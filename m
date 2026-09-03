@@ -1,47 +1,47 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB3941835E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEEA3418363;
 	Thu,  3 Sep 2026 07:38:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788421110; cv=none; b=EIkofNWAVKR57AJPnQMqRlm0ZEsH+bW6H3yoVL71qJyN41WIRPjAQPOM65d/20hxs0otLarynYfVhm4mdCSd3TJqM8Yhm8qig+5Uphz5XLOLbR3rBsCbp07hWjL7uZ3o/wLYjZ+gFL+Pa553USbQBGymiMGBdIwSZV6vm/HIO1A=
+	t=1788421111; cv=none; b=hnk/V3jyaz3YDFcz8nVGYZjRFVob5Y9tEQSD59AejhSLuYWVTUJCJLFG1xHcXUsmJ4vVVXUfk5/KpWEMEHUxodCe0MJ0pNvxfF9boZQ43ZUWDSnMNc6souPSXBDUehx8C2vWdLOUHlWFg8RgsEYbSrs0rAL86Qe2/4G+C1o893k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788421110; c=relaxed/simple;
-	bh=lSRnyAPwkxTiR+7LqZhQLOk8FGTR7q33aG6vR4tUR4k=;
+	s=arc-20240116; t=1788421111; c=relaxed/simple;
+	bh=Di/4PqdAEQOJQ/ayv+51BektmeNr4Z4vFgZ+NMwhuQM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Nc8OXtRXQv/FLAInNEmrTxdfA1BXKvLkvOAAkaa2z+WRciNq2OflD/Sa9lM4PO7IOb4rlZNXWh+OzTu2s2xwpUAppBhj9WZgq6hN2T/aNdeSLQq1bvyN1mbxcU03MF5At2tlftTAXRnIw8f+kN0sozNoCxlkDjse9Ztgb1KQ5T8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ACkNfwcV; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=p67w3Mca; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=SC/P7HmsCiahNCpvy1tIBfCbabIexsx9fBx7TgeghdGiV53Pbv7/9q5imH6MjEJfpEAwIPpS2M0QmTRw00AIANSwyrEW8zD08EeAN8pP3G7GPqFPCowINN33HxmKxIXL9MvTBPqBuZNCZQoqkNW98pt9GGg6Hf8gcYBVU5tUAw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=oJu12IJq; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=KMzkbaDi; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ACkNfwcV";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="p67w3Mca"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="oJu12IJq";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="KMzkbaDi"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1788421101;
+	s=2020; t=1788421100;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DZhPxWlYTtiTqvDB/rjm4ou5PwP5Ufta+ZoHCQD5N8U=;
-	b=ACkNfwcV4/TidgU7f8+L3UC9ET5abkJ1JlL8d9WsDijvKFgB8dOyaHLkT/UVs5rG6Zdq36
-	NXyl+kG6N7Q9AzPeCwhhZ5fOAkgZlsJIW3wsF/CtefZ+f8ciJTs+ydZobF0cC0d9vlbBHJ
-	VuQOWbg4kYTgfhyExZPaBXR7BR0u5Ess/0h49T9qX4HllpahJCFnV5voK4A/WeDgP3+6kD
-	XM07y7PTQxKtKaaWdbid4EqsUJX/BHQEvk/mzfhwjL3o6SJqsjEqwR8p8xZvq1dDfl3DIb
-	Lh/IVuhm2eAgix+r9Qzy7mVnQL/Wj3a8Y2RTXlU0ykKwSRrls0R66HYOqSWV2Q==
+	bh=nnKv5IjDqBc3X8/pWetZaLv1z0pddVPv9JqcNEXKQZY=;
+	b=oJu12IJqMxeK0hNpb/I2q3QbkkjMqmSAAfJjDJ5suJJuiZiZCwvRf5+OG06Dk+v6Dmr8at
+	XfqPM8pt3T/iyoBVVhjUA/GK3oMARbHYgSxzr09R3yU5tGWSxPiGyZHNw61jfDDVcD3tbb
+	tfoBxNnDySA5BNXVI3Px+n6r9L2fglJzi9gmeEH09/sYRY0Z/krq413xcoPoj/4o13YoPJ
+	RVs/tR5sp6Hm4YEZF7QkvczctOQMJh9+MCQt20CDdzaIIsC8H3j9iDvwbbgNODNZtaDg/F
+	jxybzml/aaeb6uZ1Va6Z4OUjizGfv1Bv0YpYR/nQM7p8y6s12F2lFmw7LwlJQQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1788421101;
+	s=2020e; t=1788421100;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DZhPxWlYTtiTqvDB/rjm4ou5PwP5Ufta+ZoHCQD5N8U=;
-	b=p67w3Mcaw20hgWdpjigtdw+hQnbQgxqo0wBmStCArBL10JA8noG+fiMGAWObuByEyvmBtw
-	C9qJYDHk2EGX7oDg==
-Date: Thu, 03 Sep 2026 09:38:18 +0200
-Subject: [PATCH v2 6/8] selftests: vDSO: vdso_test_correctness: Make
- ts_leq() and tv_leq() more generic
+	bh=nnKv5IjDqBc3X8/pWetZaLv1z0pddVPv9JqcNEXKQZY=;
+	b=KMzkbaDiBT6+7uGSkxkiJ7f4AzUIonesZ+rBcpX61I6/XVa25Va1Nm6rk1k0zOJfXR7DvX
+	YyxEe8XClRiBVIDg==
+Date: Thu, 03 Sep 2026 09:38:17 +0200
+Subject: [PATCH v2 5/8] selftests: vDSO: vdso_test_gettimeofday: Use types
+ from vdso_types.h
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260903-vdso-test-types-v2-6-1eec04eb3658@linutronix.de>
+Message-Id: <20260903-vdso-test-types-v2-5-1eec04eb3658@linutronix.de>
 References: <20260903-vdso-test-types-v2-0-1eec04eb3658@linutronix.de>
 In-Reply-To: <20260903-vdso-test-types-v2-0-1eec04eb3658@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, 
@@ -59,90 +59,59 @@ To: Andy Lutomirski <luto@kernel.org>,
 Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788421097; l=2368;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1788421097; l=1447;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=lSRnyAPwkxTiR+7LqZhQLOk8FGTR7q33aG6vR4tUR4k=;
- b=ygg1mL9k4ohqUEq6CzMYiTHZ9YaYWb9uNzAqd5jWFe0c5gLPXhDR+APxYR1J0+9e3bDi92/XI
- stf7VL3Szl3C0GnNly6tcshPFtzCLEp7Ib3f0JJ/HOscbUHjICy1cl7
+ bh=Di/4PqdAEQOJQ/ayv+51BektmeNr4Z4vFgZ+NMwhuQM=;
+ b=Xh0v3S2AW3PRmOt0/MiYKx1JPmdS19myqwQCRLwLAXCmstTdWORW+5Dl2gjIhL1ln3HjXbNsw
+ iowx925zyKdDSo3bjieKK7jguksV0jzJbFHGPDGEiSntqQ85rIgoL4S
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Upcoming changes will shuffle around the timespec and timeval types.
-To keep ts_leq() and tv_leq() working with all of those types, transform
-them into macros.
+The libc types are not necessarily compatible with the vDSO functions.
 
-Also drop ts64_leq() as it can now be replaced by the regular ts_leq().
+Use the dedicated types from vdso_types.h instead.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- .../testing/selftests/vDSO/vdso_test_correctness.c | 47 ++++++++++------------
- 1 file changed, 22 insertions(+), 25 deletions(-)
+ tools/testing/selftests/vDSO/vdso_test_gettimeofday.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_correctness.c b/tools/testing/selftests/vDSO/vdso_test_correctness.c
-index 5c5a07dd1128..537e0030aa16 100644
---- a/tools/testing/selftests/vDSO/vdso_test_correctness.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_correctness.c
-@@ -226,30 +226,27 @@ static void test_getcpu(void)
+diff --git a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
+index 990b29e0e272..2119a6429835 100644
+--- a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
++++ b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
+@@ -12,12 +12,12 @@
+ 
+ #include <stdio.h>
+ #include <sys/auxv.h>
+-#include <sys/time.h>
+ 
+ #include "kselftest.h"
+ #include "parse_vdso.h"
+ #include "vdso_config.h"
+ #include "vdso_call.h"
++#include "vdso_types.h"
+ 
+ int main(int argc, char **argv)
+ {
+@@ -33,15 +33,14 @@ int main(int argc, char **argv)
+ 	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
+ 
+ 	/* Find gettimeofday. */
+-	typedef long (*gtod_t)(struct timeval *tv, struct timezone *tz);
+-	gtod_t gtod = (gtod_t)vdso_sym(version, name[0]);
++	vdso_gettimeofday_t gtod = (vdso_gettimeofday_t)vdso_sym(version, name[0]);
+ 
+ 	if (!gtod) {
+ 		printf("Could not find %s\n", name[0]);
+ 		return KSFT_SKIP;
  	}
- }
  
--static bool ts_leq(const struct timespec *a, const struct timespec *b)
--{
--	if (a->tv_sec != b->tv_sec)
--		return a->tv_sec < b->tv_sec;
--	else
--		return a->tv_nsec <= b->tv_nsec;
--}
--
--static bool ts64_leq(const struct __kernel_timespec *a,
--		     const struct __kernel_timespec *b)
--{
--	if (a->tv_sec != b->tv_sec)
--		return a->tv_sec < b->tv_sec;
--	else
--		return a->tv_nsec <= b->tv_nsec;
--}
--
--static bool tv_leq(const struct timeval *a, const struct timeval *b)
--{
--	if (a->tv_sec != b->tv_sec)
--		return a->tv_sec < b->tv_sec;
--	else
--		return a->tv_usec <= b->tv_usec;
--}
-+#define ts_leq(_a, _b)	({				\
-+	bool _ret;					\
-+							\
-+	if ((_a)->tv_sec != (_b)->tv_sec)		\
-+		_ret = (_a)->tv_sec < (_b)->tv_sec;	\
-+	else						\
-+		_ret = (_a)->tv_nsec <= (_b)->tv_nsec;	\
-+							\
-+	_ret;						\
-+})
-+
-+#define tv_leq(_a, _b)	({				\
-+	bool _ret;					\
-+							\
-+	if ((_a)->tv_sec != (_b)->tv_sec)		\
-+		_ret = (_a)->tv_sec < (_b)->tv_sec;	\
-+	else						\
-+		_ret = (_a)->tv_usec <= (_b)->tv_usec;	\
-+							\
-+	_ret;						\
-+})
+-	struct timeval tv;
++	struct __kernel_old_timeval tv;
+ 	long ret = VDSO_CALL(gtod, 2, &tv, 0);
  
- static char const * const clocknames[] = {
- 	[0] = "CLOCK_REALTIME",
-@@ -365,7 +362,7 @@ static void test_one_clock_gettime64(int clock, const char *name)
- 	       (unsigned long long)vdso.tv_sec, vdso.tv_nsec,
- 	       (unsigned long long)end.tv_sec, end.tv_nsec);
- 
--	if (!ts64_leq(&start, &vdso) || !ts64_leq(&vdso, &end)) {
-+	if (!ts_leq(&start, &vdso) || !ts_leq(&vdso, &end)) {
- 		printf("[FAIL]\tTimes are out of sequence\n");
- 		nerrs++;
- 		return;
+ 	if (ret == 0) {
 
 -- 
 2.55.0
