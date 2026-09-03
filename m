@@ -1,170 +1,89 @@
-Received: from mta1.migadu.com (out-212.mta1.migadu.com [95.215.58.212])
+Received: from mta1.migadu.com (out-7.mta1.migadu.com [95.215.58.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B363305680
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 01:55:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.212
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF0E33939A
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 02:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788400536; cv=none; b=gm2+YmkqM7C5hxrRxcSEG3Q9GRWiW2eBpiExIhXkF47jpmgdOWZhpeh3p50vVWU+7ZNntj4WS4CTjmolaP8pSfihg+N/73NNb920VjdxNR/9QQD1EIdc399HBZ574830altVVzzbdabRS/NDVfBmRRwDeH/Egk9yujW4pKR7Gvk=
+	t=1788401750; cv=none; b=tr5+5sNHprOH8DGnTwm0VdyIArDTrcrK5otA+33mPkmKe/QBOAtW2Cl14xd1RlHSA2Ls2+TVuHrdFm/ReCiM6ubLl/o766qLidgp/RSUWthmGJ0E5I0U8Qub4Z+Ch98aWU7JVcjPaUN1ogk3gKDmCUQvBWd6FbUP0n1hKNAI3wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788400536; c=relaxed/simple;
-	bh=u95HTJEg7cNpFs+sWFGUlBGCht8uh3N7jcGtlUx/htQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cdpaNwuBJrPbIaB+dY9z45cj72ZX1oFM4JDoy1S/GToRaDvrblzkwMSRmtOa7xU0Ff7DyaY/rDKRymRanyrfherYwHdoXLxCFry8Amgu7VOLudG4itojfdBa5wZtgtlRid2wk/766+kML+nxlxAByI54stMUb26QNsBTT/eG150=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UwInK+Og; arc=none smtp.client-ip=95.215.58.212
+	s=arc-20240116; t=1788401750; c=relaxed/simple;
+	bh=G34xxgRBmUeCrrkke6/zmw55SL1tojQfi33A55TotFk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WkXWrVbT+/n24ubzFBCa3mdWj+/5fk68HUqR6DC/w6JfLMTAViRdR8ZO5UFrh8vPh6/1eprKv3Y5+GKYPaIwBZsfyN+u56ILfar0va3Nd/DxZ6EX8oAXTrD1ET/kBNAU4dDQdm7KjVf6+agwqmGwTZgfrRmrPW+P29Vo8teUWdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NnryLoMH; arc=none smtp.client-ip=95.215.58.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UwInK+Og"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NnryLoMH"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=u95HTJEg7cNpFs+sWFGUlBGCht8uh3N7jcGtlUx/htQ=;
+DKIM-Signature: a=rsa-sha256; bh=G34xxgRBmUeCrrkke6/zmw55SL1tojQfi33A55TotFk=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788400532; v=1; x=1789005332;
- b=UwInK+OgDpvBSNDoC06f2okok/6L9EJ6wCQuZka9RfVXloNvV7Luga6t7BKJh4NdsDco3Elv
- z2U0WTXRUu3ynmS4psFAN3889Zk1yiDAnwptD6pqWhxixXshXGirUWSTC90kxSKTlTY2aTcg/Oj
- AivXJDU1A0He6rrukhahxrmg=
+ t=1788401744; v=1; x=1789006544;
+ b=NnryLoMHCH5MB5L+wdVaBc2gzN6ossRcMyqJJS575vokGkFaIwu8MObJJiYzWBuIoHJqMmB+
+ 11c7UWAyKM9cyZD75bcITWH3lKfjo1vM/kF2GkCCqpz0eYZCiBETcaFJXZJebyk7wA2Rvi5VN2s
+ CEIE7/L5uO4OPLwaI8cn/4J8=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 45bc6b26ca2cf69e;
-	Thu, 03 Sep 2026 01:55:30 +0000
-X-Mizu-Trace-ID: 45bc6b26ca2cf69e
+Received: by smtp.migadu.com with ESMTPS id 22d32196a450c1c8;
+	Thu, 03 Sep 2026 02:15:44 +0000
+X-Mizu-Trace-ID: 22d32196a450c1c8
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <12386c03-e7a1-4d7f-b829-1402d74a11fe@linux.dev>
-Date: Thu, 3 Sep 2026 09:55:23 +0800
+Date: Thu, 3 Sep 2026 10:15:31 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: MPTCP Linux <mptcp@lists.linux.dev>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	Hangbin Liu <liuhangbin@kylinos.cn>
+Subject: Re: [PATCH mptcp-next 1/2] selftests: mptcp: convert iptables to
+ nftables for mptcp_sockopt.sh
+Message-ID: <apjYQ3bCkpT2Rb-X@fedora>
+References: <20260902-mptcp_nft-v1-0-559caa16f410@kylinos.cn>
+ <20260902-mptcp_nft-v1-1-559caa16f410@kylinos.cn>
+ <5b5452db-f03c-4825-b9ae-91ca28bbcf03@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/6] cgroup/cpuset: Respect child CPU ownership in type
- changes
-To: Waiman Long <longman@redhat.com>, cgroups@vger.kernel.org,
- ridong.chen@linux.dev
-Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Guopeng Zhang <zhangguopeng@kylinos.cn>
-References: <20260828095643.13395-1-guopeng.zhang@linux.dev>
- <20260828095643.13395-2-guopeng.zhang@linux.dev>
- <3c6f43e3-ca8f-4525-a147-68c35d856d35@redhat.com>
-Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <3c6f43e3-ca8f-4525-a147-68c35d856d35@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b5452db-f03c-4825-b9ae-91ca28bbcf03@kernel.org>
 
+On Wed, Sep 02, 2026 at 11:17:48AM +0200, Matthieu Baerts wrote:
+> > @@ -105,33 +109,23 @@ cleanup()
+> >  
+> >  mptcp_lib_check_mptcp
+> >  mptcp_lib_check_kallsyms
+> > -mptcp_lib_check_tools ip "${iptables}" "${ip6tables}"
+> > +mptcp_lib_check_tools ip nft
+> >  
+> >  check_mark()
+> >  {
+> >  	local ns=$1
+> >  	local af=$2
+> >  
+> > -	local tables=${iptables}
+> > +	drop=$(ip netns exec "$ns" nft list table inet msock_table | \
+> > +		grep "ipv$af.*packets.*drop" | awk '{print $(NF-3)}')
+> 
+> Would it not be cleaner to use 'nft -j' and 'jq' to get all the
+> (non-zero) drop counters?
 
+We can get with this rule:
 
-在 2026/8/31 23:37, Waiman Long 写道:
-> On 8/28/26 5:56 AM, Guopeng Zhang wrote:
->> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
->>
->> effective_xcpus includes CPUs granted to valid child partitions. Changing
->> a parent between root and isolated must not apply its new isolation state
->> or housekeeping constraints to those CPUs.
+nft -j list table filter | jq -r '.nftables[] | select(has("rule")) |
+				.rule | select (.chain=="OUTPUT" and any(.expr[]; has("drop"))) |
+				.expr[] | select(has("counter")) |
+				.counter.packets'
 
-...
-
->>   +/*
->> + * Invalidate the highest isolated partition that contains @cs.
->> + *
->> + * A root partition returning CPUs to an isolated parent can consume the last
->> + * housekeeping CPU. Invalidating the whole chain returns the CPUs to a root
->> + * partition instead.
->> + */
->> +static struct cpuset *invalidate_isolated_ancestor(struct cpuset *cs,
->> +                           struct tmpmasks *tmp)
->> +{
->> +    struct cpuset *ancestor = parent_cs(cs);
->> +    int err;
->> +
->> +    lockdep_assert_held(&cpuset_mutex);
->> +    while (!is_remote_partition(ancestor) &&
->> +           (parent_cs(ancestor)->partition_root_state == PRS_ISOLATED))
->> +        ancestor = parent_cs(ancestor);
-> That can be dangerous & may cause NULL pointer dereference. parent_cs(cs) returns NULL if cs is top_cpuset. So you should always check if ancestor is NULL or parent_cs(ancestor) is NULL. Assuming that the given cs is never the top_cpuset so the initial ancestor will not be NULL. Each ancestor reassignment can become NULL. So don't mix ancestor and parent_cs(ancestor) testing in the same compound if statement.
->> +
-
-...
->> @@ -2998,6 +3061,13 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->>            * Switching back to member is always allowed even if it
->>            * disables child partitions.
->>            */
->> +        if (old_prs == PRS_ROOT &&
->> +            parent->partition_root_state == PRS_ISOLATED &&
->> +            !isolated_cpus_can_update(cs->effective_xcpus, NULL))
->> +            invalidated = invalidate_isolated_ancestor(cs, &tmpmask);
->> +        if (invalidated)
->> +            goto out;
->> +
-> You are adding a new exception here. You should update the comment above to talk about the exception.
->>           if (is_remote_partition(cs))
->>               remote_partition_disable(cs, &tmpmask);
->>           else
->> @@ -3025,11 +3095,17 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->>       if (!is_partition_valid(cs))
->>           reset_partition_data(cs);
->>       else if (isolcpus_updated)
->> -        isolated_cpus_update(old_prs, new_prs, cs->effective_xcpus);
->> +        isolated_cpus_update(old_prs, new_prs, tmpmask.new_cpus);
-> As I have mentioned in my comment to your v1 series, this code can be reached from multiple places beside switching from root to isolated and vice versa. So tmpmask.new_cpus may not be the "owned xcpus". So additional guard should be needed to decide if effective_xcpus or tmpmask.new_cpus should be used.
->>       spin_unlock_irq(&callback_lock);
-
-Hi Longman,
-
-Thanks for the review.
-
-I have addressed your comments in v3:
-
-- rewrote the isolated-ancestor walk so that it stops safely before
-  dereferencing the parent of the top cpuset;
-- expanded the member-transition comment to describe the housekeeping
-  exception;
-- kept cs->effective_xcpus as the default isolation-accounting mask.
-  The mask pointer is changed to the directly owned CPU mask only after
-  that mask has been computed and validation has succeeded for a
-  root-to-isolated or isolated-to-root transition.
-
-I also reworked the trial ownership calculation after additional
-feedback from Sashiko.
-
-For example, suppose the kernel is booted with:
-
-    isolcpus=domain,15
-
-and the hierarchy is:
-
-    parent root partition:    cpuset.cpus=13-15
-    child isolated partition: cpuset.cpus=14-15
-
-The parent directly owns only CPU13, while CPUs 14-15 are owned by the
-child.
-
-If the parent's CPU mask is then changed to CPU15, the child is still a
-valid partition when validate_partition() examines the trial
-configuration. The previous code therefore subtracts the child's current
-effective_xcpus from the proposed parent mask. This removes CPU15 and
-leaves the parent's trial owned mask empty, so CPU15 is not included in
-the parent's housekeeping check.
-
-After the new parent mask is applied, however, the child's {14,15} mask
-is no longer a subset of the parent's {15} mask. The child is invalidated
-with PERR_INVCPUS and CPU15 returns to the parent. The result is a valid
-root partition directly owning a boot-isolated CPU which was hidden from
-its housekeeping validation.
-
-In v3, trial ownership no longer depends only on whether a child is
-currently valid. It uses the common child-partition validation rules to
-predict whether each child will remain valid under the proposed parent
-mask. CPUs are subtracted from the parent's trial owned mask only for
-children which will remain valid. This handles both PERR_INVCPUS and
-PERR_NOCPUS consistently.
-
-v3:
-https://lore.kernel.org/all/20260902102615.79189-1-guopeng.zhang@linux.dev/
-
-Thanks,
-Guopeng
-
-
+Thanks
+Hangbin
