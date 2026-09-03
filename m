@@ -1,344 +1,133 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1603A169F
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 08:10:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788423042; cv=pass; b=YFMJ8nDZHB1ll0lVdypV+dAMXN+fdrcONakx+vyaAKaxKWLFWagVoiJV/fc+bjy7b1LByCMMZ4sNc/2XjH4/mjbAxf06RjYf2bthTfhVsmIAOzhs/aPwJogUazP9OpBKjX9SZlql1d5TexNoRiOerSOv5NW6M2lQeQ5dyr6JOro=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788423042; c=relaxed/simple;
-	bh=Ri1nuWgBzlWKmVgcPTEh7t/O9jzz9QoV3TsIc1HvvfQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L8e2ObrSjBN1kgL5aoQYJ2pYx8DEXLj5LGGCsmpmKpQ6vWxBmZdgcOxEL++zkIxaa5sAQeJY3RVPwXGN8o1qmF0ETP9WYUhbuaM5g497m7CCbhYta7z2DwIdVsLn7ntT1RQL+QX6mHww5gZDhJhG8ENRTs96iOVzQBJC3OdTVvE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LcR2zzjI; arc=pass smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB1042E413
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 08:33:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788424412; cv=none; b=KYM/ES+6VAA1mhuAd4mYz+2KxAox12yXiE/aHLTXYzXC6bwyCDAWD/oUyaKmBvbmfbxqgcy4i3MjiWt/avfesB44TJw+WH9MuhWkvMXJ/t//9n/rDKSS9Ac/XEO1xKHP9TjqGW6LOH16QT+UzCMQcA0LdlKJgN5TRSqI9LajqxQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788424412; c=relaxed/simple;
+	bh=D6LEF5qrYz6DbFwcjMxDSZY/iZagbFXt2muTMD4vUes=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fNQYNrSOH8s16jFduPQ+lkHU40APEAzQHiUM/qlBL2lxxZ3CS2RhZaiSxm2SG7zTbezjlrM4b8n4/5AVnL+ylYjESIZMR9gnExRmH6R4qxy824WRzWLePvz5Hyz2RE4oceRYlxBAtjKNrQZ7jpKf5jJ60ozA6jmjf0xi5/wzpZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M5t8ubOs; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LcR2zzjI"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-8200b55dc47so25793617b3.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 01:10:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788423039; cv=none;
-        d=google.com; s=arc-20260327;
-        b=mHY9JHQHbr65QsZOYTpJDsXk4dCKn29L6o0X6yHhKZNAeIx3nyDfmPrF2GWFJrTUjP
-         Qu1QndLgP4W/Asdz3/N2AunPB/pF2RwywoRyc/2pNoCz8PAjuhzG5kOSnrMPTQG3kXY0
-         djZn+HCzdr+Lu5i25JyxrglQZ0SzSVF7sCe4SGwbY2/HoUiy1fUip1Bmq0ZiqchTkbHN
-         RBj6JXbsv9XTWUeWu1AdHrJAbd+IEtRQKi96N5h3GgqupV3qdAe/qpj+HELa0Q7iNWf5
-         LRr9fp7DMztYDcqWjv0cvJ17mViRRzTYHU+vdkeozN3yEp060NdDPuWbCNy9hwnw/IfP
-         n59w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=RAkLwpKGEZf+fAIaSu+wznOfKXRcrs45lnuC3CrX6bc=;
-        fh=mS+vOXHlW2zH+BMRzOAPJUToOMK5kPRC7qVHv1xln1Y=;
-        b=I/XFGPYCahQJkFy9psaodmqA0HUvKkVgkKWkOOJSLa0V/NNZrIjpf36e6AjosRteGu
-         1+a7n425JnOzyj1QBGVycMXlI/+SPfTKyL+a2PB18DRsZrvkKovYK9QLhdftP8yb0Byr
-         KJGFm17dMaQxPUj2EClWewz88O6U54/qSgK9W+hHmp+PMTktzyN9gux8UdngaX1YkKj2
-         X8PBUjjLIY/sNgMnEqQJu/KPq1AOy+lRdBLusYqQ1rOdCe/LeIi/lpSbB/oyjKvXTJnI
-         89Jqiu56XsE/A3bUn8cRUSHpasIu+zr6j1T6L3fZryzir2ClQZV8plIjYi5dH6loWmZT
-         AAzg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M5t8ubOs"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-395cf2535acso845073a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 01:33:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788423039; x=1789027839; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=RAkLwpKGEZf+fAIaSu+wznOfKXRcrs45lnuC3CrX6bc=;
-        b=LcR2zzjIv2x4YVoqkAVRomcXZRAjg0izLiKxxMQmdKCCxXVR97+sBfyqzUTzsEHdhl
-         EMFj5aIqVCMkmQ4U6wjzE5MfqM0P/Y4Zd9xYT3PSJ6WQJ8+XcbjxFeRVs+gPW+1UXB4e
-         lxqL0Q66O64xFvumAfjMy5cyc2gejLWcb78fTiM61vaDRNEpTs4ZzRKA4iNFnk3ehowz
-         l4QINfv4VYbAuyWSq0MgxzbgboreG59nsl5ThQJ9njF+d93SGnbPV/l7URweDqtk6Yii
-         TY677a+l/CsNMMMB2riOQiuz+bD2pU3NniEaZfnpXv5ZYuoYqC7Z05Moe4cjRHPeL0E3
-         jgpA==
+        d=gmail.com; s=20251104; t=1788424410; x=1789029210; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=OociqrsBmV/E6a5jpk0qDALr4bKhrSE+A8mgKI0tJ1g=;
+        b=M5t8ubOsX6jeEy4gU7oPAUeJVi7f+V9euo3pYU7IgkCvU7XTCjpajBwqPZ2Jn3/p5/
+         7Fvr3lMNi1sR+VRMwI9vwKYtCsmXQOgcBrpjdB2cxRRd20Yo2fkMsyqCzRkAy8nvw0Pd
+         SdDnNaZEiK/udGXTBvlmqzx1AjSI5WkFnjAPA3A9RkW0/MMb0srbLnV3oSmqeq7N6gbg
+         3yj8vZ+RkjOR8UUlEjc23eWAO00IiS1WJbPiYnULvFB/Onjm9H3Uur9ksXqku1sRq4ix
+         vQoAxmy9qQvxbMbAb7kjHJ1nWCzLuqNLyx+GHT/z/TyvBcryFaNByA0HAFzUjKKHVXHF
+         EoxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788423039; x=1789027839;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=RAkLwpKGEZf+fAIaSu+wznOfKXRcrs45lnuC3CrX6bc=;
-        b=tGxUWhIHNvn28E8vZNN43oQJGF/kWhR9tlPGcFpFMTm4xBB66lulYHHyNSdCfC+76I
-         wE/b3JwxOUZxB9q+EraR4jB1vBfmmopz3VgiYXNDQug7WzAYatUvbTMO0F+A6pSz2L/3
-         l0gkfrNng8SDE917ANmIq8EfDIsuXr3GjofFK831jPTMUaqWDrvSrwpeZYvx+lcy+oAB
-         ed3AMXufko5hrO8sSb6rVFZ7bPMIcJPvnYMu93r4/nlESd7GD8Dpbw4D7Y2C115+2fD5
-         2TOGkhGPScWjwk/uR+E2X8jveZygdH6GWBFMkMEY8gqUmtbLhrdiyf7fvZkLtZUJvnV/
-         iBnQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwi56XgBopE2W41xN5xP299zPoYf+Snek2D7a/aPCo1A2PMA4UJQwlcNP7SJA3Un4w6zrKsXWG0IDIC340i130=@vger.kernel.org
-X-Gm-Message-State: AFuF++mUDm3VM5YcLFketfJUiOT8NLEUWDqoLe8dk8ZHqAjhs+HGMkCU
-	RoxtLOlBWhN6GWwr/M+fdWAgmL4tsZG1gBzccbp8YfkLzgrVmqX/W8jBOvsRasJNpnVkV77O0hw
-	Dh2CVIC5nG4Vd8bCfO8PnBNTcB6jj8C4=
-X-Gm-Gg: AYBFou1aeU78GJ5ux4fnDVxa6E3BAUrP1h+Egr/MsBsd3tHd1ABs1AVVGD01GJjhs2v
-	qbyL7zKpFr0pHgtsaHvaklRnm15UmEQv5FV070ywTH4m63cH5Bv0l/s0JBxrXBFn6KxMopr61gg
-	UPFgwmuscxOBzdzH3eHDwxprTNydpr27H7+K440EkVgKtW0YwCZVe74WPbpF1TeIERRU7jBqZmH
-	jPsKwdf659EBIlBdwm59KDD4ZMpTuyTEZw4RCN0aZZmpCUeUge/EOJPgwea1ja4qlmnDZgmxIum
-	yNbHrBnreBNp33HV0kGSX12ZW8zq5QFl+R0R3Ck1lBH6
-X-Received: by 2002:a05:690c:4ad7:b0:869:adba:625b with SMTP id
- 00721157ae682-86c53393f40mr38386797b3.25.1788423039335; Thu, 03 Sep 2026
- 01:10:39 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1788424410; x=1789029210;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=OociqrsBmV/E6a5jpk0qDALr4bKhrSE+A8mgKI0tJ1g=;
+        b=AFFOSYcSNGUlm1gaHgg/Qgpnme1PfUoLoiXg8KGKr6TOnx4uhS5XWuAsyceLDWuYzr
+         oIzLUed/RetUMxpYul4ez35s+dCi0nKmLz+TDfHmVX0QqEMWQQIRl7DO+uTep+uMFLr5
+         7teaVFx9EUcHQNfvVTWroa1zo+8AaPMXSTuTR9wyWBy0NlXHelOVKOO7007PAjd8s7Bv
+         FX/1NId+rfhX6ID7u4o3P29vCtUrkawBlmh6eAK5u27TbIWsCrzqxexLZ8B/2nR1OjyJ
+         CxjLYm360gNTEHvrVqoKzzJB1VjXmMZLXFsEpu9yZWpmPCJVGmHn8awUm7puuw0Ru/QA
+         2prA==
+X-Forwarded-Encrypted: i=1; AKwUvBww73MobWylw847p6zkgSGHjMLx+RDmbyMQQbDgsIvqAI+lE/tFtQUD2AriFlh9OABQOhfSb4mhgZiKbHpVYko=@vger.kernel.org
+X-Gm-Message-State: AFuF++mvptlXFvbzXV+dVWdRu8BBvgeg4S/OIZaHZv5m9S/MpxENvcNU
+	1u+hp1mRyTD52SWHWaz43C2eUimWNNgjYePMLSFOwTdGSax3gIHbWD1VvvRp3w==
+X-Gm-Gg: AYBFou2jEIAQz4PhIfwVnu5jF6Yj/Ce0eDE5LF4GdP9fICA/VtH2S5O4zBDd9ENuM6T
+	jtirg1AtH/TsSm8GUBfqMKHk0fHDBpEOLxDk0zWHaau3etPvdW9hTT8nJS157lyyn6hQRiJ3rYY
+	pV2HFabgYDYzTP+yDe4eEQERrWWLSrx1zdyKIf4gl975bxQ1U63mkU/yalzVUSmwm24joQP61Vn
+	1ararI8U39uinCNKnzhGuK/HNm1cZvTrwB0Jnyk60sYJHenVAr4+v4SPfDxld3dz15M0+NXxpu7
+	RdSlLp/z/m2lG3/HgdB4E1T+v4Pgd9QgB9PRdGnr0bykFcaDTbMBGfzrx0GMQWxReS4ve7mz/pw
+	ed+CrT9uOcPM18L6qwM1GbJKaApRpHdgZnBsxpAF1TGjldGlw0Lrob9pr5aNID7o2I7XHxhBBJR
+	tgBz6ft95tfTmprv6RUhHrtHzmXuj6jQdwaxBYEu9u1eAxWiPuO7srTFzcikJLZSZIqWrQHDqB
+X-Received: by 2002:a17:90b:3cc3:b0:398:9bd3:d6d4 with SMTP id 98e67ed59e1d1-39b132d819emr1843780a91.14.1788424410133;
+        Thu, 03 Sep 2026 01:33:30 -0700 (PDT)
+Received: from gmail.com ([185.220.238.35])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b083e4fafsm4001175a91.1.2026.09.03.01.33.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2026 01:33:29 -0700 (PDT)
+From: Kunwu Chan <kunwu.chan@gmail.com>
+X-Google-Original-From: Kunwu Chan <kunwu.chan@linux.dev>
+To: SJ Park <sj@kernel.org>
+Cc: Kunwu Chan <kunwu.chan@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	stable@vger.kernel.org,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	Kunwu Chan <kunwu.chan@gmail.com>
+Subject: Re: [PATCH 1/4] mm/damon/tests/core-kunit: test committing psi goal to psi goal
+Date: Thu,  3 Sep 2026 16:33:18 +0800
+Message-ID: <20260903083319.451754-1-kunwu.chan@linux.dev>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260902002725.108635-2-sj@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260812-xdp-dut-process-lifecycle-gmail-v2-1-b03ef2aa1b97@gmail.com>
- <d4be160e-703e-46bb-9509-d3d90f6bc34b@iogearbox.net> <DKX99ZAP7GZ8.23U5EOSFB4VPU@bootlin.com>
- <CAHKNYVXN0DAUzv2Lwm=oQ_K=zhi2iNyTO2e99s5F4M+Kr7u5tQ@mail.gmail.com>
- <CAHKNYVV8gn-L_unjsxUZV=E+Rx4ouDBJX613_n4hevXP1rivyg@mail.gmail.com>
- <CAHKNYVX_r_yS+NjkTx=gn7zGfcHF11azQbFWHJ+naqXO3aTpJw@mail.gmail.com> <DL4NVR5IIKSE.IC903DOR6ZDA@etsalapatis.com>
-In-Reply-To: <DL4NVR5IIKSE.IC903DOR6ZDA@etsalapatis.com>
-From: Bochao Cao <bochaolucky@gmail.com>
-Date: Thu, 3 Sep 2026 16:10:01 +0800
-X-Gm-Features: AcwNN1W8zo3HUntwWLr6xgG9tqUYq1Z6AYfTZ41NEPBEx_muIqXDrBLxpFt8tzc
-Message-ID: <CAHKNYVXFB5aFBNU5-__TsVNNX2ket7TO1EB-HcX1FgJhbKeVCw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Track test_xdp_features DUT processes
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
- Thanks Daniel, Alexis, and Emil.
+On Tue,  1 Sep 2026 17:27:20 -0700 SJ Park <sj@kernel.org> wrote:
 
-  Moving the test to tools/testing/selftests/drivers/net/hw/ appears to
-  require more than relocating the shell script. The xdp_features userspace
-  tool, BPF program, skeleton build rules, and test environment would also
-  need to be adapted to the net driver selftest framework.
+> damon_test_commit_quota_goal_for() is set to test committing a new psi
+> goal on an existing psi goal.  However, damon_test_commit_quota_goal()
+> is mistakenly not covering the test case.  Add the test case.
+> 
+> Fixes: 99f89debafc5 ("mm/damon/tests/core-kunit: add damos_commit_quota_goal() test")
+> Cc: <stable@vger.kernel.org> # 6.19.x
+> Signed-off-by: SJ Park <sj@kernel.org>
+> ---
+>  mm/damon/tests/core-kunit.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
+> index 7071ec277b007..f1e11548c771b 100644
+> --- a/mm/damon/tests/core-kunit.h
+> +++ b/mm/damon/tests/core-kunit.h
+> @@ -793,6 +793,13 @@ static void damos_test_commit_quota_goal(struct kunit *test)
+>  		.last_psi_total = 456,
+>  	};
+>  
+> +	damos_test_commit_quota_goal_for(test, &dst,
+> +			&(struct damos_quota_goal) {
+> +			.metric = DAMOS_QUOTA_SOME_MEM_PSI_US,
+> +			.target_value = 234,
+> +			.current_value = 345,
+> +			.last_psi_total = 567,
+> +			});
+>  	damos_test_commit_quota_goal_for(test, &dst,
+>  			&(struct damos_quota_goal){
+>  			.metric = DAMOS_QUOTA_USER_INPUT,
+> -- 
+> 2.47.3
+> 
 
-  Would it be acceptable to take the process lifecycle fix as a v3 in its
-  current location, followed by a separate migration series?
+Thanks SJ. The added case correctly exercises the PSI -> PSI commit 
+path before the existing tests change the destination metric.
 
-  I would also be happy to work on the migration. If you would prefer to
-  see the migration before this fix is applied, I can prepare v3 as a
-  small series, keeping the framework migration and the process lifecycle
-  changes separate where practical.
+Reviewed-by: Kunwu Chan <kunwu.chan@gmail.com>
 
-  Thanks,
-  Bochao
-
-Emil Tsalapatis <emil@etsalapatis.com> =E4=BA=8E2026=E5=B9=B49=E6=9C=882=E6=
-=97=A5=E5=91=A8=E4=B8=89 15:44=E5=86=99=E9=81=93=EF=BC=9A
+Thanks,
+Kunwu
 
 
-Emil Tsalapatis <emil@etsalapatis.com> =E4=BA=8E2026=E5=B9=B49=E6=9C=882=E6=
-=97=A5=E5=91=A8=E4=B8=89 15:44=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Fri Aug 28, 2026 at 5:32 AM EDT, Bochao Cao wrote:
-> >  Resending as plain text because my previous reply was rejected by the
-> > vger mailing lists. Sorry for the duplicate.
-> >  Thanks Daniel and Alexis.
-> >
-> >   Dropping the procps dependency is not the primary motivation for
-> >   this change. I agree that Debian can remove the dependency independen=
-tly.
-> >   The issue addressed by this patch is process isolation in the standal=
-one
-> >   test. The current readiness check may observe an unrelated
-> >   concurrent xdp_features process, while cleanup may terminate every
-> > xdp_features
-> >   process on the host. In addition, a DUT which exits before listening
-> > can leave the test waiting indefinitely.
-> >
-> >   Although this script is not currently run by the BPF CI, it remains
-> > useful  for testing real hardware,
-> >   so these process lifecycle issues can still  affect users running
-> > the test manually.
-> >
-> >   Would it be acceptable to fix these issues in the script's current lo=
-cation?
-> >   If the preferred direction is to move it under
-> > tools/testing/selftests/drivers/net/hw/,
-> >   should the move be submitted first, with this fix rebased on top?
-> >
-> >   I can send a v3 that drops the Debian Closes tag and focuses
-> >   the commit message solely on the process isolation, timeout,
-> >   and cleanup fixes once the preferred location is clear.
-> >
-> >   Thanks,
-> >   Bochao
->
-> While I'd defer to Daniel and Alexis on this, imo we could merge the fix
-> as-is and move the file as a followup since the change is a net gain on
-> its own.
->
-> Wherever we end up putting the file feel free to add:
->
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
->
-> >
-> >
-> > Bochao Cao <bochaolucky@gmail.com> =E4=BA=8E2026=E5=B9=B48=E6=9C=8828=
-=E6=97=A5=E5=91=A8=E4=BA=94 14:10=E5=86=99=E9=81=93=EF=BC=9A
-> >>
-> >>  Thanks Daniel and Alexis.
-> >>
-> >>   Dropping the procps dependency is not the primary motivation for
-> >>   this change. I agree that Debian can remove the dependency independe=
-ntly.
-> >>   The issue addressed by this patch is process isolation in the standa=
-lone
-> >>   test. The current readiness check may observe an unrelated
-> >>   concurrent xdp_features process, while cleanup may terminate every x=
-dp_features
-> >>   process on the host. In addition, a DUT which exits before listening=
- can leave the test waiting indefinitely.
-> >>
-> >>   Although this script is not currently run by the BPF CI, it remains =
-useful  for testing real hardware,
-> >>   so these process lifecycle issues can still  affect users running th=
-e test manually.
-> >>
-> >>   Would it be acceptable to fix these issues in the script's current l=
-ocation?
-> >>   If the preferred direction is to move it under tools/testing/selftes=
-ts/drivers/net/hw/,
-> >>   should the move be submitted first, with this fix rebased on top?
-> >>
-> >>   I can send a v3 that drops the Debian Closes tag and focuses
-> >>   the commit message solely on the process isolation, timeout,
-> >>   and cleanup fixes once the preferred location is clear.
-> >>
-> >>   Thanks,
-> >>   Bochao
-> >>
-> >> Bochao Cao <bochaolucky@gmail.com> =E4=BA=8E2026=E5=B9=B48=E6=9C=8825=
-=E6=97=A5=E5=91=A8=E4=BA=8C 21:01=E5=86=99=E9=81=93=EF=BC=9A
-> >> >
-> >> >   Thanks Daniel and Alexis.
-> >> >
-> >> >   Dropping the procps dependency is not the primary motivation for
-> >> >   this change. I agree that Debian can remove the dependency indepen=
-dently.
-> >> >   The issue addressed by this patch is process isolation in the stan=
-dalone
-> >> >   test. The current readiness check may observe an unrelated
-> >> >   concurrent xdp_features process, while cleanup may terminate every=
- xdp_features
-> >> >   process on the host. In addition, a DUT which exits before listeni=
-ng can leave the test waiting indefinitely.
-> >> >
-> >> >   Although this script is not currently run by the BPF CI, it remain=
-s useful  for testing real hardware,
-> >> >   so these process lifecycle issues can still  affect users running =
-the test manually.
-> >> >
-> >> >   Would it be acceptable to fix these issues in the script's current=
- location?
-> >> >   If the preferred direction is to move it under tools/testing/selft=
-ests/drivers/net/hw/,
-> >> >   should the move be submitted first, with this fix rebased on top?
-> >> >
-> >> >   I can send a v3 that drops the Debian Closes tag and focuses
-> >> >   the commit message solely on the process isolation, timeout,
-> >> >   and cleanup fixes once the preferred location is clear.
-> >> >
-> >> >   Thanks,
-> >> >   Bochao
-> >> >
-> >> > Alexis Lothor=C3=A9 <alexis.lothore@bootlin.com> =E4=BA=8E2026=E5=B9=
-=B48=E6=9C=8824=E6=97=A5=E5=91=A8=E4=B8=80 22:49=E5=86=99=E9=81=93=EF=BC=9A
-> >> >>
-> >> >> Hi Daniel, thanks for the notification
-> >> >>
-> >> >> On Mon Aug 24, 2026 at 1:31 PM CEST, Daniel Borkmann wrote:
-> >> >> > [ Trimming the excessive Cc list, and adding Alexis ]
-> >> >> >
-> >> >> > On 8/12/26 10:28 AM, Bochao Cao via B4 Relay wrote:
-> >> >> >> From: Bochao Cao <bochaolucky@gmail.com>
-> >> >> >>
-> >> >> >> test_xdp_features.sh waits for any xdp_features listener to appe=
-ar and
-> >> >> >> uses pidof during cleanup. A concurrent test can therefore make =
-another
-> >> >> >> test proceed before its own DUT is ready, and cleanup kills ever=
-y
-> >> >> >> xdp_features process on the host. The readiness loop also has no=
- timeout,
-> >> >> >> so a DUT that exits before listening leaves the test hung indefi=
-nitely.
-> >> >> >>
-> >> >> >> Track one active DUT at a time, wait for ss to report that exact=
- PID with
-> >> >> >> a bounded retry loop, and reap it after each test. Consult the s=
-hell job
-> >> >> >> table before signaling the DUT so a stale PID cannot target an u=
-nrelated
-> >> >> >> process. On failure, terminate the shell job with SIGKILL and re=
-ap it so
-> >> >> >> blocked I/O cannot hang cleanup. Install an EXIT trap and signal=
- handlers
-> >> >> >> so failure paths also remove network setup.
-> >> >> >>
-> >> >> >> Fixes: 4dba3e7852b7 ("selftests/bpf: introduce XDP compliance te=
-st tool")
-> >> >> >> Closes: https://bugs.debian.org/1136522
-> >> >> >> Signed-off-by: Bochao Cao <bochaolucky@gmail.com>
-> >> >> >> ---
-> >> >> >> Tests:
-> >> >> >> - bash -n tools/testing/selftests/bpf/test_xdp_features.sh
-> >> >> >> - make -C tools/testing/selftests/bpf xdp_features
-> >> >> >> - sudo tools/testing/selftests/bpf/test_xdp_features.sh
-> >> >> >> - verified cleanup terminates a blocked DUT without affecting an=
- unrelated process
-> >> >> >> ---
-> >> >> >> Changes in v2:
-> >> >> >> - Clarify that avoiding name-wide process matching, rather than =
-dropping a dependency, is the motivation.
-> >> >> >> - Track and reap one active DUT at a time instead of retaining h=
-istorical PIDs.
-> >> >> >> - Address PID reuse by signaling only the current Bash job durin=
-g cleanup.
-> >> >> >> - Use SIGKILL on failure cleanup so blocked DUT I/O cannot hang =
-wait indefinitely.
-> >> >> >> - Link to v1: https://patch.msgid.link/20260805-xdp-dut-process-=
-lifecycle-gmail-v1-1-45984df8d295@gmail.com
-> >> >> >> ---
-> >> >> >>   tools/testing/selftests/bpf/test_xdp_features.sh | 82 ++++++++=
-++++++++++------
-> >> >> >>   1 file changed, 62 insertions(+), 20 deletions(-)
-> >> >> >
-> >> >> > Sorry for the late reply. With regards to https://bugs.debian.org=
-/1136522, src:linux deb
-> >> >> > does not have to depend on this at all, so the src:linux can just=
- get rid of procps in
-> >> >> > any case if this is indeed the last dependency. I'm not seeing th=
-e test being run in our
-> >> >> > BPF CI. I've Cc'ed Alexis as he's in the process of migrating and=
-/or removing tests from
-> >> >> > tools/testing/selftests/bpf/ depending on how they fit into test_=
-progs framework. I'll
-> >> >> > let him comment if there is already work in progress. It feels li=
-ke this script could be
-> >> >> > reworked into tools/testing/selftests/drivers/net/hw/ tests and r=
-emoved altogether from
-> >> >> > the tools/testing/selftests/bpf/ dir.
-> >> >>
-> >> >> There has been an attempt to fully convert and get rid of
-> >> >> test_xdp_features.sh, but discussions around the corresponding seri=
-es
-> >> >> highlighted the need for the script to remain available for testing=
- on
-> >> >> real hardware.  Features covered by the test_xdp_features.sh that w=
-ere
-> >> >> not covered yet by test_progs have been added to test_progs (in
-> >> >> xdp_cpumap_attach), see [1]. So there's currently no active effort =
-on
-> >> >> this one on my side.
-> >> >>
-> >> >> Alexis
-> >> >>
-> >> >> [1] https://lore.kernel.org/bpf/20241009-convert_xdp_tests-v3-0-51c=
-ea913710c@bootlin.com/
-> >> >>
-> >> >> --
-> >> >> Alexis Lothor=C3=A9, Bootlin
-> >> >> Embedded Linux and Kernel engineering
-> >> >> https://bootlin.com
-> >> >>
->
+Sent using hkml (https://github.com/sjp38/hackermail)
