@@ -1,45 +1,47 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAA333AD8C;
-	Thu,  3 Sep 2026 07:38:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B996937EFF1;
+	Thu,  3 Sep 2026 07:38:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788421107; cv=none; b=kWUwhJo7jlFbRNu/0VukS1niTjDx9SXVUF5qJrIxwyM42pRMAGDQhw1RxSicjV5rqF7hULdJd/ag/bKB6LHCWIA8obKFNytQiKzrdaOVA/SntLd/01ynVIkZaQ84+nrtUSYcWSlcTHHmdb5brEq7ZNaICh5l3IXXyGEtKlSxg8E=
+	t=1788421108; cv=none; b=gUtnRRsPHzQahCHpLoeMl51p/q0RHCRTM1wVlJmMIBHWSxubsSakPykqoRTrhuqLFYJGf1MU2Y1tp1/iNoIicMJIYt57znMVfgmx0h6SpbifnySRzgElAA2YBbYAcOf6yzVnBx4am8F30OE+MyP2y+sXBpciQ0KxiyNA5vJQiIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788421107; c=relaxed/simple;
-	bh=Z1m8YlWqbN772ba8GsyS01fNbHHwITa1zD0swwlZtTc=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dmrour7powvqaVuiRVBjTybnBZuIM+0TI1LNGWdbXAYaDVUf6bZbLpnD4wLrfQIaEj5BTqS+VAuzzt/H00BI3JXeV9rT4+XZ2WvyYfXBQ7GjZ5Xo2E9SNZ9dFVMo4XHd1oJ0cwDDhsa2c+pjWVKww1YmZaIxCUcEUfhGeimG5vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=fiQCk18O; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GnBGHLHC; arc=none smtp.client-ip=193.142.43.55
+	s=arc-20240116; t=1788421108; c=relaxed/simple;
+	bh=kfXhrU5ZDCCCcPmeDM78XUsWU5SKCVK8SjyPBbaDFX8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=e7YDG6iF11LhqwMegrHsOxPB653ZmUX2j5QRu8df707KnBRBfPcKfwbEfmtJ6hcAlfsoYWk/ZsKb4e9MY3yJ0RnjL4zs2X1Obl1TIz0YbZiSiZENyRo5TTa672M8LwCdb9vM/SYQPLthEcP+X1wygbTBknMne4d3wesfVLGNq/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bDrMNU6B; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=AgmCtq+g; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="fiQCk18O";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GnBGHLHC"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bDrMNU6B";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="AgmCtq+g"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1788421098;
+	s=2020; t=1788421099;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=P72WK2dflpRUDrQ2I5ggLeZ9cbv2ljHeu+k9A1omFm4=;
-	b=fiQCk18OlJXgE3uCfKLzKTIOfjKxnZ6QMePaFwyXYkhHPMZyh7nBAVJqyL60lFAXXnS04/
-	sZ7uL145FgHNpGodPskOUEof5mvDuV6oBOzDlLgwe+w2bd8rKJcP5OAsl9Ac4QdDOpuuFh
-	eaP3zlP/Y3GmVlx5MpDNQWmtkIVF17xZeylGG4YcesB9IcKb7A7PKOgFZ6ORsOiLJtBjy5
-	cNhpGObsk69gYVxOrgLhFMj3SnTpPCM5Z2tU/i2mn3IorpIvUHPuTdWJ1QhD6faAkWoRpu
-	0Z5YlX0uO0dT4Bj6npvHJ8HSnrrRTmcz6mb7yGgR8cPARfPps7bcGmaV21myBA==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LV3CUf3SZGLcf02CEjkl1gTTOJdadZAMTEhDYrh8D2c=;
+	b=bDrMNU6BLozNvhhXg0wtk86WW00oUBUXcOPNnum0/foKxxtsFszs3R+RGkqwSW4xobDEe1
+	2lbrEQSi/g0v/yFvMonaMCZxIj1rL4HJyMJboocRwczygM/A+J8KbRVmwu+g2OX2th8CGN
+	s3BLEAa83Q1hZImgQf2J08c0ozhQ7VAq8ZAHLp2JuzWBG5hVnxaRXpYTPgeWdczJoMyU4z
+	dGs6wWxQ77/9ke7SyJ7/vsiSqBDeiwI3e/zyN8+bVb6dS1IfufR3QB+uh0/N91AmSWxOwr
+	2x4gDpEgHJ4spf5KDFjh5IGIZkUdfoWLC4RO7Gpb2DTuJbkMZQ1EgtkwWXU0RA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1788421098;
+	s=2020e; t=1788421099;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=P72WK2dflpRUDrQ2I5ggLeZ9cbv2ljHeu+k9A1omFm4=;
-	b=GnBGHLHCFVSVHNgLuXVhqU3vgazMTxtWSHXH45Wv0EaekAslNCMxjQsHQLCGAMBLPspu7y
-	TmEgRD2pt9jr+DCw==
-Subject: [PATCH v2 0/8] selftests: vDSO: Stop using libc types for vDSO
- calls
-Date: Thu, 03 Sep 2026 09:38:12 +0200
-Message-Id: <20260903-vdso-test-types-v2-0-1eec04eb3658@linutronix.de>
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LV3CUf3SZGLcf02CEjkl1gTTOJdadZAMTEhDYrh8D2c=;
+	b=AgmCtq+gW1FeKJ5OyYnTbRCXwpKfZ/t7y3MixnvZT5g3Yn0Cs6+PYjmZIVEukVNK2w47RK
+	DFOGdNfHfn8AOSCg==
+Date: Thu, 03 Sep 2026 09:38:15 +0200
+Subject: [PATCH v2 3/8] selftests: vDSO: vdso_test_abi: Use types from
+ vdso_types.h
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,70 +50,155 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/2WNywrCMBBFf6XM2kgmpS9X/od0YdOpHZBEMjG0l
- P67seDK5Tlwz91AKDAJXIoNAiUW9i6DORVg57t7kOIxMxhtKkTUKo3iVSSJKq4vElW3lrRt0Ax
- NB3n1CjTxchRvfeaZJfqwHgcJv/bXwr9WQqWVLocSp7a1ddVdn+zeMXjHy3kk6Pd9/wCpuBlTs
- gAAAA==
-X-Change-ID: 20251110-vdso-test-types-68ce0c712b79
+Message-Id: <20260903-vdso-test-types-v2-3-1eec04eb3658@linutronix.de>
+References: <20260903-vdso-test-types-v2-0-1eec04eb3658@linutronix.de>
+In-Reply-To: <20260903-vdso-test-types-v2-0-1eec04eb3658@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, 
  Vincenzo Frascino <vincenzo.frascino@arm.com>, 
  Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788421097; l=2089;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1788421097; l=4174;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=Z1m8YlWqbN772ba8GsyS01fNbHHwITa1zD0swwlZtTc=;
- b=XbizUGGgXkcA2XZCL/GS35erBVEDJzRydfElaua6KWf+JaRTbiCovjAogzvggk0LI4lcF/pZ9
- FbLYFCjYg5HC7tPh/t/rUKcmz16gXJMHJwKAChWZ9EV4eiVd+nq3WYJ
+ bh=kfXhrU5ZDCCCcPmeDM78XUsWU5SKCVK8SjyPBbaDFX8=;
+ b=fu3AOWRJwXw+5vNPFNrTpZxQcjp+7Q1OQ9l33neCvGqJA2TkOJMqzsF4VZkUPikWXLENIp4Tw
+ mM26Cqw2RRBBLcmnlmJrH6gPV/JlnSLm1EoPdKoYGnJt1Z77qM357zK
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Currently the vDSO selftests use the time-related types from libc.
-This works on glibc by chance today but will break with other libc
-implementations or on distributions which switch to 64-bit times
-everywhere.
+The libc types are not necessarily compatible with the vDSO functions.
 
-The kernel's UAPI headers provide the proper types to use with the vDSO
-(and raw syscalls) but are not necessarily compatible with libc types.
-Introduce a new header which makes the UAPI headers compatible with the
-libc.
-
-Also contains some related cleanups.
+Use the dedicated types from vdso_types.h instead.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
-Changes in v2:
-- Rebase on v7.13-rc1.
-- Use __kernel_old_time_t in vdso_time_t.
-- Add vdso_syscalls.h.
-- Add a test for the time() function.
-- Use __NR_* over SYS_* syscall constants.
-- Drop already applied patches.
-- Link to v1: https://lore.kernel.org/r/20251111-vdso-test-types-v1-0-03b31f88c659@linutronix.de
+ tools/testing/selftests/vDSO/vdso_test_abi.c | 35 +++++++++-------------------
+ 1 file changed, 11 insertions(+), 24 deletions(-)
 
----
-Thomas Weißschuh (8):
-      selftests: vDSO: Introduce vdso_types.h
-      selftests: vDSO: Introduce vdso_syscalls.h
-      selftests: vDSO: vdso_test_abi: Use types from vdso_types.h
-      selftests: vDSO: vdso_test_abi: Use system call wrappers from vdso_syscalls.h
-      selftests: vDSO: vdso_test_gettimeofday: Use types from vdso_types.h
-      selftests: vDSO: vdso_test_correctness: Make ts_leq() and tv_leq() more generic
-      selftests: vDSO: vdso_test_correctness: Use types from vdso_types.h
-      selftests: vDSO: vdso_test_correctness: Use system call wrappers from vdso_syscalls.h
+diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
+index b162a4ba9c4f..b7590a727f06 100644
+--- a/tools/testing/selftests/vDSO/vdso_test_abi.c
++++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
+@@ -11,9 +11,7 @@
+ #include <stdint.h>
+ #include <elf.h>
+ #include <stdio.h>
+-#include <time.h>
+ #include <sys/auxv.h>
+-#include <sys/time.h>
+ #define _GNU_SOURCE
+ #include <unistd.h>
+ #include <sys/syscall.h>
+@@ -21,24 +19,12 @@
+ #include "kselftest.h"
+ #include "vdso_config.h"
+ #include "vdso_call.h"
++#include "vdso_types.h"
+ #include "parse_vdso.h"
+ 
+ static const char *version;
+ static const char **name;
+ 
+-/* The same as struct __kernel_timespec */
+-struct vdso_timespec64 {
+-	uint64_t tv_sec;
+-	uint64_t tv_nsec;
+-};
+-
+-typedef long (*vdso_gettimeofday_t)(struct timeval *tv, struct timezone *tz);
+-typedef long (*vdso_clock_gettime_t)(clockid_t clk_id, struct timespec *ts);
+-typedef long (*vdso_clock_gettime64_t)(clockid_t clk_id, struct vdso_timespec64 *ts);
+-typedef long (*vdso_clock_getres_t)(clockid_t clk_id, struct timespec *ts);
+-typedef long (*vdso_clock_getres_time64_t)(clockid_t clk_id, struct vdso_timespec64 *ts);
+-typedef time_t (*vdso_time_t)(time_t *t);
+-
+ static const char * const vdso_clock_name[] = {
+ 	[CLOCK_REALTIME]		= "CLOCK_REALTIME",
+ 	[CLOCK_MONOTONIC]		= "CLOCK_MONOTONIC",
+@@ -66,7 +52,7 @@ static void vdso_test_gettimeofday(void)
+ 		return;
+ 	}
+ 
+-	struct timeval tv;
++	struct __kernel_old_timeval tv;
+ 	long ret = VDSO_CALL(vdso_gettimeofday, 2, &tv, 0);
+ 
+ 	if (ret == 0) {
+@@ -78,7 +64,7 @@ static void vdso_test_gettimeofday(void)
+ 	}
+ }
+ 
+-static void vdso_test_clock_gettime64(clockid_t clk_id)
++static void vdso_test_clock_gettime64(__kernel_clockid_t clk_id)
+ {
+ 	/* Find clock_gettime64. */
+ 	vdso_clock_gettime64_t vdso_clock_gettime64 =
+@@ -91,7 +77,7 @@ static void vdso_test_clock_gettime64(clockid_t clk_id)
+ 		return;
+ 	}
+ 
+-	struct vdso_timespec64 ts;
++	struct __kernel_timespec ts;
+ 	long ret = VDSO_CALL(vdso_clock_gettime64, 2, clk_id, &ts);
+ 
+ 	if (ret == 0) {
+@@ -105,7 +91,7 @@ static void vdso_test_clock_gettime64(clockid_t clk_id)
+ 	}
+ }
+ 
+-static void vdso_test_clock_gettime(clockid_t clk_id)
++static void vdso_test_clock_gettime(__kernel_clockid_t clk_id)
+ {
+ 	/* Find clock_gettime. */
+ 	vdso_clock_gettime_t vdso_clock_gettime =
+@@ -118,7 +104,7 @@ static void vdso_test_clock_gettime(clockid_t clk_id)
+ 		return;
+ 	}
+ 
+-	struct timespec ts;
++	struct __kernel_old_timespec ts;
+ 	long ret = VDSO_CALL(vdso_clock_gettime, 2, clk_id, &ts);
+ 
+ 	if (ret == 0) {
+@@ -155,7 +141,7 @@ static void vdso_test_time(void)
+ 	}
+ }
+ 
+-static void vdso_test_clock_getres(clockid_t clk_id)
++static void vdso_test_clock_getres(__kernel_clockid_t clk_id)
+ {
+ 	int clock_getres_fail = 0;
+ 
+@@ -170,7 +156,8 @@ static void vdso_test_clock_getres(clockid_t clk_id)
+ 		return;
+ 	}
+ 
+-	struct timespec ts, sys_ts;
++	struct __kernel_old_timespec ts;
++	struct timespec sys_ts;
+ 	long ret = VDSO_CALL(vdso_clock_getres, 2, clk_id, &ts);
+ 
+ 	if (ret == 0) {
+@@ -213,7 +200,7 @@ static void vdso_test_clock_getres_time64(clockid_t clk_id)
+ 		return;
+ 	}
+ 
+-	struct vdso_timespec64 ts, sys_ts;
++	struct __kernel_timespec ts, sys_ts;
+ 	long ret = VDSO_CALL(vdso_clock_getres_time64, 2, clk_id, &ts);
+ 
+ 	if (ret == 0) {
+@@ -250,7 +237,7 @@ static void vdso_test_clock_getres_time64(clockid_t clk_id)
+  * This function calls vdso_test_clock_gettime and vdso_test_clock_getres
+  * with different values for clock_id.
+  */
+-static inline void vdso_test_clock(clockid_t clock_id)
++static inline void vdso_test_clock(__kernel_clockid_t clock_id)
+ {
+ 	ksft_print_msg("clock_id: %s\n", vdso_clock_name[clock_id]);
+ 
 
- tools/testing/selftests/vDSO/vdso_syscalls.h       |  92 +++++++++++++++
- tools/testing/selftests/vDSO/vdso_test_abi.c       |  40 +++----
- .../testing/selftests/vDSO/vdso_test_correctness.c | 126 +++++++--------------
- .../selftests/vDSO/vdso_test_gettimeofday.c        |   7 +-
- tools/testing/selftests/vDSO/vdso_types.h          |  75 ++++++++++++
- 5 files changed, 225 insertions(+), 115 deletions(-)
----
-base-commit: 058d40ae995fbcdd8342ef875c4e94df6b93a8b4
-change-id: 20251110-vdso-test-types-68ce0c712b79
-
-Best regards,
---  
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+-- 
+2.55.0
 
