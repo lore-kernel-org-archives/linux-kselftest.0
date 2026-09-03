@@ -1,219 +1,143 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62039412C08
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 20:37:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B3D440636;
+	Thu,  3 Sep 2026 20:41:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788467870; cv=none; b=Vl9IbusS5ce01LFc8Q8b3M6jwz5aRYxH4OfDH8MnptryRWXgjBe+evnJkf6Zh9yvUjwSJRQAbGTkmfkpUPVpM+o0gnrDWCUEKEBaMBZjHQDOuEaXneggrWHPmQ3++hUYDpaRmQWZvIfA7DkLSCCPatDh2sLrFZJQQ75R1UEMvpk=
+	t=1788468104; cv=none; b=ckeg/yS4o3ATUXGEaZifkXjNKURfPAGi5eqAMSgigd0pkiw4RYtuYtqcKIohmH72SJauYGQpaJw6OSCrm5xcYnA0FjtUMiOZOrB/mDMrtaxUSwJMJjZ76rsYlaUWf0kD8DYz4DWpDvxUYU5aOmw+T9GfoMDJ8ehvl2k71aDGfmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788467870; c=relaxed/simple;
-	bh=2UBlYQEyGWOQDtIcz85wPWpuQThTw5iKFdTHWIgVFSQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cJHkbXX6ZHTbQy+77Uo6k0MB0p1bAIrR6BxMmBOJzBMqnwDE/Bh/Pn20DBufQnYfiBwDmmC38VcV2I9NNHBi6uK2OLl79fZGLdC56ePNloqA86p01K4NiOeTemyjhgnvjU1XD/UzfFagPR+SgIblv65Z53vrA21VTxGVe/cFVH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ph9B1whv; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788468104; c=relaxed/simple;
+	bh=AY0HA4ndetMZiaqwqU8UghLdFoFnfxZMx6zhDjYAUVI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f0hTyOQecbtqV/MkOeEg6MwSTM3C6YoOUlwbLdKRqE8nSzJ6nWwnTQYSK0JRRZipFkpUJEWtxuMWIAjN9ZAU0wcQdRKqmh6Li4oHK7e5c+OePwp5X9di5xONeC39k0U06iR9N1A4QTCjQT8gSpQvfs8ZDsQcstNjKbck3JXtNkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JR2UQdMe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ph9B1whv"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-47f96c5b722so231265f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 13:37:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788467856; x=1789072656; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=JG5wHGxobGMru3PHPCCaPFK+av72ZMxaO+XhGsfKu1Y=;
-        b=ph9B1whvBT8TvHNzlYj5fngC4KNl8ic5pB7hUhI9EmVFkf8zM46QqzBr1wsR5wdeR1
-         QBwF5UzF745ngelPYPWU2BeOpsla2Nqg3DwfRgb/ogYYOkt1hURPCIGii8CnJhXBuWvO
-         mu8j6kV+9ewhnLYoGU6aJUdFPUgXaj0faclZ4V935AI6Im23FW9ZfC2XlpPiHsCgTij6
-         JT8J47WYqp48mbWkpjZ8HaiyBvNrn/iigFSHtgtto4pOkXG5aJlLFJFm48DOQel5jjK3
-         Q10y0aTdoCVdsYkBDsv9n416DMZxFzJbA/267PzAVL/p+WxCHSpqRsbBUnNg6ZXkfBWF
-         YXZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788467856; x=1789072656;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JG5wHGxobGMru3PHPCCaPFK+av72ZMxaO+XhGsfKu1Y=;
-        b=FTJbDIKNab+j4+58QyRhlYvE3JN/kmQZ9kcaD3iy5Mf7xj96Wco61epW+CDOD77p07
-         KqqSNmn9oQ+i7Ef64iLxkrDDBjEIOZwRonX2UGtko3FyXxT8j//Db4Jg+MZrSfLNxSTa
-         0teZRKG5X1767DWseMGUsqKUnnDkiDpnjav2ZnvyRsixLF47G+fOEXSwa/dtEhgQcvD1
-         fsFWHudYVf3YK/gmLi52OydqIMYwIX/9SIJTETpVZyeKrRxTQN5yOdcX6FvRoOXWsa0Z
-         MDUh8XdGREBMn/c3b4+mFkDZqVbIe4Ys/NrjSudc1We8/+MwmcC9uWyfR7UlxUKGpc23
-         HsZw==
-X-Forwarded-Encrypted: i=1; AKwUvBwcziX/cikq4KWe2qd631ciglG20IJM5GfB908HZuxmfXuMTpyuFykwA1Be/usgcvXtrZN+4nLPctkWMyywwVg=@vger.kernel.org
-X-Gm-Message-State: AFuF++mjKsq1Oq2lbaipA5DdWz8pv7A6A5KP+4jBEGLSdt2frY16WUxZ
-	5P4VqenXTlFF+LCFJ1vwVNDgQF1ePTS9aG1J9w6yNbyVP4Zu4L1pApx4
-X-Gm-Gg: AYBFou3zAbQkgOeb7wL2Ym31ApUe5Gy45kIcI7jZSJQ0Oe+flvqyBjN1r7mbNO4i+SE
-	Sh43omoMp9utT4SF6G9FwM9dykgpSBhH+gqNbfjmLw9OUOH80eIQF74qldzqCCwjEiUcxzh1RyJ
-	lyUb04vWhbQtCvX5D0lPcIjl+O0vFX30S/syC7Oo6dFyWQYB0Rc4Ji8kNXXKQWCJrUFK10Tv75M
-	yriLegC4qWoXv1O0QjXZYHAvUMVrOnEimGs23UCShCoYO7m2iaVNro+F38FAYfPqDIt3H2RazDZ
-	/g7rnxafjmOIJgKaX3zqBeTmgFIFl1I/sQnT5EjiUjDbXdXn9KlrgMeYlN/OCP0DjOAPzkwzu+h
-	2+45d/LQiXa8nfoZnFM1RCQKlthd6MPr5yCvNIuWJKgl4rHun7NmZUJb0lw34ph/KkqUFCV0Df1
-	ceBglXHTwD3lhZFgnqsKt4TkHGa1fPwEe145slTjXtpFs4e6m8yfEVR5O0pK8yzdz7cE1n7KYtS
-	40wIxqyYiwQ+l1EJJR9Tbbfgdq2QcuIAQicWmoWu+GHesAIqfVpDaqrwNqrCkuebSzLfMFBZkWK
-	7uu8xyqosIgRxjUOB4slDX/zGkKOCIqjOFEqlI1RHT2pfJxtB63zYlU1HpzxnwQc6awsWLqhFYE
-	9yme+
-X-Received: by 2002:a05:6000:4b0f:b0:484:3647:d977 with SMTP id ffacd0b85a97d-485872df445mr2610818f8f.27.1788467855677;
-        Thu, 03 Sep 2026 13:37:35 -0700 (PDT)
-Received: from MacBook-Pro-von-Karl.localdomain (dynamic-2a02-3100-a979-9501-3df6-d7fa-8a5a-06c5.310.pool.telefonica.de. [2a02:3100:a979:9501:3df6:d7fa:8a5a:6c5])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48588394fa1sm1005070f8f.8.2026.09.03.13.37.34
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 03 Sep 2026 13:37:35 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Vlastimil Babka <vbabka@kernel.org>,
-	Harry Yoo <harry@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Hao Li <hao.li@linux.dev>,
-	Christoph Lameter <cl@gentwo.org>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-hardening@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v3 5/5] slab: test ERR_PTR handling in kfree and hardened usercopy
-Date: Thu,  3 Sep 2026 22:37:20 +0200
-Message-Id: <20260903203720.63689-6-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20260903203720.63689-1-kmehltretter@gmail.com>
-References: <20260903203720.63689-1-kmehltretter@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JR2UQdMe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8D0D1F000E9;
+	Thu,  3 Sep 2026 20:41:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788468092;
+	bh=dccCzEuEh91JJr7dSASJ482QV1CaMg8i/UVv42TMhjI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=JR2UQdMedKz3s+eb+c1UCQQBjsKsBHzJlHuFj2Ndy9O43ymWj5x3mOfKb1Q5JvXNE
+	 KjOkRK/WycgPVOuiZ8U86TarsmBu34sUO2A/9O8ocEWdbYgnwxsD4j17EZOK3p8yv0
+	 bJduA9CcV1S7EvYXaf84BGRJU0pNPD6Qjg1U3nQypI6UyOgce4QkyFMbJl9wh71+Kd
+	 vORJuMOxPeYUbYM5QX/BgkU0V6rV4zloEh9sBjA9nzoLXTvmKAMevGibSGQl2yeE4j
+	 pkVy5b43uQ2Sp2VjQcwkKUfXpRQ6oDNQleOE44v5J58v70mqD/mcN4J2lIM6EzaBK8
+	 y/knE4VmtEqcg==
+Date: Thu, 3 Sep 2026 21:41:26 +0100
+From: Mark Brown <broonie@kernel.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
+	Fuad Tabba <fuad.tabba@linux.dev>,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Leonardo Bras <leo.bras@arm.com>,
+	Wei-Lin Chang <weilin.chang@arm.com>,
+	Yao Yuan <yaoyuan@linux.alibaba.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v20 03/14] KVM: arm64: Manage GCS access and registers
+ for guests
+Message-ID: <d2659ac3-2f00-4fc4-8f9e-0585691a4ba2@sirena.org.uk>
+References: <20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org>
+ <20260901-arm64-gcs-v20-3-f31750bdfadb@kernel.org>
+ <apmfx08vccSd2MXw@gremlin>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ww7DzEmaeFudEMkX"
+Content-Disposition: inline
+In-Reply-To: <apmfx08vccSd2MXw@gremlin>
+X-Cookie: One picture is worth 128K words.
 
-Add KUnit coverage that kfree() warns and returns for ERR_PTR values
-while remaining silent for NULL and ZERO_SIZE_PTR.
 
-Add an LKDTM test that verifies hardened usercopy rejects an ERR_PTR
-before attempting the copy.
+--ww7DzEmaeFudEMkX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Assisted-by: LLM
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
----
- drivers/misc/lkdtm/usercopy.c           | 27 +++++++++++++++++++++++++
- lib/tests/slub_kunit.c                  | 18 +++++++++++++++++
- tools/testing/selftests/lkdtm/tests.txt |  1 +
- 3 files changed, 46 insertions(+)
+On Thu, Sep 03, 2026 at 07:13:17PM +0100, Lorenzo Stoakes (ARM) wrote:
+> On Tue, Sep 01, 2026 at 10:47:01PM +0100, Mark Brown wrote:
 
-diff --git a/drivers/misc/lkdtm/usercopy.c b/drivers/misc/lkdtm/usercopy.c
-index 67db57249a34..10751e48211f 100644
---- a/drivers/misc/lkdtm/usercopy.c
-+++ b/drivers/misc/lkdtm/usercopy.c
-@@ -4,6 +4,7 @@
-  * hardening.
-  */
- #include "lkdtm.h"
-+#include <linux/err.h>
- #include <linux/slab.h>
- #include <linux/highmem.h>
- #include <linux/vmalloc.h>
-@@ -273,6 +274,31 @@ static void do_usercopy_slab_whitelist(bool to_user)
- }
- 
- /* Callable tests. */
-+static void lkdtm_USERCOPY_ERR_PTR(void)
-+{
-+	unsigned long user_addr;
-+	size_t size = unconst + 1;
-+
-+	user_addr = vm_mmap(NULL, 0, PAGE_SIZE,
-+			    PROT_READ | PROT_WRITE,
-+			    MAP_ANONYMOUS | MAP_PRIVATE, 0);
-+	if (user_addr >= TASK_SIZE) {
-+		pr_warn("Failed to allocate user memory\n");
-+		return;
-+	}
-+
-+	pr_info("attempting bad one-byte copy_to_user() from ERR_PTR\n");
-+	if (copy_to_user((void __user *)user_addr, ERR_PTR(-EINVAL), size)) {
-+		pr_warn("copy_to_user failed, but lacked Oops\n");
-+		goto free_user;
-+	}
-+	pr_err("FAIL: ERR_PTR usercopy not detected!\n");
-+	pr_expected_config_param(CONFIG_HARDENED_USERCOPY, "hardened_usercopy");
-+
-+free_user:
-+	vm_munmap(user_addr, PAGE_SIZE);
-+}
-+
- static void lkdtm_USERCOPY_SLAB_SIZE_TO(void)
- {
- 	do_usercopy_slab_size(true);
-@@ -439,6 +465,7 @@ void __exit lkdtm_usercopy_exit(void)
- }
- 
- static struct crashtype crashtypes[] = {
-+	CRASHTYPE(USERCOPY_ERR_PTR),
- 	CRASHTYPE(USERCOPY_SLAB_SIZE_TO),
- 	CRASHTYPE(USERCOPY_SLAB_SIZE_FROM),
- 	CRASHTYPE(USERCOPY_SLAB_WHITELIST_TO),
-diff --git a/lib/tests/slub_kunit.c b/lib/tests/slub_kunit.c
-index 923d8646bca1..079563387007 100644
---- a/lib/tests/slub_kunit.c
-+++ b/lib/tests/slub_kunit.c
-@@ -507,6 +507,23 @@ static void test_zero_size_alloc(struct kunit *test)
- 	kvfree(ZERO_SIZE_PTR);
- }
- 
-+static void test_kfree_err_ptr(struct kunit *test)
-+{
-+	if (!IS_ENABLED(CONFIG_BUG))
-+		kunit_skip(test, "requires CONFIG_BUG");
-+
-+	kunit_warning_suppress(test) {
-+		kfree(NULL);
-+		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 0);
-+
-+		kfree(ZERO_SIZE_PTR);
-+		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 0);
-+
-+		kfree(ERR_PTR(-EINVAL));
-+		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 1);
-+	}
-+}
-+
- static int test_init(struct kunit *test)
- {
- 	slab_errors = 0;
-@@ -532,6 +549,7 @@ static struct kunit_case test_cases[] = {
- 	KUNIT_CASE(test_leak_destroy),
- 	KUNIT_CASE(test_krealloc_redzone_zeroing),
- 	KUNIT_CASE(test_zero_size_alloc),
-+	KUNIT_CASE(test_kfree_err_ptr),
- #ifdef CONFIG_PERF_EVENTS
- 	KUNIT_CASE_SLOW(test_kmalloc_nolock_and_friends_perf),
- #endif
-diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-index bec57a02913a..d3e38c1c75cd 100644
---- a/tools/testing/selftests/lkdtm/tests.txt
-+++ b/tools/testing/selftests/lkdtm/tests.txt
-@@ -70,6 +70,7 @@ REFCOUNT_DEC_AND_TEST_SATURATED Saturation detected: still saturated
- REFCOUNT_SUB_AND_TEST_SATURATED Saturation detected: still saturated
- #REFCOUNT_TIMING timing only
- #ATOMIC_TIMING timing only
-+USERCOPY_ERR_PTR Kernel memory exposure attempt detected from ERR_PTR
- USERCOPY_SLAB_SIZE_TO
- USERCOPY_SLAB_SIZE_FROM
- USERCOPY_SLAB_WHITELIST_TO
--- 
-2.53.0
+> > GCS introduces a number of system registers, on systems with GCS we need
+> > to context switch them and expose them to VMMs to allow guests to use
+> > GCS.
 
+> > +				ctxt_sys_reg(ctxt, GCSCR_EL1)	=3D read_sysreg_el1(SYS_GCSCR);
+> > +			}
+
+> I had AI check this (and I think sashiko also hit on) it but this is a ch=
+ain of:
+
+> 	ctxt_has_tcrx() -> ctxt_has_s1pie() -> ctx_has_gcs()
+
+> Is it correct to make the gcs stuff conditional on tcrx + s1pie + gcs?
+
+There are architectural dependencies which mean it is not valid to
+configure GCS without S1PIE, and S1PIE depends on TCRX.  I had
+originally written the code without expressing this dependency but on a
+previous version Marc asked for this nesting as an optimisation.  Since
+it's about optimisastion adding checks that don't otherwise exist on the
+restore path would doubtless get the similar complaints.  Exactly the
+same concerns were raised on v19.
+
+> And it seems like that feature depends on ctxt_has_tcrx() so _architectur=
+ally_
+> fine, but it doesn't seem like KVM enforces the dependency at all and so =
+in
+> theory somebody could KVM_SET_ONE_REG a GCS, !S1PIE configuration.
+
+> And nicer to be consistent everywhere also I think (+ shut sashiko up! :)
+
+FWIW I do agree but I'm not sure how else to implement Marc's feedback
+here. =20
+
+We could do checking of the ID registers at vCPU creation so we could
+avoid worrying about them in the fast path but there was also feedback
+about not doing that.  One idea I had was to generate feature
+combination validation from the MRS, I think the main complaint was
+about open coding things rather than having the validation per se but
+ICBW.  Last I heard we were very near to having code for working with
+the MRS released which will help a lot with uses like that.  There is
+the possibility that people are relying on doing architecturally
+invalid configurations though.
+
+> And it seems like it makes it possible for a silly VMM which sets up the
+> registers wrong + some unfortunate guest behaviour -> oops via:
+
+> el1h_64_sync_handler() -> el1_gcs() -> do_el1_gcs()
+
+> Because the host's restore is skipped for s1pie=3D0, gcs=3D1, so a naught=
+y guest can
+> set gcsr_el1.pcrsel=3D1 and some value in gcspr_el1, then the host will g=
+et a
+> mismatch and trigger the kernel die().
+
+Yes, that's possible.  GCSCR_EL1.EXLOCKEN would create similar issues.
+
+--ww7DzEmaeFudEMkX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqZ23UACgkQJNaLcl1U
+h9Al2Qf9ELbi7FMrvb55gE/GD2/KOEk1DQNXY0/pdhRkKK5qem9JnkbO+L14rCTr
+UAItGA0GK83uI0GsfGMcj+oMPSMdbYvXFkruxoB9rq15icQhDSJ23bs7AAfowinc
+kkURT3oHz+G5t1sjwqswxdDjgVnIBF1f1Wy6UGOLNDGubJC1N8Gg+5tkHSQbz44j
+i2T04NdcyfXNQ6Zauee2wDnDG7ER2rPCRQVs0bKbiKG5DGkY1qLKgz/wunubw5Qd
+sS+p5dbX963skXH+nupEIW2HmAGu1cnU8hN9uOQw8JrsNJF743QHBNO+HPQqX4M6
+1M/aypWp/LTSHMquahmBniNSxNWzlQ==
+=1LHo
+-----END PGP SIGNATURE-----
+
+--ww7DzEmaeFudEMkX--
