@@ -1,166 +1,137 @@
-Received: from out28-125.mail.aliyun.com (out28-125.mail.aliyun.com [115.124.28.125])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73593546E0;
-	Thu,  3 Sep 2026 02:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.125
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D19D26ED46
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 03:04:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788403303; cv=none; b=NkEVnkxlZioMeZ+cwKZcwEwzqnFFojxrF/XywVk5R4KlzC3HJ24kwr6WLzXUv6dDRbydeGmMSSpQ98Y/g3WLoeXnL1+Vwd0vfL9uwpo8rEhZ1iiAnq8Q9zSvFCMff70dv/Jva7D1Fxaz6vckBpcb5zJ4y9g8nL5Ibdu6BA0Wvi4=
+	t=1788404681; cv=none; b=bWnd6kUrV1VhQkzaq1LDIGOSq1h/st808YHFrnk3P0/yjnDtT8w2tfxSK/VaESkfZpmBXetwIXq4I02Svt2TxSrf4ZNfCZqPe53auSBzPy+ZTNu6KcxeN3zo791JNcP7Zcy6hZ1fSV/4Rp7ub+st58Ssz53EH8GEkC9PCr/R9W4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788403303; c=relaxed/simple;
-	bh=6u4PHAZ/H4x65SWpE7IYKnikm6E+U38Lj4eVkpdhFKM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bj7teHrbiciLcnlX0MP1SzNQ7BdavcX31/B+6JznCg6aJldUZD+y91G7/5UYNQKKE9RGuJv2j1tgHUlMNU7FPtbRPUHgJEAvqrQpmrMOdZzUmKj9KcXaeaDSS89j7feOkmV40gNY0SRpsXL5L7qSiQmT0cazb/c9x1S98DyS8Ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.125
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.09446921|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00875414-0.00211812-0.989128;FP=7200128259874146027|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033023018039;MF=zhang_wei@open-hieco.net;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.j429d-8_1788403282;
-Received: from 172.18.22.44(mailfrom:zhang_wei@open-hieco.net fp:SMTPD_---.j429d-8_1788403282 cluster:ay29)
-          by smtp.aliyun-inc.com;
-          Thu, 03 Sep 2026 10:41:26 +0800
-Message-ID: <9515a124-5c18-4015-b64a-e80bb6b84264@open-hieco.net>
-Date: Thu, 3 Sep 2026 10:41:20 +0800
+	s=arc-20240116; t=1788404681; c=relaxed/simple;
+	bh=jZiWYHItaHZXLwaaS6GizSmKCrgqOiwgtX+q1aMZoz4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BSzZgl1nzAYbiFHo7RmR6HLKfnG+W3HBXmG+XK2jNUOkPEaW81WifouBQDRPew7FwLTEru2klaTejxj172I9H9w3j4qfWz/J28zVlM6MznSAjp59v+mECT64+V38c6gXl7A2w3QHXQkaVEhL11mHbUfzzz8ZsCQQcyq3TWXDcrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hKpftsFp; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hKpftsFp"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2caced6038eso6371665ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Sep 2026 20:04:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788404680; x=1789009480; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=PZ5VZbOzOAiIg21alHu3P1D5kKDO/4ea9+shULiGmrs=;
+        b=hKpftsFpGZ7SIGCko8LqaAWKV/v2qY/j2EWFzVy0KBQ5a1Ur+YHcjFe4doHk0pRm6c
+         GCOdNdRgAYWm93W+y0t2TMz/M3X7MiNYN8plL2Zw5m0Uvd5pWn7b7utP7uXNvbEE+Ps9
+         WF3cw1vdaOrIReRdD5sIjI/DUE78HCATsMReoIuzfBvPbozs2HyEfkDTPGLeAvFaRST2
+         r7oGCbBMmGsMsHMM6a67LAgh50xfRX3og7FXm3rN9iil7lE+RkoFNesgTblJ2TArEZNH
+         VgaKL7mYMTd24IXqxSfJ6uwtu/lHrOS93NcYsGSs0BWbimuSHxKtceKLJLGSMcuxtjFK
+         lE9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788404680; x=1789009480;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=PZ5VZbOzOAiIg21alHu3P1D5kKDO/4ea9+shULiGmrs=;
+        b=Drrx4zuex/gR9OSVJ1ZThfPo+Lm1P3GoWR0Q/KQRLgHDZ8AWoNfHsRwHq2kjcv0sAL
+         iLeDfkDuDoeuBpW5P5wYAGHI/qRnJXg36CzPbEY6cNu85XwLMxKJwHAdaBb5A5vh6bZz
+         bYIt0uzibc/svGrYFflN6w7UqpxiyVji4l4bzCnr0G7SwIgL9tt3KbeNcnExO8l4ETDf
+         775uPk680fRWj+RMId3/ZTBZLXgMxY+Aa8VKJasEW4rfg7JF0EB1OUU4Yudkka1o2Q5x
+         cwbnbqw7B21ypOu1GgIk7DBXgU+Wmamne06d5AUcefAhAApMalblZLpk0ZCp+6NJ9U27
+         MCXg==
+X-Forwarded-Encrypted: i=1; AKwUvBywei/XjpglQNeYqfrq7yjYtOt3+iliit3luf0B/RXVYeNG6SjHfbOeXgLhEgY8DBL80m2FJ9pVqYsGm0BJgQ0=@vger.kernel.org
+X-Gm-Message-State: AFuF++ngRMKULoYR1L4AdovIRTtlW6Dz+4dkWT/QEFUPcFoQp0Zm8PO+
+	cmR3zUn2nWHDtd1jGwGG7knf6NyNOEP8HHp4aN6D3VygpwVnIfLRyDgj
+X-Gm-Gg: AYBFou1xynd3OwRnTUBH6zXpNUP5ofg2hnGRLmYwaFvFw2xHxc3L3iB7fqhOXzUUw6Q
+	JGTPO0CJwCIb6q47aS9J9pxcxsgL3s+zQZjGd5nOmutGaxctxytVrgVa8SqQ8FfwsGLxbe09aPQ
+	iOETiEayJz1s1SpZGvMf8ZR68pBKtqrHFKe5Od55FwH4PoaMAFEuffi1X2pGav5KOvMzsc1Ha/J
+	nWvidnVGL0Z4BCswhXEMqpDvmXqTye2soPEw+OjyhCepbfBwtuRwmH+40CytlzGuCBrb/z60fUY
+	HMsRB05oElbcGG2EyGQrmybhEBDxxjzxh89wBWqkHa6EceLisizGUF56HQFfo7ZTeSVKzqCVNhq
+	oPOWI2rX32xV96JeilGH38Kjrn8NW8I4DnLe4Amo7MkKPJKOpwmXnVldEi4siwSgE9gldPsDcda
+	V9U3uB9GizaL103Ay5EpFblNMtayNrEUsAW7MXVDm/4NqxRXbmKDn/bRCSA2skYWW1JwKJNA==
+X-Received: by 2002:a17:902:f545:b0:2d6:dcf3:b754 with SMTP id d9443c01a7336-2db020c9d24mr8716085ad.7.1788404679175;
+        Wed, 02 Sep 2026 20:04:39 -0700 (PDT)
+Received: from gmail.com ([185.220.238.35])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dafec286d7sm2793645ad.51.2026.09.02.20.04.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Sep 2026 20:04:37 -0700 (PDT)
+From: Kunwu Chan <kunwu.chan@gmail.com>
+X-Google-Original-From: Kunwu Chan <kunwu.chan@linux.dev>
+To: SJ Park <sj@kernel.org>
+Cc: Kunwu Chan <kunwu.chan@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	Kunwu Chan <kunwu.chan@gmail.com>
+Subject: Re: [PATCH 08/12] mm/damon/tests/core-kunit: test overlapping ranges for set_regions()
+Date: Thu,  3 Sep 2026 11:04:27 +0800
+Message-ID: <20260903030429.309611-1-kunwu.chan@linux.dev>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260902054747.99370-9-sj@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/8] KVM: nSVM: Enable DecodeAssists for nested guests
-To: Sean Christopherson <seanjc@google.com>, Jim Mattson
- <jmattson@google.com>, kvm@vger.kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- zhouyanjing@hygon.cn, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260824123954.315112-1-zhang_wei@open-hieco.net>
-Content-Language: en-US
-From: Tina Zhang <zhang_wei@open-hieco.net>
-In-Reply-To: <20260824123954.315112-1-zhang_wei@open-hieco.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Sean and Jim,
+On Tue,  1 Sep 2026 22:47:41 -0700 SJ Park <sj@kernel.org> wrote:
 
-A gentle ping on this series. I believe v5 addresses all the comments 
-from the previous review rounds. Could you please take another look when 
-you have a chance? Any further comments would be appreciated.
+> Commit 954157679ec3 ("mm/damon/core: disallow overlapping input ranges
+> for damon_set_regions()") disallowed passing overlapping input ranges to
+> damon_set_regions().  Add a kunit test case for the overlapping input.
+> 
+> Signed-off-by: SJ Park <sj@kernel.org>
+> ---
+>  mm/damon/tests/core-kunit.h | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
+> index 3cbbbcbfbef8f..a4164ac489a61 100644
+> --- a/mm/damon/tests/core-kunit.h
+> +++ b/mm/damon/tests/core-kunit.h
+> @@ -612,6 +612,17 @@ static void damon_test_set_regions(struct kunit *test)
+>  			{.start = 42, .end = 21},
+>  			}, 1, 1,
+>  			(struct damon_addr_range[]){}, 0, -EINVAL);
+> +	/*
+> +	 * Regions resulting in same region after alignment should return
+> +	 * -EINVAL.
+> +	 */
+> +	damon_test_set_regions_for(test,
+> +			(struct damon_addr_range[]){}, 0,
+> +			(struct damon_addr_range[]){
+> +			{.start = 10, .end = 20},
+> +			{.start = 20, .end = 30},
+> +			}, 2, 4096,
+> +			(struct damon_addr_range[]){}, 0, -EINVAL);
+>  }
+>  
+>  static void damon_test_update_monitoring_result(struct kunit *test)
+> -- 
+> 2.47.3
+> 
+
+Hi SJ,
+
+I reviewed patches 6-8. The test helper extension and the added
+error cases look correct to me, including the overlap case after
+range alignment.
+
+Reviewed-by: Kunwu Chan <kunwu.chan@gmail.com>
 
 Thanks,
-Tina
+Kunwu
 
 
-On 8/24/2026 8:39 PM, Tina Zhang wrote:
-> The SVM DecodeAssists feature provides decode state for selected
-> VM-Exits.  KVM currently does not expose this feature to L1.  Some L1
-> hypervisors may therefore treat the platform's SVM support as
-> incomplete.
-> 
-> In practice, this was observed with Hyper-V running on top of KVM.
-> Hyper-V appears to require DecodeAssists before enabling nested SVM for
-> its guests.  Virtualizing the feature lets users enable Hyper-V
-> virtualization features inside a Windows VM when needed, e.g. to run
-> QEMU/KVM in WSL.  Without DecodeAssists, Hyper-V does not enable nested
-> SVM because DecodeAssists is missing from KVM's virtual SVM model.
-> 
-> Virtualize both parts of DecodeAssists for nested SVM.  For emulated
-> MOV CR/DR, INTn, INVLPG, and INVLPGA intercepts, synthesize the
-> architectural EXITINFO state that hardware would provide to L1.
-> 
-> For data #PF and #NPF VM-Exits, provide GuestInstrBytes from fresh
-> VMCB02 state, matching emulator fetch bytes, or an on-demand fetch from
-> the current L2 CS:RIP, depending on how the nested VM-Exit was produced.
-> Instruction-fetch faults report no instruction bytes, and encrypted
-> guests do not use the on-demand fallback.
-> 
-> Add a focused selftest covering synthesized EXITINFO, hardware and
-> synthesized GuestInstrBytes, truncated instruction fetching, and
-> instruction-fetch faults.  The test has been run with
-> kvm.force_emulation_prefix both disabled and enabled.
-> 
-> Changes since v4:
-> - Drop the generic queued-exception provenance tracking for delayed and
->    synthesized #PF VM-Exits.  Fetch their instruction bytes from the
->    current L2 CS:RIP when constructing VMCB12 instead.
-> - Keep matching emulator fetch bytes only for synthesized #NPF exits,
->    and use the on-demand fetch to fill any missing tail.
-> - Reduce the series from nine to eight patches by removing the generic
->    x86 exception-tracking patch.
-> - Trim the selftest to focused cases that cover distinct implementation
->    paths and regressions, removing redundant instruction variants,
->    overlapping boundary cases, and userspace event-state coverage.
-> 
-> v4:
-> https://lore.kernel.org/r/cover.1787116250.git.zhang_wei@open-hieco.net
-> 
-> Changes since v3:
-> - Rebase onto kvm-x86/next.
-> - Register DecodeAssists in the CPUID 0x8000000A SVM capability
->    initializer so that common code validates its CPUID word before the
->    SVM code enables it for nested guests.
-> - Make the VMCB02 instruction-byte source const and simplify the
->    synthesized-byte copy and fallback-fetch flow.
-> 
-> v3:
-> https://lore.kernel.org/r/cover.1785411877.git.zhang_wei@open-hieco.net
-> 
-> Changes since v2:
-> - Rebase onto kvm-x86/next.
-> - Track hardware-provided instruction bytes independently of the VMCB02
->    exit code, and preserve the bytes when L0 handles an intercepted #PF
->    before reflecting it to L1.
-> - Select the instruction-byte source using host-owned VMCB02 state
->    instead of control fields in guest-owned VMCB12.
-> - Record whether a queued #PF VM-Exit has a matching emulator context,
->    so userspace-injected #PF exits do not consume stale emulator bytes.
-> - Stop fallback instruction fetches at noncanonical addresses and at the
->    32-bit linear-address boundary.
-> - Extend the selftest with regression coverage for replacing a hardware
->    #NPF with a synthesized #NPF and for userspace-injected #PF during
->    emulation, and harden its page layout and ucall handling.
-> 
-> v2:
-> https://lore.kernel.org/r/cover.1783999988.git.zhang_wei@open-hieco.net
-> 
-> Changes since v1:
-> - Split the implementation into seven patches to make the individual
->    pieces easier to review.
-> - Add EXITINFO virtualization for emulator-generated MOV CR/DR, INTn,
->    INVLPG, and INVLPGA intercepts.
-> - Limit GuestInstrBytes propagation to data #NPF and intercepted #PF
->    exits, and clear the fields for instruction-fetch and unrelated exits.
-> - Provide GuestInstrBytes for KVM-synthesized data #PF/#NPF exits.  Use
->    matching emulator bytes first and fetch missing bytes from L2 RIP as a
->    fallback, while avoiding fallback reads for SEV guests.
-> - Expand the selftest beyond hardware #NPF and stale-state coverage to
->    exercise hardware, synthesized, userspace-injected, instruction-fetch,
->    page-boundary, and CS-limit cases.
-> 
-> v1:
-> https://lore.kernel.org/r/20260629125205.52394-1-zhang_wei@open-hieco.net
-> 
-> Tina Zhang (8):
->    KVM: x86: Add helper to provide intercept linear addresses
->    KVM: nSVM: Synthesize DecodeAssists EXITINFO for emulated intercepts
->    KVM: nSVM: Track fresh hardware DecodeAssist bytes
->    KVM: nSVM: Propagate hardware DecodeAssist bytes to VMCB12
->    KVM: nSVM: Use emulator bytes for synthesized nested #NPF
->    KVM: nSVM: Fetch missing DecodeAssist bytes for synthesized #NPF/#PF
->    KVM: nSVM: Advertise DecodeAssists to L1
->    KVM: selftests: Add nested SVM DecodeAssists test
-> 
->   arch/x86/kvm/cpuid.c                          |   1 +
->   arch/x86/kvm/emulate.c                        |  29 +-
->   arch/x86/kvm/kvm_emulate.h                    |   1 +
->   arch/x86/kvm/svm/nested.c                     | 180 ++++++-
->   arch/x86/kvm/svm/svm.c                        |  56 +-
->   arch/x86/kvm/svm/svm.h                        |  17 +-
->   tools/testing/selftests/kvm/Makefile.kvm      |   1 +
->   .../selftests/kvm/include/x86/processor.h     |   1 +
->   .../kvm/x86/svm_nested_decode_assists_test.c  | 482 ++++++++++++++++++
->   9 files changed, 754 insertions(+), 14 deletions(-)
->   create mode 100644 tools/testing/selftests/kvm/x86/svm_nested_decode_assists_test.c
-> 
-> 
-> base-commit: 1b731e5ded480bd1e5546aed35584238661ce72e
-
+Sent using hkml (https://github.com/sjp38/hackermail)
