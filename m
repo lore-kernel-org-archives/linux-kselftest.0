@@ -1,145 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A39D4B1B41;
-	Thu,  3 Sep 2026 14:04:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE1F4A2A4B
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 14:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788444306; cv=none; b=JIFs3dRVVErdjTNBLY6TQqqVv4QjKk13qnSsGFPuB7I1962MAuZmKHa/t//PhmdPFW7zRMtH7srZcAqFutcS4XBvXvYZv+bYPEKQUPWx+6/bGp5dfgMCOyADlLp0lSjRBUgPRnFPeo42tSbltWXC8AEkLDCJ7/429FOR2S/MOfA=
+	t=1788445046; cv=none; b=sIe4u90Q92VEvdpeCcLzsbtjj0Vk8heGd6eyx7qlPNV8wFhLO44XmW7u3+eEMmNqYnZ17kZYBf0/GudOQTUko/NoSZoEFW/CZFdUknrHbMeR4KzB47KmqbCsyYZ1w7TacylfmYbBnkOw3hmyJMbJzVT/KLcxt7UWY+J8q6mblbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788444306; c=relaxed/simple;
-	bh=/bwUsPFOPColKlBNTYApu5MktiyXtyxEoVxqVzkOAG0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eLas9pPpl9YJxerfve+Cb9artKqJI2M/8+pKrnkNCfJJRNMBPKZTigNnb9KO795CDgkiv5jtbs6g2FjlTktK9duy1IuvstVnYa7Fn3r4iHYNvXc7BQAuHRtlzyoGUKwYPC2bq0iZnPjqPKJ4308bcDLZCd5R5JcdHpRWocj+2iE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U1dKkoSP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788445046; c=relaxed/simple;
+	bh=grbSD99wnbBQjbz5a/guFkZGFX6aK7WNXYkMNE/JzbU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fIFpERRprHSiqRqcHtci4dbg2894v6Qas2fqFeSr8h0lIqQ9gcFGgfv8mR9nygFUCi2g0PN9cIttCCXFsiPE3P3yY3BDcTyV4L9tN1ErMI4wxCD6udBO6/NDzDKzERu804VBczDilH5oI9j9uqh+I/MIbunWm6Kx6yKkYo86+bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QOYurI94; arc=none smtp.client-ip=209.85.161.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U1dKkoSP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE2951F00A3E;
-	Thu,  3 Sep 2026 14:04:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788444295;
-	bh=elge9bDwtCLKT6xvAo3JEAnzLjGry/X8H8tlMHRXEkQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=U1dKkoSPdAWi+lBx2IodRAo+PkpJIhGCvTSJ1ADsxn5z9A2citGbidswvrrava5iz
-	 ++OYMoE48S/FkIlqNm6nOVnquLiVBZeP17Bd0w81JRE0U9f+x1UgeDzMqMEkoKS3zJ
-	 wF33hMQM0KtC8xU0KwGdS1jDmNv3eZDvnGIffxXzvT3d6fMHZWrp7fX3PDwV4h9RBT
-	 EgHZ6+D7tLUZDNsT9CHbSTPVCHUbVQaKauNHhx+AWBu23+LiPfJPTG63l8yyz9Y1UN
-	 ijDg3/bwZEG3FE+VFXUxp1mI+Xfjhflq/tdU+l6+5UJWrzpN82ooLFbSMh6l/h+Vqo
-	 tjK95QBJzG+Yg==
-Date: Thu, 3 Sep 2026 15:04:48 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Zenghui Yu <zenghui.yu@linux.dev>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org, david@kernel.org, liam@infradead.org, 
-	vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
-	shuah@kernel.org, ziy@nvidia.com, baolin.wang@linux.alibaba.com, 
-	nico.pache@linux.dev, ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org, 
-	lance.yang@linux.dev, usama.arif@linux.dev
-Subject: Re: [PATCH] selftests/mm: remove unreachable returns after ksft exit
- helpers
-Message-ID: <apl-bS787dYOwTP-@gremlin>
-References: <20260903135251.39593-1-zenghui.yu@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QOYurI94"
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-6b1a0d75a4fso1334957eaf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 07:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788445037; x=1789049837; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=zcCW6+/z3gty5vQ5bRmZgnTdisuOcsWk7AuFt/Gu6MM=;
+        b=QOYurI94eBhCsm7GIovBe1qbVZIqPNiHvos/4RtFCcBOjOZ12nAzHNP14mwKrqYgnH
+         pmAzOfjVcAFAesdrH0FgPpLqafI4FZc+Ex3bDHHM9VmKgpnGv69jftLgt4q2NSh3cvIp
+         xV3v2UYGckSQrno+u6Lf7IS7UkP/LAEtmEMHUuJqBBNn0NEH1gS5f2FgkvQjRJ8DI/je
+         g7fcDC5gniABI9l9Uo0RlCpvC/DeTE16o5QYQ8CVXsLWkbrk4S01gx/dZdS0u9NolutW
+         bWZZQwW/dZIDmqMumyUWAW5xsskT77U6gDRnfhvc/MiVHoeqwF4r4eElOAgn8F9AL/IE
+         g04w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788445037; x=1789049837;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=zcCW6+/z3gty5vQ5bRmZgnTdisuOcsWk7AuFt/Gu6MM=;
+        b=BVILChdG195qmyseR9/uiI3YmRQR+zx/SJsrhXn9YK28c9r6gevRdhA9YzdnwfkGUq
+         GLiObiRouz5amR4ncbheKXyWQk8JG67vvcrMv6fVl8ErIuo98FdFCQAcUHMqXzz89G5k
+         m2yP5vFulkwkifSAa0NkYsSoBDsbyK+GlLfT5MIrw2vTl6b97oOiYf3tk9EEq/nWfL70
+         pB5FFDlHbK5yK0k46kGhbaKpb+LIh/TNGCYim+/NygeYc61igQsPsfzk+B57j3gI9lDO
+         liiaVA0nvLEiI4wdX8aapKdAgrr2ZAI4pDWco3mV5FLGkZbn6BwqZoeawL4VtoPN3QTJ
+         IhBQ==
+X-Forwarded-Encrypted: i=1; AKwUvByOx3J9LzbepfAHu4JGe7vILrxqRLzEM1NcIm42t3XC4ywYOhMNnsH1sx5cGW3QMnbC3R5QbVQgIZAflekrq9A=@vger.kernel.org
+X-Gm-Message-State: AFuF++nHRT3nd3wsJYQkRA3XCRtY5BufQ4WwX/eLkf/sxImB9GFnzzYv
+	t9Eb2mm1QH43guf2Lhz6hAe1n1lTupkSivxaIpYppbQpM6sw+1RUvnpWA4GM+w==
+X-Gm-Gg: AYBFou3rd3vEMo1tF1/FuTIcncUp1sVgS/JvzPvUql/GkFk4WoA7UEjKif7dZMzGQdk
+	8Sk2jh81kS44RkTBW6mKlyIow/p0/pv3oLwB1X0VuxLSYb1QwJ9VzfN1HFzIMcKvgyN8UBu1rIr
+	vDM4Pl43Ryr51i720A4I3WeYAGuFtR9WNgELRuu+LRSRQd9JOpolbk3urjIHEm1TMjntojt3ZZ7
+	/cUCptGLQbIVSFlEEu0a2nopccQqv3+5WPEjheRWMhyIIZdKUJtANHysbbzLAPgJ3D0s6NukK2t
+	DMTgMEtAyngxpHVotQC48/oi6So2xjgCHz8dYMQl6NnKl3ruvkAVHBIp0oZUffyUEV8LDBVBXHG
+	iyTJ30lzo7WdO2QsltXOXkWhmzP48hZunAqQLKUW7fX1mrdl/Ed/lzOBWLRR9FpLqSLlbU0orVa
+	cZurbl/IZx6BE3QzD4HP7P5z1l0JE+ieEhSLgMZDgh/hGheKcs023Fa3tm6lisc/7cnE6eZdR0G
+	xoLzLKUpqxFoTF5FBc=
+X-Received: by 2002:a05:6820:a0e:b0:6b1:4fe1:9464 with SMTP id 006d021491bc7-6b47dfac321mr10573094eaf.22.1788445036581;
+        Thu, 03 Sep 2026 07:17:16 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:1b::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-46f3292c0b0sm7715350fac.12.2026.09.03.07.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2026 07:17:16 -0700 (PDT)
+From: Joshua Hahn <joshua.hahnjy@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Nhat Pham <nphamcs@gmail.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Yosry Ahmed <yosry@kernel.org>,
+	Krush Chavan <krushchavan@outlook.com>,
+	"Chengming Zhou" <chengming.zhou@linux.dev>,
+	"Tejun Heo" <tj@kernel.org>,
+	Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	"Shuah Khan" <shuah@kernel.org>,
+	linux-mm@kvack.org,
+	cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH v2] selftests/cgroup: account for zswap shrinker writeback
+Date: Thu,  3 Sep 2026 07:17:13 -0700
+Message-ID: <20260903141714.595256-1-joshua.hahnjy@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260902180408.05b925ce05359cd4d7f96894@linux-foundation.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260903135251.39593-1-zenghui.yu@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 03, 2026 at 09:52:51PM +0800, Zenghui Yu wrote:
-> From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
->
-> The ksft_exit*() helpers such as ksft_exit_fail_msg() are declared
-> __noreturn, and the ksft_exit() and ksft_finished() macros expand to calls
-> of them, always terminating the process via exit().  Any return statements
-> following such calls are unreachable, both at the end of main() and on
-> error paths of helper functions.
->
-> Remove all of them.  No functional change.
->
-> Assisted-by: GLM-5.3 OpenCode
+On Wed, 2 Sep 2026 18:04:08 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
 
-Thanks for providing the tag, much appreciated :)
+> On Wed,  2 Sep 2026 12:45:20 -0700 Joshua Hahn <joshua.hahnjy@gmail.com> wrote:
+> 
+> > The test_no_invasive_cgroup_shrink selftest checks that when a cgroup
+> > has zswapped out more memory than memory.zswap.max, it does not
+> > trigger writeback for other cgroups. To do this, it compares the
+> > writeback count in a control cgroup and makes sure that it is 0,
+> > and then checks the writeback count in an aggressor cgroup who does
+> > expect to see writeback.
+> > 
+> > However, when the zswap shrinker is enabled, the victim cgroup can see
+> > legitimate writebacks not triggered by the aggressor. In some Meta CI
+> > tests, we have seen this failure mode happen.
+> > 
+> > Instead of checking that the victim cgroup has 0 writeback, compare the
+> > writeback values before and after the aggressor runs and check that
+> > the victim cgroup did not perform any additional writeback. Note that
+> > this can still lead to probabilistic failures if writebacks take longer
+> > than 5 seconds, but this should fix the systematic failure case.
+> > 
+> > Fixes: b5ba474f3f51 ("zswap: shrink zswap pool based on memory pressure")
 
-> Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
+Hello Andrew, I hope you're doing well!
 
-LGTM, so:
+> Thanks.
+> 
+> I do support backporting selftests fixes.  We want selftests to work
+> well in the kernel with which they are shipped.  But, as ever, we
+> should include a clear explanation of the userspace-visible runtime
+> effects of the bug.
+> 
+> Seems the short answer is "false-positive test failures" but we can
+> perhaps do a little better than that.  Quoting the failure messages
+> would be a good way - very recognizable.
 
-Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+That sounds good to me. Unfortunately it seems like the selftests
+aren't too expressive in terms of why it failed, so this is all that
+I was able to pick up from the selftest logs:
 
-> ---
->  tools/testing/selftests/mm/folio_split_race_test.c | 2 --
->  tools/testing/selftests/mm/mlock-random-test.c     | 1 -
->  tools/testing/selftests/mm/pkey_sighandler_tests.c | 1 -
->  tools/testing/selftests/mm/split_huge_page_test.c  | 4 ----
->  4 files changed, 8 deletions(-)
->
-> diff --git a/tools/testing/selftests/mm/folio_split_race_test.c b/tools/testing/selftests/mm/folio_split_race_test.c
-> index 45b84f7b364e..1960635a953e 100644
-> --- a/tools/testing/selftests/mm/folio_split_race_test.c
-> +++ b/tools/testing/selftests/mm/folio_split_race_test.c
-> @@ -269,6 +269,4 @@ int main(void)
->  				      NUM_ITERATIONS);
->
->  	ksft_exit(iter == NUM_ITERATIONS);
-> -
-> -	return 0;
->  }
-> diff --git a/tools/testing/selftests/mm/mlock-random-test.c b/tools/testing/selftests/mm/mlock-random-test.c
-> index 16294bc7dae6..58772914fd79 100644
-> --- a/tools/testing/selftests/mm/mlock-random-test.c
-> +++ b/tools/testing/selftests/mm/mlock-random-test.c
-> @@ -71,7 +71,6 @@ int get_proc_locked_vm_size(void)
->
->  	fclose(f);
->  	ksft_exit_fail_msg("cannot parse VmLck in /proc/self/status: %s\n", strerror(errno));
-> -	return -1;
->  }
->
->  /*
-> diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-> index 74bf79a5399d..f9c728ba96a5 100644
-> --- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
-> +++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-> @@ -556,5 +556,4 @@ int main(int argc, char *argv[])
->  	}
->
->  	ksft_finished();
-> -	return 0;
->  }
-> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-> index 86a603692826..c01d227d7fd6 100644
-> --- a/tools/testing/selftests/mm/split_huge_page_test.c
-> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
-> @@ -101,7 +101,6 @@ static bool is_backed_by_folio(char *vaddr, int order, int pagemap_fd,
->  	return (pfn_flags & folio_tail_flags) != folio_tail_flags;
->  fail:
->  	ksft_exit_fail_msg("Failed to get folio info\n");
-> -	return false;
->  }
->
->  static int check_after_split_folio_orders(char *vaddr_start, size_t len,
-> @@ -548,7 +547,6 @@ static int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size,
->  err_out_unlink:
->  	unlink(testfile);
->  	ksft_exit_fail_msg("Failed to create large pagecache folios\n");
-> -	return -1;
->  }
->
->  static void split_thp_in_pagecache_to_order_at(size_t fd_size,
-> @@ -711,6 +709,4 @@ int main(int argc, char **argv)
->  	free(expected_orders);
->
->  	ksft_finished();
-> -
-> -	return 0;
->  }
-> --
-> 2.53.0
->
+ok 1 test_zswap_usage
+ok 2 test_swapin_nozswap
+ok 3 test_zswapin
+ok 4 test_zswap_writeback_enabled
+ok 5 test_zswap_writeback_disabled
+ok 6 # SKIP test_no_kmem_bypass
+not ok 7 test_no_invasive_cgroup_shrink
+ok 8 test_zswap_incompressible
+# 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
+# Totals: pass:6 fail:1 xfail:0 xpass:0 skip:1 error:0
 
---
-Cheers, Lorenzo
+I'm not too sure how helpful this will be, but maybe it would be better
+to amend the last line of the commit message to say:
+
+...
+than 5 seconds, but this should fix the systematic failure case
+and make "not ok test_no_invasive_cgroup_shrink" less likely.
+
+> > Reported-by: Krush Chavan <krushchavan@outlook.com>
+> 
+> Relatedly, is there a Link:/Closes:?
+
+Unfortunately this was detected in our private CI workflow and raised
+by Krush, so I'm not sure if there is anything we can share.
+
+If there is anything else that I can add to make this clearer, please
+let me know. I hope you have a great day Andrew!
+Joshua
