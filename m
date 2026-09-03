@@ -1,152 +1,500 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A074FECC5
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 18:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF404FC8D2;
+	Thu,  3 Sep 2026 18:13:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788458618; cv=none; b=c0sotwiMJZAP2g4yaJG0+Vx0VaeuZpAbQCAItITBKHOw9POWD4kh8A9gM2aLezVrKv7AXPXABycou4EpHS5xE7FFiv83TcWaHeovEHmYCOcG4qPJN7RZSspnkH3vmtlgwmKlAE9AqbMuHH4Ud/AtCOvypU2Y8lDnQ5zBlaGL3+4=
+	t=1788459207; cv=none; b=Cnv/gX0+FkUPLaIxWao/Uau39B/uqlKjvIMDSsRElbX/k/ydQD+EzM8p2K4QuI/wk9LP1NtWhn/hun55hMbDiQcZdHmHd4WB5Mg9V0VwxPkcpF70hCRFKmP/BlBr5Qxt5cTt4JAht21kq707JoGtJCHHVx9QDlQ57m0aFxztVZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788458618; c=relaxed/simple;
-	bh=CwdE3Okoch7xrLK/qUNZUvKvP/5GRURsBtqJNWxxv0I=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=M+tksbresNoPRvjZnxLfk9uA/1syOGTqNKIN+bfpCyBd2/e7yIBmBikCfQDL7XC1vt6+GdTHaUZHpRwKvXgHElD83R+DfxXEHlQ6HynJedipUqVBwBTd0HMDId81aQPc/8+wkVQPwY/kEptSwPP4zOoPNOq5NXXcoiuNQlJvPeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cCYbUdN5; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=tH6oOTLL; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1788459207; c=relaxed/simple;
+	bh=vsCFO2Y3Rh/TC0GvFfGzQkCmaGywYBD9MmvF8NWoGWg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k0PspD9CboCKv4Ll+9nit4eTzpygjjUPtQF53Z064Zx9POREc3RLOmQCL9tvRFpxF4vH1Q2tazNvkADSZvjO+gxnetAo9liQNEhhVytiKz83wyMCfAL2h5xFYEKzQHahHhObpr41lmG3SyeriYF3/MHmAHKn6EuztymjSeicrT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jbU7XTkG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cCYbUdN5";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="tH6oOTLL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1788458615;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3JoPfOCY29A3Y3qiUx94yvtnxEMXNVAH5t6LGehu/9c=;
-	b=cCYbUdN5R7PX17Jis0y076IAdYpQrKVvx/CZ9uPNo0ATBwyWrhLwMurweGzZitQw32Hukq
-	VtQJAE3m+6HEsjX3PLwqnPIxwDsknGIW/2doKH0O4OXDttE/bUYPC02wV0qLEPPcF5npj2
-	qHo7+34MuSE425dw9fXOsz1NOY+d3ZQ=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-116-Z-3QYfHaMrS3t2eVvmLrMg-1; Thu, 03 Sep 2026 14:03:32 -0400
-X-MC-Unique: Z-3QYfHaMrS3t2eVvmLrMg-1
-X-Mimecast-MFC-AGG-ID: Z-3QYfHaMrS3t2eVvmLrMg_1788458612
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-51c26012cd0so4105191cf.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 11:03:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1788458612; x=1789063412; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=3JoPfOCY29A3Y3qiUx94yvtnxEMXNVAH5t6LGehu/9c=;
-        b=tH6oOTLLnentvSYgVc3HKcjaXdiewAxBw78Po2ye2l7OJhMx8mF+/PRLBG2nbL+Mop
-         4Q4u7I+4+4mSQF4tgwyZML/O6Hxe841tTQLZsFAx8xD1A6UdqsaXMDEoOkyLFR0YQCqw
-         EuZv+IbQydeEOiYeU1cpuM4r0JAO5bv1pJ8ArjMKIrNIcQqjmJtdyAU5rVJ39T/jIFGu
-         Ko/fgUGKNZihQLdSvBEg7xIuVY2KJCFRHaHmfKjaxEi9KR8lAysje24jAX4TtvtlVkj5
-         JoEBdxsRssRO94Ap7ilDzbfENJhLrQFMgb+nSl5RSDdtYM3f0z107ADbtObZtaQhOnqu
-         AZbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788458612; x=1789063412;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3JoPfOCY29A3Y3qiUx94yvtnxEMXNVAH5t6LGehu/9c=;
-        b=iRbaRpNSKoaxRuI+Qxqw/FhAZceZZ+Yke1DhL+MH+DU7zX9aysKgJzjcWHrvVw1gF0
-         qrhL/zmbZtiTKpPlpGvckt5wOIAXSb+ijgXMU82TDi7EHxQXIdcmuEkpgmmIHdiQSr8y
-         jUDTUjpLncrTcT+nuKLEnaN8ar3ITqncqgzsX0QwjSaA1EowAHJO07OqNf8J3fcHKH8w
-         vidr44kLot9mG074jayJXUgMmoVQ1RSExDswxexpt3gOdT+mQgnMTFwrqUUU6k/XUSUg
-         Nc3VKIhqYfzjdMSGOo4knYn25PaGsb5T/tdoIw6b3r7QdbTEORR77eiLZqSmCK7CpIc+
-         zTaQ==
-X-Forwarded-Encrypted: i=1; AKwUvByCxZLjcuUR2MPMFpxEgSCoTrdwvOqp/WVQB0+tu4bV3nAWFHtQ+3+J/QBADDa6+F8ZWRGgHmaKfA13w1AYc9c=@vger.kernel.org
-X-Gm-Message-State: AFuF++n5GB9OwUwqRfHWnTcpNnBbqJr5hJ2niYsm8pNXzjx8ni5b9EGa
-	caIrhP1HmUnpCvpNTTC9Y1nXeiyzi2/BCAOKnRRMeloStLyT9KVi7pR+b/uSDXPyuKUvEZ/UiaP
-	5kArlveMpGBSzTyba3OGzOPfOa1Yej05dXOuw0A6yl91bStcRbc/WVkq5b4I751zXc9pxJw==
-X-Gm-Gg: AYBFou2MWwR1OPj4fPrcBakn6EhVyzHSc7WfpqrmEzFXfRtVFiwVSsMNMyQltIfTIze
-	WLmVtLR6ETWPBdM9s6gybYB7GlPWFv8yS2/3V6TADPw2Dj3xqkCg+tpaA8iBd2zFCClKBKtAtqK
-	hK7FDjshon8ynCjrg0XUiIFlC9XoEUgsYpen9Ea7F6SnzbnpXYnMTWCozaB6rn5oGhP1o63htjb
-	aZ9J9lqRnxr3t1Fo5SYPlCXETxXOMVomnxrzPmxDOaMk3ADJmcOnbN/QxrGLg0oMXqZyI6jLoCm
-	i9xrlN3GyKWJRB8A30aTaMdyaUKlMWpuc4c01v+FerBZXa7vA3CqqoSz3QSeJgeNnltOFxrQo0A
-	1RWOu0eRDqbUPAmBTgPCTHas2Y6gFd7nm2gPrQgk=
-X-Received: by 2002:ac8:570f:0:b0:530:3526:9ad4 with SMTP id d75a77b69052e-53054944a04mr6120991cf.27.1788458611929;
-        Thu, 03 Sep 2026 11:03:31 -0700 (PDT)
-X-Received: by 2002:ac8:570f:0:b0:530:3526:9ad4 with SMTP id d75a77b69052e-53054944a04mr6119851cf.27.1788458611330;
-        Thu, 03 Sep 2026 11:03:31 -0700 (PDT)
-Received: from [192.168.1.3] (c-73-183-53-213.hsd1.pa.comcast.net. [73.183.53.213])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5305418950fsm2243051cf.20.2026.09.03.11.03.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 11:03:30 -0700 (PDT)
-From: Brian Masney <bmasney@redhat.com>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
- Rae Moar <raemoar63@gmail.com>, 
- "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Pascal EBERHARD <pascal.eberhard@se.com>, 
- Wolfram Sang <wsa+renesas@sang-engineering.com>, 
- Fran Li <Frank.li@oss.nxp.com>, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- Frank Li <Frank.Li@nxp.com>, Herve Codina <herve.codina@bootlin.com>
-In-Reply-To: <20260807-schneider-v7-2-rc1-eip201-upstream-v5-0-8785f9531cf0@bootlin.com>
-References: <20260807-schneider-v7-2-rc1-eip201-upstream-v5-0-8785f9531cf0@bootlin.com>
-Subject: Re: [PATCH v5 0/7] clk: Add support for clock nexus
-Message-Id: <178845859345.51586.16050131783608017430.b4-ty@b4>
-Date: Thu, 03 Sep 2026 14:03:13 -0400
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jbU7XTkG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43D741F000E9;
+	Thu,  3 Sep 2026 18:13:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788459205;
+	bh=RiqoPoWH3M2TPB1Mg+9tfuZHHhDEDmfQsRpo7pGnISc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=jbU7XTkGgvubbKVP+L6cBViHFceXpv6Gu24OGwpZuJbFbMvcIe/w0xY4AAugxUUaM
+	 F1ICHfPJ2bmanMV0CB5LRskVtYRsypRFCNVxHXcpheX0eEqvtDDQKFLo0uQROK+uXk
+	 UhBvzp1rY8pLCDTOtNgl/sV5OD7xVz2NmOAkUfM4QXOZGB9Xd4un6flhh9A9RtTw2P
+	 Bf8TA7xocv1Efm9jZtu0yrabZZVtm+OyOPPY0xN62OwMPn3urnE1D98Uf7IzRwYvrn
+	 vQRuNw1gufu9qmxiatmgBIRa6c+3suP2ahkSKBBZvHtg7pQcFVJg4ez4ckseHHtVgU
+	 bNfiK35N1phGQ==
+Date: Thu, 3 Sep 2026 19:13:17 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Fuad Tabba <fuad.tabba@linux.dev>, Peter Maydell <peter.maydell@linaro.org>, 
+	Leonardo Bras <leo.bras@arm.com>, Wei-Lin Chang <weilin.chang@arm.com>, 
+	Yao Yuan <yaoyuan@linux.alibaba.com>, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v20 03/14] KVM: arm64: Manage GCS access and registers
+ for guests
+Message-ID: <apmfx08vccSd2MXw@gremlin>
+References: <20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org>
+ <20260901-arm64-gcs-v20-3-f31750bdfadb@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1234; i=bmasney@redhat.com;
- s=20250903; h=from:subject:message-id;
- bh=8F+i4KUetkQ+0aPX5fdnN3d1y2UwrIbldYxHlQ8YsOA=;
- b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGLJmbsvrsqsrqnh3r4VvUyAD82fFh/bmeQsLNe/Ir70bc
- c5hsuXajlIWBjEuBlkxRZYluUYFEamrbO/d0WSBmcPKBDKEgYtTACaS7sfI8KQ4oviW9cWfXiom
- 6mJPO0VeXjjhVn5N4WtfTN/DKT3y3YwMkzx2fd6e/WTvlJATFjmTdp5wlr47od1tvURCaZt3a7I
- vCwA=
-X-Developer-Key: i=bmasney@redhat.com; a=openpgp;
- fpr=A46D32705865AA3DDEDC2904B7D2DD275D7EC087
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260901-arm64-gcs-v20-3-f31750bdfadb@kernel.org>
+
+On Tue, Sep 01, 2026 at 10:47:01PM +0100, Mark Brown wrote:
+> GCS introduces a number of system registers, on systems with GCS we need
+> to context switch them and expose them to VMMs to allow guests to use
+> GCS.
+>
+> In order to allow guests to use GCS we also need to configure
+> HCRX_EL2.GCSEn, if this is not set GCS instructions will be noops and
+> CHKFEAT will report GCS as disabled.
+>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/include/asm/kvm_emulate.h       |  3 +++
+>  arch/arm64/include/asm/kvm_host.h          | 14 ++++++++++
+>  arch/arm64/include/asm/vncr_mapping.h      |  2 ++
+>  arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h | 28 ++++++++++++++++++++
+>  arch/arm64/kvm/hyp/vhe/sysreg-sr.c         | 11 ++++++++
+>  arch/arm64/kvm/sys_regs.c                  | 42 ++++++++++++++++++++++++++++++
+>  6 files changed, 100 insertions(+)
+>
+> diff --git a/arch/arm64/include/asm/kvm_emulate.h b/arch/arm64/include/asm/kvm_emulate.h
+> index a3c1928bdf74..0cd91b3d6c82 100644
+> --- a/arch/arm64/include/asm/kvm_emulate.h
+> +++ b/arch/arm64/include/asm/kvm_emulate.h
+> @@ -712,6 +712,9 @@ static inline void vcpu_set_hcrx(struct kvm_vcpu *vcpu)
+>  		if (kvm_has_feat(kvm, ID_AA64ISAR1_EL1, LS64, LS64_V))
+>  			vcpu->arch.hcrx_el2 |= HCRX_EL2_EnASR;
+>
+> +		if (kvm_has_gcs(kvm))
+> +			vcpu->arch.hcrx_el2 |= HCRX_EL2_GCSEn;
 
 
-On Fri, 07 Aug 2026 17:24:01 +0200, Miquel Raynal (Schneider Electric) wrote:
-> clk: Add support for clock nexus
-> 
-> Adding support for clock nexus had some prerequisites requested by
-> Stephen, such as adding new selftests, the initial discussions come
-> from:
-> 
-> Link: https://lore.kernel.org/linux-clk/20260129201003.288605-1-miquel.raynal@bootlin.com/
-> 
-> [...]
+So as per [0] this is GCS Enable so it makes sense that this enables it :)
 
-Applied, thanks!
+[0]: https://support.arm.com/documentation/ddi0601/2026-06/AArch64-Registers/HCRX-EL2--Extended-Hypervisor-Configuration-Register?lang=en
 
-[1/7] dt-bindings: clock: Introduce nexus nodes
-      commit: e0be7b4eedd3b7c6d1a3db0dd76babc35ff89bc6
-[2/7] clk: tests: Add clk_parse_clkspec() Kunit testing
-      commit: d0a15b827251de65bd39ce0555d656d5563c41dc
-[3/7] clk: tests: Add Kunit testing for of_clk_get_parent_name()
-      commit: 32d4598a48d63003e732f2de3608fcd184aa8061
-[4/7] clk: Improve a couple of comments
-      commit: 4ee1e9e1d614a6b3a6264bac5b070c67a89ce19a
-[5/7] clk: Use the generic OF phandle parsing in only one place
-      commit: 57d728b4ab15a8af890013bb0f302e7733f7c1c6
-[6/7] clk: Add support for clock nexus dt bindings
-      commit: aacc54c67869effe89c92c0d54bea40148c53475
-[7/7] clk: tests: Add Kunit testing for nexus nodes
-      commit: 91b1b8d437abe0cd83210d8f257b785a63047aa9
+> +
+>  		/*
+>  		 * NV3 is a host-specific extension, and we always use
+>  		 * it when present and that the guest uses NV. It may
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 27fe0cd5b2d7..6aba1bcb8ee7 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -500,6 +500,10 @@ enum vcpu_sysreg {
+>
+>  	POR_EL0,	/* Permission Overlay Register 0 (EL0) */
+>
+> +	/* Guarded Control Stack registers */
+> +	GCSCRE0_EL1,	/* Guarded Control Stack Control (EL0) */
 
-Best regards,
--- 
-Brian Masney <bmasney@redhat.com>
+Ack as per
+https://support.arm.com/documentation/111107/2026-06/AArch64-Registers/GCSCRE0-EL1--Guarded-Control-Stack-Control-Register--EL0-?lang=en
 
+(these urls are big :)
+
+> +	GCSPR_EL0,	/* Guarded Control Stack Pointer (EL0) */
+
+
+And:
+https://support.arm.com/documentation/111107/2026-06/AArch64-Registers/GCSPR-EL0--Guarded-Control-Stack-Pointer-Register--EL0-?lang=en
+
+> +
+
+So this seems in general to be exposing these as system registers.
+
+>  	/* FP/SIMD/SVE */
+>  	SVCR,
+>  	FPMR,
+> @@ -520,6 +524,8 @@ enum vcpu_sysreg {
+>  	PIRE0_EL2,	/* Permission Indirection Register 0 (EL2) */
+>  	PIR_EL2,	/* Permission Indirection Register 1 (EL2) */
+>  	POR_EL2,	/* Permission Overlay Register 2 (EL2) */
+> +	GCSCR_EL2,	/* Guarded Control Stack Control Register (EL2) */
+
+Similarly
+
+https://support.arm.com/documentation/111107/2026-06/AArch64-Registers/GCSCR-EL2--Guarded-Control-Stack-Control-Register--EL2-?lang=en
+
+> +	GCSPR_EL2,	/* Guarded Control Stack Pointer Register (EL2) */
+
+And
+
+https://support.arm.com/documentation/111107/2026-06/AArch64-Registers/GCSPR-EL2--Guarded-Control-Stack-Pointer-Register--EL2-?lang=en
+
+>  	SPSR_EL2,	/* EL2 saved program status register */
+>  	ELR_EL2,	/* EL2 exception link register */
+>  	AFSR0_EL2,	/* Auxiliary Fault Status Register 0 (EL2) */
+> @@ -592,6 +598,10 @@ enum vcpu_sysreg {
+>  	VNCR(VDISR_EL2),
+>  	VNCR(VSESR_EL2),
+>
+> +	/* Guarded Control Stack registers */
+> +	VNCR(GCSPR_EL1),	/* Guarded Control Stack Pointer (EL1) */
+> +	VNCR(GCSCR_EL1),	/* Guarded Control Stack Control (EL1) */
+> +
+
+And the VNCR entries for the EL1 registers.
+
+>  	VNCR(HFGRTR_EL2),
+>  	VNCR(HFGWTR_EL2),
+>  	VNCR(HFGITR_EL2),
+> @@ -1654,6 +1664,10 @@ void kvm_set_vm_id_reg(struct kvm *kvm, u32 reg, u64 val);
+>  #define kvm_has_sctlr2(k)				\
+>  	(kvm_has_feat((k), ID_AA64MMFR3_EL1, SCTLRX, IMP))
+>
+> +#define kvm_has_gcs(k)					\
+> +	(system_supports_gcs() &&			\
+> +	 kvm_has_feat((k), ID_AA64PFR1_EL1, GCS, IMP))
+> +
+
+OK can see bits 47-44 are for a GCS feature check as per:
+
+https://support.arm.com/documentation/ddi0601/2026-06/AArch64-Registers/ID-AA64PFR1-EL1--AArch64-Processor-Feature-Register-1?lang=en
+
+And ID_AA64PFR1_EL1_GCS_IMP == 0b0001 -> the documented enabled value.
+
+
+>  static inline bool kvm_arch_has_irq_bypass(void)
+>  {
+>  	return true;
+> diff --git a/arch/arm64/include/asm/vncr_mapping.h b/arch/arm64/include/asm/vncr_mapping.h
+> index 9e8a49fa8b63..e589adccc2f3 100644
+> --- a/arch/arm64/include/asm/vncr_mapping.h
+> +++ b/arch/arm64/include/asm/vncr_mapping.h
+> @@ -97,6 +97,8 @@
+>  #define VNCR_PMSNEVFR_EL1       0x850
+>  #define VNCR_PMSDSFR_EL1        0x858
+>  #define VNCR_TRFCR_EL1          0x880
+> +#define VNCR_GCSPR_EL1		0x8C0
+
+I see NVMem(0x8C0) in
+
+https://support.arm.com/documentation/ddi0601/2026-06/AArch64-Registers/GCSPR-EL1--Guarded-Control-Stack-Pointer-Register--EL1-?lang=en
+
+So LGTM :)
+
+
+> +#define VNCR_GCSCR_EL1		0x8D0
+
+And I see NVMem(0x8D0) in
+
+https://support.arm.com/documentation/111107/2026-06/AArch64-Registers/GCSCR-EL1--Guarded-Control-Stack-Control-Register--EL1-
+
+So also LGTM :)
+
+>  #define VNCR_MPAM1_EL1          0x900
+>  #define VNCR_MPAMHCR_EL2        0x930
+>  #define VNCR_MPAMVPMV_EL2       0x938
+> diff --git a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> index c382848d3194..d26802aa455e 100644
+> --- a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> +++ b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> @@ -17,6 +17,7 @@
+>  #include <asm/kvm_mmu.h>
+>
+>  static inline bool ctxt_has_s1poe(struct kvm_cpu_context *ctxt);
+> +static inline bool ctxt_has_gcs(struct kvm_cpu_context *ctxt);
+>
+>  static inline struct kvm_vcpu *ctxt_to_vcpu(struct kvm_cpu_context *ctxt)
+>  {
+> @@ -67,6 +68,11 @@ static inline void __sysreg_save_user_state(struct kvm_cpu_context *ctxt)
+>  {
+>  	ctxt_sys_reg(ctxt, TPIDR_EL0)	= read_sysreg(tpidr_el0);
+>  	ctxt_sys_reg(ctxt, TPIDRRO_EL0)	= read_sysreg(tpidrro_el0);
+> +
+> +	if (ctxt_has_gcs(ctxt)) {
+> +		ctxt_sys_reg(ctxt, GCSPR_EL0) = read_sysreg_s(SYS_GCSPR_EL0);
+> +		ctxt_sys_reg(ctxt, GCSCRE0_EL1)	= read_sysreg_s(SYS_GCSCRE0_EL1);
+> +	}
+>  }
+>
+>  static inline bool ctxt_has_mte(struct kvm_cpu_context *ctxt)
+> @@ -131,6 +137,14 @@ static inline bool ctxt_has_sctlr2(struct kvm_cpu_context *ctxt)
+>  	return kvm_has_sctlr2(kern_hyp_va(vcpu->kvm));
+>  }
+>
+> +static inline bool ctxt_has_gcs(struct kvm_cpu_context *ctxt)
+> +{
+> +	struct kvm_vcpu *vcpu = ctxt_to_vcpu(ctxt);
+> +
+> +	return kvm_has_gcs(kern_hyp_va(vcpu->kvm));
+> +
+
+Function looks sensible, but extra newline?
+
+> +}
+> +
+>  static inline void __sysreg_save_el1_state(struct kvm_cpu_context *ctxt)
+>  {
+>  	ctxt_sys_reg(ctxt, SCTLR_EL1)	= read_sysreg_el1(SYS_SCTLR);
+> @@ -144,6 +158,10 @@ static inline void __sysreg_save_el1_state(struct kvm_cpu_context *ctxt)
+>  		if (ctxt_has_s1pie(ctxt)) {
+>  			ctxt_sys_reg(ctxt, PIR_EL1)	= read_sysreg_el1(SYS_PIR);
+>  			ctxt_sys_reg(ctxt, PIRE0_EL1)	= read_sysreg_el1(SYS_PIRE0);
+> +			if (ctxt_has_gcs(ctxt)) {
+> +				ctxt_sys_reg(ctxt, GCSPR_EL1)	= read_sysreg_el1(SYS_GCSPR);
+> +				ctxt_sys_reg(ctxt, GCSCR_EL1)	= read_sysreg_el1(SYS_GCSCR);
+> +			}
+
+I had AI check this (and I think sashiko also hit on) it but this is a chain of:
+
+	ctxt_has_tcrx() -> ctxt_has_s1pie() -> ctx_has_gcs()
+
+Is it correct to make the gcs stuff conditional on tcrx + s1pie + gcs?
+
+In vcpu_set_hcrx() settings HCRX_EL2 is gated only on kvm_has_gcs():
+
+	if (kvm_has_gcs(kvm))
+		vcpu->arch.hcrx_el2 |= HCRX_EL2_GCSEn;
+
+And gcs_visiblity() is:
+
+static unsigned int gcs_visibility(const struct kvm_vcpu *vcpu,
+				   const struct sys_reg_desc *r)
+{
+	if (kvm_has_gcs(vcpu->kvm))
+		return 0;
+
+	return REG_HIDDEN;
+}
+
+So gated on kvm_has_gcs() alone.
+
+But then on register save it's gated on ctxt_has_tcrx() +
+ctxt_has_s1pie() + ctx_has_gcs()
+
+So it seems to be a mismatch, and this should be unnested?
+
+Buuut I see in el2_setup.h:
+
+	/* GCS depends on PIE so we don't check it if PIE is absent */
+
+And it seems like that feature depends on ctxt_has_tcrx() so _architecturally_
+fine, but it doesn't seem like KVM enforces the dependency at all and so in
+theory somebody could KVM_SET_ONE_REG a GCS, !S1PIE configuration.
+
+And nicer to be consistent everywhere also I think (+ shut sashiko up! :)
+
+And it seems like it makes it possible for a silly VMM which sets up the
+registers wrong + some unfortunate guest behaviour -> oops via:
+
+el1h_64_sync_handler() -> el1_gcs() -> do_el1_gcs()
+
+Because the host's restore is skipped for s1pie=0, gcs=1, so a naughty guest can
+set gcsr_el1.pcrsel=1 and some value in gcspr_el1, then the host will get a
+mismatch and trigger the kernel die().
+
+>  		}
+>
+>  		if (ctxt_has_s1poe(ctxt))
+> @@ -210,6 +228,11 @@ static inline void __sysreg_restore_user_state(struct kvm_cpu_context *ctxt)
+>  {
+>  	write_sysreg(ctxt_sys_reg(ctxt, TPIDR_EL0),	tpidr_el0);
+>  	write_sysreg(ctxt_sys_reg(ctxt, TPIDRRO_EL0),	tpidrro_el0);
+> +	if (ctxt_has_gcs(ctxt)) {
+> +		write_sysreg_s(ctxt_sys_reg(ctxt, GCSPR_EL0), SYS_GCSPR_EL0);
+> +		write_sysreg_s(ctxt_sys_reg(ctxt, GCSCRE0_EL1),
+> +			       SYS_GCSCRE0_EL1);
+> +	}
+>  }
+>
+>  static inline void __sysreg_restore_el1_state(struct kvm_cpu_context *ctxt,
+> @@ -243,6 +266,11 @@ static inline void __sysreg_restore_el1_state(struct kvm_cpu_context *ctxt,
+>  		if (ctxt_has_s1pie(ctxt)) {
+>  			write_sysreg_el1(ctxt_sys_reg(ctxt, PIR_EL1),	SYS_PIR);
+>  			write_sysreg_el1(ctxt_sys_reg(ctxt, PIRE0_EL1),	SYS_PIRE0);
+> +
+> +			if (ctxt_has_gcs(ctxt)) {
+> +				write_sysreg_el1(ctxt_sys_reg(ctxt, GCSPR_EL1),	SYS_GCSPR);
+> +				write_sysreg_el1(ctxt_sys_reg(ctxt, GCSCR_EL1),	SYS_GCSCR);
+> +			}
+
+Similarly this is gated the same as the save.
+
+>  		}
+>
+>  		if (ctxt_has_s1poe(ctxt))
+> diff --git a/arch/arm64/kvm/hyp/vhe/sysreg-sr.c b/arch/arm64/kvm/hyp/vhe/sysreg-sr.c
+> index 0c4ef1ce32ae..08b5d939a6c5 100644
+> --- a/arch/arm64/kvm/hyp/vhe/sysreg-sr.c
+> +++ b/arch/arm64/kvm/hyp/vhe/sysreg-sr.c
+> @@ -59,10 +59,14 @@ static void __sysreg_save_vel2_state(struct kvm_vcpu *vcpu)
+>  			if (ctxt_has_s1pie(&vcpu->arch.ctxt)) {
+>  				__vcpu_assign_sys_reg(vcpu, PIRE0_EL2, read_sysreg_el1(SYS_PIRE0));
+>  				__vcpu_assign_sys_reg(vcpu, PIR_EL2, read_sysreg_el1(SYS_PIR));
+> +
+> +				if (ctxt_has_gcs(&vcpu->arch.ctxt))
+> +					__vcpu_assign_sys_reg(vcpu, GCSCR_EL2, read_sysreg_el1(SYS_GCSCR));
+
+
+Similar comment to above tcrx -> s1pie -> gcs
+
+>  			}
+>
+>  			if (ctxt_has_s1poe(&vcpu->arch.ctxt))
+>  				__vcpu_assign_sys_reg(vcpu, POR_EL2, read_sysreg_el1(SYS_POR));
+> +
+
+Extra newline?
+
+>  		}
+>
+>  		/*
+> @@ -86,6 +90,8 @@ static void __sysreg_save_vel2_state(struct kvm_vcpu *vcpu)
+>  	__vcpu_assign_sys_reg(vcpu, SP_EL2,	 read_sysreg(sp_el1));
+>  	__vcpu_assign_sys_reg(vcpu, ELR_EL2,	 read_sysreg_el1(SYS_ELR));
+>  	__vcpu_assign_sys_reg(vcpu, SPSR_EL2,	 read_sysreg_el1(SYS_SPSR));
+> +	if (ctxt_has_gcs(&vcpu->arch.ctxt))
+> +		__vcpu_assign_sys_reg(vcpu, GCSPR_EL2, read_sysreg_el1(SYS_GCSPR));
+
+For VEL2, GCSPR_EL2 is gated on gcs alone for save.
+
+>
+>  	if (ctxt_has_sctlr2(&vcpu->arch.ctxt))
+>  		__vcpu_assign_sys_reg(vcpu, SCTLR2_EL2, read_sysreg_el1(SYS_SCTLR2));
+> @@ -138,6 +144,11 @@ static void __sysreg_restore_vel2_state(struct kvm_vcpu *vcpu)
+>  		if (ctxt_has_s1pie(&vcpu->arch.ctxt)) {
+>  			write_sysreg_el1(__vcpu_sys_reg(vcpu, PIR_EL2), SYS_PIR);
+>  			write_sysreg_el1(__vcpu_sys_reg(vcpu, PIRE0_EL2), SYS_PIRE0);
+> +
+> +			if (ctxt_has_gcs(&vcpu->arch.ctxt)) {
+> +				write_sysreg_el1(__vcpu_sys_reg(vcpu, GCSCR_EL2), SYS_GCSCR);
+> +				write_sysreg_el1(__vcpu_sys_reg(vcpu, GCSPR_EL2), SYS_GCSPR);
+> +			}
+
+But for restore both GCSCR_EL2 and GCSPR_EL2 are gated on tcrx -> s1pie -> gcs.
+
+>  		}
+>
+>  		if (ctxt_has_s1poe(&vcpu->arch.ctxt))
+> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> index 44aae52c473d..c5ce18b3f7d8 100644
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@ -109,6 +109,8 @@ static enum sr_loc_attr locate_direct_register(const struct kvm_vcpu *vcpu,
+>  	case PIR_EL1:
+>  	case PIRE0_EL1:
+>  	case POR_EL1:
+> +	case GCSCR_EL1:
+> +	case GCSPR_EL1:
+>  	case ESR_EL1:
+>  	case AFSR0_EL1:
+>  	case AFSR1_EL1:
+> @@ -135,6 +137,8 @@ static enum sr_loc_attr locate_direct_register(const struct kvm_vcpu *vcpu,
+>  	case DACR32_EL2:
+>  	case IFSR32_EL2:
+>  	case DBGVCR32_EL2:
+> +	case GCSCRE0_EL1:
+> +	case GCSPR_EL0:
+>  		/* These registers are always loaded, no matter what */
+>  		return SR_LOC_LOADED;
+>
+> @@ -198,6 +202,8 @@ static void locate_register(const struct kvm_vcpu *vcpu, enum vcpu_sysreg reg,
+>  		MAPPED_EL2_SYSREG(PIR_EL2,     PIR_EL1,     NULL	     );
+>  		MAPPED_EL2_SYSREG(PIRE0_EL2,   PIRE0_EL1,   NULL	     );
+>  		MAPPED_EL2_SYSREG(POR_EL2,     POR_EL1,     NULL	     );
+> +		MAPPED_EL2_SYSREG(GCSCR_EL2,   GCSCR_EL1,   NULL             );
+> +		MAPPED_EL2_SYSREG(GCSPR_EL2,   GCSPR_EL1,   NULL             );
+>  		MAPPED_EL2_SYSREG(AMAIR_EL2,   AMAIR_EL1,   NULL	     );
+>  		MAPPED_EL2_SYSREG(ELR_EL2,     ELR_EL1,	    NULL	     );
+>  		MAPPED_EL2_SYSREG(SPSR_EL2,    SPSR_EL1,    NULL	     );
+> @@ -253,6 +259,10 @@ static u64 read_sr_from_cpu(enum vcpu_sysreg reg)
+>  	case TCR2_EL1:		val = read_sysreg_s(SYS_TCR2_EL12);	break;
+>  	case PIR_EL1:		val = read_sysreg_s(SYS_PIR_EL12);	break;
+>  	case PIRE0_EL1:		val = read_sysreg_s(SYS_PIRE0_EL12);	break;
+> +	case GCSPR_EL0:		val = read_sysreg_s(SYS_GCSPR_EL0);	break;
+> +	case GCSCRE0_EL1:	val = read_sysreg_s(SYS_GCSCRE0_EL1);	break;
+> +	case GCSCR_EL1:		val = read_sysreg_s(SYS_GCSCR_EL12);	break;
+> +	case GCSPR_EL1:		val = read_sysreg_s(SYS_GCSPR_EL12);	break;
+>  	case POR_EL1:		val = read_sysreg_s(SYS_POR_EL12);	break;
+>  	case ESR_EL1:		val = read_sysreg_s(SYS_ESR_EL12);	break;
+>  	case AFSR0_EL1:		val = read_sysreg_s(SYS_AFSR0_EL12);	break;
+> @@ -293,6 +303,10 @@ static void write_sr_to_cpu(enum vcpu_sysreg reg, u64 val)
+>  	case PIR_EL1:		write_sysreg_s(val, SYS_PIR_EL12);	break;
+>  	case PIRE0_EL1:		write_sysreg_s(val, SYS_PIRE0_EL12);	break;
+>  	case POR_EL1:		write_sysreg_s(val, SYS_POR_EL12);	break;
+> +	case GCSCRE0_EL1:	write_sysreg_s(val, SYS_GCSCRE0_EL1);	break;
+> +	case GCSPR_EL0:		write_sysreg_s(val, SYS_GCSPR_EL0);	break;
+> +	case GCSCR_EL1:		write_sysreg_s(val, SYS_GCSCR_EL12);	break;
+> +	case GCSPR_EL1:		write_sysreg_s(val, SYS_GCSPR_EL12);	break;
+>  	case ESR_EL1:		write_sysreg_s(val, SYS_ESR_EL12);	break;
+>  	case AFSR0_EL1:		write_sysreg_s(val, SYS_AFSR0_EL12);	break;
+>  	case AFSR1_EL1:		write_sysreg_s(val, SYS_AFSR1_EL12);	break;
+> @@ -3089,6 +3103,21 @@ static unsigned int cnthv_visibility(const struct kvm_vcpu *vcpu,
+>  	return REG_HIDDEN;
+>  }
+>
+> +static unsigned int gcs_visibility(const struct kvm_vcpu *vcpu,
+> +				   const struct sys_reg_desc *r)
+> +{
+> +	if (kvm_has_gcs(vcpu->kvm))
+> +		return 0;
+> +
+> +	return REG_HIDDEN;
+> +}
+> +
+> +static unsigned int gcs_el2_visibility(const struct kvm_vcpu *vcpu,
+> +				       const struct sys_reg_desc *rd)
+> +{
+> +	return __el2_visibility(vcpu, rd, gcs_visibility);
+> +}
+> +
+>  static bool access_mdcr(struct kvm_vcpu *vcpu,
+>  			struct sys_reg_params *p,
+>  			const struct sys_reg_desc *r)
+> @@ -3493,6 +3522,13 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>  	PTRAUTH_KEY(APDB),
+>  	PTRAUTH_KEY(APGA),
+>
+> +	{ SYS_DESC(SYS_GCSCR_EL1), NULL, reset_val, GCSCR_EL1, 0,
+> +	  .visibility = gcs_visibility },
+> +	{ SYS_DESC(SYS_GCSPR_EL1), NULL, reset_unknown, GCSPR_EL1,
+> +	  .visibility = gcs_visibility },
+> +	{ SYS_DESC(SYS_GCSCRE0_EL1), NULL, reset_val, GCSCRE0_EL1, 0,
+> +	  .visibility = gcs_visibility },
+> +
+>  	{ SYS_DESC(SYS_SPSR_EL1), access_spsr},
+>  	{ SYS_DESC(SYS_ELR_EL1), access_elr},
+>
+> @@ -3618,6 +3654,8 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>  		    CTR_EL0_DminLine_MASK |
+>  		    CTR_EL0_L1Ip_MASK |
+>  		    CTR_EL0_IminLine_MASK),
+> +	{ SYS_DESC(SYS_GCSPR_EL0), NULL, reset_unknown, GCSPR_EL0,
+> +	  .visibility = gcs_visibility },
+>  	{ SYS_DESC(SYS_SVCR), undef_access, reset_val, SVCR, 0, .visibility = sme_visibility  },
+>  	{ SYS_DESC(SYS_FPMR), undef_access, reset_val, FPMR, 0, .visibility = fp8_visibility },
+>
+> @@ -3861,6 +3899,10 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>  	EL2_REG_FILTERED(VNCR_EL2, bad_vncr_trap, reset_val, 0,
+>  			 vncr_el2_visibility),
+>
+> +	EL2_REG_FILTERED(GCSCR_EL2, access_rw, reset_val, 0,
+> +			 gcs_el2_visibility),
+> +	EL2_REG_FILTERED(GCSPR_EL2, access_rw, reset_val, 0,
+> +			 gcs_el2_visibility),
+>  	{ SYS_DESC(SYS_DACR32_EL2), undef_access, reset_unknown, DACR32_EL2 },
+>  	EL2_REG_VNCR_FILT(HDFGRTR2_EL2, fgt2_visibility),
+>  	EL2_REG_VNCR_FILT(HDFGWTR2_EL2, fgt2_visibility),
+>
+> --
+> 2.47.3
+>
+>
+
+--
+Cheers, Lorenzo
