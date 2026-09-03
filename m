@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+Received: from mta0.migadu.com (out-43.mta0.migadu.com [91.218.175.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A88361DA8
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 04:03:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB5825CC79
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 04:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788408233; cv=none; b=ow5Hn4UUz+zmjkriDD0Pkuet3A1aRt3jdg7AaCgjIEH2sOpoYIh2wPoJKgCzoljPk7V4dyYH53cpguv2SDb87TVZOJnL3+gwwpCFnluXRetCa4P+IWJ2lP1ZF87R9AaXw1cj2vYqe8hg9UCUAUrGxRBVGiDPWuqVKSGXIstuHdI=
+	t=1788408234; cv=none; b=bSPmawOzHIj1yeRYTqsRR37MPtq5c/Iow1eyiI5ZOQEjDEwEbyZc6dsII7dxjB0zk2n680K/ArsOfEZ6g6SW84Hda6iYYrqwjxgTTMy7Zy1HsnEir3CGTA7y4P/WfRKAUuq8ZPx98kb3bkhaslZAcCdeSyroJiHhpDesIySt6cw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788408233; c=relaxed/simple;
-	bh=/Cx+kQIoXQn4f56wMN2TAMtu+h068kTZbFYbYyLO0HE=;
+	s=arc-20240116; t=1788408234; c=relaxed/simple;
+	bh=xIQ6328uPha5Ej51WRnaGrlS19oTAvrX4j5xJxvcgUU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bgoZRAqY/akM5afgdjAsrjf5PuE75bwcr3jC627KLBqbMjXhj6xANkYXsb1iYN/DspqPlFLB4QVW9T48SSmrMsCNjZeNka/KEFS8N9HTrm4UFi/BnUCgZf3RY49ovu4uvpRuxoabLv/Mf7uBMx1aAVFCrJaF9wUXnvnFULu8y08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MdDMt0F6; arc=none smtp.client-ip=95.215.58.182
+	 MIME-Version; b=Q/XlM0kiLcKVa+QN0Kppq91CTchZilRWVew5itcmrWS++c4HOx36ZrkW4Qqnk1U7KphZ/7gV2XNdPwBUWaW42TBIPjkTNnG6Jb0fLPGvKvtNkngjlwDO7jTc5Cen5kxwGWi6xoUNjOdTl4cfbUnFO64rxanSWA4aVOD0J/295Zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=m69SkJVA; arc=none smtp.client-ip=91.218.175.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MdDMt0F6"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m69SkJVA"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=/Cx+kQIoXQn4f56wMN2TAMtu+h068kTZbFYbYyLO0HE=;
+DKIM-Signature: a=rsa-sha256; bh=xIQ6328uPha5Ej51WRnaGrlS19oTAvrX4j5xJxvcgUU=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788408229; v=1; x=1789013029;
- b=MdDMt0F6Sn82OrNSECBXHyv1ujwPZvQDqRZymovSMo0kiGSP6UG6zfpLdQHFQt9+rdNnHaAd
- 3QWyWwBL8A+bYwuv8qT5zEfl8V1Cl6BWBf6v6fjBP2JzPs5uS6nEyMoZmFpy/vgRO0cykIFURBQ
- 192ndQuRhQrkI9I7+ZA//p2s=
+ t=1788408230; v=1; x=1789013030;
+ b=m69SkJVAcYUg5n0cTv8caE7Vww1YTSNpjF5EqTw7NBXqLR3bF4N396noKQEzDtdeaWzJ9GAf
+ w/Lj/ryplDdNY5v8sTjK+T0WuGvJ4WHtHZuPZsuBADeOAVj7coek2z0RT+DHAjj7ZPDLhgEEN1R
+ oW7R3n06OiAs6Np1rbcxavR4=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7fbf072aebaeb1e4;
-	Thu, 03 Sep 2026 04:03:49 +0000
-X-Mizu-Trace-ID: 7fbf072aebaeb1e4
+Received: by smtp.migadu.com with ESMTPS id ba3584afaf9a3bb2;
+	Thu, 03 Sep 2026 04:03:50 +0000
+X-Mizu-Trace-ID: ba3584afaf9a3bb2
 X-Migadu-Flow: FLOW_OUT
 From: Shakeel Butt <shakeel.butt@linux.dev>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,11 +36,10 @@ To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc: Meta kernel team <kernel-team@meta.com>,
 	linux-kselftest@vger.kernel.org,
 	driver-core@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH 2/3] kernfs: don't lose IN_DELETE_SELF when decoding a file handle
-Date: Wed,  2 Sep 2026 21:02:52 -0700
-Message-ID: <20260903040253.670020-2-shakeel.butt@linux.dev>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 3/3] kernfs: fix up the unlocked attribute reads on the creation paths
+Date: Wed,  2 Sep 2026 21:02:53 -0700
+Message-ID: <20260903040253.670020-3-shakeel.butt@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260903040253.670020-1-shakeel.butt@linux.dev>
 References: <20260903040253.670020-1-shakeel.butt@linux.dev>
@@ -52,113 +51,95 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-__kernfs_remove() clears i_nlink on the inode each superblock holds for
-the node, and finds those inodes with ilookup().  A lookup that has
-pinned the node but has not put its new inode in the inode hash yet is
-invisible to that pass:
+Two creation paths read a live node's attributes without holding
+kernfs_iattr_rwsem, which kernfs_iop_setattr() takes for writing.  They
+do not want the same fix.
 
-  CPU0                                    CPU1
-  open_by_handle_at()
-    kernfs_find_and_get_node_by_id()
-      pins the node, still active
-                                          rmdir()
-                                            marks the subtree removing
-                                            ilookup() finds no inode
-    kernfs_get_inode()
-      hashes an inode with i_nlink 1
+kernfs_create_link() copies the target's ia_uid and then its ia_gid
+into the new link.  A chown of the target between the two reads leaves
+the link with the old uid and the new gid, an owner the target never
+had, when copying the target's owner is the whole point.  Read both
+fields under the rwsem.
 
-Nothing corrects it afterwards, because kernfs_refresh_inode() skips
-set_nlink() for a directory being removed and never touches i_nlink for
-a file.  The inode keeps the i_nlink of 1 that inode_init_always() gave
-it, and dentry_unlink_inode() only sends IN_DELETE_SELF when i_nlink is
-0, so a watcher is never told the node went away.
+kernfs_new_node() reads the parent's ia_gid for S_ISGID inheritance,
+and that one does not care which value it gets: the node does not exist
+yet, so nothing orders a racing chown against the creation either way.
+Taking the rwsem there would only serialize creation under a set-gid
+parent against a chown of that parent, to pick between two answers that
+are both right.  Mark the field read data_race() instead.
 
-kernfs_rwsem keeps the other callers of kernfs_get_inode() in fs/kernfs
-out of that window, and the one outside it, cgroup_may_write(), is kept
-out by cgroup_mutex, which cgroup_destroy_locked() holds across its
-kernfs_remove().  __kernfs_fh_to_dentry() has neither; it has created
-inodes without a lock ever since exportfs support was added.
+The pointer that leads to it is a different matter: __kernfs_iattrs()
+publishes kernfs_node::iattr with try_cmpxchg(), so there is no
+unmarked write for that read to pair with, and both sides read it with
+READ_ONCE() like the rest of fs/kernfs does.
 
-Take kernfs_rwsem for reading, as ->get_parent already does.  It has to
-cover the lookup by id as well, not just kernfs_get_inode():
-__kernfs_remove() marks and deactivates the whole subtree under the write
-lock before kernfs_drain() first drops it, so under the read lock an
-active node is one that is not going away, and the lookup returns NULL
-for the rest.  The other outcome, that CPU0 takes the lock first, leaves
-the inode in the hash before the ilookup() pass runs, so the pass finds
-it.
+The Fixes tag is for the symlink half.  kernfs_create_link() has read
+the pair without a lock since it started copying the target's owner at
+all; only the name of the lock its writer takes has changed since.  The
+data_race() is a marking rather than a fix.
 
-The same argument covers ->fh_to_parent, since a node cannot be active
-while an ancestor is being removed.
-
-Reproduced with a 300ms delay in __kernfs_fh_to_dentry(), between the
-lookup by id and kernfs_get_inode(): one task decodes a handle for a
-file in a cgroup directory while another rmdir()s that directory.  The
-result has st_nlink 1 without this patch and 0 with it.
-
-->get_parent keeps a window of its own that this does not close.  It
-already holds the same lock, but it has no active check, so
-reconnect_path() can still build an inode for an ancestor whose removal
-has finished, on the very open_by_handle_at() that got here.  Closing
-that wants the active test rather than another lock, and it changes what
-->get_parent returns for a node that is already gone, so it is left to
-the series that reworks these paths.
-
-Fixes: eea5d2bb34ba ("kernfs: Send IN_DELETE_SELF and IN_IGNORED")
-Cc: stable@vger.kernel.org
+Fixes: 488dee96bb62 ("kernfs: allow creating kernfs objects with arbitrary uid/gid")
 Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
 ---
- fs/kernfs/mount.c | 32 +++++++++++++++++++++-----------
- 1 file changed, 21 insertions(+), 11 deletions(-)
+ fs/kernfs/dir.c     | 16 +++++++++++++---
+ fs/kernfs/symlink.c | 17 ++++++++++++++---
+ 2 files changed, 27 insertions(+), 6 deletions(-)
 
-diff --git a/fs/kernfs/mount.c b/fs/kernfs/mount.c
-index f183a96778b9..c15ba6357162 100644
---- a/fs/kernfs/mount.c
-+++ b/fs/kernfs/mount.c
-@@ -124,22 +124,32 @@ static struct dentry *__kernfs_fh_to_dentry(struct super_block *sb,
- 		return NULL;
- 	}
- 
--	kn = kernfs_find_and_get_node_by_id(info->root, id);
--	if (!kn)
--		return ERR_PTR(-ESTALE);
-+	/*
-+	 * Hold kernfs_rwsem across the lookup as well as kernfs_get_inode().
-+	 * __kernfs_remove() deactivates the subtree and clears i_nlink on its
-+	 * inodes under the write lock, so under the read lock either
-+	 * kernfs_find_and_get_node_by_id() refuses the node, or the inode is
-+	 * in the inode hash before the ilookup() pass goes looking for it.
-+	 */
-+	scoped_guard(rwsem_read, &info->root->kernfs_rwsem) {
-+		kn = kernfs_find_and_get_node_by_id(info->root, id);
-+		if (!kn)
-+			return ERR_PTR(-ESTALE);
- 
--	if (get_parent) {
--		struct kernfs_node *parent;
-+		if (get_parent) {
-+			struct kernfs_node *parent;
- 
--		parent = kernfs_get_parent(kn);
-+			parent = kernfs_get_parent(kn);
-+			kernfs_put(kn);
-+			kn = parent;
-+			if (!kn)
-+				return ERR_PTR(-ESTALE);
-+		}
+diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+index 214c97130a8a..3997c02f0165 100644
+--- a/fs/kernfs/dir.c
++++ b/fs/kernfs/dir.c
+@@ -740,9 +740,19 @@ struct kernfs_node *kernfs_new_node(struct kernfs_node *parent,
+ 		/* this code block imitates inode_init_owner() for
+ 		 * kernfs
+ 		 */
+-
+-		if (parent->iattr)
+-			gid = parent->iattr->ia_gid;
++		struct kernfs_iattrs *attrs = READ_ONCE(parent->iattr);
 +
-+		inode = kernfs_get_inode(sb, kn);
- 		kernfs_put(kn);
--		kn = parent;
--		if (!kn)
--			return ERR_PTR(-ESTALE);
++		if (attrs) {
++			/*
++			 * Unlocked on purpose: the gid is inherited onto a
++			 * node that does not exist yet, so nothing orders a
++			 * racing chown against this creation, and either
++			 * value is correct.  The pointer above needs no such
++			 * marking, __kernfs_iattrs() publishes it with
++			 * try_cmpxchg().
++			 */
++			gid = data_race(attrs->ia_gid);
++		}
+ 
+ 		if (flags & KERNFS_DIR)
+ 			mode |= S_ISGID;
+diff --git a/fs/kernfs/symlink.c b/fs/kernfs/symlink.c
+index 90e2b3221b83..3e53105d3abf 100644
+--- a/fs/kernfs/symlink.c
++++ b/fs/kernfs/symlink.c
+@@ -31,9 +31,20 @@ struct kernfs_node *kernfs_create_link(struct kernfs_node *parent,
+ 	kuid_t uid = GLOBAL_ROOT_UID;
+ 	kgid_t gid = GLOBAL_ROOT_GID;
+ 
+-	if (target->iattr) {
+-		uid = target->iattr->ia_uid;
+-		gid = target->iattr->ia_gid;
++	/*
++	 * A symlink takes its owner from its target, so both fields have to
++	 * come from the same moment: read them under kernfs_iattr_rwsem, or
++	 * a chown of the target racing this could leave the link with the
++	 * old uid and the new gid.  The section ends before kernfs_add_one()
++	 * takes kernfs_rwsem.
++	 */
++	scoped_guard(rwsem_read, &kernfs_root(target)->kernfs_iattr_rwsem) {
++		struct kernfs_iattrs *attrs = READ_ONCE(target->iattr);
++
++		if (attrs) {
++			uid = attrs->ia_uid;
++			gid = attrs->ia_gid;
++		}
  	}
  
--	inode = kernfs_get_inode(sb, kn);
--	kernfs_put(kn);
- 	return d_obtain_alias(inode);
- }
- 
+ 	kn = kernfs_new_node(parent, name, S_IFLNK|0777, uid, gid, KERNFS_LINK);
 -- 
 2.53.0-Meta
 
