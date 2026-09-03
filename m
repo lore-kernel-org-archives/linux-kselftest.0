@@ -1,121 +1,134 @@
-Received: from mta1.migadu.com (out-63.mta1.migadu.com [95.215.58.63])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B4F372ECD
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 06:15:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.63
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1410D3DDDDD
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 06:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788416125; cv=none; b=FoEQJ3369Mes9cj7Q5eLTaeotVyEgpLfml7brP0e27n4mxuwy2JHZaZuZ7TDDSSav6mOS1IJeQLcFTgHhnSb16uLdoiB8UUpFLnxdtqxcGHbqp16aSFKuPKHvORgyW7mGlg5EWlv58J7X+SWuRbUNoRPQvfn3y/wgg/sHuuMbII=
+	t=1788416252; cv=none; b=tSW00zPD6hiDhTs8/ZGsztOQ/d41Qed86wgIOY3m0d5/Ji0/D0HPmTO951K0Sh68zUWqofxaRPC6/oyaMRTGLcUbTzLZJL3Or03Uq3JhxuvTEgYorhEHn8DUArOCafw5kxr2vZqG0nmO1kEhp2lQ4wRML25Cvkcs303wqCiJhl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788416125; c=relaxed/simple;
-	bh=VW2G9+S+grYb3iReEIYAciUQOjbf6ENRNXOUTjyONew=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sGqo41XXTsv7xOhpQLx5LbLt6rDetdfzSJtmHhakvjHn6ePiZMzARyYzvU039PN6bHqtu1OXpVOrctkHf9I5Tms5pZVwP+HYOkcKtp2r7jTucCYLqf/JmufwAyo5kd53ZsWhJg7KwDVyrp7D5PRmP8wTc2OJsQJZQjZ/dSN23Ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tBm7ZQTX; arc=none smtp.client-ip=95.215.58.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788416252; c=relaxed/simple;
+	bh=5fEpVgp9E7FDiWUah58fsA7bdrIxanTxTOaQkc2H9Js=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 Content-Type:MIME-Version; b=dTsErNUkpv6fEgYugKqMqcqptFFEC9M+Q940lL5lMYBvmUxo3OfdchNPES6Tg+KQGOjypM5HExwj34nuKeu/1PT/8IoQGVP3fows+g6iDfOA8TZO5YDL/42xhs84yx+LQpwGfQBL86r8AwgfGM5OAsoraCo5xTbV8TYddOyma3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qHudFzUG; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tBm7ZQTX"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=VW2G9+S+grYb3iReEIYAciUQOjbf6ENRNXOUTjyONew=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788416121; v=1; x=1789020921;
- b=tBm7ZQTX2Dm6E5zwJFfDBpbZS3DL2Rs/wANv0RSwBMOXI4lXSHIXmYMy8p8cm2m4+Lh/kbE5
- xqJD8CWATxUJs4PCjcjjwxhxGwGSwfA7U014kcvM/Oi+qCSWyyRZScj8eneqDCWkUOhtHdUrqWs
- 3feaIJinHAYiEFgzb4CJClZU=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 4d603cdf1e5a2158;
-	Thu, 03 Sep 2026 06:15:21 +0000
-X-Mizu-Trace-ID: 4d603cdf1e5a2158
-X-Migadu-Flow: FLOW_OUT
-Date: Wed, 2 Sep 2026 23:15:16 -0700
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Tejun Heo <tj@kernel.org>, Christian Brauner <christian@brauner.io>, 
-	Meta kernel team <kernel-team@meta.com>, linux-kselftest@vger.kernel.org, driver-core@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] kernfs: take kernfs_rename_lock for same-parent
- renames too
-Message-ID: <20260903060812.GA18952@shakeel.butt@linux.dev>
-References: <20260903040253.670020-1-shakeel.butt@linux.dev>
- <2026090330-cytoplasm-resilient-900b@gregkh>
- <6a990797.3e7a366d.3bd849.72d1SMTPIN_ADDED_BROKEN@mx.google.com>
- <2026090351-turbofan-tux-d75e@gregkh>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qHudFzUG"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-855d2bfae95so757248b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Sep 2026 23:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788416249; x=1789021049; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:content-type:message-id:date
+         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=iBqEdXDuBCy8uZJKHbshNmmYy9yfjB6hUG6xMylUjFw=;
+        b=qHudFzUGi8oRrtJ+tfnlAGtGA4kLyRrVrpkEbldIWRWuXkoGMmUKGo96cksz5iijhC
+         iWHvvF+8SZHHAAGaWghfFuTqfCTQdLQwylS5pl758CeEPQQ+S6OfWnVJlgngvXxWoeHY
+         nb+0pRJc6yyd5YxZ++1PAUQRN6lWp+2Wonzw2YgIgFw12toSG00UPZfpuD8MkMGKzkHT
+         GGyVq6ZCOPVl/28yCNvZUCzwBf57gbR8j6QVc0WuJAOKy4KPJ9E+uPRQP7CEDBBaRKrv
+         CvgNbse25W3ELMuo2VqvUitDXoKEL5e4QVY15dnw1lNNsXeFK+2toAO/7M2dmUkhUSjD
+         M3fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788416249; x=1789021049;
+        h=mime-version:content-transfer-encoding:content-type:message-id:date
+         :references:in-reply-to:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=iBqEdXDuBCy8uZJKHbshNmmYy9yfjB6hUG6xMylUjFw=;
+        b=ocf7JSYazfBtIXrG5Qw0Eq7y7JvFKsw+WmtmtaHri0yUh2Uz6NntT6F+2PgHpNtxSY
+         LMkyq0n0jFn9QpS8EXxi4K2TrUWezYVY8krbBErZJay5Ae5EapqxFHdV/8UudA88dvJN
+         PWILUmhV8jsprpoMpNDzt8rGGtbC7uNqBzcb+M8kVwGNi80ur31wgtRXmxv3lw2uJhCP
+         LA4u2yCRvxBbk6nJS6Oc14Teqlhx//t6AM4VgOMJHBSU89bdjC0ZSXZENPo9cGjUxavD
+         ZdtCyukfYSNqEJhaD2XFdiTJSM8sbnF4/gsaZxLpCW8Uzrax917qCo03GzL9SO9X/TmK
+         eQZQ==
+X-Forwarded-Encrypted: i=1; AKwUvByMQuRf7sQcR08zRd7g6KggHSdcIN4h62H59gelJDsUCR960RsQHq+VLN5JWx6d0FthLvvdqsl44h/mokNa/Ho=@vger.kernel.org
+X-Gm-Message-State: AFuF++kK+oZ5pEknLTnKnv3I3zTZmaMjG4C4nOo9EX/TaDBprjAOVA2c
+	3tyfICW+K+pQQqCsR0tYaKAEYTjRuyXVvjm+pBf4cUmcl99eUhnjOxmt
+X-Gm-Gg: AYBFou1nUGCpZkAgtUVTpAP5ylep8CloyADrEQLi621ptAkDWb2K860UjWnwFuOn69d
+	fFFkQOeRqBP4zqzQSXfo9f/e2/jmBWY+Sv/pQ30fi9bxeqUXO7r5ZseQBESa0G13rDbnvfCG8fp
+	UBjA7iU5GQmQjFv2Y5rrHky1fGqYwyIDmv6E/RZ7WdGCbAiQn5SEIBj5exBPVBfJWKkRWbmNeXR
+	6Az8FMAcuLXsQ7JwE/qhzFyWiCA+4JVumoHspiGDi2kx7dezlBKMKPNs7ghhD7rTzNnHASlplhB
+	N05V+IEtYKVPj5i80aaNQ1ZyMnGgy2LGmUZqq+0YhhFEy8FMf+UFJWamuC4EDT83fNv3ykx/UN2
+	ZzYIPhUC5xZunB7EM56wvMPO/J/fx1TyTRMnsEgp9YZYen/IAcZzclMsDZyrBK4XUsMgI0QboJR
+	h9cWhr8Q3xN5Qlf1OZJpZGWvPZTcRxDX8lZYlNq5vaD7zmYceeH4DdGs6dYRt7paUgEqsXWm7ZJ
+	JIf47C52hOJLoA=
+X-Received: by 2002:a05:6a21:7008:b0:3d1:66eb:511c with SMTP id adf61e73a8af0-3da215a7315mr3588262637.13.1788416248458;
+        Wed, 02 Sep 2026 23:17:28 -0700 (PDT)
+Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14319976a4asm2874285c88.13.2026.09.02.23.17.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Sep 2026 23:17:27 -0700 (PDT)
+From: Hemanth Selam <hemanth.selam@gmail.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: seanjc@google.com, pbonzini@redhat.com, shuah@kernel.org,
+ kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] KVM: selftests: Actually compare sregs and events in
+ sync_regs_test
+In-Reply-To: <20260902122209.865E61F00A3E@smtp.kernel.org>
+References: <20260902120235.18486-1-hemanth.selam@gmail.com>
+ <20260902120235.18486-2-hemanth.selam@gmail.com>
+ <20260902122209.865E61F00A3E@smtp.kernel.org>
+Date: Thu, 03 Sep 2026 11:47:23 +0530
+Message-ID: <178841624362.1403938.933078415206124828@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2026090351-turbofan-tux-d75e@gregkh>
 
-On Thu, Sep 03, 2026 at 07:41:53AM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Sep 02, 2026 at 10:37:21PM -0700, Shakeel Butt wrote:
-> > On Thu, Sep 03, 2026 at 06:31:58AM +0200, Greg Kroah-Hartman wrote:
-> > > On Wed, Sep 02, 2026 at 09:02:51PM -0700, Shakeel Butt wrote:
-> > > > kernfs_rename_ns() only takes kernfs_rename_lock when the rename moves
-> > > > the node to a new parent.  A rename that keeps the same parent, like
-> > > > renaming a network interface, changes kernfs_node::name with only
-> > > > kernfs_rwsem held.  So the lock protects ->__parent but not ->name, and
-> > > > a reader that wants a stable name has to take kernfs_rwsem, the same
-> > > > lock every path lookup needs.
-> > > > 
-> > > > That also makes for a small but real bug.  kernfs_path_from_node()
-> > > > takes kernfs_rename_lock for reading, and kernfs_path_from_node_locked()
-> > > > then reads the name of each ancestor.  It reads each one once, so a
-> > > > single same-parent rename only moves the answer from the old path to the
-> > > > new one, but two of them landing inside one walk build a path that never
-> > > > existed:
-> > > > 
-> > > >   CPU0                                   CPU1
-> > > >   kernfs_path_from_node() on /a/b/c
-> > > >     reads the name of a, gets "a"
-> > > >                                          renames a to a2
-> > > >                                          renames b to b2
-> > > >     reads the name of b, gets "b2"
-> > > >     returns "/a/b2/c"
-> > > > 
-> > > > This hits roots without KERNFS_ROOT_INVARIANT_PARENT: sysfs, where the
-> > > > bad path can reach sysfs_warn_dup() and pr_cont_kernfs_path(), and
-> > > > resctrl, which renames a mon group inside its mon_groups directory.
-> > > > cgroup sets the flag, so it skips the lock and reads names under RCU
-> > > > alone; that case needs something else and is not addressed here.
-> > > > 
-> > > > So take the lock in both cases, and let kernfs_rcu_name() accept it the
-> > > > way kernfs_parent() already does for ->__parent.  Same-parent renames
-> > > > are rare, the lock is per filesystem, and the locked section is at most
-> > > > three stores.  It also gives a future rename sequence counter one place
-> > > > to sit that covers every rename.
-> > > > 
-> > > > Fixes: 741c10b096bc ("kernfs: Use RCU to access kernfs_node::name.")
-> > > > Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
-> > > > ---
-> > > >  fs/kernfs/dir.c             | 28 +++++++++++++++-------------
-> > > >  fs/kernfs/kernfs-internal.h |  9 ++++++++-
-> > > >  2 files changed, 23 insertions(+), 14 deletions(-)
-> > > 
-> > > How was this found and tested?  Did you forget an Assisted-by: tag?
-> > 
-> > I am working on a series to improve kernfs_rwsem and going through
-> > review-prompt with AI to review my series and these were existing 
-> > issues AI found. I have created reproducers with AI for these and
-> > tested that these patches those.
-> 
-> Then please read our documentation for how to properly document this
-> usage of a LLM tool.
+On Wed, Sep 02, 2026 at 12:22:09PM +0000, sashiko-bot@kernel.org wrote:
+> [Severity: High]
+> This is a pre-existing issue, but does this new assertion trigger test
+> failures due to how __get_sregs() handles the interrupt_bitmap?
 
-Sure
+No.  Neither of the two tests that reach compare_sregs(),
+req_and_verify_all_valid and set_and_verify_various, ever injects an
+interrupt: the guest just loops on an IN from a port, and nothing in the
+test writes interrupt_bitmap.  KVM allocates the kvm_run page with
+__GFP_ZERO, so the sync region's copy starts out zero and stays zero,
+and the KVM_GET_SREGS side is filled from a kzalloc()'d buffer.  Both
+sides are all zeros at every point where the memcmp() runs, which I
+confirmed by printing them, and the series passes 10/10 on an AMD host.
 
-> 
-> If you have reproducers, please add them to the kernfs tests as well as
-> patches part of this series when you resend them.
->
+> This function sets the bit corresponding to the currently injected interrupt
+> but never clears the prior contents of the array.
 
-The reproducers are like stress tests and are targeting race conditions.
-In one case delay was added to fully expose the race. I am not sure
-selftests is the right place for this kind of tests. I can just publish
-the reproducer on the list to have them on record if that is what you
-are looking for.
+That part is right, and it is observable from userspace.  Planting a bit
+in the sync region and running the vCPU with KVM_SYNC_X86_SREGS in
+kvm_valid_regs but nothing in kvm_dirty_regs:
+
+  run->s.regs.sregs.interrupt_bitmap[0] = 1ULL << 0x30;
+
+leaves KVM_GET_SREGS reporting 0x0 while the sync region still reads
+0x1000000000000 after the exit.  KVM refreshed sregs there and left the
+caller's bit in place.
+
+> Could this lead to spurious interrupt injections or corrupted state during
+> live migration for any VMM using the KVM_SYNC_X86_SREGS API?
+
+Handing that same stale bit back with KVM_SYNC_X86_SREGS set in
+kvm_dirty_regs does inject it: __set_sregs()'s find_first_bit() picks up
+vector 0x30, kvm_queue_interrupt() queues it, and the guest dies on an
+unhandled 0x30.  So a VMM that read-modify-writes the sync region can
+resubmit a vector KVM itself put there on an earlier exit, since nothing
+clears the field once a bit is set.
+
+I could not demonstrate KVM planting the bit itself here, as selftest VMs
+have an in-kernel irqchip and KVM_INTERRUPT returns -ENXIO; that half
+rests on __get_sregs() only ever doing set_bit().
+
+Whether KVM should zero interrupt_bitmap before it ORs in the injected
+vector, or clear it in store_regs(), is an ABI question rather than
+something this test change should decide, and I am happy to send a patch
+if that is the direction.  I would keep the memcmp() either way: it is
+precisely the check that would catch a stale bit turning up in the sync
+region.
+
+Thanks,
+Hemanth
