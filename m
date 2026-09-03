@@ -1,148 +1,132 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mta0.migadu.com (out-10.mta0.migadu.com [91.218.175.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430344DBD8E;
-	Thu,  3 Sep 2026 16:08:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08894EC645
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 16:08:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788451687; cv=none; b=hyDyoJrahmPch/NqIh0NWJq2IsEh8yp/Zy8gDB7szsMQn9RZajiVS359n6F4nC/FSndwGLNVH5Qa/rTH12IjX9i5jLZqbwDBkGBf84iTFzljogFOM4AX1G6q2GApJFoL0xkdWYdFsbkBLDpkvFG5T8LX9C+s72ahJi0dQ9uQtlE=
+	t=1788451714; cv=none; b=jO/fn1ojSKLXsVsq2L4Oox16J2IFey3vVifGKmo7sW1t5kgRQyl9iyVnGvIau2emELWkCsfJ3RzRB6BJjV2Qjsu2HucFrNlZnA+EEmBpDz8KAY/1mmsA82cf71esLGbSJn7e2f+75mmWuzznnl0MSMsynD0u7bO2uPFpT3VBPyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788451687; c=relaxed/simple;
-	bh=QQHY7VAbEmpS20mi2zTXJgznuJ4zr7QMNhtHPB/CPKE=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GbI7NnZi9CUgg3stjCWrXkYJWFCkCVQVV+zzt81rfgbLsOiorQjJWC5ZvGzyEPge6rqqX3IiayNrdl1NyJidBErG/ERQDOe6foVMKTx3BUwwm+LxJJfIQ9NVXBwMZ2ts2WaAEilhgaOSRvnZMWlIc05QcX1Jkjz+0WAQdc+ktz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=OxZrOVI0; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=EEvzfYHf; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=aMvmeg3t; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=QAdTSwsK; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1788451714; c=relaxed/simple;
+	bh=LIb/7rrK5h/wT9lpdn6ra1OGGg+3Wy5Q15Bf/KyCPjQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qTY894lGno6mzJ3sOm6PrG6r77WUWWdJ9oGQNeM6auKlCaxp8PYFSY/i8andqT6MkgIQQAjF+6dcIJd03/z80dLtk2Gp9ixC1Zyh+8obLW9GAeosGJwsKs5e0nvgOjbninqFZ9glQcZ9sLFtbrwK6MrWr1bWfLGSaiN9OxdFNzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pLdJoR7h; arc=none smtp.client-ip=91.218.175.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="OxZrOVI0";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="EEvzfYHf";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="aMvmeg3t";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="QAdTSwsK"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id DBBD21FD8F;
-	Thu,  3 Sep 2026 16:07:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1788451680; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=s7qk4rF4ucrFATvBIIWGJNf/bxF0erj4kBt1GCZQoPQ=;
-	b=OxZrOVI0EZb6qBn1LtUrsSj5JFsL9e948LQnxr5NVGyiC/9U1EsVJ4rQ6zaL+c49IaKjaG
-	ldupme80hMXki8t2x24w3MjofpoIcBRavc4YM4QPIpgBWBybdHAqKDXayUDkclGF4Jvp/v
-	9YO16/tey4mVo/GGN6WUTmizHbGBa4s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1788451680;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=s7qk4rF4ucrFATvBIIWGJNf/bxF0erj4kBt1GCZQoPQ=;
-	b=EEvzfYHfVfnac3ZFkdXrxocjNBduX44mL1NaIde4b4yHD1UtgYndiUDip0nnaVpCagb5dP
-	vE2U9OWM22/zVhAQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1788451675; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=s7qk4rF4ucrFATvBIIWGJNf/bxF0erj4kBt1GCZQoPQ=;
-	b=aMvmeg3tUCKzzIcv93JJJ/fIo13/pQmXF8IvChHzvJKuALDGxMxb0Sm08oL5X/S/lUQw/J
-	Dw5DzhyLEiQtOxvkPQxRJuBejdMV1J1lf4h//KEA68CiojDg80WPJyCGxmjHtms2xy7szG
-	SwJABsUDcJOv7tfiOrM0ozyXqoFKYjM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1788451675;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=s7qk4rF4ucrFATvBIIWGJNf/bxF0erj4kBt1GCZQoPQ=;
-	b=QAdTSwsK6TqU97LEfxXq8DqhVwgUhFvjWQZhDy+bz1blbpJ9xwdSfssOLCGmiBx9wZuD3r
-	fWojKzwuEOAITXDQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8A689136D9;
-	Thu,  3 Sep 2026 16:07:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id N1SkIFubmWoIeAAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Thu, 03 Sep 2026 16:07:55 +0000
-Date: Thu, 03 Sep 2026 18:07:55 +0200
-Message-ID: <87o6ee71yc.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: HyeongJun An <sammiee5311@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>,
-	Takashi Iwai <tiwai@suse.com>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pLdJoR7h"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=LIb/7rrK5h/wT9lpdn6ra1OGGg+3Wy5Q15Bf/KyCPjQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788451708; v=1; x=1789056508;
+ b=pLdJoR7hoY4o6mwSvLsdRhvtJyNdOrVP1FKbkEKK3b2q4+1NRLxFSNTdRPpyfqC7ROxo2n1Y
+ dXS82xhprPZu4kXZHFmJjFBEawyN+gNeHVYBgQHMWFtJwsptn3e4xVkpPcMrPUPDhRbW++6g0vH
+ CodLf/idUhwvSuoIiDoKZxao=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id b4b3b84fd517c841;
+	Thu, 03 Sep 2026 16:08:18 +0000
+X-Mizu-Trace-ID: b4b3b84fd517c841
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 3 Sep 2026 09:08:17 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Tejun Heo <tj@kernel.org>, Christian Brauner <christian@brauner.io>, 
+	Meta kernel team <kernel-team@meta.com>, linux-kselftest@vger.kernel.org, driver-core@lists.linux.dev, 
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/alsa: Fix the step check for INTEGER controls
-In-Reply-To: <20260903123832.97377-1-sammiee5311@gmail.com>
-References: <20260903123832.97377-1-sammiee5311@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
+Subject: Re: [PATCH 1/3] kernfs: take kernfs_rename_lock for same-parent
+ renames too
+Message-ID: <apmaTeNaULFmV7H4@linux.dev>
+References: <20260903040253.670020-1-shakeel.butt@linux.dev>
+ <2026090330-cytoplasm-resilient-900b@gregkh>
+ <6a990797.3e7a366d.3bd849.72d1SMTPIN_ADDED_BROKEN@mx.google.com>
+ <2026090351-turbofan-tux-d75e@gregkh>
+ <20260903060812.GA18952@shakeel.butt@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Level: 
-X-Spam-Score: -3.30
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_TLS_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,imap1.dmz-prg2.suse.org:helo]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260903060812.GA18952@shakeel.butt@linux.dev>
 
-On Thu, 03 Sep 2026 14:38:32 +0200,
-HyeongJun An wrote:
+On Wed, Sep 02, 2026 at 11:15:16PM -0700, Shakeel Butt wrote:
+> On Thu, Sep 03, 2026 at 07:41:53AM +0200, Greg Kroah-Hartman wrote:
+> > On Wed, Sep 02, 2026 at 10:37:21PM -0700, Shakeel Butt wrote:
+> > > On Thu, Sep 03, 2026 at 06:31:58AM +0200, Greg Kroah-Hartman wrote:
+> > > > On Wed, Sep 02, 2026 at 09:02:51PM -0700, Shakeel Butt wrote:
+> > > > > kernfs_rename_ns() only takes kernfs_rename_lock when the rename moves
+> > > > > the node to a new parent.  A rename that keeps the same parent, like
+> > > > > renaming a network interface, changes kernfs_node::name with only
+> > > > > kernfs_rwsem held.  So the lock protects ->__parent but not ->name, and
+> > > > > a reader that wants a stable name has to take kernfs_rwsem, the same
+> > > > > lock every path lookup needs.
+> > > > > 
+> > > > > That also makes for a small but real bug.  kernfs_path_from_node()
+> > > > > takes kernfs_rename_lock for reading, and kernfs_path_from_node_locked()
+> > > > > then reads the name of each ancestor.  It reads each one once, so a
+> > > > > single same-parent rename only moves the answer from the old path to the
+> > > > > new one, but two of them landing inside one walk build a path that never
+> > > > > existed:
+> > > > > 
+> > > > >   CPU0                                   CPU1
+> > > > >   kernfs_path_from_node() on /a/b/c
+> > > > >     reads the name of a, gets "a"
+> > > > >                                          renames a to a2
+> > > > >                                          renames b to b2
+> > > > >     reads the name of b, gets "b2"
+> > > > >     returns "/a/b2/c"
+> > > > > 
+> > > > > This hits roots without KERNFS_ROOT_INVARIANT_PARENT: sysfs, where the
+> > > > > bad path can reach sysfs_warn_dup() and pr_cont_kernfs_path(), and
+> > > > > resctrl, which renames a mon group inside its mon_groups directory.
+> > > > > cgroup sets the flag, so it skips the lock and reads names under RCU
+> > > > > alone; that case needs something else and is not addressed here.
+> > > > > 
+> > > > > So take the lock in both cases, and let kernfs_rcu_name() accept it the
+> > > > > way kernfs_parent() already does for ->__parent.  Same-parent renames
+> > > > > are rare, the lock is per filesystem, and the locked section is at most
+> > > > > three stores.  It also gives a future rename sequence counter one place
+> > > > > to sit that covers every rename.
+> > > > > 
+> > > > > Fixes: 741c10b096bc ("kernfs: Use RCU to access kernfs_node::name.")
+> > > > > Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
+> > > > > ---
+> > > > >  fs/kernfs/dir.c             | 28 +++++++++++++++-------------
+> > > > >  fs/kernfs/kernfs-internal.h |  9 ++++++++-
+> > > > >  2 files changed, 23 insertions(+), 14 deletions(-)
+> > > > 
+> > > > How was this found and tested?  Did you forget an Assisted-by: tag?
+> > > 
+> > > I am working on a series to improve kernfs_rwsem and going through
+> > > review-prompt with AI to review my series and these were existing 
+> > > issues AI found. I have created reproducers with AI for these and
+> > > tested that these patches those.
+> > 
+> > Then please read our documentation for how to properly document this
+> > usage of a LLM tool.
 > 
-> The modulo sits inside the subtraction, so the check evaluates
-> int_val - (min % step) rather than (int_val - min) % step. The
-> INTEGER64 branch below it is parenthesised correctly.
+> Sure
 > 
-> The written form passes only when the value equals min % step, and such
-> a value is always on a step boundary, so it never misses a real
-> violation. It only reports valid values as invalid.
+> > 
+> > If you have reproducers, please add them to the kernfs tests as well as
+> > patches part of this series when you resend them.
+> >
 > 
-> snd-aloop declares step 1 on four controls, so every non-zero value on
-> them is reported. Before:
-> 
->   # PCM Rate Shift 100000.0 value 100000 invalid for step 1 minimum 80000
->   # Totals: pass:660 fail:101 xfail:0 xpass:0 skip:296 error:0
-> 
-> After, same card, nothing else changed:
-> 
->   # Totals: pass:740 fail:21 xfail:0 xpass:0 skip:296 error:0
-> 
-> Eighteen files under sound/ declare a non-zero step.
-> 
-> Fixes: 5aaf9efffc57 ("kselftest: alsa: Add simplistic test for ALSA mixer controls kselftest")
-> Signed-off-by: HyeongJun An <sammiee5311@gmail.com>
-> Assisted-by: Claude:claude-opus-5
+> The reproducers are like stress tests and are targeting race conditions.
+> In one case delay was added to fully expose the race. I am not sure
+> selftests is the right place for this kind of tests. I can just publish
+> the reproducer on the list to have them on record if that is what you
+> are looking for.
 
-Applied now.  Thanks.
+Greg, let me know what would you prefer. I can add selftests which execise the
+paths these bugs are on but to trigger the bug, more stress would be needed and
+still will not trigger the bug always.
 
+Also I have inflight kernfs selftest patch [1] as well. I can combine that to
+this series. 
 
-Takashi
+[1] https://lore.kernel.org/all/20260902014050.499002-1-shakeel.butt@linux.dev/
