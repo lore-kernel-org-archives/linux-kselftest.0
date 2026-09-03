@@ -1,49 +1,49 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C0C38BF89
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 18:33:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D113E7BCC
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 19:12:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788460461; cv=none; b=nmi/4mWKXff9Cfov0aeaymQxIRidT3Wa9RFp9odM9qwvmA67f4SvgtesYnwHy/n0ISQh2j0vaT8W5KTwvvdvUSsY+w28xrJSfB9xjFSEn6nCMI9t5jpVkAzoezzO6BUHih+M3GxyufNdvssTW2v3Virsbuf8YKo6EOMH0sK/m+o=
+	t=1788462734; cv=none; b=Ts6S9a/i1IG1ykTiC24kPmFqryrPJM0vcOWu4GYxpJTQLSOGR+N+c1l/pAkIzK79YYNRx2dwuaORj+jlZEV4nhd/Dk7JEtKU1SSi8L7kNdR3vMeaSakjB/nv3i8K6Fxjh9oSZV3RR1Poud5U44b9FUMywPK5rwdXSU6xvVkiI6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788460461; c=relaxed/simple;
-	bh=rYEDqSVs5KWsByB/gKaLKuCfCYtF38rGdj2qCxtEO8g=;
+	s=arc-20240116; t=1788462734; c=relaxed/simple;
+	bh=1i8tMJfp/R8QxhaIUIM0toTZBDt7bMgl455MIL0WIoI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZXHaj3hJdl4uucKkX625SjMc9ltvlV8NYReyukb5TpIaXba+pQX0KQenYy1voIY8t6omtgkImIQCYaYkBDsBkl5r45puILoEmVYDiCrvc1oe1RZ7bbudCJtf2mw2CK5D64JyaWZY6wv0+SKwybWxXFsR2/pZNXLSOIsw97QjyKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JZes461l; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=I+kB/PKiN/xA0IFN/6IgA4Ym8z01BsaDi74j2RatwOE30kohnDNVbmtmBns6+21JpFlCNKRH6jcPuPNPlb6I2wcgofWlfcbNyiXQLkZpcolkvHr86fBMjiReHb0k96Nvu/Z4VWMFrZiMoqTaBTwhh+i/TDdsy4sGyZABB/rRO4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eUZNJX2d; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JZes461l"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eUZNJX2d"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1788460433;
+	s=mimecast20190719; t=1788462719;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=hAb38BLLkIQ7vd+VdRyAqRpps7HgXE5a0fJqzLwWo8Y=;
-	b=JZes461lfZTqs3JEW/JKW1snFJ28VWR4pfpNTtkVZOPhBk+6axcPjlGTxX0XM6VuGJNW3a
-	pyzP6bMHN6QVc0LDsak0AYhtM8AxVz0gl3HI+XCdAEkeOYytXFpyg+Rgnrtuhw9179n9qu
-	C05BZwnj1NaW/unvNGKC2NjHIrECCME=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+	bh=9NSPYcZxyhavCYoY5cBlCY/RocvvrkZ0xuo+47WWZcw=;
+	b=eUZNJX2ddC42M0d5LbXwUJYphKVhXXfX4QtHGPA5vALCzQpadcR9D18+JmxwafhsCYG9N8
+	rF+osiU2p/ICE0pNGE59nCObXtSFZe6cmCjGnnMexkd9CP3C4k/hHQnSrTdtY3465KomHn
+	+ZSx6QsPJFWC0h0csRa2KkgMKYW0mzQ=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-512-qUrUPf8xNrO1dNKaejVlUw-1; Thu,
- 03 Sep 2026 14:33:47 -0400
-X-MC-Unique: qUrUPf8xNrO1dNKaejVlUw-1
-X-Mimecast-MFC-AGG-ID: qUrUPf8xNrO1dNKaejVlUw_1788460425
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-159-enJAFK_rPne1IS8NMIzeYQ-1; Thu,
+ 03 Sep 2026 15:11:54 -0400
+X-MC-Unique: enJAFK_rPne1IS8NMIzeYQ-1
+X-Mimecast-MFC-AGG-ID: enJAFK_rPne1IS8NMIzeYQ_1788462713
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F0CFF185CE9B;
-	Thu,  3 Sep 2026 18:33:44 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8309318C0FE8;
+	Thu,  3 Sep 2026 19:11:52 +0000 (UTC)
 Received: from [100.91.18.181] (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DBF4E1803A51;
-	Thu,  3 Sep 2026 18:33:42 +0000 (UTC)
-Message-ID: <5842edcd-9283-4a87-afc9-50e51962368e@redhat.com>
-Date: Thu, 3 Sep 2026 14:33:41 -0400
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8B0671955F7C;
+	Thu,  3 Sep 2026 19:11:50 +0000 (UTC)
+Message-ID: <9ff85fed-190c-4a8d-8d47-2a37990c1cbb@redhat.com>
+Date: Thu, 3 Sep 2026 15:11:49 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,7 +65,7 @@ From: Waiman Long <longman@redhat.com>
 In-Reply-To: <20260902102615.79189-2-guopeng.zhang@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
 On 9/2/26 6:26 AM, Guopeng Zhang wrote:
 > From: Guopeng Zhang <zhangguopeng@kylinos.cn>
@@ -100,9 +100,6 @@ On 9/2/26 6:26 AM, Guopeng Zhang wrote:
 > +		      const struct cpumask *partition_cpus,
 > +		      const struct cpumask *remaining_cpus,
 > +		      bool parent_populated)
-I think you should add some functional comments on what "partition_cpus" 
-and "remaining_cpus" are supposed to be so that caller knows what to 
-pass into this helper.
 > +{
 > +	if (!cpumask_subset(child->effective_xcpus, partition_cpus))
 > +		return PERR_INVCPUS;
@@ -133,29 +130,12 @@ pass into this helper.
 > -		WRITE_ONCE(child->prs_err, 0);
 > -		if (!cpumask_subset(child->effective_xcpus,
 > -				    cs->effective_xcpus))
-> -			WRITE_ONCE(child->prs_err, PERR_INVCPUS);
-> -		else if (populated &&
-> -			 cpumask_subset(new_ecpus, child->effective_xcpus))
-> -			WRITE_ONCE(child->prs_err, PERR_NOCPUS);
-> -
-> -		if (child->prs_err) {
-> +		WRITE_ONCE(child->prs_err, PERR_NONE);
-> +		child_err = child_partition_error(child, cs->effective_xcpus,
-> +						  new_ecpus, populated);
-> +		if (child_err)
-> +			WRITE_ONCE(child->prs_err, child_err);
-> +
 
-You can ignore the inital PERR_NONE write and always write the child_err 
-value into child->prs_err.
-
-Not big issue, just some nits.
+Looking at the patch again, I now see that the current code is 
+incorrect. It should be "if (!cpumask_subset(child->effective_xcpus, 
+new_ecpus))" So you only need to pass the "parent_excpus" (for instance) 
+to the new helper instead of passing two.
 
 Cheers,
 Longman
-
-> +		if (child_err) {
->   			int old_prs = child->partition_root_state;
->   
->   			/*
 
