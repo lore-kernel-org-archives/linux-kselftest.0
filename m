@@ -1,143 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from flow-a1-smtp.messagingengine.com (flow-a1-smtp.messagingengine.com [103.168.172.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B3D440636;
-	Thu,  3 Sep 2026 20:41:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2932A3E5A29;
+	Thu,  3 Sep 2026 20:48:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788468104; cv=none; b=ckeg/yS4o3ATUXGEaZifkXjNKURfPAGi5eqAMSgigd0pkiw4RYtuYtqcKIohmH72SJauYGQpaJw6OSCrm5xcYnA0FjtUMiOZOrB/mDMrtaxUSwJMJjZ76rsYlaUWf0kD8DYz4DWpDvxUYU5aOmw+T9GfoMDJ8ehvl2k71aDGfmU=
+	t=1788468488; cv=none; b=e4dliwE9C3RiwYduu2BXdJb9W4T6KgPyNylGOKd4bf+XSR/9YVQK6pn0aS3/L8WfW6ukzprFZKlBgZBEwuQ9keMsPT05J4JTB/jxjrDwI29QH4JrfwdBADiL0Y6uQ+ASM8L7/Aq/EppSQsFk//1y0EK/o9vV2K6/bVGq7eK3ARI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788468104; c=relaxed/simple;
-	bh=AY0HA4ndetMZiaqwqU8UghLdFoFnfxZMx6zhDjYAUVI=;
+	s=arc-20240116; t=1788468488; c=relaxed/simple;
+	bh=0tVHDldB0byJ87vmnVyBzo1m8ktM7L6UglxhruR5/f0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f0hTyOQecbtqV/MkOeEg6MwSTM3C6YoOUlwbLdKRqE8nSzJ6nWwnTQYSK0JRRZipFkpUJEWtxuMWIAjN9ZAU0wcQdRKqmh6Li4oHK7e5c+OePwp5X9di5xONeC39k0U06iR9N1A4QTCjQT8gSpQvfs8ZDsQcstNjKbck3JXtNkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JR2UQdMe; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=bdynaIY8FycoxunKgIPKcb3dMvvCtRkwJ3tJozLHCZgF49qVCoDmVuxPL+N7FlhBuUMA4lk9yCb9C8NDnGVOE9nmiqMZe7J/iCiyrnYbcvCifbC9+2HbtBvkxuAkvtwh080pOFx7ArQyFfGL5XZ7yDSGVDL0CuKZM/MmampWcOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=LoqpdVHo; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=xr5+svod; arc=none smtp.client-ip=103.168.172.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JR2UQdMe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8D0D1F000E9;
-	Thu,  3 Sep 2026 20:41:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788468092;
-	bh=dccCzEuEh91JJr7dSASJ482QV1CaMg8i/UVv42TMhjI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=JR2UQdMedKz3s+eb+c1UCQQBjsKsBHzJlHuFj2Ndy9O43ymWj5x3mOfKb1Q5JvXNE
-	 KjOkRK/WycgPVOuiZ8U86TarsmBu34sUO2A/9O8ocEWdbYgnwxsD4j17EZOK3p8yv0
-	 bJduA9CcV1S7EvYXaf84BGRJU0pNPD6Qjg1U3nQypI6UyOgce4QkyFMbJl9wh71+Kd
-	 vORJuMOxPeYUbYM5QX/BgkU0V6rV4zloEh9sBjA9nzoLXTvmKAMevGibSGQl2yeE4j
-	 pkVy5b43uQ2Sp2VjQcwkKUfXpRQ6oDNQleOE44v5J58v70mqD/mcN4J2lIM6EzaBK8
-	 y/knE4VmtEqcg==
-Date: Thu, 3 Sep 2026 21:41:26 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Leonardo Bras <leo.bras@arm.com>,
-	Wei-Lin Chang <weilin.chang@arm.com>,
-	Yao Yuan <yaoyuan@linux.alibaba.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v20 03/14] KVM: arm64: Manage GCS access and registers
- for guests
-Message-ID: <d2659ac3-2f00-4fc4-8f9e-0585691a4ba2@sirena.org.uk>
-References: <20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org>
- <20260901-arm64-gcs-v20-3-f31750bdfadb@kernel.org>
- <apmfx08vccSd2MXw@gremlin>
+	dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b="LoqpdVHo";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="xr5+svod"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.phl.internal (Postfix) with ESMTP id 35C0313800CC;
+	Thu,  3 Sep 2026 16:47:58 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Thu, 03 Sep 2026 16:47:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1788468478;
+	 x=1788475678; bh=vYh/59ueWC2tCap+cAh5Pc8XIHLmjRhWP4EF7HGivPY=; b=
+	LoqpdVHoHV2WXbeG0Ma8deXG8kWbqjfIDsRmS5QAKBLANiZjMmcOZF2G44wRfhrT
+	q7358SjwplUnzRX2gaBPdXs6vNgXQVxYmB7GPRPELLTUanlDrdzeMqxMQKsFPHRP
+	9zoUcssP+3izMtkpqDPCOf/dgrGG0qtxNi32ikJKN44gkWRzGzKB0PN3BQg/BIKO
+	Ngx+D4DeNTamsYnDa+f5XUeB9uqxq9yI8pQgXIfjpcKQQkjmQNB7FlEAvi6LrIji
+	lH5BnFSP4SZUmrvni/2t28TgYULBtkALduDaxgsmkmRhS1n88gzSth1iqBQg5jbg
+	L+6bETU0QxcwdqF5Y0HWzg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1788468478; x=
+	1788475678; bh=vYh/59ueWC2tCap+cAh5Pc8XIHLmjRhWP4EF7HGivPY=; b=x
+	r5+svodN6ruZd+PRXpsu2eqv87HJ6DWONZKBmSiU70zgW8faYOcBTfmVr/Nb0Y3u
+	9mMKXhd+w+bRejySO8Z7OHPs3s76D6m3jlZzFhmdLcNyGsYxjW6eBPEujOjv4xtf
+	dtJEG2QxWPXJ35cHNXXpUIZ/NyG9MEYOEQwR4Xgme87kSohzOVPH60wVUUGXXIPs
+	Usjah0X8/fcsiyM12/MCOGbtuFlP4y9cLh29+0DG13L/IEpFliJN2mkaUrZWRAxP
+	QrcbgxOHQDHfcKlxp5pik3B+CSfII+yC1jSbqiPsPLgrqQX9ZQDPRbWw6XuYh9zP
+	T8n0XUB2xhdjxLxdcOBKQ==
+X-ME-Sender: <xms:_tyZao2MOcBKruAzVojCz2nnR46A-cBSrNZIdTRcDro4PIvsTToVoQ>
+    <xme:_tyZarSWNSfmoiXNIxwNkEIlDeOhjodv-6rS2fn2YPGPSPI6XhQDPb7RjnCT70sph
+    OlRUVvd1oCE0Zz5J3Hy7Jn_px3YEuJfivaKljDloTHNtIiB9JcAmKthlA>
+X-ME-Received: <xmr:_tyZasekoWZD5vT-bmFoJzKedAwixC_zArvzCCza8NjeM7r7XEX5xktcjJw-ZBp9INqmfaWqHfSTZi-vxEK7HpJqHXmaYeo>
+X-ME-Proxy-Cause: dmFkZTFONURqZfnbz0P41q83IrnEBnUQeLNict9qTZuSYOgw/OZgOGbwAgN8bJfthkkaIV
+    I4hzyFKmUHvWCL397ElXGN6juxpbuSPv7Nm46rxsOsdIPeHkf5vuiSg2JnsW8iLtrPch7N
+    jgTVWDOGoVmZG8jroNefPNoMOcPiyzzLBTFBgoHprYiYJFyeABY1IvrNzRx9zbviTV3xbi
+    aoWfDnz7460xs+RroEtKaeJGRUjNrcAvI4rCpxA2kMdCCNHGpm2bdCRpvUezclo9ePP5QN
+    EGreWD+jZhkGgilHJQMZWdm58IG9xLzST5+2ZxQeB+ObwI1u3Pe9FcSNXI4a2LePdXhgla
+    qG5heHvaxKCWmblHeiaFr/GY+kC6ZqPMn5m5Abt04a9M2zUU6G6LWvmjM7t9JdwP5aY34C
+    BQP7nyIXhyqj/+RWnLdsClEw+FumzAiO8TobK5vzXrVU5jVV2KrN5/KRS+47THK/toj8G/
+    vUQzzNm5qKRgomk81l/HDbFWKe/flOup7wSGmmtaw3bZKESHjsWLddXpyCg0M5u6ZVM6HF
+    tJ8W2u3487a5XAA9DKeH5pyqXwL32hr1Y/3oe906SbT+WIiuhhpw1TucTl7nJ+lBqRT1zv
+    NEMJvZGzwYdMMXmfc/M6wNgbI20m6jBPUce6KAQHmfgGFgSY/b5yDB8FYExw
+X-ME-Proxy: <xmx:_tyZasd4yshlRNdmoO1heF7F8vdGRgBH2_MGn8dO2S6tbhb0zabyIg>
+    <xmx:_tyZam16ekeSsJvRDhf7jX_lIhXgwXkqS9S8Ip3Pg8nGh9QlQudmAA>
+    <xmx:_tyZak_hhNLNElrSXmCWysZCd8H8XOTp73lgGrxTsk9VUKnkke-aKw>
+    <xmx:_tyZar4DoAvqzhiB1Pi3DnCnSLZBkS5cXmTCexENB3aYu8VzyECr0w>
+    <xmx:_tyZao6ee_T23TmanWEeLQDPJP1D3w3BYb30Xrhm0nYn-Xtv9rlRd9HN>
+Feedback-ID: i80b64ba7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 3 Sep 2026 16:47:57 -0400 (EDT)
+Date: Thu, 3 Sep 2026 15:47:56 -0500
+From: Juanlu Herrero <juanlu@fastmail.com>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev-bot+sashiko@kernel.org, dw@davidwei.uk, netdev@vger.kernel.org, 
+	io-uring@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kuba@kernel.org, asml.silence@gmail.com, shuah@kernel.org
+Subject: Re: [net-next,v6,5/6] selftests: net: add multithread server support
+ to iou-zcrx
+Message-ID: <apncp9j_ie53HgYh@jlhe0197-mac>
+References: <20260831-iou-zcrx-v6-5-02d1d012f0fd@fastmail.com>
+ <178839229706.3394541.1555608492152892136@kernel.org>
+ <1cf3f4de-bec8-4559-a4b2-1d946ead0f69@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ww7DzEmaeFudEMkX"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <apmfx08vccSd2MXw@gremlin>
-X-Cookie: One picture is worth 128K words.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1cf3f4de-bec8-4559-a4b2-1d946ead0f69@redhat.com>
 
+On Thu, Sep 03, 2026 at 01:06:11PM -0600, Paolo Abeni wrote:
+> 
+> 
+> On 9/3/26 1:38 AM, netdev-bot+sashiko@kernel.org wrote:
+> > Thank you for your contribution! Sashiko AI review found 6 potential
+> > issue(s) to consider:
+> > 
+> > Critical: 0 · High: 1 · Medium: 2 (3) · Low: 3
+> > 
+> > - [High] listen() is now executed before the workers have registered
+> >   their zcrx ifqs, breaking the ordering that two existing in-tree tests…
+> > - [Medium] A worker thread that is dispatched zero connections reports
+> >   success without receiving or verifying a single byte.
+> > - [Medium] The new CQ sizing removes the implicit bound that kept the
+> >   zcrx refill-queue producer inside one ring.
+> 
+> My understanding is that the above 3 concerns may affect tests stability
+> and should be addressed before merging.
+> 
+> Thanks,
+> 
+> Paolo
+> 
 
---ww7DzEmaeFudEMkX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+makes sense, I will address these in v7 of this patchset.
 
-On Thu, Sep 03, 2026 at 07:13:17PM +0100, Lorenzo Stoakes (ARM) wrote:
-> On Tue, Sep 01, 2026 at 10:47:01PM +0100, Mark Brown wrote:
-
-> > GCS introduces a number of system registers, on systems with GCS we need
-> > to context switch them and expose them to VMMs to allow guests to use
-> > GCS.
-
-> > +				ctxt_sys_reg(ctxt, GCSCR_EL1)	=3D read_sysreg_el1(SYS_GCSCR);
-> > +			}
-
-> I had AI check this (and I think sashiko also hit on) it but this is a ch=
-ain of:
-
-> 	ctxt_has_tcrx() -> ctxt_has_s1pie() -> ctx_has_gcs()
-
-> Is it correct to make the gcs stuff conditional on tcrx + s1pie + gcs?
-
-There are architectural dependencies which mean it is not valid to
-configure GCS without S1PIE, and S1PIE depends on TCRX.  I had
-originally written the code without expressing this dependency but on a
-previous version Marc asked for this nesting as an optimisation.  Since
-it's about optimisastion adding checks that don't otherwise exist on the
-restore path would doubtless get the similar complaints.  Exactly the
-same concerns were raised on v19.
-
-> And it seems like that feature depends on ctxt_has_tcrx() so _architectur=
-ally_
-> fine, but it doesn't seem like KVM enforces the dependency at all and so =
-in
-> theory somebody could KVM_SET_ONE_REG a GCS, !S1PIE configuration.
-
-> And nicer to be consistent everywhere also I think (+ shut sashiko up! :)
-
-FWIW I do agree but I'm not sure how else to implement Marc's feedback
-here. =20
-
-We could do checking of the ID registers at vCPU creation so we could
-avoid worrying about them in the fast path but there was also feedback
-about not doing that.  One idea I had was to generate feature
-combination validation from the MRS, I think the main complaint was
-about open coding things rather than having the validation per se but
-ICBW.  Last I heard we were very near to having code for working with
-the MRS released which will help a lot with uses like that.  There is
-the possibility that people are relying on doing architecturally
-invalid configurations though.
-
-> And it seems like it makes it possible for a silly VMM which sets up the
-> registers wrong + some unfortunate guest behaviour -> oops via:
-
-> el1h_64_sync_handler() -> el1_gcs() -> do_el1_gcs()
-
-> Because the host's restore is skipped for s1pie=3D0, gcs=3D1, so a naught=
-y guest can
-> set gcsr_el1.pcrsel=3D1 and some value in gcspr_el1, then the host will g=
-et a
-> mismatch and trigger the kernel die().
-
-Yes, that's possible.  GCSCR_EL1.EXLOCKEN would create similar issues.
-
---ww7DzEmaeFudEMkX
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqZ23UACgkQJNaLcl1U
-h9Al2Qf9ELbi7FMrvb55gE/GD2/KOEk1DQNXY0/pdhRkKK5qem9JnkbO+L14rCTr
-UAItGA0GK83uI0GsfGMcj+oMPSMdbYvXFkruxoB9rq15icQhDSJ23bs7AAfowinc
-kkURT3oHz+G5t1sjwqswxdDjgVnIBF1f1Wy6UGOLNDGubJC1N8Gg+5tkHSQbz44j
-i2T04NdcyfXNQ6Zauee2wDnDG7ER2rPCRQVs0bKbiKG5DGkY1qLKgz/wunubw5Qd
-sS+p5dbX963skXH+nupEIW2HmAGu1cnU8hN9uOQw8JrsNJF743QHBNO+HPQqX4M6
-1M/aypWp/LTSHMquahmBniNSxNWzlQ==
-=1LHo
------END PGP SIGNATURE-----
-
---ww7DzEmaeFudEMkX--
+Best,
+Juanlu
