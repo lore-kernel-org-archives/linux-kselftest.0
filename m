@@ -1,157 +1,82 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA294F052E
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 16:43:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D4A4F30D0;
+	Thu,  3 Sep 2026 16:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788453815; cv=none; b=ccScRX02QCo5kIGPchqWhxV+mvN5IKUFXn2IeEpzEiQgfjb9CGAcrc4a/GRjnScsMqBmtHVwd3fa6GWzEWGJcmedx2mHDc1+Sf5q4ilIbAmFlUcy0282ml6My/aAhUVmXEjMyw7ZaVGc+5bqJRsM6oA5eukciXSHGWzpYShe3Mw=
+	t=1788454331; cv=none; b=qq+7cEgCD1ViIZgcSTVngt8fV1raB6Bd0GD34QuavyIqQVC3+gb138S27bf62fv1JzDrUa98iBA7Wp20KEptz0rn7MQW1gMr9NCZrR3rM/l6Tpdlu+SbZ4OcnxX5SOKFAjC52A4UanugVKR5iH+Zcd318KP+0lAg+POrQvTvo9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788453815; c=relaxed/simple;
-	bh=+r9hLk2SPOmyAvshuN0IagagVfA7a/hC3JMXKL35W1Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b9OAOYR1Y783bq/KwDLcydKLdJOznMGFFPIa37czDaSDPhaqK0R49eYBjaopchGW6mD5Q6XYYcGvV7COqREvz86v0YM49HEsUsKu1BSl6fLBnXiM9KrmqnWZTuQSmQVbhTb8wj0Z2LOQJT1CfLDHe+xjg7Htf9pcGIWSUJyDkVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fCUjCDtf; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788454331; c=relaxed/simple;
+	bh=d/OdNA9yDbHUU/IIud4NyA+t6qNKIq1S2Hk+dNC1dHw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PGG24aGh17dRdv49YfxhNpr7Pihrhi4Y+EiZhsfNbjcYcGsnppGbpZmF6F3GHjzfUGv+EOpat3ft3YzLI5epqAbfQddD7m5OuIcHya0i2E6JKFDdsgBmVY1Vq5oskgSa18br+0IDIU/74Q4Une7JicAmlTtqxlN5zVW4RSZoNA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=dwgb1VH/; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fCUjCDtf"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c255c58156bso452332566b.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 09:43:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788453810; x=1789058610; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Wjfdopz1N1hWehGtY1xAg4wK0Ims0sicB7CXr04O9bM=;
-        b=fCUjCDtf3DUvCktyOi7f0h40JphcHQHqXKbM5MD1pLWM2Z/b2QCKxqouFFHEi1fSDn
-         0n4kqEDMRqS9TxXP/KG0uhS2D4ewr0k7dJ6N+N4cMeO8NPDAALn36bGQGNWrM8jN1P1h
-         4QkwBnnPOiMVLN4hIU2a6pYeuD3imrIIV3JkQWKssdj7i5PSmkuWgfEmyzNuCl5juYJ2
-         ZodPFcGYrbTsa2XJIDecYjnC3hpMvqCZ0vplkqbCfu7t4+fhqE6i6hjKmt/BLuvfa/2q
-         4Exb5gaTWUQa9NJrxlH2ehvOfWrsm/rJ5v5nE3wSMBzWMRpJ76wEeOXkmJibbG+SBoLC
-         Xaig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788453810; x=1789058610;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Wjfdopz1N1hWehGtY1xAg4wK0Ims0sicB7CXr04O9bM=;
-        b=cjUmIelVRspziAmiHk00gq1hhQQNaEE5BINlJBXJFwATWqPVM4l7d9kKGZKyuRfcxm
-         Tr48uZJE1MEURdOQQmr9iYRK5wsedPpDHlHMBcXpI0be9zOuIB7vKGBGeLA2ZE+1hdsk
-         y8LCtRJ1MJPS21MeLL1lg8iJrFYaUkiemSACr90MWaGxh+Z3Et7cR8hLQ+0PXrIqR9W0
-         AYS1WiSeKI55eE1Xwd75PtSSO/a5JipPNg36L3IKYziBNv8aLSTmAJMdNQnLlD6bm44/
-         q8Ndf61tSWfIvx6z8gkKUASpQWBjT6NfAfroMLvkyI/3D1FL9QPRYKIdR7tmEgi0zGtg
-         eK7A==
-X-Forwarded-Encrypted: i=1; AKwUvBznWkNhbL+a26XttIIT0v6bqNAZvPI7cLYI5KeW3Ej36ude0WMgIay9+0bE0xUndNgAJKt8eQktW4NmFxziwJY=@vger.kernel.org
-X-Gm-Message-State: AFuF++nrLAV6xYp/zY2FAqzrchJq5qt6O6XjQEa4OA0fm6sp799AIadz
-	s5dz8C5lFVj4TNnOUe3z9Kfyk8vu/byFL3NGd29kq4lDDsjR48dCShV0
-X-Gm-Gg: AYBFou23GTNCQ7Dr+BjXZgB/kX4OYP2qJiFDCWSy6gwBsCYKM6HPhy8CWCio35YKJB5
-	BSNTbJlGTrwD4t4eo56OpIm7+G0BMT8xyLk8kLEU0SfZYWbdf48py1628HPoa8jueXBcjzSlNRJ
-	efKT00qayRCMcr7rByircvT1PBGMiAEhidpG2MF3EAxo2Ot7IEYUJOpHYLmRish9yDDFmtu4iAG
-	dfX9kDJF+Z4+XRD5PhQDbcNewYb4AoIEgMRmPVQPcRyvSqXx9ev72fmq0o33G2pGFDm62C6nenR
-	Sa46jlzXX+PhoWg/4q7soC3nE+A/l/AvTi1YvmgXrf0G1hlz48HaQ/r4CYOtx9PnmulZW8AXJuF
-	EDtkGnh5KxFPG1tePbi1TlXgCjXAqlt7rJFxFjo5b40gwq8g3XKe73c9Nz5pKVLqMjltwubiwmv
-	hDGQ/5ti32nh8dBX5evkCvWqo/eHk/wKtmA/KdMkx8cqjiINOa795zHgfYvJmQ5RPNtYVRCw/re
-	4+ifDBnsQUWNgPh5OXfSaXZLRjik3XOdi7ABFBuuDJ/Eao=
-X-Received: by 2002:a17:907:7290:b0:c25:89fa:5a8e with SMTP id a640c23a62f3a-c260c7ac978mr1632566b.10.1788453810166;
-        Thu, 03 Sep 2026 09:43:30 -0700 (PDT)
-Received: from ?IPV6:2a02:8109:a307:d900:c0df:8063:3b00:b779? ([2a02:8109:a307:d900:c0df:8063:3b00:b779])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c25f4244e45sm127018266b.60.2026.09.03.09.43.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Sep 2026 09:43:29 -0700 (PDT)
-Message-ID: <7c741628-c259-4ae6-8d67-d92910183526@gmail.com>
-Date: Thu, 3 Sep 2026 17:43:28 +0100
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="dwgb1VH/"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=SXFKe4evya0DZyG4b99oQ8sosTasD5iYeO7P5IvsJpo=; b=dwgb1VH/IuRahWIfElN37ERPO5
+	hLkP2oCNJNho7smcn0Y8DC50oJWcMnsNGl7A6gTOvgFDQZgPhkqEPUp7m2baUI1iWeY4Q1B4jIm0d
+	HIIINqaMLvyrATGn3uonBxRxEreoJyazg/yEdD/RvS7+l+4mBBN0p0syhKOtN0aCzqz8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1x2AfP-002lHe-U4; Thu, 03 Sep 2026 18:51:59 +0200
+Date: Thu, 3 Sep 2026 18:51:59 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: "Maxime Chevallier (Netdev Foundation)" <maxime.chevallier@bootlin.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, davem@davemloft.net,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	matttbe@kernel.org, Stanislav Fomichev <sdf@fomichev.me>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	thomas.petazzoni@bootlin.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v2 0/2] selftests: drv-net: Allow
+ cross-compiling the hardware tests
+Message-ID: <2a595cf6-d208-4a0a-a96f-738235236aa1@lunn.ch>
+References: <20260903155524.2241065-1-maxime.chevallier@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 1/2] bpf: bound resizable hash map iteration
-To: Hui Su <sh_def@163.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, yatsenko@meta.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260831140132.117755-1-sh_def@163.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260831140132.117755-1-sh_def@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260903155524.2241065-1-maxime.chevallier@bootlin.com>
 
-On 8/31/26 3:01 PM, Hui Su wrote:
-> rhashtable_next_key() provides a best-effort walk that may revisit
-> entries and is not guaranteed to terminate under sustained rehashing.
-> Callers performing a full iteration are expected to bound the walk
-> externally.
+On Thu, Sep 03, 2026 at 05:55:21PM +0200, Maxime Chevallier (Netdev Foundation) wrote:
+> Hi everyone, here's V2 for cross-compilation improvements for the
+> drivers/net/hw selftests.
 > 
-> bpf_each_rhash_elem() currently loops until rhashtable_next_key()
-> returns NULL, leaving callback execution without a finite bound. Sample
-> rhashtable's current element count and use it as the iteration budget.
-> This keeps the bound proportional to current occupancy instead of the
-> potentially much larger map capacity.
+> Patch 1 fixes YNL cross compilation, while patch 2 deals with the
+> iou_zcrx check.
 > 
-> Duplicate visits may consume the budget and cause the walk to stop before
-> all keys are observed, but RHASH iteration already permits missed
-> elements under concurrent mutation.
+> Jakub asked :
 > 
-> This is reproducible with concurrent updates and deletes triggering
-> rehash. With max_entries=4096, one walk invoked the callback 5239 times
-> on an unpatched kernel. With the bound in place, callback invocations did
-> not exceed 4096 in the same stress test.
+>   I assume you don't actually have luring for your cross- env? Could we
+>   keep it simple and just declare luring as unavailable when cross
+>   compiling? Because the probing compilation rule is probably missing 
+>   more flags to make cross compilation work.
 > 
-> Fixes: 818e00848227 ("bpf: Implement iteration ops for resizable hashtab")
-> Signed-off-by: Hui Su <sh_def@163.com>
-> ---
-> Changes in v2:
-> - Bound the walk by the sampled rhashtable element count instead of
->   map->max_entries, keeping the budget proportional to occupancy.
+>   Ignore if selftests using luring do actually work for you after this
+>   patch..
 > 
-> Link: https://lore.kernel.org/bpf/20260828183326.3330530-1-sh_def@163.com/
-> ---
+> Turns out I did have liburing in the CC env (generated from Buildroot,
+> which supports liburing), and the cross-compiled liburing check worked
+> as expected :)
 
-Thanks for sending the patch. I'm not sure if this change fixes anything,
-the main issue of walking concurrently modified rhashtable is not changed: you
-still may miss elements or visit same elements multiple times. In some scenarios
-this can make things worse: imagine you start iterating with small map 
-(visit_budget = 10), then 1000000 elements are inserted concurrently with walk,
-so you'll miss at least 1000000 - 10. To me this is a trade off/taste 
-thing, rather than bug fix.
-The change is compact, though, I'm not against it.
+Nice. Did you give the liburing tests a quick smoke test?
 
->  kernel/bpf/hashtab.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index d40cb5dd446c..2cad67c90154 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -3198,7 +3198,8 @@ static long bpf_each_rhash_elem(struct bpf_map *map, bpf_callback_t callback_fn,
->  	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
->  	void *prev_key = NULL;
->  	struct rhtab_elem *elem;
-> -	int num_elems = 0;
-> +	u32 visit_budget;
-> +	u32 num_elems = 0;
->  	u64 ret = 0;
->  
->  	cant_migrate();
-> @@ -3212,7 +3213,9 @@ static long bpf_each_rhash_elem(struct bpf_map *map, bpf_callback_t callback_fn,
->  	 * elements are deleted/inserted, there may be missed or duplicate
->  	 * elements visited.
->  	 */
-> -	while ((elem = rhashtable_next_key(&rhtab->ht, prev_key))) {
-> +	visit_budget = atomic_read(&rhtab->ht.nelems);
-> +	while (num_elems < visit_budget &&
-> +	       (elem = rhashtable_next_key(&rhtab->ht, prev_key))) {
->  		if (IS_ERR(elem))
->  			break;
->  		num_elems++;
-> 
-> base-commit: c20313e98b04ce543936431b6122dd639d3a8346
+I get the feeling not many Embedded people run the self tests, if
+basic things like cross compilation does not work, and native 32bit
+builds spits out 1000s of warnings.
 
+       Andrew
