@@ -1,42 +1,42 @@
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9724AFE1D
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 13:51:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB4D4B203C;
+	Thu,  3 Sep 2026 13:52:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788443534; cv=none; b=hKo/kc0eWJ3jE76oqtJtctQNOVrgNXj/Gfu19AHb0is5tosu4rl1FNsyjIZizleg3+A+W2kVHJrjAc43MDr/G5IDvWy+fjziJrLrJ7lWzbyuf9k8rrtADwGzcpyfD7K63o6ZrbapNycu1JN9JKkrtN9UQEAljOQYzOMS1Ykmr5Q=
+	t=1788443543; cv=none; b=ngRGTUTXr7PwwGv3G2kib4FIFW14uqanZvb6lnjctG5cnlsDyD2KAwPaB96YqxXMt6dp5upHxi3sGNgP7tcFt7zSB9JExquW8Vq/3Tw9v/4ZjnrAeYDADZwiu7o84zY23fm48CIyPo3avps+O5Fj9lbhuzhRwyb3zjtElMe9jtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788443534; c=relaxed/simple;
-	bh=QMt9uiQRgaN4LMJPEfxhVrCIpCu3ga1suxBwVf0h3TI=;
+	s=arc-20240116; t=1788443543; c=relaxed/simple;
+	bh=CT/Gjo2eneEjO2Ue0I4TGs9z+iX8TPRLUGz0u+8Gko4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DGVOoQw/uag/2yx6O2hydWFy8JpGmD0wJ2rmKj0+LOlDrlPGx8ixnUHv0eNDC7HeKGHuZoVTCMpvDEyfeLj9tcsbJuyavtsnWG/tssPSNOHvpo/6VgN7IFseeybjtxYb0BBz3g3VAMRAyjOerFLwwEcSQK4zomVSoCYyTmW/eXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=bpRqOfAx; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=ScPA9womDT4JRhcSiYvAe0gyypLn0RrH9z+H66b92otCZ6t5hL4XwqnR9Kc8FAGDy06F8sYBsiHVYLPxty2l7K8b0/b8ckEslg/6xlAaa8Gt8OX0gbgPjGftdkMiokh1Gi8PndDmUh72rUhIwURQ4eYoO+6/0qPc43ZPKSSgHM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=vWNGQu/5; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bpRqOfAx"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="vWNGQu/5"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 6C5AC1A197F;
-	Thu,  3 Sep 2026 13:51:55 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id BE5391A1981;
+	Thu,  3 Sep 2026 13:52:02 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 383DF602B8;
-	Thu,  3 Sep 2026 13:51:55 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6152F11C7A03F;
-	Thu,  3 Sep 2026 15:51:50 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 895B6602B8;
+	Thu,  3 Sep 2026 13:52:02 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8161811C7A19D;
+	Thu,  3 Sep 2026 15:51:57 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1788443513; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1788443521; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=WAqZ1gne0xepkyr6oP+31b6AAXlpdo+IG0PqvS3qpgI=;
-	b=bpRqOfAxXvVckqE+obw2s0GswSCWCs+uOGTFomlS/6PTYXFMOhlyfLhnWY6vE2nkgrFJBh
-	QWsloIvxq1p01zezSQxb+0HNbkRSoLWEIriPW1OhhVjyr36HdtDZVadD26hXPgE8vhRfVE
-	uyHpXi0OKaetLW0QRs8/x92omAFEvJNOSB9BD3HBnd819efViBZYmZziFOro0Q6Ag5wlWw
-	7qJ/+zgnt6Hovt0ug7+WHtsqNX1Ejc+Kh97rsNQXlKja0kQydtU5kDHAJu3v+1NREQyldH
-	e+UX5Bp6gfPEv8pd6tur1hanaXT8cnhfPkGTIJdgjt3NmaAOdj0QgfOhxFeA/g==
+	bh=0kQP0GmtHe4QERJ/pQao5qjnFU1LNd7sa5g7wyCFZaQ=;
+	b=vWNGQu/51uNxtfGaZoULLsc3883K0pzcC8ClBM4WxAcJKY6itggSzbgIW1ZBG1poxEGWee
+	zW5SOQh3fUwAq/vldBNQdynOFMFeDaYQfF8Hjt0yXWjWaruu92l92uFnASrqlD5UcVhdIQ
+	KOM7EpBcdggDG+GFDQ7eWGFc2wMpsKh0RrAhrjK1Gk2S4gLMVZqyvX7BBVPghGlSBMArSt
+	kc0c2wh+jMkhld0NfsDOg28eFQ2h4/O9NMGoFuionX3t0odUNFgNwYKUk32o3zlHU2vn+z
+	pBk0KgqpD4DlLCOmyTy9ePa7Vy6FuU+i9OGN2iWnWawPdORdM8ZtirBnZ0kBSA==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Thu, 03 Sep 2026 15:51:32 +0200
-Subject: [PATCH bpf-next v9 3/8] bpf, x86: refactor BPF_ST management in
- do_jit
+Date: Thu, 03 Sep 2026 15:51:34 +0200
+Subject: [PATCH bpf-next v9 5/8] bpf, x86: enable KASAN for JITed programs
+ on x86
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260903-kasan-v9-3-2407fe99255a@bootlin.com>
+Message-Id: <20260903-kasan-v9-5-2407fe99255a@bootlin.com>
 References: <20260903-kasan-v9-0-2407fe99255a@bootlin.com>
 In-Reply-To: <20260903-kasan-v9-0-2407fe99255a@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -70,135 +70,28 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.15.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-In order to prepare for KASAN checks insertion before every
-memory-related load or store, group all BPF_ST instructions that indeed
-access memory in a single helper to allow instrumenting those in one
-call, rather than having to instrument all cases individually.
+Mark x86 as supporting KASAN checks in JITed programs so that the
+corresponding JIT compiler inserts checks on the translated
+instructions.
 
+Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
-Changes in v9:
-- update BPF_ST management to resync it with BPF_STX
+ arch/x86/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Changes in v7:
-- align dst_reg type with same type as other emit helpers
-- fix line wrapping
-- add missing doc on top of new helper
-- remove unneeded cast
-
-Changes in v3:
-- new patch
----
- arch/x86/net/bpf_jit_comp.c | 73 ++++++++++++++++++++++++++++-----------------
- 1 file changed, 46 insertions(+), 27 deletions(-)
-
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 48429fae0641..f907be3988b2 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1315,6 +1315,46 @@ static void emit_st_index(u8 **pprog, u32 size, u32 dst_reg, u32 index_reg, int
- 	*pprog = prog;
- }
- 
-+/* ST: *(u8*)(dst_reg + off) = imm */
-+static void emit_st(u8 **pprog, struct bpf_insn *insn, u32 dst_reg,
-+		    s32 insn_off)
-+{
-+	s32 imm32 = insn->imm;
-+	u8 *prog = *pprog;
-+
-+	switch (BPF_SIZE(insn->code)) {
-+	case BPF_B:
-+		if (is_ereg(dst_reg))
-+			EMIT2(0x41, 0xC6);
-+		else
-+			EMIT1(0xC6);
-+		break;
-+	case BPF_H:
-+		if (is_ereg(dst_reg))
-+			EMIT3(0x66, 0x41, 0xC7);
-+		else
-+			EMIT2(0x66, 0xC7);
-+		break;
-+	case BPF_W:
-+		if (is_ereg(dst_reg))
-+			EMIT2(0x41, 0xC7);
-+		else
-+			EMIT1(0xC7);
-+		break;
-+	case BPF_DW:
-+		EMIT2(add_1mod(0x48, dst_reg), 0xC7);
-+		break;
-+	}
-+
-+	if (is_imm8(insn_off))
-+		EMIT2(add_1reg(0x40, dst_reg), insn_off);
-+	else
-+		EMIT1_off32(add_1reg(0x80, dst_reg), insn_off);
-+
-+	EMIT(imm32, bpf_size_to_x86_bytes(BPF_SIZE(insn->code)));
-+	*pprog = prog;
-+}
-+
- static void emit_st_r12(u8 **pprog, u32 size, u32 dst_reg, int off, int imm)
- {
- 	emit_st_index(pprog, size, dst_reg, X86_REG_R12, off, imm);
-@@ -2250,49 +2290,28 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 			EMIT_LFENCE();
- 			break;
- 
--			/* ST: *(u8*)(dst_reg + off) = imm */
- 		case BPF_ST | BPF_MEM | BPF_B:
--			if (is_ereg(dst_reg))
--				EMIT2(0x41, 0xC6);
--			else
--				EMIT1(0xC6);
--			goto st;
- 		case BPF_ST | BPF_MEM | BPF_H:
--			if (is_ereg(dst_reg))
--				EMIT3(0x66, 0x41, 0xC7);
--			else
--				EMIT2(0x66, 0xC7);
--			goto st;
- 		case BPF_ST | BPF_MEM | BPF_W:
--			if (is_ereg(dst_reg))
--				EMIT2(0x41, 0xC7);
--			else
--				EMIT1(0xC7);
--			goto st;
- 		case BPF_ST | BPF_MEM | BPF_DW:
- 			if (dst_reg == BPF_REG_PARAMS && insn->off == -8) {
- 				/* Arg 6: store immediate in r9 register */
--				emit_mov_imm64(&prog, X86_REG_R9, imm32 >> 31, (u32)imm32);
-+				emit_mov_imm64(&prog, X86_REG_R9, imm32 >> 31,
-+					       imm32);
- 				break;
- 			}
--			EMIT2(add_1mod(0x48, dst_reg), 0xC7);
--
--st:			insn_off = insn->off;
-+			insn_off = insn->off;
- 			if (dst_reg == BPF_REG_PARAMS) {
- 				/*
- 				 * Args 7+: reverse BPF negative offsets to
- 				 * x86 positive rsp offsets.
- 				 * BPF off=-16 → [rsp+0], off=-24 → [rsp+8], ...
- 				 */
--				insn_off = outgoing_arg_base - outgoing_rsp - insn_off - 16;
-+				insn_off = outgoing_arg_base - outgoing_rsp -
-+					   insn_off - 16;
- 				dst_reg = BPF_REG_FP;
- 			}
--			if (is_imm8(insn_off))
--				EMIT2(add_1reg(0x40, dst_reg), insn_off);
--			else
--				EMIT1_off32(add_1reg(0x80, dst_reg), insn_off);
--
--			EMIT(imm32, bpf_size_to_x86_bytes(BPF_SIZE(insn->code)));
-+			emit_st(&prog, insn, dst_reg, insn_off);
- 			break;
- 
- 			/* STX: *(u8*)(dst_reg + off) = src_reg */
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 48ccc3e6059d..745890d91e99 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -234,6 +234,7 @@ config X86
+ 	select HAVE_SAMPLE_FTRACE_DIRECT	if X86_64
+ 	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI	if X86_64
+ 	select HAVE_EBPF_JIT
++	select HAVE_EBPF_JIT_KASAN		if X86_64
+ 	select HAVE_EFFICIENT_UNALIGNED_ACCESS
+ 	select HAVE_EISA			if X86_32
+ 	select HAVE_EXIT_THREAD
 
 -- 
 2.55.0
