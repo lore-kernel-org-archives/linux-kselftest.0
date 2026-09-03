@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A994457A4;
-	Thu,  3 Sep 2026 17:25:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A054F6494;
+	Thu,  3 Sep 2026 17:25:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788456329; cv=none; b=tFmFNPlryCSXcO/k4L6WSYV9vrhOqt/XgQkhj+M4UKNOGq9lg44s/C+fpBUJqyPV/XUME7h+xyRZHQE8tpDd8RfMe5oqliRrLeMeLhFgR4827925Va3Omb4+NPXplCtnqyrfvlFx3EhQp5nxcfwoCbhpTwT887ArC2E0M90I0nQ=
+	t=1788456347; cv=none; b=ks7uYHnpMt01wpcpfU0lyHSWQeiZbmxrj6VMhC4MJioLjSPjBUnCcRGwD84WMcfybtJJTPk2dLnfFGlIDmAmOH8v5xZKzCA4HVSZ3jQqdwKpigaIfLP1Od+rCa+ZlmjcpADdZ53YvR3J7Uap+/24zgQGgO8W4vqCd97dvlGN5Qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788456329; c=relaxed/simple;
-	bh=SO+rIIMEQqagYPGY5fk4pR+141Fpo642qjF+27eLVFk=;
+	s=arc-20240116; t=1788456347; c=relaxed/simple;
+	bh=jHRgtv4R6XKuf3LzRr5g20DtF1dNpV03O3lhO7zAjWs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=naM9+O/LDH4VnVRq3UmQgL7tNfkGmHAjXLE0TuuFtEfL0BGA/2OCSG/zeELKXUw67Vxwy2zG+X2X3K3G7AwbQPrBgw92JrmGorgNnL1OHuirr+6wEhpR1Hi6FjObvdzh76J2daxRHDR8DH/JuteX2W7j5TskdWx2MtwLbqYVKnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OdflpS/6; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=csBX28nVqkTGjEEiBFA/09/MTmVuoNfhnbe9NLgDcwIV48BuxNVdYBzGZ8LqZixDzL/sBdMkkNTxpYzDPoor7hFuos2F5r2/BmjFg8dQuBnGYpOpqQtqKjzTM974uR0XFuc/lhFWVX4/7RL3+7IdXUGv+IMg3xhtwQmaDaVGKHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ABtIGJf8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OdflpS/6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 980E31F000E9;
-	Thu,  3 Sep 2026 17:25:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ABtIGJf8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90D421F000E9;
+	Thu,  3 Sep 2026 17:25:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788456328;
-	bh=DYlk3b3Hpldrnb+VBRe1xUF3jUimjKIJKALQa59x6fM=;
+	s=k20260515; t=1788456344;
+	bh=jHRgtv4R6XKuf3LzRr5g20DtF1dNpV03O3lhO7zAjWs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=OdflpS/6fk/2tdjcHWoWBoMABGHltZL/v9jQdhL8yr5Vx1dcY1agOzicCa6c4llLB
-	 8b3qMGyCfbD2ewCVkR920yiGr+WwR9vOqwzMGxKhzPpeXHM0PBwRGQEzeglR6fYvnM
-	 VHGQeI7DJTwol+DIzUJPj48rtPgitvPxMKMOhBaJaKdSxID54lg7Op7Kp8IG5vFwRq
-	 34QOm15duDpStw/l95y5KhO0CGQDntD3v4lxQt/jAKnYCkW8pqnQOFQhTy14/axfY4
-	 1eatgE1kaXtjV4VpA5FkuvZQ67ZXuxM1HYXlxggFekp+uDE1j/emNCUd5Eor5ExkaY
-	 zn1KIf5s5GL1g==
-Message-ID: <c3f649fa-24b6-41d3-b6a1-7f37edec87ff@kernel.org>
-Date: Thu, 3 Sep 2026 19:25:22 +0200
+	b=ABtIGJf8KBBjF38kdWk0QnjmuQLWXWLGF+pSo1abZOEWtP7DCRPAWIl7J8e9ka0UB
+	 yJ803Gukb++XiVzscO5+/UG3alpjV6/M2xgFFsBe6GrpINoPiYIWGTfnQJYV72Hgmq
+	 cy9Om1gm96YarFPLwD+Vl5rIKQl/tfrtZJ2BJsvRoJBxC+SUI9MZyTfDNnYNUJee/b
+	 sTPtPdKYnE7roMofsKhI5akDAcrrob0+enKrm47WBbKzBum4VKh92G1UUSN0rA1U5h
+	 HTjjGnXHyHWTPvT/1qG6I6IjTKnwJgkr9ikj1y1fmyNy1XRJ+M/8J1J8hwdtSCy9u/
+	 wKAQgFsY45JFQ==
+Message-ID: <6f70f28a-eb2b-47c5-bdc0-33c0d018ca31@kernel.org>
+Date: Thu, 3 Sep 2026 19:25:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,17 +38,17 @@ User-Agent: Mozilla Thunderbird Beta
 Subject: Re: [PATCH net-next v2 0/2] selftests: drv-net: Allow cross-compiling
  the hardware tests
 Content-Language: fr
-To: Andrew Lunn <andrew@lunn.ch>,
- "Maxime Chevallier (Netdev Foundation)" <maxime.chevallier@bootlin.com>
+To: Andrew Lunn <andrew@lunn.ch>
 Cc: Andrew Lunn <andrew+netdev@lunn.ch>, davem@davemloft.net,
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
  Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
  Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
- linux-kselftest@vger.kernel.org
+ linux-kselftest@vger.kernel.org,
+ "Maxime Chevallier (Netdev Foundation)" <maxime.chevallier@bootlin.com>
 References: <20260903155524.2241065-1-maxime.chevallier@bootlin.com>
- <c45453d8-72ae-450b-be9a-565df1cf0287@lunn.ch>
+ <2a595cf6-d208-4a0a-a96f-738235236aa1@lunn.ch>
 From: Matthieu Baerts <matttbe@kernel.org>
 Autocrypt: addr=matttbe@kernel.org; keydata=
  xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
@@ -94,39 +94,18 @@ Autocrypt: addr=matttbe@kernel.org; keydata=
  JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
  lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
 Organization: NGI0 Core
-In-Reply-To: <c45453d8-72ae-450b-be9a-565df1cf0287@lunn.ch>
+In-Reply-To: <2a595cf6-d208-4a0a-a96f-738235236aa1@lunn.ch>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 Hi Andrew,
 
-On 03/09/2026 19:11, Andrew Lunn wrote:
->> Tested on an aarch64 target, built on x86_64.
-> 
-> Probably a question for Jakub or Matthieu.
-> 
-> As part of the CI system which is feeding into patchworks, I don't
-> think we build the selftests? Do we have the CPU resources to build
-> them?
+On 03/09/2026 18:51, Andrew Lunn wrote:
+> I get the feeling not many Embedded people run the self tests, if
+> basic things like cross compilation does not work, and native 32bit
+> builds spits out 1000s of warnings.
 
-We do: the "build_tools" script [1] checks that. And they are also built
-before launching the selftests.
-
-> We currently do x86 64 and 32 bit builds. Do we have the CPU resources
-> to do an arm64 cross build?
-
-I think we do, but I don't know if we need to (see below)
-
-> I assume a cross build the self tests needs something like buildroot
-> to be sensible? Or Debians multi-arch stuff where you can install .deb
-> packages for libraries for other architectures? So maybe that is going
-> too far?
-
-From what I understood, the goal is to execute the selftests on embedded
-systems as well, which will require building new image including the
-kernel and the drivers/net selftests. Do we need to build the whole
-kernel for arm64? :)
+Maybe they do, but they are possibly a few (LTS) kernel versions behind :)
 
 Cheers,
 Matt
-
