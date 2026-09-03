@@ -1,43 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5AD3E44ED;
-	Thu,  3 Sep 2026 22:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59717367B67;
+	Thu,  3 Sep 2026 23:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788476376; cv=none; b=LWX0UKfOrJ4vozLsls24WB/myLz6Q9vJWfY2G2Knb6DuOQjkqvsrvj47EEKpeN4e+TnbhaEiSkSGwE4b8CfXAfiUOgdznHSLASE1k5b9qxmDFLpfC9OM0BLZ+JbQADuOEUFgP5cz0O2HsQ9koW6NXcRcQKzlUutWyXUq9iE0/Lg=
+	t=1788478827; cv=none; b=oRaL2ZT0WgUf7kETzgj0TMYLn33Etdjz6MLrXN5tpVwLbeag4G1K87w8599UPqwIMrqhITd9jM5xDEGfBBAp+EqYvk12wFy0w4VrAKU6Pduhrnej6nR9VEJWuUhJFz5pzlXSEu8NRGWqp2jsrjL7FqIUPx7q1e4bWMTfcoueCAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788476376; c=relaxed/simple;
-	bh=JKdZvFZ3LKZRNyuUk7gA7WxsrCA7B1Vvkfx2jt1x55o=;
+	s=arc-20240116; t=1788478827; c=relaxed/simple;
+	bh=Rhr30zsDpLK1Avh30WGVYOWTvvclw8Ogz47cmDZ3H2s=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ubg9DAPtKp0xyTFLVh8nIgSPD7JnsbOar0bAm4M9nYoXrnhUhk7RegI3gBlZrbL82mYSkPK1q88hK6ng9gWSiQAe55xEQ3O9OVP7iadgsMff3yUP/kHm6khcO4V39Yh6sV3bJif3PGTNwu3Mv5hwhm+cvyz9ZvRbo4EK3VkQuMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DvOxozwQ; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=H52mVCk0mONKp0j8WE5912a/4sDBeW2am3skmPxxVexcuLzjJBzVUtaQrYFqwt7hKE+I6vydyNtTuxFt1DTzOADH49LeHXAHbQZNkHRqmpTNThc4gucPmGTzAMjVq/4pLnmY6cvXnumuwtuT0GGHXF40/ZukFP3fXhgjU7DVkA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=echoDLYu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DvOxozwQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EE9D1F00A3E;
-	Thu,  3 Sep 2026 22:59:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="echoDLYu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF3771F000E9;
+	Thu,  3 Sep 2026 23:40:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788476373;
-	bh=jglbHv45sn/kgN6oIp/wN9E39sy51rSciV8vOlAW0Z4=;
+	s=k20260515; t=1788478826;
+	bh=WFeegX+RSc7YOTXkzpPq8Hf2d/jLRIPsS826zeaVlqg=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=DvOxozwQrEmZ3cqPHzxEssLU8HFiNv8K0HAJB4DkHxqQos/vkN11yVg9ckB1VRlPa
-	 WuB4XURrujgP9RzPRAMe77FrK+Fn+S9K9dteyPQGvf0okV6qdYr9wPbtse1ML/dLWm
-	 vQrAS1e3DoVVeuD96mJqvtrkUMERwEXeoTvoHvoKN9EPOqwi7uvoDsBFZuqIPjQzQd
-	 cKlhfXUw7bg1FfOLJxV+jXuOF4nOWK6xxdxgVvB4stNEGXNs/SFe1nw8f7SkBnP9pD
-	 +5nZcmuwpeBljS6Gk/VnNbYdmNpIM0ntxDlORvKZNEaEK0UVaBTCKyiAV2qiz5jNdG
-	 OC244CKVeW0eA==
-Date: Thu, 3 Sep 2026 15:59:32 -0700
+	b=echoDLYuEUh7HX+a8D+JG650N2dZwaBdBt8ag3P/bu4C1Ou7zlyF/2X/o6CE6SkmB
+	 dst4nWXfzlhl743zQm0pZfv4fPk2Z4ubXtkiQwd258ZoXgciMdCmiK6Fk9mdXPOeRg
+	 tr2aiWcJAqSANF/9Ej4KmDGkMtFb9F8OGS+S3Xi6C08f99wr17JegM9LI9o6j4kvTS
+	 B/bfTIN5duUgw/dWdzEP/l7lkWSlNrSkpIw346faH8wczj+EkpQA7OmoAKxCca/1j7
+	 o1o1xNOyiCck4ZWZN2m42w0eJEtSiJsLvyN7wwl/+9h0mj+x5LoIZBP6jHBfCzKw41
+	 KnBqA8KPiFLkg==
+Date: Thu, 3 Sep 2026 16:40:25 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v1 0/2] netdevsim: add TLS device offload
- emulation and test
-Message-ID: <20260903155932.6b4528de@kernel.org>
-In-Reply-To: <20260901154914.11637-1-jiayuan.chen@linux.dev>
-References: <20260901154914.11637-1-jiayuan.chen@linux.dev>
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ davem@davemloft.net, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, matttbe@kernel.org,
+ Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v2 0/2] selftests: drv-net: Allow
+ cross-compiling the hardware tests
+Message-ID: <20260903164025.1095ff53@kernel.org>
+In-Reply-To: <b2f7d07b-5c14-4767-9fbf-47a72a6c22cd@bootlin.com>
+References: <20260903155524.2241065-1-maxime.chevallier@bootlin.com>
+	<2a595cf6-d208-4a0a-a96f-738235236aa1@lunn.ch>
+	<b2f7d07b-5c14-4767-9fbf-47a72a6c22cd@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,35 +52,15 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue,  1 Sep 2026 23:48:55 +0800 Jiayuan Chen wrote:
-> It helped me find
-> commit b17cf742eaad ("tls: device: fix out-of-bounds write in tls_append_frag()").
-> 
-> So I think it is worth sending a formal patchset.
-> 
-> The kTLS device offload path in net/tls/tls_device.c has no test
-> coverage upstream -- selftests/net/tls.c is software only, and the
-> offload code needs a driver that implements it.
-> 
-> So teach netdevsim to fake it.  Patch 1 implements tlsdev_ops and
-> advertises the TLS features, patch 2 adds a selftest.
-> 
-> No crypto is done: TX puts the plaintext record on the wire, RX just
-> sets skb->decrypted.  That only works netdevsim to netdevsim, but it
-> covers record assembly and the offload lifecycle.  Real ciphertext, and
-> more on top of it, can come later.
+On Thu, 3 Sep 2026 23:44:51 +0200 Maxime Chevallier wrote:
+> We could expand the remote_ssh logic to probe the peer, and raise a skip if it's
+> a different arch than the dut. Or better, have the DUT check if the peer doesn't
+> already have the tool in question, i.e. the kselftest "package" is also installed
+> there.
 
-Please don't post selftests to net-next which depend on a fix going 
-to another tree. If we merge this now we will have a failing test 
-until the fix also lands.
-
-If we add TLS support to netdevsim it must be paired with a test 
-which can also run against real HW. There was a selftest posted
-recently by the person working on TLS 1.3 offload, we can use that
-as the target (feel free to add that to your series, just keep 
-the original author).
-
-We can add special netdevsim-only cases but the main focus should
-be writing tests that can be executed against real devices.
--- 
-pw-bot: cr
+FTR the remote* API is supposed to make it easy to drop-in
+your own implementation (as in you should be able to copy an extra file
+in the right place and use it without patching anything). 
+You can probably do some extra binary jugging / probing in your own
+class. I was trying to avoid having to carry bespoke handlers directly
+in the kernel tree.
