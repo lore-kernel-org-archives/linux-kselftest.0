@@ -1,104 +1,141 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-167.mta0.migadu.com [91.218.175.167])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99F94A5C55;
-	Thu,  3 Sep 2026 12:50:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCF6F4AA568
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 12:53:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788439850; cv=none; b=pN4e+77hf8zezsiiW4TRw9qeIUiHqVy4E+he4O9FT7zG/qoQt0j4sjUlKAd/RKPMrT2D3Pr7mcYihDM1V5PC7mdc+Dn6fMstpNC+tmeSZ3VKsIFZnWNdcUCFeW848RnJ90Hqp+0SEPbzM1pg8KIADn9EqOzznZME4Z5UjuCD4do=
+	t=1788440003; cv=none; b=SufP3c1WEyhfVXTPWZMo6J3xhUJiQV8zHhGjMDAEKhod4gqOYazIn4rgkDLqLSkq0TzHhqTbyBDa9h+80RViKBLDz5XvPTcwvYSz4bu6LFyZ63RSUnQVsYxtCS2BMX0nPtWDelQadocBWLcNHSN9e9yIJzQYDcEoLh1DjyIWxpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788439850; c=relaxed/simple;
-	bh=Q9Ag8UhZfFIg30b0p1hfLWvvAOk537smwoJLAfBKCPg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HDC59EMUsRn7IDqKQXiUxOJGc27h4Yza6D8zPahWj1ks24oI/uA1Cc6vuRFFcd8UJzDESlVraJTG/Clb+QvRQAqXp5aTg0PHspJLWDafJFWLuipjuAI657pxcHK/urdNtjX2ZpFaEXtmay6DAG0FRd5KdYuk1oELcupNusn+cY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 5435420012E; Thu,  3 Sep 2026 20:50:46 +0800 (AWST)
-X-Spam-Level: 
-Received: from [IPV6:2001:8003:8802:7000::9c4] (unknown [IPv6:2001:8003:8802:7000::9c4])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id EFA30200113;
-	Thu,  3 Sep 2026 20:50:41 +0800 (AWST)
-Message-ID: <c724e706-ef52-4a77-b31d-03d2bd137d4b@davidgow.net>
-Date: Thu, 3 Sep 2026 20:50:39 +0800
+	s=arc-20240116; t=1788440003; c=relaxed/simple;
+	bh=UlTZVZlpxTLFXO8JJRdJ8MXuTqmOeVcpCsf//AOZZCE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MybLAPSiERq57npSPPnhv3JQPPXqLbdke+CnCk8Z6FeHp3qtUz8xRGvsTuN4EcKkfbDO5xeVMyaa7SIKncsgaSpUBksLSbY8zVYMZK6istbkodr386kIddk7qel6mBXPPzfM4TXxLZws+nt0B8WNpFCH+7tDV0LA+Z95reivuu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bZgCCfHJ; arc=none smtp.client-ip=91.218.175.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bZgCCfHJ"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=UlTZVZlpxTLFXO8JJRdJ8MXuTqmOeVcpCsf//AOZZCE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788439998; v=1; x=1789044798;
+ b=bZgCCfHJwIyAAkUIHMriFrmR1b1F7tyZwl3fdu9z9UCeZsj2Ep7DEIyUSEmgF+ZhMVLWiEvw
+ zyYYk1BeX8qgwCaCvP8majsvebQqpmTIzeIQAVPXlFPzTB95++c2u/q1A+GTnGmeZszJFKDFLtf
+ gi3y7yEVr4Bab5NY9KUjsef4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 5ce3ad7db0c8ff24;
+	Thu, 03 Sep 2026 12:53:18 +0000
+X-Mizu-Trace-ID: 5ce3ad7db0c8ff24
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Xiang Mei <xmei5@asu.edu>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Aditi Ghag <aditi.ghag@isovalent.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf 1/2] bpf: Fix out-of-bounds read of sk_protocol in bpf_sock_destroy()
+Date: Thu,  3 Sep 2026 20:52:48 +0800
+Message-ID: <20260903125306.299943-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] rust: doctest: unify with other kunit tests
-To: Gary Guo <gary@garyguo.net>, Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun@kernel.org>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot
- <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
- Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>
-Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20260902-kunit-v2-0-eda3ed6c00c5@garyguo.net>
-From: David Gow <david@davidgow.net>
-Content-Language: fr
-In-Reply-To: <20260902-kunit-v2-0-eda3ed6c00c5@garyguo.net>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Le 03/09/2026 à 5:59 AM, Gary Guo a écrit :
-> Currently in Rust, kunit tests are handled with `kunit_tests`, while the
-> doctests generate a lot `extern "C"` functions and invoke them through a
-> generated C wrapper.
-> 
-> This is currently needed because of the special treatment of file name and
-> line numbers from doctests. Convert them to override `file!()` and
-> `line!()` macro instead, and use them inside `kunit_assert!`.
-> 
-> With this it is possible to just generate `#[kunit_tests]` and `#[test]`
-> for doctests.
-> 
-> David mentioned in [1] that this should route via the Rust tree.
-> 
-> Link: https://lore.kernel.org/rust-for-linux/e30d16ec-f5a3-4cd8-9b25-96e0dfa8b9d2@davidgow.net/ [1]
-> 
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> ---
-> Changes in v2:
-> - Rebased on v7.3-rc1
-> - Picked up tags
-> - Link to v1: https://patch.msgid.link/20260616-kunit-v1-0-b191604a8d6b@garyguo.net
-> 
-> ---
+sk_protocol lives in struct sock, not in struct sock_common. A timewait
+or request sock handed to bpf_sock_destroy() by the tcp iterator is
+neither, so reading sk->sk_protocol runs past the object:
 
-Thanks again. This still looks good to me.
+==================================================================
+BUG: KASAN: slab-out-of-bounds in bpf_sock_destroy+0xc7/0xe0
+Read of size 2 at addr ffff8881047d11b4 by task test_progs/428
 
-Cheers,
--- David
+Tainted: [W]=WARN
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x91/0xf0
+ print_report+0xd1/0x630
+ kasan_report+0xf3/0x130
+ __asan_report_load2_noabort+0x14/0x30
+ bpf_sock_destroy+0xc7/0xe0
+ bpf_prog_c3dd61f9d9cd9f37_iter_tcp6_timewait+0x9f/0xb7
+ bpf_iter_run_prog+0x538/0xde0
+ bpf_iter_tcp_seq_show+0x26b/0x4b0
+ bpf_seq_read+0x424/0x1210
+ vfs_read+0x197/0xe40
+ ksys_read+0x119/0x240
+ __x64_sys_read+0x72/0xc0
+ x64_sys_call+0x647/0x27e0
+ do_syscall_64+0xe5/0x610
+ entry_SYSCALL_64_after_hwframe+0x76/0x7e
 
-> Gary Guo (3):
->       rust: kunit: use `file!()` inside `kunit_assert!`
->       rust: kunit: use `line!()` inside `kunit_assert!`
->       rust: doctest: generate Rust kunit test suites
-> 
->  Documentation/rust/general-information.rst |  4 +-
->  init/Kconfig                               |  3 --
->  rust/Makefile                              |  4 +-
->  rust/kernel/kunit.rs                       | 11 +++--
->  rust/kernel/str.rs                         |  2 +-
->  rust/macros/helpers.rs                     | 16 -------
->  rust/macros/kunit.rs                       |  5 +-
->  rust/macros/lib.rs                         |  5 --
->  scripts/rustdoc_test_gen.rs                | 73 ++++++++----------------------
->  9 files changed, 30 insertions(+), 93 deletions(-)
-> ---
-> base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
-> change-id: 20260616-kunit-348f2c029b1e
-> 
-> Best regards,
-> --  
-> Gary Guo <gary@garyguo.net>
-> 
+Only check sk_protocol on full socks. tcp_abort() already knows how to
+deal with TIME_WAIT and NEW_SYN_RECV socks. Also fix the comment, it
+never matched the code.
+
+Fixes: 4ddbcb886268 ("bpf: Add bpf_sock_destroy kfunc")
+Reported-by: Xiang Mei (Microsoft) <xmei5@asu.edu>
+Closes: https://lore.kernel.org/bpf/20260702224519.800135-1-xmei5@asu.edu/
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ net/core/filter.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 61940e753552..1bbb72138ac6 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -12912,8 +12912,8 @@ __bpf_kfunc_start_defs();
+  * @sock: Pointer to socket to be destroyed
+  *
+  * Return:
+- * On error, may return EPROTONOSUPPORT, EINVAL.
+- * EPROTONOSUPPORT if protocol specific destroy handler is not supported.
++ * On error, may return EOPNOTSUPP, EINVAL.
++ * EOPNOTSUPP if protocol specific destroy handler is not supported.
+  * 0 otherwise
+  */
+ __bpf_kfunc int bpf_sock_destroy(struct sock_common *sock)
+@@ -12925,8 +12925,12 @@ __bpf_kfunc int bpf_sock_destroy(struct sock_common *sock)
+ 	 * Supporting protocols will need to acquire sock lock in the BPF context
+ 	 * prior to invoking this kfunc.
+ 	 */
+-	if (!sk->sk_prot->diag_destroy || (sk->sk_protocol != IPPROTO_TCP &&
+-					   sk->sk_protocol != IPPROTO_UDP))
++	if (!sk->sk_prot->diag_destroy)
++		return -EOPNOTSUPP;
++
++	if (sk_fullsock(sk) &&
++	    sk->sk_protocol != IPPROTO_TCP &&
++	    sk->sk_protocol != IPPROTO_UDP)
+ 		return -EOPNOTSUPP;
+ 
+ 	return sk->sk_prot->diag_destroy(sk, ECONNABORTED);
+-- 
+2.43.0
 
