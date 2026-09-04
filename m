@@ -1,162 +1,388 @@
-Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E90503BE0
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 16:41:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74BC2503BD6
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 16:42:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788540108; cv=none; b=uE2sI/ajlNTcRsIJ1CM7flk5h9I3/wA+yd2LttVxOwPMUKZGFfipzcpAj6HYdznX9O0tsK+i1PUwYEM0Ae7NwoBrGhSAbTiPeB78FaCEASbc+9rczgT1BpnWM3wyFd1kVRkM2mvg3grFD3q4Ir/9V1MA8VN+eC9cFX6uWd4Js+Y=
+	t=1788540127; cv=none; b=tPppMRh4CGzUGMmPL/lIXvdDLwNawVi8XJBaD9PLSzciUP6HuxfMecKGQLpcG8r+rxLvasGI2AM0BfPhpwRpRVN+RoyCE/ZdPw5rk2Gu+cq5s0KjMVkHvjHQA9Zep0VjILYT7tH1ZH7D1xpRNKV2MR2ITlvQ9oolUc9lv0iQkwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788540108; c=relaxed/simple;
-	bh=W+1DwyqZ0vEIC8ZbwjnEAQ/i6kezzc44cJHGVgpIou4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BR54Nq3wn/froS5jFC9WzwquCpH5pwSZbmgs5jUbhqUVYilBhP74Adj6YlLV0VcDP3XslapxVwKWL2Neka2CSYjoT6sRONkCEJFfBo/vQr3yOAvbQENPxA47NJxq+WIAFDhGrhcZly/FXHVPALNWtNRq1KJCnu2gPnDvzURLDuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.225.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-484373a2e82so452445f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 09:41:46 -0700 (PDT)
+	s=arc-20240116; t=1788540127; c=relaxed/simple;
+	bh=FtwZPiNUsMP/xfUK71nHkR8f6eGWTrDNA2Um1G91eBE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ogeamoIfXH/rqlvBRVd0tMJyMEWUnNKMFAaYoW3jbMJ7Pbru10D2eG6E0A3yC4JjG1OwSYg/Ybp4jAXi0i2gvCidKukXEDu5YGidvzqlRp6j/RDJ1b0brOC4/fybiOQVO1WKRnLTLQDdC+qJmyP2Q6ikkNnFxaVITobkWEpbFN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=C+ZlQae/; arc=none smtp.client-ip=209.85.210.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C+ZlQae/"
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-84859a64079so1554595b3a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 09:42:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788540124; x=1789144924; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rAmEFChS+Mw8ORUnC6NaPfXbsqCC3aTDWqLaVLXDsik=;
+        b=C+ZlQae/k5CDQiopwNRnqmqIUF9ozMtO3CSvZNyseTv7vJS+Ff4Ygq0Sc30h7j3IA+
+         zw7UzM1gRhkV6i2i+f83kreNpPi2Ko/fD8xu9GFvk7kpkHqtI2FNDwIqJ/4iCQLKtOf0
+         Phm9hjLlRmqoNOTJ9cLfZIkLWnJQ9iqOPx9BHhQK7YYqFKrheCKLdGQF7/khkxkzeS9v
+         jM3SL7qWWATKwPu3AadJw15OlDZ8wqU2gb3iclgw63RhsaSB4xvTgS8D7HEwDruAtTrc
+         fEbm+2Ep6BLtul/9cBrEbjFmhPGCqpIdOmJY8p8XZTBa6DmM0R3+NvXcvOEwtYavC0eB
+         hlaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788540104; x=1789144904;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1788540124; x=1789144924;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=irPlhgKRfCP6rMpUfujetCdiJVbOXFe5xjl9vJMRqUQ=;
-        b=JMQLbvy+9Skn9ZKwZVLVklp8cQxFAWgS856bQe8MsI7YnTUQwis3xeHmGg45h/QCB0
-         SnoVRd2NlWt+MjWcC+VXrGY1VT8aHbAW+lsJz8BvZ4YWqgo4x/XLVlLrimtR4CzeazP1
-         7SEljvfVhtc1ZY+xUNNBPB+UaiuZvZ2lKW5AEsDd8e4730P7ci8TDgyXQQD+sYdXSbX4
-         vxNfmAEk2wDx4NdIudQnj8moMq5tXlYKGnopSNct3cTgnlRU6IjUL83q90uH9frZBkIz
-         lES72iA5bb8fkOQqsZ24iOAJRRuiQ6j1LplR9nCp0TGDPO8rwJLtLOzTKIIebpTj4O+t
-         vwUw==
-X-Forwarded-Encrypted: i=1; AKwUvBztcqkFSfiEW4roMdUF5QJD0pBE0RJiTZtfIYOJG5u2u25t2FKpy/NPX0mYS/FEgj2vvLhAawumFVPCwK23pBM=@vger.kernel.org
-X-Gm-Message-State: AFuF++l4g1gMm8eGgAIfDaYle0GTJqUf39PnZaYSrQp/IF7XOPsdOtXy
-	AwTMSKirsUR/WljIZ1mRqXgrRRNYasqh8+62GLVjKD63W6L70IDSZ0c3
-X-Gm-Gg: AYBFou2dxnAQmi5CFFqQBU3K85vhnlpCwZ4+v6YzMyNEfrQTDpT2ADaDVCpii1J1a4j
-	YLqcFZ/9mlZZ1lDj0toSDPQOuS5gYHccMHUrUqJUHh7k4yy8PKllNro5KCef2cYSWoNoq7iMv9R
-	Qc7jUIur2x3U211odNl++ApGo5DFKkU1yBacWP3A+Wg8AIK6g1NO6ak8+leJhZ/SWRyPqugWLyj
-	xC6e4mUbt8Zj9UZsCIGUUg9sQuJevUi5VEBZchM3QDGYAI6/uMgBMOcgJdGZcXGsz9QZCV2Jht1
-	jGJWtw4Fi3E/JxCjXZthMFFNYF8HkZ8csuPHRtiLclHvOy+rVO9J79xuoNFtVdvLOVyJzaztrGx
-	OSK8q9IauD3SV/qaRkRoOmoPdhHFPx0ccE5TxVcrV3PAMCJVB60+SsS1vbGOXUHINjKVWYLn9So
-	DJpODCVAnx45+I0uPrcflcTD49X36xTIP3NngzPioNrVibcvE+oESquxm69/wUljO/mxywUsHpf
-	YGOoy3PgGvsQ6hhFQtW5zXz
-X-Received: by 2002:a05:6000:605:b0:485:8b66:f5 with SMTP id ffacd0b85a97d-4858b660161mr10077690f8f.18.1788540104208;
-        Fri, 04 Sep 2026 09:41:44 -0700 (PDT)
-Received: from [192.168.88.241] (37-48-53-4.nat.epc.tmcz.cz. [37.48.53.4])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48588394fa1sm7491043f8f.8.2026.09.04.09.41.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Sep 2026 09:41:43 -0700 (PDT)
-Message-ID: <5d871ca2-1db4-47b8-bd48-34b3fa42961e@ovn.org>
-Date: Fri, 4 Sep 2026 18:41:42 +0200
+        bh=rAmEFChS+Mw8ORUnC6NaPfXbsqCC3aTDWqLaVLXDsik=;
+        b=mAjcWnNNNPTqjBux/f7mbNcblRoXwRs92FPB3G8/APjk5bFahavKDy0LuE11E4ShlR
+         wJcpAeJu3wqKlpCfSRpj6cd//Fv62UWP2XSmbSE/3ZHUTTIluZXA/v4ciOWMrDzUylDg
+         hpB9AKQ3upfPg29iR6ZjUcMLp6VPO/QC3KoFl5y1qRreot8/F5oH2f3UPL3SCs988Qjo
+         8FOhWGRwAxY/fV9fW4XnW8WF9CCmxGOFiYYDiVO0zTJRRMIAr106EJBkbeFgk9EZAVzb
+         L9wUzAomF3TTQUq0/SzSJ8qRvzu0hlkB8YeOl6dh1Pb8JKQJu4t8excY+UCttqpIKj/+
+         bVEA==
+X-Forwarded-Encrypted: i=1; AKwUvBy18V88rD9n2Oj9xpp+fScrYKdy+iMeECvbyBOXfPpiyMR11OFuA7adYY8IsRjqnQq5X7D69C/psxWtxxX2Oeo=@vger.kernel.org
+X-Gm-Message-State: AFuF++kbId20sihsAdYJ0TACXTlGE8OaFAkKg+oP084Y6CYjL272YxSc
+	bs49JZ4WfBxObJc09wYCRiNXh6gHwxkT3ndBF0cDxPJwhRhsSbHMabqSbbrlCew02X/nGbl1jyQ
+	lJgXAgA==
+X-Received: from pfbgv7.prod.google.com ([2002:a05:6a00:4e87:b0:848:81e8:f2d9])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:8c02:b0:85b:635e:7814
+ with SMTP id d2e1a72fcca58-86169e6ed2bmr10426398b3a.12.1788540123262; Fri, 04
+ Sep 2026 09:42:03 -0700 (PDT)
+Date: Fri, 4 Sep 2026 09:42:02 -0700
+In-Reply-To: <20260904023105.1167376-2-zhao1.liu@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 1/2] selftests: netfilter: use KHDR_INCLUDES in CFLAGS
-To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
- Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>,
- Phil Sutter <phil@nwl.cc>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>,
- Ido Schimmel <idosch@nvidia.com>
-Cc: Ilya Maximets <i.maximets@ovn.org>, netfilter-devel@vger.kernel.org,
- coreteam@netfilter.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260904-net-sft-nf-khdr_includes-v1-0-92455af428e9@kernel.org>
- <20260904-net-sft-nf-khdr_includes-v1-1-92455af428e9@kernel.org>
-Content-Language: en-US
-From: Ilya Maximets <i.maximets@ovn.org>
-Autocrypt: addr=i.maximets@ovn.org; keydata=
- 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
-In-Reply-To: <20260904-net-sft-nf-khdr_includes-v1-1-92455af428e9@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20260904023105.1167376-1-zhao1.liu@intel.com> <20260904023105.1167376-2-zhao1.liu@intel.com>
+Message-ID: <apr02qOMhsZnXIlV@google.com>
+Subject: Re: [RFC 1/4] KVM: nVMX: Don't copy L2's CET state to L1 if VM-entry
+ didn't load it
+From: Sean Christopherson <seanjc@google.com>
+To: Zhao Liu <zhao1.liu@intel.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Chao Gao <chao.gao@intel.com>, 
+	Xin Li <xin@zytor.com>, Sohil Mehta <sohil.mehta@intel.com>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On 9/4/26 6:13 PM, Matthieu Baerts (NGI0) wrote:
-> KHDR_INCLUDES is typically used to include headers from the kernel
-> source directory instead of only relying on the ones from the host: they
-> can be missing or outdated.
-> 
-> The kselftest doc recommends assigning KHDR_INCLUDES to CFLAGS in a
-> target Makefile. lib.mk will set KHDR_INCLUDES to "-isystem
-> $(top_srcdir)/usr/include" if the user didn't set it, e.g. if the kernel
-> was built in a different build directory.
-> 
-> Other net targets have KHDR_INCLUDES added to their CFLAGS.
-> 
-> Fixes: 3f189349e52a ("selftests: netfilter: move to net subdir")
+On Fri, Sep 04, 2026, Zhao Liu wrote:
+> On a nested VM-exit that disables VM_EXIT_LOAD_CET_STATE, only copy L2's
+> CET state from vmcs12 to vmcs01 if VM-entry really loaded that state,
+> i.e. don't copy when VM-entry fails before loading guest state.
+>
+> The state, that L1 should see after a L2 VM-exit, depends on three
+> things: the VM-exit load (host state) control, whether VM-entry loaded
+> L2's state, and whether L2 ran.
 
-I think, this should point to a commit that added the first C test:
+No, it depends on four things.  The three things you listed, plus uarch-specific
+ordering of checks and loads of guest state.  The SDM says:
 
-Fixes: a64d558d8cf9 ("selftests: netfilter: add nfqueue test case")
+  the following operations take place concurrently:
+  
+    (1) the guest-state area of the VMCS is checked to ensure that, after the
+        VM entry completes, the state of the logical processor is consistent
+	with IA-32 and Intel 64 architectures;
+    (2) processor state is loaded from the guest-state area or as specified by
+        the VM-entry control fields; and (3) address-range monitoring is cleared.
 
-> Link: https://docs.kernel.org/dev-tools/kselftest.html#contributing-new-tests-details
-> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-> ---
->  tools/testing/selftests/net/netfilter/Makefile | 2 ++
->  1 file changed, 2 insertions(+)
+  Because the checking and the loading occur concurrently, a failure may be
+  discovered only after some state has been loaded. For this reason, the logical
+  processor responds to such failures by loading state from the host-state area,
+  as it would for a VM exit.
+
+So KVM is well within its rights to load vmcs01 state from vmcs12 even on VM-Exit
+due to a failed VM-Entry.  More at the very bottom (below the first diff).
+ 
+> For CET, there are 4 cases:
 > 
-> diff --git a/tools/testing/selftests/net/netfilter/Makefile b/tools/testing/selftests/net/netfilter/Makefile
-> index f88dd4ef8d26..df3c20c90f5d 100644
-> --- a/tools/testing/selftests/net/netfilter/Makefile
-> +++ b/tools/testing/selftests/net/netfilter/Makefile
-> @@ -2,6 +2,8 @@
+>  1) VM_EXIT_LOAD_CET_STATE is set. Load L1's CET state from vmcs12's
+>     host fields, no matter what happened before. KVM already does this.
+> 
+>  2) VM_EXIT_LOAD_CET_STATE is clear, and VM-entry loaded L2's CET
+>     state. Whether it's the normal VM-exit or VM-entry failure exit,
+>     the guest's (L2's) state should be retained, so copy vmcs12's guest
+>     fields into vmcs01 to give L1 the same result.
+> 
+>  3) VM_EXIT_LOAD_CET_STATE is clear, VM-entry didn't load L2's CET
+>     state, and L2 never ran. This is the typical case that VM-entry
+>     fails before loading guest state, the CPU keeps L1's own state, so
+>     do nothing.
+> 
+>  4) VM_EXIT_LOAD_CET_STATE is clear, VM-entry didn't load L2's CET
+>     state, but L2 ran and exited normally. The CPU keeps L1's state
+>     again, but L2 could have changed it while running, so still copy
+>     vmcs12's guest fields into vmcs01, because they hold what L2 left
+>     behind.
+
+...
+
+> @@ -3700,6 +3738,13 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+>  		goto vmentry_fail_vmexit_guest_mode;
+>  	}
 >  
->  top_srcdir = ../../../../..
->  
-> +CFLAGS += $(KHDR_INCLUDES)
-> +
->  HOSTPKG_CONFIG := pkg-config
->  MNL_CFLAGS := $(shell $(HOSTPKG_CONFIG) --cflags libmnl 2>/dev/null)
->  MNL_LDLIBS := $(shell $(HOSTPKG_CONFIG) --libs libmnl 2>/dev/null || echo -lmnl)
-> 
+> +	/*
+> +	 * VM-entry has completed the architectural guest-state loading phase;
+> +	 * MSRs are loaded after guest state, so failures below should retain
+> +	 * L2's state (see nested_l2_state_is_live()).
+> +	 */
+> +	l2_state = L2_STATE_LOADED_FROM_VMCS12;
 
-This solves my problem with building netfilter tests locally with uAPI
-modifications.  Beside the Fixes tag, LGTM.
+This works, but IMO is unnecessarily convoluted.  KVM doesn't need to manually
+query vmcs12 entry controls, we can and should instead call sync_vmcs02_to_vmcs12()
+in the failed VM-Entry path if vmcs02 has been prepared with vmcs12 state.  Then
+the only thing that needs to be communicated to load_vmcs12_host_state() is
+whether or not vmcs02 was prepared.  This would make KVM consistent with how it
+handles guest state on failed VM-Entry VM-Exits that occur because of hardware's
+consistency checks (KVM only validates a subset of guest state).
 
-Reviewed-by: Ilya Maximets <i.maximets@ovn.org>
+So I'm fairly certain it's just the below change (I also tweaked the comment about
+CET state because it's not at all obvious why vmcs12 would hold the correct state).
+
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 47599e7312cf..cb6a910eed2e 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -3613,8 +3613,9 @@ static int nested_vmx_check_permission(struct kvm_vcpu *vcpu)
+ 	return 1;
+ }
+ 
+-static void load_vmcs12_host_state(struct kvm_vcpu *vcpu,
+-				   struct vmcs12 *vmcs12);
++static void load_vmcs12_host_state(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
++				   bool prepared_vmcs02);
++static void sync_vmcs02_to_vmcs12(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12);
+ 
+ /*
+  * If from_vmentry is false, this is being called from state restore (either RSM
+@@ -3636,6 +3637,7 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+ 		.basic = EXIT_REASON_INVALID_STATE,
+ 		.failed_vmentry = 1,
+ 	};
++	bool prepared_vmcs02 = false;
+ 	u32 failed_index;
+ 
+ 	trace_kvm_nested_vmenter(kvm_rip_read(vcpu),
+@@ -3700,6 +3702,8 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+ 		goto vmentry_fail_vmexit_guest_mode;
+ 	}
+ 
++	prepared_vmcs02 = true;
++
+ 	if (from_vmentry) {
+ 		failed_index = nested_vmx_load_msr(vcpu,
+ 						   vmcs12->vm_entry_msr_load_addr,
+@@ -3758,6 +3762,9 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+ 	 * 26.7 "VM-entry failures during or after loading guest state".
+ 	 */
+ vmentry_fail_vmexit_guest_mode:
++	if (prepared_vmcs02)
++		sync_vmcs02_to_vmcs12(vcpu, vmcs12);
++
+ 	if (vmcs12->cpu_based_vm_exec_control & CPU_BASED_USE_TSC_OFFSETTING)
+ 		vcpu->arch.tsc_offset -= vmcs12->tsc_offset;
+ 
+@@ -3778,7 +3785,7 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+ 
+ 	nested_put_vmcs12_pages(vcpu);
+ 
+-	load_vmcs12_host_state(vcpu, vmcs12);
++	load_vmcs12_host_state(vcpu, vmcs12, prepared_vmcs02);
+ 	vmcs12->vm_exit_reason = exit_reason.full;
+ 	if (enable_shadow_vmcs || nested_vmx_is_evmptr12_valid(vmx))
+ 		vmx->nested.need_vmcs12_to_shadow_sync = true;
+@@ -4797,8 +4804,8 @@ static void prepare_vmcs12(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+  * Failures During or After Loading Guest State").
+  * This function should be called when the active VMCS is L1's (vmcs01).
+  */
+-static void load_vmcs12_host_state(struct kvm_vcpu *vcpu,
+-				   struct vmcs12 *vmcs12)
++static void load_vmcs12_host_state(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
++				   bool prepared_vmcs02)
+ {
+ 	enum vm_entry_failure_code ignored;
+ 	struct kvm_segment seg;
+@@ -4854,14 +4861,15 @@ static void load_vmcs12_host_state(struct kvm_vcpu *vcpu,
+ 		vmcs_write64(GUEST_BNDCFGS, 0);
+ 
+ 	/*
+-	 * Load CET state from host state if VM_EXIT_LOAD_CET_STATE is set.
+-	 * otherwise CET state should be retained across VM-exit, i.e.,
+-	 * guest values should be propagated from vmcs12 to vmcs01.
++	 * If CET state should be retained across VM-exit, i.e. isn't loaded
++	 * from host state fields, and vmcs02 was prepared with guest state and
++	 * thus synchronized back to vmcs12 (CET state is unconditionally saved
++	 * on VM-Exit), then propagate the guest's values from vmcs12 to vmcs01.
+ 	 */
+ 	if (vmcs12->vm_exit_controls & VM_EXIT_LOAD_CET_STATE)
+ 		vmcs_write_cet_state(vcpu, vmcs12->host_s_cet, vmcs12->host_ssp,
+ 				     vmcs12->host_ssp_tbl);
+-	else
++	else if (prepared_vmcs02)
+ 		vmcs_write_cet_state(vcpu, vmcs12->guest_s_cet, vmcs12->guest_ssp,
+ 				     vmcs12->guest_ssp_tbl);
+ 
+@@ -5193,7 +5201,7 @@ void __nested_vmx_vmexit(struct kvm_vcpu *vcpu, u32 vm_exit_reason,
+ 						       vmcs12->vm_exit_intr_error_code,
+ 						       KVM_ISA_VMX);
+ 
+-		load_vmcs12_host_state(vcpu, vmcs12);
++		load_vmcs12_host_state(vcpu, vmcs12, true);
+ 
+ 		/*
+ 		 * Process events if an injectable IRQ or NMI is pending, even
+
+As for nitpicking the SDM, KVM doesn't *need* to wait until prepare_vmcs02()
+completes cleanly, KVM just needs to guarantee that vmcs12 holds the correct state
+if L2 state is loaded from vmcs12 on VM-Exit.  Because even on failure,
+prepare_vmcs02() has already loaded (most) guest state into vmcs02.  So we could
+sync vmcs02=>vmcs12 on any failure after switching to vmcs02, if we adjusted
+prepare_vmcs02() to fully prepare vmcs02 before do its final consistency checks.
+I.e. we could do the below on top.
+
+However, as much as I want to be pedantic on this point, I don't think we should
+actually do the below.  I combed through the flows and can't find anything that
+would result in loading the wrong L1 state if KVM mostly prepares vmcs02 but
+doesn't do sync_vmcs02_to_vmcs12().  And marking vmcs02 as prepared if and only
+if it's fully prepared is much more obviously correct.
+
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index cb6a910eed2e..68f3b09a1531 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -2843,25 +2843,8 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+ 	/* Note: may modify VM_ENTRY/EXIT_CONTROLS and GUEST/HOST_IA32_EFER */
+ 	vmx_set_efer(vcpu, vcpu->arch.efer);
+ 
+-	/*
+-	 * Guest state is invalid and unrestricted guest is disabled,
+-	 * which means L1 attempted VMEntry to L2 with invalid state.
+-	 * Fail the VMEntry.
+-	 *
+-	 * However when force loading the guest state (SMM exit or
+-	 * loading nested state after migration, it is possible to
+-	 * have invalid guest state now, which will be later fixed by
+-	 * restoring L2 register state
+-	 */
+-	if (CC(from_vmentry && !vmx_guest_state_valid(vcpu))) {
+-		*entry_failure_code = ENTRY_FAIL_DEFAULT;
+-		return -EINVAL;
+-	}
+-
+-	/* Shadow page tables on either EPT or shadow page tables. */
+-	if (nested_vmx_load_cr3(vcpu, vmcs12->guest_cr3, nested_cpu_has_ept(vmcs12),
+-				from_vmentry, entry_failure_code))
+-		return -EINVAL;
++	kvm_rsp_write(vcpu, vmcs12->guest_rsp);
++	kvm_rip_write(vcpu, vmcs12->guest_rip);
+ 
+ 	/*
+ 	 * Immediately write vmcs02.GUEST_CR3.  It will be propagated to vmcs12
+@@ -2882,6 +2865,50 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+ 		vmcs_write64(GUEST_PDPTR3, vmcs12->guest_pdptr3);
+ 	}
+ 
++	/*
++	 * DO NOT write vmcs02 after this point!  I.e. load all L2 guest state
++	 * into vmcs02 before performining *any* consistency checks on vmcs12
++	 * guest state.  KVM loads vmcs12 guest from vmcs02 on *all* VM-Exits,
++	 * including VM-Exits due to failed VM-Entry.  Doing so avoids having
++	 * to track which fields are live in vmcs12, and when.  While counter-
++	 * intuitive, loading guest state before it is checked is explicitly
++	 * allowed by the SDM, which says:
++	 *
++	 * the following operations take place concurrently:
++	 *
++	 *  (1) the guest-state area of the VMCS is checked to ensure that,
++	 *      after the VM entry completes, the state of the logical processor
++	 *      is consistent with IA-32 and Intel 64 architectures;
++	 *  (2) processor state is loaded from the guest-state area or as
++	 *      specified by the VM-entry control fields;
++	 *  (3) and address-range monitoring is cleared.
++	 *
++	 * Because the checking and the loading occur concurrently, a failure
++	 * may be discovered only after some state has been loaded. For this
++	 * reason, the logical processor responds to such failures by loading
++	 * state from the host-state area, as it would for a VM exit.
++	 */
++
++	/*
++	 * Guest state is invalid and unrestricted guest is disabled,
++	 * which means L1 attempted VMEntry to L2 with invalid state.
++	 * Fail the VMEntry.
++	 *
++	 * However when force loading the guest state (SMM exit or
++	 * loading nested state after migration, it is possible to
++	 * have invalid guest state now, which will be later fixed by
++	 * restoring L2 register state
++	 */
++	if (CC(from_vmentry && !vmx_guest_state_valid(vcpu))) {
++		*entry_failure_code = ENTRY_FAIL_DEFAULT;
++		return -EINVAL;
++	}
++
++	/* Shadow page tables on either EPT or shadow page tables. */
++	if (nested_vmx_load_cr3(vcpu, vmcs12->guest_cr3, nested_cpu_has_ept(vmcs12),
++				from_vmentry, entry_failure_code))
++		return -EINVAL;
++
+ 	if ((vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL) &&
+ 	    kvm_pmu_has_perf_global_ctrl(vcpu_to_pmu(vcpu)) &&
+ 	    WARN_ON_ONCE(__kvm_emulate_msr_write(vcpu, MSR_CORE_PERF_GLOBAL_CTRL,
+@@ -2890,9 +2917,6 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+ 		return -EINVAL;
+ 	}
+ 
+-	kvm_rsp_write(vcpu, vmcs12->guest_rsp);
+-	kvm_rip_write(vcpu, vmcs12->guest_rip);
+-
+ 	/*
+ 	 * It was observed that genuine Hyper-V running in L1 doesn't reset
+ 	 * 'hv_clean_fields' by itself, it only sets the corresponding dirty
+@@ -3696,14 +3720,19 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+ 
+ 	enter_guest_mode(vcpu);
+ 
++	/*
++	 * Mark vmcs02 as having been prepared, even if preparation ultimately
++	 * fails, as the final consistency checks performed by prepare_vmcs02()
++	 * are done only after vmcs02 has been loaded with guest state.
++	 */
++	prepared_vmcs02 = true;
++
+ 	if (prepare_vmcs02(vcpu, vmcs12, from_vmentry, &entry_failure_code)) {
+ 		exit_reason.basic = EXIT_REASON_INVALID_STATE;
+ 		vmcs12->exit_qualification = entry_failure_code;
+ 		goto vmentry_fail_vmexit_guest_mode;
+ 	}
+ 
+-	prepared_vmcs02 = true;
+-
+ 	if (from_vmentry) {
+ 		failed_index = nested_vmx_load_msr(vcpu,
+ 						   vmcs12->vm_entry_msr_load_addr,
+@@ -3762,8 +3791,7 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+ 	 * 26.7 "VM-entry failures during or after loading guest state".
+ 	 */
+ vmentry_fail_vmexit_guest_mode:
+-	if (prepared_vmcs02)
+-		sync_vmcs02_to_vmcs12(vcpu, vmcs12);
++	sync_vmcs02_to_vmcs12(vcpu, vmcs12);
+ 
+ 	if (vmcs12->cpu_based_vm_exec_control & CPU_BASED_USE_TSC_OFFSETTING)
+ 		vcpu->arch.tsc_offset -= vmcs12->tsc_offset;
+@@ -3775,6 +3803,8 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+ 	 */
+ 	kvm_service_local_tlb_flush_requests(vcpu);
+ 
++	sync_vmcs02_to_vmcs12(vcpu, vmcs12);
++
+ 	leave_guest_mode(vcpu);
+ 
+ vmentry_fail_vmexit:
+
