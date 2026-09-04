@@ -1,128 +1,122 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB044D2EDE;
-	Fri,  4 Sep 2026 14:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE994F052F;
+	Fri,  4 Sep 2026 15:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788533976; cv=none; b=VouZ50a+JqgVmTpy5WSluCnWWvMvexJwgjvDaayq6xBcS0+9VABi8sR7FZCnOeTIRg+LdgnNeF5z1Nc9uVwh5oO7ZNlEAxnFU4a+usrj9rnGqKgCAWOO4fto8dnyC2m+Vdgn1KoHJNB9QPmKh68OJgQ7tidi773vInkQoBM68/M=
+	t=1788534657; cv=none; b=YyvrNpW5w42OrM4RRVSF00XbVTWFqWYSzF8ce4gfUMpcsrp6LAJnPT07Rur32/MD2LeE9sHxcjHcpFGLO5tTm+mxgFQy3rAmUql3XUJsKXNWlpfx+iGPAsGQ0/2rTJEWWfucUe+gNT+Lr8c5L8FcAXHX2BvMWSXSobumVpzyjog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788533976; c=relaxed/simple;
-	bh=tg+beaFvFWyQqkBNHBB7oc6UW88l9wEu/T1qzRYhjfs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=A4O7HEbbmupjbAmk0sx8RQipe1nVsteS0EZXWHBRegxLyUpgQNHGWx7qQON/d0gC+//CbPdmox91dxsZwAyBflCrJVLvfJ4QwX8JHWeQzS1dTet5hZcAFgz0bD31UIeEv1eQJHJIITCGjHF9NeNaX6dqelLOvm0AfyZhNBnnxic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=akKvh57a; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788534657; c=relaxed/simple;
+	bh=A0VpHOoTUbM1tou3WIkcE6JwwQ0HC0j4IOAJoYAQEqM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sh5FVlcawiUrNAE+Egq3S+lbFlCygMOYj0pCfSn6DUSHHMeftI/EmC8zTPRWebRDax7LwOHNoYXxqNby/bWwY/dRujox2v/MhWEkLy5hJ3D0dT7K6jZbiNiMl9CQ0jofzI6fq4AMmI/wWWsstUbGOgTGZ6reg9DXcQ0oG+Zma5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VB3Gp389; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="akKvh57a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 624A11F00A3D;
-	Fri,  4 Sep 2026 14:59:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VB3Gp389"
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id EAE621F00A3D;
+	Fri,  4 Sep 2026 15:10:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788533974;
-	bh=Mtmh+EbQEolZ0B+Cu+N77fkNfs3wVAfEnrHoZtaub+4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=akKvh57agkJAqnqARbiOesO0F3Co6J3xZW04uqfzOIDRqxFZnS/WAs4jLeWdy18dA
-	 asedTgctivCw0JSn15eNH1acIGeFsC1GbtOnJ5giNQGUfdJubfvG6Izb/8g2D9QNtb
-	 YSNZhSIqlfZEMZH7J9/WWd+Y/cSSrkB3WwUaF6MXteZmF30yKb3uAdxp5uLb0WSQoq
-	 9sBIS3ms5v9BDNzzHpaN1zaf0QEE8+JiSAZz+hCfCKJ5Nch+rgCMqru1j5wZpViyku
-	 rTI2mxXQHcdKUTn0US3bpM6bo6Lxumu1LjP81cTWu1HVfykZM2dzAhwaHchB64rsI/
-	 5zgI12L0kJppQ==
-Message-ID: <64106236-9d0d-4f64-b6dd-b1e609fb8c5a@kernel.org>
-Date: Fri, 4 Sep 2026 16:59:28 +0200
+	s=k20260515; t=1788534655;
+	bh=41xaUrJ1lAeNQeQ/qi/93VPU9j/VGLCqogvprDRRNhA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=VB3Gp389hUiJzqvsLNBiOxo9AiBTn02To+KR9uXQbCTwnr1MfN9K/mfYWPpkTQYoi
+	 YkSwXqdiH4MVDRmvZayz5DTTmd7tsTIJhqEsiBQ3VlBGcQBtX7Q6V0d1qqBAGbutA4
+	 YBaPGJLRz8WvCU8m9I5oOD/6mQhQWDsfTzAs+Re6PhaN8sHtYH9UTWU8n/vsjGRzma
+	 YwTvxKJ6eQC0djlK9jHVUYb/cXNutoS9zDShgIfepZ+JjJGdx9OMIEewirFY6jcTaF
+	 yD2lEjdL0GwoSgI4JISCTQdxtXsBn9k9OJn4pclMED29mV+rIlc390GxVcXiR5xkzZ
+	 F3nGaY5o8zg9Q==
+Date: Fri, 4 Sep 2026 08:10:54 -0700
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Jan Kara <jack@suse.cz>, Jakub Kicinski <kuba@kernel.org>,
+	Namjae Jeon <linkinjeon@kernel.org>,
+	Hisam Mehboob <hisamshar@gmail.com>,
+	Martin =?utf-8?Q?Kepplinger-Novakovi=C4=87?= <martink@posteo.de>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Bagas Sanjaya <bagasdotme@gmail.com>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	David Howells <dhowells@redhat.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Theodore Ts'o <tytso@mit.edu>,
+	Catalin Iacob <iacobcatalin@gmail.com>,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>,
+	Andrei Vagin <avagin@gmail.com>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Bhavik Sachdev <b.sachdev1904@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Wang Yan <wangyan01@kylinos.cn>,
+	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+	Malaya Kumar Rout <malayarout91@gmail.com>,
+	linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Luis de Bethencourt <luisbg@kernel.org>,
+	Salah Triki <salah.triki@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH] bfs: remove the filesystem
+Message-ID: <20260904151054.GG6047@frogsfrogsfrogs>
+References: <20260904082954.48738-1-enelsonmoore@gmail.com>
+ <20260904-hinnimmt-triumphieren-handgefertigt-4e51fe2ed659@brauner>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH mptcp-next v2 0/2] selftests: mptcp: convert iptables to
- nftables
-Content-Language: fr
-To: Hangbin Liu <hangbin.liu@linux.dev>, MPTCP Linux <mptcp@lists.linux.dev>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- Hangbin Liu <liuhangbin@kylinos.cn>
-References: <20260903-mptcp_nft-v2-0-66283e4b9c3b@kylinos.cn>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260903-mptcp_nft-v2-0-66283e4b9c3b@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260904-hinnimmt-triumphieren-handgefertigt-4e51fe2ed659@brauner>
 
-Hello,
-
-On 03/09/2026 03:12, Hangbin Liu wrote:
-> iptables has been deprecated for years. The Linux kernel has included
-> nftables as the successor to iptables since 2014, and every major
-> distribution uses nftables as the default packet filtering framework.
-> The iptables command we run on modern systems is actually iptables‑nft,
-> a compatibility layer that translates iptables syntax to nftables rules
-> behind the scenes.
+On Fri, Sep 04, 2026 at 12:43:09PM +0200, Christian Brauner wrote:
+> On Fri, 04 Sep 2026 01:29:19 -0700, Ethan Nelson-Moore wrote:
+> > bfs: remove the filesystem
 > 
-> There are also some features that can be set easily with nft, while we need
-> to convert to BPF code under iptables, such as MPTCP add‑addr and
-> remove‑addr suboptions. To make future work easier, convert iptables usage
-> in mptcp to nftables.
+> I agree.
+
+At the moment, I don't.  Nowhere in this thread does anyone mention what
+someone with a B(oot)FS filesystem image should do if they want to
+extract whatever's stored in the filesystem.  Are there userspace tools
+for that purpose (ala efs)?  Does "binwalk -e $bfs_image" suffice for
+that purpose?  Or is there solid evidence that there isn't even a single
+user (ala freevxfs) who strongly wants it to stay in?
+
+I'm all for getting rid of old cruft but there still needs to be a
+documented offramp for users.
+
+--D
+
+> ---
 > 
-> Tested with iptables-translate to make sure each nft conversion is the same
-> with previous one. e.g. for mptcp_sockopt.sh, the ip6tables shows
-FYI, Hangbin is working on a new version addressing my comments from v1.
-The new version(s) will be sent to the MPTCP list only, and I will sent
-these patches to Netdev when ready.
-
-Updating here the PW status:
-
-pw-bot: cr
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
+> Applied to the vfs-7.4.bfs branch of the vfs/vfs.git tree.
+> Patches in the vfs-7.4.bfs branch should appear in linux-next soon.
+> 
+> Please report any outstanding bugs that were missed during review in a
+> new review to the original patch series allowing us to drop it.
+> 
+> It's encouraged to provide Acked-bys and Reviewed-bys even though the
+> patch has now been applied. If possible patch trailers will be updated.
+> 
+> Note that commit hashes shown below are subject to change due to rebase,
+> trailer updates or similar. If in doubt, please check the listed branch.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+> branch: vfs-7.4.bfs
+> 
+> [1/1] bfs: remove the filesystem
+>       https://git.kernel.org/vfs/vfs/c/e36781a626b2
+> 
+> 
