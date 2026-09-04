@@ -1,223 +1,142 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84EBB503BCF
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 19:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788549540; cv=pass; b=hGbpTmP2ysXHDSNiM0RC/ThM+u+gLYfDyjJMDCwfJpdouRiR6MQFsptaMiu5tSE2RKi8CmsdT301fKdEEoqZ7XMcZfdk5C7dD6OV13uM+UXLD5G395tnzKDTmqTP+M3uMt1PwXSTUMEzjOvSrQtggqQT/U3w+2+57wkHaV354L8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788549540; c=relaxed/simple;
-	bh=T8oGRVZetWW4BSbiptnI+0JfOFjftBlNlKsV291GxEs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PnxD/ps95RSXRdTmjhC0Zt9VifiRyQ8sJxV8vCEXRNej5L4Tlsco0ApWSzFVoM4paa7IvNcw4CCMhm897esWLvWCgOEHQJQ6YFuf9Sk9/aGmRRFJ4kYmd/CTTNlvUJvQoLW+WcaQft3yFQUuejf3Ng8KjYx7lL4K/ugJbnz1eEk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=uFz2pet5; arc=pass smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62EBB3546EB
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 19:24:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788549880; cv=none; b=SoZIwP+roBXQ32UmtWhGFLD5m5NdJZlktIkbXX5jGv5Fp1afgyZeE+iTkZy/AYPMY8xeyeR2cR5OKsP9Nq7M4UV65gTBpzfVrJOPvbAgqiJ6ZGqsBKiNuYdsy31fe82cHUos+2Cw1e9tbnr0j6OGdJuoVyj992f7Aj5+mPEd+WM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788549880; c=relaxed/simple;
+	bh=1TLp0mcpPztPjUtMwMwh25MNgjqQzYvogl/T02HTuZo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=BF/OqJC9cvzYOUS/N/BvGPtlEWfqj9Rj9ziXX4m4PPYkjTLoEZFINgHFH5QB+0MkVwmJD16BuilbjWGr/MLkfBoWKoL46U2n4z2SFwUMdkmZUNanJNU2oEokYzGrJz72rtVPEgkW9347XDwctT5eCiedtlLobQ/a0wSyV/n8+bI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cFBf0gMs; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="uFz2pet5"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-84f3ab8750cso1180552b3a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 12:18:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788549536; cv=none;
-        d=google.com; s=arc-20260327;
-        b=oZbmcEgDqyEeuoUo6XYazrf94d8a9ZyO4Bu+fhSYwOxAsK/AqR8nMHgxxDNZpjGw8g
-         J2wx213VDJcJNARNRGHYKgA6f2wnMELJKTzf0MEo5HLNaJwwuEH7YkbqiIamrMKq0Met
-         xkCp47gbqhuh/8EWEBQmIGROv7fB3vVU8hCnp3Ng5sMwbp2sPYfxf8H1ofRyz4em86fx
-         FZ1BGcYLjrPdhaaP1+OtGSUgQ91eyO9iOG8uwIcLejSMjFkdYFwL59Ycg7ZimcWkjx4d
-         xrHdrxvpa5QXEkKEYooaryJMZ5T+nj54fF/3JvCC/ig2kfb6+OZ3AY6HOK1qVfkLroCj
-         5Cig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=NjP2g4bpBWdK8v/XQipjZnBq2wtvRo6JQJKPDpSexCo=;
-        fh=Xy9oQAfAKUpNmYZn9h7mIXjhB7wNqTotuEu9J759Wg0=;
-        b=abRy3acoP8TCZDCFa4VgSdyOewBNEmb+Zz4LXd++ovZ4K9A4Kw2m+1J5gJFavMWRoX
-         c+9zBdzYHswWynCmrkZE6eAFGMwl1EV1+V7SPR9NzJS9tHeBZY08YzxIM+WSaBtMsSta
-         QaYJ6eH3WmTMvNxaI9o8thx58E2KmYxpFil010rutcgH405q7SP8vrmZmI0ISYsX+9sZ
-         J0hXPnOdutyhZAqb7GcTOjWealWDyPtrm9Kw1iY9rsNsxDyIe8/q16fdCbDrEruhxzJc
-         G/RmGbZiNHC7jrT4QyPaWgAJtCVaCO+CCfS+5085MSkHiEc81A3+JAujMzZJNHY2L1PB
-         6KbA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cFBf0gMs"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c25b661d37dso198441966b.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 12:24:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1788549536; x=1789154336; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=NjP2g4bpBWdK8v/XQipjZnBq2wtvRo6JQJKPDpSexCo=;
-        b=uFz2pet5V+1Sq6H5E90V3CifmKP8YRE32/teZ4ILFwzGGDv5Sie7ESXPpqQg5RsT/t
-         cY1r8rIIVeTY8LWlOzt1ovKaKohoHEYIC2hcs66dIRT/FXCTQZc0ZUAxDdyxBtQLuZDK
-         Rk1LMjceEeZLbHuwV858s9Co8zpxRPff5YskQ=
+        d=gmail.com; s=20251104; t=1788549875; x=1789154675; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=x6+3E6XdBlMMWEsp4l0QEjnTRS+wXP5LKYWHqQew038=;
+        b=cFBf0gMshOXE5g2gwE3/Mej9hTYqE9sjQIMtcy92CvVZxak4tmPey9EUBEf5jFUsxo
+         kGdazRo5qaErqx/YIFn/g/kvPKHYEA1GSc3QZGP3vGyU1iLZYpJ/wyO+pBidmRBgbUK8
+         HU1RAUy1NkVBcIt0Wf4q0hWD2ffVtUz7BLVP8asCZrZ+cB4gyn39R+aZGOh/+DXWGbkM
+         U0JqP3plXnXU3xCywyE6sIWYr+R3AgehC6U0+S1DjV7rHk9pz/ZtCOyF6qPEd5fVreo7
+         OoCzLqAtl8gPrXhLD5JoMf831KiJllQIadEQCzFuKTXlkz6ODZwPISuSQIG+u3TElHFe
+         5OZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788549536; x=1789154336;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=NjP2g4bpBWdK8v/XQipjZnBq2wtvRo6JQJKPDpSexCo=;
-        b=pnpfB1J9AW/GQJfH9imSPY7q9VJg0EVOBbGSytGjBKQodyiFMostzq/u8Erq3mGoXz
-         RiOnWMEVtHA+NhQ8ubdcEoDLfBEMxhOlWpGXVF82SSKhUE0fQol3jr4wYrozYxumLUzM
-         7+BpfXgMwvlZkulTRuE66hycVsv63N2m4+AUnPzkp1iNMHZmk3ccANPAREWtYuCodC2a
-         ToB+5WUHNCgMKvt9ZS3BmsmIqIMuNK9Lr6EMndDp9HH3eS6sQBUaHJ7og3OOlN4PmGoC
-         4K2XqB5w4eoZQkxJ5+EpV2ciNc+HLcU1OZRjLxChKV/q/E+ZWL3H5riO92x5oYM5P8Pv
-         S2RA==
-X-Forwarded-Encrypted: i=1; AKwUvBxSy7/bWkfkqTjo0stkOlkg86pxFuMcr1JCQm11G82zjs6sRBWCQmlj0tVCCJobPLmTynsnGbxNIFzttfw80/8=@vger.kernel.org
-X-Gm-Message-State: AFuF++kLUhOzlNUhbuZXlz8l8nhXlpWGrfKjPE29jkEJtk3CtAqV+FnP
-	s7wWBd3amo/H5RgyR8QiT+yphdIr1w1WzUL2yp1lW3DBOQVEu/5YOTuB8RwjpW0LKXJuA1NWxir
-	O68ewHrt5SL/pKWsiUKBLFnwn4v0mC3ARX9VbJvxv
-X-Gm-Gg: AYBFou15c/h9mjoSRQ4wE+Ig0s+0AtBVZOytct9RYoJ+HcdW1hdjRc2IB6zKmGdU9zM
-	T7j99x/AUfegaZhoYMARuEGqf127R3FeQb4YmKVhpCoLIRkBFfksSuyJKhh+SuqusYgGG1YX4X/
-	M+YyWpllb+Rvm+AF0ttH48GCsGlyiDFMtBkrqBnwNaV+Jnbye5Oz/b7cc66gwjTpWg7/rSzgmum
-	dzCb5WmvxZjwHQoyAkQirptT/tdULh0FMiu37RX9wJgvVYx8ctDOD4OsZ6bc+MX3CMsAqfAr3uY
-	sKCber8x2yqjy0Om5BbsVEwM63eajo0tfUZpO4xne9xzKfFC4YDJdUEplXz0JHybwd1pssLF6OP
-	x/4A/Gd8tdvb3jstaQ+m1Blk=
-X-Received: by 2002:a05:6a00:400e:b0:84e:e741:174f with SMTP id
- d2e1a72fcca58-861669c6df9mr13575676b3a.7.1788549536465; Fri, 04 Sep 2026
- 12:18:56 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1788549875; x=1789154675;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=x6+3E6XdBlMMWEsp4l0QEjnTRS+wXP5LKYWHqQew038=;
+        b=OnGmlDpEdm3tqQIyCb6qb3dOKfitY5bo8EBYWIKvirbRtU2mEFhVupsaN8f+PCW0Ch
+         LcLv0UKo9dRMnH65DW5JBvuCYXXiwu++5hHctyeSCGOxg0Lgli0eL85HeT+LCgp5KR6y
+         nJ4D7oZ/recC6byKvImA5q6+rBpr1jHhS2tQECLfbPkf0IdaKj4NN4lcXWuGDxqQjb35
+         8f/5o2cMzJTozWhSPsMFOdgFIpcAJNL2H8RrKNLjmPHz2FtGRfG78UfirlQ9XXT/r+U5
+         OJyz4bSEqVRCsOrC3PGhHjLJ6EMx7PtgO4FpZpk2WnX07iIunBboKvR0sxJV3klUNmyi
+         Q7ew==
+X-Forwarded-Encrypted: i=1; AKwUvBysYRmJjJOKGaDlQAYAIlCN2HA5IM7DoH1xKM9bgCMhiRs00gndQu3TvA6s1qZ9Rabq+1GCegvTnRv75OP3n8w=@vger.kernel.org
+X-Gm-Message-State: AFuF++nbLoLgHUZXjjvmX9vzwSRSdfz9/Zal4nTRsdRgYf7xIHLGjTaW
+	jVFWKsDS2Il3V9BXnSE9ixek+FNG4J+RQTsTverWYQ5fw6Axu/OJGBGg
+X-Gm-Gg: AYBFou1GAf8ChT6XFyc3Km7GIIEuJwHTAJdtvPKuOFPgtEcwdmJSCWwcnVlzHBCY9AJ
+	rs5Ur/GheMi+67+D7xyOkEXzaqzwWzUBmp0aOpO8pXssWHdadSYzM7Xjhoe2Nl6WZm/tdEmIbLL
+	Ju9DBGWqomiATY/s3mKJDz3aoNI5fIhyI3x8yzxVYZu4U0BfKZG4RW3xjzySbzkInq5IJioiU4i
+	nfpvLvPWaY9mFXtqo/K318haH5a9uQznsZsA08n+tnBDdgqJzzKRqGTohDCuAin03kDQGri1lv1
+	DBBIOvDs9PcJ4rG08okuXC9nF5+Qz7FZE68QOsz2AzGpiFootBi7P/wWrR6rUTpCfswkwmFyUS/
+	oPhUGGu229r+hPlzW/cqN9vmL6yR26U8aa9kiKj/LTRP1rHtMmt7I96DrwxQtGSJPW6hm3ZaSvy
+	SRgZCpoxDd6J7rcRvo8gHdiKx50GWaZN7J7QUp4Lc=
+X-Received: by 2002:a17:907:3f98:b0:c26:19e3:e988 with SMTP id a640c23a62f3a-c2619e3ef32mr205513766b.40.1788549875549;
+        Fri, 04 Sep 2026 12:24:35 -0700 (PDT)
+Received: from localhost ([2a02:8071:50c5:5c0::48d4])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c260d5bb9a9sm141698766b.55.2026.09.04.12.24.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Sep 2026 12:24:35 -0700 (PDT)
+From: Wadim Mueller <wafgo01@gmail.com>
+Subject: [PATCH 0/2] iio: flow: slf3s: fix and test the vdd supply balance
+Date: Fri, 04 Sep 2026 21:24:24 +0200
+Message-Id: <20260904-iio-slf3s-pm-regulator-kunit-v1-0-5ea61e6d6db2@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <QDISC-0CFC.v3.20260901204856@mojatatu.com.7> <178851496747.4131868.17944512399699900309@kernel.org>
-In-Reply-To: <178851496747.4131868.17944512399699900309@kernel.org>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Fri, 4 Sep 2026 15:18:42 -0400
-X-Gm-Features: AcwNN1WqxnmG7XJP9xus-rjvXfHWjN_e7YaJplwGyG90ehZAnfEN97msYOXBnTM
-Message-ID: <CAM0EoM=NzniseZ=5LDAmoRBWXzwYDF6t6QACxt1t51zAH=86+Q@mail.gmail.com>
-Subject: Re: [PATCH net v3 6/9] net/sched: pie: clamp psched_mtu in pie_drop_early
-To: netdev-bot+sashiko@kernel.org
-Cc: netdev@vger.kernel.org, jiri@resnulli.us, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	victor@mojatatu.com, vega@nebusec.ai, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, toke@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqDQAwAwK9Izg1EVxT7FenBalaDdlcSLYL4d
+ xePc5kTjFXY4J2doPwXkxgS8lcG/dSFkVGGZCioqKihEkUi2uKd4fpD5XFfui0qznuQDUvHTHX
+ zdZUnSMWq7OV4+vZzXTdLe+rKbgAAAA==
+X-Change-ID: 20260904-iio-slf3s-pm-regulator-kunit-43ee079b36f0
+To: Maxwell Doose <maxwell@maxwelld.cc>, 
+ Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
+ Andy Shevchenko <andy@kernel.org>
+Cc: Jonathan Cameron <jonathan.cameron@oss.qualcomm.com>, 
+ linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Li Youhong <dayou5941@163.com>, Li Youhong <liyouhong@kylinos.cn>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+ Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org, 
+ kunit-dev@googlegroups.com, Wadim Mueller <wafgo01@gmail.com>
+X-Mailer: b4 0.14.3
 
-On Fri, Sep 4, 2026 at 5:42=E2=80=AFAM <netdev-bot+sashiko@kernel.org> wrot=
-e:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider:
->
-> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 1 =C2=B7 Low: 0
->
-> - [Medium] The commit message's "Conditions to recreate the bug" section
->   does not reproduce the described bug.
->
-Valid
-The clamp fix correctly hardens the mtu=3D0x80000000 case; the
-changelog's reproducer and premise need the `ip link set mtu ...` step
-instead.
-Documentation-only fix.
+Li Youhong reported that slf3s_resume() leaves vdd enabled when the
+measurement restart fails [1].  The report is right, but the patch and
+my own Reviewed-by on it were both too narrow.
 
-Note: same wrong-reproducer issue as patch 5 (dualpi2); both
-changelogs blame a stab path that psched_mtu() never reads.
+Andy asked whether the regulator refcount can go sideways here.  It
+cannot.  device_suspend() sets power.is_suspended only when the callback
+returned 0, and device_resume() returns before the callback when the
+flag is clear.  So the two alternate and the count stays in {0, 1}.
+Please drop my Reviewed-by, the reasoning in it is wrong.
 
+Three things do go wrong though:
 
-cheers,
-jamal
->
-> net/sched: pie: clamp psched_mtu in pie_drop_early
->
-> The patch clamps the value returned by psched_mtu() in pie_drop_early() t=
-o
-> the range [1, 1<<20], with the stated aim of preventing a very large devi=
-ce
-> MTU from zeroing the bytemode drop probability. The change itself is a
-> one-line clamp_t() in net/sched/sch_pie.c.
->
-> >     pie_drop_early() calls psched_mtu() with no clamp. With mtu=3D0x800=
-00000
-> >     the bytemode divide silently zeroes the drop probability, disabling=
- AQM.
-> >     Clamp to [1, 1<<20].
-> >
-> >     Conditions to recreate the bug:
-> >       CONFIG_NET_SCH_PIE=3Dy. Requires CAP_NET_ADMIN (namespace-local v=
-ia
-> >       unshare -Urn suffices).
-> >
-> >       tc qdisc add dev dummy0 root pie
-> >       tc qdisc change dev dummy0 root pie stab data 32768 size_log 15 c=
-ell_log 0
->
-> [Severity: Medium]
-> Do these two commands actually reproduce the described condition?
->
-> The clamped quantity comes only from the netdevice:
->
-> include/net/pkt_sched.h:psched_mtu() {
->         return READ_ONCE(dev->mtu) + dev->hard_header_len;
-> }
->
-> Neither "tc qdisc add ... root pie" nor "tc qdisc change ... stab data 32=
-768
-> size_log 15 cell_log 0" changes dev->mtu or dev->hard_header_len, so dumm=
-y0
-> keeps its ether_setup() defaults of 1500 + 14 =3D 1514.  That is already =
-inside
-> [1, 1<<20], so clamp_t() returns the same value and the reproducer sees n=
-o
-> difference before or after the patch.  Shouldn't the steps include someth=
-ing
-> like "ip link set dev dummy0 mtu 2147483634" (which dummy allows, since
-> dummy_setup() leaves dev->min_mtu =3D 0 and dev->max_mtu =3D 0)?
->
-> Also, does the size table have any bearing here?  A TCA_STAB table only
-> affects qdisc_skb_cb(skb)->pkt_len via __qdisc_calculate_pkt_len(), which=
- is
-> already capped:
->
-> net/sched/sch_api.c:__qdisc_calculate_pkt_len() {
->         ...
->         pkt_len =3D clamp_t(int, pkt_len, 1, QDISC_PKT_LEN_MAX);
->         ...
-> }
->
-> and pie_qdisc_enqueue() does not use it as packet_size:
->
-> net/sched/sch_pie.c:pie_qdisc_enqueue() {
->         ...
->         if (!pie_drop_early(sch, &q->params, &q->vars, sch->qstats.backlo=
-g,
->                             skb->len)) {
->         ...
-> }
->
-> Finally, the divide the message blames is gated on bytemode:
->
-> net/sched/sch_pie.c:pie_drop_early() {
->         ...
->         if (params->bytemode && packet_size <=3D mtu)
->                 local_prob =3D (u64)packet_size * div_u64(local_prob, mtu=
-);
->         ...
-> }
->
-> and bytemode is off by default:
->
-> include/net/pie.h:pie_params_init() {
->         ...
->         params->bytemode =3D false;
->         ...
-> }
->
-> Since the listed commands never pass bytemode, is that branch ever reache=
-d in
-> the reproducer?  Could the "Conditions to recreate the bug" section be up=
-dated
-> to raise the MTU and enable bytemode, so that the Tested-by tag correspon=
-ds to
-> a sequence that exercises the clamped value and the divide?
->
-> >  {
-> >       u64 rnd;
-> >       u64 local_prob =3D vars->prob;
-> > -     u32 mtu =3D psched_mtu(qdisc_dev(sch));
-> > +     u32 mtu =3D clamp_t(u32, psched_mtu(qdisc_dev(sch)), 1, 1 << 20);
->
-> --
-> Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
-set/QDISC-0CFC.v3.20260901204856%40mojatatu.com
+ - resume enables vdd, start_meas() fails, the supply stays on.
+
+ - the part is then powered but idle, so it NACKs the stop command.
+   suspend() returns early on that error and never disables vdd, so the
+   system cannot suspend any more until rebind.  This one hurts most.
+
+ - if regulator_enable() fails in resume, the next suspend disables a
+   supply that was never enabled: "unbalanced disables" in the regulator
+   core, and -EIO.  Unbind hits the same case.
+
+The original patch fixes the first one only.
+
+Patch 1 tracks the supply state and drives enable/disable from it.
+Patch 2 adds KUnit tests with a fake i2c adapter and a counting
+regulator, so no hardware is needed:
+
+  ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/iio/flow
+
+Four of the eight tests fail without patch 1.
+
+[1] https://lore.kernel.org/linux-iio/20260901025010.356735-1-dayou5941@163.com/
+
+Signed-off-by: Wadim Mueller <wafgo01@gmail.com>
+---
+Wadim Mueller (2):
+      iio: flow: slf3s: keep the vdd supply balanced across suspend/resume
+      iio: flow: slf3s: add KUnit tests for the PM regulator balance
+
+ MAINTAINERS                    |   2 +
+ drivers/iio/flow/.kunitconfig  |   6 +
+ drivers/iio/flow/Kconfig       |  15 +
+ drivers/iio/flow/Makefile      |   1 +
+ drivers/iio/flow/slf3s-kunit.c | 734 +++++++++++++++++++++++++++++++++++++++++
+ drivers/iio/flow/slf3s.c       |  35 +-
+ 6 files changed, 787 insertions(+), 6 deletions(-)
+---
+base-commit: bc35965f6940a9bf834d54187b6088b8eb09206d
+change-id: 20260904-iio-slf3s-pm-regulator-kunit-43ee079b36f0
+
+Best regards,
+-- 
+Wadim Mueller <wafgo01@gmail.com>
+
