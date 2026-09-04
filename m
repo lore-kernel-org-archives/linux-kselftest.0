@@ -1,126 +1,166 @@
-Received: from mta1.migadu.com (out-102.mta1.migadu.com [95.215.58.102])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B8C43E0080
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 08:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.102
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582623D45F7;
+	Fri,  4 Sep 2026 08:30:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788509725; cv=none; b=GaekZYe5mbVyfSFMnshOYGpM/SfthMLiCoBRC9rkJ9p+R7kh6jzVO5aUC02nuLlHHv3+RjwM+qMD3gzyRzDctdXS5NBVqRwWPp74ECvEv8Ki0v4C/8ZDjirccj5lhPGeeNRWLciwc5vH6F62chJ4AVPWRKWr3eOrnOxsBOradWk=
+	t=1788510631; cv=none; b=Z9dogKX0luP51g8m0R1uvyVEpqDKvXgecz5sI8OXjpoHQOzLAQQcl+y67awn/edwTSwytP5rhpSLlP2bCCAJZRLdw+lb2VHazYHzqDoijB/IvkyId7gRFpM3DY1CBYGhoIJH+GYSYjEfUw7xZtQnjqZ2LpbLBKXNAsqUskm1RKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788509725; c=relaxed/simple;
-	bh=PvS/b2Z/rWbhXmaZRpQZt7dAKEvw4kUH2lDXouIPU/Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kaoINvcsF53JB9159ckvgy5EV8s88qpMfuIj0OGz+hNxoghk5SjFN/0WuIVJwQIsLdJaxxzwVZVlqafUFdWM799y8ga5U9qJ83vnaHcI8SYyGycpSwBqSb0bJ81CBVAJIZFANf49ODmAg+Xa6RGXiX4/NbBR8lHyUjI1A82/9j4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tK7fuDs/; arc=none smtp.client-ip=95.215.58.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788510631; c=relaxed/simple;
+	bh=+txI98bU7AZdaiB9Ur1ZPh7M8XhE0kJiLvXk4DRyEo8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rBtPNz22JpgbYHpV28t+N6hKN+onD01qMY7mZWf1RKhEleclbAq3pg+ccFTcA1hROHYMd7gImTX8eYKFmiVOExu4Y9jOD8nZ13Dj1zYeeL2tf1eRMnCTS0RsA2H+j0Xb0HqDKj8Jt/9JgcMLdCVwJYQo2V04TPwfzA/w1Ge1Agc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CZqJMm1o; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tK7fuDs/"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=PvS/b2Z/rWbhXmaZRpQZt7dAKEvw4kUH2lDXouIPU/Q=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788509719; v=1; x=1789114519;
- b=tK7fuDs/LKiQDnZg+jday5NS+rCi6phLKcz2VHSMul3M2BUPuiu2w+D2g23jx2CBHDFLmtB2
- nO2gbz57G1WFmvxTwSB5EZNo6OiBtTAUZewe3ggvEVXh5I/QzPbHrFUDIwj5s4Jnd5qORMFc+0f
- ArMHskl8t1u+0WYgW3FZd1YM=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e6edb99a81daf5e0;
-	Fri, 04 Sep 2026 08:15:18 +0000
-X-Mizu-Trace-ID: e6edb99a81daf5e0
-X-Migadu-Flow: FLOW_OUT
-Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b4a0b384b7so3703e87.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 01:15:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBzUvLR7U02RElc/E/mM+Q7vhMGBGtNbQa9ukp86PrMn45uRyXvXTRfcTUzcfcc6T/hvQ/qBXIBYKCcq/Mf6Kqg=@vger.kernel.org
-X-Gm-Message-State: AFuF++mYTr7xwanTxVZw6BIiMp1WslvKsvhkpd/QPiYCLYd+MbeSbRqw
-	BI8hhyDC+COuVdh1cEKDXzTansiYWnJpVL/8Cpms3PFdPFvoJdKhB9tdfSS2jfmS8hAx4qoClIL
-	JLYxoV97S9hEthEZ2RnjYr5OvF/7fmKSZsOqR6aFL
-X-Received: by 2002:a05:6512:1112:b0:5b2:a967:c0e1 with SMTP id
- 2adb3069b0e04-5b616f28401mr90649e87.0.1788509712868; Fri, 04 Sep 2026
- 01:15:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CZqJMm1o"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 514681F00A3E;
+	Fri,  4 Sep 2026 08:30:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788510630;
+	bh=HCwmAHeu39K6xzdfz5VnsF0WOjtNpzC44nH7/8gOAy4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=CZqJMm1ouNXl208Ft0fEiKxNfeGKvX/vYevqxvAjgt3mUsAZ4zWWoBKEtacdgNVu3
+	 NdrOHI/Y0wj0v2Ky/CJtsjXKpIKZ97tpmngMWC7cMxUFniALxG1jJfft4N1rcKqni/
+	 b7NxkjZVjN8OJsqWfTA5uPJ2K0frokB++G7PlG/GWxhj234dutpiPfJCbwwosOuKAD
+	 3NDxzGcdT3YTgKPRwQGZ8cRLyFpJj6F9RPSgWzfvG51164YFMTEm6gBxQVibYZVFBe
+	 jXY10+3ew/ThXJmthFtMLRRFJAHFPZURi3pBQuKzEr8ZMnpr0lVLV/iLUmEH39iMPO
+	 1d2GzSKMmHT8w==
+Date: Fri, 4 Sep 2026 11:30:23 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Song Hu <husong@kylinos.cn>, linux-mm@kvack.org, muchun.song@linux.dev,
+	osalvador@suse.de, david@kernel.org, ljs@kernel.org,
+	liam@infradead.org, vbabka@kernel.org, surenb@google.com,
+	mhocko@suse.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Mina Almasry <almasrymina@google.com>
+Subject: Re: [PATCH 2/2] selftests/mm: restore hidden hugetlb reservation
+ scenarios
+Message-ID: <apqBn7tWDHQeMrzB@kernel.org>
+References: <20260714021630.1063823-1-husong@kylinos.cn>
+ <20260901173748.fb7a442941102894a0c42baa@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260826-arm64-52bit-va-v1-0-14ec98211363@fujitsu.com>
-In-Reply-To: <20260826-arm64-52bit-va-v1-0-14ec98211363@fujitsu.com>
-From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Fri, 4 Sep 2026 09:14:36 +0100
-X-Gmail-Original-Message-ID: <CA+EHjTwPmwPTMcgQB6zt47Kz6NPMr+FkGfq2Qq+Uxu+G427OEg@mail.gmail.com>
-X-Gm-Features: AcwNN1WvopgDxoDNDPRaykUroX4fh4XjNCnUWBoPOLttdFGRxQfbeOfusjQcANY
-Message-ID: <CA+EHjTwPmwPTMcgQB6zt47Kz6NPMr+FkGfq2Qq+Uxu+G427OEg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] 52-bit VA guest mode ID support
-To: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Steffen Eiden <seiden@linux.ibm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Takayuki Okamoto <tokamoto@fujitsu.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260901173748.fb7a442941102894a0c42baa@linux-foundation.org>
 
-Hi Itaru,
+On Tue, Sep 01, 2026 at 05:37:48PM -0700, Andrew Morton wrote:
+> On Tue, 14 Jul 2026 10:16:30 +0800 Song Hu <husong@kylinos.cn> wrote:
+> 
+> > A stray 'continue' in the main loop of charge_reserved_hugetlb.sh made
+> > the "more than reservation", "more than cgroup limit", and "multiple
+> > cgroups" scenarios unreachable, so they never ran.
+> > 
+> > Remove it so the first two run again.
+> 
+> OK.
+> 
+> > The third,
+> > run_multiple_cgroup_test(), is separately broken -- a backslash
+> > line-continuation breaks its local declarations and its hugetlb
+> > reservation accounting does not charge as expected -- and has never run
+> > in CI; skip it explicitly with a comment until fixed.
+> 
+> That's reasonable.  This code was added by Mina six years ago.  But
+> he's still around so let's bug him with a cc ;)
 
+And this code breaks our CI e.g:
 
-On Tue, 25 Aug 2026 at 22:18, Itaru Kitayama <itaru.kitayama@fujitsu.com> wrote:
->
-> This patch series extends the arm64 KVM selftest framework
-> to support 52-bit guest virtual address (VA) modes in addition to
-> the existing 52-bit physical address (PA) configurations.
-> The motivation is to enable validation of LPA2 guest memory-management
-> behaviour in configurations that use a 52-bit VA space.
-> While the selftest framework already supports testing 52-bit PA
-> configurations, it lacks the ability to exercise guests running with
-> 52-bit virtual addresses, leaving part of the LPA2 functionality untested.
+https://github.com/linux-mm/linux-mm/actions/runs/33040981840/job/98414290236
 
-The series adds three 52-bit VA guest modes, but nothing in tree maps
-a guest VA high enough to use them. The mode-iterating tests map at a
-fixed low GVA, so pgd_index() returns 0 and only the first entry of
-the top level is ever used.
-
-What do you expect the modes to catch as they stand? The allocators
-already take a minimum GVA, so mapping high in one of those tests
-looks like a small change.
-
-> To address this, the series introduces new guest modes for 52-bit VA
-> operation, adds five-level page table support where required, and
-> performs runtime detection of host 52-bit VA capability so that
-> LPA2-enabled guest VA tests are executed only on supported systems.
->
-> Testing:
->
-> Built and tested on arm64.
-> Verified on QEMU with a V52-capable guest configuration.
-> Confirmed correct operation of high virtual address mappings by
-> exercising guest memory accesses in the 52-bit VA range.
-
-I could not reproduce "exercising guest memory accesses in the 52-bit
-VA range" with anything in tree either. Could you say which test you
-ran, which guest modes, and on what?
-
-Thanks,
-/fuad
-
-> Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-> Reviewed-by: Takayuki Okamoto <tokamoto@fujitsu.com>
+> > Also correct two
+> > `[[ "$method" == 2"" ]]` typos (harmless empty-string concatenation)
+> > to plain `2`.
+> 
+> OK.
+> 
+> 
+> 
+> From: Song Hu <husong@kylinos.cn>
+> Subject: selftests/mm: restore hidden hugetlb reservation scenarios
+> Date: Tue, 14 Jul 2026 10:16:30 +0800
+> 
+> A stray 'continue' in the main loop of charge_reserved_hugetlb.sh made the
+> "more than reservation", "more than cgroup limit", and "multiple cgroups"
+> scenarios unreachable, so they never ran.
+> 
+> Remove it so the first two run again.  The third,
+> run_multiple_cgroup_test(), is separately broken -- a backslash
+> line-continuation breaks its local declarations and its hugetlb
+> reservation accounting does not charge as expected -- and has never run in
+> CI; skip it explicitly with a comment until fixed.  Also correct two `[[
+> "$method" == 2"" ]]` typos (harmless empty-string concatenation) to plain
+> `2`.
+> 
+> Link: https://lore.kernel.org/20260714021630.1063823-1-husong@kylinos.cn
+> Signed-off-by: Song Hu <husong@kylinos.cn>
+> Reviewed-by: Andrew Morton <akpm@linux-foundation.org>
+> Cc: David Hildenbrand <david@kernel.org>
+> Cc: Liam R. Howlett <liam@infradead.org>
+> Cc: Lorenzo Stoakes <ljs@kernel.org>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Mike Rapoport <rppt@kernel.org>
+> Cc: Muchun Song <muchun.song@linux.dev>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Suren Baghdasaryan <surenb@google.com>
+> Cc: Vlastimil Babka <vbabka@kernel.org>
+> Cc: Mina Almasry <almasrymina@google.com>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 > ---
-> Itaru Kitayama (2):
->       KVM: selftest: arm64: Support 5-level paging in stage 1 translation table
->       KVM: selftests: arm64: Add 52-bit VA guest modes
->
->  .../selftests/kvm/include/arm64/processor.h        |  2 +
->  tools/testing/selftests/kvm/include/kvm_util.h     |  3 +
->  tools/testing/selftests/kvm/lib/arm64/processor.c  | 87 ++++++++++++++++++++--
->  tools/testing/selftests/kvm/lib/guest_modes.c      |  5 ++
->  tools/testing/selftests/kvm/lib/kvm_util.c         | 11 +++
->  5 files changed, 103 insertions(+), 5 deletions(-)
-> ---
-> base-commit: 8d3ae59288f1e7d58d76558a6ee96d533bc5019f
-> change-id: 20260825-arm64-52bit-va-32f1f4cd050d
->
-> Best regards,
-> --
-> Itaru Kitayama <itaru.kitayama@fujitsu.com>
->
+> 
+>  tools/testing/selftests/mm/charge_reserved_hugetlb.sh |   14 +++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
+> 
+> --- a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh~selftests-mm-restore-hidden-hugetlb-reservation-scenarios
+> +++ a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+> @@ -439,11 +439,11 @@ for populate in "" "-o"; do
+>          fi
+>  
+>          # Skip populated shmem tests. Doesn't seem to be supported.
+> -        if [[ "$method" == 2"" ]] && [[ "$populate" == "-o" ]]; then
+> +        if [[ "$method" == 2 ]] && [[ "$populate" == "-o" ]]; then
+>            continue
+>          fi
+>  
+> -        if [[ "$method" == 2"" ]] && [[ "$reserve" == "-n" ]]; then
+> +        if [[ "$method" == 2 ]] && [[ "$reserve" == "-n" ]]; then
+>            continue
+>          fi
+>  
+> @@ -496,7 +496,6 @@ for populate in "" "-o"; do
+>          echo 'PASS'
+>  
+>          cleanup
+> -        continue
+>          echo
+>          echo
+>          echo
+> @@ -530,6 +529,15 @@ for populate in "" "-o"; do
+>  
+>          cleanup
+>  
+> +        # The "multiple cgroups" scenario (run_multiple_cgroup_test) is
+> +        # multiply broken and has never run in CI: a backslash
+> +        # line-continuation breaks its local declarations, it passes
+> +        # reservation sizes in bytes rather than pages (unlike
+> +        # run_test), and its assertions compare page counts to byte
+> +        # values. Skip it until properly rewritten; the two scenarios
+> +        # above are restored by this change.
+> +        continue
+> +
+>          echo
+>          echo
+>          echo
+> _
+> 
+> 
+
+-- 
+Sincerely yours,
+Mike.
