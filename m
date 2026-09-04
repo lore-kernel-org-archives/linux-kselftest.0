@@ -1,62 +1,76 @@
-Received: from mta0.migadu.com (out-26.mta0.migadu.com [91.218.175.26])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49CBF36DA1D
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 03:34:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.26
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680E823BD1B;
+	Fri,  4 Sep 2026 04:13:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788492842; cv=none; b=O0V1l1JppMNhphA852V0ArICb1GeZQldzT1SdYOVmoKaTKLrlQbInZjjtVNhigwiTecyXv4ErKk3wgIhRijxjd9hwyx5qz5QYdTckwptSMon6BqVqzNDP4RG9l2D3H7gEE4P7XOewkfihQO8nkbfw3lahHiargaagzeTF6/oeD4=
+	t=1788495222; cv=none; b=HV+8y1K6fQuawHTN6Rtsf3hDjIsTJiP2GtnRJy5bxryQkmAzH5C+6dz+Xs8alwa5dDrq/lVlFw/8jYmUhtG3kqg/+crp94G5SV5rAtzNkkmwdFZUwUUaZLjTjD+981r5KF40ItvU0ztmsBg0koW9gC7mEC7KP/pnDJ+PKSfdpYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788492842; c=relaxed/simple;
-	bh=UCfOPeXkp6R0OzJhvrLuIKNSK5w1HFIK/p1igY0h6so=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=J8QzU3fVQ/dxaw3HkLZDIHaulCbl6f+Lm+Q1sMOm3RSIhhe7o+/PSBXIkm/rjV+S3c5PQ6nQm41C602d2NLAzn3o8Lvcg423zMXddlqIZmmZH5U+aH0UILClxxi417FpbufPzAzOjf95rSVQv6zbSCAlkui8Bt5czkZ9l7ltNJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gKMfNA54; arc=none smtp.client-ip=91.218.175.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788495222; c=relaxed/simple;
+	bh=Ovg+QgZFjgwPM6VxGpptzrugWCyGFgm1zCQ39i/p8W8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=c7Y3vMeFlS8Ens47C9dSLmSmSKVq4xkuD7++6bA1FvCNHEnN97gOFDZkjXbw0Z5pOqCs6vcWwFYdLrPg1DO2oyojK5rvh7udEExo+M7sQ1lE8NKmGZlqspSI4vq+iBcrh07qbJdZw03BMo2RByIGKil6+ifHAvYH++9O0SOEi9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FlL32qaH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gKMfNA54"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=UCfOPeXkp6R0OzJhvrLuIKNSK5w1HFIK/p1igY0h6so=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788492839; v=1; x=1789097639;
- b=gKMfNA54zU+0RE7nIWpnAKOD/sbLVMzKOyKa1fPQKu5fxptNSyybv6M36AgWviZ3TSNdMw5O
- +JymGpysYvI0sMwcBow7I3Nd5VgUl9HwEoyXFJ0eUzRP2wax9of73hqHhU/rWfFZNYFQBaCI0p9
- 2GyDjSfBTZg4rALboMyfq1+0=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9e4d589e8816b580;
-	Fri, 04 Sep 2026 03:33:59 +0000
-X-Mizu-Trace-ID: 9e4d589e8816b580
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <070c7aa5-404d-472d-bc63-4f8865f05b0e@linux.dev>
-Date: Fri, 4 Sep 2026 09:03:52 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FlL32qaH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDD0C1F00A3D;
+	Fri,  4 Sep 2026 04:13:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788495219;
+	bh=Ovg+QgZFjgwPM6VxGpptzrugWCyGFgm1zCQ39i/p8W8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=FlL32qaHfcA1RJ7GJu0KbLvf+B3sB2GXkgBWqruEijyDZdcTShQzRXu8AIRQfpCmt
+	 dniEimjbRRhPR9KW1Nf9rBhvZaEBFYki6OfoyBL5HeO2Y+ovqFraVZYVGsEqWZ+4+p
+	 ojyX+Ag3lOtJg6pqvpKZKhtcnYKESXgWXt4w9PLfFOwE5506lunSRbQ8ismNre2p5y
+	 5/JF0gAI6zRr/m5NxJeITdazR6Jze3+JAAKoQ5DDUlxZcomBl8YYQSijR3jkBCFSiS
+	 WeV8LObrxWvPCZ9HBmMJAXzkKKKXCrKInGG/wefabpXUArLb/QB8j0buov1vAImPf1
+	 t/kznrsxUCkmQ==
+Content-Type: multipart/mixed; boundary="===============4158003370620922930=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Mailer snafu (was Re: [RFC bpf-next 2/6] bpf: move the linked-scalar
- flags into bpf_reg_state->flags [NFC])
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: Eduard Zingerman <eddyz87@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260814231945.3884596-1-vineet.gupta@linux.dev>
- <20260814231945.3884596-3-vineet.gupta@linux.dev>
- <82363647cb12b75398e34c7d66a9f0c527940c8d.camel@gmail.com>
- <c145728c-80fd-459f-be72-f5e0fcdeaf25@linux.dev>
-Content-Language: en-US
-In-Reply-To: <c145728c-80fd-459f-be72-f5e0fcdeaf25@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Message-Id: <4fc647167cbe57eccef94e639af9c89c00481b0c06a23df95a8ac27dea12edc0@mail.kernel.org>
+In-Reply-To: <20260904031912.2133476-2-tweek@google.com>
+References: <20260904031912.2133476-2-tweek@google.com>
+Subject: Re: [PATCH bpf-next 2/2] bpftool: Reject non-autoload programs for light skeletons
+From: bot+bpf-ci@kernel.org
+To: tweek@google.com,qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,shuah@kernel.org,leon.hwang@linux.dev,emil@etsalapatis.com,tweek@google.com
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,ihor.solodrai@linux.dev,sidnayyar@google.com,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri,  4 Sep 2026 04:13:38 +0000 (UTC)
 
-On 9/4/26 08:59, Vineet Gupta wrote:
+--===============4158003370620922930==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
 
-Apologies for the multiple re-sends, this was some mailer snafu at my end.
+PiBjb21taXQgMmY1OWQyNTQ0MjI3M2EzZGQ0ZTQ2YmQ0YTc3Y2E0YmJmMTYzM2UzYwo+IEF1dGhv
+cjogVGhpw6liYXVkIFdla3N0ZWVuIDx0d2Vla0Bnb29nbGUuY29tPgo+IERhdGU6ICAgRnJpIFNl
+cCA0IDEzOjE5OjEyIDIwMjYgKzEwMDAKPgo+ICAgICBicGZ0b29sOiBSZWplY3Qgbm9uLWF1dG9s
+b2FkIHByb2dyYW1zIGZvciBsaWdodCBza2VsZXRvbnMKPgo+ICAgICBXaGVuIGdlbmVyYXRpbmcg
+YSBsaWdodCBza2VsZXRvbiAoYnBmdG9vbCBnZW4gc2tlbGV0b24gLUwpLCB0aGVyZSBpcyBubwo+
+ICAgICBsaWJicGYgcnVudGltZSBvYmplY3Qgb3IgYnBmX3Byb2dyYW1fX3NldF9hdXRvbG9hZCgp
+IEFQSSBhdmFpbGFibGUgdG8KPiAgICAgZW5hYmxlL2Rpc2FibGUgdGhlIGF1dG9sb2FkaW5nIG9m
+IHByb2dyYW1zLiBJZiBhIEJQRiBwcm9ncmFtIGluIHRoZQo+ICAgICBvYmplY3QgaGFzIGF1dG9s
+b2FkIGRpc2FibGVkIChlLmcuIHZpYSBTRUMoIj8uLi4iKSksIGJwZl9vYmplY3RfX2xvYWQoKQo+
+ICAgICBzaWxlbnRseSBza2lwcyBsb2FkaW5nIGl0LiBicGZ0b29sIHN0aWxsIGdlbmVyYXRlcyBz
+dHJ1Y3QgYnBmX3Byb2dfZGVzYwo+ICAgICBmaWVsZHMgYW5kIGF0dGFjaCBmdW5jdGlvbnMgaW4g
+dGhlIGxpZ2h0IHNrZWxldG9uIGhlYWRlciwgbGVhdmluZwo+ICAgICBza2VsLT5wcm9ncy48bmFt
+ZT4ucHJvZ19mZCB1bmluaXRpYWxpemVkICgwKS4KPgo+ICAgICBFeHBsaWNpdGx5IHJlamVjdCBu
+b24tYXV0b2xvYWRlZCBwcm9ncmFtcyB3aGVuIHVzZV9sb2FkZXIgaXMgdHJ1ZSB3aXRoCj4gICAg
+IGFuIGVycm9yIG1lc3NhZ2UsIHByZXZlbnRpbmcgdGhlIGdlbmVyYXRpb24gb2YgYnJva2VuIGxp
+Z2h0IHNrZWxldG9uCj4gICAgIGhlYWRlcnMuCj4KPiAgICAgU2lnbmVkLW9mZi1ieTogVGhpw6li
+YXVkIFdla3N0ZWVuIDx0d2Vla0Bnb29nbGUuY29tPgoKVGhpcyBsb29rcyBsaWtlIGEgYnVnIGZp
+eCBmb3IgbGlnaHQgc2tlbGV0b24gZ2VuZXJhdGlvbi4gU2hvdWxkIHRoaXMKaW5jbHVkZSBhIEZp
+eGVzOiB0YWc/CgogIEZpeGVzOiBkNTEwMjk2ZDMzMWEgKCJicGZ0b29sOiBVc2Ugc3lzY2FsbC9s
+b2FkZXIgcHJvZ3JhbSBpbiBcInByb2cgbG9hZFwiIGFuZCBcImdlbiBza2VsZXRvblwiIGNvbW1h
+bmQuIikKCgotLS0KQUkgcmV2aWV3ZWQgeW91ciBwYXRjaC4gUGxlYXNlIGZpeCB0aGUgYnVnIG9y
+IGVtYWlsIHJlcGx5IHdoeSBpdCdzIG5vdCBhIGJ1Zy4KU2VlOiBodHRwczovL2dpdGh1Yi5jb20v
+a2VybmVsLXBhdGNoZXMvdm10ZXN0L2Jsb2IvbWFzdGVyL2NpL2NsYXVkZS9SRUFETUUubWQKCkNJ
+IHJ1biBzdW1tYXJ5OiBodHRwczovL2dpdGh1Yi5jb20va2VybmVsLXBhdGNoZXMvYnBmL2FjdGlv
+bnMvcnVucy8zMzgzMzU2NzY3Mg==
 
+--===============4158003370620922930==--
