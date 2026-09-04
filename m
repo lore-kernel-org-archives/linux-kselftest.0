@@ -1,64 +1,65 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F87483807
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 13:25:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B034A2E3B
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 13:50:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788528305; cv=none; b=Nv1FTuf0XUa/UcrORJRkgIuMz7qL5Cbk7SiuICQtGLIILCjPtVrIHuT2HNizjYTdlX2WzfW2GxjAiATdBuQQKqvBEoUImHuKCGSCQTQQHHZ9ow74vtbvoF0oGcQj6QxrbZysj37YLC6LLnEBK4simqGA1cPleXcsfatOdmyMg4k=
+	t=1788529851; cv=none; b=kDNEyeWwdKGwL8VsUgfiwBYTZ4kFXACOBn0oSjPibzTR2gRS0OYn8dD1cmjy8hOKji35DAdXkQFb8Ektv4LWTdvTRSvuMH9PGvA41gPH84FW3tDaADr1T/XU33vSEqnjU0+fV902bwLd7ymuMdE2FcZjH5YHk1yr3u6Z2aD0Zqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788528305; c=relaxed/simple;
-	bh=7IrgWckgLXmOp+bSbt2l3lsAkLznjIprg/+l63INEHk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=SfV86MwC+xebKXXLWFBIOZeVKof1SRwtqV+2Z9f9ZfLkgLgOgr12ii+MGcMB6JFXL/+Y9F1QKvtMazCA2X7ykiHQbXLQ0901D6qMjaLuy20WeDDHuwH8ofz59bA+RFOi/l7To+sUpaVA4yADfCU7mon7qFtuPJkPTgqohdbilc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Io5VVGDp; arc=none smtp.client-ip=209.85.128.177
+	s=arc-20240116; t=1788529851; c=relaxed/simple;
+	bh=Z8hNnyHSVmt549ei10OsDc7fux/5aK6L6Q+U/yY2ZJw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=DjKbfAbCb+OZjaafdNTCtyntLqEWr46dAq+mVA8ClrXWHjDnCJkSVBa1row2IUNIdNZxPET0MQcocNLeAEs+JiuW5hTfe9kboXQ/g0kET1G7OcCJIve3ygI8vHz87ydc1/cSbzO0ZfJ4+NGsGl34RqrJE3eNl4siZR/LlBD2f3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TQFelx79; arc=none smtp.client-ip=209.85.160.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Io5VVGDp"
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-8200b55dc47so12010797b3.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 06:25:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TQFelx79"
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-52eaeddc837so10025161cf.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 06:50:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788528301; x=1789133101; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=gmail.com; s=20251104; t=1788529849; x=1789134649; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=EUxRc34t0qU8FOfG0VqqQu2j6hNUb8g29gyCmIO8xCk=;
-        b=Io5VVGDp+CZ4sCDGBJWKIvbBPJiL7wXPujE8eqUiy2X6aLrwI6V0GFNbQXCRooi4W6
-         Qv5uZ/hg1BMjSoax92jJEjOcRy92hppD5AEQHcoe/O5Dq7KBu2k9c2pZ8B3Bpld8afcE
-         wuM87A8bwdwP1lgwmI1ZktnAli1WGSTI5YNC7TlPLXUc2ymBT0EMQ9jwa9V29vtMZBq5
-         wJa7XJTZO8ERQw1jeQYt5PEVEsdK2bRNFCQFlFJSEYDaA4lHUPIEP7y58oqzk1qd1APh
-         UWHvjbNVibFz9VdcOa8UaxbWYmof45ePAT9TcR2qwvsIZOnD7LXS48aPU7YLQImIFvXy
-         4eCA==
+        bh=RloxBmq1OFFdMW2QFzzJPyBKTHQtM11rCubg4Pmtdw0=;
+        b=TQFelx79SVUXXk6lPuhJkCpNgaMkUrKUBvxqQfxohmyi9xBVmosK/MQjKHh6cJDyOc
+         osRB1ymPJcn7Cv+hbYnmld0znVmwVN20tnZZas/tFaar2aXm2/nV++oBqfK1VEkvVwvk
+         FQ2FAmermUrsgjpeDDBOCnSofvfnRQ33piuv0X8JVt5fzJo5EVy7DxWUHVwAHmFbLDkd
+         QJ9R9g6p3baFaj4+zUR1I2OWxDOVzISlhO3wADzQkzwf9PJ2CejpVpInaA6xQksstza2
+         VNqFu7xMhyFVGbwoRwQVDe2dhEOK/lGGa2GmGTjDnxhc1GLT7kw24Nsod6YXjDxPJX/w
+         KLKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788528301; x=1789133101;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1788529849; x=1789134649;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=EUxRc34t0qU8FOfG0VqqQu2j6hNUb8g29gyCmIO8xCk=;
-        b=LACUPVgoEci4uRXFCJGJpB/q5FlQgqPavSyHvCCrkMjNHSvbvci1OKNGn17nw8zHEr
-         R7B8L26m/Ze4Yr5tEDYKl+5Xi6CahSXDE6oPwRYbiNGfAprdMEanbsXGz0hf0sYODLGi
-         yIvfU6E//VRqLbZX/36GzcY6ON7I2BYyLNYeV9OELwQ7IP7r8+A51uCzMMEyJXN4vCEB
-         opFJmCPmtK1qfTcrSKAa7jZ61jusSqlXS8cQEs1xlv2KMbBQPiUEVWqfS0IDpgIzLaZH
-         lUpeZZ03oaab25bNRjjE6OcgP4wJwjp3OlejS/ObSpewM3yntIkqx007IBQdDPvDLLSO
-         9EHg==
-X-Forwarded-Encrypted: i=1; AKwUvBwVSIcXKMUBbI75ygM8KegQmaaStgTd4+7lbpB5FH6GyrFJJb9oP7SPTIURER0DPyby2Y6LeULdMAYyYvohlVE=@vger.kernel.org
-X-Gm-Message-State: AFuF++mQU+TNfSdp4dQhOlgCCbmx6BuGqh6QiyYlZLvYL8y6TIS9DXlM
-	R4PbIOmIoGZcINM4K8WA3FQG5YoDfymwo9gJhQXNH77mMkSAgL6ohgio
-X-Gm-Gg: AYBFou2HTw4r30LsbjjLPV7cegacYDeUkv3z8VuCut4zvrbEJCOrx0y9YcReNK/X65N
-	QUfsjO20UxI4aAE0I3za8thGPSlpumJqgmdNAh/xP/AaQfaCvTVOQja/HfLrKgzvUY14nEN4RFc
-	W4enq0qzbRWlM61xk9e5BuFB0g2f1deplFohCCc0ZMP2QvOWnSfNXwfJNFuCMWAYKnXQYRYsQ0u
-	XqpdN5j7z2kzfzpS6KVthEoUxo+9g4S9e+nOXbX+lCJR1QsLFlKVYPSkMqySjg5va6uknuHsLP0
-	4AmTldGqrBHtilB+OvJDOqdW+IJVAA149fwz0myi++GUq9gfh5B+wkmGY2ANBoR4DlImLkkbuZO
-	o9J3xS6HrgUr9hF1j8t2G4RyY/xcOVjROscFVgg5bN8ygZNv7+kAGfYnMkQ0kY8Q9kQm76gmxNU
-	fTzm4GNfV2z13Ovr/QkStVw/rdGPRtgT8DxL3OtC6dJVGS/OwXQuqASQA8pBbntobJcQ==
-X-Received: by 2002:a05:690c:dd3:b0:873:5c6b:a2ff with SMTP id 00721157ae682-8735c6ba63bmr2923997b3.45.1788528301340;
-        Fri, 04 Sep 2026 06:25:01 -0700 (PDT)
+        bh=RloxBmq1OFFdMW2QFzzJPyBKTHQtM11rCubg4Pmtdw0=;
+        b=VCxp1832E8hDlaH5hSQali8gSvofCl69w3tJUFS+Eo7ouEdmeValXK5xR/Fo51dczq
+         Ez/39c2MZuBc9S4xpafbCY8vBQ2Z5K4/a2Yy0KKbAOWxNylQcEWVTz7EN7LdpqLWbiNl
+         u3xtX6/JTuE+iK6TgYBGhfrgWdoL7Bo0ATA4oXd+3hSpLHDpz5nEAzDi65/4kPbvZVs7
+         XR6vBSyWzQg9o+RqlOyjxAjtH+3YgEi3y4yyaPECOcnEH2F3DxONJLIODLq8dDlObDPy
+         00Cp3t3P/LmYle7pltI3YtBZO6Pihev9h4/w3yhMcVAc7rlyNUYtyftVEu5cxAxejtz2
+         tbVQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzMkHBT3awUETpy6PoIrklVkbrHdArnYzHsNF67DBX7wFjfpSBRy2sZ4/zwoPt0P6U0f8N8CjFgpK6JlD8IWhs=@vger.kernel.org
+X-Gm-Message-State: AFuF++lyPcqrFbuIGbAkCFGWIpn3auh4z9i3dBr9wSVyLv5b1/xAMuCE
+	ZcCha5Ug7LgqR9jEVc8zalPRRKwZUDPsUd0O77uxQTERZQoUBCAENhM5
+X-Gm-Gg: AYBFou0csAfRPBNd74N3QPxBHYop53HCZCZTzLsW6ZdrYsnGEawtHjko+ETiKO1gAYk
+	X3kkIYAaU1+HvISJmSLtWwCt1Rsdlxl/hwZK4Nan1db7d/OWjYjLcSG2D5ln0bxBd8P78C4q6a5
+	XcTQQZ5MrTeogwFqkTnpR0T0uyfw8gq4SSfl4W62jXPMny23v6ZJ58DMgch45aho2O+iBfq/Yoq
+	iJL/ff3+FbvGJ/vThDYbWIfK9XsuxnHIJVIKYJRQdGsl6a4amoEIOKxbPe05NQ5AV8u5Fl2kDyX
+	MDo6iFt/Ca4C0vPyJz55mXwZ/qK3+7Z/2vRoEhS4Y7ZjKsloBJYNH8490FFvVIxT6YwfBfTNiYC
+	KdnY8xP0/TW3IMprazz3yrqwuns/EwwX8VoAtlb8bUgXdM5h8wFurCqV5iBAty2FgqhPA1ikPFN
+	Vd2MKTqBkk43sKV4phkuNQLziIPf90LsCPfXxyzYFyx1YBRPNHZCm5w65RPZ00DaHuJhb1xCBON
+	jFc
+X-Received: by 2002:ac8:5945:0:b0:530:42d4:4c9a with SMTP id d75a77b69052e-53054a34924mr61953591cf.44.1788529848638;
+        Fri, 04 Sep 2026 06:50:48 -0700 (PDT)
 Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-910406bbb79sm20079006d6.47.2026.09.04.06.24.58
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-910406940f3sm20714426d6.38.2026.09.04.06.50.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Sep 2026 06:25:00 -0700 (PDT)
+        Fri, 04 Sep 2026 06:50:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,8 +68,14 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 04 Sep 2026 09:24:58 -0400
-Message-Id: <DL6KD9FKLYQ8.1HD909WP9YA21@gmail.com>
+Date: Fri, 04 Sep 2026 09:50:45 -0400
+Message-Id: <DL6KX0CC3BM1.1GLV02ZNIK4M2@gmail.com>
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+To: "Tariq Toukan" <tariqt@nvidia.com>, "Andrew Lunn"
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ <netdev@vger.kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Sabrina
+ Dubroca" <sd@queasysnail.net>
 Cc: "Aleksandr Loktionov" <aleksandr.loktionov@intel.com>, "Alexei Lazar"
  <alazar@nvidia.com>, "Alexei Starovoitov" <ast@kernel.org>, "Allison
  Henderson" <allison.henderson@oracle.com>, "Antonio Quartulli"
@@ -93,46 +100,46 @@ Cc: "Aleksandr Loktionov" <aleksandr.loktionov@intel.com>, "Alexei Lazar"
  "Simon Horman" <horms@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>,
  "Stanislav Fomichev" <sdf.kernel@gmail.com>, "Willem de Bruijn"
  <willemb@google.com>, "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>
-Subject: Re: [PATCH net-next V3 01/15] net/mlx5e: Generalize TC <-> IPsec
- mutual exclusion
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-To: "Tariq Toukan" <tariqt@nvidia.com>, "Andrew Lunn"
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- <netdev@vger.kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Sabrina
- Dubroca" <sd@queasysnail.net>
+Subject: Re: [PATCH net-next V3 15/15] selftests: drv-net: Add PSP HW GRO
+ conformance tests
 X-Mailer: aerc 0.21.0-threadmapfix
 References: <20260903085215.3691657-1-tariqt@nvidia.com>
- <20260903085215.3691657-2-tariqt@nvidia.com>
-In-Reply-To: <20260903085215.3691657-2-tariqt@nvidia.com>
+ <20260903085215.3691657-16-tariqt@nvidia.com>
+In-Reply-To: <20260903085215.3691657-16-tariqt@nvidia.com>
 
 On Thu Sep 3, 2026 at 4:52 AM EDT, Tariq Toukan wrote:
-> -#ifdef CONFIG_MLX5_ESWITCH
-> -static int mlx5e_ipsec_block_tc_offload(struct mlx5_core_dev *mdev)
-> -{
-> -	struct mlx5_eswitch *esw =3D mdev->priv.eswitch;
-> -	int err =3D 0;
-> -
-> -	if (esw) {
-> -		err =3D mlx5_esw_lock(esw);
+> From: Cosmin Ratiu <cratiu@nvidia.com>
+>
+> Add PSP conformance tests using the same gro helper binary as gro.py
+> does, but in --psp mode. SPIs are procured by psp_gro.py from a real PSP
+> device and handed off to the gro sender & receiver. The sender crafts
+> and encrypts packets in software, the receiver relies fully on the HW to
+> decrypt, decapsulate and do HW GRO.
+>
+> Because the NIC decrypts and decapsulates before the frames reach the
+> receiver AF_PACKET tap, it sees the plain frames and the assertions
+> remain exactly the same as gro.py.
+>
+> So these tests verify, at length, that the device does PSP HW-GRO the
+> same way as plain TCP.
+>
+> Additional PSP-specific tests are defined to check that GRO doesn't
+> merge packets across PSP versions, SPIs, encryption-status, etc.
+>
+> Some tests from gro.py are not included because they don't work:
+> - ip_csum: the checksum is recomputed by psp_dev_rcv().
+> - tcp_csum: packets are marked with CHECKSUM_UNNECESSARY.
+> - ip_frag4/ip_frag6: PSP is incompatible with IP fragmentation.
+> - IPv6 extension header tests: PSP doesn't deal with IPv6 ext headers.
+>
+> Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
+> Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
+> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+> ---
+>  .../testing/selftests/drivers/net/gro_lib.py  |  14 +-
+>  .../testing/selftests/drivers/net/hw/Makefile |  17 ++
+>  .../selftests/drivers/net/hw/psp_gro.py       | 172 ++++++++++++++++++
 
-This appears to the last caller of mlx5_esw_lock(), so the function will
-be dead code after this patch.
-
-> -		if (err)
-> -			return err;
-> -	}
-> -
-> -	if (mdev->num_block_ipsec) {
-> -		err =3D -EBUSY;
-> -		goto unlock;
-> -	}
-> -
-> -	mdev->num_block_tc++;
-> -
-> -unlock:
-> -	if (esw)
-> -		mlx5_esw_unlock(esw);
-> -
-> -	return err;
-> -}
+There's a chance I don't use the config snippets correctly, but I don't
+include configs from parent directories. So maybe add CONFIG_INET_PSP=3Dy
+to ./tools/testing/selftests/drivers/net/hw/config?
