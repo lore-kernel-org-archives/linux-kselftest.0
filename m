@@ -1,117 +1,307 @@
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+Received: from mta0.migadu.com (out-225.mta0.migadu.com [91.218.175.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16F1D36DA1D
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 03:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043D336EAAE
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 03:29:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788491962; cv=none; b=tP2oCHXREENxFZKrq8HAXCLlzpI9KAYY8H+quTp9s1w2W5sNhpvxnAy3xjpGAHaFx2a8iXfd5oN4L+kM/UBP9Yi/7cWoE/gvjt/jIbbvBpDr0WykH1+LIzaDjnksdxqwBsu7OiW2FnOB8qwIBqx/oeR54PeeMmN0aKcZ8LNDQCY=
+	t=1788492587; cv=none; b=brsX/aLuv8hn3b0KC5WXggiXKg4mcqpxvxdqyScADz4JMa6DiYOkRmeB1TdV02uAyAfEOiZ23yJBJR8gX8sMIXU3yaVBnwUlbc9kiBjaDuHvHk0t7PRAfJA1Z5uk3xO8x2Ck2Zwa00eZ7gjd1V1LjtAZ3c/ke2oDbrE6jBX+D0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788491962; c=relaxed/simple;
-	bh=sj0RgPHdzxSRWqefTbTBLEc9iMK6VIez0GYU13p6wyA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=mgsl6+aCGV1L57IJsiAlMF58O/TF532lx0/N7Io5TOB0oZMajd0uh276lgddvE+cqOspZQaA2xig/c8UETwRqa62IEONCyt+zhXe0eGRtBskbgfBriKupOZm5J4ErIIxZSlZqC91eCkGCr1K6vHVjevJ0mGDdHdcgWB8cpj0L+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cQDWyO4q; arc=none smtp.client-ip=209.85.214.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com
+	s=arc-20240116; t=1788492587; c=relaxed/simple;
+	bh=OQpB0E9Xye+9Bzc2bw778HFeVMgqZ7Q5znttxHan1uM=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=qZIFwGjXw5NqFXUzg2634zWoteWh3TmewPhUOQHcQ8+gGP69lwjZJkL8MAclfMf2Az9Lr0LAnxx10W1Dv+NjdBlUUEAzYh69DvufZ7uE/xTTTYBY7pxVPyvhue73l7QjO0WMSgl2SlaOxJOZKafkQz3pyUHKr21+7K3f0O7DLAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ah00+lGR; arc=none smtp.client-ip=91.218.175.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cQDWyO4q"
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2d7443e0f0bso9301295ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 20:19:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788491960; x=1789096760; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=UUeuOmPr3qwVczVid/enr8NtWC6XGI8w6N5wrcZYCKc=;
-        b=cQDWyO4qWQdE0deOrvGxZBzlU4kids2miaS17h0LE75KIYEaADOUsm7AN+2i7t7ZEc
-         hMmqPUfY1LCQW9YVj1btxec6L4L4/VPSzen2op8TpVIpwOpFPk7ETG/nwKXuYxpApSVW
-         GpTasvE2kOA6waLz6uYM3IBHkfYQe44fz11XsIKSe7K1ddP1Zi66ODJFoIwswCyzhTXR
-         tyr94RN161BnW7ev954LFqwJYHS4qq3hoXXcZWKbW/pwOty2w0cPde8S6OrtRrVlQwqG
-         Zmp6Y2hhKN/HLXjhrB9z3YmRoMG/MeT0o986MVo4yUN90kIVPjAKOiWiZKgRUL7lN107
-         9GQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788491960; x=1789096760;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UUeuOmPr3qwVczVid/enr8NtWC6XGI8w6N5wrcZYCKc=;
-        b=mMXvkTU3IV5ZydErF+sEF+fnNjv1MonMv82DA36sLfDJzQ8sCBlTId5mG14ujajvNq
-         XmVwR6ZHnuoik268DBZo3SmhSMEeVGyuQXLR8RyL1nLVrkPd5vUmVvg2vYRyFJRJKZHa
-         iV0i/CZOJNqO01d2Z5lo0wtHmTskS5KK+TcgYcb5V2mFHIuoZT4C9Y808U5GNsi1974e
-         YBe7iliUSsq2aX+cNIoXJe9jvgt5M0F7tDwePPtSTOdiWZqLCCUpOVAb9At9vXx8WXFB
-         gjWmGhwj+yyjqHynCgrPdXjmGvSKHcOJYHAykujDFhg4ptt1ktz7uWb/m/ySQVEXGW0e
-         Nczw==
-X-Forwarded-Encrypted: i=1; AKwUvByUNAp8DAtz8kjMBIUow9kg1vng/jjZ/VaGvPvZqXqecKyUSd2+RImaM5mW/FKV2GKMU4GR3VLl1WsJM8ljrNI=@vger.kernel.org
-X-Gm-Message-State: AFuF++kb0NV5Iu2FX//us68JZyAIDWPu0Uf6FcT24xRqmEk6RNy5Rw0P
-	/4AG5vCVRRUGcraoX+E/t1rfJudUq7Adgty4YwtldoaWOE3WbHRlZyE7cQ2LUwCQfDGwcXYmY+x
-	/xA==
-X-Received: from plmd12.prod.google.com ([2002:a17:903:ecc:b0:2d7:f5:4c1d])
- (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:4b27:b0:2cc:f5b8:4c2e
- with SMTP id d9443c01a7336-2db12496889mr48356665ad.9.1788491959817; Thu, 03
- Sep 2026 20:19:19 -0700 (PDT)
-Date: Fri,  4 Sep 2026 13:19:12 +1000
-In-Reply-To: <20260904031912.2133476-1-tweek@google.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ah00+lGR"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=OQpB0E9Xye+9Bzc2bw778HFeVMgqZ7Q5znttxHan1uM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788492582; v=1; x=1789097382;
+ b=Ah00+lGRtNXYXOB6gdOTsw7fD9TnkF+sZvlqkiZ4vbmVLN/M50n6ykVznwWPJxnkPxiXW3DT
+ Gic15IxNV5b/3insmA2H1uz+6Ol+Fn3AXNWh2A4Lj9/PAIy6w+JEj9g0oS6nyd1EeWu0Kw2kq0p
+ tijgcOQOg7XuduDVKUlWz+VA=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4a993d0f922b9332;
+	Fri, 04 Sep 2026 03:29:42 +0000
+X-Mizu-Trace-ID: 4a993d0f922b9332
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <c145728c-80fd-459f-be72-f5e0fcdeaf25@linux.dev>
+Date: Fri, 4 Sep 2026 08:59:32 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260904031912.2133476-1-tweek@google.com>
-X-Mailer: git-send-email 2.55.0.979.g7e5102b832-goog
-Message-ID: <20260904031912.2133476-2-tweek@google.com>
-Subject: [PATCH bpf-next 2/2] bpftool: Reject non-autoload programs for light skeletons
-From: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
-To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Leon Hwang <leon.hwang@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	"=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Sid Nayyar <sidnayyar@google.com>, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Subject: Re: [RFC bpf-next 2/6] bpf: move the linked-scalar flags into
+ bpf_reg_state->flags [NFC]
+To: Eduard Zingerman <eddyz87@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260814231945.3884596-1-vineet.gupta@linux.dev>
+ <20260814231945.3884596-3-vineet.gupta@linux.dev>
+ <82363647cb12b75398e34c7d66a9f0c527940c8d.camel@gmail.com>
+Content-Language: en-US
+In-Reply-To: <82363647cb12b75398e34c7d66a9f0c527940c8d.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-When generating a light skeleton (bpftool gen skeleton -L), there is no
-libbpf runtime object or bpf_program__set_autoload() API available to
-enable/disable the autoloading of programs. If a BPF program in the
-object has autoload disabled (e.g. via SEC("?...")), bpf_object__load()
-silently skips loading it. bpftool still generates struct bpf_prog_desc
-fields and attach functions in the light skeleton header, leaving
-skel->progs.<name>.prog_fd uninitialized (0).
+On 8/19/26 4:21 AM, Eduard Zingerman wrote:
+> On Fri, 2026-08-14 at 16:19 -0700, Vineet Gupta wrote:
+>
+> +#define BPF_FLAG_ADD_CONST32	(1U << 0)
+> +#define BPF_FLAG_ADD_CONST64	(1U << 1)
+> +#define BPF_FLAG_ADD_CONST	(BPF_FLAG_ADD_CONST32 | BPF_FLAG_ADD_CONST64)
+>   #define BPF_FLAG_PRECISE	(1U << 7)
+> I'd still suggest to use bitfields.
 
-Explicitly reject non-autoloaded programs when use_loader is true with
-an error message, preventing the generation of broken light skeleton
-headers.
+Done.
 
-Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
----
- tools/bpf/bpftool/gen.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+FWIW I've used enum bitfields which guarantees type safety for mutual 
+exclusions of 32 and 64 flags.
 
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index a50540ef6521..1583150241c8 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -1340,6 +1340,12 @@ static int do_skeleton(int argc, char **argv)
- 	}
- 	bpf_object__for_each_program(prog, obj) {
- 		prog_cnt++;
-+
-+		if (use_loader && !bpf_program__autoload(prog)) {
-+			p_err("program '%s' is marked as non-autoload, which is not supported f=
-or light skeletons",
-+			      bpf_program__name(prog));
-+			return -1;
-+		}
- 	}
-=20
- 	get_header_guard(header_guard, obj_name, "SKEL_H");
---=20
-2.55.0.979.g7e5102b832-goog
+>> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+>> index f7a0314fa106..d3105b9a9965 100644
+>> --- a/kernel/bpf/states.c
+>> +++ b/kernel/bpf/states.c
+>> @@ -370,12 +370,12 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+>>    * to cur_id=0 and pass. With temp IDs: r6 maps X->temp1, r7 tries to map
+>>    * X->temp2, but X is already mapped to temp1, so the check fails correctly.
+>>    *
+>> - * When old_id has BPF_ADD_CONST set, the compound id (base | flag) and the
+>> - * base id (flag stripped) must both map consistently. Example: old has
+>> - * r2.id=A, r3.id=A|flag (r3 = r2 + delta), cur has r2.id=B, r3.id=C|flag
+>> - * (r3 derived from unrelated r4). Without the base check, idmap gets two
+>> - * independent entries A->B and A|flag->C|flag, missing that A->C conflicts
+>> - * with A->B. The base ID cross-check catches this.
+>> + * ->id is a plain identifier -- the ADD_CONST relationship lives in
+>> + * ->flags -- so there is no compound (base | flag) key to unpack here.
+>> + * Registers sharing a base id go through one idmap entry, which is what
+>> + * catches e.g. old r2.id=A, r3.id=A (r3 = r2 + delta) against cur r2.id=B,
+>> + * r3.id=C: A->B and A->C conflict. Matching ->flags and ->delta are checked
+>> + * by the caller in regsafe().
+> Nit: the above paragraph can be dropped altogether now.
 
+Done.
+
+>>    */
+>>   static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+>>   {
+>> @@ -384,15 +384,7 @@ static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+>>
+>>   	cur_id = cur_id ? cur_id : ++idmap->tmp_id_gen;
+>>
+>> -	if (!check_ids(old_id, cur_id, idmap))
+>> -		return false;
+>> -	if (old_id & BPF_ADD_CONST) {
+>> -		old_id &= ~BPF_ADD_CONST;
+>> -		cur_id &= ~BPF_ADD_CONST;
+>> -		if (!check_ids(old_id, cur_id, idmap))
+>> -			return false;
+>> -	}
+>> -	return true;
+>> +	return check_ids(old_id, cur_id, idmap);
+>>   }
+> I think sashiko is correct when it comments about:
+>
+>> Does the explore_alu_limits verification path also need a similar update?
+> Both check_scalar_ids() call sites need an update.
+> That being said, I'd say that the following case in regsafe()
+>
+> 		if (env->explore_alu_limits) {
+> 			/* explore_alu_limits disables tnum_in() and range_within()
+> 			 * logic and requires everything to be strict
+> 			 */
+> 			return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
+> 			       check_scalar_ids(rold->id, rcur->id, idmap);
+> 		}
+>
+>
+> can be replaced with `if (...) return regs_exact(rold, rcur, idmap)`,
+> parent_id should be zero for SCALAR_VALUE.
+
+And actually this can be moved out to the NFC patch.
+
+Re. the next instance of check_scalar_ids () call - there is no direct 
+change to that effect - the check for flags above it (existing for 
+add_const, new for  sugreg) provide the coverage.
+
+One thing that did came up out of this deliberations and related.
+
+The NFC patch 1 moved the flags out but didn't update regs_exact() for 
+checking the add_const flag explicitly which was happening implicitly 
+before the series. Turns out that causes the NFC to accept the following 
+incorrectly.
+
+        old {r1.id=A, r2.id=A+delta}  vs cur {r1.id=B, r2.id=B}
+
+If regs_exact () is updated in the NFC, it fixes above. But it also 
+starts rejecting (correctly) something that pre-series was not.
+
+        old {r2.id=A+delta32}         vs cur {r2.id=B+delta64}
+
+Which is fine, except it is no longer NFC.
+
+So what would your preference be: NFC + addon patch (with 1 patch 
+regression of a hard to hit test) or fold the fix and remove the NFC label.
+
+>>   static void __clean_func_state(struct bpf_verifier_env *env,
+>> @@ -488,11 +480,32 @@ static int clean_verifier_state(struct bpf_verifier_env *env,
+>>   	return 0;
+>>   }
+>>
+>> +/*
+>> + * Do rold and rcur describe the same relationship to their ->id set?
+>> + *
+>> + * The link flags live in ->flags, which sits past the end of every memcmp()
+>> + * window used for state comparison.
+> --- 8< ----------------------------
+>                                          and check_ids() only ever sees the plain
+>> + * ->id. So unlike when these bits rode along in the top of ->id, they have to
+>> + * be compared explicitly everywhere ->id is.
+> ---------------------------- >8 ---
+>
+> Nit: let's drop this sentence.
+
+The actual helper below is gone in v2 so this is gone too.
+
+>> + *
+>> + * Only meaningful when rold carries an id: the flags are only ever set
+>> + * together with one, so rold->id == 0 implies none of them is set.
+>> + */
+>> +static bool link_flags_match(const struct bpf_reg_state *rold,
+>> +			     const struct bpf_reg_state *rcur)
+>> +{
+>> +	if (!rold->id)
+>> +		return true;
+>> +
+>> +	return (rold->flags & BPF_FLAG_ADD_CONST) == (rcur->flags & BPF_FLAG_ADD_CONST);
+>> +}
+>> +
+> ...
+>
+>> @@ -590,17 +603,24 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+>>   		 */
+>>
+>>   		/*
+>> -		 * ADD_CONST flags must match exactly: BPF_ADD_CONST32 and
+>> -		 * BPF_ADD_CONST64 have different linking semantics in
+>> +		 * ADD_CONST flags must match exactly: BPF_FLAG_ADD_CONST32 and
+>> +		 * BPF_FLAG_ADD_CONST64 have different linking semantics in
+>>   		 * sync_linked_regs() (alu32 zero-extends, alu64 does not),
+>>   		 * so pruning across different flag types is unsafe.
+>>   		 */
+>> -		if (rold->id &&
+>> -		    (rold->id & BPF_ADD_CONST) != (rcur->id & BPF_ADD_CONST))
+>> +		if (!link_flags_match(rold, rcur))
+>>   			return false;
+>>
+>> -		/* Both have offset linkage: offsets must match */
+>> -		if ((rold->id & BPF_ADD_CONST) && rold->delta != rcur->delta)
+>> +		/*
+>> +		 * Both have offset linkage: offsets must match. The rold->id
+>> +		 * test is redundant today -- BPF_FLAG_ADD_CONST is only ever set
+>> +		 * together with an id -- but it used to be structural, because
+>> +		 * the flag lived in the id itself. Keep it explicit so the
+>> +		 * invariant does not rest on every ->id = 0 site remembering to
+>> +		 * clear ->flags too.
+>> +		 */
+> Nit: Let's shorten this comment to it's original form.
+>       A comment on ->flags field saying that "->flags != 0 iff ->id != 0" should suffice.
+>       Let's also drop the 'rold->id && ' part.
+
+Done.
+
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 8925749d636e..93e69116ca9e 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -1806,6 +1806,7 @@ static void __mark_reg_known(struct bpf_reg_state *reg, u64 imm)
+>>   	       offsetof(struct bpf_reg_state, var_off) - sizeof(reg->type));
+>>   	reg->id = 0;
+>>   	reg->parent_id = 0;
+>> +	reg->flags &= ~BPF_FLAG_ADD_CONST;
+>>   	___mark_reg_known(reg, imm);
+>>   }
+>>
+>> @@ -3308,6 +3309,7 @@ static void clear_scalar_id(struct bpf_reg_state *reg)
+>>   {
+>>   	reg->id = 0;
+>>   	reg->delta = 0;
+>> +	reg->flags &= ~BPF_FLAG_ADD_CONST;
+>>   }
+> sashiko is correct about the following branch in the
+> check_stack_write_fixed_off():
+>
+> 		if (!reg_value_fits)
+> 			state->stack[spi].spilled_ptr.id = 0;
+>
+> this seem to be the only missing location, the rest deals with
+> pointers, where ->flags should already be zero.
+
+Now clear_scalar_id(&state->stack[spi].spilled_ptr)
+
+>> @@ -15950,18 +15951,19 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+>>   				: &vstate->frame[e->frameno]->stack[e->spi].spilled_ptr;
+>>   		if (reg->type != SCALAR_VALUE || reg == known_reg)
+>>   			continue;
+>> -		if ((reg->id & ~BPF_ADD_CONST) != (known_reg->id & ~BPF_ADD_CONST))
+>> +		if (reg->id != known_reg->id)
+>>   			continue;
+>>   		/*
+>>   		 * Skip mixed 32/64-bit links: the delta relationship doesn't
+>>   		 * hold across different ALU widths.
+>>   		 */
+>> -		if (((reg->id ^ known_reg->id) & BPF_ADD_CONST) == BPF_ADD_CONST)
+>> +		if (((reg->flags ^ known_reg->flags) & BPF_FLAG_ADD_CONST) == BPF_FLAG_ADD_CONST)
+>>   			continue;
+>> -		if ((!(reg->id & BPF_ADD_CONST) && !(known_reg->id & BPF_ADD_CONST)) ||
+>> +		if ((!(reg->flags & BPF_FLAG_ADD_CONST) && !(known_reg->flags & BPF_FLAG_ADD_CONST)) ||
+>>   		    reg->delta == known_reg->delta) {
+>>   			*reg = *known_reg;
+>>   		} else {
+>> +			u8 saved_add_const = reg->flags & BPF_FLAG_ADD_CONST;
+>        ---------------------^
+>>      |         	s32 saved_off = reg->delta;
+>>      | 		u32 saved_id = reg->id;
+>>      |
+>> @@ -|5976,11 +15978,12 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+>>      | 		 */
+>>      | 		reg->delta = saved_off;
+>>      | 	        reg->id = saved_id;
+>> +   | 		reg->flags = (reg->flags & ~BPF_FLAG_ADD_CONST) | saved_add_const;
+>>      -----------------------^
+>        I'm not sure we need to inherit flags from known_reg here.
+>        Let's avoid that and go with just saved_flags.
+
+Done.
+
+>> --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+>> +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+>> @@ -349,8 +349,9 @@ l0_%=:							\
+>>   }
+>>
+>>   /*
+>> - * Test that sync_linked_regs() checks reg->id (the linked target register)
+>> - * for BPF_ADD_CONST32 rather than known_reg->id (the branch register).
+>> + * Test that sync_linked_regs() consults reg->flags (the linked target
+>                                     ^^^^^^^^
+>                                 nit: checks
+>> + * register) for BPF_FLAG_ADD_CONST32, not just known_reg->flags (the branch
+>> + * register): the gate is (reg->flags | known_reg->flags).
+>                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 nit: please drop.
+
+Fixed.
+
+Thx,
+-Vineet
