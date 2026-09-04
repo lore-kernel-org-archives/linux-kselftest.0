@@ -1,240 +1,184 @@
-Received: from mta0.migadu.com (out-4.mta0.migadu.com [91.218.175.4])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC96044BC82
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 09:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 577C839D6DA;
+	Fri,  4 Sep 2026 09:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788515442; cv=none; b=DQI1TKKx34aibSiGZ8rtZ0otBEezUQCaxJmke+orXjh2D4YQgTc8m+uA7sk2PKD+QrQrFhqKUDIPvjv2Nj1U2XfJVTRqX5NP9aQzTQvTObbTROjRJ6MooZEGD2Vs8ZFsTjnLvjYObk8Q3/N2D3ui+JFtUPdDxAY1CHhgMTik8zI=
+	t=1788515770; cv=none; b=vEIChIyRS4Omq6xwUIYW+3Q6aoMDPFpwk7kQ2vdU+kvtEOlnJjA22WPMbJpZkdmaDhZZsJnUtGj/Bt7Tl+eb4w8ZthP231mP6TRRGITHCCWWVSoO7OAxZbkX95UPt5LJCwpPVGGddxw5q0w4DtvcVppeJM9H+a5h2uwWC0pjWbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788515442; c=relaxed/simple;
-	bh=SlBX3aTzVhnrj3tpy1KFU3P3FZH9l3Z5w+HhiJfNOS0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cIyUbYvr8VkrvE53jwRw5rXUiCS7lJsNPF0Bg/GdkBiw6PykeJMUMeF5fJJftBSvFPUlHrHmJb9JKUeg1M8CflSLbBX1ZfPJcZd18O/wOgMehycxjwv+g76vo/ZnF1xmaI+k+6anDZykkrgcrcDQBAJ7F/htoUDIv6f+pnLvyKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CNOYj9kk; arc=none smtp.client-ip=91.218.175.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788515770; c=relaxed/simple;
+	bh=gnIBxKwtZtizljDf8ntnc5PsKurT8mkgOoph4B8t5LI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VXrkvAToVtT1JW3XMfrD90mR58cWb+QMhJeJXU6936umn4ayIBW5hl2UyErBc94AetdXJkPYFS5N+wf/LjBjxdbyGoRgnOeDU4kN2SvxBIIfD70CKnL3FF+cvbORHJReQMm8IV9aqqKXyIo1bOGXi5tJCyJk3rl0B3nb3+LQYB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=0UfkgZLG; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=+4h++arR; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ad1QSPu6; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=BNvHZQEx; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CNOYj9kk"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=SlBX3aTzVhnrj3tpy1KFU3P3FZH9l3Z5w+HhiJfNOS0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788515438; v=1; x=1789120238;
- b=CNOYj9kk3xz6BdYqI2vnZcLTXFzYquqq4z8jWxFdEZxcUacTMsiSk9UcUBRdJf8NVlhCr2UK
- 9CL72jS1sfFtyQkYfqTBOtxns/mTackaCijXvOLH/UGdKawK9o2kZ0+S9zqTUPiXNbLhbcWadXJ
- QShIigQGhs/orKUZcUfqs5Zg=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 3206c25e4c7eaa95;
-	Fri, 04 Sep 2026 09:50:38 +0000
-X-Mizu-Trace-ID: 3206c25e4c7eaa95
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Aditi Ghag <aditi.ghag@isovalent.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Test bpf_sock_destroy() on a TIME_WAIT sock
-Date: Fri,  4 Sep 2026 17:49:37 +0800
-Message-ID: <20260904094954.63447-2-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260904094954.63447-1-jiayuan.chen@linux.dev>
-References: <20260904094954.63447-1-jiayuan.chen@linux.dev>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="0UfkgZLG";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="+4h++arR";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ad1QSPu6";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="BNvHZQEx"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 32E891F7C1;
+	Fri,  4 Sep 2026 09:55:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1788515754; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DWnOsR3taajAx5HxQdLrn4oIj0S+37+jF+NaGCzhb2U=;
+	b=0UfkgZLGuceFVSXFhOXCo3bxuMJ/ajW/SjffHOn74F0at0FcRmV49AeQ5hyGC83Kd2rkz/
+	SCA+luHV89CZ9lAPn0tgbT98Y+Ggnw1dXkF73z5Y67zcXenuB2IGg/aSkVXNnR/zXtNFsU
+	g5YRfJTfTDBzKarYT0aJUsfOciJr8b4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1788515754;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DWnOsR3taajAx5HxQdLrn4oIj0S+37+jF+NaGCzhb2U=;
+	b=+4h++arRnl4FJbmh9/Vyp9J7QnfSbWLNoe3HTDCMTwA/eiG0QbkUvjvH0NU0guqMHpeh/q
+	hjDf1JNztScsFEBA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=ad1QSPu6;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=BNvHZQEx
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1788515750; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DWnOsR3taajAx5HxQdLrn4oIj0S+37+jF+NaGCzhb2U=;
+	b=ad1QSPu6lJxN90Ow+Xg3moi/PVFKz5+jCa6LpBWejhp/Q5swAHdJSOy3FQk6VShnYjXheu
+	yrZGoxs9tbdRDgCDvWI+gZSd9tSOZMp5TJV5+RkaxnROpL63+vI+41Oi6SsCR5zUHnKSeg
+	5ExFBG+qWtL670H8SE7qFSX59co5esY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1788515750;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DWnOsR3taajAx5HxQdLrn4oIj0S+37+jF+NaGCzhb2U=;
+	b=BNvHZQExiGh1+LTbXnIpigowoCkEO/5O6Uic8NBtADtD4i1BYpJjQfjdWuwJsqdnxuiZBd
+	5w+stBh0rXm9TMCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 10CAA13678;
+	Fri,  4 Sep 2026 09:55:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id t8IUBKaVmmqEKgAAD6G6ig
+	(envelope-from <jack@suse.cz>); Fri, 04 Sep 2026 09:55:50 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 9CC8CA13CE; Fri, 04 Sep 2026 11:55:45 +0200 (CEST)
+Date: Fri, 4 Sep 2026 11:55:45 +0200
+From: Jan Kara <jack@suse.cz>
+To: Tigran Aivazian <aivazian.tigran@gmail.com>
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Jan Kara <jack@suse.cz>, Jakub Kicinski <kuba@kernel.org>, 
+	Namjae Jeon <linkinjeon@kernel.org>, Hisam Mehboob <hisamshar@gmail.com>, 
+	Martin =?utf-8?Q?Kepplinger-Novakovi=C4=87?= <martink@posteo.de>, Christian Brauner <brauner@kernel.org>, 
+	Amir Goldstein <amir73il@gmail.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
+	Lorenzo Stoakes <ljs@kernel.org>, Eric Biggers <ebiggers@kernel.org>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, David Howells <dhowells@redhat.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Theodore Ts'o <tytso@mit.edu>, 
+	Catalin Iacob <iacobcatalin@gmail.com>, Stephen Hemminger <stephen@networkplumber.org>, 
+	Andrew Lunn <andrew@lunn.ch>, "Maciej W. Rozycki" <macro@orcam.me.uk>, 
+	Andrei Vagin <avagin@gmail.com>, Wei Yang <richard.weiyang@gmail.com>, 
+	Bhavik Sachdev <b.sachdev1904@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Wang Yan <wangyan01@kylinos.cn>, Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>, 
+	Malaya Kumar Rout <malayarout91@gmail.com>, linux-doc@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Luis de Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH] bfs: remove the filesystem
+Message-ID: <35dsgpk5dsh6bm4xoblrq6hdslfvtuibl5grzag37cye2hgepk@rkrtkjxdyk5g>
+References: <20260904082954.48738-1-enelsonmoore@gmail.com>
+ <CAK+_RL=RHfRLDc=Ldjx1p8KTHSKeELjnBpxEqYjwWX_8ur1hOw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK+_RL=RHfRLDc=Ldjx1p8KTHSKeELjnBpxEqYjwWX_8ur1hOw@mail.gmail.com>
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: 32E891F7C1
+X-Spamd-Result: default: False [-2.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_TWELVE(0.00)[42];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_COUNT_THREE(0.00)[3];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[gmail.com,linuxfoundation.org,infradead.org,ellerman.id.au,kernel.org,suse.cz,posteo.de,linux-m68k.org,redhat.com,alpha.franken.de,mit.edu,networkplumber.org,lunn.ch,orcam.me.uk,linux-foundation.org,kylinos.cn,vger.kernel.org,lists.ozlabs.org,lwn.net,linux.ibm.com,zeniv.linux.org.uk];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	R_RATELIMIT(0.00)[to_ip_from(RLx5fqm8k6as49t7tzapjazi4f)];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.cz:dkim]
+X-Spam-Flag: NO
+X-Spam-Score: -2.51
 
-Add a tcp_timewait subtest. The client shuts down first and the server
-closes after it, so the client sock ends up in TIME_WAIT. A tcp iterator
-then finds the timewait sock by the cookie it inherited from the client
-sock and destroys it. Iterate once more to make sure it is gone.
+Hello!
 
-Without the previous fix bpf_sock_destroy() reads past the timewait sock
-and KASAN complains.
+On Fri 04-09-26 09:51:10, Tigran Aivazian wrote:
+> On Fri, 4 Sept 2026 at 09:30, Ethan Nelson-Moore <enelsonmoore@gmail.com> wrote:
+> >
+> > BFS (not to be confused with BeFS, the BeOS filesystem) is the
+> > filesystem UnixWare uses for its boot partition. It has extremely
+> > limited functionality, only supporting contiguous files and no
+> > subdirectories. Even though the bfs driver is very small and is
+> > unlikely to cause future maintenance problems, given that the only type
+> > of data stored on such a partition is likely to be kernels and
+> > bootloader settings, there is very little reason anyone would want to
+> > access it from Linux. Other old Unix filesystems (efs, freevxfs) have
+> > been removed recently, and bfs is highly unlikely to have any users, so
+> > remove it as well. Retain the UAPI header to be safe.
+> 
+> You are right that probably no one would want to use BFS for storing the
+> actual data today. But some things have didactical value, rather than
+> mere pragmatic usage. It is the didactic value of MINIX (and its
+> limitations wrt making use of the wonderful capabilities of i386) that
+> has originally triggered the creation of Linux. But back to BFS: it is
+> actually used in Steve Pate's book "Linux Filesystems" (2024, unfinished
+> yet), which is a sequel to his excellent classic "UNIX Filesystems"
+> (2003), as an illustration of a particularly simple filesystem
+> implementation.
 
-  ./test_progs -a sock_destroy
+So I agree BFS is simple. In fact so simple that I was confused by how it
+can get away with not implementing certain bits when having to modify it
+couple months ago when doing some fs-wide fixes :). Regarding didactical
+value, we currently also have minix and ext2 implementations more or less
+for educational purposes so frankly, I don't think we need a third one.
 
-  #444/1   sock_destroy/tcp_client:OK
-  #444/2   sock_destroy/tcp_server:OK
-  #444/3   sock_destroy/tcp_timewait:OK
-  #444/4   sock_destroy/udp_client:OK
-  #444/5   sock_destroy/udp_server:OK
-  #444/6   sock_destroy/trace_tcp_destroy_sock:OK
-  #444     sock_destroy:OK
-  Summary: 1/6 PASSED, 0 SKIPPED, 0/0 FAILED
-
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../selftests/bpf/prog_tests/sock_destroy.c   | 71 ++++++++++++++++++-
- .../selftests/bpf/progs/sock_destroy_prog.c   | 30 ++++++++
- 2 files changed, 100 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-index 9c11938fe597..b90fab707338 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-@@ -110,6 +110,74 @@ static void test_tcp_server(struct sock_destroy_prog *skel)
- 		close(serv);
- }
- 
-+static void test_tcp_timewait(struct sock_destroy_prog *skel)
-+{
-+	int serv = -1, clien = -1, accept_serv = -1, n;
-+	struct timeval tv = {};
-+	char buf[1];
-+
-+	serv = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
-+	if (!ASSERT_GE(serv, 0, "start_server"))
-+		goto cleanup;
-+
-+	clien = connect_to_fd(serv, 0);
-+	if (!ASSERT_GE(clien, 0, "connect_to_fd"))
-+		goto cleanup;
-+
-+	accept_serv = accept(serv, NULL, NULL);
-+	if (!ASSERT_GE(accept_serv, 0, "serv accept"))
-+		goto cleanup;
-+
-+	/*
-+	 * Active close from the client, then close the server side. Once
-+	 * recv() sees EOF the server FIN has been processed and the client
-+	 * sock is in TIME_WAIT. Block without timeout so a loaded CI box
-+	 * can't race us.
-+	 */
-+	if (!ASSERT_OK(setsockopt(clien, SOL_SOCKET, SO_RCVTIMEO, &tv,
-+				  sizeof(tv)), "clear rcvtimeo"))
-+		goto cleanup;
-+	if (!ASSERT_OK(shutdown(clien, SHUT_WR), "client shutdown"))
-+		goto cleanup;
-+
-+	/*
-+	 * Make sure the server has seen the client FIN before it closes,
-+	 * so the two FINs never cross.
-+	 */
-+	n = recv(accept_serv, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(n, 0, "server recv EOF"))
-+		goto cleanup;
-+
-+	close(accept_serv);
-+	accept_serv = -1;
-+
-+	/* block until return EOF */
-+	n = recv(clien, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(n, 0, "client recv EOF"))
-+		goto cleanup;
-+
-+	/* Run iterator program that destroys the timewait client sock. */
-+	skel->bss->tw_found = 0;
-+	start_iter_sockets(skel->progs.iter_tcp6_timewait);
-+	if (!ASSERT_EQ(skel->bss->tw_found, 1, "timewait sock found"))
-+		goto cleanup;
-+
-+	ASSERT_OK(skel->bss->tw_destroy_err, "destroy timewait sock");
-+
-+	/* The destroyed timewait sock must be gone. */
-+	skel->bss->tw_found = 0;
-+	start_iter_sockets(skel->progs.iter_tcp6_timewait);
-+	ASSERT_EQ(skel->bss->tw_found, 0, "timewait sock destroyed");
-+
-+cleanup:
-+	if (clien != -1)
-+		close(clien);
-+	if (accept_serv != -1)
-+		close(accept_serv);
-+	if (serv != -1)
-+		close(serv);
-+}
-+
- static void test_udp_client(struct sock_destroy_prog *skel)
- {
- 	int serv = -1, clien = -1, n = 0;
-@@ -204,11 +272,12 @@ void test_sock_destroy(void)
- 		test_tcp_client(skel);
- 	if (test__start_subtest("tcp_server"))
- 		test_tcp_server(skel);
-+	if (test__start_subtest("tcp_timewait"))
-+		test_tcp_timewait(skel);
- 	if (test__start_subtest("udp_client"))
- 		test_udp_client(skel);
- 	if (test__start_subtest("udp_server"))
- 		test_udp_server(skel);
--
- 	RUN_TESTS(sock_destroy_prog_fail);
- 
- cleanup:
-diff --git a/tools/testing/selftests/bpf/progs/sock_destroy_prog.c b/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-index 9e0bf7a54cec..0a8887543218 100644
---- a/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-+++ b/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-@@ -7,6 +7,8 @@
- #include "bpf_tracing_net.h"
- 
- __be16 serv_port = 0;
-+int tw_found = 0;
-+int tw_destroy_err = 0;
- 
- int bpf_sock_destroy(struct sock_common *sk) __ksym;
- 
-@@ -100,6 +102,34 @@ int iter_tcp6_server(struct bpf_iter__tcp *ctx)
- 	return 0;
- }
- 
-+SEC("iter/tcp")
-+int iter_tcp6_timewait(struct bpf_iter__tcp *ctx)
-+{
-+	struct sock_common *sk_common = ctx->sk_common;
-+	__u64 *val;
-+	int key = 0;
-+
-+	if (!sk_common)
-+		return 0;
-+
-+	if (sk_common->skc_family != AF_INET6)
-+		return 0;
-+
-+	if (!bpf_skc_to_tcp_timewait_sock(sk_common))
-+		return 0;
-+
-+	val = bpf_map_lookup_elem(&tcp_conn_sockets, &key);
-+	if (!val)
-+		return 0;
-+	/* The timewait sock inherits the cookie of the closed client sock. */
-+	if (bpf_get_socket_cookie(sk_common) != *val)
-+		return 0;
-+
-+	tw_found++;
-+	tw_destroy_err = bpf_sock_destroy(sk_common);
-+
-+	return 0;
-+}
- 
- SEC("iter/udp")
- int iter_udp6_client(struct bpf_iter__udp *ctx)
+								Honza
 -- 
-2.43.0
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
