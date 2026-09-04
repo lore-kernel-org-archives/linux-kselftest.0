@@ -1,113 +1,112 @@
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-161.mta0.migadu.com [91.218.175.161])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44E5428470
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 07:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.121
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08EEB3CE4B1
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 07:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788505713; cv=none; b=Pzljnj7IGdbkVwbzC4Y9kE3q6VJgXZi1FoiNET3YCuNBy+GljoiAIqIPe/uURyliP5htQXsNWf2q2nB3CG27NbZCCNqszuMynBz2QUe/hZZp6QDR4wdDMNDJ0zPQcirq4X1eCx9P5yUSlQ3XydPOF4ZIXLZcHh00bYNZKJSwuNs=
+	t=1788507487; cv=none; b=UPk1PKJlCpOXBPneqRK6zNklUTau0aJcitsXrGOtdf1cwr+RKNdAEBzI9luZhUY4uwIzQu8UNAafxpLoDfrpUokZViohK3/N8owFKV8LI4om8VdogBvtJrGqM+BzcAlX99A3p4xRo9DEEJbjGt4nZqNay19LkDcfbRM420nhk0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788505713; c=relaxed/simple;
-	bh=NnQjpzn6CGMRD6O72dRGkPUHGjT4QxWUT9cjQpmy96g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=NgEpMuzqdSWrKMyeOLUVMM+TN1+9xaN2fUd5GcBm55FjqVgguAMiU6DgQbhxHwikZh7d2oZiTsjqfnPLfmdNoMlqhqlNkIQlG8ZDfbc4mFbOS4leh6s0xTypPMSKt7Vr7pz3eZHewntJxbNewpGGLjqAIq1Oz/SXdLoWWoCP2S0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=rTymczZb; arc=none smtp.client-ip=185.125.188.121
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1788507487; c=relaxed/simple;
+	bh=ut1RAeTmhP4u08aElYbIvkNLEWQ6+/R9w+gyuZCJDQc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=stWb5hs7nphjMS50+xK/FqNGJfxwZoQsL5SbJW7O1SughEfn0ED49KDi/G/FCTPVOAA07NCV22i/pcjkbP57OsCS73t8Jdl+mh7xBW6Ge3aovXtMtoGY09J9Lc1FHr0CXMGcDued4SjgeaLjSmcPSvBtiBBjX7+W49OaT9m4Wok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=srORfhAa; arc=none smtp.client-ip=91.218.175.161
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="rTymczZb"
-Received: from [192.168.1.5] (unknown [120.244.199.14])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 264AC40015;
-	Fri,  4 Sep 2026 07:08:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1788505707;
-	bh=DYttTYfHxpoEEJlZ2AGa1sb7qtr4zgMWxVBn/4zbexg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type;
-	b=rTymczZbQC5z0ujyHNbaoOO0gZnoOXmOB0y0Rol55KwvJ3J43qgCI285ZcpRMzGh/
-	 nREGIma2cpoWcvxw7grVfLZVucwM4Css5prmVnFGoWXjTBVeZ6ccHNszXH8XMsVEiT
-	 idckFRj/hP/07StYrxr2sm6DqX/BrwZuCsjT50aF6dFc13zW55/w3vm8OgGtujOEeM
-	 AEDt1rUpOzYTHlp/vn8Esq1Z5brwSIGzF23/MYAEfOFV8Bd8jLhSwPykB4GUe+ZKYd
-	 FTPSL2X6RO6lOq+Ce8nnubPHXmwwdUl+SKseLhXttUjXo6NaNAvoR0HOSBJSDNOliA
-	 f0TJKqZt6EZol2fA+2QGNQ3DKjUForiCD3RDjDI3Ih4Ml8nvDEvfQOBizL8Y27WPEF
-	 vDBQIgbpDFHxFn7v7rSGjMyhTEFIMfKkaEAJpyNVW1MpOLt8uGZ3wskBgwWTHEt9a+
-	 owdIGVb2NUza45JUPyJnlen3LdSw7mVdS5OpAAGPzeFUoovc8jaHS5afNXpl9tROmv
-	 67zHQG+6YLVomDsb6cnVYASY/uNyxraYkEVWW5SyfeVlK3mWkyJVCu2Dxva7XzhK2O
-	 lWcE2jT//ZbIzJ/G+Iq9ZZkTi64TCjBT9U0ooTeKfrI3I2vVDPpil51gxHxSYvckKk
-	 B87zxZIA0s0YD4r0l+ALsar8=
-Message-ID: <a057f075-920f-4673-a9d0-5920a41e02a8@canonical.com>
-Date: Fri, 4 Sep 2026 15:08:21 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="srORfhAa"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ut1RAeTmhP4u08aElYbIvkNLEWQ6+/R9w+gyuZCJDQc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788507475; v=1; x=1789112275;
+ b=srORfhAa2kFxZRsujS7a1e4MDX2+mCI4vxfIGqxRbQ7UegylugzBTmvmsShcvtJgXf1WoQ3u
+ 3RguHQ+D+iGNX7THyirYwrhwSIZ9+iv97E0FsI7GvfNCU3t2JBfPKVNBohPqFkVFXQk6hlAcFWw
+ xCQbY1JkwqOUPIOLdbEMcyfg=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id ba18ad104a91eea3;
+	Fri, 04 Sep 2026 07:37:54 +0000
+X-Mizu-Trace-ID: ba18ad104a91eea3
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v1] selftests/bpf: Fix flaky bpf_nf test when random NAT port is 0
+Date: Fri,  4 Sep 2026 15:37:39 +0800
+Message-ID: <20260904073745.363314-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/efivarfs: skip write tests if efivarfs is
- mounted read-only
-To: Ard Biesheuvel <ardb@kernel.org>, shuah@kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org
-References: <20260820030101.35982-1-hui.wang@canonical.com>
- <9352c070-753a-428e-90b3-5293f1bf3e8b@app.fastmail.com>
- <c1d93383-aed9-4c54-8ad6-d8e3361d73a8@canonical.com>
- <caf1ec53-fef7-41c0-880f-7e403a75d3e7@app.fastmail.com>
-Content-Language: en-US
-From: Hui Wang <hui.wang@canonical.com>
-In-Reply-To: <caf1ec53-fef7-41c0-880f-7e403a75d3e7@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+The bpf_nf test allocs a ct, sets snat and dnat with random addr and
+port via bpf_ct_set_nat_info(), then looks the ct up and checks the
+reply tuple against what was set.
 
-On 9/4/26 14:44, Ard Biesheuvel wrote:
->
-> On Fri, 4 Sep 2026, at 04:06, Hui Wang wrote:
->> The previous mail was rejected by linux-kselftest maillist because the
->> html part is detected. Fixing it and re-sending the mail.
->>
->> On 9/3/26 17:34, Ard Biesheuvel wrote:
->>>>    run_test()
->>>> @@ -74,7 +82,7 @@ test_create_empty()
->>>>    {
->>>>    	local file=$efivarfs_mount/$FUNCNAME-$test_guid
->>>>
->>>> -	: > $file
->>>> +	: 2>/dev/null > $file
->>>>
->>> Why is this needed?
->> The test_create_empty() will be run on read-only efivarfs, and it will
->> print [PASS], but it will also print some noise message with read-only
->> filesystem like:
->>
->> --------------------
->> running test_create_empty
->> --------------------
->> $(TESTCASE_PATH)/efivarfs.sh: line 85:
->> /sys/firmware/efi/efivars/test_create_empty-210be57c-9849-4fc7-a635-e6382d1aec27:
->> Read-only file system
->>     [PASS]
->>
->> This change is for suppressing the noise message and make the output
->> clean like below:
->>
->> --------------------
->> running test_create_empty
->> --------------------
->>     [PASS]
->>
-> That does not make sense.
->
-> If the file does not exist after attempting to create it, the test has failed.
-> But I suspect that this fails even on a read-write efivarfs, given that EFI
-> does not support zero-length variables.
->
-> Please fix this in a separate patch, or leave it alone. Don't paper over it
-> like this.
+The port comes from bpf_get_prandom_u32() and can be 0. For
+bpf_ct_set_nat_info(), port 0 means "port not specified", so only the
+addr is mapped and the kernel keeps the original port. The check then
+compares that port with 0 and fails, which shows up as a flaky
+"Test for source natting" failure in CI [1][2].
 
-OK, got it.
+Keep the random port in 1..65535 so it is always specified.
 
-Thanks.
+[1] https://github.com/kernel-patches/bpf/actions/runs/33830002889/job/100893868791
+[2] https://github.com/kernel-patches/bpf/actions/runs/33829976794/job/100893220999
+
+Fixes: b06b45e82b59 ("selftests/bpf: add tests for bpf_ct_set_nat_info kfunc")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ tools/testing/selftests/bpf/progs/test_bpf_nf.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+index df43649ecb78..eda9b7bbab75 100644
+--- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
++++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+@@ -190,8 +190,8 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+ 	ct = alloc_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
+ 		      sizeof(opts_def));
+ 	if (ct) {
+-		__u16 sport = bpf_get_prandom_u32();
+-		__u16 dport = bpf_get_prandom_u32();
++		__u16 sport = bpf_get_prandom_u32() % 65535 + 1;
++		__u16 dport = bpf_get_prandom_u32() % 65535 + 1;
+ 		union nf_inet_addr saddr = {};
+ 		union nf_inet_addr daddr = {};
+ 		struct nf_conn *ct_ins;
+@@ -293,8 +293,8 @@ nf_ct_opts_new_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *
+ 	ct = alloc_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
+ 		      sizeof(opts_def));
+ 	if (ct) {
+-		__u16 sport = bpf_get_prandom_u32();
+-		__u16 dport = bpf_get_prandom_u32();
++		__u16 sport = bpf_get_prandom_u32() % 65535 + 1;
++		__u16 dport = bpf_get_prandom_u32() % 65535 + 1;
+ 		union nf_inet_addr saddr = {};
+ 		union nf_inet_addr daddr = {};
+ 		struct nf_conn *ct_ins;
+-- 
+2.43.0
 
