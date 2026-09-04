@@ -1,154 +1,134 @@
-Received: from mail-wm2-f2.google.com (mail-wm2-f2.google.com [74.125.225.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74835503BD8
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 16:44:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A2747798F;
+	Fri,  4 Sep 2026 16:46:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788540266; cv=none; b=uOcfDIl1ybJepVyXSlIrLg8E80fO3tmx9wuORKm4Kk1cJ1wCJnti4Uo93juokFxqVRGl9+VoJQFOl6nhfoOsymROLGMaLrHP+ZcKxN0klaOTd6UVpG/jVN/LKGltzCOQ2zy9abP3A5kTsw8USvcOWgYh3MxD4L7eQ5ywwHFeftQ=
+	t=1788540369; cv=none; b=q7CC7wDIg0p9pHXfGq2wUorltAADDbRG22TVO5Qai12syVc6jMuct7669Sn0ycFoFJ9HO8QHJx+wbAeNY0Rb8bcAbsQPdoO00rQvgN2KUT905/aJ0af8xdAQ1ZWROPRmVTg5UhddikceilUKsNm2SY9n1EOOV43xTjNVWPgD9UY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788540266; c=relaxed/simple;
-	bh=+T8uCAV9OTwG6wpyBUuRwrNrLb3w9G4dozxeqmZKwYk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DTj3IGVdfvmiJLb15My2JBjBXqIFl0gcd4jHPGvddqt7BuOnNDraaBuZJEs22wZSO9fXCgndqZIaXGLThKKNbn7wKjzyuxg5o0LBNvNpZvskM+psXVDdYsSriUYpyRseQamPFclzg+3qBtFJbMWyXdcA7lZKCBE3+ILGH08NGa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.225.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm2-f2.google.com with SMTP id 5b1f17b1804b1-4926d058720so3627495e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 09:44:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788540262; x=1789145062;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=MkwLEvNPno1uKGbPkCGLW8m9xq+mdFjkf26jMfmqkHM=;
-        b=QHRZ5APY/AM2pAK/zk6H3CWSnTk0oP9K9CWyQKvCByrprgzAOuJHUSjuuP6FvZFkD7
-         i8odxzyUUOxJkJqpN7EXjhGL7WU53lPWdgP1TjU3ucvpxEp6FVb7RFjWkKlwbCHVjrBC
-         U+di3yDuS8EvOiYWO8MuWUmbAFnjQBcWVJjjkNq/nDXD2n/1nR7ZDvMvwG2unLiBHpUw
-         oh28u2Z88/I1KUy6XXWQEIs159oZtWxqzN4geACuQYR7CG63wBoKPW3y3lHMyAXyGbKF
-         qDlpIjd3tpVfDHoX+xA/d21SQpqop3VMAA6VrUrK84x0zbZFZop5lO9OWMKu1yKAujvU
-         cPFA==
-X-Forwarded-Encrypted: i=1; AKwUvBywJdBhPqqtG4h+CsWjsfq+zxlN+zsPcY3djoghw6U0xs+qkFWEZElBjuDXapHxbSpbH6U5AgBqD1E4OyRgH9E=@vger.kernel.org
-X-Gm-Message-State: AFuF++kuK8cf4+QUHGwKGOqCrOWEzLzUpoXp7aRfEUsLSSkC3N0zGRkQ
-	Vr3GdwnTGHNWBPxb5kEq3ADSndp6zl63sldm2AX/HWOxbwN+2p6wTbnz
-X-Gm-Gg: AYBFou1n8jE8EB04rUF8CZDbCgOhl0ZG6oGZeoo1MXAP5ikcJIayn5tfQeootysyiZa
-	FyD0gamfFdDbVPEGGgKhfloVR8DhLFhC3ND7Yagni0Cmau0/o39aVMcdlUC96JtwwLmLvFremxE
-	GsS1QY5P7gZsFd7luHaBhNqraNzOILHa55rec0GXcsSJ9Oa6Q+BzjOsZPcJ9YmHr1siRxT8mp8S
-	c7VKyUFIhxkZ2AIeXep1cg0IwHARRJWVOCvq29bHMUxAFN0ka7F62CPNU5L624Bm/Jmc6GZyzmD
-	fLUEv6z4TBoXBTcPVBLQ1/LzfKcjii4kHTW5Xumo1duITM/+tYsLHKIaWr6q/Rv3OaOThBY6ZNu
-	mxtmHL+FvhQ+3G7Y1EdAjTRNLPor0T9LEd8Xts+7RnHVEkgRh84Ab8xer6231cvdZTRWwig26ES
-	/7rv73eDmn+aSX4W9dlyMWitoWAeXFXlIXvJgdYsgTirT8/v+ZOyvJ9Xv/dK4KvbFRKmT6y9tps
-	I22a6mvhjMkYw==
-X-Received: by 2002:a05:600c:34d0:b0:49c:fc6e:a3d3 with SMTP id 5b1f17b1804b1-49cfc6ea71amr44437245e9.18.1788540262467;
-        Fri, 04 Sep 2026 09:44:22 -0700 (PDT)
-Received: from [192.168.88.241] (37-48-53-4.nat.epc.tmcz.cz. [37.48.53.4])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cfd3f8192sm42737055e9.3.2026.09.04.09.44.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Sep 2026 09:44:22 -0700 (PDT)
-Message-ID: <4c350065-7efa-4301-b287-95c1c554d427@ovn.org>
-Date: Fri, 4 Sep 2026 18:44:20 +0200
+	s=arc-20240116; t=1788540369; c=relaxed/simple;
+	bh=p/QDGi7MJCxA8soqcqABl6a7rhLa88UYgRiKEbdriGs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=F7+TX+e/OWOROtMF2HE/9BKCppnE8vfGhlVimovf9fqpft1mC+pT4E+rzdODeOB2zjweVf5sJsZGb//VKu09r6mq0hAWobqR7T43K9sa1F7BwPTDWDxpAfVEhLkDVbDhTwMzpK/HssruyWS30fSd3cerEhYHUOtXx+8r4Xw1M3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=UShlwPcl; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=KaGGf68u; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ODVwy5Jr; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Ohap4DB+; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="UShlwPcl";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="KaGGf68u";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ODVwy5Jr";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Ohap4DB+"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 9E269203A4;
+	Fri,  4 Sep 2026 16:45:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1788540355; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=o5Vk7nOeZkCcjmUccwIC3knrNfALT30x9jDi0kHot6E=;
+	b=UShlwPclrh7FHtEs+KEKlAFVg2g5YyEERhzJVOvxdpksayYj3j9QOExmOPBR/RVp8nX1II
+	5REFTcu4DV/JjcqF/hIZun0FpSuEjyMwC3Z5cv0mSgJZJs+LDXGXc3C+TLBh1vxm9aZ01/
+	+XsCYSgt5LbZj1tJ4pu1qayNSEzxxhY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1788540355;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=o5Vk7nOeZkCcjmUccwIC3knrNfALT30x9jDi0kHot6E=;
+	b=KaGGf68uJ6a+1KdU27+C8iBosfL7j6epyxQTTqhSKnFt3rs6VwHKg+bXqK+kxToyrKDOmi
+	ZNzIpzufJ6Rwh6BA==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1788540351; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=o5Vk7nOeZkCcjmUccwIC3knrNfALT30x9jDi0kHot6E=;
+	b=ODVwy5JrvyC4hqCTZYTI3CEF7K0qTPmWs0xwM+lP5hqUxMEEUDUoj1yIyoVZKdNXsNMY1n
+	i8TvwJBrkuyExXgpc6UMdon9dhod334YNJB4RlmXEW8HI5qPN6ijwCtAjFmqPRPT6jOZko
+	rA/RdqGgnnYe17355nCJyPIDR25vrqU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1788540351;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=o5Vk7nOeZkCcjmUccwIC3knrNfALT30x9jDi0kHot6E=;
+	b=Ohap4DB+z72s/6eNe0A15gIl1D8NrM/Kz/pB13pmVDYPTcIlQY/3wsn/dMD6T2TVnByG5I
+	Mzg6+8sLIoIWf6Aw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 0A53713726;
+	Fri,  4 Sep 2026 16:45:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id DXrCK731mmoXVAAAD6G6ig
+	(envelope-from <krisman@suse.de>); Fri, 04 Sep 2026 16:45:49 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Christian Loehle <christian.loehle@arm.com>, Shuah Khan
+ <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Cc: Rama Krishna Katta <ramakrishna.katta@arm.com>, Thomas Gleixner
+ <tglx@kernel.org>, Gregory Price <gourry.memverge@gmail.com>, Kees Cook
+ <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Andy Lutomirski
+ <luto@kernel.org>, Gabriel Krisman Bertazi <krisman@collabora.com>,
+ linux-kernel@vger.kernel.org, Christian Loehle <christian.loehle@arm.com>
+Subject: Re: [PATCH 0/3] selftests: Skip SUD tests when unsupported
+In-Reply-To: <cover.1786965107.git.christian.loehle@arm.com>
+Organization: SUSE
+References: <cover.1786965107.git.christian.loehle@arm.com>
+Date: Fri, 04 Sep 2026 13:45:44 -0300
+Message-ID: <87jyp12cef.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 2/2] selftests: forwarding: use KHDR_INCLUDES in
- CFLAGS
-To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
- Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>,
- Phil Sutter <phil@nwl.cc>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>,
- Ido Schimmel <idosch@nvidia.com>
-Cc: Ilya Maximets <i.maximets@ovn.org>, netfilter-devel@vger.kernel.org,
- coreteam@netfilter.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260904-net-sft-nf-khdr_includes-v1-0-92455af428e9@kernel.org>
- <20260904-net-sft-nf-khdr_includes-v1-2-92455af428e9@kernel.org>
-Content-Language: en-US
-From: Ilya Maximets <i.maximets@ovn.org>
-Autocrypt: addr=i.maximets@ovn.org; keydata=
- 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
-In-Reply-To: <20260904-net-sft-nf-khdr_includes-v1-2-92455af428e9@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Spam-Level: 
+X-Spam-Score: -2.80
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MISSING_XM_UA(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[arm.com,kernel.org,gmail.com,infradead.org,collabora.com,vger.kernel.org];
+	RCVD_TLS_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,imap1.dmz-prg2.suse.org:helo,arm.com:email]
 
-On 9/4/26 6:13 PM, Matthieu Baerts (NGI0) wrote:
-> KHDR_INCLUDES is typically used to include headers from the kernel
-> source directory instead of only relying on the ones from the host: they
-> can be missing or outdated.
-> 
-> The kselftest doc recommends assigning KHDR_INCLUDES to CFLAGS in a
-> target Makefile. lib.mk will set KHDR_INCLUDES to "-isystem
-> $(top_srcdir)/usr/include" if the user didn't set it, e.g. if the kernel
-> was built in a different build directory.
-> 
-> Other net targets have KHDR_INCLUDES added to their CFLAGS.
-> 
-> Fixes: 05068eaa67b2 ("selftest: net: Add basic functionality tests for ipmr.")
-> Link: https://docs.kernel.org/dev-tools/kselftest.html#contributing-new-tests-details
-> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-> ---
->  tools/testing/selftests/net/forwarding/Makefile | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/net/forwarding/Makefile b/tools/testing/selftests/net/forwarding/Makefile
-> index bbaf4d937dd8..1bdfd141c0fb 100644
-> --- a/tools/testing/selftests/net/forwarding/Makefile
-> +++ b/tools/testing/selftests/net/forwarding/Makefile
-> @@ -1,5 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0+ OR MIT
->  
-> +CFLAGS += $(KHDR_INCLUDES)
-> +
->  TEST_PROGS := \
->  	bridge_activity_notify.sh \
->  	bridge_fdb_learning_limit.sh \
-> 
+Christian Loehle <christian.loehle@arm.com> writes:
 
-Reviewed-by: Ilya Maximets <i.maximets@ovn.org>
+> Syscall User Dispatch (SUD) is unavailable on architectures without
+> generic syscall entry. Such architectures return -EINVAL for otherwise
+> valid SUD prctl and ptrace requests, which the SUD selftests currently
+> report as failures.
+>
+> Probe SUD with a valid disabled configuration and skip the affected tests
+> when that probe returns EINVAL. Unexpected errors remain failures, and the
+> existing coverage is unchanged on kernels that support SUD.
+
+Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
+
+-- 
+Gabriel Krisman Bertazi
