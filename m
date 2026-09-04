@@ -1,45 +1,36 @@
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-156.mta0.migadu.com [91.218.175.156])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38E9931A572
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 02:06:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.121
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF741CD2C
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 02:10:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788487584; cv=none; b=Rx2ZQETqChlNqIXACV/kx14xv0uRL99j9psj4hzkgiwyQglqXSTz209htWif6psBH0kYre/8Ulh2JFhNMLtXDhyyGQN31X18+dva9BXFBnXre/CxtwItDZ1lUNNXINjSA/x+ZlFs8j8jvh/MBoaszZD8P01zkjinQsBLbzStdjk=
+	t=1788487808; cv=none; b=r2yTLMnENnNa2D+ogqDuhINYpqdOmre5vSX94Uxi5z158QDKa9M0Nx4dYPGMfkRtqkj1mYVvCCcMR3HDV+AhYAUwPibdRh7WvatzVhvJ+m3c8qfthJm++YNpuJXJWeB7nuLaADgPyj8Rd4SEpZeC/2Xnrm141zOGHlTrCB6/YfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788487584; c=relaxed/simple;
-	bh=gJG75J7GlO0YjOG7k2fTYlXcU+vQEavXrf5r9oSCSWo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=XCoGpsZodKH6YnQKTWFGPtQV76kUg0O/0PT0q7bLEwGVUFK0+4HnS3t+l6TNQbjEiU7qXkCTZoRLs6TOQC8OlW1pcWT3QkMqq5gU8SzQxMjpvLRlYG4oV7saT+LvDhp2L5SIFQfXIO4UnUv+NIad/JsCxPNoh8nZGJ/lMptq5FE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=rU86bnqi; arc=none smtp.client-ip=185.125.188.121
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1788487808; c=relaxed/simple;
+	bh=BMeFQ+GZlF4ab0g6//RFRMFJgtNUmqnK7e+RQqoIuyc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RF1B9UkZdTkly1HPc5Rg7fT4SC8bO8Ny3PDzOJwp7rGW1hyAblAmleLVFxHJyzihAUXaIphcixdMVuiMWvrZBcoLlY2Y+plRdOmufBVR4rOhApEKRndgPKFssbU8q4ZSudTv4UpC5/9/X4uyrluHYT/g8dg2VAwcmsAfc/mqqAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kKypBwOM; arc=none smtp.client-ip=91.218.175.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="rU86bnqi"
-Received: from [192.168.1.5] (unknown [120.244.199.14])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id DCAE8412FA;
-	Fri,  4 Sep 2026 02:06:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1788487579;
-	bh=nRuzRm0EbV3aU1vB6JTeM55TdgRZLYbX6C8/psiVzY8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type;
-	b=rU86bnqi6/SCcEa61xvnwEtl0m0U+Wq+1DPJ337cN65vKkiYDBALVMymatbU8oA0h
-	 cV9LVbma/JWUK9JBU1UZrfc6z79z5gYl2evUAYmimL+x+snk7quTIaZdng2qLTnNsh
-	 fG+9S3SPqYw4P9Gy5/n/ULF7I/pHwNMB+ClFLkYnYbLP6deWeNu1FVXzzAkapz/OmI
-	 9NzdMmJLRDvdZ4fbZG3TqLj78Xd7W6IBrcofKR7vTYZFCNbXpiaTE31uW54qE0fNL3
-	 XX313j2VYi9w8be2pW7UzdV3dFc8OjLxGIbMDtqepBcNDQt4PYe4QLd8IOTiC5Aim3
-	 ke+mxw+IQ0kedoJFlbQL+V0/8yDEhNe+SCOQV/VGjha2yJtkI0UOx+2GxD7XuEC7OB
-	 zBwiNq1mgPh9rgw7FvcffKbypsM246iTV1ElNuViocsVMKrPpLv4QHunkYC4X0NWgd
-	 OBU0ixCiMRM6JuoHy1b0D1roNJKHj3W/FQbeww7Yp2MfvELVyhbUGvFJY2GxiakGCc
-	 sOX8/RtRTE4AV/BQgdaG3VNV+YtnsFv7UuDyh6tBB2fEiWqXFt5D1Jq6OfwmuO9+aS
-	 9cAS00su9PYetcyfucdxVSBFlcuLr3AJF3t71fw04hHmyRrPV8rwtHTnjXCjFKZf6Z
-	 47fNSpwje7HE5VPf0TPxiBXs=
-Message-ID: <c1d93383-aed9-4c54-8ad6-d8e3361d73a8@canonical.com>
-Date: Fri, 4 Sep 2026 10:06:14 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kKypBwOM"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=BMeFQ+GZlF4ab0g6//RFRMFJgtNUmqnK7e+RQqoIuyc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788487805; v=1; x=1789092605;
+ b=kKypBwOMMHPfxwc+3gKGVnjDhc0wwlngjdDhMSry8Wc8guESX0xArFdnFOXV1RQ40Wbhoq0i
+ Ja4BrCZr9w4+pmWUd3CMmC3nIdVAFxvOpF89714UxveDQlZVaEzumZu91FcNZABItiGCKI2BWCZ
+ kcF9dmFDXI8E4AGTBSOzsRcU=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id f1d90e771c373216;
+	Fri, 04 Sep 2026 02:09:55 +0000
+X-Mizu-Trace-ID: f1d90e771c373216
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <56484f61-7290-4e3a-bb02-66c53042b180@linux.dev>
+Date: Fri, 4 Sep 2026 10:09:30 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,52 +38,52 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/efivarfs: skip write tests if efivarfs is
- mounted read-only
-To: Ard Biesheuvel <ardb@kernel.org>, shuah@kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org
-References: <20260820030101.35982-1-hui.wang@canonical.com>
- <9352c070-753a-428e-90b3-5293f1bf3e8b@app.fastmail.com>
-Content-Language: en-US
-From: Hui Wang <hui.wang@canonical.com>
-In-Reply-To: <9352c070-753a-428e-90b3-5293f1bf3e8b@app.fastmail.com>
+Subject: Re: [PATCH net-next v1 0/2] netdevsim: add TLS device offload
+ emulation and test
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260901154914.11637-1-jiayuan.chen@linux.dev>
+ <20260903155932.6b4528de@kernel.org>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260903155932.6b4528de@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-The previous mail was rejected by linux-kselftest maillist because the 
-html part is detected. Fixing it and re-sending the mail.
 
-On 9/3/26 17:34, Ard Biesheuvel wrote:
->>   run_test()
->> @@ -74,7 +82,7 @@ test_create_empty()
->>   {
->>   	local file=$efivarfs_mount/$FUNCNAME-$test_guid
+on 9/4/26 6:59 AM, Jakub Kicinski wrote:
+> On Tue,  1 Sep 2026 23:48:55 +0800 Jiayuan Chen wrote:
+>> It helped me find
+>> commit b17cf742eaad ("tls: device: fix out-of-bounds write in tls_append_frag()").
 >>
->> -	: > $file
->> +	: 2>/dev/null > $file
+>> So I think it is worth sending a formal patchset.
 >>
-> Why is this needed?
-The test_create_empty() will be run on read-only efivarfs, and it will 
-print [PASS], but it will also print some noise message with read-only 
-filesystem like:
+>> The kTLS device offload path in net/tls/tls_device.c has no test
+>> coverage upstream -- selftests/net/tls.c is software only, and the
+>> offload code needs a driver that implements it.
+>>
+>> So teach netdevsim to fake it.  Patch 1 implements tlsdev_ops and
+>> advertises the TLS features, patch 2 adds a selftest.
+>>
+>> No crypto is done: TX puts the plaintext record on the wire, RX just
+>> sets skb->decrypted.  That only works netdevsim to netdevsim, but it
+>> covers record assembly and the offload lifecycle.  Real ciphertext, and
+>> more on top of it, can come later.
+> Please don't post selftests to net-next which depend on a fix going
+> to another tree. If we merge this now we will have a failing test
+> until the fix also lands.
+>
+> If we add TLS support to netdevsim it must be paired with a test
+> which can also run against real HW. There was a selftest posted
+> recently by the person working on TLS 1.3 offload, we can use that
+> as the target (feel free to add that to your series, just keep
+> the original author).
+>
+> We can add special netdevsim-only cases but the main focus should
+> be writing tests that can be executed against real devices.
 
---------------------
-running test_create_empty
---------------------
-$(TESTCASE_PATH)/efivarfs.sh: line 85: 
-/sys/firmware/efi/efivars/test_create_empty-210be57c-9849-4fc7-a635-e6382d1aec27: 
-Read-only file system
-   [PASS]
 
-This change is for suppressing the noise message and make the output 
-clean like below:
-
---------------------
-running test_create_empty
---------------------
-   [PASS]
-
-Thanks,
-
-Hui.
+I think I just wait until that series is merged and then take a next setp.
 
