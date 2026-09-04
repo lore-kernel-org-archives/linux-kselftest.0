@@ -1,121 +1,389 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9BB3F23DB
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 05:20:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480C0415F22
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 05:24:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788499255; cv=none; b=BzhxRmsL/WAh9JVglilkl897vpMO3wK9BQJPM5AvPA+6R6aqe/b/fv5qzYia4Q92nNTMkEsq9q/nmbIiyvEOo/81DZimAV6hYVPgpaw2NZyljmbBEpM/WwzrIXLd+2eyEHfGrE7RRzkIzG0l4Vy+clupIakwWHMAJH2DsiN2RBo=
+	t=1788499456; cv=none; b=mtuGc2wO27I99zlbGBG12LWhDK+wryFPxJYd5c3qsuD0TTZjF/N+yAGWYw3l7fjjoZYF3TfcF4/CNsyxmClZyPBe7pNg04CFH/XAWEY9mTi29+TQ1ywvLMnoURqXsEkynijlRLuJGQ0Q/iigQ38WyWagDcWaikuzeK5OxqfRoWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788499255; c=relaxed/simple;
-	bh=1efYk6YAdTzdJ9YjN9WoZ1h5m8a3Ae6k8ZyGafuKg7k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J0ZbLXeBXYPWrqIaN3rWcnzaweNozeJ5DZTxrhOb/RiHzppOI7bgZA6Icgy/8M+x5hh9OiRqRYk0UaKzWWOaGDU2AMk19HILmLOgBXgpydhT0UHmbHsSKtSoIisTKGIxtSS+bLRxJhnmhjzbPU9AFBd3OrJoIT31Oivy9f50/PI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cXiGgXWc; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788499456; c=relaxed/simple;
+	bh=7KaZiuKtQ9cKH6q1e0cb8UZ8FdxD8kB477KhSVY04XM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=m1JOo4ZQbsmnAaKXv0hFrU5pIxuNc5UMNF3F8gMV4n/JDpSFmaZL5Xo+Utk+3uZJyDXJdEq47/eyC8OwT6MyCkJp7nn5qRM2LAtIqqEbHVdfEkCfygHPZ3CsHRrknV6bSezRbXPfmg4ivLkg91WuCl3AQ+qpNaRlsxZm+4UfxmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E9Wkvx4M; arc=none smtp.client-ip=209.85.215.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cXiGgXWc"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3965d3d9ab8so434852a91.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 22:20:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E9Wkvx4M"
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cc1eb205d31so1077188a12.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 22:24:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788499253; x=1789104053; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=N8nhx59l8O2wS9fd/hyLR2KGFd79BQ0LWN0fdxxg7Fc=;
-        b=cXiGgXWcimrbc1bTpiRxfsx0ny0B3yblBCXXHNuRZRnnxTQ1JFEny78Fd0y2EMTWKn
-         TL/oh88LPszb+A2IFDIafKss9GxKvRjxOMqXkD9vU9xbjcF7pZCHitz1rucTIrtiyqzb
-         LM6vlrGuJDuNsdvozd6xsFs/UQMKs6SUUhTBmI0u0GUux7yCACuGJcWxu631oEzvABH3
-         mUR43MawoezdMyeEnOdYoFdtXmuN1kdi2QfpD6ulbsQzoM+IYq2kz5SVhRgTyrstPs7P
-         dF+NBUBuq2UuPFfqaTFrKXpUcLqatcqTbibwEpwWfHzgIOY1gMCiJ/UJ1i1GkRVhZy7J
-         CQmw==
+        d=google.com; s=20251104; t=1788499454; x=1789104254; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=gXHP0a88o+3bQLyJbJ5f7ds9jlZoO09Khvr46maIpVY=;
+        b=E9Wkvx4Mrcd6XW/h58/QiJSVciG+RQm2KLZxRxLqZFmvdO97cAq7cRLQ8c8RkP5P+E
+         kVvxhDNwjxJXnNUTfpE5dFEklW9SPZ9hDjRcsW+TSOf1VPqCoJVGiK5HtFp10S/3WQ7V
+         UzdcURk5yHWtAmX6M2P9uvrGX9DCDlmt4QD5BjGuyzrbu6PtIqSAblJR996pVJwvnuK3
+         dqk7fwqyq8moNQzYIgiFr2nqll1GkEU/ATP9hLnLHgUSMA20YKWr9rDR7zfqoxNDpx87
+         MAWDZWI3LFHod6R8mMnG19FDb2kQm9x0zyd4EOX032L1DZbgGwrE9UFBcSrc9MxfMZzv
+         hDFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788499253; x=1789104053;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=N8nhx59l8O2wS9fd/hyLR2KGFd79BQ0LWN0fdxxg7Fc=;
-        b=KmOX+Dp4bjgUKLKNH5wyo2AeU9trWbVvdq/eGOTK8GVbcWpIHt/WvzuqEMDKNmOBb8
-         Ve9F7n6d1pvGnFF1e5xQbN3Ic4UvPzc7+TvnWU2apaO6cbJyLhRnvyIYjqRHygjffOxe
-         OxCTHdMxw4YwXAeagTphdDSMYSnUoW6V3SkMacn2iQg39fuZr1Xwd1h9WLsYt6OLC5Op
-         IYoCmXYGWcXJfmGaTckL2I7kU0SVKXHPlog6Lm7jI2dcVXfDgjqzX4uJoJVJQAFQWg+k
-         PTvjGPjp9Gw9Z2ICaIGcun82w5yhmyae2tL94zksXcbmOHdZJiwZSP/hKvDc+JZeCDGV
-         Tixg==
-X-Forwarded-Encrypted: i=1; AKwUvBzdkC4qYDrsl76aiJDuY+Y3Q39kPJbVSCFmSzJSyYKTJechhk2SIwCfKlCB4orGef7OQ24HR4dvHy8n6D3wuSc=@vger.kernel.org
-X-Gm-Message-State: AFuF++lnZrQrPuIwNSyYNeoeYwFNj99Kg3q9rdwEMk7Bn3OtLYNYU8AH
-	KGmDRGqzLIOl/ndadI8tCtUk349VMTSBdEdmkoOzGFoRwC1sw7hluOfH
-X-Gm-Gg: AYBFou2gpSc27C5zzfiWzLkUG6MfAjm5ddXM5iVk1/XnNqB8aM+2lS2u1Sy56MY1fAM
-	koqpOCkKyosb4o/18SwjsXZgvmqre7XCruAHau3/XsmnAnzEV5yJ+WmYPHfWb+yeV+QEs3MVvOh
-	13Cv66UOkvAWoEgbedgrsBn9SBm3t5ymwsiT2fnHPS4toIGZ7dGDXCK/KIETI6bMo1S9LhOt/x6
-	3qp9JshrGHv7kbSwg7mtDughIB6A56V+VRDrq4uOA4AuW2vOpft/TI2l06T6UcTBsgGCxQ7QQP6
-	CQf51zKVgTvhJYogmrAewhd7rEFJCbrDNoMv3lD54rb+gNcMBtuZaTsusnjJ+dTGiaCwDo5RWbU
-	PjA2knyGhfiHjh0blFRKQLlSBDjwX6Jxs82udKHkTUhFd57gbrFx3sWWq6ARq+KBPZjL5c0HRC2
-	u8qeaz+pZsvZGQ/pGLEptQdE7cZV23kx4ExUFCJTNF2ZSAHuM8nUMJQXYxXMsJfWy2/15W15eSK
-	A==
-X-Received: by 2002:a17:90b:3b52:b0:38f:18f9:785 with SMTP id 98e67ed59e1d1-39b26101d25mr5197743a91.8.1788499253348;
-        Thu, 03 Sep 2026 22:20:53 -0700 (PDT)
-Received: from amd.ban-spse ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14324356931sm5952481c88.4.2026.09.03.22.20.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 22:20:53 -0700 (PDT)
-From: Chaithanya Lagisetty <nagachaithanya9911@gmail.com>
-To: pbonzini@redhat.com,
-	seanjc@google.com
-Cc: shuah@kernel.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	nagachaithanya9911@gmail.com
-Subject: [PATCH] selftests: kvm: Fix transposed calloc() arguments in the uffd helper
-Date: Fri,  4 Sep 2026 05:20:33 +0000
-Message-ID: <20260904052033.3648259-1-nagachaithanya9911@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20251104; t=1788499454; x=1789104254;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gXHP0a88o+3bQLyJbJ5f7ds9jlZoO09Khvr46maIpVY=;
+        b=i3rlW+Kq+fPeA1YXdH6vXF/htUXQyfRsS93bvcCqZs0UXvFBeWxVLjsdQJhRmVcDKf
+         zDpLhLFR2o6ksNxSA1bJN+WKev3SWcwwKQugqPSLsWJNZiL6DICwmnXZB2JOUtpgoQDU
+         VFdCpCg8mV6XbD04Xd/1sbEZnRYyux6DbcfftLwdpSEICC7/XRaj2eVydXeqmgX1FFs9
+         AOVn2P9Vyf05dwudaafUMW/xsrOYhcGezunsd0nHGSm2jDeHbTTU0BhZ/SGTeoKiGNEq
+         lylg0R5uxt4cQ0ZsfmVrWDyKBLtGQ651e0/NXtaOVevQExpL1TdkLZrNt3FQ+WsVj0pN
+         xheQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxgzIEhZPHLr2JIYK06hCdCPIdaLPArN3bLq5z9kYaxg6op2PlvoVhN8cR1BRT2pkySPw27Uw/p1Yh6z3jLmWk=@vger.kernel.org
+X-Gm-Message-State: AFuF++mj2Of6WyIwz+PW93NMR0iWhMWZr1pIeog0zOJWibsFITeSodB4
+	OkG4L94VfUWytMu1Zcui15JeWhcjzpqFfargF7+YiyB3aoiKqWyuTg2AUwfirkcfIuksP0pbg00
+	V60wz+f3Imc+tnuI/HRLzcU2EgBs63QjKxg==
+X-Received: from pgbd2-n2.prod.google.com ([2002:a05:6a02:64c2:20b0:cc1:c12a:92cf])
+ (user=rathodpriyank job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a21:a8f:b0:3c3:6f6c:aa21 with SMTP id adf61e73a8af0-3da39ec3effmr5265216637.11.1788499453320;
+ Thu, 03 Sep 2026 22:24:13 -0700 (PDT)
+Date: Fri, 04 Sep 2026 05:24:11 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAPxVmmoC/33NTQ6CMBCG4auQrh3TH0TqynsYF9gOMBFb0pJGQ
+ 7i7hY0xMS7fL5lnZhYxEEZ2KmYWMFEk73KoXcFM37gOgWxuJrmseK0EjIYQBnJ3QGdHT26KoI8
+ 1Cs7twfKK5csxYEvPTb1cc/cUJx9e25Mk1vW/lwQIUNLI1tZaocZz53034N74B1vBJD+I5uVvR AIHUbXmprhoFJZfyLIsb5XlOT78AAAA
+X-Change-Id: 20260831-pcie-link-endpoints-978e100d5d06
+X-Mailer: b4 0.14.3
+Message-ID: <20260904-pcie-link-endpoints-v3-0-4b9a91bd4b35@google.com>
+Subject: [PATCH v3 0/3] PCI/pcie: Add PCIe Lane Margining at Receiver (LMR) support
+From: Priyank Rathod <rathodpriyank@google.com>
+To: Bjorn Helgaas <bhelgaas@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: "=?utf-8?q?Ilpo_J=C3=A4rvinen?=" <ilpo.jarvinen@linux.intel.com>, linux-pci@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Priyank Rathod <rathodpriyank@google.com>, 
+	sashiko-bot@kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-uffd_setup_demand_paging() passes the element size as the first argument
-to calloc() and the element count as the second:
+Hi Bjorn, Ilpo, and the PCI community,
 
-	uffd_desc->pipefds = calloc(sizeof(int), num_readers);
+This patch series introduces upstream Linux kernel support for PCIe Lane Ma=
+rgining
+at Receiver (LMR) per PCI Express Base Specification Revision 7.0 / 6.0 (=
+=C2=A7 7.7.11
+and =C2=A7 8.4.4).
 
-calloc() expects the number of elements first and the size of each element
-second. The product, and therefore the allocation size, is the same either
-way, so this is not a functional change, but the arguments are misleading
-and GCC 14 diagnoses them with -Wcalloc-transposed-args, which is enabled
-by -Wextra.
+During the review of the previous v7 standalone LMR submission
+(https://lore.kernel.org/linux-pci/20260828-pcie-lmt-v7-1-6012e9e0940a@goog=
+le.com/),
+Ilpo J=C3=A4rvinen pointed out that feature drivers resolving link partners=
+ duplicate
+link traversal logic that is already present in drivers such as ASPM:
 
-Swap the arguments to match the calloc() prototype.
+  "This feels like duplicating similar functionality with the aspm driver
+   that also wants to infer ends of the link when giving a pci_dev in.
+   The aspm driver currently does that within, but it kind of duplicating
+   pci_bus. It would be nice to avoid the duplication and have something
+   similar for this in PCI core."
 
-Signed-off-by: Chaithanya Lagisetty <nagachaithanya9911@gmail.com>
+In response to this feedback, the implementation is factored into a clean,
+modular 3-patch stack:
+
+1. Patch 1/3 (PCI: Add pcie_get_link_endpoints() helper):
+   Standardized, race-safe helper in drivers/pci/pci.c and include/linux/pc=
+i.h
+   to identify both ends of a point-to-point PCIe link. Safely inspects the
+   subordinate bus under down_read(&pci_bus_sem) and acquires a reference
+   (pci_dev_get()), paired symmetrically with pcie_put_link_endpoints().
+   Filters for Function 0 (with ARI support), validates bridge ownership
+   (child->self =3D=3D pdev) to prevent ABA pointer reuse, and handles RCiE=
+P
+   and empty downstream ports (-ENODEV).
+
+2. Patch 2/3 (PCI/ASPM: Add pci_aspm_inhibit() helper for temporary link st=
+ate suppression):
+   Reference-counted mechanism (aspm_inhibit_cnt) in drivers/pci/pcie/aspm.=
+c
+   to temporarily disable ASPM state transitions (L0s, L1, L1SS) on an acti=
+ve link.
+   Guarantees callers hold down_read(&pci_bus_sem) (via lockdep_assert_held=
+_read),
+   eliminating deadlocks and preventing power-saving transitions while hard=
+ware
+   link characterization is in progress.
+
+3. Patch 3/3 (PCI/pcie: Add PCIe Lane Margining at Receiver (LMR) support):
+   Implements the core LMR driver (CONFIG_PCIE_LMR) in drivers/pci/pcie/mar=
+gin.c
+   exposing a debugfs interface under /sys/kernel/debug/pci/pcie_lmr_<dev>/=
+.
+   Strictly self-contained: 0 modified lines in drivers/pci/pci.c, pci-driv=
+er.c,
+   or core drivers/pci/pci.h. Exposes clean lifecycle hooks in drivers/pci/=
+probe.c
+   and drivers/pci/remove.c, supports 2D timing and voltage margining acros=
+s
+   physical receivers (0..6), enforces Function 0 endpoint filtering (=C2=
+=A7 7.7.11),
+   and includes an exhaustive kselftest suite (tools/testing/selftests/pcie=
+_lmt/).
+
+- Capability Discovery (=C2=A7 7.7.11): Probed via Extended Capability ID 0=
+x27 on
+  Gen4+ (>=3D 16 GT/s) physical links. Differentiates optional support on G=
+en4/Gen5
+  from mandatory capability presence on Gen6+ (>=3D 64 GT/s).
+- Multi-Function Device Scope (=C2=A7 7.7.11): Enforces that capability reg=
+istration
+  is strictly restricted to Function 0 on Endpoints / Upstream Ports.
+- Payload Decoding (Table 4-77, Cmd 88h): Accurately decodes Margin Control
+  Capabilities (Bits 0..4); preserves Bits 7:5 as reserved 0b.
+- Direction Encodings (=C2=A7 4.2.18.1.2): Enforces that Left/Right and Up/=
+Down
+  direction bits remain 0b for symmetric receivers (Bits 6 & 7 reserved 0b)=
+.
+- Multi-Receiver Concurrency (=C2=A7 4.2.18.2): Governed strictly by MIndEr=
+rorSampler.
+  If MIndErrorSampler =3D=3D 0b (main data sampler), at most one receiver a=
+cross the
+  link is margined at a time.
+- Autonomous Speed & Width Transitions (=C2=A7 7.5.3.7, =C2=A7 7.5.3.17, =
+=C2=A7 8.4.4): Software
+  sequencing disables Downstream Component before Upstream Component on ena=
+blement,
+  and restores Upstream Component before Downstream Component on teardown.
+  Restoration is unconditional via pcie_capability_clear_and_set_word()
+  (serialized by pci_lock), eliminating trylock failure traps.
+
+Ingress paths (margin_enable_write and pci_lmr_exit) strictly follow the ca=
+nonical
+PCI locking DAG:
+  down_read(&pci_bus_sem)
+    -> pci_dev_lock(downstream_port)
+      -> pci_dev_lock(upstream_port)
+        -> mutex_lock(&mdev->lock)
+          -> spin_lock_irqsave(&aspm_lock)
+
+Key Concurrency Guarantees:
+1. Hot-Swap Identity Invariance: When disabling LMR, dynamic endpoint resol=
+ution
+   is completely bypassed. Teardown binds strictly to the session-saved mde=
+v->partner,
+   which is read and pinned with pci_dev_get() under mutex_lock(&mdev->lock=
+).
+2. Surprise Removal & Fault Hardening: Hardware register accesses check
+   pci_dev_is_disconnected() and PCI_POSSIBLE_ERROR() guards, preventing MM=
+IO
+   or config space bus aborts when hardware is pulled.
+3. Power Management Synchronization: Both link partners are pinned in D0 us=
+ing
+   pm_runtime_resume_and_get() during enablement, and symmetrically release=
+d via
+   pm_runtime_put() on teardown. System suspend hooks into pci_pm_prepare()=
+ where
+   all devices in the hierarchy are guaranteed to be in D0.
+4. Security Teardown Order: In pci_destroy_dev(), pci_lmr_exit() is called =
+after
+   pci_tsm_destroy(), preserving D0 state for TSM link operations (PCIe IDE=
+ unbind
+   and SPDM cryptographic session teardown).
+
+- Build: Clean compile on x86_64 and ARM64; make W=3D1 drivers/pci/ (0 warn=
+ings).
+- Linters: checkpatch.pl clean across all 3 patches (0 errors, 0 warnings).
+- Kselftest: tools/testing/selftests/pcie_lmt/pcie_lmt.sh expanded to 287 l=
+ines,
+  covering positive and negative boundary tests (syntax clean with bash -n)=
+.
+- Pre-Commit AI Review (Sashiko AI):
+  * Patch 1 (f34fdf7f5c6b): Reviewed =E2=80=94 Clean (0 issues).
+  * Patch 2 (6adc680a727f): Reviewed =E2=80=94 Clean (0 issues).
+  * Patch 3 (c62b5f92af63): Reviewed =E2=80=94 Clean (0 issues, "No issues =
+found.").
+
+Signed-off-by: Priyank Rathod <rathodpriyank@google.com>
 ---
- tools/testing/selftests/kvm/lib/userfaultfd_util.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Changes in v3:
+- Port Classification Modernization:
+  * Replaced open-coded (PCI_EXP_TYPE_ROOT_PORT || PCI_EXP_TYPE_DOWNSTREAM)=
+ checks
+    in drivers/pci/pcie/margin.c with canonical pcie_downstream_port(dev).
+  * Why: Open-coded comparisons missed PCI_EXP_TYPE_PCIE_BRIDGE ports, whic=
+h act
+    as downstream ports in specific bridge topologies. This caused inverted
+    downstream/upstream port classification, reversing lock acquisition ord=
+er and
+    causing configuration writes to link partners without holding appropria=
+te locks.
+  * How: Adopted core pcie_downstream_port() helper universally across marg=
+in.c.
+- Hardware Execution Payload Status Validation:
+  * In pci_lmr_run_cmd(), added explicit checking of hardware execution sta=
+tus bits
+    (LMR_STS_EXEC_MASK via pci_lmr_check_exec_status()) instead of relying =
+solely on
+    PCI configuration bus transaction return codes.
+  * Why: A configuration register write/read succeeds at the bus transactio=
+n level
+    (ret =3D=3D 0) even when the physical receiver hardware rejects the com=
+mand (NAK)
+    or encounters excessive bit errors during stepping.
+  * How: Explicitly map LMR_STS_EXEC_NAK (0x3) to -EOPNOTSUPP without mutat=
+ing software
+    margin state, and LMR_STS_EXEC_TOO_MANY_ERR (0x0) to -EIO while resetti=
+ng both
+    plane->timing_val and plane->voltage_val to nominal 0.
+- Hardware Step 0 Synchronization & Orthogonal State Preservation (Table 4-=
+77):
+  * Aligned step margin zeroing with PCIe Base Specification Revision 7.0 T=
+able 4-77.
+  * Why: Writing a Step Margin command with payload 0 is explicitly specifi=
+ed as a
+    hardware NO-OP; the physical receiver sampler ignores it. The only spec=
+ification-
+    defined nominal reset is Command 0x0F ("Go to Normal Settings"), but is=
+suing 0x0F
+    clears both timing and voltage samplers simultaneously, causing orthogo=
+nal hardware
+    drift in 2D margining.
+  * How: When zeroing an axis (e.g. echo 0 > margin_timing) while the ortho=
+gonal axis
+    is displaced (voltage_val !=3D 0), issue 0x0F and immediately re-apply =
+the saved
+    orthogonal displacement via pci_lmr_issue_step(), ensuring 100% bit-acc=
+urate
+    hardware/software state synchronization.
+- Multi-Receiver Concurrency Guard Hardening (=C2=A7 4.2.18.2 & =C2=A7 8.4.=
+4):
+  * In pci_lmr_check_sample_multiple_rx(), enforced dual verification of bo=
+th
+    LMR_CAP_IND_ERROR_SAMPLER (Bit 4) and LMR_CAP_SAMPLE_MULTIPLE_RECEIVERS=
+ (Bit 5).
+  * Why: If an active receiver uses the live data sampler (Bit 4 =3D 0) or =
+cannot sample
+    multiple receivers concurrently (Bit 5 =3D 0), running margining on ano=
+ther receiver
+    injects errors into operational data traffic or exceeds hardware capabi=
+lities.
+  * How: Replaced single-bit check with a bidirectional predicate requiring=
+ BOTH Bit 4
+    and Bit 5 to be asserted on both the targeted receiver and all currentl=
+y active
+    receivers across all lanes. If either bit is 0, reject with -EBUSY.
+- Non-Link Port Type Filtering:
+  * In pci_lmr_init(), filtered out non-link PCIe port types (PCI_EXP_TYPE_=
+RC_END,
+    PCI_EXP_TYPE_RC_EC, PCI_EXP_TYPE_PCI_BRIDGE) per PCIe Base Spec =C2=A7 =
+7.7.11 to
+    eliminate spurious pci_warn diagnostics on unsupported topologies.
+- DebugFS Subsystem Directory Portability:
+  * Verified debugfs "pci" root directory coexistence on architectures like=
+ s390 via
+    debugfs_lookup("pci", NULL) before debugfs_create_dir("pci", NULL), pre=
+venting
+    -EEXIST from poisoning the root dentry pointer.
+- Pre-Submission Verification:
+  * Pre-commit AI review (Sashiko AI bot): Reviewed =E2=80=94 No issues fou=
+nd (0 findings,
+    0 concerns, Review ID 94722).
+  * Compiler: make W=3D1 drivers/pci/ (0 warnings, 0 errors on x86_64 and A=
+RM64).
+  * Linter: checkpatch.pl clean across all patches (0 warnings, 0 errors).
+- Link to v2: https://lore.kernel.org/r/20260904-pcie-link-endpoints-v2-0-1=
+6fcb301a3e4@google.com
 
-diff --git a/tools/testing/selftests/kvm/lib/userfaultfd_util.c b/tools/testing/selftests/kvm/lib/userfaultfd_util.c
-index f7ce5a6ddcc2..49eff05b7d39 100644
---- a/tools/testing/selftests/kvm/lib/userfaultfd_util.c
-+++ b/tools/testing/selftests/kvm/lib/userfaultfd_util.c
-@@ -119,13 +119,13 @@ struct uffd_desc *uffd_setup_demand_paging(int uffd_mode, useconds_t delay,
- 	uffd_desc = malloc(sizeof(struct uffd_desc));
- 	TEST_ASSERT(uffd_desc, "Failed to malloc uffd descriptor");
- 
--	uffd_desc->pipefds = calloc(sizeof(int), num_readers);
-+	uffd_desc->pipefds = calloc(num_readers, sizeof(int));
- 	TEST_ASSERT(uffd_desc->pipefds, "Failed to alloc pipes");
- 
--	uffd_desc->readers = calloc(sizeof(pthread_t), num_readers);
-+	uffd_desc->readers = calloc(num_readers, sizeof(pthread_t));
- 	TEST_ASSERT(uffd_desc->readers, "Failed to alloc reader threads");
- 
--	uffd_desc->reader_args = calloc(sizeof(struct uffd_reader_args), num_readers);
-+	uffd_desc->reader_args = calloc(num_readers, sizeof(struct uffd_reader_args));
- 	TEST_ASSERT(uffd_desc->reader_args, "Failed to alloc reader_args");
- 
- 	uffd_desc->num_readers = num_readers;
--- 
-2.43.0
+Changes in v2:
+- Decomposed monolithic LMR driver into a 3-patch stack with dedicated core=
+ helpers:
+  * Patch 1: PCI core link endpoint discovery helper (pcie_get_link_endpoin=
+ts()).
+  * Patch 2: Core ASPM temporary inhibition helper (pci_aspm_inhibit()).
+  * Patch 3: PCIe Lane Margining at Receiver driver and debugfs interface.
+- Core Scope Discipline: Confined LMR logic exclusively to drivers/pci/pcie=
+/margin.c
+  and include/linux/pci.h forward declarations (0 modified lines in pci.c/p=
+ci-driver.c).
+- Endpoint Discovery Hardening:
+  * Handled RCiEP and empty downstream buses returning -ENODEV.
+  * Added Function 0 resolution (pcie_find_link_upstream_func0()) supportin=
+g PCIe ARI.
+  * Added bridge ownership verification (child->self =3D=3D pdev) to preven=
+t ABA races.
+  * Added symmetric pcie_put_link_endpoints() to balance pci_dev_get() refe=
+rences.
+- ASPM Inhibit Hardening:
+  * Added lockdep_assert_held_read(&pci_bus_sem) to pci_aspm_inhibit_locked=
+().
+  * Added reference counting (aspm_inhibit_cnt) to support nested/concurren=
+t calls.
+- Hot-Swap & Concurrency Protections:
+  * Eliminated hot-swap identity mismatch in margin_enable_write() by bindi=
+ng teardown
+    strictly to session-saved mdev->partner instead of re-evaluating endpoi=
+nts.
+  * Added mutex protection when reading and pinning mdev->partner to elimin=
+ate UAF races.
+  * Converted autonomous speed/width restoration to unconditional register =
+write via
+    pcie_capability_clear_and_set_word(), eliminating trylock failure degra=
+dation.
+- Specification Alignments (PCIe Base Spec r7.0):
+  * Aligned Extended Capability ID 0x27 to =C2=A7 7.7.11 and =C2=A7 8.4.4.
+  * Enforced Function 0 restriction on Endpoints / Upstream Ports (=C2=A7 7=
+.7.11).
+  * Preserved Reserved Bits 7:5 in Command 88h capabilities response.
+  * Implemented MIndErrorSampler-based concurrency for multi-receiver links=
+ (=C2=A7 4.2.18.2).
+  * Corrected direction bit encoding to 0b for symmetric receivers (=C2=A7 =
+4.2.18.1.2).
+- Kselftest Overhaul:
+  * Extended test coverage from 105 to 287 lines, adding comprehensive boun=
+dary
+    and negative validation tests.
+- Link to v1: https://lore.kernel.org/r/20260831-pcie-link-endpoints-v1-1-3=
+2c2fd893e9e@google.com
+- Link to v7 (monolithic LMR): https://lore.kernel.org/linux-pci/20260828-p=
+cie-lmt-v7-1-6012e9e0940a@google.com/
+
+---
+Priyank Rathod (3):
+      PCI: Add pcie_get_link_endpoints() helper
+      PCI/ASPM: Add pci_aspm_inhibit() helper for temporary link state supp=
+ression
+      PCI/pcie: Add PCIe Lane Margining at Receiver (LMR) support
+
+ Documentation/PCI/index.rst                  |    1 +
+ Documentation/PCI/pcie-lmr.rst               |  174 +++
+ MAINTAINERS                                  |    8 +
+ drivers/pci/pci.c                            |  152 +++
+ drivers/pci/pci.h                            |    8 +
+ drivers/pci/pcie/Kconfig                     |   12 +
+ drivers/pci/pcie/Makefile                    |    1 +
+ drivers/pci/pcie/aspm.c                      |  100 ++
+ drivers/pci/pcie/margin.c                    | 1682 ++++++++++++++++++++++=
+++++
+ drivers/pci/probe.c                          |    1 +
+ drivers/pci/remove.c                         |    2 +-
+ include/linux/pci.h                          |   17 +
+ include/uapi/linux/pci_regs.h                |   18 +
+ tools/testing/selftests/Makefile             |    1 +
+ tools/testing/selftests/pcie_lmt/Makefile    |    3 +
+ tools/testing/selftests/pcie_lmt/pcie_lmt.sh |  405 +++++++
+ 16 files changed, 2584 insertions(+), 1 deletion(-)
+---
+base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
+change-id: 20260831-pcie-link-endpoints-978e100d5d06
+
+Best regards,
+--=20
+Priyank Rathod <rathodpriyank@google.com>
 
