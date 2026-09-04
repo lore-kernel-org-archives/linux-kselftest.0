@@ -1,122 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-125.mta1.migadu.com [95.215.58.125])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52339332EBB;
-	Fri,  4 Sep 2026 09:15:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D32F439349
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 09:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.125
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788513350; cv=none; b=Kv8VEvZmQ0KAQG2/aMBgJyJb9sMQID8Fv1J888CgGm+bE5vtrg1bcWTXLztFg5ZdakVq+FYJBrC5d5ODRKtzXtGczlayhZ9zEbHOFQHCLo/1okl0nekcM3PguoZE30XykBaGGDXPPmCEyNaHZNY3vfeehRNSR0+ZGZQvKlqTDyI=
+	t=1788513723; cv=none; b=ZGCC1y3xCYRL9D5VqsDP6qgoNPybegtmC9N7V5kZLbjiS35ymP3bnbKOhQVd7x9Adq//EzsYcDmC/bbqP8Fx0N+tEe0UTm7zj3HP88gCfV2fRkPks4ubmWITCIGZDioFkV4LmyUnYKwQ8aYnVe9eJMmpwnnCBKNxF+n879xVHio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788513350; c=relaxed/simple;
-	bh=0Kjz+wSEcdot/Kp+frqf0GhQv33OLZIVvwXtWAhVB5s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eBwouYxYfoxZ4hnYP7s24ceOxiUHXWgWSVSCn/GJjYmgZPC8qUgP7DbaRQPV/vpS2LXGwU4f+N+SgRSRyit+zTT2wdCo+yg8SwVz4+QL6dEbs+xrkomMohKKdkYqKrQO7w/KVlniIBmoFw1ugOl7IFtg7zMwdv+gDtLmEz+ACjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VufFzf3C; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788513723; c=relaxed/simple;
+	bh=XNzKjHkngtqCqjAb20SyRUTjszAkf7AltK/o8l/wh4c=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=oAKemTQs4EohrBq2YYMZlST4QkOoBVdpINEP2w9PZAvUu8Kk4phykFlBR7qmV6kMurmnufq0jmEX22CFzPKKS0ptYB7hi9CnzpwFQLOsc4irP6GlcuKEmZfKukOd1tcW+jDWaTWLUORIAvE5oKjd3NhtuwwoZ3ceatTL5h1z84c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gho8eG+H; arc=none smtp.client-ip=95.215.58.125
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VufFzf3C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 031B41F00A3D;
-	Fri,  4 Sep 2026 09:15:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788513348;
-	bh=0Kjz+wSEcdot/Kp+frqf0GhQv33OLZIVvwXtWAhVB5s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VufFzf3Cilbm8QtKx3NZr5yYaHyhMTKVokK/7JAundphZYwRJZyAo6texlJnLQJqv
-	 0fvCDCCOIVb3jI6uaP0ILqKvLG9T78RTOyIAFsuMHsgnyPijzHoRFRRH6DQ2StiC/3
-	 sH7vQ+ZLgzYJDgBDjOKSkfPwiqGFsosDZvbfmwZCP7Si+SvxBLGIojDr0IlwCbKulZ
-	 f9zPR8PI9gm1tbspmiVQz4qHraB1WqCV60hXJT0rY4w4G/8lUxsiwseP80Cg38WaQz
-	 P/s+D4hWHjAkILDLihL2QiXOz1ytOJPa+YYlmRwU+mUvvetZVXXljSRz0hn9gYQry6
-	 sOBg5ihVyDPaA==
-Date: Fri, 4 Sep 2026 10:15:37 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Tigran Aivazian <aivazian.tigran@gmail.com>
-Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Jan Kara <jack@suse.cz>, Jakub Kicinski <kuba@kernel.org>, 
-	Namjae Jeon <linkinjeon@kernel.org>, Hisam Mehboob <hisamshar@gmail.com>, 
-	Martin =?utf-8?Q?Kepplinger-Novakovi=C4=87?= <martink@posteo.de>, Christian Brauner <brauner@kernel.org>, 
-	Amir Goldstein <amir73il@gmail.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
-	Eric Biggers <ebiggers@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	David Howells <dhowells@redhat.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Theodore Ts'o <tytso@mit.edu>, Catalin Iacob <iacobcatalin@gmail.com>, 
-	Stephen Hemminger <stephen@networkplumber.org>, Andrew Lunn <andrew@lunn.ch>, 
-	"Maciej W. Rozycki" <macro@orcam.me.uk>, Andrei Vagin <avagin@gmail.com>, 
-	Wei Yang <richard.weiyang@gmail.com>, Bhavik Sachdev <b.sachdev1904@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Wang Yan <wangyan01@kylinos.cn>, 
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>, Malaya Kumar Rout <malayarout91@gmail.com>, 
-	linux-doc@vger.kernel.org, linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Luis de Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH] bfs: remove the filesystem
-Message-ID: <apqHhmRD5rAeLivO@gremlin>
-References: <20260904082954.48738-1-enelsonmoore@gmail.com>
- <CAK+_RL=RHfRLDc=Ldjx1p8KTHSKeELjnBpxEqYjwWX_8ur1hOw@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gho8eG+H"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=XNzKjHkngtqCqjAb20SyRUTjszAkf7AltK/o8l/wh4c=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788513710; v=1; x=1789118510;
+ b=gho8eG+H2BlujHePsr4CCnfde7iqcpDGBxZMx2haPn/MNVciUHwAg++0QRZrO+X/RO7XugnJ
+ WNpWpF+4QbogrbsV+74ecqVYBCl72hH/Ayq6I+WFKd58EYfsDmVCbSq42xjVMXj3LbCcsm1QPQM
+ vW6MaPcYxVRqfzLRu4AtYQy4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4d2c5bf555aa2c40;
+	Fri, 04 Sep 2026 09:21:50 +0000
+X-Mizu-Trace-ID: 4d2c5bf555aa2c40
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <ce007c25-8d49-4df4-9508-3af911f90eb7@linux.dev>
+Date: Fri, 4 Sep 2026 17:21:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK+_RL=RHfRLDc=Ldjx1p8KTHSKeELjnBpxEqYjwWX_8ur1hOw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, bsegall@google.com, cgroups@vger.kernel.org,
+ corbet@lwn.net, dietmar.eggemann@arm.com, hannes@cmpxchg.org,
+ juri.lelli@redhat.com, kprateek.nayak@amd.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ mgorman@suse.de, mingo@redhat.com, peterz@infradead.org,
+ rostedt@goodmis.org, skhan@linuxfoundation.org, tj@kernel.org,
+ vincent.guittot@linaro.org, vschneid@redhat.com, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] sched/fair: Remove the write-order dependency
+ between cpu.max and cpu.max.burst
+To: Zhe Liu <liuzhe1@kylinos.cn>, mkoutny@suse.com
+References: <aobnZEh1hfIBhswD@localhost.localdomain>
+ <20260904062013.504236-1-liuzhe1@kylinos.cn>
+ <20260904062013.504236-2-liuzhe1@kylinos.cn>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <20260904062013.504236-2-liuzhe1@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 04, 2026 at 09:51:10AM +0100, Tigran Aivazian wrote:
-> Hi Ethan,
->
-> On Fri, 4 Sept 2026 at 09:30, Ethan Nelson-Moore <enelsonmoore@gmail.com> wrote:
-> >
-> > BFS (not to be confused with BeFS, the BeOS filesystem) is the
-> > filesystem UnixWare uses for its boot partition. It has extremely
-> > limited functionality, only supporting contiguous files and no
-> > subdirectories. Even though the bfs driver is very small and is
-> > unlikely to cause future maintenance problems, given that the only type
-> > of data stored on such a partition is likely to be kernels and
-> > bootloader settings, there is very little reason anyone would want to
-> > access it from Linux. Other old Unix filesystems (efs, freevxfs) have
-> > been removed recently, and bfs is highly unlikely to have any users, so
-> > remove it as well. Retain the UAPI header to be safe.
-> >
->
-> You are right that probably no one would want to use BFS for storing
-> the actual data today.
-> But some things have didactical value, rather than mere pragmatic
-> usage. It is the didactic
-> value of MINIX (and its limitations wrt making use of the wonderful
-> capabilities of i386) that
-> has originally triggered the creation of Linux. But back to BFS: it is
-> actually used in Steve Pate's
-> book "Linux Filesystems" (2024, unfinished yet), which is a sequel to
-> his excellent classic
-> "UNIX Filesystems" (2003), as an illustration of a particularly simple
-> filesystem implementation.
+Hi, Zhe,
 
-Oh wow! :) Nice to hear a new linux book is coming, as a fellow author [fighting
-my way through the editing stage atm :)] that's good to hear.
+在 2026/9/4 14:20, Zhe Liu 写道:
+> Keep the configured burst independent of the current quota and cap it
+> when CFS refills runtime. This allows quota and burst updates in either
+> order.
+> 
 
-(I also learned, the hard way, why people don't tend to write kernel books these
-days - the modern kernel is too damn big! :)
+Ran the selftests on next-20260903 in a VM: all 10 test_cpu cases pass
+with the series applied, and test_cpucg_max_burst fails on the unpatched
+kernel, so the test does catch the old behavior.
 
->
-> I remember when Linus accepted my patch with BFS on 28 October 1999
-> into 2.3.25 his comment
-> was: "this appears to be a particularly simple one".
+One problem (spotted by sashiko, an automated overflow checker; I
+re-did the arithmetic): dropping the burst_us + quota_us <=
+max_bw_runtime_us check is not safe. With quota and burst both near
+MAX_BW, the period-scaling path in sched_cfs_period_timer() can double
+both up to 512x, and the new clamp quota + min(burst, quota) in
+__refill_cfs_bandwidth_runtime() then wraps u64 to 0, leaving the group
+with zero runtime on every refill.
 
-:)) nice!
+I believe you can just drop the burst_us > quota_us comparison and keep
+the sum check. Both write-order cases still pass that way: burst=80ms
+with quota=50ms gives 130ms, well under the limit.
 
-We shouldn't be afraid to remove stuff that is less maintained or that
-causes maintenance overhead or other headaches (e.g. blocking things from
-being developed), as I have often pointed out re: older architectures,
-nommu etc.
+Tested-by: Tao Cui <cuitao@kylinos.cn>
 
-But I'm not sure if any of that applies here or not, so really one for
-VFS maintainers I think.
+> Fixes: f4183717b370 ("sched/fair: Introduce the burstable CFS controller")
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Zhe Liu <liuzhe1@kylinos.cn>
+> ---
+>  kernel/sched/core.c | 3 +--
+>  kernel/sched/fair.c | 3 ++-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index f78275192036..5269b8cfcf7f 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -10159,8 +10159,7 @@ static int tg_set_bandwidth(struct task_group *tg,
+>  	if (quota_us != RUNTIME_INF && quota_us > max_bw_runtime_us)
+>  		return -EINVAL;
+>  
+> -	if (quota_us != RUNTIME_INF && (burst_us > quota_us ||
+> -					burst_us + quota_us > max_bw_runtime_us))
+> +	if (burst_us > max_bw_runtime_us)
+>  		return -EINVAL;
+>  
+>  #ifdef CONFIG_CFS_BANDWIDTH
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 6d881e530f89..488de18d477e 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6627,7 +6627,8 @@ void __refill_cfs_bandwidth_runtime(struct cfs_bandwidth *cfs_b)
+>  		cfs_b->nr_burst++;
+>  	}
+>  
+> -	cfs_b->runtime = min(cfs_b->runtime, cfs_b->quota + cfs_b->burst);
+> +	cfs_b->runtime = min(cfs_b->runtime,
+> +			     cfs_b->quota + min(cfs_b->burst, cfs_b->quota));
+>  	cfs_b->runtime_snap = cfs_b->runtime;
+>  }
+>  
 
->
-> Kind regards,
-> Tigran
-
---
-Cheers, Lorenzo
