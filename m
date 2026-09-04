@@ -1,105 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f2.google.com (mail-wm2-f2.google.com [74.125.225.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315F53EBF02;
-	Fri,  4 Sep 2026 10:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7843244A40C
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 10:49:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788518631; cv=none; b=d9Xh7P4orQKXdjv3lblr98LQolWwfwBxWg9LPVgjcnIGJhj1h+EcspshU42m6xelXdePNORPFvdLRMeeXqIDTQvmyXOTd1PZCF1F3kyEGa3rGGAaGS8akjZNJi6kqeKT6ACe5xgso5U0wHKIpAJvm/7ZYXo4L8npO4024b3y1bU=
+	t=1788518987; cv=none; b=qVifPV90YBVtlj/9h+xwjLFzRwiJ7sRGu/S5akEXYQMKsOH41sC7E5NSlgLkVvkKMHK32/W32kSrUcGVTxNZu7dDAGHWU7abQn0+IXxsfoxdcXJpXZqL7kFUPWrDTi6biUHOW3uURMvuTFIJp6s+3Z8gVuIUVR1jgx87Jp3Y5qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788518631; c=relaxed/simple;
-	bh=SEZe5HnLJEPtViVtmgtwkTJszcnx/wvXNNnLPrgibYw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=maA6sWf+OVNxGrGgX8QuPxZ4ZOo1pbE0P3Oqi20uZRIqvCswVoE2Y/Lp7L1n62oumHb8e98Ikel/22kAVF7Fbl0r5574wrGuJEB4sRc71iHcsL4+b+S2/4l3WLjqY4kol64XaT11ccHha9E3LR2/bsn01yTCl+vZxe9jrFlEyLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CVjYeIbd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788518987; c=relaxed/simple;
+	bh=14oWaO8y6kGduZOTbJrPXUHKyBBu9i5dpXXvYnAKRSM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=a8TPuL+vCkxiEFwIT3ZcpId3ruOPxmiKpurgLpfuR0KqraLbaSEZFHsmmn3c3+53UKcw9deAsD9DykPbJjOeQeivVxvXmnBoVrL8vPGefsDwkmckMwE8v6SSnp7KUyazABwdG6CYmoVt9EhEIKLhtFyDdH61JPfuV+m0QbUn/rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bIORgWTR; arc=none smtp.client-ip=74.125.225.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CVjYeIbd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A10011F00A3D;
-	Fri,  4 Sep 2026 10:43:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788518629;
-	bh=VW/CLvXtR4yi53YJ7B+rM0JAvXpIe3UjCxJyIRDFpr0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=CVjYeIbd00dffOAYPugbkKN2MbArT5cImYadB4j+59apFTYJ6qNsx+HJXhXSHjxWd
-	 PDU+/10sgnpMiO+5G+/JkISHJeO5wyEx1bjM/hX2VhwGl6LIlR3fGnc8THVTpArie1
-	 0Xk7ms3jKC3xlsqJhXRbTzeRZjLy4Abb2Suyos0H7Aj2bak0q/nUotJea62OlTfBij
-	 QyM6wsxZkGpPgAGrubvnOsTcq+ZBX3tEAp72W8R7GuA7Lqbhu8bwvKXzqb7k6qJm9l
-	 sLBakyO/blUmymUISaV/2lYDlsveRZLBbJM96xbjGN9yZpw4lKEzujXCapOwqYUlvZ
-	 ZIMVI+2+bSC4Q==
-From: Christian Brauner <brauner@kernel.org>
-To: Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>, Michael Ellerman <mpe@ellerman.id.au>, 
- Nicholas Piggin <npiggin@gmail.com>, 
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Jan Kara <jack@suse.cz>, 
- Jakub Kicinski <kuba@kernel.org>, Namjae Jeon <linkinjeon@kernel.org>, 
- Hisam Mehboob <hisamshar@gmail.com>, 
- =?utf-8?q?Martin_Kepplinger-Novakovi=C4=87?= <martink@posteo.de>, 
- Amir Goldstein <amir73il@gmail.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
- Lorenzo Stoakes <ljs@kernel.org>, Eric Biggers <ebiggers@kernel.org>, 
- Geert Uytterhoeven <geert@linux-m68k.org>, 
- David Howells <dhowells@redhat.com>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Theodore Ts'o <tytso@mit.edu>, Catalin Iacob <iacobcatalin@gmail.com>, 
- Stephen Hemminger <stephen@networkplumber.org>, 
- Andrew Lunn <andrew@lunn.ch>, "Maciej W. Rozycki" <macro@orcam.me.uk>, 
- Andrei Vagin <avagin@gmail.com>, Wei Yang <richard.weiyang@gmail.com>, 
- Bhavik Sachdev <b.sachdev1904@gmail.com>, 
- Andrew Morton <akpm@linux-foundation.org>, Wang Yan <wangyan01@kylinos.cn>, 
- Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>, 
- Malaya Kumar Rout <malayarout91@gmail.com>, linux-doc@vger.kernel.org, 
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Ethan Nelson-Moore <enelsonmoore@gmail.com>
-Cc: Luis de Bethencourt <luisbg@kernel.org>, 
- Salah Triki <salah.triki@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
- "Tigran A. Aivazian" <aivazian.tigran@gmail.com>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Alexander Viro <viro@zeniv.linux.org.uk>
-In-Reply-To: <20260904082954.48738-1-enelsonmoore@gmail.com>
-References: <20260904082954.48738-1-enelsonmoore@gmail.com>
-Subject: Re: [PATCH] bfs: remove the filesystem
-Message-Id: <20260904-hinnimmt-triumphieren-handgefertigt-4e51fe2ed659@brauner>
-Date: Fri, 04 Sep 2026 12:43:09 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bIORgWTR"
+Received: by mail-wm2-f2.google.com with SMTP id 5b1f17b1804b1-4926d058720so2681305e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 03:49:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788518984; x=1789123784; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=R3u9g8flI7rRarp9QuZV2hara4otiGm0KnyRuI1Bei8=;
+        b=bIORgWTRvmWjQSxSXxLvJxYYovQvEDHq2HnOUeNQtouc8LdXexBsJh9l2mOtqzqMBm
+         +Ic7jcmbtp4Y2pj1vqYtPiJtTobfTbRDgSgx0l9Kmyr7k229qbc2v9YKsJ+wLwh+6iXT
+         /t49JXB2swCnHIBNbHgbevKa1qQ4SgQZ3pkmKvghB9f3YNR8n6SmekCpGfHrOGUf4ekO
+         nnMNHhMa1/hRm0X6RfC4egbmEkkWnh+UWw42b3aZRl2pnYl+jyStUVUUbcJ/fLVhS7E1
+         FFgCttQvDdXrpPiP+O1gQ/6ZuR34mHoYcN6jN5qmFmidtzYzXzoip6jCGksl3zcGogPe
+         CBEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788518984; x=1789123784;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=R3u9g8flI7rRarp9QuZV2hara4otiGm0KnyRuI1Bei8=;
+        b=jsxvAPTmnC3bN5DUqcWwNwDfbskl6GJ3iecarkZqBmkrysHTYnM7KQFP8KSqzBN8ue
+         D9Os2+Bcy8EzY1+YNifmDPFsO3X1mHEMchFoAOubPxCikSU5jn1FjJAmngK/sWCmrrt0
+         0MwGoEV2Xa1v1lPWjgkrYxRbYZjAOnfSjueR7KUq4J5hEidQwCtz39v7/Aq31hlrW7zU
+         JYsETk2XIloSxMXjN5d6ewX4pVl9/1JUQ2d7vDilHFn2oK2tGZGVYdw5fxOq/q+nnh9O
+         MyJCNY88v4kmTjkLrF0qtLFbTBY3VwFLZzYakuLSg4n1Xogoa5T+Mz2WCTCgbGoEzneB
+         Bidg==
+X-Forwarded-Encrypted: i=1; AKwUvBxivWt/oEvRetcUE6dPXdWJYSHBzMsjR++6lOeT7YXSf+be3jXhaXIz7r5/J/IygLFfJDdlGNzYZWNom/apNUE=@vger.kernel.org
+X-Gm-Message-State: AFuF++mq3Tu1v/bWSwN8W1IS1mqMH/n5GtftUw1pkb9euyJhfX5IN4Jw
+	2DiAbrbO8J5quLGbvMUKsesiswrHxAhhV4KO8TSwmB1OymWqmc//SdLe
+X-Gm-Gg: AYBFou2/YtvfNlcqQfp4einYNDpuN3sn7FfuhUOpMGMDmQ2tZsdEuRES/JX7gQBqift
+	c31/D44iaBdzceEMjGMOfWcSjxiOpNMhviEJ7rm9MWzg99yi7j4Dfpohks2AyZCImY7Mu7SwlsP
+	7aJ8BJlZpiC75VspSwpSTeKbiWJJf5HRY7zQI5zmF1pmyLiXJnqO/fQ/YB7tMW72gUpCnyvfsl2
+	8sL6+HUYUjz1O3OI+Yb/tUg08qAKOdkgEP6+fJ0T2wm1IdkP4l5XZXDgmNu8/IYVYpMgec3KGPO
+	sQcWgEmqlaouzT6Xkj6aDHUDd/EzjN+bj+B5r7+uEGkniDhU7XkVMDr9U09Sl6UnqPpQ80RwD3R
+	Z6gLlX8jphCPOxdDym1Tcz2vQU2g5KCnkmsnySnGle5bjCkY6d9tqGYrnWTXwsF+PlKVEt0mUsC
+	HXfFoum1ylWFNm7SgouSVlwLwpsZ4b+FS1H/B7dpk+4kfzWpbBlO3W9IeU5p1R53p/L3AzUijLN
+	cc2XFCK1/7Tl9GnwGpaMKScKlnd6BBFSXT4XV8f5qxMPGspw5ffm1XyXdoCJdlLL9FHHEoQk1nV
+	jzdlD3sY2ozQo+dY+nwUC0JNcKg=
+X-Received: by 2002:a05:600c:46d1:b0:493:bd2a:93be with SMTP id 5b1f17b1804b1-49cf820c992mr53868815e9.6.1788518983443;
+        Fri, 04 Sep 2026 03:49:43 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee80eda4sm141983635e9.15.2026.09.04.03.49.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Sep 2026 03:49:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.17-dev-db0b7
-X-Developer-Signature: v=1; a=openpgp-sha256; l=859; i=brauner@kernel.org;
- h=from:subject:message-id; bh=SEZe5HnLJEPtViVtmgtwkTJszcnx/wvXNNnLPrgibYw=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTNWnB77S5lMyEl9+dJ/HLX590J4N+XsPtmUsuNHyGhN
- Q1OTHcedZSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEykeiojwxoB52CpkN9BCyZ2
- 2izo/OY7bYapT739fJPZbu0Sp8xilzP8Lyt/d+TkVQWPP+sS1xyavfuujX3Dr4edtfbn2XY16J4
- 9ygYA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 04 Sep 2026 12:49:42 +0200
+Message-Id: <DL6H2DO8O3BZ.3CU50815EL05A@gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/4] bpf: Cancel special fields in resizable
+ hashtab on recycle
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: <chenyuan_fl@163.com>, <bpf@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Shuah
+ Khan" <shuah@kernel.org>, "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>, "Yuan
+ Chen" <chenyuan@kylinos.cn>
+X-Mailer: aerc 0.21.0
+References: <0560a24d-2cf9-4e5b-aa61-580af1e56de1@gmail.com>
+ <20260901062845.1379760-1-chenyuan_fl@163.com>
+In-Reply-To: <20260901062845.1379760-1-chenyuan_fl@163.com>
 
-On Fri, 04 Sep 2026 01:29:19 -0700, Ethan Nelson-Moore wrote:
-> bfs: remove the filesystem
+On Tue Sep 1, 2026 at 8:28 AM CEST, chenyuan_fl wrote:
+> From: Yuan Chen <chenyuan@kylinos.cn>
+>
+> v3 addresses Mykyta's review of v2 [3]. Both comments concern patch 1:
+>
+>   1. "Could you please double check if this is needed at all? I think
+>      bpf_map_free_internal_structs() going to reset special fields to 0,
+>      so immediate reuse by __bpf_async_init(), bpf_task_work_schedule()
+>      correctly identifies fresh fields."
+>      -> Correct: bpf_obj_cancel_fields() resets the timer/workqueue/
+>      task_work slots in place (xchg to NULL in bpf_async_cancel_and_free(=
+)
+>      and bpf_task_work_cancel_and_free()), so no re-initialization is
+>      needed on reuse. rhtab_init_map_value() is dropped entirely; the
+>      element alloc path now matches htab's non-prealloc path
+>      (alloc_htab_elem()), which also performs no explicit init.
+>
+>   2. "Let's directly call bpf_obj_cancel_fields() here and below, so it
+>      is consistent with htab."
+>      -> Done: the rhtab_cancel_fields() wrapper is removed and
+>      rhtab_delete_elem()/rhtab_map_update_existing() call
+>      bpf_obj_cancel_fields() directly.
+>
 
-I agree.
+I split out two fixes from this, given Nuoqi's patch was already acked befo=
+re, I
+decided to take that one with Mykyta's ack, and also rewrote commit log and
+simplified tests where possible. The remaining issue should be th BTF relat=
+ed
+problem, please send that separately, but also simplify it.
 
----
+The current fix is too convoluted. Just taking extra map BTF refcount for t=
+he
+dtor record should hopefully suffice.
 
-Applied to the vfs-7.4.bfs branch of the vfs/vfs.git tree.
-Patches in the vfs-7.4.bfs branch should appear in linux-next soon.
-
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
-
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-7.4.bfs
-
-[1/1] bfs: remove the filesystem
-      https://git.kernel.org/vfs/vfs/c/e36781a626b2
+> The resizable hashtab still eagerly calls bpf_obj_free_fields() on
+> element delete/replace, which runs kptr destructors from the caller's
+> execution context (unsafe in NMI). This follows the existing discussion
+> on RHash special-field recycling (Nuoqi Gui's series [2] and the review
+> [1]): patch 1 applies the cancel semantics like hash/array maps
+> (a3a81d247651); patch 2 fixes a program-BTF use-after-free in the
+> mem-alloc destructor found while testing; patches 3-4 add regression
+> tests (NMI update, and per-field delete/re-insert cycles).
+>
+> Changes since v2 (all from Mykyta's review [3]):
+>
+>   * Drop rhtab_init_map_value(): bpf_obj_cancel_fields() resets the
+>     timer/workqueue/task_work slots to zero on delete, fresh elements
+>     come zeroed from the bpf mem allocator, and kptr slots must stay
+>     untouched, so no re-initialization is needed (matching htab's
+>     non-prealloc path).
+>   * Call bpf_obj_cancel_fields() directly instead of a rhtab-specific
+>     wrapper, consistent with htab.
+>
+> [1] https://lore.kernel.org/bpf/DKEVG8ZVJDDQ.2G40FTOIZKU57@gmail.com/
+> [2] https://lore.kernel.org/bpf/20260726-f01-23-rhash-cancel-bpf-next-v1-=
+0-6e5e1131d885@mails.tsinghua.edu.cn/
+> [3] https://lore.kernel.org/bpf/0560a24d-2cf9-4e5b-aa61-580af1e56de1@gmai=
+l.com/
+>
+> Yuan Chen (4):
+>   bpf: Cancel special fields in resizable hashtab on recycle
+>   bpf: Fix use-after-free of program BTF in mem-alloc destructor
+>   selftests/bpf: Test rhtab kptr recycle from NMI context
+>   selftests/bpf: Test rhtab special-field combinations
+>
+>  kernel/bpf/hashtab.c                               |  98 +++++-
+>  .../selftests/bpf/prog_tests/rhtab_fields.c        | 337 +++++++++++++++=
++++
+>  .../testing/selftests/bpf/prog_tests/rhtab_kptr.c  | 184 ++++++++++
+>  tools/testing/selftests/bpf/progs/rhtab_fields.c   | 378 +++++++++++++++=
+++++++
+>  tools/testing/selftests/bpf/progs/rhtab_kptr.c     | 146 ++++++++
+>  tools/testing/selftests/bpf/rhtab_fields_common.h  |  19 ++
+>  tools/testing/selftests/bpf/rhtab_kptr_common.h    |   6 +
+>  7 files changed, 1152 insertions(+), 16 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/rhtab_fields.c
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/rhtab_fields.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/rhtab_kptr.c
+>  create mode 100644 tools/testing/selftests/bpf/rhtab_fields_common.h
+>  create mode 100644 tools/testing/selftests/bpf/rhtab_kptr_common.h
+>
+> --
+> 2.54.0
 
