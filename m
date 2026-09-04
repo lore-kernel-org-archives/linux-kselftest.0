@@ -1,83 +1,126 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-102.mta1.migadu.com [95.215.58.102])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125D93DDDCB;
-	Fri,  4 Sep 2026 08:14:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B8C43E0080
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 08:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788509666; cv=none; b=S4sY/SoHG8Qpxp7e3GvKhI4/OxWHodqdfiHPXAGTYcfG4n4rI2vE6TZlj7RxmDjezZ+bPsGBkoWxgao/2bzu+GON2hswDYaz1WSk8V492TMRjz1/e+CT43zajQf25TmrenCj8xBRU/TjLd6BmzbbVIpSMi87j4Mym7qd/YDb/wg=
+	t=1788509725; cv=none; b=GaekZYe5mbVyfSFMnshOYGpM/SfthMLiCoBRC9rkJ9p+R7kh6jzVO5aUC02nuLlHHv3+RjwM+qMD3gzyRzDctdXS5NBVqRwWPp74ECvEv8Ki0v4C/8ZDjirccj5lhPGeeNRWLciwc5vH6F62chJ4AVPWRKWr3eOrnOxsBOradWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788509666; c=relaxed/simple;
-	bh=Pei3AQKbV/8mZPIhqlEsfH56hZdpkbaH3xKuasIlxdg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qGGrpBKcUIsaus3l9EvrC8oiPKXWrdf7ywWxwzGERUL5xfIfNtfjkGR/AtWqW0mX/D6rPyk3diqe6pZf6fdHn1Eci/ZDWxGssfHrmU75UI8zlZGHbZIo5qgd8volMlHS62juIsKu2CK5+S6QAf6BZlPUTgHqJe9t9p7QomOtIwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=EXddcMwH; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1788509725; c=relaxed/simple;
+	bh=PvS/b2Z/rWbhXmaZRpQZt7dAKEvw4kUH2lDXouIPU/Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kaoINvcsF53JB9159ckvgy5EV8s88qpMfuIj0OGz+hNxoghk5SjFN/0WuIVJwQIsLdJaxxzwVZVlqafUFdWM799y8ga5U9qJ83vnaHcI8SYyGycpSwBqSb0bJ81CBVAJIZFANf49ODmAg+Xa6RGXiX4/NbBR8lHyUjI1A82/9j4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tK7fuDs/; arc=none smtp.client-ip=95.215.58.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EXddcMwH"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 189C14E41502;
-	Fri,  4 Sep 2026 08:14:21 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id DD78A6057F;
-	Fri,  4 Sep 2026 08:14:20 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7DC1411C7A463;
-	Fri,  4 Sep 2026 10:14:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1788509659; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=A/YUapB0XqTHWiFgZm2Y5luuW3ulfbFhmj5mkJkslv0=;
-	b=EXddcMwHej/eVzgfd6wa7/YXUsgWwktnpwOdzEdlUayRgZcOua1NyTFXUdNOw+x3+NGbfW
-	KQ4AynvTEzCFuIQVFb/DjgU/5Yr6poms+XC1N+sto0A5GEZgx5n6aXTIh8yFIw7O5cp/us
-	HCiXEHaDhtSKRN7dvREaC6U8jvCdoaYt9r2B2IX1f5zJ2OuKsRrMor546t2bYzLQecYhwa
-	xLt0u9pou+N6uaK0pZanHpFiyWIgOHR01aWjRgV/eufe0zggc+odZY0AEYvuVFdeV2C4Xe
-	pjIZLp4/R5PLbhULxbQrscI0l+DgIkr+pzYZ64B2BrMfsd+uOZmetlA8lvo/lw==
-Message-ID: <249f530e-fb9d-42ae-98d8-1f6190f650b6@bootlin.com>
-Date: Fri, 4 Sep 2026 10:14:15 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tK7fuDs/"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=PvS/b2Z/rWbhXmaZRpQZt7dAKEvw4kUH2lDXouIPU/Q=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788509719; v=1; x=1789114519;
+ b=tK7fuDs/LKiQDnZg+jday5NS+rCi6phLKcz2VHSMul3M2BUPuiu2w+D2g23jx2CBHDFLmtB2
+ nO2gbz57G1WFmvxTwSB5EZNo6OiBtTAUZewe3ggvEVXh5I/QzPbHrFUDIwj5s4Jnd5qORMFc+0f
+ ArMHskl8t1u+0WYgW3FZd1YM=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id e6edb99a81daf5e0;
+	Fri, 04 Sep 2026 08:15:18 +0000
+X-Mizu-Trace-ID: e6edb99a81daf5e0
+X-Migadu-Flow: FLOW_OUT
+Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b4a0b384b7so3703e87.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 01:15:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBzUvLR7U02RElc/E/mM+Q7vhMGBGtNbQa9ukp86PrMn45uRyXvXTRfcTUzcfcc6T/hvQ/qBXIBYKCcq/Mf6Kqg=@vger.kernel.org
+X-Gm-Message-State: AFuF++mYTr7xwanTxVZw6BIiMp1WslvKsvhkpd/QPiYCLYd+MbeSbRqw
+	BI8hhyDC+COuVdh1cEKDXzTansiYWnJpVL/8Cpms3PFdPFvoJdKhB9tdfSS2jfmS8hAx4qoClIL
+	JLYxoV97S9hEthEZ2RnjYr5OvF/7fmKSZsOqR6aFL
+X-Received: by 2002:a05:6512:1112:b0:5b2:a967:c0e1 with SMTP id
+ 2adb3069b0e04-5b616f28401mr90649e87.0.1788509712868; Fri, 04 Sep 2026
+ 01:15:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH][next] selftests/bpf: test_xsk: Fix spelling mistake
- "conigure" -> "configure"
-To: Colin Ian King <colin.i.king@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260903150351.12725-1-colin.i.king@gmail.com>
-Content-Language: en-US
-From: Bastien Curutchet <bastien.curutchet@bootlin.com>
-In-Reply-To: <20260903150351.12725-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20260826-arm64-52bit-va-v1-0-14ec98211363@fujitsu.com>
+In-Reply-To: <20260826-arm64-52bit-va-v1-0-14ec98211363@fujitsu.com>
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Fri, 4 Sep 2026 09:14:36 +0100
+X-Gmail-Original-Message-ID: <CA+EHjTwPmwPTMcgQB6zt47Kz6NPMr+FkGfq2Qq+Uxu+G427OEg@mail.gmail.com>
+X-Gm-Features: AcwNN1WvopgDxoDNDPRaykUroX4fh4XjNCnUWBoPOLttdFGRxQfbeOfusjQcANY
+Message-ID: <CA+EHjTwPmwPTMcgQB6zt47Kz6NPMr+FkGfq2Qq+Uxu+G427OEg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] 52-bit VA guest mode ID support
+To: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Steffen Eiden <seiden@linux.ibm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Takayuki Okamoto <tokamoto@fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
-
-I think your mail subject should have started with [PATCH bpf-next] (cf
-https://elixir.bootlin.com/linux/v7.2.2/source/Documentation/bpf/bpf_devel_QA.rst#L157-L166)
-
-Also other commits to this file start with selftests/xsk, but that's a 
-nit pick.
+Hi Itaru,
 
 
-On 9/3/26 5:03 PM, Colin Ian King wrote:
-> There is a spelling mistake in an assert message. Fix it.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-Reviewed-by: Bastien Curutchet <bastien.curutchet@bootlin.com>
+On Tue, 25 Aug 2026 at 22:18, Itaru Kitayama <itaru.kitayama@fujitsu.com> wrote:
+>
+> This patch series extends the arm64 KVM selftest framework
+> to support 52-bit guest virtual address (VA) modes in addition to
+> the existing 52-bit physical address (PA) configurations.
+> The motivation is to enable validation of LPA2 guest memory-management
+> behaviour in configurations that use a 52-bit VA space.
+> While the selftest framework already supports testing 52-bit PA
+> configurations, it lacks the ability to exercise guests running with
+> 52-bit virtual addresses, leaving part of the LPA2 functionality untested.
 
+The series adds three 52-bit VA guest modes, but nothing in tree maps
+a guest VA high enough to use them. The mode-iterating tests map at a
+fixed low GVA, so pgd_index() returns 0 and only the first entry of
+the top level is ever used.
 
-Regards,
-Bastien
+What do you expect the modes to catch as they stand? The allocators
+already take a minimum GVA, so mapping high in one of those tests
+looks like a small change.
+
+> To address this, the series introduces new guest modes for 52-bit VA
+> operation, adds five-level page table support where required, and
+> performs runtime detection of host 52-bit VA capability so that
+> LPA2-enabled guest VA tests are executed only on supported systems.
+>
+> Testing:
+>
+> Built and tested on arm64.
+> Verified on QEMU with a V52-capable guest configuration.
+> Confirmed correct operation of high virtual address mappings by
+> exercising guest memory accesses in the 52-bit VA range.
+
+I could not reproduce "exercising guest memory accesses in the 52-bit
+VA range" with anything in tree either. Could you say which test you
+ran, which guest modes, and on what?
+
+Thanks,
+/fuad
+
+> Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+> Reviewed-by: Takayuki Okamoto <tokamoto@fujitsu.com>
+> ---
+> Itaru Kitayama (2):
+>       KVM: selftest: arm64: Support 5-level paging in stage 1 translation table
+>       KVM: selftests: arm64: Add 52-bit VA guest modes
+>
+>  .../selftests/kvm/include/arm64/processor.h        |  2 +
+>  tools/testing/selftests/kvm/include/kvm_util.h     |  3 +
+>  tools/testing/selftests/kvm/lib/arm64/processor.c  | 87 ++++++++++++++++++++--
+>  tools/testing/selftests/kvm/lib/guest_modes.c      |  5 ++
+>  tools/testing/selftests/kvm/lib/kvm_util.c         | 11 +++
+>  5 files changed, 103 insertions(+), 5 deletions(-)
+> ---
+> base-commit: 8d3ae59288f1e7d58d76558a6ee96d533bc5019f
+> change-id: 20260825-arm64-52bit-va-32f1f4cd050d
+>
+> Best regards,
+> --
+> Itaru Kitayama <itaru.kitayama@fujitsu.com>
+>
