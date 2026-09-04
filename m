@@ -1,75 +1,68 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2E4737B40C
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 02:19:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4725D390214;
+	Fri,  4 Sep 2026 02:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788488398; cv=none; b=JnVvdPLYFw91DmqkyQDhDbDVfpxez/qzLbhUlSTiVide4L7g+kwZ26XNGeLSosGoUnNe0qXrERfcqZyrpNMM9HygTfb8qKcNqs4kkxmueEDOLy6HNoVVqgPGfDaSoW5sbKTYAx2e0G3vhSbplKeSvNCPKgOf352N/zDU1JdIkAI=
+	t=1788489096; cv=none; b=Tbn/3emK6AKTKAs/BdT4XsVjwWWgsWukLxRqUTHhe/89aiJ81HY7bJO0x53zTM1ppui8Hca5tS/LRAg60WDVhG442LE2fcvh/9KOSA2ZBVKcgRIM7CkrZekykr7C0Y7XUBgvGwW5OBqWXQsV7DFLT/HzYnsjA7pFZCG/OzNHa0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788488398; c=relaxed/simple;
-	bh=p3+FAJ/9mFidjyr+eEcreaYdBMlN0e+7XIZVWS+Ja/w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Fi6H/pv/ZBgWfahyfQDH0kgFof/15G52GPesB7I3AeQdgeQ70U6dQW8KlwAqv9LP0EX7h8UtAbPFjXjjvIy+Q4ZrBUvv4nkcEDYvSMOXyG1d+iSyVEp0GEfk4t0tppRYLejnmqegvgstF2fxd9rZ4efytIpUhHxzv2kuE2x+zAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=niac6wvv; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788489096; c=relaxed/simple;
+	bh=akIoDhXyVIrI7sL7nD+jqHniSkh3DFIabdfKV37esCw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qMMB0kkl2We+/+naRlmidZ9RI44Qbas9RXXvE4aX3GRscphz96FDy4SqnRmpJAbPYlFLtLKW5t83IHQ8HhPVPqx/fOcSCWbEi+MevmF+w6VvtQcnKeOjSWsKioLP10IZ/pVPi3UXNrzA0VfAu8kBgtRHIZc+FG94WVNUMHxQrtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y6eEAlJZ; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="niac6wvv"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so571147a91.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 19:19:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788488396; x=1789093196; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cH8hCql3slFtjql46/fGxJDpBGHTGfbVhDtVe9R8smo=;
-        b=niac6wvvOL4Eq8box362ohv6ntOmpUvesj954DvolNMvVSwgeL9NoDH7kVY2e18baz
-         C3Uu553MbcQDml1Ai5Tf/DWBHnGxr1Igya1Swhws+tVxkWdbsHi+e6u20FDZ9jxa2WVt
-         QLS3IHL65UQtMGYGlE2nSmanweCssYF5G3nF4GQ3oO8+u5qEs06j/VBBYr9lLJLhyeN0
-         mAdXzx/ppVmzaqysW9kawH1u3q90y+QJHD7o9PgWASnOCI5C9p5hrxIfCaApRwbif8Ur
-         9yG6IesLH3DopA7VJ0VXF4xX3vpxz2gEmSrI8Cv29JonUFX/TmAXGgvxkTtsNdk9X2bj
-         AS7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788488396; x=1789093196;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=cH8hCql3slFtjql46/fGxJDpBGHTGfbVhDtVe9R8smo=;
-        b=FjOq6hUP9Z0B6avyoa8pH+FfhryOgy/O7GP6ylZMWoiVy4QqCCfl0mg6527Y36SIBj
-         OFnjzsLFOS1PdyQkD1LYXW6GWphFHsSsehwklSisgqM/oEY4wAARhyVnCJkMLJJlsMfU
-         OhBdVegUSp3UTop8rcXDg4Ug4v2FoyiMV8pBxBJ0i2dVYemqmihIF6XAZZhr2u4ZFMeU
-         aLa6kWReafYs0vvVgom9y+aEv58OZOrQCLjoUBTtynzwt/zUcn5E8b1d3jF9REUCIAXd
-         5GwHP7hojaaItzqR7wETgAiAuuUOlhFq/M4AtMsFN0apyGE8qXsrTVF1lb6Q41FNekEQ
-         L7/g==
-X-Forwarded-Encrypted: i=1; AKwUvBxr+nFxH29ug4ycAkOpBCdwOjAhniCWf5+XaCnskht3HxPPaMgNAUTZVzHZPHLPnGMpMuh1zgbkYkTAPjycHyE=@vger.kernel.org
-X-Gm-Message-State: AFuF++nalogqiZFLaxTLiWFo5cPO//f1Pgd3cVf4GrclLBH0tGWDANEy
-	l6YLBxPkxfq0pLG+yL5fSFKWqllkEEaRAjMJ7P3dYUdoy/nlv/365xG32J3+Dvkd
-X-Gm-Gg: AYBFou2Kdozy7IJFxAaXEwjFpi0YtOSmbE5kG4DDqYFuYgszwduLu5JyJDouNW8vJ44
-	LyD8bMO2Q1tLJAq5hx1NW2va8r27aSoA8WEht4OjMZ8Y0FtlKr5+oxXyd+yqUMx72ZWOPnHajeK
-	1dbmbCotUBC5ueBk67VRIt8d1axpJfwJ+oE6eJpi8U2yhv6PRZKTI0ezcf9wPnvoikS+lRszsZm
-	tJsv8NzDFJ72i0ok1LTjtoPbhPJn8L44N/0E28WnovfcsRbZQ41ecgkoeEA7USV3daBpXFgGE6S
-	QsKq4i7i8TlA4nfwTCa4INDLgEmzsSL3pLJGfpNZXpvyIBtiCWrDN9cga5iGD8cxyrw5Q8DjApw
-	x3/lEgcWjoK1s0KvTiyaowR93g11QmYCCfUIbfp53grU/rmkaNzcR9D3YB5FeLsm5VEDvTnYuAO
-	zPtl/isZUmUZdH5cTOX53GB+ybayAsbp7H7Jq40h88CMexWvxiuZ2LWbjSBFA6DbC1lwcC48wyV
-	bRu8ldxi969dlZ43CVji5yw2rDkuilyR2ASKPmcNXeGMbkJsdpUtw==
-X-Received: by 2002:a17:90b:4c4a:b0:398:bc52:825b with SMTP id 98e67ed59e1d1-39b2624c32amr3809472a91.21.1788488395788;
-        Thu, 03 Sep 2026 19:19:55 -0700 (PDT)
-Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b260cd2aasm1731212a91.3.2026.09.03.19.19.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 19:19:55 -0700 (PDT)
-From: HyeongJun An <sammiee5311@gmail.com>
-To: Mark Brown <broonie@kernel.org>,
-	Takashi Iwai <tiwai@suse.com>,
-	Jaroslav Kysela <perex@perex.cz>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y6eEAlJZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1788489093; x=1820025093;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=akIoDhXyVIrI7sL7nD+jqHniSkh3DFIabdfKV37esCw=;
+  b=Y6eEAlJZKE878DYvnhKqAM3jB2y8K4e7o+bFs1Mzx8lqi3zIcie9Dmvz
+   KprVn82smjD0RW+G2uEm9rby+zYaG5AdlhVQAuOBNyrESumvQVQ1b2dZa
+   BrizcUOkAcf5Ebmqi5EPE57g2dPPBPTLjxHSZgLF6//YVZwPUndfi/718
+   gLljO1He2A94anNzn3qZFg16FYQq5LbYMpnFeMa3cbF9S9mmyZEmE2yea
+   sCWKPRL8tPFsMgHCw8ZMhGij+n3/hDvSnMjQFFLxP0is7riJ28La9CX8n
+   PiJTSrh3MoYZL/ms5AKGK+fvryDK0SPda9jgom1AuiUyiYqjjpnoam1j8
+   Q==;
+X-CSE-ConnectionGUID: 713oasOYQ1WYR3kWVYrDBg==
+X-CSE-MsgGUID: pVxugXkeTp+g+vUd91LN0g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11895"; a="106506737"
+X-IronPort-AV: E=Sophos;i="6.25,260,1779174000"; 
+   d="scan'208";a="106506737"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2026 19:31:32 -0700
+X-CSE-ConnectionGUID: CBsqO7imSD6iGL6OHbMuJw==
+X-CSE-MsgGUID: 3eBBviPLSPykQsDmVANN8w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,260,1779174000"; 
+   d="scan'208";a="270433488"
+Received: from zhaoliu1-desk.sh.intel.com ([10.238.208.118])
+  by orviesa009.jf.intel.com with ESMTP; 03 Sep 2026 19:31:29 -0700
+From: Zhao Liu <zhao1.liu@intel.com>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
 	Shuah Khan <shuah@kernel.org>
-Cc: linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+Cc: Chao Gao <chao.gao@intel.com>,
+	Xin Li <xin@zytor.com>,
+	Sohil Mehta <sohil.mehta@intel.com>,
+	kvm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	HyeongJun An <sammiee5311@gmail.com>
-Subject: [PATCH] selftests/alsa: Test writes to IEC958 controls
-Date: Fri,  4 Sep 2026 11:19:39 +0900
-Message-ID: <20260904021939.149468-1-sammiee5311@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	linux-kselftest@vger.kernel.org,
+	Zhao Liu <zhao1.liu@intel.com>
+Subject: [RFC 0/4] KVM: nVMX: Fix guest (CET) state handling on VM-entry failure
+Date: Fri,  4 Sep 2026 10:31:01 +0800
+Message-Id: <20260904023105.1167376-1-zhao1.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,289 +71,215 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Nothing checks that the put() callback of an IEC958 control reports a
-change, because write_valid skips these controls.
+Hi,
 
-Toggle one channel status bit and look for the event. The bit comes
-from the Con Mask, Pro Mask or plain Mask sibling where there is one,
-non-audio by preference because it means the same thing in both
-layouts. Bit 0 of the first byte picks the layout, so leave it alone.
+This series tries to point out the missing guest state retain behavior
+in the current KVM handling for the nested vm-entry failure case, by a
+CET nested selftest (patch 4), and to raise a discussion on how KVM
+retains guest state at VM-entry failure.
 
-Write the value once without grading it first, since a device need not
-implement the bit we picked. The graded write then compares against
-what the device gave back, so it can only fail on the notification.
+Currently, I think there are two possible fix approaches: one is patch 1,
+which explicitly enumerates the stages, and the other is option B
+mentioned in section "Option B", which uses (or reuse pre_vmenter_* ?)
+intermediate variables to cache the guest state between vmcs01 and
+vmcs02.
 
-On an HDA card with four HDMI PCMs:
+Back to problem (using CET as the example), at present, on a nested
+VM-exit with VM_EXIT_LOAD_CET_STATE cleared, KVM unconditionally copies
+vmcs12's guest CET fields into vmcs01. When the VM-exit is a VM-entry
+failure that occurred before guest state was loaded, those fields hold
+what L1 wrote for L2, not what the CPU would have kept, so L1 resumes
+with the S_CET/SSP/INTERRUPT_SSP_TABLE_ADDR it had programmed for L2.
 
-  -# Totals: pass:212 fail:5 xfail:0 xpass:0 skip:56 error:0
-  +# Totals: pass:216 fail:5 xfail:0 xpass:0 skip:52 error:0
+This does not conform to the SDM's description of vm-entry failure.
 
-A driver whose put() never reports a change now shows up as
-event_missing rather than as a skip. hdmi-codec, img-spdif-out and
-uniperif_player store the value and return 0, so boards using them
-should report a new failure.
+Background
+==========
 
-write_invalid stays a skip. Every bit pattern is a valid channel
-status.
+What L1 should observe after a nested VM-exit depends on three things:
+the VM-exit "load host state" control, whether VM-entry got far enough
+to load L2's state, and whether L2 ran. For CET:
 
-Suggested-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/all/317fc80e-ec80-477d-80f6-53c395de4b4a@sirena.org.uk/
-Signed-off-by: HyeongJun An <sammiee5311@gmail.com>
-Assisted-by: Claude:claude-opus-5
+ 1) VM_EXIT_LOAD_CET_STATE set: load L1's state from vmcs12's host
+    fields, no matter what happened before. KVM already does this, and
+    setting this control makes L1 immune to the bug below.
+
+ 2) Control clear, VM-entry loaded L2's CET state: the guest state is
+    retained on the CPU, so L1 observes it. Copying vmcs12's guest
+    fields into vmcs01 gives the right result.
+
+ 3) Control clear, VM-entry did not load L2's CET state (VM-entry
+    failed before the guest-state loading phase): the CPU keeps L1's
+    own state, so KVM must do nothing.
+
+ 4) Control clear, VM-entry did not load CET state, but L2 ran and
+    exited normally: L2 may have changed the state while running, and
+    vmcs12's guest fields hold what L2 left behind (guest CET state is
+    always saved on VM-exit; there is no VM-exit control for it), so
+    copying them is again correct.
+
+Case 3) is broken today: KVM never syncs vmcs02 back to vmcs12 on the
+VM-entry failure path, so vmcs12's guest fields still hold whatever L1
+wrote with VMWRITE, and KVM stuffs that into vmcs01.
+
+Note that one "VM-entry failed" flag is not enough to distinguish 2)
+from 3): MSR loading happens after guest-state loading, so an
+EXIT_REASON_MSR_LOAD_FAIL implies L2's state was loaded, whereas an
+EXIT_REASON_INVALID_STATE does not.
+
+The INVALID_STATE side of this is a modeling choice, not a hardware
+guarantee. Per the SDM ("Checking and Loading Guest State"), guest-state
+checking and loading occur concurrently, so whether L2's state was
+loaded when the check fails is architecturally undefined.
+
+With patch 1, we can make the behavior well-defined for KVM, by treating
+the check as preceding the load, i.e. it emulates an INVALID_STATE
+VM-entry failure as if no guest state was loaded at all (Case 3).
+
+Option A (this series)
+======================
+
+Track how far VM-entry got, and use that at VM-exit to decide whether
+vmcs12's guest fields are a faithful copy of what the CPU holds:
+
+  enum nested_l2_state {
+	L2_STATE_NOT_LOADED,		/* VM-entry failed before the
+					   guest-state loading phase */
+	L2_STATE_LOADED_FROM_VMCS12,
+	L2_STATE_SAVED_TO_VMCS12,	/* L2 ran, state synced back */
+  };
+
+nested_vmx_enter_non_root_mode() sets L2_STATE_LOADED_FROM_VMCS12 right
+after prepare_vmcs02() succeeds, __nested_vmx_vmexit() passes
+L2_STATE_SAVED_TO_VMCS12, and nested_l2_state_is_live() folds the three
+states plus the VM-entry load control into one predicate.
+
+Pros: small, self-contained, no new state that outlives the transition
+(the enum is a local + one parameter), and the per-feature cost is one
+stage check in load_vmcs12_host_state().
+
+Cons: the VM-exit path now has to look at vmcs12->vm_entry_controls,
+which is odd, because that control belongs to VM-entry.
+
+Option B (not implemented)
+==========================
+
+On a VM-exit, the host-state loading step only ever does one of two
+things: load the register from the VMCS host field, or leave the register
+alone. It does not care why the VM-exit happened, nor how far a failed
+VM-entry got. But KVM cannot simply "leave the register alone", because
+the live value sits in the guest fields of the current VMCS, so it moves
+when KVM switches from vmcs02 back to vmcs01.
+
+KVM already solves this for the L1->L2 direction, with
+nested.pre_vmenter_{s_cet,ssp,ssp_tbl}: L1's live value is read from
+vmcs01 before the switch, and written into vmcs02 if VM-entry does not
+load CET state. The L2->L1 direction has no such variable and uses
+vmcs12's guest fields instead. That is where the bug comes from.
+
+So the other way to fix this is to keep those fields updated in both
+directions. They would then hold more than the pre-VM-entry value, so
+they'd want a new name as well (nested.cet_state, i.e. drop the
+"pre_vmenter" prefix again :-)):
+
+  nested_vmx_enter_non_root_mode()
+	read the live state from vmcs01		/* unconditionally */
+	switch to vmcs02
+	guest-state checks fail  -> exit path, value is still L1's
+	prepare_vmcs02() fails   -> exit path, value is still L1's
+	/* guest-state loading phase */
+	if (VM_ENTRY_LOAD_CET_STATE)
+		value = vmcs12 guest fields
+	write the value into vmcs02
+	/* MSR loading phase; on failure the value is already correct */
+
+  prepare_vmcs12()				/* real VM-exits only */
+	read the live state from vmcs02 into vmcs12's guest fields
+	and into the tracked value
+
+  load_vmcs12_host_state()
+	if (VM_EXIT_LOAD_CET_STATE)
+		value = vmcs12 host fields
+	write the value into vmcs01		/* unconditionally */
+
+Pros: no history to reconstruct at VM-exit, no reference to the
+VM-entry control from the VM-exit path, symmetric with the existing
+L1->L2 handling, and it works for state that is not synced back to
+vmcs12.
+
+Cons: a wider diff (VM-entry path, prepare_vmcs02(), prepare_vmcs12(),
+load_vmcs12_host_state()), and the tracked value is a "second copy" [*]
+of live state, which introduces a third place where guest state lives,
+next to vmcs01/vmcs02 and vmcs12, and every affected state needs its
+own variable. So this is the approach that grows with the number of
+features, whereas Option A's staging enum is shared by all of them.
+
+[*]: "second copy" may be inaccurate, since several places already hold
+guest state outside the VMCS: EFER and PAT are kept in vcpu->arch.*,
+which survives the VMCS switch for free, while CET and BNDCFGS live only
+in the VMCS and already need their own nested.pre_vmenter_* fields for
+the L1->L2 direction. No single unified place is a pity indeed.
+
+Extensibility
+=============
+
+Any feature with a VM-exit "load host state" (or "clear") control has to
+answer the same question: with that control set/clear, what state to
+retain for l1? So this is not only about CET:
+
+ * EFER is correct, because vcpu->arch.efer holds L2's value and
+   the vmx_set_efer() at the end of that if/else chain writes vmcs01
+   unconditionally.
+
+ * CET is broken, which is what patch 1 fixes.
+
+ * BNDCFGS is broken: load_vmcs12_host_state() only handles
+   VM_EXIT_CLEAR_BNDCFGS, so with that control clear L2's value is lost
+   and L1 resumes with its own. MPX is limited to a few older CPUs.
+
+ * PAT is broken: with VM_EXIT_LOAD_IA32_PAT clear, vmcs01.GUEST_IA32_PAT
+   keeps L1's pre-VM-entry value while vcpu->arch.pat holds L2's, so L1
+   resumes with its own PAT but reads L2's back with RDMSR.
+
+ * (in future) FRED also needs to consider this.
+
+Testing
+=======
+
+The selftest gives L1, L2 and vmcs12's host fields three different sets
+of CET values, so that whichever one L1 ends up with tells us where it
+came from. For each of the 4 combinations of VM_ENTRY_LOAD_CET_STATE and
+VM_EXIT_LOAD_CET_STATE, it triggers both kinds of VM-entry failure and
+then checks what L1 reads back:
+
+ - EXIT_REASON_INVALID_STATE: guest CR0 with PG set and PE clear.
+ - EXIT_REASON_MSR_LOAD_FAIL: a VM-entry MSR load list entry for
+   MSR_IA32_UCODE_REV.
+
+MSR_IA32_INTERRUPT_SSP_TABLE_ADDR is the primary observation point
+because KVM always intercepts it and reads it straight out of
+vmcs01.GUEST_INTR_SSP_TABLE. The test requires SHSTK and skips
+otherwise.
+
+Thanks and Best Regards,
+Zhao
 ---
- tools/testing/selftests/alsa/mixer-test.c | 225 ++++++++++++++++++++++
- 1 file changed, 225 insertions(+)
+Zhao Liu (4):
+  KVM: nVMX: Don't copy L2's CET state to L1 if VM-entry didn't load it
+  KVM: selftests: Synchronize and update VMCS controls
+  KVM: selftests: Synchronize and update VMCS encodings
+  KVM: selftests: Test VM-entry failure handling for nested VM
 
-diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
-index a329f901c5ed..0f5750edcd98 100644
---- a/tools/testing/selftests/alsa/mixer-test.c
-+++ b/tools/testing/selftests/alsa/mixer-test.c
-@@ -30,6 +30,12 @@
- 
- #define TESTS_PER_CONTROL 7
- 
-+/* Suffixes of the SNDRV_CTL_NAME_IEC958() names, not exported to userspace */
-+#define IEC958_DEFAULT		"Default"
-+#define IEC958_CON_MASK		"Con Mask"
-+#define IEC958_PRO_MASK		"Pro Mask"
-+#define IEC958_MASK		"Mask"
-+
- struct card_data {
- 	snd_ctl_t *handle;
- 	int card;
-@@ -842,6 +848,221 @@ static bool test_ctl_write_valid_enumerated(struct ctl_data *ctl)
- 	return !fail;
- }
- 
-+/*
-+ * Find the read only mask control for an IEC958 value control.  The two
-+ * share device, subdevice and index but not always the interface.
-+ */
-+static struct ctl_data *find_iec958_mask_ctl(struct ctl_data *ctl,
-+					     const char *suffix)
-+{
-+	char name[64];
-+	int stem;
-+	struct ctl_data *mask;
-+
-+	stem = strlen(ctl->name) - strlen(IEC958_DEFAULT);
-+	if (snprintf(name, sizeof(name), "%.*s%s", stem, ctl->name, suffix) >=
-+	    (int)sizeof(name))
-+		return NULL;
-+
-+	for (mask = ctl_list; mask != NULL; mask = mask->next) {
-+		if (mask->card != ctl->card)
-+			continue;
-+		if (snd_ctl_elem_info_get_type(mask->info) !=
-+		    SND_CTL_ELEM_TYPE_IEC958)
-+			continue;
-+		if (snd_ctl_elem_info_is_inactive(mask->info))
-+			continue;
-+		if (!snd_ctl_elem_info_is_readable(mask->info))
-+			continue;
-+		if (snd_ctl_elem_id_get_device(mask->id) !=
-+		    snd_ctl_elem_id_get_device(ctl->id))
-+			continue;
-+		if (snd_ctl_elem_id_get_subdevice(mask->id) !=
-+		    snd_ctl_elem_id_get_subdevice(ctl->id))
-+			continue;
-+		if (snd_ctl_elem_id_get_index(mask->id) !=
-+		    snd_ctl_elem_id_get_index(ctl->id))
-+			continue;
-+		if (strcmp(mask->name, name) == 0)
-+			return mask;
-+	}
-+
-+	return NULL;
-+}
-+
-+/*
-+ * Read the bits the device says it implements.  Bit 0 of the first status
-+ * byte picks which mask applies, some devices publish only a plain Mask.
-+ */
-+static bool read_iec958_mask(struct ctl_data *ctl,
-+			     const snd_aes_iec958_t *cur,
-+			     snd_aes_iec958_t *mask)
-+{
-+	int err;
-+	struct ctl_data *mask_ctl;
-+	snd_ctl_elem_value_t *val;
-+
-+	if (!strend(ctl->name, IEC958_DEFAULT))
-+		return false;
-+
-+	if (cur->status[0] & IEC958_AES0_PROFESSIONAL)
-+		mask_ctl = find_iec958_mask_ctl(ctl, IEC958_PRO_MASK);
-+	else
-+		mask_ctl = find_iec958_mask_ctl(ctl, IEC958_CON_MASK);
-+	if (!mask_ctl)
-+		mask_ctl = find_iec958_mask_ctl(ctl, IEC958_MASK);
-+	if (!mask_ctl)
-+		return false;
-+
-+	snd_ctl_elem_value_alloca(&val);
-+	snd_ctl_elem_value_set_id(val, mask_ctl->id);
-+
-+	err = snd_ctl_elem_read(mask_ctl->card->handle, val);
-+	if (err < 0) {
-+		ksft_print_msg("snd_ctl_elem_read() failed for %s: %s\n",
-+			       mask_ctl->name, snd_strerror(err));
-+		return false;
-+	}
-+
-+	snd_ctl_elem_value_get_iec958(val, mask);
-+
-+	return true;
-+}
-+
-+/*
-+ * Pick one bit to toggle.  Bit 0 of the first status byte selects the
-+ * layout the others are read in so leave it alone, prefer non audio.
-+ */
-+static bool pick_iec958_bit(const snd_aes_iec958_t *mask, unsigned int *byte,
-+			    unsigned char *bit)
-+{
-+	unsigned int i;
-+	int j;
-+
-+	if (mask->status[0] & IEC958_AES0_NONAUDIO) {
-+		*byte = 0;
-+		*bit = IEC958_AES0_NONAUDIO;
-+		return true;
-+	}
-+
-+	for (i = 0; i < sizeof(mask->status); i++) {
-+		for (j = 0; j < 8; j++) {
-+			if (i == 0 && (1 << j) == IEC958_AES0_PROFESSIONAL)
-+				continue;
-+			if (mask->status[i] & (1 << j)) {
-+				*byte = i;
-+				*bit = 1 << j;
-+				return true;
-+			}
-+		}
-+	}
-+
-+	return false;
-+}
-+
-+/*
-+ * Throw away the events from a write we are not grading, one left behind
-+ * would make a missing notification look like a notification we got.
-+ */
-+static int drop_events(struct ctl_data *ctl)
-+{
-+	int err;
-+
-+	do {
-+		err = wait_for_event(ctl, 0);
-+	} while (err > 0);
-+
-+	return err;
-+}
-+
-+/*
-+ * Toggle a single channel status bit and check that userspace is told about
-+ * it.  A device need not implement the bit we picked so write the value
-+ * without grading it first, then grade against what it gave back.
-+ */
-+static bool test_ctl_write_valid_iec958(struct ctl_data *ctl)
-+{
-+	int err;
-+	unsigned int byte;
-+	unsigned char bit;
-+	snd_aes_iec958_t iec958, mask;
-+	snd_ctl_elem_value_t *orig_val, *val, *read_val, *w_val;
-+	snd_ctl_elem_value_alloca(&orig_val);
-+	snd_ctl_elem_value_alloca(&val);
-+	snd_ctl_elem_value_alloca(&read_val);
-+	snd_ctl_elem_value_alloca(&w_val);
-+
-+	/*
-+	 * The bytes past the ones a driver implements are compared too,
-+	 * so start from a read rather than building a value here.
-+	 */
-+	snd_ctl_elem_value_set_id(orig_val, ctl->id);
-+	err = snd_ctl_elem_read(ctl->card->handle, orig_val);
-+	if (err < 0) {
-+		ksft_print_msg("snd_ctl_elem_read() failed: %s\n",
-+			       snd_strerror(err));
-+		return false;
-+	}
-+
-+	snd_ctl_elem_value_get_iec958(orig_val, &iec958);
-+
-+	/* With no mask to go on all we can do is try non audio */
-+	memset(&mask, 0, sizeof(mask));
-+	if (!read_iec958_mask(ctl, &iec958, &mask))
-+		mask.status[0] = IEC958_AES0_NONAUDIO;
-+
-+	if (!pick_iec958_bit(&mask, &byte, &bit)) {
-+		ksft_print_msg("%s implements no settable status bits\n",
-+			       ctl->name);
-+		return true;
-+	}
-+
-+	iec958.status[byte] ^= bit;
-+	snd_ctl_elem_value_copy(val, orig_val);
-+	snd_ctl_elem_value_set_iec958(val, &iec958);
-+
-+	/* Writing can modify the value so keep a copy to write from */
-+	snd_ctl_elem_value_copy(w_val, val);
-+	err = snd_ctl_elem_write(ctl->card->handle, w_val);
-+	if (err < 0) {
-+		ksft_print_msg("snd_ctl_elem_write() failed: %s\n",
-+			       snd_strerror(err));
-+		return false;
-+	}
-+
-+	snd_ctl_elem_value_set_id(read_val, ctl->id);
-+	err = snd_ctl_elem_read(ctl->card->handle, read_val);
-+	if (err < 0) {
-+		ksft_print_msg("snd_ctl_elem_read() failed: %s\n",
-+			       snd_strerror(err));
-+		return false;
-+	}
-+
-+	/* Put it back where we found it, then forget both writes */
-+	snd_ctl_elem_value_copy(w_val, orig_val);
-+	err = snd_ctl_elem_write(ctl->card->handle, w_val);
-+	if (err < 0) {
-+		ksft_print_msg("snd_ctl_elem_write() failed: %s\n",
-+			       snd_strerror(err));
-+		return false;
-+	}
-+
-+	if (drop_events(ctl) < 0)
-+		return false;
-+
-+	if (snd_ctl_elem_value_compare(val, read_val)) {
-+		/* Grade against what came back, the event check still runs */
-+		ksft_print_msg("%s does not implement status[%u] 0x%02x\n",
-+			       ctl->name, byte, bit);
-+		return write_and_verify(ctl, val, read_val) == 0;
-+	}
-+
-+	ksft_print_msg("%s toggling status[%u] 0x%02x\n", ctl->name, byte,
-+		       bit);
-+
-+	return write_and_verify(ctl, val, NULL) == 0;
-+}
-+
- static void test_ctl_write_valid(struct ctl_data *ctl)
- {
- 	bool pass;
-@@ -878,6 +1099,10 @@ static void test_ctl_write_valid(struct ctl_data *ctl)
- 		pass = test_ctl_write_valid_enumerated(ctl);
- 		break;
- 
-+	case SND_CTL_ELEM_TYPE_IEC958:
-+		pass = test_ctl_write_valid_iec958(ctl);
-+		break;
-+
- 	default:
- 		/* No tests for this yet */
- 		ksft_test_result_skip("write_valid.%s.%d\n",
+ arch/x86/kvm/vmx/nested.c                     |  59 ++-
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../selftests/kvm/include/x86/processor.h     |   1 +
+ tools/testing/selftests/kvm/include/x86/vmx.h | 489 ++++++++++--------
+ .../selftests/kvm/include/x86/vmxfeatures.h   |  93 ++++
+ .../x86/vmx_nested_entry_fail_state_test.c    | 311 +++++++++++
+ 6 files changed, 727 insertions(+), 227 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/x86/vmxfeatures.h
+ create mode 100644 tools/testing/selftests/kvm/x86/vmx_nested_entry_fail_state_test.c
+
 -- 
-2.43.0
+2.34.1
 
