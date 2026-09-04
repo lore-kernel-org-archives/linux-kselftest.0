@@ -1,57 +1,55 @@
-Received: from mta0.migadu.com (out-52.mta0.migadu.com [91.218.175.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346883AA4F2
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 03:11:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3BF3B19BC;
+	Fri,  4 Sep 2026 03:17:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788491476; cv=none; b=H3SEn9s9d2UESXQj1aCyHqPdbjr+7r7JakNXCd5/xf6c4v4/RavEVIupXaVJh17u/SgKV1U6Bu8hPtWtSFU06kPRHOdw9dOkFtypau1Qyjahm0vvza8lVJmq2LeKoIRVV3P3nvW27gNTWkQPs7M36OcdqSSyMM3jHOX4h2oHzAE=
+	t=1788491854; cv=none; b=VbOmNmD4aRwKm3C+ty9HI54/KcmH5eAIhbvc6UWzpxUUBBZzPK558ttJ0BpsIiuitlh56Gfo1W61gQOFdW4joHwzGIrkWnBcChDDkKzVi/AdNV9VadactO9k3QooSZFFf5g8JHNSv0fO9WzihvihwoE2wKDEuZFCZphhEpEODxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788491476; c=relaxed/simple;
-	bh=nx/eitTR44C33VFjQT5eDwZTcChTpu7T7AIpTkNv5MY=;
+	s=arc-20240116; t=1788491854; c=relaxed/simple;
+	bh=UuVs6G544DUiPcB+LIxKErGL1C6sWz5vsMOXhTDol8g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QUk1QR6EOgB79kU357VSlBJAOusUdjeWDc3PazrgvxOSQlNIAPn1d6Jd4cpvY8oXgBjQC+3RrkBbrHPKnYxogikcqV0Kfl83MeOXSvMxhZHcZOOaZi+/CotBHZH99ayjU4c0mSB61SGMC6VGDFUtGV4X/fekclkki8k+j7lgOdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tIP0PUq1; arc=none smtp.client-ip=91.218.175.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 MIME-Version; b=u3KmRew/RbMriKOdYz04eE6Kb8TZRwiKPBV9aS8QF/WXij2Lqti5zgnO5Xex8GUk97LnYXxofrxgulj9p2mmpJLQCFU+JG/ohPXnG8IxJqwMwiaB0FqoCgRrHcei8fadJhfk9/PjQFgrreuaoN3GFSKzkY77DUoOACyc/MYxWOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=oz53q1Nm; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tIP0PUq1"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=nx/eitTR44C33VFjQT5eDwZTcChTpu7T7AIpTkNv5MY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788491473; v=1; x=1789096273;
- b=tIP0PUq12dU0AdfeuLhKXHPIC7GZk4dQfvotWfPZjBVhXvOw9s3vCeHO6VIEy/icCoYZfTwR
- jvKIXO2+z2Bo2WERgsssEfGAAQc630iIfIsRCEpYLH1X02A0mhaRoiDxZS3UmiStPUSL3gy8sPR
- MphpGHrucCPQMo3EJPke+xHQ=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 946ef5c41bdd8706;
-	Fri, 04 Sep 2026 03:11:12 +0000
-X-Mizu-Trace-ID: 946ef5c41bdd8706
-X-Migadu-Flow: FLOW_OUT
-From: George Guo <dongtai.guo@linux.dev>
-To: chenhuacai@kernel.org,
-	rppt@kernel.org,
-	pasha.tatashin@soleen.com,
-	pratyush@kernel.org,
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="oz53q1Nm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Uu
+	Vs6G544DUiPcB+LIxKErGL1C6sWz5vsMOXhTDol8g=; b=oz53q1NmF/PUWgQynL
+	id8zjm20GI46Y6hDp/emBeqjcuHeAVlnJfVmmvH9BLdopE/+alAqv5Z1ih4b5Mme
+	yEoVPr+e6mMI9ZTuA9WyXdUmQQrCbHPFgTQ3dBgzDS2oK/SwmFAEPkMW8KH+xdKP
+	91xx+byVCn5Adtwj4nxPz6Vgs=
+Received: from localhost (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgCnyPcVOJpqO20qOg--.45819S2;
+	Fri, 04 Sep 2026 11:16:37 +0800 (CST)
+From: Hui Su <sh_def@163.com>
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+	bpf@vger.kernel.org
+Cc: Hui Su <sh_def@163.com>,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
 	shuah@kernel.org,
-	ardb@kernel.org
-Cc: guodongtai@kylinos.cn,
-	kernel@xen0n.name,
-	graf@amazon.com,
-	liukexin@kylinos.cn,
-	loongarch@lists.linux.dev,
+	yatsenko@meta.com,
 	linux-kernel@vger.kernel.org,
-	kexec@lists.infradead.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-efi@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] selftests/kho: add LoongArch vmtest support
-Date: Fri,  4 Sep 2026 11:11:08 +0800
-Message-ID: <20260904031108.11986-1-dongtai.guo@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260807103714.33074-5-dongtai.guo@linux.dev>
-References: <20260807103714.33074-5-dongtai.guo@linux.dev>
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf v2 1/2] bpf: bound resizable hash map iteration
+Date: Fri,  4 Sep 2026 11:16:37 +0800
+Message-ID: <20260904031637.230595-1-sh_def@163.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <7c741628-c259-4ae6-8d67-d92910183526@gmail.com>
+References: <20260831140132.117755-1-sh_def@163.com> <7c741628-c259-4ae6-8d67-d92910183526@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,32 +57,56 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PSgvCgCnyPcVOJpqO20qOg--.45819S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WFW5tr4UZFy7Cr1xCFy3urg_yoW8Cw1kpa
+	9agryktw1SyFZ7WrykuF4xW34UKFZ3Ca4UtrWUG3sYywn5GFnFqrsrK3y29FyUur4xZrn0
+	qFWxKwn8Zw4rAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRo89ZUUUUU=
+X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbCwRZUs2qaOBZLmQAA38
 
-Hi,
+On Thu, Sep 3, 2026 at 5:43 PM, Mykyta Yatsenko wrote:
+> I'm not sure if this change fixes anything, the main issue of walking
+> concurrently modified rhashtable is not changed: you still may miss
+> elements or visit same elements multiple times.
+>
+> In some scenarios this can make things worse: imagine you start
+> iterating with small map (visit_budget = 10), then 1000000 elements
+> are inserted concurrently with walk, so you'll miss at least
+> 1000000 - 10.
+>
+> To me this is a trade off/taste thing, rather than bug fix. The
+> change is compact, though, I'm not against it.
 
-While preparing v5, I retested the LoongArch vmtest without the explicit
-`kho_scratch=16M,16M,16M` setting. That setting was masking a pre-existing
-bug in the generic percentage-based KHO scratch sizing.
+Thanks for the review.
 
-The percentage heuristic itself is reasonable, but the old implementation
-calculated each per-node baseline after allocating the lowmem and global
-scratch areas. Since memblock allocations are marked MEMBLOCK_RSRV_KERN,
-those scratch areas were counted as new kernel demand and scaled again.
+I agree that this change does not, and is not intended to, make
+concurrent rhashtable iteration complete or duplicate-free. Missed and
+duplicate elements remain part of the existing best-effort semantics.
 
-On the 1 GiB LoongArch guest, the 98.45 MiB reservation baseline and 32 MiB
-alignment made the old ordering request 224 MiB of lowmem scratch followed
-by 672 MiB for node 0. The node allocation failed and disabled KHO. I sent
-a separate generic fix here:
+The narrower issue I am trying to address is that bpf_each_rhash_elem()
+currently keeps calling rhashtable_next_key() until it returns NULL.
+The rhashtable_next_key() documentation states that a full iteration
+may not terminate under adversarial or sustained rehashing, and
+recommends that callers bound such walks externally.
 
-  https://lore.kernel.org/loongarch/20260904025101.9959-1-dongtai.guo@linux.dev
+The purpose of this change is therefore not to make the iteration
+complete, but to provide a finite upper bound on callback invocations
+under sustained rehashing.
 
-With that fix, the total aligned request is 448 MiB and the LoongArch
-vmtest passes using the default percentage-based sizing. I also ran the x86
-KHO vmtest with the fix; it passes as well.
+I agree that taking a snapshot of ht.nelems makes the bound insensitive
+to elements inserted after the walk starts. In the example you gave, the
+walk could stop after the initial occupancy and miss most newly inserted
+elements.
 
-Therefore, I will remove `kho_scratch=16M,16M,16M` from loongarch.conf in
-v5 so that it tests the default sizing path, matching the existing x86
-selftest behavior.
+Using map->max_entries would preserve more of the existing behavior
+under concurrent growth, at the cost of allowing a much longer walk for
+a sparsely populated map.
+
+Would map->max_entries be a more appropriate bound in your view?
+
+Also, if you consider adding such a bound useful but not a bug fix,
+would bpf-next be a more appropriate target for this change?
 
 Thanks,
-George
+Hui
+
