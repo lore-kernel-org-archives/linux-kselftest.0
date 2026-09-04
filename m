@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-120.mta1.migadu.com [95.215.58.120])
+Received: from mta1.migadu.com (out-128.mta1.migadu.com [95.215.58.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D664570EE
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 10:10:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0DC44AB73
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 10:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788516648; cv=none; b=leaH6SiN2tQ/IanYb7hKgXKeIXmw9WFZjKpG/enKuGNzwbIA2CDV5oeyiXfmvKV6q7nu1EpAcozopK4SxP2CCjhBEkk7Sr7AO/vEz34xDSatr3/XTL0W14q9bxcmlFD6MFFX8n5OxzmF7ErPZblMa/XwbDW1g0kFkJjAsauLA28=
+	t=1788516650; cv=none; b=Pg65yFjCwnQ0/o+GGGpkU2EXXGnIPJXXJnwme+1mya7Vm0uhn20+6bjHoG4Q43BHqgiVXP8OgnIQnEY0kTOQVUuddzHEgoLaAXl6IKlvmp5XT7t44njGWKHYLC3GmJozNRzJFceTCkUJEMOnK2iI6ziLejyqV6nQOkZYl5w82TI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788516648; c=relaxed/simple;
-	bh=3cPgANBsAN0TCTPt7lj+YGACHJ2FHFsC3fuQuOraQMA=;
+	s=arc-20240116; t=1788516650; c=relaxed/simple;
+	bh=/oiDxHrVDKa7VGrXp6hL5mHL7wu/IJpMsp5HWkvasdU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HQT1jT52gTVaqoM+RRBL9rtatJDeP0lmKGN2SfaFZCZ0kOcfXSmwn8FwyGFs8SP1kLc5y7/n0ZQYpcDhHz9ivcc2TvkUdURzhIYn4poTD18W4R+oP2qOtqpxxl54C9J9tBLoUk7K8jf8/IW7cLJM8KFf4BrL7wDvw4SHUaUjsL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jOYuemRc; arc=none smtp.client-ip=95.215.58.120
+	 MIME-Version; b=idn+NXLq8hZpZlaDtPPJ42Z04UH6ZWoiDbi4Q4mU3as17yErq37UdETae/1T3G4C0/mXHi0Nl2tzrttsgtjOA7IM+AKOkmv3Yj5JCOrTQamjJ0cuWIiRmi2q3qsX2/I6mtgSamf3FJ9Xy0sTWmXhph47r4sWcTujfCV6XhnrUQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dg/D2y03; arc=none smtp.client-ip=95.215.58.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jOYuemRc"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dg/D2y03"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=3cPgANBsAN0TCTPt7lj+YGACHJ2FHFsC3fuQuOraQMA=;
+DKIM-Signature: a=rsa-sha256; bh=/oiDxHrVDKa7VGrXp6hL5mHL7wu/IJpMsp5HWkvasdU=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788516636; v=1; x=1789121436;
- b=jOYuemRcWo5KL+QgZmCOv9MMIDTecQV4sy4qKJZoKBEmf5d3iNXBGG9bnLcIf1/rcI4GcegT
- fTUoHhog/yvL5xoVRmK1vLBPfhssLCgKuA5gqPNvAsN6NJaLVLdygn8180W+R8x0Ym3nDkEmxor
- QWjA6/7/PTIMc6MQxWL3/CAY=
+ t=1788516638; v=1; x=1789121438;
+ b=dg/D2y03QKFwv7tqBdzyogXQtKWJ6QyG1AcV3TJ7bsMddVZASTcVwj62I/0/wfZEFineU+UJ
+ CnMSS7E65A4K0nrZe9VxlTxW2cOeDVyg0D8ncWkhy27GLqaMZuMNHGYTvO2pwJF8dwi1WXA3wLh
+ UgCdLH577lFDOfuakyd6prj0=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 031a72623a973772;
-	Fri, 04 Sep 2026 10:10:35 +0000
-X-Mizu-Trace-ID: 031a72623a973772
+Received: by smtp.migadu.com with ESMTPS id 6e5c0a65e25e0cdf;
+	Fri, 04 Sep 2026 10:10:37 +0000
+X-Mizu-Trace-ID: 6e5c0a65e25e0cdf
 X-Migadu-Flow: FLOW_OUT
 From: George Guo <dongtai.guo@linux.dev>
 To: rppt@kernel.org,
@@ -50,9 +50,9 @@ Cc: ilias.apalodimas@linaro.org,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-efi@vger.kernel.org
-Subject: [PATCH v5 4/5] LoongArch: enable kexec handover (KHO)
-Date: Fri,  4 Sep 2026 18:08:51 +0800
-Message-ID: <20260904100852.26006-5-dongtai.guo@linux.dev>
+Subject: [PATCH v5 5/5] selftests/kho: add LoongArch vmtest support
+Date: Fri,  4 Sep 2026 18:08:52 +0800
+Message-ID: <20260904100852.26006-6-dongtai.guo@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260904100852.26006-1-dongtai.guo@linux.dev>
 References: <20260904100852.26006-1-dongtai.guo@linux.dev>
@@ -66,40 +66,80 @@ Content-Transfer-Encoding: 8bit
 
 From: George Guo <guodongtai@kylinos.cn>
 
-Enable ARCH_SUPPORTS_KEXEC_HANDOVER for 64-bit LoongArch.  It selects
-EFI_KHO whenever KEXEC_HANDOVER is enabled, so LoongArch uses the
-architecture-agnostic EFI configuration table channel
-(LINUX_EFI_KEXEC_HANDOVER_GUID) introduced by this series to carry the
-KHO state across kexec.
+Add loongarch.conf to configure QEMU's LoongArch virtual machine with a
+la464 CPU, an 8250 serial console, and the generic PCI host controller.
+Extend vmtest.sh to recognize loongarch64 as a supported target and map
+it to the loongarch kernel architecture name.
 
-LoongArch boots through EFI without a device tree, so it cannot use the
-/chosen FDT path that arm64 and riscv use; the EFI configuration table
-channel is its handover transport.  No arch-specific setup.c reader or
-machine_kexec_file.c writer is needed -- both live in the generic EFI
-code.
+Boot vmlinux.efi through EFI firmware.  The KHO configuration table
+channel is installed by the EFI stub during the initial boot, so direct
+kernel boot bypasses the path that this test needs to exercise.  QEMU_EFI
+defaults to the firmware shipped under /usr/share/edk2/loongarch64/ and
+can be overridden for distributions that install it under a different
+path, such as Debian's qemu-efi-loongarch64 package.
+
+QEMU's LoongArch virt machine has no i8042 controller.  Enable the generic
+PCI host so its I/O space is mapped before the i8042 fallback probe
+accesses the legacy ports.  This avoids disabling the i8042 options and
+allows the same kernel configuration to remain usable on physical hosts.
+
+Enable ACPI_SPCR_TABLE so the bare earlycon parameter can obtain the UART
+type, MMIO address and baud rate from the SPCR table installed by EDK2.
+Unlike on x86, ACPI_SPCR_TABLE does not default to enabled on LoongArch.
+Without it, no early console is registered for the EFI firmware boot path,
+and vmtest cannot observe the early kernel output in its serial log.
+
+The KHO vmtest requires CONFIG_DEFERRED_STRUCT_PAGE_INIT=y, which
+depends on SPARSEMEM.  Select CONFIG_SPARSEMEM_MANUAL=y to satisfy the
+dependency on LoongArch.
 
 Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
 Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- arch/loongarch/Kconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/kho/loongarch.conf | 11 +++++++++++
+ tools/testing/selftests/kho/vmtest.sh      |  3 ++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/kho/loongarch.conf
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index a21f51e5815e..5eaa65578d58 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -685,6 +685,10 @@ config ARCH_SUPPORTS_KEXEC
- config ARCH_SUPPORTS_KEXEC_FILE
- 	def_bool 64BIT
+diff --git a/tools/testing/selftests/kho/loongarch.conf b/tools/testing/selftests/kho/loongarch.conf
+new file mode 100644
+index 000000000000..36153b03c4ef
+--- /dev/null
++++ b/tools/testing/selftests/kho/loongarch.conf
+@@ -0,0 +1,11 @@
++QEMU_EFI="${QEMU_EFI:-/usr/share/edk2/loongarch64/QEMU_EFI.fd}"
++QEMU_CMD="qemu-system-loongarch64 -M virt -cpu la464 -bios $QEMU_EFI"
++QEMU_KCONFIG="
++CONFIG_ACPI_SPCR_TABLE=y
++CONFIG_PCI_HOST_GENERIC=y
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SPARSEMEM_MANUAL=y
++"
++KERNEL_IMAGE="vmlinux.efi"
++KERNEL_CMDLINE="console=ttyS0 earlycon"
+diff --git a/tools/testing/selftests/kho/vmtest.sh b/tools/testing/selftests/kho/vmtest.sh
+index 0014bd76e88d..d05ba0734b25 100755
+--- a/tools/testing/selftests/kho/vmtest.sh
++++ b/tools/testing/selftests/kho/vmtest.sh
+@@ -21,7 +21,7 @@ Options:
+ 	-d)	path to the kernel build directory
+ 	-j)	number of jobs for compilation, similar to -j in make
+ 	-t)	run test for target_arch, requires CROSS_COMPILE set
+-		supported targets: aarch64, x86_64
++		supported targets: aarch64, loongarch64, x86_64
+ 	-h)	display this help
+ EOF
+ }
+@@ -126,6 +126,7 @@ function target_to_arch() {
  
-+config ARCH_SUPPORTS_KEXEC_HANDOVER
-+	def_bool 64BIT && EFI_STUB
-+	select EFI_KHO if KEXEC_HANDOVER
-+
- config ARCH_SELECTS_KEXEC_FILE
- 	def_bool 64BIT
- 	depends on KEXEC_FILE
+ 	case $target in
+ 	     aarch64) echo "arm64" ;;
++	     loongarch64) echo "loongarch" ;;
+ 	     x86_64) echo "x86" ;;
+ 	     *) skip "architecture $target is not supported"
+ 	esac
 -- 
 2.53.0
 
