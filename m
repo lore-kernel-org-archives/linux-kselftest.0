@@ -1,478 +1,300 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C80F3A7848;
-	Fri,  4 Sep 2026 02:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422CE35DA64
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 02:48:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788489109; cv=none; b=tTrfcy9k9AepsRZp/eOjsRvLh7+ye/8vMg4NZy6IXLf3BpY1jZh1Htm6DI9WgwlverHZI5QHmDcT/7rFlLygk1WVkCZOgOOPasVnTzHzHRb5kb0ACEd59kmMEwkjMh+Ryzr18flcR9876pfkye79I2JJwwxuZr3R3zv1NBvzH4Q=
+	t=1788490112; cv=none; b=JgH9w2t0S+r1snqC+1uZXeaR8XKexY1JK2wVlO2+1YVqUQRBg6DxUuQTil2Q69qE7JjAl+xj8CezHvyfJIdKoVVjbllO8At+3+y8+iYpfChZ7AXCJYAILGcGddeD/vB1Ek26EL0c+P8YO01Usi2LQ/+2v44Gq21pX5OsTRNJ9WI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788489109; c=relaxed/simple;
-	bh=oopmgu0AWR1HPnMv1Lm+slLchzVcGhuCGowevaxY80s=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RKLNUG0xzxb9h7fzT4t3VUkoSxseDuDIp/9fhweXLFI6z6zQ/fYckUzwEqcXbNC2Y3T9rcLSq7hUPZCJyAPBSWg5WLnhiHaMCUHbGbmJMFR4UKCXja5RJrVaSxzlUi9kJK+yTivh2yJ9/06UkeVwKAfW9lLht2qrI2i9aOruPV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l/ZPiU8f; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1788490112; c=relaxed/simple;
+	bh=cK5XxbhXOxCXvBcflUV2pYVwoPtcaOQNtD5vNiyWaTk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=KxV0sN/E4rEN9WeFD5iiFxZThW3sToX637s/irC+7gCpPiJC0wgP4EYLIe8sTMo7oeEXQzjGQftvzCuAYrew/KkqX4emEOL7UbfyrMZRYsr8N6bDz6R8Ym9dI69dA6AkAbDtdCZSPMguMipt5x9lGk5QHF4mJ9ARcmwhPbCgXU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=c9XWjlk+; arc=none smtp.client-ip=209.85.215.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l/ZPiU8f"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788489107; x=1820025107;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=oopmgu0AWR1HPnMv1Lm+slLchzVcGhuCGowevaxY80s=;
-  b=l/ZPiU8fZViWJCYFdhoumndG9cOeCffuPjempj+ACpYQB+egVhX5//KQ
-   1FEcg67SQSc6cjHcRY7pjxgnxqgr3VLjjtxf9kuMEZNyP5EQVPyMRiKpe
-   uUY94yT2ePLxnilbDXzHBCPe/PqpwoQDAoPY63xYdA05ClKvpBcR1RGV0
-   RQ9NINeRJT2hn+HFotPTKPGi5v+61YXRhp2skdRQIwK62jjmeOJuNDhh6
-   Bv1+E3ku8ZNInUiDlrxLyK70lpQfF0mVrU2cHpJELMUL9uPrzhpZFH7ug
-   eWZ6055QFQXQqoaL0rbxzEQQzxiYndqyGvpL9LzGUvr3Ex35dmwhrCPr5
-   Q==;
-X-CSE-ConnectionGUID: 2sDGjh4TTT+Ggpb23Twjqg==
-X-CSE-MsgGUID: vt5T01ksTJ+ovkNDRuIfGw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11895"; a="106506786"
-X-IronPort-AV: E=Sophos;i="6.25,260,1779174000"; 
-   d="scan'208";a="106506786"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2026 19:31:46 -0700
-X-CSE-ConnectionGUID: 6l3oIaAeQISWovLuaQ3gBA==
-X-CSE-MsgGUID: SFX/s9O/THOFcS677tNQGA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,260,1779174000"; 
-   d="scan'208";a="270433511"
-Received: from zhaoliu1-desk.sh.intel.com ([10.238.208.118])
-  by orviesa009.jf.intel.com with ESMTP; 03 Sep 2026 19:31:43 -0700
-From: Zhao Liu <zhao1.liu@intel.com>
-To: Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Chao Gao <chao.gao@intel.com>,
-	Xin Li <xin@zytor.com>,
-	Sohil Mehta <sohil.mehta@intel.com>,
-	kvm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Zhao Liu <zhao1.liu@intel.com>
-Subject: [RFC 4/4] KVM: selftests: Test VM-entry failure handling for nested VM
-Date: Fri,  4 Sep 2026 10:31:05 +0800
-Message-Id: <20260904023105.1167376-5-zhao1.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260904023105.1167376-1-zhao1.liu@intel.com>
-References: <20260904023105.1167376-1-zhao1.liu@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="c9XWjlk+"
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cc132709c76so854365a12.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 19:48:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788490110; x=1789094910; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=kppunAxcNEE5lV4m1JynLDzX32wrZ6XhwjwL2AKPq8Y=;
+        b=c9XWjlk++jepZjMzrgymVDhYBckRervCBFfGVF2mz30oWN5aZIwxEsokPhMIdBpvJg
+         XqFy44iPK14Czfs/AUujfgaoMR3tO8jxu95Ck12/Y/OnZs4+ea5OhzuUCnl2Cdj6u3HZ
+         D0RW/lAgtt6f+k31zOvPxJGRzFuVdm1wrj87c0K179qF4ay45nWgJXBvXxGOsZbehZUH
+         VWmO+oVLUHCoT5tMBvXvdA49CxPDUF9wMCt+EnzuLR7HZbBHOf86wn+VVKE/2cY5hLLm
+         zLNmf8yUnfFN3KvRWsdZbY1g0O4BR/2CQw8UhGrVWycXRRmkyCrLpxbn+Q5IgEPPpj7t
+         vybQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788490110; x=1789094910;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=kppunAxcNEE5lV4m1JynLDzX32wrZ6XhwjwL2AKPq8Y=;
+        b=DTS6dwpaQHedsRRYntrtqM8cXPwy6VVi0P57oFeRgAu/Xp5ocalba9tg5zlyObTACd
+         FlVj+zsRJLW9wdmsD/OBzCnd1dEgwoq52ep6loPdzk5UBTOa2p8qfjh7ftWBfx65iQhh
+         fiJTpC0wNC8IHp5KacqSPx/2f6BohJbxXzBmn9irNk4ra5nupFL6epEqVEjNG5UAQhTq
+         ZFvzmBFI//7Vd+llrydxTQHlHmZN+FBTpYH2IltPGSx+ffrFxQy+HaWYASOtM2TWrE5Q
+         C9HmuErNZb6cqDxPEI1o2G/WO/qkDKz05j6qE3DMB6PafUi4BQi02HlYM9Nh+0tbZmY5
+         YjSQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzunY1WFoJVAWn5PvaOG3f28k+GjdD1APjJZzFkqxVrNfacfbblFYpCrh/XDnzQywZrQHoK375XkBuP23WoYeQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++lvxBcmM49zPTZV/qgZPN5R85FHfgCfmneLYdhz1z6+0vbsylH1
+	4x8xO5I5vA2xhLz1OAikR/ecMyoEvc2csqXDlNUnqHGnyq1LEk8dzeSJ69lgao/C0BV2+5wnYCq
+	b1+99TCSLaSPmKhmWamW9Ou3CQ9MxoHOXWQ==
+X-Received: from pgar19.prod.google.com ([2002:a05:6a02:2e93:b0:cc4:3eb9:12ac])
+ (user=rathodpriyank job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a21:e081:b0:3b4:61f:1fec with SMTP id adf61e73a8af0-3da39bb593dmr4099789637.2.1788490109174;
+ Thu, 03 Sep 2026 19:48:29 -0700 (PDT)
+Date: Fri, 04 Sep 2026 02:48:27 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAHsxmmoC/32NQQ6CMBBFr0Jm7Zi2RARX3MOwMO0AE7HTtKTRE
+ O5u5QAu30v++xskikwJbtUGkTInFl/AnCqw88NPhOwKg1GmUW2tMVgmXNg/kbwLwn5N2F1b0kq
+ 5i1MNlGWINPL7qN6HwjOnVeLnOMn6Z//3skaNtbFmdG1XU0f9JDItdLbygmHf9y9MPA5atwAAA A==
+X-Change-Id: 20260831-pcie-link-endpoints-978e100d5d06
+X-Mailer: b4 0.14.3
+Message-ID: <20260904-pcie-link-endpoints-v2-0-16fcb301a3e4@google.com>
+Subject: [PATCH v2 0/3] PCI/pcie: Add PCIe Lane Margining at Receiver (LMR) support
+From: Priyank Rathod <rathodpriyank@google.com>
+To: Bjorn Helgaas <bhelgaas@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: "=?utf-8?q?Ilpo_J=C3=A4rvinen?=" <ilpo.jarvinen@linux.intel.com>, linux-pci@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Priyank Rathod <rathodpriyank@google.com>, 
+	sashiko-bot@kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a test for the CET state L1 sees after a nested VM-entry fails. What
-L1 should see depends on two controls: the VM-entry "load CET state"
-control, which tells whether L2's state was ever loaded, and the VM-exit
-"load CET state" control, which tells whether L1's state is reloaded from
-vmcs12's host-state area.
+Hi Bjorn, Ilpo, and the PCI community,
 
-A failed VM-entry is a VM-exit, but it leaves nested mode in an unusual
-way: vmcs12's guest state was never copied back from vmcs02. So when KVM
-copies vmcs12->guest_* into vmcs01 while emulating the VM-exit, it
-overwrites the CET state that L1 is really running with, using L2's
-values.
+This patch series introduces upstream Linux kernel support for PCIe Lane Ma=
+rgining
+at Receiver (LMR) per PCI Express Base Specification Revision 7.0 / 6.0 (=
+=C2=A7 7.7.11
+and =C2=A7 8.4.4).
 
-Test all four combinations of the two controls, with both failure points,
-and check L1's S_CET and INT_SSP_TAB:
+During the review of the previous v7 standalone LMR submission
+(https://lore.kernel.org/linux-pci/20260828-pcie-lmt-v7-1-6012e9e0940a@goog=
+le.com/),
+Ilpo J=C3=A4rvinen pointed out that feature drivers resolving link partners=
+ duplicate
+link traversal logic that is already present in drivers such as ASPM:
 
-  exit  entry  failure      what L1 should see
-  ----  -----  -----------  -------------------------------------
-   1     x     either       vmcs12's host state
-   0     0     either       L1's own state, L2's was never loaded
-   0     1     MSR-load     vmcs12's guest state
-   0     1     guest-state  L1's own state, see below
+  "This feels like duplicating similar functionality with the aspm driver
+   that also wants to infer ends of the link when giving a pci_dev in.
+   The aspm driver currently does that within, but it kind of duplicating
+   pci_bus. It would be nice to avoid the duplication and have something
+   similar for this in PCI core."
 
-The last row is the only case where KVM is more precise than the SDM
-requires. The SDM vol. 3C, section 29.3, "Checking and Loading Guest
-State" says guest state is checked and loaded at the same time, so a
-guest-state failure may be found after some state is already loaded. In
-other words, the CET state after such a failure is undefined, unless the
-VM-exit control reloads the host state.
+In response to this feedback, the implementation is factored into a clean,
+modular 3-patch stack:
 
-The VM-entry MSR-load list is different: it is handled only after guest
-state is loaded, so a failure there always keeps whatever the VM-entry
-loaded.
+1. Patch 1/3 (PCI: Add pcie_get_link_endpoints() helper):
+   Standardized, race-safe helper in drivers/pci/pci.c and include/linux/pc=
+i.h
+   to identify both ends of a point-to-point PCIe link. Safely inspects the
+   subordinate bus under down_read(&pci_bus_sem) and acquires a reference
+   (pci_dev_get()), paired symmetrically with pcie_put_link_endpoints().
+   Filters for Function 0 (with ARI support), validates bridge ownership
+   (child->self =3D=3D pdev) to prevent ABA pointer reuse, and handles RCiE=
+P
+   and empty downstream ports (-ENODEV).
 
-For that undefined case, KVM picks the simplest well-defined behavior: it
-emulates every EXIT_REASON_INVALID_STATE VM-entry failure as if no guest
-state was loaded at all, so L1 keeps its own state. Note, this holds even
-though KVM does have guest-state checks that run after L2's CET state is
-written into vmcs02, e.g. vmx_guest_state_valid() and
-nested_vmx_load_cr3() in prepare_vmcs02(); the failed VM-entry throws
-vmcs02 away, and L1's state never left vmcs01. Test KVM's behavior
-here.
+2. Patch 2/3 (PCI/ASPM: Add pci_aspm_inhibit() helper for temporary link st=
+ate suppression):
+   Reference-counted mechanism (aspm_inhibit_cnt) in drivers/pci/pcie/aspm.=
+c
+   to temporarily disable ASPM state transitions (L0s, L1, L1SS) on an acti=
+ve link.
+   Guarantees callers hold down_read(&pci_bus_sem) (via lockdep_assert_held=
+_read),
+   eliminating deadlocks and preventing power-saving transitions while hard=
+ware
+   link characterization is in progress.
 
-This test case uses the two failure points, that covers KVM's two exit
-paths: a bad guest CR0 (PG set, PE clear) gives EXIT_REASON_INVALID_STATE,
-and a read-only MSR in the VM-entry MSR-load list triggers
-EXIT_REASON_MSR_LOAD_FAIL.
+3. Patch 3/3 (PCI/pcie: Add PCIe Lane Margining at Receiver (LMR) support):
+   Implements the core LMR driver (CONFIG_PCIE_LMR) in drivers/pci/pcie/mar=
+gin.c
+   exposing a debugfs interface under /sys/kernel/debug/pci/pcie_lmr_<dev>/=
+.
+   Strictly self-contained: 0 modified lines in drivers/pci/pci.c, pci-driv=
+er.c,
+   or core drivers/pci/pci.h. Exposes clean lifecycle hooks in drivers/pci/=
+probe.c
+   and drivers/pci/remove.c, supports 2D timing and voltage margining acros=
+s
+   physical receivers (0..6), enforces Function 0 endpoint filtering (=C2=
+=A7 7.7.11),
+   and includes an exhaustive kselftest suite (tools/testing/selftests/pcie=
+_lmt/).
 
-Only CET state is checked for now, and other state loaded by the
-VM-entry/VM-exit controls can be added later.
+- Capability Discovery (=C2=A7 7.7.11): Probed via Extended Capability ID 0=
+x27 on
+  Gen4+ (>=3D 16 GT/s) physical links. Differentiates optional support on G=
+en4/Gen5
+  from mandatory capability presence on Gen6+ (>=3D 64 GT/s).
+- Multi-Function Device Scope (=C2=A7 7.7.11): Enforces that capability reg=
+istration
+  is strictly restricted to Function 0 on Endpoints / Upstream Ports.
+- Payload Decoding (Table 4-77, Cmd 88h): Accurately decodes Margin Control
+  Capabilities (Bits 0..4); preserves Bits 7:5 as reserved 0b.
+- Direction Encodings (=C2=A7 4.2.18.1.2): Enforces that Left/Right and Up/=
+Down
+  direction bits remain 0b for symmetric receivers (Bits 6 & 7 reserved 0b)=
+.
+- Multi-Receiver Concurrency (=C2=A7 4.2.18.2): Governed strictly by MIndEr=
+rorSampler.
+  If MIndErrorSampler =3D=3D 0b (main data sampler), at most one receiver a=
+cross the
+  link is margined at a time.
+- Autonomous Speed & Width Transitions (=C2=A7 7.5.3.7, =C2=A7 7.5.3.17, =
+=C2=A7 8.4.4): Software
+  sequencing disables Downstream Component before Upstream Component on ena=
+blement,
+  and restores Upstream Component before Downstream Component on teardown.
+  Restoration is unconditional via pcie_capability_clear_and_set_word()
+  (serialized by pci_lock), eliminating trylock failure traps.
 
-Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
+Ingress paths (margin_enable_write and pci_lmr_exit) strictly follow the ca=
+nonical
+PCI locking DAG:
+  down_read(&pci_bus_sem)
+    -> pci_dev_lock(downstream_port)
+      -> pci_dev_lock(upstream_port)
+        -> mutex_lock(&mdev->lock)
+          -> spin_lock_irqsave(&aspm_lock)
+
+Key Concurrency Guarantees:
+1. Hot-Swap Identity Invariance: When disabling LMR, dynamic endpoint resol=
+ution
+   is completely bypassed. Teardown binds strictly to the session-saved mde=
+v->partner,
+   which is read and pinned with pci_dev_get() under mutex_lock(&mdev->lock=
+).
+2. Surprise Removal & Fault Hardening: Hardware register accesses check
+   pci_dev_is_disconnected() and PCI_POSSIBLE_ERROR() guards, preventing MM=
+IO
+   or config space bus aborts when hardware is pulled.
+3. Power Management Synchronization: Both link partners are pinned in D0 us=
+ing
+   pm_runtime_resume_and_get() during enablement, and symmetrically release=
+d via
+   pm_runtime_put() on teardown. System suspend hooks into pci_pm_prepare()=
+ where
+   all devices in the hierarchy are guaranteed to be in D0.
+4. Security Teardown Order: In pci_destroy_dev(), pci_lmr_exit() is called =
+after
+   pci_tsm_destroy(), preserving D0 state for TSM link operations (PCIe IDE=
+ unbind
+   and SPDM cryptographic session teardown).
+
+- Build: Clean compile on x86_64 and ARM64; make W=3D1 drivers/pci/ (0 warn=
+ings).
+- Linters: checkpatch.pl clean across all 3 patches (0 errors, 0 warnings).
+- Kselftest: tools/testing/selftests/pcie_lmt/pcie_lmt.sh expanded to 287 l=
+ines,
+  covering positive and negative boundary tests (syntax clean with bash -n)=
+.
+- Pre-Commit AI Review (Sashiko AI):
+  * Patch 1 (f34fdf7f5c6b): Reviewed =E2=80=94 Clean (0 issues).
+  * Patch 2 (6adc680a727f): Reviewed =E2=80=94 Clean (0 issues).
+  * Patch 3 (c62b5f92af63): Reviewed =E2=80=94 Clean (0 issues, "No issues =
+found.").
+
+Signed-off-by: Priyank Rathod <rathodpriyank@google.com>
 ---
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../selftests/kvm/include/x86/processor.h     |   1 +
- .../x86/vmx_nested_entry_fail_state_test.c    | 311 ++++++++++++++++++
- 3 files changed, 313 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86/vmx_nested_entry_fail_state_test.c
+Changes in v2:
+- Decomposed monolithic LMR driver into a 3-patch stack with dedicated core=
+ helpers:
+  * Patch 1: PCI core link endpoint discovery helper (pcie_get_link_endpoin=
+ts()).
+  * Patch 2: Core ASPM temporary inhibition helper (pci_aspm_inhibit()).
+  * Patch 3: PCIe Lane Margining at Receiver driver and debugfs interface.
+- Core Scope Discipline: Confined LMR logic exclusively to drivers/pci/pcie=
+/margin.c
+  and include/linux/pci.h forward declarations (0 modified lines in pci.c/p=
+ci-driver.c).
+- Endpoint Discovery Hardening:
+  * Handled RCiEP and empty downstream buses returning -ENODEV.
+  * Added Function 0 resolution (pcie_find_link_upstream_func0()) supportin=
+g PCIe ARI.
+  * Added bridge ownership verification (child->self =3D=3D pdev) to preven=
+t ABA races.
+  * Added symmetric pcie_put_link_endpoints() to balance pci_dev_get() refe=
+rences.
+- ASPM Inhibit Hardening:
+  * Added lockdep_assert_held_read(&pci_bus_sem) to pci_aspm_inhibit_locked=
+().
+  * Added reference counting (aspm_inhibit_cnt) to support nested/concurren=
+t calls.
+- Hot-Swap & Concurrency Protections:
+  * Eliminated hot-swap identity mismatch in margin_enable_write() by bindi=
+ng teardown
+    strictly to session-saved mdev->partner instead of re-evaluating endpoi=
+nts.
+  * Added mutex protection when reading and pinning mdev->partner to elimin=
+ate UAF races.
+  * Converted autonomous speed/width restoration to unconditional register =
+write via
+    pcie_capability_clear_and_set_word(), eliminating trylock failure degra=
+dation.
+- Specification Alignments (PCIe Base Spec r7.0):
+  * Aligned Extended Capability ID 0x27 to =C2=A7 7.7.11 and =C2=A7 8.4.4.
+  * Enforced Function 0 restriction on Endpoints / Upstream Ports (=C2=A7 7=
+.7.11).
+  * Preserved Reserved Bits 7:5 in Command 88h capabilities response.
+  * Implemented MIndErrorSampler-based concurrency for multi-receiver links=
+ (=C2=A7 4.2.18.2).
+  * Corrected direction bit encoding to 0b for symmetric receivers (=C2=A7 =
+4.2.18.1.2).
+- Kselftest Overhaul:
+  * Extended test coverage from 105 to 287 lines, adding comprehensive boun=
+dary
+    and negative validation tests.
+- Link to v1: https://lore.kernel.org/r/20260831-pcie-link-endpoints-v1-1-3=
+2c2fd893e9e@google.com
+- Link to v7 (monolithic LMR): https://lore.kernel.org/linux-pci/20260828-p=
+cie-lmt-v7-1-6012e9e0940a@google.com/
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 96bab7002d39..352ae003183a 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -134,6 +134,7 @@ TEST_GEN_PROGS_x86 += x86/vmx_apicv_updates_test
- TEST_GEN_PROGS_x86 += x86/vmx_exception_with_invalid_guest_state
- TEST_GEN_PROGS_x86 += x86/vmx_msrs_test
- TEST_GEN_PROGS_x86 += x86/vmx_invalid_nested_guest_state
-+TEST_GEN_PROGS_x86 += x86/vmx_nested_entry_fail_state_test
- TEST_GEN_PROGS_x86 += x86/vmx_nested_la57_state_test
- TEST_GEN_PROGS_x86 += x86/apic_bus_clock_test
- TEST_GEN_PROGS_x86 += x86/xapic_ipi_test
-diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
-index 6e6f70035508..870ef1bb1ba1 100644
---- a/tools/testing/selftests/kvm/include/x86/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86/processor.h
-@@ -79,6 +79,7 @@ const char *ex_str(int vector);
- #define X86_CR4_SMEP		(1ul << 20)
- #define X86_CR4_SMAP		(1ul << 21)
- #define X86_CR4_PKE		(1ul << 22)
-+#define X86_CR4_CET		(1ul << 23)
- 
- struct xstate_header {
- 	u64				xstate_bv;
-diff --git a/tools/testing/selftests/kvm/x86/vmx_nested_entry_fail_state_test.c b/tools/testing/selftests/kvm/x86/vmx_nested_entry_fail_state_test.c
-new file mode 100644
-index 000000000000..ed0cb045ed53
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86/vmx_nested_entry_fail_state_test.c
-@@ -0,0 +1,311 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Nested VM-entry failure state test
-+ *
-+ * Copyright (C) 2026, Intel, Inc.
-+ */
-+#include <asm/msr-index.h>
-+
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "test_util.h"
-+#include "vmx.h"
-+
-+static gva_t entry_msr_load_list_gva;
-+static gpa_t entry_msr_load_list_gpa;
-+
-+enum state_src {
-+	STATE_SRC_L1,		/* L1's own state */
-+	STATE_SRC_VMCS12_GUEST,	/* vmcs12->guest_*, i.e. L2's state */
-+	STATE_SRC_VMCS12_HOST,	/* vmcs12->host_*, i.e. host state to load */
-+	NR_STATE_SRCS,
-+};
-+
-+static bool has_shstk;
-+struct cet_state {
-+	u64 s_cet;
-+	u64 ssp;
-+	u64 ssp_tbl;
-+};
-+
-+struct test_state {
-+	struct cet_state cet;
-+};
-+
-+/*
-+ * In practice, states of STATE_SRC_L1 and STATE_SRC_VMCS12_HOST should be
-+ * same, i.e., the state of STATE_SRC_VMCS12_HOST is copied from host (L1).
-+ *
-+ * But in this test, to distinguish the "load (host) state" operation, make
-+ * STATE_SRC_VMCS12_HOST different from STATE_SRC_L1.
-+ */
-+static const struct test_state states[NR_STATE_SRCS] = {
-+	[STATE_SRC_L1] = {
-+		.cet = {
-+			.s_cet		= CET_SHSTK_EN,
-+			/*
-+			 * SSP is not an MSR; the L1 SSP must be configured
-+			 * using the KVM_SET_ONE_REG ioctl. To simplify the
-+			 * test logic, checking the other MSRs is enough to
-+			 * identify the state source, so that there's no need
-+			 * to configure different SSPs.
-+			 */
-+			.ssp		= 0x0000111111111000UL,
-+			.ssp_tbl	= 0x0000123456789000UL,
-+		}
-+	},
-+	[STATE_SRC_VMCS12_GUEST] = {
-+		.cet = {
-+			.s_cet		= CET_SHSTK_EN | CET_WRSS_EN,
-+			.ssp		= 0x0000111111111000UL,
-+			.ssp_tbl	= 0x00000abcabcab000UL,
-+		}
-+	},
-+	[STATE_SRC_VMCS12_HOST] = {
-+		.cet = {
-+			.s_cet		= CET_WRSS_EN,
-+			.ssp		= 0x0000111111111000UL,
-+			.ssp_tbl	= 0x00007edcba987000UL,
-+		}
-+	},
-+};
-+
-+/* VM-entry-load and VM-exit-load, each 0 or 1. There are 4 combinations in total. */
-+#define NR_CTRL_COMBOS		4
-+/* each load control combination includes 2 cases with different VM-exit reasons. */
-+#define NR_CASES		(NR_CTRL_COMBOS * 2)
-+
-+/* Define what state the hardware should retain in different cases. */
-+static enum state_src get_expected_state_src(bool entry_load, bool exit_load,
-+					     uint32_t exit_reason)
-+{
-+	if (exit_load)
-+		return STATE_SRC_VMCS12_HOST;
-+
-+	/* no entry load, no exit load - L1's own state is retained. */
-+	if (!entry_load)
-+		return STATE_SRC_L1;
-+
-+	/*
-+	 * From the Intel SDM volume 3, chapter 29.3 "CHECKING AND LOADING
-+	 * GUEST STATE":
-+	 *   The following operations take place concurrently:
-+	 *     (1) the guest-state area of the VMCS is checked to ensure that,
-+	 *         after the VM entry completes, the state of the logical
-+	 *         processor is consistent with IA-32 and Intel 64
-+	 *         architectures;
-+	 *     (2) processor state is loaded from the guest-state area or as
-+	 *         specified by the VM-entry control fields;
-+	 *     and (3) address-range monitoring is cleared.
-+	 *   Because the checking and the loading occur concurrently, a failure
-+	 *   may be discovered only after some state has been loaded.
-+	 *
-+	 * I.e. the state left behind by a guest-state failure is
-+	 * architecturally undefined. KVM picks the simplest well-defined
-+	 * behavior: an EXIT_REASON_INVALID_STATE VM-entry failure is emulated
-+	 * as if no guest state was loaded at all, so L1 keeps its own state.
-+	 * Note, that holds even for KVM's guest-state checks that run after
-+	 * L2's CET state is written into vmcs02, e.g. vmx_guest_state_valid()
-+	 * and nested_vmx_load_cr3() in prepare_vmcs02(); the failed VM-entry
-+	 * throws vmcs02 away while L1's state never left vmcs01.
-+	 */
-+	if (exit_reason == EXIT_REASON_INVALID_STATE)
-+		return STATE_SRC_L1;
-+
-+	return STATE_SRC_VMCS12_GUEST;
-+}
-+
-+static void l1_load_own_state(void)
-+{
-+	if (has_shstk) {
-+		const struct cet_state *cet = &states[STATE_SRC_L1].cet;
-+
-+		wrmsr(MSR_IA32_S_CET, cet->s_cet);
-+		wrmsr(MSR_IA32_INT_SSP_TAB, cet->ssp_tbl);
-+	}
-+}
-+
-+static void l1_program_vmcs12_cet(bool entry_load, bool exit_load)
-+{
-+	const struct cet_state *guest = &states[STATE_SRC_VMCS12_GUEST].cet;
-+	const struct cet_state *host = &states[STATE_SRC_VMCS12_HOST].cet;
-+	u64 entry_ctrl = vmreadz(VM_ENTRY_CONTROLS) & ~VM_ENTRY_LOAD_CET_STATE;
-+	u64 exit_ctrl = vmreadz(VM_EXIT_CONTROLS) & ~VM_EXIT_LOAD_CET_STATE;
-+
-+	GUEST_ASSERT(!vmwrite(GUEST_S_CET, guest->s_cet));
-+	GUEST_ASSERT(!vmwrite(GUEST_SSP, guest->ssp));
-+	GUEST_ASSERT(!vmwrite(GUEST_INTR_SSP_TABLE, guest->ssp_tbl));
-+	GUEST_ASSERT(!vmwrite(HOST_S_CET, host->s_cet));
-+	GUEST_ASSERT(!vmwrite(HOST_SSP, host->ssp));
-+	GUEST_ASSERT(!vmwrite(HOST_INTR_SSP_TABLE, host->ssp_tbl));
-+
-+	if (entry_load) {
-+		entry_ctrl |= VM_ENTRY_LOAD_CET_STATE;
-+
-+		/*
-+		 * Enable CET for L2 -- although it's not required for this test,
-+		 * since L2 never runs (VM-entry always fails), so these never
-+		 * reach real hardware -- just trying to emulate a L2 guest running
-+		 * CET.
-+		 */
-+		GUEST_ASSERT(!vmwrite(GUEST_CR0, vmreadz(GUEST_CR0) | X86_CR0_WP));
-+		GUEST_ASSERT(!vmwrite(GUEST_CR4, vmreadz(GUEST_CR4) | X86_CR4_CET));
-+	}
-+	if (exit_load)
-+		exit_ctrl |= VM_EXIT_LOAD_CET_STATE;
-+
-+	GUEST_ASSERT(!vmwrite(VM_ENTRY_CONTROLS, entry_ctrl));
-+	GUEST_ASSERT(!vmwrite(VM_EXIT_CONTROLS, exit_ctrl));
-+}
-+
-+static void l1_program_vmcs12_state(bool entry_load, bool exit_load)
-+{
-+	if (has_shstk)
-+		l1_program_vmcs12_cet(entry_load, exit_load);
-+}
-+
-+/*
-+ * Set the invalid guest state to fail the VM-entry check
-+ * -- triggering a VM-exit (EXIT_REASON_INVALID_STATE).
-+ */
-+static void l1_break_guest_state(void)
-+{
-+	u64 cr0 = vmreadz(GUEST_CR0);
-+
-+	GUEST_ASSERT(!vmwrite(GUEST_CR0, (cr0 | X86_CR0_PG) & ~X86_CR0_PE));
-+}
-+
-+/*
-+ * Set the invalid MSR load list to fail the VM-entry check
-+ * -- triggering a VM-exit (EXIT_REASON_MSR_LOAD_FAIL).
-+ */
-+static void l1_break_msr_load_list(void)
-+{
-+	struct vmx_msr_entry *list = (void *)entry_msr_load_list_gva;
-+
-+	list[0] = (struct vmx_msr_entry){
-+		.index = MSR_IA32_UCODE_REV,
-+		.reserved = 0,
-+		.value = 0,
-+	};
-+
-+	GUEST_ASSERT(!vmwrite(VM_ENTRY_MSR_LOAD_ADDR, entry_msr_load_list_gpa));
-+	GUEST_ASSERT(!vmwrite(VM_ENTRY_MSR_LOAD_COUNT, 1));
-+}
-+
-+static void l1_check_observed_cet(bool entry_load, bool exit_load, uint32_t exit_reason)
-+{
-+	enum state_src src = get_expected_state_src(entry_load, exit_load, exit_reason);
-+	const struct cet_state *expect = &states[src].cet;
-+	u64 s_cet = rdmsr(MSR_IA32_S_CET);
-+	u64 ssp_tbl = rdmsr(MSR_IA32_INT_SSP_TAB);
-+
-+	__GUEST_ASSERT(s_cet == expect->s_cet && ssp_tbl == expect->ssp_tbl,
-+		       "entry_load=%d exit_load=%d exit_reason=%u: "
-+		       "expect src %d S_CET=%#lx INT_SSP_TAB=%#lx, "
-+		       "got S_CET=%#lx INT_SSP_TAB=%#lx",
-+		       entry_load, exit_load, exit_reason, src, expect->s_cet,
-+		       expect->ssp_tbl, s_cet, ssp_tbl);
-+}
-+
-+static void l1_check_observed_state(bool entry_load, bool exit_load, uint32_t exit_reason)
-+{
-+	if (has_shstk)
-+		l1_check_observed_cet(entry_load, exit_load, exit_reason);
-+}
-+
-+static void l1_run_case(struct vmx_pages *vmx, bool entry_load, bool exit_load,
-+			uint32_t exit_reason)
-+{
-+	l1_load_own_state();
-+
-+	GUEST_ASSERT(load_vmcs(vmx));
-+	prepare_vmcs(vmx, NULL);
-+
-+	l1_program_vmcs12_state(entry_load, exit_load);
-+
-+	switch (exit_reason) {
-+	case EXIT_REASON_INVALID_STATE:
-+		l1_break_guest_state();
-+		break;
-+	case EXIT_REASON_MSR_LOAD_FAIL:
-+		l1_break_msr_load_list();
-+		break;
-+	default:
-+		GUEST_FAIL("unexpected exit reason %u", exit_reason);
-+	}
-+
-+	GUEST_ASSERT(!vmlaunch());
-+	GUEST_ASSERT_EQ(vmreadz(VM_EXIT_REASON),
-+			EXIT_REASON_FAILED_VMENTRY | exit_reason);
-+
-+	l1_check_observed_state(entry_load, exit_load, exit_reason);
-+
-+	GUEST_SYNC(0);
-+}
-+
-+static void l1_guest_code(struct vmx_pages *vmx)
-+{
-+	int ctrl;
-+
-+	GUEST_ASSERT(prepare_for_vmx_operation(vmx));
-+
-+	for (ctrl = 0; ctrl < NR_CTRL_COMBOS; ctrl++) {
-+		bool entry_load = ctrl & BIT(0);
-+		bool exit_load = ctrl & BIT(1);
-+
-+		/* 2 cases with different VM-exit reasons. */
-+		l1_run_case(vmx, entry_load, exit_load, EXIT_REASON_INVALID_STATE);
-+		l1_run_case(vmx, entry_load, exit_load, EXIT_REASON_MSR_LOAD_FAIL);
-+	}
-+
-+	GUEST_DONE();
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	gva_t vmx_pages_gva;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	struct ucall uc;
-+	int ncases = 0;
-+
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_VMX));
-+
-+	has_shstk = kvm_cpu_has(X86_FEATURE_SHSTK);
-+	TEST_REQUIRE(has_shstk);
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
-+
-+	entry_msr_load_list_gva = vm_alloc_page(vm);
-+	entry_msr_load_list_gpa = addr_gva2gpa(vm, entry_msr_load_list_gva);
-+	sync_global_to_guest(vm, entry_msr_load_list_gva);
-+	sync_global_to_guest(vm, entry_msr_load_list_gpa);
-+
-+	sync_global_to_guest(vm, has_shstk);
-+
-+	vcpu_alloc_vmx(vm, &vmx_pages_gva);
-+	vcpu_args_set(vcpu, 1, vmx_pages_gva);
-+
-+	for (;;) {
-+		vcpu_run(vcpu);
-+		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
-+
-+		switch (get_ucall(vcpu, &uc)) {
-+		case UCALL_SYNC:
-+			ncases++;
-+			break;
-+		case UCALL_DONE:
-+			TEST_ASSERT(ncases == NR_CASES, "L1 ran %d cases, expected %d",
-+				    ncases, NR_CASES);
-+			goto done;
-+		case UCALL_ABORT:
-+			REPORT_GUEST_ASSERT(uc);
-+		default:
-+			TEST_FAIL("Unexpected ucall: %lu", uc.cmd);
-+		}
-+	}
-+done:
-+	kvm_vm_free(vm);
-+	return 0;
-+}
--- 
-2.34.1
+---
+Priyank Rathod (3):
+      PCI: Add pcie_get_link_endpoints() helper
+      PCI/ASPM: Add pci_aspm_inhibit() helper for temporary link state supp=
+ression
+      PCI/pcie: Add PCIe Lane Margining at Receiver (LMR) support
+
+ Documentation/PCI/index.rst                  |    1 +
+ Documentation/PCI/pcie-lmr.rst               |  174 +++
+ MAINTAINERS                                  |    8 +
+ drivers/pci/pci.c                            |  152 +++
+ drivers/pci/pci.h                            |    8 +
+ drivers/pci/pcie/Kconfig                     |   12 +
+ drivers/pci/pcie/Makefile                    |    1 +
+ drivers/pci/pcie/aspm.c                      |  100 ++
+ drivers/pci/pcie/margin.c                    | 1592 ++++++++++++++++++++++=
+++++
+ drivers/pci/probe.c                          |    1 +
+ drivers/pci/remove.c                         |    2 +-
+ include/linux/pci.h                          |   17 +
+ include/uapi/linux/pci_regs.h                |   18 +
+ tools/testing/selftests/Makefile             |    1 +
+ tools/testing/selftests/pcie_lmt/Makefile    |    3 +
+ tools/testing/selftests/pcie_lmt/pcie_lmt.sh |  287 +++++
+ 16 files changed, 2376 insertions(+), 1 deletion(-)
+---
+base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
+change-id: 20260831-pcie-link-endpoints-978e100d5d06
+
+Best regards,
+--=20
+Priyank Rathod <rathodpriyank@google.com>
 
