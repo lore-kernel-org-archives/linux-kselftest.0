@@ -1,94 +1,95 @@
 Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133DA3EC833
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 23:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1701A3DDDA0
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 23:59:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.76
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788565375; cv=pass; b=HwY1Urgq43q5ClTL7qZrqiDbLNQvXmT5Qo+41cce820Y8CA7PrVpokB6F4FRPQG4Dl0k5V4JQuZgk2csMs6wncfuT51yaTcYr5k64buECgaJJMZHrt/Yh9CxELYGDSLktMqP7ah7Rw78OP0zcfCShuPLVXDabrCBsHWTniFjGlw=
+	t=1788566348; cv=pass; b=BibxkjUesMsMBSHIGzszhM7WIkmpg0U4MG76W9+og1ARp/0QgWqYLuCkRTYsj5G6y56OGqfPzpiBZL11e+spGA2mGF8YRZlRs2InJy5vQPm5b8pdUA1WmBwO90HZBW9D3bNabe+IFu5GeMxP+vbH6J8EI/7r4+a4bZD8xp5ipYk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788565375; c=relaxed/simple;
-	bh=tdeIH4baK11lM3YxuNe0/+kLC8zzDloAejtrDuGVn1o=;
+	s=arc-20240116; t=1788566348; c=relaxed/simple;
+	bh=krBmnFRbIq8gF67j4Y7+7n50O8rGry2k/xf6HDV+HQs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M2vyexETiqTQn2VeITj/r39vLmiMWO+w84X9ZUWWFWq0sE6ki30req/vrXHYPhCyuZW9Qj2I94rYtGIs2jPxhCTeAmgvZWXkxJpQhaga4KhWwPtXpzmwwmCaGo/yHAKzF5E6EI7jW4vF0BnPV/j1cocxLVkCvm7u4Jcvmq9jI5w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZF4j5uCp; arc=pass smtp.client-ip=74.125.228.76
+	 To:Cc:Content-Type; b=IE+5CNa+g0OL9n+U7YyBET38UxR6bI+99n75UnOhlEc5MMNbFh8+EGAccHeeDd8ADYht/SikhAL1s3DINfb7TFDv/AVPJ14poxBFIufVHGC0b5uem7ha+j0/6jIbRlIdzWXyUDqsF1A9bVTxLhAcYxYl0BGuWAzGQA2FXAaVh4g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tPfZhjQh; arc=pass smtp.client-ip=74.125.228.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZF4j5uCp"
-Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a613a6bcd8so2107a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 16:42:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788565370; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tPfZhjQh"
+Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a5d8fd8d8dso1648a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 16:59:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788566345; cv=none;
         d=google.com; s=arc-20260327;
-        b=Z2MB31htG3FcCpuUkmP5Q8MIJGw4AadHxUS0I7I9PmKsEUIooYBk7I+riWRVyqLBHn
-         iDuJVsbMX6bkjtmgEnpMkzuGdrk3/DjEQCmIDhDfnOrJeRizQ80FCs/hiymccMarwmpF
-         uVGfQJCRVZURmo+xP6gxwCiEYWFFdKvvnO3bjdi7l26wD9FXzFrUl4f6+tCHAMX/3LHQ
-         a9AB6U/0e4DPQslmzXVxJAFYWGAPDzITQWG5oOJJwxrAieOYrECDwScAKY6KLrHn5K8/
-         mrLvWxUy39Z7ySHFyXjKQzhGScki2uh+Vcz3udkGqrFY+oEH0vv8yCwf1jB2WawDY+L6
-         4wpw==
+        b=nKfOQywFuRHBUzfQ7ceU8rR8oQqGyRbJHCpOlEc5M3vgfgOT5UlgTBXoQud+SqJRlC
+         /BYiO48mwqzadydrjFa/DaucN59cPFpd6NYS+K5aQGVylg92qRS3PTwDfygRNh0ycVEF
+         4fVmCO2Jt921VA5SYqaD9z+FPPH3RCwChsRZBUgE7gRU6ARbu4yrQbbGmK8W8BIrbjXU
+         OkpcH38IJXE6IHTcBKVPi1WTEh3b3tCD8AAnZHWcaeSoFONZyj5fdCdNJkvu0CmiB78A
+         f3BSmz6U8g8mjFNTWJz4+3+4/Dydunb1wffqKcZVggaSRSQeGJ543zjuNOajglAPggg/
+         47yQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=a490dV5va/G+fyNgSv3jbK3kZI5ySQnRWsBN/ioce6o=;
-        fh=NDCetO71wi0C0zLnQCXIWJeuNOCh26AkkXtmLqbOEas=;
-        b=BNNmRFRrZD5BmbCaE4AjcO3KC13785D3/YrDifbcesJX/njj9haJgFRL6X1zUZojbn
-         JSaCzB6NPuI2fHolDb1/zicG6WDfsglMFULNa4JmUmWJB5N9cKRsLbIuXFQNZp2ewZht
-         MbaOH/qV6WbLsLN1GzlU/+rN9tHXYEC4+D2g/PRxXMGcp+myKSDBtEZctBlyX/AMJ3IE
-         /y8yGyDArn4P0lg+atg1bm3FUXx7stu2Hz3XOs5bYp6DsoUxsV77T5O1PME6pdhZCsJC
-         rHltQrr5l74A/mHecM2KcvfZGfXHvRFSWte4m4Kb922PqgxZRi9toOWSwYlxyCKStiCc
-         ofCw==;
+        bh=P15M9YH6S+kcXbz1rCaJgiRw7qh7wUbJsCq2CIKQ2jE=;
+        fh=XLBnJLmqmyP2cDBMQpz9Eun89sXsVBKATGE5QeGQXhA=;
+        b=kaIUm7K4ixEoOXUbgsKGkEhPEqqhVxFl30IpQaruOa9NT/ALrKbF5y5hy4dBGfCiio
+         yExFj2PryF9TBEppF31To5U46yl/Wsnp6wm45DhtKUnQJO+OcLMFIu4Ggwlg7r17+B/v
+         ekK3R6l61YahTyTSDFkz3g8cyw6kr4H/9tzhC/BRymj2j/efnqKELCxW9eTVVr/0VMb+
+         vI+Qd4zt4IS6NbQR8I+3DQm2DiS7r4Dw/nm5/ZoNYFx1lx4XLjE8DEvqFpHB0z5cwjF/
+         BHnRpH9S2NTYGLkNi14Ebsls/tdQvmbbUPxyOi3aiL0zheHvgDdvfNIzzwudGgcfo/yf
+         SauQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788565370; x=1789170170; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1788566345; x=1789171145; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=a490dV5va/G+fyNgSv3jbK3kZI5ySQnRWsBN/ioce6o=;
-        b=ZF4j5uCpoKaUnazWnTNp2ojnyEHndnkgC5TuSr5x9xX2Gu7egVp6hYDu0gFYl5/aL3
-         XrOMxY/HGvP8kkf247LrxyhJegpnNbgA6bS/8B3ktAUo9nB+1YlmLrJDVGWc1VUoPZ8U
-         Q2iuTkZPPaj18l0BTgo0kqaZJ99IjW6b6rOocQxXpkYMqbYpIB0GmG0BlwhlM5av7MuI
-         lhCzKrdRFYXjDnLMr8DdkiBJBFY2f1pdYnuycVoDTKhk5WNGSbtzJ1b8N5s6QMWxetPD
-         77FN/KJfZXQwJpFcw9cC9gzhd5VBgvEKPrjwGOGH4EODJtHnYWKrufXDmEBabDF8NWrD
-         GmTA==
+        bh=P15M9YH6S+kcXbz1rCaJgiRw7qh7wUbJsCq2CIKQ2jE=;
+        b=tPfZhjQhDVwmNy1sVnstD0Be7ummGaDZcrFc8j11i9CKV2eqKlaBGDmMJ901e8Xtjq
+         INWzo1vj34VIbPo4v7d0V8PgxdbpnpTYxeB+q7WUqa0LnoxAQRUtdcZzIW629DdFomkA
+         fICmank83k1iDHCMF4GUMcZf1yZl//9EmgQHpUlYYhBdzoul1Z7BQYEMFPD9/8qh9+Nr
+         w01B7J0z8DHEdg24wiE8ive+B3kxmXhfAQdxYdnXsV488N0wd7tgzq9HGew+L9sIzdJQ
+         LXWpyiVUKbUCCZF85YM7JHaXRoguDSWDVu+ntMLpEF3Sp8V/u/H5cDGzkgXmmLPj7A2b
+         4qow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788565370; x=1789170170;
+        d=1e100.net; s=20251104; t=1788566345; x=1789171145;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=a490dV5va/G+fyNgSv3jbK3kZI5ySQnRWsBN/ioce6o=;
-        b=iDURIPRCZ9YcygGtTeUET3sCGK//L+IWcd4hU+4DIa5mAzt8jXwiUKR2lqzlSNCQFq
-         T5iaEuKBaHAuV+6S/AIXyrzUX79d18AlAOWjpkE1a9e65+NrVkaC6RrDZQF9yjG+GIGs
-         ffK8bkIIjX2/O2BF5vVxf4c4hBEezGC2tCGbv4yayzHI2Od67qF9U6AdG5MO5vxJKDV6
-         tVYPXv2sbkfWKuqb8Ns6p4JGXNCMC2bYOdGevMw3cqDW5HmTYU6jYQnj+D4hls4e514G
-         cff5SyjdwRopMh3ojnQITDy5BH6P0JgnZpHNe0NvB4ZUkf9rOlaeikFuWmRbBNNdL7r6
-         7VmQ==
-X-Forwarded-Encrypted: i=1; AKwUvBz4jI8ypBSX/dYtLeivRCH4IBFj6Kz+o1JsUiYruzXMDwGiWsgm4m+CTbD7IAGW5t+416L0ciylaKy3iWTwxzw=@vger.kernel.org
-X-Gm-Message-State: AFuF++nRjfZSaLTbNMTP80QpIYA7ZTh+ZQeVrE608Nu8Z53o5FIdVtgk
-	VxRfgnVf809SrfB6r/2t27wrtXd56GkwDjdmhrsuDwfYzp9eHxnZH/6IUt6e24Gh9hlpw+duBs4
-	uVwHsbqqQfdjCtDsY/0L0ky9PFIT+QgWL0kBCMYix
-X-Gm-Gg: AYBFou1cJ3DDrMU55C6Ot1Qle9WkgU5Gq8SIjTM9ENHLdI0foW0tojPw7nUyqOlDZQj
-	k8hm3e6ArgEnJGzVVows9mq2pss/hbFzYsl1stjb/RPGSvd1aB/f3UrJjrMYLIxZzcowf37ewGm
-	VHgK7Gg2rSzwYEgsTAe6iE9yamM9fPOjX59OVOXFX5vwQ+ge3OhqbBfhJqm16xM1NXsYU1uRz+E
-	JgIWCfTw9qKgyN0Hgz2HBMtRnYRGQKUjUh0DvuotjK/oChs1MTxZ4D7CNrvQECLdNQviqIvUSF7
-	uGVCxDROm6HOHMDtN+VaPvG5VBr4GNu1zEo/Y2SnK45s
-X-Received: by 2002:aa7:d892:0:b0:6a6:32f6:2841 with SMTP id
- 4fb4d7f45d1cf-6a7f684a29bmr14334a12.14.1788565369618; Fri, 04 Sep 2026
- 16:42:49 -0700 (PDT)
+        bh=P15M9YH6S+kcXbz1rCaJgiRw7qh7wUbJsCq2CIKQ2jE=;
+        b=X0VlHqlmmUX23uQ68Qu6wOFHbe67L2OYbDg34Z1W6ZspIc0mMyywxBZBmX5yhKQ86H
+         9Vb4H4BNKljIHc2366SpJhX48ThrtANzas57A+lZ0vZH/WNi6iNO49+d4g1FHPTr6Ac6
+         K0anF4viqznRL82kZUYoklBbcTEIRv0dC2WQCV2EU9MuS6K/6MyNtWmBj0fqJPndOqIV
+         dHbhXyrd/7AvCzySmThBrEyXjoPQYVksSRvYnEdLFIL8JwB5krx0O2P9m32lWLCVj1PQ
+         AsPsk+0YIAtomrvsgHvws1Ds1QmReH7vio2GQgO9b8D3wvwB7d6gpNVlf3f3PXsFSnzL
+         eh+g==
+X-Forwarded-Encrypted: i=1; AKwUvByPIQLz24KLmleaN2qxuIC0iRFwLOnTw8rKQuZ2OYXkaK9VTgeMJ0+8EKa3VfW2SzAx6tg9ZLTOwUplh2GRy3k=@vger.kernel.org
+X-Gm-Message-State: AFuF++mKkf7dq93pOLmOBAS9XAtTlyii6yxhM9nMzg5pRKFwtZ+91VXb
+	vn/5WVtb4+s+KJQn9TXsvun2Atoj55CpT+BJFTWnctTXrBx7wbQeVhHK5zUORq9vPtgC+0XxhW4
+	h6EMSqv8vzWrkgq6wQg6tBS9VZIa3VRMc/XeHi+tPJBisBVtk5FD0SxfkPC0=
+X-Gm-Gg: AYBFou34qC4iY0nQi5SF1G7ZuIAgZgi0+hiqL3b+n0YtdJg3qAx5myefmEs/aGClL5b
+	S0OdwZADrX/T1yn8wCymPzKsAKGvV6FH1h5Xv0ITWW/R5KEinTXSq7TU6L5VagmrHJZsTnEom3U
+	LA7YH6s26xfnh4W/wDyT0X1eeTKIAU2qhM+4iV7hyajSCxWxxjR8xb0PabpMVS1oye95nlHoS8c
+	Ox2IrKHizU5NzzGF6fXHoI+MkNu/wH39TbZPoICwyE4QI3UJ0jiEJGyx6OCAv24milxdjCHB+UZ
+	UF0PzIe57v0wgCOV5ydVoOnq08wjckEEoPfOphfL9edi
+X-Received: by 2002:aa7:c0c3:0:b0:6a6:967c:3186 with SMTP id
+ 4fb4d7f45d1cf-6a7f67ae76amr12701a12.2.1788566344746; Fri, 04 Sep 2026
+ 16:59:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260824123954.315112-1-zhang_wei@open-hieco.net> <20260824123954.315112-4-zhang_wei@open-hieco.net>
-In-Reply-To: <20260824123954.315112-4-zhang_wei@open-hieco.net>
+References: <20260824123954.315112-1-zhang_wei@open-hieco.net> <20260824123954.315112-5-zhang_wei@open-hieco.net>
+In-Reply-To: <20260824123954.315112-5-zhang_wei@open-hieco.net>
 From: Jim Mattson <jmattson@google.com>
-Date: Fri, 4 Sep 2026 16:42:37 -0700
-X-Gm-Features: AcwNN1VTu8soNFdZKDDuJyRJOCyguZsvF4fhB4VorP5tfiMZXhPhnkzdAlhwRFU
-Message-ID: <CALMp9eTUv+4v3jT7w3T8XoQmoSwkEjx6LHr39oJ9k8QNiQnyUA@mail.gmail.com>
-Subject: Re: [PATCH v5 3/8] KVM: nSVM: Track fresh hardware DecodeAssist bytes
+Date: Fri, 4 Sep 2026 16:58:51 -0700
+X-Gm-Features: AcwNN1VzwHjjOpDM8aPo2_uyIHXlBmHXB-Cus8IcnrfXF5YVspG-M2LzaQS3L0E
+Message-ID: <CALMp9eR=TNUqfbNCFkxmg=O_Obcj11Tu9jAmX6Pe60qvvNx-2g@mail.gmail.com>
+Subject: Re: [PATCH v5 4/8] KVM: nSVM: Propagate hardware DecodeAssist bytes
+ to VMCB12
 To: Tina Zhang <zhang_wei@open-hieco.net>
 Cc: Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, 
 	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, zhouyanjing@hygon.cn, 
@@ -99,195 +100,97 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Aug 24, 2026 at 5:40=E2=80=AFAM Tina Zhang <zhang_wei@open-hieco.ne=
 t> wrote:
 >
-> VMCB02 instruction bytes are valid only for the hardware VM-Exit that
-> populated them.  Track whether VMCB02 contains instruction bytes for the
-> data #PF or #NPF currently being reflected to L1 so that stale bytes are
-> not copied to VMCB12.
+> DecodeAssists provides instruction bytes for nested page faults and
+> intercepted page faults caused by data accesses.  When the feature is
+> exposed to L1, copy fresh hardware-provided instruction bytes from VMCB02
+> to VMCB12 for these exits.
 >
-> Clear the VMCB02 instruction-byte fields and freshness state before each
-> nested run.  Mark the bytes as fresh only when a data #PF or #NPF came
-
-By "nested run," do you mean "emulated VMRUN"? IIUC, that's when the
-bytes and freshness are cleared.
-
-> from hardware; KVM-synthesized exits and instruction-fetch faults leave
-> the state clear.
->
-> A subsequent change will use this state when propagating hardware
-> DecodeAssist instruction bytes to VMCB12.
+> Clear the VMCB12 instruction-byte state before rebuilding it, and leave t=
+he
+> length zero for instruction-fetch page faults, unrelated exits, and exits
+> without fresh hardware bytes.
 >
 > Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
 > ---
->  arch/x86/kvm/svm/nested.c | 41 +++++++++++++++++++++++++++++++++++++--
->  arch/x86/kvm/svm/svm.c    |  6 +++---
->  arch/x86/kvm/svm/svm.h    |  5 ++++-
->  3 files changed, 46 insertions(+), 6 deletions(-)
+>  arch/x86/kvm/svm/nested.c | 35 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
 >
 > diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index 73f37b050d0a..6770721d4e4c 100644
+> index 6770721d4e4c..2db0ec66e8dc 100644
 > --- a/arch/x86/kvm/svm/nested.c
 > +++ b/arch/x86/kvm/svm/nested.c
-> @@ -35,6 +35,38 @@
+> @@ -42,6 +42,20 @@ static void nested_svm_clear_insn_bytes(struct vmcb *v=
+mcb)
+>                sizeof(vmcb->control.insn_bytes));
+>  }
 >
->  #define CC KVM_NESTED_VMENTER_CONSISTENCY_CHECK
+> +static void nested_svm_copy_insn_bytes(struct vmcb *to,
+> +                                      const struct vmcb *from)
+> +{
+> +       u8 insn_len =3D from->control.insn_len;
+> +
+> +       nested_svm_clear_insn_bytes(to);
+
+It's not obvious to me that this clearing is necessary (except in the
+case of the early return below). The APM does not say what happens to
+the remaining bytes if there is a short read.
+
+> +       if (WARN_ON_ONCE(insn_len > sizeof(from->control.insn_bytes)))
+> +               return;
+> +
+> +       to->control.insn_len =3D insn_len;
+> +       memcpy(to->control.insn_bytes, from->control.insn_bytes, insn_len=
+);
+> +}
+>  static bool nested_svm_vmexit_has_insn_bytes(const struct vmcb *vmcb)
+>  {
+>         u64 exit_code =3D vmcb->control.exit_code;
+> @@ -67,6 +81,25 @@ static void nested_svm_clear_vmcb02_insn_bytes(struct =
+vcpu_svm *svm)
+>         svm->nested.vmcb02_insn_bytes_fresh =3D false;
+>  }
 >
-> +static void nested_svm_clear_insn_bytes(struct vmcb *vmcb)
+> +static void nested_svm_update_vmcb12_insn_bytes(struct kvm_vcpu *vcpu,
+> +                                               struct vmcb *vmcb12,
+> +                                               const struct vmcb *vmcb02=
+)
 > +{
-> +       vmcb->control.insn_len =3D 0;
-> +       memset(vmcb->control.insn_bytes, 0,
-> +              sizeof(vmcb->control.insn_bytes));
-> +}
-
-Is it necessary to clear the bytes? The APM says, "All other
-intercepts clear bits 7:0 in this field to zero (to indicate an
-invalid condition); implementations may leave the other bytes
-untouched."
-
-Are you concerned about leaking bytes from unreflected VM-exits handled by =
-L0?
-
-> +static bool nested_svm_vmexit_has_insn_bytes(const struct vmcb *vmcb)
-> +{
-> +       u64 exit_code =3D vmcb->control.exit_code;
+> +       struct vcpu_svm *svm =3D to_svm(vcpu);
 > +
-> +       if (exit_code !=3D SVM_EXIT_NPF &&
-> +           exit_code !=3D SVM_EXIT_EXCP_BASE + PF_VECTOR)
-> +               return false;
-> +
-> +       return !(vmcb->control.exit_info_1 & PFERR_FETCH_MASK);
-> +}
-> +
-> +static void nested_svm_set_vmcb02_insn_bytes_fresh(struct vcpu_svm *svm,
-> +                                                  bool from_hardware)
-> +{
-> +       svm->nested.vmcb02_insn_bytes_fresh =3D
-> +               from_hardware && static_cpu_has(X86_FEATURE_DECODEASSISTS=
-) &&
-> +               nested_svm_vmexit_has_insn_bytes(svm->vmcb);
+> +       nested_svm_clear_insn_bytes(vmcb12);
 
-For  consistency, should svm->vmcb be svm->nested.vmcb02.ptr?
+Clearing here is premature. If L1 does not have
+X86_FEATURE_DECODEASSISTS, the "Guest Instruction Bytes" fields of
+vmcs12 should not be touched.
 
-> +}
+Moreover, as I pointed out earlier, if L1 has
+X86_FEATURE_DECODEASSISTS, and the VM-exit doesn't have instruction
+bytes, you onlyhave to clear bits 7:0.
+
+> +       if (!guest_cpu_cap_has(vcpu, X86_FEATURE_DECODEASSISTS) ||
+> +           !nested_svm_vmexit_has_insn_bytes(vmcb02))
+> +               goto out;
 > +
-> +static void nested_svm_clear_vmcb02_insn_bytes(struct vcpu_svm *svm)
-> +{
-> +       nested_svm_clear_insn_bytes(svm->nested.vmcb02.ptr);
+> +       if (svm->nested.vmcb02_insn_bytes_fresh)
+> +               nested_svm_copy_insn_bytes(vmcb12, vmcb02);
+> +
+> +out:
 > +       svm->nested.vmcb02_insn_bytes_fresh =3D false;
 > +}
 > +
 >  static void nested_svm_inject_npf_exit(struct kvm_vcpu *vcpu,
 >                                        struct x86_exception *fault,
 >                                        bool from_hardware)
-> @@ -68,6 +100,7 @@ static void nested_svm_inject_npf_exit(struct kvm_vcpu=
- *vcpu,
->                                     (fault->error_code & ~PFERR_GUEST_FAU=
-LT_STAGE_MASK);
->         vmcb->control.exit_info_2 =3D fault->address;
+> @@ -1332,6 +1365,8 @@ static int nested_svm_vmexit_update_vmcb12(struct k=
+vm_vcpu *vcpu)
+>         if (guest_cpu_cap_has(vcpu, X86_FEATURE_NRIPS))
+>                 vmcb12->control.next_rip  =3D vmcb02->control.next_rip;
 >
-> +       nested_svm_set_vmcb02_insn_bytes_fresh(svm, from_hardware);
->         nested_svm_vmexit(svm);
->  }
->
-> @@ -868,7 +901,9 @@ static void nested_vmcb02_prepare_control(struct vcpu=
-_svm *svm)
->         /*
->          * Filled at exit: exit_code, exit_info_1, exit_info_2, exit_int_=
-info,
->          * exit_int_info_err, next_rip, insn_len, insn_bytes.
-> +        * Clear stale DecodeAssist data before L2 runs.
->          */
-> +       nested_svm_clear_vmcb02_insn_bytes(svm);
->
->         if (guest_cpu_cap_has(vcpu, X86_FEATURE_VGIF) &&
->             (vmcb12_ctrl->int_ctl & V_GIF_ENABLE_MASK))
-> @@ -1643,14 +1678,16 @@ static int nested_svm_intercept(struct vcpu_svm *=
-svm)
->         return vmexit;
->  }
->
-> -int nested_svm_exit_handled(struct vcpu_svm *svm)
-> +int nested_svm_exit_handled(struct vcpu_svm *svm, bool from_hardware)
-
-I don't think 'from_hardware' is necessary. The two callsites where
-from_hardware is false are for opcode exits, and will be ruled out by
-the check for nested_svm_vmexit_has_insn_bytes(svm->vmcb). If you drop
-this extra parameter, there will be less churn.
-
->  {
->         int vmexit;
->
->         vmexit =3D nested_svm_intercept(svm);
->
-> -       if (vmexit =3D=3D NESTED_EXIT_DONE)
-> +       if (vmexit =3D=3D NESTED_EXIT_DONE) {
-> +               nested_svm_set_vmcb02_insn_bytes_fresh(svm, from_hardware=
-);
->                 nested_svm_vmexit(svm);
-> +       }
->
->         return vmexit;
->  }
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index c7c1f1527c3c..5426a9669053 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -2571,7 +2571,7 @@ static bool check_selective_cr0_intercepted(struct =
-kvm_vcpu *vcpu,
->
->         if (cr0 ^ val) {
->                 svm->vmcb->control.exit_code =3D SVM_EXIT_CR0_SEL_WRITE;
-> -               ret =3D (nested_svm_exit_handled(svm) =3D=3D NESTED_EXIT_=
-DONE);
-> +               ret =3D (nested_svm_exit_handled(svm, false) =3D=3D NESTE=
-D_EXIT_DONE);
->         }
->
->         return ret;
-> @@ -3723,7 +3723,7 @@ static int svm_handle_exit(struct kvm_vcpu *vcpu, f=
-astpath_t exit_fastpath)
->                 vmexit =3D nested_svm_exit_special(svm);
->
->                 if (vmexit =3D=3D NESTED_EXIT_CONTINUE)
-> -                       vmexit =3D nested_svm_exit_handled(svm);
-> +                       vmexit =3D nested_svm_exit_handled(svm, true);
->
->                 if (vmexit =3D=3D NESTED_EXIT_DONE)
->                         return 1;
-> @@ -4983,7 +4983,7 @@ static int svm_check_intercept(struct kvm_vcpu *vcp=
-u,
->         if (static_cpu_has(X86_FEATURE_NRIPS))
->                 vmcb->control.next_rip  =3D info->next_rip;
->         vmcb->control.exit_code =3D icpt_info.exit_code;
-> -       vmexit =3D nested_svm_exit_handled(svm);
-> +       vmexit =3D nested_svm_exit_handled(svm, false);
->
->         ret =3D (vmexit =3D=3D NESTED_EXIT_DONE) ? X86EMUL_INTERCEPTED
->                                            : X86EMUL_CONTINUE;
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 66b44b54608e..610def16f700 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -242,6 +242,9 @@ struct svm_nested_state {
->          * on its side.
->          */
->         bool force_msr_bitmap_recalc;
+> +       nested_svm_update_vmcb12_insn_bytes(vcpu, vmcb12, vmcb02);
 > +
-> +       /* True if VMCB02 has instruction bytes from the current hardware=
- exit. */
-> +       bool vmcb02_insn_bytes_fresh;
->  };
+>         if (nested_vmcb12_has_lbrv(vcpu))
+>                 svm_copy_lbrs(&vmcb12->save, &vmcb02->save);
 >
->  struct vcpu_sev_es_state {
-> @@ -887,7 +890,7 @@ static inline void nested_svm_simple_vmexit(struct vc=
-pu_svm *svm, u32 exit_code)
->         nested_svm_vmexit(svm);
->  }
->
-> -int nested_svm_exit_handled(struct vcpu_svm *svm);
-> +int nested_svm_exit_handled(struct vcpu_svm *svm, bool from_hardware);
->  int nested_svm_check_permissions(struct kvm_vcpu *vcpu);
->  int nested_svm_check_cached_vmcb12(struct kvm_vcpu *vcpu);
->  int nested_svm_check_exception(struct vcpu_svm *svm, unsigned nr,
 > --
 > 2.43.7
 >
