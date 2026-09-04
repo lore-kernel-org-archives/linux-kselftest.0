@@ -1,152 +1,208 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 785F83B388D
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 03:18:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C9C3B3C11
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 03:19:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788491891; cv=none; b=QWHoljEQLB9sts8bJf0yNspcfdVoafpsseLl9cQZ0fX7i10mSyl4A5SMK8pmABha0wQWfQq6r+I5xpCFXWPoj+Vsl0SgmiDvnKq9WRuHJZEXw3Ik69NazNoShOSP2xHoiljd8ZDKmyndVsDA4tcHCeGPjgKb/Vt2F9Hy0vTbHvE=
+	t=1788491957; cv=none; b=Aqwt3zZVJcRtH8zvNDWwjmqcc3pddqXAlLA1phMnQkXNd1sAJiMWaNMy+K7tCSv6wpIeBxZIc9kUFL13/AXZdrsAfg7YbpmNFTSHj5RxhRX1bUgyLmxrwIkim3AWCzf9Dy1OwByizOpkmkggoJE/xWJCMEzajEuZmw3gfUg0PsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788491891; c=relaxed/simple;
-	bh=AIU6NGTW/RpZfTt6y2cuypcAmkoFDaCDqNNZTCJi0Bc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NxSNw9dx7k+NrW5r/p8EYarm+82yUx2hEhZMX/ZMBuFICVnY/FCIb50XO6qg3uOtWAx0Z3/xhiP5bR21hv+Y52PiSGgzSI5+JSB24SQjkfTHrVJtAOZoK3oIlpde4nRDBqqAgVHhcFWYAFUMFuUDEL1eQYnEGseFpKrBwD2KYMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=XXnf1qrk; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1788491957; c=relaxed/simple;
+	bh=fC6bLYvWi3YAW75vB3TW1SRbpe/x9g2nH3Xn4stbrlg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=mRRh4xWv/KYKww2efXi1WWbVLb4rpus4mJBvAXcZ7DGygUdZgaPyb/wpON589l7EMiPK9h2cBzaG3h49pUYn+HpEhOEUbM1Pz5PQkBQnUHGs8K6KvVqRLKlKDoVTlF9/PMJKyNbkVRthkxgl40PXczHWKyx/RasghFmF0xX/sbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ujb4EKor; arc=none smtp.client-ip=209.85.214.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="XXnf1qrk"
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-52e2d1bdbc0so4672021cf.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 20:18:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ujb4EKor"
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2cec4226c70so6792505ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 20:19:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1788491887; x=1789096687; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=I82bST350eZ9tF0sXAbqbqSO4hf+URoRFBA/uGedV7I=;
-        b=XXnf1qrkElo3aCzA7QExaOWSdNxP/unmoxpQ7Nl14LSqP+OXLeyp+7TwEx+/0vPFXS
-         mbXWBII3WXz82rpc/mRXs5oQAafMXv/lR9i6NSNTO7vI6fbUQ9Lm/H+/70dUKyPYID/D
-         rINud0bXIB6JWQRfob5+wo6/7GzlrBSpoLZZyO4V6Mq1y4oT1jQb28+99bKN5jmlVfq7
-         XLGDbXv6L3DciY+gWrXNu3RIZDTtpgb+GehzhnXRXGRkpYwMGg9GSc7zeFG53wLU+gCx
-         flGxyi214iKlFdnetOf0+RVR7gjNDakGPu1348MlAGrbuEUQ+hjaFC/oLLirlUZ3Lv2L
-         lQ3A==
+        d=google.com; s=20251104; t=1788491956; x=1789096756; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=3+QfypsaoraMhsiZLHV6szGOoZiPKujpYHWhvNQofXQ=;
+        b=Ujb4EKorHMajyPYN0jotOPigulNcazTWZXTjxl05gJEMecLomIjX5nhcP0+td3DMpz
+         DsdXoBdyh3sHIughZdHjKuAKf2F7Ni3XR9Zat/kzrx0Y9cSai7bF9kOap39pSV1nM6Yy
+         /6jw5q/GgZrG5DEQBP7ScfyZiNBKA4XgtcGpf7W6YCavy++vci0eCgiWLgmSWbBAA1WW
+         eySLrLNfE7JzyBalf29dbPDHlyf7YJ3dvO1SE2Z48TPDo5oUPkuyUNRCh5jNVZHip/P4
+         t2hZfQN6UQKvbeobWECNztoIEeuYj7OpZiVP+/Jmq/ZSwk2Q1MmwZd6dh89roVbOK5Jp
+         RACw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788491887; x=1789096687;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=I82bST350eZ9tF0sXAbqbqSO4hf+URoRFBA/uGedV7I=;
-        b=qruBl/d/h7zSL5rJ4ZONRQ4tpZKRoJOY5EZUbdCxc8jcCjzm1HFpey3veFsuyXWGim
-         72BTiKseNGHHWLlQQ/GhJIa1IbRVsDGv1oRZTuA83trR40lOU+TOsQaX3bPYx9eicApV
-         B75WTGbJFWhwA8G8PDCGdCOXeEzwtVu5qT4TsibsvXcnZ17fq2pz61iUdTLDui+/gzdh
-         a6PUZSZzNgal3NPTvuus61/MbPh8DR/8aIRLDSBm83QskpmDOeoup2Z7qz1UVzV6ljKF
-         ZXznXwZwR/T2kIFxMu9B5ZNqf4A7PH+w/VCOUFrmvktcOKFYq6Tp7hfssYCkseLufYAZ
-         m88A==
-X-Forwarded-Encrypted: i=1; AKwUvBxCME8/OMVEPJJKjaI97vrVp/xqhPiHhsSrt7nI7+wbCusXZczcCzOYNxEW+VakOmOEJNnvJS0S/IvpjREZFIE=@vger.kernel.org
-X-Gm-Message-State: AFuF++mSbt6lsdpy9uERhNfuzHB13N8NbpnhE0PdSyw842PgBaT56Oaj
-	NZgrVw7NBCelkUvppILJUs1tKqJWVLCIeYfnAEiUWb7pNDJSL/HnuVaZShWaxTtyh3w=
-X-Gm-Gg: AYBFou39Ac20lyI+K46Ri1cgco1jC2bLZ5mTTssdulZi5OZzEIDe0EVLAwSUvaKFFD0
-	8mM2KwHEMW+p6xKKECMTXhBKGkXTXDvpfYG1L57P73g1Zeq3fCux4rtLTJlPJXbPr1xYxVAkqqI
-	/21i88nm9kpVq5gL8WPE51jlQPRlkQ4fQSS/CjOUEob9gxeECvjeIjvdbbALYfPJufVsQ5kqkrH
-	pmNWdx53aktKKcfYxOS0fQ9a7vUJG9MvUHMOgwEpMf7bpuFPPiKezgM41tnXwaYf+kp3Bs4fFjf
-	xVarO63Y+d/IJMD1hFydxNNwyaCeZ/DPw1kx7lDdUymE9LOkafRjYYkUIXkw6u+0yB9miG6Mt0u
-	dfZrUK/ohZIoenVnW3B6JIySsbJC4mWzyufCSLuFvMDpQh+q956JAlOzuPJErMjm+vzYZNHNajP
-	qBnuIGemy0F8aABE427ljHIBo76MbEM3WJVtynXxxDzyTW1SmvnLdinnkmAuXfzGzledd6MSrgg
-	2TD34j8yJECz4h07iVaHNK+IuHZWu8MQqFQtBMzf8ggpxx3Al6183A=
-X-Received: by 2002:a05:622a:1c18:b0:52d:4f43:d5b0 with SMTP id d75a77b69052e-530548bc5e0mr43078621cf.22.1788491887027;
-        Thu, 03 Sep 2026 20:18:07 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5305402a7b7sm11260161cf.3.2026.09.03.20.18.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 20:18:06 -0700 (PDT)
-Date: Thu, 3 Sep 2026 23:18:03 -0400
-From: Gregory Price <gourry@gourry.net>
-To: Qiqi Li <liqiqi23@huawei.com>
-Cc: linux-mm@kvack.org, Zhigang.Luo@amd.com, arun.george@samsung.com, 
-	balbirs@nvidia.com, brendan.jackman@linux.dev, yuzenghui@huawei.com, 
-	apopple@nvidia.com, alucerop@amd.com, matthew.brost@intel.com, 
-	akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, liam@infradead.org, 
-	vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
-	corbet@lwn.net, skhan@linuxfoundation.org, gregkh@linuxfoundation.org, 
-	rafael@kernel.org, dakr@kernel.org, djbw@kernel.org, vishal.l.verma@intel.com, 
-	dave.jiang@intel.com, alison.schofield@intel.com, osandov@osandov.com, 
-	jannh@google.com, pfalcato@suse.de, jackmanb@google.com, hannes@cmpxchg.org, 
-	ziy@nvidia.com, pbonzini@redhat.com, osalvador@suse.de, joshua.hahnjy@gmail.com, 
-	rakie.kim@sk.com, byungchul@sk.com, ying.huang@linux.alibaba.com, 
-	kasong@tencent.com, qi.zheng@linux.dev, shakeel.butt@linux.dev, baohua@kernel.org, 
-	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, yury.norov@gmail.com, 
-	linux@rasmusvillemoes.dk, longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org, 
-	mkoutny@suse.com, sj@kernel.org, jgg@ziepe.ca, jhubbard@nvidia.com, 
-	peterx@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
-	ryan.roberts@arm.com, dev.jain@arm.com, lance.yang@linux.dev, usama.arif@linux.dev, 
-	xu.xin16@zte.com.cn, chengming.zhou@linux.dev, roman.gushchin@linux.dev, 
-	muchun.song@linux.dev, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	driver-core@lists.linux.dev, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
-	linux-debuggers@vger.kernel.org, linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
-	cgroups@vger.kernel.org, damon@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	kernel-team@meta.com
-Subject: Re: [PATCH v5 25/36] mm/memory_hotplug: support N_MEMORY_PRIVATE
- node hotplug
-Message-ID: <apo3bZab6qtCosQM@gourry-fedora-PF4VCD3F>
-References: <20260720193431.3841992-1-gourry@gourry.net>
- <20260720193431.3841992-26-gourry@gourry.net>
- <6840c720-8cb7-46bb-a652-040c130a4427@huawei.com>
- <aoJaaYp30LnKLj1w@gourry-fedora-PF4VCD3F>
- <0334fe7d-d949-45f7-8914-3012cb11b740@huawei.com>
+        d=1e100.net; s=20251104; t=1788491956; x=1789096756;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=3+QfypsaoraMhsiZLHV6szGOoZiPKujpYHWhvNQofXQ=;
+        b=KM5GBq2qAiP6APQO79roesMfbICziqyQFLttR4TuhNF4d7kbvJZ8v99AqPP8VnpDID
+         wTR8wH6O/picC8SY7PgeVSMPr5Ehp/REUF8mAWUpjLZdetBAykGnaY62QYMh2VBJm7Ci
+         HHOp/ZahO7hUYFo+1M86Ywozz6z515H9QUh2YQB2EbJDLm67iHr8Bycrw9zPNTvD21/p
+         iEkidrjt0VHe1Zrc4uh741jksIN+sgvgjXwkajDuQFhqGBPlZgjJucDdHDUETWpIXSV3
+         0jyTe61k4/soFbBXbyfSYJKqbpHnybfjRtL9uosfMDwBZSky785j7X7mWvgiufJ+KF2K
+         uRaw==
+X-Forwarded-Encrypted: i=1; AKwUvBwYcDUy4K9dbwLzMotdhNGd1VQjLbRwkgpA5ePyHwmQxynwjsH6amm9Ipoqprk5P93u2vBNr4JPF/4aEQjQCyI=@vger.kernel.org
+X-Gm-Message-State: AFuF++k7wuMzX6MZZilsIEhATd9jTfMVcjJb43/EMoZVRMa20BT/Cobf
+	qXGhF7LlFtVy5DGgbEvFkkDfn44ExFWoOvszAO6RqHVp+J3jLIqiIhuF84Bw5RSUDaAIY5D1ivJ
+	54g==
+X-Received: from plrx6.prod.google.com ([2002:a17:902:b406:b0:2d6:dcd1:657d])
+ (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3810:b0:2d6:3c22:99bf
+ with SMTP id d9443c01a7336-2db124afcefmr52336225ad.9.1788491955429; Thu, 03
+ Sep 2026 20:19:15 -0700 (PDT)
+Date: Fri,  4 Sep 2026 13:19:11 +1000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0334fe7d-d949-45f7-8914-3012cb11b740@huawei.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.979.g7e5102b832-goog
+Message-ID: <20260904031912.2133476-1-tweek@google.com>
+Subject: [PATCH bpf-next 1/2] selftests/bpf: Move verifier failure tests out
+ of test_global_percpu_data
+From: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
+To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Leon Hwang <leon.hwang@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	"=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Sid Nayyar <sidnayyar@google.com>, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 04, 2026 at 09:05:39AM +0800, Qiqi Li wrote:
-> On 8/17/2026 8:49 AM, Gregory Price wrote:
-> > It would need to be reserved, and you could use numa emulation but
-> > that's clunky.  I have an RFC for exactly this issue - though i haven't
-> > pushed it further yet.
-> > 
-> > https://lore.kernel.org/all/20260610014517.253609-1-gourry@gourry.net/
-> 
-> Hi Gregory,
-> 
-> Sorry for the late reply.
-> 
-> I took a look at the exclusive-node RFC. The approach looks useful for
-> device-backed private memory without a firmware-described NUMA node.
-> Thanks for the pointer.
-> 
-> We are currently looking into the private-node and CRAM design as a
-> whole. I noticed that CRAM was not included with the v5 series, and saw
-> that others were also interested in a v5 version.
-> 
-> If you already have a CRAM branch or patches based on v5, even if they
-> are still work in progress, would you mind sharing them? It would be
-> very helpful for us to continue testing the overall design.
->
+Commit 4c9241bd731a ("selftests/bpf: Add tests to verify global percpu
+data") added test_global_percpu_data.c to LSKELS_EXTRA. Later, in commit
+1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu data")
+two verifier failure tests were added (verifier_strncmp and
+verifier_snprintf), both marked as non-autoload (SEC("?kprobe")).
 
-I dropped it off because it was starting to become unwieldly, but i am
-continuing to maintain a branch on my github:
+When bpftool generates light skeletons, non-autoloaded programs are
+skipped during loading, causing the loader program to store subsequent
+program FDs into incorrect skeleton struct fields (e.g. dump_percpu_data's
+FD was stored into verifier_strncmp's descriptor).
 
-https://github.com/gourryinverse/linux/commits/scratch/gourry/cramtest/cram_72/
+Move the two verifier failure tests to a dedicated test file,
+test_global_percpu_data_failure.c, and run them via RUN_TESTS in
+global_data_init.c. This leaves test_global_percpu_data.c with only
+autoloaded programs, ensuring the light skeleton can be generated cleanly
+and correctly.
 
-I have not posted a new version in some time and it has been reworked
-significantly in the past few months - but I plan to talk about this
-particular branch and the tests I've run with it at the device memory
-LPC micro-conference.
+Fixes: 4c9241bd731a ("selftests/bpf: Add tests to verify global percpu data=
+")
+Fixes: 1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu da=
+ta")
+Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
+---
+ .../bpf/prog_tests/global_data_init.c         |  3 +-
+ .../bpf/progs/test_global_percpu_data.c       | 23 --------------
+ .../progs/test_global_percpu_data_failure.c   | 30 +++++++++++++++++++
+ 3 files changed, 32 insertions(+), 24 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_global_percpu_da=
+ta_failure.c
 
-I validated this branch against most in-tree (relevant) filesystems for
-the page-cache extension, but I imagine the anon-only version subset is
-the more immediately interesting for upstream development.
+diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/to=
+ols/testing/selftests/bpf/prog_tests/global_data_init.c
+index 7c539cbcf3a1..dbb7de534f7d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
++++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+@@ -3,6 +3,7 @@
+ #include "bpf/libbpf_internal.h"
+ #include "test_global_percpu_data.skel.h"
+ #include "test_global_percpu_data.lskel.h"
++#include "test_global_percpu_data_failure.skel.h"
+=20
+ void test_global_data_init(void)
+ {
+@@ -372,7 +373,7 @@ static void test_global_percpu_data_rdonly_direct_write=
+(void)
+=20
+ static void test_global_percpu_data_verifier_log(void)
+ {
+-	RUN_TESTS(test_global_percpu_data);
++	RUN_TESTS(test_global_percpu_data_failure);
+ }
+=20
+ static void test_global_percpu_data_iter(void)
+diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/=
+tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+index 2765cd46e9af..bc748df4a6cc 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
++++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+@@ -42,29 +42,6 @@ int update_percpu_data(void *ctx)
+ 	return 0;
+ }
+=20
+-static const char fmt[] SEC(".percpu.fmt") =3D "data %d\n";
+-
+-SEC("?kprobe")
+-__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be us=
+ed as const string")
+-int verifier_strncmp(void *ctx)
+-{
+-	return bpf_strncmp("test", 5, fmt);
+-}
+-
+-SEC("?kprobe")
+-__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be us=
+ed as const string")
+-int verifier_snprintf(void *ctx)
+-{
+-	u64 args[] =3D { data };
+-	char buf[128];
+-	int len;
+-
+-	len =3D bpf_snprintf(buf, sizeof(buf), fmt, args, sizeof(args));
+-	if (len > 0)
+-		bpf_printk("snprintf: %s\n", buf);
+-	return 0;
+-}
+-
+ volatile const __u32 num_cpus =3D 0;
+ volatile const int num_off;
+ volatile const int elem_sz;
+diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data_fail=
+ure.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data_failure.c
+new file mode 100644
+index 000000000000..3a823acb42d7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data_failure.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++int data SEC(".percpu") =3D -1;
++static const char fmt[] SEC(".percpu.fmt") =3D "data %d\n";
++
++SEC("?kprobe")
++__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be us=
+ed as const string")
++int verifier_strncmp(void *ctx)
++{
++	return bpf_strncmp("test", 5, fmt);
++}
++
++SEC("?kprobe")
++__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be us=
+ed as const string")
++int verifier_snprintf(void *ctx)
++{
++	u64 args[] =3D { data };
++	char buf[128];
++	int len;
++
++	len =3D bpf_snprintf(buf, sizeof(buf), fmt, args, sizeof(args));
++	if (len > 0)
++		bpf_printk("snprintf: %s\n", buf);
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
+--=20
+2.55.0.979.g7e5102b832-goog
 
-I may include the anon-only version in v6, but I've been a bit busy
-shoring up the base private memory node core and implementing kernel
-selftests and LTP tests to ensure there's no userland api regressions.
-
-I hope to get something out later this month.
-
-~Gregory
