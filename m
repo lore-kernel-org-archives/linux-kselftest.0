@@ -1,76 +1,46 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-225.mta0.migadu.com [91.218.175.225])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE994F052F;
-	Fri,  4 Sep 2026 15:10:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B609B4F7981
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 15:34:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788534657; cv=none; b=YyvrNpW5w42OrM4RRVSF00XbVTWFqWYSzF8ce4gfUMpcsrp6LAJnPT07Rur32/MD2LeE9sHxcjHcpFGLO5tTm+mxgFQy3rAmUql3XUJsKXNWlpfx+iGPAsGQ0/2rTJEWWfucUe+gNT+Lr8c5L8FcAXHX2BvMWSXSobumVpzyjog=
+	t=1788536096; cv=none; b=BAPP80PbilFOhdQI/rlG4L2wg+kwx/QUfMtoJwwqtw2ohWzcFbJw/HTlg8iuYas7/59qVEc8ugmF3d+0Yxl4NckvDz2uW1ll0WUrYSNx0LUdPmwek4XpxTlyW0VIWHKCyoeTlDGahFz874fk2DNB4aZGS1RpA8AeQXOGYLjk+0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788534657; c=relaxed/simple;
-	bh=A0VpHOoTUbM1tou3WIkcE6JwwQ0HC0j4IOAJoYAQEqM=;
+	s=arc-20240116; t=1788536096; c=relaxed/simple;
+	bh=dxHYj5mtAj9G23/xifSZT8O5npOXri/YHHZUKO6RTF8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sh5FVlcawiUrNAE+Egq3S+lbFlCygMOYj0pCfSn6DUSHHMeftI/EmC8zTPRWebRDax7LwOHNoYXxqNby/bWwY/dRujox2v/MhWEkLy5hJ3D0dT7K6jZbiNiMl9CQ0jofzI6fq4AMmI/wWWsstUbGOgTGZ6reg9DXcQ0oG+Zma5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VB3Gp389; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=ctCNWOglzZfKkCkOzZtekwL95RleXk6SS/acooQRuka1eh0Yf/eIXWbYcZNswZo6ouUTOcZvFSj4YdLhREw5SonnqYRLTRPGESJ4A/o37ENYZj5Y9gyOcss/gDhKkLHbV/qx+28nK2lBZxpJjHENXxTaCd5FWqOi8nZUd7a2vpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r7flXrej; arc=none smtp.client-ip=91.218.175.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VB3Gp389"
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id EAE621F00A3D;
-	Fri,  4 Sep 2026 15:10:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788534655;
-	bh=41xaUrJ1lAeNQeQ/qi/93VPU9j/VGLCqogvprDRRNhA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VB3Gp389hUiJzqvsLNBiOxo9AiBTn02To+KR9uXQbCTwnr1MfN9K/mfYWPpkTQYoi
-	 YkSwXqdiH4MVDRmvZayz5DTTmd7tsTIJhqEsiBQ3VlBGcQBtX7Q6V0d1qqBAGbutA4
-	 YBaPGJLRz8WvCU8m9I5oOD/6mQhQWDsfTzAs+Re6PhaN8sHtYH9UTWU8n/vsjGRzma
-	 YwTvxKJ6eQC0djlK9jHVUYb/cXNutoS9zDShgIfepZ+JjJGdx9OMIEewirFY6jcTaF
-	 yD2lEjdL0GwoSgI4JISCTQdxtXsBn9k9OJn4pclMED29mV+rIlc390GxVcXiR5xkzZ
-	 F3nGaY5o8zg9Q==
-Date: Fri, 4 Sep 2026 08:10:54 -0700
-From: "Darrick J. Wong" <djwong@kernel.org>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Jan Kara <jack@suse.cz>, Jakub Kicinski <kuba@kernel.org>,
-	Namjae Jeon <linkinjeon@kernel.org>,
-	Hisam Mehboob <hisamshar@gmail.com>,
-	Martin =?utf-8?Q?Kepplinger-Novakovi=C4=87?= <martink@posteo.de>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	David Howells <dhowells@redhat.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Theodore Ts'o <tytso@mit.edu>,
-	Catalin Iacob <iacobcatalin@gmail.com>,
-	Stephen Hemminger <stephen@networkplumber.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	"Maciej W. Rozycki" <macro@orcam.me.uk>,
-	Andrei Vagin <avagin@gmail.com>,
-	Wei Yang <richard.weiyang@gmail.com>,
-	Bhavik Sachdev <b.sachdev1904@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Wang Yan <wangyan01@kylinos.cn>,
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
-	Malaya Kumar Rout <malayarout91@gmail.com>,
-	linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	Luis de Bethencourt <luisbg@kernel.org>,
-	Salah Triki <salah.triki@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH] bfs: remove the filesystem
-Message-ID: <20260904151054.GG6047@frogsfrogsfrogs>
-References: <20260904082954.48738-1-enelsonmoore@gmail.com>
- <20260904-hinnimmt-triumphieren-handgefertigt-4e51fe2ed659@brauner>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r7flXrej"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=dxHYj5mtAj9G23/xifSZT8O5npOXri/YHHZUKO6RTF8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788536091; v=1; x=1789140891;
+ b=r7flXrejFqUYcBJaUNBDsEVxjKg7dudtGvOwmLmvf3dp//wchRbPTGNOr4wxEJk2mJTTdTHc
+ aS6HxiqPjBLuiOiwTkzN2sE0VCIpsLGD6yUpieR+HpxuTCn65KvR7JxuU6g/2GcDFxrkYnwGh6b
+ lBkaTbSxcwncz4XYVNYdYpqs=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 202d08132f2dd1d3;
+	Fri, 04 Sep 2026 15:34:51 +0000
+X-Mizu-Trace-ID: 202d08132f2dd1d3
+X-Migadu-Flow: FLOW_OUT
+Date: Fri, 4 Sep 2026 08:34:46 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christian Brauner <christian@brauner.io>, Meta kernel team <kernel-team@meta.com>, 
+	linux-kselftest@vger.kernel.org, driver-core@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: cover kernfs dentry revalidation
+Message-ID: <aprkl_CCGJsCPvLO@linux.dev>
+References: <20260902014050.499002-1-shakeel.butt@linux.dev>
+ <20260904-kandidat-bergbahn-ersonnen-3a6dd1f1cf0e@brauner>
+ <aprVEyqOrdmuD-HN@linux.dev>
+ <2026090456-unblock-elixir-7d4f@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,44 +49,23 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260904-hinnimmt-triumphieren-handgefertigt-4e51fe2ed659@brauner>
+In-Reply-To: <2026090456-unblock-elixir-7d4f@gregkh>
 
-On Fri, Sep 04, 2026 at 12:43:09PM +0200, Christian Brauner wrote:
-> On Fri, 04 Sep 2026 01:29:19 -0700, Ethan Nelson-Moore wrote:
-> > bfs: remove the filesystem
+On Fri, Sep 04, 2026 at 04:44:18PM +0200, Greg Kroah-Hartman wrote:
+> On Fri, Sep 04, 2026 at 07:33:45AM -0700, Shakeel Butt wrote:
+> > On Fri, Sep 04, 2026 at 10:13:11AM +0200, Christian Brauner wrote:
+> > > On Tue, Sep 01, 2026 at 06:40:50PM -0700, Shakeel Butt wrote:
+[...]
+> > 
+> > I assume the kernfs bug fixes [1] will also go to your vfs branch. I will send a
+> > v2 of that series with appropriate tags and will try to improve the commit
+> > messages as well. I have a followup improvements for kernfs_rwsem which I will
+> > base on vfs branch. Just wanted to give a headsup.
 > 
-> I agree.
+> kernfs patches go through the driver-core tree normally, not vfs.
 
-At the moment, I don't.  Nowhere in this thread does anyone mention what
-someone with a B(oot)FS filesystem image should do if they want to
-extract whatever's stored in the filesystem.  Are there userspace tools
-for that purpose (ala efs)?  Does "binwalk -e $bfs_image" suffice for
-that purpose?  Or is there solid evidence that there isn't even a single
-user (ala freevxfs) who strongly wants it to stay in?
+My followup patches depends on patches already in vfs-7.4.kernfs, I will
+continue developing on that branch and let you and Christian figure out how
+these will go to Linus tree.
 
-I'm all for getting rid of old cruft but there still needs to be a
-documented offramp for users.
-
---D
-
-> ---
-> 
-> Applied to the vfs-7.4.bfs branch of the vfs/vfs.git tree.
-> Patches in the vfs-7.4.bfs branch should appear in linux-next soon.
-> 
-> Please report any outstanding bugs that were missed during review in a
-> new review to the original patch series allowing us to drop it.
-> 
-> It's encouraged to provide Acked-bys and Reviewed-bys even though the
-> patch has now been applied. If possible patch trailers will be updated.
-> 
-> Note that commit hashes shown below are subject to change due to rebase,
-> trailer updates or similar. If in doubt, please check the listed branch.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-> branch: vfs-7.4.bfs
-> 
-> [1/1] bfs: remove the filesystem
->       https://git.kernel.org/vfs/vfs/c/e36781a626b2
-> 
-> 
+Thanks
