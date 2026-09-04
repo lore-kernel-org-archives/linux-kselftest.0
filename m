@@ -1,136 +1,286 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47E8F521211;
-	Fri,  4 Sep 2026 21:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788556078; cv=none; b=gA+mvmmkq1Ows4gUBMLZMqi2+s8sQnuOZFgdSmubypPOHkKsiRN3lda9gVkWIqkv0xBiwzjtxaAnRFjYGWL12HQhW32xwAYjK/dxdtwtQYfUcAtidwGMZs6oEe3tJQOrzV2C88Pgd7yBr1EX1WwBP1Yo19bexhnTJIQnaQi+DtU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788556078; c=relaxed/simple;
-	bh=OcN3BZ4A6KpdYS+WMT/+ILplvgW62mU+jHQZrpov2J4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZdBH+Ah+Dr4qY20NJj1KXId4UavIuForYaHUkv6/7c7W8xTKoBC/A5DxoIjmDw3hk6CAZVWY1F5SYLg1Rl+ndDK0+ayAdakotLL1vAZ5+x4FGvtnizefV54x1sR0pXwxVo8POqOXxcHFIJRubn21zpi/a3E4Xy1YYdCR3YbmdYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S50/g39Y; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F50B3515C9
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 21:19:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788556767; cv=pass; b=WR5nXNMxy+Q22qW3v7tu0mJrOS6FkfcvEvCVKg0jeekmu4oIR2Al0Iw7aablPEmji5zNwH4Ls9t6Wmi0pu+xtI3iYc+p8TMUxtHwqxla1Zn2kUzkywzCqaK9WTRLvxe6Nrmqji+54gkE5G7AO/ahk4Yf48DSyq59EJuoRAjWv70=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788556767; c=relaxed/simple;
+	bh=zIRIJE2AGHcUOE1+Invane5EQjk28+ssl8PL6PvjdRg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=L9QW73llfoK7G1JSHyXcfh0kTXqT3K7++Hcx5ufDF3Dtm6Zi88E/M/oyonZ6Se+D4FdJnE3a5a9drsJ7P9DXeLpEdB1FEGIg441l9KNCBgEqvFnS78nFpkm6exM8GRU0GA0K8jJGERxNf0CD0QBaQzOWwegOS+qqf6r4b1f5VQU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=DmzzUH5z; arc=pass smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S50/g39Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 893101F00A3D;
-	Fri,  4 Sep 2026 21:07:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788556071;
-	bh=v7qKDhZ+F/2Bi/cyOsP+5DU9BRD5spx5V6SRGgxoqJo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=S50/g39YB+UKTmtZhDM86RL7eGgd5uMqzVcDE1aAlJT8XMQAqeHfkE58X7ZAr26AU
-	 onB1eejg3jb1WO8cKRmxSPB3MvyMNkr+eT23R7PfSmy7LO9lko3ShF5ipG7JZ7cvjK
-	 q7gKapYUS2LKKN7GMUzxJQeSbrSD8BweqOm9/PJ3wP56Q8qBtTRvbEQXecVhtbHxyT
-	 V1F0xaFHoUj4i7tRvSu7cjG+ZxAaQ5wQiUaK5QERMs4M/zsPmmXntBhiXosa0wCNDL
-	 NGiSltNgHL1pCcWcMBTEQwVSodVuiSuCD2HOgsoLUQe9Mudv0UuHFyJgj7i2Mz0Lsq
-	 yQK3y0OxWGV8A==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id 77FD41AC52F1; Fri, 04 Sep 2026 22:07:49 +0100 (BST)
-Date: Fri, 4 Sep 2026 22:07:49 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Leonardo Bras <leo.bras@arm.com>,
-	Wei-Lin Chang <weilin.chang@arm.com>,
-	Yao Yuan <yaoyuan@linux.alibaba.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v20 03/14] KVM: arm64: Manage GCS access and registers
- for guests
-Message-ID: <apszJZ17KUvd6BJ7@sirena.co.uk>
-References: <20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org>
- <20260901-arm64-gcs-v20-3-f31750bdfadb@kernel.org>
- <apmfx08vccSd2MXw@gremlin>
- <d2659ac3-2f00-4fc4-8f9e-0585691a4ba2@sirena.org.uk>
- <apqA_SuoA6-TyHsS@gremlin>
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="DmzzUH5z"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-85377c8bc96so1335976b3a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 14:19:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788556765; cv=none;
+        d=google.com; s=arc-20260327;
+        b=RhgMq2WcuGnVfEaNm5QAKdn7Ah+dp0hmXwTShh5Rz5PsjSAdAtVe6MMeGmY3sWzPPW
+         HJ+CeNJZei4Zth5IHBA/QVeAXczpBlKGdvS1sn7KtHsMzNfjtn8tvCvc5jpmTARsRIIw
+         DGXJu2hTYE6h67pJVrQCz2ZlumhBkofEnvcNPtKD0EYYhP4Y1xq3YM7NuHsD41GAbs3f
+         op9SepswW58qqE8fKOdMgkoLA3lEBbcAOKzAGt+nv5c7dh3MVSGcWYBfYBFMWRluUgTg
+         vVe7TdjIcvJoCo3KADfEjPZ7eSSfg0CdOLnkMP/cwct2McgJxSRu4lsthlBHjUeUCPe6
+         ZSig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=oLRCH+U/8BGHSBOTZJVb7cSifq3coNuuOCxdIL9/vPg=;
+        fh=OAGmW34o3WFQKzsTDDS9wtui1D+f11+tA7Dbebs1mF4=;
+        b=VCWVC+V3kgn6yBHNc+q2UUwei9hPrAwyJknwznHGATgoIZp7JyEHOJRk/bzDhxW1IF
+         aZdayVqS2STyh4PSUpWu0O6NH5q8227Woy02hZ3da2klkRaTYEWPB0KDuaghp2XfJSq6
+         dnMeVgIwusjgb0LPwvsVBMWVWUGRerC5sRXm64198MqEgfhaxViCMxJfmajemU+KNif+
+         meEPvfx/Vu+UHzc8nP5Hw69eCUBO8DlRyfjLa+rlKBJNE5JytcZojdRa2Ne7Rx3kgWo5
+         MaJod2b1qyw3yHyn7+AXJGSSsEdDLsprbgMN+KMB3iaa53w4pp7WzkTPrTjDBWuaQ31h
+         Qwdg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu.com; s=google; t=1788556765; x=1789161565; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=oLRCH+U/8BGHSBOTZJVb7cSifq3coNuuOCxdIL9/vPg=;
+        b=DmzzUH5zwNjhorqQXC+g1EQccLiSTTwl786gFHxI8nSgngdj/EaDf0ynZp99JVQ7pH
+         sOL68UXbfcTyxRyiDc6t1B3O/3KxPF5v7d3CZT5Qnxsl9Azlvh692p48NCqLRONmNHw+
+         6h0ew6iMD9RgBb9uWxcGFK5WrNFsoVWTsMBys=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788556765; x=1789161565;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=oLRCH+U/8BGHSBOTZJVb7cSifq3coNuuOCxdIL9/vPg=;
+        b=pqnWEhSbTbFrgsI6FEYpO0HhnKYj580bovde4kMirkrsvvDHSBQ4xshhGAHPFtuW6P
+         1yg0hJFaIUI0htEnH16ps5k3Eh5TZ/qcGGEiQmqA4P1bmqOmj+aF2fftG5lS+VoPJy4M
+         L+xc/A9e/vuy/DCAG6Ey4Mlz5zOePPwVl3YvjVe8l2sDPGpGHzYjjf4x77peZNXriScp
+         QL0obIYyrw8XpGwKGV2C54qQyh1moD7RvjZFHzlhKf2RbQkRhSv8pKurrSBRqnI8L8dS
+         4vfBWruttm/i2d2Qeh3szD2orkkQiy89wG74u14VgMycCJRrQPurSxQUL2FWhZiAnrpX
+         TADw==
+X-Forwarded-Encrypted: i=1; AKwUvBy11l93/QGMkoy5LoCZszFJaCigMgPvynVdPYKGlMHNZEXwzxE90/PdcOIVx2sOqupfs2j+vb+IGmgYCUm1BjI=@vger.kernel.org
+X-Gm-Message-State: AFuF++l7tg8xaxeLD1SmWaFMpKHzxXtXjSvhP0CNp29IdAjpMB3taqd6
+	FsxLoxoULo1iXpkZcB0rmSLIzWaA6ezhc0Pp6JMclLkUul2SELlO848FyvuSang7EMVAhmTTTKX
+	a4usnogNGB/SEVWnvyTWApeQvO+gp1v/aQTZG81oD
+X-Gm-Gg: AYBFou0rIu8aE9ZMWgGkvqMlE5coBUQ7fJDGZKlnWdc2Bp/IbBaNVPrBtO6kiZ9MP28
+	4ASRDCj6nH2rkymL9Pz/6yEazGNisD6TnNoGi2AUrldmN/7GSScRRP0niSDkM30TfjEo4TB88dz
+	hL8GWUEasSO23yQAyIhdCAB9rdzs+Dl18+YtxEjwHoCfhzRdBJIZs9jZ/TDhU2BhVK16+Xf0SYp
+	Q4oh/bu4nRCbyhhw/+0o5vpLfJARu/m3rzRaiQv11jvmVxbMJAEPYFI3bdgFBl1V0G/hLhXUtjx
+	wOq9YJk9/xICvgBwzFG61QxDtl2o0upS+mPZX/1O2XOA379oBBwtOo3OfKDmEAyZQ51ZXB8BYOH
+	UoF+qYP4emSLAv5voIY78toA=
+X-Received: by 2002:a05:6a00:3007:b0:846:4d4c:23f8 with SMTP id
+ d2e1a72fcca58-861662d4c34mr12212323b3a.1.1788556764562; Fri, 04 Sep 2026
+ 14:19:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="UxxT9yru8a/XGYWy"
-Content-Disposition: inline
-In-Reply-To: <apqA_SuoA6-TyHsS@gremlin>
-X-Cookie: My vaseline is RUNNING...
+References: <QDISC-0CFC.v3.20260901204856@mojatatu.com.8> <178851496878.4131868.2069895170229482350@kernel.org>
+In-Reply-To: <178851496878.4131868.2069895170229482350@kernel.org>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+Date: Fri, 4 Sep 2026 17:19:12 -0400
+X-Gm-Features: AcwNN1X4rPq8Wr5crkVB_76iRnNWdS3etBNl9qA_K2l3cZKDPDzbSYA8CDd1o-E
+Message-ID: <CAM0EoMke5h0wdNaTGQxTSALrFPPGNeMLad1p8arTakfPHa+NsA@mail.gmail.com>
+Subject: Re: [PATCH net v3 7/9] net/sched: drr: clamp quantum in change class
+To: netdev-bot+sashiko@kernel.org
+Cc: netdev@vger.kernel.org, jiri@resnulli.us, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	victor@mojatatu.com, vega@nebusec.ai, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org, toke@redhat.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Sep 4, 2026 at 5:42=E2=80=AFAM <netdev-bot+sashiko@kernel.org> wrot=
+e:
+>
+> Thank you for your contribution! Sashiko AI review found 2 potential
+> issue(s) to consider:
+>
+> Critical: 0 =C2=B7 High: 1 =C2=B7 Medium: 1 =C2=B7 Low: 0
+>
+> - [High] net/sched/sch_drr.c:85 and :87 (drr_change_class) silently
+>   rewrite an administrator-supplied TCA_DRR_QUANTUM instead of honouring=
+=E2=80=A6
 
 
---UxxT9yru8a/XGYWy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Valid as a "description". My view is the patch is fine.
+The rewrite-vs-reject choice is the series' deliberate uAPI - the
+whole point is that a too-small quantum is crazy as illustrated by the
+series so it  is never installed...
+I am not sure if sashiko is looking at the net tree which has commit
+8f735d64382d but qdisc_pkt_len cap which is clamp-style already, and
+Eric accepted v3 on this basis.
+The asymmetry is discoverable by re-read (dump echoes the stored value).
+Summary: If the series is resent, we will state the rewrite behaviour
+in the changelog.
 
-On Fri, Sep 04, 2026 at 09:54:51AM +0100, Lorenzo Stoakes (ARM) wrote:
-> On Thu, Sep 03, 2026 at 09:41:26PM +0100, Mark Brown wrote:
+> - [Medium] Commit message premise and reproduction recipe do not match
+>   the tree the patch applies to, and an undeclared stable-backport=E2=80=
+=A6
+>
 
-> > originally written the code without expressing this dependency but on a
-> > previous version Marc asked for this nesting as an optimisation.  Since
-> > it's about optimisastion adding checks that don't otherwise exist on the
-> > restore path would doubtless get the similar complaints.  Exactly the
-> > same concerns were raised on v19.
+Very valid, if i understood correctly. I think you mean: backporting
+on trees matching Fixes: 13d2a1d2b032 there is no QDISC_PKT_LEN_MAX
+cap, so things will go crazy there...
 
-> Could you implement the nesting the same in the cases where there is a bare
-> ctx_has_gcs() as an alternative?
+I would say It's worth mentioning 8f735d64382d as a backport
+prerequisite not sure if that's in the commit, although i am not
+familiar enough with the backport rules to make that call.
++Cc stable@vger.kernel.org
 
-> So then it'd always be tcrx -> s1pie -> gcs everywhere and that'd resolve things
-> also and make things symmetric.
 
-> You could also I think express the dependency if it makes sense to.
+cheers,
+jamal
 
-Clearly we *can*, it's a question of what'd be acceptable - it'd result
-in the compiler emitting a bunch of extra alternatives and conditionals
-in the context switch path.
-
-> > We could do checking of the ID registers at vCPU creation so we could
-> > avoid worrying about them in the fast path but there was also feedback
-> > about not doing that.  One idea I had was to generate feature
-
-> Could you possibly check in sanitise_id_aa64pfr1_el1(), something like:
-
-Sanitising the writes is a bit tricky since multiple ID registers are
-involved, TCRX and S1PIE are in ID_AA64MMFR3_EL1 while GCS is in
-ID_AA64PFR1_EL1 so you'd create an ordering constraint for userspace,
-and you'd also have to handle the case where TCR2 or S1PIE are turned
-off with GCS already enabled.  It feels like a bunch of complication,
-especially if you start applying the same approach with other features.
-
-If we're going to validate the ID registers it feels safer to check at
-the point where we finalise the ID registers and refuse to start the
-vCPU if there's an unsupportable configuration, that would mean the
-check would only need to be done in one place and userspace wouldn't
-trip over any ordering requirements with how it updates registers.  Only
-userspaces that set architecturally invalid configurations should see an
-error.  We could also handle things by fixing up the configuration at
-the same point, disabling features that are missing their dependencies,
-that's a bit more friendly in the short term but could lead to trouble
-later on as it means we hide issues in userspace.
-
-I think the best thing overall would be to leave the runtime paths as
-they are and refuse to run with an architecturally invalid setup, that
-would avoid bloating the fast path.
-
---UxxT9yru8a/XGYWy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqbMyQACgkQJNaLcl1U
-h9DE8Qf/VR7HYcBaMw2G7Ups8tn2qUfYjOTJ99VnF8o6I1RpC8Nl2GgzkjHXBJyx
-/nQjWZNQ2wAy/rdn2lQtjolxCA4p5ZnYXJwG6dVQmDAKGSvJJ5MxqgRAt0i220TR
-F7XnsZKbtHp+rri39JMZoLszEfc28vUcUxh19+PF1UQfRaXniazCXbnBOAqyU6lM
-+ROUaor3Rve9TvHm/uqKw7eiDnyYIZjxn/nj3S9GdFwTVKstI0WX1iu+LHNPcuva
-qO3rGmzDFOtxScggNgCj497tEj1vvj8qb1Cz/+NnC5Px4NJKgqUq03twCDtTkWOr
-flTA3wHWYD88gDv/NRFpxyWaWE+XdQ==
-=j1jf
------END PGP SIGNATURE-----
-
---UxxT9yru8a/XGYWy--
+> net/sched: drr: clamp quantum in change class
+>
+> This adds a clamp_t(u32, quantum, 256, 1 << 20) in drr_change_class(),
+> applied both to an explicitly supplied TCA_DRR_QUANTUM and to the
+> psched_mtu() fallback, so that the deficit-refill loop in drr_dequeue()
+> cannot iterate on a very small quantum.  The existing rejection of an
+> explicit quantum of zero is kept.
+>
+> Two questions below, one about the changelog and one about the new
+> clamping behaviour.
+>
+> > drr_change_class() rejects explicit quantum=3D=3D0 but falls back to
+> > psched_mtu() with no floor. With a crafted size table qdisc_pkt_len
+> > reaches ~2 GiB, so quantum=3D1 (or a zero psched_mtu on a headerless
+> > device) makes the deficit-refill loop spin under the qdisc lock.
+>
+> [Severity: Medium]
+>
+> Is the "~2 GiB" figure still accurate for this tree?  The baseline
+> already ends __qdisc_calculate_pkt_len() in net/sched/sch_api.c with:
+>
+>         /* A size table can inflate qdisc_pkt_len() beyond any real packe=
+t
+>          * (via overhead, the data table, or size_log); cap it so deficit
+>          * schedulers such as DRR/ETS terminate their refill loops.
+>          */
+>         pkt_len =3D clamp_t(int, pkt_len, 1, QDISC_PKT_LEN_MAX);
+>         qdisc_skb_cb(skb)->pkt_len =3D pkt_len;
+>
+> with QDISC_PKT_LEN_MAX defined as (1 << 20) in include/net/pkt_sched.h.
+>
+> Since drr_dequeue() advances the deficit by one quantum per round:
+>
+>         WRITE_ONCE(cl->deficit, cl->deficit + READ_ONCE(cl->quantum));
+>
+> wouldn't the worst case with quantum=3D1 be around 1M rounds rather than
+> ~2^31?  The loop bound seems tied to that packet-length cap, not to a
+> 2 GiB length.
+>
+> Related to that, the recipe given:
+>
+> >   tc qdisc add dev dummy0 root drr
+> >   tc class add dev dummy0 parent 1: classid 1:1 drr quantum 1
+>
+> installs no size table and sends no traffic, so it does not appear to
+> exercise the refill loop at all.  Could the reproducer be extended to
+> include the size table and a transmit step?
+>
+> There is also a backport angle.  With the new floor at 256 the effective
+> iteration bound (~4096 rounds) comes from QDISC_PKT_LEN_MAX rather than
+> from this change.  Trees matching "Fixes: 13d2a1d2b032" have no such cap,
+> so this hunk on its own still allows roughly 8.4M refill iterations per
+> dequeue there.  Should the QDISC_PKT_LEN_MAX commit be named as a
+> backport prerequisite?
+>
+> > diff --git a/net/sched/sch_drr.c b/net/sched/sch_drr.c
+> > index 91b1ef824afaf..8621d057edd9f 100644
+> > --- a/net/sched/sch_drr.c
+> > +++ b/net/sched/sch_drr.c
+> > @@ -82,8 +82,9 @@ static int drr_change_class(struct Qdisc *sch, u32 cl=
+assid, u32 parentid,
+> >                       NL_SET_ERR_MSG(extack, "Specified DRR quantum can=
+not be zero");
+> >                       return -EINVAL;
+> >               }
+> > +             quantum =3D clamp_t(u32, quantum, 256, 1 << 20);
+>
+> [Severity: High]
+>
+> Should an out-of-range quantum be rewritten rather than rejected here?
+> Only the exact value 0 returns -EINVAL; every other value now falls
+> through this clamp and is committed, either via the existing-class path
+> in drr_change_class():
+>
+>                 if (tb[TCA_DRR_QUANTUM])
+>                         WRITE_ONCE(cl->quantum, quantum);
+>
+> or via cl->quantum =3D quantum on the create path.  Netlink then returns
+> success for a configuration that was not applied.
+>
+> Does this create a set/get asymmetry?  drr_dump_class() reports the
+> stored value:
+>
+>         if (nla_put_u32(skb, TCA_DRR_QUANTUM, READ_ONCE(cl->quantum)))
+>
+> so "tc class add ... drr quantum 1" succeeds and reads back 256.
+>
+> Does this also change service ratios silently?  drr_dequeue() refills by
+> cl->quantum each round, so relative shares are the ratio of class
+> quanta.  A 10:100 weighting would become 256:256, and 4 MiB:1 MiB would
+> become 1 MiB:1 MiB, on any later "tc class change ... quantum <n>"
+> against a class that worked before.
+>
+> The declared policy still advertises the whole u32 range:
+>
+>         [TCA_DRR_QUANTUM]       =3D { .type =3D NLA_U32 },
+>
+> The sibling implementation of the same bounded-quantum idea rejects
+> instead of mutating, in net/sched/sch_qfq.c:
+>
+>         static const struct netlink_range_validation lmax_range =3D {
+>                 .min =3D QFQ_MIN_LMAX,
+>                 .max =3D QFQ_MAX_LMAX,
+>         };
+>
+>         static const struct nla_policy qfq_policy[TCA_QFQ_MAX + 1] =3D {
+>                 [TCA_QFQ_WEIGHT] =3D NLA_POLICY_RANGE(NLA_U32, 1, QFQ_MAX=
+_WEIGHT),
+>                 [TCA_QFQ_LMAX] =3D NLA_POLICY_FULL_RANGE(NLA_U32, &lmax_r=
+ange),
+>         };
+>
+> and the sfq patch in this same series rejects the identical upper bound
+> in sfq_change():
+>
+>         if (ctl->quantum > 1 << 20) {
+>                 NL_SET_ERR_MSG_MOD(extack, "quantum too large");
+>                 return -EINVAL;
+>         }
+>
+> Would a declared NLA_POLICY_FULL_RANGE (or an explicit -EINVAL plus
+> extack) be preferable, which would also subsume the zero check?
+>
+> One more on the upper bound: a quantum larger than qdisc_pkt_len() cannot
+> add refill rounds, so the 1 << 20 maximum does not seem related to the
+> loop described in the changelog.  Is the narrowing of the accepted range
+> intentional, and if so should it be spelled out in the commit message?
+> The message currently reads:
+>
+> > Add clamp_t(u32, quantum, 256, 1<<20) after the zero reject and on the
+> > fallback path. The explicit-zero reject is preserved.
+>
+> which reads as a hardening change with no behaviour change, and does not
+> mention that previously accepted values are now altered.  That seems
+> worth stating given the Fixes: tag implies a stable backport.
+>
+> >       } else
+> > -             quantum =3D psched_mtu(qdisc_dev(sch));
+> > +             quantum =3D clamp_t(u32, (u32)psched_mtu(qdisc_dev(sch)),=
+ 256, 1 << 20);
+> >
+> >       if (cl !=3D NULL) {
+> >               if (tca[TCA_RATE]) {
+>
+> --
+> Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
+set/QDISC-0CFC.v3.20260901204856%40mojatatu.com
