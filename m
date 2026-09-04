@@ -1,40 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FC63612E2;
-	Fri,  4 Sep 2026 07:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5B51B652E;
+	Fri,  4 Sep 2026 07:50:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788508205; cv=none; b=MpvkptopuKhylELXXZTDGYSwqtvaw1wvEMo+8ohTrDqByIa8eBpaUDgkaYIUqG1ClSGReuww/H+kjgI05uncmXWTbJ6D1g4y0IS//x1eo17jq5wJK4EBM+vTP7aGgR5FJPUbuv9S+LOASHS9OTDEI0JQ2uqzorwSwLCNBIthVP8=
+	t=1788508237; cv=none; b=XYVc3tcRuMw4is0LkvRwYEtQwcsHMqexP+PT+gr+O3DhUc8Wh9j0M4lMa++1BJQ9XSSY0cN0/fM/VmT4ONRkASC+HPCXGyvcuxy+u2MVHEv5C+3U6+M6Ds/5U+0ulVEdZbCWj0Y8m5ez5Gye+gF25h4Ui3Hu8evmsqFOUiOTYOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788508205; c=relaxed/simple;
-	bh=tqbrAg4zqpX48Q5gno0yaHbZ+w6oCsX4KLmBKDPb7uE=;
+	s=arc-20240116; t=1788508237; c=relaxed/simple;
+	bh=maFN79B4UiNTNUcUR3QWi+OBdUrAcheaYp42ki0ovmM=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=APOBAFaJKa5AssZImVVEyHn6IPU4KReGhLf0ixC8fAtA8ZcJS+UYJ0oQO9uvSGpVyhUIMuaJp15xD8Kqx3/jkNKqZUyEUkQVQzv/ExGEpBlqmn4JrXgUfRJe7IZdRp2EhKhOq55ThZ8GUECQz87Qve0JhJwlmKvUuOBeEyFzQr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PSJ5rnsS; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=gmVSvR7oIncB3G8eeXnaSOYFdU7Qk+YbA9qa3dyDXeMmo8DBNZsvSDwJKLl/h1XOx8PMiKF0gSm+22GWKyVQFv54mTzCT74JDWNjWIOKDN0m2/5HGPDGKXzagZLvCyUiiPiDbknhtsEmstwTPjzHQgHgp/U4V5Plsr9Blc0x+Fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fd4MZmqE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PSJ5rnsS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FC051F00A3D;
-	Fri,  4 Sep 2026 07:50:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fd4MZmqE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A8CE1F00A3D;
+	Fri,  4 Sep 2026 07:50:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788508204;
-	bh=mPL6YvgHR1/+2ZXwCt3JuYunyi1EKpt0iSdtdQW+WeU=;
+	s=k20260515; t=1788508236;
+	bh=y9QnPABxRulC3VVKPDMatVPFU5510laiI9b7bfUp2OU=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=PSJ5rnsS3k3E6efimeM95BzHzIoYJcaEpnYkx/Zw8HQF9yQ7AuaHzwspSoTDDHf0x
-	 7ezAbTFHRoz2fO+rYRT9qDlhRqGpxr2AgtSZcxCbH3g+V+mCYi/k8ul8HsW+58+Q8s
-	 E3gnZOxSFNH4b2tgrGm+l/dO9N/2T/ZDtISD0dVAAXDqei8znNAdar3vCxe+nl2ly8
-	 nWcTGqD1uVh9wNz/d/HVGhbqosIpNzKnbAdmEONizLdEVjLnNfIDz8jiBS/XE1UN3E
-	 w8sZlx6h1hpOHXygPxiWVKlXpQ9pWqzZQOEJC1RQd8NNASwJWlayCU770O+BuRD2fJ
-	 lIge3zJ3Nbkiw==
+	b=fd4MZmqED+wqifzc8YGn3rfQmFbWJJsNcl9i7XwZ+dimxFlhrRfRQVLZJkmRFByJH
+	 EIzVt9AW4fK8W52eLlYrWQGebC7Jo8V43MW+Msz9M1+3QMbQyuyk0MRzjBd855fhlT
+	 7ljcViG+8bFAf2ueUQ/s+xMTwfAnYdrTPigrO6Nz6G4SjdmSg/NYNEHyfBdDb3OL7t
+	 7mU8V4Xxq4s86bZomxpOSrSTXVTER8mGGpVK3aTAUnZKAtQbU/VdE9vkleIhC0/jMx
+	 UUDZ0HKLjoBEPw0q/5Ejj0I8MYNLwjY9IAXgQnSY1L2Lzng2WS19cBmNLvcsKrmsCH
+	 v4rJxW21J9lZw==
 From: Christian Brauner <brauner@kernel.org>
 To: Shuah Khan <shuah@kernel.org>, Paul Dolan <paul.dolan.dev@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-In-Reply-To: <20260902174939.15135-1-paul.dolan.dev@gmail.com>
-References: <20260902174939.15135-1-paul.dolan.dev@gmail.com>
-Subject: Re: [PATCH] selftests/clone3: tighten CLONE_CLEAR_SIGHAND conflict
- test
-Message-Id: <20260904-zinssatz-auftrag-kastanie-5a7b91104538@brauner>
-Date: Fri, 04 Sep 2026 09:50:01 +0200
+Cc: Luca Boccassi <luca.boccassi@gmail.com>, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+In-Reply-To: <20260902162615.11531-1-paul.dolan.dev@gmail.com>
+References: <20260902162615.11531-1-paul.dolan.dev@gmail.com>
+Subject: Re: [PATCH] selftests/pidfd: fix PPID values in error message
+Message-Id: <20260904-freuen-verrohen-zeigen-5af4629d9beb@brauner>
+Date: Fri, 04 Sep 2026 09:50:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -45,15 +45,13 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.17-dev-db0b7
 
-On Wed, 02 Sep 2026 18:49:39 +0100, Paul Dolan wrote:
-> The CLONE_CLEAR_SIGHAND test intends to verify that
-> CLONE_CLEAR_SIGHAND and CLONE_SIGHAND are mutually exclusive. However,
-> CLONE_SIGHAND without CLONE_VM is independently invalid, so the test
-> input has another reason to fail with EINVAL.
+On Wed, 02 Sep 2026 17:26:15 +0100, Paul Dolan wrote:
+> The PIDFD_GET_INFO PPID check compares info.ppid against getppid(), but
+> its failure message prints pid and info.pid from the preceding PID
+> check.
 > 
-> Add CLONE_VM so that CLONE_SIGHAND is otherwise valid, and require
-> clone3() to fail with EINVAL. This ensures the test exercises the
-> intended flag conflict and does not accept an unrelated failure.
+> Print the PPID values being compared so that a failure reports the
+> correct information.
 > 
 > [...]
 
@@ -72,6 +70,6 @@ trailer updates or similar. If in doubt, please check the listed branch.
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
 branch: vfs-7.4.misc
 
-[1/1] selftests/clone3: tighten CLONE_CLEAR_SIGHAND conflict test
-      https://git.kernel.org/vfs/vfs/c/aeebb4884f0e
+[1/1] selftests/pidfd: fix PPID values in error message
+      https://git.kernel.org/vfs/vfs/c/b4ad6eb49532
 
