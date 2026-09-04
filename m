@@ -1,159 +1,196 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1690527A92D;
-	Fri,  4 Sep 2026 08:54:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9213A839B
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 08:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788512100; cv=none; b=rnXCzdgRm4yCi7zX6v5enerz3Yr2QYE3G92ZbV9JnuPn4GEx3ttj3RGS8v2B+mHIX/cgAdTCHeEFQwsrNl+5MeMH6oRp01sWSrxhXiwRKXiHhkvZl1oDA4Ox9uLrzGdlmuWcdBtZ7Q3f2m/A2iCLa2Rd1MHuuefjo3gxp9xxnKs=
+	t=1788512130; cv=none; b=U+kY2X3LIVvyXRV4ri8B6jv0E+gPxYS4Syx4qgqf4WxgFSzgnM0RtPofqECK9EkAchFe7rBoSVTniSOomfdMV5KsEs8Wf7hOfWbVbE4cylQMoJzC1/dGoUwaxEjnHIUJ2O4u9ditI2Y5PHh+yorhcaKV+27c6BoqzTJt/IRJdxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788512100; c=relaxed/simple;
-	bh=2359StVxBcWtdgpf5MOEaC+RqUmRcrr8KTMuhap9yJ0=;
+	s=arc-20240116; t=1788512130; c=relaxed/simple;
+	bh=4IIv9yG4m7qxm3IqrT9DQAomNx8kM3TWRYVx0cDnJRE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SfoFDZuwmRjl6jbgxAibJokaIG5oEHBzuVBxqlNdNuSetAX9zIGXEF/hoddG7mZ3Ykm6+zXwsbe0L+DVwF8Vl2faZY/gyLHclnYBclmFi59ldpvW5H8L3q0m96tk13X67938uBkwAmPSFQOeHnhaPKgAAt1OtLifN2sh6j45tCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U8k5Itm+; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=rMkuxpbktH/Z2GHby1hPvHOOMmwO0ZPmH8wkyfRCNa1w04SnbAUTnR/OGrTn0S9u9cOyy10KgB6MbcPvJCn9qgGyzrPoQSJoPTAsGyrUHs0hw37TqqnPHmgb/jdfnpixELu7hOabXLWRgsH0M5RtbfGaEa5b6hUI0BAFB/iH66Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LD88kmsY; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=GHSRva5s; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U8k5Itm+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81D0C1F00A3D;
-	Fri,  4 Sep 2026 08:54:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788512098;
-	bh=WpIOvIK2/IKeoBTyPS1FpXMOk28YALsYNxySmYWmBa0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=U8k5Itm+x/8FEuee+UDlCYMbyQoC9MEH9uY7DeCd/yWdxW5+Olbt8r3TiZFAmywCj
-	 Dhh5XXm5KudyPYceHRdeZmOPreIe1u0O50XciqP/5Cl2VV+bdazxBDZOrDLgeYLhfW
-	 AvCaRGpIwy4byAnl6pi1q35onn7+yczkm/inFgMcezZQAe3mRm0P5fqpxpJAy1NNFs
-	 0Up1nSjH9435PPNwoGiPBj5YaRLjhlbp/NFVOXs9U0JEhjWKATJ4uDIGiZzs8aVJ8U
-	 YCruon+cWiSo/OFqECQ2BuSziHTFpDpgeK8itYjZPPl4v10u37BlEEh22mJHkQqINf
-	 VZ+iJTOvWS5ZA==
-Date: Fri, 4 Sep 2026 09:54:51 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Fuad Tabba <fuad.tabba@linux.dev>, Peter Maydell <peter.maydell@linaro.org>, 
-	Leonardo Bras <leo.bras@arm.com>, Wei-Lin Chang <weilin.chang@arm.com>, 
-	Yao Yuan <yaoyuan@linux.alibaba.com>, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v20 03/14] KVM: arm64: Manage GCS access and registers
- for guests
-Message-ID: <apqA_SuoA6-TyHsS@gremlin>
-References: <20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org>
- <20260901-arm64-gcs-v20-3-f31750bdfadb@kernel.org>
- <apmfx08vccSd2MXw@gremlin>
- <d2659ac3-2f00-4fc4-8f9e-0585691a4ba2@sirena.org.uk>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LD88kmsY";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="GHSRva5s"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1788512127;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JKkhm4P3owmRu88ixnc//OXNGkRZebTXD50nAJpfW/8=;
+	b=LD88kmsYbCnbK9xEC8DoWeKi4Hd/N547tbI1yVQDjqMcQTgkyBVioWs+KRNcDqBK6zyM49
+	BkvBVjeC3aU/KzH8dj/HNC8kA72VAwKtfElezDzFroFxA//75hP+XAMRCZ/6ICPc/BEZwo
+	tftBY4YPQ9zKfw5GbVahcNkPDcFuHT8=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-39-jyBidgycMrCMF-Yngfr99Q-1; Fri, 04 Sep 2026 04:55:25 -0400
+X-MC-Unique: jyBidgycMrCMF-Yngfr99Q-1
+X-Mimecast-MFC-AGG-ID: jyBidgycMrCMF-Yngfr99Q_1788512125
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-490a767c7dcso5642075e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 01:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1788512125; x=1789116925; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=JKkhm4P3owmRu88ixnc//OXNGkRZebTXD50nAJpfW/8=;
+        b=GHSRva5sMEryUDA+/igHn9JZyq/Ve7JP5ZnPCnu6cuz3I8o5mit2MG5KusK5KcWkBp
+         Ap1txZYb9A+KXqzb4u+2ZHiD9EF7Pl0lven+DH3EM6dS24QbUJcRp1wzA/fUHPQdK100
+         6Rx569cSI21p2Z/19KergekHvDRPygtC3FUSyasvQrnPEELV4tJrx3BDLI28CZ9hCL2h
+         MbJVibU+45X5b0J6D3SepvT4Q5u9xeop7m7QGO1N5xETnikFp/xHTfeTAliqDNTUaDr9
+         oVFWs9/mDdKP7v6WX0SObfBCHD1DQWFU2pl0x3cl/lMsHbnxLR5JZ0APMOv8y+eR41IH
+         WbBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788512125; x=1789116925;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JKkhm4P3owmRu88ixnc//OXNGkRZebTXD50nAJpfW/8=;
+        b=IX+j1K214mIZPQf4Y9x8i+aVI3WOF//GpHnpstzwFhVCl8TMBB4FFXtitvXY2xiX1g
+         IkJ1sDZW38gjqjQZ03apG6Dz+P/xkWrG/CHIBVk8Cn37sQZpr4qXrbDXPYSQ2Q+O+vTm
+         BRVx7YHSXaaqa1RhXKKW/d0GQ/JeCW0xai+fxp0/jM6GTGto66tM7QLfl0lUlL5Nimr1
+         OvsQhSBDOXWofYnUrbS5G0ULComchfhUrSX22HhGrX8HtrtHnwFSlBcajpO29NibfOk3
+         8di/IGqOoXp6UcwrDujKvJLCTcMmWs6Vgtn+XlW8zp7q4UJYrcE3gOSKbtqg52l0osSW
+         sR9g==
+X-Forwarded-Encrypted: i=1; AKwUvBwD6+gaz03rZk/jWsmd/VJYAuPqXEHwu6VLQ8Zx8F1k7RnnIfAgef42v5UIlPXNhSrqXp0odQU+gW5Kstw8Sx8=@vger.kernel.org
+X-Gm-Message-State: AFuF++n1EVCL5MQThkEfNAYz5vJRq1VHNrRR7E2t9cCmHi+KntzSZs3q
+	yNknIsaBctCDOfEbnM9F/muQ5zLF904iiptTGLX8ckG5yeg5cIy/RKOrS3My4D1EDU7SMzkyDoT
+	ZxxoWNNfWWWyairyc7QPkQJ+ARQrDJmam68sFf//weTTsgyA4h3IYmuJvxAIbDjQsr7I8fQ==
+X-Gm-Gg: AYBFou1ylR3lh7VjNZec9LRlpJ/btWO1nLEijDyP8vp22v8kzp9KD3Teib/gY7ZVH8F
+	+GCDcRriA/yjAtCnM+PwhWYiW1bERPDE/CZKu4dsNZroyMp7Ys1e4DEtDMOua2xTir21H/kt7lD
+	7CDPRLHMdn/FZkMU4yUet1HP6peeE1LapKnk2GalNcOjcdVLnCrvcqYUT8DsfMzE8og0eVh35Co
+	xP0A61iyyZlKHNE3GZ0ffcUR5k3C8Za/qaARZUyEZdpXy460Y1NU8+uEfq95l3h25Ow81yZLfHF
+	BWm56aDg2PKkRZHcp60ummEjLbgkTlnGCxBDMmMshMu8qR+O14THKH6e46EhIRGjH7YrdVMobvx
+	MZyqG3TkslWQ1VKEi7N4riq516DVgFNNz/IGTKF9WfwQoMQ==
+X-Received: by 2002:a05:600c:1c29:b0:49c:fc6c:be03 with SMTP id 5b1f17b1804b1-49cfc6cc06cmr18966775e9.26.1788512124613;
+        Fri, 04 Sep 2026 01:55:24 -0700 (PDT)
+X-Received: by 2002:a05:600c:1c29:b0:49c:fc6c:be03 with SMTP id 5b1f17b1804b1-49cfc6cc06cmr18966125e9.26.1788512123997;
+        Fri, 04 Sep 2026 01:55:23 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-53-30-11.retail.telecomitalia.it. [79.53.30.11])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ce46696e8sm128248985e9.0.2026.09.04.01.55.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Sep 2026 01:55:23 -0700 (PDT)
+Date: Fri, 4 Sep 2026 10:55:17 +0200
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
+	Jason Wang <jasowangio@gmail.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, sargun@sargun.me, jlinbox@meta.com, 
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next 0/6] vsock: assign the guest vsock device to a
+ network namespace
+Message-ID: <apqGcFDFm9_Wtw4q@sgarzare-redhat>
+References: <20260902-vsock-guest-ns-v1-0-9995383e9a8b@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <d2659ac3-2f00-4fc4-8f9e-0585691a4ba2@sirena.org.uk>
+In-Reply-To: <20260902-vsock-guest-ns-v1-0-9995383e9a8b@meta.com>
 
-On Thu, Sep 03, 2026 at 09:41:26PM +0100, Mark Brown wrote:
-> On Thu, Sep 03, 2026 at 07:13:17PM +0100, Lorenzo Stoakes (ARM) wrote:
-> > On Tue, Sep 01, 2026 at 10:47:01PM +0100, Mark Brown wrote:
->
-> > > GCS introduces a number of system registers, on systems with GCS we need
-> > > to context switch them and expose them to VMMs to allow guests to use
-> > > GCS.
->
-> > > +				ctxt_sys_reg(ctxt, GCSCR_EL1)	= read_sysreg_el1(SYS_GCSCR);
-> > > +			}
->
-> > I had AI check this (and I think sashiko also hit on) it but this is a chain of:
->
-> > 	ctxt_has_tcrx() -> ctxt_has_s1pie() -> ctx_has_gcs()
->
-> > Is it correct to make the gcs stuff conditional on tcrx + s1pie + gcs?
->
-> There are architectural dependencies which mean it is not valid to
-> configure GCS without S1PIE, and S1PIE depends on TCRX.  I had
+On Wed, Sep 02, 2026 at 04:00:46PM -0700, Bobby Eshleman wrote:
+>vsock network namespaces let a host put each VM in a namespace of its
+>own. A guest has no equivalent yet. It has a single G2H device that
+>cannot be assigned to a network namespace.
 
-Ack yeah I think I note that elsewhere, so it reduces only to the 'users doing
-weird stuff' case :)
-
-> originally written the code without expressing this dependency but on a
-> previous version Marc asked for this nesting as an optimisation.  Since
-> it's about optimisastion adding checks that don't otherwise exist on the
-> restore path would doubtless get the similar complaints.  Exactly the
-> same concerns were raised on v19.
-
-Could you implement the nesting the same in the cases where there is a bare
-ctx_has_gcs() as an alternative?
-
-So then it'd always be tcrx -> s1pie -> gcs everywhere and that'd resolve things
-also and make things symmetric.
-
-You could also I think express the dependency if it makes sense to.
+Thanks for this, I'll do a proper review next week, in the mean time 
+some comments below:
 
 >
-> > And it seems like that feature depends on ctxt_has_tcrx() so _architecturally_
-> > fine, but it doesn't seem like KVM enforces the dependency at all and so in
-> > theory somebody could KVM_SET_ONE_REG a GCS, !S1PIE configuration.
+>This series lets a guest move that device into a network namespace. A
+>new ioctl on /dev/vsock, IOCTL_VM_SOCKETS_ASSIGN_G2H_NETNS, assigns the
+>device to the namespace of the calling process. The namespace's existing
+
+Why an ioctl?
+
+I'm asking because I'd like to know if you've already considered any 
+alternatives (sysfs, netlink, etc.)
+
+How do you think the ioctl should be used? Should we provide an 
+userspace tool, or extending some existing tools?
+
+Thanks,
+Stefano
+
+>ns_mode then decides who may use it: a "global" namespace shares the
+>device with every other global namespace, and a "local" namespace keeps
+>the host connection to itself. The device starts out in the initial
+>namespace, so until the ioctl is issued nothing has moved and no mode
+>has changed. There is no explicit unassign as assigning the device back
+>to the initial namespace is equivalent.
 >
-> > And nicer to be consistent everywhere also I think (+ shut sashiko up! :)
+>The ioctl requires CAP_NET_ADMIN in the initial user namespace.
 >
-> FWIW I do agree but I'm not sure how else to implement Marc's feedback
-> here.
-
-Ack sure of course.
-
+>Connections that can no longer reach the device after a move are reset,
+>so that a namespace which has lost access cannot keep using a socket it
+>opened while it still had access. Following netdevs, the device returns
+>to the initial namespace when the namespace it was moved to is deleted.
 >
-> We could do checking of the ID registers at vCPU creation so we could
-> avoid worrying about them in the fast path but there was also feedback
-> about not doing that.  One idea I had was to generate feature
+>Transports opt in through a new netns_assign_allow callback. Only
+>virtio-vsock implements it here.
 
-Could you possibly check in sanitise_id_aa64pfr1_el1(), something like:
+Why? (Not asking to support all the others, asking to explain the reason 
+or ask helps from others to extend it)
 
-diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-index fb2c9fd42e24..ba8780745987 100644
---- a/arch/arm64/kvm/sys_regs.c
-+++ b/arch/arm64/kvm/sys_regs.c
-@@ -2193,7 +2193,8 @@ static u64 sanitise_id_aa64pfr1_el1(const struct kvm_vcpu *vcpu, u64 val)
- 	      SYS_FIELD_GET(ID_AA64PFR0_EL1, RAS, pfr0) == ID_AA64PFR0_EL1_RAS_IMP))
- 		val &= ~ID_AA64PFR1_EL1_RAS_frac;
-
--	if (!system_supports_gcs())
-+	if (!system_supports_gcs() || !kvm_has_tcr2(vcpu->kvm) ||
-+	    !kvm_has_s1pie(vcpu->kvm))
- 		val &= ~ID_AA64PFR1_EL1_GCS;
-
- 	val &= ~ID_AA64PFR1_EL1_SME;
---
-
-And that way it slots in next to the system check?
-
-> combination validation from the MRS, I think the main complaint was
-> about open coding things rather than having the validation per se but
-> ICBW.  Last I heard we were very near to having code for working with
-> the MRS released which will help a lot with uses like that.  There is
-
-Yeah that sounds like a really neat way of solving it! And a useful idea in
-general.
-
-> the possibility that people are relying on doing architecturally
-> invalid configurations though.
-
-Yeah, I guess it's possible somebody could think they could just set a single
-register and use it or something.
+Thanks,
+Stefano
 
 >
-> > And it seems like it makes it possible for a silly VMM which sets up the
-> > registers wrong + some unfortunate guest behaviour -> oops via:
+>Patch 1 is just a const cleanup that patch 2 needs. The remaining
+>patches are actual implementation and tests.
 >
-> > el1h_64_sync_handler() -> el1_gcs() -> do_el1_gcs()
+>Based off of Stefano's original series:
+>https://lore.kernel.org/all/20200116172428.311437-1-sgarzare@redhat.com/
 >
-> > Because the host's restore is skipped for s1pie=0, gcs=1, so a naughty guest can
-> > set gcsr_el1.pcrsel=1 and some value in gcspr_el1, then the host will get a
-> > mismatch and trigger the kernel die().
+>Suggested-by: Stefano Garzarella <sgarzare@redhat.com>
+>Link: https://lore.kernel.org/all/20200427142518.uwssa6dtasrp3bfc@steredhat/
 >
-> Yes, that's possible.  GCSCR_EL1.EXLOCKEN would create similar issues.
+>Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+>---
+>Bobby Eshleman (6):
+>      vsock: constify the transport in vsock_for_each_connected_socket()
+>      vsock: add IOCTL_VM_SOCKETS_ASSIGN_G2H_NETNS
+>      vsock/virtio: support guest device network namespace
+>      selftests/vsock: add a helper to assign the g2h device to a netns
+>      selftests/vsock: test the guest vsock device network namespace
+>      selftests/vsock: test the assign ioctl privilege checks
+>
+> Documentation/admin-guide/sysctl/net.rst           |  18 +
+> include/linux/virtio_vsock.h                       |   2 +
+> include/net/af_vsock.h                             |   9 +-
+> include/uapi/linux/vm_sockets.h                    |   6 +
+> net/vmw_vsock/af_vsock.c                           | 200 ++++++++-
+> net/vmw_vsock/virtio_transport.c                   |  28 +-
+> net/vmw_vsock/virtio_transport_common.c            |  28 +-
+> tools/testing/selftests/vsock/.gitignore           |   1 +
+> tools/testing/selftests/vsock/Makefile             |   3 +-
+> tools/testing/selftests/vsock/config               |   1 +
+> tools/testing/selftests/vsock/vmtest.sh            | 461 ++++++++++++++++++++-
+> .../selftests/vsock/vsock_assign_g2h_netns.c       |  45 ++
+> 12 files changed, 774 insertions(+), 28 deletions(-)
+>---
+>base-commit: d0ec95a8a4e79f2fd6063fc8932415db8c227689
+>change-id: 20260831-vsock-guest-ns-d06af451da67
+>
+>Best regards,
+>-- 
+>Bobby Eshleman <bobbyeshleman@meta.com>
+>
 
-Yeah :(
-
---
-Cheers, Lorenzo
