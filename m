@@ -1,112 +1,77 @@
-Received: from mta0.migadu.com (out-161.mta0.migadu.com [91.218.175.161])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08EEB3CE4B1
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 07:38:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.161
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FC63612E2;
+	Fri,  4 Sep 2026 07:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788507487; cv=none; b=UPk1PKJlCpOXBPneqRK6zNklUTau0aJcitsXrGOtdf1cwr+RKNdAEBzI9luZhUY4uwIzQu8UNAafxpLoDfrpUokZViohK3/N8owFKV8LI4om8VdogBvtJrGqM+BzcAlX99A3p4xRo9DEEJbjGt4nZqNay19LkDcfbRM420nhk0E=
+	t=1788508205; cv=none; b=MpvkptopuKhylELXXZTDGYSwqtvaw1wvEMo+8ohTrDqByIa8eBpaUDgkaYIUqG1ClSGReuww/H+kjgI05uncmXWTbJ6D1g4y0IS//x1eo17jq5wJK4EBM+vTP7aGgR5FJPUbuv9S+LOASHS9OTDEI0JQ2uqzorwSwLCNBIthVP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788507487; c=relaxed/simple;
-	bh=ut1RAeTmhP4u08aElYbIvkNLEWQ6+/R9w+gyuZCJDQc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=stWb5hs7nphjMS50+xK/FqNGJfxwZoQsL5SbJW7O1SughEfn0ED49KDi/G/FCTPVOAA07NCV22i/pcjkbP57OsCS73t8Jdl+mh7xBW6Ge3aovXtMtoGY09J9Lc1FHr0CXMGcDued4SjgeaLjSmcPSvBtiBBjX7+W49OaT9m4Wok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=srORfhAa; arc=none smtp.client-ip=91.218.175.161
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788508205; c=relaxed/simple;
+	bh=tqbrAg4zqpX48Q5gno0yaHbZ+w6oCsX4KLmBKDPb7uE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=APOBAFaJKa5AssZImVVEyHn6IPU4KReGhLf0ixC8fAtA8ZcJS+UYJ0oQO9uvSGpVyhUIMuaJp15xD8Kqx3/jkNKqZUyEUkQVQzv/ExGEpBlqmn4JrXgUfRJe7IZdRp2EhKhOq55ThZ8GUECQz87Qve0JhJwlmKvUuOBeEyFzQr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PSJ5rnsS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="srORfhAa"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ut1RAeTmhP4u08aElYbIvkNLEWQ6+/R9w+gyuZCJDQc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788507475; v=1; x=1789112275;
- b=srORfhAa2kFxZRsujS7a1e4MDX2+mCI4vxfIGqxRbQ7UegylugzBTmvmsShcvtJgXf1WoQ3u
- 3RguHQ+D+iGNX7THyirYwrhwSIZ9+iv97E0FsI7GvfNCU3t2JBfPKVNBohPqFkVFXQk6hlAcFWw
- xCQbY1JkwqOUPIOLdbEMcyfg=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ba18ad104a91eea3;
-	Fri, 04 Sep 2026 07:37:54 +0000
-X-Mizu-Trace-ID: ba18ad104a91eea3
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v1] selftests/bpf: Fix flaky bpf_nf test when random NAT port is 0
-Date: Fri,  4 Sep 2026 15:37:39 +0800
-Message-ID: <20260904073745.363314-1-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PSJ5rnsS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FC051F00A3D;
+	Fri,  4 Sep 2026 07:50:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788508204;
+	bh=mPL6YvgHR1/+2ZXwCt3JuYunyi1EKpt0iSdtdQW+WeU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=PSJ5rnsS3k3E6efimeM95BzHzIoYJcaEpnYkx/Zw8HQF9yQ7AuaHzwspSoTDDHf0x
+	 7ezAbTFHRoz2fO+rYRT9qDlhRqGpxr2AgtSZcxCbH3g+V+mCYi/k8ul8HsW+58+Q8s
+	 E3gnZOxSFNH4b2tgrGm+l/dO9N/2T/ZDtISD0dVAAXDqei8znNAdar3vCxe+nl2ly8
+	 nWcTGqD1uVh9wNz/d/HVGhbqosIpNzKnbAdmEONizLdEVjLnNfIDz8jiBS/XE1UN3E
+	 w8sZlx6h1hpOHXygPxiWVKlXpQ9pWqzZQOEJC1RQd8NNASwJWlayCU770O+BuRD2fJ
+	 lIge3zJ3Nbkiw==
+From: Christian Brauner <brauner@kernel.org>
+To: Shuah Khan <shuah@kernel.org>, Paul Dolan <paul.dolan.dev@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+In-Reply-To: <20260902174939.15135-1-paul.dolan.dev@gmail.com>
+References: <20260902174939.15135-1-paul.dolan.dev@gmail.com>
+Subject: Re: [PATCH] selftests/clone3: tighten CLONE_CLEAR_SIGHAND conflict
+ test
+Message-Id: <20260904-zinssatz-auftrag-kastanie-5a7b91104538@brauner>
+Date: Fri, 04 Sep 2026 09:50:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.17-dev-db0b7
 
-The bpf_nf test allocs a ct, sets snat and dnat with random addr and
-port via bpf_ct_set_nat_info(), then looks the ct up and checks the
-reply tuple against what was set.
+On Wed, 02 Sep 2026 18:49:39 +0100, Paul Dolan wrote:
+> The CLONE_CLEAR_SIGHAND test intends to verify that
+> CLONE_CLEAR_SIGHAND and CLONE_SIGHAND are mutually exclusive. However,
+> CLONE_SIGHAND without CLONE_VM is independently invalid, so the test
+> input has another reason to fail with EINVAL.
+> 
+> Add CLONE_VM so that CLONE_SIGHAND is otherwise valid, and require
+> clone3() to fail with EINVAL. This ensures the test exercises the
+> intended flag conflict and does not accept an unrelated failure.
+> 
+> [...]
 
-The port comes from bpf_get_prandom_u32() and can be 0. For
-bpf_ct_set_nat_info(), port 0 means "port not specified", so only the
-addr is mapped and the kernel keeps the original port. The check then
-compares that port with 0 and fails, which shows up as a flaky
-"Test for source natting" failure in CI [1][2].
+Applied to the vfs-7.4.misc branch of the vfs/vfs.git tree.
+Patches in the vfs-7.4.misc branch should appear in linux-next soon.
 
-Keep the random port in 1..65535 so it is always specified.
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-[1] https://github.com/kernel-patches/bpf/actions/runs/33830002889/job/100893868791
-[2] https://github.com/kernel-patches/bpf/actions/runs/33829976794/job/100893220999
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-Fixes: b06b45e82b59 ("selftests/bpf: add tests for bpf_ct_set_nat_info kfunc")
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- tools/testing/selftests/bpf/progs/test_bpf_nf.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
 
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-index df43649ecb78..eda9b7bbab75 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-@@ -190,8 +190,8 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 	ct = alloc_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
- 		      sizeof(opts_def));
- 	if (ct) {
--		__u16 sport = bpf_get_prandom_u32();
--		__u16 dport = bpf_get_prandom_u32();
-+		__u16 sport = bpf_get_prandom_u32() % 65535 + 1;
-+		__u16 dport = bpf_get_prandom_u32() % 65535 + 1;
- 		union nf_inet_addr saddr = {};
- 		union nf_inet_addr daddr = {};
- 		struct nf_conn *ct_ins;
-@@ -293,8 +293,8 @@ nf_ct_opts_new_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *
- 	ct = alloc_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
- 		      sizeof(opts_def));
- 	if (ct) {
--		__u16 sport = bpf_get_prandom_u32();
--		__u16 dport = bpf_get_prandom_u32();
-+		__u16 sport = bpf_get_prandom_u32() % 65535 + 1;
-+		__u16 dport = bpf_get_prandom_u32() % 65535 + 1;
- 		union nf_inet_addr saddr = {};
- 		union nf_inet_addr daddr = {};
- 		struct nf_conn *ct_ins;
--- 
-2.43.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs-7.4.misc
+
+[1/1] selftests/clone3: tighten CLONE_CLEAR_SIGHAND conflict test
+      https://git.kernel.org/vfs/vfs/c/aeebb4884f0e
 
