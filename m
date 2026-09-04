@@ -1,62 +1,164 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DFD83E558C;
-	Fri,  4 Sep 2026 10:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F3146AF2C;
+	Fri,  4 Sep 2026 10:38:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788517682; cv=none; b=TNYjZOhMi4LboDHUULvv8smA5hV2zqNvonCs1S5n2qV92UA64ZKQJMqG75P4WGBTFNSgNY4s/KJEM33uGlv8yNapWUL9uDRDkBCrsuaAbQgThv8PhaunXsxB1OzUQN/bqSCKtCJ345pv+H+LmQTwMmFjDwbTW64vBzWNdbKW9SE=
+	t=1788518337; cv=none; b=P4nAJUoRYTuHliUy7A83RdXnMQedEaB/jPt5ZFfPN8Q/dsPvtXxZKGTnW2WToIsc3QsAwwLOwATdL2FOGRarPu/zAooLgPQfhqIKbPMmdk1mCJWzWWs+AvTu1ft7/AbG55eTRvPIo93v/NRNKM1HhSOftFHRxo6iMBkuS5HX++8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788517682; c=relaxed/simple;
-	bh=Wxi4QLkMt7yCafK+vWErvjbZ67P91pfTsuTtTlo5z44=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PZnT3bZMIS+Z5PTe5t5rFmGBLv/LFTI6JMxc3LOgn5PZn2AdqVSXQR2FPYPV6tCkYuTaKs05FxHUFR2YG3sp07JCfN1+ZZYZPYyJtzYRjlW7Oex0wKhdZauuw1T65zQOPt4uSVe2m2KBgijrvE4GHgMyTIQRh0Pmg72brpuFtE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gqY0Tu3w; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788518337; c=relaxed/simple;
+	bh=+HuJRv9MxBWoIl1CqVAhOCJ8Nb9U+afeGbiwDFQ1MhE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PGVJFQJMp63VvtwGR8+m5DuUXsqXLqOUGvGyXP9ctQQj4Cf1wwtDkMGs+ulGsr4YdsU328US10d1x6HMi/dN2rs0U4dTPdvVqWR/Jr3BsaZBHDK4ZWxi1xBFDNSXZNre12qtXMQZ0rF+z2giHc/brfEEn9HKyVPwkssbURO/bpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=YmhHk22J; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gqY0Tu3w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F321F00A3D;
-	Fri,  4 Sep 2026 10:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788517680;
-	bh=Z5uJkJhagrwdl4sZQ1qPHpYHc2S+e7JnS08j6EzBqQE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gqY0Tu3wXVzYMSmLWPbyDK59qOz1oMuQGaXKFGMTG0gLFo6jCCJWxoFQ2mUQxp6+Y
-	 ELt5BM9CBVfbT/Wbw1BkjurvS+4TzFAiZVJsK7GkTechxStOnGMsTth5OD3UhbpG5/
-	 mI82fbGmJOXW2io1gRWN6STjKyg8uy0pmMrJRx3USzcyB2hAH7GJuw/HkNUiGrixOL
-	 jFVVIPv8FDDkvRmbh2appi2tvHXtFHlX2Spd78jNJMkYZwNPugMdkysBeTO5P8ppY0
-	 iflWPmcxZ+UKy7gYPweNolZ56rDR7O1/n+4f359pTh/R6DTcttPfEb3aiYl0tgBpfB
-	 Uh7XnaCK22eYA==
-Date: Fri, 4 Sep 2026 12:27:55 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Disha Goel <disgoel@linux.ibm.com>, shuah@kernel.org, 
-	wenyang.linux@foxmail.com, jlayton@kernel.org, jack@suse.cz, djwong@kernel.org, 
-	aleksa@amutable.com, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] selftests/filesystems: fix missing and stale TARGETS
- entries
-Message-ID: <20260904-textpassagen-zugezogen-fachverband-3e338cb727b0@brauner>
-References: <20260703150742.58991-1-disgoel@linux.ibm.com>
- <20260706-geerntet-neonlicht-liege-d005ee1904b3@brauner>
- <cecdc333-f58a-4e8b-a3f5-774fd0e69cf7@linux.ibm.com>
- <20260902191720.464705fabe41818d747ff3c7@linux-foundation.org>
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="YmhHk22J"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	Cc:To:From:From:Reply-To; bh=f/JuPB5ODbW76qoUQlyBQI5XfcE9nTaSz3hiDI+DXao=; b=
+	YmhHk22JBrUbGDHpYRNbBL0jBnVM0MOr95Bu0oe7NIGMZZWZlGiDw+zFiAO2IVmOA1TlYVF4M8RBY
+	8O/tSk6N75BnNKNGlyHNIkqWu00sPR6YDTnkDen26wkpmRqetBSxxM0Gj2HhdUt5u/NMVn4RWnpV6
+	iCYMOMnk9nJwzHZk6npKQasXCHsLPVJl04lj2J8EBrP7jRF/ZRYVuIKpd6GBdhb7t2GyhaI8I0J8O
+	xK9lU94i32GcArR+Q7mMG/9i2+waGmdgRlWe1JKWcdGv2vPMB38zGfb66r9/PPf9rYM8P3KYXuFH0
+	O8TTshyX8nFtbuBkCsRHusUFzmFcdp6KqA==;
+Received: from bl21-120-122.dsl.telepac.pt ([2.82.120.122] helo=localhost)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1x2RJl-00Eq0n-A4; Fri, 04 Sep 2026 12:38:45 +0200
+From: Luis Henriques <luis@igalia.com>
+To: Miklos Szeredi <miklos@szeredi.hu>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Chen Linxuan <me@black-desk.cn>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: fuse-devel@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Matt Harvey <mharvey@jumptrading.com>,
+	kernel-dev@igalia.com,
+	Luis Henriques <luis@igalia.com>
+Subject: [RFC PATCH v3 2/8] selftests/fuse: convert fusectl test to fuse3
+Date: Fri,  4 Sep 2026 11:39:14 +0100
+Message-ID: <20260904103920.4471-3-luis@igalia.com>
+In-Reply-To: <20260904103920.4471-1-luis@igalia.com>
+References: <20260904103920.4471-1-luis@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260902191720.464705fabe41818d747ff3c7@linux-foundation.org>
 
-On Wed, Sep 02, 2026 at 07:17:20PM -0700, Andrew Morton wrote:
-> On Mon, 31 Aug 2026 15:16:45 +0530 Disha Goel <disgoel@linux.ibm.com> wrote:
-> 
-> > Gentle ping — is this patch merged or queued for a future merge window.
-> > 
-> 
-> I can help with that ;)
+Since it is probably not worth adding new fuse kselftests based on fuse2,
+it is a good idea to convert the single existing test to fuse3.  The
+conversion is trivial, as it only requires some changes to function
+signatures (the gettattr and truncate fuse operations), and to the filler()
+helper.
 
-No, that's already picked up in the vfs tree where it belongs.
+Signed-off-by: Luis Henriques <luis@igalia.com>
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+---
+ .../selftests/filesystems/fuse/Makefile       | 20 +++++++------------
+ .../selftests/filesystems/fuse/fuse_mnt.c     | 17 +++++++++-------
+ 2 files changed, 17 insertions(+), 20 deletions(-)
+
+diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/testing/selftests/filesystems/fuse/Makefile
+index 95a1ee947ca7..a3ee9b3a2f5d 100644
+--- a/tools/testing/selftests/filesystems/fuse/Makefile
++++ b/tools/testing/selftests/filesystems/fuse/Makefile
+@@ -4,31 +4,25 @@ CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
+ 
+ TEST_GEN_PROGS := fusectl_test
+ TEST_GEN_PROGS += write_extend_eof_test
+-TEST_GEN_FILES := fuse_mnt
+-
+-# fuse_acl_cache_test requires libfuse3; add it only when the library is present.
+-ACL_CFLAGS := $(shell pkg-config fuse3 --cflags 2>/dev/null)
+-ACL_LDLIBS := $(shell pkg-config fuse3 --libs 2>/dev/null)
+-ifneq ($(ACL_CFLAGS),)
+ TEST_GEN_PROGS += fuse_acl_cache_test
+-endif
++TEST_GEN_FILES := fuse_mnt
+ 
+ include ../../lib.mk
+ 
+ $(OUTPUT)/write_extend_eof_test: LDLIBS += -lpthread
+ 
+-VAR_CFLAGS := $(shell pkg-config fuse --cflags 2>/dev/null)
++VAR_CFLAGS := $(shell pkg-config fuse3 --cflags 2>/dev/null)
+ ifeq ($(VAR_CFLAGS),)
+-VAR_CFLAGS := -D_FILE_OFFSET_BITS=64 -I/usr/include/fuse
++VAR_CFLAGS := -D_FILE_OFFSET_BITS=64 -I/usr/include/fuse3
+ endif
+ 
+-VAR_LDLIBS := $(shell pkg-config fuse --libs 2>/dev/null)
++VAR_LDLIBS := $(shell pkg-config fuse3 --libs 2>/dev/null)
+ ifeq ($(VAR_LDLIBS),)
+-VAR_LDLIBS := -lfuse -pthread
++VAR_LDLIBS := -lfuse3 -pthread
+ endif
+ 
+ $(OUTPUT)/fuse_mnt: CFLAGS += $(VAR_CFLAGS)
+ $(OUTPUT)/fuse_mnt: LDLIBS += $(VAR_LDLIBS)
+ 
+-$(OUTPUT)/fuse_acl_cache_test: CFLAGS += $(ACL_CFLAGS)
+-$(OUTPUT)/fuse_acl_cache_test: LDLIBS += $(ACL_LDLIBS)
++$(OUTPUT)/fuse_acl_cache_test: CFLAGS += $(VAR_CFLAGS)
++$(OUTPUT)/fuse_acl_cache_test: LDLIBS += $(VAR_LDLIBS)
+diff --git a/tools/testing/selftests/filesystems/fuse/fuse_mnt.c b/tools/testing/selftests/filesystems/fuse/fuse_mnt.c
+index d12b17f30fad..5d335fa5cf05 100644
+--- a/tools/testing/selftests/filesystems/fuse/fuse_mnt.c
++++ b/tools/testing/selftests/filesystems/fuse/fuse_mnt.c
+@@ -4,7 +4,7 @@
+  * Creates a simple FUSE filesystem with a single read-write file (/test)
+  */
+ 
+-#define FUSE_USE_VERSION 26
++#define FUSE_USE_VERSION 31
+ 
+ #include <fuse.h>
+ #include <stdio.h>
+@@ -20,7 +20,8 @@ static char *content;
+ static size_t content_size = 0;
+ static const char test_path[] = "/test";
+ 
+-static int test_getattr(const char *path, struct stat *st)
++static int test_getattr(const char *path, struct stat *st,
++			struct fuse_file_info *fi)
+ {
+ 	memset(st, 0, sizeof(*st));
+ 
+@@ -41,14 +42,15 @@ static int test_getattr(const char *path, struct stat *st)
+ }
+ 
+ static int test_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
+-			off_t offset, struct fuse_file_info *fi)
++			off_t offset, struct fuse_file_info *fi,
++			enum fuse_readdir_flags flags)
+ {
+ 	if (strcmp(path, "/"))
+ 		return -ENOENT;
+ 
+-	filler(buf, ".", NULL, 0);
+-	filler(buf, "..", NULL, 0);
+-	filler(buf, test_path + 1, NULL, 0);
++	filler(buf, ".", NULL, 0, FUSE_FILL_DIR_DEFAULTS);
++	filler(buf, "..", NULL, 0, FUSE_FILL_DIR_DEFAULTS);
++	filler(buf, test_path + 1, NULL, 0, FUSE_FILL_DIR_DEFAULTS);
+ 
+ 	return 0;
+ }
+@@ -107,7 +109,8 @@ static int test_write(const char *path, const char *buf, size_t size,
+ 	return size;
+ }
+ 
+-static int test_truncate(const char *path, off_t size)
++static int test_truncate(const char *path, off_t size,
++			 struct fuse_file_info *fi)
+ {
+ 	if (strcmp(path, test_path) != 0)
+ 		return -ENOENT;
