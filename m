@@ -1,163 +1,389 @@
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5655111BF
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 17:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B1B38F65D;
+	Fri,  4 Sep 2026 17:41:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788543037; cv=none; b=bXcMjsfatoBooqIKcx/Rje7Vo+Uu/9Li0wDnMTUqxSSi+wS9xuaO6ScFAkHzg5Tw+3QfMEdaRMjpIJWkBBDpRdf1SyjWPTjYYxZbrAxzKjQzPvmuLMnHrQSCJWNcsp5qsuMcvCYJ/lwJvtoVbwIzPZO89MlsV8qMRJl1R2Vqvwg=
+	t=1788543700; cv=none; b=my+v73yXEjq86de/KMeD7JD2cGGw7M3vuxQXDUtIBsBTE3A9io/fP9sAL8vKbDFYz8xL1Z2k0qx6j0uq5ACkTTa8ZLBS8tTngmzvbhKycovnTWlRetdSdc6kVFoGFa1TxuU1+ADft0YkdKGdBgXmoJiS13gRMSGZsPmf6TDAnqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788543037; c=relaxed/simple;
-	bh=uFS7CqJ/4WMuU0sv4h1FMLN2xytbZtd+0px5/4cj4zo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AZL7a2qPzxm7r1fZCWrx9ulyq0E/85s//4ttaUu9VtzvME3PN9IW0i+nwdcsLB9oK107mS8d+1EosfvDuvUys2eE5EbBa4uSnoLdfxlyfYVXjFDuBY067/ycufw6CKugLThskgrHbZL/oHckiQnt1A9+tUpMkUxYL9GikFuOI68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dlp4D8Nr; arc=none smtp.client-ip=209.85.210.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788543700; c=relaxed/simple;
+	bh=R/+LKf9b3YzvRQolJi7KBGQWMyiCSayeC/3/p/K1MNY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D3K1muzezSZrSoqjjBUdEPEQMs8OFKSuNeyfNRCjcb6tPCVVqyNDtZjryitTjLxasrIajsdeYwue7gkLMSoOVw57J+fg6OEmYEsuy1cC6k6XJeIVkOriXWIXYT5wXWT5YvGJjmWqSFLdlfU7fLlv8ILhDhDlCDRMSDOwWtk06yI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z2XLlcnO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dlp4D8Nr"
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7f57db8b5a4so1126000a34.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 10:30:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788543034; x=1789147834; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=+yXuzXtZ9/rSTTLjcAorY8DG6JyAA49nbzxpJiEv6qQ=;
-        b=dlp4D8NrLCfOaml28Rfdy2UhZF7UzLr8y67EdqEca+eOC6vhG/NIYXhT0BI/YIe1DG
-         0FRo3ZqT1MFTMyUmHteUK8cGOhsjMtoxEt7Vzdo47oxkEEb79Esj4qg6VKYLXBme/Dey
-         SLIQVcK3eBN1TlS6oS7xrEvOuTSAPu959xKfLhOhY/4vKju4y14xNKSxs3S+L7R8kXCk
-         8iWjcJl64v+zxd9EWmMFP2Cka3FdyGDWnSHQiR6ATzNMWXXrgCDWT0pxCSWhakswsG+G
-         obQvno+V7z20U1QE1/cnNmy4Pa8pZ3KCDCoxW5TyQuKb7woDkhFFN/NgfBWvpg3p9Nh5
-         zRYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788543034; x=1789147834;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+yXuzXtZ9/rSTTLjcAorY8DG6JyAA49nbzxpJiEv6qQ=;
-        b=OLftFFNXg/rpb7Mbik9XzFRrzE1Wd0Z5hN35Xvz0kHjYxyGP347nh+JzRyKrQh/Pl5
-         oAjLvQIYu232azYTiEjQXlqHjcLcULTkSzarHICoZ5RDzViFWfejH+fj6Tr5IXlsqjel
-         Urpmsq958yE5hoswa8RI6LI0logFSQvpvJMFS+i93FpuYLqlUM76PPL1Oy6sl9318/Ur
-         wuF4ZZcBHc7KwBVaM+Q56hm8ZWpRmATsdyZGRwy3bQDKaGOhrGzOrdw7BQKYStcSRXuR
-         wnchEfRfrOTeiEq6aZ6CyslcZvi9GnqryXdMBEz4swxAs/ulaD0+twZnGa86ElQb4ePI
-         L/tw==
-X-Forwarded-Encrypted: i=1; AKwUvBxrtpgmCu0tt1TgZA45IndiMav53e+G5QlzGjXP+gqHgswCYEO2vXCMOu66TRlA021quLWLQsFawCUhV6YNofc=@vger.kernel.org
-X-Gm-Message-State: AFuF++n8kwiF+WyMyxJX4VVrvSVQEdK5/1UKcVdYayOia21BDxdiUctG
-	OGSZNWvM4R3xC5Wh1ntP4daIoWqxFbrPnjAB+UjRIKN+v9J3B/9qYUJn
-X-Gm-Gg: AYBFou3CV0naPpa/1Diwb83WU87G0VFdpyRy+GTRaIzsxrB92IYSvkGziyaKqhVLu9+
-	y1rjTFv4ZlFWTIOcMCYCrO8RlDBL0EXYjaCZJcilbCNnScIdIE3yf46liFKFFdSbg0tYEflBDU7
-	xnhiojRDN63NA+JMbJ2FGOyv7fog0jzrKVKXsMRtPJwnlzpMz1Vhq1qrnU32Sq2z5SxVyD+R5qk
-	F76ATtwLsuAeF46eogflvup9V5qin43QcEgk9MNzeh/yiOMACR8Ag7W8pY1zmfYnX9RzHwW2Luj
-	BPh9OEgZMOuWEIA7SN3Pg8obDSqmskamHz3iOquEIyBVE/aW9jNqvO6nugJpkuyfPjp3T3XCa25
-	yuj6n163FAeDWAPTq0M6T/ZBxB2EKWBj6M3mlfi2lDIm594XYT5Ml4llJdo6mb+JslnnsEaeIt5
-	Uf2jUMHYqltE3PmsYVa9NUg3EQxEI7mtwVuevt94jHX6Plv7kQ2U5xeMq8X2jNtPuKvFU88C8kV
-	Z1cNsD86P8R/SrO59js
-X-Received: by 2002:a05:6830:6684:b0:7e4:163:49cc with SMTP id 46e09a7af769-7fa1e2c7eabmr7139441a34.7.1788543034170;
-        Fri, 04 Sep 2026 10:30:34 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:5b::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f9f6da9a3esm3454794a34.10.2026.09.04.10.30.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 10:30:33 -0700 (PDT)
-Date: Fri, 4 Sep 2026 10:30:28 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowangio@gmail.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	sargun@sargun.me, jlinbox@meta.com,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next 0/6] vsock: assign the guest vsock device to a
- network namespace
-Message-ID: <apsANK7ySuRzzK0V@devvm29614.prn0.facebook.com>
-References: <20260902-vsock-guest-ns-v1-0-9995383e9a8b@meta.com>
- <apqGcFDFm9_Wtw4q@sgarzare-redhat>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z2XLlcnO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C1F41F00A3D;
+	Fri,  4 Sep 2026 17:41:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788543697;
+	bh=CLvJLxDuarSJdg7k97odOMV7NPap1snyy+/egi/aUNk=;
+	h=From:To:Cc:Subject:Date;
+	b=Z2XLlcnOPWY1YBZZdUojCYMdc+IEkrapRtJfwyWpbT/tnvgChJIFmHgeBMZFBHMvZ
+	 U/NAGPFPy+R7UBKEQUckmtyivvx1wan0gZbvR/Bb4AjnpQF3gbZfAU/F3GTAWBbRZT
+	 uOP2FQ1BIdboSIDfrPSFWKAsPdZqbF943CxD2T/njiJreA8HHgkWTAZelyED56dkOY
+	 WJzR0duVO1PAou8PVZI/SmtT/nL4CI/Wnm/3fCRl67swxkVzjCWdCAVvXasEBKI0gw
+	 YeD+xcqTYsFEdAGPDIlwRmgjre4DknghDINqRueLHHrXY2pjrGBbLXpTnSL1yqIM2D
+	 iMPlhDMHM/QLQ==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	shuah@kernel.org,
+	cjubran@nvidia.com,
+	cratiu@nvidia.com,
+	noren@nvidia.com,
+	willemb@google.com,
+	petrm@nvidia.com,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: net: add ctl_file_write() helper
+Date: Fri,  4 Sep 2026 10:41:34 -0700
+Message-ID: <20260904174134.3789400-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <apqGcFDFm9_Wtw4q@sgarzare-redhat>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 04, 2026 at 10:55:17AM +0200, Stefano Garzarella wrote:
-> On Wed, Sep 02, 2026 at 04:00:46PM -0700, Bobby Eshleman wrote:
-> > vsock network namespaces let a host put each VM in a namespace of its
-> > own. A guest has no equivalent yet. It has a single G2H device that
-> > cannot be assigned to a network namespace.
-> 
-> Thanks for this, I'll do a proper review next week, in the mean time some
-> comments below:
-> 
-> > 
-> > This series lets a guest move that device into a network namespace. A
-> > new ioctl on /dev/vsock, IOCTL_VM_SOCKETS_ASSIGN_G2H_NETNS, assigns the
-> > device to the namespace of the calling process. The namespace's existing
-> 
-> Why an ioctl?
-> 
-> I'm asking because I'd like to know if you've already considered any
-> alternatives (sysfs, netlink, etc.)
-> 
-> How do you think the ioctl should be used? Should we provide an userspace
-> tool, or extending some existing tools?
-> 
-> Thanks,
-> Stefano
+Setting a sysctl or a sysfs attribute for the duration of a test and
+putting the old value back has been open coded multiple times.
 
-Really only because /dev/vsock exists and the prior series used it.
+We generally avoid creating library helpers but this one is very
+common, and the defer is a little tricky as using the same function
+for defer as the initial write leads to an infinite loop (not that
+I would ever make such mistake!)
 
-Considering netlink, it might be the better option because there is a
-lot of prior art solving problems we might have in the future. For
-example, I was thinking about when users suddenly lose access to vsock,
-with just the current assign ioctl there is no way for apps or users to
-figure out why this happened. We can have an ioctl() setter for user,
-but in netdev world users can actually get a notification via netlink as
-to which namespace the device went to and what its ifindex is there (see
-__dev_change_net_namespace() for the RTM_DELLINK and RTM_NEWLINK
-messages). There is probably more, but that's the case that comes to
-mind.
+Some of the conversions are not identical, but arguably ctl_file_write()
+semantics are more correct.
 
-> 
-> > ns_mode then decides who may use it: a "global" namespace shares the
-> > device with every other global namespace, and a "local" namespace keeps
-> > the host connection to itself. The device starts out in the initial
-> > namespace, so until the ioctl is issued nothing has moved and no mode
-> > has changed. There is no explicit unassign as assigning the device back
-> > to the initial namespace is equivalent.
-> > 
-> > The ioctl requires CAP_NET_ADMIN in the initial user namespace.
-> > 
-> > Connections that can no longer reach the device after a move are reset,
-> > so that a namespace which has lost access cannot keep using a socket it
-> > opened while it still had access. Following netdevs, the device returns
-> > to the initial namespace when the namespace it was moved to is deleted.
-> > 
-> > Transports opt in through a new netns_assign_allow callback. Only
-> > virtio-vsock implements it here.
-> 
-> Why? (Not asking to support all the others, asking to explain the reason or
-> ask helps from others to extend it)
-> 
-> Thanks,
-> Stefano
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: shuah@kernel.org
+CC: cjubran@nvidia.com
+CC: cratiu@nvidia.com
+CC: noren@nvidia.com
+CC: willemb@google.com
+CC: petrm@nvidia.com
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/drivers/net/gro.py    | 17 +++---------
+ .../drivers/net/hw/devlink_rate_tc_bw.py      |  5 ++--
+ tools/testing/selftests/drivers/net/hw/irq.py | 11 ++------
+ .../drivers/net/hw/lib/py/__init__.py         |  4 +--
+ .../selftests/drivers/net/hw/toeplitz.py      | 10 +++----
+ .../selftests/drivers/net/lib/py/__init__.py  |  4 +--
+ .../selftests/drivers/net/ring_reconfig.py    | 26 ++++---------------
+ .../testing/selftests/net/lib/py/__init__.py  |  4 +--
+ tools/testing/selftests/net/lib/py/utils.py   | 22 ++++++++++++++++
+ 9 files changed, 44 insertions(+), 59 deletions(-)
 
-Sure, can add a note here about extending it. I just didn't want to
-implement code without having an environment allowing me to test it.
+diff --git a/tools/testing/selftests/drivers/net/gro.py b/tools/testing/selftests/drivers/net/gro.py
+index 6ab8c97880d1..e0b21703cc3c 100755
+--- a/tools/testing/selftests/drivers/net/gro.py
++++ b/tools/testing/selftests/drivers/net/gro.py
+@@ -42,7 +42,7 @@ import re
+ from lib.py import ksft_run, ksft_exit, ksft_pr
+ from lib.py import NetDrvEpEnv, KsftFailEx, KsftXfailEx
+ from lib.py import NetdevFamily, EthtoolFamily
+-from lib.py import bkg, cmd, defer, ethtool, ip
++from lib.py import bkg, cmd, ctl_file_write, defer, ethtool, ip
+ from lib.py import ksft_variants, KsftNamedVariant
+ 
+ 
+@@ -79,17 +79,6 @@ GRO_DPORT = 8000
+     return getattr(cfg, attr)
+ 
+ 
+-def _write_defer_restore(cfg, path, val, defer_undo=False):
+-    with open(path, "r", encoding="utf-8") as fp:
+-        orig_val = fp.read().strip()
+-        if str(val) == orig_val:
+-            return
+-    with open(path, "w", encoding="utf-8") as fp:
+-        fp.write(val)
+-    if defer_undo:
+-        defer(_write_defer_restore, cfg, path, orig_val)
+-
+-
+ def _set_mtu_restore(dev, mtu, host):
+     if dev['mtu'] < mtu:
+         ip(f"link set dev {dev['ifname']} mtu {mtu}", host=host)
+@@ -244,8 +233,8 @@ def _run_gro_bin(cfg, test_name, protocol=None, num_flows=None,
+         flush_path = f"/sys/class/net/{cfg.ifname}/gro_flush_timeout"
+         irq_path = f"/sys/class/net/{cfg.ifname}/napi_defer_hard_irqs"
+ 
+-        _write_defer_restore(cfg, flush_path, "200000", defer_undo=True)
+-        _write_defer_restore(cfg, irq_path, "10", defer_undo=True)
++        ctl_file_write(flush_path, "200000")
++        ctl_file_write(irq_path, "10")
+ 
+         _set_ethtool_feat(cfg.ifname, cfg.feat,
+                           {"generic-receive-offload": True,
+diff --git a/tools/testing/selftests/drivers/net/hw/devlink_rate_tc_bw.py b/tools/testing/selftests/drivers/net/hw/devlink_rate_tc_bw.py
+index 4e4faa9275bb..38d712755257 100755
+--- a/tools/testing/selftests/drivers/net/hw/devlink_rate_tc_bw.py
++++ b/tools/testing/selftests/drivers/net/hw/devlink_rate_tc_bw.py
+@@ -63,7 +63,7 @@ from lib.py import ksft_pr, ksft_run, ksft_exit
+ from lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
+ from lib.py import NetDrvEpEnv, DevlinkFamily
+ from lib.py import NlError
+-from lib.py import cmd, defer, ethtool, ip
++from lib.py import cmd, ctl_file_write, defer, ethtool, ip
+ from lib.py import Iperf3Runner
+ 
+ 
+@@ -113,8 +113,7 @@ from lib.py import Iperf3Runner
+     except Exception as exc:
+         raise KsftSkipEx(f"Failed to enable switchdev mode on {cfg.pci}") from exc
+     try:
+-        cmd(f"echo 1 > /sys/class/net/{cfg.ifname}/device/sriov_numvfs", shell=True)
+-        defer(cmd, f"echo 0 > /sys/class/net/{cfg.ifname}/device/sriov_numvfs", shell=True)
++        ctl_file_write(f"/sys/class/net/{cfg.ifname}/device/sriov_numvfs", 1)
+     except Exception as exc:
+         raise KsftSkipEx(f"Failed to enable SR-IOV on {cfg.ifname}") from exc
+ 
+diff --git a/tools/testing/selftests/drivers/net/hw/irq.py b/tools/testing/selftests/drivers/net/hw/irq.py
+index 0699d6a8b4e2..3d1c56b51054 100755
+--- a/tools/testing/selftests/drivers/net/hw/irq.py
++++ b/tools/testing/selftests/drivers/net/hw/irq.py
+@@ -7,7 +7,7 @@ from lib.py import KsftSkipEx
+ from lib.py import ksft_disruptive
+ from lib.py import EthtoolFamily, NetdevFamily
+ from lib.py import NetDrvEnv
+-from lib.py import cmd, ip, defer
++from lib.py import cmd, ctl_file_write, ip
+ 
+ 
+ def read_affinity(irq) -> str:
+@@ -15,12 +15,6 @@ from lib.py import cmd, ip, defer
+         return fp.read().lstrip("0,").strip()
+ 
+ 
+-def write_affinity(irq, what) -> str:
+-    if what != read_affinity(irq):
+-        with open(f'/proc/irq/{irq}/smp_affinity', 'w') as fp:
+-            fp.write(what)
+-
+-
+ def check_irqs_reported(cfg) -> None:
+     """ Check that device reports IRQs for NAPI instances """
+     napis = cfg.netnl.napi_get({"ifindex": cfg.ifindex}, dump=True)
+@@ -41,8 +35,7 @@ from lib.py import cmd, ip, defer
+     old = read_affinity(n['irq'])
+     # pick an affinity that's not the current one
+     new = "3" if old != "3" else "5"
+-    write_affinity(n['irq'], new)
+-    defer(write_affinity, n['irq'], old)
++    ctl_file_write(f"/proc/irq/{n['irq']}/smp_affinity", new)
+ 
+     reconfig_cb(cfg)
+ 
+diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+index 8a58cb17cc06..81e1d1865cd5 100644
+--- a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
++++ b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+@@ -24,7 +24,7 @@ KSFT_DIR = (Path(__file__).parent / "../../../../..").resolve()
+     from net.lib.py import CmdExitFailure
+     from net.lib.py import bkg, cmd, bpftool, bpftrace, defer, ethtool, \
+         fd_read_timeout, ip, rand_port, rand_ports, wait_port_listen, \
+-        wait_file, tool
++        wait_file, ctl_file_write, tool
+     from net.lib.py import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
+     from net.lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
+     from net.lib.py import ksft_disruptive, ksft_exit, ksft_pr, ksft_run, \
+@@ -40,7 +40,7 @@ KSFT_DIR = (Path(__file__).parent / "../../../../..").resolve()
+                "CmdExitFailure",
+                "bkg", "cmd", "bpftool", "bpftrace", "defer", "ethtool",
+                "fd_read_timeout", "ip", "rand_port", "rand_ports",
+-               "wait_port_listen", "wait_file", "tool",
++               "wait_port_listen", "wait_file", "ctl_file_write", "tool",
+                "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
+                "KsftSkipEx", "KsftFailEx", "KsftXfailEx",
+                "ksft_disruptive", "ksft_exit", "ksft_pr", "ksft_run",
+diff --git a/tools/testing/selftests/drivers/net/hw/toeplitz.py b/tools/testing/selftests/drivers/net/hw/toeplitz.py
+index 571732198b93..962d1aca2bc9 100755
+--- a/tools/testing/selftests/drivers/net/hw/toeplitz.py
++++ b/tools/testing/selftests/drivers/net/hw/toeplitz.py
+@@ -13,7 +13,7 @@ import os
+ import socket
+ from lib.py import ksft_run, ksft_exit, ksft_pr
+ from lib.py import NetDrvEpEnv, EthtoolFamily, NetdevFamily
+-from lib.py import cmd, bkg, rand_port, defer
++from lib.py import cmd, bkg, ctl_file_write, rand_port, defer
+ from lib.py import ksft_in
+ from lib.py import ksft_variants, KsftNamedVariant, KsftSkipEx, KsftFailEx
+ 
+@@ -113,7 +113,7 @@ QUEUE_CAP = 8
+ 
+ 
+ def _configure_rps(cfg, rps_cpus):
+-    """Configure RPS for all Rx queues."""
++    """Configure RPS for all Rx queues, restored at the end of the test."""
+ 
+     mask = 0
+     for cpu in rps_cpus:
+@@ -123,9 +123,8 @@ QUEUE_CAP = 8
+ 
+     # Set RPS bitmap for all rx queues
+     for rps_file in glob.glob(f"/sys/class/net/{cfg.ifname}/queues/rx-*/rps_cpus"):
+-        with open(rps_file, "w", encoding="utf-8") as fp:
+-            # sysfs expects hex without '0x' prefix, toeplitz.c needs the prefix
+-            fp.write(mask[2:])
++        # sysfs expects hex without '0x' prefix, toeplitz.c needs the prefix
++        ctl_file_write(rps_file, mask[2:])
+ 
+     return mask
+ 
+@@ -208,7 +207,6 @@ QUEUE_CAP = 8
+         # Get CPUs not used by Rx queues and configure them for RPS
+         rps_cpus = _get_unused_rps_cpus(cfg, count=2)
+         rps_mask = _configure_rps(cfg, rps_cpus)
+-        defer(_configure_rps, cfg, [])
+         rx_cmd += ["-r", rps_mask]
+         ksft_pr(f"RPS using CPUs: {rps_cpus}, mask: {rps_mask}")
+ 
+diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+index ee903bcf3207..591b1e6c7eea 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/__init__.py
++++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+@@ -24,7 +24,7 @@ KSFT_DIR = (Path(__file__).parent / "../../../..").resolve()
+     from net.lib.py import CmdExitFailure
+     from net.lib.py import bkg, cmd, bpftool, bpftrace, defer, ethtool, \
+         fd_read_timeout, ip, rand_port, rand_ports, tc, wait_port_listen, \
+-        wait_file
++        wait_file, ctl_file_write
+     from net.lib.py import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
+     from net.lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
+     from net.lib.py import ksft_disruptive, ksft_exit, ksft_pr, ksft_run, \
+@@ -38,7 +38,7 @@ KSFT_DIR = (Path(__file__).parent / "../../../..").resolve()
+                "CmdExitFailure",
+                "bkg", "cmd", "bpftool", "bpftrace", "defer", "ethtool",
+                "fd_read_timeout", "ip", "rand_port", "rand_ports", "tc",
+-               "wait_port_listen", "wait_file",
++               "wait_port_listen", "wait_file", "ctl_file_write",
+                "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
+                "KsftSkipEx", "KsftFailEx", "KsftXfailEx",
+                "ksft_disruptive", "ksft_exit", "ksft_pr", "ksft_run",
+diff --git a/tools/testing/selftests/drivers/net/ring_reconfig.py b/tools/testing/selftests/drivers/net/ring_reconfig.py
+index 2bc329b77134..6682d4badfbf 100755
+--- a/tools/testing/selftests/drivers/net/ring_reconfig.py
++++ b/tools/testing/selftests/drivers/net/ring_reconfig.py
+@@ -13,7 +13,7 @@ from lib.py import ksft_run, ksft_exit, ksft_pr
+ from lib.py import ksft_eq
+ from lib.py import KsftSkipEx, KsftXfailEx
+ from lib.py import NetDrvEpEnv, EthtoolFamily, GenerateTraffic
+-from lib.py import cmd, defer, rand_port, tc, NlError
++from lib.py import cmd, ctl_file_write, defer, rand_port, tc, NlError
+ 
+ # Added in Python 3.13; fallback to 61 for x86/ARM/MIPS
+ SO_TXTIME = getattr(socket, "SO_TXTIME", 61)
+@@ -166,22 +166,6 @@ MAX_TX_RING = 1024
+         GenerateTraffic(cfg).wait_pkts_and_stop(10000)
+ 
+ 
+-def _write_file(path, val):
+-    """Write val to a file."""
+-    with open(path, "w", encoding="utf-8") as fp:
+-        fp.write(str(val))
+-
+-
+-def _write_sysfs(path, val):
+-    """Write val to a sysfs file, restoring the original value on exit."""
+-    with open(path, "r", encoding="utf-8") as fp:
+-        orig_val = fp.read().strip()
+-    if str(val) == orig_val:
+-        return
+-    _write_file(path, val)
+-    defer(_write_file, path, orig_val)
+-
+-
+ def _get_qdisc_backlog(cfg, mq_handle, queue):
+     """Return the qdisc backlog (bytes) for the given TX queue's leaf."""
+     target_parent = f"{mq_handle}{queue + 1:x}"
+@@ -342,8 +326,8 @@ MAX_TX_RING = 1024
+     # Slow completions so the ring stays full after FQ releases packets
+     napi_defer = f"/sys/class/net/{cfg.ifname}/napi_defer_hard_irqs"
+     gro_timeout = f"/sys/class/net/{cfg.ifname}/gro_flush_timeout"
+-    _write_sysfs(napi_defer, 100)
+-    _write_sysfs(gro_timeout, 1000000000)
++    ctl_file_write(napi_defer, 100)
++    ctl_file_write(gro_timeout, 1000000000)
+ 
+     port = rand_port()
+     # A single flow must overflow the ring, so send twice the ring depth and
+@@ -384,8 +368,8 @@ MAX_TX_RING = 1024
+     cfg.eth.rings_set(ehdr | {'tx': tx_cur})
+ 
+     # Let completions proceed normally
+-    _write_sysfs(napi_defer, 0)
+-    _write_sysfs(gro_timeout, 0)
++    ctl_file_write(napi_defer, 0)
++    ctl_file_write(gro_timeout, 0)
+ 
+     # Poll for backlog to drain
+     for _ in range(100):
+diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing/selftests/net/lib/py/__init__.py
+index 34935886b6ad..71df5880b356 100644
+--- a/tools/testing/selftests/net/lib/py/__init__.py
++++ b/tools/testing/selftests/net/lib/py/__init__.py
+@@ -14,7 +14,7 @@ from .netns import NetNS, NetNSEnter, UserNetNS
+ from .nsim import NetdevSim, NetdevSimDev
+ from .utils import CmdExitFailure, fd_read_timeout, cmd, bkg, defer, \
+     bpftool, ip, ethtool, bpftrace, rand_port, rand_ports, wait_port_listen, \
+-    wait_file, tool, tc
++    ctl_file_write, wait_file, tool, tc
+ from .bpf import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
+ from .ynl import NlError, NlctrlFamily, YnlFamily, \
+     EthtoolFamily, NetdevFamily, RtnlFamily, RtnlAddrFamily, RtnlRouteFamily
+@@ -29,7 +29,7 @@ __all__ = ["KSRC",
+            "NetNS", "NetNSEnter", "UserNetNS",
+            "CmdExitFailure", "fd_read_timeout", "cmd", "bkg", "defer",
+            "bpftool", "ip", "ethtool", "bpftrace", "rand_port", "rand_ports",
+-           "wait_port_listen", "wait_file", "tool", "tc",
++           "wait_port_listen", "ctl_file_write", "wait_file", "tool", "tc",
+            "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
+            "NetdevSim", "NetdevSimDev",
+            "NetshaperFamily", "DevlinkFamily", "PSPFamily", "NlError",
+diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
+index 184bb04343f6..1727bc418073 100644
+--- a/tools/testing/selftests/net/lib/py/utils.py
++++ b/tools/testing/selftests/net/lib/py/utils.py
+@@ -357,6 +357,28 @@ GLOBAL_DEFER_ARMED = False
+         time.sleep(sleep)
+ 
+ 
++def _ctl_file_write(path, val):
++    with open(path, "w", encoding="utf-8") as fp:
++        fp.write(str(val))
++
++
++def ctl_file_write(path, val):
++    """
++    Write @val to a control file - a sysctl, a sysfs attribute, configfs...
++    and defer() restoring the old value, so needs a defer queue.
++
++    Writing a value which is already set is skipped, there is nothing
++    to restore in that case.
++    """
++    with open(path, "r", encoding="utf-8") as fp:
++        old = fp.read().strip()
++    if old == str(val):
++        return
++
++    _ctl_file_write(path, val)
++    defer(_ctl_file_write, path, old)
++
++
+ def wait_file(fname, test_fn, sleep=0.005, deadline=5, encoding='utf-8'):
+     """
+     Wait for file contents on the local system to satisfy a condition.
+-- 
+2.55.0
 
-Best,
-Bobby
