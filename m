@@ -1,155 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed2-f11.google.com (mail-ed2-f11.google.com [74.125.228.75])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0A02222AA;
-	Fri,  4 Sep 2026 09:01:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3002C431A22
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 09:02:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788512472; cv=none; b=Fj83OEeStL/dnA0zuY0CXBVCn2uC2SvvSl3sCpUDSFb2hvnTwxg/BXWxKbwNTLIKYMbbJGaRpykfXLxKiskzGs5J3nU++ACBQzimla3Q2OYWkt6LBF8jjaem7soinCNduBQN0N5pLKaXvfaOd8D/P+NlNNScYlTLMk2ToPbS7w8=
+	t=1788512559; cv=none; b=Ax0Oow6HXrvW+on5IL5ZuQzCkc7INgWF5LhKpkiYarYBn364QrTjNIUfTjUzm1vVaGPwCU900Emxj7LIprQVMcS8u8FKDw3/bVXI734WiLp1xZgJypwuj3xEanu2K9QzfzNKE/cuDk6lM4reX9HRtMtzGcQ54k5kdb8mzGWIWPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788512472; c=relaxed/simple;
-	bh=NKQFYA/36+trZ8mR4+iGgQHvRrS7dZWgZnNZFkrK40M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DIEc97JufsSf/k8mIHgS6k+ThYDu/hFEueVTYkMkasobSBPK1tQekw5vNlfe0Oyyz1w/IyXD5kCPtOpfE1E8iVFVk7yW5E7VpE+0s1jvGWo64UV94IX+G2Pgbh9UrByJ99lk9RvEe3iqNXDpNuvxlO7swAelsHFcrAQhjp6ObP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JH8R3oTh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788512559; c=relaxed/simple;
+	bh=FocYj1Tg6JeoZyTDyfHblEWp+ZMU7BmLVvhrp05G4mE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=gZrdpLXX/5vJ/vNmuk8ken2DdJQLDhEiyCoU+cq2oYx9mcQ7qclvV+V01vY0Qk/QgQrndtRMyYFmfqMb6PJblvGfWfHmQZ8AqPStysUSB+gD4Mv1dPPAVXRUQQfiWL0kez0stvNOvZ0ZXuNjPmq/2UR3EGQ8bafAqJ1wWtC1qsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ahLmHHkU; arc=none smtp.client-ip=74.125.228.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JH8R3oTh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03841F00A3D;
-	Fri,  4 Sep 2026 09:01:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788512471;
-	bh=NS43r1NlPHoz3Menx8qLeACzHNPCiAWFDDBQZ2Ncqlo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=JH8R3oThTjf7VbgyDYAPuSERILexkhuy68q6S1R/j3k/xU/SQ6pKR3M2STiVCtoHB
-	 N4HPsS8DQBcHTVMRDKMixaJfZj6KsdUi6flqlVHchSUh+EefEVewz6t6s7WtAMBOeJ
-	 Ne/DDRDYmPRQsrF1gzDzU68tIP+YLcuaGzUbmyY3aIASIqIJ4ih/2x0Z8NuR9CSIMx
-	 DbsFfSOtbOWzQP6VioFxiuQ4PjtSlyVmMco+ejyW09TzSDfxc5DIUggo2qelo+xcr6
-	 EPF7LjD5kV6at2CbWtfaDYmAXt1icNVl+5k3xYCyClty41Zpigub4q/rajGOS10E/r
-	 a2YCLFTlvAlIw==
-Message-ID: <497a85d3-e062-4930-bcb8-c86a8205e7b2@kernel.org>
-Date: Fri, 4 Sep 2026 11:01:04 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ahLmHHkU"
+Received: by mail-ed2-f11.google.com with SMTP id 4fb4d7f45d1cf-6a144c8f038so351459a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 02:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788512556; x=1789117356; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=VSBcA76yWuklBIVlW8nFJkprKtYg80K7J6L7TsEg75w=;
+        b=ahLmHHkUUY5GyLFEnMgSOAo6lncxD0syIQsq9xaGV+PMU31VF/R0AWp1T1/XGVjJ7m
+         HyWJ6ezyl+fjWFsxwts/r4gMnEFYYrohLFL5iEBQs0Ti1XSxFN+F8sASHgWbPzuuUwBw
+         liwG7psGLFP2IfFG7ov6CWJztbtotCJ7nUQDDS7u54xWuXRJjljy+C3dSPaOZDET/eyh
+         HxP26qOtsXoJVsZ3a7Q6u2BZqigbdT7cq82dDmGsB2NfrnjNUpYaKE1jtCldZD4m9KSc
+         y6PHgMqjCn5Qi0tG5orQ4q1fLkSmUKySZBUVCNIz1CfwAeb5G+VvDVjMSghbqXxAgCVZ
+         a8mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788512556; x=1789117356;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=VSBcA76yWuklBIVlW8nFJkprKtYg80K7J6L7TsEg75w=;
+        b=XoaOqBEe6SSRIJJJX5O0WY0KOGy0Pnp2bu9DYUdZVeldDDdo6hjZaRBdZRuoi5I5d8
+         sOM2C0qRdSqAhkReFIhL7LzJNqWt0Ynaib9Teaqx+dYDnkst57ILY8G8mrOLETgrNSMC
+         7/yAXQF+PG9xwv/lLbyGJSdpfHgHDTbRpzHPnD/B4RGZwyVIpJGg/Y5Ut9Wl98LRgoIn
+         eZvqSJlZxvwnVtD2fd6NU8hzAIaKycLpR2uv4/FwEteJB0tb/lWIxqUDjpS/+1wnFKxS
+         /rKNWNDSm9bZbBh4/tg4xuGTeUSG4rrk/yny7j+QAxWEB57CU52uOqJr0P9Qci7c9aZg
+         mI0Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzyGp05mZyw5iNbpq7Cyy41Dc+getFEPUGrnLN9vSn5u3yNdk3COX342kAyTTP965OtPDhg3ahVpqUe0nojT1I=@vger.kernel.org
+X-Gm-Message-State: AFuF++nguqDlq8440F5/ZCAu8CBOf2I6QqgbaiEPCKxAwKUXBhOZaF/Y
+	ZrwT2aMCimZbX36BX8y2jwl7AVl31JlGjUOdkvGnK5oMg+F6agxPW62J
+X-Gm-Gg: AYBFou0rwIxoSVu55aPoBNNl5gZu1tLziwQGrUhBO+edPrQgEx3ZbHae4azUJVWfBge
+	59W7VZhMNr3U7VO8YSONnLCP7iquPr77nia7DsreqXr+IDbIDDLwy6+7G8SYov/cBYojyR4I4Aj
+	EMWUyPoVmp0krrKk40MPbMoVjIw7xSE9Gr0iuoaj0wvBzyVJF5hYcGOqkVuP8Rv4ucMBKuEcH83
+	v2m2KsqT7OuLRzK4XjqbH3lsrBLJWrMqoHPY4zxljTz5tXhacGBhA4TFtA12pLz9pDynG2vADHz
+	ZTYedlgiQN+ri00v6+e2kIuEDPfubEgeunkbj2ZMFUetOXBnqwMSi1GzcGmrzGmd2h9Kej4QrLK
+	D97ioup3ZZ3pQLzo8sN2YUODhiyUtRGuNn70C4ueRNgxvYbwXiIyIB5Gv7MFqGtFMJddR5dDDQw
+	us4f4OHF+Fm9JmcT/c23QSNqEFt3jDTF44Z+e4nOPanCjlrST0v69+FxTIxPJYjXKMsyaxPUUcb
+	tMy1Oy/CWBxUyHjy69Wj/Sp1hmXBliT5K5Ob6aPp4j3H6E8+Z7EYp9Duc3A+pYiWJbPlx0dNIJg
+	IOlZEg5Rlw/tf1ELGy1xIrmuNw8=
+X-Received: by 2002:a17:907:c81a:b0:c25:659:89ba with SMTP id a640c23a62f3a-c260c8d4e21mr198032866b.9.1788512555920;
+        Fri, 04 Sep 2026 02:02:35 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c260d503f96sm77028066b.26.2026.09.04.02.02.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Sep 2026 02:02:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/5] slab: handle ERR_PTR values in kfree and hardened
- usercopy
-Content-Language: en-US
-To: Karl Mehltretter <kmehltretter@gmail.com>, Harry Yoo <harry@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Catalin Marinas <catalin.marinas@arm.com>, Kees Cook <kees@kernel.org>,
- "Gustavo A . R . Silva" <gustavoars@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-hardening@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20260903203720.63689-1-kmehltretter@gmail.com>
- <20260903203720.63689-4-kmehltretter@gmail.com>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Autocrypt: addr=vbabka@kernel.org; keydata=
- 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
-In-Reply-To: <20260903203720.63689-4-kmehltretter@gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Fri, 04 Sep 2026 11:02:34 +0200
+Message-Id: <DL6ESCNVJ52D.3NSNU8FZDQTU@gmail.com>
+Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v9 0/8] bpf: add support for KASAN checks in
+ JITed programs
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
+ "Jiri Olsa" <jolsa@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>,
+ "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Ingo Molnar"
+ <mingo@redhat.com>, "Andrey Konovalov" <andreyknvl@gmail.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Yafang Shao" <laoar.shao@gmail.com>
+X-Mailer: aerc 0.21.0
+References: <20260903-kasan-v9-0-2407fe99255a@bootlin.com>
+In-Reply-To: <20260903-kasan-v9-0-2407fe99255a@bootlin.com>
 
-On 9/3/26 22:37, Karl Mehltretter wrote:
-> Passing an ERR_PTR to kfree() currently reaches virt_to_page() and may
-> fault. Warn and return instead, leaving the bad caller visible without
-> using the pointer as allocator metadata.
-> 
-> Also reject ERR_PTR values in hardened usercopy. Keep both checks
-> separate from ZERO_OR_NULL_PTR(), whose exact matching is required by
-> krealloc().
-> 
-> Link: https://lore.kernel.org/r/CAG48ez05QVn6_gQ2TBrRa1a_DWQoaSSYubUsu5YMWxx-gqMijQ@mail.gmail.com
-> Link: https://lore.kernel.org/r/202608111716.0FA9DB17@keescook
-> Link: https://github.com/KSPP/linux/issues/93
-> Assisted-by: LLM
-> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
-> ---
->  mm/slub.c     | 3 +++
->  mm/usercopy.c | 3 +++
->  2 files changed, 6 insertions(+)
-> 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index f9b56cb439e7..027b44dd7f07 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -6780,6 +6780,9 @@ void kfree(const void *object)
->  	if (unlikely(ZERO_OR_NULL_PTR(object)))
->  		return;
->  
-> +	if (WARN_ON(IS_ERR(object)))
+On Thu Sep 3, 2026 at 3:51 PM CEST, Alexis Lothor=C3=A9 (eBPF Foundation) w=
+rote:
+> Hello,
+> this is v9 of the series aiming to bring basic support for KASAN checks
+> to BPF JITed programs. Among a few minor optimizations, this revision
+> fixes some wrong kasan instrumentation on some unwanted stack access
+> (stack access ending up being instrumented AND targeting the wrong stack
+> offset). To mitigate this risk further, this revision introduces a
+> systematic KASAN check skip when (addr_reg =3D=3D BPF_REG_FP || addr_reg =
+=3D=3D
+> BPF_REG_PARAMS) in emit_kasan_check. This secondary check (on top of the
+> non_stack_access flag), should hopefully prevent the issues raised in
+> v8. I've also reworked the emit_st refactoring to realign it with
+> BPF_STX management in the x86 JIT compiler, as the "arguments on stack"
+> feature made me realize that it could be kept more symmetric with
+> BPF_STX; so I've dropped Ihor's Acked-by on this.
+>
+> Original cover letter:
+>
+> "Traditional" KASAN allows to spot memory management mistakes by
+> reserving a fraction of memory as "shadow memory" that will map to the
+> rest of the memory and allow its monitoring. Each memory-accessing
+> instruction is then instrumented at build time to call some ASAN check
+> function, that will analyze the corresponding bits in shadow memory, and
+> if it detects the access as invalid, trigger a detailed report. The goal
+> of this series is to replicate this mechanism for BPF programs when they
+> are being JITed into native instructions: that's then the JIT compiler
+> that is in charge of inserting calls to the corresponding kasan checks,
+> when a program is being loaded into the kernel. This task involves:
+> - identifying at program load time the instructions performing memory
+>   accesses
+> - identifying those accesses properties (size ? read or write ?) to
+>   define the relevant kasan check function to call
+> - just before the identified instructions:
+>   - perform the basic context saving (ie: saving registers)
+>   - inserting a call to the relevant kasan check function
+>   - restore context
+> - whenever the instrumented program executes, if it performs an invalid
+>   access, it triggers a kasan report identical to those instrumented on
+>   kernel side at build time.
+>
+> The series comes with new selftests programs that generate a wide
+> variety of kasan reports: those need the kernel to be running with
+> kasan_multi_shot enabled.
+>
+> As discussed in [1], this series is based on some choices and
+> assumptions:
+> - it focuses on x86_64 for now, and so only on KASAN_GENERIC
+> - not all memory accessing BPF instructions are being instrumented:
+>   - it discards instructions accessing BPF program stack (already
+>     monitored by page guards)
+>   - it discards possibly faulting instructions, like BPF_PROBE_MEM or
+>     BPF_PROBE_ATOMIC insns
+>
 
-Wonder if WARN_ON_ONCE() would be better.
-Also wonder about the benefits for hardening (as opposed to debugging).
-Without this check it would fault. Now it warns, but hardened setups often
-use panic_on_warn anyway, so the result is the same?
+For the series:
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-> +		return;
-> +
->  	page = virt_to_page(object);
->  	slab = page_slab(page);
->  	if (!slab) {
-> diff --git a/mm/usercopy.c b/mm/usercopy.c
-> index 5de7a518b1b1..c8d8703544c6 100644
-> --- a/mm/usercopy.c
-> +++ b/mm/usercopy.c
-> @@ -157,6 +157,9 @@ static inline void check_bogus_address(const unsigned long ptr, unsigned long n,
->  	/* Reject if NULL or ZERO-allocation. */
->  	if (ZERO_OR_NULL_PTR(ptr))
->  		usercopy_abort("null address", NULL, to_user, ptr, n);
-> +
-> +	if (IS_ERR_VALUE(ptr))
-> +		usercopy_abort("ERR_PTR", NULL, to_user, ptr, n);
->  }
->  
->  static inline void check_heap_object(const void *ptr, unsigned long n,
+If there are remaining issues, we can fix forward, but I think we should tr=
+y and
+land this for now.
 
+> [...]
