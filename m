@@ -1,106 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5D6501F20;
-	Fri,  4 Sep 2026 17:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5655111BF
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 17:30:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788541284; cv=none; b=pFk1XrI8vYQDXduWUvtcHdwNcpYtmNzqN0/wYHIEKZirYNvAyBKr9BSbK5bFKbz6I2aAcTHeoVTd9/KAcV0ktJkknHqJZFhV36OnyKDCtrk4t4Cq7uTC7WvrP0eao7pKWFrQVFmXW3Xm9aJ+YBX6Fe+LFqbVPPRpwP5zfmd0cjA=
+	t=1788543037; cv=none; b=bXcMjsfatoBooqIKcx/Rje7Vo+Uu/9Li0wDnMTUqxSSi+wS9xuaO6ScFAkHzg5Tw+3QfMEdaRMjpIJWkBBDpRdf1SyjWPTjYYxZbrAxzKjQzPvmuLMnHrQSCJWNcsp5qsuMcvCYJ/lwJvtoVbwIzPZO89MlsV8qMRJl1R2Vqvwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788541284; c=relaxed/simple;
-	bh=PBIJm9PGJA2rg5PfzVOojx5Pj+TrNJKVHgxXlXEh0to=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=FLNkb27y+L3ccUpTEv7VsNk+zc9Fb6fvpKr4UP9l0sj5RYTbjmwirTVLAmnJWl92vtr4RcD0HMQRpBuXW70Kr+cB6dL38BJ7Yk8U2qzZwut5Qqf12ByObGfjGExTLvTdOtUlCNAR0G3qrlJa8kH+DioepDlDp079r5+XWmenwho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C0y1AtdM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788543037; c=relaxed/simple;
+	bh=uFS7CqJ/4WMuU0sv4h1FMLN2xytbZtd+0px5/4cj4zo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AZL7a2qPzxm7r1fZCWrx9ulyq0E/85s//4ttaUu9VtzvME3PN9IW0i+nwdcsLB9oK107mS8d+1EosfvDuvUys2eE5EbBa4uSnoLdfxlyfYVXjFDuBY067/ycufw6CKugLThskgrHbZL/oHckiQnt1A9+tUpMkUxYL9GikFuOI68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dlp4D8Nr; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C0y1AtdM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 362761F00A3D;
-	Fri,  4 Sep 2026 17:01:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788541282;
-	bh=ZE19tjQV++uxCuX44HWypuHxk/eqCnq3HtKWU01h7DM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=C0y1AtdMBxKbuKaUt5kBYLmcia/QHwKUcsU/ED8eAtAX5mt3849WTczvRQEqYzDs6
-	 7VEjM8JTis5JAHZjuueXmIU2+Vg75MeTdCXookJU5WIgyhd41wr2qta3VoTgOM0GU3
-	 135+J48EeE/GnyNyC5UxG54pCeJIudhA2mSMfpZchAvso3B/k2Eq/2dHc/EYctgYCa
-	 EGomYhk77rIreEVF1Dq66pC5KhVnyr0N8ktiUtAccwW1lBfl1khrvDOasdXVUVj4gC
-	 fyWdRjuUgqYG/Dv1HXXabCy/5TgW0mFVio4uvzOlno6BQSnyg50Art2Qlgd+KPfn3u
-	 mvCRQIcKLK+Uw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 316603924A53;
-	Fri,  4 Sep 2026 17:00:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dlp4D8Nr"
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7f57db8b5a4so1126000a34.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 10:30:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788543034; x=1789147834; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=+yXuzXtZ9/rSTTLjcAorY8DG6JyAA49nbzxpJiEv6qQ=;
+        b=dlp4D8NrLCfOaml28Rfdy2UhZF7UzLr8y67EdqEca+eOC6vhG/NIYXhT0BI/YIe1DG
+         0FRo3ZqT1MFTMyUmHteUK8cGOhsjMtoxEt7Vzdo47oxkEEb79Esj4qg6VKYLXBme/Dey
+         SLIQVcK3eBN1TlS6oS7xrEvOuTSAPu959xKfLhOhY/4vKju4y14xNKSxs3S+L7R8kXCk
+         8iWjcJl64v+zxd9EWmMFP2Cka3FdyGDWnSHQiR6ATzNMWXXrgCDWT0pxCSWhakswsG+G
+         obQvno+V7z20U1QE1/cnNmy4Pa8pZ3KCDCoxW5TyQuKb7woDkhFFN/NgfBWvpg3p9Nh5
+         zRYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788543034; x=1789147834;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+yXuzXtZ9/rSTTLjcAorY8DG6JyAA49nbzxpJiEv6qQ=;
+        b=OLftFFNXg/rpb7Mbik9XzFRrzE1Wd0Z5hN35Xvz0kHjYxyGP347nh+JzRyKrQh/Pl5
+         oAjLvQIYu232azYTiEjQXlqHjcLcULTkSzarHICoZ5RDzViFWfejH+fj6Tr5IXlsqjel
+         Urpmsq958yE5hoswa8RI6LI0logFSQvpvJMFS+i93FpuYLqlUM76PPL1Oy6sl9318/Ur
+         wuF4ZZcBHc7KwBVaM+Q56hm8ZWpRmATsdyZGRwy3bQDKaGOhrGzOrdw7BQKYStcSRXuR
+         wnchEfRfrOTeiEq6aZ6CyslcZvi9GnqryXdMBEz4swxAs/ulaD0+twZnGa86ElQb4ePI
+         L/tw==
+X-Forwarded-Encrypted: i=1; AKwUvBxrtpgmCu0tt1TgZA45IndiMav53e+G5QlzGjXP+gqHgswCYEO2vXCMOu66TRlA021quLWLQsFawCUhV6YNofc=@vger.kernel.org
+X-Gm-Message-State: AFuF++n8kwiF+WyMyxJX4VVrvSVQEdK5/1UKcVdYayOia21BDxdiUctG
+	OGSZNWvM4R3xC5Wh1ntP4daIoWqxFbrPnjAB+UjRIKN+v9J3B/9qYUJn
+X-Gm-Gg: AYBFou3CV0naPpa/1Diwb83WU87G0VFdpyRy+GTRaIzsxrB92IYSvkGziyaKqhVLu9+
+	y1rjTFv4ZlFWTIOcMCYCrO8RlDBL0EXYjaCZJcilbCNnScIdIE3yf46liFKFFdSbg0tYEflBDU7
+	xnhiojRDN63NA+JMbJ2FGOyv7fog0jzrKVKXsMRtPJwnlzpMz1Vhq1qrnU32Sq2z5SxVyD+R5qk
+	F76ATtwLsuAeF46eogflvup9V5qin43QcEgk9MNzeh/yiOMACR8Ag7W8pY1zmfYnX9RzHwW2Luj
+	BPh9OEgZMOuWEIA7SN3Pg8obDSqmskamHz3iOquEIyBVE/aW9jNqvO6nugJpkuyfPjp3T3XCa25
+	yuj6n163FAeDWAPTq0M6T/ZBxB2EKWBj6M3mlfi2lDIm594XYT5Ml4llJdo6mb+JslnnsEaeIt5
+	Uf2jUMHYqltE3PmsYVa9NUg3EQxEI7mtwVuevt94jHX6Plv7kQ2U5xeMq8X2jNtPuKvFU88C8kV
+	Z1cNsD86P8R/SrO59js
+X-Received: by 2002:a05:6830:6684:b0:7e4:163:49cc with SMTP id 46e09a7af769-7fa1e2c7eabmr7139441a34.7.1788543034170;
+        Fri, 04 Sep 2026 10:30:34 -0700 (PDT)
+Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:5b::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f9f6da9a3esm3454794a34.10.2026.09.04.10.30.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Sep 2026 10:30:33 -0700 (PDT)
+Date: Fri, 4 Sep 2026 10:30:28 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowangio@gmail.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+	virtualization@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	sargun@sargun.me, jlinbox@meta.com,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next 0/6] vsock: assign the guest vsock device to a
+ network namespace
+Message-ID: <apsANK7ySuRzzK0V@devvm29614.prn0.facebook.com>
+References: <20260902-vsock-guest-ns-v1-0-9995383e9a8b@meta.com>
+ <apqGcFDFm9_Wtw4q@sgarzare-redhat>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v9 0/8] bpf: add support for KASAN checks in
- JITed
- programs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178854122304.442795.2582545330493893301.git-patchwork-notify@kernel.org>
-Date: Fri, 04 Sep 2026 17:00:23 +0000
-References: <20260903-kasan-v9-0-2407fe99255a@bootlin.com>
-In-Reply-To: <20260903-kasan-v9-0-2407fe99255a@bootlin.com>
-To: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29_=3Calexis=2Elothore=40bo?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org,
-	=?utf-8?q?otlin=2Ecom=3E?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, tglx@kernel.org,
- bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- shuah@kernel.org, mingo@redhat.com, andreyknvl@gmail.com,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, laoar.shao@gmail.com,
- ebpf@linuxfoundation.org, bastien.curutchet@bootlin.com,
- thomas.petazzoni@bootlin.com, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <apqGcFDFm9_Wtw4q@sgarzare-redhat>
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Thu, 03 Sep 2026 15:51:29 +0200 you wrote:
-> Hello,
-> this is v9 of the series aiming to bring basic support for KASAN checks
-> to BPF JITed programs. Among a few minor optimizations, this revision
-> fixes some wrong kasan instrumentation on some unwanted stack access
-> (stack access ending up being instrumented AND targeting the wrong stack
-> offset). To mitigate this risk further, this revision introduces a
-> systematic KASAN check skip when (addr_reg == BPF_REG_FP || addr_reg ==
-> BPF_REG_PARAMS) in emit_kasan_check. This secondary check (on top of the
-> non_stack_access flag), should hopefully prevent the issues raised in
-> v8. I've also reworked the emit_st refactoring to realign it with
-> BPF_STX management in the x86 JIT compiler, as the "arguments on stack"
-> feature made me realize that it could be kept more symmetric with
-> BPF_STX; so I've dropped Ihor's Acked-by on this.
+On Fri, Sep 04, 2026 at 10:55:17AM +0200, Stefano Garzarella wrote:
+> On Wed, Sep 02, 2026 at 04:00:46PM -0700, Bobby Eshleman wrote:
+> > vsock network namespaces let a host put each VM in a namespace of its
+> > own. A guest has no equivalent yet. It has a single G2H device that
+> > cannot be assigned to a network namespace.
 > 
-> [...]
+> Thanks for this, I'll do a proper review next week, in the mean time some
+> comments below:
+> 
+> > 
+> > This series lets a guest move that device into a network namespace. A
+> > new ioctl on /dev/vsock, IOCTL_VM_SOCKETS_ASSIGN_G2H_NETNS, assigns the
+> > device to the namespace of the calling process. The namespace's existing
+> 
+> Why an ioctl?
+> 
+> I'm asking because I'd like to know if you've already considered any
+> alternatives (sysfs, netlink, etc.)
+> 
+> How do you think the ioctl should be used? Should we provide an userspace
+> tool, or extending some existing tools?
+> 
+> Thanks,
+> Stefano
 
-Here is the summary with links:
-  - [bpf-next,v9,1/8] bpf: mark instructions accessing program stack
-    https://git.kernel.org/bpf/bpf-next/c/d02bfbc49c8e
-  - [bpf-next,v9,2/8] bpf: add BPF_JIT_KASAN for KASAN instrumentation of JITed programs
-    https://git.kernel.org/bpf/bpf-next/c/90769ad233ca
-  - [bpf-next,v9,3/8] bpf, x86: refactor BPF_ST management in do_jit
-    https://git.kernel.org/bpf/bpf-next/c/b3b45e9d72df
-  - [bpf-next,v9,4/8] bpf, x86: emit KASAN checks in x86 JITed programs
-    https://git.kernel.org/bpf/bpf-next/c/92b73b708b17
-  - [bpf-next,v9,5/8] bpf, x86: enable KASAN for JITed programs on x86
-    https://git.kernel.org/bpf/bpf-next/c/cfc821c029fd
-  - [bpf-next,v9,6/8] selftests/bpf: make cmdline_contains stricter
-    https://git.kernel.org/bpf/bpf-next/c/040ef1f8b02e
-  - [bpf-next,v9,7/8] selftests/bpf: add helpers for KASAN in JIT testing
-    https://git.kernel.org/bpf/bpf-next/c/9123a4d4c4f3
-  - [bpf-next,v9,8/8] selftests/bpf: add tests to validate KASAN on JIT programs
-    https://git.kernel.org/bpf/bpf-next/c/2cbbb035977a
+Really only because /dev/vsock exists and the prior series used it.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Considering netlink, it might be the better option because there is a
+lot of prior art solving problems we might have in the future. For
+example, I was thinking about when users suddenly lose access to vsock,
+with just the current assign ioctl there is no way for apps or users to
+figure out why this happened. We can have an ioctl() setter for user,
+but in netdev world users can actually get a notification via netlink as
+to which namespace the device went to and what its ifindex is there (see
+__dev_change_net_namespace() for the RTM_DELLINK and RTM_NEWLINK
+messages). There is probably more, but that's the case that comes to
+mind.
 
+> 
+> > ns_mode then decides who may use it: a "global" namespace shares the
+> > device with every other global namespace, and a "local" namespace keeps
+> > the host connection to itself. The device starts out in the initial
+> > namespace, so until the ioctl is issued nothing has moved and no mode
+> > has changed. There is no explicit unassign as assigning the device back
+> > to the initial namespace is equivalent.
+> > 
+> > The ioctl requires CAP_NET_ADMIN in the initial user namespace.
+> > 
+> > Connections that can no longer reach the device after a move are reset,
+> > so that a namespace which has lost access cannot keep using a socket it
+> > opened while it still had access. Following netdevs, the device returns
+> > to the initial namespace when the namespace it was moved to is deleted.
+> > 
+> > Transports opt in through a new netns_assign_allow callback. Only
+> > virtio-vsock implements it here.
+> 
+> Why? (Not asking to support all the others, asking to explain the reason or
+> ask helps from others to extend it)
+> 
+> Thanks,
+> Stefano
 
+Sure, can add a note here about extending it. I just didn't want to
+implement code without having an environment allowing me to test it.
+
+Best,
+Bobby
