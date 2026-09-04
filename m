@@ -1,111 +1,126 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3FF34AD7CF
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 15:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F5CB3ACA4B;
+	Fri,  4 Sep 2026 16:06:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788536486; cv=none; b=TGL5azRu3j4VUvJ5iQaGWpnazQnK6tfyll/QmnUZbh7ZhNNJJAuQwawqdUcODgXkixKWzxvAy4VeKALvl0TyRaS4sPxThxWaZ8b24C+4Cw5IYgRdYZBpU0Zr/gWohaRrD1N9GgWZxScHbfq9JhoQhItxWogzazotrVucoKEffek=
+	t=1788538000; cv=none; b=XW5XykRisGHZRhH++zFFu45/uCMdNC5LlXpa0D+P8l2zY9nVJxMw1fn9HX/6jeMW/ZpF/jSMenK1Oml8Q13y8tDjW6vKDiM6CV1nh9NTC4La3D7Z2vhA80neU6m756ybRoIDiyaKeo7rD/Vu4uLN8VwN0dhhxyT5Ip77hcldpRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788536486; c=relaxed/simple;
-	bh=lWjHP6alA8c9bfJKDwOOPP5dbXqNnIjRZYB6Isxoog8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MGj3/S09Ex1Nk9bSoh70XwaJmCJxVhgYnblWAcB/ye4ogkMo1qbfaArFlKAqfctgfeCnNNTge+U3Pjv09YWrgpQfqCKJDJ1pmIpMBVkIrycsKJQMe+n7maSEdHWmr6YaL2/cLEYuoAZEzOejhYOgj087kfTsJIfWz+DuG0se+nY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EkHMSSsv; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788538000; c=relaxed/simple;
+	bh=8FSb/gjuciMqhZIT4RXlFvIKNcHmDi84w1BldFvuDhY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sh/qN0alBc0a63zT/HPfMMRa4x3ha6j7NVeMS2us1rZ6NZfxV5Ip5df1wjlyySXZqLcyilEEGIShWyCgM9YWeEQu5sE5sTEv9ZQ6TVD/BGpYCNhb5jNG0omKeiuWapAkcV+BoXAq9ZyhlDAJdKaZUDfqxcfLplEB1ix+yjSH63Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CFVs81Nr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EkHMSSsv"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4956869750eso8733035e9.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 08:41:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788536482; x=1789141282; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BjL2pXlHfuAQFc/3GOIX7IQe1y00mLqM+xdgaQa2Gmw=;
-        b=EkHMSSsvR4nCtFi2868GfW6A8fuo/RlIkZyw92xRmd26rh6cRQZVBbqlX78KjUpKWr
-         f6loln11kyYdPp/LfWanh5DZHQKcMJmDZDKsKVpZkgfce7DUZlCPQfyZP+pOiFbnR0Ns
-         DzTQejzSHS37UEbMJOsTNt3zTcF1YESm8VUX7NUlJHMAtfnJ5/SiEuUvyhofXIlFDzTU
-         BAYSae7Wloa6PMAtoDUlDMBcDquB/YzFbck5qHpZXnWm9JfsYM6Z67TWC0rMHk0PatdW
-         h+hefLt5KHlfNNu2Vug34cS/0VCsIgZUz5eR/W8wm60xiz0CWlm8ZN9c+0LOV/BFyHYE
-         26Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788536482; x=1789141282;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=BjL2pXlHfuAQFc/3GOIX7IQe1y00mLqM+xdgaQa2Gmw=;
-        b=h9Q1oG7uOqcZOY4CKa3r5VnckqARE2ZdrPJaS6l12+fWQtoa+Ug1ZB+Aw8gajnGq2I
-         B21j3q2mxdyCQayIsylYHF3qNXG83CpECDo84lxf+bZWEOKZT/eiQIFRTiijvinQyE/7
-         mOp1Wwr6EHvc2WI5RKq5e8VnLe7r5aK7lF5GMKYWexvuqn3uH1Ct8Y5RKHD5UJljkpY2
-         d5Xue52WW3rzPWRBcm2lYclcVu71wmqgXyktY6Us/OLcnE8QV+wGjOfUKjCF6SBAlVjH
-         o48pkSGREratHZrExF3ZiZMRmopJ1w13jnS2x3WNCJc7ub1Dqt7LQy/k96cHju1NyfWg
-         PEnQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxnHUiB7oLMYyBm/SlTRjJbDhWzkDTxr+Hl7s4XYbJcRuKoWRsjBfrxa9DwKqFwNAtZc/QzS3m0aYDNu9GRMTM=@vger.kernel.org
-X-Gm-Message-State: AFuF++mOif7GIPdhEZuIoqA+YaoMACHlmIGOJ4lU4Nw66KnK39xtW3md
-	KEUUGcCiQkk/pFJ9nAJNOSxqFGxBZVuugC6UUNxkgfcRfbUDXMUOmzpGB0ecTbcX
-X-Gm-Gg: AYBFou15+an8gZ0rWcPpLZeBODVQpDHRuF5hHS4w9SvJUyXzmEbXCzDC3cpoOwm3D7w
-	ii7PHSLv2swexdwOIjjKT9rXxgRjFuXGLkIbK4hksHWyWHYfykUxqR1MHDkDNnYHb/ZNsVbAP3j
-	NIWvxge0ZS17pZTN7lRXdujlpOrD3L64EZQJA4Kz6HJA/f/bF3foDGSpj+WEu4Xv7kIEtj9S3+c
-	gWPdPcTuZrjB1ikKV94CfxxRjqnuoZz7N2vWhoL09oW8lYU67qw8LtJoXcYLKXrIOY88U0v1taf
-	jQkiS5VyYzjDxQWa0ZtZea7f65RnrfVdZk/7WfkGCKzBP3UQ/shAnh8f8At6hvgH4zf3t7yxIsK
-	4Xi3lnpyqzQKTtbHhEz3jZ0ejNdYwtD4e4X3F8Xuj3AqC0ngJwyL2MDsBq4sUgTbxXo+QmRLwTy
-	pWrtK0mm+g+Mfqb73XeZEJXsiHYryr6OTceU3hrR8Y7w3Ip7GBtY2Pni1tKW1A8kuTzR5K8g==
-X-Received: by 2002:a05:600c:3495:b0:49c:dadb:18a7 with SMTP id 5b1f17b1804b1-49cf8244260mr66326485e9.10.1788536482119;
-        Fri, 04 Sep 2026 08:41:22 -0700 (PDT)
-Received: from fedora ([109.77.55.89])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49d00031c95sm5959525e9.11.2026.09.04.08.41.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 08:41:21 -0700 (PDT)
-From: Paul Dolan <paul.dolan.dev@gmail.com>
-To: Kees Cook <kees@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/exec: reject zero as power-of-two alignment
-Date: Fri,  4 Sep 2026 16:40:57 +0100
-Message-ID: <20260904154057.160753-1-paul.dolan.dev@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CFVs81Nr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B31E1F00A3D;
+	Fri,  4 Sep 2026 16:06:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788537990;
+	bh=89DU0GapqiOZlaA7jU9CQs5/T4ZZ4b0KeYVQAFryc+c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=CFVs81Nrix1xWs3kup1P05Krc0JJYYhS/ViPHckidBWbZUUGJsinV0OpG0P2Yp0BM
+	 Yi+nMeESljaXeDglpK+m7DNQxDrSYy8UGDgOQoERJShk9RAc41+SjMQlXp7YkTY/cs
+	 KX7Zc2qg+zrln15rB1FL9dhfPpQNrATWQEC0mVvJPFKr8EUGnQG1Al5bkXiPq+CkAV
+	 8ASReE6E/YXuMju48gmLyNRm35+cwsjDqveHmTZAEelBBwGoMRCiXvPw2ZAyXgeW7s
+	 FNu/myp6GFkUNY3kus7xr2P0HhWcShI8J6dlb8+vBIMclZAmORFzAg8TXYBEMMFa6n
+	 RwUUxSxh+CnkA==
+Date: Fri, 4 Sep 2026 17:06:19 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "Darrick J. Wong" <djwong@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Jan Kara <jack@suse.cz>, Jakub Kicinski <kuba@kernel.org>, 
+	Namjae Jeon <linkinjeon@kernel.org>, Hisam Mehboob <hisamshar@gmail.com>, 
+	Martin =?utf-8?Q?Kepplinger-Novakovi=C4=87?= <martink@posteo.de>, Amir Goldstein <amir73il@gmail.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Eric Biggers <ebiggers@kernel.org>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, David Howells <dhowells@redhat.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Theodore Ts'o <tytso@mit.edu>, 
+	Catalin Iacob <iacobcatalin@gmail.com>, Stephen Hemminger <stephen@networkplumber.org>, 
+	Andrew Lunn <andrew@lunn.ch>, "Maciej W. Rozycki" <macro@orcam.me.uk>, 
+	Andrei Vagin <avagin@gmail.com>, Wei Yang <richard.weiyang@gmail.com>, 
+	Bhavik Sachdev <b.sachdev1904@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Wang Yan <wangyan01@kylinos.cn>, Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>, 
+	Malaya Kumar Rout <malayarout91@gmail.com>, linux-doc@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Ethan Nelson-Moore <enelsonmoore@gmail.com>, Luis de Bethencourt <luisbg@kernel.org>, 
+	Salah Triki <salah.triki@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH] bfs: remove the filesystem
+Message-ID: <aprr9xUwEmjA1N5T@gremlin>
+References: <20260904082954.48738-1-enelsonmoore@gmail.com>
+ <20260904-hinnimmt-triumphieren-handgefertigt-4e51fe2ed659@brauner>
+ <20260904151054.GG6047@frogsfrogsfrogs>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260904151054.GG6047@frogsfrogsfrogs>
 
-The load_address test reports whether an alignment was found separately
-from whether that alignment is a power of two. However, the usual
-x & (x - 1) check also evaluates to zero when x is zero, causing a
-missing alignment to be reported as a power of two.
+On Fri, Sep 04, 2026 at 08:10:54AM -0700, Darrick J. Wong wrote:
+> On Fri, Sep 04, 2026 at 12:43:09PM +0200, Christian Brauner wrote:
+> > On Fri, 04 Sep 2026 01:29:19 -0700, Ethan Nelson-Moore wrote:
+> > > bfs: remove the filesystem
+> >
+> > I agree.
+>
+> At the moment, I don't.  Nowhere in this thread does anyone mention what
+> someone with a B(oot)FS filesystem image should do if they want to
+> extract whatever's stored in the filesystem.  Are there userspace tools
+> for that purpose (ala efs)?  Does "binwalk -e $bfs_image" suffice for
+> that purpose?  Or is there solid evidence that there isn't even a single
+> user (ala freevxfs) who strongly wants it to stay in?
+>
+> I'm all for getting rid of old cruft but there still needs to be a
+> documented offramp for users.
 
-Require the alignment to be non-zero when reporting the power-of-two
-result.
+Use an older/downstream version of linux? :)
 
-Fixes: b57a2907c9d9 ("selftests/exec: Build both static and non-static load_address tests")
-Signed-off-by: Paul Dolan <paul.dolan.dev@gmail.com>
----
- tools/testing/selftests/exec/load_address.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+It's like the museum piece arch stuff - people argue vigorously in favour of
+nommu (which btw is a variety of linux that _doesn't implement forking_ :)))
+gesticulating at talks given at conferences etc.
 
-diff --git a/tools/testing/selftests/exec/load_address.c b/tools/testing/selftests/exec/load_address.c
-index 55fd3732f029..e279d85e8f19 100644
---- a/tools/testing/selftests/exec/load_address.c
-+++ b/tools/testing/selftests/exec/load_address.c
-@@ -92,9 +92,10 @@ int main(int argc, char **argv)
- 
- 	/* Is the alignment sane? */
- 	pow2 = extracted.alignment & (extracted.alignment - 1);
--	ksft_test_result(pow2 == 0,
--			 "Alignment is%s a power of 2: %#llx\n",
--			 pow2 == 0 ? "" : " NOT", extracted.alignment);
-+	ksft_test_result(extracted.alignment != 0 && pow2 == 0,
-+		"Alignment is%s a power of 2: %#llx\n",
-+		extracted.alignment != 0 && pow2 == 0 ? "" : " NOT",
-+		extracted.alignment);
- 
- 	/* Is the load address aligned? */
- 	misalign = extracted.load_address & (extracted.alignment - 1);
--- 
-2.55.0
+But then never quite answer the 'why not use an older version of linux' or 'why
+not just maintain it downstraem for the 3 people who need it'.
 
+Also worth consider what the Venn diagram overlap of bfs users and people
+running even-vaguely-tip kernels/likely to ever upgrade is. Quite likely zero I
+expect?
+
+I get the desire not to lose people their data, but the code's not gone away
+forever :)
+
+>
+> --D
+>
+> > ---
+> >
+> > Applied to the vfs-7.4.bfs branch of the vfs/vfs.git tree.
+> > Patches in the vfs-7.4.bfs branch should appear in linux-next soon.
+> >
+> > Please report any outstanding bugs that were missed during review in a
+> > new review to the original patch series allowing us to drop it.
+> >
+> > It's encouraged to provide Acked-bys and Reviewed-bys even though the
+> > patch has now been applied. If possible patch trailers will be updated.
+> >
+> > Note that commit hashes shown below are subject to change due to rebase,
+> > trailer updates or similar. If in doubt, please check the listed branch.
+> >
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+> > branch: vfs-7.4.bfs
+> >
+> > [1/1] bfs: remove the filesystem
+> >       https://git.kernel.org/vfs/vfs/c/e36781a626b2
+> >
+> >
+
+--
+Cheers, Lorenzo
