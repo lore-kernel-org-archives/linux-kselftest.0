@@ -1,42 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77E85328C7;
-	Fri,  4 Sep 2026 22:25:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E8C533590;
+	Fri,  4 Sep 2026 22:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788560741; cv=none; b=qaocKPryKu3WvP2b2bdrbzltWDSuUCvyEh57UqhIJZ4bMR32LaUKmZr8G9pn8Pcp+6blSzKeayzNBGuyGiDnZzdbfSf3V7pZzSKkt+mUif02no7UEQYZljHD5JGA9rDMmHZtMgTfvNnvlGinHhA8uhEuohtNNf5ZwYQFTIJFI18=
+	t=1788560743; cv=none; b=KrJ4sx7YpOnqFRiwoYFLk0mdAO4MRB1JDhVf53fZsyGw7nV9cq5Xi9FdFKNFV3+Vmn2jxsHzgjtryVSEFJk0M29ZunrBhERHagW79Ucf+T8HBRtoyFuD6vbU/1AW5VH9uM1Oon5UjNDw2PWXkaOOLjBlaZph0lP5p/uXU5UKPNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788560741; c=relaxed/simple;
-	bh=qvsT0W+v5bzqv6EBQ6wEE6IZX3pigF4LBvlOFMiTfXI=;
+	s=arc-20240116; t=1788560743; c=relaxed/simple;
+	bh=EBcF3TiOg0WEPl4LjWHMVEni9IEe/s6n8IQy68eFBws=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Z6RT2vmexYDJbcNSbK9DWQYL7/fdzRfzZwsPZt5N6ociOVAgjWeN7+GBZHPLBAlDmv8fBctxc2W/gYlVvyuMjWjwEvWqMZVPrABuDSMo3VMEaDkJBjTqg8dQbMb7ypA735KoJNaDRHHKFZ4M99KtKyhzlQjn2vmqMSN9U/7alcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OK2UNyrC; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=nGmYZzssUJOB7UZPuUmAwR4jtyB2HyT+7jgI0gJNoh/4l+dLMpmvWnVSaFu2VMsS2vFmcXvCDRDpoJ2mweWhvPym5sbS5ELJ13f0xGO16mTDlXtH6TfW+w/+a+YfjqVKFmtBJmu6dv3ZgoGzKn3bFKDO1N3L/LLrlNK95xp+IUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ng9kM22j; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OK2UNyrC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2810F1F00A3D;
-	Fri,  4 Sep 2026 22:25:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ng9kM22j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A1241F00A3F;
+	Fri,  4 Sep 2026 22:25:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788560738;
-	bh=BODUg4diNtAxt2eo94DXsAxAYTsQqkqw87fLf07CnyY=;
+	s=k20260515; t=1788560739;
+	bh=suPu0cdQDOTwATm9T47irhtcJrPVB2hrMYZxY2+mQ+8=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=OK2UNyrCd2VmypIPMDK1eVKp8GX/FxDc9eVLE6bCYGShkrSAsHMwiy4xAqx4k9V5f
-	 +y7+XFYBg4lu34ACFtV1l/WCnEjtO0m4qBVoZmdX8voFMrYa2jzJC5rSQdIue4GJSt
-	 NMpre8kV5Slds1jbvD4wkBQdoP8zrgLXZxhRWabtMNzFJqBIhwQvlGKdnDCwSRaJeQ
-	 CGVt54c8nLBlIGAZDaHJ2jh9I25A4v2avyqqJQJTgGoC8tkShDnrDA2qjKfKjbI2S+
-	 novY6YSXEh1diE0Dh+ylhzc561JzXvrpATZzgh8/eeSxGIoKPvR210qcF1hkL5W2Zs
-	 C7jIrrPOnBbIA==
-Subject:
- Re: [PATCH net-next v1 1/2] netdevsim: add TLS device offload emulation
+	b=ng9kM22jM37bbeaTPEjZlcsKXw++97TMsC2O2m1T5fDrXDBTjUOkGVJ/Y/WZKBBfD
+	 pYPPa/Ye94dA0gDkeISdHtjMRpx86mUXIRhKy6Y2/QExxO1VY1qTTHiXAI7t+EVK+e
+	 VI+If2Vnjyucye4NlzGJPu/dTNl17OwurpdAmF3BsYO/1gNjwg6jsBxy1DUUsqeSoG
+	 fND5EFTFmFLLEzVsFqIUv2CQIWbOphgNNI4Xxz6h+qqyESJDGNsk3KspIbFXCRxWe2
+	 Vsk0kj4cVhODJxoZanwOkLNVUSfjmwfU44WLrZE+tzuiubNq724dBssaojr0yjQwBT
+	 hgZdTxi1Q4O9g==
+Subject: Re: [PATCH net-next v1 2/2] selftests: netdevsim: add a kTLS device
+ offload test
 From: netdev-bot+sashiko@kernel.org
 To: jiayuan.chen@linux.dev
 Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
  edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Fri, 04 Sep 2026 22:25:37 +0000
-Message-ID: <178856073774.219967.3771752588848719293@kernel.org>
-In-Reply-To: <20260901154914.11637-2-jiayuan.chen@linux.dev>
-References: <20260901154914.11637-2-jiayuan.chen@linux.dev>
+Date: Fri, 04 Sep 2026 22:25:38 +0000
+Message-ID: <178856073881.219967.7291257459649538794@kernel.org>
+In-Reply-To: <20260901154914.11637-3-jiayuan.chen@linux.dev>
+References: <20260901154914.11637-3-jiayuan.chen@linux.dev>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -50,308 +50,849 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 5 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 3
+Critical: 0 · High: 0 (1) · Medium: 2 · Low: 3
 
-- [Medium] The whole RX half of the emulation is a dead decision: every
-  frame nsim_tls_rx() inspects already has skb->decrypted == 1 set by…
-- [Medium] nsim_tls_tx_zero_tags() aborts the whole record walk with
-  'break' as soon as tls_get_record() returns NULL or a start-marker…
-- [Low] Claim that the new TLS emulation has no in-tree consumer / no
-  selftest, so the commit message's stated purpose (code coverage and…
-- [Low] The lock-scope annotation on the new struct nsim_tls in
-  drivers/net/netdevsim/netdevsim.h ('spinlock_t lock; /* protects conns…
-- [Low] nsim_tls_tx_zero_tags() rewrites tag_size payload bytes (the
-  auth-tag placeholder, memset at drivers/net/netdevsim/tls.c:188) from…
+- [Medium] The `run_pair nosample` run (offload features turned off) has
+  no rendezvous between the two helpers: both are expected to abort…
+- [Medium] The payload verification for splice fragments generates
+  identical data for all fragments, which silently defeats the test's…
+- [Low] tls.sh reuses the global, fixed network-namespace names
+  `nssv`/`nscl` and exactly the same random netdevsim device-ID ranges…
+- [Low] Two assertions inspect only one of the two ports/namespaces even
+  though their messages imply both: (a) the `tls-hw-tx-offload`/`tls-hw-…
+- [Low] The "per-port debugfs tls file exists" assertion is dead code: a
+  few lines earlier the script already does `if [ !
+
+Pre-existing issues:
+- [High] The new test is the first in-tree user of setsockopt(SOL_TLS,
+  TLS_TX_MAX_PAYLOAD_LEN) on a device-offloaded (TLS_HW) socket, and it…
 
 --
 
-netdevsim: add TLS device offload emulation
+selftests: netdevsim: add a kTLS device offload test
 
-This adds an emulated kTLS device offload to netdevsim: tlsdev_ops plus
-NETIF_F_HW_TLS_TX/RX so kTLS sockets over netdevsim take the device path,
-with TX zeroing the auth tag placeholder and RX marking skbs decrypted.
-A per-port debugfs "tls" file exposes the connection list and counters.
+Adds tls.sh plus the tls_offload helper under
+tools/testing/selftests/drivers/net/netdevsim/, running kTLS over a linked
+netdevsim pair with one port per netns.  The helper asserts via
+/proc/net/tls_stat that both directions landed on the device path, then
+exercises bulk transfers, MSG_MORE writes, splice() with TLS_TX_ZEROCOPY_RO
+and a minimal record limit, plus the ethtool off/on path.
 
-A few questions below.
+A few questions about the new test below.
 
-> diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-> index b4a99f3ceac60..b9e0a2f5b18fc 100644
-> --- a/drivers/net/netdevsim/netdev.c
-> +++ b/drivers/net/netdevsim/netdev.c
-> @@ -151,6 +151,8 @@ static netdev_tx_t nsim_start_xmit(struct sk_buff *skb, struct net_device *dev)
->  	if (dr)
->  		goto out_drop_free;
->  
-> +	nsim_do_tls(skb, ns, peer_ns);
-> +
->  	rxq = skb_get_queue_mapping(skb);
->  	if (rxq >= peer_dev->num_rx_queues)
->  		rxq = rxq % peer_dev->num_rx_queues;
-
-[ ... ]
-
-> diff --git a/drivers/net/netdevsim/netdevsim.h b/drivers/net/netdevsim/netdevsim.h
-> index 55aec41237b9b..b4646c7061bd0 100644
-> --- a/drivers/net/netdevsim/netdevsim.h
-> +++ b/drivers/net/netdevsim/netdevsim.h
-> @@ -56,6 +56,20 @@ struct nsim_ipsec {
->  	u32 tx;
->  };
->  
-> +struct nsim_tls {
-> +	struct list_head conns;
-> +	spinlock_t lock;	/* protects conns and the counters below */
-> +	struct dentry *dfile;
-> +	u32 count;
-> +	u32 tx_conn;
-> +	u32 rx_conn;
-> +	atomic64_t tx_packets;
-> +	atomic64_t tx_bytes;
-> +	atomic64_t rx_packets;
-> +	atomic64_t rx_bytes;
-> +	atomic64_t resyncs;
-> +};
-
-[Severity: Low]
-This isn't a bug, but does the annotation match the code?  Of the fields
-below the lock, only count, tx_conn and rx_conn are updated under
-ns->tls.lock (nsim_tls_dev_add(), nsim_tls_dev_del(),
-nsim_tls_teardown()).
-
-The five atomic64_t counters are only ever touched from the lockless xmit
-path, in nsim_tls_tx(), nsim_tls_rx() and nsim_tls_dev_resync():
-
-	atomic64_inc(&ns->tls.tx_packets);
-	atomic64_add(skb->len, &ns->tls.tx_bytes);
-
-and count is additionally read with no lock held in nsim_tls_rx():
-
-	if (!READ_ONCE(ns->tls.count))
-		return;
-
-Would "protects conns, count, tx_conn and rx_conn" describe the actual
-contract better, so nobody later adds a plain counter there and updates it
-from the xmit path?
-
-[ ... ]
-
-> diff --git a/drivers/net/netdevsim/tls.c b/drivers/net/netdevsim/tls.c
-> new file mode 100644
-> index 0000000000000..079d30a86b5d6
+> diff --git a/tools/testing/selftests/drivers/net/netdevsim/tls.sh b/tools/testing/selftests/drivers/net/netdevsim/tls.sh
+> new file mode 100755
+> index 0000000000000..59b7d1c0e5148
 > --- /dev/null
-> +++ b/drivers/net/netdevsim/tls.c
-> @@ -0,0 +1,482 @@
+> +++ b/tools/testing/selftests/drivers/net/netdevsim/tls.sh
+> @@ -0,0 +1,334 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +#
+> +# Exercise netdevsim's emulated kTLS device offload over a linked
+> +# netdevsim pair, one port per network namespace.
+> +#
+> +# shellcheck disable=SC2154 # ksft_skip comes from lib.sh
+> +
+> +lib_dir=$(dirname "$0")
+> +# shellcheck source=./../../../net/lib.sh
+> +# shellcheck disable=SC1091
+> +source "$lib_dir"/../../../net/lib.sh
+> +
+> +# Device IDs and the nssv/nscl namespaces are picked the same way as peer.sh.
+> +NSIM_DEV_1_ID=$((256 + RANDOM % 256))
+> +NSIM_DEV_1_SYS=/sys/bus/netdevsim/devices/netdevsim$NSIM_DEV_1_ID
+> +NSIM_DEV_2_ID=$((512 + RANDOM % 256))
+> +NSIM_DEV_2_SYS=/sys/bus/netdevsim/devices/netdevsim$NSIM_DEV_2_ID
 
 [ ... ]
 
-> +static bool nsim_tls_rx_offloaded(struct netdevsim *ns,
-> +				  const struct nsim_tls_tuple *t)
+> +# Each resource is handed to defer only once it exists, so a run that loses a
+> +# race for one of the global names does not tear down the winner's.
+> +setup()
 > +{
-> +	struct nsim_tls_conn *conn;
+> +	set -e
 > +
-> +	list_for_each_entry_rcu(conn, &ns->tls.conns, list) {
-> +		if (conn->dir != TLS_OFFLOAD_CTX_DIR_RX ||
-> +		    conn->lport != t->dport || conn->rport != t->sport ||
-> +		    !ipv6_addr_equal(&conn->laddr, &t->daddr) ||
-> +		    !ipv6_addr_equal(&conn->raddr, &t->saddr))
-> +			continue;
-> +
-> +		/* Anything before start_sn predates the offload and has to
-> +		 * stay encrypted.  Only worth asking once: TCP sequence
-> +		 * numbers wrap, and a stream that has moved 2G past a
-> +		 * sequence it is still compared against looks like it went
-> +		 * backwards.
-> +		 */
-> +		if (!READ_ONCE(conn->started)) {
-> +			if (before(t->seq, conn->start_sn))
-> +				return false;
-> +			WRITE_ONCE(conn->started, true);
-> +		}
-> +
-> +		return true;
-> +	}
-> +
-> +	return false;
-> +}
+> +	echo "$NSIM_DEV_1_ID" > "$NSIM_DEV_SYS_NEW"
+> +	defer nsim_dev_del "$NSIM_DEV_1_ID"
+> +	echo "$NSIM_DEV_2_ID" > "$NSIM_DEV_SYS_NEW"
+> +	defer nsim_dev_del "$NSIM_DEV_2_ID"
 
 [ ... ]
 
-> +static void nsim_tls_tx_zero_tags(struct sk_buff *skb)
-> +{
-
-[ ... ]
-
-> +	spin_lock_irqsave(&tx_ctx->lock, flags);
-> +	while (before(seq, end)) {
-> +		struct tls_record_info *record;
-> +		skb_frag_t *frag;
-> +		u64 rcd_sn;
-> +
-> +		record = tls_get_record(tx_ctx, seq, &rcd_sn);
-> +		if (!record || tls_record_is_start_marker(record))
-> +			break;
-
-[Severity: Medium]
-Can this break put un-zeroed tag placeholders on the wire?
-
-tls_get_record() returns the start marker record for any sequence before
-start_offload_tcp_sn:
-
-net/tls/tls_device.c:tls_get_record() {
-	...
-	if (likely(!tls_record_is_start_marker(info))) {
-	...
-}
-
-include/net/tls.h:
-static inline bool tls_record_is_start_marker(struct tls_record_info *rec)
-{
-	return rec->len == 0;
-}
-
-So for a segment that starts with pre-offload bytes and continues into the
-first offloaded record, the walk breaks on the very first iteration and no
-record in that skb gets its tag placeholder cleared, even though the start
-marker's end_seq gives the boundary to continue from.
-
-The helper returns void, nsim_tls_tx() still returns true and
-nsim_start_xmit() forwards the frame, so the uninitialized page frag bytes
-reach the peer's receive path where AF_PACKET, tc/BPF or XDP in that netns
-can read them.  That is the leak the commit message says it closes:
-
-    "the placeholder the stack leaves for it comes from a page frag that is
-    never zeroed, so clear it instead of putting stale page contents on the
-    wire"
-
-Would it be better for this helper to report failure and have the skb
-dropped, or to skip past the start marker via record->end_seq and keep
-walking?
-
-> +
-> +		frag = &record->frags[record->num_frags - 1];
-> +		memset(skb_frag_address(frag) + skb_frag_size(frag) - tag_size,
-> +		       0, tag_size);
+> +	ip netns add nssv
+> +	defer ip netns del nssv
+> +	ip netns add nscl
+> +	defer ip netns del nscl
 
 [Severity: Low]
-This isn't a bug in the supported setup, but the memset rewrites tag_size
-payload bytes from inside ndo_start_xmit without touching the L4 checksum.
+The fixed names nssv and nscl, and the device ID ranges $((256 + RANDOM %
+256)) / $((512 + RANDOM % 256)), are exactly the ones peer.sh in the same
+directory already uses.
 
-netdevsim has NETIF_F_HW_CSUM in hw_features (nsim_setup()), so "ethtool -K
-nsimX tx off" is accepted.  netdev_fix_features() then also clears
-NETIF_F_HW_TLS_TX, but tls_dev_event() only re-checks that tlsdev_ops
-exist, so a live socket keeps ctx->netdev pointing at this device and keeps
-taking the device TX path.  With csum offload gone, skb_checksum_help()
-runs before ndo_start_xmit and computes over the un-zeroed placeholder;
-nsim_tls_tx_zero_tags() then changes those bytes, and since netdevsim never
-sets CHECKSUM_UNNECESSARY on receive the peer's TCP drops every segment and
-the connection stalls.
+What happens when a stale nssv or nscl namespace is left behind by an
+aborted peer.sh or tls.sh run, or when peer.sh runs concurrently?  setup()
+runs under set -e, so ip netns add nssv (or the new_device write) failing
+aborts the script mid-setup with a raw shell error and no PASS, FAIL or
+SKIP line at all.
 
-The sibling emulation in the same driver repairs this, nsim_do_psp():
-
-		uh->check = udp_v4_check(udplen, iph->saddr, iph->daddr, csum);
-		...
-		skb->ip_summed	= CHECKSUM_NONE;
-
-Would skipping (or compensating for) the memset when skb->ip_summed !=
-CHECKSUM_PARTIAL be worth doing here?
-
-> +
-> +		seq = record->end_seq;
-> +	}
-> +	spin_unlock_irqrestore(&tx_ctx->lock, flags);
-> +}
+Would setup_ns() from the already sourced tools/testing/selftests/net/lib.sh
+be preferable here, since it generates per-run unique namespace names?
 
 [ ... ]
 
-> +static bool nsim_tls_tx(struct netdevsim *ns, struct sk_buff *skb)
+> +run_pair()
 > +{
-> +	if (!tls_is_skb_tx_device_offloaded(skb))
-> +		return false;
-> +
-> +	/* The question tls_validate_xmit_skb() asks: on anything other than
-> +	 * the device the context is attached to, the core has already
-> +	 * encrypted the record in software, so it is real ciphertext and none
-> +	 * of our business.
-> +	 */
-> +	if (rcu_dereference_bh(tls_get_ctx(skb->sk)->netdev) != ns->netdev)
-> +		return false;
+> +	local sample="${1:-sample}"
+> +	local srv_rc cli_rc ready=1
 
 [ ... ]
 
-> +static void nsim_tls_rx(struct netdevsim *ns, struct sk_buff *skb)
-> +{
-> +	struct nsim_tls_tuple t;
+> +	if [ "$sample" = "sample" ]; then
+> +		# Comfortably longer than the helpers take to get to the
+> +		# barrier.  Timing out here means a sample would be stale, so
+> +		# fail the run rather than assert on it.
+> +		slowwait "$READY_TIMEOUT_SEC" both_ready >/dev/null || ready=0
+> +		if [ "$ready" -eq 1 ]; then
+> +			CONNS_1=$(dbg_field "$NSIM_DEV_1_TLS" count)
+> +			CONNS_2=$(dbg_field "$NSIM_DEV_2_TLS" count)
+> +			: "${CONNS_1:=0}"
+> +			: "${CONNS_2:=0}"
+> +		fi
+> +	fi
+> +	touch "$SYNCDIR/go"
+
+[ ... ]
+
+> +# The offload has to be advertised, and on by default like the other
+> +# netdevsim crypto offloads.
+> +for f in tls-hw-tx-offload tls-hw-rx-offload; do
+> +	[ "$(feature nssv "$NSIM_DEV_1_NAME" "$f")" = "on" ]
+> +	check "$f advertised and on by default" $?
+> +done
+
+[Severity: Low]
+This loop only queries feature nssv "$NSIM_DEV_1_NAME", but the message says
+the feature is advertised and on by default without qualifying which port.
+Should the client port in nscl be checked too, the way set_features() does?
+
+The same one-sided pattern shows up later for the current-context counters:
+
+	[ "$(tls_stat nssv TlsCurrTxDevice)" -eq 0 ] && \
+		[ "$(tls_stat nssv TlsCurrRxDevice)" -eq 0 ]
+	check "no device contexts left behind" $?
+
+/proc/net/tls_stat is per netns, and enable_ktls() installs TX and RX
+contexts on both ends, so would a context left behind on the client port in
+nscl pass unnoticed here?
+
 > +
-> +	/* Not every port registers the offload, and one that does not never
-> +	 * initializes the list head, so gate on the count.  It is the
-> +	 * cheaper test anyway.
-> +	 */
-> +	if (!READ_ONCE(ns->tls.count))
-> +		return;
+> +[ -e "$NSIM_DEV_1_TLS" ]
+> +check "per-port debugfs tls file exists" $?
+
+[Severity: Low]
+Is this assertion reachable in the failing state?  A few lines earlier the
+script already does:
+
+	if [ ! -e "$NSIM_DEV_1_TLS" ]; then
+		echo "SKIP: netdevsim built without TLS device offload (CONFIG_TLS_DEVICE=n)"
+		exit "$ksft_skip"
+	fi
+
+so by the time [ -e "$NSIM_DEV_1_TLS" ] runs it is always true, and the
+check only adds to num_pass.
+
+Meanwhile $NSIM_DEV_2_TLS is never checked for existence, although
+all_ctx_released() and the tx_packets/rx_packets assertions parse it.  If
+that file is missing or a field name changes, dbg_field() returns an empty
+string and [ "" -eq 0 ] / [ "" -ge 1 ] emit "integer expression expected"
+rather than a clean FAIL.  Should the existence check cover port 2 instead?
+
+[ ... ]
+
+> +[ "$(tls_stat nssv TlsCurrTxDevice)" -eq 0 ] && \
+> +	[ "$(tls_stat nssv TlsCurrRxDevice)" -eq 0 ]
+> +check "no device contexts left behind" $?
+
+[ ... ]
+
+> +# Turning the features off has to make the offload refuse the connection;
+> +# the test binary insists on the device path, so it must now fail.
+> +set_features off
+> +check "both offload features turned off on both ports" $?
 > +
-> +	if (!nsim_tls_parse(skb, &t))
-> +		return;
+> +run_pair nosample
+> +rc=$?
+> +[ "$rc" -ne 0 ]
+> +check "offload declined once the feature is off" $?
 > +
-> +	if (!nsim_tls_rx_offloaded(ns, &t))
-> +		return;
-> +
-> +	skb->decrypted = 1;
+> +# Both directions on both ends have to have landed on the software path.
+> +[ "$(tls_stat nssv TlsTxSw)" -ge 1 ] && [ "$(tls_stat nssv TlsRxSw)" -ge 1 ] && \
+> +	[ "$(tls_stat nscl TlsTxSw)" -ge 1 ] && \
+> +	[ "$(tls_stat nscl TlsRxSw)" -ge 1 ]
+> +check "software path used when offload is off" $?
 
 [Severity: Medium]
-Is skb->decrypted already 1 by the time this runs, making the whole RX
-decision unobservable?
+Can this assertion fail intermittently?  In nosample mode run_pair() skips
+the slowwait/both_ready barrier entirely, and neither helper reaches
+rendezvous() because enable_ktls() exits first:
 
-For a device-offloaded kTLS socket the TX side sets it:
+tools/testing/selftests/drivers/net/netdevsim/tls_offload.c:enable_ktls() {
+	if (read_tls_stat("TlsTxDevice") != tx_before + 1)
+		fail("TX did not land on the device path (TlsTxDevice %lu -> %lu)",
+	...
+}
+
+So whichever end aborts first closes its socket and sends a FIN.  If the
+peer processes that FIN before it gets to setsockopt(TCP_ULP, "tls"):
+
+net/tls/tls_main.c:tls_init() {
+	...
+	if (sk->sk_state != TCP_ESTABLISHED)
+		return -ENOTCONN;
+	...
+}
+
+the peer dies in die("setsockopt(TCP_ULP, tls)") and never installs software
+kTLS, so TlsTxSw/TlsRxSw in that namespace stay at 0 and this check fails.
+Note the first run already asserted TlsTxSw == 0 in both namespaces, so
+earlier traffic cannot cover for it.
+
+"offload declined once the feature is off" still passes in that case since
+it only requires a non-zero exit status, so the failure reason is hidden.
+Would a rendezvous (or a retry) before the helpers give up make this run
+deterministic?
+
+> diff --git a/tools/testing/selftests/drivers/net/netdevsim/tls_offload.c b/tools/testing/selftests/drivers/net/netdevsim/tls_offload.c
+> new file mode 100644
+> index 0000000000000..0d7c8950ca6ce
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/netdevsim/tls_offload.c
+> @@ -0,0 +1,505 @@
+
+[ ... ]
+
+> +/* A record can be up to 16K, so normally one segment carries a piece of a
+> + * single record.  Shrinking the limit puts a dozen or so whole records in
+> + * every segment instead, which is the multi-record path through the driver.
+> + */
+> +static void send_small_records(int fd, unsigned int seed)
+> +{
+> +	char buf[SMALL_LEN];
+> +	uint16_t limit;
+> +
+> +	limit = REC_LIM_MIN;
+> +	if (setsockopt(fd, SOL_TLS, TLS_TX_MAX_PAYLOAD_LEN, &limit,
+> +		       sizeof(limit)))
+> +		die("setsockopt(TLS_TX_MAX_PAYLOAD_LEN)");
+
+[Severity: High]
+This isn't a bug introduced by this patch, but it looks like the first
+in-tree caller of TLS_TX_MAX_PAYLOAD_LEN on a socket that the test has just
+asserted is device offloaded (tx_conf == TLS_HW), and the kernel handler
+looks type confused:
+
+net/tls/tls_main.c:do_tls_setsockopt_tx_payload_len() {
+	struct tls_sw_context_tx *sw_ctx = tls_sw_ctx_tx(ctx);
+	...
+	if (sw_ctx && sw_ctx->open_rec)
+		return -EBUSY;
+	...
+}
+
+include/net/tls.h:tls_sw_ctx_tx() is an unchecked cast:
+
+	return (struct tls_sw_context_tx *)tls_ctx->priv_ctx_tx;
+
+and for an offloaded socket net/tls/tls_device.c:tls_set_device_offload()
+stores a struct tls_offload_context_tx there:
+
+	ctx->priv_ctx_tx = offload_ctx;
+
+There is no tx_conf == TLS_SW test, so the ->open_rec read lands inside the
+offload context's sg_tx_data[MAX_SKB_FRAGS], which tls_push_record() fills
+for every offloaded record:
+
+net/tls/tls_device.c:tls_push_record() {
+	sg_unmark_end(&offload_ctx->sg_tx_data[i]);
+	sg_set_page(&offload_ctx->sg_tx_data[i], skb_frag_page(frag),
+		    skb_frag_size(frag), skb_frag_off(frag));
+	...
+}
+
+Two things follow, and which one happens depends on the struct layout:
+
+If the aliased bytes are non-zero (page_link/offset/length, e.g. once the
+offsets shift with CONFIG_DEBUG_SPINLOCK or LOCKDEP changing the
+scatterlist stride), setsockopt returns a spurious -EBUSY.  That is fatal
+for this helper, since the call above goes straight to
+die("setsockopt(TLS_TX_MAX_PAYLOAD_LEN)") after the bulk, MSG_MORE and
+splice traffic has already populated sg_tx_data.
+
+If they are zero (default x86_64 layout, where the read lands on
+sg_tx_data[n].dma_address, which tls_device.c never writes), the intended
+guard never fires, because tls_offload_context_tx->open_record is never
+consulted.  The limit can then be shrunk while an offloaded record is open,
+and the next send hits:
 
 net/tls/tls_device.c:tls_push_data() {
 	...
-	flags |= MSG_SENDPAGE_DECRYPTED;
+	copy = min_t(size_t, size, max_open_record_len - record->len);
 	...
 }
 
-net/ipv4/tcp.c:tcp_sendmsg_locked() {
-	...
-	skb->decrypted = !!(flags & MSG_SENDPAGE_DECRYPTED);
-	...
-}
+with max_open_record_len < record->len, i.e. a u32 underflow that makes copy
+== size and lets the record grow past the requested limit and past the 2^14
+payload ceiling.
 
-netdevsim hands that same skb to the peer via nsim_forward_skb() ->
-__dev_forward_skb() -> skb_scrub_packet(), which clears pkt_type, iif, dst,
-extensions, ct, mark and tstamp but not decrypted.  On the peer,
-tls_device_decrypted() reads skb->decrypted whenever rx_conf == TLS_HW.
+Should the guard check ctx->tx_conf == TLS_SW (and consult
+tls_offload_ctx_tx(ctx)->open_record for the TLS_HW case) before the test
+starts relying on this option on offloaded sockets?
 
-If so, the tuple match and the "predates the offload" rejection in
-nsim_tls_rx_offloaded():
-
-		if (!READ_ONCE(conn->started)) {
-			if (before(t->seq, conn->start_sn))
-				return false;
-
-cannot have any effect, and the mid-stream behaviour the commit message
-describes does not happen:
-
-    "Anything else - a peer with no matching context, a context installed
-    mid stream - has the core run the software AEAD over plaintext, which
-    fails the connection with -EBADMSG."
-
-The same inheritance also seems to defeat the ctx->netdev != ns->netdev
-bail-out in nsim_tls_tx().  If the sending port goes down, tls_device_down()
-clears ctx->netdev while tx_conf stays TLS_HW, so subsequent sends go
-through tls_validate_xmit_skb() and the software fallback.  decrypted lives
-inside struct_group(headers, ...) in struct sk_buff, so the fallback skb
-built by complete_skb()/skb_copy_header() inherits the bit.  Would that
-deliver real ciphertext to a peer that still has a matching RX connection,
-with tls_device_decrypted() returning 1, the software AEAD skipped and
-userspace handed ciphertext rather than plaintext or -EBADMSG?
-
-Should the emulation clear skb->decrypted for frames it does not claim, the
-way a real wire drops an in-kernel-only bit?
-
-> +	atomic64_inc(&ns->tls.rx_packets);
-> +	atomic64_add(skb->len, &ns->tls.rx_bytes);
-> +}
+> +
+> +	fill_pattern(buf, sizeof(buf), seed);
+> +	write_all(fd, buf, sizeof(buf));
 
 [ ... ]
+
+> @@ -0,0 +1,505 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * kTLS device offload data path exercise, driven by tls.sh.
+> + *
+> + * One instance runs as the server and one as the client, each in its own
+> + * network namespace, connected back to back by a linked netdevsim pair.
+> + * Both ends enable kTLS and rely on netdevsim's emulated TLS offload, so
+> + * every record travels through net/tls/tls_device.c rather than the
+> + * software path.
+> + *
+> + * The two processes rendezvous through a shared directory so that neither
+> + * side sends before the other has installed its RX offload.
+> + */
+> +
+> +#define _GNU_SOURCE
+> +
+> +#include <arpa/inet.h>
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <limits.h>
+> +#include <netinet/in.h>
+> +#include <netinet/tcp.h>
+> +#include <stdarg.h>
+> +#include <stdbool.h>
+> +#include <stdint.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <sys/socket.h>
+> +#include <sys/stat.h>
+> +#include <sys/types.h>
+> +#include <time.h>
+> +#include <unistd.h>
+> +
+> +#include <linux/tls.h>
+> +
+> +#ifndef SOL_TLS
+> +#define SOL_TLS			282
+> +#endif
+> +
+> +#ifndef TCP_ULP
+> +#define TCP_ULP			31
+> +#endif
+> +
+> +#define BULK_LEN		(200 * 1024)
+> +#define MORE_FRAGS		64
+> +#define SPLICE_FRAG_LEN		4096
+> +#define SPLICE_FRAGS		8
+> +
+> +/* TLS_MIN_RECORD_SIZE_LIM and TLS_MAX_PAYLOAD_SIZE, which are not uapi. */
+> +#define REC_LIM_MIN		64
+> +#define REC_LIM_MAX		16384
+> +
+> +#define SMALL_RECS		100
+> +#define SMALL_LEN		(REC_LIM_MIN * SMALL_RECS)
+> +
+> +#define SYNC_TIMEOUT_MS		20000
+> +#define CONNECT_TIMEOUT_MS	20000
+> +
+> +/* accept() and the transfers have no timeout of their own, and tls.sh waits
+> + * on both helpers.  Bound the whole run so a stuck peer cannot hang the test.
+> + */
+> +#define RUN_TIMEOUT_SEC		120
+> +
+> +static const char *role;
+> +
+> +static void die(const char *what)
+> +{
+> +	fprintf(stderr, "%s: %s: %s\n", role, what, strerror(errno));
+> +	exit(1);
+> +}
+> +
+> +static void fail(const char *fmt, ...)
+> +{
+> +	va_list ap;
+> +
+> +	fprintf(stderr, "%s: ", role);
+> +	va_start(ap, fmt);
+> +	vfprintf(stderr, fmt, ap);
+> +	va_end(ap);
+> +	fprintf(stderr, "\n");
+> +	exit(1);
+> +}
+> +
+> +static void msleep(unsigned int ms)
+> +{
+> +	struct timespec ts = {
+> +		.tv_sec = ms / 1000,
+> +		.tv_nsec = (ms % 1000) * 1000000L,
+> +	};
+> +
+> +	nanosleep(&ts, NULL);
+> +}
+> +
+> +/* /proc/net/tls_stat is per netns, so both ends can check that their own
+> + * connection really landed on the device path.
+> + */
+> +static unsigned long read_tls_stat(const char *name)
+> +{
+> +	char line[256];
+> +	unsigned long val;
+> +	FILE *f;
+> +
+> +	f = fopen("/proc/net/tls_stat", "r");
+> +	if (!f)
+> +		die("open /proc/net/tls_stat");
+> +
+> +	while (fgets(line, sizeof(line), f)) {
+> +		char key[64];
+> +
+> +		if (sscanf(line, "%63s %lu", key, &val) != 2)
+> +			continue;
+> +		if (!strcmp(key, name)) {
+> +			fclose(f);
+> +			return val;
+> +		}
+> +	}
+> +
+> +	fclose(f);
+> +	fail("%s not found in /proc/net/tls_stat", name);
+> +	return 0;
+> +}
+> +
+> +static void fill_pattern(char *buf, size_t len, unsigned int seed)
+> +{
+> +	size_t i;
+> +
+> +	for (i = 0; i < len; i++)
+> +		buf[i] = (char)(seed + i * 31 + (i >> 8) * 7);
+> +}
+> +
+> +static void check_pattern(const char *buf, size_t len, unsigned int seed,
+> +			  const char *what)
+> +{
+> +	char *want = malloc(len);
+> +	size_t i;
+> +
+> +	if (!want)
+> +		die("malloc");
+> +
+> +	fill_pattern(want, len, seed);
+> +	for (i = 0; i < len; i++) {
+> +		if (buf[i] != want[i])
+> +			fail("%s: payload mismatch at byte %zu: got 0x%02x want 0x%02x",
+> +			     what, i, (unsigned char)buf[i],
+> +			     (unsigned char)want[i]);
+> +	}
+> +
+> +	free(want);
+> +}
+> +
+> +static void write_all(int fd, const char *buf, size_t len)
+> +{
+> +	size_t done = 0;
+> +
+> +	while (done < len) {
+> +		ssize_t n = send(fd, buf + done, len - done, 0);
+> +
+> +		if (n < 0) {
+> +			if (errno == EINTR)
+> +				continue;
+> +			die("send");
+> +		}
+> +		done += n;
+> +	}
+> +}
+> +
+> +static void read_all(int fd, char *buf, size_t len)
+> +{
+> +	size_t done = 0;
+> +
+> +	while (done < len) {
+> +		ssize_t n = recv(fd, buf + done, len - done, 0);
+> +
+> +		if (n < 0) {
+> +			if (errno == EINTR)
+> +				continue;
+> +			die("recv");
+> +		}
+> +		if (n == 0)
+> +			fail("peer closed after %zu of %zu bytes", done, len);
+> +		done += n;
+> +	}
+> +}
+> +
+> +static void enable_ktls(int fd)
+> +{
+> +	struct tls12_crypto_info_aes_gcm_128 ci = {};
+> +	unsigned long tx_before, rx_before;
+> +
+> +	tx_before = read_tls_stat("TlsTxDevice");
+> +	rx_before = read_tls_stat("TlsRxDevice");
+> +
+> +	if (setsockopt(fd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls")))
+> +		die("setsockopt(TCP_ULP, tls)");
+> +
+> +	ci.info.version = TLS_1_2_VERSION;
+> +	ci.info.cipher_type = TLS_CIPHER_AES_GCM_128;
+> +	memset(ci.iv, 'i', sizeof(ci.iv));
+> +	memset(ci.key, 'k', sizeof(ci.key));
+> +	memset(ci.salt, 's', sizeof(ci.salt));
+> +	memset(ci.rec_seq, 0, sizeof(ci.rec_seq));
+> +
+> +	if (setsockopt(fd, SOL_TLS, TLS_TX, &ci, sizeof(ci)))
+> +		die("setsockopt(TLS_TX)");
+> +	if (setsockopt(fd, SOL_TLS, TLS_RX, &ci, sizeof(ci)))
+> +		die("setsockopt(TLS_RX)");
+> +
+> +	/* The whole point of the exercise: refuse to silently fall back to
+> +	 * the software path, otherwise the test would pass without ever
+> +	 * touching tls_device.c.
+> +	 */
+> +	if (read_tls_stat("TlsTxDevice") != tx_before + 1)
+> +		fail("TX did not land on the device path (TlsTxDevice %lu -> %lu)",
+> +		     tx_before, read_tls_stat("TlsTxDevice"));
+> +	if (read_tls_stat("TlsRxDevice") != rx_before + 1)
+> +		fail("RX did not land on the device path (TlsRxDevice %lu -> %lu)",
+> +		     rx_before, read_tls_stat("TlsRxDevice"));
+> +}
+> +
+> +static void sync_path(char *out, size_t len, const char *dir, const char *who)
+> +{
+> +	if ((size_t)snprintf(out, len, "%s/%s.ready", dir, who) >= len)
+> +		fail("sync dir path too long");
+> +}
+> +
+> +static void rendezvous(const char *dir, const char *me, const char *peer)
+> +{
+> +	char mine[PATH_MAX], theirs[PATH_MAX];
+> +	unsigned int waited = 0;
+> +	int fd;
+> +
+> +	sync_path(mine, sizeof(mine), dir, me);
+> +	sync_path(theirs, sizeof(theirs), dir, peer);
+> +
+> +	fd = open(mine, O_CREAT | O_WRONLY, 0600);
+> +	if (fd < 0)
+> +		die("create sync file");
+> +	close(fd);
+> +
+> +	while (access(theirs, F_OK)) {
+> +		if (waited >= SYNC_TIMEOUT_MS)
+> +			fail("timed out waiting for %s", peer);
+> +		msleep(20);
+> +		waited += 20;
+> +	}
+> +}
+> +
+> +/* Both ends stop here with their offload installed and no data sent yet,
+> + * so that the driver state can be inspected from the outside.
+> + */
+> +static void wait_for_go(const char *dir)
+> +{
+> +	unsigned int waited = 0;
+> +	char go[PATH_MAX];
+> +
+> +	if ((size_t)snprintf(go, sizeof(go), "%s/go", dir) >= sizeof(go))
+> +		fail("sync dir path too long");
+> +
+> +	while (access(go, F_OK)) {
+> +		if (waited >= SYNC_TIMEOUT_MS)
+> +			fail("timed out waiting for go");
+> +		msleep(20);
+> +		waited += 20;
+> +	}
+> +}
+> +
+> +/* Small writes with MSG_MORE accumulate into one open record before it is
+> + * pushed, which is the interesting part of tls_push_data().
+> + */
+> +static void send_msg_more(int fd, unsigned int seed)
+> +{
+> +	char buf[MORE_FRAGS + 1];
+> +	int i;
+> +
+> +	fill_pattern(buf, sizeof(buf), seed);
+> +
+> +	for (i = 0; i < MORE_FRAGS; i++) {
+> +		if (send(fd, buf + i, 1, MSG_MORE) != 1)
+> +			die("send(MSG_MORE)");
+> +	}
+> +	if (send(fd, buf + MORE_FRAGS, 1, 0) != 1)
+> +		die("send(last)");
+> +}
+> +
+> +/* splice() reaches tls_push_data() with MSG_SPLICE_PAGES once
+> + * TLS_TX_ZEROCOPY_RO is enabled, which is a distinct fragment path.
+> + */
+> +static void send_splice(int fd, unsigned int seed)
+> +{
+> +	char buf[SPLICE_FRAG_LEN];
+> +	int val = 1;
+> +	int i;
+> +
+> +	if (setsockopt(fd, SOL_TLS, TLS_TX_ZEROCOPY_RO, &val, sizeof(val)))
+> +		die("setsockopt(TLS_TX_ZEROCOPY_RO)");
+> +
+> +	for (i = 0; i < SPLICE_FRAGS; i++) {
+> +		int p[2];
+> +
+> +		fill_pattern(buf, sizeof(buf), seed + i * SPLICE_FRAG_LEN);
+> +
+> +		if (pipe(p))
+> +			die("pipe");
+> +		if (write(p[1], buf, sizeof(buf)) != sizeof(buf))
+> +			die("write to pipe");
+> +		if (splice(p[0], NULL, fd, NULL, sizeof(buf),
+> +			   i == SPLICE_FRAGS - 1 ? 0 : SPLICE_F_MORE) !=
+> +		    sizeof(buf))
+> +			die("splice");
+> +		close(p[0]);
+> +		close(p[1]);
+> +	}
+> +
+> +	val = 0;
+> +	if (setsockopt(fd, SOL_TLS, TLS_TX_ZEROCOPY_RO, &val, sizeof(val)))
+> +		die("setsockopt(TLS_TX_ZEROCOPY_RO off)");
+> +}
+> +
+> +/* A record can be up to 16K, so normally one segment carries a piece of a
+> + * single record.  Shrinking the limit puts a dozen or so whole records in
+> + * every segment instead, which is the multi-record path through the driver.
+> + */
+> +static void send_small_records(int fd, unsigned int seed)
+> +{
+> +	char buf[SMALL_LEN];
+> +	uint16_t limit;
+> +
+> +	limit = REC_LIM_MIN;
+> +	if (setsockopt(fd, SOL_TLS, TLS_TX_MAX_PAYLOAD_LEN, &limit,
+> +		       sizeof(limit)))
+> +		die("setsockopt(TLS_TX_MAX_PAYLOAD_LEN)");
+> +
+> +	fill_pattern(buf, sizeof(buf), seed);
+> +	write_all(fd, buf, sizeof(buf));
+> +
+> +	limit = REC_LIM_MAX;
+> +	if (setsockopt(fd, SOL_TLS, TLS_TX_MAX_PAYLOAD_LEN, &limit,
+> +		       sizeof(limit)))
+> +		die("setsockopt(TLS_TX_MAX_PAYLOAD_LEN restore)");
+> +}
+> +
+> +#define SEED_C2S_BULK	0x11
+> +#define SEED_S2C_BULK	0x22
+> +#define SEED_C2S_MORE	0x33
+> +#define SEED_C2S_SPLICE	0x44
+> +#define SEED_C2S_SMALL	0x55
+> +
+> +static void run_client(int fd)
+> +{
+> +	char *buf = malloc(BULK_LEN);
+> +
+> +	if (!buf)
+> +		die("malloc");
+> +
+> +	fill_pattern(buf, BULK_LEN, SEED_C2S_BULK);
+> +	write_all(fd, buf, BULK_LEN);
+> +
+> +	read_all(fd, buf, BULK_LEN);
+> +	check_pattern(buf, BULK_LEN, SEED_S2C_BULK, "server -> client bulk");
+> +
+> +	send_msg_more(fd, SEED_C2S_MORE);
+> +	send_splice(fd, SEED_C2S_SPLICE);
+> +	send_small_records(fd, SEED_C2S_SMALL);
+> +
+> +	/* Wait for the server's verdict before tearing anything down. */
+> +	read_all(fd, buf, 1);
+> +	if (buf[0] != 'k')
+> +		fail("server reported a failure");
+> +
+> +	free(buf);
+> +}
+> +
+> +static void run_server(int fd)
+> +{
+> +	size_t splice_len = (size_t)SPLICE_FRAG_LEN * SPLICE_FRAGS;
+> +	char *buf = malloc(BULK_LEN);
+> +	char more[MORE_FRAGS + 1];
+> +	char *sbuf;
+> +	char ok = 'k';
+> +	int i;
+> +
+> +	sbuf = malloc(splice_len);
+> +	if (!buf || !sbuf)
+> +		die("malloc");
+> +
+> +	read_all(fd, buf, BULK_LEN);
+> +	check_pattern(buf, BULK_LEN, SEED_C2S_BULK, "client -> server bulk");
+> +
+> +	fill_pattern(buf, BULK_LEN, SEED_S2C_BULK);
+> +	write_all(fd, buf, BULK_LEN);
+> +
+> +	read_all(fd, more, sizeof(more));
+> +	check_pattern(more, sizeof(more), SEED_C2S_MORE, "client -> server MSG_MORE");
+> +
+> +	read_all(fd, sbuf, splice_len);
+> +	for (i = 0; i < SPLICE_FRAGS; i++)
+> +		check_pattern(sbuf + (size_t)i * SPLICE_FRAG_LEN,
+> +			      SPLICE_FRAG_LEN, SEED_C2S_SPLICE +
+> +			      i * SPLICE_FRAG_LEN, "client -> server splice");
+> +
+> +	read_all(fd, buf, SMALL_LEN);
+> +	check_pattern(buf, SMALL_LEN, SEED_C2S_SMALL,
+> +		      "client -> server small records");
+> +
+> +	write_all(fd, &ok, 1);
+> +
+> +	free(sbuf);
+> +	free(buf);
+> +}
+> +
+> +static int do_server(const char *ip, int port, const char *syncdir)
+> +{
+> +	struct sockaddr_in sa = {};
+> +	int lfd, fd, one = 1;
+> +
+> +	lfd = socket(AF_INET, SOCK_STREAM, 0);
+> +	if (lfd < 0)
+> +		die("socket");
+> +	if (setsockopt(lfd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one)))
+> +		die("SO_REUSEADDR");
+> +
+> +	sa.sin_family = AF_INET;
+> +	sa.sin_port = htons(port);
+> +	if (inet_pton(AF_INET, ip, &sa.sin_addr) != 1)
+> +		fail("bad bind address %s", ip);
+> +
+> +	if (bind(lfd, (struct sockaddr *)&sa, sizeof(sa)))
+> +		die("bind");
+> +	if (listen(lfd, 1))
+> +		die("listen");
+> +
+> +	fd = accept(lfd, NULL, NULL);
+> +	if (fd < 0)
+> +		die("accept");
+> +	close(lfd);
+> +
+> +	enable_ktls(fd);
+> +	rendezvous(syncdir, "server", "client");
+> +	wait_for_go(syncdir);
+> +
+> +	run_server(fd);
+> +
+> +	close(fd);
+> +	return 0;
+> +}
+> +
+> +static int do_client(const char *ip, int port, const char *syncdir)
+> +{
+> +	struct sockaddr_in sa = {};
+> +	unsigned int waited = 0;
+> +	int fd;
+> +
+> +	sa.sin_family = AF_INET;
+> +	sa.sin_port = htons(port);
+> +	if (inet_pton(AF_INET, ip, &sa.sin_addr) != 1)
+> +		fail("bad server address %s", ip);
+> +
+> +	for (;;) {
+> +		fd = socket(AF_INET, SOCK_STREAM, 0);
+> +		if (fd < 0)
+> +			die("socket");
+> +		if (!connect(fd, (struct sockaddr *)&sa, sizeof(sa)))
+> +			break;
+> +		close(fd);
+> +		if (waited >= CONNECT_TIMEOUT_MS)
+> +			die("connect");
+> +		msleep(20);
+> +		waited += 20;
+> +	}
+> +
+> +	enable_ktls(fd);
+> +	rendezvous(syncdir, "client", "server");
+> +	wait_for_go(syncdir);
+> +
+> +	run_client(fd);
+> +
+> +	close(fd);
+> +	return 0;
+> +}
+> +
+> +int main(int argc, char **argv)
+> +{
+> +	int port;
+> +
+> +	if (argc != 5) {
+> +		fprintf(stderr,
+> +			"usage: %s server|client <ip> <port> <syncdir>\n",
+> +			argv[0]);
+> +		return 2;
+> +	}
+> +
+> +	role = argv[1];
+> +	port = atoi(argv[3]);
+> +
+> +	alarm(RUN_TIMEOUT_SEC);
+> +
+> +	if (!strcmp(role, "server"))
+> +		return do_server(argv[2], port, argv[4]);
+> +	if (!strcmp(role, "client"))
+> +		return do_client(argv[2], port, argv[4]);
+> +
+> +	fprintf(stderr, "unknown role %s\n", role);
+> +	return 2;
+> +}
+
+[Severity: Medium]
+Does the per-fragment seed here actually produce distinct payloads?
+fill_pattern() truncates every byte to 8 bits:
+
+	buf[i] = (char)(seed + i * 31 + (i >> 8) * 7);
+
+and SPLICE_FRAG_LEN is 4096, a multiple of 256, so seed + i *
+SPLICE_FRAG_LEN only ever differs from seed in bits 8 and above.  All
+SPLICE_FRAGS fragments therefore get byte-for-byte identical contents,
+and the matching loop in run_server()
+
+	check_pattern(sbuf + (size_t)i * SPLICE_FRAG_LEN,
+		      SPLICE_FRAG_LEN, SEED_C2S_SPLICE +
+		      i * SPLICE_FRAG_LEN, "client -> server splice");
+
+collapses to the same expected buffer for each i.
+
+That is not a correctness problem for the transfer itself, but it does
+remove most of what the splice case is supposed to prove: with every
+fragment identical, reordering, duplication or dropping-and-refilling a
+fragment inside the TLS_TX_ZEROCOPY_RO / MSG_SPLICE_PAGES path still
+compares equal and the test passes.  Given that the whole point of this
+hunk is to exercise a distinct fragment path in tls_push_data(), it
+seems worth having the payload distinguish the fragments.
+
+Would a seed step that survives the truncation be preferable here, e.g.
+seed + i rather than seed + i * SPLICE_FRAG_LEN (with the same change on
+the server side), or should fill_pattern() fold the seed's high bits into
+the byte value so that any seed spacing works?  Note the other cases are
+unaffected, since SEED_C2S_BULK/SEED_S2C_BULK/SEED_C2S_MORE/SEED_C2S_SMALL
+all differ in the low 8 bits.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260901154914.11637-1-jiayuan.chen%40linux.dev
