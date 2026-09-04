@@ -1,132 +1,111 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-237.mta1.migadu.com [95.215.58.237])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1824A8FDD
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 14:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 554FF3845CB
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 14:33:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.237
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788530628; cv=none; b=rTH1+aJ2k0qHU9Lv3a52mAWlzSjNVuWypY5GRG3B0/J5x3CcM145DG++gJn3oFkFfHYPa5asZA3kuSH8l4zZYi7SDXgiHc4ACycBYmQ02PsaBvYPB9kv2NJZcg3EJID8CxNsHg99hE7U5iE6dZPQNo/kKyaZdq3mQGeNTBHgVS8=
+	t=1788532435; cv=none; b=QRgHmh4vTdtSs+sV67dow9G7iB9EC1TZn43jrfzWzeyRKMC6JniH2aWG96a5Dhfqq3xtVurASWZ8AwSzc/7ehIsNOKm+xi1Xv7t3mZBjbtmKyEcvz0YtRxckU0SidjLGNHMQcaoACebQxhnCEVKBhnpHj/ah/+yFK7EGfuuPdsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788530628; c=relaxed/simple;
-	bh=l1T/TPElEBIBckbkV0zkS+lAJ3dGZHogNKbOl0Tkkoo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GFxGxyzTfNvvnC5ADIaYr7XHHWvN3BEw20xpAI0tWRgVRQb818chMzR0C3Vt3i0Gk95BNaxqfq9i6caTCmAKYZPoAqC/0aFlvXI5b/GLFuKyNbSdilb8OP5B8zFIb/L9pjy5HxUte6PxBVEarRKfpt0X0RE611wPghdDxAfUrs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=K/rG5fTJ; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1788532435; c=relaxed/simple;
+	bh=JuPH7/2Y2ltdy3iQbdznIQ0SDNwJB4Wc+2UbdaNxT08=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fhVk/Wfe3TyKnXITfnVd6/IrpzgyYMQ2p/TRUEq41mz9FngpkGacHI7qyf/rCzOfvoX/5bXmUKU5E5iDUVq3vuco8kom5///4UVtaSLas9pX+MAgTAdDdj9cR8F9JUxCVndHsjkx9M5YLYWY2ZiwYoPctczfvbND1kyF71lMiNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aqEbJ3iP; arc=none smtp.client-ip=95.215.58.237
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="K/rG5fTJ"
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 90A7F42956
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 14:03:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1788530617;
-	bh=3DF+MIyFr5r6aUv7sE4j7TVrrTvo12iD8pFcT2yVbKU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
-	b=K/rG5fTJMt7RAqpR97Bj3x0qUnOcc/98nFZUbQq6O4+sx6PYGZBdi4MID1Gk9niZ0
-	 J0TomwoDBEu1rLdy5NnVnIrLmrLFKXQVoS05Q5ALQIT8vJwxiEVZAz6coIEOjw5Ou+
-	 Xz1Qb8xrSVEO55tcE7donEIakXGwQ6jPJTUiFvCtqmUqOWFJGPpa8nPQLLewMXGcjt
-	 GFuhY1YDd7ETlP+pYHtpOAC60iZ+HLmx/V0qCGG1ngPIc4AvqxOaRy2gJn5YVwLlli
-	 3QKWgeeJ+zETSaKv3Vmh0gSjfxRLN9w4GFf41Tm0iVwaoU/nNFRi6UeNi6xjLXdmUP
-	 K+ukQKray9iKI0jncaL/YNSlOWDn1QFI3M7P/gx+IT9RKG++eY5Gmy/2ceFdrDUFUh
-	 rn/lWIpi5G6Y8NzI4TFvHIr895BKfF6bbYWrM7qKjy5WAfgDuHWxSBoRAQJyWgJ+Ss
-	 Lu09gPdye8Xv9MqwuZti+9fYT/iNO/ZTycsAqHNGd/KiuZ9Tsf9ZLphts5KMUT1mRp
-	 cldzf5+ey85xFG1UiRoXczuyGCqXavLz+VPbSEBXu5NV1zdzfxNW1o53Ze2w/6ECft
-	 5ngfL7+hQ35TH7C4ruCaBw00rpsm16B6Qc4tGu72iSJGoBPm33MtGoAy4yA6jh53UY
-	 708BOzhIe1NhEiEe+I+nl3eI=
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c217f249fa1so110302466b.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 07:03:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788530617; x=1789135417;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=3DF+MIyFr5r6aUv7sE4j7TVrrTvo12iD8pFcT2yVbKU=;
-        b=g7RBLRtnk831pHhwqcrn7S1IMMMdAAAi2M9657sGE+6Pvys8OVnf8qoE8rMbzxpqQT
-         OXw7x2xux9Tm35tzKJKaV+ijCfDo2nPSbJxpyHdcZjlIFtaWxBHAJINtYygfg1tTQCbi
-         uHCINDD7HtZ36F+RinChJSvy6+N0ZpEw40zRUPutoGMN/t/TlaRLasffAUVQ/jVi6ZDK
-         UrexOM4uCNYe1lBf5OGQon/IXg60TyqqUcZ7O5gcntfr9PqfiZq8D3UAzM3rzZ/9H/4R
-         +XnaSAVIT8ot+PcDafVT2PHjPaMwq7rIyGJjbCFGKS+MowQ1WsX57Kp2JuaUkdpVH3gb
-         s3Vw==
-X-Gm-Message-State: AFuF++nsdw4UWi4Ei8p3+JzYLb6aWROdHHJxGpcdJ1G4N51uAt+y9GIq
-	/AzPAW7ERIXiG1PBBKK0q3kkXiwfnIl2Ujtg1OyQxensSllABfuzvZ1/mzIj65M7cZCLrxdtqpF
-	wLaUOqHW9ZdmKAxgO/cF8A9sVNSVicv4MBW0z4QlSc0Cr08iyL+3jDpjVKv2Yn6s0VvOFswIaNe
-	uBSPSi3a9Aig==
-X-Gm-Gg: AYBFou3S+1RvoZDOkH0kyT5cLsV+pxER2Pwy1L0uX4ihvf9juIADRNgSHzXrPC+rcao
-	0zhADnGZor1VkXVajgqRLcAhLZZZ/eYCV6w4xcgJF7ic8abAVUVlyhmpPY28/vJh6A9hM2vciA8
-	wk1OecgqeOa3qaqqSS9FCUTVui3BwnIiicIwaXvsyX3mWHmqhb4zJiT5GTIDG1WmDhrWwtmDWYN
-	fwf2jwjEf5cK4PX54sBDqIs2EABXhomnJZCBdVBz0WDawdq+7KHElI73zVkqa8xrQDsWG9uqXrS
-	CcVfgZj8QLpEWZA2jJWrhfMokjwdQMx8guFElG+qgm4Ie9NWIw6q6p2vY+9go+DKfvKazE8Cu39
-	GR4bie1Fx9NObIuVg/ak14i4401nigT+y1BVeSmXYj4LrELhCNk5l
-X-Received: by 2002:a17:907:3f88:b0:c16:14d1:b529 with SMTP id a640c23a62f3a-c260c9e2213mr292883566b.18.1788530617048;
-        Fri, 04 Sep 2026 07:03:37 -0700 (PDT)
-X-Received: by 2002:a17:907:3f88:b0:c16:14d1:b529 with SMTP id a640c23a62f3a-c260c9e2213mr292880166b.18.1788530616630;
-        Fri, 04 Sep 2026 07:03:36 -0700 (PDT)
-Received: from P16s.localdomain (staticline-31-183-213-56.toya.net.pl. [31.183.213.56])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c260d4aa5acsm111956666b.12.2026.09.04.07.03.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 07:03:36 -0700 (PDT)
-From: Kuba Pawlak <kuba.pawlak@canonical.com>
-To: netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	kuniyu@amazon.com,
-	Copilot <223556219+Copilot@users.noreply.github.com>
-Subject: [PATCH net-next] selftests: net: Skip so_incoming_cpu on single-CPU systems
-Date: Fri,  4 Sep 2026 16:03:34 +0200
-Message-ID: <20260904140334.562593-1-kuba.pawlak@canonical.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aqEbJ3iP"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=JuPH7/2Y2ltdy3iQbdznIQ0SDNwJB4Wc+2UbdaNxT08=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788532431; v=1; x=1789137231;
+ b=aqEbJ3iPMSzdysHD6Z/Nn6ZNICUweuIjiyQHuaG4hUEKRQlp8XnbAeVWf18r15aXp1uaFGZD
+ fQbT6jXcJMypMkuZomlcBp9mTodoBVTFrw2jGNfnmtyLL2Luvgz0KzsT+oF3zyGMd0CEHo4DgfL
+ 8Krn04WRcb5Irl8A5iIFRVpY=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 46051ea72cb9bae1;
+	Fri, 04 Sep 2026 14:33:51 +0000
+X-Mizu-Trace-ID: 46051ea72cb9bae1
+X-Migadu-Flow: FLOW_OUT
+Date: Fri, 4 Sep 2026 07:33:45 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Tejun Heo <tj@kernel.org>, Christian Brauner <christian@brauner.io>, 
+	Meta kernel team <kernel-team@meta.com>, linux-kselftest@vger.kernel.org, driver-core@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: cover kernfs dentry revalidation
+Message-ID: <aprVEyqOrdmuD-HN@linux.dev>
+References: <20260902014050.499002-1-shakeel.butt@linux.dev>
+ <20260904-kandidat-bergbahn-ersonnen-3a6dd1f1cf0e@brauner>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260904-kandidat-bergbahn-ersonnen-3a6dd1f1cf0e@brauner>
 
-The test requires at least two CPUs to exercise the distribution of
-connections between per-CPU listeners.  It currently enforces this
-prerequisite with an assertion, causing all test cases to fail on
-single-vCPU systems even though no kernel functionality was tested.
+On Fri, Sep 04, 2026 at 10:13:11AM +0200, Christian Brauner wrote:
+> On Tue, Sep 01, 2026 at 06:40:50PM -0700, Shakeel Butt wrote:
+> > kernfs_test only checked two xattr calls. It did not touch the part of
+> > kernfs that userspace hits most: the dentry cache.
+> > 
+> > The kernel adds and removes kernfs nodes on its own, with no VFS call
+> > behind it, and removal cannot always unhash the dentries that are
+> > already cached. So ->d_revalidate() is what keeps the cache honest,
+> > let's add tests for it.
+> > 
+> > Add tests that make the kernel change kernfs directly, instead of going
+> > through create and unlink:
+> > 
+> >  - writing cgroup.subtree_control makes the kernel add and remove files
+> >    in every child cgroup. That checks two things: a cached negative
+> >    dentry is dropped once the file appears, and a cached positive one
+> >    is dropped once the file goes away.
+> >  - renaming a network interface renames the sysfs node under a dentry
+> >    that is already cached.
+> >  - sysfs mounted in a new network namespace must list that namespace's
+> >    interfaces and not the parent's, which covers the KERNFS_NS tagging
+> >    code.
+> >  - many lookups running against concurrent mkdir and rmdir. A lookup
+> >    may only succeed or fail with an errno that means "it is gone".
+> >  - open across removal, readdir returning each entry once, and a
+> >    telldir()/seekdir() round trip, which uses the name hash cookie in
+> >    kernfs_dir_pos().
+> > 
+> > Test the other direction too: walking dentries that are already cached
+> > must not drop them. That is not just a slowdown. d_invalidate() calls
+> > detach_mounts(), so a dentry dropped by mistake also unmounts whatever
+> > is mounted under that directory.
+> > 
+> > Both filesystems are needed. cgroup2 has no ->rename and is not
+> > namespace tagged. sysfs cannot be mounted with a set of children we
+> > control. The config fragment stops a kernel built with kselftest-merge
+> > from passing while it runs almost nothing.
+> > 
+> > To confirm the tests really catch a broken backstop, kernfs_dir_changed()
+> > was stubbed to return false. 8 of the 11 tests then failed.
+> > 
+> > Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
+> > ---
+> 
+> I have to say I would appreciate trimmed-down commit messages with less
+> relative clauses. This reads very LLMy still. Especially for tests my
+> appetite for wading through multiple paragraphs of info is very low.
+> Same goes for the very wordy changelog below...
 
-Report the unsupported environment as a skip instead.  Check the
-prerequisite before setting up the network namespace so skipped tests do
-not make unnecessary system changes.
+My appologies, I will be more precise and concise in future.
 
-Link: https://bugs.launchpad.net/ubuntu-kernel-tests/+bug/2023546
+I assume the kernfs bug fixes [1] will also go to your vfs branch. I will send a
+v2 of that series with appropriate tags and will try to improve the commit
+messages as well. I have a followup improvements for kernfs_rwsem which I will
+base on vfs branch. Just wanted to give a headsup.
 
-Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
-Signed-off-by: Kuba Pawlak <kuba.pawlak@canonical.com>
----
- tools/testing/selftests/net/so_incoming_cpu.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Thanks a lot, Christian.
 
-diff --git a/tools/testing/selftests/net/so_incoming_cpu.c b/tools/testing/selftests/net/so_incoming_cpu.c
-index 4740701f1..1b7344238 100644
---- a/tools/testing/selftests/net/so_incoming_cpu.c
-+++ b/tools/testing/selftests/net/so_incoming_cpu.c
-@@ -81,10 +81,11 @@ static int nr_client_per_server, nr_server, nr_client;
- 
- FIXTURE_SETUP(so_incoming_cpu)
- {
--	setup_netns(_metadata);
--
- 	nr_server = get_nprocs();
--	ASSERT_LE(2, nr_server);
-+	if (nr_server < 2)
-+		SKIP(return, "requires at least two CPUs");
-+
-+	setup_netns(_metadata);
- 
- 	if (NR_CLIENT_PER_SERVER_DEFAULT * nr_server < NR_PORT)
- 		nr_client_per_server = NR_CLIENT_PER_SERVER_DEFAULT;
--- 
-2.43.0
+[1] https://lore.kernel.org/all/20260903040253.670020-1-shakeel.butt@linux.dev/ 
