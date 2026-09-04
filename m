@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96AAA450906;
-	Fri,  4 Sep 2026 09:42:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE54A4503EB;
+	Fri,  4 Sep 2026 09:42:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788514969; cv=none; b=NRrxRpuVzoLLpuBruD1ysGvn7oAadW34PZCO16nIUUMY4iBmTV3e65MmbDrFuGazRADK4x/0Ai5QZTOuE5T+flLffCii5nt/mHFSRtQTvDisI/t9o9JTtnE3E5fI2Mibuu3Ah3RoXPe/CnCNMvZHlhcsCtyAEZ+S7rVso4tqOdM=
+	t=1788514969; cv=none; b=fS3F8MwbvUxjNn0CVFUywgPnCcoGjeqMt5mAt2kEJOpcNS+z7+Cub2MiYXEaF18marCY2rKuXYcG4nh3ahyHKaLNy8g7eCl/25pQPZMtOk6EbFrnLiTtngd0e7PmmlVGWYG4NPQFkXmmqlw/hzeVui+j0r2rD9I1wtfP0s/L+oY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1788514969; c=relaxed/simple;
-	bh=YvFgK4CHN7XP5y+daIkBthQSQZFK5diIFeV8txpjGLk=;
+	bh=OYcjxb5pdSLwsdBF7nwj06n41YLKOlE53+KpV3mei2Q=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WiT2LKXBg4JRmMhDP9aD4cZrZNKa/zsdB03UA4svdbZH2hlu77VYy8oT6vTB3JXa0aNuB7VgDa+QXbX7u9MokMIJZpYK/mYmnHZbjv34ggLSMYegEkr/j8TtSSdRv7DEAs1kIfsPPJOyGJV7tfbl0aP94r2ctzifq0NPRC9U1OU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z/0ONNgE; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=EVgelvIFRHBQekW9ZTE8LDrtFzTjhWcou8dkRoybZP6h3MIztcuhVGJoI3/9geuBrCjVJfxhW2h8yJEdLcO61uImztc3mw/zZaM6m9aWC5lLXlZxLoCp66it1tTgzVM7R5ZZj25nt3EvbSGk6+ikFSqha8heMJBlC1AQQl8RWAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FCW6h3Zo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z/0ONNgE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97EBA1F00A3D;
-	Fri,  4 Sep 2026 09:42:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FCW6h3Zo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E46701F00A3E;
+	Fri,  4 Sep 2026 09:42:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788514967;
-	bh=YwGgVvLkm9aHYzQ3g97tGtR/hpTy6t/JISQUEjiRWFs=;
+	s=k20260515; t=1788514968;
+	bh=88EYUIu9clgWW4TE2RbXJ0pGJ7mM44ke71Aoddbe2lk=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Z/0ONNgEJkxFlb6uG4M/SoIqN/RmmvXqHq6LE4QBkWUfJTwxNGDsJVx9826aPEwOC
-	 2cesRWjh8/I+NnLRnDBm3C6MDAPc7FjJ1YKHvFK4H4Axz53ZyomeVcVbfABr/HjLue
-	 NxSnn1Stj08CwenlTWYJn7BNaESxY1ews/gxuL/HJhosAzRAEctkX08R7K8JHwIBWp
-	 hdRRrUeQvsmJ6ryq1UbTftBGOg7hAtJgRl/S5LwevN1xHb6MQ4JhDQWRRkVtZklp8Z
-	 LN7RDbYORhQ5fE0RFnm0VnAtraU0RpFK9NV3jNKG5lQu5MP/j9B0w3m2PLVYXjzVS1
-	 Qr5RIqaYgHzYg==
+	b=FCW6h3ZoO1C6I9lMjp4IbRphc4WWuA0Udvw0BS39ANM001nAC4f9bx3eWH+RxLdQj
+	 rGrOI1WkZQ19jX8mVR8VM4vFay7+mQBifYCDjG7jZpgkpt/W1xFX1EooyggML6/GmV
+	 09k/9NLLYXj2eeBsFtdvQ9fXi5Jfl8c8NxU/LaEVvlr/4glcrYKsaFQWNwQHXqgbbj
+	 1cB7IHbC35GRatTzzE3YZo2zKfcfMjSkhnjY28otdWflAu4hB+6OHEv+m/f14JFSh5
+	 OfQEJKlcu/NAhLr53C+Vv+JmEMzxcG35NzVMh0JK0KUyueWyNkeete7WkbfcA0Jdoq
+	 gyjACahdAohUw==
 Subject:
- Re: [PATCH net v3 5/9] net/sched: dualpi2: clamp psched_mtu at all call sites
+ Re: [PATCH net v3 6/9] net/sched: pie: clamp psched_mtu in pie_drop_early
 From: netdev-bot+sashiko@kernel.org
 To: jhs@mojatatu.com
 Cc: netdev@vger.kernel.org, jiri@resnulli.us, davem@davemloft.net,
  edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
  victor@mojatatu.com, vega@nebusec.ai, shuah@kernel.org,
  linux-kselftest@vger.kernel.org, toke@redhat.com
-Date: Fri, 04 Sep 2026 09:42:46 +0000
-Message-ID: <178851496617.4131868.17637386620065749703@kernel.org>
-In-Reply-To: <QDISC-0CFC.v3.20260901204856@mojatatu.com.6>
-References: <QDISC-0CFC.v3.20260901204856@mojatatu.com.6>
+Date: Fri, 04 Sep 2026 09:42:47 +0000
+Message-ID: <178851496747.4131868.17944512399699900309@kernel.org>
+In-Reply-To: <QDISC-0CFC.v3.20260901204856@mojatatu.com.7>
+References: <QDISC-0CFC.v3.20260901204856@mojatatu.com.7>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -48,139 +48,97 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-- [Medium] Changelog/reproducer mismatch in "net/sched: dualpi2: clamp
-  psched_mtu at all call sites": the commit message blames "a crafted…
-- [Low] netdev coding-style violation and triplicated open-coded clamp.
+- [Medium] The commit message's "Conditions to recreate the bug" section
+  does not reproduce the described bug.
 
 --
 
-net/sched: dualpi2: clamp psched_mtu at all call sites
+net/sched: pie: clamp psched_mtu in pie_drop_early
 
-The patch clamps psched_mtu(qdisc_dev(sch)) into [1, 1 << 20] at the three
-places sch_dualpi2.c uses it: dualpi2_calculate_c_protection(), must_drop()
-and get_memory_limit().  The stated goal is to avoid overflow of the signed
-multiply for c_protection_init and the wrap of 2 * psched_mtu().
+The patch clamps the value returned by psched_mtu() in pie_drop_early() to
+the range [1, 1<<20], with the stated aim of preventing a very large device
+MTU from zeroing the bytemode drop probability. The change itself is a
+one-line clamp_t() in net/sched/sch_pie.c.
 
-A couple of questions about the changelog and the style of the new code.
+>     pie_drop_early() calls psched_mtu() with no clamp. With mtu=0x80000000
+>     the bytemode divide silently zeroes the drop probability, disabling AQM.
+>     Clamp to [1, 1<<20].
+>
+>     Conditions to recreate the bug:
+>       CONFIG_NET_SCH_PIE=y. Requires CAP_NET_ADMIN (namespace-local via
+>       unshare -Urn suffices).
+>
+>       tc qdisc add dev dummy0 root pie
+>       tc qdisc change dev dummy0 root pie stab data 32768 size_log 15 cell_log 0
 
 [Severity: Medium]
+Do these two commands actually reproduce the described condition?
 
-> With a crafted size table qdisc_pkt_len reaches ~2 GiB, causing a soft
-> lockup / denial of service.
->
->   tc qdisc add dev dummy0 root dualpi2
->   tc qdisc change dev dummy0 root dualpi2 stab data 32768 size_log 15 cell_log 0
+The clamped quantity comes only from the netdevice:
 
-Do these two commands actually exercise any of the three changed lines?
+include/net/pkt_sched.h:psched_mtu() {
+	return READ_ONCE(dev->mtu) + dev->hard_header_len;
+}
 
-The patch only bounds psched_mtu(), which is derived from the netdevice:
+Neither "tc qdisc add ... root pie" nor "tc qdisc change ... stab data 32768
+size_log 15 cell_log 0" changes dev->mtu or dev->hard_header_len, so dummy0
+keeps its ether_setup() defaults of 1500 + 14 = 1514.  That is already inside
+[1, 1<<20], so clamp_t() returns the same value and the reproducer sees no
+difference before or after the patch.  Shouldn't the steps include something
+like "ip link set dev dummy0 mtu 2147483634" (which dummy allows, since
+dummy_setup() leaves dev->min_mtu = 0 and dev->max_mtu = 0)?
 
-include/net/pkt_sched.h:
-	static inline unsigned int psched_mtu(const struct net_device *dev)
-	{
-		return READ_ONCE(dev->mtu) + dev->hard_header_len;
-	}
-
-A TCA_STAB only rewrites qdisc_skb_cb(skb)->pkt_len in
-__qdisc_calculate_pkt_len(), so a size table cannot influence
-psched_mtu().  With the quoted commands dummy0 keeps its default MTU, so
-dualpi2_calculate_c_protection(), must_drop() and get_memory_limit()
-compute the same values before and after this patch.
-
-Is the "~2 GiB" qdisc_pkt_len reachable on this tree at all?
-__qdisc_calculate_pkt_len() already caps it, and that clamp is present in
-the baseline too:
+Also, does the size table have any bearing here?  A TCA_STAB table only
+affects qdisc_skb_cb(skb)->pkt_len via __qdisc_calculate_pkt_len(), which is
+already capped:
 
 net/sched/sch_api.c:__qdisc_calculate_pkt_len() {
 	...
 	pkt_len = clamp_t(int, pkt_len, 1, QDISC_PKT_LEN_MAX);
-	qdisc_skb_cb(skb)->pkt_len = pkt_len;
-}
-
-with include/net/pkt_sched.h:
-
-	#define QDISC_PKT_LEN_MAX	(1 << 20)	/* 1 MiB */
-
-Would it be more accurate to describe the trigger as a large device MTU?
-dummy leaves the upper bound unset:
-
-drivers/net/dummy.c:dummy_setup() {
 	...
-	dev->min_mtu = 0;
-	dev->max_mtu = 0;
 }
 
-and dev_validate_mtu() only enforces an upper limit when dev->max_mtu > 0,
-so "ip link set dev dummy0 mtu 2147483647" is what makes
-(s32)psched_mtu() * ((int)wc - (int)wl) overflow.  Note that
-TCA_DUALPI2_C_PROTECTION is range-limited to [0, MAX_WC] with MAX_WC 100,
-so the signed multiply only overflows above roughly 21.5 MiB of MTU, and
-2 * psched_mtu() only wraps above 2 GiB.
+and pie_qdisc_enqueue() does not use it as packet_size:
 
-One more thing on scope: the size-table path the message mentions is left
-untouched in this file.  dequeue_packet() still does
+net/sched/sch_pie.c:pie_qdisc_enqueue() {
+	...
+	if (!pie_drop_early(sch, &q->params, &q->vars, sch->qstats.backlog,
+			    skb->len)) {
+	...
+}
 
-	*credit_change *= qdisc_pkt_len(skb);
+Finally, the divide the message blames is gated on bytemode:
 
-and drop_and_retry() still accumulates
+net/sched/sch_pie.c:pie_drop_early() {
+	...
+	if (params->bytemode && packet_size <= mtu)
+		local_prob = (u64)packet_size * div_u64(local_prob, mtu);
+	...
+}
 
-	q->deferred_drops_len += qdisc_pkt_len(skb);
+and bytemode is off by default:
 
-Those are fine here because of the generic 1 MiB pkt_len cap, but the
-Fixes: tag points at trees that may not carry that cap.  Should the
-changelog say so?
+include/net/pie.h:pie_params_init() {
+	...
+	params->bytemode = false;
+	...
+}
 
-> diff --git a/net/sched/sch_dualpi2.c b/net/sched/sch_dualpi2.c
-> index 4f678d4ff10ec..4947def7c49ef 100644
-> --- a/net/sched/sch_dualpi2.c
-> +++ b/net/sched/sch_dualpi2.c
+Since the listed commands never pass bytemode, is that branch ever reached in
+the reproducer?  Could the "Conditions to recreate the bug" section be updated
+to raise the MTU and enable bytemode, so that the Tested-by tag corresponds to
+a sequence that exercises the clamped value and the divide?
 
-[ ... ]
-
-> @@ -285,8 +287,9 @@ static bool must_drop(struct Qdisc *sch, struct dualpi2_sched_data *q,
->  	u64 local_l_prob;
->  	bool overload;
->  	u32 prob;
+>  {
+>  	u64 rnd;
+>  	u64 local_prob = vars->prob;
+> -	u32 mtu = psched_mtu(qdisc_dev(sch));
 > +	u32 mtu = clamp_t(u32, psched_mtu(qdisc_dev(sch)), 1, 1 << 20);
-
-[Severity: Low]
-This isn't a bug, but the new declaration in must_drop() is the longest
-line of the block and is placed last, which breaks the netdev declaration
-ordering rule in Documentation/process/maintainer-netdev.rst ("Order the
-variable declaration lines longest to shortest").  Moving the
-initialization out of line, or reordering the block, would match the rule.
-
->  
-> -	if (sch->qstats.backlog < 2 * psched_mtu(qdisc_dev(sch)))
-> +	if (sch->qstats.backlog < 2 * mtu)
->  		return false;
->  
->  	prob = READ_ONCE(q->pi2_prob);
-
-[ ... ]
-
-> @@ -712,7 +715,8 @@ static u32 get_memory_limit(struct Qdisc *sch, u32 limit)
->  	/* Apply rule of thumb, i.e., doubling the packet length,
->  	 * to further include per packet overhead in memory_limit.
->  	 */
-> -	u64 memlim = mul_u32_u32(limit, 2 * psched_mtu(qdisc_dev(sch)));
-> +	u64 memlim = mul_u32_u32(limit, 2 * clamp_t(u32, psched_mtu(qdisc_dev(sch)),
-> +						     1, 1 << 20));
-
-Would a small helper, e.g. dualpi2_psched_mtu(sch), be preferable here?
-The same clamp_t(u32, psched_mtu(qdisc_dev(sch)), 1, 1 << 20) expression is
-now open-coded three times, including this line-wrapped copy inside
-mul_u32_u32(), so the "at all call sites" property has to be re-checked by
-hand for any future psched_mtu() user or bound change.
-
->  
->  	if (upper_32_bits(memlim))
->  		return U32_MAX;
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-0CFC.v3.20260901204856%40mojatatu.com
