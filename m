@@ -1,149 +1,159 @@
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E0F3A839B
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 08:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788511884; cv=pass; b=RDyK8aclfCT+YQGwHYQ4XzSQv0P0WPRPvhm0NWICfTSXaUDegqks30AbYpAuxnYQ72g+wJ9ilsMg3WP8Xd3//AMu5Ywo74Omh4y8qdQGeiWI49BprD50HqTBjKUYGEFzF4OT89TJi7yC0ZxKuMrHmrNufbM4bFT/YePDbv3wDKg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788511884; c=relaxed/simple;
-	bh=el9C0eC2AOZtIteG0TNFb/RC0Pp+DPvBNH48NZ87dWM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VlXCibOlLfJvy/A/O+olzbUZfpcW5KKROHzYZLlCsA1zLoBUYPDp0iKkCpv1z0enbI4LWk8cB1snxpBgrG0dKf1khSD6VSrGQpronrqL1Xpf37MD3B7qMq4pjbTAcRhUHeSJIXUI8b/Y1js8v7EUGHQDnLDxMtY+y5g5j59PY0Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TsDTFALD; arc=pass smtp.client-ip=74.125.224.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1690527A92D;
+	Fri,  4 Sep 2026 08:54:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788512100; cv=none; b=rnXCzdgRm4yCi7zX6v5enerz3Yr2QYE3G92ZbV9JnuPn4GEx3ttj3RGS8v2B+mHIX/cgAdTCHeEFQwsrNl+5MeMH6oRp01sWSrxhXiwRKXiHhkvZl1oDA4Ox9uLrzGdlmuWcdBtZ7Q3f2m/A2iCLa2Rd1MHuuefjo3gxp9xxnKs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788512100; c=relaxed/simple;
+	bh=2359StVxBcWtdgpf5MOEaC+RqUmRcrr8KTMuhap9yJ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SfoFDZuwmRjl6jbgxAibJokaIG5oEHBzuVBxqlNdNuSetAX9zIGXEF/hoddG7mZ3Ykm6+zXwsbe0L+DVwF8Vl2faZY/gyLHclnYBclmFi59ldpvW5H8L3q0m96tk13X67938uBkwAmPSFQOeHnhaPKgAAt1OtLifN2sh6j45tCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U8k5Itm+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TsDTFALD"
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-66c711b7f2aso626638d50.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 01:51:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788511882; cv=none;
-        d=google.com; s=arc-20260327;
-        b=MhzQFjy/sSYcAre8RKq8aHbVpGAo6BbaZEPnKnjNZ3etsiO+i6YGCrn8jNC/VDwV8d
-         1Ld8MfO9SJxOvWJ2D8JhZsl3YB2UMQhzin3jBuQQmZHlpJbrJ7CDOhitbcCoEMwFSis3
-         3AhqQTl1NK6GBjQ5ul7j222nkOo5Jy71VFm38w05TPYyu6MelApsK6xmjilRurAAXHZw
-         F6X9SLAQZbaca34Fo1nvYSU9AzYIEaR4618ASl8ZnMbGxrAdP6azsKFcEZaPIBgP0VGp
-         2cZktB5SY251Q2+FE+niQ27myj2I9MhXgF0KNWaPvkdK0021sjoISHd9ARMhp8LBjUe5
-         ehJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=el9C0eC2AOZtIteG0TNFb/RC0Pp+DPvBNH48NZ87dWM=;
-        fh=v1OPeHhHVJ6KF/yq+ogBZZ0lfLYv54Tj3yDdLTvl2sM=;
-        b=MUPJZI/a2ZqFtvAb71dnoDHJpGgeQzgO0IHNpOKssGm3R6RKeLqH367NPSGx4k/YAx
-         v2xjbN4cJC+mERqqxSlopDVVv9mlViZfqPvUuiOYPMUp7ICyl0a8t03EqLBssKWIfzgz
-         kJb+j5ohajmqyRtt8adYT7cUq9eoj+38ewQVbd+nXz8+fXS62qw9Myiw9iVKInNIuJ6R
-         bsYooW+h1uLOF/IePkvwJubswjF0K883Y9+f0B7xGQ/vDdRCYd1Cd+c9qTjZWhdblA97
-         WnGDzADkfp+4uJqmDP5HZvlloW3+5lb24u+zHIkTP3lSpl4i66d7ixt+lSyFVY/c74+C
-         Tgzw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788511882; x=1789116682; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=el9C0eC2AOZtIteG0TNFb/RC0Pp+DPvBNH48NZ87dWM=;
-        b=TsDTFALDw4vsg1GN3g+UztVq9bUfuAKY8SIzq703SuedfYigVlMSf6jeA7JQqnvzo6
-         H+bdIZiYYT2Id0IFRDBzF/pSegUpkX04c+5X/MDwrFyoNXITvDHTLSrW8BHC+m+KsTlh
-         zyhiLtSj0nxFg/pCbyTDpM19NkKthyd2RAUgxwJ+4Bn8Q4cbn/9BlnxDwHjEWADhCtes
-         V7MilISWIICAkfPebCopcNudegdQLPQg/C0wmTUwg9kYGcEuRq2m9nCL1uSYkLAMXp/N
-         7hnYtLDQ/9EAXev+7dGUqNFxr0t81siXFKzxiiwpRat81kwxvqT1JpGLX/MXFOcCE7xL
-         TSXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788511882; x=1789116682;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=el9C0eC2AOZtIteG0TNFb/RC0Pp+DPvBNH48NZ87dWM=;
-        b=IjeY79EEWaVb6h6A8G9EMSNHr/lk4IzwJ5iuGnhl/XV4BUtlUxqRP4q8SkQBGdruxE
-         xkinPq0cQognKGtOQZldEQK2bWxTJLlLHRjyLCOtb7A0rcpmQdx+bLrhdShVAFa5m415
-         rXx7VvkE48x28LK8nGcmA3r7KDxMMGAxI0GonHFRHavgGztFnJpcxYogP8XjOwj9SGhO
-         rSKZ3vccaeTwikoPGfc+ga59ZSNVnekPYf3jWlauf5lcsVf+nna9Q6yjR7VRho4c8O8G
-         uwpUO/KbkHZh4Bu5hlkp4QgvfIk8mSv5xhLFte6JT0dSWQZMJttBgYvz5h8VtVZ3ivlA
-         Huew==
-X-Forwarded-Encrypted: i=1; AKwUvBwvHfcUN+jYSDnpv3eHNRVazdu8gCGJrNGwmEFNTdCIK3Hn2BEd593ICph6JTehjewqnFrYUl+dp9jJmqtQqnc=@vger.kernel.org
-X-Gm-Message-State: AFuF++mjMk8sEa5QiXt2UFZ1v/vTcnfGo8bBPW8oAeRQDH00rf3OuoSR
-	JcTiHQLvE8YTStjddKtEWh51q4vE+vB+rRHFJnyrwhTVKteVVgl5f1SS85Kj9IhQUqD4D5qHt0E
-	nsTwhh1jxHk8s56g9LNbQCb6YqbvZ97E=
-X-Gm-Gg: AYBFou22FjR3gWN2Mdk+8yGLJA++5HqQL3YGXqnfUG0mzNJjFAGo2CYmw8w5g0B2rMF
-	ZL6IuGA+flUyZC1gazza9B4oSoZzNb3FSWLuB89rtMNb9pI0axERai4TET0ZSPvN08ZqaK/rUZs
-	4hHAcRvxBb21FNoUhe79WRJoTMmdRlb913srmXoDy4ZoS1CDnlcYe7UeT3P2VVdeUfvaqpYjXJT
-	KFvG/74VUu/MGJS9oqmrG24eZMEqdrTXE4kToMwwAbDc+dd1LrlpFKx2Ba6LnCqSfq14DFdZGTB
-	1xOJzr8ukpscQu2xWJz7z1WAAbrhe45BWZ/cnAXsD0DgG33RY7Un/zIajihrj1rxHTQMXLA98hh
-	ZoT7sV5yVECv7WvzbR/rmDy8c
-X-Received: by 2002:a05:690e:e25:b0:66d:2c09:fb70 with SMTP id
- 956f58d0204a3-66fb575c665mr1287497d50.0.1788511882074; Fri, 04 Sep 2026
- 01:51:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U8k5Itm+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81D0C1F00A3D;
+	Fri,  4 Sep 2026 08:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788512098;
+	bh=WpIOvIK2/IKeoBTyPS1FpXMOk28YALsYNxySmYWmBa0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=U8k5Itm+x/8FEuee+UDlCYMbyQoC9MEH9uY7DeCd/yWdxW5+Olbt8r3TiZFAmywCj
+	 Dhh5XXm5KudyPYceHRdeZmOPreIe1u0O50XciqP/5Cl2VV+bdazxBDZOrDLgeYLhfW
+	 AvCaRGpIwy4byAnl6pi1q35onn7+yczkm/inFgMcezZQAe3mRm0P5fqpxpJAy1NNFs
+	 0Up1nSjH9435PPNwoGiPBj5YaRLjhlbp/NFVOXs9U0JEhjWKATJ4uDIGiZzs8aVJ8U
+	 YCruon+cWiSo/OFqECQ2BuSziHTFpDpgeK8itYjZPPl4v10u37BlEEh22mJHkQqINf
+	 VZ+iJTOvWS5ZA==
+Date: Fri, 4 Sep 2026 09:54:51 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Fuad Tabba <fuad.tabba@linux.dev>, Peter Maydell <peter.maydell@linaro.org>, 
+	Leonardo Bras <leo.bras@arm.com>, Wei-Lin Chang <weilin.chang@arm.com>, 
+	Yao Yuan <yaoyuan@linux.alibaba.com>, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v20 03/14] KVM: arm64: Manage GCS access and registers
+ for guests
+Message-ID: <apqA_SuoA6-TyHsS@gremlin>
+References: <20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org>
+ <20260901-arm64-gcs-v20-3-f31750bdfadb@kernel.org>
+ <apmfx08vccSd2MXw@gremlin>
+ <d2659ac3-2f00-4fc4-8f9e-0585691a4ba2@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260904082954.48738-1-enelsonmoore@gmail.com>
-In-Reply-To: <20260904082954.48738-1-enelsonmoore@gmail.com>
-From: Tigran Aivazian <aivazian.tigran@gmail.com>
-Date: Fri, 4 Sep 2026 09:51:10 +0100
-X-Gm-Features: AcwNN1US813RpOVK53IyVszIyhGZqjM2-hVqjP58I9fP7PqngduJcqRbNBYYNbU
-Message-ID: <CAK+_RL=RHfRLDc=Ldjx1p8KTHSKeELjnBpxEqYjwWX_8ur1hOw@mail.gmail.com>
-Subject: Re: [PATCH] bfs: remove the filesystem
-To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Jan Kara <jack@suse.cz>, Jakub Kicinski <kuba@kernel.org>, 
-	Namjae Jeon <linkinjeon@kernel.org>, Hisam Mehboob <hisamshar@gmail.com>, 
-	=?UTF-8?Q?Martin_Kepplinger=2DNovakovi=C4=87?= <martink@posteo.de>, 
-	Christian Brauner <brauner@kernel.org>, Amir Goldstein <amir73il@gmail.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Eric Biggers <ebiggers@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	David Howells <dhowells@redhat.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"Theodore Ts'o" <tytso@mit.edu>, Catalin Iacob <iacobcatalin@gmail.com>, 
-	Stephen Hemminger <stephen@networkplumber.org>, Andrew Lunn <andrew@lunn.ch>, 
-	"Maciej W. Rozycki" <macro@orcam.me.uk>, Andrei Vagin <avagin@gmail.com>, 
-	Wei Yang <richard.weiyang@gmail.com>, Bhavik Sachdev <b.sachdev1904@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Wang Yan <wangyan01@kylinos.cn>, 
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>, Malaya Kumar Rout <malayarout91@gmail.com>, 
-	linux-doc@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-fsdevel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Luis de Bethencourt <luisbg@kernel.org>, 
-	Salah Triki <salah.triki@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Alexander Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d2659ac3-2f00-4fc4-8f9e-0585691a4ba2@sirena.org.uk>
 
-Hi Ethan,
-
-On Fri, 4 Sept 2026 at 09:30, Ethan Nelson-Moore <enelsonmoore@gmail.com> wrote:
+On Thu, Sep 03, 2026 at 09:41:26PM +0100, Mark Brown wrote:
+> On Thu, Sep 03, 2026 at 07:13:17PM +0100, Lorenzo Stoakes (ARM) wrote:
+> > On Tue, Sep 01, 2026 at 10:47:01PM +0100, Mark Brown wrote:
 >
-> BFS (not to be confused with BeFS, the BeOS filesystem) is the
-> filesystem UnixWare uses for its boot partition. It has extremely
-> limited functionality, only supporting contiguous files and no
-> subdirectories. Even though the bfs driver is very small and is
-> unlikely to cause future maintenance problems, given that the only type
-> of data stored on such a partition is likely to be kernels and
-> bootloader settings, there is very little reason anyone would want to
-> access it from Linux. Other old Unix filesystems (efs, freevxfs) have
-> been removed recently, and bfs is highly unlikely to have any users, so
-> remove it as well. Retain the UAPI header to be safe.
+> > > GCS introduces a number of system registers, on systems with GCS we need
+> > > to context switch them and expose them to VMMs to allow guests to use
+> > > GCS.
 >
+> > > +				ctxt_sys_reg(ctxt, GCSCR_EL1)	= read_sysreg_el1(SYS_GCSCR);
+> > > +			}
+>
+> > I had AI check this (and I think sashiko also hit on) it but this is a chain of:
+>
+> > 	ctxt_has_tcrx() -> ctxt_has_s1pie() -> ctx_has_gcs()
+>
+> > Is it correct to make the gcs stuff conditional on tcrx + s1pie + gcs?
+>
+> There are architectural dependencies which mean it is not valid to
+> configure GCS without S1PIE, and S1PIE depends on TCRX.  I had
 
-You are right that probably no one would want to use BFS for storing
-the actual data today.
-But some things have didactical value, rather than mere pragmatic
-usage. It is the didactic
-value of MINIX (and its limitations wrt making use of the wonderful
-capabilities of i386) that
-has originally triggered the creation of Linux. But back to BFS: it is
-actually used in Steve Pate's
-book "Linux Filesystems" (2024, unfinished yet), which is a sequel to
-his excellent classic
-"UNIX Filesystems" (2003), as an illustration of a particularly simple
-filesystem implementation.
+Ack yeah I think I note that elsewhere, so it reduces only to the 'users doing
+weird stuff' case :)
 
-I remember when Linus accepted my patch with BFS on 28 October 1999
-into 2.3.25 his comment
-was: "this appears to be a particularly simple one".
+> originally written the code without expressing this dependency but on a
+> previous version Marc asked for this nesting as an optimisation.  Since
+> it's about optimisastion adding checks that don't otherwise exist on the
+> restore path would doubtless get the similar complaints.  Exactly the
+> same concerns were raised on v19.
 
-Kind regards,
-Tigran
+Could you implement the nesting the same in the cases where there is a bare
+ctx_has_gcs() as an alternative?
+
+So then it'd always be tcrx -> s1pie -> gcs everywhere and that'd resolve things
+also and make things symmetric.
+
+You could also I think express the dependency if it makes sense to.
+
+>
+> > And it seems like that feature depends on ctxt_has_tcrx() so _architecturally_
+> > fine, but it doesn't seem like KVM enforces the dependency at all and so in
+> > theory somebody could KVM_SET_ONE_REG a GCS, !S1PIE configuration.
+>
+> > And nicer to be consistent everywhere also I think (+ shut sashiko up! :)
+>
+> FWIW I do agree but I'm not sure how else to implement Marc's feedback
+> here.
+
+Ack sure of course.
+
+>
+> We could do checking of the ID registers at vCPU creation so we could
+> avoid worrying about them in the fast path but there was also feedback
+> about not doing that.  One idea I had was to generate feature
+
+Could you possibly check in sanitise_id_aa64pfr1_el1(), something like:
+
+diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+index fb2c9fd42e24..ba8780745987 100644
+--- a/arch/arm64/kvm/sys_regs.c
++++ b/arch/arm64/kvm/sys_regs.c
+@@ -2193,7 +2193,8 @@ static u64 sanitise_id_aa64pfr1_el1(const struct kvm_vcpu *vcpu, u64 val)
+ 	      SYS_FIELD_GET(ID_AA64PFR0_EL1, RAS, pfr0) == ID_AA64PFR0_EL1_RAS_IMP))
+ 		val &= ~ID_AA64PFR1_EL1_RAS_frac;
+
+-	if (!system_supports_gcs())
++	if (!system_supports_gcs() || !kvm_has_tcr2(vcpu->kvm) ||
++	    !kvm_has_s1pie(vcpu->kvm))
+ 		val &= ~ID_AA64PFR1_EL1_GCS;
+
+ 	val &= ~ID_AA64PFR1_EL1_SME;
+--
+
+And that way it slots in next to the system check?
+
+> combination validation from the MRS, I think the main complaint was
+> about open coding things rather than having the validation per se but
+> ICBW.  Last I heard we were very near to having code for working with
+> the MRS released which will help a lot with uses like that.  There is
+
+Yeah that sounds like a really neat way of solving it! And a useful idea in
+general.
+
+> the possibility that people are relying on doing architecturally
+> invalid configurations though.
+
+Yeah, I guess it's possible somebody could think they could just set a single
+register and use it or something.
+
+>
+> > And it seems like it makes it possible for a silly VMM which sets up the
+> > registers wrong + some unfortunate guest behaviour -> oops via:
+>
+> > el1h_64_sync_handler() -> el1_gcs() -> do_el1_gcs()
+>
+> > Because the host's restore is skipped for s1pie=0, gcs=1, so a naughty guest can
+> > set gcsr_el1.pcrsel=1 and some value in gcspr_el1, then the host will get a
+> > mismatch and trigger the kernel die().
+>
+> Yes, that's possible.  GCSCR_EL1.EXLOCKEN would create similar issues.
+
+Yeah :(
+
+--
+Cheers, Lorenzo
