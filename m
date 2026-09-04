@@ -1,129 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-235.mta0.migadu.com [91.218.175.235])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAAF1390610;
-	Fri,  4 Sep 2026 06:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F8241D214
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 06:07:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788501858; cv=none; b=lZWwgaOvhiOGYnnLbwqJUNmbGX9Lsa+iWYmMbD1RwVst0dzvf3wPxM160kvKYUnXD6JTtZk4Qqb7RxufzzBiKf1sD1DMsTvHpzZeNSIRfTWF3zINWU/6G/BjK0QjRQjhc/AXeVMMurE6YxGliwGN2WVCNhRbZsPadx59rAF6T7g=
+	t=1788502078; cv=none; b=m0Ts+I8mTV8g8n7Bey4DDXLVAlEeRc3kXd3mlKy/HLYVznf6afz+JIO32jaMLc+yemUegtXwXs58DRiRAzLAvs8Ddfb4vUx2V4tkncZu+9sS/+crcgt6sIbBNNv+OHXgd5Jr1/KJxj5Ji5R/KpIvx6XS19SmJJLPvJMrpkrOjnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788501858; c=relaxed/simple;
-	bh=1jCojS2k9dmomuM/T5Y/9PMCl0u+3Q640PkvDTWKiLw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u3M34pZZH2E/FtjMXOTfzKMTbbnqrr+2HaD1HqpL0MXz7yKLm7d6x+8XuIPsjbXI0bRYcWx11XJ48zutiq3lZNAEHkKYyN3pUTu55+VUH2i/OQAMRmqZwu5wEx++Z3xkyYfk4e4RbDQmMkrmzYZtX/SpM6s2z065bFnbavje0Gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ez8gGPZJ; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1788502078; c=relaxed/simple;
+	bh=eS+TwFxyuQDJqXHnp8bn/k1yAKU5y5vbImhUYOe1uDA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cHQwO1UOPQaaB+/0gIj6bJtgynSxnAE/MTJzIc7LBoA3j2b5I5lRn0X6/+nTmDlBIFAh6SV65XuNtHMX4BIbaSw9QX4I9LuWkDIAdmiQHqMOv0ajdUVihhJ/LPypNFi60HY/VX7MrHFJNNMEcD66+dPNx+lLgi4GScoIdrTAjv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=K+XNHRuk; arc=none smtp.client-ip=91.218.175.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ez8gGPZJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788501856; x=1820037856;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1jCojS2k9dmomuM/T5Y/9PMCl0u+3Q640PkvDTWKiLw=;
-  b=Ez8gGPZJDI2XptSjspAXxaE0QrLZ1e79aPgLMI1mr/0Ywpiz8V65LmIG
-   2TMmmHd5tZ7yhaE0mF4VzN1N9uxJxTYkNNctpUHclVNxvLT8hAMVErFgX
-   qQ312M+IzzZcA4F1ySeau+WKZBVDJVayGzbDM9OuoOoKnXn6vxbxOxqEx
-   pvqqMUiVi119zASa2HxkERCYrmOz+mJA0NPwkPJ/P/Gj7T2Z5ULiRNC40
-   1fHfHPE9N7xLQAhtqN5I3nzXycg/yI/s/8CmJbY+5N4qapTzSMgiypbWG
-   Xkl7iFsCoATJXSItq69okgLSaFRBWSITlwvddG/U/wZ+go72rHvaqTxHV
-   A==;
-X-CSE-ConnectionGUID: mv0TdqG0Q7uXaxe0swuDug==
-X-CSE-MsgGUID: we8bXrJHQbeq+IqmWcSxTQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11895"; a="100516275"
-X-IronPort-AV: E=Sophos;i="6.25,260,1779174000"; 
-   d="scan'208";a="100516275"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2026 23:04:15 -0700
-X-CSE-ConnectionGUID: XZ+6LqDLQfumcewIwdVduQ==
-X-CSE-MsgGUID: S8npCM7eRcOSnkB7MxG2Dg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,260,1779174000"; 
-   d="scan'208";a="263745271"
-Received: from slindbla-desk.ger.corp.intel.com (HELO localhost) ([10.245.244.224])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2026 23:04:13 -0700
-Date: Fri, 4 Sep 2026 09:04:10 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Daniel Pereira <danielmaraboo@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	shuah@kernel.org
-Subject: Re: [PATCH] lib: hexdump: convert test to KUnit framework
-Message-ID: <appfWm7KaBuk5iL1@ashevche-desk.local>
-References: <20260903213656.57203-1-danielmaraboo@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="K+XNHRuk"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=eS+TwFxyuQDJqXHnp8bn/k1yAKU5y5vbImhUYOe1uDA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788502074; v=1; x=1789106874;
+ b=K+XNHRukt4oyprgxrzLvhtKegLaVkDT3mC/HLvwcvUFt5ZVZfXDawh++RXnQTgRHx8RDzQiT
+ cX5k7NgKjtkMpRnIlEUSKjac+h00j8vFJ0NJmsV4eQm181BdKhe88bFT+yyAAdc3sY2fK6kdPfz
+ HAf0ifXp3MMGqtLnwYXs0YlI=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 67aa2e91fa35fe53;
+	Fri, 04 Sep 2026 06:07:54 +0000
+X-Mizu-Trace-ID: 67aa2e91fa35fe53
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <b965bb62-fcc8-4517-9947-24613650f1f5@linux.dev>
+Date: Fri, 4 Sep 2026 14:07:49 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260903213656.57203-1-danielmaraboo@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/2] selftests/bpf: Move verifier failure tests
+ out of test_global_percpu_data
+To: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>,
+ Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Sid Nayyar <sidnayyar@google.com>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260904031912.2133476-1-tweek@google.com>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260904031912.2133476-1-tweek@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 03, 2026 at 06:36:56PM -0300, Daniel Pereira wrote:
-> The old test_hexdump module used the traditional kernel printing
-> functions to verify hex dumping capabilities.
+On 4/9/26 11:19, Thiébaud Weksteen wrote:
+> Commit 4c9241bd731a ("selftests/bpf: Add tests to verify global percpu
+> data") added test_global_percpu_data.c to LSKELS_EXTRA. Later, in commit
+> 1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu data")
+> two verifier failure tests were added (verifier_strncmp and
+> verifier_snprintf), both marked as non-autoload (SEC("?kprobe")).
 > 
-> This patch converts the existing test into the modern KUnit framework
-> to allow standard automation, faster execution, and better integration
-> with Kselftest CI.
+> When bpftool generates light skeletons, non-autoloaded programs are
+> skipped during loading, causing the loader program to store subsequent
+> program FDs into incorrect skeleton struct fields (e.g. dump_percpu_data's
+> FD was stored into verifier_strncmp's descriptor).
 
-...
+IIUC, patch 2 will fix the issue totally.
 
-> +++ b/lib/Kconfig.debug
+Better to add a subtest to verify both the issue and the fix?
 
->  	tristate "KUnit test for cpumask" if !KUNIT_ALL_TESTS
->  	depends on KUNIT
->  	default KUNIT_ALL_TESTS
-> +	default KUNIT_ALL_TESTS
->  	help
->  	  Enable to turn on cpumask tests, running at boot or module load time.
->  
-> @@ -2289,6 +2290,7 @@ config TEST_LIST_SORT
->  	tristate "Linked list sorting test" if !KUNIT_ALL_TESTS
->  	depends on KUNIT
->  	default KUNIT_ALL_TESTS
-> +	default KUNIT_ALL_TESTS
->  	help
->  	  Enable this to turn on 'list_sort()' function test. This test is
->  	  executed only once during system boot (so affects only boot time),
-> @@ -2300,6 +2302,7 @@ config TEST_SORT
->  	tristate "Array-based sort test" if !KUNIT_ALL_TESTS
->  	depends on KUNIT
->  	default KUNIT_ALL_TESTS
-> +	default KUNIT_ALL_TESTS
+Thanks,
+Leon
 
->  	  This option enables the self-test function of 'sort()' at boot,
->  	  or at module load time.
-> @@ -2329,6 +2332,7 @@ config TEST_MULDIV64
->  config TEST_IOV_ITER
->  	tristate "Test iov_iter operation" if !KUNIT_ALL_TESTS
->  	depends on KUNIT
-> +	default KUNIT_ALL_TESTS
->  	depends on MMU
->  	default KUNIT_ALL_TESTS
->  	help
-> @@ -2343,6 +2347,7 @@ config KPROBES_SANITY_TEST
->  	depends on DEBUG_KERNEL
->  	depends on KPROBES
->  	depends on KUNIT
-> +	default KUNIT_ALL_TESTS
->  	select STACKTRACE if ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
->  	default KUNIT_ALL_TESTS
->  	help
-
-Have you read the patch before sending?
-
-...
-
-Please, take your time and check what you are sending next time.
-This version is obviously no-go.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> [...]
 
