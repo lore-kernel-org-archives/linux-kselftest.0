@@ -1,33 +1,33 @@
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B81EE4078EA;
-	Fri,  4 Sep 2026 10:38:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEF346D2BF;
+	Fri,  4 Sep 2026 10:38:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788518338; cv=none; b=KYE5eC+8tJ/2jcKp6FTAgbkZXQ6vjw9FyPEzJpSzHGUiBTZgkZHaHThsgRd7DAftLNfLMvQZbttJZv5okYtvvaKa/NeItPrFfPaBfm8TMW5fqv/c0EWdtHfYpUcc0nO7RZIGXWw5UR26hcAk0UtEcLFs8P2MlqUcznTzSYOd5Xg=
+	t=1788518339; cv=none; b=bTcaMpjddMylkOa7x0+beaHNxm2V49p3D9y4TBIcnQAbrfQU8F2SoqQ2D8YhT8Yg/oaoO05XzhkxlcnaGvbVNE8y0JW84Y+iQEcIClJfBeYXuCGvkaNP2gkxzNSH8ibxW8zbT2cwmyyL7ciaRMuCpO2Fw9wcoPRaX5zzw+zu4kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788518338; c=relaxed/simple;
-	bh=M6VPZSP4N7Tdl7alnu4MXD0zXNdQWm8noHuUEkT12l0=;
+	s=arc-20240116; t=1788518339; c=relaxed/simple;
+	bh=sYIHcPCrYS4KyEQfcFyUdFQhlq70gQCjq5hSX/4UNno=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OaCwgaeKiYIdguZkM5lBlLSpCIFVXvUiqscYZ7DDjn6qrRTr8PsxU5qC9f5cDFxH+Hxy8T1AUNkumzZjofTzx9GVkDE2DpGrYYXaQtTJjApU0m+fDR3Oo7cTcX0juVWZQQTVHoz0uSg/g+pUbkph4KNiDFzqgFW5iBozhEFT5xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=qoUjr8yF; arc=none smtp.client-ip=213.97.179.56
+	 MIME-Version; b=udk7kMCzOlrKXv06MNUk0EdoKPeYUeC+CQTnH7+sxk1//EFwF3Vig/rVy2webh1Bn1yFf4Vzt4zxInbW2jdjT5yvAInJCMDZVFObEUp07G9PVYr1ZJApqFESU3gSUKF2NUcTSFNC16PxG8IeZ9M7F2pyVcj9RvMiHo/eOE6kZAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=WEXo5fy8; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="qoUjr8yF"
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="WEXo5fy8"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:From:Reply-To; bh=NM1eSMoCqUMUlgdICsVdSOO0iW8qsu55z6uJhM9FWVU=; b=
-	qoUjr8yFtOeWyPrlWrxqWfpO27QX6LzwC3KFrKTV93GO+HVW8T5sVtxK3UATbMtw2FXk+67q/zkue
-	17wL/NpJbQKCvTO9BCVmlTxw86xU9lOjG72I1ICHKOfA+9W6B+YhKf6ZiGFtAYkKK6CcOdM7l90PA
-	AMx2Lv9FFhnTWqfqHx+6MReeJMQJdVZzx4mywgdcSRLTLPVtqV7KnBdVE/WxXFX9NDn0zD9N0hQuY
-	ZUh5jAI8ewxbdbdiwAYQtrX6sg7J//UelKdhfpfL0lvJh46K9/jFcFz8VzggrvGi03qmzNiXnyBpi
-	2ycpkRw4kpkTkQ0u6s+O69iNo9EWe3DCsQ==;
+	Cc:To:From:From:Reply-To; bh=8WOnr4RN6rzP95WWHSW4bXDIpnOb0dKKHyJEBh7/hHU=; b=
+	WEXo5fy8clMP8LdbwyVXmUVTI4VAIAfPitsKG9htiL700CknUFqmyYIUMUTfYLMFM3bGO6xn2/gKY
+	1BCy0C8cJb+tTaAO6cBqf50ut5gLpDOnbVbzEFcKBBEdEEgIdoizVPwQK6cN/ZgTbvdtplJCYPXb9
+	JSF3RPmq9iNxGEfHK69eYjM0Bon3OYvLue44xpUZqLsxiUiL/9tdC6whlB9RTVXqpNziGv8oCU/3t
+	05LZaPz4iB3v+r2PU21aM4BxgeGqcKmqh15IsTy+wQnrJw+yzcf/ov7wc/NY5fz6cBtVROcBpqc+c
+	Dw6sUA5pDHHZIvdOgMHbPignaORyhWMOeA==;
 Received: from bl21-120-122.dsl.telepac.pt ([2.82.120.122] helo=localhost)
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1x2RJo-00Eq1O-5D; Fri, 04 Sep 2026 12:38:48 +0200
+	id 1x2RJn-00Eq0y-7y; Fri, 04 Sep 2026 12:38:47 +0200
 From: Luis Henriques <luis@igalia.com>
 To: Miklos Szeredi <miklos@szeredi.hu>,
 	Amir Goldstein <amir73il@gmail.com>,
@@ -40,9 +40,9 @@ Cc: fuse-devel@lists.linux.dev,
 	Matt Harvey <mharvey@jumptrading.com>,
 	kernel-dev@igalia.com,
 	Luis Henriques <luis@igalia.com>
-Subject: [RFC PATCH v3 8/8] selftests/fuse: add fuse readdir caching test
-Date: Fri,  4 Sep 2026 11:39:20 +0100
-Message-ID: <20260904103920.4471-9-luis@igalia.com>
+Subject: [RFC PATCH v3 6/8] selftests/fuse: add some extra ACL caching tests
+Date: Fri,  4 Sep 2026 11:39:18 +0100
+Message-ID: <20260904103920.4471-7-luis@igalia.com>
 In-Reply-To: <20260904103920.4471-1-luis@igalia.com>
 References: <20260904103920.4471-1-luis@igalia.com>
 Precedence: bulk
@@ -53,322 +53,255 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This new test will check the caching behaviour using combinations of two
-opendir flags: FOPEN_KEEP_CACHE and FOPEN_CACHE_DIR.
+This adds some extra tests to ACL caching:
+- Verify that reading ACLs results in the expected number of requests
+  being sent user-space, depending on whether cache is enabled or disabled
+- Verify caching behaviour on some caching invalidation scenarios
+
+While there, add test binary to .gitignore.
 
 Signed-off-by: Luis Henriques <luis@igalia.com>
 ---
  .../selftests/filesystems/fuse/.gitignore     |   1 +
- .../selftests/filesystems/fuse/Makefile       |   2 +
- .../fuse/fuse_readdir_cache_test.c            | 274 ++++++++++++++++++
- 3 files changed, 277 insertions(+)
- create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_readdir_cache_test.c
+ .../filesystems/fuse/fuse_acl_cache_test.c    | 179 ++++++++++++++++++
+ 2 files changed, 180 insertions(+)
 
 diff --git a/tools/testing/selftests/filesystems/fuse/.gitignore b/tools/testing/selftests/filesystems/fuse/.gitignore
-index ebfe7133d811..ffa356f23e8c 100644
+index fb51603fe419..f7f3dd345a50 100644
 --- a/tools/testing/selftests/filesystems/fuse/.gitignore
 +++ b/tools/testing/selftests/filesystems/fuse/.gitignore
-@@ -4,3 +4,4 @@ fusectl_test
+@@ -2,3 +2,4 @@
+ fuse_mnt
+ fusectl_test
  write_extend_eof_test
- fuse_acl_cache_test
- fuse_symlink_cache_test
-+fuse_readdir_cache_test
-diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/testing/selftests/filesystems/fuse/Makefile
-index 3a5a557dde7a..570ced181168 100644
---- a/tools/testing/selftests/filesystems/fuse/Makefile
-+++ b/tools/testing/selftests/filesystems/fuse/Makefile
-@@ -6,6 +6,7 @@ TEST_GEN_PROGS := fusectl_test
- TEST_GEN_PROGS += write_extend_eof_test
- TEST_GEN_PROGS += fuse_acl_cache_test
- TEST_GEN_PROGS += fuse_symlink_cache_test
-+TEST_GEN_PROGS += fuse_readdir_cache_test
- TEST_GEN_FILES := fuse_mnt
++fuse_acl_cache_test
+diff --git a/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c b/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
+index c2d6658ff7de..9608a0adb967 100644
+--- a/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
++++ b/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
+@@ -83,6 +83,7 @@ struct daemon_state {
+ 	uint8_t        *acl;
+ 	size_t          acl_size;
+ 	int             getxattr_count;
++	bool            cache;
+ };
  
- include ../../lib.mk
-@@ -30,5 +31,6 @@ $(OUTPUT)/fuse_mnt: LDLIBS += $(VAR_LDLIBS)
+ /*
+@@ -91,9 +92,17 @@ struct daemon_state {
+  */
+ static struct daemon_state g_ds = {
+ 	.lock = PTHREAD_MUTEX_INITIALIZER,
++	.cache = false,
+ };
  
- $(OUTPUT)/fuse_acl_cache_test: fuse_common.c fuse_acl_cache_test.c
- $(OUTPUT)/fuse_symlink_cache_test: fuse_common.c fuse_symlink_cache_test.c
-+$(OUTPUT)/fuse_readdir_cache_test: fuse_common.c fuse_readdir_cache_test.c
- 
- EXTRA_CLEAN := fuse_common.o
-diff --git a/tools/testing/selftests/filesystems/fuse/fuse_readdir_cache_test.c b/tools/testing/selftests/filesystems/fuse/fuse_readdir_cache_test.c
-new file mode 100644
-index 000000000000..7c49cc6a23e3
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/fuse/fuse_readdir_cache_test.c
-@@ -0,0 +1,274 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Simple filesystem to test FUSE readdir cache
-+ *
-+ * It will simply perform readdir operations on a directory checking how many
-+ * times a request is sent to user-space using all the possible caching
-+ * combination setting (FOPEN_KEEP_CACHE and FOPEN_CACHE_DIR flags).
-+ */
-+
-+#include <stdio.h>
-+#include <limits.h>
-+#include <dirent.h>
-+
-+#include "kselftest_harness.h"
-+
-+#include "fuse_common.h"
-+
-+#define DIRNAME "mydir"
-+#define FILENAME "myfile"
-+
-+#define DIR_INO 42
-+#define FILE_INO 43
-+#define DOT_INO 40
-+#define DOTDOT_INO 41
-+
-+#define TIMEOUT	86400.0f
-+
-+struct test_state {
-+	pthread_mutex_t lock;
-+	bool cache_readdir;
-+	bool keep_cache;
-+	int readdir_counter;
-+} test_state = {
-+	.lock = PTHREAD_MUTEX_INITIALIZER,
-+};
-+
-+static void fs_lookup(fuse_req_t req, fuse_ino_t parent, const char *name)
+ /* ---- FUSE lowlevel callbacks -------------------------------------------- */
++static void fs_init(void *userdata, struct fuse_conn_info *conn)
 +{
-+	struct fuse_entry_param e = {};
-+
-+	if (parent != FUSE_ROOT_ID || strcmp(name, DIRNAME) != 0)
-+		fuse_reply_err(req, ENOENT);
-+	else {
-+		if (!strcmp(name, DIRNAME)) {
-+			e.ino = DIR_INO;
-+			e.attr.st_mode = S_IFDIR | 0755;
-+			e.attr.st_nlink = 1;
-+		} else {
-+			e.ino = FUSE_ROOT_ID;
-+			e.attr.st_mode = S_IFDIR | 0755;
-+			e.attr.st_nlink = 2;
-+		}
-+		e.attr.st_mtime = time(NULL);
-+		e.attr_timeout = TIMEOUT;
-+		e.entry_timeout = TIMEOUT;
-+		fuse_reply_entry(req, &e);
-+	}
++	pthread_mutex_lock(&g_ds.lock);
++	if (g_ds.cache)
++		fuse_set_feature_flag(conn, FUSE_CAP_POSIX_ACL);
++	pthread_mutex_unlock(&g_ds.lock);
 +}
-+
-+static int fill_stat(fuse_ino_t ino, struct stat *st)
+ 
+ static void fs_lookup(fuse_req_t req, fuse_ino_t parent, const char *name)
+ {
+@@ -115,6 +124,8 @@ static void fs_lookup(fuse_req_t req, fuse_ino_t parent, const char *name)
+ 	e.attr.st_ino     = FILE_INO;
+ 	e.attr.st_mode    = S_IFREG | 0644;
+ 	e.attr.st_nlink   = 1;
++	e.attr.st_uid = getuid();
++	e.attr.st_gid = getgid();
+ 	fuse_reply_entry(req, &e);
+ }
+ 
+@@ -175,10 +186,38 @@ static void fs_getxattr(fuse_req_t req, fuse_ino_t ino, const char *name,
+ 	free(acl);
+ }
+ 
++static void fs_setxattr(fuse_req_t req, fuse_ino_t ino, const char *name,
++			    const char *value, size_t size, int flags)
 +{
 +	int ret = 0;
++	uint8_t *acl;
 +
-+	st->st_ino = ino;
-+	st->st_mtime = time(NULL);
++	if (ino != FILE_INO)
++		ret = ENOENT;
++	else if (!strcmp(name, "system.posix_acl_access")) {
++		acl = malloc(size);
++		if (acl) {
++			memcpy(acl, value, size);
++			pthread_mutex_lock(&g_ds.lock);
++			if (g_ds.acl)
++				free(g_ds.acl);
++			g_ds.acl = acl;
++			g_ds.acl_size = size;
++			pthread_mutex_unlock(&g_ds.lock);
++		} else
++			ret = ENOMEM;
++	} else
++		ret = ENOTSUP;
 +
-+	switch (ino) {
-+	case FUSE_ROOT_ID:
-+		st->st_mode = S_IFDIR | 0755;
-+		st->st_nlink = 2;
-+		break;
-+	case DOT_INO:
-+	case DOTDOT_INO:
-+	case DIR_INO:
-+		st->st_mode = S_IFDIR | 0755;
-+		st->st_nlink = 1;
-+		break;
-+	case FILE_INO:
-+		st->st_mode = S_IFREG | 0444;
-+		st->st_nlink = 1;
-+		break;
-+	default:
-+		ret = -1;
-+		break;
-+	}
-+
-+	return ret;
++	fuse_reply_err(req, ret);
 +}
 +
-+static void fs_getattr(fuse_req_t req, fuse_ino_t ino,
-+		       struct fuse_file_info *fi)
-+{
-+	struct stat st = {};
-+
-+	if (fill_stat(ino, &st) < 0)
-+		fuse_reply_err(req, ENOENT);
-+	else
-+		fuse_reply_attr(req, &st, TIMEOUT);
-+}
-+
-+static void fs_opendir(fuse_req_t req, fuse_ino_t ino,
-+		       struct fuse_file_info *fi)
-+{
-+	pthread_mutex_lock(&test_state.lock);
-+	fi->keep_cache = test_state.keep_cache;
-+	fi->cache_readdir = test_state.cache_readdir;
-+	pthread_mutex_unlock(&test_state.lock);
-+	fuse_reply_open(req, fi);
-+}
-+
-+static void fs_readdir(fuse_req_t req, fuse_ino_t ino, size_t size,
-+		       off_t offset, struct fuse_file_info *fi)
-+{
-+	struct stat st = {};
-+	char buf[1024];
-+	char *pbuf;
-+	size_t rem = size;
-+	size_t sz;
-+	int nextoff = 0;
-+
-+	if (ino != DIR_INO) {
-+		fuse_reply_err(req, ENOTDIR);
-+		return;
-+	}
-+	if (offset) {
-+		fuse_reply_buf(req, NULL, 0);
-+		return;
-+	}
-+	pbuf = buf;
-+	fill_stat(DOT_INO, &st);
-+	sz = fuse_add_direntry(req, pbuf, rem, ".", &st, nextoff++);
-+	rem -= sz;
-+	pbuf += sz;
-+	fill_stat(DOTDOT_INO, &st);
-+	sz = fuse_add_direntry(req, pbuf, rem, "..", &st, nextoff++);
-+	rem -= sz;
-+	pbuf += sz;
-+	fill_stat(FILE_INO, &st);
-+	sz = fuse_add_direntry(req, pbuf, rem, FILENAME, &st, nextoff++);
-+	rem -= sz;
-+
-+	fuse_reply_buf(req, buf, size - rem);
-+
-+	pthread_mutex_lock(&test_state.lock);
-+	test_state.readdir_counter++;
-+	pthread_mutex_unlock(&test_state.lock);
-+}
-+
-+static const struct fuse_lowlevel_ops fs_ops = {
-+	.lookup		= fs_lookup,
-+	.getattr	= fs_getattr,
-+	.opendir	= fs_opendir,
-+	.readdir	= fs_readdir,
-+};
-+
-+FIXTURE(readdir_cache)
+ static const struct fuse_lowlevel_ops fs_ops = {
++	.init     = fs_init,
+ 	.lookup   = fs_lookup,
+ 	.getattr  = fs_getattr,
+ 	.getxattr = fs_getxattr,
++	.setxattr = fs_setxattr,
+ };
+ 
+ /* ---- kselftest harness --------------------------------------------------- */
+@@ -199,6 +238,7 @@ FIXTURE_SETUP(acl_cache)
+ 	ASSERT_NE(g_ds.acl, NULL);
+ 	memcpy(g_ds.acl, acl_a, g_ds.acl_size);
+ 	g_ds.getxattr_count = 0;
++	g_ds.cache          = false;
+ 
+ 	if (fs_setup(&self->se, self->mountpoint, &fs_ops, &self->thread, err))
+ 		SKIP(return, err);
+@@ -322,4 +362,143 @@ TEST_F(acl_cache, stale_after_force_sync)
+ 	EXPECT_EQ(count, 4);
+ }
+ 
++FIXTURE(acl_cache_onoff)
 +{
 +	struct fuse_session *se;
 +	char mountpoint[MOUNTPOINT_SZ];
++	char pathname[PATH_MAX];
 +	pthread_t thread;
 +};
 +
-+FIXTURE_VARIANT(readdir_cache)
-+{
-+	bool cache_readdir;
-+	bool keep_cache;
-+};
-+FIXTURE_VARIANT_ADD(readdir_cache, nocache)
-+{
-+	.cache_readdir = false,
-+	.keep_cache = false,
-+};
-+FIXTURE_VARIANT_ADD(readdir_cache, cache_readdir)
-+{
-+	.cache_readdir = true,
-+	.keep_cache = false,
-+};
-+FIXTURE_VARIANT_ADD(readdir_cache, keep_cache)
-+{
-+	.cache_readdir = false,
-+	.keep_cache = true,
-+};
-+FIXTURE_VARIANT_ADD(readdir_cache, cache)
-+{
-+	.cache_readdir = true,
-+	.keep_cache = true,
-+};
++FIXTURE_VARIANT(acl_cache_onoff) { bool cache; };
++FIXTURE_VARIANT_ADD(acl_cache_onoff, nocache) { .cache = false, };
++FIXTURE_VARIANT_ADD(acl_cache_onoff, docache) { .cache = true, };
 +
-+FIXTURE_SETUP(readdir_cache)
++FIXTURE_SETUP(acl_cache_onoff)
 +{
 +	char err[MAX_ERR_MSG];
 +
-+	pthread_mutex_lock(&test_state.lock);
-+	test_state.readdir_counter = 0;
-+	test_state.cache_readdir = variant->cache_readdir;
-+	test_state.keep_cache = variant->keep_cache;
-+	pthread_mutex_unlock(&test_state.lock);
++	g_ds.acl = NULL;
++	g_ds.acl_size = 0;
++	g_ds.getxattr_count = 0;
++	g_ds.cache = variant->cache;
 +
 +	if (fs_setup(&self->se, self->mountpoint, &fs_ops, &self->thread, err))
 +		SKIP(return, err);
++
++	snprintf(self->pathname, sizeof(self->pathname),
++		 "%s/" FILE_NAME, self->mountpoint);
 +}
 +
-+FIXTURE_TEARDOWN(readdir_cache)
++FIXTURE_TEARDOWN(acl_cache_onoff)
 +{
 +	fs_teardown(self->se, self->thread, self->mountpoint);
++	free(g_ds.acl);
 +}
 +
-+TEST_F(readdir_cache, test_readdir_cache)
++/*
++ * This is the most basic ACL caching test: verify that, when reading ACLs for
++ * an inode, user-space is called:
++ * - Only once if ACLs cache is enabled, or
++ * - Once per access if cache i disabled.
++ */
++TEST_F(acl_cache_onoff, test_acl_cache_enable_disable)
 +{
-+	struct dirent *dentry;
-+	DIR *dir;
-+	char pathname[PATH_MAX];
-+	int total_counter, rewind_counter;
-+	int dentrycount;
++	char buf[512];
++	ssize_t sz;
++	bool cache;
++	int counter;
++	int i;
 +
-+	sprintf(pathname, "%s/%s", self->mountpoint, DIRNAME);
++	ASSERT_EQ(lsetxattr(self->pathname, "system.posix_acl_access",
++			    acl_a, sizeof(acl_a), 0), 0);
 +
-+	dir = opendir(pathname);
-+	if (dir == NULL)
-+		TH_LOG("opendir(): %s", strerror(errno));
-+	ASSERT_NE(dir, NULL);
-+
-+	errno = 0;
-+	dentrycount = 0;
-+	while ((dentry = readdir(dir)))
-+		dentrycount++;
-+	ASSERT_EQ(errno, 0);
-+	ASSERT_EQ(dentrycount, 3);
-+
-+	rewinddir(dir);
-+	errno = 0;
-+	dentrycount = 0;
-+	while ((dentry = readdir(dir)))
-+		dentrycount++;
-+	ASSERT_EQ(errno, 0);
-+	ASSERT_EQ(dentrycount, 3);
-+
-+	ASSERT_EQ(closedir(dir), 0);
-+
-+	pthread_mutex_lock(&test_state.lock);
-+	rewind_counter = test_state.readdir_counter;
-+	pthread_mutex_unlock(&test_state.lock);
-+
-+	dir = opendir(pathname);
-+	if (dir == NULL)
-+		TH_LOG("opendir(): %s", strerror(errno));
-+	ASSERT_NE(dir, NULL);
-+
-+	errno = 0;
-+	dentrycount = 0;
-+	while ((dentry = readdir(dir)))
-+		dentrycount++;
-+	ASSERT_EQ(errno, 0);
-+	ASSERT_EQ(dentrycount, 3);
-+
-+	ASSERT_EQ(closedir(dir), 0);
-+
-+	pthread_mutex_lock(&test_state.lock);
-+	total_counter = test_state.readdir_counter;
-+	pthread_mutex_unlock(&test_state.lock);
-+
-+	if (!variant->cache_readdir) {
-+		ASSERT_EQ(rewind_counter, 2);
-+		ASSERT_EQ(total_counter, 3);
-+	} else if (!variant->keep_cache) {
-+		ASSERT_EQ(rewind_counter, 1);
-+		ASSERT_EQ(total_counter, 2);
-+	} else {
-+		ASSERT_EQ(rewind_counter, 1);
-+		ASSERT_EQ(total_counter, 1);
++	for (i = 0; i < 100; i++) {
++		sz = lgetxattr(self->pathname, "system.posix_acl_access",
++			       buf, sizeof(buf));
++		ASSERT_EQ(sz, sizeof(acl_a));
++		ASSERT_EQ(memcmp(buf, acl_a, sz), 0);
 +	}
++
++	pthread_mutex_lock(&g_ds.lock);
++	counter = g_ds.getxattr_count;
++	cache = g_ds.cache;
++	pthread_mutex_unlock(&g_ds.lock);
++
++	if (cache) {
++		ASSERT_EQ(counter, 1);
++	} else {
++		ASSERT_EQ(counter, 100);
++	}
++
++	TH_LOG("User-space called %d time(s) with ACL caching %s",
++	       counter, cache ? "enabled" : "disabled");
 +}
 +
-+TEST_HARNESS_MAIN
++/*
++ * Test caching invalidation for several scenarios:
++ * 1. When a new ACL is set
++ * 2. When invalidating an inode (NOTIFY_INODE_INVAL)
++ */
++TEST_F(acl_cache_onoff, test_acl_cache_invalidation)
++{
++	char buf[512];
++	ssize_t sz;
++	int counter;
++	bool cache;
++	int i;
++
++	/* Set an ACL */
++	ASSERT_EQ(lsetxattr(self->pathname, "system.posix_acl_access",
++			    acl_a, sizeof(acl_a), 0), 0);
++
++	for (i = 0; i < 100; i++) {
++		sz = lgetxattr(self->pathname, "system.posix_acl_access",
++			       buf, sizeof(buf));
++		ASSERT_EQ(sz, sizeof(acl_a));
++		ASSERT_EQ(memcmp(buf, acl_a, sz), 0);
++	}
++
++	/* 1. force cache invalidation by setting a new ACL */
++	ASSERT_EQ(lsetxattr(self->pathname, "system.posix_acl_access",
++			    acl_b, sizeof(acl_b), 0), 0);
++
++	sz = lgetxattr(self->pathname, "system.posix_acl_access",
++		       buf, sizeof(buf));
++	ASSERT_EQ(sz, sizeof(acl_b));
++	ASSERT_EQ(memcmp(buf, acl_b, sz), 0);
++
++	pthread_mutex_lock(&g_ds.lock);
++	counter = g_ds.getxattr_count;
++	cache = g_ds.cache;
++	pthread_mutex_unlock(&g_ds.lock);
++
++	if (cache) {
++		ASSERT_EQ(counter, 2);
++	} else {
++		ASSERT_EQ(counter, 101);
++	}
++	TH_LOG("Invalidation by setting new ACL: OK");
++
++	/* 2. send FUSE_NOTIFY_INVAL_INODE */
++	fuse_lowlevel_notify_inval_inode(self->se, FILE_INO, 0, 0);
++
++	sz = lgetxattr(self->pathname, "system.posix_acl_access",
++		       buf, sizeof(buf));
++	ASSERT_EQ(sz, sizeof(acl_b));
++	ASSERT_EQ(memcmp(buf, acl_b, sz), 0);
++
++	pthread_mutex_lock(&g_ds.lock);
++	counter = g_ds.getxattr_count;
++	cache = g_ds.cache;
++	pthread_mutex_unlock(&g_ds.lock);
++
++	if (cache) {
++		ASSERT_EQ(counter, 3);
++	} else {
++		ASSERT_EQ(counter, 102);
++	}
++	TH_LOG("Invalidation through FUSE_NOTIFY_INVAL_INODE: OK");
++}
++
+ TEST_HARNESS_MAIN
