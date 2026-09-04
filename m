@@ -1,93 +1,93 @@
 Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABAF5377EDC
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 19:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0EF42378F
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 19:15:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788548472; cv=pass; b=j2jKk3Q54KuJQOi4Vvoz7iXMjoqoByVc8gNfQqdzlao1wwZfXQ5iJJeLvl12kbbrPDXLy0fkPuybwM158oDOy/HI8uwJlZDP9VUdL9aTY6gmwgbWoCjQPiMOT72rmhfsrlFhxKY06wJvtUGh9o/QYKBW6O+zSe00u9dBifAC0tw=
+	t=1788549337; cv=pass; b=gUYl75BrCvV+qzZbezmDhPQTO6zygIfMvzIrsZk98e4IWRR75ZeiQHqsbhjQUZiRwPa9nD1YFu0aVIzvWeMHiX5fy88+A3aJC+8JggkubcHGVo5zIqc4SBMzLYz+F4CUv85pYH2XCI5aPfjBPCfogaOYG53FkxYSjZTv2Nqo87A=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788548472; c=relaxed/simple;
-	bh=2OV53qj+Ok3sZRi1Cu45I3HwF6So2E+y40itVWLrldU=;
+	s=arc-20240116; t=1788549337; c=relaxed/simple;
+	bh=RJcDDgRgpaDIUsfuExKSBMWandyiKFZbShfF+mF/REM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Exyku85jcwetR+UdgXVWh5PMMMVYFY3EvbDnBGCriVQskx6EJ8zrPwBfNpFZEKS7NSukC/4bFsMMGYR0cAisM8eqyU9wmPEHXFv8FAxVh2jTAZSh88b6mpDZAroxvrZE7fwT9f5QN5c3GxvZ4Lfdgk1L26sSZso/MrXLQZgHTZc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=mQyeiOk5; arc=pass smtp.client-ip=209.85.210.181
+	 To:Cc:Content-Type; b=I5uLjpswKjeOWdLEjFgJ2xzFsf1ogCFzmvm2x/EPtEOnd9EC+igqX4s9Ld6BQMGvqvPcv17qRzdnvTlm9WPY7Twzqpohk/HHfoCObYVJJn4M52yu2dyUuafAFx5GNito+YerKNNPk4VncGgrh6FZb6p/zNn81j4qvpTpO0Ju8Vs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=Nw5jcjG7; arc=pass smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="mQyeiOk5"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-84eb992a881so935839b3a.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 12:00:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788548443; cv=none;
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="Nw5jcjG7"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8556ec44e9aso1338374b3a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 12:15:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788549332; cv=none;
         d=google.com; s=arc-20260327;
-        b=I4E1gGg7Ae+vRzgtotdq2wpYCoefA99w7/Z0UnwubxXu5s3dWCwvjGj5HFCQH5lU5L
-         O1iaVCyThf2c0hAOG7wHYXOKowea835IjbOQlfUVs0ctdnr0MHz1+5wjmvGb5h/mnsFp
-         dkdmo26Z2fxB1PwuWfsFvBMfGR07is1pDoo46fZ/7baCY4bUr+Huo5+BKXkYt+hJAqHt
-         B9XPg9EArj61fmEZyMV+pDf4ZCjExecW/PXgvqCntJW0EnJKUBqLfeBTdlz72e/NuMoj
-         ILlCRTzFMAVQbjgeO9bl9ym5CvnoWFjre0h+7ULy4t2JK7KDkjHyz15ed3wOSzhWvMFg
-         vMFA==
+        b=kGGLFYZlH8HPEdewmVTrgVbXgUjr+OQxnafHqXzal8sYbqyfr5/kOqKG0Qfw70wjWJ
+         mkSketwmoxH68pHaTUHothlc1XwqApmyAtsqiBcoGmxzPMe1vMRxmNnf6/q9WTLk4sHM
+         75e92tz1i+IXmX0d9QhF0IDgejIROF+O9A0XdmWKrGxGX1rA2fij3QqnTNEQq4UlDVi7
+         XEGVU2ddowMwvrE8GEmNCwcu6knt/Wh3t97kgbnezSGXqDHe+wLhpmt7+bzylODA2buP
+         hjTUS3Siq0SL3qKJZ/c0hYb9q6oT3gQVL9CvbiH/40OQlyI9cXJDv+5rDonS2Kk/gkti
+         G04Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=xEH5wC1CsIXf1Wl3c1bH+jg+ggyRXswm+rvfZnXVjBs=;
-        fh=3NiSUAVrIfi0ZgnLxaJre7s5wR4vC/tntZa8lS/zcyU=;
-        b=TFo+nyoErUx66Hp5U1//lmsT0aeFSedcMLVzEH+44Mn3+khlYYoboWUc0KmeUJ0Ghh
-         iBk0etXnDqlHmhNpO9HfofgYK8vUGKLrmJejtcUVc/eotTIRIXnDuSj7kdVlIii3YJYF
-         0oDMCW6J87zs+tOYMnRTf115tMxWHGZWU5flSIMSVUeYnKwiOBi2wgZNNFm4GOvagmtZ
-         vjBJKXAby5g5zklsJL45R+o3QRn8Jb9n7fgJv/jXHyt5QMPJz490Q2M5FDzbwWJ/5hFy
-         l8CAVyBZQi+DPOEqeRO9Zp66p+6WtE1m6LqWJE+yQzqVvgTYPe7CW7FH6bnpSA96/kqW
-         aq4A==;
+        bh=dYS5/w22YuJNpUyBa8hionV/tw+04HF3GDuU6FDXpFg=;
+        fh=S4JqHmWbjewlhgmSNlxaSliQNLVZVtn/DWjexqoNz5E=;
+        b=gbkU2KAgN0BPFSfMHj0BN9tc01MrzCp/Q0j25y31nHxUFUzhq/GZv390Jcytoi381b
+         SMfv6Ue6SUcbWCw74Fwy2d1WDR1V3rC0QSlNz6/gfMbQwUVL1ossKMbDcTIng2peZ7WD
+         EKDl/mxAQ469b+WEbHwav8L3V48eF5PVxZ/OOvKJ8uFdE6ZUN8hvL+O+BizyVAsyuiSY
+         duvtYA6WwQhSB1SXGjSQLYLQgGhaLafw4xvXj2+Jcoe+wN0lBpwsVYMGa09dv+ZfgXMr
+         LSSVEfgH92I7qa1dlznEbP9fXVFZ87OgYyXbiTeSX7+g4bUzs/QIT3x402RY6D+tW6jL
+         pM7w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1788548443; x=1789153243; darn=vger.kernel.org;
+        d=mojatatu.com; s=google; t=1788549332; x=1789154132; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=xEH5wC1CsIXf1Wl3c1bH+jg+ggyRXswm+rvfZnXVjBs=;
-        b=mQyeiOk5dJSJbhy+c1J3+B/BEKcezVsTv279dr09o8QAGCVCc9fD1yOW+3og2RwHHS
-         MWGmIymyD2bDFyTIp/aVRoKunCcNCurepyamnhDwPGDoKEIfxi6hqSQA2viK/JDdktEQ
-         6pGdI5Suo+G8hSnTngq481dS+c2IiYm8xCYOo=
+        bh=dYS5/w22YuJNpUyBa8hionV/tw+04HF3GDuU6FDXpFg=;
+        b=Nw5jcjG7Y+yWx6I60/FaTfMbrUBQUHz77/UklmKOtMsHfaLyw/MbO6wDf6EKiIcSoB
+         u5T+iZsymQJa/56O4fCj+hooQ0t8+4SVI9bKCPmno3FkCKw11kBwv0F+eijzBzdLemJA
+         RwJ1QKcflTHfkLWrFx/jybRj0jS0TnnFKozOY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788548443; x=1789153243;
+        d=1e100.net; s=20251104; t=1788549332; x=1789154132;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xEH5wC1CsIXf1Wl3c1bH+jg+ggyRXswm+rvfZnXVjBs=;
-        b=JmmFsaoPQE2qKvapai9wsjXpH9vfrKwGT0Fxdj6WNsJ8JGWEvSlZYvp44sEOmIj10D
-         89dNEb8mGreLeVRFoWw/sF3JU2ECUIku+zcA+fZ+lNCbspzAC4EcyUPgkAvTxTU8HjpS
-         FteeKbrbQ1ESQXzLFzj7xEwcEGoaOvz+9mVHlwcAPHZ2XOpsT8OrbJtpWuceOCpZiwtS
-         W2hVlIzjdWasXBYVW2xzOfys8ggJYDJXJEIGGdAQXeOQmqETARsnHdJE4Ua/tJzbv2IO
-         KhwQMtdtIhW0q/mAYy4n5NrDBym7MroHnKEY2QuVv+vgwe3aBNDknOeHLDXSYg5HMesX
-         Ts/Q==
-X-Forwarded-Encrypted: i=1; AKwUvBybivQ1fU3OUFpKBAOD2eGgRuJH9gObRKYZUOzdgtq6a2vPp+7WaVT/rwaNX6DxwV6FT3w7oVAvJKjZV/V5OBk=@vger.kernel.org
-X-Gm-Message-State: AFuF++k6P5XkDqliz+Ys7ojXU9jLw2MwlJxEoRgGXXQtW3AhfctGjI24
-	gcAQbHuS78je0luUcBDPmo0sT9ooY52Qf9LKPFVyB3wyGLgGq0MOhM7HC7HR8c3q5GQNUSsVUYW
-	h55Q1AJ1rn697R0Vy9TiJf2ZYK6P0SFO7scyQipE1
-X-Gm-Gg: AYBFou2SnYnKYacV0KfMA1lm6sVtd5oUCU26IPxtE1JuyZA8CnnaXmd/QdQtbktgwWQ
-	I3V8mF2IAVciZ3Qx2iyaypyvOcDLDkUR4krIYWVRuxEokroopyl3SMwAbju2Iadqmw8jZQeNy1n
-	1LOKbOkvv6m+SDXaW4h75QkgYrh76ZrDEDP6YRQPERTRYCek3pRl5H5pNxrdH+p+N9arv8DVaxl
-	p2rgFA1KCbu2Ld1hPlE7utybuyNgy7r3ooGNUtpSXmD8ZzPv1/f+37orrub1bOw1n8bH5qmrIfb
-	I/EsWm+ETGWplUpEHh0fK6xmn+Luqgg5dHj1auVKy1oTmW9h5+C7iZhH3rnJ9tA+C2axURYXq+W
-	W6ILp6d+oi6pwfz0XkPVQtng=
-X-Received: by 2002:a05:6a00:4388:b0:857:7317:cff2 with SMTP id
- d2e1a72fcca58-8616a266f1bmr11528797b3a.19.1788548442716; Fri, 04 Sep 2026
- 12:00:42 -0700 (PDT)
+        bh=dYS5/w22YuJNpUyBa8hionV/tw+04HF3GDuU6FDXpFg=;
+        b=BD51Z1/DedBbOaYFAZX3ShG+IMsRgtbalbwmcLj0xUlEr0hUp001kVCR6qyoftp4cn
+         ilZMPp/SDg5tPcirtiG3IYY+DcB8wIyqODzmOOsYQZy/jCTphW2SIS4Oy7bsIuZKunA3
+         gmWi1iYGYpAHl+aLnfzRUAASdsj676XFQ+4snW9zLNKzx6EcMnO5mDTUq9X2RTjNXUQw
+         H+/FMqOPRCJHoRV7g1oBTWuLgXIHiLvhfw12v6F4JS9wJ8pxPTfrsRbrI1EsOx4dMtOL
+         Vg5bx0ngHT4T+HFlnmSMgwzMIqa//6LdJAd3EO2d6GY6SWqTqQupVKksPZSn6STd7Mqi
+         VJKA==
+X-Forwarded-Encrypted: i=1; AKwUvBzYeG/cq6V5d6CNOPdKkNHyJZ212RXrdELFRr1rUP3Wk0NUFvkRZx+vlcH9Jtkmw/68LFTkE1LlegATNu0iRDw=@vger.kernel.org
+X-Gm-Message-State: AFuF++kz24keiVDAPRtAgl7iQittZ31ijxl84Z081NcYsSEQEzeRH94A
+	q1+I7+Gs2+HVvbp+Zn1x2/Ta2FB7/Q31au+by5mS/vOs0qfpoIRcW2Vr3a7HEkS+n/YMuLNcRHM
+	4R/OWOK1BFFQYPnvAzb6MdBLEUfqKwAE302a5adzF
+X-Gm-Gg: AYBFou1mO5jFDD+xbGRfpPFPBxrzS5GX6PrTScFXXUw5v7OuuqS+WrjkmafwyhWiQEd
+	yu9JSX7kkzw6shiCQJkUrfxNleDQhuxRrnRiwZSBP2HLvWz+TjyKoHZepY9R1ByVi/TBxFyjMGj
+	JhCcn6+O3lcHCgdVJE6AS188S6yeFUeqUvp0iw6W9ovfyDO+xMDw4Lk08/EMt8i1yjniN4HE24O
+	RWp49477tbR99TRTL9JZiIW4Uwl7fcuu1SF4OPKUYNkZ5cfx8dOpT2IIICUbaHPKhxPDzAjjSIF
+	klNeLwTbQB6+jGwJo2FEFs0Hgnh7s5nzJ0CLv8SlJ50/6S6n1D+Bjsbzo5CLEMScg/zi1xVMa1E
+	uHA6BTqnbRr3TpQUVz5dOindEwQmydoDEBA==
+X-Received: by 2002:a05:6a00:950c:b0:855:74f7:40c2 with SMTP id
+ d2e1a72fcca58-8616a36d628mr12602867b3a.14.1788549331694; Fri, 04 Sep 2026
+ 12:15:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <QDISC-0CFC.v3.20260901204856@mojatatu.com.5> <178851496497.4131868.4506740406009637307@kernel.org>
-In-Reply-To: <178851496497.4131868.4506740406009637307@kernel.org>
+References: <QDISC-0CFC.v3.20260901204856@mojatatu.com.6> <178851496617.4131868.17637386620065749703@kernel.org>
+In-Reply-To: <178851496617.4131868.17637386620065749703@kernel.org>
 From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Fri, 4 Sep 2026 15:00:31 -0400
-X-Gm-Features: AcwNN1VDa4Ghdswb8Xi7BvlaZaZEQXVw6g3GygKdaBdnklKemsWZICSvEGXwP_Y
-Message-ID: <CAM0EoM=soN+QzH7ZFW5th8ZC-53Kh7f178QK6ooZ-Su7re74rg@mail.gmail.com>
-Subject: Re: [PATCH net v3 4/9] net/sched: hhf: clamp quantum in change and
- init paths
+Date: Fri, 4 Sep 2026 15:15:19 -0400
+X-Gm-Features: AcwNN1VgibR1p-Uw9b938VLE_oHi6L0x_m8biEC_EiOq_ihQAdY98OCRwHBuzRA
+Message-ID: <CAM0EoMmPcFnbA3pV4wYBb-GiODmy9BR55obGHM-5Z8zuCeccyg@mail.gmail.com>
+Subject: Re: [PATCH net v3 5/9] net/sched: dualpi2: clamp psched_mtu at all
+ call sites
 To: netdev-bot+sashiko@kernel.org
 Cc: netdev@vger.kernel.org, jiri@resnulli.us, davem@davemloft.net, 
 	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
@@ -99,164 +99,179 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Sep 4, 2026 at 5:42=E2=80=AFAM <netdev-bot+sashiko@kernel.org> wrot=
 e:
 >
-> Thank you for your contribution! Sashiko AI review found 1 potential
+> Thank you for your contribution! Sashiko AI review found 2 potential
 > issue(s) to consider:
 >
-> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 1 (1) =C2=B7 Low: 0
+> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 1 =C2=B7 Low: 1
 >
-> - [Medium] The changelog's justification is stale on the tree this patch
->   applies to.
->
-> Pre-existing issues:
-> - [Medium] A TCA_HHF_HH_FLOWS_LIMIT value supplied at qdisc creation time
->   is silently discarded.
->
-> --
+> - [Medium] Changelog/reproducer mismatch in "net/sched: dualpi2: clamp
+>   psched_mtu at all call sites": the commit message blames "a crafted=E2=
+=80=A6
+> - [Low] netdev coding-style violation and triplicated open-coded clamp.
 >
 
-1. [Medium] "~2 GiB / 2^31 figure stale"
+My conclusion:
 
-Valid. Good catch on the backport angle.
-Post-8f735d64382d the stab-inflated pkt_len is capped at 1 MiB, so the
-hhf_dequeue() refill loop is bounded to ~2^20/quantum iterations,
-_not_ 2^31. The changelog should describe the post-cap bound and note
-8f735d64382d as the commit that closes the soft-lockup case. Stable
-patches are going to include  8f735d64382d so we are good.
-Documentation on the clamp itself is still correct defense-in-depth
-for the mtu=3D0 case it also fixes.
+1. [Medium] "changelog/reproducer mismatch =E2=80=94 stab does not reach
+   psched_mtu()"
+Valid point.
+The real trigger is a large device MTU  (dummy accepts up to ~2^31-1
+since dev->max_mtu =3D 0), not a size table; the changelog's stab-based
+recipe exercises none of the three
+ The correct reproducer is: "ip link set dev dummy0 mtu 2147483647"
+Changelog issue only; the clamp is the right fix for the MTU path.
 
-2. [Medium, pre-existing] "TCA_HHF_HH_FLOWS_LIMIT at creation is
-silently discarded"
-Already tracked by our internal tracker as  bug QDISC-B855. It covers
-the hhf flows-limit family; this specific create-path discard is noted
-there as part of that fix's scope.
+2. [Low] "declaration ordering + triplicated clamp"
+Also valid:  Will fix the ordering (and consider a small helper) if
+the series is ever resent.
 
-Summary: No code change requested for this patch.
-
+On the deferred scope note (dequeue_packet() credit multiply,
+deferred_drops_len accumulation): We verified separately the generic 1
+MiB pkt_len cap bounds the multiply, but the s32 credit ACCUMULATION
+can still wrap when the C queue is empty; filed as a follow-up
+("under dualpi2 c_protection_credit s32 accumulation wrap
+(C-queue-empty case)") .
 
 cheers,
 jamal
-> net/sched: hhf: clamp quantum in change and init paths
+
+> --
 >
-> This adds a 256 byte floor to the quantum accepted from userspace in
-> hhf_change(), clamps the quantum derived from the device MTU in hhf_init(=
-)
-> to [256, 1<<20], and drops the old overflow fallback that set quantum to
-> 256.
+> net/sched: dualpi2: clamp psched_mtu at all call sites
 >
-> Two questions below, one about the changelog and one about a pre-existing
-> detail in hhf_init().
+> The patch clamps psched_mtu(qdisc_dev(sch)) into [1, 1 << 20] at the thre=
+e
+> places sch_dualpi2.c uses it: dualpi2_calculate_c_protection(), must_drop=
+()
+> and get_memory_limit().  The stated goal is to avoid overflow of the sign=
+ed
+> multiply for c_protection_init and the wrap of 2 * psched_mtu().
 >
-> >     hhf_change() accepts any quantum from userspace, including 1. With =
-a
-> >     crafted size table qdisc_pkt_len reaches ~2 GiB, so quantum=3D1 mak=
-es
-> >     the deficit-refill loop spin ~2^31 times under the qdisc lock
-> >     (a soft lockup / denial of service).
-> >     ...
-> >       tc qdisc add dev dummy0 root hhf
-> >       tc qdisc change dev dummy0 root hhf quantum 1 stab data 32768 siz=
-e_log 15 cell_log 0
-> >
-> >     Fixes: 10239edf86f1 ("net-qdisc-hhf: Heavy-Hitter Filter (HHF) qdis=
-c")
+> A couple of questions about the changelog and the style of the new code.
 >
 > [Severity: Medium]
-> Is the ~2 GiB / ~2^31 figure still accurate on this tree?
 >
-> __qdisc_calculate_pkt_len() in net/sched/sch_api.c already ends with:
+> > With a crafted size table qdisc_pkt_len reaches ~2 GiB, causing a soft
+> > lockup / denial of service.
+> >
+> >   tc qdisc add dev dummy0 root dualpi2
+> >   tc qdisc change dev dummy0 root dualpi2 stab data 32768 size_log 15 c=
+ell_log 0
 >
->         /* A size table can inflate qdisc_pkt_len() beyond any real packe=
-t
->          * (via overhead, the data table, or size_log); cap it so deficit
->          * schedulers such as DRR/ETS terminate their refill loops.
->          */
+> Do these two commands actually exercise any of the three changed lines?
+>
+> The patch only bounds psched_mtu(), which is derived from the netdevice:
+>
+> include/net/pkt_sched.h:
+>         static inline unsigned int psched_mtu(const struct net_device *de=
+v)
+>         {
+>                 return READ_ONCE(dev->mtu) + dev->hard_header_len;
+>         }
+>
+> A TCA_STAB only rewrites qdisc_skb_cb(skb)->pkt_len in
+> __qdisc_calculate_pkt_len(), so a size table cannot influence
+> psched_mtu().  With the quoted commands dummy0 keeps its default MTU, so
+> dualpi2_calculate_c_protection(), must_drop() and get_memory_limit()
+> compute the same values before and after this patch.
+>
+> Is the "~2 GiB" qdisc_pkt_len reachable on this tree at all?
+> __qdisc_calculate_pkt_len() already caps it, and that clamp is present in
+> the baseline too:
+>
+> net/sched/sch_api.c:__qdisc_calculate_pkt_len() {
+>         ...
 >         pkt_len =3D clamp_t(int, pkt_len, 1, QDISC_PKT_LEN_MAX);
+>         qdisc_skb_cb(skb)->pkt_len =3D pkt_len;
+> }
 >
-> with QDISC_PKT_LEN_MAX defined as (1 << 20) in include/net/pkt_sched.h.
-> That cap is present in the baseline, added by 8f735d64382d ("net/sched:
-> bound qdisc_pkt_len to prevent qdisc soft lockup").
+> with include/net/pkt_sched.h:
 >
-> With that clamp, the quoted reproducer (32768 << 15, i.e. 2^30) yields a
-> pkt_len of 2^20, so the refill loop in hhf_dequeue():
+>         #define QDISC_PKT_LEN_MAX       (1 << 20)       /* 1 MiB */
 >
->                 if (bucket->deficit <=3D 0) {
->                         int weight =3D (bucket - q->buckets =3D=3D WDRR_B=
-UCKET_FOR_HH) ?
->                                       1 : q->hhf_non_hh_weight;
+> Would it be more accurate to describe the trigger as a large device MTU?
+> dummy leaves the upper bound unset:
 >
->                         bucket->deficit +=3D weight * q->quantum;
+> drivers/net/dummy.c:dummy_setup() {
+>         ...
+>         dev->min_mtu =3D 0;
+>         dev->max_mtu =3D 0;
+> }
 >
-> is bounded to roughly 2^20 iterations with quantum=3D1, not 2^31. The
-> changelog of 8f735d64382d itself describes 1M iterations as completing in
-> a few milliseconds.
+> and dev_validate_mtu() only enforces an upper limit when dev->max_mtu > 0=
+,
+> so "ip link set dev dummy0 mtu 2147483647" is what makes
+> (s32)psched_mtu() * ((int)wc - (int)wl) overflow.  Note that
+> TCA_DUALPI2_C_PROTECTION is range-limited to [0, MAX_WC] with MAX_WC 100,
+> so the signed multiply only overflows above roughly 21.5 MiB of MTU, and
+> 2 * psched_mtu() only wraps above 2 GiB.
 >
-> Could the changelog be reworded so it describes the bound that actually
-> applies here, and mention 8f735d64382d as the commit that closes the
-> soft-lockup case? Without that dependency noted, a stable backport of thi=
-s
-> patch alone onto a tree lacking the pkt_len cap still leaves roughly
-> 2 GiB / 256 refill iterations under the qdisc lock.
+> One more thing on scope: the size-table path the message mentions is left
+> untouched in this file.  dequeue_packet() still does
 >
-> > diff --git a/net/sched/sch_hhf.c b/net/sched/sch_hhf.c
-> > index 96acab6a8da03..fc72f825fbd92 100644
-> > --- a/net/sched/sch_hhf.c
-> > +++ b/net/sched/sch_hhf.c
-> > @@ -551,7 +551,7 @@ static int hhf_change(struct Qdisc *sch, struct nla=
-ttr *opt,
-> >               return err;
-> >
-> >       if (tb[TCA_HHF_QUANTUM])
-> > -             new_quantum =3D nla_get_u32(tb[TCA_HHF_QUANTUM]);
-> > +             new_quantum =3D max(256U, nla_get_u32(tb[TCA_HHF_QUANTUM]=
-));
-> >
-> >       if (tb[TCA_HHF_NON_HH_WEIGHT])
-> >               new_hhf_non_hh_weight =3D nla_get_u32(tb[TCA_HHF_NON_HH_W=
-EIGHT]);
+>         *credit_change *=3D qdisc_pkt_len(skb);
+>
+> and drop_and_retry() still accumulates
+>
+>         q->deferred_drops_len +=3D qdisc_pkt_len(skb);
+>
+> Those are fine here because of the generic 1 MiB pkt_len cap, but the
+> Fixes: tag points at trees that may not carry that cap.  Should the
+> changelog say so?
+>
+> > diff --git a/net/sched/sch_dualpi2.c b/net/sched/sch_dualpi2.c
+> > index 4f678d4ff10ec..4947def7c49ef 100644
+> > --- a/net/sched/sch_dualpi2.c
+> > +++ b/net/sched/sch_dualpi2.c
 >
 > [ ... ]
 >
-> > @@ -624,10 +624,6 @@ static int hhf_init(struct Qdisc *sch, struct nlat=
-tr *opt,
-> >       q->hhf_evict_timeout =3D HZ;      /* 1  sec */
-> >       q->hhf_non_hh_weight =3D 2;
+> > @@ -285,8 +287,9 @@ static bool must_drop(struct Qdisc *sch, struct dua=
+lpi2_sched_data *q,
+> >       u64 local_l_prob;
+> >       bool overload;
+> >       u32 prob;
+> > +     u32 mtu =3D clamp_t(u32, psched_mtu(qdisc_dev(sch)), 1, 1 << 20);
+>
+> [Severity: Low]
+> This isn't a bug, but the new declaration in must_drop() is the longest
+> line of the block and is placed last, which breaks the netdev declaration
+> ordering rule in Documentation/process/maintainer-netdev.rst ("Order the
+> variable declaration lines longest to shortest").  Moving the
+> initialization out of line, or reordering the block, would match the rule=
+.
+>
 > >
-> > -     if ((int)q->quantum <=3D 0 ||
-> > -         (u64)q->quantum * q->hhf_non_hh_weight > INT_MAX)
-> > -             q->quantum =3D 256;
-> > -
-> >       if (opt) {
-> >               int err =3D hhf_change(sch, opt, extack);
+> > -     if (sch->qstats.backlog < 2 * psched_mtu(qdisc_dev(sch)))
+> > +     if (sch->qstats.backlog < 2 * mtu)
+> >               return false;
 > >
+> >       prob =3D READ_ONCE(q->pi2_prob);
 >
-> [Severity: Medium]
-> This is a pre-existing issue and not something this patch introduces, but
-> while looking at the ordering in hhf_init() around this hhf_change() call=
-:
-> is a TCA_HHF_HH_FLOWS_LIMIT value passed at creation time dropped?
+> [ ... ]
 >
-> hhf_change() stores it:
+> > @@ -712,7 +715,8 @@ static u32 get_memory_limit(struct Qdisc *sch, u32 =
+limit)
+> >       /* Apply rule of thumb, i.e., doubling the packet length,
+> >        * to further include per packet overhead in memory_limit.
+> >        */
+> > -     u64 memlim =3D mul_u32_u32(limit, 2 * psched_mtu(qdisc_dev(sch)))=
+;
+> > +     u64 memlim =3D mul_u32_u32(limit, 2 * clamp_t(u32, psched_mtu(qdi=
+sc_dev(sch)),
+> > +                                                  1, 1 << 20));
 >
->         if (tb[TCA_HHF_HH_FLOWS_LIMIT])
->                 WRITE_ONCE(q->hh_flows_limit,
->                            nla_get_u32(tb[TCA_HHF_HH_FLOWS_LIMIT]));
+> Would a small helper, e.g. dualpi2_psched_mtu(sch), be preferable here?
+> The same clamp_t(u32, psched_mtu(qdisc_dev(sch)), 1, 1 << 20) expression =
+is
+> now open-coded three times, including this line-wrapped copy inside
+> mul_u32_u32(), so the "at all call sites" property has to be re-checked b=
+y
+> hand for any future psched_mtu() user or bound change.
 >
-> but on a fresh qdisc q->hh_flows is NULL, so hhf_init() then enters the
-> allocation branch which overwrites the same field:
->
->                 /* Cap max active HHs at twice len of hh_flows table. */
->                 q->hh_flows_limit =3D 2 * HH_FLOWS_CNT;
->
-> So tc qdisc add dev X root hhf hh_limit N appears to be ignored, while th=
-e
-> same option via tc qdisc change on an already initialised qdisc takes
-> effect. That field gates admission in hhf_get_flow():
->
->         if (q->hh_flows_current_cnt >=3D q->hh_flows_limit) {
->
-> Would it make sense to only apply the default when the attribute was not
-> supplied?
+> >
+> >       if (upper_32_bits(memlim))
+> >               return U32_MAX;
 >
 > --
 > Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
