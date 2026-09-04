@@ -1,130 +1,143 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9021346D57E
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 10:58:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6014052BB;
+	Fri,  4 Sep 2026 11:25:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788519513; cv=none; b=oSgi0+ImKXOYoAhbAYZTqD34J7mhCuE1iu3PofUsNBrUhkeEK0paX7wWCChilxlNYyuFh50l4zGaYkDQOHDAP2lAG3Ol1s6PusGNmgHrSyLdeGw0hGsSuZ9YcJ1gtO3wgAuZIKJUfYGuVg3u3OdxR90R1JF455ns/LHxmfOk6H4=
+	t=1788521135; cv=none; b=s9X8S9RIU15DkHNmHOIePoWRP+HmqrcUpnrhervzL+GPVZL/Bj6Oqr2qnGFJaeiErBtsJQtAkVdaUo+G5y+2i4sWJ71yfiiL56eg9dmVLeTupwxuh1kE/8jwcre4mKZO5M+Vu+DOKeEoqvyBdbfYnG82tK2ZYoRd+FwK+194V9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788519513; c=relaxed/simple;
-	bh=5yHQlDDHZS6dSVTjZsXMj1S4H7hxEwFqsfVwpTXeteQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aVEsMiOyuDvrOQFWnO2pvDim1aIBCEAvJUZ3nhYyVt5vvJN0lMEs4LhjpVL0ag6Kw+57cRGC6c4URiIwnWod62wq7r+yMgB/tmtO8nKYpO/kkoywj2ar43WOu/Z5U9sB92JjMfE5x7Eol8oum17D1hWjO9s7KWq0XM58ZGQUv4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dGl+VcAm; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788521135; c=relaxed/simple;
+	bh=1pvyWnrQxIwi2JPXOXJev5rAjKEXQJNnU8aT39OlX+8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=cDRApWYiyeST6PbmY6awqUdhqv+Ijw2l6d8OT8Y6tDN3H04qawjVJlN8aobq/xE1PkerztUZVCULRQJc5qz2l77mCvgqzg2TvpKoTMTrvUwiv/tzWH2sbTh0llGmLmNEDEBRPW/65QJRHSsNd93cVIhvmdcG4k9QP9PAXnsn4hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oNate+tZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dGl+VcAm"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2d91ff7d9acso7739315ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 03:58:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788519509; x=1789124309; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=PizEHm/PS46Gb7MqU/Rt95IUcZXQSacvCcrM5GSnGTo=;
-        b=dGl+VcAm7kClFdBOevqEH2I+irqA+wM/NvNwoos1I27k9nH4fxG9asrMi4aOErGWnm
-         SOIsBoUTgg1yk/0cJGQ2qPsOBINhP3if9Vw7XzswruzjfH7dXO/fb6HeNPsYfxcLlNxx
-         7jNnKFHLl+dZ5MTh4aW70AYP2951OuL4FruYw5v/A5eckFaOU6xWY9Xh2Z9xpm+1PYVB
-         DUGVg9CjS18Fy9USV9/8jk60YYVDsPf6Zt6TRHwXGNOYjmsrVZC1GQMp15yy277+xAK4
-         nGN8r52Qs6Toq/guZQZr03vheowiuN3JS5rZe8oHz9koeiDuA0fwBiL4v/Uvr5Lo2/V3
-         +MZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788519509; x=1789124309;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=PizEHm/PS46Gb7MqU/Rt95IUcZXQSacvCcrM5GSnGTo=;
-        b=p339CHXLJ67YkK5PRyqafeXYlKX6dVqGNvWIi398Ol3Owp0i5GCH727X8dR83icw0/
-         27RHWylDiZjQW7Eq0KVMz/76jXUc24lcVLA4xV/Skud0s3+1yRsSXX1tojNbtg2Mx4Jn
-         xIWkHjpP8EjKZ+0ciIbhP7JfHKIugChAVJkyljUJBHXBvFW8416iJG8p4iHAR3JGAazQ
-         /g6qnOWuCit3Lq8iQ5PtTwyRJDrVld+VxOAxj6dkk4j0+8Yi6vM5XVY7gLRj8pxdQhIT
-         8CNMFMB2ZoFuxoLyQAFU9z+TmX6e+DdBBFAmCe+dunCOCnk9crKYlwKUuIT9x6WGLT4p
-         l2hQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwCOXgDtMn959ifG4sxavVW5X3nARnRo4ria4FVnTr5wXjocOOCzInTnkY3YieV3b3RxLKslTLwbhmz28PKwag=@vger.kernel.org
-X-Gm-Message-State: AFuF++lTznfRKUfx6eAVh3nFCodAI+iBtD0owujrXyvkE0Yz3gUIoacn
-	hRUZgO08k4UPBNVUuJFIHXDSYX/PHZ6cXLkmBDiij3dsaGOc03DC54jb
-X-Gm-Gg: AYBFou11fpKWQtm5BRPUQJzLPzemydkvhf3otkdQjWpJqQI9EOp/f05aiVHWxOjX++7
-	RzFSzJmnb3j2uRHBt7/pwlu9Rme8epewN308S66e3Qiqn0vVbztRxMWZgTCChqnu8g+a1xVTuyn
-	iYwWzhUH/NQhesumCGdf9D6eufrJJBcibtCQwf9hpmXABRcauSE9YvZIOlsW37tj8AD79PdJJT/
-	jfD9sttieHg8CQH19yMvhNkdc7raoqnPX4tm3IpjF2D0FhiIIUnadWWGv93iHqpgOy8m2DPiT6n
-	KbCbHCTgiwH/K2l2SFg3UrdPHF+hyAhnQV6MY/uDZvJXBGYb3hGcxR3iT88Heugr6Wtaa5XRq81
-	N4pdeilZLxGVZqsUADq4SVPuU2jLzD/pOREbAg/a8zj+ITHGI+6V0PvGC538n+0qgcXWncs137G
-	8xcYXeB/iPTkQLI0Sm3uMCQL2F2uQlhCc0fq9DCfqYsbDvMWnt3Hs9ZUp5wHCv0JTjoSI0166f0
-	+HQH2dscOIcIQdQbE7xvwWuBw==
-X-Received: by 2002:a17:90b:1c0a:b0:398:d132:ba76 with SMTP id 98e67ed59e1d1-39b2623abfemr7468790a91.21.1788519509025;
-        Fri, 04 Sep 2026 03:58:29 -0700 (PDT)
-Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339b123731sm5523091eec.18.2026.09.04.03.58.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 03:58:28 -0700 (PDT)
-From: Hemanth Selam <hemanth.selam@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 7/7] selftests: bpf: fix repeated words in comments
-Date: Fri,  4 Sep 2026 16:27:37 +0530
-Message-ID: <20260904105743.39799-8-hemanth.selam@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20260904105743.39799-1-hemanth.selam@gmail.com>
-References: <20260904105743.39799-1-hemanth.selam@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oNate+tZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D6171F00A3E;
+	Fri,  4 Sep 2026 11:25:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788521134;
+	bh=g0Hx9IkcnC9yI6FW6UAfMW2/eWJ/9yUrVjzbboHYdGE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=oNate+tZINO21Z6rg2gAhqOHaOa7D1PgqzmZzm2o6lRjp3omI6uQffc0CGFaskXlf
+	 Wtl9cu5fXZANV+j+tFjFoM/rb2zKKBP3PDs8HNLSyPixA5Utz0GTLtzZE8aZmEZMSP
+	 yGovCdsGIfXGKPTFJ8G9MOsyI45QuD9S/HxSp0+0mzh583UhGvOm+P1+xM2f1KVXo/
+	 GbYVXXFJa4E4bJxc4tWnr16zdzIYL0NkN6jEQ4mzNU0nvdApj0myCN8t9dWvLiWc2I
+	 VSHVUruLva3cE0Vij86eSa3ANebkNzkL92AoYKz6n18YK+pANCVPisCpvycPJFPUNz
+	 lVxRqTKgIkqBw==
+Content-Type: multipart/mixed; boundary="===============8006556704449721133=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <9c166c8436f504519e6c236cf6c6c1c08981610fc3b9ff6c47c7cd084e304de8@mail.kernel.org>
+In-Reply-To: <7d8b77dc99ffe99a7bef874a257472fdaaf07e1c.1788516769.git.zhuhui@kylinos.cn>
+References: <7d8b77dc99ffe99a7bef874a257472fdaaf07e1c.1788516769.git.zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next v7 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+From: bot+bpf-ci@kernel.org
+To: hui.zhu@linux.dev,roman.gushchin@linux.dev,inwardvessel@gmail.com,shakeel.butt@linux.dev,akpm@linux-foundation.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,baohua@kernel.org,geliang@kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-mm@kvack.org,linux-kselftest@vger.kernel.org
+Cc: zhuhui@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri,  4 Sep 2026 11:25:33 +0000 (UTC)
 
-Drop words accidentally written twice, reported by checkpatch.pl as a
-possible repeated word.  Only touches comments, no code changes.
+--===============8006556704449721133==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Assisted-by: Cursor:claude-opus-5
-Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
+> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+> index 716df49d76477..92f35ba66309e 100644
+> --- a/mm/bpf_memcontrol.c
+> +++ b/mm/bpf_memcontrol.c
+> @@ -6,6 +6,7 @@
+>   */
+>
+>  #include <linux/memcontrol.h>
+> +#include <linux/swap.h>
+>  #include <linux/bpf.h>
+>
+>  __bpf_kfunc_start_defs();
+
+[ ... ]
+
+> +/**
+> + * bpf_proactive_reclaim - proactively reclaim memory from a memory
+> + *                         cgroup
+> + * @memcg: the target memory cgroup to reclaim from
+> + * @size:  the amount of memory to reclaim, in bytes, clamped to
+> + *         MEMCG_CHARGE_BATCH (64 pages)
+> + *
+> + * Trigger one proactive reclaim pass on @memcg, similar to a write to
+> + * memory.reclaim, but without retrying until @size is reached.
+> + *
+> + * @size is clamped so that one call is a bounded unit of work, matching
+> + * the memory.high workqueue fallback in high_work_func(). To reclaim
+> + * more, call this kfunc repeatedly instead of passing a larger @size.
+> + *
+> + * This kfunc is restricted to BPF_PROG_TYPE_SYSCALL to ensure it runs
+> + * in a clean process context. The SYSCALL program can schedule the
+> + * actual reclaim work via bpf_wq or timers, which also execute in
+> + * safe process context (workqueue, task_work).
+
+Does the kernel-doc accurately describe when this kfunc can be called?
+
+The doc says "bpf_wq or timers" can call this kfunc and attributes "safe
+process context (workqueue, task_work)" to both. bpf_timer callbacks run
+in softirq context (HRTIMER_MODE_REL_SOFT in kernel/bpf/helpers.c), not
+process context, and the verifier rejects the documented pattern:
+
+kernel/bpf/verifier.c:is_async_cb_sleepable() {
+    /* bpf_timer callbacks are never sleepable. */
+    if (bpf_helper_call(insn) && insn->imm == BPF_FUNC_timer_set_callback)
+            return false;
+
+which then causes check_kfunc_call() to reject the KF_SLEEPABLE kfunc:
+
+    if (sleepable && !in_sleepable(env)) {
+            verbose(env, "program must be sleepable to call sleepable kfunc %s\n", func_name);
+            return -EACCES;
+
+So a bpf_timer callback calling bpf_proactive_reclaim() fails verification
+regardless of the program being marked sleepable.
+
+The commit message says "A SYSCALL program can still drive reclaim
+asynchronously through bpf_wq or task_work callbacks", and the block
+comment above BTF_KFUNCS_START(bpf_memcontrol_reclaim_kfuncs) says "The
+bpf_wq and task_work callbacks that a SYSCALL program schedules run as the
+same program type". Only the kernel-doc substitutes "timers" for
+task_work, so the three descriptions disagree.
+
+The follow-up selftest (5ed7b6799588 "selftests/bpf: Add memcg async
+reclaim test") demonstrates the actual constraint: its bpf_timer callback
+wq_timer_cb() only calls bpf_wq_start()/bpf_timer_start(), and
+bpf_proactive_reclaim() is called solely from the bpf_wq callback
+reclaim_work_fn().
+
+Could "or timers" be dropped (or reworded to "a bpf_timer callback can
+only kick a bpf_wq; the kfunc itself must be called from the bpf_wq or
+task_work callback") so the kernel-doc matches both the verifier and the
+other two descriptions in the patch?
+
+> + *
+> + * When reclaim is driven from a bpf_wq, call this kfunc once per
+> + * callback and requeue the same work item for the next batch rather
+> + * than looping inside the callback: a long-running callback stalls
+> + * other work on the shared workqueue, and because lru_lock is held with
+> + * interrupts disabled the resulting contention also delays IPI
+> + * handling. Give each target memcg its own bpf_wq item, so that
+> + * reclaiming one memcg neither serializes behind nor piles up on top of
+> + * another. Deciding whether to submit the next batch is up to the BPF
+> + * program, which can stop at any point, e.g. once the target cgroup is
+> + * dying.
+
+[ ... ]
+
+
 ---
- tools/testing/selftests/bpf/libarena/src/asan.bpf.c | 2 +-
- tools/testing/selftests/bpf/progs/iters.c           | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
-index 5135d5c72a46..158d95c2520b 100644
---- a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
-@@ -221,7 +221,7 @@ static __always_inline bool check_asan_args(s8 __arena *addr, size_t size,
- 		goto confirmed_valid;
- 
- 	/*
--	 * Wraparound is possible for values close to the the edge of the
-+	 * Wraparound is possible for values close to the edge of the
- 	 * 4GiB boundary of the arena (last valid address is 1UL << 32 - 1).
- 	 *
- 	 *
-diff --git a/tools/testing/selftests/bpf/progs/iters.c b/tools/testing/selftests/bpf/progs/iters.c
-index 62d7df9e80be..340670e89ba9 100644
---- a/tools/testing/selftests/bpf/progs/iters.c
-+++ b/tools/testing/selftests/bpf/progs/iters.c
-@@ -1511,7 +1511,7 @@ __naked int checkpoint_states_deletion(void)
- 	 * would get equal to one of the explored states and thus loop
- 	 * exploration would be finished (at-least for a specific path).
- 	 * Verifier evicts explored states with high miss to hit ratio
--	 * to to avoid comparing current state with too many explored
-+	 * to avoid comparing current state with too many explored
- 	 * states per instruction.
- 	 * This test is designed to "stress test" eviction policy defined using formula:
- 	 *
--- 
-2.48.1
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33864052510
+--===============8006556704449721133==--
