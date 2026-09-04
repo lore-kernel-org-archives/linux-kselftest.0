@@ -1,48 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B1B38F65D;
-	Fri,  4 Sep 2026 17:41:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B700477E57
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 17:44:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788543700; cv=none; b=my+v73yXEjq86de/KMeD7JD2cGGw7M3vuxQXDUtIBsBTE3A9io/fP9sAL8vKbDFYz8xL1Z2k0qx6j0uq5ACkTTa8ZLBS8tTngmzvbhKycovnTWlRetdSdc6kVFoGFa1TxuU1+ADft0YkdKGdBgXmoJiS13gRMSGZsPmf6TDAnqg=
+	t=1788543903; cv=none; b=NeWE17+Tnq2xAEzrez0qs4OVKOn7x7/MTfDo9+cXLgTWKCr8R6FMt5LDnztdk6CqkO1t2iIbWqIQ3f5T3HLIHl+IZnxzgkeuDgprmkhd4IfOpOvl35tyo79svtjt2kjh7J2n24b7bu7JJJw7yI5efn3P0TILkFMYF0HcIBug1Ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788543700; c=relaxed/simple;
-	bh=R/+LKf9b3YzvRQolJi7KBGQWMyiCSayeC/3/p/K1MNY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D3K1muzezSZrSoqjjBUdEPEQMs8OFKSuNeyfNRCjcb6tPCVVqyNDtZjryitTjLxasrIajsdeYwue7gkLMSoOVw57J+fg6OEmYEsuy1cC6k6XJeIVkOriXWIXYT5wXWT5YvGJjmWqSFLdlfU7fLlv8ILhDhDlCDRMSDOwWtk06yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z2XLlcnO; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z2XLlcnO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C1F41F00A3D;
-	Fri,  4 Sep 2026 17:41:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788543697;
-	bh=CLvJLxDuarSJdg7k97odOMV7NPap1snyy+/egi/aUNk=;
-	h=From:To:Cc:Subject:Date;
-	b=Z2XLlcnOPWY1YBZZdUojCYMdc+IEkrapRtJfwyWpbT/tnvgChJIFmHgeBMZFBHMvZ
-	 U/NAGPFPy+R7UBKEQUckmtyivvx1wan0gZbvR/Bb4AjnpQF3gbZfAU/F3GTAWBbRZT
-	 uOP2FQ1BIdboSIDfrPSFWKAsPdZqbF943CxD2T/njiJreA8HHgkWTAZelyED56dkOY
-	 WJzR0duVO1PAou8PVZI/SmtT/nL4CI/Wnm/3fCRl67swxkVzjCWdCAVvXasEBKI0gw
-	 YeD+xcqTYsFEdAGPDIlwRmgjre4DknghDINqRueLHHrXY2pjrGBbLXpTnSL1yqIM2D
-	 iMPlhDMHM/QLQ==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
+	s=arc-20240116; t=1788543903; c=relaxed/simple;
+	bh=QxoyOPmnBP+2vXmnQmmz4vCdiQx0RF4yUXLxKepKWhI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fIrtJSBKrqGfvTjtYXU2RFhvhK60ZRbjUInvQPaQBMQA+qPa22OuZjUv+pgndkyVlB1z7vJmJ0wFO/9BCWt1pVuW9ffjrEcM/aa4bsbCDE3l4vVfKnZuSlROSS1uusSAHqozHyDc8ApEs2nyTGkRS9MJNeHlQ3fUzNiReY8l4MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.225.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-483960225ccso379483f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 10:44:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788543898; x=1789148698;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=A4kzJ/kne5IQ47RkaKkc8cz1uyvHKgyGYe6SvCcVy1s=;
+        b=DOypybtDVNqtnvoibpL12ZdQfcf9ZGPzB0FIhzrkoSY6GtmHznTkwHiDbyP20MFcmZ
+         OkDK937gv+ozOAH2UDnnr7IBNhsmJAiE2n0sAJSaUBPSDrNxoRuS15xNtiyeix3kX3Eh
+         7WELwSxU1/sZfpRxsuh+h1nfn4WQAP7jWFXAoOS+sYR/Bddqz/j4DMaZBDdUFgC2dULg
+         Vz0Zj+hY7+bbIK7sBwO+6crOrVL+8iBVEFHVKRPOFeBlQBT8bSTktM/Y9Jrp6pIlOAaW
+         Wf+ZbL1+STBxMXJGSzm08hTHErzrQcdpSFAYHXsxI/sFLabpd/0fVLqB1aqzdOsIJF+Z
+         XXMg==
+X-Forwarded-Encrypted: i=1; AKwUvByW5YVYY/07aAvZjzRsbIj44AGZgra1Ff/AU3ijv2ntioSOq0Q7i+gkJmUZcVzB+Bb3SFd8+WqhS10oJPNnb6k=@vger.kernel.org
+X-Gm-Message-State: AFuF++nN+GNyzIqJlpGO9CREBS1VTHWUpVnEl2DX/peKEHPCcs847bWu
+	u9rjW6WNXueVIyGbyHaQKn7sQkFqGEp2AdFEBW9UbjgIf46IxGxD4kl+
+X-Gm-Gg: AYBFou3GcRM1Od5qL4NP991UTmA+XQJuZjpq4rgd0EpqE4UiN5EW2xCVwqU1Tg5bkzc
+	JQSYZcpO6mLWJfDECCu3bu3uRUv/+mJJJ4clYWGVuvhv5PBrRqCdDxgpy33Rg5ueJizWLbm6mqm
+	Oe2pooJENEkpMlwNqg9CwH+FhGnIZ2kdCIRoC309aWq5hyVR99ox8XtW68szAb/Kmu8HayUZ53c
+	WwKvNtSiGv/uxsL/R6DcUgsNuHM1ku2nuhgfoio+ODGsGxixkvvQKGNigDPXm8BL0waNPracaOS
+	Lcx8aBfO+c3wM2hCgsP2u8M71edKw+364/UolZFpz2GVKkstprgRsQ0jTJRbsLB9OH5dpVXFduE
+	lq87i8QqTDdKvBGhHr/zZVAqSXQhhQ5jp9q7dfejDnE1yK/nsh3iMha1JdrYY+OYjfKSqvpzoiX
+	j8RQPcF+4QYkwsF1tc1115VERi4KY4CTPZJVDODcnL7qNBRCgPZJyz5j87X9jVzGBqq80mfDHLv
+	mPReAQrsQD0D7pVACY=
+X-Received: by 2002:a05:600c:3e0a:b0:495:6e68:5df2 with SMTP id 5b1f17b1804b1-49cf8267a36mr91107025e9.12.1788543897684;
+        Fri, 04 Sep 2026 10:44:57 -0700 (PDT)
+Received: from im-t490s.redhat.corp (37-48-53-4.nat.epc.tmcz.cz. [37.48.53.4])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cfd3f815bsm36889475e9.4.2026.09.04.10.44.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Sep 2026 10:44:56 -0700 (PDT)
+From: Ilya Maximets <i.maximets@ovn.org>
+To: netfilter-devel@vger.kernel.org
 Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
+	Donald Hunter <donald.hunter@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
-	shuah@kernel.org,
-	cjubran@nvidia.com,
-	cratiu@nvidia.com,
-	noren@nvidia.com,
-	willemb@google.com,
-	petrm@nvidia.com,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next] selftests: net: add ctl_file_write() helper
-Date: Fri,  4 Sep 2026 10:41:34 -0700
-Message-ID: <20260904174134.3789400-1-kuba@kernel.org>
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>,
+	Phil Sutter <phil@nwl.cc>,
+	Shuah Khan <shuah@kernel.org>,
+	=?UTF-8?q?Asbj=C3=B8rn=20Sloth=20T=C3=B8nnesen?= <ast@fiberby.net>,
+	"Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
+	"Remy D. Farley" <one-d-wide@protonmail.com>,
+	linux-kernel@vger.kernel.org,
+	coreteam@netfilter.org,
+	linux-kselftest@vger.kernel.org,
+	Ilya Maximets <i.maximets@ovn.org>
+Subject: [PATCH nf-next] netfilter: conntrack: make filtering by zone discoverable
+Date: Fri,  4 Sep 2026 19:44:45 +0200
+Message-ID: <20260904174452.1913072-1-i.maximets@ovn.org>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -52,338 +76,390 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Setting a sysctl or a sysfs attribute for the duration of a test and
-putting the old value back has been open coded multiple times.
+Conntrack flush supports filtering by zone using CTA_ZONE, but this
+attribute is really hard to use from user space applications.  The
+reason is that it is not possible to tell if it's supported or not.
 
-We generally avoid creating library helpers but this one is very
-common, and the defer is a little tricky as using the same function
-for defer as the initial write leads to an infinite loop (not that
-I would ever make such mistake!)
+Older kernels silently ignore CTA_ZONE.  And in that case they just
+happily flush all the entries from all zones breaking all the existing
+connections.  So, applications have to infer support from the kernel
+version.  While it works in most cases, it's not a particularly
+reliable or desired way to check kernel capabilities from applications
+that aim to be portable.  There should be a better way to probe or
+discover features in the kernel.
 
-Some of the conversions are not identical, but arguably ctl_file_write()
-semantics are more correct.
+The CTA_FILTER interface on the other hand is simple enough to probe.
+We can check for NLM_F_DUMP_FILTERED in the dump to see if filtering
+is supported.  And unknown sub-attributes in CTA_FILTER are rejected
+explicitly since strict validation is in use there.
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Let's add new CTA_FILTER_ZONE that signals that CTA_ZONE should be
+filtered on.  It is a flag, since everything in the CTA_FILTER is a
+bit mask, i.e., a form of a flag.  If set, it means that CTA_ZONE must
+be present and be used for filtering.  If the flag is not set however,
+the filtering on CTA_ZONE will still take place to ensure backwards
+compatibility.  So, the flag doesn't really change the filtering
+behavior, but it allows user space applications to properly discover
+support for CTA_ZONE filtering without need to rely on kernel version
+parsing or risk accidental flushes of the entire conntrack table,
+and also without modifying the kernel state.
+
+A new test variant is added to test with and without the new flag.
+Since the setup code is moved into a shared function, expectations
+replaced with assertions to bail early if the base setup fails to
+avoid the cascade of secondary failures that can be misleading.
+Error return is only for the SKIP cases.
+
+Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
 ---
-CC: shuah@kernel.org
-CC: cjubran@nvidia.com
-CC: cratiu@nvidia.com
-CC: noren@nvidia.com
-CC: willemb@google.com
-CC: petrm@nvidia.com
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/drivers/net/gro.py    | 17 +++---------
- .../drivers/net/hw/devlink_rate_tc_bw.py      |  5 ++--
- tools/testing/selftests/drivers/net/hw/irq.py | 11 ++------
- .../drivers/net/hw/lib/py/__init__.py         |  4 +--
- .../selftests/drivers/net/hw/toeplitz.py      | 10 +++----
- .../selftests/drivers/net/lib/py/__init__.py  |  4 +--
- .../selftests/drivers/net/ring_reconfig.py    | 26 ++++---------------
- .../testing/selftests/net/lib/py/__init__.py  |  4 +--
- tools/testing/selftests/net/lib/py/utils.py   | 22 ++++++++++++++++
- 9 files changed, 44 insertions(+), 59 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/gro.py b/tools/testing/selftests/drivers/net/gro.py
-index 6ab8c97880d1..e0b21703cc3c 100755
---- a/tools/testing/selftests/drivers/net/gro.py
-+++ b/tools/testing/selftests/drivers/net/gro.py
-@@ -42,7 +42,7 @@ import re
- from lib.py import ksft_run, ksft_exit, ksft_pr
- from lib.py import NetDrvEpEnv, KsftFailEx, KsftXfailEx
- from lib.py import NetdevFamily, EthtoolFamily
--from lib.py import bkg, cmd, defer, ethtool, ip
-+from lib.py import bkg, cmd, ctl_file_write, defer, ethtool, ip
- from lib.py import ksft_variants, KsftNamedVariant
+One other alternative is to make CTA_FILTER_ZONE a U16 sub-attribute
+instead of a FLAG and prioritize it over the CTA_ZONE.  But it feels
+like a FLAG is better suited for the CTA_FILTER, even if it takes a
+bit of extra space in the request.  Though I'm OK with reworking this
+into U16 or some other mechanism that would make the feature
+discoverable, if there are better ideas.
+
+ Documentation/netlink/specs/conntrack.yaml    |   5 +
+ .../linux/netfilter/nfnetlink_conntrack.h     |   1 +
+ net/netfilter/nf_conntrack_netlink.c          |  11 ++
+ .../net/netfilter/conntrack_dump_flush.c      | 143 ++++++++++++------
+ 4 files changed, 115 insertions(+), 45 deletions(-)
+
+diff --git a/Documentation/netlink/specs/conntrack.yaml b/Documentation/netlink/specs/conntrack.yaml
+index b1eb102ab8432..cfc113ba34029 100644
+--- a/Documentation/netlink/specs/conntrack.yaml
++++ b/Documentation/netlink/specs/conntrack.yaml
+@@ -371,6 +371,11 @@ attribute-sets:
+         name: reply-flags
+         type: u32
+         doc: bitmask of tuple fields to filter on, reply direction
++      -
++        name: zone
++        type: flag
++        doc: filter on conntrack zone id; requires the top-level zone
++          (``CTA_ZONE``) attribute
+   -
+     name: conntrack-attrs
+     attributes:
+diff --git a/include/uapi/linux/netfilter/nfnetlink_conntrack.h b/include/uapi/linux/netfilter/nfnetlink_conntrack.h
+index 43233af75b9d5..985f9c08d3e9b 100644
+--- a/include/uapi/linux/netfilter/nfnetlink_conntrack.h
++++ b/include/uapi/linux/netfilter/nfnetlink_conntrack.h
+@@ -285,6 +285,7 @@ enum ctattr_filter {
+ 	CTA_FILTER_UNSPEC,
+ 	CTA_FILTER_ORIG_FLAGS,
+ 	CTA_FILTER_REPLY_FLAGS,
++	CTA_FILTER_ZONE,
+ 	__CTA_FILTER_MAX
+ };
+ #define CTA_FILTER_MAX (__CTA_FILTER_MAX - 1)
+diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
+index 9b4e29557ec33..ffc29a407749d 100644
+--- a/net/netfilter/nf_conntrack_netlink.c
++++ b/net/netfilter/nf_conntrack_netlink.c
+@@ -911,6 +911,7 @@ struct ctnetlink_filter {
+ static const struct nla_policy cta_filter_nla_policy[CTA_FILTER_MAX + 1] = {
+ 	[CTA_FILTER_ORIG_FLAGS]		= NLA_POLICY_MASK(NLA_U32, CTA_FILTER_F_ALL),
+ 	[CTA_FILTER_REPLY_FLAGS]	= NLA_POLICY_MASK(NLA_U32, CTA_FILTER_F_ALL),
++	[CTA_FILTER_ZONE]		= { .type = NLA_FLAG },
+ };
  
+ static int ctnetlink_parse_filter(const struct nlattr *attr,
+@@ -930,6 +931,9 @@ static int ctnetlink_parse_filter(const struct nlattr *attr,
+ 	if (tb[CTA_FILTER_REPLY_FLAGS])
+ 		filter->reply_flags = nla_get_u32(tb[CTA_FILTER_REPLY_FLAGS]);
  
-@@ -79,17 +79,6 @@ GRO_DPORT = 8000
-     return getattr(cfg, attr)
- 
- 
--def _write_defer_restore(cfg, path, val, defer_undo=False):
--    with open(path, "r", encoding="utf-8") as fp:
--        orig_val = fp.read().strip()
--        if str(val) == orig_val:
--            return
--    with open(path, "w", encoding="utf-8") as fp:
--        fp.write(val)
--    if defer_undo:
--        defer(_write_defer_restore, cfg, path, orig_val)
--
--
- def _set_mtu_restore(dev, mtu, host):
-     if dev['mtu'] < mtu:
-         ip(f"link set dev {dev['ifname']} mtu {mtu}", host=host)
-@@ -244,8 +233,8 @@ def _run_gro_bin(cfg, test_name, protocol=None, num_flows=None,
-         flush_path = f"/sys/class/net/{cfg.ifname}/gro_flush_timeout"
-         irq_path = f"/sys/class/net/{cfg.ifname}/napi_defer_hard_irqs"
- 
--        _write_defer_restore(cfg, flush_path, "200000", defer_undo=True)
--        _write_defer_restore(cfg, irq_path, "10", defer_undo=True)
-+        ctl_file_write(flush_path, "200000")
-+        ctl_file_write(irq_path, "10")
- 
-         _set_ethtool_feat(cfg.ifname, cfg.feat,
-                           {"generic-receive-offload": True,
-diff --git a/tools/testing/selftests/drivers/net/hw/devlink_rate_tc_bw.py b/tools/testing/selftests/drivers/net/hw/devlink_rate_tc_bw.py
-index 4e4faa9275bb..38d712755257 100755
---- a/tools/testing/selftests/drivers/net/hw/devlink_rate_tc_bw.py
-+++ b/tools/testing/selftests/drivers/net/hw/devlink_rate_tc_bw.py
-@@ -63,7 +63,7 @@ from lib.py import ksft_pr, ksft_run, ksft_exit
- from lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
- from lib.py import NetDrvEpEnv, DevlinkFamily
- from lib.py import NlError
--from lib.py import cmd, defer, ethtool, ip
-+from lib.py import cmd, ctl_file_write, defer, ethtool, ip
- from lib.py import Iperf3Runner
- 
- 
-@@ -113,8 +113,7 @@ from lib.py import Iperf3Runner
-     except Exception as exc:
-         raise KsftSkipEx(f"Failed to enable switchdev mode on {cfg.pci}") from exc
-     try:
--        cmd(f"echo 1 > /sys/class/net/{cfg.ifname}/device/sriov_numvfs", shell=True)
--        defer(cmd, f"echo 0 > /sys/class/net/{cfg.ifname}/device/sriov_numvfs", shell=True)
-+        ctl_file_write(f"/sys/class/net/{cfg.ifname}/device/sriov_numvfs", 1)
-     except Exception as exc:
-         raise KsftSkipEx(f"Failed to enable SR-IOV on {cfg.ifname}") from exc
- 
-diff --git a/tools/testing/selftests/drivers/net/hw/irq.py b/tools/testing/selftests/drivers/net/hw/irq.py
-index 0699d6a8b4e2..3d1c56b51054 100755
---- a/tools/testing/selftests/drivers/net/hw/irq.py
-+++ b/tools/testing/selftests/drivers/net/hw/irq.py
-@@ -7,7 +7,7 @@ from lib.py import KsftSkipEx
- from lib.py import ksft_disruptive
- from lib.py import EthtoolFamily, NetdevFamily
- from lib.py import NetDrvEnv
--from lib.py import cmd, ip, defer
-+from lib.py import cmd, ctl_file_write, ip
- 
- 
- def read_affinity(irq) -> str:
-@@ -15,12 +15,6 @@ from lib.py import cmd, ip, defer
-         return fp.read().lstrip("0,").strip()
- 
- 
--def write_affinity(irq, what) -> str:
--    if what != read_affinity(irq):
--        with open(f'/proc/irq/{irq}/smp_affinity', 'w') as fp:
--            fp.write(what)
--
--
- def check_irqs_reported(cfg) -> None:
-     """ Check that device reports IRQs for NAPI instances """
-     napis = cfg.netnl.napi_get({"ifindex": cfg.ifindex}, dump=True)
-@@ -41,8 +35,7 @@ from lib.py import cmd, ip, defer
-     old = read_affinity(n['irq'])
-     # pick an affinity that's not the current one
-     new = "3" if old != "3" else "5"
--    write_affinity(n['irq'], new)
--    defer(write_affinity, n['irq'], old)
-+    ctl_file_write(f"/proc/irq/{n['irq']}/smp_affinity", new)
- 
-     reconfig_cb(cfg)
- 
-diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-index 8a58cb17cc06..81e1d1865cd5 100644
---- a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-+++ b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-@@ -24,7 +24,7 @@ KSFT_DIR = (Path(__file__).parent / "../../../../..").resolve()
-     from net.lib.py import CmdExitFailure
-     from net.lib.py import bkg, cmd, bpftool, bpftrace, defer, ethtool, \
-         fd_read_timeout, ip, rand_port, rand_ports, wait_port_listen, \
--        wait_file, tool
-+        wait_file, ctl_file_write, tool
-     from net.lib.py import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
-     from net.lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
-     from net.lib.py import ksft_disruptive, ksft_exit, ksft_pr, ksft_run, \
-@@ -40,7 +40,7 @@ KSFT_DIR = (Path(__file__).parent / "../../../../..").resolve()
-                "CmdExitFailure",
-                "bkg", "cmd", "bpftool", "bpftrace", "defer", "ethtool",
-                "fd_read_timeout", "ip", "rand_port", "rand_ports",
--               "wait_port_listen", "wait_file", "tool",
-+               "wait_port_listen", "wait_file", "ctl_file_write", "tool",
-                "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
-                "KsftSkipEx", "KsftFailEx", "KsftXfailEx",
-                "ksft_disruptive", "ksft_exit", "ksft_pr", "ksft_run",
-diff --git a/tools/testing/selftests/drivers/net/hw/toeplitz.py b/tools/testing/selftests/drivers/net/hw/toeplitz.py
-index 571732198b93..962d1aca2bc9 100755
---- a/tools/testing/selftests/drivers/net/hw/toeplitz.py
-+++ b/tools/testing/selftests/drivers/net/hw/toeplitz.py
-@@ -13,7 +13,7 @@ import os
- import socket
- from lib.py import ksft_run, ksft_exit, ksft_pr
- from lib.py import NetDrvEpEnv, EthtoolFamily, NetdevFamily
--from lib.py import cmd, bkg, rand_port, defer
-+from lib.py import cmd, bkg, ctl_file_write, rand_port, defer
- from lib.py import ksft_in
- from lib.py import ksft_variants, KsftNamedVariant, KsftSkipEx, KsftFailEx
- 
-@@ -113,7 +113,7 @@ QUEUE_CAP = 8
- 
- 
- def _configure_rps(cfg, rps_cpus):
--    """Configure RPS for all Rx queues."""
-+    """Configure RPS for all Rx queues, restored at the end of the test."""
- 
-     mask = 0
-     for cpu in rps_cpus:
-@@ -123,9 +123,8 @@ QUEUE_CAP = 8
- 
-     # Set RPS bitmap for all rx queues
-     for rps_file in glob.glob(f"/sys/class/net/{cfg.ifname}/queues/rx-*/rps_cpus"):
--        with open(rps_file, "w", encoding="utf-8") as fp:
--            # sysfs expects hex without '0x' prefix, toeplitz.c needs the prefix
--            fp.write(mask[2:])
-+        # sysfs expects hex without '0x' prefix, toeplitz.c needs the prefix
-+        ctl_file_write(rps_file, mask[2:])
- 
-     return mask
- 
-@@ -208,7 +207,6 @@ QUEUE_CAP = 8
-         # Get CPUs not used by Rx queues and configure them for RPS
-         rps_cpus = _get_unused_rps_cpus(cfg, count=2)
-         rps_mask = _configure_rps(cfg, rps_cpus)
--        defer(_configure_rps, cfg, [])
-         rx_cmd += ["-r", rps_mask]
-         ksft_pr(f"RPS using CPUs: {rps_cpus}, mask: {rps_mask}")
- 
-diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
-index ee903bcf3207..591b1e6c7eea 100644
---- a/tools/testing/selftests/drivers/net/lib/py/__init__.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
-@@ -24,7 +24,7 @@ KSFT_DIR = (Path(__file__).parent / "../../../..").resolve()
-     from net.lib.py import CmdExitFailure
-     from net.lib.py import bkg, cmd, bpftool, bpftrace, defer, ethtool, \
-         fd_read_timeout, ip, rand_port, rand_ports, tc, wait_port_listen, \
--        wait_file
-+        wait_file, ctl_file_write
-     from net.lib.py import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
-     from net.lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
-     from net.lib.py import ksft_disruptive, ksft_exit, ksft_pr, ksft_run, \
-@@ -38,7 +38,7 @@ KSFT_DIR = (Path(__file__).parent / "../../../..").resolve()
-                "CmdExitFailure",
-                "bkg", "cmd", "bpftool", "bpftrace", "defer", "ethtool",
-                "fd_read_timeout", "ip", "rand_port", "rand_ports", "tc",
--               "wait_port_listen", "wait_file",
-+               "wait_port_listen", "wait_file", "ctl_file_write",
-                "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
-                "KsftSkipEx", "KsftFailEx", "KsftXfailEx",
-                "ksft_disruptive", "ksft_exit", "ksft_pr", "ksft_run",
-diff --git a/tools/testing/selftests/drivers/net/ring_reconfig.py b/tools/testing/selftests/drivers/net/ring_reconfig.py
-index 2bc329b77134..6682d4badfbf 100755
---- a/tools/testing/selftests/drivers/net/ring_reconfig.py
-+++ b/tools/testing/selftests/drivers/net/ring_reconfig.py
-@@ -13,7 +13,7 @@ from lib.py import ksft_run, ksft_exit, ksft_pr
- from lib.py import ksft_eq
- from lib.py import KsftSkipEx, KsftXfailEx
- from lib.py import NetDrvEpEnv, EthtoolFamily, GenerateTraffic
--from lib.py import cmd, defer, rand_port, tc, NlError
-+from lib.py import cmd, ctl_file_write, defer, rand_port, tc, NlError
- 
- # Added in Python 3.13; fallback to 61 for x86/ARM/MIPS
- SO_TXTIME = getattr(socket, "SO_TXTIME", 61)
-@@ -166,22 +166,6 @@ MAX_TX_RING = 1024
-         GenerateTraffic(cfg).wait_pkts_and_stop(10000)
- 
- 
--def _write_file(path, val):
--    """Write val to a file."""
--    with open(path, "w", encoding="utf-8") as fp:
--        fp.write(str(val))
--
--
--def _write_sysfs(path, val):
--    """Write val to a sysfs file, restoring the original value on exit."""
--    with open(path, "r", encoding="utf-8") as fp:
--        orig_val = fp.read().strip()
--    if str(val) == orig_val:
--        return
--    _write_file(path, val)
--    defer(_write_file, path, orig_val)
--
--
- def _get_qdisc_backlog(cfg, mq_handle, queue):
-     """Return the qdisc backlog (bytes) for the given TX queue's leaf."""
-     target_parent = f"{mq_handle}{queue + 1:x}"
-@@ -342,8 +326,8 @@ MAX_TX_RING = 1024
-     # Slow completions so the ring stays full after FQ releases packets
-     napi_defer = f"/sys/class/net/{cfg.ifname}/napi_defer_hard_irqs"
-     gro_timeout = f"/sys/class/net/{cfg.ifname}/gro_flush_timeout"
--    _write_sysfs(napi_defer, 100)
--    _write_sysfs(gro_timeout, 1000000000)
-+    ctl_file_write(napi_defer, 100)
-+    ctl_file_write(gro_timeout, 1000000000)
- 
-     port = rand_port()
-     # A single flow must overflow the ring, so send twice the ring depth and
-@@ -384,8 +368,8 @@ MAX_TX_RING = 1024
-     cfg.eth.rings_set(ehdr | {'tx': tx_cur})
- 
-     # Let completions proceed normally
--    _write_sysfs(napi_defer, 0)
--    _write_sysfs(gro_timeout, 0)
-+    ctl_file_write(napi_defer, 0)
-+    ctl_file_write(gro_timeout, 0)
- 
-     # Poll for backlog to drain
-     for _ in range(100):
-diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing/selftests/net/lib/py/__init__.py
-index 34935886b6ad..71df5880b356 100644
---- a/tools/testing/selftests/net/lib/py/__init__.py
-+++ b/tools/testing/selftests/net/lib/py/__init__.py
-@@ -14,7 +14,7 @@ from .netns import NetNS, NetNSEnter, UserNetNS
- from .nsim import NetdevSim, NetdevSimDev
- from .utils import CmdExitFailure, fd_read_timeout, cmd, bkg, defer, \
-     bpftool, ip, ethtool, bpftrace, rand_port, rand_ports, wait_port_listen, \
--    wait_file, tool, tc
-+    ctl_file_write, wait_file, tool, tc
- from .bpf import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
- from .ynl import NlError, NlctrlFamily, YnlFamily, \
-     EthtoolFamily, NetdevFamily, RtnlFamily, RtnlAddrFamily, RtnlRouteFamily
-@@ -29,7 +29,7 @@ __all__ = ["KSRC",
-            "NetNS", "NetNSEnter", "UserNetNS",
-            "CmdExitFailure", "fd_read_timeout", "cmd", "bkg", "defer",
-            "bpftool", "ip", "ethtool", "bpftrace", "rand_port", "rand_ports",
--           "wait_port_listen", "wait_file", "tool", "tc",
-+           "wait_port_listen", "ctl_file_write", "wait_file", "tool", "tc",
-            "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
-            "NetdevSim", "NetdevSimDev",
-            "NetshaperFamily", "DevlinkFamily", "PSPFamily", "NlError",
-diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
-index 184bb04343f6..1727bc418073 100644
---- a/tools/testing/selftests/net/lib/py/utils.py
-+++ b/tools/testing/selftests/net/lib/py/utils.py
-@@ -357,6 +357,28 @@ GLOBAL_DEFER_ARMED = False
-         time.sleep(sleep)
- 
- 
-+def _ctl_file_write(path, val):
-+    with open(path, "w", encoding="utf-8") as fp:
-+        fp.write(str(val))
++	if (tb[CTA_FILTER_ZONE])
++		filter->zone_filter = true;
 +
+ 	return 0;
+ }
+ 
+@@ -1006,6 +1010,7 @@ ctnetlink_alloc_filter(const struct nlattr * const cda[], u8 family)
+ 	if (err)
+ 		goto err_filter;
+ 
++	/* CTA_ZONE is allowed without CTA_FILTER_ZONE. */
+ 	if (cda[CTA_ZONE]) {
+ 		err = ctnetlink_parse_zone(cda[CTA_ZONE], &filter->zone);
+ 		if (err < 0)
+@@ -1020,6 +1025,12 @@ ctnetlink_alloc_filter(const struct nlattr * const cda[], u8 family)
+ 	if (err < 0)
+ 		goto err_filter;
+ 
++	/* CTA_FILTER_ZONE cannot be set without CTA_ZONE. */
++	if (filter->zone_filter && !cda[CTA_ZONE]) {
++		err = -EINVAL;
++		goto err_filter;
++	}
 +
-+def ctl_file_write(path, val):
-+    """
-+    Write @val to a control file - a sysctl, a sysfs attribute, configfs...
-+    and defer() restoring the old value, so needs a defer queue.
+ 	if (filter->orig_flags) {
+ 		if (!cda[CTA_TUPLE_ORIG]) {
+ 			err = -EINVAL;
+diff --git a/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c b/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c
+index 31b8250ddc53d..63f41356fe6d6 100644
+--- a/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c
++++ b/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c
+@@ -215,7 +215,22 @@ static int count_entries(const struct nlmsghdr *nlh, void *data)
+ 	return MNL_CB_OK;
+ }
+ 
+-static int conntrack_count_zone(struct mnl_socket *sock, uint16_t zone)
++static void put_zone_attr(struct nlmsghdr *nlh, uint16_t zone,
++			  bool use_cta_filter)
++{
++	struct nlattr *nest;
 +
-+    Writing a value which is already set is skipped, there is nothing
-+    to restore in that case.
-+    """
-+    with open(path, "r", encoding="utf-8") as fp:
-+        old = fp.read().strip()
-+    if old == str(val):
-+        return
++	mnl_attr_put_u16(nlh, CTA_ZONE, htons(zone));
 +
-+    _ctl_file_write(path, val)
-+    defer(_ctl_file_write, path, old)
++	if (use_cta_filter) {
++		nest = mnl_attr_nest_start(nlh, CTA_FILTER);
++		mnl_attr_put(nlh, CTA_FILTER_ZONE, 0, NULL);
++		mnl_attr_nest_end(nlh, nest);
++	}
++}
 +
++static int conntrack_count_zone(struct mnl_socket *sock, uint16_t zone,
++				bool use_cta_filter)
+ {
+ 	char buf[MNL_SOCKET_BUFFER_SIZE];
+ 	struct nlmsghdr *nlh;
+@@ -235,7 +250,7 @@ static int conntrack_count_zone(struct mnl_socket *sock, uint16_t zone)
+ 	nfh->version = NFNETLINK_V0;
+ 	nfh->res_id = 0;
+ 
+-	mnl_attr_put_u16(nlh, CTA_ZONE, htons(zone));
++	put_zone_attr(nlh, zone, use_cta_filter);
+ 
+ 	ret = mnl_socket_sendto(sock, nlh, nlh->nlmsg_len);
+ 	if (ret < 0) {
+@@ -261,7 +276,8 @@ static int conntrack_count_zone(struct mnl_socket *sock, uint16_t zone)
+ 	return reply_counter;
+ }
+ 
+-static int conntrack_flush_zone(struct mnl_socket *sock, uint16_t zone)
++static int conntrack_flush_zone(struct mnl_socket *sock, uint16_t zone,
++				bool use_cta_filter)
+ {
+ 	char buf[MNL_SOCKET_BUFFER_SIZE];
+ 	struct nlmsghdr *nlh;
+@@ -281,7 +297,7 @@ static int conntrack_flush_zone(struct mnl_socket *sock, uint16_t zone)
+ 	nfh->version = NFNETLINK_V0;
+ 	nfh->res_id = 0;
+ 
+-	mnl_attr_put_u16(nlh, CTA_ZONE, htons(zone));
++	put_zone_attr(nlh, zone, use_cta_filter);
+ 
+ 	ret = mnl_socket_sendto(sock, nlh, nlh->nlmsg_len);
+ 	if (ret < 0) {
+@@ -304,43 +320,40 @@ static int conntrack_flush_zone(struct mnl_socket *sock, uint16_t zone)
+ 	return 0;
+ }
+ 
+-FIXTURE(conntrack_dump_flush)
+-{
+-	struct mnl_socket *sock;
+-};
+-
+-FIXTURE_SETUP(conntrack_dump_flush)
++static int conntrack_zone_setup(struct __test_metadata *_metadata,
++				struct mnl_socket **sock)
+ {
+ 	struct in6_addr src, dst;
+ 	int ret;
+ 
+-	self->sock = mnl_socket_open(NETLINK_NETFILTER);
+-	if (!self->sock) {
++	*sock = mnl_socket_open(NETLINK_NETFILTER);
++	if (!*sock) {
+ 		perror("mnl_socket_open");
+-		SKIP(return, "cannot open netlink_netfilter socket");
++		SKIP(return -1, "cannot open netlink_netfilter socket");
+ 	}
+ 
+-	ret = mnl_socket_bind(self->sock, 0, MNL_SOCKET_AUTOPID);
++	ret = mnl_socket_bind(*sock, 0, MNL_SOCKET_AUTOPID);
+ 	EXPECT_EQ(ret, 0);
+ 
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_count_zone(*sock, TEST_ZONE_ID, false);
+ 	if (ret < 0 && errno == EPERM)
+-		SKIP(return, "Needs to be run as root");
++		SKIP(return -1, "Needs to be run as root");
+ 	else if (ret < 0 && errno == EOPNOTSUPP)
+-		SKIP(return, "Kernel does not seem to support conntrack zones");
++		SKIP(return -1,
++		     "Kernel does not seem to support conntrack zones");
+ 
+-	ret = conntrack_data_generate_v4(self->sock, 0xf0f0f0f0, 0xf1f1f1f1,
++	ret = conntrack_data_generate_v4(*sock, 0xf0f0f0f0, 0xf1f1f1f1,
+ 					 TEST_ZONE_ID);
+-	EXPECT_EQ(ret, 0);
+-	ret = conntrack_data_generate_v4(self->sock, 0xf2f2f2f2, 0xf3f3f3f3,
++	ASSERT_EQ(ret, 0);
++	ret = conntrack_data_generate_v4(*sock, 0xf2f2f2f2, 0xf3f3f3f3,
+ 					 TEST_ZONE_ID + 1);
+-	EXPECT_EQ(ret, 0);
+-	ret = conntrack_data_generate_v4(self->sock, 0xf4f4f4f4, 0xf5f5f5f5,
++	ASSERT_EQ(ret, 0);
++	ret = conntrack_data_generate_v4(*sock, 0xf4f4f4f4, 0xf5f5f5f5,
+ 					 TEST_ZONE_ID + 2);
+-	EXPECT_EQ(ret, 0);
+-	ret = conntrack_data_generate_v4(self->sock, 0xf6f6f6f6, 0xf7f7f7f7,
++	ASSERT_EQ(ret, 0);
++	ret = conntrack_data_generate_v4(*sock, 0xf6f6f6f6, 0xf7f7f7f7,
+ 					 NF_CT_DEFAULT_ZONE_ID);
+-	EXPECT_EQ(ret, 0);
++	ASSERT_EQ(ret, 0);
+ 
+ 	src = (struct in6_addr) {{
+ 		.__u6_addr32 = {
+@@ -358,9 +371,9 @@ FIXTURE_SETUP(conntrack_dump_flush)
+ 			0x02000000
+ 		}
+ 	}};
+-	ret = conntrack_data_generate_v6(self->sock, src, dst,
++	ret = conntrack_data_generate_v6(*sock, src, dst,
+ 					 TEST_ZONE_ID);
+-	EXPECT_EQ(ret, 0);
++	ASSERT_EQ(ret, 0);
+ 	src = (struct in6_addr) {{
+ 		.__u6_addr32 = {
+ 			0xb80d0120,
+@@ -377,9 +390,9 @@ FIXTURE_SETUP(conntrack_dump_flush)
+ 			0x04000000
+ 		}
+ 	}};
+-	ret = conntrack_data_generate_v6(self->sock, src, dst,
++	ret = conntrack_data_generate_v6(*sock, src, dst,
+ 					 TEST_ZONE_ID + 1);
+-	EXPECT_EQ(ret, 0);
++	ASSERT_EQ(ret, 0);
+ 	src = (struct in6_addr) {{
+ 		.__u6_addr32 = {
+ 			0xb80d0120,
+@@ -396,9 +409,9 @@ FIXTURE_SETUP(conntrack_dump_flush)
+ 			0x06000000
+ 		}
+ 	}};
+-	ret = conntrack_data_generate_v6(self->sock, src, dst,
++	ret = conntrack_data_generate_v6(*sock, src, dst,
+ 					 TEST_ZONE_ID + 2);
+-	EXPECT_EQ(ret, 0);
++	ASSERT_EQ(ret, 0);
+ 
+ 	src = (struct in6_addr) {{
+ 		.__u6_addr32 = {
+@@ -416,14 +429,51 @@ FIXTURE_SETUP(conntrack_dump_flush)
+ 			0x08000000
+ 		}
+ 	}};
+-	ret = conntrack_data_generate_v6(self->sock, src, dst,
++	ret = conntrack_data_generate_v6(*sock, src, dst,
+ 					 NF_CT_DEFAULT_ZONE_ID);
+-	EXPECT_EQ(ret, 0);
++	ASSERT_EQ(ret, 0);
+ 
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
++	return 0;
++}
 +
- def wait_file(fname, test_fn, sleep=0.005, deadline=5, encoding='utf-8'):
-     """
-     Wait for file contents on the local system to satisfy a condition.
++FIXTURE(conntrack_dump_flush)
++{
++	struct mnl_socket *sock;
++};
++
++FIXTURE_VARIANT(conntrack_dump_flush)
++{
++	bool use_cta_filter;
++};
++
++FIXTURE_VARIANT_ADD(conntrack_dump_flush, cta_zone)
++{
++	.use_cta_filter = false,
++};
++
++FIXTURE_VARIANT_ADD(conntrack_dump_flush, cta_filter)
++{
++	.use_cta_filter = true,
++};
++
++FIXTURE_SETUP(conntrack_dump_flush)
++{
++	int ret;
++
++	if (conntrack_zone_setup(_metadata, &self->sock))
++		return;
++
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID, false);
+ 	EXPECT_GE(ret, 2);
+ 	if (ret > 2)
+ 		SKIP(return, "kernel does not support filtering by zone");
++
++	if (variant->use_cta_filter) {
++		ret = conntrack_count_zone(self->sock, TEST_ZONE_ID, true);
++		if (ret < 0 && errno == EINVAL)
++			SKIP(return, "kernel does not support CTA_FILTER_ZONE");
++		ASSERT_GE(ret, 0);
++	}
+ }
+ 
+ FIXTURE_TEARDOWN(conntrack_dump_flush)
+@@ -434,39 +484,42 @@ TEST_F(conntrack_dump_flush, test_dump_by_zone)
+ {
+ 	int ret;
+ 
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID,
++				   variant->use_cta_filter);
+ 	EXPECT_EQ(ret, 2);
+ }
+ 
+ TEST_F(conntrack_dump_flush, test_flush_by_zone)
+ {
++	bool filter = variant->use_cta_filter;
+ 	int ret;
+ 
+-	ret = conntrack_flush_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_flush_zone(self->sock, TEST_ZONE_ID, filter);
+ 	EXPECT_EQ(ret, 0);
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID, filter);
+ 	EXPECT_EQ(ret, 0);
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 1);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 1, filter);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 2);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 2, filter);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntrack_count_zone(self->sock, NF_CT_DEFAULT_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, NF_CT_DEFAULT_ZONE_ID, filter);
+ 	EXPECT_EQ(ret, 2);
+ }
+ 
+ TEST_F(conntrack_dump_flush, test_flush_by_zone_default)
+ {
++	bool filter = variant->use_cta_filter;
+ 	int ret;
+ 
+-	ret = conntrack_flush_zone(self->sock, NF_CT_DEFAULT_ZONE_ID);
++	ret = conntrack_flush_zone(self->sock, NF_CT_DEFAULT_ZONE_ID, filter);
+ 	EXPECT_EQ(ret, 0);
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID, filter);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 1);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 1, filter);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 2);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 2, filter);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntrack_count_zone(self->sock, NF_CT_DEFAULT_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, NF_CT_DEFAULT_ZONE_ID, filter);
+ 	EXPECT_EQ(ret, 0);
+ }
+ 
 -- 
 2.55.0
 
