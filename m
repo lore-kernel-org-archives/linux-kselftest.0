@@ -1,84 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AFCF468C19;
-	Fri,  4 Sep 2026 10:50:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C83472796
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 10:51:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788519019; cv=none; b=GS4rxtahydsefpRDe033aGnwZoZsK42MCln3JvwvFFp/nf360uIpO363y8/uJrJzIRxOtSK0pNVF5ZcCxSJ7cSOh9yJHuAEGe8E5fAQ5EXi1UBHt11jl5vk60TVL399R68NBjja8PDoZL1heOYyVsF9MzqlldKe0x+JDe92ufOU=
+	t=1788519093; cv=none; b=VCrlM7VtkvhHU0/5qjTdEeSUcocAcfqWu/o3qNVc4dU4bBvJNuV367ruT0s3rCxyAGmHWwZqmmYIufBHBtJAHvLWyfjCdW64XcoWuCGFsLUyG7FUnHXxq/lXs/vEM/PCWjCtmC6yIac7V9bY5B+E/q71BMR4T2GpjL/+wxzYigo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788519019; c=relaxed/simple;
-	bh=s9uxXFvpTCk/Y5jnAxuIOLJsohEAF1Y8vrCJuw7ayKs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=slLvrgwI8FTSXTxkS8CW7V6HCNpBubh9UAj6Cze/vhMcXcyNazjEgpMzvfmhGnzAQGR6H6JZRNWrNEOehd3V/g3UVIhF7HQYJ0KT6A62gNvKnNdmvpiJH8w3kbZhxtJPjCnRTS+/XKH9un2ez1gzryutF1WR+d5Dhwt1Mil+1FA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gvYEZbbH; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788519093; c=relaxed/simple;
+	bh=N5auCAAX6JttEiw3mG/TYR0m/xuN8LLYJ8Fh8xM0+P0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=aBYW3jWCVo7ut6a/d/ekL1fdLBqEn5ENLMuXsbXlQjRMrmkxjSgox3q6e7PSmU23JQ4yzUb3TeIMRXM4TcbkHXEDFOOlyXJszd9XjRR450LAkwsW5dB8I3qI9CbHqHH10KTslKYL3J1I2DAQAEMbtdKvCTvLXjxA1wYXnWP7Gk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ccd10wZm; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gvYEZbbH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA6351F00A3D;
-	Fri,  4 Sep 2026 10:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788519018;
-	bh=TAFrTDe5umwoBlyHKSIuK627CJ1GvkzYaJrFzDktHY0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=gvYEZbbH/+d5NqS2Pu1v01hlJa0gJpW0mRt6YEPf8uywcAlpBoWGHMAU2opdrftOk
-	 rrTxnadveiLckCaV0amQpQOuJyGiu2hufEfH/XbG6eHgjyQoTIntJgxk25uIcGS2dI
-	 d2zwdrSHKL3n1ImQf2i/42BZBW67F7MJVldq9oi+jPS3TJXzxhSqSwWsiBkEHUs2Sm
-	 Ns9JbCPUpRYCI78QcPtvVmz6iMJyLR2epoO5g/FSoQJOFxmS7Cwp+ewXPcRTcLyTER
-	 1PQ6Qm2S/EE/reA3gODQVg9M46IYL5JtFJ6oSeg7qcUr82AeCdkZ+AfGvfVA5KPgTF
-	 +2YGcDM4lqZtQ==
-Content-Type: multipart/mixed; boundary="===============5450880720553597705=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ccd10wZm"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cc1c3d79b9bso761479a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 03:51:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788519091; x=1789123891; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jmLwI+8qpgC/kNOEZ2bmyU9DgSQDRKLrj7ylcHY7B/A=;
+        b=Ccd10wZmUSJ8pN0KKarBAQmLeodpi8wYAEgYAQH1sNMAWhXUAfbSq+rhX6ZwiTFFxE
+         MsAJakRI8su/duhyCX3E5Njac3f4PfyApFn/y5HeVcc6pUSUW62iXg10+85HyKK3fyz+
+         md7PQ/1LejstOTAmTAIfd8vPkK+Ulg2vuje36oxatgFoOyRu0jv2lhvbnzKxiOEt1/f3
+         Z3EXp75DyQjboBrwxBksHW1na5rUy44Q+i7TsbI6t41s4tK3uKKbm7128zyuVmd2PAES
+         mPlixIPTYga4587ukm47ZEla6+07IMOwTn/j3jNZj4hgH72hJhOmPBqMWdXqpbXNEa10
+         0rpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788519091; x=1789123891;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jmLwI+8qpgC/kNOEZ2bmyU9DgSQDRKLrj7ylcHY7B/A=;
+        b=Mo8YLoRSxcSvmInxqEJyq8vYfW09/mIMlrIEOkhHEStntlceFvR4iCICcpMh7IK1kt
+         koYrvyvjB5dVVGoZG9kFdFATLnv27xQ7EDvNGksW/cpSLHRbcq+87B01q3mFg6tjdnq4
+         AvDz+/4lUmHRXtoTJf0GBujVTrFZBK8yvPEf+fySa8G/zydJAD4umACEWDrrcpTvS8a8
+         7N3vOQO9BZXxWPsstvg0rAvDPXlA/hdjXYY40VMHuvt8Hdi2RkRR8pRFYx7IYepcLhxw
+         OPOBehVmy39zRtbbecJvBUeuXymklQuAF82wmBxJtV7dUn0La2KTvchmdjQakelKXzDl
+         XvgA==
+X-Forwarded-Encrypted: i=1; AKwUvBzNI6D7BED7ySnJQk+vPKZ8f2atO6V2CNadj9uBnaiy9lF4gQGmAR273JIaEd8e09V842KwEhr0U+wVtiCpI78=@vger.kernel.org
+X-Gm-Message-State: AFuF++naM/D2qhLMrLtu+/40bZCOX6ced2J9e7Fd4o9HmtFokWHZewFe
+	UMJ3MmfbL0nHMBkGyEfp9iC6+xj8jy4Z+6HgUCGWsBqSGQKYaBl/Pm+u
+X-Gm-Gg: AYBFou0XLnWVawMmCfw4PHQYzukfJJrHCTGh+R/MYPljfWuVxMANl5WBND/YvRtdCgy
+	gscdpOG+YhTRuLVJtYeGLoVCcNcDl4wyqPU2bj5dP4Hp4UmmXwqgY/NetMUlYVB3Im6pa6/aZXg
+	oZhpRvB8UDl7tNkdwlN5zrEygUy6Wy7IgIRC2rCyhRp8hj3xzCDMTa85dp010Z8FlUv3neK7vgz
+	Cc+deVhuC32nIywr4YmE6ao/87yHJmz0HJwQJ3w54fyvKywd39VkcI488oPDdQNzJLQ2TUG/cmj
+	FAR+oj1ikR/r7lc+Q5BT57evosrdBfxIgZVplNCSVabh/4nkx1qrJZJPKNLwqVaRGD1vvB9Jhv7
+	zx2GW+VRNhxVhhi6Rxj3lxUKu3v5ANWSWTBYCs4j8lEd0D825yI6KCFsVhwi3e6w1AebwEJZRii
+	WjZqTikUCJvaobAHlIe85nYvgD7r9yL3lvB1+6rKmW77U6zmm+tu89oMHVeuJkTYYd2kqfjQ1J4
+	PonFsTQkOSJvlPnpslIe2yM7Q==
+X-Received: by 2002:a17:90b:1c07:b0:399:149a:3f27 with SMTP id 98e67ed59e1d1-39b2617ed8bmr8372452a91.9.1788519091308;
+        Fri, 04 Sep 2026 03:51:31 -0700 (PDT)
+Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339befdefcsm5031484eec.29.2026.09.04.03.51.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Sep 2026 03:51:30 -0700 (PDT)
+From: Hemanth Selam <hemanth.selam@gmail.com>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 3/4] selftests: arm64: fix typo "hander" in comment
+Date: Fri,  4 Sep 2026 16:21:09 +0530
+Message-ID: <20260904105114.29474-4-hemanth.selam@gmail.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20260904105114.29474-1-hemanth.selam@gmail.com>
+References: <20260904105114.29474-1-hemanth.selam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6b47a60308d94d4758e016e7850c9090a412f20b1d4f99874431d9f935e54901@mail.kernel.org>
-In-Reply-To: <20260904094954.63447-2-jiayuan.chen@linux.dev>
-References: <20260904094954.63447-2-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Test bpf_sock_destroy() on a TIME_WAIT sock
-From: bot+bpf-ci@kernel.org
-To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,shuah@kernel.org,aditi.ghag@isovalent.com,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  4 Sep 2026 10:50:16 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============5450880720553597705==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Correct "hander" to "handler", reported by scripts/checkpatch.pl using the
+misspelling list in scripts/spelling.txt.  Only touches comments, no code
+changes.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-> index 9c11938fe597d..b90fab7073386 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-
-[ ... ]
-
-> @@ -204,11 +272,12 @@ void test_sock_destroy(void)
->  		test_tcp_client(skel);
->  	if (test__start_subtest("tcp_server"))
->  		test_tcp_server(skel);
-> +	if (test__start_subtest("tcp_timewait"))
-> +		test_tcp_timewait(skel);
->  	if (test__start_subtest("udp_client"))
->  		test_udp_client(skel);
->  	if (test__start_subtest("udp_server"))
->  		test_udp_server(skel);
-> -
->  	RUN_TESTS(sock_destroy_prog_fail);
-
-This isn't a bug, but was dropping the blank line before RUN_TESTS()
-intended as part of this change? The deleted line had been separating the
-block of test__start_subtest() calls from RUN_TESTS(), which is a
-different kind of step. If the grouping was intentional, could that line
-stay so the diff is limited to registering the new subtest?
-
-[ ... ]
-
-
+Assisted-by: Cursor:claude-opus-5
+Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ .../arm64/signal/testcases/fake_sigreturn_sve_change_vl.c       | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33861180631
---===============5450880720553597705==--
+diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c
+index e1ccf8f85a70..bcef280582ed 100644
+--- a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c
++++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c
+@@ -2,7 +2,7 @@
+ /*
+  * Copyright (C) 2021 ARM Limited
+  *
+- * Attempt to change the SVE vector length in a signal hander, this is not
++ * Attempt to change the SVE vector length in a signal handler, this is not
+  * supported and is expected to segfault.
+  */
+ 
+-- 
+2.48.1
+
