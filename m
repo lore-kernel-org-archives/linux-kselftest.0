@@ -1,242 +1,117 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC5C3D47C8
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 21:36:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788557786; cv=pass; b=kZQNhkIwZdT/wMchlVngetqFmOOUJWDPGQmVOR2JvHLFk5iTCWiNJO84mTKMu+KyESSmCqmxkxkZwHarmEHWa+tm38jzcumYwvQpjetQvTf7VIq2dfKkAcPFPpDXHPbRRQ4/fFx8BAuSRWl22H8DsAIpnW84r4ZlO3fQzTPXHCQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788557786; c=relaxed/simple;
-	bh=3lo3qrRtIe4+ljGHirIsW2nt6lBq86dk1MmVX4naxMA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=My8aDnfEU27baIERB9EsRLMtpJ8Q6l48MUmig2bpV1AlXKCKrS7LyU8otfOKSeI34CwYPt5eHXnc0OgHNL+XvXi5di0DuoM726TQdjaPrsS31bTod8Vzv4TlCHsNiWZaMBkieVVkS9+uvQpvmBIy4AHl0UB1cdZ0xOKuEwKvqjA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=XQasX8BB; arc=pass smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC00837A4AF;
+	Fri,  4 Sep 2026 21:56:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788559011; cv=none; b=WxU6LsACShjMIY2SVsgVBlq9jgoUTvwqpuHdUjA1Zp3cdSnAlrCaqZ091a9+5V7stbrKJZctiqOSZp03PUT6KXluU9FqlnPXyZtqPFnIlRREau+rNJv1AHD0iz+IFfCE7GVJ7RmaAEeqVD80coOxEZAONdoQOrd87mFILG8ogIk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788559011; c=relaxed/simple;
+	bh=mDIvNTMMYeK7GsPNDD/Z4tGz1X/p8URxHyfgdZ5Z8DM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oijWaEgT5mv0r5ufE1pnti8HfRMA18Sk2tITEOhzYXlYm4YHCYgEwHgKPZp0gf2LU1X/IkVbfqjECfZQQ2CmytZmC6ZOnPXIVF4gQDO8pySunXYRfVJaZ+bFC++rEJY5vYknMN56nMqR/zTfNW57AdDnI4KV0jEXHd9SLnUtCEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RbHCANIi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="XQasX8BB"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8558c0b26a8so1008682b3a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 14:36:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788557784; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Rz5CmpyEE+qoul6ck/O5db9CaKXqwPFnB66UfdepIfNHtfIuzRdOCprlqdpTsjrT8w
-         e3Ks2YvlObECguRtsOAPO1TdTUUJ084zsIG1gqaQU8JpPCL1Epajkx228SrcOB3wD/+m
-         kKfTdtTVje7eTFkVS6NdG/KH8HgG9Av3y63uBiBbjirwTfPCCbi9BGWUqZcQTGptEcbh
-         7FnNp4OVuevjO0q9UCIY2wu+SNx6SQkkkogslccVl5wj69/xjIdKNlj390oxPF56ix8W
-         Mo8Lm03vjBHlpSFAc+p/g+JA35yYo522dxR/g1hnxyWfMebFWmfu2X0Rlw1jEUxkRsY7
-         uwnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=jo4x4Ggaou9AjUhv6Fk871jpbvjAaDAFo132WJylUiw=;
-        fh=FKg7VUJuWp1XuTKK7nodoTMRUXCr9eHgRwSu6SKW2zw=;
-        b=YzDGEUknfJpWXO0UyAAq50n4eazBi7I/Wdkxi74R9cCLkJROCUfRGI/NiD1xWh8lVb
-         pekVBE5Kj5JNx+cK+6En7m38LGeMiC/yb9OSRKOXQdsG6Fy3CZ7+7+BEqiZCao/9hcuY
-         u4gw7uCtClh7N3P+6676q5XwV1MuRLxdcKpuZe92havvWpoNHxqONTgN82vL2JtpjcFX
-         SDzqb36q83gr43lY5ToIUmMZUR5oRdx+qcIdVHInUiexRaRI0140k5z/EOir98ICXC1V
-         iIZdRjOXJRgT3aLthuORKkMuPoaS50RCD7nFYS2kyb5k7tkr9L+la87pS12XYBUD6UBC
-         lVPQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1788557784; x=1789162584; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jo4x4Ggaou9AjUhv6Fk871jpbvjAaDAFo132WJylUiw=;
-        b=XQasX8BBn6HPKEfCOfoksO69qSLUdV4xSBh849uhPn5EzMOcuMiJp5gq+tCRclFZAu
-         jvHo3Sju7XJBZT/2vLFZ4FQq5FbTn8ghvZ23tif+xDN1rJSysNv2j6zcvd8HdUE2SrAU
-         dMXu33RCcamKorPANiOupCXGN1nd23oOroiPo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788557784; x=1789162584;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jo4x4Ggaou9AjUhv6Fk871jpbvjAaDAFo132WJylUiw=;
-        b=nqngFsYvIawsqUrUeCigtlX6XGszSv1G/2w6qhE3Z1q6RQeFUc7bcgcMj6P25kwR4W
-         bTO4fsLz+49CsHJ9U6sVFRiAmdAm+q4E3kJhvGsvcoGvAyJFbXje7CKODG2niZ9m9zSe
-         xJbkVEtT7OpnluSzmn/Kn2pfblWEkFN1iGL0CZqGHfyxjEK3KKurYDyqwjrzhnYI+lUo
-         tbEnMjBXPeuk4GB7cncrQVXNf3pcLsz9pGZ2+EZa2yVK8xNTS8BO4EP8Z8LEpuV5QTga
-         VSejlIPoLAwA/Guq3xuKekgNSjs3SSfBu/hlCF7eV7uxh4/lm6JrhKzBy/gSeQ4+luRi
-         nMKQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzKYpfaSOXkrkh+1ABhCB4NL0fdK4j4AbtD+4zu4aF8xfgOwj96X9fx5GKBGEg2hHauhzRoc7zriU/niWey8hU=@vger.kernel.org
-X-Gm-Message-State: AFuF++l81YAE7vapuLWOVgEXx73LmhtG0rcLoJ0ymexVhVkbcNCNdYS6
-	dAW/9LZb3lhc6nPVW25rwI0pAzVOANXa+zxrl2BucaNoLQZ1Dsl7MbJRlZ2xM8MWBDy4lQTdOyx
-	7IGtPPYdJmb0jGd5K99Q6IujdpWx0nDOeTwgwHkLI
-X-Gm-Gg: AYBFou1mNuRNHEt4sodsk1+5W6QAvqW4xlCQZcaZNQJLUQ46wfssShzE86mZz2R6aeS
-	SOAJUn+mppaoesupRlH4LEQWcp3hv0rKQ7fyhesR4UtEJP6M1G7JVGSZghAqTk0C3nrRpHO17nS
-	3q/u7GYsmWjP+R50WRlxsN8MCuVOw/5ZVnhtzXBlhfKXmWlkP8/c6psFftZveEMTv64u9hkqTr4
-	WEFLaWrVSiNII5OXJMTLFo78TxUzwnqjGU/yoHRiJaMNtT6VubgNXS+mJOirrFgHHWXIz4IwLeO
-	Xbb8TChhN3gQRW8SON2jasm2Qs8plmqtyWfc+RnKp/eszVj/GOBcdZ1K86eRFWOIN1V5wMjYcCl
-	49aT0xs98TTl7qG6alqMK9vk=
-X-Received: by 2002:a05:6a00:3c89:b0:853:2e35:ad84 with SMTP id
- d2e1a72fcca58-8616858e931mr10880855b3a.14.1788557784154; Fri, 04 Sep 2026
- 14:36:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RbHCANIi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2201F00A3D;
+	Fri,  4 Sep 2026 21:56:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788559010;
+	bh=WLLN6D/aLaiSZCc6VRO4G+fmb2F/w3i1SeqpgrJDHo4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=RbHCANIivrUJeL+oLXqYTr+R4r3BsqdM4cQvevCYwT6Dx7hhRQHEHuxPhEGrzY8Dc
+	 93YNYH2AahXbS2hroX7eS4yqeIyySc5cq+STIsNypvImYjwxw+dGXsELvtimyuL3sf
+	 MGiGdlE1MZPDGo129o2qeReweS2riv51lC9YBXs/xgw1lRrAdMTMYheHdKdtPLwtCi
+	 DE0DNyXJJBHHOeuBboM7SwnWn9AS+YeWeqvy+b+zppTFa/pbyK6mIu+qp5r/5LUq0e
+	 WH9h7w+zBBOfDbeaMJbvDG31qh4E1s4THHW8iZgBuey2+RCgsZeZfaFEDtWExZbzdz
+	 3zz/va3OKRI+A==
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+	id 44EAA1AC52F1; Fri, 04 Sep 2026 22:56:48 +0100 (BST)
+Date: Fri, 4 Sep 2026 22:56:48 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Leonardo Bras <leo.bras@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
+	Fuad Tabba <fuad.tabba@linux.dev>,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Wei-Lin Chang <weilin.chang@arm.com>,
+	Yao Yuan <yaoyuan@linux.alibaba.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v20 06/14] KVM: arm64: Validate GCS exception lock when
+ emulating ERET
+Message-ID: <aps-oNeG3RjzqHQs@sirena.co.uk>
+References: <20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org>
+ <20260901-arm64-gcs-v20-6-f31750bdfadb@kernel.org>
+ <apmUQETDlhTIuJIY@LeoBrasDK>
+ <2dfd8a6c-42c2-466c-b3d6-2313466fc3d5@sirena.org.uk>
+ <aprEsh-xogu8zFnK@LeoBrasDK>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <QDISC-0CFC.v3.20260901204856@mojatatu.com.10> <178851497140.4131868.17681128693200676725@kernel.org>
-In-Reply-To: <178851497140.4131868.17681128693200676725@kernel.org>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Fri, 4 Sep 2026 17:36:12 -0400
-X-Gm-Features: AcwNN1XA0CNvG31L9KVaV2Dah6gb_K5L-qSmSxWhn4H41Crfa2y7-yoRIruaIMY
-Message-ID: <CAM0EoM=7mQbKeWzUbRrUK7BuQ0e0KJmH8SyLpNfPgm8-hKUqvw@mail.gmail.com>
-Subject: Re: [PATCH net v3 9/9] selftests: tc-testing: update ETS test 41f5
- for clamped quanta
-To: netdev-bot+sashiko@kernel.org
-Cc: netdev@vger.kernel.org, jiri@resnulli.us, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	victor@mojatatu.com, vega@nebusec.ai, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, toke@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="TZSwDlEzCnBqnKB1"
+Content-Disposition: inline
+In-Reply-To: <aprEsh-xogu8zFnK@LeoBrasDK>
+X-Cookie: My vaseline is RUNNING...
+
+
+--TZSwDlEzCnBqnKB1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 4, 2026 at 5:42=E2=80=AFAM <netdev-bot+sashiko@kernel.org> wrot=
-e:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider:
->
-> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 1 =C2=B7 Low: 0 (1)
->
-> - [Medium] Incomplete selftest update / undisclosed behavioural change:
->   the accompanying commit 0bbbcd21591a ("net/sched: ets: clamp quantum=E2=
-=80=A6
+On Fri, Sep 04, 2026 at 02:16:34PM +0100, Leonardo Bras wrote:
+> On Thu, Sep 03, 2026 at 08:22:44PM +0100, Mark Brown wrote:
+> > On Thu, Sep 03, 2026 at 04:37:37PM +0100, Leonardo Bras wrote:
 
-Note: the e51a/e7f2 breakage branch is wrong (verified: iproute2
-rejects the literal 0 client-side, both tests pass on the patched
-kernel per our tests).
-Note2: The underlying point is fair, though: the error-contract change
-for TCA_ETS_QUANTA_BAND =3D=3D 0 deserves one changelog sentence.
+> > > > +	if (kvm_check_illegal_exlock_return(vcpu, spsr))
+> > > > +		return false;
 
-> Pre-existing issues:
-> - [Low] Concern that test 41f5 ("ETS offload with out-of-range quanta
->   clamped") only checks the software qdisc dump via `tc qdisc show` and=
-=E2=80=A6
+> > > >  	/* If ERETAx fails, take the slow path */
+> > > >  	if (esr_iss_is_eretax(esr)) {
+> > > >  		if (!(vcpu_has_ptrauth(vcpu) && kvm_auth_eretax(vcpu, &elr)))
 
-That matches the file's existing goal; the retired sum-wrap case is
-indeed unreachable with the 1 MiB per-band ceiling (16 bands x 1 MiB
-<< 2^32).
+=2E..
 
-IMO, other than the changelog change for "medium" - nothing else to see her=
-e.
+> > We need this because ERETs from vEL2 are handled in software, modulo the
+> > NV3 fast path mentioned at the top of the function.
 
-Phew! Cant believe i went over all that. I thought this new era was
-about keeping up with huge influx of bug reports - but the influx from
-the bots is higher. I am sure the s/w quality will improve but man oh
-man this is too much work (change the changelog, no human has ever
-asked me that!)
+> Oh, and this is done in __fixup_guest_exit() because vEL2 is not a=20
+> nested guest. It would be it's guests' exit that would be dealt in=20
+> fixup_nv_guest_exit().
 
-cheers,
-jamal
+> Is this correct?
 
+Well, it's as much because that is the point where we handle the EC
+specifics.  __fixup_guest_exit() does general handling of guest exits
+that applies to all ECs and then dispatches to an EC specific handler,
+it is common code with nVHE.  When we have NV then fixup_nv_guest_exit()
+is run beforehand to do extra handling that applies to all ECs in the NV
+case, but any EC specifics for NV still go in the relevant EC specific
+handler.
 
-> --
->
-> selftests: tc-testing: update ETS test 41f5 for clamped quanta
->
-> This updates tdc test 41f5 in qdiscs/ets.json so that its name and match
-> pattern reflect the new quantum clamping to [256, 1 << 20] introduced by
-> "net/sched: ets: clamp quantum in parse and fallback paths".  The test
-> still passes "quanta 4294967294 1 1" but now expects "quanta 1048576 256
-> 256" in the qdisc dump.
->
-> > diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.jso=
-n b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
-> > index ee09e6d6fdf3c..d2eab61c099a8 100644
-> > --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
-> > +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
-> > @@ -987,7 +987,7 @@
-> >      },
-> >      {
-> >          "id": "41f5",
-> > -        "name": "ETS offload where the sum of quanta wraps u32",
-> > +        "name": "ETS offload with out-of-range quanta clamped",
-> >          "category": [
-> >              "qdisc",
-> >              "ets"
-> > @@ -1002,7 +1002,7 @@
-> >          "cmdUnderTest": "$TC qdisc add dev $ETH root ets quanta 429496=
-7294 1 1",
-> >          "expExitCode": "0",
-> >          "verifyCmd": "$TC qdisc show dev $ETH",
-> > -        "matchPattern": "qdisc ets .*bands 3 quanta 4294967294 1 1",
-> > +        "matchPattern": "qdisc ets .*bands 3 quanta 1048576 256 256",
-> >          "matchCount": "1",
->
-> [Severity: Low]
-> This isn't a bug introduced by this patch, but a note on what the renamed
-> test now covers.
->
-> The verification is only "$TC qdisc show dev $ETH", which reports the
-> software qdisc quanta.  The quanta actually handed to the driver are
-> filled in separately by ets_offload_change() in net/sched/sch_ets.c:
->
->         qopt.replace_params.quanta[i] =3D quantum;
->         qopt.replace_params.weights[i] =3D weight;
->
-> and netdevsim's nsim_setup_tc_ets() in drivers/net/netdevsim/tc.c does
-> nothing with them:
->
->         case TC_ETS_REPLACE:
->         case TC_ETS_DESTROY:
->                 break;
->
-> so nothing tdc can observe reflects the offload request itself.  That is
-> pre-existing and matches the idiom used by the other cases in this file.
->
-> Separately, since each quantum is now capped at 1 << 20 and there are at
-> most 16 bands, is the u32 sum-wrap condition the test was originally
-> written for still reachable at all?  If not, the rename retires that
-> coverage without a replacement.
->
-> [Severity: Medium]
-> Should the two neighbouring tests in this same file be updated in the
-> same patch?
->
-> The kernel-side commit in this series also removed the explicit
-> zero-quantum rejection from ets_quantum_parse(), which now reads:
->
-> net/sched/sch_ets.c:ets_quantum_parse() {
->         *quantum =3D clamp_t(u32, nla_get_u32(attr), 256, 1 << 20);
->         return 0;
-> }
->
-> The previous "ETS quantum cannot be zero" -EINVAL and extack are gone,
-> and nothing else in the path rejects 0: ets_quanta_policy declares
-> TCA_ETS_QUANTA_BAND as a bare NLA_U32 with no range, and
-> ets_qdisc_quanta_parse() only runs __nla_validate_nested() plus the band
-> count check before calling ets_quantum_parse().  A band quantum of 0 is
-> therefore clamped to 256 and the qdisc is created.
->
-> Tests e51a "Zero element in quanta" and e7f2 "Sole zero element in
-> quanta" still encode the old behaviour, for example e51a:
->
->         "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root ets quan=
-ta 1000 0 800 700",
->         "expExitCode": "1",
->         "verifyCmd": "$TC qdisc show dev $DUMMY",
->         "matchPattern": "qdisc ets",
->         "matchCount": "0"
->
-> If tc forwards the literal 0 to the kernel, which is what 41f5 suggests
-> given that it passes 4294967294 and 1 through unmodified, then the add
-> now returns 0 instead of 1 and "tc qdisc show" prints "qdisc ets", so
-> both tests fail.  If tc filters the 0 locally the tests keep passing but
-> no longer exercise any kernel check, and nothing covers the new
-> accept-and-clamp semantics.
->
-> Either way, could the removal of the zero-quantum -EINVAL and its extack
-> be mentioned in the changelog?  Neither this commit message nor the
-> kernel one notes that the netlink error contract for
-> TCA_ETS_QUANTA_BAND =3D=3D 0 changed, and sch_drr.c deliberately kept its
-> explicit zero reject.
->
-> --
-> Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
-set/QDISC-0CFC.v3.20260901204856%40mojatatu.com
+--TZSwDlEzCnBqnKB1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqbPp8ACgkQJNaLcl1U
+h9DFBwf8D5V/G8mDF5LtW3QQNUxhO8RJk17+tPVKa2yUGPdsVLrSA7bw5X/vbgDg
+WS485cIPTSH/+3VE9pa/EbV3gQps9QWT4FUIyMNEPS1Uk4M1VYYzRnXUd8vN7E7n
+9ZSEkjKz+O1MXm198k5LeY3vrLTDSH2ACHa+cIkp1Mf0eqV5cahEjEZYw0A0HL22
+5hYMKI69FWMHCU/Xu+KaNRuLmqA76LyzFWNCXAAuI9E4gM3Y4DVzmj0fwcAADwwP
+RRcvCAIazVSryyiTq2LnpE42nRWNAbTM6AUbwWEnvsrs01HU3YABGNkKZW04ilMu
+LMPVCobegoaSeXNobAfZsKW92a3nSA==
+=kVDG
+-----END PGP SIGNATURE-----
+
+--TZSwDlEzCnBqnKB1--
