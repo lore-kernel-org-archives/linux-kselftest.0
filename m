@@ -1,96 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006361BC2A;
-	Fri,  4 Sep 2026 00:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAEA02192F9;
+	Fri,  4 Sep 2026 01:05:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788482655; cv=none; b=kkabesCNKSWx6CJ6SVNf2rufD//cKJnJTGqYOJZNLEfZCwxUqI3gqWfiCg299jccz6SZpq1u06L7tQ0BDZE6drl0MRhm0UQu3vmuEqFxhTrEB5ZGwsVmvTB1KiIziS+5HYjIzAacDqD4j1i36V+0XymAksTgHdSAf4RNUZzivLc=
+	t=1788483953; cv=none; b=Zyyq2nx+N4VeK8LcOEla2uEGaoFFsk87e8eUDCa9k7ol/LrI1rdL0QRk0UlBWyrMgTHJ425uzVab0b3H03cUwjfmAQV6kug3BFb4AYSdM69im8Wl/I9FtrUDNYUCyQqajXRcUPjMlzVXbOw98HesBoZx3l9Zod3nKMK4BcFUIS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788482655; c=relaxed/simple;
-	bh=IpaniWpl4q+8kiIAFgq+x65paTc23TjQM5EsmdPM+OQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Qj+5PcO73RowR5Kw0uMpNint+Jw+ZkX4WNhd4+be6xmt4Qa6N66htuqB8Ke9XSzO41Wfe+qKcFab+pz3zDNsPDi6+W2rMjrKi4z1IgggYPJLgaXr0ngOpWUPbmC2Ps4/u+NeQUqUYdApgC/3uSE+mKkMvCBI0dVdaQgfnbpzqtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C8pOMMDh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788483953; c=relaxed/simple;
+	bh=pXJxK3+dwpX0ZuLCucXJEaT/CLa6AThnH/lmQa4I3lI=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
+	 In-Reply-To:Content-Type; b=K6sqXm79kIHXQrJpNr6wZhjLfmDp3COgDSGbEn5dz3ORV2RkqwoXNS02YpBebtlW79rwRQI4JM1B/b542lQ8/bltMYhzhy+gaSzv6xpGybQYLSpI+7QnnOYbfMiSf4WXw3eDZqKgIFHpWndfg4OkpOJhx5hXPgSeMnuoHDZ5pgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=c1r7eiZl; arc=none smtp.client-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C8pOMMDh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 180D91F000E9;
-	Fri,  4 Sep 2026 00:44:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788482653;
-	bh=KraBssmMEiWIBzyn65iDWbUViqjTaiDbL8M21HHwgAw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=C8pOMMDh1Z7TttwCKihKzuccCRBEZrjT7j/gIJuixvaPcRyABx0q5vkmdefdAFVEw
-	 gmTdX5+k8WBG43R6I6IRzTFITAC7liJ1tduPzDmZ+IzDSg+RSiDdPij31M3uA1LW3H
-	 IPUb55zkVjTROVZWmvIoa/qGLAtXc26UbslMIIMjedyl/0jBtwTf+taIQf6DDZb5Bb
-	 0pmW6bv7X/hyAAZHoW2MasZxmB/RjxFXbXEcbcmMORoVMvXtOBKaYARyejgBtGrTK3
-	 kdEbBsanlq6IiPYeeUGWDInPYRArnHJxb1xPD3TOhK8jGIhZ9rIX//UBtOleT/ZwIP
-	 /ZmeyT06BpDlw==
-From: SJ Park <sj@kernel.org>
-To: Zenghui Yu <zenghui.yu@linux.dev>
-Cc: SJ Park <sj@kernel.org>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org,
-	ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com,
-	nico.pache@linux.dev,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	usama.arif@linux.dev,
-	Kiryl Shutsemau <kas@kernel.org>
-Subject: Re: [PATCH] selftests/mm: remove unreachable returns after ksft exit helpers
-Date: Thu,  3 Sep 2026 17:44:05 -0700
-Message-ID: <20260904004405.116994-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260903135251.39593-1-zenghui.yu@linux.dev>
-References: 
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="c1r7eiZl"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=R44xkW68vjRLhEKdA9HxJ22eV9oyvArt4A8C0/wQSo8=;
+	b=c1r7eiZldp5+In5FW8BEUxdtlU5u/WVo+hSCJWw91lCBymS2tcgwWI/JzJA041tHKqqz4v/Nl
+	hXo7ErQV6AgoBMx7gU1AaEoW5lxF3r8HvNXZJwWBGTpxd9MgOyQkHUYa6XLn1XNdCt00vy8B1Ug
+	A1o7hU9teks1R0J1f8bUgiU=
+Received: from mail.maildlp.com (unknown [172.19.162.197])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4hbdKQ3qwkz1prLc;
+	Fri,  4 Sep 2026 08:54:50 +0800 (CST)
+Received: from kwepemo500018.china.huawei.com (unknown [7.202.195.199])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3A59E40579;
+	Fri,  4 Sep 2026 09:05:43 +0800 (CST)
+Received: from [10.174.176.101] (10.174.176.101) by
+ kwepemo500018.china.huawei.com (7.202.195.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Fri, 4 Sep 2026 09:05:39 +0800
+Message-ID: <0334fe7d-d949-45f7-8914-3012cb11b740@huawei.com>
+Date: Fri, 4 Sep 2026 09:05:39 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: Qiqi Li <liqiqi23@huawei.com>
+Subject: Re: [PATCH v5 25/36] mm/memory_hotplug: support N_MEMORY_PRIVATE node
+ hotplug
+To: Gregory Price <gourry@gourry.net>
+CC: <linux-mm@kvack.org>, <Zhigang.Luo@amd.com>, <arun.george@samsung.com>,
+	<balbirs@nvidia.com>, <brendan.jackman@linux.dev>, <yuzenghui@huawei.com>,
+	<apopple@nvidia.com>, <alucerop@amd.com>, <matthew.brost@intel.com>,
+	<akpm@linux-foundation.org>, <david@kernel.org>, <ljs@kernel.org>,
+	<liam@infradead.org>, <vbabka@kernel.org>, <rppt@kernel.org>,
+	<surenb@google.com>, <mhocko@suse.com>, <corbet@lwn.net>,
+	<skhan@linuxfoundation.org>, <gregkh@linuxfoundation.org>,
+	<rafael@kernel.org>, <dakr@kernel.org>, <djbw@kernel.org>,
+	<vishal.l.verma@intel.com>, <dave.jiang@intel.com>,
+	<alison.schofield@intel.com>, <osandov@osandov.com>, <jannh@google.com>,
+	<pfalcato@suse.de>, <jackmanb@google.com>, <hannes@cmpxchg.org>,
+	<ziy@nvidia.com>, <pbonzini@redhat.com>, <osalvador@suse.de>,
+	<joshua.hahnjy@gmail.com>, <rakie.kim@sk.com>, <byungchul@sk.com>,
+	<ying.huang@linux.alibaba.com>, <kasong@tencent.com>, <qi.zheng@linux.dev>,
+	<shakeel.butt@linux.dev>, <baohua@kernel.org>, <axelrasmussen@google.com>,
+	<yuanchu@google.com>, <weixugc@google.com>, <yury.norov@gmail.com>,
+	<linux@rasmusvillemoes.dk>, <longman@redhat.com>, <ridong.chen@linux.dev>,
+	<tj@kernel.org>, <mkoutny@suse.com>, <sj@kernel.org>, <jgg@ziepe.ca>,
+	<jhubbard@nvidia.com>, <peterx@redhat.com>, <baolin.wang@linux.alibaba.com>,
+	<npache@redhat.com>, <ryan.roberts@arm.com>, <dev.jain@arm.com>,
+	<lance.yang@linux.dev>, <usama.arif@linux.dev>, <xu.xin16@zte.com.cn>,
+	<chengming.zhou@linux.dev>, <roman.gushchin@linux.dev>,
+	<muchun.song@linux.dev>, <linux-kernel@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <driver-core@lists.linux.dev>,
+	<nvdimm@lists.linux.dev>, <linux-cxl@vger.kernel.org>,
+	<linux-debuggers@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+	<kvm@vger.kernel.org>, <cgroups@vger.kernel.org>, <damon@lists.linux.dev>,
+	<linux-kselftest@vger.kernel.org>, <kernel-team@meta.com>
+References: <20260720193431.3841992-1-gourry@gourry.net>
+ <20260720193431.3841992-26-gourry@gourry.net>
+ <6840c720-8cb7-46bb-a652-040c130a4427@huawei.com>
+ <aoJaaYp30LnKLj1w@gourry-fedora-PF4VCD3F>
+In-Reply-To: <aoJaaYp30LnKLj1w@gourry-fedora-PF4VCD3F>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemo500018.china.huawei.com (7.202.195.199)
 
-'get_maintainer.pl --nogit --nogit-fallback' on mm-new suggests adding Kiryl.
-I added him.
-
-- Kiryl Shutsemau <kas@kernel.org>
-
-On Thu,  3 Sep 2026 21:52:51 +0800 Zenghui Yu <zenghui.yu@linux.dev> wrote:
-
-> From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
+On 8/17/2026 8:49 AM, Gregory Price wrote:
+> It would need to be reserved, and you could use numa emulation but
+> that's clunky.  I have an RFC for exactly this issue - though i haven't
+> pushed it further yet.
 > 
-> The ksft_exit*() helpers such as ksft_exit_fail_msg() are declared
-> __noreturn, and the ksft_exit() and ksft_finished() macros expand to calls
-> of them, always terminating the process via exit().  Any return statements
-> following such calls are unreachable, both at the end of main() and on
-> error paths of helper functions.
-> 
-> Remove all of them.  No functional change.
+> https://lore.kernel.org/all/20260610014517.253609-1-gourry@gourry.net/
 
-Makes sense and looks correct to me :)
+Hi Gregory,
 
-> 
-> Assisted-by: GLM-5.3 OpenCode
-> Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
+Sorry for the late reply.
 
-Reviewed-by: SJ Park <sj@kernel.org>
+I took a look at the exclusive-node RFC. The approach looks useful for
+device-backed private memory without a firmware-described NUMA node.
+Thanks for the pointer.
 
+We are currently looking into the private-node and CRAM design as a
+whole. I noticed that CRAM was not included with the v5 series, and saw
+that others were also interested in a v5 version.
+
+If you already have a CRAM branch or patches based on v5, even if they
+are still work in progress, would you mind sharing them? It would be
+very helpful for us to continue testing the overall design.
 
 Thanks,
-SJ
-
-[...]
+Qiqi
