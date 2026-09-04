@@ -1,33 +1,33 @@
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5200F46C4CD;
-	Fri,  4 Sep 2026 10:38:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BD946C4D0;
+	Fri,  4 Sep 2026 10:38:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788518338; cv=none; b=j6IdTs2sCt8bUFNWy9ovfi4zf2IhcnlsEPQhs8h3IBxAsLOwBjBA7SkywvWxO/hFRkZJZUiGz0v6vrs2R/xbHSFjcvRGPv5z+sQtyZ65QSiHUwK9AuekJiQ5UsRl4+dJZ6rI1LWMIlw/b39STWzr19abJHhLPrdDShvNevUg7W0=
+	t=1788518338; cv=none; b=WXUwpyn+ShdQU8gOjNFIZq3YEZ8PLlh9fO58xQMDHlqp8LoCeXo5dHVdxxZpx9oGw+Lk6LFxUrWUugYZDAZ7wAO4BfRtvxfybnCKpHznIo6rLQK+tqEOUUJrXUsBfjnY6poy6woevLosqpQzPjo9Sz9IlGmZ4tS+5QcFhxNApH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1788518338; c=relaxed/simple;
-	bh=SyR2SgiiKaDf8DwjVf//zwy1H59Q/wnToVU222J1pVc=;
+	bh=p9g1PUouT6Erw84QHlBFOLCTCegUKxVucfE3SQgpLT0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u0pzn1pKghJiswv6ziegs2H08ZGbu1cRKaGAHmu4NwtGel970UTncS2qQhzo/iEIk8aKuqwKFruiCOTZMuvbPmlVAl//+/vAx+sInNyzD5qcw/ydjlEMFEWrjT9qQzvK0/1XKUnpnysDYqCfvws5H0qc1g3O7U266UZbzuO1Y3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=akFQ41tg; arc=none smtp.client-ip=213.97.179.56
+	 MIME-Version; b=gbf0zNN6Z/ORGYMOj/eyXjT35zJp6cALjOrYq6in49cgoed/pWkOhCV7hXlbfE3rGzojknNsKBVscCxg7G/wLW700+WS49UKvshHCEImYJpu7DLcBhrklWCnbzqGwGvtPGhNeGM8bv22jDXvWKvkPKI7Be91QvhXiwWqNmdPnpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=CBHlhqqu; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="akFQ41tg"
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="CBHlhqqu"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:From:Reply-To; bh=gVTEyq0Vf66zV88lZcZuSzCziAx/EaV2pyuTvSCeSPY=; b=
-	akFQ41tgCgHu1DHeg4zXcgDcObmzbLzGZoTU2jip9nYOqlohS0KqMCvu10CJF8BoRQl3/KETwSBUZ
-	SiYUJyB0aAbgcGHQLXTNQlM2Vk62vve8fEMajNam+GPKfCihtI2Q/475QtXaCHg0ODXMeFuAiDHHO
-	wLe2x2yIaRXOJBRMZnbqxbbXbUfJSuMyMJ5y2g1pWHd4C37TFxRry9h4vZEYPPxh6+GAZsAe8g8Ku
-	uJx/rWQuBUtsWVqiD7es5sIqyYmEyemuxjzEriEOm8FDBASrsDuSTdRhhxK4DzT2Xfk6b4Lqe8/Ov
-	271BH9y2GM+LSGSANOX3wtftZdhWJEkOuw==;
+	Cc:To:From:From:Reply-To; bh=EOI1gXGQqauK+VMxJAvurkqReNkZikt+yZ4YgoEKb80=; b=
+	CBHlhqquF+Nk7ixCS4IFHzcrn0Rx9IZGRSk1w08+SWg/lCbFB1V/+JCJM4xR4EBoS9QJUpZAcB33I
+	HZQFWrd+fhw49COf5UZIXNrylRt0q6ihjcNnskoJbBfza4/18CCjFbaDfilU7toe5cQ7faPB2i2XB
+	lxw2Du1eW3o6Un6ycXNnGjSWRR75RRMG1GryO6CoWUGBpOX9GDIStYCEDooKMLqLyd22qdwZi9o1a
+	ivDK4IihJ2cGsnsSvUI360SSxWT4BuVLBnHm8aFpRCPtCAgpvLfs20zzhYEOJOf3gMGjVD7N+Oh+W
+	vqhUUPU0oaT5fU+etS1K5sLipC21P1etcw==;
 Received: from bl21-120-122.dsl.telepac.pt ([2.82.120.122] helo=localhost)
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1x2RJk-00Eq0k-RH; Fri, 04 Sep 2026 12:38:44 +0200
+	id 1x2RJm-00Eq0v-OW; Fri, 04 Sep 2026 12:38:46 +0200
 From: Luis Henriques <luis@igalia.com>
 To: Miklos Szeredi <miklos@szeredi.hu>,
 	Amir Goldstein <amir73il@gmail.com>,
@@ -40,9 +40,9 @@ Cc: fuse-devel@lists.linux.dev,
 	Matt Harvey <mharvey@jumptrading.com>,
 	kernel-dev@igalia.com,
 	Luis Henriques <luis@igalia.com>
-Subject: [RFC PATCH v3 1/8] Documentation: fuse: add document on caches being used by FUSE
-Date: Fri,  4 Sep 2026 11:39:13 +0100
-Message-ID: <20260904103920.4471-2-luis@igalia.com>
+Subject: [RFC PATCH v3 5/8] selftests/fuse: use dynamically allocated memory to store ACLs
+Date: Fri,  4 Sep 2026 11:39:17 +0100
+Message-ID: <20260904103920.4471-6-luis@igalia.com>
 In-Reply-To: <20260904103920.4471-1-luis@igalia.com>
 References: <20260904103920.4471-1-luis@igalia.com>
 Precedence: bulk
@@ -53,176 +53,106 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This new file aims at documenting the caches that are used by FUSE.  At
-the moment only symlink, attributes, ACLs and readdir caches are described.
+Instead of directly using static arrays for the ACL value, allocate memory
+for storing it.  This will make it easier to implement ACL tests that also
+set the xattr dynamically.
 
 Signed-off-by: Luis Henriques <luis@igalia.com>
 ---
- .../filesystems/fuse/fuse-caches.rst          | 158 ++++++++++++++++++
- 1 file changed, 158 insertions(+)
- create mode 100644 Documentation/filesystems/fuse/fuse-caches.rst
+ .../filesystems/fuse/fuse_acl_cache_test.c    | 32 ++++++++++++++++---
+ 1 file changed, 27 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/filesystems/fuse/fuse-caches.rst b/Documentation/filesystems/fuse/fuse-caches.rst
-new file mode 100644
-index 000000000000..e9f60355d7ff
---- /dev/null
-+++ b/Documentation/filesystems/fuse/fuse-caches.rst
-@@ -0,0 +1,158 @@
-+.. SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c b/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
+index 12cbf9753d03..c2d6658ff7de 100644
+--- a/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
++++ b/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
+@@ -80,7 +80,7 @@ static const uint8_t acl_b[] = {
+ 
+ struct daemon_state {
+ 	pthread_mutex_t lock;
+-	const uint8_t  *acl;
++	uint8_t        *acl;
+ 	size_t          acl_size;
+ 	int             getxattr_count;
+ };
+@@ -142,15 +142,26 @@ static void fs_getattr(fuse_req_t req, fuse_ino_t ino,
+ static void fs_getxattr(fuse_req_t req, fuse_ino_t ino, const char *name,
+ 			size_t size)
+ {
++	uint8_t *acl = NULL;
++	size_t acl_size;
 +
-+===========
-+FUSE Caches
-+===========
+ 	if (ino != FILE_INO ||
+ 	    strcmp(name, "system.posix_acl_access") != 0) {
+ 		fuse_reply_err(req, ENODATA);
+ 		return;
+ 	}
+ 
++	if (size) {
++		acl = malloc(size);
++		if (!acl) {
++			fuse_reply_err(req, ENOMEM);
++			return;
++		}
++	}
+ 	pthread_mutex_lock(&g_ds.lock);
+-	const uint8_t *acl      = g_ds.acl;
+-	size_t         acl_size = g_ds.acl_size;
++	acl_size = g_ds.acl_size;
++	if (acl && (size >= acl_size))
++		memcpy(acl, g_ds.acl, acl_size);
+ 	g_ds.getxattr_count++;
+ 	pthread_mutex_unlock(&g_ds.lock);
+ 
+@@ -160,6 +171,8 @@ static void fs_getxattr(fuse_req_t req, fuse_ino_t ino, const char *name,
+ 		fuse_reply_err(req, ERANGE);
+ 	else
+ 		fuse_reply_buf(req, (const char *)acl, acl_size);
 +
-+Introduction
-+============
++	free(acl);
+ }
+ 
+ static const struct fuse_lowlevel_ops fs_ops = {
+@@ -181,8 +194,10 @@ FIXTURE_SETUP(acl_cache)
+ {
+ 	char err[MAX_ERR_MSG];
+ 
+-	g_ds.acl = acl_a;
+ 	g_ds.acl_size = sizeof(acl_a);
++	g_ds.acl = malloc(g_ds.acl_size);
++	ASSERT_NE(g_ds.acl, NULL);
++	memcpy(g_ds.acl, acl_a, g_ds.acl_size);
+ 	g_ds.getxattr_count = 0;
+ 
+ 	if (fs_setup(&self->se, self->mountpoint, &fs_ops, &self->thread, err))
+@@ -195,6 +210,7 @@ FIXTURE_SETUP(acl_cache)
+ FIXTURE_TEARDOWN(acl_cache)
+ {
+ 	fs_teardown(self->se, self->thread, self->mountpoint);
++	free(g_ds.acl);
+ }
+ 
+ static int do_force_statx(const char *path)
+@@ -210,6 +226,7 @@ TEST_F(acl_cache, stale_after_force_sync)
+ 	char    buf[512];
+ 	ssize_t sz;
+ 	int     count;
++	uint8_t *acl;
+ 
+ 	/*
+ 	 * Step 1: two getxattr calls before any statx(FORCE_SYNC).
+@@ -270,8 +287,13 @@ TEST_F(acl_cache, stale_after_force_sync)
+ 	 * !fc->posix_acl mounts (it skips forget_all_cached_acls in that case).
+ 	 * On a fixed kernel the ACL was never cached, so this is moot.
+ 	 */
++	acl = malloc(sizeof(acl_b));
++	ASSERT_NE(acl, NULL);
++	memcpy(acl, acl_b, sizeof(acl_b));
 +
-+This document summarises the different types of caches used in FUSE. For each
-+cache type, it documents the rules to insert data into it. It also documents the
-+rules for validating and invalidating data in the cache.
-+
-+symlink caching
-+===============
-+
-+Whenever there's a link resolution request for a FUSE filesystem, the VFS will
-+call into ``fuse_get_link()``, the ``->get_link()`` inode operation. This
-+function will then send a ``FUSE_READLINK`` request to the user-space FUSE
-+server.
-+
-+The server can ask the kernel to cache all link resolutions by setting the
-+``FUSE_CACHE_SYMLINKS`` flag during the ``FUSE_INIT`` negotiation. If this flag
-+is set, when the VFS calls into the ``->get_link()`` operation, FUSE will
-+immediately call ``__page_get_link()``. The first time this is done for a
-+specific inode, it will result in sending the ``FUSE_READLINK`` request to
-+user-space. But the result returned from this request will then be added into
-+the page-cache. The next time this link needs to be resolved, it will use the
-+link resolution already cached, and will only fallback to user-space if the
-+folio isn't up-to-date.
-+
-+Attributes caching
-+==================
-+
-+Inode attributes may be obtained from user-space by different FUSE operations.
-+For example, ``FUSE_LOOKUP``, ``FUSE_GETATTR``, and also several other
-+operations that create file system objects (e.g. ``FUSE_MKDIR``). These
-+attributes obtained from user-space are cached by the kernel. They have,
-+however, a timeout associated and once it expires, they are invalidated. The
-+next time the attributes are needed, a request (``FUSE_GETATTR``) will be sent
-+to the FUSE server.
-+
-+The ``FUSE_GETATTR`` request can be sent to user-space in three different
-+scenarios:
-+
-+#. if the attributes for the inode aren't yet available in the kernel;
-+#. if they are not valid any more (timed-out, or have been invalidated), or
-+#. if there is an explicit request for forcing the request to be sent (for
-+   example, by using the ``AT_STATX_FORCE_SYNC`` flag in ``statx``).
-+
-+Regarding the attributes invalidation, they may happen in several occasions:
-+
-+- Upon user-space request for invalidation:
-+
-+  - A ``FUSE_NOTIFY_INVAL_INODE`` will invalidate ``STATX_BASIC_STATS``;
-+  - ``FUSE_NOTIFY_DELETE`` and ``FUSE_NOTIFY_INVAL_ENTRY`` invalidate
-+    ``FUSE_STATX_MODDIR``.
-+
-+- When setting (or removing) an ACL on an inode ``STATX_CTIME`` is invalidated;
-+  if the ``FUSE_POSIX_ACL`` flag was set by the FUSE server,
-+  ``STATX_BASIC_STATS`` will also be invalidated.
-+- On a ``->rename()`` operation, both the old and the new entities will have
-+  it's ctime invalidated (``STATX_CTIME``). Also, the directories for both the
-+  old and the new entities will also have their attributes invalidated
-+  (``FUSE_STATX_MODDIR``)
-+- When creating or deleting a new file system object (``->link()/->unlink()``,
-+  ``->symlink()``, ``->mkdir()/->rmdir()``, ``->tmpfile()``, or
-+  ``->atomic_open()``), the directory where the object is created/deleted will
-+  have it's attributes invalidated (``FUSE_STATX_MODDIR``).
-+- If a ``->link()`` operation is interrupted by a signal (``EINTR``) the inode
-+  being linked will have it's attributes invalidated (``STATX_BASIC_STATS``).
-+- When doing a readdir (``->iterate_shared()`` operation) and the directory
-+  contents is not cached, ``STATX_ATIME`` attributes will be invalidated.
-+- When doing a symlink resolution (by sending a ``FUSE_READLINK`` request)
-+  ``STATX_ATIME`` will be invalidated.
-+- When doing a ``->flush()`` (i.e. sending a ``FUSE_FLUSH`` request) and
-+  writeback cache is enabled, ``STATX_BLOCKS`` will be invalidated.
-+- When truncating a file on open using ``O_TRUNC`` open flag (and the FUSE
-+  server has set ``FUSE_ATOMIC_O_TRUNC`` during ``FUSE_INIT``), then
-+  ``FUSE_STATX_MODSIZE`` will be invalidated.
-+- When setting attributes in an inode (``->setattr()``) and there's a signal
-+  that interrupts the operation (``EINTR``), then ``STATX_BASIC_STATS`` will be
-+  invalidated.
-+- When data is read from a file, ``STATX_ATIME`` will be invalidated (unless the
-+  file system is read-only).
-+- When data is written info a file, ``FUSE_STATX_MODSIZE`` is invalidated.
-+
-+ACL caching
-+===========
-+
-+FUSE has allowed the usage of POSIX Access Control Lists (ACLs) for a long time,
-+as they can be set and accessed simply as extended attributes. However, it was
-+only with the introduction of the ``FUSE_POSIX_ACL`` flag that ACLs started to
-+be fully supported. Without this flag being set during the ``FUSE_INIT``
-+negotiation, ACLs can still be set, but the VFS won't use them for performing
-+permission checks - that would be the user-space server's responsibility.
-+
-+Also, without setting ``FUSE_POSIX_ACL``, ACLs will not be cached by the kernel.
-+In this case, new inodes ``i_acl`` and ``i_default_acl`` fields will be set to
-+``ACL_DONT_CACHE``.
-+
-+On the other hand, if the ``FUSE_POSIX_ACL`` flag is set then, when an inode ACL
-+is accessed, VFS will first check if it's already cached. If it is not, FUSE
-+``->get_acl()`` operation (``fuse_get_acl()``) is called, which will eventually
-+send a user-space request. Future accesses to this inode ACL will use the cached
-+data.
-+
-+Setting an ACL in an inode will also result in sending a request to the FUSE
-+server for setting it. But this operation won't immediately cache the ACL -- it
-+will only be cached after it is accessed again and requested from user-space.
-+
-+On the other hand, ACLs will be removed from the cache in the following
-+situations:
-+
-+- When setting an ACL in an inode (and the ``FUSE_POSIX_ACL`` flag is set),
-+  previously cached ACLs for this inode will be invalidated.
-+- When invalidating an inode through the ``FUSE_NOTIFY_INVAL_INODE`` operation.
-+- When ``->d_revalidate()`` is called for a dentry that requires a lookup (e.g.
-+  it has expired) and that lookup operation is successful.
-+- When the VFS needs to check access rights for an inode (by calling
-+  ``->permission()``), attributes may need to be refreshed. If that happens, any
-+  cached ACLs for that inode will be invalidated.
-+- After setting an inode attribute (i.e. operation ``FUSE_SETATTR`` is sent to
-+  user-space), the user-space server may have also updated the ACLs. Thus, any
-+  cached ACLs for this inode are also invalidated.
-+- While processing ``FUSE_READDIRPLUS`` and an already existing dentry needs to
-+  be updated.
-+- In general, when there is the need to send a ``FUSE_STATX`` or
-+  ``FUSE_GETATTR`` to user-space (e.g. when attributes expired).
-+
-+readdir caching
-+===============
-+
-+When opening a directory a ``FUSE_OPENDIR`` will be sent to the FUSE server, and
-+server will be responsible for setting the open flags related with caching,
-+namely ``FOPEN_KEEP_CACHE`` and ``FOPEN_CACHE_DIR``.
-+
-+If neither flags are set by the user-space FUSE server, then every ``readdir``
-+will result in a ``FUSE_READDIR`` (or ``FUSE_READDIRPLUS``) request being sent.
-+If ``FOPEN_CACHE_DIR`` is set by the server, then the result of a ``readdir``
-+will be cached by the kernel and reused for the current open. If
-+``FOPEN_KEEP_CACHE`` is also set, the cache will be kept and reused in the
-+future, when the directory is open again for reading.
-+
-+The readdir cache will also expire and reset if the inode's ``mtime`` or
-+``iversion`` don't match the cached values, or if the FUSE connection ``epoch``
-+doesn't match the cache ``epoch``.
-+
-+dentry caching
-+==============
-+
-+TBD
-+
-+data caching
-+============
-+
-+TBD
-+
+ 	pthread_mutex_lock(&g_ds.lock);
+-	g_ds.acl      = acl_b;
++	free(g_ds.acl);
++	g_ds.acl      = acl;
+ 	g_ds.acl_size = sizeof(acl_b);
+ 	pthread_mutex_unlock(&g_ds.lock);
+ 	TH_LOG("step 4: daemon switched to ACL_B (%zu bytes)", sizeof(acl_b));
