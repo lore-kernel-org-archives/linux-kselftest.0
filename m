@@ -1,273 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07E740315F;
-	Fri,  4 Sep 2026 04:44:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9BB3F23DB
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 05:20:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788497073; cv=none; b=CtsATLEKP4d2+XuGZnRY7Ys7MX6sdjFPJl9uvr+FJoBxB4uekOeEQSBLpTrJNJRvXIDM6aoNcS6zghUvrswfN0T4s6xQt7ojdE+JjtvCBjtu4Y0vO6nn59kWQV0yPN86qKMeTaFVfGj8OxjXA+SSsbIZl46o7aBqCMcnPYabNfo=
+	t=1788499255; cv=none; b=BzhxRmsL/WAh9JVglilkl897vpMO3wK9BQJPM5AvPA+6R6aqe/b/fv5qzYia4Q92nNTMkEsq9q/nmbIiyvEOo/81DZimAV6hYVPgpaw2NZyljmbBEpM/WwzrIXLd+2eyEHfGrE7RRzkIzG0l4Vy+clupIakwWHMAJH2DsiN2RBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788497073; c=relaxed/simple;
-	bh=Z7hVBp3B91lCTwcznGY85Rbc9giuuME718tdt2UYugc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=MhHv+G7463z9wx0DraQne62PTACkPXh+BwXjlCoxtUXq7TgcIBjhfh+JCEfNjdg3ZP/UmEdn1u1V+hS9QTDCrL+USGIxkaAxQTtcZ7USiywzqTBTaG1q4PKOsCDSwLfwJ/ehmbM0CwgAsiFIHhx7yjfBRzT0JMitYw97WsJ8NIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZKT2f/g9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1788499255; c=relaxed/simple;
+	bh=1efYk6YAdTzdJ9YjN9WoZ1h5m8a3Ae6k8ZyGafuKg7k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J0ZbLXeBXYPWrqIaN3rWcnzaweNozeJ5DZTxrhOb/RiHzppOI7bgZA6Icgy/8M+x5hh9OiRqRYk0UaKzWWOaGDU2AMk19HILmLOgBXgpydhT0UHmbHsSKtSoIisTKGIxtSS+bLRxJhnmhjzbPU9AFBd3OrJoIT31Oivy9f50/PI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cXiGgXWc; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZKT2f/g9"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 54C0AC2BCF7;
-	Fri,  4 Sep 2026 04:44:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1788497073;
-	bh=Z7hVBp3B91lCTwcznGY85Rbc9giuuME718tdt2UYugc=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=ZKT2f/g9ZrjfgpN3mJ5cUXsjUQ45BNiY4wo8bTYlHJtnzTnZDXGZZeIGH+Az7Em4i
-	 ClHjH8M7DNSLVqgZA9ogta91C3/LE/UCLu3UqJ5lR/BvAjm9t5d4hPBlpWcXrmP/w0
-	 zxVfCqB1fhojvrTgXjbBwABNK/eqT34//Y8RuFdLHBzN2oNQ94nr3VzsRsXM1M21lk
-	 SMJyxauL4SzEDkp3UdBDv6s/9ul5HfyoPkGgCdkrEJE7ggKE8HrVkOG8URLNvGnuGm
-	 ArNCrp/eD7zLllXB5rX61yK0xXWOCN8EAg9usBgceP5+IYOe8nXoaZC9fXlv0miKjh
-	 lPQ8zp6jWQK9A==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 303C2C61DD3;
-	Fri,  4 Sep 2026 04:44:33 +0000 (UTC)
-From: Bochao Cao via B4 Relay <devnull+bochaolucky.gmail.com@kernel.org>
-Date: Fri, 04 Sep 2026 12:44:16 +0800
-Subject: [PATCH net-next v3] selftests/bpf: Track test_xdp_features DUT
- processes
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cXiGgXWc"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3965d3d9ab8so434852a91.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 22:20:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788499253; x=1789104053; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=N8nhx59l8O2wS9fd/hyLR2KGFd79BQ0LWN0fdxxg7Fc=;
+        b=cXiGgXWcimrbc1bTpiRxfsx0ny0B3yblBCXXHNuRZRnnxTQ1JFEny78Fd0y2EMTWKn
+         TL/oh88LPszb+A2IFDIafKss9GxKvRjxOMqXkD9vU9xbjcF7pZCHitz1rucTIrtiyqzb
+         LM6vlrGuJDuNsdvozd6xsFs/UQMKs6SUUhTBmI0u0GUux7yCACuGJcWxu631oEzvABH3
+         mUR43MawoezdMyeEnOdYoFdtXmuN1kdi2QfpD6ulbsQzoM+IYq2kz5SVhRgTyrstPs7P
+         dF+NBUBuq2UuPFfqaTFrKXpUcLqatcqTbibwEpwWfHzgIOY1gMCiJ/UJ1i1GkRVhZy7J
+         CQmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788499253; x=1789104053;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=N8nhx59l8O2wS9fd/hyLR2KGFd79BQ0LWN0fdxxg7Fc=;
+        b=KmOX+Dp4bjgUKLKNH5wyo2AeU9trWbVvdq/eGOTK8GVbcWpIHt/WvzuqEMDKNmOBb8
+         Ve9F7n6d1pvGnFF1e5xQbN3Ic4UvPzc7+TvnWU2apaO6cbJyLhRnvyIYjqRHygjffOxe
+         OxCTHdMxw4YwXAeagTphdDSMYSnUoW6V3SkMacn2iQg39fuZr1Xwd1h9WLsYt6OLC5Op
+         IYoCmXYGWcXJfmGaTckL2I7kU0SVKXHPlog6Lm7jI2dcVXfDgjqzX4uJoJVJQAFQWg+k
+         PTvjGPjp9Gw9Z2ICaIGcun82w5yhmyae2tL94zksXcbmOHdZJiwZSP/hKvDc+JZeCDGV
+         Tixg==
+X-Forwarded-Encrypted: i=1; AKwUvBzdkC4qYDrsl76aiJDuY+Y3Q39kPJbVSCFmSzJSyYKTJechhk2SIwCfKlCB4orGef7OQ24HR4dvHy8n6D3wuSc=@vger.kernel.org
+X-Gm-Message-State: AFuF++lnZrQrPuIwNSyYNeoeYwFNj99Kg3q9rdwEMk7Bn3OtLYNYU8AH
+	KGmDRGqzLIOl/ndadI8tCtUk349VMTSBdEdmkoOzGFoRwC1sw7hluOfH
+X-Gm-Gg: AYBFou2gpSc27C5zzfiWzLkUG6MfAjm5ddXM5iVk1/XnNqB8aM+2lS2u1Sy56MY1fAM
+	koqpOCkKyosb4o/18SwjsXZgvmqre7XCruAHau3/XsmnAnzEV5yJ+WmYPHfWb+yeV+QEs3MVvOh
+	13Cv66UOkvAWoEgbedgrsBn9SBm3t5ymwsiT2fnHPS4toIGZ7dGDXCK/KIETI6bMo1S9LhOt/x6
+	3qp9JshrGHv7kbSwg7mtDughIB6A56V+VRDrq4uOA4AuW2vOpft/TI2l06T6UcTBsgGCxQ7QQP6
+	CQf51zKVgTvhJYogmrAewhd7rEFJCbrDNoMv3lD54rb+gNcMBtuZaTsusnjJ+dTGiaCwDo5RWbU
+	PjA2knyGhfiHjh0blFRKQLlSBDjwX6Jxs82udKHkTUhFd57gbrFx3sWWq6ARq+KBPZjL5c0HRC2
+	u8qeaz+pZsvZGQ/pGLEptQdE7cZV23kx4ExUFCJTNF2ZSAHuM8nUMJQXYxXMsJfWy2/15W15eSK
+	A==
+X-Received: by 2002:a17:90b:3b52:b0:38f:18f9:785 with SMTP id 98e67ed59e1d1-39b26101d25mr5197743a91.8.1788499253348;
+        Thu, 03 Sep 2026 22:20:53 -0700 (PDT)
+Received: from amd.ban-spse ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14324356931sm5952481c88.4.2026.09.03.22.20.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2026 22:20:53 -0700 (PDT)
+From: Chaithanya Lagisetty <nagachaithanya9911@gmail.com>
+To: pbonzini@redhat.com,
+	seanjc@google.com
+Cc: shuah@kernel.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	nagachaithanya9911@gmail.com
+Subject: [PATCH] selftests: kvm: Fix transposed calloc() arguments in the uffd helper
+Date: Fri,  4 Sep 2026 05:20:33 +0000
+Message-ID: <20260904052033.3648259-1-nagachaithanya9911@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260904-xdp-dut-process-lifecycle-gmail-v3-1-5b7eee4f7009@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/42Oyw6DIBBFf8Ww7jSAj2pX/Y+mC4VBaXwF0GiM/
- 16kG3ft8s7cOWc2YtFotOQebcTgrK0eeh/iS0REU/Y1gpY+E055RnOawiJHkJOD0QwCrYVWKxS
- raBHqrtQtZDKjlcqlkIoRTxkNKr0Ew5P06KDHxZHXd2On6o3CHYKj22jrBrOGZ2YWLv72zgwYJ
- GmRJ9LbeZE+wvwqhi7YZn7iMf6bxz2vojEqXpasKm5n3r7vHy+oWnY6AQAA
-X-Change-ID: 20260805-xdp-dut-process-lifecycle-gmail-6d60bf8dcdf1
-To: Daniel Borkmann <daniel@iogearbox.net>, 
- Jakub Kicinski <kuba@kernel.org>
-Cc: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Lorenzo Bianconi <lorenzo@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- bpf@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Bochao Cao <bochaolucky@gmail.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788497071; l=6447;
- i=bochaolucky@gmail.com; s=20260805; h=from:subject:message-id;
- bh=I2n4a59uAKEvkbSso4YQc4bQe47kg2xl5vnB8E1CvlM=;
- b=p6gzwSNVBLab6wCc/Fk60sH5alBgRcLdhxrE9e+AFKFcFlF/7xCxhaTn/PP4yPX8ZnHMHoR7d
- +QVZsMgPQXlCeqzN22LC2kil+Pgo13uSEAutkJf3o7sfSPzzeysNRen
-X-Developer-Key: i=bochaolucky@gmail.com; a=ed25519;
- pk=ZYp7O2eXSIrJ9YmKrl0iHDoulPYSG+1lzICsicAvld0=
-X-Endpoint-Received: by B4 Relay for bochaolucky@gmail.com/20260805 with
- auth_id=920
-X-Original-From: Bochao Cao <bochaolucky@gmail.com>
-Reply-To: bochaolucky@gmail.com
+Content-Transfer-Encoding: 8bit
 
-From: Bochao Cao <bochaolucky@gmail.com>
+uffd_setup_demand_paging() passes the element size as the first argument
+to calloc() and the element count as the second:
 
-test_xdp_features.sh waits for any xdp_features listener to appear and
-uses pidof during cleanup. A concurrent test can therefore make another
-test proceed before its own DUT is ready, and cleanup kills every
-xdp_features process on the host. The readiness loop also has no timeout,
-so a DUT that exits before listening leaves the test hung indefinitely.
+	uffd_desc->pipefds = calloc(sizeof(int), num_readers);
 
-Track one active DUT at a time, wait for ss to report that exact PID with
-a bounded retry loop, and reap it after each test. Consult the shell job
-table before signaling the DUT so a stale PID cannot target an unrelated
-process. On failure, terminate the shell job with SIGKILL and reap it so
-blocked I/O cannot hang cleanup. Install an EXIT trap and signal handlers
-so failure paths also remove network setup.
+calloc() expects the number of elements first and the size of each element
+second. The product, and therefore the allocation size, is the same either
+way, so this is not a functional change, but the arguments are misleading
+and GCC 14 diagnoses them with -Wcalloc-transposed-args, which is enabled
+by -Wextra.
 
-Fixes: 4dba3e7852b7 ("selftests/bpf: introduce XDP compliance test tool")
-Signed-off-by: Bochao Cao <bochaolucky@gmail.com>
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Swap the arguments to match the calloc() prototype.
+
+Signed-off-by: Chaithanya Lagisetty <nagachaithanya9911@gmail.com>
 ---
-Tests:
-- bash -n tools/testing/selftests/bpf/test_xdp_features.sh
-- make -C tools/testing/selftests/bpf xdp_features
-- sudo tools/testing/selftests/bpf/test_xdp_features.sh
-- verified cleanup terminates a blocked DUT without affecting an unrelated process
----
-Changes in v3:
-- Rebase onto net-next.
-- Retarget the patch from bpf-next to net-next so the hardware-test
-  migration can follow in the same tree without conflicts.
-- Drop the Debian bug Closes tag; dependency cleanup can be handled
-  independently by Debian.
-- Add Emil's Reviewed-by tag.
-- Link to v2: https://patch.msgid.link/20260812-xdp-dut-process-lifecycle-gmail-v2-1-b03ef2aa1b97@gmail.com
+ tools/testing/selftests/kvm/lib/userfaultfd_util.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Changes in v2:
-- Clarify that avoiding name-wide process matching, rather than dropping a dependency, is the motivation.
-- Track and reap one active DUT at a time instead of retaining historical PIDs.
-- Address PID reuse by signaling only the current Bash job during cleanup.
-- Use SIGKILL on failure cleanup so blocked DUT I/O cannot hang wait indefinitely.
-- Link to v1: https://patch.msgid.link/20260805-xdp-dut-process-lifecycle-gmail-v1-1-45984df8d295@gmail.com
----
- tools/testing/selftests/bpf/test_xdp_features.sh | 82 ++++++++++++++++++------
- 1 file changed, 62 insertions(+), 20 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/test_xdp_features.sh b/tools/testing/selftests/bpf/test_xdp_features.sh
-index 0aa71c4455c0..35ce0d4e2418 100755
---- a/tools/testing/selftests/bpf/test_xdp_features.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_features.sh
-@@ -8,6 +8,7 @@ readonly V0_IP6=2001:db8::11
- readonly V1_IP6=2001:db8::1
+diff --git a/tools/testing/selftests/kvm/lib/userfaultfd_util.c b/tools/testing/selftests/kvm/lib/userfaultfd_util.c
+index f7ce5a6ddcc2..49eff05b7d39 100644
+--- a/tools/testing/selftests/kvm/lib/userfaultfd_util.c
++++ b/tools/testing/selftests/kvm/lib/userfaultfd_util.c
+@@ -119,13 +119,13 @@ struct uffd_desc *uffd_setup_demand_paging(int uffd_mode, useconds_t delay,
+ 	uffd_desc = malloc(sizeof(struct uffd_desc));
+ 	TEST_ASSERT(uffd_desc, "Failed to malloc uffd descriptor");
  
- ret=1
-+dut_pid=""
+-	uffd_desc->pipefds = calloc(sizeof(int), num_readers);
++	uffd_desc->pipefds = calloc(num_readers, sizeof(int));
+ 	TEST_ASSERT(uffd_desc->pipefds, "Failed to alloc pipes");
  
- setup() {
- 	{
-@@ -30,77 +31,118 @@ setup() {
- 	} > /dev/null 2>&1
- }
+-	uffd_desc->readers = calloc(sizeof(pthread_t), num_readers);
++	uffd_desc->readers = calloc(num_readers, sizeof(pthread_t));
+ 	TEST_ASSERT(uffd_desc->readers, "Failed to alloc reader threads");
  
-+terminate_dut_server() {
-+	[ -z "$dut_pid" ] && return
-+
-+	# Use the shell job instead of a PID which may have been reused.
-+	if [ "$(jobs -pr %% 2> /dev/null)" = "$dut_pid" ]; then
-+		kill -KILL %% 2> /dev/null || true
-+	fi
-+
-+	wait "$dut_pid" 2> /dev/null || true
-+	dut_pid=""
-+}
-+
- cleanup() {
--	ip link del v1 2> /dev/null
--	ip netns del ${NS} 2> /dev/null
--	[ "$(pidof xdp_features)" = "" ] || kill $(pidof xdp_features) 2> /dev/null
-+	terminate_dut_server
-+	ip link del v1 2> /dev/null || true
-+	ip netns del "${NS}" 2> /dev/null || true
- }
+-	uffd_desc->reader_args = calloc(sizeof(struct uffd_reader_args), num_readers);
++	uffd_desc->reader_args = calloc(num_readers, sizeof(struct uffd_reader_args));
+ 	TEST_ASSERT(uffd_desc->reader_args, "Failed to alloc reader_args");
  
- wait_for_dut_server() {
--	while sleep 1; do
--		ss -tlp | grep -q xdp_features
--		[ $? -eq 0 ] && break
-+	local i
-+
-+	for ((i = 0; i < 10; i++)); do
-+		if [ "$(jobs -pr %% 2> /dev/null)" != "$dut_pid" ]; then
-+			echo "xdp_features server $dut_pid exited before accepting connections" >&2
-+			return 1
-+		fi
-+
-+		if ss -tlp 2> /dev/null | grep -q "pid=$dut_pid,"; then
-+			return 0
-+		fi
-+
-+		sleep 1
- 	done
-+
-+	echo "Timed out waiting for xdp_features server $dut_pid" >&2
-+	return 1
-+}
-+
-+start_dut_server() {
-+	./xdp_features "$@" &
-+	dut_pid=$!
-+	wait_for_dut_server
-+}
-+
-+reap_dut_server() {
-+	local status=0
-+
-+	wait "$dut_pid" || status=$?
-+	dut_pid=""
-+	return "$status"
- }
- 
- test_xdp_features() {
- 	setup
- 
- 	## XDP_PASS
--	./xdp_features -f XDP_PASS -D $V1_IP6 -T $V0_IP6 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_PASS -D $V1_IP6 -T $V0_IP6 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_PASS \
- 					   -D $V1_IP6 -C $V1_IP6 \
- 					   -T $V0_IP6 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_DROP
--	./xdp_features -f XDP_DROP -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_DROP -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_DROP \
- 					   -D ::ffff:$V1_IP4 \
- 					   -C ::ffff:$V1_IP4 \
- 					   -T ::ffff:$V0_IP4 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_ABORTED
--	./xdp_features -f XDP_ABORTED -D $V1_IP6 -T $V0_IP6 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_ABORTED -D $V1_IP6 -T $V0_IP6 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_ABORTED \
- 					   -D $V1_IP6 -C $V1_IP6 \
- 					   -T $V0_IP6 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_TX
--	./xdp_features -f XDP_TX -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_TX -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_TX \
- 					   -D ::ffff:$V1_IP4 \
- 					   -C ::ffff:$V1_IP4 \
- 					   -T ::ffff:$V0_IP4 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_REDIRECT
--	./xdp_features -f XDP_REDIRECT -D $V1_IP6 -T $V0_IP6 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_REDIRECT -D $V1_IP6 -T $V0_IP6 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_REDIRECT \
- 					   -D $V1_IP6 -C $V1_IP6 \
- 					   -T $V0_IP6 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_NDO_XMIT
--	./xdp_features -f XDP_NDO_XMIT -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_NDO_XMIT -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_NDO_XMIT \
- 					   -D ::ffff:$V1_IP4 \
- 					   -C ::ffff:$V1_IP4 \
- 					   -T ::ffff:$V0_IP4 v0
- 	ret=$?
--	cleanup
-+	reap_dut_server
- }
- 
- set -e
--trap cleanup 2 3 6 9
-+trap cleanup EXIT
-+trap 'exit 129' HUP
-+trap 'exit 130' INT
-+trap 'exit 143' TERM
- 
- test_xdp_features
- 
-
----
-base-commit: 6ebcf5074cff0402730c6981d2397139fee6322d
-change-id: 20260805-xdp-dut-process-lifecycle-gmail-6d60bf8dcdf1
-
-Best regards,
---  
-Bochao Cao <bochaolucky@gmail.com>
-
+ 	uffd_desc->num_readers = num_readers;
+-- 
+2.43.0
 
