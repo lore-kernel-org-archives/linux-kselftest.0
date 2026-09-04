@@ -1,109 +1,116 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B523400DE8;
-	Fri,  4 Sep 2026 06:11:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2AC641A766;
+	Fri,  4 Sep 2026 06:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788502295; cv=none; b=MmtLXAl+m33B1tJ8uxWlCsvJGM8LIfOBAsqxgl+ahMU3Bev5mDEtZUyH4OYsQ391r+1dVqMSjBboaBOdfuoJ0G9muzfR3CrE0qj4z3DCtG0WA6KjZv7zxna+jNUMPegRF2GrjtWr93ydAnwKp1M9bexsFj1qJ8S6EkZ4uJ3XgVM=
+	t=1788502851; cv=none; b=lBoZIgrrbw03Rd9fL6BSMW8ZL/G5kOPh8sj/AAo8iHHORg6GOp0128FErEv89dQQ/FGn8WlNWy7aCFU9aJSERBUOdwQDlP8dzDaiik/p9L+m/TSDyCrrVKX/IvHoUJGAnfyHkrJ6JlQx5HqgbuleZ0zVJca/a/ObTrwVv2S4MPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788502295; c=relaxed/simple;
-	bh=JHkbB1JfRxNI1CsXHCi50vbXHL74mLGXT94u8wHDfJ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k3HMyPW9vtB1VjoJFmitJtvCgrzHvcMHHZxrXKLik2lpcoIfqyu+joHgTvFXUVGkphmGfriP1pa0XGX3ewVYmyWbKV6TIoRJP8nfC0ZBM0psudc9ebM8qRufs+Od+1U0ok+Xi0XJr/+N8N2Fl6grjnfToa3l27/2m4elfXls2II=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=0NwTAcz0; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="0NwTAcz0"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 4DA831A199A;
-	Fri,  4 Sep 2026 06:11:29 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 1BDEF6057F;
-	Fri,  4 Sep 2026 06:11:29 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id EC85711C79F76;
-	Fri,  4 Sep 2026 08:11:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1788502288; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=RjzcsyivNlPTUwhkXm3AdIxL5Bh4sKOmVQSxjRl8PGI=;
-	b=0NwTAcz0MdpOoqji7q2xKnNJsmjSu7eAV4DCPTkxjm2bz6sY218UF5hr5I1U2fiLxVcZK/
-	PKl6aLGBwKKLyAq3fgos0WtRv8PBkzjTurWfdK6FQ/JcUcUhmmuRQdnYAZ8F9XvemMKVTh
-	QdH3ZPOG+pskVTVF8f3x6HkslNdT0ovkmuPhGFLTVpnML3R6dRkW4H059ji5nfGVs22eEb
-	Sk7Zv5OiCMCsZoL9X3WuUQrNPclPlXqm4DgNz0GsNILau1nLMJd4EngNvu0NGwDhGncwji
-	G7LNbQk9jginQ8/55C+hynixCrjw89yeW7ZLj1wlZThmdoBSIPbTDhc+EwdXwA==
-Message-ID: <de57fcda-30b8-4afc-8711-0f0d06840fa2@bootlin.com>
-Date: Fri, 4 Sep 2026 08:11:22 +0200
+	s=arc-20240116; t=1788502851; c=relaxed/simple;
+	bh=uUl5TUx1pnfaVQA8lLhnfzeRXvU6dGVODw0tLincpbA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=iLY8KCAUdo7OKBtoKxHwBJw7+EQj7I9lQl8uni76yLDfC0x6qyuyaIsLDKp2HQpiledbWwQXuGEYQrSRnLfikZDI25X4eYtIXb1QtFIYDCsMYYtNERAo3u5jBXdC/iG1TQicpXmHCaYPCh8VT/CcX5sJ9MPTQ+G8CiAv4h/TeaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: be051130a82811f19a56ed5b684f684d-20260904
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD
+	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
+	ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:53ec030e-a809-4b08-b39e-4445004c419f,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:10
+X-CID-INFO: VERSION:1.3.19,REQID:53ec030e-a809-4b08-b39e-4445004c419f,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:10
+X-CID-META: VersionHash:7db8b62,CLOUDID:1af869afdf5f6162e8062e8862059f0a,BulkI
+	D:260904140114ZJEVG48C,BulkQuantity:2,SF:17|19|66|78|81|82|102|127|136|850
+	|865|898,TC:nil,Content:0|15|50|99,EDM:-3|-100,IP:-2,URL:0,File:nil,RT:nil
+	,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BR
+	R:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: be051130a82811f19a56ed5b684f684d-20260904
+X-User: liuzhe1@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <liuzhe1@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 42094721; Fri, 04 Sep 2026 14:20:36 +0800
+From: Zhe Liu <liuzhe1@kylinos.cn>
+To: mkoutny@suse.com
+Cc: bsegall@google.com,
+	cgroups@vger.kernel.org,
+	corbet@lwn.net,
+	dietmar.eggemann@arm.com,
+	hannes@cmpxchg.org,
+	juri.lelli@redhat.com,
+	kprateek.nayak@amd.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	liuzhe1@kylinos.cn,
+	mgorman@suse.de,
+	mingo@redhat.com,
+	peterz@infradead.org,
+	rostedt@goodmis.org,
+	skhan@linuxfoundation.org,
+	tj@kernel.org,
+	vincent.guittot@linaro.org,
+	vschneid@redhat.com
+Subject: [PATCH v2 0/3] sched/fair: remove quota/burst write-order dependency
+Date: Fri,  4 Sep 2026 14:20:10 +0800
+Message-Id: <20260904062013.504236-1-liuzhe1@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <aobnZEh1hfIBhswD@localhost.localdomain>
+References: <aobnZEh1hfIBhswD@localhost.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 0/2] selftests: drv-net: Allow cross-compiling
- the hardware tests
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, davem@davemloft.net,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- matttbe@kernel.org, Stanislav Fomichev <sdf@fomichev.me>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- thomas.petazzoni@bootlin.com, linux-kselftest@vger.kernel.org
-References: <20260903155524.2241065-1-maxime.chevallier@bootlin.com>
- <2a595cf6-d208-4a0a-a96f-738235236aa1@lunn.ch>
- <b2f7d07b-5c14-4767-9fbf-47a72a6c22cd@bootlin.com>
- <a0ced283-7eac-451c-b22b-cb88a302995f@lunn.ch>
-Content-Language: en-US
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-In-Reply-To: <a0ced283-7eac-451c-b22b-cb88a302995f@lunn.ch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
 
+The CPU bandwidth quota and burst controls currently make the order of
+userspace writes significant. A burst configured while quota is unlimited can
+prevent a later finite quota from being installed, and increasing quota and
+burst in the burst-first order can fail with EINVAL.
 
+This series keeps the configured burst value independent of the current quota
+and applies the quota-relative clamp when CFS refills runtime. It also adds a
+selftest for both write orders and documents the resulting behavior for cgroup
+v1 and cgroup v2.
 
-On 9/3/26 23:59, Andrew Lunn wrote:
->> But then there's the kselftests that require a peer, and here it's another story.
->> Some tests, when using the SSH remote type, will scp a small binary on the peer
->> and use that binary for testing (sending specially crafted frames, etc.)
->>
->> Just in the drivers/net/hw tests, we have :
->>
->> drivers/net/hw/csum.py
->> drivers/net/hw/devmem_lib.py
->> drivers/net/hw/gro_hw.py
->> drivers/net/hw/iou-zcrx.py
->> drivers/net/hw/nk_qlease.py
-> 
-> But none of these are binary, so long as you run the .py file, not a
-> pyc file.
-> 
-> iou-zcrx.c ncdevmem.c nk_forward.bpf.c nk_primary_rx_redirect.bpf.c
-> toeplitz.c would be a problem.
+Changes in v2:
+  - apply the clamp at refill time instead of changing the configured burst;
+  - retain the value reported by cpu.max.burst and cpu.cfs_burst_us;
+  - add write-order selftests and update the CPU bandwidth documentation.
 
-What I meant is that all the .py files above are selftests that are copying
-actual biniares (generated from the c files you mention)
+Testing:
+  make -C tools/testing/selftests TARGETS=cgroup
 
-e.g.
+Zhe Liu (3):
+  sched/fair: Remove the write-order dependency between cpu.max and
+    cpu.max.burst
+  selftests: cgroup: Test CPU quota and burst write order
+  Documentation: describe CPU quota and burst ordering
 
-drivers/net/hw/csum.py sends the binary generated from net/lib/csum.c to the peer
+ Documentation/admin-guide/cgroup-v2.rst   |  5 ++-
+ Documentation/scheduler/sched-bwc.rst     | 21 ++++++-----
+ kernel/sched/core.c                       |  3 +-
+ kernel/sched/fair.c                       |  3 +-
+ tools/testing/selftests/cgroup/test_cpu.c | 40 +++++++++++++++++++++++
+ 5 files changed, 59 insertions(+), 13 deletions(-)
 
-
-> 
->> We could expand the remote_ssh logic to probe the peer, and raise a skip if it's
->> a different arch than the dut. Or better, have the DUT check if the peer doesn't
->> already have the tool in question, i.e. the kselftest "package" is also installed
->> there.
-> 
-> https://github.com/torvalds/linux/blob/master/Documentation/dev-tools/kselftest.rst#install-selftests
-> 
-> does talk about installing the self tests. Maybe somewhere in
-> /usr/local/libexec or /usr/local/bin. 
-
-Yep that's what I meant, this is what buildroot uses to populate the rootfs on the target
-
-Maxime
-
+-- 
+2.25.1
