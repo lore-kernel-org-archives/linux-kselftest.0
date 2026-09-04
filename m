@@ -1,252 +1,402 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B4939CD00
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 23:16:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E7D37FF7A;
+	Fri,  4 Sep 2026 23:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788563819; cv=none; b=TlALqjJvjJKCjTV8BbX8FM6fRKX8KNz3CP5gORe9ZGq4jCXE9xWtjAAuad249pSS/MCJUgkJELWDeiH1Usg047mzhGnbmhAzKe6zx9+FVyWXSiieVamNzItRuL/xAzK3NyAb0GxELoTLk82lMotwd7x+/PAKiPa+LWH7pfxRIxc=
+	t=1788563879; cv=none; b=XWN91Tk5fN5EiOsAtZRT+9A9X6UFv5FoYif2UQhuG8lQQKCW4bbsG10OI63woYpvtGkkGZz15O+Cm6BwNjk/o7bis6aXAnMt6Fhh580E015Sw5nlqRGU/3kbBpEjWZtp13GW+o1qdXX26jskbC5iW7dZOTgJKqSEgeCirwDKgHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788563819; c=relaxed/simple;
-	bh=dCGK+5CQYCXHSgBKKQcG7YPLkc0E1mAwwMS9f0mQ1qQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=Eyiw8BeftTGmgmtlMgXsfoI0qPVcYTYmC4z92pjL0PCTeq9QSPDOdFEjvSW4f29ILfYxk6Ep6yOterPTd5rBXdL06XskqPBQSbNsPcQ9qrWIyY3GfFLkTxynocwfcJr+t0BAMBAAdY3+CjQti3h7Niz1pYB+Kzw3PiSBwB37ToA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=awyihteA; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1788563879; c=relaxed/simple;
+	bh=DOD9nKVPJGtP+zC+U/9sgVJAG4iDWj8ZhzvGK1KdYT8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=agH41cXGiYJ1UeYNsGoxiRFxHFC6BvcYiSfLBdPH9Edirob9Y5e3wT+tY0K/nznkbN8/V1l+nYDcsIJbmArHEuggZBIWPa0F/Pl+8xP/acJaSYeoSYgAXhahOAZqDBaG+bKQn5H5ulj/3TtCMGcL1oVYgFPiWqzAvSl70xGzFXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P2mXTX7b; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="awyihteA"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cc149372c14so865281a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2026 16:16:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788563810; x=1789168610; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=fe1GlyuKTc0shGJ4KGsnmbYW1CmUV72M/c0uYbs9G98=;
-        b=awyihteAdZxirxvXxuKW+/Cn94PWBrwqwYAQ3iuOzzN89e9sRq/8kRtVYmjVdv69S9
-         GxADGoPsKBaj+nz93O+a42FYJr7Dbch9G04ku108Lpsli6+qgnyp8mLe39ylMKx3q5T/
-         c7mFbWOMbyiI7iL6WVFDgaWjgrLIqpAkMDyDFFSwuPl0vGVNHuV1mfNbwSt2JQINUTcd
-         yITiSqdsYDLcE5mPDmeIq0+Gm/BcWoQSQ0FzcVBfHS9Ji67Ygx8w8TNdW0YfxzJKviyH
-         6eOuA5l2z7hxOB0WhewJNvnrZ3fOirdhcRXKMm9/ZKIEB/Koujw1NxCJeB6JMajUX5p5
-         hAIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788563810; x=1789168610;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fe1GlyuKTc0shGJ4KGsnmbYW1CmUV72M/c0uYbs9G98=;
-        b=VSlg1Ecv5kEEYq7yeoYuz3XOqrujYxFpGfjASgbxiU4DaizStY/nrN8nf9s4QKSMoq
-         Rug5sBw6ifudTHLiceB/OVMa6WiIU2gTyyc0OhRN31qta8fGn2n4YFgz8PaSZgJUZs6w
-         QJxjbVeb+4WKxjoIp5uJSfaO083pKIFxSsIgqMiJnzQcAvoBYhHPQLmsONcdTc7wDsDI
-         tIP11Kk8jZzRz1uB2GXhdGqgiQ4zF3tFXtlkRhDI7mgQZp3e/s9Q/mhwqoT/cv7op/fO
-         EYi8JdOLJAs9dvCv0l0E9mXM3on1XT/7fnscACbRSgY/7JMJFBOxtwDJV8edAOYTPaaq
-         dBDQ==
-X-Forwarded-Encrypted: i=1; AKwUvByjpafERVYGOZTjWGxPUrxBxK+6F9bXnoTA+UOZ0Sl2L32fAGOTqJxVcaCRzujOnQ4Obv1THYlgGaytcl/YfTQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++mRMwCm7GARNuxZwscckZePmWwv0UfurFSBHq8sNXZDKJWvzWKO
-	fzKeQBdILHwU/vzWpDFO+UDxsOCKtzQyMGaMiXye51EyFM3sbj9ZIoj4SOOf0A0N4SA=
-X-Gm-Gg: AYBFou1GYN5qTVHMe7GdhkKogNvphIk+ZvWnJHjq5Ytt0ywBIMPKih6Vhu8xQ1GuwqG
-	luQ79AzHa70qrfp9gAIK6DtWvfE4x/J7hgkyiWtCeKRpsKMn/PDzitBzepGNXJ8XQuHtQqYPo3h
-	J9icmMDGgZYVvi6S5AOpjJO5N6z1diYG+jaMwqaN9X4m1uEpvjHVEhP4cTEENKS1drLc8HKJozw
-	miJgUeCYBzesESiE14o3PNDuCJuQmgeFkxYFAH3zEefVRtGfaRW4aRf/uw41UdLJpqgEEaEWDRq
-	fy0tZGBcpycPY1frookMK/OZ8In8o9LjEHifArSPxXA5NdMmUiILfuCO+tj4C/b3U+paaywvj8Y
-	pIWktWIcV+jama4nXo4Yns8tTFOodOEqEpJ7C/HlNnONxQektrBa5J+o6pszcZPOke31rvc4CWR
-	SlFJZ2pV8as9pFONRI7Jh+lFBUVs7yGvgq7e0q/2/f2j0/
-X-Received: by 2002:a17:90b:4c86:b0:395:5f43:4ec4 with SMTP id 98e67ed59e1d1-39b25f78ab8mr12763621a91.0.1788563809964;
-        Fri, 04 Sep 2026 16:16:49 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::1:7c52])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339aa33e96sm9699901eec.12.2026.09.04.16.16.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Sep 2026 16:16:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P2mXTX7b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E01351F00A3D;
+	Fri,  4 Sep 2026 23:17:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788563877;
+	bh=5+Ee0hUWWTMq68Jf92FClpr6IOWRhmXIoLHXGdvda5s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=P2mXTX7bB9plOgRbxzrB1/iEFoo3VL5Cko68CExn811Fe8+UAxFJ5K3o4S0itI8Jv
+	 iCe6R1d7/BBX9uuK6mGnd0ABpgzLA+lcUT/lpQ5qwVx/OPJiG3dwibpAPZ71kIGroi
+	 K/ln1Vgwd/FMe56ckb6A58eWb2gg7UIoD6PmjKrIT4MqLQpsGlp8GLoGibsnMIli3a
+	 G5mV6wt6AcBUdOERMIHSp+hjUtph5+RJmIoHVQhmd9bQphAlp0lKnRcvBmcgeUMt+K
+	 oNuHz/1ll2IgjX0FZQXkx4pgL2ScJajwu3ADl03SlrkPTPOm3ze+/xF3V4kRXQZp5g
+	 lRyxSRLUNU43Q==
+From: Jakub Kicinski <kuba@kernel.org>
+To: hemendranaik@gmail.com
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	netdev@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	jiri@resnulli.us,
+	jhs@mojatatu.com,
+	shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	vishy0777@gmail.com,
+	tahiliani@nitk.edu.in
+Subject: Re: [PATCH net-next v5 1/3] net/sched: sch_fq_pie: add per-flow statistics via class ops
+Date: Fri,  4 Sep 2026 16:17:56 -0700
+Message-ID: <20260904231756.4082402-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260902035231.81866-2-hemendranaik@gmail.com>
+References: <20260902035231.81866-2-hemendranaik@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 04 Sep 2026 19:16:28 -0400
-Message-Id: <DL6WY5J4EPB0.3KT7XUU9US5CW@etsalapatis.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>,
- <netdev@vger.kernel.org>
-Cc: <syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com>, "Andrew Lunn"
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
- Abeni" <pabeni@redhat.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Jesper Dangaard Brouer"
- <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>, "Stanislav
- Fomichev" <sdf@fomichev.me>, "Simon Horman" <horms@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>, "Kuniyuki
- Iwashima" <kuniyu@google.com>, "Hangbin Liu" <liuhangbin@gmail.com>,
- "Krishna Kumar" <krikku@gmail.com>, "Martin Karsten"
- <mkarsten@uwaterloo.ca>, =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?=
- <toke@redhat.com>, "Lorenzo Bianconi" <lorenzo.bianconi@oss.qualcomm.com>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf v2 1/2] bpf, veth: xdp: fix page_pool page leak on
- skb-backed XDP
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260824030257.263179-1-jiayuan.chen@linux.dev>
- <20260824030705.266049-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260824030705.266049-1-jiayuan.chen@linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sun Aug 23, 2026 at 11:06 PM EDT, Jiayuan Chen wrote:
-> bpf_xdp_shrink_data() frees a released frag via __xdp_return() using
-> xdp->rxq->mem.type, but that type is wrong for skb-backed XDP: the skb is
-> cow'd into page_pool memory while the rxq still says MEM_TYPE_PAGE_SHARED=
-,
-> so the page_pool page is freed with page_frag_free() and we hit
-> "Bad page state ... page_pool leak".
->
-> Both generic XDP and veth are affected. A non-linear skb is cow'd into
-> page_pool memory (skb_cow_data_for_xdp() -> skb_pp_cow_data() for generic
-> XDP, veth_convert_skb_to_xdp_buff() for veth), so its frags become
-> page_pool pages while the rxq keeps MEM_TYPE_PAGE_SHARED.
->
-> We can't just fix rxq->mem.type in place:
-> - generic XDP: xdp->rxq is dev->_rx[queue].xdp_rxq (see
->   bpf_prog_run_generic_xdp()), a shared rxq that other CPUs may access in
->   parallel, so we must not write to it.
-> - veth: rq->xdp_rxq.mem is shared per-queue state that veth resets on XDP
->   teardown, and with GRO that reset runs without stopping in-flight NAPI,
->   so a type stashed there can be clobbered under a packet still in flight=
-.
->
-> Adding a check in __xdp_return() or bpf_xdp_shrink_data() itself is not a=
-n
-> option either: without recording it somewhere, both can only guess the
-> frag's memory type, which quickly gets confusing.
->
-> So record it in the xdp_buff. Add a XDP_FLAGS_FRAGS_PAGE_POOL flag; the t=
-wo
-> skb-cow sites set it, and bpf_xdp_shrink_data() frees the frag to the
-> page_pool when it is set, otherwise it keeps falling back to
-> xdp->rxq->mem.type unchanged. No other path changes behaviour.
->
-> Fixes: e6d5dbdd20aa ("xdp: add multi-buff support for xdp running in gene=
-ric mode")
-> Fixes: 0ebab78cbcbf ("net: veth: add page_pool for page recycling")
-> Reported-by: syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=3D237bbeed8dfe0699b7f5
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+---
+net/sched: sch_fq_pie: add per-flow statistics via class ops
 
-Hi Jiayuan,
+This adds a Qdisc_class_ops table to sch_fq_pie with walk, dump and
+dump_stats so that per-flow PIE state can be reported via 'tc -s class
+show'.  struct tc_fq_pie_xstats gains a type discriminator plus an
+embedded struct tc_fq_pie_cl_stats, and the accepted flow count is
+narrowed to [1..65535].
 
-> ---
->  drivers/net/veth.c |  5 +++++
->  include/net/xdp.h  | 14 ++++++++++++++
->  net/core/dev.c     |  5 +++++
->  net/core/filter.c  |  7 +++++++
->  4 files changed, 31 insertions(+)
->
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 6ed3ee81153f..0afa0661ada1 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -775,6 +775,11 @@ static int veth_convert_skb_to_xdp_buff(struct veth_=
-rq *rq,
->  	if (skb_shinfo(skb)->nr_frags) {
->  		skb_shinfo(skb)->xdp_frags_size =3D skb->data_len;
->  		xdp_buff_set_frags_flag(xdp);
-> +		/* A nonlinear skb was cow'd into rq->page_pool above, so the
-> +		 * frags must be freed to that pool, not via the rxq's
-> +		 * MEM_TYPE_PAGE_SHARED.
-> +		 */
-> +		xdp_buff_set_frag_pp(xdp);
->  	} else {
->  		xdp_buff_clear_frags_flag(xdp);
->  	}
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> index aa742f413c35..b389dc527adc 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
-> @@ -81,6 +81,10 @@ enum xdp_buff_flags {
->  	 * XDP program is not attached.
->  	 */
->  	XDP_FLAGS_FRAGS_UNREADABLE	=3D BIT(2),
-> +	/* frags are page_pool memory even though rxq->mem.type is not: a
-> +	 * skb-backed XDP buff (generic XDP, veth) is cow'd into a page_pool.
-> +	 */
-> +	XDP_FLAGS_FRAGS_PAGE_POOL	=3D BIT(3),
+> diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
+> index 490efd2885267..89d825bac4bee 100644
+> --- a/include/uapi/linux/pkt_sched.h
+> +++ b/include/uapi/linux/pkt_sched.h
+> @@ -953,6 +953,21 @@ enum {
 >  };
-> =20
->  struct xdp_buff {
-> @@ -131,6 +135,16 @@ static __always_inline void xdp_buff_set_frag_unread=
-able(struct xdp_buff *xdp)
->  	xdp->flags |=3D XDP_FLAGS_FRAGS_UNREADABLE;
->  }
-> =20
-> +static __always_inline void xdp_buff_set_frag_pp(struct xdp_buff *xdp)
-> +{
-> +	xdp->flags |=3D XDP_FLAGS_FRAGS_PAGE_POOL;
-> +}
-
-For veth_xdp_rcv_skb() we also need to clear the flag in XDP_TX and XDP_RED=
-IRECT.
-The veth_xdp_get() call takes page refs but not page pool refs, while consu=
-me_skb()=20
-drops the page pool reference. We should be clearing the new flag so that _=
-_xdp_return()
-doesn't try to free it back to the page pool, otherwise we get a similar mi=
-smatch-related=20
-splat to the original bug's.
-
-pw-bot: cr
-
-
-
+>  #define TCA_FQ_PIE_MAX   (__TCA_FQ_PIE_MAX - 1)
+>  
+> +enum {
+> +	TCA_FQ_PIE_XSTATS_QDISC,
+> +	TCA_FQ_PIE_XSTATS_CLASS,
+> +};
 > +
-> +static __always_inline bool xdp_buff_is_frag_pp(const struct xdp_buff *x=
-dp)
-> +{
-> +	return !!(xdp->flags & XDP_FLAGS_FRAGS_PAGE_POOL);
-> +}
+> +struct tc_fq_pie_cl_stats {
+> +	__u64 prob;			/* current probability */
+> +	__u32 delay;			/* current delay in microseconds */
+> +	__s32 deficit;			/* number of remaining byte credits */
+> +	__u32 avg_dq_rate;		/* current average dq_rate in
+> +					 * bytes/second
+> +					 */
+> +	__u32 dq_rate_estimating;	/* is avg_dq_rate being calculated? */
+> +};
 > +
->  static __always_inline u32 xdp_buff_get_skb_flags(const struct xdp_buff =
-*xdp)
+>  struct tc_fq_pie_xstats {
+>  	__u32 packets_in;	/* total number of packets enqueued */
+>  	__u32 dropped;		/* packets dropped due to fq_pie_action */
+> @@ -963,6 +978,9 @@ struct tc_fq_pie_xstats {
+>  	__u32 new_flows_len;	/* count of flows in new list */
+>  	__u32 old_flows_len;	/* count of flows in old list */
+>  	__u32 memory_usage;	/* total memory across all queues */
+> +	__u32 type;
+> +	struct tc_fq_pie_cl_stats class_stats;
+> +
+>  };
+
+[Severity: Medium]
+The changelog says the new members are appended so that "qdisc xstats
+offsets stay compatible with the flat struct fq_pie already shipped".
+That is true for the offsets, but does it also change the size of an
+already shipped struct?
+
+  nine __u32 counters          = 36 bytes
+  + __u32 type                 = 40 bytes
+  + struct tc_fq_pie_cl_stats  = 64 bytes
+
+A consumer that validates the TCA_STATS_APP payload with the usual
+iproute2 idiom:
+
+  if (RTA_PAYLOAD(xstats) < sizeof(*st))
+	  return -1;
+
+would stop printing fq_pie xstats altogether once rebuilt against this
+header and run on an older kernel that still emits 36 bytes.  sch_fq
+handled this by having userspace copy min(payload, sizeof(*st)).  Should
+the changelog mention the size change so this is a conscious decision?
+
+Related: since fq_pie_dump_class_stats() reuses the same struct, an
+iproute2 that does not know about the new type field will decode the
+per-class blob using the qdisc layout and print nine all-zero qdisc
+counters per flow.  Does that mean the stated goal ("'tc -s class show'
+reports per-flow state") depends on an iproute2 change that the changelog
+does not mention?  The selftest added later in the series matches
+"class fq_pie 2:[0-9]+ .*prob .*delay .*deficit", which only a patched
+iproute2 can produce.
+
+[Severity: Low]
+Documentation/netlink/specs/tc.yaml still describes tc-fq-pie-xstats as a
+struct with only the nine original u32 members, and it is referenced as
+the fixed-header for the fq_pie entry of tca-stats-app-msg:
+
+  Documentation/netlink/specs/tc.yaml
+      value: fq_pie
+      fixed-header: tc-fq-pie-xstats
+
+Should the spec be extended in the same patch so ynl-based decoders can
+see the new type discriminator and the per-flow fields?  Note YAML structs
+are implicitly packed, so the nested tc_fq_pie_cl_stats members would need
+to be spelled out explicitly.
+
+> diff --git a/net/sched/sch_fq_pie.c b/net/sched/sch_fq_pie.c
+> index b27d95418707a..32c76d2bb74bf 100644
+> --- a/net/sched/sch_fq_pie.c
+> +++ b/net/sched/sch_fq_pie.c
+> @@ -310,9 +310,9 @@ static int fq_pie_change(struct Qdisc *sch, struct nlattr *opt,
+>  			goto flow_error;
+>  		}
+>  		q->flows_cnt = nla_get_u32(tb[TCA_FQ_PIE_FLOWS]);
+> -		if (!q->flows_cnt || q->flows_cnt > 65536) {
+> +		if (!q->flows_cnt || q->flows_cnt > 65535) {
+>  			NL_SET_ERR_MSG_MOD(extack,
+> -					   "Number of flows must range in [1..65536]");
+> +					   "Number of flows must range in [1..65535]");
+>  			goto flow_error;
+>  		}
+>  	}
+
+[Severity: High]
+Is this a uAPI regression?  fq_pie_change() has accepted flows == 65536
+since sch_fq_pie was merged, and after this change the same netlink
+request fails with -EINVAL:
+
+  tc qdisc add dev dummy0 handle 1: root fq_pie flows 65536
+
+There is an in-tree consumer of exactly that command:
+
+  tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json, id 83be
+      "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_pie flows 65536",
+      "expExitCode": "0",
+
+and the later selftest patch in this series flips that case to expect exit
+code 2 with matchCount 0.  Does that mean the series records the behaviour
+change rather than avoiding it?
+
+The stated reason is that TC_H_MIN(65536) == 0 would give the 65536th flow
+a class handle of major:0 in fq_pie_dump_class():
+
+  tcm->tcm_handle |= TC_H_MIN(cl);
+
+Nothing kernel-side truncates - fq_pie_walk() passes i + 1 as an unsigned
+long straight into fq_pie_dump_class_stats().  Could the class enumeration
+simply stop at 65535 flows (or the handle be computed differently) so that
+existing configurations using 65536 flows keep working?  The changelog
+does not mention that a previously valid configuration is now refused.
+
+> @@ -510,7 +510,9 @@ static int fq_pie_dump(struct Qdisc *sch, struct sk_buff *skb)
+>  static int fq_pie_dump_stats(struct Qdisc *sch, struct gnet_dump *d)
 >  {
->  	return xdp->flags;
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 38336858c168..be36020484b6 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -5532,6 +5532,11 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, =
-struct xdp_buff *xdp,
->  	if (skb_is_nonlinear(skb)) {
->  		skb_shinfo(skb)->xdp_frags_size =3D skb->data_len;
->  		xdp_buff_set_frags_flag(xdp);
-> +		/* A nonlinear skb was cow'd into page_pool memory by
-> +		 * skb_cow_data_for_xdp() before we got here, so the frags must
-> +		 * be freed to that pool, not via the rxq's MEM_TYPE_PAGE_SHARED.
-> +		 */
-> +		xdp_buff_set_frag_pp(xdp);
->  	} else {
->  		xdp_buff_clear_frags_flag(xdp);
->  	}
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 61940e753552..d34ba56d79d8 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -4378,6 +4378,13 @@ static bool bpf_xdp_shrink_data(struct xdp_buff *x=
-dp, skb_frag_t *frag,
->  	if (mem_type =3D=3D MEM_TYPE_XSK_BUFF_POOL) {
->  		netmem =3D 0;
->  		zc_frag =3D bpf_xdp_shrink_data_zc(xdp, shrink, tail, release);
-> +	} else if (xdp_buff_is_frag_pp(xdp)) {
-> +		/*
-> +		 * Skb-backed XDP (generic XDP, veth) cow's the frags into a
-> +		 * page_pool while the rxq stays MEM_TYPE_PAGE_SHARED, so free
-> +		 * the frag to the pool, not via page_frag_free().
-> +		 */
-> +		mem_type =3D MEM_TYPE_PAGE_POOL;
->  	}
-> =20
->  	if (release) {
+>  	struct fq_pie_sched_data *q = qdisc_priv(sch);
+> -	struct tc_fq_pie_xstats st = { 0 };
+> +	struct tc_fq_pie_xstats st = {
+> +		.type	= TCA_FQ_PIE_XSTATS_QDISC,
+> +	};
+>  	struct list_head *pos;
+>  
+>  	sch_tree_lock(sch);
 
+[ ... ]
+
+> @@ -562,7 +564,89 @@ static void fq_pie_destroy(struct Qdisc *sch)
+>  	kvfree(q->flows);
+>  }
+>  
+> +static struct Qdisc *fq_pie_leaf(struct Qdisc *sch, unsigned long arg)
+> +{
+> +	return NULL;
+> +}
+> +
+> +static unsigned long fq_pie_find(struct Qdisc *sch, u32 classid)
+> +{
+> +	return 0;
+> +}
+> +
+> +static int fq_pie_dump_class(struct Qdisc *sch, unsigned long cl,
+> +			     struct sk_buff *skb, struct tcmsg *tcm)
+> +{
+> +	tcm->tcm_handle |= TC_H_MIN(cl);
+> +	return 0;
+> +}
+> +
+> +static int fq_pie_dump_class_stats(struct Qdisc *sch, unsigned long cl,
+> +				   struct gnet_dump *d)
+> +{
+> +	struct fq_pie_sched_data *q = qdisc_priv(sch);
+> +	struct gnet_stats_queue qs = { 0 };
+> +	struct tc_fq_pie_xstats xstats;
+> +	u32 idx = cl - 1;
+> +
+> +	if (idx < q->flows_cnt) {
+> +		const struct fq_pie_flow *flow = &q->flows[idx];
+> +
+> +		memset(&xstats, 0, sizeof(xstats));
+> +		xstats.type = TCA_FQ_PIE_XSTATS_CLASS;
+> +		xstats.class_stats.prob =
+> +			READ_ONCE(flow->vars.prob) << BITS_PER_BYTE;
+> +		xstats.class_stats.delay =
+> +			((u32)PSCHED_TICKS2NS(READ_ONCE(flow->vars.qdelay))) /
+> +			NSEC_PER_USEC;
+
+[Severity: Medium]
+Does the exported delay wrap here?  PSCHED_TICKS2NS() yields an s64
+nanosecond value, but the cast to u32 happens before the division by
+NSEC_PER_USEC, so anything above 2^32 ns (about 4.295 s) folds over - a
+5 s sojourn time is reported as roughly 705032 us, while the __u32 field
+could carry about 4295 s.
+
+With dq_rate_estimator off (the default) flow->vars.qdelay is the packet
+sojourn time, and multi-second sojourn times are easy to produce behind a
+slow shaper; the selftest added later in this series stacks fq_pie under
+'tbf rate 8bit'.  Would keeping the value 64-bit until after the division
+be preferable?
+
+  delay = div_u64(PSCHED_TICKS2NS(READ_ONCE(flow->vars.qdelay)),
+		  NSEC_PER_USEC);
+
+The same expressions already exist in pie_dump_stats() in
+net/sched/sch_pie.c, so the pattern is inherited, but this adds new
+instances per flow.
+
+> +		xstats.class_stats.deficit = READ_ONCE(flow->deficit);
+> +		xstats.class_stats.dq_rate_estimating =
+> +			READ_ONCE(q->p_params.dq_rate_estimator);
+> +
+> +		if (xstats.class_stats.dq_rate_estimating) {
+> +			xstats.class_stats.avg_dq_rate =
+> +				READ_ONCE(flow->vars.avg_dq_rate) *
+> +				(PSCHED_TICKS_PER_SEC) >> PIE_SCALE;
+> +		}
+
+[Severity: Medium]
+Can this multiplication overflow on 32-bit builds?  PSCHED_TICKS_PER_SEC
+derives from the long constant NSEC_PER_SEC:
+
+  include/net/pkt_sched.h
+  #define PSCHED_TICKS_PER_SEC	(NSEC_PER_SEC >> PSCHED_SHIFT)
+
+so on ILP32 the product stays 32-bit and wraps once avg_dq_rate exceeds
+about 4396, i.e. rates above roughly 16.7 MB/s, even though the final
+bytes/second result would still fit in the __u32 field.  Would a u64
+intermediate (or an explicit saturation) be better here?
+
+> +
+> +		qs.qlen    = READ_ONCE(flow->qlen);
+> +		qs.backlog = READ_ONCE(flow->backlog);
+> +	}
+
+[Severity: Medium]
+Are these READ_ONCE()s paired with anything on the writer side?
+
+All six fields read here are updated with plain stores under the qdisc
+root lock:
+
+  fq_pie_qdisc_enqueue()
+	sel_flow->deficit = q->quantum;
+	sel_flow->qlen = 0;
+	sel_flow->backlog = 0;
+	...
+	sel_flow->qlen++;
+	sel_flow->backlog += pkt_len;
+
+  fq_pie_qdisc_dequeue()
+	flow->qlen--;
+	flow->deficit -= pkt_len;
+	flow->backlog -= pkt_len;
+	pie_process_dequeue(skb, &q->p_params, &flow->vars, flow->backlog);
+
+  fq_pie_timer()
+	spin_lock(root_lock);
+	...
+	pie_calculate_probability(&q->p_params,
+				  &q->flows[q->flows_cursor].vars,
+				  q->flows[q->flows_cursor].backlog);
+
+and this new reader takes no lock at all.  vars.prob is u64 and
+vars.qdelay is psched_time_t (u64), so on 32-bit builds can a concurrent
+read return a torn value?  On all builds, can userspace observe an
+inconsistent snapshot, for example qlen == 0 together with a non-zero
+backlog while enqueue is in its reset window, or prob and delay from two
+different tupdate rounds?
+
+Taking the lock appears to be allowed here - tc_fill_tclass() passes NULL
+as the lock to gnet_stats_start_copy_compat() before calling
+cl_ops->dump_stats, and fq_pie_dump_stats() in this same file already
+brackets its counters with sch_tree_lock()/sch_tree_unlock().
+
+Note sch_fq_codel, whose class-stats reader this mirrors, converted its
+writers to WRITE_ONCE() (flow->deficit, flow->head, flow->cvars.count)
+precisely to pair with the lockless reader.  Should fq_pie either do the
+same or hold sch_tree_lock() over the snapshot?
+
+> +	if (gnet_stats_copy_queue(d, NULL, &qs, qs.qlen) < 0)
+> +		return -1;
+> +	if (idx < q->flows_cnt)
+> +		return gnet_stats_copy_app(d, &xstats, sizeof(xstats));
+> +	return 0;
+> +}
+> +
+> +static void fq_pie_walk(struct Qdisc *sch, struct qdisc_walker *arg)
+> +{
+> +	struct fq_pie_sched_data *q = qdisc_priv(sch);
+> +	unsigned int i;
+> +
+> +	if (arg->stop)
+> +		return;
+> +
+> +	for (i = 0; i < q->flows_cnt; i++) {
+> +		if (list_empty(&q->flows[i].flowchain)) {
+> +			arg->count++;
+> +			continue;
+> +		}
+> +		if (!tc_qdisc_stats_dump(sch, i + 1, arg))
+> +			break;
+> +	}
+> +}
+> +
+> +static const struct Qdisc_class_ops fq_pie_class_ops = {
+> +	.leaf		=	fq_pie_leaf,
+> +	.find		=	fq_pie_find,
+> +	.dump		=	fq_pie_dump_class,
+> +	.dump_stats	=	fq_pie_dump_class_stats,
+> +	.walk		=	fq_pie_walk,
+> +};
+
+[Severity: Low]
+This isn't a bug introduced by this patch, but with cl_ops now present the
+missing .tcf_block becomes more visible.  sch_fq_pie already carries the
+full external classifier plumbing:
+
+  fq_pie_init()    -> tcf_block_get(&q->block, &q->filter_list, sch, extack)
+  fq_pie_classify() -> filter = rcu_dereference_bh(q->filter_list);
+  fq_pie_destroy() -> tcf_block_put(q->block)
+
+but __tcf_qdisc_find() in net/sched/cls_api.c rejects every filter
+operation when the class ops table has no .tcf_block:
+
+	if (!cops->tcf_block) {
+		NL_SET_ERR_MSG(extack, "Class doesn't support blocks");
+		err = -EOPNOTSUPP;
+
+so q->filter_list can never become non-NULL and the classifier path in
+fq_pie_classify() stays unreachable, as it was before this patch.  The
+changelog states the omission is deliberate; would adding the trivial
+.tcf_block that sch_fq_codel provides be cheap enough to make that dead
+code live?
+
+>  static struct Qdisc_ops fq_pie_qdisc_ops __read_mostly = {
+> +	.cl_ops		= &fq_pie_class_ops,
+>  	.id		= "fq_pie",
+
+[ ... ]
+
+Also, minor: there is a stray blank line before the closing brace of
+struct tc_fq_pie_xstats in include/uapi/linux/pkt_sched.h.
+-- 
+pw-bot: cr
