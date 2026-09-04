@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-119.mta0.migadu.com [91.218.175.119])
+Received: from mta1.migadu.com (out-120.mta1.migadu.com [95.215.58.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F216456E0F
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 10:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D664570EE
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Sep 2026 10:10:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788516643; cv=none; b=lC1ouCGrX5ku4pA59uFiEvwxD0df3YZsSWKc29lXKuAnEXGizcbkLguSECjXYwd/hpUcB32+qEBKklOZakBS9ClkJU7df3kq2zQTS3gDy3JNNT7HQYq9h33dO5BfCmScoljSsMVOlNHBoqPwhDQfgez1UjlGqEwpk7UV0geVSoU=
+	t=1788516648; cv=none; b=leaH6SiN2tQ/IanYb7hKgXKeIXmw9WFZjKpG/enKuGNzwbIA2CDV5oeyiXfmvKV6q7nu1EpAcozopK4SxP2CCjhBEkk7Sr7AO/vEz34xDSatr3/XTL0W14q9bxcmlFD6MFFX8n5OxzmF7ErPZblMa/XwbDW1g0kFkJjAsauLA28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788516643; c=relaxed/simple;
-	bh=9aOZu5joPDLJyi4gz7dO0f9aMIY13LvVV/UJCIG+uIA=;
+	s=arc-20240116; t=1788516648; c=relaxed/simple;
+	bh=3cPgANBsAN0TCTPt7lj+YGACHJ2FHFsC3fuQuOraQMA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YLUfFnCgBxKj5JgpYxecANz3uU2EOxxQUqShDtHntP5R+o3SSn5lU5tZQXpipo0826dzoOZ4yXYehUCkCOytJpUqkYlkhhNtqiXcKQXOvsEyXZr6PnVRKAF/IMARHmnvZ7V3d/S6EQ+Dy5jkH4/Fck42ugIEIbVew1k+FQVu6JY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OMDA5LLr; arc=none smtp.client-ip=91.218.175.119
+	 MIME-Version; b=HQT1jT52gTVaqoM+RRBL9rtatJDeP0lmKGN2SfaFZCZ0kOcfXSmwn8FwyGFs8SP1kLc5y7/n0ZQYpcDhHz9ivcc2TvkUdURzhIYn4poTD18W4R+oP2qOtqpxxl54C9J9tBLoUk7K8jf8/IW7cLJM8KFf4BrL7wDvw4SHUaUjsL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jOYuemRc; arc=none smtp.client-ip=95.215.58.120
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OMDA5LLr"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jOYuemRc"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9aOZu5joPDLJyi4gz7dO0f9aMIY13LvVV/UJCIG+uIA=;
+DKIM-Signature: a=rsa-sha256; bh=3cPgANBsAN0TCTPt7lj+YGACHJ2FHFsC3fuQuOraQMA=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788516633; v=1; x=1789121433;
- b=OMDA5LLrG8KDrfPVcchlsXbhmMDk865MrwFysRUs9ECTzubH+1uug4zwb1SxLQgRgJp9sDPU
- pfj7iDyCFWimdOIUFY3t2hkpZQ+W6CkKvuoIsdKvaRe8pZJdifYCaEboSCRwYEXnZxlVV+TDQUq
- IZXhR/Swxia4qtJDty0ZJ7oE=
+ t=1788516636; v=1; x=1789121436;
+ b=jOYuemRcWo5KL+QgZmCOv9MMIDTecQV4sy4qKJZoKBEmf5d3iNXBGG9bnLcIf1/rcI4GcegT
+ fTUoHhog/yvL5xoVRmK1vLBPfhssLCgKuA5gqPNvAsN6NJaLVLdygn8180W+R8x0Ym3nDkEmxor
+ QWjA6/7/PTIMc6MQxWL3/CAY=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 94f18b2629cbbf22;
-	Fri, 04 Sep 2026 10:10:33 +0000
-X-Mizu-Trace-ID: 94f18b2629cbbf22
+Received: by smtp.migadu.com with ESMTPS id 031a72623a973772;
+	Fri, 04 Sep 2026 10:10:35 +0000
+X-Mizu-Trace-ID: 031a72623a973772
 X-Migadu-Flow: FLOW_OUT
 From: George Guo <dongtai.guo@linux.dev>
 To: rppt@kernel.org,
@@ -50,9 +50,9 @@ Cc: ilias.apalodimas@linaro.org,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-efi@vger.kernel.org
-Subject: [PATCH v5 3/5] liveupdate: kho_block: include linux/mm.h for virt/phys translation
-Date: Fri,  4 Sep 2026 18:08:50 +0800
-Message-ID: <20260904100852.26006-4-dongtai.guo@linux.dev>
+Subject: [PATCH v5 4/5] LoongArch: enable kexec handover (KHO)
+Date: Fri,  4 Sep 2026 18:08:51 +0800
+Message-ID: <20260904100852.26006-5-dongtai.guo@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260904100852.26006-1-dongtai.guo@linux.dev>
 References: <20260904100852.26006-1-dongtai.guo@linux.dev>
@@ -66,44 +66,40 @@ Content-Transfer-Encoding: 8bit
 
 From: George Guo <guodongtai@kylinos.cn>
 
-kho_block.c calls virt_to_phys() and phys_to_virt(). On LoongArch with
-CONFIG_KFENCE=y, these macros (in arch/loongarch/include/asm/io.h) expand
-to offset_in_page() and page_address(), both declared in <linux/mm.h>.
+Enable ARCH_SUPPORTS_KEXEC_HANDOVER for 64-bit LoongArch.  It selects
+EFI_KHO whenever KEXEC_HANDOVER is enabled, so LoongArch uses the
+architecture-agnostic EFI configuration table channel
+(LINUX_EFI_KEXEC_HANDOVER_GUID) introduced by this series to carry the
+KHO state across kexec.
 
-Since kho_block.c does not include <linux/mm.h>, the translation unit
-fails to build with CONFIG_KFENCE=y:
-
-  asm/io.h: error: implicit declaration of function 'offset_in_page'
-  asm/io.h: error: implicit declaration of function 'page_address'
-
-Add the missing include to fix these build errors.
-
-This is the same root cause as the luo_session.c build fix previously
-acked by Mike Rapoport [1]; the virt_to_phys()/phys_to_virt() calls have
-since been refactored from luo_session.c into kho_block.c, so the fix
-moves with it.
-
-[1] https://lore.kernel.org/r/ai5nYlbERQBXRHSp@kernel.org/
+LoongArch boots through EFI without a device tree, so it cannot use the
+/chosen FDT path that arm64 and riscv use; the EFI configuration table
+channel is its handover transport.  No arch-specific setup.c reader or
+machine_kexec_file.c writer is needed -- both live in the generic EFI
+code.
 
 Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
 Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- kernel/liveupdate/kho_block.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/loongarch/Kconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/kernel/liveupdate/kho_block.c b/kernel/liveupdate/kho_block.c
-index 0d2a342ef422..0d56891b2f4c 100644
---- a/kernel/liveupdate/kho_block.c
-+++ b/kernel/liveupdate/kho_block.c
-@@ -25,6 +25,7 @@
- #include <linux/kho/abi/block.h>
- #include <linux/kho_block.h>
- #include <linux/slab.h>
-+#include <linux/mm.h>
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index a21f51e5815e..5eaa65578d58 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -685,6 +685,10 @@ config ARCH_SUPPORTS_KEXEC
+ config ARCH_SUPPORTS_KEXEC_FILE
+ 	def_bool 64BIT
  
- /*
-  * Safeguard limit for the number of serialization blocks. This is used to
++config ARCH_SUPPORTS_KEXEC_HANDOVER
++	def_bool 64BIT && EFI_STUB
++	select EFI_KHO if KEXEC_HANDOVER
++
+ config ARCH_SELECTS_KEXEC_FILE
+ 	def_bool 64BIT
+ 	depends on KEXEC_FILE
 -- 
 2.53.0
 
