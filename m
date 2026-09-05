@@ -1,94 +1,94 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DA146A5F0
-	for <linux-kselftest@vger.kernel.org>; Sat,  5 Sep 2026 12:45:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE65365A14
+	for <linux-kselftest@vger.kernel.org>; Sat,  5 Sep 2026 13:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788612324; cv=pass; b=nsHT1tRTIwktPCcwypFxC4yNRTAYsBNI6sQ6JsUMcJgiSkBZGENQVkMr7fwuHJ43xTmer1izzTuC6yanq2G3fVXnm133dsFa2i28KWSeNfBg34eHVFMjyVs3kJgWD8ZpXYU126C9zniN06FhPSjbSq4OT3GIciFlg0Y4IQCYTHY=
+	t=1788616775; cv=pass; b=gTcQZZjipZi2zI7DgaLyzNLyspDkWNgP/284zAhzo6J011soO4WzJWG7vANDdj6CBNRsnjIG1ZDX1tnqSwrlwmF+b2+9J7BABQxux8MJFE7mdZXt2IdNIKvNt0kn4Au932LuQWcySN8keQTSvezMfjRg//lwbiYfhwp2TG7WsFI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788612324; c=relaxed/simple;
-	bh=fBWEGcX5+6BMMIJlFafz91zXoPt1lhGtk3Zdv3Oy89w=;
+	s=arc-20240116; t=1788616775; c=relaxed/simple;
+	bh=0NZgvcjxD//y9TcBVnzxsrfCCQmI3Ud37a8Ni4R+RGs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WiB4Fottlw0tJjkP7XI1Gnk2Ak6rWndO2VAvz26o7VZ3AFVcw9F8Wms3ujUUlQpHX5xpn5XQ5UMogk/a44USCI1DOi4YeAwmTNcaxcLyJv3jostyi8nSXhuy+n+hF6fA5V47Wroe7MnR+glFshTGsv/5t/Gxwi2EKwY5s4EK4Z8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ac/h074N; arc=pass smtp.client-ip=209.85.208.50
+	 To:Cc:Content-Type; b=CIkJ3UR5mJgB9dL/jZj0Y0DSfZdMzAx0DCXRZkA444kB0r+HzZy8ioSo3FTZNcf8EREoKoFBmJ8rlb7sA3sSIFLfL9s66ZRlrSih6DCIeRzb+0I/KGM8x1Hbu0jsgecDPNQkUEuB2f8CLT3KTo6mObx7mMJBE0yar4BOXhmKw+Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H+hYeY0e; arc=pass smtp.client-ip=209.85.208.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ac/h074N"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6a0de062db5so2738679a12.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 05 Sep 2026 05:45:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788612321; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H+hYeY0e"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6a38098734bso3435494a12.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 05 Sep 2026 06:59:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788616772; cv=none;
         d=google.com; s=arc-20260327;
-        b=V5kgKhbt5pT3rB9gUuWJKukzmGEoLp82N0KndRsUNS+wAXxiX1k47kLUVVsIrAG7jh
-         ekIFPevXTM4rZxvqK1+f05KUx2/2uH+06Wm0aM9RPHNwusyeuyfQIJ4OVbSZ5HU4RoGK
-         GrjBxT5wm9p+rA8fTOju9TrgtNwtavsV6qwnNspRSX3dhqZbLenhyAUGKLrm84q8Ss9O
-         kEuFAqrqnv8YvYluAKORN09uFDL5OkJWw3M7RKmcPDGS/C2YfDt6+HPFIovDtMwdkVJO
-         pbNYgloclBUmonVB0iuUGyrUDqJEc0dVQe2JABFaMOmDf5dh7UU2hUrP57+iQ4YlIyWY
-         lUeQ==
+        b=q93O06vepXSdg44cyl2N3iz377nckwdtrzqihgQozb3PR1gM19SpO8M/n6ui69OkKa
+         NOuzYLQiURDg3a20agi9ha/Ih097hSzugNBgYy/NRsvftQCP4u0Z++SfCt7pudsemsuL
+         G6MFvd0WfEieXHMhSIqhLYdWqv3uAFJkf1jrwCy3azGGejgti/yWsKHVMR2Jyd1nVGP/
+         idrqE/qhXCTHCJguQadnGz0n+pBDWMHzUDqQpINyg7OL651fV0c3ONEnoq7D3zAQLNyf
+         ohG5iaqy0A0ePQ+QiNh7N4tpyAcKmfIk8aN6d1+QxbuVLNZqjoK2VZeFuXZxDS69CSq4
+         4fEw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=tGM/0WGqNNlVNkDUUKOgVaHbElh413E3DzLNpPh8458=;
-        fh=5XXtioDnruP5oHyxEo4xZGgogCfZzDlA0hJkXlz3vwA=;
-        b=ZngzWCnfb7x3PChaIG82YgrnrZYpdgRrh3K3hs8B51J0yEn2Zmt5TFLzRxMeW/z8oS
-         tPQ2UsbnYrB5nrQ+Y8cgbwON1kwI8atk1hPSpvX1uq/qtljpGGCS98LWKM9lliEsNUNY
-         4Di6vRBFDniLazfHu1G/ciOp2PsDPkRmumu4BkjoUyGBPFB1cvCrJLumc+8gZg/8yisA
-         kML6kkmcww+pVkXc/raDP4mYLcM7LEonxpZealk86lgTqsmVVlH/f4t50Eso6/g817S0
-         s9ImKzPZrSOqPRmaIEwWILkVtNCCPLzlqP/AhBtnZCjt1xvXjKKKrU/f1yGToxNjofS2
-         U5Nw==;
+        bh=iWHfzIxXlwPck3mW+IxFV0BJz5vdTVjdjrFzdDbobSI=;
+        fh=GOZUG6tLauxry750qyMQUnoRN1x6I+9FymOvmGEgSns=;
+        b=jSlCljF16KIGhxXVUAig9aYu8/vdj8IDQUKmMfnEJaGoGkUKbAWQPK8QfcgIcuSi1K
+         uuMtaWpbT0DNHgivqaAW/rRnJAJPKzfgsTFECg5ytkdu3dwuvjNE/my8gXin+HhNurZx
+         6yueWSD2BrM3K8bc/qcAcJjasjawKdtsxx20hQS3eXambs8bXk5WMzUTRS2l1DJGL/id
+         PsdLUTVZEHvLRDmInAwYM2pIIgW3tkpspZU4j1RHwZMAGKpgtCs6omWSRePGOnlMCOFC
+         Hs4ZeNqx2KqB2o2tRLsXNGIBir28kQSRoRTmgLVR8A+7t8iLn6yoNJTupfznUY0hX5B6
+         KHtg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788612321; x=1789217121; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788616772; x=1789221572; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=tGM/0WGqNNlVNkDUUKOgVaHbElh413E3DzLNpPh8458=;
-        b=ac/h074NI8wTt5Gt3eW3DYI4LZIW64GQRms1hZWpU6wQMdG9BBdG+CEqG41kMb5u5o
-         rq+QDEZFYpxaf81HWKgmMDCsaEBxt+UTzi/fWiShz+0BrfwjY1dE8IfX8PRAI6Bclhb1
-         OcpVd0K/CUF0KVo6YgVeSNxwGnU1Y4ZSo6Xx2Dn/STxbSbkbGxZiYnZfQY1aZbOo5T+r
-         7dH5yIJnFn23gj3L2CFHTSztIZbot4kSt5iJq6PvWzcbXTY8AM973RR3eH36DLxOxGqF
-         8+uCFQ9oSVZoFuu2dXUsyl5she7+LfwrOEXpyJIDhlaUQgAFZJX+sudkP6cYC0pVY6Z8
-         9w1g==
+        bh=iWHfzIxXlwPck3mW+IxFV0BJz5vdTVjdjrFzdDbobSI=;
+        b=H+hYeY0ekhuwq6EzSOpXyPjw0JubJRtzQzwN/zPkUWxz1pC22fokJYR+IdLNkhJEwt
+         FzTT973ks9udGWyjCXyQERFn+DMXlEgwLy1pw/rI7PhYnfJNZUOJU5xykhiRsGbl+1tZ
+         adj2azTtCGVhP/eiaphHW1PRm7SIvIuu9Fn2wIBpQK339QMu3h6bp86+yYBoELNVcc/N
+         F70nc2EL+wcecxCApC1qxRsf61QaGrAkerrTtEIHzkBCVJxuY3l9hHelNEpbY8K4i184
+         Z/EJRQLe+wZQ2yNqgedjWTNfh7MYZ9ys5PzSicFnad5QEgMMA3j9y+cQ+97ee5AJqH0c
+         nG8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788612321; x=1789217121;
+        d=1e100.net; s=20251104; t=1788616772; x=1789221572;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=tGM/0WGqNNlVNkDUUKOgVaHbElh413E3DzLNpPh8458=;
-        b=qxTnbeTgHBGquIDJ5wPRHuGxi46d5o3iNxPPGwNsinx/HnA8sqaOVXgh0jJp/47xka
-         hsvD2tkkGKYCgmJonxFxFQBDvKqwt9fjTGlNxNdScrqcqqM+DPpzrBDH4Rp1nmnelX8j
-         mF9Duk3jxw3xmqeZdxngHB7uoMztHb47cTYjoxwfxv4CArco9QfmVAygYkc8Q4v3DC6Y
-         J+XHEpMr82L7NdjlpWvbREAuuN6UPjgzXFJ/eG6cMiEjY88iCnw8o+9Sqhyvn1j/b8O6
-         0HrbEKFjw5BviMq9hxuh2lfGZX/AcFqzZmLN5BN9fN5nX9HDP6PNY33N0kqaDQpi/z4b
-         Qr6A==
-X-Forwarded-Encrypted: i=1; AKwUvByuXC95mtfJTcYKuB/mfUN7VDHGJ1WOvbmEuhQFIZgU/mNmIh1PPZL3QLrpqTaw6UFx74Wp7nWUJ8pn+YraTco=@vger.kernel.org
-X-Gm-Message-State: AFuF++kS01MbZdOZuydr/AzMjj4s9+nBftzPRp3Bc3QoFAWgH2SCYj5Z
-	5sZb2OoUCqDwa+tkl9DdwxnyLeeEtd4BRbHJr+gnCcZaQksLuCJpMKTuPgJbRySFpVVSQ5hmE/u
-	rSIxTGa0LDJhPzRmpZgUxDDix4aa9E0I=
-X-Gm-Gg: AYBFou2pS3tmfltQqtAzDDGl7u7bZ1Y//sJlecJhcuKeU6wEAoXrPn7vm2oC3dwS0O3
-	fwUoBvPr0wa+MVNVK3mfb6/BTmxt6Rj0AvHxxkdxv6Gt4LVOoIgOmcZGCdfUotwHDyV8DnZXBuc
-	1cVcTnCshCWWeNwlq5DVBslU3SClaK0oz+ZxdujtqRr0+xv6lCMd8O4r5sQ8WaaRabhgv09+yGU
-	zo0fDFBl/N7noXWlkLJVA+MCcAMRi8Md30mx1ANRJRJ0O0S1ydRQ++X8Dlp4u/HzrXQNbkejd/E
-	TbQpcf+FDRN2UkGadxrLPR/P/nztbbEAEp15D+7PlNjT/Q==
-X-Received: by 2002:a05:6402:a547:10b0:6a7:f25e:6db1 with SMTP id
- 4fb4d7f45d1cf-6a7f25e6e51mr2032344a12.37.1788612320869; Sat, 05 Sep 2026
- 05:45:20 -0700 (PDT)
+        bh=iWHfzIxXlwPck3mW+IxFV0BJz5vdTVjdjrFzdDbobSI=;
+        b=GRa19zPJwHNndFmgbIPc4pMdQv58w7EQZ2dtKUDp7xiqFBV/+qIHtZkFJ8VJv2UayV
+         8O78C9/0candLd5uEy8T0Rd6wWV4zLnPoLycUEFUj1Sf44+OUfqV2vFrhP5wo+vFHenl
+         W/s9eAyrXxijUy09GkJwVBFJrRt4DO14jlZ4ah4pnJPKuTzdVWTArXX/gHtU+WuGGXLb
+         jFk1eMcilvTpWSBx9GVN+/+ta7k7hLjugtv1/aMrh2RBMDufqoN2I1FCoPyT6azI1quf
+         w8JX5lyBzL/ZAJE4pkKGI2nLYfHw5ZBEDXuRdAz1bOhaZftOVgjLuZvYJCT7DEgMvJ2a
+         6dOQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx6LkdeK8aNb3yB0X6CJw654ckWlfVmtuA9zZkMqE248+1ROA4Dcuev1xPXRPPnLxVw/001VG4TpUeDe82zgAA=@vger.kernel.org
+X-Gm-Message-State: AFuF++m9l1WrL0HwySMZYL3D9YB6ykoCluhj4Z835FzhQwxOzvPSZ7hz
+	M9v2qnmV+cDl3FjutSUoJ40ka37r6icNLgYm9LA9JYQeJNjq8tUwHgNGcrwy21/OM5IKfo4fq+3
+	WCu2qFE61g5kic6UGQeRMSuGbyRlwNh/0y5CfUrg=
+X-Gm-Gg: AYBFou13ewaltkYT4aj8oR1zx1hv3Gds880ABwwgAFISsfpqef6iwjtvmX7+E1TFwbg
+	ut6os4CJxSijgXD7h2xv9Tqur/9keCz3Qp1JkjozueaToEFBdlI9ISFznIOYikbeP7XhRVriOaI
+	6C87o0DKMBGyG4YAlSqvDxVplpm9JtGHyqwe4fDzERtZlMxqG6ntO3j0eD234NVbEyeSrOmrCSq
+	+3+YiO5MIcATAM5EGiyCjXZK0LnEJFmpbB//kwJUq4IV+iAHWt29cvYvXRj7MPgxrPTDkWYch7X
+	L4jQFudAHTpgjSxWx20/nabqE+hcQ9Rbcgexrp6VYdxMGA==
+X-Received: by 2002:a05:6402:4343:b0:6a7:ea53:f624 with SMTP id
+ 4fb4d7f45d1cf-6a7ea540b3dmr3578271a12.35.1788616771728; Sat, 05 Sep 2026
+ 06:59:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260904103920.4471-1-luis@igalia.com> <20260904103920.4471-5-luis@igalia.com>
-In-Reply-To: <20260904103920.4471-5-luis@igalia.com>
+References: <20260904103920.4471-1-luis@igalia.com> <20260904103920.4471-4-luis@igalia.com>
+In-Reply-To: <20260904103920.4471-4-luis@igalia.com>
 From: Amir Goldstein <amir73il@gmail.com>
-Date: Sat, 5 Sep 2026 14:45:08 +0200
-X-Gm-Features: AcwNN1XW76aTEzUfZkegLGWoMyxaeMkdHeOExTNGv0PjSuMsOiLdN22V8KyQ1vU
-Message-ID: <CAOQ4uxgR8v6H=8fHMmLjChsuXUn8560nzda55t8pCNA1ocvg_A@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 4/8] selftests/fuse: factor-out test fixture setup/teardown
+Date: Sat, 5 Sep 2026 15:59:20 +0200
+X-Gm-Features: AcwNN1W2vMf-WzY4zwsWBAU_vcsCDCHvVaEThEDUXBh2gwCNW5IHuyRc5r8QctI
+Message-ID: <CAOQ4uxjCFCS=V5SLH7QT0q1VmJUKKVkWMSgd9DAtdM9U=a_EWw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 3/8] selftests/fuse: check that fusectlfs is mounted
 To: Luis Henriques <luis@igalia.com>
 Cc: Miklos Szeredi <miklos@szeredi.hu>, Chen Linxuan <me@black-desk.cn>, 
 	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, fuse-devel@lists.linux.dev, 
@@ -100,266 +100,37 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Sep 4, 2026 at 12:38=E2=80=AFPM Luis Henriques <luis@igalia.com> wr=
 ote:
 >
-> In order to reduce new tests setup/teardown code duplication, factor-out
-> these functions from the existing acl_cache test into a new fuse_common.c
-> file that can be reused in other tests.
+> The control filesystem for FUSE needs to be mounted for the fusectl_test =
+to
+> be successfully run.  Skip the test is that is not the case.
 >
 > Signed-off-by: Luis Henriques <luis@igalia.com>
+
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
 > ---
->  .../selftests/filesystems/fuse/Makefile       |  8 ++-
->  .../filesystems/fuse/fuse_acl_cache_test.c    | 62 +++----------------
->  .../selftests/filesystems/fuse/fuse_common.c  | 60 ++++++++++++++++++
->  .../selftests/filesystems/fuse/fuse_common.h  | 25 ++++++++
->  4 files changed, 100 insertions(+), 55 deletions(-)
->  create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_common.=
-c
->  create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_common.=
-h
+>  tools/testing/selftests/filesystems/fuse/fusectl_test.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/te=
-sting/selftests/filesystems/fuse/Makefile
-> index a3ee9b3a2f5d..7744f796eb06 100644
-> --- a/tools/testing/selftests/filesystems/fuse/Makefile
-> +++ b/tools/testing/selftests/filesystems/fuse/Makefile
-> @@ -21,8 +21,12 @@ ifeq ($(VAR_LDLIBS),)
->  VAR_LDLIBS :=3D -lfuse3 -pthread
->  endif
+> diff --git a/tools/testing/selftests/filesystems/fuse/fusectl_test.c b/to=
+ols/testing/selftests/filesystems/fuse/fusectl_test.c
+> index 0d1d012c35ed..b828173c01bd 100644
+> --- a/tools/testing/selftests/filesystems/fuse/fusectl_test.c
+> +++ b/tools/testing/selftests/filesystems/fuse/fusectl_test.c
+> @@ -106,8 +106,15 @@ TEST_F(fusectl, abort)
+>         char path_buf[PATH_MAX];
+>         int abort_fd, test_fd, ret;
 >
-> +CFLAGS +=3D $(VAR_CFLAGS)
-> +LDLIBS +=3D $(VAR_LDLIBS)
-> +
->  $(OUTPUT)/fuse_mnt: CFLAGS +=3D $(VAR_CFLAGS)
->  $(OUTPUT)/fuse_mnt: LDLIBS +=3D $(VAR_LDLIBS)
+> -       sprintf(path_buf, "/sys/fs/fuse/connections/%d/abort", self->conn=
+ection);
+> +       snprintf(path_buf, PATH_MAX, "%s/%d", FUSECTL_MOUNTPOINT,
+> +                self->connection);
+> +       if (access(path_buf, F_OK) !=3D 0)
+> +               SKIP(return,
+> +                    "fusectl doesn't seem to be mounted: %s",
+> +                    strerror(errno));
 >
-> -$(OUTPUT)/fuse_acl_cache_test: CFLAGS +=3D $(VAR_CFLAGS)
-> -$(OUTPUT)/fuse_acl_cache_test: LDLIBS +=3D $(VAR_LDLIBS)
-> +$(OUTPUT)/fuse_acl_cache_test: fuse_common.c fuse_acl_cache_test.c
-> +
-> +EXTRA_CLEAN :=3D fuse_common.o
-> diff --git a/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test=
-.c b/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
-> index 2411a6e285f1..12cbf9753d03 100644
-> --- a/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
-> +++ b/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
-> @@ -33,23 +33,15 @@
->   */
+> +       snprintf(path_buf, PATH_MAX, "%s/%d/abort", FUSECTL_MOUNTPOINT,
+> +                self->connection);
+>         ASSERT_EQ(0, access(path_buf, F_OK));
 >
->  #define _GNU_SOURCE
-> -#include <errno.h>
->  #include <fcntl.h>
->  #include <linux/limits.h>
-> -#include <pthread.h>
->  #include <stdint.h>
-> -#include <stdio.h>
-> -#include <stdlib.h>
-> -#include <string.h>
-> -#include <sys/stat.h>
->  #include <sys/xattr.h>
-> -#include <unistd.h>
-> -
-> -#define FUSE_USE_VERSION 31
-> -#include <fuse_lowlevel.h>
->
->  #include "kselftest_harness.h"
->
-> +#include "fuse_common.h"
-> +
->  /* ---- ACL binary encoding --------------------------------------------=
----- */
->  /*
->   * POSIX ACL v2 xattr format (little-endian):
-> @@ -176,69 +168,33 @@ static const struct fuse_lowlevel_ops fs_ops =3D {
->         .getxattr =3D fs_getxattr,
->  };
->
-> -/* ---- Daemon thread --------------------------------------------------=
------ */
-> -
-> -static void *run_daemon(void *arg)
-> -{
-> -       fuse_session_loop((struct fuse_session *)arg);
-> -       return NULL;
-> -}
-> -
->  /* ---- kselftest harness ----------------------------------------------=
------ */
->
->  FIXTURE(acl_cache) {
->         struct fuse_session *se;
-> -       char                 mountpoint[PATH_MAX];
-> +       char                 mountpoint[MOUNTPOINT_SZ];
->         char                 file_path[PATH_MAX];
->         pthread_t            thread;
->  };
-
-Nice!
-I think it would be even nicer to have struct fuse_common_ctx
-with the common members embedded in the per test state,
-but I'll let you decide if you want to do that or not.
-
-Thanks,
-Amir.
-
->
->  FIXTURE_SETUP(acl_cache)
->  {
-> -       char *fuse_argv[] =3D { "fuse_acl_cache_test", NULL };
-> -       struct fuse_args args =3D FUSE_ARGS_INIT(1, fuse_argv);
-> +       char err[MAX_ERR_MSG];
->
-> -       g_ds.acl            =3D acl_a;
-> -       g_ds.acl_size       =3D sizeof(acl_a);
-> +       g_ds.acl =3D acl_a;
-> +       g_ds.acl_size =3D sizeof(acl_a);
->         g_ds.getxattr_count =3D 0;
->
-> -       strcpy(self->mountpoint, "/tmp/acl_cache_test_XXXXXX");
-> -       if (!mkdtemp(self->mountpoint))
-> -               SKIP(return, "mkdtemp: %s", strerror(errno));
-> +       if (fs_setup(&self->se, self->mountpoint, &fs_ops, &self->thread,=
- err))
-> +               SKIP(return, err);
->
->         snprintf(self->file_path, sizeof(self->file_path),
->                  "%s/" FILE_NAME, self->mountpoint);
-> -
-> -       self->se =3D fuse_session_new(&args, &fs_ops, sizeof(fs_ops), NUL=
-L);
-> -       if (!self->se) {
-> -               rmdir(self->mountpoint);
-> -               SKIP(return, "fuse_session_new failed");
-> -       }
-> -
-> -       if (fuse_session_mount(self->se, self->mountpoint)) {
-> -               fuse_session_destroy(self->se);
-> -               rmdir(self->mountpoint);
-> -               SKIP(return, "fuse_session_mount failed "
-> -                            "(missing fusermount3 or insufficient privil=
-eges)");
-> -       }
-> -
-> -       if (pthread_create(&self->thread, NULL, run_daemon, self->se)) {
-> -               fuse_session_unmount(self->se);
-> -               fuse_session_destroy(self->se);
-> -               rmdir(self->mountpoint);
-> -               SKIP(return, "pthread_create: %s", strerror(errno));
-> -       }
-> -
-> -       fuse_opt_free_args(&args);
->  }
->
->  FIXTURE_TEARDOWN(acl_cache)
->  {
-> -       fuse_session_exit(self->se);
-> -       fuse_session_unmount(self->se);
-> -       pthread_join(self->thread, NULL);
-> -       fuse_session_destroy(self->se);
-> -       rmdir(self->mountpoint);
-> +       fs_teardown(self->se, self->thread, self->mountpoint);
->  }
->
->  static int do_force_statx(const char *path)
-> diff --git a/tools/testing/selftests/filesystems/fuse/fuse_common.c b/too=
-ls/testing/selftests/filesystems/fuse/fuse_common.c
-> new file mode 100644
-> index 000000000000..3a91cac25b81
-> --- /dev/null
-> +++ b/tools/testing/selftests/filesystems/fuse/fuse_common.c
-> @@ -0,0 +1,60 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include "fuse_common.h"
-> +
-> +static void *run_daemon(void *arg)
-> +{
-> +       fuse_session_loop((struct fuse_session *)arg);
-> +       return NULL;
-> +}
-> +
-> +int fs_setup(struct fuse_session **se, char *mountpoint,
-> +            const struct fuse_lowlevel_ops *fs_ops,
-> +            pthread_t *thread, char *err)
-> +{
-> +       char *fuse_argv[] =3D { "fuse_test", NULL };
-> +       struct fuse_args args =3D FUSE_ARGS_INIT(1, fuse_argv);
-> +
-> +       strcpy(mountpoint, MOUNTPOINT_TEMPLATE);
-> +       if (!mkdtemp(mountpoint)) {
-> +               snprintf(err, MAX_ERR_MSG, "mkdtemp: %s", strerror(errno)=
-);
-> +               return -1;
-> +       }
-> +
-> +       *se =3D fuse_session_new(&args, fs_ops, sizeof(*fs_ops), NULL);
-> +       if (!*se) {
-> +               rmdir(mountpoint);
-> +               snprintf(err, MAX_ERR_MSG, "fuse_session_new failed");
-> +               return -1;
-> +       }
-> +
-> +       if (fuse_session_mount(*se, mountpoint)) {
-> +               fuse_session_destroy(*se);
-> +               rmdir(mountpoint);
-> +               snprintf(err, MAX_ERR_MSG, "fuse_session_mount failed "
-> +                       "(missing fusermount3 or insufficient privileges)=
-");
-> +               return -1;
-> +       }
-> +
-> +       if (pthread_create(thread, NULL, run_daemon, *se)) {
-> +               fuse_session_unmount(*se);
-> +               fuse_session_destroy(*se);
-> +               rmdir(mountpoint);
-> +               snprintf(err, MAX_ERR_MSG, "pthread_create: %s", strerror=
-(errno));
-> +               return -1;
-> +       }
-> +
-> +       fuse_opt_free_args(&args);
-> +
-> +       return 0;
-> +}
-> +
-> +void fs_teardown(struct fuse_session *se, pthread_t thread, char *mountp=
-oint)
-> +{
-> +       fuse_session_exit(se);
-> +       fuse_session_unmount(se);
-> +       pthread_join(thread, NULL);
-> +       fuse_session_destroy(se);
-> +       rmdir(mountpoint);
-> +}
-> +
-> diff --git a/tools/testing/selftests/filesystems/fuse/fuse_common.h b/too=
-ls/testing/selftests/filesystems/fuse/fuse_common.h
-> new file mode 100644
-> index 000000000000..77d5eb58550d
-> --- /dev/null
-> +++ b/tools/testing/selftests/filesystems/fuse/fuse_common.h
-> @@ -0,0 +1,25 @@
-> +#ifndef __SELFTEST_FUSE_COMMON_H__
-> +#define __SELFTEST_FUSE_COMMON_H__
-> +
-> +#define _GNU_SOURCE
-> +#include <errno.h>
-> +#include <pthread.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <unistd.h>
-> +
-> +#define FUSE_USE_VERSION 31
-> +#include <fuse_lowlevel.h>
-> +
-> +#define MAX_ERR_MSG 256
-> +
-> +#define MOUNTPOINT_TEMPLATE "/tmp/fuse_test_XXXXXX"
-> +#define MOUNTPOINT_SZ 64
-> +
-> +int fs_setup(struct fuse_session **se, char *mountpoint,
-> +            const struct fuse_lowlevel_ops *fs_ops,
-> +            pthread_t *thread, char *err);
-> +void fs_teardown(struct fuse_session *se, pthread_t thread, char *mountp=
-oint);
-> +
-> +#endif /* __SELFTEST_FUSE_COMMON_H__ */
+>         abort_fd =3D open(path_buf, O_WRONLY);
