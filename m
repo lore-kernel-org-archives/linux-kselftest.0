@@ -1,125 +1,137 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7441F453A4B
-	for <linux-kselftest@vger.kernel.org>; Sat,  5 Sep 2026 10:41:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5982747CA81
+	for <linux-kselftest@vger.kernel.org>; Sat,  5 Sep 2026 11:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788604878; cv=none; b=jiV71MnXLsXvJSc+LP7QxyO70t7q7LBbLK2ZeSl27kSUqIEv3OPMJABtk5IwF96gFvgRyjdmPCVH5ml11l3L/QR2WA/ABX+gFknhmB7BoW+dtMe1eATuu6GwBEDiivAugwZMx5tnD/5HyTXdfWnjDL0VCPrlQeU6uQOBiFXVOyo=
+	t=1788607424; cv=none; b=TKQn9PDCfmxPsptR3YqdiuL1sOsX1W1U8kgmJmeP5AO8816hi4LBx7BNBZGsgFiFxnjShdn02YObVDrRdeg68DNUgniA59qyRIBPY5TiFv+WUOkkeZH2HSHKILaEam7kU//f2+0ULj5I0ymRrVYOTF3xsWNf7CjPGIZdGu46XnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788604878; c=relaxed/simple;
-	bh=3H7DWsjdB2t1XmW+qQclm6nGtSHSe5mjsU+kx9BBsDA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kj+QSTJcyoma/cG+aDziL5gNYAeaKI+24I+XbggVjouX1/qp7T8R+p4PFJm01RPvZrO6yru9W7V5oL3NHNeLMIO8ce4NCpydqv9OhCWpDgBNe4/VF53B3f5laa6y5ADFCwCFOKb88zO7OsjkeryWBvYxLLb+WvnoXcbPdL4M/pw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ox+SKv45; arc=none smtp.client-ip=209.85.215.170
+	s=arc-20240116; t=1788607424; c=relaxed/simple;
+	bh=46gfGGvOHamt2U6ZnlfStx9ZhBdMqYA1cvWxqwtmAYw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=F6a89VIy1TxNqjRmAovsWieF6QWgwqo0yV9YlgOL+8ihPY5lPlHA+WITDuP5N1KmI1JE0ZER1kRk8NWrAt2ALLgIGaHItZdaNHkUVTxKggZwyB344prxbtbh91Sci+TcFvBZWDVPmgiCuTZ6hNgNlCjVlrFWmR9cqQV1asL//IA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q+A/z3ZD; arc=none smtp.client-ip=74.125.225.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ox+SKv45"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cc1c8d4a959so1336225a12.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 05 Sep 2026 03:41:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q+A/z3ZD"
+Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-48436370540so840101f8f.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 05 Sep 2026 04:23:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788604867; x=1789209667; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=9d1us5ou1/R6dn+w5YFLXgBK3EMQL/jKg3S7fI7Edk4=;
-        b=Ox+SKv45BlaCEgLEb11cuz3fFHPGcjrNp5+W59jn0QCLx7ScN0xBi8gARYNmidb9iM
-         YSIfySIz3j8o9LU6RWKcKs3/YcIYecNaE4l0Cb09pykqNr92+mUEQOpUpZg5ynlQZuM2
-         lILrZbOqaiKyIUsyPx3OJ8Ynq9S8LcfwjQUrprSadJjI+m3nSNPEO7tHOAFTHYeLzuCI
-         t1aSYao4Md0PGLXYGXaVSN88rheZJDNtQh6PT1YhzKU2x3B3gxMoy9me7jmSskVquWn5
-         BRsvb1avRdwlV1RMXMbCsB34cv7F4ETuhDFVXeFSyRDGhclxkZAZn5/udKBzxEQb8/fc
-         WkMg==
+        d=gmail.com; s=20251104; t=1788607421; x=1789212221; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=OK8u0A1r5wARyyx+mQthY7pulPX5uc00KjP5Fs0Y5/U=;
+        b=Q+A/z3ZDMSiXVgbRXO+zPozELZ6V3vjOQVVoRzZiHgeBqo4Om9xkt7FGx+oqDs2h2C
+         hl0rmc2a8oze26WlFknREh1Jp308JbGotgds7kI0cFTSZakdxrDuY2KF9wu2+0KyIooF
+         rGCBNfr8KG/9g+l9oeIiEfjhd1ZnNZf+ZR51fjd3zatku5Y4FJF0feRCEU/K/5eT+/Zh
+         9K7+hypVDH/AT8mQplZ5715R3Xg4ULsECVT4aKl/Y1xNNwuP7t6QJd8nCrIJCTkDYwV8
+         3h9zUnW9wNSvqNVkluVJ5poCvKR5l5uYy7Gr/YZJadR679rlgxN/XGoOPRTlgwNsvMwW
+         y28g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788604867; x=1789209667;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9d1us5ou1/R6dn+w5YFLXgBK3EMQL/jKg3S7fI7Edk4=;
-        b=ptD+GtGGKp7FNH97omJb2zCrV2qDgF3AUwvojX9Zoj+p1LUmElixQsUcVwTiVEv03B
-         6t9bkQ0hYc7kN2814OCxJG71FdAJPVjlpisSZcOA5EYiij/alH6nDIRJM+wGOeWKjir1
-         plyJY9pOp1+FJt3k7m7FOww7Mu+tISSNXyO8yfpfaO2OM1Axe+1n77cQV1PGO1k1kymD
-         zDfEPcCPSuPGg74hlC2horGb7hR4adn7Uuc3dsBnidbUDzccoU9F6g111VmC1Uz2sXR3
-         +8vG1BrTkvSH/tSMpqqvGYSSoh8sELS7OCN24co3RL+KvNuSnuhw/OSu3iK4BqFW7o8h
-         +mAQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwlbiosSTQ5UQnGIrmVPeEE9xZbpwMlauDQSY+1Rf1hKYj6XTntxPJ9KQpJ2wVbBDg4RURPg/b28BaaeFKVuAw=@vger.kernel.org
-X-Gm-Message-State: AFuF++mHV0qw9VZ+tDkMkpryJ+TmilszpzY1FWvguxv6ZqRoo3QiS6wb
-	uEuGx1lvQL0K62FHIVuL5HX8nWVbi35giOQL2wBTDNPTnw2CnIzGr4/q
-X-Gm-Gg: AYBFou2g+iadCV7191Oi/pJZyn+WuIJyYgoMyY2gIxzYDWXSeF6dxTbenOrsqD+bLjH
-	w8oq1xN+yqBIvxSEw8fimIbA1o6d0gC7duH5eauSt2Sc/j2CwnKveYyLrrojtxtXs4E104UsgoI
-	pWZD04M6/8MzXIywQJkRMnOiFlhoojl6EsADfTIg2TOj0p7a79m1pDbdQMdDAdX6SpAquoKumc4
-	5kOQNUkwzd4TgJF5GTtI4nDbf5rw0RUI8dr8zNfc4BUqZ4N8X7+Fshqe7xLkvfNbRdCwc4JE03e
-	ulIggM6Ej8evOi0ETNI2y4Zuxu6Dp965tQVpMoAYFFgvu460aBrxtsTe0wG6y4YasotC6ET8NSg
-	FcBJwfgCASZaVyD895NFlAemTdAiB9rEl08v2YBwuH5y1PNIxCEnCBWJjYYBT2uPy15iJ6it+t/
-	WStaaiLnUpj3409HWIZBTKsuMpuOgOPOPrePiBMdOXeLjZFcVDl8Ossg==
-X-Received: by 2002:a17:90b:2b8b:b0:398:c0ad:711c with SMTP id 98e67ed59e1d1-39b26272f0fmr18850197a91.15.1788604866501;
-        Sat, 05 Sep 2026 03:41:06 -0700 (PDT)
-Received: from houminxi ([154.197.57.228])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339b314cfcsm13559776eec.19.2026.09.05.03.41.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Sep 2026 03:41:05 -0700 (PDT)
-From: Minxi Hou <houminxi@gmail.com>
-To: netdev@vger.kernel.org
-Cc: aconole@redhat.com,
-	davem@davemloft.net,
-	dev@openvswitch.org,
-	echaudro@redhat.com,
-	edumazet@google.com,
-	i.maximets@ovn.org,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	horms@kernel.org,
-	Minxi Hou <houminxi@gmail.com>
-Subject: [PATCH 4/4] selftests: openvswitch: suppress pylint complexity warnings
-Date: Sat,  5 Sep 2026 06:40:26 -0400
-Message-ID: <20260905104026.3776396-5-houminxi@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260905104026.3776396-1-houminxi@gmail.com>
-References: <20260905104026.3776396-1-houminxi@gmail.com>
+        d=1e100.net; s=20251104; t=1788607421; x=1789212221;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=OK8u0A1r5wARyyx+mQthY7pulPX5uc00KjP5Fs0Y5/U=;
+        b=rnyuAFusK9TgRXlpKg1RIS2hZHEw+dXwiZV46irKVg9hhiGPctU63f7CqkOuHqNpLv
+         nTNhMoig4DG7boHS9JQLrIGykSgNs9JuW1zn0ChCgdK9JZjxoQ49dWY0cPUKFI3tgB+r
+         lz9Xu+XKk9x2pGQA6SSpyc+A6fF/k8558NtUlMyspc54aLBvubHcDwV1E6AHbppXWy9z
+         5pFaDnZVQvcvuA7aGwSwxDjtHJrNrRq9AE+N+M/Dbi7nPa8fgk5JbKOtX+5HrvlOZOeV
+         Qg4UpNQsexABNDKbYRzl5+3FNkq3FPY9WfOq/PUPHXDYVcGhyEo/sZwiDE5zRnVtv5Pr
+         r7bw==
+X-Forwarded-Encrypted: i=1; AKwUvBzdJB1l6gRQO4J1NP+6689dF6kIWzYSq2EpO6li9k65KpnO2lfI5gYJdgzIDUg64MBgq/25qSwXa5+BdifZTxE=@vger.kernel.org
+X-Gm-Message-State: AFuF++nLf7MYmeiLbYPDllHEx66olDboqKLMTsgPup8e3+v2EPLiyxdn
+	dcs93kKTcpdPSqop8jd9e3nmC/GL9sKB7hUEzKC1nbrGvKyzbUwnoVdH
+X-Gm-Gg: AYBFou3kIHP1C6ORT06iorGaPQMhO95WbZW9/GNtqkhB9y4HB/8F+qq1vENMIApRTW8
+	ukIO6Ge0+0mgoUBACo2OBc/uk2U4mH+owrBRl/+sk0e6+g4OdVEM0DvUTvlEQ4+w4SN5anHSH6V
+	8vMbYdDMw0b3kX/VkLhI8UoHyXZo64HQkWS1g04opIy8FCKFnG0ilKFaobwMiuBoL6DjCu1AHP5
+	TtIGHU88CcGTtrx92xdCGqPAguFwnpjHLKSafs+MolnUdD3sgpLI+hFQ9s3QsldhvGXV/FHDMnV
+	J94bYX5/FelaiyIKF9QGk5PLq/fiDAu2ngwDc/1+SksFAfiDbj092vOrIVfkZ6nK9RDhiRQCGOE
+	0sF5wSb62l+htik65nDwtaVXw6IIU1jb/n0SgC5hyUXO/i17O2+rvLW3yC+Td1amwbtQK+pDPkw
+	xcr4wO0xfzuVTlUTPAQ9YM46TcTcYAjI+Q4gxnZ1hw+no/Um/hPRe+eSZkEbLdMk0aA7O2dfLnZ
+	JttGcxrldJ+Xvwjb6Hd8+4DfK4VaQn0waxl9u3i7NBRZ2V05x1qLBSxSRV+7tAitLpkoVtKjxVJ
+	/lJjaomUsiZsrHJ5J8IwYZd3TrY=
+X-Received: by 2002:a5d:5888:0:b0:485:8c16:5ef9 with SMTP id ffacd0b85a97d-4858c166172mr8839779f8f.51.1788607421304;
+        Sat, 05 Sep 2026 04:23:41 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485958f1493sm1014293f8f.37.2026.09.05.04.23.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 05 Sep 2026 04:23:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 05 Sep 2026 13:23:39 +0200
+Message-Id: <DL7CEX9EX781.23V26M3600JEI@gmail.com>
+Cc: "Roman Gushchin" <roman.gushchin@linux.dev>, "JP Kobryn"
+ <inwardvessel@gmail.com>, "Shakeel Butt" <shakeel.butt@linux.dev>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Martin KaFai
+ Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>, "Barry
+ Song" <baohua@kernel.org>, "Geliang Tang" <geliang@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>, "Hui Zhu"
+ <zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next v7 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Andrew Morton" <akpm@linux-foundation.org>, "Hui Zhu"
+ <hui.zhu@linux.dev>
+X-Mailer: aerc 0.21.0
+References: <cover.1788516769.git.zhuhui@kylinos.cn>
+ <7d8b77dc99ffe99a7bef874a257472fdaaf07e1c.1788516769.git.zhuhui@kylinos.cn>
+ <20260904110308.4473cde499e91aab14dbd5fc@linux-foundation.org>
+In-Reply-To: <20260904110308.4473cde499e91aab14dbd5fc@linux-foundation.org>
 
-Add file-level pylint:disable comments for warnings caused by
-pyroute2 framework constraints that cannot be fixed without
-restructuring the netlink attribute hierarchy.
+On Fri Sep 4, 2026 at 8:03 PM CEST, Andrew Morton wrote:
+> On Fri,  4 Sep 2026 18:20:19 +0800 "Hui Zhu" <hui.zhu@linux.dev> wrote:
+>
+>> @@ -159,6 +160,74 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct =
+mem_cgroup *memcg)
+>>  	mem_cgroup_flush_stats(memcg);
+>>  }
+>>
+>> +/*
+>> + * Reclaim must not recurse: try_to_free_mem_cgroup_pages() overwrites
+>> + * current->reclaim_state, so a nested call would corrupt the outer
+>> + * reclaim state. Reclaim windows are marked with PF_MEMALLOC;
+>> + * reclaim_state is also checked because it is installed slightly
+>> + * before PF_MEMALLOC.
+>> + */
+>> +static bool bpf_in_reclaim_context(void)
+>> +{
+>> +	return (current->flags & PF_MEMALLOC) || current->reclaim_state;
+>> +}
+>> +
+>
+> Would life improve if try_to_free_mem_cgroup_pages() didn't do that?
+> If try_to_free_mem_cgroup_pages() (or some variant of it) were to
+> permit nesting?
+>
+> 	rs =3D new_thing(current, &sc.reclaim_state);
+> 	...
+> 	set_task_reclaim_state(current, rs);
+>
 
-After this patch, pylint reports 9.93/10 with 10 remaining
-C0301 line-too-long warnings (81-89 columns) on f-string
-constructions that match the surrounding style.
+My understanding is that given the current restrictions on where this kfunc=
+ can
+be called, this is mostly a defensive and shouldn't be firing (?). Given th=
+at,
+we can probably revisit this when such reentrancy is necessary, even though=
+ I
+doubt it would be the case in the future. It will at most be invoked from a=
+ wq
+callback or a kthread, so should be fine.
 
-Signed-off-by: Minxi Hou <houminxi@gmail.com>
----
-base-commit: 9eab111e765729e93087ff86a2ec9b2ae42d0fa5
- tools/testing/selftests/net/openvswitch/ovs-dpctl.py | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index 5b29aeb4b50e..5948471ffe63 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -1,6 +1,14 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
- """OVS datapath control utility for kernel selftests."""
-+# pylint: disable=invalid-name,too-many-lines
-+# pylint: disable=too-many-ancestors,too-many-arguments
-+# pylint: disable=too-many-positional-arguments,too-many-branches
-+# pylint: disable=too-many-locals,too-many-statements
-+# pylint: disable=too-many-return-statements,too-many-nested-blocks
-+# pylint: disable=unused-argument,broad-exception-caught
-+# pylint: disable=no-member,not-callable
-+# pylint: disable=non-parent-init-called,super-init-not-called
- 
- # Controls the openvswitch module.  Part of the kselftest suite, but
- # can be used for some diagnostic purpose as well.
--- 
-2.55.0
+> ?
 
