@@ -1,37 +1,36 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-150.mta0.migadu.com [91.218.175.150])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B981A358D00;
-	Sat,  5 Sep 2026 02:58:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C8C361DC1
+	for <linux-kselftest@vger.kernel.org>; Sat,  5 Sep 2026 04:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788577101; cv=none; b=sD2OBkd4jkTkFkYT+Yi0S3WYrkfLIGFxhdqcJbkyspUcttu7wMrZA2wejzN7ZoCRu0Fy1Pvxu83oUjzJYOncPxMUfsK/fFZkIB3bEPMghr6b569eD/oK6dpGxk2IRIK4dZSjEUAF0wIE6b7SuFlwv5kusGceHYSXW5H+pO9nvrs=
+	t=1788581293; cv=none; b=d6BHkXwPnjpkBejf4dc9IOlaDWOvXrhhZtWN2msQmGZX6FVV6obU59fzTtQFQMKso+6df54eaLQEduvfcI4JLhcmji9A7/UYfOjwF19bTayqhH/FzZBxdh26wxGOZSltbWdP6jopHCxSK0E28CQHFRR3We7jFORRDCSM2TlynSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788577101; c=relaxed/simple;
-	bh=c/ZRYHFwwl7P9ymT0f1zQ+VSU7PAgEnEte10astEePE=;
+	s=arc-20240116; t=1788581293; c=relaxed/simple;
+	bh=Ogjcy6AWuIiNMoFElPu+5M0YUvjA1DAHyKooz++N5NU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=arIgCmkjKVawRx8PvgfqbMklvVjosHHt3o8+IT2UUGikWtnS0n7U/Tr5Y0lpg42qBaKWQODT5ZNwa76P1oMq5bJzCTkogPEhWjya0MtTV3QHb61PNopiqlh30BFeiKGZvU/ta8fgTj2DcfnnpbKAIH3kKEX77iDRMP81yaYZGRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=r0GTWO4b; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	 In-Reply-To:Content-Type; b=K0X2shSH6tmVCrZQvsYSU4NK3K/D6HyX81fCWrg79Cg04MAh5MJtSS7SMbRlmkH6Ewlx2QJ95Rj94AKiZiD5MUckkxLPlehhWp4QKuwbrRXTt4s66FK3K6lxTXowbex6LyvG837kxXTZIYex1fEkwT8kzW8ny+sBxfylXOBSbgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h0m9iSVi; arc=none smtp.client-ip=91.218.175.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="r0GTWO4b"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=JRuv1iNzwrkzYPanlW1KF3I/WUjJp6LiVqQvqYh8crA=; b=r0GTWO4bt/7blNhWIfG/B131zR
-	t4Ws19Qith2ad1L5E/CM5hcTqV1nEVVTkwiculx9GeyTS5AU1K9viG5x1Dj8w3eu2T41D9iLJ/EaX
-	CNmWWdiSZeMF8FS3Qn5kVteDPUnq+eKdUbWTOddhSkzLZa3Kxr61WNUk0PdPAlwtc/PZ+TDNGH158
-	MQwzNhSUxWBLkDCvF+e198+rvgv9AoenzsDiijXe/S9anz2mzng5HB/zcGu3F7D0ZPvRT+Yno14TI
-	HG175qtSkTS/Mgrh3LO43dU4ULWIdyvVTcsEcwxAZMAAMBy4nU2Etcj/g6ylhGjXidB9as2lNAkM4
-	trQAN9Zw==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1x2gbe-00000003cUV-1RtA;
-	Sat, 05 Sep 2026 02:58:14 +0000
-Message-ID: <0bff3cf5-0d85-4ebb-9fdb-7fb5d12faf49@infradead.org>
-Date: Fri, 4 Sep 2026 19:58:13 -0700
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h0m9iSVi"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Ogjcy6AWuIiNMoFElPu+5M0YUvjA1DAHyKooz++N5NU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788581289; v=1; x=1789186089;
+ b=h0m9iSViCse/ejJSm8+5HMIXz7cna1EPV225TkyAJuyIJeXjBl/i1XdzNA+khOH3q/PQaElM
+ XiAHPsrupi7MmolggXHPIYA9nOvRdo8VsJpXDcXiMCo20SRUog6KGljhmBDmdKfCQP/p6G1kZhM
+ sxddT5qZ4EsGtJPFGW9RJL8w=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 92059d4e748b9bc4;
+	Sat, 05 Sep 2026 04:07:59 +0000
+X-Mizu-Trace-ID: 92059d4e748b9bc4
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <ffe712c9-6c24-4452-b703-c8e01828ed18@linux.dev>
+Date: Fri, 4 Sep 2026 21:07:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -39,67 +38,128 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] docs: KUnit: Fix cross-compiler prefix examples
-To: Karl Mehltretter <kmehltretter@gmail.com>,
- Brendan Higgins <brendan.higgins@linux.dev>
-Cc: David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Tim Bird <tim.bird@sony.com>, Harinder Singh <sharinder@google.com>,
- =?UTF-8?Q?Ma=C3=ADra_Canal?= <mairacanal@riseup.net>,
- Daniel Latypov <dlatypov@google.com>, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, workflows@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260905025126.83693-1-kmehltretter@gmail.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20260905025126.83693-1-kmehltretter@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v5 17/20] vfio: selftests: Add
+ vfio_pci_liveupdate_kexec_test
+To: Vipin Sharma <vipinsh@google.com>
+Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, ajayachandra@nvidia.com, alex@shazbot.org,
+ amastro@fb.com, ankita@nvidia.com, apopple@nvidia.com, bhelgaas@google.com,
+ chrisl@kernel.org, christian.koenig@amd.com, corbet@lwn.net,
+ dmatlack@google.com, graf@amazon.com, jacob.pan@linux.microsoft.com,
+ jgg@nvidia.com, jgg@ziepe.ca, jrhilke@google.com, julianr@linux.ibm.com,
+ kees@kernel.org, kevin.tian@intel.com, leon@kernel.org, leonro@nvidia.com,
+ lukas@wunner.de, mattev@meta.com, michal.winiarski@intel.com,
+ parav@nvidia.com, pasha.tatashin@soleen.com, praan@google.com,
+ pratyush@kernel.org, rananta@google.com, rientjes@google.com,
+ rodrigo.vivi@intel.com, rppt@kernel.org, saeedm@nvidia.com,
+ schnelle@linux.ibm.com, skhan@linuxfoundation.org, skhawaja@google.com,
+ vivek.kasireddy@intel.com, witu@nvidia.com, yi.l.liu@intel.com,
+ "yanjun.zhu@linux.dev" <yanjun.zhu@linux.dev>
+References: <20260714151505.3466855-1-vipinsh@google.com>
+ <20260714151505.3466855-18-vipinsh@google.com>
+ <0556e2fc-3be5-4023-a9a4-8482fa8c88b2@linux.dev>
+ <20260805055042.GA806762.vipinsh@google.com>
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <20260805055042.GA806762.vipinsh@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
+在 2026/8/4 23:02, Vipin Sharma 写道:
+> On Tue, Aug 04, 2026 at 03:19:34PM -0700, Yanjun.Zhu wrote:
+>> On 7/14/26 8:15 AM, Vipin Sharma wrote:
+>>> Add a selftest to exercise preserving a vfio-pci device across a Live
+>>> Update. For now the test is extremely simple and just verifies that the
+>>> device file can be preserved and retrieved. In the future this test will
+>>> be extended to verify more parts about device preservation as they are
+>>> implemented.
+>>>
+>>> This test is added to TEST_GEN_PROGS_EXTENDED since it must be run
+>>> manually along with a kexec.
+>>>
+>>> To run this test manually:
+>>>
+>>>    $ tools/testing/selftests/vfio/scripts/setup.sh 0000:00:04.0
+>>>    $ tools/testing/selftests/vfio/vfio_pci_liveupdate_kexec_test --stage 1 0000:00:04.0
+>>>
+>>>    $ kexec ...   # NOTE: Exact method will be distro-dependent
+>>>
+>>>    $ tools/testing/selftests/vfio/scripts/setup.sh 0000:00:04.0
+>>>    $ tools/testing/selftests/vfio/vfio_pci_liveupdate_kexec_test --stage 2 0000:00:04.0
+>> Hi, Vipin
+>>
+>> Thanks a lot for your help. I followed your suggestion, vfio-pci setup can
+>> work.
+> I am glad your setup using virsh is working.
+>
+>> The followings are the test result. In the step 3, after kexec, there are
+>> some fails. I am not sure if these are known problem or not.
+>>
+>> 1. Before kexec command
+>>
+>> + modprobe -v vfio-pci
+>> + tools/testing/selftests/vfio/scripts/setup.sh 0000:00:04.0
+>> + echo "vfio-pci" > /sys/bus/pci/devices/0000:00:04.0/driver_override
+>> + echo "0000:00:04.0" > /sys/bus/pci/drivers/vfio-pci/bind
+>> + tools/testing/selftests/vfio/vfio_pci_liveupdate_kexec_test --stage 1
+>> 0000:00:04.0
+>> Preserving device in session
+>> Preserving memfd of size 0x40100000 in session
+>> # [STAGE 1] Forking persistent child to hold sessions...
+>> # [STAGE 1] Child PID: 1236. Resources are pinned.
+>> # [STAGE 1] You may now perform kexec reboot.
+>> + set +x
+>>
+>> 2. Run kexec command
+>>
+>> 3. After kexec command
+>>
+>> + echo "vfio-pci" > /sys/bus/pci/devices/0000:00:04.0/driver_override
+>> + echo "0000:00:04.0" > /sys/bus/pci/drivers/vfio-pci/bind
+>> Checking open(/dev/vfio/devices/vfio0) fails  <--- I can confirm that the
+>> /dev/vfio/devices/vfio0 exists. But open this failed.
+> This is correct output. Test is verifying that open should fail. If it
+> didn't fail the ntest would have exited with an error. A preserved VFIO
+> FD can only be retrived using Live Update session ioctls and not through
+> usual VFIO dev path.
+>
+>> Checking ioctl(group_fd, VFIO_GROUP_GET_DEVICE_FD, "0000:00:04.0") fails
+>> (vfio_type1_iommu)      <--- fails
+>> Checking ioctl(group_fd, VFIO_GROUP_GET_DEVICE_FD, "0000:00:04.0") fails
+>> (vfio_type1v2_iommu).  <--- fails
+>> Checking ioctl(group_fd, VFIO_GROUP_GET_DEVICE_FD, "0000:00:04.0") fails
+>> (iommufd_compat_type1)  <--- fails
+>> Checking ioctl(group_fd, VFIO_GROUP_GET_DEVICE_FD, "0000:00:04.0") fails
+>> (iommufd_compat_type1v2). <--- fails
+> These are all correct output. Test is verifying that userspace should
+> not be able to get VFIO device FD only through Live Update session
+> ioctls and nothing else.
+>
+>> Retrieving memfd from LUO
+>> Finishing the session before retrieving the device (should fail)
+>> Retrieving the device FD from LUO
+>> Finishing the session before binding to iommufd (should fail)
+>> Binding the device to an iommufd and setting it up
+>> Finishing the session
+>>
+> This is shows VFIO FD is successfully retrived by Live Update ioctl.
+>
+> So, you saw expected output from successful test run. I will change
+> the message getting printed to avoid confusion. I think current way of
+> printing ".... fails" is confusing.
 
-On 9/4/26 7:51 PM, Karl Mehltretter wrote:
-> The GNU target-tuple prefixes shown in the CROSS_COMPILE examples are
-> missing their trailing dash.
-> 
-> Fixes: 46201d47d6c4 ("Documentation: kunit: Reorganize documentation related to running tests")
-> Fixes: 957063874c76 ("Documentation: kunit: Add CLI args for kunit_tool")
-> Assisted-by: LLM
-> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+Thanks a lot. I have made tests in KVM. I can get the same test results.
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Thanks.
+Reviewed-and-tested-by: Zhu Yanjun <yanjun.zhu@linux.dev>
 
-> ---
->  Documentation/dev-tools/kunit/run_wrapper.rst | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
-> index cecc110a3399f..9221acddf3fa8 100644
-> --- a/Documentation/dev-tools/kunit/run_wrapper.rst
-> +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-> @@ -189,10 +189,10 @@ via UML. To run tests on qemu, by default it requires two flags:
->    Kbuild. As a reminder, this will be the prefix for the toolchain
->    binaries such as GCC. For example:
->  
-> -  - ``sparc64-linux-gnu`` if we have the sparc toolchain installed on
-> +  - ``sparc64-linux-gnu-`` if we have the sparc toolchain installed on
->      our system.
->  
-> -  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/microblaze-linux``
-> +  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/microblaze-linux-``
->      if we have downloaded the microblaze toolchain from the 0-day
->      website to a directory in our home directory called toolchains.
->  
-> @@ -293,7 +293,7 @@ command line arguments:
->    - ``sparc64-linux-gnu-`` if we have the sparc toolchain installed on
->      our system.
->  
-> -  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/microblaze-linux``
-> +  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/microblaze-linux-``
->      if we have downloaded the microblaze toolchain from the 0-day
->      website to a specified path in our home directory called toolchains.
->  
+Zhu Yanjun
+
+>
+> Thanks
+> Vipin
 
 -- 
-~Randy
+Best Regards,
+Yanjun.Zhu
+
