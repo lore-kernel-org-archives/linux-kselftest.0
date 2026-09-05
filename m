@@ -1,63 +1,65 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E7533262B
-	for <linux-kselftest@vger.kernel.org>; Sat,  5 Sep 2026 09:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B563A38AC65
+	for <linux-kselftest@vger.kernel.org>; Sat,  5 Sep 2026 09:39:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788601182; cv=none; b=Xqiv3lB4B5oDvYErgmtu8zMyin10ow6W3oivmkybQkYCf7NVJLAdRIVytHV4c5Wrh0i1toaP+s4QKEnx0Cte3LSMPG3KlliHKh8VoptX60ZWXq3btWVw19WWSL+4ZYam58eL5VzdaHtOtbW82s8DSzuFxhtJP/XXSo/S1MZnHiA=
+	t=1788601187; cv=none; b=mq3kYa1ZSukxK/z7GqmyZlnemHzcT3rtPKOtRqnGw38DHmjZ+RWwie8ZW5mq50u/vjl69zu3Thq/caGY14spgcKXLiillj9AQ6jM0sbkvyh1BIRmxFNZ7nOQaUqsYXnkHZDNZeHoV7ZBvL2/Axr+YnlagXb9TYOpdCZOQrixfVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788601182; c=relaxed/simple;
-	bh=36gROY4qL9gSQnmwWWmssqa2Rc1TUhB5TO6YlZyD02Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qplJ2c/ISztMN/UFls9fMfYNn9//p2vH7s4h97CDDmldaxUEwV+dkM3BHVOtAZdiPhu1xgDynLHY8r4RB0FvuKfl42Pnv4dUIHnnhsl4SphxL2VPj4bMkD0o26YgwIoZ3/n89fDl11zTMPV431L3cwdUYzgUERNhMvMQY+eGO48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PeNXO/QL; arc=none smtp.client-ip=209.85.214.176
+	s=arc-20240116; t=1788601187; c=relaxed/simple;
+	bh=kBH/QCChj1yZYkWRGvB6j5/KJJ0aYZ6DCFSNPgO54kc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PBhun5CmtOXAq19kxaOGDtEZniDMBICEZ4qxXUesG+sMb8qrG0eFBOsCj46F320YUJXh0D456TRgYqyTreFsja4leWVvnJpq2LT5CrWh+1HycUcZgfgdEqwaO3hSjh2lmxvhzXb99BxlTwfcV7HTZ9d8L9vPvaj/Ogj8EtEeuac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=msJVZWqD; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PeNXO/QL"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2d032846c95so20187235ad.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 05 Sep 2026 02:39:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="msJVZWqD"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2d7200b2e15so20858965ad.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 05 Sep 2026 02:39:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788601180; x=1789205980; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=RohfZQzLcCU55CV/vABPS7u+EENiNPdreGoEMSHrxVg=;
-        b=PeNXO/QLNfyNaOzNHPIgIGP5PsR5Us8JGog4v6Mhwr5aq+NZbo1CJNf64yuQVYPL8I
-         BnueYOYLAFVElk67SCbbfZWLWlcP2Yf6qZca0XTVwARMpESNQUS1+a7v8dI8N4jDpkUf
-         qukf4nIQ7Wxj2nZBzzlFLEGQKkj8XaPE8Zv8dQ+NhnAjnHwau0lHF9WNnjmNAaa5soZK
-         gaAYd4VNrA2+tmfjfyZWRBzKqS+hPmZ8aEPOea9XWHszWeYhV2W3q04UeE/iK3CV1rHw
-         z7NAkESSaSPoBswJXOWUIYrXSC+fh+WOvvUtyBVHHtkV0nut+eIQjJ2M5eYC28QeLPEA
-         9bUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788601180; x=1789205980;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1788601185; x=1789205985; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=RohfZQzLcCU55CV/vABPS7u+EENiNPdreGoEMSHrxVg=;
-        b=o7HtR4vZEaWJNBhgS130AYPo+K6Ypqyg35nm9XFUVxMOEkaaTSX/NaAjSS/sNxuYzZ
-         zyrYXAxVoJSaw1H9V1WoKAYMJ/4AUMMUxXmkQIDa6dZr+6OKcvCcw6BhIjQjfs3JbdlQ
-         hzSfahJT81RgK+Y4Z7ILH7CMRLETDBYYZiuR8bZmheAZVi2d+07OJIHD5id5TldjZ2eA
-         JkUDW03LxT2Fpi/W2JAhD4qkeypYHbfWwY7hyN7zGCHf7J/xSWnE4fZ4l5/dymPyxV4g
-         mCFWN0//xI1EJCb2P3pUsRqvxMghNR9cZm01QiHp2w5GVdo4onyCp7iwYkFXTSufCsTm
-         DPRg==
-X-Forwarded-Encrypted: i=1; AKwUvByLO2/AVCOInvPTj3iVPZVv+ANDzb9N7HXCrMP3Kkgl98c+PpdhiYyPm457mXsaMlF/7Tm1IpaQYAeQGfInmyk=@vger.kernel.org
-X-Gm-Message-State: AFuF++nhHVrkRVosFdc0/kCDMk637b8tDcHisIGPrnxoICGBhAPVmJmH
-	Xd3titk1mX0YF0okauY2hv89nHiqbTEYYKpGxa/a6HQkwAvwhPYS2+RP
-X-Gm-Gg: AYBFou2veY5bcb+1635fwpB3GvezzZHSfPjxTu8hAr8Nb8BD7PoIDvq2RZxqhmgEaMB
-	TbTfBti69dXc/Pu6RguRmtnGU99E84UESFQb28JFvWj2UlXmWKLJTdLt6gXK57d3M50826pwiIb
-	sXwtaGCOVgp5m/W+YC6wQoIuNHXaGm2RATuX0RO22Hk4VZL+WXbc8u7l1Qtx+3L2bpLZ45J7YAL
-	2MXuGSzZ3ToDBkG8A9LGGKT/rHP/pf2jxg19ibnWaBunzDwO5rZhhme31WRGy+5DEEtApv/hxNF
-	1s/lrZXvNlR7rk4MfF4fHgg6S8ZjNDu0LmjpfGO8BDaqjdMY8JHS8fHwPY6KHHnFB1Y3LTZMZmv
-	KGOW9UcjELm43WXefSMfSPDVqlO6STVJkbUZqqlmR2wjn9gi1MGofRrnzUzCmQ+ZSkZ3eOUT1jp
-	SzO2WfqvPciVeE2DvRQsumP+3HJ8bzz/OxsDBSYiIMqre1jFiD4plnCwfapifmeZQGU+1J5Wtcm
-	m3f936K16u60+4v42tZ8O0Li080RfFcyhT4JYktq2bT4JfM
-X-Received: by 2002:a17:903:28c4:b0:2d7:f0:896b with SMTP id d9443c01a7336-2db125a3438mr104278615ad.13.1788601180369;
-        Sat, 05 Sep 2026 02:39:40 -0700 (PDT)
+        bh=93uempVhJxS6adHQtJsrkPq5DG5IgTwHCn3O8Hav3LQ=;
+        b=msJVZWqDxOOamlIbmvHEFUkmBFHK0FWfLKYfY3aayBItbsrfUg/z130wAvDETMm5DR
+         jTCFYz4SAHdskJJimzrBjsTGPfEnXNgpA7yUxNspHoo2EEmYQtHGxsqDgYVumKAeYpBP
+         zAxFN7DO9ZAuHVzbNCPt7HtWGqvIeHlNbOU4TgYKG4W6Avs5eBvExPqyV71573ElHx+4
+         yYQx4MYl+y377dZP15Yayg3r6xWtbpCkI5jWeIHgfcLbGagCqMVS1N4O64Vx+iscF2sk
+         HTs5JaN1P+AR1eF9Ji8kJx4zEE3+7dF8YN3DbqXvwIx4F2wRAwuNT/NG4p0FwE0o8dtA
+         0itg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788601185; x=1789205985;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=93uempVhJxS6adHQtJsrkPq5DG5IgTwHCn3O8Hav3LQ=;
+        b=Bs33n9Br9F6fcWdD0OCcy4jI+Mi1etaNmASJD/OALuSbqrmRDkhR7aVu05y+DOKUfl
+         IqgQ4YGg9bE4ppSWyT9Li848YR5DLK+ZbuTYh5GZlSbRXgfEn5ivSE+JHzyUMq0RbVbz
+         wD4XBD7G+HZN+eVSYlTPhaiFwPvw/ruFw3JTlWpF25sA+A3qRxWXiz5D8jJlk56Slhx9
+         4mrwdkKdtUFJngdIfM3EPicmt1EFOlAE+f3vqDAzNZMd0WIz/FaxihEh4rzPL76u821b
+         TIqt+f1IrThGjKmON3G79zapBPhC6z6uiXD4nqBst2K8yfyYzzwYwX+Lf2fKUhzLqPv9
+         B9Ig==
+X-Forwarded-Encrypted: i=1; AKwUvBwNhj87UicmZLANf+XJSyl5YUf1SPhr4x1tLOR2jtM8m3UYdpyaUMHoiBgcBT3KTV+53miWjTEnAxGUq9u+9zQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++lvamDBSM53QxKCEztuzO9ATMFlOQqybIVKrbrSuvxz/HP4SI/D
+	ER7tmJB6Bw/3+SV/Zsg0luwmCt2C4bWL9SaJ5m6AZ+KO8GY3RyCpSPlT
+X-Gm-Gg: AYBFou2yuCfsuoeXKonTyA2NBKzzvHl+SefpVay6Ty8+aSi6vzzBP9kkXPolM6msa6Y
+	Sx+boCzchG8gFHNVzzuA1Lecd5SMmDJ7tOaWIFySTwIKgxLxUXkZnZcRbjcmnaBUzc/nuGsfDUD
+	tkqFTK2pvjNKg4YIjy3k3h9cUWkGTTHoFHYlnOvEATsZqXoGh636VCO2V7wy8cUatC0p3VgoIAc
+	SOApYHu4vnNGA4kkuoJqWvnUx6NbGM0W8uG70tTCJZErVwgoEkDUadKvzcnd1xd8YiOdN/XPQzs
+	AbFSGeyuNNaOSEn89JyHAOeRdNcIFOHjgaqioX49T3kSi0f0yxlxPpTjEFKMjkKIuN/yg/C4fJL
+	PKLRWqkidK+Wb9B+a2gIr/oDpq6qgGXgzfAo7bxtz8pPJLDeT+O6ftyBckjt56XybcdteyUK/UC
+	0I1OtD94r4RKOVjB0tjX7ztC3Of/Gcoh7hDyPNYERgMR5TpeO9VjB7qUxbbVQN3PlObdnfMK1oW
+	W6SEUXrOzWAe8WwJvpf/XbFg/4iDVBTxBN8/A==
+X-Received: by 2002:a17:903:1983:b0:2cf:8131:75f4 with SMTP id d9443c01a7336-2db127c3903mr201337165ad.11.1788601184945;
+        Sat, 05 Sep 2026 02:39:44 -0700 (PDT)
 Received: from m-upc-A520M-HDV.lan ([2400:2410:3f60:500:dbc1:ef89:4dd5:b812])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2db1495a0c0sm20393745ad.17.2026.09.05.02.39.35
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2db1495a0c0sm20393745ad.17.2026.09.05.02.39.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Sep 2026 02:39:39 -0700 (PDT)
+        Sat, 05 Sep 2026 02:39:44 -0700 (PDT)
 Sender: Yuyang Huang <uyoko90@gmail.com>
 From: Yuyang Huang <sigefriedhyy@gmail.com>
 To: Yuyang Huang <sigefriedhyy@gmail.com>
@@ -77,10 +79,12 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH net-next 0/3] rtnetlink: dump link-layer multicast addresses
-Date: Sat,  5 Sep 2026 18:39:29 +0900
-Message-ID: <20260905093932.43726-1-sigefriedhyy@gmail.com>
+Subject: [PATCH net-next 1/3] rtnetlink: add AF_PACKET multicast dumps
+Date: Sat,  5 Sep 2026 18:39:30 +0900
+Message-ID: <20260905093932.43726-2-sigefriedhyy@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260905093932.43726-1-sigefriedhyy@gmail.com>
+References: <20260905093932.43726-1-sigefriedhyy@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,45 +93,180 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-"ip maddr show" prints three kinds of entries: link-layer, IPv4 and
-IPv6. The IPv4 and IPv6 ones can be read over netlink today: IPv6 has
-had RTM_GETMULTICAST for a long time and IPv4 got it in eb4e17a1d915
-("netlink: support dumping IPv4 multicast addresses"), with IFA_MC_USERS
-added later so the user count no longer has to come from procfs.
+RTM_GETMULTICAST dumps IPv4 and IPv6 multicast group memberships, but
+the device multicast list (dev->mc) is only available through
+/proc/net/dev_mcast, so "ip maddr show" still has to parse procfs for
+its link-layer entries.
 
-The link-layer list is the missing piece. dev->mc, the addresses
-programmed into the device filter, is only exported via
-/proc/net/dev_mcast, so iproute2 still carries a procfs parser just for
-that. This series closes the gap so that "ip maddr show" can be served
-from rtnetlink alone.
+Handle RTM_GETMULTICAST dumps with ifa_family set to AF_PACKET and
+report every entry of dev->mc in the existing ifaddrmsg format:
 
-Patch 1 handles RTM_GETMULTICAST dumps with ifa_family set to AF_PACKET
-and walks dev->mc under netif_addr_lock_bh(), no RTNL. The reply reuses
-the ifaddrmsg format of the IPv4 and IPv6 dumps: IFA_MULTICAST carries
-the raw link-layer address, IFA_MC_USERS the reference count, and
-IFA_F_PERMANENT is set for entries added with SIOCADDMULTI, which is the
-"static" column /proc/net/dev_mcast has and "ip maddr" prints. A
-non-zero ifa_index in a strict request limits the dump to one device.
+  - IFA_MULTICAST carries the raw link-layer address
+  - IFA_MC_USERS carries the entry reference count
+  - IFA_F_PERMANENT marks entries added with SIOCADDMULTI
+    (netdev_hw_addr::global_use, "static" in "ip maddr")
+  - ifa_scope is RT_SCOPE_LINK
 
-Patch 2 updates the rt-addr spec and patch 3 adds a selftest that
-checks the filter, the user count and the permanent flag on a dummy
-device.
+This covers every column of /proc/net/dev_mcast. Strict requests are
+validated like the IPv4 dump, except that no attributes are accepted;
+a non-zero ifa_index restricts the dump to that device. The dump runs
+under RCU and netif_addr_lock_bh() and does not need RTNL.
 
-Nothing changes for other families. AF_PACKET dumps returned
--EOPNOTSUPP before, so iproute2 can keep the procfs fallback for older
-kernels. I have the iproute2 side ready and will post it once this is
-in; with it, "ip maddr show" does not open /proc/net at all.
+Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
+---
+ net/core/rtnetlink.c | 132 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 132 insertions(+)
 
-Yuyang Huang (3):
-  rtnetlink: add AF_PACKET multicast dumps
-  netlink: specs: rt-addr: document AF_PACKET multicast dumps
-  selftests: net: test AF_PACKET multicast dumps
-
- Documentation/netlink/specs/rt-addr.yaml |   7 +-
- net/core/rtnetlink.c                     | 132 +++++++++++++++++++++++
- tools/testing/selftests/net/rtnetlink.py |  58 +++++++++-
- 3 files changed, 193 insertions(+), 4 deletions(-)
-
+diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
+index 81c5a6104dea..5e83232c1504 100644
+--- a/net/core/rtnetlink.c
++++ b/net/core/rtnetlink.c
+@@ -4566,6 +4566,136 @@ static int rtnl_dump_all(struct sk_buff *skb, struct netlink_callback *cb)
+ 	return skb->len ? : ret;
+ }
+ 
++static int rtnl_fill_mcaddr(struct sk_buff *skb, const struct net_device *dev,
++			    const struct netdev_hw_addr *ha, u32 portid,
++			    u32 seq, unsigned int flags)
++{
++	struct ifaddrmsg *ifm;
++	struct nlmsghdr *nlh;
++
++	nlh = nlmsg_put(skb, portid, seq, RTM_GETMULTICAST, sizeof(*ifm),
++			flags);
++	if (!nlh)
++		return -EMSGSIZE;
++
++	ifm = nlmsg_data(nlh);
++	ifm->ifa_family = AF_PACKET;
++	ifm->ifa_prefixlen = 0;
++	ifm->ifa_flags = ha->global_use ? IFA_F_PERMANENT : 0;
++	ifm->ifa_scope = RT_SCOPE_LINK;
++	ifm->ifa_index = dev->ifindex;
++
++	if (nla_put(skb, IFA_MULTICAST, dev->addr_len, ha->addr) ||
++	    nla_put_u32(skb, IFA_MC_USERS, ha->refcount)) {
++		nlmsg_cancel(skb, nlh);
++		return -EMSGSIZE;
++	}
++
++	nlmsg_end(skb, nlh);
++	return 0;
++}
++
++static int rtnl_dump_mcaddr_dev(struct net_device *dev, struct sk_buff *skb,
++				struct netlink_callback *cb, int *s_addr_idx,
++				unsigned int flags)
++{
++	struct netdev_hw_addr *ha;
++	int addr_idx = 0;
++	int err = 0;
++
++	netif_addr_lock_bh(dev);
++	netdev_for_each_mc_addr(ha, dev) {
++		if (addr_idx < *s_addr_idx) {
++			addr_idx++;
++			continue;
++		}
++		err = rtnl_fill_mcaddr(skb, dev, ha, NETLINK_CB(cb->skb).portid,
++				       cb->nlh->nlmsg_seq, flags);
++		if (err < 0)
++			break;
++		addr_idx++;
++	}
++	netif_addr_unlock_bh(dev);
++
++	*s_addr_idx = err < 0 ? addr_idx : 0;
++
++	return err;
++}
++
++static int rtnl_valid_dump_mcaddr_req(const struct nlmsghdr *nlh,
++				      struct netlink_ext_ack *extack,
++				      int *pifindex)
++{
++	struct ifaddrmsg *ifm;
++
++	ifm = nlmsg_payload(nlh, sizeof(*ifm));
++	if (!ifm) {
++		NL_SET_ERR_MSG(extack,
++			       "Invalid header for multicast dump request");
++		return -EINVAL;
++	}
++
++	if (ifm->ifa_prefixlen || ifm->ifa_flags || ifm->ifa_scope) {
++		NL_SET_ERR_MSG(extack,
++			       "Invalid values in multicast dump header");
++		return -EINVAL;
++	}
++
++	if (nlmsg_attrlen(nlh, sizeof(*ifm))) {
++		NL_SET_ERR_MSG(extack,
++			       "Invalid data after multicast dump header");
++		return -EINVAL;
++	}
++
++	*pifindex = ifm->ifa_index;
++
++	return 0;
++}
++
++static int rtnl_dump_mcaddr(struct sk_buff *skb, struct netlink_callback *cb)
++{
++	struct net *net = sock_net(skb->sk);
++	unsigned int flags = NLM_F_MULTI;
++	struct {
++		unsigned long ifindex;
++		int addr_idx;
++	} *ctx = (void *)cb->ctx;
++	struct net_device *dev;
++	int ifindex = 0;
++	int err = 0;
++
++	if (cb->strict_check) {
++		err = rtnl_valid_dump_mcaddr_req(cb->nlh, cb->extack,
++						 &ifindex);
++		if (err < 0)
++			return err;
++	}
++
++	rcu_read_lock();
++
++	if (ifindex) {
++		cb->answer_flags |= NLM_F_DUMP_FILTERED;
++		flags |= NLM_F_DUMP_FILTERED;
++		dev = dev_get_by_index_rcu(net, ifindex);
++		if (!dev) {
++			err = -ENODEV;
++			goto out;
++		}
++		err = rtnl_dump_mcaddr_dev(dev, skb, cb, &ctx->addr_idx, flags);
++		goto out;
++	}
++
++	for_each_netdev_dump(net, dev, ctx->ifindex) {
++		err = rtnl_dump_mcaddr_dev(dev, skb, cb, &ctx->addr_idx,
++					   flags);
++		if (err < 0)
++			break;
++	}
++out:
++	rcu_read_unlock();
++	return err;
++}
++
+ struct sk_buff *rtmsg_ifinfo_build_skb(int type, struct net_device *dev,
+ 				       unsigned int change,
+ 				       u32 event, gfp_t flags, int *new_nsid,
+@@ -7251,6 +7381,8 @@ static const struct rtnl_msg_handler rtnetlink_rtnl_msg_handlers[] __initconst =
+ 	{.msgtype = RTM_SETSTATS, .doit = rtnl_stats_set},
+ 	{.msgtype = RTM_NEWLINKPROP, .doit = rtnl_newlinkprop},
+ 	{.msgtype = RTM_DELLINKPROP, .doit = rtnl_dellinkprop},
++	{.protocol = PF_PACKET, .msgtype = RTM_GETMULTICAST,
++	 .dumpit = rtnl_dump_mcaddr, .flags = RTNL_FLAG_DUMP_UNLOCKED},
+ 	{.protocol = PF_BRIDGE, .msgtype = RTM_GETLINK,
+ 	 .dumpit = rtnl_bridge_getlink},
+ 	{.protocol = PF_BRIDGE, .msgtype = RTM_DELLINK,
 -- 
 2.43.0
 
