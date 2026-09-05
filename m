@@ -1,66 +1,66 @@
-Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
+Received: from mail-wm2-f6.google.com (mail-wm2-f6.google.com [74.125.225.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5982747CA81
-	for <linux-kselftest@vger.kernel.org>; Sat,  5 Sep 2026 11:23:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E888C48989F
+	for <linux-kselftest@vger.kernel.org>; Sat,  5 Sep 2026 11:24:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788607424; cv=none; b=TKQn9PDCfmxPsptR3YqdiuL1sOsX1W1U8kgmJmeP5AO8816hi4LBx7BNBZGsgFiFxnjShdn02YObVDrRdeg68DNUgniA59qyRIBPY5TiFv+WUOkkeZH2HSHKILaEam7kU//f2+0ULj5I0ymRrVYOTF3xsWNf7CjPGIZdGu46XnY=
+	t=1788607502; cv=none; b=PlEWMwiHltH7ADOQKq7Opn+au0U6Dzf0MEWEdFfo4bGTp4lCLJagVKVDI9ALVMBovno1Cj60lRR4SjuFZDmlclotTzP74MXlCRHWtHJTMqL5nI9y4V+EkDY9Fwu0Y69lwAv2cy9AnUyFV5psO6Avhr9k/IYaCp5mnAI8GlyUiGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788607424; c=relaxed/simple;
-	bh=46gfGGvOHamt2U6ZnlfStx9ZhBdMqYA1cvWxqwtmAYw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=F6a89VIy1TxNqjRmAovsWieF6QWgwqo0yV9YlgOL+8ihPY5lPlHA+WITDuP5N1KmI1JE0ZER1kRk8NWrAt2ALLgIGaHItZdaNHkUVTxKggZwyB344prxbtbh91Sci+TcFvBZWDVPmgiCuTZ6hNgNlCjVlrFWmR9cqQV1asL//IA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q+A/z3ZD; arc=none smtp.client-ip=74.125.225.74
+	s=arc-20240116; t=1788607502; c=relaxed/simple;
+	bh=B91bvzotjFUcMw1qyxQVrgtsCG6I0XEyZUoF6bsDVB0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=OJa3UoAOetoaQ6tJCdTCf4R31c4KJs4XO5zPuKx20a7ml7NvgS+6eu9Kh6ESk8zlwn4w7SdEOfNatyICzuOsJ2zkH76DRdT/MAtwwNDKLZ8C5xqiIN4aIrCVXpflECyI5NNpHeL37c+6UjgfiXja2+KT/BX2St3WMehGfUrc5aU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cVRCJsT+; arc=none smtp.client-ip=74.125.225.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q+A/z3ZD"
-Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-48436370540so840101f8f.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 05 Sep 2026 04:23:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cVRCJsT+"
+Received: by mail-wm2-f6.google.com with SMTP id 5b1f17b1804b1-499aaf0a723so6788515e9.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 05 Sep 2026 04:24:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788607421; x=1789212221; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=gmail.com; s=20251104; t=1788607495; x=1789212295; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=OK8u0A1r5wARyyx+mQthY7pulPX5uc00KjP5Fs0Y5/U=;
-        b=Q+A/z3ZDMSiXVgbRXO+zPozELZ6V3vjOQVVoRzZiHgeBqo4Om9xkt7FGx+oqDs2h2C
-         hl0rmc2a8oze26WlFknREh1Jp308JbGotgds7kI0cFTSZakdxrDuY2KF9wu2+0KyIooF
-         rGCBNfr8KG/9g+l9oeIiEfjhd1ZnNZf+ZR51fjd3zatku5Y4FJF0feRCEU/K/5eT+/Zh
-         9K7+hypVDH/AT8mQplZ5715R3Xg4ULsECVT4aKl/Y1xNNwuP7t6QJd8nCrIJCTkDYwV8
-         3h9zUnW9wNSvqNVkluVJ5poCvKR5l5uYy7Gr/YZJadR679rlgxN/XGoOPRTlgwNsvMwW
-         y28g==
+        bh=B91bvzotjFUcMw1qyxQVrgtsCG6I0XEyZUoF6bsDVB0=;
+        b=cVRCJsT++DQEbybF00xzEUg9Q0yr/sAMl1n/W539qWwn+qjurUIB7QCXrxOjx7ezQI
+         NiXTCINcAkpG44PbtbUVZ3fU1CuKM8ydHT4XlD859WRrxk61i6dwzN5S4lql+zWTFGPs
+         7KBv0FnOo6wQoiuRBxuzSpyfv6MjKYg/+tHPji/4SNSkjkzBfZXIsNiFukzxyg+QlB8S
+         9MLak73a4Zh+5AT2vrfCJ7HwWEYHQKYCDvUNdTOT5V7hIzUx5xtrI2I8W2fuiMtI+hey
+         rFQ2O2bDUOIvCAxyyahvLmJSwFWhn2SsY9M1tpdWB3sLRbxff2PNbN9R66Tq1OixxEIC
+         fhiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788607421; x=1789212221;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1788607495; x=1789212295;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=OK8u0A1r5wARyyx+mQthY7pulPX5uc00KjP5Fs0Y5/U=;
-        b=rnyuAFusK9TgRXlpKg1RIS2hZHEw+dXwiZV46irKVg9hhiGPctU63f7CqkOuHqNpLv
-         nTNhMoig4DG7boHS9JQLrIGykSgNs9JuW1zn0ChCgdK9JZjxoQ49dWY0cPUKFI3tgB+r
-         lz9Xu+XKk9x2pGQA6SSpyc+A6fF/k8558NtUlMyspc54aLBvubHcDwV1E6AHbppXWy9z
-         5pFaDnZVQvcvuA7aGwSwxDjtHJrNrRq9AE+N+M/Dbi7nPa8fgk5JbKOtX+5HrvlOZOeV
-         Qg4UpNQsexABNDKbYRzl5+3FNkq3FPY9WfOq/PUPHXDYVcGhyEo/sZwiDE5zRnVtv5Pr
-         r7bw==
-X-Forwarded-Encrypted: i=1; AKwUvBzdJB1l6gRQO4J1NP+6689dF6kIWzYSq2EpO6li9k65KpnO2lfI5gYJdgzIDUg64MBgq/25qSwXa5+BdifZTxE=@vger.kernel.org
-X-Gm-Message-State: AFuF++nLf7MYmeiLbYPDllHEx66olDboqKLMTsgPup8e3+v2EPLiyxdn
-	dcs93kKTcpdPSqop8jd9e3nmC/GL9sKB7hUEzKC1nbrGvKyzbUwnoVdH
-X-Gm-Gg: AYBFou3kIHP1C6ORT06iorGaPQMhO95WbZW9/GNtqkhB9y4HB/8F+qq1vENMIApRTW8
-	ukIO6Ge0+0mgoUBACo2OBc/uk2U4mH+owrBRl/+sk0e6+g4OdVEM0DvUTvlEQ4+w4SN5anHSH6V
-	8vMbYdDMw0b3kX/VkLhI8UoHyXZo64HQkWS1g04opIy8FCKFnG0ilKFaobwMiuBoL6DjCu1AHP5
-	TtIGHU88CcGTtrx92xdCGqPAguFwnpjHLKSafs+MolnUdD3sgpLI+hFQ9s3QsldhvGXV/FHDMnV
-	J94bYX5/FelaiyIKF9QGk5PLq/fiDAu2ngwDc/1+SksFAfiDbj092vOrIVfkZ6nK9RDhiRQCGOE
-	0sF5wSb62l+htik65nDwtaVXw6IIU1jb/n0SgC5hyUXO/i17O2+rvLW3yC+Td1amwbtQK+pDPkw
-	xcr4wO0xfzuVTlUTPAQ9YM46TcTcYAjI+Q4gxnZ1hw+no/Um/hPRe+eSZkEbLdMk0aA7O2dfLnZ
-	JttGcxrldJ+Xvwjb6Hd8+4DfK4VaQn0waxl9u3i7NBRZ2V05x1qLBSxSRV+7tAitLpkoVtKjxVJ
-	/lJjaomUsiZsrHJ5J8IwYZd3TrY=
-X-Received: by 2002:a5d:5888:0:b0:485:8c16:5ef9 with SMTP id ffacd0b85a97d-4858c166172mr8839779f8f.51.1788607421304;
-        Sat, 05 Sep 2026 04:23:41 -0700 (PDT)
+        bh=B91bvzotjFUcMw1qyxQVrgtsCG6I0XEyZUoF6bsDVB0=;
+        b=RI/bHVcsMWt2rtwvlmARkL4BvK57nslmJnOSWgMGJ8OGdSMSadroOFZNeVXY/HxflN
+         OJ/GOzpJEBXIhzCWG+ZlNVrcanZ6pau37/59fDRBkdOYekTNqW52Z2CSE2lOI5h0zFPN
+         TsuBBilSH+bjtr561/26CahwZXl9V72JQbnxVbTOkBka3/pYQEWCGndLb4cN4Z6G/XOI
+         WJPxMJ0epFDBBa8z1GJxEUpZGHZQYUl+nZXqJ/fwbOhNRyTm0vMJEywGJBMgJfwk0Lqm
+         i8n3LRW1BUnIZOuT5UF6jSXvC7mAEewo5itVq+7wGPQy6TZtBDNmNNkDFbdrHdaj81TB
+         eGFA==
+X-Forwarded-Encrypted: i=1; AKwUvBwVOiHLAkhwVwvymcsnrwjmOTsCZpYyG0I1suksH6g2MUCJHtiVvAmwE6UKSXB6j6HJCp0da11wYe0D1zynofY=@vger.kernel.org
+X-Gm-Message-State: AFuF++k5fneGXaNQ7KR/dTRU1ZxPSFLuHvfS+NXo7gEjsmwLnjcYVkpd
+	Q+40E66RVw6pSEEVU2LnBK9A3CpI8bKOzOZbM09el4BA1hINyDzeWUcF
+X-Gm-Gg: AYBFou318RQqYMX5Y7jEKk70GVThj+HFCIGNB/1sDnMwWxD39quDsBSLPF1yO9+gYdr
+	XD91iWg20BFNxmVXFOSyqGB13EiZHRQZYTlQSwyLkuDzQ4d/6/hrJk/TNgcHbalsnlz0qNI1F27
+	SmkTnTahsb+vq9TChBCXHtBVHs0hmNlWOjepHmt1fnc/+yVpEDbhlwx+LNokIK36sFi11tv2f6/
+	OyaQ2zTNF2cPqnCMmFFBzukksLIShUtqM7MChoFXnsxbdC/jGQww+UOaihLTL9ynJUSuQwq9uuC
+	4RUiHRybHynJOJIW65TJh6qauDNtYsXB32KTqjbPCfZd5Yte5oBxtTWKQIuc5C6BI5m1X8yINHJ
+	yNGLKtvhGZWZ0Z7T0LVbHT5M34L1skh5lWSAOIo06fxQjdGefZKWlfZXKJ5SG0eZjQpZL9vwUzL
+	0QPZitFXOR/dbOT4iMH+3ZlbOnzOqd3cVS6W7qI/5BZ71U4wobpsT8DXYAOXvHP4tSGIRa1wHm+
+	0eGYbcQVQiuFeajrNvUWge7V6yFSG2NfHzjhgPhFFq7PMNpc0pJu/87vsTb6/BEo0+NNREpJeHo
+	h+6ErU0Z1EKU26nYOfKcv8TrSAA=
+X-Received: by 2002:a05:600c:6306:b0:49c:f5c0:aa76 with SMTP id 5b1f17b1804b1-49cf81e366amr268925475e9.5.1788607495209;
+        Sat, 05 Sep 2026 04:24:55 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485958f1493sm1014293f8f.37.2026.09.05.04.23.40
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee6023d6sm225255635e9.8.2026.09.05.04.24.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Sep 2026 04:23:40 -0700 (PDT)
+        Sat, 05 Sep 2026 04:24:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,69 +69,64 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 05 Sep 2026 13:23:39 +0200
-Message-Id: <DL7CEX9EX781.23V26M3600JEI@gmail.com>
-Cc: "Roman Gushchin" <roman.gushchin@linux.dev>, "JP Kobryn"
- <inwardvessel@gmail.com>, "Shakeel Butt" <shakeel.butt@linux.dev>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Martin KaFai
- Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>, "Barry
- Song" <baohua@kernel.org>, "Geliang Tang" <geliang@kernel.org>,
- <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
- <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>, "Hui Zhu"
- <zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next v7 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+Date: Sat, 05 Sep 2026 13:24:53 +0200
+Message-Id: <DL7CFVDSDV92.1VPGNHDCKVVIV@gmail.com>
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Andrew Morton" <akpm@linux-foundation.org>, "Hui Zhu"
- <hui.zhu@linux.dev>
+To: "Hui Zhu" <hui.zhu@linux.dev>, "Roman Gushchin"
+ <roman.gushchin@linux.dev>, "JP Kobryn" <inwardvessel@gmail.com>, "Shakeel
+ Butt" <shakeel.butt@linux.dev>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song
+ Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
+ Olsa" <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah
+ Khan" <shuah@kernel.org>, "Barry Song" <baohua@kernel.org>, "Geliang Tang"
+ <geliang@kernel.org>, <linux-kernel@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-kselftest@vger.kernel.org>
+Cc: "Hui Zhu" <zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next v7 0/2] bpf: BPF-driven proactive memcg reclaim
 X-Mailer: aerc 0.21.0
 References: <cover.1788516769.git.zhuhui@kylinos.cn>
- <7d8b77dc99ffe99a7bef874a257472fdaaf07e1c.1788516769.git.zhuhui@kylinos.cn>
- <20260904110308.4473cde499e91aab14dbd5fc@linux-foundation.org>
-In-Reply-To: <20260904110308.4473cde499e91aab14dbd5fc@linux-foundation.org>
+In-Reply-To: <cover.1788516769.git.zhuhui@kylinos.cn>
 
-On Fri Sep 4, 2026 at 8:03 PM CEST, Andrew Morton wrote:
-> On Fri,  4 Sep 2026 18:20:19 +0800 "Hui Zhu" <hui.zhu@linux.dev> wrote:
+On Fri Sep 4, 2026 at 12:20 PM CEST, Hui Zhu wrote:
+> From: Hui Zhu <zhuhui@kylinos.cn>
 >
->> @@ -159,6 +160,74 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct =
-mem_cgroup *memcg)
->>  	mem_cgroup_flush_stats(memcg);
->>  }
->>
->> +/*
->> + * Reclaim must not recurse: try_to_free_mem_cgroup_pages() overwrites
->> + * current->reclaim_state, so a nested call would corrupt the outer
->> + * reclaim state. Reclaim windows are marked with PF_MEMALLOC;
->> + * reclaim_state is also checked because it is installed slightly
->> + * before PF_MEMALLOC.
->> + */
->> +static bool bpf_in_reclaim_context(void)
->> +{
->> +	return (current->flags & PF_MEMALLOC) || current->reclaim_state;
->> +}
->> +
+> BPF programs can observe memory pressure on a cgroup (e.g. refault
+> stats via bpf_mem_cgroup_page_state()), but cannot act on it:
+> triggering reclaim on a chosen cgroup requires writing to
+> memory.reclaim, which BPF cannot do. This series adds
+> bpf_proactive_reclaim(), a sleepable kfunc performing one proactive
+> reclaim pass on a target memcg, so when and how hard to reclaim is
+> BPF policy rather than hard-coded thresholds.
 >
-> Would life improve if try_to_free_mem_cgroup_pages() didn't do that?
-> If try_to_free_mem_cgroup_pages() (or some variant of it) were to
-> permit nesting?
+> The kfunc is restricted to BPF_PROG_TYPE_SYSCALL so that reclaim
+> always runs in a clean process context: generic sleepable programs
+> may execute with filesystem locks held or in NOFS/NOIO contexts,
+> where the reclaim path could deadlock in filesystem shrinkers. The
+> bpf_wq and task_work callbacks of a SYSCALL program keep its program
+> type and run in process context, so reclaim work can still be queued
+> asynchronously through them, as the selftest does with bpf_wq.
 >
-> 	rs =3D new_thing(current, &sc.reclaim_state);
-> 	...
-> 	set_task_reclaim_state(current, rs);
+> The use case we are looking at is protecting high-priority workloads:
+> a BPF program monitors the state of a high-priority cgroup and, when
+> it degrades (e.g. PSI rises or refaults increase, as in the
+> selftest), asynchronously reclaims memory from low-priority cgroups
+> via bpf_wq and bpf_proactive_reclaim(), giving the pressured cgroup
+> more free pages.
 >
+> Another use case: several vendor-maintained kernels carry private
+> implementations that trigger asynchronous reclaim when a memcg enters
+> a certain state. These exist for historical and partly psychological
+> reasons, but the underlying demand is real. We expect BPF-driven
+> proactive reclaim, combined with the BPF hooks for the memory
+> controller currently under discussion and development, to serve these
+> needs in mainline, reducing kernel fragmentation and improving kernel
+> maintainability.
 
-My understanding is that given the current restrictions on where this kfunc=
- can
-be called, this is mostly a defensive and shouldn't be firing (?). Given th=
-at,
-we can probably revisit this when such reentrancy is necessary, even though=
- I
-doubt it would be the case in the future. It will at most be invoked from a=
- wq
-callback or a kthread, so should be fine.
-
-> ?
-
+From BPF perspective this looks ok to me. I saw you dropped the swappiness
+argument, what happened there? I thought we agreed to just include it in th=
+e
+kfunc now. Did something change?
