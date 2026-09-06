@@ -1,93 +1,144 @@
-Received: from out198-19.us.a.mail.aliyun.com (out198-19.us.a.mail.aliyun.com [47.90.198.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f5.google.com (mail-pj2-f5.google.com [74.125.227.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059BB14ABE;
-	Sun,  6 Sep 2026 02:45:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE51612B143
+	for <linux-kselftest@vger.kernel.org>; Sun,  6 Sep 2026 03:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788662736; cv=none; b=W9D73S9jq2VLs57TCftQqfcP8lVNN/s37HkrXCBayHZDds2Q0xPH+7SbHkZH94/jVPVRlNIH7Vl4L5MOjW8JV7/l986WtR4Thak3ZcIvvFyvyvebCA0XeOznfhcVZZOxWsQgo71Kqk+/nwczCi5IsGlr+SzbhMaAvP51ogt8ba0=
+	t=1788664609; cv=none; b=FIAmLfu/NSj4wx7w1tVPWzpBnpejoCPftNqdudT+jPow3JtNjI49NowqMwf2Q7zFflVEsay7Okkw7uvt3YHFHG+O74MeTyZ5ggaEmP7sVhNSnQ5u0wJl2K+kJhsct5KuB5lJcMjkJMXiweS/MFYxG2TZErfP5I21Y71GN27dIHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788662736; c=relaxed/simple;
-	bh=MtSQk/okHkcSdRva2nRzbLImT99Tt4JP/UbLq2pgdos=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G0hpYIfM5JYKf8/mI3MXnOCtQjVhgz8JqT8pLtBrPmuaWGfs1dTnLl8rWyF8AlrU6d+X2+ZGAUOCVOUSnDDoIVZxYDz+d6PBFB3X/fqpn+QnYOkoTX8NmLt0KdYB8J3BGea1iTzsozSaBD3HwgkcRSCa9wqdYPrgRHEs8JyWR8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=47.90.198.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.07916929|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00797682-0.00203275-0.98999;FP=12673810057201397720|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033037025160;MF=zhang_wei@open-hieco.net;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.j6fQ5R4_1788662710;
-Received: from 192.168.1.4(mailfrom:zhang_wei@open-hieco.net fp:SMTPD_---.j6fQ5R4_1788662710 cluster:ay29)
-          by smtp.aliyun-inc.com;
-          Sun, 06 Sep 2026 10:45:11 +0800
-Message-ID: <669bffc9-ad08-491b-a55c-86889f4e3f11@open-hieco.net>
-Date: Sun, 6 Sep 2026 10:45:08 +0800
+	s=arc-20240116; t=1788664609; c=relaxed/simple;
+	bh=s5TYD7BS+s/jGw29CeHqa38NtbnJHkNgMMffGi8ZnIs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AdkEs3XsD8QWhNj09oxjZsd9kVQcOqEZV6LGvUOIXw+PeUEi8ylErzkxWsLsZwn9rFcM4GTQtGKIFF22Cm2Ozrl0LB2PqBIxBkA+QUdQCBBDhIWiLQ2gchDqGIsFdWv8xc+NEURlLhnmFu8darY9fR/Tz2qKKbBUGiSc6cX7Dts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ifAv0xaZ; arc=none smtp.client-ip=74.125.227.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ifAv0xaZ"
+Received: by mail-pj2-f5.google.com with SMTP id d9443c01a7336-2d942de6574so14848815ad.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 05 Sep 2026 20:16:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788664607; x=1789269407; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=UQUQORBh9/effmcCOK9oZ0voPzgfijwpho2+g50NVks=;
+        b=ifAv0xaZJJX0GSmT91T1NofvewP2Ju+xl4fFN5oc9vMbpYbF3mFnJpMsVZbNxGE3cZ
+         SRc3Gs2tifzAzhcy31oB1spvQg4ggXTyOFT5PdGSEh8jMQh8KdALquxqDYL2nULQ1ydo
+         HMWMVJ9T3sB4hiC/svaa8bzwLVZOPvY9Pk7S/Y62/83ekcZbOVQq/QPdwARUYhvoYkQu
+         RoiN7WdNvVxUzMzyTEA79vo21sBY5KDd5C9s6cKX5al8CQmm4xjjj63AQ6mvsuiaVkEN
+         LL3z//0cK2zEN+mm1ojLwhrlJBo6zGWcjHrHBMtkJmO9TCTz9PpCQzO1pKHgJcJek3F1
+         PQXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788664607; x=1789269407;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=UQUQORBh9/effmcCOK9oZ0voPzgfijwpho2+g50NVks=;
+        b=isyXTN5/HhpQwN4bLUylLfqcVd8TpsBlLk0SCCx+BfATSPc+F3ecPCXd7Jgolc1LEU
+         U0XCZGI/Vs44VbUPprhnrZUEFXIQQ0QU/BLE0MQa2lvwQ0elLOaXoofsdZvoinfjYWuF
+         ceSImthTd4qhF/ASlkfnAhXTTCnXNWu9Mjih3DlYxcvCkE/LqEpwWVW+bKH+NpGTR/k1
+         flpO7zNiNdNh4CvhI5uW0pN/ZTfLxSOcWMF66sp4ErFo8C156X0rB5bsZ3As1PrgTnqF
+         Fw7d8dbsubD7f36lm6zwvpmbE9o5TjE5QH4aQ2EKt8Lw8MqXJYKin/Tmsv8q8CuB7bRY
+         mseQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx2gLzvUp8R00Bz8u3i4hMujoB3nD/37qfJRthULjiNeyYbL9sBP/jcS4bfSJkwDxNxc3rggQRWOzfXE4vUDos=@vger.kernel.org
+X-Gm-Message-State: AFuF++mpqV5r9RvezhiEDvTeOZs4DE0uZscC+UnDH+3GQRZSbL10VFA5
+	grDdR5j9oHp/2YczzAZ8V7pcyl1R5tIP/d6a0it3EVolvYsB98JzfhjP
+X-Gm-Gg: AYBFou3b+Hf7cCmTjCceS3bFPWOHI7CC82ElehK/8KHMkct7f24Cek+JmNahJwYbfWN
+	f60nY0Skrd94025C/4EvW1yGh53YqTa1O2SSDpIL9YfnLxikOB7P5yIJv7rbcaSs2w9bgqeudTW
+	rtKE8Xt/CGeFkZ2MuDFiLfFxnvhiIr/F2AYt9AwL9wEol0Aes1sQAD6nVkQ4AwNVd3hFT08lmoD
+	1pSOsB8XpOJnSWAEvobkbPUAmdgpO7s318XGvi02HnWD71ZlAovqVUTDwqKirQ6y53n4PXMTOjj
+	09+8Y/p1FYMN6e+Ce+qCZyFx7yx3FL6WgttOFO/hzxE2nrQd1OoQ3+2T5sa8bHXPsa9LLtQ7i9O
+	J76bA8SjJunzWnn8SkzZrhPbJ6hFiT3acTaco+vMzKFKk208DymBYUkplOWiK1v1LVP1/2RML9y
+	gVHjiJiox3TyD1DTFVlC6ZjMl1y61rt/L7o0qWfFlpFcRn9F+VQt6SnUrfP2EYJXfaCt7Olt7/6
+	vxeHvpG/+dJFJFj+q5gQqOYP0vipsCIoD3UZApHsKGWMYt05fayvm/fJQlsWDmW7Z5IlYPtpfTg
+	f72xOmV2Q17JeBRekQASe6AJeX8gdA0ywpXhZ0nvsYXSRoAPSR06MYk=
+X-Received: by 2002:a05:6a21:6816:b0:3d3:afa7:8101 with SMTP id adf61e73a8af0-3da3a16d1cdmr26417705637.28.1788664606822;
+        Sat, 05 Sep 2026 20:16:46 -0700 (PDT)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339a534152sm16958958eec.10.2026.09.05.20.16.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Sep 2026 20:16:46 -0700 (PDT)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: Tony Luck <tony.luck@intel.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Bhavik Sachdev <b.sachdev1904@gmail.com>,
+	linux-kselftest@vger.kernel.org
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Kees Cook <kees@kernel.org>
+Subject: [PATCH] selftests/statmount: update list of valid filesystems
+Date: Sat,  5 Sep 2026 20:16:25 -0700
+Message-ID: <20260906031629.74204-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/8] KVM: nSVM: Propagate hardware DecodeAssist bytes
- to VMCB12
-To: Jim Mattson <jmattson@google.com>
-Cc: Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- zhouyanjing@hygon.cn, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260824123954.315112-1-zhang_wei@open-hieco.net>
- <20260824123954.315112-5-zhang_wei@open-hieco.net>
- <CALMp9eR=TNUqfbNCFkxmg=O_Obcj11Tu9jAmX6Pe60qvvNx-2g@mail.gmail.com>
-Content-Language: en-US
-From: Tina Zhang <zhang_wei@open-hieco.net>
-In-Reply-To: <CALMp9eR=TNUqfbNCFkxmg=O_Obcj11Tu9jAmX6Pe60qvvNx-2g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+The list of valid filesystems in
+tools/testing/selftests/filesystems/statmount/statmount_test.c contains
+several filesystems that have been removed from the kernel, and is
+missing several recently added filesystems. Update it.
 
+The new list was generated using this small script:
+(grep -rA10 'struct file_system_type .* =' | fgrep -w .name
+fgrep -r MODULE_ALIAS_FS'(' | grep -v '#define'
+) | cut -d '"' -f2 | LC_ALL=C sort -u | while read a; do
+    printf '"%s", ' "$a"
+done
+echo
 
-On 9/5/2026 7:58 AM, Jim Mattson wrote:
-> On Mon, Aug 24, 2026 at 5:40 AM Tina Zhang <zhang_wei@open-hieco.net> wrote:
->>
->> +static void nested_svm_copy_insn_bytes(struct vmcb *to,
->> +                                      const struct vmcb *from)
->> +{
->> +       u8 insn_len = from->control.insn_len;
->> +
->> +       nested_svm_clear_insn_bytes(to);
-> 
-> It's not obvious to me that this clearing is necessary (except in the
-> case of the early return below). The APM does not say what happens to
-> the remaining bytes if there is a short read.
+It was then manually formatted and edited to remove filesystem types
+registered by tests and fix a few entries the script couldn't extract
+correctly.
 
-You're right.  I had interpreted the APM as requiring the entire Guest 
-Instruction Bytes field to be cleared when rebuilding the state, but 
-that was too broad.  For a short read, the remaining bytes are not 
-defined and do not need to be cleared.  Thanks for correcting my 
-understanding.
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+---
+ .../filesystems/statmount/statmount_test.c    | 24 +++++++++----------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-
->> +static void nested_svm_update_vmcb12_insn_bytes(struct kvm_vcpu *vcpu,
->> +                                               struct vmcb *vmcb12,
->> +                                               const struct vmcb *vmcb02)
->> +{
->> +       struct vcpu_svm *svm = to_svm(vcpu);
->> +
->> +       nested_svm_clear_insn_bytes(vmcb12);
-> 
-> Clearing here is premature. If L1 does not have
-> X86_FEATURE_DECODEASSISTS, the "Guest Instruction Bytes" fields of
-> vmcs12 should not be touched.
-
-Agreed.
-
-> 
-> Moreover, as I pointed out earlier, if L1 has
-> X86_FEATURE_DECODEASSISTS, and the VM-exit doesn't have instruction
-> bytes, you onlyhave to clear bits 7:0.
-
-Yes. I'll update it in the next version.
-
-
-Thanks,
-Tina
+diff --git a/tools/testing/selftests/filesystems/statmount/statmount_test.c b/tools/testing/selftests/filesystems/statmount/statmount_test.c
+index 52544512edc7..352ca022f248 100644
+--- a/tools/testing/selftests/filesystems/statmount/statmount_test.c
++++ b/tools/testing/selftests/filesystems/statmount/statmount_test.c
+@@ -17,21 +17,21 @@
+ 
+ static const char *const known_fs[] = {
+ 	"9p", "adfs", "affs", "afs", "aio", "anon_inodefs", "apparmorfs",
+-	"autofs", "bcachefs", "bdev", "befs", "binder", "binfmt_misc",
++	"autofs", "bdev", "befs", "binder", "binfmt_misc",
+ 	"bpf", "btrfs", "btrfs_test_fs", "ceph", "cgroup", "cgroup2", "cifs",
+-	"coda", "configfs", "cpuset", "cramfs", "cxl", "dax", "debugfs",
+-	"devpts", "devtmpfs", "dmabuf", "drm", "ecryptfs", "efivarfs", "efs",
+-	"erofs", "exfat", "ext2", "ext3", "ext4", "f2fs", "functionfs",
+-	"fuse", "fuseblk", "fusectl", "gadgetfs", "gfs2", "gfs2meta", "hfs",
+-	"hfsplus", "hostfs", "hpfs", "hugetlbfs", "ibmasmfs", "iomem",
+-	"ipathfs", "iso9660", "jffs2", "jfs", "minix", "mqueue", "msdos",
+-	"nfs", "nfs4", "nfsd", "nilfs2", "nsfs", "ntfs", "ntfs3", "ocfs2",
+-	"ocfs2_dlmfs", "omfs", "openpromfs", "overlay", "pipefs", "proc",
+-	"pstore", "pvfs2", "qnx4", "qnx6", "ramfs", "resctrl", "romfs",
++	"coda", "configfs", "cpuset", "cramfs", "dax", "debugfs",
++	"devpts", "devtmpfs", "dmabuf", "drm", "ecryptfs", "efivarfs",
++	"erofs", "exfat", "ext2", "ext3", "ext4", "f2fs", "failfs", "functionfs",
++	"fuse", "fuseblk", "fusectl", "gadgetfs", "gfs2", "gfs2meta", "guest_memfd", "hfs",
++	"hfsplus", "hostfs", "hpfs", "hugetlbfs", "iomem",
++	"iso9660", "jffs2", "jfs", "minix", "mqueue", "msdos",
++	"nfs", "nfs4", "nfsd", "nilfs2", "nsfs", "ntfs", "ntfs3", "nullfs", "ocfs2",
++	"ocfs2_dlmfs", "omfs", "openpromfs", "overlay", "pidfs", "pipefs", "proc",
++	"pseudo_erofs", "pstore", "pvfs2", "qnx4", "qnx6", "ramfs", "resctrl", "romfs",
+ 	"rootfs", "rpc_pipefs", "s390_hypfs", "secretmem", "securityfs",
+ 	"selinuxfs", "smackfs", "smb3", "sockfs", "spufs", "squashfs", "sysfs",
+-	"sysv", "tmpfs", "tracefs", "ubifs", "udf", "ufs", "v7", "vboxsf",
+-	"vfat", "virtiofs", "vxfs", "xenfs", "xfs", "zonefs", NULL };
++	"tmpfs", "tracefs", "ubifs", "udf", "ufs", "vboxsf",
++	"vfat", "vfio", "virtiofs", "xenfs", "xfs", "zonefs", NULL };
+ 
+ static void write_file(const char *path, const char *val)
+ {
+-- 
+2.43.0
 
