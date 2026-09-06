@@ -1,38 +1,38 @@
-Received: from out-2uec-a98.jellyfish.systems (out-2uec-a98.jellyfish.systems [63.250.43.98])
+Received: from out-2uec-a117.jellyfish.systems (out-2uec-a117.jellyfish.systems [63.250.43.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C42F30C177
-	for <linux-kselftest@vger.kernel.org>; Sun,  6 Sep 2026 14:40:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.250.43.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE6230C177
+	for <linux-kselftest@vger.kernel.org>; Sun,  6 Sep 2026 14:41:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.250.43.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788705647; cv=none; b=cd0ljjrs/Udv/zerx//hTq+c78Vx+3JRDBrCSkRByQltwiFJzr7qA9XsAac6wyrdlQUX4vztIbMLCtWs66TZ0WWd7LdpILMpky72UCmbPYJbSxRHQ5tLmdmmB41a5p1803vEFWzuPhsgEcIBgue3RdAOSp9Wk/UFMwFk5h+TgMU=
+	t=1788705687; cv=none; b=gJeXJLINR8mtto9TV0trsbpyhrh5MvrhC8PDBYdbffP01LgQq9E7vU42UHO0SVABECAZKHP7OSHs1VMTBUH5dbnfdEXvCC3nKQcQ2n8NmRNIX02VaMrcK21COWE4V4ppaLgJb+DjrM9prPGfjzOvwDBIeBtw3jY8QChiMRPygLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788705647; c=relaxed/simple;
-	bh=1h/QQ6duO528OlThOs542J/mhgQmH9J87s2umK0mSko=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XyWjINLp1DUdUEjrXN35WzduhzDaTBusNfD3/OhA6tJ7vqizdPZJqFskcBZk4eqNuNyXdKK+wVeyc5AUUppDIcZn4SIPeKm0BTFyaUYfPUvb31X4qY8vY43sMeJVy3zJze74IDi+pTb2TjxRskgQ+xS0UzPtwo4Yk8PPR2geY0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=Q1GAzMbn; arc=none smtp.client-ip=63.250.43.98
+	s=arc-20240116; t=1788705687; c=relaxed/simple;
+	bh=kBziXRb4xkro2U105NfHH7Bc5Xtf9RDCbcH+RfIsoKQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JmU4e0De8gbTvb+anDduqfSZANJnACHMdgmJ0HjEeEuTm85vNbIpyEuefCIyN2LvEVQMibZhqBgdHJxsGEhjFj09v2SW/4s7K7Ek+r0j5y72zjILzFvhpBLvwd3w7Kne9yXWGm91zv7qk6IcPoafUxrN+gqbHGf8PNSEYm98ej0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=nIQTjkzh; arc=none smtp.client-ip=63.250.43.117
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="Q1GAzMbn"
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="nIQTjkzh"
 Received: from fedora (unknown [69.5.53.41])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdCYM6yjLz8sY8;
-	Sun, 06 Sep 2026 14:40:39 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdBY20MYsz8sWS;
+	Sun, 06 Sep 2026 13:55:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1788705644;
-	bh=PVCy054hdtEsDkZ1qYlyURG4QQmkYxTjJnPPeIByJ9Y=;
+	s=spacemail; t=1788702921;
+	bh=71YrgSHuZLndedm9wwmiiZbkg6WKcS9DSEAI9LncDTA=;
 	h=From:To:Cc:Subject:Date:From;
-	b=Q1GAzMbn0tzJwSvzVzb8i32sTN0hgnG5bZc1dARMG2pCCwSHz6vOtRP6pIXJmXfco
-	 9yLHOSB9J4M3YpSlKxTd2wsBBf7bkNPyU08PX7Va3nt3PI770RXtQH2nYqtyT4D7n9
-	 27pI8d+Jt6TJOvT1InF7mN+4Bsbd0k41v7QPZ3gRdIqgDnhUYBEqMfsRCxV//2N1Rx
-	 wZr9ESRgm49mftQyXMJphCpzhAskNfGdxnh0opoTUkvnZKaOPC067HFvNF5SJCs5iG
-	 2LeYSPRC1tWEmqlwu6hDgPI45RKqgGhb0VgUU0K35PJ9jPiA9JUmE9crq46aMm54OW
-	 Gnbx2lwVnkKJg==
+	b=nIQTjkzhP3mMxcgtv6hVEzKICczIiefvHU4djych37cg90+VGYIyc0ou8z5MaugC8
+	 Re6WO/iM60BC1ZcJXWNeOZyHgRYWhzni1+3yuGX0Tqf2sItqkrcQ6CC21V/NifByuv
+	 MrcyMewg9qJSrw7VoetNH3jNb9BbwiDm/hsNE2GcYRPTvFXx5zyarQ35UvttyJcUQm
+	 lldSXbHfRuaFd3nN/tL/TZD0eOfcuh3g/PBTuM74ddRAIhKtdV63r161tvUtW7lnZx
+	 kxsdTEEJxAlGF8wc+JMuM1GMPHv/nCxrxdAvTFi/lgaHnf27WNKoh4xq9EJLncVD43
+	 MBQm2xpamxSqA==
 From: Tianyi Chen <hi@tychen.cc>
-To: tj@kernel.org,
+To: Tejun Heo <tj@kernel.org>,
 	David Vernet <void@manifault.com>
 Cc: Tianyi Chen <hi@tychen.cc>,
 	Andrea Righi <arighi@nvidia.com>,
@@ -40,10 +40,11 @@ Cc: Tianyi Chen <hi@tychen.cc>,
 	Shuah Khan <shuah@kernel.org>,
 	sched-ext@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/sched_ext: Validate select_cpu_and mask constraints
-Date: Sun,  6 Sep 2026 22:40:29 +0800
-Message-ID: <20260906144029.848978-1-hi@tychen.cc>
+	linux-kernel@vger.kernel.org,
+	Cheng-Yang Chou <yphbchou0911@gmail.com>
+Subject: [PATCH] selftests/sched_ext: Fail interrupted test runs
+Date: Sun,  6 Sep 2026 21:54:55 +0800
+Message-ID: <20260906135507.749280-1-hi@tychen.cc>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -54,202 +55,40 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Envelope-From: hi@tychen.cc
 
-The syscall test checks whether BPF_PROG_TEST_RUN succeeds, but only
-prints the CPU selection result returned by the BPF program.
+SIGINT and SIGTERM set exit_req, causing the runner to stop before
+executing the remaining tests. However, the exit status only reflects
+the number of failed tests, so an interrupted run returns success when
+none of the completed tests failed.
 
-Exercise empty and affinity-disjoint custom masks and require -EBUSY.
-Also exercise a legal singleton mask, allowing its CPU to be busy.
-Interpret retval as signed and reject unexpected errors or selection
-outside the custom mask or the task's affinity.
+Include exit_req in the failure condition so callers can distinguish
+an interrupted run from a successful run. Keep the result counts
+limited to the tests that actually ran.
 
-Choose CPUs from the runner's affinity, restore it after the disjoint
-case, and skip only that case when fewer than two CPUs are available.
+Tested the actual runner under GDB, delivering each signal before the
+first test and after the example test passed. The original runner
+returns 0 in all four cases; the fixed runner returns 1. Normal -h,
+-l and -t example invocations still return 0.
 
-The test passes in a two-CPU VM with full and single-CPU affinity.
-Forcing selection of CPU 0 against an empty mask makes it fail with
--ERANGE; the restored test passes again.
-
+Fixes: 9d851afa4826 ("selftests/sched_ext: Abort test loop on signal")
 Assisted-by: LLM
 Signed-off-by: Tianyi Chen <hi@tychen.cc>
 ---
- .../selftests/sched_ext/allowed_cpus.bpf.c    | 24 +++++-
- .../selftests/sched_ext/allowed_cpus.c        | 77 ++++++++++++++++---
- 2 files changed, 86 insertions(+), 15 deletions(-)
+ tools/testing/selftests/sched_ext/runner.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/sched_ext/allowed_cpus.bpf.c b/tools/testing/selftests/sched_ext/allowed_cpus.bpf.c
-index 9dd72d0da29..08c2fe0e1c3 100644
---- a/tools/testing/selftests/sched_ext/allowed_cpus.bpf.c
-+++ b/tools/testing/selftests/sched_ext/allowed_cpus.bpf.c
-@@ -147,23 +147,41 @@ void BPF_STRUCT_OPS(allowed_cpus_exit, struct scx_exit_info *ei)
+diff --git a/tools/testing/selftests/sched_ext/runner.c b/tools/testing/selftests/sched_ext/runner.c
+index c264807caa9..57dda75384f 100644
+--- a/tools/testing/selftests/sched_ext/runner.c
++++ b/tools/testing/selftests/sched_ext/runner.c
+@@ -243,7 +243,7 @@ int main(int argc, char **argv)
+ 			printf("  - %s\n", failed_tests[i]);
+ 	}
+ 
+-	return failed > 0 ? 1 : 0;
++	return failed > 0 || exit_req ? 1 : 0;
  }
  
- struct task_cpu_arg {
--	pid_t pid;
-+	u64 pid;
-+	s64 custom_cpu;
- };
- 
- SEC("syscall")
- int select_cpu_from_user(struct task_cpu_arg *input)
- {
- 	struct task_struct *p;
--	int cpu;
-+	struct bpf_cpumask *mask;
-+	s32 cpu;
- 
- 	p = bpf_task_from_pid(input->pid);
- 	if (!p)
- 		return -EINVAL;
- 
-+	mask = bpf_cpumask_create();
-+	if (!mask) {
-+		bpf_task_release(p);
-+		return -ENOMEM;
-+	}
-+
-+	/* A negative custom_cpu leaves the custom mask empty. */
-+	if (input->custom_cpu >= 0)
-+		bpf_cpumask_set_cpu(input->custom_cpu, mask);
-+
- 	bpf_rcu_read_lock();
--	cpu = scx_bpf_select_cpu_and(p, bpf_get_smp_processor_id(), 0, p->cpus_ptr, 0);
-+	cpu = scx_bpf_select_cpu_and(p, bpf_get_smp_processor_id(), 0,
-+				     cast_mask(mask), 0);
-+	if (cpu >= 0 &&
-+	    (!bpf_cpumask_test_cpu(cpu, cast_mask(mask)) ||
-+	     !bpf_cpumask_test_cpu(cpu, p->cpus_ptr)))
-+		cpu = -ERANGE;
- 	bpf_rcu_read_unlock();
- 
-+	bpf_cpumask_release(mask);
- 	bpf_task_release(p);
- 
- 	return cpu;
-diff --git a/tools/testing/selftests/sched_ext/allowed_cpus.c b/tools/testing/selftests/sched_ext/allowed_cpus.c
-index 093f285ab4b..cc08c42ad95 100644
---- a/tools/testing/selftests/sched_ext/allowed_cpus.c
-+++ b/tools/testing/selftests/sched_ext/allowed_cpus.c
-@@ -2,7 +2,9 @@
- /*
-  * Copyright (c) 2025 Andrea Righi <arighi@nvidia.com>
-  */
-+#define _GNU_SOURCE
- #include <bpf/bpf.h>
-+#include <sched.h>
- #include <scx/common.h>
- #include <sys/wait.h>
- #include <unistd.h>
-@@ -23,17 +25,19 @@ static enum scx_test_status setup(void **ctx)
- 	return SCX_TEST_PASS;
- }
- 
--static int test_select_cpu_from_user(const struct allowed_cpus *skel)
-+static int test_select_cpu_from_user(const struct allowed_cpus *skel,
-+				     const char *name, int custom_cpu,
-+				     bool expect_busy)
- {
- 	int fd, ret;
--	__u64 args[1];
-+	__s32 cpu;
-+	__u64 args[] = { getpid(), (__u64)(__s64)custom_cpu };
- 
- 	LIBBPF_OPTS(bpf_test_run_opts, attr,
- 		.ctx_in = args,
- 		.ctx_size_in = sizeof(args),
- 	);
- 
--	args[0] = getpid();
- 	fd = bpf_program__fd(skel->progs.select_cpu_from_user);
- 	if (fd < 0)
- 		return fd;
-@@ -42,7 +46,13 @@ static int test_select_cpu_from_user(const struct allowed_cpus *skel)
- 	if (ret < 0)
- 		return ret;
- 
--	fprintf(stderr, "%s: CPU %d\n", __func__, attr.retval);
-+	/* test_run returns the signed BPF result through an unsigned field. */
-+	cpu = (__s32)attr.retval;
-+	if ((expect_busy && cpu != -EBUSY) ||
-+	    (!expect_busy && cpu != -EBUSY && cpu != custom_cpu)) {
-+		SCX_ERR("%s: unexpected CPU selection result %d", name, cpu);
-+		return -EINVAL;
-+	}
- 
- 	return 0;
- }
-@@ -50,21 +60,64 @@ static int test_select_cpu_from_user(const struct allowed_cpus *skel)
- static enum scx_test_status run(void *ctx)
- {
- 	struct allowed_cpus *skel = ctx;
-+	enum scx_test_status status = SCX_TEST_FAIL;
-+	cpu_set_t original, pinned;
-+	int first = -1, second = -1, cpu;
- 	struct bpf_link *link;
- 
-+	SCX_FAIL_IF(sched_getaffinity(0, sizeof(original), &original),
-+		    "Failed to get affinity (%d)", errno);
-+	for (cpu = 0; cpu < CPU_SETSIZE; cpu++) {
-+		if (!CPU_ISSET(cpu, &original))
-+			continue;
-+		if (first < 0)
-+			first = cpu;
-+		else {
-+			second = cpu;
-+			break;
-+		}
-+	}
-+	SCX_FAIL_IF(first < 0, "No CPU in affinity mask");
-+
- 	link = bpf_map__attach_struct_ops(skel->maps.allowed_cpus_ops);
- 	SCX_FAIL_IF(!link, "Failed to attach scheduler");
- 
--	/* Pick an idle CPU from user-space */
--	SCX_FAIL_IF(test_select_cpu_from_user(skel), "Failed to pick idle CPU");
--
--	/* Just sleeping is fine, plenty of scheduling events happening */
-+	if (test_select_cpu_from_user(skel, "empty mask", -1, true))
-+		goto out;
-+
-+	/* A legal candidate may be busy; selection need not succeed. */
-+	if (test_select_cpu_from_user(skel, "legal candidate", first, false))
-+		goto out;
-+
-+	if (second >= 0) {
-+		CPU_ZERO(&pinned);
-+		CPU_SET(first, &pinned);
-+		if (sched_setaffinity(0, sizeof(pinned), &pinned)) {
-+			SCX_ERR("Failed to pin task (%d)", errno);
-+			goto out;
-+		}
-+		if (test_select_cpu_from_user(skel, "disjoint masks", second, true))
-+			goto restore;
-+	} else {
-+		fprintf(stderr, "Skipping disjoint masks: need two allowed CPUs\n");
-+	}
-+
-+	/* Just sleeping is fine, plenty of scheduling events happening. */
- 	sleep(1);
--
--	SCX_EQ(skel->data->uei.kind, EXIT_KIND(SCX_EXIT_NONE));
-+	if (skel->data->uei.kind != EXIT_KIND(SCX_EXIT_NONE)) {
-+		SCX_ERR("Scheduler exited unexpectedly");
-+		goto restore;
-+	}
-+	status = SCX_TEST_PASS;
-+
-+restore:
-+	if (second >= 0 && sched_setaffinity(0, sizeof(original), &original)) {
-+		SCX_ERR("Failed to restore affinity (%d)", errno);
-+		status = SCX_TEST_FAIL;
-+	}
-+out:
- 	bpf_link__destroy(link);
--
--	return SCX_TEST_PASS;
-+	return status;
- }
- 
- static void cleanup(void *ctx)
+ void scx_test_register(struct scx_test *test)
 -- 
 2.55.0
 
