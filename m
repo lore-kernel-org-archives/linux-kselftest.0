@@ -1,237 +1,121 @@
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FF623B63E
-	for <linux-kselftest@vger.kernel.org>; Sun,  6 Sep 2026 16:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60FFE8472;
+	Sun,  6 Sep 2026 17:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788713594; cv=none; b=gXBOSFL6qxqPKqE+uTwy8kZvESR/d/pTicdxSsRNABJ/LJfLZjcg6n4JJo2tWhiTq+KyqV3cNsntXhzk0SZjCSj79ginKaQRYWv201GPnPgd1b7WyJv16F6PiRlP25mOBIUkrpZ5BhWRTrRd5ivOlleH0M/gIj42sfq6y3X6jrQ=
+	t=1788714176; cv=none; b=Peds55qqRtBIGC8R6YazliWTiN+FwJxaKj3iIJQK7mRomJ38pfhB2NtnLNXNmXwdCFdhIOxV1ztQdXlzk493bto3CAaKj4PdPlehPNq9piptCY7uHZ6BIyUrXvBob5XYwLKWKCuu7TaRzx8czcntV68rI/bI4xTo6burlkvcwjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788713594; c=relaxed/simple;
-	bh=KuLX5nFd6sKvpOw24HCW5pPqc7gmdWxBz/dxA8XmQXs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ro+PrOKUOGlqErahj2OXmJcFr4Z4v+HBvUWsI9Qiyfd9CkO3+8maRCeAAaPYD/OMbVUeITfEt75cR+reGcFRhhzprD66Gz5WTPClxhDxvZW1p/8XgnsJALkPRJNxDnkdkYEY8MV+HaLapNzl0AAw9SBjSmT8lkPStiNbz2QUGeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NJCgHhFI; arc=none smtp.client-ip=209.85.219.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788714176; c=relaxed/simple;
+	bh=QyHdNnmyM6dLVHkg0+sJ89DOljku6meMJb3tIDrUVLA=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=kL4Ljymxn6RPJwvFWIyRLYSFa5xEZX4aeDHhVogElsh/vO5EAzGjC1gUfQgHbS69/pKh3xNVufKDEv1slbnjkTc7ATGwDi4BAQrjuUQa6UQCXZ9Gp6IgDmYRAHm7TyCZvJeYT349eysJa1pxKpH9kNUzP4Ov7G5i26kYL/WTCVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ci5FUCgy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NJCgHhFI"
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-90cc107c451so17550196d6.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 06 Sep 2026 09:53:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788713592; x=1789318392; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ZZiMeD/Io3WtmguEFZgA5/+B6qbs9KLh5cpu9F1ku0A=;
-        b=NJCgHhFI67dm+OqHPvxTQWDpfDgLkY5b0CaIPL8jQQtD+hO3du/UoFnOasWuwhkZWU
-         Z625q3gdGHms+U5e8pPKjRd7O8cAjFMH6NBVBju0UgPTRlhNTL4ZXNDF2ZXKecYrWbis
-         Gm3UxlSGO2YrJCUAgGcqVaYonBJ7GuoAS8Oct66mKPigD4LPyAP2JKyrli0OBpwSa3r+
-         T/5TaVEYj0SILYFBQdJpHSWzW05986mWRy2TXX5dFWFY2sDYaDM1QoFB54XOZ0l45XcI
-         AlRVwFOqE4913VRcl0jEgUYalMva7rof6m6p0xIeu6PbP41snkesGUYO6zFhKhMJalOS
-         yAug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788713592; x=1789318392;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ZZiMeD/Io3WtmguEFZgA5/+B6qbs9KLh5cpu9F1ku0A=;
-        b=jAXNeARGto+3ucB85lYacbT2qC7ZB6H0SmlifiTaCQjqOV9z1R8e9Z8XHYrhuurDdb
-         vD/6hVW1VmBDagZygGLawA1C5Gaa6FK9cfUycFiQeg0tK9022VAQBCplRe1ZFLp3q/yk
-         edQH9cPxXVdWOKWCol7bWW3VgySVeMcP9zIcx9CGVc3bdKXunTLLKWRcGVCvyYIc+h8W
-         1UmVf6PnCUvrj0TsJxxLyhUMQWIjKJ4/hKGSDUpo23sxlnJUtyI9JQtlkjN+OdFchKpn
-         4aNF0PgZ213fI0P9pzlHW5foXO66fI9QuP2Y1rNGC5MCaLmzQUNSUaR11T5GeksP8WvB
-         f4dQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx2WjjNob0zvj43k3dz6Izco0E6wo2e+wiMlGXXEpagCcwuvo0/QvD4edMmR0FczFjS80ByMWgDnvHS74C079I=@vger.kernel.org
-X-Gm-Message-State: AFuF++mj9ddVo3M/OL3cDn9yIye2DvcBEaJLkDwXDbZi/8xP0221A/KL
-	syTSk9/Mm3LbOjq4yxMoPMjeuXMSAOvZH7VqRN+evOMlyPDgeFzbc/bC
-X-Gm-Gg: AYBFou02X8B4nppSBNvHAKRp+pNvo0fkZ50EpWKcY1pXXT4mZNlocAECCPcmVor8fmk
-	pwOq32At7Uh3EuYw9Tvq6uKHRfpsXQmq7HAheYTHQ+pUqcOhX4c/cKIIt4ZD8UtHqOe+KKmx6rP
-	E8qlnfxAjF3mhARyfAgFmqqvI5go4csj+iOyhT0VyGnj7lvbJ8sOQSWrFPNe7jqm9dGY7C5JBEs
-	pzew54opCpGUTBqtbdqxxiabuEdkPBtJ/Fx3ZT6uRqOTmXQYwTETGCzA/8IZbujEa8F0ER2Klka
-	lu4XyPXytTSXbHJJ4oL0SkTZon+TF1QSQegHW34d5BW5s92fyMFrtzaNf7hLWc+kE1HrIrpZa4J
-	TB5MQW2qAiT2Cf/FcMsgQJWsVVtUJXeB5uU70wLM5PY3b5riiqtzeNaXC9YukR8uxaZE1bLwAeQ
-	oM0/bvQUa0dMOwmzpk6CD3nBj2uS6/1gBitn9Ci8iZ7mSmLJbZjg4z0AlkBBE33/U=
-X-Received: by 2002:a05:622a:449:b0:530:23cb:cac with SMTP id d75a77b69052e-530547d5adfmr206552741cf.6.1788713591570;
-        Sun, 06 Sep 2026 09:53:11 -0700 (PDT)
-Received: from houminxi ([163.123.141.225])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91040595f81sm72195696d6.2.2026.09.06.09.53.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Sep 2026 09:53:11 -0700 (PDT)
-From: Minxi Hou <houminxi@gmail.com>
-To: netdev@vger.kernel.org
-Cc: aconole@redhat.com,
-	echaudro@redhat.com,
-	i.maximets@ovn.org,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	dev@openvswitch.org,
-	Minxi Hou <houminxi@gmail.com>
-Subject: [PATCH v3 2/2] selftests/net/openvswitch: add SCTP NAT test with port translation
-Date: Sun,  6 Sep 2026 12:52:51 -0400
-Message-ID: <20260906165251.1176875-3-houminxi@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260906165251.1176875-1-houminxi@gmail.com>
-References: <20260906165251.1176875-1-houminxi@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ci5FUCgy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09F781F00A3A;
+	Sun,  6 Sep 2026 17:02:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788714175;
+	bh=TBeFAIFQ4spFa6+WzZT7KG9TSEJ5lXH3S3WUVWuoYo8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ci5FUCgyC/QInhQXTJ05mtFV29CfPr6LvOcjDgJ1xEKZAtM7HR3K7gN5fL8ABYtZU
+	 EOceTC8fe4q+YQxL8MdhtadIasJmCyFAnN7rsIbZ4wqjQY07i0zr1umYkJ/6Ii7hPJ
+	 vqOtQQdJQgUIpNvlHWFgT3x3VlLHYLsrzgOQUfiyIRd1hAw+zo2FI9JkMC/L0IcJ8A
+	 qx0rU7ckA0c7ONVJFZsOH3bUddbd6u4mKEzkstQslcLKZ4sivFem6/T8tEIpIzwyVR
+	 zDqCoYu8fmvp3KUIAzzcnLN6FibR65BmM/QhwDngt9Ico5yFFIpnCF/FEWrH7xi62A
+	 B0PGnEeVsNQUw==
+Content-Type: multipart/mixed; boundary="===============8862146096104192090=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <36471b9e2d7f9a324b5563343e6f76b70ad344c3bfd527cac9749734cd2377b5@mail.kernel.org>
+In-Reply-To: <178870998583.979169.16526173782819097354@tychen.cc>
+References: <178870998583.979169.16526173782819097354@tychen.cc>
+Subject: Re: [PATCH bpf-next v2 1/2] bpftool: Add recursive map dumping
+From: bot+bpf-ci@kernel.org
+To: hi@tychen.cc,qmo@kernel.org,andrii@kernel.org,eddyz87@gmail.com
+Cc: hi@tychen.cc,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,shuah@kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,martin.lau@kernel.org,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun,  6 Sep 2026 17:02:54 +0000 (UTC)
 
-After conntrack NAT rewrites a packet, OVS refreshes the cached flow
-key in ovs_nat_update_key(), which has a per-protocol branch for the
-L4 ports (UDP/TCP/SCTP, conntrack.c). Address-only NAT cannot tell a
-working SCTP branch from a missing one: the ports survive unchanged
-either way, so a post-recirc match on the original port stays green
-even with the branch deleted. The suite's NAT coverage drives TCP
-over nc, and the merged SCTP test has no conntrack in the path, so
-the SCTP branch goes unexercised.
+--===============8862146096104192090==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Add test_sctp_nat_connect_v4: untracked client traffic to
-192.168.0.20:4443 hits ct(commit,nat(dst=172.31.110.20:5555)),recirc,
-and the post-recirc flows match the translated tuple,
-ipv4(dst=172.31.110.20),sctp(dst=5555). Reply traffic is matched on
-the restored original tuple, sctp(src=4443). With the SCTP branch
-broken the translated port never reaches the key, no post-recirc
-flow matches, and the association fails. The probe flow uses the
-same ct+nat action as the real flows, so a kernel without
-CONFIG_NF_NAT rejects it at flow-add time and the test skips instead
-of failing; CONFIG_NF_CT_PROTO_SCTP=y is added to the config fragment
-for the same reason (the symbol is user-visible only with
-NETFILTER_ADVANCED=y). After the association succeeds the test pushes
-a known payload across and waits for the listener to log it.
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+> index 5daf3de5c744..38d1f542bf5a 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
 
-Signed-off-by: Minxi Hou <houminxi@gmail.com>
+[ ... ]
+
+> @@ -170,6 +170,25 @@ OPTIONS
+>      Do not automatically attempt to mount any virtual file system (such as
+>      tracefs or BPF virtual file system) when necessary.
+>
+> +-r, --recursive
+> +    Also dump the inner maps referenced by **array_of_maps** and **hash_of_maps**
+> +    entries when running **map dump**. Each map ID is visited once, even if
+> +    several entries refer to it. Selected maps are followed by their inner maps.
+> +
+> +    Plain output includes a header identifying each map. On success, JSON output
+> +    is always an array of map objects, each containing an **id** and an
+> +    **elements** array, including when only one map is dumped. Outer map entries
+> +    retain their **inner_map_id** field, which identifies the corresponding inner
+> +    map object.
+> +
+> +    Inner map IDs are resolved when the maps are visited. The dump is not an
+> +    atomic snapshot: concurrent updates can change map contents or remove a
+> +    referenced inner map before it is visited. Failure to open a referenced
+> +    inner map stops the dump and returns a nonzero exit status. Output may
+> +    contain maps or entries printed before the error.
+> +    In JSON mode, an error during traversal is included in the output and the
+> +    enclosing arrays and objects are closed.
+
+This isn't a bug, but would it be worth reflowing this option block
+to 80 columns? Two lines run to 81 columns (the "Also dump the inner
+maps referenced by" line and the "retain their **inner_map_id** field"
+line), making them the only prose lines over 80 columns in the file.
+
+Also, should there be a blank line before "In JSON mode, ..." if it's
+meant to be its own paragraph? It currently starts on a fresh line
+after a short 53-column line, so it renders as a continuation of the
+same paragraph rather than separated like the other paragraphs in this
+block.
+
+[ ... ]
+
+> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+> index 5ababd8f7d0a..33f4c7172583 100644
+> --- a/tools/bpf/bpftool/main.c
+> +++ b/tools/bpf/bpftool/main.c
+> @@ -26,6 +26,7 @@ static int (*last_do_help)(int argc, char **argv);
+>  json_writer_t *json_wtr;
+>  bool pretty_output;
+>  bool json_output;
+> +bool recursive;
+>  bool show_pinned;
+>  bool block_mount;
+>  bool verifier_logs;
+
+This isn't a bug, but would a name like recursive_dump or dump_recursive
+read better here? It's a program-wide global exported in main.h, and the
+neighbouring flags all carry a qualifier that says what they apply to:
+json_output, pretty_output, show_pinned, relaxed_maps, verifier_logs.
+Note that --json and --pretty didn't become json or pretty for the same
+reason.
+
+[ ... ]
+
+
 ---
- .../testing/selftests/net/openvswitch/config  |  1 +
- .../selftests/net/openvswitch/openvswitch.sh  | 87 +++++++++++++++++++
- 2 files changed, 88 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/net/openvswitch/config b/tools/testing/selftests/net/openvswitch/config
-index a825e0b5c88e..fa90475dc388 100644
---- a/tools/testing/selftests/net/openvswitch/config
-+++ b/tools/testing/selftests/net/openvswitch/config
-@@ -7,6 +7,7 @@ CONFIG_NET_IPGRE=m
- CONFIG_NET_IPGRE_DEMUX=m
- CONFIG_NF_CONNTRACK=m
- CONFIG_NF_CONNTRACK_OVS=y
-+CONFIG_NF_CT_PROTO_SCTP=y
- CONFIG_OPENVSWITCH=m
- CONFIG_PSAMPLE=m
- CONFIG_VETH=y
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index 0926e304ed88..fb37b6ab2ec1 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -35,6 +35,7 @@ tests="
- 	icmpv6					icmpv6: ICMPv6 echo type match
- 	sctp_connect_v4				sctp: SCTP flow key matching
- 	sctp_connect_v6			sctp6: SCTP flow key matching over IPv6
-+	sctp_nat_connect_v4		sctpnat4: SCTP flow key across conntrack NAT
- 	psample					psample: Sampling packets with psample"
- 
- info() {
-@@ -1186,6 +1187,92 @@ test_nat_connect_v4 () {
- 	return 0
- }
- 
-+# sctp_nat_connect_v4 test
-+#  - SCTP association crosses a ct(commit,nat(dst=ip:port)) DNAT
-+#  - post-recirc flows match the translated address and port, so the
-+#    SCTP branch of the post-NAT flow key update is load-bearing
-+test_sctp_nat_connect_v4 () {
-+	local t="test_sctp_nat_connect_v4"
-+	local payload="SCTP_NAT_DATA_OK"
-+	local rxfile="${ovs_base}/${t}/sctp-rx.txt"
-+
-+	modprobe -q sctp 2>/dev/null || return "$ksft_skip"
-+	socat -V 2>&1 | grep -q "define WITH_SCTP" || return "$ksft_skip"
-+	# SCTP conntrack is compiled into nf_conntrack.ko, so check that
-+	# loading it actually exposed the SCTP conntrack sysctls.
-+	modprobe -q nf_conntrack 2>/dev/null || return "$ksft_skip"
-+	[ -e /proc/sys/net/netfilter/nf_conntrack_sctp_timeout_established ] \
-+	    || { info "no SCTP conntrack support - skipping"
-+	         return "$ksft_skip"; }
-+
-+	sbx_add "test_sctp_nat_connect_v4" || return $?
-+
-+	ovs_add_dp "test_sctp_nat_connect_v4" sctpnat4 || return 1
-+	info "create namespaces"
-+	for ns in client server; do
-+		ovs_add_netns_and_veths "test_sctp_nat_connect_v4" "sctpnat4" \
-+		    "$ns" "${ns:0:1}0" "${ns:0:1}1" || return 1
-+	done
-+
-+	ip netns exec client ip addr add 172.31.110.10/24 dev c1
-+	ip netns exec client ip link set c1 up
-+	ip netns exec server ip addr add 172.31.110.20/24 dev s1
-+	ip netns exec server ip link set s1 up
-+
-+	ip netns exec client ip route add default via 172.31.110.20
-+
-+	# Check if the ct and nat actions can be configured.
-+	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
-+		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
-+		'ct(commit,nat(dst=172.31.110.20:5555)),recirc(0x1)' &> /dev/null
-+	if [ $? == 1 ]; then
-+		info "no support for ct/nat actions - skipping"
-+		ovs_exit_sig
-+		return $ksft_skip
-+	fi
-+
-+	ovs_del_flows "test_sctp_nat_connect_v4" sctpnat4
-+
-+	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
-+		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
-+	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
-+		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
-+	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
-+		"ct_state(-trk),in_port(1),eth(),eth_type(0x0800),ipv4(dst=192.168.0.20)" \
-+		"ct(commit,nat(dst=172.31.110.20:5555)),recirc(0x1)" || return 1
-+	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
-+		"ct_state(-trk),in_port(2),eth(),eth_type(0x0800),ipv4()" \
-+		"ct(commit,nat),recirc(0x2)" || return 1
-+
-+	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
-+		"recirc_id(0x1),ct_state(+trk-inv),in_port(1),eth(),eth_type(0x0800),ipv4(dst=172.31.110.20,proto=132),sctp(dst=5555)" \
-+		"2" || return 1
-+	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
-+		"recirc_id(0x2),ct_state(+trk-inv),in_port(2),eth(),eth_type(0x0800),ipv4(src=192.168.0.20,proto=132),sctp(src=4443)" \
-+		"1" || return 1
-+
-+	ovs_netns_spawn_daemon "test_sctp_nat_connect_v4" "server" \
-+		socat -u -t 1 SCTP4-LISTEN:5555,fork \
-+		OPEN:"$rxfile",creat,append
-+	ovs_wait sctp_eps_has server 5555 || return 1
-+
-+	info "verify SCTP association across NAT"
-+	ovs_sbx "test_sctp_nat_connect_v4" ip netns exec client \
-+	    timeout 3 socat -u STDIN "SCTP4-CONNECT:192.168.0.20:4443" \
-+	    </dev/null || return 1
-+
-+	info "verify SCTP DATA chunk crosses NAT"
-+	ovs_sbx "test_sctp_nat_connect_v4" ip netns exec client \
-+	    timeout 3 socat -u STDIN "SCTP4-CONNECT:192.168.0.20:4443" \
-+	    <<< "$payload" || return 1
-+	ovs_wait grep -q "$payload" "$rxfile" \
-+	    || { info "server did not receive SCTP DATA payload"
-+	         return 1; }
-+
-+	info "done..."
-+	return 0
-+}
-+
- # nat_related_v4 test
- #  - client->server ip packets go via SNAT
- #  - client solicits ICMP destination unreachable packet from server
--- 
-2.55.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34044964295
+--===============8862146096104192090==--
