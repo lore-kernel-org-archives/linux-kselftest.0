@@ -1,75 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out-2z4y-a149.jellyfish.systems (out-2z4y-a149.jellyfish.systems [198.54.127.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AECE31355B;
-	Sun,  6 Sep 2026 13:04:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8191C5B21A
+	for <linux-kselftest@vger.kernel.org>; Sun,  6 Sep 2026 13:55:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788699876; cv=none; b=OUBSyjBB1dOQtsAyRFTpl9k3KvxpKNyeBB9IdA4zKcgJn5KQ3CveGvuFik8wtRnXv/flgqtAG9x108gp7HDDFXFpqIOLC8mHWJ0ioJfrHkxVSHggYZURvytQE3/7QV6zMtf556sdyYBDGU/KRwqJ4ISxdj/Zw/p/osJSiWGsVAM=
+	t=1788702921; cv=none; b=lIBpRlXQuWSEIkCmPONfxiLEeKH/M1CAdFcw13+ubJIjkjoTh73joDSUT1yISZWtyZGGxizjnMIo1XfSsLMKt+N/+Z6oS2TJTAiG+Jr7TY8IfeUsAL66JKewyNvVJOJROgJRe3OuOpsrqeYvI7or0iH2pwZgzupu2Wf5O+xGECk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788699876; c=relaxed/simple;
-	bh=n4Dy6NYC2MvWH30Bm8gMOVuhLEaDn2wSxuagR+3OsA4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uj6Pk7ujjheTjL/DcHZJGUp9YQ1IPNnhccnzsr7WZfCr3hshjtMrJk48IPlj6atuRVgIrY9FpdQ1/lguqPDN/Gwo4kSIo1nBIZgeWpOlotesVx7ZWdgRSMHgv/UnDEbhBqCFZ834KainIPA+VNDRJZ+tUn3IqjvJ0gyesFavFgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=obtd4NNK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788702921; c=relaxed/simple;
+	bh=SyfwgLgNUrQ9kHyz2X1jy/vY9gOc6JlLxw6yzV19Le0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Jh8SDCh4E/rfej0PRexWNSbWPkYM4t2d7CSo+TLqZ79vxIv14G99hsXfDZ9kClY+3kCxK8f0u0TwvQB8nPlCG6jJI/Hk2BBJlQMn+p8QeCV9p3JwinmPPIAApt2Gi3HdusAxbUaZr9GuzEx24dq4b4DF187gmfGzHY8IsWoitfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=k+nC8v9x; arc=none smtp.client-ip=198.54.127.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="obtd4NNK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 312601F00A3A;
-	Sun,  6 Sep 2026 13:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788699873;
-	bh=vuHuzooQ4Dh6nue4M1OIRqKRrIWXdSV4gGiCzBpBbmQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=obtd4NNKyL0WDomOgZw2V8GlWhOR8hrlYxo/Y8iYgmt/Uvrk5JGV0OXh6IW7VniM/
-	 7NvQTrYC3k+v+BnKM0MXpbMHRmJB/76QQ8x/Oyienzop5AN+ZaeXHOSUnrS9eoAAHc
-	 6e6Dumx0J22Wb+VaMiHoq/+s8uH1O9WpY2j0odXdDjXBkhhQ1xSxeIOYX+M1taGv94
-	 +z6P8+Kn7LTa531e9rjUmVGdUdKnU6qsCUm0E8/BNIgJeRNJ9/x52TgzW8EpkxFUgD
-	 6QzUPPRtRhCM7GNR9yejwIgMXmmVhCMeuhOwPUl/F43ROirOhwOQkP21NqOshAd5IO
-	 XzIWuRqitg1LQ==
-Date: Sun, 6 Sep 2026 14:04:30 +0100
-From: Simon Horman <horms@kernel.org>
-To: Chris Gellermann <christian.gellermann@codasip.com>
-Cc: david@ixit.cz, bongsu.jeon@samsung.com, shuah@kernel.org,
-	kuba@kernel.org, linux-kselftest@vger.kernel.org,
-	oe-linux-nfc@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/nci: Fix out-of-bounds store on thread join
-Message-ID: <20260906130430.GJ40544@horms.kernel.org>
-References: <20260904095915.3372241-1-christian.gellermann@codasip.com>
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="k+nC8v9x"
+Received: from fedora (unknown [69.5.53.41])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdBXW3m5Lz8sXQ;
+	Sun, 06 Sep 2026 13:54:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1788702894;
+	bh=Rdk1razVM4wzn8BYFk67V58kT1IZF+tiqXFv5msdJgM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=k+nC8v9xOCXuaxIACm5N2ea5tjPWOcyhsH/oWRcrxtfjOoADlBUKIuVFjLD4QNArL
+	 khGdE484U8oj7VgnrYKk7v0Hbf2fb7ynvhVB1XOmdwpwqPdB8iMLQAy9bO3VXoP7su
+	 l+HuOk+0uokc3WvgH5K0+i5JLGz6YmUVsNSIGobMbSyySAlj/MvonfXoiB5jbx09f4
+	 8udyRITBcATAGCp2De26lgs1aSFvDjDLg5OjZ9f0xfN/yMILtukR3f8S5JKKQfX/Fr
+	 v9X133n9AAOiPRv4GzB2Z1Be60WgN1eO5jcTqtIE2+dA1kLAqvaWONcYrDbzOECpPL
+	 PqKG9AJZ7mqPw==
+From: Tianyi Chen <hi@tychen.cc>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>
+Cc: Tianyi Chen <hi@tychen.cc>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Joel Savitz <jsavitz@redhat.com>
+Subject: [PATCH RESEND] selftests/mm: Exit on invalid command-line options
+Date: Sun,  6 Sep 2026 21:54:39 +0800
+Message-ID: <20260906135444.749144-1-hi@tychen.cc>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <ZTYJZT7Q8UU4.KPP9BUAAJVQO1@mailcore-89d674988-v7w7p>
+References: <ZTYJZT7Q8UU4.KPP9BUAAJVQO1@mailcore-89d674988-v7w7p>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260904095915.3372241-1-christian.gellermann@codasip.com>
+Content-Transfer-Encoding: 8bit
+X-Envelope-From: hi@tychen.cc
 
-On Fri, Sep 04, 2026 at 11:59:15AM +0200, Chris Gellermann wrote:
-> The NCI test collects the exit status of its helper threads by passing
-> the address of an int to pthread_join():
-> 
-> 	int status;
-> 	...
-> 	pthread_join(thread_t, (void **) &status);
-> 
-> pthread_join() stores a void pointer to the memory location. On 64-bit
-> systems, a void pointer is wider than an int, so the store overruns the
-> 4 bytes of space allocated on the stack for the integer and corrupts the
-> adjacent stack. On our CHERI system, this caused a fault due to a
-> capability bounds violation.
-> 
-> Fix this by introducing a helper that joins a thread through a void
-> pointer and converts the result back to an integer, which is what the
-> helper threads return.
-> 
-> While here, also fix the logic in disconnect_tag() if the helper thread
-> creation failed. Previously, it would have joined a thread that was
-> never created when pthread_create() failed.
-> 
-> Fixes: f595cf1242f3 ("selftests: Add nci suite")
-> Signed-off-by: Chris Gellermann <christian.gellermann@codasip.com>
+getopts reports unknown options and missing option arguments, but
+run_vmtests.sh ignores its error result and continues running tests.
+For example, passing -z or omitting the argument to -t can run the
+default test selection instead of rejecting the command.
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+Exit with failure when getopts reports an error, before any tests or
+their setup run. Keep the diagnostic provided by getopts.
+
+Verified that -z, -t and -t mmap -z exit with status 1, while -h still
+exits with status 0. The mmap category's three test programs pass in
+a VM running the kernel built from the same source tree.
+
+Fixes: 85463321e726 ("selftests/vm: enable running select groups of tests")
+Assisted-by: LLM
+Signed-off-by: Tianyi Chen <hi@tychen.cc>
+---
+Resending because the webmail editor damaged the whitespace in the
+previous submission. The code change is unchanged.
+
+ tools/testing/selftests/mm/run_vmtests.sh | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index d09f9f6a384..189927f87e6 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -110,6 +110,7 @@ while getopts "aht:nd" OPT; do
+ 		"t") VM_SELFTEST_ITEMS=${OPTARG} ;;
+ 		"n") TAP_PREFIX= ;;
+ 		"d") RUN_DESTRUCTIVE=true ;;
++		"?") exit 1 ;;
+ 	esac
+ done
+ shift $((OPTIND -1))
+-- 
+2.55.0
 
