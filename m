@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0163B362154;
-	Sun,  6 Sep 2026 15:00:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015A634CFC5;
+	Sun,  6 Sep 2026 15:00:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788706829; cv=none; b=QcVqfhOA8dB21JRo2wAfSiY4w0BfPcvV0ZEbIqtGk/LCfpWteL0dBDMAWeyx2h22VSQ2VEV9hTooX+j3Dtv+zW6SQksllev4D5/01uWZZADQQ52uIztDmUxYDs2WbR5XeDhbz3elv0ZeP8m/jyX3vskYa1yvWdyNjEjh9YlAHDo=
+	t=1788706830; cv=none; b=G8mnAbB7j/ZByM6ufiAa1rKl4X8yWIOZS1Bbo4V6MPMK6+qMc4VP+ESeMNmfi3PNYaJHLZUm5j193qJMa26pSzzr15ZTROYnZrFKVnWmxu6XM+MmCeqsuiX+Sm0n/ktmcMRh6dX0wqa4fkkd5phcp+z1+f0wtw3QmXT7jM5O/0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788706829; c=relaxed/simple;
-	bh=Rxy4YBlBtB5HAWk/JMk7n71PFj1H+GTbtc/lh+EOM0g=;
+	s=arc-20240116; t=1788706830; c=relaxed/simple;
+	bh=lXdLylgUppWXqndGD5M043CnO4y8gC0ombHPHU+I8kM=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IMWS2j//NA2M26FodwvdxhEKd141A5frty/gLPoeLx9djxjCQKwbeQIeRzP+36SaWzLDQtmNAy3rFpLx8Txv7nKgVIg2UB2Hn9kLYzgCasOsx50f80Sb13nL3J7LU4Tv2ZiCthyg+ErIwmoK/Uur5kTEs7QUEn818Qku7Cn8sqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kRVcQe14; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=EVqRqhsoir0wmib8plD09f0t1sNw2Q7hOZJ+BQCmPlZtOr1zH3d4aa1R2REjWZZ/ncoJesJhUMOg8xixM/c4NehdlDOIPsYUVmLJe46SMK8BuNwnpU4DCEEy8cfAOvksLgQl+AenwiiyJFXmbB+jJQ8D1lgha4s62St2WyDpjtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fn4gIv7I; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kRVcQe14"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E00C91F00A3A;
-	Sun,  6 Sep 2026 15:00:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fn4gIv7I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 912AE1F00A3D;
+	Sun,  6 Sep 2026 15:00:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788706821;
-	bh=7rsy1jb7TwXnL4D5XTd/EAACeqOWAzhGZYCkXITHWOA=;
+	s=k20260515; t=1788706820;
+	bh=L9WQPmk3lG1YhB+ecDgtcWY/E3QHxA5qdfMZgqUKad8=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=kRVcQe1460Ja6zrZt9OaYiq9A/30dWehyzX5GqNDxT8szqoIsRuP1nhFGmd6HDgxw
-	 kAnRS6HMqlq/L2/mcBuaHe3SgxOo2rEMFxRT4K/WvIF7yu5UtznhPLY1PeMvsGY5DF
-	 fSTMS1wJItbQdkwNrvd21xIeK3udYQ+0w0IVpt1on+9Lvl/44l26dc8lMMqQ9t2Yhu
-	 KvT3VWPyBmTVeJjsv4i+QtOUndsP7k813soOuCEAjmxiohXoZqOPh/NSdQbh6Il78n
-	 7t2TDGmVQjJGoF9bsNMqK7LnsWqJYJuzyrSuYrTA0QzpvbCJbt2BqMoT7vqihFB3uv
-	 ITqHP4KMTzdbA==
-Subject: Re: [PATCH net-next v2 2/2] selftests: drv-net: Use cross-compilation
- environment for the io_uring check
+	b=Fn4gIv7IMZK0fua0FBAzRUHjI2uOupN8IBCjKks/y8bhF2hJzBP0yre8lYM2b+D4J
+	 +9olHCuAzAUHuMle9lwj9edkWqTHW5Y0Z8NBylSdH38lm9wFHoNGSZNXakqHP3f6kc
+	 +PPRJV6yFXELNBST+JndkvDyUupJQOZnbDVp6cGYskp2cmwWzWNIyy00MOBaNuwjZc
+	 /IpRjDU/lIjb+/GUyb2PJuiU9xhoMw09Qsi8t/4f7dnUGBle1qENitSuZh0tlnlg8T
+	 pxdM3O1OMh/6XmMuQeAoUvp2/z/RezlOy1fHw7jRfijd/EGiX9VbpQvPnW1UOcBKr0
+	 4Kx+onmx/+lVA==
+Subject: Re: [PATCH net-next v2 1/2] tools: ynl: Allow cross-compiling ynl and
+ associated tools
 From: netdev-bot+sashiko@kernel.org
 To: maxime.chevallier@bootlin.com
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
@@ -35,10 +35,10 @@ Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
  shuah@kernel.org, matttbe@kernel.org, sdf@fomichev.me, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
  linux-kselftest@vger.kernel.org
-Date: Sun, 06 Sep 2026 15:00:20 +0000
-Message-ID: <178870682049.219967.8686151218558794028@kernel.org>
-In-Reply-To: <20260903155524.2241065-3-maxime.chevallier@bootlin.com>
-References: <20260903155524.2241065-3-maxime.chevallier@bootlin.com>
+Date: Sun, 06 Sep 2026 15:00:19 +0000
+Message-ID: <178870681916.219967.14635919564673520317@kernel.org>
+In-Reply-To: <20260903155524.2241065-2-maxime.chevallier@bootlin.com>
+References: <20260903155524.2241065-2-maxime.chevallier@bootlin.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -49,110 +49,197 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Critical: 0 · High: 0 · Medium: 2 · Low: 1
 
-- [Medium] Incomplete fix: the capability probe still uses a different
-  compiler than the one lib.mk installs to build `iou-zcrx`, in two…
-- [Low] Missing `Fixes:` tag.
+- [Medium] Incomplete LLVM cross-compilation support: the commit claims
+  to "account for the cross-compiling options such as CROSS_COMPILE or…
+- [Medium] Include ordering bug in tools/net/ynl/Makefile: `include
+  ../../scripts/Makefile.include` is added on line 4, i.e. *after*…
+- [Low] Verbosity-control mismatch in tools/net/ynl/ynltool/Makefile: the
+  patch adds `include ../../../scripts/Makefile.include` (line 4), which…
 
 --
 
-selftests: drv-net: Use cross-compilation environment for the io_uring check
+tools: ynl: Allow cross-compiling ynl and associated tools
 
-This patch sets CC to $(CROSS_COMPILE)gcc at the top of
-tools/testing/selftests/drivers/net/hw/Makefile so that the liburing
-zero-copy capability probe (HAS_IOURING_ZCRX) is compiled with the
-cross compiler instead of make's built-in default. The override is
-guarded by ifeq ($(LLVM)$(CC),cc).
+The ynl Makefiles stop hardcoding CC=gcc and instead include
+tools/scripts/Makefile.include so that CC/AR are resolved from
+CROSS_COMPILE and the LLVM variables, and the ynltool CFLAGS assignment is
+switched from := to += so it no longer clobbers the flags coming from
+Makefile.include.
 
-[Severity: Low]
-
-Should this carry a Fixes: tag?  git blame on the baseline attributes the
-whole probe block, including the ifeq ($(HAS_IOURING_ZCRX),y) gating, to
-f81171fecd0c3 ("selftests: hw-net: auto-disable building the iouring C
-code").  Since no CC is set before the probe in this Makefile, in
-tools/testing/selftests/Makefile, or in lib.mk, that commit is where the
-probe started evaluating with the built-in CC=cc in cross builds:
-
-  Fixes: f81171fecd0c3 ("selftests: hw-net: auto-disable building the iouring C code")
-
-On the changelog wording:
-
-> The CC value used for the io_uring library check defaults to the host
-> compiler, which will fail in cross-compiling environments.
-
-Does the check actually fail?  The compile of the probe program succeeds or
-fails against the host's liburing, so the result simply describes the host
-rather than the target.  The failure comes later, when iou-zcrx is
-cross-built and linked with -luring, or the test is silently dropped.
-Would it be more accurate to describe it that way?
-
-> diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-> index 6105be8e590f..f9458dc6c150 100644
-> --- a/tools/testing/selftests/drivers/net/hw/Makefile
-> +++ b/tools/testing/selftests/drivers/net/hw/Makefile
-> @@ -1,5 +1,10 @@
->  # SPDX-License-Identifier: GPL-2.0+ OR MIT
+> diff --git a/tools/net/ynl/Makefile b/tools/net/ynl/Makefile
+> index 3cefe4ed96cb..8bf72c063e86 100644
+> --- a/tools/net/ynl/Makefile
+> +++ b/tools/net/ynl/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
 >  
-> +# Set CC for the io_uring check
-> +ifeq ($(LLVM)$(CC),cc)
-> +CC := $(CROSS_COMPILE)gcc
-> +endif
-> +
+>  include ../../scripts/Makefile.arch
+> +include ../../scripts/Makefile.include
+>  
+>  INSTALL	?= install
+>  prefix  ?= /usr
 
 [Severity: Medium]
+Should the new include come before Makefile.arch rather than after it?
 
-Can the probe and the actual build of iou-zcrx still end up on different
-compilers after this change?  The guard only matches when LLVM is empty and
-CC still holds the built-in value cc.
+Makefile.arch probes the compiler with a simply-expanded assignment, so
+${CC} and ${CFLAGS} are expanded at include time:
 
-Two cases seem to slip through:
+tools/scripts/Makefile.arch:
+  LP64 := $(shell if command -v $(firstword ${CC}) >/dev/null 2>&1; then echo __LP64__ | ${CC} ${CFLAGS} -E -x c -; fi | tail -n 1)
 
-  make LLVM=1 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- ...
+At that point CC is still make's builtin cc and CFLAGS is empty, because
+the allow-override of CC from CROSS_COMPILE and the CFLAGS += $(CLANG_CROSS_FLAGS)
+in Makefile.include only run on the following line.
 
-  $(LLVM)$(CC) expands to "1cc", the ifeq is false, so HAS_IOURING_ZCRX is
-  probed with the host cc while lib.mk later sets:
+LP64 then feeds libdir_relative and libdir in this same Makefile:
 
-    CC := $(CLANG) $(CLANG_FLAGS) -fintegrated-as
+  ifeq ($(LP64), 1)
+    libdir_relative = lib64
+  else
+    libdir_relative = lib
+  endif
+  libdir  ?= $(prefix)/$(libdir_relative)
 
-CC arriving from the environment with any value other than cc.  The
-top-level kernel Makefile has:
+and libdir is used by the install target:
 
-    export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC HOSTPKG_CONFIG
+  @$(INSTALL) -d $(DESTDIR)$(libdir)
+  @$(INSTALL) -m 0644 libynl.a $(DESTDIR)$(libdir)/libynl.a
 
-so kbuild-driven builds such as make kselftest always have CC in the
-environment (plain clang with no --target under LLVM=1).  The ifeq is
-false, the probe uses that compiler, but lib.mk's plain := assignment
-overrides an environment CC for the real build:
+So does make CROSS_COMPILE=arm-linux-gnueabihf- install on an x86_64 host
+end up installing the 32-bit libynl.a under $(prefix)/lib64, with the
+reverse happening on a 32-bit host cross-building for aarch64?
 
-    CC := $(CROSS_COMPILE)gcc
+Other in-tree users of the same LP64/libdir_relative pattern include
+Makefile.include first, for example tools/lib/perf/Makefile:
 
-In both cases, a host liburing that has io_uring_register_ifq sets
-HAS_IOURING_ZCRX=y, which adds iou-zcrx to COND_GEN_FILES and enables:
+  include $(srctree)/tools/scripts/Makefile.include
+  include $(srctree)/tools/scripts/Makefile.arch
 
-    $(OUTPUT)/iou-zcrx: LDLIBS += -luring
+Would simply swapping the two includes here be enough?
 
-Does the subsequent cross compile then abort on liburing.h or -luring
-instead of taking the graceful path?
+> diff --git a/tools/net/ynl/generated/Makefile b/tools/net/ynl/generated/Makefile
+> index ea4128f612d6..5a186349b5a8 100644
+> --- a/tools/net/ynl/generated/Makefile
+> +++ b/tools/net/ynl/generated/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -CC=gcc
+> +include ../../../scripts/Makefile.include
+> +
+>  CFLAGS += -std=gnu11 -O2 -W -Wall -Wextra -Wno-unused-parameter -Wshadow \
+>  	-I../lib/ -idirafter $(UAPI_PATH)
+>  ifeq ("$(DEBUG)","1")
+> diff --git a/tools/net/ynl/lib/Makefile b/tools/net/ynl/lib/Makefile
+> index 9b98c0599600..7b3eae89982f 100644
+> --- a/tools/net/ynl/lib/Makefile
+> +++ b/tools/net/ynl/lib/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -CC=gcc
+> +include ../../../scripts/Makefile.include
+> +
+>  CFLAGS += -std=gnu11 -O2 -W -Wall -Wextra -Wno-unused-parameter -Wshadow
+>  ifeq ("$(DEBUG)","1")
+>    CFLAGS += -g -fsanitize=address -fsanitize=leak -static-libasan
+> @@ -8,7 +9,6 @@ endif
 
-    $(warning excluding iouring tests, liburing not installed or too old)
+[Severity: Medium]
+The commit message says the change accounts for "the cross-compiling options
+such as CROSS_COMPILE or the LLVM-specific variables". Does this also cover
+the documented LLVM form described in Documentation/kbuild/llvm.rst, that is
+make LLVM=1 ARCH=<arch> with no CROSS_COMPILE?
 
-The inverse case, where the target sysroot has liburing but the host does
-not, would silently drop a supported test.
+In tools/scripts/Makefile.include, the target triple is only appended inside
+the CROSS_COMPILE branch:
 
-Since the probe is expanded well before include ../../../lib.mk, would it
-be possible to mirror lib.mk's own CC derivation here, or to move the probe
-after lib.mk is included, so the gate always matches the compiler that
-builds iou-zcrx?
+  else ifneq ($(CROSS_COMPILE),)
+  ifeq ($(CLANG_CROSS_FLAGS),)
+  CLANG_TARGET := $(notdir $(CROSS_COMPILE:%-=%))
+  ...
+  CFLAGS += $(CLANG_CROSS_FLAGS)
 
->  # Check if io_uring supports zero-copy receive
->  HAS_IOURING_ZCRX := $(shell \
->  	echo -e '#include <liburing.h>\n' \
+With LLVM=1 and an empty CROSS_COMPILE, CC resolves to plain clang with no
+--target, so lib/ynl.o and generated/*-user.o would be built for the host.
+
+For the selftests path, tools/testing/selftests/lib.mk computes a
+target-aware compiler from ARCH:
+
+  CC := $(CLANG) $(CLANG_FLAGS) -fintegrated-as
+
+but tools/testing/selftests/net/ynl.mk only forwards GENS and RSTS to the
+sub-make:
+
+  $(Q)$(MAKE) -C $(top_srcdir)/tools/net/ynl \
+  	GENS="$(YNL_GENS)" RSTS="" libynl.a
+
+Since ynl.mk forces the YNL_GEN_FILES targets (ncdevmem, toeplitz in
+tools/testing/selftests/drivers/net/hw/Makefile) to link $(OUTPUT)/libynl.a,
+does make LLVM=1 ARCH=arm64 -C tools/testing/selftests/drivers/net/hw fail at
+link time with host objects in libynl.a against aarch64 objects?
+
+If that configuration is out of scope for now, could the commit message say
+so? The later patch "selftests: drv-net: Use cross-compilation environment
+for the io_uring check" states the limitation explicitly ("this doesn't cover
+the LLVM cross-compiling case though"), while this one reads as if the LLVM
+case is handled.
 
 [ ... ]
+
+> diff --git a/tools/net/ynl/ynltool/Makefile b/tools/net/ynl/ynltool/Makefile
+> index 48b0f32050f0..85cc0840b403 100644
+> --- a/tools/net/ynl/ynltool/Makefile
+> +++ b/tools/net/ynl/ynltool/Makefile
+> @@ -1,12 +1,12 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  
+>  include ../Makefile.deps
+> +include ../../../scripts/Makefile.include
+>  
+>  INSTALL	?= install
+>  prefix  ?= /usr
+>  
+> -CC := gcc
+> -CFLAGS := -Wall -Wextra -Werror -O2
+> +CFLAGS += -Wall -Wextra -Werror -O2
+>  ifeq ("$(DEBUG)","1")
+>    CFLAGS += -g -fsanitize=address -fsanitize=leak -static-libasan
+>  endif
+
+[Severity: Low]
+This isn't a bug, but now that Makefile.include is pulled in here, the
+existing Q assignment later in this same file disagrees with it:
+
+tools/scripts/Makefile.include:
+  ifeq ($(V),1)
+    quiet =
+    Q =
+  else
+    quiet = quiet_
+    Q = @
+  endif
+  ...
+  export quiet Q
+
+tools/net/ynl/ynltool/Makefile, after the include:
+  Q = @
+
+  $(YNLTOOL): ../libynl.a $(OBJS)
+  	$(Q)echo -e "\tLINK $@"
+  	$(Q)$(CC) $(CFLAGS) -o $@ $(OBJS) ../libynl.a -lm
+
+Since the local assignment comes after the include, does make V=1 -C
+tools/net/ynl/ynltool still hide the CC and LINK command lines, which is
+what one would want to look at when debugging a cross build? The same
+overridden Q is also exported into the $(MAKE) -C ../ recursion for
+../libynl.a. Could the local Q = @ line be dropped now?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260903155524.2241065-1-maxime.chevallier%40bootlin.com
