@@ -1,241 +1,366 @@
-Received: from out-93wp-a21.jellyfish.systems (out-93wp-a21.jellyfish.systems [104.207.68.21])
+Received: from mta1.migadu.com (out-15.mta1.migadu.com [95.215.58.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9147C3AA1B2
-	for <linux-kselftest@vger.kernel.org>; Sun,  6 Sep 2026 17:08:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.207.68.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6B83BBFBC
+	for <linux-kselftest@vger.kernel.org>; Sun,  6 Sep 2026 17:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788714539; cv=none; b=PMKxg2AUExQkiYMUFiWW0yqTjLJQ4kpTPjtv8SaC1n/HzDegCys+5e02A/jxvx0TUgkV3Fkvm2zPZ1RFg3ksoJ4EQul4QXvtKkC1UoElY14LrpmqfkjrCvwvZko7rBlOXS3EwrRo1C1gBhOnlf7lbAYoPUM++3VZUxKGApb5R4Q=
+	t=1788714857; cv=none; b=hoGUq7lNWwRHQ0+TERQ8tA/hz0HSMuZSSZx+zZT+UIVbXnaLVuGqHDDcQwF+tUtqVM7pEg2k9K4/nnrPBcxW2OpA/lpmX5P+6hl4e1nCToSIEBl6nAbrhQJZqDmxic2cuycESmjEafeZiah4sM6JuWxZDjnF9C3Sx/7gTrDOx4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788714539; c=relaxed/simple;
-	bh=dJy8K7QpTEAQGyMtp7rRVTUQldhttr9jIZVdtHql6D8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tXqOdEysgtzoSF4RiOZmvTF7efamMWuvx/nFfYalb8G/s5zknnbMOG9D3EdYrOfmQw4dIujbs2jZCs6yLZa+FA74zE82sz4SGjPuZb0u/DtN4OtfQGuXdEvKT3jIrgzgcbQuCpbcpyvJcQeB7Ki8SSllkh9O4a7NgDgYWg2kvYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=d3QRuOHM; arc=none smtp.client-ip=104.207.68.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
+	s=arc-20240116; t=1788714857; c=relaxed/simple;
+	bh=kv66z7JV1166ueZMCWhYRrYKaMpcvrBriXgBRYKc+CA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GcUxkca3VUl6ngIqhTZtUUieQ2xUkGv6/SCj8QQyojp5VojncsfQSMEyD8nbR6O87BLHpXpw0Wy99sA+kVpIItNjlLja6ihB+qN59X2iEcOyC65yYoyF6Qxuvd9jxgxbE32u6i4a9L93GbM5tPU0Zvruxt0tO299IQVQZJkv6Xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=S57Iv8Dm; arc=none smtp.client-ip=95.215.58.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="d3QRuOHM"
-Received: from fedora (unknown [69.5.53.41])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdGr41rpLz8sXJ;
-	Sun, 06 Sep 2026 17:08:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1788714523;
-	bh=pEaJ0IworLq94kzj0A5eN/+Ym81HOT70PvZyiKxaOOI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=d3QRuOHM0NXOvHlwAaAO95wMHLjxSgm0qPB5e2lxiCi7mN3VQl2Xk6rCWz6q2+967
-	 MKqR/1jQ7jo3nmkL+v2wvoko9roMg3eytXJBqHRl9+qVar4c/nAfSIl4/hf4GmJK5M
-	 XmQ7ET70TTMjVJ+HuwEdKdt+4xMBER7Sr8rixLga1LKk3NGHJefE2b6zerGRZZHUg9
-	 zCkH03HTRUHocKo5hBLGhtNFAWRqk8Og4jLT3Il6DGc04wvn9cwzAhBWPWCcnErL30
-	 ho2zFG1urzQz5LnfDujGOdjdWpuC8Sxp8iBwbC6SKOiFfsXcRj73tQP43Hg51YW2BS
-	 nO505y0Q1AW5Q==
-From: Tianyi Chen <hi@tychen.cc>
-To: bpf@vger.kernel.org
-Cc: Tianyi Chen <hi@tychen.cc>,
-	Quentin Monnet <qmo@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 1/2] bpftool: Use batch lookups for bounded hash map dumps
-Date: Mon,  7 Sep 2026 01:08:18 +0800
-Message-ID: <20260906170819.1212661-2-hi@tychen.cc>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260906170819.1212661-1-hi@tychen.cc>
-References: <20260906170819.1212661-1-hi@tychen.cc>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="S57Iv8Dm"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=kv66z7JV1166ueZMCWhYRrYKaMpcvrBriXgBRYKc+CA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788714853; v=1; x=1789319653;
+ b=S57Iv8Dm+4mNlrjcjDmYuuHUiIyA+rBANGQ3JuCkp94Nvc7K3weRIaXCcyfoMh9lxycXB4Yu
+ L4R4e6EIMYItXksqoZnf7sfG+aPwW0VTFjtCDGbZCQl9ujWBb0lnR1glHwPbiXRrGhQCyTIc/El
+ IUYdAUxxC6FqqwR8MhG+HFKc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 9c84a11702f27cf1;
+	Sun, 06 Sep 2026 17:14:13 +0000
+X-Mizu-Trace-ID: 9c84a11702f27cf1
+X-Migadu-Flow: FLOW_OUT
+Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b4a0b384c4so4090e87.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 06 Sep 2026 10:14:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBz7gyvWwlcgxcA7k1l09iQ1lK1BPAp9zZ2LTV6tlDs3u8h2fVpwsfBqsvDyhamNqL/nbETWhS6HPS3OjP+XOIA=@vger.kernel.org
+X-Gm-Message-State: AFuF++nCJYcg+EWfq+eiewgYNv1llp8pA69LqeZuIzo5g+kNmb43Yl/c
+	PeAQrnjlnTphk9izg0/C7WW4HNJpJxocGpX58bX1M23B2WIFGVGdO6iwNscN2iMcrL04TZrsNqM
+	yW6Oh25Qi23zHaTPOE0LCXgRuVY7Q6wDT06YgClhd
+X-Received: by 2002:a05:6512:4053:b0:5b2:a967:c0e1 with SMTP id
+ 2adb3069b0e04-5b74d007331mr84965e87.0.1788714848215; Sun, 06 Sep 2026
+ 10:14:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Envelope-From: hi@tychen.cc
+References: <20260904175550.430266-1-dongli.zhang@oracle.com> <20260904175550.430266-2-dongli.zhang@oracle.com>
+In-Reply-To: <20260904175550.430266-2-dongli.zhang@oracle.com>
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Sun, 6 Sep 2026 18:13:32 +0100
+X-Gmail-Original-Message-ID: <CA+EHjTwMwZCNZRAhve9EVfU30axNZYBbUzE91hv23miGXvscEQ@mail.gmail.com>
+X-Gm-Features: AcwNN1XZMT9sy0kcFj7bH_1dkmMWQvLE6JZKEq9JPm5SZfVcw9Kc1Kv5uV3TAXQ
+Message-ID: <CA+EHjTwMwZCNZRAhve9EVfU30axNZYBbUzE91hv23miGXvscEQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] KVM: Move last_steal to common struct kvm_vcpu
+To: Dongli Zhang <dongli.zhang@oracle.com>
+Cc: kvm@vger.kernel.org, kvmarm@lists.linux.dev, loongarch@lists.linux.dev, 
+	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+	maz@kernel.org, oupton@kernel.org, joey.gouly@arm.com, seiden@linux.ibm.com, 
+	suzuki.poulose@arm.com, yuzenghui@huawei.com, zhaotianrui@loongson.cn, 
+	maobibo@loongson.cn, chenhuacai@kernel.org, anup@brainfault.org, 
+	atish.patra@linux.dev, seanjc@google.com, pbonzini@redhat.com, 
+	shuah@kernel.org, dwmw2@infradead.org, joe.jin@oracle.com
+Content-Type: text/plain; charset="UTF-8"
 
-Use BPF_MAP_LOOKUP_BATCH when dumping hash maps to reduce the number
-of BPF syscalls. Share element formatting with individual lookups to
-preserve plain, JSON and BTF output.
+On Fri, 4 Sept 2026 at 18:56, Dongli Zhang <dongli.zhang@oracle.com> wrote:
+>
+> KVM caches per-vCPU host task's run_delay in per-architecture struct
+> kvm_vcpu_arch at last_steal.
+>
+> Move the cache to struct kvm_vcpu and convert x86, arm64, riscv, and
+> loongarch to use the common field.
+>
+> Add HAVE_KVM_PV_STEAL_TIME so last_steal is used only for architectures
+> that implement KVM stealtime.
+>
+> Suggested-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
+> ---
+> Marc suggested reusing CONFIG_HAVE_PV_STEAL_CLOCK_GEN, but I introduced
+> HAVE_KVM_PV_STEAL_TIME instead.
 
-Start with up to 256 entries and grow on ENOSPC without advancing the
-input cursor. Restrict the optimization to maps whose maximum key and
-value storage fits in 4 MiB, so even a worst-case bucket can fit without
-restarting a partially printed dump. Preserve aligned element buffers
-for formatting keys and values with odd sizes.
+FWIW, I think HAVE_KVM_PV_STEAL_TIME is the right choice here, since
+it's about what KVM itself supports. HAVE_PV_STEAL_CLOCK_GEN is the
+guest-side paravirt_steal_clock() config, so a KVM-side symbol fits
+the host field better.
 
-Fall back to individual lookups only if the initial batch operation is
-unsupported. Process the final partial batch on ENOENT, but never use
-count or output buffers after other errors. Report errors after batch
-traversal starts without restarting and duplicating output.
+Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
 
-Assisted-by: Codex:GPT-6
-Signed-off-by: Tianyi Chen <hi@tychen.cc>
----
- tools/bpf/bpftool/map.c | 113 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 105 insertions(+), 8 deletions(-)
+Cheers,
+/fuad
 
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 684a8fb7241..1eccdc0d1e9 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -740,15 +740,10 @@ static int do_show(int argc, char **argv)
- 	return errno == ENOENT ? 0 : -1;
- }
- 
--static int dump_map_elem(int fd, void *key, void *value,
--			 struct bpf_map_info *map_info, struct btf *btf,
--			 json_writer_t *btf_wtr)
-+static void print_map_elem(void *key, void *value,
-+			   struct bpf_map_info *map_info, struct btf *btf,
-+			   json_writer_t *btf_wtr)
- {
--	if (bpf_map_lookup_elem(fd, key, value)) {
--		print_entry_error(map_info, key, errno);
--		return -1;
--	}
--
- 	if (json_output) {
- 		print_entry_json(map_info, key, value, btf);
- 	} else if (btf) {
-@@ -762,10 +757,108 @@ static int dump_map_elem(int fd, void *key, void *value,
- 	} else {
- 		print_entry_plain(map_info, key, value);
- 	}
-+}
-+
-+static int dump_map_elem(int fd, void *key, void *value,
-+			 struct bpf_map_info *map_info, struct btf *btf,
-+			 json_writer_t *btf_wtr)
-+{
-+	if (bpf_map_lookup_elem(fd, key, value)) {
-+		print_entry_error(map_info, key, errno);
-+		return -1;
-+	}
- 
-+	print_map_elem(key, value, map_info, btf, btf_wtr);
- 	return 0;
- }
- 
-+#define MAP_DUMP_BATCH_SIZE 256U
-+#define MAP_DUMP_BATCH_MAX_BYTES (4 * 1024 * 1024)
-+
-+/* Return 1 to use individual lookups, but only before batch traversal starts. */
-+static int dump_map_batch(int fd, void *key, void *value,
-+			  struct bpf_map_info *info, struct btf *btf,
-+			  json_writer_t *wtr, unsigned int *num_elems)
-+{
-+	__u32 capacity, count, batch = 0, next_batch = 0, i;
-+	void *keys = NULL, *values = NULL, *buf;
-+	bool first = true, can_fallback = true;
-+	int err;
-+
-+	/* Hash lookup batches must accommodate a whole bucket. Restrict the
-+	 * optimization to maps whose worst-case bucket fits the memory budget,
-+	 * so a later ENOSPC never forces a restart after printing some entries.
-+	 * Division also bounds the allocation multiplications on 32-bit hosts.
-+	 */
-+	if (info->type != BPF_MAP_TYPE_HASH || !info->max_entries ||
-+	    (__u64)info->key_size + info->value_size >
-+	    MAP_DUMP_BATCH_MAX_BYTES / info->max_entries)
-+		return 1;
-+
-+	capacity = min(info->max_entries, MAP_DUMP_BATCH_SIZE);
-+resize:
-+	buf = realloc(keys, (size_t)capacity * info->key_size);
-+	if (!buf) {
-+		err = ENOMEM;
-+		goto error;
-+	}
-+	keys = buf;
-+	buf = realloc(values, (size_t)capacity * info->value_size);
-+	if (!buf) {
-+		err = ENOMEM;
-+		goto error;
-+	}
-+	values = buf;
-+
-+	while (true) {
-+		count = capacity;
-+		err = bpf_map_lookup_batch(fd, first ? NULL : &batch,
-+					   &next_batch, keys, values, &count, NULL);
-+		err = err ? errno : 0;
-+		/* Older kernels reject the command before updating count. Do not
-+		 * inspect the buffers on these errors, or fall back after progress.
-+		 */
-+		if (can_fallback && (err == EINVAL || err == EOPNOTSUPP ||
-+				     err == 524 /* ENOTSUPP */)) {
-+			err = 1;
-+			goto out;
-+		}
-+		can_fallback = false;
-+		if (err == ENOSPC) {
-+			if (capacity == info->max_entries)
-+				goto error;
-+			capacity += min(capacity, info->max_entries - capacity);
-+			/* Preserve the input cursor: the oversized bucket was not read. */
-+			goto resize;
-+		}
-+		/* In particular, EFAULT can leave count and the buffers invalid. */
-+		if (err && err != ENOENT)
-+			goto error;
-+		for (i = 0; i < count; i++) {
-+			/* Keep the alignment provided by individual lookups, including
-+			 * for BTF types whose map key/value size is not aligned.
-+			 */
-+			memcpy(key, keys + (size_t)i * info->key_size, info->key_size);
-+			memcpy(value, values + (size_t)i * info->value_size, info->value_size);
-+			print_map_elem(key, value, info, btf, wtr);
-+			(*num_elems)++;
-+		}
-+		if (err == ENOENT) {
-+			err = 0;
-+			goto out;
-+		}
-+		first = false;
-+		batch = next_batch;
-+	}
-+error:
-+	p_err("can't lookup map batch: %s", strerror(err));
-+	err = -1;
-+out:
-+	free(keys);
-+	free(values);
-+	return err;
-+}
-+
- static int maps_have_btf(int *fds, int nb_fds)
- {
- 	struct bpf_map_info info = {};
-@@ -869,6 +962,9 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
- 		p_info("Warning: cannot read values from %s map with value_size != 8",
- 		       map_type_str);
- 	}
-+	err = dump_map_batch(fd, key, value, info, btf, wtr, &num_elems);
-+	if (err != 1)
-+		goto end_dump;
- 	while (true) {
- 		err = bpf_map_get_next_key(fd, prev_key, key);
- 		if (err) {
-@@ -881,6 +977,7 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
- 		prev_key = key;
- 	}
- 
-+end_dump:
- 	if (wtr) {
- 		jsonw_end_array(wtr);	/* elements */
- 		if (show_header)
--- 
-2.55.0
 
+> As I have access to only x86 and arm64 KVM hosts, I created and validated
+> the selftest on those two architectures only.
+>
+>  arch/arm64/include/asm/kvm_host.h     |  1 -
+>  arch/arm64/kvm/Kconfig                |  1 +
+>  arch/arm64/kvm/pvtime.c               |  8 ++++----
+>  arch/loongarch/include/asm/kvm_host.h |  1 -
+>  arch/loongarch/kvm/Kconfig            |  1 +
+>  arch/loongarch/kvm/exit.c             |  2 +-
+>  arch/loongarch/kvm/vcpu.c             |  6 +++---
+>  arch/riscv/include/asm/kvm_host.h     |  1 -
+>  arch/riscv/kvm/Kconfig                |  1 +
+>  arch/riscv/kvm/vcpu_sbi_sta.c         | 10 +++++-----
+>  arch/x86/include/asm/kvm_host.h       |  1 -
+>  arch/x86/kvm/Kconfig                  |  1 +
+>  arch/x86/kvm/x86.c                    |  5 ++---
+>  include/linux/kvm_host.h              |  4 ++++
+>  virt/kvm/Kconfig                      |  3 +++
+>  15 files changed, 26 insertions(+), 20 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 27fe0cd5b2d7..36cb7dee988c 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -937,7 +937,6 @@ struct kvm_vcpu_arch {
+>
+>         /* Guest PV state */
+>         struct {
+> -               u64 last_steal;
+>                 gpa_t base;
+>         } steal;
+>
+> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
+> index 449154f9a485..f5855bfc681c 100644
+> --- a/arch/arm64/kvm/Kconfig
+> +++ b/arch/arm64/kvm/Kconfig
+> @@ -34,6 +34,7 @@ menuconfig KVM
+>         select HAVE_KVM_IRQ_BYPASS
+>         select HAVE_KVM_READONLY_MEM
+>         select HAVE_KVM_VCPU_RUN_PID_CHANGE
+> +       select HAVE_KVM_PV_STEAL_TIME
+>         select SCHED_INFO
+>         select GUEST_PERF_EVENTS if PERF_EVENTS
+>         select KVM_GUEST_MEMFD
+> diff --git a/arch/arm64/kvm/pvtime.c b/arch/arm64/kvm/pvtime.c
+> index 4ceabaa4c30b..a67d93845d79 100644
+> --- a/arch/arm64/kvm/pvtime.c
+> +++ b/arch/arm64/kvm/pvtime.c
+> @@ -14,7 +14,7 @@ void kvm_update_stolen_time(struct kvm_vcpu *vcpu)
+>  {
+>         struct kvm *kvm = vcpu->kvm;
+>         u64 base = vcpu->arch.steal.base;
+> -       u64 last_steal = vcpu->arch.steal.last_steal;
+> +       u64 last_steal = vcpu->last_steal;
+>         u64 offset = offsetof(struct pvclock_vcpu_stolen_time, stolen_time);
+>         u64 steal = 0;
+>         int idx;
+> @@ -25,8 +25,8 @@ void kvm_update_stolen_time(struct kvm_vcpu *vcpu)
+>         idx = srcu_read_lock(&kvm->srcu);
+>         if (!kvm_get_guest(kvm, base + offset, steal)) {
+>                 steal = le64_to_cpu(steal);
+> -               vcpu->arch.steal.last_steal = READ_ONCE(current->sched_info.run_delay);
+> -               steal += vcpu->arch.steal.last_steal - last_steal;
+> +               vcpu->last_steal = READ_ONCE(current->sched_info.run_delay);
+> +               steal += vcpu->last_steal - last_steal;
+>                 kvm_put_guest(kvm, base + offset, cpu_to_le64(steal));
+>         }
+>         srcu_read_unlock(&kvm->srcu, idx);
+> @@ -61,7 +61,7 @@ gpa_t kvm_init_stolen_time(struct kvm_vcpu *vcpu)
+>          * Start counting stolen time from the time the guest requests
+>          * the feature enabled.
+>          */
+> -       vcpu->arch.steal.last_steal = current->sched_info.run_delay;
+> +       vcpu->last_steal = current->sched_info.run_delay;
+>         kvm_write_guest_lock(kvm, base, &init_values, sizeof(init_values));
+>
+>         return base;
+> diff --git a/arch/loongarch/include/asm/kvm_host.h b/arch/loongarch/include/asm/kvm_host.h
+> index 23cfbecebbd7..14514a25b261 100644
+> --- a/arch/loongarch/include/asm/kvm_host.h
+> +++ b/arch/loongarch/include/asm/kvm_host.h
+> @@ -253,7 +253,6 @@ struct kvm_vcpu_arch {
+>         /* paravirt steal time */
+>         struct {
+>                 u64 guest_addr;
+> -               u64 last_steal;
+>                 struct gfn_to_hva_cache cache;
+>                 u8  preempted;
+>         } st;
+> diff --git a/arch/loongarch/kvm/Kconfig b/arch/loongarch/kvm/Kconfig
+> index 15da2d88c0c1..4996ec9c07f9 100644
+> --- a/arch/loongarch/kvm/Kconfig
+> +++ b/arch/loongarch/kvm/Kconfig
+> @@ -26,6 +26,7 @@ config KVM
+>         select HAVE_KVM_MSI
+>         select HAVE_KVM_READONLY_MEM
+>         select KVM_COMMON
+> +       select HAVE_KVM_PV_STEAL_TIME
+>         select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+>         select KVM_GENERIC_HARDWARE_ENABLING
+>         select KVM_MMIO
+> diff --git a/arch/loongarch/kvm/exit.c b/arch/loongarch/kvm/exit.c
+> index 4f58e6e2cf86..56ae6b18f8c1 100644
+> --- a/arch/loongarch/kvm/exit.c
+> +++ b/arch/loongarch/kvm/exit.c
+> @@ -773,7 +773,7 @@ static long kvm_save_notify(struct kvm_vcpu *vcpu)
+>                 if (!(data & KVM_STEAL_PHYS_VALID))
+>                         return 0;
+>
+> -               vcpu->arch.st.last_steal = current->sched_info.run_delay;
+> +               vcpu->last_steal = current->sched_info.run_delay;
+>                 kvm_make_request(KVM_REQ_STEAL_UPDATE, vcpu);
+>                 return 0;
+>         default:
+> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
+> index ed9e092c97ba..728d29eba8e0 100644
+> --- a/arch/loongarch/kvm/vcpu.c
+> +++ b/arch/loongarch/kvm/vcpu.c
+> @@ -187,8 +187,8 @@ static void kvm_update_stolen_time(struct kvm_vcpu *vcpu)
+>         smp_wmb();
+>
+>         unsafe_get_user(steal, &st->steal, out);
+> -       steal += current->sched_info.run_delay - vcpu->arch.st.last_steal;
+> -       vcpu->arch.st.last_steal = current->sched_info.run_delay;
+> +       steal += current->sched_info.run_delay - vcpu->last_steal;
+> +       vcpu->last_steal = current->sched_info.run_delay;
+>         unsafe_put_user(steal, &st->steal, out);
+>
+>         smp_wmb();
+> @@ -1205,7 +1205,7 @@ static int kvm_loongarch_pvtime_set_attr(struct kvm_vcpu *vcpu,
+>
+>         if (!ret) {
+>                 vcpu->arch.st.guest_addr = gpa;
+> -               vcpu->arch.st.last_steal = current->sched_info.run_delay;
+> +               vcpu->last_steal = current->sched_info.run_delay;
+>                 kvm_make_request(KVM_REQ_STEAL_UPDATE, vcpu);
+>         }
+>
+> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+> index a30600579231..305875301c04 100644
+> --- a/arch/riscv/include/asm/kvm_host.h
+> +++ b/arch/riscv/include/asm/kvm_host.h
+> @@ -273,7 +273,6 @@ struct kvm_vcpu_arch {
+>         /* SBI steal-time accounting */
+>         struct {
+>                 gpa_t shmem;
+> -               u64 last_steal;
+>         } sta;
+>  };
+>
+> diff --git a/arch/riscv/kvm/Kconfig b/arch/riscv/kvm/Kconfig
+> index ec2cee0a39e0..1ff07a904a02 100644
+> --- a/arch/riscv/kvm/Kconfig
+> +++ b/arch/riscv/kvm/Kconfig
+> @@ -26,6 +26,7 @@ config KVM
+>         select HAVE_KVM_READONLY_MEM
+>         select HAVE_KVM_DIRTY_RING_ACQ_REL
+>         select KVM_COMMON
+> +       select HAVE_KVM_PV_STEAL_TIME
+>         select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+>         select KVM_GENERIC_HARDWARE_ENABLING
+>         select KVM_MMIO
+> diff --git a/arch/riscv/kvm/vcpu_sbi_sta.c b/arch/riscv/kvm/vcpu_sbi_sta.c
+> index 60e50296a008..9a77d3bde7c7 100644
+> --- a/arch/riscv/kvm/vcpu_sbi_sta.c
+> +++ b/arch/riscv/kvm/vcpu_sbi_sta.c
+> @@ -19,13 +19,13 @@
+>  static void kvm_riscv_vcpu_sbi_sta_reset(struct kvm_vcpu *vcpu)
+>  {
+>         vcpu->arch.sta.shmem = INVALID_GPA;
+> -       vcpu->arch.sta.last_steal = 0;
+> +       vcpu->last_steal = 0;
+>  }
+>
+>  void kvm_riscv_vcpu_record_steal_time(struct kvm_vcpu *vcpu)
+>  {
+>         gpa_t shmem = vcpu->arch.sta.shmem;
+> -       u64 last_steal = vcpu->arch.sta.last_steal;
+> +       u64 last_steal = vcpu->last_steal;
+>         __le32 __user *sequence_ptr;
+>         __le64 __user *steal_ptr;
+>         __le32 sequence_le;
+> @@ -67,8 +67,8 @@ void kvm_riscv_vcpu_record_steal_time(struct kvm_vcpu *vcpu)
+>
+>         if (!WARN_ON(get_user(steal_le, steal_ptr))) {
+>                 steal = le64_to_cpu(steal_le);
+> -               vcpu->arch.sta.last_steal = READ_ONCE(current->sched_info.run_delay);
+> -               steal += vcpu->arch.sta.last_steal - last_steal;
+> +               vcpu->last_steal = READ_ONCE(current->sched_info.run_delay);
+> +               steal += vcpu->last_steal - last_steal;
+>                 WARN_ON(put_user(cpu_to_le64(steal), steal_ptr));
+>         }
+>
+> @@ -115,7 +115,7 @@ static int kvm_sbi_sta_steal_time_set_shmem(struct kvm_vcpu *vcpu)
+>                 return SBI_ERR_INVALID_ADDRESS;
+>
+>         vcpu->arch.sta.shmem = shmem;
+> -       vcpu->arch.sta.last_steal = current->sched_info.run_delay;
+> +       vcpu->last_steal = current->sched_info.run_delay;
+>
+>         return 0;
+>  }
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 683bb8bf43a9..ebdd8526ae12 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -872,7 +872,6 @@ struct kvm_vcpu_arch {
+>         struct {
+>                 u8 preempted;
+>                 u64 msr_val;
+> -               u64 last_steal;
+>                 struct gfn_to_hva_cache cache;
+>         } st;
+>
+> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> index 538ed1e80332..b2aea8058841 100644
+> --- a/arch/x86/kvm/Kconfig
+> +++ b/arch/x86/kvm/Kconfig
+> @@ -40,6 +40,7 @@ config KVM_X86
+>         select HAVE_KVM_MSI
+>         select HAVE_KVM_CPU_RELAX_INTERCEPT
+>         select HAVE_KVM_NO_POLL
+> +       select HAVE_KVM_PV_STEAL_TIME
+>         select VIRT_XFER_TO_GUEST_WORK
+>         select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+>         select KVM_VFIO
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 79468ddfe473..927c8b1ed83d 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -2129,9 +2129,8 @@ static void record_steal_time(struct kvm_vcpu *vcpu)
+>         smp_wmb();
+>
+>         unsafe_get_user(steal, &st->steal, out);
+> -       steal += current->sched_info.run_delay -
+> -               vcpu->arch.st.last_steal;
+> -       vcpu->arch.st.last_steal = current->sched_info.run_delay;
+> +       steal += current->sched_info.run_delay - vcpu->last_steal;
+> +       vcpu->last_steal = current->sched_info.run_delay;
+>         unsafe_put_user(steal, &st->steal, out);
+>
+>         version += 1;
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 03bfc92864b6..ff9d423b6a7c 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -398,6 +398,10 @@ struct kvm_vcpu {
+>          */
+>         struct kvm_memory_slot *last_used_slot;
+>         u64 last_used_slot_gen;
+> +
+> +#ifdef CONFIG_HAVE_KVM_PV_STEAL_TIME
+> +       u64 last_steal;
+> +#endif
+>  };
+>
+>  /*
+> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
+> index c3c0ee253fc7..f42a3a0fc5ba 100644
+> --- a/virt/kvm/Kconfig
+> +++ b/virt/kvm/Kconfig
+> @@ -82,6 +82,9 @@ config HAVE_KVM_IRQ_BYPASS
+>  config HAVE_KVM_VCPU_RUN_PID_CHANGE
+>         bool
+>
+> +config HAVE_KVM_PV_STEAL_TIME
+> +       bool
+> +
+>  config HAVE_KVM_NO_POLL
+>         bool
+>
+> --
+> 2.43.7
+>
