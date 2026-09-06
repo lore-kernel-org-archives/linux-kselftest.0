@@ -1,38 +1,38 @@
-Received: from out-2uec-a117.jellyfish.systems (out-2uec-a117.jellyfish.systems [63.250.43.117])
+Received: from out-2uec-a100.jellyfish.systems (out-2uec-a100.jellyfish.systems [63.250.43.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE6230C177
-	for <linux-kselftest@vger.kernel.org>; Sun,  6 Sep 2026 14:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.250.43.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2B92C3757
+	for <linux-kselftest@vger.kernel.org>; Sun,  6 Sep 2026 14:46:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.250.43.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788705687; cv=none; b=gJeXJLINR8mtto9TV0trsbpyhrh5MvrhC8PDBYdbffP01LgQq9E7vU42UHO0SVABECAZKHP7OSHs1VMTBUH5dbnfdEXvCC3nKQcQ2n8NmRNIX02VaMrcK21COWE4V4ppaLgJb+DjrM9prPGfjzOvwDBIeBtw3jY8QChiMRPygLA=
+	t=1788705988; cv=none; b=R0BvOHJBhMQ1bURGzA8nH7m5Cs4LK+aav1MEome/6TGR8y7cYrPTUl/hMuGvSG0n60/FkQqxG+rPXCTMaJ5k2dMboIkyO8ooOOPo4/qTepyUn/WERMVduAkfJm9geUoYWmjFSLsoi+Pz9sNKBGwcQu69RttI528SIHiGbKyF5Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788705687; c=relaxed/simple;
-	bh=kBziXRb4xkro2U105NfHH7Bc5Xtf9RDCbcH+RfIsoKQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JmU4e0De8gbTvb+anDduqfSZANJnACHMdgmJ0HjEeEuTm85vNbIpyEuefCIyN2LvEVQMibZhqBgdHJxsGEhjFj09v2SW/4s7K7Ek+r0j5y72zjILzFvhpBLvwd3w7Kne9yXWGm91zv7qk6IcPoafUxrN+gqbHGf8PNSEYm98ej0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=nIQTjkzh; arc=none smtp.client-ip=63.250.43.117
+	s=arc-20240116; t=1788705988; c=relaxed/simple;
+	bh=8nFx9yPRzKaj16U/gthA6bI9cl20f2jVshwFSMAEEek=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hQCou3HE0SQkBDIhWDlCdEqojSLTqGecxaUrtorkUX0qdmmR+E9hxmwAFsXvM1OzR+z/fvJx8Po4Hzk8EUmt6ZbwhpVvYKXS0nBjxDvSfxxvGXFOlqA1Uc1wSWblgYD+cmKvZvK7aBYXw/Ds6gbIAhjilttw9qSM4k6d32seQDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=iM1agAwn; arc=none smtp.client-ip=63.250.43.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="nIQTjkzh"
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="iM1agAwn"
 Received: from fedora (unknown [69.5.53.41])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdBY20MYsz8sWS;
-	Sun, 06 Sep 2026 13:55:17 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdCYg3XcBz8sXt;
+	Sun, 06 Sep 2026 14:40:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1788702921;
-	bh=71YrgSHuZLndedm9wwmiiZbkg6WKcS9DSEAI9LncDTA=;
+	s=spacemail; t=1788705659;
+	bh=j4yMbUzC3JdQhfwbNkbQdD8PV1ZrYrHZIUWMMMM+we8=;
 	h=From:To:Cc:Subject:Date:From;
-	b=nIQTjkzhP3mMxcgtv6hVEzKICczIiefvHU4djych37cg90+VGYIyc0ou8z5MaugC8
-	 Re6WO/iM60BC1ZcJXWNeOZyHgRYWhzni1+3yuGX0Tqf2sItqkrcQ6CC21V/NifByuv
-	 MrcyMewg9qJSrw7VoetNH3jNb9BbwiDm/hsNE2GcYRPTvFXx5zyarQ35UvttyJcUQm
-	 lldSXbHfRuaFd3nN/tL/TZD0eOfcuh3g/PBTuM74ddRAIhKtdV63r161tvUtW7lnZx
-	 kxsdTEEJxAlGF8wc+JMuM1GMPHv/nCxrxdAvTFi/lgaHnf27WNKoh4xq9EJLncVD43
-	 MBQm2xpamxSqA==
+	b=iM1agAwndDus86sCchyIgLCK9fbtXHookdsMXs/FyWf/UuVXihRPpYXpa/K0D7IpZ
+	 pM4ZuuloEIGYPimeRgwWjtU6AXaSBd3SBGcYHvFIRmmwPaoUZ3AcI4zWwjFolA8+aj
+	 cG89hFlO5uEYlXkHDX75Tl5ZXvtMdseMWVXWltX9Ldv/X/F8su0ithbkjWOOJvuUKf
+	 EYQGtnF3e2dsHm3Ga+IDEyRHkSfP7Oa3FLkmmbtU1puSlsvEZAJ+OuszcGqR+uUybM
+	 uKQLRwbKk2/k4urS+eC3sfNL84/atr99fpGHh+CbbJbbxtlFsmPxutT6qiV/39ePn0
+	 VEUsrTT3+GI4A==
 From: Tianyi Chen <hi@tychen.cc>
-To: Tejun Heo <tj@kernel.org>,
+To: tj@kernel.org,
 	David Vernet <void@manifault.com>
 Cc: Tianyi Chen <hi@tychen.cc>,
 	Andrea Righi <arighi@nvidia.com>,
@@ -40,11 +40,10 @@ Cc: Tianyi Chen <hi@tychen.cc>,
 	Shuah Khan <shuah@kernel.org>,
 	sched-ext@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Cheng-Yang Chou <yphbchou0911@gmail.com>
-Subject: [PATCH] selftests/sched_ext: Fail interrupted test runs
-Date: Sun,  6 Sep 2026 21:54:55 +0800
-Message-ID: <20260906135507.749280-1-hi@tychen.cc>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/sched_ext: Cover duplicate DSQ creation and ID reuse
+Date: Sun,  6 Sep 2026 22:40:44 +0800
+Message-ID: <20260906144044.849222-1-hi@tychen.cc>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -55,40 +54,103 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Envelope-From: hi@tychen.cc
 
-SIGINT and SIGTERM set exit_req, causing the runner to stop before
-executing the remaining tests. However, the exit status only reflects
-the number of failed tests, so an interrupted run returns success when
-none of the completed tests failed.
+The create_dsq test creates and destroys queues, but does not check the
+-EEXIST contract for duplicate creation or whether the ID remains
+accessible after the failed operation.
 
-Include exit_req in the failure condition so callers can distinguish
-an interrupted run from a successful run. Keep the result counts
-limited to the tests that actually ran.
+Extend the existing lifecycle loop to reject duplicate creation and
+check that the empty queue is still accessible. After destruction,
+require -ENOENT from the queue lookup, then recreate and destroy the
+same ID. Check that all 1024 iterations complete.
 
-Tested the actual runner under GDB, delivering each signal before the
-first test and after the example test passed. The original runner
-returns 0 in all four cases; the fixed runner returns 1. Normal -h,
--l and -t example invocations still return 0.
+This exercises empty queues during initialization, without concurrent
+enqueueing or destruction of a nonempty queue. The create_dsq test
+passes on a two-CPU matching-kernel VM.
 
-Fixes: 9d851afa4826 ("selftests/sched_ext: Abort test loop on signal")
+Link: https://lore.kernel.org/all/Z-OZ7tJWhRZbUk1l@gpd3/
 Assisted-by: LLM
 Signed-off-by: Tianyi Chen <hi@tychen.cc>
 ---
- tools/testing/selftests/sched_ext/runner.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../selftests/sched_ext/create_dsq.bpf.c      | 35 +++++++++++++++++++
+ .../testing/selftests/sched_ext/create_dsq.c  |  4 ++-
+ 2 files changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/sched_ext/runner.c b/tools/testing/selftests/sched_ext/runner.c
-index c264807caa9..57dda75384f 100644
---- a/tools/testing/selftests/sched_ext/runner.c
-+++ b/tools/testing/selftests/sched_ext/runner.c
-@@ -243,7 +243,7 @@ int main(int argc, char **argv)
- 			printf("  - %s\n", failed_tests[i]);
+diff --git a/tools/testing/selftests/sched_ext/create_dsq.bpf.c b/tools/testing/selftests/sched_ext/create_dsq.bpf.c
+index 2cfc4ffd60e..680cc4b6d8c 100644
+--- a/tools/testing/selftests/sched_ext/create_dsq.bpf.c
++++ b/tools/testing/selftests/sched_ext/create_dsq.bpf.c
+@@ -10,6 +10,8 @@
+ 
+ char _license[] SEC("license") = "GPL";
+ 
++u32 nr_lifecycle_tests;
++
+ void BPF_STRUCT_OPS(create_dsq_exit_task, struct task_struct *p,
+ 		    struct scx_exit_task_args *args)
+ {
+@@ -43,7 +45,40 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(create_dsq_init)
  	}
  
--	return failed > 0 ? 1 : 0;
-+	return failed > 0 || exit_req ? 1 : 0;
+ 	bpf_for(i, 0, 1024) {
++		err = scx_bpf_create_dsq(i, -1);
++		if (err != -EEXIST) {
++			scx_bpf_error("Duplicate DSQ %d creation returned %d", i, err);
++			return -EINVAL;
++		}
++
++		/* A rejected duplicate must leave the original DSQ accessible. */
++		err = scx_bpf_dsq_nr_queued(i);
++		if (err) {
++			scx_bpf_error("Original DSQ %d queue count is %d", i, err);
++			return -EINVAL;
++		}
++
++		scx_bpf_destroy_dsq(i);
++		err = scx_bpf_dsq_nr_queued(i);
++		if (err != -ENOENT) {
++			scx_bpf_error("Destroyed DSQ %d queue count is %d", i, err);
++			return -EINVAL;
++		}
++
++		err = scx_bpf_create_dsq(i, -1);
++		if (err) {
++			scx_bpf_error("Failed to recreate DSQ %d: %d", i, err);
++			return err;
++		}
++
++		err = scx_bpf_dsq_nr_queued(i);
++		if (err) {
++			scx_bpf_error("Recreated DSQ %d queue count is %d", i, err);
++			return -EINVAL;
++		}
++
+ 		scx_bpf_destroy_dsq(i);
++		nr_lifecycle_tests++;
+ 	}
+ 
+ 	return 0;
+diff --git a/tools/testing/selftests/sched_ext/create_dsq.c b/tools/testing/selftests/sched_ext/create_dsq.c
+index d67431f57ac..422e6532ee7 100644
+--- a/tools/testing/selftests/sched_ext/create_dsq.c
++++ b/tools/testing/selftests/sched_ext/create_dsq.c
+@@ -37,6 +37,8 @@ static enum scx_test_status run(void *ctx)
+ 
+ 	bpf_link__destroy(link);
+ 
++	SCX_EQ(skel->bss->nr_lifecycle_tests, 1024);
++
+ 	return SCX_TEST_PASS;
  }
  
- void scx_test_register(struct scx_test *test)
+@@ -49,7 +51,7 @@ static void cleanup(void *ctx)
+ 
+ struct scx_test create_dsq = {
+ 	.name = "create_dsq",
+-	.description = "Create and destroy a dsq in a loop",
++	.description = "Create, reject duplicates, destroy and recreate DSQs",
+ 	.setup = setup,
+ 	.run = run,
+ 	.cleanup = cleanup,
 -- 
 2.55.0
 
