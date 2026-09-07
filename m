@@ -1,64 +1,64 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2790B67E
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 04:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B2E37B402
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 04:52:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788756725; cv=none; b=kqqpSi7C39tOMbirUIJqFrcRrRCtEdVP6hTquYimHvrK9dVKTJKUBoKGD5OGQNf+WHMmF7B+TsCMV20WX61f4GI91mZI3a/KOrepq1mMkvMteR8dwDY2u79T/K95wYC75fXWSTn3+64oXUA5ACkw9sPr97d0426nkeve3xn9PmI=
+	t=1788756734; cv=none; b=TTCGDJLoiZNEpMGTsqAUulZ2m1Q2fGC+pCfj49zjgBO5p1Rxa+yAi05N4CUzGAZZbj54m+r974+2iiWSoBLsjonexwoHo69XekulTpGyUsDvaJG5r3M8LeIGFPzFvsvLgmzptL1aEHLlRctBbRIkXiP5bqTdybn62hIVdQ6mRVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788756725; c=relaxed/simple;
-	bh=o+i201PWKQhnh0LFP97eF7E1wnhN9oEPKnfB2knTOSM=;
+	s=arc-20240116; t=1788756734; c=relaxed/simple;
+	bh=p8E1QK/4FioG1d4S1YkCrtoTmqQDudh5HjsVGvHc+yA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hIdiVY+Pmh+p96toi6Gw+WRsxoGLUZY/E7VRUH1hjD5Fde2xihGfftMFVo31WeMv+5c+6XL7C8OIpyUd2XKzQyLScR3kBuETNxPV1lofajG++266tiCOljpiscLYMBY+U7sR4MiUPW3FdFSKdk/fxg7bv09C8kmLZdw2vtlqOu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fjYGNuHp; arc=none smtp.client-ip=209.85.215.170
+	 MIME-Version; b=tbGdBsPNA+OjyxnE2Z4ptGUWDSrE6FbrT5D+QVzQlftjB3a/UKhdjnhWvGRVE07Obyoy+v4l/TwiW+MvnvX2VB4Ywjb7Etx9IhXBm3Ph0EJ8jsAE+qG+1SEk7g/4uTcV0VRNVM6WG62l2HpwfKmsCNZDBWY5x7tF2W5LPhkx2RY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TNE/yBgc; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fjYGNuHp"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cc1cc97b84bso2317047a12.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 06 Sep 2026 21:52:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TNE/yBgc"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so2978019a91.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 06 Sep 2026 21:52:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788756723; x=1789361523; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788756732; x=1789361532; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=lk88M/pDZxe/5FAVj+dp68PIWOvqnCOJ0AD0p9smdgE=;
-        b=fjYGNuHpkPlvyaOD9PVD685AcyPxbS9VVUIIzwb303/cC5yqyTCQFtk2m3//X0GeeL
-         dFmSg4HMYoYSUSAJqCpYU9ed3rACAcEyLmY/E0BFfpnY0Ztlm2W09wvqsNNhbOs2ulrU
-         vKewDyPuQDr9XuDGbCqfqhU6xG9MdVoVSOW/VzrVWCps4EqO19XiUYouRvAaC1Iza3Zv
-         CGnTD4T9Q/eu68huaywUBrSwIhTwZr4zsqIb+4QIQt0DTJZFTJBWLwB0lPPa8p/iruaV
-         H9pzNGI4jVt0XHyRs2U9Hl5eT/fL6KO7f9snYpkz33uHZBXqXSzmXpg+RHQ+hTP0mnwA
-         wutg==
+        bh=lGe5bwb/eYgn9AMup9CCvH2ogR87NmRNuEpL6c/z+js=;
+        b=TNE/yBgcZxbGPAdOq2yiMpEsl86HD0pULin3jKN+bYleIdqSCo82bIK3nb4jVDnbRm
+         5K+bl+kvgXkeddLJLnATBuAKWGD6O6L+4vz1coLHfkTFoziLcpEEXszSfxBekqW4bPPv
+         OIh3GKTZyZp0JuS15PlkU1IZTilkuwHDZi2ZBT0GWgYu6SX9GV375vih7iiomFKREv6y
+         U2pfGH7HIt+hlCty8fkqF7EOYMkoyfAXvvE6VH2kWQx6W1cKsOZJcrmXOraeVGJyWf1d
+         CPbndhJJZelS/W/rumZnff/BsqxOd/duZ3q4CAewD2wAaS37h/LMJYRKUAqXe5wBOuyB
+         mG0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788756723; x=1789361523;
+        d=1e100.net; s=20251104; t=1788756732; x=1789361532;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=lk88M/pDZxe/5FAVj+dp68PIWOvqnCOJ0AD0p9smdgE=;
-        b=WsbeEdb6XiBwY+REjvm/pEOuirHHx3fAqjxoblE0zC5PcZ82wtrKDofL0Tf6nvouLx
-         +9IUuFBkhLYiaUztIcI4nv1ny7oqKumEGH+fDEwuYRX0HXKXsYAf1XOU+YhzMCdNfJiQ
-         T+O4DaGdPfwZsAaO4q9Yecf67Sesq0ddassav53J2mYobfJ4kKZfBNdpSEyLa+3Wgu3p
-         dbr7sbyyGWoXRfuiJGvyMRhZLDlgD4w59WWlWT317vcI7EYdKSlBykbwcV42WSjpcEF/
-         j4pmQ7oDCHtbdegHUKGldSMY/qUvbSuq58gc7g1lqWQeHk0/WrmqR63A4b8aNYGMMrkw
-         FXoQ==
-X-Forwarded-Encrypted: i=1; AKwUvByaoq9+RzAKvrHEzJTJl82FAc8J6chZjOIa+kC62MQqIvPEsTgqTK0Fr4di3pjzfToqcRo1gwvOWbZiMCfDlwc=@vger.kernel.org
-X-Gm-Message-State: AFuF++lR7ZJcKaB+hnTFJs92eAsK0OIAaVcFlOMhA5Fi4HHpCa42jCQe
-	qTTB3XyxSWzw8P53iGKsz/Y/OZT+shFhzkNSd0pUwm0pvJ+x7sL1Q5Ci
-X-Gm-Gg: AYBFou2LCYG4PNGqHjga9zaldZkt9BYcYv1SR/ePRfz2rXBNu3BuBrQlVRMlM2iYlpB
-	+y9f8ZFbAnwq4OZamxghctn1gTr6X7tYaVTjgsrVdnIjtuSUmfs2UKRyGjZ8g5fduNv/nhNMFBc
-	BpJinZJRNmC8fh6nKP0mqaQ2IhsV1jyVky7E1/gJUxYxeIBnkc6yj2jZJmn8vur+dXwkd6CJyK/
-	DzxiiFRJtCCUJa+WT9saXvv7YLyDGkBk50WxU5ja8x3EjSQse44/nmzzjy5wPOI7ezqAs89kOHG
-	sWVOtuC7OFGTS3JITUbuerzH7zEVelr15v6T+dha1JBVpFhlO7c+oKgWoyowWlT7aLe8qHILW96
-	ayZ+gpX9NX/5ZXskYtqBgpu1FvJkjkNHKsoEagr0O2XXciSIn7motudKYp6AlPohZtTSr3zIvZy
-	R834vW7DPEYET7If/pTZZOletOa4lioLBVPq5RVlRYbh/IczJ7kL6jG17SUNvgwq7xtwVRadgxx
-	4zpZIk1ex1i2Q==
-X-Received: by 2002:a17:90b:33c9:b0:398:c16e:69d3 with SMTP id 98e67ed59e1d1-39b26122fbamr28838386a91.1.1788756723030;
-        Sun, 06 Sep 2026 21:52:03 -0700 (PDT)
+        bh=lGe5bwb/eYgn9AMup9CCvH2ogR87NmRNuEpL6c/z+js=;
+        b=IGO40/OyHTgC66Kbz1i35I8RLYuOxRShJEW5TltRZNUDFVPY/fEV3w69ldINjEep5W
+         DZZ4WZm2KvTQMzNIi6zDzPI7BMd3/RjTocPwP+o0TFybZSYeCeND0V9gD2aEnesy3G2u
+         O3CM8HHGlUjv6C6vsLL5acYuB/d1hBN5OGWpeoCGOUz9fBedAfvtmaQS/qOrrAQOtoVP
+         s/1F4Q6WN/2d8MSQi1XRFyaWQnvAybb1/ILRytinfmU5QGnxNijcl0YGuPguWf/SBmR8
+         odwqWMLnBWyeGvtjbfLuIRHKiebBf+jm1H+dWQRtqWz1w4XyhbJa2DWzNHSqeqv5ldhW
+         rvUw==
+X-Forwarded-Encrypted: i=1; AKwUvBzL0tSurKWohngfVaByeqGLYdQS93xaw4R29fUfXh9rF378A/u7d7rhymzwHKHSUgObgBDC1Dxu9VYZoavTKNs=@vger.kernel.org
+X-Gm-Message-State: AFuF++k853BBGSsKbP3y85z6UPSVFOjs74U8V5I1Q+Bm8KjRqzqTvLg9
+	62IslVI+6Pg0jUz7CLmwgPQS76Z9LSP0y/pnkPdBBqHIZ51QjwY7kjRY
+X-Gm-Gg: AYBFou1QZQ3bnqGqFPyPf8x/cZ3N50w9rw0x22pHh7F/iFgHVQ/v9kbO6Eut3GcipYy
+	Q7klVkMQrEcOql/UbVjo5wCIO2icQnHlVHpekuoy9X2ShMbRBky+4OrD2gWk1aWE6I1ROGfgjqe
+	V+JxcsXwKqdI2HWKuVIpPGiGHUov1rYg9ossE3mD3c2zaFrOH9wCySN6r5eHajY7L/PB2Z5q0Qr
+	D7bVaMkWOrIndJlDeUc1FXFXTu2tJvPJJ2fHJPDWWOSFiN1eKwGVSlXSh21lqJkTloVBPI8awWD
+	TkLf4l7WB4qHNaqAcq/TB+u19kXo+3+R1ZwuiuLf000jbtSw5g9POpXcNdhMa7JeTNvi1uVBL0w
+	Eyj1H+1g/fiMa+smRBPtj+shWmuyRJC/VDO+N/CJmJHw3POP+kDlTTktS2oi6aVacsLqMV5BR26
+	426j0o2vY9q9ysTTeepjR4mpGlm43DqIeMTODVR1nHkH6DanuLS4xhtmcPKZ58INGQF3z0xvLM1
+	+67CK6/NTjFIA==
+X-Received: by 2002:a17:90b:4c4a:b0:398:bc52:825b with SMTP id 98e67ed59e1d1-39b2624c32amr28690908a91.21.1788756731628;
+        Sun, 06 Sep 2026 21:52:11 -0700 (PDT)
 Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14324410092sm21979675c88.14.2026.09.06.21.51.54
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14324410092sm21979675c88.14.2026.09.06.21.52.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Sep 2026 21:52:02 -0700 (PDT)
+        Sun, 06 Sep 2026 21:52:11 -0700 (PDT)
 From: Hemanth Selam <hemanth.selam@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -89,9 +89,9 @@ Cc: bpf@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-kselftest@vger.kernel.org,
 	sparclinux@vger.kernel.org
-Subject: [PATCH v2 2/7] bpf: fix typos in comments
-Date: Mon,  7 Sep 2026 10:21:30 +0530
-Message-ID: <20260907045135.13317-3-hemanth.selam@gmail.com>
+Subject: [PATCH v2 3/7] powerpc: net: fix typo "upto" in comments
+Date: Mon,  7 Sep 2026 10:21:31 +0530
+Message-ID: <20260907045135.13317-4-hemanth.selam@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20260907045135.13317-1-hemanth.selam@gmail.com>
 References: <20260907045135.13317-1-hemanth.selam@gmail.com>
@@ -103,63 +103,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix typos in comments, reported by scripts/checkpatch.pl using the
+Correct "upto" to "up to", reported by scripts/checkpatch.pl using the
 misspelling list in scripts/spelling.txt.  Only touches comments, no code
 changes.
 
 Assisted-by: Cursor:claude-opus-5
 Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
 ---
- include/linux/filter.h       | 4 ++--
- kernel/bpf/reuseport_array.c | 2 +-
- kernel/bpf/stream.c          | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ arch/powerpc/net/bpf_jit_comp32.c | 2 +-
+ arch/powerpc/net/bpf_jit_comp64.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 4a9bc6a848f2..0a067c2e923d 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -147,7 +147,7 @@ struct ctl_table_header;
- #define BPF_ALU32_IMM(OP, DST, IMM)				\
- 	BPF_ALU32_IMM_OFF(OP, DST, IMM, 0)
- 
--/* Endianess conversion, cpu_to_{l,b}e(), {l,b}e_to_cpu() */
-+/* Endianness conversion, cpu_to_{l,b}e(), {l,b}e_to_cpu() */
- 
- #define BPF_ENDIAN(TYPE, DST, LEN)				\
- 	((struct bpf_insn) {					\
-@@ -1029,7 +1029,7 @@ static inline u8 *bpf_skb_cb(const struct sk_buff *skb)
- 	 *
- 	 * In some socket filter cases, the cb unfortunately needs to be
- 	 * saved/restored so that protocol specific skb->cb[] data won't
--	 * be lost. In any case, due to unpriviledged eBPF programs
-+	 * be lost. In any case, due to unprivileged eBPF programs
- 	 * attached to sockets, we need to clear the bpf_skb_cb() area
- 	 * to not leak previous contents to user space.
- 	 */
-diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
-index 49b8e5a0c6b4..4de08abfd94e 100644
---- a/kernel/bpf/reuseport_array.c
-+++ b/kernel/bpf/reuseport_array.c
-@@ -207,7 +207,7 @@ reuseport_array_update_check(const struct reuseport_array *array,
- 		return -ENOTSUPP;
- 
- 	/*
--	 * sk must be hashed (i.e. listening in the TCP case or binded
-+	 * sk must be hashed (i.e. listening in the TCP case or bound
- 	 * in the UDP case) and
- 	 * it must also be a SO_REUSEPORT sk (i.e. reuse cannot be NULL).
- 	 *
-diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-index be9ce98e9469..54f5be1289d2 100644
---- a/kernel/bpf/stream.c
-+++ b/kernel/bpf/stream.c
-@@ -24,7 +24,7 @@ static struct bpf_stream_elem *bpf_stream_elem_alloc(int len)
- 	/*
- 	 * Length denotes the amount of data to be written as part of stream element,
- 	 * thus includes '\0' byte. We're capped by how much bpf_bprintf_buffers can
--	 * accomodate, therefore deny allocations that won't fit into them.
-+	 * accommodate, therefore deny allocations that won't fit into them.
- 	 */
- 	if (len < 0 || len > max_len)
- 		return NULL;
+diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
+index bfdc50740da8..cf8c1b49da25 100644
+--- a/arch/powerpc/net/bpf_jit_comp32.c
++++ b/arch/powerpc/net/bpf_jit_comp32.c
+@@ -23,7 +23,7 @@
+  *
+  *		[	prev sp		] <-------------
+  *		[   nv gpr save area	] 16 * 4	|
+- * fp (r31) -->	[   ebpf stack space	] upto 512	|
++ * fp (r31) -->	[   ebpf stack space	] up to 512	|
+  *		[     frame header	] 16		|
+  * sp (r1) --->	[    stack pointer	] --------------
+  */
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index fc9db691e820..8a1a00026c69 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -23,7 +23,7 @@
+  * Stack layout with frame:
+  * Layout when setting up our own stack frame.
+  * Note: r1 at bottom, component offsets positive wrt r1.
+- * Ensure the top half (upto local_tmp_var) stays consistent
++ * Ensure the top half (up to local_tmp_var) stays consistent
+  * with our redzone usage.
+  *
+  * tail_call_info - stores tailcall count value in main program's
+@@ -35,7 +35,7 @@
+  *		[   nv gpr save area	] (6 * 8)	|
+  *		[ addl. nv gpr save area] (12 * 8)	| <--- exception boundary/callback program
+  *		[    local_tmp_var	] 24		|
+- * fp (r31) -->	[   ebpf stack space	] upto 512	|
++ * fp (r31) -->	[   ebpf stack space	] up to 512	|
+  *		[     frame header	] 32/112	|
+  * sp (r1) --->	[    stack pointer	] --------------
+  *
