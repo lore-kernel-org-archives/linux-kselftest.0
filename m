@@ -1,95 +1,61 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mta1.migadu.com (out-251.mta1.migadu.com [95.215.58.251])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD5E409E12
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 06:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8504119FA
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 07:09:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.251
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788763940; cv=none; b=eiHsyicTIU9HdRzNRNK2s+OJ9WJhnWKj3CRZoUg09NGIrdHlPlL9z5G7C/Fp7Vu6wSmS44ZmMFIkmU52IlZO1+lgRQ3ZwZLOKw9V0DhVCUA4i/DPoFqMGL3/f/3yOvOa4E66ou/x5ftDFrx4sBNXHepNZyunFBsKO2kd+C2lIXU=
+	t=1788764955; cv=none; b=AYxUhMdwnTVXFKBddNw898E/9uk33Yb2RCA0paywPImw0xuD4r2Q6rd+XuDbWLgQ5u5S29aVAAtYUbr8QdySDWTfY+/4YRS2PpvAuGk83lSFtVF64pnpSFyrKAETsz68GvnAGSLYRHCzudq9uNU2msSniuD7oF2CqfrlclIn3DM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788763940; c=relaxed/simple;
-	bh=kumiUlRz7JsyiKthWciBMIW1fQxBHennQS9s5scomyE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QoP741ebelRhVyLMxy6/u1dxUWfooPi1GMSPBEI3qhoieVex4XErj3fj/GFRqA/swdoHbKcqWWKeQG61fCUngYRxbfJwrW1hJ3UjhOnQWOUACQa2VQeieDF2PKmtMHMpYaBR2tAUQbd3oDRRj+C6qBfXCbBlu0auwgapI1kUFaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=biplsEOG; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788764955; c=relaxed/simple;
+	bh=cMqBUKMjA5LqO1qX/pHGsFFtEHOiPyHSfU21KoovxRg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jYW+VuHlj1vpLvglnpQfzxU5efGlz6cTV8eQHYjIvZqyN0Sa9uloekspTyWsIwg4FWzlcJxEBuLIu6f7foYl92PUerL/FxTNLCggT33oRhlIb8NibUHIkjuJov7n9K9gn1Ru9yYrhYDN9iIBDBb6ADg+4Qunt7rlkqJtK43es0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LKJzNyN7; arc=none smtp.client-ip=95.215.58.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="biplsEOG"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cc1cc1b42b5so3300305a12.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 06 Sep 2026 23:52:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788763938; x=1789368738; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=0keQuQDh3GWYquu5tDAaSwyIzlXxpUqzOXBgn/Zoyak=;
-        b=biplsEOGD06UFI0ZWIjUe4UKaz69lRnhn2wsrfBDN5BsCBX1Vy23ielJINwadYTb9y
-         BudNnqKZjSHNPvLiJI1ZUrnePMPSbVvS5tgoNMpV5DU+qWxOnXJ9IToSYSM2W4y1IdRJ
-         dptODbOaDAjLGfUCDS4IfnRUokD4sk/8diRqme56Mov+ae58x/rxTyJRtODDWgsT1X/H
-         J2aC/5etlILkI80w3OBKdE5UlSsZ/Lldxsd0MOwQcFFTv+Zrvkqbo7mhTrz8q+xd/jY9
-         GI7UFurqwiFoT3EDOoPyzvEmn15NK5D1ahRfrF9a4ylPOiCNNR4yCc2bsR4jYGkMJonM
-         Ax3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788763938; x=1789368738;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=0keQuQDh3GWYquu5tDAaSwyIzlXxpUqzOXBgn/Zoyak=;
-        b=WvhLSalMPaRGDekMHmbec+CkJC0OiAvHwnSR0e55pujzyBL29VX/KjH9O0tfjHLv44
-         zfttsgsL9TLxJ7PYSrE8Q5hTfYokRanA1zOzoVhZRlAxvYxrkE2RJk/34KPp+OJ9etXR
-         tkv51JDzD4/FDQnYuLYZOObISdjjdxAbLq0SSzJeaiPCVLBcfwzH4XtQlLNqRf59BWS/
-         4OVPrR05giOYL8TwZvinw3qMCB6rds6wI00CJXOJcZ2DkHCw8B1D6/L2OcmFHwuB/w1g
-         pe/ywoGdjMv4Xo9piPDyNi+4O8E4PtNO8zeT/aZImtQvFB6VsuAssGlb2a51PJg2WrYO
-         qPCQ==
-X-Forwarded-Encrypted: i=1; AKwUvByxxg4nOZAo6hkgOhoRGWMr6Hx9IrL3g5POzF5JgeAAwyon8AW4IdO9uV5IrsYYQS00IN1h1sk2gb+oexZc09k=@vger.kernel.org
-X-Gm-Message-State: AFuF++mWptX0jVKPyamelZlsc8r3LYw/j+3x1J8U5ByuU+0W4FRjAZQ8
-	FUTkvdFcf/87MrPpUcnFQAJn/LXsPJpAflTkXutJ5sF89eKGObTm69mh
-X-Gm-Gg: AYBFou1FXbGc2MnDlratF8R3Fd+gza6B4gr//cei95oaRrUD2qxQRiXaTorbQBGkwnD
-	0UytagFfW7K5HL7vQPd58of7ZjD+s2YAp6aqfWO/1EB8N5mmrhXjlJlfq5kOI8n7Qucpeh+o9AX
-	fOoPzt6ZRNYnxBWQixVmIl4iPCPEegN/AOIDXRWSj6aq4qDL3KbP67qancjtU3TelWvs7hG64WS
-	7kpB1tIiHVp6H8vmVp0pDPeDdP04XbD5ipPCAmlvhKVCQLdit96jR2KDnthpKhZDOwzDYzvDAb8
-	HdfHJd8CR2ahA4NFxR2zFgeXZiGNxKfVV0U5+b9yz6Jcs/kX2FqpLch4UXb6nY7HDG0FZwqljSQ
-	Y6Bo/RFe6KwGzPq1L3+qV1j1x8Pp2JIqdGdBUqI35SETSb+aIOF4H36A6Jk29zOWOgbSYceS+1x
-	u3CrAvYLQX7QXKBXoxz/v4mbGuk2gLGJA0TTPDItK+gTtfvev0hL4/shzcIqHi0g9HAT8Z7vh+2
-	OSeiVA1a8P2FOzH4DeO6QpS
-X-Received: by 2002:a05:6a21:15cf:b0:3cc:ec12:a788 with SMTP id adf61e73a8af0-3da39b57e15mr33996691637.4.1788763938332;
-        Sun, 06 Sep 2026 23:52:18 -0700 (PDT)
-Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339b608409sm28825941eec.21.2026.09.06.23.52.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Sep 2026 23:52:17 -0700 (PDT)
-From: Hemanth Selam <hemanth.selam@gmail.com>
-To: Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <chleroy@kernel.org>,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver O'Halloran <oohall@gmail.com>,
-	Geoff Levand <geoff@infradead.org>,
-	Haren Myneni <haren@linux.ibm.com>,
-	Rick Lindsley <ricklind@linux.ibm.com>,
-	Nick Child <nnac123@linux.ibm.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linuxppc-dev@lists.ozlabs.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LKJzNyN7"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=cMqBUKMjA5LqO1qX/pHGsFFtEHOiPyHSfU21KoovxRg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788764950; v=1; x=1789369750;
+ b=LKJzNyN7tGf20EM9DrpQX9xGvf9C3CruPGVFuy387y8d3GCrWSFIj+g9/7I4rsZUi6PKn2w3
+ mKNAkurG8dEVyKUxCkJkkiTYd1LyPyc+c+5LV5dzQLY1LT1sPNqYq7IUtqy/ZReUuANUfrmbamo
+ X8q71bxGu1Eiz6xhGKf7Vhag=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 8e71fb95d3d7fb2e;
+	Mon, 07 Sep 2026 07:09:10 +0000
+X-Mizu-Trace-ID: 8e71fb95d3d7fb2e
+X-Migadu-Flow: FLOW_OUT
+From: "Hui Zhu" <hui.zhu@linux.dev>
+To: Roman Gushchin <roman.gushchin@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-serial@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 2/2] powerpc: fix repeated words in comments
-Date: Mon,  7 Sep 2026 12:21:53 +0530
-Message-ID: <20260907065153.33578-3-hemanth.selam@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20260907065153.33578-1-hemanth.selam@gmail.com>
-References: <20260907065153.33578-1-hemanth.selam@gmail.com>
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v8 0/2] bpf: BPF-driven proactive memcg reclaim
+Date: Mon,  7 Sep 2026 15:08:51 +0800
+Message-ID: <cover.1788764121.git.zhuhui@kylinos.cn>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -98,39 +64,102 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Drop words accidentally written twice, reported by checkpatch.pl as a
-possible repeated word.  Only touches comments, no code changes.
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-Assisted-by: Cursor:claude-opus-5
-Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
----
- arch/powerpc/kernel/paca.c             | 2 +-
- arch/powerpc/sysdev/xics/xics-common.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+BPF programs can observe memory pressure on a cgroup (e.g. refault
+stats via bpf_mem_cgroup_page_state()), but cannot act on it:
+triggering reclaim on a chosen cgroup requires writing to
+memory.reclaim, which BPF cannot do. This series adds
+bpf_proactive_reclaim(), a sleepable kfunc performing one proactive
+reclaim pass on a target memcg, so when and how hard to reclaim is
+BPF policy rather than hard-coded thresholds.
 
-diff --git a/arch/powerpc/kernel/paca.c b/arch/powerpc/kernel/paca.c
-index 0e263b97e016..2e0c5bac250d 100644
---- a/arch/powerpc/kernel/paca.c
-+++ b/arch/powerpc/kernel/paca.c
-@@ -101,7 +101,7 @@ static void *__init alloc_shared_lppaca(unsigned long size, unsigned long limit,
- /*
-  * See asm/lppaca.h for more detail.
-  *
-- * lppaca structures must must be 1kB in size, L1 cache line aligned,
-+ * lppaca structures must be 1kB in size, L1 cache line aligned,
-  * and not cross 4kB boundary. A 1kB size and 1kB alignment will satisfy
-  * these requirements.
-  */
-diff --git a/arch/powerpc/sysdev/xics/xics-common.c b/arch/powerpc/sysdev/xics/xics-common.c
-index c3fa539a9898..c2486b43c5cc 100644
---- a/arch/powerpc/sysdev/xics/xics-common.c
-+++ b/arch/powerpc/sysdev/xics/xics-common.c
-@@ -384,7 +384,7 @@ int xics_set_irq_type(struct irq_data *d, unsigned int flow_type)
- 	 * the corresponding descriptor bits mind you but those will in turn
- 	 * affect the resend function when re-enabling an edge interrupt.
- 	 *
--	 * Set set the default to edge as explained in map().
-+	 * Set the default to edge as explained in map().
- 	 */
- 	if (flow_type == IRQ_TYPE_DEFAULT || flow_type == IRQ_TYPE_NONE)
- 		flow_type = IRQ_TYPE_EDGE_RISING;
+The kfunc is restricted to BPF_PROG_TYPE_SYSCALL so that reclaim
+always runs in a clean process context: generic sleepable programs
+may execute with filesystem locks held or in NOFS/NOIO contexts,
+where the reclaim path could deadlock in filesystem shrinkers. The
+bpf_wq and task_work callbacks of a SYSCALL program keep its program
+type and run in process context, so reclaim work can still be queued
+asynchronously through them, as the selftest does with bpf_wq.
+
+The use case we are looking at is protecting high-priority workloads:
+a BPF program monitors the state of a high-priority cgroup and, when
+it degrades (e.g. PSI rises or refaults increase, as in the
+selftest), asynchronously reclaims memory from low-priority cgroups
+via bpf_wq and bpf_proactive_reclaim(), giving the pressured cgroup
+more free pages.
+
+Another use case: several vendor-maintained kernels carry private
+implementations that trigger asynchronous reclaim when a memcg enters
+a certain state. These exist for historical and partly psychological
+reasons, but the underlying demand is real. We expect BPF-driven
+proactive reclaim, combined with the BPF hooks for the memory
+controller currently under discussion and development, to serve these
+needs in mainline, reducing kernel fragmentation and improving kernel
+maintainability.
+
+Changelog:
+v8:
+According to the comments of Andrew, Kumar and Shakeel, drop the
+bpf_in_reclaim_context() check because the SYSCALL-only restriction
+already rules out reentrancy.
+According to the comments of Kumar, Add the swappiness argument to
+bpf_proactive_reclaim().
+v7:
+According to the comments of JP, clamp the reclaim target of one
+bpf_proactive_reclaim() call to MEMCG_CHARGE_BATCH so each call is
+a bounded unit of work, and document the batching policy in the kfunc.
+selftest: check the target cgroup for dying state before reclaiming
+from it, and add the memcg_async_reclaim_dying test covering target
+removal while reclaim is running.
+v6:
+According to the comments of Kumar and Shakeel, Restrict
+bpf_proactive_reclaim() to BPF_PROG_TYPE_SYSCALL by moving it
+to a dedicated kfunc set registered for that program type only, and
+document the clean-process-context requirement in its kerneldoc.
+v5:
+According to the comments of Andrii, Kumar and Shakeel, remove
+bpf_proactive_reclaim_swappiness.
+v4:
+According to the comments of bot+bpf-ci and sashiko, also check
+current->reclaim_state to close the fentry-on-trace-iter recursion
+window in bpf_in_reclaim_context.
+Return bytes instead of pages ( nr * PAGE_SIZE ) in
+bpf_proactive_reclaim_pages and bpf_proactive_reclaim_swappiness.
+Return (unsigned long)-1 on out-of-range swappiness (was 0).
+Kdoc of both kfuncs: updated Return descriptions; added FS-lock deadlock
+warning to bpf_proactive_reclaim.
+Fix potential child process leak in selftests.
+Use _exit() instead of exit() in forked children in selftests.
+Rename reclaimed_pages to reclaimed_bytes in selftests.
+Fix comments issues in selftests.
+v3:
+According to the comments of bot+bpf-ci, add a shared helper
+bpf_proactive_reclaim_pages() that is called by bpf_proactive_reclaim
+and bpf_proactive_reclaim_swappiness.
+According to the comments of sashiko and bot+bpf-ci, fix the issues of
+selftests.
+v2:
+According to the comments of Shakeel Butt, replace
+bpf_try_to_free_mem_cgroup_pages() with
+bpf_proactive_reclaim(memcg, size) and
+bpf_proactive_reclaim_swappiness(memcg, size, swappiness).
+According to the comments of Kumar Kartikeya Dwivedi, drop patch 2
+and patch 3.
+Remove bpf_thread_wq code in patch 4.
+According to the comments of sashiko-bot, fix the issues of selftests.
+
+Hui Zhu (2):
+  mm/bpf: Add bpf_proactive_reclaim kfunc
+  selftests/bpf: Add memcg async reclaim test
+
+ mm/bpf_memcontrol.c                           |  94 ++-
+ .../bpf/prog_tests/memcg_async_reclaim.c      | 686 ++++++++++++++++++
+ .../selftests/bpf/progs/memcg_async_reclaim.c | 259 +++++++
+ 3 files changed, 1037 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
+
+-- 
+2.53.0
+
