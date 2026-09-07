@@ -1,229 +1,209 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7050F3AF666;
-	Mon,  7 Sep 2026 17:08:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF421188CC9;
+	Mon,  7 Sep 2026 17:38:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788800937; cv=none; b=cWobLN3SMzSq6kd0pFlCPKFYm2cvBta7itAc66lJ58ePVNr/AE4cY+i59wCTt7KJiUlVPr1hDJHUFSdUu+Ib1vS6gnYFU3IFgEYO77H+l/emSBFkciDfoIOvQtAouP7lqQr6w4eIKvo733CBO6b2dJNM/SUlbaRDfoHB5pRfXOw=
+	t=1788802710; cv=none; b=IZx330rvrbjIq3a3bK4jMsDuDDlRYnZiTTDvk1TPFDsMeyPYvivS7N6n+fdM5zFeTw9DqtG2s9V1BCYQfNrWiJlsFCQT7dS+SaVWUw5oE70TkTAjauE/AyDwdb1oAUcPTQNsXTaYp1MzAsyLYQ2iwUWJJv1JqkLQ0hb3LIKDqEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788800937; c=relaxed/simple;
-	bh=btc7pahP8DBBefhXLxJ2nWb1mk6pUWZslp/d2qEQ+Nk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=owY0lBTtZnmiIMbySxSDV4ccu2jw+xbWxlfgCnsNBmD1zPj1D77VCsgfY3/3RfrVFpleWo9Sud8OS6RvUtOE/iQwyn1iC4QJi7RWLB73peeHpPYqz21hfCnzED/4vQkpTMUciE1OEB7IzJG+Ery7VQbjgoCPVFb07/tS1+DfDF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aoskVabW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788802710; c=relaxed/simple;
+	bh=ZKFqm7/Ml5Qvs0OYSfvLzqhkLXSRb6h8ez4YXH7u3gA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c2u/LJCxf6leUkfy+99kkaCP3ZXvbH+uFLjCzfraP+xid7mg6cyi6Vy6zsCbLWhApn4otxHY/KAEhczL4J4LC0uqHfUSsAZC0soAKt4uUKHkaoIMmo6HCsClftgs8nh0FF6Vo0BI0KsT8EulzG3OTqgfElDRrL5b9MtrwpKzo3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VzMW3Iuw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aoskVabW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30AAE1F00A3A;
-	Mon,  7 Sep 2026 17:08:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VzMW3Iuw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13BE21F00A3A;
+	Mon,  7 Sep 2026 17:38:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788800936;
-	bh=j7x/51HwsP9l6I4L2UsRVOYC9hBKf+rW1hZb9VZ+8mk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=aoskVabW49we9m61if+yG80C3wtGQ69YtOvFI7mW0eoHdMIHHFnJ3qaxHEKq0LFHS
-	 5MN11lbxi667fu1q0kWnrr2xojlZU6Pjj9shKb0acrAX/MqY47KHdVM2WKpQkEsEYD
-	 rROTjv/GJeFU9O5ZZOhJqZ9cRg/LjWupTnHG/Kh0LbkCx9e2FYQdVVS4toYaMSfJPN
-	 retSexSkntzEcSaWZjSrYBmj1cWP90KvFbE8LenDGr3jPKFad9FqK6Bsfu/aM/hQ1G
-	 yo5nqG2djiu7I6W/APCdjcIAMBkZZSEhKJFQOWudMlP9DXUkR9N1NzbG9Rc1Vb0Xlk
-	 QefYvOkesgvbA==
-Message-ID: <42c1b1be-d176-45fd-b467-464b5b87e116@kernel.org>
-Date: Mon, 7 Sep 2026 19:08:48 +0200
+	s=k20260515; t=1788802708;
+	bh=JYtjFp3g5gdPUFznyNGIYCvkhRU+oOhyCAUXnEZTtCo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=VzMW3IuwBAg0OTqQvmPn74oP0XsjLtq/qrNYYzxcb8nBQieMLuuNv34LCDXblb6dd
+	 h/+fzPZzyMdUTiZvrTV8VGZ55uTkC/1tZk9TrYYk3rOSFoDASk6wZWlVmt5cmNApAH
+	 JLSj1hCAl7D4YduZxjCE7Epw5GcJu5YyF2NN3i5OXGrp9JirRJ5HoT6KnWSvGX7AYZ
+	 aja9CsaKR6GbO/BpEntARV7zMTsVDyD6NbjUsewLkDd7tHNBbEaUko7Onb6f6mxCF2
+	 Zh2gq2ncPA/L5Z3K0jmjY+aO+R+7FbIyYg4erGHvbfD4HCGGwEjQHZXd5VaYoWRmZC
+	 Kj70uAvm9nifQ==
+Date: Mon, 7 Sep 2026 18:38:21 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Hugh Dickins <hughd@google.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Jan Kara <jack@suse.cz>, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 3/6] mm/vma: only permit MAP_PRIVATE /dev/zero to be
+ mapped anonymous
+Message-ID: <ap71GOPAeKHfHp5J@gremlin>
+References: <20260902-map-private-dev-zero-v1-0-a578c730cec7@kernel.org>
+ <20260902-map-private-dev-zero-v1-3-a578c730cec7@kernel.org>
+ <d6dc52e3-b27d-4663-848c-a2f270fb4c5d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/6] tools/testing/selftests/mm: add MAP_PRIVATE-/dev/zero
- merge tests
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Hugh Dickins <hughd@google.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260902-map-private-dev-zero-v1-0-a578c730cec7@kernel.org>
- <20260902-map-private-dev-zero-v1-6-a578c730cec7@kernel.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
- dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
- QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
- XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
- Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
- PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
- WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
- UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
- jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
- B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
- ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
- AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
- 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
- g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
- ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
- 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
- /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
- jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
- DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
- HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
- 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
- LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
- 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
- VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
- /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
- iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
- 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
- zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
- azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
- FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
- sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
- 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
- EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
- IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
- 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
- Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
- sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
- yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
- 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
- r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
- 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
- CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
- qIws/H2t
-In-Reply-To: <20260902-map-private-dev-zero-v1-6-a578c730cec7@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d6dc52e3-b27d-4663-848c-a2f270fb4c5d@kernel.org>
 
-On 9/2/26 20:00, Lorenzo Stoakes (ARM) wrote:
-> Assert that MAP_PRIVATE-mapped /dev/zero mappings behave like they are
-> anonymous.
-> 
-> We test both unfaulted and faulted/unfaulted merges - each with the regions
-> having page offset of 0, which would not merge if the mappings were treated
-> as if they were file-backed.
-> 
-> With the recent change that makes them behave as pure anonymous mappings,
-> the merges should succeed as their page offsets are equal to their
-> anonymous page offsets.
-> 
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
->  tools/testing/selftests/mm/merge.c | 104 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 104 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/mm/merge.c b/tools/testing/selftests/mm/merge.c
-> index 52b8727b6628..7c528d470404 100644
-> --- a/tools/testing/selftests/mm/merge.c
-> +++ b/tools/testing/selftests/mm/merge.c
-> @@ -1362,6 +1362,110 @@ TEST_F(merge, anon_and_page_offset_mismatch_memfd)
->  	ASSERT_EQ(procmap->query.vma_end, (unsigned long)ptr + 5 * page_size);
->  }
->  
-> +TEST_F(merge, merge_map_private_dev_zero_unfaulted)
-> +{
-> +	struct procmap_fd *procmap = &self->procmap;
-> +	unsigned int page_size = self->page_size;
-> +	char *carveout = self->carveout;
-> +	char *ptr, *ptr2;
-> +	int fd_zero;
-> +
-> +	if (access("/dev/zero", F_OK))
-> +		SKIP(return, "No /dev/zero.");
-> +	fd_zero = open("/dev/zero", O_RDWR);
-> +	ASSERT_NE(fd_zero, -1);
-> +
-> +	/*
-> +	 * Map two MAP_PRIVATE-/dev/zero VMAs next to one another with offset 0
-> +	 * each.
-> +	 *
-> +	 * With these being made truly anonymous upon mapping, they will
-> +	 * merge. If they were file-backed VMAs the page offsets would prevent
-> +	 * merge:
+On Mon, Sep 07, 2026 at 06:56:51PM +0200, David Hildenbrand (Arm) wrote:
+> > diff --git a/mm/vma.c b/mm/vma.c
+> > index 35e7a64855fa..4b8d430d9619 100644
+> > --- a/mm/vma.c
+> > +++ b/mm/vma.c
+> > @@ -2621,6 +2621,19 @@ static int __mmap_new_file_vma(struct mmap_state *map,
+> >  	return 0;
+> >  }
+> >
+> > +static bool map_is_private(const struct mmap_state *map)
+> > +{
+> > +	return !vma_flags_test(&map->vma_flags, VMA_SHARED_BIT);
+> > +}
+> > +
+> > +static bool map_is_anon(const struct mmap_state *map)
+>
+> I was wondering whether we should call this "map_is_private_anon", due to
+> MAP_ANON|MAP_SHARED. But looking at __mmap_new_vma(), the existing "is_anon" is
+> also limited to MAP_ANON|MAP_PRIVATE.
 
-Nit: "the" merge? You're the native speaker, so I don't know if what you have is
-just correct :)
+A 'shared anon' mapping is not anon at all, and that's handled early in
+do_mmap().
 
-> +	 *
-> +	 * |-----||------|    |-------------|
-> +	 * | ptr || ptr2 | -> |     ptr     |
-> +	 * |-----||------|    |-------------|
-> +	 */
-> +	ptr = mmap(carveout, 5 * page_size, PROT_READ | PROT_WRITE,
-> +		   MAP_FIXED | MAP_PRIVATE, fd_zero, 0);
-> +	if (ptr == MAP_FAILED) {
-> +		close(fd_zero);
-> +		ASSERT_TRUE(false);
-> +	}
-> +	ptr2 = mmap(&carveout[5 * page_size], 5 * page_size,
-> +		   PROT_READ | PROT_WRITE, MAP_FIXED | MAP_PRIVATE, fd_zero, 0);
-> +	if (ptr2 == MAP_FAILED) {
-> +		close(fd_zero);
+I wish that we didn't confuse people by allowing MAP_SHARED | MAP_ANON as a
+shorthand but there we are.
 
-Is the close() really required before the ASSERT?  After all, you're also not
-munmap'ing, so I wonder to which degree we have to clean up.
+So I don't like to make that distinction on the basis that a 'shared
+anon' mapping isn't something that exists :)
 
-So maybe this could just become a
+And then imagine vma_is_private_anonymous() vs. vma_is_anonymous() etc. It would
+get silly, quick...
 
-	ASSERT_NE(ptr2, MAP_FAILED);
+>
+> > +{
+> > +	if (!map_is_private(map))
+> > +		return false;
+> > +
+> > +	return !map->file || file_is_dev_zero(map->file);
+> > +}
+> > +
+> >  /*
+> >   * __mmap_new_vma() - Allocate a new VMA for the region, as merging was not
+> >   * possible.
+> > @@ -2634,8 +2647,7 @@ static int __mmap_new_file_vma(struct mmap_state *map,
+> >  static int __mmap_new_vma(struct mmap_state *map, struct vm_area_struct **vmap,
+> >  	struct mmap_action *action)
+> >  {
+> > -	const bool is_anon = !map->file &&
+> > -		!vma_flags_test(&map->vma_flags, VMA_SHARED_BIT);
+> > +	const bool is_anon = map_is_anon(map);
+> >  	struct vma_iterator *vmi = map->vmi;
+> >  	int error = 0;
+> >  	struct vm_area_struct *vma;
+> > @@ -2651,7 +2663,7 @@ static int __mmap_new_vma(struct mmap_state *map, struct vm_area_struct **vmap,
+> >
+> >  	vma_iter_config(vmi, map->addr, map->end);
+> >
+> > -	if (is_anon)
+> > +	if (is_anon && !map->file)
+> >  		vma_set_anonymous(vma);
+> >
+> >  	vma_set_range(vma, map->addr, map->end, map->pgoff, map->anon_pgoff);
+> > @@ -2669,6 +2681,10 @@ static int __mmap_new_vma(struct mmap_state *map, struct vm_area_struct **vmap,
+> >  	else if (!is_anon)
+> >  		error = shmem_zero_setup(vma);
+> >
+> > +	/* Temporary MAP_PRIVATE-/dev/zero workaround. */
+> > +	if (is_anon && map->file)
+> > +		vma_set_anonymous(vma);
+> > +
+> >  	if (error)
+> >  		goto free_iter_vma;
+> >
+> > @@ -2777,6 +2793,10 @@ static int call_mmap_prepare(struct mmap_state *map,
+> >  	if (err)
+> >  		return err;
+> >
+> > +	/* Hooks cannot mark themselves anonymous. */
+>
+> I guess this comment will be stale soon (after #4 where you drop the
+> set_anonymous part).
 
-Same for ptr above.
+Not really, it's there to catch drivers doing something silly/broken (likely by
+mistake).
 
-You could likely also do
+I want to catch that early. I have a 36 patch series that extends this kind of
+idea... a lot :)
 
-ptr = mmap()
-ptr2 = mmap()
-close(fd_zero);
+>
+> Should it be
+>
+> "vm_ops are strictly required with mmap_prepare"
+>
+> or sth like that?
 
-ASSERT_NE(ptr, MAP_FAILED);
-ASSERT_NE(ptr2, MAP_FAILED);
+Well that's confusing though, because desc->vm_ops defaults to &dummy_vma_ops,
+and we absolutely do not require drivers to set vm_ops at all.
 
-> +		ASSERT_TRUE(false);
-> +	}
-> +	close(fd_zero);
-> +
-> +	/* Assert that they merged. */
-> +	ASSERT_TRUE(find_vma_procmap(procmap, ptr));
-> +	ASSERT_EQ(procmap->query.vma_start, (unsigned long)ptr);
-> +	ASSERT_EQ(procmap->query.vma_end, (unsigned long)ptr + 10 * page_size);
-> +}
-> +
-> +TEST_F(merge, merge_map_private_dev_zero_faulted_unfaulted)
-> +{
-> +	struct procmap_fd *procmap = &self->procmap;
-> +	unsigned int page_size = self->page_size;
-> +	char *carveout = self->carveout;
-> +	char *ptr, *ptr2;
-> +	int fd_zero;
-> +
-> +	if (access("/dev/zero", F_OK))
-> +		SKIP(return, "No /dev/zero.");
-> +	fd_zero = open("/dev/zero", O_RDWR);
-> +	ASSERT_NE(fd_zero, -1);
-> +
-> +	/*
-> +	 * Map a MAP_PRIVATE mapping of /dev/zero with page offset 0, then fault
-> +	 * it in:
-> +	 *
-> +	 * |-------------------------------|
-> +	 * |           faulted             |
-> +	 * |-------------------------------|
-> +	 */
-> +	ptr = mmap(carveout, 15 * page_size, PROT_READ | PROT_WRITE,
-> +		   MAP_FIXED | MAP_PRIVATE, fd_zero, 0);
-> +	if (ptr == MAP_FAILED) {
-> +		close(fd_zero);
-> +		ASSERT_TRUE(false);
+And as far as the driver is concerned maybe it's NULL? They maybe don't realise
+:)
 
-Same question regarding cleanup requirements. The ASSERT_TRUE(false) looks a bit
-odd.
+So the idea is to say don't allow them to try to do something they can't do.
 
--- 
-Cheers,
+>
+> > +	if (!desc->vm_ops)
+> > +		return -EINVAL;
+> > +
+> >  	err = call_action_prepare(map, desc);
+> >  	if (err)
+> >  		return err;
+> > @@ -2799,10 +2819,7 @@ static int call_mmap_prepare(struct mmap_state *map,
+> >  static void set_vma_user_defined_fields(struct vm_area_struct *vma,
+> >  		struct mmap_state *map)
+> >  {
+> > -	if (map->vm_ops)
+> > -		vma->vm_ops = map->vm_ops;
+> > -	else	/* Only /dev/zero should do this. */
+> > -		vma_set_anonymous(vma);
+> > +	vma->vm_ops = map->vm_ops;
+> >  	vma->vm_private_data = map->vm_private_data;
+> >  }
+> >
+> > @@ -2882,7 +2899,7 @@ static unsigned long __mmap_region(struct file *file, unsigned long addr,
+> >  		allocated_new = true;
+> >  	}
+> >
+> > -	if (have_mmap_prepare)
+> > +	if (have_mmap_prepare && !map_is_anon(&map))
+> >  		set_vma_user_defined_fields(vma, &map);
+>
+> Ah, we have mmap_zero_prepare() for handling the shmem_zero_setup_desc(). I was
+> just about to ask whether we can just get rid of this here.
+>
+>
+> But, hold on, do we now even need that? Could core-mm now take care of that as
+> well, and we could just remove mmap_zero_prepare() entirely?
+>
+> That is, we'd make shmem_zero_setup() in __mmap_new_vma() take care of this?
+> Then we might not even need shmem_zero_setup_desc() anymore.
+>
+> Maybe harder than it sounds at first.
 
-David
+I think I'd rather that be a follow up :) this series is about eliminiating the
+one last (I hope?) corner case for anon VMAs.
+
+>
+> --
+> Cheers,
+>
+> David
+
+--
+Cheers, Lorenzo
