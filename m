@@ -1,64 +1,64 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE224456E07
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 09:52:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD14445519B
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 09:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788774775; cv=none; b=PoDod6v8PaZBHDRuLRWTD4bY9yB1V5xcANYabC8uZR3EW5K1iC10dP0fnxsyEZReguAooDDMPAfE4hhj3ZtL1gtMmfoHLE5IyuylCAsnIczDgEhjOJ26rfqU2BiMZeFxVU9ppJC24FGSeIfqMdly2hr8dmX86XWnrqw/uCVaWzo=
+	t=1788774780; cv=none; b=dDWWtPjaideayMuRFQ/G+zNiGccNURvON+xLIZUzIHWDYymgfTf4r3qKYSPlA+svl16lBiZWTi6cPRHaCFOTKdL0Av3aEVTFGnI9dLGdTVU4vXL5QhIHzE8bUlLie0nfTDaAHUhy57AGe5CPTbLHpYnK3oynx+rhbK20BkZJNxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788774775; c=relaxed/simple;
-	bh=R5R4dBbRkL18oaDcmT8H6C5VQWPuThc9w+Im8ln/9mI=;
+	s=arc-20240116; t=1788774780; c=relaxed/simple;
+	bh=hBg3D/J/ocDdblowAKe4EaRsTJDtpQ8JcltIc+PaO7g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l1vANUpZtWoTgMnnNwMn+5irVnoWY+fWj6UEm0uL0+KHOxlaP4r01/y3kaDs/Yeeag4aag7DO8PRoy4XVeuklCpiKPqa8BO7tiGxwhBlJjzhWnAURDsNLm4gbdfMGPIHQv7os8ut2hWREiPTylI/SJ73y7JQoMVjcjA6ADRARpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LaiO/q0o; arc=none smtp.client-ip=209.85.216.45
+	 MIME-Version; b=sp8/wu4m9F+SBr+lrqzyaCofY6Qqr0lxmQUP9K88LEOQQBzLKzvoLa/zUSGYoRonQjKfF7/BNTI36CKTb1zsYdNpgP0BeCWaxoUse/ljLjqd/yX9INMIR8F1iHzXYHNMae9udqhot22SxzImvA/0Jr5Q/nkjfJ0opT9dpEemnk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ohjgjEDP; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LaiO/q0o"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-38ea87caafeso2653769a91.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 02:52:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ohjgjEDP"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cc1cb472b76so2684326a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 02:52:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788774773; x=1789379573; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788774778; x=1789379578; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=xJgFBYg28tVOaKzoqkIGeWjpddjUWJ3I21idFrjiKm4=;
-        b=LaiO/q0oGMceb6psUFFMiEoYqNzQqRDTrmxUF9jvpnuzBkNiDCAFOUKM9fub7pQ62/
-         Ou4dPnjgI9ha1zD4W3G9mS/JB0D4sk7OB/6NPg8D5mW8uzHv3TH0PfgxR7H+ajW9PfJV
-         RIvBPDYvPhfbJDz4sZIw3jdqO5hZ8Z9oh7LHHJQ/677JA6eXbSFIzZaSKr8Kn4cryN7t
-         2SzneNiJ0NQ5fxh5A3eZzeFB9U+vXy0FrZIesCaKTSanzlkqfk0fjR0Nu29wiPqu1SSB
-         zMKT9clIaP827qZKT/RVwNzpi8NS48JcUiedFYbJHtLllHXxNqo2zF5UifykepjV63g3
-         gs8g==
+        bh=TmSlKz9c4FGvbJaD9XV0mEk6m2YQk28BnycotBtjlRc=;
+        b=ohjgjEDPyWVFXL/YvsUNNYQm3/kg9LXFVuhuqKsFDsQRn8vGwq8OKn8nLjYJSwgYU2
+         AqBsIpi3EufW2MKZ+2s4mpF/ue56b/AohW/M1HCQMd8KDsm0mPLz5diUqbwLDuQYi23e
+         ilVCH4bD3kOixD+jc55SD6HCuQVfhuX/+SbR522BaY3PinHCbN2JVzHHfKJk04xPGqCm
+         aQ729ISMO3khxm1s29kj7hjKeTsXBZ6y9GVK66j59Oepl5ju9xSmNj5f7M1x9yhenmG/
+         DwEhWwG9Jxc7PsdIN4Vkhr1JoJpfKohD5/qIY8HFpk8d2hTzLF3BwH4wDyf4C6bO2Axc
+         RQfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788774773; x=1789379573;
+        d=1e100.net; s=20251104; t=1788774778; x=1789379578;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=xJgFBYg28tVOaKzoqkIGeWjpddjUWJ3I21idFrjiKm4=;
-        b=KRkWunettKg8/GIEX+oFNXJk777yajm+QUMnM7M5+s5o2wUr9xEcG39fdOXw1VbmkK
-         guOfdwTTIMV62HwadT8UNbtZuuy23YwpUlyi7Y9YA6fUPumFfQTQCn+xkDsDC1Ghuxb5
-         qmDLFg94vZB3QF23Dp/eXo/OdLOCcKwQknYHbCEdr6hkuFdSOJBeCVKZ4wcdDizOqiqm
-         al8xL7C3a9Y04uEIfzXrgVE1iJhB5KUQCZSiza0TbkzH4MbV1Bc+SQ16+FxHIpfJOQHK
-         7ncpEju7sn2jVLlrrW8QHiRY26FbMGZHpPd/Nm02D+SouQre9T4E7yDTGdiow3sdpVRk
-         TJhw==
-X-Forwarded-Encrypted: i=1; AKwUvBwLJh8AMoDRf81AR6CA2m8ZKdgJ7MRI9ZAxW8umTICVv7RY8r21qR56UXbq/d205LzSW2SDTEwNWpKOHUGu44Q=@vger.kernel.org
-X-Gm-Message-State: AFuF++mbLawcBSE0eQdJvkh5r4tBBFouXzrd+C0NmRJurANfrf+OJSf6
-	kncOUYPwu24GVpyCbKNmhfhBcAKxEQbOiUeWi2KN64qhqrOTHRgylvjW
-X-Gm-Gg: AYBFou3O2o0jC+OyyuSgg6tiY1h7T5gcodnvfLfvlfI3HFdlASxtGizRIMrtK4lKseJ
-	GcmLtdiz5Z4DGpRSWjc+s53hLEbpI/n+B9DNT3YjdOJxcDRVow1L+shZ8Yb+lkFqC4PZO2nUaJY
-	KOSKARxvNZbnDdyKnbsiv4Ik2olYI/8HVuiiRA2pjOR2Gmzy+lnDQM/lOYnC0txa74XQaOunpLC
-	MmH3fB7cFkStjo1+LIgPcATdztJ/gm9zhyn0NuGTPEu3JA3NXwfL5nzR8IADAyZHcRe7Vtkrjpc
-	aQ438SkFL/pQCx4bh/zwDFYsvUy4trRr9N1MYc48H+/+V9SEXxVSfCrrsHPEUYMxkFHQCB3G5pO
-	/LPOpUOYDydQvKKx9E9H2lyH0LNlMF6t3w7VmWCqSOPLm1oieBDMIiIghWV5R2uburJ/2iHjgJ0
-	Xa3cvldmODQ0jCFXqeol5l9RfuirThA5w14JYSePi2UicmJfYUHx8aLVnMqx3PNKuXqO0awvX5D
-	bU+jGjR+rl48cIsIdiJW0BI
-X-Received: by 2002:a17:90b:5246:b0:39a:e983:d4bd with SMTP id 98e67ed59e1d1-39b262a3cf7mr35585786a91.24.1788774773211;
-        Mon, 07 Sep 2026 02:52:53 -0700 (PDT)
+        bh=TmSlKz9c4FGvbJaD9XV0mEk6m2YQk28BnycotBtjlRc=;
+        b=dzJqWNnzfsVgmbQX11dUQ3ah7w1IrOzQdURCMrXA7hfDAvmB9cZQIDIpp7iTKWeMgY
+         xL4L4nlwOpPD2XGMRNclQfkCY7R2ch7D8wgG+M3TXT9fpS+YIsHYWoW3QPaUPORoUSPD
+         tXfI+oiQiGXLA36pt6Pi1Up7pOSkxpqJnLJe1pjIY6T9u0iohOX6Svi/RTkW4fKSkU44
+         x+q8Mvq3N3zNRyda7KUDWq7ZIoz7XuB41H1u4cDux90G2ugnm7UlPCDdSzMcZz5nEMGi
+         c7BQ1c/Wq7V4b0yuvcAXfB8iR2kIccllJFkM16SDwfBlRt5GfjTyMhM7dalusOnGQFM2
+         N9cA==
+X-Forwarded-Encrypted: i=1; AKwUvBzjuGwSSX4RYrjLP3G2CGbnl9dfld2OB3yqK925B3+pGx0P4+tMoVgoAL3QXAtqFSbCqNNNgdNUW4tZ5jdSi3Y=@vger.kernel.org
+X-Gm-Message-State: AFuF++llJLyfYKhy5h0cNWpco9TIPdljFj/XvYteEdAMVgQsD6VWFpK3
+	3+OMa4e5cwlZpD4+AYR3GRg1jOZkjjs91MDdA9oW67A0UHmNYLUhsyJr
+X-Gm-Gg: AYBFou2A/h8RbBmtMmUBsJIdfcInFub7L+oG+j0tC3DB7palCiC9dQCoZUMM7oLYD0M
+	Iv0h+JK2/61Qpc35pg5LXyGhKQ+mj0JHC8W9VkAGD/pbeYz5pEt9lDd72A2kB9cx3iVKMuYo1E4
+	ZFTP7fIX+t9xlBeknF10DS2zjuoCoGCvMmEhDYvv5gJrM08RwQRm/AdN9EKL1XOp4+1y62l2fbt
+	pksnmPwm9APbsN/Dg4ppFLZ/Ly4sndY95HLrYHBAFiA8OqLWqzQJBOsash8MmYhCf48AN7ZTY9r
+	1ySafHyIRcOnQUebJJqADonN834xRScRYocuqZlXApBeRxyqgEuu/vhpWw/jqEKMcfPRrSgyAPx
+	zt/raw29xPEw5obuyqiMUuggTer/JqBuE7greF+5vsHLqa0DQosh+QOnfCJqUnXPVa5qxpUwI7x
+	MVt5jHHGmgn0Sla1yUkbDsvfcKO97In3uWrkUtgy7ODOt9y+/jksRw7Ypiq8bav300kxiTn07/s
+	U2xMfcFMZUuJg==
+X-Received: by 2002:a05:6a21:6f12:b0:3bf:49c8:f7b with SMTP id adf61e73a8af0-3da39fdfe0cmr33889558637.13.1788774778035;
+        Mon, 07 Sep 2026 02:52:58 -0700 (PDT)
 Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14332405e92sm18924258c88.8.2026.09.07.02.52.48
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14332405e92sm18924258c88.8.2026.09.07.02.52.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2026 02:52:52 -0700 (PDT)
+        Mon, 07 Sep 2026 02:52:57 -0700 (PDT)
 From: Hemanth Selam <hemanth.selam@gmail.com>
 To: Pablo Neira Ayuso <pablo@netfilter.org>,
 	Florian Westphal <fw@strlen.de>,
@@ -74,9 +74,9 @@ Cc: netfilter-devel@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH nf-next v2 1/3] netfilter: arp_tables: fix typo "alignement" in comment
-Date: Mon,  7 Sep 2026 15:22:39 +0530
-Message-ID: <20260907095241.24441-2-hemanth.selam@gmail.com>
+Subject: [PATCH nf-next v2 2/3] netfilter: ipset: fix typo "artifical" in comment
+Date: Mon,  7 Sep 2026 15:22:40 +0530
+Message-ID: <20260907095241.24441-3-hemanth.selam@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20260907095241.24441-1-hemanth.selam@gmail.com>
 References: <20260907095241.24441-1-hemanth.selam@gmail.com>
@@ -103,19 +103,19 @@ Notes:
     
     v1: https://lore.kernel.org/all/20260907064239.39910-1-hemanth.selam@gmail.com/
 
- net/ipv4/netfilter/arp_tables.c | 2 +-
+ net/netfilter/ipset/ip_set_core.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/netfilter/arp_tables.c b/net/ipv4/netfilter/arp_tables.c
-index a87e07e80d0d..b680bd14d329 100644
---- a/net/ipv4/netfilter/arp_tables.c
-+++ b/net/ipv4/netfilter/arp_tables.c
-@@ -59,7 +59,7 @@ static inline int arp_devaddr_compare(const struct arpt_devaddr_info *ap,
- /*
-  * Unfortunately, _b and _mask are not aligned to an int (or long int)
-  * Some arches dont care, unrolling the loop is a win on them.
-- * For other arches, we only have a 16bit alignement.
-+ * For other arches, we only have a 16bit alignment.
-  */
- static unsigned long ifname_compare(const char *_a, const char *_b, const char *_mask)
- {
+diff --git a/net/netfilter/ipset/ip_set_core.c b/net/netfilter/ipset/ip_set_core.c
+index 0a86a170ba90..4aeb767088cf 100644
+--- a/net/netfilter/ipset/ip_set_core.c
++++ b/net/netfilter/ipset/ip_set_core.c
+@@ -1426,7 +1426,7 @@ static int ip_set_swap(struct sk_buff *skb, const struct nfnl_info *info,
+ 		return -IPSET_ERR_EXIST_SETNAME2;
+ 
+ 	/* Features must not change.
+-	 * Not an artifical restriction anymore, as we must prevent
++	 * Not an artificial restriction anymore, as we must prevent
+ 	 * possible loops created by swapping in setlist type of sets.
+ 	 */
+ 	if (!(from->type->features == to->type->features &&
