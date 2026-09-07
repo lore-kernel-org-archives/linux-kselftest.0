@@ -1,48 +1,48 @@
-Received: from out-93wp-a21.jellyfish.systems (out-93wp-a21.jellyfish.systems [104.207.68.21])
+Received: from out-2uec-a118.jellyfish.systems (out-2uec-a118.jellyfish.systems [63.250.43.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D721221FC6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6592857F0
 	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 01:21:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.207.68.21
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.250.43.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788744083; cv=none; b=Efk/d/h0uBLg480kb6ZvWkHl/ztAuSaPx7bOEbcTNmOjYmblcp3rSXg9iAIblIFqytID6XFxcGL8ogkFv4OAH/pjcuVs+E63NCSzEkrQxUPzRBPb/ehagbkPopQN9HC+iyuQ2f96lGhoj/bz83q+ZEwU83HS+Hsn8nRzasURZMA=
+	t=1788744083; cv=none; b=sx41/y8ht8ELNL4ZDpA7FMOgR5RSDkkb9Vlf1yJUrSO5uAPmODTKtNeFr6XJCGn+LZ+2xm+hxuvHmXdtcXdm3Ku8SdAS8Ck556KnIgmSV96dGNnxOFfXD1Z6FgyX8jgSjbKAwoRO0DRCHRPfcG+0UpJ9nlV6l9Usfmf5zLEsjqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1788744083; c=relaxed/simple;
-	bh=n6I3T9HODFXl8aM/iAv7esgrqP4JSMXFIy9ZJ2xwbxY=;
+	bh=IRE56WVX3dwqVWzGZI4zmf8UloIQ3ZU31Z9VISf2cs8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=shCdU4/TAgS3HqkDimNOYfhQ6wvjZLAB9PQuaBlPYTbTNW/zNZNdwhxB3efTFvc8uGbUmkEK3ZK+ku1v2zIPdN/NY+kzm0p5M6ULhVSmdH9sIgZAnnmyRoSvLYSqqWZwhvkbKH0WM+KWZ+wlDvQOFFyAdVMrp1ee4PjH90KEEHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=YsdHeULe; arc=none smtp.client-ip=104.207.68.21
+	 MIME-Version; b=HWhd+D3rqMkX6uqTR8ca4EtypuBCz6OTJvpsCF87kXZG8UpQ29mEnlDapA55pbvFnU2/TQO0F8wCVS/YYXUnWxCNR06hj5WEfcc9NbLCvDc96d44in4ns3aq9YL4LeQffZp3rbsAtd3AJaPWPTmpu5RZyp3XLGFv2ZDcZz/UUgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=jDGjehnY; arc=none smtp.client-ip=63.250.43.118
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="YsdHeULe"
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="jDGjehnY"
 Received: from 192.168.5.3 (unknown [69.5.53.41])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdTmY5yKSz6tll;
-	Mon, 07 Sep 2026 01:21:17 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdTmD1QwXz8sYS;
+	Mon, 07 Sep 2026 01:20:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1788744079;
-	bh=/pIG29M/yiUassiOGeJJ5zE9hVMB8+17QKVeUPfZeUA=;
+	s=spacemail; t=1788744062;
+	bh=XfxKpBvhfXs8G4qxM4Uz03DjYwo8QijjCQSAF1xi5yU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YsdHeULe3q6CmPK2wJUXDSAySynCJ7eM5zBlSFNGx/ovsU41K3CBuGE2NMUXV/qf2
-	 gkPKMXw+geB9Z2m9qlZJ4gY0/F/4jEssQTK+bqz596BjimeTlDWW6MpAd0hQeNpjkI
-	 rfPYWOdMyEzE5VG34QDpCAXt+67cn6EX8kvSKptQR1bdjfs4ewv7/7tAcnoT050NIM
-	 mfdRngJ8N7V4IKrWvNz0hkMl7vuiU+BKmykVk6xQ2GGSxsV9WEdpa+2mmw+pDKdZzv
-	 7YcG4ZpWK1Fhoq6xEUfcVmjRGsePzNz8e6HCrsJ7EDuCJz0BwwqGIuxAHRfMLgPQHZ
-	 i/Jdv5LhL+R2Q==
+	b=jDGjehnY8Ax05USkNTcVLXzFxrswWWDs7oIWB9dpv5WeW+t2B6EIlD5jOO0o0b9IA
+	 ddQEy7RZZPnTmWvhNAcVIfzfaMpNAL6MFGudm1U1fNR2UGk/0Q2g4XTT89yXGuA4ey
+	 PykJK5z86uDDXLHQ+R0v84qnJWuxbUxHgmraNhDrTo2wKZ5an4lVRZXi2PFuySZ5Od
+	 8O+/aEATbztmjv+bcfJqLBgIabbIR+MCh7MzkM2FTmpJIsr31UW3dJo7TXCKN0bghm
+	 y4ji6Xc/650YBYQWJCuW0dUXV3IyPcdqTqYRD/9IJ9Lk5MbkuIqR1cHABjBpS5UUxS
+	 EGMAcMElUwSaw==
 From: Tianyi Chen <hi@tychen.cc>
 To: bpf@vger.kernel.org
 Cc: Tianyi Chen <hi@tychen.cc>,
 	Quentin Monnet <qmo@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/2] bpftool: Batch bounded hash map dumps
-Date: Mon,  7 Sep 2026 09:21:13 +0800
-Message-ID: <178874362960.1415955.9584865244247659247.batch-v2-0@tychen.cc>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Cover symbolic bpftool map creation flags
+Date: Mon,  7 Sep 2026 09:20:51 +0800
+Message-ID: <178874362959.1415955.8526609394619576332.flags-v2-2@tychen.cc>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260906170819.1212661-1-hi@tychen.cc>
-References: <20260906170819.1212661-1-hi@tychen.cc>
+In-Reply-To: <178874362959.1415955.5742268739057412911.flags-v2-0@tychen.cc>
+References: <20260906170715.1212085-1-hi@tychen.cc> <178874362959.1415955.5742268739057412911.flags-v2-0@tychen.cc>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,48 +52,123 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Envelope-From: hi@tychen.cc
 
-Use lookup batches for ordinary hash maps whose maximum key/value
-storage fits within 4 MiB. Patch 1 implements batch traversal; patch 2
-checks complete output contents around its batch boundary and for short
-keys, odd-sized values and BTF formatting.
+Check numeric and symbolic map creation flags, including combined and
+repeated names, against map information read independently with libbpf.
+Exercise malformed names and lists, update-only flags, empty input and
+numeric range errors. Verify rejected input leaves no pinned map.
 
-Changes in v2:
-- Send fatal batch diagnostics to stderr. JSON elements arrays retain
-  only map-entry objects, including after a partially completed dump.
-- Use the BPF multiline comment style in the implementation and test.
+Assisted-by: Codex:GPT-6
+Signed-off-by: Tianyi Chen <hi@tychen.cc>
+---
+ .../bpf/prog_tests/bpftool_map_flags.c        | 99 +++++++++++++++++++
+ 1 file changed, 99 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
 
-Validation:
-- All 11 batch dump subtests passed in the integration run below.
-- Reproduced the v1 generic error object inside the elements array.
-- Injected initial EFAULT/ENOMEM and post-progress EIO/EINVAL with
-  strace for -j and -p, both with and without -r. All 16 cases returned
-  failure, emitted the diagnostic on stderr, and kept a complete JSON
-  document containing only the expected zero or 256 distinct entries.
-- Initial EINVAL/EOPNOTSUPP/ENOTSUPP fallback and ENOSPC growth before
-  and after progress still returned all 1,025 entries without duplicates.
-
-The injected syscall errors are not a real hash collision stress test.
-The batching algorithm and eligibility bound are unchanged from v1.
-
-v1: https://lore.kernel.org/r/20260906170819.1212661-1-hi@tychen.cc
-Request: https://github.com/libbpf/bpftool/issues/63
-
-Integration validation: the flags, ring-buffer and batch v2 series plus
-recursive dump v3 built together with LLVM 20. All 69 focused BPF subtests
-passed in an x86-64 KVM guest running Linux 7.3.0-rc1, with no skips or
-failures. The bpftool-map man page also built successfully. This is a
-focused run, not the full BPF selftest suite.
-
-
-Tianyi Chen (2):
-  bpftool: Use batch lookups for bounded hash map dumps
-  selftests/bpf: Check bpftool batch map dump contents
-
- tools/bpf/bpftool/map.c                       | 116 ++++++++++-
- .../bpf/prog_tests/bpftool_map_batch.c        | 187 ++++++++++++++++++
- 2 files changed, 295 insertions(+), 8 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
+new file mode 100644
+index 00000000000..140401dd254
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
+@@ -0,0 +1,99 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <errno.h>
++#include <unistd.h>
++#include <bpf/bpf.h>
++#include <bpftool_helpers.h>
++#include <test_progs.h>
++
++static const struct map_flags_test {
++	const char *name;
++	const char *flags;
++	__u32 expected_flags;
++	const char *error;
++} tests[] = {
++	{ "zero", "0", 0 },
++	{ "decimal", "129", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
++	{ "hexadecimal", "0x81", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
++	{ "octal", "0201", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
++	{ "positive_sign", "+1", BPF_F_NO_PREALLOC },
++	{ "single_name", "BPF_F_NO_PREALLOC", BPF_F_NO_PREALLOC },
++	{ "combined_names", "BPF_F_NO_PREALLOC,BPF_F_RDONLY_PROG",
++	  BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
++	{ "repeated_name", "BPF_F_NO_PREALLOC,BPF_F_NO_PREALLOC", BPF_F_NO_PREALLOC },
++	{ "unknown_name", "BPF_F_NOT_A_MAP_FLAG", 0, "can't parse" },
++	{ "other_command_flag", "BPF_F_PATH_FD", 0, "can't parse" },
++	{ "update_flag", "BPF_F_LOCK", 0, "can't parse" },
++	{ "abbreviated_name", "BPF_F_NO_PRE", 0, "can't parse" },
++	{ "lowercase_name", "bpf_f_no_prealloc", 0, "can't parse" },
++	{ "empty", "", 0, "can't parse" },
++	{ "whitespace", " ", 0, "can't parse" },
++	{ "empty_list", ",", 0, "can't parse" },
++	{ "leading_comma", ",BPF_F_NO_PREALLOC", 0, "can't parse" },
++	{ "trailing_comma", "BPF_F_NO_PREALLOC,", 0, "can't parse" },
++	{ "empty_element", "BPF_F_NO_PREALLOC,,BPF_F_RDONLY_PROG", 0, "can't parse" },
++	{ "number_then_name", "1,BPF_F_RDONLY_PROG", 0, "can't parse" },
++	{ "name_then_number", "BPF_F_NO_PREALLOC,128", 0, "can't parse" },
++	{ "numeric_list", "1,128", 0, "can't parse" },
++	{ "whitespace_in_list", "BPF_F_NO_PREALLOC, BPF_F_RDONLY_PROG", 0, "can't parse" },
++	{ "overflow_u32", "4294967296", 0, "can't parse" },
++	{ "overflow_hex", "0x100000000", 0, "can't parse" },
++	{ "overflow_u64", "18446744073709551616", 0, "can't parse" },
++	{ "negative", "-1", 0, "can't parse" },
++	/* Numeric bits unknown to bpftool must still reach the kernel. */
++	{ "all_bits", "0xffffffff", 0, "map create failed" },
++	{ "invalid_combination", "BPF_F_RDONLY,BPF_F_WRONLY", 0, "map create failed" },
++};
++
++static void test_map_flags(const struct map_flags_test *test, const char *path)
++{
++	char cmd[MAX_BPFTOOL_CMD_LEN], output[1024] = {};
++	struct bpf_map_info info = {};
++	__u32 info_len = sizeof(info);
++	int fd, err;
++
++	/* Let the flags parser handle negative numbers instead of getopt(). */
++	err = snprintf(cmd, sizeof(cmd),
++		       "-- map create %s type hash key 4 value 4 entries 1 name flags_test flags '%s' 2>&1",
++		       path, test->flags);
++	if (!ASSERT_GT(err, 0, "format_command") ||
++	    !ASSERT_LT(err, sizeof(cmd), "command_length"))
++		return;
++
++	err = get_bpftool_command_output(cmd, output, sizeof(output));
++	if (test->error) {
++		ASSERT_NEQ(err, 0, "reject_flags");
++		ASSERT_HAS_SUBSTR(output, test->error, "error_message");
++		err = access(path, F_OK);
++		ASSERT_EQ(err, -1, "no_pin");
++		ASSERT_EQ(errno, ENOENT, "pin_absent");
++		goto cleanup;
++	}
++	if (!ASSERT_OK(err, "create_map"))
++		goto cleanup;
++
++	fd = bpf_obj_get(path);
++	if (!ASSERT_OK_FD(fd, "open_map"))
++		goto cleanup;
++	if (ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &info_len), "map_info"))
++		ASSERT_EQ(info.map_flags, test->expected_flags, "map_flags");
++	close(fd);
++cleanup:
++	unlink(path);
++}
++
++void test_bpftool_map_flags(void)
++{
++	char dir[] = "/sys/fs/bpf/bpftool_flags_XXXXXX";
++	char path[sizeof(dir) + sizeof("/map")];
++	int i;
++
++	if (!ASSERT_OK_PTR(mkdtemp(dir), "create_pin_dir"))
++		return;
++	snprintf(path, sizeof(path), "%s/map", dir);
++	for (i = 0; i < ARRAY_SIZE(tests); i++) {
++		if (test__start_subtest(tests[i].name))
++			test_map_flags(&tests[i], path);
++	}
++	ASSERT_OK(rmdir(dir), "remove_pin_dir");
++}
 -- 
 2.55.0
 
