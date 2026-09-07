@@ -1,118 +1,109 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-68.mta0.migadu.com [91.218.175.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163544EE87D;
-	Mon,  7 Sep 2026 13:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038274E80DC
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 13:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788789117; cv=none; b=XCCQMI6yxWNiwhu1F2CFgILytFbKXvHY2HMlY0BcG6Leck0ri9NuLS73Joq8xex72gA0pv/dbJCY+qqM3VidrxT6R/kq2pENbbTJFIkFG3iVKJ4TZ3IWqFaRfL/xVbuX+oaRgUHJObtT3gifCQFqYDX8EmC+gdPEIKiX+XSQHc8=
+	t=1788789403; cv=none; b=f0nnadBI7VxnlGeq93AOblmGh+Qjc7u/8mISMMh0j+xNlxEQzQjj4catN2ARDp5kKOgpmtO9u94yGm43NTwWst+qer+i2dsrVrw5O9EtfhpDRW1rnovlDxudUMf8jVAO2RAxHflCZKHGxIs+xZMa6DWW7YsABkIiqpNfZGKBKa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788789117; c=relaxed/simple;
-	bh=ThHeYkZYHeYjd7tF89cElYsGMLmimQV2FzPcueOlD24=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cxTpAjErGYUl0UGzCPxu/MBFm3YZ/9/s4ywFlVO5BJsnpi5ajNgwZPyhISYqkNYW13p9HNI9o4j0tlAvrsl6iOGgE/bIW1NelhAjR82glzrJ5IhLh2pRas9J+jEOJsFohSIOfb5LhBK2IRHvemUNbLYxmILOIbA6JYsHEPSKthU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GlpGw7H8; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1788789403; c=relaxed/simple;
+	bh=ku9/UBu99vSafYGo9adeFr1f9lBsBT9crq+anMw3VDM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S3oTCIdVDt5DPjj/yF+3c3VCDZx7BQVpako0drMMviOsUFIj5cyEs3aSX8pDP+khEz00RRcz7WCuFK1iwQlaDM9d7LJqQ9R+ti4HVzegMLR0xs53gV7RxCKiIP9ninZKy2KTKvQquT1e6Jz9DSZpBOvdaXeS8weEPObkN38MPIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=coNMpP0i; arc=none smtp.client-ip=91.218.175.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GlpGw7H8"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 368E44E4156F;
-	Mon,  7 Sep 2026 13:51:53 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 086F460383;
-	Mon,  7 Sep 2026 13:51:53 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id EABD311C79257;
-	Mon,  7 Sep 2026 15:51:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1788789112; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=dCdnS8YGabKEY8dwf5ux6eiXZ8smgAq5tjIUZqqWccQ=;
-	b=GlpGw7H8O+6FyW9wvK2smDhNdOI28WjVK8NV8KC2zUsNI97UqIWeIRWS/GSO9YniJzgSoL
-	EbEFJzbs7igWmG3j9FqXp1hHQ3T7a44ZvOQaW4GAUQfWNSuFpRboOoiVTHkO8U6bm5Ymwu
-	2YurP8VJAFU9ITW/uDrFKY+2OTI0j7mkWHEM5Ebsc2q3ENJtW2MgYtFb3k0XcMq59fPv04
-	C6oIAJKd1PqWomXKGOOWiQRcDPld6/JsuG915suSh1RQfAG1V7JgNlXxrBkNmrrgyam/Qh
-	Xwg+H/wnyuvtW/LmMp8tRYKK2MniHp93xHAdRS9GJ7jjbl0ZMWdKkgJi44oY4g==
-Message-ID: <318ed226-ec5a-42f8-a2be-c41959970ef5@bootlin.com>
-Date: Mon, 7 Sep 2026 15:51:46 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="coNMpP0i"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ku9/UBu99vSafYGo9adeFr1f9lBsBT9crq+anMw3VDM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788789395; v=1; x=1789394195;
+ b=coNMpP0iL2skrqQ1eElLFpIaIfj4nan1asy2MqeBQqjHyQntRGLGREgjuUcP2kwsYpwmlfYP
+ FR2gBqzzSkfhYiwMzXojMGBm1VK1QCFvvzrRqVru3QzS0Twcr3aPTMR1xAtwPuq8RyOdJCeC78z
+ 0XLv58ituWXzHhwBDMlcj9lo=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 66dd265d53de2e57;
+	Mon, 07 Sep 2026 13:56:35 +0000
+X-Mizu-Trace-ID: 66dd265d53de2e57
+X-Migadu-Flow: FLOW_OUT
+From: Zenghui Yu <zenghui.yu@linux.dev>
+To: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	"Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
+Subject: [PATCH] selftests/mm: fix size truncation in pagemap_ioctl test
+Date: Mon,  7 Sep 2026 21:56:13 +0800
+Message-ID: <20260907135613.68692-1-zenghui.yu@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 2/2] selftests: drv-net: Use cross-compilation
- environment for the io_uring check
-To: netdev-bot+sashiko@kernel.org
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, donald.hunter@gmail.com,
- horms@kernel.org, shuah@kernel.org, matttbe@kernel.org, sdf@fomichev.me,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- thomas.petazzoni@bootlin.com, linux-kselftest@vger.kernel.org
-References: <20260903155524.2241065-3-maxime.chevallier@bootlin.com>
- <178870682049.219967.8686151218558794028@kernel.org>
-Content-Language: en-US
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-In-Reply-To: <178870682049.219967.8686151218558794028@kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-Hi,
+From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
 
-On 9/6/26 17:00, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issue(s) to consider:
-> 
-> Critical: 0 · High: 0 · Medium: 1 · Low: 1
-> 
-> - [Medium] Incomplete fix: the capability probe still uses a different
->   compiler than the one lib.mk installs to build `iou-zcrx`, in two…
-> - [Low] Missing `Fixes:` tag.
-> 
-> --
-> 
-> selftests: drv-net: Use cross-compilation environment for the io_uring check
-> 
-> This patch sets CC to $(CROSS_COMPILE)gcc at the top of
-> tools/testing/selftests/drivers/net/hw/Makefile so that the liburing
-> zero-copy capability probe (HAS_IOURING_ZCRX) is compiled with the
-> cross compiler instead of make's built-in default. The override is
-> guarded by ifeq ($(LLVM)$(CC),cc).
-> 
-> [Severity: Low]
-> 
-> Should this carry a Fixes: tag?  git blame on the baseline attributes the
-> whole probe block, including the ifeq ($(HAS_IOURING_ZCRX),y) gating, to
-> f81171fecd0c3 ("selftests: hw-net: auto-disable building the iouring C
-> code").  Since no CC is set before the probe in this Makefile, in
-> tools/testing/selftests/Makefile, or in lib.mk, that commit is where the
-> probe started evaluating with the built-in CC=cc in cross builds:
-> 
->   Fixes: f81171fecd0c3 ("selftests: hw-net: auto-disable building the iouring C code")
+On arm64 with 64K base pages, the huge page size is 512 MiB, and
+hpage_unit_tests() builds a 5 GiB range (10 * 512 MiB) for its tests.  This
+exceeds the range of the int size parameters of gethugepage(),
+wp_addr_range() and pagemap_ioctl().  The implicit truncation to 1 GiB
+makes gethugepage() allocate a too small buffer, while the callers keep
+operating on the original 5 GiB range, resulting in spurious failures or
+SIGSEGV.
 
-Yeah but OTHO this never worked, and apparently was never tested before.
+Change those size parameters to size_t.
 
-> 
-> On the changelog wording:
-> 
->> The CC value used for the io_uring library check defaults to the host
->> compiler, which will fail in cross-compiling environments.
+Fixes: 46fd75d4a3c9 ("selftests: mm: add pagemap ioctl tests")
+Assisted-by: GLM-5.3 OpenCode
+Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
+---
+ tools/testing/selftests/mm/pagemap_ioctl.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I'll reword yeah...
+diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+index eadc7159ca5b..48cbea3a33c9 100644
+--- a/tools/testing/selftests/mm/pagemap_ioctl.c
++++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+@@ -44,7 +44,7 @@ const char *progname;
+ 
+ #define LEN(region)	((region.end - region.start)/page_size)
+ 
+-static long pagemap_ioctl(void *start, int len, void *vec, int vec_len, int flag,
++static long pagemap_ioctl(void *start, size_t len, void *vec, int vec_len, int flag,
+ 			  int max_pages, long required_mask, long anyof_mask, long excluded_mask,
+ 			  long return_mask)
+ {
+@@ -152,7 +152,7 @@ int wp_free(void *addr, long size)
+ 	return 0;
+ }
+ 
+-int wp_addr_range(void *addr, int size)
++int wp_addr_range(void *addr, size_t size)
+ {
+ 	if (pagemap_ioctl(addr, size, NULL, 0,
+ 			  PM_SCAN_WP_MATCHING | PM_SCAN_CHECK_WPASYNC,
+@@ -787,7 +787,7 @@ int base_tests(char *prefix, char *mem, unsigned long long mem_size, int skip)
+ 	return 0;
+ }
+ 
+-void *gethugepage(int map_size)
++void *gethugepage(size_t map_size)
+ {
+ 	int ret;
+ 	char *map;
+-- 
+2.53.0
 
-[...]
-
-> 
-> Since the probe is expanded well before include ../../../lib.mk, would it
-> be possible to mirror lib.mk's own CC derivation here, or to move the probe
-> after lib.mk is included, so the gate always matches the compiler that
-> builds iou-zcrx?
-
-Well this is what I wanted to avoid :(
-
-Let me reword the commit log for V2, Matthieu if that's OK I'll also keep your
-R-b, as I'll leave the code as-is unless someone has any objection ?
-
-Maxime
