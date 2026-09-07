@@ -1,149 +1,218 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D3F92D949F;
-	Mon,  7 Sep 2026 12:52:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EE84BCAA9;
+	Mon,  7 Sep 2026 12:52:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788785540; cv=none; b=QIDDU43x7HX3n5tGuMdiBDUL80Ak9lvDKLf7bfB2N6isvoWr/5or+XcNl2HSKAF93y7nMewxsDcY/Fbqb5ioAs+a/95aUYeBpv0uMSSLMrvoSi0FqOx2Z99vam/uqkmJWRdTzGWniqH1cC4z0HEunAqzlM84ADuqfGD9przWlTw=
+	t=1788785549; cv=none; b=tG3/qb/bZFkvRUjimLY1JTNVjtdAfpOjUmagYU1R+DLD3N6rNQeN48HwrPtjf3yYd3f/jExg+pAL3Cpl9nRCOZGA3NbeG67grOLFmnPkweG8QVEf/apr/wEd2IEszz23eoHGT7Sn37NLwbTPpeYSym9xhrZQ1WrEiWxdc6uqnIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788785540; c=relaxed/simple;
-	bh=MZhF9bnZvbOFE7bsrMQoFB6pM4cvaxyJ/W22+E0UBAk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c2ooyyRxOyXL5ueQlb7U3otJ2h+8mESqM9oX7mtjGuWCs6hze2xzYVB4OP+AuwKUeRGzCHplvDmCUjhouBPercrt4euXtHF2QjIsD0fz7XJT9q60olIiR+aX3/pS6pLHi7nTEU1HETizbFbtU9chSsSqN8fFwcVffhdt9dRdM7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hdmfx1hxjzKHLtb;
-	Mon,  7 Sep 2026 20:32:25 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 6A37D4058C;
-	Mon,  7 Sep 2026 20:33:25 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgCXCbcTr55qPXJXBA--.48482S2;
-	Mon, 07 Sep 2026 20:33:25 +0800 (CST)
-Message-ID: <8116d851-b52f-4b17-9ff5-45a0c5d45e07@huaweicloud.com>
-Date: Mon, 7 Sep 2026 20:33:23 +0800
+	s=arc-20240116; t=1788785549; c=relaxed/simple;
+	bh=x8b7N9jqfDk77DldP5fChz2gndYQavocBAogp1SVOLE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uftWreUEHDPRQoqcl2SdGwp0Cm7Os3c1leVgqPE4iYnABBJBLIYjXVVMrmqjIczQS/tThl4xS1HAv/S7LZZTRQ7hN3vW7rdJx7bpX92f9t9miOLBGEc8cCXtz92PMVBTPd0EbNlWGgADcen14xeq2aOiK94aDPTC64bKaP6vdI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=mfJAnWbd; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="mfJAnWbd"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=ripSjHDdp3XrP9PDd5/ms7sEI5CQitY+Sd0KNfUlUvg=; b=mfJAnWbd01mYqQuT06W19DFHyM
+	7nUOhAl/0IERfO2ss1DRPwYzITrBYDj0TVgRqSw7T4IfTYFh69BilY1Wks2aGNyGtzfXj0PtkIcRX
+	iXMGcAb/Ln7Uezc94gkHHrvxFlU90Iqujwm67Mcpk9jpMonAe85fndZyj/DsOsPK24lM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1x3Ypc-003WG6-Pg; Mon, 07 Sep 2026 14:52:16 +0200
+Date: Mon, 7 Sep 2026 14:52:16 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Hemanth Selam <hemanth.selam@gmail.com>
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Sudarsana Kalluru <skalluru@marvell.com>,
+	Manish Chopra <manishc@marvell.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>,
+	Edward Cree <ecree.xilinx@gmail.com>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-net-drivers@amd.com, linux-kselftest@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] net: fix typos in comments
+Message-ID: <8f289b56-0d4f-470f-a0ba-bdd6b4ee524f@lunn.ch>
+References: <20260907044635.7141-1-hemanth.selam@gmail.com>
+ <20260907044635.7141-2-hemanth.selam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: cover the exception callback
- using its own BPF stack
-Content-Language: en-US
-To: Donggeun Yoo <donggeunyoo.kernel@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Mark Rutland <mark.rutland@arm.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Puranjay Mohan <puranjay@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>,
- Will Deacon <will@kernel.org>, Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260907054235.473103-1-donggeunyoo.kernel@gmail.com>
- <20260907054235.473103-3-donggeunyoo.kernel@gmail.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <20260907054235.473103-3-donggeunyoo.kernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:_Ch0CgCXCbcTr55qPXJXBA--.48482S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxur4xXw47uFW8uw1xAFWfGrg_yoW5Ar4fpF
-	yqvF9xKF95JFnFva47Jw40ga1rWrs7XF48CrWkXr1YvF1xtrn7WF1xKFZ8tw45CrWSyrn5
-	Za1Yvr93Kw45C3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	s2-5UUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260907044635.7141-2-hemanth.selam@gmail.com>
 
-On 9/7/2026 1:42 PM, Donggeun Yoo wrote:
-> The existing exception tests do not reach a callback that materializes
-> BPF_REG_FP into a register. They either throw from the main program,
-> where BPF_REG_FP already holds the value the callback needs, or use a
-> callback whose only stack accesses are frame pointer relative, which the
-> arm64 JIT rewrites to be stack pointer relative.
+On Mon, Sep 07, 2026 at 10:16:30AM +0530, Hemanth Selam wrote:
+> Fix typos in comments, reported by scripts/checkpatch.pl using the
+> misspelling list in scripts/spelling.txt.  Only touches comments, no code
+> changes.
 > 
-> Add a test that throws from a subprogram using its own BPF stack, with a
-> callback that hands the address of a local variable to
-> bpf_probe_read_kernel(). The helper and the callback have to name the
-> same slot for the value read back to be the one the helper stored.
-> 
-> Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+> Assisted-by: Cursor:claude-opus-5
+> Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
 > ---
->   .../selftests/bpf/prog_tests/exceptions.c     |  1 +
->   .../testing/selftests/bpf/progs/exceptions.c  | 29 +++++++++++++++++++
->   2 files changed, 30 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-> index 3588d6f97fd4..639866ce09a9 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-> @@ -55,6 +55,7 @@ static void test_exceptions_success(void)
->   	RUN_SUCCESS(exception_ext, 0);
->   	RUN_SUCCESS(exception_ext_mod_cb_runtime, 35);
->   	RUN_SUCCESS(exception_throw_subprog, 1);
-> +	RUN_SUCCESS(exception_throw_subprog_stack_cb, 0x1234);
->   	RUN_SUCCESS(exception_assert_nz_gfunc, 1);
->   	RUN_SUCCESS(exception_assert_zero_gfunc, 1);
->   	RUN_SUCCESS(exception_assert_neg_gfunc, 1);
-> diff --git a/tools/testing/selftests/bpf/progs/exceptions.c b/tools/testing/selftests/bpf/progs/exceptions.c
-> index c8d716fbd419..2b01b45cef06 100644
-> --- a/tools/testing/selftests/bpf/progs/exceptions.c
-> +++ b/tools/testing/selftests/bpf/progs/exceptions.c
-> @@ -212,6 +212,35 @@ int exception_throw_subprog(struct __sk_buff *ctx)
->   	return 0;
->   }
->   
-> +u64 exception_cb_stack_src = 0x1234;
-> +
-> +/* The address handed to the helper has to be this callback's own stack
-> + * slot, not one from a frame that is already gone.
-> + */
-> +__noinline int exception_cb_stack(u64 cookie)
-> +{
-> +	volatile u64 val = 0xdead;
-> +
-> +	bpf_probe_read_kernel((void *)&val, sizeof(val), &exception_cb_stack_src);
-> +	return val;
-> +}
-> +
-> +/* Throws from a subprogram that has a stack of its own. */
-> +__noinline static int throwing_subprog_stack(struct __sk_buff *ctx)
-> +{
-> +	volatile u64 pad[4] = {};
-> +
-> +	bpf_throw(pad[0]);
-> +	return 0;
-> +}
-> +
-> +SEC("tc")
-> +__exception_cb(exception_cb_stack)
-> +int exception_throw_subprog_stack_cb(struct __sk_buff *ctx)
-> +{
-> +	return throwing_subprog_stack(ctx);
-> +}
-> +
->   __noinline int assert_nz_gfunc(u64 c)
->   {
->   	volatile u64 cookie = c;
+>  drivers/net/dsa/bcm_sf2_cfp.c                          |  2 +-
+>  drivers/net/dsa/microchip/ksz_dcb.c                    |  2 +-
+>  drivers/net/dsa/realtek/rtl8366rb.c                    |  2 +-
+>  drivers/net/dsa/sja1105/sja1105_tas.c                  |  2 +-
+>  drivers/net/ethernet/3com/typhoon.h                    |  2 +-
+>  drivers/net/ethernet/8390/ax88796.c                    |  2 +-
+>  drivers/net/ethernet/airoha/airoha_eth.c               |  2 +-
+>  drivers/net/ethernet/allwinner/sun4i-emac.c            |  2 +-
+>  drivers/net/ethernet/amazon/ena/ena_eth_com.h          |  2 +-
+>  drivers/net/ethernet/amd/xgbe/xgbe-dev.c               |  2 +-
+>  drivers/net/ethernet/apm/xgene/xgene_enet_main.c       |  2 +-
+>  drivers/net/ethernet/atheros/atl1c/atl1c_hw.h          |  2 +-
+>  drivers/net/ethernet/atheros/atl1e/atl1e.h             |  2 +-
+>  drivers/net/ethernet/atheros/atl1e/atl1e_hw.c          |  2 +-
+>  drivers/net/ethernet/atheros/atl1e/atl1e_main.c        |  2 +-
+>  drivers/net/ethernet/atheros/atlx/atl1.c               |  2 +-
+>  drivers/net/ethernet/atheros/atlx/atl2.c               |  2 +-
+>  drivers/net/ethernet/broadcom/bcm63xx_enet.c           |  2 +-
+>  drivers/net/ethernet/broadcom/bcm63xx_enet.h           |  2 +-
+>  drivers/net/ethernet/broadcom/bcmsysport.h             |  2 +-
+>  drivers/net/ethernet/broadcom/bnx2x/bnx2x.h            |  2 +-
+>  drivers/net/ethernet/broadcom/bnx2x/bnx2x_dcb.c        |  4 ++--
+>  drivers/net/ethernet/broadcom/bnx2x/bnx2x_hsi.h        |  2 +-
+>  drivers/net/ethernet/broadcom/bnx2x/bnx2x_init_ops.h   |  2 +-
+>  drivers/net/ethernet/broadcom/bnx2x/bnx2x_link.c       |  8 ++++----
+>  drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c       |  2 +-
+>  drivers/net/ethernet/broadcom/bnx2x/bnx2x_reg.h        |  4 ++--
+>  drivers/net/ethernet/brocade/bna/bfa_ioc.c             |  4 ++--
+>  drivers/net/ethernet/brocade/bna/bna_enet.c            |  4 ++--
+>  drivers/net/ethernet/calxeda/xgmac.c                   |  2 +-
+>  drivers/net/ethernet/cavium/liquidio/cn66xx_device.c   |  2 +-
+>  drivers/net/ethernet/cavium/liquidio/lio_core.c        |  2 +-
+>  drivers/net/ethernet/cavium/liquidio/octeon_config.h   |  4 ++--
+>  drivers/net/ethernet/cavium/liquidio/octeon_iq.h       |  2 +-
+>  drivers/net/ethernet/cavium/liquidio/octeon_main.h     |  2 +-
+>  drivers/net/ethernet/cavium/liquidio/octeon_nic.h      |  2 +-
+>  drivers/net/ethernet/cavium/liquidio/request_manager.c |  2 +-
+>  drivers/net/ethernet/cavium/thunder/nic.h              |  2 +-
+>  drivers/net/ethernet/cavium/thunder/nic_main.c         |  2 +-
+>  drivers/net/ethernet/chelsio/cxgb3/sge.c               |  2 +-
+>  drivers/net/ethernet/chelsio/cxgb4/cxgb4_dcb.c         |  2 +-
+>  drivers/net/ethernet/chelsio/cxgb4/cxgb4_ethtool.c     |  2 +-
+>  drivers/net/ethernet/chelsio/cxgb4/t4_hw.c             |  2 +-
+>  drivers/net/ethernet/chelsio/cxgb4vf/sge.c             |  2 +-
+>  drivers/net/ethernet/cirrus/cs89x0.c                   |  4 ++--
+>  drivers/net/ethernet/dec/tulip/de2104x.c               |  2 +-
+>  drivers/net/ethernet/dec/tulip/interrupt.c             |  4 ++--
+>  drivers/net/ethernet/dec/tulip/media.c                 |  2 +-
+>  drivers/net/ethernet/dec/tulip/tulip.h                 |  4 ++--
+>  drivers/net/ethernet/dec/tulip/winbond-840.c           |  2 +-
+>  drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c       |  2 +-
+>  drivers/net/ethernet/freescale/fman/fman_memac.c       |  2 +-
+>  drivers/net/ethernet/freescale/gianfar.c               |  2 +-
+>  drivers/net/ethernet/freescale/gianfar.h               |  2 +-
+>  drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c     |  2 +-
+>  drivers/net/ethernet/hisilicon/hns/hns_dsaf_ppe.c      |  2 +-
+>  drivers/net/ethernet/hisilicon/hns/hns_enet.c          |  4 ++--
+>  .../net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c    |  2 +-
+>  drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_tm.c  |  2 +-
+>  .../net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c  |  2 +-
+>  drivers/net/ethernet/ibm/emac/emac.h                   |  2 +-
+>  drivers/net/ethernet/ibm/emac/phy.h                    |  2 +-
+>  drivers/net/ethernet/jme.h                             |  2 +-
+>  drivers/net/ethernet/marvell/mvpp2/mvpp2.h             |  2 +-
+>  drivers/net/ethernet/marvell/mvpp2/mvpp2_prs.c         |  8 ++++----
+>  drivers/net/ethernet/marvell/octeontx2/af/npc.h        |  4 ++--
+>  drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c    |  2 +-
+>  drivers/net/ethernet/marvell/octeontx2/nic/cn10k.c     |  2 +-
+>  .../net/ethernet/marvell/octeontx2/nic/otx2_dcbnl.c    |  2 +-
+>  drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c   |  2 +-
+>  drivers/net/ethernet/marvell/pxa168_eth.c              |  4 ++--
+>  drivers/net/ethernet/mellanox/mlx4/eq.c                |  2 +-
+>  drivers/net/ethernet/mellanox/mlx5/core/en/tc/sample.c |  2 +-
+>  drivers/net/ethernet/mellanox/mlx5/core/lib/tout.c     |  2 +-
+>  drivers/net/ethernet/mellanox/mlxsw/i2c.c              |  2 +-
+>  drivers/net/ethernet/mellanox/mlxsw/reg.h              |  2 +-
+>  drivers/net/ethernet/natsemi/sonic.h                   |  2 +-
+>  drivers/net/ethernet/nvidia/forcedeth.c                |  4 ++--
+>  drivers/net/ethernet/qlogic/netxen/netxen_nic_ctx.c    |  2 +-
+>  drivers/net/ethernet/qlogic/qed/qed_cxt.c              |  2 +-
+>  drivers/net/ethernet/qlogic/qed/qed_dev.c              |  2 +-
+>  drivers/net/ethernet/qlogic/qed/qed_mcp.h              |  2 +-
+>  drivers/net/ethernet/qlogic/qlcnic/qlcnic.h            |  2 +-
+>  drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c  |  4 ++--
+>  drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c        |  2 +-
+>  drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c       |  4 ++--
+>  drivers/net/ethernet/qualcomm/emac/emac-mac.c          |  2 +-
+>  drivers/net/ethernet/realtek/8139too.c                 |  2 +-
+>  drivers/net/ethernet/realtek/rtase/rtase_main.c        |  2 +-
+>  drivers/net/ethernet/seeq/sgiseeq.c                    |  2 +-
+>  drivers/net/ethernet/sfc/falcon/falcon.c               |  2 +-
+>  drivers/net/ethernet/sfc/mcdi_pcol.h                   |  8 ++++----
+>  drivers/net/ethernet/sfc/siena/mcdi_pcol.h             |  6 +++---
+>  drivers/net/ethernet/sfc/siena/ptp.c                   |  2 +-
+>  drivers/net/ethernet/sgi/meth.h                        |  2 +-
+>  drivers/net/ethernet/silan/sc92031.c                   |  6 +++---
+>  drivers/net/ethernet/sis/sis900.c                      |  2 +-
+>  drivers/net/ethernet/smsc/smsc9420.c                   |  2 +-
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c      |  2 +-
+>  drivers/net/ethernet/sun/cassini.h                     |  2 +-
+>  drivers/net/ethernet/synopsys/dwc-xlgmac-common.c      |  2 +-
+>  drivers/net/ethernet/synopsys/dwc-xlgmac-hw.c          |  2 +-
+>  drivers/net/ethernet/tehuti/tehuti.c                   |  8 ++++----
+>  drivers/net/ethernet/ti/tlan.c                         |  2 +-
+>  drivers/net/ethernet/toshiba/ps3_gelic_net.c           |  2 +-
+>  drivers/net/ethernet/toshiba/ps3_gelic_net.h           |  2 +-
+>  drivers/net/ethernet/toshiba/ps3_gelic_wireless.c      |  2 +-
+>  drivers/net/ethernet/via/via-rhine.c                   |  2 +-
+>  drivers/net/ethernet/via/via-velocity.c                | 10 +++++-----
+>  drivers/net/fddi/skfp/cfm.c                            |  2 +-
+>  drivers/net/fddi/skfp/ecm.c                            |  2 +-
+>  drivers/net/fddi/skfp/fplustm.c                        |  4 ++--
+>  drivers/net/fddi/skfp/h/hwmtm.h                        |  2 +-
+>  drivers/net/fddi/skfp/h/sba.h                          |  2 +-
+>  drivers/net/fddi/skfp/pcmplc.c                         |  2 +-
+>  drivers/net/fddi/skfp/rmt.c                            |  2 +-
+>  drivers/net/ipa/ipa_interrupt.h                        |  2 +-
+>  drivers/net/phy/bcm87xx.c                              |  2 +-
+>  drivers/net/phy/marvell.c                              |  2 +-
+>  drivers/net/ppp/ppp_generic.c                          |  4 ++--
+>  drivers/net/usb/ax88179_178a.c                         |  4 ++--
+>  drivers/net/wan/slic_ds26522.c                         |  2 +-
+>  drivers/s390/net/ctcm_main.c                           |  4 ++--
+>  drivers/s390/net/qeth_core.h                           |  2 +-
+>  include/net/inet_hashtables.h                          |  2 +-
+>  include/net/sock.h                                     |  2 +-
+>  net/ipv4/tcp.c                                         |  2 +-
+>  net/ipv4/tcp_input.c                                   |  2 +-
+>  net/ipv4/tcp_output.c                                  |  2 +-
+>  net/ipv6/calipso.c                                     |  4 ++--
+>  net/llc/llc_c_ac.c                                     |  2 +-
+>  net/netlink/af_netlink.c                               |  2 +-
+>  net/sctp/protocol.c                                    |  4 ++--
+>  net/sctp/sm_make_chunk.c                               |  4 ++--
+>  net/sctp/sm_sideeffect.c                               |  2 +-
+>  net/sctp/transport.c                                   |  2 +-
+>  net/sctp/ulpqueue.c                                    |  2 +-
+>  samples/pktgen/README.rst                              |  2 +-
+>  tools/testing/selftests/drivers/net/team/options.sh    |  2 +-
+>  .../selftests/net/arp_ndisc_untracked_subnets.sh       |  4 ++--
+>  tools/testing/selftests/net/forwarding/lib.sh          |  2 +-
+>  tools/testing/selftests/net/ip_defrag.c                |  2 +-
+>  142 files changed, 184 insertions(+), 184 deletions(-)
+
+It takes me a surprising amount of time to review each change. 184
+changes is too many to review at once. Please split this patch by
+vendor.
 
 
-Acked-by: Xu Kuohai <xukuohai@huawei.com>
+    Andrew
 
+---
+pw-bot: cr
