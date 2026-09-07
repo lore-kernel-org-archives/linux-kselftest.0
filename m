@@ -1,62 +1,64 @@
-Received: from mail-pj2-f6.google.com (mail-pj2-f6.google.com [74.125.227.134])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588224A2630
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 13:06:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBA8C47278D
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 13:06:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788786400; cv=none; b=eFMfTKmz9NojHkHA8IwH7hV6kf3JThqwarBsKxVqxaRZOHCuvr/wGenGv/mSupciuKhM2YDXRmMLAuSmWVM3BiOcQ5hVey1zD0yg3GGgc3Z4JLR22iaOS9EgiVXXgALgHO/EzdbCaipoE23ex2e2WnO35g0DWLPr+vmQJ9UWLVs=
+	t=1788786413; cv=none; b=nHMBONFddbZ23efZ2KHdHXK47+Wtozscgq/I2dR32kWGxgq/gs0PxgN0Xj4aX0dQ8Bgjhir1tyxU/IKl3oXszkCU2lnLVniOLbgBZ1CwgsKmXBdb27KS4KqBGtUiNByGuYrDmk0dkU8LckvkSFitqUxCORZh86ouWgx3WlIEQyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788786400; c=relaxed/simple;
-	bh=KVlall24y0p+qSno+YoVUQqAPfLtfndwd2+UzHAoFPA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=glsZKXCypDOQmv8ql+mYQBMzIwDYEFC6KdIsUqne/Z9TZWloZMY6S8/th3nh/DRbWShKqcZ27Mx22xBlckbPuxfznHNLWtCcB92YrJHz4jIkuxhbZiCYIW2G5TcoJU3lKAHCgw6rvgSTeX6WgLx25fI+DbvazJwJ6I0YjX86ZDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H3qWyb9H; arc=none smtp.client-ip=74.125.227.134
+	s=arc-20240116; t=1788786413; c=relaxed/simple;
+	bh=kUOr/kXMiEHJllHl5FfrdB2jjdM1d+MjF5uadLEvrz8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cxsYU7MCmn0HKq/2kn+D5n0atPGZwdxL7oljzr3LaL8m/cnsvyPeLuKaSihIJXRztBo7jqsPSvZMhyU0uFLxnriXuaX0wSW7eH9s69O5lxG2EDwo3cBZVP8o/GVVQeEOaVE9lDmRJXpm1Da5oJgmudyZ9EkhityrqASJd8uw4J0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K9P/Own6; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H3qWyb9H"
-Received: by mail-pj2-f6.google.com with SMTP id d9443c01a7336-2d74bbdc61fso861665ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 06:06:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K9P/Own6"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-382ef647e20so3517741a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 06:06:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788786394; x=1789391194; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=riOSU4dH10zq3tO5Dx537AG40XCcFzKoLCwwWkJ2TP8=;
-        b=H3qWyb9HYdUXJ65laXKBATV1baqz1RgE7zo0b3nN9AwTcM5Bt7qRTW9J36gxaYzzNV
-         GELDpAAL3tt4ZvdmFhSzX2zvdFGCasxYHrj6SbjdJRL6Dwr1LCiYj4DBXrTH6yOHWkKI
-         Awa5OTOnpMG/iCsflOls/EnjN5bVePxtYOIoCOCuSpQ/GvRJb4+yuTuSO67ay+//8VG/
-         6Po5xHLKnq/4TvsEDO0m+KLup5Ct02olWGNMcavO1zXLzjnPvVJz7N9SQ/f+pQafDB7R
-         //y2yGMAkZpwiEXwLp0jF448C80y3JcjHGbTinlWEHkUjjZUNkTc3GqbKcKPo1z9cBAm
-         8XgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788786394; x=1789391194;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1788786401; x=1789391201; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=riOSU4dH10zq3tO5Dx537AG40XCcFzKoLCwwWkJ2TP8=;
-        b=bszPxCozkbKQ3MRblVCTKxNHpXvKXj5y0oO1FJE29ChkDyuAG+zh3/QOVjmNP+bAsk
-         UhCdo5jZjCs9fyy/80+VuRsZWf3B8gy9uTbAnPdo2FeC+8LyBbNJ+GPAoRkF0L0JzJGT
-         GvJGtCUWIeSJAvBZiPALgNChWCQk1oTbETEM+EhSuKGKIRnoD2X2bXSelRdiH0nL97g2
-         kZ8/zKzjeurphya1GdyCu1g/EzvAARN/Kc72qcQzXBV7Zsxzwa/UESs3MdRXl+7/34zl
-         FHpAzgJ3dorA6AN5xITVFZkB1Mo+7AcA47mvnZwfJ+1bc09ZXdsAfyWs83SoBFmrRUfw
-         66eA==
-X-Forwarded-Encrypted: i=1; AKwUvBxuVU5SO3DmjS/IjS48Fx42UPfHqUB2RDU2pclGNGIqiIXrvi9rxegrVZV9egnCeM14DKQel18T62elkPSmnHA=@vger.kernel.org
-X-Gm-Message-State: AFuF++nZOZqn8vq3B+3TRcdaLcNHnIEt2mgR0ILd9xu4K2do4RbVAewA
-	gpzS87bnWvi6sLi6lJSSY+vxgiy/C4us4NIIpYVVh93u6uR9PoHaq1U=
-X-Gm-Gg: AYBFou39Y1Vcoe35bk17d+2FDrM55y9OXdezH3H3YvAlvSwMYPDz4FMIO1DZCRJ7Kg+
-	bFdf2LDvFjP2HXmWFX2Eexdts8xsRP9ahrRA8Bt7GoUi6LnALcDP0EzBPe0d+ZVgynBQUvLYXuq
-	uqIUwLbpRgBBZGYNEb1wXypBO6fQs2/UwrNL5N/cCvh6JqbUSQyUMakErX6FJkl8j/z+5wuzkIQ
-	2gOMKafLEcC6egUGTLi3Pg6zga5jW53AG31lj3kS7RC2mNBDOTggWs01rjD6kYgP6H8SV1Y3GCp
-	3S7p5XHzh+81VxOoWrF7jdeyAiGYksxpxeAfK3lfAU3kUuylyKFSmjDadiV9ivUYiKQgOhUNWkZ
-	0nuCmRZHs18BstjfzzoF7KSAbAToXlxam/uyMBUDl7hs0DMgLETEEj4LZuyRqSJg3jGj2KG0+xt
-	zs9eQORaz41ALthAHkugqwqfGLr96JNs6YGDSfRNhNa3hM4dfeyuWXqsWy0Uk5TFu/4l6WyVZGW
-	OWx0YQ+LZXwgwZJpevgH0ZHZGs=
-X-Received: by 2002:a17:90b:4b83:b0:398:9bd3:d6d2 with SMTP id 98e67ed59e1d1-39b8bec8c1fmr661379a91.12.1788786394289;
-        Mon, 07 Sep 2026 06:06:34 -0700 (PDT)
+        bh=6SxQC1ayWQCOsksETTmVt8rx2S1MTrrOl76Pd3OeUuw=;
+        b=K9P/Own6aA1ed3yRY33F8o7yCZCXQGZbbI5VONJr581lkdOfGz/ecACdtWg0ntZhsk
+         OG8HA/MU6V/QewoeFr0qSeho3AYtTypFZxrPX+h6bvodKg2VW2DVFIANZWpk7O6z/5Cf
+         Do+IWVaYbWI0Zl/U5c+UAdSkSZ8zutS5umCFLCI1LdeJYOQcxVMGY4uoXp0bnDFqCgW8
+         3JMXgnvycXpFukGHA340BYGX6LH1sBEwWWs8Wj763SvguLdtyx0jr+1QYj9l9cKNxvhR
+         ggq2r+sNKqpmK9MAMcSRj0j4Rl88MW5Wcb7/PseOL3AA6zaGtaX0CacPU9sk9+8A7Nsv
+         QZeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788786401; x=1789391201;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=6SxQC1ayWQCOsksETTmVt8rx2S1MTrrOl76Pd3OeUuw=;
+        b=a8ag+7RCUe4PykKR9J4YIbPNeNQZ54HKxrS+N8aO7f2VpGol17NwLOV+m7vJ9wDlhF
+         3yGXwKlfJ0OTkkCsWhc2fCSvHhduWjVrVvpIpTOY+zvuTHvkBHkR8xqtTojDzB4yVFze
+         e8C7Npp54jR09MqPcaBuytDc43Z1rA7BeDBuS90NquIl29umOIxm5/yokggfgNZUmBwP
+         wBLRcHBB23gmxLiugtiZYA1pDl63GL5sJhNPO/pjyFXFLSGAFVUnKMFTiub/MkUQUwJV
+         O5G6tEaQcCdKwL85H5uiF62omy7mtJk4lNmzhvyp/hk9LYZ/buAFV1yz2ls6GMt6PQf+
+         1IfA==
+X-Forwarded-Encrypted: i=1; AKwUvBzFeuncA5WZFHR6RUXVTWYtWpZfutbYuSFwjuvPSOCV29L3iz/JIfIXdcJhUVWG2pJLuXg04kD/mso1ovtONXw=@vger.kernel.org
+X-Gm-Message-State: AFuF++l/SN65WU5K1VcOmFLwd6LnD5uNf2J3Q/5HSS1p5AsG0LTZqsZJ
+	yf8lRy7VFt3Dc9Z+y3d9NpIPUZBcZD4fnPXOIdEQ/cMPKFbHjdfdOEY=
+X-Gm-Gg: AYBFou3xM4nNtW1rLT2kMkRb1hG5OzeE4+ujepeUq5Nu3cwts1MtjHtLDKYw5Ei37f5
+	4ZzU+zCq8bXWGfhZmtzHKR65Ir5kfhy00tElEJ/SmrbFZ7gG4y0Y0KDUepwZ5eezMWZO5jQAdcD
+	TbVM+J34cokk6LticSFuEwWJshpXLRWXOsM7nnXO7dSwb6vjMyyZpNVrPoiJpeBCj54qDGU8XVD
+	YpIl87f27QovyFYJ2CFzz8zmKrmyz7+J+8IU1evzcwi8Tmi1kGVlsoOX9zOoPtYOErDNouf1SAa
+	zvpMmBFVjo6p71kJh7Xf1W9fNzNGClvbt8HA5whRg/QbjZVH246I2QDGvhHFcI6f9Jqr9zah56d
+	K1K7EX9qjNomubSd23MMl7p797sEeSjaja83qQkuHmo9ZbrpjYujgkqX8WEqzwweHhQUmb4gpnJ
+	J/JmQ9DYgbCWEA9I9JOa5LrFTgzL4jX62l2+J3JzU3NmL8nQuKSEi+BgwtLLH7vIRG901wwnm6P
+	/10XcHjRULLodOC
+X-Received: by 2002:a17:90b:5790:b0:398:9bd5:4910 with SMTP id 98e67ed59e1d1-39b2624f0ffmr33674550a91.23.1788786400789;
+        Mon, 07 Sep 2026 06:06:40 -0700 (PDT)
 Received: from ydg-Zenbook-14-UM3406GA ([2001:2d8:6467:d689:c773:5f09:906c:a72b])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b07b197a9sm26742398a91.0.2026.09.07.06.06.27
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b07b197a9sm26742398a91.0.2026.09.07.06.06.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2026 06:06:33 -0700 (PDT)
+        Mon, 07 Sep 2026 06:06:40 -0700 (PDT)
 From: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -80,10 +82,12 @@ Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	donggeunyoo.kernel@gmail.com
-Subject: [PATCH bpf v3 0/2] bpf, arm64: fix the exception callback's frame pointer
-Date: Mon,  7 Sep 2026 22:06:22 +0900
-Message-ID: <20260907130624.611942-1-donggeunyoo.kernel@gmail.com>
+Subject: [PATCH bpf v3 1/2] bpf, arm64: set up the frame pointer for the exception callback
+Date: Mon,  7 Sep 2026 22:06:23 +0900
+Message-ID: <20260907130624.611942-2-donggeunyoo.kernel@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260907130624.611942-1-donggeunyoo.kernel@gmail.com>
+References: <20260907130624.611942-1-donggeunyoo.kernel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,19 +96,28 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The arm64 JIT does not set BPF_REG_FP in the prologue of an exception
-callback, so the callback runs with whatever x25 held when bpf_throw()
-was called. A callback that materializes the register, for instance to
-pass the address of a local variable to a helper, then works on the
-frame of the subprogram that threw.
+A program acting as exception boundary saves all callee-saved registers,
+so build_prologue() takes the exception_cb path and never calls
+push_callee_regs(). That is the only place find_used_callee_regs() runs,
+and with it the only place ctx->fp_used is set, so the callback prologue
+does not emit the
 
-Patch 1 sets ctx->fp_used on that path, the same fix commit b114fcee766d
-("bpf, arm64: Fix fp initialization for exception boundary") made for
-the exception boundary. Patch 2 adds a selftest that reaches the case.
+  mov x25, sp
 
-Tested on aarch64 under QEMU with vmtest.sh, on the base below. Without
-patch 1 the new test panics the kernel, because the address handed to
-the helper lands on the helper's own saved return address:
+that points BPF_REG_FP at the frame the callback runs on. x25 keeps
+whatever it held when bpf_throw() was called. If the throw came from a
+subprogram that uses its own BPF stack, that is the subprogram's frame
+pointer, and since the subprogram never returns it never restores x25
+either.
+
+Stack accesses through BPF_REG_FP are rewritten to be stack pointer
+relative, so those still land in the callback's own frame. Materializing
+the register does not: a callback that passes the address of a local
+variable to a helper hands over an address in the dead subprogram's
+frame. That address is below the callback's stack pointer by then, and
+the helper's own call chain covers it, so the helper can write over its
+own return address. 0x1234 below is the value the helper was asked to
+store:
 
   pc : 0x1234
   lr : 0x1234
@@ -115,41 +128,33 @@ the helper lands on the helper's own saved return address:
    __sys_bpf+0xbdc/0xdd8
   Kernel panic - not syncing: Oops: Fatal exception in interrupt
 
-0x1234 is the value the callback reads, so the helper wrote it over its
-own return address. With patch 1 applied the whole group passes:
+Set ctx->fp_used on the exception callback path so that the existing code
+further down sets x25 from the stack pointer. The epilogue restores it
+from the main program's save area along with the other callee-saved
+registers, as it already does. x86 sets the frame pointer for the
+callback from the argument it is passed, and powerpc computes it from
+the stack pointer.
 
-  #117/11  exceptions/exception_throw_subprog_stack_cb:OK
-  #117     exceptions:OK
-  Summary: 1/118 PASSED, 0 SKIPPED, 0/0 FAILED
+Fixes: 5d4fa9ec5643 ("bpf, arm64: Avoid blindly saving/restoring all callee-saved registers")
+Acked-by: Xu Kuohai <xukuohai@huawei.com>
+Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+---
+ arch/arm64/net/bpf_jit_comp.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Not tested on other architectures.
-
-v1: https://lore.kernel.org/bpf/20260904070210.4163193-1-donggeunyoo.kernel@gmail.com/
-v2: https://lore.kernel.org/bpf/20260907054235.473103-1-donggeunyoo.kernel@gmail.com/
-
-v2 -> v3:
- - patch 2: use the standard multi-line comment style
- - patch 1: no change, added the Acked-by
-
-Nothing compiled changed, so the numbers above are still v2's.
-
-v1 -> v2:
- - rebase onto bpf/master; CI could not apply v1
- - spell the three new declarations u64 rather than __u64, to match the
-   rest of progs/exceptions.c
- - no change to patch 1
-
-Donggeun Yoo (2):
-  bpf, arm64: set up the frame pointer for the exception callback
-  selftests/bpf: cover the exception callback using its own BPF stack
-
- arch/arm64/net/bpf_jit_comp.c                 |  2 ++
- .../selftests/bpf/prog_tests/exceptions.c     |  1 +
- .../testing/selftests/bpf/progs/exceptions.c  | 30 +++++++++++++++++++
- 3 files changed, 33 insertions(+)
-
-
-base-commit: df2908090cda368b01ff43709f51890076c56157
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index c18e005a41db..c5f55d6161fe 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -600,6 +600,8 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
+ 		 * 12 registers are on the stack
+ 		 */
+ 		emit(A64_SUB_I(1, A64_SP, A64_FP, 96), ctx);
++		/* The callback may use its own BPF stack, set up fp for it. */
++		ctx->fp_used = true;
+ 	}
+ 
+ 	/* Stack must be multiples of 16B */
 -- 
 2.53.0
 
