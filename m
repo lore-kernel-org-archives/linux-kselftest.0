@@ -1,121 +1,67 @@
-Received: from mta0.migadu.com (out-147.mta0.migadu.com [91.218.175.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A2248CD71
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 12:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6474B53F2;
+	Mon,  7 Sep 2026 12:46:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788784549; cv=none; b=DyA6O32HBEVGayGEcz2q4sTbVLD+yXtu2EN15gXu68/DZ0axogPwYNoVXZpToFb9iFGI5OZP2O44O3ae0As6TPl9HNVesl3gxAwty9yiGZO9yPlJVs/n9hHGIxV4t3rIB9lmyz274+sDMfo8Cj07B+hlHUxq8qmQcXzPd0fe6mw=
+	t=1788785198; cv=none; b=gzNzaB8R+8xcFuDU0G6zfzX7HXdta4eHzZocivp5Ju1ZSCoZJuYGZ12vSfLfu6uLjUEpFc3BvNIEa4MiuoRJSMeqzaJipGkP/yt308S1azoH+NohH9xADEMDPmccDIwWvgoP9SuPlHR7ZMvroHZ/Z6HyZYTcKAXtOG/tDuHoCxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788784549; c=relaxed/simple;
-	bh=9Vrwldiu86hCVdvrUFji2IlPOad8eDYhb/cvDGNbV4A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VjrT76ZfjfYL+u5ydUBHSKk5igaEfpQM5CSM4+oMNvaJlxOotU0PfvA/bq2vfHBPiHNab0Cn3GIkFLYRxIbEy92RC7TvftfwOegucOsUbk01qiXxdbWDqEDyG3WBCx9qn+Pm7C5tASzSM7TH18ulvREo5O4qclMj3A0a7NZbW8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ozLwK3Pb; arc=none smtp.client-ip=91.218.175.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788785198; c=relaxed/simple;
+	bh=L7senZac0sy8pUJGmblXJVzYmWB+RzzCcgxvI/i3zzk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jox/QIhWQ7BvgwMchqgxiDQpXJVZIlYLfofaPNItKL2Polgzm1FwAkl5J/LuV1kYeKeRwbeog/27SomTdXCNxdvVFzkvFaq9rm0++dX3EbaxYzyhfzHdtXTRfJuWiYpHmiJ3BefXqu4RgaZA+UiwjzoIwxGrXIpk45mFZ9XZrtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=BCeQmDL/; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ozLwK3Pb"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9Vrwldiu86hCVdvrUFji2IlPOad8eDYhb/cvDGNbV4A=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788784545; v=1; x=1789389345;
- b=ozLwK3Pb65dziwhuS3T7hQnggmdjF3z/rCiFJmrCNG9T2WXRd4yM4DMNHRoekv2yF8hOaQB2
- nP2Zc3HnL1+2Zqy+H3PrgrRzJGvd4eQxrKmZgsbG8vtOfEyFDRXDcN4qtFq88yomaFQNPv+w4St
- CoQsODqU01cGJp37btoEo4QU=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 83939cb49fa7006e;
-	Mon, 07 Sep 2026 12:35:31 +0000
-X-Mizu-Trace-ID: 83939cb49fa7006e
-X-Migadu-Flow: FLOW_OUT
-From: Zenghui Yu <zenghui.yu@linux.dev>
-To: damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: sj@kernel.org,
-	shuah@kernel.org,
-	akpm@linux-foundation.org,
-	ekffu200098@gmail.com,
-	"Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
-Subject: [PATCH] selftests/damon: stop kdamond on error exits of no-op commit test
-Date: Mon,  7 Sep 2026 20:34:55 +0800
-Message-ID: <20260907123455.67246-1-zenghui.yu@linux.dev>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="BCeQmDL/"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=jWlh4ZuZ5M27NzituDSZkqPWQo4oelgw1EQ9Hc1dxp4=; b=BCeQmDL/CZHVxh3I2HbjFjyBnz
+	c1kEVeahbGx1yF57IMB2uhyNerwHA53diZruJ/OF4RA3rDzK2N7zJchupwSp6Y+L6d0W6qn9Cp293
+	Dv8IscKgr1IOMIcZXizISYKaL2+RFKzfM3Aq6CLMDe5A7kufbk+nP0FMSPZMVUtn/7sI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1x3Yjq-003W8S-R5; Mon, 07 Sep 2026 14:46:18 +0200
+Date: Mon, 7 Sep 2026 14:46:18 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Hemanth Selam <hemanth.selam@gmail.com>
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Sudarsana Kalluru <skalluru@marvell.com>,
+	Manish Chopra <manishc@marvell.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>,
+	Edward Cree <ecree.xilinx@gmail.com>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-net-drivers@amd.com, linux-kselftest@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 3/6] net: llc: fix repeated word 'all' in comment
+Message-ID: <73289f58-4937-42da-9016-796a13ced97e@lunn.ch>
+References: <20260907044635.7141-1-hemanth.selam@gmail.com>
+ <20260907044635.7141-4-hemanth.selam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260907044635.7141-4-hemanth.selam@gmail.com>
 
-From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
+On Mon, Sep 07, 2026 at 10:16:32AM +0530, Hemanth Selam wrote:
+> Drop the second 'all', reported by checkpatch.pl as a possible repeated
+> word.  Only touches a comment, no code changes.
+> 
+> Assisted-by: Cursor:claude-opus-5
+> Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
 
-The sysfs_no_op_commit_break test starts a kdamond via sysfs, but its error
-paths (e.g., drgn not installed) exit without stopping it.  The leaked
-kdamond then makes subsequent tests, e.g. lru_sort.sh and reclaim.sh, skip
-with "Another kdamond is running".
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-Wrap the post-start logic in try-finally so that kdamonds.stop() is
-executed on every exit path.
-
-Fixes: 10725cd2b09a ("selftests/damon: test no-op commit broke DAMON status")
-Assisted-by: GLM-5.3 OpenCode
-Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
----
- .../damon/sysfs_no_op_commit_break.py         | 35 ++++++++++---------
- 1 file changed, 18 insertions(+), 17 deletions(-)
-
-diff --git a/tools/testing/selftests/damon/sysfs_no_op_commit_break.py b/tools/testing/selftests/damon/sysfs_no_op_commit_break.py
-index 2c65cffe6b54..81774ddc55ac 100755
---- a/tools/testing/selftests/damon/sysfs_no_op_commit_break.py
-+++ b/tools/testing/selftests/damon/sysfs_no_op_commit_break.py
-@@ -47,26 +47,27 @@ def main():
-         print('kdamond start failed: %s' % err)
-         exit(1)
- 
--    before_commit_status, err = \
--        dump_damon_status_dict(kdamonds.kdamonds[0].pid)
--    if err is not None:
--        print('before-commit status dump failed: %s' % err)
--        exit(1)
-+    try:
-+        before_commit_status, err = \
-+            dump_damon_status_dict(kdamonds.kdamonds[0].pid)
-+        if err is not None:
-+            print('before-commit status dump failed: %s' % err)
-+            exit(1)
- 
--    kdamonds.kdamonds[0].commit()
-+        kdamonds.kdamonds[0].commit()
- 
--    after_commit_status, err = \
--        dump_damon_status_dict(kdamonds.kdamonds[0].pid)
--    if err is not None:
--        print('after-commit status dump failed: %s' % err)
--        exit(1)
--
--    if before_commit_status != after_commit_status:
--        print(f'before: {json.dumps(before_commit_status, indent=2)}')
--        print(f'after: {json.dumps(after_commit_status, indent=2)}')
--        exit(1)
-+        after_commit_status, err = \
-+            dump_damon_status_dict(kdamonds.kdamonds[0].pid)
-+        if err is not None:
-+            print('after-commit status dump failed: %s' % err)
-+            exit(1)
- 
--    kdamonds.stop()
-+        if before_commit_status != after_commit_status:
-+            print(f'before: {json.dumps(before_commit_status, indent=2)}')
-+            print(f'after: {json.dumps(after_commit_status, indent=2)}')
-+            exit(1)
-+    finally:
-+        kdamonds.stop()
- 
- if __name__ == '__main__':
-     main()
--- 
-2.53.0
-
+    Andrew
