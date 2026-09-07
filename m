@@ -1,63 +1,36 @@
-Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010057.outbound.protection.outlook.com [40.93.198.57])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-201.mta0.migadu.com [91.218.175.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F70B415F3C;
-	Mon,  7 Sep 2026 07:25:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788765948; cv=fail; b=mUKq7p3Qos5qLv9uMuQxkPatLzEB8CSbaVg6tZhi+OQZOkaHT2OGl0xEnX+azmPXB9ZAfW/BElfmzrZbbwo/5hgq+W59fPfRKnr4npdadmPu8eKmiQvuVz/WLd6FnSDpQaPwGufBTg7jAW31cUZ1QOrY/dlb3nfpHnqARE9v+Ao=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788765948; c=relaxed/simple;
-	bh=yukzV0l0ZMwqNLaEq60fyFmbcjXdCl8xNnL0q0m7xp4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=L6U5DgXg6LqTeRKVfnCSEfqvhfi2dS/HT+6MLxDrgey0MAo296iiLWqZ90s3gbaTThsX2TIiO1XxqOdvUoX8q2EtX2ijlYA9DRWgjW0sXzZ4JRM32pHgYKZQKfofdQE3vUeBGzNW5RRk9FcnLEknvktfXn4mjtH+4hQdlPXCLwk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=xg64y+bn; arc=fail smtp.client-ip=40.93.198.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463644071F3
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 07:28:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788766119; cv=none; b=YZJ96Mtr0u5dmetteQFpGHFKium2kBvsYreG8ZkJUP5INlruBb/x4KnDVlkCy06u4YezGSchR9RqPTiQhnqQLbe8Jxt9M9eXnC20V0D0z6wJngjcQEEnXZeg4lAGavbhcs/UVuAC3Kta89H8J3l4C9tsRr1ARzGB1qMlJda+Swc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788766119; c=relaxed/simple;
+	bh=U36+s7lt3j4odLOnhivVcwQ+iQNG4iZNIJVXSr//Roc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=hsvrp6J/AMbKhNdY+kDFyPti6BdYjLXje+LPv7KXcux8pZn5kan4/kdMHntZuJEgWsckiN2rqfGvv4zKrjPhIdbyodaa+pn28KUCJVSx1sUk04Vox289dLDDZryg/cE4Q6W4fXHgBgQnnv//UE390zgPTQw1r947HFBVhlcROpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FBuLUvrg; arc=none smtp.client-ip=91.218.175.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="xg64y+bn"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Wq5opcUtF733NaEZEoJ3CuiXReQlxn4eB1OhfgqMWPbgWp5XTFnzjz0JMHXDY8N+Ybja4IsQafju0Zdw4TOUJqP2CvIKZw0i6QH0YN28woOdalq+16aCJ4sFtmTnvtzWocviISLHDGpVeX0ipRTfA8LoMdZz057qh/OVrDuGa7yCZEyXJNia3n67Ky8CSM+QgzhY8Paa8cAe48jqqOB6+4FbaJ9hOIBUPiloNOWUpiXaNKOKxAvbJlfzXbXVpwmA6vPStKuvQw7Ma1R1vWUtyyROmyrOe4BV6tkWKZiBTIW7Io5nk9eNLhAPadbP7eDqnjcDsJk1/EJgiPp5ANdRng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZJZiJRDldMAZS2uz1ngzE1FHNtPDhjb+6i7g5ZUTCHk=;
- b=guWwR6fgmApgTK8UmA02e6ikbI9S0LwMRGddRWVfhkwzFNngzb9eF1+xNV4cacTR3/GaGlODARb1sKGb7pjIMoy1bhETLh7F75X7OY9NU3BxxLdlZbVqv3KL8R6GVq7yo2qBE/RwR2uuxFZEHoYE0FyMDL8jGHdLKJ6dVT2HIVxwBGlCAsSu+zsuCAEtz6/mSwMx5d/Arqilb0jszlV6CKP9Wxqm40OZNFwnbOTawxIprI4c+UJ9lgpYZBxW0x5EeWbNR/chWcA9CfhHZhw9Hw1FgM4W/HRgtKPC6F3b71J3I6oVJ2/0gYC598HN8JCgC+oVwI2v06YkoN28pBCrAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZJZiJRDldMAZS2uz1ngzE1FHNtPDhjb+6i7g5ZUTCHk=;
- b=xg64y+bnq4PJAWeJkcLTJOGl36gczuuvmZszhjYGMhME060+98a57wqBIoD9J82cE02w958wUwWykJmrEuFYBgJ+rITgBwpBfkYflIjFfWEKR+R12AEJuCJ9gIE9P1MkIzDxwDmkl36Uoxggxl0rAoKIgZVHM01Iw6podrw28NA=
-Received: from IA1P220CA0022.NAMP220.PROD.OUTLOOK.COM (2603:10b6:208:464::11)
- by DSVPR12MB931903.namprd12.prod.outlook.com (2603:10b6:8:4fd::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.382.15; Mon, 7 Sep
- 2026 07:25:44 +0000
-Received: from BN3PEPF00022BBC.namprd04.prod.outlook.com
- (2603:10b6:208:464:cafe::6c) by IA1P220CA0022.outlook.office365.com
- (2603:10b6:208:464::11) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.382.15 via Frontend Transport; Mon, 7
- Sep 2026 07:25:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- BN3PEPF00022BBC.mail.protection.outlook.com (10.167.248.118) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.406.5 via Frontend Transport; Mon, 7 Sep 2026 07:25:43 +0000
-Received: from [127.0.1.1] (10.180.168.240) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.46; Mon, 7 Sep
- 2026 02:25:38 -0500
-From: Shivank Garg <shivankg@amd.com>
-Date: Mon, 7 Sep 2026 07:25:00 +0000
-Subject: [PATCH v3 4/4] KVM: selftests: Drop unused sysfs NUMA helpers
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FBuLUvrg"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=U36+s7lt3j4odLOnhivVcwQ+iQNG4iZNIJVXSr//Roc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788766115; v=1; x=1789370915;
+ b=FBuLUvrg+56DhX1OuT66OkAsZwzzIlChtcUYg50YoclgRoMc3h8PkR8lxII0RfAjsHXCQmpK
+ M+Xp9/lfVRW6d6Raa5AVP09RHYCSnBscy2i6hbaGqWHOxUD+g/amEV9SejgAuinJSYo/jEURJjY
+ 7xrYiEXqF7I5C4dcTt0HMabY=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 06bd02fb2dca1679;
+	Mon, 07 Sep 2026 07:28:34 +0000
+X-Mizu-Trace-ID: 06bd02fb2dca1679
+X-Migadu-Flow: FLOW_OUT
+From: Hangbin Liu <hangbin.liu@linux.dev>
+Date: Mon, 07 Sep 2026 15:28:09 +0800
+Subject: [PATCH net] selftests/drivers/net: include lib/sh/*.sh
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,132 +38,177 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20260907-gmem-selftests-fix-v3-4-7a4be5c1cc8a@amd.com>
-References: <20260907-gmem-selftests-fix-v3-0-7a4be5c1cc8a@amd.com>
-In-Reply-To: <20260907-gmem-selftests-fix-v3-0-7a4be5c1cc8a@amd.com>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini
-	<pbonzini@redhat.com>, David Hildenbrand <david@kernel.org>, Shuah Khan
-	<shuah@kernel.org>, Jim Mattson <jmattson@google.com>, Peter Shier
-	<pshier@google.com>, Ricardo Koller <ricarkol@google.com>, Ackerley Tng
-	<ackerleytng@google.com>
-CC: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Shivank Garg <shivankg@amd.com>
-X-Mailer: b4 0.15-dev-47d62
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788765924; l=2084;
- i=shivankg@amd.com; s=20260518; h=from:subject:message-id;
- bh=yukzV0l0ZMwqNLaEq60fyFmbcjXdCl8xNnL0q0m7xp4=;
- b=nk5q12Ni6eisGWNZhKA13XPJiYJXfvvROhNcHXxC9RBPVfNwRMCvGbLJ7w7aup1FwfFiGQeQC
- 5nWRaF1DMFvDKk4je8wrd3Cc9VC0RhYLBqnkJxf4LJB/9RHtgBKLKcK
-X-Developer-Key: i=shivankg@amd.com; a=ed25519;
- pk=2l2QGTeXuGkZTtfmx0nPQU8iFZfjYmX/ymMojitevx4=
-X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
- (10.181.42.216)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF00022BBC:EE_|DSVPR12MB931903:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4b9346fe-a9cd-439f-f0f3-08df0cb13a5b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|23010399003|82310400026|36860700016|11063799006|56012099006|6133799003|18002099003|22082099003|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	2q9gVvxOWXuR6nm903yTH0sCwemWUf+7c6I/s7OKOMS7jHf96G9cd4oJf5UNtl6yxMOzZsiiroOPKE3BthvvbiE3fLYCgw9bwOrQwSNvD9JGUSjYj+KL38q9uv1T3MLSOXuq+dhyCYJHM13BsFyFH+ZazlCfZuaEfTUxLae2bS71WEraIwPONgXrOVL8f0k/3uQBnsmDPS53X1zYpW1nUtfoQzlJ4OG1fL0/tt15IqtQhXbt7LbZPKlUVF9vpG8/J60Rc3GawLMbNWIGuuXnfAVF+y7RJfuyiEjq5CSYNOvbYESYt6MfdNaXDw68P3EbgRH0rnWmjKMBid8Wx0Et4qhaq1/gfq804k0Q0wnUFDxUuRDd8cVN0WLYfXKVgESTSyWh4qX9BKQZ9uRn2bnnxunCteDll6g47fjofd0hhtoZ74QtmYER1bN3ZxZdBmDH/JjWtxoNcR5TEHH4EKZ3s/Cci2QJJwTFv5vq658+WDSEKmiehgMrKNiLN63auQNiqQ5DvvVgjT/EjUCTW/cICVLF4ENOGmeS3D3oy5IXcTNwnxIRh7Wq44GTsC6b8sRIZxdORPNzw04e+AJAb1huS6DIP9Nth/eCpar1I8xIAEQG+5JkoyO2/RhKRqIKOqJ26TlTOR3CyTzsWNJLlMW+Ck9920wv4PrFTtABrxnyX9V2//MAfQEn9z00QlJhsQ9U
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(23010399003)(82310400026)(36860700016)(11063799006)(56012099006)(6133799003)(18002099003)(22082099003)(10067099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	Rp9K5Gk5WufHxeAmMvrCZcJQUARhSiyYA3maFMNAceH7Fzdpo3IsdP5PusqJQhrbQrvGLKWw+vMVTac+5pzZdY5ri1AzNPvnIjzQzN4eQCItR6MvjfeYQ9QqSpJdMklP5+rQG7ZZV2RcHfGEjiZQdV+JmGhGRY5Y7UuI4JMUaF0PKHJfE1V12uNzAVlpiusAO8/cQBPCNeQKZi6J4cXupcLe/q/KfiKx2pRnJTvGrtsZmgDbfhtYI/mnhwQY0AGhIRbaT7L3V4hXE0KQ0Xp1hqGmh2NhE6SG0Kl2I2SKOMBVRcSWzy2tGUP1L26LODOO+2PhxhDgTY7Urm/aVArMPnvAk9CQ9b/CpZCzaoylUrmjqStP8hI5SQp6KNdFCUy7LBbUWsE6LyyRKKoC6cIskFQuBq0dOH7ECJIOEyjVFLJAkSGj6rfy0dOaVbavoGiw
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2026 07:25:43.7322
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b9346fe-a9cd-439f-f0f3-08df0cb13a5b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF00022BBC.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DSVPR12MB931903
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260907-selftest_lib_defer-v1-1-8af94645aaa3@kylinos.cn>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqDMBBG4avIrA1EG9LqVUREzZ92QKJkggjBu
+ ze4/BbvZRJEhlBfZYo4WXgPBU1d0fqbwxeKXTG1urW600YJNp8gadp4mRw8otLN26wwL+s+M5X
+ wiPB8PdOBAhKN9/0HLM7MAWkAAAA=
+X-Change-ID: 20260904-selftest_lib_defer-0174ce436d8a
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Jay Vosburgh <jv@jvosburgh.net>, 
+ Vladimir Oltean <olteanv@gmail.com>, Breno Leitao <leitao@debian.org>, 
+ Jiri Pirko <jiri@resnulli.us>, "Michael S. Tsirkin" <mst@redhat.com>, 
+ Jason Wang <jasowangio@gmail.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+ =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+ Petr Machata <petrm@nvidia.com>
+Cc: Matthieu Baerts <matttbe@kernel.org>, 
+ Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ virtualization@lists.linux.dev, Hangbin Liu <liuhangbin@kylinos.cn>
+X-Mailer: b4 0.14.3
 
-No users of get_max_numa_node(), is_numa_available(), or
-is_multi_numa_node_system() remain.  Remove the helpers and the now
-unused dirent.h include.
+From: Hangbin Liu <liuhangbin@kylinos.cn>
 
-Signed-off-by: Shivank Garg <shivankg@amd.com>
+When I tried to install and run bonding selftests via:
+
+  make INSTALL_PATH=/tmp/kself TARGETS=drivers/net/bonding \
+     -C tools/testing/selftests install
+
+Some tests fail because net/lib/sh/defer.sh is missing:
+
+  /tmp/kself/net/forwarding/../lib.sh: line 5: /tmp/kself/net/lib/sh/defer.sh: No such file or directory
+
+One option is to add defer.sh directly to TEST_INCLUDES. Alternatively,
+follow the approach from commit f72aa1b27628 ("selftests: net: include
+lib/sh/*.sh with lib.sh"), which pulls in all .sh files to accommodate
+future changes to the library directory.
+
+This patch adds a wildcard to include all shell files for drivers/net
+tests that consume net lib.sh. TEST_INCLUDES is also sorted to avoid
+ordering‑related problems for future modifications. The team driver is
+not affected by this bug, but we use the wildcard for it as well, rather
+than listing only defer.sh.
+
+Fixes: a6e263f125cd ("selftests: net: lib: Introduce deferred commands")
+Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
 ---
- tools/testing/selftests/kvm/include/numaif.h | 52 ----------------------------
- 1 file changed, 52 deletions(-)
+Since this is a trivial fix, I have also updated the virtio_net part
+within this patch. Please let me know if I should split the virtio_net
+changes into a separate patch.
 
-diff --git a/tools/testing/selftests/kvm/include/numaif.h b/tools/testing/selftests/kvm/include/numaif.h
-index 0945500c6322..c3884017ebb8 100644
---- a/tools/testing/selftests/kvm/include/numaif.h
-+++ b/tools/testing/selftests/kvm/include/numaif.h
-@@ -4,8 +4,6 @@
- #ifndef SELFTEST_KVM_NUMAIF_H
- #define SELFTEST_KVM_NUMAIF_H
- 
--#include <dirent.h>
--
- #include <linux/bitmap.h>
- #include <linux/mempolicy.h>
- 
-@@ -73,54 +71,4 @@ static inline int kvm_get_next_numa_node(unsigned long nodemask, int from)
- 	return to;
- }
- 
--static inline int get_max_numa_node(void)
--{
--	struct dirent *de;
--	int max_node = 0;
--	DIR *d;
--
--	/*
--	 * Assume there's a single node if the kernel doesn't support NUMA,
--	 * or if no nodes are found.
--	 */
--	d = opendir("/sys/devices/system/node");
--	if (!d)
--		return 0;
--
--	while ((de = readdir(d)) != NULL) {
--		int node_id;
--		char *endptr;
--
--		if (strncmp(de->d_name, "node", 4) != 0)
--			continue;
--
--		node_id = strtol(de->d_name + 4, &endptr, 10);
--		if (*endptr != '\0')
--			continue;
--
--		if (node_id > max_node)
--			max_node = node_id;
--	}
--	closedir(d);
--
--	return max_node;
--}
--
--static bool is_numa_available(void)
--{
--	/*
--	 * Probe for NUMA by doing a dummy get_mempolicy().  If the syscall
--	 * fails with ENOSYS, then the kernel was built without NUMA support.
--	 * if the syscall fails with EPERM, then the process/user lacks the
--	 * necessary capabilities (CAP_SYS_NICE).
--	 */
--	return !get_mempolicy(NULL, NULL, 0, NULL, 0) ||
--		(errno != ENOSYS && errno != EPERM);
--}
--
--static inline bool is_multi_numa_node_system(void)
--{
--	return is_numa_available() && get_max_numa_node() >= 1;
--}
--
- #endif /* SELFTEST_KVM_NUMAIF_H */
+Before posting the patch, I ran `make install` for each subtest and
+verified that `defer.sh` gets installed.
+---
+ tools/testing/selftests/drivers/net/Makefile            | 1 +
+ tools/testing/selftests/drivers/net/bonding/Makefile    | 3 ++-
+ tools/testing/selftests/drivers/net/dsa/Makefile        | 1 +
+ tools/testing/selftests/drivers/net/hw/Makefile         | 3 ++-
+ tools/testing/selftests/drivers/net/netconsole/Makefile | 3 ++-
+ tools/testing/selftests/drivers/net/team/Makefile       | 4 ++--
+ tools/testing/selftests/drivers/net/virtio_net/Makefile | 1 +
+ 7 files changed, 11 insertions(+), 5 deletions(-)
 
+diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+index d5bf4cb638a8..ab39c2e508f0 100644
+--- a/tools/testing/selftests/drivers/net/Makefile
++++ b/tools/testing/selftests/drivers/net/Makefile
+@@ -3,6 +3,7 @@ CFLAGS += $(KHDR_INCLUDES)
+ 
+ TEST_INCLUDES := $(wildcard lib/py/*.py) \
+ 		 $(wildcard lib/sh/*.sh) \
++		 $(wildcard ../../net/lib/sh/*.sh) \
+ 		 ../../net/lib.sh \
+ 
+ TEST_GEN_FILES := \
+diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
+index 6364ca02642d..e337c099fb40 100644
+--- a/tools/testing/selftests/drivers/net/bonding/Makefile
++++ b/tools/testing/selftests/drivers/net/bonding/Makefile
+@@ -27,9 +27,10 @@ TEST_FILES := \
+ # end of TEST_FILES
+ 
+ TEST_INCLUDES := \
+-	../../../net/lib.sh \
++	$(wildcard ../../../net/lib/sh/*.sh) \
+ 	../lib/sh/lib_netcons.sh \
+ 	../../../net/forwarding/lib.sh \
++	../../../net/lib.sh \
+ # end of TEST_INCLUDES
+ 
+ include ../../../lib.mk
+diff --git a/tools/testing/selftests/drivers/net/dsa/Makefile b/tools/testing/selftests/drivers/net/dsa/Makefile
+index 7994bd0e5c44..7893011b3842 100644
+--- a/tools/testing/selftests/drivers/net/dsa/Makefile
++++ b/tools/testing/selftests/drivers/net/dsa/Makefile
+@@ -19,6 +19,7 @@ TEST_FILES := \
+ # end of TEST_FILES
+ 
+ TEST_INCLUDES := \
++	$(wildcard ../../../net/lib/sh/*.sh) \
+ 	../../../net/forwarding/bridge_locked_port.sh \
+ 	../../../net/forwarding/bridge_mdb.sh \
+ 	../../../net/forwarding/bridge_mld.sh \
+diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
+index 78bb0169350b..17c7e878ca42 100644
+--- a/tools/testing/selftests/drivers/net/hw/Makefile
++++ b/tools/testing/selftests/drivers/net/hw/Makefile
+@@ -64,10 +64,11 @@ TEST_FILES := \
+ 
+ TEST_INCLUDES := \
+ 	$(wildcard lib/py/*.py ../lib/py/*.py) \
+-	../../../net/lib.sh \
++	$(wildcard ../../../net/lib/sh/*.sh) \
+ 	../../../net/forwarding/ipip_lib.sh \
+ 	../../../net/forwarding/lib.sh \
+ 	../../../net/forwarding/tc_common.sh \
++	../../../net/lib.sh \
+ 	#
+ 
+ # YNL files, must be before "include ..lib.mk"
+diff --git a/tools/testing/selftests/drivers/net/netconsole/Makefile b/tools/testing/selftests/drivers/net/netconsole/Makefile
+index f0674c0017fc..c7972a40babf 100644
+--- a/tools/testing/selftests/drivers/net/netconsole/Makefile
++++ b/tools/testing/selftests/drivers/net/netconsole/Makefile
+@@ -1,8 +1,9 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ TEST_INCLUDES := \
+-	../../../net/lib.sh \
++	$(wildcard ../../../net/lib/sh/*.sh) \
+ 	../lib/sh/lib_netcons.sh \
++	../../../net/lib.sh \
+ # end of TEST_INCLUDES
+ 
+ TEST_PROGS := \
+diff --git a/tools/testing/selftests/drivers/net/team/Makefile b/tools/testing/selftests/drivers/net/team/Makefile
+index 7c58cf82121e..e40c83a92724 100644
+--- a/tools/testing/selftests/drivers/net/team/Makefile
++++ b/tools/testing/selftests/drivers/net/team/Makefile
+@@ -13,12 +13,12 @@ TEST_PROGS := \
+ # end of TEST_PROGS
+ 
+ TEST_INCLUDES := \
+-	team_lib.sh \
++	$(wildcard ../../../net/lib/sh/*.sh) \
+ 	../bonding/lag_lib.sh \
+ 	../../../net/forwarding/lib.sh \
+ 	../../../net/in_netns.sh \
+ 	../../../net/lib.sh \
+-	../../../net/lib/sh/defer.sh \
++	team_lib.sh \
+ # end of TEST_INCLUDES
+ 
+ include ../../../lib.mk
+diff --git a/tools/testing/selftests/drivers/net/virtio_net/Makefile b/tools/testing/selftests/drivers/net/virtio_net/Makefile
+index 868ece3fea1f..df34e29b5680 100644
+--- a/tools/testing/selftests/drivers/net/virtio_net/Makefile
++++ b/tools/testing/selftests/drivers/net/virtio_net/Makefile
+@@ -5,6 +5,7 @@ TEST_PROGS = basic_features.sh
+ TEST_FILES = virtio_net_common.sh
+ 
+ TEST_INCLUDES = \
++	$(wildcard ../../../net/lib/sh/*.sh) \
+ 	../../../net/forwarding/lib.sh \
+ 	../../../net/lib.sh \
+ # end of TEST_INCLUDES
+
+---
+base-commit: 38b6be101006d3e7af972999f45d4f1e8250587a
+change-id: 20260904-selftest_lib_defer-0174ce436d8a
+
+Best regards,
 -- 
-2.43.0
+Hangbin Liu <liuhangbin@kylinos.cn>
 
