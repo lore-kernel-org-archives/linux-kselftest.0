@@ -1,171 +1,135 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1278C4CC28E
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 13:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED406436BEA;
+	Mon,  7 Sep 2026 13:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788786423; cv=none; b=Ur+GPLTHFV9X5EMwOCzNpbPBXUA3HsLMgADoOChRoOBpy5PTj9MM+VC5hVGRFzvFEddPQY/OsfPEIo1GugM2tL32tV9Gbx3Nj7rdZzgX4IYljqDoSwU3z26WjTG4GBRc3NTIbaw349riqYDOonHGeLVd2U9eQ/fK+f2YItfe24E=
+	t=1788786683; cv=none; b=oSrn2HE6Y+Saur+ZdB6FwBnG6IDPgBze6r024fkXikUlBVXLxN2oB+ei6RmErQZyDLOE63Xvvoj7YiOWsCpXMRNtfm2wZGyJTBV0WUD8bRpFqafA44N435IkoZFey2jvoAG4W92AjI4yCm55ybmzgT/uc3uJW7VQ16Grj9oMP5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788786423; c=relaxed/simple;
-	bh=Aq2Yj8WlY/n8sjOdlrRc6EEnwqw44OPa3KHFRf4++So=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=STraD52XQubvjPBUW1mB9FjBCgmmYtX+AzScNKVuD8U8cf5ep786naEdwTOeH3SWQBcTmqQKvStd22LZaOtF0ALcrQxI2icvoctfMUS/4bQ8AE+0miLX/5Vt/F15blfKRdXshY2ZNgnXXzqfgYnxAkJMh4H0hiOsPLNTuYLucG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hs2ov4Uk; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788786683; c=relaxed/simple;
+	bh=tA0OMRv8oj06En5/BWfSVzQAOrbI0aJi40goniR2kr8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aZ+KD3OX46ko/hQd/pvAOmDMcrgrFDNthDg7g2PjXQzh9Cscw2v1BAPDq5CpKuElLoOzM4AskIIcXbMUagKyxIOcPVDO1LoI/EM7Wj1cq8tTyXImvoAPh8Fd2TkG7xZ+OncL73cKEMLVB3ja6Id7Ju3NtzHrNMqXQIoR6ulNm78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=Y+kYpxzC; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qN686EEZ; arc=none smtp.client-ip=103.168.172.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hs2ov4Uk"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3969e82ff8fso3589907a91.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 06:06:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788786407; x=1789391207; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=YnZZQEjTT3ispo9t2Rp3ilMwMqDfcn5R3yYWSok4gBU=;
-        b=Hs2ov4UkFW+3Ps6wOnyI0xRBCDAmGThte3uzHkEIoQ4hk7Q4nQVnnEsy+77xUC0awn
-         nRn1dtYLhkuPIBrYPe3guKnvth68e4aq3ydEYZqy4u7tniI8rFfFI9QaCFK6BBkZ3Wqh
-         aqCpc7OqNlMWOPPVsgv//a11tcQrx5uQ+LRbcZ1HSKAglqMQI0HZuvTHe2OE0jhRNlAi
-         8KWaCjtCPyNkmDL+bD/POxZHQ1GBtB/G+15RSfnfXwXcdOmquP6HajZ0+YDZA7A5JxOi
-         Z+Tj4W8yscWftdJtvvw/KAF8KO8eM5nNtWRkm0A4wdBvGWDlBLP6JKX6M6dea+klLvam
-         Cj1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788786407; x=1789391207;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YnZZQEjTT3ispo9t2Rp3ilMwMqDfcn5R3yYWSok4gBU=;
-        b=j8lI+BNB9JZogcLzOdfrElld5PJ7V/avXgeuhsRvkIYjyOtPJE3ImJ7ftgNpCZE4JF
-         vSr1c6RkWvFSnLXwzIgm2xr2fPjWH3py+RIJCY9yoalgRFUR+tgsqCOJzQPrB2BleljQ
-         XQEsH9t6cvOAcRZDIi0Ghw+BXaAPouqqrTJBTRJZPlNA4wVlSf33z2xiKRvcBKSyvL6/
-         /TmyzsOpdzf6CSqyfOxA2zEXLDAdhEj2NIQdIXR/Dr6qjU5K0UuNXyPYS+CfGQwO5gmT
-         wadEXgvrVdRhiJ/Rd3Z9ph5lmbfLCxSFluZlt+eoy2x57ZXMYRr+sNEOpb0Fx1+mq6gR
-         twBg==
-X-Forwarded-Encrypted: i=1; AKwUvBxK/fP2fR4Thmz9xd7niagF6+aLvDUju4srzKgmfA/7Nc0tqh6uraZEIPx62pSxMXyMtz5iRcMx1xJ0ZVNpVjk=@vger.kernel.org
-X-Gm-Message-State: AFuF++nwDxYASvtXPicCHBlHf9m++cQzCaguQCHopir/sV73mmevMgj5
-	UENeiEo5OJuoXb4VNTcs+upqNpVwQvjBBW/akJq5ah9f7J8e+NNwKsc=
-X-Gm-Gg: AYBFou0/pT7PRWW1VhddEq15Nzbn/IAsfNSY72QvrJErrQ2Ul0wUYCvbHJffJ6GEuuU
-	XzUYyevyktbAWkj32tdvrLz7+Dvewn3zaPEkctx1ipUA20xgfa8oUsIoZYbaFUnyWCR7fkriNWY
-	SGku5t/eq+SfxAHkAUjHrOqsPi4DjiYrGwpnk2IcerjxlhYY10s4ho+zNvRyuPq74OvJ/goByVn
-	XDbl2zivLMPumV0nfxoONzh6Jr7TllL+9sfOVUpFzbNXUec1AA+U/P6YqV7dr8vxirDczOLE9D7
-	1gz4AeuKmd6YBvylbJZyC567uGno/cuZwnmZfjxQfAM7kmA9DIGRgRJlFx8EJuDzw5KbjKvJKPQ
-	kLiBCjoilAXIzRxrskKTd/kYYLVMhsXc0266emJdrQO60dA6k4kZLtNocnyqxCUf32sbqSG6LBW
-	7Trk7vU0uIPInP45OnYYEJ+n1rTylICYlUVm9+z7xBG7bH81GQyfsp9jdNMWyBvxQbDh4ltRsJZ
-	bK6nk/2Q9wymj3r
-X-Received: by 2002:a17:90b:3809:b0:381:a766:efc9 with SMTP id 98e67ed59e1d1-39b261014e2mr32056634a91.7.1788786407241;
-        Mon, 07 Sep 2026 06:06:47 -0700 (PDT)
-Received: from ydg-Zenbook-14-UM3406GA ([2001:2d8:6467:d689:c773:5f09:906c:a72b])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b07b197a9sm26742398a91.0.2026.09.07.06.06.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2026 06:06:46 -0700 (PDT)
-From: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	donggeunyoo.kernel@gmail.com
-Subject: [PATCH bpf v3 2/2] selftests/bpf: cover the exception callback using its own BPF stack
-Date: Mon,  7 Sep 2026 22:06:24 +0900
-Message-ID: <20260907130624.611942-3-donggeunyoo.kernel@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260907130624.611942-1-donggeunyoo.kernel@gmail.com>
-References: <20260907130624.611942-1-donggeunyoo.kernel@gmail.com>
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="Y+kYpxzC";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qN686EEZ"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.phl.internal (Postfix) with ESMTP id 3B9701380129;
+	Mon,  7 Sep 2026 09:11:18 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Mon, 07 Sep 2026 09:11:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1788786678; x=
+	1788793878; bh=e0j3fsVumRKOaqygse+y9YlCuGTHtFBd6bkppJhg5aQ=; b=Y
+	+kYpxzCmkaObMDKsElaKybkYiQgDFAOfumjkiK0v6gqCc7U5sXGsc22hXru8gl+d
+	JzI96FZcZ/XPyC6fLhv+xxX4U9Nanr6s7UlcXP5h/AnnAuGbgNSUYcHQcbBcHLja
+	FdW7ylO/d9rw1Huk9KhQOZk51SAFDvTZ7ODcfddfK7WM1JKshD+bvne+CmRYOh24
+	6H6L88Ld5HHTMkx4G7QovqMsd0R10eyIQoCZyXtwxFU7qJ4CESxo70tA1DE+nJZq
+	zqbzRzwNXRpYZCAxY0FlB1GE2EQVjW3+OTZFufIRIhWI8Rct/RRuMTkAmkHsevlL
+	bIr0g8waGjTv4pzBVrlKQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1788786678; x=1788793878; bh=e0j3fsVumRKOaqygse+y9YlCuGTHtFBd6bk
+	ppJhg5aQ=; b=qN686EEZGG/tsa69vxZL8F3XI2sKttIIO5qdBhlAqyUuD6Rd2Z1
+	+2a9luALx1xUUGzhRYuwu/e/jmHiPww5L7zzpLjwBpMs0hxrTN+l8/L8BGDO1iqC
+	gJ0dm5/FY0/+A/FtoBKuuJpnaI082/eCVnARX/ebCDj9XSIlA95UpwalC6Iflbfp
+	cpoi47OLLqvHcV1iMtyuFdpz0uxhQPp3IJeq5MLW+/MthMEvQH3qcHj08wpVvdqm
+	kalN0Z8vr0XPBECWwdRcjLSfevn59rw10Nu9UuKrcgJpM5xGqAvOTeYtXbpS/Hd1
+	NPOn6gDS4Ii9KzUhmexqVcEBxj9rHWUS5mw==
+X-ME-Sender: <xms:9beeajiUotEuDdqY_HytcU5-9lftUbtXdHdAToE2WIj-H7h2eo_UAQ>
+    <xme:9beeatr2uKO4gyrglpPPWgLvfi0ZC58w5zrKmK68FKgVODRqivMp6dQvOOG5F_5YX
+    YzOfsxJ79VKQsK0rUhMqjKpnMB2eHm546EceyWk2sjpW65VCD7N0lrR>
+X-ME-Received: <xmr:9beeaoq899ew8Zak42SLQR9dmL9HG729mbfwXqE-oaLf78542WfmFaeQ2x4>
+X-ME-Proxy-Cause: dmFkZTGCNMd4Q9EInv4pZwT0BWMYc3KKxkNKEeuTjTisAjU8d5Iurn0W2J3En98eX2qsVN
+    ekRO29qUaexBsyWN7A53qFlun/i+vnBWAtli1SZa6vfamv7SenRmqOOprxPz+Q/bWWetUh
+    /S3jyyw9PXvPTNSDAdwTD/58wgq9G4gqlODsXkcpxOTf+YWzdmvXK+ELl7ZgjUbshPyR+y
+    c13E7au5/4A72e68nnUGJ/wf/F+5kOOFDRXY2a5WFfQZeYaYPEUG6Ns+q99gBu8gTBju26
+    bGZ1UjcI1UN8N5K2VwRkS/SQMLA//GURXziQRtpudSQgoNzKljxQmQV355Zep/Np6A/6KU
+    KgQQ+WVW0mlx1tgz7Frln65/T4Y+JYh5W2jxZK7XZg4UEcTOwCLMGxQPa1br0UPh6FhhHp
+    /a3rzemnykab/qHDTUU3TCBJK8Bowu4xG4sg7H2gVgADUprLnw/0/jueoSfX9GrLvLfPlu
+    i/4mC40gk+iKxWl2JMN6TCPziEjAPOu7udpC4diN3sTcOWsuLoTrzVfXyfCueXrzWYhCFh
+    0m2MQ10Ao35Ahz6ncrzA3jteAAuy33LSJ4BQA8zngl23k8KUI4VjgAsF+9vvyfHDHOFwBz
+    cuZCynSFR/UpGwThhQpThki9pueYfybMpTXOHzxiSqnZWkAy0cOjIp5wlxFg
+X-ME-Proxy: <xmx:9beeaj5W9Lmlg6Tz7-HMToPbyZYSougqkORofRhP4zJR10UQYhs5Hg>
+    <xmx:9beeav27-BtC14nEIvXsWKxxdRiha83uzI9zH36U-xBOovqjlTCo7Q>
+    <xmx:9beeavl00NZt6HF9eX_bCAPySDPKg5_q2CVn8MuTQywKD2za7MXIcw>
+    <xmx:9beeaogSfjhpC-Wrs9S6gNPldI1-5_hT3tJSJjz1oedHd1-ot8D9sQ>
+    <xmx:9reeau0BHTfgTqODVRoJfWKaEOCSyeqmMEuLqGM3np_iDtJs2yonPbSi>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 7 Sep 2026 09:11:16 -0400 (EDT)
+Date: Mon, 7 Sep 2026 14:11:15 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: akpm@linux-foundation.org, david@kernel.org, nico.pache@linux.dev, 
+	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
+	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
+	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
+	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 09/19] selftests/mm: add folio-order detection
+ self-check
+Message-ID: <ap63H6oZmka_oWpD@thinkstation>
+References: <20260815015901.1236937-1-kirill@shutemov.name>
+ <20260815015901.1236937-10-kirill@shutemov.name>
+ <aoQzXhP0W0FVsvTp@lucifer>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aoQzXhP0W0FVsvTp@lucifer>
 
-The existing exception tests do not reach a callback that materializes
-BPF_REG_FP into a register. They either throw from the main program,
-where BPF_REG_FP already holds the value the callback needs, or use a
-callback whose only stack accesses are frame pointer relative, which the
-arm64 JIT rewrites to be stack pointer relative.
+On Tue, Aug 18, 2026 at 11:30:06AM +0100, Lorenzo Stoakes (ARM) wrote:
+> On Sat, Aug 15, 2026 at 02:58:51AM +0100, Kiryl Shutsemau wrote:
+> > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> >
+> > The khugepaged mTHP tests detect collapse results with the vm_util
+> > folio-order helpers rather than smaps AnonHugePages, which only sees PMD
+> > mappings.  If those helpers are wrong, every case built on them is wrong
+> > the same way, and nothing says so.
+> >
+> > Check them directly.  For every anon THP order the kernel supports, fault
+> > memory in with only that order enabled.  Require the helpers to classify
+> > the backing as exactly that order: not a neighbouring order, and 4K-backed
+> > memory as order 0.
+> >
+> > Run it in the thp category, ahead of ./khugepaged, so a broken helper is
+> > reported as itself rather than as a collapse failure.  Verified on x86-64
+> > 4K (orders 0, 2-9) and arm64 64K (orders 0, 2-13).
+> >
+> > The test needs ALIGN(), which hmm-tests.c and migration.c each defined
+> > privately.  Move it to vm_util.h and drop both copies.
+> 
+> Also:
+> 
+> uffd-unit-tests defines ALIGN_UP()...
+> 
+> And really you probably want to match the kernel convention of ALIGN()
+> defaulting to align-up (for some reason) and name this ALIGN_DOWN() to be
+> consistent and avoid confusion BUT...
 
-Add a test that throws from a subprogram using its own BPF stack, with a
-callback that hands the address of a local variable to
-bpf_probe_read_kernel(). The helper and the callback have to name the
-same slot for the value read back to be the one the helper stored.
+Hm? It is align-up:
 
-Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
----
- .../selftests/bpf/prog_tests/exceptions.c     |  1 +
- .../testing/selftests/bpf/progs/exceptions.c  | 30 +++++++++++++++++++
- 2 files changed, 31 insertions(+)
+#define ALIGN(x, a)                   (((x) + (a) - 1) & ~((a) - 1))
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-index 3588d6f97fd4..639866ce09a9 100644
---- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
-+++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-@@ -55,6 +55,7 @@ static void test_exceptions_success(void)
- 	RUN_SUCCESS(exception_ext, 0);
- 	RUN_SUCCESS(exception_ext_mod_cb_runtime, 35);
- 	RUN_SUCCESS(exception_throw_subprog, 1);
-+	RUN_SUCCESS(exception_throw_subprog_stack_cb, 0x1234);
- 	RUN_SUCCESS(exception_assert_nz_gfunc, 1);
- 	RUN_SUCCESS(exception_assert_zero_gfunc, 1);
- 	RUN_SUCCESS(exception_assert_neg_gfunc, 1);
-diff --git a/tools/testing/selftests/bpf/progs/exceptions.c b/tools/testing/selftests/bpf/progs/exceptions.c
-index c8d716fbd419..91c81971e58c 100644
---- a/tools/testing/selftests/bpf/progs/exceptions.c
-+++ b/tools/testing/selftests/bpf/progs/exceptions.c
-@@ -212,6 +212,36 @@ int exception_throw_subprog(struct __sk_buff *ctx)
- 	return 0;
- }
- 
-+u64 exception_cb_stack_src = 0x1234;
-+
-+/*
-+ * The address handed to the helper has to be this callback's own stack
-+ * slot, not one from a frame that is already gone.
-+ */
-+__noinline int exception_cb_stack(u64 cookie)
-+{
-+	volatile u64 val = 0xdead;
-+
-+	bpf_probe_read_kernel((void *)&val, sizeof(val), &exception_cb_stack_src);
-+	return val;
-+}
-+
-+/* Throws from a subprogram that has a stack of its own. */
-+__noinline static int throwing_subprog_stack(struct __sk_buff *ctx)
-+{
-+	volatile u64 pad[4] = {};
-+
-+	bpf_throw(pad[0]);
-+	return 0;
-+}
-+
-+SEC("tc")
-+__exception_cb(exception_cb_stack)
-+int exception_throw_subprog_stack_cb(struct __sk_buff *ctx)
-+{
-+	return throwing_subprog_stack(ctx);
-+}
-+
- __noinline int assert_nz_gfunc(u64 c)
- {
- 	volatile u64 cookie = c;
+It matches kernel definition.
+
+pkey-helpers.h has ALIGN_UP(), ALIGN_DOWN() and two pointer variants of
+its own.  Folding those onto the vm_util.h one is worth doing, as a
+follow-up rather than in this series.
+
 -- 
-2.53.0
-
+  Kiryl Shutsemau / Kirill A. Shutemov
