@@ -1,162 +1,140 @@
-Received: from esa2.hc1455-7.c3s2.iphmx.com (esa2.hc1455-7.c3s2.iphmx.com [207.54.90.48])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A98282F01;
-	Mon,  7 Sep 2026 21:26:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39113CC9E9
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 21:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788816366; cv=none; b=siN78qMMiMXKUyxMO5rdgJzVGMQIjpofcYlOLHoWSFImjtkAXoC8elGcYVW4lKFs5wcgSA3COi6hUImKgpm8oJcj4mYdb2w0+nEKCCSu48Hy23QlMsB/PC0G1TxV+YxeoveHZsfNjkaO80KwQFyJJr2TUxii/BfuCxuSFbvRciY=
+	t=1788818080; cv=none; b=ApLYo/oirONDynB03iS6+D4+/4hZZZOiSe2zlZ7qCRU3JrCHqZfI6s9vjGjQyAUyqdeseyiYBVt8LG0PvFJSDo/d+jbn1+cfAHdTXbDZOprz6Yv16wVy9OTSxSPx/sHsYhhTGrIioFAXWCFuY1pd1ou34SE/syFJQ2Kn7gnrrH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788816366; c=relaxed/simple;
-	bh=sP6TqseWnq6F/rMwkPdxmagtSOyUxPFFpE+5Nu3dPv0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tWsQjkTqteSyAHqA9S806JyGAtcEVme+6aSzdA+XVj2Fz15VNvh5Xcu9BtA4uXjRRTe7K4BEwm2ByTMXiItfjPVTVnXrWQPIchOtBPvsANHQPEBDTAu7amGjlTCdxPcSylsIhOIxoVdZywWqCwwOoMVSci7QeAkJQu+lngRzG6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=rYq81/pX; arc=none smtp.client-ip=207.54.90.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+	s=arc-20240116; t=1788818080; c=relaxed/simple;
+	bh=ATzllCN+dDw5CaRunDgFMLiOohABpMDjBm9gAA2JbL4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GD9bEkpCHJsSKrdxTy4ulXWq5GPxt+8E+GNW8DEmhABOjoeScYGuJlzdaFh3zWfEPdJzNEUBH5GLYAEv3InkA877m6dd7GQk9ziv1seuNcXnYa/yXRkzmpihVKl2QNC1y2OodUTyQyqOv2x+WDU7TuI8W8Re5q+UWQSqnwbKQbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=kRu5icKf; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="rYq81/pX"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1788816369; x=1820352369;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sP6TqseWnq6F/rMwkPdxmagtSOyUxPFFpE+5Nu3dPv0=;
-  b=rYq81/pX69B7Jyk5b/fWETw+RjKEUTLK3FXBdSCPksFZ2zsrM4yIUbOc
-   bBspliHdhx1mtdrl59Vtow7gCONuBP88Zw71TeLb9gm3dvRhPu6jpX7g2
-   IR+3NIKMKXRKaULxPgwrwNBNyGtzWf9xC5/uTK8Mh/fnJBLuv76vE1F1i
-   YJkH3hAkYlfTGLm9tGbM6R9unGQ5gJwZPJFgkKtuPWneDB4diFdXgeZXg
-   RaRfMSDbTU10wR0c/s9FZC+CFXaNBs6y5Jy0QmhMXll4eQeyQnVAbQ2TP
-   53pAHvJctMtiphi0NVY8GowPGnW4r/eVCqQAnve70XY+b/8D2DX39QiPk
-   Q==;
-X-CSE-ConnectionGUID: o1TNUDJzT3q7J2JVHWmp7A==
-X-CSE-MsgGUID: CgO76uCQRM+Xb/Nh7rh+nA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11899"; a="254238655"
-X-IronPort-AV: E=Sophos;i="6.25,268,1779116400"; 
-   d="scan'208";a="254238655"
-Received: from gmgwuk01.global.fujitsu.com ([172.187.114.235])
-  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2026 06:24:58 +0900
-Received: from az2uksmgm3.o.css.fujitsu.com (unknown [10.151.22.200])
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="kRu5icKf"
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com [209.85.128.199])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by gmgwuk01.global.fujitsu.com (Postfix) with ESMTPS id 06CBF82040C;
-	Mon,  7 Sep 2026 21:24:54 +0000 (UTC)
-Received: from az2uksmom1.o.css.fujitsu.com (unknown [10.151.22.202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by az2uksmgm3.o.css.fujitsu.com (Postfix) with ESMTPS id AAD62C00771;
-	Mon,  7 Sep 2026 21:24:53 +0000 (UTC)
-Received: from sm-arm-grace07 (unknown [10.124.178.20])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by az2uksmom1.o.css.fujitsu.com (Postfix) with ESMTPS id 641E81800170;
-	Mon,  7 Sep 2026 21:24:48 +0000 (UTC)
-Date: Tue, 8 Sep 2026 06:24:45 +0900
-From: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-To: Fuad Tabba <fuad.tabba@linux.dev>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Takayuki Okamoto <tokamoto@fujitsu.com>
-Subject: Re: [PATCH 2/2] KVM: selftests: arm64: Add 52-bit VA guest modes
-Message-ID: <ap8rnTINMJQqfYGL@sm-arm-grace07>
-References: <20260826-arm64-52bit-va-v1-0-14ec98211363@fujitsu.com>
- <20260826-arm64-52bit-va-v1-2-14ec98211363@fujitsu.com>
- <CA+EHjTyJpPd8HjaWBw0V6pHF9UR0w2UFmaKDe7U3O+Sj8wiyPg@mail.gmail.com>
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 34EA23F1F4
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 21:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1788818074;
+	bh=fRpckaKOwl0Kgs7K/gM2OB7RO7urUAj94CqnshB8/I4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
+	b=kRu5icKfUEUcmvwaKio7cmGGXWebNI9AbOdiVcfdEc3UeR4Hvbq/QCmhfLjI5J3Y1
+	 7BhNDcg4dLCwQzoIVntelMxGictKU1hIg2ouclc1olE3y168lrQPy78R8faOl7kB00
+	 y9MIS8bM6prt+jJBpChPHCQBDA3XzyIM2KefFXmXJcoUQ+xvIDf/3smoyEDItINtxT
+	 DEjecywl0Y7ijg0gi59NlebztCgnbEP9RF6QhnDx7M/fvLhnKm+zsfatzIEhuuXshi
+	 xh2dTgg5tPmA3/7tOb/be78LMtGonA+UKSDSJCLV+s+5UCjgPAEBQJ+iZit5d0kN24
+	 mDTr9bwUs0c/aPOyTFj3CfRvAZd/scZbW6OT/w3qccAgiRo0FtrOtyAF11Oa0Pmrlq
+	 Q+1rPhoKxmePEZPSt1p4MuiQ987Rj0hcP391N3DITApRl83kJs0kb9EseUWFbkyDhC
+	 3unbhfNJsPmfOoNR/mlQDvmc3xdCdnIjZ/IksvMRAQyRDpd3xbPK8IWEOpUBK3wQ14
+	 As0NXAWoc7Ic+DwqLokvCsr8Jop8NI2yUK4IVgFyh069MW5P4WvRsQXIO2RcC2V5PJ
+	 VBkzNbhV/lvX0ERDXWzWYYfIUpU5x59anBAdn1jTbUfG2mHuUjDvIkGpDfpuKUpTjt
+	 aCmfwM/rneWl3aRbec9rhkjI=
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-857f88e7b3fso34078877b3.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 14:54:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788818073; x=1789422873;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=fRpckaKOwl0Kgs7K/gM2OB7RO7urUAj94CqnshB8/I4=;
+        b=imoa6xyx7mS8cKTFgt3J/xwHBoYHOwI3iR3cb0KOXclXeOPW3ydIKAMnOKUN30ZQ7C
+         QBGvGVyqIg3WQYzLsBOh94VksIEKsEEZCGBTp14rs5JoBu+WAv7hRbNRqKosL/cyNqBd
+         sf7Ed+xW7v52tVYiWqr8ILZZDlrhEWjlO2thVmdCoD7FmsU6Glixwcx6fLByysEG272T
+         99usnrczIwagoFZnuQjHf8eiIW0jopmfd2UWIeJI6X4/B8gOXrVJDVtbTS+MohMo7rJJ
+         47gjKtUn6uKA7tuKy2wtIVaBVD6F0C5uvWv+j57Cjh59mhlSSMjhw9C8hxc7z5+wJGnf
+         unmg==
+X-Forwarded-Encrypted: i=1; AKwUvBz0GP6mxVwVO6/MAKwUCwRbs+jUx3MUqwrqaNZkzlhwKVsdaBD3Ix0ljNRbz1NyyDMkPK1TIo11Tr0xhmHY0uA=@vger.kernel.org
+X-Gm-Message-State: AFuF++n7q7WFfehAfB3QODGZJxo6M5Z7Td5KzFQ9Zpe4gjQQvzJJaVvG
+	JEzQRVbQlEm9Ny9H1+bUGN1eq29wqCQzIe7JUL+l4sLQnOoM8OgrLiaVXjrX13avTjT8x5mb1te
+	0/oc6EkdYxhtxAHViEU11STwGd1b8vq6lDbGT6O8jou/ODQoI+3d5GiCrqlVzqkEXFM81fTRIiP
+	y7ThpNLfvHrQ==
+X-Gm-Gg: AYBFou3RGLNhJmHCmV5uGZDS2xBbY2i9+H0hE6SoduT0jEPVd/r9E5uWYriw6so8BIW
+	fC26RKVsFxx5qTzKRietS4bFJyyVhgqwiO9LTvkKwQDnR2a5HcF4TPDBiwGuPoMkGLn51k/Qiwh
+	fE8zWA0CsfxAbGp5sG/JhR3n7cgZyASn8wVk4XBn1BVpLXtmc8iqTetefPigffla1hmK6riCsQJ
+	WY43zaFy2gvAvsNWQlFNAnRUDF39anr7wHxxdvStQBP2U/v0sVuTLGMAKQJsMvoQkVSeTb2xdCc
+	fn80lxdZtscdMIoPrZyXAfLYANnQ7qxTnlfzbxxqmdQJpB1pIHnErpjPHF8JGkV7uYVbmUPWQ+d
+	6/2t1DRsows8uibaiBXV6ePCyEsOkrynvF8k6Naj4Nw==
+X-Received: by 2002:a05:690e:2581:b0:66f:8797:8721 with SMTP id 956f58d0204a3-66fb591c4b0mr6436212d50.10.1788818072939;
+        Mon, 07 Sep 2026 14:54:32 -0700 (PDT)
+X-Received: by 2002:a05:690e:2581:b0:66f:8797:8721 with SMTP id 956f58d0204a3-66fb591c4b0mr6436205d50.10.1788818072556;
+        Mon, 07 Sep 2026 14:54:32 -0700 (PDT)
+Received: from Q58-sff ([2a00:5884:1118:0:ed91:74de:df2:6b36])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-66fb47a8b8fsm8977708d50.2.2026.09.07.14.54.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Sep 2026 14:54:31 -0700 (PDT)
+From: Thibault Ferrante <thibault.ferrante@canonical.com>
+To: linuxppc-dev@lists.ozlabs.org,
+	maddy@linux.ibm.com
+Cc: mpe@ellerman.id.au,
+	npiggin@gmail.com,
+	shuah@kernel.org,
+	chleroy@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/powerpc/tm: Fix tcheck() reading uninitialised CR value
+Date: Mon,  7 Sep 2026 23:54:20 +0200
+Message-ID: <20260907215420.1258678-1-thibault.ferrante@canonical.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+EHjTyJpPd8HjaWBw0V6pHF9UR0w2UFmaKDe7U3O+Sj8wiyPg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Fuad,
-On Fri, Sep 04, 2026 at 09:45:30AM +0100, Fuad Tabba wrote:
-> Hi Itaru,
-> 
-> On Tue, 25 Aug 2026 at 22:18, Itaru Kitayama <itaru.kitayama@fujitsu.com> wrote:
-> ...
-> > diff --git a/tools/testing/selftests/kvm/lib/arm64/processor.c b/tools/testing/selftests/kvm/lib/arm64/processor.c
-> > index 9108e14a9b5b..bcdf670c9eb8 100644
-> > --- a/tools/testing/selftests/kvm/lib/arm64/processor.c
-> > +++ b/tools/testing/selftests/kvm/lib/arm64/processor.c
-> > @@ -46,7 +46,7 @@ static u64 pud_index(struct kvm_vm *vm, gva_t gva)
-> >         u64 mask = (1UL << (vm->page_shift - 3)) - 1;
-> >
-> >         TEST_ASSERT(vm->mmu.pgtable_levels >= 4,
-> > -                   "Mode %d does not have at least 4 page table levels",
-> > +                   "Mode %d does not have >= 4 page table levels",
-> 
-> Patch 1 added this string one commit earlier. Could it go in with the
-> final wording there?
+tcheck() is used to check the current transaction state (active,
+suspended, doomed) via the "tcheck" instruction, which writes its
+result into CR field 0. The inline asm declared a GPR output operand
+for this result but never actually moved the CR into it.
 
-Surely, will fix in v2.
+Every caller (tcheck_doomed(), tcheck_active(), tcheck_suspended(),
+tcheck_transactional()) has effectively been testing bits of an unrelated,
+arbitrary register value since this helper was introduced.
+The "& 4" mask discards the TDOOMED and TS_lsb (suspended) bits before
+they ever reach the callers, so tcheck_doomed() and tcheck_suspended()
+can never return true, and tcheck_transactional() degrades to being
+equivalent to tcheck_active().
 
-> 
-> ...
-> 
-> > @@ -298,10 +304,14 @@ struct kvm_vm *____vm_create(struct vm_shape shape)
-> >
-> >         /* Setup mode specific traits. */
-> >         switch (vm->mode) {
-> > +       case VM_MODE_P52V52_4K:
-> > +               vm->mmu.pgtable_levels = 5;
-> > +               break;
-> 
-> This is now the deepest mode, so page_fault_test.c's sizing is stale:
-> 
->    * VM_MODE_P48V48_4K is the mode with most PT pages; let's use
->    * twice that just in case.
->   pt_size = 26 * guest_page_size;
-> 
-> The margin still covers it. Could pt_size come from vm->mmu.pgtable_levels?
+Fix tcheck() to actually move CR into the output register with mfcr,
+and widen the mask from "& 4" to "& 0xf" so the full CR0 nibble
+(TDOOMED | TS_msb | TS_lsb | reserved) is preserved for the callers.
 
-I'm not the author of the page_fault_test.c for arm64, but so I'm
-guessing here; per the comment in the test, I dont think total number of
-levels determines pt_size, rather by the addresses prepared for the
-test.
+This bug has been present since tcheck() was introduced.
 
-This stress test does not require high virtual addresses, though should
-we update the comment while at it?
+Link: https://bugs.launchpad.net/bugs/2107442
+Fixes: 8e03bd4e70b6 ("selftests/powerpc: Add TM tcheck helpers in C")
+Signed-off-by: Thibault Ferrante <thibault.ferrante@canonical.com>
+---
+ tools/testing/selftests/powerpc/tm/tm.h | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Thanks,
-Itaru.
+diff --git a/tools/testing/selftests/powerpc/tm/tm.h b/tools/testing/selftests/powerpc/tm/tm.h
+index c03c6e778876..6024ce4ba6ff 100644
+--- a/tools/testing/selftests/powerpc/tm/tm.h
++++ b/tools/testing/selftests/powerpc/tm/tm.h
+@@ -105,8 +105,12 @@ static inline bool failure_is_nesting(void)
+ static inline int tcheck(void)
+ {
+ 	long cr;
+-	asm volatile ("tcheck 0" : "=r"(cr) : : "cr0");
+-	return (cr >> 28) & 4;
++	asm volatile("tcheck 0;"
++		     "mfcr %0;"
++		     : "=r"(cr)
++		     :
++		     : "cr0");
++	return (cr >> 28) & 0xf;
+ }
+ 
+ static inline bool tcheck_doomed(void)
+-- 
+2.55.0
 
-> 
-> Cheers,
-> /fuad
-> 
-> 
-> >         case VM_MODE_P52V48_4K:
-> >                 vm->mmu.pgtable_levels = 4;
-> >                 break;
-> >         case VM_MODE_P52V48_64K:
-> > +       case VM_MODE_P52V52_64K:
-> >                 vm->mmu.pgtable_levels = 3;
-> >                 break;
-> >         case VM_MODE_P48V48_4K:
-> > @@ -322,6 +332,7 @@ struct kvm_vm *____vm_create(struct vm_shape shape)
-> >         case VM_MODE_P48V48_16K:
-> >         case VM_MODE_P40V48_16K:
-> >         case VM_MODE_P36V48_16K:
-> > +       case VM_MODE_P52V52_16K:
-> >                 vm->mmu.pgtable_levels = 4;
-> >                 break;
-> >         case VM_MODE_P47V47_16K:
-> >
-> > --
-> > 2.43.0
-> >
-> 
