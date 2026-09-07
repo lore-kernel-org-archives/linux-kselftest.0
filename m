@@ -1,50 +1,43 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6474B53F2;
-	Mon,  7 Sep 2026 12:46:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD6D8483BD5
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 12:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788785198; cv=none; b=gzNzaB8R+8xcFuDU0G6zfzX7HXdta4eHzZocivp5Ju1ZSCoZJuYGZ12vSfLfu6uLjUEpFc3BvNIEa4MiuoRJSMeqzaJipGkP/yt308S1azoH+NohH9xADEMDPmccDIwWvgoP9SuPlHR7ZMvroHZ/Z6HyZYTcKAXtOG/tDuHoCxQ=
+	t=1788785202; cv=none; b=ArIQMVRVFs/WOXr34CDomylZZzFNPZx8gvyoz2eHGFu32oSR0/MSU4KnDffTw1bakUeVaZqij7vnwiD+UaUiM03/tYaS+8JCtXBW+DHhO/Kv4eHuEhudH3KC5YUY8vyrCPKmFmOU93NArgxCveTkutV1/RvL8yj4jFUyn9nE6O0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788785198; c=relaxed/simple;
-	bh=L7senZac0sy8pUJGmblXJVzYmWB+RzzCcgxvI/i3zzk=;
+	s=arc-20240116; t=1788785202; c=relaxed/simple;
+	bh=k3P6Pn2muRbcAFklFTowju2ksw4ZRrFDADOvJm7KZ0o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jox/QIhWQ7BvgwMchqgxiDQpXJVZIlYLfofaPNItKL2Polgzm1FwAkl5J/LuV1kYeKeRwbeog/27SomTdXCNxdvVFzkvFaq9rm0++dX3EbaxYzyhfzHdtXTRfJuWiYpHmiJ3BefXqu4RgaZA+UiwjzoIwxGrXIpk45mFZ9XZrtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=BCeQmDL/; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	 Content-Type:Content-Disposition:In-Reply-To; b=OExt3UvTkalI7dJcFp1pqiq2ia6eU3LG8kf9HWjahWAdb2tn4/OKvoA+CSvl8KVoXIIabSt3bAx7v5IRJoCFV/lB8vcN0s5x50qKZgB22FV3BVGYrQP+5Ue+C+LaJftamebDvrOU8gIoeEtstluju0Exxxqxc3b6AAe4DaWTZKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fmMU+Toi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="BCeQmDL/"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=jWlh4ZuZ5M27NzituDSZkqPWQo4oelgw1EQ9Hc1dxp4=; b=BCeQmDL/CZHVxh3I2HbjFjyBnz
-	c1kEVeahbGx1yF57IMB2uhyNerwHA53diZruJ/OF4RA3rDzK2N7zJchupwSp6Y+L6d0W6qn9Cp293
-	Dv8IscKgr1IOMIcZXizISYKaL2+RFKzfM3Aq6CLMDe5A7kufbk+nP0FMSPZMVUtn/7sI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1x3Yjq-003W8S-R5; Mon, 07 Sep 2026 14:46:18 +0200
-Date: Mon, 7 Sep 2026 14:46:18 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Hemanth Selam <hemanth.selam@gmail.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Sudarsana Kalluru <skalluru@marvell.com>,
-	Manish Chopra <manishc@marvell.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>,
-	Edward Cree <ecree.xilinx@gmail.com>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-net-drivers@amd.com, linux-kselftest@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] net: llc: fix repeated word 'all' in comment
-Message-ID: <73289f58-4937-42da-9016-796a13ced97e@lunn.ch>
-References: <20260907044635.7141-1-hemanth.selam@gmail.com>
- <20260907044635.7141-4-hemanth.selam@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fmMU+Toi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433761F00A3A;
+	Mon,  7 Sep 2026 12:46:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788785199;
+	bh=rzdkdKARecRe01szTYol++atDGkRoRfjvh6vRPYl5UI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=fmMU+ToibZFV8IbiMlB7BJcyNMWiUGoLS44Vm5Vqh9Vze0eOEl7CNxS0hUHcpn2+U
+	 KDqTzGIiVtZl2E49E4Ozxyf0r0idinYHKqHEcc0/vTsBG6TseiuvZKjo6li9gfwFBh
+	 XMatxt5QnMhLz37fIKXkBJm4CrR1X9lYXtjiPtET1jw5HDYQTBD/47WEJLkzTrSUnd
+	 qtnZwbvNxWcgKfkEWn1APaq0S6qTInfeKglBBhVX7cmBQW6mDOZq/KYHuVTiHoR5YF
+	 GH58BNpPS089GXzGEZdhaypjKL4ska+IMdoxMxlw3Ufn8A9fx1Lugz6xTXQlRh3dw1
+	 SNTmY/DAjaHGg==
+Date: Mon, 7 Sep 2026 13:46:31 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	akpm@linux-foundation.org, david@kernel.org, liam@infradead.org, vbabka@kernel.org, 
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org, 
+	ziy@nvidia.com, baolin.wang@linux.alibaba.com, nico.pache@linux.dev, 
+	ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev, 
+	usama.arif@linux.dev, kas@kernel.org, sarthak.sharma@arm.com
+Subject: Re: [PATCH v2] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT macro
+Message-ID: <ap6vmwQw47sxSKQO@gremlin>
+References: <20260907081509.924979-1-yeoreum.yun@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,15 +46,401 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260907044635.7141-4-hemanth.selam@gmail.com>
+In-Reply-To: <20260907081509.924979-1-yeoreum.yun@arm.com>
 
-On Mon, Sep 07, 2026 at 10:16:32AM +0530, Hemanth Selam wrote:
-> Drop the second 'all', reported by checkpatch.pl as a possible repeated
-> word.  Only touches a comment, no code changes.
-> 
-> Assisted-by: Cursor:claude-opus-5
-> Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
+On Mon, Sep 07, 2026 at 09:15:08AM +0100, Yeoreum Yun wrote:
+> HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
+> When this macro is used in some test, test result would be strange in
+> the system where PAGE_SIZE is more then 4KB.
+>
+> Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
+>
+>   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
+>     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
+>     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>     ...
+>   ok 1 Completed
+>
+> Remove the HPAGE_SIZE and HPAGE_SHIFT macros and introduce pmd_page_shift()
+> helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-existing
+> helper, read_pmd_pagesize().
+>
+> Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
+> which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
+> and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
+> PMD-sized units, the test may fail with the previous size of 100 MiB,
+> which is not a multiple of the PMD size when the base page size is
+> 16 KiB or 64 KiB.
+>
+> After this patch, output of transhuge-stress:
+>
+>   transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
+>     2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>     2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>     2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>     2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s	2616 succeed, 1201 failed, 2616 different pages
+>     2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s	2627 succeed, 1190 failed, 2627 different pages
+>     2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s	2628 succeed, 1189 failed, 2628 different pages
+>     2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s	2630 succeed, 1187 failed, 2630 different pages
+>     2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s	2631 succeed, 1186 failed, 2631 different pages
+>     ...
+>   ok 1 Completed
+>
+> Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Tested and works locally :) (weird stall in data below is because it was being
+run in a VM that was given too much memory :P):
 
-    Andrew
+$ sudo ./transhuge-stress -d 20
+TAP version 13
+1..1
+transhuge-stress: allocate 251 transhuge pages, using 8041 MiB virtual memory and 7 MiB of ram
+# 2.317 s/loop, 9.230 ms/page,   3467.040 MiB/s	 251 succeed,    0 failed,  233 different pages
+# 0.175 s/loop, 0.696 ms/page,  46008.352 MiB/s	 251 succeed,    0 failed,  235 different pages
+# 0.166 s/loop, 0.661 ms/page,  48416.410 MiB/s	 251 succeed,    0 failed,  232 different pages
+# 3.367 s/loop, 13.416 ms/page,  2385.195 MiB/s	 251 succeed,    0 failed,  235 different pages
+# 10.092 s/loop, 40.206 ms/page,  795.906 MiB/s	 251 succeed,    0 failed,  231 different pages
+# 0.190 s/loop, 0.757 ms/page,  42252.947 MiB/s	 251 succeed,    0 failed,  230 different pages
+# 0.170 s/loop, 0.678 ms/page,  47177.691 MiB/s	 251 succeed,    0 failed,  231 different pages
+# 0.259 s/loop, 1.032 ms/page,  30995.582 MiB/s	 251 succeed,    0 failed,  230 different pages
+# 1.416 s/loop, 5.642 ms/page,   5671.301 MiB/s	 251 succeed,    0 failed,  230 different pages
+# 0.170 s/loop, 0.677 ms/page,  47252.908 MiB/s	 251 succeed,    0 failed,  229 different pages
+# 0.166 s/loop, 0.662 ms/page,  48339.908 MiB/s	 251 succeed,    0 failed,  228 different pages
+# 0.165 s/loop, 0.659 ms/page,  48572.554 MiB/s	 251 succeed,    0 failed,  231 different pages
+# 0.164 s/loop, 0.655 ms/page,  48841.927 MiB/s	 251 succeed,    0 failed,  228 different pages
+# 0.216 s/loop, 0.861 ms/page,  37184.310 MiB/s	 251 succeed,    0 failed,  189 different pages
+# 0.175 s/loop, 0.698 ms/page,  45864.590 MiB/s	 251 succeed,    0 failed,  233 different pages
+ok 1 Completed
+# Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Thanks for this!
+
+Tested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+
+> ---
+> Chnage in v2:
+>  - rename hpage_* to pmd_page_*
+>  - Link to v1: https://lore.kernel.org/all/20260902175611.1241118-1-yeoreum.yun@arm.com/#t
+>
+> ---
+>  tools/testing/selftests/mm/guard-regions.c    | 11 ++++--
+>  tools/testing/selftests/mm/ksm_tests.c        | 16 +++++----
+>  tools/testing/selftests/mm/run_vmtests.sh     |  4 +--
+>  tools/testing/selftests/mm/transhuge-stress.c | 25 +++++++------
+>  tools/testing/selftests/mm/vm_util.c          | 36 ++++++++++++++++---
+>  tools/testing/selftests/mm/vm_util.h          |  9 ++---
+>  6 files changed, 71 insertions(+), 30 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
+> index 5c8ec3ca75d7..e57cc7e39e41 100644
+> --- a/tools/testing/selftests/mm/guard-regions.c
+> +++ b/tools/testing/selftests/mm/guard-regions.c
+> @@ -2195,14 +2195,21 @@ TEST_F(guard_regions, pagemap_scan)
+>  TEST_F(guard_regions, collapse)
+>  {
+>  	const unsigned long page_size = self->page_size;
+> -	const unsigned long size = 2 * HPAGE_SIZE;
+> -	const unsigned long num_pages = size / page_size;
+> +	const uint64_t hpage_size = read_pmd_pagesize();
+> +	unsigned long size;
+> +	unsigned long num_pages;
+>  	char *ptr;
+>  	int i;
+>
+>  	if (!thp_available())
+>  		SKIP(return, "Transparent Hugepages not available\n");
+>
+> +	if (!hpage_size)
+> +		ksft_exit_fail_msg("reading hpage_size failed\n");
+> +
+> +	size = 2 * hpage_size;
+> +	num_pages = size / page_size;
+> +
+>  	/* Need file to be correct size for tests for non-anon. */
+>  	if (variant->backing != ANON_BACKED)
+>  		ASSERT_EQ(ftruncate(self->fd, size), 0);
+> diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selftests/mm/ksm_tests.c
+> index 5fd7792a0d47..ef27ce467b8c 100644
+> --- a/tools/testing/selftests/mm/ksm_tests.c
+> +++ b/tools/testing/selftests/mm/ksm_tests.c
+> @@ -521,19 +521,23 @@ static int ksm_merge_hugepages_time(int merge_type, int mapping, int prot,
+>  	struct timespec start_time, end_time;
+>  	unsigned long scan_time_ns;
+>  	int pagemap_fd, n_normal_pages, n_huge_pages;
+> +	const uint64_t hpage_size = read_pmd_pagesize();
+>
+>  	if (!thp_is_enabled()) {
+>  		ksft_print_msg("Transparent Hugepages not available\n");
+>  		return KSFT_SKIP;
+>  	}
+>
+> +	if (!hpage_size)
+> +		ksft_exit_fail_msg("reading hpage_size failed\n");
+> +
+>  	map_size *= MB;
+>  	size_t len = map_size;
+>
+> -	len -= len % HPAGE_SIZE;
+> -	map_ptr_orig = mmap(NULL, len + HPAGE_SIZE, PROT_READ | PROT_WRITE,
+> +	len -= len % hpage_size;
+> +	map_ptr_orig = mmap(NULL, len + hpage_size, PROT_READ | PROT_WRITE,
+>  			MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE, -1, 0);
+> -	map_ptr = map_ptr_orig + HPAGE_SIZE - (uintptr_t)map_ptr_orig % HPAGE_SIZE;
+> +	map_ptr = map_ptr_orig + hpage_size - (uintptr_t)map_ptr_orig % hpage_size;
+>
+>  	if (map_ptr_orig == MAP_FAILED)
+>  		err(2, "initial mmap");
+> @@ -547,7 +551,7 @@ static int ksm_merge_hugepages_time(int merge_type, int mapping, int prot,
+>
+>  	n_normal_pages = 0;
+>  	n_huge_pages = 0;
+> -	for (void *p = map_ptr; p < map_ptr + len; p += HPAGE_SIZE) {
+> +	for (void *p = map_ptr; p < map_ptr + len; p += hpage_size) {
+>  		if (allocate_transhuge(p, pagemap_fd) < 0)
+>  			n_normal_pages++;
+>  		else
+> @@ -578,11 +582,11 @@ static int ksm_merge_hugepages_time(int merge_type, int mapping, int prot,
+>  	ksft_print_msg("Average speed:  %.3f MiB/s\n", (map_size / MB) /
+>  					       ((double)scan_time_ns / NSEC_PER_SEC));
+>
+> -	munmap(map_ptr_orig, len + HPAGE_SIZE);
+> +	munmap(map_ptr_orig, len + hpage_size);
+>  	return KSFT_PASS;
+>
+>  err_out:
+> -	munmap(map_ptr_orig, len + HPAGE_SIZE);
+> +	munmap(map_ptr_orig, len + hpage_size);
+>  	return KSFT_FAIL;
+>  }
+>
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> index d09f9f6a384e..24aa1de27c25 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -360,8 +360,8 @@ fi
+>  CATEGORY="memfd_secret" run_test ./memfd_secret
+>  fi
+>
+> -# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 100
+> -CATEGORY="ksm" run_test ./ksm_tests -H -s 100
+> +# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 512
+> +CATEGORY="ksm" run_test ./ksm_tests -H -s 512
+>  # KSM KSM_MERGE_TIME test with size of 100
+>  CATEGORY="ksm" run_test ./ksm_tests -P -s 100
+>  # KSM MADV_MERGEABLE test with 10 identical pages
+> diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
+> index 8eb0c5630e7e..9cd9790224db 100644
+> --- a/tools/testing/selftests/mm/transhuge-stress.c
+> +++ b/tools/testing/selftests/mm/transhuge-stress.c
+> @@ -35,12 +35,17 @@ int main(int argc, char **argv)
+>  	size_t map_len;
+>  	int pagemap_fd;
+>  	int duration = 0;
+> +	const uint64_t hpage_size = read_pmd_pagesize();
+> +	const uint64_t hpage_shift = pmd_page_shift();
+>
+>  	ksft_print_header();
+>
+>  	if (!thp_is_enabled())
+>  		ksft_exit_skip("Transparent Hugepages not available\n");
+>
+> +	if (!hpage_size || !hpage_shift)
+> +		ksft_exit_fail_msg("reading hpage_size failed\n");
+> +
+>  	ram = sysconf(_SC_PHYS_PAGES);
+>  	if (ram > SIZE_MAX / psize() / 4)
+>  		ram = SIZE_MAX / 4;
+> @@ -70,23 +75,23 @@ int main(int argc, char **argv)
+>  	}
+>
+>  	warnx("allocate %zd transhuge pages, using %zd MiB virtual memory"
+> -	      " and %zd MiB of ram", len >> HPAGE_SHIFT, len >> 20,
+> -	      ram >> (20 + HPAGE_SHIFT - pshift() - 1));
+> +	      " and %zd MiB of ram", len >> hpage_shift, len >> 20,
+> +	      ram >> (20 + hpage_shift - pshift() - 1));
+>
+>  	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+>  	if (pagemap_fd < 0)
+>  		ksft_exit_fail_msg("open pagemap\n");
+>
+> -	len -= len % HPAGE_SIZE;
+> -	ptr = mmap(NULL, len + HPAGE_SIZE, PROT_RW, mmap_flags, backing_fd, 0);
+> +	len -= len % hpage_size;
+> +	ptr = mmap(NULL, len + hpage_size, PROT_RW, mmap_flags, backing_fd, 0);
+>  	if (ptr == MAP_FAILED)
+>  		ksft_exit_fail_msg("initial mmap");
+> -	ptr += HPAGE_SIZE - (uintptr_t)ptr % HPAGE_SIZE;
+> +	ptr += hpage_size - (uintptr_t)ptr % hpage_size;
+>
+>  	if (madvise(ptr, len, MADV_HUGEPAGE))
+>  		ksft_exit_fail_msg("MADV_HUGEPAGE");
+>
+> -	map_len = ram >> (HPAGE_SHIFT - 1);
+> +	map_len = ram >> (hpage_shift - 1);
+>  	map = malloc(map_len);
+>  	if (!map)
+>  		ksft_exit_fail_msg("map malloc\n");
+> @@ -99,7 +104,7 @@ int main(int argc, char **argv)
+>  		memset(map, 0, map_len);
+>
+>  		clock_gettime(CLOCK_MONOTONIC, &a);
+> -		for (p = ptr; p < ptr + len; p += HPAGE_SIZE) {
+> +		for (p = ptr; p < ptr + len; p += hpage_size) {
+>  			int64_t pfn;
+>
+>  			pfn = allocate_transhuge(p, pagemap_fd);
+> @@ -107,7 +112,7 @@ int main(int argc, char **argv)
+>  			if (pfn < 0) {
+>  				nr_failed++;
+>  			} else {
+> -				size_t idx = pfn >> (HPAGE_SHIFT - pshift());
+> +				size_t idx = pfn >> (hpage_shift - pshift());
+>
+>  				nr_succeed++;
+>  				if (idx >= map_len) {
+> @@ -123,7 +128,7 @@ int main(int argc, char **argv)
+>  			}
+>
+>  			/* split transhuge page, keep last page */
+> -			if (madvise(p, HPAGE_SIZE - psize(), MADV_DONTNEED))
+> +			if (madvise(p, hpage_size - psize(), MADV_DONTNEED))
+>  				ksft_exit_fail_msg("MADV_DONTNEED");
+>  		}
+>  		clock_gettime(CLOCK_MONOTONIC, &b);
+> @@ -131,7 +136,7 @@ int main(int argc, char **argv)
+>
+>  		ksft_print_msg("%.3f s/loop, %.3f ms/page, %10.3f MiB/s\t"
+>  			       "%4d succeed, %4d failed, %4d different pages\n",
+> -			       s, s * 1000 / (len >> HPAGE_SHIFT), len / s / (1 << 20),
+> +			       s, s * 1000 / (len >> hpage_shift), len / s / (1 << 20),
+>  			       nr_succeed, nr_failed, nr_pages);
+>
+>  		if (duration > 0 && b.tv_sec - start.tv_sec >= duration) {
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index 4821a3563036..f75bf0bacd18 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -21,6 +21,8 @@
+>
+>  unsigned int __page_size;
+>  unsigned int __page_shift;
+> +uint64_t __pmd_page_size;
+> +uint64_t __pmd_page_shift;
+>
+>  uint64_t pagemap_get_entry(int fd, char *start)
+>  {
+> @@ -161,6 +163,9 @@ uint64_t read_pmd_pagesize(void)
+>  	char buf[20];
+>  	ssize_t num_read;
+>
+> +	if (__pmd_page_size)
+> +		return __pmd_page_size;
+> +
+>  	fd = open(PMD_SIZE_FILE_PATH, O_RDONLY);
+>  	if (fd == -1)
+>  		return 0;
+> @@ -173,7 +178,25 @@ uint64_t read_pmd_pagesize(void)
+>  	buf[num_read] = '\0';
+>  	close(fd);
+>
+> -	return strtoul(buf, NULL, 10);
+> +	__pmd_page_size = strtoul(buf, NULL, 10);
+> +
+> +	return __pmd_page_size;
+> +}
+> +
+> +uint64_t pmd_page_shift(void)
+> +{
+> +	if (__pmd_page_shift)
+> +		return __pmd_page_shift;
+> +
+> +	if (!__pmd_page_size)
+> +		__pmd_page_size = read_pmd_pagesize();
+> +
+> +	if (!__pmd_page_size)
+> +		return 0;
+> +
+> +	__pmd_page_shift = (ffsl(__pmd_page_size) - 1);
+> +
+> +	return __pmd_page_shift;
+>  }
+>
+>  unsigned long rss_anon(void)
+> @@ -452,14 +475,19 @@ bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size
+>  int64_t allocate_transhuge(void *ptr, int pagemap_fd)
+>  {
+>  	uint64_t ent[2];
+> +	const uint64_t hpage_size = read_pmd_pagesize();
+> +	const uint64_t hpage_shift = pmd_page_shift();
+> +
+> +	if (!hpage_size || !hpage_shift)
+> +		return -1;
+>
+>  	/* drop pmd */
+> -	if (mmap(ptr, HPAGE_SIZE, PROT_READ | PROT_WRITE,
+> +	if (mmap(ptr, hpage_size, PROT_READ | PROT_WRITE,
+>  		 MAP_FIXED | MAP_ANONYMOUS |
+>  		 MAP_NORESERVE | MAP_PRIVATE, -1, 0) != ptr)
+>  		ksft_exit_fail_msg("mmap transhuge\n");
+>
+> -	if (madvise(ptr, HPAGE_SIZE, MADV_HUGEPAGE))
+> +	if (madvise(ptr, hpage_size, MADV_HUGEPAGE))
+>  		ksft_exit_fail_msg("MADV_HUGEPAGE\n");
+>
+>  	/* allocate transparent huge page */
+> @@ -471,7 +499,7 @@ int64_t allocate_transhuge(void *ptr, int pagemap_fd)
+>
+>  	if (PAGEMAP_PRESENT(ent[0]) && PAGEMAP_PRESENT(ent[1]) &&
+>  	    PAGEMAP_PFN(ent[0]) + 1 == PAGEMAP_PFN(ent[1]) &&
+> -	    !(PAGEMAP_PFN(ent[0]) & ((1 << (HPAGE_SHIFT - pshift())) - 1)))
+> +	    !(PAGEMAP_PFN(ent[0]) & ((1 << (hpage_shift - pshift())) - 1)))
+>  		return PAGEMAP_PFN(ent[0]);
+>
+>  	return -1;
+> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+> index 9a49af88702e..1d2608c1ad08 100644
+> --- a/tools/testing/selftests/mm/vm_util.h
+> +++ b/tools/testing/selftests/mm/vm_util.h
+> @@ -31,6 +31,8 @@
+>
+>  extern unsigned int __page_size;
+>  extern unsigned int __page_shift;
+> +extern uint64_t __pmd_page_size;
+> +extern uint64_t __pmd_page_shift;
+>
+>  /*
+>   * Represents an open fd and PROCMAP_QUERY state for binary (via ioctl)
+> @@ -89,6 +91,7 @@ unsigned long pagemap_get_pfn(int fd, char *start);
+>  void clear_softdirty(void);
+>  bool check_for_pattern(FILE *fp, const char *pattern, char *buf, size_t len);
+>  uint64_t read_pmd_pagesize(void);
+> +uint64_t pmd_page_shift(void);
+>  unsigned long rss_anon(void);
+>  bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size);
+>  bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size);
+> @@ -157,12 +160,6 @@ int ksm_stop(void);
+>  int get_hardware_corrupted_size(unsigned long *val);
+>  int unpoison_memory(unsigned long pfn);
+>
+> -/*
+> - * On ppc64 this will only work with radix 2M hugepage size
+> - */
+> -#define HPAGE_SHIFT 21
+> -#define HPAGE_SIZE (1 << HPAGE_SHIFT)
+> -
+>  #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
+>  #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
+>
+> --
+> LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
+>
+
+--
+Cheers, Lorenzo
