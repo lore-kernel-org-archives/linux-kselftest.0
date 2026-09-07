@@ -1,101 +1,222 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mta1.migadu.com (out-131.mta1.migadu.com [95.215.58.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703DC23AB88
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 01:38:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 230931A680E
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 01:48:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788745135; cv=none; b=jVg1dRodrcPjaVV0GUGdziYK6jDA2iHjRnI9j+LRmqwMSw3S+5DYEGeV8nu8+hlAPIeWxUEctQhAwnZ3JTUqf/RiQCTkj2gGkMR+fl4XH6Vc5SEpMphLyJLjihoP1Esm5Q+eaTB17jzTzOTxaCiS5+i9iJSjKdgojr3wTfbktLY=
+	t=1788745690; cv=none; b=u0YpmFJ2Z99PGwdgHYJbIrJtMXbXAG26p5mZprkjRiJQLdKiATYMptvXkc8+N1yVhMEcIPTFUiSCjTHrHlLafg00ipczDcnRYuP5GHjXH6LhZJqCzgeBCAnA9y+Tr8xyvGcY1tlLp0M+VjKNCX0jvpcIyNLS7NPUxZpOPqvfXew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788745135; c=relaxed/simple;
-	bh=Rcc/NX5FEJFOxRXZ9DDTD7xInDmsvLTzC5w5eWduUkk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aJfoWXLVlxU2LroL2AvVAV/7M6i4FDZd+UXG8esvUcuJID/HIQqWuDBJREIKVfPUzPJ4lwPkJraGF2aNs74u8ArzluoPuivVdauyOEKPvtM2WVfUIX5u4CGwWR1ihQR2aKc90ASY4xO14IAww+/rwxdHg7zJEzKlHbWdX7qJj88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rAcq3q5L; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788745690; c=relaxed/simple;
+	bh=oRl2Ig0sqb2lbu8LjCTCNBnNy0/sezGLFVcQX5GWk8Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HN0Degm5dmkowEOLPoA+SbDgxu1YxaXqgOJf1ptPuQpjBv9aUfVi1FLHdRZhl3kF0p04CGlBask1ji7rpAyyZ9I6yjAuS8VVpca7hYT2n1QCcYdvnrKBzZo9eQunHaRqv+4a4/dh4PK9kGo2NZQS484Upv3iZ6ZNcptm1eomHgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uQaIqU8I; arc=none smtp.client-ip=95.215.58.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rAcq3q5L"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2d01663d816so20098925ad.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 06 Sep 2026 18:38:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788745134; x=1789349934; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Rcc/NX5FEJFOxRXZ9DDTD7xInDmsvLTzC5w5eWduUkk=;
-        b=rAcq3q5LGpkv0Pl5cMfV8+G8mepihWjJKUBCY7IADKf41AzoHkCjhSb5ilbxbPkXKX
-         KA/ZCN9pUY9ilGmzvDGmS2aNx5Bldm2u5nVERQLVyi3fRsynU71UcgamIu4448dav0Mi
-         6YweFLcS1cJ178hzrTgIlbr6EPaaryM9QAPbjLX+jolrDP5jUiSqYMHADzqxb26y8eVH
-         JpBHWtJuw7INLx9G7zDNHYZQRTJvLZPR3UvuxVG0t6f2CL0jL+5wi66K6no5rRC9kEsM
-         KFrH9x/Ui8cuxqOIoigvGjODhHP2zA8GO+zgOPRmJB55KFVhA1R67vQLN3cCyYYFWG6d
-         yj7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788745134; x=1789349934;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Rcc/NX5FEJFOxRXZ9DDTD7xInDmsvLTzC5w5eWduUkk=;
-        b=NRaLA/jli+UpPlNL909WYYRgcZrvTlQptc/kfwBYaU3JDS6T8IWX+nrwGaHMyrqBXB
-         hX2XFd7dw58IAcOPm00Gk4Rcu3WgKuwwFmcCRbBynnuTKAtFh4kgpYUf+7hmE19kYnML
-         ktRV7LOkQyKhxSNC45XhWXZ3EIUzzSzqipXCiEevrJUjlYBfV2cKstMHMDzDtDfMz+1o
-         C263GPYLXqcAkPsiidH5RsFajHEnNyWUmZVWlVLVwrYSsh0PONqgpvrnxM3nzg9oPiPJ
-         BGfF952EalH3itt/wfLA+7vV0W8DKOeaxfSgzIVcm1ThgzDccSI4hb/YCdaER5gOoaWN
-         dhlw==
-X-Forwarded-Encrypted: i=1; AKwUvByU+Gvbcs29MquOXOVYG88U2e1Zv8wHT5nynTHel9IzfKzGAeojSyn08BKXCF3HxWlvKf+xBkVY4/Dx7U9wod4=@vger.kernel.org
-X-Gm-Message-State: AFuF++lPMrv74NyR1nb88uLOw0PzbD476j40uOyXJv8QqPB1Q2NqQzQV
-	ib9tN0GyLfBDZriDxGkmmQzQrPP3voqKz+Bq0wX47+A81ww2iAZnVve9
-X-Gm-Gg: AYBFou0lOelGcwIuAdxDFWJo4t5WELLxjhUgt84dx6sguTLSKoh7pofiTiDYcO10KZe
-	EHXTWHdr0JU67kpPP15AfHLXbVQcm5r7RARSg3w8cYFCxE4FCXCQiDVTteijCmx/R8WO/Ei4CCY
-	3hxQRfl4IqukUrZYFKcDmrJwJCo7NgRMaSxdHvUEjTltq/XfaiPmzbibt/TOqwMhSYFRqjgWjzP
-	rXSox4dyIzHvsIByKJ2E/5Jref/7CMBMI3JtnhDm1zr33gazwXtMx9g3sZB2ILrmjWpyD/J+yNE
-	wIImaEMjE8jZDWJk9nnnFBW3cAH5dHT9EY39tHCdQjxIcwTiCTOmQ8vvz01QlppxiAb4X6xW1x4
-	JJSXhi7x6Ee8HPPtEJ4L40V4M2UwpT4cM4isae27D4mLNlALO4pz0FQNyjVyDympItnhE/rE339
-	6t5MKpsOMeRjSkWZHRko6zAWpB9YwQovD0wA1vYgvWypWSMxFbpb+tvjDz1BMPeCyE38Lc4MolD
-	T3WkIjoOdC47D5G757kyDVNnJo576GD51EeYLFbXlRtF6lvMK9l
-X-Received: by 2002:a17:902:b114:b0:2d9:1dee:43e3 with SMTP id d9443c01a7336-2db12757f17mr188382005ad.18.1788745133792;
-        Sun, 06 Sep 2026 18:38:53 -0700 (PDT)
-Received: from secrnd-cstp.tailb7f510.ts.net ([125.131.91.97])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2db14996a3asm36305435ad.46.2026.09.06.18.38.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Sep 2026 18:38:52 -0700 (PDT)
-From: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	bpf@vger.kernel.org,
-	Leon Hwang <leon.hwang@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Pu Lehui <pulehui@huawei.com>,
-	Suchit Karunakaran <suchitkarunakaran@gmail.com>,
-	Xu Kuohai <xukuohai@huawei.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Cover attach type checks in link update
-Date: Mon,  7 Sep 2026 10:38:19 +0900
-Message-ID: <20260907013818.51624-2-sanghyun.park.cnu@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <CABFh=a6YEtiZdcC51LXbZKTKWoXxCk9PSe5jtn1R-w_EWT4aUQ@mail.gmail.com>
-References: 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uQaIqU8I"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=oRl2Ig0sqb2lbu8LjCTCNBnNy0/sezGLFVcQX5GWk8Y=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788745687; v=1; x=1789350487;
+ b=uQaIqU8IAu7/Pz8O6I7cWNsO6/NVaQ5777HdUUrnawCe8tOS5P6nQYOhcuBJaVN0SIbdm/1d
+ WhLdAouzjuqqLiVM5JW08qOu25OoyddWp603dzr2f52dQKh5dg6y4nIH0aPVG6Q822CDfDtQ99B
+ IGncpnO78havMpSsuR4qVZiE=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id 2cb00b0d8266826f;
+	Mon, 07 Sep 2026 01:48:06 +0000
+X-Mizu-Trace-ID: 2cb00b0d8266826f
+X-Migadu-Flow: FLOW_OUT
+Date: Mon, 7 Sep 2026 09:47:58 +0800
+From: Baoquan He <baoquan.he@linux.dev>
+To: George Guo <dongtai.guo@linux.dev>
+Cc: rppt@kernel.org, pasha.tatashin@soleen.com, pratyush@kernel.org,
+	chenhuacai@kernel.org, ardb@kernel.org, shuah@kernel.org,
+	ilias.apalodimas@linaro.org, akpm@linux-foundation.org,
+	ruirui.yang@linux.dev, guodongtai@kylinos.cn, kernel@xen0n.name,
+	graf@amazon.com, liukexin@kylinos.cn, loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-efi@vger.kernel.org
+Subject: Re: [PATCH v5 0/5] LoongArch: add KHO support and selftests
+Message-ID: <ap4XzvnM3WUn5ard@fedora>
+References: <20260904100852.26006-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260904100852.26006-1-dongtai.guo@linux.dev>
 
-Hi Emil,
+On 09/04/26 at 06:08pm, George Guo wrote:
+> This series enables Kexec HandOver (KHO) on 64-bit LoongArch and adds
+> LoongArch coverage to the KHO QEMU selftest.  KHO is the remaining
+> architecture gate needed by Live Update (LUO) on LoongArch.
+> 
+> The transport is the central problem.  Arm64 and riscv can pass the KHO
+> state FDT and scratch area through properties under /chosen in a boot
+> FDT.  LoongArch boots through EFI without a boot FDT, so that path is not
+> available.
 
-Thanks for reviewing both patches. I'll come up with v6 with the things resolved.
+I didn't look into your patchset very carefully, but I doubt you
+are reinventing the wheel. X86 didn't have FDT, seems it introduces FDT
+for KHO support. LoongArch doesn't have FDT, so you reworks the EFI
+transport. Is there a reason you don't want to follow the standard KHO
+way using FDT too?
+
+Please correct me if I am wrong.
+
+> 
+> EFI KHO channel:
+> 
+> v5 reworks the EFI transport following Pratyush's and Huacai's reviews
+> [1, 2].  Instead of rebuilding the EFI configuration table in
+> LoongArch code and switching st->tables before kexec, the common EFI stub
+> allocates and installs a persistent table under
+> LINUX_EFI_KEXEC_HANDOVER_GUID.  This follows the model used by
+> LINUX_EFI_MEMRESERVE_TABLE_GUID.
+
+> 
+> The common EFI table parser reserves the stub-allocated table, reads it
+> during early boot, and calls kho_populate().  An early initcall keeps the
+> table persistently mapped so it can also be updated on the crash kexec
+> path.  The implementation is architecture-independent; LoongArch only
+> selects EFI_KHO when KEXEC_HANDOVER is enabled.
+> 
+> The EFI table is global, but kexec can keep separate normal and crash
+> images and can replace a loaded candidate.  Updating the table while a
+> candidate image is being loaded could therefore leave it pointing at a
+> failed candidate while the previously installed image remains the one
+> that will be executed.  v5 records the KHO data in struct kimage and
+> synchronizes the channel from the image selected for execution.  Images
+> without KHO data, including legacy and crash images, clear the channel so
+> the next kernel boots cold rather than reviving stale state.
+> 
+> The GUID name is changed to LINUX_EFI_KEXEC_HANDOVER_GUID as suggested by
+> Huacai and Pratyush [3].  Existing x86 KHO support continues to use its
+> setup_data transport.  Besides supporting non-UEFI boot, that entry is
+> consumed by the x86 decompressor before normal EFI table parsing, so KASLR
+> only uses KHO scratch areas and does not overwrite preserved memory.  The
+> new channel is installed by the generic EFI-stub entry path and relies on
+> EFI_GENERIC_STUB, which x86 does not select.  Moving x86 would therefore
+> require installing the table from the x86-specific EFI stub and scanning it
+> in the decompressor, not just selecting EFI_KHO.
+> 
+> LoongArch enablement and build fix:
+> 
+> The architecture patch now only enables ARCH_SUPPORTS_KEXEC_HANDOVER and
+> selects the generic EFI channel.  No LoongArch setup reader, kexec writer,
+> or EFI system-table replacement remains.
+> 
+> The linux/mm.h build fix is moved from luo_session.c to kho_block.c, where
+> the virt_to_phys() and phys_to_virt() calls reside after the liveupdate
+> refactoring.  This addresses Pratyush's review [4].  Adding linux/mm.h to
+> asm/io.h was previously attempted, but creates an include cycle under
+> CONFIG_KFENCE [5].  The fix precedes LoongArch enablement so every
+> intermediate commit builds with CONFIG_KFENCE=y.
+> 
+> Selftest:
+> 
+> The LoongArch vmtest boots vmlinux.efi through EDK2 because the initial
+> EFI stub invocation installs the channel being tested.  QEMU_EFI can
+> override the firmware filename for distributions that install it under a
+> different name or path.
+> 
+> CONFIG_ACPI_SPCR_TABLE lets the bare earlycon parameter obtain the UART
+> description from EDK2's SPCR table.  CONFIG_PCI_HOST_GENERIC keeps i8042
+> enabled while ensuring that the QEMU virt machine's PCI I/O space is
+> mapped before the legacy fallback probe, addressing Huacai's concern that
+> the same kernel configuration should remain usable for hosts and guests.
+> 
+> With EFI runtime reset services available, panic=-1 and QEMU's existing
+> -no-reboot option terminate the test normally.  The generic QEMU runner
+> therefore remains unchanged and does not mask failures by forcibly
+> terminating QEMU after a timeout.
+> 
+> The LoongArch vmtest uses the default KHO scratch-sizing path.  This
+> series is based on the generic fix that calculates per-node scratch sizes
+> before scratch allocation [6].
+> 
+> The KHO vmtest passes on:
+> 
+>   * LoongArch with KVM using QEMU_EFI.fd from edk2-loongarch64.
+>   * x86_64 with KVM, as regression coverage for the generic kexec/KHO
+>     changes.
+> 
+> Patch layout:
+> 
+>   1. Add the generic EFI KHO channel and its ABI.
+>   2. Synchronize the channel from the selected image at execution.
+>   3. Fix the kho_block.c header dependency exposed by LoongArch/KFENCE.
+>   4. Enable KHO on 64-bit LoongArch through the generic EFI channel.
+>   5. Add LoongArch to the KHO QEMU selftest.
+> 
+> Changes since v4:
+> 
+>   * Allocate and install the KHO table from the common EFI stub, following
+>     the EFI memreserve-table model (Pratyush).
+>   * Parse, reserve, map, and update the channel in generic EFI code; remove
+>     the LoongArch-specific reader, writer, and st->tables replacement
+>     (Pratyush, Huacai).
+>   * Synchronize the global channel at execution rather than image load;
+>     clear it for cold and crash images and use the scratch payload size.
+>   * Rename the GUID to LINUX_EFI_KEXEC_HANDOVER_GUID (Huacai, Pratyush).
+>   * Move the linux/mm.h include from luo_session.c to the actual caller,
+>     kho_block.c, and place the fix before architecture enablement
+>     (Pratyush, Huacai).
+>   * Boot the vmtest through EDK2, allow QEMU_EFI to override the firmware,
+>     and use vmlinux.efi to exercise the EFI stub and channel.
+>   * Keep i8042 enabled and select PCI_HOST_GENERIC instead of disabling
+>     the host configuration in the selftest (Huacai).
+>   * Enable ACPI_SPCR_TABLE and use the SPCR-provided early console.
+>   * Exercise the default KHO scratch-sizing path in the LoongArch vmtest;
+>     depend on the separately posted generic sizing fix [6].
+>   * Drop the generic QEMU timeout now that EFI runtime reset services make
+>     the LoongArch guest terminate normally.
+>   * Rebase onto Linux 7.3-rc1.
+> 
+> [1] Pratyush Yadav:
+>     https://lore.kernel.org/r/2vxzo6f96fmn.fsf@kernel.org/
+> [2] Huacai Chen:
+>     https://lore.kernel.org/r/CAAhV-H4PKRNCa4g=6TGepP+trtM82JiMoWgVr3O7PqbZYP9uGw@mail.gmail.com/
+> [3] https://lore.kernel.org/r/2vxzse4m54nz.fsf@kernel.org/
+> [4] https://lore.kernel.org/r/2vxzfr0l6fam.fsf@kernel.org/
+> [5] https://lore.kernel.org/r/202605211925.DbDvQ6ii-lkp@intel.com/
+> [6] https://lore.kernel.org/loongarch/20260904025101.9959-1-dongtai.guo@linux.dev/
+> 
+> Previous version:
+> 
+> v4: https://lore.kernel.org/loongarch/20260807103714.33074-1-dongtai.guo@linux.dev/
+> 
+> George Guo (5):
+>   efi: add a KHO configuration table channel
+>   liveupdate: synchronize EFI KHO channel at execution
+>   liveupdate: kho_block: include linux/mm.h for virt/phys translation
+>   LoongArch: enable kexec handover (KHO)
+>   selftests/kho: add LoongArch vmtest support
+> 
+>  arch/loongarch/Kconfig                     |  4 ++
+>  drivers/firmware/efi/Kconfig               | 12 ++++
+>  drivers/firmware/efi/efi.c                 | 78 ++++++++++++++++++++++
+>  drivers/firmware/efi/libstub/efi-stub.c    | 25 +++++++
+>  include/linux/efi.h                        | 36 ++++++++++
+>  kernel/crash_core.c                        |  7 ++
+>  kernel/kexec_core.c                        |  5 ++
+>  kernel/kexec_internal.h                    |  3 +
+>  kernel/liveupdate/kexec_handover.c         | 33 +++++++++
+>  kernel/liveupdate/kho_block.c              |  1 +
+>  tools/testing/selftests/kho/loongarch.conf | 11 +++
+>  tools/testing/selftests/kho/vmtest.sh      |  3 +-
+>  12 files changed, 217 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/kho/loongarch.conf
+> 
+> 
+> base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
+> prerequisite-patch-id: a2f06addb17cc379b9f98674f087a1642588dc6e
+> -- 
+> 2.53.0
