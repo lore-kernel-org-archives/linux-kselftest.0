@@ -1,51 +1,93 @@
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 386FA1448E0
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 01:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703DC23AB88
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 01:38:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788744907; cv=none; b=COnc3trUpLRG5sNP2SfI/aHLK1WI6JGMC7d1dv7il/f8+WJDXl8qg2xmU+FNip/J9JusSCr5sD73PQoePN2GZsR1mZ+zx3jBBixv6vHYMhdmvrnOrRdBHaT/UdhkVNq7lR2QZaXLi8mo0yC6CA367c+HUPQ4/sg31+2Quc7Z+/M=
+	t=1788745135; cv=none; b=jVg1dRodrcPjaVV0GUGdziYK6jDA2iHjRnI9j+LRmqwMSw3S+5DYEGeV8nu8+hlAPIeWxUEctQhAwnZ3JTUqf/RiQCTkj2gGkMR+fl4XH6Vc5SEpMphLyJLjihoP1Esm5Q+eaTB17jzTzOTxaCiS5+i9iJSjKdgojr3wTfbktLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788744907; c=relaxed/simple;
-	bh=WqJYj6l5fd3uswwKxVL61TnRtOLLP9ZGNXr6g+glCo0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P35LJpSo9t0OuqCUB0zY7V0+AvuLpx4jbcUPSUvgMU67fM6Dst5DGL0gViF8lzf8B0auQfv9wenWv7dpywk1lylbT8Wgt1xh7FKa9PN+tH1zneMDMLys4rhrWzAnXTWXfyICIwUAp7pj9haPutbMMTOAJ851LoHb7oQt59JLqYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=IBa01zHS; arc=none smtp.client-ip=185.125.188.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1788745135; c=relaxed/simple;
+	bh=Rcc/NX5FEJFOxRXZ9DDTD7xInDmsvLTzC5w5eWduUkk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=aJfoWXLVlxU2LroL2AvVAV/7M6i4FDZd+UXG8esvUcuJID/HIQqWuDBJREIKVfPUzPJ4lwPkJraGF2aNs74u8ArzluoPuivVdauyOEKPvtM2WVfUIX5u4CGwWR1ihQR2aKc90ASY4xO14IAww+/rwxdHg7zJEzKlHbWdX7qJj88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rAcq3q5L; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="IBa01zHS"
-Received: from hwang4-g16.. (unknown [183.241.39.42])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 5260E40CBA;
-	Mon,  7 Sep 2026 01:28:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1788744539;
-	bh=cKYGd+4Ix4It34QdOIlNevn0v4NzUgoSFh26dvzkfZk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
-	b=IBa01zHS/FZRJtx0FbWZ29u92bF6WDETcHRPuGtfBlNvWKrPI4Jiiw5VGndh3+sak
-	 4dVG47PlnBt2bLujC4qafU6OSWhgm/Xw3u1jD84W9cjoOy9tI0F6i214TT3jyJimcn
-	 xqD490rmCy4qY0No81wV5kryCjeRWQ2lfpe8RIVFRX1ttDMJRWqaanbalehbu+n9mV
-	 2NAFRHrJ1Odsp6v/Ondc4fpRoDo18+Pey58KYH+mFUxI9jvLL53pY1YK1+Il2THLv5
-	 hXHx1ouySMTQlOJTGEl3JYfDoQ1VBDNhBSNw7Y8k21PLjUYT5Nsk64hCm3c5F9XlYm
-	 8Yatzms9nAggJgUsLTBvXqHBk5lkzDoRcDCO5XK3HNXnRXVx40c7hN5Y8FyXOpraNV
-	 3kqEf/zPgYHeoUYf3kVLgPxBLIJY4edvbHhqwCySceU7qJBOJz1jSRUDMDS9yIgNsx
-	 3/aCDY0txP4scG90YbtXBx8Z4etCltPctmnf4u1eMwSJxqafn1j8wCKGLvJTPf26u7
-	 aMRt7gwaES16phtWHaThKZ8fuWKtIeJhPh2KkX4gGoYu2OiVs5ZRZg+XL/zcK6Qy6Z
-	 rY2ItafU8V1wyWMhJUAdbFfXlBHxiGYVY0AkldEz3SNRNH3iE/+lOuuZcygFjwx1TQ
-	 tGG9TuLMIJVhCln1FKV3u+m4=
-From: Hui Wang <hui.wang@canonical.com>
-To: shuah@kernel.org,
-	skhan@linuxfoundation.org,
-	ardb@kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rAcq3q5L"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2d01663d816so20098925ad.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 06 Sep 2026 18:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788745134; x=1789349934; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Rcc/NX5FEJFOxRXZ9DDTD7xInDmsvLTzC5w5eWduUkk=;
+        b=rAcq3q5LGpkv0Pl5cMfV8+G8mepihWjJKUBCY7IADKf41AzoHkCjhSb5ilbxbPkXKX
+         KA/ZCN9pUY9ilGmzvDGmS2aNx5Bldm2u5nVERQLVyi3fRsynU71UcgamIu4448dav0Mi
+         6YweFLcS1cJ178hzrTgIlbr6EPaaryM9QAPbjLX+jolrDP5jUiSqYMHADzqxb26y8eVH
+         JpBHWtJuw7INLx9G7zDNHYZQRTJvLZPR3UvuxVG0t6f2CL0jL+5wi66K6no5rRC9kEsM
+         KFrH9x/Ui8cuxqOIoigvGjODhHP2zA8GO+zgOPRmJB55KFVhA1R67vQLN3cCyYYFWG6d
+         yj7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788745134; x=1789349934;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Rcc/NX5FEJFOxRXZ9DDTD7xInDmsvLTzC5w5eWduUkk=;
+        b=NRaLA/jli+UpPlNL909WYYRgcZrvTlQptc/kfwBYaU3JDS6T8IWX+nrwGaHMyrqBXB
+         hX2XFd7dw58IAcOPm00Gk4Rcu3WgKuwwFmcCRbBynnuTKAtFh4kgpYUf+7hmE19kYnML
+         ktRV7LOkQyKhxSNC45XhWXZ3EIUzzSzqipXCiEevrJUjlYBfV2cKstMHMDzDtDfMz+1o
+         C263GPYLXqcAkPsiidH5RsFajHEnNyWUmZVWlVLVwrYSsh0PONqgpvrnxM3nzg9oPiPJ
+         BGfF952EalH3itt/wfLA+7vV0W8DKOeaxfSgzIVcm1ThgzDccSI4hb/YCdaER5gOoaWN
+         dhlw==
+X-Forwarded-Encrypted: i=1; AKwUvByU+Gvbcs29MquOXOVYG88U2e1Zv8wHT5nynTHel9IzfKzGAeojSyn08BKXCF3HxWlvKf+xBkVY4/Dx7U9wod4=@vger.kernel.org
+X-Gm-Message-State: AFuF++lPMrv74NyR1nb88uLOw0PzbD476j40uOyXJv8QqPB1Q2NqQzQV
+	ib9tN0GyLfBDZriDxGkmmQzQrPP3voqKz+Bq0wX47+A81ww2iAZnVve9
+X-Gm-Gg: AYBFou0lOelGcwIuAdxDFWJo4t5WELLxjhUgt84dx6sguTLSKoh7pofiTiDYcO10KZe
+	EHXTWHdr0JU67kpPP15AfHLXbVQcm5r7RARSg3w8cYFCxE4FCXCQiDVTteijCmx/R8WO/Ei4CCY
+	3hxQRfl4IqukUrZYFKcDmrJwJCo7NgRMaSxdHvUEjTltq/XfaiPmzbibt/TOqwMhSYFRqjgWjzP
+	rXSox4dyIzHvsIByKJ2E/5Jref/7CMBMI3JtnhDm1zr33gazwXtMx9g3sZB2ILrmjWpyD/J+yNE
+	wIImaEMjE8jZDWJk9nnnFBW3cAH5dHT9EY39tHCdQjxIcwTiCTOmQ8vvz01QlppxiAb4X6xW1x4
+	JJSXhi7x6Ee8HPPtEJ4L40V4M2UwpT4cM4isae27D4mLNlALO4pz0FQNyjVyDympItnhE/rE339
+	6t5MKpsOMeRjSkWZHRko6zAWpB9YwQovD0wA1vYgvWypWSMxFbpb+tvjDz1BMPeCyE38Lc4MolD
+	T3WkIjoOdC47D5G757kyDVNnJo576GD51EeYLFbXlRtF6lvMK9l
+X-Received: by 2002:a17:902:b114:b0:2d9:1dee:43e3 with SMTP id d9443c01a7336-2db12757f17mr188382005ad.18.1788745133792;
+        Sun, 06 Sep 2026 18:38:53 -0700 (PDT)
+Received: from secrnd-cstp.tailb7f510.ts.net ([125.131.91.97])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2db14996a3asm36305435ad.46.2026.09.06.18.38.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Sep 2026 18:38:52 -0700 (PDT)
+From: Sanghyun Park <sanghyun.park.cnu@gmail.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	bpf@vger.kernel.org,
+	Leon Hwang <leon.hwang@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Pu Lehui <pulehui@huawei.com>,
+	Suchit Karunakaran <suchitkarunakaran@gmail.com>,
+	Xu Kuohai <xukuohai@huawei.com>,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Cc: hui.wang@canonical.com
-Subject: [PATCH v3] selftests/efivarfs: skip write tests if efivarfs is mounted read-only
-Date: Mon,  7 Sep 2026 09:28:52 +0800
-Message-ID: <20260907012852.17477-1-hui.wang@canonical.com>
-X-Mailer: git-send-email 2.43.0
+Subject: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Cover attach type checks in link update
+Date: Mon,  7 Sep 2026 10:38:19 +0900
+Message-ID: <20260907013818.51624-2-sanghyun.park.cnu@gmail.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <CABFh=a6YEtiZdcC51LXbZKTKWoXxCk9PSe5jtn1R-w_EWT4aUQ@mail.gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,93 +96,6 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-efivarfs is mounted read-only when the firmware does not provide a
-working runtime SetVariable() service. This happens, for example, on
-systems where the EFI runtime is provided by U-Boot's efi_loader (a
-common case on RISC-V under QEMU booting via OpenSBI -> U-Boot -> GRUB),
-or when runtime services are disabled (efi=noruntime, lockdown, etc).
+Hi Emil,
 
-In that situation every test that creates, modifies or deletes an EFI
-variable is bound to fail, producing spurious test failures that do not
-reflect a real kernel bug.
-
-Detect the mount mode in check_prereqs() and store it in the global
-efivarfs_mode ("ro" or "rw"). Group all tests that require a writable
-efivarfs into a single "if [ "$efivarfs_mode" = "rw" ]" block, so they
-are only run when efivarfs is writable; otherwise print a single message
-explaining that they were skipped.
-
-test_invalid_filenames is left to run unconditionally, since its
-expectation still holds on a read-only mount.
-
-Assisted-by: Copilot:claude-opus-4-8
-Signed-off-by: Hui Wang <hui.wang@canonical.com>
----
-In the v3: drop the change in the test_create_empty, and move this
-           testcase to rw group as suggested in the v2.
-
- tools/testing/selftests/efivarfs/efivarfs.sh | 41 ++++++++++++++------
- 1 file changed, 29 insertions(+), 12 deletions(-)
-
-diff --git a/tools/testing/selftests/efivarfs/efivarfs.sh b/tools/testing/selftests/efivarfs/efivarfs.sh
-index c62544b966ae..9a5ad818c63b 100755
---- a/tools/testing/selftests/efivarfs/efivarfs.sh
-+++ b/tools/testing/selftests/efivarfs/efivarfs.sh
-@@ -26,6 +26,14 @@ check_prereqs()
- 		echo $msg efivarfs is not mounted on $efivarfs_mount >&2
- 		exit $ksft_skip
- 	fi
-+
-+	# Determine whether efivarfs is mounted read-only or read-write
-+	# and store the result ("ro" or "rw") in the global efivarfs_mode.
-+	if grep -q "^\S\+ $efivarfs_mount efivarfs ro[, ]" /proc/mounts; then
-+		efivarfs_mode=ro
-+	else
-+		efivarfs_mode=rw
-+	fi
- }
- 
- run_test()
-@@ -361,18 +369,27 @@ check_prereqs
- 
- rc=0
- 
--run_test test_create
--run_test test_create_empty
--run_test test_create_read
--run_test test_delete
--run_test test_zero_size_delete
--run_test test_open_unlink
--run_test test_valid_filenames
-+# Tests that are also valid on a read-only efivarfs run unconditionally.
- run_test test_invalid_filenames
--run_test test_no_set_size
--setup_test_multiple
--run_test test_multiple_zero_size
--run_test test_multiple_create
--run_test test_multiple_delete_on_write
-+
-+# These tests need to create, modify or delete EFI variables, so they
-+# require a writable efivarfs. Skip them when it is mounted read-only.
-+if [ "$efivarfs_mode" = "rw" ]; then
-+	run_test test_create
-+	run_test test_create_empty
-+	run_test test_create_read
-+	run_test test_delete
-+	run_test test_zero_size_delete
-+	run_test test_open_unlink
-+	run_test test_valid_filenames
-+	run_test test_no_set_size
-+	setup_test_multiple
-+	run_test test_multiple_zero_size
-+	run_test test_multiple_create
-+	run_test test_multiple_delete_on_write
-+else
-+	echo "efivarfs is mounted read-only on $efivarfs_mount;" \
-+	     "tests that require write access were skipped" >&2
-+fi
- 
- exit $rc
--- 
-2.43.0
-
+Thanks for reviewing both patches. I'll come up with v6 with the things resolved.
