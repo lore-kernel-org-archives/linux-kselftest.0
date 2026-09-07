@@ -1,139 +1,134 @@
-Received: from mta1.migadu.com (out-157.mta1.migadu.com [95.215.58.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08AF4ADD88
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 15:08:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F894F55BD;
+	Mon,  7 Sep 2026 15:14:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788793723; cv=none; b=BC0MO1T0r0pPMxbHVFa/X66uva7GpV/1eGszUu8/77MphgrCvt95Cdgo7p5OS3dS0tMMPwb/1E4jCH/evw1sXVZnSpRKBPGbXrmqx6nrn43hn+GW9CBpcxyHN4hrvYKwVdXhSRUetN7f1Iwooee6dzbgcaIEk/aeks4tsZvyHuw=
+	t=1788794062; cv=none; b=TW+yBxi9NTsiMBcrHT6GVAO7ak5rkojnd4zUKyEKiTLfact9WAS8Oyl5972KjrbMxoN1ZTYofA9zff40sW5x6pwybptxxOdrz5TbLcRXydgh/uYhp84RGlV8DZaoa7bRERoGl5gGlEKX44/X+exvVQMTHfzQEcrTy2OCK5Iz85A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788793723; c=relaxed/simple;
-	bh=9IaJRo/onH+WZUAxCRicEOSEY53Kz1vfjpyJNhUkVW4=;
+	s=arc-20240116; t=1788794062; c=relaxed/simple;
+	bh=HvoRSCGw4K3J6+9kMEnfFBQ3PR0xTY8raMYZ20HeE9Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l6URe3PZ+29oanWvnpNiOBvkP5IARODLJUax7lXG68g/KVSGZrHatfSC4wDbjceV9od/YNh4joiYiQ6A0tccXyz6CgesY1VTEeyMbE5FZ7WCngeUNz8rEqePqWkOeecVE83LnhCaLZ5i1KYNG0D/Hr8pZ8S9Uf5lQZzdoADZ+io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JNwKlzcd; arc=none smtp.client-ip=95.215.58.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=azNsoo/z2Albpx1fGskmaiGyHrcMDveVe/+L4Gtfp/Nr5o2MZq0eBJJxcSsvRdmAQA1SUgAenA27miulmHTxK9yHsuSCKaPSB1S2gaVZgdTeoaKCY6eVSX+YIvno3T0mT/Ung235JZp4wld0DeIrxXv7qqfFMymTw+cLdqytj9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=li2oxAWN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JNwKlzcd"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9IaJRo/onH+WZUAxCRicEOSEY53Kz1vfjpyJNhUkVW4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788793719; v=1; x=1789398519;
- b=JNwKlzcdbuTin8fwQdweSsro1lrTw4XdeHAToOEAr5drnMDbZucvdgT6gaLwq5zX94qZppbi
- GUP58PSlT7HymSAa4fZociirYirjufE2ako1hTjDd3+l35uGnG+avo3NGtm8UIqceSdT41DpqDQ
- uE5xOhmy0LO7TL72wRe6ozws=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9e0dbadcb7e0ce26;
-	Mon, 07 Sep 2026 15:08:39 +0000
-X-Mizu-Trace-ID: 9e0dbadcb7e0ce26
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <a44630a1-4965-4020-afb9-ba5b1a7848e6@linux.dev>
-Date: Mon, 7 Sep 2026 23:08:30 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="li2oxAWN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25EFB1F00A3A;
+	Mon,  7 Sep 2026 15:14:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788794061;
+	bh=dbOA0LduOb0l+EeWq7lxr4mHCdhv6fqwlu6KdWF4Los=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=li2oxAWNgsBQdF6krCVYH5rrTBTGPfLw5S8BGd72DGJxJR+RJ7AvXba/PrOmkZ+JO
+	 P6iC/Zm8V+j5RCLzvX6Dll85xfJ8ZbEKML6bx5FA1LvR3vecbGPNkkKnB4Gga4cxjT
+	 aZVhYWWSCld8LhyRA92IeubXD6EZRUx13eBWAjawSeHnXXiYjT2v2QgaRTK2gi+Kd+
+	 vVSk1o6HYKIJxpFdrkOC+435Ewf5WNb1N6zVqHsI5mhhfPKHSUgV85FVroEg+LkpEb
+	 nrPqDrXS9KaeXntcDHKjFpHP4IsrupzKGVHHzUbZg+yuqjPWHugOSQvEKksPVLewin
+	 ZTwlxl+7sUSwg==
+Message-ID: <e944079a-5c4d-416a-9c5a-5831aaf88517@kernel.org>
+Date: Mon, 7 Sep 2026 17:14:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v6 1/2] bpf: Validate program attach type during
- link update
-To: bot+bpf-ci@kernel.org, sanghyun.park.cnu@gmail.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, bpf@vger.kernel.org
-Cc: john.fastabend@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, sdf@fomichev.me,
- pulehui@huawei.com, suchitkarunakaran@gmail.com, xukuohai@huawei.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20260907015003.65087-2-sanghyun.park.cnu@gmail.com>
- <514a0c26ff5e0322fe0442d07142cafc7dda338a3ce2c5b7e9437dd994cb0ba1@mail.kernel.org>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <514a0c26ff5e0322fe0442d07142cafc7dda338a3ce2c5b7e9437dd994cb0ba1@mail.kernel.org>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net] selftests/drivers/net: include lib/sh/*.sh
+Content-Language: fr
+To: Hangbin Liu <hangbin.liu@linux.dev>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+ Hangbin Liu <liuhangbin@kylinos.cn>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Jay Vosburgh <jv@jvosburgh.net>,
+ Vladimir Oltean <olteanv@gmail.com>, Breno Leitao <leitao@debian.org>,
+ Jiri Pirko <jiri@resnulli.us>, "Michael S. Tsirkin" <mst@redhat.com>,
+ Jason Wang <jasowangio@gmail.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+ Petr Machata <petrm@nvidia.com>
+References: <20260907-selftest_lib_defer-v1-1-8af94645aaa3@kylinos.cn>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20260907-selftest_lib_defer-v1-1-8af94645aaa3@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2026/9/7 10:36, bot+bpf-ci@kernel.org wrote:
->> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->> index c7bc9ba9b331..b394a37eecb4 100644
->> --- a/kernel/bpf/syscall.c
->> +++ b/kernel/bpf/syscall.c
->> @@ -4481,14 +4481,9 @@ static int bpf_prog_attach_check_attach_type(const struct bpf_prog *prog,
->>  	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
->>  	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
->>  	case BPF_PROG_TYPE_SK_LOOKUP:
->> +	case BPF_PROG_TYPE_LSM:
->>  		return attach_type == prog->expected_attach_type ? 0 : -EINVAL;
+Hi Hangbin,
+
+On 07/09/2026 09:28, Hangbin Liu wrote:
+> From: Hangbin Liu <liuhangbin@kylinos.cn>
 > 
-> Does adding BPF_PROG_TYPE_LSM to this arm also relax the check on the
-> BPF_LINK_CREATE path?
+> When I tried to install and run bonding selftests via:
 > 
-> Before this patch, BPF_PROG_TYPE_LSM fell into the default arm:
+>   make INSTALL_PATH=/tmp/kself TARGETS=drivers/net/bonding \
+>      -C tools/testing/selftests install
 > 
-> 	default:
-> 		ptype = attach_type_to_prog_type(attach_type);
-> 		if (ptype == BPF_PROG_TYPE_UNSPEC || ptype != prog->type)
-> 			return -EINVAL;
-> 		return 0;
+> Some tests fail because net/lib/sh/defer.sh is missing:
 > 
-> Since attach_type_to_prog_type() returns BPF_PROG_TYPE_LSM only for
-> BPF_LSM_MAC and BPF_LSM_CGROUP (kernel/bpf/syscall.c:4457, 4463), an LSM
-> program could only ever be accepted for those two attach types.
+>   /tmp/kself/net/forwarding/../lib.sh: line 5: /tmp/kself/net/lib/sh/defer.sh: No such file or directory
 > 
-> The new arm drops that constraint and accepts any attach_type as long as it
-> equals prog->expected_attach_type. The other members of that arm are safe
-> because bpf_prog_load_check_attach() restricts their expected_attach_type
-> to a set that all maps back to the same prog type. BPF_PROG_TYPE_LSM is the
-> one type in that arm with no such restriction: bpf_prog_load_check_attach()
-> (kernel/bpf/syscall.c:2766 onwards) has no LSM case and falls into
-> `default: return 0`, so prog->expected_attach_type is entirely
-> userspace-controlled for LSM programs.
+> One option is to add defer.sh directly to TEST_INCLUDES. Alternatively,
+> follow the approach from commit f72aa1b27628 ("selftests: net: include
+> lib/sh/*.sh with lib.sh"), which pulls in all .sh files to accommodate
+> future changes to the library directory.
+> 
+> This patch adds a wildcard to include all shell files for drivers/net
+> tests that consume net lib.sh. TEST_INCLUDES is also sorted to avoid
+> ordering‑related problems for future modifications. The team driver is
+> not affected by this bug, but we use the wildcard for it as well, rather
+> than listing only defer.sh.
+Thank you for fixing that!
 
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
-Good catch.
-
-Since there's no expected_attach_type check for lsm prog, a lsm prog can
-have BPF_TRACE_ITER expected_attach_type, and creates a lsm link via
-BPF_LINK_CREATE with this patch. Such lsm prog cannot create a lsm link
-via BPF_LINK_CREATE without this patch.
-
-The new case BPF_PROG_TYPE_LSM in bpf_prog_attach_check_attach_type()
-relaxes the prog->type check when adding expected_attach_type check.
-
-I think we can add expected_attach_type check for lsm prog in
-bpf_prog_load_check_attach(). See below diff. The diff will restrict a
-lsm prog with these two expected_attach_type, BPF_LSM_MAC and
-BPF_LSM_CGROUP.
-
-Thanks,
-Leon
-
----
-
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 6874ba1424af..4b56e82ff3b9 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2830,6 +2830,16 @@ bpf_prog_load_check_attach(enum bpf_prog_type
-prog_type,
- 		if (expected_attach_type == BPF_NETFILTER)
- 			return 0;
- 		return -EINVAL;
-+	case BPF_PROG_TYPE_LSM:
-+		switch (expected_attach_type) {
-+		case BPF_LSM_MAC:
-+		case BPF_LSM_CGROUP:
-+			return 0;
-+		default:
-+			return -EINVAL;
-+		}
- 	case BPF_PROG_TYPE_SYSCALL:
- 	case BPF_PROG_TYPE_EXT:
- 		if (expected_attach_type)
-
-> [...]
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
