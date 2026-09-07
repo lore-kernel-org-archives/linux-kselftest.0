@@ -1,111 +1,73 @@
-Received: from mta1.migadu.com (out-66.mta1.migadu.com [95.215.58.66])
+Received: from mta1.migadu.com (out-113.mta1.migadu.com [95.215.58.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B4A23D283
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 02:51:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6346A3E5ED7
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 02:57:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788749498; cv=none; b=XyzE0R8/cLa294OhmqQZHiTdxMfQs6D02aNwm5JmWzcCD0gKknsyYbilF3PJz5BVGlLf4rtPYxPJ4djmpaIk5higQjO3CJIqTDzLqOuKv5xd9jJXf0o6GQWhgmII0OnZcOvZnwz+p/UXj/4QrzCUPxmNfG8YnsMsflIIQJZRvn8=
+	t=1788749847; cv=none; b=UepEt+otcZpFw1nPYtfkwvVRkWQpb/Khnk8IC5Agz89OqNyp6SP2qLKIPkMpSsi9zEn/3yAkHLhWx0i6Zbp6JF6LXwuhy1Gh4tJCu76vew+bkMKGOhVpjsaQffaWBEXWVtuadGLnqIGkwQT/IZ2rTSi3q1u/SEZCzU8qlDkGlxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788749498; c=relaxed/simple;
-	bh=SxzjzX434z8T2FekJgnAJrbYVmucvXUWeYnZppPlDZk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qj8jNFOy6YkZIr53ojekO0BcMu+V8RIohLUPTbabpFhqVWwTZiJgGF2OHwhQIR9OtfMHXPuJuCVLmo6uXyWX4qHRBAjBBu9FkO4NTDv/2feu1BjPV+Q5XIGwrs+n5Ej3deu7be7KaNQqZenUj889HWMRRtTZT6l9BBXZ6zRz4yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IsjEXfDq; arc=none smtp.client-ip=95.215.58.66
+	s=arc-20240116; t=1788749847; c=relaxed/simple;
+	bh=EVCd9zteXERBAt/SX5CILS8alhx+syDJQf+XFvUpFOA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JstaOg4bBW/fyVWaCxMMtWd6NsqI4DCEEeA7JFpO651DKc+IGRNgpofuuCktgp/ABIDcFo4RmA4T7sipnzYILcz/31+fjzCVLB3LwSgraRwH+BkfoebCUfyDDNPIrLVBhyemLMa7lJVRk5QWsiOKFyyGMie0RwK8X9RzZeWq+tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wo21kBzN; arc=none smtp.client-ip=95.215.58.113
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IsjEXfDq"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wo21kBzN"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=SxzjzX434z8T2FekJgnAJrbYVmucvXUWeYnZppPlDZk=;
+DKIM-Signature: a=rsa-sha256; bh=EVCd9zteXERBAt/SX5CILS8alhx+syDJQf+XFvUpFOA=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788749494; v=1; x=1789354294;
- b=IsjEXfDqwDFBLJ6Ovb0TYHjb99/MR86C9FMmnlmUIImQB2pMRWMV+G6MSkPeRrFst59BK2EF
- o4mnwkB+bj3M9V75So/Pl9jxyQ8AwE6YKgS7yFoU6q2RABPzToPGKpJ+0DQFjZnQkvwA5pCurjc
- FaJ7qvLbVYjnPDXhr9tApS3U=
+ t=1788749843; v=1; x=1789354643;
+ b=wo21kBzNVlNqphSTKkGmCioMtaDI4E7R/TaFkRmoy59/k1e57XzaYbaxjDJmqAbfTB2KrKC4
+ hXQHjISa9id0MUCpDogMvLuXKNOZbYjfsmv1SD2gBNR5FIAmZ0fh8Yh8mT8wKvdKAT2y0kgU8Y7
+ caJE6zjsgAYnfOHDcz+0tjU0=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 209a31feee9fdb3e;
-	Mon, 07 Sep 2026 02:51:33 +0000
-X-Mizu-Trace-ID: 209a31feee9fdb3e
+Received: by smtp.migadu.com with ESMTPS id c880a3f75462cd55;
+	Mon, 07 Sep 2026 02:57:23 +0000
+X-Mizu-Trace-ID: c880a3f75462cd55
 X-Migadu-Flow: FLOW_OUT
-Date: Mon, 7 Sep 2026 10:51:23 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/lib.mk: run_tests= print summary at the end
-Message-ID: <ap4mq02KukH7W8kI@fedora>
-References: <20260625-sft-run-tests-print-totals-v1-1-bfe588266249@kernel.org>
+Message-ID: <370cfedb-c434-40b7-8abe-9f68aca236ab@linux.dev>
+Date: Mon, 7 Sep 2026 10:57:11 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260625-sft-run-tests-print-totals-v1-1-bfe588266249@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next] selftests: net: Add TCP payload verification to
+ udpgso_bench_rx
+To: shuo huang <f64116045@gs.ncku.edu.tw>, netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org
+References: <20260906145643.219609-1-f64116045@gs.ncku.edu.tw>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260906145643.219609-1-f64116045@gs.ncku.edu.tw>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jun 25, 2026 at 06:22:19PM +0200, Matthieu Baerts (NGI0) wrote:
-> When there are many tests and/or many log lines, it is difficult to
-> quickly find out how the different tests went when running:
-> 
->     make -C tools/testing/selftests run_tests
-> 
-> This run_tests target executes 'run_many' from runner.sh, which relies
-> on ktap_helpers.sh. At the end of the execution, the KTAP_CNT_* counters
-> have been populated, and the total can then be simply printed with the
-> ktap_print_totals helper.
-> 
-> Now a summary is printed at the end, e.g. here with the two last lines:
-> 
->     $ make -sC tools/testing/selftests TARGETS=(...) run_tests
->     # timeout set to (...)
->     # selftests: (...)
->     (...)
->     ok 1 selftests: (...)
->     # timeout set to (...)
->     # selftests: (...)
->     (...)
->     ok 2 selftests: (...) # SKIP
->     # timeout set to (...)
->     # selftests: (...)
->     (...)
->     not ok 3 selftests: (...)
->     # 1 skipped test(s) detected.  Consider enabling relevant config options to improve coverage.
->     # Totals: pass:1 fail:1 xfail:0 xpass:0 skip:1 error:0
-> 
-> This summary is printed, using '#' as prefix to be treated as a comment
-> in the TAP format. The summary is also printed when summary=1 is used to
-> redirect log lines in different files because it still looks useful when
-> there are many tests, not to have to check each line.
-> 
-> Note that this 'make' command will continue to exit without errors
-> (returned code is 0) when the tests can be executed. I guess it is
-> better not to change this behaviour to be able to continue detecting
-> kselftests failures.
-> 
-> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-> ---
->  tools/testing/selftests/lib.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index f02cc8a2e4ae..de15e63bc6b4 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -106,7 +106,8 @@ define RUN_TESTS
->  	if [ "X$(summary)" != "X" ]; then       \
->  		per_test_logging=1;		\
->  	fi;                                     \
-> -	run_many $(1)
-> +	run_many $(1);				\
-> +	ktap_print_totals
->  endef
->  
->  define INSTALL_INCLUDES
 
-This helps get a clear summary for make run_tests.
+On 9/6/26 10:56 PM, shuo huang wrote:
+> udpgso_bench_rx supports UDP payload verification but rejects the
+> combination of TCP and verification mode. Its TCP receive path discards
+> the payload, so it cannot check the data generated by udpgso_bench_tx.
+>
+> Read the TCP payload into a buffer when verification is requested
+> and check it against the transmitter's repeating alphabetic
+> pattern. Preserve the verification position across recv() calls
+> because TCP does not preserve send boundaries. Restart the pattern
+> at the payload length supplied with -l, matching the transmitter's
+> pattern restart on each message.
+>
+> Require a nonzero -l value for TCP verification and retain the existing
+> discard path when verification is disabled.
+>
+> Signed-off-by: shuo huang <f64116045@gs.ncku.edu.tw>
 
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
+
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+
