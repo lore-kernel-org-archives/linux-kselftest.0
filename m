@@ -1,115 +1,155 @@
-Received: from flow-a3-smtp.messagingengine.com (flow-a3-smtp.messagingengine.com [103.168.172.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f6.google.com (mail-pj2-f6.google.com [74.125.227.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6498B47279F;
-	Mon,  7 Sep 2026 12:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588224A2630
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 13:06:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788785997; cv=none; b=R2fMsqYlF6VgTQOm+6xk1WKxLgTcrHUNJOCPqg42/X5RDHlRRAr+62AYNjv/XAMGV3xbOvLYm+3zE5u8G87Xq7iBpAnW5Qf+bP4p/LOj8I45mszdc7EkCAfrxkHARiZfPY+WY+eimvxDsNIvr7PLq4smtC/fVef6Icv9sdlrm9I=
+	t=1788786400; cv=none; b=eFMfTKmz9NojHkHA8IwH7hV6kf3JThqwarBsKxVqxaRZOHCuvr/wGenGv/mSupciuKhM2YDXRmMLAuSmWVM3BiOcQ5hVey1zD0yg3GGgc3Z4JLR22iaOS9EgiVXXgALgHO/EzdbCaipoE23ex2e2WnO35g0DWLPr+vmQJ9UWLVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788785997; c=relaxed/simple;
-	bh=MkvOaW8wkaxVsp7+9WEl+B97dZNt1FDF4HFuRtuNW6U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z4bz5H84Zlo8KFmJBDnm+kICtd9kqD1Tr8MYtUtl1ccYwHviZpZNny4rDwM4TE1watX6LB7VT2cKDLVjpkY+BwTaT13METNRRHtlGdbEFR9maZOcdL+aeX8djJ1jOL0AxRaV5LhailttLnSxcHuxk3VCcpLDCFvSHq9YCrXSFaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=bG1F3G79; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IayrZM0F; arc=none smtp.client-ip=103.168.172.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	s=arc-20240116; t=1788786400; c=relaxed/simple;
+	bh=KVlall24y0p+qSno+YoVUQqAPfLtfndwd2+UzHAoFPA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=glsZKXCypDOQmv8ql+mYQBMzIwDYEFC6KdIsUqne/Z9TZWloZMY6S8/th3nh/DRbWShKqcZ27Mx22xBlckbPuxfznHNLWtCcB92YrJHz4jIkuxhbZiCYIW2G5TcoJU3lKAHCgw6rvgSTeX6WgLx25fI+DbvazJwJ6I0YjX86ZDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H3qWyb9H; arc=none smtp.client-ip=74.125.227.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="bG1F3G79";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IayrZM0F"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailflow.phl.internal (Postfix) with ESMTP id 633F41380054;
-	Mon,  7 Sep 2026 08:59:46 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Mon, 07 Sep 2026 08:59:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1788785986; x=
-	1788793186; bh=lYDGB/RXWunUBHizdGiMziv4O2zhbYW2jWaEbKuOHsI=; b=b
-	G1F3G79iC03Ct6JwvcO+c5TCzquytWTPpldQGzzb3BrMw3yKtHS03Y49D3tCbhhE
-	yhBa95NKaEoz9uAijnkv1y/zgutADJBIg8iBi+EBLjaQqYRzGVhWegX5L8QdxqPE
-	5NhrT1sxjgSyHujPJdg+mJpJs4GYODMgNaenjrRFL0c+XdM/MBXrWG9+Mvlx9Pmp
-	OoObvnqUD1h38zBA6gjYLeRqwGQHQrbiHvFJjHmpwYHE/DaeMwcAdoFZ/iLPP4IN
-	uRFQc6L2zX3w6DFK2DxjAD8F5/jOs1QEiQ8rdGt3a6vbiHmKhp6hWw/Jh+fRiQZX
-	Id9NzriDuk4ES9VUGSLqw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1788785986; x=1788793186; bh=lYDGB/RXWunUBHizdGiMziv4O2zhbYW2jWa
-	EbKuOHsI=; b=IayrZM0FqNCpp7HFPd7Ovd70efH1vXDuTyb4BuTqXMndLQVFYiO
-	Rm43PEw5vcxHL8byV6kOe4FZF8b2ZL/Bu/Pxk/ZFx2Z854UkGanu+YebEQ6y5NFX
-	/6oCrEhl9qIf69LVNABM4Z8NnI657ihA8pvyKJrJISUtxi2mmkd3fMK+JWG+ajGZ
-	3k+YVD3VxuAzrYEwVCFgmMBnZTCwypwrPRbwUI18P6ANHY00k+kyagOH9uFDrcBu
-	pcXcAo+Br7LjIghJGgOL3SVfEgbJKNbXVc8V43kZwHD1kW5fWFAkJTXwjW926MFv
-	o+NWxrlWOqi2K/TbrYXt7bM8ExAgUpwNF8w==
-X-ME-Sender: <xms:QbWeatZoN5cL5KI_BtpTGntigHz0Ugcb6QzkLKV6fcYkLbbhtv7-yw>
-    <xme:QbWeatashrvgTrojrqEtRF96HwS50lAJl4nrXP2BEAl98FEQUKZ1mnnKaMC48exYl
-    SbnMMLQRGIKAN5z49gZsHZWD90GIvCcSLhhttd0dMP50d7R_zTJ5bMl>
-X-ME-Received: <xmr:QbWeapruxHftV97YXljez7WSiuCOEM_KXSC9n9N4JHpWzHQjS-tsU7zex0I>
-X-ME-Proxy-Cause: dmFkZTE/RyyJEHpH/xeKsN4XNBiUmGFM48RXSJCmmPUQ993cXAA4f4cCG2jBf4pg29mZZH
-    T0r5B8dg0Dgu/wTg3OkNeKKPGFjIPrnT+MxaTt+8JtQRA42zTbyuy6nvryU5phm5fb7if/
-    z4Wbe/ItURKbRrCxTBW72oofYLTVqcjT+80q6k9+Mq+e2HmMOB7x7rGOcl+QvJIGaHfcn6
-    bVTQrWtvCBDnpBojICyjPD/5jOkMukeqbAaxJ8Wicr9D+j+A0z1NtJx39x4bQFcjxdrDIJ
-    YU1+rDhx99mj0WMR+3CjWZPMSKi3uW9hcvcF6FVFP+f/sCGSJy8pp4S0me+2cvoQSw44ky
-    KZMB7bjnQkGZmvAr928a4dgg0aB2Bp/gcycSjNt7fDIMjbomTTe0f26+r67PDOeOL8bR5e
-    PFPwiapu00b1fFRij9so+5V+/TLFms3zeeWD5ln9qxQX7UvD+joArJiZ4wwm29xa2JUHT6
-    q9eeZqsygeA42u0Y+ogLcjyAos13BOO8I8JADXNpIMJy5WYMu3T3pDbzDtupDuoO/NFZ0E
-    6A0t8bzPVeuLuW85BMr49/F5OazgMuHDrN8QMptNFdvfcZBMGUgClGmKC/KU6dHpsy5EPr
-    joPL+Y8gAC4Y9wOGnaFkpCO3C3XPjvoNy1yaVVSezyY3ZwayIZYc4OS4HS0Q
-X-ME-Proxy: <xmx:QbWeailDfJP8gGeUlK9_5ekuwXlnmH-Gie1kPnAicPACaBy5pojlhg>
-    <xmx:QbWearWK0qk44MiQJ1sRqt49J60_pHycK9_DnalTR6-1v5ZiwIT3bQ>
-    <xmx:QbWeapQ7OAETFED8c77bY9SX04yprCcbrQL_Z6AO_Tbn-3sQ0eYpJQ>
-    <xmx:QbWeaoloQZT4G3otJX8A33K7IjAuRjlkK0avTjegMoErcCXgS5lfPg>
-    <xmx:QrWeaj4fqco_THgKMBs-0rzUYSbsMisBGtFVVJ5uiDL4x77Ik8ZHK3Yb>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Sep 2026 08:59:44 -0400 (EDT)
-Date: Mon, 7 Sep 2026 13:59:43 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: akpm@linux-foundation.org, david@kernel.org, nico.pache@linux.dev, 
-	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
-	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
-	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
-	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 08/19] selftests/mm: add folio-order check for address
- ranges
-Message-ID: <ap60vvh09oqrQZ_T@thinkstation>
-References: <20260815015901.1236937-1-kirill@shutemov.name>
- <20260815015901.1236937-9-kirill@shutemov.name>
- <aoQxLVg3IsTuA9NE@lucifer>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H3qWyb9H"
+Received: by mail-pj2-f6.google.com with SMTP id d9443c01a7336-2d74bbdc61fso861665ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 06:06:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788786394; x=1789391194; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=riOSU4dH10zq3tO5Dx537AG40XCcFzKoLCwwWkJ2TP8=;
+        b=H3qWyb9HYdUXJ65laXKBATV1baqz1RgE7zo0b3nN9AwTcM5Bt7qRTW9J36gxaYzzNV
+         GELDpAAL3tt4ZvdmFhSzX2zvdFGCasxYHrj6SbjdJRL6Dwr1LCiYj4DBXrTH6yOHWkKI
+         Awa5OTOnpMG/iCsflOls/EnjN5bVePxtYOIoCOCuSpQ/GvRJb4+yuTuSO67ay+//8VG/
+         6Po5xHLKnq/4TvsEDO0m+KLup5Ct02olWGNMcavO1zXLzjnPvVJz7N9SQ/f+pQafDB7R
+         //y2yGMAkZpwiEXwLp0jF448C80y3JcjHGbTinlWEHkUjjZUNkTc3GqbKcKPo1z9cBAm
+         8XgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788786394; x=1789391194;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=riOSU4dH10zq3tO5Dx537AG40XCcFzKoLCwwWkJ2TP8=;
+        b=bszPxCozkbKQ3MRblVCTKxNHpXvKXj5y0oO1FJE29ChkDyuAG+zh3/QOVjmNP+bAsk
+         UhCdo5jZjCs9fyy/80+VuRsZWf3B8gy9uTbAnPdo2FeC+8LyBbNJ+GPAoRkF0L0JzJGT
+         GvJGtCUWIeSJAvBZiPALgNChWCQk1oTbETEM+EhSuKGKIRnoD2X2bXSelRdiH0nL97g2
+         kZ8/zKzjeurphya1GdyCu1g/EzvAARN/Kc72qcQzXBV7Zsxzwa/UESs3MdRXl+7/34zl
+         FHpAzgJ3dorA6AN5xITVFZkB1Mo+7AcA47mvnZwfJ+1bc09ZXdsAfyWs83SoBFmrRUfw
+         66eA==
+X-Forwarded-Encrypted: i=1; AKwUvBxuVU5SO3DmjS/IjS48Fx42UPfHqUB2RDU2pclGNGIqiIXrvi9rxegrVZV9egnCeM14DKQel18T62elkPSmnHA=@vger.kernel.org
+X-Gm-Message-State: AFuF++nZOZqn8vq3B+3TRcdaLcNHnIEt2mgR0ILd9xu4K2do4RbVAewA
+	gpzS87bnWvi6sLi6lJSSY+vxgiy/C4us4NIIpYVVh93u6uR9PoHaq1U=
+X-Gm-Gg: AYBFou39Y1Vcoe35bk17d+2FDrM55y9OXdezH3H3YvAlvSwMYPDz4FMIO1DZCRJ7Kg+
+	bFdf2LDvFjP2HXmWFX2Eexdts8xsRP9ahrRA8Bt7GoUi6LnALcDP0EzBPe0d+ZVgynBQUvLYXuq
+	uqIUwLbpRgBBZGYNEb1wXypBO6fQs2/UwrNL5N/cCvh6JqbUSQyUMakErX6FJkl8j/z+5wuzkIQ
+	2gOMKafLEcC6egUGTLi3Pg6zga5jW53AG31lj3kS7RC2mNBDOTggWs01rjD6kYgP6H8SV1Y3GCp
+	3S7p5XHzh+81VxOoWrF7jdeyAiGYksxpxeAfK3lfAU3kUuylyKFSmjDadiV9ivUYiKQgOhUNWkZ
+	0nuCmRZHs18BstjfzzoF7KSAbAToXlxam/uyMBUDl7hs0DMgLETEEj4LZuyRqSJg3jGj2KG0+xt
+	zs9eQORaz41ALthAHkugqwqfGLr96JNs6YGDSfRNhNa3hM4dfeyuWXqsWy0Uk5TFu/4l6WyVZGW
+	OWx0YQ+LZXwgwZJpevgH0ZHZGs=
+X-Received: by 2002:a17:90b:4b83:b0:398:9bd3:d6d2 with SMTP id 98e67ed59e1d1-39b8bec8c1fmr661379a91.12.1788786394289;
+        Mon, 07 Sep 2026 06:06:34 -0700 (PDT)
+Received: from ydg-Zenbook-14-UM3406GA ([2001:2d8:6467:d689:c773:5f09:906c:a72b])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b07b197a9sm26742398a91.0.2026.09.07.06.06.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Sep 2026 06:06:33 -0700 (PDT)
+From: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	donggeunyoo.kernel@gmail.com
+Subject: [PATCH bpf v3 0/2] bpf, arm64: fix the exception callback's frame pointer
+Date: Mon,  7 Sep 2026 22:06:22 +0900
+Message-ID: <20260907130624.611942-1-donggeunyoo.kernel@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aoQxLVg3IsTuA9NE@lucifer>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 18, 2026 at 11:25:27AM +0100, Lorenzo Stoakes (ARM) wrote:
-> > +bool is_range_backed_by_folio_orders(char *start, size_t len, int order,
-> 
-> is_range_mthp_backed() seems a lot clearer?
-> 
+The arm64 JIT does not set BPF_REG_FP in the prologue of an exception
+callback, so the callback runs with whatever x25 held when bpf_throw()
+was called. A callback that materializes the register, for instance to
+pass the address of a local variable to a helper, then works on the
+frame of the subprogram that threw.
 
-I would rather keep the order in the name.
+Patch 1 sets ctx->fp_used on that path, the same fix commit b114fcee766d
+("bpf, arm64: Fix fp initialization for exception boundary") made for
+the exception boundary. Patch 2 adds a selftest that reaches the case.
 
-The helper checks that the range is backed by folios of exactly the
-order the caller names, and the mTHP cases call it three times per check
-at three different orders to tell them apart -- reporting an order-7
-folio as order-6 is a bug.
+Tested on aarch64 under QEMU with vmtest.sh, on the base below. Without
+patch 1 the new test panics the kernel, because the address handed to
+the helper lands on the helper's own saved return address:
 
-It is also called with order 0, which is not an mTHP.
+  pc : 0x1234
+  lr : 0x1234
+  Call trace:
+   0x1234 (P)
+   bpf_test_run+0x188/0x3e0
+   bpf_prog_test_run_skb+0x47c/0x998
+   __sys_bpf+0xbdc/0xdd8
+  Kernel panic - not syncing: Oops: Fatal exception in interrupt
 
-Going with is_range_backed_by_order() in v5.
+0x1234 is the value the callback reads, so the helper wrote it over its
+own return address. With patch 1 applied the whole group passes:
 
-Everything else here taken as suggested, and the comment made kdoc.
+  #117/11  exceptions/exception_throw_subprog_stack_cb:OK
+  #117     exceptions:OK
+  Summary: 1/118 PASSED, 0 SKIPPED, 0/0 FAILED
 
+Not tested on other architectures.
+
+v1: https://lore.kernel.org/bpf/20260904070210.4163193-1-donggeunyoo.kernel@gmail.com/
+v2: https://lore.kernel.org/bpf/20260907054235.473103-1-donggeunyoo.kernel@gmail.com/
+
+v2 -> v3:
+ - patch 2: use the standard multi-line comment style
+ - patch 1: no change, added the Acked-by
+
+Nothing compiled changed, so the numbers above are still v2's.
+
+v1 -> v2:
+ - rebase onto bpf/master; CI could not apply v1
+ - spell the three new declarations u64 rather than __u64, to match the
+   rest of progs/exceptions.c
+ - no change to patch 1
+
+Donggeun Yoo (2):
+  bpf, arm64: set up the frame pointer for the exception callback
+  selftests/bpf: cover the exception callback using its own BPF stack
+
+ arch/arm64/net/bpf_jit_comp.c                 |  2 ++
+ .../selftests/bpf/prog_tests/exceptions.c     |  1 +
+ .../testing/selftests/bpf/progs/exceptions.c  | 30 +++++++++++++++++++
+ 3 files changed, 33 insertions(+)
+
+
+base-commit: df2908090cda368b01ff43709f51890076c56157
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.53.0
+
