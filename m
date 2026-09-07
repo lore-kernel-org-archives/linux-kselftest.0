@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D5A4B04B1;
-	Mon,  7 Sep 2026 15:22:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099D227057D;
+	Mon,  7 Sep 2026 15:24:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788794559; cv=none; b=YbZT/Zc2ZRlxEX+q9Ak6G90vmRbuqt0a80yogx0bN1qfHNobD5df34bAv9FQE0VAblrTTEp+T34JuNJvTHZ1LSULU9ExEla30xdOgg29a8yUfSnKkVcT0nxFneDwrzKL2WdbFRrymM3gcrGMwLamnaN0ASfXT+pcZMoWjzXqhHU=
+	t=1788794651; cv=none; b=qAb7vzDcrJKHDm9NiKfbHZxMseipEH7rvaP+ItiuCe5hKS+ky3SsVSsAuEAJqx81jlkaOc7j0cdPFoydVqJ0TLN116PosGuWsXmdg3AAXslTjgV1WfLmM4VzKZor0btx7Lk0Rd44sBen4mVWAlTiDfz2otVl52iM3w/YbhIQImU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788794559; c=relaxed/simple;
-	bh=/zl2YhCLLLy2wvwRTZfecyIW1kR5dLGkCPYLV+rUE4M=;
+	s=arc-20240116; t=1788794651; c=relaxed/simple;
+	bh=GTuBLuN4JOqWdZd1Mu3f0IP0dpVMTxxsE0i4r7IPbms=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UQ61uMQRi60ksnJ+WP2e9n5SFnmzMUp+yau6/egI5weJJcjHfwgtQZR4OVIM28MQGaJaDKU4H6SEmJlGSZtIWxI4v5SrqH1P2+5YlTuoC3bwO+6ktOG5ING031KYAI0GzAm0YcW5pwlK/rZGz7u9KAOX+SVHw9pHWTGo8EjkMJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KNF6zczO; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=LhrimGEL7yzoEVALjTLrOmJxch03r47sEVlyYB9jIJHZbrm2njx0PRxGzzD5Unsa2c7kk45NfhK/Cz/CeWvFEnmnfOv0UDuET7EzQsm/PEnd5hz8itd0X1whMUPEICUTYwzNygc7CngM2xt+bsl1+toLIfp8P2UsSBF2o9r/1X4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WGLDhRNt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KNF6zczO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 486461F00A3A;
-	Mon,  7 Sep 2026 15:22:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WGLDhRNt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C41A51F00A3A;
+	Mon,  7 Sep 2026 15:24:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788794557;
-	bh=2iV4wmxbLboD5m61BUcdgszYN9JR7rqtg6uMfGNK+Pw=;
+	s=k20260515; t=1788794649;
+	bh=XJq6pvnPJHRY0KLfPMgxtLcYaufXaCJJ6tr4Hi7QX3g=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=KNF6zczOnUC280nScMOfHKGnsEhksMAL+0VbRvZvnl4CSfyvRBZbv2thM+uYmElMw
-	 6DuJILmh6kZ9mgi6RDXXkSy9Q4WY/oeLwkQyCHgkxziG2LrqrmgxJ9fijG3M+wFwt7
-	 Ao+SfjuFlLDZ0v0q7wt7jwoLje4eyliSQI4M2b8Yj0u5MLpzWywWt43ICRi0wfHGHZ
-	 aE+nmclaBKRvpV1ZduOdoBjPHJqU3xePzHjV5pWdXZ1qzVjYh5rptcD/EDOuVu1ya8
-	 CjTE1/jpB71QuGqq9f9mkKTkpPxAVDGuu78RBjrCNGSExCcA+6N6tvD+Ndn7fDl0T5
-	 WNI4EWfCcaAKA==
-Message-ID: <9a21fc3c-1ca9-42a3-a044-6421f20341f6@kernel.org>
-Date: Mon, 7 Sep 2026 17:22:32 +0200
+	b=WGLDhRNt4nRE4aE9ezf3Tni8/D/RqTrv1a6R29B8mOCPBobKtLb9zo5/lK9jOjLby
+	 Mt4b+OTtv8ryjM1qaIQNB89XPtXya1ta6ZulDgDK7CZJop1+wfVILgwIO3MqgD0ub6
+	 woXVtkapsHft7cjq4J3BuccCWv8KHf7zjuA5/xTBYuXfEE+WJOA8yR4/nvlQU3UiEM
+	 192hBNaTqr0SEDWxCJp1XYE5GT46/0RvbwyqZe9w4gnxhfWbzvxx6FliXBykjqnrn7
+	 FdefVRyfxMD1toYikoM7IQ+k7OLpz+ysg4cSsUclLwo4MsyZ1HbMyg2bd31iW24wEz
+	 2kqUMw1lREm2w==
+Message-ID: <4468d220-9d7f-47d0-8e5c-c01070ab2d47@kernel.org>
+Date: Mon, 7 Sep 2026 16:24:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,93 +35,68 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: fix size truncation in pagemap_ioctl test
-To: Zenghui Yu <zenghui.yu@linux.dev>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: akpm@linux-foundation.org, ljs@kernel.org, liam@infradead.org,
- vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
- shuah@kernel.org
-References: <20260907135613.68692-1-zenghui.yu@linux.dev>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260907135613.68692-1-zenghui.yu@linux.dev>
+Subject: Re: [PATCH bpf-next 2/2] bpftool: Reject non-autoload programs for
+ light skeletons
+To: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Leon Hwang <leon.hwang@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Sid Nayyar <sidnayyar@google.com>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260904031912.2133476-1-tweek@google.com>
+ <20260904031912.2133476-2-tweek@google.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260904031912.2133476-2-tweek@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/7/26 15:56, Zenghui Yu wrote:
-> From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
+On 04/09/2026 04:19, Thiébaud Weksteen wrote:
+> When generating a light skeleton (bpftool gen skeleton -L), there is no
+> libbpf runtime object or bpf_program__set_autoload() API available to
+> enable/disable the autoloading of programs. If a BPF program in the
+> object has autoload disabled (e.g. via SEC("?...")), bpf_object__load()
+> silently skips loading it. bpftool still generates struct bpf_prog_desc
+> fields and attach functions in the light skeleton header, leaving
+> skel->progs.<name>.prog_fd uninitialized (0).
 > 
-> On arm64 with 64K base pages, the huge page size is 512 MiB, and
-> hpage_unit_tests() builds a 5 GiB range (10 * 512 MiB) for its tests.  This
-> exceeds the range of the int size parameters of gethugepage(),
-> wp_addr_range() and pagemap_ioctl().  The implicit truncation to 1 GiB
-> makes gethugepage() allocate a too small buffer, while the callers keep
-> operating on the original 5 GiB range, resulting in spurious failures or
-> SIGSEGV.
+> Explicitly reject non-autoloaded programs when use_loader is true with
+> an error message, preventing the generation of broken light skeleton
+> headers.
 > 
-> Change those size parameters to size_t.
-> 
-> Fixes: 46fd75d4a3c9 ("selftests: mm: add pagemap ioctl tests")
-> Assisted-by: GLM-5.3 OpenCode
-> Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
+> Signed-off-by: Thiébaud Weksteen <tweek@google.com>
 > ---
+>  tools/bpf/bpftool/gen.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+> index a50540ef6521..1583150241c8 100644
+> --- a/tools/bpf/bpftool/gen.c
+> +++ b/tools/bpf/bpftool/gen.c
+> @@ -1340,6 +1340,12 @@ static int do_skeleton(int argc, char **argv)
+>  	}
+>  	bpf_object__for_each_program(prog, obj) {
+>  		prog_cnt++;
+> +
+> +		if (use_loader && !bpf_program__autoload(prog)) {
+> +			p_err("program '%s' is marked as non-autoload, which is not supported for light skeletons",
+> +			      bpf_program__name(prog));
+> +			return -1;
 
-Looking at pagemap_ioctl.c ... I think most functions should actually be "static".
+
+Sashiko is correct, at this stage of the function, rather than returning
+directly, you'd need to "goto out".
 
 
-Using size_t is ok. But then we should also change "unsigned long long mem_size"
-to size_t, no?
+> +		}
 
-Also, in wp_free() we are suddenly using "long size". In pagemap_ioc() we're
-also still using "int len".
 
-Can we consistently use one type please?
+Thank you. Maybe consider adding a word about autoload/non-autoload in
+"bpftool gen" man page? My concern is that users who are not familiar
+with the notion will struggle to understand the error message.
 
--- 
-Cheers,
-
-David
+Quentin
