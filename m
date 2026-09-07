@@ -1,180 +1,212 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05183C2796
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 10:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94DF544470E
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 10:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788775390; cv=none; b=DOTIf+7UF6G9KBwKpD+SEujQtIg7HovfO9rHj+CjaC0Y/U11MrnAq4tGu/XEb6ZiqHz4SBA5w6vYOGUoyrVW68+Ly2yrfQlCQ6VrKcU0lZWlekWUtVucqg+JluNkKf6kvS8wQmaio/XyiHgbXC5GFd0I6RJ8ZdHmCoYIPLwC8H0=
+	t=1788775598; cv=none; b=XFGEM5xjc2MceC309Sp1awMOf2sftVpGkINbYxW0k4YD7Ub/IGjRgOehWEyrlSuMs4fd5Xl2axVmDN+FHMLQS813OhBCguMXqaa1RGblNDe9fFg9j/eJZHDrRklzSy+wKcJg2PVSnsDiUO4Z3FUgSyUYhQgfOg6+phX2yZ77mms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788775390; c=relaxed/simple;
-	bh=u858oefPAQOSDb/at8+AC4GTZzgA1wXI5Wvo+XpkcEs=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=APrx8Ck5LxG7i+hDOaXj97AF730Sdl2Q/2Y6pSraASVhZ5paK19hE4oE020fcR4jWX0BM7TN38KuIZKTeORuF7OkTl48NbzvngEuLhey4hisIWG9Uv3DXQ+mb3o4mA+nT76U5+Ce+zktX8noYNu8ZkLzNH6oWMs88B92WvDc1ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=YQRtzyYC; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=GIlZTHUU; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1788775598; c=relaxed/simple;
+	bh=cfZlsUNL1tYXf3StIFp8xyHHzkshbzsXgfZAOQaTPHk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C5HPV7NrdTA4sacB8kq0hO+4p5mikW1JOkK3uUVo+JkJjzfJjqkRY4p8TkC0VmF1wrc/pK5G9d2sIISHcYa1vXUCknn9SOaMNFVO9s6y4kxngXsC5tAKuCF24m8SebSUaWkizYQxDNZQ3QKb5Pcy5Y+pMZm2Hvi2iR4bGJDvkn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=EsWx4Qy7; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="YQRtzyYC";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="GIlZTHUU"
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6879bc1A3702403
-	for <linux-kselftest@vger.kernel.org>; Mon, 7 Sep 2026 10:03:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	U7itov2a9EU/fIEUTIADuD/V5VWTNPPlvnNHpxB9/h0=; b=YQRtzyYCoQeBsG1h
-	AFgmG6KwSpRtxBE1bN2smpW6l7Bqr+MbeN/Y1OK415m1icVP29jqpr45n0zgM4s9
-	Nw1CtkwBjwYnVHNPAqez/ktgS2VEP8mRSHiSzjPKrKTYjIYQ3U3T6mSMW/Uy/Hyv
-	yYCYS+eutao0fPWc9afp6060B94x+udB4g9+v2wI6Xg0DJhWEVJFtr7Ex1+rBucF
-	TEXBbDCjiArU5hoOUYhn8HLdSCRNB4ueEKp5F66PRbpBKsx8FFClebPahPCdR2rU
-	Br7gLmhttZMF89bIN3D3TmeJOMfwG9q14sW9++7EzG4cf8holOHeLF+0qNWb4GO2
-	OHkTSg==
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ghq66h8f9-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 10:03:06 +0000 (GMT)
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-9394ad7f64aso562416685a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 03:03:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1788775386; x=1789380186; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=U7itov2a9EU/fIEUTIADuD/V5VWTNPPlvnNHpxB9/h0=;
-        b=GIlZTHUUVln0yLTS6fvU/wBCfxairKfKmhBm0O/W0Nya1FanIoFSj//YyjCXlLWTKe
-         1fnF3nTWft5a5SgFDmZvOAmbDepuen02oHahg3sQ8yhh4UIYw5ACUjcU7+yIcISdJZah
-         Rw+3U+DyEKYvN2Fc/PDip8qmGWfMGaO1T1gb+jU7W9rQVo85wLQqgSuSjLdfVx6nGLwa
-         cac/ee6PAnMlBPZijrHXbZJl0xG/msW7W/qFGMEo5/szbKQuls0RiB064m1fmmAfaRZl
-         kaueh3F2RAfDcmDdzOygcc4w4Q/DP88JNJNjMqhN0///v3mTnOO8kCWW2kHhg9wc4M5v
-         iWtA==
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="EsWx4Qy7"
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id CD4C73F28A
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 10:06:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1788775593;
+	bh=dRV5mMHnpzRbNcgwfhh0JIyTTCV6Vk7ZoBlXJcHwHHk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
+	b=EsWx4Qy7wLOIpR+FOd1YtEeCeqv2cICHe0YuX/q5Met9vFX/E2H0WQI8dCqdMoWqg
+	 izUzfZ6I9j4DGTlLh7Bze2SENnnGhT089ABN3g12J4eFZJxBq/T0Exr3GiiaYC1mep
+	 th8I6jHgVTHUWFcWSp0xKhQjQA+uLoNepCT2k+48ZYgPuoozjG0RPb+2pRJ0vfm7l2
+	 V1U1kLww1ZxC/1mBWZFrJXnDsso1y8ZMgb/WnCEOjU62CEXFe8/lvlGhOtS6gyKkmO
+	 gHr/Hy7PV8SoAN2+S54SryVG1cUcQD0CEoq7WzxLAuN29reB5NACcXOFgqQAdTCvCB
+	 djH7r8IFWjf5WYm4fqx4YgdBKuS4hh/BeGEraja2IXgb1OqF6Nt05uHXkjCvp0AvOJ
+	 T0AMIuHYgI6oQ46wNgW+497EHZaDBq8ANpvxk5BokOy4sphc6kQGqJKgSf3YDJzhKR
+	 NOh1m7M1rxhubcz3upYoZKKAOwMzG5QPp5UZJ9/HItN1pI8oV9c3L+srKpDu/TdDRc
+	 MYko0zdlbnsARwCKvrwk4CwTLN3b97AfGK7d5w/Cee1mRB6ruSsDu50vDyKweIcRsz
+	 T2CNnNoS3OJpKm5kHpjj653eIx3jKs6dpUZj9LInsj0l8Gvu5v5Xra7FWmf4RXc4KN
+	 uqlNbGmjcmJsURhK3Rx4AWyQ=
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-4858e4b3e92so1239393f8f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 03:06:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788775386; x=1789380186;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1788775593; x=1789380393;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=U7itov2a9EU/fIEUTIADuD/V5VWTNPPlvnNHpxB9/h0=;
-        b=ewKbY+Le1S9oiQgz5sS5YxGettpmvhm0zQozOo06OHwOUAGoaWT34wy1ggHKhD8Jf5
-         lSguGD3HhDHe1ngCs5yvSd+fRa4VTo+WC8f1AyUlpEhghh3DojBowg+c/wqI7n5VWDE4
-         7tUxs7XIDL+IVzJRJKIkgWNfnwNiZNaZq9kRq39Hpd/Is+tfAf+0lt/i0gyCT2o+ngeo
-         F5fmDxahlnbbi5DxvKBHyBuv0HSCbwocpidZHurvIPs/81qWbHpTw2DcifxKMFt73YHC
-         YrtCL+DASDm0BgertabpxWokV7zwtutPxS7Jiwm6snCnzXQKBGUAfhumIrOLfeWx6qb5
-         3rcA==
-X-Forwarded-Encrypted: i=1; AKwUvBxAjrPoXwnl8ipZtD4pdDTTqYzNZ5/o+3z6Jpl54H1skBsmqIlqTRdE/u05RnBx44urizW787FupioearpEZVk=@vger.kernel.org
-X-Gm-Message-State: AFuF++l8SQ7k9dJTKeLaWsSPrY0/TL1tvPp4jQPHvLYORbMlKkzI75mm
-	/3vQ1L9tivHcUrYIMFWa6Urf+sSSd0lQDKeo2roBHonv6XEph+bpkQGfyU9ZMuexWij9OtFAdu7
-	VJ5XEPGfis+BZYnykkBQzbNqon1JknvhUv85zh7TqRi4QJLHOyv0Wgq/tk7EBrX9qsl4ZLiA=
-X-Gm-Gg: AYBFou1Vk1PqVNgnT1hcKyGLL+mlM7KUJTEc1JfrekbIBKUs/JEWga3HPH3SR3MZAgd
-	iIah3o+fGUxIQDl2d8goSI27i8VTZ5xHaSXvOPVc4BwFsXrJRop/ZJaEXAPjon9l4jU9hu8FYOy
-	cXvWELWLYchshleFnkuYtPZGGj+EnSY00EIMhOhcAGgwuqD9Zd5DOL3NAVzaHziqvj8sE9T21wW
-	YUFETfj+J1wSnB9j5Fcb3LK8Qrtl+Uo4XG8/EbZZbVkreY1NhRPyUj9urkhpbVLiA9fK57VDP6t
-	UhHnE7pOXtrpz28rGWz2Y1v6hhOBV+DlOPqM1nsjOM+LULVxOq0jZGrPaOpIJNMMb33OvnVvjaW
-	jeB/QKaUpjEyGs3yD1kM9fVsc78wQaWyxBaJy6sR76+WIZ2VmqkTQ2yIGkJ9yQ/o=
-X-Received: by 2002:a05:620a:4493:b0:939:31b5:4e08 with SMTP id af79cd13be357-939800fc582mr2208355285a.0.1788775386303;
-        Mon, 07 Sep 2026 03:03:06 -0700 (PDT)
-X-Received: by 2002:a05:620a:4493:b0:939:31b5:4e08 with SMTP id af79cd13be357-939800fc582mr2208345485a.0.1788775385724;
-        Mon, 07 Sep 2026 03:03:05 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:5e04:77e4:65ed:d6d7? ([2a05:6e02:1041:c10:5e04:77e4:65ed:d6d7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485883be709sm28042627f8f.21.2026.09.07.03.03.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Sep 2026 03:03:04 -0700 (PDT)
-Message-ID: <ef124b64-e7d2-4c9c-9890-00685e34f314@oss.qualcomm.com>
-Date: Mon, 7 Sep 2026 12:03:04 +0200
+        bh=dRV5mMHnpzRbNcgwfhh0JIyTTCV6Vk7ZoBlXJcHwHHk=;
+        b=fiEJvtt/0sHGsMFnE+pTvF8oDg912zEXtZeuF5XM1BHWjcNFQyeSDBZjp4flSr4Cf3
+         Y5A33Fzr6T7MBqrHSkCRw0zc1J/+dpcrYJ9e1tzrRGJ0Y8L/cSSD0kDc4BOO6/V9tXOg
+         9A/vVYqvDuJzKwsUZ6uxZ15XqsMH76E17d8wLUtltz/JdPHFHpfDUcrrohGqhNaYDE4Q
+         4OqGFailB3aka4NqgkKJg4E/f/pk+4R3fWP7MYSqxUC9dbs/mGCSajazDwAk50OR87dB
+         Y9tjXRVldB80mb7CwUCdZTpoYDAfEAlvmxqSm6lwGsO9XnZGl2byfb/NKdghOaBd985P
+         sc1A==
+X-Forwarded-Encrypted: i=1; AKwUvByGBDKfkT7SskEF2am5fSi7dtdBljcsp2kvwfmY7rMJpmbQ8RX2+BQzqt4id2q2D5f+wWnEuPpx2+ajprBtsuY=@vger.kernel.org
+X-Gm-Message-State: AFuF++nmWb0YZeoOjds9QTiFYrPZ81z1Mumlz4XayI4i7HZ+wXMeK1/T
+	mMNAtMH81r7yRG17pz1j+nzQkME4KpVAM6sHzgcZT1hqjf6lHXhOaX404s7g9egnAGnJ6MhhD4c
+	/AEttCtUpsR5XNwyuV50xS4BgWxCplfO9/TQcEai2iMQgmo35MTm0cEUhNVng2NfF4Z4VviFrir
+	KhGjG5dm9eVQ==
+X-Gm-Gg: AYBFou0sAveIoHeJe11WlbPycSwlYwyVFCttOHNZnUm/fMSfZ+On3OrxqF4FgFUUkts
+	AMVVmYPneMRcDpRiF2wm3fYG0O+HMVLIh47Oh78oynmgb4HEpMEA4mo5LE3y3Cc+WRBWxFlgc1/
+	W7plJWlIiRMaQoOS3WOeLt7BN+gWB+qMEurKooNGJGYI4JbznceYzbCk6+IBKWKQ11Wnaxje/YQ
+	6FspDIth2/0UV+JMLbYXkV9ROJDmQLJaLKr+Qw+HbZ71AVgFBn2ISvSS9CV0BeG02iocCwFqhcv
+	UKruqz1FczwzT+41pPo4PVy5Xku/zvQKLASNY7aaWEPG02z15W0nJmlDajyNO8Yt0D9X79QhboP
+	+g4icFRHM3zSCymz97w/NOIDqTVOZuT+nPhWrRNJVGFbwP6MLDXU0Cv2y1pVhYtGqJnVSJA==
+X-Received: by 2002:a05:6000:388:b0:485:8c75:48fb with SMTP id ffacd0b85a97d-4858c75598cmr17163971f8f.50.1788775593443;
+        Mon, 07 Sep 2026 03:06:33 -0700 (PDT)
+X-Received: by 2002:a05:6000:388:b0:485:8c75:48fb with SMTP id ffacd0b85a97d-4858c75598cmr17163935f8f.50.1788775592991;
+        Mon, 07 Sep 2026 03:06:32 -0700 (PDT)
+Received: from localhost (93-40-94-241.ip38.fastwebnet.it. [93.40.94.241])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485881353e8sm27574871f8f.1.2026.09.07.03.06.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Sep 2026 03:06:32 -0700 (PDT)
+From: Alessio Faina <alessio.faina@canonical.com>
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v3] selftests/net: skip srv6_end_dt[4/6]_l3vpn_test.sh if vrftable not available
+Date: Mon,  7 Sep 2026 12:06:31 +0200
+Message-ID: <20260907100631.1923148-1-alessio.faina@canonical.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] powercap: Introduce generic hierarchy helpers and
- selftests
-From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-To: rafael@kernel.org
-Cc: linux-pm@vger.kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, manaf.pallikunhi@oss.qualcomm.com
-References: <20260806110159.69690-1-daniel.lezcano@oss.qualcomm.com>
-Content-Language: en-US
-In-Reply-To: <20260806110159.69690-1-daniel.lezcano@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=QPhYgALL c=1 sm=1 tr=0 ts=6a9e8bda cx=c_pps
- a=HLyN3IcIa5EE8TELMZ618Q==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22 a=VwQbUJbxAAAA:8
- a=EUspDBNiAAAA:8 a=sDQwJVceT08lulBnrQ0A:9 a=QEXdDO2ut3YA:10
- a=bTQJ7kPSJx9SKPbeHEYW:22
-X-Proofpoint-GUID: Zc3AWwOv79Owx2SFZh04VsLthv-ouDsR
-X-Proofpoint-ORIG-GUID: Zc3AWwOv79Owx2SFZh04VsLthv-ouDsR
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA3MDExMCBTYWx0ZWRfX74EqBaUNVSem
- dz7bFkauH2NFb30iwyee26bqpxoxAT3/3QgnIWqwwn5/KBc0LsceO8dSWVeGMr/3HbPkbaghfTv
- SteALK5a1pRRV0E8TgI0AR/PDEB21uM=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA3MDExMCBTYWx0ZWRfX/2Ff4D3DncYt
- F0lN4LajKZ+b40hl01gsZ61i5/nFMf8magIjXvAKqIKBkcMBqjIcXeb1UyL8T6vJOD3OuhR+sY6
- igWVG/v9AuW8DtR/6hlCR5VUwPekh6KSVSL0k62PB6kfRJNWtuvp/mluDuxZOadDLi67Galhbj+
- 8ZDjouoACHNv+kk+uCzmIaZScKcczKEzxxSj2SuTfURQyVY3RgqJoShoq7NuRJP3Bxr1AdOLJVV
- KR6Pf+TCM254P6OKckJk6uuD8IyW3mwJAMAknnYzAcQSNy2RCBf2KtVKupo5/ohko8/myLBB2AI
- JOSt4VpF3KfYH084fpBC7iprdKVABCva3dSpHyhuNu8f1QGSRPiJ5S3yHpQaAl4qcX7VTFU2cul
- hqB4DI8aUEJFdy9AnbgM/x+6Almfl+PieiOCqfb0egWzHAv32ixVWuaHCh/3KRhKVOUc7ENhGgm
- 791TVetUmV4vgYmzkxA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-07_02,2026-09-07_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 suspectscore=0 adultscore=0 spamscore=0 priorityscore=1501
- bulkscore=0 lowpriorityscore=0 impostorscore=0 malwarescore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609070110
+Content-Transfer-Encoding: 8bit
 
+In case iproute2 is older than version 5.11.0, released ~Feb 23, 2021,
+the vrftable support is not available and the tests
+contained in the following 2 test files
+ - srv6_end_dt4_l3vpn_test.sh
+ - srv6_end_dt6_l3vpn_test.sh
+are failing in some kernel backports.
+This is the result of one of those tests in an unsupported environment:
 
-Hi Rafael,
+ ##########################################################################
+ TEST SECTION: SRv6 VPN connectivity test among hosts in the same tenant
+ ##########################################################################
 
-On 8/6/26 13:01, Daniel Lezcano wrote:
-> Powercap controllers frequently expose a hierarchy of power zones (for
-> example package, clusters and CPUs). Until now, each driver had to
-> implement its own hierarchy traversal, parent lookup, error handling and
-> teardown logic.
-> 
-> This series introduces a generic hierarchy description and helper
-> functions allowing a controller to instantiate and destroy an entire
-> powercap hierarchy from a static description. The framework takes care of
-> duplicating the hierarchy description, rebasing parent pointers,
-> creating zones in dependency order and performing the appropriate
-> rollback and cleanup on errors.
-> 
-> The series also adds a kselftest exercising the new API by creating a
-> synthetic hierarchy, validating the exported sysfs hierarchy and
-> attributes, and ensuring that all resources are correctly released when
-> the hierarchy is destroyed.
-> 
-> The patches are organized as follows:
-> 
-> 1. powercap: Add generic zone hierarchy creation helpers
-> 2. selftests/powercap: Add powercap hierarchy creation API tests
-> 
-> The API was primarily motivated by the recently posted SPEL series and
-> also provides a migration path for DTPM to use the same generic
-> infrastructure instead of maintaining its own hierarchy handling.
-> 
-> Link: SPEL cover letter <https://lore.kernel.org/lkml/20260702-qcom_spel_driver_upstream-v3-0-434d50f0c5b0@oss.qualcomm.com/>
-> 
-> Daniel Lezcano (2):
-> powercap: Add generic zone hierarchy creation helpers
-> selftests/powercap: Add powercap hierarchy creation API tests
-> 
-> --
-It was easy to migrate DTPM to this API and AFAICT Manaf was able to 
-migrate also its series to this new API.
+    TEST: Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)    [FAIL]
 
-Is it possible to consider it for merging ?
+    TEST: Hosts connectivity: hs-t100-2 -> hs-t100-1 (tenant 100)    [FAIL]
 
-Thanks
+    TEST: Hosts connectivity: hs-t200-3 -> hs-t200-4 (tenant 200)    [FAIL]
 
-   -- Daniel
+    TEST: Hosts connectivity: hs-t200-4 -> hs-t200-3 (tenant 200)    [FAIL]
 
-[1] 
-https://lore.kernel.org/all/20260819165605.1398880-1-daniel.lezcano@oss.qualcomm.com/
+The test installs a route with the vrftable feature; if this feature is
+not available, the approach taken is to skip the test rather than
+failing it.
 
-[2] 
-https://lore.kernel.org/all/20260702-qcom_spel_driver_upstream-v3-0-434d50f0c5b0@oss.qualcomm.com/
+Signed-off-by: Alessio Faina <alessio.faina@canonical.com>
+---
+v3: - Fix Commit message and mail subject
+v2: https://patchwork.kernel.org/project/netdevbpf/patch/20260903103545.1325276-1-alessio.faina@canonical.com/
+    - remove dx[4/6] tests
+    - test if vrftable is available in the installed iproute2
+      application
+v1: https://patchwork.kernel.org/project/netdevbpf/patch/20260824091537.2305107-1-alessio.faina@canonical.com/
+    - initial approach by testing DT[4/6] and DX[4/6]
+    - test if DT4/DT6 are available in iproute2
+
+ ./tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh  | 21 +++++++++++++++++++
+ ./tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh  | 21 +++++++++++++++++++
+ 2 files changed, 42 insertions(+)
+
+diff --git a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
+index a649dba3cb77..037e5fe1da2a 100755
+--- a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
++++ b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
+@@ -469,12 +469,33 @@ if [ ! -x "$(command -v ip)" ]; then
+ 	exit $ksft_skip
+ fi
+ 
++test_vrftable_supp_or_ksft_skip()
++{
++	local nsname
++
++	setup_ns nsname
++	ip netns exec "${nsname}" sh -c "echo 1 > /proc/sys/net/vrf/strict_mode"
++	ip -netns "${nsname}" link add vrf-100 type vrf table 100
++	ip -netns "${nsname}" link set vrf-100 up
++
++	if ! ip -netns "${nsname}" -6 route add fc00::1/128 \
++			encap seg6local action End.DT4 vrftable 100 dev vrf-100 2>/dev/null; then
++		cleanup_ns "${nsname}"
++		echo "SKIP: SRv6 End.DT4 vrftable not supported"
++		exit "${ksft_skip}"
++	fi
++
++	cleanup_ns "${nsname}"
++}
++
+ modprobe vrf &>/dev/null
+ if [ ! -e /proc/sys/net/vrf/strict_mode ]; then
+         echo "SKIP: vrf sysctl does not exist"
+         exit $ksft_skip
+ fi
+ 
++test_vrftable_supp_or_ksft_skip
++
+ cleanup &>/dev/null
+ 
+ setup
+diff --git a/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
+index e408406d8489..9a29e0d6c912 100755
+--- a/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
++++ b/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
+@@ -479,12 +479,33 @@ if [ ! -x "$(command -v ip)" ]; then
+ 	exit $ksft_skip
+ fi
+ 
++test_vrftable_supp_or_ksft_skip()
++{
++	local nsname
++
++	setup_ns nsname
++	ip netns exec "${nsname}" sh -c "echo 1 > /proc/sys/net/vrf/strict_mode"
++	ip -netns "${nsname}" link add vrf-100 type vrf table 100
++	ip -netns "${nsname}" link set vrf-100 up
++
++	if ! ip -netns "${nsname}" -6 route add fc00::1/128 \
++			encap seg6local action End.DT6 vrftable 100 dev vrf-100 2>/dev/null; then
++		cleanup_ns "${nsname}"
++		echo "SKIP: SRv6 End.DT6 vrftable not supported"
++		exit "${ksft_skip}"
++	fi
++
++	cleanup_ns "${nsname}"
++}
++
+ modprobe vrf &>/dev/null
+ if [ ! -e /proc/sys/net/vrf/strict_mode ]; then
+         echo "SKIP: vrf sysctl does not exist"
+         exit $ksft_skip
+ fi
+ 
++test_vrftable_supp_or_ksft_skip
++
+ cleanup &>/dev/null
+ 
+ setup
+-- 
+2.43.0
+
