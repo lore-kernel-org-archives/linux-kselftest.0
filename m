@@ -1,188 +1,224 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 176434964F;
-	Mon,  7 Sep 2026 10:57:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788778672; cv=none; b=C8ZhiHILNThQsb6SXp5+/UaAWJP8IAWVxzsW5c4loCXtSHNSw0TKhDcw/8mwYEA1LS4W8V89DoU2kYROW050IJwLvso9SY5XQgxbfDSvSGX8bJh4GfKi1XWr95avB6Tdk4ri8kwebsSPzxpFknjaxvY8/TBCD03Yi3K1huwtjss=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788778672; c=relaxed/simple;
-	bh=3PDFtlco4OcZygR+DrQDf/kVT7D/7gQJWD424nAICOE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=M53/Wsn7UpQeK/RKJPc+TdPLCvc2fQltMgwQ+27TQSsocTG3pPyuThoJ2vL4nAm6dRpesgOLEto18DMSRynkJuUrdYHU579pvjT3e4v33ca0IfMPzXt5QaMDcuJTR57gT3hy1lPcJi3hvNSNqWa+GOOH8/jXCm6hYBWsrUWmgSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=e1WsTKHr; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425E74A13AB
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 11:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788781128; cv=pass; b=HVfZWVB9YIpyJU/EzoPMuIsjNSKX6ElVZ9RdLk+bx3a0Mkh1dxNDYJ9X+ddYBIdlZN4DDduVqFl3MOSnElJcw9xXoGfYMBZoUqUnkxUIWBye52qIuR22AZngFDnIIQEm9TSUZEZofs3DHFJFqcFAEyUG4UJSGpmckh7Gr5hl3jI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788781128; c=relaxed/simple;
+	bh=VVL02GMYWb/u6hDJI/5bikv4BicjcyQC43KoC26CTf8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nDdw5CUiDajNEawX+rYuSCoEwVNp/7pyu4H3rHtmclbyqHaYYNhm74Kvkortfym4l7MZBFVNaloPa9WpPSpROZrfZImu+maR0+BJ5PSRLjt+ytsWFVofcD/USTJcC5Nelej1TzfH3dIoYIOXzlaDK40tjR5KUJFrujbxfO5xvBU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jLKnNSEV; arc=pass smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="e1WsTKHr"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:
-	Date:Subject:Cc:To:From:From:Reply-To;
-	bh=tf3EYimRWhnEVKPQh6ORuRf1OW6Z+eMnNd2CBmc1Gco=; b=e1WsTKHrd39a2DnhXC34g4utpo
-	rBWi/Ar3pDwHYt1XiQtdfEOqE/HRl43R90QvlA+V+0gxDswhp3Ekjnbrq/Jp7rvxRWNujusKq5/aw
-	4PFixqt77gETG69bd2BZqb/ssf99Pr18RCfG2yII5v3Zw0RSwKFNs74VrFpyDPxAWGOTyUsSq65TD
-	n99nsMoR79liSCp6I2ZPe+xq4nSD3U/CFfvzQmk2IR3y23pki8L2f9eSwARjyvgK0OWeqiuYeUJL9
-	JwjjjWtT5wealIH6n3SZpY6XVyac0Ge+6GSvDfRWSfT6WSQ9RJbihbyRc8NqSqVXXY8HLbPbjrTvb
-	3S/9MqQw==;
-Received: from bl21-120-122.dsl.telepac.pt ([2.82.120.122] helo=localhost)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1x3X2k-00Fzg0-Rx; Mon, 07 Sep 2026 12:57:42 +0200
-From: Luis Henriques <luis@igalia.com>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: Miklos Szeredi <miklos@szeredi.hu>,  Chen Linxuan <me@black-desk.cn>,
-  Jonathan Corbet <corbet@lwn.net>,  Shuah Khan
- <skhan@linuxfoundation.org>,  fuse-devel@lists.linux.dev,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,  Matt
- Harvey <mharvey@jumptrading.com>,  kernel-dev@igalia.com
-Subject: Re: [RFC PATCH v3 7/8] selftests/fuse: add fuse symlink caching test
-In-Reply-To: <CAOQ4uxhFCKOLexyiP6DQ=a9t+8dhGn=tJLGyHg0NHPz=mPDkhw@mail.gmail.com>
-	(Amir Goldstein's message of "Sat, 5 Sep 2026 14:32:46 +0200")
-References: <20260904103920.4471-1-luis@igalia.com>
-	<20260904103920.4471-8-luis@igalia.com>
-	<CAOQ4uxhFCKOLexyiP6DQ=a9t+8dhGn=tJLGyHg0NHPz=mPDkhw@mail.gmail.com>
-Date: Mon, 07 Sep 2026 11:58:29 +0100
-Message-ID: <87cxupfhuy.fsf@wotan.olymp>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jLKnNSEV"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-c2544ff970dso459210666b.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 04:38:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788781124; cv=none;
+        d=google.com; s=arc-20260327;
+        b=k9l1KHyI5SYKrC4o/DAC/uywTs7p6cx248yY937TvYhutDFM/m67y+hv5bIMEb69WW
+         BJsqyr1asaZzUdugpOC8pEByBEOdbjHajUBSiItqqugaECAVBBJMb+EAUqq/wLXDodYE
+         Uk83oKkVXagZCIwMCfzmtAXHvTHsCA/z1p19Y+Cv+HR/36dyp9hHSK5RJBGMMpJlgEzn
+         BjA/+Fb6fIdC2JcPFxStWNnaQC8MITSahZIhEbWc6RIMbcvnG5bhnnopJtIwPumxvnbl
+         LtU64B+gl0sncmY0gGfK4EVAKEGm53eFWgwg75FmsApADw77NxNySE8et2oLImUrEiEF
+         KHkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=zsumuHn7FPHHPCQh2IOcR/Revkm68pLy+fSdVwAPQkQ=;
+        fh=GCTYxqTXyPpJnLdN5zUHKWx0mwbGy82jz2Jf85xx7L4=;
+        b=jFq+7IELYX6V4nFqdkZGf78NK/JCiOC5tb0BhtjRkDfcaFiB1J2G7aey2ixnvPvGzU
+         CrDKctLg+W2nz6JERnlf248uOqEZyNJK2pE7JciOsAxxHtgn9BbykEMtacnYO+GSyh1b
+         ekriGtvQPs6Ckf+8AztVttP/b6NPDMX1Sgz+m9/YauYjZOz9Ox8FoAH4VgxMmuNB7tFd
+         1oW9jHw2GI7QGH9SKkmvpbGl2jAbtJLxeZF8Fy5STANhfYpDTz1x7qEkD1rtXCL2dz5v
+         UjDot5w6IU5fU2rb3BkUMeaI5uzSJ2mFKbr+HRePg2Y/lejIqMeMnQxqVIMzixd5JGJl
+         Nviw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788781124; x=1789385924; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=zsumuHn7FPHHPCQh2IOcR/Revkm68pLy+fSdVwAPQkQ=;
+        b=jLKnNSEVETgXbG4tt89OsJpvO9IS+oa1tI7Q/JJCP36p5HbDUTMD5Pnv+wG4Qupz78
+         8xIKXq4P5fkwDLKrTv7HV8NntXrIxFDmCP6MotXHn/7KznBpLZy5Cxkkt6c0Vc+JmPzF
+         LDDQZ1uWKKOynMpLEbeZiLse7yaSmISd4WxkxjoG3pE8yt8izUGWaNI1ZWCBSN/1RrNj
+         m+hngsCMhx4dvKQwksggAh/ZB/Ayn4Tmd0wN4tZ8v3DFyIpuSKN7LzQ8E1AxDfylVTrn
+         2L5q86POweCVN8QD3ULIKid6aeYxO6FCHx2D1+FVUJt5dkVKjTOM7OIw6Nf1soMcZZ4U
+         qL1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788781124; x=1789385924;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zsumuHn7FPHHPCQh2IOcR/Revkm68pLy+fSdVwAPQkQ=;
+        b=LyBPzrngPMPweIhfcYOMlZdpBTbRI3UwSki3g+B456kFLsbHjrrYrlYA4PCYEFlmN1
+         RbxKO2Wg6Zg1o9lDXVG/nIPXIMU7r0ee+ZQWjJKhUBDk9PtZP4eMQYkLGTijK7U8xb0Z
+         rAs5Sh6oQtVSSF2Bst6P+uwHd8QreLyO6lK1KqFzvVQSd5v4M9H9XEM8vla9Owtxy44E
+         y7BPJujY3f1l/Oo1Ib5kO8/crBNiQxy8r8/HUPfvF6Sv8QVCS4dLe+39dGmBP4q2ZW4M
+         begfYPI4zOBrn7/H/JBM4S49OYCGEwvLmJdsOhK22byBC7NRL5w+XPfCTrV+gu9OTFnX
+         y3bA==
+X-Forwarded-Encrypted: i=1; AKwUvBwDo9q3mQ1ZTu8pdn2yVWRKxEuqNcwWLR7vUUIALpmVfvK+2Ll/mKV0/2smOvPwrDgw084tW6zhUJuW8nBrESI=@vger.kernel.org
+X-Gm-Message-State: AFuF++l5yUj15V/WTQ04WnkSooFli2eiUh+wrySO8Tw64xeJPdLQ4bRZ
+	eJP2H65NX61kJLu7LHNkmfWsKZsnRCE+ASmvWumMRpLK2wX8GPyaAqhWUnTtqc9IDMgJ1okIgFB
+	v0eJ8+udFah5QnlLh6Era4kzw2CkzPt0=
+X-Gm-Gg: AYBFou1g/UDVR0+iUZy59n2MlgHinuXGDX4kXyj6a2TcYtj9VRv9nu9Am38CtL9tclm
+	mgfuDLBhQwuwwPLXS89v47J3x14+mtC1CZmBj0juW1NTVVD8CgIn4PAemocUxRv7EmOM73NRYMB
+	0vTLnFiNUDiQsWuC/VX/BEkIe5jV1UK3Q7PewdDVXs/OUcPSeS179wk0z9ck8DLH1iDCWo/KB0N
+	k3PTXW7grQfquVWiIGTQ+imwgLs13z2uVgBK7GsfOjCcHJKAmmvgd5hhQApE5eXiRtKu0+VxlDD
+	vLu/o2t4vhqNIlGN5LCeUktXTv1E3iP1wvU6EJF4O2rqswrnAB6E+YZP
+X-Received: by 2002:a17:907:6092:b0:c26:3478:fbb0 with SMTP id
+ a640c23a62f3a-c263478fce6mr388269066b.11.1788781123926; Mon, 07 Sep 2026
+ 04:38:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20260904103920.4471-1-luis@igalia.com> <20260904103920.4471-5-luis@igalia.com>
+ <CAOQ4uxgR8v6H=8fHMmLjChsuXUn8560nzda55t8pCNA1ocvg_A@mail.gmail.com> <87pkypfihg.fsf@wotan.olymp>
+In-Reply-To: <87pkypfihg.fsf@wotan.olymp>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Mon, 7 Sep 2026 13:38:31 +0200
+X-Gm-Features: AcwNN1VBg_-Nh0xqgh5QGpERcqSlw7P_XDXd6wO9zSOlVqLVhQ7X3lt_FZWaIoE
+Message-ID: <CAOQ4uxjtuwyXrckor8pu+ShvOJWO8rG1=o-DfbWhwQ+vbHTnTg@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 4/8] selftests/fuse: factor-out test fixture setup/teardown
+To: Luis Henriques <luis@igalia.com>
+Cc: Miklos Szeredi <miklos@szeredi.hu>, Chen Linxuan <me@black-desk.cn>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, fuse-devel@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Matt Harvey <mharvey@jumptrading.com>, kernel-dev@igalia.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 05 2026, Amir Goldstein wrote:
-
-> On Fri, Sep 4, 2026 at 12:38=E2=80=AFPM Luis Henriques <luis@igalia.com> =
-wrote:
->>
->> This patch adds a simple test that allows to verify that, when resolving=
- a
->> symlink, user-space is called only the first time when caching is enabled
->> or, if caching is disabled, every time the symlink resolution is request=
-ed.
->>
->> Signed-off-by: Luis Henriques <luis@igalia.com>
->> ---
->>  .../selftests/filesystems/fuse/.gitignore     |   1 +
->>  .../selftests/filesystems/fuse/Makefile       |   2 +
->>  .../fuse/fuse_symlink_cache_test.c            | 167 ++++++++++++++++++
->>  3 files changed, 170 insertions(+)
->>  create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_symlin=
-k_cache_test.c
->>
->> diff --git a/tools/testing/selftests/filesystems/fuse/.gitignore b/tools=
-/testing/selftests/filesystems/fuse/.gitignore
->> index f7f3dd345a50..ebfe7133d811 100644
->> --- a/tools/testing/selftests/filesystems/fuse/.gitignore
->> +++ b/tools/testing/selftests/filesystems/fuse/.gitignore
->> @@ -3,3 +3,4 @@ fuse_mnt
->>  fusectl_test
->>  write_extend_eof_test
->>  fuse_acl_cache_test
->> +fuse_symlink_cache_test
->> diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/t=
-esting/selftests/filesystems/fuse/Makefile
->> index 7744f796eb06..3a5a557dde7a 100644
->> --- a/tools/testing/selftests/filesystems/fuse/Makefile
->> +++ b/tools/testing/selftests/filesystems/fuse/Makefile
->> @@ -5,6 +5,7 @@ CFLAGS +=3D -Wall -O2 -g $(KHDR_INCLUDES)
->>  TEST_GEN_PROGS :=3D fusectl_test
->>  TEST_GEN_PROGS +=3D write_extend_eof_test
->>  TEST_GEN_PROGS +=3D fuse_acl_cache_test
->> +TEST_GEN_PROGS +=3D fuse_symlink_cache_test
->>  TEST_GEN_FILES :=3D fuse_mnt
->>
->>  include ../../lib.mk
->> @@ -28,5 +29,6 @@ $(OUTPUT)/fuse_mnt: CFLAGS +=3D $(VAR_CFLAGS)
->>  $(OUTPUT)/fuse_mnt: LDLIBS +=3D $(VAR_LDLIBS)
->>
->>  $(OUTPUT)/fuse_acl_cache_test: fuse_common.c fuse_acl_cache_test.c
->> +$(OUTPUT)/fuse_symlink_cache_test: fuse_common.c fuse_symlink_cache_tes=
-t.c
->>
->>  EXTRA_CLEAN :=3D fuse_common.o
->> diff --git a/tools/testing/selftests/filesystems/fuse/fuse_symlink_cache=
-_test.c b/tools/testing/selftests/filesystems/fuse/fuse_symlink_cache_test.c
->> new file mode 100644
->> index 000000000000..ca3c5cdaf578
->> --- /dev/null
->> +++ b/tools/testing/selftests/filesystems/fuse/fuse_symlink_cache_test.c
->> @@ -0,0 +1,167 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Simple filesystem to test FUSE symlink cache
->> + *
->> + * This is a simple FUSE filesystem that contains two objects: a file n=
-amed
->> + * 'file' and a symlink to that file named 'link'.  If symlink caching =
-is
->> + * disabled (i.e. FUSE_CAP_CACHE_SYMLINKS is reset during FUSE_INIT), w=
-henever
->> + * the ->readlink() is executed to resolve 'link' a counter will be inc=
-remented.
->> + *
->> + * If symlink caching is enabled (i.e. FUSE_CAP_CACHE_SYMLINKS is set d=
-uring
->> + * FUSE_INIT), resolving a symlink will only call into user-space the f=
-irst
->> + * time.
->> + */
->> +
->> +#define FUSE_USE_VERSION 31
->> +
->> +#include <stdio.h>
->> +#include <limits.h>
->> +#include <fuse_lowlevel.h>
->> +
->> +#include "kselftest_harness.h"
->> +
->> +#include "fuse_common.h"
->> +
->> +#define FILENAME "file"
->> +#define FILE_INO 42
->> +
->> +#define LINKNAME "link"
->> +#define LINK_INO 43
->> +
->> +#define TIMEOUT        86400.0f
->> +
->> +struct test_state {
->> +       pthread_mutex_t lock;
->> +       bool cache;
->> +       int readlink_counter;
->> +} test_state =3D {
->> +       .lock =3D PTHREAD_MUTEX_INITIALIZER,
->> +};
->> +
->> +static void fs_init(void *userdata, struct fuse_conn_info *conn)
->> +{
->> +       pthread_mutex_lock(&test_state.lock);
->> +       if (test_state.cache)
->> +               fuse_set_feature_flag(conn, FUSE_CAP_CACHE_SYMLINKS);
->> +       else
->> +               fuse_unset_feature_flag(conn, FUSE_CAP_CACHE_SYMLINKS);
->> +       pthread_mutex_unlock(&test_state.lock);
->> +}
->> +
->> +static void fs_lookup(fuse_req_t req, fuse_ino_t parent, const char *na=
-me)
->> +{
->> +       struct fuse_entry_param e =3D {};
->> +
->> +       if (parent !=3D FUSE_ROOT_ID ||
->> +           (!strcmp(name, FILENAME) && !(strcmp(name, LINKNAME))))
+On Mon, Sep 7, 2026 at 12:44=E2=80=AFPM Luis Henriques <luis@igalia.com> wr=
+ote:
 >
-> You probably meant strcmp() !=3D 0 ...
-> Did you miss this Sashiko comment?
+> On Sat, Sep 05 2026, Amir Goldstein wrote:
+>
+> > On Fri, Sep 4, 2026 at 12:38=E2=80=AFPM Luis Henriques <luis@igalia.com=
+> wrote:
+> >>
+> >> In order to reduce new tests setup/teardown code duplication, factor-o=
+ut
+> >> these functions from the existing acl_cache test into a new fuse_commo=
+n.c
+> >> file that can be reused in other tests.
+> >>
+> >> Signed-off-by: Luis Henriques <luis@igalia.com>
+> >> ---
+> >>  .../selftests/filesystems/fuse/Makefile       |  8 ++-
+> >>  .../filesystems/fuse/fuse_acl_cache_test.c    | 62 +++---------------=
+-
+> >>  .../selftests/filesystems/fuse/fuse_common.c  | 60 ++++++++++++++++++
+> >>  .../selftests/filesystems/fuse/fuse_common.h  | 25 ++++++++
+> >>  4 files changed, 100 insertions(+), 55 deletions(-)
+> >>  create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_comm=
+on.c
+> >>  create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_comm=
+on.h
+> >>
+> >> diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools=
+/testing/selftests/filesystems/fuse/Makefile
+> >> index a3ee9b3a2f5d..7744f796eb06 100644
+> >> --- a/tools/testing/selftests/filesystems/fuse/Makefile
+> >> +++ b/tools/testing/selftests/filesystems/fuse/Makefile
+> >> @@ -21,8 +21,12 @@ ifeq ($(VAR_LDLIBS),)
+> >>  VAR_LDLIBS :=3D -lfuse3 -pthread
+> >>  endif
+> >>
+> >> +CFLAGS +=3D $(VAR_CFLAGS)
+> >> +LDLIBS +=3D $(VAR_LDLIBS)
+> >> +
+> >>  $(OUTPUT)/fuse_mnt: CFLAGS +=3D $(VAR_CFLAGS)
+> >>  $(OUTPUT)/fuse_mnt: LDLIBS +=3D $(VAR_LDLIBS)
+> >>
+> >> -$(OUTPUT)/fuse_acl_cache_test: CFLAGS +=3D $(VAR_CFLAGS)
+> >> -$(OUTPUT)/fuse_acl_cache_test: LDLIBS +=3D $(VAR_LDLIBS)
+> >> +$(OUTPUT)/fuse_acl_cache_test: fuse_common.c fuse_acl_cache_test.c
+> >> +
+> >> +EXTRA_CLEAN :=3D fuse_common.o
+> >> diff --git a/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_t=
+est.c b/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
+> >> index 2411a6e285f1..12cbf9753d03 100644
+> >> --- a/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
+> >> +++ b/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
+> >> @@ -33,23 +33,15 @@
+> >>   */
+> >>
+> >>  #define _GNU_SOURCE
+> >> -#include <errno.h>
+> >>  #include <fcntl.h>
+> >>  #include <linux/limits.h>
+> >> -#include <pthread.h>
+> >>  #include <stdint.h>
+> >> -#include <stdio.h>
+> >> -#include <stdlib.h>
+> >> -#include <string.h>
+> >> -#include <sys/stat.h>
+> >>  #include <sys/xattr.h>
+> >> -#include <unistd.h>
+> >> -
+> >> -#define FUSE_USE_VERSION 31
+> >> -#include <fuse_lowlevel.h>
+> >>
+> >>  #include "kselftest_harness.h"
+> >>
+> >> +#include "fuse_common.h"
+> >> +
+> >>  /* ---- ACL binary encoding -----------------------------------------=
+------- */
+> >>  /*
+> >>   * POSIX ACL v2 xattr format (little-endian):
+> >> @@ -176,69 +168,33 @@ static const struct fuse_lowlevel_ops fs_ops =3D=
+ {
+> >>         .getxattr =3D fs_getxattr,
+> >>  };
+> >>
+> >> -/* ---- Daemon thread -----------------------------------------------=
+-------- */
+> >> -
+> >> -static void *run_daemon(void *arg)
+> >> -{
+> >> -       fuse_session_loop((struct fuse_session *)arg);
+> >> -       return NULL;
+> >> -}
+> >> -
+> >>  /* ---- kselftest harness -------------------------------------------=
+-------- */
+> >>
+> >>  FIXTURE(acl_cache) {
+> >>         struct fuse_session *se;
+> >> -       char                 mountpoint[PATH_MAX];
+> >> +       char                 mountpoint[MOUNTPOINT_SZ];
+> >>         char                 file_path[PATH_MAX];
+> >>         pthread_t            thread;
+> >>  };
+> >
+> > Nice!
+> > I think it would be even nicer to have struct fuse_common_ctx
+> > with the common members embedded in the per test state,
+> > but I'll let you decide if you want to do that or not.
+>
+> Thanks for the suggestion.  It may make sense indeed to have that common
+> struct, although it would probably only include the spinlock and a bool
+> for enabling/disabling the cache.  I'll have a closer look and see if it
+> makes sense.
 
-Oops! I did fix one similar comment (probably in a different test) but
-missed this one.  I'll fix it for the next iteration.  (And I'll still
-need to have a look at sashiko again for any new comments for this
-revision).
+I meant that it should include:
+         struct fuse_session *se;
+         char                 mountpoint[PATH_MAX];
+         pthread_t            thread;
 
-Cheers,
---=20
-Lu=C3=ADs
+instead of passing them by reference individually to fs_setup/teardown()
+not a big deal, just a bit nicer IMO.
+
+Thanks,
+Amir.
