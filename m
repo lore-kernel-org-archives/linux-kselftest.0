@@ -1,100 +1,188 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A74A47DD79;
-	Mon,  7 Sep 2026 10:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 176434964F;
+	Mon,  7 Sep 2026 10:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788778540; cv=none; b=IUReYXMmT1HpXuWe14jDahPOSj4waSkGrfjYrPeZjw01fyBUtT60NUSFGxLMow74/z19QM+zfVM0s+i7h15S0xbsHZseQNMue3Twz6tkQaPVq9kvzO7rpb6OMkb4yiv7yv7HpGnC4DCmLyK+a8FwUQtWsfhPt+7NaQv1ff4c+04=
+	t=1788778672; cv=none; b=C8ZhiHILNThQsb6SXp5+/UaAWJP8IAWVxzsW5c4loCXtSHNSw0TKhDcw/8mwYEA1LS4W8V89DoU2kYROW050IJwLvso9SY5XQgxbfDSvSGX8bJh4GfKi1XWr95avB6Tdk4ri8kwebsSPzxpFknjaxvY8/TBCD03Yi3K1huwtjss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788778540; c=relaxed/simple;
-	bh=E3jYT8BbJ4w2SnMF/c5ygS3n4YeOF0/ZtH2+kO3O+tY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Disposition; b=n4Dfns80bRH2bWrBDYWenmTqmYwEV2iAr0ZA7XkLwFX9RJRjW/SAV+t0kY03kEXz0YWmWKlGDLw6kohHRU8LdeRtFhf3579UFYjiI3Y0auUYc67sDVmJTBuCRmuTXdtsN0poXrt6qiFB9vjfV67VRZCrvy2YvuPmbHI0/5DpQPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ZWS+gxZn; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1788778672; c=relaxed/simple;
+	bh=3PDFtlco4OcZygR+DrQDf/kVT7D/7gQJWD424nAICOE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=M53/Wsn7UpQeK/RKJPc+TdPLCvc2fQltMgwQ+27TQSsocTG3pPyuThoJ2vL4nAm6dRpesgOLEto18DMSRynkJuUrdYHU579pvjT3e4v33ca0IfMPzXt5QaMDcuJTR57gT3hy1lPcJi3hvNSNqWa+GOOH8/jXCm6hYBWsrUWmgSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=e1WsTKHr; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ZWS+gxZn"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5880A1476;
-	Mon,  7 Sep 2026 03:55:33 -0700 (PDT)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CBBDC3F7B4;
-	Mon,  7 Sep 2026 03:55:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1788778537; bh=E3jYT8BbJ4w2SnMF/c5ygS3n4YeOF0/ZtH2+kO3O+tY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZWS+gxZnr2jYVFGXrj+ilBGofSnt06NhS2wsOsdAcq1JSep+u16p7gOkFuAvKkOoG
-	 SsFOx35kMy4oRX9jfcOjj1PjPBrQDnew8q6KXbFYGmBwn+NF3Ak012Z1zwLnNWeo/z
-	 8/BIDGukb9o4xSmnZX30qrlC346MeWYeaonT4+GE=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Leonardo Bras <leo.bras@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Wei-Lin Chang <weilin.chang@arm.com>,
-	Yao Yuan <yaoyuan@linux.alibaba.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v20 06/14] KVM: arm64: Validate GCS exception lock when emulating ERET
-Date: Mon,  7 Sep 2026 11:55:32 +0100
-Message-ID: <ap6YJHB5JKtfjM3M@LeoBrasDK>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <aps-oNeG3RjzqHQs@sirena.co.uk>
-References: <20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org> <20260901-arm64-gcs-v20-6-f31750bdfadb@kernel.org> <apmUQETDlhTIuJIY@LeoBrasDK> <2dfd8a6c-42c2-466c-b3d6-2313466fc3d5@sirena.org.uk> <aprEsh-xogu8zFnK@LeoBrasDK> <aps-oNeG3RjzqHQs@sirena.co.uk>
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="e1WsTKHr"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:
+	Date:Subject:Cc:To:From:From:Reply-To;
+	bh=tf3EYimRWhnEVKPQh6ORuRf1OW6Z+eMnNd2CBmc1Gco=; b=e1WsTKHrd39a2DnhXC34g4utpo
+	rBWi/Ar3pDwHYt1XiQtdfEOqE/HRl43R90QvlA+V+0gxDswhp3Ekjnbrq/Jp7rvxRWNujusKq5/aw
+	4PFixqt77gETG69bd2BZqb/ssf99Pr18RCfG2yII5v3Zw0RSwKFNs74VrFpyDPxAWGOTyUsSq65TD
+	n99nsMoR79liSCp6I2ZPe+xq4nSD3U/CFfvzQmk2IR3y23pki8L2f9eSwARjyvgK0OWeqiuYeUJL9
+	JwjjjWtT5wealIH6n3SZpY6XVyac0Ge+6GSvDfRWSfT6WSQ9RJbihbyRc8NqSqVXXY8HLbPbjrTvb
+	3S/9MqQw==;
+Received: from bl21-120-122.dsl.telepac.pt ([2.82.120.122] helo=localhost)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1x3X2k-00Fzg0-Rx; Mon, 07 Sep 2026 12:57:42 +0200
+From: Luis Henriques <luis@igalia.com>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Miklos Szeredi <miklos@szeredi.hu>,  Chen Linxuan <me@black-desk.cn>,
+  Jonathan Corbet <corbet@lwn.net>,  Shuah Khan
+ <skhan@linuxfoundation.org>,  fuse-devel@lists.linux.dev,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,  Matt
+ Harvey <mharvey@jumptrading.com>,  kernel-dev@igalia.com
+Subject: Re: [RFC PATCH v3 7/8] selftests/fuse: add fuse symlink caching test
+In-Reply-To: <CAOQ4uxhFCKOLexyiP6DQ=a9t+8dhGn=tJLGyHg0NHPz=mPDkhw@mail.gmail.com>
+	(Amir Goldstein's message of "Sat, 5 Sep 2026 14:32:46 +0200")
+References: <20260904103920.4471-1-luis@igalia.com>
+	<20260904103920.4471-8-luis@igalia.com>
+	<CAOQ4uxhFCKOLexyiP6DQ=a9t+8dhGn=tJLGyHg0NHPz=mPDkhw@mail.gmail.com>
+Date: Mon, 07 Sep 2026 11:58:29 +0100
+Message-ID: <87cxupfhuy.fsf@wotan.olymp>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 04, 2026 at 10:56:48PM +0100, Mark Brown wrote:
-> On Fri, Sep 04, 2026 at 02:16:34PM +0100, Leonardo Bras wrote:
-> > On Thu, Sep 03, 2026 at 08:22:44PM +0100, Mark Brown wrote:
-> > > On Thu, Sep 03, 2026 at 04:37:37PM +0100, Leonardo Bras wrote:
-> 
-> > > > > +	if (kvm_check_illegal_exlock_return(vcpu, spsr))
-> > > > > +		return false;
-> 
-> > > > >  	/* If ERETAx fails, take the slow path */
-> > > > >  	if (esr_iss_is_eretax(esr)) {
-> > > > >  		if (!(vcpu_has_ptrauth(vcpu) && kvm_auth_eretax(vcpu, &elr)))
-> 
-> ...
-> 
-> > > We need this because ERETs from vEL2 are handled in software, modulo the
-> > > NV3 fast path mentioned at the top of the function.
-> 
-> > Oh, and this is done in __fixup_guest_exit() because vEL2 is not a 
-> > nested guest. It would be it's guests' exit that would be dealt in 
-> > fixup_nv_guest_exit().
-> 
-> > Is this correct?
-> 
-> Well, it's as much because that is the point where we handle the EC
-> specifics.  __fixup_guest_exit() does general handling of guest exits
-> that applies to all ECs and then dispatches to an EC specific handler,
-> it is common code with nVHE.  When we have NV then fixup_nv_guest_exit()
-> is run beforehand to do extra handling that applies to all ECs in the NV
-> case, but any EC specifics for NV still go in the relevant EC specific
-> handler.
+On Sat, Sep 05 2026, Amir Goldstein wrote:
 
+> On Fri, Sep 4, 2026 at 12:38=E2=80=AFPM Luis Henriques <luis@igalia.com> =
+wrote:
+>>
+>> This patch adds a simple test that allows to verify that, when resolving=
+ a
+>> symlink, user-space is called only the first time when caching is enabled
+>> or, if caching is disabled, every time the symlink resolution is request=
+ed.
+>>
+>> Signed-off-by: Luis Henriques <luis@igalia.com>
+>> ---
+>>  .../selftests/filesystems/fuse/.gitignore     |   1 +
+>>  .../selftests/filesystems/fuse/Makefile       |   2 +
+>>  .../fuse/fuse_symlink_cache_test.c            | 167 ++++++++++++++++++
+>>  3 files changed, 170 insertions(+)
+>>  create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_symlin=
+k_cache_test.c
+>>
+>> diff --git a/tools/testing/selftests/filesystems/fuse/.gitignore b/tools=
+/testing/selftests/filesystems/fuse/.gitignore
+>> index f7f3dd345a50..ebfe7133d811 100644
+>> --- a/tools/testing/selftests/filesystems/fuse/.gitignore
+>> +++ b/tools/testing/selftests/filesystems/fuse/.gitignore
+>> @@ -3,3 +3,4 @@ fuse_mnt
+>>  fusectl_test
+>>  write_extend_eof_test
+>>  fuse_acl_cache_test
+>> +fuse_symlink_cache_test
+>> diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/t=
+esting/selftests/filesystems/fuse/Makefile
+>> index 7744f796eb06..3a5a557dde7a 100644
+>> --- a/tools/testing/selftests/filesystems/fuse/Makefile
+>> +++ b/tools/testing/selftests/filesystems/fuse/Makefile
+>> @@ -5,6 +5,7 @@ CFLAGS +=3D -Wall -O2 -g $(KHDR_INCLUDES)
+>>  TEST_GEN_PROGS :=3D fusectl_test
+>>  TEST_GEN_PROGS +=3D write_extend_eof_test
+>>  TEST_GEN_PROGS +=3D fuse_acl_cache_test
+>> +TEST_GEN_PROGS +=3D fuse_symlink_cache_test
+>>  TEST_GEN_FILES :=3D fuse_mnt
+>>
+>>  include ../../lib.mk
+>> @@ -28,5 +29,6 @@ $(OUTPUT)/fuse_mnt: CFLAGS +=3D $(VAR_CFLAGS)
+>>  $(OUTPUT)/fuse_mnt: LDLIBS +=3D $(VAR_LDLIBS)
+>>
+>>  $(OUTPUT)/fuse_acl_cache_test: fuse_common.c fuse_acl_cache_test.c
+>> +$(OUTPUT)/fuse_symlink_cache_test: fuse_common.c fuse_symlink_cache_tes=
+t.c
+>>
+>>  EXTRA_CLEAN :=3D fuse_common.o
+>> diff --git a/tools/testing/selftests/filesystems/fuse/fuse_symlink_cache=
+_test.c b/tools/testing/selftests/filesystems/fuse/fuse_symlink_cache_test.c
+>> new file mode 100644
+>> index 000000000000..ca3c5cdaf578
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/filesystems/fuse/fuse_symlink_cache_test.c
+>> @@ -0,0 +1,167 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Simple filesystem to test FUSE symlink cache
+>> + *
+>> + * This is a simple FUSE filesystem that contains two objects: a file n=
+amed
+>> + * 'file' and a symlink to that file named 'link'.  If symlink caching =
+is
+>> + * disabled (i.e. FUSE_CAP_CACHE_SYMLINKS is reset during FUSE_INIT), w=
+henever
+>> + * the ->readlink() is executed to resolve 'link' a counter will be inc=
+remented.
+>> + *
+>> + * If symlink caching is enabled (i.e. FUSE_CAP_CACHE_SYMLINKS is set d=
+uring
+>> + * FUSE_INIT), resolving a symlink will only call into user-space the f=
+irst
+>> + * time.
+>> + */
+>> +
+>> +#define FUSE_USE_VERSION 31
+>> +
+>> +#include <stdio.h>
+>> +#include <limits.h>
+>> +#include <fuse_lowlevel.h>
+>> +
+>> +#include "kselftest_harness.h"
+>> +
+>> +#include "fuse_common.h"
+>> +
+>> +#define FILENAME "file"
+>> +#define FILE_INO 42
+>> +
+>> +#define LINKNAME "link"
+>> +#define LINK_INO 43
+>> +
+>> +#define TIMEOUT        86400.0f
+>> +
+>> +struct test_state {
+>> +       pthread_mutex_t lock;
+>> +       bool cache;
+>> +       int readlink_counter;
+>> +} test_state =3D {
+>> +       .lock =3D PTHREAD_MUTEX_INITIALIZER,
+>> +};
+>> +
+>> +static void fs_init(void *userdata, struct fuse_conn_info *conn)
+>> +{
+>> +       pthread_mutex_lock(&test_state.lock);
+>> +       if (test_state.cache)
+>> +               fuse_set_feature_flag(conn, FUSE_CAP_CACHE_SYMLINKS);
+>> +       else
+>> +               fuse_unset_feature_flag(conn, FUSE_CAP_CACHE_SYMLINKS);
+>> +       pthread_mutex_unlock(&test_state.lock);
+>> +}
+>> +
+>> +static void fs_lookup(fuse_req_t req, fuse_ino_t parent, const char *na=
+me)
+>> +{
+>> +       struct fuse_entry_param e =3D {};
+>> +
+>> +       if (parent !=3D FUSE_ROOT_ID ||
+>> +           (!strcmp(name, FILENAME) && !(strcmp(name, LINKNAME))))
+>
+> You probably meant strcmp() !=3D 0 ...
+> Did you miss this Sashiko comment?
 
-Humm, okay.
+Oops! I did fix one similar comment (probably in a different test) but
+missed this one.  I'll fix it for the next iteration.  (And I'll still
+need to have a look at sashiko again for any new comments for this
+revision).
 
-FWIW:
-Reviewed-by: Leonardo Bras <leo.bras@arm.com>
-
+Cheers,
+--=20
+Lu=C3=ADs
