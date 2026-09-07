@@ -1,50 +1,48 @@
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out-2z4y-a135.jellyfish.systems (out-2z4y-a135.jellyfish.systems [198.54.127.135])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14563D0927;
-	Sun,  6 Sep 2026 21:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E547E25B085
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 01:21:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788728727; cv=none; b=mxbOBwNn+Cf+yyYyuq0MzB0fRKJJacJN4+K+eUd2rKke9PYd9O66DZAaPMAWnMDkm3HFe7TLmTeYKpwZihoINu12ivAZBKA8hQUizMuiWVtH8edSBAGYHacuD6ikewPRXMUli6am8UPbtc7ynqAB5MpI8TuS19fTNt8RUXhaBk4=
+	t=1788744062; cv=none; b=NbqFLcnJoCEd7H3eGg+NbMP5gROd79s3AYrAvXgOxp7lf0B7/OS+kdThsZ8wwINVOzg6c6HxrrHqWaY4lIe815b81/NL53/yObG50dVwTATxkQWWqXiyn93HtGvdRCZEl0T3boqiMc7tb+CftG4LJpzFsrQ3d2oCVhmZP+4oMN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788728727; c=relaxed/simple;
-	bh=FSidv/qNTf55M88IvPpS0rThvRv7ry/b6RfaUm3+67g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fPHNBBLP90ejEll72msH8Yz5Y+/j3eDrRqVJJ9cgXSePMYR6x8uP4LmkzQ5Fy2jCctqAVwkKvK2cRDYe8NoOQkajgzOTpKR4MwL+nBLyTmZmfkhCVUvv34qC9U809yhTD/igICKvWnRJpNCkuGu3+nWQFIZ3faiXZo3Mhita9lI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=WWj/8cxJ; arc=none smtp.client-ip=130.117.225.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	s=arc-20240116; t=1788744062; c=relaxed/simple;
+	bh=6l8uLUt6bU8KLBUACoUOGsgIC4WgCcRjH0GFVb4xNCo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JaWdM/X7Y/+9ZWrptYD2UeAtDFmd67akOtGmEob2iWd3ZBxMyx7SadPTaSHzTHHGHMkLIYZVsE0w0WRj7/B6MS14rzu4XTDYDbbVGG6Shf320tdjlZ+krm3T4uagwC2ZIE3biYVs+QqkHV4zvfbi0rMPyDlF6yNvNPlp63KVzHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=FLBkev/C; arc=none smtp.client-ip=198.54.127.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="WWj/8cxJ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=7ZRDUXUsGwRN+ne0AawD7gejvXQP/E6c8+m2m5pqP/k=; b=WWj/8cxJJ6gg
-	zT8Sua57Iv8xcjGv1dLDbgktgfP1aZLlEyIqnAyYL6mEpirC0uWnSGtTRT0ypEM7SRg0ZgmXSP/Qw
-	oH0UPR4T9BXr/hCkPpueyOPQpsOlFaCLlJ62FntB1Ez+wz5xf1youiRhFgVv8nXQ+Q97No8spph+a
-	BDpvxP59tVKRgGEd6SIm0cHdOB6O40k4O1986I8p6OyLbsJPlefZMLBF8o1Z8TjGLdPrn4QTOnio3
-	XHa0tGIU+RdhpCoucfRZRp26Wps/QM0ODxbbbdWFP1JEUxw2qObVCYkIItXsoFpKAho2pdsqpHhsW
-	44CmP303GIyK7330u/R/Rw==;
-Received: from ch-vpn.virtuozzo.com ([130.117.225.6] helo=LekKit-T14)
-	by relay.virtuozzo.com with esmtp (Exim 4.96)
-	(envelope-from <eva.kurchatova@virtuozzo.com>)
-	id 1x3Jlk-00G6jo-18;
-	Sun, 06 Sep 2026 22:49:44 +0200
-From: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc: linux-kernel@vger.kernel.org,
-	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	live-patching@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="FLBkev/C"
+Received: from 192.168.5.3 (unknown [69.5.53.41])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdTm61tc0z8sYS;
+	Mon, 07 Sep 2026 01:20:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1788744055;
+	bh=+fxT8GAaNVtOXP/vz0yqRqkKjkOxys+3Ayv2BKCt7s4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=FLBkev/Ccsa3/2ZxNsyTvU9gQ5eidZJS6mJGBcB66URSSrtA4pOTMNdVPovKsr0Mi
+	 kbWRwJjPrmb500tm5et6ZzpnUfncnzjIBpKeGtDpyCNmiYnZmuJfWhFSwq0n+ccvzG
+	 oyUJgjkG69JO5icMOZDD5gmOlitXEJ2F37y6a+UpYQeXzp5+Mn3RUqoom0sXnbT1eI
+	 +ylpmo6XZ+Dpo962fe6FDwO4F5O0YB3lLvXF0C/+mqeOpt1zf8V04uEOPYxQTYKCQu
+	 xl2XOPUOeC7tyGQgZhBM1ZK9P0vlV/XEiW3LipnCx4BsHuNPSVA8H3xZr6JMnPsPSl
+	 YxicUephmtDBQ==
+From: Tianyi Chen <hi@tychen.cc>
+To: bpf@vger.kernel.org
+Cc: Tianyi Chen <hi@tychen.cc>,
+	Quentin Monnet <qmo@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests: livepatch: do not require a kernel build tree to run
-Date: Sun,  6 Sep 2026 23:49:28 +0300
-Message-ID: <20260906204932.2343013-1-eva.kurchatova@virtuozzo.com>
+Subject: [PATCH bpf-next v2 0/2] bpftool: Support symbolic map creation flags
+Date: Mon,  7 Sep 2026 09:20:49 +0800
+Message-ID: <178874362959.1415955.5742268739057412911.flags-v2-0@tychen.cc>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260906170715.1212085-1-hi@tychen.cc>
+References: <20260906170715.1212085-1-hi@tychen.cc>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,61 +50,43 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Envelope-From: hi@tychen.cc
 
-setup_config() calls has_kdir(), which skips every livepatch test when
-/lib/modules/$(uname -r)/build is missing. The tests do not compile
-anything though, they insmod the pre-built modules from test_modules/,
-so the check tests a proxy rather than the thing it cares about.
+Add comma-separated BPF_F_* names to map create flags while retaining
+base-0 numeric input, with matching documentation, completion and tests.
 
-That proxy holds only for a source tree or a machine with kernel-devel
-installed. A packaged testsuite ships the modules pre-built and runs on
-machines with no kernel build tree at all, and there every single test
-reports "ok ... # SKIP". A harness that looks for "not ok" then reports
-the suite as passed, so the whole suite silently tests nothing.
+Changes in v2:
+- Complete list elements without adding a trailing space, so the user
+  can immediately append another comma-separated flag.
 
-Test for the modules instead. Missing modules still skip rather than
-fail, which is what the KDIR check was there for, and the tests now run
-wherever the modules are.
+Validation:
+- Real Bash readline completion checked with default COMP_WORDBREAKS
+  and with comma included: unique first and second flags stay in one
+  argument; after an explicit space, entries completion adds its normal
+  trailing space. Bash syntax and diff checks passed.
+- All 29 map_flags subtests passed in the integration run described below.
 
-Fixes: 54ee3526796f ("selftests: livepatch: Avoid running the tests if kernel-devel is missing")
-Signed-off-by: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
----
- tools/testing/selftests/livepatch/functions.sh | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+v1: https://lore.kernel.org/r/20260906170715.1212085-1-hi@tychen.cc
+Request: https://github.com/libbpf/bpftool/issues/57
 
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index a65b7b1ac8ad..492955ca2fa0 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -44,14 +44,12 @@ function is_root() {
- 	fi
- }
- 
--# Check if we can compile the modules before loading them
--function has_kdir() {
--	if [ -z "$KDIR" ]; then
--		KDIR="/lib/modules/$(uname -r)/build"
--	fi
-+# Check that the test modules are there before loading them
-+function has_test_modules() {
-+	local mods=(test_modules/*.ko)
- 
--	if [ ! -d "$KDIR" ]; then
--		echo "skip all tests: KDIR ($KDIR) not available to compile modules."
-+	if [ ! -e "${mods[0]}" ]; then
-+		echo "skip all tests: test modules are not built, run make first" >&2
- 		exit $ksft_skip
- 	fi
- }
-@@ -150,7 +148,7 @@ function cleanup() {
- #		 the ftrace_enabled sysctl.
- function setup_config() {
- 	is_root
--	has_kdir
-+	has_test_modules
- 	push_config
- 	set_dynamic_debug
- 	set_ftrace_enabled 1
+Integration validation: the flags, ring-buffer and batch v2 series plus
+recursive dump v3 built together with LLVM 20. All 69 focused BPF subtests
+passed in an x86-64 KVM guest running Linux 7.3.0-rc1, with no skips or
+failures. The bpftool-map man page also built successfully. This is a
+focused run, not the full BPF selftest suite.
+
+
+Tianyi Chen (2):
+  bpftool: Accept symbolic map creation flags
+  selftests/bpf: Cover symbolic bpftool map creation flags
+
+ .../bpf/bpftool/Documentation/bpftool-map.rst | 13 ++-
+ tools/bpf/bpftool/bash-completion/bpftool     | 26 ++++-
+ tools/bpf/bpftool/map.c                       | 77 ++++++++++++++-
+ .../bpf/prog_tests/bpftool_map_flags.c        | 99 +++++++++++++++++++
+ 4 files changed, 209 insertions(+), 6 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
+
 -- 
 2.55.0
 
