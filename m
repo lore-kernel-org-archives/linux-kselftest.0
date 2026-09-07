@@ -1,36 +1,33 @@
-Received: from mta0.migadu.com (out-70.mta0.migadu.com [91.218.175.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD8DD30EF68
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 18:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DB2413D62;
+	Mon,  7 Sep 2026 19:54:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788807082; cv=none; b=NHSPLzdPr+mmBWDBLLwSxOBMRBqT67IxUK0Zf5JYg7Qb70HndA6BIg1C9FrKh3PgSjbYkgSUksq/E47TN9d76SXZ1rjH/LsGgwYuSiJbHT8GC8IAOiZbTOml7LGYVKS/36hFoUH6btx5KHBvaawJs3B2+mOZQrhcTjTDmnyPhUo=
+	t=1788810853; cv=none; b=DoMoSOsela8yy79Li5LQwCHYEcNSGyxZPrc0dZQziwpUxtUVv9i8rQRiXujFuQD0vNRhpnV6wNIOef9s5E7LSsi6I7WAQKolPwzgRg67IR31JJW0R+bTcBKx3pw6DZHn4Bs6DWeOGtyhgsY2EiCyEHEdfcp6aUT/eSE0ltmeh5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788807082; c=relaxed/simple;
-	bh=NddO47tYxBI2h7DsCq/hs4VZYoZz/R9enIlpJ3TUNlw=;
+	s=arc-20240116; t=1788810853; c=relaxed/simple;
+	bh=vZnN4KU1cWaEFbNnzCzPt2Wdmzgtn0Dy+55Sn17gtT8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iFS26sd/Hv2UNHzNVlo7uOUHepw0Y9pOzO660wBLOBte49YHfcvEDsW3gfymGmG/nkGtpCFKvoAEcDJoeBG/uLeNFzdmIoshEXHGQLtHr6ymZewisn6bVdyQjw+o6/u0lFUNDoaxK9Y87n99DdyYCikR8fvS/DvxEnBVeF2lQsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EcL5nzSM; arc=none smtp.client-ip=91.218.175.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=loWeJAVAmX7JHFYgsAJyLYQQn0rBoIyhKIc3C8TJKp8evhIOIvaw+SLN/oHzPd2FjqurZhSfr5UsXkmE/RYX3aD+rH4iTwF7jpGNkVDFkMkV+GL6CigzW9S8ryl/pur1+KCUHr/C/nS5MBw5PUNzHo7Np/+3UlGezMgRMoJ23A0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U7Huh7to; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EcL5nzSM"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=NddO47tYxBI2h7DsCq/hs4VZYoZz/R9enIlpJ3TUNlw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788807072; v=1; x=1789411872;
- b=EcL5nzSMc/vm/90o63vsPdZHGM3U7c9pGvBSvfZmIIpjN9vH34WFfRrRdNfk2xBuYWbQ6Ckr
- MeV4cOF0JgerKOzZLNevblkr8FTzqlzYmcJ1cbCFhA3P5a037/TPsO5vBCLIsmzoNgzHzwMK6Lp
- mxU+qbAzF1dt6uO4RS6b8g68=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 0ed654492ec4f958;
-	Mon, 07 Sep 2026 18:51:11 +0000
-X-Mizu-Trace-ID: 0ed654492ec4f958
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <6df0f368-0acb-49b4-8bf6-c82d3d2c79a1@linux.dev>
-Date: Mon, 7 Sep 2026 11:51:06 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U7Huh7to"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E3321F00A3A;
+	Mon,  7 Sep 2026 19:54:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788810851;
+	bh=BEUL0SljeIyq1NT5NrU2gpIGhYcIPt2sqlLxa+OdvBI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=U7Huh7to+wvW/QhflgkMntofgOu4uxc+43i29/GW0wPcugj9po7OvqZNodFKHamNJ
+	 QDv7LJsPdqV8i3gqta3u5z9nHFS46AbjNueUmlsf+/bAIAFrEFJIWGWn6EbecoLXMf
+	 aGct/ZyQfVGpD41ggHxy2fcZcUgEpnpRwlYptWqNKKMqdXh/nSQfhxIyHi54XLD/dx
+	 vsec7TZbxxwRgTbSFkRP3HbrtxJSN6REKJHSxXTBMf98NAUQiXq3mWslZkjJy9zNJL
+	 2Ev0wxYNzterJ5kT/NciqJOttqXmoIRs1i0FYa0H//Qe2JZ+QFXVSs1WFdyK/EHj9/
+	 rPimLjqpzb61w==
+Message-ID: <8f797f01-e958-404e-bcdf-283da960e95c@kernel.org>
+Date: Mon, 7 Sep 2026 21:54:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,253 +35,218 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v8 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
-To: Hui Zhu <hui.zhu@linux.dev>, Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>,
+Subject: Re: [PATCH 3/6] mm/vma: only permit MAP_PRIVATE /dev/zero to be
+ mapped anonymous
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Andrew Morton <akpm@linux-foundation.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- Barry Song <baohua@kernel.org>, Geliang Tang <geliang@kernel.org>,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-Cc: Hui Zhu <zhuhui@kylinos.cn>
-References: <cover.1788764121.git.zhuhui@kylinos.cn>
- <0f1e2b5408aef7baaacf7306dff5f6d4fb91e441.1788764121.git.zhuhui@kylinos.cn>
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Hugh Dickins <hughd@google.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260902-map-private-dev-zero-v1-0-a578c730cec7@kernel.org>
+ <20260902-map-private-dev-zero-v1-3-a578c730cec7@kernel.org>
+ <d6dc52e3-b27d-4663-848c-a2f270fb4c5d@kernel.org> <ap71GOPAeKHfHp5J@gremlin>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
-From: JP Kobryn <jp.kobryn@linux.dev>
-In-Reply-To: <0f1e2b5408aef7baaacf7306dff5f6d4fb91e441.1788764121.git.zhuhui@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <ap71GOPAeKHfHp5J@gremlin>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Hui,
-
-On 9/7/26 12:08 AM, Hui Zhu wrote:
-> From: Hui Zhu <zhuhui@kylinos.cn>
+>> I was wondering whether we should call this "map_is_private_anon", due to
+>> MAP_ANON|MAP_SHARED. But looking at __mmap_new_vma(), the existing "is_anon" is
+>> also limited to MAP_ANON|MAP_PRIVATE.
 > 
-> Add bpf_proactive_reclaim(), a sleepable kfunc which performs one
-> proactive reclaim pass on a given memory cgroup, similar to a write
-> to memory.reclaim but without retrying until the target is reached.
+> A 'shared anon' mapping is not anon at all, and that's handled early in
+> do_mmap().
+> 
+> I wish that we didn't confuse people by allowing MAP_SHARED | MAP_ANON as a
+> shorthand but there we are.
+> 
+> So I don't like to make that distinction on the basis that a 'shared
+> anon' mapping isn't something that exists :)
+> 
+> And then imagine vma_is_private_anonymous() vs. vma_is_anonymous() etc. It would
+> get silly, quick...
+> 
 
-The cover letter has the reasons why you're adding this kfunc. It should
-be included before this paragraph.
+Yeah, agreed.
+
+>>
+>>> +{
+>>> +	if (!map_is_private(map))
+>>> +		return false;
+>>> +
+>>> +	return !map->file || file_is_dev_zero(map->file);
+>>> +}
+>>> +
+>>>  /*
+>>>   * __mmap_new_vma() - Allocate a new VMA for the region, as merging was not
+>>>   * possible.
+>>> @@ -2634,8 +2647,7 @@ static int __mmap_new_file_vma(struct mmap_state *map,
+>>>  static int __mmap_new_vma(struct mmap_state *map, struct vm_area_struct **vmap,
+>>>  	struct mmap_action *action)
+>>>  {
+>>> -	const bool is_anon = !map->file &&
+>>> -		!vma_flags_test(&map->vma_flags, VMA_SHARED_BIT);
+>>> +	const bool is_anon = map_is_anon(map);
+>>>  	struct vma_iterator *vmi = map->vmi;
+>>>  	int error = 0;
+>>>  	struct vm_area_struct *vma;
+>>> @@ -2651,7 +2663,7 @@ static int __mmap_new_vma(struct mmap_state *map, struct vm_area_struct **vmap,
+>>>
+>>>  	vma_iter_config(vmi, map->addr, map->end);
+>>>
+>>> -	if (is_anon)
+>>> +	if (is_anon && !map->file)
+>>>  		vma_set_anonymous(vma);
+>>>
+>>>  	vma_set_range(vma, map->addr, map->end, map->pgoff, map->anon_pgoff);
+>>> @@ -2669,6 +2681,10 @@ static int __mmap_new_vma(struct mmap_state *map, struct vm_area_struct **vmap,
+>>>  	else if (!is_anon)
+>>>  		error = shmem_zero_setup(vma);
+>>>
+>>> +	/* Temporary MAP_PRIVATE-/dev/zero workaround. */
+>>> +	if (is_anon && map->file)
+>>> +		vma_set_anonymous(vma);
+>>> +
+>>>  	if (error)
+>>>  		goto free_iter_vma;
+>>>
+>>> @@ -2777,6 +2793,10 @@ static int call_mmap_prepare(struct mmap_state *map,
+>>>  	if (err)
+>>>  		return err;
+>>>
+>>> +	/* Hooks cannot mark themselves anonymous. */
+>>
+>> I guess this comment will be stale soon (after #4 where you drop the
+>> set_anonymous part).
+> 
+> Not really, it's there to catch drivers doing something silly/broken (likely by
+> mistake).
+> 
+> I want to catch that early. I have a 36 patch series that extends this kind of
+> idea... a lot :)
+> 
+>>
+>> Should it be
+>>
+>> "vm_ops are strictly required with mmap_prepare"
+>>
+>> or sth like that?
+> 
+> Well that's confusing though, because desc->vm_ops defaults to &dummy_vma_ops,
+> and we absolutely do not require drivers to set vm_ops at all.
+> 
+> And as far as the driver is concerned maybe it's NULL? They maybe don't realise
+> :)
+> 
+> So the idea is to say don't allow them to try to do something they can't do.
+
+Yes, but my point is that the comment
+
+"cannot mark themselves anonymous"
+
+will not really be correct after the next patch, no?
 
 > 
-> The kfunc is restricted to BPF_PROG_TYPE_SYSCALL so that reclaim
-> always runs in a clean process context. Generic sleepable programs
-> may execute with filesystem locks held or in NOFS/NOIO contexts,
-> where the reclaim path could deadlock in filesystem shrinkers. A
-> SYSCALL program can still drive reclaim asynchronously through
-> bpf_wq or task_work callbacks, which run in process context and
-> keep the SYSCALL program type, so they can call the kfunc too.
-
-I think this paragraph would read better if you inverted the decision
-and rationale. Something like:
-
-"Since some bpf program types may be invoked while holding fs locks,
-limit the kfunc to only syscall progs to avoid..."
-
+>>
+>>> +	if (!desc->vm_ops)
+>>> +		return -EINVAL;
+>>> +
+>>>  	err = call_action_prepare(map, desc);
+>>>  	if (err)
+>>>  		return err;
+>>> @@ -2799,10 +2819,7 @@ static int call_mmap_prepare(struct mmap_state *map,
+>>>  static void set_vma_user_defined_fields(struct vm_area_struct *vma,
+>>>  		struct mmap_state *map)
+>>>  {
+>>> -	if (map->vm_ops)
+>>> -		vma->vm_ops = map->vm_ops;
+>>> -	else	/* Only /dev/zero should do this. */
+>>> -		vma_set_anonymous(vma);
+>>> +	vma->vm_ops = map->vm_ops;
+>>>  	vma->vm_private_data = map->vm_private_data;
+>>>  }
+>>>
+>>> @@ -2882,7 +2899,7 @@ static unsigned long __mmap_region(struct file *file, unsigned long addr,
+>>>  		allocated_new = true;
+>>>  	}
+>>>
+>>> -	if (have_mmap_prepare)
+>>> +	if (have_mmap_prepare && !map_is_anon(&map))
+>>>  		set_vma_user_defined_fields(vma, &map);
+>>
+>> Ah, we have mmap_zero_prepare() for handling the shmem_zero_setup_desc(). I was
+>> just about to ask whether we can just get rid of this here.
+>>
+>>
+>> But, hold on, do we now even need that? Could core-mm now take care of that as
+>> well, and we could just remove mmap_zero_prepare() entirely?
+>>
+>> That is, we'd make shmem_zero_setup() in __mmap_new_vma() take care of this?
+>> Then we might not even need shmem_zero_setup_desc() anymore.
+>>
+>> Maybe harder than it sounds at first.
 > 
-> The reclaim target of a single call is clamped to MEMCG_CHARGE_BATCH.
-> try_to_free_mem_cgroup_pages() takes nr_to_reclaim as a lower bound,
-> so nothing else limits how long one call scans. An unbounded call
-> stalls other work on a shared workqueue, and since lru_lock is held
-> with interrupts disabled the contention delays IPI handling and can
-> cause CSD lock stalls. MEMCG_CHARGE_BATCH is the bound already used
-> by high_work_func(), so each call becomes a bounded unit of work.
+> I think I'd rather that be a follow up :) this series is about eliminiating the
+> one last (I hope?) corner case for anon VMAs.
+Right; having to deal with anonymous mappings that have mmap_prepare is rather
+suboptimal. Ideally we'd just handle the odd dev-zero special-casing early in
+the mmap path also for MAP_SHARED, and avoid messing with mmap_prepare entirely.
 
-It's not strictly speaking a bounded unit of work though. The scan work
-time can vary.
+So agreed that this can be done separately.
 
-The example of interrupt delay I gave on the prior rev is included here,
-unnecessarily increasing the verbosity. I think you can just say that
-you're following the precedent in high_work_func() which uses the same
-cap, but I would still emphasize like I said above that the actual
-scanning work is not bounded.
+-- 
+Cheers,
 
-> 
-> Reclaiming more than one batch is left to the BPF program. This is
-> documented in the kfunc rather than enforced: call the kfunc once
-> per bpf_wq callback and requeue the same work item for the next
-> batch instead of looping inside a callback, and give each target
-> memcg its own bpf_wq item. Keeping the policy in BPF lets a program
-> decide when to reclaim and when to stop, e.g. once the target cgroup
-> is dying.
-
-You should be explicit on the different calling contexts. This is one
-way to use it, but someone could still invoke it directly in the syscall
-program.
-
-> 
-> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
-> ---
->   mm/bpf_memcontrol.c | 94 ++++++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 92 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
-> index 716df49d7647..74ccac30c011 100644
-> --- a/mm/bpf_memcontrol.c
-> +++ b/mm/bpf_memcontrol.c
-> @@ -6,8 +6,11 @@
->    */
->   
->   #include <linux/memcontrol.h>
-> +#include <linux/swap.h>
->   #include <linux/bpf.h>
->   
-> +#include "internal.h"
-> +
->   __bpf_kfunc_start_defs();
->   
->   /**
-> @@ -159,6 +162,71 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
->   	mem_cgroup_flush_stats(memcg);
->   }
->   
-> +/**
-> + * bpf_proactive_reclaim - proactively reclaim memory from a memory
-> + *                         cgroup
-> + * @memcg: the target memory cgroup to reclaim from
-> + * @size:  the amount of memory to reclaim, in bytes, clamped to
-> + *         MEMCG_CHARGE_BATCH (64 pages)
-> + * @swappiness: the reclaim swappiness, in the range [0, 201] where 201
-> + *         means anon-only reclaim; a negative value means the memcg's
-> + *         own swappiness is used
-> + *
-> + * Trigger one proactive reclaim pass on @memcg, similar to a write to
-> + * memory.reclaim, but without retrying until @size is reached.
-> + *
-> + * @size is clamped so that one call is a bounded unit of work, matching
-> + * the memory.high workqueue fallback in high_work_func(). To reclaim
-> + * more, call this kfunc repeatedly instead of passing a larger @size.
-
-Again I think "bounded unit of work" is too strong here. The reclaim
-target is clamped but the scanning work/time will vary. Lets be explicit
-that we're only capping the reclaim target.
-
-> + *
-> + * This kfunc is restricted to BPF_PROG_TYPE_SYSCALL to ensure it runs
-> + * in a clean process context. The SYSCALL program can schedule the
-> + * actual reclaim work via bpf_wq or timers, which also execute in
-> + * safe process context (workqueue, task_work).
-
-"clean" and "safe" are ambiguous here.
-
-This is another example of mixing calling contexts. You should separate
-them. i.e. can I call this directly in a syscall prog? does it have to
-be async work? Also, as it reads, it makes it sound like calling the
-kfunc is ok in a timer program.
-
-> + *
-> + * When reclaim is driven from a bpf_wq, call this kfunc once per
-> + * callback and requeue the same work item for the next batch rather
-> + * than looping inside the callback: a long-running callback stalls
-> + * other work on the shared workqueue, and because lru_lock is held with
-> + * interrupts disabled the resulting contention also delays IPI
-> + * handling. Give each target memcg its own bpf_wq item, so that
-> + * reclaiming one memcg neither serializes behind nor piles up on top of
-> + * another. Deciding whether to submit the next batch is up to the BPF
-> + * program, which can stop at any point, e.g. once the target cgroup is
-> + * dying.
-
-If this is the intended usage, be more explicit on the recommendation.
-Reduce the verbosity on the interrupt delay here, similar to the advice
-on the changelog.
-
-> + *
-> + * Must not be called with a filesystem lock held: the reclaim path
-> + * may deadlock on it via filesystem shrinkers.
-
-This should move to the syscall-only prog rationale. Otherwise, it reads
-like something for callers to enforce.
-
-> + *
-> + * Return: The amount of memory reclaimed, in bytes, or 0 if @size is
-> + * smaller than a page, or (unsigned long)-1 if @swappiness is out of
-> + * range.
-> + */
-> +__bpf_kfunc unsigned long bpf_proactive_reclaim(struct mem_cgroup *memcg,
-> +						unsigned long size,
-> +						int swappiness)
-> +{
-> +	unsigned long nr_reclaimed;
-> +	unsigned long nr_pages;
-> +
-> +	if (swappiness < -1 || swappiness > SWAPPINESS_ANON_ONLY)
-> +		return (unsigned long)-1;
-> +
-> +	if (size < PAGE_SIZE)
-> +		return 0;
-> +
-> +	nr_pages = min(size / PAGE_SIZE, (unsigned long)MEMCG_CHARGE_BATCH);
-> +
-> +	nr_reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages,
-> +						    GFP_KERNEL,
-> +						    MEMCG_RECLAIM_MAY_SWAP |
-> +						    MEMCG_RECLAIM_PROACTIVE,
-> +						    swappiness < 0 ? NULL :
-> +								     &swappiness);
-> +
-> +	return nr_reclaimed * PAGE_SIZE;
-> +}
-> +
->   __bpf_kfunc_end_defs();
->   
->   BTF_KFUNCS_START(bpf_memcontrol_kfuncs)
-> @@ -171,22 +239,44 @@ BTF_ID_FLAGS(func, bpf_mem_cgroup_memory_events)
->   BTF_ID_FLAGS(func, bpf_mem_cgroup_usage)
->   BTF_ID_FLAGS(func, bpf_mem_cgroup_page_state)
->   BTF_ID_FLAGS(func, bpf_mem_cgroup_flush_stats, KF_SLEEPABLE)
-> -
->   BTF_KFUNCS_END(bpf_memcontrol_kfuncs)
->   
-> +/*
-> + * Proactive reclaim needs a clean process context, so it is restricted
-> + * to BPF_PROG_TYPE_SYSCALL. The bpf_wq and task_work callbacks that a
-> + * SYSCALL program schedules run as the same program type, so they can
-> + * still invoke it; generic sleepable programs (e.g. fentry on reclaim
-> + * paths, inode_rmdir) cannot.
-
-This comment feels out of place here and is not buying much at this
-point. You already explained it in the kfunc comments, and the syscall
-only registration further down is explicit enough by now.
-
-> + */
-> +BTF_KFUNCS_START(bpf_memcontrol_reclaim_kfuncs)
-> +BTF_ID_FLAGS(func, bpf_proactive_reclaim, KF_SLEEPABLE)
-> +BTF_KFUNCS_END(bpf_memcontrol_reclaim_kfuncs)
-> +
->   static const struct btf_kfunc_id_set bpf_memcontrol_kfunc_set = {
->   	.owner          = THIS_MODULE,
->   	.set            = &bpf_memcontrol_kfuncs,
->   };
->   
-> +static const struct btf_kfunc_id_set bpf_memcontrol_reclaim_kfunc_set = {
-> +	.owner          = THIS_MODULE,
-> +	.set            = &bpf_memcontrol_reclaim_kfuncs,
-> +};
-> +
->   static int __init bpf_memcontrol_init(void)
->   {
->   	int err;
->   
->   	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
->   					&bpf_memcontrol_kfunc_set);
-> -	if (err)
-> +	if (err) {
->   		pr_warn("error while registering bpf memcontrol kfuncs: %d", err);
-> +		return err;
-> +	}
-> +
-> +	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
-> +					&bpf_memcontrol_reclaim_kfunc_set);
-> +	if (err)
-> +		pr_warn("error registering bpf reclaim kfuncs: %d", err);
->   
->   	return err;
->   }
-
+David
