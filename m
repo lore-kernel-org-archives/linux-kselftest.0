@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-8.mta1.migadu.com [95.215.58.8])
+Received: from mta0.migadu.com (out-147.mta0.migadu.com [91.218.175.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC15E34D4C9
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 03:18:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152823E8340
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 03:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788751085; cv=none; b=UzSe7423BhyihiYciT4c/4cA2sjhg7GSNkQQUxPs9Kj/FD8IU1ZjQC1/6C11Ln1mfq2WGv9VxCT/e5r9xiUVHJakuT63vxkk2tklbWrYQfVQ4WVMyUZTE9tHA5OEKMEoW0OCW8VOBshsqutJXMKrcdh2ShQyQ9nvad6/u5uzv/s=
+	t=1788751917; cv=none; b=cT3abTURxfgOeUADKVoMtm7z/7tVoBSF8VX2Ub3+838A4NZXNvgfiC2B+lLsWVyOqxM5wy0JfugPtV2md9M57/8YwqQUUO5K5uMaMYC8YuLEotpNHIqHDeCUwn0vqeUZ3tB1YSW2Fr8PLkrpWuK1IykrCpRcqI2wkAwEtYb0SWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788751085; c=relaxed/simple;
-	bh=4NwIip7/KPKLo7TJlw7Cq9K17+JHbn+jGgJ7eRNJyU0=;
+	s=arc-20240116; t=1788751917; c=relaxed/simple;
+	bh=VMIbqoBiQDeHLrphbYg5Mf+UsKXgH9fka3p1+aplsZE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uIcFZkvdMKMs7DmWsUhHxU7MqPUcaAEdMukoHLfX6hcqguVmW42x7r/kgf7TPCxr4lbSOCTRamRGb36AWTtt/89WYbjpZzRN55N7vrLbSBGhfT1oMRj5bK7WcKlq4kOqpx6Tk4YzsbVtyHmK93Z9SDJgo55lec4E/rvpf+fpbkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XoH3rQxV; arc=none smtp.client-ip=95.215.58.8
+	 In-Reply-To:Content-Type; b=K47yKdxTRrTAeYqIyL6x4rga2nqKd47Vczp2CWVHe1+eg/1JylHMCiqD7dmIlemvGiW8rSgEO7Fs5adwvXnxvjMOWWKSB2e43kYnrKq8n2Jnyhk9ER42zJJ2ABgkDBlbzxz1KJzoSAQF23bvunr5F0VrcTOtu3R0BH1OBBsonxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=u6OmzNGU; arc=none smtp.client-ip=91.218.175.147
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XoH3rQxV"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="u6OmzNGU"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=4NwIip7/KPKLo7TJlw7Cq9K17+JHbn+jGgJ7eRNJyU0=;
+DKIM-Signature: a=rsa-sha256; bh=VMIbqoBiQDeHLrphbYg5Mf+UsKXgH9fka3p1+aplsZE=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788751080; v=1; x=1789355880;
- b=XoH3rQxVvtuIH7YZpNDAHgio5/F4WQsDsrj8RjgmAC10i7CcIlUmwP8bUuqy+LE3zPIcbj04
- IYLPnM5exsQpB6aWrbShgAicYDAcFxlT0NrwXT9CkxeMUCHSBGE+86fLTrj/ZsT+fVqzdHni+bQ
- 1eKKrZXMfRktIHDLCqB1UHQs=
+ t=1788751912; v=1; x=1789356712;
+ b=u6OmzNGU6htyuZB9kN7btaayVrma/AWzfBItwEpaUeH0V41C7JjCziCsc5jEP8DRP40gFMob
+ zsCf0t0tNlPry5kBEzxBgbXn1sVrSo6Sbk+ycC1m02xzhhSl7BQQZrzbFlOcf5b2ILk6Q6cjvND
+ AwoiubskkSQiExq+8lzrnfak=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 557dbd025e9566f7;
-	Mon, 07 Sep 2026 03:17:50 +0000
-X-Mizu-Trace-ID: 557dbd025e9566f7
+Received: by smtp.migadu.com with ESMTPS id e3763fd486958387;
+	Mon, 07 Sep 2026 03:31:52 +0000
+X-Mizu-Trace-ID: e3763fd486958387
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <4525fdf8-def6-4f24-abe8-1948eab54d6e@linux.dev>
-Date: Mon, 7 Sep 2026 11:17:43 +0800
+Message-ID: <13813a74-1f1b-4fb5-a589-6eda1e99bd19@linux.dev>
+Date: Mon, 7 Sep 2026 11:31:46 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,70 +38,71 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Betterbird (macOS/Intel)
-Subject: Re: [PATCH bpf-next v7 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
-To: Shakeel Butt <shakeel.butt@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
+Subject: Re: [PATCH bpf-next v7 0/2] bpf: BPF-driven proactive memcg reclaim
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
  Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn
- <inwardvessel@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai
- <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
+ <inwardvessel@gmail.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
  Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
  Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
  Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
  Barry Song <baohua@kernel.org>, Geliang Tang <geliang@kernel.org>,
  linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, Hui Zhu <zhuhui@kylinos.cn>
+ linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
 References: <cover.1788516769.git.zhuhui@kylinos.cn>
- <7d8b77dc99ffe99a7bef874a257472fdaaf07e1c.1788516769.git.zhuhui@kylinos.cn>
- <20260904110308.4473cde499e91aab14dbd5fc@linux-foundation.org>
- <DL7CEX9EX781.23V26M3600JEI@gmail.com> <apxB5tyglnSbqmEu@linux.dev>
+ <DL7CFVDSDV92.1VPGNHDCKVVIV@gmail.com>
 Content-Language: en-US
 From: Hui Zhu <hui.zhu@linux.dev>
-In-Reply-To: <apxB5tyglnSbqmEu@linux.dev>
+In-Reply-To: <DL7CFVDSDV92.1VPGNHDCKVVIV@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
-> On Sat, Sep 05, 2026 at 01:23:39PM +0200, Kumar Kartikeya Dwivedi wrote:
->> On Fri Sep 4, 2026 at 8:03 PM CEST, Andrew Morton wrote:
->>> On Fri,  4 Sep 2026 18:20:19 +0800 "Hui Zhu" <hui.zhu@linux.dev> wrote:
->>>
->>>> @@ -159,6 +160,74 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
->>>>   	mem_cgroup_flush_stats(memcg);
->>>>   }
->>>>
->>>> +/*
->>>> + * Reclaim must not recurse: try_to_free_mem_cgroup_pages() overwrites
->>>> + * current->reclaim_state, so a nested call would corrupt the outer
->>>> + * reclaim state. Reclaim windows are marked with PF_MEMALLOC;
->>>> + * reclaim_state is also checked because it is installed slightly
->>>> + * before PF_MEMALLOC.
->>>> + */
->>>> +static bool bpf_in_reclaim_context(void)
->>>> +{
->>>> +	return (current->flags & PF_MEMALLOC) || current->reclaim_state;
->>>> +}
->>>> +
->>> Would life improve if try_to_free_mem_cgroup_pages() didn't do that?
->>> If try_to_free_mem_cgroup_pages() (or some variant of it) were to
->>> permit nesting?
->>>
->>> 	rs = new_thing(current, &sc.reclaim_state);
->>> 	...
->>> 	set_task_reclaim_state(current, rs);
->>>
->> My understanding is that given the current restrictions on where this kfunc can
->> be called, this is mostly a defensive and shouldn't be firing (?). Given that,
->> we can probably revisit this when such reentrancy is necessary, even though I
->> doubt it would be the case in the future. It will at most be invoked from a wq
->> callback or a kthread, so should be fine.
+> On Fri Sep 4, 2026 at 12:20 PM CEST, Hui Zhu wrote:
+>> From: Hui Zhu <zhuhui@kylinos.cn>
 >>
-> If with the current restrictions, this recursion can not happen then let's not
-> add this check here. We never want recursion/reentrancy here.
+>> BPF programs can observe memory pressure on a cgroup (e.g. refault
+>> stats via bpf_mem_cgroup_page_state()), but cannot act on it:
+>> triggering reclaim on a chosen cgroup requires writing to
+>> memory.reclaim, which BPF cannot do. This series adds
+>> bpf_proactive_reclaim(), a sleepable kfunc performing one proactive
+>> reclaim pass on a target memcg, so when and how hard to reclaim is
+>> BPF policy rather than hard-coded thresholds.
+>>
+>> The kfunc is restricted to BPF_PROG_TYPE_SYSCALL so that reclaim
+>> always runs in a clean process context: generic sleepable programs
+>> may execute with filesystem locks held or in NOFS/NOIO contexts,
+>> where the reclaim path could deadlock in filesystem shrinkers. The
+>> bpf_wq and task_work callbacks of a SYSCALL program keep its program
+>> type and run in process context, so reclaim work can still be queued
+>> asynchronously through them, as the selftest does with bpf_wq.
+>>
+>> The use case we are looking at is protecting high-priority workloads:
+>> a BPF program monitors the state of a high-priority cgroup and, when
+>> it degrades (e.g. PSI rises or refaults increase, as in the
+>> selftest), asynchronously reclaims memory from low-priority cgroups
+>> via bpf_wq and bpf_proactive_reclaim(), giving the pressured cgroup
+>> more free pages.
+>>
+>> Another use case: several vendor-maintained kernels carry private
+>> implementations that trigger asynchronous reclaim when a memcg enters
+>> a certain state. These exist for historical and partly psychological
+>> reasons, but the underlying demand is real. We expect BPF-driven
+>> proactive reclaim, combined with the BPF hooks for the memory
+>> controller currently under discussion and development, to serve these
+>> needs in mainline, reducing kernel fragmentation and improving kernel
+>> maintainability.
+>  From BPF perspective this looks ok to me. I saw you dropped the swappiness
+> argument, what happened there? I thought we agreed to just include it in the
+> kfunc now. Did something change?
 
-Will remove it in the next version.
+Nothing changed. I misunderstood the earlier discussion and dropped the
+swappiness argument by mistake. The plan to include it in the kfunc
+still stands, and I will add it back in the next version.
 
 Best,
 Hui
