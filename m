@@ -1,48 +1,48 @@
-Received: from out-2z4y-a149.jellyfish.systems (out-2z4y-a149.jellyfish.systems [198.54.127.149])
+Received: from out-93wp-a21.jellyfish.systems (out-93wp-a21.jellyfish.systems [104.207.68.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351792652B2
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 01:21:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D721221FC6
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 01:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.207.68.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788744078; cv=none; b=EqyN1jAFnjaBga0zmpZRGTnR0EkS9/IcZfP3TUr9r6c3pqrIJEBYlCd1Kd3AKEWaOyH2Y7YHVXC9RD5uOEwxZ8PPFTQ5k+klSG/FWYPVdme5VDeuLkj5YZlBmZLs0ECu65G0a/bdTVo6ljpaOWXGyoHc1BZRmYin+cG0w/C8224=
+	t=1788744083; cv=none; b=Efk/d/h0uBLg480kb6ZvWkHl/ztAuSaPx7bOEbcTNmOjYmblcp3rSXg9iAIblIFqytID6XFxcGL8ogkFv4OAH/pjcuVs+E63NCSzEkrQxUPzRBPb/ehagbkPopQN9HC+iyuQ2f96lGhoj/bz83q+ZEwU83HS+Hsn8nRzasURZMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788744078; c=relaxed/simple;
-	bh=a7AXSmn/NlKoS0xwXv0eAiJJYGGdHLj5VX0F9Gj8Tbk=;
+	s=arc-20240116; t=1788744083; c=relaxed/simple;
+	bh=n6I3T9HODFXl8aM/iAv7esgrqP4JSMXFIy9ZJ2xwbxY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qRCOFBMgJSu4PS6IPIYeWeVSFmkeAQhbKn6vJSp4KQrazp353neHUnJ5JA+1KQvK3d1wFdK/DnuXMeEtJk0A1qX1JHKgiUshKgNpCbuymbthb06hVfTRTjvvx2q9g13zareDDhWY0K9796AYEbBgSoUphNmO8n3RWz20s97a1b8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=MIXcU3Hm; arc=none smtp.client-ip=198.54.127.149
+	 MIME-Version; b=shCdU4/TAgS3HqkDimNOYfhQ6wvjZLAB9PQuaBlPYTbTNW/zNZNdwhxB3efTFvc8uGbUmkEK3ZK+ku1v2zIPdN/NY+kzm0p5M6ULhVSmdH9sIgZAnnmyRoSvLYSqqWZwhvkbKH0WM+KWZ+wlDvQOFFyAdVMrp1ee4PjH90KEEHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=YsdHeULe; arc=none smtp.client-ip=104.207.68.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="MIXcU3Hm"
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="YsdHeULe"
 Received: from 192.168.5.3 (unknown [69.5.53.41])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdTmL0G3Qz2x9c;
-	Mon, 07 Sep 2026 01:21:05 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdTmY5yKSz6tll;
+	Mon, 07 Sep 2026 01:21:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1788744067;
-	bh=lr5KieLnqI+sgaziKgRJ4AR56kcubW4Ft5c8hGZUf+0=;
+	s=spacemail; t=1788744079;
+	bh=/pIG29M/yiUassiOGeJJ5zE9hVMB8+17QKVeUPfZeUA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MIXcU3HmwWee/ZN3Ui0/Wv4W92SNlQTfPtQ/HrSHa0YOTVx3RFKi9BH4DqVlDonmt
-	 7QziXiuIjsscHeu6lW3wcPTdKfETNceMt+KGc0C3uTZmhI++Um/Ze7k1J/gLrS7Lyd
-	 frxX0Ngm9BCHotjsGE4LSMGG0JMxxmeJjhH33MliNprC14On2yoMngq92rsif7VxF3
-	 n96hXC94J8S8Lm4uEAGyNT5gkmqqCk2B/dzSuKiU4+EVxGU5GkizZvC2aq+/Fcg5E+
-	 XZ6dmPJRVpilNXXW2uHZEcuERSJ1pp8DTldyCg7zuKLh2AfisOkC39V1lfGUS5Sk/Z
-	 aGoFvufoErryg==
+	b=YsdHeULe3q6CmPK2wJUXDSAySynCJ7eM5zBlSFNGx/ovsU41K3CBuGE2NMUXV/qf2
+	 gkPKMXw+geB9Z2m9qlZJ4gY0/F/4jEssQTK+bqz596BjimeTlDWW6MpAd0hQeNpjkI
+	 rfPYWOdMyEzE5VG34QDpCAXt+67cn6EX8kvSKptQR1bdjfs4ewv7/7tAcnoT050NIM
+	 mfdRngJ8N7V4IKrWvNz0hkMl7vuiU+BKmykVk6xQ2GGSxsV9WEdpa+2mmw+pDKdZzv
+	 7YcG4ZpWK1Fhoq6xEUfcVmjRGsePzNz8e6HCrsJ7EDuCJz0BwwqGIuxAHRfMLgPQHZ
+	 i/Jdv5LhL+R2Q==
 From: Tianyi Chen <hi@tychen.cc>
 To: bpf@vger.kernel.org
 Cc: Tianyi Chen <hi@tychen.cc>,
 	Quentin Monnet <qmo@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/2] bpftool: Consume ring buffer maps with event_pipe
-Date: Mon,  7 Sep 2026 09:21:01 +0800
-Message-ID: <178874362960.1415955.14971768495630842802.ringbuf-v2-0@tychen.cc>
+Subject: [PATCH bpf-next v2 0/2] bpftool: Batch bounded hash map dumps
+Date: Mon,  7 Sep 2026 09:21:13 +0800
+Message-ID: <178874362960.1415955.9584865244247659247.batch-v2-0@tychen.cc>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260906170747.1212378-1-hi@tychen.cc>
-References: <20260906170747.1212378-1-hi@tychen.cc>
+In-Reply-To: <20260906170819.1212661-1-hi@tychen.cc>
+References: <20260906170819.1212661-1-hi@tychen.cc>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,24 +52,31 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Envelope-From: hi@tychen.cc
 
-Extend map event_pipe to BPF ring buffer maps using libbpf's ring buffer
-manager. Output records in plain or JSON format, reject CPU/index
-selectors for ring buffers, and document the shared consumer position.
+Use lookup batches for ordinary hash maps whose maximum key/value
+storage fits within 4 MiB. Patch 1 implements batch traversal; patch 2
+checks complete output contents around its batch boundary and for short
+keys, odd-sized values and BTF formatting.
 
 Changes in v2:
-- Add actual -p invocations and pinned map selection, which the v1
-  selftest commit message described without implementing those cases.
-- Check the complete pretty-printed document, test plain/JSON/pretty
-  output through pinned paths, and test pretty output for an empty stream.
-- Clean up pins and their unique directories on success and failure.
+- Send fatal batch diagnostics to stderr. JSON elements arrays retain
+  only map-entry objects, including after a partially completed dump.
+- Use the BPF multiline comment style in the implementation and test.
 
 Validation:
-- All 17 ringbuf subtests passed, including the existing perf event array
-  regression, in the integration run described below.
-- The event_pipe implementation is unchanged from v1.
+- All 11 batch dump subtests passed in the integration run below.
+- Reproduced the v1 generic error object inside the elements array.
+- Injected initial EFAULT/ENOMEM and post-progress EIO/EINVAL with
+  strace for -j and -p, both with and without -r. All 16 cases returned
+  failure, emitted the diagnostic on stderr, and kept a complete JSON
+  document containing only the expected zero or 256 distinct entries.
+- Initial EINVAL/EOPNOTSUPP/ENOTSUPP fallback and ENOSPC growth before
+  and after progress still returned all 1,025 entries without duplicates.
 
-v1: https://lore.kernel.org/r/20260906170747.1212378-1-hi@tychen.cc
-Request: https://github.com/libbpf/bpftool/issues/54
+The injected syscall errors are not a real hash collision stress test.
+The batching algorithm and eligibility bound are unchanged from v1.
+
+v1: https://lore.kernel.org/r/20260906170819.1212661-1-hi@tychen.cc
+Request: https://github.com/libbpf/bpftool/issues/63
 
 Integration validation: the flags, ring-buffer and batch v2 series plus
 recursive dump v3 built together with LLVM 20. All 69 focused BPF subtests
@@ -79,17 +86,13 @@ focused run, not the full BPF selftest suite.
 
 
 Tianyi Chen (2):
-  bpftool: Read ring buffer maps with event_pipe
-  selftests/bpf: Cover bpftool ring buffer event_pipe
+  bpftool: Use batch lookups for bounded hash map dumps
+  selftests/bpf: Check bpftool batch map dump contents
 
- .../bpf/bpftool/Documentation/bpftool-map.rst |  15 +-
- tools/bpf/bpftool/bash-completion/bpftool     |   4 +-
- tools/bpf/bpftool/map_perf_ring.c             |  87 +++-
- .../bpf/prog_tests/bpftool_ringbuf.c          | 425 ++++++++++++++++++
- .../selftests/bpf/progs/bpftool_ringbuf.c     |  47 ++
- 5 files changed, 554 insertions(+), 24 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpftool_ringbuf.c
+ tools/bpf/bpftool/map.c                       | 116 ++++++++++-
+ .../bpf/prog_tests/bpftool_map_batch.c        | 187 ++++++++++++++++++
+ 2 files changed, 295 insertions(+), 8 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
 
 -- 
 2.55.0
