@@ -1,63 +1,63 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11CBF402BB1
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 06:41:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1946F403EB9
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 06:41:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788763311; cv=none; b=py0ZF2wEdgYmDZSeT/8wJtD65pcaoAZdsbiDQDeI28JmrEkDGBCwqnBhI4h2l22TLqqZP1gYu3Gc25r+G5rvlhFkSOjmlRvpNu02u2vUj1dunlp7rdSxDP8F9YwxwnpyvJKhaUHYvc8gsTfFTU5JGSyAO2mOwdO54ZYrBisKKlc=
+	t=1788763315; cv=none; b=adHc6dB9GzcVKcRqZz1e5Yx1CMhUKy3KezxT3HXFhIyyqJ59OElsDVz8Wjny48LeR1aZ1yfhToTTX1JibMegoOF06hBRin0osc5JH2OXdeiBTtnDKeSxs4LpDOl5yrHT0Cnxzr+K9wIesV8lin99AdqjHV+VFdVu/6TDO/proi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788763311; c=relaxed/simple;
-	bh=eafPgUhy9IynSAtvFbXAit1hK6ESnxmns9zqLM/jKZo=;
+	s=arc-20240116; t=1788763315; c=relaxed/simple;
+	bh=1cJY6sL+Q6oG2/VnhFlaXz7tgv3rZc5fSR5r9wiilcM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iD4BO+hme+rHL6xcz4sX4prhIfKltS2DxHB5U6tSKhnVkrUBdWEKostApJd6znE46WuUSLhgkMriYrrecr6cyUhS0F/7j0mDylQiolqf+X0hT/DfkhwdNSf8yx1VjM6NJOJYtu+4PX3zDqI/JJGXXMNtIyfzsV2b838RibKMOqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e+xAe+Bo; arc=none smtp.client-ip=209.85.215.174
+	 MIME-Version; b=QSGvPbFgf8c2we8iW6zpYSPJek6YzEXp8SDr6E+nKJcxI9x61va8gBrSta/o1EIq91/Zf4WqMRUe0ynneK4YHdD8iP1vO/TrGQvx77+Dph3CL/9htUguKZoEdzxAZ+6O6dCwSThDLsiEqBIRXTFb+DtumSH3CImcWErD0sj7Igo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n9QbOWEP; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e+xAe+Bo"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cc1c3d79b9bso2264802a12.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 06 Sep 2026 23:41:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n9QbOWEP"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2db18e5cb56so28436515ad.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 06 Sep 2026 23:41:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788763309; x=1789368109; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788763313; x=1789368113; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=AeK2I1AiWRpjY7VAGe4JrwBL3S2TxoFeFpHn4sVFSG4=;
-        b=e+xAe+Bo0nwJI5oTNV94ciTCBgdy2KejrvEjAMDuSqgoRVOI64A62mILLxFCvhC1aZ
-         /PRTqjm6Gj29RCLscxvM0fGwb+xKx//LzPP/4mVB0VGPonwPvyqXFHv8YvjV/7+2zwB2
-         AMj482hST5UTYoQCQg/Co3sNVhYpGvAjhTtde3s/wJxjp2MOiIs8Xk0aiFUehuX/1kbA
-         qaHTUg0eaSbyHGCNjWZhH+ukQoqA1sHk8IfOuXcdk3yIeU/fqiQbkqSiehgY8S96JXNp
-         44klfgp+18i0gQWBXAiTlQH4vVvwIvFlGKo2x50shy4PomIN+0RcaWir+25YhLS86Bo2
-         7p3g==
+        bh=vvpO/+VHQl+z4w7f6yOyVn2oZshJZNt+Vlm/SjhRNLI=;
+        b=n9QbOWEPubRmudynV5jhJHNME6N0aBKMpxH7MFo7ob+wBluIf59xWfYxptknsKtU7r
+         c+zAKNtY9z1SzZT5AKfDujDWOOzvhw9/V/pedX7IvvtVuEzmZz/vg3BSlHDqA2KSLNar
+         fAF4SN/iq+xWTW4XORM8IoO7smJOiCMhb49Dd6qi/EL501Q1Ra1pGYpCn8lta5chuoac
+         eqxn9kSvTYnVzs1UG22fn+bAG1anA3N92RlXGR13p+rwHEQlhxSyF8GC9ZfKfECdh81r
+         2uMXtLI3+8ssDhVgsvxuplUgSfO8SEo3Grei6DwzzdXHmynuhM+Div8sFLqnIABf3Mik
+         b5FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788763309; x=1789368109;
+        d=1e100.net; s=20251104; t=1788763313; x=1789368113;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=AeK2I1AiWRpjY7VAGe4JrwBL3S2TxoFeFpHn4sVFSG4=;
-        b=k2oOiKJ8dhHq/5pXyMMKbOC+jSR9KEj/fkFZJ7bWUlrwqM+Cw8KI36fwvWXs6LrAip
-         ZlCIi85kWLe/6gHfaamYhw3unehSv/bLKrNPrjHv0RtB5DF+2DahyA9J+jD3ZDN4iTjt
-         QwMk/hcUL3pbQRkEug1hGsgiYLJwMcr4EIzHLOEPKsjmPe577jXnGoUxounwlnP0/KKj
-         g7czDmxHOgxrhU60fSGMTxW+yzn4QS4tPWjoeEym6aPy/zeK9w+4H6VIlBn7mhdQzLFW
-         BB5xb1d7ZOo6Xc7EK1G/DVMMpeFUhg04ThLujBFqaCtYH2hdqa43Fa2Kj6EVRLeZ3l76
-         /H8w==
-X-Gm-Message-State: AFuF++mkEGUfTDelHYJrUAIU/xZWOFNiOYKgCss63xIL4M4hKlHa8ypG
-	28c0SXwNK1sfd2iSCJGTjrcI06eog1cZJfG5zCPi62tPG98uHBnHgb4k
-X-Gm-Gg: AYBFou24yJI6RWVsCW9ATPazW5F+EQ+txDNb1W4Gx+R+WCIi+KWb7x+ZT4f56EcpSl2
-	pRkud7WsplSQ+uT89eFGbH5Q8t8Bx6FLmN5jpmTOQiMAhf4Z8zBY112aSh46LN8RIaKZ0t62c41
-	QOo/PZDYc8s2Ie2BUet+lEsqLcmm9vNpj8JFFyCFf78PjtXfztHPBP3cFSsNECC7BinATxgpgIo
-	M3xVhxXF4k4j7xh+Pqh0oU+BsenAy7QVr+rQHA5aFEqdWUC+5I7w4V1R+6k+x7ZsSAO2p3JFXEO
-	auCHeGckPLvnlLqrwmZOljWfisXOhzu+Lh3Ec90zq5qlHUbP1FlG9wiEuoNyomzhuBIG9b2c4p/
-	9te0BEgbWY2rVsTEgJJvRUhDQ/Aj3mT3v6MjfKxcql5+p/+ONG2ul8aYt7h1mhEhLsb1vizsY7m
-	lSAdIqwQbmIgpt6M7fklsm9kwfmyUNFm8BpQQxxTfKXkqxaGFvc/gh4xJEaHIbl1CZAsNQq1+k1
-	2JFyHwz9m4IXxYYim5NNw3P
-X-Received: by 2002:a17:90b:2808:b0:398:b46d:48c0 with SMTP id 98e67ed59e1d1-39b262aaeb7mr33803957a91.18.1788763309146;
-        Sun, 06 Sep 2026 23:41:49 -0700 (PDT)
+        bh=vvpO/+VHQl+z4w7f6yOyVn2oZshJZNt+Vlm/SjhRNLI=;
+        b=TnE+JRB7Y+VpHlg4YgqMmnHS0pi1JVr4iGtICBUu7tAhL1Gg1BXf4rwBuN8JVsO06a
+         33VJusY+bU86IxV04AyyueJBV4sH4AK01GFwMzl2aXp3ohG2e/6TMixlPhH9ri0waWP3
+         Rr73w5UOnYnPs24Ym3QZLUZ5N5QD48JA/wayG+fPc0xeqW9r/eMPOULjGDaCH6y4VA1s
+         sxWt356vj9j71P9PjqiUlMnq/ruPWkY/h9F07TOCY4egsZEyzFBpV8TD0rNCTs0A9Pbw
+         Jfk1ECBrUQzT1RJf3zmYJd9pewTicELCyFJhNPs5kNkWMZbqASjjLiHvYObcCrymufrL
+         pIZg==
+X-Gm-Message-State: AFuF++mO32j1IaI0mQxsc//anKVQgF/lV/XHBDkVnoHY4Lv68UdFpL8z
+	4y7xBPJ51HGogETOAodCc5sgXh7wDDKf/t7lNT97VdDu0iG0tkL9XhIC
+X-Gm-Gg: AYBFou0ovAqA1YgeDjWbagh2dpj9YK9OUZtfTbd7k13VVZ8/+Mbzx4jeTxTFI+OzA98
+	XXb1xopMP1vNkVt7+U3VdWt5B676JFhdoEi8Ow/nXHFZe0dDPkCxHVdCyF6MkwO0mDygobBXYaH
+	gUolirnK68tDFUBm789+ORoFM/tnZYTwZUqjcxyq0hQDV8AInQkXwVdwHT7YTuI/r7ECxwBDloF
+	cRorEElU9r92TWVUCrI3XBde4DJQMgH10qN9dzJr0llVjiCmZuBsV/V3rN3sgev3Mvj94q+BCx5
+	6i4ETQla0YuZ0VXMhqbhVcD+Jpo5UlhDvcd31fRfPsm01W7lDmpAhomKLeCS/3YU/DH89bemFId
+	KFxxK5fsRolqf7c4J3eydYuJNotrk8MMmLNkDheefC69etW50bNicMYzrHxZox6SgVyzX1Jnqoi
+	V8dZbMOz0Er+vFxeTwfVY4GfcPjv00SUQq9lg0M5nuWJ6EQdrul4y0OYbtIWsjO1DICUb0vHcfc
+	6MFAAcydPbuQwUYin+YnNcx
+X-Received: by 2002:a17:90b:5905:b0:398:9bd5:490b with SMTP id 98e67ed59e1d1-39b262133ccmr31094553a91.18.1788763313430;
+        Sun, 06 Sep 2026 23:41:53 -0700 (PDT)
 Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-143240d86c3sm22413038c88.0.2026.09.06.23.41.45
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-143240d86c3sm22413038c88.0.2026.09.06.23.41.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Sep 2026 23:41:48 -0700 (PDT)
+        Sun, 06 Sep 2026 23:41:53 -0700 (PDT)
 From: Hemanth Selam <hemanth.selam@gmail.com>
 To: Shuah Khan <shuah@kernel.org>,
 	Tony Luck <tony.luck@intel.com>,
@@ -71,9 +71,9 @@ Cc: linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org,
 	linux-block@vger.kernel.org
-Subject: [PATCH 1/2] selftests: fix typos in comments
-Date: Mon,  7 Sep 2026 12:11:37 +0530
-Message-ID: <20260907064138.38689-2-hemanth.selam@gmail.com>
+Subject: [PATCH 2/2] selftests: core: fix repeated word 'and' in comment
+Date: Mon,  7 Sep 2026 12:11:38 +0530
+Message-ID: <20260907064138.38689-3-hemanth.selam@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20260907064138.38689-1-hemanth.selam@gmail.com>
 References: <20260907064138.38689-1-hemanth.selam@gmail.com>
@@ -85,105 +85,28 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix typos in comments, reported by scripts/checkpatch.pl using the
-misspelling list in scripts/spelling.txt.  Only touches comments, no code
-changes.
+Drop the second 'and', reported by checkpatch.pl as a possible repeated
+word.  Only touches a comment, no code changes.
 
 Assisted-by: Cursor:claude-opus-5
 Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
 ---
- tools/testing/selftests/amd-pstate/tbench.sh | 4 ++--
- tools/testing/selftests/proc/setns-dcache.c  | 2 +-
- tools/testing/selftests/proc/setns-sysvipc.c | 2 +-
- tools/testing/selftests/resctrl/resctrlfs.c  | 6 +++---
- tools/testing/selftests/ublk/kublk.h         | 2 +-
- 5 files changed, 8 insertions(+), 8 deletions(-)
+ tools/testing/selftests/core/close_range_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/amd-pstate/tbench.sh b/tools/testing/selftests/amd-pstate/tbench.sh
-index 2a98d9c9202e..b54b9d0396a1 100755
---- a/tools/testing/selftests/amd-pstate/tbench.sh
-+++ b/tools/testing/selftests/amd-pstate/tbench.sh
-@@ -103,7 +103,7 @@ parse_tbench()
- 	en_sum=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum}' $OUTFILE_TBENCH-energy-$1-$2.log)
- 	printf "Tbench-$1-#$2 power consumption(J): $en_sum\n" | tee -a $OUTFILE_TBENCH.result
+diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
+index f14eca63f20c..88e7ce6ee977 100644
+--- a/tools/testing/selftests/core/close_range_test.c
++++ b/tools/testing/selftests/core/close_range_test.c
+@@ -506,7 +506,7 @@ TEST(close_range_cloexec_unshare_syzbot)
  
--	# Permance is throughput per second, denoted T/t, where T is throught rendered in t seconds.
-+	# Permance is throughput per second, denoted T/t, where T is through rendered in t seconds.
- 	# It is well known that P=E/t, where P is power measured in watts(W), E is energy measured in joules(J),
- 	# and t is time measured in seconds(s). This means that performance per watt becomes
- 	#       T/t   T/t    T
-@@ -161,7 +161,7 @@ gather_tbench()
- 	avg_en=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_TBENCH-energy-$1.log)
- 	printf "Tbench-$1 avg power consumption(J): $avg_en\n" | tee -a $OUTFILE_TBENCH.result
- 
--	# Permance is throughput per second, denoted T/t, where T is throught rendered in t seconds.
-+	# Permance is throughput per second, denoted T/t, where T is through rendered in t seconds.
- 	# It is well known that P=E/t, where P is power measured in watts(W), E is energy measured in joules(J),
- 	# and t is time measured in seconds(s). This means that performance per watt becomes
- 	#       T/t   T/t    T
-diff --git a/tools/testing/selftests/proc/setns-dcache.c b/tools/testing/selftests/proc/setns-dcache.c
-index 60ab197a73fc..70389832dd22 100644
---- a/tools/testing/selftests/proc/setns-dcache.c
-+++ b/tools/testing/selftests/proc/setns-dcache.c
-@@ -50,7 +50,7 @@ int main(void)
- 
- 	atexit(f);
- 
--	/* Check for priviledges and syscall availability straight away. */
-+	/* Check for privileges and syscall availability straight away. */
- 	if (unshare(CLONE_NEWNET) == -1) {
- 		if (errno == ENOSYS || errno == EPERM) {
- 			return 4;
-diff --git a/tools/testing/selftests/proc/setns-sysvipc.c b/tools/testing/selftests/proc/setns-sysvipc.c
-index 903890c5e587..d03aa4838f0f 100644
---- a/tools/testing/selftests/proc/setns-sysvipc.c
-+++ b/tools/testing/selftests/proc/setns-sysvipc.c
-@@ -49,7 +49,7 @@ int main(void)
- 
- 	atexit(f);
- 
--	/* Check for priviledges and syscall availability straight away. */
-+	/* Check for privileges and syscall availability straight away. */
- 	if (unshare(CLONE_NEWIPC) == -1) {
- 		if (errno == ENOSYS || errno == EPERM) {
- 			return 4;
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index b9c1bfb6cc02..b6d69bf4fc1f 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -517,8 +517,8 @@ int get_mask_no_shareable(const char *cache_type, unsigned long *mask)
- 
- /*
-  * taskset_benchmark - Taskset PID (i.e. benchmark) to a specified cpu
-- * @bm_pid:		PID that should be binded
-- * @cpu_no:		CPU number at which the PID would be binded
-+ * @bm_pid:		PID that should be bound
-+ * @cpu_no:		CPU number at which the PID would be bound
-  * @old_affinity:	When not NULL, set to old CPU affinity
-  *
-  * Return: 0 on success, < 0 on error.
-@@ -693,7 +693,7 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp, const char *mongr
-  * write_schemata - Update schemata of a con_mon grp
-  * @ctrlgrp:		Name of the con_mon grp
-  * @schemata:		Schemata that should be updated to
-- * @cpu_no:		CPU number that the benchmark PID is binded to
-+ * @cpu_no:		CPU number that the benchmark PID is bound to
-  * @resource:		Resctrl resource (Eg: MB, L3, L2, etc.)
-  *
-  * Update schemata of a con_mon grp *only* if requested resctrl resource is
-diff --git a/tools/testing/selftests/ublk/kublk.h b/tools/testing/selftests/ublk/kublk.h
-index d98f3d612d88..88248b802c86 100644
---- a/tools/testing/selftests/ublk/kublk.h
-+++ b/tools/testing/selftests/ublk/kublk.h
-@@ -257,7 +257,7 @@ struct ublk_thread {
- 	unsigned short nr_bufs;
- 	unsigned short auto_buf_stride;
- 
--       /* followings are for BATCH_IO */
-+       /* following are for BATCH_IO */
- 	unsigned short commit_buf_start;
- 	unsigned char  commit_buf_elem_size;
-        /*
+ 	/*
+ 	 * Create a huge gap in the fd table. When we now call
+-	 * CLOSE_RANGE_UNSHARE with a shared fd table and and with ~0U as upper
++	 * CLOSE_RANGE_UNSHARE with a shared fd table and with ~0U as upper
+ 	 * bound the kernel will only copy up to fd1 file descriptors into the
+ 	 * new fd table. If the kernel is buggy and doesn't handle
+ 	 * CLOSE_RANGE_CLOEXEC correctly it will not have copied all file
 -- 
 2.48.1
 
