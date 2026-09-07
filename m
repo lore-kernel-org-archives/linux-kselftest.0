@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A6B2BDC1C;
-	Mon,  7 Sep 2026 15:15:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D5A4B04B1;
+	Mon,  7 Sep 2026 15:22:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788794130; cv=none; b=GUBOZCmF6IusAhHa5DVbveazTcW/gxs0oUFb+vQjfSj7XtJ49Q9yWsmwcPmp5lkc23x+eu6+ogzIT3G1aPGgLbVmprrYkhz+u0n2BvE37ycU+mVD920ilZ6kRAAUGrM+AA6cvvoHccVe9uTPD6i5QSPoPl71SIG4lbK49IjNsjw=
+	t=1788794559; cv=none; b=YbZT/Zc2ZRlxEX+q9Ak6G90vmRbuqt0a80yogx0bN1qfHNobD5df34bAv9FQE0VAblrTTEp+T34JuNJvTHZ1LSULU9ExEla30xdOgg29a8yUfSnKkVcT0nxFneDwrzKL2WdbFRrymM3gcrGMwLamnaN0ASfXT+pcZMoWjzXqhHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788794130; c=relaxed/simple;
-	bh=sVyEianJEmsmNv8odnB6QrpoJZkRjqeCjoAPD0AAGqk=;
+	s=arc-20240116; t=1788794559; c=relaxed/simple;
+	bh=/zl2YhCLLLy2wvwRTZfecyIW1kR5dLGkCPYLV+rUE4M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rF9XweWJ/7X61+Nr0CEax5GP0EQ4W2LCprjIsO8AZ9tWCppQSenWQgOIlBq6xyLCJyRGXpPuFq7l7D2/G8Igq1LB8BGvFEoJ9cEfbYvCKDLw0+1YEXMSi/q8i9YjEuMgLZbGNT7bRMjyEEphV2MFUIQso6/AuzMcktojgkP4aJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=euGPfO0e; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=UQ61uMQRi60ksnJ+WP2e9n5SFnmzMUp+yau6/egI5weJJcjHfwgtQZR4OVIM28MQGaJaDKU4H6SEmJlGSZtIWxI4v5SrqH1P2+5YlTuoC3bwO+6ktOG5ING031KYAI0GzAm0YcW5pwlK/rZGz7u9KAOX+SVHw9pHWTGo8EjkMJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KNF6zczO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="euGPfO0e"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE94A1F00A3A;
-	Mon,  7 Sep 2026 15:15:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KNF6zczO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 486461F00A3A;
+	Mon,  7 Sep 2026 15:22:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788794128;
-	bh=LI25JDv6LdNw5GdP3MdBucH0tpqtW3EinfdRXPIOwiI=;
+	s=k20260515; t=1788794557;
+	bh=2iV4wmxbLboD5m61BUcdgszYN9JR7rqtg6uMfGNK+Pw=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=euGPfO0ehic5DgwGGkfjKu2JXIQIkYF5QqhsNhhQ8GYQ6fP8C8RvWTRpMyrfYxOOh
-	 VLCa5/GQbIbRsqek+3ZUjTVrd6DJqgCtI/fiw8SJWuTVbR/d9LHrA3tCX0kW/cmw60
-	 WDm/ASKaufbBR6jq781kYTujJNTKx/CePweRVq5wf0Wo43SaHaRNfSzx59dXpywJ6Z
-	 jIanAfMNDKZwsax14FRMi5tpTo8JYLLlvJ34HImhgkH+VtNrZY3TDhV1kdRpx8rJO+
-	 NPQznX5FP+rFbTQ0MgfjxS88Wa0zLAnFJuqbLkUAr1jkwBYAXKytu1k4lhP7ZuiqdO
-	 JKzXdjX5y2mTQ==
-Message-ID: <b0400430-c3b6-40d5-b476-49189b1cc292@kernel.org>
-Date: Mon, 7 Sep 2026 17:15:17 +0200
+	b=KNF6zczOnUC280nScMOfHKGnsEhksMAL+0VbRvZvnl4CSfyvRBZbv2thM+uYmElMw
+	 6DuJILmh6kZ9mgi6RDXXkSy9Q4WY/oeLwkQyCHgkxziG2LrqrmgxJ9fijG3M+wFwt7
+	 Ao+SfjuFlLDZ0v0q7wt7jwoLje4eyliSQI4M2b8Yj0u5MLpzWywWt43ICRi0wfHGHZ
+	 aE+nmclaBKRvpV1ZduOdoBjPHJqU3xePzHjV5pWdXZ1qzVjYh5rptcD/EDOuVu1ya8
+	 CjTE1/jpB71QuGqq9f9mkKTkpPxAVDGuu78RBjrCNGSExCcA+6N6tvD+Ndn7fDl0T5
+	 WNI4EWfCcaAKA==
+Message-ID: <9a21fc3c-1ca9-42a3-a044-6421f20341f6@kernel.org>
+Date: Mon, 7 Sep 2026 17:22:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,26 +35,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 6/6] selftests/mm: add a GUP selftest
-To: Sarthak Sharma <sarthak.sharma@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
- <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Mark Brown <broonie@kernel.org>,
- Anshuman Khandual <anshuman.khandual@arm.com>,
- Muhammad Usama Anjum <usama.anjum@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260904123631.198697-1-sarthak.sharma@arm.com>
- <20260904123631.198697-7-sarthak.sharma@arm.com>
+Subject: Re: [PATCH] selftests/mm: fix size truncation in pagemap_ioctl test
+To: Zenghui Yu <zenghui.yu@linux.dev>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: akpm@linux-foundation.org, ljs@kernel.org, liam@infradead.org,
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ shuah@kernel.org
+References: <20260907135613.68692-1-zenghui.yu@linux.dev>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -101,184 +88,38 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260904123631.198697-7-sarthak.sharma@arm.com>
+In-Reply-To: <20260907135613.68692-1-zenghui.yu@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/4/26 14:36, Sarthak Sharma wrote:
-> Add a new GUP selftest which uses kselftest_harness.h. Cover
-> 12 mapping configurations: THP enabled, THP disabled and
-> HugeTLB, each across private/shared mappings and with/without
-> FOLL_WRITE. Run 5 test cases for every variant: get_user_pages,
-> get_user_pages_fast, pin_user_pages, pin_user_pages_fast and
-> pin_user_pages_longterm.
+On 9/7/26 15:56, Zenghui Yu wrote:
+> From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
 > 
-> Choose the number of default hugeTLB pages using a 256 MiB target,
-> with a minimum of 1 page and derive the mapping size from that
-> number. This avoids reserving excess memory when the hugeTLB page
-> size is too large and retains 128 pages for the most common case
-> of 2MiB hugeTLB pages.
+> On arm64 with 64K base pages, the huge page size is 512 MiB, and
+> hpage_unit_tests() builds a 5 GiB range (10 * 512 MiB) for its tests.  This
+> exceeds the range of the int size parameters of gethugepage(),
+> wp_addr_range() and pagemap_ioctl().  The implicit truncation to 1 GiB
+> makes gethugepage() allocate a too small buffer, while the callers keep
+> operating on the original 5 GiB range, resulting in spurious failures or
+> SIGSEGV.
 > 
-> Sweep four nr_pages_per_call values for each test: 1, 512, 123 and
-> all pages. This preserves the coverage previously provided by
-> run_gup_matrix(): 12 mapping combinations x 5 GUP/PUP operations x 4
-> batch sizes. In total the selftest reports 60 TAP cases and issues
-> 240 ioctls.
+> Change those size parameters to size_t.
 > 
-> Do not carry DUMP_USER_PAGES_TEST into the new selftest because its
-> output is written to the kernel log and the selftest does not verify
-> that output.
-> 
-> Add the new gup binary to the selftests/mm build, run_vmtests.sh and
-> MAINTAINERS. Update mm/Kconfig to describe the benchmark and
-> selftest split.
-> 
-> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-> Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
+> Fixes: 46fd75d4a3c9 ("selftests: mm: add pagemap ioctl tests")
+> Assisted-by: GLM-5.3 OpenCode
+> Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
 > ---
->  MAINTAINERS                               |   1 +
->  mm/Kconfig                                |  21 +-
->  tools/testing/selftests/mm/Makefile       |   1 +
->  tools/testing/selftests/mm/gup.c          | 287 ++++++++++++++++++++++
->  tools/testing/selftests/mm/run_vmtests.sh |   1 +
->  5 files changed, 300 insertions(+), 11 deletions(-)
->  create mode 100644 tools/testing/selftests/mm/gup.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d7a146b093de..1ca7de3e440e 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17189,6 +17189,7 @@ F:	mm/gup.c
->  F:	mm/gup_test.c
->  F:	mm/gup_test.h
->  F:	tools/mm/gup_bench.c
-> +F:	tools/testing/selftests/mm/gup.c
->  F:	tools/testing/selftests/mm/gup_longterm.c
->  
->  MEMORY MANAGEMENT - KSM (Kernel Samepage Merging)
-> diff --git a/mm/Kconfig b/mm/Kconfig
-> index c1ddf59c0d71..79163b7d795a 100644
-> --- a/mm/Kconfig
-> +++ b/mm/Kconfig
-> @@ -1287,24 +1287,23 @@ config PERCPU_STATS
->  	  be used to help understand percpu memory usage.
->  
->  config GUP_TEST
-> -	bool "Enable infrastructure for get_user_pages()-related unit tests"
-> +	bool "Enable infrastructure for get_user_pages()-related unit tests and benchmarks"
->  	depends on DEBUG_FS
->  	help
->  	  Provides /sys/kernel/debug/gup_test, which in turn provides a way
-> -	  to make ioctl calls that can launch kernel-based unit tests for
-> -	  the get_user_pages*() and pin_user_pages*() family of API calls.
-> +	  to make ioctl calls that can launch kernel-based unit tests and
-> +	  benchmarks for the get_user_pages*() and pin_user_pages*() families
-> +	  of API calls.
->  
-> -	  These tests include benchmark testing of the _fast variants of
-> -	  get_user_pages*() and pin_user_pages*(), as well as smoke tests of
-> +	  These include benchmark testing of the _fast variants of
-> +	  get_user_pages*() and pin_user_pages*(), as well as tests of
->  	  the non-_fast variants.
->  
-> -	  There is also a sub-test that allows running dump_page() on any
-> -	  of up to eight pages (selected by command line args) within the
-> -	  range of user-space addresses. These pages are either pinned via
-> -	  pin_user_pages*(), or pinned via get_user_pages*(), as specified
-> -	  by other command line arguments.
-> +	  There is also a test that allows running dump_page() on any of up
-> +	  to eight pages within the range of user-space addresses. These
-> +	  pages are either acquired via pin_user_pages*() or get_user_pages*().
->  
-> -	  See tools/testing/selftests/mm/gup_test.c
-> +	  See tools/testing/selftests/mm/gup.c and tools/mm/gup_bench.c.
+
+Looking at pagemap_ioctl.c ... I think most functions should actually be "static".
 
 
-BTW, I was wondering what it would take to:
+Using size_t is ok. But then we should also change "unsigned long long mem_size"
+to size_t, no?
 
-1) Turn mm/gup_test.o into an OOT module (would we need more EXPORT_SYMBOL_GPL?
-EXPORT_SYMBOL_FOOR_MODULE ?)
+Also, in wp_free() we are suddenly using "long size". In pagemap_ioc() we're
+also still using "int len".
 
-2) Move it to tools/mm/modules or sth like that.
-
-3) Build it with the selftests etc
-
-4) Remove GUP_TEST
-
-5) Try insmod'ing it from the tools+selftests that need it.
-
-[...]
-
-> +int main(int argc, char **argv)
-> +{
-> +	char *file = "/dev/zero";
-> +	int fd;
-> +
-> +	fd = open(file, O_RDWR);
-> +	if (fd < 0) {
-> +		ksft_print_header();
-> +		ksft_exit_fail_msg("Unable to open %s: %s\n", file, strerror(errno));
-> +	}
-> +	close(fd);
-
-
-I'm confused. Why do we have to open+close /dev/zero?
-
-> +
-> +	fd = open(GUP_TEST_FILE, O_RDWR);
-> +	if (fd == -1) {
-> +		ksft_print_header();
-> +		if (errno == EACCES)
-> +			ksft_exit_skip("Please run this test as root\n");
-
-Wouldn't we want to fail here?
-
-> +		if (errno == ENOENT) {
-> +			DIR *debugfs = opendir("/sys/kernel/debug");
-> +
-> +			if (!debugfs) {
-> +				ksft_exit_skip("Mount debugfs at /sys/kernel/debug\n");
-> +			} else {
-> +				closedir(debugfs);
-> +				ksft_exit_skip("Check CONFIG_GUP_TEST in kernel config\n");
-> +			}
-
-You can remove the } else { part as you skip on !debugfs.
-
-> +		}
-> +		ksft_exit_fail_msg("Failed to open %s: %s\n", GUP_TEST_FILE, strerror(errno));
-> +	}
-> +	close(fd);
-> +
-> +	hp_size = default_huge_page_size();
-> +	if (hp_size) {
-> +		nr_huge_pages = HUGETLB_TARGET_SIZE / hp_size;
-> +		if (!nr_huge_pages)
-> +			nr_huge_pages = 1;
-> +
-> +		hugetlb_setup_succeeded = hugetlb_setup_default(nr_huge_pages);
-> +	}
-
-BTW, why are we using HUGETLB_TARGET_SIZE instead of just using the
-default_huge_page_size()?
-
-> +
-> +	return test_harness_run(argc, argv);
-> +}
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> index 8f1e828e4f39..ae0ab5efabae 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -251,6 +251,7 @@ fi
->  
->  CATEGORY="mmap" run_test ./map_fixed_noreplace
->  
-> +CATEGORY="gup_test" run_test ./gup
->  CATEGORY="gup_test" run_test ./gup_longterm
-
-Nice
+Can we consistently use one type please?
 
 -- 
 Cheers,
