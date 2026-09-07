@@ -1,212 +1,220 @@
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-202.mta1.migadu.com [95.215.58.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94DF544470E
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 10:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2EE453A22
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 10:16:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788775598; cv=none; b=XFGEM5xjc2MceC309Sp1awMOf2sftVpGkINbYxW0k4YD7Ub/IGjRgOehWEyrlSuMs4fd5Xl2axVmDN+FHMLQS813OhBCguMXqaa1RGblNDe9fFg9j/eJZHDrRklzSy+wKcJg2PVSnsDiUO4Z3FUgSyUYhQgfOg6+phX2yZ77mms=
+	t=1788776203; cv=none; b=a8C9CqAT6xQD7smrT6dv8DaEiN33edQrwPCHjNvjmSuAdo6d8L0QqkYaLA18WGHb5K4anv13uC+QHh2IRMoN+j5UxIAK5N3B/jrdWQicECDu/s5f+4MBgyvY8Cm/v4bV1mTn6WhZl3yuNEPaTZHFOgibVPvKpkOP+eGwCJe0tmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788775598; c=relaxed/simple;
-	bh=cfZlsUNL1tYXf3StIFp8xyHHzkshbzsXgfZAOQaTPHk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C5HPV7NrdTA4sacB8kq0hO+4p5mikW1JOkK3uUVo+JkJjzfJjqkRY4p8TkC0VmF1wrc/pK5G9d2sIISHcYa1vXUCknn9SOaMNFVO9s6y4kxngXsC5tAKuCF24m8SebSUaWkizYQxDNZQ3QKb5Pcy5Y+pMZm2Hvi2iR4bGJDvkn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=EsWx4Qy7; arc=none smtp.client-ip=185.125.188.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1788776203; c=relaxed/simple;
+	bh=vtnw3/F8lWgxCizJj1LomFF2YMoZAGQBpQS83aThC4s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=loOGr2IZbIpDNWpF44wFtxHkiD41LTvVSyZi1ETxh2UZ0HbH+P9ZI8MpA1txLgBBnDufoqRSyj7GRds6vTsEZPCLjbOlv1HZzWoT5hc/zVMGvNRvanpllO2199J56S7sMK1HUG12CF7QI0vDByjiFe2o/GOtI7IET1C0tGpKL8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=muVozIc3; arc=none smtp.client-ip=95.215.58.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="EsWx4Qy7"
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id CD4C73F28A
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 10:06:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1788775593;
-	bh=dRV5mMHnpzRbNcgwfhh0JIyTTCV6Vk7ZoBlXJcHwHHk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
-	b=EsWx4Qy7wLOIpR+FOd1YtEeCeqv2cICHe0YuX/q5Met9vFX/E2H0WQI8dCqdMoWqg
-	 izUzfZ6I9j4DGTlLh7Bze2SENnnGhT089ABN3g12J4eFZJxBq/T0Exr3GiiaYC1mep
-	 th8I6jHgVTHUWFcWSp0xKhQjQA+uLoNepCT2k+48ZYgPuoozjG0RPb+2pRJ0vfm7l2
-	 V1U1kLww1ZxC/1mBWZFrJXnDsso1y8ZMgb/WnCEOjU62CEXFe8/lvlGhOtS6gyKkmO
-	 gHr/Hy7PV8SoAN2+S54SryVG1cUcQD0CEoq7WzxLAuN29reB5NACcXOFgqQAdTCvCB
-	 djH7r8IFWjf5WYm4fqx4YgdBKuS4hh/BeGEraja2IXgb1OqF6Nt05uHXkjCvp0AvOJ
-	 T0AMIuHYgI6oQ46wNgW+497EHZaDBq8ANpvxk5BokOy4sphc6kQGqJKgSf3YDJzhKR
-	 NOh1m7M1rxhubcz3upYoZKKAOwMzG5QPp5UZJ9/HItN1pI8oV9c3L+srKpDu/TdDRc
-	 MYko0zdlbnsARwCKvrwk4CwTLN3b97AfGK7d5w/Cee1mRB6ruSsDu50vDyKweIcRsz
-	 T2CNnNoS3OJpKm5kHpjj653eIx3jKs6dpUZj9LInsj0l8Gvu5v5Xra7FWmf4RXc4KN
-	 uqlNbGmjcmJsURhK3Rx4AWyQ=
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-4858e4b3e92so1239393f8f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 03:06:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788775593; x=1789380393;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=dRV5mMHnpzRbNcgwfhh0JIyTTCV6Vk7ZoBlXJcHwHHk=;
-        b=fiEJvtt/0sHGsMFnE+pTvF8oDg912zEXtZeuF5XM1BHWjcNFQyeSDBZjp4flSr4Cf3
-         Y5A33Fzr6T7MBqrHSkCRw0zc1J/+dpcrYJ9e1tzrRGJ0Y8L/cSSD0kDc4BOO6/V9tXOg
-         9A/vVYqvDuJzKwsUZ6uxZ15XqsMH76E17d8wLUtltz/JdPHFHpfDUcrrohGqhNaYDE4Q
-         4OqGFailB3aka4NqgkKJg4E/f/pk+4R3fWP7MYSqxUC9dbs/mGCSajazDwAk50OR87dB
-         Y9tjXRVldB80mb7CwUCdZTpoYDAfEAlvmxqSm6lwGsO9XnZGl2byfb/NKdghOaBd985P
-         sc1A==
-X-Forwarded-Encrypted: i=1; AKwUvByGBDKfkT7SskEF2am5fSi7dtdBljcsp2kvwfmY7rMJpmbQ8RX2+BQzqt4id2q2D5f+wWnEuPpx2+ajprBtsuY=@vger.kernel.org
-X-Gm-Message-State: AFuF++nmWb0YZeoOjds9QTiFYrPZ81z1Mumlz4XayI4i7HZ+wXMeK1/T
-	mMNAtMH81r7yRG17pz1j+nzQkME4KpVAM6sHzgcZT1hqjf6lHXhOaX404s7g9egnAGnJ6MhhD4c
-	/AEttCtUpsR5XNwyuV50xS4BgWxCplfO9/TQcEai2iMQgmo35MTm0cEUhNVng2NfF4Z4VviFrir
-	KhGjG5dm9eVQ==
-X-Gm-Gg: AYBFou0sAveIoHeJe11WlbPycSwlYwyVFCttOHNZnUm/fMSfZ+On3OrxqF4FgFUUkts
-	AMVVmYPneMRcDpRiF2wm3fYG0O+HMVLIh47Oh78oynmgb4HEpMEA4mo5LE3y3Cc+WRBWxFlgc1/
-	W7plJWlIiRMaQoOS3WOeLt7BN+gWB+qMEurKooNGJGYI4JbznceYzbCk6+IBKWKQ11Wnaxje/YQ
-	6FspDIth2/0UV+JMLbYXkV9ROJDmQLJaLKr+Qw+HbZ71AVgFBn2ISvSS9CV0BeG02iocCwFqhcv
-	UKruqz1FczwzT+41pPo4PVy5Xku/zvQKLASNY7aaWEPG02z15W0nJmlDajyNO8Yt0D9X79QhboP
-	+g4icFRHM3zSCymz97w/NOIDqTVOZuT+nPhWrRNJVGFbwP6MLDXU0Cv2y1pVhYtGqJnVSJA==
-X-Received: by 2002:a05:6000:388:b0:485:8c75:48fb with SMTP id ffacd0b85a97d-4858c75598cmr17163971f8f.50.1788775593443;
-        Mon, 07 Sep 2026 03:06:33 -0700 (PDT)
-X-Received: by 2002:a05:6000:388:b0:485:8c75:48fb with SMTP id ffacd0b85a97d-4858c75598cmr17163935f8f.50.1788775592991;
-        Mon, 07 Sep 2026 03:06:32 -0700 (PDT)
-Received: from localhost (93-40-94-241.ip38.fastwebnet.it. [93.40.94.241])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485881353e8sm27574871f8f.1.2026.09.07.03.06.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2026 03:06:32 -0700 (PDT)
-From: Alessio Faina <alessio.faina@canonical.com>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v3] selftests/net: skip srv6_end_dt[4/6]_l3vpn_test.sh if vrftable not available
-Date: Mon,  7 Sep 2026 12:06:31 +0200
-Message-ID: <20260907100631.1923148-1-alessio.faina@canonical.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="muVozIc3"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=vtnw3/F8lWgxCizJj1LomFF2YMoZAGQBpQS83aThC4s=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788776198; v=1; x=1789380998;
+ b=muVozIc3LmFVJdkoHhsbJwZwzRXDFiDpqOiVNf+rrgCfY+f5gwWbP4IDHaHg2C8r7G31RX+N
+ 30SMyAkfZ06h59703MDMoZS4Npx1PFb72E8u9aFyDDLI3xiTFqIrlSuX616JM3HWvQy9bQyxruH
+ HMa3lbfML74kRpClJIDTYtzM=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 3af2089f0fc6ec0a;
+	Mon, 07 Sep 2026 10:16:27 +0000
+X-Mizu-Trace-ID: 3af2089f0fc6ec0a
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <0b2b6b9d-98de-4f45-8e65-a202fe9ce0d1@linux.dev>
+Date: Mon, 7 Sep 2026 18:16:23 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/7] cgroup/cpuset: Factor out child partition
+ validation
+To: Ridong Chen <ridong.chen@linux.dev>, Waiman Long <longman@redhat.com>,
+ cgroups@vger.kernel.org
+Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Guopeng Zhang <zhangguopeng@kylinos.cn>
+References: <20260902102615.79189-1-guopeng.zhang@linux.dev>
+ <20260902102615.79189-2-guopeng.zhang@linux.dev>
+ <5842edcd-9283-4a87-afc9-50e51962368e@redhat.com>
+ <5e0d1386-b094-4d4e-8569-e6b584f955c5@linux.dev>
+ <7d1f1c95-5dad-4124-858c-7c8e3119f437@linux.dev>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <7d1f1c95-5dad-4124-858c-7c8e3119f437@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-In case iproute2 is older than version 5.11.0, released ~Feb 23, 2021,
-the vrftable support is not available and the tests
-contained in the following 2 test files
- - srv6_end_dt4_l3vpn_test.sh
- - srv6_end_dt6_l3vpn_test.sh
-are failing in some kernel backports.
-This is the result of one of those tests in an unsupported environment:
 
- ##########################################################################
- TEST SECTION: SRv6 VPN connectivity test among hosts in the same tenant
- ##########################################################################
 
-    TEST: Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)    [FAIL]
+在 2026/9/4 09:55, Ridong Chen 写道:
+> 
+> 
+> On 9/4/2026 9:25 AM, Ridong Chen wrote:
+>>
+>>
+>> On 9/4/2026 2:33 AM, Waiman Long wrote:
+>>> On 9/2/26 6:26 AM, Guopeng Zhang wrote:
+>>>> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+>>>>
+>>>> compute_partition_effective_cpumask() checks whether each valid child
+>>>> partition remains covered by the parent exclusive CPU mask and whether it
+>>>> would consume all remaining CPUs of a populated parent.
+>>>>
+>>>> Factor these two checks into child_partition_error() so the same rules can
+>>>> be reused when evaluating a proposed parent configuration. This is a
+>>>> preparatory refactoring with no intended functional change.
+>>>>
+>>>> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+>>>> ---
+>>>>   kernel/cgroup/cpuset.c | 38 +++++++++++++++++++++++++++++---------
+>>>>   1 file changed, 29 insertions(+), 9 deletions(-)
+>>>>
+>>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>>>> index 8f24171b6055..6994dc75d940 100644
+>>>> --- a/kernel/cgroup/cpuset.c
+>>>> +++ b/kernel/cgroup/cpuset.c
+>>>> @@ -2085,6 +2085,26 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>>>>       return 0;
+>>>>   }
+>>>> +/*
+>>>> + * Return the error that will invalidate a child partition under a proposed
+>>>> + * parent partition configuration.
+>>>> + */
+>>>> +static enum prs_errcode
+>>>> +child_partition_error(struct cpuset *child,
+>>>> +              const struct cpumask *partition_cpus,
+>>>> +              const struct cpumask *remaining_cpus,
+>>>> +              bool parent_populated)
+>>> I think you should add some functional comments on what "partition_cpus" and "remaining_cpus" are supposed to be so that caller knows what to pass into this helper.
+>>
+>> Would it help to rename them to excpus and local_excpus?
+>> local already implies "excluding children" (just like cgroup.stat.local), so I think that makes the intent clearer.
+>>
+> 
+> Regarding the naming: child_partition_error is a bit odd — it sounds like it's validating a hierarchical child partition, but it's actually validating the partition itself (the child argument). The parent is only needed as context for the validation logic, not because we're checking a subordinate partition.
+> 
+> I'd suggest renaming it to something like:
+> 
+> ```
+> static enum prs_errcode cs_partition_error(struct cpuset *cs, ...)
+> 
+> ```
+> 
+> That would better reflect what the function actually does.
+> 
 
-    TEST: Hosts connectivity: hs-t100-2 -> hs-t100-1 (tenant 100)    [FAIL]
+Thanks, Ridong. I see what you mean about the name.
 
-    TEST: Hosts connectivity: hs-t200-3 -> hs-t200-4 (tenant 200)    [FAIL]
+My intention with "child" was to describe the role of the partition in these checks. Both callers use the helper while walking a parent's child partitions, and the result depends on the parent's complete exclusive mask, whether the parent is populated, and the active CPUs remaining at that point in the walk. The helper also checks only the two conditions that can invalidate a child during this process, rather than performing general validation of an arbitrary cpuset partition.
 
-    TEST: Hosts connectivity: hs-t200-4 -> hs-t200-3 (tenant 200)    [FAIL]
+For that reason, `cs_partition_error()` might suggest a broader scope than the helper actually has. Would it make sense to keep `child_partition_error()` and clarify the comment, for example:
 
-The test installs a route with the vrftable feature; if this feature is
-not available, the approach taken is to skip the test rather than
-failing it.
+/*
+ * Return the error that would invalidate @child under its parent
+ * partition's CPU configuration.
+ */
 
-Signed-off-by: Alessio Faina <alessio.faina@canonical.com>
----
-v3: - Fix Commit message and mail subject
-v2: https://patchwork.kernel.org/project/netdevbpf/patch/20260903103545.1325276-1-alessio.faina@canonical.com/
-    - remove dx[4/6] tests
-    - test if vrftable is available in the installed iproute2
-      application
-v1: https://patchwork.kernel.org/project/netdevbpf/patch/20260824091537.2305107-1-alessio.faina@canonical.com/
-    - initial approach by testing DT[4/6] and DX[4/6]
-    - test if DT4/DT6 are available in iproute2
+I am also open to another name that preserves this parent-child context.
 
- ./tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh  | 21 +++++++++++++++++++
- ./tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh  | 21 +++++++++++++++++++
- 2 files changed, 42 insertions(+)
 
-diff --git a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-index a649dba3cb77..037e5fe1da2a 100755
---- a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-@@ -469,12 +469,33 @@ if [ ! -x "$(command -v ip)" ]; then
- 	exit $ksft_skip
- fi
- 
-+test_vrftable_supp_or_ksft_skip()
-+{
-+	local nsname
-+
-+	setup_ns nsname
-+	ip netns exec "${nsname}" sh -c "echo 1 > /proc/sys/net/vrf/strict_mode"
-+	ip -netns "${nsname}" link add vrf-100 type vrf table 100
-+	ip -netns "${nsname}" link set vrf-100 up
-+
-+	if ! ip -netns "${nsname}" -6 route add fc00::1/128 \
-+			encap seg6local action End.DT4 vrftable 100 dev vrf-100 2>/dev/null; then
-+		cleanup_ns "${nsname}"
-+		echo "SKIP: SRv6 End.DT4 vrftable not supported"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	cleanup_ns "${nsname}"
-+}
-+
- modprobe vrf &>/dev/null
- if [ ! -e /proc/sys/net/vrf/strict_mode ]; then
-         echo "SKIP: vrf sysctl does not exist"
-         exit $ksft_skip
- fi
- 
-+test_vrftable_supp_or_ksft_skip
-+
- cleanup &>/dev/null
- 
- setup
-diff --git a/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
-index e408406d8489..9a29e0d6c912 100755
---- a/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
-@@ -479,12 +479,33 @@ if [ ! -x "$(command -v ip)" ]; then
- 	exit $ksft_skip
- fi
- 
-+test_vrftable_supp_or_ksft_skip()
-+{
-+	local nsname
-+
-+	setup_ns nsname
-+	ip netns exec "${nsname}" sh -c "echo 1 > /proc/sys/net/vrf/strict_mode"
-+	ip -netns "${nsname}" link add vrf-100 type vrf table 100
-+	ip -netns "${nsname}" link set vrf-100 up
-+
-+	if ! ip -netns "${nsname}" -6 route add fc00::1/128 \
-+			encap seg6local action End.DT6 vrftable 100 dev vrf-100 2>/dev/null; then
-+		cleanup_ns "${nsname}"
-+		echo "SKIP: SRv6 End.DT6 vrftable not supported"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	cleanup_ns "${nsname}"
-+}
-+
- modprobe vrf &>/dev/null
- if [ ! -e /proc/sys/net/vrf/strict_mode ]; then
-         echo "SKIP: vrf sysctl does not exist"
-         exit $ksft_skip
- fi
- 
-+test_vrftable_supp_or_ksft_skip
-+
- cleanup &>/dev/null
- 
- setup
--- 
-2.43.0
+> On a related note, the current partition validation logic is scattered across the code. I think we should consider consolidating it into a common set of helpers, perhaps like:
+> 
+> 
+> ```
+> static enum prs_errcode validate_partition(struct cpuset *cs, struct cpuset *trialcs, struct cpuset *parent)
+> {
+> ...
+> }
+> 
+> static enum prs_errcode validate_local_partition(struct cpuset *cs, struct cpuset *trialcs, struct cpuset *parent)
+> {
+>     // local partion specific check
+>     // call validate_partition
+>     
+> }
+> 
+> static enum prs_errcode validate_remote_partition(struct cpuset *cs, struct cpuset *trialcs, struct cpuset *parent)
+> {
+>     // remote partion specific check
+>     // call validate_partition
+> }
+> 
+> ```
+> 
+
+That sounds like a good idea.
+
+Since these validation paths have different inputs and side effects, consolidating them may require a broader review and restructuring.
+
+I will look into this separately after the current series is completed.
+
+Thanks,
+Guopeng
+> 
+>>>> +{
+>>>> +    if (!cpumask_subset(child->effective_xcpus, partition_cpus))
+>>>> +        return PERR_INVCPUS;
+>>>> +
+>>>> +    if (parent_populated &&
+>>>> +        cpumask_subset(remaining_cpus, child->effective_xcpus))
+>>>> +        return PERR_NOCPUS;
+>>>> +
+>>>> +    return PERR_NONE;
+>>>> +}
+>>>> +
+>>>>   /**
+>>>>    * compute_partition_effective_cpumask - compute effective_cpus for partition
+>>>>    * @cs: partition root cpuset
+>>>> @@ -2121,6 +2141,8 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
+>>>>       rcu_read_lock();
+>>>>       cpuset_for_each_child(child, css, cs) {
+>>>> +        enum prs_errcode child_err;
+>>>> +
+>>>>           if (!is_partition_valid(child))
+>>>>               continue;
+>>>> @@ -2129,15 +2151,13 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
+>>>>            * partition root.
+>>>>            */
+>>>>           WARN_ON_ONCE(is_remote_partition(child));
+>>>> -        WRITE_ONCE(child->prs_err, 0);
+>>>> -        if (!cpumask_subset(child->effective_xcpus,
+>>>> -                    cs->effective_xcpus))
+>>>> -            WRITE_ONCE(child->prs_err, PERR_INVCPUS);
+>>>> -        else if (populated &&
+>>>> -             cpumask_subset(new_ecpus, child->effective_xcpus))
+>>>> -            WRITE_ONCE(child->prs_err, PERR_NOCPUS);
+>>>> -
+>>>> -        if (child->prs_err) {
+>>>> +        WRITE_ONCE(child->prs_err, PERR_NONE);
+>>>> +        child_err = child_partition_error(child, cs->effective_xcpus,
+>>>> +                          new_ecpus, populated);
+>>>> +        if (child_err)
+>>>> +            WRITE_ONCE(child->prs_err, child_err);
+>>>> +
+>>>
+>>> You can ignore the inital PERR_NONE write and always write the child_err value into child->prs_err.
+>>>
+>>> Not big issue, just some nits.
+>>>
+>>> Cheers,
+>>> Longman
+>>>
+>>>> +        if (child_err) {
+>>>>               int old_prs = child->partition_root_state;
+>>>>               /*
+>>>
+>>
+> 
 
