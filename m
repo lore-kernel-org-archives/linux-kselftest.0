@@ -1,1055 +1,167 @@
-Received: from mta0.migadu.com (out-72.mta0.migadu.com [91.218.175.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011025.outbound.protection.outlook.com [52.101.62.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA1E4415F3C
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 07:09:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.72
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788764968; cv=none; b=oKIGX5LEAv8MC9YW3FYtkRa/dbCgHbKd/P1qjqAxOYOSxlPbE1V/Q1KxtZlSYvrAoexuZPcNNpAtjQq//bCexbrItnm678BPkaN7VmOudRudfFEya4ONYGSn5R26BwaB7+A9ue6E7kMsszzRSm6m3Fsb0h+p0Jmk6mK+/LQiWd0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788764968; c=relaxed/simple;
-	bh=Lpdh91j3GUNSzWr2GTiNhH5Yo3u5xXmAmiImUQzl4aw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kGq7qshbzYpRxFcrZHzw64gZz5HBvd2eAYHC97Kezz9Txbjgf+B7W4XRZBKMlNtxq51ifr+hFRdbLeYNr71bFDK1G0FyfJQGzklxZ7B3p+FE4TRChdBJoIMZUKVWWl9R87x+JJNREO5E5ptLfwSKqCqwSVuFt37Ec42TqTkYpDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OWUUVAWx; arc=none smtp.client-ip=91.218.175.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF4E340401;
+	Mon,  7 Sep 2026 07:25:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.25
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788765933; cv=fail; b=Btk9v8W4Rtdaq/lhjJxQotA0+g5NNRSlzIQ0ZMcuFSC0+UM79QmDH2rMwIds9gXj3LwSxg5/oc+uLWnn8TXl9B5DRC5y1k+Ii8S0bZRXpXhL357l14HIdC7UvezhJA21uHyft268wYAc5kkof/ydhlQhfGwDyDIAu+PaScvSHPo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788765933; c=relaxed/simple;
+	bh=812nYdNCd0+ukKX3haJP6/coKUxYvoTMqbC4HoGY5C4=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=XBnypSauwNBwRcwwntLSLN/n+dcqXEITPuQ07unwsVaoW8imx78SSu1wNZeJPZSWrqJlBduTklWNvrkMYD7KHsqtNyEF1B0IfmUM4A+/blyj2PouImJTonjvVBy/xSdbDj6rk2syVqTMsoNPEjPPB1ug0pvcWaFyw5JSvQYz/Vc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=XmgjFxNz; arc=fail smtp.client-ip=52.101.62.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OWUUVAWx"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Lpdh91j3GUNSzWr2GTiNhH5Yo3u5xXmAmiImUQzl4aw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788764963; v=1; x=1789369763;
- b=OWUUVAWxwVrniSuobyRGS8QV0ryLhE5f97/LkoPsquJzkJLZZ6y/gyIIUbv2GykRvbAJss1D
- bEQG9kq0ULG+AhOwVc11JZI/cEqMLBwAwtgp+kdDgQzMWq3VhElwUwW7ojBYR4EgoZedlD01T6T
- FQ8nO7VHc5U9QN3mUv2lgsAw=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 73625f71ad062af0;
-	Mon, 07 Sep 2026 07:09:23 +0000
-X-Mizu-Trace-ID: 73625f71ad062af0
-X-Migadu-Flow: FLOW_OUT
-From: "Hui Zhu" <hui.zhu@linux.dev>
-To: Roman Gushchin <roman.gushchin@linux.dev>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Barry Song <baohua@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Cc: Hui Zhu <zhuhui@kylinos.cn>
-Subject: [PATCH bpf-next v8 2/2] selftests/bpf: Add memcg async reclaim test
-Date: Mon,  7 Sep 2026 15:08:53 +0800
-Message-ID: <568617014278dc17c206c3fffa6e520309a44696.1788764121.git.zhuhui@kylinos.cn>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <cover.1788764121.git.zhuhui@kylinos.cn>
-References: <cover.1788764121.git.zhuhui@kylinos.cn>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XmgjFxNz"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=T5LflHKrs3QKCYWhxkj7XuBTBC4eNBaxuG7lLV0MT8k0aOQRjdyBon8t5WgpQvB2Rnc4isAkkPTu5qyixUhFf4nrZ9kcQtqmM2Sw1f1SXOS3Rboedf6nDas366T1tkre87bFWOFBjckonE9E9iXBhdvcg6JQeG5X/0a6K9R+p0xKi4zP0lggy2rZQneIFK2vDksYOf7rpsLOr1Rv9C8sGA4TCPtIkFrXRmArVxYw4W6VLZqXQvkgZRyGceIKcPhBNXEdpwBgen43kOBZmxi0BaWnbtv/q6FAYm2rqIupYfbFLGWYcq3QUMQYolbRJ8FnZBETBdUlGE83zKjyFhaWFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5ZgFiGbeHCzTPSqeHuSQAsZzU/TysqpcWv6TSLpd9B0=;
+ b=pyqMW4w8oQszgbeFBkFyjirFRhoi19jDJad8dnkhJZs677oT1Qw2Sc7ZehoYB7oWRp394tRzeZwr2fnRK09Vh1D1+b3IKhqFx1PCn+gpNSo8y34x+wBhQbx1xEk4D0JDX4fa3C1N+iePNtfW4mwKrGK//VIenVJ/56kdtfJhBaNdNS7evwaCrcSAuHmdOF6qpl4H2GobXsU8tvxCMawoOcLWilB8V+fXip13btdHSFY/nUEidSQ63AkwT6L0EUw1rmJqsb8AsErzQh7bj2Iu3AgKfQyWSY2mfqYQ2faUSrgGYHnjLHPsxBCO6zMtzqwdWt6cQiSpGDXHfcPW/zljPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5ZgFiGbeHCzTPSqeHuSQAsZzU/TysqpcWv6TSLpd9B0=;
+ b=XmgjFxNz4FpHf24YwBpM4PDUOz8AM6I6CaWdSrwTAI1bIYVZxlPnIlCF6nADTlNeDdl507zSTIbyIaUyncn+9EWKSKhsYcVZZxtWtzdzFH+nvFQ6jR8uOp/cSCNzGLTWZKacdK4tlSLN/hPaUiu2ufa5QLFlgN5HaFwQ16lyNQs=
+Received: from BN9PR03CA0705.namprd03.prod.outlook.com (2603:10b6:408:ef::20)
+ by DS7PR12MB8232.namprd12.prod.outlook.com (2603:10b6:8:e3::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.382.15; Mon, 7 Sep
+ 2026 07:25:28 +0000
+Received: from BN3PEPF00022BBA.namprd04.prod.outlook.com
+ (2603:10b6:408:ef:cafe::51) by BN9PR03CA0705.outlook.office365.com
+ (2603:10b6:408:ef::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.382.14 via Frontend Transport; Mon, 7
+ Sep 2026 07:25:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ BN3PEPF00022BBA.mail.protection.outlook.com (10.167.248.116) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.406.5 via Frontend Transport; Mon, 7 Sep 2026 07:25:28 +0000
+Received: from [127.0.1.1] (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.46; Mon, 7 Sep
+ 2026 02:25:24 -0500
+From: Shivank Garg <shivankg@amd.com>
+Subject: [PATCH v3 0/4] KVM: guest_memfd: fix NUMA selftests
+Date: Mon, 7 Sep 2026 07:24:56 +0000
+Message-ID: <20260907-gmem-selftests-fix-v3-0-7a4be5c1cc8a@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMhmnmoC/32OQW7DIBBFr2KxLtEAxjZWVeUeURZTPDhUwbRAr
+ FZR7l7sdN3lG2nef3eWKXnKbGzuLNHqs49LBfXSMHvBZSbup8pMguzAgOBzoMAzXV2hXDJ3/pt
+ L1GRaYaTrDauPn4nqeZeezpUvPpeYfvaNVW7Xf3Wr5MA1yl4JrZRu7RHDdLAxsPPjaU/0daul5
+ TnBAuWMe+nYvP6ZFYDopD7I3kjV9VzUEVw+7HGOcb7SpnvbWt8xE68QfBmbYWhBO8BJTNp2A6A
+ jRQiWjGq1Q0NiIkQ71JDHL1NBh8w6AQAA
+X-Change-ID: 20260901-gmem-selftests-fix-2a5e94192f79
+To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+	<pbonzini@redhat.com>, David Hildenbrand <david@kernel.org>, Shuah Khan
+	<shuah@kernel.org>, Jim Mattson <jmattson@google.com>, Peter Shier
+	<pshier@google.com>, Ricardo Koller <ricarkol@google.com>, Ackerley Tng
+	<ackerleytng@google.com>
+CC: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Shivank Garg <shivankg@amd.com>
+X-Mailer: b4 0.15-dev-47d62
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1788765924; l=2231;
+ i=shivankg@amd.com; s=20260518; h=from:subject:message-id;
+ bh=812nYdNCd0+ukKX3haJP6/coKUxYvoTMqbC4HoGY5C4=;
+ b=VtY4gV4gQT6PyEp0A/oakAlXKFu6yblgZXwe+AN9j8qpE61l2xzEf49fuyocEVXbyWYyePd8z
+ N5yBZgVBfdeDaEiLQ5bRhTLboFOGXkOebNxz5OQndrFqPcVQZyEY4M2
+X-Developer-Key: i=shivankg@amd.com; a=ed25519;
+ pk=2l2QGTeXuGkZTtfmx0nPQU8iFZfjYmX/ymMojitevx4=
+X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN3PEPF00022BBA:EE_|DS7PR12MB8232:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9a6e418e-247e-4700-05d1-08df0cb13125
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|36860700016|7416014|376014|23010399003|13003099007|6133799003|10067099003|56012099006|11063799006|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	fFCKSDNvO3Scqi9j7S8/rw0Bl8HrcNBw+li9V8ogJ+qbMw3eHflu42iS/SchtoPG5Bw5ZJGsw9cAdYtvioWFq0Nltl8j6l1ch51yF6bw81399zk9QKWKfqsyD7YyV96rMmqZ8Wn9TJMX644m4I4WFFQksjMlWh3JTbRBhCKjsouMpNBt3gRox8NVl6rhLD5fXmMduTEaPvCNjN1Qv5sNX32VU8dOFqyr2CzgJyd3lqjYfgNTLnwIc9aMW6Ba5HQ5RpFIYuWhK1YRaXMdVqZTUkE6Dsad8M2DDiHiRIJPAWCvFcWCP+ERWfYSr2cRvmhOwgaZVow5kmsYtRjlqRL/xNP1nJZAKVqMwVvttz9FJqku4xnp3/kAepk3+lGXXOHeIsNg1f4L+7Bi5WXJ/ATLx+eL4F+CLWucqwxJ+LBvltLxkPTz2jzGiFEOmMtREybOxFwUSiT8C8HHaXFagQhxnh605JyXzmJGbho7DVkXD5GQ7lnm35zzsc6I+pxXksdV/gvO1QjK2peCwd7dnlVMh4pzgNmdzq/AHNDk8Zu+EE5ZHyUVIuWkEvfEJER6zh3u0IYhkxME67qY3b2hvNCdh+Mic8PjF1O9X+TnGhzc79WKrZDcA8jgFhjRJwGBDEqzYbtrPv5adStOgOkVvUb+jQj8/OTkYv2mkzCHNiUPr1MZ2VmGEKzSYUHpgQSYfS5dNogRbSfK1KcQDa9DteZQiA==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700016)(7416014)(376014)(23010399003)(13003099007)(6133799003)(10067099003)(56012099006)(11063799006)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	3R0/a8Zxtz4r+9+ulgZB5FiVDnAabhEUMpkWQFJHDG6DQZo8dTGbURR84qB3xVqBlIGiu2jfBIgv2wbNvC8gSWkEWBgDibsVJMAXSkV35rxcl8xt/Efnmj8inC8CtM133R1zQeJOyiWJeyk8iu8cIWTcPH0WzXokaeeCKHI9O3ncL64NcahXBAYIed+CmjYpR7wk8yE6DNTJIerErfTSIrtjekk4F7YW7udcbrnegv3cZEOJh/P2CtShRoGz70/oK18k+ZRgBe96tvAMPB8Zm3uLACWx5+MW/+sFYDQ9SQJlf1HxGr2ajIOKQoCdILxyzAiMtBsQ+AlzNXX7Xn/WWMGTv7fCJwXv4n8Urxn9yDu/9gPPF+vd/pkF380jtCso+gDIHI7u/kJneldgL/HxHkXbcftZDr6Vu4F6WZrL11XkN9N0/XovGJfuyx6b+Mj9
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2026 07:25:28.2734
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a6e418e-247e-4700-05d1-08df0cb13125
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN3PEPF00022BBA.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8232
 
-From: Hui Zhu <zhuhui@kylinos.cn>
+NUMA selftests in guest_memfd_test assumes that node 0 and 1 exist and
+have memory. However, nodes can be sparse or memoryless which would
+break this selftest.  Select the nodes from MPOL_F_MEMS_ALLOWED instead.
 
-Add the memcg_async_reclaim selftest, which verifies that BPF-driven
-async proactive reclaim mitigates refault-induced slowdown under
-memory pressure: a BPF program monitors the refault stats of a
-memory-pressured cgroup and, once they grow, asynchronously reclaims
-another cgroup via bpf_wq and bpf_proactive_reclaim(), letting the
-pressured workload finish faster.
+Based on KVM: selftests: Fix maxnodes bugs and cleanup related code [1]
 
-The BPF program also handles a dying reclaim target. Looking the
-target up by id is not enough: bpf_cgroup_from_id() keeps handing
-back a cgroup until its last reference is dropped, so the program
-checks the css flags and skips reclaim once the target is offlined
-or dying. A second test, memcg_async_reclaim_dying, keeps reclaim
-rounds running against the target, removes the target cgroup while
-reclaim is in flight, and verifies that reclaim stops on the removed
-target instead of reclaiming from it.
+Tested on a 7.3-rc1+, AMD EPYC 7713.
 
-Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+[1] https://lore.kernel.org/kvm/20260903001625.2792367-1-seanjc@google.com
+
+Changes in v3:
+- Rebase on Sean's spin-off series [1] which picks up patch 1 and 2.
+- Drop Patch 3 as version in [1] is better. (Sean)
+- Split patch 4 of V2 into 4 patches. (Sean)
+- Use MAXNODE_FOR_MASK() for maxnode value. (Sean)
+- Link to v2: https://lore.kernel.org/r/20260901-gmem-selftests-fix-v2-0-5a273153354c@amd.com
+
+Changes in V2:
+- Split from unbind race fix. (Sean)
+- Include <linux/bits.h> that defines BITS_PER_TYPE for self-containment. (Sashiko)
+- Link to V1: https://lore.kernel.org/kvm/20260823-shivank-gmem-fix-split-v1-0-512a29fb8e86@amd.com
+
+Signed-off-by: Shivank Garg <shivankg@amd.com>
 ---
- .../bpf/prog_tests/memcg_async_reclaim.c      | 686 ++++++++++++++++++
- .../selftests/bpf/progs/memcg_async_reclaim.c | 259 +++++++
- 2 files changed, 945 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
- create mode 100644 tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
+Shivank Garg (4):
+      KVM: selftests: Prepare guest_memfd_test for arbitrary NUMA nodes
+      KVM: selftests: Use an allowed memory node in test_mbind()
+      KVM: selftests: Use allowed memory nodes in test_numa_allocation()
+      KVM: selftests: Drop unused sysfs NUMA helpers
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
-new file mode 100644
-index 000000000000..65f500684463
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
-@@ -0,0 +1,686 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Memory controller eBPF async reclaim test
-+ */
-+
-+#include <test_progs.h>
-+#include <sys/mman.h>
-+#include <sys/stat.h>
-+#include <sys/vfs.h>
-+#include <sys/wait.h>
-+#include <fcntl.h>
-+#include <signal.h>
-+#include <time.h>
-+#include <unistd.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <limits.h>
-+#include <linux/magic.h>
-+
-+#include "cgroup_helpers.h"
-+
-+struct bpf_args {
-+	u64 high_cgroup_id;
-+	u64 low_cgroup_id;
-+	u64 event_delta_threshold;
-+	u64 check_ns;
-+};
-+
-+#include "memcg_async_reclaim.skel.h"
-+
-+#define FILE_SIZE (32 * 1024 * 1024ul)
-+#define BUFFER_SIZE (4096)
-+#define CG_LIMIT (32 * 1024 * 1024ul)
-+#define READ_TIMES 50
-+
-+#define CG_DIR "/memcg_async_reclaim"
-+#define CG_HIGH_DIR CG_DIR "/high"
-+#define CG_LOW_DIR CG_DIR "/low"
-+
-+#define CG_DYING_DIR "/memcg_async_reclaim_dying"
-+#define CG_DYING_TRIGGER_DIR CG_DYING_DIR "/trigger"
-+#define CG_DYING_TARGET_DIR CG_DYING_DIR "/target"
-+
-+#define CHECK_PERIOD_NS (2 * 1000 * 1000ull)
-+#define EVENT_DELTA_THRESHOLD 1
-+
-+/*
-+ * Timing for the dying test: after the target cgroup is removed, give
-+ * in-flight reclaim passes time to drain, then wait for a reclaim round
-+ * to hit the removed target. The keepalive reader keeps the trigger
-+ * cgroup refaulting, and the timer fires every CHECK_PERIOD_NS, so
-+ * such a round must show up within a few timer periods.
-+ */
-+#define DYING_SETTLE_US (200 * 1000)
-+#define DYING_POLL_ITERS 500
-+#define DYING_POLL_INTERVAL_US (10 * 1000)
-+
-+/*
-+ * The workload files must sit on a regular filesystem: with swap
-+ * disabled for the cgroup, tmpfs/ramfs pages are unevictable and would
-+ * OOM the cgroup instead of exercising reclaim; they are also charged
-+ * as anonymous memory, so they never raise the WORKINGSET_REFAULT_FILE
-+ * events the BPF program monitors. Fall back to the current directory
-+ * when /tmp is backed by such a filesystem.
-+ */
-+static const char *workload_files_dir(void)
-+{
-+	struct statfs st;
-+
-+	if (!statfs("/tmp", &st) &&
-+	    (st.f_type == TMPFS_MAGIC || st.f_type == RAMFS_MAGIC))
-+		return ".";
-+	return "/tmp";
-+}
-+
-+/*
-+ * The workload children run after test_progs hijacked stdio, so
-+ * anything they print is lost with their private copy of the hijacked
-+ * buffer. The exit status is the only diagnostics channel that reaches
-+ * the parent, so each failing step gets its own code.
-+ */
-+enum child_exit_code {
-+	CHILD_EXIT_OK = 0,
-+	CHILD_EXIT_JOIN_CGROUP,
-+	CHILD_EXIT_WRITE_FILE,
-+	CHILD_EXIT_READ_FILE,
-+	CHILD_EXIT_TIME_FILE,
-+};
-+
-+static const char *child_exit_str(int code)
-+{
-+	switch (code) {
-+	case CHILD_EXIT_OK:
-+		return "success";
-+	case CHILD_EXIT_JOIN_CGROUP:
-+		return "join cgroup";
-+	case CHILD_EXIT_WRITE_FILE:
-+		return "write data file";
-+	case CHILD_EXIT_READ_FILE:
-+		return "read data file";
-+	case CHILD_EXIT_TIME_FILE:
-+		return "write time file";
-+	default:
-+		return "unknown";
-+	}
-+}
-+
-+static int setup_high_low_cgroups(u64 *high_cgroup_id, u64 *low_cgroup_id)
-+{
-+	int ret;
-+	char limit_buf[20];
-+
-+	ret = setup_cgroup_environment();
-+	if (!ASSERT_OK(ret, "setup_cgroup_environment"))
-+		goto cleanup;
-+
-+	ret = create_and_get_cgroup(CG_DIR);
-+	if (!ASSERT_GE(ret, 0, "create_and_get_cgroup " CG_DIR))
-+		goto cleanup;
-+	close(ret);
-+
-+	ret = enable_controllers(CG_DIR, "memory");
-+	if (!ASSERT_OK(ret, "enable_controllers"))
-+		goto cleanup;
-+
-+	snprintf(limit_buf, sizeof(limit_buf), "%lu", CG_LIMIT);
-+	ret = write_cgroup_file(CG_DIR, "memory.max", limit_buf);
-+	if (!ASSERT_OK(ret, "write_cgroup_file memory.max"))
-+		goto cleanup;
-+
-+	/*
-+	 * Keep the workloads from swapping out. With CONFIG_SWAP=n the
-+	 * memory.swap.max file does not exist, and no swap can happen
-+	 * anyway, so skip the write.
-+	 */
-+	if (!access("/proc/swaps", F_OK)) {
-+		ret = write_cgroup_file(CG_DIR, "memory.swap.max", "0");
-+		if (!ASSERT_OK(ret, "write_cgroup_file memory.swap.max"))
-+			goto cleanup;
-+	}
-+
-+	ret = create_and_get_cgroup(CG_HIGH_DIR);
-+	if (!ASSERT_GE(ret, 0, "create_and_get_cgroup " CG_HIGH_DIR))
-+		goto cleanup;
-+	close(ret);
-+
-+	*high_cgroup_id = get_cgroup_id(CG_HIGH_DIR);
-+	if (!ASSERT_GT(*high_cgroup_id, 0, "get_cgroup_id"))
-+		goto cleanup;
-+
-+	ret = create_and_get_cgroup(CG_LOW_DIR);
-+	if (!ASSERT_GE(ret, 0, "create_and_get_cgroup " CG_LOW_DIR))
-+		goto cleanup;
-+	close(ret);
-+
-+	*low_cgroup_id = get_cgroup_id(CG_LOW_DIR);
-+	if (!ASSERT_GT(*low_cgroup_id, 0, "get_cgroup_id"))
-+		goto cleanup;
-+
-+	return 0;
-+
-+cleanup:
-+	cleanup_cgroup_environment();
-+	return -1;
-+}
-+
-+/*
-+ * The dying test needs an empty reclaim target plus a cgroup that keeps
-+ * refaulting while the target is removed, so reclaim rounds keep
-+ * starting and run into the removed target. The two have to be separate
-+ * cgroups: the target must hold no processes to be removed, and v2's
-+ * no-internal-process constraint keeps the refaulting workload out of
-+ * any parent that has domain children.
-+ */
-+static int setup_dying_cgroups(u64 *trigger_cgroup_id, u64 *target_cgroup_id)
-+{
-+	int ret;
-+	char limit_buf[20];
-+
-+	ret = setup_cgroup_environment();
-+	if (!ASSERT_OK(ret, "setup_cgroup_environment"))
-+		goto cleanup;
-+
-+	ret = create_and_get_cgroup(CG_DYING_DIR);
-+	if (!ASSERT_GE(ret, 0, "create_and_get_cgroup " CG_DYING_DIR))
-+		goto cleanup;
-+	close(ret);
-+
-+	ret = enable_controllers(CG_DYING_DIR, "memory");
-+	if (!ASSERT_OK(ret, "enable_controllers"))
-+		goto cleanup;
-+
-+	snprintf(limit_buf, sizeof(limit_buf), "%lu", CG_LIMIT);
-+	ret = write_cgroup_file(CG_DYING_DIR, "memory.max", limit_buf);
-+	if (!ASSERT_OK(ret, "write_cgroup_file memory.max"))
-+		goto cleanup;
-+
-+	/* See the matching write in setup_high_low_cgroups(). */
-+	if (!access("/proc/swaps", F_OK)) {
-+		ret = write_cgroup_file(CG_DYING_DIR, "memory.swap.max", "0");
-+		if (!ASSERT_OK(ret, "write_cgroup_file memory.swap.max"))
-+			goto cleanup;
-+	}
-+
-+	ret = create_and_get_cgroup(CG_DYING_TRIGGER_DIR);
-+	if (!ASSERT_GE(ret, 0, "create_and_get_cgroup " CG_DYING_TRIGGER_DIR))
-+		goto cleanup;
-+	close(ret);
-+
-+	*trigger_cgroup_id = get_cgroup_id(CG_DYING_TRIGGER_DIR);
-+	if (!ASSERT_GT(*trigger_cgroup_id, 0, "get_cgroup_id"))
-+		goto cleanup;
-+
-+	ret = create_and_get_cgroup(CG_DYING_TARGET_DIR);
-+	if (!ASSERT_GE(ret, 0, "create_and_get_cgroup " CG_DYING_TARGET_DIR))
-+		goto cleanup;
-+	close(ret);
-+
-+	*target_cgroup_id = get_cgroup_id(CG_DYING_TARGET_DIR);
-+	if (!ASSERT_GT(*target_cgroup_id, 0, "get_cgroup_id"))
-+		goto cleanup;
-+
-+	return 0;
-+
-+cleanup:
-+	cleanup_cgroup_environment();
-+	return -1;
-+}
-+
-+static int write_file(const char *filename)
-+{
-+	int ret = -1;
-+	size_t written = 0;
-+	char *buffer;
-+	FILE *fp;
-+
-+	fp = fopen(filename, "wb");
-+	if (!fp)
-+		goto out;
-+
-+	buffer = malloc(BUFFER_SIZE);
-+	if (!buffer)
-+		goto cleanup_fp;
-+
-+	memset(buffer, 'A', BUFFER_SIZE);
-+
-+	while (written < FILE_SIZE) {
-+		size_t to_write = FILE_SIZE - written < BUFFER_SIZE ?
-+				  FILE_SIZE - written : BUFFER_SIZE;
-+
-+		if (fwrite(buffer, 1, to_write, fp) != to_write)
-+			goto cleanup;
-+		written += to_write;
-+	}
-+
-+	ret = 0;
-+cleanup:
-+	free(buffer);
-+cleanup_fp:
-+	fclose(fp);
-+out:
-+	return ret;
-+}
-+
-+static int read_file(const char *filename, int iterations)
-+{
-+	int ret = -1;
-+	long page_size = sysconf(_SC_PAGESIZE);
-+	char *map;
-+	size_t i;
-+	int fd;
-+	struct stat sb;
-+
-+	fd = open(filename, O_RDONLY);
-+	if (fd == -1)
-+		goto out;
-+
-+	if (fstat(fd, &sb) == -1)
-+		goto cleanup_fd;
-+
-+	if (sb.st_size != FILE_SIZE) {
-+		fprintf(stderr, "File size mismatch: expected %lu, got %lu\n",
-+			(unsigned long)FILE_SIZE, (unsigned long)sb.st_size);
-+		goto cleanup_fd;
-+	}
-+
-+	map = mmap(NULL, FILE_SIZE, PROT_READ, MAP_PRIVATE, fd, 0);
-+	if (map == MAP_FAILED)
-+		goto cleanup_fd;
-+
-+	for (int iter = 0; iter < iterations; iter++) {
-+		for (i = 0; i < FILE_SIZE; i += page_size) {
-+			/* access a byte to trigger page fault */
-+			volatile char v = map[i];
-+			(void)v;
-+		}
-+	}
-+
-+	if (munmap(map, FILE_SIZE) == -1)
-+		goto cleanup_fd;
-+
-+	ret = 0;
-+
-+cleanup_fd:
-+	close(fd);
-+out:
-+	return ret;
-+}
-+
-+static int real_test_child_work(const char *cgroup_path, char *data_filename,
-+				char *time_filename, int read_times)
-+{
-+	struct timespec start, end;
-+	double elapsed;
-+	FILE *fp;
-+
-+	if (join_parent_cgroup(cgroup_path))
-+		return CHILD_EXIT_JOIN_CGROUP;
-+
-+	clock_gettime(CLOCK_MONOTONIC, &start);
-+
-+	if (write_file(data_filename))
-+		return CHILD_EXIT_WRITE_FILE;
-+
-+	if (read_file(data_filename, read_times))
-+		return CHILD_EXIT_READ_FILE;
-+
-+	clock_gettime(CLOCK_MONOTONIC, &end);
-+
-+	if (!time_filename)
-+		return CHILD_EXIT_OK;
-+
-+	elapsed = (end.tv_sec - start.tv_sec) +
-+		  (end.tv_nsec - start.tv_nsec) / 1000000000.0;
-+	printf("%.6f\n", elapsed);
-+
-+	fp = fopen(time_filename, "w");
-+	if (!fp)
-+		return CHILD_EXIT_TIME_FILE;
-+	fprintf(fp, "%.6f", elapsed);
-+	fclose(fp);
-+
-+	return CHILD_EXIT_OK;
-+}
-+
-+static int get_time(char *time_filename, double *time)
-+{
-+	int ret = -1;
-+	FILE *fp;
-+	char buf[64];
-+
-+	fp = fopen(time_filename, "r");
-+	if (!ASSERT_OK_PTR(fp, "fopen"))
-+		goto out;
-+
-+	if (!ASSERT_OK_PTR(fgets(buf, sizeof(buf), fp), "fgets"))
-+		goto cleanup;
-+
-+	if (sscanf(buf, "%lf", time) != 1) {
-+		PRINT_FAIL("sscanf %s", buf);
-+		goto cleanup;
-+	}
-+
-+	ret = 0;
-+cleanup:
-+	fclose(fp);
-+out:
-+	return ret;
-+}
-+
-+static int
-+run_high_low_workload(double *high_elapsed, double *low_elapsed, int read_times)
-+{
-+	char high_data_file[PATH_MAX];
-+	char low_data_file[PATH_MAX];
-+	char high_time_file[PATH_MAX];
-+	char low_time_file[PATH_MAX];
-+	const char *dir = workload_files_dir();
-+	pid_t high_pid = -1, low_pid = -1;
-+	pid_t wait_ret;
-+	int fd, status;
-+	int ret = -1;
-+
-+	snprintf(high_data_file, sizeof(high_data_file),
-+		 "%s/memcg_async_high_data_XXXXXX", dir);
-+	snprintf(low_data_file, sizeof(low_data_file),
-+		 "%s/memcg_async_low_data_XXXXXX", dir);
-+	snprintf(high_time_file, sizeof(high_time_file),
-+		 "%s/memcg_async_high_time_XXXXXX", dir);
-+	snprintf(low_time_file, sizeof(low_time_file),
-+		 "%s/memcg_async_low_time_XXXXXX", dir);
-+
-+	fd = mkstemp(high_data_file);
-+	if (!ASSERT_GE(fd, 0, "mkstemp"))
-+		goto cleanup;
-+	close(fd);
-+
-+	fd = mkstemp(low_data_file);
-+	if (!ASSERT_GE(fd, 0, "mkstemp"))
-+		goto cleanup;
-+	close(fd);
-+
-+	fd = mkstemp(high_time_file);
-+	if (!ASSERT_GE(fd, 0, "mkstemp"))
-+		goto cleanup;
-+	close(fd);
-+
-+	fd = mkstemp(low_time_file);
-+	if (!ASSERT_GE(fd, 0, "mkstemp"))
-+		goto cleanup;
-+	close(fd);
-+
-+	low_pid = fork();
-+	if (!ASSERT_GE(low_pid, 0, "fork low"))
-+		goto cleanup;
-+	if (low_pid == 0)
-+		_exit(real_test_child_work(CG_LOW_DIR, low_data_file,
-+					  low_time_file, read_times));
-+
-+	high_pid = fork();
-+	if (!ASSERT_GE(high_pid, 0, "fork high"))
-+		goto cleanup;
-+	if (high_pid == 0)
-+		_exit(real_test_child_work(CG_HIGH_DIR, high_data_file,
-+					  high_time_file, read_times));
-+
-+	wait_ret = waitpid(low_pid, &status, 0);
-+	if (!ASSERT_GT(wait_ret, 0, "low waitpid"))
-+		goto cleanup;
-+	/*
-+	 * The child has been reaped and its PID can already be reused,
-+	 * so mark it to keep cleanup from signaling an unrelated process.
-+	 */
-+	low_pid = -1;
-+	if (!ASSERT_TRUE(WIFEXITED(status), "low exited"))
-+		goto cleanup;
-+	if (WEXITSTATUS(status) != CHILD_EXIT_OK) {
-+		PRINT_FAIL("low child failed at: %s (exit status %d)",
-+			   child_exit_str(WEXITSTATUS(status)),
-+			   WEXITSTATUS(status));
-+		goto cleanup;
-+	}
-+
-+	wait_ret = waitpid(high_pid, &status, 0);
-+	if (!ASSERT_GT(wait_ret, 0, "high waitpid"))
-+		goto cleanup;
-+	/* Same as above: the reaped PID must not be signaled again. */
-+	high_pid = -1;
-+	if (!ASSERT_TRUE(WIFEXITED(status), "high exited"))
-+		goto cleanup;
-+	if (WEXITSTATUS(status) != CHILD_EXIT_OK) {
-+		PRINT_FAIL("high child failed at: %s (exit status %d)",
-+			   child_exit_str(WEXITSTATUS(status)),
-+			   WEXITSTATUS(status));
-+		goto cleanup;
-+	}
-+
-+	if (get_time(high_time_file, high_elapsed))
-+		goto cleanup;
-+	if (get_time(low_time_file, low_elapsed))
-+		goto cleanup;
-+
-+	ret = 0;
-+
-+cleanup:
-+	/* On failure, make sure no child process is left behind */
-+	if (ret) {
-+		if (high_pid > 0) {
-+			kill(high_pid, SIGKILL);
-+			(void)waitpid(high_pid, NULL, 0);
-+		}
-+		if (low_pid > 0) {
-+			kill(low_pid, SIGKILL);
-+			(void)waitpid(low_pid, NULL, 0);
-+		}
-+	}
-+	unlink(low_time_file);
-+	unlink(high_time_file);
-+	unlink(low_data_file);
-+	unlink(high_data_file);
-+	return ret;
-+}
-+
-+static int
-+setup_bpf(u64 high_cgroup_id, u64 low_cgroup_id,
-+	  struct memcg_async_reclaim **skel_ptr)
-+{
-+	struct memcg_async_reclaim *skel;
-+	struct bpf_args args = {
-+		.high_cgroup_id = high_cgroup_id,
-+		.low_cgroup_id = low_cgroup_id,
-+		.event_delta_threshold = EVENT_DELTA_THRESHOLD,
-+		.check_ns = CHECK_PERIOD_NS,
-+	};
-+	LIBBPF_OPTS(bpf_test_run_opts, run_opts,
-+		.ctx_in = &args,
-+		.ctx_size_in = sizeof(args));
-+	int prog_init_fd, err;
-+
-+	skel = memcg_async_reclaim__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "memcg_async_reclaim__open_and_load"))
-+		return -1;
-+
-+	prog_init_fd = bpf_program__fd(skel->progs.wq_prog_init);
-+
-+	err = bpf_prog_test_run_opts(prog_init_fd, &run_opts);
-+	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
-+		goto error_out;
-+	if (!ASSERT_EQ(run_opts.retval, 0, "prog_init retval"))
-+		goto error_out;
-+
-+	*skel_ptr = skel;
-+	return 0;
-+
-+error_out:
-+	memcg_async_reclaim__destroy(skel);
-+	return -1;
-+}
-+
-+void test_memcg_async_reclaim(void)
-+{
-+	u64 high_cgroup_id, low_cgroup_id;
-+	int err;
-+	double high_time = 0.0, low_time = 0.0;
-+	struct memcg_async_reclaim *skel = NULL;
-+
-+	err = setup_high_low_cgroups(&high_cgroup_id, &low_cgroup_id);
-+	if (!ASSERT_OK(err, "setup_high_low_cgroups reclaim"))
-+		return;
-+
-+	err = setup_bpf(high_cgroup_id, low_cgroup_id, &skel);
-+	if (!ASSERT_OK(err, "setup_bpf"))
-+		goto out;
-+
-+	err = run_high_low_workload(&high_time, &low_time, READ_TIMES);
-+	if (!ASSERT_OK(err, "run_high_low_workload reclaim"))
-+		goto out;
-+
-+	/*
-+	 * The timing comparison below alone cannot distinguish a working
-+	 * reclaim from a no-op one, so require that the BPF program
-+	 * actually reclaimed memory from the low cgroup.
-+	 */
-+	if (!ASSERT_GT(skel->bss->reclaim_calls, 0, "reclaim_calls"))
-+		goto out;
-+	if (!ASSERT_GT(skel->bss->reclaimed_bytes, 0, "reclaimed_bytes"))
-+		goto out;
-+
-+	if (high_time >= low_time)
-+		PRINT_FAIL("high cgroup not improved: high=%f low=%f",
-+			   high_time, low_time);
-+
-+out:
-+	if (skel)
-+		memcg_async_reclaim__destroy(skel);
-+	cleanup_cgroup_environment();
-+}
-+
-+/*
-+ * Keep refaults flowing through the trigger cgroup so reclaim rounds
-+ * keep being triggered while the target cgroup is being removed. The
-+ * child joins the trigger cgroup and writes the data file there, so
-+ * that the file pages are charged to the trigger cgroup and actually
-+ * come under its memory limit; then it re-reads the file in a loop
-+ * until it is killed.
-+ */
-+static pid_t spawn_keepalive_reader(const char *data_file)
-+{
-+	pid_t pid = fork();
-+
-+	if (pid != 0)
-+		return pid;
-+
-+	if (join_parent_cgroup(CG_DYING_TRIGGER_DIR))
-+		_exit(CHILD_EXIT_JOIN_CGROUP);
-+	if (write_file(data_file))
-+		_exit(CHILD_EXIT_WRITE_FILE);
-+	for (;;) {
-+		if (read_file(data_file, READ_TIMES))
-+			_exit(CHILD_EXIT_READ_FILE);
-+	}
-+}
-+
-+/*
-+ * Remove the reclaim target while the BPF program keeps running and
-+ * verify that reclaim stops on the dying/removed cgroup instead of
-+ * reclaiming from it.
-+ *
-+ * The target stays empty; the workload lives in the trigger cgroup and
-+ * only keeps refaults flowing so that reclaim rounds keep starting,
-+ * both before and after the target is removed. reclaim_calls growing
-+ * while the target is alive proves that rounds really run (the kfunc
-+ * returns 0 on the empty target, but the call is still counted), and
-+ * after the removal the skip counters must grow while reclaim_calls
-+ * and reclaimed_bytes stay frozen.
-+ */
-+void test_memcg_async_reclaim_dying(void)
-+{
-+	u64 trigger_cgroup_id, target_cgroup_id;
-+	u64 calls_before, bytes_before;
-+	char data_file[PATH_MAX] = "";
-+	struct memcg_async_reclaim *skel = NULL;
-+	pid_t reader_pid = -1;
-+	int err, fd, i;
-+
-+	err = setup_dying_cgroups(&trigger_cgroup_id, &target_cgroup_id);
-+	if (!ASSERT_OK(err, "setup_dying_cgroups"))
-+		return;
-+
-+	err = setup_bpf(trigger_cgroup_id, target_cgroup_id, &skel);
-+	if (!ASSERT_OK(err, "setup_bpf"))
-+		goto out;
-+
-+	snprintf(data_file, sizeof(data_file),
-+		 "%s/memcg_async_dying_XXXXXX", workload_files_dir());
-+	fd = mkstemp(data_file);
-+	if (!ASSERT_GE(fd, 0, "mkstemp"))
-+		goto out;
-+	close(fd);
-+
-+	reader_pid = spawn_keepalive_reader(data_file);
-+	if (!ASSERT_GT(reader_pid, 0, "fork keepalive reader"))
-+		goto out;
-+
-+	/* Wait for reclaim rounds to reach the live target cgroup. */
-+	for (i = 0; i < DYING_POLL_ITERS; i++) {
-+		if (skel->bss->reclaim_calls > 0)
-+			break;
-+		usleep(DYING_POLL_INTERVAL_US);
-+	}
-+	if (!ASSERT_GT(skel->bss->reclaim_calls, 0, "reclaim_calls"))
-+		goto out;
-+
-+	remove_cgroup(CG_DYING_TARGET_DIR);
-+
-+	/* Let reclaim passes that were already in flight drain. */
-+	usleep(DYING_SETTLE_US);
-+
-+	calls_before = skel->bss->reclaim_calls;
-+	bytes_before = skel->bss->reclaimed_bytes;
-+
-+	/* Wait for reclaim rounds to hit the removed cgroup. */
-+	for (i = 0; i < DYING_POLL_ITERS; i++) {
-+		if (skel->bss->reclaim_target_gone ||
-+		    skel->bss->reclaim_skipped_dying)
-+			break;
-+		usleep(DYING_POLL_INTERVAL_US);
-+	}
-+
-+	if (!skel->bss->reclaim_target_gone &&
-+	    !skel->bss->reclaim_skipped_dying) {
-+		PRINT_FAIL("no reclaim round hit the removed cgroup (gone=%llu, dying=%llu)",
-+			   (unsigned long long)skel->bss->reclaim_target_gone,
-+			   (unsigned long long)skel->bss->reclaim_skipped_dying);
-+		goto out;
-+	}
-+
-+	/*
-+	 * reclaim_skipped_dying shows that the CSS_DYING/CSS_ONLINE check
-+	 * caught the cgroup mid-teardown. Whether it is hit is timing
-+	 * dependent, because the cgroup may already be fully released, so
-+	 * only the combined skip count above is asserted.
-+	 */
-+	printf("memcg_async_reclaim_dying: skips on removed cgroup: gone=%llu, dying=%llu\n",
-+	       (unsigned long long)skel->bss->reclaim_target_gone,
-+	       (unsigned long long)skel->bss->reclaim_skipped_dying);
-+
-+	/* Nothing may have been reclaimed from the removed target. */
-+	if (!ASSERT_EQ(skel->bss->reclaim_calls, calls_before, "reclaim_calls"))
-+		goto out;
-+	if (!ASSERT_EQ(skel->bss->reclaimed_bytes, bytes_before,
-+		       "reclaimed_bytes"))
-+		goto out;
-+
-+out:
-+	if (reader_pid > 0) {
-+		kill(reader_pid, SIGKILL);
-+		(void)waitpid(reader_pid, NULL, 0);
-+	}
-+	if (data_file[0])
-+		unlink(data_file);
-+	if (skel)
-+		memcg_async_reclaim__destroy(skel);
-+	cleanup_cgroup_environment();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/memcg_async_reclaim.c b/tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
-new file mode 100644
-index 000000000000..5033d5ec4c8e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
-@@ -0,0 +1,259 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include "bpf_experimental.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+
-+#define CLOCK_MONOTONIC_ID	1
-+#define PAGE_SIZE		4096UL
-+/*
-+ * One reclaim round targets RECLAIM_MAX_ITER batches of RECLAIM_SIZE
-+ * each. Each bpf_wq callback reclaims a single batch and requeues the
-+ * same work item for the next one, so no callback runs longer than one
-+ * bounded reclaim pass.
-+ */
-+#define RECLAIM_SIZE		(32 * PAGE_SIZE)
-+#define RECLAIM_MAX_ITER	32
-+
-+struct bpf_args {
-+	u64 high_cgroup_id;
-+	u64 low_cgroup_id;
-+	u64 event_delta_threshold;
-+	u64 check_ns;
-+};
-+
-+struct cgroup_memcg {
-+	struct cgroup *cgrp;
-+	struct mem_cgroup *memcg;
-+};
-+
-+static u64 wq_high_cgroup_id;
-+static u64 wq_low_cgroup_id;
-+
-+/*
-+ * Statistics exposed to userspace through .bss, so the test can verify
-+ * that reclaim actually happened instead of relying on timing alone.
-+ */
-+u64 reclaim_calls;
-+u64 reclaimed_bytes;
-+/*
-+ * Reclaim attempts skipped because the target cgroup is dying or has
-+ * been removed. reclaim_skipped_dying counts lookups that still found
-+ * the cgroup while it is being torn down, reclaim_target_gone counts
-+ * lookups that found nothing. The test removes the target cgroup while
-+ * reclaim is running and checks that reclaim stops via these counters.
-+ */
-+u64 reclaim_skipped_dying;
-+u64 reclaim_target_gone;
-+
-+static int get_cgroup_memcg_from_id(u64 cgroup_id, struct cgroup_memcg *cm)
-+{
-+	cm->cgrp = bpf_cgroup_from_id(cgroup_id);
-+	if (!cm->cgrp)
-+		return -1;
-+
-+	cm->memcg = bpf_get_mem_cgroup(&cm->cgrp->self);
-+	if (!cm->memcg) {
-+		bpf_cgroup_release(cm->cgrp);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static void put_cgroup_memcg(struct cgroup_memcg *cm)
-+{
-+	bpf_put_mem_cgroup(cm->memcg);
-+	bpf_cgroup_release(cm->cgrp);
-+}
-+
-+static int get_cgroup_event(u64 cgroup_id, u64 *val)
-+{
-+	struct cgroup_memcg cm;
-+
-+	if (get_cgroup_memcg_from_id(cgroup_id, &cm))
-+		return -1;
-+	bpf_mem_cgroup_flush_stats(cm.memcg);
-+	*val = bpf_mem_cgroup_page_state(cm.memcg,
-+		bpf_core_enum_value(enum node_stat_item,
-+				    WORKINGSET_REFAULT_FILE));
-+	put_cgroup_memcg(&cm);
-+
-+	return 0;
-+}
-+
-+static bool
-+should_reclaim_cgroup(u64 cgroup_id, u64 *prev_event, u64 event_delta_threshold)
-+{
-+	u64 cur, delta;
-+
-+	if (get_cgroup_event(cgroup_id, &cur))
-+		return false;
-+
-+	delta = cur - *prev_event;
-+	*prev_event = cur;
-+
-+	return delta >= event_delta_threshold;
-+}
-+
-+/*
-+ * A cgroup is dying once it has been offlined (CSS_ONLINE cleared) or
-+ * CSS_DYING has been raised, mirroring cgroup_is_dead()/css_is_dying()
-+ * in include/linux/cgroup.h. bpf_cgroup_from_id() can still hand back
-+ * such a cgroup, because it only fails once the last reference has been
-+ * dropped, so reclaim has to check these flags instead of relying on
-+ * the lookup failing.
-+ *
-+ * CSS_ONLINE and CSS_DYING come from vmlinux.h: the kernel defines them
-+ * in an anonymous enum, so bpf_core_enum_value() has no enum type to
-+ * bind to, and redeclaring them locally would clash with the vmlinux.h
-+ * enumerators. vmlinux.h is generated from the running kernel's BTF, so
-+ * the values already match the target kernel.
-+ */
-+static bool cgroup_is_dying(struct cgroup *cgrp)
-+{
-+	unsigned int flags = cgrp->self.flags;
-+
-+	return (flags & CSS_DYING) || !(flags & CSS_ONLINE);
-+}
-+
-+/*
-+ * Reclaim one batch from the target cgroup. Returns the number of
-+ * bytes reclaimed, or 0 if the cgroup is dying or gone or nothing was
-+ * reclaimed.
-+ */
-+static u64 reclaim_cgroup(u64 cgroup_id, u64 size)
-+{
-+	struct cgroup_memcg cm;
-+	u64 nr = 0;
-+
-+	if (get_cgroup_memcg_from_id(cgroup_id, &cm)) {
-+		reclaim_target_gone++;
-+		return 0;
-+	}
-+
-+	if (cgroup_is_dying(cm.cgrp)) {
-+		reclaim_skipped_dying++;
-+		put_cgroup_memcg(&cm);
-+		return 0;
-+	}
-+
-+	reclaim_calls++;
-+	nr = bpf_proactive_reclaim(cm.memcg, size, -1);
-+	reclaimed_bytes += nr;
-+
-+	put_cgroup_memcg(&cm);
-+
-+	return nr;
-+}
-+
-+struct wq_elem {
-+	struct bpf_timer timer;
-+	struct bpf_wq work;
-+	u64 prev_event;
-+	u64 event_delta_threshold;
-+	u64 check_ns;
-+	/*
-+	 * Bytes still to reclaim in the current round, carried across
-+	 * requeues. 0 means no round is in progress; the timer path
-+	 * starts a new round by resetting it, requeued work only looks
-+	 * at it.
-+	 */
-+	u64 remaining;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct wq_elem);
-+} wq_map SEC(".maps");
-+
-+static int reclaim_work_fn(void *map, int *key, void *value)
-+{
-+	struct wq_elem *elem = value;
-+	u64 nr, size;
-+
-+	if (!elem->remaining) {
-+		/*
-+		 * Timer-triggered entry: start a new round only when the
-+		 * high cgroup refaults enough. Requeued entries skip this
-+		 * check and only look at remaining, so the refault delta
-+		 * is consumed once per round.
-+		 */
-+		if (!should_reclaim_cgroup(wq_high_cgroup_id, &elem->prev_event,
-+			elem->event_delta_threshold))
-+			return 0;
-+		elem->remaining = RECLAIM_MAX_ITER * RECLAIM_SIZE;
-+	}
-+
-+	/* One bounded reclaim pass per callback */
-+	size = elem->remaining < RECLAIM_SIZE ? elem->remaining : RECLAIM_SIZE;
-+	nr = reclaim_cgroup(wq_low_cgroup_id, size);
-+	if (!nr) {
-+		elem->remaining = 0;
-+		return 0;
-+	}
-+
-+	/* try_to_free_mem_cgroup_pages() may reclaim more than requested */
-+	if (nr >= elem->remaining)
-+		elem->remaining = 0;
-+	else
-+		elem->remaining -= nr;
-+
-+	/* Requeue the same work item for the next batch */
-+	if (elem->remaining)
-+		bpf_wq_start(&elem->work, 0);
-+
-+	return 0;
-+}
-+
-+static int wq_timer_cb(void *map, int *key, struct wq_elem *elem)
-+{
-+	bpf_wq_start(&elem->work, 0);
-+	bpf_timer_start(&elem->timer, elem->check_ns, 0);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int wq_prog_init(struct bpf_args *ctx)
-+{
-+	struct wq_elem *elem;
-+	__u32 key = 0;
-+	int ret;
-+
-+	elem = bpf_map_lookup_elem(&wq_map, &key);
-+	if (!elem)
-+		return -1;
-+
-+	ret = bpf_wq_init(&elem->work, &wq_map, 0);
-+	if (ret)
-+		return ret;
-+
-+	ret = bpf_wq_set_callback(&elem->work, reclaim_work_fn, 0);
-+	if (ret)
-+		return ret;
-+
-+	ret = bpf_timer_init(&elem->timer, &wq_map, CLOCK_MONOTONIC_ID);
-+	if (ret)
-+		return ret;
-+
-+	ret = bpf_timer_set_callback(&elem->timer, wq_timer_cb);
-+	if (ret)
-+		return ret;
-+
-+	elem->prev_event = 0;
-+	elem->remaining = 0;
-+	elem->event_delta_threshold = ctx->event_delta_threshold;
-+	elem->check_ns = ctx->check_ns;
-+
-+	wq_high_cgroup_id = ctx->high_cgroup_id;
-+	wq_low_cgroup_id = ctx->low_cgroup_id;
-+
-+	return bpf_timer_start(&elem->timer, elem->check_ns, 0);
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ tools/testing/selftests/kvm/guest_memfd_test.c | 61 +++++++++++++++++---------
+ tools/testing/selftests/kvm/include/numaif.h   | 52 ----------------------
+ 2 files changed, 40 insertions(+), 73 deletions(-)
+---
+base-commit: 88405f0ad1d5c680afe3ea0ce9345fa9e1deaac8
+change-id: 20260901-gmem-selftests-fix-2a5e94192f79
+prerequisite-message-id: <20260903001625.2792367-1-seanjc@google.com>
+prerequisite-patch-id: 6424a3d1e4b372d513b201984c97181a9fc2320d
+prerequisite-patch-id: 1d0e83e328934e90b0e8cb9e4c47f9c7c2d12f9b
+prerequisite-patch-id: 11bb6b35408a3f251ae7300aa6f1cde2f3ebfac1
+prerequisite-patch-id: 7b68398ae0815a4892358359bd067b4cf84c4912
+prerequisite-patch-id: 91a2873eeff8555ff7bc728e29a797a07247bdc6
+prerequisite-patch-id: d068f85c63973f8bd7606cdb771a3d007b75ad02
+prerequisite-patch-id: 26bcf27d961c67b4173bb418fda0a581a6c8a72c
+
+Best regards,
 -- 
-2.53.0
+Shivank Garg <shivankg@amd.com>
 
