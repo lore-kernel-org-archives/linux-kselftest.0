@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 831583B47CD;
-	Mon,  7 Sep 2026 16:56:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7050F3AF666;
+	Mon,  7 Sep 2026 17:08:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788800221; cv=none; b=OLihD2X0NLIwR+EaJy3cEUuG0GqJSDRG09dD8ohTninaXQiyVQY4ohYP7swSGU3Ew0CcWgEUdM48VduCvK6dr4hk7TaXsqh2unwdw8c8q2ZQjCmBngvLP7hTYghYuW+b0cg6JJ33RIrnrWplGm4HJQuvS+B5w8Xxi3BWS3MFH4c=
+	t=1788800937; cv=none; b=cWobLN3SMzSq6kd0pFlCPKFYm2cvBta7itAc66lJ58ePVNr/AE4cY+i59wCTt7KJiUlVPr1hDJHUFSdUu+Ib1vS6gnYFU3IFgEYO77H+l/emSBFkciDfoIOvQtAouP7lqQr6w4eIKvo733CBO6b2dJNM/SUlbaRDfoHB5pRfXOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788800221; c=relaxed/simple;
-	bh=aTuazGd35Bcu9csBhTUgz4cz9heaPWV36zCjuHxVwA0=;
+	s=arc-20240116; t=1788800937; c=relaxed/simple;
+	bh=btc7pahP8DBBefhXLxJ2nWb1mk6pUWZslp/d2qEQ+Nk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pdEYwu7gLcvMCt2kva/RCjM5MChEnx+Xampw9l4Xm3rcoeM718KBZ6WLUcxB6A0XJ8N/GQWMRkzDnyg+dfXpjvv3LvH3OwttTJFZTN5kE8UALtjTxSWkGwRVbVUdIwKMzLxSPrzGm7TrO0Joh9OJyU+Ps1tpD4O+GG9nvtI2PSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U2eMkJBn; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=owY0lBTtZnmiIMbySxSDV4ccu2jw+xbWxlfgCnsNBmD1zPj1D77VCsgfY3/3RfrVFpleWo9Sud8OS6RvUtOE/iQwyn1iC4QJi7RWLB73peeHpPYqz21hfCnzED/4vQkpTMUciE1OEB7IzJG+Ery7VQbjgoCPVFb07/tS1+DfDF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aoskVabW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U2eMkJBn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A1461F00A3A;
-	Mon,  7 Sep 2026 16:56:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aoskVabW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30AAE1F00A3A;
+	Mon,  7 Sep 2026 17:08:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788800219;
-	bh=7sMiZud/gecw2GU2/OU3WSFMgRwBwDYM1b6ol/3L2AQ=;
+	s=k20260515; t=1788800936;
+	bh=j7x/51HwsP9l6I4L2UsRVOYC9hBKf+rW1hZb9VZ+8mk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=U2eMkJBnxejCrjOQYxNf49B/y7ghwS63xl8kEFfSHPWHnEslOhZPUH9PrfOaFb/oO
-	 vhBO4qgPGcA4rgq/5XcEfm7JlWYqx1IgFGQwjh1wWy1/O6JVpIHy2U4n8+BXHPsDNx
-	 1VLmZw2b6mikVBQRxjIYCzdsH5OuRk7gr2NrmNJMcOj+DSky/Ir00/zP+/t1IlvVKT
-	 b2ju0GSQNWjg7+im/JUVMHfkNJdv0WspOrigCfBEvB4oyND2m/Ye03Ju/EQ9/Hr6j1
-	 HFdX4QrTcpf91Aj+wxuQwfBphRIEyrP22dI461P1S/nE4ua3v7dNt1qETwDaMYrngQ
-	 Wxon93uiVUv/A==
-Message-ID: <d6dc52e3-b27d-4663-848c-a2f270fb4c5d@kernel.org>
-Date: Mon, 7 Sep 2026 18:56:51 +0200
+	b=aoskVabW49we9m61if+yG80C3wtGQ69YtOvFI7mW0eoHdMIHHFnJ3qaxHEKq0LFHS
+	 5MN11lbxi667fu1q0kWnrr2xojlZU6Pjj9shKb0acrAX/MqY47KHdVM2WKpQkEsEYD
+	 rROTjv/GJeFU9O5ZZOhJqZ9cRg/LjWupTnHG/Kh0LbkCx9e2FYQdVVS4toYaMSfJPN
+	 retSexSkntzEcSaWZjSrYBmj1cWP90KvFbE8LenDGr3jPKFad9FqK6Bsfu/aM/hQ1G
+	 yo5nqG2djiu7I6W/APCdjcIAMBkZZSEhKJFQOWudMlP9DXUkR9N1NzbG9Rc1Vb0Xlk
+	 QefYvOkesgvbA==
+Message-ID: <42c1b1be-d176-45fd-b467-464b5b87e116@kernel.org>
+Date: Mon, 7 Sep 2026 19:08:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/6] mm/vma: only permit MAP_PRIVATE /dev/zero to be
- mapped anonymous
+Subject: Re: [PATCH 6/6] tools/testing/selftests/mm: add MAP_PRIVATE-/dev/zero
+ merge tests
 To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Andrew Morton <akpm@linux-foundation.org>,
@@ -49,7 +49,7 @@ To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
 Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
  linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20260902-map-private-dev-zero-v1-0-a578c730cec7@kernel.org>
- <20260902-map-private-dev-zero-v1-3-a578c730cec7@kernel.org>
+ <20260902-map-private-dev-zero-v1-6-a578c730cec7@kernel.org>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -96,228 +96,132 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260902-map-private-dev-zero-v1-3-a578c730cec7@kernel.org>
+In-Reply-To: <20260902-map-private-dev-zero-v1-6-a578c730cec7@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 9/2/26 20:00, Lorenzo Stoakes (ARM) wrote:
-> In order to use mmap_prepare() with MAP_PRIVATE mappings of /dev/zero
-> without the success_hook hack we explicitly permitted mmap_prepare handlers
-> to set NULL vm_ops.
+> Assert that MAP_PRIVATE-mapped /dev/zero mappings behave like they are
+> anonymous.
 > 
-> However this is dangerous and we really only want to allow this for
-> MAP_PRIVATE-mapped /dev/zero.
+> We test both unfaulted and faulted/unfaulted merges - each with the regions
+> having page offset of 0, which would not merge if the mappings were treated
+> as if they were file-backed.
 > 
-> Therefore use the newly introduced file_is_dev_zero() to uniquely identify
-> MAP_PRIVATE-/dev/zero mappings and only permit this behaviour for them.
-> 
-> Then, remove all ability for mmap_prepare or mmap hooks to set a VMA
-> anonymous and update mmap_zero_prepare() to leave it to the core mmap code
-> to do so.
-> 
-> Note that this disallows nested MAP_PRIVATE-mappings of /dev/zero
-> regions. Doing this would be broken in any case.
-> 
-> We therefore do not need to update the mmap_prepare() compatibility layer
-> to reflect these changes, as the mmap hook check suffices to disallow this
-> behaviour.
-> 
-> Now we're setting vma->vm_ops to NULL for an mmap_prepare-initialised
-> MAP_PRIVATE-/dev/zero mapping, we have to avoid a subtle issue when
-> updating user-defined fields via set_vma_user_defined_fields().
-> 
-> The default for vma->vm_ops for all mmap_prepare-initialised mappings is
-> vma_dummy_vm_ops, so map->vm_ops will be set to this and setting
-> vma->vm_ops to this will render the VMA mistakenly non-anon.
-> 
-> In general, we should never be setting user-defined fields for an anonymous
-> VMA, so explicitly check for this to avoid doing so for the one case where
-> a mapping can be both mmap_prepare and anonymous.
-> 
-> In the case of legacy ->mmap hooks some drivers may set vma->vm_ops NULL
-> believing this is the equivalent of setting no VMA operations. Therefore
-> update mmap_file() to correct this by setting dummy VMA operations if this
-> occurs.
-> 
-> An example of this is drm_gem_shmem_mmap() which deliberately clears
-> vma->vm_ops before handing the VMA to dma-buf. Cases such as this will be
-> updated when they are converted to mmap_prepare.
-> 
-> Also, in order to avoid a single commit bisection hazard, add a temporary
-> workaround to set the VMA anonymous only after vma->vm_file is assigned in
-> __mmap_new_file_vma().
-> 
-> This is because vma_set_range() calls vma_set_pgoff() and
-> assert_sane_pgoff() in turn, prior to the vma->vm_file being assigned. If
-> we set the VMA anonymous early then this assert will fail.
-> 
-> This is removed in the subsequent commit.
+> With the recent change that makes them behave as pure anonymous mappings,
+> the merges should succeed as their page offsets are equal to their
+> anonymous page offsets.
 > 
 > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 > ---
->  mm/char-mem.c |  6 +-----
->  mm/internal.h | 17 ++++++++++-------
->  mm/vma.c      | 33 +++++++++++++++++++++++++--------
->  3 files changed, 36 insertions(+), 20 deletions(-)
+>  tools/testing/selftests/mm/merge.c | 104 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 104 insertions(+)
 > 
-> diff --git a/mm/char-mem.c b/mm/char-mem.c
-> index e53e89e6ddd8..c0b5fb019223 100644
-> --- a/mm/char-mem.c
-> +++ b/mm/char-mem.c
-> @@ -508,11 +508,7 @@ static int mmap_zero_prepare(struct vm_area_desc *desc)
->  	if (vma_desc_test(desc, VMA_SHARED_BIT))
->  		return shmem_zero_setup_desc(desc);
->  
-> -	/*
-> -	 * This is a highly unique situation where we mark a MAP_PRIVATE mapping
-> -	 * of /dev/zero anonymous, despite it not being.
-> -	 */
-> -	vma_desc_set_anonymous(desc);
-> +	/* MAP_PRIVATE semantics are taken care of for us by core mm. */
->  	return 0;
+> diff --git a/tools/testing/selftests/mm/merge.c b/tools/testing/selftests/mm/merge.c
+> index 52b8727b6628..7c528d470404 100644
+> --- a/tools/testing/selftests/mm/merge.c
+> +++ b/tools/testing/selftests/mm/merge.c
+> @@ -1362,6 +1362,110 @@ TEST_F(merge, anon_and_page_offset_mismatch_memfd)
+>  	ASSERT_EQ(procmap->query.vma_end, (unsigned long)ptr + 5 * page_size);
 >  }
 >  
-> diff --git a/mm/internal.h b/mm/internal.h
-> index 5d474e5f7709..da14c56fb24e 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -226,15 +226,18 @@ static inline int mmap_file(struct file *file, struct vm_area_struct *vma)
->  {
->  	int err = vfs_mmap(file, vma);
->  
-> -	if (likely(!err))
-> -		return 0;
-> -
->  	/*
-> -	 * OK, we tried to call the file hook for mmap(), but an error
-> -	 * arose. The mapping is in an inconsistent state and we must not invoke
-> -	 * any further hooks on it.
-> +	 * Either we tried to call the file hook for mmap() and an error arose
-> +	 * or a driver set vma->vm_ops = NULL intending there to be no VMA
-> +	 * operations.
+> +TEST_F(merge, merge_map_private_dev_zero_unfaulted)
+> +{
+> +	struct procmap_fd *procmap = &self->procmap;
+> +	unsigned int page_size = self->page_size;
+> +	char *carveout = self->carveout;
+> +	char *ptr, *ptr2;
+> +	int fd_zero;
+> +
+> +	if (access("/dev/zero", F_OK))
+> +		SKIP(return, "No /dev/zero.");
+> +	fd_zero = open("/dev/zero", O_RDWR);
+> +	ASSERT_NE(fd_zero, -1);
+> +
+> +	/*
+> +	 * Map two MAP_PRIVATE-/dev/zero VMAs next to one another with offset 0
+> +	 * each.
 > +	 *
-> +	 * In the former case the VMA is in an inconsistent state and we mustn't
-> +	 * invoke any further hooks on it, in the latter case the hook actually
-> +	 * wanted no further hooks to be invoked, so fix both by setting dummy
-> +	 * VMA ops.
->  	 */
-> -	vma->vm_ops = &vma_dummy_vm_ops;
-> +	if (unlikely(err || !vma->vm_ops))
-> +		vma->vm_ops = &vma_dummy_vm_ops;
->  
->  	return err;
->  }
-> diff --git a/mm/vma.c b/mm/vma.c
-> index 35e7a64855fa..4b8d430d9619 100644
-> --- a/mm/vma.c
-> +++ b/mm/vma.c
-> @@ -2621,6 +2621,19 @@ static int __mmap_new_file_vma(struct mmap_state *map,
->  	return 0;
->  }
->  
-> +static bool map_is_private(const struct mmap_state *map)
-> +{
-> +	return !vma_flags_test(&map->vma_flags, VMA_SHARED_BIT);
+> +	 * With these being made truly anonymous upon mapping, they will
+> +	 * merge. If they were file-backed VMAs the page offsets would prevent
+> +	 * merge:
+
+Nit: "the" merge? You're the native speaker, so I don't know if what you have is
+just correct :)
+
+> +	 *
+> +	 * |-----||------|    |-------------|
+> +	 * | ptr || ptr2 | -> |     ptr     |
+> +	 * |-----||------|    |-------------|
+> +	 */
+> +	ptr = mmap(carveout, 5 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_FIXED | MAP_PRIVATE, fd_zero, 0);
+> +	if (ptr == MAP_FAILED) {
+> +		close(fd_zero);
+> +		ASSERT_TRUE(false);
+> +	}
+> +	ptr2 = mmap(&carveout[5 * page_size], 5 * page_size,
+> +		   PROT_READ | PROT_WRITE, MAP_FIXED | MAP_PRIVATE, fd_zero, 0);
+> +	if (ptr2 == MAP_FAILED) {
+> +		close(fd_zero);
+
+Is the close() really required before the ASSERT?  After all, you're also not
+munmap'ing, so I wonder to which degree we have to clean up.
+
+So maybe this could just become a
+
+	ASSERT_NE(ptr2, MAP_FAILED);
+
+Same for ptr above.
+
+You could likely also do
+
+ptr = mmap()
+ptr2 = mmap()
+close(fd_zero);
+
+ASSERT_NE(ptr, MAP_FAILED);
+ASSERT_NE(ptr2, MAP_FAILED);
+
+> +		ASSERT_TRUE(false);
+> +	}
+> +	close(fd_zero);
+> +
+> +	/* Assert that they merged. */
+> +	ASSERT_TRUE(find_vma_procmap(procmap, ptr));
+> +	ASSERT_EQ(procmap->query.vma_start, (unsigned long)ptr);
+> +	ASSERT_EQ(procmap->query.vma_end, (unsigned long)ptr + 10 * page_size);
 > +}
 > +
-> +static bool map_is_anon(const struct mmap_state *map)
-
-I was wondering whether we should call this "map_is_private_anon", due to
-MAP_ANON|MAP_SHARED. But looking at __mmap_new_vma(), the existing "is_anon" is
-also limited to MAP_ANON|MAP_PRIVATE.
-
+> +TEST_F(merge, merge_map_private_dev_zero_faulted_unfaulted)
 > +{
-> +	if (!map_is_private(map))
-> +		return false;
+> +	struct procmap_fd *procmap = &self->procmap;
+> +	unsigned int page_size = self->page_size;
+> +	char *carveout = self->carveout;
+> +	char *ptr, *ptr2;
+> +	int fd_zero;
 > +
-> +	return !map->file || file_is_dev_zero(map->file);
-> +}
+> +	if (access("/dev/zero", F_OK))
+> +		SKIP(return, "No /dev/zero.");
+> +	fd_zero = open("/dev/zero", O_RDWR);
+> +	ASSERT_NE(fd_zero, -1);
 > +
->  /*
->   * __mmap_new_vma() - Allocate a new VMA for the region, as merging was not
->   * possible.
-> @@ -2634,8 +2647,7 @@ static int __mmap_new_file_vma(struct mmap_state *map,
->  static int __mmap_new_vma(struct mmap_state *map, struct vm_area_struct **vmap,
->  	struct mmap_action *action)
->  {
-> -	const bool is_anon = !map->file &&
-> -		!vma_flags_test(&map->vma_flags, VMA_SHARED_BIT);
-> +	const bool is_anon = map_is_anon(map);
->  	struct vma_iterator *vmi = map->vmi;
->  	int error = 0;
->  	struct vm_area_struct *vma;
-> @@ -2651,7 +2663,7 @@ static int __mmap_new_vma(struct mmap_state *map, struct vm_area_struct **vmap,
->  
->  	vma_iter_config(vmi, map->addr, map->end);
->  
-> -	if (is_anon)
-> +	if (is_anon && !map->file)
->  		vma_set_anonymous(vma);
->  
->  	vma_set_range(vma, map->addr, map->end, map->pgoff, map->anon_pgoff);
-> @@ -2669,6 +2681,10 @@ static int __mmap_new_vma(struct mmap_state *map, struct vm_area_struct **vmap,
->  	else if (!is_anon)
->  		error = shmem_zero_setup(vma);
->  
-> +	/* Temporary MAP_PRIVATE-/dev/zero workaround. */
-> +	if (is_anon && map->file)
-> +		vma_set_anonymous(vma);
-> +
->  	if (error)
->  		goto free_iter_vma;
->  
-> @@ -2777,6 +2793,10 @@ static int call_mmap_prepare(struct mmap_state *map,
->  	if (err)
->  		return err;
->  
-> +	/* Hooks cannot mark themselves anonymous. */
+> +	/*
+> +	 * Map a MAP_PRIVATE mapping of /dev/zero with page offset 0, then fault
+> +	 * it in:
+> +	 *
+> +	 * |-------------------------------|
+> +	 * |           faulted             |
+> +	 * |-------------------------------|
+> +	 */
+> +	ptr = mmap(carveout, 15 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_FIXED | MAP_PRIVATE, fd_zero, 0);
+> +	if (ptr == MAP_FAILED) {
+> +		close(fd_zero);
+> +		ASSERT_TRUE(false);
 
-I guess this comment will be stale soon (after #4 where you drop the
-set_anonymous part).
-
-Should it be
-
-"vm_ops are strictly required with mmap_prepare"
-
-or sth like that?
-
-> +	if (!desc->vm_ops)
-> +		return -EINVAL;
-> +
->  	err = call_action_prepare(map, desc);
->  	if (err)
->  		return err;
-> @@ -2799,10 +2819,7 @@ static int call_mmap_prepare(struct mmap_state *map,
->  static void set_vma_user_defined_fields(struct vm_area_struct *vma,
->  		struct mmap_state *map)
->  {
-> -	if (map->vm_ops)
-> -		vma->vm_ops = map->vm_ops;
-> -	else	/* Only /dev/zero should do this. */
-> -		vma_set_anonymous(vma);
-> +	vma->vm_ops = map->vm_ops;
->  	vma->vm_private_data = map->vm_private_data;
->  }
->  
-> @@ -2882,7 +2899,7 @@ static unsigned long __mmap_region(struct file *file, unsigned long addr,
->  		allocated_new = true;
->  	}
->  
-> -	if (have_mmap_prepare)
-> +	if (have_mmap_prepare && !map_is_anon(&map))
->  		set_vma_user_defined_fields(vma, &map);
-
-Ah, we have mmap_zero_prepare() for handling the shmem_zero_setup_desc(). I was
-just about to ask whether we can just get rid of this here.
-
-
-But, hold on, do we now even need that? Could core-mm now take care of that as
-well, and we could just remove mmap_zero_prepare() entirely?
-
-That is, we'd make shmem_zero_setup() in __mmap_new_vma() take care of this?
-Then we might not even need shmem_zero_setup_desc() anymore.
-
-Maybe harder than it sounds at first.
+Same question regarding cleanup requirements. The ASSERT_TRUE(false) looks a bit
+odd.
 
 -- 
 Cheers,
