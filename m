@@ -1,33 +1,36 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-157.mta1.migadu.com [95.215.58.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375EC472536;
-	Mon,  7 Sep 2026 15:04:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08AF4ADD88
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 15:08:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788793489; cv=none; b=dFpHE09Oct0NOJe0YHHi6okqk0yVY24bDFs9lRYar+T2QSAJq27RDp24LflOGaGGj8z9Ktlnn2XAAAbmO+yVvkQy9FH+n7N+KGjRxEUkUTIp3KNAn3UEPaqEE0LnZgrIeExD4ATuFBkKSoe8lOzLHTHBjqTXitkCsMvDATiNwQM=
+	t=1788793723; cv=none; b=BC0MO1T0r0pPMxbHVFa/X66uva7GpV/1eGszUu8/77MphgrCvt95Cdgo7p5OS3dS0tMMPwb/1E4jCH/evw1sXVZnSpRKBPGbXrmqx6nrn43hn+GW9CBpcxyHN4hrvYKwVdXhSRUetN7f1Iwooee6dzbgcaIEk/aeks4tsZvyHuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788793489; c=relaxed/simple;
-	bh=t2dJQdrZLefr4fTR0Q/g+d2QO2gjes/wTxxH+HOJ1Q4=;
+	s=arc-20240116; t=1788793723; c=relaxed/simple;
+	bh=9IaJRo/onH+WZUAxCRicEOSEY53Kz1vfjpyJNhUkVW4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uBu//wrDm9SGpcUHpyXEC5kovnRJnMQ7aK6meQuJTc76vZlhCTlZH1s0VBT0T3KgoQ76yCrdJSlpShr1+OoK7hPkqIgbevyZERmwfdv5TRVxwAiWDCmsrD0s5g72D3IpsPlPvIyaUEb/faTub1U/XXVWdgtY8xDsSm5Rsm893M0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hPnaEEnK; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=l6URe3PZ+29oanWvnpNiOBvkP5IARODLJUax7lXG68g/KVSGZrHatfSC4wDbjceV9od/YNh4joiYiQ6A0tccXyz6CgesY1VTEeyMbE5FZ7WCngeUNz8rEqePqWkOeecVE83LnhCaLZ5i1KYNG0D/Hr8pZ8S9Uf5lQZzdoADZ+io=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JNwKlzcd; arc=none smtp.client-ip=95.215.58.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hPnaEEnK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 043311F00ACF;
-	Mon,  7 Sep 2026 15:04:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788793487;
-	bh=WrmnsJms3KMQBnYoX9bqubw5TZDr+akXxSg4A3Qx0P8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=hPnaEEnKB2Wu05wVyWeyh6akPQFUbZVUsyfsVi3SVWE3pRYX+9X5pL/vJdw02dM0n
-	 Q6vqVhaS32rnCZ0Vy7JoDLS5DjoRIwiXueBDhAB7RGDJBaAqnqpWzDz4xq6Zbpd+iJ
-	 I93AAavqCIOxqGpZPwYqvQT5R5Mr7IkrSg/fpY8E7Pi6s8H/KdalnJ9EFUg308FAV9
-	 1Ct/0CnJg126tqlnLRq4qpftO17gh1OZvQf3YKqQUXVc89t0SpEF7juNS/UeX1xhAA
-	 JPlnrJm8ghMCYFyzKcZqvr8Ot3Gxu2ZJMFyPObyjc5vKR4vC3195B8UWNEAkHT0hak
-	 WZEi5kgDDX40g==
-Message-ID: <a8cb3260-abe2-4445-8477-4494870820bb@kernel.org>
-Date: Mon, 7 Sep 2026 17:04:38 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JNwKlzcd"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=9IaJRo/onH+WZUAxCRicEOSEY53Kz1vfjpyJNhUkVW4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788793719; v=1; x=1789398519;
+ b=JNwKlzcdbuTin8fwQdweSsro1lrTw4XdeHAToOEAr5drnMDbZucvdgT6gaLwq5zX94qZppbi
+ GUP58PSlT7HymSAa4fZociirYirjufE2ako1hTjDd3+l35uGnG+avo3NGtm8UIqceSdT41DpqDQ
+ uE5xOhmy0LO7TL72wRe6ozws=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 9e0dbadcb7e0ce26;
+	Mon, 07 Sep 2026 15:08:39 +0000
+X-Mizu-Trace-ID: 9e0dbadcb7e0ce26
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a44630a1-4965-4020-afb9-ba5b1a7848e6@linux.dev>
+Date: Mon, 7 Sep 2026 23:08:30 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,90 +38,102 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 5/6] tools/mm: make gup_bench a benchmark only tool
-To: Sarthak Sharma <sarthak.sharma@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
- <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Mark Brown <broonie@kernel.org>,
- Anshuman Khandual <anshuman.khandual@arm.com>,
- Muhammad Usama Anjum <usama.anjum@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260904123631.198697-1-sarthak.sharma@arm.com>
- <20260904123631.198697-6-sarthak.sharma@arm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
+Subject: Re: [PATCH bpf-next v6 1/2] bpf: Validate program attach type during
+ link update
+To: bot+bpf-ci@kernel.org, sanghyun.park.cnu@gmail.com, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, bpf@vger.kernel.org
+Cc: john.fastabend@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, shuah@kernel.org, sdf@fomichev.me,
+ pulehui@huawei.com, suchitkarunakaran@gmail.com, xukuohai@huawei.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20260907015003.65087-2-sanghyun.park.cnu@gmail.com>
+ <514a0c26ff5e0322fe0442d07142cafc7dda338a3ce2c5b7e9437dd994cb0ba1@mail.kernel.org>
 Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260904123631.198697-6-sarthak.sharma@arm.com>
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <514a0c26ff5e0322fe0442d07142cafc7dda338a3ce2c5b7e9437dd994cb0ba1@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
+On 2026/9/7 10:36, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+>> index c7bc9ba9b331..b394a37eecb4 100644
+>> --- a/kernel/bpf/syscall.c
+>> +++ b/kernel/bpf/syscall.c
+>> @@ -4481,14 +4481,9 @@ static int bpf_prog_attach_check_attach_type(const struct bpf_prog *prog,
+>>  	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+>>  	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
+>>  	case BPF_PROG_TYPE_SK_LOOKUP:
+>> +	case BPF_PROG_TYPE_LSM:
+>>  		return attach_type == prog->expected_attach_type ? 0 : -EINVAL;
+> 
+> Does adding BPF_PROG_TYPE_LSM to this arm also relax the check on the
+> BPF_LINK_CREATE path?
+> 
+> Before this patch, BPF_PROG_TYPE_LSM fell into the default arm:
+> 
+> 	default:
+> 		ptype = attach_type_to_prog_type(attach_type);
+> 		if (ptype == BPF_PROG_TYPE_UNSPEC || ptype != prog->type)
+> 			return -EINVAL;
+> 		return 0;
+> 
+> Since attach_type_to_prog_type() returns BPF_PROG_TYPE_LSM only for
+> BPF_LSM_MAC and BPF_LSM_CGROUP (kernel/bpf/syscall.c:4457, 4463), an LSM
+> program could only ever be accepted for those two attach types.
+> 
+> The new arm drops that constraint and accepts any attach_type as long as it
+> equals prog->expected_attach_type. The other members of that arm are safe
+> because bpf_prog_load_check_attach() restricts their expected_attach_type
+> to a set that all maps back to the same prog type. BPF_PROG_TYPE_LSM is the
+> one type in that arm with no such restriction: bpf_prog_load_check_attach()
+> (kernel/bpf/syscall.c:2766 onwards) has no LSM case and falls into
+> `default: return 0`, so prog->expected_attach_type is entirely
+> userspace-controlled for LSM programs.
 
->  	free(tid);
-> -
-> -	ksft_exit_pass();
-> +	if (thread_error)
-> +		goto err_unmap;
 
-Nit:
+Good catch.
 
-if (!thread_error)
-	exit_status = 0;
+Since there's no expected_attach_type check for lsm prog, a lsm prog can
+have BPF_TRACE_ITER expected_attach_type, and creates a lsm link via
+BPF_LINK_CREATE with this patch. Such lsm prog cannot create a lsm link
+via BPF_LINK_CREATE without this patch.
 
+The new case BPF_PROG_TYPE_LSM in bpf_prog_attach_check_attach_type()
+relaxes the prog->type check when adding expected_attach_type check.
 
--- 
-Cheers,
+I think we can add expected_attach_type check for lsm prog in
+bpf_prog_load_check_attach(). See below diff. The diff will restrict a
+lsm prog with these two expected_attach_type, BPF_LSM_MAC and
+BPF_LSM_CGROUP.
 
-David
+Thanks,
+Leon
+
+---
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 6874ba1424af..4b56e82ff3b9 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2830,6 +2830,16 @@ bpf_prog_load_check_attach(enum bpf_prog_type
+prog_type,
+ 		if (expected_attach_type == BPF_NETFILTER)
+ 			return 0;
+ 		return -EINVAL;
++	case BPF_PROG_TYPE_LSM:
++		switch (expected_attach_type) {
++		case BPF_LSM_MAC:
++		case BPF_LSM_CGROUP:
++			return 0;
++		default:
++			return -EINVAL;
++		}
+ 	case BPF_PROG_TYPE_SYSCALL:
+ 	case BPF_PROG_TYPE_EXT:
+ 		if (expected_attach_type)
+
+> [...]
+
