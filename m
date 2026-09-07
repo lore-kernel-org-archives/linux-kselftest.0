@@ -1,139 +1,124 @@
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 658A837BE72
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 14:57:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375EC472536;
+	Mon,  7 Sep 2026 15:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788793067; cv=none; b=V/lHHBoNLEcTQB0k/Agr3ba+AhlWN2Jg9b6StvYADqDeAG4er3mTcyfXqoycXtsOelPTwlgSkPw6ikA4D+H8dYJmvSwGGgVyZIigORyeMTJOICpHVUAtC27wTdvlwJERYopayrGaL7dd10PVsm7j+p1rpwvoGFqJHaZQGW7O7Vc=
+	t=1788793489; cv=none; b=dFpHE09Oct0NOJe0YHHi6okqk0yVY24bDFs9lRYar+T2QSAJq27RDp24LflOGaGGj8z9Ktlnn2XAAAbmO+yVvkQy9FH+n7N+KGjRxEUkUTIp3KNAn3UEPaqEE0LnZgrIeExD4ATuFBkKSoe8lOzLHTHBjqTXitkCsMvDATiNwQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788793067; c=relaxed/simple;
-	bh=gbehEEdOEBuU3HHxuQ6NSXa8DS14VTlpX5880xHhcCA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bbaoCUSjpvpZXbIY1N3lDBjohzWJe+8HkMvmylb2SAl9koDqkC/aFzG6GXccDgPWfjoV3ZNBpAiQQ19hpkHJ+ic6Q/qOn/pYGJTjWgGhlreyd0a1xirfjD13X1lgYTRIINN9qNSk1UYj6hcv5kLOSy26WM8nns3uRu2Mv0t9cOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=Oe+bokNH; arc=none smtp.client-ip=209.85.222.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1788793489; c=relaxed/simple;
+	bh=t2dJQdrZLefr4fTR0Q/g+d2QO2gjes/wTxxH+HOJ1Q4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uBu//wrDm9SGpcUHpyXEC5kovnRJnMQ7aK6meQuJTc76vZlhCTlZH1s0VBT0T3KgoQ76yCrdJSlpShr1+OoK7hPkqIgbevyZERmwfdv5TRVxwAiWDCmsrD0s5g72D3IpsPlPvIyaUEb/faTub1U/XXVWdgtY8xDsSm5Rsm893M0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hPnaEEnK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="Oe+bokNH"
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-9399daa3d43so125502385a.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 07:57:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1788793064; x=1789397864; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=fKmfltuahHibleolgFqoLkoM/YklChy1LcLNAOhU3Vo=;
-        b=Oe+bokNHNe/HImO/aGgXCxRhqjQPHB13UpTfCeBV+/tmCki99R6DiFxw7plKkLuB9A
-         LiGcTKwlViMCe5dBh/zHvvqd37Ch7enS336pveukKQH3DNM4Nk3v5p4tPBa/+jKFsosn
-         5hugnxuLKQ+h24mwAEzWY63nv1CqzETrdZlJspPh4LspkzFmiEI0xqybV9Ed9F6e3YOx
-         H5q3cCaw52waPs54kVKKhJ9U/3BflkuStFbltvgQl8nqhprSqMqpOZGTnmZAg6C/nAhR
-         teFFWcmhwfEVecpKzoALShR5CNYK1vxfPO6jUGIr5yNq4OD0XysxdMGSbqj9QoG6yr/B
-         9K1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788793064; x=1789397864;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fKmfltuahHibleolgFqoLkoM/YklChy1LcLNAOhU3Vo=;
-        b=O74zFAlHK2jo9oPK1oF1sRS4BNmv5SkoT5JzD+1xCUTGqUiYCmjlLKPjzsZgE50gt4
-         oM9PC8RkkQUkC01iwUYl50BWF5TW5t0l6syzGPqvmINCjrCFGSHwHgqSAznhRGYSp4O/
-         CcWDaMP3qN0FJ53C7N5SQdhdUpHZvctiULOhl04U+yVP1MNiPrmHELuL1kVIpQUJZ7nV
-         pHp0Tv+d8BByPHcvGQ77TLdeFE/9Tzhb2cGZnIPkerkqrlGVhZLKxSVd55oPGRDYcMWN
-         ZCGi3cI+Mvn1gGFlH8vxAbPfygdQjL4izD7z3Wd/VWXfuZrBO5yCJ+0RTowPcWNOZb4+
-         wYuw==
-X-Forwarded-Encrypted: i=1; AKwUvBw5mvA3hXRaQaPyOWDfdL3VFX2OeDEn4BfkArbGQ1f42oVISY0jVfN9Xo1RLs97r+tU0leoz7d5FEJBCbZ3T9M=@vger.kernel.org
-X-Gm-Message-State: AFuF++nviPRTlS+Dajhpc1nv7qL8y99Ix03G6GCnxEw7xEJKPxN0ZiWH
-	3RkTuD2j6RUvXKhr6rv6zSqdBfGKhRdwjbDH7PFS3C2815Ld302j6aEBR/2XLatDSxc=
-X-Gm-Gg: AYBFou0QPN2myRktASeHWSzT+SCTpj6jxlmUA7JNICtdvg7mzOAc3LpUtBRR8/Dtcsp
-	47oNpWp2GzaTkOVvx3PQQ+0JxipapWhfMSpns+UzuDlqn6NcP+wJFeoWlUt06XsiIgUsZuYbnEQ
-	svwD5ynJDIetQnqs/ZMXV/XLqZMchlh9DSjOKX4WYGaOFiTqUlr9lb0p3sP9ZPe6mi5lH8WGHw6
-	hZIeDwT9GrWkHQqiuAjDP8veaXjnz34vgXqTujl9pgFcOHMOXQcsvmdyfEEVjnXiqKoSk3hlrpK
-	GDW2nHnxcDgQhhsz7RK6EWIdNASOX+T9aORjfharpjj217GfapNTi9y3yrmpW1ByYJAyzT6bjFz
-	3dZJ4tfJrdc4HE1WZAScLZkn1Qk3t7B0CcuiYTe5vcsMEE6GED4pB2nGcPo9eO0JaZi8UKOOwyZ
-	nn5WeZpbFW9DuxYF6nQPwdvUzsfTK8fv8BmNmd7aeWb/nPJ6nmpi5nVZ8YcrZ1/0Z8Zw/DHCydE
-	RUtQUPYBHNmKOO6oRRpMKsCNkaWa5VoyKuV+yjQQ9L9egbdtA0nwuw=
-X-Received: by 2002:a05:620a:468f:b0:939:6db3:6cad with SMTP id af79cd13be357-9398035a913mr2267757785a.12.1788793064205;
-        Mon, 07 Sep 2026 07:57:44 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-9397fb380f8sm905137785a.23.2026.09.07.07.57.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2026 07:57:43 -0700 (PDT)
-Date: Mon, 7 Sep 2026 10:57:42 -0400
-From: Gregory Price <gourry@gourry.net>
-To: Zenghui Yu <zenghui.yu@linux.dev>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com, shuah@kernel.org
-Subject: Re: [PATCH] selftests/mm: fix size truncation in pagemap_ioctl test
-Message-ID: <ap7Qza32A-MzxBU3@gourry-fedora-PF4VCD3F>
-References: <20260907135613.68692-1-zenghui.yu@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hPnaEEnK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 043311F00ACF;
+	Mon,  7 Sep 2026 15:04:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788793487;
+	bh=WrmnsJms3KMQBnYoX9bqubw5TZDr+akXxSg4A3Qx0P8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=hPnaEEnKB2Wu05wVyWeyh6akPQFUbZVUsyfsVi3SVWE3pRYX+9X5pL/vJdw02dM0n
+	 Q6vqVhaS32rnCZ0Vy7JoDLS5DjoRIwiXueBDhAB7RGDJBaAqnqpWzDz4xq6Zbpd+iJ
+	 I93AAavqCIOxqGpZPwYqvQT5R5Mr7IkrSg/fpY8E7Pi6s8H/KdalnJ9EFUg308FAV9
+	 1Ct/0CnJg126tqlnLRq4qpftO17gh1OZvQf3YKqQUXVc89t0SpEF7juNS/UeX1xhAA
+	 JPlnrJm8ghMCYFyzKcZqvr8Ot3Gxu2ZJMFyPObyjc5vKR4vC3195B8UWNEAkHT0hak
+	 WZEi5kgDDX40g==
+Message-ID: <a8cb3260-abe2-4445-8477-4494870820bb@kernel.org>
+Date: Mon, 7 Sep 2026 17:04:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260907135613.68692-1-zenghui.yu@linux.dev>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 5/6] tools/mm: make gup_bench a benchmark only tool
+To: Sarthak Sharma <sarthak.sharma@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
+ <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Mark Brown <broonie@kernel.org>,
+ Anshuman Khandual <anshuman.khandual@arm.com>,
+ Muhammad Usama Anjum <usama.anjum@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260904123631.198697-1-sarthak.sharma@arm.com>
+ <20260904123631.198697-6-sarthak.sharma@arm.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260904123631.198697-6-sarthak.sharma@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 07, 2026 at 09:56:13PM +0800, Zenghui Yu wrote:
-> From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
-> 
-> On arm64 with 64K base pages, the huge page size is 512 MiB, and
-> hpage_unit_tests() builds a 5 GiB range (10 * 512 MiB) for its tests.  This
-> exceeds the range of the int size parameters of gethugepage(),
-> wp_addr_range() and pagemap_ioctl().  The implicit truncation to 1 GiB
-> makes gethugepage() allocate a too small buffer, while the callers keep
-> operating on the original 5 GiB range, resulting in spurious failures or
-> SIGSEGV.
-> 
-> Change those size parameters to size_t.
-> 
-> Fixes: 46fd75d4a3c9 ("selftests: mm: add pagemap ioctl tests")
-> Assisted-by: GLM-5.3 OpenCode
-> Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
 
-Reviewed-by: Gregory Price (Meta) <gourry@gourry.net>
+>  	free(tid);
+> -
+> -	ksft_exit_pass();
+> +	if (thread_error)
+> +		goto err_unmap;
 
-> ---
->  tools/testing/selftests/mm/pagemap_ioctl.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-> index eadc7159ca5b..48cbea3a33c9 100644
-> --- a/tools/testing/selftests/mm/pagemap_ioctl.c
-> +++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-> @@ -44,7 +44,7 @@ const char *progname;
->  
->  #define LEN(region)	((region.end - region.start)/page_size)
->  
-> -static long pagemap_ioctl(void *start, int len, void *vec, int vec_len, int flag,
-> +static long pagemap_ioctl(void *start, size_t len, void *vec, int vec_len, int flag,
->  			  int max_pages, long required_mask, long anyof_mask, long excluded_mask,
->  			  long return_mask)
->  {
-> @@ -152,7 +152,7 @@ int wp_free(void *addr, long size)
->  	return 0;
->  }
->  
-> -int wp_addr_range(void *addr, int size)
-> +int wp_addr_range(void *addr, size_t size)
->  {
->  	if (pagemap_ioctl(addr, size, NULL, 0,
->  			  PM_SCAN_WP_MATCHING | PM_SCAN_CHECK_WPASYNC,
-> @@ -787,7 +787,7 @@ int base_tests(char *prefix, char *mem, unsigned long long mem_size, int skip)
->  	return 0;
->  }
->  
-> -void *gethugepage(int map_size)
-> +void *gethugepage(size_t map_size)
->  {
->  	int ret;
->  	char *map;
-> -- 
-> 2.53.0
-> 
+Nit:
+
+if (!thread_error)
+	exit_status = 0;
+
+
+-- 
+Cheers,
+
+David
