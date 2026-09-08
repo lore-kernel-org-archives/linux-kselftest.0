@@ -1,169 +1,153 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8AAF51993A
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 23:21:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788909703; cv=pass; b=BecUbC8j5Mx6ee4nkLFNV8Dk8qAioE1p8f52Y3RvOtlqtzD5/tb4Zk9BlxI5HPfaz4iWgz3Dq2JmGuoo0A+IclrgmpTp0N91gACDnDgmppmLLQ/tfitbLvZTk1ttKX9FYmjm1bm54nbqKY/x9LIHdaX3ac/0WdHlHLw6hc6AsCY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788909703; c=relaxed/simple;
-	bh=2w9Vu2z44X0Z4L1kBT3EHawgFCel5XoCWx4dtZIXYo0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tbmBir3WBdc2EUiPi5OT+sCBKH75PANaW4GdpXUlrXOkNP1mYPnfiynJL0xYFu7i2nFrfcjQoJSZCLsRcF66HLvIHx972vDV/RV/DfzPbK/YDvLHhJfzedmaG05LrFF92hLR2xgpdoSlIvgqQFA8DwoAHkWEXa7LqVaSXMX6GlY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hkq1QJT7; arc=pass smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C958D56B848
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 23:22:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788909775; cv=none; b=GOSWpGVNR+b3BqhHWvtPNPtfiAtpZirP19lMmdolQyIPzVyJEkzu0gVYJ8GyuB0TlSP4+J1d8DMw6S11xpwdRhvhSUoh/0gupE8qtkpqE9Wy3Br8I3nUvaJsdrsh9OU/rF1bCI597pO37mCCz/FtZqg//YBu6ofErviLfZFlZsM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788909775; c=relaxed/simple;
+	bh=igRLaNLKATsv/xrFKZo/2BMOVmf77KFzzmgZ9es4sLw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=ORzoOgzZfWKvt6OmeULj4nAw2khZXEuq3pKaVEaB2+G7x7w0H3nJ0RbM8q9CLhIfiGv/ntHBmNt8PZj6dKlcuymjRDg5XnNYL38FRJsm7e0vNn6zw14echTzuKxVoiHZJeic9Q+72FMbc54d+WssjNgF2gsmiaBPRBDhx3hCkkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fffKPUp+; arc=none smtp.client-ip=209.85.219.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hkq1QJT7"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2d6fe26ef1cso52483965ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 16:21:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788909701; cv=none;
-        d=google.com; s=arc-20260327;
-        b=EnJoX3HR+OXG7SHVnnK7ThCp18SDqJQ0DS0CjSYQr84WR+OY3NH7s2yVrJjIjwW7g5
-         5JfoizyHR2pOsi3d0KP96h/szFikrk5RGRDcpCqpZc6rKqs7F3YvKu5P6S8nZQgN5CQi
-         Jd4/+JHT4PZppNGO4LZ9Kdfd2dJRUWl+ZBicihhtQh5Bk/QCQ4s+zQK5vC4AEnQslqUS
-         wC0JiJ0TWKouHNPAV7vn4raoAvzn8EuO76cxoHhFGfcCWPBtlyFDsLWQ5HhGCAiW0DB2
-         iLfYiZAfUmqTGAbbn4gD06xJAieJof9s2vwYHyAVlQJkGMDVC4zeV9GIQdMkzg0tQA1Y
-         hdyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=N40Ys2WwREbdlf0UPMXpzQZmUrGcTgSJ9kBHkYNCAm8=;
-        fh=7fP4JCZM+MvBBCfRGpLCu3IXchgEQd0ui88FhKchFqk=;
-        b=pR6DyPHtY44P06PLsKDe2tfYPXj7PdCELGWo3hbw5ICtX2ogwDKxC/mEbdwpCgqCZ6
-         d9nugFBhxqtauE9bs0tx8X7fF4xBSLrCUb4bY2Cx2RtiGUT7QSBU9SybXXEAWBq6ocYP
-         S/bWP8GLfvHk4boAQCEfUG3fStNflUmAQUCsZz+a7etaIGkp42Xrm0tZBRBmM2Zu7rUZ
-         Zt9i+ioVwvtH7ATPYIkMcIXyFj8h3JZiIF7idUX4tuTmGMJw23GfJnS7PIZHrEHslAak
-         OTlm+iMk18McSAnFo9fg+s7z6+93wuRz1Aq4zA0GcCjvf9QqsPjVafxJGV18Bq2EV5sB
-         NUjA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fffKPUp+"
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-90cd96389efso64180206d6.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 16:22:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788909701; x=1789514501; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=N40Ys2WwREbdlf0UPMXpzQZmUrGcTgSJ9kBHkYNCAm8=;
-        b=Hkq1QJT7aD2gS/kN+6+wiIolAdUiQCrVzoLUPWZlpYMRNz3/FxgNHmYhAPiZLmBygJ
-         2ELmOjRjFLo0ffk+q/kjnbMC+VffmQLlBTj8vl4xveW94uYK7HG1ZjF3v0mbTW9Ed2pV
-         XxYzXufrNGxuIfNA/dIZHX+e6ACW+U3UBfusy2ihqS2U2B37OprhCJxC5cYR2D54JtN3
-         ETArIWgVNNue5PiMnlbRviiD2ygZrhU3myVVVElA5lD9p5T28BbrflzRlyYZMwaB0dKz
-         N6Za3CMK5fs4UrXKy3mVyxZrioZHD5qwA2XokhT/cOPBkQKBcWI8WU7qWUv3hmaZCQ/7
-         C99Q==
+        d=gmail.com; s=20251104; t=1788909770; x=1789514570; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=1ZsRUEYFwJyfqiHg/NlJRFQE2q1GaX7lbKCnVamDOJQ=;
+        b=fffKPUp+eqhcs644J1qFagKow4sBFSAbNUFWT5W7+9zaYvFy3l9ignd8fSrQtK9Wze
+         GjeyrBGZpepn4eT/2hQTyQxFXNNTP4WgModLT+DPVfXd1Zsk99UjCH6VY3gjUac5d7su
+         YrmbAekf5ulIpd8VA5JjCE7bnkhRd5G2J98IZmKjGjIbZkXbzWLDIiZMuiD8e5f0jaWn
+         SmiJ2t61NyKl5JDrelX9kTAZWYflwnn9n3h5g0kQQorucRNj3O1G3oDAeeDimaDbHrua
+         VzwTIXg1GbrNBoOOCFe3QkfFmN87poq+/hmkVmHciNZXSJ/as9hft8LuT7Npf2C9HRdr
+         mlJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788909701; x=1789514501;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1788909770; x=1789514570;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=N40Ys2WwREbdlf0UPMXpzQZmUrGcTgSJ9kBHkYNCAm8=;
-        b=GBBr048A+Zbu8ooTI+8NhO4WS7oQK/6US46Hkl1058zz74pK9IxqiYH4ebRlOcnm6Z
-         oy6Kt+9aCqUdHUvJ8h4Cm8XSzbkZh6z7I/unVoBMvTBjCQzHUvdB/T2GtmW2rw9lLH9Z
-         jDpy9vzBKlNirfptcWHhD1UgHlp0fetBmuIa4dl4U6+DOh/QUO1BIkhaG+WgOtEmbho3
-         yimyp3UHSp4JvYxm6Zv28OBhwEqmpFrfQ9dO1KtdScFsC4HDUPZuKc7hVt6L98nFGIAD
-         +Fx2zs9JoKlEQtoMDhsNk4fNPeSw2mduyJ4xPlMPrtYfwlYUO7SNFJ0gYo8CXGKg5nsV
-         x5Bw==
-X-Forwarded-Encrypted: i=1; AKwUvBzfId2YfeQw8YlscayI5jzGJetsgXTzAyZO4aVQd97qKdAP1GoXaUuGWbbchfMzov8LI/J/da44sTPocswGCXM=@vger.kernel.org
-X-Gm-Message-State: AFuF++lpwqzkOGqj6w9VoFWOKMrA92MTZNL8conxpBTj8PEgIfxPi2aJ
-	DNqCVuUAq9qWbcz90NEjEMdT4QZVcHRsjrp1fDikBGixEeH2GLyUh5/ECreqpJaxmuDGTFEjrxI
-	lC5kVYQRhIIDAf0yXvfzrDZenEEepG0k=
-X-Gm-Gg: AYBFou3AC1ZhhDxFeIyiLkxgjMw5JDCDuXB5NjEJbXgTmM3Jrabjo0MTSH03r6yeDp4
-	Lrtm1MDcT/IQImXLtq698cpVXF5kuNrlWneUb4gHBmPHbDQLuSqgv/muIxqNRvFtOQgMA6nOYwh
-	/dQLeh3bBbCvN0jfr0AgrBB2o+JUZ4CIsZxYFap/LkZ07n+F+HS0mOVa3TV7/FhNL3Ulemr024c
-	SLUnmcZ7G4zuzkVTA+GM8ZuBd9CGpbnpZA+n6B+cunVlEc2zeWCgvhrX0TZF2VJZ5SVBup6o6Y3
-	HzPanbtDSbK+zE+3mRxpi+Jboimj+g31H6Yunpv7K32uFjg65TjCtU5raMBiGLt09T8SfpHFJWx
-	FbHLJV0izkqvONp0f9g6smNled0wX1qrxMpR+P99abw==
-X-Received: by 2002:a17:90b:57cd:b0:38e:bfe:81e9 with SMTP id
- 98e67ed59e1d1-39b260fead0mr46769801a91.1.1788909701068; Tue, 08 Sep 2026
- 16:21:41 -0700 (PDT)
+        bh=1ZsRUEYFwJyfqiHg/NlJRFQE2q1GaX7lbKCnVamDOJQ=;
+        b=iM713vsNbMBtcpCS5MEl7Kr+kUaBaOl2cDBaXRePtx2JdT1HucYUydqudAfvL8AiDO
+         8gSGPofcOf0orVS+If2sz649dW94nAIr1xkihDGRve0/F+mJ7ygDq2x9eNI6U5AA1ZDV
+         sTDuzYLxesWOGqRqvnbO/2syZMI4+eiD0NDG4rd4T6bKNnLj0Q/hIm0W+mXjPG9maBta
+         uIZcu8sPGspR4xDmfUIYvTfPr1ozrnA6TVv7uzHNTSDR0Hq6VQ0C4qt8izLmwPcydKZn
+         JkI8DYNC+SO/t65Z5KHdF5TUWJBTAE+P+UPPzuvmhZLGSrB9lLsVQtweqC0Lw7EAq8aa
+         CcEQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwS/J9uXdH90Y22tVWNJSPwZY4e1Og8EEAQVHZOFcCqOc4XvQsmRvGBxgrySHZmC/MGVaCXA7sL9HmQeyVCDSU=@vger.kernel.org
+X-Gm-Message-State: AFuF++mXK10iS/WdQ8ASHXj5fqSnqyQApPDHvvI4wovEDBEm1GZrhIsW
+	MZ+7GxK7KMzvXlPOTFYE/9HTehnId/A8I4+2TKtzs/fblCVXNg58MFKm
+X-Gm-Gg: AYBFou0eqVLZVI5JhAN495IuiIE9ONMZlhSa6Y1S7X9sb8ueJ5SkMYTRerjknfuKKK/
+	NLjsIWxyZSt600gPNPBwulGbf/XxIX+mGdeZTCXNR1GzSLK5qeUZ0HQXUfWbaCaKd7+2UqXvrwS
+	KZt3WtmO9B/7f1wf/ttIvUSjQUXSaJfH9LKm8/LnSGduqdG3FC+Pp/hAIuYhWbSqFw1xX/VDSHk
+	rQqurem1LtOWygofosY887nXBlMwUdKcVMzpO5s9Eq5W4UpUjGzlau084xaaUwudUQLoxjTYzEi
+	ugsdVNCG37euwxxrFRJBKbsLH6lz9jK8uKGysahO43QOX4li+wL1aD+yoBuU1vRnbta/XJWJNi1
+	NsMLRYUe99Ax4LC48VMFHgO/zfO8PCiZt+JwF4mQgFZ2gbBhjzeigS4oFlgs49uo1uRF10nuA95
+	KkKHBh4MFKDt02Z57BEbLPQNQnpIeYHJ1V0UJuJ8DyIMXopATJC+303hgGtjk+jDFeKg==
+X-Received: by 2002:a05:6214:84cf:b0:90c:e685:d0ef with SMTP id 6a1803df08f44-9103eff8ca6mr419740676d6.23.1788909770512;
+        Tue, 08 Sep 2026 16:22:50 -0700 (PDT)
+Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-910406b0f51sm128531996d6.42.2026.09.08.16.22.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Sep 2026 16:22:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260902150439.692725-1-adi.sharma@zohomail.in>
-In-Reply-To: <20260902150439.692725-1-adi.sharma@zohomail.in>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 8 Sep 2026 16:21:25 -0700
-X-Gm-Features: AcwNN1W3DRslezF3q8zGwmwdk3AYLdNuGHbMfUGJVA0I4K_g62wgy-gg8bf3BtQ
-Message-ID: <CAEf4BzZSWKeEV0-i65Nr4zKmB3uKZu7cqtHc3NrphFV=Z9--qw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Only check nmi_uaccess_okay() when
- signalling current
-To: Aditya Sharma <adi.sharma@zohomail.in>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, yonghong.song@linux.dev, 
-	eddyz87@gmail.com, song@kernel.org, jolsa@kernel.org, kpsingh@kernel.org, 
-	shuah@kernel.org, puranjay@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 08 Sep 2026 19:22:48 -0400
+Message-Id: <DLABL6GQC9HK.2P8KU1JJRO1XV@gmail.com>
+Cc: "Bobby Eshleman" <bobbyeshleman@meta.com>, "Boris Pismenny"
+ <borisp@nvidia.com>, "Carolina Jubran" <cjubran@nvidia.com>, "Cosmin Ratiu"
+ <cratiu@nvidia.com>, "Daniel Zahka" <daniel.zahka@gmail.com>, "Doruk Tan
+ Ozturk" <doruk@0sec.ai>, "Dragos Tatulea" <dtatulea@nvidia.com>, "Gal
+ Pressman" <gal@nvidia.com>, "Jianbo Liu" <jianbol@nvidia.com>, "Kees Cook"
+ <kees@kernel.org>, "Leon Romanovsky" <leon@kernel.org>, "open list"
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-rdma@vger.kernel.org>, "Mark Bloch" <mbloch@nvidia.com>, "Petr
+ Machata" <petrm@nvidia.com>, "Raed Salem" <raeds@nvidia.com>, "Rahul
+ Rameshbabu" <rrameshbabu@nvidia.com>, "Saeed Mahameed" <saeedm@nvidia.com>,
+ "Shuah Khan" <shuah@kernel.org>, "Shuah Khan" <skhan@linuxfoundation.org>,
+ "Simon Horman" <horms@kernel.org>, "Willem de Bruijn" <willemb@google.com>,
+ "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>
+Subject: Re: [PATCH net-next V4 14/14] selftests: drv-net: Add PSP HW GRO
+ conformance tests
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+To: "Tariq Toukan" <tariqt@nvidia.com>, "Andrew Lunn"
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ <netdev@vger.kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Sabrina
+ Dubroca" <sd@queasysnail.net>
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20260908065244.3799142-1-tariqt@nvidia.com>
+ <20260908065244.3799142-15-tariqt@nvidia.com>
+In-Reply-To: <20260908065244.3799142-15-tariqt@nvidia.com>
 
-On Wed, Sep 2, 2026 at 8:05=E2=80=AFAM Aditya Sharma <adi.sharma@zohomail.i=
-n> wrote:
+On Tue Sep 8, 2026 at 2:52 AM EDT, Tariq Toukan wrote:
+> From: Cosmin Ratiu <cratiu@nvidia.com>
 >
-> nmi_uaccess_okay() takes no task argument and is a statement about
-> current. When commit 6280cf718db0 ("bpf: Implement bpf_send_signal_task()
-> kfunc") made the PF_KTHREAD/PF_EXITING and is_global_init() test the
-> supplied task, nmi_uaccess_okay() was left testing current.
+> Add PSP conformance tests using the same gro helper binary as other gro
+> tests , but in --psp mode. SPIs are procured by psp_gro.py from a real
+> PSP device and handed off to the gro sender & receiver. The sender
+> crafts and encrypts packets in software, the receiver relies fully on
+> the HW to decrypt, decapsulate and do HW GRO.
 >
-> As a result bpf_send_signal_task() returns -EPERM whenever the
-> calling context happens to be a kernel thread, regardless of which task
-> the signal is aimed at. The same call with the same target succeeds or
-> fails depending only on what the CPU was running:
+> Because the NIC decrypts and decapsulates before the frames reach the
+> receiver AF_PACKET tap, the gro receiver sees the plain frames and the
+> assertions remain exactly the same as other gro tests.
 >
->   bpf_send_signal_task() from tp_btf/workqueue_execute_start : -EPERM
->   bpf_send_signal_task() from tp_btf/sys_enter               : 0
+> So these tests verify, at length, that the device does PSP HW-GRO the
+> same way as plain TCP.
 >
-> This was originally hit from a bpf_timer callback, where the failure
-> is intermittent because a softirq runs on whichever task it
-> interrupted. The rejection is x86-only, as nmi_uaccess_okay() is
-> defined as true in include/asm-generic/tlb.h elsewhere.
+> Additional PSP-specific tests are defined to check that GRO doesn't
+> merge packets across PSP versions, SPIs, encryption-status, etc.
 >
-> Only apply the check when the signal is sent to current, where the
-> predicate is meaningful. bpf_send_signal() and bpf_send_signal_thread()
-> assign task =3D current, so their behaviour is unchanged.
+> Some gro tests are not included because they don't work:
+> - ip_csum: the checksum is recomputed by psp_dev_rcv().
+
+psp_dev_rcv() isn't on the hw gro path for mlx5, right?
+
+> - tcp_csum: packets are marked with CHECKSUM_UNNECESSARY.
+
+this also seems strange to me as the hw gro engine and its decision to
+coalesce two packets sits upstream of this skb->ip_summed determination
+in the driver, right?
+
+> - ip_frag4/ip_frag6: PSP is incompatible with IP fragmentation.
+> - IPv6 extension header tests: PSP doesn't deal with IPv6 ext headers.
 >
-> Fixes: 6280cf718db0 ("bpf: Implement bpf_send_signal_task() kfunc")
-> Suggested-by: Yonghong Song <yonghong.song@linux.dev>
-> Link: https://lore.kernel.org/bpf/20260819124324.43162-1-adi.sharma@zohom=
-ail.in/T/#u
->
-> Signed-off-by: Aditya Sharma <adi.sharma@zohomail.in>
+> Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
+> Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
+> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
 > ---
->  kernel/trace/bpf_trace.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 29260951aa87..f7a41f222599 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -871,7 +871,10 @@ static int bpf_send_signal_common(u32 sig, enum pid_=
-type type, struct task_struc
->          */
->         if (unlikely(task->flags & (PF_KTHREAD | PF_EXITING)))
->                 return -EPERM;
-> -       if (unlikely(!nmi_uaccess_okay()))
-> +       /* Since nmi_uaccess_okay() is only for the current
-> +        * task, check if task is current.
-> +        */
-> +       if (task =3D=3D current && unlikely(!nmi_uaccess_okay()))
->                 return -EPERM;
+...
+> +
+> +@ksft_variants(_ip_variants())
+> +def test_psp_ver_diff(cfg, protocol):
+> +    """Frames from two different PSP versions must not coalesce."""
+> +    init_psp_dev(cfg)
+> +    if len(cfg.psp_info['psp-versions-cap']) < 2:
 
-I think we should just drop nmi_uaccess_okay() check altogether.
-Unless there is some technical reason why **for current task only** we
-can't send signals, there is no good reason to have this.
+nit: what the above checks is slightly different than what the _run()
+below uses, e.g. dev supports versions 0 and 2.
 
-let's just drop, it seems like just a copy/paste from some user memory
-probing logic, which shouldn't apply for signals.
+> +        raise KsftSkipEx("Device supports a single PSP version")
+> +
+> +    _run(cfg, "psp_ver_diff", protocol, [0, 1])
+> +
 
-pw-bot: cr
+couple of minor comments:
 
->         /* Task should not be pid=3D1 to avoid kernel panic. */
->         if (unlikely(is_global_init(task)))
->
-> base-commit: d761934c9483ecde93fe99d8705282f716dfee50
-> --
-> 2.34.1
->
+Reviewed-by: Daniel Zahka <daniel.zahka@gmail.com>
