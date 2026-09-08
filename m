@@ -1,64 +1,64 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D0A2E62B4
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 05:26:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF511377A8B
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 05:26:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788845210; cv=none; b=T1sr7EB0BmeoFYhk9Atq47a4W2XTTpya2L9Zg1ZOgbKXfMl/dJnsYYFTsdgOSVvm7O1kS69NZh/rOlP3Kd8DA61yAnUvo52rFZbQpMNTT+cxLtWHrwymYcw46Bt032lw187sQ6mQ/keanMTwQL8wtOmtysbBEkP3UUOZfaC9fw8=
+	t=1788845218; cv=none; b=Tl0V5qHgMjc0QNmnHKYBuF4Mq2XRMMG6clNK8rwueP/zmhptjxmHBUky32W8XcIeYH7ypj8enZeP8ad+OzzR++vJLYS+P3DaDVZpjjIrT4NtaNN41SfS7ytGRO7pLTF9KHtYV0zbWln82sUQRfG1S5dqTI0nHUks/U7R7TtdHHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788845210; c=relaxed/simple;
-	bh=euwZzd/VFR4HBBLlVmWUOsKqBJWwNbfBplF7gYP2uQw=;
+	s=arc-20240116; t=1788845218; c=relaxed/simple;
+	bh=0T/9zHHBg8JlGaqYwBGGLUUgXoah60mFMolw0Z8Tmz0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=W9hHB47nIBuysVtpvDpSxvxJTVcw2PYe/NFslEHu3s6a7BlmHdVauVO1dKUGCSz1F4LzgFZfd8Em0XdITCFMMHII7KTjmxOVePMZ2PhGGSx3lHDx+Gs0AnOfgt4egWfIYN6G8f+nHK79DfEvMTVK5CaXbeKwTkl/vghgApOE5hA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QqBDloLS; arc=none smtp.client-ip=209.85.216.53
+	 MIME-Version; b=jEq3XTr/7VHNi+FQCLHPN2rJE6ZzbzGRb7mkMi2fUyDmo8llQ1lTOm0uW3xio24m7Fjmv80dn4e1ycltloMvUaqSqz5/MwZYIn6IxnzQV1IVOQuWRmZrO4zXgDc2jBhyqp0c/qfGv9bQeh0IsD+W+NAvr7j7uqUVLXfUJG/fh6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VOse+mxU; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QqBDloLS"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3964e480f76so4901657a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 22:26:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VOse+mxU"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-39b9a99469fso219027a91.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 22:26:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788845207; x=1789450007; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788845216; x=1789450016; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=1z6Bj27I27t4pJmuJ175AefeQtd/kOqAphoJXB6vZBA=;
-        b=QqBDloLSVafCHnAlsUsq5XcwBtt+XX1R7bRNH4j6B6tWCKT9uEK3rCaO1L2/OTOWGB
-         AdSSr6xnT4Xhm0i87tb7YWrjToGKZz+yfSHQ4zZGiko4yXH2wfAPzyCbzXstvGgVXbgp
-         J2ricQyJDxB/mpt8Q0OlID3DWPPntbl1HWp49mjswQ0AU9739U5FrOvIoWHDu5wQzMxn
-         +K0CEZ1W/PHroneZG0N4JMd4e0GzsF/6pRehAoXpGpaPHNrX/t4w1/vlGM5MgTaF6kqU
-         tbIyXd4+bUg7O7TAJyjMnUqig95IiFdjiHFoNENsgX5skakNNbsiQQ6OmakcOiOVUoMQ
-         kKKw==
+        bh=6LsOjIpoezfOQTuidmlHq/lP7hR+WKEHPT5u3b2kG30=;
+        b=VOse+mxUEXyeKLeLlSjz7tl4H9W0+Pmrqs1opJ7mcNl+IGNDMmiHarWoI1lVKIADvm
+         L35do45RoaaFseUgNbVQWeox0rtSqWU1SebBRAvwTHSKQ1j11Mul7imGHdYr0EkTIJxq
+         WJdifc+/8/yjw9gAe6q9A2hip65zfohheW6jjVXzvz2K0WZiiRd2Jw1rRr/54h1kJnoi
+         VcxBfbnhHxTJYEdh/nayg8DBE1yB6buM/VKAsuRCrH43Nxq1OtTdTWA+q/YhLUXiVRiB
+         WH8Q3XoIuTyZNXdfWQC82QpHa3JMHH58Tvtm+EQGoGmNURh8wkdlnRD+rjsTfUnA7M3/
+         p08w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788845207; x=1789450007;
+        d=1e100.net; s=20251104; t=1788845216; x=1789450016;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1z6Bj27I27t4pJmuJ175AefeQtd/kOqAphoJXB6vZBA=;
-        b=HVYyyXOiQYW9LdIzTt55A9hG4yBTOPSTA0zNWlgZsEz4Cj5bMlhqsIXPfoDOFBDEDN
-         Ms3T9JsF0jHFQOI9n/CEl4HtVvWSlxL2xlFOoYu5U3cWmIJmQOTiM3y9L5wHMiCQWHRh
-         sC+fJyLdlzr3QB2vPWOZdNKGNdIVezjzVj2f/ADNU0QDeJrij/zREVeP5QzHSKAzI9Wj
-         /mK1yBnOPAfCgvb1EpXG9yhTRdlu+4AXFZXVT8WnbGk8JWkc2xLdocxFJ0INN33mYSd5
-         CXlGXneo3Gq15wIeXQGgK4UcuIOf3s3+4wljq8sNRQ6Sh4Da0pcYYTOoYUjBjW0U8TPE
-         CpGQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzbFQmaQvxtdn31XHJ8XTHYSqdolZ1FrmZvLEsBq16EL1fQf/le7X6hsGZkW8CPMmUmxFYQKNURbdm9MZov8XY=@vger.kernel.org
-X-Gm-Message-State: AFuF++m1PaB7EX/fgpM76q3ZVpfIPadthjoXANlsIc2apzxFq7IjGVQ9
-	XWXknqjFCaj2zUDDkSyd0ZeBPXYUOZApIKL3jxgdD+OpkIAKNF4NfpkI
-X-Gm-Gg: AYBFou08xEDJ7kpwZy1onYYOePzTfdWLWv7imfHUs+RqDAnrxGHIf3rdyE/wVotHNpZ
-	ivUz2NlHKfpipaWsGcRmIRqhuHhdHrsoHsQtI2V9LCSyuTTW8GiYuIZIhgIk+/YhJk/cfETuBbr
-	mjtuOGDSxW2QBojGO+BRtFtsVylnn45Y8s7RMbfbZRIQRf4rKfZsy2w5zYEkGU4EsU+wZsQNt4T
-	lLVoJYU7VlSY7IVlnGK4z6N5XqhfUmLOVceSFRzIELoPUnngFB26ED//6cNo/Y8fEGiyIkKyvGZ
-	m4So2C1tMUUt2Hx0pHolUs1cq1A5PbYRi03XvVQbeJigtRbK9WBVivfRFlN08FQ1mVND4QAFpfE
-	frGkxL3XwiZsQ02gea2tizyT0dutorx71ju4dR480Hy1u8Ry0HmL4JYwsLANJ9LWVL0QxCgnrsC
-	9joMIEmS0dCSAoKrOk1akaZgqRvQjnDOLb/V0zwuHl2T1wF1GctwbSY51JPlpHhZ6J9zsDSJe0h
-	fGx37L7D7261UQp7i7j/UsL
-X-Received: by 2002:a17:90b:3943:b0:398:d8eb:cb2a with SMTP id 98e67ed59e1d1-39b26273e31mr43805291a91.23.1788845207542;
-        Mon, 07 Sep 2026 22:26:47 -0700 (PDT)
+        bh=6LsOjIpoezfOQTuidmlHq/lP7hR+WKEHPT5u3b2kG30=;
+        b=bFPG1Cpu/9M2mPzKS1AD+rfkS1C5BPD/6nE382Th0WbWMAZu4s036SpnX7LqZMmIEz
+         o+jSXhIevbvo63DxPLtc+Wp0cWJ1whknSsofhLts7dXpKkTDNLSv6R7e/eFFfIuY3zdD
+         hZxxMzjEu7abX4Mmsfzdiiky58/EvFwf6zhRWHhXt0bN/HtNIbvyI2Po2wbACGh5w4Go
+         UUaVE21vVkWmdW2aiUF0zrfezBcyWAdbJB+l0oP6bjWwwsNHYgOHpq9hMltP4em55Xdc
+         +8rTmXjwYTc+zDiP5rmhw+wPJJF0vv1viLKTqyerBZktHC8oJ4tBR63NGbdPILQ+t3ny
+         CqOw==
+X-Forwarded-Encrypted: i=1; AKwUvBw35cplkNbrMOFQ1354wHqyF9Q9s/9BsSVb7PEzafczTkZ05z4Q7DO517NOXKzyvUT00TTZQOr8KSe86r+wI3E=@vger.kernel.org
+X-Gm-Message-State: AFuF++lXQQxO0PPBlCHu9ervRw5+SUDZgf0sH7ar1QZ7YhRoOL8/bcn8
+	SIn0V8fksAUFckw2KcPwcGy1fBh8XTa0o+Bjt44AkYT8BvxcqilYv+/9
+X-Gm-Gg: AYBFou0blz/wyPT6rVFbT1lLjcNZVaWSNzgfC5oxTLppkIgsiJv76s/ftDrXHY3lOOd
+	ZGZLD4hSDYDxAsTxqO1yluSDwfjdQSkqVMIt9AXEfPdz58i8AiA1tRuD6+fxYbJEnKhuzfHGXZI
+	Vc31g/s7Q3o9Fpm4m7s6UVC3yl9l0x2GZS0sAu6HfNcvLWkbWzQECydEPCpETEk+Na//6YBMxmq
+	p8hGuY6D6zDuKJAWR5It+90FsMlXRsL69KO31lS6oAUOS3M7nUi/SkgAL+M/Jko40oEyhxXlMov
+	WYkRT+OugNt26/c1wwna/Ad0yWx/3iE4sglA46aedG6cMk4zqRi2qqvnoocZnREU3ujZDI5qbHD
+	ssTZY7WtmoAXW2mDGNe1Un0JrSWWT4N/3rQ/Do9MZSYQOfXJR0sFLomsSr0K6aA+3jtzkj0U2ww
+	etnd19U9w2VSbx8YlMQ+5GUUpzLkFSeVcSV6stoqoPELal5qo8tqaC+Ygij+OXbnLhyMXlzJNpp
+	UhfG1BI5KRMBw==
+X-Received: by 2002:a17:90b:39a7:b0:381:cef1:11ac with SMTP id 98e67ed59e1d1-39b26125efemr37873663a91.10.1788845216050;
+        Mon, 07 Sep 2026 22:26:56 -0700 (PDT)
 Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14340a69666sm11720586c88.9.2026.09.07.22.26.39
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14340a69666sm11720586c88.9.2026.09.07.22.26.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2026 22:26:47 -0700 (PDT)
+        Mon, 07 Sep 2026 22:26:55 -0700 (PDT)
 From: Hemanth Selam <hemanth.selam@gmail.com>
 To: "David S. Miller" <davem@davemloft.net>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -89,9 +89,9 @@ Cc: linux-arm-kernel@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
 	linux-parisc@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH net-next v3 04/10] net: cavium: fix typos in comments
-Date: Tue,  8 Sep 2026 10:55:56 +0530
-Message-ID: <20260908052602.27497-5-hemanth.selam@gmail.com>
+Subject: [PATCH net-next v3 05/10] net: qlogic: fix typos in comments
+Date: Tue,  8 Sep 2026 10:55:57 +0530
+Message-ID: <20260908052602.27497-6-hemanth.selam@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20260908052602.27497-1-hemanth.selam@gmail.com>
 References: <20260908052602.27497-1-hemanth.selam@gmail.com>
@@ -110,143 +110,118 @@ changes.
 Assisted-by: Cursor:claude-opus-5
 Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
 ---
- drivers/net/ethernet/cavium/liquidio/cn66xx_device.c   | 2 +-
- drivers/net/ethernet/cavium/liquidio/lio_core.c        | 2 +-
- drivers/net/ethernet/cavium/liquidio/octeon_config.h   | 4 ++--
- drivers/net/ethernet/cavium/liquidio/octeon_iq.h       | 2 +-
- drivers/net/ethernet/cavium/liquidio/octeon_main.h     | 2 +-
- drivers/net/ethernet/cavium/liquidio/octeon_nic.h      | 2 +-
- drivers/net/ethernet/cavium/liquidio/request_manager.c | 2 +-
- drivers/net/ethernet/cavium/thunder/nic.h              | 2 +-
- drivers/net/ethernet/cavium/thunder/nic_main.c         | 2 +-
- 9 files changed, 10 insertions(+), 10 deletions(-)
+ drivers/net/ethernet/qlogic/netxen/netxen_nic_ctx.c   | 2 +-
+ drivers/net/ethernet/qlogic/qed/qed_cxt.c             | 2 +-
+ drivers/net/ethernet/qlogic/qed/qed_mcp.h             | 2 +-
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic.h           | 2 +-
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c | 4 ++--
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c       | 2 +-
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c      | 4 ++--
+ 7 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/cavium/liquidio/cn66xx_device.c b/drivers/net/ethernet/cavium/liquidio/cn66xx_device.c
-index 93fccfec288d..d3ebbb40579e 100644
---- a/drivers/net/ethernet/cavium/liquidio/cn66xx_device.c
-+++ b/drivers/net/ethernet/cavium/liquidio/cn66xx_device.c
-@@ -177,7 +177,7 @@ static void lio_cn66xx_setup_pkt_ctl_regs(struct octeon_device *oct)
+diff --git a/drivers/net/ethernet/qlogic/netxen/netxen_nic_ctx.c b/drivers/net/ethernet/qlogic/netxen/netxen_nic_ctx.c
+index fef4b2b0b1f2..79d6a819bf90 100644
+--- a/drivers/net/ethernet/qlogic/netxen/netxen_nic_ctx.c
++++ b/drivers/net/ethernet/qlogic/netxen/netxen_nic_ctx.c
+@@ -17,7 +17,7 @@ netxen_poll_rsp(struct netxen_adapter *adapter)
+ 	int	timeout = 0;
  
- 	/* 66XX SPECIFIC */
- 	if (CFG_GET_OQ_MAX_Q(cn6xxx->conf) <= 4)
--		/* Disable RING_EN if only upto 4 rings are used. */
-+		/* Disable RING_EN if only up to 4 rings are used. */
- 		pktctl &= ~(1 << 4);
- 	else
- 		pktctl |= (1 << 4);
-diff --git a/drivers/net/ethernet/cavium/liquidio/lio_core.c b/drivers/net/ethernet/cavium/liquidio/lio_core.c
-index 93b06d599eed..bed450bfad38 100644
---- a/drivers/net/ethernet/cavium/liquidio/lio_core.c
-+++ b/drivers/net/ethernet/cavium/liquidio/lio_core.c
-@@ -565,7 +565,7 @@ static int octeon_setup_droq(struct octeon_device *oct, int q_no, int num_descs,
- }
+ 	do {
+-		/* give atleast 1ms for firmware to respond */
++		/* give at least 1ms for firmware to respond */
+ 		msleep(1);
  
- /**
-- * liquidio_push_packet - Routine to push packets arriving on Octeon interface upto network layer.
-+ * liquidio_push_packet - Routine to push packets arriving on Octeon interface up to network layer.
-  * @octeon_id:octeon device id.
-  * @skbuff:   skbuff struct to be passed to network layer.
-  * @len:      size of total data received.
-diff --git a/drivers/net/ethernet/cavium/liquidio/octeon_config.h b/drivers/net/ethernet/cavium/liquidio/octeon_config.h
-index 24c212001212..d2d64edaf3bf 100644
---- a/drivers/net/ethernet/cavium/liquidio/octeon_config.h
-+++ b/drivers/net/ethernet/cavium/liquidio/octeon_config.h
-@@ -254,7 +254,7 @@ struct octeon_oq_config {
- 	u64 pkts_per_intr:16;
+ 		if (++timeout > NX_OS_CRB_RETRY_COUNT)
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_cxt.c b/drivers/net/ethernet/qlogic/qed/qed_cxt.c
+index b70262e70baf..89b947f82cf0 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_cxt.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_cxt.c
+@@ -561,7 +561,7 @@ int qed_cxt_cfg_ilt_compute(struct qed_hwfn *p_hwfn, u32 *line_count)
+ 			 *      block in the ILT client. This is later used to
+ 			 *      configure the CDU segment offset registers and
+ 			 *      results in an FL command for TIDs of this
+-			 *      segement behaves as regular load commands
++			 *      segment behaves as regular load commands
+ 			 *      (loading TIDs from the working memory).
+ 			 */
+ 			line = p_cli->pf_blks[CDUT_SEG_BLK(i)].start_line;
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_mcp.h b/drivers/net/ethernet/qlogic/qed/qed_mcp.h
+index 9bd0565fe8ab..50699d600b8e 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_mcp.h
++++ b/drivers/net/ethernet/qlogic/qed/qed_mcp.h
+@@ -783,7 +783,7 @@ struct qed_mcp_info {
+ 	u16					mfw_mb_length;
+ 	u32					mcp_hist;
  
- 	/** Interrupt Coalescing (Time Interval). Octeon will interrupt the
--	 *  host if atleast one packet was sent in the time interval specified
-+	 *  host if at least one packet was sent in the time interval specified
- 	 *  by this field. The driver uses time interval interrupt coalescing
- 	 *  by default. The time is specified in microseconds.
- 	 */
-@@ -296,7 +296,7 @@ struct octeon_oq_config {
- 	u64 oq_intr_pkt:16;
+-	/* Capabilties negotiated with the MFW */
++	/* Capabilities negotiated with the MFW */
+ 	u32					capabilities;
  
- 	/** Interrupt Coalescing (Time Interval). Octeon will interrupt the
--	 *  host if atleast one packet was sent in the time interval specified
-+	 *  host if at least one packet was sent in the time interval specified
- 	 *  by this field. The driver uses time interval interrupt coalescing
- 	 *  by default.  The time is specified in microseconds.
- 	 */
-diff --git a/drivers/net/ethernet/cavium/liquidio/octeon_iq.h b/drivers/net/ethernet/cavium/liquidio/octeon_iq.h
-index a04f36a0e1a0..fdd7d3a77a2d 100644
---- a/drivers/net/ethernet/cavium/liquidio/octeon_iq.h
-+++ b/drivers/net/ethernet/cavium/liquidio/octeon_iq.h
-@@ -70,7 +70,7 @@ struct oct_iq_stats {
+ 	/* S/N for debug data mailbox commands */
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic.h b/drivers/net/ethernet/qlogic/qlcnic/qlcnic.h
+index d7c8fadb49de..9728d583b891 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic.h
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic.h
+@@ -909,7 +909,7 @@ struct qlcnic_mac_vlan_list {
  
- /** The instruction (input) queue.
-  *  The input queue is used to post raw (instruction) mode data or packet
-- *  data to Octeon device from the host. Each input queue (upto 4) for
-+ *  data to Octeon device from the host. Each input queue (up to 4) for
-  *  a Octeon device has one such structure to represent it.
-  */
- struct octeon_instr_queue {
-diff --git a/drivers/net/ethernet/cavium/liquidio/octeon_main.h b/drivers/net/ethernet/cavium/liquidio/octeon_main.h
-index 953edf0c7096..d2a52673cac5 100644
---- a/drivers/net/ethernet/cavium/liquidio/octeon_main.h
-+++ b/drivers/net/ethernet/cavium/liquidio/octeon_main.h
-@@ -166,7 +166,7 @@ static inline int octeon_map_pci_barx(struct octeon_device *oct,
-  * errno -EINTR: user abort the command.
-  * errno -ETIME: user spefified timeout value has been expired.
-  * errno -EBUSY: the response of the request does not return in
-- *               resonable time (LIO_SC_MAX_TMO_MS).
-+ *               reasonable time (LIO_SC_MAX_TMO_MS).
-  *               the sc wll be move to zombie response list by
-  *               lio_process_ordered_list()
-  *
-diff --git a/drivers/net/ethernet/cavium/liquidio/octeon_nic.h b/drivers/net/ethernet/cavium/liquidio/octeon_nic.h
-index c139fc423764..8341faaa0c24 100644
---- a/drivers/net/ethernet/cavium/liquidio/octeon_nic.h
-+++ b/drivers/net/ethernet/cavium/liquidio/octeon_nic.h
-@@ -277,7 +277,7 @@ int octnet_send_nic_data_pkt(struct octeon_device *oct,
+ #define QLCNIC_LRO_REQUEST_CLEANUP	4
  
- /** Send a NIC control packet to the device
-  * @param oct - octeon device pointer
-- * @param nctrl - control structure with command, timout, and callback info
-+ * @param nctrl - control structure with command, timeout, and callback info
-  * @returns IQ_FAILED if it failed to add to the input queue. IQ_STOP if the
-  * queue should be stopped, and IQ_SEND_OK if it sent okay.
-  */
-diff --git a/drivers/net/ethernet/cavium/liquidio/request_manager.c b/drivers/net/ethernet/cavium/liquidio/request_manager.c
-index d7cfb20eea00..a983e7f79461 100644
---- a/drivers/net/ethernet/cavium/liquidio/request_manager.c
-+++ b/drivers/net/ethernet/cavium/liquidio/request_manager.c
-@@ -40,7 +40,7 @@ static void  __check_db_timeout(struct octeon_device *oct, u64 iq_no);
+-/* Capabilites received */
++/* Capabilities received */
+ #define QLCNIC_FW_CAPABILITY_TSO		BIT_1
+ #define QLCNIC_FW_CAPABILITY_BDG		BIT_8
+ #define QLCNIC_FW_CAPABILITY_FVLANTX		BIT_9
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
+index 47cd9ec665ee..ff337a917243 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
+@@ -1957,9 +1957,9 @@ static void qlcnic_83xx_template_end(struct qlcnic_adapter *p_dev)
+ * qlcnic_83xx_exec_template_cmd
+ *
+ * @p_dev: adapter structure
+-* @p_buff: Poiter to instruction template
++* @p_buff: Pointer to instruction template
+ *
+-* Template provides instructions to stop, restart and initalize firmware.
++* Template provides instructions to stop, restart and initialize firmware.
+ * These instructions are abstracted as a series of read, write and
+ * poll operations on hardware registers. Register information and operation
+ * specifics are not exposed to the driver. Driver reads the template from
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c
+index eb827b86ecae..1b94c42d669b 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c
+@@ -95,7 +95,7 @@ qlcnic_poll_rsp(struct qlcnic_adapter *adapter)
+ 	int timeout = 0, err = 0;
  
- static void (*reqtype_free_fn[MAX_OCTEON_DEVICES][REQTYPE_LAST + 1]) (void *);
+ 	do {
+-		/* give atleast 1ms for firmware to respond */
++		/* give at least 1ms for firmware to respond */
+ 		mdelay(1);
  
--/* Define this to return the request status comaptible to old code */
-+/* Define this to return the request status compatible to old code */
- /*#define OCTEON_USE_OLD_REQ_STATUS*/
+ 		if (++timeout > QLCNIC_OS_CRB_RETRY_COUNT)
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
+index ff4f7cd20c79..23ae76ca81db 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
+@@ -640,7 +640,7 @@ static int qlcnic_max_rings(struct qlcnic_adapter *adapter, u8 ring_cnt,
  
- /* Return 0 on success, 1 on failure */
-diff --git a/drivers/net/ethernet/cavium/thunder/nic.h b/drivers/net/ethernet/cavium/thunder/nic.h
-index 090d6b83982a..bb3f4fa6b995 100644
---- a/drivers/net/ethernet/cavium/thunder/nic.h
-+++ b/drivers/net/ethernet/cavium/thunder/nic.h
-@@ -97,7 +97,7 @@
-  * This value ensures that once a packet has been "accepted"
-  * for reception it will not get dropped due to non-availability
-  * of CQ descriptor. An errata in HW mandates this value to be
-- * atleast 0x100.
-+ * at least 0x100.
-  */
- #define NICPF_CQM_MIN_DROP_LEVEL       0x100
+ void qlcnic_set_tx_ring_count(struct qlcnic_adapter *adapter, u8 tx_cnt)
+ {
+-	/* 83xx adapter does not have max_tx_rings intialized in probe */
++	/* 83xx adapter does not have max_tx_rings initialized in probe */
+ 	if (adapter->max_tx_rings)
+ 		adapter->drv_tx_rings = qlcnic_max_rings(adapter, tx_cnt,
+ 							 QLCNIC_TX_QUEUE);
+@@ -650,7 +650,7 @@ void qlcnic_set_tx_ring_count(struct qlcnic_adapter *adapter, u8 tx_cnt)
  
-diff --git a/drivers/net/ethernet/cavium/thunder/nic_main.c b/drivers/net/ethernet/cavium/thunder/nic_main.c
-index 0ec65ec634df..086f32b61580 100644
---- a/drivers/net/ethernet/cavium/thunder/nic_main.c
-+++ b/drivers/net/ethernet/cavium/thunder/nic_main.c
-@@ -595,7 +595,7 @@ static void nic_config_rss(struct nicpf *nic, struct rss_cfg_msg *cfg)
- 	nic_reg_write(nic, idx_addr | (cpi_base << 3), cpi_cfg);
- }
- 
--/* 4 level transmit side scheduler configutation
-+/* 4 level transmit side scheduler configuration
-  * for TNS bypass mode
-  *
-  * Sample configuration for SQ0 on 88xx
+ void qlcnic_set_sds_ring_count(struct qlcnic_adapter *adapter, u8 rx_cnt)
+ {
+-	/* 83xx adapter does not have max_sds_rings intialized in probe */
++	/* 83xx adapter does not have max_sds_rings initialized in probe */
+ 	if (adapter->max_sds_rings)
+ 		adapter->drv_sds_rings = qlcnic_max_rings(adapter, rx_cnt,
+ 							  QLCNIC_RX_QUEUE);
 -- 
 2.48.1
 
