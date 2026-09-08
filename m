@@ -1,157 +1,144 @@
-Received: from mail-qv2-f12.google.com (mail-qv2-f12.google.com [74.125.230.140])
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1706C2EEE7E
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 23:24:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.140
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788909883; cv=pass; b=jI4tNa4Lh3M4i96TvrKGKiag0q58xR8vYbjyZRF/+hKfB6/hNFpDNnMVEhw50cY6nJ2seBGsqnJ5lwgTn83Q28DdP29EQVcKoLOld2jRAm9OgaV99+KMjqfXu7K5dpR5Vp1kA5l0DTeFjoGmebyw8NkCO2sa4QEd6sb/rDe9KqY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788909883; c=relaxed/simple;
-	bh=BUX/j6GF6XPucpJCZBKJcMPFmpJb+KNmwo1Z/5+yXsg=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H2SDl0tsJi4qzfqRc4CLWeFPjFlZF2YcJV4DRpwX/0woRi7Mmx2hZPfTd9ismQJZvz08S+vB7GoVYTHNHCYQbamBiM7yz89HtE9bMcEaiMXuD4Yks4OTgYJCwmdQaLrAor4CrwM/H3a8cFrPPYMIoExoOQe180tbUQuT780as+g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iciIM+yf; arc=pass smtp.client-ip=74.125.230.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD5F2853FD
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 23:31:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788910279; cv=none; b=InVlS+l6/kY3IjbLu5f3c4YjIueoOeRdG9pAmFQI/8QkY+4tHBtOOb5yojahtfEuiPvSN7FLvGI/Q/WXRv74yrvGhmw4zEgdkNZTHondFKN70tIXxRetWz036W0jQsqP0MvZzuvgJfn82bjL0C69bHPMj/BWpMHhQ9g/sKbZ/VM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788910279; c=relaxed/simple;
+	bh=lgK52YWEbmOHlLC5XhevTS6kX/pGRh0yPlV7xZbQ1f0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=r8MQWH6kGOuxY12W6pBh6g/3S3VhF+7212sPmQNb0yQlhIiAYcjaoFD2Vlg4vLVnBTiv+RJPXr21uYE68MD6suN176To/NibDoUQC/sVVd8jtNwG2cgn/jy+UDGp5Tn0XjShSAyiL1WzjXyuwjAEMCsVVDlP3JyZLK86tSFLDcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eMUqpufU; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iciIM+yf"
-Received: by mail-qv2-f12.google.com with SMTP id 6a1803df08f44-91058dd77a2so6739666d6.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 16:24:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788909880; cv=none;
-        d=google.com; s=arc-20260327;
-        b=VcwE7GY1OkZJSDzsrBI+2vG5EtsZP1ssH8FoJxDSAtmxf/sKHrvPZ3wwo5ZX3t+c7s
-         /zS2jO35CYUptpOsuaJptsHlpN0r2qkOSrHhht59QZm9rG9JgkUioIclk3ZycFH8m706
-         ELLB9zELpMkF4FoLew8F7JBDb3uaaUgRwGWBxG3CtjNCDuYiSfdLH2UevalJyCF0pBHi
-         PNSUkj9eI0beAgTW6xRlecrvglSpnlmiDius9QnKWP3VQN2XwKkc8gle8eM5BX+Cj+Kx
-         FEGqcTnUMycTrrct7pj1avFQvcMQKFjIIe/1XaVhoae7Uc/1UoootRSfTM86AeHu4u8G
-         4uYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=0IN5QQmb/lTANWR/iwoSBOuy02Mh22swkqv8V9Ybn/0=;
-        fh=bJLzTFoJJ1rxZ2A+gcesiiB+ihjNJCOfiW09OpJGBCQ=;
-        b=CYeoLxC54lOBkzBLm7SBqPIjScU3KXOCfGRbiHxa99A539/lFuxA2voctONc11aWuW
-         bfS6rRhO62hJGucXGEQl8yrV6CZ96pzOhe43onJ4bfCsV3RbxM1Ba7Q7sIlXnrwclJN5
-         WyqRvriYnAnDHLDh+0LdcNYncxJ8AA7oBi5d/aE4HIgVIZaMKfqA/15pku5USxm6jgQd
-         I/5hUndSeV8x9BeeEB1jOBAFKEY9M1ZSfCDkYJYB88Pr4X6/ZSj8CjJdv3SjwYj1m32O
-         QVx2P7klbTTl+Gv5/1EBCqcfwUnGVBw3FfOOCQfRv28Bej8Re9CnlKx7q7t+26FYuD8k
-         oD8Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eMUqpufU"
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-9103f5b813aso42300686d6.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 16:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788909880; x=1789514680; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0IN5QQmb/lTANWR/iwoSBOuy02Mh22swkqv8V9Ybn/0=;
-        b=iciIM+yfT1AHLW24zESpQnkRY48v0FlVHuK+O44tSw3v5Q8vshEESBTu6M/HGC+WzZ
-         +utQ+MZF4vB2yVzggnhBIZi+dMZsVlXDucj6O4c1yMEYbaVzuHVXUyg6PMfobS0nf+c/
-         cG4MiKp9YUskVAcj1Nkkn3N2l1svvSd7YbtfD4NXp+gvxuV7TwmWnQYn79yYUBshgTXe
-         tO9c4oTY1JhkPa5m4jfXKWxaVbdGIi+m5TSCHeqziMqqYxl+R0NqBJd/OTjOXfCwqib/
-         ie/Oc0k3pm3AIwgNbPb953Ho3ObLsb+FE6kGtvRlgoSs2iF+50QjsChG/Q5fxVVM75VW
-         LiKQ==
+        d=gmail.com; s=20251104; t=1788910277; x=1789515077; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Yq7lXkoWC5jfEWJMNBS6tBwhDj/bbJjyiLJq/Z7eNiQ=;
+        b=eMUqpufUtakeZcaUo0NM8W4QbYk15mZl5vy0UDj4R2McNaJEoUur8T/m7FSwYfQe4o
+         HVr2MZKCzKGgIfhlzQV2K+Tsycof34HGcUv7XI+zeTrq7+ahMvF316oUcCDtgr6JG20A
+         SpGUNVge2hripIhw90sWNWu2HkKXxiwJYRAqn8znRt/eVBhn6c8wlZ/49AsmA3H3cl/b
+         KJXCE39fBlAIf/jdkxt2sNTiva1RHEgQnk5XedHZsg5q1AnsYE/DzLPzJT2Z9I6HROKd
+         xtXRd4o6Pi8Zww0vvKVBqzGrE0/6aQW6ZnEXxwrZZkYWAxhMpdAjqYahzK0i12evC7BT
+         5AJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788909880; x=1789514680;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=0IN5QQmb/lTANWR/iwoSBOuy02Mh22swkqv8V9Ybn/0=;
-        b=clokfATjzjV+BffPVEXbyQo4ATKE3vK3RX1sjkaYeA71i/wDP094KC9w0nXO0k9hZk
-         xYIM2DajQm4Sfd33oy7STsPvsc+SGJOYOCxd/Bbz5Isuvlvck//DfIT7qW+KCB/wRUks
-         mLRi0bcUaANMoymxyPdoc6tpLyz9j2SYJQea9Gn/mmyWmmM8AALdbR0cPQ/VmMj3oka+
-         1hwA6UdcmsI/T5y/6Vk+LmAu/4+3vUzJRQqhLsBknP/WPxIs4b/tq2qM9axz0xSqfzg4
-         f6x5joG1pPjmMYY8mYNjQSXlVH0FYsTNxcv4ccz9ZXNJMfsjwCUApRVBBKTqWpw6Nn4N
-         wORQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzB7d9DA5BpbJYeNuTamtWIAeL3hiJlKgmDDc0g5mSkVINkPBzyGTCtMDAbjn+qgNunqVqQWienKJSZaKMhDmc=@vger.kernel.org
-X-Gm-Message-State: AFuF++mteIudIeB5OnRxhb22dwe8kJRd/OWmP+ODBpeWgJeN2t0SG2E5
-	7cT07dEuhrOD6Fdq8PbEZ9IL6lmby2hs46Fmlaxlj/MOrHssOYWMMMZaKwOYvrXykBkrFAXBeeZ
-	7b8VUYCC2h9kGCtexTQFuF5zK06R5j2X7G7w2k0hj
-X-Gm-Gg: AYBFou13fz7CgDdLTUonwkTyq1olczqsRCLrnlVmobb/M9fLe4ChGWcejqjYacP2if3
-	p1MCTYyfNFta0dVDkw2fJABlnHgF/jAMsi6rWDdDKC2Ygi0ct/+ftKK6BGwWaqavgcpenny4rI4
-	ReY4v/qf/pVsr8fiHnK5FoubUwo5ummzrkSKwf5oNZjh6Diwufw3E0FjVk7/irxBaIZFf9f5ubn
-	owcwh8KbKDaaxGknbcZtrEkV+r6wb8m4Tzb2CqgtrKl543VvFBdNVd0zKxJ0cYStPUtoWMNjaD8
-	UThS8G7PuVsfNY8/fECm6VN1KCg9mp2XTuEqNWl0WCp52jPuqwc9ko3yNklqOfPYXjb77OHmMxm
-	KDl8YyjFSG3pV0r5h9/HnEZ5Jr6z1m04=
-X-Received: by 2002:a05:6214:4a09:b0:90e:7de2:d81f with SMTP id
- 6a1803df08f44-9106b407918mr47732286d6.20.1788909879267; Tue, 08 Sep 2026
- 16:24:39 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 8 Sep 2026 16:24:38 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 8 Sep 2026 16:24:38 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <0a08eab7-e093-46ef-97bc-531766cdbcf2@intel.com>
-References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
- <20260722-tdx-selftests-v14-19-15ad654a50db@google.com> <0a08eab7-e093-46ef-97bc-531766cdbcf2@intel.com>
+        d=1e100.net; s=20251104; t=1788910277; x=1789515077;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Yq7lXkoWC5jfEWJMNBS6tBwhDj/bbJjyiLJq/Z7eNiQ=;
+        b=dnYqCkTCKOdRSUBaEVJTIedNpa1KJKZPc/muQdsUSbR+RjmhmRRZxU0A2+/GoaWvNi
+         NdqBe+dk8sjrK7gJ32BinQOVfdmHX5jvExGbwb+nl9VJ53Xl9K893zKOnYX57Bg+WCRu
+         MZjOyiDLfLg9a+4L6morfT/49q083/ohHplxm9GX/siFca+Xsx8WnpRnhsQf4ZYWgFA1
+         Zc6/ywzi5QfcoNO+uNjK/NzL0SyH1fGtj2Hoyd9STz/co/pcrEFZTwkBMVeTfRZmwOLM
+         7MlChqJJSSoI79b6j9628t0/ALKr5O22chuv8tPy23gisnZN4K6NoBjTOLqwHRlKbTvk
+         dBxw==
+X-Forwarded-Encrypted: i=1; AKwUvBwPtJSlMiYucsxqgYnrDgYMI9kVUWqwftjjt7Q47gdMubPHqmRs7g3GzWikV5gIGBTVThn0tJdZpZcsg9R6pns=@vger.kernel.org
+X-Gm-Message-State: AFuF++kiN2j/BW9P0LmVGOhgv4Y8EwfUQHSl1QesrDwHG4Y/aGo1GVln
+	MySq8dVt68MLPNXnrX9auH+gJnYL8kR03eBJtCPBQFiwz5dIE53AdCMO
+X-Gm-Gg: AYBFou1PqMLXmPlJh09hY5Gxr6/2Hxeuq1OmBStlfYwDb9WW+DItnc7VsQszUkVzHrx
+	1Dz692ztQvHhXJgjwktynqYrrJJ4vXkxE/bHQUFV7CD8ibEVbqGBz1J2P9h3DK9naS4tWEI7rtc
+	BOl6Ke08dkstdj1VJiH8NGbB+QRAlmOmYwG02VyYwcoi0ca7IrYeIP/yCFD67uQthgauQuxRcQP
+	F7IU6YKjyMbIUozOCu8BAfsmXwvpuiIpHOBoS5Xr/wJ+OEYu4nNGKrVfvZGrgp5lVzBv2M+wmle
+	MBT9ckB14TjrBe8U+VvObhuUFTyyYeDy6OzZxkMrejTdJBb1k1CIdLfrkSzUgiOEwX72+0fJsN9
+	gU3t/rIzf0VqVxelY/TuO7gVfeSvds1EB65NllyhgJx/DMBBWEDUwAYCJS6gzXacLtmlx17F8DQ
+	c305Lo7rTjmXnLlgiMBkwA8t4pWuTLTgNRXZ7i6eQ2pVyKU5U2azZFDoi5yCRY3Hlpmg==
+X-Received: by 2002:ad4:5ce2:0:b0:908:958f:4db with SMTP id 6a1803df08f44-9103eefd24fmr369191086d6.3.1788910276570;
+        Tue, 08 Sep 2026 16:31:16 -0700 (PDT)
+Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91040694c35sm129077696d6.36.2026.09.08.16.31.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Sep 2026 16:31:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Date: Tue, 8 Sep 2026 16:24:38 -0700
-X-Gm-Features: AcwNN1UULNTPjF9-p9AmAvuYgtyt3ObShfxcFD10uTDSDoS21CnWX7JfXOpZMy0
-Message-ID: <CAEvNRgHE-c09hdeLqkUfGdnrAUkENuSrdNqByXBYr3N=HSbB_A@mail.gmail.com>
-Subject: Re: [PATCH v14 19/22] KVM: selftests: Finalize TD memory as part of kvm_arch_vm_finalize_vcpus
-To: Xiaoyao Li <xiaoyao.li@intel.com>, Lisa Wang <wyihan@google.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
-	Chao Gao <chao.gao@intel.com>, Chenyi Qiang <chenyi.qiang@intel.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Erdem Aktas <erdemaktas@google.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>, 
-	Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>
-Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 08 Sep 2026 19:31:14 -0400
+Message-Id: <DLABRMYUL6Y5.2AH8IHHONR58N@gmail.com>
+Cc: "Bobby Eshleman" <bobbyeshleman@meta.com>, "Boris Pismenny"
+ <borisp@nvidia.com>, "Carolina Jubran" <cjubran@nvidia.com>, "Cosmin Ratiu"
+ <cratiu@nvidia.com>, "Daniel Zahka" <daniel.zahka@gmail.com>, "Doruk Tan
+ Ozturk" <doruk@0sec.ai>, "Dragos Tatulea" <dtatulea@nvidia.com>, "Gal
+ Pressman" <gal@nvidia.com>, "Jianbo Liu" <jianbol@nvidia.com>, "Kees Cook"
+ <kees@kernel.org>, "Leon Romanovsky" <leon@kernel.org>, "open list"
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-rdma@vger.kernel.org>, "Mark Bloch" <mbloch@nvidia.com>, "Petr
+ Machata" <petrm@nvidia.com>, "Raed Salem" <raeds@nvidia.com>, "Rahul
+ Rameshbabu" <rrameshbabu@nvidia.com>, "Saeed Mahameed" <saeedm@nvidia.com>,
+ "Shuah Khan" <shuah@kernel.org>, "Shuah Khan" <skhan@linuxfoundation.org>,
+ "Simon Horman" <horms@kernel.org>, "Willem de Bruijn" <willemb@google.com>,
+ "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>
+Subject: Re: [PATCH net-next V4 09/14] net/mlx5e: psp: Add an rx_decap
+ steering table
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+To: "Tariq Toukan" <tariqt@nvidia.com>, "Andrew Lunn"
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ <netdev@vger.kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Sabrina
+ Dubroca" <sd@queasysnail.net>
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20260908065244.3799142-1-tariqt@nvidia.com>
+ <20260908065244.3799142-10-tariqt@nvidia.com>
+In-Reply-To: <20260908065244.3799142-10-tariqt@nvidia.com>
 
-Xiaoyao Li <xiaoyao.li@intel.com> writes:
+On Tue Sep 8, 2026 at 2:52 AM EDT, Tariq Toukan wrote:
+> From: Cosmin Ratiu <cratiu@nvidia.com>
+> =20
+> +static void accel_psp_fs_rx_reconfigure(struct mlx5e_psp_fs *fs,
+> +					bool decap_wanted)
+> +{
+> +	bool decap_supported =3D
+> +		MLX5_CAP_FLOWTABLE(fs->mdev,
+> +				   flow_table_properties_nic_receive.reformat_del_psp_transport);
 
-> On 7/23/2026 7:13 AM, Lisa Wang wrote:
->> From: Sagi Shahar <sagis@google.com>
->>
->> Finalize TDX VM after creation to make it runnable.
->
-> The changelog is too weak.
->
+not for this series, but this makes me think having some way of letting
+the user know whether or not psp with hw gro is enabled would be nice,
+so that they don't wonder why stuff isn't coalescing when they have old
+fw like I do :) I could see a similar thing being useful for gso
+features if the psp device can't segment something that it otherwise can
+for non-psp.
 
-Some other points I can think of (Xiaoyao, please add on!):
-
-+ Why was kvm_arch_vm_finalize_vcpus() was picked as the lifecycle hook
-  in which to finalize the VM? (See comments from the earlier revision
-  from Sean) What are the rejected alternatives?
-+ Expand on "make it runnable": finalizing also performs measurements
-
-Just confirming: Peter, you meant to add the () at the end of
-kvm_arch_vm_finalize_vcpus in the commit subject, right?
-
->>
->> Signed-off-by: Sagi Shahar <sagis@google.com>
->> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
->> Signed-off-by: Lisa Wang <wyihan@google.com>
->> ---
->>   tools/testing/selftests/kvm/lib/x86/processor.c | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
->> index 4b97a9a1bb5e..8319ae3d9fe6 100644
->> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
->> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
->> @@ -1489,6 +1489,12 @@ bool kvm_arch_has_default_irqchip(void)
->>   	return true;
->>   }
->>
->> +void kvm_arch_vm_finalize_vcpus(struct kvm_vm *vm)
->> +{
->> +	if (is_tdx_vm(vm))
->> +		tdx_vm_finalize(vm);
->> +}
->> +
->>   void setup_smram(struct kvm_vm *vm, struct kvm_vcpu *vcpu, u64 smram_gpa,
->>   		 const void *smi_handler, size_t handler_size)
->>   {
->>
+> +	bool decap_enable =3D decap_wanted && decap_supported;
+> +	struct mlx5_flow_destination dest =3D {};
+> +	int err;
+> +
+> +	if (decap_enable =3D=3D fs->decap_enabled)
+> +		return;
+> +
+> +	/* Create the decap table if needed. */
+> +	if (decap_enable && !fs->decap.ft) {
+> +		err =3D accel_psp_fs_rx_decap_ft_create(fs, &fs->decap);
+> +		if (err)
+> +			goto out_err;
+> +	}
+> +
+> +	/* Redirect traffic to the correct table. */
+> +	dest.type =3D MLX5_FLOW_DESTINATION_TYPE_FLOW_TABLE;
+> +	dest.ft =3D decap_enable ? fs->decap.ft : fs->rx.ft;
+> +	err =3D mlx5_modify_rule_destination(fs->check.rule, &dest, NULL);
+> +	if (err)
+> +		goto out_err;
+> +
+> +	fs->decap_enabled =3D decap_enable;
+> +	return;
+> +
+> +out_err:
+> +	mlx5_core_warn(fs->mdev,
+> +		       "Failed to create/modify PSP decapsulation rules (err %d), HW G=
+RO for PSP unavailable\n",
+> +		       err);
+> +}
