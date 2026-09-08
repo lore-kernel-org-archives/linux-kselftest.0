@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9444A4EE842;
-	Tue,  8 Sep 2026 10:14:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D5A501F36;
+	Tue,  8 Sep 2026 10:15:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788862487; cv=none; b=aI8uZviDfdLDG3c6SnvPA8LV8D8FYAs4JlQG+skj/Yi4dknHZHJ5HzeH/zRPy7t7xRLGjsCDFdBUQyvUbFATf031mlGMwUghWwuzO7FJqtwHQtdRAO0InqVSeQvnTFjkdyPgFIV+09RLUspBP6a2osRBo9sOhpZ+dvZMsB7hWBg=
+	t=1788862558; cv=none; b=ehbDs/vsnjiEt1AOIMFdUlaZhCqtnpYN0oWhUtmnuAhjrMSvOeA4523v896ODW6xfzF3XdQ+BlaBRdbSI9jWzjXi7/LPnkAlCPjFwx/k8qLQVZixkCuPVeeJj2g2x7j0Lrlz1B21Ztw1W5GxO8yBoMXtXxMs36yw6X9RppF4QKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788862487; c=relaxed/simple;
-	bh=faFEQjgMnDiusYVfCCUQAU59ZSChKuyIkz+2k2FWJ5U=;
+	s=arc-20240116; t=1788862558; c=relaxed/simple;
+	bh=KBdy1R4tq5Vf6wdLqlx52WKKhoV0g8IVACV6XjTV20U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LgMZM1tWyXkmzqpJah0K3YcT91FjPjeKFHhhg9fqxVRxELE5Z+sWchwmi4JdvluYgNKJ/mkI6kVVG4eCtrhXwfSaMfmXW/DVWzYfwo5TOCjaF9NAU3s2ZMpsopKsB8R+tv9sFNrD0jZVaOzYursXnttWgq1fQAWDivkIaf2UwVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iz9xURpW; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=efaya6p1DZI8dHdqehCe2KrQX+V2EGNgijD1cH+y395mkdRXm+8I+cUlpVgL0iHGJyXTb72NWFs/vFq5jeh+RLPXWcXMzb6ARkZMPnFMMdeDSB4zxz7mUCMVWddPd7501TdBWiqme1ItlJJqmpXHX9kbS1KsazymqGjyUZNHsaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kPlt8z7j; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iz9xURpW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28E1D1F00A3A;
-	Tue,  8 Sep 2026 10:14:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kPlt8z7j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCED91F00A3A;
+	Tue,  8 Sep 2026 10:15:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788862486;
-	bh=Cvq4qMjanLuwG3YSjMLX9OxK6QvsahWFeb4aWNdZaXM=;
+	s=k20260515; t=1788862556;
+	bh=ekjkNjyquBfVj0KUaXkP0qTUEnu6sauJ66A70KU2iAM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=iz9xURpWnnx+dU5/HrM8VQO5BbUDBW7rvyOLEuiLWetDXdQ8k9sBR4ImmLdNM+Dla
-	 N9Dfp7sOUwRPAKQbqdb/YMlpm5hpy6WKAwoioZvsKkWesFetbmX/dgCDD7SwWw0Sh8
-	 sdrThQmQVgTDomTp7h5cUd70qq67m8ahaB44eFW7y5LRfCBqUDMACXcX8xpnkJgR90
-	 ThiuAAAiaifndll5OnzG754tijKFWr3abF20Ynl6N13OEEvqTD5p/YrmKZ8l2+CuLy
-	 4e9UVv2pB0x39Ake1gvwn527QYcC2r9cUvKByu65tH2hoLFf2vOU18urhhaoqRuR1Q
-	 lT+RtcZM6i4Wg==
-Message-ID: <c8f3161f-0428-4f0e-a3bf-6ca72370b4fa@kernel.org>
-Date: Tue, 8 Sep 2026 12:14:41 +0200
+	b=kPlt8z7jZmNtunlUzwNDs8G6avxVAMsAD5cPfdkaobbL7+WfVWyPofROj6KBDOnvS
+	 32cslRcICIzEoo24KXgU2CT3g+SyznrFPBm7ratNwixpf4yLwLE7TgYJxyGEEUte+4
+	 NOmK6Z4vDQxg64SpI9oIe6qTREXaEwLSaB2bJKk86vXY83KmzFPJGQqN8Ae15zjOgz
+	 ql1QOtj43iaqQqaLLsjESsy9iEWnOuMQo716zHsbRulSrtKNsSf+D3qpGq+cJQADHY
+	 fRsvFByfuaepL5ab9jTt/exrvglxG2dO/N5OM9EdTFs9GvfPEAkRYspWPVH3Nrt7ZR
+	 ca5x/QANDt6ew==
+Message-ID: <adaade14-6ce5-4a7a-9510-8ff99ee66eca@kernel.org>
+Date: Tue, 8 Sep 2026 12:15:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,14 +35,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] selftests/mm: Only prepare ptrace_scope when
- memfd_secret is selected
+Subject: Re: [PATCH v2 0/2] selftests/mm: Validate selections and scope
+ memfd_secret setup
 To: Tianyi Chen <hi@tychen.cc>, Andrew Morton <akpm@linux-foundation.org>
 Cc: shuah@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, jsavitz@redhat.com
 References: <20260906135444.749144-1-hi@tychen.cc>
  <178886112560.138404.1278745290043112298.mm-cli-v2-0@tychen.cc>
- <178886112560.138404.8930658836608223518.mm-cli-v2-2@tychen.cc>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -89,47 +88,58 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <178886112560.138404.8930658836608223518.mm-cli-v2-2@tychen.cc>
+In-Reply-To: <178886112560.138404.1278745290043112298.mm-cli-v2-0@tychen.cc>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 9/8/26 11:55, Tianyi Chen wrote:
-> The memfd_secret setup clears ptrace_scope whenever its test binary is
-> executable, even when a different category was selected. run_test() filters
-> the test invocation, but it does not protect the preceding setup.
+> run_vmtests.sh can reach test setup after an invalid category selection,
+> and its memfd_secret preparation can change ptrace_scope even when that
+> category was not selected. These two patches address David's follow-up
+> questions on the earlier getopts fix.
 > 
-> Check the category selection before entering the memfd_secret block so
-> running unrelated categories does not change ptrace_scope. Keep the
-> existing executable check and the behavior when memfd_secret is selected.
+> Patch 1 extends the getopts error handling to reject empty, whitespace-only
+> and unknown category selections before setup. It uses the existing category
+> list in usage() and normalizes separators, while preserving the default
+> when -t is omitted and the existing environment-selection behavior.
 > 
-> Assisted-by: Codex:GPT-6
-
-We prefer
-
-Assisted-by: LLM
-
-now
-
-> Signed-off-by: Tianyi Chen <hi@tychen.cc>
-> ---
->  tools/testing/selftests/mm/run_vmtests.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Patch 2 gates memfd_secret preparation on category selection and executable
+> presence. It retains the existing behavior when memfd_secret is selected;
+> it does not add configuration restoration or otherwise change that test.
 > 
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> index 836c7454cba..9932df252f4 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -371,7 +371,7 @@ CATEGORY="process_madv" run_test ./process_madv
->  
->  CATEGORY="vma_merge" run_test ./merge
->  
-> -if [ -x ./memfd_secret ]
-> +if test_selected "memfd_secret" && [ -x ./memfd_secret ]
->  then
->  if [ -f /proc/sys/kernel/yama/ptrace_scope ]; then
->  	(echo 0 > /proc/sys/kernel/yama/ptrace_scope 2>&1) | tap_prefix
+> Changes in v2:
+> - Rebase onto current mm-unstable.
+> - Extend the original option-error patch with category validation.
+> - Add a separate patch for the memfd_secret setup side effect.
+> 
+> Focused validation:
+> - Bash syntax and strict checkpatch passed. All 30 documented categories
+>   match the categories used by the script.
+> - Parser checks cover omitted/default selections, empty environment values,
+>   explicit empty -t, invalid options/categories, whitespace-separated lists
+>   and command-line overrides of environment selections.
+> - Twelve invalid-input cases and help were run through the full script in
+>   a KVM guest. Invalid inputs exited with status 1 before test setup.
+> - The real mmap category's three programs and memfd_secret passed in an
+>   x86-64 KVM guest running Linux 7.3.0-rc1, including multi-category and
+>   environment-selected runs.
+> - The guest kernel lacks Yama. A disposable file bind-mounted at the actual
+>   ptrace_scope path verified the shell's write condition: the old script
+>   writes for an unrelated selection, the new script does not, and selected
+>   executable memfd_secret retains the write. This checks script gating,
+>   not Yama policy enforcement. Missing-executable behavior was also checked.
+> 
+> This was focused validation, not a run of the complete MM selftest suite.
+> 
+> Previous submission:
+> https://lore.kernel.org/r/20260906135444.749144-1-hi@tychen.cc
+> Review:
+> https://lore.kernel.org/r/519ef70a-679c-455f-ba5f-3841730873a4@kernel.org
+> 
+> 
+> Tianyi Chen (2):
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+For the future, don't send new versions in reply to old versions of a patch set.
 
 -- 
 Cheers,
