@@ -1,176 +1,258 @@
-Received: from mta1.migadu.com (out-213.mta1.migadu.com [95.215.58.213])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00FEF3054C7
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 01:40:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.213
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D2926056C;
+	Tue,  8 Sep 2026 01:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.61.253
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788831659; cv=none; b=Jb9jOSGrWAUYALHAopv6VHDsSUb3dvH/1hz0vftQrjkDJjJVQ310TqblO28YeptbP6Z/R8dE1yzMx8yxOo3oCYzBc0kkXsHn0GVlWa6ZilYvhxd2aFeCDlKjzAoegSLWp3qjw7cCJAh8WxJ8Mukc2sTEFUu3+p7mtSiED85EsKM=
+	t=1788831864; cv=none; b=s1kOAAla5Spmb87MJnTO50nn91qkdN6E3cU3fgmsawKVKUUF/JAtD5zmKGBJfhspVDAWdywOw0HQm61e+9zNtvR6RZYppueY4rA4Ck/wR4AWXLnedk5+A3Qwf8MmUdYhpbmGvea6bGj5E5q2OuUn3WUzvHYqJobZbIB+6/qikW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788831659; c=relaxed/simple;
-	bh=njFz8+N4GFRKkhHgnolDJ7cNiihKm6IZpjgne2qpBeA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nKLGXFtMCQre96B7v9mQDNrk7/T9ub980jtJ4QJu/fGJyRNQzToYqwcUlufuzsruVu/PUFavV2pXoLX+P27X+T3J89BL0AInm71f2RGT3+4RhLb0qTmpvB2aD3mU9GqmhE27cve+Gmmflk3KNfIUPQ2sAxNHFxWnPJYdhQcFRFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ELcJ3R4v; arc=none smtp.client-ip=95.215.58.213
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788831864; c=relaxed/simple;
+	bh=LvzJtPnZANUsV5VdV340HGark2+yZ1Mwn3pRAiG/vvU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a+0edtI7TugmLrdTYb47poYCJ1jFS5vALPNQ+znL6xCNDUGdQpwvtGn2TaQMTSsYV/4AD2zLfFBB8j5mCrTAiRT8Op4A9PEQpsHeZEI/NTAtnbxa8qQ0YIFqlnIwNoOGT6zcmY9SWfl3gmTnqc29LlxvhZvSFpxIegCyJ377hwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=c4h9H2kF; arc=none smtp.client-ip=139.138.61.253
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ELcJ3R4v"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=njFz8+N4GFRKkhHgnolDJ7cNiihKm6IZpjgne2qpBeA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788831655; v=1; x=1789436455;
- b=ELcJ3R4vL2tl4Vadb7MVJ3njg0Sz2kpeahJjRUoxm53e0SxucXDuCd5vGDhCPyVyUVRjSBA6
- AQUPh9uXwPqxGBi9sC16dI66Rnlcicpz5ZOz3CmSoBlYvh07HAWZ9fyoAwk1B8RLzGFF5BvRCP0
- 0NAWQ6dN++18LvCUgNTPa9/g=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e543444743d1275e;
-	Tue, 08 Sep 2026 01:40:45 +0000
-X-Mizu-Trace-ID: e543444743d1275e
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <7c2a545f-7fa2-40d5-8d4f-25a65ec5df24@linux.dev>
-Date: Tue, 8 Sep 2026 09:40:41 +0800
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="c4h9H2kF"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
+  t=1788831862; x=1820367862;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LvzJtPnZANUsV5VdV340HGark2+yZ1Mwn3pRAiG/vvU=;
+  b=c4h9H2kFVWROXM9QA4JudcPP3nkljDf+rCqmTToaNse7lKDTTLcv1Xyc
+   XzBjCu2BBdAVBNsPeXJjEI/h6nABLldSXNKHuGFIjAH6/mv7Y1WnjEBI5
+   B5imRaDyJ6KLtASl4kn+4fTHmUAwiW/iFQNmcofDtxdVWjY+9by4DDEUY
+   QhiANIDFNFj2+dfdhViExXWzlwWBriVTneL5YOKWTCb921WSJqhw5yRM7
+   qSFnnKrJ6odys017Y2LwYd1UbJpgAfOkcjm9dniDSzsj094RIt2M1DQYw
+   g3JX9khH97x1zG908dpN36PWMqF0aZ2fx+hmaO4a0i3t7m13MbfS3oqJr
+   w==;
+X-CSE-ConnectionGUID: o/LawgO/T+OvnN2FulMluw==
+X-CSE-MsgGUID: vfpNLy7aSyO4Fu9FXW84+w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11899"; a="242226078"
+X-IronPort-AV: E=Sophos;i="6.25,268,1779116400"; 
+   d="scan'208";a="242226078"
+Received: from gmgwuk01.global.fujitsu.com ([172.187.114.235])
+  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2026 10:44:20 +0900
+Received: from az2uksmgm1.o.css.fujitsu.com (unknown [10.151.22.198])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by gmgwuk01.global.fujitsu.com (Postfix) with ESMTPS id E8F2B1002B9C;
+	Tue,  8 Sep 2026 01:44:19 +0000 (UTC)
+Received: from az2nlsmom2.o.css.fujitsu.com (unknown [10.150.26.200])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by az2uksmgm1.o.css.fujitsu.com (Postfix) with ESMTPS id 9D52E8D29D2;
+	Tue,  8 Sep 2026 01:44:19 +0000 (UTC)
+Received: from sm-arm-grace07 (unknown [10.124.178.20])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by az2nlsmom2.o.css.fujitsu.com (Postfix) with ESMTPS id 0B0EE18002CD;
+	Tue,  8 Sep 2026 01:44:13 +0000 (UTC)
+Date: Tue, 8 Sep 2026 10:44:10 +0900
+From: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Takayuki Okamoto <tokamoto@fujitsu.com>
+Subject: Re: [PATCH 1/2] KVM: selftest: arm64: Support 5-level paging in
+ stage 1 translation table
+Message-ID: <ap9oag87vZiuTVer@sm-arm-grace07>
+References: <20260826-arm64-52bit-va-v1-0-14ec98211363@fujitsu.com>
+ <20260826-arm64-52bit-va-v1-1-14ec98211363@fujitsu.com>
+ <CA+EHjTy6EH-d=O+dtRdWdTUkS0zkXeW=auxiK6N5Dc-yihrYRw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/7] cgroup/cpuset: Factor out child partition
- validation
-To: Guopeng Zhang <guopeng.zhang@linux.dev>, Waiman Long
- <longman@redhat.com>, cgroups@vger.kernel.org
-Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Guopeng Zhang <zhangguopeng@kylinos.cn>
-References: <20260902102615.79189-1-guopeng.zhang@linux.dev>
- <20260902102615.79189-2-guopeng.zhang@linux.dev>
- <5842edcd-9283-4a87-afc9-50e51962368e@redhat.com>
- <5e0d1386-b094-4d4e-8569-e6b584f955c5@linux.dev>
- <fe0c93af-5562-44fe-8aee-328c4a450a9b@linux.dev>
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <fe0c93af-5562-44fe-8aee-328c4a450a9b@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+EHjTy6EH-d=O+dtRdWdTUkS0zkXeW=auxiK6N5Dc-yihrYRw@mail.gmail.com>
 
+Hi Fuad,
+On Fri, Sep 04, 2026 at 09:38:39AM +0100, Fuad Tabba wrote:
+> Hi Itaru,
+> 
+> The usual subject prefix in the tree is "KVM: arm64: selftests:", for
+> this patch and the next one.
 
+Sure. Fix in v2.
+> On Tue, 25 Aug 2026 at 22:18, Itaru Kitayama <itaru.kitayama@fujitsu.com> wrote:
+> >
+> > Add p4d_index() for when 5-level paging required, i.e., V52 guest mode
+> > IDs. With the index helper function, _virt_pg_map() handles 5-level
+> 
+> Only VM_MODE_P52V52_4K has five levels. The 16K and 64K V52 modes get
+> four and three, so this is for the 4K granule rather than for V52
+> modes as a class.
 
-On 9/7/2026 5:49 PM, Guopeng Zhang wrote:
-> 
-> 
-> 在 2026/9/4 09:25, Ridong Chen 写道:
->>
->>
->> On 9/4/2026 2:33 AM, Waiman Long wrote:
->>> On 9/2/26 6:26 AM, Guopeng Zhang wrote:
->>>> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
->>>>
->>>> compute_partition_effective_cpumask() checks whether each valid child
->>>> partition remains covered by the parent exclusive CPU mask and whether it
->>>> would consume all remaining CPUs of a populated parent.
->>>>
->>>> Factor these two checks into child_partition_error() so the same rules can
->>>> be reused when evaluating a proposed parent configuration. This is a
->>>> preparatory refactoring with no intended functional change.
->>>>
->>>> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
->>>> ---
->>>>    kernel/cgroup/cpuset.c | 38 +++++++++++++++++++++++++++++---------
->>>>    1 file changed, 29 insertions(+), 9 deletions(-)
->>>>
->>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>>> index 8f24171b6055..6994dc75d940 100644
->>>> --- a/kernel/cgroup/cpuset.c
->>>> +++ b/kernel/cgroup/cpuset.c
->>>> @@ -2085,6 +2085,26 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->>>>        return 0;
->>>>    }
->>>> +/*
->>>> + * Return the error that will invalidate a child partition under a proposed
->>>> + * parent partition configuration.
->>>> + */
->>>> +static enum prs_errcode
->>>> +child_partition_error(struct cpuset *child,
->>>> +              const struct cpumask *partition_cpus,
->>>> +              const struct cpumask *remaining_cpus,
->>>> +              bool parent_populated)
->>> I think you should add some functional comments on what "partition_cpus" and "remaining_cpus" are supposed to be so that caller knows what to pass into this helper.
->>
->> Would it help to rename them to excpus and local_excpus?
->> local already implies "excluding children" (just like cgroup.stat.local), so I think that makes the intent clearer.
->>
-> 
-> Ridong, thanks for your review.
-> 
-> Renaming the masks would help, but I think `local_excpus` may be slightly misleading here. When the helper is called, the mask may still contain active CPUs assigned to the current child and to children that have not yet been visited. It excludes only the CPUs of previously visited children that remain valid under the configuration being evaluated, and the mask itself is restricted to active CPUs.
-> 
-> In addition, "local" already has the local-versus-remote partition meaning in cpuset.
-> 
-> Would `parent_xcpus` for the complete effective exclusive mask, which may include offline CPUs, and `remaining_ecpus` for the remaining active CPUs before evaluating the current child be clearer? I will also document both parameters explicitly.
-> 
-
-Passing struct cpuset *parent into the function simplifies naming, as the needed 
-values become local variables derived from it.
+Yes, understood. Will update the commit log.
 
 > 
->>>> +{
->>>> +    if (!cpumask_subset(child->effective_xcpus, partition_cpus))
->>>> +        return PERR_INVCPUS;
->>>> +
->>>> +    if (parent_populated &&
->>>> +        cpumask_subset(remaining_cpus, child->effective_xcpus))
->>>> +        return PERR_NOCPUS;
->>>> +
->>>> +    return PERR_NONE;
->>>> +}
->>>> +
->>>>    /**
->>>>     * compute_partition_effective_cpumask - compute effective_cpus for partition
->>>>     * @cs: partition root cpuset
->>>> @@ -2121,6 +2141,8 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
->>>>        rcu_read_lock();
->>>>        cpuset_for_each_child(child, css, cs) {
->>>> +        enum prs_errcode child_err;
->>>> +
->>>>            if (!is_partition_valid(child))
->>>>                continue;
->>>> @@ -2129,15 +2151,13 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
->>>>             * partition root.
->>>>             */
->>>>            WARN_ON_ONCE(is_remote_partition(child));
->>>> -        WRITE_ONCE(child->prs_err, 0);
->>>> -        if (!cpumask_subset(child->effective_xcpus,
->>>> -                    cs->effective_xcpus))
->>>> -            WRITE_ONCE(child->prs_err, PERR_INVCPUS);
->>>> -        else if (populated &&
->>>> -             cpumask_subset(new_ecpus, child->effective_xcpus))
->>>> -            WRITE_ONCE(child->prs_err, PERR_NOCPUS);
->>>> -
->>>> -        if (child->prs_err) {
->>>> +        WRITE_ONCE(child->prs_err, PERR_NONE);
->>>> +        child_err = child_partition_error(child, cs->effective_xcpus,
->>>> +                          new_ecpus, populated);
->>>> +        if (child_err)
->>>> +            WRITE_ONCE(child->prs_err, child_err);
->>>> +
->>>
->>> You can ignore the inital PERR_NONE write and always write the child_err value into child->prs_err.
->>>
->>> Not big issue, just some nits.
->>>
->>> Cheers,
->>> Longman
->>>
->>>> +        if (child_err) {
->>>>                int old_prs = child->partition_root_state;
->>>>                /*
->>>
->>
+> ...
 > 
+> >  u64 *virt_get_pte_hva_at_level(struct kvm_vm *vm, gva_t gva, int level)
+> >  {
+> > +       int start_level = 4 - vm->mmu.pgtable_levels;
+> >         u64 *ptep;
+> >
+> > +       TEST_ASSERT(level >= start_level && level <= 3,
+> > +                   "Invalid translation level %d, valid range is %d-3",
+> > +                   level, start_level);
+> > +
+> >         if (!vm->mmu.pgd_created)
+> >                 goto unmapped_gva;
+> >
+> >         ptep = addr_gpa2hva(vm, vm->mmu.pgd) + pgd_index(vm, gva) * 8;
+> >         if (!ptep)
+> >                 goto unmapped_gva;
+> > -       if (level == 0)
+> > +       /*
+> > +        * Stage-1 translation starts at level -1 for a five-level page
+> > +        * table, and at levels 0, 1, or 2 for four-, three-, or two-level
+> > +        * page tables, respectively.
+> > +        */
+> > +       if (level == start_level)
+> 
+> 
+> This changes what level means for the existing three-level modes:
+> level 0 used to return the top-level entry and now trips the assert,
+> level 1 used to return the leaf and now returns the top level. No
+> caller in tree asks for either of those two levels, and the new
+> numbering matches the architecture.
 
--- 
-Best regards
-Ridong
+Yes, as you checked this change won't break current tests, so if you
+have better comments I will replace it with yours.
 
+> 
+> ...
+> 
+> > @@ -321,12 +356,14 @@ void aarch64_vcpu_setup(struct kvm_vcpu *vcpu, struct kvm_vcpu_init *init)
+> >         case VM_MODE_PXXVYY_4K:
+> >                 TEST_FAIL("AArch64 does not support 4K sized pages "
+> >                           "with ANY-bit physical address ranges");
+> > +       case VM_MODE_P52V52_64K:
+> 
+> These VM_MODE_ enumerators arrive in patch 2, so this patch does not
+> build on its own:
+> 
+>   lib/arm64/processor.c:359:7: error: use of undeclared identifier
+> 'VM_MODE_P52V52_64K'; did you mean 'VM_MODE_P52V48_64K'?
+>   lib/arm64/processor.c:360:7: error: duplicate case value 'VM_MODE_P52V48_64K'
+> 
+> There are other build errors from the same cause. Could you move the
+> enum values and their vm_guest_mode_string()/vm_guest_mode_params[]
+> entries into this patch, or a new one altogether?
+
+Yes, I have rearranged the series to avoid this.
+
+> 
+> >         case VM_MODE_P52V48_64K:
+> >         case VM_MODE_P48V48_64K:
+> >         case VM_MODE_P40V48_64K:
+> >         case VM_MODE_P36V48_64K:
+> >                 tcr_el1 |= TCR_TG0_64K;
+> >                 break;
+> > +       case VM_MODE_P52V52_16K:
+> >         case VM_MODE_P52V48_16K:
+> >         case VM_MODE_P48V48_16K:
+> >         case VM_MODE_P40V48_16K:
+> > @@ -334,6 +371,7 @@ void aarch64_vcpu_setup(struct kvm_vcpu *vcpu, struct kvm_vcpu_init *init)
+> >         case VM_MODE_P36V47_16K:
+> >                 tcr_el1 |= TCR_TG0_16K;
+> >                 break;
+> > +       case VM_MODE_P52V52_4K:
+> >         case VM_MODE_P52V48_4K:
+> >         case VM_MODE_P48V48_4K:
+> >         case VM_MODE_P40V48_4K:
+> > @@ -348,6 +386,9 @@ void aarch64_vcpu_setup(struct kvm_vcpu *vcpu, struct kvm_vcpu_init *init)
+> >
+> >         /* Configure output size */
+> >         switch (vm->mode) {
+> > +       case VM_MODE_P52V52_4K:
+> > +       case VM_MODE_P52V52_16K:
+> > +       case VM_MODE_P52V52_64K:
+> >         case VM_MODE_P52V48_4K:
+> >         case VM_MODE_P52V48_16K:
+> >         case VM_MODE_P52V48_64K:
+> > @@ -578,6 +619,42 @@ static u32 max_ipa_for_page_size(u32 vm_ipa, u32 gran,
+> >                 return min(vm_ipa, 48U);
+> >  }
+> >
+> > +u32 aarch64_get_supported_va_size(void)
+> 
+> This repeats aarch64_get_supported_page_sizes() below it and builds a
+> second probe VM one line after the first. Could it take a u32 *va
+> out-param, so both ID registers come off the one vCPU?
+> 
+> VARange is the 52-bit VA indicator for the 64K granule only, so a bare
+> 52 or 48 reads as granule-independent. The caller in patch 2 only uses
+> it for 64K, so nothing is wrong today.
+
+Yes, I've dropped the _va_size() function and instead, expanded a bit
+as you suggested the aarch64_get_supported_page_sizes() to check if vcpu
+can address upto 52-bit VA space or not (48-bit max). 
+
+Thanks,
+Itaru.
+> 
+> Cheers,
+> /fuad
+> 
+> 
+> > +{
+> > +       struct kvm_vcpu_init preferred_init = {};
+> > +       int kvm_fd, vm_fd, vcpu_fd, err;
+> > +       u64 val;
+> > +       u32 va_range;
+> > +       struct kvm_one_reg reg = {
+> > +               .id     = KVM_ARM64_SYS_REG(SYS_ID_AA64MMFR2_EL1),
+> > +               .addr   = (u64)&val,
+> > +       };
+> > +
+> > +       kvm_fd = open_kvm_dev_path_or_exit();
+> > +       vm_fd = __kvm_ioctl(kvm_fd, KVM_CREATE_VM, NULL);
+> > +       TEST_ASSERT(vm_fd >= 0, KVM_IOCTL_ERROR(KVM_CREATE_VM, vm_fd));
+> > +
+> > +       vcpu_fd = ioctl(vm_fd, KVM_CREATE_VCPU, 0);
+> > +       TEST_ASSERT(vcpu_fd >= 0, KVM_IOCTL_ERROR(KVM_CREATE_VCPU, vcpu_fd));
+> > +
+> > +       err = ioctl(vm_fd, KVM_ARM_PREFERRED_TARGET, &preferred_init);
+> > +       TEST_ASSERT(err == 0, KVM_IOCTL_ERROR(KVM_ARM_PREFERRED_TARGET, err));
+> > +
+> > +       err = ioctl(vcpu_fd, KVM_ARM_VCPU_INIT, &preferred_init);
+> > +       TEST_ASSERT(err == 0, KVM_IOCTL_ERROR(KVM_ARM_VCPU_INIT, err));
+> > +
+> > +       err = ioctl(vcpu_fd, KVM_GET_ONE_REG, &reg);
+> > +       TEST_ASSERT(err == 0, KVM_IOCTL_ERROR(KVM_GET_ONE_REG, err));
+> > +
+> > +       va_range = FIELD_GET(ID_AA64MMFR2_EL1_VARange, val);
+> > +
+> > +       close(vcpu_fd);
+> > +       close(vm_fd);
+> > +       close(kvm_fd);
+> > +
+> > +       return va_range >= ID_AA64MMFR2_EL1_VARange_52 ? 52 : 48;
+> > +}
+> > +
+> >  void aarch64_get_supported_page_sizes(u32 ipa, u32 *ipa4k,
+> >                                       u32 *ipa16k, u32 *ipa64k)
+> >  {
+> >
+> > --
+> > 2.43.0
+> >
