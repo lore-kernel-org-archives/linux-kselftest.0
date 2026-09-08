@@ -1,14 +1,14 @@
 Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD8451121B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9082C513576;
 	Tue,  8 Sep 2026 10:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.250.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788863626; cv=none; b=Fkkl8oBYHYLl4xo4ecq9rnmc9N7nCO45MewpIoK617HEaQ6jXcIvalP2FgilzBhFVddx3ndqgJYuhtaEnZACap7wD8Opl9P5BiWdaW0ancbIU0iN0CGi3sicDF6JJHHqYPE0mGqOYs8hXxvm0ngDowcBDRGlKT/KoI1XOHjEkbw=
+	t=1788863626; cv=none; b=i9aEyvs40Uw6uyYvS+UU05xx8FHXsDWD1I4y7ZOwuPeJuqVnyD0B75v4ji82W4Bulc9MLlHV1kfbXVQdwwV/ZbMO/w/zItKY7y1Mc7MBx1rQrDS09ogrgpCLxvpz3TJy7JBCB7kw6rZvBkxSH9mxQMI4ITghKeSLmz2LFOqDi2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1788863626; c=relaxed/simple;
-	bh=hOX9cepHBy5fg0iuhqvQgBD+Hx48ZLl75cezIhE4b8M=;
+	bh=EqoRbY1JKhqgy+7l9NJpPrlMsA3evtLD+d+bHl0cYNU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fImz3enbiDXU5ikvpDcaTlIp7WcuKgON5Pdt4cS+M6yz4e2m3rGPkOyU+nWRor/hx4ozNjr3ALT/G8rsNfbF47yI1W7uESZanruG1COIFqFDDTu+qPGUE03jJbGOo3RSXo1py7brW5bHZK1XgKT3fE2PRrHedCK9hJITbzPBhRU=
+	 MIME-Version; b=pIgNlGA1NZaPGlRbYl1pxjresT/8qGJJweK6WUzL3tTrdtTfzBdcOQL1z5MqNy8s/n3ddLUa3IpUX87D/3ip2hxFpp9DAEAuH419tr3Jhx4hINRKtQjx5egOD0d1yXUZJGPVMQ4zbK2QPTsqSm2qJU55SuqkW8/+RjG9KC0V5RU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org; spf=pass smtp.mailfrom=8bytes.org; arc=none smtp.client-ip=85.214.250.239
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=8bytes.org
@@ -16,7 +16,7 @@ Received: from io.fritz.box (p200300f6af085a00d84fb33a51badfd9.dip0.t-ipconnect.
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.8bytes.org (Postfix) with ESMTPSA id 3223820A1DC;
+	by mail.8bytes.org (Postfix) with ESMTPSA id 7D31020A1DE;
 	Tue,  8 Sep 2026 12:33:41 +0200 (CEST)
 From: =?UTF-8?q?J=C3=B6rg=20R=C3=B6del?= <joro@8bytes.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
@@ -33,9 +33,9 @@ Cc: Michael Roth <michael.roth@amd.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	coconut-svsm@lists.linux.dev
-Subject: [PATCH v2 2/8] KVM: SVM: Implement GET_AP_APIC_IDS NAE event
-Date: Tue,  8 Sep 2026 12:33:32 +0200
-Message-ID: <20260908103338.427254-3-joro@8bytes.org>
+Subject: [PATCH v2 4/8] KVM: SEV: Add direct VMSA capability
+Date: Tue,  8 Sep 2026 12:33:34 +0200
+Message-ID: <20260908103338.427254-5-joro@8bytes.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260908103338.427254-1-joro@8bytes.org>
 References: <20260908103338.427254-1-joro@8bytes.org>
@@ -49,152 +49,221 @@ Content-Transfer-Encoding: 8bit
 
 From: Joerg Roedel <joerg.roedel@amd.com>
 
-Advertise and handle the GHCB APIC ID list feature so that SNP guests can
-discover the vCPUs for which they need to create VMSAs without relying on
-INIT-SIPI.
+Direct VMSA mode is currently selected implicitly when userspace installs
+a guest-owned VMSA on any vCPU.  That makes the launch model a side effect
+of per-vCPU state and applies it retroactively to every vCPU.
 
-Return the required page count for undersized buffers.  For sufficiently
-large requests, validate the GPA range and use KVM's SRCU-protected guest
-write path to copy an exact snapshot of the online vCPU APIC IDs.
+Add KVM_CAP_SNP_DIRECT_VMSA as a VM-scoped settable capability.  Require
+userspace to enable it on an SNP VM before creating vCPUs, and reject
+nonzero arguments.
+
+When enabled, skip allocating KVM-owned VMSAs during vCPU creation and
+skip generating and measuring KVM-owned VMSAs at launch finish.  Keep
+legacy allocation and measurement behavior when it is not enabled.
 
 Assisted-by: LLM
-Signed-off-by: Joerg Roedel <joerg.roedel@amd.com>
 ---
- arch/x86/include/asm/sev-common.h |  1 +
- arch/x86/include/uapi/asm/svm.h   |  1 +
- arch/x86/kvm/svm/sev.c            | 67 ++++++++++++++++++++++++++++++-
- 3 files changed, 67 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/kvm-x86-ops.h |  1 +
+ arch/x86/include/asm/kvm_host.h    |  1 +
+ arch/x86/kvm/svm/sev.c             | 28 ++++++++++++++++++++--------
+ arch/x86/kvm/svm/svm.c             | 22 ++++++++++++++++++++++
+ arch/x86/kvm/svm/svm.h             |  1 +
+ arch/x86/kvm/x86.c                 |  5 +++++
+ include/uapi/linux/kvm.h           |  1 +
+ 7 files changed, 51 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
-index 01a6e4dbe423..c041f85dfd5c 100644
---- a/arch/x86/include/asm/sev-common.h
-+++ b/arch/x86/include/asm/sev-common.h
-@@ -136,6 +136,7 @@ enum psc_op {
+diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+index e213c9ae3e30..a48259696ca6 100644
+--- a/arch/x86/include/asm/kvm-x86-ops.h
++++ b/arch/x86/include/asm/kvm-x86-ops.h
+@@ -23,6 +23,7 @@ KVM_X86_OP(vcpu_after_set_cpuid)
+ KVM_X86_OP(vm_init)
+ KVM_X86_OP_OPTIONAL(vm_destroy)
+ KVM_X86_OP_OPTIONAL(vm_pre_destroy)
++KVM_X86_OP_OPTIONAL(enable_vm_cap)
+ KVM_X86_OP_OPTIONAL_RET0(vcpu_precreate)
+ KVM_X86_OP(vcpu_create)
+ KVM_X86_OP(vcpu_free)
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 683bb8bf43a9..3bfc02bb7998 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1519,6 +1519,7 @@ struct kvm_x86_ops {
+ 	int (*vm_init)(struct kvm *kvm);
+ 	void (*vm_destroy)(struct kvm *kvm);
+ 	void (*vm_pre_destroy)(struct kvm *kvm);
++	int (*enable_vm_cap)(struct kvm *kvm, struct kvm_enable_cap *cap);
  
- #define GHCB_HV_FT_SNP			BIT_ULL(0)
- #define GHCB_HV_FT_SNP_AP_CREATION	BIT_ULL(1)
-+#define GHCB_HV_FT_APIC_ID_LIST		BIT_ULL(4)
- #define GHCB_HV_FT_SNP_MULTI_VMPL	BIT_ULL(5)
- 
- /*
-diff --git a/arch/x86/include/uapi/asm/svm.h b/arch/x86/include/uapi/asm/svm.h
-index 010a45c9f614..05e5e31e23e1 100644
---- a/arch/x86/include/uapi/asm/svm.h
-+++ b/arch/x86/include/uapi/asm/svm.h
-@@ -117,6 +117,7 @@
- #define SVM_VMGEXIT_AP_CREATE_ON_INIT		0
- #define SVM_VMGEXIT_AP_CREATE			1
- #define SVM_VMGEXIT_AP_DESTROY			2
-+#define SVM_VMGEXIT_GET_APIC_IDS		0x80000017ull
- #define SVM_VMGEXIT_SNP_RUN_VMPL		0x80000018ull
- #define SVM_VMGEXIT_SAVIC			0x8000001aull
- #define SVM_VMGEXIT_SAVIC_REGISTER_GPA		0
+ 	/* Create, but do not attach this VCPU */
+ 	int (*vcpu_precreate)(struct kvm *kvm);
 diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 5705723f1f41..c16eca9983f3 100644
+index ee1bf9b4cc53..5a282aff04a8 100644
 --- a/arch/x86/kvm/svm/sev.c
 +++ b/arch/x86/kvm/svm/sev.c
-@@ -40,7 +40,9 @@
- #define GHCB_VERSION_MAX	2ULL
- #define GHCB_VERSION_MIN	1ULL
+@@ -2524,8 +2524,15 @@ static int snp_launch_update_vmsa(struct kvm *kvm, struct kvm_sev_cmd *argp)
  
--#define GHCB_HV_FT_SUPPORTED	(GHCB_HV_FT_SNP | GHCB_HV_FT_SNP_AP_CREATION)
-+#define GHCB_HV_FT_SUPPORTED	(GHCB_HV_FT_SNP | \
-+				 GHCB_HV_FT_SNP_AP_CREATION | \
-+				 GHCB_HV_FT_APIC_ID_LIST)
+ 	kvm_for_each_vcpu(i, vcpu, kvm) {
+ 		struct vcpu_svm *svm = to_svm(vcpu);
+-		u64 pfn = __pa(svm->sev_es.vmsa) >> PAGE_SHIFT;
++		u64 pfn;
++
++		if (sev->snp_direct_vmsa) {
++			if (!svm->sev_es.snp_has_guest_vmsa)
++				svm->vmcb->control.vmsa_pa = INVALID_PAGE;
++			goto protect_vcpu;
++		}
  
- /*
-  * The GHCB spec essentially states that all non-zero error codes other than
-@@ -3493,7 +3495,8 @@ static bool sev_es_are_required_ghcb_fields_valid(struct vcpu_svm *svm)
- 	case SVM_VMGEXIT_AP_CREATION:
- 		return kvm_ghcb_rax_is_valid(svm) ||
- 		       lower_32_bits(control->exit_info_1) == SVM_VMGEXIT_AP_DESTROY;
--		break;
-+	case SVM_VMGEXIT_GET_APIC_IDS:
-+		return kvm_ghcb_rax_is_valid(svm);
- 	case SVM_VMGEXIT_MMIO_READ:
- 	case SVM_VMGEXIT_MMIO_WRITE:
- 	case SVM_VMGEXIT_PSC:
-@@ -4215,6 +4218,63 @@ static int sev_snp_ap_creation(struct vcpu_svm *svm)
- 	return 0;
++		pfn = __pa(svm->sev_es.vmsa) >> PAGE_SHIFT;
+ 		ret = sev_es_sync_vmsa(svm);
+ 		if (ret)
+ 			goto out;
+@@ -2545,6 +2552,7 @@ static int snp_launch_update_vmsa(struct kvm *kvm, struct kvm_sev_cmd *argp)
+ 			goto out;
+ 		}
+ 
++protect_vcpu:
+ 		svm->vcpu.arch.guest_state_protected = true;
+ 		/*
+ 		 * SEV-ES (and thus SNP) guest mandates LBR Virtualization to
+@@ -3559,6 +3567,9 @@ void sev_free_vcpu(struct kvm_vcpu *vcpu)
+ 	 * a guest-owned page. Transition the page to hypervisor state before
+ 	 * releasing it back to the system.
+ 	 */
++	if (!svm->sev_es.vmsa)
++		goto skip_vmsa_free;
++
+ 	if (is_sev_snp_guest(vcpu)) {
+ 		u64 pfn = __pa(svm->sev_es.vmsa) >> PAGE_SHIFT;
+ 
+@@ -4056,13 +4067,9 @@ static void __sev_snp_reload_vmsa(struct kvm_vcpu *vcpu, gpa_t gpa)
+ 	vmcb_mark_all_dirty(svm->vmcb);
+ 
+ 	/*
+-	 * From this point forward, the VMSA will always be a guest-mapped page
+-	 * rather than the initial one allocated by KVM in svm->sev_es.vmsa. In
+-	 * theory, svm->sev_es.vmsa could be free'd and cleaned up here, but
+-	 * that involves cleanups like flushing caches, which would ideally be
+-	 * handled during teardown rather than guest boot.  Deferring that also
+-	 * allows the existing logic for SEV-ES VMSAs to be re-used with
+-	 * minimal SNP-specific changes.
++	 * From this point forward, the VMSA will always be a guest-mapped page.
++	 * If KVM allocated an initial VMSA, keep it until teardown to defer
++	 * cache flushing and other cleanup out of the guest boot path.
+ 	 */
+ 	svm->sev_es.snp_has_guest_vmsa = true;
+ 
+@@ -4929,12 +4936,15 @@ void sev_init_vmcb(struct vcpu_svm *svm, bool init_event)
+ int sev_vcpu_create(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
++	struct kvm_sev_info *sev = to_kvm_sev_info(vcpu->kvm);
+ 	struct page *vmsa_page;
+ 
+ 	mutex_init(&svm->sev_es.snp_vmsa_mutex);
+ 
+ 	if (!is_sev_es_guest(vcpu))
+ 		return 0;
++	if (is_sev_snp_guest(vcpu) && sev->snp_direct_vmsa)
++		goto init_vmsa_state;
+ 
+ 	/*
+ 	 * SEV-ES guests require a separate (from the VMCB) VMSA page used to
+@@ -4945,6 +4955,8 @@ int sev_vcpu_create(struct kvm_vcpu *vcpu)
+ 		return -ENOMEM;
+ 
+ 	svm->sev_es.vmsa = page_address(vmsa_page);
++
++init_vmsa_state:
+ 	svm->sev_es.snp_pending_vmsa_gpa = INVALID_PAGE;
+ 	svm->sev_es.snp_guest_vmsa_gpa = INVALID_PAGE;
+ 
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 7d59d301e1e5..98c5cffe2c22 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -5325,6 +5325,27 @@ static void *svm_alloc_apic_backing_page(struct kvm_vcpu *vcpu)
+ 	return page_address(page);
  }
  
-+struct sev_apic_id_desc {
-+	u32 num_entries;
-+	u32 apic_ids[];
-+};
-+
-+static int sev_snp_get_apic_ids(struct vcpu_svm *svm)
++static int svm_enable_vm_cap(struct kvm *kvm, struct kvm_enable_cap *cap)
 +{
-+	struct kvm_vcpu *vcpu = &svm->vcpu;
-+	struct kvm *kvm = vcpu->kvm;
-+	struct sev_apic_id_desc *desc;
-+	unsigned int nr_vcpus, size;
-+	unsigned int i;
-+	gpa_t gpa, end_gpa;
-+	u64 pages;
++	switch (cap->cap) {
++#ifdef CONFIG_KVM_AMD_SEV
++	case KVM_CAP_SNP_DIRECT_VMSA:
++		if (memchr_inv(cap->args, 0, sizeof(cap->args)) ||
++		    kvm->arch.vm_type != KVM_X86_SNP_VM)
++			return -EINVAL;
 +
-+	nr_vcpus = atomic_read(&kvm->online_vcpus);
-+	size = sizeof(*desc) + (nr_vcpus * sizeof(desc->apic_ids[0]));
++		guard(mutex)(&kvm->lock);
++		if (kvm->created_vcpus)
++			return -EINVAL;
 +
-+	pages = vcpu->arch.regs[VCPU_REGS_RAX];
-+	if (pages < PFN_UP(size)) {
-+		vcpu->arch.regs[VCPU_REGS_RAX] = PFN_UP(size);
-+		return 1;
++		to_kvm_sev_info(kvm)->snp_direct_vmsa = true;
++		return 0;
++#endif
++	default:
++		return -EINVAL;
 +	}
-+
-+	gpa = svm->vmcb->control.exit_info_1;
-+	if (!PAGE_ALIGNED(gpa) ||
-+	    check_add_overflow(gpa, size - 1, &end_gpa) ||
-+	    !page_address_valid(vcpu, gpa) ||
-+	    !page_address_valid(vcpu, end_gpa & PAGE_MASK))
-+		goto invalid_buffer;
-+
-+	desc = kvzalloc(size, GFP_KERNEL_ACCOUNT);
-+	if (!desc)
-+		return -ENOMEM;
-+
-+	desc->num_entries = nr_vcpus;
-+	for (i = 0; i < nr_vcpus; i++) {
-+		struct kvm_vcpu *listed_vcpu = kvm_get_vcpu(kvm, i);
-+
-+		if (WARN_ON_ONCE(!listed_vcpu))
-+			goto invalid_buffer_free;
-+		desc->apic_ids[i] = listed_vcpu->vcpu_id;
-+	}
-+
-+	if (kvm_write_guest(kvm, gpa, desc, size))
-+		goto invalid_buffer_free;
-+
-+	kvfree(desc);
-+	return 1;
-+
-+invalid_buffer_free:
-+	kvfree(desc);
-+invalid_buffer:
-+	svm_vmgexit_bad_input(svm, GHCB_ERR_INVALID_INPUT);
-+	return 1;
 +}
 +
- static int snp_handle_guest_req(struct vcpu_svm *svm, gpa_t req_gpa, gpa_t resp_gpa)
- {
- 	struct sev_data_snp_guest_request data = {0};
-@@ -4494,6 +4554,7 @@ static bool is_snp_only_vmgexit(u64 exit_code)
- {
- 	switch (exit_code) {
- 	case SVM_VMGEXIT_AP_CREATION:
-+	case SVM_VMGEXIT_GET_APIC_IDS:
- 	case SVM_VMGEXIT_GUEST_REQUEST:
- 	case SVM_VMGEXIT_EXT_GUEST_REQUEST:
- 	case SVM_VMGEXIT_PSC:
-@@ -4665,6 +4726,8 @@ int sev_handle_vmgexit(struct kvm_vcpu *vcpu)
- 		if (sev_snp_ap_creation(svm))
- 			svm_vmgexit_bad_input(svm, GHCB_ERR_INVALID_INPUT);
- 		return 1;
-+	case SVM_VMGEXIT_GET_APIC_IDS:
-+		return sev_snp_get_apic_ids(svm);
- 	case SVM_VMGEXIT_GUEST_REQUEST:
- 	case SVM_VMGEXIT_EXT_GUEST_REQUEST:
- 		if (!PAGE_ALIGNED(control->exit_info_1) ||
+ struct kvm_x86_ops svm_x86_ops __initdata = {
+ 	.name = KBUILD_MODNAME,
+ 
+@@ -5345,6 +5366,7 @@ struct kvm_x86_ops svm_x86_ops __initdata = {
+ 	.vm_init = svm_vm_init,
+ 	.vm_pre_destroy = avic_vm_pre_destroy,
+ 	.vm_destroy = svm_vm_destroy,
++	.enable_vm_cap = svm_enable_vm_cap,
+ 
+ 	.prepare_switch_to_guest = svm_prepare_switch_to_guest,
+ 	.vcpu_load = svm_vcpu_load,
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index e958943b8162..881d662aaab2 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -121,6 +121,7 @@ struct kvm_sev_info {
+ 	struct mutex guest_req_mutex; /* Must acquire before using bounce buffers */
+ 	cpumask_var_t have_run_cpus; /* CPUs that have done VMRUN for this VM. */
+ 	bool snp_certs_enabled;	/* SNP certificate-fetching support. */
++	bool snp_direct_vmsa;	/* Userspace provides and measures VMSA pages. */
+ };
+ #endif
+ 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 79468ddfe473..fb4857eca6c6 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -2404,6 +2404,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_VM_TYPES:
+ 		r = kvm_caps.supported_vm_types;
+ 		break;
++	case KVM_CAP_SNP_DIRECT_VMSA:
++		r = !!(kvm_caps.supported_vm_types & BIT(KVM_X86_SNP_VM));
++		break;
+ 	case KVM_CAP_READONLY_MEM:
+ 		r = kvm ? kvm_arch_has_readonly_mem(kvm) : 1;
+ 		break;
+@@ -4212,6 +4215,8 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+ 	}
+ 	default:
+ 		r = -EINVAL;
++		if (kvm_x86_ops.enable_vm_cap)
++			r = kvm_x86_call(enable_vm_cap)(kvm, cap);
+ 		break;
+ 	}
+ 	return r;
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index ac2d77d14963..283e881b2634 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -999,6 +999,7 @@ struct kvm_enable_cap {
+ #define KVM_CAP_S390_HPAGE_2G 249
+ #define KVM_CAP_PPC_COMPAT_CAPS 250
+ #define KVM_CAP_ARM_PMU_V3_STRICT 251
++#define KVM_CAP_SNP_DIRECT_VMSA 252
+ 
+ struct kvm_irq_routing_irqchip {
+ 	__u32 irqchip;
 -- 
 2.53.0
 
