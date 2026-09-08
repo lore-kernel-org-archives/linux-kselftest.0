@@ -1,132 +1,155 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7142327FB18
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 02:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788836186; cv=none; b=NiOmDqwac39KB6eebSbfVPX1GFqitwnNTektalXvb9rHhwnaKqSoQeX28qwZka8w4tSrhfLWO+9RWEJ33QQ1OhzjYWxIKzoV9lnzutR2BLT2IdzBxvNvPTq0KMZO1SfPzggA/kcZ2x33eaxli830z8D/GtMCe/0JVnR4C4WpgD8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788836186; c=relaxed/simple;
-	bh=nh2azw4Q09y+V/LEQu8pCrIHmotw2s9BlnECGdIZ6Wg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NlRQsDsfUvkXw9FNziZopsqDqTiTk6bLJRT48zP4tfXRsa0P6RN+O6lPdnOTk8g2XpALRcyK8nn4sWzwiJXrAdjv/bblyU5zQuYgogQeWVAghPVAMUJVC/EJOXkJsJrk9k1cslD+IiJAoWSPRrzHOpwzCrFgQOW98Qca5NXH12g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OerdfL3Y; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 407F533E360
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 02:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788836230; cv=pass; b=uqCzx71AGr62P17xvDIZFK/jBGYIeUDodJx/yQzBBf4Lk3tNhSg2r/6nO1Ab9Ju/90BtjpA7hXD2PaL12w//WdrPCcmb7HisNH2SQ/LBzQvVOXccsNNPjO9DrtBA3bOvWpnj7QCk/9Zm/U2s79TrPt3kDL5Rtff3RzQS07Zw/k0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788836230; c=relaxed/simple;
+	bh=7QT6BoZEqcPorRF+41Olle15p4YL12kp6yZbrGZ8iLo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BMnpqm4rC9A1YcRiJ4kGzgRjplqjwC5BpRa/Yl462BJPxpivFJtcjXPvpqZsZPHRHaGPQ1KF+i+FJXJDzvZY+9+hNVVhVWCEq1ppfp8ppL5oc81gIEF3l5owYqD0fCM6Fgk3VyT/yhFM07zqYX5JUEsZ4OJdIjY/FY5GSo2qswM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y2+lXPuH; arc=pass smtp.client-ip=209.85.167.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OerdfL3Y"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-382ef647e20so4170553a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 19:56:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y2+lXPuH"
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5b4af730f8aso4356860e87.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 19:57:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788836226; cv=none;
+        d=google.com; s=arc-20260327;
+        b=EMlTFQ+7W5evPEC2vIEVHG1+74eIq+AphOOEYKu6SPtZRECOiP0XK44EEJVBknqE+H
+         Npaug/WhrSvKvba/+ZaCCRlYcEQv6slRb9ZBt6KKPhy40msWzCdEWN1p5GsjZZtBX0+j
+         Jog7gnHim1uuZh1nRGUrPgj3nlVGgfEvqKP0AOT709NUOZXDeKa02GrDZXqn1w9Vd7AL
+         Fyv2HsZQiUQB7Eh3mmoY4K3desRB36PPYwqaB59OkAE/iIJedzZmFvN+r6jhnquGHQMS
+         ghw+KjedihetbvP6SSQ9PBRKfaLeOuPGchdJuV9cheqKlp6k7qWQBZg1ricb90nIgm4l
+         BXfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=7QT6BoZEqcPorRF+41Olle15p4YL12kp6yZbrGZ8iLo=;
+        fh=SlUIm48K4Q6D6GX5zmJhl216RVUzTgvdJewBYK4Vyio=;
+        b=SXWZUFSzTF8ssSArHsjpdI/NXFy05pB7hDp4pTr7HFDiQeho11ddYOMLf7rFOOsrkG
+         H+UpqKzOQzKT7R9WscPBDm+i7Amd/exqmMOeAjSWk1Q0Bx+Ax5wawa6Bj5x4T+L3Sj98
+         oxX/w0UqkijgOoacMGpenv9hm73tin16yrubXeQYGAFYSSgX2IOjcAk/GxD1WKiC6pjj
+         Zym6NPscKIjKcAan+/bO5jwl3zvbjA1NB8nAw4P/WyTOB9HwUapSrDqe8arxhkicxnVi
+         u9zyD8HUc2aKohvC+UHtZdZKjLpmRyMFWCF8oV3+MNvSrRvACIzTgppX+BRj+R8v+EYt
+         qgXg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788836185; x=1789440985; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ej1AYuaJ6I913RYzOv3nrsx0ow2YNcqJVwdQB6kart8=;
-        b=OerdfL3YcYBRw4G9U5biJhwUtmNLnCZJaaFNuSDNLTibHyCNuJ8L6+9p8Ryh9TUNGP
-         o9C7FsuLtmUPW/PkMyklTgw+3Xbq0mvEfFejkrLyxupDlu372xniUrUwp7cHLrbs/fQg
-         FLdNP+1Wfkv09OvipEKS4Ft9zxg/i6fl22dSbeqG1qzfcZPPEJ76S/65zJrKoTkKdN14
-         8BvYdvH28+J6P7QMVWrsG62pxoaCMoJVz3jjjnQXu7X+qgO5ErNP8djXSHB4NbiDMVgg
-         mkgsoBzB2Jy5+04RFVbzK+BAscPh3UVHuF5kAWksUeU1llKqwU+kcoC9kX5BLASoy3Nr
-         ZRlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788836185; x=1789440985;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1788836226; x=1789441026; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ej1AYuaJ6I913RYzOv3nrsx0ow2YNcqJVwdQB6kart8=;
-        b=oah+JG4pMBggioDtWgmqkv8Hjw6jc2L+5UQtR7Rmlf01MGvNSunI5EksdHF1h7UyW+
-         zYhEryyaTEhj9fyrLe0DawNkvyY7iu+yXjb+64wiWepRYrB9gN+FLcE86fDJP73kkx1H
-         8bIGSYUTJ45oo92DfcIFfu5kSx1rzPamNPUdr9LbjUb6l8AZ7q2JeBi4P6DyNNxaoJtD
-         cdWdCC4uk3G53rc+sX9KvsmJAvrAlJVyrIJHYloWXBV3ZikfETCfiJC/6cw2IppHN0eM
-         zMJpPHuKtAw8biYCEQemXwFMS9S6XaKOpi4o871jD+nAWdL8UqnItA+9QEOGmS/dYQNX
-         Dkng==
-X-Forwarded-Encrypted: i=1; AKwUvBwQ0poC1uzMyhAMnyaA8mI+i9GpvbqZ1y49AfgXqaKNLdQgVvjA7m/gvv+gXqsL994tGrTNISRckUBro45xTSE=@vger.kernel.org
-X-Gm-Message-State: AFuF++mbIDf+8vJRhkXXsAg5A+CLb9B+YlG9y2O/690viU1A0wPk6jl/
-	d8xcuI3YvUa9r6BArBl1MZwgqvm/Bcwf0FcFFmwZyXJ4KS/bPmEqYg1j
-X-Gm-Gg: AYBFou22O3vMQa1s2yn8MlV3uPcmFQHhNmhtWUDIyFK5+zVCDZSMiP6luUNoIzavqR6
-	6hnwMNKnLonI5MCuGNo1LP++OYa/vVwaZfcHAVg0ZRNjIP11jHpEviPFNyZVL3iPBqHNt6V4T0d
-	9g99UBjF7BSgcRvSbkeO0UFkmJOau2vG3vNIbgUQo6DWKQAHYtUCn6hrvFh39g2aT6AwbDnUQ3J
-	gwPFW+BxDLAGZLEjXlHzSyROo3YUNY+smQAXnKiPeFebl4tD7881I1A4FuQoFfEiaehJrgjVPQO
-	QVodDv08+9mMtipIotmQKoCAjjKhVAFIQjfMtDWEMFzl5uAvukoNRXUBM9+aLlHPzpyyYo9IWej
-	QYKdmsD2Bl/SobyzFif073ziUcftIZMTFH00QY+dpBYBGYBdsbjyKGGnz0gnWn4fH/4JX1baLl8
-	gS10S/IBG4+S3Jf4s6gkRtloulHaoNdbPw2gSMPhjQPquAJDbtaFpgRwaVT5zJNYdr9n8F+1VDF
-	b8=
-X-Received: by 2002:a17:90b:52c4:b0:36a:5d1f:7b6 with SMTP id 98e67ed59e1d1-39b260d3375mr39542125a91.2.1788836184768;
-        Mon, 07 Sep 2026 19:56:24 -0700 (PDT)
-Received: from localhost.localdomain ([2408:8607:1b00:8:3fb3:b562:896c:1ac7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b26155324sm22925971a91.17.2026.09.07.19.56.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2026 19:56:22 -0700 (PDT)
-From: Pengfei Li <ljdlns1987@gmail.com>
-X-Google-Original-From: Pengfei Li <lipengfei28@xiaomi.com>
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	kernel test robot <lkp@intel.com>,
-	Bo Zhang <zhangbo56@xiaomi.com>,
-	Pengfei Li <lipengfei28@xiaomi.com>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v6 0/3] trace: stack trace deduplication for ftrace ring buffer
-Date: Tue,  8 Sep 2026 10:55:51 +0800
-Message-Id: <20260908025551.4155877-1-lipengfei28@xiaomi.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260908101509.5ca094dacc96053236f7d2f3@kernel.org>
-References: <20260903132409.270195-1-lipengfei28@xiaomi.com> <20260908101509.5ca094dacc96053236f7d2f3@kernel.org>
+        bh=7QT6BoZEqcPorRF+41Olle15p4YL12kp6yZbrGZ8iLo=;
+        b=Y2+lXPuHDzNBPhBHm7jD2JBjY6yYMYwVQYJWnYYCNDXyEDrSHPVx062hLelr0OP7Lx
+         HlnlBP9W4TBcrQZVdZZJbLlJo5D040Y0a004yCzzO5gG2SfyyBSbVdKcAfePjvO3Z49V
+         VaneVhUtpbu8birBJq2hXka/T+FT6NbRRPQ9TeLMxFN45NGvH66PNFG5SKtYgfsKA83Z
+         mGO/EbGfm2wW4ti/6jwZRUX3PcDX6HhbjhnmBqCS06lmbJE89QO2bIz0p69e9NKj5klX
+         rwcR7apqWKvjpq0GM7e0RNxqwUqYhOk/dgIAAWcU6nJLkXn3XvjuypH9uDzkb4LG54gp
+         s+1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788836226; x=1789441026;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=7QT6BoZEqcPorRF+41Olle15p4YL12kp6yZbrGZ8iLo=;
+        b=RDXxiJ58tIrW34uDioCbshf7VwureE32CizgVG53DV49A0cN9BPC8oi2N6xbyhA/9A
+         MswnCVBR41c6ELnyuMDknXgqkrWxiHtCAZh9M/5Ulg6eFQVfUwr3hwU9m30lSe8jRXns
+         5aquYQfsKkSKgOaw5Tj74Zk4BLr3WGYXesrS8v4+jMJWKhuj3Y1BBexbaGTdnjxTHbrS
+         G57yY1Csv31C1dqkEOO6wo5SC+1olfJySSGewrUYhwUlMyKBLxoTEjavrMVhSyv2+GQZ
+         Oh+kdZxEkFaXdjmED+KCg53dOXXECrJ942z/kEjp2Usn5k4su72RSNt1cHxjrxAWi6Ws
+         eiQQ==
+X-Forwarded-Encrypted: i=1; AKwUvByWfgTmzP3YLvBWH0fGEHaxgEdqurtO/5N9IKAvtZlinUYALyh6qiXFKfN8CVN4hrb1yMVj58E5FWxyXZf8iMQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++nSfIhRpE24IFFQJX76iBKMPPkdZllw2FTsz7QZeqs+ICMGl4ME
+	PVU85xqlPjQZ0jtAhh5XoGZJU4zVucZ7XEuiRXHKTVnOhdrg9CxeOBu0RZRov11b++AULpGTOMo
+	YMnwpRstrNGfGvGwejRcDZYqQRY5lFcs=
+X-Gm-Gg: AYBFou1SZYRrtowWQXtwBoc1yTqhqPdp4Pi+m2YUVjFloEWMQbBYvL7N2n51SCxF3th
+	jySfVZtmtKCmLgu6LH3fX1z9xlRW/Zoj9Fo/RjyL+qao0UY6B73guygS5QM1mbGkcZJBu2DNuOh
+	eD9MksQk/IAnO+4dElmwWmS8LGaWSBeQpXZ327w+7D0h+KVXJC/e94Xp7sMbbYXCgloy9T6s9cW
+	E+Fijlqt0MFbijx20ubrFbLUiZRcLMgpfuKqprMRvT0qhexQfMlLzGs6EJcycbLcGcKNEbECTex
+	9pGfb03p8jn31+Hxqpaeln5hc+Aun2OoT9TBoVB2/qHfbRfZWvNnhIOUOS7LtLDTsxub+QbMIn4
+	IjsrtM1XJmA+sWwX9YaPht0UtRoClJ7zPbw==
+X-Received: by 2002:a05:6512:10d1:b0:5b6:4ae:8c01 with SMTP id
+ 2adb3069b0e04-5b616f59cf5mr4175296e87.28.1788836225895; Mon, 07 Sep 2026
+ 19:57:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260905093932.43726-1-sigefriedhyy@gmail.com> <f1e70062-943d-4521-976a-ae7c9fbc756b@6wind.com>
+In-Reply-To: <f1e70062-943d-4521-976a-ae7c9fbc756b@6wind.com>
+From: Yuyang Huang <sigefriedhyy@gmail.com>
+Date: Tue, 8 Sep 2026 11:56:54 +0900
+X-Gm-Features: AcwNN1U9p2sFJsv_7_Qjw2glgbmq-K3CoxGpp4O9ALykWZMch5RDUDwBJuNCCmI
+Message-ID: <CA+7S2vL7Xm3nPw96R1+aN-sHLaprPxFUNw4qi6kbTAUu5OUyNg@mail.gmail.com>
+Subject: Re: [PATCH net-next 0/3] rtnetlink: dump link-layer multicast addresses
+To: nicolas.dichtel@6wind.com
+Cc: "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>, 
+	Ido Schimmel <idosch@nvidia.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Nikolaos Gkarlis <nickgarlis@gmail.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>, 
+	Simon Horman <horms@kernel.org>, Stanislav Fomichev <sdf.kernel@gmail.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 08 Sep 2026 10:15:09 +0900 Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-> BTW, to make it easier for review, can you split the patches in
-> several parts? For example, start from a minimum basic functionality
-> (just internal stackmap, seq_read, and reset), use it from tracing,
-> add stat interface, binary interface, and documents, tools, selftests.
-> This makes the series in at least 7 patches, but nicer to focus on
-> one thing for each patch.
+> These addresses could be listed with 'bridge fdb' (RTM_GETNEIGH on AF_BRIDGE).
+> Instead of having a new message to get the missing info (users), maybe it would
+> be better to update the current API.
 
-Agreed, and the split points you list match where the current patches
-are doing several things at once. v7 will follow that structure:
+I looked at the FDB dump based on the suggestion and I don't think
+that path works well. The missing users count is not the only problem:
 
-   1. internal stackmap: table, element pool, get_id(), create/destroy
-   2. text seq_file export and reset
-   3. use it from the ftrace stack recording path
-   4. stat interface
-   5. binary interface
-   6. ftrace_stackmap.bits= kernel parameter
-   7. documentation
-   8. userspace parser
-   9. selftest: basic functionality
-  10. selftest: reset semantics and binary ABI header
-  11. selftest: top-level instance gating
+It doesn't list dev->mc for every device. Only ndo_dflt_fdb_dump()
+walks dev->mc, and rtnl_fdb_dump() calls it only for Ethernet devices
+that have no ndo_fdb_dump of their own. So bridge, vxlan, macvlan and
+IPoIB devices never show their multicast filter in "bridge fdb show",
+while /proc/net/dev_mcast lists them. Fixing that means calling the
+default dump for those devices too, which adds new entries to
+"bridge fdb show" output on every one of them.
 
-Each patch compiles on its own and does not leave unused helpers or
-tracefs files whose backing code has not been added yet. Patches 4 and
-5 also carry the stat locking fix and the binary export rework from
-your comments on 1/3, so those interfaces arrive in the shape you
-asked for rather than being split first and fixed afterwards.
+User space can't reliably tell the entries apart either. "ip maddr"
+would keep NTF_SELF entries with a multicast lladdr, but it seems vxlan's own
+FDB entries seems also carry NTF_SELF, so a multicast MAC added there as a
+forwarding rule (bridge fdb add ... dev vxlan0 dst ...) would show up
+as a device multicast address, while the real dev->mc of that vxlan
+device is missing. And since a dump can't be limited to self entries,
+on a host with bridges "ip maddr show" would receive the whole learned
+FDB of every port and drop it.
 
-> The patch description is a key area to focus on; if the explanation
-> proceeds by saying "add Foo, then add Bar, and so on," those changes
-> should likely be split into multiple patches.
+It would still need a new uAPI. All self entries are NUD_PERMANENT, so
+the users count and the SIOCADDMULTI (static) bit would be new NDA_*
+attributes. On the other hand, this series adds no new attributes;
+IFA_MULTICAST, IFA_MC_USERS and IFA_F_PERMANENT already exist for the
+IPv4 and IPv6 dumps.
 
-That test also flags the current 1/3 and 3/3 accurately. Both of their
-descriptions are lists of independent additions, which is why they grew
-to 949 and 614 lines. I will use it as the check when writing the v7
-descriptions: if a description needs a bullet list of additions, the
-patch is still too coarse.
+Covering this with RTM_GETNEIGH would need the default dump for
+devices with their own ndo_fdb_dump, a way to tell filter entries from
+a device's own
+NTF_SELF FDB entries, a self-only request filter, and new NDA_*
+attributes for users and the static bit. That is more new uAPI than
+this series for the same result.
 
-Pengfei
+Therefore, I feel that my original proposal seems cleaner and causes
+less chrun. But feel free to let me know if I have any
+misunderstanding on the suggestion.
+
+> FWIW, AF_PACKET seems strange to me. Isn't AF_UNSPEC (like for interface, cf
+> rtnl_fill_ifinfo) more appropriate?
+
+For address dumps AF_UNSPEC already means "all families" (RTM_GETADDR
+goes through rtnl_dump_all()), so I'd rather keep it available for
+RTM_GETMULTICAST. AF_PACKET is what iproute2 already uses for the link
+family: "ip -0" sets preferred_family = AF_PACKET and sends it in
+RTM_GETLINK, and ipmaddr.c has always tagged the /proc/net/dev_mcast
+entries as AF_PACKET.
+
+Thanks,
+
+Yuyang
