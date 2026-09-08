@@ -1,136 +1,128 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D3A10F0
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 03:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF900BA3D
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 04:21:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788837003; cv=none; b=F/sJvYVcxS2/35nbvDskyg/PHzE13fMeHnmpYbQSlpkEhwOixQWh5tzqA+0A4FiqdsLDheYCAbJWofTzkt0COG87vqsj2ZulVGekayCZceavBzdZd8N1RVnhpwMHzWoei3o+yzdedNePdCoECK4b/Dmpc0L/Sd9P9ZHoAoVOe6Q=
+	t=1788841293; cv=none; b=K/0jnpjPibxtrZI+AFKyjcg+E+X+0xosFOL5IJ5ltH83aQHGfOkTFh8DnAd5JYSd4JABx2QYHUvaKzzKg/k74J+/oLvLzTS66ZSo+Sey5rIrdWfQHJGk8oXRu4acgXC6z/EK3vckFXqXoFXn6Xxjg5Ts3QAkSxy8A1pXwoM5OX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788837003; c=relaxed/simple;
-	bh=NIZ40nNzsbeeL8cdyy6ZKPpOyXaqocZlHwIU4WgHUck=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZXBNqRpaa9PtIyc7Ki2zrycR/BeJfFgp+08J+62svJXE85idcHM9YK2eUJ2IJZ2DX7Rsz4MAZlVDzyAnaYFIpMXW3Z4T5JVimNiIL538u3PLvAovjIgAv8oOoBMp9x7JCMlo80jdjG3Mg8t44LQKflUI5OZMZP3GvtQzX2qfU88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q/NFaiyt; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788841293; c=relaxed/simple;
+	bh=K0Wlf9u1v8EnKIQ5AhyaZte4Iwg0VOgbEUCSHSr2OBY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=puvjroffcGZTiCVaIA8PUrBPwuw1gHLee0auAygclULud3i6ZlKMw2Dol6MbPk7Bh/8xaIo5BLoxrdwm0GE/EEbYVMcJkt0tZzpHER6HBqVywKmafRB6V+cpTODADTIfLOEAGJPYK/LCgGGUqNV5Susd++9qIUa9tHWjiiLga+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=RqqsGDNb; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q/NFaiyt"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2d942c7cc2fso33775645ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 20:10:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788837001; x=1789441801; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5udmBuXlTT1GwJow6bPNXuqCwSBhZgjyh+ECHMZW2WA=;
-        b=Q/NFaiyt0R/bL+cvpQ0D5PaxfS/njeOH1Jqycs9RrJj65O63iB9yBlZxCETd+uttaW
-         f6lKbbKrdeiA/eTJbydj97Bhc55S4wzidP/cChT4D8/7jkviHA7VAbxwh+YwWxQmXH+z
-         xQk/XsGiOplS+2Q5NJqQJESnKC8cErb8IAsFcPegb8lfwhflYkFPSzGQ+5GQn/BujXFe
-         TPOId7vkUHzeKeaBdLuKranmAx4HjcZej7Y0KtAKNKaW2xyRtmg0bMaB/JmFHZddFHrx
-         zakmmlPaN1TXnhJxj8zo8s1u/l2tVlb7xwt2Re6RVZb1nLIQ33+Bc464g4YjAFntW5Nn
-         HiGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788837001; x=1789441801;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5udmBuXlTT1GwJow6bPNXuqCwSBhZgjyh+ECHMZW2WA=;
-        b=TyaxEpgv2g7IHk2hqjFvpHPWL6CmhmA+OBrdIjwx+WVtP+VjiuWTl/OHCnLDlSvTJf
-         +N2Qhz4MHw+/TuBOA0pDZ2arGsUnHYpB8Nm4Ee4CrWAdisAx60FWIXI33Lufrjhppu6/
-         D1UtaZS62CLcKSNwg8ZHw/6rP7Pvw+oXaWraDndqRfbwP8SvuuG0EtgBzQr1+eroVHQF
-         ZGJ+kxcTs1SamrJwGTvE014CD/KzMxKeswCvtM98WGhLxOscHLMEZNSieu2BNkf/5vmL
-         Bri6YORQX4EGALEMTuynNcr6k4rfTVHk+Q/4p78ksb06SNd0KBR+yfsQ10WHgKva2lvc
-         bfKA==
-X-Forwarded-Encrypted: i=1; AKwUvByYIGmmWtpXM9gDALiZyKNu+pTKHlZXIqKz+hHNEr0DBSKnAKMWmOchH7w+aKekql7yBjf3wPHQ4aWLqf4xjwI=@vger.kernel.org
-X-Gm-Message-State: AFuF++m6OApivh+peMGd9PR7/rq+svUVwPlb4HB53ak4cTQanAKPRYzQ
-	4dmAq4qy4Ss5tvR1EffnK3SEWjPw7qe1ycmlWf6aWChMQ748jQhH2Zoi
-X-Gm-Gg: AYBFou3GEgRnZfbbkbX52sb3pl1slTfkwl74bsMq2X8iLudmq+mRT7wtngDU/7r8RLI
-	kHitZFPymsNSFyFbIWw6vU+10jc7VkCZB478YTA37s2BsBU3cedJmNzsKhADBo1KUBezNv0Pg5j
-	w9yy2VBYUV6AowpgEKgrfjhTg/1P+VNZPk/wMz14x603bUW/VMaRlOE+Ht8/UHeUKgwqncIwGxw
-	eR3FYOeMW9BZHNHPc6Q8u0YdZJsewNQmIZRyTRru3QoMZjK1kOC0KbW17COUieuJtFz9Hq5scUi
-	F5HYXF9QH+uu7PxdfUDSfc9za9ragxVR+etXJYgQIAhXtPQXD84zI7M+UrKun21NkSxs80A0qeb
-	1aLBxJQs523QNQQXlV7LK0vbzBA/uKxXWPjt9+xlxZz5p9f/pIte3+R5LZBMUN6yu81e+qtDa+h
-	KMtwE9W4RS88Zj/gse9sSJy1Er/xWRl+RHoySqa+TS5yXTg4KSCI06r2tIo9HAcCU0J4peG636k
-	0o=
-X-Received: by 2002:a17:903:22c8:b0:2d7:5ebe:a588 with SMTP id d9443c01a7336-2db126d6e31mr377723085ad.13.1788837000864;
-        Mon, 07 Sep 2026 20:10:00 -0700 (PDT)
-Received: from localhost.localdomain ([2408:8607:1b00:8:3fb3:b562:896c:1ac7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2db149cb603sm51255985ad.68.2026.09.07.20.09.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2026 20:09:59 -0700 (PDT)
-From: Pengfei Li <ljdlns1987@gmail.com>
-X-Google-Original-From: Pengfei Li <lipengfei28@xiaomi.com>
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	kernel test robot <lkp@intel.com>,
-	Bo Zhang <zhangbo56@xiaomi.com>,
-	Pengfei Li <lipengfei28@xiaomi.com>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v6 3/3] trace: add documentation, selftest and tooling for stackmap
-Date: Tue,  8 Sep 2026 11:09:38 +0800
-Message-Id: <20260908030938.14046-1-lipengfei28@xiaomi.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260908103514.a1c61f51b84b8d67d6f0f511@kernel.org>
-References: <20260903132409.270195-1-lipengfei28@xiaomi.com> <20260903132409.270195-4-lipengfei28@xiaomi.com> <20260908103514.a1c61f51b84b8d67d6f0f511@kernel.org>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="RqqsGDNb"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E71921476;
+	Mon,  7 Sep 2026 21:21:18 -0700 (PDT)
+Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 520A93F528;
+	Mon,  7 Sep 2026 21:21:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1788841282; bh=K0Wlf9u1v8EnKIQ5AhyaZte4Iwg0VOgbEUCSHSr2OBY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RqqsGDNbNtoGF8UaRD/lb3640ii0GOwPaqfaV9OUSkpZ8Pv7s0Ig+sx0ZF2WElmJL
+	 QGEE2st8jPLsPDEvCKixIHnvUwWRf3ky8NfQXwxbdzy1Pxg7G7hl8TrxYDz6qOTfHf
+	 UCxTossPmCnXFlVPRAx55tMMlqTM3W75gCtjdI+c=
+Message-ID: <943faa15-06b8-49ce-8b91-e4c1e2f22fa2@arm.com>
+Date: Tue, 8 Sep 2026 09:51:14 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT macro
+To: "David Hildenbrand (Arm)" <david@kernel.org>,
+ Yeoreum Yun <yeoreum.yun@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+Cc: akpm@linux-foundation.org, ljs@kernel.org, liam@infradead.org,
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ shuah@kernel.org, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+ nico.pache@linux.dev, ryan.roberts@arm.com, dev.jain@arm.com,
+ baohua@kernel.org, lance.yang@linux.dev, usama.arif@linux.dev, kas@kernel.org
+References: <20260907081509.924979-1-yeoreum.yun@arm.com>
+ <9f8c6e91-c1c8-4ec5-96a9-9d6d4ab571cc@kernel.org>
+Content-Language: en-US
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+In-Reply-To: <9f8c6e91-c1c8-4ec5-96a9-9d6d4ab571cc@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On Tue, 08 Sep 2026 10:35:14 +0900 Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-> Could you decouple tools/docs/tests in independent patches?
 
-Yes. v7 splits this patch into the documentation, the userspace parser,
-and the tests, each on its own.
 
-> If each test has this volume description, it is enough to split those
-> tests in independent patches.
+On 9/7/26 8:06 PM, David Hildenbrand (Arm) wrote:
+> On 9/7/26 10:15, Yeoreum Yun wrote:
+>> HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
+>> When this macro is used in some test, test result would be strange in
+>> the system where PAGE_SIZE is more then 4KB.
+>>
+>> Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
+>>
+>>   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
+>>     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
+>>     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>>     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>>     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>>     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>>     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>>     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>>     ...
+>>   ok 1 Completed
+>>
+>> Remove the HPAGE_SIZE and HPAGE_SHIFT macros and introduce pmd_page_shift()
+>> helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-existing
+>> helper, read_pmd_pagesize().
+>>
+>> Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
+>> which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
+>> and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
+>> PMD-sized units, the test may fail with the previous size of 100 MiB,
+>> which is not a multiple of the PMD size when the base page size is
+>> 16 KiB or 64 KiB.
+>>
+>> After this patch, output of transhuge-stress:
+>>
+>>   transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
+>>     2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>>     2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>>     2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>>     2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s	2616 succeed, 1201 failed, 2616 different pages
+>>     2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s	2627 succeed, 1190 failed, 2627 different pages
+>>     2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s	2628 succeed, 1189 failed, 2628 different pages
+>>     2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s	2630 succeed, 1187 failed, 2630 different pages
+>>     2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s	2631 succeed, 1186 failed, 2631 different pages
+>>     ...
+>>   ok 1 Completed
+>>
+>> Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+>> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+>> ---
+> 
+> 
+> [...]
+> 
+>> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+>> index d09f9f6a384e..24aa1de27c25 100755
+>> --- a/tools/testing/selftests/mm/run_vmtests.sh
+>> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+>> @@ -360,8 +360,8 @@ fi
+>>  CATEGORY="memfd_secret" run_test ./memfd_secret
+>>  fi
+>>  
+>> -# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 100
+>> -CATEGORY="ksm" run_test ./ksm_tests -H -s 100
+>> +# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 512
+>> +CATEGORY="ksm" run_test ./ksm_tests -H -s 512
+> 
+> 
+> Why the magic value 512? (desrves a comment)
+> 
+> A clear sign that the ksm tests must be rewritten to be standalone and just
+> handle this internally. @Sarthak
 
-Fair point -- the three tests cover unrelated properties and each needed
-its own paragraph, which is the same signal you mentioned on the cover.
-They become three patches in v7:
+Sure David, I'll work on this.
 
-  - basic functionality: stack_id events are produced and the map fills
-  - reset semantics: the map is cleared while the ring buffer is not,
-    plus the binary ABI header check
-  - instance gating: a secondary instance exposes neither the option
-    nor the stack_map* nodes, and writing the option there is rejected
-
-Each lands after the interface it exercises, so no test references a
-tracefs file that does not exist yet at that point in the series. The
-reset test's ABI header check follows the binary export patch, which is
-being reworked to a streaming seq_file export per your comment on 1/3,
-so the check will match the final header layout.
-
-> > +    with open(args.file, 'rb') as f:
-> > +        data = f.read()
->
-> nit: Can this support input from stdin? If we use this on android,
-> user may want to do:
->
-> adb shell cat /sys/.../stack_map_bin | python3 stackmap_dump.py
-
-Good use case, and it is the common one on Android where pulling the
-file first is an extra step. v7 makes the path argument optional and
-reads sys.stdin.buffer when it is omitted or given as '-', so both
-
-  adb shell cat /sys/.../stack_map_bin | stackmap_dump.py
-  stackmap_dump.py /tmp/stack_map.bin
-
-work. Reading from a pipe also suits the streaming export better than
-the current stat-and-read pattern.
-
-Pengfei
