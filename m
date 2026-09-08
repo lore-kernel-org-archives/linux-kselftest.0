@@ -1,210 +1,157 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E94346E43
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2026 23:34:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93731D54FA
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 01:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.204
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788824086; cv=pass; b=KrjwBbhnwv5NkWoPO6ufiHovdCcqVmaWVv7hiWDslb4RDqJjuUTfNxG1xg+yjmemHuJ2BRY8RXDJkXb8234JDnyBSuAbkig5Rjx8P9Cc5k2W+/aBXz8y6u99TV/8eXFkZG4fodPvwLyKy9wXcGD+RyiPY3+wje2MIgSs6OKd0dY=
+	t=1788829483; cv=pass; b=UBxfGbnykQwSjCiP3C7Og9NKBNkdmAwO8bs2WF4k+OXgfP14j4QL8AE4GNWUJ5r65LkYv0Ik0wtVeYW6b0uXYFpeB9u1hUVOJZUug5OFi+XREnySpzhjYAgzIjVXM6HDSRP0fSsjrszm8DRcELslDTLEAk8AiVM+egO1tUhiAQc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788824086; c=relaxed/simple;
-	bh=l6bwwoVueCaG8E45kbLYaQURVS5qLWt2C7NdrvXHikY=;
+	s=arc-20240116; t=1788829483; c=relaxed/simple;
+	bh=W4XdQovADM5RSeHI+/ZuPheISmstJfmeHSEtcR5uyzk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XFSK7vRR2AaA0idx7Qq2oZE8Oneb4+47ZE2ZZ7oBosTLloPw86StEJQWGvXuwCgdT5HNziRHnP0Wvecg4MNou46K/W1oB1TAVxjcUnUuetlxHNGToKaPK54LS4k3PIHXSWcUbMfLsaiacuUOWpQo+RQX1Aq9mWY2kj1NB6GeolQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LueDEPZr; arc=pass smtp.client-ip=209.85.216.47
+	 To:Cc:Content-Type; b=ptabqB78YNHt7psxZKU2ss/FV9AQ3bgyle/Ta7L3NMCAildTxvqh3UfWWicUe+4fDQSkjByhCL3az3PYqURogoZXiMNKjEpSOrHykAkujc62sDr9yp90piQbJUdMa0FiGb1zSb85/91Hv68/tt2TuomIysdyCZg5xxKPCu59OuU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S0MczrWG; arc=pass smtp.client-ip=74.125.230.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LueDEPZr"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-381b831d535so6422015a91.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 16:34:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788824085; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S0MczrWG"
+Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-5307425f44bso365281cf.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 18:04:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788829481; cv=none;
         d=google.com; s=arc-20260327;
-        b=KIvp3ONcfaqYs50O9wZy9wm6kRJHTmGl45L0Zm011DJnLXqz5moeebmg090HLB38Fx
-         bgJJaqfjS6H18qSF8CE42lyOHQ+Ue52IaRGSaXjONcC+iodBfWN/8VvmkrIbLfJKJ5Mq
-         1/d3SHWrrwQNOuPDsSSAYmgYq6oKjS5nCCtXQGGNscI+xaG4oUbKFfr55F7+aqEQwio3
-         /1ww7oJMuNcIPViD6qFAkqtaWSbIvU+qHXHBXYq/lM4COevj2gKWp3x9dJaR/EfQLEeh
-         SfR1MWv2ckgMAuSLyu+c/o5L9hRjF/+k1TJV2b43N2YZvJy9RZ/5yEHavdPXbXRW61yq
-         +37w==
+        b=arNYkW8BOl6CHhwPHM3YmxHtuCf7YjiSuS9S6v1qhUPBnmruRtDt/Cw4Shsni2tp0r
+         n4huUtaSmO6FoE2I9mpCgW+l5Aw9M6/KqNX6Sh9hGZmK61hfO43wpXplP/NYu6R/5n7V
+         GmGnLBZ61CyBde5YJCJyAGSAdAZDKr63tNSMszE78X2pbaW0B4eDnvmv7jiO477kLAz9
+         ZD+j76Ap1YXkrdjzZkwKvXHaVaZ1Y+Z948iJzSiI50nv7XrRO5472FGPpEgU6pDhEGj2
+         xZfCS0ENFntBq/22DdSiIu9slIH0+PpzrUlHZW88RHgb8uxxxCJ3ybtqpNtaYRpWQ3mq
+         nYaw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Awv3H1wnvCKoXScc4pcndUyTglaueBmQi2mzpL4GQqA=;
-        fh=eVC+0FhxXF+1aImTiE8702u33R0uJUiguqekEDEFQ+g=;
-        b=iqNatYYB/jyzqZ677Qd2//WAczhZ6JHbXrdaG0JnMqwMcWIxbTojQhNaBUhp0fW8Ea
-         h8ziB74H3ySqWj98F7qmfnykz2EEWdovUVoCmA5Cb6/TQXpnuRVaBQ4dE/t7GlMBu0Lj
-         wE1OnB6ur2lsH8nTx4rSh/Tpgl7qr9p/X6wmyJWIA71Ngy7O7L5BvTm0TzT834wkDjBz
-         kCVWEWIIaxCsuBdtGaBCONAjq8177vmkxAbMhIRHcRIPMsrXOP0HdegaxQ8ZE11gKAA/
-         P4Eb5AXLSH8g6+eXmQ7OrR50CWFQP+dsyz4CU8Xo1lIPmv297gqEW9fQ2Ji3fYTlLcH4
-         JxCw==;
+        bh=W4XdQovADM5RSeHI+/ZuPheISmstJfmeHSEtcR5uyzk=;
+        fh=cbP6VxnBVSvvywc4t+weH6Cg1H3iyYlIb3eJl1QRnS8=;
+        b=PfeZ3vPQTJBGd+4Z481A8TOFwGQYJZnmZ2kTlA/xtN3S1OjzshRWQ5zyOgH6HG+X3n
+         ZvUgT31xaxavyaNPuIErTrdYHTPONRX+8amIcKbLS4zrz/XZ5BkBYpWQ59c65Qwrfa33
+         7oXpS596Qa4pv5t9MYrxzt0mP6VLdflwNa+ZbhsL+tBzAQqZNP2JndOwQQ0BmfIGNrfg
+         Wakn+00+ND5aPlm5DqeLGgVjFRN29Nvz6paExOo8Ot6NeYa41uu8dYPijzQb3l3QSxxq
+         2OaTf8nk8/28p4FSsTrZCrBiKf2zXA/EDuwoZO1ppzkrZ/yL9YwOx7ofg/uDrdfgaCpo
+         6y8A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788824085; x=1789428885; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1788829481; x=1789434281; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Awv3H1wnvCKoXScc4pcndUyTglaueBmQi2mzpL4GQqA=;
-        b=LueDEPZrwERRQSqM4jQrV4y5AcPQiFDDOxYgL798newQ1GTpIjbL3H5vEICl9llvd4
-         Y92DZADnXzh2vJDaQPscrI/URK4PCO33pne9encxE94MXh6t4BQ2eeu+mDP3InZkgve4
-         7vbvzttqw0aiGB0pI082mmpMQBE2Zo5Ef4cg0YlV8Pge0uITCSJ9YqYDpUUAKteDsOZl
-         svnjiO2HuX0cHbYXpXQH3gCGtMYzg6tTM8oxMt7tDr4BSffy5A+mdjJHoeBAzt3qqeD3
-         o+4c+M2UC0vgAZQBjKcwNV1eF2Vr86KKswB8/Ttv80E5547Og37X9ZGnyt2tL3d1RoBo
-         rmFg==
+        bh=W4XdQovADM5RSeHI+/ZuPheISmstJfmeHSEtcR5uyzk=;
+        b=S0MczrWGpX30+x/4tSE0UhO7/5nIWkmrbcpR+tQLiGy1ecHuzC+1pydZy9SDALW+rU
+         cXj7rb/em83lTsyENqxg2vFHRTQ6AV8UJWKIJo3KfoTYwc1YMYJaUwEi65hCN3wNe/3b
+         qzsemCnkATfIguMgH0jC8hzs6fOXiXFI67FW/gAE1rF1jXht8shZXpZ+AVg0WFd+w8lW
+         GnwY2oPYXN8lXGw7HM4tcJrCGNy4Yw+q2/gWYqephUhYGrJZxvecrpCXWsogsFlaSH9n
+         l5x1CEkupBU+lQy9OJgN7x6J6MPkK+b4GSmlSN1ufSnSlmyrTR7pkbIFD2XUrfY0C2g3
+         jF8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788824085; x=1789428885;
+        d=1e100.net; s=20251104; t=1788829481; x=1789434281;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Awv3H1wnvCKoXScc4pcndUyTglaueBmQi2mzpL4GQqA=;
-        b=hhB0eWaToU2sM8V17mbypUjUrkm1SiLHN1jI5/0ypr7M+tkCKgDaNIoaXThf1tJf6A
-         AxbZxGxkJNkVyHFQYiMOjxFjsOqdMK4EERvoEO2sFwDgtoxu1HDvbEi+e8CvaWdKdwFy
-         C3yJkd4CfWXSWtNk8S3iR3XfXO7kohW9L/gbDXtJ6kbY/Uu+eVRBpqBLeH4sl9mCz70T
-         Xcts5GaaJwrZ76Imsz4ZftDl3wT243OzLrJUJw0xsw9eA+a4yIMfat+OW/zn/s7U+WzX
-         SCIgaoe62nNt9KsQJS/WXFmBSwjokPYy6fmNHk9+lSXjj/WuB0QF8rS+/TbESOd7Q8e6
-         TG0w==
-X-Forwarded-Encrypted: i=1; AKwUvBxKv0bM3kZZHohtuKCSZ3DRQ9rcVCO+VCPa+X1zXw+gXmixsREev+bCftf6cg3WJIEGQznt0gRwb1wW1K95DGk=@vger.kernel.org
-X-Gm-Message-State: AFuF++mow3meYNv/74E/+48qae3i0alYvPpDj+i023R36ieIBwnwg+gH
-	CMXBWKP5cxzG3azx2hUNS9O8PXjeS1JaAWbzQ9+KPf9eHAwYM9Z+jJEDuZtlz849u2fQWfIOwIk
-	IXTLKDFas7xMGIvwWVEfNSjaTNYown88ZBy5pInSW
-X-Gm-Gg: AYBFou0QQARslqYXq1qLfdV/uiJrEZJyF/HpDv/S1gCT9uiXlMgtInPMe07YwDd2CRg
-	ZhwcuPjEePUlsJrWXTxVuSITWChu8gNUmv4KX/rtRp4zTmcnuFbCsNeHsE6R5hpzeEnfjir6xdA
-	D0Y4B5itURONfasT6BVX+w2dhsP0I+a1ij8th+4OglyUa2AkJRP0JH1SAHT+UfAjbYYrHdWPEWR
-	CooDXwKiDaG+gApUI4U1RZKq2/Q5NKfhHyNTY9oV5qiWoClmXKR9jmQUGAjHdwwLCeMBqSskwkn
-	lkzfTwCetUT61yZ6JlT/8ZDGTeiAz+oJExLdXG3MCJqkGPVxfOhoSPPGYN23xsjQKoIREbyKDMW
-	yVGv0CZVBfvujwDnoHY9jmRxifzFwZ06z76UIVOBwAGvCzXI3vI3lZ5FO
-X-Received: by 2002:a17:90b:570b:b0:398:deed:6e1d with SMTP id
- 98e67ed59e1d1-39b260de5bbmr39739841a91.5.1788824084339; Mon, 07 Sep 2026
- 16:34:44 -0700 (PDT)
+        bh=W4XdQovADM5RSeHI+/ZuPheISmstJfmeHSEtcR5uyzk=;
+        b=j/CuWB24kvSFnLd1SLuvp5sWFqT8T3YroFWieZyat09b/37LxlmPzm+c6jw1MPCCXP
+         WVexwiSK/VupmEuWX4Hlk8IDzm1YRWT0VQ0sXxAtT6R8+dYjt2bnvPOpxkeaEN/pvCF0
+         PSltZfv8EVSyATKYon/AYj2TI0ajkqxl2SvHOOI0bIwyW1tiEcFF58jAJxwYZ5AhM8oR
+         IArkqxpHszEZGccbpHlV1mg+EJ63mH7w1wyd76i+7rreeyTyr9xhbtND35K+0LXcmK/B
+         emIi/sD4ShvbumzrpKVh+JZIw2fADTpQ8B75X76PQFHGlMePTaqujCBRme6yZ64MftTo
+         xcLw==
+X-Forwarded-Encrypted: i=1; AKwUvBxymY1n1Jn72CUn9smRXR47AMOhM5NSb0QmII3xL3Skv+vsIMcEs0HkvUCeoZJxrB7sda0n9JYPC4lNDXJqBc4=@vger.kernel.org
+X-Gm-Message-State: AFuF++lPW0YGgDXdhC3flpl9biltKYReIxhNlDsSjTY9bCrmjwX5BbJo
+	xykFa9KxXx3Lt0bw78P9QYPCw1YHljy+yGHa6YJolnrt0heoiU78FVtH/umsuywKPafTL2SURmb
+	YpQTbG5bNfhU38c+PhsSrfPH+m+5C/uG6yJTJZ+MG
+X-Gm-Gg: AYBFou0mH9bg+bJeFMjkFLHoMJHcE8g3myst551qrhhZA06toTi3ugoFycay9k5T9TC
+	bTq+5gOpgy5AxLEHbVbnbreKXxU6cWOSe2wUFLbpTc9Qt5+eaK5TiJm9LqTkopc5Sw6z75kUkw5
+	nB3KWVdRpp/lBkZ+wXRNRsWLVCMYfXcV2hEZdJ4ju0mHtaZctA1+9C4wO8Ry7IsJkAS3gw1NAnA
+	XA26SenjqztLyk0Azfe9g11wfUGxNgaMAjXdmC0xQzr4Fa4zvcywemPoeYFsC3QGIr/CNgBNWUV
+	HZSYC1nVKGNEhecThWfIMOjUHC5rEmrbTmXy+/PgKAPRc5LeXV/0XHDNmwa0BrOS2myUluudEct
+	w2kqivDfO3+hIYLHBR6IJr2/bokqJ
+X-Received: by 2002:a05:622a:e416:10b0:519:b82d:fe62 with SMTP id
+ d75a77b69052e-530810b149cmr15210511cf.7.1788829480213; Mon, 07 Sep 2026
+ 18:04:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260906074135.185212-3-jiayuan.chen@linux.dev> <0aa6425f9e8f32705ae827f6325b29079234c3f3d0c7b2cdefba3e5b50432766@mail.kernel.org>
-In-Reply-To: <0aa6425f9e8f32705ae827f6325b29079234c3f3d0c7b2cdefba3e5b50432766@mail.kernel.org>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Mon, 7 Sep 2026 16:34:32 -0700
-X-Gm-Features: AcwNN1UK4ePHf92C8dfodAq8wlNSEQxGqv1s9W_oplqA5uHsM2tjuHOURyVXA5A
-Message-ID: <CAAVpQUBztYDHyiCN1fnhdxCPv_5AZ09yCMQfNW96SzZyw0LhHA@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 2/3] tcp: Skip cond_resched() in
- inet_csk_listen_stop() under BPF context
-To: bot+bpf-ci@kernel.org
-Cc: jiayuan.chen@linux.dev, bpf@vger.kernel.org, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, sdf@fomichev.me, martin.lau@linux.dev, 
-	ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	emil@etsalapatis.com, ihor.solodrai@linux.dev, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	ncardwell@google.com, shuah@kernel.org, aditi.ghag@isovalent.com, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org
+References: <20260904031912.2133476-1-tweek@google.com> <b965bb62-fcc8-4517-9947-24613650f1f5@linux.dev>
+ <CA+zpnLc-WAqE9rA0PsjvOFe_YCZOdVj9YAzuayGXx0nhpqtw7g@mail.gmail.com> <534e5a3b-5160-4619-8b2e-27a81783e17f@linux.dev>
+In-Reply-To: <534e5a3b-5160-4619-8b2e-27a81783e17f@linux.dev>
+From: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
+Date: Tue, 8 Sep 2026 11:04:21 +1000
+X-Gm-Features: AcwNN1VZYaBih0XkaS7qOeRNbkcxHADyZeWVg_y6k7B5EJaVTTRllbZ02cIFTKY
+Message-ID: <CA+zpnLeiZrmvNeatnbA1RSRUVFswXBsJc1S0=mZS6cF_g1UbSg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] selftests/bpf: Move verifier failure tests
+ out of test_global_percpu_data
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Sid Nayyar <sidnayyar@google.com>, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Sep 6, 2026 at 1:23=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
+On Tue, Sep 8, 2026 at 1:24=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> wr=
+ote:
 >
-> > tcp: Skip cond_resched() in inet_csk_listen_stop() under BPF context
-> >
-> > bpf_sock_destroy() runs from the tcp iterator, under rcu_read_lock(). I=
-f
-> > the sock is a listener that still has children in its accept queue,
-> > tcp_abort() ends up in inet_csk_listen_stop() and the cond_resched()
-> > there trips the debug check:
-> >
-> > BUG: sleeping function called from invalid context at net/ipv4/inet_con=
-nection_sock.c:1523
-> > in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 628, name: test_=
-progs
-> > preempt_count: 0, expected: 0
-> > RCU nest depth: 1, expected: 0
-> > locks held by test_progs/628: 3, last CPU#3:
-> >  #0: ffff8881158cee18 (&p->lock){+.+.}-{4:4}, at: bpf_seq_read+0x56/0x1=
-210
-> >  #1: ffff8881106bb858 (sk_lock-AF_INET6){+.+.}-{0:0}, at: bpf_iter_tcp_=
-seq_show+0x32b/0x4b0
-> >  #2: ffffffffb435af20 (rcu_read_lock){....}-{1:3}, at: bpf_iter_run_pro=
-g+0x46b/0xde0
-> > CPU: 3 UID: 0 PID: 628 Comm: test_progs Tainted: G        W           7=
-.2.0+ #65 PREEMPT
-> > Tainted: [W]=3DWARN
-> > Call Trace:
-> >  <TASK>
-> >  dump_stack_lvl+0xc1/0xf0
-> >  dump_stack+0x10/0x20
-> >  __might_resched+0x3d2/0x610
-> >  inet_csk_listen_stop+0x7b/0xbf0
-> >  tcp_abort+0x23b/0x3b0
-> >  bpf_sock_destroy+0xfc/0x140
-> >  bpf_prog_448133d24601754f_iter_tcp6_server+0x81/0x8a
-> >  bpf_iter_run_prog+0x538/0xde0
-> >  bpf_iter_tcp_seq_show+0x26b/0x4b0
-> >  bpf_seq_read+0x424/0x1210
-> >  vfs_read+0x197/0xe40
-> >  ksys_read+0x119/0x240
-> >  __x64_sys_read+0x72/0xc0
-> >  x64_sys_call+0x647/0x27e0
-> >  do_syscall_64+0xe5/0x610
-> >  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-> > RIP: 0033:0x7fad39b28aca
-> > RSP: 002b:00007ffc381c61c0 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-> > RAX: ffffffffffffffda RBX: 00007ffc381c6a88 RCX: 00007fad39b28aca
-> > RDX: 0000000000000032 RSI: 00007ffc381c6250 RDI: 0000000000000014
-> > RBP: 00007ffc381c61e0 R08: 0000000000000000 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
-> > R13: 0000000000000000 R14: 000055f077c1bbb0 R15: 00007fad3a0f3000
-> >  </TASK>
-> >
-> > The commit that added the kfunc already guards lock_sock() in tcp_abort=
-()
-> > and udp_abort() with has_current_bpf_ctx(), but missed the listener pat=
-h.
-> > Do the same for the cond_resched(), it can't reschedule there anyway.
-> >
-> > Fixes: 4ddbcb886268 ("bpf: Add bpf_sock_destroy kfunc")
-> > Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
->
-> Is the justification "it can't reschedule there anyway" accurate?
->
-> With CONFIG_PREEMPT_DYNAMIC=3Dy booted with preempt=3Dnone or preempt=3Dv=
-oluntary,
-> cond_resched() expands to __cond_resched() which can actually reschedule.
-> The splat in the commit message confirms preempt_count is 0 while RCU nes=
+> On 2026/9/7 13:46, Thi=C3=A9baud Weksteen wrote:
+> > On Fri, Sep 4, 2026 at 4:07=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev=
+> wrote:
+> >>
+> >> On 4/9/26 11:19, Thi=C3=A9baud Weksteen wrote:
+> >>> Commit 4c9241bd731a ("selftests/bpf: Add tests to verify global percp=
+u
+> >>> data") added test_global_percpu_data.c to LSKELS_EXTRA. Later, in com=
+mit
+> >>> 1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu dat=
+a")
+> >>> two verifier failure tests were added (verifier_strncmp and
+> >>> verifier_snprintf), both marked as non-autoload (SEC("?kprobe")).
+> >>>
+> >>> When bpftool generates light skeletons, non-autoloaded programs are
+> >>> skipped during loading, causing the loader program to store subsequen=
 t
-> depth is 1. With preempt_count=3D=3D0, should_resched(0) can be true and
-> __cond_resched() will call preempt_schedule_common() for a real reschedul=
-e.
+> >>> program FDs into incorrect skeleton struct fields (e.g. dump_percpu_d=
+ata's
+> >>> FD was stored into verifier_strncmp's descriptor).
+> >>
+> >> IIUC, patch 2 will fix the issue totally.
+> >>
+> >> Better to add a subtest to verify both the issue and the fix?
+> >
+> > Thanks for the review. That's right, patch 2 will fix the issue:
+> > bpftool will fail to build any program that is set up that way. That's
+> > why patch 1 is necessary; otherwise, the existing test would fail.
+> >
+> > Just checking your suggestion: what I can do is add a new test to make
+> > sure that dump_percpu_data is set up as expected (fd > 0). I can write
+> > a new test_global_percpu_data_iter_lskel, that is similar to
+> > test_global_percpu_data_iter, but for lskel?
+> >
+> > I can also write a test to ensure that bpftool fails when light
+> > skeletons are set up with autoload=3Dfalse?
+> >
 >
-> Additionally, in configurations with CONFIG_PREEMPT_RCU=3Dn where
-> rcu_read_lock() is preempt_disable(), __cond_resched() falls through to
-> rcu_all_qs() which calls rcu_qs() to report a quiescent state from inside
-> an RCU read-side critical section. That's a correctness problem beyond ju=
-st
-> the debug check.
+> imo, the rejection of autoload=3Dfalse prog when generating light skeleto=
+n
+> is not friendly for users. Users should not care about mixing
+> autoload=3Dfalse progs with autoload=3Dtrue progs, even for light skeleto=
+ns.
 >
-> So the call can either reschedule (PREEMPT_DYNAMIC none/voluntary) or rep=
-ort
-> a bogus quiescent state (non-preemptible RCU). Could the justification be
-> reworded to explain that the loop runs inside the iterator's RCU read-sid=
-e
-> critical section and must not reschedule or report a quiescent state ther=
-e?
-> The code change itself is correct and matches the existing pattern in
-> tcp_abort() and udp_abort().
+> The users-friendly way is to skip those autoload=3Dfalse progs when
+> generating light skeletons.
 
-or maybe simply remove cond_resched(), hoping 7dadeaa6e851 would
-resolve the scheduling issue.
-
-
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/340203=
-53095
+Good point. I agree. I'll send a patch with this approach instead. Thanks.
