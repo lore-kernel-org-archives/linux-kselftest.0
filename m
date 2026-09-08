@@ -1,129 +1,144 @@
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE302E7623;
-	Tue,  8 Sep 2026 05:36:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C192736F433
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 05:49:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788845802; cv=none; b=e8/UJqRZT3X9qDdH1lhM9WpJQCI9m6G35vmmUFiawQHG+orByPcmcQReU+m27PlUsdb5tOZOf4FHJqOdPXcGPuR+X1GuEYaxThB80HMM2odieO7jzQEDvmF90bR/cGvyN7SWi7KVB7lDYKKBN0HmwTfDhk9pTAYncKyYnnktzBk=
+	t=1788846547; cv=none; b=itSIeVpaFmmwyT1+t7jkmkWwaVt3lafvaSpOmusVYjNET/smm2uyN/FpOW5OjGgSCZm7a0ef8BuKZoywgCo+Vq/cv/eVXN7cNVpi2/n/M/pIp1zvG0TygcGI829vlPKRjWIVl0yBGM0aQk6VaBN4dctiHdERiVfVSMWUvvpcnLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788845802; c=relaxed/simple;
-	bh=oL1tC9u9RzhU2PL6dZVLf7oxQFr7lsRQFjOMCjgg9x8=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ok9hU4OsgMEaHXRoheVVutIKMER/FXj25qNrIy+cRvQAmxMW7mxyssN7DKEhw+P4blrDa9ONogepCN6SIRlHsxva6GHUHlnHNZ4WCz5bZwA60Q0ojaE3dqy0OuuSYUdlRALV+MnJlO+WHFLN2vGdpPBjLZ+Skuc1jek6UWmespQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=BihBDKLs; arc=none smtp.client-ip=67.231.156.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	s=arc-20240116; t=1788846547; c=relaxed/simple;
+	bh=VyhIDkMGxjIHBAZdaTDfNNTavhuZAK2+hkjy/GcRv8g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iqAFN5iutRWRy4FuD9ZTKh8CJxKvPJBX8LU84fu5Qqp7RxMusKVrnnU1aV0IbaRisa6a8J/vCk34VQp6fBDa1tHf9XtT/2Po5GKgw6MaipuDfMAI/uKP3SUSVJie7GLkxkrMEiTU1PnOJTAflCDh46pBRbSbZEgoYdcjBHbFjvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XIxqxowJ; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="BihBDKLs"
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 687NoiiN4052707;
-	Mon, 7 Sep 2026 22:35:36 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pfpt0220; bh=L8bQVcZ4XERxz6R2mCbfmBMtR
-	zXuotUJA5hLPxZbwzA=; b=BihBDKLsw4pynSGhwHdPWhTYqd5EIYdgjEDjj2k/H
-	nyQc2ByMQXzkPtQLr8bclg7jGV5vC/+CQPDTFGpFJov/o9ZzESX22vKrFELMK0Np
-	n90wwp9ROCw6znY9McFq97V703M5iatV+CZjCXd8nniTo29Slpp6hmmjdTHrna8w
-	neJEvGlk7RnqwA1HdeZwdNn0IE5EQ4ziBuRVgSqmfpPxzCEDlQ7slnx5aFpJc04b
-	VSXVxbN9gfJ1M3u2LkH+Udj+LaS33k1wmJ9h+1mpCq70N8ggJjMVotbLV6bxC5AD
-	xna41MnZDtpakF/lL8NhnZOwoIb+b9eLl4LvzV6Q/SbEw==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4ghupyaf99-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 07 Sep 2026 22:35:36 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Mon, 7 Sep 2026 22:35:34 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Mon, 7 Sep 2026 22:35:34 -0700
-Received: from rkannoth-OptiPlex-7090 (unknown [10.28.36.165])
-	by maili.marvell.com (Postfix) with SMTP id 1D0A83F7078;
-	Mon,  7 Sep 2026 22:35:25 -0700 (PDT)
-Date: Tue, 8 Sep 2026 11:05:19 +0530
-From: Ratheesh Kannoth <rkannoth@marvell.com>
-To: Hemanth Selam <hemanth.selam@gmail.com>
-CC: "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn
-	<andrew+netdev@lunn.ch>,
-        Bharat Bhushan <bbhushan2@marvell.com>,
-        "Broadcom
- internal kernel review list" <bcm-kernel-feedback-list@broadcom.com>,
-        "Chris
- Snook" <chris.snook@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "Florian
- Fainelli" <florian.fainelli@broadcom.com>,
-        <GR-Linux-NIC-Dev@marvell.com>, Geetha sowjanya <gakula@marvell.com>,
-        Jakub Kicinski <kuba@kernel.org>, "Jian
- Shen" <shenjian15@huawei.com>,
-        Jijie Shao <shaojijie@huawei.com>,
-        "Manish
- Chopra" <manishc@marvell.com>,
-        Marcin Wojtas <marcin.s.wojtas@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, Rahul Verma <rahulv@marvell.com>,
-        "Russell
- King" <linux@armlinux.org.uk>,
-        Shahed Shaikh <shshaikh@marvell.com>, "Shuah
- Khan" <shuah@kernel.org>,
-        Simon Horman <horms@kernel.org>,
-        Subbaraya Sundeep
-	<sbhatta@marvell.com>,
-        Sudarsana Kalluru <skalluru@marvell.com>,
-        "Sunil
- Goutham" <sgoutham@marvell.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-Subject: Re: [PATCH net-next v3 07/10] net: marvell: fix typos in comments
-Message-ID: <ap-elz1ObdxcutDv@rkannoth-OptiPlex-7090>
-References: <20260908052602.27497-1-hemanth.selam@gmail.com>
- <20260908052602.27497-8-hemanth.selam@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XIxqxowJ"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-84f38f3b36eso2817032b3a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 22:49:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788846545; x=1789451345; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=3Hk+XNhijnUk0JrFp3DVPvigSnryVRt/+DzNzROaqfU=;
+        b=XIxqxowJdju9k542yAl5qdvceLTQwlt5Enxen4g/8x5W0oKqWFiURRWEBZmkac+h82
+         k0BsV1KKSaJKStBBqxqBnLGkI46TCD0/0NYfC2CP/9oa+3o8UF/A+NOkDwbZOvn1sBIM
+         NBUXWWrcc8dI70Gi8uQ0WxVuGppknP5LWHWjULAI8vENPOOmCOFGRHgnEO9vjhqpcn3t
+         hAq866hwuAFW6uHkme/Mf+ketRBxfT6DKjLeGLY4wwHkrE36s9DG8YmMKjEQsP95gXAQ
+         r47C6bellblHD53QH2c3h508qgd6nwzTwuaBUgNNjBQNttkcqGLQSJqGoVSFmBxVrV/9
+         S7nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788846545; x=1789451345;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=3Hk+XNhijnUk0JrFp3DVPvigSnryVRt/+DzNzROaqfU=;
+        b=NkawBdn2fkIYWhPp2YrWhfIzgTQ1ISbhAaJTmgXcEctC1CbIBvv8XJl/7lzsPQNwIN
+         0hvNokkZY3IbkWT0mn49ZDxAvVHFyvoQ+YU/36wpGQtVPS8wWI5bXgNYbSKyZQuh8Qbt
+         /wijNob1YV0wfXdvuUUjFM+Bb5u6rJpus3tI1MBahTWmudr8SZ9E8ZjEnWA8OfI8FWvO
+         Hny7Gbgp2VZv4DjtnbUmj2z3zPNnPTAiHWD7lI1AguuxN9W8ByCwTLO72tSaKzGdPXOX
+         WgU+OAJlY81O8APanlWbHRTMCQlz4+fKHKQXJ2zVd5dkkHKm7LHSX0Mu5Iff5Ws7yck9
+         Heqg==
+X-Forwarded-Encrypted: i=1; AKwUvBxiJ/UMD5H63/Pk6uHzrU0j7u+ISAfcNBxRx3m03jTFA7BfTqESEMEYsV4tM9eawVbBJ45TnV/jTMjxVldR8A4=@vger.kernel.org
+X-Gm-Message-State: AFuF++mg5DHE/JSNMJtZr4n8YMxgbJOqmNQ9adGCzq0lBBvDIeD24rOk
+	8131elvJDpLkszipDq0o+OYv0Ne5k3Lbe9Unmh55a8tp7S5hG7/Bq1FD
+X-Gm-Gg: AYBFou1L7divdUwUw9xxIKJjDh82H11K5cyy88VWyS4Vg8gQomAF4BnDeuad+yUBy7i
+	N8VVOoXnVtOo1u1nyDwzE0nc5ECDo1OceldwJ+KbU/JVsq9u/CbquFiPg/X5PfyKcim4u2etNKC
+	O34gesWfcEWywHmQpuek+7N84xzuWCIuiaDUbJ1jL5U8w5Lb026M9RKDoKP7bLvl0ycZV93c/uF
+	J7A5XYqUCv6SIoARk+QC6stDZwdAit4+47x4MM3PIhm3Aal44EkU0q33nVtFKl0vIOtydDico6Y
+	oO87cKGWawVxXBWEfYVWtVwDRt8qtU5672ux5PzFDmB7Ekv2bGlWW8qveL/E+U4b++Jy2GuHox9
+	xK0qZSwI8b2KS2KOo09y3/c6Aqev/HUoh+2D5s002Wc9ppltAq8S+lcVo0oZeihGotj4svfiTsY
+	dy7aYUDo9B6r4pZsQnrXdA8RWth8iWx2gxgNgIxGABZGVJQsuGfv/I1rbRW8OedbDMwdzvqlVt8
+	b0+KWoBOpzk9g==
+X-Received: by 2002:a05:6a21:38c:b0:3d3:ae1f:d7f8 with SMTP id adf61e73a8af0-3da3a0cc91cmr42893779637.24.1788846544946;
+        Mon, 07 Sep 2026 22:49:04 -0700 (PDT)
+Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-334fbd5e6f6sm25690109eec.23.2026.09.07.22.48.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Sep 2026 22:49:04 -0700 (PDT)
+From: Hemanth Selam <hemanth.selam@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Russell King <linux@armlinux.org.uk>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Hari Bathini <hbathini@linux.ibm.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>
+Cc: bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kselftest@vger.kernel.org,
+	sparclinux@vger.kernel.org
+Subject: [PATCH bpf-next v4 0/7] bpf: fix typos and repeated words in comments
+Date: Tue,  8 Sep 2026 11:18:46 +0530
+Message-ID: <20260908054853.13820-1-hemanth.selam@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260908052602.27497-8-hemanth.selam@gmail.com>
-X-Authority-Analysis: v=2.4 cv=AYyB2XXG c=1 sm=1 tr=0 ts=6a9f9ea8 cx=c_pps
- a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
- a=kj9zAlcOel0A:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=l0iWHRpgs5sLHlkKQ1IR:22 a=QXcCYyLzdtTjyudCfB6f:22 a=pGLkceISAAAA:8
- a=M5GUcnROAAAA:8 a=tqGoz1Is73OFN3djMG0A:9 a=CjuIK1q_8ugA:10
- a=OBjm3rFKGHvpk9ecZwUJ:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA4MDA1OSBTYWx0ZWRfXyOtTkmQm1q4x
- SUjKFIJV5r0rqLrG6heVXaKN72MitGgLDmd8Bv4FbcX8Y0xrsYPTwWZFvu9ewyVL6Di9EfFKk1L
- 4YLk94IAoz86MBUbPxVe5p/xf2SmW/xfXQHjIVpGQv64xYB13I0s4rE/L9cnkJRQGVQXV7wBEoU
- Ym5QSuAqWh+z3q5YMXYDeXDjxOfsz18zOMMmL830aWLNAZlDpN0vxhLajUAxxL1PmYnjfPr6sWk
- uByWJbUf3S8xiXKq5xbeuA+0s2Cc0KOrNbNDiaKkLJbv3vdgPSYqwYL/6gt9we0ZpnCE1mBnN8I
- +wyaIp7fRIu+VDxVZ1culF1mKzlm8erVlmuLvZE9bhartfQKQdxsqwh9fGlxqfl+gQDVCeN197Q
- 7QL9cwVZEkBt1GmVOkXmMWexGe7YQZIdJHsx87R5s/aBI7KL9FQPH2AvnHwDlK93cyljG+zmKeo
- EEUTu45739cwJluPVqg==
-X-Proofpoint-ORIG-GUID: vGLgS59Z7ZapmCskxREr1hd--snyiUqy
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA4MDA1OSBTYWx0ZWRfX+gdxfEt/IaoT
- R1bLw9QTDsE5rTF0QUOGiIWUSyFbSstK6ypH/ds435eD0V4rUUa312PvDlJxP0j1XmA+Lx19DKv
- ByG2LrwN6PJXp52vWuquepGgmVyrW2s=
-X-Proofpoint-GUID: vGLgS59Z7ZapmCskxREr1hd--snyiUqy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-07_07,2026-09-07_01,2025-10-01_01
+Content-Transfer-Encoding: 8bit
 
-On 2026-09-08 at 10:55:59, Hemanth Selam (hemanth.selam@gmail.com) wrote:
-> Fix misspellings in comments, found with scripts/checkpatch.pl using
-> the misspelling list in scripts/spelling.txt.  Comments only, no code
-> changes.
->
+Fix misspellings and repeated words in comments, found with
+scripts/checkpatch.pl using the misspelling list in scripts/spelling.txt.
+Comments only, no code changes.
 
-For below files
+Changes since v3:
+ - rebased onto bpf-next.  CI reported a conflict on v3 and asked for a
+   rebase and resubmit; the tree has moved on since and the series
+   applies cleanly again.  The patches are otherwise identical to v3.
 
->  drivers/net/ethernet/marvell/octeontx2/af/npc.h         | 4 ++--
->  drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c     | 2 +-
->  drivers/net/ethernet/marvell/octeontx2/nic/cn10k.c      | 2 +-
->  drivers/net/ethernet/marvell/octeontx2/nic/otx2_dcbnl.c | 2 +-
+Changes since v2:
+ - moved from mainline to bpf-next, which resolved the earlier conflict
+   in stream.c where the typo had already been fixed upstream.
+ - renamed the selftests patches to the selftests/bpf: prefix used by the
+   rest of that directory, as CI suggested.
 
-Reviewed-by: Ratheesh Kannoth <rkannoth@marvell.com>
+Hemanth Selam (7):
+  ARM: net: fix typo "arithmatic" in comment
+  bpf: fix typos in comments
+  powerpc: net: fix typo "upto" in comments
+  selftests/bpf: fix typos in comments
+  sparc: net: fix typo "evalute" in comment
+  libbpf: Fix typos in comments
+  selftests/bpf: fix repeated words in comments
+
+ arch/arm/net/bpf_jit_32.c                                    | 2 +-
+ arch/powerpc/net/bpf_jit_comp32.c                            | 2 +-
+ arch/powerpc/net/bpf_jit_comp64.c                            | 4 ++--
+ arch/sparc/net/bpf_jit_asm_32.S                              | 2 +-
+ include/linux/filter.h                                       | 4 ++--
+ kernel/bpf/reuseport_array.c                                 | 2 +-
+ tools/lib/bpf/btf.c                                          | 4 ++--
+ tools/lib/bpf/usdt.c                                         | 2 +-
+ tools/testing/selftests/bpf/libarena/src/asan.bpf.c          | 2 +-
+ tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c       | 2 +-
+ tools/testing/selftests/bpf/prog_tests/task_local_data.h     | 2 +-
+ tools/testing/selftests/bpf/progs/freplace_unreliable_prog.c | 2 +-
+ tools/testing/selftests/bpf/progs/iters.c                    | 2 +-
+ tools/testing/selftests/bpf/progs/verifier_var_off.c         | 2 +-
+ 14 files changed, 17 insertions(+), 17 deletions(-)
+
+-- 
+2.48.1
+
