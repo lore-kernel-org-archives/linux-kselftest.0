@@ -1,155 +1,161 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 407F533E360
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 02:57:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788836230; cv=pass; b=uqCzx71AGr62P17xvDIZFK/jBGYIeUDodJx/yQzBBf4Lk3tNhSg2r/6nO1Ab9Ju/90BtjpA7hXD2PaL12w//WdrPCcmb7HisNH2SQ/LBzQvVOXccsNNPjO9DrtBA3bOvWpnj7QCk/9Zm/U2s79TrPt3kDL5Rtff3RzQS07Zw/k0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788836230; c=relaxed/simple;
-	bh=7QT6BoZEqcPorRF+41Olle15p4YL12kp6yZbrGZ8iLo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BMnpqm4rC9A1YcRiJ4kGzgRjplqjwC5BpRa/Yl462BJPxpivFJtcjXPvpqZsZPHRHaGPQ1KF+i+FJXJDzvZY+9+hNVVhVWCEq1ppfp8ppL5oc81gIEF3l5owYqD0fCM6Fgk3VyT/yhFM07zqYX5JUEsZ4OJdIjY/FY5GSo2qswM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y2+lXPuH; arc=pass smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E034F28DB54
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 03:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788836810; cv=none; b=ITxB2CyiPdKZCRsAUv7c7n+ze0+Zge2Ucn2l1lTUecUmAyas2LygbhU2ZXC24Thw7JniFu+N2JvyCHdz+1xiRGZE6BLKfoIvi3ulDdypI4QSqhYtopLuNSkOeNWYjkITBrFKwmR0fWq3b8mE3haChwyo2tMXAdreRzTCASrsg64=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788836810; c=relaxed/simple;
+	bh=ZfxXtFIDZaxEaB2DZZIymB/sPhHPfXU2HCfAD7m370Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LAuSVNhtenZLD2rWkH6UV2bdJE7fYSG7LLlhQmV2G58rww4zl0JebyEElBSuey5zWQ9A4+Xw6SPFobPMffClh1ueWaYQuOceeGMZm7WHM0F/htrAoLodNGPd06LSzsBdKSf6UF33uD8BmwumrfQYyqI9fwkBJHMNaj962GzflzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i01aQlTL; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y2+lXPuH"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5b4af730f8aso4356860e87.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 19:57:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788836226; cv=none;
-        d=google.com; s=arc-20260327;
-        b=EMlTFQ+7W5evPEC2vIEVHG1+74eIq+AphOOEYKu6SPtZRECOiP0XK44EEJVBknqE+H
-         Npaug/WhrSvKvba/+ZaCCRlYcEQv6slRb9ZBt6KKPhy40msWzCdEWN1p5GsjZZtBX0+j
-         Jog7gnHim1uuZh1nRGUrPgj3nlVGgfEvqKP0AOT709NUOZXDeKa02GrDZXqn1w9Vd7AL
-         Fyv2HsZQiUQB7Eh3mmoY4K3desRB36PPYwqaB59OkAE/iIJedzZmFvN+r6jhnquGHQMS
-         ghw+KjedihetbvP6SSQ9PBRKfaLeOuPGchdJuV9cheqKlp6k7qWQBZg1ricb90nIgm4l
-         BXfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=7QT6BoZEqcPorRF+41Olle15p4YL12kp6yZbrGZ8iLo=;
-        fh=SlUIm48K4Q6D6GX5zmJhl216RVUzTgvdJewBYK4Vyio=;
-        b=SXWZUFSzTF8ssSArHsjpdI/NXFy05pB7hDp4pTr7HFDiQeho11ddYOMLf7rFOOsrkG
-         H+UpqKzOQzKT7R9WscPBDm+i7Amd/exqmMOeAjSWk1Q0Bx+Ax5wawa6Bj5x4T+L3Sj98
-         oxX/w0UqkijgOoacMGpenv9hm73tin16yrubXeQYGAFYSSgX2IOjcAk/GxD1WKiC6pjj
-         Zym6NPscKIjKcAan+/bO5jwl3zvbjA1NB8nAw4P/WyTOB9HwUapSrDqe8arxhkicxnVi
-         u9zyD8HUc2aKohvC+UHtZdZKjLpmRyMFWCF8oV3+MNvSrRvACIzTgppX+BRj+R8v+EYt
-         qgXg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i01aQlTL"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-ca97d139d5fso3693487a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 20:06:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788836226; x=1789441026; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7QT6BoZEqcPorRF+41Olle15p4YL12kp6yZbrGZ8iLo=;
-        b=Y2+lXPuHDzNBPhBHm7jD2JBjY6yYMYwVQYJWnYYCNDXyEDrSHPVx062hLelr0OP7Lx
-         HlnlBP9W4TBcrQZVdZZJbLlJo5D040Y0a004yCzzO5gG2SfyyBSbVdKcAfePjvO3Z49V
-         VaneVhUtpbu8birBJq2hXka/T+FT6NbRRPQ9TeLMxFN45NGvH66PNFG5SKtYgfsKA83Z
-         mGO/EbGfm2wW4ti/6jwZRUX3PcDX6HhbjhnmBqCS06lmbJE89QO2bIz0p69e9NKj5klX
-         rwcR7apqWKvjpq0GM7e0RNxqwUqYhOk/dgIAAWcU6nJLkXn3XvjuypH9uDzkb4LG54gp
-         s+1w==
+        d=gmail.com; s=20251104; t=1788836808; x=1789441608; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=12p4lFRZRGzA/IYQV7hQkbzRDXwADtGkCvDmrb2OlJ8=;
+        b=i01aQlTLNMlR+jcgeYe2V/PIZR0nn1Lqt1uUHbJIeLI226Iv5CTIhYOwqB0etXmTWi
+         0P4vQnuroo65v1rA+ICr7pHFL/oBu/A9i5TUW+2NHIwXQ2eej6Dy3urrh27HMTTbb5lT
+         HRAzp1EkUmGmt7Y1hyDRHDgz97FxT8B/Ti8mgtWtxhDKwrCUU2EWbkGkTUrLCe2bA1kR
+         gqh7qz94GsUby5mcqaLCGWs72BkSqqPKpHD6sm15IhUBJ/voukV1SunFga1p55mv+G+t
+         kmxf+AwsSrfWsgatYJRYhqVmqvDkwRclkivdahJAPh736ETYQs+XDc6BHDaDQ/5oGZuq
+         GNbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788836226; x=1789441026;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=7QT6BoZEqcPorRF+41Olle15p4YL12kp6yZbrGZ8iLo=;
-        b=RDXxiJ58tIrW34uDioCbshf7VwureE32CizgVG53DV49A0cN9BPC8oi2N6xbyhA/9A
-         MswnCVBR41c6ELnyuMDknXgqkrWxiHtCAZh9M/5Ulg6eFQVfUwr3hwU9m30lSe8jRXns
-         5aquYQfsKkSKgOaw5Tj74Zk4BLr3WGYXesrS8v4+jMJWKhuj3Y1BBexbaGTdnjxTHbrS
-         G57yY1Csv31C1dqkEOO6wo5SC+1olfJySSGewrUYhwUlMyKBLxoTEjavrMVhSyv2+GQZ
-         Oh+kdZxEkFaXdjmED+KCg53dOXXECrJ942z/kEjp2Usn5k4su72RSNt1cHxjrxAWi6Ws
-         eiQQ==
-X-Forwarded-Encrypted: i=1; AKwUvByWfgTmzP3YLvBWH0fGEHaxgEdqurtO/5N9IKAvtZlinUYALyh6qiXFKfN8CVN4hrb1yMVj58E5FWxyXZf8iMQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++nSfIhRpE24IFFQJX76iBKMPPkdZllw2FTsz7QZeqs+ICMGl4ME
-	PVU85xqlPjQZ0jtAhh5XoGZJU4zVucZ7XEuiRXHKTVnOhdrg9CxeOBu0RZRov11b++AULpGTOMo
-	YMnwpRstrNGfGvGwejRcDZYqQRY5lFcs=
-X-Gm-Gg: AYBFou1SZYRrtowWQXtwBoc1yTqhqPdp4Pi+m2YUVjFloEWMQbBYvL7N2n51SCxF3th
-	jySfVZtmtKCmLgu6LH3fX1z9xlRW/Zoj9Fo/RjyL+qao0UY6B73guygS5QM1mbGkcZJBu2DNuOh
-	eD9MksQk/IAnO+4dElmwWmS8LGaWSBeQpXZ327w+7D0h+KVXJC/e94Xp7sMbbYXCgloy9T6s9cW
-	E+Fijlqt0MFbijx20ubrFbLUiZRcLMgpfuKqprMRvT0qhexQfMlLzGs6EJcycbLcGcKNEbECTex
-	9pGfb03p8jn31+Hxqpaeln5hc+Aun2OoT9TBoVB2/qHfbRfZWvNnhIOUOS7LtLDTsxub+QbMIn4
-	IjsrtM1XJmA+sWwX9YaPht0UtRoClJ7zPbw==
-X-Received: by 2002:a05:6512:10d1:b0:5b6:4ae:8c01 with SMTP id
- 2adb3069b0e04-5b616f59cf5mr4175296e87.28.1788836225895; Mon, 07 Sep 2026
- 19:57:05 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1788836808; x=1789441608;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=12p4lFRZRGzA/IYQV7hQkbzRDXwADtGkCvDmrb2OlJ8=;
+        b=VBkN5IKG52IuDePGXoXS4o7C8U0uVuHwSqTmo2EbWvNlacnMmdbBA+ONiOgZOYea6p
+         Q1yjFrs5gt5NGdPbT36T8xUhODhJWrZ85wcJhXfFnEX2elHhVfI3JyrvR9zHU1C+/ZSU
+         3pYNgSw4CisIYBpIVKeFC9MHAZP7C5KhxgdKIpukjWCLaRBCzP0opQo9JScovT5AvZ41
+         nJkWPVUQHIqqMfJep+6GsaBIe4DpG3lB431dve7IgErA0ybJUvEuw77F2As4lr8ZLs/E
+         lx8mZrmrgyG11XUZrgcNlOe+6fylYy1O4GFs6j4CMVYX8M67MfMp+TWNCezkt5nslNei
+         se6A==
+X-Forwarded-Encrypted: i=1; AKwUvBxNVgDm0vutJMOgu8dL2SzJMaDX3PRHLsIpx/6QsEKQ1jF4UHyDoLT2X5fIppdq1Reu7d4F1CNQ+8Q5B1rOmkU=@vger.kernel.org
+X-Gm-Message-State: AFuF++nQ2p1IiBk6ssLrLiWI/oR/zd30HsmvpuMNKbbslpmBmVNA8OZK
+	Dzz14DvHlD7L79b6TT8hNa1VJYW+yXdzRwOlq6+aiT7qS0BtFM6/NNrA
+X-Gm-Gg: AYBFou1fTyrsyphCdv/PeB2P8Hr8s0XTQreJunc0AoGCaLLcjZLfBI6huGBOzSpBUJn
+	h1Mo5cz2tugI8OXtOy5fLbD0xxokekovmPXfWich+6SCYvo3KAvhGUQQIFVBcOG3M4rIWUlDFxl
+	WKP3OrUCNVpQuhSgEExrXiwtzF9lyeKAswSrEpJzW1lIf+qv0LJ+xsg5HlZEQIlM6RzUOxA2Ao5
+	ik/1vPqJ+yTG5tdMPjQsKbCpmStlaMmi83rppUOBJ05+8Ok7+KTOw8bmrJOmdhhGOdtfK27MeLo
+	g3XrYqqiYHxa7F+anj+CDjHeW5mKKHQnbRdF0rdhASh7Q7SPB7aj01nwBjItmU0pJwt2q19uyLD
+	auesWKa6L0g/3r7OvW/H4km4gLUrDGaPOg7toomU//hBgQ1S5CcTvqknLPoMRrRVBSlsXzZBM/1
+	f0y4THaDVBNHAyoL8Hx3Ko2n5sX1DwbUYPObVlNgjwlLOWkJov5Hsp9QvXHxTmvGDiY11Sp65O/
+	mo=
+X-Received: by 2002:a05:6a21:e081:b0:3b4:61f:1fec with SMTP id adf61e73a8af0-3da39bb593dmr40716679637.2.1788836808060;
+        Mon, 07 Sep 2026 20:06:48 -0700 (PDT)
+Received: from localhost.localdomain ([2408:8607:1b00:8:3fb3:b562:896c:1ac7])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc45a6abaa2sm4390883a12.23.2026.09.07.20.06.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Sep 2026 20:06:47 -0700 (PDT)
+From: Pengfei Li <ljdlns1987@gmail.com>
+X-Google-Original-From: Pengfei Li <lipengfei28@xiaomi.com>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	kernel test robot <lkp@intel.com>,
+	Bo Zhang <zhangbo56@xiaomi.com>,
+	Pengfei Li <lipengfei28@xiaomi.com>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v6 1/3] trace: add lock-free stackmap for stack trace deduplication
+Date: Tue,  8 Sep 2026 11:06:24 +0800
+Message-Id: <20260908030624.1300-1-lipengfei28@xiaomi.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260908102140.2ed161f1c851d94e1365520d@kernel.org>
+References: <20260903132409.270195-1-lipengfei28@xiaomi.com> <20260903132409.270195-2-lipengfei28@xiaomi.com> <20260908102140.2ed161f1c851d94e1365520d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260905093932.43726-1-sigefriedhyy@gmail.com> <f1e70062-943d-4521-976a-ae7c9fbc756b@6wind.com>
-In-Reply-To: <f1e70062-943d-4521-976a-ae7c9fbc756b@6wind.com>
-From: Yuyang Huang <sigefriedhyy@gmail.com>
-Date: Tue, 8 Sep 2026 11:56:54 +0900
-X-Gm-Features: AcwNN1U9p2sFJsv_7_Qjw2glgbmq-K3CoxGpp4O9ALykWZMch5RDUDwBJuNCCmI
-Message-ID: <CA+7S2vL7Xm3nPw96R1+aN-sHLaprPxFUNw4qi6kbTAUu5OUyNg@mail.gmail.com>
-Subject: Re: [PATCH net-next 0/3] rtnetlink: dump link-layer multicast addresses
-To: nicolas.dichtel@6wind.com
-Cc: "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>, 
-	Ido Schimmel <idosch@nvidia.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Nikolaos Gkarlis <nickgarlis@gmail.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>, 
-	Simon Horman <horms@kernel.org>, Stanislav Fomichev <sdf.kernel@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-> These addresses could be listed with 'bridge fdb' (RTM_GETNEIGH on AF_BRIDGE).
-> Instead of having a new message to get the missing info (users), maybe it would
-> be better to update the current API.
+On Tue, 08 Sep 2026 10:21:40 +0900 Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+> > Kernel command line parameter:
+> > - ftrace_stackmap.bits=N: set map capacity (2^N unique stacks,
+> >   range 10-18, default 14)
+>
+> Ah, this kernel cmdline parameter is also be a separated patch,
+> because this is not fundamentary needed.
 
-I looked at the FDB dump based on the suggestion and I don't think
-that path works well. The missing users count is not the only problem:
+Right, it is not needed for the basic functionality. In v7 the core
+patch hardcodes the default capacity, and a later patch adds the
+early_param along with the [10, 18] clamp and the memory-footprint
+documentation that goes with it.
 
-It doesn't list dev->mc for every device. Only ndo_dflt_fdb_dump()
-walks dev->mc, and rtnl_fdb_dump() calls it only for Ethernet devices
-that have no ndo_fdb_dump of their own. So bridge, vxlan, macvlan and
-IPoIB devices never show their multicast filter in "bridge fdb show",
-while /proc/net/dev_mcast lists them. Fixing that means calling the
-default dump for those devices too, which adds new entries to
-"bridge fdb show" output on every one of them.
+> It is OK to use an official address for SoB, but to make sure this
+> address work, please at least Cc to this address.
 
-User space can't reliably tell the entries apart either. "ip maddr"
-would keep NTF_SELF entries with a multicast lladdr, but it seems vxlan's own
-FDB entries seems also carry NTF_SELF, so a multicast MAC added there as a
-forwarding rule (bridge fdb add ... dev vxlan0 dst ...) would show up
-as a device multicast address, while the real dev->mc of that vxlan
-device is missing. And since a dump can't be limited to self entries,
-on a host with bridges "ip maddr show" would receive the whole learned
-FDB of every port and drop it.
+lipengfei28@xiaomi.com is on the Cc list of this series and receives
+the list traffic; it is a working address. It will stay on Cc for v7
+and any follow-up.
 
-It would still need a new uAPI. All self entries are NUD_PERMANENT, so
-the users count and the SIOCADDMULTI (static) bit would be new NDA_*
-attributes. On the other hand, this series adds no new attributes;
-IFA_MULTICAST, IFA_MC_USERS and IFA_F_PERMANENT already exist for the
-IPv4 and IPv6 dumps.
+> > +	if (!smap) {
+> > +		seq_puts(m, "stackmap not initialized\n");
+> > +		return 0;
+> > +	}
+> > +
+>
+> You also need down_read(&smap->reader_sem) here for serializing.
+[...]
+> > +	seq_printf(m, "success_rate: %llu%%\n", successes);
+>
+> and up_read(&smap->reader_sem) too.
 
-Covering this with RTM_GETNEIGH would need the default dump for
-devices with their own ndo_fdb_dump, a way to tell filter entries from
-a device's own
-NTF_SELF FDB entries, a self-only request filter, and new NDA_*
-attributes for users and the static bit. That is more new uAPI than
-this series for the same result.
+Correct, this is a real hole. Reset clears next_elt and the per-CPU
+successes/drops counters under the write side of reader_sem, so an
+unserialized stat read can straddle it and mix pre- and post-reset
+values -- for instance a non-zero entries count next to counters that
+have already been zeroed. v7 takes the rwsem for read around the whole
+sampling and formatting block.
 
-Therefore, I feel that my original proposal seems cleaner and causes
-less chrun. But feel free to let me know if I have any
-misunderstanding on the suggestion.
+> > +	 * At bits=18 this caps at ~135 MB. The file is mode 0440
+> > +	 * (TRACE_MODE_READ), so only privileged users can open it.
+>
+> Hmm, this is too huge to make a copy inside the kernel.
+> If the stackmap is only increasing, and can avoid resetting by
+> reader_sem, what about rewriting this as a raw-output mode of
+> seq_file?
+> You can use seq_write() to seq_file buffer.
 
-> FWIW, AF_PACKET seems strange to me. Isn't AF_UNSPEC (like for interface, cf
-> rtnl_fill_ifinfo) more appropriate?
+Agreed on both counts: the copy is far too large, and seq_file with
+seq_write() removes the need for it entirely. The element pool only
+grows and slots are never recycled, so an iterator can walk the table
+in index order and emit each populated entry through seq_write() as it
+goes, holding reader_sem for read across each pass the way the text
+export already does. That drops the per-open cost to the seq_file
+buffer, and the header layout and version stay as they are: open()
+counts the populated entries once to fill nr_stacks, which is a plain
+memory scan of the table rather than a copy of it.
 
-For address dumps AF_UNSPEC already means "all families" (RTM_GETADDR
-goes through rtnl_dump_all()), so I'd rather keep it available for
-RTM_GETMULTICAST. AF_PACKET is what iproute2 already uses for the link
-family: "ip -0" sets preferred_family = AF_PACKET and sends it in
-RTM_GETLINK, and ipmaddr.c has always tagged the /proc/net/dev_mcast
-entries as AF_PACKET.
+One caveat on relying on reader_sem alone: seq_file releases it between
+read() calls, so a reset landing between two reads of the same fd would
+otherwise splice two generations of the map into a single output stream.
+For the text export that is merely confusing output, but a binary
+consumer would silently parse it as one coherent dump. So the reworked
+export also carries a generation counter, bumped by reset; open()
+records it along with the entry count, and each pass revalidates it and
+fails the read if it changed. A reader that raced a reset gets an error
+and can retry instead of receiving a spliced dump.
 
-Thanks,
-
-Yuyang
+Pengfei
