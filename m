@@ -1,73 +1,73 @@
 Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD655427F0;
-	Tue,  8 Sep 2026 12:51:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB71548549;
+	Tue,  8 Sep 2026 12:51:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788871908; cv=none; b=jp7cnM1RdPSwxQprJ197oCKCZ9nJjVFq6RjCR/5BtZWs7wwmwpD/Lbx6rW4K9lUg2ZqBvtv5K/DcuU3hxY5+00hVz6F6EzZH/+yNuzFZCbAHRulxSxKuq4+FHQp1N3cCVAmOKZDOcSBqsLPgGDwiZXPTpZiPbgpTk7Jx2gp1tMI=
+	t=1788871909; cv=none; b=hOOdPgA2CrJJzglZ+e0B8ueGW8V22WkFci9u61G1dt6VxTVjmUAtse8E6+cohsGcdYK9Ef9nWGpvf4wUIbC8Hozc8nRBAywyKR0TsgrXUPANwyAk9u5qzwKrHLvb8mEFiKTSClRl+1hh7uOW4jdJpozkPkD/Uve77b/7sCUcfKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788871908; c=relaxed/simple;
-	bh=sEDoyljbr1xNNULU2pd7wIPLaa6XceILZL9t8obyF5k=;
+	s=arc-20240116; t=1788871909; c=relaxed/simple;
+	bh=RsIVpZ5qbEkeqtMBGBz7qrrXun1dGGoYmUbBi6WCRjE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lgxWJqvRgpUu8TmWX+trZCr7BQs/tzAmjka95PAf3+0fEg7RMelpn5tYNo+6wKFQ8RtsTroeH3wrmGdYpG5yYjxXGqgvzJMVO3/8uMRD9FE2OLVDGS21FBYY/wbXSqidZsa1D9gcG1o3cicULVGejG0LBsZYVEh8c8kS3q8HfUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=Cen3VCr9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=srxBstZ/; arc=none smtp.client-ip=103.168.172.157
+	 MIME-Version; b=Ajvn5XVCxD2ixJQutqo+tFwqxpTW7DeIN6J5RX7LxzRmRWDncvyi/ZLEWxruHzVieVfGPfs4pwzhlZIo1xZ9AuKlBbB8bZSBYEPg/neX3gC3J5tC2kApOPsPzgVLpLe8wyjUvBz2k8lmq7Oj3UzxRc59IP831rYJ4e+jGPhfo0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=c9Y3CyAy; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=AvEJhTm2; arc=none smtp.client-ip=103.168.172.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="Cen3VCr9";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="srxBstZ/"
-Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id A38DD1400068;
-	Tue,  8 Sep 2026 08:51:44 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="c9Y3CyAy";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AvEJhTm2"
+Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 85507140006E;
+	Tue,  8 Sep 2026 08:51:46 -0400 (EDT)
 Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-07.internal (MEProxy); Tue, 08 Sep 2026 08:51:44 -0400
+  by phl-compute-12.internal (MEProxy); Tue, 08 Sep 2026 08:51:46 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1788871904; x=
-	1788958304; bh=zbCvvEeTGNJUluvqL2n+kCyw5bEenmwnstQ3FSwOS9I=; b=C
-	en3VCr9mXESspPmSzUs7MHT+mJvHcm6vgknu1Xu5L/YIItjs+W98YEnu6RtbWi9m
-	FOx5327IK31dXKcjveHab/Ji8jDpeyWFqJV8fjlAVEiVXnxCA9bUpwOGKxAQa/ea
-	I9r08baLelHbK1KX99lBEJYNzYlQhk3+imEnWWl0pyh3c4eBvUUjVz0XMAZbjSJn
-	/A21txCc4+Q2umLOWBeXgw3jGKTU1Bge/xw7VydevjJvOQygDFRSVbmGHPY2azdo
-	OjjNBWNNW5EJaEvxkJgMcwv1G/q08OwBvHfjLs6MNN+BEdnNQ3LEBRAOIsekYgHd
-	M8kYJnd404soEtU8s0fiw==
+	:reply-to:subject:subject:to:to; s=fm2; t=1788871906; x=
+	1788958306; bh=zqvacDlN0e2w6egDKHKDWVi4bm/TZ7c4rTBepRvovoM=; b=c
+	9Y3CyAylZLS5kOC0oNs7ri1UFySi9umg5CeHU2uK4jLDC3R4j+IZN1zrsV/NBAt8
+	sjTk/mRcgNuuqqgS3W9rQn4N10sIsGQBElj0moQGUapZiVTgkGykyYgu115RX/xr
+	5QwP5ydVtCdBfs5Ui15qQNF7UJ9p5vWxjjvm+t4k3cKrEaB/+7jxaJftFGFnjXkV
+	WxdOPuiBUXTHkWmw0mdGThKp/9U+7aF3VS9LeZDv28cvmoxhBnMEJbz1ulLA8/F5
+	PpvWwVvH0fnfs/YQUjzbdZ3iyLCD0waj0UKR+bezjMcqTlc/BdrF5+JETf/vtZAg
+	ZftisHQhkXHacPhz4smug==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm1; t=1788871904; x=1788958304; bh=z
-	bCvvEeTGNJUluvqL2n+kCyw5bEenmwnstQ3FSwOS9I=; b=srxBstZ/a5I3zrcpX
-	CnX9UM8oNW7jIh+h9f2IPWcukw0AO8aC7fMcCzx3oCAraYT5fWZ0buEOhL9IbLp4
-	kyVZciL6mr2RXGJJVZIoQ1HcrLPwwrDN5fYoxCCH32J+NCX4KHshi4EtOAM0mA++
-	dnYz0Ui6bzMxtUWmQG25O9LjGTLPvMzjwmaEuhiUSY1kjcKrVd8vJv8fhX0I9ZVD
-	k9T2gto/vZ57mEPTbiFChJOzf1XJISI3B6fhL+6rVaWvGjR9og0dA3cyHqrjSnhu
-	UJx+y2PxqIVwCZFlyw+Wqug+mpvRxNjS8zuZhf6HbXi36Y741uKyh6Y2spuuzYhv
-	YRicQ==
-X-ME-Sender: <xms:4ASgavCHMneS9i1S18jALXAn7oBj1EeWMC64Ybh1eQ3gA9AHhoeLvw>
-    <xme:4ASgat4ZKgIHqYYodj1AIrAiH1BDY5mOKXgDuca9zlwQbhHZ4vVG9uoDp794d2avo
-    uLjHuC7ShXDht5WMPM2Dzpy_dAWbiz6VYQDI4i7eSXV_AvUUSNMQxcq>
-X-ME-Received: <xmr:4ASgaszPlkbUbklH2h-BnUuDCwyQpLMe9pKeX0QV0sNJ-udcuYlQR-m0nTc>
+	:x-me-sender:x-sasl-enc; s=fm1; t=1788871906; x=1788958306; bh=z
+	qvacDlN0e2w6egDKHKDWVi4bm/TZ7c4rTBepRvovoM=; b=AvEJhTm2JAnnieYVd
+	k4g/vlDtlMCYLYcplvJ2DDpmxYlf/roP7IeJY/p7pFcQrA0E/Ih67pjKsfSbDRzn
+	134f0ZGRNwjiV/7kdQNrA+Z3BDP1zhcS8k0ipYnpCxqwFYTVQownIR2/VmzM8tvi
+	xK1PTCSK6KtMlh8gk3CbTAD1CXMP/tYRNLMrSWVVWwUoZc7BRNFTwPN/xcHz0PZ1
+	DDLB6hg3nz5ghDh5iprLlY2BECTPUbjbfLxvpL8R+/EQnI9lzTsvgsAK9kJD2dg+
+	G8Ce+cv6Mi2R3UTAvikJ5yGioGNKhDNoBlQPSlxRLHbg5kdTzZNKvIPj95rjoiJU
+	+y89Q==
+X-ME-Sender: <xms:4gSgakA8SX-DX-Gfh5uAGwEERc7wnrCDCbCHINZ4qGqWVyxtmuGbOA>
+    <xme:4gSgaoZ_FDSS5oHmS-bXzy0agCoqwgtNho_DK7aA5D3OHNrm668qLhw3lRmbbITGw
+    alVZVMj4WN3O6Vijua3oqkh3VELoNQvyjlZEUxr-Y_VxE9QyKITWy8k>
+X-ME-Received: <xmr:4gSgasvhMkxP_B2HgY__LP7sXQfJQGkCRTFBeYLI3XK-K24bGcK8wfrFO0o>
 X-ME-Proxy-Cause: dmFkZTEFE5qoX+UuF24uzYsEDVhBj7K7PVNhp/QrdS9IridywNr6zbUVHRTwEJHEkegH78
     2Q0FzpV7Ffbkv2IdJy+2X+gRr5j/GVU+OmQCyX7TrMKkR+B67hpV4qik2kuPcySyPVfL0N
     fjj0puKIPOVKC53VUKH1AFABHK+HgKXG4fFGTm0bttO6aht4AByKsMi5q5m3My1bWaIsHx
     VvWLDqNEgw9NR009yUV13rBPhKD5hG186SgbvLIVXWjVzTBDRGAi2tS1solDyldiLqdSzW
-    Z7lbjekX5xhyyUWYdDppP3CJdHwaOTYUEqdi4pIet3xRU1rw2DJzUGF3Njycnc94ehWzmw
-    R2sVtQqcjql9WndhmtChSoeg8JgqPt78nSih4/C1Mx3BlZ90urh9FBsiO6UWAUNJwRUGjc
-    8pZA9NVuO0gT2YokndUx/YfQS18X8XGNethIgxEH8zreKreLc/5QEgljrUNGtZJ/f9boOw
-    wRcMCRaWqx3u9UU2hS4og0hmE3v1ab0++imJ7UI6HSA/ISHYzUecwxxqq/SvydyNBmHIFz
-    hH/4J/13str7Xs52hP7vWlXtSeZ0hy4TIP77Wy6vvHRi2xUv9pzc6s88yXAWoav3Ojh8xW
-    JAWrV9qOhpvWiPBqrPc4z6Va90tfBjV0yPSYDHGWPwyCfksm9cHADsVtfO7g
-X-ME-Proxy: <xmx:4ASgapnzVfb1HydZ6RMfqQm5wkkyEzOleoBvKHmHC08kNI9dbSByMg>
-    <xmx:4ASgamWXUaSdN7lz9x1Z2K75_a_zU8oMEIcckG7iRVttegFBlsdqXw>
-    <xmx:4ASgakOT7a85P8hl5cdWfy0tK_5n8tzE3UI2dI1uXE_6hPr_6fajaw>
-    <xmx:4ASgapGPK9ocODrWktac23pzsLbLo-3MC797fhNQaXKHndrdhCCUdA>
-    <xmx:4ASgatCEwEuXL5CaALsdwJaS8MO_UCRtkyZWjSNnTiHzaKlLW6HP5FTD>
+    Z7lbjekX5xhyyUWYdDppP3CJdHwaOTYUEqdi4pIet3xRU1rw2DJzUGF3Njycnc94ehWzPa
+    vyAAOqe73Pl13+klFC5N/QOg1BhsXHpd+vVpfxLPxcnWMqyPAjq9YobTdfsrZ7COd/vDux
+    AcdlwHGf6V6gdwGca+kLxFa4//EDlDVxr9FWn7d4CP+XYBPZRFx1Y5HpkUnEMvxYp8jn2v
+    VMB2tnByHyvca8cjYMG2uRxTeArPeslgB1YFWCkOBLje8bLCFvxkQ1laerqKTxH5AUQYlh
+    ldLdqHSvRU+u4z7McyHtiJwTtFIlJEWKTih1uh/MravE8iA21qbIxTnwg6VcYuj/RpZ27d
+    Lj88J0kjUTocPL4rn5NVEXbn+olYGpziUqynafsRUsnixcqPM1XmZMqz2tHw
+X-ME-Proxy: <xmx:4gSgaq_ue6OnGowX8LalEnBJKcDXeOUxjjhdQ7oP7g-8GDTxyhHCzQ>
+    <xmx:4gSgasU5mQOeVXTUUVrju3J1Li86er0RTG2evnA86-UF-NXr4DxxPQ>
+    <xmx:4gSgautAsu1DuTrg03f3x0W_wn5XiNzkE-ccfeDi7eKhS7hNR8N7TA>
+    <xmx:4gSgaq8d1LVqwyLPtVe43Wp5clWrVCBJ9asUTVMql_abWj4hcWDUHg>
+    <xmx:4gSgakcBS7Q6qodGBD3XhI7VTX9xiCF_1cjzpAaxHUn5Xd06inMrE5nE>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 8 Sep 2026 08:51:43 -0400 (EDT)
+ 8 Sep 2026 08:51:45 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -96,9 +96,9 @@ Cc: linux-mm@kvack.org,
 	leon@kernel.org,
 	kernel-team@meta.com,
 	"Kiryl Shutsemau (Meta)" <kas@kernel.org>
-Subject: [PATCH v5 17/19] selftests/mm: race the collapse of windows with holes
-Date: Tue,  8 Sep 2026 13:51:03 +0100
-Message-ID: <20260908125105.1510704-18-kirill@shutemov.name>
+Subject: [PATCH v5 18/19] selftests/mm: add memory-pressure threads to the khugepaged race harness
+Date: Tue,  8 Sep 2026 13:51:04 +0100
+Message-ID: <20260908125105.1510704-19-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260908125105.1510704-1-kirill@shutemov.name>
 References: <20260908125105.1510704-1-kirill@shutemov.name>
@@ -112,106 +112,254 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-The harness pins max_ptes_none to 0, so khugepaged only collapses a window
-once every PTE in it is present.  A window with holes takes a different
-route, and never gets raced.  A hole is zero-filled in the new folio
-rather than copied.  Which slots count as holes keeps moving under the
-racing MADV_DONTNEED, right up to the moment the PMD is detached.
+The harness races collapse against faults, pins, fork, mremap and
+MADV_DONTNEED, but nothing in it runs reclaim or compaction against the
+collapse.
 
-Run both ends of the occupancy scale for every driver mode, one after the
-other.  mTHP collapse supports only those two, 0 and HPAGE_PMD_NR - 1, and
-coerces anything between them to 0.  Each result says which end it ran:
+Add two more threads, and run every mode and occupancy limit both with and
+without them:
 
-  ok 1 stepped/strict: 5s, 231 steps, no corruption
-  ok 2 stepped/holes: 5s, 194 steps, no corruption
+ - pageout: cycles MADV_PAGEOUT over a region of its own, faults it back
+   in and checks the content each round, since a page's pattern must
+   survive the trip through swap.  Left out when the host has no swap,
+   because then there is no anon reclaim to drive.
+
+ - compactor: writes /proc/sys/vm/compact_memory in a loop.  Compaction
+   isolates and migrates folios, so it competes with a collapse for the
+   pages it is gathering, with refcount elevations and migration entries
+   of its own.
+
+Each result says whether it ran under pressure:
+
+  ok 2 stepped/strict/pressure: 5s, 88 steps, no corruption
+
+A full run is now twelve combinations; -m picks one mode, -d shortens
+each run.
 
 Assisted-by: LLM
 Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- tools/testing/selftests/mm/khugepaged_race.c | 32 ++++++++++++--------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+ tools/testing/selftests/mm/khugepaged_race.c | 142 ++++++++++++++++---
+ 1 file changed, 122 insertions(+), 20 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/khugepaged_race.c b/tools/testing/selftests/mm/khugepaged_race.c
-index 448256704ef4..f31f12fc0390 100644
+index f31f12fc0390..1f4aa23834db 100644
 --- a/tools/testing/selftests/mm/khugepaged_race.c
 +++ b/tools/testing/selftests/mm/khugepaged_race.c
-@@ -231,6 +231,8 @@ int main(int argc, char **argv)
+@@ -44,6 +44,8 @@ static unsigned long page_size;
+ static char *region;
+ static char *mremap_area;
+ static char *mremap_scratch;
++static char *pageout_area;
++static size_t pageout_size;
+ static int gup_fd = -1;
+ static volatile int stop;
+ static volatile int corrupted;
+@@ -199,6 +201,69 @@ static void *mremapper_fn(void *arg)
+ 	return NULL;
+ }
+ 
++/*
++ * Swap traffic and LRU churn on a region nothing else writes, so a page's
++ * pattern must survive the trip through swap exactly.
++ */
++static void *pageout_fn(void *arg)
++{
++	unsigned int seed = (unsigned long)arg;
++	unsigned long nr = pageout_size / page_size;
++	unsigned long i;
++
++	for (i = 0; i < nr; i++)
++		*(unsigned int *)(pageout_area + i * page_size) = pattern(i);
++
++	while (!stop) {
++		madvise(pageout_area, pageout_size, MADV_PAGEOUT);
++		for (i = 0; i < nr && !stop; i++) {
++			unsigned int val = *(unsigned int *)(pageout_area +
++							     i * page_size);
++
++			if (val != pattern(i)) {
++				corrupted = 1;
++				ksft_print_msg("Pageout corruption at page %lu: %#x != %#x\n",
++					       i, val, pattern(i));
++			}
++		}
++		usleep(rand_r(&seed) % 2000);
++	}
++	return NULL;
++}
++
++/* Compaction migrates the collapse sources while they are being gathered */
++static void *compactor_fn(void *arg)
++{
++	unsigned int seed = (unsigned long)arg;
++	int fd = open("/proc/sys/vm/compact_memory", O_WRONLY);
++
++	if (fd < 0) {
++		ksft_print_msg("No compact_memory; compactor idle\n");
++		return NULL;
++	}
++	while (!stop) {
++		if (write(fd, "1", 1) < 0)
++			break;
++		usleep(10000 + rand_r(&seed) % 100000);
++	}
++	close(fd);
++	return NULL;
++}
++
++static bool swap_available(void)
++{
++	char line[256];
++	int lines = 0;
++	FILE *fp = fopen("/proc/swaps", "r");
++
++	if (!fp)
++		return false;
++	while (fgets(line, sizeof(line), fp))
++		lines++;
++	fclose(fp);
++	return lines > 1;
++}
++
+ static unsigned long now_ms(void)
+ {
+ 	struct timeval tv;
+@@ -222,17 +287,23 @@ int main(int argc, char **argv)
+ {
+ 	static const char * const thread_names[] = {
+ 		"faulter", "faulter2", "dontneed", "pinner", "forker",
+-		"mremapper",
++		"mremapper", "pageout", "compactor",
+ 	};
+ 	void *(*const thread_fns[])(void *) = {
+ 		faulter_fn, faulter_fn, dontneed_fn, pinner_fn, forker_fn,
+-		mremapper_fn,
++		mremapper_fn, pageout_fn, compactor_fn,
+ 	};
++	enum { T_FAULTER, T_FAULTER2, T_DONTNEED, T_PINNER, T_FORKER,
++	       T_MREMAPPER, T_PAGEOUT, T_COMPACTOR };
++	const unsigned long pageout_bit = 1UL << T_PAGEOUT;
++	const unsigned long compactor_bit = 1UL << T_COMPACTOR;
  	const int nr_threads = ARRAY_SIZE(thread_names);
  	pthread_t threads[ARRAY_SIZE(thread_names)];
  	static const char * const all_modes[] = { "stepped", "free", "madvise" };
-+	static const bool occupancies[] = { false, true };	/* strict, holes */
-+	const int nr_occupancies = ARRAY_SIZE(occupancies);
+ 	static const bool occupancies[] = { false, true };	/* strict, holes */
++	static const bool pressures[] = { false, true };	/* quiet, under pressure */
+ 	const int nr_occupancies = ARRAY_SIZE(occupancies);
++	const int nr_pressures = ARRAY_SIZE(pressures);
  	const char *one_mode[1];
  	const char * const *modes = all_modes;
  	int nr_modes = ARRAY_SIZE(all_modes);
-@@ -298,7 +300,7 @@ int main(int argc, char **argv)
+@@ -241,6 +312,9 @@ int main(int argc, char **argv)
+ 	unsigned long end_ms;
+ 	int duration_s = 5;
+ 	unsigned long thread_mask = ~0UL;
++	unsigned long base_mask;
++	bool have_swap;
++	char label[64];
+ 	int nr_areas_arg = 0;
+ 	unsigned long i;
+ 	int steps = 0;
+@@ -300,7 +374,13 @@ int main(int argc, char **argv)
  		 -1, 0) != (void *)mremap_scratch)
  		ksft_exit_fail_perror("mmap() mremap scratch");
  
--	ksft_set_plan(nr_modes);
-+	ksft_set_plan(nr_modes * nr_occupancies);
+-	ksft_set_plan(nr_modes * nr_occupancies);
++	base_mask = thread_mask;
++	have_swap = swap_available();
++	if (!have_swap)
++		/* No swap, no anon reclaim: compaction-only pressure */
++		ksft_print_msg("no swap: the pageout thread is not started\n");
++
++	ksft_set_plan(nr_modes * nr_occupancies * nr_pressures);
  
  	thp_save_settings();
  	thp_read_settings(&settings);
-@@ -306,8 +308,9 @@ int main(int argc, char **argv)
+@@ -308,9 +388,25 @@ int main(int argc, char **argv)
  	/* Base of the settings stack; the bottom entry is never popped */
  	thp_push_settings(&settings);
  
--	for (int m = 0; m < nr_modes; m++) {
--		const char *mode = modes[m];
-+	for (int run = 0; run < nr_modes * nr_occupancies; run++) {
-+		const char *mode = modes[run / nr_occupancies];
-+		bool holes = occupancies[run % nr_occupancies];
+-	for (int run = 0; run < nr_modes * nr_occupancies; run++) {
+-		const char *mode = modes[run / nr_occupancies];
+-		bool holes = occupancies[run % nr_occupancies];
++	for (int run = 0; run < nr_modes * nr_occupancies * nr_pressures; run++) {
++		int rem = run % (nr_occupancies * nr_pressures);
++		const char *mode = modes[run / (nr_occupancies * nr_pressures)];
++		bool holes = occupancies[rem / nr_pressures];
++		bool pressure = pressures[rem % nr_pressures];
++
++		snprintf(label, sizeof(label), "%s/%s%s", mode,
++			 holes ? "holes" : "strict", pressure ? "/pressure" : "");
++		if (corrupted) {
++			/* Memory is suspect; the rest would prove nothing */
++			ksft_test_result_skip("%s: skipped after corruption\n", label);
++			continue;
++		}
++
++		thread_mask = base_mask;
++		if (!pressure)
++			thread_mask &= ~(pageout_bit | compactor_bit);
++		else if (!have_swap)
++			thread_mask &= ~pageout_bit;
  
  		thp_read_settings(&settings);
  		settings.thp_enabled = THP_MADVISE;
-@@ -317,12 +320,14 @@ int main(int argc, char **argv)
- 		settings.khugepaged.scan_sleep_millisecs =
- 			strcmp(mode, "free") ? 1000 : 0;
- 		settings.khugepaged.alloc_sleep_millisecs = 10;
+@@ -344,6 +440,20 @@ int main(int argc, char **argv)
+ 			ksft_exit_fail_perror("mmap() playground");
+ 		mremap_area = region + nr_shared_areas * hpage_pmd_size;
+ 
++		if (thread_mask & pageout_bit) {
++			/* Enough to drive real reclaim without swamping a small guest */
++			pageout_size = 4 * hpage_pmd_size;
++			if (pageout_size < 16UL << 20)
++				pageout_size = 16UL << 20;
++			if (pageout_size > 64UL << 20)
++				pageout_size = 64UL << 20;
++			pageout_area = mmap(NULL, pageout_size,
++					    PROT_READ | PROT_WRITE,
++					    MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++			if (pageout_area == MAP_FAILED)
++				ksft_exit_fail_perror("mmap() pageout area");
++		}
 +
- 		/*
--		 * mTHP collapse honours only 0 or HPAGE_PMD_NR - 1 here, and 0
--		 * keeps a step from being spent on PMD allocations that racing
--		 * MADV_DONTNEED will not let succeed.
-+		 * mTHP collapse honours only 0 or HPAGE_PMD_NR - 1 here.  The two
-+		 * ends race different paths: a strict window has every PTE
-+		 * present, a hole-heavy one is mostly zero-filled.
- 		 */
--		settings.khugepaged.max_ptes_none = 0;
-+		settings.khugepaged.max_ptes_none = holes ?
-+			(hpage_pmd_size / page_size) - 1 : 0;
- 		/* One wake, one pass: the playground plus the forked children's copies */
- 		settings.khugepaged.pages_to_scan =
- 			nr_areas * (hpage_pmd_size / page_size) * 8;
-@@ -388,8 +393,9 @@ int main(int argc, char **argv)
+ 		/* Populate so the first pass has something to collapse */
+ 		for (i = 0; i < nr_shared_areas * hpage_pmd_size / page_size; i++)
+ 			*(unsigned int *)(region + i * page_size) = pattern(i);
+@@ -392,26 +502,18 @@ int main(int argc, char **argv)
+ 		for (i = 0; i < nr_shared_areas * hpage_pmd_size / page_size; i++)
  			check_page(i);
  
- 		ksft_test_result(!corrupted,
--				 "%s: %ds, %d steps, no corruption\n",
--				 mode, duration_s, steps);
-+				 "%s/%s: %ds, %d steps, no corruption\n",
-+				 mode, holes ? "holes" : "strict",
-+				 duration_s, steps);
+-		ksft_test_result(!corrupted,
+-				 "%s/%s: %ds, %d steps, no corruption\n",
+-				 mode, holes ? "holes" : "strict",
+-				 duration_s, steps);
++		ksft_test_result(!corrupted, "%s: %ds, %d steps, no corruption\n",
++				 label, duration_s, steps);
  
  		/* The next mode maps the same fixed address with its own settings */
  		munmap(region, nr_areas * hpage_pmd_size);
-@@ -399,9 +405,11 @@ int main(int argc, char **argv)
- 
- 		if (corrupted) {
- 			/* Memory is suspect; the rest would prove nothing */
--			while (++m < nr_modes)
--				ksft_test_result_skip("%s: skipped after corruption\n",
--						      modes[m]);
-+			while (++run < nr_modes * nr_occupancies)
-+				ksft_test_result_skip("%s/%s: skipped after corruption\n",
-+						      modes[run / nr_occupancies],
-+						      occupancies[run % nr_occupancies] ?
-+						      "holes" : "strict");
- 			break;
- 		}
++		if (pageout_area) {
++			munmap(pageout_area, pageout_size);
++			pageout_area = NULL;
++		}
+ 		thp_pop_settings();
+ 		stop = 0;
+ 		steps = 0;
+-
+-		if (corrupted) {
+-			/* Memory is suspect; the rest would prove nothing */
+-			while (++run < nr_modes * nr_occupancies)
+-				ksft_test_result_skip("%s/%s: skipped after corruption\n",
+-						      modes[run / nr_occupancies],
+-						      occupancies[run % nr_occupancies] ?
+-						      "holes" : "strict");
+-			break;
+-		}
  	}
+ 
+ 	ksft_finished();
 -- 
 2.54.0
 
