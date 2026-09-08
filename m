@@ -1,153 +1,157 @@
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+Received: from mail-qv2-f12.google.com (mail-qv2-f12.google.com [74.125.230.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C958D56B848
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 23:22:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788909775; cv=none; b=GOSWpGVNR+b3BqhHWvtPNPtfiAtpZirP19lMmdolQyIPzVyJEkzu0gVYJ8GyuB0TlSP4+J1d8DMw6S11xpwdRhvhSUoh/0gupE8qtkpqE9Wy3Br8I3nUvaJsdrsh9OU/rF1bCI597pO37mCCz/FtZqg//YBu6ofErviLfZFlZsM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788909775; c=relaxed/simple;
-	bh=igRLaNLKATsv/xrFKZo/2BMOVmf77KFzzmgZ9es4sLw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=ORzoOgzZfWKvt6OmeULj4nAw2khZXEuq3pKaVEaB2+G7x7w0H3nJ0RbM8q9CLhIfiGv/ntHBmNt8PZj6dKlcuymjRDg5XnNYL38FRJsm7e0vNn6zw14echTzuKxVoiHZJeic9Q+72FMbc54d+WssjNgF2gsmiaBPRBDhx3hCkkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fffKPUp+; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1706C2EEE7E
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 23:24:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788909883; cv=pass; b=jI4tNa4Lh3M4i96TvrKGKiag0q58xR8vYbjyZRF/+hKfB6/hNFpDNnMVEhw50cY6nJ2seBGsqnJ5lwgTn83Q28DdP29EQVcKoLOld2jRAm9OgaV99+KMjqfXu7K5dpR5Vp1kA5l0DTeFjoGmebyw8NkCO2sa4QEd6sb/rDe9KqY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788909883; c=relaxed/simple;
+	bh=BUX/j6GF6XPucpJCZBKJcMPFmpJb+KNmwo1Z/5+yXsg=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H2SDl0tsJi4qzfqRc4CLWeFPjFlZF2YcJV4DRpwX/0woRi7Mmx2hZPfTd9ismQJZvz08S+vB7GoVYTHNHCYQbamBiM7yz89HtE9bMcEaiMXuD4Yks4OTgYJCwmdQaLrAor4CrwM/H3a8cFrPPYMIoExoOQe180tbUQuT780as+g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iciIM+yf; arc=pass smtp.client-ip=74.125.230.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fffKPUp+"
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-90cd96389efso64180206d6.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 16:22:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iciIM+yf"
+Received: by mail-qv2-f12.google.com with SMTP id 6a1803df08f44-91058dd77a2so6739666d6.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 16:24:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788909880; cv=none;
+        d=google.com; s=arc-20260327;
+        b=VcwE7GY1OkZJSDzsrBI+2vG5EtsZP1ssH8FoJxDSAtmxf/sKHrvPZ3wwo5ZX3t+c7s
+         /zS2jO35CYUptpOsuaJptsHlpN0r2qkOSrHhht59QZm9rG9JgkUioIclk3ZycFH8m706
+         ELLB9zELpMkF4FoLew8F7JBDb3uaaUgRwGWBxG3CtjNCDuYiSfdLH2UevalJyCF0pBHi
+         PNSUkj9eI0beAgTW6xRlecrvglSpnlmiDius9QnKWP3VQN2XwKkc8gle8eM5BX+Cj+Kx
+         FEGqcTnUMycTrrct7pj1avFQvcMQKFjIIe/1XaVhoae7Uc/1UoootRSfTM86AeHu4u8G
+         4uYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=0IN5QQmb/lTANWR/iwoSBOuy02Mh22swkqv8V9Ybn/0=;
+        fh=bJLzTFoJJ1rxZ2A+gcesiiB+ihjNJCOfiW09OpJGBCQ=;
+        b=CYeoLxC54lOBkzBLm7SBqPIjScU3KXOCfGRbiHxa99A539/lFuxA2voctONc11aWuW
+         bfS6rRhO62hJGucXGEQl8yrV6CZ96pzOhe43onJ4bfCsV3RbxM1Ba7Q7sIlXnrwclJN5
+         WyqRvriYnAnDHLDh+0LdcNYncxJ8AA7oBi5d/aE4HIgVIZaMKfqA/15pku5USxm6jgQd
+         I/5hUndSeV8x9BeeEB1jOBAFKEY9M1ZSfCDkYJYB88Pr4X6/ZSj8CjJdv3SjwYj1m32O
+         QVx2P7klbTTl+Gv5/1EBCqcfwUnGVBw3FfOOCQfRv28Bej8Re9CnlKx7q7t+26FYuD8k
+         oD8Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788909770; x=1789514570; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=1ZsRUEYFwJyfqiHg/NlJRFQE2q1GaX7lbKCnVamDOJQ=;
-        b=fffKPUp+eqhcs644J1qFagKow4sBFSAbNUFWT5W7+9zaYvFy3l9ignd8fSrQtK9Wze
-         GjeyrBGZpepn4eT/2hQTyQxFXNNTP4WgModLT+DPVfXd1Zsk99UjCH6VY3gjUac5d7su
-         YrmbAekf5ulIpd8VA5JjCE7bnkhRd5G2J98IZmKjGjIbZkXbzWLDIiZMuiD8e5f0jaWn
-         SmiJ2t61NyKl5JDrelX9kTAZWYflwnn9n3h5g0kQQorucRNj3O1G3oDAeeDimaDbHrua
-         VzwTIXg1GbrNBoOOCFe3QkfFmN87poq+/hmkVmHciNZXSJ/as9hft8LuT7Npf2C9HRdr
-         mlJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788909770; x=1789514570;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1788909880; x=1789514680; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=1ZsRUEYFwJyfqiHg/NlJRFQE2q1GaX7lbKCnVamDOJQ=;
-        b=iM713vsNbMBtcpCS5MEl7Kr+kUaBaOl2cDBaXRePtx2JdT1HucYUydqudAfvL8AiDO
-         8gSGPofcOf0orVS+If2sz649dW94nAIr1xkihDGRve0/F+mJ7ygDq2x9eNI6U5AA1ZDV
-         sTDuzYLxesWOGqRqvnbO/2syZMI4+eiD0NDG4rd4T6bKNnLj0Q/hIm0W+mXjPG9maBta
-         uIZcu8sPGspR4xDmfUIYvTfPr1ozrnA6TVv7uzHNTSDR0Hq6VQ0C4qt8izLmwPcydKZn
-         JkI8DYNC+SO/t65Z5KHdF5TUWJBTAE+P+UPPzuvmhZLGSrB9lLsVQtweqC0Lw7EAq8aa
-         CcEQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwS/J9uXdH90Y22tVWNJSPwZY4e1Og8EEAQVHZOFcCqOc4XvQsmRvGBxgrySHZmC/MGVaCXA7sL9HmQeyVCDSU=@vger.kernel.org
-X-Gm-Message-State: AFuF++mXK10iS/WdQ8ASHXj5fqSnqyQApPDHvvI4wovEDBEm1GZrhIsW
-	MZ+7GxK7KMzvXlPOTFYE/9HTehnId/A8I4+2TKtzs/fblCVXNg58MFKm
-X-Gm-Gg: AYBFou0eqVLZVI5JhAN495IuiIE9ONMZlhSa6Y1S7X9sb8ueJ5SkMYTRerjknfuKKK/
-	NLjsIWxyZSt600gPNPBwulGbf/XxIX+mGdeZTCXNR1GzSLK5qeUZ0HQXUfWbaCaKd7+2UqXvrwS
-	KZt3WtmO9B/7f1wf/ttIvUSjQUXSaJfH9LKm8/LnSGduqdG3FC+Pp/hAIuYhWbSqFw1xX/VDSHk
-	rQqurem1LtOWygofosY887nXBlMwUdKcVMzpO5s9Eq5W4UpUjGzlau084xaaUwudUQLoxjTYzEi
-	ugsdVNCG37euwxxrFRJBKbsLH6lz9jK8uKGysahO43QOX4li+wL1aD+yoBuU1vRnbta/XJWJNi1
-	NsMLRYUe99Ax4LC48VMFHgO/zfO8PCiZt+JwF4mQgFZ2gbBhjzeigS4oFlgs49uo1uRF10nuA95
-	KkKHBh4MFKDt02Z57BEbLPQNQnpIeYHJ1V0UJuJ8DyIMXopATJC+303hgGtjk+jDFeKg==
-X-Received: by 2002:a05:6214:84cf:b0:90c:e685:d0ef with SMTP id 6a1803df08f44-9103eff8ca6mr419740676d6.23.1788909770512;
-        Tue, 08 Sep 2026 16:22:50 -0700 (PDT)
-Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-910406b0f51sm128531996d6.42.2026.09.08.16.22.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Sep 2026 16:22:49 -0700 (PDT)
+        bh=0IN5QQmb/lTANWR/iwoSBOuy02Mh22swkqv8V9Ybn/0=;
+        b=iciIM+yfT1AHLW24zESpQnkRY48v0FlVHuK+O44tSw3v5Q8vshEESBTu6M/HGC+WzZ
+         +utQ+MZF4vB2yVzggnhBIZi+dMZsVlXDucj6O4c1yMEYbaVzuHVXUyg6PMfobS0nf+c/
+         cG4MiKp9YUskVAcj1Nkkn3N2l1svvSd7YbtfD4NXp+gvxuV7TwmWnQYn79yYUBshgTXe
+         tO9c4oTY1JhkPa5m4jfXKWxaVbdGIi+m5TSCHeqziMqqYxl+R0NqBJd/OTjOXfCwqib/
+         ie/Oc0k3pm3AIwgNbPb953Ho3ObLsb+FE6kGtvRlgoSs2iF+50QjsChG/Q5fxVVM75VW
+         LiKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788909880; x=1789514680;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=0IN5QQmb/lTANWR/iwoSBOuy02Mh22swkqv8V9Ybn/0=;
+        b=clokfATjzjV+BffPVEXbyQo4ATKE3vK3RX1sjkaYeA71i/wDP094KC9w0nXO0k9hZk
+         xYIM2DajQm4Sfd33oy7STsPvsc+SGJOYOCxd/Bbz5Isuvlvck//DfIT7qW+KCB/wRUks
+         mLRi0bcUaANMoymxyPdoc6tpLyz9j2SYJQea9Gn/mmyWmmM8AALdbR0cPQ/VmMj3oka+
+         1hwA6UdcmsI/T5y/6Vk+LmAu/4+3vUzJRQqhLsBknP/WPxIs4b/tq2qM9axz0xSqfzg4
+         f6x5joG1pPjmMYY8mYNjQSXlVH0FYsTNxcv4ccz9ZXNJMfsjwCUApRVBBKTqWpw6Nn4N
+         wORQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzB7d9DA5BpbJYeNuTamtWIAeL3hiJlKgmDDc0g5mSkVINkPBzyGTCtMDAbjn+qgNunqVqQWienKJSZaKMhDmc=@vger.kernel.org
+X-Gm-Message-State: AFuF++mteIudIeB5OnRxhb22dwe8kJRd/OWmP+ODBpeWgJeN2t0SG2E5
+	7cT07dEuhrOD6Fdq8PbEZ9IL6lmby2hs46Fmlaxlj/MOrHssOYWMMMZaKwOYvrXykBkrFAXBeeZ
+	7b8VUYCC2h9kGCtexTQFuF5zK06R5j2X7G7w2k0hj
+X-Gm-Gg: AYBFou13fz7CgDdLTUonwkTyq1olczqsRCLrnlVmobb/M9fLe4ChGWcejqjYacP2if3
+	p1MCTYyfNFta0dVDkw2fJABlnHgF/jAMsi6rWDdDKC2Ygi0ct/+ftKK6BGwWaqavgcpenny4rI4
+	ReY4v/qf/pVsr8fiHnK5FoubUwo5ummzrkSKwf5oNZjh6Diwufw3E0FjVk7/irxBaIZFf9f5ubn
+	owcwh8KbKDaaxGknbcZtrEkV+r6wb8m4Tzb2CqgtrKl543VvFBdNVd0zKxJ0cYStPUtoWMNjaD8
+	UThS8G7PuVsfNY8/fECm6VN1KCg9mp2XTuEqNWl0WCp52jPuqwc9ko3yNklqOfPYXjb77OHmMxm
+	KDl8YyjFSG3pV0r5h9/HnEZ5Jr6z1m04=
+X-Received: by 2002:a05:6214:4a09:b0:90e:7de2:d81f with SMTP id
+ 6a1803df08f44-9106b407918mr47732286d6.20.1788909879267; Tue, 08 Sep 2026
+ 16:24:39 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 8 Sep 2026 16:24:38 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 8 Sep 2026 16:24:38 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <0a08eab7-e093-46ef-97bc-531766cdbcf2@intel.com>
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <20260722-tdx-selftests-v14-19-15ad654a50db@google.com> <0a08eab7-e093-46ef-97bc-531766cdbcf2@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 08 Sep 2026 19:22:48 -0400
-Message-Id: <DLABL6GQC9HK.2P8KU1JJRO1XV@gmail.com>
-Cc: "Bobby Eshleman" <bobbyeshleman@meta.com>, "Boris Pismenny"
- <borisp@nvidia.com>, "Carolina Jubran" <cjubran@nvidia.com>, "Cosmin Ratiu"
- <cratiu@nvidia.com>, "Daniel Zahka" <daniel.zahka@gmail.com>, "Doruk Tan
- Ozturk" <doruk@0sec.ai>, "Dragos Tatulea" <dtatulea@nvidia.com>, "Gal
- Pressman" <gal@nvidia.com>, "Jianbo Liu" <jianbol@nvidia.com>, "Kees Cook"
- <kees@kernel.org>, "Leon Romanovsky" <leon@kernel.org>, "open list"
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-rdma@vger.kernel.org>, "Mark Bloch" <mbloch@nvidia.com>, "Petr
- Machata" <petrm@nvidia.com>, "Raed Salem" <raeds@nvidia.com>, "Rahul
- Rameshbabu" <rrameshbabu@nvidia.com>, "Saeed Mahameed" <saeedm@nvidia.com>,
- "Shuah Khan" <shuah@kernel.org>, "Shuah Khan" <skhan@linuxfoundation.org>,
- "Simon Horman" <horms@kernel.org>, "Willem de Bruijn" <willemb@google.com>,
- "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>
-Subject: Re: [PATCH net-next V4 14/14] selftests: drv-net: Add PSP HW GRO
- conformance tests
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-To: "Tariq Toukan" <tariqt@nvidia.com>, "Andrew Lunn"
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- <netdev@vger.kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Sabrina
- Dubroca" <sd@queasysnail.net>
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20260908065244.3799142-1-tariqt@nvidia.com>
- <20260908065244.3799142-15-tariqt@nvidia.com>
-In-Reply-To: <20260908065244.3799142-15-tariqt@nvidia.com>
+MIME-Version: 1.0
+Date: Tue, 8 Sep 2026 16:24:38 -0700
+X-Gm-Features: AcwNN1UULNTPjF9-p9AmAvuYgtyt3ObShfxcFD10uTDSDoS21CnWX7JfXOpZMy0
+Message-ID: <CAEvNRgHE-c09hdeLqkUfGdnrAUkENuSrdNqByXBYr3N=HSbB_A@mail.gmail.com>
+Subject: Re: [PATCH v14 19/22] KVM: selftests: Finalize TD memory as part of kvm_arch_vm_finalize_vcpus
+To: Xiaoyao Li <xiaoyao.li@intel.com>, Lisa Wang <wyihan@google.com>, 
+	Andrew Jones <ajones@ventanamicro.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
+	Chao Gao <chao.gao@intel.com>, Chenyi Qiang <chenyi.qiang@intel.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Erdem Aktas <erdemaktas@google.com>, 
+	Ira Weiny <ira.weiny@intel.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
+	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>, 
+	Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>
+Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue Sep 8, 2026 at 2:52 AM EDT, Tariq Toukan wrote:
-> From: Cosmin Ratiu <cratiu@nvidia.com>
+Xiaoyao Li <xiaoyao.li@intel.com> writes:
+
+> On 7/23/2026 7:13 AM, Lisa Wang wrote:
+>> From: Sagi Shahar <sagis@google.com>
+>>
+>> Finalize TDX VM after creation to make it runnable.
 >
-> Add PSP conformance tests using the same gro helper binary as other gro
-> tests , but in --psp mode. SPIs are procured by psp_gro.py from a real
-> PSP device and handed off to the gro sender & receiver. The sender
-> crafts and encrypts packets in software, the receiver relies fully on
-> the HW to decrypt, decapsulate and do HW GRO.
+> The changelog is too weak.
 >
-> Because the NIC decrypts and decapsulates before the frames reach the
-> receiver AF_PACKET tap, the gro receiver sees the plain frames and the
-> assertions remain exactly the same as other gro tests.
->
-> So these tests verify, at length, that the device does PSP HW-GRO the
-> same way as plain TCP.
->
-> Additional PSP-specific tests are defined to check that GRO doesn't
-> merge packets across PSP versions, SPIs, encryption-status, etc.
->
-> Some gro tests are not included because they don't work:
-> - ip_csum: the checksum is recomputed by psp_dev_rcv().
 
-psp_dev_rcv() isn't on the hw gro path for mlx5, right?
+Some other points I can think of (Xiaoyao, please add on!):
 
-> - tcp_csum: packets are marked with CHECKSUM_UNNECESSARY.
++ Why was kvm_arch_vm_finalize_vcpus() was picked as the lifecycle hook
+  in which to finalize the VM? (See comments from the earlier revision
+  from Sean) What are the rejected alternatives?
++ Expand on "make it runnable": finalizing also performs measurements
 
-this also seems strange to me as the hw gro engine and its decision to
-coalesce two packets sits upstream of this skb->ip_summed determination
-in the driver, right?
+Just confirming: Peter, you meant to add the () at the end of
+kvm_arch_vm_finalize_vcpus in the commit subject, right?
 
-> - ip_frag4/ip_frag6: PSP is incompatible with IP fragmentation.
-> - IPv6 extension header tests: PSP doesn't deal with IPv6 ext headers.
->
-> Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
-> Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
-> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
-> ---
-...
-> +
-> +@ksft_variants(_ip_variants())
-> +def test_psp_ver_diff(cfg, protocol):
-> +    """Frames from two different PSP versions must not coalesce."""
-> +    init_psp_dev(cfg)
-> +    if len(cfg.psp_info['psp-versions-cap']) < 2:
-
-nit: what the above checks is slightly different than what the _run()
-below uses, e.g. dev supports versions 0 and 2.
-
-> +        raise KsftSkipEx("Device supports a single PSP version")
-> +
-> +    _run(cfg, "psp_ver_diff", protocol, [0, 1])
-> +
-
-couple of minor comments:
-
-Reviewed-by: Daniel Zahka <daniel.zahka@gmail.com>
+>>
+>> Signed-off-by: Sagi Shahar <sagis@google.com>
+>> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+>> Signed-off-by: Lisa Wang <wyihan@google.com>
+>> ---
+>>   tools/testing/selftests/kvm/lib/x86/processor.c | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
+>> index 4b97a9a1bb5e..8319ae3d9fe6 100644
+>> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
+>> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
+>> @@ -1489,6 +1489,12 @@ bool kvm_arch_has_default_irqchip(void)
+>>   	return true;
+>>   }
+>>
+>> +void kvm_arch_vm_finalize_vcpus(struct kvm_vm *vm)
+>> +{
+>> +	if (is_tdx_vm(vm))
+>> +		tdx_vm_finalize(vm);
+>> +}
+>> +
+>>   void setup_smram(struct kvm_vm *vm, struct kvm_vcpu *vcpu, u64 smram_gpa,
+>>   		 const void *smi_handler, size_t handler_size)
+>>   {
+>>
