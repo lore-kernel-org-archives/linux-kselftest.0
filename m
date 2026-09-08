@@ -1,78 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7877055D86B;
-	Tue,  8 Sep 2026 15:46:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CA8557C738;
+	Tue,  8 Sep 2026 15:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788882390; cv=none; b=Ne/HT9bTKfJaw64epyvi5PjjkALdCVG6GKytVqluOmDf/XeOuAJ3SARO47CQqiM2W7VTAmPy8h0MQElkA93MR+w50Aw2deNjrz1kJ5qq2/61UL+HHsyi+SW4aJzjTY1ruP6M3M6kZHk1YJUYYMMA/nb5+W98faSp7SdwWXRR0QM=
+	t=1788883018; cv=none; b=Zi8xl4q0Acz+z3QkESe5Um/SIEJwXknxLDpZRDRwZ3Jbqciw31QMhCoVO8ZfFPjXhWpi1rzcJH8DQ+UBGgrL44MAwSzNLHkpbqzZTSflOStJtLypHNqJB9QNjmRWzxkCHvx8u3lf7/49u1sPTC4gehAAcqgKcuOm57e3AcpEdn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788882390; c=relaxed/simple;
-	bh=7qYYfjyLc3tn8rvvC+NAQfgXS4Fq6g//NqNTayfF6Po=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=UtSptC4pREwx4a7tGV9a3eDKDrOXSlNxIDjdEIGHk+QdjDGp8+pUUgcAO4JPckjbAOzfZY7ZFVfMBleqpVu1uvDKeauoNiddVpITw83c69yU4+QWNcgm7uLrlb4vBCfJE8w87cNKJ0Q3lCz7DCU5EUIzniV0wSI/YhoFN/8YKB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iOuSoqWw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788883018; c=relaxed/simple;
+	bh=SYBL6JqyoQ76N8dx/qhGcs7E92Sv5vj8oJSL3lQKEzE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V6Ooj++VYVeHaYpIzwPfT9e9ErT+5fLAMn+UEN5eV4uMFjqVDjAxld67QCe1Tg4Fc1llSadg45PX//0QSAWYu1m3kf47pyRx6tWEAhHmembX7Np3E84p1Y0e8roefxuRJ/TSeFx0P+sWdz0O4AyriKobPvrVHy3VZGor9+m/JwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SaAb6Cao; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iOuSoqWw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E19761F00A3A;
-	Tue,  8 Sep 2026 15:46:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SaAb6Cao"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 295801F00A3D;
+	Tue,  8 Sep 2026 15:56:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788882389;
-	bh=Kztwgkb4XTqQOeNq3XmEydkSmcGr+YU/Q1mfeqyJ2XQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=iOuSoqWw7qP1Yc/L/V2+cOdZ+MANRMYM6PGoeDgP1FDhSg0a8zU61yQhHe+bkv766
-	 Ilqn+T9ExMWwNOk+nzExpTBxaw8/zA9OyXKYkvRWtq0KbnDU/nq0sv+ri3N7Y0eBEF
-	 ZHHjnUJA3zLbVzSZZaf4tTNZrNX7POGgWY/MIUYF9L8MyNdGEjgzHp1czviMIsyAVk
-	 g13G43fgzkCEvbWLl9aCIoYpHSNwMdLNDI8shCjpzD8UuoWXNqQGeiGiCYhXQFrt7C
-	 qy6NFbi/9RCf69zbGtel9SNg8bbuf1hLQArT8FsYXuM4CV2MWcKbIptG/kqDqkkSgn
-	 VFbP8HdCdtTCA==
-Content-Type: multipart/mixed; boundary="===============2347235133467270577=="
+	s=k20260515; t=1788883015;
+	bh=D2+EB8N23BWkXyn3BS2+m2U6FpYOtn54CY3uZ3y8YJs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=SaAb6Cao2iGX8tN4Xu800roPEU65yamNP1bauJE3x9rhEaor3zDWsgJusfIpMUdx7
+	 Ox5NYnmwCVp5nj7rHq83u0xvbw8rdpKc3JHPIpTGB4p4uXJ2yi10Pzg/IAp5nxzhiO
+	 2l5vcfFagM4XqqpbHtppKno5C2GJZP+FaAjZ/mFWvS9pbIw8aJcFp/XcRvtWnRU5au
+	 JC0GwyBQx5gLgEioUNwtDf56/cPi0o71i2xbwn8EhBdWgZVzwaE1nPrKEKYxN4Rko7
+	 oF71x82KM+ysYVdVhDJQSKfqCS1afgT1IUF+kw/3/HmE44AGPq4fnsZJH2O+jQMAnV
+	 qBwE3Kz8heHNQ==
+Message-ID: <1673485d-5529-415b-b1b6-60e27291e3bf@kernel.org>
+Date: Tue, 8 Sep 2026 09:56:54 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e66e3d4c2b5ac1bafc96110f70eb902b88ff47da341ed847a46d11ffa01239ff@mail.kernel.org>
-In-Reply-To: <20260908065529.901593-2-tweek@google.com>
-References: <20260908065529.901593-2-tweek@google.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Verify program FD after non-autoload programs in lskel
-From: bot+bpf-ci@kernel.org
-To: tweek@google.com,qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,shuah@kernel.org,tweek@google.com,kpsingh@kernel.org,leon.hwang@linux.dev,emil@etsalapatis.com
-Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,ihor.solodrai@linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue,  8 Sep 2026 15:46:27 +0000 (UTC)
-
---===============2347235133467270577==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 1/3] rtnetlink: add AF_PACKET multicast dumps
+Content-Language: en-US
+To: Yuyang Huang <sigefriedhyy@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>,
+ Ido Schimmel <idosch@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
+ Kuniyuki Iwashima <kuniyu@google.com>,
+ Nikolaos Gkarlis <nickgarlis@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
+ Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>,
+ Simon Horman <horms@kernel.org>, Stanislav Fomichev <sdf.kernel@gmail.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ netdev@vger.kernel.org
+References: <20260905093932.43726-1-sigefriedhyy@gmail.com>
+ <20260905093932.43726-2-sigefriedhyy@gmail.com>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20260905093932.43726-2-sigefriedhyy@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> In test_global_percpu_data.c, dump_percpu_data is defined after two
-> non-autoload SEC("?kprobe") programs (verifier_strncmp and
-> verifier_snprintf). Verify in test_global_percpu_data_lskel() that
-> lskel->progs.dump_percpu_data.prog_fd is properly populated (> 0) when
-> loaded via the light skeleton.
->
-> Fixes: 4c9241bd731a ("selftests/bpf: Add tests to verify global percpu data")
-> Fixes: 1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu data")
+On 9/5/26 4:39 AM, Yuyang Huang wrote:
+> +static int rtnl_dump_mcaddr(struct sk_buff *skb, struct netlink_callback *cb)
+> +{
+> +	struct net *net = sock_net(skb->sk);
+> +	unsigned int flags = NLM_F_MULTI;
+> +	struct {
+> +		unsigned long ifindex;
+> +		int addr_idx;
+> +	} *ctx = (void *)cb->ctx;
+> +	struct net_device *dev;
+> +	int ifindex = 0;
+> +	int err = 0;
+> +
+> +	if (cb->strict_check) {
 
-The existing Fixes tags point to commits 4c9241bd731a and 1ed2294b31fc,
-but the specific test scenario being verified here (dump_percpu_data
-program appearing after non-autoload programs) was only fully introduced
-by commit 15945d02c6e1.
+this is new code. It should only work with strict checking.
 
-While the earlier commits laid groundwork (4c9241bd731a added
-test_global_percpu_data_lskel(), 1ed2294b31fc added non-autoload
-programs), the dump_percpu_data program itself was added in 15945d02c6e1.
+> +		err = rtnl_valid_dump_mcaddr_req(cb->nlh, cb->extack,
+> +						 &ifindex);
+> +		if (err < 0)
+> +			return err;
+> +	}
+> +
+> +	rcu_read_lock();
+> +
+> +	if (ifindex) {
+> +		cb->answer_flags |= NLM_F_DUMP_FILTERED;
+> +		flags |= NLM_F_DUMP_FILTERED;
+> +		dev = dev_get_by_index_rcu(net, ifindex);
+> +		if (!dev) {
+> +			err = -ENODEV;
+> +			goto out;
+> +		}
+> +		err = rtnl_dump_mcaddr_dev(dev, skb, cb, &ctx->addr_idx, flags);
+> +		goto out;
+> +	}
+> +
+> +	for_each_netdev_dump(net, dev, ctx->ifindex) {
+> +		err = rtnl_dump_mcaddr_dev(dev, skb, cb, &ctx->addr_idx,
+> +					   flags);
+> +		if (err < 0)
+> +			break;
+> +	}
+> +out:
+> +	rcu_read_unlock();
+> +	return err;
+> +}
+> +
+>  struct sk_buff *rtmsg_ifinfo_build_skb(int type, struct net_device *dev,
+>  				       unsigned int change,
+>  				       u32 event, gfp_t flags, int *new_nsid,
 
-Would it be more accurate to use:
-
-  Fixes: 15945d02c6e1 ("selftests/bpf: Verify bpf_iter for global percpu data")
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34245369055
---===============2347235133467270577==--
