@@ -1,65 +1,65 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E034F28DB54
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 03:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D3A10F0
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 03:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788836810; cv=none; b=ITxB2CyiPdKZCRsAUv7c7n+ze0+Zge2Ucn2l1lTUecUmAyas2LygbhU2ZXC24Thw7JniFu+N2JvyCHdz+1xiRGZE6BLKfoIvi3ulDdypI4QSqhYtopLuNSkOeNWYjkITBrFKwmR0fWq3b8mE3haChwyo2tMXAdreRzTCASrsg64=
+	t=1788837003; cv=none; b=F/sJvYVcxS2/35nbvDskyg/PHzE13fMeHnmpYbQSlpkEhwOixQWh5tzqA+0A4FiqdsLDheYCAbJWofTzkt0COG87vqsj2ZulVGekayCZceavBzdZd8N1RVnhpwMHzWoei3o+yzdedNePdCoECK4b/Dmpc0L/Sd9P9ZHoAoVOe6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788836810; c=relaxed/simple;
-	bh=ZfxXtFIDZaxEaB2DZZIymB/sPhHPfXU2HCfAD7m370Q=;
+	s=arc-20240116; t=1788837003; c=relaxed/simple;
+	bh=NIZ40nNzsbeeL8cdyy6ZKPpOyXaqocZlHwIU4WgHUck=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LAuSVNhtenZLD2rWkH6UV2bdJE7fYSG7LLlhQmV2G58rww4zl0JebyEElBSuey5zWQ9A4+Xw6SPFobPMffClh1ueWaYQuOceeGMZm7WHM0F/htrAoLodNGPd06LSzsBdKSf6UF33uD8BmwumrfQYyqI9fwkBJHMNaj962GzflzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i01aQlTL; arc=none smtp.client-ip=209.85.215.177
+	 MIME-Version:Content-Type; b=ZXBNqRpaa9PtIyc7Ki2zrycR/BeJfFgp+08J+62svJXE85idcHM9YK2eUJ2IJZ2DX7Rsz4MAZlVDzyAnaYFIpMXW3Z4T5JVimNiIL538u3PLvAovjIgAv8oOoBMp9x7JCMlo80jdjG3Mg8t44LQKflUI5OZMZP3GvtQzX2qfU88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q/NFaiyt; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i01aQlTL"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-ca97d139d5fso3693487a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 20:06:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q/NFaiyt"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2d942c7cc2fso33775645ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 20:10:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788836808; x=1789441608; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788837001; x=1789441801; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=12p4lFRZRGzA/IYQV7hQkbzRDXwADtGkCvDmrb2OlJ8=;
-        b=i01aQlTLNMlR+jcgeYe2V/PIZR0nn1Lqt1uUHbJIeLI226Iv5CTIhYOwqB0etXmTWi
-         0P4vQnuroo65v1rA+ICr7pHFL/oBu/A9i5TUW+2NHIwXQ2eej6Dy3urrh27HMTTbb5lT
-         HRAzp1EkUmGmt7Y1hyDRHDgz97FxT8B/Ti8mgtWtxhDKwrCUU2EWbkGkTUrLCe2bA1kR
-         gqh7qz94GsUby5mcqaLCGWs72BkSqqPKpHD6sm15IhUBJ/voukV1SunFga1p55mv+G+t
-         kmxf+AwsSrfWsgatYJRYhqVmqvDkwRclkivdahJAPh736ETYQs+XDc6BHDaDQ/5oGZuq
-         GNbg==
+        bh=5udmBuXlTT1GwJow6bPNXuqCwSBhZgjyh+ECHMZW2WA=;
+        b=Q/NFaiyt0R/bL+cvpQ0D5PaxfS/njeOH1Jqycs9RrJj65O63iB9yBlZxCETd+uttaW
+         f6lKbbKrdeiA/eTJbydj97Bhc55S4wzidP/cChT4D8/7jkviHA7VAbxwh+YwWxQmXH+z
+         xQk/XsGiOplS+2Q5NJqQJESnKC8cErb8IAsFcPegb8lfwhflYkFPSzGQ+5GQn/BujXFe
+         TPOId7vkUHzeKeaBdLuKranmAx4HjcZej7Y0KtAKNKaW2xyRtmg0bMaB/JmFHZddFHrx
+         zakmmlPaN1TXnhJxj8zo8s1u/l2tVlb7xwt2Re6RVZb1nLIQ33+Bc464g4YjAFntW5Nn
+         HiGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788836808; x=1789441608;
+        d=1e100.net; s=20251104; t=1788837001; x=1789441801;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=12p4lFRZRGzA/IYQV7hQkbzRDXwADtGkCvDmrb2OlJ8=;
-        b=VBkN5IKG52IuDePGXoXS4o7C8U0uVuHwSqTmo2EbWvNlacnMmdbBA+ONiOgZOYea6p
-         Q1yjFrs5gt5NGdPbT36T8xUhODhJWrZ85wcJhXfFnEX2elHhVfI3JyrvR9zHU1C+/ZSU
-         3pYNgSw4CisIYBpIVKeFC9MHAZP7C5KhxgdKIpukjWCLaRBCzP0opQo9JScovT5AvZ41
-         nJkWPVUQHIqqMfJep+6GsaBIe4DpG3lB431dve7IgErA0ybJUvEuw77F2As4lr8ZLs/E
-         lx8mZrmrgyG11XUZrgcNlOe+6fylYy1O4GFs6j4CMVYX8M67MfMp+TWNCezkt5nslNei
-         se6A==
-X-Forwarded-Encrypted: i=1; AKwUvBxNVgDm0vutJMOgu8dL2SzJMaDX3PRHLsIpx/6QsEKQ1jF4UHyDoLT2X5fIppdq1Reu7d4F1CNQ+8Q5B1rOmkU=@vger.kernel.org
-X-Gm-Message-State: AFuF++nQ2p1IiBk6ssLrLiWI/oR/zd30HsmvpuMNKbbslpmBmVNA8OZK
-	Dzz14DvHlD7L79b6TT8hNa1VJYW+yXdzRwOlq6+aiT7qS0BtFM6/NNrA
-X-Gm-Gg: AYBFou1fTyrsyphCdv/PeB2P8Hr8s0XTQreJunc0AoGCaLLcjZLfBI6huGBOzSpBUJn
-	h1Mo5cz2tugI8OXtOy5fLbD0xxokekovmPXfWich+6SCYvo3KAvhGUQQIFVBcOG3M4rIWUlDFxl
-	WKP3OrUCNVpQuhSgEExrXiwtzF9lyeKAswSrEpJzW1lIf+qv0LJ+xsg5HlZEQIlM6RzUOxA2Ao5
-	ik/1vPqJ+yTG5tdMPjQsKbCpmStlaMmi83rppUOBJ05+8Ok7+KTOw8bmrJOmdhhGOdtfK27MeLo
-	g3XrYqqiYHxa7F+anj+CDjHeW5mKKHQnbRdF0rdhASh7Q7SPB7aj01nwBjItmU0pJwt2q19uyLD
-	auesWKa6L0g/3r7OvW/H4km4gLUrDGaPOg7toomU//hBgQ1S5CcTvqknLPoMRrRVBSlsXzZBM/1
-	f0y4THaDVBNHAyoL8Hx3Ko2n5sX1DwbUYPObVlNgjwlLOWkJov5Hsp9QvXHxTmvGDiY11Sp65O/
-	mo=
-X-Received: by 2002:a05:6a21:e081:b0:3b4:61f:1fec with SMTP id adf61e73a8af0-3da39bb593dmr40716679637.2.1788836808060;
-        Mon, 07 Sep 2026 20:06:48 -0700 (PDT)
+        bh=5udmBuXlTT1GwJow6bPNXuqCwSBhZgjyh+ECHMZW2WA=;
+        b=TyaxEpgv2g7IHk2hqjFvpHPWL6CmhmA+OBrdIjwx+WVtP+VjiuWTl/OHCnLDlSvTJf
+         +N2Qhz4MHw+/TuBOA0pDZ2arGsUnHYpB8Nm4Ee4CrWAdisAx60FWIXI33Lufrjhppu6/
+         D1UtaZS62CLcKSNwg8ZHw/6rP7Pvw+oXaWraDndqRfbwP8SvuuG0EtgBzQr1+eroVHQF
+         ZGJ+kxcTs1SamrJwGTvE014CD/KzMxKeswCvtM98WGhLxOscHLMEZNSieu2BNkf/5vmL
+         Bri6YORQX4EGALEMTuynNcr6k4rfTVHk+Q/4p78ksb06SNd0KBR+yfsQ10WHgKva2lvc
+         bfKA==
+X-Forwarded-Encrypted: i=1; AKwUvByYIGmmWtpXM9gDALiZyKNu+pTKHlZXIqKz+hHNEr0DBSKnAKMWmOchH7w+aKekql7yBjf3wPHQ4aWLqf4xjwI=@vger.kernel.org
+X-Gm-Message-State: AFuF++m6OApivh+peMGd9PR7/rq+svUVwPlb4HB53ak4cTQanAKPRYzQ
+	4dmAq4qy4Ss5tvR1EffnK3SEWjPw7qe1ycmlWf6aWChMQ748jQhH2Zoi
+X-Gm-Gg: AYBFou3GEgRnZfbbkbX52sb3pl1slTfkwl74bsMq2X8iLudmq+mRT7wtngDU/7r8RLI
+	kHitZFPymsNSFyFbIWw6vU+10jc7VkCZB478YTA37s2BsBU3cedJmNzsKhADBo1KUBezNv0Pg5j
+	w9yy2VBYUV6AowpgEKgrfjhTg/1P+VNZPk/wMz14x603bUW/VMaRlOE+Ht8/UHeUKgwqncIwGxw
+	eR3FYOeMW9BZHNHPc6Q8u0YdZJsewNQmIZRyTRru3QoMZjK1kOC0KbW17COUieuJtFz9Hq5scUi
+	F5HYXF9QH+uu7PxdfUDSfc9za9ragxVR+etXJYgQIAhXtPQXD84zI7M+UrKun21NkSxs80A0qeb
+	1aLBxJQs523QNQQXlV7LK0vbzBA/uKxXWPjt9+xlxZz5p9f/pIte3+R5LZBMUN6yu81e+qtDa+h
+	KMtwE9W4RS88Zj/gse9sSJy1Er/xWRl+RHoySqa+TS5yXTg4KSCI06r2tIo9HAcCU0J4peG636k
+	0o=
+X-Received: by 2002:a17:903:22c8:b0:2d7:5ebe:a588 with SMTP id d9443c01a7336-2db126d6e31mr377723085ad.13.1788837000864;
+        Mon, 07 Sep 2026 20:10:00 -0700 (PDT)
 Received: from localhost.localdomain ([2408:8607:1b00:8:3fb3:b562:896c:1ac7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc45a6abaa2sm4390883a12.23.2026.09.07.20.06.38
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2db149cb603sm51255985ad.68.2026.09.07.20.09.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2026 20:06:47 -0700 (PDT)
+        Mon, 07 Sep 2026 20:09:59 -0700 (PDT)
 From: Pengfei Li <ljdlns1987@gmail.com>
 X-Google-Original-From: Pengfei Li <lipengfei28@xiaomi.com>
 To: Masami Hiramatsu <mhiramat@kernel.org>
@@ -75,12 +75,12 @@ Cc: Steven Rostedt <rostedt@goodmis.org>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v6 1/3] trace: add lock-free stackmap for stack trace deduplication
-Date: Tue,  8 Sep 2026 11:06:24 +0800
-Message-Id: <20260908030624.1300-1-lipengfei28@xiaomi.com>
+Subject: Re: [RFC PATCH v6 3/3] trace: add documentation, selftest and tooling for stackmap
+Date: Tue,  8 Sep 2026 11:09:38 +0800
+Message-Id: <20260908030938.14046-1-lipengfei28@xiaomi.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260908102140.2ed161f1c851d94e1365520d@kernel.org>
-References: <20260903132409.270195-1-lipengfei28@xiaomi.com> <20260903132409.270195-2-lipengfei28@xiaomi.com> <20260908102140.2ed161f1c851d94e1365520d@kernel.org>
+In-Reply-To: <20260908103514.a1c61f51b84b8d67d6f0f511@kernel.org>
+References: <20260903132409.270195-1-lipengfei28@xiaomi.com> <20260903132409.270195-4-lipengfei28@xiaomi.com> <20260908103514.a1c61f51b84b8d67d6f0f511@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,72 +90,47 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Tue, 08 Sep 2026 10:21:40 +0900 Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-> > Kernel command line parameter:
-> > - ftrace_stackmap.bits=N: set map capacity (2^N unique stacks,
-> >   range 10-18, default 14)
+On Tue, 08 Sep 2026 10:35:14 +0900 Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+> Could you decouple tools/docs/tests in independent patches?
+
+Yes. v7 splits this patch into the documentation, the userspace parser,
+and the tests, each on its own.
+
+> If each test has this volume description, it is enough to split those
+> tests in independent patches.
+
+Fair point -- the three tests cover unrelated properties and each needed
+its own paragraph, which is the same signal you mentioned on the cover.
+They become three patches in v7:
+
+  - basic functionality: stack_id events are produced and the map fills
+  - reset semantics: the map is cleared while the ring buffer is not,
+    plus the binary ABI header check
+  - instance gating: a secondary instance exposes neither the option
+    nor the stack_map* nodes, and writing the option there is rejected
+
+Each lands after the interface it exercises, so no test references a
+tracefs file that does not exist yet at that point in the series. The
+reset test's ABI header check follows the binary export patch, which is
+being reworked to a streaming seq_file export per your comment on 1/3,
+so the check will match the final header layout.
+
+> > +    with open(args.file, 'rb') as f:
+> > +        data = f.read()
 >
-> Ah, this kernel cmdline parameter is also be a separated patch,
-> because this is not fundamentary needed.
-
-Right, it is not needed for the basic functionality. In v7 the core
-patch hardcodes the default capacity, and a later patch adds the
-early_param along with the [10, 18] clamp and the memory-footprint
-documentation that goes with it.
-
-> It is OK to use an official address for SoB, but to make sure this
-> address work, please at least Cc to this address.
-
-lipengfei28@xiaomi.com is on the Cc list of this series and receives
-the list traffic; it is a working address. It will stay on Cc for v7
-and any follow-up.
-
-> > +	if (!smap) {
-> > +		seq_puts(m, "stackmap not initialized\n");
-> > +		return 0;
-> > +	}
-> > +
+> nit: Can this support input from stdin? If we use this on android,
+> user may want to do:
 >
-> You also need down_read(&smap->reader_sem) here for serializing.
-[...]
-> > +	seq_printf(m, "success_rate: %llu%%\n", successes);
->
-> and up_read(&smap->reader_sem) too.
+> adb shell cat /sys/.../stack_map_bin | python3 stackmap_dump.py
 
-Correct, this is a real hole. Reset clears next_elt and the per-CPU
-successes/drops counters under the write side of reader_sem, so an
-unserialized stat read can straddle it and mix pre- and post-reset
-values -- for instance a non-zero entries count next to counters that
-have already been zeroed. v7 takes the rwsem for read around the whole
-sampling and formatting block.
+Good use case, and it is the common one on Android where pulling the
+file first is an extra step. v7 makes the path argument optional and
+reads sys.stdin.buffer when it is omitted or given as '-', so both
 
-> > +	 * At bits=18 this caps at ~135 MB. The file is mode 0440
-> > +	 * (TRACE_MODE_READ), so only privileged users can open it.
->
-> Hmm, this is too huge to make a copy inside the kernel.
-> If the stackmap is only increasing, and can avoid resetting by
-> reader_sem, what about rewriting this as a raw-output mode of
-> seq_file?
-> You can use seq_write() to seq_file buffer.
+  adb shell cat /sys/.../stack_map_bin | stackmap_dump.py
+  stackmap_dump.py /tmp/stack_map.bin
 
-Agreed on both counts: the copy is far too large, and seq_file with
-seq_write() removes the need for it entirely. The element pool only
-grows and slots are never recycled, so an iterator can walk the table
-in index order and emit each populated entry through seq_write() as it
-goes, holding reader_sem for read across each pass the way the text
-export already does. That drops the per-open cost to the seq_file
-buffer, and the header layout and version stay as they are: open()
-counts the populated entries once to fill nr_stacks, which is a plain
-memory scan of the table rather than a copy of it.
-
-One caveat on relying on reader_sem alone: seq_file releases it between
-read() calls, so a reset landing between two reads of the same fd would
-otherwise splice two generations of the map into a single output stream.
-For the text export that is merely confusing output, but a binary
-consumer would silently parse it as one coherent dump. So the reworked
-export also carries a generation counter, bumped by reset; open()
-records it along with the entry count, and each pass revalidates it and
-fails the read if it changed. A reader that raced a reset gets an error
-and can retry instead of receiving a spliced dump.
+work. Reading from a pipe also suits the streaming export better than
+the current stat-and-read pattern.
 
 Pengfei
