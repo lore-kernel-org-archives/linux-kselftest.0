@@ -1,140 +1,92 @@
-Received: from mta1.migadu.com (out-145.mta1.migadu.com [95.215.58.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304FB371860
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 08:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E05D3AC0C0;
+	Tue,  8 Sep 2026 08:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788854891; cv=none; b=ZuoHDUq7atfU0FeqBHfeRE4jHtCX7WhrHwr7qZqNmVEiKQZIWB1PmYZjDzpOXVPmKow4v4i/74yM883kb9bAOS6f1TYic/XAwUfXchffcmigVuI6WkMFgacRVbA1D/X1VJF8gSDfL5zg5GeJA6B/Iud1yAe3KqtE66eQU/wnv0U=
+	t=1788854892; cv=none; b=FEQYKDDiK5mt72YFwUTKe9VZ/rSij+PiuiHIhGCBolXHrOU1MWCkUM781jMXSNsoZbLJVUq2JKLyuj+m4zVhSSdy+P0YiGEmTQrUeN2KLnhASjLlAGvSpXK8tU0EKVA5fAv+eW50acr6a1fLYswwTOU300qKGPcj+fnYxa8SEQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788854891; c=relaxed/simple;
-	bh=17Qpr2HZAfjTf+fUY0bEYiBsyBtJXKQkXqw9F9jXj84=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ob6uTsoe3lhXEDerOKnJrGaS6qXomvqI//wgbAJmxkPrgdwMG/08LMxauTYcyPG5aSgWx2/6Jvw4FcA6cbJDKcyysC45KJaI/w0zO82w3RkH0QbegQwL6zgtlQ8A90la+k8JM9PlKQbX6/HdOVlzkdkca4KL56j/W2lmqAMKpA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YhKPa69D; arc=none smtp.client-ip=95.215.58.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788854892; c=relaxed/simple;
+	bh=/wjfVcw4jnBj6lfFGMgNp2q3imqvSAbzXLkXYHLjS6I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f9N4VGEeNU9tv/+oU2kZ8g+QTfUJ2YcAVSSzB7p+aP0ke424qaRuiPUSMUZrSOQVulJwnSur6l3FUIOyRLjrBbxtxa54SuJuUqOq8goeMVQTLPXL4UehjNEYy/bcKo0EiJuOhg8Fkq3ZWxyyzZu7ZU6GhYJmjNIYw355CcWKxhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g3hdzvFt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YhKPa69D"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=17Qpr2HZAfjTf+fUY0bEYiBsyBtJXKQkXqw9F9jXj84=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788854886; v=1; x=1789459686;
- b=YhKPa69DdS5qZIl1G+SGZx4cR2YVxx0k6mS3QpgPwciPPwYelLamurWlQsD5W+ZQZsA6u7g1
- IrmvqGHkQNvFrE/Bum+vIYjfi6jVrBlqGmZYwySvi8xOekOZMLm8guERo+N5LfGFU7f0zQoNeR8
- M36VdzpZO26Hl6or04k7N/xM=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id f75abea937d6cb6f;
-	Tue, 08 Sep 2026 08:08:06 +0000
-X-Mizu-Trace-ID: f75abea937d6cb6f
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <a44c1e4d-e9a8-4df3-aa25-20875cd4d30e@linux.dev>
-Date: Tue, 8 Sep 2026 16:07:48 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g3hdzvFt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27A601F00A3A;
+	Tue,  8 Sep 2026 08:08:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788854891;
+	bh=Ex5rOv7vKl28wj0SeyBEi/wKjcPUGR+up3g3DebNUfk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=g3hdzvFtn7mdxCrxrK3f5AngKmNRypNNY++sY86OVJO/qKmiyKU9WrgnNlJYMLjzS
+	 rUezNUNpyOGzENlX2jUpX6GmHAZDPN5ZdSoA1qij8ljUxe8/2pulEIkfIy4V6g2KPq
+	 sqEPAWjYgcQubNLBMwbKfeXvC/EvKPgACWv8kJC1EL011bCB4hhB1pshakHEcfbiQ+
+	 g9qneAn5/Ou+5ppRRsN7fh4XVxkqVrjbqDw8crgiyEVP/y065tOOaVb2vlXQo9H3nW
+	 vhdQO1X8MwvcFkcINL09UubOrvH/5hcbmV/tP8BGL8/5DrkpvdFMY/AZ5oiL9mz/lx
+	 4n/aQo3AHB1VA==
+Date: Tue, 8 Sep 2026 11:08:03 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Hongfu Li <hongfu.li@linux.dev>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
+	liam@infradead.org, vbabka@kernel.org, surenb@google.com,
+	mhocko@suse.com, shuah@kernel.org,
+	James.Bottomley@hansenpartnership.com, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Hongfu Li <lihongfu@kylinos.cn>
+Subject: Re: [PATCH] selftests/mm: fix ptrace PEEKDATA check in memfd_secret
+ test
+Message-ID: <ap_CY1sTymJd8zOy@kernel.org>
+References: <20260908025111.34562-1-hongfu.li@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 2/3] tcp: Skip cond_resched() in
- inet_csk_listen_stop() under BPF context
-To: Kuniyuki Iwashima <kuniyu@google.com>, bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- sdf@fomichev.me, martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ncardwell@google.com,
- shuah@kernel.org, aditi.ghag@isovalent.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20260906074135.185212-3-jiayuan.chen@linux.dev>
- <0aa6425f9e8f32705ae827f6325b29079234c3f3d0c7b2cdefba3e5b50432766@mail.kernel.org>
- <CAAVpQUBztYDHyiCN1fnhdxCPv_5AZ09yCMQfNW96SzZyw0LhHA@mail.gmail.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <CAAVpQUBztYDHyiCN1fnhdxCPv_5AZ09yCMQfNW96SzZyw0LhHA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260908025111.34562-1-hongfu.li@linux.dev>
 
+On Tue, Sep 08, 2026 at 10:51:11AM +0800, Hongfu Li wrote:
+> From: Hongfu Li <lihongfu@kylinos.cn>
+> 
+> try_ptrace() treats PTRACE_PEEKDATA return value as a boolean
+> check. A successful read returns non-zero data (memory filled with
+> 0x55), causing the test to incorrectly report PASS when secret memory
+> protection is broken.
+> 
+> Check the return value against -1 instead. The test should only pass
+> when PTRACE_PEEKDATA fails, which means secret memory protection works.
+> 
+> Fixes: 76fe17ef588a ("secretmem: test: add basic selftest for memfd_secret(2)")
+> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
 
-On 9/8/26 7:34 AM, Kuniyuki Iwashima wrote:
-> On Sun, Sep 6, 2026 at 1:23 AM <bot+bpf-ci@kernel.org> wrote:
->>> tcp: Skip cond_resched() in inet_csk_listen_stop() under BPF context
->>>
->>> bpf_sock_destroy() runs from the tcp iterator, under rcu_read_lock(). If
->>> the sock is a listener that still has children in its accept queue,
->>> tcp_abort() ends up in inet_csk_listen_stop() and the cond_resched()
->>> there trips the debug check:
->>>
->>> BUG: sleeping function called from invalid context at net/ipv4/inet_connection_sock.c:1523
->>> in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 628, name: test_progs
->>> preempt_count: 0, expected: 0
->>> RCU nest depth: 1, expected: 0
->>> locks held by test_progs/628: 3, last CPU#3:
->>>   #0: ffff8881158cee18 (&p->lock){+.+.}-{4:4}, at: bpf_seq_read+0x56/0x1210
->>>   #1: ffff8881106bb858 (sk_lock-AF_INET6){+.+.}-{0:0}, at: bpf_iter_tcp_seq_show+0x32b/0x4b0
->>>   #2: ffffffffb435af20 (rcu_read_lock){....}-{1:3}, at: bpf_iter_run_prog+0x46b/0xde0
->>> CPU: 3 UID: 0 PID: 628 Comm: test_progs Tainted: G        W           7.2.0+ #65 PREEMPT
->>> Tainted: [W]=WARN
->>> Call Trace:
->>>   <TASK>
->>>   dump_stack_lvl+0xc1/0xf0
->>>   dump_stack+0x10/0x20
->>>   __might_resched+0x3d2/0x610
->>>   inet_csk_listen_stop+0x7b/0xbf0
->>>   tcp_abort+0x23b/0x3b0
->>>   bpf_sock_destroy+0xfc/0x140
->>>   bpf_prog_448133d24601754f_iter_tcp6_server+0x81/0x8a
->>>   bpf_iter_run_prog+0x538/0xde0
->>>   bpf_iter_tcp_seq_show+0x26b/0x4b0
->>>   bpf_seq_read+0x424/0x1210
->>>   vfs_read+0x197/0xe40
->>>   ksys_read+0x119/0x240
->>>   __x64_sys_read+0x72/0xc0
->>>   x64_sys_call+0x647/0x27e0
->>>   do_syscall_64+0xe5/0x610
->>>   entry_SYSCALL_64_after_hwframe+0x76/0x7e
->>> RIP: 0033:0x7fad39b28aca
->>> RSP: 002b:00007ffc381c61c0 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
->>> RAX: ffffffffffffffda RBX: 00007ffc381c6a88 RCX: 00007fad39b28aca
->>> RDX: 0000000000000032 RSI: 00007ffc381c6250 RDI: 0000000000000014
->>> RBP: 00007ffc381c61e0 R08: 0000000000000000 R09: 0000000000000000
->>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
->>> R13: 0000000000000000 R14: 000055f077c1bbb0 R15: 00007fad3a0f3000
->>>   </TASK>
->>>
->>> The commit that added the kfunc already guards lock_sock() in tcp_abort()
->>> and udp_abort() with has_current_bpf_ctx(), but missed the listener path.
->>> Do the same for the cond_resched(), it can't reschedule there anyway.
->>>
->>> Fixes: 4ddbcb886268 ("bpf: Add bpf_sock_destroy kfunc")
->>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
->> Is the justification "it can't reschedule there anyway" accurate?
->>
->> With CONFIG_PREEMPT_DYNAMIC=y booted with preempt=none or preempt=voluntary,
->> cond_resched() expands to __cond_resched() which can actually reschedule.
->> The splat in the commit message confirms preempt_count is 0 while RCU nest
->> depth is 1. With preempt_count==0, should_resched(0) can be true and
->> __cond_resched() will call preempt_schedule_common() for a real reschedule.
->>
->> Additionally, in configurations with CONFIG_PREEMPT_RCU=n where
->> rcu_read_lock() is preempt_disable(), __cond_resched() falls through to
->> rcu_all_qs() which calls rcu_qs() to report a quiescent state from inside
->> an RCU read-side critical section. That's a correctness problem beyond just
->> the debug check.
->>
->> So the call can either reschedule (PREEMPT_DYNAMIC none/voluntary) or report
->> a bogus quiescent state (non-preemptible RCU). Could the justification be
->> reworded to explain that the loop runs inside the iterator's RCU read-side
->> critical section and must not reschedule or report a quiescent state there?
->> The code change itself is correct and matches the existing pattern in
->> tcp_abort() and udp_abort().
-> or maybe simply remove cond_resched(), hoping 7dadeaa6e851 would
-> resolve the scheduling issue.
->
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-Good suggestion. cond_resched has become old practice under 
-CONFIG_PREEMPT_LAZY
+> ---
+>  tools/testing/selftests/mm/memfd_secret.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mm/memfd_secret.c b/tools/testing/selftests/mm/memfd_secret.c
+> index c55d84c5e613..dd08a3a1ef14 100644
+> --- a/tools/testing/selftests/mm/memfd_secret.c
+> +++ b/tools/testing/selftests/mm/memfd_secret.c
+> @@ -145,7 +145,7 @@ static void try_ptrace(int fd, int pipefd[2])
+>  		exit(KSFT_FAIL);
+>  	}
+>  
+> -	if (ptrace(PTRACE_PEEKDATA, ppid, mem, 0))
+> +	if (ptrace(PTRACE_PEEKDATA, ppid, mem, 0) == -1)
+>  		exit(KSFT_PASS);
+>  
+>  	exit(KSFT_FAIL);
+> -- 
+> 2.54.0
+> 
+> 
 
+-- 
+Sincerely yours,
+Mike.
