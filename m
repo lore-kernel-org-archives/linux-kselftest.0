@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-62.mta0.migadu.com [91.218.175.62])
+Received: from mta1.migadu.com (out-103.mta1.migadu.com [95.215.58.103])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132DF54DAF0
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 13:43:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866FF2F1FC3
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 13:44:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.103
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788875027; cv=none; b=eN5HhnE7vSklGdtfXBk5or2rCDla7yXFLsfnYxipC8S09hNg807IchJbfZbM5NTWEbucLa/Uw8XE6G6cnXqCmpenk9j1K0p9oiRCbbghWcoQKaAEwkZ28lM8qV9NRPj+7+NQ++fn9zF2+p0837KTGH4FOeFFZ/BQKbdIB5FhWfQ=
+	t=1788875082; cv=none; b=r5WWmoL6xbX8O0HmMOBTuIZnNrl5OZIX+d5a3FmwjcCtOVtkbN2P2bAG1E48lxU5lh7ikX713yeM/Dz16U8JFwUyd92oXznHaNKICFR8EGlBnFmJTR3KWg8l0I68CYITjaI5gQ80Cm2GyakybJTK+/zP8WN0kbMNjGkLT9i1j2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788875027; c=relaxed/simple;
-	bh=YVHXbf26rA+jKhFYHPEQQG1zeSvG9J2n54qBLSk4eXs=;
+	s=arc-20240116; t=1788875082; c=relaxed/simple;
+	bh=65dsR/AIsa1KwD07S3iIYP5bJ3Epc26abAu9BtMFUS4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DUaH/O+Qo+iXFXYbGY3LfQHb1nEWJO9UWswjC9YRfXxeTxPX0Nu74R+eyVURCPIFozzOK+qDVdM1wT6BapbQu+pBtqtks51zztRvfG+EwOOHJZ+YkXMAnoC2t63057XVh5OxJfP029lBZvZlUodRu+mDqfYX7Kno91odE8OK1/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AsvSKsiP; arc=none smtp.client-ip=91.218.175.62
+	 MIME-Version; b=bmMnQw8gvbC9OtmXEdBwr800+1MDHxwmJ5gFE302qNySx5FS4cSwgntJxRlrS2gC5BBLj6ugOrDS68YItNHE3L5i80W5hwYjr0f2nteWH6jkHUvx2cV5kURdSF+0o0xnhSg4bTV53GXUL3k9m3CD+a1v4/b9v2IhY96CmwjoVyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Fad6sxFg; arc=none smtp.client-ip=95.215.58.103
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AsvSKsiP"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Fad6sxFg"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=YVHXbf26rA+jKhFYHPEQQG1zeSvG9J2n54qBLSk4eXs=;
+DKIM-Signature: a=rsa-sha256; bh=65dsR/AIsa1KwD07S3iIYP5bJ3Epc26abAu9BtMFUS4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788875006; v=1; x=1789479806;
- b=AsvSKsiP1qCoD7qYXZkQirh3mScZWgVvGFeQ8A3f4KDq5NotBxaFkX3sixHHiKD6xKxVVi63
- jzYF5gDn86/MYs3wamasAwWImCguV8rxuQPhBxINEtfs3/Qe++FrYdUl/34ncKF1kfWqBNGheXl
- p4vZK4YVPmRXZLVr98+zBxGM=
+ t=1788875055; v=1; x=1789479855;
+ b=Fad6sxFgcBzdmpNy3jWqhhFI1K0cG5IVG9G/qh60aeLcUnSIkZ3a3arHJ8sUWD1VeQD1Bu+4
+ j6mBw9BkctCkJudw7VzZgEQR8RvhCinzs3ntrpf084Fdc8S+lE0MCabmKv9iVeDGPojdlI/ugRT
+ xSz9X6BFTKQVx8oH2WfkiNsI=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id fac4a1df8e1a2353;
-	Tue, 08 Sep 2026 13:43:26 +0000
-X-Mizu-Trace-ID: fac4a1df8e1a2353
+Received: by smtp.migadu.com with ESMTPS id ce353f69015ecc17;
+	Tue, 08 Sep 2026 13:44:14 +0000
+X-Mizu-Trace-ID: ce353f69015ecc17
 X-Migadu-Flow: FLOW_OUT
 From: Zenghui Yu <zenghui.yu@linux.dev>
 To: linux-mm@kvack.org,
@@ -44,9 +44,9 @@ Cc: akpm@linux-foundation.org,
 	shuah@kernel.org,
 	gourry@gourry.net,
 	"Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
-Subject: [PATCH v2 2/3] selftests/mm: mark file-local symbols of pagemap_ioctl.c static
-Date: Tue,  8 Sep 2026 21:43:14 +0800
-Message-ID: <20260908134315.84431-1-zenghui.yu@linux.dev>
+Subject: [PATCH v2 3/3] selftests/mm: init page sizes early in pagemap_ioctl test
+Date: Tue,  8 Sep 2026 21:44:05 +0800
+Message-ID: <20260908134405.84448-1-zenghui.yu@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260908134117.84405-1-zenghui.yu@linux.dev>
 References: <20260908134117.84405-1-zenghui.yu@linux.dev>
@@ -60,183 +60,61 @@ Content-Transfer-Encoding: 8bit
 
 From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
 
-The file-scope variables (pagemap_fd, uffd, page_size, hpage_size and
-progname) and most functions of the pagemap_ioctl test are only used
-locally, but lack the static storage class.  Mark them static so that the
-compiler can catch accidental outer references.
+Initialize page_size and hpage_size before calling init_uffd(),
+hugetlb_setup_default(), etc.  That won't fix anything, but it is safer and
+saner to get these globals set up before doing other things.
 
-Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+While at it, drop the page_size parameter of transact_test(), which is
+actually unnecessary.
+
+Suggested-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
 ---
- tools/testing/selftests/mm/pagemap_ioctl.c | 43 +++++++++++-----------
- 1 file changed, 21 insertions(+), 22 deletions(-)
+ tools/testing/selftests/mm/pagemap_ioctl.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-index 3665530eda76..1a87b7483316 100644
+index 1a87b7483316..d9a4fb782ecf 100644
 --- a/tools/testing/selftests/mm/pagemap_ioctl.c
 +++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -36,11 +36,11 @@
- 
- #define TEST_ITERATIONS 100
- #define PAGEMAP "/proc/self/pagemap"
--int pagemap_fd;
--int uffd;
--size_t page_size;
--size_t hpage_size;
--const char *progname;
-+static int pagemap_fd;
-+static int uffd;
-+static size_t page_size;
-+static size_t hpage_size;
-+static const char *progname;
- 
- #define LEN(region)	((region.end - region.start)/page_size)
- 
-@@ -92,8 +92,7 @@ static long pagemap_ioc(void *start, size_t len, void *vec, size_t vec_len, int
- 	return ret;
+@@ -1489,7 +1489,7 @@ static void *thread_proc(void *mem)
+ 	return NULL;
  }
  
+-static void transact_test(int page_size)
++static void transact_test(void)
+ {
+ 	unsigned int i, count, extra_pages;
+ 	unsigned int c;
+@@ -1653,6 +1653,9 @@ int main(int __attribute__((unused)) argc, char *argv[])
+ 
+ 	ksft_print_header();
+ 
++	page_size = getpagesize();
++	hpage_size = read_pmd_pagesize();
++
+ 	if (init_uffd())
+ 		ksft_exit_skip("Failed to initialize userfaultfd\n");
+ 
+@@ -1661,9 +1664,6 @@ int main(int __attribute__((unused)) argc, char *argv[])
+ 
+ 	ksft_set_plan(119);
+ 
+-	page_size = getpagesize();
+-	hpage_size = read_pmd_pagesize();
 -
--int init_uffd(void)
-+static int init_uffd(void)
- {
- 	struct uffdio_api uffdio_api;
+ 	pagemap_fd = open(PAGEMAP, O_RDONLY);
+ 	if (pagemap_fd < 0)
+ 		ksft_exit_fail_msg("Failed to open " PAGEMAP "\n");
+@@ -1823,7 +1823,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
+ 	mprotect_tests();
  
-@@ -116,7 +115,7 @@ int init_uffd(void)
- 	return 0;
- }
+ 	/* 13. Transact test */
+-	transact_test(page_size);
++	transact_test();
  
--int wp_init(void *addr, size_t size)
-+static int wp_init(void *addr, size_t size)
- {
- 	struct uffdio_register uffdio_register;
- 	struct uffdio_writeprotect wp;
-@@ -140,7 +139,7 @@ int wp_init(void *addr, size_t size)
- 	return 0;
- }
- 
--int wp_free(void *addr, size_t size)
-+static int wp_free(void *addr, size_t size)
- {
- 	struct uffdio_register uffdio_register;
- 
-@@ -152,7 +151,7 @@ int wp_free(void *addr, size_t size)
- 	return 0;
- }
- 
--int wp_addr_range(void *addr, size_t size)
-+static int wp_addr_range(void *addr, size_t size)
- {
- 	if (pagemap_ioctl(addr, size, NULL, 0,
- 			  PM_SCAN_WP_MATCHING | PM_SCAN_CHECK_WPASYNC,
-@@ -162,7 +161,7 @@ int wp_addr_range(void *addr, size_t size)
- 	return 0;
- }
- 
--void *gethugetlb_mem(size_t size, int *shmid)
-+static void *gethugetlb_mem(size_t size, int *shmid)
- {
- 	char *mem;
- 
-@@ -186,7 +185,7 @@ void *gethugetlb_mem(size_t size, int *shmid)
- 	return mem;
- }
- 
--int userfaultfd_tests(void)
-+static int userfaultfd_tests(void)
- {
- 	size_t mem_size, vec_size, num_pages = 16;
- 	long written;
-@@ -230,7 +229,7 @@ int userfaultfd_tests(void)
- 	return 0;
- }
- 
--int get_reads(struct page_region *vec, size_t vec_size)
-+static int get_reads(struct page_region *vec, size_t vec_size)
- {
- 	size_t i;
- 	int sum = 0;
-@@ -241,7 +240,7 @@ int get_reads(struct page_region *vec, size_t vec_size)
- 	return sum;
- }
- 
--int sanity_tests_sd(void)
-+static int sanity_tests_sd(void)
- {
- 	size_t mem_size, vec_size, i, total_pages = 0;
- 	long ret, ret2, ret3;
-@@ -684,7 +683,7 @@ int sanity_tests_sd(void)
- 	return 0;
- }
- 
--int base_tests(char *prefix, char *mem, size_t mem_size, int skip)
-+static int base_tests(char *prefix, char *mem, size_t mem_size, int skip)
- {
- 	size_t vec_size;
- 	int written;
-@@ -789,7 +788,7 @@ int base_tests(char *prefix, char *mem, size_t mem_size, int skip)
- 	return 0;
- }
- 
--void *gethugepage(size_t map_size)
-+static void *gethugepage(size_t map_size)
- {
- 	int ret;
- 	char *map;
-@@ -807,7 +806,7 @@ void *gethugepage(size_t map_size)
- 	return map;
- }
- 
--int hpage_unit_tests(void)
-+static int hpage_unit_tests(void)
- {
- 	char *map;
- 	int ret, ret2;
-@@ -1001,7 +1000,7 @@ int hpage_unit_tests(void)
- 	return 0;
- }
- 
--int unmapped_region_tests(void)
-+static int unmapped_region_tests(void)
- {
- 	void *start = (void *)0x10000000;
- 	int written;
-@@ -1158,7 +1157,7 @@ static void unpopulated_thp_scan_test(void)
- 	munmap(area, 2 * hpage_size);
- }
- 
--int sanity_tests(void)
-+static int sanity_tests(void)
- {
- 	size_t mem_size, vec_size, i, buf_size;
- 	long ret, fd, nr_pages;
-@@ -1330,7 +1329,7 @@ int sanity_tests(void)
- 	return 0;
- }
- 
--int mprotect_tests(void)
-+static int mprotect_tests(void)
- {
- 	int ret;
- 	char *mem, *mem2;
-@@ -1450,7 +1449,7 @@ static ssize_t get_dirty_pages_reset(char *mem, unsigned int count,
- 	return cnt;
- }
- 
--void *thread_proc(void *mem)
-+static void *thread_proc(void *mem)
- {
- 	int *m = mem;
- 	long curr_faults, faults;
-@@ -1583,7 +1582,7 @@ static void transact_test(int page_size)
- 			      extra_thread_faults);
- }
- 
--void zeropfn_tests(void)
-+static void zeropfn_tests(void)
- {
- 	size_t mem_size, i;
- 	struct page_region vec;
+ 	/* 14. Sanity testing */
+ 	sanity_tests();
 -- 
 2.53.0
 
