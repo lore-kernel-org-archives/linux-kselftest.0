@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E8C4F797F;
-	Tue,  8 Sep 2026 10:13:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9444A4EE842;
+	Tue,  8 Sep 2026 10:14:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788862419; cv=none; b=Icf7Yw4IJbQ3B7a6wVI+sG04ASa/VuPlYy8m0PtnajCbqBXLh0nzRIZFD225UgK76XypdroYxsxB87kN6lerVO04je2wAndsKFzpEGsSGUmC/JfHMUR0YcsPaqzaIhfCJFxl7umroN2HLDOf3z8dWXKxpl9BJ4eqvuoq8W5wjjE=
+	t=1788862487; cv=none; b=aI8uZviDfdLDG3c6SnvPA8LV8D8FYAs4JlQG+skj/Yi4dknHZHJ5HzeH/zRPy7t7xRLGjsCDFdBUQyvUbFATf031mlGMwUghWwuzO7FJqtwHQtdRAO0InqVSeQvnTFjkdyPgFIV+09RLUspBP6a2osRBo9sOhpZ+dvZMsB7hWBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788862419; c=relaxed/simple;
-	bh=HMxdTjutqE80QtVvVuEyBqknLXYSR/nBcMooiWNB3x0=;
+	s=arc-20240116; t=1788862487; c=relaxed/simple;
+	bh=faFEQjgMnDiusYVfCCUQAU59ZSChKuyIkz+2k2FWJ5U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PXsbmTFGZQnjvGGU8Q8iU8B9N9Z05fgq+/YHnlgcnqYXTBN2V2lGneeI0ih6wElQidf1y07hC3Qh5E2uK5GXz3zd+6sS1V4jTn989I2aLT7aZrdoNlikS3HXMXxs7LYcEb9whzBzyTF0PIEzI82/+4WB8eFkvuByz8mAEjPVbYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OO5YyETh; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=LgMZM1tWyXkmzqpJah0K3YcT91FjPjeKFHhhg9fqxVRxELE5Z+sWchwmi4JdvluYgNKJ/mkI6kVVG4eCtrhXwfSaMfmXW/DVWzYfwo5TOCjaF9NAU3s2ZMpsopKsB8R+tv9sFNrD0jZVaOzYursXnttWgq1fQAWDivkIaf2UwVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iz9xURpW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OO5YyETh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D794C1F00A3A;
-	Tue,  8 Sep 2026 10:13:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iz9xURpW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28E1D1F00A3A;
+	Tue,  8 Sep 2026 10:14:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788862418;
-	bh=s5Rhz3vZATjbgv4L2KAACRCIbtaQyFKnS2m/CL22BH0=;
+	s=k20260515; t=1788862486;
+	bh=Cvq4qMjanLuwG3YSjMLX9OxK6QvsahWFeb4aWNdZaXM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=OO5YyEThil9/HPDJqoIpj1Ew48vNHqwYqwgFZG09fyVBdWNykF7HX/zrzOp1X+egE
-	 c0JHpYD0fJtjE2J/OxgDUrDOrwQGsqY8cKYgf9Nh4dgXFUaDA+mhh21BeAWQHvgO1e
-	 FybHHB8M0FbsEEaJmOKRedjFAiQ7Bg8NM0FrJfJQEVsIpxwd6RwIWX/W8mi8tMnKQ5
-	 QQQwz6oOprf0KFSJNTTbFexVcGiO+t8E/iKhnsPoayZz2HRcLGqURRC8hsWkOLVJx6
-	 Pp0/QHNDZOD2UpFdE/blACWUocYPjIbVp+2k06z5jDSVV0Q1Ql6tx3+Rae0mUR6ZOE
-	 aWiFMONpCEtUQ==
-Message-ID: <d6ca7f47-39bb-43b4-92d6-63ccc148ebdd@kernel.org>
-Date: Tue, 8 Sep 2026 12:13:32 +0200
+	b=iz9xURpWnnx+dU5/HrM8VQO5BbUDBW7rvyOLEuiLWetDXdQ8k9sBR4ImmLdNM+Dla
+	 N9Dfp7sOUwRPAKQbqdb/YMlpm5hpy6WKAwoioZvsKkWesFetbmX/dgCDD7SwWw0Sh8
+	 sdrThQmQVgTDomTp7h5cUd70qq67m8ahaB44eFW7y5LRfCBqUDMACXcX8xpnkJgR90
+	 ThiuAAAiaifndll5OnzG754tijKFWr3abF20Ynl6N13OEEvqTD5p/YrmKZ8l2+CuLy
+	 4e9UVv2pB0x39Ake1gvwn527QYcC2r9cUvKByu65tH2hoLFf2vOU18urhhaoqRuR1Q
+	 lT+RtcZM6i4Wg==
+Message-ID: <c8f3161f-0428-4f0e-a3bf-6ca72370b4fa@kernel.org>
+Date: Tue, 8 Sep 2026 12:14:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,14 +35,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] selftests/mm: Reject invalid test selections
- before running tests
+Subject: Re: [PATCH v2 2/2] selftests/mm: Only prepare ptrace_scope when
+ memfd_secret is selected
 To: Tianyi Chen <hi@tychen.cc>, Andrew Morton <akpm@linux-foundation.org>
 Cc: shuah@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, jsavitz@redhat.com
 References: <20260906135444.749144-1-hi@tychen.cc>
  <178886112560.138404.1278745290043112298.mm-cli-v2-0@tychen.cc>
- <178886112560.138404.14562368683011041790.mm-cli-v2-1@tychen.cc>
+ <178886112560.138404.8930658836608223518.mm-cli-v2-2@tychen.cc>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -89,85 +89,47 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <178886112560.138404.14562368683011041790.mm-cli-v2-1@tychen.cc>
+In-Reply-To: <178886112560.138404.8930658836608223518.mm-cli-v2-2@tychen.cc>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 9/8/26 11:55, Tianyi Chen wrote:
-> getopts reports unknown options and missing arguments, but run_vmtests.sh
-> ignores its error result and continues with test setup. An empty -t
-> argument also falls back to the default selection, while unknown category
-> names can silently select no tests and still reach setup code.
+> The memfd_secret setup clears ptrace_scope whenever its test binary is
+> executable, even when a different category was selected. run_test() filters
+> the test invocation, but it does not protect the preceding setup.
 > 
-> Exit on getopts errors and validate category names against the existing
-> list in usage() before any test setup. Reject empty and whitespace-only
-> selections, and normalize category separators so validation and execution
-> agree. Keep the default selection for an unset or empty VM_SELFTEST_ITEMS
-> environment variable, and preserve the existing standalone default value.
+> Check the category selection before entering the memfd_secret block so
+> running unrelated categories does not change ptrace_scope. Keep the
+> existing executable check and the behavior when memfd_secret is selected.
 > 
-> Fixes: 85463321e726 ("selftests/vm: enable running select groups of tests")
 > Assisted-by: Codex:GPT-6
+
+We prefer
+
+Assisted-by: LLM
+
+now
+
 > Signed-off-by: Tianyi Chen <hi@tychen.cc>
 > ---
->  tools/testing/selftests/mm/run_vmtests.sh | 27 +++++++++++++++++++----
->  1 file changed, 23 insertions(+), 4 deletions(-)
+>  tools/testing/selftests/mm/run_vmtests.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> index d09f9f6a384..836c7454cba 100755
+> index 836c7454cba..9932df252f4 100755
 > --- a/tools/testing/selftests/mm/run_vmtests.sh
 > +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -96,26 +96,45 @@ separated by spaces:
+> @@ -371,7 +371,7 @@ CATEGORY="process_madv" run_test ./process_madv
 >  
->  example: ./run_vmtests.sh -t "hmm mmap ksm"
->  EOF
-> -	exit 0
->  }
+>  CATEGORY="vma_merge" run_test ./merge
 >  
->  RUN_ALL=false
->  RUN_DESTRUCTIVE=false
->  TAP_PREFIX="# "
->  
-> +# An unset or empty environment selection keeps the default behavior.
-> +VM_SELFTEST_ITEMS=${VM_SELFTEST_ITEMS:-default}
+> -if [ -x ./memfd_secret ]
+> +if test_selected "memfd_secret" && [ -x ./memfd_secret ]
+>  then
+>  if [ -f /proc/sys/kernel/yama/ptrace_scope ]; then
+>  	(echo 0 > /proc/sys/kernel/yama/ptrace_scope 2>&1) | tap_prefix
 
-Who would set it at this point?
-
-Can't this just be
-
-VM_SELFTEST_ITEMS="default"
-
-> +
->  while getopts "aht:nd" OPT; do
->  	case ${OPT} in
->  		"a") RUN_ALL=true ;;
-> -		"h") usage ;;
-> +		"h") usage; exit 0 ;;
->  		"t") VM_SELFTEST_ITEMS=${OPTARG} ;;
->  		"n") TAP_PREFIX= ;;
->  		"d") RUN_DESTRUCTIVE=true ;;
-> +		"?") exit 1 ;;
->  	esac
->  done
->  shift $((OPTIND -1))
->  
-> -# default behavior: run all tests
-> -VM_SELFTEST_ITEMS=${VM_SELFTEST_ITEMS:-default}
-> +# Normalize whitespace so validation and test_selected() use the same names.
-> +read -r -a selected_categories <<< "${VM_SELFTEST_ITEMS//$'\n'/ }"
-> +VM_SELFTEST_ITEMS="${selected_categories[*]}"
-> +if [ -z "$VM_SELFTEST_ITEMS" ]; then
-> +	echo "No test categories specified" >&2
-> +	exit 1
-> +fi
-> +
-> +if [ "$VM_SELFTEST_ITEMS" != "default" ]; then
-> +	# Keep the documented category list as the source of valid names.
-
-That makes sense to me.
-
-It's interesting what would happen when trying to run a test that does not even
-exist for the architecture. Getting some feedback that the test was skipped
-would be nice. But that's something for another day :)
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
