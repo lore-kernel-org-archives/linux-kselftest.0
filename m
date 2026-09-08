@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-61.mta1.migadu.com [95.215.58.61])
+Received: from mta1.migadu.com (out-215.mta1.migadu.com [95.215.58.215])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1688653CA70
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 12:14:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B4C75335A8
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 12:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.215
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788869687; cv=none; b=mMicYvN7mYZJI0lqL0bwQvQ96j/ccKJmZDcUP/iwdENH8agDERGdYFr+7psfxlTV31P45QCfn0VreKu5Qv45ehUx/jrVUhrKhI0W29m/PHdbjigj4+BwVmHzEwj5pwEvTOb0oKtwn862gRfsNP8JGkFQ/G60p2OD92kPPiS68ME=
+	t=1788870139; cv=none; b=b7jsielZ1j8RYBqdtL5XBTP3QeP7DUiN8Q601roi6S+O9Iba0fQl/XdicfPQM5+zVNLvh0f8WHfjfrrvwqFNR9dWrOq1iWSVdqHMNlAHpqPt27g8hhyHTPv7NivzbBAo0RAnRvEBHTbCYVHUtFOkH115+MpfvW4x07fQ6V4eIq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788869687; c=relaxed/simple;
-	bh=s0JjhgQcWXx5LvEeft7Y4N1FNjMy2Kjb8rSLh9lKqgQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nfkHV7mSrA71/Yj1xw+378bQFlsQ7Bs6Ma8pBz6B6ZwFBQ5fYbBjr+BudiWnyZgH4E8ZXpKgu0l3tpH3d7qbnIQgVqAxN9QuK3NteRwkXLS7ReXOqQWiC37Bn4hiAsC5FGKpbWHAAEjiLBd1lnW0axvXa1SqJCvb0RrfnWU0lYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G4YCsJrG; arc=none smtp.client-ip=95.215.58.61
+	s=arc-20240116; t=1788870139; c=relaxed/simple;
+	bh=k/IHifKCS20JBL4khmFjrFg5h30C+16o1SAyAAe7yD8=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=hCmtJrdCLHSBi9SP8FoqBBKrd/sT8lQx/Ye0eqjq2WEiwE/R8L2Hm0PhwPl2Bo6Xx9QKjdOO88XnYqKyj8iF+9mDe0dhVBwA9WRKkRg1/Nw+k9ZqPqUmSGeUJUpnxx0WXYtJYaajqJOeT59MrBFIMaqkxrjjugFEcYJYG9FPHiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hP0neyFS; arc=none smtp.client-ip=95.215.58.215
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G4YCsJrG"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hP0neyFS"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=s0JjhgQcWXx5LvEeft7Y4N1FNjMy2Kjb8rSLh9lKqgQ=;
+DKIM-Signature: a=rsa-sha256; bh=k/IHifKCS20JBL4khmFjrFg5h30C+16o1SAyAAe7yD8=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788869679; v=1; x=1789474479;
- b=G4YCsJrG03+9kNCUUBLUBWMWQnoHNHatTiT0nU6rbvzAg74pJMbSBNJaaRGlKLAAjqNhIDQJ
- a64BJb01Hb2l78xQLCVKFqQHi2MeP07gpEq0hhe8VTHTer8yhHUqB8dP3JpSiNS698RTRGqm3YV
- VMZDpkiN5sRiyC15PVOXHdcM=
+ t=1788870132; v=1; x=1789474932;
+ b=hP0neyFS6PhRYDaYjbwef6m8kg60FR8gWtm174W2znoCF20FPFxYz2l4t15h+H05ZJRIL7Ko
+ EcYw0gew4UDwgQWw8EdCe8pPHAIVvs61jiyeNSotyrSqUEt43Zjajmd5wJ0uWoePCKwdCjykKd8
+ uM7cKFLM0wzYuHLVpkmmJFZM=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id a6ac0f3f3b0ab0b5;
-	Tue, 08 Sep 2026 12:14:39 +0000
-X-Mizu-Trace-ID: a6ac0f3f3b0ab0b5
+Received: by smtp.migadu.com with ESMTPS id 05ba60e156225361;
+	Tue, 08 Sep 2026 12:22:12 +0000
+X-Mizu-Trace-ID: 05ba60e156225361
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <55327e28-1d34-4913-97cc-eb281b6f5b37@linux.dev>
-Date: Tue, 8 Sep 2026 20:14:28 +0800
+Message-ID: <c6c4fd69-3074-4d6d-804b-cf8ff62359da@linux.dev>
+Date: Tue, 8 Sep 2026 20:22:02 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,109 +38,132 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/7] cgroup/cpuset: Factor out child partition
- validation
-To: Ridong Chen <ridong.chen@linux.dev>, Waiman Long <longman@redhat.com>,
- cgroups@vger.kernel.org
-Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
+Subject: Re: [PATCH bpf v2 2/3] tcp: Skip cond_resched() in
+ inet_csk_listen_stop() under BPF context
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: Kuniyuki Iwashima <kuniyu@google.com>, bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ sdf@fomichev.me, martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ncardwell@google.com,
+ shuah@kernel.org, aditi.ghag@isovalent.com, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Guopeng Zhang <zhangguopeng@kylinos.cn>
-References: <20260902102615.79189-1-guopeng.zhang@linux.dev>
- <20260902102615.79189-2-guopeng.zhang@linux.dev>
- <5842edcd-9283-4a87-afc9-50e51962368e@redhat.com>
- <5e0d1386-b094-4d4e-8569-e6b584f955c5@linux.dev>
- <7d1f1c95-5dad-4124-858c-7c8e3119f437@linux.dev>
- <0b2b6b9d-98de-4f45-8e65-a202fe9ce0d1@linux.dev>
- <a89dab46-c6e8-4643-bf83-83fd76a38ab7@linux.dev>
-Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <a89dab46-c6e8-4643-bf83-83fd76a38ab7@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+ martin.lau@kernel.org, mason@kernel.org
+References: <20260906074135.185212-3-jiayuan.chen@linux.dev>
+ <0aa6425f9e8f32705ae827f6325b29079234c3f3d0c7b2cdefba3e5b50432766@mail.kernel.org>
+ <CAAVpQUBztYDHyiCN1fnhdxCPv_5AZ09yCMQfNW96SzZyw0LhHA@mail.gmail.com>
+ <a44c1e4d-e9a8-4df3-aa25-20875cd4d30e@linux.dev>
+In-Reply-To: <a44c1e4d-e9a8-4df3-aa25-20875cd4d30e@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
+On 9/8/26 4:07 PM, Jiayuan Chen wrote:
+>
+> On 9/8/26 7:34 AM, Kuniyuki Iwashima wrote:
+>> On Sun, Sep 6, 2026 at 1:23 AM <bot+bpf-ci@kernel.org> wrote:
+>>>> tcp: Skip cond_resched() in inet_csk_listen_stop() under BPF context
+>>>>
+>>>> bpf_sock_destroy() runs from the tcp iterator, under 
+>>>> rcu_read_lock(). If
+>>>> the sock is a listener that still has children in its accept queue,
+>>>> tcp_abort() ends up in inet_csk_listen_stop() and the cond_resched()
+>>>> there trips the debug check:
+>>>>
+>>>> BUG: sleeping function called from invalid context at 
+>>>> net/ipv4/inet_connection_sock.c:1523
+>>>> in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 628, name: 
+>>>> test_progs
+>>>> preempt_count: 0, expected: 0
+>>>> RCU nest depth: 1, expected: 0
+>>>> locks held by test_progs/628: 3, last CPU#3:
+>>>>   #0: ffff8881158cee18 (&p->lock){+.+.}-{4:4}, at: 
+>>>> bpf_seq_read+0x56/0x1210
+>>>>   #1: ffff8881106bb858 (sk_lock-AF_INET6){+.+.}-{0:0}, at: 
+>>>> bpf_iter_tcp_seq_show+0x32b/0x4b0
+>>>>   #2: ffffffffb435af20 (rcu_read_lock){....}-{1:3}, at: 
+>>>> bpf_iter_run_prog+0x46b/0xde0
+>>>> CPU: 3 UID: 0 PID: 628 Comm: test_progs Tainted: G W           
+>>>> 7.2.0+ #65 PREEMPT
+>>>> Tainted: [W]=WARN
+>>>> Call Trace:
+>>>>   <TASK>
+>>>>   dump_stack_lvl+0xc1/0xf0
+>>>>   dump_stack+0x10/0x20
+>>>>   __might_resched+0x3d2/0x610
+>>>>   inet_csk_listen_stop+0x7b/0xbf0
+>>>>   tcp_abort+0x23b/0x3b0
+>>>>   bpf_sock_destroy+0xfc/0x140
+>>>>   bpf_prog_448133d24601754f_iter_tcp6_server+0x81/0x8a
+>>>>   bpf_iter_run_prog+0x538/0xde0
+>>>>   bpf_iter_tcp_seq_show+0x26b/0x4b0
+>>>>   bpf_seq_read+0x424/0x1210
+>>>>   vfs_read+0x197/0xe40
+>>>>   ksys_read+0x119/0x240
+>>>>   __x64_sys_read+0x72/0xc0
+>>>>   x64_sys_call+0x647/0x27e0
+>>>>   do_syscall_64+0xe5/0x610
+>>>>   entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>>>> RIP: 0033:0x7fad39b28aca
+>>>> RSP: 002b:00007ffc381c61c0 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+>>>> RAX: ffffffffffffffda RBX: 00007ffc381c6a88 RCX: 00007fad39b28aca
+>>>> RDX: 0000000000000032 RSI: 00007ffc381c6250 RDI: 0000000000000014
+>>>> RBP: 00007ffc381c61e0 R08: 0000000000000000 R09: 0000000000000000
+>>>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
+>>>> R13: 0000000000000000 R14: 000055f077c1bbb0 R15: 00007fad3a0f3000
+>>>>   </TASK>
+>>>>
+>>>> The commit that added the kfunc already guards lock_sock() in 
+>>>> tcp_abort()
+>>>> and udp_abort() with has_current_bpf_ctx(), but missed the listener 
+>>>> path.
+>>>> Do the same for the cond_resched(), it can't reschedule there anyway.
+>>>>
+>>>> Fixes: 4ddbcb886268 ("bpf: Add bpf_sock_destroy kfunc")
+>>>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+>>> Is the justification "it can't reschedule there anyway" accurate?
+>>>
+>>> With CONFIG_PREEMPT_DYNAMIC=y booted with preempt=none or 
+>>> preempt=voluntary,
+>>> cond_resched() expands to __cond_resched() which can actually 
+>>> reschedule.
+>>> The splat in the commit message confirms preempt_count is 0 while 
+>>> RCU nest
+>>> depth is 1. With preempt_count==0, should_resched(0) can be true and
+>>> __cond_resched() will call preempt_schedule_common() for a real 
+>>> reschedule.
+>>>
+>>> Additionally, in configurations with CONFIG_PREEMPT_RCU=n where
+>>> rcu_read_lock() is preempt_disable(), __cond_resched() falls through to
+>>> rcu_all_qs() which calls rcu_qs() to report a quiescent state from 
+>>> inside
+>>> an RCU read-side critical section. That's a correctness problem 
+>>> beyond just
+>>> the debug check.
+>>>
+>>> So the call can either reschedule (PREEMPT_DYNAMIC none/voluntary) 
+>>> or report
+>>> a bogus quiescent state (non-preemptible RCU). Could the 
+>>> justification be
+>>> reworded to explain that the loop runs inside the iterator's RCU 
+>>> read-side
+>>> critical section and must not reschedule or report a quiescent state 
+>>> there?
+>>> The code change itself is correct and matches the existing pattern in
+>>> tcp_abort() and udp_abort().
+>> or maybe simply remove cond_resched(), hoping 7dadeaa6e851 would
+>> resolve the scheduling issue.
+>>
+>
+> Good suggestion. cond_resched has become old practice under 
+> CONFIG_PREEMPT_LAZY
 
-在 2026/9/8 09:27, Ridong Chen 写道:
-> 
-> 
-> On 9/7/2026 6:16 PM, Guopeng Zhang wrote:
->>
->>
->> 在 2026/9/4 09:55, Ridong Chen 写道:
->>>
->>>
->>> On 9/4/2026 9:25 AM, Ridong Chen wrote:
->>>>
->>>>
->>>> On 9/4/2026 2:33 AM, Waiman Long wrote:
->>>>> On 9/2/26 6:26 AM, Guopeng Zhang wrote:
->>>>>> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
->>>>>>
->>>>>> compute_partition_effective_cpumask() checks whether each valid child
->>>>>> partition remains covered by the parent exclusive CPU mask and whether it
->>>>>> would consume all remaining CPUs of a populated parent.
->>>>>>
->>>>>> Factor these two checks into child_partition_error() so the same rules can
->>>>>> be reused when evaluating a proposed parent configuration. This is a
->>>>>> preparatory refactoring with no intended functional change.
->>>>>>
->>>>>> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
->>>>>> ---
->>>>>>    kernel/cgroup/cpuset.c | 38 +++++++++++++++++++++++++++++---------
->>>>>>    1 file changed, 29 insertions(+), 9 deletions(-)
->>>>>>
->>>>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>>>>> index 8f24171b6055..6994dc75d940 100644
->>>>>> --- a/kernel/cgroup/cpuset.c
->>>>>> +++ b/kernel/cgroup/cpuset.c
->>>>>> @@ -2085,6 +2085,26 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->>>>>>        return 0;
->>>>>>    }
->>>>>> +/*
->>>>>> + * Return the error that will invalidate a child partition under a proposed
->>>>>> + * parent partition configuration.
->>>>>> + */
->>>>>> +static enum prs_errcode
->>>>>> +child_partition_error(struct cpuset *child,
->>>>>> +              const struct cpumask *partition_cpus,
->>>>>> +              const struct cpumask *remaining_cpus,
->>>>>> +              bool parent_populated)
->>>>> I think you should add some functional comments on what "partition_cpus" and "remaining_cpus" are supposed to be so that caller knows what to pass into this helper.
->>>>
->>>> Would it help to rename them to excpus and local_excpus?
->>>> local already implies "excluding children" (just like cgroup.stat.local), so I think that makes the intent clearer.
->>>>
->>>
->>> Regarding the naming: child_partition_error is a bit odd — it sounds like it's validating a hierarchical child partition, but it's actually validating the partition itself (the child argument). The parent is only needed as context for the validation logic, not because we're checking a subordinate partition.
->>>
->>> I'd suggest renaming it to something like:
->>>
->>> ```
->>> static enum prs_errcode cs_partition_error(struct cpuset *cs, ...)
->>>
->>> ```
->>>
->>> That would better reflect what the function actually does.
->>>
->>
->> Thanks, Ridong. I see what you mean about the name.
->>
->> My intention with "child" was to describe the role of the partition in these checks. Both callers use the helper while walking a parent's child partitions, and the result depends on the parent's complete exclusive mask, whether the parent is populated, and the active CPUs remaining at that point in the walk. The helper also checks only the two conditions that can invalidate a child during this process, rather than performing general validation of an arbitrary cpuset partition.
->>
->> For that reason, `cs_partition_error()` might suggest a broader scope than the helper actually has. Would it make sense to keep `child_partition_error()` and clarify the comment, for example:
->>
-> 
-> As you can see, we are continuing to add partition checks, so I'd still suggest avoiding child_partition_error(), it would become confusing when we later refactor the partition validation logic. All of these functions are ultimately used to validate a partition, and the validation may depend on either the parent or a trialcs, or something else.
-> 
-> So I'd propose keeping it as:
-> 
-> static enum prs_errcode cs_partition_error(struct cpuset *cs, struct cpuset *parent);
-> 
-> This is more general and better accommodates future extensions.
-> 
 
-I see your point now. You are looking at this from a longer-term design perspective. I will update it in the next version.
+After reconsideration, I think it's not a good idea to remove it if we 
+treat it as a fix and the fix will be backported to LTS.
 
-Thanks,
-Guopeng
+Or we just drop both cond_resched and Fixes tag.
+
 
