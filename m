@@ -1,157 +1,263 @@
-Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93731D54FA
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 01:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.204
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788829483; cv=pass; b=UBxfGbnykQwSjCiP3C7Og9NKBNkdmAwO8bs2WF4k+OXgfP14j4QL8AE4GNWUJ5r65LkYv0Ik0wtVeYW6b0uXYFpeB9u1hUVOJZUug5OFi+XREnySpzhjYAgzIjVXM6HDSRP0fSsjrszm8DRcELslDTLEAk8AiVM+egO1tUhiAQc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788829483; c=relaxed/simple;
-	bh=W4XdQovADM5RSeHI+/ZuPheISmstJfmeHSEtcR5uyzk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ptabqB78YNHt7psxZKU2ss/FV9AQ3bgyle/Ta7L3NMCAildTxvqh3UfWWicUe+4fDQSkjByhCL3az3PYqURogoZXiMNKjEpSOrHykAkujc62sDr9yp90piQbJUdMa0FiGb1zSb85/91Hv68/tt2TuomIysdyCZg5xxKPCu59OuU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S0MczrWG; arc=pass smtp.client-ip=74.125.230.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4E6242D72;
+	Tue,  8 Sep 2026 01:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788830116; cv=none; b=A6BoeJyOAIzfkmlayRgeg16G9176HaAhYErExIXaijMNJnJ6wlvnE6uJaShbct+oxfoBkqYODLwkDKhJrtuDju+8EAprgc+gnlnjvtOunNMr7FZQcIugwkeCLveJ/x/R0zfadyu9gwmcjv1ga4iYpO2YcdfZnKnmKsIWsBkIHZU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788830116; c=relaxed/simple;
+	bh=Gy+k7+DDVj2xxByjkqg61Rqjwsbg3NNadUPvA+BHCIY=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=hAuLIVAwwzDakXGPQjbTaWfmOj0IEWGu8oOYWsDrUeiaJT7FdqD/9FLijfZXrfWQgRzVpI2ZJjy6uZ+4FzDzPYxWfGF+QCUEmpku+0GOFMnUFSWekM7Y7swGbeD0gOpWn/+QgfLIS6D05ZWHS8yYI1Nd3txJYZhYMV5R2QFR8BY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MEaQehHc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S0MczrWG"
-Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-5307425f44bso365281cf.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 18:04:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788829481; cv=none;
-        d=google.com; s=arc-20260327;
-        b=arNYkW8BOl6CHhwPHM3YmxHtuCf7YjiSuS9S6v1qhUPBnmruRtDt/Cw4Shsni2tp0r
-         n4huUtaSmO6FoE2I9mpCgW+l5Aw9M6/KqNX6Sh9hGZmK61hfO43wpXplP/NYu6R/5n7V
-         GmGnLBZ61CyBde5YJCJyAGSAdAZDKr63tNSMszE78X2pbaW0B4eDnvmv7jiO477kLAz9
-         ZD+j76Ap1YXkrdjzZkwKvXHaVaZ1Y+Z948iJzSiI50nv7XrRO5472FGPpEgU6pDhEGj2
-         xZfCS0ENFntBq/22DdSiIu9slIH0+PpzrUlHZW88RHgb8uxxxCJ3ybtqpNtaYRpWQ3mq
-         nYaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=W4XdQovADM5RSeHI+/ZuPheISmstJfmeHSEtcR5uyzk=;
-        fh=cbP6VxnBVSvvywc4t+weH6Cg1H3iyYlIb3eJl1QRnS8=;
-        b=PfeZ3vPQTJBGd+4Z481A8TOFwGQYJZnmZ2kTlA/xtN3S1OjzshRWQ5zyOgH6HG+X3n
-         ZvUgT31xaxavyaNPuIErTrdYHTPONRX+8amIcKbLS4zrz/XZ5BkBYpWQ59c65Qwrfa33
-         7oXpS596Qa4pv5t9MYrxzt0mP6VLdflwNa+ZbhsL+tBzAQqZNP2JndOwQQ0BmfIGNrfg
-         Wakn+00+ND5aPlm5DqeLGgVjFRN29Nvz6paExOo8Ot6NeYa41uu8dYPijzQb3l3QSxxq
-         2OaTf8nk8/28p4FSsTrZCrBiKf2zXA/EDuwoZO1ppzkrZ/yL9YwOx7ofg/uDrdfgaCpo
-         6y8A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788829481; x=1789434281; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=W4XdQovADM5RSeHI+/ZuPheISmstJfmeHSEtcR5uyzk=;
-        b=S0MczrWGpX30+x/4tSE0UhO7/5nIWkmrbcpR+tQLiGy1ecHuzC+1pydZy9SDALW+rU
-         cXj7rb/em83lTsyENqxg2vFHRTQ6AV8UJWKIJo3KfoTYwc1YMYJaUwEi65hCN3wNe/3b
-         qzsemCnkATfIguMgH0jC8hzs6fOXiXFI67FW/gAE1rF1jXht8shZXpZ+AVg0WFd+w8lW
-         GnwY2oPYXN8lXGw7HM4tcJrCGNy4Yw+q2/gWYqephUhYGrJZxvecrpCXWsogsFlaSH9n
-         l5x1CEkupBU+lQy9OJgN7x6J6MPkK+b4GSmlSN1ufSnSlmyrTR7pkbIFD2XUrfY0C2g3
-         jF8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788829481; x=1789434281;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=W4XdQovADM5RSeHI+/ZuPheISmstJfmeHSEtcR5uyzk=;
-        b=j/CuWB24kvSFnLd1SLuvp5sWFqT8T3YroFWieZyat09b/37LxlmPzm+c6jw1MPCCXP
-         WVexwiSK/VupmEuWX4Hlk8IDzm1YRWT0VQ0sXxAtT6R8+dYjt2bnvPOpxkeaEN/pvCF0
-         PSltZfv8EVSyATKYon/AYj2TI0ajkqxl2SvHOOI0bIwyW1tiEcFF58jAJxwYZ5AhM8oR
-         IArkqxpHszEZGccbpHlV1mg+EJ63mH7w1wyd76i+7rreeyTyr9xhbtND35K+0LXcmK/B
-         emIi/sD4ShvbumzrpKVh+JZIw2fADTpQ8B75X76PQFHGlMePTaqujCBRme6yZ64MftTo
-         xcLw==
-X-Forwarded-Encrypted: i=1; AKwUvBxymY1n1Jn72CUn9smRXR47AMOhM5NSb0QmII3xL3Skv+vsIMcEs0HkvUCeoZJxrB7sda0n9JYPC4lNDXJqBc4=@vger.kernel.org
-X-Gm-Message-State: AFuF++lPW0YGgDXdhC3flpl9biltKYReIxhNlDsSjTY9bCrmjwX5BbJo
-	xykFa9KxXx3Lt0bw78P9QYPCw1YHljy+yGHa6YJolnrt0heoiU78FVtH/umsuywKPafTL2SURmb
-	YpQTbG5bNfhU38c+PhsSrfPH+m+5C/uG6yJTJZ+MG
-X-Gm-Gg: AYBFou0mH9bg+bJeFMjkFLHoMJHcE8g3myst551qrhhZA06toTi3ugoFycay9k5T9TC
-	bTq+5gOpgy5AxLEHbVbnbreKXxU6cWOSe2wUFLbpTc9Qt5+eaK5TiJm9LqTkopc5Sw6z75kUkw5
-	nB3KWVdRpp/lBkZ+wXRNRsWLVCMYfXcV2hEZdJ4ju0mHtaZctA1+9C4wO8Ry7IsJkAS3gw1NAnA
-	XA26SenjqztLyk0Azfe9g11wfUGxNgaMAjXdmC0xQzr4Fa4zvcywemPoeYFsC3QGIr/CNgBNWUV
-	HZSYC1nVKGNEhecThWfIMOjUHC5rEmrbTmXy+/PgKAPRc5LeXV/0XHDNmwa0BrOS2myUluudEct
-	w2kqivDfO3+hIYLHBR6IJr2/bokqJ
-X-Received: by 2002:a05:622a:e416:10b0:519:b82d:fe62 with SMTP id
- d75a77b69052e-530810b149cmr15210511cf.7.1788829480213; Mon, 07 Sep 2026
- 18:04:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MEaQehHc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B808E1F00A3D;
+	Tue,  8 Sep 2026 01:15:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788830114;
+	bh=w+7FkFBDFQ+GLRLPh0cC29VnEl1BgTg3LuZPeUb6jVA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=MEaQehHcRMDfmLnUO288XNQtOERtvLtcOA5001TTqZxYYzHhQmHwbVQhHqi+RHeqX
+	 z+W9sTsDTMFYzI5KSploJbQ4cIBNqaCcu1sDaaTX0OfKyHVp4qQN5ZMGDZpK6imzvg
+	 7l39l4bsNlEejohGCou0XvYtS+SUq/7U49xQqAOEr2QIYz5eE0bFjvT/ThZPDvnN56
+	 yHPfvzPdlze6Cdbqswsmb67KWZpljya5H/Sr2ncvYa0MGkUBE4xMYjnHHNph7sTjLH
+	 4hCECKNc+R4IBUSdKnwK09pM8xkcB9i0y40JuPbSJe9965dkQokpRupD8Dal/gOpCa
+	 5TRFhBP66rCow==
+Date: Tue, 8 Sep 2026 10:15:09 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Pengfei Li <ljdlns1987@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Mark Rutland <mark.rutland@arm.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ kernel test robot <lkp@intel.com>, Bo Zhang <zhangbo56@xiaomi.com>, Pengfei
+ Li <lipengfei28@xiaomi.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v6 0/3] trace: stack trace deduplication for ftrace
+ ring buffer
+Message-Id: <20260908101509.5ca094dacc96053236f7d2f3@kernel.org>
+In-Reply-To: <20260903132409.270195-1-lipengfei28@xiaomi.com>
+References: <20260903132409.270195-1-lipengfei28@xiaomi.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260904031912.2133476-1-tweek@google.com> <b965bb62-fcc8-4517-9947-24613650f1f5@linux.dev>
- <CA+zpnLc-WAqE9rA0PsjvOFe_YCZOdVj9YAzuayGXx0nhpqtw7g@mail.gmail.com> <534e5a3b-5160-4619-8b2e-27a81783e17f@linux.dev>
-In-Reply-To: <534e5a3b-5160-4619-8b2e-27a81783e17f@linux.dev>
-From: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
-Date: Tue, 8 Sep 2026 11:04:21 +1000
-X-Gm-Features: AcwNN1VZYaBih0XkaS7qOeRNbkcxHADyZeWVg_y6k7B5EJaVTTRllbZ02cIFTKY
-Message-ID: <CA+zpnLeiZrmvNeatnbA1RSRUVFswXBsJc1S0=mZS6cF_g1UbSg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] selftests/bpf: Move verifier failure tests
- out of test_global_percpu_data
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Sid Nayyar <sidnayyar@google.com>, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 8, 2026 at 1:24=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> wr=
-ote:
->
-> On 2026/9/7 13:46, Thi=C3=A9baud Weksteen wrote:
-> > On Fri, Sep 4, 2026 at 4:07=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev=
-> wrote:
-> >>
-> >> On 4/9/26 11:19, Thi=C3=A9baud Weksteen wrote:
-> >>> Commit 4c9241bd731a ("selftests/bpf: Add tests to verify global percp=
-u
-> >>> data") added test_global_percpu_data.c to LSKELS_EXTRA. Later, in com=
-mit
-> >>> 1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu dat=
-a")
-> >>> two verifier failure tests were added (verifier_strncmp and
-> >>> verifier_snprintf), both marked as non-autoload (SEC("?kprobe")).
-> >>>
-> >>> When bpftool generates light skeletons, non-autoloaded programs are
-> >>> skipped during loading, causing the loader program to store subsequen=
-t
-> >>> program FDs into incorrect skeleton struct fields (e.g. dump_percpu_d=
-ata's
-> >>> FD was stored into verifier_strncmp's descriptor).
-> >>
-> >> IIUC, patch 2 will fix the issue totally.
-> >>
-> >> Better to add a subtest to verify both the issue and the fix?
-> >
-> > Thanks for the review. That's right, patch 2 will fix the issue:
-> > bpftool will fail to build any program that is set up that way. That's
-> > why patch 1 is necessary; otherwise, the existing test would fail.
-> >
-> > Just checking your suggestion: what I can do is add a new test to make
-> > sure that dump_percpu_data is set up as expected (fd > 0). I can write
-> > a new test_global_percpu_data_iter_lskel, that is similar to
-> > test_global_percpu_data_iter, but for lskel?
-> >
-> > I can also write a test to ensure that bpftool fails when light
-> > skeletons are set up with autoload=3Dfalse?
-> >
->
-> imo, the rejection of autoload=3Dfalse prog when generating light skeleto=
-n
-> is not friendly for users. Users should not care about mixing
-> autoload=3Dfalse progs with autoload=3Dtrue progs, even for light skeleto=
-ns.
->
-> The users-friendly way is to skip those autoload=3Dfalse progs when
-> generating light skeletons.
+On Thu,  3 Sep 2026 21:24:06 +0800
+Pengfei Li <ljdlns1987@gmail.com> wrote:
 
-Good point. I agree. I'll send a patch with this approach instead. Thanks.
+> Hi Steven, Masami, all,
+> 
+> This is v6 of the ftrace stackmap series, sent as a new thread.
+> 
+> Previous version:
+>   https://lore.kernel.org/all/20260902064242.28606-1-lipengfei28@xiaomi.com/
+> 
+> The series adds stack trace deduplication to ftrace. When the
+> 'stackmap' option is enabled alongside 'stacktrace', the ring buffer
+> stores a 4-byte stack_id instead of a full kernel stack trace, and the
+> full stacks are exported once via tracefs (stack_map / stack_map_bin).
+
+Thanks for updating!
+
+BTW, to make it easier for review, can you split the patches in
+several parts? For example, start from a minimum basic functionality
+(just internal stackmap, seq_read, and reset), use it from tracing,
+add stat interface, binary interface, and documents, tools, selftests.
+This makes the series in at least 7 patches, but nicer to focus on
+one thing for each patch.
+
+The patch description is a key area to focus on; if the explanation
+proceeds by saying "add Foo, then add Bar, and so on," those changes
+should likely be split into multiple patches.
+
+Thanks,
+
+> 
+> The series is based on v7.2-rc4-102-g4539944e5151.
+> 
+> Motivation
+> ==========
+> 
+> The target use case is long-duration, from-boot kernel tracing where
+> the same stacks recur enormously often and the bottleneck is ring
+> buffer space, not CPU.
+> 
+> Concretely, consider tracing the slab allocator from boot for hours to
+> study memory aging and catch the allocation backtraces behind a usage
+> peak. With a stacktrace trigger on slab tracepoints, every event today
+> carries a full kernel stack (roughly 80-160 bytes). On a fixed-size
+> ring buffer, the buffer wraps in seconds to minutes and the early-boot
+> history is overwritten before it can be consumed.
+> 
+> For this workload the set of distinct stacks is small and highly
+> repetitive. Storing a 4-byte stack_id per event and the full stack only
+> once significantly increases the time span covered by the same ring
+> buffer. The intended model is to trace for a long time and resolve
+> stack_ids offline through stack_map or the included stack_map_bin
+> parser.
+> 
+> This is complementary to the existing full-stack recording. Deep
+> stacks, reset windows, map insertion failures, and the early pre-init
+> window fall back to full stacks.
+> 
+> Effect on retention
+> ===================
+> 
+> Same fixed per-CPU buffer, slab allocation workload with a shallow
+> kernel stack (kmem_cache_alloc), stackmap OFF versus ON:
+> 
+>                   retained events   bytes/event   time span
+>   stackmap OFF        645,068          ~104 B        15.0 s
+>   stackmap ON       1,397,741           ~48 B        27.7 s
+>                      2.17x             2.17x          1.85x
+> 
+> The benefit grows with stack depth and stack repetition.
+> 
+> Changes since v5
+> ================
+> 
+>   - Correct all three commit messages to describe map-only reset:
+>     reset works while tracing is active and does not clear the ring
+>     buffer.
+>   - Restore tracing_reset_all_cpus() to a private static helper and
+>     remove its unused declaration.
+>   - Add EXIT cleanup to the instance selftest and track instance
+>     ownership so cleanup cannot remove a pre-existing instance.
+>   - Reject truncated stack_map_bin entry headers and IP arrays in
+>     stackmap_dump.py instead of silently returning partial output.
+>   - Install stackmap_dump.py from the tools/tracing install target.
+>   - Define stack_map as the required resolver/reset node and
+>     stack_map_stat plus stack_map_bin as auxiliary observability nodes;
+>     align selftest requirements with that distinction.
+>   - Remove an unreachable basic-test branch around successes and drops.
+>   - Keep success_rate present as 0% after reset and define precisely
+>     what successes, drops, and success_rate count. Bypasses that never
+>     call the map are not included in the rate.
+>   - Reset the map at selftest entry and EXIT to avoid cross-test state;
+>     declare od as a required program for the binary ABI test.
+>   - Make ftrace_stackmap_reset() private and correct its tracefs
+>     write-handler documentation.
+>   - Clarify boot-time activation: deduplication starts only after the
+>     map is created, the required stack_map resolver exists, and the map
+>     is published to global_trace.stackmap. Events before publication
+>     use full-stack fallback.
+> 
+> Reset semantics
+> ===============
+> 
+> Reset clears the map and nothing else. It does not require tracing to
+> be stopped and does not clear the ring buffer. A trace can therefore
+> still contain <stack_id N> records after reset. Such an id either no
+> longer resolves or, after slot reuse, resolves to an unrelated stack.
+> That is misleading userspace output, not kernel memory corruption:
+> reset frees nothing and only clears storage still owned by the map.
+> Read the trace out before resetting if existing ids must stay
+> meaningful.
+> 
+> Test results
+> ============
+> 
+> Final v6 candidate b22d31e6e672, QEMU aarch64 virt:
+> 
+>   - Clean arm64 Image build: PASS
+>     KERNELRELEASE=7.2.0-rc4-00105-gb22d31e6e672
+>   - Function tracer stackmap suite: 20/20 PASS
+>   - Function-graph stackmap suite: 4/4 PASS
+>   - Boot-time activation suite: 3/3 PASS
+>   - No BUG, WARNING, Oops, Call trace, or Kernel panic in these runs.
+> 
+> The immediately preceding code-identical candidate was also
+> exercised with the full stability matrix before the final
+> Documentation-only wording correction:
+> 
+>   - bits=14 concurrent stress for 30 minutes: 15/15 PASS
+>     work=9,372,378, reset_ok=27,177, binary reads=449,497, errors=0
+>   - bits=10 saturation for 20 minutes: 16/16 PASS
+>     entries=1024/1024, successes=4,722,487, drops=56,842,925, errors=0
+>   - bits=18, 3 GB guest, concurrent stress for 10 minutes: 15/15 PASS
+>     work=2,719,022, reset_ok=5,501, binary reads=60,123, errors=0
+> 
+> The final candidate differs from that tested candidate only in the
+> boot-time activation paragraph and its matching commit-message text;
+> all kernel and tooling code is identical.
+> 
+> KASAN and lockdep were not enabled for these runs.
+> 
+> Local Sashiko review used sashiko 0.3.3, prompts revision
+> 4e9a9051bc4237b6543cda194d2143080127671d, and the subjective-review
+> prompt. The full three-patch review found only the boot-time wording
+> issue above. A targeted review of the corrected final patch 3
+> completed with no findings.
+> 
+> Known limitations
+> =================
+> 
+>   - Per-instance stackmaps are not included. The option is gated to the
+>     global trace instance in both tracefs and set_tracer_flag().
+>   - Allocation is eager at fs_initcall when CONFIG_FTRACE_STACKMAP=y:
+>     roughly 8 MB at the default bits=14 and roughly 130 MB at bits=18.
+>   - Deduplication is best-effort. Under contention, two CPUs may insert
+>     duplicate entries for the same stack and split ref_count between
+>     them; memory remains bounded and each entry is self-consistent.
+>   - Reset can make ids already present in the trace unresolvable or
+>     misleading, as described above.
+>   - stack_map_bin is a best-effort snapshot serialized against reset,
+>     not a fully atomic export.
+>   - Only kernel stacks are covered.
+>   - trace-cmd/libtraceevent integration is left for follow-up.
+> 
+> Usage
+> =====
+> 
+>   echo 1 > /sys/kernel/debug/tracing/options/stackmap
+>   echo 1 > /sys/kernel/debug/tracing/options/stacktrace
+> 
+> Pengfei Li (3):
+>   trace: add lock-free stackmap for stack trace deduplication
+>   trace: integrate stackmap into ftrace stack recording path
+>   trace: add documentation, selftest and tooling for stackmap
+> 
+>  Documentation/trace/ftrace-stackmap.rst       | 187 ++++
+>  Documentation/trace/index.rst                 |   1 +
+>  kernel/trace/Kconfig                          |  22 +
+>  kernel/trace/Makefile                         |   1 +
+>  kernel/trace/trace.c                          | 226 ++++-
+>  kernel/trace/trace.h                          |  16 +
+>  kernel/trace/trace_entries.h                  |  15 +
+>  kernel/trace/trace_functions_graph.c          |   1 +
+>  kernel/trace/trace_output.c                   |  23 +
+>  kernel/trace/trace_selftest.c                 |   1 +
+>  kernel/trace/trace_stackmap.c                 | 871 ++++++++++++++++++
+>  kernel/trace/trace_stackmap.h                 |  55 ++
+>  .../ftrace/test.d/ftrace/stackmap-basic.tc    | 101 ++
+>  .../test.d/ftrace/stackmap-instance-gate.tc   |  67 ++
+>  .../ftrace/test.d/ftrace/stackmap-reset.tc    |  84 ++
+>  tools/tracing/Makefile                        |  13 +-
+>  tools/tracing/stackmap_dump.py                | 164 ++++
+>  17 files changed, 1843 insertions(+), 5 deletions(-)
+>  create mode 100644 Documentation/trace/ftrace-stackmap.rst
+>  create mode 100644 kernel/trace/trace_stackmap.c
+>  create mode 100644 kernel/trace/trace_stackmap.h
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/stackmap-basic.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/stackmap-instance-gate.tc
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/stackmap-reset.tc
+>  create mode 100755 tools/tracing/stackmap_dump.py
+> 
+> 
+> base-commit: 4539944e515183668109bdf4d0c3d7d228383d88
+> -- 
+> 2.34.1
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
