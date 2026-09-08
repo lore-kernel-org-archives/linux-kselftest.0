@@ -1,45 +1,48 @@
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CFC49AA28;
-	Tue,  8 Sep 2026 21:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83DA54A0902;
+	Tue,  8 Sep 2026 21:48:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788903768; cv=none; b=PSHAQbWBR2c/wC9cCwTaKUPEv2cxIgKyAeVmo3ZISQS8JzxuQPFQ0c+JQqKTSg5RR4rz+jvPuHDU4rricPobGyGUvtbdOYkdx6X13Foz5VJGJz13tbUDJemjHaVAWWK7TCg5x0J/eNaCewqPzxW8ycCklZXiWdDphnt3xl6cUDE=
+	t=1788904120; cv=none; b=W04zIfClJx/zeF8ZcKiVR65XdEOW6TUXcpxyVdRjPrzfE5pyAQGtvQxJdBBRoixrMo282W0WB6lt5POrA92/bOQz4fVHJyvNHJ2g6wIlMS40F2bZUQEkD22FdjLM3sfg51wJVcZaf+qpZ7MeCmG2c7hp86tqw5AxwYqlxi23aXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788903768; c=relaxed/simple;
-	bh=ynL4sTPqoRxUi/bbstz9Ih55gEIocNQe5Y8y9Op4EvE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GUnfIIh5TK0JRL6iDu6T0T14uO+wje2N6sRZcUC/KIT1kCODawElksktRwsOKokxkSQq51hidFMyEeokklCchnOj5UkQ8miFPi2MY0bZXC8QKCebF2DU5vo8kIDYnsDQCMUokvQRCBcTAWyIdxmMOgZSp3mulDXB6jfaL5NxPnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=ETKbjd3P; arc=none smtp.client-ip=130.117.225.111
+	s=arc-20240116; t=1788904120; c=relaxed/simple;
+	bh=Bo+6Rdn77POaJ6YwdOntdmZgfwKCdhinnWntII9lVdY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ISoMW6OQle22j7lYCbTVp+3zVjcxWsXxKVXqxrex619rh6ovPsqlejRsBvbE0PvEThLir2CjT4IsXvIVRbHaODGXV2PAg5yFTkuz+0IgSA2M1/AcMwcgKHwhxBvI0Jf2Ck0b3sdcmdRLMnKm+s2sKIJqP1yOuohNcQUKSf9IXsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=ioicMYGF; arc=none smtp.client-ip=130.117.225.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="ETKbjd3P"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="ioicMYGF"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=O3DiMovYc6B1Qy4ylGXWdug+s2LRTGdo7r7Q/lm2Uiw=; b=ETKbjd3P0aIS
-	zLSFZ4jfN+wofW8JHslFcmsD/O8r/7CEOqA2CgQBIibGHKTUOX8LU1w20IQX/08IABQFAVcKGRY/V
-	nvDD4NqKToHgZCbe7G868ys1SH3bS9dxZTs7KBtnS1i2+7iYdXqp/fauxBg24bSsnL4FoCwOJY7+v
-	/n7uAIcXQYOCNmidfaxypgH/uI+fb8kUwRqIC87TLKhn7EK3sKy/U6hmNqC+yN+7JDtOn5RVzEXmX
-	6o9I/XnywtrvKrzzmK3viVCj5TCSB7idsz7smYg52LiN0tQxYG5mm6wKDUH3FY39X2lGI7EGujwE7
-	AiWkOhwaUM4nj261WH+Csw==;
+	Content-Type; bh=1f34i7ELcyl//Ubi8x1ZRHLDiv9uG7Y8v6wrp7ZZgSE=; b=ioicMYGF/98d
+	qqjSckkmuGfCT4jG2sqqS5SHNBYilUq7PKPSjAOqQ97blwRkAbMGvXwul/TqrGC2PoyXN5pZl4+I9
+	BisoZ1Jrs7mHw0YphNv29cCzAYkFZLdRUAtThlbGn6+IYXSAHe4Y5j54TrYMfzDB2g+r87bjD9l2S
+	sJ3wDPOI4SKkE2DgHNGPdYZLpQ+z2XL/y5hCyiU85K5QbjLTSOG4bMcbztR3DCX/lo114qVxjfNTa
+	afzC6XCwu9zY1Fzz5R7kmLCH91yfXLiS0g64cudwuG2v+dhwPXsVmPQWRNHE4wSRpADBDdOcbLBeb
+	UOq8JbAcCCsEs49oUYBgRA==;
 Received: from ch-vpn.virtuozzo.com ([130.117.225.6] helo=LekKit-T14)
 	by relay.virtuozzo.com with esmtp (Exim 4.96)
 	(envelope-from <eva.kurchatova@virtuozzo.com>)
-	id 1x43Xv-002j23-0I;
-	Tue, 08 Sep 2026 23:42:31 +0200
+	id 1x43db-002qQQ-1B;
+	Tue, 08 Sep 2026 23:48:23 +0200
 From: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
-To: SJ Park <sj@kernel.org>,
+To: Jason Gunthorpe <jgg@ziepe.ca>,
+	Kevin Tian <kevin.tian@intel.com>,
 	Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org,
 	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
+	iommu@lists.linux.dev,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests: damon: add script dir to sys.path for PYTHONSAFEPATH compatibility
-Date: Wed,  9 Sep 2026 00:42:35 +0300
-Message-ID: <20260908214238.2680324-1-eva.kurchatova@virtuozzo.com>
+Subject: [PATCH 2/2] selftests: iommu: skip when the mock device is not there
+Date: Wed,  9 Sep 2026 00:48:12 +0300
+Message-ID: <20260908214825.2682078-2-eva.kurchatova@virtuozzo.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260908214825.2682078-1-eva.kurchatova@virtuozzo.com>
+References: <20260908214825.2682078-1-eva.kurchatova@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,151 +51,76 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Running these tests under Python's safe path mode, either with -P on the
-interpreter command line or with PYTHONSAFEPATH set in the environment,
-stops the script's own directory being prepended to sys.path. Some
-distributions (RHEL, for example) build the tests with -P in the shebang.
+Both iommufd tests need the mock device the iommufd module registers
+under CONFIG_IOMMUFD_TEST, and they open /dev/iommu in every fixture
+without checking, so on a kernel that does not provide it every case
+fails on the open.
 
-This breaks all 7 DAMON Python selftests that import the _damon_sysfs
-helper module located in the same directory:
+Checking the open is not enough on its own. /dev/iommu appears as soon
+as the iommufd module is loaded, which says nothing about the mock
+device: the release config here is CONFIG_IOMMUFD=m with
+CONFIG_IOMMUFD_TEST unset, so the open succeeds and the tests fail later
+in the ioctls that drive the mock device instead. Only the debug config
+sets CONFIG_IOMMUFD_TEST.
 
-  ModuleNotFoundError: No module named '_damon_sysfs'
-
-Fix this by explicitly adding the script's directory to sys.path before
-importing _damon_sysfs, following the same pattern used in commit
-c3b3eb565bd7 ("tools: ynl: add script dir to sys.path") which fixed the
-identical issue for the YNL tools.
+/sys/bus/iommufd_mock covers both, it exists only once the module is
+loaded and the kernel was built with CONFIG_IOMMUFD_TEST. Check for it
+once before handing over to the harness, rather than in each of the
+fixtures, and report a skip. test_harness_run() is what TEST_HARNESS_MAIN
+calls anyway, so the tests still run exactly as they did.
 
 Signed-off-by: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
 ---
- tools/testing/selftests/damon/damon_nr_regions.py              | 3 +++
- tools/testing/selftests/damon/damos_apply_interval.py          | 3 +++
- tools/testing/selftests/damon/damos_quota.py                   | 3 +++
- tools/testing/selftests/damon/damos_quota_goal.py              | 3 +++
- tools/testing/selftests/damon/damos_tried_regions.py           | 3 +++
- .../selftests/damon/sysfs_update_schemes_tried_regions_hang.py | 3 +++
- .../damon/sysfs_update_schemes_tried_regions_wss_estimation.py | 3 +++
- 7 files changed, 21 insertions(+)
+ tools/testing/selftests/iommu/iommufd.c          | 15 ++++++++++++++-
+ tools/testing/selftests/iommu/iommufd_fail_nth.c | 15 ++++++++++++++-
+ 2 files changed, 28 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/damon/damon_nr_regions.py b/tools/testing/selftests/damon/damon_nr_regions.py
-index 58f3291fed12..e55239813c65 100755
---- a/tools/testing/selftests/damon/damon_nr_regions.py
-+++ b/tools/testing/selftests/damon/damon_nr_regions.py
-@@ -1,9 +1,12 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
+index d44b34b05757..446306badcdc 100644
+--- a/tools/testing/selftests/iommu/iommufd.c
++++ b/tools/testing/selftests/iommu/iommufd.c
+@@ -3613,4 +3613,17 @@ TEST_F(iommufd_device_pasid, pasid_attach)
+ 	test_cmd_mock_domain_replace(self->stdev_id, self->ioas_id);
+ }
  
-+import os
- import subprocess
-+import sys
- import time
+-TEST_HARNESS_MAIN
++static bool iommufd_mock_available(void)
++{
++	return access("/sys/bus/iommufd_mock", F_OK) == 0;
++}
++
++int main(int argc, char **argv)
++{
++	if (!iommufd_mock_available())
++		ksft_exit_skip("no iommufd mock device, the tests need "
++			       "CONFIG_IOMMUFD_TEST=y and the iommufd "
++			       "module loaded\n");
++
++	return test_harness_run(argc, argv);
++}
+diff --git a/tools/testing/selftests/iommu/iommufd_fail_nth.c b/tools/testing/selftests/iommu/iommufd_fail_nth.c
+index 25495d8dceb3..c516e00f7316 100644
+--- a/tools/testing/selftests/iommu/iommufd_fail_nth.c
++++ b/tools/testing/selftests/iommu/iommufd_fail_nth.c
+@@ -745,4 +745,17 @@ TEST_FAIL_NTH(basic_fail_nth, device)
+ 	return 0;
+ }
  
-+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
- import _damon_sysfs
- 
- def test_nr_regions(real_nr_regions, min_nr_regions, max_nr_regions):
-diff --git a/tools/testing/selftests/damon/damos_apply_interval.py b/tools/testing/selftests/damon/damos_apply_interval.py
-index 0f2f36584e48..0bf7768b2006 100755
---- a/tools/testing/selftests/damon/damos_apply_interval.py
-+++ b/tools/testing/selftests/damon/damos_apply_interval.py
-@@ -1,9 +1,12 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
- 
-+import os
- import subprocess
-+import sys
- import time
- 
-+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
- import _damon_sysfs
- 
- def main():
-diff --git a/tools/testing/selftests/damon/damos_quota.py b/tools/testing/selftests/damon/damos_quota.py
-index 57c4937aaed2..879115a499bf 100755
---- a/tools/testing/selftests/damon/damos_quota.py
-+++ b/tools/testing/selftests/damon/damos_quota.py
-@@ -1,9 +1,12 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
- 
-+import os
- import subprocess
-+import sys
- import time
- 
-+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
- import _damon_sysfs
- 
- def main():
-diff --git a/tools/testing/selftests/damon/damos_quota_goal.py b/tools/testing/selftests/damon/damos_quota_goal.py
-index 661e4ba4765a..fed033a0afdf 100755
---- a/tools/testing/selftests/damon/damos_quota_goal.py
-+++ b/tools/testing/selftests/damon/damos_quota_goal.py
-@@ -1,9 +1,12 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
- 
-+import os
- import subprocess
-+import sys
- import time
- 
-+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
- import _damon_sysfs
- 
- def main():
-diff --git a/tools/testing/selftests/damon/damos_tried_regions.py b/tools/testing/selftests/damon/damos_tried_regions.py
-index d6472e6a6e08..6941f87c10b1 100755
---- a/tools/testing/selftests/damon/damos_tried_regions.py
-+++ b/tools/testing/selftests/damon/damos_tried_regions.py
-@@ -1,9 +1,12 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
- 
-+import os
- import subprocess
-+import sys
- import time
- 
-+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
- import _damon_sysfs
- 
- def main():
-diff --git a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py
-index 28c887a0108f..625761c243b5 100755
---- a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py
-+++ b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py
-@@ -1,9 +1,12 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
- 
-+import os
- import subprocess
-+import sys
- import time
- 
-+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
- import _damon_sysfs
- 
- def main():
-diff --git a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
-index 16fdc6e7fc56..36e7ae5f826d 100755
---- a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
-+++ b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
-@@ -1,9 +1,12 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
- 
-+import os
- import subprocess
-+import sys
- import time
- 
-+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
- import _damon_sysfs
- 
- def pass_wss_estimation(sz_region):
+-TEST_HARNESS_MAIN
++static bool iommufd_mock_available(void)
++{
++	return access("/sys/bus/iommufd_mock", F_OK) == 0;
++}
++
++int main(int argc, char **argv)
++{
++	if (!iommufd_mock_available())
++		ksft_exit_skip("no iommufd mock device, the tests need "
++			       "CONFIG_IOMMUFD_TEST=y and the iommufd "
++			       "module loaded\n");
++
++	return test_harness_run(argc, argv);
++}
 -- 
 2.55.0
 
