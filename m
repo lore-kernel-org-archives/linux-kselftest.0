@@ -1,246 +1,132 @@
-Received: from mta0.migadu.com (out-165.mta0.migadu.com [91.218.175.165])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335422BEFEB
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 01:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.165
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC3E31A680C;
+	Tue,  8 Sep 2026 01:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788830851; cv=none; b=QAXMZfCRY2Apq2QmLM/97OqWbiR7scKU7IAVJNDwriQn0pDF7ouzgYAGFmkodo9xGnMQ/rz/n+a9RFPXsE4MUDeFTyEVPNKmpM5dZ12fuqPVt8MxkSAyhc46jjo2SdC1fI8oboMJye4SNJqc1nqWClrTfSCKb2xgNYxqG/HQDQ0=
+	t=1788831321; cv=none; b=KS5olrGCWFaUtTaQqgRCTR0kII5TPv1lk14evh2IOzN8615wergC5GhLN7uNnfCjXe8UapzZ55gSCiIN29uWOF4rj/kIDRUIHmSM/M4THfWClrOmOtR3VFh5deRYtakGzSf0+qRs69bAgq5H7A8v6Qhy2S1nnIhITUwuskdQH+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788830851; c=relaxed/simple;
-	bh=dsDRaDunIKCn+MJPiPdeLUKuKsqc8In8Ij1klgunuKA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WC+PcbUVitSdpEBMaXk5Z81RjYBAYWjwEOIkgRigOgU1fisbUaq/p7ymJqGtYPzG940Xwc4lRsj7/UeBQ9oraErKOoNnj0gWQN/95EyvXWrq4VqAnQuB421Uj5vQn7FpF2lAHgs75WDgJz6ebPqtIZD1wRqsv4TiGwdqosgWL40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=C+uvDn8x; arc=none smtp.client-ip=91.218.175.165
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788831321; c=relaxed/simple;
+	bh=HcRShxzvk71BSA6oMKwUhJ3MkEJ8V1MqsW2aKf+Xxos=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=B61y1MgbkMXlMe9NgSDEP8PzRZ8Qvf0DXQAL4f9ZLbI85zgdMZyv8VNUiCQqPIZ06CcFWKXqgLm9QZn/kJ8otbTr1Lae0BXhLh7wcd4/pAit/BcDIOlmaiAJomezfGrGnsYr80+7SluKR1G2NQLwiDcYFMiC9/Rw5GiMHPrel5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fKQyyJhb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="C+uvDn8x"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=dsDRaDunIKCn+MJPiPdeLUKuKsqc8In8Ij1klgunuKA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788830846; v=1; x=1789435646;
- b=C+uvDn8xCDw+XGQR7EDzpxMWYlvnBHcH+jj4UhK5jXHNzLoBhnFCfVvGAiUyc0Q9ETq4vJIP
- 9mxIyUFqsOf6S7iuHWSO4sVYceBY8dJjua/jZuh1SbJcRO5C/zQdhu5i9Tr4lWE6iZY2a3wFEW/
- Kw+hNJxDZV3+EBx9/oIgKmMQ=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ef7a5941853f9600;
-	Tue, 08 Sep 2026 01:27:26 +0000
-X-Mizu-Trace-ID: ef7a5941853f9600
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <a89dab46-c6e8-4643-bf83-83fd76a38ab7@linux.dev>
-Date: Tue, 8 Sep 2026 09:27:17 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fKQyyJhb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49CFF1F00A3A;
+	Tue,  8 Sep 2026 01:35:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788831319;
+	bh=jgByKFB/1L+upVT7rUj+pfkyRwkhlSdVhbrR4RRvcu8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=fKQyyJhbZqca+VSht7hwIMTjP0FjW607X040OvzuWYn26H8ppy3D1Or8DB+hNR275
+	 f3SIDJecAajvgXwOOTIJRIpeEson+6ob9M86luy7ooyPmkKM264a3nQCMmUpvCwf+h
+	 D8sP15V8ddysd0kAak/h26GFxCwX94KTNxAwnYWuunxXMC9G8wqVarD/FeXAwT0O9P
+	 StR3FQb5wFrpS05cA7ckSxs4ruZVk65gyTL9H4nDRdsJAM3HI7yp722YzHhHAYCFMQ
+	 sgn5ORsxyck+TDtNDyHkweS0ODgxKf4h90xwHfIQazllPxq1loud8cCoIylj5Eg8E9
+	 DDI/Mlk1E7TWA==
+Date: Tue, 8 Sep 2026 10:35:14 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Pengfei Li <ljdlns1987@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Mark Rutland <mark.rutland@arm.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ kernel test robot <lkp@intel.com>, Bo Zhang <zhangbo56@xiaomi.com>, Pengfei
+ Li <lipengfei28@xiaomi.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v6 3/3] trace: add documentation, selftest and
+ tooling for stackmap
+Message-Id: <20260908103514.a1c61f51b84b8d67d6f0f511@kernel.org>
+In-Reply-To: <20260903132409.270195-4-lipengfei28@xiaomi.com>
+References: <20260903132409.270195-1-lipengfei28@xiaomi.com>
+	<20260903132409.270195-4-lipengfei28@xiaomi.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/7] cgroup/cpuset: Factor out child partition
- validation
-To: Guopeng Zhang <guopeng.zhang@linux.dev>, Waiman Long
- <longman@redhat.com>, cgroups@vger.kernel.org
-Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Guopeng Zhang <zhangguopeng@kylinos.cn>
-References: <20260902102615.79189-1-guopeng.zhang@linux.dev>
- <20260902102615.79189-2-guopeng.zhang@linux.dev>
- <5842edcd-9283-4a87-afc9-50e51962368e@redhat.com>
- <5e0d1386-b094-4d4e-8569-e6b584f955c5@linux.dev>
- <7d1f1c95-5dad-4124-858c-7c8e3119f437@linux.dev>
- <0b2b6b9d-98de-4f45-8e65-a202fe9ce0d1@linux.dev>
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <0b2b6b9d-98de-4f45-8e65-a202fe9ce0d1@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Thu,  3 Sep 2026 21:24:09 +0800
+Pengfei Li <ljdlns1987@gmail.com> wrote:
 
-
-On 9/7/2026 6:16 PM, Guopeng Zhang wrote:
-> 
-> 
-> 在 2026/9/4 09:55, Ridong Chen 写道:
->>
->>
->> On 9/4/2026 9:25 AM, Ridong Chen wrote:
->>>
->>>
->>> On 9/4/2026 2:33 AM, Waiman Long wrote:
->>>> On 9/2/26 6:26 AM, Guopeng Zhang wrote:
->>>>> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
->>>>>
->>>>> compute_partition_effective_cpumask() checks whether each valid child
->>>>> partition remains covered by the parent exclusive CPU mask and whether it
->>>>> would consume all remaining CPUs of a populated parent.
->>>>>
->>>>> Factor these two checks into child_partition_error() so the same rules can
->>>>> be reused when evaluating a proposed parent configuration. This is a
->>>>> preparatory refactoring with no intended functional change.
->>>>>
->>>>> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
->>>>> ---
->>>>>    kernel/cgroup/cpuset.c | 38 +++++++++++++++++++++++++++++---------
->>>>>    1 file changed, 29 insertions(+), 9 deletions(-)
->>>>>
->>>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>>>> index 8f24171b6055..6994dc75d940 100644
->>>>> --- a/kernel/cgroup/cpuset.c
->>>>> +++ b/kernel/cgroup/cpuset.c
->>>>> @@ -2085,6 +2085,26 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->>>>>        return 0;
->>>>>    }
->>>>> +/*
->>>>> + * Return the error that will invalidate a child partition under a proposed
->>>>> + * parent partition configuration.
->>>>> + */
->>>>> +static enum prs_errcode
->>>>> +child_partition_error(struct cpuset *child,
->>>>> +              const struct cpumask *partition_cpus,
->>>>> +              const struct cpumask *remaining_cpus,
->>>>> +              bool parent_populated)
->>>> I think you should add some functional comments on what "partition_cpus" and "remaining_cpus" are supposed to be so that caller knows what to pass into this helper.
->>>
->>> Would it help to rename them to excpus and local_excpus?
->>> local already implies "excluding children" (just like cgroup.stat.local), so I think that makes the intent clearer.
->>>
->>
->> Regarding the naming: child_partition_error is a bit odd — it sounds like it's validating a hierarchical child partition, but it's actually validating the partition itself (the child argument). The parent is only needed as context for the validation logic, not because we're checking a subordinate partition.
->>
->> I'd suggest renaming it to something like:
->>
->> ```
->> static enum prs_errcode cs_partition_error(struct cpuset *cs, ...)
->>
->> ```
->>
->> That would better reflect what the function actually does.
->>
-> 
-> Thanks, Ridong. I see what you mean about the name.
-> 
-> My intention with "child" was to describe the role of the partition in these checks. Both callers use the helper while walking a parent's child partitions, and the result depends on the parent's complete exclusive mask, whether the parent is populated, and the active CPUs remaining at that point in the walk. The helper also checks only the two conditions that can invalidate a child during this process, rather than performing general validation of an arbitrary cpuset partition.
-> 
-> For that reason, `cs_partition_error()` might suggest a broader scope than the helper actually has. Would it make sense to keep `child_partition_error()` and clarify the comment, for example:
+> Add supporting files for the ftrace stackmap feature:
 > 
 
-As you can see, we are continuing to add partition checks, so I'd still suggest 
-avoiding child_partition_error(), it would become confusing when we later 
-refactor the partition validation logic. All of these functions are ultimately 
-used to validate a partition, and the validation may depend on either the parent 
-or a trialcs, or something else.
+Could you decouple tools/docs/tests in independent patches?
 
-So I'd propose keeping it as:
+> Documentation/trace/ftrace-stackmap.rst:
+>   Documentation covering design, usage, tracefs interface, binary
+>   format, and performance characteristics. Added to the 'Core Tracing
+>   Frameworks' toctree in Documentation/trace/index.rst. Documents:
+>   - Reset clears the map and nothing else: the trace buffer is left
+>     untouched and tracing does not have to be stopped, so <stack_id N>
+>     records in an already-collected trace can stop resolving after a
+>     reset. Read the trace out first if the ids need to stay meaningful
+>   - Boot-time activation via trace_options=stackmap: events use the
+>     full-stack fallback until the map and required resolver are created
+>     and the map is published to global_trace.stackmap
+>   - bits parameter range [10, 18] and worst-case memory usage
+>   - tracefs file modes (0640 / 0440), with stack_map required and
+>     stack_map_stat / stack_map_bin treated as auxiliary observability
+>     nodes whose creation failure does not disable deduplication
+>   - Best-effort snapshot semantics for stack_map_bin, serialized
+>     against reset via the reader_sem
+>   - Counter definitions and stable output: successes counts map operations
+>     that return a stack ID; drops counts capacity or probe-limit
+>     failures; success_rate excludes bypasses that never call the map
+>     and remains present as 0% when both counters are zero
+>   - Gravestone amplification when the pool is exhausted
+> 
+> tools/testing/selftests/ftrace/test.d/ftrace/stackmap-basic.tc:
+>   Functional selftest verifying:
+>   - required stackmap tracefs nodes exist; tests that consume auxiliary
+>     nodes declare them in '# requires:' and skip if unavailable
+>   - enabling stackmap + stacktrace produces stack_id events
+>   - stack_map_stat shows non-zero successes; a nonzero drops count is
+>     a legitimate by-design fallback and is not treated as failure
+>   - reset succeeds while tracing is active, since it clears the map
+>     only and leaves the ring buffer alone
+>   - reset also clears the map when tracing is stopped
+>   The test starts and exits with a map reset so a failed run cannot
+>   leak entries or counters into the next case. It reads trace contents
+>   BEFORE switching back to the nop tracer (tracer_init()
+>   unconditionally resets the ring buffer). The function:tracer
+>   dependency is declared in '# requires:' so ftracetest skips on
+>   kernels without CONFIG_FUNCTION_TRACER instead of failing spuriously.
 
-static enum prs_errcode cs_partition_error(struct cpuset *cs, struct cpuset 
-*parent);
+If each test has this volume description, it is enough to split those
+tests in independent patches.
 
-This is more general and better accommodates future extensions.
+[...]
+
+> +def main():
+> +    parser = argparse.ArgumentParser(description='Parse ftrace stack_map_bin')
+> +    parser.add_argument('file', help='Path to stack_map_bin file')
+> +    parser.add_argument('--vmlinux', help='Path to vmlinux for symbol resolution')
+> +    parser.add_argument('--json', action='store_true', help='JSON output')
+> +    parser.add_argument('--top', type=int, default=0,
+> +                        help='Show only top N stacks by ref_count')
+> +    args = parser.parse_args()
+> +
+> +    with open(args.file, 'rb') as f:
+> +        data = f.read()
+
+nit: Can this support input from stdin? If we use this on android,
+user may want to do:
+
+adb shell cat /sys/.../stack_map_bin | python3 stackmap_dump.py 
+
+instead of pulling the file.
+
+Thanks,
 
 
-> /*
->   * Return the error that would invalidate @child under its parent
->   * partition's CPU configuration.
->   */
-> 
-> I am also open to another name that preserves this parent-child context.
-> 
-
-
-
-> 
->> On a related note, the current partition validation logic is scattered across the code. I think we should consider consolidating it into a common set of helpers, perhaps like:
->>
->>
->> ```
->> static enum prs_errcode validate_partition(struct cpuset *cs, struct cpuset *trialcs, struct cpuset *parent)
->> {
->> ...
->> }
->>
->> static enum prs_errcode validate_local_partition(struct cpuset *cs, struct cpuset *trialcs, struct cpuset *parent)
->> {
->>      // local partion specific check
->>      // call validate_partition
->>      
->> }
->>
->> static enum prs_errcode validate_remote_partition(struct cpuset *cs, struct cpuset *trialcs, struct cpuset *parent)
->> {
->>      // remote partion specific check
->>      // call validate_partition
->> }
->>
->> ```
->>
-> 
-> That sounds like a good idea.
-> 
-> Since these validation paths have different inputs and side effects, consolidating them may require a broader review and restructuring.
-> 
-> I will look into this separately after the current series is completed.
-> 
-> Thanks,
-> Guopeng
->>
->>>>> +{
->>>>> +    if (!cpumask_subset(child->effective_xcpus, partition_cpus))
->>>>> +        return PERR_INVCPUS;
->>>>> +
->>>>> +    if (parent_populated &&
->>>>> +        cpumask_subset(remaining_cpus, child->effective_xcpus))
->>>>> +        return PERR_NOCPUS;
->>>>> +
->>>>> +    return PERR_NONE;
->>>>> +}
->>>>> +
->>>>>    /**
->>>>>     * compute_partition_effective_cpumask - compute effective_cpus for partition
->>>>>     * @cs: partition root cpuset
->>>>> @@ -2121,6 +2141,8 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
->>>>>        rcu_read_lock();
->>>>>        cpuset_for_each_child(child, css, cs) {
->>>>> +        enum prs_errcode child_err;
->>>>> +
->>>>>            if (!is_partition_valid(child))
->>>>>                continue;
->>>>> @@ -2129,15 +2151,13 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
->>>>>             * partition root.
->>>>>             */
->>>>>            WARN_ON_ONCE(is_remote_partition(child));
->>>>> -        WRITE_ONCE(child->prs_err, 0);
->>>>> -        if (!cpumask_subset(child->effective_xcpus,
->>>>> -                    cs->effective_xcpus))
->>>>> -            WRITE_ONCE(child->prs_err, PERR_INVCPUS);
->>>>> -        else if (populated &&
->>>>> -             cpumask_subset(new_ecpus, child->effective_xcpus))
->>>>> -            WRITE_ONCE(child->prs_err, PERR_NOCPUS);
->>>>> -
->>>>> -        if (child->prs_err) {
->>>>> +        WRITE_ONCE(child->prs_err, PERR_NONE);
->>>>> +        child_err = child_partition_error(child, cs->effective_xcpus,
->>>>> +                          new_ecpus, populated);
->>>>> +        if (child_err)
->>>>> +            WRITE_ONCE(child->prs_err, child_err);
->>>>> +
->>>>
->>>> You can ignore the inital PERR_NONE write and always write the child_err value into child->prs_err.
->>>>
->>>> Not big issue, just some nits.
->>>>
->>>> Cheers,
->>>> Longman
->>>>
->>>>> +        if (child_err) {
->>>>>                int old_prs = child->partition_root_state;
->>>>>                /*
->>>>
->>>
->>
-> 
 
 -- 
-Best regards
-Ridong
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
