@@ -1,206 +1,140 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mta1.migadu.com (out-145.mta1.migadu.com [95.215.58.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5573876CD
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 08:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304FB371860
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 08:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788854705; cv=none; b=lahC4Y0tX9nHuVXncZ4uYn4FZgpKOpO01dmHMdqB4yPAK5zmui91Rv87lC3ZQzZjtmq2DVZMbGYr5rh6oQdJ6gzKk491mnoNP1Z09PkvKG9Djlg+G/kWeJCiMFy5Dxq8iufRd7RTfoSUZRKib2KZdKzG1JUQP/V6vwLF6BSvHGg=
+	t=1788854891; cv=none; b=ZuoHDUq7atfU0FeqBHfeRE4jHtCX7WhrHwr7qZqNmVEiKQZIWB1PmYZjDzpOXVPmKow4v4i/74yM883kb9bAOS6f1TYic/XAwUfXchffcmigVuI6WkMFgacRVbA1D/X1VJF8gSDfL5zg5GeJA6B/Iud1yAe3KqtE66eQU/wnv0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788854705; c=relaxed/simple;
-	bh=A2d081V5u9O9db2fGR1Uw/LCtJvvhhWQH/7b76K7e9M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bl0VIio3dZWvU5bZyhSZbZ+VNDpNq7FGROkqXx0lx7PpKiLtLoPILdytgjNPybduMMCUoIr6DcN+Xo1GIIVnhoVFJkf4rgbofIy1x892wE1SFvrECiE34x+s+Fa9DpqJAiOyAQFvBWnbgu3I8SunFgSmX+qB0UtSdvs500T8WgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jxlqfy63; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1788854891; c=relaxed/simple;
+	bh=17Qpr2HZAfjTf+fUY0bEYiBsyBtJXKQkXqw9F9jXj84=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ob6uTsoe3lhXEDerOKnJrGaS6qXomvqI//wgbAJmxkPrgdwMG/08LMxauTYcyPG5aSgWx2/6Jvw4FcA6cbJDKcyysC45KJaI/w0zO82w3RkH0QbegQwL6zgtlQ8A90la+k8JM9PlKQbX6/HdOVlzkdkca4KL56j/W2lmqAMKpA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YhKPa69D; arc=none smtp.client-ip=95.215.58.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jxlqfy63"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d6ff3aca07so205755ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 01:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788854702; x=1789459502; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=N6N0od/sVrug4dpoGO2TXWMVX/OvNe36xacdNRKZ9rU=;
-        b=jxlqfy63N07ZXZ7NwDPBgDQBFsv0CVcuv8bbJ0W6fPLuZWX9+/JZecT2VKUJ+anTtt
-         fBOATkGI0QFshjy5i4aHcql27aCnZiR1W9Lx2rGE7ACsR6p091gChAYdFY5oyeI3QDNP
-         898ERq+TH5LCr+EsZksk94SIATb/Iw+Kbv8W59x140ymnTGDrd3PZn2nnW0IpPnwdA5x
-         jsvTvwDgmNKc8LBN3X/hRogAevsxoSBB1cpgDNvOGKWyM2mAEGYQNQJUfkHLYwZ66nec
-         50Tk1jbh+XFZfFZa6XyJN993J8eYzaWQkyitAn1Mwgm90NYI7F1k4sYtoG1bEXINPczR
-         KLFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788854702; x=1789459502;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=N6N0od/sVrug4dpoGO2TXWMVX/OvNe36xacdNRKZ9rU=;
-        b=FwyE9UUMyHrIb2dNK4JnL/yfyXooIVw4Oh4cMjr7Cj6p/4jICWKQKscqBCNvcyyTnW
-         fxw2/z+ZZyMDfOjCTBfcBmFjbX4O9qjjfI47l2GoTBThi4JU69uFk5p+Qmx9qKLYoT89
-         R9CNnJrVdiSLeZBh7a9nuP2lqlcTAgacihpyOmh7YkmwUUJec5KpRDpQ0VOsIxKtb1ol
-         m1LMtcXZoUjVxWi7L7NXp87M+Eu2CA2xTZnalusf+0dbj0ScQBaDZoa80zOgs/XGMwz6
-         PAL3MWg4bvlYWUP9oigz4NM8jts8JMl17AOR6XcnXwHwqbe5YusVUSZzCmVATDq0DwMi
-         SpGg==
-X-Forwarded-Encrypted: i=1; AKwUvBxpQI1icnjysyWtUM2T2m0153HN5Zpa7H1v/0jYngj4N+FLaLwgJgX0+Xz2aa+VZMkLq3e/V/FH7QAGg1wkNtU=@vger.kernel.org
-X-Gm-Message-State: AFuF++nISl4z0uumerp207iqMTHSM6J0YY9TylvHmbzXA4N7+lUMercL
-	goZz0FPDJg/PxoX41v1yIcLUExdIyFbq5kN5vhr1MXvITcE0uwRoTTOTGGeRUO6ErA==
-X-Gm-Gg: AYBFou35YJt+dkKQIpimLNf+Yc6bb1f0vTe5cFs4wYMWvubM3k98k90HmbIH1WMBBrP
-	P2uot05kKxnAJwbqUogEje3LzyeU+biWG4QCFm6IfX9/TVrs3IqgqACVCISiggRBGEIHd2Piad3
-	H9KnkcgKkNJSAkKVn+heFxlBSy+tYCs8kwd8SdG9IjjE2WwI1vZz0cT7USPSuAamGyb0zBmja44
-	0Esj1+wnSOnIUdMD5JjyEXim4ZVQypAwFokI2dgRw2XebACEA2xPPDqZC07t3tQWpLRPLV+UMvz
-	u3vt5v8aIAwfEfwpsN/+3drtSJ+HKnp+XvLuLFNo85gRO/5X5zGa3kn5v69yGWxTk5nC7wscmSX
-	mjL07tJazd1B0NkFndvNAe8pAYVHrXToUUXBNXenqPP8xwbC8Zo+3mc70agsR4uRKEaX9jkmq5+
-	KANXjQdU+o+0nldR7pVJQYu/WwfD9PPFVmxC6dZoBBsIMpbqa98ZPIzfVG5p99yAIhI1VeuKP0M
-	qwjmhXkZnyHGX0ctZ3QnA==
-X-Received: by 2002:a17:903:1968:b0:2d5:db38:8013 with SMTP id d9443c01a7336-2db290965e6mr13546505ad.18.1788854701219;
-        Tue, 08 Sep 2026 01:05:01 -0700 (PDT)
-Received: from google.com (195.5.127.34.bc.googleusercontent.com. [34.127.5.195])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2db1499d92dsm54262635ad.52.2026.09.08.01.04.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 01:04:56 -0700 (PDT)
-Date: Tue, 8 Sep 2026 08:04:53 +0000
-From: Lisa Wang <wyihan@google.com>
-To: Xiaoyao Li <xiaoyao.li@intel.com>
-Cc: Andrew Jones <ajones@ventanamicro.com>,
-	Ackerley Tng <ackerleytng@google.com>,
-	Binbin Wu <binbin.wu@linux.intel.com>,
-	Chao Gao <chao.gao@intel.com>,
-	Chenyi Qiang <chenyi.qiang@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Erdem Aktas <erdemaktas@google.com>,
-	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Roger Wang <runanwang@google.com>,
-	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
-	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
-	x86@kernel.org
-Subject: Re: [PATCH v14 03/22] KVM: selftests: Initialize the TDX VM
-Message-ID: <ap_Bpe7dZm_eWsJ2@google.com>
-References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
- <20260722-tdx-selftests-v14-3-15ad654a50db@google.com>
- <c8b7a800-58ed-4ef7-91bd-31da77763717@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YhKPa69D"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=17Qpr2HZAfjTf+fUY0bEYiBsyBtJXKQkXqw9F9jXj84=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788854886; v=1; x=1789459686;
+ b=YhKPa69DdS5qZIl1G+SGZx4cR2YVxx0k6mS3QpgPwciPPwYelLamurWlQsD5W+ZQZsA6u7g1
+ IrmvqGHkQNvFrE/Bum+vIYjfi6jVrBlqGmZYwySvi8xOekOZMLm8guERo+N5LfGFU7f0zQoNeR8
+ M36VdzpZO26Hl6or04k7N/xM=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id f75abea937d6cb6f;
+	Tue, 08 Sep 2026 08:08:06 +0000
+X-Mizu-Trace-ID: f75abea937d6cb6f
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a44c1e4d-e9a8-4df3-aa25-20875cd4d30e@linux.dev>
+Date: Tue, 8 Sep 2026 16:07:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c8b7a800-58ed-4ef7-91bd-31da77763717@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v2 2/3] tcp: Skip cond_resched() in
+ inet_csk_listen_stop() under BPF context
+To: Kuniyuki Iwashima <kuniyu@google.com>, bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ sdf@fomichev.me, martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ncardwell@google.com,
+ shuah@kernel.org, aditi.ghag@isovalent.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20260906074135.185212-3-jiayuan.chen@linux.dev>
+ <0aa6425f9e8f32705ae827f6325b29079234c3f3d0c7b2cdefba3e5b50432766@mail.kernel.org>
+ <CAAVpQUBztYDHyiCN1fnhdxCPv_5AZ09yCMQfNW96SzZyw0LhHA@mail.gmail.com>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <CAAVpQUBztYDHyiCN1fnhdxCPv_5AZ09yCMQfNW96SzZyw0LhHA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 23, 2026 at 04:44:08PM +0800, Xiaoyao Li wrote:
-> > + */
-> > +#define __tdx_vm_ioctl(vm, cmd, _flags, arg)				\
-> 
-> sev uses the name __vm_sev_ioctl, I think we need to keep them consistent.
 
-While __vm_tdx_ioctl matches SEV, the TDX selftest follows a tdx_<scope>_*
-naming convention (1. TDX prefix, 2. Scope: VM or vCPU). I named it
-__tdx_vm_ioctl to keep the TDX codebase internally consistent.[1]
+On 9/8/26 7:34 AM, Kuniyuki Iwashima wrote:
+> On Sun, Sep 6, 2026 at 1:23 AM <bot+bpf-ci@kernel.org> wrote:
+>>> tcp: Skip cond_resched() in inet_csk_listen_stop() under BPF context
+>>>
+>>> bpf_sock_destroy() runs from the tcp iterator, under rcu_read_lock(). If
+>>> the sock is a listener that still has children in its accept queue,
+>>> tcp_abort() ends up in inet_csk_listen_stop() and the cond_resched()
+>>> there trips the debug check:
+>>>
+>>> BUG: sleeping function called from invalid context at net/ipv4/inet_connection_sock.c:1523
+>>> in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 628, name: test_progs
+>>> preempt_count: 0, expected: 0
+>>> RCU nest depth: 1, expected: 0
+>>> locks held by test_progs/628: 3, last CPU#3:
+>>>   #0: ffff8881158cee18 (&p->lock){+.+.}-{4:4}, at: bpf_seq_read+0x56/0x1210
+>>>   #1: ffff8881106bb858 (sk_lock-AF_INET6){+.+.}-{0:0}, at: bpf_iter_tcp_seq_show+0x32b/0x4b0
+>>>   #2: ffffffffb435af20 (rcu_read_lock){....}-{1:3}, at: bpf_iter_run_prog+0x46b/0xde0
+>>> CPU: 3 UID: 0 PID: 628 Comm: test_progs Tainted: G        W           7.2.0+ #65 PREEMPT
+>>> Tainted: [W]=WARN
+>>> Call Trace:
+>>>   <TASK>
+>>>   dump_stack_lvl+0xc1/0xf0
+>>>   dump_stack+0x10/0x20
+>>>   __might_resched+0x3d2/0x610
+>>>   inet_csk_listen_stop+0x7b/0xbf0
+>>>   tcp_abort+0x23b/0x3b0
+>>>   bpf_sock_destroy+0xfc/0x140
+>>>   bpf_prog_448133d24601754f_iter_tcp6_server+0x81/0x8a
+>>>   bpf_iter_run_prog+0x538/0xde0
+>>>   bpf_iter_tcp_seq_show+0x26b/0x4b0
+>>>   bpf_seq_read+0x424/0x1210
+>>>   vfs_read+0x197/0xe40
+>>>   ksys_read+0x119/0x240
+>>>   __x64_sys_read+0x72/0xc0
+>>>   x64_sys_call+0x647/0x27e0
+>>>   do_syscall_64+0xe5/0x610
+>>>   entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>>> RIP: 0033:0x7fad39b28aca
+>>> RSP: 002b:00007ffc381c61c0 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+>>> RAX: ffffffffffffffda RBX: 00007ffc381c6a88 RCX: 00007fad39b28aca
+>>> RDX: 0000000000000032 RSI: 00007ffc381c6250 RDI: 0000000000000014
+>>> RBP: 00007ffc381c61e0 R08: 0000000000000000 R09: 0000000000000000
+>>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
+>>> R13: 0000000000000000 R14: 000055f077c1bbb0 R15: 00007fad3a0f3000
+>>>   </TASK>
+>>>
+>>> The commit that added the kfunc already guards lock_sock() in tcp_abort()
+>>> and udp_abort() with has_current_bpf_ctx(), but missed the listener path.
+>>> Do the same for the cond_resched(), it can't reschedule there anyway.
+>>>
+>>> Fixes: 4ddbcb886268 ("bpf: Add bpf_sock_destroy kfunc")
+>>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+>> Is the justification "it can't reschedule there anyway" accurate?
+>>
+>> With CONFIG_PREEMPT_DYNAMIC=y booted with preempt=none or preempt=voluntary,
+>> cond_resched() expands to __cond_resched() which can actually reschedule.
+>> The splat in the commit message confirms preempt_count is 0 while RCU nest
+>> depth is 1. With preempt_count==0, should_resched(0) can be true and
+>> __cond_resched() will call preempt_schedule_common() for a real reschedule.
+>>
+>> Additionally, in configurations with CONFIG_PREEMPT_RCU=n where
+>> rcu_read_lock() is preempt_disable(), __cond_resched() falls through to
+>> rcu_all_qs() which calls rcu_qs() to report a quiescent state from inside
+>> an RCU read-side critical section. That's a correctness problem beyond just
+>> the debug check.
+>>
+>> So the call can either reschedule (PREEMPT_DYNAMIC none/voluntary) or report
+>> a bogus quiescent state (non-preemptible RCU). Could the justification be
+>> reworded to explain that the loop runs inside the iterator's RCU read-side
+>> critical section and must not reschedule or report a quiescent state there?
+>> The code change itself is correct and matches the existing pattern in
+>> tcp_abort() and udp_abort().
+> or maybe simply remove cond_resched(), hoping 7dadeaa6e851 would
+> resolve the scheduling issue.
+>
 
-Do you think we should align with SEV's naming convention instead of
-sticking with the internal TDX pattern?
+Good suggestion. cond_resched has become old practice under 
+CONFIG_PREEMPT_LAZY
 
-[1]: https://lore.kernel.org/kvm/489f3c7b-db03-43dc-bb64-910a0fcba31e@intel.com/
-
-> > +({									\
-> > +	u64 r;								\
-> > +									\
-> > +	union {								\
-> > +		struct kvm_tdx_cmd c;					\
-> > +		unsigned long raw;					\
-> > +	} tdx_cmd = { .c = {						\
-> > +		.id = (cmd),						\
-> > +		.flags = (u32)(_flags),					\
-> > +		.data = (u64)(arg),					\
-> > +	} };								\
-> > +									\
-> > +	r = __vm_ioctl(vm, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd.raw);	\
-> > +	r ?: tdx_cmd.c.hw_error;					\
-> 
-> I know it takes the same handling from __vm_sev_ioctl(). But I think the
-> handling for hw_error is not correct, at least for TDX (I didn't check for
-> SEV).
-> 
-> the hw_error is the additional info, to tell the SEAMCALL return code, when
-> the IOCTL fails. KVM requires hw_error to be in the input, and KVM puts the
-> SEAMCALL return code into hw_error when the IOCTL fails due to SEAMCALL
-> failure. That means, when r == 0, the hw_error is always 0.
-> 
-> I think we need to provide hw_error along with r to the caller so that
-> caller can print them together.
-
-I think the value of r is not important, because the ioctl failure
-is already captured in errno.
-
-We only need to fix the return values for SEV and TDX and have
-TEST_ASSERT_* print formatted error logs with errno and hw_error.
-
-- r ?: {tdx, sev}_cmd.c.hw_error;
-+ r ? {tdx, sev}_cmd.c.hw_error : 0;
-
-> > +})
-> > +
-> > +#define tdx_vm_ioctl(vm, cmd, flags, arg)				\
-> > +({									\
-> > +	u64 ret = __tdx_vm_ioctl(vm, cmd, flags, arg);			\
-> > +									\
-> > +	if (ret) {							\
-> > +		TEST_ASSERT(!ret,					\
-> > +			    "%s failed, rc: 0x%llx errno: %i (%s)",	\
-> > +			    #cmd, (unsigned long long)ret,		\
-> > +			    errno, strerror(errno));			\
-> 
-> The if() looks silly. Why add it? And why change it from
-> __TEST_ASSERT_VM_VCPU_IOCTL() in the v13?
-> 
-> Considering the suggestion of hw_error above, I think we need to introduce
-> the TEST_ASSERT_TDX_VM_VCPU_IOCTL() which accepts additional hw_error?
-
-The reason we could not use __TEST_ASSERT_VM_VCPU_IOCTL() directly[2] is
-because it formats ther return value as %i (32-bit), whereas
-__tdx_vm_ioctl might return a u64 hardware error code.
-
-I agree with your suggestion to introduce a new
-TEST_ASSERT_TDX_VM_VCPU_IOCTL() macro to print out u64 hardware error
-code properly.
-
-[2]: https://lore.kernel.org/all/a58e2941-77f9-43cf-a54d-023506dd7eb0@linux.intel.com/
-
-> <snip>
-> > diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> > new file mode 100644
-> > index 000000000000..e1ffb67a106c
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> > @@ -0,0 +1,120 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +
-> > +#include "processor.h"
-> > +#include "tdx/tdx_util.h"
-> > +
-> > +static struct kvm_tdx_capabilities *tdx_read_capabilities(struct kvm_vm *vm)
-> 
-> make it const, is better.
-
-Thanks, noted.
-
-> > +	init_vm->attributes = attributes;
-> 
-> Besides CPUID, it only allows attributes to be configure but leave XFAM as
-> 0. I think the changelog needs to explain why we need to configure
-> attributes.
-
-Thanks, noted.
-
-> The rest of the patch looks good to me.
- 
