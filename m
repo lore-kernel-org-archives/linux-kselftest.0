@@ -1,64 +1,64 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDAD157F744
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 16:04:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A947559CBC
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 16:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788883501; cv=none; b=BeHaZ3Xtsm3rqTnlfmoMNvie4VLq0OtjoMoaROZOYfwfM5UdbLSdFdZW98q3OKZq+s/Sjhvf4FQX1b0g8ykqQo+gAVmgReEFfDfJ0PfSxUiJ0793rJepO5kwRMv0xZBaUzmy2J0e59QIYj9j+mO6TAf+ww3e9NfKo2TaP1Dsq1M=
+	t=1788883510; cv=none; b=CMmlWUa2/OUKwm0GNFwfbNl4Z+QeM4V/Et5JraBYh+npc7aNKFSHMkaezXP7XvFUd1XKxai4TGp+jVHB3+oSzEF2czPKVczXYXAGypVvSc7eOJyIn4HjV4s1xZ2zATms0CGv4J2XIfRuGdq/cq6gnw7WicqXdiuQow5QmW4H17k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788883501; c=relaxed/simple;
-	bh=PoIZefIYgemK9yZJ4YbXFzvrGW+3EnfGu14JP84JhVo=;
+	s=arc-20240116; t=1788883510; c=relaxed/simple;
+	bh=sK1b5nDQtrjVKFr+o/6GwxhEgYwKp92RT5diVPkBA+U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lE1yYJmqR14/WT3SXhvoMHzlimfm0v/+2fzfbw2BLnm+GGLQm1ELKwKAfXZ2RF8ZWrNTJxnN2Z90R5dOCtfrFbEfodnMa4HuHdZnC4Vws7G9dURsdwI3rwR3vhnEHdcaZYM//AznQpwISfu57cnot8hoL+XUAfOQiE0a/GsWO74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HQh8aQiS; arc=none smtp.client-ip=209.85.216.41
+	 MIME-Version; b=htXWt/sVmHfPLgELhSC5abBWbiPLTcVkDWByNaBRB5QyQOVACvVzLOZNC9pizxpNv5COMRuuULItFzy1cAM3XqDMRyeX2HjDIUIHTfcCOymgA7lXzkktixWQVv8t0gk0hhH6MJru0Da/Y3BwiWFUu8n5HdTFpBoPBhycvN9kRVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZfKObwWj; arc=none smtp.client-ip=74.125.228.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HQh8aQiS"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-39b2ad862bdso5201913a91.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 09:04:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZfKObwWj"
+Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc1cebad4acso71881a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 09:05:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788883498; x=1789488298; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788883507; x=1789488307; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=udEwa8n9rLXAHa2zU6AruMqakZJAsEvaZhfj1mlF4oU=;
-        b=HQh8aQiS275IMskl2futVye8miZjnPRPVcRHRjpN4m5eJFvEwFl26e3iBdFbtw7MMf
-         89fGFLmhqKrmoWEfTHIEBokyCNC6ZYFWPOUZ7i0y0ilBtHQxHE/jtsAdKMO2uCMBudrt
-         0wOmWbYugf8iIoTg9tsVq0+UIX32zop3iRkM27MZ31xVpqwRyNoXmfR8y53SuQbdkO69
-         vqrbFq9M6rEKiRPS+stKofqdU9sftr5kAs37PDINL7z93bs4gyI/BRtVGa2kUuefJ2ur
-         13lEFjI6+nY1VCIig76dg/wMiymXN9RJyUxcS3+WVr5OvYGmTcNjnZAcVJFW+j4ISVDh
-         QMbQ==
+        bh=SSdpcNES+qMXGVTc/+WrAnmCz5JB/CaNe97EdcfztrE=;
+        b=ZfKObwWjNK7L05K1IvN9ICzOvstr1NZlsrbwloYMwlijiL/KhwcaIn8KXaD08mxM5M
+         p4BocJTIUF+LtbE4jvCDeA0pLStRxVf9nAKzYbKg7LRzeSylufcSUXRi5AjrLu2YgV1B
+         iZV9DoDUI1Qu/DJHf4nyG5SPoqMzFi7gO4mdr3jF+DcNEMLUhjFG7qRvxztAngXy0AKj
+         uDI7YDXbVVb3UwFZHwKdCaOAAXGLKqYcZS70YG8twwIk/HaZU9gJMoiutRp8E7e1kyMa
+         eh+M+sIpHd0CAhbXoJrzcWdLZkY6HiNB2syr77wTymo05XcGSb75S6JotjPKhhZCRR5H
+         0Zaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788883498; x=1789488298;
+        d=1e100.net; s=20251104; t=1788883507; x=1789488307;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=udEwa8n9rLXAHa2zU6AruMqakZJAsEvaZhfj1mlF4oU=;
-        b=hUHcGgyZVtWq/p+ymPsAL+OG0xX2vkbdoLKM75mSr1TbB1vY90m/AOt3lWwpCoU+Jj
-         27qGa29qORrZR4dNktNToRLeeigiDS/dk9WASxcZ6vRZIqCEDoKvkNxn6ri9QdsuR51/
-         EXd2ArQ6M8mCXogn4cEtbnpQztdcOGn060UmNdFHsYwpxNUlzdd8lrvuPJb9Q9g+5lir
-         0xTKvsi88Q5CMpI/zTocMHrePW2yueDxYf579NlsyXgH8gtUqWQt6H6zEKMk3v/MMK3q
-         d7qXHjub3V1ipAmh9hCGmRfttDHkhqd3JRt+wgpl+mmAj1Mlmv5HqS5fs6Q/Fo+XF4C6
-         SxjA==
-X-Forwarded-Encrypted: i=1; AKwUvBxWtO7Pmyda7KxyZIryD5mf8+hAOsx7xIhxZNxdgxWFGU5kiXmTXbdSdQV/Qn1ZwzKhl6RqL9HHVN8ycfw5geY=@vger.kernel.org
-X-Gm-Message-State: AFuF++k6VNg0+U6X3069ONoZyU9yDcWQhOj5C33lJ8j12AEHa/vOVMxU
-	wQXxmGmREUXtmZKQIZTFM+oVvLNLrolWWW72VY9+2blfwcp9Cn1U028jvhmr4w==
-X-Gm-Gg: AYBFou3iNJVNCFs34Ss3mKttMV3+y8U17SYPW6nR9+nJtCqbmpKIc8mQUrCNsQJIakj
-	19m/UXWApKfbNee4L+yq5gt6JnT0gTgL8TemU1CI1Vj9O7QvYvJ1KcuLH8LerAyefjURulRyuG6
-	aG2uV7b9BJrsr8e76O5Dqwx/Nr37ttxh3Qt+vYYbywekFhDJ9IkbAKsWMShYCeMFv2VDn5C6BXF
-	c79MrEiti1UuNHLyZXcD6wrBC0ngQKYtIqpbwaYNLf64L5/8jxTpLGei6NlV1axX4zFwAFuejJA
-	BC6Xz6LV9WvNAhnPaZqEyN0MLZ2sPqx7/+P8SDtZXq2hALnQtLnDxXsdzSL1/pu5LQ1ZSQ/qj2F
-	WE7roLYhRsrelAb2c3FruaMtw+R3tlAhpuoinEYjGFPTxbj2ELd1qm2YAOiVmN92txy5BPhZDez
-	aYvGUmR7bChAWPbrVKXOdAogkwAa4sCvxWprikGTfDIX0UOffDLZXPwgA36HOil5Qn8AsqhXFNL
-	SFOT3Ulfb7t
-X-Received: by 2002:a17:90a:ec8d:b0:38e:67e1:15b with SMTP id 98e67ed59e1d1-39b261002f5mr41870407a91.6.1788883497638;
-        Tue, 08 Sep 2026 09:04:57 -0700 (PDT)
+        bh=SSdpcNES+qMXGVTc/+WrAnmCz5JB/CaNe97EdcfztrE=;
+        b=rVg/7LaFVDBU1J3xk57n/LiqO6ew1LgY2mmW8x6UZc2NMXyM1gOOTuMg2iuR3KPTvH
+         SmTyPbDvuD0aX+TKswimozNf7fl5SF1HM75TIl8FWMfoM3mGANVJ5WXOPn0t+ifqW4tW
+         1xZ/rZcGSbi49uOkGEWqOlBZR1Iwa8jg0ZGhnV1WXN0xv8MdWIQBFhpMkTuMUOyjLeDN
+         vfGfZGEgezAuiP8Rhf1bKPm7VJ+6nh+ZE6bjylpYmJuLWNz80YRnapZ/c85ug69G2B4V
+         KIkjqhkWS8k6Ao6If220ai+C0iwyWw4Nxi71h1g3JyHcPNtG3Fmy2AecqWrIs5UugDF4
+         zlFg==
+X-Forwarded-Encrypted: i=1; AKwUvByeyHr/03a957JAiMxVUBnyfxvK6b4hXryk3zw1WjQuz30W4BD6oDwHucl1FfDler10kzoWkAms6WEl7CfVe1Y=@vger.kernel.org
+X-Gm-Message-State: AFuF++njpxG6qW4pFDmVhIclfT7qRj5TuoyZhle2vgg0GyfinqRPh0ww
+	OLJqkoRl2Tpmshbp39TgK4NdrMn+XBEVMXyxPXJ0cl9G9P8otV1elc4N
+X-Gm-Gg: AYBFou2bSB+NUOr0A1QIJbJPUhb6tz0PYNRIynpM60gmD9MFWSVi8SGbWBBePTwpVxE
+	bbp5VTtcIT/I/49Zq4QLcGzUvMWPjbqF+PSpqfw0ijk2xlZhpkBh5bEsjabZ8jGtP9pjS7ksF2h
+	3NKurYMit5//wCZfjWBnDs4kRdbX0x5QEY5mpajZsPfHM6quhuHmEj4xBbPbwvHwZAy7ymEkeOw
+	o5jK2+3EkdEL431OH1HgaFlCe24m7oIkm8gKhMugI/zjQJCMkbvZPbmLw1BksM3SET4GPEF/NuY
+	fdy8i9MTgSyODj41ZsVP8SJAyuFYE5EpFt4NHuKcCzfUmbXrESfI77GMBUKPxwaotKGjfNQF8VS
+	DadFSG7SMJaNCN1t8gEzun/PkC+1avGLg/+cJJQUBAGSgGj0wFgpV9hzvC369IObBzARwfE7EUe
+	MQYockLPXk57T3Ab+qK7zKRP7YTYWBZ08oTs42pjvAmHaPIKiRUQd/0Jpsp9hkzyzdUcrhNkhEa
+	mA3M+wICtyw
+X-Received: by 2002:a05:6a20:2d22:b0:3d0:f57d:c87a with SMTP id adf61e73a8af0-3dabab860f3mr994786637.0.1788883506463;
+        Tue, 08 Sep 2026 09:05:06 -0700 (PDT)
 Received: from x1c ([2405:9800:b670:b64b:3ef4:ec38:7826:6c9b])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33825669695sm14204525eec.3.2026.09.08.09.04.52
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33825669695sm14204525eec.3.2026.09.08.09.05.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 09:04:57 -0700 (PDT)
+        Tue, 08 Sep 2026 09:05:06 -0700 (PDT)
 From: Tharit Tangkijwanichakul <tharitt97@gmail.com>
 To: seanjc@google.com,
 	pbonzini@redhat.com,
@@ -79,9 +79,9 @@ Cc: hpa@zytor.com,
 	me@brighamcampbell.com,
 	jkoolstra@xs4all.nl,
 	Tharit Tangkijwanichakul <tharitt97@gmail.com>
-Subject: [PATCH v1 1/2] KVM: x86: Reject reserved CR8 bits in KVM_SET_SREGS
-Date: Tue,  8 Sep 2026 23:04:25 +0700
-Message-ID: <20260908160426.6547-2-tharitt97@gmail.com>
+Subject: [PATCH v1 2/2] KVM: selftests: Add CR8 reserved-bit checks to set_sregs_test
+Date: Tue,  8 Sep 2026 23:04:26 +0700
+Message-ID: <20260908160426.6547-3-tharitt97@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260908160426.6547-1-tharitt97@gmail.com>
 References: <20260908160426.6547-1-tharitt97@gmail.com>
@@ -93,53 +93,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-kvm_is_valid_sregs() validates the incoming CR0, CR4, and efer values but
-never checks CR8.
+Extend set_sregs_test to cover CR8. Verify that the architecturally
+allowed bits [3:0] can be set and read back, that every reserved bit
+[63:4] is rejected by KVM_SET_SREGS, and that a successful set is
+observable via KVM_GET_SREGS.
 
-When userspace passes a CR8 value with any of the
-reserved bits [63:4] set, __set_sregs_common() forwards it to
-kvm_set_cr8(), which rejects the reserved bits and returns early. That
-return value is not checked, so the ioctl reports success while the
-requested value is silently dropped. A subsequent KVM_GET_SREGS then
-returns a CR8 different from the one userspace believed it had written.
+Without the accompanying fix to kvm_is_valid_sregs(), setting a reserved
+CR8 bit is silently accepted and the read-back value diverges from the
+value written, so this test fails on an unpatched kernel and passes once
+the fix is applied.
 
-Factor the reserved-bit check out into kvm_is_valid_cr8() and use it both
-in kvm_set_cr8() and in kvm_is_valid_sregs().
-
-Fixes: 2f5bb3fe5835 ("KVM: x86: Move the bulk of register specific code from x86.c to regs.c")
 Signed-off-by: Tharit Tangkijwanichakul <tharitt97@gmail.com>
 ---
- arch/x86/kvm/regs.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ tools/testing/selftests/kvm/x86/set_sregs_test.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/arch/x86/kvm/regs.c b/arch/x86/kvm/regs.c
-index 8f66438989e4..fad31b59c622 100644
---- a/arch/x86/kvm/regs.c
-+++ b/arch/x86/kvm/regs.c
-@@ -440,9 +440,14 @@ int kvm_set_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
- }
- EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_set_cr4);
- 
-+static bool kvm_is_valid_cr8(unsigned long cr8)
-+{
-+	return !(cr8 & CR8_RESERVED_BITS);
-+}
+diff --git a/tools/testing/selftests/kvm/x86/set_sregs_test.c b/tools/testing/selftests/kvm/x86/set_sregs_test.c
+index 603226ffe437..4e7c35179438 100644
+--- a/tools/testing/selftests/kvm/x86/set_sregs_test.c
++++ b/tools/testing/selftests/kvm/x86/set_sregs_test.c
+@@ -135,6 +135,18 @@ static void test_cr_bits(struct kvm_vcpu *vcpu, u64 cr4)
+ 	/* NW without CD is illegal, as is PG without PE. */
+ 	TEST_INVALID_SREG_BIT(vcpu, cr0, sregs, X86_CR0_NW);
+ 	TEST_INVALID_SREG_BIT(vcpu, cr0, sregs, X86_CR0_PG);
 +
- int kvm_set_cr8(struct kvm_vcpu *vcpu, unsigned long cr8)
- {
--	if (cr8 & CR8_RESERVED_BITS)
-+	if (!kvm_is_valid_cr8(cr8))
- 		return 1;
- 	if (lapic_in_kernel(vcpu))
- 		kvm_lapic_set_tpr(vcpu, cr8);
-@@ -565,6 +570,7 @@ static bool kvm_is_valid_sregs(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs)
- 
- 	return kvm_is_valid_cr4(vcpu, sregs->cr4) &&
- 	       kvm_is_valid_cr0(vcpu, sregs->cr0) &&
-+	       kvm_is_valid_cr8(sregs->cr8) &&
- 	       kvm_valid_efer(vcpu, sregs->efer);
++	/* CR8 bits 3:0 are writable; bits 63:4 are reserved. */
++	vcpu_sregs_get(vcpu, &sregs);
++	sregs.cr8 = 0xf;
++	rc = _vcpu_sregs_set(vcpu, &sregs);
++	TEST_ASSERT(!rc, "Failed to set valid CR8 value 0xf");
++
++	vcpu_sregs_get(vcpu, &sregs);
++	TEST_ASSERT_EQ(sregs.cr8, 0xf);
++
++	for (i = 4; i < 64; i++)
++		TEST_INVALID_SREG_BIT(vcpu, cr8, sregs, BIT_ULL(i));
  }
  
+ static void test_efer_bits(struct kvm_vcpu *vcpu, u64 efer)
 -- 
 2.53.0
 
