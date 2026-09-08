@@ -1,30 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBED3A9605;
-	Tue,  8 Sep 2026 18:19:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8D0531AFB;
+	Tue,  8 Sep 2026 18:34:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788891599; cv=none; b=KXktI1MaGbOgvUGiiSsJDyNgdFeWV2b8E0j2g3D5+aKPfrHP3IeXnXLEzYgDvZLLZ0ZFXmYL7ze8UR0H/XESoLu2vgRJdV8QcB5yiD3pa0SPZeneO20qgUoMpMryaKrZDci2KhKJlILPuWVLy5XnWqyD+yHQhjp0f44M/ziqoXQ=
+	t=1788892473; cv=none; b=OiCeKpOFB20glgWySioH5u6mVTUv8aQ9AMy+rHhCkFXq4ShZC9w3ptAhXDFauu6YdvtGgqh8DAGi7lrB/S74IkGB+u9iozF6QKLOFcAwN/MnB3Ks4RVAuHsHZDnLf4eKgSlpNXDpn6VbZfMdTGcs/rICtVvIyNrxtyUn0H5tQwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788891599; c=relaxed/simple;
-	bh=LUiVOTFg1tnrxdQsq6or85GsD7yX0CD8cnaCVNhMmjM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pD1uICE7Rc3tV2Uiz9gJ3AEHpa7Y6g56RGwdvfJKc9ecAUVQ+9+h3JWxqWeQbJvbKAUDLQev+xM/L9dc41pkopcAlOjWX1btfw587H3IHHiYhT2yXDeVrmpsZgW6H+zV9pIs9PZ0A2fpsKBuocM0A/1qMusdmJ2z8yWreeAPm4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FcTlrPE/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788892473; c=relaxed/simple;
+	bh=KqaRe5oDXfofNA6aUa5ish15rWRHOikEUyWj3XVOvfY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QyvPIpJDkSo7bAQ2s55mPCUBVRcL+HXYIPX/5EUaxuDaEqZR50w4Zom+ZGVIBnRgl1ZQ/G/UTqo36ETB88ovpqnPdtH01105JBwz4GfPqYidKKaYwCjjoI2eke0c+O7cwzfmZVH4TXhh0y83r40rRXyk/bnltukfYEETnBJTIN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IxXLA6fz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FcTlrPE/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFE481F00A3A;
-	Tue,  8 Sep 2026 18:19:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IxXLA6fz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 799611F00A3A;
+	Tue,  8 Sep 2026 18:34:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788891598;
-	bh=vnf1Aokfz0Pd+GQW7kvwiEALZgbY6RG7KxqSv9UBbm8=;
+	s=k20260515; t=1788892465;
+	bh=tj69CnV7/mQljGyQjdl9aN8WaNK7KVgTy6egIaCyen8=;
 	h=From:To:Cc:Subject:Date;
-	b=FcTlrPE/FfPlph6rgO0ddGee5oGKXZeONniWmoyDxIQdXhuZrzpbHm58pS9qkeEaV
-	 Nd6ksZdtRr7SFp4zL1fFX57O1n9T9y1b64IWTAuTFYL6RoXG5TronC/A+R7kiDTcW+
-	 YeVAs0ctL9rG5MJEDF9KdXxSnmH/drfyp15W6B+AIM0tmvz+YOnE5x9JuRr6zo5gLt
-	 hkyK6GYRPp8EFLni+4COG+Z9743lVu+yRt3UxJV/+mSAlZWw/QXKAFPIJMYEgjZq+R
-	 FsWLkhOKM2fm3zZdQPgmXPfFKMYZi0cetXfyUcFwzl+zJbgliMYQ8+pVB9Zt3KBvkd
-	 PpO+e65uKmcCQ==
+	b=IxXLA6fzcQ3XVNZgw+8yHAQ8zO/Hb9mAVr5U+9/Dms8Bd0XZjIYHlkBkwiA6P7lH2
+	 dKqhTX7KLhZSKURBnUqmPfViBkwSwTLl/5u2fMRtpsJKoG4JKGdCEkPbF0AXTVAZqE
+	 x2+HDZ+5X6QdOECpw/0BgLJOZkwKmgLMl2zeuXxSm153MGGdSBrhr4mog+IDfg9+0o
+	 D94V0yXSd7nyjrigdPdbuNz2CbILVNdnuDHr/BJpQQsVuwwpJpduinjlYpEs9N/KmM
+	 hBOlRI3AxHeXYQynzvgPlk8rlBuFFPAz+9XeC66WMVxjBwfqEkRItzZCT01+OTflV0
+	 QhK6ykbXIpshg==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -33,14 +33,15 @@ Cc: netdev@vger.kernel.org,
 	andrew+netdev@lunn.ch,
 	horms@kernel.org,
 	Jakub Kicinski <kuba@kernel.org>,
-	adrian.pielech@intel.com,
-	sheenamo@google.com,
-	przemyslaw.kitszel@intel.com,
 	shuah@kernel.org,
+	bobbyeshleman@meta.com,
+	sdf@fomichev.me,
+	leitao@debian.org,
+	razor@blackwall.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next] selftests: drv-net: warn if LOCAL_V6 has DAD or not kept on link down
-Date: Tue,  8 Sep 2026 11:19:56 -0700
-Message-ID: <20260908181956.1357684-1-kuba@kernel.org>
+Subject: [PATCH net-next] selftests: drv-net: devmem: set reuseaddr on the sender's source port
+Date: Tue,  8 Sep 2026 11:34:20 -0700
+Message-ID: <20260908183420.1369630-1-kuba@kernel.org>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -50,89 +51,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-napi_id.py intermittently fails to start its helper on Intel and Google
-HW runners:
+devmem.py fails on the HW runners with:
 
-  CMD: /srv/netdev/drivers/net/napi_id_helper 3001::1 37569
-    EXIT: 1
-    STDERR: bind failed: Cannot assign requested address
+  CMD[remote]: dd if=/dev/zero bs=512 count=1 2>/dev/null | socat -b 512 \
+    -u - TCP6:[fd00:2::1]:50051,bind=[fd00:2::2]:50051,nodelay
+    STDERR: socat[41018] W bind(5, {AF=10 [fd00:2::2]:50051}, 28): \
+            Address already in use
 
-Either keep_addr_on_down is not set or more likely the address is
-configured without nodad. Having to make sure that all tests
-always wait for DAD after impacting the link would be a whack-a-mole
-so we expect the env to have nodad and keep_addr_on_down set.
+ncdevmem installs a 5-tuple flow rule which matches the source port, so
+socat has to bind it explicitly. The port comes from rand_port(), which
+checks availability on the DUT - but we bind on the remote...
+That said the failure rate seems to high to be random collisions
+(~2% per sub-test). It's probably TIME_WAIT sockets on the remote,
+run_rx_hds() alone creates 12 of them.
 
-Warn about both while validating the environment, and document this.
-We could fail completely but most tests don't impact the link so for
-quick local testing it'd be annoying to have to apply the settings.
-I hope the warninging stikes the right balance.
+Set reuseaddr so a TIME_WAIT socket does not fail the bind. Collisions
+with a live socket are still possible, we'll see if they are frequent
+enough to care.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-Adrian, Sheena, please update the setups scripts for your
-systems. Looks like nodad is missing.
-
-CC: adrian.pielech@intel.com
-CC: sheenamo@google.com
-CC: przemyslaw.kitszel@intel.com
-CCL hramamurthy@google.com
 CC: shuah@kernel.org
+CC: bobbyeshleman@meta.com
+CC: sdf@fomichev.me
+CC: leitao@debian.org
+CC: razor@blackwall.org
 CC: linux-kselftest@vger.kernel.org
 ---
- .../testing/selftests/drivers/net/README.rst  |  9 +++++++++
- .../selftests/drivers/net/lib/py/env.py       | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+)
+ tools/testing/selftests/drivers/net/hw/devmem_lib.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/README.rst b/tools/testing/selftests/drivers/net/README.rst
-index c6bed9a985bc..3fe49bce4f3a 100644
---- a/tools/testing/selftests/drivers/net/README.rst
-+++ b/tools/testing/selftests/drivers/net/README.rst
-@@ -70,6 +70,15 @@ LOCAL_V4, LOCAL_V6, REMOTE_V4, REMOTE_V6
+diff --git a/tools/testing/selftests/drivers/net/hw/devmem_lib.py b/tools/testing/selftests/drivers/net/hw/devmem_lib.py
+index 3554954a6691..b6e52fa9dda5 100644
+--- a/tools/testing/selftests/drivers/net/hw/devmem_lib.py
++++ b/tools/testing/selftests/drivers/net/hw/devmem_lib.py
+@@ -201,7 +201,7 @@ def ncdevmem_rx(cfg, port, verify=True, fail_on_linear=False, flow_steer=False,
+     else:
+         addr = cfg.baddr
  
- Local and remote endpoint IP addresses.
+-    suffix = f",bind={cfg.remote_baddr}:{port}"
++    suffix = f",bind={cfg.remote_baddr}:{port},reuseaddr"
  
-+Tests reconfigure the device freely, including taking the link down, and
-+expect the addresses to work immediately afterwards. IPv6 needs help::
-+
-+  ip -6 address add 2001:db8:1::1/64 dev eth0 nodad
-+  sysctl -w net.ipv6.conf.eth0.keep_addr_on_down=1
-+
-+Without those the address is flushed when the link goes down, or spends
-+a second unusable while waiting for DAD to finish.
-+
- LOCAL_PREFIX_V6
- ~~~~~~~~~~~~~~~
- 
-diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
-index 25903f580b40..6262080a8bf4 100644
---- a/tools/testing/selftests/drivers/net/lib/py/env.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-@@ -239,6 +239,25 @@ from . import bpftool, RtnlFamily, Netlink
-         if missing:
-             raise Exception("Invalid environment, missing configuration:", missing,
-                             "Please see tools/testing/selftests/drivers/net/README.rst")
-+        if "LOCAL_V6" in self.env:
-+            self._check_v6_env()
-+
-+    def _check_v6_env(self):
-+        """Tests bind() to LOCAL_V6 and bounce the link, it must survive both."""
-+        ifname, addr = self.env["NETIF"], self.env["LOCAL_V6"]
-+
-+        def _keep_addr(scope):
-+            with open(f"/proc/sys/net/ipv6/conf/{scope}/keep_addr_on_down",
-+                      encoding="utf-8") as fp:
-+                return int(fp.read())
-+
-+        # 'all' wins when non-zero, see addrconf_ifdown()
-+        if (_keep_addr("all") or _keep_addr(ifname)) <= 0:
-+            ksft_pr(f"WARN: net.ipv6.conf.{ifname}.keep_addr_on_down not set")
-+
-+        dev = ip(f"-6 address show dev {ifname} to {addr}", json=True)
-+        if not (dev and dev[0]["addr_info"][0].get("nodad")):
-+            ksft_pr(f"WARN: LOCAL_V6 {addr} not configured with nodad")
- 
-     def resolve_remote_ifc(self):
-         v4 = v6 = None
+     buf = ""
+     if buf_size:
 -- 
 2.55.0
 
