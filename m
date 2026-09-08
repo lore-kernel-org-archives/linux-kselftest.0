@@ -1,150 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-46.mta0.migadu.com [91.218.175.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B1B394492;
-	Tue,  8 Sep 2026 07:29:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598D23A9852
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 07:55:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788852559; cv=none; b=S4tNk8v7du2rANof/YGe0u1fcQa2em4a+UcUUS6YZ/1Fb5TZjy4sDFtVpPSXwHWhSjoaG6R+N/6BjfPoIUuOpQ+iAHJDsc3DKFRBvLi6oFYlNbTCzkA2KmPu5do/6S7bPhgFULc5uAa0gAH/Vmf1acOYsLI3Mjbpib4AYsbJNSM=
+	t=1788854148; cv=none; b=rv/u71ZGWjGHJzSZROS5A8XfMXP2YEI03MvE+59yUPRl8VpeIv5sIOZG1FBYpZ0ashmeYNv+idOrPLrbLGTFmG3tx4g09heFyBsy9Z+A6T6urTMa6GJc/eBOG06t7LiBuglwPcEWBb72SReKMy8faICB0EBmjXJ3tdkEOxenV9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788852559; c=relaxed/simple;
-	bh=tJkqs30o+i74kwpbgxSRT2kQNjeQe8YkmKgxdoAHZDs=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=slIQYKBXDbY2sV0t8FzjInyjLFqu+o7GaVHny1HjcBV7x5yYFf1hAs6bGp62epkq0XmZJjeasoLpezI4v2gnDuxa79vVLUwASqu6JMNmDYDxcSBCCo0VhyuqHfpnAv+G6sUU1SeCfnwVe1dXd5MD6rjRepnWm9ojMWEWTJvP9RA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cMKYyM1i; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788854148; c=relaxed/simple;
+	bh=r4hdO+l1tHybJlhIhjw+zD0e2eT2sYv8x5tSfI6vj+8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lwYHiTlEr49KdNx+Bms45Q2zCIxAOuQQE3o9i4sXljuoevhgBNs0BN/cV1gzEk25+FVvG+X74BLWprloUaBLSBXRTeK3rf4yHWN14rRGLN3+qFi5AKpujaui+v/hlaOUZ+lbQrd/NRJKbZpqqeD8pUwK7EiQ3nyKk1Sm2q+EfPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z9UmC3Uw; arc=none smtp.client-ip=91.218.175.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cMKYyM1i"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76A141F00A3A;
-	Tue,  8 Sep 2026 07:29:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788852557;
-	bh=ElAtuWbE+yqcbTjG45DzqB3eCUQaFOtLYoirm4N9njk=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=cMKYyM1iPpJIY5N6wDCaWQhjQkC1WRPngk87DJYRxZr/ecjFYMB9fH71AUIc565tz
-	 Qc0n8aKI8aygMWxLeRgSTyUU2Md64eazmD37u+Krw8pKRsM8gfZkmXlFGxJtENH6LH
-	 nsJA4ndWPwoKkxQLOrvEmGKOFbhJtLZBnvUDiadSGORtXI8sWU4GLrO35PfTBjorHK
-	 jhYoMvmbpzgKNofgx7WOgeKfsfBelPMRwifVBUtg4Wum03OAbPB9N48JK+MFx0jVRI
-	 nKrTdQUMo9/Sj+0LpPkP4V/+eCyAbmIPjmiQOf4MZ2iYJMtz5raHLy++60Lhz+1JEO
-	 01YWQ++LbRAbQ==
-Subject: Re: [PATCH net] selftests/drivers/net: include lib/sh/*.sh
-From: netdev-bot+sashiko@kernel.org
-To: hangbin.liu@linux.dev
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, jv@jvosburgh.net,
- olteanv@gmail.com, leitao@debian.org, jiri@resnulli.us, mst@redhat.com,
- jasowangio@gmail.com, xuanzhuo@linux.alibaba.com, eperezma@redhat.com,
- petrm@nvidia.com, matttbe@kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- virtualization@lists.linux.dev, liuhangbin@kylinos.cn
-Date: Tue, 08 Sep 2026 07:29:16 +0000
-Message-ID: <178885255602.219967.561231920123759325@kernel.org>
-In-Reply-To: <20260907-selftest_lib_defer-v1-1-8af94645aaa3@kylinos.cn>
-References: <20260907-selftest_lib_defer-v1-1-8af94645aaa3@kylinos.cn>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z9UmC3Uw"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=r4hdO+l1tHybJlhIhjw+zD0e2eT2sYv8x5tSfI6vj+8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788854144; v=1; x=1789458944;
+ b=Z9UmC3UwvlNH+8X9L9uuK7jMx8wC6QXmaMYikCmaV1iDYW9a4HsnzhOISd+cmJD5flMsVj4V
+ jJe7FXa3dIR8I8a12Vs18SNucJjwtciOhv3xT0RNz48def4eBqvJk0zfvsJSKL70vxUVuLhpgs+
+ e96fr9gR7geWnEBcQ2lbpC4M=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4d9c3b18d43e9b40;
+	Tue, 08 Sep 2026 07:55:44 +0000
+X-Mizu-Trace-ID: 4d9c3b18d43e9b40
+X-Migadu-Flow: FLOW_OUT
+Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b4a0b17358so10141e87.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 00:55:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBzfEWGzyBSrZ0PyTUDPSUmumuCn5Bti8Pj9yBBaYK4lqaUl1TCh8R+sFmJ60MjgKbiwTPPxWXtjeSBhz33QRmU=@vger.kernel.org
+X-Gm-Message-State: AFuF++knVhYV9dwhT5c62S/JYfi0q5jO0Y6fyhv/6rQIk99OIr2wfca2
+	KaQp74R1CjfHzS2YxBCXoLqadnQoU4m6IevFqAuAr8JAHffkL6vriGiQHYPQI5Tm1p54dqBFN3n
+	G1ffOurglZ0r/gAXyLYpor6OHBIwf+Aq6EWbEPWc3
+X-Received: by 2002:a05:6512:3185:b0:5b6:19c6:a91b with SMTP id
+ 2adb3069b0e04-5b74d1e0c5bmr294833e87.14.1788854142874; Tue, 08 Sep 2026
+ 00:55:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260826-arm64-52bit-va-v1-0-14ec98211363@fujitsu.com>
+ <CA+EHjTwPmwPTMcgQB6zt47Kz6NPMr+FkGfq2Qq+Uxu+G427OEg@mail.gmail.com> <ap9wgBjYEDI-27N1@sm-arm-grace07>
+In-Reply-To: <ap9wgBjYEDI-27N1@sm-arm-grace07>
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Tue, 8 Sep 2026 08:55:06 +0100
+X-Gmail-Original-Message-ID: <CA+EHjTxy3vURKpjmcX86T+coXZN7sCfW=5L4TM3GH30xuz+zPA@mail.gmail.com>
+X-Gm-Features: AcwNN1UPBjEuQQThxfaCHXl31wDDjpU8d24LqbsGJMyA-76vtr69g4waCdr9dow
+Message-ID: <CA+EHjTxy3vURKpjmcX86T+coXZN7sCfW=5L4TM3GH30xuz+zPA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] 52-bit VA guest mode ID support
+To: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Steffen Eiden <seiden@linux.ibm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Takayuki Okamoto <tokamoto@fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider:
+Hi Itaru,
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+On Tue, 8 Sept 2026 at 03:18, Itaru Kitayama <itaru.kitayama@fujitsu.com> wrote:
+>
+> Hi Fuad,
+> On Fri, Sep 04, 2026 at 09:14:36AM +0100, Fuad Tabba wrote:
+> > On Tue, 25 Aug 2026 at 22:18, Itaru Kitayama <itaru.kitayama@fujitsu.com> wrote:
+> > >
+> > > This patch series extends the arm64 KVM selftest framework
+> > > to support 52-bit guest virtual address (VA) modes in addition to
+> > > the existing 52-bit physical address (PA) configurations.
+> > > The motivation is to enable validation of LPA2 guest memory-management
+> > > behaviour in configurations that use a 52-bit VA space.
+> > > While the selftest framework already supports testing 52-bit PA
+> > > configurations, it lacks the ability to exercise guests running with
+> > > 52-bit virtual addresses, leaving part of the LPA2 functionality untested.
+> >
+> > The series adds three 52-bit VA guest modes, but nothing in tree maps
+> > a guest VA high enough to use them. The mode-iterating tests map at a
+> > fixed low GVA, so pgd_index() returns 0 and only the first entry of
+> > the top level is ever used.
+> >
+> > What do you expect the modes to catch as they stand? The allocators
+> > already take a minimum GVA, so mapping high in one of those tests
+> > looks like a small change.
+>
+> I think at least a 4KB page is allocated for the level -1 translation table,
+> and entry 0 is populated with a Table descriptor pointing to the level 0 translation
+> table. But, no it does not test a nonzero top-level index.
 
-- [Medium] Incomplete fix:
-  `tools/testing/selftests/drivers/net/netdevsim/Makefile` is the only…
+Right, that's the gap. Every mode-iterating test maps at a fixed low
+GVA (0xc0000000), so the new modes only ever fill entry 0 of the top
+table. If the series adds the modes, it should add a test that drives
+a VA into the 52-bit range.
 
---
+> >
+> > > To address this, the series introduces new guest modes for 52-bit VA
+> > > operation, adds five-level page table support where required, and
+> > > performs runtime detection of host 52-bit VA capability so that
+> > > LPA2-enabled guest VA tests are executed only on supported systems.
+> > >
+> > > Testing:
+> > >
+> > > Built and tested on arm64.
+> > > Verified on QEMU with a V52-capable guest configuration.
+> > > Confirmed correct operation of high virtual address mappings by
+> > > exercising guest memory accesses in the 52-bit VA range.
+> >
+> > I could not reproduce "exercising guest memory accesses in the 52-bit
+> > VA range" with anything in tree either. Could you say which test you
+> > ran, which guest modes, and on what?
+>
+> I just in guest_code() of existing one of the kselftests, mapped and
+> accessed a page at 1ULL << 49 using virt_pg_map() and on QEMU TCG mode
+> as I don't currently have access to the machines LPA and LPA2 features.
 
-selftests/drivers/net: include lib/sh/*.sh
+That test is what the series needs, and you've already written it.
+Folding a mode-iterating version in tree would exercise the modes and
+make the cover letter's "52-bit VA range" line reproducible. It runs
+under TCG, so no LPA2 hardware needed.
 
-This adds $(wildcard ../../net/lib/sh/*.sh) to TEST_INCLUDES in the
-drivers/net selftest Makefiles so that net/lib/sh/defer.sh gets installed
-by "make install", and sorts the TEST_INCLUDES lists while at it.
+Cheers,
+/fuad
 
-> diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-> index d5bf4cb638a8c..ab39c2e508f0a 100644
-> --- a/tools/testing/selftests/drivers/net/Makefile
-> +++ b/tools/testing/selftests/drivers/net/Makefile
-> @@ -3,6 +3,7 @@ CFLAGS += $(KHDR_INCLUDES)
->  
->  TEST_INCLUDES := $(wildcard lib/py/*.py) \
->  		 $(wildcard lib/sh/*.sh) \
-> +		 $(wildcard ../../net/lib/sh/*.sh) \
->  		 ../../net/lib.sh \
->  
->  TEST_GEN_FILES := \
-
-[Severity: Medium]
-Was drivers/net/netdevsim intentionally left out?  It is the only Makefile
-under tools/testing/selftests/drivers/net/ that this patch does not touch,
-and it defines no TEST_INCLUDES at all:
-
-tools/testing/selftests/drivers/net/netdevsim/Makefile:
-	TEST_PROGS := \
-		devlink.sh \
-		...
-		peer.sh \
-		...
-	# end of TEST_PROGS
-
-	TEST_FILES := \
-		ethtool-common.sh
-	# end of TEST_FILES
-
-	include ../../../lib.mk
-
-Its installed scripts do consume the net shell libraries.  peer.sh does:
-
-	lib_dir=$(dirname $0)/../../../net
-	source $lib_dir/lib.sh
-
-and devlink.sh, devlink_in_netns.sh, devlink_trap.sh, fib.sh,
-fib_notifications.sh, hw_stats_l3.sh, nexthop.sh and psample.sh do:
-
-	lib_dir=$(dirname $0)/../../../net/forwarding
-	source $lib_dir/lib.sh
-
-which reaches net/lib.sh, and that unconditionally sources defer.sh:
-
-tools/testing/selftests/net/lib.sh:
-	net_dir=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
-	source "$net_dir/lib/sh/defer.sh"
-
-There is also no automatic fallback for this target, since the top-level
-Makefile only matches the exact strings net, drivers/net and
-drivers/net/hw:
-
-tools/testing/selftests/Makefile:
-	# Networking tests want the net/lib target, include it automatically
-	ifneq ($(filter net drivers/net drivers/net/hw,$(TARGETS)),)
-	ifeq ($(filter net/lib,$(TARGETS)),)
-		INSTALL_DEP_TARGETS := net/lib
-	endif
-	endif
-
-So does the failure quoted in the changelog still reproduce with:
-
-	make INSTALL_PATH=/tmp/kself TARGETS=drivers/net/netdevsim \
-		-C tools/testing/selftests install
-
-The commit message says the patch "adds a wildcard to include all shell
-files for drivers/net tests that consume net lib.sh" — should that claim be
-narrowed, or netdevsim covered too?
-
-Note the gap in netdevsim is wider than defer.sh: adding only
-$(wildcard ../../../net/lib/sh/*.sh) would not be enough, since
-../../../net/lib.sh and ../../../net/forwarding/lib.sh are not installed
-either (plus devlink_lib.sh, fib_offload_lib.sh and tc_common.sh, which
-several of those scripts source).
-
-For reference, drivers/net/dsa is also not in the default TARGETS list and
-this patch does cover it, and drivers/net/{mlxsw,ocelot,microchip} have no
-Makefile so they are not installable targets at all.
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260907-selftest_lib_defer-v1-1-8af94645aaa3%40kylinos.cn
+> Thanks,
+> Itaru.
+> >
+> > Thanks,
+> > /fuad
+> >
+> > > Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+> > > Reviewed-by: Takayuki Okamoto <tokamoto@fujitsu.com>
+> > > ---
+> > > Itaru Kitayama (2):
+> > >       KVM: selftest: arm64: Support 5-level paging in stage 1 translation table
+> > >       KVM: selftests: arm64: Add 52-bit VA guest modes
+> > >
+> > >  .../selftests/kvm/include/arm64/processor.h        |  2 +
+> > >  tools/testing/selftests/kvm/include/kvm_util.h     |  3 +
+> > >  tools/testing/selftests/kvm/lib/arm64/processor.c  | 87 ++++++++++++++++++++--
+> > >  tools/testing/selftests/kvm/lib/guest_modes.c      |  5 ++
+> > >  tools/testing/selftests/kvm/lib/kvm_util.c         | 11 +++
+> > >  5 files changed, 103 insertions(+), 5 deletions(-)
+> > > ---
+> > > base-commit: 8d3ae59288f1e7d58d76558a6ee96d533bc5019f
+> > > change-id: 20260825-arm64-52bit-va-32f1f4cd050d
+> > >
+> > > Best regards,
+> > > --
+> > > Itaru Kitayama <itaru.kitayama@fujitsu.com>
+> > >
