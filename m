@@ -1,73 +1,73 @@
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C016354281A;
-	Tue,  8 Sep 2026 12:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A591F5437D0;
+	Tue,  8 Sep 2026 12:51:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788871878; cv=none; b=DDC7LmtgjqWW5rhYYl6Yn3/gVyiabjN0LFdUGKpxDlNwxw/nbjMQgSTCSGTNMAc0eIs0FTp/928QswZKiKm3uLBBrTo1q6jHjKSEVuxLu/pnVHqQ+PrFsEyUP7/O0Auf7jJjQU0Rs5w/xxnOYYxqTatk9Ca+46gT7z47z7ITRMg=
+	t=1788871880; cv=none; b=jD3673sErCQvO+c+jlDDNZvY1orUgo9oLv4NHnrkWiA5KYVlzq0N7x8nXGCqKFw2gL4RfLm+EKOhdYhwGIX1Y3vBbTKPOLEDRlskZLCNdlPGYZDan3POhyeJjq2Dz6LAxlsHdRWHNDtSFC+I1p9cZyiVAuY9bqq4OAJpI4wNfHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788871878; c=relaxed/simple;
-	bh=CSXMKC8Az4HfRsue6NIapBlAOU3y8TH3lkmLyPElzeY=;
+	s=arc-20240116; t=1788871880; c=relaxed/simple;
+	bh=m87rit2xZVxyYYGGBfTwQIb+3uHuiUcFoaOr9xj5OFc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GWITg0M0/URT8UuinYd3xyqDuXacOkXHMGdGeHiLdCqT0s9jaVPyehVGzIjxBqbuX+57VIBQJLDMJ3XrirqjpGKB4RBbHaCYTWtGBo/5W0NmlUw3FUZCHEmqyqhEKKJ9HLRCgYD6sdKRE7hJ/6JVw3VqIfguKIahP3WOnsv+wRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=obd9qnwG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=m7jwhF/m; arc=none smtp.client-ip=103.168.172.156
+	 MIME-Version; b=F3pp7zkbubX//bDv2NvlClJBkXksDUcxhw0Q9tXvNoKZKxsg0QZB+3K3ULlltIEbyx/A56gP92sen+TySsyrlLf6FoRLELj0d9y3T8qfnBhp9DjISv86jlubiSrZwedmDxKYj/0+jKCP45bizfHlFPRJhpfPdU0sjyOZh2TLBmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=BC6RTcgv; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MGv3A5vu; arc=none smtp.client-ip=103.168.172.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="obd9qnwG";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="m7jwhF/m"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id D796C14000A1;
-	Tue,  8 Sep 2026 08:51:15 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="BC6RTcgv";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MGv3A5vu"
+Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
+	by mailfout.phl.internal (Postfix) with ESMTP id BB4C2EC010E;
+	Tue,  8 Sep 2026 08:51:17 -0400 (EDT)
 Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Tue, 08 Sep 2026 08:51:15 -0400
+  by phl-compute-08.internal (MEProxy); Tue, 08 Sep 2026 08:51:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1788871875; x=
-	1788958275; bh=iwxMgzeRWfdCSv6NSO8Zrqvha9AMlvjv8LhyEme61lQ=; b=o
-	bd9qnwGe0nuhKHPDfRr4hBq3btiviPT7kiJwKHW/Na3lP4/RAhwuiSwAhZhH5sCi
-	3P4Zaj+i177qex+EhoCwv0RaOaOa1ZO/BqUfTapihfLpk9n9ZTP56ueGQdv2gQSy
-	5pUM57wp3w+dCmBwPWzRAZBnSMO4wnoXzZUUPchFrIIVln7apBrPU9x708iZZPxX
-	lp6T2Y22OR68pw1dOOyWQE2TeRZW9riMXuZkeSzvBRgOkgrK+BsM+AYmkuzbSI3n
-	4EmLe+2L/QI6NvEKeaosO4bMCdSIPBeABIaBMrt+YLaGrmfxvd0R/ZiF4KFUeeST
-	j/rUzaQNGO0+FuvofNRMA==
+	:reply-to:subject:subject:to:to; s=fm2; t=1788871877; x=
+	1788958277; bh=2hGlkwJH8rpVYNSw9dyCZihy+2pP4J7uKRwXxgbT84Y=; b=B
+	C6RTcgvMZ+j0dLw/pV7afe7NzIFUram5k9kDBc2+D+gPWYmiYNXopP+2DxEgnUwz
+	gmhL7JexHkSVLlTIvvAcfadHibeRFg9WvS+ryO6dGwybP5WKipfSr4Fqn2vXa98X
+	wX7dxut8kVUfnu4y1iZ1Tw5zhQ2EdTph5SbKC1g0a3nFH5YUkKxCfxxaFTvD0i2I
+	4HFnJZXtIdvyybWadFDE6CkwsjK51eWdHosLUjfOkq0YKNdAzL3AJvHx4+S9rW/2
+	vG9NtMZm5D2NqwyLXrYuLObaLK2QWJ+6u8BPereNdrHQWy2p6KM8QcV2vg5WZMOp
+	9XtHH38QyEyns8o/aSb7w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm1; t=1788871875; x=1788958275; bh=i
-	wxMgzeRWfdCSv6NSO8Zrqvha9AMlvjv8LhyEme61lQ=; b=m7jwhF/mSf/e8bYVw
-	p3U8nCNtyIsPudps1FYdop7nvFYLnCMU/RwarpMCdvYuAztIh7GGeYzyPRbunifY
-	1RweJVoMAcr88IzxF5bI4Qv2RDKefXaRFTJ7MLuWn6B+fjRL+zvrL0dcGTSjbG28
-	yVW6w/ckbttMUK2V9TRl42YwtyN/Df/BJvPi6Z1TuS867/30eSS0fT3ji2bRr/gw
-	hss0uNAhgvkE8pLpGNlOm+E0ueNmldZWmgIhwqVl3TNxYyA7IbKB+SRtc6FaZM2Y
-	4SFvxB1D8mhE0fA0aRFnQIK+y4Nma2+UTujrpjOt2c0hlHspT1rzgysrbU4fEb54
-	FvAwQ==
-X-ME-Sender: <xms:wwSgapTRoE1N4N1J76ulCElSXI9QHhbQVGxOpSUbSqCDthKJ9Qb8qA>
-    <xme:wwSgarLMeIDL3MVkaIimjvlrl7eZ0tlfzQ44AImJucKSnMOXkEhIU4RCWWLLE2Syn
-    sWsq6eM_ZvWpJ2xpeQ_Yyxgw-X2z-lglakeqayyqbUZHDSuxX57740>
-X-ME-Received: <xmr:wwSgahBsM3YLcFubpUpFsSILvHY9seBmg-VQ7OFCuJ_8EktP8xrsQrRjses>
-X-ME-Proxy-Cause: dmFkZTGuvEMc9jYu2f0uyTmUF7l0J7NybVdULRlrJFmokmmiolg4yH1+7h97U05D2w+OYm
-    AZhWoHmMPT2EsIB4AC7PxRFoqN+CF4x8etMK41ayTMd5Tw55ZxqvSYpb69cNUy0p/dfOGv
-    05P0JRk7g5kt5eTL1k2cO9e1oUb7lrROdNyUSbigYjG7Zs/tNKx+L8+9HHw+CSw5cJpWIQ
-    j2DrX13NeCZvnLN36sWkEk/U0EX1Q1izKAtzdjMuXhus4PGMhEw3kJKafKZkgCRsnWRxXR
-    Wv8osDa5aTh9mnjCTFnYcP83hQ8y7tmPYrDENim+Q79mFJR5sJUGN5QsCu80CUB5y6e4dK
-    Z0E9GGivkeHG4X0HLGLbvvZrC5bnJqafe3JtujJDyZU0RMBh78hGImZdsp2+xaQaiezMm1
-    W/GxYA/8X81H1QVXDnrm7G9MmdnWthDp4bwQE5/Q0EdSY92qYkIEBt67B1nXGULa9l92XT
-    H9EdurnNFjSVs+D0N5mfI+L0uLvVkI49ArxXJw6fWpDpyme1CL+vBTCCQ8iRE8baVUUqIG
-    5Q4v7N+9OtQl4udFlDE23Stsl524Vf+c3e0rJWn2aMdBmjTlm24pCumW9GZtDQTrD2kADC
-    eCu+eSd4I4se6UGU1Y5GZn8BXiAdR+e8UnPIWACsfZMNOO+zGh7eufrimloA
-X-ME-Proxy: <xmx:wwSgao2UGfeBbO7a6xhbv6_qQRFrp9dphat8jjHN1QPOsS87oPuf7A>
-    <xmx:wwSgaklXKLNWOjhQ5cP1m0ItR_SkQ-4ZmMBn0TNJeIZLPKpYyjgHZw>
-    <xmx:wwSgalcf9I8l46X-jfpmlcT5FUcy6hDZUkjA2ezxoRVjDUPTWT5y9w>
-    <xmx:wwSgahUsP5nozBw5atULOe4tqYRZYDW40OI1CC2CyNy_mkJ6CZoThg>
-    <xmx:wwSgagQyrwQRyF-WTkkhrfx1VZ0CmjQtPsQnw20xlwA5GZ6EpnOpkaEN>
+	:x-me-sender:x-sasl-enc; s=fm1; t=1788871877; x=1788958277; bh=2
+	hGlkwJH8rpVYNSw9dyCZihy+2pP4J7uKRwXxgbT84Y=; b=MGv3A5vuwwT/kKvXV
+	ryQ/URKE2Xq1OvDZwW5m6ZtNn6p1Hkx0Qh21kxJKPlYKDStgjdcsv/U/xZ0+PJcV
+	UD3ToQAdesS4T1mrlF9n4IYvrfmcC/2qnOl2wPGosVfr7J9izvNHQGcesoDRNhAn
+	69CeOjmSj7PhO+733sEIpCVyYp1O/EQitK7XDY8KX0z/Avsd/QMvGDW8w2EUKFU6
+	fRpyLl6rBlwQUZb9htZaGVDMfrBmlzdjY+0MwrK+5UWqDORV3z9QG/XdseZNQNA6
+	DMBHj+ZvyOoh16dPdfak4vHMFr8o4KsPhSd2e96aZDT6kbVwkK3JMo8ho63rg7p1
+	IUgAQ==
+X-ME-Sender: <xms:xQSgarVe8zCoZRLAVjd6i67gnnc_jPaoVhzw1tis775NIP6dxA311A>
+    <xme:xQSgar-J1i2a11Qt9LeixGXaGdLUBHJZqus23_RYuoy1e6_RqiA-eLuhB9E-MJiHT
+    5OyyLacB24uMEwiqvgATfmvaaFIuvmh6RGetrntp48vtrFS-ZNqWyl2>
+X-ME-Received: <xmr:xQSgapmY8gx1aMdK9CL97173s60X9ivphiZ0poWXGjI424TGkW-crTIrEec>
+X-ME-Proxy-Cause: dmFkZTFCT83ts3xpHDuUgDdlzQtELcoAknrXBpsFepmdcEBLccwduWOOVyAuau0VlYvm49
+    objBvbnGefvuHsKXiB+MOl7qErn3M4/Q7Z72R+asBFni+WG6jRYqPjjJBv1F7ovmfnEZp3
+    uEJcbLADGcdxsWcYxdWct2wwV9KQaoOTpGWM7Il7/oKOILrVOp7MvqHbWAXdA0mgRBniUZ
+    2M+Su4Zoe9zFbzekNirjNltohahTSfzaLbYZTkGXD/hRQ+ajqkABo2HdEn2GJrc7g0w4Iu
+    PhTUexE0AKZ4j2dsA7W9i19VnbZvZZgTTujH64lpg2nDW6KlKK63jDlRsrLETwVfJ8WCYT
+    c+1thOoDewX31NDRvXFN4FzlTNJbNXxIxXZjZXhV04JGtGEMASGQE13zj3ov8UNJ4DV03c
+    hgGHVSPpLeKSwMrclFT227P9uZgw/zASFm8T7kNC8oysJSwF7oz7DhskUil4s7vgqC0Ujg
+    sbzjWvYrlaiDWtwWvVOPU4KY1M4TkgM2w/RNXl+09lrdc5Lm8OZVr28UpHrx4IPp2zJwYw
+    2Z6Z7FSPOdzUAx59/gI6YMrK/Lw5o55EpppddSmm8GWtF8Sk9hdqmGAGS+v9WjvJH2+eLN
+    SOezize9leW/aI5FS2JtPvjb54u8YUaB5Lf/aK4j4I3ZC08E9OcMVz/o8gRw
+X-ME-Proxy: <xmx:xQSgauKgzsRJVCgZoYjxvoe_ofuwQfSW9p7ApsuZ03rKt4TMqL_z8g>
+    <xmx:xQSganr1rgb9A6AuSyjtofSnrKWxPNSE1DcO6dbbGzWn2E6tCFTF0A>
+    <xmx:xQSgajSAkWUonf1kYAFJBZBHi7BO39zLyMPtoJCiYH8J9F2UeNA4_g>
+    <xmx:xQSgai74A-TeTaEHqm6Mz8iAgwBAM5o21wHE7JipeJKNP4oK9Rh-VA>
+    <xmx:xQSgaoJ3rWE2efYo1GEW-RVOULv-AnV8HtcarO-f49ElWVHMthMMSR9_>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 8 Sep 2026 08:51:14 -0400 (EDT)
+ 8 Sep 2026 08:51:16 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -96,9 +96,9 @@ Cc: linux-mm@kvack.org,
 	leon@kernel.org,
 	kernel-team@meta.com,
 	"Kiryl Shutsemau (Meta)" <kas@kernel.org>
-Subject: [PATCH v5 02/19] selftests/mm: skip collapse_compound_extreme() where the PMD is too large
-Date: Tue,  8 Sep 2026 13:50:48 +0100
-Message-ID: <20260908125105.1510704-3-kirill@shutemov.name>
+Subject: [PATCH v5 03/19] selftests/mm: scale khugepaged's collapse wait with the PMD size
+Date: Tue,  8 Sep 2026 13:50:49 +0100
+Message-ID: <20260908125105.1510704-4-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260908125105.1510704-1-kirill@shutemov.name>
 References: <20260908125105.1510704-1-kirill@shutemov.name>
@@ -112,19 +112,23 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-collapse_compound_extreme() builds a PTE table full of distinct PTE-mapped
-compound pages by cycling hpage_pmd_nr fault-time THPs through mremap.  It
-therefore needs hpage_pmd_nr PMD-order allocations in a row.  That is fine
-at a 2M PMD (4K base pages) or a 32M one (16K).  A 512M PMD -- arm64 with
-64K base pages -- makes each of those an order-13 allocation, which the
-allocator cannot reliably hand out even once, let alone 8192 times.
+wait_for_scan() gives every case the same three seconds, whatever the huge
+page costs to build.  collapse_full() asks for four of them: 8M at a 2M
+PMD, but 2G at a 512M PMD -- arm64 with 64K base pages.  Three seconds is
+thin at that size, and the case has reported a failure for a collapse that
+was still going.
 
-The failure is not a quiet one: the case calls ksft_exit_fail_msg(), so the
-whole binary stops and every case after it is lost.
+The timeout is a ceiling on a poll loop, not a sleep: the loop stops as
+soon as ops->check_huge() sees the collapse, or as soon as full_scans has
+advanced by two.  Raising it costs a passing case nothing.  Across 80 runs
+of collapse_full() on arm64 with 64K pages the wait was half a second in
+73 of them, with a tail to two seconds.
 
-Skip the case where the PMD is larger than 32M.  The MADV_COLLAPSE cases
-still cover PMD-order collapse on those configurations, and 4K and 16K
-PMDs are unaffected.
+Keep three seconds as the floor and add a second per 128M collapsed.  A 2M
+PMD is unchanged, so x86-64 is too; a 512M PMD gets 19 seconds.
+
+On arm64 with 64K pages a passing ./khugepaged all:anon takes 49 seconds
+under TCG before and after this change.
 
 Assisted-by: LLM
 Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
@@ -132,30 +136,27 @@ Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- tools/testing/selftests/mm/khugepaged.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ tools/testing/selftests/mm/khugepaged.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index e57016bd96fb..1ca7c6978571 100644
+index 1ca7c6978571..48e0040d53b4 100644
 --- a/tools/testing/selftests/mm/khugepaged.c
 +++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -935,6 +935,16 @@ static void collapse_compound_extreme(struct collapse_context *c, struct mem_ops
- 	void *p;
- 	int i;
- 
-+	/*
-+	 * This needs hpage_pmd_nr PMD-order allocations in a row, which the
-+	 * allocator will not supply if the PMD is very large.
-+	 */
-+	if (hpage_pmd_size > (32UL << 20)) {
-+		ksft_test_result_skip("%s: PMD too large for fault-time THP construction\n",
-+				      __func__);
-+		return;
-+	}
+@@ -556,8 +556,11 @@ static bool wait_for_scan(const char *msg, char *p, size_t len,
+ 		int nr_hpages, int collap_order, struct mem_ops *ops)
+ {
+ 	unsigned long hpage_size = page_size << collap_order;
+-	int full_scans;
+-	int timeout = 6; /* 3 seconds */
++	unsigned long bytes = (unsigned long)nr_hpages * hpage_size;
++	int timeout, full_scans;
 +
- 	p = ops->setup_area(1);
- 	ksft_print_msg("Construct PTE page table full of different PTE-mapped compound pages\n");
- 	for (i = 0; i < hpage_pmd_nr; i++) {
++	/* Half-second ticks: three seconds floor, plus a second per 128M */
++	timeout = 6 + 2 * (bytes / (128UL << 20));
+ 
+ 	/* Sanity check */
+ 	if (!ops->check_huge(p, len, 0, hpage_size))
 -- 
 2.54.0
 
