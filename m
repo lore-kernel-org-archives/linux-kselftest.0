@@ -1,90 +1,132 @@
-Received: from mta0.migadu.com (out-187.mta0.migadu.com [91.218.175.187])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309AE1B4138
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 02:51:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7142327FB18
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 02:56:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788835908; cv=none; b=SO8YUS0mxfMeloTSxFcGkoBj2fYAWjajmDXQx7rysgGH/i67winluuLDeUF+NsI+hBj1XJWqMoS1l7t01Ae2h8/hAZmPXAKokBG2iU/GnpsNu/X9EG3e0LnBRX3B67u3om1E3EM5YEGVoHjWdlb8brEzTrymUnKni1hZn/iNdZE=
+	t=1788836186; cv=none; b=NiOmDqwac39KB6eebSbfVPX1GFqitwnNTektalXvb9rHhwnaKqSoQeX28qwZka8w4tSrhfLWO+9RWEJ33QQ1OhzjYWxIKzoV9lnzutR2BLT2IdzBxvNvPTq0KMZO1SfPzggA/kcZ2x33eaxli830z8D/GtMCe/0JVnR4C4WpgD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788835908; c=relaxed/simple;
-	bh=KbC4/aHSZoRhlEvoZxF6IZ3ATXrmb8tfT9i+DprXs1k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rWzk5J1QPWq7XA5WMozP2jf/d3VYIi1vtSrRfLFM7JbK4lvxClI5VShRo4gC+ccCPBfm3S3F2nbzEZ02AeQHeKg4Ge9aXZ8vKz803y8B7wOoGlgxwrrIpTRRceqtOW9+yFLne6ubHnJWMbMA8EstrdS6MAAWz/THckGjYg++yMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NG0LmK0h; arc=none smtp.client-ip=91.218.175.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788836186; c=relaxed/simple;
+	bh=nh2azw4Q09y+V/LEQu8pCrIHmotw2s9BlnECGdIZ6Wg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NlRQsDsfUvkXw9FNziZopsqDqTiTk6bLJRT48zP4tfXRsa0P6RN+O6lPdnOTk8g2XpALRcyK8nn4sWzwiJXrAdjv/bblyU5zQuYgogQeWVAghPVAMUJVC/EJOXkJsJrk9k1cslD+IiJAoWSPRrzHOpwzCrFgQOW98Qca5NXH12g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OerdfL3Y; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NG0LmK0h"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=KbC4/aHSZoRhlEvoZxF6IZ3ATXrmb8tfT9i+DprXs1k=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788835905; v=1; x=1789440705;
- b=NG0LmK0hEva9JVOT1sRB8/22mL2k1uecx3m3hZBbXGOkJgrCikZp5u6yrIt3TCXHquQa+D++
- 8cJ3aPVR22uZHoH1JpAKWVZLuGyfU7P80DlSZM339rEIxipKBRMKM+ClShsXoQU7pJjQ+xYMjC1
- txxH2npzq5x/Y/xzgRXK2D1A=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id f40b372a38627f66;
-	Tue, 08 Sep 2026 02:51:35 +0000
-X-Mizu-Trace-ID: f40b372a38627f66
-X-Migadu-Flow: FLOW_OUT
-From: Hongfu Li <hongfu.li@linux.dev>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org,
-	James.Bottomley@HansenPartnership.com
-Cc: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OerdfL3Y"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-382ef647e20so4170553a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2026 19:56:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788836185; x=1789440985; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ej1AYuaJ6I913RYzOv3nrsx0ow2YNcqJVwdQB6kart8=;
+        b=OerdfL3YcYBRw4G9U5biJhwUtmNLnCZJaaFNuSDNLTibHyCNuJ8L6+9p8Ryh9TUNGP
+         o9C7FsuLtmUPW/PkMyklTgw+3Xbq0mvEfFejkrLyxupDlu372xniUrUwp7cHLrbs/fQg
+         FLdNP+1Wfkv09OvipEKS4Ft9zxg/i6fl22dSbeqG1qzfcZPPEJ76S/65zJrKoTkKdN14
+         8BvYdvH28+J6P7QMVWrsG62pxoaCMoJVz3jjjnQXu7X+qgO5ErNP8djXSHB4NbiDMVgg
+         mkgsoBzB2Jy5+04RFVbzK+BAscPh3UVHuF5kAWksUeU1llKqwU+kcoC9kX5BLASoy3Nr
+         ZRlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788836185; x=1789440985;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ej1AYuaJ6I913RYzOv3nrsx0ow2YNcqJVwdQB6kart8=;
+        b=oah+JG4pMBggioDtWgmqkv8Hjw6jc2L+5UQtR7Rmlf01MGvNSunI5EksdHF1h7UyW+
+         zYhEryyaTEhj9fyrLe0DawNkvyY7iu+yXjb+64wiWepRYrB9gN+FLcE86fDJP73kkx1H
+         8bIGSYUTJ45oo92DfcIFfu5kSx1rzPamNPUdr9LbjUb6l8AZ7q2JeBi4P6DyNNxaoJtD
+         cdWdCC4uk3G53rc+sX9KvsmJAvrAlJVyrIJHYloWXBV3ZikfETCfiJC/6cw2IppHN0eM
+         zMJpPHuKtAw8biYCEQemXwFMS9S6XaKOpi4o871jD+nAWdL8UqnItA+9QEOGmS/dYQNX
+         Dkng==
+X-Forwarded-Encrypted: i=1; AKwUvBwQ0poC1uzMyhAMnyaA8mI+i9GpvbqZ1y49AfgXqaKNLdQgVvjA7m/gvv+gXqsL994tGrTNISRckUBro45xTSE=@vger.kernel.org
+X-Gm-Message-State: AFuF++mbIDf+8vJRhkXXsAg5A+CLb9B+YlG9y2O/690viU1A0wPk6jl/
+	d8xcuI3YvUa9r6BArBl1MZwgqvm/Bcwf0FcFFmwZyXJ4KS/bPmEqYg1j
+X-Gm-Gg: AYBFou22O3vMQa1s2yn8MlV3uPcmFQHhNmhtWUDIyFK5+zVCDZSMiP6luUNoIzavqR6
+	6hnwMNKnLonI5MCuGNo1LP++OYa/vVwaZfcHAVg0ZRNjIP11jHpEviPFNyZVL3iPBqHNt6V4T0d
+	9g99UBjF7BSgcRvSbkeO0UFkmJOau2vG3vNIbgUQo6DWKQAHYtUCn6hrvFh39g2aT6AwbDnUQ3J
+	gwPFW+BxDLAGZLEjXlHzSyROo3YUNY+smQAXnKiPeFebl4tD7881I1A4FuQoFfEiaehJrgjVPQO
+	QVodDv08+9mMtipIotmQKoCAjjKhVAFIQjfMtDWEMFzl5uAvukoNRXUBM9+aLlHPzpyyYo9IWej
+	QYKdmsD2Bl/SobyzFif073ziUcftIZMTFH00QY+dpBYBGYBdsbjyKGGnz0gnWn4fH/4JX1baLl8
+	gS10S/IBG4+S3Jf4s6gkRtloulHaoNdbPw2gSMPhjQPquAJDbtaFpgRwaVT5zJNYdr9n8F+1VDF
+	b8=
+X-Received: by 2002:a17:90b:52c4:b0:36a:5d1f:7b6 with SMTP id 98e67ed59e1d1-39b260d3375mr39542125a91.2.1788836184768;
+        Mon, 07 Sep 2026 19:56:24 -0700 (PDT)
+Received: from localhost.localdomain ([2408:8607:1b00:8:3fb3:b562:896c:1ac7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b26155324sm22925971a91.17.2026.09.07.19.56.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Sep 2026 19:56:22 -0700 (PDT)
+From: Pengfei Li <ljdlns1987@gmail.com>
+X-Google-Original-From: Pengfei Li <lipengfei28@xiaomi.com>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	kernel test robot <lkp@intel.com>,
+	Bo Zhang <zhangbo56@xiaomi.com>,
+	Pengfei Li <lipengfei28@xiaomi.com>,
 	linux-kernel@vger.kernel.org,
-	hongfu.li@linux.dev,
-	Hongfu Li <lihongfu@kylinos.cn>
-Subject: [PATCH] selftests/mm: fix ptrace PEEKDATA check in memfd_secret test
-Date: Tue,  8 Sep 2026 10:51:11 +0800
-Message-ID: <20260908025111.34562-1-hongfu.li@linux.dev>
-X-Mailer: git-send-email 2.54.0
+	linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v6 0/3] trace: stack trace deduplication for ftrace ring buffer
+Date: Tue,  8 Sep 2026 10:55:51 +0800
+Message-Id: <20260908025551.4155877-1-lipengfei28@xiaomi.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260908101509.5ca094dacc96053236f7d2f3@kernel.org>
+References: <20260903132409.270195-1-lipengfei28@xiaomi.com> <20260908101509.5ca094dacc96053236f7d2f3@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Hongfu Li <lihongfu@kylinos.cn>
+On Tue, 08 Sep 2026 10:15:09 +0900 Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+> BTW, to make it easier for review, can you split the patches in
+> several parts? For example, start from a minimum basic functionality
+> (just internal stackmap, seq_read, and reset), use it from tracing,
+> add stat interface, binary interface, and documents, tools, selftests.
+> This makes the series in at least 7 patches, but nicer to focus on
+> one thing for each patch.
 
-try_ptrace() treats PTRACE_PEEKDATA return value as a boolean
-check. A successful read returns non-zero data (memory filled with
-0x55), causing the test to incorrectly report PASS when secret memory
-protection is broken.
+Agreed, and the split points you list match where the current patches
+are doing several things at once. v7 will follow that structure:
 
-Check the return value against -1 instead. The test should only pass
-when PTRACE_PEEKDATA fails, which means secret memory protection works.
+   1. internal stackmap: table, element pool, get_id(), create/destroy
+   2. text seq_file export and reset
+   3. use it from the ftrace stack recording path
+   4. stat interface
+   5. binary interface
+   6. ftrace_stackmap.bits= kernel parameter
+   7. documentation
+   8. userspace parser
+   9. selftest: basic functionality
+  10. selftest: reset semantics and binary ABI header
+  11. selftest: top-level instance gating
 
-Fixes: 76fe17ef588a ("secretmem: test: add basic selftest for memfd_secret(2)")
-Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
----
- tools/testing/selftests/mm/memfd_secret.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Each patch compiles on its own and does not leave unused helpers or
+tracefs files whose backing code has not been added yet. Patches 4 and
+5 also carry the stat locking fix and the binary export rework from
+your comments on 1/3, so those interfaces arrive in the shape you
+asked for rather than being split first and fixed afterwards.
 
-diff --git a/tools/testing/selftests/mm/memfd_secret.c b/tools/testing/selftests/mm/memfd_secret.c
-index c55d84c5e613..dd08a3a1ef14 100644
---- a/tools/testing/selftests/mm/memfd_secret.c
-+++ b/tools/testing/selftests/mm/memfd_secret.c
-@@ -145,7 +145,7 @@ static void try_ptrace(int fd, int pipefd[2])
- 		exit(KSFT_FAIL);
- 	}
- 
--	if (ptrace(PTRACE_PEEKDATA, ppid, mem, 0))
-+	if (ptrace(PTRACE_PEEKDATA, ppid, mem, 0) == -1)
- 		exit(KSFT_PASS);
- 
- 	exit(KSFT_FAIL);
--- 
-2.54.0
+> The patch description is a key area to focus on; if the explanation
+> proceeds by saying "add Foo, then add Bar, and so on," those changes
+> should likely be split into multiple patches.
 
+That test also flags the current 1/3 and 3/3 accurately. Both of their
+descriptions are lists of independent additions, which is why they grew
+to 949 and 614 lines. I will use it as the check when writing the v7
+descriptions: if a description needs a bullet list of additions, the
+patch is still too coarse.
+
+Pengfei
