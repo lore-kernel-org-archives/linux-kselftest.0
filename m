@@ -1,115 +1,131 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4635C513552;
-	Tue,  8 Sep 2026 14:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD82C1FCFEF;
+	Tue,  8 Sep 2026 14:17:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788876899; cv=none; b=WWbMagBfSQSP6g/C2yRjxJQgL6bxoqj5J28AwkHiGMSVoX660T69MEcfUaDCr9tgfcHnD7F6CZr/wFo0RbA3iGmy2uIE+kOhsyf3c9Gl9xoJHLXYuk3oR5emh4F6qWTBRaLuU83paaI0LZ/U+ZyAmzyhcOPzR37in9qasY6Aw6Y=
+	t=1788877064; cv=none; b=fSGNwB/qFGkuVu/t5Xw0WvuE39pvijBOXIpbgl01chGew4cqOBGR/pZxD3w5EvyriLizSbnqetHjVDi4pTfQEfgDHxN6+ePnNo3BLm7hhhWEOYEm96jSrgPQXK61teuNRzFzE+2D4K14Mbue5KSjbp4l93JG2JmKF4NrfUwWfNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788876899; c=relaxed/simple;
-	bh=c5IXRGjuz0fSPa4V5Xz2gLhzLB899t5Sk/STYYx7jXw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NCwMmkQvUcqUt6+IJHpK2/781tKhYbIghMMUwkHKJhudQCTT84HdwG9oD4zXdP/NaWv4IAPmCYRNusc14FbJVObItfGpxs5qrk7LuEoqOZm/PrSgulqyjDHerYyn2r9+3g2NUA691V7K587N84QEIPVfsb0cQxGgfloE7qEX0yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zlb8d3lD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788877064; c=relaxed/simple;
+	bh=iuV3xyscWAa8WdVQdK3rRnbinmT5+MxtyC//eJQ7czY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nXqT5sCsXjHCJCAoKINUtdN6HUJ0ZzenzJSV6hvvW+eyxN7v/NxSZR8+x9d3eZ64zyKhuMNSmkflZ4apxzUMvUtBpgDTIeLTmoypuh0pXHLyhmtgMBI774TZObumj27W+Pf9Py4pEpDYVpD1IIGMH3A0IZUk8gx2MERQdgoA+1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=myV7eNg/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zlb8d3lD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 454511F00AC4;
-	Tue,  8 Sep 2026 14:14:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="myV7eNg/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B171E1F00A3D;
+	Tue,  8 Sep 2026 14:17:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788876882;
-	bh=oCwaDeVCnMEOM3Suj5i1JtmGB4sF4AjuaGS8MXJAUMg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=Zlb8d3lDTI3j816xJQJWU2xsXUNOVRup5KU1RLEIL58RlxNK+7SyN4rJznxthjVG/
-	 /hO69OTWrjMJz6H+GNRRhipxbdkuaV46BDgDAGvGrUV5xujkUn1mfX+ghYNZTN5SIr
-	 sqWDDpph/e3ajmp3/5Ab4yL321L97YWJ64fwDLYzYgwXNEHlE61RRNzSlVgFE+ug3G
-	 nRcabVn2QNEduwG/6dirafSmylmoXuyCRVljrPTnq/z+t9CDqsFULCbTzyV1k0x8LJ
-	 NJu0x8kxXjOFIFKkzD161xXQePYvtoxTTBpar9nXtVOtkmgoKmiRMfvOmxEYGlzHZ/
-	 4p8JhfP6j/PaA==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Tue, 08 Sep 2026 16:07:16 +0200
-Subject: [PATCH net v2 11/15] selftests: mptcp: lib: dump nstat for the
- right test
+	s=k20260515; t=1788877055;
+	bh=NNSm9JyIdvqOJegC2cdB6kLuYGU1rFuia0SmDqpT6mw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=myV7eNg/gv18ZLJYuBI9HmZI8F2KKiBaPLhVUz+ajLhMZhgl0dEcFdPpnMth6B83v
+	 f7bKAmwnkn9B0NO+54KyVRbbRUSJT+mqymyMHBpmKK2jZU+aRP8M304KVS1gKBFzeh
+	 EcYROI937QJtzjnVZHMtcKkuH/fgohPt/53e0Xjf4cYrDbIlpcnz3Ch3HzkCeAF2He
+	 mjDTcEnwkIc79obTXOVQkYijQogcTpASWqBWw7RwTrb82kurV+UZ9BZelSzjnJ3ui9
+	 WLgDmf/OjnP51LoWTRGGQQ3znASGd9+51tfmaf5s0IinPyNYr1r7oMLH+QeT7qEO5a
+	 nrFkF6e9FdI4g==
+Message-ID: <2335b64f-483b-4327-9598-94123c36902f@kernel.org>
+Date: Tue, 8 Sep 2026 16:17:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/6] mm/vma: only permit MAP_PRIVATE /dev/zero to be
+ mapped anonymous
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Hugh Dickins <hughd@google.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260908-map-private-dev-zero-v2-0-acc7b5625305@kernel.org>
+ <20260908-map-private-dev-zero-v2-3-acc7b5625305@kernel.org>
+ <e743b598-9048-440f-9124-72071c696679@kernel.org> <aqAFBTyAqPTHlxkZ@gremlin>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <aqAFBTyAqPTHlxkZ@gremlin>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260908-net-mptcp-misc-fixes-7-3-rc1-v2-11-df1de70348b6@kernel.org>
-References: <20260908-net-mptcp-misc-fixes-7-3-rc1-v2-0-df1de70348b6@kernel.org>
-In-Reply-To: <20260908-net-mptcp-misc-fixes-7-3-rc1-v2-0-df1de70348b6@kernel.org>
-To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>
-Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
- linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
- linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1903; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=c5IXRGjuz0fSPa4V5Xz2gLhzLB899t5Sk/STYYx7jXw=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLIWSOgryodM9s04z7lPMDnAMvvlpKrsSPPjocFmi60MZ
- Rjap6ztKGVhEONikBVTZJFui8yf+byKt8TLzwJmDisTyBAGLk4BmEhCIMN/Lxk1dYnHonoR/3hM
- /t1ee96rfUHMBK9Dbn7b/PYwXjbaw/BX0qX4zP8GGUfN1RpFJrpcHK/1/61kOXRP4d67BxZcB9M
- 4AQ==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-In case of errors, mptcp_lib_pr_nstat is called to dump the nstat
-counters, but for some tests, it was dumping the counters for all
-subtests, not just the current one.
+On 9/8/26 14:52, Lorenzo Stoakes (ARM) wrote:
+> On Tue, Sep 08, 2026 at 02:49:33PM +0200, David Hildenbrand (Arm) wrote:
+>>
+>>> +	/* Temporary MAP_PRIVATE-/dev/zero workaround. */
+>>> +	if (is_anon && map->file)
+>>> +		vma_set_anonymous(vma);
+>>> +
+>>>  	if (error)
+>>>  		goto free_iter_vma;
+>>>
+>>> @@ -2777,6 +2793,10 @@ static int call_mmap_prepare(struct mmap_state *map,
+>>>  	if (err)
+>>>  		return err;
+>>>
+>>> +	/* Hooks cannot mark themselves anonymous. */
+>>
+>> Wasn't this supposed to be reworked? :)
+> 
+> It is, you yourself pointed out 4/6 makes this irrelevant, so I changed it
+> there :)
 
-That's an issue for tests that don't recreate the netns for each
-subtest, e.g. mptcp_connect.sh. In this case, 'nstat -a' will look at
-the absolute counters since the creation of the netns, making
-debugging harder.
-
-Instead, it should dump the counters for the current test, by using the
-history recorded in /tmp/<ns>.nstat if available, and not using '-a'
-which was dumping the absolute values instead of calculating increments.
-
-While at it, rename the previous 'hist' variable to 'cache' as it was
-used to look at the cache, not the nstat history.
-
-Fixes: 658e53141780 ("selftests: mptcp: join: dump stats from history")
-Cc: stable@vger.kernel.org
-Reviewed-by: Geliang Tang <geliang@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/net/mptcp/mptcp_lib.sh | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_lib.sh b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-index 5ef6033775c8..da1da414c30f 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-@@ -108,12 +108,14 @@ mptcp_lib_pr_info() {
- 
- mptcp_lib_pr_nstat() {
- 	local ns="${1}"
--	local hist="/tmp/${ns}.out"
-+	local cache="/tmp/${ns}.out"
-+	local hist="/tmp/${ns}.nstat"
- 
--	if [ -f "${hist}" ]; then
--		awk '$2 != 0 { print "  "$0 }' "${hist}"
-+	if [ -f "${cache}" ]; then
-+		awk '$2 != 0 { print "  "$0 }' "${cache}"
- 	else
--		ip netns exec "${ns}" nstat -as | grep Tcp
-+		NSTAT_HISTORY="${hist}" ip netns exec "${ns}" nstat -s |
-+			grep Tcp
- 	fi
- }
- 
+Ah, thought you'd adjust that right away. Works for me, thanks.
 
 -- 
-2.55.0
+Cheers,
 
+David
