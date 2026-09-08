@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D5A501F36;
-	Tue,  8 Sep 2026 10:15:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB997511192
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 10:21:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788862558; cv=none; b=ehbDs/vsnjiEt1AOIMFdUlaZhCqtnpYN0oWhUtmnuAhjrMSvOeA4523v896ODW6xfzF3XdQ+BlaBRdbSI9jWzjXi7/LPnkAlCPjFwx/k8qLQVZixkCuPVeeJj2g2x7j0Lrlz1B21Ztw1W5GxO8yBoMXtXxMs36yw6X9RppF4QKc=
+	t=1788862902; cv=none; b=fDGZ4AHsCzxNPOsaiqGUG5gKRl+0nBpc/9GCGF1yTXNBkEzjLYgFJdZ0k0g8H4thn2bAn22iz1/uU3h6TYZDXuBz814v5CMkh23gp6p4sGsfKsatOMFn8TUv8NTQUiXmutdp+DeCb8QKnhr0T4StYrnHBBV8TOEHn24SoiVIuu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788862558; c=relaxed/simple;
-	bh=KBdy1R4tq5Vf6wdLqlx52WKKhoV0g8IVACV6XjTV20U=;
+	s=arc-20240116; t=1788862902; c=relaxed/simple;
+	bh=45auj1khbplJcm6gCDNBgLF3clBH0gM+PZlSVrMPUcQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=efaya6p1DZI8dHdqehCe2KrQX+V2EGNgijD1cH+y395mkdRXm+8I+cUlpVgL0iHGJyXTb72NWFs/vFq5jeh+RLPXWcXMzb6ARkZMPnFMMdeDSB4zxz7mUCMVWddPd7501TdBWiqme1ItlJJqmpXHX9kbS1KsazymqGjyUZNHsaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kPlt8z7j; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=LLGS6pq2Vtj7iIBB94cuvlA1Cl60A14C5Sptoc4lUJv1GmPDaxhzUcfhfPQVW9mkrnTev9wXaMgQGAf46BgZjPX+p/Xzg82O7NstEm1ua/VA98fCl39GDDQVE2CEVqJYTb8WUYbGxAPHC75Ik2yqncwkgOrzjhWFm2VDyV3LFww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MwuWX3nI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kPlt8z7j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCED91F00A3A;
-	Tue,  8 Sep 2026 10:15:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MwuWX3nI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5E5B1F00A3A;
+	Tue,  8 Sep 2026 10:21:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788862556;
-	bh=ekjkNjyquBfVj0KUaXkP0qTUEnu6sauJ66A70KU2iAM=;
+	s=k20260515; t=1788862900;
+	bh=EdpJXbbMOseV/GzgjZcu5PmWeQ2rLXnmfc4HrvcGFIs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=kPlt8z7jZmNtunlUzwNDs8G6avxVAMsAD5cPfdkaobbL7+WfVWyPofROj6KBDOnvS
-	 32cslRcICIzEoo24KXgU2CT3g+SyznrFPBm7ratNwixpf4yLwLE7TgYJxyGEEUte+4
-	 NOmK6Z4vDQxg64SpI9oIe6qTREXaEwLSaB2bJKk86vXY83KmzFPJGQqN8Ae15zjOgz
-	 ql1QOtj43iaqQqaLLsjESsy9iEWnOuMQo716zHsbRulSrtKNsSf+D3qpGq+cJQADHY
-	 fRsvFByfuaepL5ab9jTt/exrvglxG2dO/N5OM9EdTFs9GvfPEAkRYspWPVH3Nrt7ZR
-	 ca5x/QANDt6ew==
-Message-ID: <adaade14-6ce5-4a7a-9510-8ff99ee66eca@kernel.org>
-Date: Tue, 8 Sep 2026 12:15:50 +0200
+	b=MwuWX3nI9kKlPLVmiAeITMKUOVyjcgiiv/9uUCx7t1YWMcpyiA+zkX6nav1+6YEh9
+	 T3cDyFUZzx6XFHxXnmEJU57FJIAtpp43/YspXJAD5R0naz4JiriAXoWop84vZMOx1Q
+	 iiatmVfHZtTj13NPzh/icKKWGQtfsFVSFnO64TtrPDQi09J4OhsWy2D89wxMr0MbFt
+	 Gb35JegmIAgb/th/YOjLDO/Zy1mHo/0nbEsz51xQgJkPfImyHi4P40MBGjm9Pl6qQg
+	 STx0gqiKUUpcjqTCr2gipy1NGrRRQTn8qDYnnWZKpRTWeN6NywV65N0RNgjmyTkfqO
+	 HodiYzcxPMHOQ==
+Message-ID: <0d93cd99-e1b2-46cb-ae31-a2dc4ca63d2a@kernel.org>
+Date: Tue, 8 Sep 2026 12:21:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,13 +35,18 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] selftests/mm: Validate selections and scope
- memfd_secret setup
-To: Tianyi Chen <hi@tychen.cc>, Andrew Morton <akpm@linux-foundation.org>
-Cc: shuah@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, jsavitz@redhat.com
-References: <20260906135444.749144-1-hi@tychen.cc>
- <178886112560.138404.1278745290043112298.mm-cli-v2-0@tychen.cc>
+Subject: Re: [PATCH v2] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT macro
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ akpm@linux-foundation.org, ljs@kernel.org, liam@infradead.org,
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ shuah@kernel.org, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+ nico.pache@linux.dev, ryan.roberts@arm.com, dev.jain@arm.com,
+ baohua@kernel.org, lance.yang@linux.dev, usama.arif@linux.dev,
+ kas@kernel.org, sarthak.sharma@arm.com
+References: <20260907081509.924979-1-yeoreum.yun@arm.com>
+ <9f8c6e91-c1c8-4ec5-96a9-9d6d4ab571cc@kernel.org>
+ <ap_GBdbMIkasmVO4@e129823.arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -88,58 +93,171 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <178886112560.138404.1278745290043112298.mm-cli-v2-0@tychen.cc>
+In-Reply-To: <ap_GBdbMIkasmVO4@e129823.arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/8/26 11:55, Tianyi Chen wrote:
-> run_vmtests.sh can reach test setup after an invalid category selection,
-> and its memfd_secret preparation can change ptrace_scope even when that
-> category was not selected. These two patches address David's follow-up
-> questions on the earlier getopts fix.
+On 9/8/26 10:23, Yeoreum Yun wrote:
+> On Mon, Sep 07, 2026 at 04:36:56PM +0200, David Hildenbrand (Arm) wrote:
+>> On 9/7/26 10:15, Yeoreum Yun wrote:
+>>> HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
+>>> When this macro is used in some test, test result would be strange in
+>>> the system where PAGE_SIZE is more then 4KB.
+>>>
+>>> Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
+>>>
+>>>   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
+>>>     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
+>>>     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>>>     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>>>     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>>>     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>>>     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>>>     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
+>>>     ...
+>>>   ok 1 Completed
+>>>
+>>> Remove the HPAGE_SIZE and HPAGE_SHIFT macros and introduce pmd_page_shift()
+>>> helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-existing
+>>> helper, read_pmd_pagesize().
+>>>
+>>> Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
+>>> which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
+>>> and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
+>>> PMD-sized units, the test may fail with the previous size of 100 MiB,
+>>> which is not a multiple of the PMD size when the base page size is
+>>> 16 KiB or 64 KiB.
+>>>
+>>> After this patch, output of transhuge-stress:
+>>>
+>>>   transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
+>>>     2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>>>     2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>>>     2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+>>>     2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s	2616 succeed, 1201 failed, 2616 different pages
+>>>     2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s	2627 succeed, 1190 failed, 2627 different pages
+>>>     2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s	2628 succeed, 1189 failed, 2628 different pages
+>>>     2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s	2630 succeed, 1187 failed, 2630 different pages
+>>>     2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s	2631 succeed, 1186 failed, 2631 different pages
+>>>     ...
+>>>   ok 1 Completed
+>>>
+>>> Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+>>> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+>>> ---
+>>
+>>
+>> [...]
+>>
+>>> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+>>> index d09f9f6a384e..24aa1de27c25 100755
+>>> --- a/tools/testing/selftests/mm/run_vmtests.sh
+>>> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+>>> @@ -360,8 +360,8 @@ fi
+>>>  CATEGORY="memfd_secret" run_test ./memfd_secret
+>>>  fi
+>>>  
+>>> -# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 100
+>>> -CATEGORY="ksm" run_test ./ksm_tests -H -s 100
+>>> +# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 512
+>>> +CATEGORY="ksm" run_test ./ksm_tests -H -s 512
+>>
+>>
+>> Why the magic value 512? (desrves a comment)
+>>
+>> A clear sign that the ksm tests must be rewritten to be standalone and just
+>> handle this internally. @Sarthak
 > 
-> Patch 1 extends the getopts error handling to reject empty, whitespace-only
-> and unknown category selections before setup. It uses the existing category
-> list in usage() and normalizes separators, while preserving the default
-> when -t is omitted and the existing environment-selection behavior.
+> Acked. I thought it's enough to spell out in commit message but
+> I'll spell out into comment too in this round not refactorying by me
+> for ksm test.
 > 
-> Patch 2 gates memfd_secret preparation on category selection and executable
-> presence. It retains the existing behavior when memfd_secret is selected;
-> it does not add configuration restoration or otherwise change that test.
+>>
+>>>  # KSM KSM_MERGE_TIME test with size of 100
+>>>  CATEGORY="ksm" run_test ./ksm_tests -P -s 100
+>>>  # KSM MADV_MERGEABLE test with 10 identical pages
+>>
+>> [...]
+>>
+>>> index 4821a3563036..f75bf0bacd18 100644
+>>> --- a/tools/testing/selftests/mm/vm_util.c
+>>> +++ b/tools/testing/selftests/mm/vm_util.c
+>>> @@ -21,6 +21,8 @@
+>>>  
+>>>  unsigned int __page_size;
+>>>  unsigned int __page_shift;
+>>> +uint64_t __pmd_page_size;
+>>> +uint64_t __pmd_page_shift;
+>>>  
+>>>  uint64_t pagemap_get_entry(int fd, char *start)
+>>>  {
+>>> @@ -161,6 +163,9 @@ uint64_t read_pmd_pagesize(void)
+>>>  	char buf[20];
+>>>  	ssize_t num_read;
+>>>  
+>>> +	if (__pmd_page_size)
+>>> +		return __pmd_page_size;
+>>> +
+>>>  	fd = open(PMD_SIZE_FILE_PATH, O_RDONLY);
+>>>  	if (fd == -1)
+>>>  		return 0;
+>>> @@ -173,7 +178,25 @@ uint64_t read_pmd_pagesize(void)
+>>>  	buf[num_read] = '\0';
+>>>  	close(fd);
+>>>  
+>>> -	return strtoul(buf, NULL, 10);
+>>> +	__pmd_page_size = strtoul(buf, NULL, 10);
+>>> +
+>>> +	return __pmd_page_size;
+>>> +}
+>>> +
+>>> +uint64_t pmd_page_shift(void)
+>>> +{
+>>> +	if (__pmd_page_shift)
+>>> +		return __pmd_page_shift;
+>>> +
+>>> +	if (!__pmd_page_size)
+>>> +		__pmd_page_size = read_pmd_pagesize();
+>>> +
+>>> +	if (!__pmd_page_size)
+>>> +		return 0;
+>>> +
+>>> +	__pmd_page_shift = (ffsl(__pmd_page_size) - 1);
+>>> +
+>>> +	return __pmd_page_shift;
+>>>  }
+>> The interface is a bit inconsistent.
+>>
+>> read_pmd_pagesize() vs. pmd_page_shift().
+>>
+>> Consider renaming read_pmd_pagesize() to pmd_pagesize() in a cleanup patch.
 > 
-> Changes in v2:
-> - Rebase onto current mm-unstable.
-> - Extend the original option-error patch with category validation.
-> - Add a separate patch for the memfd_secret setup side effect.
+> Okay.
 > 
-> Focused validation:
-> - Bash syntax and strict checkpatch passed. All 30 documented categories
->   match the categories used by the script.
-> - Parser checks cover omitted/default selections, empty environment values,
->   explicit empty -t, invalid options/categories, whitespace-separated lists
->   and command-line overrides of environment selections.
-> - Twelve invalid-input cases and help were run through the full script in
->   a KVM guest. Invalid inputs exited with status 1 before test setup.
-> - The real mmap category's three programs and memfd_secret passed in an
->   x86-64 KVM guest running Linux 7.3.0-rc1, including multi-category and
->   environment-selected runs.
-> - The guest kernel lacks Yama. A disposable file bind-mounted at the actual
->   ptrace_scope path verified the shell's write condition: the old script
->   writes for an unrelated selection, the new script does not, and selected
->   executable memfd_secret retains the write. This checks script gating,
->   not Yama policy enforcement. Missing-executable behavior was also checked.
+>> ... or (better?) adding a size_to_shift() helper instead?
+>>
+>> I think most places that want the shift also want the size.
+>>
+>> So this can just be
+>>
+>> const uint64_t hpage_size = read_pmd_pagesize();
+>> const uint64_t hpage_shift = size_to_shift(hpage_size);
+>>
+>>
+>> In size_to_shift(), you can just handle
+>>
+>> if (size == 0)
+>> 	return 0;
 > 
-> This was focused validation, not a run of the complete MM selftest suite.
+> Hmm, most of tests care mainly two sizes and shiftes --
+> psize()/pshift() and pmd_pagesize() and pmd_pageshift().
 > 
-> Previous submission:
-> https://lore.kernel.org/r/20260906135444.749144-1-hi@tychen.cc
-> Review:
-> https://lore.kernel.org/r/519ef70a-679c-455f-ba5f-3841730873a4@kernel.org
-> 
-> 
-> Tianyi Chen (2):
+> Would it be better to keep both kinda of helpers and
+> add size_to_shift() helper for nother hpage size then?
 
-For the future, don't send new versions in reply to old versions of a patch set.
+Works for me as well. As long as it's consistent.
+
+Maybe even pmd_psize() and pmd_pshift() to match our custom psize() and pshift()?
 
 -- 
 Cheers,
