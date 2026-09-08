@@ -1,250 +1,138 @@
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21570599A26
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 18:08:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788890923; cv=pass; b=amdl3FwsVGQJlnEM04oAY7WLyGd5DjKQ2kBV2qMRt2F1PU0wEPfQ6ZNqreRLIB8dipFBorj2dT17Y+3WdZxxWrbGbho2YFrXFixzMUiLmW+V67Wz71v5IiXAGb3FszaxWysSknEbbLvU7/5V9dCHmuWGAhp9FC1jxWA1GWnRtCc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788890923; c=relaxed/simple;
-	bh=ctxwmMZG56iPJS4J71g6McGGkHju65sE/xDpcDOUvZM=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AM8m2wtCNy+9u1VoIHI8JHquHTS+nJdMP3lAYB17Y4QTQMV8qaHY2Pewlhptxq7odzRKXusM8sLohuT0AbbhQmYxidhxZquXC7dRFKmeTf3RKxBJLvRCEVH7NseWOlzJ8DoVYNDPVntLlCCrtcWMyrpiOOhrWZSCCkIrcv6w8xQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NtvV63uS; arc=pass smtp.client-ip=209.85.219.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBED3A9605;
+	Tue,  8 Sep 2026 18:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788891599; cv=none; b=KXktI1MaGbOgvUGiiSsJDyNgdFeWV2b8E0j2g3D5+aKPfrHP3IeXnXLEzYgDvZLLZ0ZFXmYL7ze8UR0H/XESoLu2vgRJdV8QcB5yiD3pa0SPZeneO20qgUoMpMryaKrZDci2KhKJlILPuWVLy5XnWqyD+yHQhjp0f44M/ziqoXQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788891599; c=relaxed/simple;
+	bh=LUiVOTFg1tnrxdQsq6or85GsD7yX0CD8cnaCVNhMmjM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pD1uICE7Rc3tV2Uiz9gJ3AEHpa7Y6g56RGwdvfJKc9ecAUVQ+9+h3JWxqWeQbJvbKAUDLQev+xM/L9dc41pkopcAlOjWX1btfw587H3IHHiYhT2yXDeVrmpsZgW6H+zV9pIs9PZ0A2fpsKBuocM0A/1qMusdmJ2z8yWreeAPm4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FcTlrPE/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NtvV63uS"
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-90e7fd978beso85287446d6.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 11:08:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788890920; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ET8moep10N/LuBkbY2Z2VmPh8H7qSlwcJRvVRG63njc1b22728TCm2tW7T75uhEfFX
-         Lhp29cOibFeuwcm6r+9CeKMYmZ6+pc5bNYxQ8lHzRY6bNOiurVcfAdtlvrEZH/Ayf3ne
-         0Y91vCPkrbcL2AhuJA3MUXE+HzXYLlaVQe5biy+TLDxwRYWI9T91YkS+osWAr4Zg/Q+f
-         1YezU13ZBT1j5ajmvR+mn6BAgG4+2UQcR5fSf8DFgKX/jAp6ILR3bKhQCB0v25amYYGu
-         W7twlsTn5TlmO78teyMUDs/UhZh1SCu7khROXmjYr68WNfVzCqq6CRlUHduv9eB7D6eG
-         +jrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=XkkCs0H0gi8/nvDnbQ0GVT3d+JJdjCr4VH0ja1Y149M=;
-        fh=sE7Bgtuyp1mFP+MpkYF1bPK6vrcK+poCtiOcyDQFQgc=;
-        b=cQk7xGOYoJhn0cS/9jEsCmutlA7R/LLNGj1fhkV0IW8ie61qQFNpNVYhqggmB1lP2v
-         R4rKYbGeyBNHIk8Q24GLQ5m/+3UA0eQEF1WGGiMy67LmYnxHhmWvGZ09OnCJlZT63RN5
-         6IVwi45V+hO3lXgJI6Iwtl/ld2R++gYOFIxR7Kcnc/xniJkBAtg/+CM6aQG9dAO3Jt3l
-         JYepgnFH3vy02nec1AA6n1SDKvm1vvqY7SWxaWHT9q2PLcYaRgxvcF5lXYSXaNnhpnjX
-         xzs9/NlQyfKRoRlFm0IaXvca0AJXYpqcslUQSpJ2kxmKRUonqWPb32Z+SBPXdWC9Xn2r
-         KXKA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788890920; x=1789495720; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XkkCs0H0gi8/nvDnbQ0GVT3d+JJdjCr4VH0ja1Y149M=;
-        b=NtvV63uSxZbTe4MqYVxBGvDmGALPFsg4KI0EezFDE/xSmB7PKgJZdDzHTroZ25dMd0
-         r8j9rikrAtywianuNUdNCozi4b4L5KDAQlHJ0yC1jXlUaQJ2HLEXVPLzQ9/tmyyw8/sK
-         MQcKXTYgdmnn5Syts0/YkphryNVpGtoAqelPGl0nauMVB2HwScbht2lD5YV378y6DDZm
-         bJ4bKIoswOpjKci+hw19nKfodHfweLVdrWM42lPaLL9vAyjBm72baTiqy9DDwxoC6Fxw
-         u8eSeeWeCI99Od4tyKcphZ4QH7YLrbv42J4oNf4RW0jymm9gJKwVLrrNipVOZeyc4f2B
-         pFMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788890920; x=1789495720;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=XkkCs0H0gi8/nvDnbQ0GVT3d+JJdjCr4VH0ja1Y149M=;
-        b=fgwrhV6tkz7ln+Cclg/re4t8VsjmWnCluiBURy6CC/+82kpXb1dzaFIMQWz5hRGx/8
-         F0Gn5UbgBrE/X1zuC+kjCGy01HaueNMQjp6ADJ032WNRfNMCH6LeX4peQg8+IGkNuRi8
-         uZuzZh6nyRKouw2nbTyk0bCZOb+nK7nPGOKERMUdhU1KN2KEM941InuXYlI6/un5s22K
-         rubHivnovKBmPspCEoFbCSEcFiOx8OlOdWWYKGN4cL2LCB+WOHjrHBixOqdjlwJFBTxo
-         zNAtL0AnKZfEQDWhK2B/BHUG1QFKgFybs4Qgta+SY6ELgcNlxPxsxr4wYDincag79Uin
-         gC1w==
-X-Forwarded-Encrypted: i=1; AKwUvBxe4ZJkUOcIA2bbCvsxUYPNpSu44yqLCY6APEY8YYDr5LKHU33ipIsBviTcMyftm+hIM62dMujyHD6J3e1YUI0=@vger.kernel.org
-X-Gm-Message-State: AFuF++mP2AN195KdUV1rlUzHPiY55Sk8SKuFDZTQYHG3CZxUkHGqClR8
-	gvULlupW9zQGclX1Isy/4AfBKIt4LKAF/k4quHYu/o4Ph+AwXfDZ5XX7Z+39T5uzSZp/QGvolXM
-	Jt+HwbjvCgMHYFmYk58mmKhbAJwQUj3nvTVrqq20U
-X-Gm-Gg: AYBFou1nW/nteXaKv52x8NZImMZahiQpr6tL85XvR9f/lermAf+cNMM6msu3zKCYoqO
-	pkY06jUY5WoI1lBfgk4IyjyMbHU9h6dB+lca/KXIZf/9jtoyg8wxqVZfY6vyGTi5bcj3lBkFqT0
-	RKt1Vc4mOBMwNeaEKOdG3bWVizB9qQ/qio1sSdncT2jW152+bhRQC3hkBblTlDxGWuBSIb+s9G0
-	UunuRT8rfXSZ3OMp6fvS7nHdBJGtXkSh825+MkRp5FeZawdU4HhsD3fbHQcWDFFxASvDdePiSre
-	3n9RCL6lhpFn7q+NDa8BmSBe+6oYWdYqwARi+7mGFJX3/uV8+1G9w24ezxdNj0pnIqLCxfXTHT0
-	DJUnga0vrd5IWdtwkamiNZSKYutLCtmjv
-X-Received: by 2002:a05:6214:c26:b0:910:5235:14f9 with SMTP id
- 6a1803df08f44-91052351570mr213426586d6.21.1788890918818; Tue, 08 Sep 2026
- 11:08:38 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 8 Sep 2026 11:08:37 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 8 Sep 2026 11:08:36 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <ap_Bpe7dZm_eWsJ2@google.com>
-References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
- <20260722-tdx-selftests-v14-3-15ad654a50db@google.com> <c8b7a800-58ed-4ef7-91bd-31da77763717@intel.com>
- <ap_Bpe7dZm_eWsJ2@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FcTlrPE/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFE481F00A3A;
+	Tue,  8 Sep 2026 18:19:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788891598;
+	bh=vnf1Aokfz0Pd+GQW7kvwiEALZgbY6RG7KxqSv9UBbm8=;
+	h=From:To:Cc:Subject:Date;
+	b=FcTlrPE/FfPlph6rgO0ddGee5oGKXZeONniWmoyDxIQdXhuZrzpbHm58pS9qkeEaV
+	 Nd6ksZdtRr7SFp4zL1fFX57O1n9T9y1b64IWTAuTFYL6RoXG5TronC/A+R7kiDTcW+
+	 YeVAs0ctL9rG5MJEDF9KdXxSnmH/drfyp15W6B+AIM0tmvz+YOnE5x9JuRr6zo5gLt
+	 hkyK6GYRPp8EFLni+4COG+Z9743lVu+yRt3UxJV/+mSAlZWw/QXKAFPIJMYEgjZq+R
+	 FsWLkhOKM2fm3zZdQPgmXPfFKMYZi0cetXfyUcFwzl+zJbgliMYQ8+pVB9Zt3KBvkd
+	 PpO+e65uKmcCQ==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	adrian.pielech@intel.com,
+	sheenamo@google.com,
+	przemyslaw.kitszel@intel.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: drv-net: warn if LOCAL_V6 has DAD or not kept on link down
+Date: Tue,  8 Sep 2026 11:19:56 -0700
+Message-ID: <20260908181956.1357684-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 8 Sep 2026 11:08:36 -0700
-X-Gm-Features: AcwNN1VP_qB0f4TJcoKYWPiMzrCml_G_3zCXJ48132tpYvgvUSaM73PgQ25Ao6s
-Message-ID: <CAEvNRgFHTAPYTVQ8a_PVdFLqQ8z07Uep2XhA9r_Ypw+D0WAC8w@mail.gmail.com>
-Subject: Re: [PATCH v14 03/22] KVM: selftests: Initialize the TDX VM
-To: Lisa Wang <wyihan@google.com>, Xiaoyao Li <xiaoyao.li@intel.com>
-Cc: Andrew Jones <ajones@ventanamicro.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
-	Chao Gao <chao.gao@intel.com>, Chenyi Qiang <chenyi.qiang@intel.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Erdem Aktas <erdemaktas@google.com>, 
-	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>, 
-	Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, 
-	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Lisa Wang <wyihan@google.com> writes:
+napi_id.py intermittently fails to start its helper on Intel and Google
+HW runners:
 
-> On Thu, Jul 23, 2026 at 04:44:08PM +0800, Xiaoyao Li wrote:
->> > + */
->> > +#define __tdx_vm_ioctl(vm, cmd, _flags, arg)				\
->>
->> sev uses the name __vm_sev_ioctl, I think we need to keep them consistent.
->
-> While __vm_tdx_ioctl matches SEV, the TDX selftest follows a tdx_<scope>_*
-> naming convention (1. TDX prefix, 2. Scope: VM or vCPU). I named it
-> __tdx_vm_ioctl to keep the TDX codebase internally consistent.[1]
->
-> Do you think we should align with SEV's naming convention instead of
-> sticking with the internal TDX pattern?
->
-> [1]: https://lore.kernel.org/kvm/489f3c7b-db03-43dc-bb64-910a0fcba31e@intel.com/
->
+  CMD: /srv/netdev/drivers/net/napi_id_helper 3001::1 37569
+    EXIT: 1
+    STDERR: bind failed: Cannot assign requested address
 
-Given that __vm_sev_ioctl and __tdx_vm_ioctl aren't likely to appear
-next to each other, I think it's better to have the tdx prefix earlier
-to keep the TDX code consistent. To move things along, I think we could
-continue as-is and not swap to align with sev.
+Either keep_addr_on_down is not set or more likely the address is
+configured without nodad. Having to make sure that all tests
+always wait for DAD after impacting the link would be a whack-a-mole
+so we expect the env to have nodad and keep_addr_on_down set.
 
-(The sev functions actually look kind of inconsistent in sev.h, but
-that's a discussion for another series.)
+Warn about both while validating the environment, and document this.
+We could fail completely but most tests don't impact the link so for
+quick local testing it'd be annoying to have to apply the settings.
+I hope the warninging stikes the right balance.
 
->> > +({									\
->> > +	u64 r;								\
->> > +									\
->> > +	union {								\
->> > +		struct kvm_tdx_cmd c;					\
->> > +		unsigned long raw;					\
->> > +	} tdx_cmd = { .c = {						\
->> > +		.id = (cmd),						\
->> > +		.flags = (u32)(_flags),					\
->> > +		.data = (u64)(arg),					\
->> > +	} };								\
->> > +									\
->> > +	r = __vm_ioctl(vm, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd.raw);	\
->> > +	r ?: tdx_cmd.c.hw_error;					\
->>
->> I know it takes the same handling from __vm_sev_ioctl(). But I think the
->> handling for hw_error is not correct, at least for TDX (I didn't check for
->> SEV).
->>
->> the hw_error is the additional info, to tell the SEAMCALL return code, when
->> the IOCTL fails. KVM requires hw_error to be in the input, and KVM puts the
->> SEAMCALL return code into hw_error when the IOCTL fails due to SEAMCALL
->> failure. That means, when r == 0, the hw_error is always 0.
->>
->> I think we need to provide hw_error along with r to the caller so that
->> caller can print them together.
->
-> I think the value of r is not important, because the ioctl failure
-> is already captured in errno.
->
-> We only need to fix the return values for SEV and TDX and have
-> TEST_ASSERT_* print formatted error logs with errno and hw_error.
->
-> - r ?: {tdx, sev}_cmd.c.hw_error;
-> + r ? {tdx, sev}_cmd.c.hw_error : 0;
->
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+Adrian, Sheena, please update the setups scripts for your
+systems. Looks like nodad is missing.
 
-I didn't look in detail, perhaps Lisa could look into these:
+CC: adrian.pielech@intel.com
+CC: sheenamo@google.com
+CC: przemyslaw.kitszel@intel.com
+CCL hramamurthy@google.com
+CC: shuah@kernel.org
+CC: linux-kselftest@vger.kernel.org
+---
+ .../testing/selftests/drivers/net/README.rst  |  9 +++++++++
+ .../selftests/drivers/net/lib/py/env.py       | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+)
 
-+ What are the possible values of r? Is it always going to be 1 on
-  error?
-+ Is r always positive or negative?
-+ Is tdx_cmd.c.hw_error always positive or negative? It's probably not
-  one of the standard Linux errors, right?
+diff --git a/tools/testing/selftests/drivers/net/README.rst b/tools/testing/selftests/drivers/net/README.rst
+index c6bed9a985bc..3fe49bce4f3a 100644
+--- a/tools/testing/selftests/drivers/net/README.rst
++++ b/tools/testing/selftests/drivers/net/README.rst
+@@ -70,6 +70,15 @@ LOCAL_V4, LOCAL_V6, REMOTE_V4, REMOTE_V6
+ 
+ Local and remote endpoint IP addresses.
+ 
++Tests reconfigure the device freely, including taking the link down, and
++expect the addresses to work immediately afterwards. IPv6 needs help::
++
++  ip -6 address add 2001:db8:1::1/64 dev eth0 nodad
++  sysctl -w net.ipv6.conf.eth0.keep_addr_on_down=1
++
++Without those the address is flushed when the link goes down, or spends
++a second unusable while waiting for DAD to finish.
++
+ LOCAL_PREFIX_V6
+ ~~~~~~~~~~~~~~~
+ 
+diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
+index 25903f580b40..6262080a8bf4 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/env.py
++++ b/tools/testing/selftests/drivers/net/lib/py/env.py
+@@ -239,6 +239,25 @@ from . import bpftool, RtnlFamily, Netlink
+         if missing:
+             raise Exception("Invalid environment, missing configuration:", missing,
+                             "Please see tools/testing/selftests/drivers/net/README.rst")
++        if "LOCAL_V6" in self.env:
++            self._check_v6_env()
++
++    def _check_v6_env(self):
++        """Tests bind() to LOCAL_V6 and bounce the link, it must survive both."""
++        ifname, addr = self.env["NETIF"], self.env["LOCAL_V6"]
++
++        def _keep_addr(scope):
++            with open(f"/proc/sys/net/ipv6/conf/{scope}/keep_addr_on_down",
++                      encoding="utf-8") as fp:
++                return int(fp.read())
++
++        # 'all' wins when non-zero, see addrconf_ifdown()
++        if (_keep_addr("all") or _keep_addr(ifname)) <= 0:
++            ksft_pr(f"WARN: net.ipv6.conf.{ifname}.keep_addr_on_down not set")
++
++        dev = ip(f"-6 address show dev {ifname} to {addr}", json=True)
++        if not (dev and dev[0]["addr_info"][0].get("nodad")):
++            ksft_pr(f"WARN: LOCAL_V6 {addr} not configured with nodad")
+ 
+     def resolve_remote_ifc(self):
+         v4 = v6 = None
+-- 
+2.55.0
 
-Perhaps squashing hw_error together with a retval conflates the two.
-
-In the lower-level __tdx_vm_ioctl() we could pass a hw_error and have
-the macro set hw_error? That will allow the caller to print both.
-
->> > +})
->> > +
->> > +#define tdx_vm_ioctl(vm, cmd, flags, arg)				\
->> > +({									\
->> > +	u64 ret = __tdx_vm_ioctl(vm, cmd, flags, arg);			\
->> > +									\
->> > +	if (ret) {							\
->> > +		TEST_ASSERT(!ret,					\
->> > +			    "%s failed, rc: 0x%llx errno: %i (%s)",	\
->> > +			    #cmd, (unsigned long long)ret,		\
->> > +			    errno, strerror(errno));			\
->>
->> The if() looks silly. Why add it? And why change it from
->> __TEST_ASSERT_VM_VCPU_IOCTL() in the v13?
->>
->> Considering the suggestion of hw_error above, I think we need to introduce
->> the TEST_ASSERT_TDX_VM_VCPU_IOCTL() which accepts additional hw_error?
->
-> The reason we could not use __TEST_ASSERT_VM_VCPU_IOCTL() directly[2] is
-> because it formats ther return value as %i (32-bit), whereas
-> __tdx_vm_ioctl might return a u64 hardware error code.
->
-> I agree with your suggestion to introduce a new
-> TEST_ASSERT_TDX_VM_VCPU_IOCTL() macro to print out u64 hardware error
-> code properly.
->
-> [2]: https://lore.kernel.org/all/a58e2941-77f9-43cf-a54d-023506dd7eb0@linux.intel.com/
->
-
-Is tdx_vm_ioctl() the only place where TEST_ASSERT_TDX_VM_VCPU_IOCTL()
-is going to be used though? If so, maybe we should defer introducing
-TEST_ASSERT_TDX_VM_VCPU_IOCTL() till later.
-
-I think the issue with if (ret) is just that TEST_ASSERT(!ret) already
-does that same check, and so we can drop the if (ret) part.
-
->> <snip>
->> > diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
->> > new file mode 100644
->> > index 000000000000..e1ffb67a106c
->> > --- /dev/null
->> > +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
->> > @@ -0,0 +1,120 @@
->> > +// SPDX-License-Identifier: GPL-2.0-only
->> > +
->> > +#include "processor.h"
->> > +#include "tdx/tdx_util.h"
->> > +
->> > +static struct kvm_tdx_capabilities *tdx_read_capabilities(struct kvm_vm *vm)
->>
->> make it const, is better.
->
-> Thanks, noted.
->
->> > +	init_vm->attributes = attributes;
->>
->> Besides CPUID, it only allows attributes to be configure but leave XFAM as
->> 0. I think the changelog needs to explain why we need to configure
->> attributes.
->
-> Thanks, noted.
->
->> The rest of the patch looks good to me.
->
