@@ -1,155 +1,206 @@
-Received: from mta0.migadu.com (out-46.mta0.migadu.com [91.218.175.46])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598D23A9852
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 07:55:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5573876CD
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2026 08:05:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788854148; cv=none; b=rv/u71ZGWjGHJzSZROS5A8XfMXP2YEI03MvE+59yUPRl8VpeIv5sIOZG1FBYpZ0ashmeYNv+idOrPLrbLGTFmG3tx4g09heFyBsy9Z+A6T6urTMa6GJc/eBOG06t7LiBuglwPcEWBb72SReKMy8faICB0EBmjXJ3tdkEOxenV9E=
+	t=1788854705; cv=none; b=lahC4Y0tX9nHuVXncZ4uYn4FZgpKOpO01dmHMdqB4yPAK5zmui91Rv87lC3ZQzZjtmq2DVZMbGYr5rh6oQdJ6gzKk491mnoNP1Z09PkvKG9Djlg+G/kWeJCiMFy5Dxq8iufRd7RTfoSUZRKib2KZdKzG1JUQP/V6vwLF6BSvHGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788854148; c=relaxed/simple;
-	bh=r4hdO+l1tHybJlhIhjw+zD0e2eT2sYv8x5tSfI6vj+8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lwYHiTlEr49KdNx+Bms45Q2zCIxAOuQQE3o9i4sXljuoevhgBNs0BN/cV1gzEk25+FVvG+X74BLWprloUaBLSBXRTeK3rf4yHWN14rRGLN3+qFi5AKpujaui+v/hlaOUZ+lbQrd/NRJKbZpqqeD8pUwK7EiQ3nyKk1Sm2q+EfPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z9UmC3Uw; arc=none smtp.client-ip=91.218.175.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788854705; c=relaxed/simple;
+	bh=A2d081V5u9O9db2fGR1Uw/LCtJvvhhWQH/7b76K7e9M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bl0VIio3dZWvU5bZyhSZbZ+VNDpNq7FGROkqXx0lx7PpKiLtLoPILdytgjNPybduMMCUoIr6DcN+Xo1GIIVnhoVFJkf4rgbofIy1x892wE1SFvrECiE34x+s+Fa9DpqJAiOyAQFvBWnbgu3I8SunFgSmX+qB0UtSdvs500T8WgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jxlqfy63; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z9UmC3Uw"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=r4hdO+l1tHybJlhIhjw+zD0e2eT2sYv8x5tSfI6vj+8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788854144; v=1; x=1789458944;
- b=Z9UmC3UwvlNH+8X9L9uuK7jMx8wC6QXmaMYikCmaV1iDYW9a4HsnzhOISd+cmJD5flMsVj4V
- jJe7FXa3dIR8I8a12Vs18SNucJjwtciOhv3xT0RNz48def4eBqvJk0zfvsJSKL70vxUVuLhpgs+
- e96fr9gR7geWnEBcQ2lbpC4M=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 4d9c3b18d43e9b40;
-	Tue, 08 Sep 2026 07:55:44 +0000
-X-Mizu-Trace-ID: 4d9c3b18d43e9b40
-X-Migadu-Flow: FLOW_OUT
-Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b4a0b17358so10141e87.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 00:55:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBzfEWGzyBSrZ0PyTUDPSUmumuCn5Bti8Pj9yBBaYK4lqaUl1TCh8R+sFmJ60MjgKbiwTPPxWXtjeSBhz33QRmU=@vger.kernel.org
-X-Gm-Message-State: AFuF++knVhYV9dwhT5c62S/JYfi0q5jO0Y6fyhv/6rQIk99OIr2wfca2
-	KaQp74R1CjfHzS2YxBCXoLqadnQoU4m6IevFqAuAr8JAHffkL6vriGiQHYPQI5Tm1p54dqBFN3n
-	G1ffOurglZ0r/gAXyLYpor6OHBIwf+Aq6EWbEPWc3
-X-Received: by 2002:a05:6512:3185:b0:5b6:19c6:a91b with SMTP id
- 2adb3069b0e04-5b74d1e0c5bmr294833e87.14.1788854142874; Tue, 08 Sep 2026
- 00:55:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jxlqfy63"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d6ff3aca07so205755ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 01:05:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788854702; x=1789459502; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=N6N0od/sVrug4dpoGO2TXWMVX/OvNe36xacdNRKZ9rU=;
+        b=jxlqfy63N07ZXZ7NwDPBgDQBFsv0CVcuv8bbJ0W6fPLuZWX9+/JZecT2VKUJ+anTtt
+         fBOATkGI0QFshjy5i4aHcql27aCnZiR1W9Lx2rGE7ACsR6p091gChAYdFY5oyeI3QDNP
+         898ERq+TH5LCr+EsZksk94SIATb/Iw+Kbv8W59x140ymnTGDrd3PZn2nnW0IpPnwdA5x
+         jsvTvwDgmNKc8LBN3X/hRogAevsxoSBB1cpgDNvOGKWyM2mAEGYQNQJUfkHLYwZ66nec
+         50Tk1jbh+XFZfFZa6XyJN993J8eYzaWQkyitAn1Mwgm90NYI7F1k4sYtoG1bEXINPczR
+         KLFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788854702; x=1789459502;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=N6N0od/sVrug4dpoGO2TXWMVX/OvNe36xacdNRKZ9rU=;
+        b=FwyE9UUMyHrIb2dNK4JnL/yfyXooIVw4Oh4cMjr7Cj6p/4jICWKQKscqBCNvcyyTnW
+         fxw2/z+ZZyMDfOjCTBfcBmFjbX4O9qjjfI47l2GoTBThi4JU69uFk5p+Qmx9qKLYoT89
+         R9CNnJrVdiSLeZBh7a9nuP2lqlcTAgacihpyOmh7YkmwUUJec5KpRDpQ0VOsIxKtb1ol
+         m1LMtcXZoUjVxWi7L7NXp87M+Eu2CA2xTZnalusf+0dbj0ScQBaDZoa80zOgs/XGMwz6
+         PAL3MWg4bvlYWUP9oigz4NM8jts8JMl17AOR6XcnXwHwqbe5YusVUSZzCmVATDq0DwMi
+         SpGg==
+X-Forwarded-Encrypted: i=1; AKwUvBxpQI1icnjysyWtUM2T2m0153HN5Zpa7H1v/0jYngj4N+FLaLwgJgX0+Xz2aa+VZMkLq3e/V/FH7QAGg1wkNtU=@vger.kernel.org
+X-Gm-Message-State: AFuF++nISl4z0uumerp207iqMTHSM6J0YY9TylvHmbzXA4N7+lUMercL
+	goZz0FPDJg/PxoX41v1yIcLUExdIyFbq5kN5vhr1MXvITcE0uwRoTTOTGGeRUO6ErA==
+X-Gm-Gg: AYBFou35YJt+dkKQIpimLNf+Yc6bb1f0vTe5cFs4wYMWvubM3k98k90HmbIH1WMBBrP
+	P2uot05kKxnAJwbqUogEje3LzyeU+biWG4QCFm6IfX9/TVrs3IqgqACVCISiggRBGEIHd2Piad3
+	H9KnkcgKkNJSAkKVn+heFxlBSy+tYCs8kwd8SdG9IjjE2WwI1vZz0cT7USPSuAamGyb0zBmja44
+	0Esj1+wnSOnIUdMD5JjyEXim4ZVQypAwFokI2dgRw2XebACEA2xPPDqZC07t3tQWpLRPLV+UMvz
+	u3vt5v8aIAwfEfwpsN/+3drtSJ+HKnp+XvLuLFNo85gRO/5X5zGa3kn5v69yGWxTk5nC7wscmSX
+	mjL07tJazd1B0NkFndvNAe8pAYVHrXToUUXBNXenqPP8xwbC8Zo+3mc70agsR4uRKEaX9jkmq5+
+	KANXjQdU+o+0nldR7pVJQYu/WwfD9PPFVmxC6dZoBBsIMpbqa98ZPIzfVG5p99yAIhI1VeuKP0M
+	qwjmhXkZnyHGX0ctZ3QnA==
+X-Received: by 2002:a17:903:1968:b0:2d5:db38:8013 with SMTP id d9443c01a7336-2db290965e6mr13546505ad.18.1788854701219;
+        Tue, 08 Sep 2026 01:05:01 -0700 (PDT)
+Received: from google.com (195.5.127.34.bc.googleusercontent.com. [34.127.5.195])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2db1499d92dsm54262635ad.52.2026.09.08.01.04.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2026 01:04:56 -0700 (PDT)
+Date: Tue, 8 Sep 2026 08:04:53 +0000
+From: Lisa Wang <wyihan@google.com>
+To: Xiaoyao Li <xiaoyao.li@intel.com>
+Cc: Andrew Jones <ajones@ventanamicro.com>,
+	Ackerley Tng <ackerleytng@google.com>,
+	Binbin Wu <binbin.wu@linux.intel.com>,
+	Chao Gao <chao.gao@intel.com>,
+	Chenyi Qiang <chenyi.qiang@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Erdem Aktas <erdemaktas@google.com>,
+	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Roger Wang <runanwang@google.com>,
+	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
+	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [PATCH v14 03/22] KVM: selftests: Initialize the TDX VM
+Message-ID: <ap_Bpe7dZm_eWsJ2@google.com>
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <20260722-tdx-selftests-v14-3-15ad654a50db@google.com>
+ <c8b7a800-58ed-4ef7-91bd-31da77763717@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260826-arm64-52bit-va-v1-0-14ec98211363@fujitsu.com>
- <CA+EHjTwPmwPTMcgQB6zt47Kz6NPMr+FkGfq2Qq+Uxu+G427OEg@mail.gmail.com> <ap9wgBjYEDI-27N1@sm-arm-grace07>
-In-Reply-To: <ap9wgBjYEDI-27N1@sm-arm-grace07>
-From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Tue, 8 Sep 2026 08:55:06 +0100
-X-Gmail-Original-Message-ID: <CA+EHjTxy3vURKpjmcX86T+coXZN7sCfW=5L4TM3GH30xuz+zPA@mail.gmail.com>
-X-Gm-Features: AcwNN1UPBjEuQQThxfaCHXl31wDDjpU8d24LqbsGJMyA-76vtr69g4waCdr9dow
-Message-ID: <CA+EHjTxy3vURKpjmcX86T+coXZN7sCfW=5L4TM3GH30xuz+zPA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] 52-bit VA guest mode ID support
-To: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Steffen Eiden <seiden@linux.ibm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Takayuki Okamoto <tokamoto@fujitsu.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c8b7a800-58ed-4ef7-91bd-31da77763717@intel.com>
 
-Hi Itaru,
+On Thu, Jul 23, 2026 at 04:44:08PM +0800, Xiaoyao Li wrote:
+> > + */
+> > +#define __tdx_vm_ioctl(vm, cmd, _flags, arg)				\
+> 
+> sev uses the name __vm_sev_ioctl, I think we need to keep them consistent.
 
-On Tue, 8 Sept 2026 at 03:18, Itaru Kitayama <itaru.kitayama@fujitsu.com> wrote:
->
-> Hi Fuad,
-> On Fri, Sep 04, 2026 at 09:14:36AM +0100, Fuad Tabba wrote:
-> > On Tue, 25 Aug 2026 at 22:18, Itaru Kitayama <itaru.kitayama@fujitsu.com> wrote:
-> > >
-> > > This patch series extends the arm64 KVM selftest framework
-> > > to support 52-bit guest virtual address (VA) modes in addition to
-> > > the existing 52-bit physical address (PA) configurations.
-> > > The motivation is to enable validation of LPA2 guest memory-management
-> > > behaviour in configurations that use a 52-bit VA space.
-> > > While the selftest framework already supports testing 52-bit PA
-> > > configurations, it lacks the ability to exercise guests running with
-> > > 52-bit virtual addresses, leaving part of the LPA2 functionality untested.
-> >
-> > The series adds three 52-bit VA guest modes, but nothing in tree maps
-> > a guest VA high enough to use them. The mode-iterating tests map at a
-> > fixed low GVA, so pgd_index() returns 0 and only the first entry of
-> > the top level is ever used.
-> >
-> > What do you expect the modes to catch as they stand? The allocators
-> > already take a minimum GVA, so mapping high in one of those tests
-> > looks like a small change.
->
-> I think at least a 4KB page is allocated for the level -1 translation table,
-> and entry 0 is populated with a Table descriptor pointing to the level 0 translation
-> table. But, no it does not test a nonzero top-level index.
+While __vm_tdx_ioctl matches SEV, the TDX selftest follows a tdx_<scope>_*
+naming convention (1. TDX prefix, 2. Scope: VM or vCPU). I named it
+__tdx_vm_ioctl to keep the TDX codebase internally consistent.[1]
 
-Right, that's the gap. Every mode-iterating test maps at a fixed low
-GVA (0xc0000000), so the new modes only ever fill entry 0 of the top
-table. If the series adds the modes, it should add a test that drives
-a VA into the 52-bit range.
+Do you think we should align with SEV's naming convention instead of
+sticking with the internal TDX pattern?
 
-> >
-> > > To address this, the series introduces new guest modes for 52-bit VA
-> > > operation, adds five-level page table support where required, and
-> > > performs runtime detection of host 52-bit VA capability so that
-> > > LPA2-enabled guest VA tests are executed only on supported systems.
-> > >
-> > > Testing:
-> > >
-> > > Built and tested on arm64.
-> > > Verified on QEMU with a V52-capable guest configuration.
-> > > Confirmed correct operation of high virtual address mappings by
-> > > exercising guest memory accesses in the 52-bit VA range.
-> >
-> > I could not reproduce "exercising guest memory accesses in the 52-bit
-> > VA range" with anything in tree either. Could you say which test you
-> > ran, which guest modes, and on what?
->
-> I just in guest_code() of existing one of the kselftests, mapped and
-> accessed a page at 1ULL << 49 using virt_pg_map() and on QEMU TCG mode
-> as I don't currently have access to the machines LPA and LPA2 features.
+[1]: https://lore.kernel.org/kvm/489f3c7b-db03-43dc-bb64-910a0fcba31e@intel.com/
 
-That test is what the series needs, and you've already written it.
-Folding a mode-iterating version in tree would exercise the modes and
-make the cover letter's "52-bit VA range" line reproducible. It runs
-under TCG, so no LPA2 hardware needed.
+> > +({									\
+> > +	u64 r;								\
+> > +									\
+> > +	union {								\
+> > +		struct kvm_tdx_cmd c;					\
+> > +		unsigned long raw;					\
+> > +	} tdx_cmd = { .c = {						\
+> > +		.id = (cmd),						\
+> > +		.flags = (u32)(_flags),					\
+> > +		.data = (u64)(arg),					\
+> > +	} };								\
+> > +									\
+> > +	r = __vm_ioctl(vm, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd.raw);	\
+> > +	r ?: tdx_cmd.c.hw_error;					\
+> 
+> I know it takes the same handling from __vm_sev_ioctl(). But I think the
+> handling for hw_error is not correct, at least for TDX (I didn't check for
+> SEV).
+> 
+> the hw_error is the additional info, to tell the SEAMCALL return code, when
+> the IOCTL fails. KVM requires hw_error to be in the input, and KVM puts the
+> SEAMCALL return code into hw_error when the IOCTL fails due to SEAMCALL
+> failure. That means, when r == 0, the hw_error is always 0.
+> 
+> I think we need to provide hw_error along with r to the caller so that
+> caller can print them together.
 
-Cheers,
-/fuad
+I think the value of r is not important, because the ioctl failure
+is already captured in errno.
 
-> Thanks,
-> Itaru.
-> >
-> > Thanks,
-> > /fuad
-> >
-> > > Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-> > > Reviewed-by: Takayuki Okamoto <tokamoto@fujitsu.com>
-> > > ---
-> > > Itaru Kitayama (2):
-> > >       KVM: selftest: arm64: Support 5-level paging in stage 1 translation table
-> > >       KVM: selftests: arm64: Add 52-bit VA guest modes
-> > >
-> > >  .../selftests/kvm/include/arm64/processor.h        |  2 +
-> > >  tools/testing/selftests/kvm/include/kvm_util.h     |  3 +
-> > >  tools/testing/selftests/kvm/lib/arm64/processor.c  | 87 ++++++++++++++++++++--
-> > >  tools/testing/selftests/kvm/lib/guest_modes.c      |  5 ++
-> > >  tools/testing/selftests/kvm/lib/kvm_util.c         | 11 +++
-> > >  5 files changed, 103 insertions(+), 5 deletions(-)
-> > > ---
-> > > base-commit: 8d3ae59288f1e7d58d76558a6ee96d533bc5019f
-> > > change-id: 20260825-arm64-52bit-va-32f1f4cd050d
-> > >
-> > > Best regards,
-> > > --
-> > > Itaru Kitayama <itaru.kitayama@fujitsu.com>
-> > >
+We only need to fix the return values for SEV and TDX and have
+TEST_ASSERT_* print formatted error logs with errno and hw_error.
+
+- r ?: {tdx, sev}_cmd.c.hw_error;
++ r ? {tdx, sev}_cmd.c.hw_error : 0;
+
+> > +})
+> > +
+> > +#define tdx_vm_ioctl(vm, cmd, flags, arg)				\
+> > +({									\
+> > +	u64 ret = __tdx_vm_ioctl(vm, cmd, flags, arg);			\
+> > +									\
+> > +	if (ret) {							\
+> > +		TEST_ASSERT(!ret,					\
+> > +			    "%s failed, rc: 0x%llx errno: %i (%s)",	\
+> > +			    #cmd, (unsigned long long)ret,		\
+> > +			    errno, strerror(errno));			\
+> 
+> The if() looks silly. Why add it? And why change it from
+> __TEST_ASSERT_VM_VCPU_IOCTL() in the v13?
+> 
+> Considering the suggestion of hw_error above, I think we need to introduce
+> the TEST_ASSERT_TDX_VM_VCPU_IOCTL() which accepts additional hw_error?
+
+The reason we could not use __TEST_ASSERT_VM_VCPU_IOCTL() directly[2] is
+because it formats ther return value as %i (32-bit), whereas
+__tdx_vm_ioctl might return a u64 hardware error code.
+
+I agree with your suggestion to introduce a new
+TEST_ASSERT_TDX_VM_VCPU_IOCTL() macro to print out u64 hardware error
+code properly.
+
+[2]: https://lore.kernel.org/all/a58e2941-77f9-43cf-a54d-023506dd7eb0@linux.intel.com/
+
+> <snip>
+> > diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
+> > new file mode 100644
+> > index 000000000000..e1ffb67a106c
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
+> > @@ -0,0 +1,120 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +
+> > +#include "processor.h"
+> > +#include "tdx/tdx_util.h"
+> > +
+> > +static struct kvm_tdx_capabilities *tdx_read_capabilities(struct kvm_vm *vm)
+> 
+> make it const, is better.
+
+Thanks, noted.
+
+> > +	init_vm->attributes = attributes;
+> 
+> Besides CPUID, it only allows attributes to be configure but leave XFAM as
+> 0. I think the changelog needs to explain why we need to configure
+> attributes.
+
+Thanks, noted.
+
+> The rest of the patch looks good to me.
+ 
