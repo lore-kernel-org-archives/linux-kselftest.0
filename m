@@ -1,143 +1,209 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A074353A7E;
-	Wed,  9 Sep 2026 00:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D762E2BE639
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 01:12:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788915305; cv=none; b=GJWbVEPj23l5ny0SlDGsbvS9ThEAjAre1K/2dxnTy52Tg6gPj9apzx3i0ulHpMzLI95gIfCB8D+UZmE+n5MXqg20xRhYLPUjJSOqAIlcThczSJw/przF2xpOKSIeSb4YyVX+5Bwpvj+/UGzBQt/eLxj8S7LfcJQ+iV2k6bkLpAA=
+	t=1788916322; cv=none; b=ezQ8AbCialSA/Ul2VfG32MiBqVRsTOAsudCzCjlZrwSwGQ4mQAoTC8JhQMAr9SAtAf4DE7KjrgQY5+eaYS2Gxngb4u8ADrqM/Qx9c672hiLIzw29Mj6Wpx9nSYJHEMzl0VlH0LOjmfiBi71UWjopAkHi4/UpI5qAL8phVtkpOp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788915305; c=relaxed/simple;
-	bh=Lwy/9R38kf8pOXh0dRWhpawLdZJ90yvpYJQKMNXDPqY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=q8Rxhqy5MK0utCRcv3MQszmADE+o8SCtc6QWeFNtoSg3uzjpQ3/D+EYLOKd690BUYYyi5XUhPs8UCDggZrbh0Ez41AYfYu9eL9/BM9IjCf+wAIiBmHx1w3zl/X9S7Sz7prLu6WDM3kG/HKOYJZL7xHEYP7/+wZj7wgsAzUjcZNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j+U4CkPb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1788916322; c=relaxed/simple;
+	bh=78YHx0yWVPDvUyOR4u9IIre+/Nu/Oz2FqNSImaYhDvU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eD858PbiY7tO7fLka9bMohLlVLm6F3MhaWCxdMMQVeTBOn+nv2BrH7mslHpeqRkOHwTnDlN4AhgI22iJlIH/zGm8U6tzhipCC6PXsf1iLxTb5Nt3TQnRiPKc6JD990W9FwliqoafMM7nso3gvXrDHqyTV5UmCcIp1w/O/eJwGHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aVOT3mJ3; arc=none smtp.client-ip=74.125.231.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j+U4CkPb"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DA446C2BCFF;
-	Wed,  9 Sep 2026 00:55:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1788915304;
-	bh=Lwy/9R38kf8pOXh0dRWhpawLdZJ90yvpYJQKMNXDPqY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=j+U4CkPbjG8VYf3IxJCCsydnX5r4oCaHB/h4KM92otgt3s3/mNSoR0lC2uW9ro0Ha
-	 kuNev2vZOjzRjLgGzHdLfZ2fMDLldzBAQ8moZ6uDard6bV5RxUQkyRY1llNAf4mCg0
-	 pjzTSdyFuDcWXxYEgNDWdTOuoEkM+iWLym5k1+oHDuej3Q5c2cdcJ1Knyc9w5d+J4c
-	 VfqzevS4Ff8bY85C/aYOqZ+hpVNyiCH6F74jJR8yP/uSuLL+gLfb/C1oV1mB/Z6CQE
-	 LfFCwf+5nae4Is9S5f18WcXq5odQw9dRZE2N15EfCiaMl8pC4n6v4CLaXtnK4XsihW
-	 XqXwRlfyoKwTw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9DCDC79FB6;
-	Wed,  9 Sep 2026 00:55:04 +0000 (UTC)
-From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
-Date: Tue, 08 Sep 2026 18:55:35 -0600
-Subject: [PATCH v9 39/39] dyndbg: add DEBUG-biased fallback stubs for
- _dynamic_func_call_cls
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aVOT3mJ3"
+Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-466cc9b4b70so322263fac.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 18:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788916320; x=1789521120; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=69NpNYRfiy3q+HXuUHJlVfVJ+ZNmTg+OdYZin1d+3V4=;
+        b=aVOT3mJ3bTZdvPl3Gyb4h2YE1+QYhs5543Cdy6Q7VvquNJVtkUG0qqmvKguIfNmF6D
+         OpbPcsa5l03LbNoVpcSnafwI12bbpfUaL1pB7kvpm/OAUsissldaEedGckjRR8t4xAqg
+         VAC8MrMNEOx4tp7DTwW5wgc0uLmY1Hown1QCBN7jla+D0RAlFt6iWJYl3H8vC1Nyf2yH
+         qizogNqjsK6ZbhCfSxc2NJ+Uy5x0HSWRbvhon58r6UgU5dpPbRUBE2im3nK1dcmExsKJ
+         yaXEVIn0NkPhjnRJ2DLZi8MNL8C1UdUdyJDukJ7fYMSUwNYt7fzdNY6SiQNI7sU57yWf
+         iNRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788916320; x=1789521120;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=69NpNYRfiy3q+HXuUHJlVfVJ+ZNmTg+OdYZin1d+3V4=;
+        b=lXlf0O450YfSjPWWYvrfH61m8Q3HwEw9Ul5aR/mX19DV0R7zp0HHxbNawA2GZcti+L
+         d0jcZkLy7kyCBXyhtbuDDuvtHjzMtDBPtdf5Ti48Ldav3PrZ/cuwy+q1km9hJVUbjP9H
+         S6L9mNqyLGCKdrD0FCoonPbTSyGlaxzj2zYOiS5Bm7aOzZ0EuuULb+en2ezph0qF55DW
+         AAxV2hUv4Yu40VtDaalTO5FgCFHIpTu9CZCtGGDi0J2EDfHGBnrMSgZBPEO517wlGney
+         rfZiv2CqmOKWmBCcEaNsLkTmUQY2exGLM3s7wAQ7TnxEO++rl4D8z3+n5F1PgaTd9M4t
+         DTYA==
+X-Forwarded-Encrypted: i=1; AKwUvBzzbg/QPTdiEiZopAtroT0ldZvSq70j+o/DuL9VjtAPRWr42uoELoBurgwz/8Qct/EYRs/aC3YgtCB4W4uBIaI=@vger.kernel.org
+X-Gm-Message-State: AFuF++nTmep1a0dKFDKJrAso4KuZFoWV5GGp/DdrXcCZWLzuuLcrvY3+
+	UYBP3Qlx/OQHrn84dilazmnj3Cyn8d/rmSH3bnMHbbtr205nT/TNvG2v
+X-Gm-Gg: AYBFou3sTzcb3Vibd4elTAvBiAEQ3qh8hIVo8CqLp9vBK9l3nOIVR2iVxjGEV+/orSd
+	8QFTOVMdrO956cHSufJZyW+wLSJ2jQBVEzFe2IgWiOiNgbIf7OtTfBzPrKavAMQibh8lQYZzn0W
+	vL6JrudUq+xc3gK/C4lawnX/5CXAm3PgdubiYdOgOAiA3NXGpnSiXrzYzWjyNecHD+KrBp0A7+K
+	X3CU9Ys3MCFgP34brQg0lW1o09YWYuNIGKRaeblxrZjsDxlxJPW4PAd6maI6NoX1DAmWDFZ3ovH
+	TcVY1UegpMt7cgiBJMuARDTnArub/OgHQhapToM+IdZEfx5+Nr+Suu4peGkS5z0IDHWMkWufSs3
+	oC6WXkxhf8a5YF3AXK6niDjdO4bE4lGo2kox2IoWQAxo48zIn+V6CTvchugCFyz5xzYakw7EMJg
+	8dj3B+XAe82ZE65GKyDPhssVBL8w+EaOVVQri9V5vucl2tqBTuoVDeoSKXPam9ByWQZaBQME7K0
+	ZMaJkeo0uSJxBzSIK/z
+X-Received: by 2002:a05:6820:60e:b0:6b5:ec3f:4988 with SMTP id 006d021491bc7-6bc27fe0322mr3929278eaf.35.1788916319677;
+        Tue, 08 Sep 2026 18:11:59 -0700 (PDT)
+Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:53::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b6dbedc38bsm17083879eaf.4.2026.09.08.18.11.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2026 18:11:57 -0700 (PDT)
+Date: Tue, 8 Sep 2026 18:11:53 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: "Maxime Chevallier (Netdev Foundation)" <maxime.chevallier@bootlin.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, davem@davemloft.net,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	matttbe@kernel.org, Stanislav Fomichev <sdf@fomichev.me>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	thomas.petazzoni@bootlin.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v3 1/2] tools: ynl: Allow cross-compiling ynl
+ and associated tools
+Message-ID: <aqCyWQxqKDuQnZYR@devvm29614.prn0.facebook.com>
+References: <20260907161438.755125-1-maxime.chevallier@bootlin.com>
+ <20260907161438.755125-2-maxime.chevallier@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260908-dd-cmap-part2-clean-v9-39-3a3f621f4a10@gmail.com>
-References: <20260908-dd-cmap-part2-clean-v9-0-3a3f621f4a10@gmail.com>
-In-Reply-To: <20260908-dd-cmap-part2-clean-v9-0-3a3f621f4a10@gmail.com>
-To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- Jonathan Corbet <corbet@net.net>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
- Len Brown <lenb@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
- linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
- Jim Cromie <jim.cromie@gmail.com>, kernel test robot <lkp@intel.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788915300; l=2698;
- i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=UzHqkocJhhqs+OcvBRzlrKDtVugWnfrgPJr08BsCHJ8=;
- b=/PPxAaGfLhiX44RK2guq5ZLmp4hnvE4FW3a8ac+SsdeTmiRzph0dBsC4T9QZLrlPTLKSIOI9/
- dLe/Jsba9mNDzB7/UP+Oq0rg0H8+vdv52Wth5Q5ISRI4RB3e/ieM5NH
-X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
- pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
-X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
- auth_id=958
-X-Original-From: Jim Cromie <jim.cromie@gmail.com>
-Reply-To: jim.cromie@gmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260907161438.755125-2-maxime.chevallier@bootlin.com>
 
-From: Jim Cromie <jim.cromie@gmail.com>
+On Mon, Sep 07, 2026 at 06:14:35PM +0200, Maxime Chevallier (Netdev Foundation) wrote:
+> The ynl tool and libraries may be built standalone or through the
+> drivers/net/hw selftest machinery. This may target a different arch, so
+> we need to take the CROSS_COMPILE variable into account for LLVM and
+> gcc.
+> 
+> Let's include the tools/scripts/Makefile.include that deals with the
+> CC/AR resolution.
+> 
+> Fixup the ynltool CFLAGS handling to use +=, so that we don't override
+> the ones set in Makefile.include.
+> 
+> Makefile.include also sets the Q variable for verbose mode, so we can
+> drop it from the ynltool Makefile. This will allow properly selection
+> the verbosity of ynltool builds with the V=1 make flag.
+> 
+> Reviewed-by: Matthieu Baerts (Netdev Foundation) <matttbe@kernel.org>
+> Signed-off-by: Maxime Chevallier (Netdev Foundation) <maxime.chevallier@bootlin.com>
 
-When the dynamic debug core is enabled (CONFIG_DYNAMIC_DEBUG_CORE=y) but
-the global CONFIG_DYNAMIC_DEBUG is disabled, subsystems can opt-in to
-dynamic debug by defining DYNAMIC_DEBUG_MODULE.
+Hey Maxime,
 
-However, for built-in code (like DRM core) where DYNAMIC_DEBUG_MODULE
-is not defined, the macros fall back to the disabled #else block in
-include/linux/dynamic_debug.h.
+It seems that this patch may break some invocations of make:
 
-In this block, the family of _dynamic_func_call_cls macros were
-completely undefined. This caused build failures (implicit declarations)
-in subsystems (like DRM) that attempt to use these macros to wrap their
-own debug functions even when dynamic debug is disabled.
+  # make -C tools/net/ynl/ynltool O=/tmp/o1
+  make: Entering directory '/data/users/bobbyeshleman/linux-worktrees/review/tools/net/ynl/ynltool'
+  make: *** No rule to make target '/tmp/o1/json_writer.o', needed by '/tmp/o1/ynltool'.  Stop.
+  make: Leaving directory '/data/users/bobbyeshleman/linux-worktrees/review/tools/net/ynl/ynltool'
 
-Add stub definitions that mirror the enabled behavior and respect the
-DEBUG macro, similar to pr_debug. If DEBUG is defined, they inject NULL
-as the first argument (to satisfy the expected descriptor pointer) and
-pass the arguments through, allowing the wrapped function's own slow-path
-fallback logic to execute. If DEBUG is not defined, they use an if (0)
-statement-expression to compile out the call while returning 0, achieving
-zero overhead while maintaining compile-time argument checking.
+Best,
+Bobby
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202605201408.x1sHT6fx-lkp@intel.com/
-Assisted-by: Gemini-CLI:gemini-2.5-pro
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
----
- include/linux/dynamic_debug.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index 064df695b3a4..a04e8aeca000 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -541,6 +541,23 @@ void ddebug_increment_call_count(void);
- #define DYNAMIC_DEBUG_BRANCH(descriptor) false
- #define DECLARE_DYNDBG_CLASSMAP(...)
- 
-+#if defined(DEBUG)
-+#define _dynamic_func_call_cls(cls, fmt, func, ...)		\
-+	do { func(NULL, ##__VA_ARGS__); } while (0)
-+#define _dynamic_func_call_cls_no_desc(cls, fmt, func, ...)	\
-+	do { func(__VA_ARGS__); } while (0)
-+#else
-+#define _dynamic_func_call_cls(cls, fmt, func, ...)		\
-+	do { if (0) func(NULL, ##__VA_ARGS__); } while (0)
-+#define _dynamic_func_call_cls_no_desc(cls, fmt, func, ...)	\
-+	do { if (0) func(__VA_ARGS__); } while (0)
-+#endif
-+
-+#define _dynamic_func_call(fmt, func, ...)			\
-+	_dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-+#define _dynamic_func_call_no_desc(fmt, func, ...)		\
-+	_dynamic_func_call_cls_no_desc(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-+
- #define dynamic_pr_debug(fmt, ...)					\
- 	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
- #define dynamic_dev_dbg(dev, fmt, ...)					\
-
--- 
-2.55.0
-
-
+> ---
+>  tools/net/ynl/Makefile           | 1 +
+>  tools/net/ynl/generated/Makefile | 3 ++-
+>  tools/net/ynl/lib/Makefile       | 3 ++-
+>  tools/net/ynl/tests/Makefile     | 2 +-
+>  tools/net/ynl/ynltool/Makefile   | 6 ++----
+>  5 files changed, 8 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/net/ynl/Makefile b/tools/net/ynl/Makefile
+> index 3cefe4ed96cb..838c465d65aa 100644
+> --- a/tools/net/ynl/Makefile
+> +++ b/tools/net/ynl/Makefile
+> @@ -1,5 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> +include ../../scripts/Makefile.include
+>  include ../../scripts/Makefile.arch
+>  
+>  INSTALL	?= install
+> diff --git a/tools/net/ynl/generated/Makefile b/tools/net/ynl/generated/Makefile
+> index ea4128f612d6..5a186349b5a8 100644
+> --- a/tools/net/ynl/generated/Makefile
+> +++ b/tools/net/ynl/generated/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -CC=gcc
+> +include ../../../scripts/Makefile.include
+> +
+>  CFLAGS += -std=gnu11 -O2 -W -Wall -Wextra -Wno-unused-parameter -Wshadow \
+>  	-I../lib/ -idirafter $(UAPI_PATH)
+>  ifeq ("$(DEBUG)","1")
+> diff --git a/tools/net/ynl/lib/Makefile b/tools/net/ynl/lib/Makefile
+> index 9b98c0599600..7b3eae89982f 100644
+> --- a/tools/net/ynl/lib/Makefile
+> +++ b/tools/net/ynl/lib/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -CC=gcc
+> +include ../../../scripts/Makefile.include
+> +
+>  CFLAGS += -std=gnu11 -O2 -W -Wall -Wextra -Wno-unused-parameter -Wshadow
+>  ifeq ("$(DEBUG)","1")
+>    CFLAGS += -g -fsanitize=address -fsanitize=leak -static-libasan
+> diff --git a/tools/net/ynl/tests/Makefile b/tools/net/ynl/tests/Makefile
+> index 40827ca8e579..99ae7dcd6348 100644
+> --- a/tools/net/ynl/tests/Makefile
+> +++ b/tools/net/ynl/tests/Makefile
+> @@ -2,8 +2,8 @@
+>  # Makefile for YNL tests
+>  
+>  include ../Makefile.deps
+> +include ../../../scripts/Makefile.include
+>  
+> -CC=gcc
+>  CFLAGS += -std=gnu11 -O2 -W -Wall -Wextra -Wno-unused-parameter -Wshadow \
+>  	-I../lib/ -I../generated/ -I../../../testing/selftests/ \
+>  	-idirafter $(UAPI_PATH)
+> diff --git a/tools/net/ynl/ynltool/Makefile b/tools/net/ynl/ynltool/Makefile
+> index 48b0f32050f0..b8c67cdb4fdf 100644
+> --- a/tools/net/ynl/ynltool/Makefile
+> +++ b/tools/net/ynl/ynltool/Makefile
+> @@ -1,12 +1,12 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  
+>  include ../Makefile.deps
+> +include ../../../scripts/Makefile.include
+>  
+>  INSTALL	?= install
+>  prefix  ?= /usr
+>  
+> -CC := gcc
+> -CFLAGS := -Wall -Wextra -Werror -O2
+> +CFLAGS += -Wall -Wextra -Werror -O2
+>  ifeq ("$(DEBUG)","1")
+>    CFLAGS += -g -fsanitize=address -fsanitize=leak -static-libasan
+>  endif
+> @@ -27,8 +27,6 @@ include $(wildcard *.d)
+>  
+>  all: $(YNLTOOL)
+>  
+> -Q = @
+> -
+>  $(YNLTOOL): ../libynl.a $(OBJS)
+>  	$(Q)echo -e "\tLINK $@"
+>  	$(Q)$(CC) $(CFLAGS) -o $@ $(OBJS) ../libynl.a -lm
+> -- 
+> 2.55.0
+> 
