@@ -1,32 +1,33 @@
-Received: from mta1.migadu.com (out-138.mta1.migadu.com [95.215.58.138])
+Received: from mta0.migadu.com (out-42.mta0.migadu.com [91.218.175.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F136B3B42F1
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 07:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B42623C73CC
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 07:04:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788937449; cv=none; b=SGWRIANDvdHARG+IT8oXM4jI8C0xbDfK8x6G1Hqiuvz4MUktiIrLL2tM7D1O+c4KCegVRO7CzFnYBTt3ndj7hB5BK8zwrMkO9SwDUwq6nh2gkVj1GMi7RBZBEGV1t/Kz2U3PTAslSe1auFfNXJ+Qw1GqudVIrA3imPiBSfF7Uh8=
+	t=1788937460; cv=none; b=prk9ENhVQx9R8wP3HY9Aoxe/DjE7Vnw1Cyigy6XjACF9PeBHhvSIiHPVZWBRT0hjF/0XAyqBz2ox2a+lw2HnApBd5AMYHigH3CMQBDckssTVR9HzkUNGQp6/7bXnlnSujki3AE2YvLfKbP0tru9nuRr2022z3e37SAa6clw25pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788937449; c=relaxed/simple;
-	bh=SUM0U1/OvZRncgMDqenXn6uLiikLIm64tbFJCtzaLpg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lzmLjXF+klCbliHx8k2c9cZxA9CXiXLg9fXj7j1iY0ZnOdIIiu95BCHyzYTXeeAc7m8qGwxlb06qvLFr+dAjDMwl0sPeI5jHYPgy7hv/7StZGill4g/MRjle8o5mvcnY0q3f+aluwpUwFy3jTeeTRvVSeluJnNzDF8GU7rBxj9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jazioOe9; arc=none smtp.client-ip=95.215.58.138
+	s=arc-20240116; t=1788937460; c=relaxed/simple;
+	bh=T6lie9elNQONzQUM6lpEByBCQyx9hgQM9lLk5pi6gO4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=kMflLbfw4pAoIbW9zZe1Lx6XiZ40xAymszgaS9Hzzv0UUPG+BHTzCWyKw1LZEZusEyYhzJ4EmrCt44eVEFHMSisGbBCIdsN7o/FIzdSapAhMqSKVddXls6d87GYo4EEpj9OxpSsljKo7Lm/M0ha7H7ZtuWT5xqNZ4RoQXBMxqIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=N37lVx5B; arc=none smtp.client-ip=91.218.175.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jazioOe9"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="N37lVx5B"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=SUM0U1/OvZRncgMDqenXn6uLiikLIm64tbFJCtzaLpg=;
+DKIM-Signature: a=rsa-sha256; bh=T6lie9elNQONzQUM6lpEByBCQyx9hgQM9lLk5pi6gO4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788937442; v=1; x=1789542242;
- b=jazioOe9RWq13qIxmcMFnqA5IPae3CuIThDS0TcFTSS8hESDMsEi8vpgZqwx/Ri4/QCDwbd9
- KiJClUTG7uuVeh4x/pOcJtyzAkG3Pi5uHVSHOzO2H7QCGhtHxE55Ke7fczrczMqYZ+3RuCIYY95
- s1VDXlb4k9qatoZ1/gjMLqJg=
+ t=1788937456; v=1; x=1789542256;
+ b=N37lVx5ByPLtwf34oE7jKgfe1KDMS1uDMqmwhuY9ZA82XlkB9NMSVSNO4y1mGmeR5MPZYf5L
+ ANTKDZ1AE11RzztNQp7/3gOf/b7M3xnWcaH2zVXhu8t0hDF9IlS7WWmZN29SPiAhg7mxWZR23em
+ FXMCOSVnOSFNY0mefTOE5Dys=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 54304dfd1b75a60a;
-	Wed, 09 Sep 2026 07:04:02 +0000
-X-Mizu-Trace-ID: 54304dfd1b75a60a
+Received: by smtp.migadu.com with ESMTPS id da7b0975fc924df2;
+	Wed, 09 Sep 2026 07:04:16 +0000
+X-Mizu-Trace-ID: da7b0975fc924df2
 X-Migadu-Flow: FLOW_OUT
 From: Xuanqiang Luo <xuanqiang.luo@linux.dev>
 To: netdev@vger.kernel.org
@@ -40,11 +41,14 @@ Cc: jhs@mojatatu.com,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Xuanqiang Luo <luoxuanqiang@kylinos.cn>
-Subject: [PATCH net v1 0/2] net/sched: fix action batch failure cleanup
-Date: Wed,  9 Sep 2026 15:03:34 +0800
-Message-ID: <20260909070336.32979-1-xuanqiang.luo@linux.dev>
+	Xuanqiang Luo <luoxuanqiang@kylinos.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH net v1 1/2] net/sched: act_api: release all action references on NEWACTION failure
+Date: Wed,  9 Sep 2026 15:03:35 +0800
+Message-ID: <20260909070336.32979-2-xuanqiang.luo@linux.dev>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260909070336.32979-1-xuanqiang.luo@linux.dev>
+References: <20260909070336.32979-1-xuanqiang.luo@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,43 +59,56 @@ Content-Transfer-Encoding: 8bit
 
 From: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
 
-Failed batched RTM_NEWACTION requests can leak action references and
-reserved IDR indices when cleanup encounters a filter-bound action.
+When a batched RTM_NEWACTION request replaces an existing action,
+tcf_idr_check_alloc() takes a temporary reference on it. If a later
+action fails to initialize, tcf_action_destroy() uses strict release
+semantics to clean up the actions initialized so far. For an action
+bound to a filter, the strict check returns -EPERM without dropping
+the temporary reference.
 
-Patch 1 fixes the failure cleanup.
+This error also makes tcf_action_destroy() return before releasing
+subsequent entries. Any new action initialized between the bound
+action and the failing entry is leaked together with its reserved
+IDR slot, preventing reuse of its index.
 
-Patch 2 adds tc-testing regression coverage.
+Use tcf_idr_release() to drop each reference held by the batch without
+rejecting bound actions. This allows cleanup to continue through all
+initialized entries and preserves the module reference release when
+an action is destroyed. Explicit action deletion and flushing retain
+their separate bind-count checks.
 
-Failure reproduction (key output excerpts):
+Fixes: 55334a5db5cd ("net_sched: act: refuse to remove bound action outside")
+Cc: stable@vger.kernel.org
+Signed-off-by: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+---
+ net/sched/act_api.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-  python3 tdc.py -f tc-tests/actions/gact-rollback.json
-
-not ok 1 e3b1 - Failed action batch releases a bound action reference
-	Could not match regex pattern. Verify command output:
-[...]
-	 index 1 ref 3 bind 1
-
-not ok 2 e3b2 - Failed action batch releases entries after a bound action
-	Command exited with 255, expected 0
-RTNETLINK answers: Resource temporarily unavailable
-We have an error talking to the kernel
-
-not ok 3 e3b3 - Failed action batch releases repeated references to a bound action
-	Could not match regex pattern. Verify command output:
-[...]
-	 index 1 ref 4 bind 1
-
-Xuanqiang Luo (2):
-  net/sched: act_api: release all action references on NEWACTION failure
-  selftests: tc-testing: test action batch failure cleanup
-
- net/sched/act_api.c                           |  9 +--
- .../tc-tests/actions/gact-rollback.json       | 78 +++++++++++++++++++
- 2 files changed, 80 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/actions/gact-rollback.json
-
-
-base-commit: a401a9d547c50ef34db1088cc1fb9a201a7af657
+diff --git a/net/sched/act_api.c b/net/sched/act_api.c
+index 37eced84dfa5f..19501dc994641 100644
+--- a/net/sched/act_api.c
++++ b/net/sched/act_api.c
+@@ -1200,18 +1200,13 @@ EXPORT_SYMBOL(tcf_action_exec);
+ 
+ int tcf_action_destroy(struct tc_action *actions[], int bind)
+ {
+-	const struct tc_action_ops *ops;
+ 	struct tc_action *a;
+ 	int ret = 0, i;
+ 
+ 	tcf_act_for_each_action(i, a, actions) {
+ 		actions[i] = NULL;
+-		ops = a->ops;
+-		ret = __tcf_idr_release(a, bind, true);
+-		if (ret == ACT_P_DELETED)
+-			module_put(ops->owner);
+-		else if (ret < 0)
+-			return ret;
++		/* Drop our reference even if the action is still bound to a filter. */
++		ret = tcf_idr_release(a, bind);
+ 	}
+ 	return ret;
+ }
 -- 
 2.43.0
 
