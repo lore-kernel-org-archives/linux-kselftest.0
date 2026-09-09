@@ -1,143 +1,69 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94DA39A07B
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 18:29:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4D035E936;
+	Wed,  9 Sep 2026 18:33:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788978557; cv=none; b=LPdh170++/idimia0J8qjIFosNksfmMBIOPg3CM9AHDvL/pbEHF8H5ZAX6izsJjJNW+FsSIyZ01IGxw/ZNv49mKJmuZ4JWDwA2qEXCqBmamP4xzS9ov6hjBgmeMgb4wtlkLXKmcgZfQSZYMMNw6CPwstX49HbnOcezmxPbubqdA=
+	t=1788978782; cv=none; b=Vv5ns7acnziOQZaPONABVNOqxL+8Y4S3RBqEbZZZyI0fGUnZiIc6gA7afwatBvRyIjb8yR0Z3rzbW9UCC3jWxii9waIb7vjqX7yMmAOYxgjy81pMadcP58zmSH/myAzhapXoxAJlHousrXXfYJPvEA1YNlA1Bp+PHPiiIZcy3Hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788978557; c=relaxed/simple;
-	bh=4D/mn8F2dB3f8vcdPsHU1tAUaAcT/+4x9VACwuiFHwo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=lezKD9l7fw1OANrpnICgZza131pvd/pGJn6dhgPh0acb7SlUoefCvgOhULLjTPjrhVb3UtmZdVrJrGxvoJ4DWYEnnKJM6YWwhnEpg6spbF/B5xd+G/0BnpsHkdAkBPX5W98PR6q1dm6HVB3TpQOM1BmuI9r8gKTtrQz6BWTnva0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=hbT+3/qH; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1788978782; c=relaxed/simple;
+	bh=FN4MB9DrOkRAG5BwNAMUEc9rNHvBFaMmQ693wqgaX5c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fDV/Tc0ssmV3Gx+5sVkG5AhoOXLb+3FS927+fGrGOF9RpAxltB7w68Xq1LXZFC5i92GSs8VZe9+LG+w0oaNovoBdU2aVy/YAlf0YlGhGnEo41cj1pO50RDhqGqGdZVYYlfaI0bnU4YmbrPtRH5z4mGwoVbIoX01ZOv3i7goCTSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gj2czM5h; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="hbT+3/qH"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2d91ded8174so52041195ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 11:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788978555; x=1789583355; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=1oUEgD/rN41C0bVeA3gI1cpMDgX5748s/d/3oZ5kHgc=;
-        b=hbT+3/qHCQkvm4u4JN3ZbE/Fwed7LwI7C7lmOZ03xuD3ZPXBfC+v/JzENV9LJbBKyC
-         C4YHGQBcZYJAg/ZOKLHEldIRwvXrDjJ30YAt3RtwLb4ZlXrBoTZBQfX17hFpylOFo6cR
-         hAk+8LKldNCkPondeiBCLLKBOeIAX44XZPjr2GDfUXgP//Ujo1/zqzonepatCHSZNT9I
-         JTxj0lKMhGYcTEkohFI1j/4j0ubNgb6n/3Nl7jk3NwYjzcRm/QoVNwlbnqUcvXEMlYq3
-         NS8GoBxJ9t42NCThDVhbpL3MjTlXCazIxy2wKih4pKFeC6ZrSICnm5DcvDko+Ad/sU9u
-         qLQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788978555; x=1789583355;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=1oUEgD/rN41C0bVeA3gI1cpMDgX5748s/d/3oZ5kHgc=;
-        b=C+k10Mbpd6RJr4nXWmCbqSXJJ7gQWjDIkIOQuVzAvlgC7oTGEqChnIBKjvcfrKD8Ga
-         FdeZIZ9xWksfwq9tlnyBWrlPoGS7Nyju4Me5QoUbQrq+A8lR8YdJtgHDnYEqr12E/bOh
-         qkivlSN55p4tATBIzTYWFL06Nyr3sg6cASWtNZ2dADwJIDHVrPX/gMXErFZ9/ZRTcxbv
-         Rb7Y2tmHdvuAwCAzcg1ovePVK+3goj9NTxqWdlUuU2MWIpdu5UGBopEnt0FuU1yQZ0gr
-         LQV2FlQJdNNG/m1TuEfZnX79VoSOxcoqAVszXfchSlUyeI18MfbsRDZHuk6fK9CJXgG4
-         TskA==
-X-Forwarded-Encrypted: i=1; AKwUvBxnCzE6BBBkIapBvLTpjuue1/vbK/YnQ3fUHuws4xZ1vc5UUdyTgGb2ZlhU3Y7B8D4i86hsfJV6Z2y1ZJxfXvM=@vger.kernel.org
-X-Gm-Message-State: AFuF++kzZTAbahB6YL+9SUs4B/3+l6IMFP/Iij8V84iLaOKxFfnqhq3n
-	a+UdewxRJYKNnISwZ+kU9+BYTTaNeTjF1cOZF9pInveGTinP3fDEK3LeGC7i2ro18Y4=
-X-Gm-Gg: AYBFou1r5mFnijdT0WJD79Ph6KlPCFgb4ro+SOMaN6px5bWtiIA3JM6uTYRbsxeehqr
-	rcl9gtBKWqCU9Vs5nj9ZLAN0CH+Zs8rcFgZx9+/vOvWQSRnLrctjkCTOQfP29Kvm8FakcpCMWLa
-	X/2rDws2iEcZaH+IoY4tZvbOrKEgEd/UmItP1dkIHgrhqeyvOngwQF7x5xQo7LAiHNYmt8rE6bQ
-	tEaO9yFD7xNy4O6vtQzdoG4bnJm9KcBkbXMPWJCiXiETSclrSlDn118KU3QdkXf6eIZSoaIaLNL
-	VSJLlrzQuJYfgXf4kqvyOEINPQzG9o/Gk8F2n5ggkJJ/4h9uQa07K+2proi2/auvEGKjUZDJOzQ
-	2A1on20ZuFt1kz2yV1QdAMcIvVbxX3mO8/ZW2ajfkDox/sUl1chmO/z2dVccwo5jKwaPiu+W23g
-	k2h9qzsOE+1RYR/NJ9o1C/syV/pFVnzwq2IlY3c/4kKiheQ5+/rti0CNE8Wt9cGlD/0EH1Am2rB
-	E6lzhPsyuZM44OV7nz4qJe8nyQx
-X-Received: by 2002:a17:90b:264e:b0:398:9bd1:3215 with SMTP id 98e67ed59e1d1-39b262e28cdmr58011908a91.22.1788978554953;
-        Wed, 09 Sep 2026 11:29:14 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39cfa5b2fffsm1727085a91.4.2026.09.09.11.29.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2026 11:29:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gj2czM5h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C101F000FF;
+	Wed,  9 Sep 2026 18:32:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788978780;
+	bh=FN4MB9DrOkRAG5BwNAMUEc9rNHvBFaMmQ693wqgaX5c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=gj2czM5h9kqx1AKnVa6hdiW33xYFygqjhULtOk70b2F3CJWVg5MAuehIPPtEQNpWp
+	 8wSSHAXA3IXgr7mcA2in5iGUGj0mHaqoNvhRbr4AVuE9neCtRo8HKiQNwAKEDMi2SA
+	 tVhByVGnHGSjCuoftY33IVCreDMTNyEJMN76K06ApXh5dUNusix1iyRmjgqotieaNr
+	 7RLoHNr8vYW9t6yTZ6dhpf//P4n7ex2ecv62dnumZbdthMh2A3ZfnnNIZTOen60YI6
+	 3tICQ1c62JEKPZ20bmLjUDL/7rmqwWJxkEoPUlcaPEnT9D+NCVzxOkLCInoeOGawi3
+	 KZDop7hc0X4OA==
+Date: Wed, 9 Sep 2026 11:32:59 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Cc: Yuyang Huang <sigefriedhyy@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, Donald Hunter
+ <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>, Ido Schimmel
+ <idosch@nvidia.com>, Kuniyuki Iwashima <kuniyu@google.com>, Nikolaos
+ Gkarlis <nickgarlis@gmail.com>, Paolo Abeni <pabeni@redhat.com>, Sabrina
+ Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>, Simon Horman
+ <horms@kernel.org>, Stanislav Fomichev <sdf.kernel@gmail.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v3 1/4] netlink: specs: rt-addr: fix the type
+ of target-netnsid
+Message-ID: <20260909113259.3d061483@kernel.org>
+In-Reply-To: <a6836306-a60a-4bd9-8173-0bd759f73dad@6wind.com>
+References: <20260909133247.113923-1-sigefriedhyy@gmail.com>
+	<20260909133247.113923-2-sigefriedhyy@gmail.com>
+	<a6836306-a60a-4bd9-8173-0bd759f73dad@6wind.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 09 Sep 2026 14:29:12 -0400
-Message-Id: <DLAZYXG7B54C.23SY9Z6V3JRT1@etsalapatis.com>
-Cc: <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
- <linux-kselftest@vger.kernel.org>, <sparclinux@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v4 0/7] bpf: fix typos and repeated words in
- comments
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Hemanth Selam" <hemanth.selam@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Russell King" <linux@armlinux.org.uk>,
- "Puranjay Mohan" <puranjay@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "Hari Bathini" <hbathini@linux.ibm.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, "Naveen N Rao"
- <naveen@kernel.org>, "Madhavan Srinivasan" <maddy@linux.ibm.com>, "Michael
- Ellerman" <mpe@ellerman.id.au>, "Nicholas Piggin" <npiggin@gmail.com>,
- "Shuah Khan" <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- "Andreas Larsson" <andreas@gaisler.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260908054853.13820-1-hemanth.selam@gmail.com>
-In-Reply-To: <20260908054853.13820-1-hemanth.selam@gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue Sep 8, 2026 at 1:48 AM EDT, Hemanth Selam wrote:
-> Fix misspellings and repeated words in comments, found with
-> scripts/checkpatch.pl using the misspelling list in scripts/spelling.txt.
-> Comments only, no code changes.
->
-> Changes since v3:
->  - rebased onto bpf-next.  CI reported a conflict on v3 and asked for a
->    rebase and resubmit; the tree has moved on since and the series
->    applies cleanly again.  The patches are otherwise identical to v3.
->
-> Changes since v2:
->  - moved from mainline to bpf-next, which resolved the earlier conflict
->    in stream.c where the typo had already been fixed upstream.
->  - renamed the selftests patches to the selftests/bpf: prefix used by the
->    rest of that directory, as CI suggested.
->
-> Hemanth Selam (7):
->   ARM: net: fix typo "arithmatic" in comment
->   bpf: fix typos in comments
->   powerpc: net: fix typo "upto" in comments
->   selftests/bpf: fix typos in comments
->   sparc: net: fix typo "evalute" in comment
->   libbpf: Fix typos in comments
->   selftests/bpf: fix repeated words in comments
+On Wed, 9 Sep 2026 18:09:17 +0200 Nicolas Dichtel wrote:
+> Le 09/09/2026 =C3=A0 15:32, Yuyang Huang a =C3=A9crit=C2=A0:
+> > The kernel parses IFA_TARGET_NETNSID as NLA_S32 and rt-link.yaml
+> > declares its target-netnsid as s32, but rt-addr.yaml has it as binary.
+> >=20
+> > Fixes: dfb0f7d9d979 ("doc/netlink: Add spec for rt addr messages")
+> > Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com> =20
+> This is a fix, so the target is net.
+> Could you submit it separately?
 
-NACK, this kind of churn for no measurable gain is not productive.
-
-pw-bot: cr
-
->
->  arch/arm/net/bpf_jit_32.c                                    | 2 +-
->  arch/powerpc/net/bpf_jit_comp32.c                            | 2 +-
->  arch/powerpc/net/bpf_jit_comp64.c                            | 4 ++--
->  arch/sparc/net/bpf_jit_asm_32.S                              | 2 +-
->  include/linux/filter.h                                       | 4 ++--
->  kernel/bpf/reuseport_array.c                                 | 2 +-
->  tools/lib/bpf/btf.c                                          | 4 ++--
->  tools/lib/bpf/usdt.c                                         | 2 +-
->  tools/testing/selftests/bpf/libarena/src/asan.bpf.c          | 2 +-
->  tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c       | 2 +-
->  tools/testing/selftests/bpf/prog_tests/task_local_data.h     | 2 +-
->  tools/testing/selftests/bpf/progs/freplace_unreliable_prog.c | 2 +-
->  tools/testing/selftests/bpf/progs/iters.c                    | 2 +-
->  tools/testing/selftests/bpf/progs/verifier_var_off.c         | 2 +-
->  14 files changed, 17 insertions(+), 17 deletions(-)
-
+We should just drop the Fixes tag instead
+It never worked, and if someone cares they can use the latest YAML file
+AI makes people slap Fixes tags on everything these days :/
