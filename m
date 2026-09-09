@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-42.mta0.migadu.com [91.218.175.42])
+Received: from mta1.migadu.com (out-156.mta1.migadu.com [95.215.58.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B42623C73CC
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 07:04:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC90B3C873B
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 07:04:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788937460; cv=none; b=prk9ENhVQx9R8wP3HY9Aoxe/DjE7Vnw1Cyigy6XjACF9PeBHhvSIiHPVZWBRT0hjF/0XAyqBz2ox2a+lw2HnApBd5AMYHigH3CMQBDckssTVR9HzkUNGQp6/7bXnlnSujki3AE2YvLfKbP0tru9nuRr2022z3e37SAa6clw25pc=
+	t=1788937472; cv=none; b=gZmMfCtprkOc5aTFnyOQgWlSF4szmqxHjSieNotmEl4T7v81wdZdIxS9oV+d47sj9y64FiC5kuToatfnhwUgk5MHSdKKN0bX+QYUjFIrjBzyeOy5beaCdCao0vaP4Fm1y86uJZ4qRdfQsU8MuWuWyB4Zf9ZnpnSqojAAJO4dqwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788937460; c=relaxed/simple;
-	bh=T6lie9elNQONzQUM6lpEByBCQyx9hgQM9lLk5pi6gO4=;
+	s=arc-20240116; t=1788937472; c=relaxed/simple;
+	bh=//yohNIuqAnGRo3lgqQJ49CeHC5XJjYRMg3X/WB18PA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kMflLbfw4pAoIbW9zZe1Lx6XiZ40xAymszgaS9Hzzv0UUPG+BHTzCWyKw1LZEZusEyYhzJ4EmrCt44eVEFHMSisGbBCIdsN7o/FIzdSapAhMqSKVddXls6d87GYo4EEpj9OxpSsljKo7Lm/M0ha7H7ZtuWT5xqNZ4RoQXBMxqIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=N37lVx5B; arc=none smtp.client-ip=91.218.175.42
+	 MIME-Version; b=V6HV/EvnhTpYSp1FMSZQ5xnd+/GVe0xab6te8VnFgEJiXpOS9iKnH5ashbT0UvK5IpDBSWhaObJub+k8CTLW1l72tKVXpiqUmx8amPdcoMjUifh9nB8I4WeUPMBsHN8aKRrrYTd7HI4v6mc9UoE1nDYDqKEsmqkyBMKV31TuU+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uTnVHdOY; arc=none smtp.client-ip=95.215.58.156
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="N37lVx5B"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uTnVHdOY"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=T6lie9elNQONzQUM6lpEByBCQyx9hgQM9lLk5pi6gO4=;
+DKIM-Signature: a=rsa-sha256; bh=//yohNIuqAnGRo3lgqQJ49CeHC5XJjYRMg3X/WB18PA=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788937456; v=1; x=1789542256;
- b=N37lVx5ByPLtwf34oE7jKgfe1KDMS1uDMqmwhuY9ZA82XlkB9NMSVSNO4y1mGmeR5MPZYf5L
- ANTKDZ1AE11RzztNQp7/3gOf/b7M3xnWcaH2zVXhu8t0hDF9IlS7WWmZN29SPiAhg7mxWZR23em
- FXMCOSVnOSFNY0mefTOE5Dys=
+ t=1788937468; v=1; x=1789542268;
+ b=uTnVHdOYYKCg2HalMo60hJAgJH66QhFjVANiweZ9e05v510y3hWnmtw7kpau0HJvV0jp57cc
+ wGxXuilLiVpdvfEXmyyWVPopaXH0Tp0iVa0RQr2kaSgf/0zuGz9464XJZaUVNFX56tpagjYhOUj
+ YrRv0xdIjDcABaeZKqAN0rdQ=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id da7b0975fc924df2;
-	Wed, 09 Sep 2026 07:04:16 +0000
-X-Mizu-Trace-ID: da7b0975fc924df2
+Received: by smtp.migadu.com with ESMTPS id b6175bb5234216f3;
+	Wed, 09 Sep 2026 07:04:28 +0000
+X-Mizu-Trace-ID: b6175bb5234216f3
 X-Migadu-Flow: FLOW_OUT
 From: Xuanqiang Luo <xuanqiang.luo@linux.dev>
 To: netdev@vger.kernel.org
@@ -41,11 +41,10 @@ Cc: jhs@mojatatu.com,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Xuanqiang Luo <luoxuanqiang@kylinos.cn>,
-	stable@vger.kernel.org
-Subject: [PATCH net v1 1/2] net/sched: act_api: release all action references on NEWACTION failure
-Date: Wed,  9 Sep 2026 15:03:35 +0800
-Message-ID: <20260909070336.32979-2-xuanqiang.luo@linux.dev>
+	Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+Subject: [PATCH net v1 2/2] selftests: tc-testing: test action batch failure cleanup
+Date: Wed,  9 Sep 2026 15:03:36 +0800
+Message-ID: <20260909070336.32979-3-xuanqiang.luo@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260909070336.32979-1-xuanqiang.luo@linux.dev>
 References: <20260909070336.32979-1-xuanqiang.luo@linux.dev>
@@ -59,56 +58,106 @@ Content-Transfer-Encoding: 8bit
 
 From: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
 
-When a batched RTM_NEWACTION request replaces an existing action,
-tcf_idr_check_alloc() takes a temporary reference on it. If a later
-action fails to initialize, tcf_action_destroy() uses strict release
-semantics to clean up the actions initialized so far. For an action
-bound to a filter, the strict check returns -EPERM without dropping
-the temporary reference.
+Add tests for cleanup after a batched RTM_NEWACTION request fails.
+Replace an existing gact action bound to a filter, then fail a later
+entry by requesting goto chain without a classifier context.
 
-This error also makes tcf_action_destroy() return before releasing
-subsequent entries. Any new action initialized between the bound
-action and the failing entry is leaked together with its reserved
-IDR slot, preventing reuse of its index.
+Check that the bound action's reference count returns to its original
+value. Also cover a successfully initialized new action between the
+bound action and the failing entry, verifying that its reserved index
+can be reused. Repeat the bound action in another batch to check that
+each temporary reference to the same action is released.
 
-Use tcf_idr_release() to drop each reference held by the batch without
-rejecting bound actions. This allows cleanup to continue through all
-initialized entries and preserves the module reference release when
-an action is destroyed. Explicit action deletion and flushing retain
-their separate bind-count checks.
-
-Fixes: 55334a5db5cd ("net_sched: act: refuse to remove bound action outside")
-Cc: stable@vger.kernel.org
 Signed-off-by: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
 ---
- net/sched/act_api.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ .../tc-tests/actions/gact-rollback.json       | 78 +++++++++++++++++++
+ 1 file changed, 78 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/actions/gact-rollback.json
 
-diff --git a/net/sched/act_api.c b/net/sched/act_api.c
-index 37eced84dfa5f..19501dc994641 100644
---- a/net/sched/act_api.c
-+++ b/net/sched/act_api.c
-@@ -1200,18 +1200,13 @@ EXPORT_SYMBOL(tcf_action_exec);
- 
- int tcf_action_destroy(struct tc_action *actions[], int bind)
- {
--	const struct tc_action_ops *ops;
- 	struct tc_action *a;
- 	int ret = 0, i;
- 
- 	tcf_act_for_each_action(i, a, actions) {
- 		actions[i] = NULL;
--		ops = a->ops;
--		ret = __tcf_idr_release(a, bind, true);
--		if (ret == ACT_P_DELETED)
--			module_put(ops->owner);
--		else if (ret < 0)
--			return ret;
-+		/* Drop our reference even if the action is still bound to a filter. */
-+		ret = tcf_idr_release(a, bind);
- 	}
- 	return ret;
- }
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/gact-rollback.json b/tools/testing/selftests/tc-testing/tc-tests/actions/gact-rollback.json
+new file mode 100644
+index 0000000000000..e92a4180db689
+--- /dev/null
++++ b/tools/testing/selftests/tc-testing/tc-tests/actions/gact-rollback.json
+@@ -0,0 +1,78 @@
++[
++    {
++        "id": "e3b1",
++        "name": "Failed action batch releases a bound action reference",
++        "category": [
++            "actions",
++            "gact"
++        ],
++        "plugins": {
++           "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress",
++            "$TC actions add action pass index 1",
++            "$TC filter add dev $DEV1 protocol all ingress prio 1 matchall action gact index 1"
++        ],
++        "cmdUnderTest": "$TC actions replace action pass index 1 action goto chain 42 index 3",
++        "expExitCode": "255",
++        "verifyCmd": "$TC actions ls action gact",
++        "matchPattern": "total acts 1.*index 1 ref 2 bind 1",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "e3b2",
++        "name": "Failed action batch releases entries after a bound action",
++        "category": [
++            "actions",
++            "gact"
++        ],
++        "plugins": {
++           "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress",
++            "$TC actions add action pass index 1",
++            "$TC filter add dev $DEV1 protocol all ingress prio 1 matchall action gact index 1",
++            [
++                "$TC actions replace action pass index 1 action pass index 2 action goto chain 42 index 3",
++                255
++            ]
++        ],
++        "cmdUnderTest": "$TC actions add action pass index 2",
++        "expExitCode": "0",
++        "verifyCmd": "$TC actions ls action gact",
++        "matchPattern": "total acts 2.*index 1 ref 2 bind 1.*index 2 ref 1 bind 0",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "e3b3",
++        "name": "Failed action batch releases repeated references to a bound action",
++        "category": [
++            "actions",
++            "gact"
++        ],
++        "plugins": {
++           "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress",
++            "$TC actions add action pass index 1",
++            "$TC filter add dev $DEV1 protocol all ingress prio 1 matchall action gact index 1"
++        ],
++        "cmdUnderTest": "$TC actions replace action pass index 1 action pass index 1 action goto chain 42 index 3",
++        "expExitCode": "255",
++        "verifyCmd": "$TC actions ls action gact",
++        "matchPattern": "total acts 1.*index 1 ref 2 bind 1",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    }
++]
 -- 
 2.43.0
 
