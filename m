@@ -1,33 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C1F57ED98;
-	Wed,  9 Sep 2026 15:54:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 435ED5540A0;
+	Wed,  9 Sep 2026 15:55:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788969279; cv=none; b=QJSLqWb6P3hhSwPQr7yFYRVg8YnNsHXuc3jtxJc3AALVc/ypPJOufLk8MbjakTbS6qLv8eqkaltgj/s2kg1yhUCSe6QjJeIs8U5mkx4UspUT2vyNjyAAv/KCPRhMhkFAFFSErbO6aoNNRMCllV3uM0I4Us3RK+LUFotRL2n1B1U=
+	t=1788969302; cv=none; b=XHC8sZ4W8v4PDT/px1hKt2Dyoizc9MYjrHPzGe53+K/fJ8rmSIUZiKbd53ZjoktPywJHqGE8eSlPpnLK6P+HYhSIIF8QvkSxPDgwbGB+r6CtrqF2RzMAkvuPJ7dAcUYvujhmylMmADjAwuYRj+OhHUB0UULFDRd7UwELMVjZLDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788969279; c=relaxed/simple;
-	bh=4tmuZy0j5vGxvsm2FOetliQpL82hSpmRGpvP0VKkcoM=;
+	s=arc-20240116; t=1788969302; c=relaxed/simple;
+	bh=xacp76pH4f4rcfngaHSpVs/Um3pFnHmHfcLgMGXukQU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DA2qCyOcfqx1Ze395hwl7znTFJ5Hm951om2eUqJrmfAVjTHFy7gYqQjTq+vddOudnIJ/qkH5rCwdn9y++sGcp5rICifXwUo2fVlaEf5gVxx0tHWVBhOUdnZ8QoXHkdaFk30VSJAvnq0WUHe62KlfauOSs4Q66olIXbr8OOz3B+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bo/nwc6d; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=WcDK+KTaWk8xHO3hI2sQf5nkhr9ohINfV3MroJqF6JkScbD0WBuLsq1z0HqvBuA8N7srgpnuigSEjTjjC055RDELNT4kos/nmv5SffyCNCznh/IIdKlorIlxNNHfsP/SiCHXsuEa+Fgzk6TX8zvMjli20FIX7COFFsMKPwaqW4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=sDHfamFG; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bo/nwc6d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCE9E1F00A3A;
-	Wed,  9 Sep 2026 15:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788969278;
-	bh=o582C2XKLMWHOHeMahz3iW/6hgf1cGSAiI6ze6eSDVo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=bo/nwc6dS99ISeSpfGwn+iPwXI9V9uwQ4onbV0KtT2I/oMD4xZ5Xgd6icDQxHE53D
-	 1QHdm7AwvJw6FLfmN0QtUcnvlAQnsrS2d6N/8pJmkKUJ/XHHMKVJaSAgDG5IIXnzi7
-	 sbV/X8VlO7038kF1MC9CnN+7QRmws3kfAtkYR/08G4TRQnrrHmbhkQsKrATTir9Hdv
-	 6Jx8KDhSTrH7DWq9IU1lCWsur9ORkdIT8FIovsCuu53xEHAZbQINr7dQ4jBN480huT
-	 X1ZNDPsTpIsDY3dJcV8Z7usILLGTfa24PnjkNL6g9aIUrKBbUO+RGYolago2/t5buD
-	 1Di4Pnhtbw5bQ==
-Message-ID: <b6b5e12a-c3aa-4e73-9fc0-d7200141e0e0@kernel.org>
-Date: Wed, 9 Sep 2026 17:54:19 +0200
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="sDHfamFG"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 689B1c2p3817675;
+	Wed, 9 Sep 2026 15:54:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=gi7ysG
+	Fs76d77h8+hghhZQn9cu0rjkv/slXztI4qsuY=; b=sDHfamFG2CoGd5RkzYgTZ+
+	kkgPxPiaOpIW/s2cGs+TPVaJXbWkhIfpP8kSrcJ7A5YqsyMOX6K9AJ3BBHdqseUp
+	z5W9T9GIRrNAFv3WAX9K1eEgfSr+3aoO9FzCQp3F0K4d7QxNmF0tTwdgtkEuj8wF
+	ShyPMAMYlByrbPUb1/JKEM5Ik5J7QiZRCDzLn2zs8gilQgWzw+2ZwWBO1GYe25Mf
+	7KqIW4ZcynHFOjazioDpUi7Po8GuydmoYyaMyPJqwJkOGFg5m0gw94ipY9K/34BY
+	0TQ1msI0/63zrBZGBXsLN5Sh3rffBleZKUeAFN3tZc3koYKpYDHcX6UqFMdNwd0Q
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ggbf46x5g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Sep 2026 15:54:32 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 689FfEMA028718;
+	Wed, 9 Sep 2026 15:54:31 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4gh03yjxa2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Sep 2026 15:54:31 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 689FsTrM49283546
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 9 Sep 2026 15:54:29 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3954520040;
+	Wed,  9 Sep 2026 15:54:29 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6645D2004B;
+	Wed,  9 Sep 2026 15:54:19 +0000 (GMT)
+Received: from [9.61.255.18] (unknown [9.61.255.18])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed,  9 Sep 2026 15:54:18 +0000 (GMT)
+Message-ID: <ce08b0df-2859-428f-afe0-23848da35efc@linux.ibm.com>
+Date: Wed, 9 Sep 2026 21:24:15 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,132 +62,109 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 17/45] KVM: guest_memfd: Return early if range already
- has requested attributes
-To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
- binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
- jmattson@google.com, jthoughton@google.com, michael.roth@amd.com,
- oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com,
- rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com,
- steven.price@arm.com, willy@infradead.org, wyihan@google.com,
- yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
- suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, tarunsahu@google.com,
- Randy Dunlap <rdunlap@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Fuad Tabba <fuad.tabba@linux.dev>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev, Xiaoyao Li <xiaoyao.li@intel.com>
-References: <20260830-gmem-inplace-conversion-v12-0-85e5fd25252a@google.com>
- <20260830-gmem-inplace-conversion-v12-17-85e5fd25252a@google.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
+Subject: Re: [PATCH v2 04/22] selftests/coredump: discard the right amount
+ after the coredump request
+To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
+Cc: Jacob Lalonde <jalalonde@meta.com>, Josef Bacik <josef@toxicpanda.com>,
+        Jann Horn <jannh@google.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jan Kara <jack@suse.cz>, Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+        "Liam R. Howlett" <liam@infradead.org>,
+        Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+        Omar Sandoval <osandov@osandov.com>, Jacob Lalonde <jalalonde@fb.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+References: <20260820-work-coredump-sparse-v2-0-ba32dd718c51@kernel.org>
+ <20260820-work-coredump-sparse-v2-4-ba32dd718c51@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260830-gmem-inplace-conversion-v12-17-85e5fd25252a@google.com>
-Content-Type: text/plain; charset=UTF-8
+From: R Nageswara Sastry <rnsastry@linux.ibm.com>
+In-Reply-To: <20260820-work-coredump-sparse-v2-4-ba32dd718c51@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: YRLSf8zqLzgAsmOOvFaxTOyAu1vIvBmv
+X-Proofpoint-GUID: Det6qLESaqsdiuzk7q3rG57lGmI0CNFh
+X-Authority-Analysis: v=2.4 cv=DbEnbPtW c=1 sm=1 tr=0 ts=6aa18138 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=9XybDkHhOahZXpspZ08A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA5MDE3MyBTYWx0ZWRfX+ylvdHX5HKLS
+ cYPZpa0eaoRG+YEirsH9P8p7ZQqqy1AX+LT03PBoNx+pjNzvrdPD/BXCxM3Uq+fYFLTCy/UlFjy
+ WIvDQIZdUmBOgA7pfGGPWdHoefd0CNA31SvySJ74xSMTAQ4Iqy2+4vu1NsBZ4snUGwuZNcJ0Mev
+ VESFjaxveCXTNGMQIjwlzO4mZ3VbKH5I4LAVsNGr5ZmmDLYisuzfqM/IbjAhZvpJSauNipvwMib
+ B0R0i5lB8nTzlwrvwDVa0xENC0dXNgQJ29ATyvPx3LNYcz69QbdCjwPgxnLirtxvn4JjsjDx9nw
+ Jecqq/dG1UbB4EfE/Y0zZnwEkJ1H/9rrrEEzzhQqe4pSi7mfrSDeiU6SRfuwpk4n2yMNTYxvcXA
+ lJslZmzTvmT5fBuzJL0u23iGpJgtstIRn34bgUp8HE52Dn6ETRDgKduQuMw8rF4XWHEU99hR1Ki
+ Ml/eHNR7eWD5vZ+IheQ==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA5MDE3MyBTYWx0ZWRfX7zByKMl4hvbv
+ BsMorIwgW0uHJIC+0iy0bMdStEXM18UuiwYNWfaYyrKA3vBxU+hJQPy4HZFUewh+g4NZpKVmJnA
+ WiR1RQwG+BGy0n44x3dmrxBE0qIfHr0=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-08_03,2026-09-09_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 priorityscore=1501 impostorscore=0 adultscore=0 spamscore=0
+ clxscore=1015 suspectscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609090173
 
-On 8/31/26 02:25, Ackerley Tng via B4 Relay wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
-> 
-> Provide a function to check that a range has given attributes.
-> 
-> Optimize setting memory attributes by returning early if all pages in the
-> requested range already have the requested attributes.
-> 
-> Reviewed-by: Fuad Tabba <tabba@google.com>
-> Tested-by: Shivank Garg <shivankg@amd.com>
-> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
-> Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+
+On 20.08.2026 4:39 AM, Christian Brauner wrote:
+> read_coredump_req() gets the leftover wrong twice.
+>
+> It takes the absolute difference of the two sizes, so a test binary that
+> knows a larger struct coredump_req than the kernel sends tries to discard
+> bytes that were never sent. And it hands recv() sizeof(buffer) instead of
+> the number of bytes it wants. So MSG_WAITALL waits for a whole page.
+> Either one blocks until the kernel closes the socket. Which it won't
+> because it is waiting for the coredump ack...
+>
+> It's benign today because struct coredump_req hasn't grown. But let's fix
+> it for the future. Compute the leftover as what the kernel sent beyond
+> what was consumed.
+>
+> Fixes: 59cd658eaf40 ("selftests/coredump: add coredump server selftests")
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+Tested-by: R Nageswara Sastry <rnsastry@linux.ibm.com>
+
+System: ppc64le LPAR (IBM POWER), Linux 7.3-rc2
 > ---
->  virt/kvm/guest_memfd.c | 23 ++++++++++++++++++++++-
->  1 file changed, 22 insertions(+), 1 deletion(-)
-> 
-> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> index d14a7024bdc7b..ac8e0c6d6e942 100644
-> --- a/virt/kvm/guest_memfd.c
-> +++ b/virt/kvm/guest_memfd.c
-> @@ -98,6 +98,24 @@ static bool kvm_gmem_is_shared_mem(struct inode *inode, pgoff_t index)
->  	return !kvm_gmem_is_private_mem(inode, index);
->  }
->  
-> +static bool kvm_gmem_range_has_attributes(struct inode *inode,
-> +					  pgoff_t index, size_t nr_pages,
-> +					  u64 attributes)
-
-"has_attributes" could be confused with "has any attributes", not "has exactly
-these matching attributes and no others".
-
-Anyhow, I'm out of puff for naming suggestions today and this gets the hob done
-;) (kvm_gmem_range_has_matching_attributes is a bit mouthful)
-
-Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
-
+>   tools/testing/selftests/coredump/coredump_test_helpers.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/coredump/coredump_test_helpers.c b/tools/testing/selftests/coredump/coredump_test_helpers.c
+> index 2a20faf9cb0a..524fa5370593 100644
+> --- a/tools/testing/selftests/coredump/coredump_test_helpers.c
+> +++ b/tools/testing/selftests/coredump/coredump_test_helpers.c
+> @@ -235,10 +235,10 @@ bool read_coredump_req(int fd, struct coredump_req *req)
+>   	fprintf(stderr, "Read coredump request with size %u and mask 0x%llx\n",
+>   		req->size, (unsigned long long)req->mask);
+>   
+> -	if (user_size > kernel_size)
+> -		remaining_size = user_size - kernel_size;
+> -	else
+> +	if (kernel_size > user_size)
+>   		remaining_size = kernel_size - user_size;
+> +	else
+> +		remaining_size = 0;
+>   
+>   	if (PAGE_SIZE <= remaining_size)
+>   		return false;
+> @@ -250,7 +250,7 @@ bool read_coredump_req(int fd, struct coredump_req *req)
+>   	if (remaining_size) {
+>   		char buffer[PAGE_SIZE];
+>   
+> -		ret = recv(fd, buffer, sizeof(buffer), MSG_WAITALL);
+> +		ret = recv(fd, buffer, remaining_size, MSG_WAITALL);
+>   		if (ret != remaining_size)
+>   			return false;
+>   		fprintf(stderr, "Discarded %zu bytes of data after coredump request\n", remaining_size);
+>
 -- 
-Cheers,
+Thanks and Regards
+R.Nageswara Sastry
 
-David
