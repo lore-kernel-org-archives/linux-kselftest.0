@@ -1,141 +1,173 @@
-Received: from flow-a4-smtp.messagingengine.com (flow-a4-smtp.messagingengine.com [103.168.172.139])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738AA5237BF;
-	Wed,  9 Sep 2026 10:41:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788AB52FE41;
+	Wed,  9 Sep 2026 10:59:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788950509; cv=none; b=mBqA/43ZsT7aBHC9lCiLGRV8PcbP/jcS2OZU0fv3jmL9ipRNcrlyjxpvFJ3rDWXTFETuAFVsbZEW8PsFTKkXaDpt7Tl4C+41+xZ3cU/Omy5btKdpRG3MBMs8MIAP48zrSnmErX90W/fReuAbT85rCs5fqdV3JQ+Wh3ENW7HD+mw=
+	t=1788951569; cv=none; b=a23eIAhlhLfEY8IXMIhg9tfI0aZngebDq6d3xeHp2Tt8z/WiCcdGhayHnKkzVfzmXEAh/CIGz4McDKeAniPUw9AJ+t9NhlO7Jm8ZtUk/Nl+wGWBE8aCZreBW8KoWwGOaOV5eysUyVVHTmwBQy54qyNxnMxw3CJ7lr8tfhFfokm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788950509; c=relaxed/simple;
-	bh=cc1GifQkgQthViehWdOC3osdqIlcQSso+nxuZK0+ISU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qZvRCs19baGziHmhsOO/Z4deZ9gaUyeGmXWzEkqeEnEIXJQK9KH10p0vofz6YkIyPwiEvtTGY/EIPgx3mtf6DXPOoOM2p4SKO8ki/Nm0igr1N2g6fTa4n8toTSU+64wghaB6sCSsTt0qBU87QopMeuqm5D4i3x3bZkGKh8ROeas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=JbHeijJI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UHhPoVte; arc=none smtp.client-ip=103.168.172.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	s=arc-20240116; t=1788951569; c=relaxed/simple;
+	bh=+Tu/O72827ZSBH3csRuI89G55OIjDCt8XGGxw+E2AAU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dBwoEyuSN0bX5PDYv1iTe/3dPwfr7uMJulbI4qlpPdVifUIFXudXkCCqQtXAaXk0ngM9gCsnq0nWbFyetwCEYYW07tLg3P1soxVQ/3Eqbyk6ReiFmvBHwJoDbutRVCToLVyIT+/yaLR5nDjvUrtMsHSnV5FtfnyAanur/uyO1yA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T0PDd/CS; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="JbHeijJI";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UHhPoVte"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailflow.phl.internal (Postfix) with ESMTP id 683B913800A7;
-	Wed,  9 Sep 2026 06:41:46 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Wed, 09 Sep 2026 06:41:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1788950506; x=
-	1788957706; bh=kqIFoqRiMmH6sRALWBOwhvDCg+hj0QAMm7L7tYbgZ8Q=; b=J
-	bHeijJI8JDTm2/zSH/YR/bRwHqLWQtfEINyG98w7ojO91ZDFr0EgQPEgivHZ+ucu
-	sZ6bb8jsQy/iH1D14wd212njyBe0oDLekefyr91l7N3hDysIHIDjCGfrk1O0wDF9
-	1bIxhbwvtRVRg7cjm1dCqJoILxbvl/ZnQLjsSwnSdgMOr49AxZAb+xSDiCloNjiX
-	4KOKdmL+SoZCiavKfr+Si3ypsY+1nIh7Vm3+nCqdWuNU0T8iN5+4pta6DKrWPQhF
-	x2bVqO7H70TnLcPcWSoiXJmmJIk1LpQG+AM+RUm5riGJOAFcqQMlb9Pqhd6ESlK7
-	5ucqVuVeVS0m1QUSLbUuA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1788950506; x=1788957706; bh=kqIFoqRiMmH6sRALWBOwhvDCg+hj0QAMm7L
-	7tYbgZ8Q=; b=UHhPoVteWjrexluIKwxpq7gHRP0Yn+xrFc4oCt4es9DSZe6/Dmn
-	qZIaERihWm53WQzrF0jT4be0tN+CUWbpOgFMfSfp8k5J+Aqk7YkNacFf67JdVPRx
-	SFjcVGgS6ZIgtHlN1FKtyGxnyvm8lM+0GbZM8P5Y2tyUGlxd+/oxHwaohqcSqfUp
-	Zj6rG8Z31iw7EEfxR7/jfm8bgAD5XLm8zo/I/+gkdoQY8ipnaQVpF7ylJLbxz7p6
-	XBjmvNViWt6breEaFMyjJ5ah0XjA3Q83LBqUomh6dMy/ZwslsCww2axV6Uua21PJ
-	N9BXadM+plZ9X8B2MHwc/msFIKxhlmoYd2A==
-X-ME-Sender: <xms:6jehasVffBFtqSzdA-ZyeOR8gTnGoBU6FWOZV-RQ5snrsX8IPlLC6g>
-    <xme:6jehahTR4zRa-1HpMXSlRSchSB4v6RAeWyayWueVM1xBZPoUl73ljU_0qVgtcvGjW
-    WD1xNSp5RpcPFDGidq6G90VZDpp11bvtYX6BgDGKW99aZlC4VN5X8KW>
-X-ME-Received: <xmr:6jehardkP3jo5HCLH9-rLNYN-9t2nbkdQRSZIu5utqsQ3k4sigEIGrk2L8g>
-X-ME-Proxy-Cause: dmFkZTFtLjv8RYkaq2KOBNDHIDm+JOFoDRz/txBIRtvLfi3jajWftiquSrS7lUz15GDtJw
-    ZOsPoBToNQmmrpwX9wEG/IMwctc1l1Wf1Y2SedqlX3vPWZtcpN5ewOiZ61MuL9Ij4Jnfx3
-    U9v//DrA1CcVS1qE5MG3ShUl2XBgF8Qcaew1nccOXf0rTqAbaAiI2JpvLYyias9OwsKlYG
-    VsbABRmlg2uz3Pv/UHBh4lrmI6JV5VXme4xVA5YQBUZhmlvB7ncMW5ab4sZ0wqYH1bm2TG
-    S1/fVkqzOlhjLLx9BGdAp6Bq3hZ1WVQpTicAaqDxCw8vjzBNsONxFItyag/hXfw8lVx4OO
-    EiWQctQ3P/1Yxu6/5y8fw3oYORhYCFJKG6DuEYt7dJ8btnp38IOAxjWJEsurEK1fRBek0z
-    ztzCjw68d0x2f36ktxCo0MhQGeLaMCNx/gnQZF52aQ8Mlx7YP3RWYVxcqzwqEIruKp/zkF
-    OKkmxSrqWuyobb75H+1KOeuVk3n10uFTmMkhcoY3ib9x8bjUSyKMCt48MsCUTKF88VrEbk
-    L12cdYBGh4TpHzQ0zzKmgMpY9yBvNv5Zaq5OmRtGLRP2Ix1M3m59F39F/Y+4MYV8XTZ9bn
-    hsVdaxTOrKaXZ1VaovGzC6NjKoo2QHgQBevaHeGpILmvpfm15tFUza/k7rew
-X-ME-Proxy: <xmx:6jeharUd_xRCJamGUgRjyUgpu--FkUIIlnru2pddbGp75Le0XK8_Jg>
-    <xmx:6jehapjNfpB6y9Ak3NdphzJu_O1Eas3uMOK7ZjRRPRVkRWRk9Zxm4w>
-    <xmx:6jehahElGdLuV2jqcuOx_gXtqlTde3Z6vk8rtmoSQyCqfUbhgJRDFw>
-    <xmx:6jehanIyyuhe4fiUxZMxKtcHZR9pz6Y96OV3YvNzTXBwnPusel_zTw>
-    <xmx:6jehannmD6nV_zLTPVSsU0c6aTkow2pnkoJVt7vFCaWM-ftkK-ZceVkh>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Sep 2026 06:41:45 -0400 (EDT)
-Date: Wed, 9 Sep 2026 11:41:44 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	rppt@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, usama.anjum@arm.com, usama.arif@linux.dev, nico.pache@linux.dev, 
-	ziy@nvidia.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
-	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, ryan.roberts@arm.com, 
-	shuah@kernel.org, surenb@google.com, vbabka@kernel.org, agordeev@linux.ibm.com, 
-	jgg@ziepe.ca, leon@kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v5 06/19] selftests/mm: stop khugepaged during the
- MADV_COLLAPSE cases
-Message-ID: <aqE3Vq8Go01c1icS@thinkstation>
-References: <20260908125105.1510704-1-kirill@shutemov.name>
- <20260908125105.1510704-7-kirill@shutemov.name>
- <4e064b9d-aea9-485a-8547-3830999cff01@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T0PDd/CS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1788951567; x=1820487567;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+Tu/O72827ZSBH3csRuI89G55OIjDCt8XGGxw+E2AAU=;
+  b=T0PDd/CS9Esf0xBYMQS5kPsYPPKV7joPQDBKr5Ns0ZSGlx5lv+QLO0wh
+   U5my+1YwoteVVelDv6b3fzEiDV9kVxnskkMlL6Pqs1I5aJJMETxA3KAWY
+   Ep7WPrp3eQO31NuWhF37JuRb+/1orf9E0NV52Oggx4JbctvgtZw9zxywd
+   RGhIszm0rsr2u1n7EnfuR78xekJGcefdzgEOOHaSG05W8F/AaB6uWvw1Q
+   Fp8NeUwfzkZsKUG2K51gklUUTlfodkBNdcVFkBnXaiGHsSFJhVVP2UFeS
+   GvSQxOoHJJGHtr5pcxN+UeVSGw6Wj/LFaN0EWLz+v0uYlWxa3LUr5eH5o
+   g==;
+X-CSE-ConnectionGUID: YSC4YB7DSFWLCrIBTY9ISQ==
+X-CSE-MsgGUID: xwe42HPQThOXodOrVtUfAw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11900"; a="89298546"
+X-IronPort-AV: E=Sophos;i="6.25,270,1779174000"; 
+   d="scan'208";a="89298546"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2026 03:59:23 -0700
+X-CSE-ConnectionGUID: 9Byf6zvYR8OU4EXO2+AkNQ==
+X-CSE-MsgGUID: QRSdUOmUTxuJX9zEK3/LHw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,270,1779174000"; 
+   d="scan'208";a="267001320"
+Received: from unknown (HELO [10.238.208.122]) ([10.238.208.122])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2026 03:59:17 -0700
+Message-ID: <f16e1c13-b959-4085-bf4a-9e583d149e93@intel.com>
+Date: Wed, 9 Sep 2026 18:59:14 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4e064b9d-aea9-485a-8547-3830999cff01@linux.alibaba.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 21/22] KVM: selftests: Add ucall support for TDX
+To: Sean Christopherson <seanjc@google.com>, Peter Fang <peter.fang@intel.com>
+Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Binbin Wu
+ <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>,
+ Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>,
+ kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+ linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <20260722-tdx-selftests-v14-21-15ad654a50db@google.com>
+ <6f89fc78-0344-4a7e-bbd8-ac201b8f845a@intel.com>
+ <20260828020612.GF33657@pedri>
+ <b4cffa34-864d-4fd0-9fc7-a7d4514075b2@intel.com>
+ <20260828042044.GG33657@pedri> <apGYxwdCSuC-X732@google.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <apGYxwdCSuC-X732@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 09, 2026 at 05:55:01PM +0800, Baolin Wang wrote:
+On 8/28/2026 10:18 PM, Sean Christopherson wrote:
+> On Thu, Aug 27, 2026, Peter Fang wrote:
+>> On Fri, Aug 28, 2026 at 10:31:14AM +0800, Xiaoyao Li wrote:
+>>>>
+>>>> Hmm... This makes me wonder if vm->arch.s_bit below could be replaced
+>>>> with the same architectural approach. GPAW is available through
+>>>> TDG.VP.INFO or the initial RBX value. This does require a bit more
+>>>> plumbing though.
+>>>
+>>> I'm afraid not. Because below is host code, and vm->arch.s_bit is not used
+>>> in guest code.
+>>>
+>>> Or are suggesting something like dropping the
+>>>
+>>> 	if (is_tdx_vm(vm)) {
+>>> 		ucall_mmio_gpa = UCALL_MMIO_GPA | vm->arch.s_bit;
+>>> 		sync_global_to_guest(vm, ucall_mmio_gpa);
+>>> 	}
+>>>
+>>> entirely and use below hardcoded value instead in guest code?
+>>>
+>>> 	UCALL_MMIO_GPA | 1 << (GPAW - 1)
+>>
+>> Yeah this is what I meant. Just drop sync_global_to_guest() entirely and
+>> do things like a normal TDX guest would.
 > 
+> Blech.  Every time I come back to this series we're still discussing ucall crud,
+> and "doing thing like a normal TDX guest".  Selftests aren't normal guests.
 > 
-> On 9/8/26 8:50 PM, Kiryl Shutsemau wrote:
-> > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-> > 
-> > __madvise_collapse() turns THP off before each MADV_COLLAPSE, both to keep
-> > khugepaged out of the range and to prove MADV_COLLAPSE ignores the setting.
-> > It clears the global controls only, which is no longer enough.  A per-order
-> > control overrides them, and -s, which makes the cases fault in folios of
-> > one order, leaves that order's control at "always".  khugepaged then
-> > collapses the very range the case is working on, and the case fails on a
-> > collapse that was interfered with rather than refused.
+> I know I suggested using the HPET base, but I only did so very begrudgingly as I
+> couldn't come up with a better alternative to emulated MMIO, and the end result
+> is quite gross.  Not only does the code ignore @mmio_gpa but still obviously use
+> emulated MMIO, it requires synchronizing data to the guest because KVM disallows
+> "private" MMIO.
 > 
-> Right. So I think the correct fix tag is b7f16963efe7 ("mm/khugepaged: run
-> khugepaged for all orders"), because before this commit, khugepaged would
-> not try to collapse this range since it only checked whether the PMD order
-> was suitable for collapse.
-
-Agreed.  The series is in mm-new already; if a respin is needed I will use
-that tag.
-
-> > @@ -547,9 +547,16 @@ static void __madvise_collapse(const char *msg, char *p, int nr_hpages,
-> >   	/*
-> >   	 * Prevent khugepaged interference and tests that MADV_COLLAPSE
-> >   	 * ignores /sys/kernel/mm/transparent_hugepage/enabled
-> > +	 *
-> > +	 * "inherit" rather than "never" so that MADV_COLLAPSE on shmem still
-> > +	 * finds an order to build.
-> >   	 */
-> >   	settings.thp_enabled = THP_NEVER;
-> >   	settings.shmem_enabled = SHMEM_NEVER;
-> > +	for (i = 0; i < NR_ORDERS; i++) {
-> > +		settings.hugepages[i].enabled = THP_INHERIT;
-> > +		settings.shmem_hugepages[i].enabled = SHMEM_INHERIT;
-> > +	}
+>   void ucall_arch_init(struct kvm_vm *vm, gpa_t mmio_gpa)
+>   {
+>          vm_type = vm->type;
+>          sync_global_to_guest(vm, vm_type);
 > 
-> This looks like a workaround to me. Shouldn't we fix this in shmem instead?
+>          if (is_tdx_vm(vm)) {
+>                  ucall_mmio_gpa = UCALL_MMIO_GPA | vm->arch.s_bit;
+>                  sync_global_to_guest(vm, ucall_mmio_gpa);
+>          }
+>    }
+> 
+> Retrieving GPA via TDG.VP.INFO isn't any better, it's still an absurd amount of
+> "work" for something that should be trivial.
+> 
+> Can't we just abuse TDVMCALL_REPORT_FATAL_ERROR?  AFAICT, there's no restriction
+> on the data payload, and there's enough space to all but guarantee we'll never get
+> a false positive.
+> 
+> Pulling in Xiaoyao's idea about using CPUID...
+> 
+>>> +void ucall_arch_init(struct kvm_vm *vm, gpa_t mmio_gpa)
+>>> +{
+>>> +     vm_type = vm->type;
+>>> +     sync_global_to_guest(vm, vm_type);
+>>
+>> It works and it looks simple. But we have the architectural approach to
+>> test if a guest is TD guest, by checking the CPUID 0x21.
+>>
+>> Since checking CPUID 0x21 is not complex, and as a bonus it can help
+>> test if TDX module behaves correctly for CPUID leaf 0x21, I think we
+>> should switch to use CPUID 0x21 to check if it is TDX VM in guest code?
+> 
+> Absolutely not.  It will require at least one an extra VM-Exit for TDX and non-TDX
+> guests alike, and thanks to Intel's wonderful CPUID behavior of having unsupported
+> leaves return the last supported leaf, the guest would have to check CPUID.0x0 and
+> then CPUID.0x21 on modern hardware, i.e. would incur two extra VM-Exits.  I don't
+> care about the performance, but from a debug perspective that's going to be awful,
+> as what should be a super simple operation will be polluted with unwanted data.
 
-Good point.
+As you said, "Selftests aren't normal guests". So the guest code doesn't
+need to check CPUID.0x0 to get maximum supported leaf before CPUID.0x21.
 
-It can be a follow-up patch.  Do you want to make a proper shmem.c fix
-and update the selftest along with it?
+And for TDX, the CPUID doesn't cause VM-Exit to KVM, it only exits to TDX
+module, which is transparent to KVM.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Anyway, if we go with the TDVMCALL_REPORT_FATAL_ERROR as you proposed, we
+don't need the logic to check if it is a TDX VM in the guest.
+
+> Stop trying to reinvent the wheel and just use a virtual function table.
+> 
+> I've verified the attached patches don't break non-TDX selftests, someone just
+> needs to test the TDX changes.
+
+I test it and it works.
