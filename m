@@ -1,113 +1,126 @@
-Received: from pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.12.53.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8615632BE;
-	Wed,  9 Sep 2026 13:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.12.53.23
+Received: from smtp.uniroma2.it (smtp-2015.uniroma2.it [160.80.4.33])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04F9F5519B4;
+	Wed,  9 Sep 2026 13:30:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788960411; cv=none; b=gV6rlJDMW4JIjF/x23FXFz5UjbAwdCfN3935DDnEDCi8CYQ++QLvMBbnQnF3AwmSPn0QyDhANtSo3Eh6mP61nWgAlPNNkM9nFlb2NWzOnueyOKWhsuCwybsTfzeiYzvsFbX8EpEDUAUYnQNpFyIE7viZdn1nq1/xYgevKP2qO88=
+	t=1788960636; cv=none; b=XVg5rZaNMW2XdTTNJtbgxuTb7uYq5InbsCPTbYL/VGvdx0swAfy96NufHdzkYMuV5LzvUSNOL6y7igNMm5jrfA1Ib9oAcO62KP9zYbg3IUGNuOeY3FW4idO8thHul1ylThvgFANQ9f2Hy6WpDd0bYbbPFvkM2hb/Zvbb1dfsR+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788960411; c=relaxed/simple;
-	bh=m9d7ujv378uw+j2ZjyLPhKB21Fd8zoqENiKhmu/5oqg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XhFm4Y3UXjlZjmiBvkDGQaK2sl6PA/NdSn2TuEVFZjuy59J2KKWX8cG2wPr0AOA2Gu/GoPLs1VQWSRW7djNbPYffoeM7oOVoEFPfPEAH/0ejTkdXeqjPWquS0k/nYz1D3uM0pNm6LR7WFcHG6wxe7MltMStShYEfQzCOM8P56vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=IADbfR6V; arc=none smtp.client-ip=52.12.53.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
+	s=arc-20240116; t=1788960636; c=relaxed/simple;
+	bh=wH/5rLMbn/tkRQGP+nFCObBZ0jZTBhBNuQmCJLzIOgY=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=FK1W/RZbSpMTSA78PsivnP1IobRCotoCQ94ne79IdSslmFPdqmb28r6FyQvyY3rdZVdQBKsXBaXt/zUsug0KGWCB6a4BMTxY85sETMNyhDDEDG18hWWuzps9F2J8jLA858LbQXAuF5u7a5f7918Qm5HCXvbRERNFmQvxMuR19Ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=lHy5YNbz; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=gXVUNniL; arc=none smtp.client-ip=160.80.4.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="IADbfR6V"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
-  t=1788960409; x=1820496409;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=stTt3pcn/55ggI22k7c3KD4aU4G5gE3hgIvnTyPwIrs=;
-  b=IADbfR6VUP/0XeI3sbHdYanC4dODAowD7WV9UjWeVgyteB8bADUEv8Hi
-   W8+TSgjnfnc2fBS41c3++HkQeEQl+pCjjFD1j3KWHm/ZzYFUaWLuIC330
-   HuN9KzCg2sq/hzya27hbHzNkmPJbwm6JcH9glaX1nbR068heBDe8ZzDEt
-   vetA3bZxv5cfdNgRHXpUYfz6dYuUnotguVkre1usz4pYdNM9j6wbP2jId
-   g/arLF0iaaSVnMMqu1rVzcUZnS958degofIWiYIZt8DlkYaqpNqT+SNFo
-   IdNUhouQ8dg9nBi1n/ePa63kjFRIPBk5FsaJyvE8dcasLMmuxJOId338L
-   w==;
-X-CSE-ConnectionGUID: XFeq43UxR+edIZcqz43naA==
-X-CSE-MsgGUID: d9xPtqCDSL2K4hIpBkglyA==
-X-IronPort-AV: E=Sophos;i="6.25,270,1779148800"; 
-   d="scan'208";a="28092934"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2026 13:26:43 +0000
-Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.111:26264]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.57.27:2525] with esmtp (Farcaster)
- id 2b3fafe0-6241-42f4-94b6-181936edf88d; Wed, 9 Sep 2026 13:26:43 +0000 (UTC)
-X-Farcaster-Flow-ID: 2b3fafe0-6241-42f4-94b6-181936edf88d
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Wed, 9 Sep 2026 13:26:43 +0000
-Received: from dev-dsk-mngyadam-1c-cb3f7548.eu-west-1.amazon.com
- (10.253.107.175) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.46; Wed, 9 Sep 2026
- 13:26:41 +0000
-From: Mahmoud Nagy Adam <mngyadam@amazon.de>
-To: <linux-kselftest@vger.kernel.org>
-CC: Ming Lei <tom.leiming@gmail.com>, Shuah Khan <shuah@kernel.org>, "Jens
- Axboe" <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH] selftests: ublk: install test_common.sh and trace/ scripts
-Date: Wed, 9 Sep 2026 15:26:03 +0200
-Message-ID: <20260909132602.68852-2-mngyadam@amazon.de>
-X-Mailer: git-send-email 2.47.3
+	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="lHy5YNbz";
+	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="gXVUNniL"
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 689DODVO014165;
+	Wed, 9 Sep 2026 15:24:20 +0200
+Received: from lubuntu-18.04 (host-80-183-189-234.pool80183.interbusiness.it [80.183.189.234])
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 40C6A12296B;
+	Wed,  9 Sep 2026 15:24:20 +0200 (CEST)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+	s=ed201904; t=1788960261; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YmwQH6xbCrxJ9uhmc8NIhOyl6JDr6UEwf3ZJ6I28osk=;
+	b=lHy5YNbzDq6NNAfggp9x9jA7OPfAYppL5aKvywjuF5SSLYITz3mr2mUOntHuMlpO0kNcht
+	08V2H++wY8QQqOBA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+	t=1788960261; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YmwQH6xbCrxJ9uhmc8NIhOyl6JDr6UEwf3ZJ6I28osk=;
+	b=gXVUNniL8cWk4Uc0boQJKMYRBPkagDULYHexISeUhy9T/fgGFhZdMU3bUkACrE22Ar/PPm
+	SNCaRt9bmcAYZgybSmUfKr7SCNKFhxT1tpSj1oYLKppXYrOUUsTn++7PZsqUNjRvn+ocDZ
+	oz86h/H8VuOTpDbMp/Esf2LczRaYe040l41pM58yhzUH5JEOYHtLeSMhBIV9gvZtvqoqmN
+	xqz3Ks4FMYv6R9ZyfIHQQGAWb+l/Z2ndMWJ7M7X4oH6hAbs7+5dTKfGaQcWXNmxBFEcTS6
+	b1qLgj5yQ6gp+KwRIiaZk7dirRcfsq60ZSvoQ6HD+tQ+WQ07VS1pQjTY7tgpWw==
+Date: Wed, 9 Sep 2026 15:24:18 +0200
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: Alessio Faina <alessio.faina@canonical.com>
+Cc: "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni
+ <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Simon Horman
+ <horms@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hangbin.liu@linux.dev, stefano.salsano@uniroma2.it,
+        Andrea Mayer
+ <andrea.mayer@uniroma2.it>
+Subject: Re: [PATCH net-next v3] selftests/net: skip
+ srv6_end_dt[4/6]_l3vpn_test.sh if vrftable not available
+Message-Id: <20260909152418.b94e314757b1a88dd5400b17@uniroma2.it>
+In-Reply-To: <20260907100631.1923148-1-alessio.faina@canonical.com>
+References: <20260907100631.1923148-1-alessio.faina@canonical.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D039UWA003.ant.amazon.com (10.13.139.49) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 
-Every ublk test script sources test_common.sh from its own directory:
+On Mon,  7 Sep 2026 12:06:31 +0200
+Alessio Faina <alessio.faina@canonical.com> wrote:
 
-    . "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
+> In case iproute2 is older than version 5.11.0, released ~Feb 23, 2021,
+> the vrftable support is not available and the tests
+> contained in the following 2 test files
+>  - srv6_end_dt4_l3vpn_test.sh
+>  - srv6_end_dt6_l3vpn_test.sh
+> are failing in some kernel backports.
+> This is the result of one of those tests in an unsupported environment:
+> 
+>  ##########################################################################
+>  TEST SECTION: SRv6 VPN connectivity test among hosts in the same tenant
+>  ##########################################################################
+> 
+>     TEST: Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)    [FAIL]
+> 
+>     TEST: Hosts connectivity: hs-t100-2 -> hs-t100-1 (tenant 100)    [FAIL]
+> 
+>     TEST: Hosts connectivity: hs-t200-3 -> hs-t200-4 (tenant 200)    [FAIL]
+> 
+>     TEST: Hosts connectivity: hs-t200-4 -> hs-t200-3 (tenant 200)    [FAIL]
+> 
+> The test installs a route with the vrftable feature; if this feature is
+> not available, the approach taken is to skip the test rather than
+> failing it.
+> 
+> Signed-off-by: Alessio Faina <alessio.faina@canonical.com>
+> ---
+> v3: - Fix Commit message and mail subject
+> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20260903103545.1325276-1-alessio.faina@canonical.com/
+>     - remove dx[4/6] tests
+>     - test if vrftable is available in the installed iproute2
+>       application
+> v1: https://patchwork.kernel.org/project/netdevbpf/patch/20260824091537.2305107-1-alessio.faina@canonical.com/
+>     - initial approach by testing DT[4/6] and DX[4/6]
+>     - test if DT4/DT6 are available in iproute2
+> 
+>  ./tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh  | 21 +++++++++++++++++++
+>  ./tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh  | 21 +++++++++++++++++++
+>  2 files changed, 42 insertions(+)
+>
 
-and test_generic_02/12 additionally run bpftrace against the scripts in
-trace/. Neither test_common.sh nor trace/ is listed in TEST_FILES, so
-"make install" does not copy them into the install directory and every
-ublk test fails when run from there:
+Hi Alessio,
 
-  ./test_generic_02.sh: line 4: .../kselftest_install/ublk/test_common.sh: No such file or directory
-  ./test_generic_02.sh: line 8: _have_program: command not found
+Thanks for the v3, it looks good to me.
 
-The bpftrace tests are affected even when bpftrace is installed: the
-missing trace/*.bt makes bpftrace exit immediately, and the tests then
-report a skip rather than a failure, which hides the problem.
+Reviewed-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 
-Add both to TEST_FILES, matching how other selftests ship their sourced
-helpers (see kexec/kexec_common_lib.sh and zram/zram_lib.sh).
-
-Fixes: 6aecda00b7d1e1 ("selftests: ublk: add kernel selftests for ublk")
-Fixes: 723977cab4c0fd ("selftests: ublk: add generic_01 for verifying sequential IO order")
-Cc: stable@vger.kernel.org # v6.15+
-Assisted-by: Kiro:claude-opus-5
-Signed-off-by: Mahmoud Nagy Adam <mngyadam@amazon.de>
----
- tools/testing/selftests/ublk/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/selftests/ublk/Makefile
-index 5daf36c6c36c4c..37883e9d50ec3e 100644
---- a/tools/testing/selftests/ublk/Makefile
-+++ b/tools/testing/selftests/ublk/Makefile
-@@ -73,6 +73,8 @@ TEST_PROGS += test_stress_08.sh
- TEST_PROGS += test_stress_09.sh
- 
- TEST_FILES := settings
-+TEST_FILES += test_common.sh
-+TEST_FILES += trace
- 
- TEST_GEN_PROGS_EXTENDED = kublk metadata_size
- STANDALONE_UTILS := metadata_size.c
--- 
-2.47.3
-
+Ciao,
+Andrea
