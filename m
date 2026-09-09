@@ -1,115 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A62435F60F;
-	Wed,  9 Sep 2026 18:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94DA39A07B
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 18:29:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788977359; cv=none; b=WE56JS0IclN7YkKzcQwCTlafKeSUGJ1W9q/x3iYRL+ZKEF7Dw5W49AG9sXyhazROWU3Ph1PjeqSLvX1gU4QPBj6Diwntsh2TFGRb+fVU/VHCRj4Y86wvs7tJTBFMNbgqgycRlX0HTJj9+BAxzdp59J6KgW3rAUUrnJKxE2vKAIs=
+	t=1788978557; cv=none; b=LPdh170++/idimia0J8qjIFosNksfmMBIOPg3CM9AHDvL/pbEHF8H5ZAX6izsJjJNW+FsSIyZ01IGxw/ZNv49mKJmuZ4JWDwA2qEXCqBmamP4xzS9ov6hjBgmeMgb4wtlkLXKmcgZfQSZYMMNw6CPwstX49HbnOcezmxPbubqdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788977359; c=relaxed/simple;
-	bh=2IVZFdgGbqQOUiK0a5n41VnsRdygPphRzsj20RNYMUM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TOgVx3tiPg423CDxwe9x1fOdH6p6hrS+pXVieA8OJ+0UaFygVpZJGbcbmN13pADMnw/xQn92jUo8+JYy0XAJT2u8bavKyUNatg/ooL4Pnbx8ISXZRHvTRP/fw84VX+HRHLC70h5O5wgv68bOfNUf0f3W2BOh7Em/Jicy5c3zvT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=blZZe0vy; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788978557; c=relaxed/simple;
+	bh=4D/mn8F2dB3f8vcdPsHU1tAUaAcT/+4x9VACwuiFHwo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=lezKD9l7fw1OANrpnICgZza131pvd/pGJn6dhgPh0acb7SlUoefCvgOhULLjTPjrhVb3UtmZdVrJrGxvoJ4DWYEnnKJM6YWwhnEpg6spbF/B5xd+G/0BnpsHkdAkBPX5W98PR6q1dm6HVB3TpQOM1BmuI9r8gKTtrQz6BWTnva0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=hbT+3/qH; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="blZZe0vy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF9DD1F000FF;
-	Wed,  9 Sep 2026 18:09:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788977358;
-	bh=No0dYEBciYCRakfkqasu0ewf4H44mbr8nOCpC5oBpas=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=blZZe0vyWmNz2SaEZl3pi9gdsclGZh2phjh4HwmXyS9CNt9b8+kVWrTQAH6vIAiTs
-	 XsTmwnFZWnSw1peb++s9M3bAGOvaYhuVeGgLe+RYheuxBCqA8F2X/ioBkgkpG9pm37
-	 2Boo25e4HMk2rAqz9vq+B7peCaZ4AuPXmxIyr21/460O1s1gVRdGvmt6RLmQOeLB7z
-	 b4jJnekgaBCSYzDCIpSafA0OYSEgIWvscIePTDb8vFJvgz8rpfkhCwvCWeNFJp6/B0
-	 hcSGvzDt82b5jObDaZP3uF3SSJf5kyzBMPPqBezvPBlAqcxVsGc5XwQoDIhUnBhvN/
-	 qRF744Jh81PdQ==
-Message-ID: <55bbb96a-a464-4124-a704-d64be6f8c0b1@kernel.org>
-Date: Wed, 9 Sep 2026 20:09:10 +0200
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="hbT+3/qH"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2d91ded8174so52041195ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 11:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788978555; x=1789583355; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=1oUEgD/rN41C0bVeA3gI1cpMDgX5748s/d/3oZ5kHgc=;
+        b=hbT+3/qHCQkvm4u4JN3ZbE/Fwed7LwI7C7lmOZ03xuD3ZPXBfC+v/JzENV9LJbBKyC
+         C4YHGQBcZYJAg/ZOKLHEldIRwvXrDjJ30YAt3RtwLb4ZlXrBoTZBQfX17hFpylOFo6cR
+         hAk+8LKldNCkPondeiBCLLKBOeIAX44XZPjr2GDfUXgP//Ujo1/zqzonepatCHSZNT9I
+         JTxj0lKMhGYcTEkohFI1j/4j0ubNgb6n/3Nl7jk3NwYjzcRm/QoVNwlbnqUcvXEMlYq3
+         NS8GoBxJ9t42NCThDVhbpL3MjTlXCazIxy2wKih4pKFeC6ZrSICnm5DcvDko+Ad/sU9u
+         qLQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788978555; x=1789583355;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1oUEgD/rN41C0bVeA3gI1cpMDgX5748s/d/3oZ5kHgc=;
+        b=C+k10Mbpd6RJr4nXWmCbqSXJJ7gQWjDIkIOQuVzAvlgC7oTGEqChnIBKjvcfrKD8Ga
+         FdeZIZ9xWksfwq9tlnyBWrlPoGS7Nyju4Me5QoUbQrq+A8lR8YdJtgHDnYEqr12E/bOh
+         qkivlSN55p4tATBIzTYWFL06Nyr3sg6cASWtNZ2dADwJIDHVrPX/gMXErFZ9/ZRTcxbv
+         Rb7Y2tmHdvuAwCAzcg1ovePVK+3goj9NTxqWdlUuU2MWIpdu5UGBopEnt0FuU1yQZ0gr
+         LQV2FlQJdNNG/m1TuEfZnX79VoSOxcoqAVszXfchSlUyeI18MfbsRDZHuk6fK9CJXgG4
+         TskA==
+X-Forwarded-Encrypted: i=1; AKwUvBxnCzE6BBBkIapBvLTpjuue1/vbK/YnQ3fUHuws4xZ1vc5UUdyTgGb2ZlhU3Y7B8D4i86hsfJV6Z2y1ZJxfXvM=@vger.kernel.org
+X-Gm-Message-State: AFuF++kzZTAbahB6YL+9SUs4B/3+l6IMFP/Iij8V84iLaOKxFfnqhq3n
+	a+UdewxRJYKNnISwZ+kU9+BYTTaNeTjF1cOZF9pInveGTinP3fDEK3LeGC7i2ro18Y4=
+X-Gm-Gg: AYBFou1r5mFnijdT0WJD79Ph6KlPCFgb4ro+SOMaN6px5bWtiIA3JM6uTYRbsxeehqr
+	rcl9gtBKWqCU9Vs5nj9ZLAN0CH+Zs8rcFgZx9+/vOvWQSRnLrctjkCTOQfP29Kvm8FakcpCMWLa
+	X/2rDws2iEcZaH+IoY4tZvbOrKEgEd/UmItP1dkIHgrhqeyvOngwQF7x5xQo7LAiHNYmt8rE6bQ
+	tEaO9yFD7xNy4O6vtQzdoG4bnJm9KcBkbXMPWJCiXiETSclrSlDn118KU3QdkXf6eIZSoaIaLNL
+	VSJLlrzQuJYfgXf4kqvyOEINPQzG9o/Gk8F2n5ggkJJ/4h9uQa07K+2proi2/auvEGKjUZDJOzQ
+	2A1on20ZuFt1kz2yV1QdAMcIvVbxX3mO8/ZW2ajfkDox/sUl1chmO/z2dVccwo5jKwaPiu+W23g
+	k2h9qzsOE+1RYR/NJ9o1C/syV/pFVnzwq2IlY3c/4kKiheQ5+/rti0CNE8Wt9cGlD/0EH1Am2rB
+	E6lzhPsyuZM44OV7nz4qJe8nyQx
+X-Received: by 2002:a17:90b:264e:b0:398:9bd1:3215 with SMTP id 98e67ed59e1d1-39b262e28cdmr58011908a91.22.1788978554953;
+        Wed, 09 Sep 2026 11:29:14 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39cfa5b2fffsm1727085a91.4.2026.09.09.11.29.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Sep 2026 11:29:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Thunderbird Daily
-Subject: Re: [PATCH net v2 00/15] mptcp: misc fixes for v7.3-rc1
-Content-Language: fr
-To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>
-Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org,
- Florian Westphal <fw@strlen.de>, Kalpan Jani
- <kalpan.jani@mpiricsoftware.com>,
- syzbot+55c2a5c871441261ed14@syzkaller.appspotmail.com,
- Tao Cui <cuitao@kylinos.cn>, Gang Yan <yangang@kylinos.cn>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- Qing Luo <luoqing@kylinos.cn>, Kishen Maloor <kishen.maloor@intel.com>,
- Kuniyuki Iwashima <kuniyu@google.com>, Keita Morisaki <kmta1236@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>
-References: <20260908-net-mptcp-misc-fixes-7-3-rc1-v2-0-df1de70348b6@kernel.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260908-net-mptcp-misc-fixes-7-3-rc1-v2-0-df1de70348b6@kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Wed, 09 Sep 2026 14:29:12 -0400
+Message-Id: <DLAZYXG7B54C.23SY9Z6V3JRT1@etsalapatis.com>
+Cc: <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+ <linux-kselftest@vger.kernel.org>, <sparclinux@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v4 0/7] bpf: fix typos and repeated words in
+ comments
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Hemanth Selam" <hemanth.selam@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Russell King" <linux@armlinux.org.uk>,
+ "Puranjay Mohan" <puranjay@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Hari Bathini" <hbathini@linux.ibm.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, "Naveen N Rao"
+ <naveen@kernel.org>, "Madhavan Srinivasan" <maddy@linux.ibm.com>, "Michael
+ Ellerman" <mpe@ellerman.id.au>, "Nicholas Piggin" <npiggin@gmail.com>,
+ "Shuah Khan" <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ "Andreas Larsson" <andreas@gaisler.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260908054853.13820-1-hemanth.selam@gmail.com>
+In-Reply-To: <20260908054853.13820-1-hemanth.selam@gmail.com>
 
-Hello,
+On Tue Sep 8, 2026 at 1:48 AM EDT, Hemanth Selam wrote:
+> Fix misspellings and repeated words in comments, found with
+> scripts/checkpatch.pl using the misspelling list in scripts/spelling.txt.
+> Comments only, no code changes.
+>
+> Changes since v3:
+>  - rebased onto bpf-next.  CI reported a conflict on v3 and asked for a
+>    rebase and resubmit; the tree has moved on since and the series
+>    applies cleanly again.  The patches are otherwise identical to v3.
+>
+> Changes since v2:
+>  - moved from mainline to bpf-next, which resolved the earlier conflict
+>    in stream.c where the typo had already been fixed upstream.
+>  - renamed the selftests patches to the selftests/bpf: prefix used by the
+>    rest of that directory, as CI suggested.
+>
+> Hemanth Selam (7):
+>   ARM: net: fix typo "arithmatic" in comment
+>   bpf: fix typos in comments
+>   powerpc: net: fix typo "upto" in comments
+>   selftests/bpf: fix typos in comments
+>   sparc: net: fix typo "evalute" in comment
+>   libbpf: Fix typos in comments
+>   selftests/bpf: fix repeated words in comments
 
-On 08/09/2026 16:07, Matthieu Baerts (NGI0) wrote:
-> Here are various unrelated fixes:
+NACK, this kind of churn for no measurable gain is not productive.
 
-Regarding Clashiko's review: I don't think a new version is needed.
-Follow-up patches for non-directly related issues will be sent later on.
+pw-bot: cr
 
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
+>
+>  arch/arm/net/bpf_jit_32.c                                    | 2 +-
+>  arch/powerpc/net/bpf_jit_comp32.c                            | 2 +-
+>  arch/powerpc/net/bpf_jit_comp64.c                            | 4 ++--
+>  arch/sparc/net/bpf_jit_asm_32.S                              | 2 +-
+>  include/linux/filter.h                                       | 4 ++--
+>  kernel/bpf/reuseport_array.c                                 | 2 +-
+>  tools/lib/bpf/btf.c                                          | 4 ++--
+>  tools/lib/bpf/usdt.c                                         | 2 +-
+>  tools/testing/selftests/bpf/libarena/src/asan.bpf.c          | 2 +-
+>  tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c       | 2 +-
+>  tools/testing/selftests/bpf/prog_tests/task_local_data.h     | 2 +-
+>  tools/testing/selftests/bpf/progs/freplace_unreliable_prog.c | 2 +-
+>  tools/testing/selftests/bpf/progs/iters.c                    | 2 +-
+>  tools/testing/selftests/bpf/progs/verifier_var_off.c         | 2 +-
+>  14 files changed, 17 insertions(+), 17 deletions(-)
+
