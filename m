@@ -1,53 +1,57 @@
-Received: from mta1.migadu.com (out-156.mta1.migadu.com [95.215.58.156])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC90B3C873B
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 07:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F329E3B4EB0
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 07:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788937472; cv=none; b=gZmMfCtprkOc5aTFnyOQgWlSF4szmqxHjSieNotmEl4T7v81wdZdIxS9oV+d47sj9y64FiC5kuToatfnhwUgk5MHSdKKN0bX+QYUjFIrjBzyeOy5beaCdCao0vaP4Fm1y86uJZ4qRdfQsU8MuWuWyB4Zf9ZnpnSqojAAJO4dqwY=
+	t=1788937926; cv=none; b=LAJm7WKnadbfYrF0oK3pjv58yzKhWL+aE3A6ECD4+MTJaxzVIkGg8xJbchw3KM25kB+DQhMrleUOeU1NlyghfR2wQdF047L7V3vuFzvIx7U4Ot8/ef+s+eQh31/zUcaW7kkXAFhKFPaGSnyFDnwreaEoZl7372bcKmERiFfE8j0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788937472; c=relaxed/simple;
-	bh=//yohNIuqAnGRo3lgqQJ49CeHC5XJjYRMg3X/WB18PA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V6HV/EvnhTpYSp1FMSZQ5xnd+/GVe0xab6te8VnFgEJiXpOS9iKnH5ashbT0UvK5IpDBSWhaObJub+k8CTLW1l72tKVXpiqUmx8amPdcoMjUifh9nB8I4WeUPMBsHN8aKRrrYTd7HI4v6mc9UoE1nDYDqKEsmqkyBMKV31TuU+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uTnVHdOY; arc=none smtp.client-ip=95.215.58.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788937926; c=relaxed/simple;
+	bh=7AXpKDBvtYtN7R5PiABhVAilmec0rVru3yFYHIUsEGc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hgotWe60qZ74onRfJCo9DUxa34VY5ZpWDbCfWSDjpyolJIPp0NLIkyr4dhl4lx18FruRwnUnAe9XEpi9+TYZue79MieY/P5YTK6xiTAzSlwo6D0Zn2MovJH15otkrJosUrEJqOSvqOysWdY5Pt79HfWOXTgDulSUA+ZynoCQKvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ous+8sLq; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uTnVHdOY"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=//yohNIuqAnGRo3lgqQJ49CeHC5XJjYRMg3X/WB18PA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788937468; v=1; x=1789542268;
- b=uTnVHdOYYKCg2HalMo60hJAgJH66QhFjVANiweZ9e05v510y3hWnmtw7kpau0HJvV0jp57cc
- wGxXuilLiVpdvfEXmyyWVPopaXH0Tp0iVa0RQr2kaSgf/0zuGz9464XJZaUVNFX56tpagjYhOUj
- YrRv0xdIjDcABaeZKqAN0rdQ=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b6175bb5234216f3;
-	Wed, 09 Sep 2026 07:04:28 +0000
-X-Mizu-Trace-ID: b6175bb5234216f3
-X-Migadu-Flow: FLOW_OUT
-From: Xuanqiang Luo <xuanqiang.luo@linux.dev>
-To: netdev@vger.kernel.org
-Cc: jhs@mojatatu.com,
-	jiri@resnulli.us,
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ous+8sLq"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 51FAD1A1A6D;
+	Wed,  9 Sep 2026 07:12:02 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 1C1D560448;
+	Wed,  9 Sep 2026 07:12:02 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9D3FF11C7AF25;
+	Wed,  9 Sep 2026 09:11:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1788937921; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=ClGWkCrAEcZsuhRQ4KGQ7xioMUBoHGO60NH7qmq+AsE=;
+	b=Ous+8sLq7eFEf/a8kmzFxp09SH3dkv233lGrFpz0q2B1lfFxs7LuCl6OnXU0R5pfoWc3BR
+	eTFR1+nsRG6oPyxSUCeOuOZHhARgG+Vqnum7LH7ylHAam9IHDRUqIwPvrJuDavsYzXL3QX
+	WjxyeRiEFYgRIQ1kVAzVIjEgm29NHJKIEDGBFEKxtHYVckPxmltYt9995KQvBzxAa762de
+	ecECd4kJdllqYi0wkCBtPBdNhaALEjizVSMra2yrDFDfjr7iIDrnjwnrj31nWk0a7AebBs
+	UMJtPxG1sCUvkS1qOI123Sw4MuC398v4M8O+KbcGDBu1sxl4X6GvXBDPBp+pJg==
+From: "Maxime Chevallier (Netdev Foundation)" <maxime.chevallier@bootlin.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
 	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Bobby Eshleman <bobbyeshleman@gmail.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	matttbe@kernel.org,
+	Stanislav Fomichev <sdf@fomichev.me>
+Cc: "Maxime Chevallier (Netdev Foundation)" <maxime.chevallier@bootlin.com>,
+	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Xuanqiang Luo <luoxuanqiang@kylinos.cn>
-Subject: [PATCH net v1 2/2] selftests: tc-testing: test action batch failure cleanup
-Date: Wed,  9 Sep 2026 15:03:36 +0800
-Message-ID: <20260909070336.32979-3-xuanqiang.luo@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260909070336.32979-1-xuanqiang.luo@linux.dev>
-References: <20260909070336.32979-1-xuanqiang.luo@linux.dev>
+	thomas.petazzoni@bootlin.com,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] tools: ynl: Fix out-of-tree build for ynltool
+Date: Wed,  9 Sep 2026 09:11:54 +0200
+Message-ID: <20260909071155.1234922-1-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,109 +59,49 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-From: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+After the blamed commit, running a out-of-tree build for ynltool fails :
 
-Add tests for cleanup after a batched RTM_NEWACTION request fails.
-Replace an existing gact action bound to a filter, then fail a later
-entry by requesting goto chain without a classifier context.
+  # make -C tools/net/ynl/ynltool O=/tmp/o1
+  make: Entering directory 'tools/net/ynl/ynltool'
+  make: *** No rule to make target '/tmp/o1/json_writer.o', needed by '/tmp/o1/ynltool'.  Stop.
 
-Check that the bound action's reference count returns to its original
-value. Also cover a successfully initialized new action between the
-bound action and the failing entry, verifying that its reserved index
-can be reused. Repeat the bound action in another batch to check that
-each temporary reference to the same action is released.
+ynltool's Makefile correctly accounts for $(OUTPUT) to get the list of
+object files to generate :
 
-Signed-off-by: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+OBJS := $(patsubst %.c,$(OUTPUT)%.o,$(SRCS))
+
+but it never actually set $(OUTPUT) before the blamed commit, meaning
+that out-of-tree buils of ynltool were always actually in-tree.
+
+Now, the O= parameter is correctly accounted for, and the %o: %c rule fails.
+
+Let's update the %o: %c rule to also use $(OUTPUT).
+
+Reported-by: Bobby Eshleman <bobbyeshleman@gmail.com>
+Closes: https://lore.kernel.org/all/aqCyWQxqKDuQnZYR@devvm29614.prn0.facebook.com/
+Fixes: 917f713b4ec4 ("tools: ynl: Allow cross-compiling ynl and associated tools")
+Signed-off-by: Maxime Chevallier (Netdev Foundation) <maxime.chevallier@bootlin.com>
 ---
- .../tc-tests/actions/gact-rollback.json       | 78 +++++++++++++++++++
- 1 file changed, 78 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/actions/gact-rollback.json
+Targetting net-next, as the blamed commit lives there.
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/gact-rollback.json b/tools/testing/selftests/tc-testing/tc-tests/actions/gact-rollback.json
-new file mode 100644
-index 0000000000000..e92a4180db689
---- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/actions/gact-rollback.json
-@@ -0,0 +1,78 @@
-+[
-+    {
-+        "id": "e3b1",
-+        "name": "Failed action batch releases a bound action reference",
-+        "category": [
-+            "actions",
-+            "gact"
-+        ],
-+        "plugins": {
-+           "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC actions add action pass index 1",
-+            "$TC filter add dev $DEV1 protocol all ingress prio 1 matchall action gact index 1"
-+        ],
-+        "cmdUnderTest": "$TC actions replace action pass index 1 action goto chain 42 index 3",
-+        "expExitCode": "255",
-+        "verifyCmd": "$TC actions ls action gact",
-+        "matchPattern": "total acts 1.*index 1 ref 2 bind 1",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "e3b2",
-+        "name": "Failed action batch releases entries after a bound action",
-+        "category": [
-+            "actions",
-+            "gact"
-+        ],
-+        "plugins": {
-+           "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC actions add action pass index 1",
-+            "$TC filter add dev $DEV1 protocol all ingress prio 1 matchall action gact index 1",
-+            [
-+                "$TC actions replace action pass index 1 action pass index 2 action goto chain 42 index 3",
-+                255
-+            ]
-+        ],
-+        "cmdUnderTest": "$TC actions add action pass index 2",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC actions ls action gact",
-+        "matchPattern": "total acts 2.*index 1 ref 2 bind 1.*index 2 ref 1 bind 0",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "e3b3",
-+        "name": "Failed action batch releases repeated references to a bound action",
-+        "category": [
-+            "actions",
-+            "gact"
-+        ],
-+        "plugins": {
-+           "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC actions add action pass index 1",
-+            "$TC filter add dev $DEV1 protocol all ingress prio 1 matchall action gact index 1"
-+        ],
-+        "cmdUnderTest": "$TC actions replace action pass index 1 action pass index 1 action goto chain 42 index 3",
-+        "expExitCode": "255",
-+        "verifyCmd": "$TC actions ls action gact",
-+        "matchPattern": "total acts 1.*index 1 ref 2 bind 1",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    }
-+]
+ tools/net/ynl/ynltool/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/net/ynl/ynltool/Makefile b/tools/net/ynl/ynltool/Makefile
+index b8c67cdb4fdf..1053e7606c86 100644
+--- a/tools/net/ynl/ynltool/Makefile
++++ b/tools/net/ynl/ynltool/Makefile
+@@ -31,7 +31,7 @@ $(YNLTOOL): ../libynl.a $(OBJS)
+ 	$(Q)echo -e "\tLINK $@"
+ 	$(Q)$(CC) $(CFLAGS) -o $@ $(OBJS) ../libynl.a -lm
+ 
+-%.o: %.c ../libynl.a
++$(OUTPUT)%.o: %.c ../libynl.a
+ 	$(Q)echo -e "\tCC $@"
+ 	$(Q)$(COMPILE.c) -MMD -c -o $@ $<
+ 
 -- 
-2.43.0
+2.55.0
 
