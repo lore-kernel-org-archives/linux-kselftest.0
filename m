@@ -1,67 +1,48 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0393A583ACC;
-	Wed,  9 Sep 2026 16:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C43A560AB3
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 16:40:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788971983; cv=none; b=ANI5O0C818VfxwxNIMVIM76jh11EDpfwpWh8uG1o11ZemDvG5V+I6+rqgnWxlpoi1edvVgHh8bxlx0uvNnAbKd6DO7VCi/ORY42Sm01Eeqa+jMNZkLlsxsoVkrK+S3HDVK8whmEyc0O3VvR0yJhcRHKOoMgxOgfMsDPwWV9t7Og=
+	t=1788972024; cv=none; b=h5tWVWynkJVxHt5F6KMwLiQZGtmmkyi8FBU+YA1nO2g5XyZrPCfSssJOFOoM/QKHggW+ru4oBdCzT6OZFB9rtFT4E4GZawCa5et4qJK2mpE1zjD8uaudeMkD6E++fge9+vqIdeo7KY9GxWcvQakZSB82674vrs62T8ZHN6RrioM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788971983; c=relaxed/simple;
-	bh=pIDXAc8n5rCwfY00O1emkjXRT0qj9W6LxzK1ndPe5cA=;
+	s=arc-20240116; t=1788972024; c=relaxed/simple;
+	bh=6XjnN978Dt1CGr6VQNju1YCJHuyGfu+F3SjjrJT35fM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jleU9xaz+H69NnB+2qTsXauKXcZ6t+V7wFnE5SS2KFRZxbxLaw7Yx21JSO19Whe2kWVkukZCwOKrw9mK7wNu5gNhqYg22AQufs6OmfFrxUGSo0zPd5BR8KuCJgENUEWRFO2gGg33hdtp1gG4wbsW6OiYN3IObcC+BVs7RQerZBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=mbQ+o5Kc; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=pe6ORiU/4csRNtXormq5yAIdj8oXQX1PypwUETChQM60hsshaXq4JeoUjtWVaekeFfZr0G4FDB7Fyc/a/wbGB1o2bLm67RQ5VzBD5Xsi1SrSwENWcKP+fRuu4+kk1iUr7BsfUkdx4imQZ0EvWRL/bAjCPGpnK93dARuFGna+HuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=W6YFOARK; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="mbQ+o5Kc"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 689B1iVY3839788;
-	Wed, 9 Sep 2026 16:39:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=a5iJwZH/C5crXJxQS3Xb797pc9AYFK
-	l4Bix9FKZMfpU=; b=mbQ+o5KcqSDdKEyiuYPhxzHbEoU+RnYhYbM7BxT1yMufW8
-	cY6doDF9+58RjyZocf42SxyZPtKQ89nweF2cHYTwzDEYEj64Wk4pjBVP0D0YtNn5
-	ilCvNxCdIXRoVvDyEJQwG5/dPk4rfYAMFvt+D2cC1BwRgfS7erAFp8IGa2LxSvlz
-	243skpsfvwWkEAgp7yTMY2wc4YLtFdHhhvuwyeJCCrLLTmX9bvWlqt6tO42PfBxi
-	erOy37k/U5RKGt/USmEvxyUzjVb8KWlApR9OSuS71aTYSTUX5lKWVRNKNrV0NNHB
-	vsmBPRFxEEKLwiC41+dKDD7xZHAtVxBNzJ8DskOA==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ggbhf6rrs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 09 Sep 2026 16:39:37 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 689GQEOm023349;
-	Wed, 9 Sep 2026 16:39:36 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4gh03yk54f-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 09 Sep 2026 16:39:36 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 689GdYE747776028
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 9 Sep 2026 16:39:34 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7848B20043;
-	Wed,  9 Sep 2026 16:39:34 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8BF3520040;
-	Wed,  9 Sep 2026 16:39:32 +0000 (GMT)
-Received: from Gautams-MacBook-Pro.local (unknown [9.39.30.71])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed,  9 Sep 2026 16:39:32 +0000 (GMT)
-Date: Wed, 9 Sep 2026 22:09:29 +0530
-From: Gautam Menghani <gautam@linux.ibm.com>
-To: Chaithanya Lagisetty <nagachaithanya9911@gmail.com>
-Cc: pbonzini@redhat.com, seanjc@google.com, shuah@kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: selftests: Fix the never-true negative UFFD delay
- check
-Message-ID: <aqGLwQQZ9FQ5qCtG@Gautams-MacBook-Pro.local>
-References: <20260907045246.3783304-1-nagachaithanya9911@gmail.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="W6YFOARK"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5E827143D;
+	Wed,  9 Sep 2026 09:40:18 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6DE4C3F7B4;
+	Wed,  9 Sep 2026 09:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1788972022; bh=6XjnN978Dt1CGr6VQNju1YCJHuyGfu+F3SjjrJT35fM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=W6YFOARKZ3SJ0/2up84RYOHIhVCP6MpsBMruInjgerNed3lmW1q9joM1eA/CxSCqe
+	 wY0GsZKbobnLgiOyd6MACJ/jJiq2vf8nG8SDdWQqBZNCkx8ddBlPOag4biABWFR2nn
+	 skfUDv0tOnXnAJ0FriXbSTh2yNKHmpOLIpiP5UxI=
+Date: Wed, 9 Sep 2026 17:40:17 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Yeoreum Yun <yeoreum.yun@arm.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, akpm@linux-foundation.org,
+	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+	shuah@kernel.org, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+	nico.pache@linux.dev, ryan.roberts@arm.com, dev.jain@arm.com,
+	baohua@kernel.org, lance.yang@linux.dev, usama.arif@linux.dev,
+	kas@kernel.org, sarthak.sharma@arm.com
+Subject: Re: [PATCH v2] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT macro
+Message-ID: <aqGL8X3OeGlsEnF8@e129823.arm.com>
+References: <20260907081509.924979-1-yeoreum.yun@arm.com>
+ <9f8c6e91-c1c8-4ec5-96a9-9d6d4ab571cc@kernel.org>
+ <ap_GBdbMIkasmVO4@e129823.arm.com>
+ <0d93cd99-e1b2-46cb-ae31-a2dc4ca63d2a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,97 +51,173 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260907045246.3783304-1-nagachaithanya9911@gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: TQOT7jT9L61QURCLz4-YRtoazKCQrZva
-X-Authority-Analysis: v=2.4 cv=RIaD2Yi+ c=1 sm=1 tr=0 ts=6aa18bca cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=kj9zAlcOel0A:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=pGLkceISAAAA:8
- a=VnNF1IyMAAAA:8 a=V1kCjGv-ZFlEZ27KLaEA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA5MDE4NCBTYWx0ZWRfX3V+KSTzTH8WD
- b2cduup5S192jBnOw1bNszzE/cTDG2Ay5RcOBEbhhRWRcjYeJhefAb01163hoWgUXF3zqyE9/Fy
- MM4NFe4UWtsCwTi+42ucxvTSmeIRPM8=
-X-Proofpoint-ORIG-GUID: UNsCqmGcdIxFbDuYUo7aU4jokU66j3yD
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA5MDE4NCBTYWx0ZWRfXz7r/lxPnEkwk
- fr7Vb1q8Ct15kSv1fvEpa166lrtjJWGWEDWNL1YYZy7e4DDQo7GuGXOarcEUmzOEkpio0KFCcqk
- SVooiR1+rrkzINsqyNamM7iVMBVk6S9GOTCwP7xb79I5NRwipsddOSwA+YIwL/G3QGDLPrVQ35M
- 1i8/xNQ4SvyeuJ/oakOS4wZv09bndTr/F6JoWUCFXPWeldxD26iHVYO04yszBgvn1itzVgSAPx6
- 5sDgefcH68yVAB0LzTgFy0LLPItxg43BsS6xD4td8hsz03ISL5CEu+U+NJKUHMOp3uGSnUOIyKJ
- ldrOJCvGPp4GxQi2Yiz0usfWsQh/3SagKboW2ndEuexpgLOF3WPmyhkEfBKR+mB0E9jKy2eh1Zw
- xRoC0ZFFm9RVosNlxuppBEhayjsl+G1iLp1V6CTgNX2qpuSH8+MMOnjjWIMjfZULJLjeP8cIatF
- Y4OS0AmFY26Ob9YCUDA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-08_03,2026-09-09_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 suspectscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
- adultscore=0 phishscore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609090184
+In-Reply-To: <0d93cd99-e1b2-46cb-ae31-a2dc4ca63d2a@kernel.org>
 
-On Mon, Sep 07, 2026 at 04:52:46AM +0000, Chaithanya Lagisetty wrote:
-> demand_paging_test parses the -d option with strtoul() and then asserts
-> that the result is not negative:
+On Tue, Sep 08, 2026 at 12:21:31PM +0200, David Hildenbrand (Arm) wrote:
+> On 9/8/26 10:23, Yeoreum Yun wrote:
+> > On Mon, Sep 07, 2026 at 04:36:56PM +0200, David Hildenbrand (Arm) wrote:
+> >> On 9/7/26 10:15, Yeoreum Yun wrote:
+> >>> HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
+> >>> When this macro is used in some test, test result would be strange in
+> >>> the system where PAGE_SIZE is more then 4KB.
+> >>>
+> >>> Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
+> >>>
+> >>>   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
+> >>>     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
+> >>>     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
+> >>>     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
+> >>>     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
+> >>>     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
+> >>>     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
+> >>>     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
+> >>>     ...
+> >>>   ok 1 Completed
+> >>>
+> >>> Remove the HPAGE_SIZE and HPAGE_SHIFT macros and introduce pmd_page_shift()
+> >>> helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-existing
+> >>> helper, read_pmd_pagesize().
+> >>>
+> >>> Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
+> >>> which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
+> >>> and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
+> >>> PMD-sized units, the test may fail with the previous size of 100 MiB,
+> >>> which is not a multiple of the PMD size when the base page size is
+> >>> 16 KiB or 64 KiB.
+> >>>
+> >>> After this patch, output of transhuge-stress:
+> >>>
+> >>>   transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
+> >>>     2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+> >>>     2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+> >>>     2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s	2585 succeed, 1232 failed, 2585 different pages
+> >>>     2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s	2616 succeed, 1201 failed, 2616 different pages
+> >>>     2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s	2627 succeed, 1190 failed, 2627 different pages
+> >>>     2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s	2628 succeed, 1189 failed, 2628 different pages
+> >>>     2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s	2630 succeed, 1187 failed, 2630 different pages
+> >>>     2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s	2631 succeed, 1186 failed, 2631 different pages
+> >>>     ...
+> >>>   ok 1 Completed
+> >>>
+> >>> Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> >>> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> >>> ---
+> >>
+> >>
+> >> [...]
+> >>
+> >>> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> >>> index d09f9f6a384e..24aa1de27c25 100755
+> >>> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> >>> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> >>> @@ -360,8 +360,8 @@ fi
+> >>>  CATEGORY="memfd_secret" run_test ./memfd_secret
+> >>>  fi
+> >>>  
+> >>> -# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 100
+> >>> -CATEGORY="ksm" run_test ./ksm_tests -H -s 100
+> >>> +# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 512
+> >>> +CATEGORY="ksm" run_test ./ksm_tests -H -s 512
+> >>
+> >>
+> >> Why the magic value 512? (desrves a comment)
+> >>
+> >> A clear sign that the ksm tests must be rewritten to be standalone and just
+> >> handle this internally. @Sarthak
+> > 
+> > Acked. I thought it's enough to spell out in commit message but
+> > I'll spell out into comment too in this round not refactorying by me
+> > for ksm test.
+> > 
+> >>
+> >>>  # KSM KSM_MERGE_TIME test with size of 100
+> >>>  CATEGORY="ksm" run_test ./ksm_tests -P -s 100
+> >>>  # KSM MADV_MERGEABLE test with 10 identical pages
+> >>
+> >> [...]
+> >>
+> >>> index 4821a3563036..f75bf0bacd18 100644
+> >>> --- a/tools/testing/selftests/mm/vm_util.c
+> >>> +++ b/tools/testing/selftests/mm/vm_util.c
+> >>> @@ -21,6 +21,8 @@
+> >>>  
+> >>>  unsigned int __page_size;
+> >>>  unsigned int __page_shift;
+> >>> +uint64_t __pmd_page_size;
+> >>> +uint64_t __pmd_page_shift;
+> >>>  
+> >>>  uint64_t pagemap_get_entry(int fd, char *start)
+> >>>  {
+> >>> @@ -161,6 +163,9 @@ uint64_t read_pmd_pagesize(void)
+> >>>  	char buf[20];
+> >>>  	ssize_t num_read;
+> >>>  
+> >>> +	if (__pmd_page_size)
+> >>> +		return __pmd_page_size;
+> >>> +
+> >>>  	fd = open(PMD_SIZE_FILE_PATH, O_RDONLY);
+> >>>  	if (fd == -1)
+> >>>  		return 0;
+> >>> @@ -173,7 +178,25 @@ uint64_t read_pmd_pagesize(void)
+> >>>  	buf[num_read] = '\0';
+> >>>  	close(fd);
+> >>>  
+> >>> -	return strtoul(buf, NULL, 10);
+> >>> +	__pmd_page_size = strtoul(buf, NULL, 10);
+> >>> +
+> >>> +	return __pmd_page_size;
+> >>> +}
+> >>> +
+> >>> +uint64_t pmd_page_shift(void)
+> >>> +{
+> >>> +	if (__pmd_page_shift)
+> >>> +		return __pmd_page_shift;
+> >>> +
+> >>> +	if (!__pmd_page_size)
+> >>> +		__pmd_page_size = read_pmd_pagesize();
+> >>> +
+> >>> +	if (!__pmd_page_size)
+> >>> +		return 0;
+> >>> +
+> >>> +	__pmd_page_shift = (ffsl(__pmd_page_size) - 1);
+> >>> +
+> >>> +	return __pmd_page_shift;
+> >>>  }
+> >> The interface is a bit inconsistent.
+> >>
+> >> read_pmd_pagesize() vs. pmd_page_shift().
+> >>
+> >> Consider renaming read_pmd_pagesize() to pmd_pagesize() in a cleanup patch.
+> > 
+> > Okay.
+> > 
+> >> ... or (better?) adding a size_to_shift() helper instead?
+> >>
+> >> I think most places that want the shift also want the size.
+> >>
+> >> So this can just be
+> >>
+> >> const uint64_t hpage_size = read_pmd_pagesize();
+> >> const uint64_t hpage_shift = size_to_shift(hpage_size);
+> >>
+> >>
+> >> In size_to_shift(), you can just handle
+> >>
+> >> if (size == 0)
+> >> 	return 0;
+> > 
+> > Hmm, most of tests care mainly two sizes and shiftes --
+> > psize()/pshift() and pmd_pagesize() and pmd_pageshift().
+> > 
+> > Would it be better to keep both kinda of helpers and
+> > add size_to_shift() helper for nother hpage size then?
 > 
-> 	p.uffd_delay = strtoul(optarg, NULL, 0);
-> 	TEST_ASSERT(p.uffd_delay >= 0, "A negative UFFD delay is not supported.");
+> Works for me as well. As long as it's consistent.
 > 
-> p.uffd_delay is a useconds_t, which is an unsigned type, so the comparison
-> is always true and the assertion can never fire. GCC points this out with
-> -Wtype-limits, which is enabled by -Wextra.
-> 
-> As a result, "-d -1" is accepted and converted to a very large unsigned
-> delay, causing each demand paging fault to sleep for an unexpectedly long
-> time in usleep() instead of rejecting the argument up front. The return
-> value of strtoul() is not validated either, so a non-numeric argument
-> such as "-d abc" is silently treated as a zero delay.
-> 
-> Use atoi_non_negative() instead. It rejects negative values, unparsable
-> input, and trailing garbage. It is already used a few lines below for -v,
-> and hexadecimal input keeps working because atoi_paranoid() also passes a
-> base of 0 to strtol().
-> 
-> Fixes: 0119cb365c93 ("KVM: selftests: Add configurable demand paging delay")
-> Signed-off-by: Chaithanya Lagisetty <nagachaithanya9911@gmail.com>
-> ---
->  tools/testing/selftests/kvm/demand_paging_test.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-> index f8b3d0b68830..619a0b2be45c 100644
-> --- a/tools/testing/selftests/kvm/demand_paging_test.c
-> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-> @@ -297,8 +297,7 @@ int main(int argc, char *argv[])
->  			p.single_uffd = true;
->  			break;
->  		case 'd':
-> -			p.uffd_delay = strtoul(optarg, NULL, 0);
-> -			TEST_ASSERT(p.uffd_delay >= 0, "A negative UFFD delay is not supported.");
-> +			p.uffd_delay = atoi_non_negative("UFFD delay", optarg);
->  			break;
->  		case 'b':
->  			guest_percpu_mem_size = parse_size(optarg);
-> -- 
-> 2.43.0
-> 
+> Maybe even pmd_psize() and pmd_pshift() to match our custom psize() and pshift()?
 
-With this patch applied, the test fails as intended:
+Yeap. That would be better. I'll repsin soon.
 
-# ./demand_paging_test -d -1
-Random seed: 0x236c0ed9
-
-==== Test Assertion Failure ====
-  include/test_util.h:236: num >= 0
-  pid=3674565 tid=3674565 errno=0 - Success
-     1  0x00000000004010d0: atoi_non_negative at test_util.h:236
-     2   (inlined by) main at demand_paging_test.c:300
-     3  0x00007f907d9f05b4: ?? ??:0
-     4  0x00007f907d9f0667: ?? ??:0
-     5  0x0000000000401374: _start at ??:?
-  UFFD delay must be non-negative, got '-1'
-
-
-Tested-by: Gautam Menghani <gautam@linux.ibm.com>
-Reviewed-by: Gautam Menghani <gautam@linux.ibm.com>
+-- 
+Sincerely,
+Yeoreum Yun
