@@ -1,190 +1,252 @@
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-215.mta0.migadu.com [91.218.175.215])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63633D3D18;
-	Wed,  9 Sep 2026 19:51:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11FCC3E49D1
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 20:07:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.215
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788983506; cv=none; b=FjiMNHU6rbRbB7BD/4YEEnDcVzyxZMbCVD9RlbdcQRpskPIcCQYAIJqsQvWxeMCzHaGJw+VEzIxc1PQgPfNpTPh/E+l55b7f1TqXupHDpjJQA2hEuvnLzvXBIl9jQYudz7iIo6xp3D2RnWRzstzlNCH77iBiAtS7JO8popL73Lw=
+	t=1788984429; cv=none; b=esL7iWcq98WmN5cR72/pOsboGnxQ0+7WoxfwG210tFH6sk/k2p8EKQBi5dNy44LQkng/17oGix5zY88Yi9uM7xnKOjuzp9zMse6/rdYbz/85NuZdgIrqGxjATwyNK/IRgcQBrA7hrhrYDJ4ORYZ4inJHnEK5j8Qw+AMnvQ9U4dA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788983506; c=relaxed/simple;
-	bh=bb5BYgKa09OW6lhhuFRqBlw0NXbM/PKnsSXjhp92tdg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HHA1u1R45oLv2Tg171QWC/092oUpfL/svBk4LG5mLjF4M501Q1nUHB7mNivdFUHYPSDW+9+0LQS9wgpM8Sr4Ghktzllocs5lhIqVSQni2t/TWZ+d1pU8dByNfxt2fMuqBudrDtnuxhElqmV2HtAqKoikbCuCBJJ5hDoqKj0J+Ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=iKkzZ0GA; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VCUdXAc5; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
+	s=arc-20240116; t=1788984429; c=relaxed/simple;
+	bh=OiDfq17QAZlSyhJb6xUWTPzHFTNiVBbD2d9LR/t1Ipc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tNdE3pASGL6X1xDMixMsdgcGdDuevwkp4t85hKrMWjKM3NuGMZdGlQEdhewPr82/YSFg/e2zwco3bG+0XA0MKpnaVGTLiz/NYgAbRY74XeMme1i+mYyna6/4DVYR45g0WqphqXU1OVbBa272JV1nefI1ui9HFfqGmQRAb2yAkbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PCRRj0kW; arc=none smtp.client-ip=91.218.175.215
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b="iKkzZ0GA";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VCUdXAc5"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 8418D1D00067;
-	Wed,  9 Sep 2026 15:51:42 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Wed, 09 Sep 2026 15:51:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1788983502;
-	 x=1789069902; bh=zoVUj5F+8FVqGG22Q1uCXrQ58eGyDtPNSPzvgjqr55k=; b=
-	iKkzZ0GAa0tVpMJLSOh2lOPXkLWsxrh9U2OTl1ZMajYtCfbsgJrXtRs6zjDS0ZoN
-	7z5ESUatQacKIHQDngIe9sOlInIwpiCQiesR/2hnEN5rAkVh1PGEFPWxnjQTu5Ah
-	sRgVTXWbtqh3WuLDcSoMiiorPg8Wh19sLIq5PJTqarzTdVX7RGl8O8XvEAg1uuXX
-	DcKcdhV9OlOpgFuEMdqaChlIRXJI0dLBj41fsIqxyoibNQibMgQWPfEJrJIti9xu
-	vAKd1FpIa6wC0AxbXzMbPF1FLAX4q5laDy1G1sbl8AEgn5YASaRssx6+VYhUreNT
-	BpcZlFnr6FDh93dkn6JR+w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1788983502; x=
-	1789069902; bh=zoVUj5F+8FVqGG22Q1uCXrQ58eGyDtPNSPzvgjqr55k=; b=V
-	CUdXAc5+khVbRGY1tm6UYOBJwBgGaRGM7QxpkVBV1sdXkVTLahHtGJGZ/Qmi2C1s
-	H3wUWl1Se5qlu7NrUw2/jkFiudcHaEslxcZS8q7f/ML37mLUGPNRqS63s0JZV46O
-	Qs9vMKKG+iz8+Rncn8L4+1Ywl869zl4Qb4cyARJzGuc20+sRfa2VYjzOxr095Ki0
-	XXrJ+TZBW7fHgvyELdPAXB/H+bhW7F3LwmMBwU4H7/PZPVujzXnPkbevK7HK3nRm
-	HBy/8sseMuEpMiEfghz3TEo+KEAiDNfxHkAg+fPjP3Y5LYdI8krZaaegtCdoxJCd
-	ePWoRmX7v99xEA2dXk46g==
-X-ME-Sender: <xms:zrihajOIlwLs8-bHHEl3qXkpSS3QMu3LYRAzvKZ-__hFu-aLOTUoUQ>
-    <xme:zrihamLgWMqh4_DxfEG8PDGzonXpeMElTayjopw_SXs_NaGQ_Ef-LgXrUz1iVAK_i
-    REDHXYHbFkM6FEYcDYShkLRxmr9nTrgEqIgKhiAHMHNxjb7elmpBPGc>
-X-ME-Received: <xmr:zrihat1XQmGFK-INhyeBArImlPDqhjDFdR9aKCkp_CF4-6qQNjCEUALGQm94njbT>
-X-ME-Proxy-Cause: dmFkZTErJXQT89xdNSpbfG162S52xmEnv9hkTSgvQMpTW0DT7OWpo1xulYU1WJr+H/t/6c
-    YxU8mCV7tzNTPWCtrK+C0aefe9D+fIiG8Zwe3e5360Kmzo6PwgnF4zLkhYIqtiFcLHNz8k
-    8kG/AdTFqH4mn1i25MWHJD6Y7FW4VS4FnquBG5AbU1b3tpmwsfwuSnobwaN1Xelf708tGu
-    KesOufeEfTmdIFrM5T122D4yfOMT2EDLVwpbyJSpx2lsVxxQ6YIaPR83tP7tJog5tFdC3x
-    3PPTA3Dgs+0xXrQrjzcZsH/7nbizYjypIVUt9+dLhSQqBsJNdG+VtoaGxFw6+6Yqq+Abit
-    T7QBif/3DwoCkHLfp8iQFZzwHyixolWPR9ssTSv60r72xXIvGY1KF0jZ5A5UST654bSvYf
-    zknMdCeL8/rsARrlz631r4oTVDutf9kvWSjxR3GYXJEW/yuQ1FRBwYUBTc/SDs3ByKt5YW
-    lNxrGbrjtY81iSjb6e4Mpq0wAyQY3TFsRjmX8PZZy0fxXZoXkhDSXMvPJNsrd88Q9897qa
-    yW5ihAsgCsI2pli9iVSnnkVvWuhG+rwQw/SDpK7dkpvA5XjrYQHZCfTmxyLRlPqpE7+8ZX
-    uv1GJ6pHixu5VYXnddqI0FVGeyBGkxQ/jYdB3EDsTbzMaUUJl4JARkPhngDw
-X-ME-Proxy: <xmx:zrihaiV9ZAwjNnuLAdq-z_J4Jrxj89qbg6asZhQ5dk83ZwjabvqwDg>
-    <xmx:zrihanPKovp2jKiGUZ2NQ1pZgZr-HsBR5dPRwLa9vCLs2M8j3-GilA>
-    <xmx:zrihat1XHEy_YV1bnc-Yk-DbXJ2nKCczj3A2oIadMwqzidT3CamPyg>
-    <xmx:zrihajQSiVSxBlG-9ug7AIE1KlFUB8TxVpu0ItJhvV9kvhCgdNmtbw>
-    <xmx:zrihai2LQNuTNJJK6GDiqfASbC4vtyRk8g8Q90Wuo4ANhZ0dcDnAuIP6>
-Feedback-ID: i80b64ba7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Sep 2026 15:51:41 -0400 (EDT)
-From: Juanlu Herrero <juanlu@fastmail.com>
-Date: Wed, 09 Sep 2026 14:51:28 -0500
-Subject: [PATCH net-next v7 6/6] selftests: net: add rss_multiqueue test
- variant to iou-zcrx
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PCRRj0kW"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=OiDfq17QAZlSyhJb6xUWTPzHFTNiVBbD2d9LR/t1Ipc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788984424; v=1; x=1789589224;
+ b=PCRRj0kWKKwpfIqAaP/+SG1CoXIuaUgKbVCd1lRHj73sXblIwBE157D2INvF3Ju1BzVjWhvt
+ Eo5A/s3fQ0LCczJrksv3JEUsx6fWX+4nUcfHCz/26RpZXitiZ+7MRCm5mpzM1SzB+EIfMUb4i1y
+ bsCEOuQwZ1sLa/GH+6tCsqss=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 04bb54aa1bc2000a;
+	Wed, 09 Sep 2026 20:07:04 +0000
+X-Mizu-Trace-ID: 04bb54aa1bc2000a
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <d8d4de31-79ee-425f-8759-92a1ebfa9d0a@linux.dev>
+Date: Wed, 9 Sep 2026 13:06:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v9 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+To: Hui Zhu <hui.zhu@linux.dev>, Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Barry Song <baohua@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+References: <cover.1788857915.git.zhuhui@kylinos.cn>
+ <06452a0d7722c92a38fdfd117954d244c3e52d0e.1788857915.git.zhuhui@kylinos.cn>
+Content-Language: en-US
+From: JP Kobryn <jp.kobryn@linux.dev>
+In-Reply-To: <06452a0d7722c92a38fdfd117954d244c3e52d0e.1788857915.git.zhuhui@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260909-iou-zcrx-v7-6-6b5d48a2a922@fastmail.com>
-References: <20260909-iou-zcrx-v7-0-6b5d48a2a922@fastmail.com>
-In-Reply-To: <20260909-iou-zcrx-v7-0-6b5d48a2a922@fastmail.com>
-To: dw@davidwei.uk, netdev@vger.kernel.org
-Cc: io-uring@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com, 
- pabeni@redhat.com, shuah@kernel.org, juanlu@fastmail.com
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3662; i=juanlu@fastmail.com;
- h=from:subject:message-id; bh=bb5BYgKa09OW6lhhuFRqBlw0NXbM/PKnsSXjhp92tdg=;
- b=owGbwMvMwCWW/91SPSt7w03G02pJDFkLdxx9oXFTMcwwr7cl9K1X3hIDtc89t/1UTrAn2ybtX
- X7z5csXHRNZGMS4GCzFFFk8Xoq0aEytaLyrGiEIM4eVCWSItEgDAxCwMPDlJuaVGukY6ZlqG+oZ
- GukY6BgzcHEKwFRL1TAyLH3RE96s6iDLuUyvcLrBX+UZD6N/ri3jt1p4tn/Z6ZY5powMWz6cbzw
- muPPF4gkhatcWyjMYt3zud81eZLJu09IV4u22TAA=
-X-Developer-Key: i=juanlu@fastmail.com; a=openpgp;
- fpr=48E9148428957881DD2558116FF739276A6BB0D9
 
-Add a rss_multiqueue Python test variant that exercises multi-queue
-zero-copy receive on a single listening socket.
+On 9/8/26 2:11 AM, Hui Zhu wrote:
+> From: Hui Zhu <zhuhui@kylinos.cn>
+> 
+> BPF programs can observe memory pressure on a cgroup (e.g. refault
+> stats via bpf_mem_cgroup_page_state()), but cannot act on it:
+> triggering reclaim on a chosen cgroup requires writing to
+> memory.reclaim, which BPF cannot do. Add bpf_proactive_reclaim(),
+> a sleepable kfunc which performs one proactive reclaim pass on a
+> given memory cgroup, similar to a write to memory.reclaim but
+> without retrying until the target is reached, so that when and how
+> hard to reclaim is BPF policy rather than hard-coded thresholds.
+> 
+> Since some bpf program types may be invoked while holding fs locks,
+> limit the kfunc to BPF_PROG_TYPE_SYSCALL only, to avoid deadlocking
+> in filesystem shrinkers on the reclaim path. A SYSCALL program can
+> invoke the kfunc directly, or asynchronously from its bpf_wq or
+> task_work callbacks, which run in process context and keep the> SYSCALL program type.
+> 
+> The reclaim target of a single call is capped at MEMCG_CHARGE_BATCH,
+> following the precedent of high_work_func(), the memory.high
+> workqueue fallback, which bounds each reclaim request the same way
+> and uses one work item per memcg. 
 
-Assisted-by: Claude:claude-opus-4-8
-Reviewed-by: David Wei <dw@davidwei.uk>
-Signed-off-by: Juanlu Herrero <juanlu@fastmail.com>
----
- tools/testing/selftests/drivers/net/hw/iou-zcrx.py | 50 +++++++++++++++++++++-
- 1 file changed, 48 insertions(+), 2 deletions(-)
+You can end the sentence here at "fallback" and remove the rest.
 
-diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-index b7a225fe4bea..c833535d8a03 100755
---- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-+++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-@@ -30,6 +30,13 @@ def create_rss_ctx(cfg):
-     return int(values)
- 
- 
-+def create_rss_ctx_multi(cfg, start, count):
-+    """Create an RSS context spanning count queues from start, return its ID."""
-+    output = ethtool(f"-X {cfg.ifname} context new start {start} equal {count}").stdout
-+    values = re.search(r'New RSS context is (\d+)', output).group(1)
-+    return int(values)
-+
-+
- def set_flow_rule(cfg):
-     output = ethtool(f"-N {cfg.ifname} flow-type tcp6 dst-port {cfg.port} action {cfg.target}").stdout
-     values = re.search(r'ID (\d+)', output).group(1)
-@@ -127,17 +134,56 @@ def _require_ntuple(cfg):
-         defer(ethtool, f"-K {cfg.ifname} ntuple-filters off")
- 
- 
-+def rss_multiqueue(cfg):
-+    """Steer the test flow to a multi-queue RSS context for multi-thread zcrx."""
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    channels = channels['combined-count']
-+    if channels < 3:
-+        raise KsftSkipEx('Test requires NETIF with at least 3 combined channels')
-+
-+    rings = cfg.ethnl.rings_get({'header': {'dev-index': cfg.ifindex}})
-+    rx_rings = rings['rx']
-+    hds_thresh = rings.get('hds-thresh', 0)
-+
-+    cfg.ethnl.rings_set({'header': {'dev-index': cfg.ifindex},
-+                         'tcp-data-split': 'enabled',
-+                         'hds-thresh': 0,
-+                         'rx': 64})
-+    defer(cfg.ethnl.rings_set, {'header': {'dev-index': cfg.ifindex},
-+                                'tcp-data-split': 'unknown',
-+                                'hds-thresh': hds_thresh,
-+                                'rx': rx_rings})
-+    defer(mp_clear_wait, cfg)
-+
-+    cfg.num_threads = 2
-+    cfg.target = channels - cfg.num_threads
-+    ethtool(f"-X {cfg.ifname} equal {cfg.target}")
-+    defer(ethtool, f"-X {cfg.ifname} default")
-+
-+    rss_ctx_id = create_rss_ctx_multi(cfg, cfg.target, cfg.num_threads)
-+    defer(ethtool, f"-X {cfg.ifname} delete context {rss_ctx_id}")
-+
-+    flow_rule_id = set_flow_rule_rss(cfg, rss_ctx_id)
-+    defer(ethtool, f"-N {cfg.ifname} delete {flow_rule_id}")
-+
-+
- @ksft_variants([
-     KsftNamedVariant("single", single),
-     KsftNamedVariant("rss", rss),
-+    KsftNamedVariant("rss_multiqueue", rss_multiqueue),
- ])
- def test_zcrx(cfg, setup) -> None:
-     cfg.require_ipver('6')
-     _require_ntuple(cfg)
- 
-+    cfg.num_threads = 1
-+
-     setup(cfg)
--    rx_cmd = f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} -q {cfg.target}"
--    tx_cmd = f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {cfg.port} -l 12840"
-+
-+    rx_cmd = (f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} "
-+              f"-q {cfg.target} -t {cfg.num_threads}")
-+    tx_cmd = (f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {cfg.port} "
-+              f"-l 12840 -t {cfg.num_threads}")
-     with bkg(rx_cmd, exit_wait=True):
-         wait_port_listen(cfg.port, proto="tcp")
-         cmd(tx_cmd, host=cfg.remote)
+> Note that only the reclaim target
+> is capped: the actual scanning work and its duration are not
+> bounded. Reclaiming more than one batch is left to the BPF program
+> rather than enforced by the kfunc: with one call per bpf_wq callback
+> and the same work item requeued for the next batch, the program can
+> also stop submitting batches in between, e.g. once the target cgroup
+> is dying.>
+> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> ---
+>   mm/bpf_memcontrol.c | 88 ++++++++++++++++++++++++++++++++++++++++++++-
+>   1 file changed, 87 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+> index 716df49d7647..2817c6db9a5d 100644
+> --- a/mm/bpf_memcontrol.c
+> +++ b/mm/bpf_memcontrol.c
+> @@ -6,8 +6,11 @@
+>    */
+>   
+>   #include <linux/memcontrol.h>
+> +#include <linux/swap.h>
 
--- 
-2.50.1
+You can drop this since internal.h below pulls it in.
+
+>   #include <linux/bpf.h>
+>   
+> +#include "internal.h"
+> +
+>   __bpf_kfunc_start_defs();
+>   
+>   /**
+> @@ -159,6 +162,73 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
+>   	mem_cgroup_flush_stats(memcg);
+>   }
+>   
+> +/**
+> + * bpf_proactive_reclaim - proactively reclaim memory from a memory
+> + *                         cgroup
+> + * @memcg: the target memory cgroup to reclaim from
+> + * @size:  the amount of memory to reclaim, in bytes, clamped to
+> + *         MEMCG_CHARGE_BATCH (64 pages)
+> + * @swappiness: the reclaim swappiness, in the range [0, 201] where 201
+
+It's awkward to point users to a numeric range and one magic number.
+What if you changed the associated macros to an enum:
+
+enum {
+   MIN_SWAPPINESS = 0,
+   MAX_SWAPPINESS = 200,
+   SWAPPINESS_ANON_ONLY = MAX_SWAPPINESS + 1,
+};
+
+Then these would be available in vmlinux.h and you could name them in
+the comment above.
+
+> + *         means anon-only reclaim; a negative value means the memcg's
+> + *         own swappiness is used
+
+You reject anything less than -1 below. This should say "-1" instead of
+"a negative value".
+
+> + *
+> + * Trigger one proactive reclaim pass on @memcg, similar to a write to
+> + * memory.reclaim, but without retrying until @size is reached.
+> + *
+> + * Only the reclaim target is capped: @size is clamped to
+> + * MEMCG_CHARGE_BATCH, following the precedent of high_work_func(),
+> + * the memory.high workqueue fallback, which bounds each reclaim
+> + * request the same way. The actual scanning work and its duration
+> + * are not bounded. To reclaim more, call this kfunc repeatedly
+> + * instead of passing a larger @size.
+> + *
+> + * The kfunc can be called directly from a BPF_PROG_TYPE_SYSCALL
+> + * program, synchronously in the context of the thread running the
+> + * program, or from the bpf_wq and task_work callbacks of a SYSCALL
+> + * program, which run in process context and keep the SYSCALL program
+> + * type. It is registered for BPF_PROG_TYPE_SYSCALL only, because
+> + * generic sleepable programs may run with filesystem locks held or
+> + * in NOFS/NOIO contexts, where the reclaim path could deadlock on
+> + * those locks via filesystem shrinkers.
+> + *
+> + * For asynchronous reclaim of more than one batch, driving the
+> + * reclaim from a bpf_wq callback is recommended: call this kfunc
+> + * once per callback and requeue the same work item for the next
+> + * batch, instead of looping inside the callback and monopolizing a
+> + * workqueue worker, and give each target memcg its own work item,
+> + * as high_work_func() does with one work item per memcg. Whether
+> + * to submit the next batch is up to the BPF program, which can stop
+> + * at any point, e.g. once the target cgroup is dying.
+> + *
+> + * Return: The amount of memory reclaimed, in bytes, or 0 if @size is
+> + * smaller than a page, or (unsigned long)-1 if @swappiness is out of
+> + * range.
+> + */
+> +__bpf_kfunc unsigned long bpf_proactive_reclaim(struct mem_cgroup *memcg,
+> +						unsigned long size,
+> +						int swappiness)
+> +{
+> +	unsigned long nr_reclaimed;
+> +	unsigned long nr_pages;
+> +
+> +	if (swappiness < -1 || swappiness > SWAPPINESS_ANON_ONLY)
+> +		return (unsigned long)-1;
+> +
+> +	if (size < PAGE_SIZE)
+> +		return 0;
+> +
+> +	nr_pages = min(size / PAGE_SIZE, (unsigned long)MEMCG_CHARGE_BATCH);
+> +
+> +	nr_reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages,
+> +						    GFP_KERNEL,
+> +						    MEMCG_RECLAIM_MAY_SWAP |
+> +						    MEMCG_RECLAIM_PROACTIVE,
+> +						    swappiness < 0 ? NULL :
+> +								     &swappiness);
+
+It would read more consistently if it was "swappiness == -1" here, since
+you reject less than -1 early on.
+
+> +
+> +	return nr_reclaimed * PAGE_SIZE;
+> +}
+> +
+>   __bpf_kfunc_end_defs();
+>   
+>   BTF_KFUNCS_START(bpf_memcontrol_kfuncs)
+> @@ -174,19 +244,35 @@ BTF_ID_FLAGS(func, bpf_mem_cgroup_flush_stats, KF_SLEEPABLE)
+>   
+>   BTF_KFUNCS_END(bpf_memcontrol_kfuncs)
+>   
+> +BTF_KFUNCS_START(bpf_memcontrol_reclaim_kfuncs)
+> +BTF_ID_FLAGS(func, bpf_proactive_reclaim, KF_SLEEPABLE)
+> +BTF_KFUNCS_END(bpf_memcontrol_reclaim_kfuncs)
+> +
+>   static const struct btf_kfunc_id_set bpf_memcontrol_kfunc_set = {
+>   	.owner          = THIS_MODULE,
+>   	.set            = &bpf_memcontrol_kfuncs,
+>   };
+>   
+> +static const struct btf_kfunc_id_set bpf_memcontrol_reclaim_kfunc_set = {
+> +	.owner          = THIS_MODULE,
+> +	.set            = &bpf_memcontrol_reclaim_kfuncs,
+> +};
+> +
+>   static int __init bpf_memcontrol_init(void)
+>   {
+>   	int err;
+>   
+>   	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
+>   					&bpf_memcontrol_kfunc_set);
+> -	if (err)
+> +	if (err) {
+>   		pr_warn("error while registering bpf memcontrol kfuncs: %d", err);
+> +		return err;
+> +	}
+> +
+> +	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
+> +					&bpf_memcontrol_reclaim_kfunc_set);
+> +	if (err)
+> +		pr_warn("error registering bpf reclaim kfuncs: %d", err);
+>   
+>   	return err;
+>   }
 
