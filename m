@@ -1,143 +1,97 @@
-Received: from mta1.migadu.com (out-91.mta1.migadu.com [95.215.58.91])
+Received: from mta1.migadu.com (out-138.mta1.migadu.com [95.215.58.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F963BFACA
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 06:45:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.91
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F136B3B42F1
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 07:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788936329; cv=none; b=gm3s6KFf0b4hquREhQ/2tXgyh7ifA1bFxT52uHijfR9Yp+o0F2ehH9d32XAJA6hl2zCFhtBpZOjlW36Ngmj+Imo5Q3ICV7xj/iUMn5O20YfDuIJRloxKij3o2OGURQHwdjiswxgOiLRmLi7S+azk1W6CT5Lg0pGX+1QrVL9me0Q=
+	t=1788937449; cv=none; b=SGWRIANDvdHARG+IT8oXM4jI8C0xbDfK8x6G1Hqiuvz4MUktiIrLL2tM7D1O+c4KCegVRO7CzFnYBTt3ndj7hB5BK8zwrMkO9SwDUwq6nh2gkVj1GMi7RBZBEGV1t/Kz2U3PTAslSe1auFfNXJ+Qw1GqudVIrA3imPiBSfF7Uh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788936329; c=relaxed/simple;
-	bh=oTBpNY7hw7Wf7aDEdyGbqp7ST1teTAUXIET1OkGaVu4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XXTJB1/sE2U7Nxu1+dPiizdwwoCIRTyCaPVaFUMnnMa9ns40MZ1SZcaHcO/F2Q6o0ZnDGCzdkN4UnXrWgWJoP9AbzciCOikmMUGmhTeoTgxhEFJDAj1G8erCif7kplyfXVk3JqHl5/Vb9U+1RMQaQBwikkc6EqCRO2eCjpGe65c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=j3eVYzJR; arc=none smtp.client-ip=95.215.58.91
+	s=arc-20240116; t=1788937449; c=relaxed/simple;
+	bh=SUM0U1/OvZRncgMDqenXn6uLiikLIm64tbFJCtzaLpg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lzmLjXF+klCbliHx8k2c9cZxA9CXiXLg9fXj7j1iY0ZnOdIIiu95BCHyzYTXeeAc7m8qGwxlb06qvLFr+dAjDMwl0sPeI5jHYPgy7hv/7StZGill4g/MRjle8o5mvcnY0q3f+aluwpUwFy3jTeeTRvVSeluJnNzDF8GU7rBxj9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jazioOe9; arc=none smtp.client-ip=95.215.58.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="j3eVYzJR"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jazioOe9"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=oTBpNY7hw7Wf7aDEdyGbqp7ST1teTAUXIET1OkGaVu4=;
+DKIM-Signature: a=rsa-sha256; bh=SUM0U1/OvZRncgMDqenXn6uLiikLIm64tbFJCtzaLpg=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788936323; v=1; x=1789541123;
- b=j3eVYzJRDP4GuwDpk1yAzHJdHeOy9WgKtiCl6wojdnOYSSQYKj74Ze4IE8uZMBTffhl0yVEg
- 0g76LWdQpAcp1yt1dkPOsXcAIBwRB6+Jj/p/QLt0UmKmLZdtwSgMtUR3G1lQ5vgQmgMbqfwYwcT
- GAu5tQEiBO8r9XugGs76VhSs=
+ t=1788937442; v=1; x=1789542242;
+ b=jazioOe9RWq13qIxmcMFnqA5IPae3CuIThDS0TcFTSS8hESDMsEi8vpgZqwx/Ri4/QCDwbd9
+ KiJClUTG7uuVeh4x/pOcJtyzAkG3Pi5uHVSHOzO2H7QCGhtHxE55Ke7fczrczMqYZ+3RuCIYY95
+ s1VDXlb4k9qatoZ1/gjMLqJg=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ed883708a2057349;
-	Wed, 09 Sep 2026 06:45:19 +0000
-X-Mizu-Trace-ID: ed883708a2057349
+Received: by smtp.migadu.com with ESMTPS id 54304dfd1b75a60a;
+	Wed, 09 Sep 2026 07:04:02 +0000
+X-Mizu-Trace-ID: 54304dfd1b75a60a
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <7d47a955-eee3-4a93-bf8d-210eefa59f0a@linux.dev>
-Date: Wed, 9 Sep 2026 14:45:15 +0800
+From: Xuanqiang Luo <xuanqiang.luo@linux.dev>
+To: netdev@vger.kernel.org
+Cc: jhs@mojatatu.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+Subject: [PATCH net v1 0/2] net/sched: fix action batch failure cleanup
+Date: Wed,  9 Sep 2026 15:03:34 +0800
+Message-ID: <20260909070336.32979-1-xuanqiang.luo@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: fix ptrace PEEKDATA check in memfd_secret
- test
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: akpm@linux-foundation.org, david@kernel.org, liam@infradead.org,
- vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
- shuah@kernel.org, James.Bottomley@hansenpartnership.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Hongfu Li <lihongfu@kylinos.cn>
-References: <20260908025111.34562-1-hongfu.li@linux.dev>
- <ap_N7u5DbIk4FEeZ@gremlin>
-From: Hongfu Li <hongfu.li@linux.dev>
-In-Reply-To: <ap_N7u5DbIk4FEeZ@gremlin>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+From: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
 
-在 2026/9/8 17:03, Lorenzo Stoakes (ARM) 写道:
-> On Tue, Sep 08, 2026 at 10:51:11AM +0800, Hongfu Li wrote:
->> From: Hongfu Li <lihongfu@kylinos.cn>
->>
->> try_ptrace() treats PTRACE_PEEKDATA return value as a boolean
->> check. A successful read returns non-zero data (memory filled with
->> 0x55), causing the test to incorrectly report PASS when secret memory
->> protection is broken.
->>
->> Check the return value against -1 instead. The test should only pass
->> when PTRACE_PEEKDATA fails, which means secret memory protection works.
->>
->> Fixes: 76fe17ef588a ("secretmem: test: add basic selftest for memfd_secret(2)")
-> Not sure if a fixes is warranted? But I also definitely don't think a backport
-> is in any case in case :P
->
->> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
-> The change LGTM afaict. Though I think a comment should be added. With that
-> addressed:
->
-> Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
->
->> ---
->>   tools/testing/selftests/mm/memfd_secret.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/mm/memfd_secret.c b/tools/testing/selftests/mm/memfd_secret.c
->> index c55d84c5e613..dd08a3a1ef14 100644
->> --- a/tools/testing/selftests/mm/memfd_secret.c
->> +++ b/tools/testing/selftests/mm/memfd_secret.c
->> @@ -145,7 +145,7 @@ static void try_ptrace(int fd, int pipefd[2])
->>   		exit(KSFT_FAIL);
->>   	}
->>
->> -	if (ptrace(PTRACE_PEEKDATA, ppid, mem, 0))
->> +	if (ptrace(PTRACE_PEEKDATA, ppid, mem, 0) == -1)
->>   		exit(KSFT_PASS);
->  From https://man7.org/linux/man-pages/man2/ptrace.2.html#RETURN_VALUE :
->
->         On success, the PTRACE_PEEK* operations return the requested data
->         (but see NOTES)...
->
->         On error, all operations return -1, ...
->
->         ...
->
->         PTRACE_PEEKTEXT
->         PTRACE_PEEKDATA
->                Read a word at the address addr in the tracee's memory,
->                returning the word as the result of the ptrace() call.
->                Linux does not have separate text and data address spaces,
->                so these two operations are currently equivalent.  (data is
->                ignored; but see NOTES.)
->
-> OK so we expect this to fail as otherwise that'd be a violation of secretmem.
->
-> Feels like maybe we should add a comment to that effect? :)
+Failed batched RTM_NEWACTION requests can leak action references and
+reserved IDR indices when cleanup encounters a filter-bound action.
 
-Thanks for the review, and agreed on the comment: the test only passes
-when PEEKDATA fails, which is easy to misread, so I'll make that
-explicit in v2:
+Patch 1 fixes the failure cleanup.
 
---- a/tools/testing/selftests/mm/memfd_secret.c
-+++ b/tools/testing/selftests/mm/memfd_secret.c
-@@ -145,7 +145,8 @@ static void try_ptrace(int fd, int pipefd[2])
-          exit(KSFT_FAIL);
-      }
+Patch 2 adds tc-testing regression coverage.
 
--    if (ptrace(PTRACE_PEEKDATA, ppid, mem, 0))
-+    /* PEEKDATA on secret memory must fail, else protection is broken. */
-+    if (ptrace(PTRACE_PEEKDATA, ppid, mem, 0) == -1)
-          exit(KSFT_PASS);
+Failure reproduction (key output excerpts):
+
+  python3 tdc.py -f tc-tests/actions/gact-rollback.json
+
+not ok 1 e3b1 - Failed action batch releases a bound action reference
+	Could not match regex pattern. Verify command output:
+[...]
+	 index 1 ref 3 bind 1
+
+not ok 2 e3b2 - Failed action batch releases entries after a bound action
+	Command exited with 255, expected 0
+RTNETLINK answers: Resource temporarily unavailable
+We have an error talking to the kernel
+
+not ok 3 e3b3 - Failed action batch releases repeated references to a bound action
+	Could not match regex pattern. Verify command output:
+[...]
+	 index 1 ref 4 bind 1
+
+Xuanqiang Luo (2):
+  net/sched: act_api: release all action references on NEWACTION failure
+  selftests: tc-testing: test action batch failure cleanup
+
+ net/sched/act_api.c                           |  9 +--
+ .../tc-tests/actions/gact-rollback.json       | 78 +++++++++++++++++++
+ 2 files changed, 80 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/actions/gact-rollback.json
 
 
-I'll also drop the Fixes: tag in v2 since a backport is not intended.
-
->>   	exit(KSFT_FAIL);
->> --
->> 2.54.0
->>
->> --
->> Cheers, Lorenzo
-
+base-commit: a401a9d547c50ef34db1088cc1fb9a201a7af657
 -- 
-Best regards,
-Hongfu
+2.43.0
 
