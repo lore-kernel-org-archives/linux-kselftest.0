@@ -1,108 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B5737BE9C;
-	Wed,  9 Sep 2026 17:34:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFDFA38DC78
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 17:37:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788975290; cv=none; b=XJQkYEEzT2UcmUVOHVeyL0hOymIVhjTq3rYdIfzHC47sxSwPQHBT2ILx+7Zn1MTyLQ64tFXdacX9HRpRSQwSLJFaBNR00P8fGUYII45qr8I53Ri62HEWK2w1LIA3WhcSdtaAVdgcjCSHf6ZNWd9FR4uLwp47mc0rDtBJuTKJmzk=
+	t=1788975449; cv=none; b=Llm0byCAzzgVRUG2Q65cbX/35r6qF15jVzTxyHKaXMg6t8hpJ1c70unqxNOUaaR932Dai6ubNWfRlNhOdFTc8j86fMA1bJHoFwoghyVxbI2hyj2IfjN8DgDPdGjzvV3YiyA1pH6yWipBAEyN621t2AJl1lz8f5DlVAwOA1SCFgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788975290; c=relaxed/simple;
-	bh=Tr4VdxERUhV8HxN7l33149d0J+8lmjsaWAYgZOwAqAU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Om9XEbucsxHApDTTn4bjssb+5YAz7jMtILulm4lea6Ej2ojnIbEtNnlaqIe04JD7ZXshxVMIwcfOCDXQSih0pT0ogcxLD4aChBbKTGT8is8d4l9/pphmx1/0j9XBL5iXxh8yr7szLZkiCVjQ95UG300CDr5/cX1tFnI8ZOgmI+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mvn54j8v; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788975449; c=relaxed/simple;
+	bh=gllQAeSfz8wD6OjJWJ5fccK3rEpdJJl3i7TSr7C1Q/s=;
+	h=MIME-Version:In-Reply-To:References:Message-ID:Date:Subject:From:
+	 To:Cc:Content-Type; b=VBjm7Y9hT8DO+WkExgojFSvm0n7k4awlEscIYiUrCq7R2jrkZbpYsdn7aosWN1ywWrLupHUNFnPXg2G/MvzlmRRSVfLCagmsFo7K53HkHBdq7JEgJvNlgdvLrFnJyBAF7RJs/9su9dLYksKrpxVetMWALlfSGb8PhOZBtFu810g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gvuO/HSK; arc=none smtp.client-ip=209.85.216.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mvn54j8v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC471F000FF;
-	Wed,  9 Sep 2026 17:34:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788975288;
-	bh=bbP+LPyTIrLymnPyx3C1GnkLD9nptQPBrDixZ3LBabw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Mvn54j8v2Vk5488SjbF3KsiKDQLuwtMXnO46zlphInEv8sn11l2eqbEMu4hGV61G+
-	 cx+rU/PkBan/NnZqIXabA8qJDPBHOTUt039zgnfB9DB5cTmmHL63kqgkx1M+I4AVor
-	 W5EA9xrYavVIkzMe1fnHc4vuYGU0spJrfYPeIh/Q4akx3XndXio1JJ+ba+xny17Uiu
-	 hWrLtFldUpaAhx1FNLzW4iJFbOr4ftCV0dwi9WOGNLK3CmItekCctjwLeWKTMr5T0p
-	 GjU0ESvBW/Uofqzu8k4MvE9a33DRHUGq1007291ruVV8ntHY22Pckl1EMBDi5SR69n
-	 hdJb6e2ACj3eA==
-Date: Wed, 9 Sep 2026 18:34:40 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Sarthak Sharma <sarthak.sharma@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>, Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
-	Leon Romanovsky <leon@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Muhammad Usama Anjum <usama.anjum@arm.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 6/6] selftests/mm: add a GUP selftest
-Message-ID: <07dab220-8497-4eea-a4d2-b27a6e01eaf8@sirena.org.uk>
-References: <20260904123631.198697-1-sarthak.sharma@arm.com>
- <20260904123631.198697-7-sarthak.sharma@arm.com>
- <b0400430-c3b6-40d5-b476-49189b1cc292@kernel.org>
- <5e0b9365-cbac-4f2d-b915-85edf3093508@arm.com>
- <fadb8870-37f8-46f4-aefb-c21bc3a31e5b@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gvuO/HSK"
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-398dc3d8f0fso103133a91.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 10:37:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788975447; x=1789580247; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:date:message-id:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=gllQAeSfz8wD6OjJWJ5fccK3rEpdJJl3i7TSr7C1Q/s=;
+        b=gvuO/HSK/9iYthsXgB5bsFybkF6WCELlRFvN6jycMcN3Fzj24u00/ioZ36PivkUnmF
+         YqeZWV3FhohwZle0aIxlcdJvY7Qddu0t7uXPM+FVbPUs6c/k1InnWz0YOug5LJh8VQn2
+         Rsuuj8tWfVCzZmuQ/WqW5INOiplmvrTshXEVHrxkCk1cNplAxtsEmWTFbHA/dL/llN8q
+         xWy5GgYU2qr4HtR9SkqmHGB4Ci+PqgnvMbvp1FcsZDbMfRIMEADD0LbuvY3ceAp+NPXF
+         7zF16NTnAOX0SbUlBUAcWrbmqGN3uXCkJu6/Kg6hGIfq0EgJcja1gwoAKzkqDCIu8/lP
+         AIcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788975447; x=1789580247;
+        h=content-type:cc:to:from:subject:date:message-id:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=gllQAeSfz8wD6OjJWJ5fccK3rEpdJJl3i7TSr7C1Q/s=;
+        b=DdKji5gnUMtX6rxVTMM0acJM5dwf9DTYQNM9aRz3hwyApFbZwULEaIwIyjf7WdoA/x
+         6uI5a6nhg01Dsx0gD+XJwzdnnfWb99aFPswG/Tjo8lSNywTG9DGbCP4Iw7r0Z4Onsq+A
+         n60av5EV3Zx2Cbp7aVbCQU78R3/JPVn4lasbzxuQ/sW0DB/eLS+rBhxbzfdmXAZqhWCU
+         eBtejGgMP2PvivT+9TJifbfYD8FOFVN+eb34o+s31/mr+ewPDuoioN0rOphjGhDubjZb
+         ZIsN4ASc0pkvdC5G7Cux3P2ef/QnipdrqNbyABfaNZ30bPOEQebVfwsPHxfSVuOvTJv6
+         dtOA==
+X-Forwarded-Encrypted: i=1; AKwUvBwZ5P/6jpNSaSkDwBwdl27h/j9R5KlrdXawJCnorkgrB8hTOxKtPUFq0p8NKgY2ElGHQZyYVrrrCPQMIFY69F8=@vger.kernel.org
+X-Gm-Message-State: AFuF++kZcubThE7vtcUHoYZdEoacnx7IT7XxxyqdtgukKA4Oxmj3mPuS
+	WdwRMC5tIW0bVF2Lrh/6m8TCPqK3+LRakomyRTSvdi/FOQhSCZJXna7vUCxesNkRHCukRtHDPBb
+	Bi+BHokEra/0U5u1oQmgKEt3mUBLNuljWYA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="KmRz5TkdMlywIsKu"
-Content-Disposition: inline
-In-Reply-To: <fadb8870-37f8-46f4-aefb-c21bc3a31e5b@kernel.org>
-X-Cookie: Postage will be paid by addressee.
+X-Received: from pjbpm12.prod.google.com ([2002:a17:90b:3c4c:b0:396:702b:655e])
+ (user=rathodpriyank job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:37cf:b0:38f:657:6823 with SMTP id 98e67ed59e1d1-39d77aa1851mr284135a91.8.1788975447027;
+ Wed, 09 Sep 2026 10:37:27 -0700 (PDT)
+In-Reply-To: <202608260405.gHL6gOJf-lkp@intel.com>
+References: <20260824-pcie-lmt-v6-1-bab4ce233fa5@google.com> <202608260405.gHL6gOJf-lkp@intel.com>
+Message-ID: <18d3b7b0cfb6fcb1.3137322e31392e39302e313337.965f0.0000sendgmr@google.com>
+Date: Wed, 09 Sep 2026 17:37:27 +0000
+Subject: Re: [PATCH v6] PCI/pcie: Add PCIe Lane Margining at Receiver (LMR) support
+From: Priyank Rathod <rathodpriyank@google.com>
+To: Dan Carpenter <error27@gmail.com>
+Cc: linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Bjorn Helgaas <helgaas@kernel.org>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	lkp@intel.com, oe-kbuild-all@lists.linux.dev, oe-kbuild@lists.linux.dev, 
+	Shuah Khan <skhan@linuxfoundation.org>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Jonathan Corbet <corbet@lwn.net>, linux-kselftest@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Dan,
 
---KmRz5TkdMlywIsKu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks for the report!
 
-On Wed, Sep 09, 2026 at 07:03:59PM +0200, David Hildenbrand (Arm) wrote:
+This series has since been decomposed and restructured into a 3-patch stack,
+and this issue was already resolved in the v3 submission:
+https://lore.kernel.org/r/20260904-pcie-link-endpoints-v3-0-4b9a91bd4b35@google.com
 
-> >> 2) Move it to tools/mm/modules or sth like that.
-
-...
-
-> > This is an interesting change. We can keep this open for discussion
-> > here. If required, I can work on this in the future.
-
-> Yes, we should in general try moving all test modules out of the core.
-
-If you're working on this please make sure to take a look at how the
-various automated testing systems cope with modules built under
-selftests (personally I think everything I care about uses tuxmake
-builds, but there's other stuff out there).  I think the answer for a
-bunch of them right now is badly, but I didn't actually go check.
-
---KmRz5TkdMlywIsKu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqhmLAACgkQJNaLcl1U
-h9BPiQf8CxE4IrSgHLYMJ5iNReJ7dS+KVJWt7vcB5HxJrCVmeLsaDp9p6fQbIG3d
-P14bK7/go0oX5sScOruE0zw+rPFYr7OiSZMDNlYwLTXLVLz5PWrn9r25tDHWeRFS
-F3oy5EsiGyp2GxAzVqk7lqmr/AEQGc0M2aN6wcn7/EShuAb51IHocAegVLZe7EJG
-1jGpOfndf3DfYhtwc+u4QxnCDlyx2JEG8zhR6cPKyBUu0CxxsWmEC2rhyIFk5ruO
-r5qdgt/NJpq02ec5v+V7t1GD61kzGf3FkcnE74o1WeSQ3qOo388w0Z4lvpLZUZ1e
-gCvwOoLhVYcOoMtO5UCnK/cxc0pQyQ==
-=tKSS
------END PGP SIGNATURE-----
-
---KmRz5TkdMlywIsKu--
+Thanks,
+Priyank
