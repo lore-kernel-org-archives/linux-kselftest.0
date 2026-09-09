@@ -1,179 +1,148 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6C4576EA7
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 13:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B1D4C6803;
+	Wed,  9 Sep 2026 13:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788961070; cv=none; b=DeLj9r1Lw9lR2w49fM+4jPHfQXWwaJDp6zI3XI6lpmlpdfmDu2w+12e2J6EWhyKiXAxKzJLtzew2287sz1t6ebEvcC65k4ecg+7BPsI3XadMWDuhXAbHS7LEGtcOTQ4J6IYasrwH803TtHyvPvBHV/Xi9y7EJU5n4+AHsEuKCT8=
+	t=1788961790; cv=none; b=BDCc/kG9JOuO/P0t3q9UOiNdy329jLfL6xKa0DFjJXEOxzP9x8OW8iaWuiNPbysObAEmZqAOLLhvxDXrtINVjlaZuasLUYRWsJiFFW6sTok5r68QnXjVTQLrgqgN5UUoUYrlZXLg5VZZcQ+P27oWLwOPCYiTQG14pymd+0Q7GU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788961070; c=relaxed/simple;
-	bh=c8s69uF6RIIg/jHSdzxsYQ7S8UDIf9cWpe1rBQgZpJI=;
+	s=arc-20240116; t=1788961790; c=relaxed/simple;
+	bh=zk9O1VqUlvMmQYkzykXwrVyV+D3jQkGLOctPSxrK0jE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ewmFMCJmjASqQRNxsXSPnlC9P0BZAQ97EdUr+BuIBJWlu6NkASscNOfORnWap4xF9asPDyonjogOMi8YSFBhvMy7Nf6+dhj/IFTJShDy7JjDCpfwryAvSkafb8kaYVYQ5QizFrO9Toasjv738e4fDV2WUp5Mqjb4zG9TsBv8RpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=ikNPSpOT; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=ItYtpZz7P8Hb+jvvLCyPNSPlKuXRWtyTVGDSMCunQBy70+I2BsE/UydoRRgvLuF9C4p288YFaJk/NGQls6DIllONNtgHJEmg5+eiYBAclJQ47e4gujrkDg4OrAgwZCA9VX37f1G2eaczTm3VWo+GLITl8sd1K5ywmTZ3UVIUKXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=STuk0Q4p; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="ikNPSpOT"
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DC3A63F91E
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 13:37:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1788961064;
-	bh=wrjcPeS70hvY/2jCIpdeC3QpRdoxkk0IP/UxQtFlPx4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:In-Reply-To;
-	b=ikNPSpOTBiWLUaQDtYVCdFKvB99c1QTWQXjtUxgIXdB0siNCT39pSZmULUKpussqx
-	 FPZ4GMEtEkOClCEz7KO3BN4WnzvXXl9pqx+pnSViXl8EJ+aaXcW7DabU7jmonFN6RZ
-	 hlzW3P+zGYgvQqsL1R56HVIUumdiH21iMnyv0sOzPdGpqMg5dV4an08mulOGsMzNMO
-	 ZnrY+HMPGisB2L5//smE3YldTOvLhNbJWPJw2njpVxpID3anhOa+UCLsryWdCkRxcj
-	 RJHBhQcv5gvr03m3i9G/13iUmY9Bq63ICFtlmSjPM6ylFxyigWvu+N6yJH7BXH1tcN
-	 NRfRivoDumrouxtk6tXa9JNLutY/jAXieUIUePmwKRYj5TrQi9MLVoZ/jZDNMztHhx
-	 iIkRod6wX7FWcCC7R+poNLKdKYHTAJ5X+Vdx6VI/87KhOyKmvMAfGS4HjR6NYC9Q8Y
-	 Fa1a97O6fjbUDHuQpezIa6DXJc335UxbW7RwEX8KSg18DdCfAkcGl1xbT4KVm0Plxq
-	 EI3HpHiDJGpsPYdqG+BCnxPI1JXMyVziLNkrRMMa8XhUU+2KFmd0unD1RjEpn8BHXB
-	 ts7DaC8HZjgodaycLMiW/ya9HeqiUXfo/RUXfUOumN3eNQF2lIckCmdC9udzFyU2ih
-	 DFmtR2aR54oip6GoqUuAnMF0=
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-482f763db88so3364653f8f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 06:37:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788961064; x=1789565864;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wrjcPeS70hvY/2jCIpdeC3QpRdoxkk0IP/UxQtFlPx4=;
-        b=fTCjwXFpfZs5MG6eajCCgH2DvMFAJsH++lJL/bLaB4uYHcCQM+LTU40Jgo5UoveAV9
-         mkz7SGJ66G+ubvkJG9enNmzZasKRrOM9EqA3oZXKLtwvofOcbJWw52HcV6Z7JlEpy4F5
-         KztDG19l/f3BPe1OmBKkih8bQ9iYL7TqIFsSFKZlXVwwq/GZyEuJdTeHTkmIYzW8EOND
-         pzdJeha1nXjqwLzasHsXxgVMlHzltLmPW1GbhedjwZJ+IjTHllMysh+2Yj6h+r8jbGOz
-         +ZSOx+vf9akqR7FRhRe/VDUHLsHR59UgDG/GXBYImIVlNVlfKXx9TdVYv7XttLh5nPDq
-         Onaw==
-X-Forwarded-Encrypted: i=1; AKwUvBy+2OHrM685Y/rKLTeaVN0XRsdnZx4NJtKQjDhWzakHMtIaorqKhEzWKGW8wtnhvnJcaqlfgegY02xOKaCWVUU=@vger.kernel.org
-X-Gm-Message-State: AFuF++kTuroXUGo8ERcMJqkuq8n/qD18/LrtLvWZ/jC5z1KHgQ7ZouCx
-	w+1DElmmNWEL0QpjKOd73Wmb42ZCpyKirYTbM9UWTc4WKyTBMjm73t7HcMt5dYyo+10/nQWFFXh
-	bqZYqz5fkC8uHzqZ/Sx4Rq4tOTfPDqbznmBHntOWx5h97VLXLrLN4bEWguCo8LVQrNfX5Oc971/
-	CUSlPsIl9RSw==
-X-Gm-Gg: AYBFou1QLYvG4T9FlySZYIa2TgkBKJsM5gZWrMxkNzyROGWcqtKGW1TiJmNj/MKrAAN
-	8hXBy3qs+oN+y3zp41CnMDZ13flVIR3niNjIWF1tDnVyL0SLQcGdI3F24xRG5q1hfbKHpTqUO4H
-	8f/Da6Xn7OwIrAHvs2azCjPUAWjPZTDpJl+EZNVEDOSTSfesJ75cUCKOzjhyyaEiOQ31qu9be5+
-	YKBxitCmmW87d0lrc4grVDzIDE3G9/1du6zXSpkyAn5HIDSi3L5aiS5O/uxwDf2aqk429sGp7Wa
-	I15Wb6O71f0YhrFc54nmfqDvGjofRsBbs4WOodJaXkCNMl7vECr+YZ9csEGJav6UEbBqid4qSS1
-	Kq0niDBoRZ8jauRRyGT/SEjRWJAPTe/aO0qtWe/OIzmCkIdvm7XI0xdhlfM+VWf1daZ4Otw==
-X-Received: by 2002:adf:e19b:0:b0:485:a46b:bc13 with SMTP id ffacd0b85a97d-485b30e56d0mr1667157f8f.0.1788961064232;
-        Wed, 09 Sep 2026 06:37:44 -0700 (PDT)
-X-Received: by 2002:adf:e19b:0:b0:485:a46b:bc13 with SMTP id ffacd0b85a97d-485b30e56d0mr1667107f8f.0.1788961063813;
-        Wed, 09 Sep 2026 06:37:43 -0700 (PDT)
-Received: from sprawlopolis ([154.62.191.154])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485885bbb51sm46791526f8f.30.2026.09.09.06.37.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2026 06:37:43 -0700 (PDT)
-Date: Wed, 9 Sep 2026 14:37:41 +0100
-From: Andrei Gherzan <andrei.gherzan@canonical.com>
-To: Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Kleber Sacilotto de Souza <kleber.souza@canonical.com>,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: Re: [PATCH net 0/2] netdevsim: fix IPsec debugfs byte order
-Message-ID: <aqFhJbNp5qqlehD0@sprawlopolis>
-References: <20260908140325.13367-1-andrei.gherzan@canonical.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="STuk0Q4p"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 689B1Rdn3817360;
+	Wed, 9 Sep 2026 13:49:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=SDN1bSm78JYtcqk6dQqOPb7tN9F8Iw
+	EZknd0GXW6KaM=; b=STuk0Q4pFL8YHkUE2Ux7YdUsiFxNTBq7ultO335soE+88u
+	dT+gMNefwHAM2S0E0qUpITdIMvazav5o2i5dB+c6wT8HMXMcpKftAvUbND/RXmrp
+	VLqaa01fOevhOons9sD6/Xv181JzuIXTb6DwRJfv49mJL5UhoP5dpVKu1zSMe+21
+	f9I0sTwfZsm4qnYrjQAhBgCG2oHXSBdWQay12Ar7bAyreKXqQ61QVRd1zSqdI0h/
+	G1p4pmrPzfx7JR+LNOSxM8fr3Li+noWePOLb5XdQG1aZvWSvHFe5aJVBJsv6vvCy
+	1hIj9ww+tjJ9xGPHhyGLR3Ed9ibnIehQqxRN+2jw==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ggbf4679q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Sep 2026 13:49:45 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 689DfObq004987;
+	Wed, 9 Sep 2026 13:49:44 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ggwdqjq5s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Sep 2026 13:49:44 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 689DnfoU42664418
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 9 Sep 2026 13:49:42 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CF26D2004B;
+	Wed,  9 Sep 2026 13:49:41 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E1B4020043;
+	Wed,  9 Sep 2026 13:49:39 +0000 (GMT)
+Received: from Gautams-MacBook-Pro.local (unknown [9.39.30.71])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed,  9 Sep 2026 13:49:39 +0000 (GMT)
+Date: Wed, 9 Sep 2026 19:19:36 +0530
+From: Gautam Menghani <gautam@linux.ibm.com>
+To: Chaithanya Lagisetty <nagachaithanya9911@gmail.com>
+Cc: pbonzini@redhat.com, seanjc@google.com, shuah@kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: kvm: Fix transposed calloc() arguments in the
+ uffd helper
+Message-ID: <aqFj8Iu7cUM7koH0@Gautams-MacBook-Pro.local>
+References: <20260904052033.3648259-1-nagachaithanya9911@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="VLgbsStmR6asIkJ2"
-Content-Disposition: inline
-In-Reply-To: <20260908140325.13367-1-andrei.gherzan@canonical.com>
-
-
---VLgbsStmR6asIkJ2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20260904052033.3648259-1-nagachaithanya9911@gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: 9eICNbdAGc1dM7c0EPq-6akPTP0aYTzK
+X-Proofpoint-GUID: zlMKD7G2Lt4LzMLjtdKJ-Eu_gCZ78Clh
+X-Authority-Analysis: v=2.4 cv=DbEnbPtW c=1 sm=1 tr=0 ts=6aa163f9 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=kj9zAlcOel0A:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=pGLkceISAAAA:8
+ a=VnNF1IyMAAAA:8 a=q2RsVZR9PaoYCt8hnh0A:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA5MDE1MSBTYWx0ZWRfX7+ZjmaZWHxxl
+ sYhBwAvghoPW2UT3D7sTHr1bU4FETF/tTOZVsO3z0E7cCN5XxxR6nshOyhyCXOxgn5Yk96oTgj0
+ mRdaKrkXFwjdshA9HvO2AZG1zIqu3cFiVhMVedBZiKaHuFridWG+se3nT6TEA2kEjNBPtZuN5Ei
+ C8yWJV8XZHN0Z5V0IM8pPErmzclGW0NQhHapcXuFmpCfu3Dv2AW/xhK8uV2Csk+ck2Jqg/6kApw
+ tkH0KDtM/arTtKEXBCNoIgDRk6ssTwj2ZJ+7e810jJ9DAILo1PdY4LZ04oc2F58HvG+85fxb4ak
+ LssloLCGqLYElSfRYr9vATM/EHp9rXsCEHu7M25afw6s+DY634PwsErCo5DrJxLN1kX/TF1z7Ua
+ 38ph3rIVheBvpnRXIgOZK915piOQTrIFR6Mgy1LzLFEiU5pAtLT3V2or5uW3EyKa7BkOXV1A15i
+ Pm7hVSQaQTwk8mL0o5A==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA5MDE1MSBTYWx0ZWRfXwzzDhPtnVcrX
+ DixBrJw+n2P0TIjTjmyglJK+Phev2BUcFGeuhZ5D73xBHeeWgJZEd15YKsCiqzqNpp69hrGOJEO
+ VnYXfmTt3INbV3nUfiMID5Ffue0wOH0=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-08_03,2026-09-09_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 priorityscore=1501 impostorscore=0 adultscore=0 spamscore=0
+ clxscore=1011 suspectscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609090151
 
-On 26/09/08 03:03PM, Andrei Gherzan wrote:
-> The netdevsim IPsec debugfs file (used by selftests/net/rtnetlink.sh's
-> ipsec_offload subtest) prints the SA salt and key in host CPU byte
-> order instead of network byte order, because nsim_sa.key[]/salt are
-> typed as plain u32 and printed directly with "%08x". This makes the
-> reported values differ between little-endian and big-endian hosts for
-> the same underlying key material, and breaks the selftest on
-> big-endian (e.g. s390x), which hardcodes the little-endian output.
->=20
-> A driver-side fix was proposed in 2022 but stalled in review: keeping
-> the fields as plain u32 meant sparse could not validate the added
-> ntohl()/be32_to_cpu() conversions.
->=20
->   https://lore.kernel.org/netdev/20220308135106.890270-1-kleber.souza@can=
-onical.com/
->=20
-> This series:
->=20
->   1/2 retypes nsim_sa.key[]/salt to __be32 (matching the existing
->       __be32 ipaddr[] field) and converts with be32_to_cpu() before
->       printing, so the debugfs output is now network-order on every
->       host, independent of endianness.
->=20
->   2/2 updates the selftest's expected output to match the new,
->       endianness-independent values. It depends on 1/2: applied on
->       its own it would regress little-endian hosts (though it happens
->       to have no effect on big-endian hosts, whose old host-order
->       output already matched the new expected values).
->=20
+On Fri, Sep 04, 2026 at 05:20:33AM +0000, Chaithanya Lagisetty wrote:
+> uffd_setup_demand_paging() passes the element size as the first argument
+> to calloc() and the element count as the second:
+> 
+> 	uffd_desc->pipefds = calloc(sizeof(int), num_readers);
+> 
+> calloc() expects the number of elements first and the size of each element
+> second. The product, and therefore the allocation size, is the same either
+> way, so this is not a functional change, but the arguments are misleading
+> and GCC 14 diagnoses them with -Wcalloc-transposed-args, which is enabled
+> by -Wextra.
+> 
+> Swap the arguments to match the calloc() prototype.
+> 
+> Signed-off-by: Chaithanya Lagisetty <nagachaithanya9911@gmail.com>
+> ---
+>  tools/testing/selftests/kvm/lib/userfaultfd_util.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/userfaultfd_util.c b/tools/testing/selftests/kvm/lib/userfaultfd_util.c
+> index f7ce5a6ddcc2..49eff05b7d39 100644
+> --- a/tools/testing/selftests/kvm/lib/userfaultfd_util.c
+> +++ b/tools/testing/selftests/kvm/lib/userfaultfd_util.c
+> @@ -119,13 +119,13 @@ struct uffd_desc *uffd_setup_demand_paging(int uffd_mode, useconds_t delay,
+>  	uffd_desc = malloc(sizeof(struct uffd_desc));
+>  	TEST_ASSERT(uffd_desc, "Failed to malloc uffd descriptor");
+>  
+> -	uffd_desc->pipefds = calloc(sizeof(int), num_readers);
+> +	uffd_desc->pipefds = calloc(num_readers, sizeof(int));
+>  	TEST_ASSERT(uffd_desc->pipefds, "Failed to alloc pipes");
+>  
+> -	uffd_desc->readers = calloc(sizeof(pthread_t), num_readers);
+> +	uffd_desc->readers = calloc(num_readers, sizeof(pthread_t));
+>  	TEST_ASSERT(uffd_desc->readers, "Failed to alloc reader threads");
+>  
+> -	uffd_desc->reader_args = calloc(sizeof(struct uffd_reader_args), num_readers);
+> +	uffd_desc->reader_args = calloc(num_readers, sizeof(struct uffd_reader_args));
+>  	TEST_ASSERT(uffd_desc->reader_args, "Failed to alloc reader_args");
+>  
+>  	uffd_desc->num_readers = num_readers;
+> -- 
+> 2.43.0
+> 
 
-I forgot to add Cc: stable@vger.kernel.org to these patches. Should I
-send a v2 for that, given patch 2/2 only makes sense together with
-patch 1/2 (applying just one regresses the test on one endianness or
-the other)?
-
-> Tested on real booted kernels, both patches applied:
->   - x86_64 (little-endian): PASS: ipsec_offload
->   - s390x (big-endian):     PASS: ipsec_offload
->=20
-> checkpatch.pl --strict and sparse (make C=3D2) are clean on both patches.
->=20
-> Andrei Gherzan (2):
->   netdevsim: print IPsec salt/key in network byte order
->   selftests: rtnetlink: update ipsec_offload expected output
->=20
->  drivers/net/netdevsim/ipsec.c            | 10 +++++-----
->  drivers/net/netdevsim/netdevsim.h        |  4 ++--
->  tools/testing/selftests/net/rtnetlink.sh |  8 ++++----
->  3 files changed, 11 insertions(+), 11 deletions(-)
-
---=20
-Andrei Gherzan
-gpg: rsa4096/D4D94F67AD0E9640
-
---VLgbsStmR6asIkJ2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEQvNqws+Dz7aX1cEEc7voa356t88FAmqhYSQACgkQc7voa356
-t89CjhAAsc9ihP4BOFOtH+fWmOM5lVZIpAeuppSpPCB9czlRzrua64EwObXfFX7n
-oG9uQUzx2p3UTY52038DFCCsmCVxKTMPbQvfLoevy1SUXlt3ZqGW7p/WoaPalozb
-c1zLAj99KWyKE9YdFd1D5dEzsDJkilxX7CSD51JExDzwpqflugcpJyVJ6JUGe/B0
-JSkg7FL6XMY6w2WBer6R53PxG+vCHqhLV4M+vObbysVFJyoEUCBV6aFcZHbdxRBj
-FLw58vys31n8/6x8vC6n2jjdoYTaiQb/4Bh1JtdZfKIGDmIE7NQN1v0OU9Hgp+iv
-6BebVhgAUI2SB5I8tj67VB7Dm6TndFci7R9xZFsBxwN5pZ9P/LcGSz2MviBZronM
-P7QNFq3Kl1FnBMwYg/dwy5K0C+HSHBKX7sQCUW0zuokREsSmfzGJDzUP0hZ4oNY9
-0KERXDISjbWkBMZGg+AAv7oz6oHgkXBHjU7u5cS98cxQhYLCipcEd48bm5tgZvh5
-HfNWJ0AScmeTps6vwLMLfjj9+r/zO9nAhuUNNxsoHlqLGbxmsGMldd+e8xU/wOzg
-tOjdOwiLuGwq6vTqci6sT9iuKf3yW9UTsJwG6qNCCUXgQ50vnIkY6siA2x1cfCK/
-cSEomDAKcGTrB/zi3iWZyLZb9TxzJaqMfTjOJjR5/Z6uJLmJwEI=
-=HvP6
------END PGP SIGNATURE-----
-
---VLgbsStmR6asIkJ2--
+Good catch
+Reviewed-by: Gautam Menghani <gautam@linux.ibm.com>
