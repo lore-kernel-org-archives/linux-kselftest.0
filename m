@@ -1,45 +1,87 @@
-Received: from sender-op-o11.zoho.com.au (sender-op-o11.zoho.com.au [103.138.129.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A8D563FA1
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 13:30:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=103.138.129.1
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788960641; cv=pass; b=jfoQ9oMKy4O2ZyCyjJgYU/2gQugf04wFo+y7nuIJbz8MhqCroPT9mUMVhbslRYKm8iB8EhLUOYKq2daOqtM5KnvfPPnFninlYaxe9sOVeU4+vcbBbfYHk+34bnTJfdu3ZB/1PA2TOIpfAp17I1AHPKhoO6C7D+r13AK5kDxiqig=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788960641; c=relaxed/simple;
-	bh=wnIEckzl3YvU4zGMWKoUpd2EuG7T5k1v1Z3UfykwPCo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HdM21P03uG1+qtKqbX+hLzKe0b/X0hkkFW7W0BwlYhU7Wc6Fvf+V4m1kwbj0PDsCxnLNo/cLuJCacXNGuysgQavGTMYws6ccHkf4ZlMYx3pcxxxH1pgRz5BK17yXVc2Ug4CpaMiQhFZzj88Zg9UM8J/jR0kFZeLfn5zfm2+ORMg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=scstudios.tech; spf=pass smtp.mailfrom=scstudios.tech; dkim=pass (1024-bit key) header.d=scstudios.tech header.i=@scstudios.tech header.b=fXldWyLY; arc=pass smtp.client-ip=103.138.129.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=scstudios.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=scstudios.tech
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79EA57982E
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 13:32:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788960779; cv=none; b=M+a2EtkZTGmfvozXPS9Hg6WbF/dC2gqhbxkhKt6wH+ZRBqM3Nwosu7/TwENxlRHAGVcWqYHL1W9h0iRGqEZ8sLFCvT/PWr+hb/MXEEsBpx+6lySSImxKDOXb5C1DAo4IiYcMtVJ3yKvx+4hcs3NwBh2X0t2PK6D7DaIGfuz+/+Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788960779; c=relaxed/simple;
+	bh=8Cxs1swI4BazcAdCuTGtcvH4qiVFXfzzgesxxRAK/UA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mquS7pa5CndSYveUXmUZ8GGimeZvaaA2POnnVZtTaFAfu61/z28p3B/+dewy6TtfYzhVZixxjMxPcfU7vDUzMqsBY1Xz1PffBL54mYAXAz6YQDn0lcGGarGv3ZX9meoOau2UL6KP6pKlwqpGmbDpb3AYbEfuBhjDAqwSzmYCTwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J4mSDywS; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=scstudios.tech header.i=@scstudios.tech header.b="fXldWyLY"
-ARC-Seal: i=1; a=rsa-sha256; t=1788960608; cv=none; 
-	d=zohomail.com.au; s=zohoarc; 
-	b=TSSG245HajykYkpKVkM9jPZKMmricLkUOv1StstJiFeV2rG2qESb7jFzTaU6VuJWtjJpPDW5U2AExnwGayUQkxdrKa8XjKR8Xg94426NGzZc4DO20egabum39FsouoUfZfku9DaIVaHnG0qIr6GjNQ2Or26VESrElV/RwYaFdRk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com.au; s=zohoarc; 
-	t=1788960608; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=DdcpC3W0BLcMSiBBq4v/ocnr5yVvMkT4UHv097w6Q2c=; 
-	b=0j9VqxIH/Ro2BFnW6rY7Qg8ULkEf+UorIljdKobV0VxWYsydF3VjhqkZeZxbjYWoNXfKPNnzv6YXXWPHppLuwbGDij2vIIrorAatrLIYOA5H5zElVIQnyRhi4g6KKIgkeUMd2XawRPToMPpnAAuTGYRrg5XzT+8bmUu+3yBvNfA=
-ARC-Authentication-Results: i=1; mx.zohomail.com.au;
-	dkim=pass  header.i=scstudios.tech;
-	spf=pass  smtp.mailfrom=ruben@scstudios.tech;
-	dmarc=pass header.from=<ruben@scstudios.tech>
-DKIM-Signature: a=rsa-sha256; b=fXldWyLYPSSZtr5ZafQ01xv7KUHV6v8qDszaWkxqUI8yDDg7tumcuj0+gcan8xe7dcMgINqpUdQPYvNcvK6K+MfwmYGetaszUyZny+2QZJLbpwDckpnfJNwCXBOioXKkeJF9YF5DIhjAWQc1PV22veGVK/2TQyMw9BajNtHUzEc=; c=relaxed/relaxed; s=zmail; d=scstudios.tech; v=1; bh=DdcpC3W0BLcMSiBBq4v/ocnr5yVvMkT4UHv097w6Q2c=; h=Content-Description:Content-ID:Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:List-Subscribe:List-Post:List-Owner:List-Id:List-Archive:List-Help:List-Unsubscribe:MIME-Version:Message-ID:Resent-Sender:Resent-Cc:Resent-Date:Resent-To:Reply-To:Resent-Message-ID:Resent-From:Sender:Subject:To:Feedback-ID:Date:From:Message-Id:Reply-To:Subject:To:Cc;
-Received: by mx.zoho.com.au with SMTPS id 1788960606940529.3280510955219;
-	Wed, 9 Sep 2026 23:30:06 +1000 (AEST)
-From: Ruben Sutton <ruben@scstudios.tech>
-To: Ming Lei <tom.leiming@gmail.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-block@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J4mSDywS"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2dd020a2e44so5388515ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 06:32:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788960777; x=1789565577; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=IYWWqOrH0BFKdSQbag3FfKUxf8azbOar4qW5b2e3MNY=;
+        b=J4mSDywSNys5skQHDJWouK+7/9mX2dhD/tWVcspI1faI4n2nnIXQtyiq4OVptMO7SS
+         UKa4gQ0tTXCa4gg3+3SS+AhgDC3G3CBIQ67Jb0Be7p//0O7tI9+w98pbWXRNmHEPDuvb
+         DyKfV0/wy7OKKx9aR7nb3RDAsXXkyO9ww7y5yQdic645I4LueswTPsNKOzbce3nRjcI5
+         lcPGX4r7I2LLMN7kaBoFmJNYB0qgHNOSF4gPw2pzxuuqd3m7mAG4Ula4kk/Q4ToxI1a2
+         Yeolio3I3oX4XqJGcw6Zf7qxokAelXjrGSwonUfAsMPm0RVQ0g1vJHqO/sR3UND2t5vP
+         6xHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788960777; x=1789565577;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=IYWWqOrH0BFKdSQbag3FfKUxf8azbOar4qW5b2e3MNY=;
+        b=PEyiPqAUXCpBShY9O/dzUGkZ8SO63mpdpTCuun/d0BgIUtz0bpbOBMPzobzDkPmBMa
+         Bgg5sJbQaSMhOnKknGQF4fWnOaRLd1QKBsf6wGBMUqSFVCRh78j4moXqlJn/q34HbU9j
+         ytY95Zy5QPRoReQiszPCE8TAnxqu4El1YigCJlrw37nR5Et6hN2HRfLZpRFBh5bYtIdJ
+         ywr3FUims+F0/xsCYb7O/GsXiNGK5HUG9JrNIFRj/zzO5y5mkqVsXYXFAtyZ3WxhavSQ
+         /tjIsoSYZ1WVUD34duHAt0bcP0bht14G5RbAFNB77JBfdD2J5tYhmdJ8K8nU7L8/0YMO
+         Zd4A==
+X-Forwarded-Encrypted: i=1; AKwUvBycbhOz9r3BMvMqM/pqLbPqMmDU0FoD/IWUXj4//88lJ04ywhEzyeEXs2KLOavi9DEQ0EWMeqtkkYkmXSo/2EM=@vger.kernel.org
+X-Gm-Message-State: AFuF++l7zhQ/WP3diingEhEzWNa6Ispxi1fvCVdw4k9wbTzjJ5sWNjay
+	0Ty8ZwlUiqn4TfAkkCiVgwJtGrtNPjUANQ3mg7DsvWTIe4/p29When9v
+X-Gm-Gg: AYBFou38Z5A4AueupssRFBZzp6lRWJKCUJFmF26Zs4Dza1lSsZhM8Hb6Yv9Ijto7xas
+	+dyv+agLncgNC2ryW+5WDjIjxKe78WgPlZQLONXHkD1VpjIuQmVPOcCctqv0Cw9riVjFYguboNR
+	CFBpjhxK3+GkIxR6sKHl3EBYuwfzJhlKzXOJhjMA6RRLQDTrG/wJtsY5ktIifIwc+kvm9lHBtqu
+	keVLKVyiKkYmQUveHm8LUqgdto7bs2lkFXYAHvs+S5NptbXKIc5U/bIPIKYNad3LyBap7+Xuc5Y
+	IybYKSBB9Cd0wNGG7hDUgx5zvFn6MEy1vHBl+Cr73Ijj4q9xcmgNItcdZfoc1P/AuLwWkVn0X7W
+	gGLV22QFX9aiogjsefvnf8Rr5r3tajhiSI/NEnQKFf9qc9HJECgaDb9LEFqHHY2sJV+SBzVdETK
+	zFUaW5CdvJOLRl9qrUk/yq+LrQfr/34FSYCukcXWMCjZTjlZocOQXhbtzBOXa6Q2l7vRM82nYV6
+	/ZBBbuCtibFpvT5oLNSyWPCxT7Iv59nicFuPY9WJ6XvNW9uO/gtm2vFKqWLnw==
+X-Received: by 2002:a17:90b:5287:b0:38e:6a44:671b with SMTP id 98e67ed59e1d1-39b25eeeef9mr55298249a91.0.1788960776711;
+        Wed, 09 Sep 2026 06:32:56 -0700 (PDT)
+Received: from m-upc-A520M-HDV.flets-east.jp ([2400:2410:3f60:500:574b:e1a5:307b:15c5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2db14ae8af3sm72564185ad.80.2026.09.09.06.32.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2026 06:32:56 -0700 (PDT)
+Sender: Yuyang Huang <uyoko90@gmail.com>
+From: Yuyang Huang <sigefriedhyy@gmail.com>
+To: Yuyang Huang <sigefriedhyy@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+	Nikolaos Gkarlis <nickgarlis@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Stanislav Fomichev <sdf.kernel@gmail.com>,
 	linux-kernel@vger.kernel.org,
-	Ruben Sutton <ruben@scstudios.tech>
-Subject: [PATCH] selftests: ublk: Reject excess backing files
-Date: Wed,  9 Sep 2026 23:24:12 +1000
-Message-ID: <20260909132412.8965-1-ruben@scstudios.tech>
-X-Mailer: git-send-email 2.54.0
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH net-next v3 0/4] rtnetlink: dump link-layer multicast addresses
+Date: Wed,  9 Sep 2026 22:32:43 +0900
+Message-ID: <20260909133247.113923-1-sigefriedhyy@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,80 +89,60 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 
-kublk stores at most MAX_BACK_FILES backing file arguments. The
-argument parser currently stops collecting paths when that limit is
-reached and silently ignores any remaining paths.
+"ip maddr show" prints three kinds of entries: link-layer, IPv4 and
+IPv6. The IPv4 and IPv6 ones can be read over netlink today: IPv6 has
+had RTM_GETMULTICAST for a long time and IPv4 got it in eb4e17a1d915
+("netlink: support dumping IPv4 multicast addresses"), with IFA_MC_USERS
+added later so the user count no longer has to come from procfs.
 
-Reject the command instead so that a test cannot accidentally run with
-fewer backing files than requested. Add a regression test that exercises
-the error without requiring a ublk device.
+The link-layer list is the missing piece. dev->mc, the addresses
+programmed into the device filter, is only exported via
+/proc/net/dev_mcast, so iproute2 still carries a procfs parser just for
+that. This series closes the gap so that "ip maddr show" can be served
+from rtnetlink alone.
 
-Fixes: 6aecda00b7d1 ("selftests: ublk: add kernel selftests for ublk")
-Assisted-by: LLM
-Signed-off-by: Ruben Sutton <ruben@scstudios.tech>
----
- tools/testing/selftests/ublk/Makefile       |  4 +++-
- tools/testing/selftests/ublk/kublk.c        |  5 +++++
- tools/testing/selftests/ublk/test_cli_01.sh | 15 +++++++++++++++
- 3 files changed, 23 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/ublk/test_cli_01.sh
+Patch 1 fixes the type of target-netnsid in the rt-addr spec. Patch 2
+handles RTM_GETMULTICAST dumps with ifa_family set to AF_PACKET and
+walks dev->mc under netif_addr_lock_bh(), no RTNL. The reply reuses
+the ifaddrmsg format of the IPv4 and IPv6 dumps: IFA_MULTICAST carries
+the raw link-layer address, IFA_MC_USERS the reference count, and a new
+IFA_F_GLOBAL flag in IFA_FLAGS marks entries added explicitly, which is
+the "static" column /proc/net/dev_mcast has and "ip maddr" prints. A
+non-zero ifa_index limits the dump to one device and IFA_TARGET_NETNSID
+selects another netns, like the IPv4 and IPv6 dumps.
 
-diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/selftests/ublk/Makefile
-index 5daf36c6c3..28ce542d4e 100644
---- a/tools/testing/selftests/ublk/Makefile
-+++ b/tools/testing/selftests/ublk/Makefile
-@@ -7,7 +7,9 @@ endif
- 
- LDLIBS += -lpthread -lm -luring
- 
--TEST_PROGS := test_generic_02.sh
-+TEST_PROGS := test_cli_01.sh
-+
-+TEST_PROGS += test_generic_02.sh
- TEST_PROGS += test_generic_03.sh
- TEST_PROGS += test_generic_06.sh
- TEST_PROGS += test_generic_07.sh
-diff --git a/tools/testing/selftests/ublk/kublk.c b/tools/testing/selftests/ublk/kublk.c
-index 2400b46157..3af2f10ca8 100644
---- a/tools/testing/selftests/ublk/kublk.c
-+++ b/tools/testing/selftests/ublk/kublk.c
-@@ -2525,6 +2525,11 @@ int main(int argc, char *argv[])
- 	while (i < argc && ctx.nr_files < MAX_BACK_FILES) {
- 		ctx.files[ctx.nr_files++] = argv[i++];
- 	}
-+	if (i < argc) {
-+		fprintf(stderr, "too many backing files (maximum is %d)\n",
-+			MAX_BACK_FILES);
-+		return -EINVAL;
-+	}
- 
- 	ops = ublk_find_tgt(ctx.tgt_type);
- 	if (ops && ops->parse_cmd_line) {
-diff --git a/tools/testing/selftests/ublk/test_cli_01.sh b/tools/testing/selftests/ublk/test_cli_01.sh
-new file mode 100755
-index 0000000000..e937b8e20b
---- /dev/null
-+++ b/tools/testing/selftests/ublk/test_cli_01.sh
-@@ -0,0 +1,15 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+UBLK_PROG="$(dirname "$0")/kublk"
-+expected="too many backing files (maximum is 4)"
-+
-+if output=$("${UBLK_PROG}" add -t stripe a b c d e 2>&1); then
-+	echo "kublk accepted more than four backing files"
-+	exit 1
-+fi
-+
-+if [ "${output}" != "${expected}" ]; then
-+	echo "unexpected error: ${output}"
-+	exit 1
-+fi
+Patch 3 updates the rt-addr spec and patch 4 adds a selftest that
+checks the filter, the user count, the global flag and target-netnsid.
 
-base-commit: 893e11787f78e43b534e252249ac3fff4d1333f8
+Nothing changes for other families. AF_PACKET dumps returned
+-EOPNOTSUPP before, so iproute2 can keep the procfs fallback for older
+kernels. I have the iproute2 side ready and will post it once this is
+in; with it, "ip maddr show" does not open /proc/net at all.
+
+Changes in v3:
+- Report the static bit as a new IFA_F_GLOBAL flag in IFA_FLAGS
+  instead of IFA_F_PERMANENT
+- Support IFA_TARGET_NETNSID and test it
+- Describe global_use accurately, it is also set by dev_mc_add_excl()
+- Fix the target-netnsid type in the rt-addr spec, as its own patch
+
+Changes in v2:
+- Always validate the request header, not only with strict checking
+- Use a single "with" statement in the selftest (ruff)
+
+Yuyang Huang (4):
+  netlink: specs: rt-addr: fix the type of target-netnsid
+  rtnetlink: add AF_PACKET multicast dumps
+  netlink: specs: rt-addr: document AF_PACKET multicast dumps
+  selftests: net: test AF_PACKET multicast dumps
+
+ Documentation/netlink/specs/rt-addr.yaml |  17 ++-
+ include/uapi/linux/if_addr.h             |   1 +
+ net/core/rtnetlink.c                     | 165 +++++++++++++++++++++++
+ tools/testing/selftests/net/rtnetlink.py |  71 +++++++++-
+ 4 files changed, 248 insertions(+), 6 deletions(-)
+
 -- 
-2.54.0 (Apple Git-157)
+2.43.0
 
