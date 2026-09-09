@@ -1,151 +1,157 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a4-smtp.messagingengine.com (flow-a4-smtp.messagingengine.com [103.168.172.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A12A2BE05A
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 10:05:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788948336; cv=pass; b=XHsSinxRIDhmfzN6xJEGzultNzvg6uVHhhZam8JmHwAJsmZZAtC/cCEsM1t4c1hBa8k5z82wr95+8/zApjcZ1cWkCM+yyNrf8vukV4yXXg8Rh3BDrHXODCi485mM6ft8IY/0NYdb8gUnspu7BYEKvEk6Y6xFlLxjQyIUmLD/jeI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788948336; c=relaxed/simple;
-	bh=Qs6MOo0ipbx7jwU40KRVH3VbId5c+se0y+w18KEpP08=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pyV4hWY/Vb8Z66frz7x7FQgy/XNYb4M3JRlf7HJ0+aISDknUbiNmEm3GZNTAGdTrqbs96QHavmHZNkSXnsqli1exT5gvZCaHb564PL1bmDei6VFhl43bMLSausUkGk0yzHyElgn14LpLY/YdeXJOCs9v+LJNDejh1CHH0ONElC0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=Fyh67PfP; arc=pass smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA0A3BE161;
+	Wed,  9 Sep 2026 10:09:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788948576; cv=none; b=SD852UBqeL2Vdt+daPO0Ym/XAH1rt5Q+HqOH2l+yD0HGzJi/hy9imE+1qpCxFdRUUIm/AKT/gtoUA8ZMe/KTdw9CQ5jc+uT8zJwxb41tWLrijYc6K6sY/d56vSdpNPahvFTAw1cMxs2RJxU5oNmn0IER9dTh14Ns8tc5D+BY4JQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788948576; c=relaxed/simple;
+	bh=4Y4VcvCG0fD011JAvMz3J0HoCQLG73mKFatAidE2izg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O813EO8H96SPj/vh57f7fVm3qDoorC0iuEREnOAXzWAr0AghZJN8BS+WGP2pII1PmuNc4hHKmlFl2jLL4FUSL4N3oV6nurziQzEPySh/kFcUPS3PhCdZ6sG0RUi5FkIDV63rubOoABUARoRNMGPzOWl64YbCzQBIukSESwBNcoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=dHr5WeMl; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=h2HgDVy4; arc=none smtp.client-ip=103.168.172.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="Fyh67PfP"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-86927f9ba4dso208108b3a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 03:05:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788948334; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Q3s9n89C4ZJJn545HFhHjvxDyxSQp8wf+qfCrl2k1kTR906SLZhYqfb0UyzvAoPjB8
-         Otj4DvVfIEa3bj2xsYVLBekzoFJof0vfDixrdpWe2N/QGzSANqMGlw8xJwEzETFrlqzN
-         CSjRPjDfzKptbJV4CMRzstWAclPDLGZhzDKf5lGpy5ZYmOlKwPnmK9crF2fCM2Qw/e3y
-         32yMhLRridwySEILSues8b2P+cc4f2dBNaWudV+Cj1/W1YzqhTL+4wnE1Jn/xVM1dh9V
-         ck5Y8aUEUNyKOEEvNRdcz4BH3GkvrI/ExRF3F7gpzl48W/8Y0UzaBIgUExlOsKTUm4qu
-         xDkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=H4NnU3M9b/3b6iNVJB4nDxkla8ekZHTTUWyoEboJwMQ=;
-        fh=pG8EScw24v5xtWxVMQo/7k2xt1q0PywdW/zyJRgr4aI=;
-        b=M6I0uUKkPpEm4jYjTdSQDlVjj3Ndpypec5ILUUEZetiTPeJfXZkZZ6YHImu6DjtxHg
-         XSrBl7YPT+/11VTES0EVjqssO/BjKUkYdXBCoTzOBjHa5CSmGLR1ADQ36S6BKu2wzvP+
-         +7S0dPM5QzV+Rbua9p6AuY36LMKB7fYnWFvVWJKO3pgeni4BsWFaIT5tckb4Zk9cwojO
-         9n0DXbMyo4jytoxaj11Z6SEklVCFCu+zTTAU5ohvHU6Wiq4xBO49NLpkvO3k2MLkKee2
-         LUFi9A6YWFR0YeX3XXaEkkKvidChHzB7tlpm4eg/MO7Iq32yQd7m9V0IEFSgtM+O63pt
-         ph7w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1788948334; x=1789553134; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=H4NnU3M9b/3b6iNVJB4nDxkla8ekZHTTUWyoEboJwMQ=;
-        b=Fyh67PfPES0WDZ9cuGkdzPUfAb/BXY2KURx51u1wdu8e5Tl6ZZNBpFh+EqcZZx7lTA
-         8NPTp8/HzX1M90Nwc08bVnAk1tGvzBHlu7BXLvpNxKzVK+fQGfwoqyF6PX3ls5Augf2I
-         7PrJancQuLGvRwcbf9QigiGfTuZb/EANssCYI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788948334; x=1789553134;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=H4NnU3M9b/3b6iNVJB4nDxkla8ekZHTTUWyoEboJwMQ=;
-        b=OtIuiXwudlVr7a77sErENOzlGxyBYHG+cPGRLHjOBF0C8EH8bh0rqa9EXPT0SS7h6r
-         7+s8UsMWZ2OV8wMl6lImA8ztgB32EG9uC+gibfbXGggbRKN5pv00MzM9fCulBN23Ykxv
-         zIOFo09fe1tlAXb7kNFenhxNU9VieCkmjM9MrlmcXAVYdpz5U55nzWXk3yijvZwkhQlx
-         +70+7IFOI88PTMzHT5k1MPX9MrnGf7jgHrfyl6XBfFLZDn9dPrDaHwX51kaSR/1hXIrQ
-         p6n7ogjgSB2zLuFOnCC72mKN4U0o9XZ7aJAFT2Vy82besrKo7pzsUujTtDZOR+lQQyTd
-         i9qQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx4GYV+H8NNcbflPQtQLn3OT+Q50WK4jjQ0UnnWqQ0bSBGgMro2ABRrP7v6iUdUpdc86503jdnauK5QbcirXF4=@vger.kernel.org
-X-Gm-Message-State: AFuF++n2SFJr26kvvj2M1HtKYWAs6FrMiIwKNWbvic7wahBp6p1YIaeU
-	izC9o0offaffVQDH2m4+7dwblQCegOr8ZGpPBFyAn5n7CMmOuOrwmaVUOlm+wBFzT5iQeXvrwi3
-	h2LVBCPgWxhiTJAA911TJe9fUsELjMiphmiiASL8j
-X-Gm-Gg: AYBFou3fMOuZqM2EEHKuMMiyg6GDnA4adnRM3TddxUVfgCJxK5cpXuQJI9RSafdfbTX
-	VcVOWXyhEzYUb7Akdl5fhhnSxld7DKtHxdtogQU4oJmsskaUh1qVzuYRyEOghIdmVspyToKq8fx
-	qi8ipLkNc2l54JdG1eUFJVizE0tTVx4o9O8quJ9A7glOszDcO2c5+/oxUM0PJ8LdXz8HSz9cW3n
-	mXc5c4/0oHIjoUYBymC5QU21EuBTXBiuSZ9YudnQaqgjfcf8ftRHphkM0l8WTjDKhgfrei8elGA
-	Qobl3k/CYH/S95F9u0VBIurLyoLiE2u8ySZX1EUPBXMvi+6yUvwphBw7gCAyhVzi4rP61f+wrDA
-	mdA7fE3MpojoVJInnGN1RwDdoz4k7vPv4vlLPmkt8S0Yn
-X-Received: by 2002:a05:6a00:4298:b0:84a:646f:193 with SMTP id
- d2e1a72fcca58-861633ca7b1mr48778621b3a.0.1788948333754; Wed, 09 Sep 2026
- 03:05:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="dHr5WeMl";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="h2HgDVy4"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailflow.phl.internal (Postfix) with ESMTP id 4CE881380293;
+	Wed,  9 Sep 2026 06:09:33 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-06.internal (MEProxy); Wed, 09 Sep 2026 06:09:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1788948573; x=
+	1788955773; bh=hCQxSP3iMVV7NPm73HmXp8MIEUwM8cXfnoRsOm1SuMk=; b=d
+	Hr5WeMlVnNZPiAsRPVQln0d4Xz50T0qoMS0UgyP99HPqLjUqkHG3vzqaXRVszVLW
+	iyiMWzXE8q2BinbYdbDGrsxOneDAlC/HovTpKJgqRnadXy5FjR0Do5DoWFU3jEpt
+	u2LtChwdgG+dy8DpVLdrC+5Z1lXqI3utaBIrcSSVKiSuawnWY7QWhFX5UmHgrBhW
+	qx/dgLIDeGkxkFfkn32lJ6dsd4nmDzt5RMt8Rl+PHjmUFAGH4tw8nsxRUC6S3u99
+	l9ykoylgMQw68Mcus9q1cNkQWYUK6i5pMMmt92c6dpEQwF9E5AXIsFc8UVKgEqry
+	cXsCsxtdUiMV8WHxIIYdQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1788948573; x=1788955773; bh=hCQxSP3iMVV7NPm73HmXp8MIEUwM8cXfnoR
+	sOm1SuMk=; b=h2HgDVy4rMVDFrD8a5Oe9f2hjrzVlDnu5TECZFlz85bRtUX038Y
+	PhPZA/tuOD7mpjMhJCWRVRxCA0fShUPTA94qTF4kaDL4dW87lnIJeZTjV38y+mC2
+	Y6VSxuvPeBOSSYBO82uTGj1l8IEvjQfZPncJ3zjDVDv5+V9qoQq7JHN6ArwbY2ZA
+	oL8QOSunOiLd5Y9eiTIEmCKrP8uSKUbU9/ifBVigXgT2Vvx+4VDrO7rdJyOy86YI
+	KrRYzBuomCEszbo8jgg/CZwUGbvgd8oJTd3nh9fHrCdLK1F2AK9EUtYVmJMwDbWY
+	C8jw8PCz1qZSy72aznt1wWwfORMTsxWA0dg==
+X-ME-Sender: <xms:XDCharjo66WAfwcvg_5lzdpIMh6Ll22ahn88vCBkwpu8HIUZbgyeXQ>
+    <xme:XDChaotyb5ccBC3pgdMGr60S3y8PT5Vxl4yTMAJEbcmVDOFMlN4QMUCJDVkBXfnyC
+    qaTpzYZqTom9Ib2pSv8zpdKbw9R_mKn3FfUE7-q-ng7ac2wb1UxvQjE>
+X-ME-Received: <xmr:XDChamIOeOwblLyo9MBXL6JBAtI-xBoqEfDYY71_y8XZjzVDk3TRA-jqpWI>
+X-ME-Proxy-Cause: dmFkZTEiW/+nV4rYmizBlllYjdWy9jqvSxZvqNJ2q6qUteD5fJ9Zyb9yTBIim2RhNlQ4b7
+    dMU4PfWTx+fEvDEUlrXRcrV/figM7CPym5AZYRJVJNmn85DqGnaTTKigjK7TO+5UJNb5+H
+    zZTX0MOEmeJWrlS20GJ9h9BA11Co4qs4/a7UaXtQDfPG2no4Lspj7lqjKuTCNe01mTRxvB
+    qtVY9Md4LCjxgbvXrRnHrCR0Amf/AJXmWm60OREt75lWIqdbMok8Gx8O2c2GKF2WYbp0JD
+    T+RmkJhw717rL/zb2n67g2KxEzUEsb07n21PWMubViHRv40sddXv9VXogYAhZryvsNmyJD
+    yO0fVz6/nZRMnhslX8P6rOxVoIZtPCMapnMTJmJD6RDaFyV/wCynU2R1uVnpblGxkDvjqp
+    9FB8hkLOcU/XtSz3LO9vhiLyFDztFrfCizSXvok5/VSsBXgu3akdPY/LVH8FFQLplkHdHH
+    oUlyi/jFqhkAhkvYUPtQyUQ2V1Y4biHXW7KkqiiVmzzb/UtG1pUfUuZdIcaow2LZjZCW/Q
+    6OYCRBVbtdFTtmpy4rp/eq4Jzw63HjVE6SdCAzkxfXKuApgtWjgU5+uShl2JPPIvbfypYy
+    DQTs2guYTe0360dg0KUjggE7aMxcQdSVyqo6kC7VOzXukdb1+aHUp38spJxg
+X-ME-Proxy: <xmx:XDChaoT9Mi3oXF210UIpyYKCmcuwrI_FNGLJ0DSyjUCwoXHQLiA6cA>
+    <xmx:XDCharsSfU6L978DjCNzkyGOTRUwtbsO7xjyif50d2c1xKQDyXKWHQ>
+    <xmx:XDChavgGvj9BCNmP1Hz7qbUe2wBz4zMedsxxqzo7SArFo5ULQocckw>
+    <xmx:XDChas3r503mikOJvxls3XXGwC3dSawaWXvyBE5hh7J_gpes4eGCnw>
+    <xmx:XTChasBKVHnDnA9J4uZmm_88pbEwcS2Xy68NsGIYcdTYE70cqP6kC-X0>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 9 Sep 2026 06:09:32 -0400 (EDT)
+Date: Wed, 9 Sep 2026 11:09:31 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+	rppt@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, usama.anjum@arm.com, usama.arif@linux.dev, nico.pache@linux.dev, 
+	ziy@nvidia.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
+	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, ryan.roberts@arm.com, 
+	shuah@kernel.org, surenb@google.com, vbabka@kernel.org, agordeev@linux.ibm.com, 
+	jgg@ziepe.ca, leon@kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v5 03/19] selftests/mm: scale khugepaged's collapse wait
+ with the PMD size
+Message-ID: <aqEvyYMGaPiyW_Tt@thinkstation>
+References: <20260908125105.1510704-1-kirill@shutemov.name>
+ <20260908125105.1510704-4-kirill@shutemov.name>
+ <6ac7ea7d-38ae-45eb-8d98-f626951a43cd@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260909070336.32979-1-xuanqiang.luo@linux.dev>
-In-Reply-To: <20260909070336.32979-1-xuanqiang.luo@linux.dev>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Wed, 9 Sep 2026 06:05:21 -0400
-X-Gm-Features: AcwNN1XRsCSsVSIJECxCc-1JgLAJouQ3Cyvq8feC7J8tsCQrA7yQNPwNFlVqu04
-Message-ID: <CAM0EoMnZ6AwTX45hHAkqe_tvY0jpeMhzz=c9jhduzzau2Qn84w@mail.gmail.com>
-Subject: Re: [PATCH net v1 0/2] net/sched: fix action batch failure cleanup
-To: Xuanqiang Luo <xuanqiang.luo@linux.dev>
-Cc: netdev@vger.kernel.org, jiri@resnulli.us, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Xuanqiang Luo <luoxuanqiang@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6ac7ea7d-38ae-45eb-8d98-f626951a43cd@linux.alibaba.com>
 
-On Wed, Sep 9, 2026 at 3:04=E2=80=AFAM Xuanqiang Luo <xuanqiang.luo@linux.d=
-ev> wrote:
->
-> From: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
->
-> Failed batched RTM_NEWACTION requests can leak action references and
-> reserved IDR indices when cleanup encounters a filter-bound action.
->
-> Patch 1 fixes the failure cleanup.
->
-> Patch 2 adds tc-testing regression coverage.
->
-> Failure reproduction (key output excerpts):
->
->   python3 tdc.py -f tc-tests/actions/gact-rollback.json
->
-> not ok 1 e3b1 - Failed action batch releases a bound action reference
->         Could not match regex pattern. Verify command output:
-> [...]
->          index 1 ref 3 bind 1
->
-> not ok 2 e3b2 - Failed action batch releases entries after a bound action
->         Command exited with 255, expected 0
-> RTNETLINK answers: Resource temporarily unavailable
-> We have an error talking to the kernel
->
-> not ok 3 e3b3 - Failed action batch releases repeated references to a bou=
-nd action
->         Could not match regex pattern. Verify command output:
-> [...]
->          index 1 ref 4 bind 1
->
+On Wed, Sep 09, 2026 at 03:59:37PM +0800, Baolin Wang wrote:
+> 
+> 
+> On 9/8/26 8:50 PM, Kiryl Shutsemau wrote:
+> > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> > 
+> > wait_for_scan() gives every case the same three seconds, whatever the huge
+> > page costs to build.  collapse_full() asks for four of them: 8M at a 2M
+> > PMD, but 2G at a 512M PMD -- arm64 with 64K base pages.  Three seconds is
+> > thin at that size, and the case has reported a failure for a collapse that
+> > was still going.
+> > 
+> > The timeout is a ceiling on a poll loop, not a sleep: the loop stops as
+> > soon as ops->check_huge() sees the collapse, or as soon as full_scans has
+> > advanced by two.  Raising it costs a passing case nothing.  Across 80 runs
+> > of collapse_full() on arm64 with 64K pages the wait was half a second in
+> > 73 of them, with a tail to two seconds.
+> > 
+> > Keep three seconds as the floor and add a second per 128M collapsed.  A 2M
+> > PMD is unchanged, so x86-64 is too; a 512M PMD gets 19 seconds.
+> > 
+> > On arm64 with 64K pages a passing ./khugepaged all:anon takes 49 seconds
+> > under TCG before and after this change.
+> > 
+> > Assisted-by: LLM
+> > Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> > Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> > Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+> > ---
+> >   tools/testing/selftests/mm/khugepaged.c | 7 +++++--
+> >   1 file changed, 5 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> > index 1ca7c6978571..48e0040d53b4 100644
+> > --- a/tools/testing/selftests/mm/khugepaged.c
+> > +++ b/tools/testing/selftests/mm/khugepaged.c
+> > @@ -556,8 +556,11 @@ static bool wait_for_scan(const char *msg, char *p, size_t len,
+> >   		int nr_hpages, int collap_order, struct mem_ops *ops)
+> >   {
+> >   	unsigned long hpage_size = page_size << collap_order;
+> > -	int full_scans;
+> > -	int timeout = 6; /* 3 seconds */
+> > +	unsigned long bytes = (unsigned long)nr_hpages * hpage_size;
+> 
+> We already pass in the 'len' parameter, and its size is also 'nr_hpages *
+> hpage_size", so you can drop the 'bytes' variable. With that,
 
-Thank you for providing a reproducer.
-For the series:
-Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
+They are the same for the PMD contexts, but not for mthp_khugepaged:
+mthp_khugepaged_collapse() passes len = hpage_pmd_size, the range scanned,
+while nr_hpages is the number of folios asked for.  collapse_single_mthp()
+asks for one order-N folio in a whole PMD.
 
-cheers,
-jamal
-> Xuanqiang Luo (2):
->   net/sched: act_api: release all action references on NEWACTION failure
->   selftests: tc-testing: test action batch failure cleanup
->
->  net/sched/act_api.c                           |  9 +--
->  .../tc-tests/actions/gact-rollback.json       | 78 +++++++++++++++++++
->  2 files changed, 80 insertions(+), 7 deletions(-)
->  create mode 100644 tools/testing/selftests/tc-testing/tc-tests/actions/g=
-act-rollback.json
->
->
-> base-commit: a401a9d547c50ef34db1088cc1fb9a201a7af657
-> --
-> 2.43.0
->
+That matters on arm64 with 64K pages, where the PMD is 512M: with len the
+single-mTHP case would wait up to 7 seconds for one folio, with
+nr_hpages * hpage_size it gets the 3 second floor.  The budget should
+follow what gets built, not what gets scanned, so I would keep it.
+
+Does the Reviewed-by stand with that?
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
