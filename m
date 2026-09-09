@@ -1,81 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842C9545288;
-	Wed,  9 Sep 2026 11:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4502E54280D
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 12:25:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788953660; cv=none; b=Dp7xJLJxi4LsdZgkbGzgwJb7o4ovMShZK9oWlYp5vT9A6HXiEsI7bscnt92nz4InoVKqVPJG9hBWYPyB/QmNoxHKoCfR7dg9uve/uRDG3Gy8wpzLKpvDZXRwgEll6cWxB5WICBBmieamI61OVErBP+jg3AasPGwDDn1ttxWM1zQ=
+	t=1788956732; cv=none; b=Tx86CBBLXgw17nHfxDe0rlZaf/AAurmuPa6TfrcrMNMaRM5bCTXhaEgNfrwQ4APooSd/jF1IlO6aPsLypungqnkDQ+ZXYsDFF9z2xMXs41RuJK+viGMU3qKI5DnI/fnqWdploJR28E56ZP/N3iCkhSx5aA4kH++aj745UatM49s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788953660; c=relaxed/simple;
-	bh=BYY1z10WkjEwK2mb4dVa2Dd8xSUo3dhWo++giVKDhnw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o5STOVcNODuqPBvOd+Jc4+ysLUEjcyP8ueGnLFp1wdM9deie4hkRtHPeJQly8nZigLpe8dWttXQd/4OmyVbLfX2JekVaxkTAFAPtowZSnudCI4C+hNEdy0/WDwefQ6yhSahzfw21ozUVdyJHYKTwvp2l2J6ExH/xb7sopRnnTTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yde7Jb30; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788956732; c=relaxed/simple;
+	bh=n3naVrMZf1eMBMz6krzSP4NdQDwTMp3k1GlYTRlxlc8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=r5IilVBuN6364jhoGi70tBNuGnilLGgI9e+1Ro7oSma2W/fpGixaFCtekcFP8MmQuMMkz2tgL/3TtztawnvIBED8O5AMqLpe3Qomcwc21J9f5ebZyJ0SgP1wI1qlFCG9IMGXtF6dudZU48cbY5uq+9AMEtigQwjACBtYMNlOULQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mDdp5vG8; arc=none smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yde7Jb30"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D401F00A3F;
-	Wed,  9 Sep 2026 11:34:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788953658;
-	bh=oSUP/FldKSKIh3rMEH+d3FwAjG9D+pH/7vnolvntLZ0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Yde7Jb30UcygvXK1+GjsPtdnydHn1R+M/nx8DmYk/Yf32NI2SN6NuUACHfnYM5AmP
-	 N+MpZQaEiEU1VY8D0fYerMGmJBbrnNH5FeTDmz5idDk18YK/FpLWJe60skjL4KHLvr
-	 PeEpzfV6ykd0BDY3jXAbCr+HK9My1i/y6y8Wrw4KrvpeLobGeL0VGZ+RIggo7CyqOP
-	 1tTeQAZhegkLr9eFSXFKTSQiZV5QN+Er8GnUYkT+EnCQW0iQj6ytK9lzCj/BnwJlVR
-	 VylFoArNg/gAtvX6nhU4gSeUU43t0+01Kg2meWR8ZYhQkuGXr+BwlZDJBh2xPqi6sX
-	 knSUvbNG+XKNw==
-Date: Wed, 9 Sep 2026 12:34:11 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Fuad Tabba <fuad.tabba@linux.dev>, Peter Maydell <peter.maydell@linaro.org>, 
-	Leonardo Bras <leo.bras@arm.com>, Wei-Lin Chang <weilin.chang@arm.com>, 
-	Yao Yuan <yaoyuan@linux.alibaba.com>, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v20 03/14] KVM: arm64: Manage GCS access and registers
- for guests
-Message-ID: <aqFEGDkyZbXp1B0V@gremlin>
-References: <20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org>
- <20260901-arm64-gcs-v20-3-f31750bdfadb@kernel.org>
- <apmfx08vccSd2MXw@gremlin>
- <d2659ac3-2f00-4fc4-8f9e-0585691a4ba2@sirena.org.uk>
- <apqA_SuoA6-TyHsS@gremlin>
- <apszJZ17KUvd6BJ7@sirena.co.uk>
- <ap7GPxGs3nhT70sS@gremlin>
- <1effee02-41f0-4680-9a6f-9b9f12459ec1@sirena.org.uk>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mDdp5vG8"
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-51c0006ea8eso74600931cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 05:25:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788956730; x=1789561530; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=/v8AsEvq2mhutOPqz3uIGlqkQlGqCqlg/Ykqh+aUxLI=;
+        b=mDdp5vG8OdmW/KJ5e0dG7aBiB5Gtut7tsNuIWgZ2kZzf8JNKh9SBSZPiQBDSfbscDW
+         iogMFyE/31AgQrW6lSJuX5NZfAPc4HSRjbe/Snjqm2vopI9lIA5mwWoPnKqx7pBF+X2x
+         7ZxYX8VTFZqZaRzN23lRKWIBBCG+ZB2F/RV+iCgxShrjU12KrgIjRrNTMRDZcf8kLdKv
+         RYqQGdCUBKARJdPGQrRlZJnguUuYNOluQkjHHPMAC4N+0j4mX1SzeXgSn+c47IR0UHJd
+         jY/RGG77mdbSjDwYoYkO/D9qpg95PndXHZF5pTTiaNiJd4uBHqHP7jt1tZu4jxjImPba
+         kNcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788956730; x=1789561530;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/v8AsEvq2mhutOPqz3uIGlqkQlGqCqlg/Ykqh+aUxLI=;
+        b=jeHia3RnrHjf96RXmNXVWH9yEI1cQKFzOXhiEnnMJOiW2IvG1391teYbQ+BJCyMh5s
+         NEIlpPMiKxGerOa8uNxX4HjjeVebSS6KwXxBSE5n7MIC8sVEgtn5CznoZ8jzhsFZGVOl
+         NJzk8p7P31RCsCQccYWvmictLLyc4xW52/j+hIbYlS+X/kMV2VmGRBe73Z8Oo6O2/NK+
+         fbPvSR4+5TCDsTim/rieXfD6W/OL4JYhwdoZ9M6IdQ3K1YQigySK7NN72nSnSbSZ7EgN
+         EycN2f787vbGAEh+mgSr4Jmxx8ZbWNTxRTwGF3pb0OgtxRuM/Ho2PPgQQjSZB5ld9sLy
+         y0Jw==
+X-Forwarded-Encrypted: i=1; AKwUvBxgik7Pwk1RojhmyhXbUU563VLr82L0gj5NKPUULkSMCAxLTFmH1jJNHc3KyPXRHevaQIyIXm7JLJdcjHShfbE=@vger.kernel.org
+X-Gm-Message-State: AFuF++keyYC67xPAo9uwcgSIKD/0CIWPeJ5t2TsmKxT68W8PkfO1DVr/
+	0pRVanA+09aNxrRrs9y1f40fT68qNOlwcntmVybO2k4yr/MB/dobM81D
+X-Gm-Gg: AYBFou0pNVerVFqr+yE2xtk7YX5SjOcpXI1UaiyxqvSd6BxUykhowcjXfDeYRB7F/65
+	S8OYrsQxXGROekrihQiU+CysFMvB/1XUeVAGJqUMDoubprtpa3pdQ8N4UL6t32f0gN/1oquBqYs
+	P25MF8yas5mP96gI3+DK30cwtkMUsV+JPw/jwqGzPrhFzWG5klZejVxvH4nZkbAk4yh+OPUi6tL
+	f2TLbuQt43Hp09t+Kd6VWINQ7Q9hScRm1NMTY+ZFIWaBx1IvKcO6gBjDwi+Xfi9qXSeChKWU5vg
+	/Fjc/235v4wkEdFcSH0PYrHpe0nf0T/D7hc1DDjmTjxpROB1nbUV66OttbsLMZoErvHi3yjx3b9
+	DBU0gm62URC4QJdErusLFsUDdrmvrEGTVcnFINkRCGz1L0YwCSSWDaZEm2MIkdncvsrjJMGgD37
+	sXsDGks/Fim2JiXoRudCw6siGgVrUQVYklHLl8JrR0kvLhSS1iq1DHRZVhFoX1+k/k7A==
+X-Received: by 2002:a05:622a:144b:b0:530:430e:8f10 with SMTP id d75a77b69052e-53054a34eb9mr379865441cf.47.1788956730010;
+        Wed, 09 Sep 2026 05:25:30 -0700 (PDT)
+Received: from houminxi ([163.123.141.225])
+        by smtp.googlemail.com with ESMTPSA id d75a77b69052e-5308d8d3eddsm61037541cf.0.2026.09.09.05.25.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2026 05:25:29 -0700 (PDT)
+From: Minxi Hou <houminxi@gmail.com>
+To: netdev@vger.kernel.org
+Cc: aconole@redhat.com,
+	echaudro@redhat.com,
+	i.maximets@ovn.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	dev@openvswitch.org,
+	linux-kselftest@vger.kernel.org,
+	Minxi Hou <houminxi@gmail.com>
+Subject: [PATCH net-next v4 0/2] selftests/net/openvswitch: SCTP tests
+Date: Wed,  9 Sep 2026 08:25:19 -0400
+Message-ID: <20260909122521.2687193-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1effee02-41f0-4680-9a6f-9b9f12459ec1@sirena.org.uk>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 07, 2026 at 03:55:43PM +0100, Mark Brown wrote:
-> On Mon, Sep 07, 2026 at 03:14:34PM +0100, Lorenzo Stoakes (ARM) wrote:
-> > On Fri, Sep 04, 2026 at 10:07:49PM +0100, Mark Brown wrote:
-> > > On Fri, Sep 04, 2026 at 09:54:51AM +0100, Lorenzo Stoakes (ARM) wrote:
->
-> > > I think the best thing overall would be to leave the runtime paths as
-> > > they are and refuse to run with an architecturally invalid setup, that
-> > > would avoid bloating the fast path.
->
-> > Ack, it'd be nice to not have to worry about that.
->
-> > Presumably we definitely want an oops on a GCS violation in general?
->
-> Yes, the guest is going to want GCS exceptions delivering if they've
-> enabled them and something triggers them.  It might also be relying on
-> the GCS for stack traces even if nothing triggers any GCS related fault.
+This series extends the Open vSwitch SCTP selftests: patch 1 adds the
+IPv6 flow-key test (mirroring the merged IPv4 test), and patch 2 adds an
+SCTP NAT test exercising port translation across conntrack.
 
-OK so the answer seems definitely to be disallowing the invalid config at
-runtime then I think! :)
+v3 -> v4:
+- test_sctp_connect_v6 now also asserts that installing a keyless
+  ipv6(proto=132) flow is refused with EINVAL, pinning the reject side
+  of the match_validate() sctp() key requirement (pointed out in
+  review: only the accept side was exercised, so a regression dropping
+  the requirement would have passed unnoticed). The refusal is checked
+  to be errno 22 specifically, not a flow-string parse error.
+- Wrap a few over-80-column lines in the NAT test; checkpatch strict
+  is now clean for the series.
+- Rebased onto 548b86839f7f.
 
---
-Cheers, Lorenzo
+Signed-off-by: Minxi Hou <houminxi@gmail.com>
+
+Minxi Hou (2):
+  selftests/net/openvswitch: add SCTP flow key test over IPv6
+  selftests/net/openvswitch: add SCTP NAT test with port translation
+
+ .../testing/selftests/net/openvswitch/config  |   1 +
+ .../selftests/net/openvswitch/openvswitch.sh  | 201 ++++++++++++++++++
+ 2 files changed, 202 insertions(+)
+
+
+base-commit: 548b86839f7fb819a4d6c83b71c73ec378d24275
+-- 
+2.55.0
+
