@@ -1,183 +1,173 @@
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010054.outbound.protection.outlook.com [52.101.69.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2646448D18;
-	Wed,  9 Sep 2026 18:47:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788979646; cv=none; b=JHhGuIkxOKyDULS2zRfGzgmOqKYQ1PLcmx4GDb8j3R7slGHOswUUuPClTrlj7D7+FD+oDiqw4l30UOgEXp5tf8W+kE3S+5qpBhXyJhpo6pAtHVT/pwMdRwh8NWxvTHpb5Vsfdp5ZNH3T/7IIZ8/zQBfGy3yUEKTOzxacJfBRNkM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788979646; c=relaxed/simple;
-	bh=4hjOOWXKP/Z2RIl4zAUqiVgWHAB4EEVNfl4roXiWLyg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HCo3ZxrBPe0bSgxy5Bq324bWGTk9R7K28Ujkoxzu04ZmdTIGheXzQDJXNGZmEo3Vq4VaFdJbzRrdrFAaPMNeNFzdvTA2D0lFhZQvh/uaeG45Zxjjk2UHIkjKyXFofYowpr477CAhYaOnzPB0zdoMfcuxukxUXiw9e3z+JQrl/m8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=beQ93UYl; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ehxgvOYk; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65173C3F7C;
+	Wed,  9 Sep 2026 18:48:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.54
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788979687; cv=fail; b=qva1wmw/YmIMDBfkD+z/puYIC9do42X1U1eaMUVzGV1BBvkfopHUN3Ip8mPjp7ka7e5/kCYuckvjUHqw4nfBNkzMX9wkMwHEs1xcqUv+GDUQORgcqJYxlJqaHz0h4qnvTaXlKlsoaXSe4chU9Qc8xtu22Kt09Epla15WOmRM0Qs=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788979687; c=relaxed/simple;
+	bh=iW4I8cwJYntjlBt4A304dyt6IVbG2MYKCdOyANyFw1Y=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=B9Szey0mMw8GqSWMDLnEJM3b+/CqFfAxoz/w82DaIDC/aQxF9ua6rtBTo1TVFF8roxXdatNPKX6c9SQwQUfN/bUzq0PN1cBrYYb0UlCWLmJTixUfO6j/mf6Zo38BwHyZG4fJnzL6sDaLhFlfzONebK41Q5fvc6VR8upUlJ+X2tE=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=N6m16E1C; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=N6m16E1C; arc=fail smtp.client-ip=52.101.69.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b="beQ93UYl";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ehxgvOYk"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.stl.internal (Postfix) with ESMTP id 9D6CD1D000F7;
-	Wed,  9 Sep 2026 14:47:23 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Wed, 09 Sep 2026 14:47:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1788979643; x=1789066043; bh=/E8EUsi9XW
-	AeteeJp/t/J87SvqxmYV+vojsxbJ0Wxgw=; b=beQ93UYlN4l2A5SxQWIxjlKjAM
-	m9lwItz71BgA/08i447u2Kq/F6WrmbtOrI75g0ze52RYGXmy8p5agYfG219r4/f3
-	gl3gRN8zcaEB+zvxLSoaH4yZGIvwUEd6RPHkZJTpsZBsyco04OUMNhcleRQYuMSz
-	DxfIuLS6V5HvRFca2VrjteceXPltaxkK3kAX2TfKLEgurJXH0Kpdo0ZGZzQA8wSQ
-	Nhcsv2OTaPlexdCNClLQfCufjMOkiBHeIuvgA5lpZBxRKwxwN6xiUY5noxC8s4Ub
-	C7UKnGfJnwFjRALlcXnMzskp7jiorOGIOh6Ck5CvYggFES6V9DCt+7HKDW1A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1788979643; x=1789066043; bh=/E8EUsi9XWAeteeJp/t/J87SvqxmYV+vojs
-	xbJ0Wxgw=; b=ehxgvOYkt8CiR94Lhp2sN3+vpWzVJTuOdVNgtg8tFdwDqerWEb6
-	fxZLml6MHXIMFeiMLKUz1QOk9lJJs9Me8O0/YGRgX+y2zdFQSfgK2p6/rcCTAX62
-	OpF/k2aeKcARr2wrCXJt8KWCG73oM17lvUO10J+kBzG4m4stmuHBRxfpHA68GUBZ
-	W1DVwv7oNK/hSpGaQjn5ECx7bRc6iJkvDbfP9RQWKuG6Ls+eE1LTDiBNSsDimb/1
-	yGN+jbCAQIfPCh+kk9/z08ClFKeU7n/kt3tYcMDZsXfhsjqeQf7zSjqdJc6TJPGn
-	fbt8jrX8j1CXLDgoS3urqAY8VUJK63PYSsw==
-X-ME-Sender: <xms:u6mhahK4HU0HPPn1GG7h_fzsRGki2JODvE0oJBVGH1Hv2plko7RztQ>
-    <xme:u6mhao_20JKy45ZSTHfNe64ILMxUvSjPMLrXt53Zbga8UFAs9iEEo__NG3EBL6mNU
-    3aKQ1_VTC8w7j7m6TDEltaUvragxIFTfbWiojy61HutH9zbF57voypv>
-X-ME-Received: <xmr:u6mhalGuolZ3CO8qDJbcP747jviPHDg2_yqLA8pLEvHSsMcowWtkb3kDnWfWPm6HXg>
-X-ME-Proxy-Cause: dmFkZTGt5cwZFEqRaLH3cikRR/hI/9HY9UJ/mJgqZ0vrjqAK0ARTrcB5WKoKL4iOa7nrPR
-    m6NPH4498FhZQnWWoEjUvxEqOSB/PxMEmZcvY7Grj8wflVHXapdJid7mhxwJHj8EIrfFfh
-    Fy9qfY4QE74B9KasvrvnO29H1mVk05zoXRhNypRI1cMouzjYn+bQov8/KFzWjoUtwWkyMI
-    Y69UReNU6HW8rbWDEYuf5+kyKJc6sGyeobZ4lTBEXEUbVJDEo+M80VP36EaxTHfVG2mxhs
-    4M03pymazud3loB01a2UA8zb3941tJJ6MDW/q+zEd6a6xDqrGIS0tNgRn9xKDWauqnIsUa
-    YZqhB+j0f/O4+iswV5DItjtalT8IsKMRYgJDwotSodn4/4SmRWH0i7cBnuxNXLcF5ygKrn
-    2ClJysrZqfbR+njeeHCa+ff0PZXV+P2oyp447cAAfZ/p6jLphOmZvceS6+oaOD6EA1w1S1
-    7dnUln/IBmRnk/tnC9lWw9jL/fEOY61B68o83a5Qb8OB3GZ72ZrT2hpdj1rgB7zjzA0Zf3
-    oAbfKUamf7/Z4pZLaaZ7IoDZxQTnulf/V3AgliFejh0u+7JC9Q6LU5xYOThdU4VMmqTQwS
-    6/m2DYfUIVVbTIEhwhwgj0IttLHMwuwkNl/+PzA43DLvox4QM3d6DJjQNIYg
-X-ME-Proxy: <xmx:u6mhar47Oy9kNhR_yPwykbmCyJZDwTNg8sXeTWoMtcOrpoZeT7e55A>
-    <xmx:u6mhama6l3GzEEUzpiD_SEVYpYmm67s56XMHtm9Vw5DkXPksVNGelQ>
-    <xmx:u6mhahjTGCRC82d20RH2Bn_HIdceqhAafyU1XKApY8z5sdfcmQYcsQ>
-    <xmx:u6mhagd_8t93rcdb1NJokKtk0PMtB3fOIv5U8XnazrV3ZK0Th2d-6g>
-    <xmx:u6mhav1DF-t142iWY4zLLnq3rFlaQUskhGmrvZVI1Lo4A-ddze0WKfd9>
-Feedback-ID: i80b64ba7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Sep 2026 14:47:22 -0400 (EDT)
-Date: Wed, 9 Sep 2026 13:47:21 -0500
-From: Juanlu Herrero <juanlu@fastmail.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: netdev-bot+sashiko@kernel.org, dw@davidwei.uk, netdev@vger.kernel.org, 
-	io-uring@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kuba@kernel.org, asml.silence@gmail.com, pabeni@redhat.com, shuah@kernel.org
-Subject: Re: [net-next,v6,5/6] selftests: net: add multithread server support
- to iou-zcrx
-Message-ID: <aqGpOjOk_XJ-Nzmr@jlhe0197-mac>
-References: <20260831-iou-zcrx-v6-5-02d1d012f0fd@fastmail.com>
- <178839229706.3394541.1555608492152892136@kernel.org>
- <aqGGevrEG5+iZosZ@devvm29614.prn0.facebook.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="N6m16E1C";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="N6m16E1C"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=qkBXbNbqZimrI19i7Ng8aKGe1HyMERtIa4xUcre8l21Cbs0Vbo7dJbz03V8tNbRbU244WXcUJ+Pw5as/MUuNmGTdfGxWpoykugKiEG4X4gzsPnf5jA6mpHP/ghRcqcXOR20fIU0luR0jP2apG5rIyeXi6NACWxedw0p+nTECg6x+AOEeoKONzj7nW4lOAtxPVDBsY87L2dMnuzMjYvOB0Q9YPHJpnd8kUOtr7/Zokgm+89EwsBeaFmf65fNqTBopz4PzYFNojvawdqFFn5jw5uKDSTMnl+sUirKjgpMloxU3KWfejOHLGH/VKf0Z4VIwZqL5FO3zSleFg5V1Bp/G9w==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Rlt+lXC4x/kFY2mM0Tf93RYSx0nmtQkvxKfjunCUpJg=;
+ b=oLyag8EMkJmryWegI+ZJutXoYSwtUSLiWb7k1Y8n0PJSIipshwaNVaCeHLb9TrX6QqojXD7rggdDGyw71xqHe/+w/WCPX2BBFaFrC0Lz9+KpaX0Oo9vXdDwDb9DZcwNbdZ+W3daKLqzRijD13gIeUGcj1LPjBbrD3hLZn5+TDHQirfBBl90rmebzCSwUtXDNBg+3/AVHTBr4wpvCKZmvyO75X30hPZs8Czz37FEFaK1LORQSl8t6ZHlHdcZgnBXoR2Ovecv/psJxX2u0ZhgxPZc3rfSG0DOgKHT13J0JfXpltZiAR/zn61tZfgilSXerTQXeKQEcjZunYetHuNT/Mg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=intel.com smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Rlt+lXC4x/kFY2mM0Tf93RYSx0nmtQkvxKfjunCUpJg=;
+ b=N6m16E1Ce3bPxR2gSIOOk+S2uTqPIRiCd6Ys6Lkdirzt5a74aCFo7LxumN3m06SQWq1waqt7tPQ2+lJwUnCO18rY5soI8xV+055etPo+jD5ncXTY/B1ZwzoC4YQmpHKBjGcpnveeZv1B43xrKbhRMxdId3SgrbIFu8MK902spS4=
+Received: from AM9P193CA0011.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:21e::16)
+ by AS8PR08MB5958.eurprd08.prod.outlook.com (2603:10a6:20b:299::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.7; Wed, 9 Sep 2026
+ 18:47:57 +0000
+Received: from AMS1EPF00000045.eurprd04.prod.outlook.com
+ (2603:10a6:20b:21e:cafe::49) by AM9P193CA0011.outlook.office365.com
+ (2603:10a6:20b:21e::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.406.7 via Frontend Transport; Wed, 9
+ Sep 2026 18:47:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ AMS1EPF00000045.mail.protection.outlook.com (10.167.16.42) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.406.5
+ via Frontend Transport; Wed, 9 Sep 2026 18:47:56 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=J00PEp+H5fuH02TyiLTX4qH1q/7opZT6w0F28r+F4IQpKhUAkOik1z3KRs19WGTbwQDIGOAnLlabEZLRRaV2rLe9/5daYbd0tyypcCv3ppfKtifT9joIZGZRJnPWmf6zxndgR4jIoBBzF/NGw2QBu0rZs3AGt+r2AXGRwoBGhVaZlcmuO9zGbC8/Y2FKGZMjtFt8g0TSwtmcxBcQszSauVZFOAWmgVqdkN2p3H2sCQrdbSHfPKiwQplnpk9PRTb3IMqczXWVyHEepx9N0qAD70V+eAsrXKOVKrqi3cSVvfDh3pijCSK9TAQwdQWoHb5nO6M+657A0vLI50dascyEbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Rlt+lXC4x/kFY2mM0Tf93RYSx0nmtQkvxKfjunCUpJg=;
+ b=gI53BTuyYqcO1JQFGWZ7GOfiaF2SEYwEOKLdHVKGqT5mnANgQgJPXxY2gLMF4xbz7K7kmH9J8kRCZk+WSM1JDfcz4yuKDIatwpAuTvinSqbeP4DgK4xdv0OyEwuf2oGCyq1JUTpM8OE6rwI3DV4k8nA9BEuBfiz5th8o3TJPzgf+hgqoTSIBbskwGO18+CNAKhPkouMEMq7nniCONIJoi0ifzbEh0czXfnhcxvUU/Htv+q+3SnuBrXsEeL8l/fgdtn24rAsrkk9RPhnQ8s085qntuDY9rfLlersxx0CvSxz5lXuMyJTFoJaAtFkiQcsBiXf5zJECCe5IgiB6pd10jw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Rlt+lXC4x/kFY2mM0Tf93RYSx0nmtQkvxKfjunCUpJg=;
+ b=N6m16E1Ce3bPxR2gSIOOk+S2uTqPIRiCd6Ys6Lkdirzt5a74aCFo7LxumN3m06SQWq1waqt7tPQ2+lJwUnCO18rY5soI8xV+055etPo+jD5ncXTY/B1ZwzoC4YQmpHKBjGcpnveeZv1B43xrKbhRMxdId3SgrbIFu8MK902spS4=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from PAWPR08MB9829.eurprd08.prod.outlook.com (2603:10a6:102:2e6::10)
+ by GV1PR08MB8401.eurprd08.prod.outlook.com (2603:10a6:150:a6::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.6; Wed, 9 Sep 2026
+ 18:47:17 +0000
+Received: from PAWPR08MB9829.eurprd08.prod.outlook.com
+ ([fe80::5cca:dab9:827e:c7bc]) by PAWPR08MB9829.eurprd08.prod.outlook.com
+ ([fe80::5cca:dab9:827e:c7bc%6]) with mapi id 15.21.0428.004; Wed, 9 Sep 2026
+ 18:47:17 +0000
+Message-ID: <855fe434-c663-470f-8303-a84e7617c0f2@arm.com>
+Date: Wed, 9 Sep 2026 13:47:11 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] selftest/x86: test ARCH_SHSTK_UNLOCK
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+ "x86@kernel.org" <x86@kernel.org>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "shuah@kernel.org" <shuah@kernel.org>, "mingo@redhat.com"
+ <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+ "tglx@kernel.org" <tglx@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <20260707191136.1732277-1-bill.roberts@arm.com>
+ <20260707191136.1732277-2-bill.roberts@arm.com>
+ <440cdd41a203589b31e287378de146e18e620176.camel@intel.com>
+Content-Language: en-US
+From: Bill Roberts <bill.roberts@arm.com>
+In-Reply-To: <440cdd41a203589b31e287378de146e18e620176.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: DS1P220CA0019.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:8:44c::15) To PAWPR08MB9829.eurprd08.prod.outlook.com
+ (2603:10a6:102:2e6::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aqGGevrEG5+iZosZ@devvm29614.prn0.facebook.com>
+X-MS-TrafficTypeDiagnostic:
+	PAWPR08MB9829:EE_|GV1PR08MB8401:EE_|AMS1EPF00000045:EE_|AS8PR08MB5958:EE_
+X-MS-Office365-Filtering-Correlation-Id: 62234e4a-064c-4238-3add-08df0ea2dcf1
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|1800799024|366016|7416014|376014|23010399003|10067099003|4143699003|11063799006|56012099006|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info-Original:
+ 12EForsc6vJq8oGbXa3Y3uvQxKl2AS0xM6bLSh0Gvd68ZxWmYJT4XtP6N31VcNBxu5X0Ta9pWtsxxgs+yGtWdRl7y8gmeLXd71WA7BZ91ym5lM6bjqz+CJ19OdOjDYwtqCRlouwCa4fWHPNukOJ7ZvQ1DvjpPFa+jh2A9vVU9LTUcad1auneeH9UavWYgfmqYO1kZkkyCQhJU7kgpoTmm8+loRi6OuGoLLt5U6XkIeMovvt6Abek4lbGWfA6mQ1p49JwR3e1nz/Q1Dix3uY5WIo0CFzm6YLrA6LM4L+3YVM2qIbr8hVy/1ycPoYJzwga9Ubt4crIN6FBeuUV7tGLYaJxasddfgvy/uVIF1QINVkdfQEjCFHX9BSkBaKy9tE+GTsgJT28hhGQu4a5vTlV0v4GhgF6yyheLLzSAIHubCA5R4XO1yGb6IjTPaELCyC3tXkT43bMVSRBMW7nb6RgnoB8nZy6O7RTAtAS1pWBCVvTZpRNe9WL50UyWFI1+TQgfydJ8eOh22GKyYMpmKcYjBbUofEikZ0jtsJdkl6s6yX2nDws3WGlwZZQrrx0yQC0ANoZVyAox2Y0feS+geIiGVzbevqrfHVhDnsM8SRGKco5uaZf8cjcQCJqbhYkpnF0A3vbTV8KYfcm6Fiq0c9/dgVxUXg91n6femdH7GVZOMo=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAWPR08MB9829.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(23010399003)(10067099003)(4143699003)(11063799006)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ uCob/7KDI2nMIU+dCex5KuiEfWfsu8F83q7JUMJ/h5kjXV1YxnQV0yFD855lu8LT3OsnvvatB8onl8tMtxZl7K4ZvKwk4ouxlA8/qbj2Q3Psqh7yZnHNATyDTX0pPwTMee31btbZ8pQHR7EOBps1ccLSe+SKKCM6GpeOk6BLWCfV/+DY9J4imFx5vM0QLQPlIxbHjgdcZZ3kYPKDVK0emB2RZigaL2pDalEG9Kyj5G7FVKlW5nfmLDMoGq4CHJp+OkBo1o3+srTZ76Fdg5NWxYvTuDqleEnB8oCkyB8HVGUmuaFY69xoj+kg1O3jNEDbNBgOW2KiAh89D3rSSg1Jfg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR08MB8401
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AMS1EPF00000045.eurprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	6c93d3a8-b039-451e-754a-08df0ea2c5c6
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|23010399003|376014|14060799003|1800799024|7416014|82310400026|35042699022|56012099006|11063799006|4143699003|10067099003|13003099007|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	Kgtl1e+JktSAx5fZHaApR0+lEhdlhFHkWCYdFrlkKZQKNNAlpTEa07s6Bh+NAArQAmzt16klTIXJ6wM0VYIbD/JUfllcA4US4LWyVcXT16g0IctlKuV8/FmeOVLnU6HgGd1/4PDTEuuv8NnNyOCDhhaZt+poCym39h3k0iK4OCfBT86bMRpIggyzWeSGUeo0NyMuFRMdS1rreViMvLu6v/9HbNn4/VpqDkhTS+Fl2I9OISjBOsXemgUmIBIF53vYnUTNBy6DrG92evjoHImOEnOGZWXiONYDCAO1y3C8iiCZ/xiI4bLuwuZuGCPXuH1DtMH0/55FXVp/X6sMcD462wQlScAEhJxHZpqGYGbaL01uNCSDpoe/lLkR+M3KETwHTCQaYKA/4XjyedMIH1RxZfKnQL3sMnpEjjzuUsGQr3gHRptOb+X25JcbNiTcc+QWIvalifRaCMCOhpSNysabvAUW/UiY3QBMCSv6C+P+pnGgiJRpvxR1ihla5ju/hN1NK4l1rtbY04c8OJ31KZWsWW0xDVSXecoE4CfyqLWJYzvcEmpcJ6CB8MMMZQUzHTJrxkwMnXVg8SfjwW4MXsi79luVdcF8Dl6CYICyMrP4zK5k1mHZ+uJuH2DlxP5hXVprST3S0IgIZLe/V6ymeFl0BfWRVdpFrI/zk0M6+zZ+oojQhq1TqVdlZK0VBcQyFXy0oerUeBJOqkFXolrFBP52fg==
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(23010399003)(376014)(14060799003)(1800799024)(7416014)(82310400026)(35042699022)(56012099006)(11063799006)(4143699003)(10067099003)(13003099007)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	gQ9Y8nRXyV2r4MMju5sppSgrt6Lbp8QVAf67pGCOtvEMuhClVs0ebM62C/qB6DplqBkaUer+i1ks+8MnGmuwPoOQnvPCXeprkBqRpuvQcobCKoSOEp5mYI/sEDlyDF3fPi7H8xZ3pXNDyfNgcaCQGI2B2Y+GPi4+5j0jwSOIwnqLsk4NNSm2aEGYSgvjyuHYauOgiX/eCkBI032gwp3eGy1gAj+br6MUu9MSrlRrzcEmUOUkapgAxAxnxfn4kPSgnJp2M4wzNNRxS6fxic4dIsgVSHWrjevRzmm+2TQNIV1apUozfo0jpmBe/TNqDRgHrG345PlKmg8yt2HaSmbV/2y4672iRzLDQgVdsbYaXe1iAc7mN/2vaH9iz+8f9GRHKn4g0a3pmdmDAOPe7Gg48bKVOTi4SgAmJxRcz0c9R5aRVK7q6bD2LU1kZk3jPEAi
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2026 18:47:56.3269
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62234e4a-064c-4238-3add-08df0ea2dcf1
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS1EPF00000045.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB5958
 
-On Wed, Sep 09, 2026 at 09:16:58AM -0600, Bobby Eshleman wrote:
-> On Wed, Sep 02, 2026 at 11:38:17PM +0000, netdev-bot+sashiko@kernel.org wrote:
-> > Thank you for your contribution! Sashiko AI review found 6 potential
-> > issue(s) to consider:
-> > 
-> 
-> [...]
-> 
-> > > @@ -356,29 +444,68 @@ static void run_server(void)
-> > >  	if (ret < 0)
-> > >  		error(1, 0, "bind()");
-> > >  
-> > > -	flags |= IORING_SETUP_COOP_TASKRUN;
-> > > -	flags |= IORING_SETUP_SINGLE_ISSUER;
-> > > -	flags |= IORING_SETUP_DEFER_TASKRUN;
-> > > -	flags |= IORING_SETUP_SUBMIT_ALL;
-> > > -	flags |= IORING_SETUP_CQE32;
-> > > +	pthread_barrier_init(&setup_done, NULL, cfg_num_threads + 1);
-> > > +	pthread_barrier_init(&dispatch_done, NULL, cfg_num_threads + 1);
-> > > +
-> > > +	for (i = 0; i < cfg_num_threads; i++) {
-> > > +		ctxs[i].queue_id = cfg_queue_id + i;
-> > > +		ctxs[i].setup_done = &setup_done;
-> > > +		ctxs[i].dispatch_done = &dispatch_done;
-> > > +	}
-> > >  
-> > > -	io_uring_queue_init(512, &ctx.ring, flags);
-> > > +	for (i = 0; i < cfg_num_threads; i++) {
-> > > +		ret = pthread_create(&threads[i], NULL,
-> > > +				     server_worker, &ctxs[i]);
-> > > +		if (ret)
-> > > +			error(1, ret, "pthread_create()");
-> > > +	}
-> > >  
-> > > -	setup_zcrx(&ctx);
-> > >  	if (cfg_dry_run)
-> > > -		return;
-> > > +		goto join;
-> > >  
-> > >  	if (listen(fd, 1024) < 0)
-> > >  		error(1, 0, "listen()");
-> > >  
-> > > -	add_accept(&ctx, fd);
-> > > +	pthread_barrier_wait(&setup_done);
-> > 
-> > [Severity: High]
-> > Is the listen() intentionally moved before the workers have registered
-> > their ifqs? The main thread creates the threads, calls listen(), and only
-> > then waits on setup_done, while the workers reach that barrier after
-> > io_uring_queue_init_params() plus setup_zcrx(), i.e. after
-> > io_uring_register_ifq() has restarted the device RX queue.
-> > 
-> > Before the patch the sequence was serialized in one thread:
-> > 
-> > 	io_uring_queue_init(512, &ctx.ring, flags);
-> > 	setup_zcrx(&ctx);
-> > 	...
-> > 	listen(fd, 1024);
-> > 
-> > so the port only became visible once the memory provider was installed.
-> > 
-> > Two existing tests depend on that ordering. wait_port_listen() in
-> > net/lib/py/utils.py polls every 5 ms, so it can now return while
-> > registration is still in flight:
-> > 
-> > iou-zcrx.py:test_zcrx_large_chunks() {
-> > 	wait_port_listen(cfg.port, proto="tcp")
-> > 
-> > 	check_iou_rx_buf_len(cfg, rx_buf_len)
-> > }
-> > 
-> > check_iou_rx_buf_len() raises "Expected 1 io-uring page pool, found 0",
-> > and nk_qlease.py:test_destroy() does queue_get() plus
-> > ksft_in("io-uring", queue_info) immediately after wait_port_listen() with
-> > no sleep.
-> > 
-> > Beyond the harness races, data delivered into the queue before the
-> > provider exists is serviced by the copy fallback rather than zero copy,
-> > and the queue restart during registration can drop in-flight frames.
-> > 
-> > Would moving listen() below pthread_barrier_wait(&setup_done) restore the
-> > previous guarantee?
-> 
-> Just a heads up that I tested this on BRCM and did find this listen()
-> ordering issue to cause genuine (but flaky) regression for
-> nk_qlease.test_destroy. Moving the listen() to after wait(setup_done)
-> indeed fixed it.
-> 
-> Best,
-> Bobby
 
-thanks for testing on BRCM and I will do the same as a venue to validate
-any fix I do for the listen() ordering issue in v7!
+On 8/27/26 6:32 PM, Edgecombe, Rick P wrote:
+> On Tue, 2026-07-07 at 14:11 -0500, Bill Roberts wrote:
+>> Test that ARCH_SHSTK_UNLOCK can't be called from normal (non-ptrace)
+>> context.
+>>
+>> Signed-off-by: Bill Roberts <bill.roberts@arm.com>
+>> ---
+> Reviewed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Rick/Dave, bump, any love on this patch series? Thanks.
+
+Lore links for convenience:
+
+- Re: [PATCH v2 1/2] arch/x86: handle ARCH_SHSTK_ENABLE explicitly
+   - 
+https://lore.kernel.org/all/d223c3e24650c3d29f162bb7faaac74ccb7bf65a.camel@intel.com/
+- Re: [PATCH v2 2/2] selftest/x86: test ARCH_SHSTK_UNLOCK
+   - 
+https://lore.kernel.org/all/440cdd41a203589b31e287378de146e18e620176.camel@intel.com/
+
