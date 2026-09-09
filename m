@@ -1,117 +1,151 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E602249C4CB
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 10:05:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788948309; cv=none; b=r7etCrhyqBNVe0ftf1CH+3r/DZr8HyP8BTwHmvwsaQjz2dROnxbGM566gLKfGncxltdXHMZiF2LYJmJHp4ez0YFAPU7fm+qyeGKssqGbhILPo/SnsaFc3R9j3ImHeGuJR4jbEUjE8aF8+rc3TEA9CzHimD3iFtBo0quCW3mnQTA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788948309; c=relaxed/simple;
-	bh=ispYBB5sEcTKbtVy3MNVY1blcRMOieKTmsbt+otEJQE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UdrJVJABUy65QAAYa5QUOoOyUMCBF9IaTBzIf2ZF6r+Q5ozVVVl4DyJDw37x07Izknhq41mC/uKG7ncLdA9gOBUQRWw1S0n4SqgMRmA+1UJR9wgll+BZQ2NoK46YUJ3BOn5O/9DWkEwtdKgFDGwM2WV4oIhOqe2KNjW4m6mV0RE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=Jm6TGgcO; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A12A2BE05A
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 10:05:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788948336; cv=pass; b=XHsSinxRIDhmfzN6xJEGzultNzvg6uVHhhZam8JmHwAJsmZZAtC/cCEsM1t4c1hBa8k5z82wr95+8/zApjcZ1cWkCM+yyNrf8vukV4yXXg8Rh3BDrHXODCi485mM6ft8IY/0NYdb8gUnspu7BYEKvEk6Y6xFlLxjQyIUmLD/jeI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788948336; c=relaxed/simple;
+	bh=Qs6MOo0ipbx7jwU40KRVH3VbId5c+se0y+w18KEpP08=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pyV4hWY/Vb8Z66frz7x7FQgy/XNYb4M3JRlf7HJ0+aISDknUbiNmEm3GZNTAGdTrqbs96QHavmHZNkSXnsqli1exT5gvZCaHb564PL1bmDei6VFhl43bMLSausUkGk0yzHyElgn14LpLY/YdeXJOCs9v+LJNDejh1CHH0ONElC0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=Fyh67PfP; arc=pass smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="Jm6TGgcO"
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EFEC63F5FF
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 10:05:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1788948304;
-	bh=Ne0O7Jrbbh35lHn6AVgsM7/xJO5tCKCdyIfi82Y0KOw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=Jm6TGgcOQK/6ZCcK8Dl+mP0k/bS5qAXb6aqP7cLnHZpZZT3DAmXUlW9Jlrs9jRDtk
-	 4k41+uC5HdMFZu3mQrfxgT8YUG+/N1tUuVQDkr4uahhK1fQtP7Dcl5NMZpOxDCIjLu
-	 zjOUgGtsuK5Mbtiw9gVj85J2z+PT5JV47U55JYu+aNsAgA1FzntMZGafE/afp8HLU0
-	 3SROjoDZnPzoF/aiOgf61b8WaCbamn8y9ppjL21srbgTsAXTWNqUtyRcTU1vc+z04j
-	 3WiVA4wkR353+VsVTCLtygQKbIBrdky2hMqmrOeUJ1F0wxTlhMGsiUWNGpww+z8Dld
-	 aw9BWn1BZKiwXDOCcTDjrrjb+2E/ICZDYEMIkWujUJHxJp40hsPjYUS5mWjbDiWzxC
-	 Eow2nXkImAAVSLE/qKOilG9E4fnl6Jb2xtTbkX4ZFD2bxCoQmZp8XtxhJnVbIwdSZa
-	 +1at6KmTUTRpQBGPnTwGobVp+sf9NZXjNH7CsigoONlBfYhRzDq2YogQGn9DnjbXSk
-	 oqsjZlck9Qu27+BtwRef0tx8gVf6X3wEmiKdJ+jNzO9hNr51c47I8C7AwTs4v8/w0d
-	 3FoZrIPUanA6lV9OEgX8YnuzzdpYa1TFCp5bIdJxcK9AmQfhvYZeFwyYKxjbjj6/5w
-	 F/D6mbhQjR3vnaB1xwsxfENw=
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-485afdd5079so379960f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 03:05:04 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="Fyh67PfP"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-86927f9ba4dso208108b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 03:05:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788948334; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Q3s9n89C4ZJJn545HFhHjvxDyxSQp8wf+qfCrl2k1kTR906SLZhYqfb0UyzvAoPjB8
+         Otj4DvVfIEa3bj2xsYVLBekzoFJof0vfDixrdpWe2N/QGzSANqMGlw8xJwEzETFrlqzN
+         CSjRPjDfzKptbJV4CMRzstWAclPDLGZhzDKf5lGpy5ZYmOlKwPnmK9crF2fCM2Qw/e3y
+         32yMhLRridwySEILSues8b2P+cc4f2dBNaWudV+Cj1/W1YzqhTL+4wnE1Jn/xVM1dh9V
+         ck5Y8aUEUNyKOEEvNRdcz4BH3GkvrI/ExRF3F7gpzl48W/8Y0UzaBIgUExlOsKTUm4qu
+         xDkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=H4NnU3M9b/3b6iNVJB4nDxkla8ekZHTTUWyoEboJwMQ=;
+        fh=pG8EScw24v5xtWxVMQo/7k2xt1q0PywdW/zyJRgr4aI=;
+        b=M6I0uUKkPpEm4jYjTdSQDlVjj3Ndpypec5ILUUEZetiTPeJfXZkZZ6YHImu6DjtxHg
+         XSrBl7YPT+/11VTES0EVjqssO/BjKUkYdXBCoTzOBjHa5CSmGLR1ADQ36S6BKu2wzvP+
+         +7S0dPM5QzV+Rbua9p6AuY36LMKB7fYnWFvVWJKO3pgeni4BsWFaIT5tckb4Zk9cwojO
+         9n0DXbMyo4jytoxaj11Z6SEklVCFCu+zTTAU5ohvHU6Wiq4xBO49NLpkvO3k2MLkKee2
+         LUFi9A6YWFR0YeX3XXaEkkKvidChHzB7tlpm4eg/MO7Iq32yQd7m9V0IEFSgtM+O63pt
+         ph7w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu.com; s=google; t=1788948334; x=1789553134; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=H4NnU3M9b/3b6iNVJB4nDxkla8ekZHTTUWyoEboJwMQ=;
+        b=Fyh67PfPES0WDZ9cuGkdzPUfAb/BXY2KURx51u1wdu8e5Tl6ZZNBpFh+EqcZZx7lTA
+         8NPTp8/HzX1M90Nwc08bVnAk1tGvzBHlu7BXLvpNxKzVK+fQGfwoqyF6PX3ls5Augf2I
+         7PrJancQuLGvRwcbf9QigiGfTuZb/EANssCYI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788948304; x=1789553104;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Ne0O7Jrbbh35lHn6AVgsM7/xJO5tCKCdyIfi82Y0KOw=;
-        b=Xk16hFyAGPAiWKC3/8JOphNLoMqtGv3I4gYJOi35xePFF3FKJMqvftD9rpH/sHPRGr
-         7RET9LpfXHeimVLOvh2S2Ug6zkF2m7GBx0HBHwLASjZjrsvRtomD4r08SAJEdc6YpHSh
-         pESA0uhIoMlsKAn6io9w6AG04ZyEcaOC1IwRNb/zym4QfsBVQ5wchw+ixJ69fGmSgUBU
-         WkEkuQL4VwXXcwEcfuTmIw7rQ7lxIIckfVIkhSMxJYDO1+gfmsIAztnTVLOiC+RUXsJi
-         JVPQuUbNTlBgI7dK3OGOmnnBOtGLIm2WjtYL975q27hd5ngmNuiJCvsv4S+MpcBv/UeK
-         YcJw==
-X-Forwarded-Encrypted: i=1; AKwUvByVwBrb+a+tEEXLWkIYMZWDuGuFezmf80qLB+5RtyQNIqQ1Ge5Mijnd3lT3czkugSAjaF8X1z5BHT8i6auTc+w=@vger.kernel.org
-X-Gm-Message-State: AFuF++kInRdDdUY8AC5OP3HCHOS97BRAbasR50Tz1Jwzy1TGogqqbcL8
-	xqr1y/Dhz0qOrpjKmsFqEndbbL/7V3J8pNCP49YXyuwA30b1r7kMhoUmx9EcWB61H9DXH0pe3vz
-	Yl1QDx6ccZQSjP9ToMm0CFT6v7YaqaKbNF8xfmZweb+WqoCS/39r/cdQcQgn0ZfygxdRbjpwolx
-	ezNE5+saxSkQ==
-X-Gm-Gg: AYBFou3g7ctQWzNPYr/kuT9y+pflGgLOzlV4eaKbXvaWdqyMEH9+v/67RC9ZDw9nl1i
-	2vPhw0OEigr1XX90jeQC5fGIJLYgCnrNSRopwjMEnxeFhri2koaxfWZGf8Q1eI09SOIvPdMXus/
-	kC+kJqhHk0yH7tx77BmKPLNNZk0C3FqFkkJ/lEVz2ENHjeNi+9cZknWqV8VwIS1USmp9p0ffSV1
-	+9/bG5tNNHZrEZLs0j7N2g+HitDEH1Un+Kz9tNih8AHHRTw3j5psEL+cvkvjhsCxO0rMrzO7hso
-	A3IacCW0IGWcgpJwW7kJeL35rG2jwDTfA3X8RCHPrwhhzag84cMOgJYk7MzYwpbyJoLWXo9e2DR
-	W7akMk01xqAP8kFlH6ifFFPnA6q4FjIEszzA1erhCrJcuK4s9gj1cxCwNvrRPMtDoCAGea53PoH
-	Ye8jugFmQUbXc7ZYxuY+uls7JRmrcBoPHRAKjcuH8y57Kkp7oWjDYir8Qo2lvYnZRXftBYibLkD
-	z4C7kVkmpo=
-X-Received: by 2002:a05:6000:228a:b0:485:8c16:a331 with SMTP id ffacd0b85a97d-4858c16a578mr30840998f8f.38.1788948304405;
-        Wed, 09 Sep 2026 03:05:04 -0700 (PDT)
-X-Received: by 2002:a05:6000:228a:b0:485:8c16:a331 with SMTP id ffacd0b85a97d-4858c16a578mr30840951f8f.38.1788948303969;
-        Wed, 09 Sep 2026 03:05:03 -0700 (PDT)
-Received: from ?IPV6:2a01:cb06:c054:d70d:4174:4522:1a58:40cc? (2a01cb06c054d70d417445221a5840cc.ipv6.abo.wanadoo.fr. [2a01:cb06:c054:d70d:4174:4522:1a58:40cc])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485883953cfsm35849463f8f.13.2026.09.09.03.05.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2026 03:05:02 -0700 (PDT)
-Message-ID: <1940bd28-3dda-4a03-a8b9-37fd0731282a@canonical.com>
-Date: Wed, 9 Sep 2026 12:05:00 +0200
+        d=1e100.net; s=20251104; t=1788948334; x=1789553134;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=H4NnU3M9b/3b6iNVJB4nDxkla8ekZHTTUWyoEboJwMQ=;
+        b=OtIuiXwudlVr7a77sErENOzlGxyBYHG+cPGRLHjOBF0C8EH8bh0rqa9EXPT0SS7h6r
+         7+s8UsMWZ2OV8wMl6lImA8ztgB32EG9uC+gibfbXGggbRKN5pv00MzM9fCulBN23Ykxv
+         zIOFo09fe1tlAXb7kNFenhxNU9VieCkmjM9MrlmcXAVYdpz5U55nzWXk3yijvZwkhQlx
+         +70+7IFOI88PTMzHT5k1MPX9MrnGf7jgHrfyl6XBfFLZDn9dPrDaHwX51kaSR/1hXIrQ
+         p6n7ogjgSB2zLuFOnCC72mKN4U0o9XZ7aJAFT2Vy82besrKo7pzsUujTtDZOR+lQQyTd
+         i9qQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx4GYV+H8NNcbflPQtQLn3OT+Q50WK4jjQ0UnnWqQ0bSBGgMro2ABRrP7v6iUdUpdc86503jdnauK5QbcirXF4=@vger.kernel.org
+X-Gm-Message-State: AFuF++n2SFJr26kvvj2M1HtKYWAs6FrMiIwKNWbvic7wahBp6p1YIaeU
+	izC9o0offaffVQDH2m4+7dwblQCegOr8ZGpPBFyAn5n7CMmOuOrwmaVUOlm+wBFzT5iQeXvrwi3
+	h2LVBCPgWxhiTJAA911TJe9fUsELjMiphmiiASL8j
+X-Gm-Gg: AYBFou3fMOuZqM2EEHKuMMiyg6GDnA4adnRM3TddxUVfgCJxK5cpXuQJI9RSafdfbTX
+	VcVOWXyhEzYUb7Akdl5fhhnSxld7DKtHxdtogQU4oJmsskaUh1qVzuYRyEOghIdmVspyToKq8fx
+	qi8ipLkNc2l54JdG1eUFJVizE0tTVx4o9O8quJ9A7glOszDcO2c5+/oxUM0PJ8LdXz8HSz9cW3n
+	mXc5c4/0oHIjoUYBymC5QU21EuBTXBiuSZ9YudnQaqgjfcf8ftRHphkM0l8WTjDKhgfrei8elGA
+	Qobl3k/CYH/S95F9u0VBIurLyoLiE2u8ySZX1EUPBXMvi+6yUvwphBw7gCAyhVzi4rP61f+wrDA
+	mdA7fE3MpojoVJInnGN1RwDdoz4k7vPv4vlLPmkt8S0Yn
+X-Received: by 2002:a05:6a00:4298:b0:84a:646f:193 with SMTP id
+ d2e1a72fcca58-861633ca7b1mr48778621b3a.0.1788948333754; Wed, 09 Sep 2026
+ 03:05:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/powerpc/tm: Fix tcheck() reading uninitialised
- CR value
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Venkat <venkat88@linux.ibm.com>
-Cc: linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com, mpe@ellerman.id.au,
- npiggin@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260907215420.1258678-1-thibault.ferrante@canonical.com>
- <4206CE63-979B-4464-BECE-F89D0B1BDC91@linux.ibm.com>
- <d80d892c-8505-4530-a23f-e3b6daf72d03@kernel.org>
-Content-Language: en-US
-From: Thibault Ferrante <thibault.ferrante@canonical.com>
-In-Reply-To: <d80d892c-8505-4530-a23f-e3b6daf72d03@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260909070336.32979-1-xuanqiang.luo@linux.dev>
+In-Reply-To: <20260909070336.32979-1-xuanqiang.luo@linux.dev>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+Date: Wed, 9 Sep 2026 06:05:21 -0400
+X-Gm-Features: AcwNN1XRsCSsVSIJECxCc-1JgLAJouQ3Cyvq8feC7J8tsCQrA7yQNPwNFlVqu04
+Message-ID: <CAM0EoMnZ6AwTX45hHAkqe_tvY0jpeMhzz=c9jhduzzau2Qn84w@mail.gmail.com>
+Subject: Re: [PATCH net v1 0/2] net/sched: fix action batch failure cleanup
+To: Xuanqiang Luo <xuanqiang.luo@linux.dev>
+Cc: netdev@vger.kernel.org, jiri@resnulli.us, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 09/09/2026 10:56, Christophe Leroy (CS GROUP) wrote:
->>> diff --git a/tools/testing/selftests/powerpc/tm/tm.h b/tools/testing/selftests/powerpc/tm/tm.h
->>> index c03c6e778876..6024ce4ba6ff 100644
->>> --- a/tools/testing/selftests/powerpc/tm/tm.h
->>> +++ b/tools/testing/selftests/powerpc/tm/tm.h
->>> @@ -105,8 +105,12 @@ static inline bool failure_is_nesting(void)
->>> static inline int tcheck(void)
->>> {
->>> long cr;
->>> - asm volatile ("tcheck 0" : "=r"(cr) : : "cr0");
->>> - return (cr >> 28) & 4;
->>> + asm volatile("tcheck 0;"
-> 
-> Why not use cr7 instead of using cr0 and doing cr >> 28 below ?
+On Wed, Sep 9, 2026 at 3:04=E2=80=AFAM Xuanqiang Luo <xuanqiang.luo@linux.d=
+ev> wrote:
+>
+> From: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+>
+> Failed batched RTM_NEWACTION requests can leak action references and
+> reserved IDR indices when cleanup encounters a filter-bound action.
+>
+> Patch 1 fixes the failure cleanup.
+>
+> Patch 2 adds tc-testing regression coverage.
+>
+> Failure reproduction (key output excerpts):
+>
+>   python3 tdc.py -f tc-tests/actions/gact-rollback.json
+>
+> not ok 1 e3b1 - Failed action batch releases a bound action reference
+>         Could not match regex pattern. Verify command output:
+> [...]
+>          index 1 ref 3 bind 1
+>
+> not ok 2 e3b2 - Failed action batch releases entries after a bound action
+>         Command exited with 255, expected 0
+> RTNETLINK answers: Resource temporarily unavailable
+> We have an error talking to the kernel
+>
+> not ok 3 e3b3 - Failed action batch releases repeated references to a bou=
+nd action
+>         Could not match regex pattern. Verify command output:
+> [...]
+>          index 1 ref 4 bind 1
+>
 
-That would work, but that's not consistent with other asm in selftest/powerpc: tbegin./tend./tabort. and vas_paste() all target cr0 and shift as needed.
+Thank you for providing a reproducer.
+For the series:
+Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
+
+cheers,
+jamal
+> Xuanqiang Luo (2):
+>   net/sched: act_api: release all action references on NEWACTION failure
+>   selftests: tc-testing: test action batch failure cleanup
+>
+>  net/sched/act_api.c                           |  9 +--
+>  .../tc-tests/actions/gact-rollback.json       | 78 +++++++++++++++++++
+>  2 files changed, 80 insertions(+), 7 deletions(-)
+>  create mode 100644 tools/testing/selftests/tc-testing/tc-tests/actions/g=
+act-rollback.json
+>
+>
+> base-commit: a401a9d547c50ef34db1088cc1fb9a201a7af657
+> --
+> 2.43.0
+>
