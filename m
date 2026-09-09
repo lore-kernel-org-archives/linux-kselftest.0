@@ -1,32 +1,81 @@
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE98488205;
-	Wed,  9 Sep 2026 10:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E602249C4CB
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 10:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788948087; cv=none; b=NmsDHSQH8CnBr2oKSHIPgG28ZU69XG5JNEIF73K897i/TfiLMqZjrFDf2lcBqBXfvM7Qbq6jZAO/JaM24ktmhJWnGmqcoiaXjJZJ6g+thFN/2xUI4VN/UUArlDDSQRi0vOfnIWgY3R6yOdAs0pR6uZhrKBetkTYh8hM7JxTFr8s=
+	t=1788948309; cv=none; b=r7etCrhyqBNVe0ftf1CH+3r/DZr8HyP8BTwHmvwsaQjz2dROnxbGM566gLKfGncxltdXHMZiF2LYJmJHp4ez0YFAPU7fm+qyeGKssqGbhILPo/SnsaFc3R9j3ImHeGuJR4jbEUjE8aF8+rc3TEA9CzHimD3iFtBo0quCW3mnQTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788948087; c=relaxed/simple;
-	bh=CA2yHOHqwfjCQGComYCkoGwgkhF02XDf0NC0iDnQsag=;
+	s=arc-20240116; t=1788948309; c=relaxed/simple;
+	bh=ispYBB5sEcTKbtVy3MNVY1blcRMOieKTmsbt+otEJQE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AGzoDw0oLKvrBzEYAfMfQnWTz9svjcK+XKM88bKGEYxitL2/zOK+UdJmHt5R/5kk0VHQY2ZkFvcIyNV4/qWlHhWoffUzSVE/0b4r1lG/A5KMOI8ex85hhQ2mK/SDAZPawS+7hEmfOwq7orP+EupufEJ+MQVzSvmQuRwa8/FfH8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=SO4PymNR; arc=none smtp.client-ip=115.124.30.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	 In-Reply-To:Content-Type; b=UdrJVJABUy65QAAYa5QUOoOyUMCBF9IaTBzIf2ZF6r+Q5ozVVVl4DyJDw37x07Izknhq41mC/uKG7ncLdA9gOBUQRWw1S0n4SqgMRmA+1UJR9wgll+BZQ2NoK46YUJ3BOn5O/9DWkEwtdKgFDGwM2WV4oIhOqe2KNjW4m6mV0RE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=Jm6TGgcO; arc=none smtp.client-ip=185.125.188.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="SO4PymNR"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1788948077; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=rAhR1QM/zeuhEomiumpssWgA9rCCG1Ag1irSYP33RaY=;
-	b=SO4PymNR4ShaycYfQs1qRey9t9uHNQ6AUyGjYCtzxubeOXDqGaxZBRFJtHN5v1Z8okI7XFD1yf25N23+LvvrVxoEUxFxfia8jf0cZJXnhvM/NAdMRYNGLrArrhcaRVl1ZtW7SRVXICNN4fl7VOrPhIMwTgEK64vW2PYeVzqK6W0=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0XAefrqA_1788948073;
-Received: from 30.74.144.119(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0XAefrqA_1788948073 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 09 Sep 2026 18:01:15 +0800
-Message-ID: <feb76c81-db9d-4a36-9a31-0b2b31e3c3fb@linux.alibaba.com>
-Date: Wed, 9 Sep 2026 18:01:13 +0800
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="Jm6TGgcO"
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EFEC63F5FF
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 10:05:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1788948304;
+	bh=Ne0O7Jrbbh35lHn6AVgsM7/xJO5tCKCdyIfi82Y0KOw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=Jm6TGgcOQK/6ZCcK8Dl+mP0k/bS5qAXb6aqP7cLnHZpZZT3DAmXUlW9Jlrs9jRDtk
+	 4k41+uC5HdMFZu3mQrfxgT8YUG+/N1tUuVQDkr4uahhK1fQtP7Dcl5NMZpOxDCIjLu
+	 zjOUgGtsuK5Mbtiw9gVj85J2z+PT5JV47U55JYu+aNsAgA1FzntMZGafE/afp8HLU0
+	 3SROjoDZnPzoF/aiOgf61b8WaCbamn8y9ppjL21srbgTsAXTWNqUtyRcTU1vc+z04j
+	 3WiVA4wkR353+VsVTCLtygQKbIBrdky2hMqmrOeUJ1F0wxTlhMGsiUWNGpww+z8Dld
+	 aw9BWn1BZKiwXDOCcTDjrrjb+2E/ICZDYEMIkWujUJHxJp40hsPjYUS5mWjbDiWzxC
+	 Eow2nXkImAAVSLE/qKOilG9E4fnl6Jb2xtTbkX4ZFD2bxCoQmZp8XtxhJnVbIwdSZa
+	 +1at6KmTUTRpQBGPnTwGobVp+sf9NZXjNH7CsigoONlBfYhRzDq2YogQGn9DnjbXSk
+	 oqsjZlck9Qu27+BtwRef0tx8gVf6X3wEmiKdJ+jNzO9hNr51c47I8C7AwTs4v8/w0d
+	 3FoZrIPUanA6lV9OEgX8YnuzzdpYa1TFCp5bIdJxcK9AmQfhvYZeFwyYKxjbjj6/5w
+	 F/D6mbhQjR3vnaB1xwsxfENw=
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-485afdd5079so379960f8f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 03:05:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788948304; x=1789553104;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Ne0O7Jrbbh35lHn6AVgsM7/xJO5tCKCdyIfi82Y0KOw=;
+        b=Xk16hFyAGPAiWKC3/8JOphNLoMqtGv3I4gYJOi35xePFF3FKJMqvftD9rpH/sHPRGr
+         7RET9LpfXHeimVLOvh2S2Ug6zkF2m7GBx0HBHwLASjZjrsvRtomD4r08SAJEdc6YpHSh
+         pESA0uhIoMlsKAn6io9w6AG04ZyEcaOC1IwRNb/zym4QfsBVQ5wchw+ixJ69fGmSgUBU
+         WkEkuQL4VwXXcwEcfuTmIw7rQ7lxIIckfVIkhSMxJYDO1+gfmsIAztnTVLOiC+RUXsJi
+         JVPQuUbNTlBgI7dK3OGOmnnBOtGLIm2WjtYL975q27hd5ngmNuiJCvsv4S+MpcBv/UeK
+         YcJw==
+X-Forwarded-Encrypted: i=1; AKwUvByVwBrb+a+tEEXLWkIYMZWDuGuFezmf80qLB+5RtyQNIqQ1Ge5Mijnd3lT3czkugSAjaF8X1z5BHT8i6auTc+w=@vger.kernel.org
+X-Gm-Message-State: AFuF++kInRdDdUY8AC5OP3HCHOS97BRAbasR50Tz1Jwzy1TGogqqbcL8
+	xqr1y/Dhz0qOrpjKmsFqEndbbL/7V3J8pNCP49YXyuwA30b1r7kMhoUmx9EcWB61H9DXH0pe3vz
+	Yl1QDx6ccZQSjP9ToMm0CFT6v7YaqaKbNF8xfmZweb+WqoCS/39r/cdQcQgn0ZfygxdRbjpwolx
+	ezNE5+saxSkQ==
+X-Gm-Gg: AYBFou3g7ctQWzNPYr/kuT9y+pflGgLOzlV4eaKbXvaWdqyMEH9+v/67RC9ZDw9nl1i
+	2vPhw0OEigr1XX90jeQC5fGIJLYgCnrNSRopwjMEnxeFhri2koaxfWZGf8Q1eI09SOIvPdMXus/
+	kC+kJqhHk0yH7tx77BmKPLNNZk0C3FqFkkJ/lEVz2ENHjeNi+9cZknWqV8VwIS1USmp9p0ffSV1
+	+9/bG5tNNHZrEZLs0j7N2g+HitDEH1Un+Kz9tNih8AHHRTw3j5psEL+cvkvjhsCxO0rMrzO7hso
+	A3IacCW0IGWcgpJwW7kJeL35rG2jwDTfA3X8RCHPrwhhzag84cMOgJYk7MzYwpbyJoLWXo9e2DR
+	W7akMk01xqAP8kFlH6ifFFPnA6q4FjIEszzA1erhCrJcuK4s9gj1cxCwNvrRPMtDoCAGea53PoH
+	Ye8jugFmQUbXc7ZYxuY+uls7JRmrcBoPHRAKjcuH8y57Kkp7oWjDYir8Qo2lvYnZRXftBYibLkD
+	z4C7kVkmpo=
+X-Received: by 2002:a05:6000:228a:b0:485:8c16:a331 with SMTP id ffacd0b85a97d-4858c16a578mr30840998f8f.38.1788948304405;
+        Wed, 09 Sep 2026 03:05:04 -0700 (PDT)
+X-Received: by 2002:a05:6000:228a:b0:485:8c16:a331 with SMTP id ffacd0b85a97d-4858c16a578mr30840951f8f.38.1788948303969;
+        Wed, 09 Sep 2026 03:05:03 -0700 (PDT)
+Received: from ?IPV6:2a01:cb06:c054:d70d:4174:4522:1a58:40cc? (2a01cb06c054d70d417445221a5840cc.ipv6.abo.wanadoo.fr. [2a01:cb06:c054:d70d:4174:4522:1a58:40cc])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485883953cfsm35849463f8f.13.2026.09.09.03.05.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Sep 2026 03:05:02 -0700 (PDT)
+Message-ID: <1940bd28-3dda-4a03-a8b9-37fd0731282a@canonical.com>
+Date: Wed, 9 Sep 2026 12:05:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,124 +83,35 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 08/19] selftests/mm: add folio-order check for address
- ranges
-To: Kiryl Shutsemau <kirill@shutemov.name>, akpm@linux-foundation.org,
- david@kernel.org, ljs@kernel.org, rppt@kernel.org
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, usama.anjum@arm.com, usama.arif@linux.dev,
- nico.pache@linux.dev, ziy@nvidia.com, baohua@kernel.org, dev.jain@arm.com,
- hughd@google.com, lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com,
- ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com,
- vbabka@kernel.org, agordeev@linux.ibm.com, jgg@ziepe.ca, leon@kernel.org,
- kernel-team@meta.com, "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-References: <20260908125105.1510704-1-kirill@shutemov.name>
- <20260908125105.1510704-9-kirill@shutemov.name>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20260908125105.1510704-9-kirill@shutemov.name>
+Subject: Re: [PATCH] selftests/powerpc/tm: Fix tcheck() reading uninitialised
+ CR value
+To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Venkat <venkat88@linux.ibm.com>
+Cc: linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com, mpe@ellerman.id.au,
+ npiggin@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260907215420.1258678-1-thibault.ferrante@canonical.com>
+ <4206CE63-979B-4464-BECE-F89D0B1BDC91@linux.ibm.com>
+ <d80d892c-8505-4530-a23f-e3b6daf72d03@kernel.org>
+Content-Language: en-US
+From: Thibault Ferrante <thibault.ferrante@canonical.com>
+In-Reply-To: <d80d892c-8505-4530-a23f-e3b6daf72d03@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
-
-On 9/8/26 8:50 PM, Kiryl Shutsemau wrote:
-> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+On 09/09/2026 10:56, Christophe Leroy (CS GROUP) wrote:
+>>> diff --git a/tools/testing/selftests/powerpc/tm/tm.h b/tools/testing/selftests/powerpc/tm/tm.h
+>>> index c03c6e778876..6024ce4ba6ff 100644
+>>> --- a/tools/testing/selftests/powerpc/tm/tm.h
+>>> +++ b/tools/testing/selftests/powerpc/tm/tm.h
+>>> @@ -105,8 +105,12 @@ static inline bool failure_is_nesting(void)
+>>> static inline int tcheck(void)
+>>> {
+>>> long cr;
+>>> - asm volatile ("tcheck 0" : "=r"(cr) : : "cr0");
+>>> - return (cr >> 28) & 4;
+>>> + asm volatile("tcheck 0;"
 > 
-> An mTHP collapse test needs to know that a range is backed by folios of the
-> target order, and that they sit where a collapse would put them.  Nothing
-> answers that today: is_backed_by_folio() classifies the folio behind a
-> single page, and check_huge_anon() reads smaps AnonHugePages, which only
-> accounts PMD mappings.
+> Why not use cr7 instead of using cr0 and doing cr >> 28 below ?
 
-Have you checked check_large_folios() in vm_util.c? It seems to meet 
-your requirements, or am I missing something?
-
-> Add is_range_backed_by_order().  It requires every folio-sized, folio-
-> aligned part of the range to map one folio of that order, head to tail,
-> with the head at the start of the part.
-> 
-> A part backed by two smaller folios fails, and so does a folio mapped off
-> its natural alignment.  The mTHP cases need both to tell a collapsed range
-> from the one beside it.
-> 
-> Assisted-by: LLM
-> Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-> Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
-> ---
->   tools/testing/selftests/mm/vm_util.c | 47 ++++++++++++++++++++++++++++
->   tools/testing/selftests/mm/vm_util.h |  2 ++
->   2 files changed, 49 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index 3ea42a7a2a3e..4947612e8b3d 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -552,6 +552,53 @@ bool is_backed_by_folio(char *vaddr, int order, int pagemap_fd,
->   	return false;
->   }
->   
-> +/**
-> + * is_range_backed_by_order() - check that a range is backed by @order folios
-> + * @start: start of the range, a multiple of the folio size
-> + * @len: length of the range in bytes, a multiple of the folio size
-> + * @order: the folio order to check for
-> + * @pagemap_fd: open /proc/<pid>/pagemap of the range's owner
-> + * @kpageflags_fd: open /proc/kpageflags
-> + *
-> + * Every folio-sized, folio-aligned part of the range must map one folio of
-> + * @order, head to tail, with the head at the start of the part.  A part
-> + * backed by several smaller folios fails, and so does a folio mapped off
-> + * its natural alignment.
-> + *
-> + * Returns: true if the whole range is backed that way, false otherwise.
-> + */
-> +bool is_range_backed_by_order(char *start, size_t len, int order,
-> +			      int pagemap_fd, int kpageflags_fd)
-> +{
-> +	const unsigned long nr_pages = 1UL << order;
-> +	const size_t folio_size = nr_pages * psize();
-> +	char *vaddr;
-> +
-> +	if ((uintptr_t)start % folio_size || len % folio_size)
-> +		return false;
-> +
-> +	for (vaddr = start; vaddr < start + len; vaddr += folio_size) {
-> +		const unsigned long pfn = pagemap_get_pfn(pagemap_fd, vaddr);
-> +		unsigned long i;
-> +
-> +		/* Not present, or a tail page */
-> +		if (pfn == -1UL || pfn % nr_pages)
-> +			return false;
-> +
-> +		for (i = 1; i < nr_pages; i++) {
-> +			char *page = vaddr + i * psize();
-> +
-> +			if (pagemap_get_pfn(pagemap_fd, page) != pfn + i)
-> +				return false;
-> +		}
-> +
-> +		if (!is_backed_by_folio(vaddr, order, pagemap_fd, kpageflags_fd))
-> +			return false;
-> +	}
-> +
-> +	return true;
-> +}
-> +
->   /* If `ioctls' non-NULL, the allowed ioctls will be returned into the var */
->   int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
->   			      bool miss, bool wp, bool minor, uint64_t *ioctls)
-> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-> index 56a28ce7d029..e509fc4012a5 100644
-> --- a/tools/testing/selftests/mm/vm_util.h
-> +++ b/tools/testing/selftests/mm/vm_util.h
-> @@ -99,6 +99,8 @@ int gather_folio_orders(char *vaddr_start, size_t len,
->   		int pagemap_fd, int kpageflags_fd, int orders[], int nr_orders);
->   bool is_backed_by_folio(char *vaddr, int order, int pagemap_fd,
->   			int kpageflags_fd);
-> +bool is_range_backed_by_order(char *start, size_t len, int order,
-> +			      int pagemap_fd, int kpageflags_fd);
->   
->   int uffd_register(int uffd, void *addr, uint64_t len,
->   		  bool miss, bool wp, bool minor);
-
+That would work, but that's not consistent with other asm in selftest/powerpc: tbegin./tend./tabort. and vas_paste() all target cr0 and shift as needed.
