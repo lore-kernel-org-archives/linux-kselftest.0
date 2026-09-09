@@ -1,83 +1,92 @@
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFDFA38DC78
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 17:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F1437DABC;
+	Wed,  9 Sep 2026 17:40:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788975449; cv=none; b=Llm0byCAzzgVRUG2Q65cbX/35r6qF15jVzTxyHKaXMg6t8hpJ1c70unqxNOUaaR932Dai6ubNWfRlNhOdFTc8j86fMA1bJHoFwoghyVxbI2hyj2IfjN8DgDPdGjzvV3YiyA1pH6yWipBAEyN621t2AJl1lz8f5DlVAwOA1SCFgo=
+	t=1788975646; cv=none; b=QIEFr/4WotVLdXK2pdmBtF5NVVW+LGydaCWLTB+mnl5mOTg+OpmdWqgLqrKXj0d8/Utaly8cIeTzM5N5GiD5HQDjXRDuPRIErMLzj65HD+nz4iT4nNmhdWq0VMs3KdA9VGkN430mxailEi5d2xRUvGxOQIpOmW06s2e+X0XrR7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788975449; c=relaxed/simple;
-	bh=gllQAeSfz8wD6OjJWJ5fccK3rEpdJJl3i7TSr7C1Q/s=;
-	h=MIME-Version:In-Reply-To:References:Message-ID:Date:Subject:From:
-	 To:Cc:Content-Type; b=VBjm7Y9hT8DO+WkExgojFSvm0n7k4awlEscIYiUrCq7R2jrkZbpYsdn7aosWN1ywWrLupHUNFnPXg2G/MvzlmRRSVfLCagmsFo7K53HkHBdq7JEgJvNlgdvLrFnJyBAF7RJs/9su9dLYksKrpxVetMWALlfSGb8PhOZBtFu810g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gvuO/HSK; arc=none smtp.client-ip=209.85.216.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com
+	s=arc-20240116; t=1788975646; c=relaxed/simple;
+	bh=vOPyrWVi6qqE7sYvrSwJa8RgdfKrzdkdQpU53OStgZI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LfQS/oo9WdbZUbAPbQcljVMxLUQAiFYggbK1TpZiYEQpj8++mBFj8ZT4nc0x+RVHez5AjT/nQSVE8evCNMQftPxN3fkaG/nV1rDlUqFDduQY91vuq04LH9bMwuGrVJRSmjSiAY44Gz8pvsCteUbJ9HXJkP/xPmjK5ichzzl+bxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=JaopRl5H; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gvuO/HSK"
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-398dc3d8f0fso103133a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 10:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788975447; x=1789580247; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:date:message-id:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=gllQAeSfz8wD6OjJWJ5fccK3rEpdJJl3i7TSr7C1Q/s=;
-        b=gvuO/HSK/9iYthsXgB5bsFybkF6WCELlRFvN6jycMcN3Fzj24u00/ioZ36PivkUnmF
-         YqeZWV3FhohwZle0aIxlcdJvY7Qddu0t7uXPM+FVbPUs6c/k1InnWz0YOug5LJh8VQn2
-         Rsuuj8tWfVCzZmuQ/WqW5INOiplmvrTshXEVHrxkCk1cNplAxtsEmWTFbHA/dL/llN8q
-         xWy5GgYU2qr4HtR9SkqmHGB4Ci+PqgnvMbvp1FcsZDbMfRIMEADD0LbuvY3ceAp+NPXF
-         7zF16NTnAOX0SbUlBUAcWrbmqGN3uXCkJu6/Kg6hGIfq0EgJcja1gwoAKzkqDCIu8/lP
-         AIcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788975447; x=1789580247;
-        h=content-type:cc:to:from:subject:date:message-id:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=gllQAeSfz8wD6OjJWJ5fccK3rEpdJJl3i7TSr7C1Q/s=;
-        b=DdKji5gnUMtX6rxVTMM0acJM5dwf9DTYQNM9aRz3hwyApFbZwULEaIwIyjf7WdoA/x
-         6uI5a6nhg01Dsx0gD+XJwzdnnfWb99aFPswG/Tjo8lSNywTG9DGbCP4Iw7r0Z4Onsq+A
-         n60av5EV3Zx2Cbp7aVbCQU78R3/JPVn4lasbzxuQ/sW0DB/eLS+rBhxbzfdmXAZqhWCU
-         eBtejGgMP2PvivT+9TJifbfYD8FOFVN+eb34o+s31/mr+ewPDuoioN0rOphjGhDubjZb
-         ZIsN4ASc0pkvdC5G7Cux3P2ef/QnipdrqNbyABfaNZ30bPOEQebVfwsPHxfSVuOvTJv6
-         dtOA==
-X-Forwarded-Encrypted: i=1; AKwUvBwZ5P/6jpNSaSkDwBwdl27h/j9R5KlrdXawJCnorkgrB8hTOxKtPUFq0p8NKgY2ElGHQZyYVrrrCPQMIFY69F8=@vger.kernel.org
-X-Gm-Message-State: AFuF++kZcubThE7vtcUHoYZdEoacnx7IT7XxxyqdtgukKA4Oxmj3mPuS
-	WdwRMC5tIW0bVF2Lrh/6m8TCPqK3+LRakomyRTSvdi/FOQhSCZJXna7vUCxesNkRHCukRtHDPBb
-	Bi+BHokEra/0U5u1oQmgKEt3mUBLNuljWYA==
+	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="JaopRl5H"
+Received: from omf10.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay08.hostedemail.com (Postfix) with ESMTP id 4251B1402CD;
+	Wed,  9 Sep 2026 17:40:42 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id 3CD3741;
+	Wed,  9 Sep 2026 17:40:40 +0000 (UTC)
+Date: Wed, 9 Sep 2026 13:41:56 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Sven Schnelle <svens@linux.ibm.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/ftrace: Fix unique symbol check in
+ kprobe_non_uniq_symbol.tc
+Message-ID: <20260909134156.6425e8b0@gandalf.local.home>
+In-Reply-To: <20260909092954.2200558-1-svens@linux.ibm.com>
+References: <20260909092954.2200558-1-svens@linux.ibm.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: from pjbpm12.prod.google.com ([2002:a17:90b:3c4c:b0:396:702b:655e])
- (user=rathodpriyank job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:37cf:b0:38f:657:6823 with SMTP id 98e67ed59e1d1-39d77aa1851mr284135a91.8.1788975447027;
- Wed, 09 Sep 2026 10:37:27 -0700 (PDT)
-In-Reply-To: <202608260405.gHL6gOJf-lkp@intel.com>
-References: <20260824-pcie-lmt-v6-1-bab4ce233fa5@google.com> <202608260405.gHL6gOJf-lkp@intel.com>
-Message-ID: <18d3b7b0cfb6fcb1.3137322e31392e39302e313337.965f0.0000sendgmr@google.com>
-Date: Wed, 09 Sep 2026 17:37:27 +0000
-Subject: Re: [PATCH v6] PCI/pcie: Add PCIe Lane Margining at Receiver (LMR) support
-From: Priyank Rathod <rathodpriyank@google.com>
-To: Dan Carpenter <error27@gmail.com>
-Cc: linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Bjorn Helgaas <helgaas@kernel.org>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	lkp@intel.com, oe-kbuild-all@lists.linux.dev, oe-kbuild@lists.linux.dev, 
-	Shuah Khan <skhan@linuxfoundation.org>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Jonathan Corbet <corbet@lwn.net>, linux-kselftest@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: nbdht7udeopfaonmwdpqtri7st73s5k3
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: 3CD3741
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+wuuizAZRrBrnyHyxgaQYOxQm3npG6WN4=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=k61UOLUWtwxb1LR5yESkPyq61Z+yxGwDgikexfhecXQ=; b=JaopRl5H1fOGQJARN6rJSGOCV1e10YwV5nTNJEVEZg0RapgQMD2cEAoV25W3xhQCnibWyPHn9MAm8UaBz1Ja4p8gBm0leLSFiUwqKa89Dj+DANbM2AKxZOKSc927XrS396RxasM1y9Kuqj0kiOcKrSth2xPplfLHE7I/GRcs3l0=
+X-HE-Tag: 1788975640-759811
+X-HE-Meta: U2FsdGVkX19n25FivK7oKhLguDDUNlMMVkgUg5KTF61fe3HFxSzHstYk+2jBwlusxRCXNnjix7NnadiJPLATtUUZLsVctJ1Za63yZBUyooeEmyuCEt5P93Vep6hdZp/RIDKIYbzFfImGn+A3u9qwTczNJ9ylEa3yukgXuU6yHLEOwbjisz9yeY11hauz7d05GyEFAurr4Ycd44xowUHtpST0GrhXs13yd232utl60ULUOzYqAYzg5DnvRHr/Oxc1t/D3RJ+jWDEyQP4TInauUsCmAZlbnAY7FI1hSh13l4+KTFds9I+B9Z4m4KKFzUYoq2Ag687ifm+6J1ZDbRYslc6UqGahn1hPJy6qVtJCaULLLv9eysur5lcQ9fSOuUAqjKkm3l/tNeU/gGwJ/aFBXg==
 
-Hi Dan,
+On Wed,  9 Sep 2026 11:29:53 +0200
+Sven Schnelle <svens@linux.ibm.com> wrote:
 
-Thanks for the report!
+> The current regex also matches symbols in modules, which makes the
+> test fail on s390 where name_show is present only once in the kernel,
+> but also multiple times in modules:
+> 
+> 000001b1401cdc20 t name_show
+> 000001b0c05e6c40 t name_show    [mdev]
+> 000001b0c0495f30 t name_show    [i2c_core]
+> 
+> Fix this by changing the regular expression to only match the function
+> name.
+> 
+> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+> ---
+>  .../selftests/ftrace/test.d/kprobe/kprobe_non_uniq_symbol.tc    | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_non_uniq_symbol.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_non_uniq_symbol.tc
+> index bc9514428dba..07b1177c1634 100644
+> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_non_uniq_symbol.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_non_uniq_symbol.tc
+> @@ -6,7 +6,7 @@
+>  SYMBOL='name_show'
+>  
+>  # We skip this test on kernel where SYMBOL is unique or does not exist.
+> -if [ "$(grep -c -E "[[:alnum:]]+ t ${SYMBOL}" /proc/kallsyms)" -le '1' ]; then
+> +if [ "$(grep -c -E "[[:alnum:]]+ t ${SYMBOL}$" /proc/kallsyms)" -le '1' ]; then
+>  	exit_unsupported
+>  fi
+>  
 
-This series has since been decomposed and restructured into a 3-patch stack,
-and this issue was already resolved in the v3 submission:
-https://lore.kernel.org/r/20260904-pcie-link-endpoints-v3-0-4b9a91bd4b35@google.com
+Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
 
-Thanks,
-Priyank
+But I wonder if "type_show" or "init_once" is a better option than
+"name_show"?
+
+-- Steve
