@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E21D57268B;
-	Wed,  9 Sep 2026 15:33:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602A954488E;
+	Wed,  9 Sep 2026 15:35:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788967989; cv=none; b=PiHjiFJEOd8io5uhm6yEqTE7PUNtC0RAZP/EYO4SnyXZSWiOeMPVrXTlbYRB6UX2TQZyeaSWbEzWMK07NanBMiX7veJv/F7vozpB16mk61cGqXaeiJZBCp6F4GbGDDXtW+X4E1na7d9qN0T11VqL9crkd7QKr01oz3TT1CBPY7w=
+	t=1788968113; cv=none; b=jR1PZFHDyL1X2BTCQCKXyt+M5TSc1+Dwe1bUHT0Fnrdi+xDB023Z9WBcJEzwNmEHe+FvDWjI8G7vpCChohlcVRbbEPyXE0M4gS2jsC11FbDJ+ErT+TmVggJjtKGknK0fFeERYkhZCFRAbU/aOzCYnKafa6+Nofn7NOi5w7EP8v0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788967989; c=relaxed/simple;
-	bh=jdSb4gXosPJXWGYE0mkvLnEZzewo8b7ZvEqVYWCovt4=;
+	s=arc-20240116; t=1788968113; c=relaxed/simple;
+	bh=FKq+KrDg3i4ASqcWAarhrmtMZP0a7iFN3f2dPcJ3xSY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NvZRKYAf5PIqAY+ztRzsCaD61EfCTSM2WD5akcwPK28DeHvlY9iSKBVyNVKy5Cj+9DtmOW4LaRhF67dwkM7qzE6ab2W8bW6re0L+MKGRHPfPi0Y7xFA8P5JSoe27kNAB5Ycdx3gJzQFtL/xr122pAOQsVtJM61psxpAnUP1RRw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mdoKkC1M; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=eKXaFaLo1d0gEgCak0DbWaW8mI7fIbL6SPdA9aup6i0rHnfMaS4SzJchsI2OmbaKd0w5djjBObFY2Gyg2ErLS+G2aI4BMal7pZ+qiImjuoWcAiQjQfN6bM3YJ/q9TTOtNLkyD+ZSVAXDoQxn/EYj/S9hL+fLalG9piypZIIzuRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ckd3bN3Z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mdoKkC1M"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C92EA1F00A3D;
-	Wed,  9 Sep 2026 15:33:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ckd3bN3Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 191301F00A3D;
+	Wed,  9 Sep 2026 15:34:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788967984;
-	bh=zTLAQxDUOUQ/JjETmKVNF6qdkHlKlo/iHhk8XqStnV4=;
+	s=k20260515; t=1788968111;
+	bh=xj5P1Cjd9irB4BUOsfOHGIxVo3gJHi6q3o3BRLAUlrM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=mdoKkC1MJoVOKplWs0WlxCyIl8WGhJfTItz9wea9ZyfLYML3xpRa3vNQa9pqQR8wV
-	 v0izGXK/UUOr9vqXe7ivZwHijDPYv1AT5q9ybgfKYJGNu131LaXTfxBOOQvDD8B6d/
-	 D2YCu56boH6D9ootgOvKSzOo8s3D6LGqIyLno+0sGrKrjaRX3S7CzfAFuKSNbgJswY
-	 QYuYB1rEm4if2VRholu7YVZpTRfymEIijWN4zomaMidS/yagUqT5W57RBGuiAo7sdF
-	 EfC5vLcQrjfmD7oe6CXsKTzr1n5i79Hczh2fYa9ovGirQH5DhTO17KpiBuAwg/GGhV
-	 J5A0BwThP1J1w==
-Message-ID: <17f49997-2bca-4e1e-8d58-bc95e25b9a23@kernel.org>
-Date: Wed, 9 Sep 2026 17:33:00 +0200
+	b=ckd3bN3ZBsVSMEnnFHviWt7dllTHTgykVYrIZMkd7W2vUKKUCgePCf65XS2sM98lX
+	 Qre8UzhEfTBMyw5wJ5X+7M/4kE5evGsK7cd1QkWeCxNvzqPpxbWg4ehHniu+1/ykw0
+	 asx5+MVfKRElxSINUvPSkNJDcreFgZEOBrSHVP0Kc6H2/aVk5HftReDcq4lNZUgjhV
+	 lpLgubOZFtll6VhDJCF4y+SOJuXrn9nSKAxyFQ/jogDZ1vVjkiAhpxZgKYZjEpPZKg
+	 K8EqCmZYf+jj2635P6MAVMgB9x/Gk/vRISsyVa4GSF4qweNESa7itJUAurLqwjkmdZ
+	 tqivnhL9dbvhA==
+Message-ID: <cb436d84-6787-4745-8f5d-5d0617ec0643@kernel.org>
+Date: Wed, 9 Sep 2026 17:34:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,15 +35,44 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v3 1/2] selftests/mm: Reject invalid test
- selections before running tests
-To: Tianyi Chen <diannaaav@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Joel Savitz <jsavitz@redhat.com>
-References: <CACGbirTvSoSeNSpMCBiifTdRKKDsKbgk7nfvh=09fHw2b0M4Ew@mail.gmail.com>
- <CACGbirSjNMD1mijDWRp4gLcw-6dJsErrF_jgjwr3nO-geBb1Sw@mail.gmail.com>
+Subject: Re: [PATCH v12 01/45] KVM: guest_memfd: Optimize away conversion
+ overheads via dead-code elimination
+To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
+ binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
+ jmattson@google.com, jthoughton@google.com, michael.roth@amd.com,
+ oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com,
+ rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com,
+ steven.price@arm.com, willy@infradead.org, wyihan@google.com,
+ yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
+ suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, tarunsahu@google.com,
+ Randy Dunlap <rdunlap@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Fuad Tabba <fuad.tabba@linux.dev>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260830-gmem-inplace-conversion-v12-0-85e5fd25252a@google.com>
+ <20260830-gmem-inplace-conversion-v12-1-85e5fd25252a@google.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -90,18 +119,35 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <CACGbirSjNMD1mijDWRp4gLcw-6dJsErrF_jgjwr3nO-geBb1Sw@mail.gmail.com>
+In-Reply-To: <20260830-gmem-inplace-conversion-v12-1-85e5fd25252a@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/9/26 17:23, Tianyi Chen wrote:
-> The unchanged patch is attached as text/plain to preserve long lines
-> and whitespace during mail delivery.
+On 8/31/26 02:25, Ackerley Tng via B4 Relay wrote:
+> From: Sean Christopherson <seanjc@google.com>
+> 
+> Add and use kvm_arch_has_gmem_convert() to guard guest_memfd's invocation
+> of arch hooks related to converting memory between private and shared, as
+> only one half of the x86 CoCo duo needs the runtime hooks (any pre-work is
+> pure overhead for TDX).  At this exact moment, the overhead is negligible,
+> but that will change when in-place conversion comes along, at which point
+> to-shared conversions will "need" to find all affected folios prior to
+> calling into arch code.  In quotes because very technically that work could
+> be pushed to arch code, but that would bleed guest_memfd details into arch
+> code and would be far worse than adding yet another kvm_arch_has... hook.
+> 
+> Opportunistically provide the kvm_arch_gmem_make_private() declaration, and
+> rely on dead-code elimination to eliminate the call to non-existent code
+> when CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT=n.
+> 
+> Reported-by: Binbin Wu <binbin.wu@linux.intel.com>
+> Closes: https://lore.kernel.org/all/1ec08cd8-3072-4753-ad5e-cd34956647f8@linux.intel.com
+> Suggested-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
 
-So, b4 was able to apply it (and I briefly played with it and it's fine), but
-for review using attachments is bad.
-
-How did you send out the previous revision? Through b4 or git send-mail?
+Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
