@@ -1,136 +1,102 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9D52BE7CD
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 04:38:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788928706; cv=pass; b=osIdgu9YAB6Tzc0a4YhW/0CQyZWDmQK39xa9Zvyzuuw6VnTyJxw4hP4FYhfPWfuSNxF86qrPtN2kZKU3LTB1jwkGxVLF7F0XIQfs9XJrv1Vm9XA1Y813whz2KZOuUhTOqgg+XRoLf8aoQWTCBw+c4rBO8dYf9/zOs7Vy89rhE4A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788928706; c=relaxed/simple;
-	bh=/+3eKYYz03dUBjHcHqHQIQKyut0iHUO9Sr1nrn4fiWA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qORGfZch3ZRYLdGuHVPa93py/KSaBqbgmxMNX9hoKLdupbKHc+slfMMxZmEU7CF0ZyGyUsRHsgijzCneAPKzquQpjloty6YEeV2M+XvMGb708rcJ7zsrLyV/mCEf2eZW7svG64A2d5EUgGXgt9/ehBKPffoqmpkyC0MaKkIeUH0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=G+slYNMJ; arc=pass smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D3817DFFA;
+	Wed,  9 Sep 2026 05:02:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788930140; cv=none; b=ZDROfcVGOSlA1nVD6zA9HYQfZhF0yMgIQe3W9pe1F0wNHoeBC7wMOahSCgksWiUmEtGp5txhyz8MLc5UNl5jZZAqh9KRxj2Q3BvErWS7qdkVu1rSVhb247SD5KmT9KxUkzrxMR2wDpkN0QRSED9QfUKjCsJeiMah5HD9ZsjmOjo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788930140; c=relaxed/simple;
+	bh=EbQKPk8Edtr8+SbwXIm5uJcFAa79MqHyJzFocHtRzgk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=q+tTKF0XjLJRXzLlwK4wwE2dxt4Zj9MOBiDrvZ13ddoYAASBvfeb0DvcqrHXc6LIiRS9woRFHsrn7UDwTEDvIATjvzfjhBJESpu1NG90vMm+jJzznU2hw1hcA1ULWsJOsmAqvPpblakNzsqcMQXKTeGHpReZXnYRu1EQnGpEosc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cxBOvtcY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="G+slYNMJ"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-8588583a7c3so55276607b3.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2026 21:38:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788928703; cv=none;
-        d=google.com; s=arc-20260327;
-        b=H2CRIR//oiD5Al6f5PO5HmWuud0EVM9iuWPzw3Mz9UVJAmKwXARkwmY6Uz3P42LshC
-         AcZTP3LmFxEnAUY+vc9It8waLGfbwYdaUCXkRWn5veFIFJH+FwVo+xIYVhfMmGyi4e+9
-         o0mtuwouN8XPe8EsSe+/3eAHTMCoVDQy/ktruyie11gA3ATP7YHaSBog+M7w4EL3S/5V
-         SnqD7QIAzsS6SlVMKiLqd4Lmem4TIM6WnyxXHEiZmbxXP/zsBByv3u6Xfx/8wNsTnweB
-         34A4pNYwql49aqg8c+VViqUc0hRDYGYbLxk2Oz9PKqiuJMQtRrMgTvAiNcVWIHiSEjlq
-         V38g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Teu6cC+d3LHtdtN3ePnM4eTc17lML+xatDJgJtdz0Ns=;
-        fh=/x4aBKbJhnDh7gbIXrWmKCCqU8s53l2Hjp5MWdVi2ok=;
-        b=Hz27BM8PY+tKFe6PN7vihFMO+BlYcJBCzlQpvRnUsWsqeapkqRVk47UoysPMy1bLQP
-         m+KA8Hc5JvmnFdFlj+EotVrVj983muMrVqfj7oLZE3yl1ujXCsDnfFwdPrXls36ocsip
-         Y4iYdhWbHQtgAMPSPhyeK2yAcezAXBW+izOVQ0+VVRE/F0N71OpxNvr7tUtDkN6HIttF
-         cS545t000a1oUmLK0vucidmP3uQ6+fOUgLSDIvKPAw+zNgJfYgBK2gc74VZnmszvX9j3
-         3hwfi6+tnXIX7MybAhLY1GTHD6bfeePIAPC4iQCseUfyj5m9J4D3qML+5c9hVUD3YTN2
-         PIrA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788928703; x=1789533503; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Teu6cC+d3LHtdtN3ePnM4eTc17lML+xatDJgJtdz0Ns=;
-        b=G+slYNMJ4NeYNov1rDcn3MJkqULMh4eAK7gcukOQB6HThKx6bB05QZKrqxMyyNZDg6
-         qQ7nlvJQp27dtcDujIxhQMxrNeKZLOKfUDGMeyKDpOoKLk+ad9bSIcI6ezlT7yHqihsk
-         h0Z9SjcyRDJfbVk7Jgx28PATGsWAs51SmRg95r0crWFucxkJW8J1+uEaU+5sr50mvVGO
-         BJnLvXTi9B1YqaxczK7sUZF1nJGRAh8x7jTDRAi4DLB9+sOju+Vx8XMcD7aVlcEZE98h
-         u+qKtDkafzy077tmVLUxRqtWLbgCF/FbzhwTCAH6OaWKd9dYs3x7OqEmuwpwC+Df3YPo
-         UjGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788928703; x=1789533503;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Teu6cC+d3LHtdtN3ePnM4eTc17lML+xatDJgJtdz0Ns=;
-        b=DFOynu+R5hCOC6+aMtaYEj7q8BL1sCEj6BuDBa/85Kk4gKpGMTc7g+v8jSxseKHkhx
-         3VceOspk3Qt5ohb2zfej8lh8cyZBzVH7EYQizS02L/aXc6d2bpxXfA6NnED/4bxvXqWa
-         OZnLpjS3Wcq/SVtOTCZWHJ0tWdZmoVLWa6ERNmeAstlcQAAFFwX0uUYOoB6CVc8yNNeE
-         Ui69oZLX/QDPQ9SMGEWfnMlGXrdGWaiZJlehWjw/H3g9pD3HtwSOFltBvWbMChVEpfpt
-         Jcc9OPMYNfCtd1gpQSzvYaPq7R/VcWCRRJwx+oXwBYG1GyThrDntSfEBzVJVRmQWgMIa
-         s0ig==
-X-Forwarded-Encrypted: i=1; AKwUvBxuqUxYJuDPg77GyE5JCJja7elgdNrcjKJG8o1lPsXxA39k52bsI/nNjQwqi173q5nVarhaMTthj6Z7LOAeBLE=@vger.kernel.org
-X-Gm-Message-State: AFuF++mm5dJQpcK5qGcrkuslUuepKU5hxFN26ODJl+6Pm0rLVlYX2Y9/
-	OgIIzOUoz0e0mM79Jq9C17+QDHr2p6fWpdAbiD5rxTPTpvxBaE2qyj4ODudvk2CtYJKMrb5LMMr
-	AXhOzJhYDKt1tybGiX0Y6NnffHY2yQb5IPwrdCNoodQ==
-X-Gm-Gg: AYBFou0R0OkJ0qZdvzryCxWqx/xklinQntRZnY1aM79t5rPOyv4D9pJltzGtlw2EQOl
-	KBOo+Zu52aL6N1ErJP1QaIS/Bk+PNx8Wee/pHh628+qBKcH03WAGjbOP6Ks6HlsX9jvYTgCZtU5
-	3qtTPNmgdA9/v/gE3p8DGRxJyHY8DbQ8nMzXCEgsKKmpckdxj5QMpEVuCl1tWLBIt8+ArDRtHAz
-	NTLnUKb54TrUmO1NE4yGI4bAFAPVF6JcT3Kbqh/VzRY2ueIBtEKTd/cQLnynJEn462k3x3k+Ic/
-	pSUcbmNrDhDa3YR+7qLwMoXU3Zp6wVuGslfWIsClDPdaRZX1fxmr7bs=
-X-Received: by 2002:a05:690c:e3e9:b0:870:820e:da66 with SMTP id
- 00721157ae682-87127d2ca36mr124113977b3.23.1788928703258; Tue, 08 Sep 2026
- 21:38:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cxBOvtcY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D79551F00A3A;
+	Wed,  9 Sep 2026 05:02:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788930139;
+	bh=T8Bla745+w/b0iArnpuRM8La28Hu6qO74a4kNJJ8Du8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=cxBOvtcYZZF0grfnjCtt0K6OBFzbzAfYIMbbbld256UPz/LXKoeC5+pyzsCw43MyL
+	 /4+txAEaw+wDtW+MgGxZnrp5iIh2RMJ8Fr4g7tnGauiXlfHVHjj3vyQOE8hj/Pk+0U
+	 CXosXmz+E7CIwQm4abm/JeyiLj8GXQH2z1RopzamrrDUBIC2CZ9LUDXHNa7vrluT+H
+	 LS0GkEGlC2IDDJ/GDljiBmRrP4TOKT17/2eo8ecSEwOl2XH4IxXinf6tGnyZStaBsQ
+	 m5h9qMXeUeTr5fn3MN0iaKApjUGB9Vz/gdw7+K0c/k424Ihinw1S6EGgxeq2K3GwVU
+	 mBpGM6+5FUaAw==
+Content-Type: multipart/mixed; boundary="===============1148094006327105392=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260903150351.12725-1-colin.i.king@gmail.com>
-In-Reply-To: <20260903150351.12725-1-colin.i.king@gmail.com>
-From: Emil Tsalapatis <emil@etsalapatis.com>
-Date: Wed, 9 Sep 2026 00:38:11 -0400
-X-Gm-Features: AcwNN1WAFyR_AVCv1IXGTjGY0PGid8q5kgFayEO3Y82fm5jIlHk6g71DHjJvDXg
-Message-ID: <CABFh=a7YTi2U2-cx4b5zejWv6MXE-VG-u7K410pPbtJiw6qbWQ@mail.gmail.com>
-Subject: Re: [PATCH][next] selftests/bpf: test_xsk: Fix spelling mistake
- "conigure" -> "configure"
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <215847032d4dff7aca8efa133be82c023c10397517d285aac794ecb92622846b@mail.kernel.org>
+In-Reply-To: <20260909042433.1775591-1-tweek@google.com>
+References: <20260909042433.1775591-1-tweek@google.com>
+Subject: Re: [PATCH bpf-next v2 1/3] bpftool: Skip non-autoload programs when generating light skeletons
+From: bot+bpf-ci@kernel.org
+To: tweek@google.com,qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,shuah@kernel.org,tweek@google.com,kpsingh@kernel.org,leon.hwang@linux.dev,emil@etsalapatis.com
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,ihor.solodrai@linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed,  9 Sep 2026 05:02:17 +0000 (UTC)
 
-On Thu, Sep 3, 2026 at 11:05=E2=80=AFAM Colin Ian King <colin.i.king@gmail.=
-com> wrote:
->
-> There is a spelling mistake in an assert message. Fix it.
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+--===============1148094006327105392==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/xsk.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+> index a50540ef6521..e9a1a018f270 100644
+> --- a/tools/bpf/bpftool/gen.c
+> +++ b/tools/bpf/bpftool/gen.c
+
+[ ... ]
+
+> @@ -701,9 +710,9 @@ static void codegen_destroy(struct bpf_object *obj, const char *obj_name)
+>  		obj_name);
+>  }
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xsk.c b/tools/testing=
-/selftests/bpf/prog_tests/xsk.c
-> index 6e2f63ee2a6c..772f3dd7ce64 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/xsk.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/xsk.c
-> @@ -75,7 +75,7 @@ static void test_xsk(const struct test_spec *test_to_ru=
-n, enum test_mode mode)
->         if (!ASSERT_OK_PTR(ifobj_rx, "create ifobj_rx"))
->                 goto delete_tx;
+> -static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *header_guard)
+> +static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *header_guard,
+> +		     const struct gen_loader_opts *opts)
+>  {
+> -	DECLARE_LIBBPF_OPTS(gen_loader_opts, opts);
+>  	struct bpf_load_and_run_opts sopts = {};
+>  	char sig_buf[MAX_SIG_SIZE];
+>  	__u8 prog_sha[SHA256_DIGEST_LENGTH];
+> @@ -712,19 +721,6 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
+>  	char ident[256];
+>  	int err = 0;
 >
-> -       if (!ASSERT_OK(configure_ifobj(ifobj_tx, ifobj_rx), "conigure ifo=
-bj"))
-> +       if (!ASSERT_OK(configure_ifobj(ifobj_tx, ifobj_rx), "configure if=
-obj"))
->                 goto delete_rx;
->
->         ret =3D get_hw_ring_size(ifobj_tx->ifname, &ifobj_tx->ring);
-> --
-> 2.55.0
->
+> -	if (sign_progs)
+> -		opts.gen_hash = true;
+> -
+> -	err = bpf_object__gen_loader(obj, &opts);
+> -	if (err)
+> -		return err;
+> -
+> -	err = bpf_object__load(obj);
+> -	if (err) {
+> -		p_err("failed to load object file");
+> -		goto out;
+> -	}
+> -
+>  	/* If there was no error during load then gen_loader_opts
+>  	 * are populated with the loader program.
+>  	 */
+
+This isn't a bug, but now that the bpf_object__load() call moved to
+do_skeleton(), would this comment be clearer next to the new call site, or
+reworded as a precondition on the opts parameter? The comment currently sits
+at the top of gen_trace() followed immediately by another unrelated comment,
+and a reader has to look at the caller to find the load it refers to.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34311359322
+--===============1148094006327105392==--
