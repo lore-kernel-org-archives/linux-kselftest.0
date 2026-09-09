@@ -1,79 +1,88 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a4-smtp.messagingengine.com (flow-a4-smtp.messagingengine.com [103.168.172.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E76147ECF7
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 10:38:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738AA5237BF;
+	Wed,  9 Sep 2026 10:41:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788950340; cv=none; b=k98Gmrqp4sGhWbdSq3tk7JAxYgIlgDtqM9yHgHzFQ2LFL/g6nAR7Ojz8hECwIV+i8PJOumAWaxz8PnWXfGOnf29DitvHLJEX0a8kAlb9eysNk9H6RcKQLfDXWTF8u+v7IvZZwImig4OrkGg9ndmBCBsMQ7HCzPMtM64sOVvuAh4=
+	t=1788950509; cv=none; b=mBqA/43ZsT7aBHC9lCiLGRV8PcbP/jcS2OZU0fv3jmL9ipRNcrlyjxpvFJ3rDWXTFETuAFVsbZEW8PsFTKkXaDpt7Tl4C+41+xZ3cU/Omy5btKdpRG3MBMs8MIAP48zrSnmErX90W/fReuAbT85rCs5fqdV3JQ+Wh3ENW7HD+mw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788950340; c=relaxed/simple;
-	bh=YkloEnC0ZLgVBAr9ognXw8nBjhZnbuHMLQa1IYu83xI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=Dmz28XP2jdUchn0jqrMWcH9xH97ORwTRPfKh6ezWGU+VL77qMlBGwJkLySNh7UMODk247fzfiHFeYLtwBd5Jb6a55FSuyF3e46gG7LqsMDRt0Mc/CokghYzuDSvE+nLTZZdiJDhFb6Q494TCEL8sP+tAFrohvd2Nkow6UI3Q+KQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IfOHhuTZ; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788950509; c=relaxed/simple;
+	bh=cc1GifQkgQthViehWdOC3osdqIlcQSso+nxuZK0+ISU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qZvRCs19baGziHmhsOO/Z4deZ9gaUyeGmXWzEkqeEnEIXJQK9KH10p0vofz6YkIyPwiEvtTGY/EIPgx3mtf6DXPOoOM2p4SKO8ki/Nm0igr1N2g6fTa4n8toTSU+64wghaB6sCSsTt0qBU87QopMeuqm5D4i3x3bZkGKh8ROeas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=JbHeijJI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UHhPoVte; arc=none smtp.client-ip=103.168.172.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IfOHhuTZ"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c2544ff970dso836007766b.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 03:38:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788950336; x=1789555136; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=acKyLSiBa5vUJd8dKJMdIgaytIHA9Ytzui4Ses8+1M4=;
-        b=IfOHhuTZiRYEWXjzvqJCapBUZJDZtV/zjwE2dCxhbfI8n9lK9OB+a5RbXBC9Q5ZWTn
-         Y6HR3KStigsLaES2gqa5ft+pt71vy6HcTprGwRlnanq3WNYWPLm9Rs2jZs5Ldt81untD
-         vTiooe53IuqkchjzDVgVe7u6fGu8wr5oI6tSKJIHE5Z6TjbWTbAGdQmrQx6VjOR6INtH
-         kKrtTpAbAKC3jKVwAwDm1ErjGGyK9xlR/0CD0LA9RQtH9h+2lhB7x+phCDhd+J8REv2w
-         PmPHVkYw9pxtZKdc9YcNBOQpc8R6HSmQE5uPtLzjp4H5CIqENFmBUNjMBunWEjmrDQAT
-         sXIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788950336; x=1789555136;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=acKyLSiBa5vUJd8dKJMdIgaytIHA9Ytzui4Ses8+1M4=;
-        b=Bjiikc8qgCzQd4H6vhvaqXvOWDskrHfEVAwbN3e/uLtnuBDQp/m4ThEnAWjBhcPsS5
-         AynWoOblU7JUBunMcpl9bNdm7RqctXj3Dy/eVzRuWRitps2WASMYL+1icrfnCVR+Za25
-         Bapa/fL5ei7s/RpMwSgkFr5UQOLLvMoMjBl1FCK1sLi5jo3PoB6JzipcDaaxVHZ+UlRS
-         6I2DDmtlVVfEDt2eef7vRJvGjJucOAMtLSqGOpKqurq+WAW4pWvs5I+Gmouxx4V3KNJ1
-         360fsfSwGylE/oB3VDW7smPE0fsFwKBoUfYcVYY79mFBC1z4zs3QlaCrlpQ9e80UdnZB
-         ZG4w==
-X-Forwarded-Encrypted: i=1; AKwUvBxLt7Hn0b0IX0NDdwAFfw5Dx7hI6Vxw2vQsfoI9t9e9B8fKQpenoG3f7aDjSoYqPig8BtVRaUWztLZkx27APCo=@vger.kernel.org
-X-Gm-Message-State: AFuF++mI3WFI8pXZ4Vobsrec1vw3dY+lrQAw9oiQaxQL3gk7TJgLvW84
-	bhpEEoOoctlvoZbPC0f3JmIC2TImj9uyNjZQDvhCdxSfY30g0QzF6z8P
-X-Gm-Gg: AYBFou2aXsSp8QTTifzu1sygDHYTGeX2+6rwO/MPTEIqC0m8q5ywqpKW24eG5H4lcpQ
-	qUpQpd4XzTNz5jiJdS28TyDLfUIW0dm5or9NPbvj1VLSAAGNSoPUyMBnrU/TftfGfO2ndI9ExyX
-	4ffKgaI54keYdElAxDSAKu1qTIo2y/zQM8VDsHinnugkbJ6mQYcdIt9/8jBX9S6U8jCg7FFtIFB
-	hq84E0ixMM/f/I3DT4HHfWDRUW+XMsIEe41PqFH3gv+BLRiXZlUEsfPuaSm8wp3BGI+VNdxee+1
-	h+YkRquypn3bu6g09qJ+yZ+1IJhFH+VxsqLgq+xPsHxEA9mpZXKp5/X1Vzmcj9njb4GlJJlALW/
-	7YUXEoh9tzGtX6AS0MVlD2tD1+Q2QEO6MUid3BCAfS+RXSGy6oGVhAmn3zRxkvoRbByW0TcRwEX
-	XLdju9abPDO7bDhZzMjuHezOeWDj/O0vxCopCuSXLzuMa3tlu5I22ggGn0ROBJ+2qyWozFi5+IY
-	+6V4Q==
-X-Received: by 2002:a17:907:9485:b0:c25:541:fd3a with SMTP id a640c23a62f3a-c260c7b5cfemr1361234266b.7.1788950335902;
-        Wed, 09 Sep 2026 03:38:55 -0700 (PDT)
-Received: from localhost ([2c0f:3d00:6be:8900:ce5e:9212:ea4b:f30])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c260d6e1c93sm744470666b.63.2026.09.09.03.38.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2026 03:38:55 -0700 (PDT)
-Date: Wed, 9 Sep 2026 13:38:51 +0300
-From: Dan Carpenter <error27@gmail.com>
-To: oe-kbuild@lists.linux.dev, Priyank Rathod <rathodpriyank@google.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>, Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: Re: [PATCH v6] PCI/pcie: Add PCIe Lane Margining at Receiver (LMR)
- support
-Message-ID: <202608260405.gHL6gOJf-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="JbHeijJI";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UHhPoVte"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailflow.phl.internal (Postfix) with ESMTP id 683B913800A7;
+	Wed,  9 Sep 2026 06:41:46 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Wed, 09 Sep 2026 06:41:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1788950506; x=
+	1788957706; bh=kqIFoqRiMmH6sRALWBOwhvDCg+hj0QAMm7L7tYbgZ8Q=; b=J
+	bHeijJI8JDTm2/zSH/YR/bRwHqLWQtfEINyG98w7ojO91ZDFr0EgQPEgivHZ+ucu
+	sZ6bb8jsQy/iH1D14wd212njyBe0oDLekefyr91l7N3hDysIHIDjCGfrk1O0wDF9
+	1bIxhbwvtRVRg7cjm1dCqJoILxbvl/ZnQLjsSwnSdgMOr49AxZAb+xSDiCloNjiX
+	4KOKdmL+SoZCiavKfr+Si3ypsY+1nIh7Vm3+nCqdWuNU0T8iN5+4pta6DKrWPQhF
+	x2bVqO7H70TnLcPcWSoiXJmmJIk1LpQG+AM+RUm5riGJOAFcqQMlb9Pqhd6ESlK7
+	5ucqVuVeVS0m1QUSLbUuA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1788950506; x=1788957706; bh=kqIFoqRiMmH6sRALWBOwhvDCg+hj0QAMm7L
+	7tYbgZ8Q=; b=UHhPoVteWjrexluIKwxpq7gHRP0Yn+xrFc4oCt4es9DSZe6/Dmn
+	qZIaERihWm53WQzrF0jT4be0tN+CUWbpOgFMfSfp8k5J+Aqk7YkNacFf67JdVPRx
+	SFjcVGgS6ZIgtHlN1FKtyGxnyvm8lM+0GbZM8P5Y2tyUGlxd+/oxHwaohqcSqfUp
+	Zj6rG8Z31iw7EEfxR7/jfm8bgAD5XLm8zo/I/+gkdoQY8ipnaQVpF7ylJLbxz7p6
+	XBjmvNViWt6breEaFMyjJ5ah0XjA3Q83LBqUomh6dMy/ZwslsCww2axV6Uua21PJ
+	N9BXadM+plZ9X8B2MHwc/msFIKxhlmoYd2A==
+X-ME-Sender: <xms:6jehasVffBFtqSzdA-ZyeOR8gTnGoBU6FWOZV-RQ5snrsX8IPlLC6g>
+    <xme:6jehahTR4zRa-1HpMXSlRSchSB4v6RAeWyayWueVM1xBZPoUl73ljU_0qVgtcvGjW
+    WD1xNSp5RpcPFDGidq6G90VZDpp11bvtYX6BgDGKW99aZlC4VN5X8KW>
+X-ME-Received: <xmr:6jehardkP3jo5HCLH9-rLNYN-9t2nbkdQRSZIu5utqsQ3k4sigEIGrk2L8g>
+X-ME-Proxy-Cause: dmFkZTFtLjv8RYkaq2KOBNDHIDm+JOFoDRz/txBIRtvLfi3jajWftiquSrS7lUz15GDtJw
+    ZOsPoBToNQmmrpwX9wEG/IMwctc1l1Wf1Y2SedqlX3vPWZtcpN5ewOiZ61MuL9Ij4Jnfx3
+    U9v//DrA1CcVS1qE5MG3ShUl2XBgF8Qcaew1nccOXf0rTqAbaAiI2JpvLYyias9OwsKlYG
+    VsbABRmlg2uz3Pv/UHBh4lrmI6JV5VXme4xVA5YQBUZhmlvB7ncMW5ab4sZ0wqYH1bm2TG
+    S1/fVkqzOlhjLLx9BGdAp6Bq3hZ1WVQpTicAaqDxCw8vjzBNsONxFItyag/hXfw8lVx4OO
+    EiWQctQ3P/1Yxu6/5y8fw3oYORhYCFJKG6DuEYt7dJ8btnp38IOAxjWJEsurEK1fRBek0z
+    ztzCjw68d0x2f36ktxCo0MhQGeLaMCNx/gnQZF52aQ8Mlx7YP3RWYVxcqzwqEIruKp/zkF
+    OKkmxSrqWuyobb75H+1KOeuVk3n10uFTmMkhcoY3ib9x8bjUSyKMCt48MsCUTKF88VrEbk
+    L12cdYBGh4TpHzQ0zzKmgMpY9yBvNv5Zaq5OmRtGLRP2Ix1M3m59F39F/Y+4MYV8XTZ9bn
+    hsVdaxTOrKaXZ1VaovGzC6NjKoo2QHgQBevaHeGpILmvpfm15tFUza/k7rew
+X-ME-Proxy: <xmx:6jeharUd_xRCJamGUgRjyUgpu--FkUIIlnru2pddbGp75Le0XK8_Jg>
+    <xmx:6jehapjNfpB6y9Ak3NdphzJu_O1Eas3uMOK7ZjRRPRVkRWRk9Zxm4w>
+    <xmx:6jehahElGdLuV2jqcuOx_gXtqlTde3Z6vk8rtmoSQyCqfUbhgJRDFw>
+    <xmx:6jehanIyyuhe4fiUxZMxKtcHZR9pz6Y96OV3YvNzTXBwnPusel_zTw>
+    <xmx:6jehannmD6nV_zLTPVSsU0c6aTkow2pnkoJVt7vFCaWM-ftkK-ZceVkh>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 9 Sep 2026 06:41:45 -0400 (EDT)
+Date: Wed, 9 Sep 2026 11:41:44 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+	rppt@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, usama.anjum@arm.com, usama.arif@linux.dev, nico.pache@linux.dev, 
+	ziy@nvidia.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
+	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, ryan.roberts@arm.com, 
+	shuah@kernel.org, surenb@google.com, vbabka@kernel.org, agordeev@linux.ibm.com, 
+	jgg@ziepe.ca, leon@kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v5 06/19] selftests/mm: stop khugepaged during the
+ MADV_COLLAPSE cases
+Message-ID: <aqE3Vq8Go01c1icS@thinkstation>
+References: <20260908125105.1510704-1-kirill@shutemov.name>
+ <20260908125105.1510704-7-kirill@shutemov.name>
+ <4e064b9d-aea9-485a-8547-3830999cff01@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,98 +91,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260824-pcie-lmt-v6-1-bab4ce233fa5@google.com>
+In-Reply-To: <4e064b9d-aea9-485a-8547-3830999cff01@linux.alibaba.com>
 
-Hi Priyank,
+On Wed, Sep 09, 2026 at 05:55:01PM +0800, Baolin Wang wrote:
+> 
+> 
+> On 9/8/26 8:50 PM, Kiryl Shutsemau wrote:
+> > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> > 
+> > __madvise_collapse() turns THP off before each MADV_COLLAPSE, both to keep
+> > khugepaged out of the range and to prove MADV_COLLAPSE ignores the setting.
+> > It clears the global controls only, which is no longer enough.  A per-order
+> > control overrides them, and -s, which makes the cases fault in folios of
+> > one order, leaves that order's control at "always".  khugepaged then
+> > collapses the very range the case is working on, and the case fails on a
+> > collapse that was interfered with rather than refused.
+> 
+> Right. So I think the correct fix tag is b7f16963efe7 ("mm/khugepaged: run
+> khugepaged for all orders"), because before this commit, khugepaged would
+> not try to collapse this range since it only checked whether the PMD order
+> was suitable for collapse.
 
-kernel test robot noticed the following build warnings:
+Agreed.  The series is in mm-new already; if a respin is needed I will use
+that tag.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Priyank-Rathod/PCI-pcie-Add-PCIe-Lane-Margining-at-Receiver-LMR-support/20260824-223812
-base:   0f23d56f17fdfc7db69d51f64c8b91bbab947aa9
-patch link:    https://lore.kernel.org/r/20260824-pcie-lmt-v6-1-bab4ce233fa5%40google.com
-patch subject: [PATCH v6] PCI/pcie: Add PCIe Lane Margining at Receiver (LMR) support
-config: powerpc64-randconfig-r073-20260826 (https://download.01.org/0day-ci/archive/20260826/202608260405.gHL6gOJf-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 15.2.0
-smatch: v0.5.0-9187-g5189e3fb
+> > @@ -547,9 +547,16 @@ static void __madvise_collapse(const char *msg, char *p, int nr_hpages,
+> >   	/*
+> >   	 * Prevent khugepaged interference and tests that MADV_COLLAPSE
+> >   	 * ignores /sys/kernel/mm/transparent_hugepage/enabled
+> > +	 *
+> > +	 * "inherit" rather than "never" so that MADV_COLLAPSE on shmem still
+> > +	 * finds an order to build.
+> >   	 */
+> >   	settings.thp_enabled = THP_NEVER;
+> >   	settings.shmem_enabled = SHMEM_NEVER;
+> > +	for (i = 0; i < NR_ORDERS; i++) {
+> > +		settings.hugepages[i].enabled = THP_INHERIT;
+> > +		settings.shmem_hugepages[i].enabled = SHMEM_INHERIT;
+> > +	}
+> 
+> This looks like a workaround to me. Shouldn't we fix this in shmem instead?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Closes: https://lore.kernel.org/r/202608260405.gHL6gOJf-lkp@intel.com/
+Good point.
 
-smatch warnings:
-drivers/pci/pcie/margin.c:1005 pci_lmr_exit() warn: variable dereferenced before check 'dev' (see line 1003)
-drivers/pci/pcie/margin.c:1020 pci_suspend_lmr() warn: variable dereferenced before check 'dev' (see line 1018)
-drivers/pci/pcie/margin.c:1056 pci_reset_lmr() warn: variable dereferenced before check 'dev' (see line 1054)
+It can be a follow-up patch.  Do you want to make a proper shmem.c fix
+and update the selftest along with it?
 
-vim +/dev +1005 drivers/pci/pcie/margin.c
-
-ecb76f560cf217 Priyank Rathod 2026-08-24  1001  void pci_lmr_exit(struct pci_dev *dev)
-ecb76f560cf217 Priyank Rathod 2026-08-24  1002  {
-ecb76f560cf217 Priyank Rathod 2026-08-24 @1003  	struct pci_margin_dev *mdev = dev->lmr;
-                                                                                      ^^^^^
-Dereference
-
-ecb76f560cf217 Priyank Rathod 2026-08-24  1004  
-ecb76f560cf217 Priyank Rathod 2026-08-24 @1005  	if (!dev || !mdev)
-                                                            ^^^^
-This check is too late.  It can likely be removed.  The other warnings
-are the same.
-
-ecb76f560cf217 Priyank Rathod 2026-08-24  1006  		return;
-ecb76f560cf217 Priyank Rathod 2026-08-24  1007  
-ecb76f560cf217 Priyank Rathod 2026-08-24  1008  	pci_suspend_lmr(dev);
-ecb76f560cf217 Priyank Rathod 2026-08-24  1009  
-ecb76f560cf217 Priyank Rathod 2026-08-24  1010  	pci_margin_debugfs_remove(mdev);
-ecb76f560cf217 Priyank Rathod 2026-08-24  1011  	mutex_destroy(&mdev->lock);
-ecb76f560cf217 Priyank Rathod 2026-08-24  1012  	kfree(mdev);
-ecb76f560cf217 Priyank Rathod 2026-08-24  1013  	dev->lmr = NULL;
-ecb76f560cf217 Priyank Rathod 2026-08-24  1014  }
-ecb76f560cf217 Priyank Rathod 2026-08-24  1015  
-ecb76f560cf217 Priyank Rathod 2026-08-24  1016  void pci_suspend_lmr(struct pci_dev *dev)
-ecb76f560cf217 Priyank Rathod 2026-08-24  1017  {
-ecb76f560cf217 Priyank Rathod 2026-08-24 @1018  	struct pci_margin_dev *mdev = dev->lmr;
-ecb76f560cf217 Priyank Rathod 2026-08-24  1019  
-ecb76f560cf217 Priyank Rathod 2026-08-24 @1020  	if (!dev || !mdev)
-ecb76f560cf217 Priyank Rathod 2026-08-24  1021  		return;
-ecb76f560cf217 Priyank Rathod 2026-08-24  1022  
-ecb76f560cf217 Priyank Rathod 2026-08-24  1023  	guard(mutex)(&mdev->lock);
-ecb76f560cf217 Priyank Rathod 2026-08-24  1024  	pci_lmr_disable_locked(mdev);
-ecb76f560cf217 Priyank Rathod 2026-08-24  1025  }
-ecb76f560cf217 Priyank Rathod 2026-08-24  1026  
-ecb76f560cf217 Priyank Rathod 2026-08-24  1027  static void pci_lmr_reset_software_state_locked(struct pci_margin_dev *mdev)
-ecb76f560cf217 Priyank Rathod 2026-08-24  1028  {
-ecb76f560cf217 Priyank Rathod 2026-08-24  1029  	struct pci_dev *dev;
-ecb76f560cf217 Priyank Rathod 2026-08-24  1030  	int i;
-ecb76f560cf217 Priyank Rathod 2026-08-24  1031  
-ecb76f560cf217 Priyank Rathod 2026-08-24  1032  	if (!mdev)
-ecb76f560cf217 Priyank Rathod 2026-08-24  1033  		return;
-ecb76f560cf217 Priyank Rathod 2026-08-24  1034  
-ecb76f560cf217 Priyank Rathod 2026-08-24  1035  	lockdep_assert_held(&mdev->lock);
-ecb76f560cf217 Priyank Rathod 2026-08-24  1036  
-ecb76f560cf217 Priyank Rathod 2026-08-24  1037  	if (!mdev->enabled)
-ecb76f560cf217 Priyank Rathod 2026-08-24  1038  		return;
-ecb76f560cf217 Priyank Rathod 2026-08-24  1039  
-ecb76f560cf217 Priyank Rathod 2026-08-24  1040  	dev = mdev->dev;
-ecb76f560cf217 Priyank Rathod 2026-08-24  1041  
-ecb76f560cf217 Priyank Rathod 2026-08-24  1042  	for (i = 0; i < mdev->num_lanes; i++) {
-ecb76f560cf217 Priyank Rathod 2026-08-24  1043  		mdev->lanes[i].timing_val = 0;
-ecb76f560cf217 Priyank Rathod 2026-08-24  1044  		mdev->lanes[i].voltage_val = 0;
-ecb76f560cf217 Priyank Rathod 2026-08-24  1045  	}
-ecb76f560cf217 Priyank Rathod 2026-08-24  1046  
-ecb76f560cf217 Priyank Rathod 2026-08-24  1047  	pci_lmr_restore_aspm(mdev);
-ecb76f560cf217 Priyank Rathod 2026-08-24  1048  	pm_runtime_put_sync(&dev->dev);
-ecb76f560cf217 Priyank Rathod 2026-08-24  1049  	mdev->enabled = false;
-ecb76f560cf217 Priyank Rathod 2026-08-24  1050  }
-ecb76f560cf217 Priyank Rathod 2026-08-24  1051  
-ecb76f560cf217 Priyank Rathod 2026-08-24  1052  void pci_reset_lmr(struct pci_dev *dev)
-ecb76f560cf217 Priyank Rathod 2026-08-24  1053  {
-ecb76f560cf217 Priyank Rathod 2026-08-24 @1054  	struct pci_margin_dev *mdev = dev->lmr;
-ecb76f560cf217 Priyank Rathod 2026-08-24  1055  
-ecb76f560cf217 Priyank Rathod 2026-08-24 @1056  	if (!dev || !mdev)
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
-
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
