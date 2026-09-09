@@ -1,33 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F8654A7E7;
-	Wed,  9 Sep 2026 16:01:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B515E566C53;
+	Wed,  9 Sep 2026 16:02:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788969712; cv=none; b=TNXwpht0+QGcjUudkZz2htsRA0cGTSoNuVOzmSTg1KAUCxOfFsvAs8aY8G0V6SO9B32EP174v47l/NECst0tDaMHGdXI112/Olc2HFliYLxLw1B2vHiKtXLD2BO4o1RshAetKddCJQ/ya188uv3BRr5lkVobJYiWBMowA7RUwzc=
+	t=1788969748; cv=none; b=spPCdTJDGBX/RInpSQ5Mnc6lYxaW7rOC3R2H5eWByMrCVBoJMDSMMIk81XVPSxrtIs3ZhGzbMUqz/fu9BcUHvcO14nQjOw4D1c1P/lkNn6aX4VWqoDLBZhuM1oivTruROwrHyhlUSkJAu6pzKIsKEcQGYraLbgNCCA0K4zDixl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788969712; c=relaxed/simple;
-	bh=x+wNB4YAvun4OnvxjY0BRElQYfJzAYdDORRux8Afbm8=;
+	s=arc-20240116; t=1788969748; c=relaxed/simple;
+	bh=+qFWelgk7ZhBw3jqt1QlHX25hgNM2NqBuFhO3mk1wuo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MJkt3+XPBvMTJX7rwUmMDWs9Rx1PhyDrkz6AxP1fgJU2ZcEDwFyW37ExLnhokxInyws2IxZtTGoIlC5LOg4daWbKdziQimWJ/kcyYKExinq+3ASyiKhu2Kj5iyYwze5hvd931347IcGlXdX3DmmKN0+eBIQfEO3SlkVxBCbk6Zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bPO2z0RN; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=OMS7FBLHs2PvJCFN+zOTeOKnHjwx72BaSPNilwAHMKt9Y/8wco8yGxW9n7sYVgfMPPK8VVgqJ2x0n9UQhoO43drc2qgfpwgeTxWDLMRqvxq16BGinMK08AhrLVjn848LjKYb5XHGWmBmQpYFEH0WZ51kXoCzFNbZR3pSu3CD37o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eQOIS11B; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bPO2z0RN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE5691F00A3A;
-	Wed,  9 Sep 2026 16:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788969710;
-	bh=bhcglVIg8zXwSbsWI5h+bfoKubERpLnIudVPxLA0UXE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=bPO2z0RN/ugIIn93vzjrYlhlc2+pGIpRrg5dV5Kj/x+S6uhDNu0gQ2Tflt0XBK6NZ
-	 jDcXvHPqx1BBKEOrsn47W7//Qk0M439jzhJpDgsxOwCD3kA+BWBWKG/0jn2cnDg4Ib
-	 b7cH3RBinpH2xiv24FnxMbSnohKTLg7YKmDTL0zHGuQBmV3vDDHRdBW8nioUBR2Two
-	 heDpq9ffJlY5U4/hXC3UGIszHmT+RXWbw1ja5L3l7kYf1okUEI2IxyE6+Bta+MsGca
-	 PD1BDBVM/FNAIg5rwx9A4TI6cKScsTTkLCgkXAamR1T877nPjhNQIcmGlnqavyLUz8
-	 jQaRJZ24rjmqA==
-Message-ID: <c910f084-07f8-4264-a33e-ee29b65bee87@kernel.org>
-Date: Wed, 9 Sep 2026 18:01:30 +0200
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eQOIS11B"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 689B1cJc3839630;
+	Wed, 9 Sep 2026 16:01:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=iGcnBj
+	nzsvFwvqDF7dJOgFmWXqwCG/4To3uYxCNHBPA=; b=eQOIS11BcylKcEdguI+jAm
+	1jRK2YB64sGT0T3qeY9q2Xf9TK2vXHil0SwI6i+xD8ol3CYTbu+mc3j2xQZQJhWK
+	t9O7TIqL92/YrWwX0CizP/oLzY0zFk+SGLd+kDilUefjIibipJeRhwS3hbYEfqT1
+	KIgpaTnSLKfxIVriagFs3M6McPdmqjui4yjnS4hug8mQ8MTiARHBz0X3/PeoOTDi
+	Zm0KQC9xmUYuFmbJAE982gMSFFjzy25TcQE/QBYBAEfrcqqZSSHHOT6dbIx+pdrJ
+	o8PT4kwdFzNi0imWxAnV4XAx6au95/eyu8yGQaPQAOgLh/N+Yryy8O0hRVKbr1Eg
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ggbhf6jqv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Sep 2026 16:01:51 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 689FuEm0001918;
+	Wed, 9 Sep 2026 16:01:50 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ggwswb9as-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Sep 2026 16:01:50 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 689G1jw148103904
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 9 Sep 2026 16:01:45 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 85EF82004E;
+	Wed,  9 Sep 2026 16:01:45 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BE01220040;
+	Wed,  9 Sep 2026 16:01:35 +0000 (GMT)
+Received: from [9.61.255.18] (unknown [9.61.255.18])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed,  9 Sep 2026 16:01:35 +0000 (GMT)
+Message-ID: <0e07e597-d816-4425-b190-d61c3281f95c@linux.ibm.com>
+Date: Wed, 9 Sep 2026 21:31:31 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,113 +62,341 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 09/45] KVM: guest_memfd: Stub in ability to enable
- in-place shared<=>private conversion
-To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
- binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
- jmattson@google.com, jthoughton@google.com, michael.roth@amd.com,
- oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com,
- rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com,
- steven.price@arm.com, willy@infradead.org, wyihan@google.com,
- yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
- suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, tarunsahu@google.com,
- Randy Dunlap <rdunlap@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Fuad Tabba <fuad.tabba@linux.dev>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev, Xiaoyao Li <xiaoyao.li@intel.com>
-References: <20260830-gmem-inplace-conversion-v12-0-85e5fd25252a@google.com>
- <20260830-gmem-inplace-conversion-v12-9-85e5fd25252a@google.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
+Subject: Re: [PATCH v2 12/22] coredump: clean up coredump state handling
+To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
+Cc: Jacob Lalonde <jalalonde@meta.com>, Josef Bacik <josef@toxicpanda.com>,
+        Jann Horn <jannh@google.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jan Kara <jack@suse.cz>, Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+        "Liam R. Howlett" <liam@infradead.org>,
+        Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+        Omar Sandoval <osandov@osandov.com>, Jacob Lalonde <jalalonde@fb.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+References: <20260820-work-coredump-sparse-v2-0-ba32dd718c51@kernel.org>
+ <20260820-work-coredump-sparse-v2-12-ba32dd718c51@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260830-gmem-inplace-conversion-v12-9-85e5fd25252a@google.com>
-Content-Type: text/plain; charset=UTF-8
+From: R Nageswara Sastry <rnsastry@linux.ibm.com>
+In-Reply-To: <20260820-work-coredump-sparse-v2-12-ba32dd718c51@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-GUID: RC2P0Eez8eUL9mdFR4p7Y9v5Q42r_iXJ
+X-Authority-Analysis: v=2.4 cv=RIaD2Yi+ c=1 sm=1 tr=0 ts=6aa182ef cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=EdPaav6MFMfPzbQwOvsA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA5MDE3OCBTYWx0ZWRfX49YuAzFzCrzn
+ GyUaesOT0Zaas4kjvS7CEdGUBC6cbVZQmqlGd7nXgLusnch3Gb3wkQZFid1EGDi1JsLu8+7C6ha
+ CB/7e7NuREDOrToW519z3pcXTBZANb8=
+X-Proofpoint-ORIG-GUID: KN_x0VA8pfEEO2JiqzD1hzgZ4TDJGFl7
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA5MDE3OCBTYWx0ZWRfX8pa+aJ3poKL7
+ pgZf78/kRtTfVslMnHaEvjO0KGTsMmOqAX4lHomWV68n08wcwDQXQP3z0hGakj2K1X9tvEfVTW6
+ OirKTn93cc5pdKHSOxxihMyTGgIT6agsYblgn0oUBBfRqAAPwbYlroG82xDNWtxWZFZC5203bvd
+ ZaRcU7QyYxbZ3vGfzw18tOkex8KrSxNaK7OjxJZock4akTTGeuu5hwyaeUY+Sp+mwumsYUvnrbm
+ YIj2gR1lJXiox7gxTshZwtVSYBPgfaOVnKhz0e0iJHR41a48YxGptZ/gFEKmdLw5+R4jgMxv2u+
+ rmKoTujQ0nYDfCHSiNPTd+pklx28vBkF9mB6p5rituIW5kZRraODAWvj1u3mORCmbMBmU9iFPgT
+ gAPDAf0wiLuKEWsfRO71zqnGjvJxBWsebda8pICzSfVh5F+vbA8J5xIkbOXbUg22IsTKr95wcey
+ lSRRK3JDriFloVdPGoQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-08_03,2026-09-09_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 suspectscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
+ adultscore=0 phishscore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609090178
 
-On 8/31/26 02:25, Ackerley Tng via B4 Relay wrote:
-> From: Sean Christopherson <seanjc@google.com>
-> 
-> Stub in global variable to enable in-place guest_memfd private<=>shared
-> memory conversion, which will eventually be exposed to userspace via a
-> module param, and wire up the __kvm_is_private_gfn() static call to the
-> guest_memfd version when in-place conversion is enabled, i.e. when gmem is
-> the sole authority on private vs. shared memory.
-> 
-> Cc: Fuad Tabba <tabba@google.com>
-> Cc: Xiaoyao Li <xiaoyao.li@intel.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+
+On 20.08.2026 4:39 AM, Christian Brauner wrote:
+> Right now coredump state handling is messy. The binfmt->core_dump::
+> methods return 1 when the coredump method did anything at all which
+> means that a partial write counts as having dumped core. This is fine as
+> the state is really only used to indicate that a coredump event occurred
+> in the exit status of the task. That should obviously be indicated even
+> if the actual writeout of the coredump failed.
+>
+> But it means the coredump method of the binary formats is different from
+> all the other coredump helpers. And there's no way to communicate to
+> userspace that a coredump was truncated. We'll add support for that in a
+> second. For now, clean this up.
+>
+> Add a flag member into struct coredump_params. Let the coredump method
+> raise COREDUMP_STATE_STARTED. This is what coredump_finish() will end up
+> using to splice in the coredump bit into the exit status.
+>
+> This allows us to let the return value mean success or failure and align
+> it with the other coredump helpers. We also start raising
+> COREDUMP_STATE_TRUNCATED. This will be used in the next patches to
+> communicate truncation to userspace via the coredump socket.
+>
+> No functional changes.
+>
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+Tested-by: R Nageswara Sastry <rnsastry@linux.ibm.com>
+
+System: ppc64le LPAR (IBM POWER), Linux 7.3-rc2
 > ---
-
-Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
-
+>   fs/binfmt_elf.c          | 12 +++++++-----
+>   fs/binfmt_elf_fdpic.c    | 12 +++++++-----
+>   fs/coredump.c            | 31 +++++++++++++++++--------------
+>   include/linux/binfmts.h  |  3 ++-
+>   include/linux/coredump.h | 12 ++++++++++++
+>   5 files changed, 45 insertions(+), 25 deletions(-)
+>
+> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+> index 16a56b6b3f6c..f85b2137bdb9 100644
+> --- a/fs/binfmt_elf.c
+> +++ b/fs/binfmt_elf.c
+> @@ -74,7 +74,7 @@ static int load_elf_binary(struct linux_binprm *bprm);
+>    * don't even try.
+>    */
+>   #ifdef CONFIG_ELF_CORE
+> -static int elf_core_dump(struct coredump_params *cprm);
+> +static bool elf_core_dump(struct coredump_params *cprm);
+>   #else
+>   #define elf_core_dump	NULL
+>   #endif
+> @@ -1990,9 +1990,9 @@ static void fill_extnum_info(struct elfhdr *elf, struct elf_shdr *shdr4extnum,
+>    * and then they are actually written out.  If we run out of core limit
+>    * we just truncate.
+>    */
+> -static int elf_core_dump(struct coredump_params *cprm)
+> +static bool elf_core_dump(struct coredump_params *cprm)
+>   {
+> -	int has_dumped = 0;
+> +	bool ret = false;
+>   	int segs, i;
+>   	struct elfhdr elf;
+>   	loff_t offset = 0, dataoff;
+> @@ -2023,7 +2023,7 @@ static int elf_core_dump(struct coredump_params *cprm)
+>   	if (!fill_note_info(&elf, e_phnum, &info, cprm))
+>   		goto end_coredump;
+>   
+> -	has_dumped = 1;
+> +	cprm->state |= COREDUMP_STATE_STARTED;
+>   
+>   	offset += sizeof(elf);				/* ELF header */
+>   	offset += segs * sizeof(struct elf_phdr);	/* Program headers */
+> @@ -2118,11 +2118,13 @@ static int elf_core_dump(struct coredump_params *cprm)
+>   			goto end_coredump;
+>   	}
+>   
+> +	ret = true;
+> +
+>   end_coredump:
+>   	free_note_info(&info);
+>   	kfree(shdr4extnum);
+>   	kfree(phdr4note);
+> -	return has_dumped;
+> +	return ret;
+>   }
+>   
+>   #endif		/* CONFIG_ELF_CORE */
+> diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
+> index fe0b5c5ed2bc..252eb155965b 100644
+> --- a/fs/binfmt_elf_fdpic.c
+> +++ b/fs/binfmt_elf_fdpic.c
+> @@ -75,7 +75,7 @@ static int elf_fdpic_map_file_by_direct_mmap(struct elf_fdpic_params *,
+>   					     struct file *, struct mm_struct *);
+>   
+>   #ifdef CONFIG_ELF_CORE
+> -static int elf_fdpic_core_dump(struct coredump_params *cprm);
+> +static bool elf_fdpic_core_dump(struct coredump_params *cprm);
+>   #endif
+>   
+>   static struct linux_binfmt elf_fdpic_format = {
+> @@ -1476,9 +1476,9 @@ static bool elf_fdpic_dump_segments(struct coredump_params *cprm,
+>    * and then they are actually written out.  If we run out of core limit
+>    * we just truncate.
+>    */
+> -static int elf_fdpic_core_dump(struct coredump_params *cprm)
+> +static bool elf_fdpic_core_dump(struct coredump_params *cprm)
+>   {
+> -	int has_dumped = 0;
+> +	bool ret = false;
+>   	int segs;
+>   	int i;
+>   	struct elfhdr *elf = NULL;
+> @@ -1535,7 +1535,7 @@ static int elf_fdpic_core_dump(struct coredump_params *cprm)
+>   	/* Set up header */
+>   	fill_elf_fdpic_header(elf, e_phnum);
+>   
+> -	has_dumped = 1;
+> +	cprm->state |= COREDUMP_STATE_STARTED;
+>   	/*
+>   	 * Set up the notes in similar form to SVR4 core dumps made
+>   	 * with info from their /proc.
+> @@ -1655,6 +1655,8 @@ static int elf_fdpic_core_dump(struct coredump_params *cprm)
+>   		       cprm->file->f_pos, offset);
+>   	}
+>   
+> +	ret = true;
+> +
+>   end_coredump:
+>   	while (thread_list) {
+>   		tmp = thread_list;
+> @@ -1665,7 +1667,7 @@ static int elf_fdpic_core_dump(struct coredump_params *cprm)
+>   	kfree(elf);
+>   	kfree(psinfo);
+>   	kfree(shdr4extnum);
+> -	return has_dumped;
+> +	return ret;
+>   }
+>   
+>   #endif		/* CONFIG_ELF_CORE */
+> diff --git a/fs/coredump.c b/fs/coredump.c
+> index d61f36239f91..6af3ff0e19a6 100644
+> --- a/fs/coredump.c
+> +++ b/fs/coredump.c
+> @@ -98,7 +98,6 @@ struct core_name {
+>   	char *corename __counted_by_ptr(size);
+>   	int used, size;
+>   	unsigned int core_pipe_limit;
+> -	bool core_dumped;
+>   	enum coredump_type_t core_type;
+>   };
+>   
+> @@ -250,7 +249,6 @@ static bool coredump_parse(struct core_name *cn, struct coredump_params *cprm,
+>   	cn->used = 0;
+>   	cn->corename = NULL;
+>   	cn->core_pipe_limit = 0;
+> -	cn->core_dumped = false;
+>   	if (*pat_ptr == '|')
+>   		cn->core_type = COREDUMP_PIPE;
+>   	else if (*pat_ptr == '@')
+> @@ -549,13 +547,13 @@ static int coredump_wait(int exit_code, struct core_state *core_state)
+>   	return core_waiters;
+>   }
+>   
+> -static void coredump_finish(bool core_dumped)
+> +static void coredump_finish(enum coredump_state state)
+>   {
+>   	struct core_thread *curr, *next;
+>   	struct task_struct *task;
+>   
+>   	spin_lock_irq(&current->sighand->siglock);
+> -	if (core_dumped && !__fatal_signal_pending(current))
+> +	if ((state & COREDUMP_STATE_STARTED) && !__fatal_signal_pending(current))
+>   		current->signal->group_exit_code |= 0x80;
+>   	next = current->signal->core_state->dumper.next;
+>   	current->signal->core_state = NULL;
+> @@ -1045,19 +1043,23 @@ static bool coredump_pipe(struct core_name *cn, struct coredump_params *cprm,
+>   	return true;
+>   }
+>   
+> -static bool coredump_write(struct core_name *cn,
+> -			  struct coredump_params *cprm,
+> -			  const struct linux_binfmt *binfmt)
+> +static bool coredump_write(struct coredump_params *cprm,
+> +			   const struct linux_binfmt *binfmt)
+>   {
+>   
+> -	if (dump_interrupted())
+> +	if (dump_interrupted()) {
+> +		cprm->state |= COREDUMP_STATE_TRUNCATED;
+>   		return true;
+> +	}
+>   
+> -	if (!dump_vma_snapshot(cprm))
+> +	if (!dump_vma_snapshot(cprm)) {
+> +		cprm->state |= COREDUMP_STATE_TRUNCATED;
+>   		return false;
+> +	}
+>   
+>   	file_start_write(cprm->file);
+> -	cn->core_dumped = binfmt->core_dump(cprm);
+> +	if (!binfmt->core_dump(cprm))
+> +		cprm->state |= COREDUMP_STATE_TRUNCATED;
+>   	/*
+>   	 * Ensures that file size is big enough to contain the current
+>   	 * file postion. This prevents gdb from complaining about
+> @@ -1066,7 +1068,8 @@ static bool coredump_write(struct core_name *cn,
+>   	 */
+>   	if (cprm->to_skip) {
+>   		cprm->to_skip--;
+> -		dump_emit(cprm, "", 1);
+> +		if (!dump_emit(cprm, "", 1))
+> +			cprm->state |= COREDUMP_STATE_TRUNCATED;
+>   	}
+>   	file_end_write(cprm->file);
+>   	free_vma_snapshot(cprm);
+> @@ -1082,7 +1085,7 @@ static void coredump_cleanup(struct core_name *cn, struct coredump_params *cprm)
+>   		atomic_dec(&core_pipe_count);
+>   	}
+>   	kfree(cn->corename);
+> -	coredump_finish(cn->core_dumped);
+> +	coredump_finish(cprm->state);
+>   }
+>   
+>   static inline bool coredump_skip(const struct coredump_params *cprm,
+> @@ -1136,14 +1139,14 @@ static void do_coredump(struct core_name *cn, struct coredump_params *cprm,
+>   	if (unshare_files())
+>   		return;
+>   
+> -	if ((cprm->mask & COREDUMP_KERNEL) && !coredump_write(cn, cprm, binfmt))
+> +	if ((cprm->mask & COREDUMP_KERNEL) && !coredump_write(cprm, binfmt))
+>   		return;
+>   
+>   	coredump_sock_shutdown(cprm->file);
+>   
+>   	/* Let the parent know that a coredump was generated. */
+>   	if (cprm->mask & COREDUMP_USERSPACE)
+> -		cn->core_dumped = true;
+> +		cprm->state |= COREDUMP_STATE_STARTED;
+>   
+>   	/*
+>   	 * When core_pipe_limit is set we wait for the coredump server
+> diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
+> index 2c77e383e737..64f82fb642bf 100644
+> --- a/include/linux/binfmts.h
+> +++ b/include/linux/binfmts.h
+> @@ -94,7 +94,8 @@ struct linux_binfmt {
+>   	struct module *module;
+>   	int (*load_binary)(struct linux_binprm *);
+>   #ifdef CONFIG_COREDUMP
+> -	int (*core_dump)(struct coredump_params *cprm);
+> +	/* Returns true if the whole coredump was written. */
+> +	bool (*core_dump)(struct coredump_params *cprm);
+>   	unsigned long min_coredump;	/* minimal dump size */
+>   #endif
+>   } __randomize_layout;
+> diff --git a/include/linux/coredump.h b/include/linux/coredump.h
+> index 943bddfb22bf..709388dd5659 100644
+> --- a/include/linux/coredump.h
+> +++ b/include/linux/coredump.h
+> @@ -9,6 +9,16 @@
+>   #include <asm/siginfo.h>
+>   
+>   #ifdef CONFIG_COREDUMP
+> +/**
+> + * enum coredump_state - what happened while the coredump was written
+> + * @COREDUMP_STATE_STARTED: the dumper committed to writing a coredump
+> + * @COREDUMP_STATE_TRUNCATED: the dumper stopped before it had written all of it
+> + */
+> +enum coredump_state {
+> +	COREDUMP_STATE_STARTED		= (1U << 0),
+> +	COREDUMP_STATE_TRUNCATED	= (1U << 1),
+> +};
+> +
+>   struct core_vma_metadata {
+>   	unsigned long start, end;
+>   	vm_flags_t flags;
+> @@ -28,6 +38,8 @@ struct coredump_params {
+>   	int cpu;
+>   	/* COREDUMP_* options negotiated with the coredump server. */
+>   	u64 mask;
+> +	/* COREDUMP_STATE_* raised while the coredump is written. */
+> +	enum coredump_state state;
+>   	loff_t written;
+>   	loff_t pos;
+>   	loff_t to_skip;
+>
 -- 
-Cheers,
+Thanks and Regards
+R.Nageswara Sastry
 
-David
