@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8E957981D;
-	Wed,  9 Sep 2026 16:18:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E943855C1A6;
+	Wed,  9 Sep 2026 16:22:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788970701; cv=none; b=t5J1hNMDQuXnwfCBf0h7FMlBe7NKMDPhgh3qMcb6Y0qUQ9rBK6jdci0hxHo1lhpRQgsV2ivGYzV5Xewz3Yl2kX7IeIgV8CfX/kanqgqagc17WPeCdgJ23EGC1+2es4u9OzW9N9lofmp2eTmPV8lCv3SM/qNC3cuOBcqu1wTbQzs=
+	t=1788970927; cv=none; b=eQappFMXhToCqqtQFhKFRC2gcO1g9Gx7Q4I6gPTz/WoqqDY3hz9hM8Bc0tr6OrLHRd8TBWTsumHRpl/n7WhVuJmIyNrap/dws4c4YZLWSi/xwWiIe8b4sl5/Gg6VNdBLmGh90PczqSDUB7OY8SSff7oD4l5iiQ28DgF3fW154H0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788970701; c=relaxed/simple;
-	bh=B8oUdYDYWio5DRF/tHy+wZxlsr1tt7bQQHpXhsBEZ3U=;
+	s=arc-20240116; t=1788970927; c=relaxed/simple;
+	bh=k3HOXlPmjuyP9qvoQu64y11t6PI2XAg6QCEzhbR3WMk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cxbnEE5V3+3NECXwJjoyprgMNG1BLSBRCik4JlMSX09UuhXSucnbO6flWYUsI4+bCluYozVbXdL6xbRL6h8CByAGto72LL+H8+utKNLih4v4e8yEa9nLgNbERyDLu/aNHw6cmBcloWvaAkVhKaZiZXheXopsklr2EKNC4A+Mm7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o1ral/CX; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=EOK70k8MzkxSWmRW3JDFbWENUOmdoMncr7VUkZppzj7FW5KcmUd52tef4E4GErw+O/fxOEKhJXYQHiELB9HRW6aYGuw9lSdalcfPoOzCgeu6Hl9yT8NcMfP/VlwmnlKKSGRWIrRr3yo9HJ3wY0lNybyMa5WTl86JcUb1VxHgMMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZrTCyR10; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o1ral/CX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C80631F000FF;
-	Wed,  9 Sep 2026 16:18:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZrTCyR10"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61E191F000FF;
+	Wed,  9 Sep 2026 16:21:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788970700;
-	bh=HyXKsyvomAP4+5xUKdpWvuWxueChSf/W0pw/XmgY1Cs=;
+	s=k20260515; t=1788970925;
+	bh=gVDwXOjHBRzDJvfzuWQ8YBF5gQR9D+1WWpyCaQv2V3o=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=o1ral/CXD4X/fnI10rF5bNsFBS0O3npyLOcM/9WYX8ixwC5pJ1Hvm0bz89SHGylJK
-	 oWoqybpTMJ98En5CCBAd08JK+6v6M4KeeQKe394T7dBvMwipJCL6YkakDcFA+/71ti
-	 RufHHaydWT326j7bHQhwse69mevd/0OPJuTgxt4j10MfuienIrZEJ/RK304M0xF0Vz
-	 Uo8l8sNIwOyYe88CCHh8s2iFFi7+FlsyZVx7y0t7gdNvLJAWrEXFM1H4UEiQyNDcrE
-	 ZwE1+AZ3FXLqgGTF7EwLHmh+swp+qU7ANIghQ8gN/OaxGoH+VxXJqGvMJRBKtl7vl6
-	 sFFCsg0Ho+g1w==
-Message-ID: <f1a4356a-bef2-4769-8d5d-c8f21ebff47d@kernel.org>
-Date: Wed, 9 Sep 2026 18:18:11 +0200
+	b=ZrTCyR10x3uA4f65mS7hxAFp8ku7cHmrXCRqUuYsbGL3uzYAwaspVYHVCKykwDzHG
+	 faaXJvk923DDKhvvtU+iv4+5kdQfUP8VygglE4nhW97099K39oo+ozMIDbRDUYqwet
+	 45Gm7xjQYlElkuo1iaJwAsk3oZNcGVTko1+yY4xdapWhFd54tK5nKolOmYzVEHiPAs
+	 8nu650TEQ4Bg8zF+QTYLisbn57lwTKwIhc4+69a1C0QzJos9RfAJfyA9DEPipwgcX9
+	 NTF0Jt8pcsvEec51ZM2gvemKSDif6g0/ETu8SCkbrLPIo42SWvP6ZPKGnkowPOFQbf
+	 s/ySRFjiNb+Bw==
+Message-ID: <835cf37f-d0a1-4e51-a29f-a1b83d79a940@kernel.org>
+Date: Wed, 9 Sep 2026 18:21:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 20/22] selftests/coredump: put a hole in the middle of
- a sparse mapping
+Subject: Re: [PATCH v2 17/22] coredump: describe the holes when
+ COREDUMP_SPARSE is negotiated
 To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
 Cc: Jacob Lalonde <jalalonde@meta.com>, Josef Bacik <josef@toxicpanda.com>,
  Jann Horn <jannh@google.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -49,7 +49,7 @@ Cc: Jacob Lalonde <jalalonde@meta.com>, Josef Bacik <josef@toxicpanda.com>,
  linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linuxppc-dev@lists.ozlabs.org
 References: <20260820-work-coredump-sparse-v2-0-ba32dd718c51@kernel.org>
- <20260820-work-coredump-sparse-v2-20-ba32dd718c51@kernel.org>
+ <20260820-work-coredump-sparse-v2-17-ba32dd718c51@kernel.org>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -96,60 +96,36 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260820-work-coredump-sparse-v2-20-ba32dd718c51@kernel.org>
+In-Reply-To: <20260820-work-coredump-sparse-v2-17-ba32dd718c51@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 8/20/26 01:09, Christian Brauner wrote:
-> The crashing_child_sparse() helper touches the first page of the
-> mapping. That forces everything behind it to be a trailing hole. This is
-> easy to handle. Make the test more difficult meaningful by also touchin
-> the last page. This causes the hole to sit between two populated pages.
+> Make use of COREDUMP_SPARSE. Refuse it without COREDUMP_RECORDS.
+> 
+> Actual holes are sent as a record with length indicating how much zero
+> data there was.
+> 
+> coredump_write() flushes a trailing hole if the coredump is done.
+> Instead of writing the actual byte for pipes and sockets, collapse it.
+> This stops wasting a header with coredump records for a single byte. So
+> we now only write it when the coredump can be seeked. TL;DR a trailing
+> hole is a zero record like any other and the records still cover the
+> whole coredump.
 > 
 > Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 > ---
->  tools/testing/selftests/coredump/coredump_test_helpers.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/coredump/coredump_test_helpers.c b/tools/testing/selftests/coredump/coredump_test_helpers.c
-> index 45d76fa0f469..89f3954c5607 100644
-> --- a/tools/testing/selftests/coredump/coredump_test_helpers.c
-> +++ b/tools/testing/selftests/coredump/coredump_test_helpers.c
-> @@ -58,14 +58,16 @@ void crashing_child_sparse(size_t size)
->  	char *p;
->  
->  	/*
-> -	 * Touch the first page only. The whole mapping is dumped because
-> -	 * it has been written to, but all of it save that one page is a
-> -	 * hole.
-> +	 * Touch the first and the last page. This will cause the whole mapping
-> +	 * to be dumped because it has been written to. Everything between
-> +	 * those two pages is a hole though.
->  	 */
 
-"hole" as in "no pages mapped"?
+I don't have a lot to add, the general idea LGTM.
 
-With THP enabled, this is not necessarily true. You can either size the mapping
-large enough that you get holes in an case, or just disable THPs
+What might still be suboptimal is that, for large sparse ranges, we'll do a
 
-madvise(p, size, MADV_NOHUGEPAGE);
+	get_dump_page()
 
-before write access.
+for each and every possible page in the range.
 
-That's probably the cleanest way here?
-
->  	p = mmap(NULL, size, PROT_READ | PROT_WRITE,
->  		 MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE, -1, 0);
-> -	if (p != MAP_FAILED)
-> +	if (p != MAP_FAILED) {
->  		p[0] = 'x';
-> +		p[size - 1] = 'x';
-> +	}
->  
->  	/* crash on purpose */
->  	*(volatile int *)NULL = 0;
-> 
-
+It would be interesting to benchmark how much that still costs on large sparse
+memory areas (say, a handful of GiB large).
 
 -- 
 Cheers,
