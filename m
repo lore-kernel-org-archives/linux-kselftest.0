@@ -1,53 +1,33 @@
-Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BAEF5803AD
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 15:03:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A3AE56E072;
+	Wed,  9 Sep 2026 15:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788966202; cv=none; b=DD0a8lajDY8TStyFsTQldToQfLxxc9soA6ZCNG9rC9o/Y1pmw+vBuJTDJLKBkiS0U8xJHTa4WQyX/lN2/tB8IhWajx3L++btAFTeXCYgTSofsg0FJDt+SW9RN8CAbugpot0V/+M36JWXMysYJNH/VYWD72IShjW/40PBoMf3inI=
+	t=1788966265; cv=none; b=b48m6OPqPI8XVCZzGtD0NHU2DKqnmbQSh/yvlGQuhzY4s4XMvpwqBlFwSiolu2kYvSdn6bLmGVbTX9D6WX6zru3G/QBfRB6jAS91fmme7BkJL1DE+aWia4SqfFQbqM6hyPRPpQ984l4hBHQ1cJg3aaHZfVYUxyqfCijVk4NIgio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788966202; c=relaxed/simple;
-	bh=BBJ4wLEPrUADpaj7m+kclRs22KyvWtJ+vsNVIad9Kns=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UAnQSgmOy7EhpLwB0+RHNXrCv4i2wj4WP3+yJMmDNmZrdF62zQy/xbih7fsnsGrIrmXiuhZ8y9IVhH8lSLiMXCl+h/RJdbkIzU2JVJZb7PbgkW40L2mCLsFqZA6sN2EqmgGBrfaWipf/smGgI33M7iaNbIGuLjbVQQcjEpln6uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.225.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-484372811e5so1730089f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 08:03:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788966198; x=1789570998;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=VDu/JSW7c/FW0MavWKYRbPoLSOFM4MJHY7ZmsuVCp74=;
-        b=hWd1yWa7kEjaYgOx9o2V9vnUB0iPkLbkNt3khBWiYAEqmle3hlqTU/s0CXerwLEZql
-         MRHpzpAHqnshVVLS1pdlgwhgiCpSOsTPGDL1x13el63x+yAUDSLjnkjNumALxjPgJAJw
-         jv9uwQZJrU6yRsgGWNLktdw8BGPsGUxnNim2M89U1/y5EtFaFCXOS9vcUQeNOst3SW4+
-         g6IrUH7lYnd0u/nu1vCt+0hwEVCDAoO0iRTWzHaK58463AQoFwAUOCxeBdehNn4lzdKE
-         Y1jp7bDHA8k5Lkbc2eOh4W6BQtkaYJ4osKfUU0+h26LCjlegRHW7WofHeCh4V5NBpzJO
-         QRLA==
-X-Forwarded-Encrypted: i=1; AKwUvBwARWhidNFytxzdfAHTh/N2SM7n0KpjTs67lzCWFAtZHAaeBdMoPAmXTPdBoPvBdk9ZtcoP+9Fi2lq6IOPmUvE=@vger.kernel.org
-X-Gm-Message-State: AFuF++kZR98wA9kboRowphZoEJY2Fr3WVMjll5Hvwk6osW17+NXX8hrg
-	aufIDn0Z4/va4rUyeVwHdbw0VWxado0kYku/bOkwsO+970vjQ+bQn4Aa
-X-Gm-Gg: AYBFou0nVhoEhO9lt8+NxAiXUiEP126EPpOmsvhbra/dCNb4Y2Oeo2BVdjHc6Bd3z2Q
-	+UPEDpYt+zz7JPZbtyELnkBfLezCEi6DigF4rHGwbnQ81QCZaikSO4K8nofco+B5NsdqmMP2sdy
-	as3GFHVAoeOkWgBxOzAADUBxsV0vZDi1v2kZcHayzx6Hg2xHgnaaJyrrI3crj0X3OwYnMRLd90T
-	JqHUpsq9laTB4l39oRI3pAcj87AzR3qMw4J66l9V8+vogdUcKe0xN8CbqWuzrBFuZoPnxyhuFnd
-	Tne2ded2QcTGfvIYY1i+F9g93NKlbWEUAhMoLudecr4gSQeGGCjruEVE4dyXxwLznWs+ZnujKhK
-	JXlV8AZ2D4yZ4ZPeUj3msRVnmys87eqYINnwzwhLhJShUw2TL7ohrY3YyNa9ByGroGPR2uU9R7Y
-	3xksPXwkBmLPOgcHIaN6U30pFh42BePdnehQ/Bjl2qbglFy3zbsdtwOFLOPXvlFlApS5wcKtX+8
-	iz33wc9SXgp4SAKuTIIUM6txLFtNDAj9OBq
-X-Received: by 2002:a05:6000:4020:b0:485:8f37:79b7 with SMTP id ffacd0b85a97d-485c23d66camr2033481f8f.33.1788966198129;
-        Wed, 09 Sep 2026 08:03:18 -0700 (PDT)
-Received: from [192.168.88.241] (37-48-53-4.nat.epc.tmcz.cz. [37.48.53.4])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4858d312ca0sm46572091f8f.4.2026.09.09.08.03.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2026 08:03:17 -0700 (PDT)
-Message-ID: <34457ca4-73dc-45ff-90f7-f3fe3c62f2f2@ovn.org>
-Date: Wed, 9 Sep 2026 17:03:15 +0200
+	s=arc-20240116; t=1788966265; c=relaxed/simple;
+	bh=OCCGkDjB7xZqNT1VNmpBkoA8PY8mvvDdMdJk4CCpdXQ=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=MFR/zCZLfiyzp0l9XntnSdE+K5nXfYeb3CkAo8NeBE2xzUEBSFban8j0twZNOogF/rhq4bVRVLTGHA45zORY8zGmzsEXWf0WIZMTu2ied5gBYtuNHStMfUl9VNTdlCSgLvhbV1gTrsraIoRSRd+j214hJwWWzuQDu4462Ho1cfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZylIcvBH; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZylIcvBH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A83621F00A3A;
+	Wed,  9 Sep 2026 15:04:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788966264;
+	bh=iaCx51XLgCN8swqlh0PQM0NitDh9OeH7sXEe5ved2kI=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To;
+	b=ZylIcvBHV+U8VgjaR/O7ELvyeen4wPPHN8964DOH5QZKh5rmflA4IOcxhW/LYp7KI
+	 Rdl9H1oD6GmHKu7FKKR4bp6nnod5loXrYKJXsjs/dp02Lc4DzVXjMjDHJIyptd+QQ4
+	 ubsOVRM0mErynwKlB7bBdINIFlBhLJbFGmyZdaUqwOyYQdk92qykS5UEWzDU8HD+rG
+	 u8MkrMCrZBpTbeaYGnK+hffFIJ8BlfC7czrsVp1IgzL28X4ezxDXbb99qRv+4LBRH3
+	 GikdImAOqhznXmqK1mJ3l5zzJwJ6S8n/96tG5S9YEKHyH3iZBnD2s5TJ4PjHrGyJXv
+	 1569KuDR5mzXw==
+Message-ID: <c991727d-ad63-46ec-a281-d09980ff08ca@kernel.org>
+Date: Wed, 9 Sep 2026 17:04:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,99 +35,114 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4 0/2] selftests/net/openvswitch: SCTP tests
-To: Minxi Hou <houminxi@gmail.com>, netdev@vger.kernel.org
-Cc: aconole@redhat.com, echaudro@redhat.com, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- shuah@kernel.org, dev@openvswitch.org, linux-kselftest@vger.kernel.org,
- i.maximets@ovn.org
-References: <20260909122521.2687193-1-houminxi@gmail.com>
+Subject: Re: [PATCH v3 RESEND 0/2] selftests/mm: Validate selections and scope
+ memfd_secret setup
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+To: Tianyi Chen <diannaaav@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Joel Savitz <jsavitz@redhat.com>
+References: <CACGbirSdR30=YTPQGN-=202jZqiF8gBSewhq+K_fTSNpq=DMhQ@mail.gmail.com>
+ <CACGbirTZFsyQhOszpfiHhrd7Red-L_Z_=ke7DbRDe5SQfzi9Pw@mail.gmail.com>
+ <bef8f543-ffa9-4cc6-8a7b-6118daf14f76@kernel.org>
 Content-Language: en-US
-From: Ilya Maximets <i.maximets@ovn.org>
-Autocrypt: addr=i.maximets@ovn.org; keydata=
- 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
-In-Reply-To: <20260909122521.2687193-1-houminxi@gmail.com>
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <bef8f543-ffa9-4cc6-8a7b-6118daf14f76@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/9/26 2:25 PM, Minxi Hou wrote:
-> This series extends the Open vSwitch SCTP selftests: patch 1 adds the
-> IPv6 flow-key test (mirroring the merged IPv4 test), and patch 2 adds an
-> SCTP NAT test exercising port translation across conntrack.
+On 9/9/26 17:02, David Hildenbrand (Arm) wrote:
+> On 9/9/26 16:54, Tianyi Chen wrote:
+>> Hi David,
+>>
+>> Following up on your review:
+>> https://lore.kernel.org/r/d6ca7f47-39bb-43b4-92d6-63ccc148ebdd@kernel.org
+>>
+>>> Who would set it at this point?
+>>> Can't this just be
+>>> VM_SELFTEST_ITEMS="default"
+>>
+>> V3 makes that change: the default is initialized before getopts, and only
+>> -t changes the selection. An explicit empty -t still fails validation.
+>> Both patches use Assisted-by: LLM, and patch 2 carries your Acked-by.
+>>
+>> I have resent v3 at the start of this new thread from my Gmail address
+>> after delivery problems with my previous address. The patches are rebased
+>> onto current mm-unstable without changes, and the focused parser and VM
+>> selection tests passed again.
 > 
-> v3 -> v4:
-> - test_sctp_connect_v6 now also asserts that installing a keyless
->   ipv6(proto=132) flow is refused with EINVAL, pinning the reject side
->   of the match_validate() sctp() key requirement (pointed out in
->   review: only the accept side was exercised, so a regression dropping
->   the requirement would have passed unnoticed). The refusal is checked
->   to be errno 22 specifically, not a flow-string parse error.
-> - Wrap a few over-80-column lines in the NAT test; checkpatch strict
->   is now clean for the series.
-> - Rebased onto 548b86839f7f.
+> That is new:
 > 
-> Signed-off-by: Minxi Hou <houminxi@gmail.com>
+> $ b4 shazam https://lore.kernel.org/r/CACGbirR9PNt4uhqJFATsOWnwmsNb-v8zau-Rb+9Q5SZmY-=Vug@mail.gmail.com
+> Looking up https://lore.kernel.org/all/CACGbirR9PNt4uhqJFATsOWnwmsNb-v8zau-Rb%2B9Q5SZmY-%3DVug@mail.gmail.com/
+> Grabbing thread from lore.kernel.org/all/CACGbirR9PNt4uhqJFATsOWnwmsNb-v8zau-Rb%2B9Q5SZmY-%3DVug@mail.gmail.com/t.mbox.gz
+> Checking for newer revisions
+> Grabbing search results from lore.kernel.org
+> Analyzing 4 messages in the thread
+> Analyzing 14 code-review messages
+> Checking attestation on all messages, may take a moment...
+> ---
+>   ✓ [PATCH v3 1/2] selftests/mm: Reject invalid test selections before running tests
+>   ✓ [PATCH v3 2/2] selftests/mm: Only prepare ptrace_scope when memfd_secret is selected
+>   ---
+>   ✓ Signed: DKIM/gmail.com
+> ---
+> Total patches: 2
+> ---
+> Applying: selftests/mm: Reject invalid test selections before running tests
+> Patch failed at 0001 selftests/mm: Reject invalid test selections before running tests
+> error: git diff header lacks filename information when removing 1 leading pathname component at /home/dishy/linux/.git/rebase-apply/patch:6
 > 
-> Minxi Hou (2):
->   selftests/net/openvswitch: add SCTP flow key test over IPv6
->   selftests/net/openvswitch: add SCTP NAT test with port translation
 > 
->  .../testing/selftests/net/openvswitch/config  |   1 +
->  .../selftests/net/openvswitch/openvswitch.sh  | 201 ++++++++++++++++++
->  2 files changed, 202 insertions(+)
-Beside the Aaron's comment on v3, please, avoid re-naming patches and
-the series while sending new versions.  This confuses both the automation
-and humans trying to follow the history of the change.
 
-Also, keep the full changelog from previous versions, and include links
-to lore for the previous versions.
+I think what's happening is that something in your mail sending path wraps long
+lines and breaks the patch format.
 
-BTW, it seems like due to a volume of patches and the speed you're
-re-sending them over and over, email providers started to reject your
-submissions again due to spam detection.  For example, while I'm on
-CC list for this patch set, it didn't reach my inbox so far.  So, once
-again, please, try not to have too many patches on the list at the same
-time and try to avoid re-spinning them too often.
+-- 
+Cheers,
 
-Best regards, Ilya Maximets.
+David
