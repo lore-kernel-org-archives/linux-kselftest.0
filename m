@@ -1,223 +1,123 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C43A560AB3
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 16:40:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1676298CAF;
+	Wed,  9 Sep 2026 16:45:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788972024; cv=none; b=h5tWVWynkJVxHt5F6KMwLiQZGtmmkyi8FBU+YA1nO2g5XyZrPCfSssJOFOoM/QKHggW+ru4oBdCzT6OZFB9rtFT4E4GZawCa5et4qJK2mpE1zjD8uaudeMkD6E++fge9+vqIdeo7KY9GxWcvQakZSB82674vrs62T8ZHN6RrioM=
+	t=1788972359; cv=none; b=Jwo1IROi1Nx6XEWA1pHn/MlscEDherUcg2iAO3fCKE5ubEooJHRVDLPMTK3msPH/TUqddSeMWozxO5cbaHJBh3/WS/C31uXcZi2EHfw9kv9RwZPUPNQKJKR0dgJEvfJ/wzpsSk8Rcmg+tB9mwPTLNfeBvMiWpggskCs1Ypy3izQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788972024; c=relaxed/simple;
-	bh=6XjnN978Dt1CGr6VQNju1YCJHuyGfu+F3SjjrJT35fM=;
+	s=arc-20240116; t=1788972359; c=relaxed/simple;
+	bh=pSd1camp7ry6f4jDInasPV7YNdDyWfvxFVh5yuKw47M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pe6ORiU/4csRNtXormq5yAIdj8oXQX1PypwUETChQM60hsshaXq4JeoUjtWVaekeFfZr0G4FDB7Fyc/a/wbGB1o2bLm67RQ5VzBD5Xsi1SrSwENWcKP+fRuu4+kk1iUr7BsfUkdx4imQZ0EvWRL/bAjCPGpnK93dARuFGna+HuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=W6YFOARK; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=ph2preEpkM+U3mImKpxrmoqjhRwZq9oiTM5xgVVBuxOXBKDdGdk36k5DmTk27WqMAvPkFvs/MGGBRPamukgjkvj+DgAHWfv5XTjWtpxsk/2OFC/M6BBwLyLku4Qci+tuRH6cyKOWE77kXvQTb73bflgzEeynIHUi2st9NPGMTCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YqbKRDFx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="W6YFOARK"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5E827143D;
-	Wed,  9 Sep 2026 09:40:18 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6DE4C3F7B4;
-	Wed,  9 Sep 2026 09:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1788972022; bh=6XjnN978Dt1CGr6VQNju1YCJHuyGfu+F3SjjrJT35fM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W6YFOARKZ3SJ0/2up84RYOHIhVCP6MpsBMruInjgerNed3lmW1q9joM1eA/CxSCqe
-	 wY0GsZKbobnLgiOyd6MACJ/jJiq2vf8nG8SDdWQqBZNCkx8ddBlPOag4biABWFR2nn
-	 skfUDv0tOnXnAJ0FriXbSTh2yNKHmpOLIpiP5UxI=
-Date: Wed, 9 Sep 2026 17:40:17 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, akpm@linux-foundation.org,
-	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	shuah@kernel.org, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
-	nico.pache@linux.dev, ryan.roberts@arm.com, dev.jain@arm.com,
-	baohua@kernel.org, lance.yang@linux.dev, usama.arif@linux.dev,
-	kas@kernel.org, sarthak.sharma@arm.com
-Subject: Re: [PATCH v2] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT macro
-Message-ID: <aqGL8X3OeGlsEnF8@e129823.arm.com>
-References: <20260907081509.924979-1-yeoreum.yun@arm.com>
- <9f8c6e91-c1c8-4ec5-96a9-9d6d4ab571cc@kernel.org>
- <ap_GBdbMIkasmVO4@e129823.arm.com>
- <0d93cd99-e1b2-46cb-ae31-a2dc4ca63d2a@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YqbKRDFx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1EC31F000FF;
+	Wed,  9 Sep 2026 16:45:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788972358;
+	bh=gjKBR3MpL444SDh1d20QHzHS4p8TebdwJWQeVAcffMU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=YqbKRDFx/vlGF2DLhdIeQ9LyJ1hbaJn6LbHAM4ygVNgKiqSpbEU9S8pG7sZA83IrV
+	 bMs3jyHDvVcnttPJ9y+39FGNXmXxYvp6RX38IilzfMHfJVw9uPzmoBIoaQ0bNzrAjf
+	 9bbjC5Wi/SHyd9UiqA1o+1361YLZ5k+CRU/XTkMwjjRmEFEGsofhDf88dnU45zLmlB
+	 YAINiwI8oChr9ocnNJS/G2D5+VVQZ156IjKfe3phM4NkYzuuFNO2Lr8idVUTm8jm/0
+	 4RoZLcA9tWyyq7PQUgx42ZppTIujEJplK/BTuAGWZMqyQn3V4SHqELQCwet+jZPdmS
+	 M7voXfrS4cFxQ==
+Date: Wed, 9 Sep 2026 17:45:52 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Leonardo Bras <leo.bras@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
+	Fuad Tabba <fuad.tabba@linux.dev>,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Wei-Lin Chang <weilin.chang@arm.com>,
+	Yao Yuan <yaoyuan@linux.alibaba.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v20 09/14] KVM: arm64: Allow GCS to be enabled for guests
+Message-ID: <a48e936b-29c9-410e-a0c7-84cd5143d3d5@sirena.org.uk>
+References: <20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org>
+ <20260901-arm64-gcs-v20-9-f31750bdfadb@kernel.org>
+ <aqGKnQZOe6leuXgG@LeoBrasDK>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="+LzIUzHWTMa+rfMZ"
+Content-Disposition: inline
+In-Reply-To: <aqGKnQZOe6leuXgG@LeoBrasDK>
+X-Cookie: Postage will be paid by addressee.
+
+
+--+LzIUzHWTMa+rfMZ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0d93cd99-e1b2-46cb-ae31-a2dc4ca63d2a@kernel.org>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 08, 2026 at 12:21:31PM +0200, David Hildenbrand (Arm) wrote:
-> On 9/8/26 10:23, Yeoreum Yun wrote:
-> > On Mon, Sep 07, 2026 at 04:36:56PM +0200, David Hildenbrand (Arm) wrote:
-> >> On 9/7/26 10:15, Yeoreum Yun wrote:
-> >>> HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
-> >>> When this macro is used in some test, test result would be strange in
-> >>> the system where PAGE_SIZE is more then 4KB.
-> >>>
-> >>> Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
-> >>>
-> >>>   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
-> >>>     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
-> >>>     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >>>     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >>>     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >>>     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >>>     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >>>     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >>>     ...
-> >>>   ok 1 Completed
-> >>>
-> >>> Remove the HPAGE_SIZE and HPAGE_SHIFT macros and introduce pmd_page_shift()
-> >>> helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-existing
-> >>> helper, read_pmd_pagesize().
-> >>>
-> >>> Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
-> >>> which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
-> >>> and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
-> >>> PMD-sized units, the test may fail with the previous size of 100 MiB,
-> >>> which is not a multiple of the PMD size when the base page size is
-> >>> 16 KiB or 64 KiB.
-> >>>
-> >>> After this patch, output of transhuge-stress:
-> >>>
-> >>>   transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
-> >>>     2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s	2585 succeed, 1232 failed, 2585 different pages
-> >>>     2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s	2585 succeed, 1232 failed, 2585 different pages
-> >>>     2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s	2585 succeed, 1232 failed, 2585 different pages
-> >>>     2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s	2616 succeed, 1201 failed, 2616 different pages
-> >>>     2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s	2627 succeed, 1190 failed, 2627 different pages
-> >>>     2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s	2628 succeed, 1189 failed, 2628 different pages
-> >>>     2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s	2630 succeed, 1187 failed, 2630 different pages
-> >>>     2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s	2631 succeed, 1186 failed, 2631 different pages
-> >>>     ...
-> >>>   ok 1 Completed
-> >>>
-> >>> Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> >>> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> >>> ---
-> >>
-> >>
-> >> [...]
-> >>
-> >>> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> >>> index d09f9f6a384e..24aa1de27c25 100755
-> >>> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> >>> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> >>> @@ -360,8 +360,8 @@ fi
-> >>>  CATEGORY="memfd_secret" run_test ./memfd_secret
-> >>>  fi
-> >>>  
-> >>> -# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 100
-> >>> -CATEGORY="ksm" run_test ./ksm_tests -H -s 100
-> >>> +# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 512
-> >>> +CATEGORY="ksm" run_test ./ksm_tests -H -s 512
-> >>
-> >>
-> >> Why the magic value 512? (desrves a comment)
-> >>
-> >> A clear sign that the ksm tests must be rewritten to be standalone and just
-> >> handle this internally. @Sarthak
-> > 
-> > Acked. I thought it's enough to spell out in commit message but
-> > I'll spell out into comment too in this round not refactorying by me
-> > for ksm test.
-> > 
-> >>
-> >>>  # KSM KSM_MERGE_TIME test with size of 100
-> >>>  CATEGORY="ksm" run_test ./ksm_tests -P -s 100
-> >>>  # KSM MADV_MERGEABLE test with 10 identical pages
-> >>
-> >> [...]
-> >>
-> >>> index 4821a3563036..f75bf0bacd18 100644
-> >>> --- a/tools/testing/selftests/mm/vm_util.c
-> >>> +++ b/tools/testing/selftests/mm/vm_util.c
-> >>> @@ -21,6 +21,8 @@
-> >>>  
-> >>>  unsigned int __page_size;
-> >>>  unsigned int __page_shift;
-> >>> +uint64_t __pmd_page_size;
-> >>> +uint64_t __pmd_page_shift;
-> >>>  
-> >>>  uint64_t pagemap_get_entry(int fd, char *start)
-> >>>  {
-> >>> @@ -161,6 +163,9 @@ uint64_t read_pmd_pagesize(void)
-> >>>  	char buf[20];
-> >>>  	ssize_t num_read;
-> >>>  
-> >>> +	if (__pmd_page_size)
-> >>> +		return __pmd_page_size;
-> >>> +
-> >>>  	fd = open(PMD_SIZE_FILE_PATH, O_RDONLY);
-> >>>  	if (fd == -1)
-> >>>  		return 0;
-> >>> @@ -173,7 +178,25 @@ uint64_t read_pmd_pagesize(void)
-> >>>  	buf[num_read] = '\0';
-> >>>  	close(fd);
-> >>>  
-> >>> -	return strtoul(buf, NULL, 10);
-> >>> +	__pmd_page_size = strtoul(buf, NULL, 10);
-> >>> +
-> >>> +	return __pmd_page_size;
-> >>> +}
-> >>> +
-> >>> +uint64_t pmd_page_shift(void)
-> >>> +{
-> >>> +	if (__pmd_page_shift)
-> >>> +		return __pmd_page_shift;
-> >>> +
-> >>> +	if (!__pmd_page_size)
-> >>> +		__pmd_page_size = read_pmd_pagesize();
-> >>> +
-> >>> +	if (!__pmd_page_size)
-> >>> +		return 0;
-> >>> +
-> >>> +	__pmd_page_shift = (ffsl(__pmd_page_size) - 1);
-> >>> +
-> >>> +	return __pmd_page_shift;
-> >>>  }
-> >> The interface is a bit inconsistent.
-> >>
-> >> read_pmd_pagesize() vs. pmd_page_shift().
-> >>
-> >> Consider renaming read_pmd_pagesize() to pmd_pagesize() in a cleanup patch.
-> > 
-> > Okay.
-> > 
-> >> ... or (better?) adding a size_to_shift() helper instead?
-> >>
-> >> I think most places that want the shift also want the size.
-> >>
-> >> So this can just be
-> >>
-> >> const uint64_t hpage_size = read_pmd_pagesize();
-> >> const uint64_t hpage_shift = size_to_shift(hpage_size);
-> >>
-> >>
-> >> In size_to_shift(), you can just handle
-> >>
-> >> if (size == 0)
-> >> 	return 0;
-> > 
-> > Hmm, most of tests care mainly two sizes and shiftes --
-> > psize()/pshift() and pmd_pagesize() and pmd_pageshift().
-> > 
-> > Would it be better to keep both kinda of helpers and
-> > add size_to_shift() helper for nother hpage size then?
-> 
-> Works for me as well. As long as it's consistent.
-> 
-> Maybe even pmd_psize() and pmd_pshift() to match our custom psize() and pshift()?
+On Wed, Sep 09, 2026 at 05:34:37PM +0100, Leonardo Bras wrote:
+> On Tue, Sep 01, 2026 at 10:47:07PM +0100, Mark Brown wrote:
 
-Yeap. That would be better. I'll repsin soon.
+> > @@ -2193,10 +2193,12 @@ static u64 sanitise_id_aa64pfr1_el1(const struc=
+t kvm_vcpu *vcpu, u64 val)
 
--- 
-Sincerely,
-Yeoreum Yun
+> >  	val &=3D ~ID_AA64PFR1_EL1_THE;
+> >  	val &=3D ~ID_AA64PFR1_EL1_MTEX;
+> >  	val &=3D ~ID_AA64PFR1_EL1_PFAR;
+
+> And here it says to only mask the feature bit if it's not available.
+
+> IIUC this sanitize function is called when resetting a vcpu, is that righ=
+t?
+
+Yes.
+
+> > @@ -3444,7 +3446,6 @@ static const struct sys_reg_desc sys_reg_descs[] =
+=3D {
+> >  				     ~(ID_AA64PFR1_EL1_PFAR |
+> >  				       ID_AA64PFR1_EL1_MTEX |
+> >  				       ID_AA64PFR1_EL1_THE |
+> > -				       ID_AA64PFR1_EL1_GCS |
+> >  				       ID_AA64PFR1_EL1_MTE_frac |
+> >  				       ID_AA64PFR1_EL1_NMI |
+> >  				       ID_AA64PFR1_EL1_RNDR_trap |
+
+> This one looks like to be a mask that's used to compare with=20
+> arm64_ftr_regs[] on arm64_check_features(). That seems to be called on=20
+> set_id_aa64pfr1_el1() which is used when we get an ioclt to set a system=
+=20
+> register.
+
+> So, basically, does it use this mask to check if the set value is valid?
+
+Yes, this excludes values that are never supported.
+
+> Reviewed-by: Leonardo Bras <leo.bras@arm.com>
+
+Thanks!
+
+--+LzIUzHWTMa+rfMZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqhjT8ACgkQJNaLcl1U
+h9CUpwf/SYsgfeE57KbWPUv3ttaeYr8Wo7JqNTBEkLzMO4W3ZOuskAV8owdXthu3
+F/044n75naZrTZ8F5SKfIDp4hJKY7KUMurSvOat9ilrZyki8RiTWMUHW9Wt6f43f
+Ar7UZAUR6S/MsmNIIV2+j0SpW1WKr/iTabrqzsu1CCxi1zfWLZ8ume3WKrnxlGrJ
+lsaPw66beA5spQnrQLAA7gRYJIj1aTeBfyEYI2Ziel/dlGuDIxthZ+1NjFeQK+Yw
+o8cZRsDm4aGQoB9/ftauDgQiEbL3e5tGtgi5XnTT9xNx/QwTb6qr0LEs8EEKpqIX
+TohH87q+3BMIZaMWJLYFeu1TFLFg5g==
+=UHs5
+-----END PGP SIGNATURE-----
+
+--+LzIUzHWTMa+rfMZ--
