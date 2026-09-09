@@ -1,128 +1,110 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEA643DA7DF;
-	Wed,  9 Sep 2026 13:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mta1.migadu.com (out-105.mta1.migadu.com [95.215.58.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0F93E1228
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2026 13:13:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788958817; cv=none; b=Pvempw6nVD25/ejVqMCk6gGBgPxp+YZoUBvPufuMPbpCb5FDP6hRs6Ymia5W8735yt+A/+w/R5To3xZ73ZBrt8OgzaWV/4sDsZsDsKSVZl5Xgb5xgib2ZeLH8/Hhhl+r7M//rleR6ru7hs+p5KEd7xHqhRyg3lFcpfwnCvngoyM=
+	t=1788959584; cv=none; b=VHhJw+Bby+CYXEKfQcHnj1eSqmV1rFtslbPeNSyHD0ZEZIM9WQIY5K60NIRowhMXZtbdVKgqJ9pSU5pkpoZYRD83qxA7XLcnGT7zSAxzrjWufMYXEyu/wgLd6UIacID13iE5zJNI387c0/jmMv05KxsmUTA+Lmxx5Myv9hX9gs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788958817; c=relaxed/simple;
-	bh=COoomdSG2FlqAOqhScp/Ic2bx4OeDuloT0b59UMRbdY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Disposition; b=K7edIsdE+ZvdqCn4lotMVsSje4uQk9jIAC2bOGHinmVTVWXUTu4fKBTUCpTjBpk7aah3s/HsOaddGQ3SjrARm8q6sxNA8RSbO5iiGQaYNRLZs+SCBZ5mRaV/gQCcVM67L0QA1IDazeV0pLZAbDSHXOLpmUyf+942jRCWJw4Jb+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=s58mQgbn; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1788959584; c=relaxed/simple;
+	bh=pTDfVRoX1U+RIjfQuPegFcGKswGHWQIt1UsGbzs5f/E=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=FxzERb6w/nQghso58efIFBLmXrymFRMLrLOnVZePpOPnc3j+PiP5l6mXdsLGhLoVnyt5uH682V927+xHnHHQSvatQUPDcw06oqBmIl6vA5xeilI4lt+/0/m9AGncyoUqhOyvhb2c+DsunJNWjDmuiR5SkH2+X5QyIaC2w3d+u10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o5MS9wUE; arc=none smtp.client-ip=95.215.58.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="s58mQgbn"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 52BEA1691;
-	Wed,  9 Sep 2026 06:00:11 -0700 (PDT)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 545113F7B4;
-	Wed,  9 Sep 2026 06:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1788958815; bh=COoomdSG2FlqAOqhScp/Ic2bx4OeDuloT0b59UMRbdY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=s58mQgbnP66N0tSsR0ISNWZsvL2/PwI5BHGINryKYJdKCuLFiMKLHOvStA5xDsP4h
-	 HqJj8VAURT88yoH+vmDsR5Yo4Ea99qNf7dbdm+V55Qia3YuxFhOXOL8gqZ/CPX+7VP
-	 LVy3xukrI30eMDBzoMp9lI45Uq4J0Wnq6ZUaoJPQ=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Leonardo Bras <leo.bras@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Wei-Lin Chang <weilin.chang@arm.com>,
-	Yao Yuan <yaoyuan@linux.alibaba.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v20 07/14] KVM: arm64: Forward GCS exceptions to nested guests
-Date: Wed,  9 Sep 2026 14:00:06 +0100
-Message-ID: <aqFYVnIgvXGXzHk7@LeoBrasDK>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260901-arm64-gcs-v20-7-f31750bdfadb@kernel.org>
-References: <20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org> <20260901-arm64-gcs-v20-7-f31750bdfadb@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o5MS9wUE"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=pTDfVRoX1U+RIjfQuPegFcGKswGHWQIt1UsGbzs5f/E=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788959581; v=1; x=1789564381;
+ b=o5MS9wUEAhrI8kCU1zCPvZbO/dHhwN2u6/nW9zoz0z4XVXTuNfqiK8QQk7KK/Eg4nIOSRnp9
+ sqo4amYFlhEL3YHFawczPCYcKaN/I2DV5ycYnS0/8Ewlewaz9U9emJfgsnQm3PyAroEBmOodZNk
+ j58q1HZ2OtUtvyEsHOxWQ6ig=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id b52656f567ea3328;
+	Wed, 09 Sep 2026 13:13:00 +0000
+X-Mizu-Trace-ID: b52656f567ea3328
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <7ff19114-de0c-4118-a000-b236d8d30127@linux.dev>
+Date: Wed, 9 Sep 2026 21:12:54 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
+ cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, linux-kselftest@vger.kernel.org,
+ Tao Cui <cuitao@kylinos.cn>
+Subject: Re: [RFC PATCH 0/8] blk-iocost: BPF struct_ops cost model
+To: Tejun Heo <tj@kernel.org>
+References: <20260908100143.47598-1-cui.tao@linux.dev>
+ <178889947167.2.14514677804554939704@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <178889947167.2.14514677804554939704@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 01, 2026 at 10:47:05PM +0100, Mark Brown wrote:
-> For nested guests where HFGITR_EL2.nGCSSTR_EL1 is clear or when there are
-> L2 GCS data check exceptions we need to forward the exception to the guest.
-> Add handling to do so.
+Hello, Tejun
+
+在 2026/9/9 04:31, Tejun Heo 写道:
+> Hello, Tao.
 > 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/arm64/kvm/handle_exit.c | 18 +++++++++++++++---
->  1 file changed, 15 insertions(+), 3 deletions(-)
+> On Tue, 08 Sep 2026 18:01:35 +0800, Tao Cui wrote:
 > 
-> diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
-> index db37678dcb05..a8198e96fcb4 100644
-> --- a/arch/arm64/kvm/handle_exit.c
-> +++ b/arch/arm64/kvm/handle_exit.c
-> @@ -304,12 +304,24 @@ static int handle_svc(struct kvm_vcpu *vcpu)
->  	return 1;
->  }
->  
-> +/*
-> + * We might get GCS exceptions that need to be forwarded to the
-> + * hypervisor when a nested guest has HFGITR_EL2.nGCSSTR_EL1 clear, or
-> + * for a GCS data check exception for a L2 guest.
-> + */
->  static int kvm_handle_gcs(struct kvm_vcpu *vcpu)
->  {
-> -	/* We don't expect GCS, so treat it with contempt */
-> -	if (kvm_has_feat(vcpu->kvm, ID_AA64PFR1_EL1, GCS, IMP))
-> -		WARN_ON_ONCE(1);
-> +	if (!kvm_has_gcs(vcpu->kvm)) {
-> +		kvm_inject_undefined(vcpu);
-> +		return 1;
-> +	}
->  
-> +	if (vcpu_has_nv(vcpu)) {
-> +		kvm_inject_nested_sync(vcpu, kvm_vcpu_get_esr(vcpu));
-> +		return 1;
-> +	}
-> +
-> +	WARN_ON_ONCE(1);
->  	kvm_inject_undefined(vcpu);
->  	return 1;
->  }
+>>  4. One model system-wide vs named models selectable per device (as
+>>     tcp-cc names are per-socket)?
+> 
+> The struct_ops instance should be per-device. Loading a model for a device
+> should switch it to BPF automatically. Switching back to the builtin model
+> should detach the struct_ops.
+> 
+>>  2. Per-cgroup state lifetime: iocg_id is the css id and is recycled
+>>     once the cgroup is removed, so models must treat it as a
+>>     transient key.  Does the interface need a release(iocg_id)
+>>     callback so models can clean up per-cgroup state instead of
+>>     detecting reuse, or is per-cgroup bpf local storage, which
+>>     carries its own lifetime, the better home for model state?
+> 
+> I'd pass blkcg as a kptr and add online/offline callbacks so the model can
+> manage its per-cgroup state.
+> 
+>> return value of 0 delegates the IO back to the builtin formula, so a
+>> model which only handles some IO types cannot make the rest free.
+> 
+> I don't think mixing BPF and builtin pricing makes sense, either per IO or
+> between charging and request sizing. It seems convoluted and error-prone.
+> Implementing the linear model in BPF is straightforward.
+> 
+> Please combine the interface, registration, dispatch and configuration
+> changes into one patch. These patches are small and implement one feature.
+> 
 
-Oh handle_gcs, if kvm_has_gcs() && kvm_has_nv() -> Inject synchronous 
-exception. Makes sense.
+Thanks for the detailed review across the series.
 
-(it kept bothering me that the !gcs and the gcs case do the same thing, 
-except for a warn_once. So I thougt on suggesting:
+All the comments make sense. I'm reworking the interface for v2
+along those lines: the attachment model will be reworked, the
+mixed builtin/BPF pricing path will go away so a model fully owns
+pricing on a device it's attached to (including flushes), the
+per-cgroup state handling is being reworked, operation flags will
+be preserved, and sleepable models will be rejected during
+verification.
 
-+	if (!kvm_has_gcs(vcpu->kvm))
-+		goto inject_undef;
-[...]
-+	WARN_ON_ONCE(1);
-+inject_undef:
->       kvm_inject_undefined(vcpu);
->       return 1;
+The Kconfig dependency, the example model issues, the selftest
+problems, and the patch organization will all be addressed as well.
 
-But after it was done it did not look better.)
+I'll post v2 once it's ready.
 
+Thanks,
+Tao
 
-So, FWIW:
-Reviewed-by: Leonardo Bras <leo.bras@arm.com>
+> Thanks.
+> 
 
-Thanks!
-Leo
