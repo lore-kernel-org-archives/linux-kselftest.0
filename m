@@ -1,92 +1,138 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A92F63B8BA4;
-	Wed,  9 Sep 2026 09:19:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FC03F1075;
+	Wed,  9 Sep 2026 09:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788945575; cv=none; b=A1zobB7N+0f5iRu3+L7Ya2Vq+dsK3w4/6Edx2q51KOp2Vzej7DgI8i7MFuS0b+o1lzfE/J3czJSlridH2zNa1k1rRtrEF5U6uFXlg80XVwAG+MWQtRVBHZB+icRN90YK2rtOrNJz6ObobOh6Sy+K2nlvt/J0xfpE/qG5AsYy0GI=
+	t=1788946237; cv=none; b=MSOCgjPpDrhheIGXGzn7RPjxL4qgeIrz61dDpGDYPDz+endmMCiJUeCQPpBNj7EW5zrgmRJEPkxRMtvCWpuxVVPiWauVvedLDPdA0meMTj9ZpEoQ81uNWepd35GtKv5J5rVsNwEOLopkNLD3BejzCiJnHNA8g3I82jNDo9CmKME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788945575; c=relaxed/simple;
-	bh=03xMmvpwNGlKzOXIPwICD2/yk4F9OWEokq4zEct6VJU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tSlcZIjRiCXinUHGEYVmerfR32d8HZCnYnwzsZLaXlEyVi75hNYkj7aCM1i75qEL6ccz7QYZOIOmHAR4g7VskSPI4H0J6qk1BljN6mm0sFjxF/7fY6M/OnRmyT0PVojWeXNKjgqABCEhlFoAtjcSF5Xr3MGGqyVBXFD/wpuPQsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=ExcRZHBk; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1788946237; c=relaxed/simple;
+	bh=Uy8+fa3cDu11VwKyL+MkTAWtr9qRvo3T55ynaHdO+DQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GUq6fBhz3WspdMGE+fJf52lG/4/HMQt7r4AZ9u7ISaNZ5A/XGuV+4WCRQQA0HyKRN1dAgnf+CZ8ZxSH/IaGAr52qwD/5fxo1GpAInbLR6wKvMt78kQLiCox7alYG2iSdmPYHvDuj3fpq7gA22JvE2veQEX5oBpAwssz6pWgi4BY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OONcIadS; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="ExcRZHBk"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ilYvwF6vlfDatVeBN0E3LNo/stm8fqJ/Wf8Y8/ZMm2k=; b=ExcRZHBkhe1x0I17tzAWJvcAwm
-	ytNbU3569tX/kjnfFdGuOKE/FJ7H0YfV4hcgR0hHwsi1pytdpovwRsXbSgUEZ7CAPAACNdHqKK5ix
-	Q0siDVz58XfRIs6RwMYkAr/AzeXKh0YemSA/ZwdjwYRWoVyyvTc8od5OL58U3wpogBmbWsjLylqA5
-	bKQh5+64pjGydRy0/2WbrvK1ega5ySDO3aVun9XiocnkuSsiQcebteK7qP15cMM4ioqzoXoasnWt8
-	/RAPiHr0GTvDnLiTVgCMKl3lp8OY4Qt/Ba9fHO9zeZu8Rnl66+lFhB6R+Ebdlnwjy1Dh6CUSxzfYg
-	w1qzF+dA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1x4ESg-002wt1-2u;
-	Wed, 09 Sep 2026 09:19:23 +0000
-Date: Wed, 9 Sep 2026 02:19:17 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org, 
-	bobbyeshleman@meta.com, sdf@fomichev.me, razor@blackwall.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: drv-net: devmem: set reuseaddr on
- the sender's source port
-Message-ID: <aqEjHhr-4aXTV1M6@gmail.com>
-References: <20260908183420.1369630-1-kuba@kernel.org>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OONcIadS"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 688N1d7F2126182;
+	Wed, 9 Sep 2026 09:30:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=2+5prjKPMANylfWIFutZLxvCEaQqhpeANJvVheqI3
+	t8=; b=OONcIadSGHKzrBWHjXsBOwtUKhny3nEgAO9qKBbikKSd6nWZnL17YIwU+
+	SBrPArJxcgue0+Zd/GpsBkJxwdanom9oFE7k8p/JGb+RNXxVRGDBEIeRdMaIo/xd
+	KiXP9AWZpQTSzyiQUq1Kgfj9ccJlXo8wCGlVx3WWisqgGoknudw+QekJ9EDgkAdQ
+	Q+PnSuJgT+k+MQJRRkuXNVLrIBp07rhGyf7mBJy8xK4kwrVrBAeFQYVnTh2OTWVR
+	CrQSuGfUbD6aPdQbtc5qCTThGGJuVx4bamSLSgLqY9D9TGSrrmbsI6UO0g0ltwzJ
+	Uv41ndXHVwjETtC4IMKAPGUN2VGHw==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ggbj8cknp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Sep 2026 09:30:08 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6899QGvc020749;
+	Wed, 9 Sep 2026 09:30:07 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ggwsw9jey-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Sep 2026 09:30:07 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6899U5U152101456
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 9 Sep 2026 09:30:05 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5A05C20043;
+	Wed,  9 Sep 2026 09:30:05 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3C42620040;
+	Wed,  9 Sep 2026 09:30:05 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with SMTP;
+	Wed,  9 Sep 2026 09:30:05 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
+	id 059DC160DFE; Wed, 09 Sep 2026 11:30:05 +0200 (CEST)
+From: Sven Schnelle <svens@linux.ibm.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/ftrace: Fix unique symbol check in kprobe_non_uniq_symbol.tc
+Date: Wed,  9 Sep 2026 11:29:53 +0200
+Message-ID: <20260909092954.2200558-1-svens@linux.ibm.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260908183420.1369630-1-kuba@kernel.org>
-X-Debian-User: leitao
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6pSV8Uo2XJFQeN7f1gTIe3kPkKM4nOwj
+X-Proofpoint-ORIG-GUID: 6pSV8Uo2XJFQeN7f1gTIe3kPkKM4nOwj
+X-Authority-Analysis: v=2.4 cv=RNCD2Yi+ c=1 sm=1 tr=0 ts=6aa12720 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8 a=8iogyDQ46Larf4JUBJoA:9
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA5MDEwMCBTYWx0ZWRfX2JGVe8HRpP1I
+ K/pDg858DJMLTsRUFKvRMLCudfChvnDdqgogP0MuE8xaNN5xUK87Mmw9/t/8g3BMQAP1bItL4Cm
+ Filo4f7WHLhVzcorLvAcImoScIc/sFU=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA5MDEwMCBTYWx0ZWRfXyIvu1WNtEaJ5
+ gyVVCSbbWtFCXH9tC/rt0ynHRMQTnKwdY2V2W09dW1aHx06fQCaif5wWMbKwDKUJKYyRwKNypGt
+ +7Nh/AlMmxXaY+WrjOiqNK7jJaF45TwAKnwdUTuAZ0mRIJdk0MIGXYbO9mUdBGPeNyFuviyZKzV
+ qpHkGer9RPuWGjSuBixOmYmH0d/fHmTi75M8bMJdh0J/Qt9/zCA4tTaEdVmJMekKTmChjH7gF6N
+ KMl3BoQw8Yavr9K+ktSOAr0bNnk/HwVXDrkY7zYH3CmSIk0y6ToqEh6GDQhBaObqoE2aK7pTibb
+ QyFLNB+9uritXQIqUPvmGblYDI+zZf8LW6sgE8nF2nRK01ilmF9EsLlNf9yQY3MWNwxVCxYzYFY
+ gF1iA40eU9erwUgTT7x1Irw2vTyok8DuJvUYqvz3PP/5b3cWRoJMWxNPj7d4R1MLd/j5ZwIdXZ2
+ NZE1UXy/MaXAcSSBrng==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-08_03,2026-09-08_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 clxscore=1011 spamscore=0
+ impostorscore=0 adultscore=0 phishscore=0 suspectscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609090100
 
-On Tue, Sep 08, 2026 at 11:34:20AM -0700, Jakub Kicinski wrote:
-> devmem.py fails on the HW runners with:
-> 
->   CMD[remote]: dd if=/dev/zero bs=512 count=1 2>/dev/null | socat -b 512 \
->     -u - TCP6:[fd00:2::1]:50051,bind=[fd00:2::2]:50051,nodelay
->     STDERR: socat[41018] W bind(5, {AF=10 [fd00:2::2]:50051}, 28): \
->             Address already in use
-> 
-> ncdevmem installs a 5-tuple flow rule which matches the source port, so
-> socat has to bind it explicitly. The port comes from rand_port(), which
-> checks availability on the DUT - but we bind on the remote...
-> That said the failure rate seems to high to be random collisions
-> (~2% per sub-test). It's probably TIME_WAIT sockets on the remote,
-> run_rx_hds() alone creates 12 of them.
-> 
-> Set reuseaddr so a TIME_WAIT socket does not fail the bind. Collisions
-> with a live socket are still possible, we'll see if they are frequent
-> enough to care.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+The current regex also matches symbols in modules, which makes the
+test fail on s390 where name_show is present only once in the kernel,
+but also multiple times in modules:
 
-Reviewed-by: Breno Leitao <leitao@debian.org>
+000001b1401cdc20 t name_show
+000001b0c05e6c40 t name_show    [mdev]
+000001b0c0495f30 t name_show    [i2c_core]
 
-> --- a/tools/testing/selftests/drivers/net/hw/devmem_lib.py
-> +++ b/tools/testing/selftests/drivers/net/hw/devmem_lib.py
-> @@ -201,7 +201,7 @@ def ncdevmem_rx(cfg, port, verify=True, fail_on_linear=False, flow_steer=False,
->      else:
->          addr = cfg.baddr
->  
-> -    suffix = f",bind={cfg.remote_baddr}:{port}"
-> +    suffix = f",bind={cfg.remote_baddr}:{port},reuseaddr"
+Fix this by changing the regular expression to only match the function
+name.
 
-socat_listen(), used by run_tx() and run_tx_chunks(), still builds
-without reuseaddr. From my reading, I understand we don't need it given
-ncdevmem does the active close on those tests. Leaving it alone seems
-right.
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+---
+ .../selftests/ftrace/test.d/kprobe/kprobe_non_uniq_symbol.tc    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_non_uniq=
+_symbol.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_non_uniq=
+_symbol.tc
+index bc9514428dba..07b1177c1634 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_non_uniq_symbol=
+.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_non_uniq_symbol=
+.tc
+@@ -6,7 +6,7 @@
+ SYMBOL=3D'name_show'
+=20
+ # We skip this test on kernel where SYMBOL is unique or does not exist.
+-if [ "$(grep -c -E "[[:alnum:]]+ t ${SYMBOL}" /proc/kallsyms)" -le '1' ]=
+; then
++if [ "$(grep -c -E "[[:alnum:]]+ t ${SYMBOL}$" /proc/kallsyms)" -le '1' =
+]; then
+ 	exit_unsupported
+ fi
+=20
+--=20
+2.53.0
+
