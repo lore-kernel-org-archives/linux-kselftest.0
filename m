@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B1C56C62C;
-	Thu, 10 Sep 2026 18:09:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F50576EC1;
+	Thu, 10 Sep 2026 18:09:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789063773; cv=none; b=oYJoLJ83DnU0mdtwq8fa/C+uqFjNjH+rH3DGrwwfMIVfKGBVvzHcztB5fvQvUk89gd1haDhc+9k9DXJUWsfVD8IyzsWT46RIGpD9flGju+F9L8Tn+GMdcPHVBgSO85ejd9lvkLH7z9yl7ATbhlMnWbKTlmj3qXZEfMjF/Fe6iNQ=
+	t=1789063778; cv=none; b=RKv+7lcl4Ix8iHa/UgAa6KDXfHLHin9NCM95OrrRTmcXrYQ1WdFOn64oSGIMhLDXmIWaMzFoJG6Algx7rTWIT9sikB/0MFz/2epehuaDB+GMRU7zQK2HTNQIi7VAcfU+ly9P5csPMa1d4VJeurvF4OxVj52pu5uCZWsKYRy4KJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789063773; c=relaxed/simple;
-	bh=Tfuw52YtaaBXZqgBSMLMoP4m9l9L0XwnDIp4xCS3rxM=;
+	s=arc-20240116; t=1789063778; c=relaxed/simple;
+	bh=AGgu+ENKrVSJPA71RPTaLquFuD/X0E+DiCFuD79O070=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NQQsSlkAH8C4kBRo8yzhQjQMeTMk4WMSjMQjxWbRvsat5X5oDEIEYnm1xVnztnh70qXYOEBeeXH5Cf+TT38vNCpzL0pCvJ1TUS26Li14JqBjgZ1+74UQoHnPw3LpG2JWDAd6n624n/ZXtnpW39hR22BsKyH01cGW/Ds2rVG6U9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=npZH4chh; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=XsD0JxXQbxj2NcMpubRZf2GVO0ruZ4aT847Gq7hepBnRbN2jCyKX8xw8w7u5Zx8dkr7j9ebnh7l0zlr9zsRh9Wlz75c/ba8bnpDq1raJY3zQqJLQIxisVHCwWUHJryAQ0XfV6TZmA/+3Q2/V7l1rpv/BAThoo1kqBOVPCAzI20w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bXYgbIIq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="npZH4chh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B265C1F00893;
-	Thu, 10 Sep 2026 18:09:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bXYgbIIq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 535441F000FF;
+	Thu, 10 Sep 2026 18:09:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789063765;
-	bh=XlwruAm6gWUToleBgBzypJygbCkpGPiNpwcXKoUZ3j0=;
+	s=k20260515; t=1789063771;
+	bh=twSaqNEMy/6zpzMysTkC1f1SYwon9nWhNFj4Yb50QhA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=npZH4chhZ5WsZjoyg1RU6vzfevAlijWicz+nxbcZJbvD0WQBaYEUbkw46gkTCCuGd
-	 LyYPZ1y/44a1r/xnN9kawBZpjE+vO3Fynhr9RN0kPjhbWNzES5EPOPr+NfGI9+yx3/
-	 VC6pbTK2mqEpVsH5VyeNoNWeSNXTN2m/KCoR4TlUYBnlsFqGn1jVcqxLfusp1jy4PR
-	 5pTQJ/J3VPlQUcEWwS9fPwx20qmsfniRrzaCbUu6o7HsjDX9ERhNeM2wLJOVZ1jTu9
-	 0MSpvi0ORCs2CJNDfsvBSqIs+le2NF6iTGWRNH9VTnEm1EUtu1QQJ1ptf7FEaWTnsP
-	 3gf2hchnx0FRw==
+	b=bXYgbIIqQHgPk8mmAEow8Vq4mE8ZerFjluVqgwnL3Zd/hOeXZ9hYyCdR/7WR4rSQn
+	 h3cu12Vs0TayuB8EOD+lFzYGU544Ch+SySjebMNDRCYtdGnO3dnX9qXyyTmCw7R4Kg
+	 kgcjdt4dN3OByzEazn928xl9ceJdwF98n0WlxeQxSNhE+clgz6nymP3HhPz12NwgRe
+	 rZ/7ZZTDMJo2Q8BemTu3RnUmtpSQ7jRoilr5LH6ukD9p/tt35iXQQuJovsTW5qP33k
+	 QUA0rPgZbnvYUbilxyxMfUf0jrX1srkGuvFS0xRjseLj5RUqVaRVeNYSrnmR/dWDuZ
+	 is5i2fy+OE0tA==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: Alexander Duyck <alexanderduyck@fb.com>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -40,7 +40,8 @@ To: Alexander Duyck <alexanderduyck@fb.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Daniel Borkmann <daniel@iogearbox.net>
-Cc: "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
 	Mohsin Bashir <mohsin.bashr@gmail.com>,
 	Stanislav Fomichev <sdf@fomichev.me>,
 	Bobby Eshleman <bobbyeshleman@meta.com>,
@@ -51,11 +52,10 @@ Cc: "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
 	Breno Leitao <leitao@debian.org>,
 	Tao Cui <cuitao@kylinos.cn>,
 	Pavel Begunkov <asml.silence@gmail.com>,
-	David Wei <dw@davidwei.uk>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
-Subject: [PATCH net-next v2 1/5] net: Add netdev_config helpers
-Date: Thu, 10 Sep 2026 20:09:01 +0200
-Message-ID: <20260910180908.1506533-2-bjorn@kernel.org>
+	David Wei <dw@davidwei.uk>
+Subject: [PATCH net-next v2 2/5] fbnic: Track BDQ device-page geometry per ring
+Date: Thu, 10 Sep 2026 20:09:02 +0200
+Message-ID: <20260910180908.1506533-3-bjorn@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260910180908.1506533-1-bjorn@kernel.org>
 References: <20260910180908.1506533-1-bjorn@kernel.org>
@@ -68,152 +68,326 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Jakub Kicinski <kuba@kernel.org>
+fbnic derives the BDQ buffer layout from PAGE_SIZE. That decides at
+build time how a posted page is split into 4 KiB device pages, and
+uses the same completion decoding for HPQ and PPQ. That is wrong once
+the queues use different posted-page sizes; completions must be
+decoded with the geometry of the queue that produced them.
 
-netdev_config manipulation will become slightly more complicated
-soon and will be used by both ethtool and the queue API.
-Encapsulate the logic in helper functions.
+Keep PAGE_SIZE as the posted-page size for both queues in this change,
+so the descriptor format and runtime behavior stay unchanged.
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Björn Töpel <bjorn@kernel.org>
 ---
- net/core/dev.c           |  7 ++-----
- net/core/dev.h           |  5 +++++
- net/core/netdev_config.c | 37 +++++++++++++++++++++++++++++++++++++
- net/ethtool/netlink.c    | 15 +++++++--------
- 4 files changed, 51 insertions(+), 13 deletions(-)
+ drivers/net/ethernet/meta/fbnic/fbnic_csr.h   | 34 ++------
+ .../net/ethernet/meta/fbnic/fbnic_debugfs.c   |  5 +-
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  | 83 ++++++++++++-------
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.h  |  6 ++
+ 4 files changed, 72 insertions(+), 56 deletions(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 290e0f099e6b..4a7c5a5e48e5 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -12195,10 +12195,8 @@ struct net_device *alloc_netdev_mqs(int sizeof_priv, const char *name,
- 	if (!dev->ethtool)
- 		goto free_all;
+diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_csr.h b/drivers/net/ethernet/meta/fbnic/fbnic_csr.h
+index 64b958df7774..2b9f8644b132 100644
+--- a/drivers/net/ethernet/meta/fbnic/fbnic_csr.h
++++ b/drivers/net/ethernet/meta/fbnic/fbnic_csr.h
+@@ -109,34 +109,19 @@ enum {
  
--	dev->cfg = kzalloc_obj(*dev->cfg, GFP_KERNEL_ACCOUNT);
--	if (!dev->cfg)
-+	if (netdev_alloc_config(dev))
- 		goto free_all;
--	dev->cfg_pending = dev->cfg;
+ /* Rx Buffer Descriptor Format
+  *
+- * The layout of this can vary depending on the page size of the system.
++ * Buffer descriptors describe 4 KiB device pages. A posted page larger than
++ * 4 KiB is represented by consecutive device-page descriptors.
+  *
+- * If the page size is 4K then the layout will simply consist of ID for
+- * the 16 most significant bits, and the lower 46 are essentially the page
+- * address with the lowest 12 bits being reserved 0 due to the fact that
+- * a page will be aligned.
+- *
+- * If the page size is larger than 4K then the lower n bits of the ID and
+- * page address will be reserved for the fragment ID. This fragment will
+- * be 4K in size and will be used to index both the DMA address and the ID
+- * by the same amount.
++ * The address field stores the 4 KiB-aligned DMA address. The ID field stores
++ * the software page ID, with the low n bits used as the device-page ID when a
++ * posted page spans multiple device pages. The driver increments both the
++ * address and ID by one device page for each descriptor belonging to a posted
++ * page.
+  */
+ #define FBNIC_BD_DESC_ADDR_MASK			DESC_GENMASK(45, 12)
+ #define FBNIC_BD_DESC_ID_MASK			DESC_GENMASK(63, 48)
+-#define FBNIC_BD_FRAG_SIZE \
++#define FBNIC_BD_PAGE_SIZE \
+ 	(FBNIC_BD_DESC_ADDR_MASK & ~(FBNIC_BD_DESC_ADDR_MASK - 1))
+-#define FBNIC_BD_FRAG_COUNT \
+-	(PAGE_SIZE / FBNIC_BD_FRAG_SIZE)
+-#define FBNIC_BD_FRAG_ADDR_MASK \
+-	(FBNIC_BD_DESC_ADDR_MASK & \
+-	 ~(FBNIC_BD_DESC_ADDR_MASK * FBNIC_BD_FRAG_COUNT))
+-#define FBNIC_BD_FRAG_ID_MASK \
+-	(FBNIC_BD_DESC_ID_MASK & \
+-	 ~(FBNIC_BD_DESC_ID_MASK * FBNIC_BD_FRAG_COUNT))
+-#define FBNIC_BD_PAGE_ADDR_MASK \
+-	(FBNIC_BD_DESC_ADDR_MASK & ~FBNIC_BD_FRAG_ADDR_MASK)
+-#define FBNIC_BD_PAGE_ID_MASK \
+-	(FBNIC_BD_DESC_ID_MASK & ~FBNIC_BD_FRAG_ID_MASK)
  
- 	dev->num_napi_configs = maxqs;
- 	napi_config_sz = array_size(maxqs, sizeof(*dev->napi_config));
-@@ -12270,8 +12268,7 @@ void free_netdev(struct net_device *dev)
- 		return;
+ /* Rx Completion Queue Descriptors */
+ #define FBNIC_RCD_TYPE_MASK			DESC_GENMASK(62, 61)
+@@ -151,9 +136,6 @@ enum {
+ 
+ /* Address/Length Completion Descriptors */
+ #define FBNIC_RCD_AL_BUFF_ID_MASK		DESC_GENMASK(15, 0)
+-#define FBNIC_RCD_AL_BUFF_FRAG_MASK		(FBNIC_BD_FRAG_COUNT - 1)
+-#define FBNIC_RCD_AL_BUFF_PAGE_MASK \
+-	(FBNIC_RCD_AL_BUFF_ID_MASK & ~FBNIC_RCD_AL_BUFF_FRAG_MASK)
+ #define FBNIC_RCD_AL_BUFF_LEN_MASK		DESC_GENMASK(28, 16)
+ #define FBNIC_RCD_AL_BUFF_OFF_MASK		DESC_GENMASK(43, 32)
+ #define FBNIC_RCD_AL_PAGE_FIN			DESC_BIT(60)
+diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_debugfs.c b/drivers/net/ethernet/meta/fbnic/fbnic_debugfs.c
+index 3c4563c8f403..7f23a0f97e63 100644
+--- a/drivers/net/ethernet/meta/fbnic/fbnic_debugfs.c
++++ b/drivers/net/ethernet/meta/fbnic/fbnic_debugfs.c
+@@ -181,8 +181,8 @@ static int fbnic_dbg_tcq_desc_seq_show(struct seq_file *s, void *v)
+ static int fbnic_dbg_bdq_desc_seq_show(struct seq_file *s, void *v)
+ {
+ 	struct fbnic_ring *ring = s->private;
++	unsigned int i, desc_count;
+ 	char hdr[80];
+-	int i;
+ 
+ 	/* Generate header on first entry */
+ 	fbnic_dbg_ring_show(s);
+@@ -197,7 +197,8 @@ static int fbnic_dbg_bdq_desc_seq_show(struct seq_file *s, void *v)
+ 		return 0;
  	}
  
--	WARN_ON(dev->cfg != dev->cfg_pending);
--	kfree(dev->cfg);
-+	netdev_free_config(dev);
- 	kfree(dev->ethtool);
- 	netif_free_tx_queues(dev);
- 	netif_free_rx_queues(dev);
-diff --git a/net/core/dev.h b/net/core/dev.h
-index b757faead4d1..4b52ff779cba 100644
---- a/net/core/dev.h
-+++ b/net/core/dev.h
-@@ -102,6 +102,11 @@ extern struct rw_semaphore dev_addr_sem;
- extern struct list_head net_todo_list;
- void netdev_run_todo(void);
+-	for (i = 0; i < (ring->size_mask + 1) * FBNIC_BD_FRAG_COUNT; i++) {
++	desc_count = (ring->size_mask + 1) * fbnic_bd_page_count(ring);
++	for (i = 0; i < desc_count; i++) {
+ 		u64 bd = le64_to_cpu(ring->desc[i]);
  
-+int netdev_alloc_config(struct net_device *dev);
-+void __netdev_free_config(struct netdev_config *cfg);
-+void netdev_free_config(struct net_device *dev);
-+int netdev_reconfig_start(struct net_device *dev);
-+
- int netdev_queue_config_validate(struct net_device *dev, int rxq_idx,
- 				 struct netdev_queue_config *qcfg,
- 				 struct netlink_ext_ack *extack);
-diff --git a/net/core/netdev_config.c b/net/core/netdev_config.c
-index f14af365d5cd..b101341e3251 100644
---- a/net/core/netdev_config.c
-+++ b/net/core/netdev_config.c
-@@ -6,6 +6,43 @@
+ 		seq_printf(s, "%04x %#04llx %#014llx\n", i,
+diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+index 401f8b8ae1ca..28b962307c08 100644
+--- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
++++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+@@ -871,19 +871,31 @@ static void fbnic_clean_bdq(struct fbnic_ring *ring, unsigned int hw_head,
+ 	ring->head = head;
+ }
  
- #include "dev.h"
- 
-+int netdev_alloc_config(struct net_device *dev)
++static u16 fbnic_rcd_bd_idx(const struct fbnic_ring *bdq, u64 rcd)
 +{
-+	struct netdev_config *cfg;
-+
-+	cfg = kzalloc_obj(*dev->cfg, GFP_KERNEL_ACCOUNT);
-+	if (!cfg)
-+		return -ENOMEM;
-+
-+	dev->cfg = cfg;
-+	dev->cfg_pending = cfg;
-+	return 0;
++	return FIELD_GET(FBNIC_RCD_AL_BUFF_ID_MASK, rcd) >> bdq->bd_page_shift;
 +}
 +
-+void __netdev_free_config(struct netdev_config *cfg)
++static unsigned int fbnic_rcd_bd_page_offset(const struct fbnic_ring *bdq,
++					     u64 rcd)
 +{
-+	kfree(cfg);
++	u16 id = FIELD_GET(FBNIC_RCD_AL_BUFF_ID_MASK, rcd);
++	u16 page_id = id & (fbnic_bd_page_count(bdq) - 1);
++
++	return page_id * FBNIC_BD_PAGE_SIZE;
 +}
 +
-+void netdev_free_config(struct net_device *dev)
+ static void fbnic_bd_prep(struct fbnic_ring *bdq, u16 id, netmem_ref netmem)
+ {
+-	__le64 *bdq_desc = &bdq->desc[id * FBNIC_BD_FRAG_COUNT];
++	__le64 *bdq_desc = &bdq->desc[id * fbnic_bd_page_count(bdq)];
+ 	dma_addr_t dma = page_pool_get_dma_addr_netmem(netmem);
+-	u64 bd, i = FBNIC_BD_FRAG_COUNT;
++	u64 bd, i = fbnic_bd_page_count(bdq);
+ 
+-	bd = (FBNIC_BD_PAGE_ADDR_MASK & dma) |
+-	     FIELD_PREP(FBNIC_BD_PAGE_ID_MASK, id);
++	bd = (FBNIC_BD_DESC_ADDR_MASK & dma) |
++	     FIELD_PREP(FBNIC_BD_DESC_ID_MASK, (u64)id << bdq->bd_page_shift);
+ 
+-	/* In the case that a page size is larger than 4K we will map a
+-	 * single page to multiple fragments. The fragments will be
+-	 * FBNIC_BD_FRAG_COUNT in size and the lower n bits will be use
+-	 * to indicate the individual fragment IDs.
++	/* Posted pages larger than 4 KiB use consecutive device-page IDs in
++	 * the low bits of the software page ID.
+ 	 */
+ 	do {
+ 		*bdq_desc = cpu_to_le64(bd);
+@@ -928,7 +940,7 @@ static void fbnic_fill_bdq(struct fbnic_ring *bdq)
+ 		/* Force DMA writes to flush before writing to tail */
+ 		dma_wmb();
+ 
+-		writel(i * FBNIC_BD_FRAG_COUNT, bdq->doorbell);
++		writel(i * fbnic_bd_page_count(bdq), bdq->doorbell);
+ 	}
+ }
+ 
+@@ -959,26 +971,27 @@ static void fbnic_pkt_prepare(struct fbnic_napi_vector *nv, u64 rcd,
+ 			      struct fbnic_pkt_buff *pkt,
+ 			      struct fbnic_q_triad *qt)
+ {
+-	unsigned int hdr_pg_idx = FIELD_GET(FBNIC_RCD_AL_BUFF_PAGE_MASK, rcd);
+ 	unsigned int hdr_pg_off = FIELD_GET(FBNIC_RCD_AL_BUFF_OFF_MASK, rcd);
+-	struct page *page = fbnic_page_pool_get_head(qt, hdr_pg_idx);
+ 	unsigned int len = FIELD_GET(FBNIC_RCD_AL_BUFF_LEN_MASK, rcd);
++	unsigned int hdr_pg_idx = fbnic_rcd_bd_idx(&qt->sub0, rcd);
+ 	unsigned int frame_sz, hdr_pg_start, hdr_pg_end, headroom;
+ 	unsigned char *hdr_start;
++	struct page *page;
+ 
+ 	/* data_hard_start should always be NULL when this is called */
+ 	WARN_ON_ONCE(pkt->buff.data_hard_start);
+ 
++	page = fbnic_page_pool_get_head(qt, hdr_pg_idx);
++
+ 	/* Short-cut the end calculation if we know page is fully consumed */
+ 	hdr_pg_end = FIELD_GET(FBNIC_RCD_AL_PAGE_FIN, rcd) ?
+-		     FBNIC_BD_FRAG_SIZE : fbnic_hdr_pg_end(hdr_pg_off, len);
++		     FBNIC_BD_PAGE_SIZE : fbnic_hdr_pg_end(hdr_pg_off, len);
+ 	hdr_pg_start = fbnic_hdr_pg_start(hdr_pg_off);
+ 
+ 	headroom = hdr_pg_off - hdr_pg_start + FBNIC_RX_PAD;
+ 	frame_sz = hdr_pg_end - hdr_pg_start;
+ 	xdp_init_buff(&pkt->buff, frame_sz, &qt->xdp_rxq);
+-	hdr_pg_start += (FBNIC_RCD_AL_BUFF_FRAG_MASK & rcd) *
+-			FBNIC_BD_FRAG_SIZE;
++	hdr_pg_start += fbnic_rcd_bd_page_offset(&qt->sub0, rcd);
+ 
+ 	/* Sync DMA buffer */
+ 	dma_sync_single_range_for_cpu(nv->dev, page_pool_get_dma_addr(page),
+@@ -999,18 +1012,19 @@ static void fbnic_add_rx_frag(struct fbnic_napi_vector *nv, u64 rcd,
+ 			      struct fbnic_pkt_buff *pkt,
+ 			      struct fbnic_q_triad *qt)
+ {
+-	unsigned int pg_idx = FIELD_GET(FBNIC_RCD_AL_BUFF_PAGE_MASK, rcd);
+ 	unsigned int pg_off = FIELD_GET(FBNIC_RCD_AL_BUFF_OFF_MASK, rcd);
+ 	unsigned int len = FIELD_GET(FBNIC_RCD_AL_BUFF_LEN_MASK, rcd);
+-	netmem_ref netmem = fbnic_page_pool_get_data(qt, pg_idx);
++	unsigned int pg_idx = fbnic_rcd_bd_idx(&qt->sub1, rcd);
+ 	unsigned int truesize;
++	netmem_ref netmem;
+ 	bool added;
+ 
+-	truesize = FIELD_GET(FBNIC_RCD_AL_PAGE_FIN, rcd) ?
+-		   FBNIC_BD_FRAG_SIZE - pg_off : ALIGN(len, 128);
++	netmem = fbnic_page_pool_get_data(qt, pg_idx);
+ 
+-	pg_off += (FBNIC_RCD_AL_BUFF_FRAG_MASK & rcd) *
+-		  FBNIC_BD_FRAG_SIZE;
++	truesize = FIELD_GET(FBNIC_RCD_AL_PAGE_FIN, rcd) ?
++		   FBNIC_BD_PAGE_SIZE - pg_off : ALIGN(len, 128);
++
++	pg_off += fbnic_rcd_bd_page_offset(&qt->sub1, rcd);
+ 
+ 	/* Sync DMA buffer */
+ 	page_pool_dma_sync_netmem_for_cpu(qt->sub1.page_pool, netmem,
+@@ -1257,12 +1271,12 @@ static int fbnic_clean_rcq(struct fbnic_napi_vector *nv,
+ 
+ 		switch (FIELD_GET(FBNIC_RCD_TYPE_MASK, rcd)) {
+ 		case FBNIC_RCD_TYPE_HDR_AL:
+-			head0 = FIELD_GET(FBNIC_RCD_AL_BUFF_PAGE_MASK, rcd);
++			head0 = fbnic_rcd_bd_idx(&qt->sub0, rcd);
+ 			fbnic_pkt_prepare(nv, rcd, pkt, qt);
+ 
+ 			break;
+ 		case FBNIC_RCD_TYPE_PAY_AL:
+-			head1 = FIELD_GET(FBNIC_RCD_AL_BUFF_PAGE_MASK, rcd);
++			head1 = fbnic_rcd_bd_idx(&qt->sub1, rcd);
+ 			fbnic_add_rx_frag(nv, rcd, pkt, qt);
+ 
+ 			break;
+@@ -1603,6 +1617,16 @@ fbnic_alloc_qt_page_pools(struct fbnic_net *fbn, struct fbnic_q_triad *qt,
+ 	return PTR_ERR(pp);
+ }
+ 
++static u8 fbnic_bdq_page_shift(u32 page_size)
 +{
-+	WARN_ON(dev->cfg != dev->cfg_pending);
-+	__netdev_free_config(dev->cfg);
++	return ilog2(page_size / FBNIC_BD_PAGE_SIZE);
 +}
 +
-+int netdev_reconfig_start(struct net_device *dev)
++static void fbnic_bdq_set_page_size(struct fbnic_ring *bdq, u32 page_size)
 +{
-+	struct netdev_config *cfg;
-+
-+	WARN_ON(dev->cfg != dev->cfg_pending);
-+	cfg = kmemdup(dev->cfg, sizeof(*dev->cfg), GFP_KERNEL_ACCOUNT);
-+	if (!cfg)
-+		return -ENOMEM;
-+
-+	dev->cfg_pending = cfg;
-+	return 0;
++	bdq->bd_page_shift = fbnic_bdq_page_shift(page_size);
 +}
 +
- static int netdev_nop_validate_qcfg(struct net_device *dev,
- 				    struct netdev_queue_config *qcfg,
- 				    struct netlink_ext_ack *extack)
-diff --git a/net/ethtool/netlink.c b/net/ethtool/netlink.c
-index 1af395b54330..383e911f50f7 100644
---- a/net/ethtool/netlink.c
-+++ b/net/ethtool/netlink.c
-@@ -11,6 +11,8 @@
- #include "module_fw.h"
- #include "netlink.h"
+ static void fbnic_ring_init(struct fbnic_ring *ring, u32 __iomem *doorbell,
+ 			    int q_idx, u8 flags)
+ {
+@@ -1610,6 +1634,7 @@ static void fbnic_ring_init(struct fbnic_ring *ring, u32 __iomem *doorbell,
+ 	ring->doorbell = doorbell;
+ 	ring->q_idx = q_idx;
+ 	ring->flags = flags;
++	fbnic_bdq_set_page_size(ring, PAGE_SIZE);
+ 	ring->deferred_head = -1;
+ }
  
-+#include "../core/dev.h"
+@@ -1894,12 +1919,12 @@ static int fbnic_alloc_rx_ring_desc(struct fbnic_net *fbn,
+ 
+ 	switch (rxr->doorbell - fbnic_ring_csr_base(rxr)) {
+ 	case FBNIC_QUEUE_BDQ_HPQ_TAIL:
+-		rxq_size = fbn->hpq_size / FBNIC_BD_FRAG_COUNT;
+-		desc_size *= FBNIC_BD_FRAG_COUNT;
++		rxq_size = fbn->hpq_size / fbnic_bd_page_count(rxr);
++		desc_size *= fbnic_bd_page_count(rxr);
+ 		break;
+ 	case FBNIC_QUEUE_BDQ_PPQ_TAIL:
+-		rxq_size = fbn->ppq_size / FBNIC_BD_FRAG_COUNT;
+-		desc_size *= FBNIC_BD_FRAG_COUNT;
++		rxq_size = fbn->ppq_size / fbnic_bd_page_count(rxr);
++		desc_size *= fbnic_bd_page_count(rxr);
+ 		break;
+ 	case FBNIC_QUEUE_RCQ_HEAD:
+ 		rxq_size = fbn->rcq_size;
+@@ -2565,7 +2590,7 @@ static void fbnic_enable_bdq(struct fbnic_ring *hpq, struct fbnic_ring *ppq)
+ 	hpq->tail = 0;
+ 	hpq->head = 0;
+ 
+-	log_size = fls(hpq->size_mask) + ilog2(FBNIC_BD_FRAG_COUNT);
++	log_size = fls(hpq->size_mask) + hpq->bd_page_shift;
+ 
+ 	/* Store descriptor ring address and size */
+ 	fbnic_ring_wr32(hpq, FBNIC_QUEUE_BDQ_HPQ_BAL, lower_32_bits(hpq->dma));
+@@ -2577,7 +2602,7 @@ static void fbnic_enable_bdq(struct fbnic_ring *hpq, struct fbnic_ring *ppq)
+ 	if (!ppq->size_mask)
+ 		goto write_ctl;
+ 
+-	log_size = fls(ppq->size_mask) + ilog2(FBNIC_BD_FRAG_COUNT);
++	log_size = fls(ppq->size_mask) + ppq->bd_page_shift;
+ 
+ 	/* Add enabling of PPQ to BDQ control */
+ 	bdq_ctl |= FBNIC_QUEUE_BDQ_CTL_PPQ_ENABLE;
+@@ -2846,8 +2871,10 @@ static int fbnic_queue_mem_alloc(struct net_device *dev,
+ 
+ 	fbnic_ring_init(&qt->sub0, real->sub0.doorbell, real->sub0.q_idx,
+ 			real->sub0.flags);
++	qt->sub0.bd_page_shift = real->sub0.bd_page_shift;
+ 	fbnic_ring_init(&qt->sub1, real->sub1.doorbell, real->sub1.q_idx,
+ 			real->sub1.flags);
++	qt->sub1.bd_page_shift = real->sub1.bd_page_shift;
+ 	fbnic_ring_init(&qt->cmpl, real->cmpl.doorbell, real->cmpl.q_idx,
+ 			real->cmpl.flags);
+ 
+diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
+index e03c9d2c38dc..626729b1a8b6 100644
+--- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
++++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
+@@ -121,6 +121,7 @@ struct fbnic_ring {
+ 	u16 size_mask;			/* Size of ring in descriptors - 1 */
+ 	u8 q_idx;			/* Logical netdev ring index */
+ 	u8 flags;			/* Ring flags (FBNIC_RING_F_*) */
++	u8 bd_page_shift;		/* BDQ: ilog2(page_size / 4096) */
+ 
+ 	u32 head, tail;			/* Head/Tail of ring */
+ 
+@@ -162,6 +163,11 @@ struct fbnic_napi_vector {
+ 
+ extern const struct netdev_queue_mgmt_ops fbnic_queue_mgmt_ops;
+ 
++static inline u16 fbnic_bd_page_count(const struct fbnic_ring *bdq)
++{
++	return 1U << bdq->bd_page_shift;
++}
 +
- static struct genl_family ethtool_genl_family;
- 
- static bool ethnl_ok __read_mostly;
-@@ -934,12 +936,9 @@ static int ethnl_default_set_doit(struct sk_buff *skb, struct genl_info *info)
- 	if (need_rtnl)
- 		rtnl_lock();
- 	netdev_lock_ops(dev);
--	dev->cfg_pending = kmemdup(dev->cfg, sizeof(*dev->cfg),
--				   GFP_KERNEL_ACCOUNT);
--	if (!dev->cfg_pending) {
--		ret = -ENOMEM;
--		goto out_tie_cfg;
--	}
-+	ret = netdev_reconfig_start(dev);
-+	if (ret)
-+		goto out_unlock;
- 
- 	ret = ethnl_ops_begin(dev);
- 	if (ret < 0)
-@@ -958,9 +957,9 @@ static int ethnl_default_set_doit(struct sk_buff *skb, struct genl_info *info)
- out_ops:
- 	ethnl_ops_complete(dev);
- out_free_cfg:
--	kfree(dev->cfg_pending);
--out_tie_cfg:
-+	__netdev_free_config(dev->cfg_pending);
- 	dev->cfg_pending = dev->cfg;
-+out_unlock:
- 	netdev_unlock_ops(dev);
- 	if (need_rtnl)
- 		rtnl_unlock();
+ netdev_tx_t fbnic_xmit_frame(struct sk_buff *skb, struct net_device *dev);
+ netdev_features_t
+ fbnic_features_check(struct sk_buff *skb, struct net_device *dev,
 -- 
 2.55.0
 
