@@ -1,151 +1,162 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27C1C47255C;
-	Thu, 10 Sep 2026 11:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mta1.migadu.com (out-56.mta1.migadu.com [95.215.58.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51CFB470EB4
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 11:26:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789039513; cv=none; b=X9XbNaXV/UsmLEFNsNRjQ2AzbdEReschOGTaajV8kTOfC3L3J2KaZ0Uwp9yBj3VpKBm5s2dQsT9vHebspkGQuFymxJHJ2z178b/anbIEsYWNqsW/9Vebm7+Wki3H+0LyWlPPBQuUykwI7G/ys7vuKu9BflSMc1SC1RjJn4KYnGU=
+	t=1789039621; cv=none; b=DD6BniH3mcy8yR1G5azPGcNDITuL++52vk92JPVpCIWZXdY1rRtkAiBB80jzJsBlWlMNrkbKnBh1muVbfcwAxZ9t6SmZaJsqEdvgheqzXv97ZpMELIv//wSt8FxNBt0lXwVGpd+xOLM18vghrsYHEoSKqZydGQA25RkUmyeClLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789039513; c=relaxed/simple;
-	bh=bUjVsfpDZcgmzBY7GROwv4WXzBSIWvoSj7+OppCPLvo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YSRLkR7L/TtcUXjAnwqYM3nbJ/g+PFL3M2fhYWdxMprfhdmwklFPhDJNkPFRx+YPet59XtRoFT/0NIxJUPBTgl2nRwEiflqrNfDZw65qqXdxlEJ3SHW2GzZ5wuQWiKlyjvNu2/j7KYJ2n4qWDqEPhoQ1LcGfDUqaPAubxVe9mww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=LWpqWq0C; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1789039621; c=relaxed/simple;
+	bh=95IyqXeqOZzjkj+0Ve1SI6MTNK+0O2yC9tCyVk1xeLI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pv3f6f1wVW/uu8InccRC0U/hiX3LwB0FPfi67PMGaFnD+tXQpmb/NI6/L26JIOJQDaNNmrhNzwBkeO+wZjwZM+xCaBRaeIdde4x6t2ODDevYUWqNbV7Wxi0YFWaZiixpx2j8Ei+YtxT8iBxCETG3b25d+KHVy5i8K/GrY2UwMck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=je5Ig+Al; arc=none smtp.client-ip=95.215.58.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="LWpqWq0C"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C3179153B;
-	Thu, 10 Sep 2026 04:25:07 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7A06E3F528;
-	Thu, 10 Sep 2026 04:25:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1789039511; bh=bUjVsfpDZcgmzBY7GROwv4WXzBSIWvoSj7+OppCPLvo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LWpqWq0CrMWof9QLnwbGJYPVmUIlhn1D0Yzrc/G5UkATJmpaYm3u0RxDex0YwMmjx
-	 Y1KrMDqWG4txvyHTU0XP4Yh22k5k3dLc0VRguF/0dfVMjCKk1y3nFfahfoL8kaPRZt
-	 FL6NAADXiEt0r7gFE2bpjJbM+WnaA0Jw+Xv7xQxg=
-Date: Thu, 10 Sep 2026 12:25:06 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] kselftest: mm: replace usage of /proc/self/smaps
- for check_huge_xxx() helper
-Message-ID: <aqKTkkK0wnm6cqpX@e129823.arm.com>
-References: <20260907-fix_split-v5-0-822b810458bc@arm.com>
- <20260907-fix_split-v5-2-822b810458bc@arm.com>
- <956df69d-8c0a-420f-889e-7df2842605dc@kernel.org>
- <aqKMVUDvN8bBpwVS@e129823.arm.com>
- <1968ed37-3836-44df-a266-9a37219c2f6f@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="je5Ig+Al"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=95IyqXeqOZzjkj+0Ve1SI6MTNK+0O2yC9tCyVk1xeLI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789039617; v=1; x=1789644417;
+ b=je5Ig+AlXljzoKvBTJNFM7Ojb5Yzt/ic5puVMDQMyUl7NA6DhyHE/u+tbUnJvvpxr8XVPJQn
+ Raz5FDzQFDLp+YNQilyleT83b5mDcXwFwfXt4pXRAzGzHWGTvQ78iVs6RmfeTE0aIm7JThT7sdz
+ Cawdtw28tM8JSIi6USD2cM9c=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id cdfc5c82ce19bbc5;
+	Thu, 10 Sep 2026 11:26:57 +0000
+X-Mizu-Trace-ID: cdfc5c82ce19bbc5
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Xiang Mei <xmei5@asu.edu>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Aditi Ghag <aditi.ghag@isovalent.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v3 1/3] bpf: Fix out-of-bounds read of sk_protocol in bpf_sock_destroy()
+Date: Thu, 10 Sep 2026 19:26:26 +0800
+Message-ID: <20260910112634.152195-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260910112107.148770-1-jiayuan.chen@linux.dev>
+References: <20260910112107.148770-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1968ed37-3836-44df-a266-9a37219c2f6f@kernel.org>
 
-> On 9/10/26 12:54, Yeoreum Yun wrote:
-> >> On 9/7/26 10:19, Yeoreum Yun wrote:
-> >>> Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-> >>> glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-> >>> made by memalign().
-> >>>
-> >>> The underlying VMA may start at a different address from the aligned
-> >>> address returned by memalign(). Furthermore, a subsequent
-> >>> madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
-> >>> already set.
-> >>>
-> >>> This causes split_huge_page_test to fail because the check_huge_xxx()
-> >>> helpers incorrectly require the address returned by memalign() to
-> >>> match the VMA start address reported in /proc/self/smaps.
-> >>>
-> >>> Instead of relying on /proc/self/smaps, use /proc/self/pagemap and
-> >>> /proc/kpageflags to detect huge-page mappings and large folios:
-> >>>
-> >>>   1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of
-> >>>      using check_large_folios(), since only the mapping type matters.
-> >>>      This identifies PMD-mapped huge pages.
-> >>>   2. Otherwise, use check_large_folios() to detect large folios. This
-> >>>      covers mTHP cases.
-> >>>   3. Check the folio flags according to the type of huge page.
-> >>>
-> >>> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-> >>> Suggested-by: Zi Yan <ziy@nvidia.com>
-> >>> Reviewed-by: Zi Yan <ziy@nvidia.com>
-> >>> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> >>> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> >>> Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> >>> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> >>> ---
-> >>>  tools/testing/selftests/mm/vm_util.c | 145 ++++++++++++++++++++++-------------
-> >>>  tools/testing/selftests/mm/vm_util.h |   1 +
-> >>>  2 files changed, 92 insertions(+), 54 deletions(-)
-> >>>
-> >>> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> >>> index 4821a3563036..dc62ce84e143 100644
-> >>
-> >> [...]
-> >>
-> >>>  
-> >>> -	if (hpage_size == pmd_pagesize)
-> >>> -		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
-> >>> +static bool check_huge_type(uint64_t categories, uint64_t kpageflags,
-> >>> +			    enum check_huge_type type)
-> >>> +{
-> >>> +	const bool file = categories & PAGE_IS_FILE;
-> >>> +	const bool swapbacked = kpageflags & KPF_SWAPBACKED;
-> >>> +
-> >>> +	switch (type) {
-> >>> +	case CHECK_HUGE_ANON:
-> >>> +		return !file;
-> >>> +	case CHECK_HUGE_FILE:
-> >>> +		return file && !swapbacked;
-> >>> +	case CHECK_HUGE_SHMEM:
-> >>> +		return file & swapbacked;
-> >>> +	}
-> >>
-> >> Why do we even need CHECK_HUGE_SHMEM?
-> >>
-> >> That's really just a legacy thing for using smaps to identify huge pages.
-> >>
-> >> It's sufficient to identify CHECK_HUGE_FILE if you know that you have shmem mapping.
-> >>
-> >> You will not arbitrarily have non-shmem folios in a shmem mapping :)
-> > 
-> > Agree. but there seems the case where discern whethr the mapping is
-> > with regular file or shmem like tmpfs -- khugepaged test where using
-> > __shmem_ops. So I think it would be better to keep this as-is.
-> 
-> Let's not add or maintain unnecessary complexity.
-> 
-> hmem_check_huge can really just become check_huge_file.
-> 
-> Even file_check_huge can just be simplified.
-> 
-> There must be a pretty good reason why we'd want to keep this.
+sk_protocol lives in struct sock, not in struct sock_common. A timewait
+or request sock handed to bpf_sock_destroy() by the tcp iterator is
+neither, so reading sk->sk_protocol runs past the object:
 
-Okay. then I'll change the check_huge_shmem() to check_huge_file()
-with the separate patch.
+==================================================================
+BUG: KASAN: slab-out-of-bounds in bpf_sock_destroy+0xc7/0xe0
+Read of size 2 at addr ffff8881047d11b4 by task test_progs/428
 
+Tainted: [W]=WARN
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x91/0xf0
+ print_report+0xd1/0x630
+ kasan_report+0xf3/0x130
+ __asan_report_load2_noabort+0x14/0x30
+ bpf_sock_destroy+0xc7/0xe0
+ bpf_prog_c3dd61f9d9cd9f37_iter_tcp6_timewait+0x9f/0xb7
+ bpf_iter_run_prog+0x538/0xde0
+ bpf_iter_tcp_seq_show+0x26b/0x4b0
+ bpf_seq_read+0x424/0x1210
+ vfs_read+0x197/0xe40
+ ksys_read+0x119/0x240
+ __x64_sys_read+0x72/0xc0
+ x64_sys_call+0x647/0x27e0
+ do_syscall_64+0xe5/0x610
+ entry_SYSCALL_64_after_hwframe+0x76/0x7e
+
+Only check sk_protocol on full socks. tcp_abort() already knows how to
+deal with TIME_WAIT and NEW_SYN_RECV socks. Also fix the comment, it
+never matched the code.
+
+Fixes: 4ddbcb886268 ("bpf: Add bpf_sock_destroy kfunc")
+Reported-by: Xiang Mei (Microsoft) <xmei5@asu.edu>
+Closes: https://lore.kernel.org/bpf/20260702224519.800135-1-xmei5@asu.edu/
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+---
+A reviewer asked to add ENOENT to the list of errors in the comment.
+I'd rather not list what the handlers return, that can change any time,
+so the comment now says "EOPNOTSUPP, or whatever the protocol specific
+destroy handler returns".
+
+A reviewer also worried that a sockmap iter could pass an unlocked sk here
+and run tcp_abort() without the sock lock. It cannot: only the tcp and
+udp iters mark their sk ctx arg as PTR_TRUSTED, and bpf_sock_destroy()
+needs a trusted arg. A sockmap iter prog calling it is rejected by the
+verifier with "R1 must be referenced or trusted", verified in qemu.
+
+v1 -> v2: modify comment AND avoid flaky about selftest
+v1: https://lore.kernel.org/bpf/20260903125306.299943-1-jiayuan.chen@linux.dev/
+---
+ net/core/filter.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index a043d179ff1ae..3e17ece09f028 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -12901,8 +12901,9 @@ __bpf_kfunc_start_defs();
+  * @sock: Pointer to socket to be destroyed
+  *
+  * Return:
+- * On error, may return EPROTONOSUPPORT, EINVAL.
+- * EPROTONOSUPPORT if protocol specific destroy handler is not supported.
++ * On error, may return EOPNOTSUPP, or whatever the protocol specific
++ * destroy handler returns.
++ * EOPNOTSUPP if protocol specific destroy handler is not supported.
+  * 0 otherwise
+  */
+ __bpf_kfunc int bpf_sock_destroy(struct sock_common *sock)
+@@ -12914,8 +12915,12 @@ __bpf_kfunc int bpf_sock_destroy(struct sock_common *sock)
+ 	 * Supporting protocols will need to acquire sock lock in the BPF context
+ 	 * prior to invoking this kfunc.
+ 	 */
+-	if (!sk->sk_prot->diag_destroy || (sk->sk_protocol != IPPROTO_TCP &&
+-					   sk->sk_protocol != IPPROTO_UDP))
++	if (!sk->sk_prot->diag_destroy)
++		return -EOPNOTSUPP;
++
++	if (sk_fullsock(sk) &&
++	    sk->sk_protocol != IPPROTO_TCP &&
++	    sk->sk_protocol != IPPROTO_UDP)
+ 		return -EOPNOTSUPP;
+ 
+ 	return sk->sk_prot->diag_destroy(sk, ECONNABORTED);
 -- 
-Sincerely,
-Yeoreum Yun
+2.43.0
+
