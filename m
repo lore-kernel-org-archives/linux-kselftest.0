@@ -1,79 +1,198 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59E22C0303;
-	Thu, 10 Sep 2026 00:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101FD2F7EF3
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 00:51:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789001467; cv=none; b=idD4pvJcQ5Y/L43fdMiYVJ5/7lYu/B8qtYwo3Uu/sqgMDBbb6dN2lUwyLqG9M8WI0B5kCA4Zf6HJYTpZj6D0UGvCAYJhyxV5sASv5cpYoKbIaFsSkZxZvPTzd+GjwRdnb+qrZ+EYG8NisXcPBTfyDqcRRN9dUPLxSWP46BELM3M=
+	t=1789001493; cv=none; b=P2P3/RO3YeY5vf7p0+SvVidUqc5fu/vjtEv1Evxpd0xK+aFumcu7EAeArhHii9WN4ZccvjztbZbrf8cxN7Wrdz8vt8BrB4Wr+GMkHVTybrsOixxxk5KEbZAiSmRJbqjqBEqN65qeOGsp+eK5Y7KPLYlBaaIacVMsPtGOxsxl1ME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789001467; c=relaxed/simple;
-	bh=QnwH9Nyr+Yt+9BAGd9IMI9xOAY2xTx8opyUxSozaFoA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=tVg/qwFKFRw0Y+yvh7uf4HwD2C81WonT5gJElduoti79NCxDoTC+jNVFRQRh0pm3gSsAQ1rzrTzi/9MivpyFhKMAEBVMer5e5G8s9Ma0ABMGlxyc2w3E3g1DzBQJbTB67vYbihbkJs7YOYKP/J/0dZpeDKMV8grr3vGjf/qU4Wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=crh1sLL2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789001493; c=relaxed/simple;
+	bh=e4CmGyWXjfTeWfkwiyi+/rIf8mOqJekR3R9IpPk5lHU=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=fm8gSh94YWLG9p20nyAt/LXEq39dExF3g1r3Z0ufPeYSB4z8u/ekLmxQ6LTFGgpA77cLMT4bA35qiZLhYny2wDO1fgvk7KP//M+hb7oAhO6015eD/RJ7OHjHc/Z+RtBzoRT+E/xq+tmFIXV/vl2ct+FP6QxApwnlJBsitHWqt/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v5a8VN4g; arc=none smtp.client-ip=209.85.216.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="crh1sLL2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B7B71F000FF;
-	Thu, 10 Sep 2026 00:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789001466;
-	bh=Hr8TFZ1o7N9pxOcDwN9sn0UzSZSlt0ny5WGc8oTVJjc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=crh1sLL2s0cWYkyvte9fugJRMSS9iKWD4gjQxLHE7EV4gYuIPymwPuJR5kvzSvU7D
-	 92OVpBBTYtYfzHkTj0xRDeiKF+vP4mTKYU96lpTc7brY0MN5DEROuCpjbz+a3FwMkq
-	 oRGuoADfAz9nC9KXNJpjot3xXDIfUCA662w9BcVw3qU1Bn0cAIdApOqFod7dBK8uAr
-	 xBdX+F2OJcUuHbc1MYbmKUEpb9QEt1R1jUJFPvJqkcI35aHlk573clINOz01csb0Cu
-	 M/WW4s4b+RbfnGLALPuGmPHSu80VPdSIhLaZAVpfraZKGvl/gza6n5waxBnj2bTAHT
-	 S7SscPJikAj8g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 938EC380CEC5;
-	Thu, 10 Sep 2026 00:50:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v5a8VN4g"
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-398d7e0f3b4so2106322a91.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 17:51:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1789001490; x=1789606290; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=aRIMJxhn/P9+4wFGBvYMMbxEht2YCax0x/lNJGg/0QU=;
+        b=v5a8VN4goY0d89TPRBQmoE/r8SVhIr1eiO26rtqNd42jG76gU7wAoLD2OWq6bOsgto
+         knhr+eCCXDJvLQhXmtuYAehTzPiyJZsi8XvbRtU1w3YGGn9KSt/IGjHx08L9hBwmxWMW
+         u2x4/s04HbIUbWL0JMiit+G0Ui2p5aS7LDQIvUEdh0qoAndMWRZ2deQEw1SnqsVzAPpM
+         4jRO5U8AbJRTKQBff7/+QezCZ89v1cPyXbHbY2/mY9Xa5m62LxapxIj4GDRbd6dgsgnD
+         Y7t8cCdzM0LiIL/4N4MIs68BhE1y7UfVBTPnS1hyrriPxF9N5A8NJAn5n0+y/YmlPkcR
+         e/Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789001490; x=1789606290;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=aRIMJxhn/P9+4wFGBvYMMbxEht2YCax0x/lNJGg/0QU=;
+        b=llVXhLCdK8QKh1Gnfx9zyCIYS/U0UUkaF8ezZUWHFQ9sG7RiSOe0CYDYGQq06XF6wE
+         GPSKAe7zZP0QCDz3u/gCPqH8YOZeKfOYONZDEb3n0dTBgt1aBdSGrII0mRup4v8JH53s
+         6NEDrNINUQI9w+gPfnj9P0EDFtOnrk54k5ish162Yya5zt5EVt2L9gWpEFf2ybow1HRF
+         MPz9OJ1aUWZhoYQKohVoRGI36HpyTNkziGZvyuSM4L466Gh92HHa1ZeWR8Tq87Vw6oUe
+         5OkMWA15lLPqhH/HFNsxYUCY2rliKfyAErdN+FlG3hkJ/s+eJdYJXFTshSjbltb9LAMm
+         yRbg==
+X-Forwarded-Encrypted: i=1; AKwUvBwW3lwaQkD1p9jeO4mQHuVW06FkzMf+hT18v74CyVBICCS0TDLnrqTohRbgoNNyOwXbdQwJaqa713TKaSazyk8=@vger.kernel.org
+X-Gm-Message-State: AFuF++kkmBbdC6AHeFeIZ4NDOQ2wvGj9ndNAysNBUINfsvPxs45f2cIk
+	oomSKVrFOngarjP7RoAqCW8CncagCCmMTAf9bSBf+IHjWENnrl/EvOumu3iORjNoe+yHi1llyM+
+	9Wxu9Iw==
+X-Received: from pjbmr23.prod.google.com ([2002:a17:90b:2397:b0:39d:64b8:27cc])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1850:b0:38e:bbf1:de3f
+ with SMTP id 98e67ed59e1d1-39d70b4a963mr6666007a91.12.1789001490137; Wed, 09
+ Sep 2026 17:51:30 -0700 (PDT)
+Date: Wed, 9 Sep 2026 17:51:29 -0700
+In-Reply-To: <CALMp9eQQY-Tu3C0QLMe2kxvt=__Fq91dLtzA=fbTDNc_Av7Gew@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3] selftests/net: skip
- srv6_end_dt[4/6]_l3vpn_test.sh if vrftable not available
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178900140438.1126219.5724050827796190289.git-patchwork-notify@kernel.org>
-Date: Thu, 10 Sep 2026 00:50:04 +0000
-References: <20260907100631.1923148-1-alessio.faina@canonical.com>
-In-Reply-To: <20260907100631.1923148-1-alessio.faina@canonical.com>
-To: Alessio Faina <alessio.faina@canonical.com>
-Cc: andrea.mayer@uniroma2.it, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, horms@kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
+Mime-Version: 1.0
+References: <20260824123954.315112-1-zhang_wei@open-hieco.net>
+ <20260824123954.315112-7-zhang_wei@open-hieco.net> <CALMp9eSoLMx6DLH=Ve5_r7y=0EOmxjZgJWE_fLM_CAYxOvJdkA@mail.gmail.com>
+ <f187e4d1-9d31-4e54-a75b-b724ed5d0e9a@open-hieco.net> <CALMp9eQQY-Tu3C0QLMe2kxvt=__Fq91dLtzA=fbTDNc_Av7Gew@mail.gmail.com>
+Message-ID: <aqH_EVgaV-s0pJg1@google.com>
+Subject: Re: [PATCH v5 6/8] KVM: nSVM: Fetch missing DecodeAssist bytes for
+ synthesized #NPF/#PF
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Tina Zhang <zhang_wei@open-hieco.net>, kvm@vger.kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, zhouyanjing@hygon.cn, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Sun, Sep 06, 2026, Jim Mattson wrote:
+> On Sat, Sep 5, 2026 at 11:40=E2=80=AFPM Tina Zhang <zhang_wei@open-hieco.=
+net> wrote:
+> > On 9/5/2026 8:39 AM, Jim Mattson wrote:
+> > > On Mon, Aug 24, 2026 at 5:40=E2=80=AFAM Tina Zhang <zhang_wei@open-hi=
+eco.net> wrote:
+> > >>
+> > >> For a synthesized #NPF, the emulator fetch cache is not guaranteed t=
+o
+> > >> contain the full architected 15-byte DecodeAssist window, e.g. it ma=
+y
+> > >> contain only the bytes needed to decode the instruction.
+> > >>
+> > >> Keep preparation of synthesized state limited to capturing a matchin=
+g
+> > >> emulator fetch cache for #NPF.  When constructing VMCB12, copy those=
+ bytes
+> > >> and fetch any missing tail through L2 guest page tables.  If no emul=
+ator
+> > >> bytes are available, fetch the full window from L2 RIP, including fo=
+r a
+> > >> queued or synthesized #PF VM-Exit.  Stop at a translation fault, rea=
+d
+> > >> failure, non-canonical address, or CS limit overrun.
+> > >>
+> > >> For a non-64-bit L2, truncate each incremented linear address to 32 =
+bits
+> > >> so that a fetch whose CS.base makes it cross the 4GB boundary wraps =
+as
+> > >> required.
+> > >>
+> > >> Do not perform tail or fallback reads for SEV guests.  KVM cannot re=
+ad
+> > >> plaintext instruction bytes from encrypted guest memory, and the exi=
+sting
+> > >> SEV emulation path treats missing hardware DecodeAssist bytes as
+> > >> unavailable instead of decoding guest memory.  For nested SEV, repor=
+t only
+> > >> matching emulator bytes already captured for a synthesized #NPF,
+> > >> potentially a zero instruction-byte count.
+> > >>
+> > >> Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
+> > >> ---
+> > >>   arch/x86/kvm/svm/nested.c | 58 +++++++++++++++++++++++++++++++++++=
++++-
+> > >>   1 file changed, 57 insertions(+), 1 deletion(-)
+> > >>
+> > >> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> > >> index 635ff20cc431..c677ad5df8d6 100644
+> > >> --- a/arch/x86/kvm/svm/nested.c
+> > >> +++ b/arch/x86/kvm/svm/nested.c
+> > >> @@ -87,6 +87,54 @@ static void nested_svm_clear_synthesized_insn_byt=
+es(struct vcpu_svm *svm)
+> > >>          svm->nested.synthesized_insn_bytes.insn_len =3D 0;
+> > >>   }
+> > >>
+> > >> +static u8 nested_svm_fetch_insn_bytes(struct kvm_vcpu *vcpu, u8 *by=
+tes,
+> > >> +                                     u8 count, u8 max_bytes)
+> > >> +{
+> > >> +       struct kvm_pagewalk *gva_walk =3D &vcpu->arch.gva_walk;
+> > >> +       u64 access =3D PFERR_FETCH_MASK;
+> > >> +       gva_t rip =3D kvm_get_linear_rip(vcpu);
+> > >> +       struct x86_exception e;
+> > >> +
+> > >> +       if (kvm_x86_call(get_cpl)(vcpu) =3D=3D 3)
+> > >> +               access |=3D PFERR_USER_MASK;
+> > >> +
+> > >> +       if (!is_64_bit_mode(vcpu)) {
+> > >> +               u32 eip =3D kvm_rip_read(vcpu);
+> > >> +               u32 limit =3D to_svm(vcpu)->vmcb->save.cs.limit;
+> > >> +
+> > >> +               if (eip > limit)
+> > >> +                       return 0;
+> > >> +               max_bytes =3D min_t(u64, max_bytes, (u64)limit - eip=
+ + 1);
+> > >> +       }
+> > >> +
+> > >> +       count =3D min(count, max_bytes);
+> > >
+> > > Ugh. Pasting together two partial reads performed at different times
+> > > is egregious.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+I don't love it either, but IMO (obviously) it's better than potentially re=
+porting
+completely different bytes than what KVM emulated, especially when KVM emul=
+ated
+using the buffer provided by the CPU.
 
-On Mon,  7 Sep 2026 12:06:31 +0200 you wrote:
-> In case iproute2 is older than version 5.11.0, released ~Feb 23, 2021,
-> the vrftable support is not available and the tests
-> contained in the following 2 test files
->  - srv6_end_dt4_l3vpn_test.sh
->  - srv6_end_dt6_l3vpn_test.sh
-> are failing in some kernel backports.
-> This is the result of one of those tests in an unsupported environment:
-> 
-> [...]
+And practically speaking, KVM will always be splicing together two partial =
+reads
+when the instruction splits a page boundary, which is the most common case =
+where
+KVM will even need to read more bytes at this phase.
 
-Here is the summary with links:
-  - [net-next,v3] selftests/net: skip srv6_end_dt[4/6]_l3vpn_test.sh if vrftable not available
-    https://git.kernel.org/netdev/net-next/c/6a64e9d76a79
+> > > This function should read all 15 bytes in one go. That
+> > > pretty much renders the emulator's fetch cache useless, except when i=
+t
+> > > contains the necessary 15 bytes.
+> >
+> > This patch was based on the discussion from the first version of this
+> > series[1].  My understanding from that exchange was that preserving the
+> > bytes used by the emulator and fetching the missing tail later was the
+> > intended approach, as it retains the bytes actually used to decode the
+> > instruction.
+> >
+> > Did I misunderstand the conclusion of that discussion?  If the
+> > preference is now to avoid combining reads performed at different times=
+,
+> > I can change the next version to use the emulator fetch cache only when
+> > it contains the full 15-byte window, and otherwise fetch all 15 bytes i=
+n
+> > one operation.
+> >
+> > [1]
+> > https://lore.kernel.org/kvm/20260629125205.52394-1-zhang_wei@open-hieco=
+.net/T/#m3fa3f64ddd3284b312d3ddb44fd30a2e26708037
+>=20
+> I still don't like it, but Sean overruled me, so I will be quiet now. :)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+You can always appeal to Paolo.  I'm one of the District Courts, Paolo is t=
+he
+Court of Appeals, and Linus is the Supreme Court.  :-D
