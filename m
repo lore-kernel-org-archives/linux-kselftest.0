@@ -1,198 +1,483 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF643C10BA;
-	Thu, 10 Sep 2026 08:31:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DC33AC0E4;
+	Thu, 10 Sep 2026 08:40:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789029100; cv=none; b=bKjvoiffqynHaDHZ9rtsaAIL6EIOB3ODhpjG2XtbQWeBH8L8/vQvadxAmSk0YzpAaOQN94MtfKD1kRLhBiKivBrAt/FEFvtg5ZH3YPblyOvAgUdiAq/gpbKaaQ8W+6AvXewATWO+l91wL+6xFPvSXFgYlg8Tlb79pH8Be27LPAg=
+	t=1789029606; cv=none; b=UF9/U0ge4/hMliL6tSR/VCuriX6xPHrTX768w685TBhNdi0LT3l2dT6TdQAt5Ssa/G4k4LSqUINsrz08zXUc6XGipOldNfz2DUgDqSCiT7dYyh6lHjnlp6iZ8vPTs70RwatCzT7iPOJXpDdT3kaCuoO3nSr7jrrQQnQCyrVlRng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789029100; c=relaxed/simple;
-	bh=CIGQHvLLoACXjfixLkZL3B8Gbv5ycX8kffcfuKagc0E=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=f5KmZBnx/2FDIi8mZmdCStD5o5Aeh9Rm1yaubF2/5aDG95ExMH8pUz7bgLZElBEejF2euRv3Q1Ybl/ju2jAY5G5ykGddLmxhOhoszsYSun10BYp3x1LqmYT6zgveiVbhS6di/KBUt5espLIUmRddENrahdN5o8NjSr0GFWKVJ6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jbs9L774; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789029606; c=relaxed/simple;
+	bh=t7jvF8Iz9GHLv5D97/m/gdB+PMWLEGUx/zfYyzYZq/Y=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mBasqrI9xgcCLEkgZvoSucZaDdW4h698wO/dRNbJ54cUNFN2XIicqh6vsWKuhnZ8vxHdvv+cPplVlvmGYndOTsLQQ0+nEnootPhLGdESbf5bdkIwZBhCDvrBl6y7PvITjbcf6fz0aiaO2kEaatPJX7gNo2Uo8rZgpTWW+FU1HJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UEIVeuRF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jbs9L774"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91E0B1F000FF;
-	Thu, 10 Sep 2026 08:31:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UEIVeuRF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0B8D1F00893;
+	Thu, 10 Sep 2026 08:40:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789029098;
-	bh=PHX2CV6L+xADuSOjNgypR5thAFREjphJZG3812TT6xk=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Jbs9L774dWGD9ZHMlCbeL49FX9vlK2YEyc0hEWEdmTcclKioEhnxT+Pw1LsNoDCmD
-	 qcvDnny9irKur50klFnQDq9WEuGJYCZIQGv0qpGsm5buR0hBQC/04l1gxySODQFoq9
-	 QKEF0dhrqpYKtSDWVha8SSsQQphJAYgczpsjJut5CvxrCzTgq6JgotAQKO2zOKPPK/
-	 yfeu8PCxGg0UPuJhW9VaR8y90OOEIlJFrCdbMX45206oswgm1b394Q4RY7AgOc41b9
-	 iSzhT3MZ5pNJekxuiXqIauGaTJKRqegxGlRI+7DP/h2llV9k0AQZrOxDFJ0T0OcunZ
-	 QGeBC5Sp1lqxQ==
-Subject: Re: [PATCH v7 net-next 7/7] net: ena: Implement gettimexattrs64
- callback for PTP attributes
-From: netdev-bot+sashiko@kernel.org
-To: akiyano@amazon.com
-Cc: davem@davemloft.net, kuba@kernel.org, richardcochran@gmail.com,
- netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- dwmw2@infradead.org, tglx@linutronix.de, mlichvar@redhat.com,
- maciek@machnikowski.net, andrew+netdev@lunn.ch, andrew@lunn.ch,
- cjubran@nvidia.com, guwen@linux.alibaba.com, xuanzhuo@linux.alibaba.com,
- dwmw@amazon.com, ysarna@amazon.com, zorik@amazon.com, matua@amazon.com,
- saeedb@amazon.com, msw@amazon.com, aliguori@amazon.com, nafea@amazon.com,
- evgenys@amazon.com, netanel@amazon.com, alisaidi@amazon.com, benh@amazon.com,
- ndagan@amazon.com, darinzon@amazon.com, evostrov@amazon.com, ofirt@amazon.com,
- amitbern@amazon.com, linux-kselftest@vger.kernel.org,
- linux-doc@vger.kernel.org, shuah@kernel.org, corbet@lwn.net,
- skhan@linuxfoundation.org, horms@kernel.org, bhelgaas@google.com,
- vadim.fedorenko@linux.dev, dwmw@amazon.co.uk
-Date: Thu, 10 Sep 2026 08:31:36 +0000
-Message-ID: <178902909615.219967.17316162800507267391@kernel.org>
-In-Reply-To: <20260909073136.12863-8-akiyano@amazon.com>
-References: <20260909073136.12863-8-akiyano@amazon.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1789029601;
+	bh=PjigoE6nGLfCU3p/r8i4vqMZVR1+c11DMTkFvmh0EH4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=UEIVeuRFa+hvQsz+xqp2nkyBV+pJwI8+ElqDK1L2XJbnyYG89pETB1JplW87obZbE
+	 i9nmWNckvZEjmcv58vI7SRz+ieFugkVVnKQJM8v5R2fiDobcL38N8bZTY3zZxkl9JO
+	 QTo0ulmtdI3TFVcl+fVIjuEhf/HLKQ3IjK4lua9/mL0Kct4wHOHX/eIak6D0bbgdt5
+	 dddvr1GpfG44UmUnPWbD+qbRj0qtFbkMMFupKYVD4Cy1Lp4HjhL96jPBiGNSOos+dF
+	 VonhxAq9gdA3jmni8iz8ZoqGY8ko08PtZ2cPf7SwBf8jvV6qOvecYRGpJOPWEJJvZM
+	 MyRmpMYJetPRg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1x4aK7-00000007A4S-0be4;
+	Thu, 10 Sep 2026 08:39:59 +0000
+Date: Thu, 10 Sep 2026 09:39:58 +0100
+Message-ID: <86wlst7b4x.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Fuad Tabba <tabba@google.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Jack Thomson <jackabt@amazon.com>,
+	Jack Thomson <jackabt.amazon@gmail.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Vincent Donnefort <vdonnefort@google.com>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	Leo Soares Passos <Leo.Bras@arm.com>
+Subject: Re: [PATCH 1/8] KVM: arm64: Propagate and use esr in s2fd when handling guest aborts
+In-Reply-To: <20260825-kvm-arm-prefault-v1-1-befe8947702e@kernel.org>
+References: <20260825-kvm-arm-prefault-v1-0-befe8947702e@kernel.org>
+	<20260825-kvm-arm-prefault-v1-1-befe8947702e@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: ljs@kernel.org, catalin.marinas@arm.com, will@kernel.org, oupton@kernel.org, tabba@google.com, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, corbet@lwn.net, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, jackabt@amazon.com, jackabt.amazon@gmail.com, alexandru.elisei@arm.com, vdonnefort@google.com, aneesh.kumar@kernel.org, seanjc@google.com, imbrenda@linux.ibm.com, Leo.Bras@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider:
+On Tue, 25 Aug 2026 17:00:35 +0100,
+"Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
+> 
+> kvm_handle_guest_abort() establishes a kvm_s2_fault_desc data structure,
+> s2fd, to store and propagate state to either pkvm_mem_abort(), gmem_abort()
+> or user_mem_abort() handlers.
+> 
+> Each of these, however, examines the Exception Syndrome Register (ESR) via
+> s2fd->vcpu.
+> 
+> Introduce an s2fd->esr field to abstract this and propagate it to callers.
+> 
+> The value of this (beyond refactoring) is to be able to later generate
+> faults with a synthetic esr, specifically to implement stage 2 page table
+> pre-faulting.
+> 
+> Abstract esr-specific predicates and helpers to the esr.h header and either
+> have vcpu wrappers call these, or eliminate them if they are not used
+> elsewhere.
+> 
+> Provide kvm_s2_fault_is_[write,exec,perm]() helpers for convenience.
+> 
+> Since kvm_s2_fault_map() either sets perm_fault_granule to the permission
+> fault granule or 0 if not a permission fault, implement
+> kvm_s2_perm_fault_granule() to do this directly.
+> 
+> Abort handlers which use kvm_s2_fault_desc - gmem_abort() and
+> user_mem_abort() - now only reference s2fd->esr and do not look it up in
+> any other way, which makes it safe to pass a synthetic s2fd->esr value to
+> these functions.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Please split this. ESR helpers in one patch, hacking the MMU code to
+use it in another, s2fd->esr stuff last.
 
-- [Medium] ena_phc_gettimexattrs64()
-  (drivers/net/ethernet/amazon/ena/ena_phc.c:57-60) unconditionally…
-- [Low] ena_phc_gettimexattrs64()
-  (drivers/net/ethernet/amazon/ena/ena_phc.c:28-62) is a verbatim…
-
---
-
-net: ena: Implement gettimexattrs64 callback for PTP attributes
-
-Adds ena_phc_gettimexattrs64() to the ENA PHC code and registers it in
-ena_ptp_clock_info so the PTP_SYS_OFFSET_EXTENDED_ATTRS ioctl is supported.
-The new callback reports the device error_bound value and sets the
-corresponding valid bit; other attributes are left unreported.
-
-A couple of questions below.
-
-> diff --git a/drivers/net/ethernet/amazon/ena/ena_phc.c b/drivers/net/ethernet/amazon/ena/ena_phc.c
-> index 2bcb5af564e2..725c36fe3f6e 100644
-> --- a/drivers/net/ethernet/amazon/ena/ena_phc.c
-> +++ b/drivers/net/ethernet/amazon/ena/ena_phc.c
-> @@ -25,6 +25,43 @@ static int ena_phc_feature_enable(struct ptp_clock_info *clock_info,
->  	return -EOPNOTSUPP;
->  }
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> ---
+>  arch/arm64/include/asm/esr.h         | 129 +++++++++++++++++++++++++----------
+>  arch/arm64/include/asm/kvm_emulate.h |  52 ++++----------
+>  arch/arm64/kvm/mmu.c                 |  80 +++++++++++++---------
+>  3 files changed, 156 insertions(+), 105 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
+> index f816f5d77f1a..162e90c832e9 100644
+> --- a/arch/arm64/include/asm/esr.h
+> +++ b/arch/arm64/include/asm/esr.h
+> @@ -437,6 +437,32 @@
+>  #ifndef __ASSEMBLER__
+>  #include <asm/types.h>
 >  
-> +static int ena_phc_gettimexattrs64(struct ptp_clock_info *clock_info,
-> +				   struct timespec64 *ts,
-> +				   struct ptp_system_timestamp *sts,
-> +				   struct ptp_clock_attrs *att)
+> +static inline u8 esr_trap_get_class(unsigned long esr)
+
+nit: there is no notion of trap here. This is simply extracting the EC
+from the ESR. My personal (and wholly unreliable) taste would be to go
+for something like esr_get_ec().
+
+I appreciate that you are simply propagating the names used in KVM,
+but they were pretty poor the first place, and have only been kept to
+avoid churn.
+
+Also, 'inline' is a bit of a problem given that the callers are
+__always_inline for good reasons (see 5c37f1ae1c3358).
+
 > +{
-> +	struct ena_phc_info *phc_info =
-> +		container_of(clock_info, struct ena_phc_info, clock_info);
-> +	u32 error_bound_nsec;
-> +	unsigned long flags;
-> +	u64 timestamp_nsec;
-> +	int rc;
-> +
-> +	spin_lock_irqsave(&phc_info->lock, flags);
-> +
-> +	ptp_read_system_prets(sts);
-> +
-> +	rc = ena_com_phc_get_timestamp(phc_info->adapter->ena_dev,
-> +				       &timestamp_nsec,
-> +				       &error_bound_nsec);
-> +
-> +	ptp_read_system_postts(sts);
-> +
-> +	spin_unlock_irqrestore(&phc_info->lock, flags);
-> +
-> +	if (rc)
-> +		return rc;
-> +
-> +	*ts = ns_to_timespec64(timestamp_nsec);
-> +
-
-[Severity: Low]
-This isn't a bug, but the body above is a verbatim copy of
-ena_phc_gettimex64(): same container_of(), same
-spin_lock_irqsave(&phc_info->lock, flags) / ptp_read_system_prets() /
-ena_com_phc_get_timestamp() / ptp_read_system_postts() /
-spin_unlock_irqrestore() sequence, same rc handling and same
-*ts = ns_to_timespec64(timestamp_nsec).
-
-Since ena_phc_gettimexattrs64() already tolerates att == NULL (and is in
-fact called with sts == NULL and att == NULL from ptp_clock_gettime() in
-drivers/ptp/ptp_clock.c), could ena_phc_gettimex64() simply become:
-
-	static int ena_phc_gettimex64(struct ptp_clock_info *clock_info,
-				      struct timespec64 *ts,
-				      struct ptp_system_timestamp *sts)
-	{
-		return ena_phc_gettimexattrs64(clock_info, ts, sts, NULL);
-	}
-
-Passing a non-NULL error_bound to ena_com_phc_get_timestamp() has no side
-effect beyond storing the value, since that function guards the store with
-if (error_bound). Keeping two copies of the PHC doorbell/poll sequence means
-a later fix can land in only one of them.
-
-> +	if (att) {
-> +		att->error_bound = error_bound_nsec;
-> +		att->valid |= PTP_ATTRS_VALID_ERROR_BOUND;
-> +	}
-
-[Severity: Medium]
-Is PTP_ATTRS_VALID_ERROR_BOUND being advertised here without a device
-capability gate?
-
-The only capability check in the driver is in ena_com_phc_config(), which
-accepts:
-
-	/* Supporting only PHC V0 (readless mode with error bound) */
-	if (get_feat_resp.u.phc.version != ENA_ADMIN_PHC_FEATURE_VERSION_0) {
-
-ENA_ADMIN_PHC_FEATURE_VERSION_0 is 0, which is the same numeric value that
-pre-series firmware reports for the old name ENA_ADMIN_PHC_TYPE_READLESS.
-The preceding commit only renames u8 type to u8 version and re-documents 0
-as "readless with error_bound"; it also carves u32 error_bound out of the
-previously reserved (must-be-zero) bytes of struct ena_admin_phc_resp.
-
-So can a PHC-capable device whose firmware predates error_bound still pass
-that version check, leave the DMA bytes at zero, and have
-ena_com_phc_get_timestamp() copy that zero out:
-
-	/* PHC timestamp value is returned to the caller */
-	*timestamp = resp->timestamp;
-	if (error_bound)
-		*error_bound = resp->error_bound;
-
-In that case userspace receives error_bound = 0 ns with the validity bit
-asserted, i.e. it is told the timestamp is exact, rather than being told the
-attribute is unavailable, which is what the valid bitmask exists to express.
-
-The device-side error signal does not seem to help here either:
-ENA_ADMIN_PHC_ERROR_FLAG_ERROR_BOUND (checked via ENA_PHC_ERROR_FLAGS) is a
-new flag that error_bound-unaware firmware would never set.
-
-Would it make sense to gate the valid bit on a distinct feature version
-value or an explicitly advertised device bit? Alternatively, if every
-PHC-capable ENA firmware that reports version 0 does populate error_bound
-and no older firmware exists in the field, could the commit message state
-that?
-
-> +
-> +	return 0;
+> +	return ESR_ELx_EC(esr);
 > +}
 > +
->  static int ena_phc_gettimex64(struct ptp_clock_info *clock_info,
->  			      struct timespec64 *ts,
->  			      struct ptp_system_timestamp *sts)
+> +static inline bool esr_trap_is_iabt(unsigned long esr)
+> +{
+> +	return esr_trap_get_class(esr) == ESR_ELx_EC_IABT_LOW;
+> +}
+> +
+> +static inline bool esr_abt_is_s1ptw(unsigned long esr)
+> +{
+> +	return esr & ESR_ELx_S1PTW;
+> +}
+> +
+> +/* Always check for S1PTW *before* using this. */
+> +static inline bool esr_dabt_is_write(unsigned long esr)
+> +{
+> +	return esr & ESR_ELx_WNR;
+> +}
+> +
+> +static inline bool esr_dabt_is_cm(unsigned long esr)
+> +{
+> +	return esr & ESR_ELx_CM;
+> +}
+> +
+>  static inline unsigned long esr_brk_comment(unsigned long esr)
+>  {
+>  	return esr & ESR_ELx_BRK64_ISS_COMMENT_MASK;
+> @@ -460,75 +486,104 @@ static inline bool esr_is_ubsan_brk(unsigned long esr)
+>  	return (esr_brk_comment(esr) & ~UBSAN_BRK_MASK) == UBSAN_BRK_IMM;
+>  }
+>  
+> +static inline u8 esr_fsc_get_fault(unsigned long esr)
+> +{
+> +	return esr & ESR_ELx_FSC;
+> +}
+> +
+>  static inline bool esr_fsc_is_translation_fault(unsigned long esr)
+>  {
+> -	esr = esr & ESR_ELx_FSC;
+> +	const u8 fault = esr_fsc_get_fault(esr);
+>  
+> -	return (esr == ESR_ELx_FSC_FAULT_L(3)) ||
+> -	       (esr == ESR_ELx_FSC_FAULT_L(2)) ||
+> -	       (esr == ESR_ELx_FSC_FAULT_L(1)) ||
+> -	       (esr == ESR_ELx_FSC_FAULT_L(0)) ||
+> -	       (esr == ESR_ELx_FSC_FAULT_L(-1));
+> +	return (fault == ESR_ELx_FSC_FAULT_L(3)) ||
+> +	       (fault == ESR_ELx_FSC_FAULT_L(2)) ||
+> +	       (fault == ESR_ELx_FSC_FAULT_L(1)) ||
+> +	       (fault == ESR_ELx_FSC_FAULT_L(0)) ||
+> +	       (fault == ESR_ELx_FSC_FAULT_L(-1));
 
-[ ... ]
+I really think we could do without this sort of churn.
+
+>  }
+>  
+>  static inline bool esr_fsc_is_permission_fault(unsigned long esr)
+>  {
+> -	esr = esr & ESR_ELx_FSC;
+> +	const u8 fault = esr_fsc_get_fault(esr);
+>  
+> -	return (esr == ESR_ELx_FSC_PERM_L(3)) ||
+> -	       (esr == ESR_ELx_FSC_PERM_L(2)) ||
+> -	       (esr == ESR_ELx_FSC_PERM_L(1)) ||
+> -	       (esr == ESR_ELx_FSC_PERM_L(0));
+> +	return (fault == ESR_ELx_FSC_PERM_L(3)) ||
+> +	       (fault == ESR_ELx_FSC_PERM_L(2)) ||
+> +	       (fault == ESR_ELx_FSC_PERM_L(1)) ||
+> +	       (fault == ESR_ELx_FSC_PERM_L(0));
+>  }
+>  
+>  static inline bool esr_fsc_is_access_flag_fault(unsigned long esr)
+>  {
+> -	esr = esr & ESR_ELx_FSC;
+> +	const u8 fault = esr_fsc_get_fault(esr);
+>  
+> -	return (esr == ESR_ELx_FSC_ACCESS_L(3)) ||
+> -	       (esr == ESR_ELx_FSC_ACCESS_L(2)) ||
+> -	       (esr == ESR_ELx_FSC_ACCESS_L(1)) ||
+> -	       (esr == ESR_ELx_FSC_ACCESS_L(0));
+> +	return (fault == ESR_ELx_FSC_ACCESS_L(3)) ||
+> +	       (fault == ESR_ELx_FSC_ACCESS_L(2)) ||
+> +	       (fault == ESR_ELx_FSC_ACCESS_L(1)) ||
+> +	       (fault == ESR_ELx_FSC_ACCESS_L(0));
+>  }
+>  
+>  static inline bool esr_fsc_is_excl_atomic_fault(unsigned long esr)
+>  {
+> -	esr = esr & ESR_ELx_FSC;
+> -
+> -	return esr == ESR_ELx_FSC_EXCL_ATOMIC;
+> +	return esr_fsc_get_fault(esr) == ESR_ELx_FSC_EXCL_ATOMIC;
+>  }
+>  
+>  static inline bool esr_fsc_is_addr_sz_fault(unsigned long esr)
+>  {
+> -	esr &= ESR_ELx_FSC;
+> +	const u8 fault = esr_fsc_get_fault(esr);
+> +
+> +	return (fault == ESR_ELx_FSC_ADDRSZ_L(3)) ||
+> +	       (fault == ESR_ELx_FSC_ADDRSZ_L(2)) ||
+> +	       (fault == ESR_ELx_FSC_ADDRSZ_L(1)) ||
+> +	       (fault == ESR_ELx_FSC_ADDRSZ_L(0)) ||
+> +	       (fault == ESR_ELx_FSC_ADDRSZ_L(-1));
+> +}
+> +
+> +static inline bool esr_abt_is_exec_fault(unsigned long esr)
+> +{
+> +	return esr_trap_is_iabt(esr) && !esr_abt_is_s1ptw(esr);
+> +}
+>  
+> -	return (esr == ESR_ELx_FSC_ADDRSZ_L(3))	||
+> -	       (esr == ESR_ELx_FSC_ADDRSZ_L(2))	||
+> -	       (esr == ESR_ELx_FSC_ADDRSZ_L(1)) ||
+> -	       (esr == ESR_ELx_FSC_ADDRSZ_L(0))	||
+> -	       (esr == ESR_ELx_FSC_ADDRSZ_L(-1));
+> +static inline bool esr_abt_is_sea(unsigned long esr)
+> +{
+> +	const u8 fault = esr_fsc_get_fault(esr);
+> +
+> +	switch (fault) {
+> +	case ESR_ELx_FSC_EXTABT:
+> +	case ESR_ELx_FSC_SEA_TTW(-1) ... ESR_ELx_FSC_SEA_TTW(3):
+> +	case ESR_ELx_FSC_SECC:
+> +	case ESR_ELx_FSC_SECC_TTW(-1) ... ESR_ELx_FSC_SECC_TTW(3):
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+> +/* Not valid for negative levels. */
+> +static inline u64 esr_fsc_get_level(unsigned long esr)
+> +{
+> +	return esr & ESR_ELx_FSC_LEVEL;
+>  }
+
+If that's such an unreliable helper, why is it exposed to everyone
+instead of being kept local to the single caller?
+
+>  
+>  static inline bool esr_fsc_is_sea_ttw(unsigned long esr)
+>  {
+> -	esr = esr & ESR_ELx_FSC;
+> +	const u8 fault = esr_fsc_get_fault(esr);
+>  
+> -	return (esr == ESR_ELx_FSC_SEA_TTW(3)) ||
+> -	       (esr == ESR_ELx_FSC_SEA_TTW(2)) ||
+> -	       (esr == ESR_ELx_FSC_SEA_TTW(1)) ||
+> -	       (esr == ESR_ELx_FSC_SEA_TTW(0)) ||
+> -	       (esr == ESR_ELx_FSC_SEA_TTW(-1));
+> +	return (fault == ESR_ELx_FSC_SEA_TTW(3)) ||
+> +	       (fault == ESR_ELx_FSC_SEA_TTW(2)) ||
+> +	       (fault == ESR_ELx_FSC_SEA_TTW(1)) ||
+> +	       (fault == ESR_ELx_FSC_SEA_TTW(0)) ||
+> +	       (fault == ESR_ELx_FSC_SEA_TTW(-1));
+>  }
+>  
+>  static inline bool esr_fsc_is_secc_ttw(unsigned long esr)
+>  {
+> -	esr = esr & ESR_ELx_FSC;
+> +	const u8 fault = esr_fsc_get_fault(esr);
+>  
+> -	return (esr == ESR_ELx_FSC_SECC_TTW(3)) ||
+> -	       (esr == ESR_ELx_FSC_SECC_TTW(2)) ||
+> -	       (esr == ESR_ELx_FSC_SECC_TTW(1)) ||
+> -	       (esr == ESR_ELx_FSC_SECC_TTW(0)) ||
+> -	       (esr == ESR_ELx_FSC_SECC_TTW(-1));
+> +	return (fault == ESR_ELx_FSC_SECC_TTW(3)) ||
+> +	       (fault == ESR_ELx_FSC_SECC_TTW(2)) ||
+> +	       (fault == ESR_ELx_FSC_SECC_TTW(1)) ||
+> +	       (fault == ESR_ELx_FSC_SECC_TTW(0)) ||
+> +	       (fault == ESR_ELx_FSC_SECC_TTW(-1));
+>  }
+>  
+>  /* Indicate whether ESR.EC==0x1A is for an ERETAx instruction */
+> diff --git a/arch/arm64/include/asm/kvm_emulate.h b/arch/arm64/include/asm/kvm_emulate.h
+> index a3c1928bdf74..811d7a68a9f9 100644
+> --- a/arch/arm64/include/asm/kvm_emulate.h
+> +++ b/arch/arm64/include/asm/kvm_emulate.h
+> @@ -411,18 +411,13 @@ static __always_inline int kvm_vcpu_dabt_get_rd(const struct kvm_vcpu *vcpu)
+>  
+>  static __always_inline bool kvm_vcpu_abt_iss1tw(const struct kvm_vcpu *vcpu)
+>  {
+> -	return !!(kvm_vcpu_get_esr(vcpu) & ESR_ELx_S1PTW);
+> +	return esr_abt_is_s1ptw(kvm_vcpu_get_esr(vcpu));
+>  }
+>  
+>  /* Always check for S1PTW *before* using this. */
+>  static __always_inline bool kvm_vcpu_dabt_iswrite(const struct kvm_vcpu *vcpu)
+>  {
+> -	return kvm_vcpu_get_esr(vcpu) & ESR_ELx_WNR;
+> -}
+> -
+> -static inline bool kvm_vcpu_dabt_is_cm(const struct kvm_vcpu *vcpu)
+> -{
+> -	return !!(kvm_vcpu_get_esr(vcpu) & ESR_ELx_CM);
+> +	return esr_dabt_is_write(kvm_vcpu_get_esr(vcpu));
+>  }
+>  
+>  static __always_inline unsigned int kvm_vcpu_dabt_get_as(const struct kvm_vcpu *vcpu)
+> @@ -438,17 +433,12 @@ static __always_inline bool kvm_vcpu_trap_il_is32bit(const struct kvm_vcpu *vcpu
+>  
+>  static __always_inline u8 kvm_vcpu_trap_get_class(const struct kvm_vcpu *vcpu)
+>  {
+> -	return ESR_ELx_EC(kvm_vcpu_get_esr(vcpu));
+> +	return esr_trap_get_class(kvm_vcpu_get_esr(vcpu));
+>  }
+>  
+>  static inline bool kvm_vcpu_trap_is_iabt(const struct kvm_vcpu *vcpu)
+>  {
+> -	return kvm_vcpu_trap_get_class(vcpu) == ESR_ELx_EC_IABT_LOW;
+> -}
+> -
+> -static inline bool kvm_vcpu_trap_is_exec_fault(const struct kvm_vcpu *vcpu)
+> -{
+> -	return kvm_vcpu_trap_is_iabt(vcpu) && !kvm_vcpu_abt_iss1tw(vcpu);
+> +	return esr_trap_is_iabt(kvm_vcpu_get_esr(vcpu));
+>  }
+>  
+>  static __always_inline u8 kvm_vcpu_trap_get_fault(const struct kvm_vcpu *vcpu)
+> @@ -468,26 +458,9 @@ bool kvm_vcpu_trap_is_translation_fault(const struct kvm_vcpu *vcpu)
+>  	return esr_fsc_is_translation_fault(kvm_vcpu_get_esr(vcpu));
+>  }
+>  
+> -static inline
+> -u64 kvm_vcpu_trap_get_perm_fault_granule(const struct kvm_vcpu *vcpu)
+> -{
+> -	unsigned long esr = kvm_vcpu_get_esr(vcpu);
+> -
+> -	BUG_ON(!esr_fsc_is_permission_fault(esr));
+> -	return BIT(ARM64_HW_PGTABLE_LEVEL_SHIFT(esr & ESR_ELx_FSC_LEVEL));
+> -}
+> -
+>  static __always_inline bool kvm_vcpu_abt_issea(const struct kvm_vcpu *vcpu)
+>  {
+> -	switch (kvm_vcpu_trap_get_fault(vcpu)) {
+> -	case ESR_ELx_FSC_EXTABT:
+> -	case ESR_ELx_FSC_SEA_TTW(-1) ... ESR_ELx_FSC_SEA_TTW(3):
+> -	case ESR_ELx_FSC_SECC:
+> -	case ESR_ELx_FSC_SECC_TTW(-1) ... ESR_ELx_FSC_SECC_TTW(3):
+> -		return true;
+> -	default:
+> -		return false;
+> -	}
+> +	return esr_abt_is_sea(kvm_vcpu_get_esr(vcpu));
+>  }
+>  
+>  static __always_inline int kvm_vcpu_sys_get_rt(struct kvm_vcpu *vcpu)
+> @@ -496,9 +469,9 @@ static __always_inline int kvm_vcpu_sys_get_rt(struct kvm_vcpu *vcpu)
+>  	return ESR_ELx_SYS64_ISS_RT(esr);
+>  }
+>  
+> -static inline bool kvm_is_write_fault(struct kvm_vcpu *vcpu)
+> +static inline bool esr_abt_is_write_fault(unsigned long esr)
+>  {
+> -	if (kvm_vcpu_abt_iss1tw(vcpu)) {
+> +	if (esr_abt_is_s1ptw(esr)) {
+>  		/*
+>  		 * Only a permission fault on a S1PTW should be
+>  		 * considered as a write. Otherwise, page tables baked
+> @@ -511,13 +484,18 @@ static inline bool kvm_is_write_fault(struct kvm_vcpu *vcpu)
+>  		 * first), then a permission fault to allow the flags
+>  		 * to be set.
+>  		 */
+> -		return kvm_vcpu_trap_is_permission_fault(vcpu);
+> +		return esr_fsc_is_permission_fault(esr);
+>  	}
+>  
+> -	if (kvm_vcpu_trap_is_iabt(vcpu))
+> +	if (esr_trap_is_iabt(esr))
+>  		return false;
+>  
+> -	return kvm_vcpu_dabt_iswrite(vcpu);
+> +	return esr_dabt_is_write(esr);
+> +}
+> +
+> +static inline bool kvm_is_write_fault(struct kvm_vcpu *vcpu)
+> +{
+> +	return esr_abt_is_write_fault(kvm_vcpu_get_esr(vcpu));
+>  }
+>  
+>  static inline unsigned long kvm_vcpu_get_mpidr_aff(struct kvm_vcpu *vcpu)
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index 74e7e7f7564c..30d605e87b01 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -1603,12 +1603,38 @@ struct kvm_s2_fault_desc {
+>  	struct kvm_s2_trans	*nested;
+>  	struct kvm_memory_slot	*memslot;
+>  	unsigned long		hva;
+> +	unsigned long		esr;
+>  };
+>  
+> +static bool kvm_s2_fault_is_perm(const struct kvm_s2_fault_desc *s2fd)
+> +{
+> +	return esr_fsc_is_permission_fault(s2fd->esr);
+> +}
+> +
+> +static bool kvm_s2_fault_is_exec(const struct kvm_s2_fault_desc *s2fd)
+> +{
+> +	return esr_abt_is_exec_fault(s2fd->esr);
+> +}
+> +
+> +static bool kvm_s2_fault_is_write(const struct kvm_s2_fault_desc *s2fd)
+> +{
+> +	return esr_abt_is_write_fault(s2fd->esr);
+> +}
+> +
+> +static u64 kvm_s2_perm_fault_granule(const struct kvm_s2_fault_desc *s2fd)
+> +{
+> +	u64 level;
+> +
+> +	if (!kvm_s2_fault_is_perm(s2fd))
+> +		return 0;
+> +	level = esr_fsc_get_level(s2fd->esr);
+> +	return BIT(ARM64_HW_PGTABLE_LEVEL_SHIFT(level));
+> +}
+> +
+>  static int gmem_abort(const struct kvm_s2_fault_desc *s2fd)
+>  {
+>  	bool write_fault, exec_fault;
+> -	bool perm_fault = kvm_vcpu_trap_is_permission_fault(s2fd->vcpu);
+> +	const bool perm_fault = kvm_s2_fault_is_perm(s2fd);
+
+Please don't randomly introduce const local variables. I understand
+the benefit, but *if* we want to go down that road, then we do it for
+all the predicates, as a separate series, because this obviously
+applies to {exec,write}_fault as well.
+
+Thanks,
+
+	M.
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909073136.12863-1-akiyano%40amazon.com
+Without deviation from the norm, progress is not possible.
