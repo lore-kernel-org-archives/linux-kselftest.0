@@ -1,214 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f34.google.com (mail-oo2-f34.google.com [74.125.231.162])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E68F93AE6E4;
-	Thu, 10 Sep 2026 23:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63FA849E12D
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 23:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.162
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789083973; cv=none; b=dqAGxErsG9BWDVjdZfE1STF7ybkRu3qGYkoIEHXAcfYDTcWwJEMV8kX4vrBGXQZ0GrLBdhSKfRCMsMuV6cHPY/xPSB+8M6VlmMQK8NmvSpdO4MYxpzwnvspKVwothuzYfj+wzRVbaNUqKUEynrTNE008FD6Fq8mFDw8+8mhpKz8=
+	t=1789083979; cv=none; b=PpH3uUXzeRB4DXZC2y13yy1TxnRLmHvZeJVo2i/glx1dC8rC8B30a/CHRSZKrKUUwJex+hk9EVl6xL+qjs9VrAK3KTk7NcCyuKN8F/EL75ysifA6yYvcKXWaHyU6q8rnxCMJJffTscDQfBiOYIG28LajwdyQCyWhFyZTgW2cTgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789083973; c=relaxed/simple;
-	bh=4WFG+/UlqFWZ24zRlzpdVHPzPBt1qtj5NIWeQ55LgzA=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Ydtf4QCk7mOygFYPF6jZmQXzB5cOKrbJLu2jLgSadnGE7XeGtZeg1mxyYfST4hW/EgSxvCPfnG/oCs2CsTnIZEvlSSSeou6lZS9gV9q2h9YlLjNQT7OSqmfPn7mQjLpWsPJ66FH9JEryXtZqMn6EIe2NQ/IFa79w+BJHiAQCz0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oj1dAled; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789083979; c=relaxed/simple;
+	bh=wtS7XfPu0s7QNj82EYOO3AJRyw/OaqisjEjeM1X++/s=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ULrHpZekMVfrGgXs3nbfbdv7nn0LxkJGw+/dNxjNPLPKZWJrUmRIDzzSpLMKOjV1U7CIGhcf2Kr4aVtuGJ+1TQgJCBYYNX7s7HIE8t+FcDwkOF2v5cVv8c5NiV2C7mhtHQQxUJq82JuUWqrGpMVFYWiNdnX/Ly8AvfVmQX5HUsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VoT1jAzF; arc=none smtp.client-ip=74.125.231.162
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oj1dAled"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E53A31F000FF;
-	Thu, 10 Sep 2026 23:46:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789083966;
-	bh=bKin1QGY55AdPgTixeORacbQDYMT7clJ8zzHZH3TRxU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Oj1dAledzlSEwNYwopD1K06wGLKiF/sVSFe7ThSheP5BfClxudH7mPJ5bxT8n2qyJ
-	 /xiOWxQz4V+bpbMHaqz4nao5+MAGYJirq19/A1lq7pI/TzhNLlqUoydth5ctavc24U
-	 R9VJHgsdhg+IPSZ3g9PXrhO/ekK3Glh03jZrPOJFueHPW9SqWKBRZ0taUQJw/EuwTE
-	 JBssvdhxwD+DNHhVoCFWEIZrnzKhrc1BxUesEJF/biM8WPXW4+0Qii54EDaEcEn30s
-	 VG7RjDWG4JXwz8QOOdBPAhhWvVs2RbEfto/ebdlAcV7VXmIcjEatcuxejOHnoKaFq7
-	 zdOA97CgNAo7Q==
-Subject: Re: [PATCH net v4 7/7] selftests: drv-net: Add VLAN test
-From: netdev-bot+sashiko@kernel.org
-To: ovidiu.panait.rb@renesas.com
-Cc: maxime.chevallier@bootlin.com, recv.jo@gmail.com, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, shuah@kernel.org,
- joabreu@synopsys.com, yi.fang.gan@intel.com, jun.ann.lai@intel.com,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org
-Date: Thu, 10 Sep 2026 23:46:05 +0000
-Message-ID: <178908396551.219967.6360903882566438769@kernel.org>
-In-Reply-To: <20260908164309.59282-8-ovidiu.panait.rb@renesas.com>
-References: <20260908164309.59282-8-ovidiu.panait.rb@renesas.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VoT1jAzF"
+Received: by mail-oo2-f34.google.com with SMTP id 46e09a7af769-80032c08611so263970a34.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 16:46:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789083977; x=1789688777; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=0Upxo+7rV5K9D2K97LlL1BYgX8SH4f54xRCJJNuV6UM=;
+        b=VoT1jAzFsIvrO5kWJU2Iu68ZXSDF8EQ07ug1D2mqKmcEcXzNZI7F1b8A7JFO9+8Uhf
+         gkJ3ZoYsV35Sy3PZDFZBbZzDz0C/sWiE7j7c9wlFFjlgxNTk9ARrl+skjoBgYSU98lWP
+         50hRN8j7q1nZTAS8dWbxSrJ6bv7qsKHVDr5a5zEMbMTSgrPDdELOMUT/h2zhSICLrFPB
+         wtjR2J+tt/ncujh+GQu7VOp7RoSoLYDxmHYC1DcxnxHV1B9ZJ3N1W3/U5TSmK7N/AijT
+         IoFy9pP5hw5vgZ6i7alcspJNkRW32/lZ7i8vnO6no87KnNQn4WX6tQ3OI3LgIHQdj2+Q
+         Pj7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789083977; x=1789688777;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=0Upxo+7rV5K9D2K97LlL1BYgX8SH4f54xRCJJNuV6UM=;
+        b=gAJksAv5ncAybEKDrg95Pw8/PMXNzdiuFM/zZNlv51zbFUtP73FCJUpx3lgo8UOZYj
+         7+C9q+Tu/MbWl7lEvc8qi718r1qEoUlJpXWci4h5UBP13Bs+hdy1QBmKcWCI4NOTSnuB
+         ELcP2rRfPog9WW0ADJuhr927jgcJHafbxaZgU9MfpDYj8YWPl2BXjGRHqC+Q7GmbZri9
+         Egcz60cojx9FI1wX9MqknABvNfYO+1LC00wk2grXE8lW2qqhze1rgcdVuIKhs2RNOZ0s
+         /IAMBbgCnbGfkOjVJXN0MCAgC+TWpoVjYAjfwdGvxvMvOhiDgnAWEx7ksp6EGzFeYr3R
+         mFKw==
+X-Forwarded-Encrypted: i=1; AKwUvByeFSNNp37qicXHEV2Dw/m0B76XB0qQrsRdmFJjjgXFEYp09lv8ByOfnqMQ8B9y7kBJovB1tpxg4Tu/CDMqw5A=@vger.kernel.org
+X-Gm-Message-State: AFuF++m1iIlHtaoMO3h7QTTSBMnRKT8A+fkttrtNmXLPkFpd9NzA7Cdx
+	g8Hzcj5gT8al0y6ZlnqLu7VR62wKmMwMA3GoEqRQnrNERHrbTyxicDHz
+X-Gm-Gg: AYBFou0UMW2ZiNWH4BXHxG9juNHKh1lZkxnEEEBK3fWy2y+YksGUN7qM6TiQUSyemJD
+	pHc7UbNBtCOsACXLewrQr4L7SCDKtMA/c6ki4MOcurL5iu53NOVzArujIWymsrHk4BrIPTPEwqO
+	rwczm5UIfZT4UlJ2cRXnri6y6WqffcJ+dG8YIC09yG1Nua+aFE7iQffpWnDOTL8tciHiyvvd7/c
+	zJtSlpF8yUaCle5zYYQ5AGvYRBXujxYG8u9zw8lWUSlJ4TA02MgT0HHOU1WqQW9IdhhbSJvsjQ6
+	/1JYkuk/vl0tUyH8QkX9FabwmKOHoY5yiym/Bn0JMjRRoAS4N6GxgXmcRnzj9HVVERm5ZH3esUL
+	MKzcC8tVopcyesEwNADCllm2N69uSXPlMiDUqwJaU4xCbJa8pivecD9A5bllBrtBMwa1pL2kR1f
+	h/ajqt/k7QmYl4abAUBGudJQMhZeMNp09oNpQ9VEbdbdFRXg02BHkQmh3O4OZLK0uWG1az
+X-Received: by 2002:a05:6830:43a8:b0:7e6:8955:c52d with SMTP id 46e09a7af769-803fca19150mr1910314a34.5.1789083976972;
+        Thu, 10 Sep 2026 16:46:16 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:72::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-803f59e04a0sm914483a34.8.2026.09.10.16.46.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2026 16:46:16 -0700 (PDT)
+From: Daniel Zahka <daniel.zahka@gmail.com>
+Subject: [PATCH net 0/2] net: psp: avoid conflicts with skb->decrypted and
+ sk_validate_xmit_skb()
+Date: Thu, 10 Sep 2026 16:46:03 -0700
+Message-Id: <20260910-psp-ktls-fix-v1-0-e3f30aaeca4e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADtBo2oC/x2MWwqAIBAAryL73YJJD+wq0YfkVkth4koE0d2TP
+ mdg5gGhxCQwqAcSXSx8hgJ1pWDeXFgJ2RcGo02nrbYYJeKeD8GFb2x650zvbdsuBkoSExX970Y
+ IlGF63w+ME7XqYwAAAA==
+To: Eric Dumazet <edumazet@google.com>, 
+ Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>
+Cc: Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-Mailer: b4 0.13.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider:
+Sashiko's review of commit da630d1da2b1 ("netdevsim: psp: drop tx key
+ops") [1] showed that there is a hazard between psp and offloaded tls,
+where both can clobber what the other set in the sk_validate_xmit_skb
+callback.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+It was discussed further on the mailing list [2], and it was pointed out
+that there are conflicts with psp and non-offloaded tls both using the
+skb->decrypted bit.
 
-- [Medium] vlan.py's 802.1ad/QinQ matrix never requests the one feature
-  combination in which the QinQ mis-stripping bug the commit says it…
-- [Low] test() calls cfg.require_ipver("4")
-  (tools/testing/selftests/drivers/net/hw/vlan.py:94) although the test…
+The simplest fix is to make psp and tls mutually exclusive. This series
+goes a bit further and makes psp exclusive with all TCP ULPs. The PSP
+implementation that we have is not designed to be used with any TCP ULP,
+so don't allow a socket to have state for both.
 
---
+[1]: https://sashiko.dev/#/patchset/20260903-psp-prep-v1-0-d47e9c4c375d%40gmail.com 
+[2]: https://lore.kernel.org/netdev/20260903-psp-prep-v1-0-d47e9c4c375d@gmail.com/
 
-selftests: drv-net: Add VLAN test
+Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
+---
+Daniel Zahka (2):
+      net: psp: avoid conflicts with skb->decrypted and sk_validate_xmit_skb()
+      selftests: drv-net: psp: test PSP and TCP ULP mutual exclusion
 
-Adds tools/testing/selftests/drivers/net/hw/vlan.py, which pings over
-802.1q, 802.1ad and QinQ VLAN interfaces with hardware RX VLAN stripping
-toggled on and off, plus the Makefile and config entries for it.
+ include/net/sock.h                         | 11 +++++++
+ net/core/sock.c                            |  7 +++++
+ net/ipv4/tcp_ulp.c                         |  4 +++
+ net/psp/psp_sock.c                         |  4 +++
+ tools/testing/selftests/drivers/net/config |  1 +
+ tools/testing/selftests/drivers/net/psp.py | 46 ++++++++++++++++++++++++++++++
+ 6 files changed, 73 insertions(+)
+---
+base-commit: 78445023439506ebd83b86d40b1e428a3b309d4a
+change-id: 20260909-psp-ktls-fix-47aa27d955f2
 
-A couple of questions about the variant matrix and the environment
-requirement below.
-
-> diff --git a/tools/testing/selftests/drivers/net/hw/vlan.py b/tools/testing/selftests/drivers/net/hw/vlan.py
-> new file mode 100755
-> index 000000000000..61fa452b95bd
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/net/hw/vlan.py
-> @@ -0,0 +1,112 @@
-> +#!/usr/bin/env python3
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +"""
-> +VLAN tests.
-> +
-> +Validates that ping traffic is sent and received correctly over 802.1q
-> +and 802.1ad VLAN interfaces, with hardware RX VLAN stripping enabled and
-> +disabled on the local interface.
-> +
-
-[ ... ]
-
-> +def _vlan_setup(base, addr, outer_proto, inner_proto, host=None):
-> +    """Create VLAN interfaces on base and set an IP on the innermost one."""
-> +
-> +    _vlan_add(base, OUTER_DEV, outer_proto, OUTER_VID, host=host)
-> +    if inner_proto:
-> +        _vlan_add(OUTER_DEV, INNER_DEV, inner_proto, INNER_VID, host=host)
-> +
-> +    dev = INNER_DEV if inner_proto else OUTER_DEV
-> +    ip(f"addr add {addr}/24 dev {dev}", host=host)
-> +
-> +
-> +def _setup(cfg, outer_proto, inner_proto, hw_strip):
-> +    """Configure VLAN stripping and create the VLAN interfaces."""
-> +
-> +    feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
-> +    feats = {"rx-vlan-offload": hw_strip}
-> +    if outer_proto == "802.1ad":
-> +        feats["rx-vlan-stag-hw-parse"] = hw_strip
-> +    set_ethtool_feat(cfg.ifname, feat, feats)
-
-[Severity: Medium]
-
-Does this combination actually reach the QinQ mis-stripping case the commit
-message says the test aims to catch?
-
-In _setup() both rx-vlan-offload and rx-vlan-stag-hw-parse are driven to the
-same hw_strip value, and _vlan_variants() only yields all-on and all-off
-combinations. The combination rx-vlan-offload=on with
-rx-vlan-stag-hw-parse=off is never requested.
-
-On a device where NETIF_F_HW_VLAN_STAG_RX is fixed off, set_ethtool_feat()
-raises before running any ethtool -K:
-
-tools/testing/selftests/drivers/net/lib/py/feat.py:set_ethtool_feat() {
-	...
-		if current[name]["active"] != state:
-			no_change = False
-			if current[name]["fixed"]:
-				raise KsftXfailEx(f"Device does not support {name}")
-	...
-}
-
-So the whole 8021ad_hw / qinq_hw variant is skipped, including the
-rx-vlan-offload=on part which is settable on those devices. The surviving
-8021ad_sw / qinq_sw variants then force rx-vlan-offload off.
-
-That leaves no 802.1ad or QinQ ping running with hardware C-tag stripping
-active. Wouldn't a driver that strips the first VLAN tag regardless of TPID,
-reporting an 0x88a8 tag as a C-tag, still report "ok 8021ad_sw" and
-"ok qinq_sw" here? The sample TAP output in the commit message shows exactly
-this on st_gmac, and netdevsim likewise advertises only
-NETIF_F_HW_VLAN_STAG_FILTER and not NETIF_F_HW_VLAN_STAG_RX in nsim_setup().
-
-Should the 802.1ad/QinQ variants instead be split so that rx-vlan-offload=on
-is requested independently of rx-vlan-stag-hw-parse, so a fixed
-rx-vlan-stag-hw-parse does not remove the hardware stripping coverage?
-
-Related, the docstring says:
-
-  Validates that ping traffic is sent and received correctly over 802.1q
-  and 802.1ad VLAN interfaces, with hardware RX VLAN stripping enabled and
-  disabled on the local interface.
-
-and the commit message says the three configurations are covered "each with
-hardware RX VLAN stripping enabled and disabled". Could these be reworded to
-match what happens on devices where rx-vlan-stag-hw-parse cannot be changed?
-
-> +
-> +    _vlan_setup(cfg.ifname, LOCAL_IP, outer_proto, inner_proto)
-> +    _vlan_setup(cfg.remote_ifname, REMOTE_IP, outer_proto, inner_proto,
-> +                host=cfg.remote)
-> +
-> +
-> +def _vlan_variants():
-> +    """Generator that yields the VLAN protocols and the stripping mode."""
-> +
-> +    yield KsftNamedVariant("8021q_hw", "802.1q", None, True)
-> +    yield KsftNamedVariant("8021q_sw", "802.1q", None, False)
-> +    yield KsftNamedVariant("8021ad_hw", "802.1ad", None, True)
-> +    yield KsftNamedVariant("8021ad_sw", "802.1ad", None, False)
-> +    yield KsftNamedVariant("qinq_hw", "802.1ad", "802.1q", True)
-> +    yield KsftNamedVariant("qinq_sw", "802.1ad", "802.1q", False)
-> +
-> +
-> +@ksft_variants(_vlan_variants())
-> +def test(cfg, outer_proto, inner_proto, hw_strip):
-> +    """Run a single VLAN test"""
-> +
-> +    cfg.require_ipver("4")
-
-[Severity: Low]
-
-Is this requirement needed? The test never uses the environment's IPv4
-endpoint addresses: _vlan_setup() installs its own 198.51.100.1/24 and
-198.51.100.2/24 on the newly created VLAN devices and the ping goes between
-those.
-
-NetDrvEpEnv.require_ipver() skips unless both the local and remote address
-for that version were configured:
-
-tools/testing/selftests/drivers/net/lib/py/env.py:require_ipver() {
-	if not self.addr_v[ipver] or not self.remote_addr_v[ipver]:
-		raise KsftSkipEx(f"Test requires IPv{ipver} connectivity")
-}
-
-So an environment configured with only LOCAL_V6/REMOTE_V6, which
-_check_env() accepts, skips all six variants even though the base ifname,
-the remote ifname and the test's own VLAN addressing are all available.
-
-drivers/net/macsec.py does the same 198.51.100.x-over-VLAN ping in
-_setup_vlan_ips() without calling require_ipver(). Could the call be dropped
-here as well?
-
-> +
-> +    _setup(cfg, outer_proto, inner_proto, hw_strip)
-> +
-> +    cmd(f"ping -c 1 -W 5 {REMOTE_IP}")
-
-[ ... ]
-
+Best regards,
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260908164309.59282-1-ovidiu.panait.rb%40renesas.com
+Daniel Zahka <daniel.zahka@gmail.com>
+
