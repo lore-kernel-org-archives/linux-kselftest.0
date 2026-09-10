@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396F43D79E2;
-	Thu, 10 Sep 2026 23:55:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84713CF95A;
+	Thu, 10 Sep 2026 23:55:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789084541; cv=none; b=SgWyQCqx66pciDcnd0DwvzQd5Phw0xc0QQnETbxNPEicdvu61fjhN12eWeEAoccDkdDMwPHE37rhFbTGl5MfkIhelPlq3ghl4fnVZPhJFg4nC5paAyS85lipXjVrq36UUtgFIdqQf9i0xUmWrlEqbRIjaII2y2IuQFweegOacSs=
+	t=1789084540; cv=none; b=AZXw7gy5zhjN1NNpvZNwZOsmKUTTx7zQnBSkhNP7giwrn3zNdDNKP9/aA+97//O1gNUzg/Ct0nJShhWLu/rH/xvhwyPhA/VeqHODwLqYQ55sBCOmXVg4G8su5XMV/fDHU9QwtLgWVB5Epq8rTj6buyFxN4z0t7wghoo49iKDCOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789084541; c=relaxed/simple;
-	bh=wz1joYubyC9sBFss2cubJfls0BSPnVFGoTr3Kf+jPIA=;
+	s=arc-20240116; t=1789084540; c=relaxed/simple;
+	bh=NQ+m2Gp6DBcXXd5O+sEgVmXG2eWA72DV+yeLNCYqr7E=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E7lQZp/H70O0XfWyVH1nvEN2LCfXL0+YS3D3Fonk2faV15iuNKhKHW387pgTOEDNonwBijvpf6xbZ92s7zBDJzVV1SgVIZaxjw/iOnEOEVK1MgNycHxBhU28ReTLBR9CfRpnDjZv/dNS2Fe3RULtALRu44j/j/XZRJK+QE7eXtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qhvGaerX; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=k6YREOupsCN/j4+vZ6X8eqgCSrMWFU3rRkautMFiqRk//xpzTmFdbQgTlBZmQXlOPYCQoAlSoYMOvw0fvD9Ow8QW+2BkQaXxRWsF9bjDnrjecRJyeCO2HOnJyTCjqcGo6wjAoWHQ93URnlQ/DIJzwDckm1g5rBOfXKuvQ4fuLiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h2T9AwJQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qhvGaerX"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1EA03C2BCFB;
-	Thu, 10 Sep 2026 23:55:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h2T9AwJQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A1E3C4AF0C;
+	Thu, 10 Sep 2026 23:55:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1789084541;
-	bh=wz1joYubyC9sBFss2cubJfls0BSPnVFGoTr3Kf+jPIA=;
+	s=k20201202; t=1789084540;
+	bh=NQ+m2Gp6DBcXXd5O+sEgVmXG2eWA72DV+yeLNCYqr7E=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=qhvGaerX/8ukW3A+MDtN8TqD/BihswxNKIwo80fna9qUtchiAt+i4TMfy1Qlt/YQL
-	 p4YQWtzAIDedxTr9t7UAojiFjspRIwF6tHVrICDHQf0xKlAH7j5hsgnFYl1t79Vksv
-	 nlAm4VWPRtluDZJzfxyn5v+ENsDDvZcE+iNaGm1BVj2czrc8JGMtz6nvKr+CZVXAfT
-	 rgm/Z4cOam0JNzr4M7+msW66MmqQ2Z1ep+VpiLtRZ+uTygvvB39qYZhpGAvf/g/dtu
-	 jXp/sRFjv1Oc4QmXc8r+SmZRVfjDEnmwbEoicWz/gN4QT3J0Q4buBzM5PvVE0nCk+1
-	 SmgT484gmdN0w==
+	b=h2T9AwJQhFo60X2vZP1almbLppH5PPFJf1tv2HbB4BTl/Ti/3EXAw+NTO9hLmex84
+	 PIbnBJ5LC6t8RJHRYYd57rIK7DazBa+pkNzjL5OAzLpzXspxHrpgc5LTuAETGIRK3K
+	 F/2czMLaiHVIoMc8JuRMROSXTDU6CP49T/OGM/xBiW26ov0ENG95Hz4HDP5WeXrvWX
+	 kYf1VZEb6lY9xhtINXk0FdGQRVLN4abC/tIPkD17ToSDvjd3/xiUFe6u41ylUSafNi
+	 ACUmhK02No4s8urbBOtAPggN++lk736x39WxTiuQcQFxbu+tidgN3/ioY4N2QiuCAc
+	 oP4wbFuQ3F+vw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 095B4C88E4A;
-	Thu, 10 Sep 2026 23:55:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70AD3C88E41;
+	Thu, 10 Sep 2026 23:55:40 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Thu, 10 Sep 2026 16:56:10 -0700
-Subject: [PATCH v13 44/44] KVM: selftests: Update private memory exits test
- to work with per-gmem attributes
+Date: Thu, 10 Sep 2026 16:56:04 -0700
+Subject: [PATCH v13 38/44] KVM: selftests: Reset shared memory after
+ hole-punching
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260910-gmem-inplace-conversion-v13-44-dd6fbf94f4e1@google.com>
+Message-Id: <20260910-gmem-inplace-conversion-v13-38-dd6fbf94f4e1@google.com>
 References: <20260910-gmem-inplace-conversion-v13-0-dd6fbf94f4e1@google.com>
 In-Reply-To: <20260910-gmem-inplace-conversion-v13-0-dd6fbf94f4e1@google.com>
 To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
@@ -80,11 +80,11 @@ Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  linux-coco@lists.linux.dev, Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1789084533; l=3876;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1789084533; l=2580;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=kG4M1fipOsouCgA8R0C4+Zo3TFMa1yM8FRwgKEfMXIw=;
- b=VkVQQTiR5fKR+Tjiv7AhqYj4gaD2VTWMmQaiT0JMuMt5nv3wd6uwY1PRhfR/6iJVbGDZHZWH0
- A9NHJ4d984IAC01HfYYfXn35gCsjLvPGTuO3Q8sPJMOkaw8uptfi1gX
+ bh=qgSSV+iztWlncds2pkMoO3mYfZ9NMVIVqTr/vN3QCpY=;
+ b=oTD8dzGF0eTeqnTFELLylphUqFsvuDNQhEUUaeqL+Ct1dCms1Th/dK3+Vy9QGPTpOa+xmlRa3
+ 2RqXbEeLGoaCbEGFqawd7O1aQyzJrjsLVziOSsdgZqmt8VrTUVP4isQ
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -92,91 +92,64 @@ X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
 X-Original-From: Ackerley Tng <ackerleytng@google.com>
 Reply-To: ackerleytng@google.com
 
-From: Sean Christopherson <seanjc@google.com>
+From: Ackerley Tng <ackerleytng@google.com>
 
-Skip setting memory to private in the private memory exits test when using
-per-gmem memory attributes, as memory is initialized to private by default
-for guest_memfd, and using vm_mem_set_private() on a guest_memfd instance
-requires creating guest_memfd with GUEST_MEMFD_FLAG_MMAP (which is totally
-doable, but would need to be conditional and is ultimately unnecessary).
+private_mem_conversions_test used to reset the shared memory that was used
+for the test to an initial pattern at the end of each test iteration. Then,
+it would punch out the pages, which would zero memory.
 
-Expect an emulated MMIO instead of a memory fault exit when attributes are
-per-gmem, as deleting the memslot effectively drops the private status,
-i.e. the GPA becomes shared and thus supports emulated MMIO.
+Without in-place conversion, the resetting would write shared memory, and
+hole-punching will zero private memory, hence resetting the test to the
+state at the beginning of the for loop.
 
-Skip the "memslot not private" test entirely, as private vs. shared state
-for x86 software-protected VMs comes from the memory attributes themselves,
-and so when doing in-place conversions there can never be a disconnect
-between the expected and actual states.
+With in-place conversion, resetting writes memory as shared, and
+hole-punching zeroes the same physical memory, hence undoing the reset
+done before the hole punch.
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Move the resetting after the hole-punching, and reset the entire
+PER_CPU_DATA_SIZE instead of just the tested range.
+
+With in-place conversion, this zeroes and then resets the same physical
+memory. Without in-place conversion, the private memory is zeroed, and the
+shared memory is reset to init_p.
+
+This is sufficient since at each test stage, the memory is assumed to start
+as shared, and private memory is always assumed to start zeroed. Conversion
+zeroes memory, so the future test stages will work as expected.
+
+Fixes: 43f623f350ce1 ("KVM: selftests: Add x86-only selftest for private memory conversions")
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 Tested-by: Shivank Garg <shivankg@amd.com>
 Reviewed-by: Fuad Tabba <tabba@google.com>
 ---
- .../selftests/kvm/x86/private_mem_kvm_exits_test.c | 36 ++++++++++++++++++----
- 1 file changed, 30 insertions(+), 6 deletions(-)
+ tools/testing/selftests/kvm/x86/private_mem_conversions_test.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c b/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c
-index e6d16e9d61200..f7228e0f1ac61 100644
---- a/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c
-+++ b/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c
-@@ -62,8 +62,9 @@ static void test_private_access_memslot_deleted(void)
+diff --git a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
+index f3de2a4ab0551..cf50e9a332c5b 100644
+--- a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
++++ b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
+@@ -202,15 +202,18 @@ static void guest_test_explicit_conversion(u64 base_gpa, bool do_fallocate)
+ 		guest_sync_shared(gpa, size, p3, p4);
+ 		memcmp_g(gpa, p4, size);
  
- 	virt_map(vm, EXITS_TEST_GVA, EXITS_TEST_GPA, EXITS_TEST_NPAGES);
- 
--	/* Request to access page privately */
--	vm_mem_set_private(vm, EXITS_TEST_GPA, EXITS_TEST_SIZE);
-+	/* Request to access page privately. */
-+	if (!kvm_has_gmem_attributes)
-+		vm_mem_set_private(vm, EXITS_TEST_GPA, EXITS_TEST_SIZE);
- 
- 	kvm_pthread_create(&vm_thread, NULL,
- 			   (pthread_fn_t)run_vcpu_get_exit_reason, (void *)vcpu);
-@@ -73,10 +74,26 @@ static void test_private_access_memslot_deleted(void)
- 	kvm_pthread_join(vm_thread, &thread_return);
- 	exit_reason = (u32)(u64)thread_return;
- 
--	TEST_ASSERT_EQ(exit_reason, KVM_EXIT_MEMORY_FAULT);
--	TEST_ASSERT_EQ(vcpu->run->memory_fault.flags, KVM_MEMORY_EXIT_FLAG_PRIVATE);
--	TEST_ASSERT_EQ(vcpu->run->memory_fault.gpa, EXITS_TEST_GPA);
--	TEST_ASSERT_EQ(vcpu->run->memory_fault.size, EXITS_TEST_SIZE);
-+	/*
-+	 * If attributes are tracked per-gmem, deleting the memslot that points
-+	 * at the gmem instance effectively makes the memory shared, and so the
-+	 * read should trigger emulated MMIO.
-+	 *
-+	 * If attributes are tracked per-VM, deleting the memslot shouldn't
-+	 * affect the private attribute, and so KVM should generate a memory
-+	 * fault exit (emulated MMIO on private GPAs is disallowed).
-+	 */
-+	if (kvm_has_gmem_attributes) {
-+		TEST_ASSERT_EQ(exit_reason, KVM_EXIT_MMIO);
-+		TEST_ASSERT_EQ(vcpu->run->mmio.phys_addr, EXITS_TEST_GPA);
-+		TEST_ASSERT_EQ(vcpu->run->mmio.len, sizeof(u64));
-+		TEST_ASSERT_EQ(vcpu->run->mmio.is_write, false);
-+	} else {
-+		TEST_ASSERT_EQ(exit_reason, KVM_EXIT_MEMORY_FAULT);
-+		TEST_ASSERT_EQ(vcpu->run->memory_fault.flags, KVM_MEMORY_EXIT_FLAG_PRIVATE);
-+		TEST_ASSERT_EQ(vcpu->run->memory_fault.gpa, EXITS_TEST_GPA);
-+		TEST_ASSERT_EQ(vcpu->run->memory_fault.size, EXITS_TEST_SIZE);
-+	}
- 
- 	kvm_vm_free(vm);
- }
-@@ -87,6 +104,13 @@ static void test_private_access_memslot_not_private(void)
- 	struct kvm_vcpu *vcpu;
- 	u32 exit_reason;
- 
-+	/*
-+	 * Accessing non-private memory as private with a software-protected VM
-+	 * isn't possible when doing in-place conversions.
-+	 */
-+	if (kvm_has_gmem_attributes)
-+		return;
+-		/* Reset the shared memory back to the initial pattern. */
+-		memset((void *)gpa, init_p, size);
+-
+ 		/*
+ 		 * Free (via PUNCH_HOLE) *all* private memory so that the next
+ 		 * iteration starts from a clean slate, e.g. with respect to
+ 		 * whether or not there are pages/folios in guest_mem.
+ 		 */
+ 		guest_map_shared(base_gpa, PER_CPU_DATA_SIZE, true);
 +
- 	vm = vm_create_shape_with_one_vcpu(protected_vm_shape, &vcpu,
- 					   guest_repeatedly_read);
++		/*
++		 * Hole-punching above zeroed private memory. Reset shared
++		 * memory in preparation for the next GUEST_STAGE.
++		 */
++		memset((void *)base_gpa, init_p, PER_CPU_DATA_SIZE);
+ 	}
+ }
  
 
 -- 
