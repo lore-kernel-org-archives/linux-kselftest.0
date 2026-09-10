@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A0E39A048;
-	Thu, 10 Sep 2026 08:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89813B059F;
+	Thu, 10 Sep 2026 08:31:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789029092; cv=none; b=k2SYps38vKZMhPU/twd5q7gkZfbueuMvsGOSJIvmWbNSnq+N5Zs7gkri/D2VSVW79geRt9WVClFMM20xi1QYgpZe1IzoVzodSfLJyCEyv8kFaf0UD+4FmSPIURObm9Ul/5h7tjXaqtfqqyHeinoC7tvJk2GM6Lwzu6tCwP6/J3w=
+	t=1789029095; cv=none; b=tUPOIVGjZSAbFKjZgyjE4D0SX0QHDnGV9fo5bCZVR+OI1byPBjKKgQadPPOnSN6WpwvXaeYBsJWMko8qzKJxRed8yk8/3S0EHJaZdVIzRD6YXxmRB0rrMcyLhIkLvuANZ/fKg/PyG7Dy11M0x2bJDFPa7quHSRq0kh1lwyTh1L0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789029092; c=relaxed/simple;
-	bh=mLcrICJKKsg8MiQvwUmp+sFA/YH/tFiA7Fh3Kbai7+E=;
+	s=arc-20240116; t=1789029095; c=relaxed/simple;
+	bh=0rvktlisGG/pXViy7VnJ86L2uEFtIO+dWsXgYLDpFNQ=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Oif7SOSUVgIHebzgMyweGh1Fj1PSao7zVYrYhiC320isHvmdfZvw7Az5V56ZF6yayKN5aBK8oldhHVgA5dWGEZTHKbbNRbpMGfmrjETHXb6ACAEAYzkzJBGz4nuyk1oi9G4BLcXqH4DEs/FnL5cg5NIDamPgK3oJWoLGLuT4wnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dgJIeGzL; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=FC/6x3Ro4w1NEwZcI+FNsI/lDTCAtDtEt5gpH/sucw9Q62ZFPQRuD4+r4eXZyGhPIJzuNanOGgRcBqPjBmjTHWk8JzPCehZDFEGTsDtD3ntdDZm8+LD4Nt0R6aiciYiTcP5TTKMw26meloIVn38zOwPZ7NODH285uPQ74eciPsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BXb6xkzB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dgJIeGzL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADBFA1F00893;
-	Thu, 10 Sep 2026 08:31:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BXb6xkzB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51A5A1F000FF;
+	Thu, 10 Sep 2026 08:31:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789029090;
-	bh=+iLAfbw4OrHKaFaXdarlWGpCzFIWsK0QsDLpfov8MUo=;
+	s=k20260515; t=1789029093;
+	bh=SIiKgXvOxvLKCbF2u4mFNRdPie6pSoalejtOcLHAoqY=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=dgJIeGzLhTNkwadv5mN14pguuuR8Azhs2U0xxJVcFjb4WyN1/4yPb5HPViCFmTv1a
-	 JpPo3OdMgLrKJnJV7RHUuU8GEwQ9vpbX1/8ezMewvsyA5reL8AmTHo2U+3EYu3v7R8
-	 rrB5EJDrwKqUvCdUzCt9MJw47L3eRl/tpgt14zxO3bKDAZvtBSaEYUL1Weyq097BXt
-	 mk5C3qMFS0m05Ff4dqVpYSX7mjgwplFftNSOVujVDJNih7mNBpOXOLFOuSFBTz2wFw
-	 tPO581bY9tn4/Fi7wfNCICltu+r+DenvajzAaxQB8QCmrN89LJgouPGKxwx4ZGeAB+
-	 /RwVOiT5YvflA==
-Subject: Re: [PATCH v7 net-next 3/7] selftests/ptp: Add testptp support for
- attributes ioctls
+	b=BXb6xkzBSdEABUFcjMwCN4DqW/qyWFeuo9TPNoV7EJNSH1TALisbvsYcLVrJ7M5Zi
+	 ewmGLbDoP+yspYA04x5Cv8gI7mv4WaZwXGXpuCkkYQ1IogV0DNkeGyRC7DBhnLGYaH
+	 fOnmjUQw0zvKubQXra4wISpB+WA+PC4Qajx6eB+8WM3Yz7RhLKPwFztBZpyN3EuyPZ
+	 lc3lNdLgwMdL/V8JQAXUAcsqwLaMV8KfNxWo5lzVZjSqGPr0ks627bJnvzOIhj7ZmJ
+	 quelJgdKREvRzN6WY+49DlqOpbiL0H941n4VOmEaX092+mQkVa6RYIavGaCrwOl1hi
+	 d8gfJXr+6m3eQ==
+Subject:
+ Re: [PATCH v7 net-next 4/7] ptp: ptp_vmclock: Implement attributes ioctls
 From: netdev-bot+sashiko@kernel.org
 To: akiyano@amazon.com
 Cc: davem@davemloft.net, kuba@kernel.org, richardcochran@gmail.com,
@@ -43,10 +43,10 @@ Cc: davem@davemloft.net, kuba@kernel.org, richardcochran@gmail.com,
  linux-doc@vger.kernel.org, shuah@kernel.org, corbet@lwn.net,
  skhan@linuxfoundation.org, horms@kernel.org, bhelgaas@google.com,
  vadim.fedorenko@linux.dev, dwmw@amazon.co.uk
-Date: Thu, 10 Sep 2026 08:31:28 +0000
-Message-ID: <178902908829.219967.3668712303469402253@kernel.org>
-In-Reply-To: <20260909073136.12863-4-akiyano@amazon.com>
-References: <20260909073136.12863-4-akiyano@amazon.com>
+Date: Thu, 10 Sep 2026 08:31:30 +0000
+Message-ID: <178902909090.219967.1847972587492686819@kernel.org>
+In-Reply-To: <20260909073136.12863-5-akiyano@amazon.com>
+References: <20260909073136.12863-5-akiyano@amazon.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,185 +57,235 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 4 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Critical: 0 · High: 0 · Medium: 4 · Low: 0
 
-- [Medium] The new `-x N -a` (PTP_SYS_OFFSET_EXTENDED_ATTRS) print loop
-  in `main()` (tools/testing/selftests/ptp/testptp.c lines 671-722)…
-- [Low] In `main()` of tools/testing/selftests/ptp/testptp.c, the new
-  `-a` modifier is accepted and sets `use_attrs = 1` (line 327-329) but…
+- [Medium] vmclock_populate_ptp_attributes()
+  (drivers/ptp/ptp_vmclock.c:193-196) clamps the computed 64-bit worst-…
+- [Medium] vmclock_populate_ptp_attributes() sets have_error_bound (and
+  therefore PTP_ATTRS_VALID_ERROR_BOUND) based on…
+- [Medium] The driver advertises PTP_TIMESCALE_TAI for vmclock devices
+  (drivers/ptp/ptp_vmclock.c:114-115 and the UTC-converted case at…
+- [Medium] vmclock_populate_ptp_attributes() introduces the first
+  *runtime* uses of VMCLOCK_FIELD_PRESENT (drivers/ptp/ptp_vmclock.c:158…
 
 --
 
-selftests/ptp: Add testptp support for attributes ioctls
+ptp: ptp_vmclock: Implement attributes ioctls
 
-This adds a "-a" modifier to testptp so that the new
-PTP_SYS_OFFSET_EXTENDED_ATTRS and PTP_SYS_OFFSET_PRECISE_ATTRS ioctls can
-be exercised alongside the existing -x and -X requests. It also prints the
-new extended_attrs/precise_attrs capabilities and reports unrecognized
-clock ids in print_system_timestamp().
+This adds gettimexattrs64 and getcrosststampattrs to ptp_vmclock so the
+new PTP_SYS_OFFSET_EXTENDED_ATTRS and PTP_SYS_OFFSET_PRECISE_ATTRS
+ioctls can report an error bound, a clock status and a timescale.  The
+attributes are filled in inside the seq_count loop, and the UNRELIABLE
+check that used to abort the read is moved after the loop so that only
+the legacy ioctls still fail with -EINVAL.
 
-A couple of questions below.
+A few questions about the new attribute code below.
 
-> diff --git a/tools/testing/selftests/ptp/testptp.c b/tools/testing/selftests/ptp/testptp.c
-> index d603d9f82237..62b1d0340d71 100644
-> --- a/tools/testing/selftests/ptp/testptp.c
-> +++ b/tools/testing/selftests/ptp/testptp.c
-> @@ -148,6 +148,8 @@ static void usage(char *progname)
->  		" -T val     set the ptp clock time to 'val' seconds\n"
->  		" -x val     get an extended ptp clock time with the desired number of samples (up to %d)\n"
->  		" -X         get a ptp clock cross timestamp\n"
-> +		" -a         also report clock quality attributes (error_bound,\n"
-> +		"            status, timescale); use together with -x or -X\n"
->  		" -y val     pre/post tstamp timebase to use {realtime|monotonic|monotonic-raw}\n"
->  		" -z         test combinations of rising/falling external time stamp flags\n",
->  		progname, PTP_MAX_SAMPLES);
+> diff --git a/drivers/ptp/ptp_vmclock.c b/drivers/ptp/ptp_vmclock.c
+> index bb0e14bac9f2..0cd449999139 100644
+> --- a/drivers/ptp/ptp_vmclock.c
+> +++ b/drivers/ptp/ptp_vmclock.c
 
 [ ... ]
 
-> @@ -317,6 +324,9 @@ int main(int argc, char *argv[])
->  				return -1;
->  			}
->  			break;
-> +		case 'a':
-> +			use_attrs = 1;
-> +			break;
-
-[Severity: Low]
-The usage text states that -a must be used "together with -x or -X", but is
-that requirement enforced anywhere in main()?
-
-Both new request blocks are gated on a companion option:
-
-	if (getextended && use_attrs) {
-	...
-	if (getcross && use_attrs) {
-
-and the two legacy blocks are now additionally gated on !use_attrs, so
-"testptp -d /dev/ptp0 -a" (or -a combined with something unrelated like -k
-or -g) issues no attrs ioctl, prints nothing about attributes, and exits 0.
-
-main() already diagnoses the analogous dependency for -w and -H:
-
-	if (pulsewidth >= 0 && perout < 0) {
-		puts("-w can only be specified together with -p");
-		return -1;
-	}
-
-	if (perout_phase >= 0 && perout < 0) {
-		puts("-H can only be specified together with -p");
-		return -1;
-	}
-
-Would it make sense to add the equivalent check for -a without -x or -X?
-
->  		case 'X':
->  			getcross = 1;
->  			break;
-
-[ ... ]
-
-> @@ -654,7 +668,60 @@ int main(int argc, char *argv[])
->  		free(soe);
->  	}
+> @@ -95,13 +106,113 @@ static bool tai_adjust(struct vmclock_abi *clk, uint64_t *sec)
+>  	return false;
+>  }
 >  
-> -	if (getcross) {
-> +	if (getextended && use_attrs) {
-> +		attrs_data = calloc(1, sizeof(*attrs_data) +
-> +				    getextended * sizeof(struct ptp_timestamp));
-> +		if (!attrs_data) {
-> +			perror("calloc");
-> +			return -1;
-> +		}
+> +static uint8_t vmclock_get_ptp_timescale(uint8_t vmclock_time_type)
+> +{
+> +	switch (vmclock_time_type) {
+> +	case VMCLOCK_TIME_UTC:
+> +		return PTP_TIMESCALE_UTC;
+> +	case VMCLOCK_TIME_TAI:
+> +		return PTP_TIMESCALE_TAI;
+> +	case VMCLOCK_TIME_MONOTONIC:
+> +		return PTP_TIMESCALE_MONOTONIC;
+> +	default:
+> +		return PTP_TIMESCALE_UNKNOWN;
+> +	}
+> +}
+
+[ ... ]
+
+> +static void vmclock_populate_ptp_attributes(struct vmclock_state *st,
+> +					    struct ptp_clock_attrs *att,
+> +					    uint64_t delta)
+> +{
+> +	uint64_t maxerror_ns = UINT_MAX;
+> +	bool have_error_bound = false;
 > +
-> +		attrs_data->request.num_samples = getextended;
-> +		attrs_data->request.clock_id = ext_clockid;
+> +	if (!att)
+> +		return;
 > +
-> +		if (ioctl(fd, PTP_SYS_OFFSET_EXTENDED_ATTRS, attrs_data)) {
-> +			perror("PTP_SYS_OFFSET_EXTENDED_ATTRS");
-> +		} else {
-> +			printf("extended attrs timestamp request returned %d samples\n",
-> +			       getextended);
+> +	/* Called once per seq_count retry, so don't accumulate stale bits */
+> +	att->valid = 0;
+> +	att->error_bound = 0;
 > +
-> +			for (i = 0; i < getextended; i++) {
-> +				struct ptp_timestamp *ts = &attrs_data->timestamps[i];
-> +
-> +				printf("  sample #%u:\n", i);
-> +				printf("    sys before: %lld ns\n",
-> +				       (long long)ts->pre_systime.sys_time);
-> +				printf("    sys_counter_id: %u\n",
-> +				       ts->pre_systime.sys_counter_id);
-> +				printf("    sys_counter:    %llu\n",
-> +				       (unsigned long long)ts->pre_systime.sys_counter);
-> +				printf("    phc time:   %lld.%09u\n",
-> +				       ts->devtime.device_time.sec,
-> +				       ts->devtime.device_time.nsec);
-> +				if (ts->devtime.attrs.valid & PTP_ATTRS_VALID_ERROR_BOUND)
-> +					printf("    error_bound: %u ns\n",
-> +					       ts->devtime.attrs.error_bound);
-> +				else
-> +					printf("    error_bound: not reported\n");
-> +				if (ts->devtime.attrs.valid & PTP_ATTRS_VALID_STATUS)
-> +					printf("    status: %u\n",
-> +					       ts->devtime.attrs.status);
-> +				else
-> +					printf("    status: not reported\n");
-> +				if (ts->devtime.attrs.valid & PTP_ATTRS_VALID_TIMESCALE)
-> +					printf("    timescale: %u\n",
-> +					       ts->devtime.attrs.timescale);
-> +				else
-> +					printf("    timescale: not reported\n");
-> +				printf("    sys after:  %lld ns\n",
-> +				       (long long)ts->post_systime.sys_time);
+> +	/* Only calculate if the base error is flagged as valid
+> +	 * by the hypervisor.
+> +	 */
+> +	if (VMCLOCK_FIELD_PRESENT(st->clk, time_maxerror_nanosec) &&
+> +	    (le64_to_cpu(st->clk->flags) & VMCLOCK_FLAG_TIME_MAXERROR_VALID)) {
+> +		have_error_bound = true;
+> +		maxerror_ns = le64_to_cpu(st->clk->time_maxerror_nanosec);
 
 [Severity: Medium]
-Should the post snapshot print the counter fields too?
+Is VMCLOCK_FIELD_PRESENT safe to evaluate at ioctl time?  The macro reads
+the size field straight out of the shared mapping:
 
-This loop prints pre_systime.sys_time, pre_systime.sys_counter_id and
-pre_systime.sys_counter, but for the post snapshot only sys_time. It also
-never prints sys_rawtime for either snapshot, although the kernel side fills
-all four fields of both snapshots in ptp_sys_offset_extended_attrs():
+drivers/ptp/ptp_vmclock.c:
+#define VMCLOCK_FIELD_PRESENT(_c, _f)			  \
+	(le32_to_cpu((_c)->size) >= (offsetof(struct vmclock_abi, _f) +	\
+				     sizeof((_c)->_f)))
 
-drivers/ptp/ptp_chardev.c:ptp_sys_offset_extended_attrs() {
+and size is only compared against the mapping length once, in
+vmclock_probe():
+
+	st->clk = devm_memremap(dev, st->res.start, resource_size(&st->res),
+				MEMREMAP_WB | MEMREMAP_DEC);
 	...
-	tstamp->post_systime.sys_time = ktime_to_ns(sts.post_sts.systime);
-	tstamp->post_systime.sys_rawtime = ktime_to_ns(sts.post_sts.monoraw);
-	ptp_fill_sys_counter(&tstamp->post_systime, sts.post_sts.cycles,
-			     sts.post_sts.cs_id);
-	...
-}
+	if (le32_to_cpu(st->clk->magic) != VMCLOCK_MAGIC ||
+	    le32_to_cpu(st->clk->size) > resource_size(&st->res) ||
 
-The -X -a printer added in the same patch does surface those fields:
+Before this patch VMCLOCK_FIELD_PRESENT was only used at probe, right
+after that comparison, so the checked and used values were the same
+snapshot.  These new call sites run long afterwards, and the hypervisor
+can raise size in shared memory at any point.
 
-	printf("raw time:    %lld ns\n",
-	       (long long)ts->systime.sys_rawtime);
-	printf("sys_counter_id: %u\n",
-	       ts->systime.sys_counter_id);
-	printf("sys_counter:    %llu\n",
-	       (unsigned long long)ts->systime.sys_counter);
+PTP registration only requires size to cover time_frac_sec, i.e. 88
+bytes, while time_maxerror_nanosec sits at bytes 96..103 of struct
+vmclock_abi.  With a resource of 88..103 bytes and a later size write of
+104 or more, does the dereference of st->clk->time_maxerror_nanosec then
+read past the end of the devm_memremap()ed region, and publish whatever
+it finds with PTP_ATTRS_VALID_ERROR_BOUND set?
 
-so the two new consumers of struct ptp_sys_time disagree about which
-returned fields are shown. As it stands, "-x N -a" output is identical
-whether the post-read counter source is correctly identified or left at
-zero.
+The seq_count loop does not cover this, since it only detects hypervisor
+updates and never re-validates size against resource_size(&st->res).
+Would snapshotting the validated size at probe time (e.g. a clk_size
+field in struct vmclock_state) and using that at runtime be preferable?
 
-The commit message says:
+[Severity: Medium]
+Should have_error_bound depend on VMCLOCK_FLAG_TIME_MAXERROR_VALID alone?
 
-    Also print the system counter value and its identifier (sys_counter,
-    sys_counter_id) returned in struct ptp_sys_time, so the counter source
-    is visible
+time_maxerror_nanosec bounds the error of the reference time at
+counter_value, while counter_period_maxerror_rate_frac_sec bounds the
+error accumulated while extrapolating over the elapsed ticks.  The two
+validity flags are independent bits in
+include/uapi/linux/vmclock-abi.h:
 
-Does that hold for the extended path, given that post_systime.sys_counter
-and post_systime.sys_counter_id are not printed?
+#define VMCLOCK_FLAG_PERIOD_MAXERROR_VALID	(1 << 4)
+#define VMCLOCK_FLAG_TIME_MAXERROR_VALID	(1 << 6)
 
-> +			}
-> +		}
+The timestamp handed back to userspace is taken at counter_value + delta.
+When VMCLOCK_FLAG_PERIOD_MAXERROR_VALID is clear and delta is non-zero,
+the extrapolation error is unknown, yet the code below still sets
+PTP_ATTRS_VALID_ERROR_BOUND on the reference-time error only.  With the
+50 PPM counter tolerance the vmclock ABI header itself mentions, tens of
+seconds of delta already add milliseconds that are not reflected in the
+reported bound.  Would it be more correct to leave
+PTP_ATTRS_VALID_ERROR_BOUND clear in that case?
+
 > +
-> +		free(attrs_data);
+> +		/* If frequency error is also valid, accumulate it
+> +		 * over the delta.
+> +		 */
+> +		if (VMCLOCK_FIELD_PRESENT(st->clk, counter_period_maxerror_rate_frac_sec) &&
+> +		    (le64_to_cpu(st->clk->flags) & VMCLOCK_FLAG_PERIOD_MAXERROR_VALID)) {
+> +			uint64_t maxerror_rate, err_hi, err_frac, growth_ns;
+> +
+> +			maxerror_rate = le64_to_cpu(st->clk->counter_period_maxerror_rate_frac_sec);
+> +			err_frac = mul_u64_u64_shr_add_u64(&err_hi, delta,
+> +							   maxerror_rate,
+> +							   st->clk->counter_period_shift,
+> +							   0);
+> +
+> +			if (err_hi >= U64_MAX / NSEC_PER_SEC) {
+> +				maxerror_ns = U64_MAX;
+> +				goto saturate;
+> +			}
+> +
+> +			growth_ns = (err_hi * NSEC_PER_SEC) +
+> +				    mul_u64_u64_shr(err_frac, NSEC_PER_SEC, 64);
+> +
+> +			/* Guard against overflow */
+> +			if (U64_MAX - growth_ns < maxerror_ns)
+> +				maxerror_ns = U64_MAX;
+> +			else
+> +				maxerror_ns += growth_ns;
+> +		}
 > +	}
 > +
+> +saturate:
+> +	if (have_error_bound) {
+> +		att->error_bound = (maxerror_ns > UINT_MAX) ?
+> +			UINT_MAX : (uint32_t)maxerror_ns;
+> +		att->valid |= PTP_ATTRS_VALID_ERROR_BOUND;
+> +	}
+
+[Severity: Medium]
+Can this report a bound that is smaller than the real one?  The clamp to
+UINT_MAX caps the value at roughly 4.295 s, and PTP_ATTRS_VALID_ERROR_BOUND
+is still set, so userspace has no way to tell that saturation happened.
+
+The kernel-doc for struct ptp_clock_attrs in include/uapi/linux/ptp_clock.h
+describes the field as:
+
+ * @error_bound: Maximum error (an upper bound, in nanoseconds) between the
+ *               returned device_time and true time on the advertised
+ *               @timescale; a worst-case bound, not a statistical estimate.
+
+and defines no saturation sentinel, only allowing the value to be
+distrusted when @status is UNKNOWN or UNRELIABLE.  A hypervisor
+publishing time_maxerror_nanosec above 0xffffffff (a legal __le64 value)
+with status SYNCHRONIZED, or a long enough delta in the growth
+accumulation above, both end up at 0xffffffff with the valid bit set,
+including the explicit maxerror_ns = U64_MAX branches.
+
+Would it be better to leave PTP_ATTRS_VALID_ERROR_BOUND clear when the
+value does not fit in __u32, or to define a saturation convention in the
+uAPI?  Related to that, the maxerror_ns = UINT_MAX initializer looks dead
+now, since it is overwritten whenever have_error_bound becomes true.
+
+> +	att->timescale = vmclock_get_ptp_timescale(st->clk->time_type);
+> +	/* tai_adjust() already converted UTC to TAI before we're called */
+> +	if (st->clk->time_type == VMCLOCK_TIME_UTC)
+> +		att->timescale = PTP_TIMESCALE_TAI;
+> +	att->valid |= PTP_ATTRS_VALID_TIMESCALE;
+
+[Severity: Medium]
+Which epoch does PTP_TIMESCALE_TAI imply here?  The two headers that are
+in tree after this series disagree.
+
+include/uapi/linux/vmclock-abi.h:
+
+#define VMCLOCK_TIME_TAI			1	/* Since 1970-01-01 00:00:00z */
+
+and tspec->tv_sec is built directly from time_sec, so the value returned
+to userspace is Unix-epoch based in both the TAI and the tai_adjust()
+converted UTC case.
+
+include/uapi/linux/ptp_clock.h, as added by "ptp: Add ioctls for PHC
+timestamps with quality attributes" in this series, documents:
+
+	/**
+	 * International Atomic Time (TAI)
+	 * Epoch: 1958-01-01 00:00:00.
+	 ...
+	PTP_TIMESCALE_TAI = 1,
+
+in explicit contrast to PTP_TIMESCALE_UTC/POSIX which it documents with
+the 1970 epoch.  A consumer following the enum documentation would be off
+by about 378.7 million seconds.  The commit message also states:
+
+    - timescale: Always reports TAI (UTC sources are converted by tai_adjust()
+      before the attributes are populated)
+
+Should the enum documentation be corrected to the Unix epoch that PHC
+timestamps actually use, or is the driver expected to shift the value?
 
 [ ... ]
 
