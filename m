@@ -1,142 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E1C484254;
-	Thu, 10 Sep 2026 12:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DE2247F76A;
+	Thu, 10 Sep 2026 12:34:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789043235; cv=none; b=Yw1Bv77QVBdJnhl7TN94nIvTNHQv3Y+Nc5jOnefG7GZaEYXhTmhJuSubEiOPcTdHkl0K6gZoiHwOtdzz94SrClmndaqlsyXG251kxrteYSxGcTdqTspb+Ujy0K9W8S4R6RxQr23GP1CVkh51gR4ISIpqdqeLpS1VbfAoBk/WfgU=
+	t=1789043695; cv=none; b=W9WVTVcx5t4zeKKGRcXmk1IX55uT9e/IvwlUDPHzKm3zS81thscFdIPwVMlWebmTgjZeKKo4qQXeMaWnLAefJx4OOhqrbpCi5V2AupYQrDSJJHj3UsJGdKe/H2TjZ117aiq8TMPZmPkUJY7HY0zo8xvnbMg9RlhkQjKZqf7MnvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789043235; c=relaxed/simple;
-	bh=XS3EAcYLwnUqmUzTOvAWeHgJjnAcdWUI6NWrTs/TbEA=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oBODWX9/2tIzhsu9yYJjjV0S6VoTngyDOdYGUh4bsRwLRARGd2V8o2sclsKD8ccpK3OuoHXTWqBtYqLlZE1lwFBY/hLsM7BqTCTnny/+/ImzK0GWdHNFIpyKd9wmmKgMVi1l4e3Sw2ydWFSt7fVRx/+OJZeI1j728GTbvpbjuxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OhcJenGP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789043695; c=relaxed/simple;
+	bh=3VduiEwRT1CiMZeMrb/9DRZj/SpWNd3+qDuMjc6JUx4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qsqfBYjYGSOdBYkD+iiP449PRel8Kc4SgU5PlmD8yjx+6ZCsnHhzbwKsoIPny9E6lcDdNToW5+BPAIV9TqeCdKXvLG4HAXPI5T+h2E7RU2jiju/uiLWbPV9d4S7rv/mdztmgx52lrUybFz89esqBopa/XHlBsX+Q6kexMyAaogQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=EyCim8z1; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OhcJenGP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C2651F00893;
-	Thu, 10 Sep 2026 12:27:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789043234;
-	bh=P95AAuvzBO6JOelDPVoR2QHaxFSlmbYkQZsPoZIqGYg=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=OhcJenGPLMmX5ZZSSrtNyL0Je/XWkutzzmdGVPNkygdjqPH+Jgy6VPktrNt8vVMIs
-	 QsCD9R2jF0f0a8IZqH5I/ebZq6K1W4M8x0xI4ZFZ/h5YpV1ZTrwai9wXgEKev19j3x
-	 HX5YAafSFqu0GCr+KrLtJD4Eq83/SWPybCYy0PYGqa7eiOuYTMCtUyL4atBWkc9p/D
-	 mhX8QM4vPbetsU9pLBs4I6IlWGBcoZnEbYpfIvPRHA9BB8nLk0HECvW4MuSPXQCxQK
-	 R+D3EztZ64nxGySswXz7uAXixJNykUIlweK1CyfSeEXi8Q7+8C0Z6KaJVOLSXYQSo2
-	 5j8K3GPr1ZQ9g==
-Subject: Re: [PATCH net-next v4 2/2] selftests/net/openvswitch: add SCTP NAT
- test with port translation
-From: netdev-bot+sashiko@kernel.org
-To: houminxi@gmail.com
-Cc: netdev@vger.kernel.org, aconole@redhat.com, echaudro@redhat.com,
- i.maximets@ovn.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, dev@openvswitch.org,
- linux-kselftest@vger.kernel.org
-Date: Thu, 10 Sep 2026 12:27:12 +0000
-Message-ID: <178904323283.219967.9770445964877842050@kernel.org>
-In-Reply-To: <20260909122521.2687193-3-houminxi@gmail.com>
-References: <20260909122521.2687193-3-houminxi@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="EyCim8z1"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CB9A2153B;
+	Thu, 10 Sep 2026 05:34:48 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0467F3F7B4;
+	Thu, 10 Sep 2026 05:34:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1789043692; bh=3VduiEwRT1CiMZeMrb/9DRZj/SpWNd3+qDuMjc6JUx4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EyCim8z1BXVvNkA1xBGQ4fcu6OUw6Mp7njnhN0VWg8gTaxRcZLvkZsfUFmfHBVbAj
+	 +sCuf7gjxCheN+REc0W+MySoxgx0IjTxXWJAkxDBCr9e/j+MmYZNrZ3bGLk9drGcnp
+	 0F83MHlbKNzouc73XXXeCAze3/qegFM0w0dpZ1vQ=
+Date: Thu, 10 Sep 2026 13:34:46 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Nico Pache <nico.pache@linux.dev>,
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+	Usama Arif <usama.arif@linux.dev>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] kselftest: mm: introduce alloc_isolated_mem()
+Message-ID: <aqKj5ojQ3dabOV5g@e129823.arm.com>
+References: <20260907-fix_split-v5-3-822b810458bc@arm.com>
+ <5c05b620-7a2f-453d-9725-fed4f536a019@kernel.org>
+ <aqKOVGECsCNtSMIV@e129823.arm.com>
+ <d0b3ea99-e20b-4883-8fa3-67fdbf5b1ee4@kernel.org>
+ <aqKS7CP67X4h6NiM@e129823.arm.com>
+ <31418d0e-9745-4e8d-bc02-dbbd5cb9e193@kernel.org>
+ <aqKU0-Gm4yh78F3V@e129823.arm.com>
+ <d6f2e6b2-9dc9-4f02-be37-14329c1a6798@kernel.org>
+ <aqKfjqa6ye2AOU5k@e129823.arm.com>
+ <11a36d52-89a0-4f43-8a51-a4930e171ba0@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <11a36d52-89a0-4f43-8a51-a4930e171ba0@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider:
+On Thu, Sep 10, 2026 at 02:25:40PM +0200, David Hildenbrand (Arm) wrote:
+> On 9/10/26 14:16, Yeoreum Yun wrote:
+> >> On 9/10/26 13:30, Yeoreum Yun wrote:
+> >>>
+> >>> Yes. so if we remove ASSERT_FALSE(check_vmflag_guard(ptr)), TBH
+> >>> we don't need this patch unless other usage comes up to prevent unwanted
+> >>> VMA merge.
+> >>>
+> >>> Would it be better to drop ASSERT_FALSE(check_vmflag_guard(ptr)) in
+> >>> guard test?
+> >>
+> >> I guess there is value in asserting that not all VMAs by accident start
+> >> with an over-indication of maybe having guard pages, which is why Lorenzo
+> >> added that check :)
+> >>
+> >> But I think even alloc_isolated_mem() is wrong in that regard: if the
+> >> original VMA gets merged, we could inherit the guard-marker, no?
+> > 
+> > True. I overlooked guard bit is sticky.
+> > 
+> >>
+> >> Maybe the following would be good enough?
+> >>
+> >> diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
+> >> index 5c8ec3ca75d7d..791bf6a68b9e6 100644
+> >> --- a/tools/testing/selftests/mm/guard-regions.c
+> >> +++ b/tools/testing/selftests/mm/guard-regions.c
+> >> @@ -2257,10 +2257,20 @@ TEST_F(guard_regions, smaps)
+> >>         char *ptr, *ptr2;
+> >>         int i;
+> >>
+> >> -       /* Map a region. */
+> >> -       ptr = mmap_(self, variant, NULL, 10 * page_size, PROT_READ | PROT_WRITE, 0, 0);
+> >> +       /* Reserve a 10 page region with 1 page space to both sides. */
+> >> +       ptr = mmap_(self, variant, NULL, 12 * page_size, PROT_NONE, 0, 0);
+> >>         ASSERT_NE(ptr, MAP_FAILED);
+> >>
+> >> +       /* Map a new region that is guaranteed to not get merged in any way. */
+> >> +       ptr = mmap_(self, variant | MAP_FIXED, ptr + pagesize, 10 * page_size,
+> >> +                   PROT_READ | PROT_WRITE, 0, 0);
+> >> +       ASSERT_EQ(ptr, ptr + pagesize);
+> >> +
+> >> +       /* Clean up the excess pages left and right. */
+> >> +       munmap(ptr, pagesize);
+> >> +       munmap(ptr + 11, pagesize);
+> >> +       ptr + = pagesize;
+> >> +
+> >>         /* We shouldn't yet see a guard flag. */
+> >>         ASSERT_FALSE(check_vmflag_guard(ptr));
+> >>
+> >> -- 
+> >> Cheers,
+> > 
+> > It's enough but alloc_isolated_mem() could be modified to allocate with
+> > PROT_NONE first and then change the prot.
+> > 
+> > It seems whether make a helper or testcase should write the code
+> > properly in case of unwanted VMA merge.
+> > 
+> > IMHO, instead of testcase write them all
+> 
+> So far I am aware of exactly one test case, which others do absolutely need this?
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+True. I'll respin with your suggestion.
 
-- [Medium] tools/testing/selftests/net/openvswitch/config gains
-  CONFIG_NF_CT_PROTO_SCTP=y for the new test_sctp_nat_connect_v4 test…
-
---
-
-selftests/net/openvswitch: add SCTP NAT test with port translation
-
-Adds test_sctp_nat_connect_v4, which runs an SCTP association through a
-ct(commit,nat(dst=ip:port)) DNAT and matches the translated tuple after
-recirculation, plus CONFIG_NF_CT_PROTO_SCTP=y in the config fragment.
-
-> diff --git a/tools/testing/selftests/net/openvswitch/config b/tools/testing/selftests/net/openvswitch/config
-> index a825e0b5c88e..fa90475dc388 100644
-> --- a/tools/testing/selftests/net/openvswitch/config
-> +++ b/tools/testing/selftests/net/openvswitch/config
-> @@ -7,6 +7,7 @@ CONFIG_NET_IPGRE=m
->  CONFIG_NET_IPGRE_DEMUX=m
->  CONFIG_NF_CONNTRACK=m
->  CONFIG_NF_CONNTRACK_OVS=y
-> +CONFIG_NF_CT_PROTO_SCTP=y
->  CONFIG_OPENVSWITCH=m
->  CONFIG_PSAMPLE=m
->  CONFIG_VETH=y
-
-[Severity: Medium]
-Should this fragment also request CONFIG_NF_NAT=m (and
-CONFIG_NETFILTER_ADVANCED=y, which the changelog says the SCTP conntrack
-symbol needs)?
-
-The new test's probe uses a nat() action, and net/openvswitch/Kconfig only
-has:
-
-	select NF_NAT_OVS if NF_NAT
-
-so it never turns NF_NAT on itself.  In net/netfilter/Kconfig, NF_NAT is:
-
-	config NF_NAT
-		tristate "Network Address Translation support"
-		depends on NF_CONNTRACK
-		default m if NETFILTER_ADVANCED=n
-
-With NETFILTER_ADVANCED=y and no iptables/nftables NAT option selected,
-NF_NAT ends up n, and in net/openvswitch/conntrack.c the nat attribute is
-compiled out:
-
-	#if IS_ENABLED(CONFIG_NF_NAT)
-			case OVS_CT_ATTR_NAT: {
-
-> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> index 1160f8ed7d8a..138a705fc359 100755
-> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-
-[ ... ]
-
-> @@ -1199,6 +1200,98 @@ test_nat_connect_v4 () {
-
-[ ... ]
-
-> +	# Check if the ct and nat actions can be configured.
-> +	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
-> +		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
-> +		'ct(commit,nat(dst=172.31.110.20:5555)),recirc(0x1)' \
-> +		&> /dev/null
-> +	if [ $? == 1 ]; then
-> +		info "no support for ct/nat actions - skipping"
-> +		ovs_exit_sig
-> +		return $ksft_skip
-> +	fi
-
-[Severity: Medium]
-Following on from the config question above: when NF_NAT is n, does this
-probe in test_sctp_nat_connect_v4() always fail so the test permanently
-returns $ksft_skip?
-
-That would leave the SCTP arm of ovs_nat_update_key() with no coverage,
-which is the path the changelog says is currently unexercised, and the loss
-would be silent.  The existing test_nat_connect_v4() fails loudly instead:
-
-	ovs_sbx "test_nat_connect_v4" ip netns exec client ping -c 1 -W 1 \
-	    172.31.110.20 || return 1
-
-Would adding CONFIG_NF_NAT to the fragment keep this test running on the
-reference config?
+Thanks!
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909122521.2687193-1-houminxi%40gmail.com
+Sincerely,
+Yeoreum Yun
