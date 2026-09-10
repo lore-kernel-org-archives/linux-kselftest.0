@@ -1,146 +1,111 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48BF32F5337;
-	Thu, 10 Sep 2026 11:16:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mta0.migadu.com (out-51.mta0.migadu.com [91.218.175.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4996E472090
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 11:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789038971; cv=none; b=dM0M6fSNZUev71+L9uQbHsB4qTwn6zWdcU1K4h5sCztJKF6z8lFf0B54pzPx3bUpvPN6vdhmFvBmoGOBcX4E+kSSGl6Zz24ldaJgExfs2+MsR27qzk1olsdULABXneZFwda0+2Zkh+qfp0HMvGgJsVLUWttzLsllvgji89vaJJo=
+	t=1789039284; cv=none; b=oCXba+yVpgDIY7Jfz7wYWVV9axuEEI2yI+2zFfloRkxivpgirXpMuSh4hmING/JfaE4kZwUljW4Jsc8BVQWR/xX9XbMY9m+ZebvUjQcuhyIwPWzgfPo0H6/1owha7N7zrj+dNBeWjG4VG6mOhHGka47oGaQ5c524CaQ0o49SIlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789038971; c=relaxed/simple;
-	bh=hVGs1Tj7kpc4YncSVFe0orcF4b5ZciBzk2QmqTOTL1g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YEqRuyen5GTqld23mwAkY+qQaPrrmEwM2tq2HBsFd+LPQtMw6wuS3R6HYrikyB8a0o0V4GCw1GvVvvrTUYSzD8V5HZapy1F2U+i+WHGzFdu3wg5/eCf/Q1DbumndSXUJOJstGMteMCNpFSrDViL5VJX3PtUYS4gwFY+JrpeXMt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=IpQKBy3P; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1789039284; c=relaxed/simple;
+	bh=AV/OFTDfC0/OmXuQQ9vQBP4PE/RPxM4KkzhtVQdtba4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=alA68k8+F5lqi3PHdx5hM3nqloAMb2kvuRbn18r4dwQOVisArGLaAs7KccZeEXv0uF/HkY02Yn3ROFPrbdzQTwSsGxqqCh7W2EYjIMPGCCHkB8brU5Pmw4N1z7iEAqvjA80eNeRm7OIMhlhk5aBmvBReGw+ztkAVWb0e/JwGSBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F5mjxEth; arc=none smtp.client-ip=91.218.175.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="IpQKBy3P"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D780C153B;
-	Thu, 10 Sep 2026 04:16:05 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11AAE3F528;
-	Thu, 10 Sep 2026 04:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1789038969; bh=hVGs1Tj7kpc4YncSVFe0orcF4b5ZciBzk2QmqTOTL1g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IpQKBy3P0wIZcjof1RRrgg2w+Zjdva4zQH7AyZLrz7g+fjfIlWrx5ZMYV/yR/L91q
-	 H9rkuSYiqw/m5gZVtM3RfvD7IkdW3x48VdMM1F/7nEPsKuz9CAb0nHC3Fxo76Ah0Bq
-	 DqA3PUPjOCVrQenLOMhXnt6Wf+NAeNEcd3CPRgps=
-Date: Thu, 10 Sep 2026 12:16:04 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/3] kselftest: mm: fix some failure of
- split_huge_page_test
-Message-ID: <aqKRdIjAYB2PEwRN@e129823.arm.com>
-References: <20260907-fix_split-v5-0-822b810458bc@arm.com>
- <b923f63c-db7c-4ecb-949d-368bc6311626@kernel.org>
- <aqKHHWKvOonYZPy0@e129823.arm.com>
- <21e0a933-63b6-42b4-8cd7-df05b0c9acfc@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F5mjxEth"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=AV/OFTDfC0/OmXuQQ9vQBP4PE/RPxM4KkzhtVQdtba4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789039279; v=1; x=1789644079;
+ b=F5mjxEthxcmLvx1zZn/bZ01oElUTHrVM/IWUBFaGHPUdnWI/m8MatmvWBVNVrFemoJbfZUUE
+ z3nqBm9SBWbC7q97ptjogAszpqsc9K3DJZMDqDkdC8AwTue0X0eJ/aOBgpfLNyeF78ARRe/lpTu
+ i+FRybCS6vb1HUM2BWKIn5mk=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 83cf4aa7dd699a22;
+	Thu, 10 Sep 2026 11:21:18 +0000
+X-Mizu-Trace-ID: 83cf4aa7dd699a22
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Aditi Ghag <aditi.ghag@isovalent.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v3 0/3] bpf,tcp: Fix bpf_sock_destroy() on TIME_WAIT and listener socks
+Date: Thu, 10 Sep 2026 19:20:44 +0800
+Message-ID: <20260910112107.148770-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <21e0a933-63b6-42b4-8cd7-df05b0c9acfc@kernel.org>
 
-On Thu, Sep 10, 2026 at 12:45:39PM +0200, David Hildenbrand (Arm) wrote:
-> On 9/10/26 12:31, Yeoreum Yun wrote:
-> >> On 9/7/26 10:19, Yeoreum Yun wrote:
-> >>> split_huge_page_test can fail for the following reasons:
-> >>>
-> >>>   1. During the test, khugepaged may collapse previously split pages again,
-> >>>      causing intermittent failures.
-> >>>
-> >>>   2. Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-> >>>      glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-> >>>      made by memalign(). The underlying VMA may start at a different address
-> >>>      from the aligned address returned by memalign(). Moreover, a subsequent
-> >>>      madvise(MADV_HUGEPAGE) call does not split the VMA because it already
-> >>>      has the same advice.
-> >>>
-> >>>      This causes the test to fail because the check_huge_xxx() helpers
-> >>>      incorrectly require the address returned by memalign() to match the
-> >>>      VMA start address reported in /proc/self/smaps.
-> >>>
-> >>> Address these issues by applying MADV_NOHUGEPAGE after faulting in the
-> >>> huge page, preventing khugepaged from collapsing it again, and instead of
-> >>> relying on /proc/self/smaps, use /proc/self/pagemap and
-> >>> /proc/kpageflags to detect huge-page mappings and large folios:
-> >>>
-> >>>   1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of
-> >>>      using check_large_folios(), since only the mapping type matters.
-> >>>      This identifies PMD-mapped huge pages.
-> >>>   2. Otherwise, use check_large_folios() to detect large folios. This
-> >>>      covers mTHP cases.
-> >>>   3. Check the folio flags according to the type of huge page.
-> >>>
-> >>> Also, current usage of memalign() would result memory area may
-> >>> unexpectedly merge with an adjacent VMA, causing tests
-> >>> that inspect it through /proc/self/smaps to fail.
-> >> I'm not particularly happy about this.
-> >>
-> >> Relying on VMA merging details rather hints that we shouldn't be using smaps to
-> >> query some stats/properties.
-> >>
-> >> Which exact things are test querying through /proc/self/smaps? Could we convert
-> >> the code to just query that stuff through different interfaces?
-> > 
-> > Well, users currently for using /proc/self/smaps are for check vm-flags:
-> >   - guard-regions where using check_vmflags_guard()
-> >   - pfnmap test where uses check_vmflag_pfnmap()
-> 
-> Most vm-flags should not be an issue when it comes to merging. The only
-> exception are vmflags that do not prevent VMA merging.
-> 
-> So it's VM_SOFTDIRTY and VM_MAYBE_GUARD. And I agree that for guard-regions.c we
-> likely have to care such that we don't merge by accident with other VMAs (guard
-> regions).
-> 
-> But that's independent of memalign.
-> 
-> ptr = mmap_(self, variant, NULL, 10 * page_size, PROT_READ | PROT_WRITE, 0, 0);
-> ASSERT_FALSE(check_vmflag_guard(ptr));
-> 
-> could be problematic on its own (unlikely but possible).
+Fix two bugs in bpf_sock_destroy(). One is an out-of-bounds read of
+sk->sk_protocol on TIME_WAIT and NEW_SYN_RECV socks, since the field is
+not in struct sock_common. The other is a might_sleep splat when
+destroying a listener with children in its accept queue, the
+cond_resched() in inet_csk_listen_stop() runs under the iterator's
+rcu_read_lock(). Patch 3 adds a subtest for each.
 
-Yes. That's why I'm think it would be good to use alloc_isolated_mem()
-in case of ANON mapping for this case.
+v2 -> v3:
+ - Patch 1: add Reviewed-by from Kuniyuki.
+ - Patch 2: reword why cond_resched() has to go, it can reschedule or
+   report a bogus quiescent state there.
+ - Patch 2: keep the cond_resched() for the non-BPF path rather than
+   removing it as Kuniyuki suggested. VOLUNTARY and NONE are still
+   there on some arches, and on x86 in stable where this goes, so a
+   big listener close() still relies on it. Can go once those modes
+   are gone.
+ - Selftest: don't leak the fd if accept() unexpectedly succeeds.
+v2: https://lore.kernel.org/bpf/20260906074135.185212-1-jiayuan.chen@linux.dev/
 
-> 
-> For other flags, you really only have to find the smaps area that covers the
-> given address and look at the vm-flags.
-> 
-> Or am I missing something important?
-> 
-> (merging vnas with VM_PFNMAP is impossible right now IIRC)
+v1 -> v2:
+ - Patch 1: fix the return comment too.
+ - Patch 2: new.
+ - Selftest: server recv()s EOF before close so the FINs can't cross,
+   comment style, keep the blank line before RUN_TESTS(), add the
+   tcp_listen_pending subtest.
+v1: https://lore.kernel.org/bpf/20260903125306.299943-1-jiayuan.chen@linux.dev/
 
-No. what I want to say including the patch #3 is for the above case
-where you point out -- ASSERT_FALSE(check_vmflag_guard(ptr)).
+Jiayuan Chen (3):
+  bpf: Fix out-of-bounds read of sk_protocol in bpf_sock_destroy()
+  tcp: Skip cond_resched() in inet_csk_listen_stop() under BPF context
+  selftests/bpf: Test bpf_sock_destroy() on TIME_WAIT and listener socks
 
-Since we don't have any interface to check vm_flags execpt smap
-and for memory mmaped with anon would have a chance to merge,
-We need something to replace memalign() with preventing unexpected VMA
-merge. (But I forgot to change the those case in guard test case).
+ net/core/filter.c                             |  13 +-
+ net/ipv4/inet_connection_sock.c               |   3 +-
+ .../selftests/bpf/prog_tests/sock_destroy.c   | 121 ++++++++++++++++++
+ .../selftests/bpf/progs/sock_destroy_prog.c   |  30 +++++
+ 4 files changed, 162 insertions(+), 5 deletions(-)
 
 -- 
-Sincerely,
-Yeoreum Yun
+2.43.0
+
