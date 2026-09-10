@@ -1,300 +1,112 @@
-Received: from mta1.migadu.com (out-109.mta1.migadu.com [95.215.58.109])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9D131195B
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 11:28:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.109
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF4A045D932;
+	Thu, 10 Sep 2026 11:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789039714; cv=none; b=XcN8ZQZi1q3rncnxX+KuKpizbk3/MijTRgDdO+0aTlpiP78mzn5/DstCVg+b2YBch20F4r36cMdJEzYEqkA2L/i1xeqsEO4TyO0LenqnegvltcyKmjVx/MTt2JMdjB1hU04DyUb10Clk2muZAWdXvMHeC/kBPCXEoJDxqakdth8=
+	t=1789039813; cv=none; b=DXhh+to4B39PuWiI8kFIb0+FFFsFJEZThCweh5MBRCKFw0HEK3pgiAyIz8wrrkpQtCEDFPEflP9vPVFcsf6jijkULYYj7RilruqHkxHKPmiFHvYkfh4r9oLdmWaAoaIahfX2JtUgR/jQXem2xckDs4vRaF5F17exMfBKbd/NWis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789039714; c=relaxed/simple;
-	bh=hqlLi6bTP/oiCg2WQijATvjJsdlPO5fSQ16lKd07OH4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GHC2vb1XmvHEIgtfRw74J59kgN1uYaGjWYgs7OsOP6IjtvTlqagX8zbPusLWo50wFjuFmBPvvz1iACj5Iuhg/F+HWPHBijJbGHCPYPCgIF3SvHddp3Id9sj79S7Y4NgIVL0fVvJ8HuYH70ZcCXBwnJN7B2PXPH8nKtaatENVck8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iBldzKJv; arc=none smtp.client-ip=95.215.58.109
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789039813; c=relaxed/simple;
+	bh=/G2oy6VvWgqzhhGWGDc5hUkeWhIlMJyWPCN22E56evg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CRIbSprssLSIMTGS5XqzZmuqzr/RU5BE+z9kQfAsMZ+z1/6TNVBiTuI1LwevTkvK0ybeEAz43B9Dt9g8i9B5LZV1GR6786JA59ENDVodCzA2pdSBaDOdqan0fD9dPVQziJLIdDXM5jAYgw1/bnB/kg1AyB0TVAIzXOyYks0HAZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d7aVNPj5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iBldzKJv"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=hqlLi6bTP/oiCg2WQijATvjJsdlPO5fSQ16lKd07OH4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789039709; v=1; x=1789644509;
- b=iBldzKJv63L9xfzjR+b1R1usEB/qUW4nd9FRnzevBGFBrXFKg1AByFmhr0mvvRFZTL5vGksu
- jehtENo8lDeSR7vwQTTzYZY32MWaZy2dp9xppMgEXQVIwT27qgfG1K3TAlIgVbaZ4pVu6ox28e2
- ICt9KTOJlWd0gNqzymN0dURo=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e46b3dd9f2c8c11f;
-	Thu, 10 Sep 2026 11:28:28 +0000
-X-Mizu-Trace-ID: e46b3dd9f2c8c11f
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Aditi Ghag <aditi.ghag@isovalent.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v3 3/3] selftests/bpf: Test bpf_sock_destroy() on TIME_WAIT and listener socks
-Date: Thu, 10 Sep 2026 19:28:02 +0800
-Message-ID: <20260910112810.153801-1-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260910112107.148770-1-jiayuan.chen@linux.dev>
-References: <20260910112107.148770-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d7aVNPj5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 225031F000FF;
+	Thu, 10 Sep 2026 11:30:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789039811;
+	bh=vmh1GKz1N11M+N8xmDUZhkm9CqjUcOyixUe/5x259k4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=d7aVNPj5I4IEFe1KJKsAvmQcC3+y06BptG1oBLhAOq9y20CRIwdceap4yWL+m1S//
+	 R46hgMinxVOwvajxh0odbLxPoUdIfa58DOTFbDodhDUfbfPpFPVNI9Rr5khsA+SRw2
+	 JFvbFIiuLHc7l+K6kj5aiMCUs/rpn/y3BhHxwdtInWTOBnoZ8EnO4hb/0UBJK/VVaT
+	 TvrreBW2VpKUJVDOihSi/PV5MIwpGuj9B1M3YZKlGDj/t/AO0xuJ1XBfYq2gNoW5bI
+	 /WgP8CAGLtb9kZfMDYMfzwXa88epd5AL4WN3hKmaqalWZF7H0NDGIE7Y0kc4uO7H9O
+	 B4IjvUUQnt0Jg==
+Message-ID: <9b67424d-70e5-442b-9ec7-22b1d3db12f4@kernel.org>
+Date: Thu, 10 Sep 2026 13:30:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/5] KVM: guest_memfd: bind backing memory to a NUMA node
+To: Gregory Price <gourry@gourry.net>, linux-mm@kvack.org
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com, pbonzini@redhat.com,
+ seanjc@google.com, akpm@linux-foundation.org, ziy@nvidia.com,
+ matthew.brost@intel.com, joshua.hahnjy@gmail.com, rakie.kim@sk.com,
+ byungchul@sk.com, ying.huang@linux.alibaba.com, apopple@nvidia.com,
+ shuah@kernel.org
+References: <20260902194657.79075-1-gourry@gourry.net>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260902194657.79075-1-gourry@gourry.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add two subtests.
+On 9/2/26 21:46, Gregory Price wrote:
+> guest_memfd allocates its folios through a per-inode shared mempolicy.
+> 
+> Today that policy can only be set after the fact, with mbind() on a host
+> mmap of the fd. That requires the fd to be mappable, and it cannot reach
+> folios that are only ever guest-faulted. Neither holds for a
+> non-mappable (confidential) guest_memfd.
 
-tcp_timewait: the client shuts down first and the server closes after
-it, so the client sock ends up in TIME_WAIT. A tcp iterator then finds
-the timewait sock by the cookie it inherited from the client sock and
-destroys it. Iterate once more to make sure it is gone. Without the
-first fix bpf_sock_destroy() reads past the timewait sock and KASAN
-complains.
+That looks like an investment into a mechanism we will soon consider legacy, so
+I am not convinced this is the right approach?
 
-tcp_listen_pending: connect to a listener but never accept, so the child
-sits in the accept queue, then destroy the listener. Without the second
-fix the cond_resched() in inet_csk_listen_stop() trips the might_sleep
-check under rcu_read_lock().
 
-  ./test_progs -a sock_destroy
-
-  #444/1   sock_destroy/tcp_client:OK
-  #444/2   sock_destroy/tcp_server:OK
-  #444/3   sock_destroy/tcp_listen_pending:OK
-  #444/4   sock_destroy/tcp_timewait:OK
-  #444/5   sock_destroy/udp_client:OK
-  #444/6   sock_destroy/udp_server:OK
-  #444/7   sock_destroy/trace_tcp_destroy_sock:OK
-  #444     sock_destroy:OK
-  Summary: 1/7 PASSED, 0 SKIPPED, 0/0 FAILED
-
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../selftests/bpf/prog_tests/sock_destroy.c   | 121 ++++++++++++++++++
- .../selftests/bpf/progs/sock_destroy_prog.c   |  30 +++++
- 2 files changed, 151 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-index 9c11938fe597d..78d642a02bdb6 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <poll.h>
- #include <test_progs.h>
- #include <bpf/bpf_endian.h>
- 
-@@ -110,6 +111,122 @@ static void test_tcp_server(struct sock_destroy_prog *skel)
- 		close(serv);
- }
- 
-+static void test_tcp_listen_pending(struct sock_destroy_prog *skel)
-+{
-+	int serv = -1, clien = -1, accept_serv = -1, n, serv_port;
-+	struct pollfd pfd = { .events = POLLIN };
-+	char buf[1];
-+
-+	serv = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
-+	if (!ASSERT_GE(serv, 0, "start_server"))
-+		goto cleanup;
-+	serv_port = get_socket_local_port(serv);
-+	if (!ASSERT_GE(serv_port, 0, "get_sock_local_port"))
-+		goto cleanup;
-+	skel->bss->serv_port = (__be16)serv_port;
-+
-+	/*
-+	 * Connect but never accept, so the child sits in the accept queue
-+	 * of the listener. Wait until it's actually there.
-+	 */
-+	clien = connect_to_fd(serv, 0);
-+	if (!ASSERT_GE(clien, 0, "connect_to_fd"))
-+		goto cleanup;
-+	pfd.fd = serv;
-+	if (!ASSERT_EQ(poll(&pfd, 1, -1), 1, "poll listener"))
-+		goto cleanup;
-+
-+	/* Run iterator program that destroys server sockets. */
-+	start_iter_sockets(skel->progs.iter_tcp6_server);
-+
-+	accept_serv = accept(serv, NULL, NULL);
-+	if (!ASSERT_LT(accept_serv, 0, "accept on destroyed listener"))
-+		goto cleanup;
-+	ASSERT_EQ(errno, EINVAL, "error code on destroyed listener");
-+
-+	/* The unaccepted child was reset along with the listener. */
-+	n = recv(clien, buf, sizeof(buf), 0);
-+	if (!ASSERT_LT(n, 0, "client recv on reset child"))
-+		goto cleanup;
-+	ASSERT_EQ(errno, ECONNRESET, "error code on reset child");
-+
-+cleanup:
-+	if (clien != -1)
-+		close(clien);
-+	if (accept_serv != -1)
-+		close(accept_serv);
-+	if (serv != -1)
-+		close(serv);
-+}
-+
-+static void test_tcp_timewait(struct sock_destroy_prog *skel)
-+{
-+	int serv = -1, clien = -1, accept_serv = -1, n;
-+	struct timeval tv = {};
-+	char buf[1];
-+
-+	serv = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
-+	if (!ASSERT_GE(serv, 0, "start_server"))
-+		goto cleanup;
-+
-+	clien = connect_to_fd(serv, 0);
-+	if (!ASSERT_GE(clien, 0, "connect_to_fd"))
-+		goto cleanup;
-+
-+	accept_serv = accept(serv, NULL, NULL);
-+	if (!ASSERT_GE(accept_serv, 0, "serv accept"))
-+		goto cleanup;
-+
-+	/*
-+	 * Active close from the client, then close the server side. Once
-+	 * recv() sees EOF the server FIN has been processed and the client
-+	 * sock is in TIME_WAIT. Block without timeout so a loaded CI box
-+	 * can't race us.
-+	 */
-+	if (!ASSERT_OK(setsockopt(clien, SOL_SOCKET, SO_RCVTIMEO, &tv,
-+				  sizeof(tv)), "clear rcvtimeo"))
-+		goto cleanup;
-+	if (!ASSERT_OK(shutdown(clien, SHUT_WR), "client shutdown"))
-+		goto cleanup;
-+
-+	/*
-+	 * Make sure the server has seen the client FIN before it closes,
-+	 * so the two FINs never cross.
-+	 */
-+	n = recv(accept_serv, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(n, 0, "server recv EOF"))
-+		goto cleanup;
-+
-+	close(accept_serv);
-+	accept_serv = -1;
-+
-+	/* block until return EOF */
-+	n = recv(clien, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(n, 0, "client recv EOF"))
-+		goto cleanup;
-+
-+	/* Run iterator program that destroys the timewait client sock. */
-+	skel->bss->tw_found = 0;
-+	start_iter_sockets(skel->progs.iter_tcp6_timewait);
-+	if (!ASSERT_EQ(skel->bss->tw_found, 1, "timewait sock found"))
-+		goto cleanup;
-+
-+	ASSERT_OK(skel->bss->tw_destroy_err, "destroy timewait sock");
-+
-+	/* The destroyed timewait sock must be gone. */
-+	skel->bss->tw_found = 0;
-+	start_iter_sockets(skel->progs.iter_tcp6_timewait);
-+	ASSERT_EQ(skel->bss->tw_found, 0, "timewait sock destroyed");
-+
-+cleanup:
-+	if (clien != -1)
-+		close(clien);
-+	if (accept_serv != -1)
-+		close(accept_serv);
-+	if (serv != -1)
-+		close(serv);
-+}
-+
- static void test_udp_client(struct sock_destroy_prog *skel)
- {
- 	int serv = -1, clien = -1, n = 0;
-@@ -204,6 +321,10 @@ void test_sock_destroy(void)
- 		test_tcp_client(skel);
- 	if (test__start_subtest("tcp_server"))
- 		test_tcp_server(skel);
-+	if (test__start_subtest("tcp_listen_pending"))
-+		test_tcp_listen_pending(skel);
-+	if (test__start_subtest("tcp_timewait"))
-+		test_tcp_timewait(skel);
- 	if (test__start_subtest("udp_client"))
- 		test_udp_client(skel);
- 	if (test__start_subtest("udp_server"))
-diff --git a/tools/testing/selftests/bpf/progs/sock_destroy_prog.c b/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-index 9e0bf7a54cec9..0a8887543218a 100644
---- a/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-+++ b/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-@@ -7,6 +7,8 @@
- #include "bpf_tracing_net.h"
- 
- __be16 serv_port = 0;
-+int tw_found = 0;
-+int tw_destroy_err = 0;
- 
- int bpf_sock_destroy(struct sock_common *sk) __ksym;
- 
-@@ -100,6 +102,34 @@ int iter_tcp6_server(struct bpf_iter__tcp *ctx)
- 	return 0;
- }
- 
-+SEC("iter/tcp")
-+int iter_tcp6_timewait(struct bpf_iter__tcp *ctx)
-+{
-+	struct sock_common *sk_common = ctx->sk_common;
-+	__u64 *val;
-+	int key = 0;
-+
-+	if (!sk_common)
-+		return 0;
-+
-+	if (sk_common->skc_family != AF_INET6)
-+		return 0;
-+
-+	if (!bpf_skc_to_tcp_timewait_sock(sk_common))
-+		return 0;
-+
-+	val = bpf_map_lookup_elem(&tcp_conn_sockets, &key);
-+	if (!val)
-+		return 0;
-+	/* The timewait sock inherits the cookie of the closed client sock. */
-+	if (bpf_get_socket_cookie(sk_common) != *val)
-+		return 0;
-+
-+	tw_found++;
-+	tw_destroy_err = bpf_sock_destroy(sk_common);
-+
-+	return 0;
-+}
- 
- SEC("iter/udp")
- int iter_udp6_client(struct bpf_iter__udp *ctx)
 -- 
-2.43.0
+Cheers,
 
+David
