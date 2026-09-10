@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-55.mta0.migadu.com [91.218.175.55])
+Received: from mta0.migadu.com (out-70.mta0.migadu.com [91.218.175.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A854AB1CB
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 16:47:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2733B8D48
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 16:47:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789058874; cv=none; b=UPnlG5TPVDIvTKOsLOVXhAyQODwXTD611/BqJGvl626++EHf9LJ1sye/LK4j7yChD30xQMYCJf7450MVRNNrJqtBNa0ctEV/QfY5IvZPQuJDIer2+CMGm1J89fuTNu4F64PRjHLuj7CaU71ALhGIMQ1PfOQ20MRH54N/aGz8hXQ=
+	t=1789058876; cv=none; b=DaHQtM6diiwGnyoTM6vjlR1uQVJNInDit4DDsAvNK4hJ6EGFG8GzYIngoOB22khY24iei1aKUfd2Ai4/FafL/EvS3D+gAY31I9Nn/ONt0abhD4GENuhN4GfxCFSb/LloCE11r1mwgIawbthZQ0wjWANwj0aBP3DW5njENlX2CQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789058874; c=relaxed/simple;
-	bh=mq7GOoQK30iIGJJGlQCVwVgC5MxtIYTjkgeg/GW2OnI=;
+	s=arc-20240116; t=1789058876; c=relaxed/simple;
+	bh=mrYY+8ju/CiFozDqUvghoNRZx9UJQJPLR3n4E5rpxG0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DrTvWSdV7lo1+7xaJECpKc7lpGONF9rB1DS2oAK32JMPlJGtMs542T6zGFwRL+JFmSILmkV6EG4BODhZ2cNOoSph2TR7S8RawLnzea3tUgs+sRjCEskzqBfrlFg2nS9AcOEbPDPCeVkwzGlVI2spS16NEV8MRvh2aEO17n5odlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kg5Vg68y; arc=none smtp.client-ip=91.218.175.55
+	 MIME-Version; b=oi3Jl6VYZYTHxtN1WEh4wYQTMAXE/odq2UzfwQ0RaZ825x5AhHjeswvc/c/uNSLUcDaA2YunBeblHTrHrCYWr070mFH7JbC+FbkNxMg73lEV7lc3uBnCw1GdrJgVo0DtJSxvePhXWHfAycJg6exLknvwNEH7tRy+PgeNeRmxeE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rE19zifN; arc=none smtp.client-ip=91.218.175.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kg5Vg68y"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rE19zifN"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=mq7GOoQK30iIGJJGlQCVwVgC5MxtIYTjkgeg/GW2OnI=;
+DKIM-Signature: a=rsa-sha256; bh=mrYY+8ju/CiFozDqUvghoNRZx9UJQJPLR3n4E5rpxG0=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789058864; v=1; x=1789663664;
- b=kg5Vg68yP6kF3dtU/xcNm+rhdyYFY1ZPNkCuLEA80pBnSiU/LBHMcN/PKayXR8RO3xnV7yZ8
- 56pkrassfA9rAyfTHqQcPR/3NEYEQfIe+PbURiRI99TtAAVNMRh6a+8FKZ86/l3luhMYYk06cYd
- j9jSs6cskuVb3lx6B/visEgw=
+ t=1789058869; v=1; x=1789663669;
+ b=rE19zifNqL4EhL9G/ZjzTZzXUIPPtab0xTAGXEI3CeSYz/kUbb980Ow+J35oLW4Fr/jyq6JU
+ Z7YT1WuCG6LP9iIP8xzYE905uMHqotKN50nM51T/8bBAzKptqQFUk71pyKF5Pi86IpMI8rkjncI
+ xSct+xch90Nu+d4pU1gziH80=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 100b8265b6c2deba;
-	Thu, 10 Sep 2026 16:47:44 +0000
-X-Mizu-Trace-ID: 100b8265b6c2deba
+Received: by smtp.migadu.com with ESMTPS id dc8a79c2cacc61c9;
+	Thu, 10 Sep 2026 16:47:48 +0000
+X-Mizu-Trace-ID: dc8a79c2cacc61c9
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: ast@kernel.org,
@@ -47,9 +47,9 @@ Cc: martin.lau@linux.dev,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v2 11/13] bpf: record what a narrowing spill actually stores
-Date: Thu, 10 Sep 2026 22:16:33 +0530
-Message-ID: <20260910164635.459558-12-vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v2 12/13] bpf: track low-32 scalar equality across narrowing stack spills
+Date: Thu, 10 Sep 2026 22:16:34 +0530
+Message-ID: <20260910164635.459558-13-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260910164635.459558-1-vineet.gupta@linux.dev>
 References: <20260910164635.459558-1-vineet.gupta@linux.dev>
@@ -61,149 +61,94 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A spill narrower than its source saves the register state untruncated:
-save_register_state() does
+A spill narrower than its source stores the source's low 32 bits, so the
+slot is their zero-extension -- the same relation a 32-bit mov records, in
+the store direction:
 
-	state->stack[spi].spilled_ptr = *reg;
+  r6 = ...                  /* full 64-bit unknown */
+  *(u32 *)(r10 - 8) = r6;   /* slot holds r6's low 32 bits */
+  r2 = *(u32 *)(r10 - 8);
+  if w6 != 0 goto ...       /* not taken: r6's low 32 bits are 0 */
+  if r2 == 0 goto ...       /* not deduced today */
 
-and marks only @size bytes STACK_SPILL. So after
+Record a low-32 link instead of dropping the relation. A store never
+sign-extends, so SUBREG_ZEXT is the only kind that arises here and no
+is_ldsx equivalent is needed.
 
-	r6 = ...			/* full 64-bit unknown */
-	*(u32 *)(r10 - 8) = r6;		/* four bytes reach memory */
+This composes with the fill side rather than stacking on it. The previous
+patch left the slot recording exactly what memory holds, so its width is
+already within 32 bits and the fill sees an ordinary narrow source: the
+destination copies the slot's descriptor, staying one hop from the same
+base rather than becoming a link to a link.
 
-the slot claims to hold all of r6 while memory holds its low half. That is
-sound and the fill truncates later, but stacksafe() compares the slot
-through regsafe(), so the imprecision reaches state comparison.
-
-Truncate the recorded state to the bytes stored. Nothing reads the slot as
-wider: the remaining bytes are STACK_MISC, so a larger access fails the
-size <= spill_size test and never takes the register-fill path.
-
-This is independent of linking -- it applies whether or not the source
-carries an id -- hence a patch of its own.
-
-coerce_reg_to_size() moves up to be visible at the spill site, otherwise
-unchanged.
-
-spill_subregs_preserve_stack_zero pins the old state and moves with it. It
-checks that STACK_ZERO bytes survive a subreg spill, which is unaffected;
-only the recorded scalar tightens.
+spill_subregs_preserve_stack_zero picks up the id on its 4-byte spill. The
+16- and 8-bit spills in the same program do not, which is the size gate
+working: a link can only describe the low 32 bits.
 
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
-v2: new.
+v2: new, with 11/13.
 
- kernel/bpf/verifier.c                         | 60 +++++++++++--------
- .../selftests/bpf/progs/verifier_spill_fill.c | 10 +++-
- 2 files changed, 41 insertions(+), 29 deletions(-)
+ kernel/bpf/verifier.c                         | 22 ++++++++++++++++---
+ .../selftests/bpf/progs/verifier_spill_fill.c |  2 +-
+ 2 files changed, 20 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 89be1240c99a..6cb35fc0d0fb 100644
+index 6cb35fc0d0fb..9e63eddb9023 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -3509,6 +3509,31 @@ static void assign_scalar_id_before_mov(struct bpf_verifier_env *env,
- 		src_reg->id = ++env->id_gen;
- }
+@@ -3665,10 +3665,19 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 	mark_stack_slot_scratched(env, spi);
+ 	if (reg && !(off % BPF_REG_SIZE) && reg->type == SCALAR_VALUE && env->bpf_capable) {
+ 		bool reg_value_fits;
++		bool subreg_link;
  
-+static void coerce_reg_to_size(struct bpf_reg_state *reg, int size)
-+{
-+	u64 mask;
+ 		reg_value_fits = get_reg_width(reg) <= BITS_PER_BYTE * size;
++		/*
++		 * A narrowing spill stores the low 32 bits of the source, so
++		 * the slot is their zero-extension: record a low-32 link
++		 * rather than dropping the relation, as a 32-bit mov does.
++		 * A store never sign-extends, so there is only one kind here.
++		 */
++		subreg_link = !reg_value_fits && size == 4;
 +
-+	/* clear high bits in bit representation */
-+	reg->var_off = tnum_cast(reg->var_off, size);
-+
-+	/* fix arithmetic bounds */
-+	mask = ((u64)1 << (size * 8)) - 1;
-+	if ((reg_umin(reg) & ~mask) == (reg_umax(reg) & ~mask))
-+		reg_set_urange64(reg, reg_umin(reg) & mask, reg_umax(reg) & mask);
-+	else
-+		reg_set_urange64(reg, 0, mask);
-+
-+	/*
-+	 * If size is smaller than 32bit register the 32bit register
-+	 * values are also truncated so we push 64-bit bounds into
-+	 * 32-bit bounds. Above were truncated < 32-bits already.
-+	 */
-+	if (size < 4)
-+		__mark_reg32_unbounded(reg);
-+
-+	reg_bounds_sync(reg);
-+}
-+
- static void save_register_state(struct bpf_verifier_env *env,
- 				struct bpf_func_state *state,
- 				int spi, struct bpf_reg_state *reg,
-@@ -3646,9 +3671,16 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
- 		if (reg_value_fits)
+ 		/* Make sure that reg had an ID to build a relation on spill. */
+-		if (reg_value_fits)
++		if (reg_value_fits || subreg_link)
  			assign_scalar_id_before_mov(env, reg);
  		save_register_state(env, state, spi, reg, size);
--		/* Break the relation on a narrowing spill. */
--		if (!reg_value_fits)
-+		if (!reg_value_fits) {
-+			/*
-+			 * Only the low @size bytes reach memory, so record
-+			 * what the slot holds rather than the wider source
-+			 * it came from.
-+			 */
-+			coerce_reg_to_size(&state->stack[spi].spilled_ptr, size);
-+			/* Break the relation on a narrowing spill. */
- 			clear_scalar_id(&state->stack[spi].spilled_ptr);
-+		}
+ 		if (!reg_value_fits) {
+@@ -3678,8 +3687,15 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 			 * it came from.
+ 			 */
+ 			coerce_reg_to_size(&state->stack[spi].spilled_ptr, size);
+-			/* Break the relation on a narrowing spill. */
+-			clear_scalar_id(&state->stack[spi].spilled_ptr);
++			if (subreg_link && reg->id)
++				state->stack[spi].spilled_ptr.subreg = SUBREG_ZEXT;
++			else
++				/*
++				 * Nothing to relate: either the source has no
++				 * id to share, or the store is narrower than
++				 * the 32 bits a link can describe.
++				 */
++				clear_scalar_id(&state->stack[spi].spilled_ptr);
+ 		}
  	} else if (!reg && !(off % BPF_REG_SIZE) && is_bpf_st_mem(insn) &&
  		   env->bpf_capable) {
- 		struct bpf_reg_state *tmp_reg = &env->fake_reg[0];
-@@ -5738,30 +5770,6 @@ static void sext_32_to_64(struct bpf_reg_state *reg)
- /* truncate register to smaller size (in bytes)
-  * must be called with size < BPF_REG_SIZE
-  */
--static void coerce_reg_to_size(struct bpf_reg_state *reg, int size)
--{
--	u64 mask;
--
--	/* clear high bits in bit representation */
--	reg->var_off = tnum_cast(reg->var_off, size);
--
--	/* fix arithmetic bounds */
--	mask = ((u64)1 << (size * 8)) - 1;
--	if ((reg_umin(reg) & ~mask) == (reg_umax(reg) & ~mask))
--		reg_set_urange64(reg, reg_umin(reg) & mask, reg_umax(reg) & mask);
--	else
--		reg_set_urange64(reg, 0, mask);
--
--	/* If size is smaller than 32bit register the 32bit register
--	 * values are also truncated so we push 64-bit bounds into
--	 * 32-bit bounds. Above were truncated < 32-bits already.
--	 */
--	if (size < 4)
--		__mark_reg32_unbounded(reg);
--
--	reg_bounds_sync(reg);
--}
--
- static void set_sext64_default_val(struct bpf_reg_state *reg, int size)
- {
- 	if (size == 1) {
 diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 39a1766dae3f..487e0a1f395c 100644
+index 487e0a1f395c..1042856b97c2 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -464,9 +464,13 @@ l0_%=:	r1 >>= 16;					\
- SEC("raw_tp")
- __log_level(2)
- __success
--__msg("fp-8=0m??scalar()")
--__msg("fp-16=00mm??scalar()")
--__msg("fp-24=00mm???scalar()")
-+/*
-+ * The slot records what the store put there, not the wider source it came
-+ * from, so each scalar is bounded by the size of its spill.
-+ */
-+__msg("fp-8=0m??scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))")
-+__msg("fp-16=00mm??scalar(smin=smin32=0,smax=umax=smax32=umax32=0xffff,var_off=(0x0; 0xffff))")
-+__msg("fp-24=00mm???scalar(smin=smin32=0,smax=umax=smax32=umax32=255,var_off=(0x0; 0xff))")
+@@ -468,7 +468,7 @@ __success
+  * The slot records what the store put there, not the wider source it came
+  * from, so each scalar is bounded by the size of its spill.
+  */
+-__msg("fp-8=0m??scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))")
++__msg("fp-8=0m??scalar(id={{[0-9]+}}.lo32,smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))")
+ __msg("fp-16=00mm??scalar(smin=smin32=0,smax=umax=smax32=umax32=0xffff,var_off=(0x0; 0xffff))")
+ __msg("fp-24=00mm???scalar(smin=smin32=0,smax=umax=smax32=umax32=255,var_off=(0x0; 0xff))")
  __naked void spill_subregs_preserve_stack_zero(void)
- {
- 	asm volatile (
 -- 
 2.53.0-Meta
 
