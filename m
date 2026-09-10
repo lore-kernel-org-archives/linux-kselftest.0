@@ -1,165 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D584A3F3F;
-	Thu, 10 Sep 2026 14:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789049216; cv=none; b=GeNi60+PvnLbyUO0kD+E8MzyA3DwyuBfFbv+mjzolpTCQSh31CwvvcPibnlP4K35OFr9NCzGtcyuplDUN64MPLtjpBZMFSGXhwl5RX7uMJb0Q4adRROmqOAp3DiOaRchKLzNBgmIF8rx0Gy5k/r54myswBXo6dhzVlqfx0AkN64=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789049216; c=relaxed/simple;
-	bh=usjgwNwq8e5FVuDuIy//fKbw8DVuTnjixnyIZu/Ku78=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lY8ZpZDY6Afi7C7XMldN7G1hHFMN2dwWquzdALp2oW/LHbpV1l+ZZg1IHGX4rmXTquRgAOhgrC/sx62gnXfDfIF0iYLQVgkerTcvXLaWIzy7aDx4J6MXg5ABwc/t5rHS3dhcztL9QTpIi0mmM6AnphvEX7HDYGOxmxsBnfjW5dQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=khYqYYox; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506CA489FAB
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 14:25:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789050342; cv=pass; b=pq6tSA1mjqvqausTfFNKmzSeQrhDeBF0zqmF/E7CAqh9ySEBOQjK12vbdv9++7BAsqJOuVcfAUzcapIfbG6Pqc3F+TS4gIIx7YFjKNPsmD88WdhZ8JUIJVzE2PdR0Zb/FiUYwzyxQmduaG52yj0Yeag0iYsuwMZcfsp5DWUVgxo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789050342; c=relaxed/simple;
+	bh=iexBxeT1r80QFrStcwB2/AMqN63Tsm+wJYHNQeJSdVY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JSpdWUcdcFllDOlVjVv1Mx+f0u218uHNBj9OSLrVIr3Wc67+dVMXpswPi+IQlQ8yxz9jjlNhcx4ryjoP8B+fBrsAMAVHlIh97gZK2Gon9kdJ8nK7Afc+MX5VTpppDaTrtX3E/pH8I5Ti3++x+XKpnXfhHL2Ye9R/4yvyIzkLWDU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FJp4vwvC; arc=pass smtp.client-ip=74.125.231.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="khYqYYox"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 970881F0089A;
-	Thu, 10 Sep 2026 14:06:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789049215;
-	bh=70DL84P6JTZYmHCwquU+RidyFpbSEn3EbhgRLehum0s=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=khYqYYoxLCC3IHUZhWSZ/5k6MaUU7a5qG9Uq/H2as3L0W6BL+uxN7k2+pKlEBL0yR
-	 dghTPtHKwmo6niWKCE/e7CEN8xnGbaRJ7ryTnxA4eepLVos7utuH62ktBK1Q3ynEdA
-	 mdUmxTQ9yw+NMXWXyeBG0zO325JsctZUk79B/RHN+V+0ZYQ+50sPC8n8eD8y3pPFBB
-	 05j6cHp94XsGsHj1GusZhoju5knkCNRv/37JUqphBcqKTnaYIRFBjwzHiKXiGecGar
-	 zIt2dcm1Q/eBn9ED6HySRxntqymbCFq4JhBd0JZYXKsLDP+6QtIP8duViFjxKlMAKT
-	 IJS3xyspz9d7Q==
-From: SJ Park <sj@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: SJ Park <sj@kernel.org>,
-	Gregory Price <gourry@gourry.net>,
-	balbirs@nvidia.com,
-	brendan.jackman@linux.dev,
-	yuzenghui@huawei.com,
-	apopple@nvidia.com,
-	alucerop@amd.com,
-	matthew.brost@intel.com,
-	akpm@linux-foundation.org,
-	ljs@kernel.org,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	gregkh@linuxfoundation.org,
-	rafael@kernel.org,
-	dakr@kernel.org,
-	djbw@kernel.org,
-	vishal.l.verma@intel.com,
-	dave.jiang@intel.com,
-	alison.schofield@intel.com,
-	osandov@osandov.com,
-	jannh@google.com,
-	pfalcato@suse.de,
-	jackmanb@google.com,
-	hannes@cmpxchg.org,
-	ziy@nvidia.com,
-	pbonzini@redhat.com,
-	osalvador@suse.de,
-	joshua.hahnjy@gmail.com,
-	rakie.kim@sk.com,
-	byungchul@sk.com,
-	ying.huang@linux.alibaba.com,
-	kasong@tencent.com,
-	qi.zheng@linux.dev,
-	shakeel.butt@linux.dev,
-	baohua@kernel.org,
-	axelrasmussen@google.com,
-	yuanchu@google.com,
-	weixugc@google.com,
-	yury.norov@gmail.com,
-	linux@rasmusvillemoes.dk,
-	longman@redhat.com,
-	ridong.chen@linux.dev,
-	tj@kernel.org,
-	mkoutny@suse.com,
-	jgg@ziepe.ca,
-	jhubbard@nvidia.com,
-	peterx@redhat.com,
-	baolin.wang@linux.alibaba.com,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	lance.yang@linux.dev,
-	usama.arif@linux.dev,
-	xu.xin16@zte.com.cn,
-	chengming.zhou@linux.dev,
-	roman.gushchin@linux.dev,
-	muchun.song@linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	driver-core@lists.linux.dev,
-	nvdimm@lists.linux.dev,
-	linux-cxl@vger.kernel.org,
-	linux-debuggers@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	damon@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH v5 14/36] mm/damon: skip private node memory in DAMON migration and pageout
-Date: Thu, 10 Sep 2026 07:06:45 -0700
-Message-ID: <20260910140645.168914-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <e2d2b01e-e6eb-4009-a07e-e615d576c0c3@kernel.org>
-References: 
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FJp4vwvC"
+Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-478cbd5b48aso1365131fac.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 07:25:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789050339; cv=none;
+        d=google.com; s=arc-20260327;
+        b=WmBQGlQ4Siy51VXxbhq+yPRwmgu127MahvcjRIMoD9I0NTRt6hMSAQZwA0ys9Eb7Nc
+         pUJReMu8aPjihn55OBR/mzrfNuRccWqX8Y3q2sKErAV3cvSbLHwFMOIFp2xz/6CGX+10
+         h+4790qG2aOeTLe+1YWKdYiJSulBd9F7ypmDCbEc2uASyTQfYu+ZzxFfm7/cl7OrkBvC
+         I9C7hL/as2y2EEehH2w0FC6RnIqjWqM40fKMu91slO+ABAhENHJknfS4scjzSs2/F1vp
+         UdQTV3i+FoRuMcv6hgNfw+Gs8sBouQwImaY14l4pLwbmO/TIjiVWo3Yg7TZXPodR5unZ
+         UtUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=haTWqSj8+sulXARcSdY+bPVghCT1LWLKYiL7Y87SzJw=;
+        fh=xuUV9UGD1/nV05OkQhWR7rBbgEO6X+/4/l7DYelUAHk=;
+        b=CJ+iHjBMBWDS0cQUcjlhbt5kntBTa7VFQcrWAnCFIjPJGGnx1GXUCQz2CHrUTwZdlo
+         mwmoqy3BA7K19xobfXv99V13rQJp7k5wNddOOmQZqh4Qhj7fUH+sKD17Zkg2CpC6er0y
+         s4xDBi8/kZItC4TDwzWfDYzNT/oq1xPxAQ/rjA8XxmgxAgis8Ke+MqW3ZDK2VwThmq2M
+         B1IuFz3L8DaH3wgFAFQDpzXLx6cPIYmQCwPGq9YGWhnEfN+caJ/9MF+BE3yLCUjdymcB
+         S5X0FL/QfQqx2izPgyNc0HlYhFbhkWWdJ0+7Qmx6vGo+SbTAbwBe02abS2KZbFFK8lAR
+         QGIw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789050339; x=1789655139; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=haTWqSj8+sulXARcSdY+bPVghCT1LWLKYiL7Y87SzJw=;
+        b=FJp4vwvCiR0x6tmzF+PcmZUx009lRz8h32k3K3kUFuuTRyj6aojucLDolDzlQz7TuP
+         h4Qwi8oqxvxbEx1Qbc77NKmkd9pSc02yDxBqFrTNd7d/gqAj8rPVKyyh77hFuI1OkpQT
+         R/bdwydN4x/Lt/8Nlb4XlPRIZezfOYw58Jzgbztd27rvzE5uLT2zFc/odd9vmQ3ZeLYR
+         VL4NY3l38El3Mc+PhHQkmBsOdRcM+BjqBIOIAOHvhp1gBWzBKKMRmWA80FOBBPZvHDTx
+         i6P0EA/TnFF1lidh3h1cRigRDPMyt4aVCBSK9k9KEMXJYNaFOG51bgcV3PM46gwokp1O
+         fUNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789050339; x=1789655139;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=haTWqSj8+sulXARcSdY+bPVghCT1LWLKYiL7Y87SzJw=;
+        b=k5UV9K+Un9w0UCLzs4VHSC71O1FvGOz/X3zuNNiOmIrvSMo7XqfmoIgHiIs2OoEHko
+         /iklxz5+iP0WL6RTEjVP2irykm4sM2oV2V6Nh3appp5A+QJoeYP1aV86k5eBeqHENlaw
+         L78rDZIUYgZ7Y5d77sZIoV9LQRCWcwMYlNeK0xr/OOvOWMsxF1FgXMDnISpisIa6AyMR
+         /+EyqHizNrZqJ82ZoOp6FqfALzilrlPepeyWTiz4Pi2pvT1KoiAdC0AhXFTQZ7euWNBC
+         tAi76ZSVg9fwxI6bercGQVo4bJtA5llUd4eVJYSBLhSHEbMdxaLz1d/wfq2H0PW0qZtS
+         zv4A==
+X-Gm-Message-State: AFuF++mBEwst1CETbPWxM0tBDuMki+I9tphBGpx6mV5qdZHFfUev4wXa
+	qse6GFFo8Sb0p11LLvr4485Cts7N5b/VUh8ToUDdw5DUTGJdL8hAVVeMfZKI+LfooRSatFn95Mt
+	UutOvXipZDEBOol5LWiyHmxLWxNngZ/ADV0nnaEY=
+X-Gm-Gg: AYBFou1cVgO96yaoE1MKzDiPs5zL9G5fK5z42PO4Hkr2+uhSqaPY9UyfHUhBH1tAzlp
+	CWBSUJVxNVIpx7nShOqGrgzI3Mfta74LjqNhTXJ0R0bOQthcM/cETCEEGALfVVUJ+oO029H6yK0
+	Lb6va3aYDy18Zd+8uKJlqLoUKBlFJwBLeA+Zcelf8rE8oRh+YMKUL4EB6YSi7r6lDTMoxQGPmPa
+	cLXavs62d9MwoPSYjZi15S5heKG+DmZyHlIPj5d78nsYJjkYAK6XoJTo3krFdBCDJpVzL9YG53J
+	/GGNzD2wADimQt3HctGcRWZQfS5c5v/YP6yCStGsN01cv4trIJz/RrxX8kUchUjYfc0Wty13Ciy
+	gESCkp7ZGrtFt521JevDGRMqi0TseHrxN4jgsXzk4dJgC4R8rOKBYkFIRXoNhLdH7PQ==
+X-Received: by 2002:a05:6808:4f0c:b0:4b2:8d91:ef6a with SMTP id
+ 5614622812f47-4c13fa8795emr5586961b6e.8.1789050339246; Thu, 10 Sep 2026
+ 07:25:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260909132602.68852-2-mngyadam@amazon.de>
+In-Reply-To: <20260909132602.68852-2-mngyadam@amazon.de>
+From: Ming Lei <tom.leiming@gmail.com>
+Date: Thu, 10 Sep 2026 09:25:27 -0500
+X-Gm-Features: AcwNN1Uu_GuAXXJ2Be9f6O__zza3jhEo9v5mLmL2JzR85KZC_M254gRqoHjxODg
+Message-ID: <CACVXFVO7YD4ckMPgZJh7=oxLMjka2UG_vkNcfECCBpkSQ7SHPQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests: ublk: install test_common.sh and trace/ scripts
+To: Mahmoud Nagy Adam <mngyadam@amazon.de>
+Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 10 Sep 2026 10:58:05 +0200 "David Hildenbrand (Arm)" <david@kernel.org> wrote:
+On Wed, Sep 9, 2026 at 8:26=E2=80=AFAM Mahmoud Nagy Adam <mngyadam@amazon.d=
+e> wrote:
+>
+> Every ublk test script sources test_common.sh from its own directory:
+>
+>     . "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
+>
+> and test_generic_02/12 additionally run bpftrace against the scripts in
+> trace/. Neither test_common.sh nor trace/ is listed in TEST_FILES, so
+> "make install" does not copy them into the install directory and every
+> ublk test fails when run from there:
+>
+>   ./test_generic_02.sh: line 4: .../kselftest_install/ublk/test_common.sh=
+: No such file or directory
+>   ./test_generic_02.sh: line 8: _have_program: command not found
+>
+> The bpftrace tests are affected even when bpftrace is installed: the
+> missing trace/*.bt makes bpftrace exit immediately, and the tests then
+> report a skip rather than a failure, which hides the problem.
+>
+> Add both to TEST_FILES, matching how other selftests ship their sourced
+> helpers (see kexec/kexec_common_lib.sh and zram/zram_lib.sh).
+>
+> Fixes: 6aecda00b7d1e1 ("selftests: ublk: add kernel selftests for ublk")
+> Fixes: 723977cab4c0fd ("selftests: ublk: add generic_01 for verifying seq=
+uential IO order")
+> Cc: stable@vger.kernel.org # v6.15+
+> Assisted-by: Kiro:claude-opus-5
+> Signed-off-by: Mahmoud Nagy Adam <mngyadam@amazon.de>
 
-> On 7/23/26 05:25, Gregory Price wrote:
-> > On Wed, Jul 22, 2026 at 05:19:42PM -0700, SJ Park wrote:
-> >> On Wed, 22 Jul 2026 08:16:56 -0400 Gregory Price <gourry@gourry.net> wrote:
-> >>
-> >>>
-> >>> See the damon changes in:
-> >>>
-> >>> https://lore.kernel.org/linux-mm/al-pkvmgIxGu3LzM@gourry-fedora-PF4VCD3F/T/#mfb99303c85dd9d4c3f58832dc28fc55583a7217a
-> >>
-> >> Summarizing what you want to say, quoting something from the patch, or at least
-> >> calling it "26th patch of this series" would have made reviewing much easier.
-> >> Cc-ing damon@ for only patches that toucing DAMON source files and the cover
-> >> letter of the series could also be helpful.  Please consider doing some of
-> >> these for future replies.
-> >>
-> > 
-> > I have been very much discouraged from this kind of trimming because it
-> > removes the context of the series from the individual patches - making it
-> > even more confusing.
-> 
-> Yes, 99% of upstream maintainers will scream at you if you CC them only on
-> individual patches :)
+On Wed, Sep 9, 2026 at 8:26=E2=80=AFAM Mahmoud Nagy Adam <mngyadam@amazon.d=
+e> wrote:
+>
+> Every ublk test script sources test_common.sh from its own directory:
+>
+>     . "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
+>
+> and test_generic_02/12 additionally run bpftrace against the scripts in
+> trace/. Neither test_common.sh nor trace/ is listed in TEST_FILES, so
+> "make install" does not copy them into the install directory and every
+> ublk test fails when run from there:
+>
+>   ./test_generic_02.sh: line 4: .../kselftest_install/ublk/test_common.sh=
+: No such file or directory
+>   ./test_generic_02.sh: line 8: _have_program: command not found
+>
+> The bpftrace tests are affected even when bpftrace is installed: the
+> missing trace/*.bt makes bpftrace exit immediately, and the tests then
+> report a skip rather than a failure, which hides the problem.
+>
+> Add both to TEST_FILES, matching how other selftests ship their sourced
+> helpers (see kexec/kexec_common_lib.sh and zram/zram_lib.sh).
+>
+> Fixes: 6aecda00b7d1e1 ("selftests: ublk: add kernel selftests for ublk")
+> Fixes: 723977cab4c0fd ("selftests: ublk: add generic_01 for verifying seq=
+uential IO order")
+> Cc: stable@vger.kernel.org # v6.15+
+> Assisted-by: Kiro:claude-opus-5
+> Signed-off-by: Mahmoud Nagy Adam <mngyadam@amazon.de>
 
-I agree that not everyone would like selective Cc-ing, like I also replied.
-But the number might be changed after we got modern mailing archives and tools
-like lore (public-inbox)?
-
-At least for me, selective Cc-ing works better as long as the cover letter is
-Cc-ing all recipients of all patches.  I can understand the high level picture
-from the cover letter and directly jump to the specific patch that require my
-attention.  Of course the sender might failed at figuring out to which mails I
-really need to pay attention.  If the cover letter doesn't tell me some details
-or I feel the sender might not Cc-ed me on all the patches that require my
-attention, I can fetch the entire thread from lore (public-inbox).
-
-Meanwhile, my private inbox have limited space and suboptimal UI.  Hence I use
-my private inbox as just an alarm and usually work on only public-inbox with a
-CLI tool.  Hence keeping noise in private inbox lower is more important to my
-specific workflow.  Again, my workflow may be very different from others.
-
+Reviewed-by: Ming Lei <tom.leiming@gmail.com>
 
 Thanks,
-SJ
-
-[...]
