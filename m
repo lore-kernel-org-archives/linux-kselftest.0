@@ -1,58 +1,41 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 430E14746C9;
-	Thu, 10 Sep 2026 11:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3AFC472079;
+	Thu, 10 Sep 2026 11:39:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.0.225.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789040159; cv=none; b=L9U21OLOce/UFpeSs3LeV4EMYUeuqCTYIJzoUpugYLAur1mik47oUNWZs3gdPtalbXBSHa5NVQuQPfcclU+tPRGwuTmY52ppDDkkLNR1fhSMVkz4wQrW6phJJshy7qrJNjF+VUA1c+biIAsvKzue57KE6QUpjKg4+HIxrk+9eWU=
+	t=1789040363; cv=none; b=ioUjc5OtgYG9xVWkP4tpjJKSkzc+u5ufCopE1C+iQAIvvZSllR32UCYAIcTFvbuIMHFhfQRm4sxJ7AY22dc+zQEhnD+4gO2/saTyMdgmVyw4CpLEhMmJth9onihmEaCt87dGFgUfdCkAOI1BL/XIM5YD3eLgLQVjo6kQ+oaNXz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789040159; c=relaxed/simple;
-	bh=aczfw/OR9qUx8B3t8k1OQ/240hod4So0X5+xLV4/xTA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bZRi7PqJXhbmHt609FyFycyjPpB3gLrn/rKkeHYJ8P5SQpeOCDAoZqGVCo87nngSqhNkzXUCHE2i7UqadcI4OBwjf2EVeKQ/efvICo6G9q2mzGIAsSoBMt062Cc8wHoM1NTE4Glhzx3khVZ7Tygph2/QDzNTzW26fcuxXtryk0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=CgX/mRT0; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="CgX/mRT0"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE4EF153B;
-	Thu, 10 Sep 2026 04:35:52 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E863B3F528;
-	Thu, 10 Sep 2026 04:35:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1789040156; bh=aczfw/OR9qUx8B3t8k1OQ/240hod4So0X5+xLV4/xTA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CgX/mRT04r6IGfuQdDy64iV7rk9c3tmgqtkbP4fAHIXXQyY1qGDmqhzrIGyBV/x4d
-	 6VCv3Ejrr5df0vlUe/MKPJyXEN0lFj6n7DXxd5v6HhF8nC2JCBMcBt1BitEZZ0JtGb
-	 G6tL2+pAkuCeWX/2qbtSouG74LXKcFbRexY4TzWA=
-Date: Thu, 10 Sep 2026 12:35:50 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/3] kselftest: mm: fix some failure of
- split_huge_page_test
-Message-ID: <aqKWFihYpLrLILcZ@e129823.arm.com>
-References: <20260907-fix_split-v5-0-822b810458bc@arm.com>
- <b923f63c-db7c-4ecb-949d-368bc6311626@kernel.org>
- <aqKHHWKvOonYZPy0@e129823.arm.com>
- <21e0a933-63b6-42b4-8cd7-df05b0c9acfc@kernel.org>
- <aqKRdIjAYB2PEwRN@e129823.arm.com>
- <9750125c-49b4-48b1-adab-3a1cbec4255a@kernel.org>
+	s=arc-20240116; t=1789040363; c=relaxed/simple;
+	bh=MJCokGP7zUNGImiOFAmdg2f9uLjAcaU0W2WGWAvvvTY=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uqJ3s0wWe/9OAlsIh+wer6oRRStSNe7+54legRPmdJyhb8yFFzTwRQmmpfOLfZgNqRqXbF/x5cQxMvFz+sP6RdvxEiFpiC/Ij53fiw8x4rKx4+wk7m5m6cuapKATkXrJF721pXaX0Gn11wTOTwHc8e20qFijrXtObUmPQ3LSjJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=210.0.225.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+Received: from zhaoxin.com (unknown [127.0.0.1])
+	by mx1.zhaoxin.com (MTA) with ESMTP id 4hgbL56m4RzbKSs8;
+	Thu, 10 Sep 2026 19:39:09 +0800 (CST)
+Received: from zhaoxin.com (unknown [10.28.208.166])
+	by mx1.zhaoxin.com (MTA) with ESMTP id 4hgbL34NVFzbKSs8;
+	Thu, 10 Sep 2026 19:39:07 +0800 (CST)
+Received: from ewan-server (ewan-server [10.28.24.2])
+	by zhaoxin.com (8.30) with ESMTP6074cd04769291751c80574647a050e2
+	Thu, 10 Sep 2026 19:39:06 +0800
+X-Eyou-Smtpauth: ewanhai-oc@zhaoxin.com
+X-Eyou-EnvelopeSender: ewanhai-oc@zhaoxin.com
+X-Eyou-From: Ewan Hai <ewanhai-oc@zhaoxin.com>
+From: "=?UTF-8?B?RXdhbiBIYWktb2M=?=" <ewanhai-oc@zhaoxin.com>
+Date: Thu, 10 Sep 2026 19:39:05 +0800
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Frank Zhu <frankzhu@zhaoxin.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, ewanhai@zhaoxin.com, cobechen@zhaoxin.com
+Subject: Re: [PATCH 1/8] KVM: selftests: Add Zhaoxin (ZX) CPU detection
+ support
+Message-ID: <aqKVohKiehUEhewl@ewan-server>
+References: <20260730110524.2539316-1-ewanhai-oc@zhaoxin.com>
+ <20260730110524.2539316-2-ewanhai-oc@zhaoxin.com>
+ <apdrfkO8ALRz59yl@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,63 +44,64 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9750125c-49b4-48b1-adab-3a1cbec4255a@kernel.org>
+In-Reply-To: <apdrfkO8ALRz59yl@google.com>
+X-Eyou-Sender: <ewanhai-oc@zhaoxin.com>
 
-On Thu, Sep 10, 2026 at 01:23:15PM +0200, David Hildenbrand (Arm) wrote:
-> On 9/10/26 13:16, Yeoreum Yun wrote:
-> > On Thu, Sep 10, 2026 at 12:45:39PM +0200, David Hildenbrand (Arm) wrote:
-> >> On 9/10/26 12:31, Yeoreum Yun wrote:
-> >>>
-> >>> Well, users currently for using /proc/self/smaps are for check vm-flags:
-> >>>   - guard-regions where using check_vmflags_guard()
-> >>>   - pfnmap test where uses check_vmflag_pfnmap()
-> >>
-> >> Most vm-flags should not be an issue when it comes to merging. The only
-> >> exception are vmflags that do not prevent VMA merging.
-> >>
-> >> So it's VM_SOFTDIRTY and VM_MAYBE_GUARD. And I agree that for guard-regions.c we
-> >> likely have to care such that we don't merge by accident with other VMAs (guard
-> >> regions).
-> >>
-> >> But that's independent of memalign.
-> >>
-> >> ptr = mmap_(self, variant, NULL, 10 * page_size, PROT_READ | PROT_WRITE, 0, 0);
-> >> ASSERT_FALSE(check_vmflag_guard(ptr));
-> >>
-> >> could be problematic on its own (unlikely but possible).
+On Tue, Sep 01, 2026 at 05:19:10PM -0700, Sean Christopherson wrote:
+> On Thu, Jul 30, 2026, Ewan Hai-oc wrote:
+> > From: Frank Zhu <frankzhu@zhaoxin.com>
 > > 
-> > Yes. That's why I'm think it would be good to use alloc_isolated_mem()
-> > in case of ANON mapping for this case.
+> > Add infrastructure to detect Zhaoxin CPUs in KVM selftests. Zhaoxin
+> > CPUs use vendor strings "CentaurHauls" or "  Shanghai  " and implement
+> > VMX-compatible virtualization technology.
+> > 
+> > Signed-off-by: Frank Zhu <frankzhu@zhaoxin.com>
+> > Signed-off-by: Ewan Hai <ewanhai-oc@zhaoxin.com>
+> > ---
+> >  tools/testing/selftests/kvm/include/x86/processor.h | 7 +++++++
+> >  tools/testing/selftests/kvm/lib/x86/processor.c     | 3 +++
+> >  2 files changed, 10 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
+> > index b161174ece45..9840b583877c 100644
+> > --- a/tools/testing/selftests/kvm/include/x86/processor.h
+> > +++ b/tools/testing/selftests/kvm/include/x86/processor.h
+> > @@ -23,6 +23,7 @@ extern bool host_cpu_is_intel;
+> >  extern bool host_cpu_is_amd;
+> >  extern bool host_cpu_is_hygon;
+> >  extern bool host_cpu_is_amd_compatible;
+> > +extern bool host_cpu_is_zx;
 > 
-> It's really only guest-region code that needs this.
+> Please spell out "zhaoxin", "zx" isn't intuitive for most of us (I keep thinking
+> it's a compression feature).
 > 
-> > 
-> >>
-> >> For other flags, you really only have to find the smaps area that covers the
-> >> given address and look at the vm-flags.
-> >>
-> >> Or am I missing something important?
-> >>
-> >> (merging vnas with VM_PFNMAP is impossible right now IIRC)
-> > 
-> > No. what I want to say including the patch #3 is for the above case
-> > where you point out -- ASSERT_FALSE(check_vmflag_guard(ptr)).
-> > 
-> > Since we don't have any interface to check vm_flags execpt smap
-> > and for memory mmaped with anon would have a chance to merge,
-> > We need something to replace memalign() with preventing unexpected VMA
-> > merge. 
-> Only for the cases that actually really needs this, which is in my understanding
-> guard-regions.
-> 
-> And I repeat, this is not a memalign() problem.
+> And do the same thing we did in commit 53b2869231d3 ("KVM: selftests: Add a flag
+> to identify AMD compatible test cases"), and add host_cpu_is_intel_compatible.
+> That should cut down on the number of checks on is_zhaoxin, and should help avoid
+> issues like the ones Sashiko pointed out.
+>
+Agreed. In v2, I added host_cpu_is_intel_compatible
+(host_cpu_is_intel || host_cpu_is_zhaoxin) and used it where host_cpu_is_intel
+serves as a proxy for KVM's VMX backend:
 
-Yes. I'm not claim memalign() is problem but want to prevent unwanted
-VMA merge. That's all.
+  - kvm_is_tdp_enabled() now queries kvm_intel's ept parameter.
+  - vmx_exception_with_invalid_guest_state now runs on Zhaoxin CPUs.
+  - fix_hypercall_test now selects VMCALL on Zhaoxin CPUs.
+  - kvm_is_mediated_pmu_enabled() now queries kvm_intel's
+    enable_mediated_pmu parameter on Zhaoxin CPUs.
+  - feature_msrs_test now uses the VMX initial value for
+    MSR_IA32_UCODE_REV on Zhaoxin CPUs.
 
-And as I mentioned in another reply, if we get rid of
-ASSERT_FALSE(check_vmflag_guard(ptr)), this patch would be droppable.
+I left kvm_buslock_test unchanged. KVM does not currently advertise
+KVM_CAP_X86_BUS_LOCK_EXIT on Zhaoxin systems, so the test skips before
+reaching the vendor-specific assertion. That assertion distinguishes
+trap-like from fault-like behavior, so changing it without Zhaoxin
+bus-lock exit support would be untested.
 
--- 
-Sincerely,
-Yeoreum Yun
+The PMU tests are intentionally unchanged. pmu_counters_test explicitly
+requires an Intel host, while pmu_event_filter_test requires either
+use_intel_pmu() or use_amd_pmu(); neither is true on Zhaoxin. Some
+Zhaoxin PMU registers and MSRs differ from Intel's, so Zhaoxin-specific
+PMU coverage is outside the scope of this series.
+
+
