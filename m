@@ -1,126 +1,241 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011029.outbound.protection.outlook.com [40.107.208.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EFEA31F9B4
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 22:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789077683; cv=none; b=asEvX1/QYYUI9VVpI7nVfo2oOUF5rky95vhCRSHwcdOw2rM9ZCLUEWNKVuCWaZm/vqLpp7fEn9JnWsyiXitY/ALCPQ1wNe6DeeKfpF/nKya8n0+e6V97/rzJzhvnpZ3NM8L7i6wHBUY5gfY3iykulm6uB/1P0M3ME8zXuRWCQr4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789077683; c=relaxed/simple;
-	bh=zrz0/ucW3PLwAuhZwtHcOR4kEpmta/vNkqlrXBuJJh0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lSUjleRxp6liTyQ9rw/z58jshhFWOpmH2Ys6j2WStSn3oKwMuYARPkHkn9BUtSiGDSSx5CTRhT1HTH6DL8UaDLSBCn8a1c1IwHdvbq5EyI8JLtGZqfZVn8Apt9w00ayCxLa9gnec4zBtsfchAbPmryxFkfwmCTuy5jZWNNarV+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SjZYMlRe; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982082FDC28;
+	Thu, 10 Sep 2026 23:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.29
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789081391; cv=fail; b=o6Ut8hDpQhM0A3AU68xy92zApq0+OWIgKxJ28+zgMByRKnNgYdD1jvuD3XQFeaoReTi3aRZsTse/JZWffQWVLSkndaH0pIT+8QRTLiCZ2J6xHfqrv4JFoDrnu1XxjFZY4KsQmchupgj3sIE1Ouv4mJQ/875dMg8iJ/Iy0lwJqDA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789081391; c=relaxed/simple;
+	bh=m/sLVDRbR06rrPkW0e6uUJGwocfoWzo7LzJahCZ9pEg=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=ixFYEzChrf39zFzOJ0E9WsfxL94n5trOEVshDlaFuZYI/3Tk+HoHYPeadfapAMooGZG59Ach99vu0p+E742a8XqwBa3VUNlQOd3d+UxWNsrpNWBPUTe9RlK63H0kgoyXleB4eLM1k1/SlkHyIhRbA796es5yBtSNTvKtNVwAP4w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=qwikrO3b; arc=fail smtp.client-ip=40.107.208.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SjZYMlRe"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccafb752so219054a91.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 15:01:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789077682; x=1789682482; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=W79TF8hp+v+CXkvDz/YZI2YgtWq3JSgPrSm3GoIwkgc=;
-        b=SjZYMlRezhWQAHM7K3PpKCa7npyEZISAsH0gUd4kTXizSotAkU7rcerv2y9Nwz8B0f
-         vJWVH81IPnMLcqphtxCgjbVuNv3M1+Q/tPVna/M9bgWmQWEXSdDyHQ7Ucm8YCGKPdn7C
-         uoJ0MLhOw80y4W5rBHhyj1HOSrQMi2uszilwnugZRYucIWMJl8WCTNHasHcT9hHRjfIn
-         /xcqhoXWWCYm1ZnS+KQ/17f+L2zu/8RWpMGoiRSpZ65N/JSJ3sXtJs0Pg7d1Bk5/NYMV
-         sV4f0zgV8sVOHCj4xkkwVhyAxH2V3RirR6cQX/LIrCH23Jp53oG0diPpexlKphqxXsnL
-         H4PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789077682; x=1789682482;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=W79TF8hp+v+CXkvDz/YZI2YgtWq3JSgPrSm3GoIwkgc=;
-        b=lQZbAqc72u71kP26bUko8jB4r4xrOkGXsoc5bgVqu527unRAuFBPxCdp5IQKijDkG0
-         Fi0J3bPYeF+xbtMao4qJy+JJiFeCKYrnVcZLK9jfD9Ug4xy5LjfIdhJ+ICsNf9v7UjRl
-         ZLe2Y/de4YTPwjRutmetIjUTmLfTuxXcYZWnYPUrZcF+xKFFS6sm/9bajovrIv4Jx5OD
-         UNT9A9dv8KDEkPQm05Zh/acnskA5hpRPAUXx9vwcEki5RRka0wQoVoEkPqCpH5/K/0xF
-         mA4UMHvml6SWDZc2lSR04rZ4gtEXm4n0vHOajLJGDyeVcs2t8XwdFSCpjukcKJoeFa0y
-         rk/w==
-X-Forwarded-Encrypted: i=1; AKwUvBwmoAJdcUBxeVbP35R+U+P8ZeFpWfdJReGBS4p+lbHePsSTmsuAZInD83Pp8J5bACrDaQ1GpNCgtWZZAEgLQAo=@vger.kernel.org
-X-Gm-Message-State: AFuF++mnJMLkILB0Zbz/ANjS5yDPtQAgtEMU2rFIUy8gV1Z6/FbmEY1V
-	UlMjjpQt7WCArdfWgB0h8FCVifa3L2dCam3i6tufjYUXh0nc6q8i6lw1
-X-Gm-Gg: AYBFou0VR6TwKHEUC5AWwCbUaKZjv0g6YysCktEcGUZsY+YaUWt9IXOKDazjoRAnpRZ
-	Wk+BIO/6AQTxZNcmundYM/yaJOD2NoQ0YNxHWQJUU51OKRVX+LiHzUdHog3OV+YfszQNJb5JP+e
-	3QPQ6P2T3G2xPmG7DQuMH7NTBXbzpUo30KhpFncxG22Z2WBZNXtPMFi0MSP2XbEpbBmkk5gP0DA
-	trMZbWq22n5ne1ivEK7ggaY/hgvIxI/m/MEl/sj0Hlvie/xoEWDQov5wm7CLpLyWG9dKokKClTi
-	oKNuzZj/yAATTvpSpOGFZDoB88tx0ERN64pkLmV7MSGDQoCJHV+Na97p5uolOH9sxQ4AgxkLqOw
-	o/pHxo0eg8wn+yv7bWu48Wv7fIgfN+zEJujoQplIFNh8lvmNUZUwKGnV9o1qHmfHcSmV6K9W53A
-	YvR24gYzUxAMh0K5V/YcAkDlIewq21CgkhfF0Aj4k+qfjsAYEFQJQvU2YBI9ehrqIcL2cgOWFmF
-	pkDQ2AP21zZrHS0sBFOh4U/tFOA56A/7YC4rI7dG44Tpd+fdRN/3GMToA==
-X-Received: by 2002:a17:90b:560e:b0:398:a2ed:7b5c with SMTP id 98e67ed59e1d1-39d9c3a1fc2mr1365490a91.24.1789077681667;
-        Thu, 10 Sep 2026 15:01:21 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:a3ce:533a:7492:3ff3? ([2620:10d:c090:500::4:d279])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14365b97994sm2152282c88.12.2026.09.10.15.01.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 15:01:21 -0700 (PDT)
-Message-ID: <9b3ca4f410cf1f2af0464df282fe017ae801bbd4.camel@gmail.com>
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Test BTF walk into a flexible
- array of zero-sized elements
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan
-	 <shuah@kernel.org>, Yazhou Tang <tangyazhou518@outlook.com>, Amery Hung	
- <ameryhung@gmail.com>, Matt Bobrowski <mattbobrowski@google.com>, Tejun Heo
-	 <tj@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Date: Thu, 10 Sep 2026 15:01:18 -0700
-In-Reply-To: <20260910122316.186384-2-jiayuan.chen@linux.dev>
-References: <20260910122316.186384-1-jiayuan.chen@linux.dev>
-	 <20260910122316.186384-2-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="qwikrO3b"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=apo/JKWBu5HmHo1OeZRD3OUZjj1PC/U3Ywu3HoCJB0Mq8bixz37NaveSikAjWepZ4STyUMem/FV2m+6AjboCUXk3EL6VsMEAsFmo2BGnMZREh+R6dKR2DFCtI6in25zUjJTT7N8u/bDJcVGc5p1tNsi9o8yGJvaQashmR3ZS0SPvJvIwwBItyxam8D55bqpxKS5NtDN9ugq7iGj6y/cWRJvZV29TDMKo7DpfDOiF78riVTnEzZCj8G6Hv7ylDX785CsEQgTLmdFHGxco6X2DJG450fVbkzoy9gieSybUBm2chPDIPphw+YusAn/+2JXHp/1wqTymEIztmttS7itLNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Q6SYS1Fdvd9DwfIjeToZsCPQeXOh/CiSAVBeyZ1LTek=;
+ b=FcBZrR+eprOyQFY3bBH32saQczptxVTb33ndDNBkGhM4Q5qCEObbHE17xnEApxso1HCVGH8W+wgw+TL0j+IyBEdGvhtA2zXn0Q7LV0Ub6mmX5aZgZxRFh6X/oku+kttjB7OgJ6xJVC7ekfD6hfcJ2TEPwY/Y/QbKbkl3pTvpz4s+qzTLK+sNL4etqtwOCIcHLtwslvA8vEyTCV7apsvtxisu7ETKqRiUfTQbG/jVxXxVCOZDTF9vAiMV4e1GnDHLtKzOmEoMQp3msskgvgOK6QgYHepvafrj7S5wtieR/x5IYXCoX8wU9VtVPtXFCuqiVrHZ6IApkUr5o4Tq1dyu1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Q6SYS1Fdvd9DwfIjeToZsCPQeXOh/CiSAVBeyZ1LTek=;
+ b=qwikrO3b1q9w74oXjG+galBqQmBpd50Q6wOQK2h7QwAj12v7rba8wDUKbEyn/w+ql1Ptd8Ppnp9n0/Ryu470RrQeroi/asWCq08b6CMJe+TBh0W4WDNS+WMjMRcMos0au96WZoPz5UeIIx++ROhJyHjfixJE2kLJ85EdkTnjyP6tQ3H7wZ2KYQLzIaO+7LJuefS4Gp9fMW85t1+rc1ykkAdO0+1fjqsivhZGpqf6WPnq47APGBH3soQi1t2wUEby598FevA21hIyC+OfkYrIEtUbw9oiXIRCT+cCZPDG/fw0Lr23sfPc7oWxgSIv0xwcOkO8DBbEpaW/d9gOTWkMFQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV3PR12MB9411.namprd12.prod.outlook.com (2603:10b6:408:215::20)
+ by DS0PR12MB8018.namprd12.prod.outlook.com (2603:10b6:8:149::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.7; Thu, 10 Sep
+ 2026 23:03:02 +0000
+Received: from LV3PR12MB9411.namprd12.prod.outlook.com
+ ([fe80::98b7:86de:b69:2a15]) by LV3PR12MB9411.namprd12.prod.outlook.com
+ ([fe80::98b7:86de:b69:2a15%6]) with mapi id 15.21.0406.007; Thu, 10 Sep 2026
+ 23:03:02 +0000
+From: Alex Williamson <alex.williamson@nvidia.com>
+To: kees@kernel.org
+Cc: Alex Williamson <alex.williamson@nvidia.com>,
+	luto@amacapital.net,
+	wad@chromium.org,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alex Williamson <alex@shazbot.org>,
+	matlack@google.com,
+	kvm@vger.kernel.org
+Subject: [PATCH] selftests/harness: Drain the test process group after a timeout
+Date: Thu, 10 Sep 2026 17:02:52 -0600
+Message-ID: <20260910230254.1198094-1-alex.williamson@nvidia.com>
+X-Mailer: git-send-email 2.53.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: CH0P223CA0013.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:610:116::30) To LV3PR12MB9411.namprd12.prod.outlook.com
+ (2603:10b6:408:215::20)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV3PR12MB9411:EE_|DS0PR12MB8018:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8ecbceb1-7ad9-4514-3074-08df0f8faa4d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|23010399003|366016|56012099006|11063799006|10067099003|6133799003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	FGwI+rMmMWeoqnMJtnpIpWEGp+8ClMOud9HcopVg0wVCt2/Xn9ZFIBgNL2sx8fjveiHKB56Mlt0lAMjklJ2SWgzRcna8csdxEs/HDpdmxY424SE1qlfvCDXyTVjmKX0xl8KIQw8TIs3USpL0xat04ObpUhtO316zWPqqqjSwUm2CbsNVeQaFHwVDpVFY+p9df0ENfJ2vB059qzQTNSCpKrAFwtXEBaSoLddXq6AXlKaW0CMYIBE2MNnSBvYgK4u9bU4xRn2s6MYlgO6D3acLqyy2EQOIkC+FU0tWTUTvwO7YYw8f39Q0yB/JLtFy9Md5DOd8LbyoBZIh/s5dB4O2zquEI2wwfPpyDRCGOfqCxuFJNxONkyGk5kuHsR6aFQ4r3LSKcw/Yqv6HRtqDdXzTBEsOm/CYCqbArVzqfuUWKGIERUsC6nG7hhVs48f6c3dh6wtdU4pJj6circCGZllCdn9p3HvIedBjpIt6bhzQ6h1lE2A8cWa1JdmNdQN7/m2DENRGeXob/MwWfp+gvl66Dr89mk9/H08qoaYOMy1pRcOfN+6DPOh1Xs0gVbwNHyAML9Odl1pz+uV536eCc7cM0YSj/REZegClOt3+7MK4YErTc/w/jSYsYgYsK4ZmFlX4xbEdixWH1WW+N12awompyckn1NHkA4q6md6aqyKU+A0=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR12MB9411.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(23010399003)(366016)(56012099006)(11063799006)(10067099003)(6133799003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?wcGIhhBnA8qDiAlO0tOZHnz2716CjqoCeISAakC4maALYeqAiw4Um9ZHkUqt?=
+ =?us-ascii?Q?ejULpIPB30Of5qMwDh8jnZSuPgXTAuDi1i25yD3ta/mA0HXLtyU4rZUzG4zq?=
+ =?us-ascii?Q?yhCUSflvZUedDstAPDNvuFCij7V0NNoIGvPFhoXpUDPTuILx+C9q1lIqB2PL?=
+ =?us-ascii?Q?cb8WUaVDDo0wNAxIk6neCmNm8ghLTnuIZx5kaBIUjuI9Iamw9bSwzxGIIzTd?=
+ =?us-ascii?Q?vt/3Nm5POjVtdvX4Vp3DfB+nvjDAO7vEGLJbxyUvJBW6TGc4oB5CPc5YO5rx?=
+ =?us-ascii?Q?KKTgiYsmmcbyiyxw1oglL5LdDcdPQCsnoLtHdxTHXMPhvpEjQiYC7WXDq1EX?=
+ =?us-ascii?Q?ow1ovdUijoJkOpXzpNq5gFXDFQMFDdA3BJpFvtI9ZzZhLpxp5NrsCIZsAspw?=
+ =?us-ascii?Q?VB0cXvfh3YQVXMHZshiml9RdBMqsHAse17ke5eWuU+VuisVw18NdJyW+US1n?=
+ =?us-ascii?Q?F6yB3bYkohIFRYxPSyi3Qvtfr/E8lfXZaGUez1k0xcZDXtYLGOLMx1FD6Bqs?=
+ =?us-ascii?Q?MUFCc8HJ266JfLjUJg0a1EA372C4G3VTxc1ALqdvgmO4nTofgVww0y2rPtym?=
+ =?us-ascii?Q?lkPokLsJGqnwhpyu4c0bWE67faCF2hjPRx7RuZnZ/o8+jEySOR7An3+2kaya?=
+ =?us-ascii?Q?1ynmwjyAX7EvuzEyeK8npAjstF+ZdbgxVmq+1YvpoE0yez5+LzPLzFDGjb0P?=
+ =?us-ascii?Q?8BCzM5wOkZNFOcVYoDF2Z295Op5WJoMFR5ELHFvujXAZtFeEOY3NZoLE8g2D?=
+ =?us-ascii?Q?VSZGe27S8c4/7djxWVFRb81mQ8gpbg5psiwfd2ldkJER3ec2Hwkj6qfU5eLn?=
+ =?us-ascii?Q?msWLqIKXQ7z+LSX+MfrUzhxDdLhmfn8KqEGVMwAZHPyRuAK79og7kNAQ4zM2?=
+ =?us-ascii?Q?4A2rBeKRZGziDx5bCeniY60+jqgtCSi8xsetCd7HYaMjoV2V/nZT2/Pqq6wn?=
+ =?us-ascii?Q?PvSfaFLdZbIJkA7AFkCNTjcV80AmGdy1D2ZKH6+KcBCmoh22pDXF0YZsXV00?=
+ =?us-ascii?Q?HSJanW1PH4RuBlsZpfa68PyztOodOmWador0kndj1JAvCnBoceZDZTnE+sSc?=
+ =?us-ascii?Q?dEpUeEhU4BQNIwuHfa8J9Lv0WEF5h7brM/rldaPErqUtOMiNwqY9Cb6e+qI8?=
+ =?us-ascii?Q?0XQ5UJwFRuCHjzcx1XmajCh+il4s9VbstTU60sY0AQJjLrcDw0niExKwh6Af?=
+ =?us-ascii?Q?z1WgeURz+wIxI9e0WgWseegAavhSKSJzL4jyPhbCux2n6ZJ42qbFdTy4K3tV?=
+ =?us-ascii?Q?X07XD1wjaZX482qbKYF+7MzmhVXnF2lEuAkYeylJAH8TUt7WNIe4x17+qGgj?=
+ =?us-ascii?Q?GFS5A++uUDedwqawhpPpkqWueF3i1sJ9UovXACBorioIA+59Y+h9yolJQL2L?=
+ =?us-ascii?Q?Z2fNsjZrNG0JVWH+4rFaSewTxa9tC3CummuK7vS98DqK1M4ltsRIyTvB5Dj0?=
+ =?us-ascii?Q?1dGcd15i2ohYQBrR1Z45aFy7ku6NRwq/w9bMWM03EJW/uzWfqSxItnA6wdBm?=
+ =?us-ascii?Q?BWuH4GBfPL17edUfX/laidBhdsbkb1/4a3Q6LULiQ2ihfZq3jOhIiNKTvqvD?=
+ =?us-ascii?Q?hS48tKy+WEju+wVV8JNUoVL9lgntJbrJeJp2IFSXmc2LdcRqfyGC1cfQPIBG?=
+ =?us-ascii?Q?kDCHBW3KnYZsPbX1zA9chmB6lj50fx+7RQvahHFRXC08Re8EM12BvXLKwbN5?=
+ =?us-ascii?Q?FlX/E5N+APVI40P4PC+usRdavFMEvGepC0rcBop3vvoIn1n78ysijRTW1MOI?=
+ =?us-ascii?Q?3PkMEv8GRg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ecbceb1-7ad9-4514-3074-08df0f8faa4d
+X-MS-Exchange-CrossTenant-AuthSource: LV3PR12MB9411.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2026 23:03:02.4395
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: j3YWgHRHWLkpg+8Y56Q5VioGcUIErHeLbG7Oqckfq/VZ51/d31EN/F/nR+br8GDAz/u+qkbE0NJj9PauRJuicQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8018
 
-On Thu, 2026-09-10 at 20:22 +0800, Jiayuan Chen wrote:
-> The program stashes a bpf_obj_new() object whose type ends with a flexibl=
-e
-> array of empty structs, then reads it back as an untrusted kptr. Without
-> the previous patch this divides by zero in btf_struct_walk() instead of
-> being rejected.
->=20
->   # ./test_progs -t verifier_btf_flex_array
->   ...
->   #602     verifier_btf_flex_array:OK
->   Summary: 1/1 PASSED, 0 SKIPPED, 0/0 FAILED
->=20
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
+The harness runs each test in a child that it forks in __run_test().
+That child's PID is saved as t->pid and the child calls setpgrp() to
+make itself the leader of a new process group, PGID.  For a fixture
+test, that child only runs the TEST_F() wrapper.  The wrapper forks a
+*grandchild* to run the fixture body (ie., FIXTURE_SETUP -> test ->
+FIXTURE_TEARDOWN), and that grandchild is what actually acquires
+resources such as a vfio device fd.  The grandchild inherits the
+group, so t->pid and the grandchild share PGID, t->pid.
 
-Please simplify test case as follows:
+On timeout __wait_for_test() kills that whole group with
+kill(-(t->pid), SIGKILL), but at best only t->pid is reaped by
+waitpid().  The grandchild exits asynchronously, while the harness
+proceeds to the next tests.  Any resources required by those next
+tests that are still owned exclusively by the grandchild process
+result in a cascade of failures through those subsequent tests.
 
-SEC("syscall")
-__failure __msg("access beyond struct test_flex_batch at off 4 size 1")
-int stash_and_peek(void *ctx)
-{
-        struct map_value *v;
-        int key =3D 0;
+Instead, the harness needs to not only actively reap t->pid itself,
+but it needs to poll the process group to provide time for the
+grandchild, and any processes it may have created, to exit.
 
-        v =3D bpf_map_lookup_elem(&batches, &key);
-        if (!v || !v->batch)
-                return 0;
+Additionally the harness itself needs to avoid getting blocked by an
+uninterruptible test process, therefore process reaping is bounded to
+5s, which allows completion of longer running release paths, such as
+those including device resets in vfio-pci.
 
-        return *(char *)&v->batch->events[0];
-}
+Assisted-by: LLM
+Signed-off-by: Alex Williamson <alex.williamson@nvidia.com>
+---
+ tools/testing/selftests/kselftest_harness.h | 49 +++++++++++++++++----
+ 1 file changed, 41 insertions(+), 8 deletions(-)
 
-Also, aren't there already test cases for flex arrays somewhere?
-Probably no need to add a new file.
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 29a19bc87084..4e479c8cb49e 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -80,6 +80,7 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
+ #define KSELFTEST_PRIO_XFAIL   20001
+ 
+ #define TEST_TIMEOUT_DEFAULT 30
++#define TEST_TIMEOUT_DRAIN_MS 5000
+ 
+ /* Utilities exposed to the test definitions */
+ #ifndef TH_LOG_STREAM
+@@ -981,8 +982,7 @@ static void __wait_for_test(struct __test_metadata *t)
+ 	 */
+ 	int status = KSFT_FAIL << 8;
+ 	struct pollfd poll_child;
+-	int ret, child, childfd;
+-	bool timed_out = false;
++	int ret, child = 0, childfd;
+ 
+ 	childfd = syscall(__NR_pidfd_open, t->pid, 0);
+ 	if (childfd == -1) {
+@@ -1004,9 +1004,46 @@ static void __wait_for_test(struct __test_metadata *t)
+ 			t->name);
+ 		return;
+ 	} else if (ret == 0) {
+-		timed_out = true;
++		int elapsed_ms = 0;
++
+ 		/* signal process group */
+ 		kill(-(t->pid), SIGKILL);
++
++		/*
++		 * wait(2): "A child that terminates, but has not been waited
++		 * for becomes a "zombie"...  As long as a zombie is not removed
++		 * from the system via a wait, it will consume a slot in the
++		 * kernel process table..."  Therefore, wait for the wrapper
++		 * process to exit and only then poll whether the process group
++		 * also still exists.  Only when the process group is no longer
++		 * found are all the processes exited.
++		 */
++		for (;;) {
++			if (child != t->pid) {
++				child = waitpid(t->pid, &status, WNOHANG);
++				if (child == -1 && errno != EINTR)
++					break;
++			}
++
++			if (child == t->pid &&
++			    kill(-(t->pid), 0) == -1 && errno == ESRCH)
++				break;
++
++			if (elapsed_ms >= TEST_TIMEOUT_DRAIN_MS) {
++				fprintf(TH_LOG_STREAM,
++					"# %s: process group not reaped %dms after timeout SIGKILL (task stuck in D state?); continuing\n",
++					t->name, TEST_TIMEOUT_DRAIN_MS);
++				break;
++			}
++
++			usleep(10 * 1000);
++			elapsed_ms += 10;
++		}
++
++		t->exit_code = KSFT_FAIL;
++		fprintf(TH_LOG_STREAM,
++			"# %s: Test terminated by timeout\n", t->name);
++		return;
+ 	}
+ 	child = waitpid(t->pid, &status, WNOHANG);
+ 	if (child == -1 && errno != EINTR) {
+@@ -1017,11 +1054,7 @@ static void __wait_for_test(struct __test_metadata *t)
+ 		return;
+ 	}
+ 
+-	if (timed_out) {
+-		t->exit_code = KSFT_FAIL;
+-		fprintf(TH_LOG_STREAM,
+-			"# %s: Test terminated by timeout\n", t->name);
+-	} else if (WIFEXITED(status)) {
++	if (WIFEXITED(status)) {
+ 		if (WEXITSTATUS(status) == KSFT_SKIP ||
+ 		    WEXITSTATUS(status) == KSFT_XPASS ||
+ 		    WEXITSTATUS(status) == KSFT_XFAIL) {
+-- 
+2.53.0
 
-...
