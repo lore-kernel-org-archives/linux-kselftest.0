@@ -1,420 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7BD48EC7A;
-	Thu, 10 Sep 2026 13:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58574494839;
+	Thu, 10 Sep 2026 13:46:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789047976; cv=none; b=VVX+nOqmkSJ+PSkNwKNvHkaX5y5IlZ6GjP5g7pB/H1Puyb3ScFveX3i92aqPFU2X8OEPp2xdW7MY93iosAFD8xLUEopB/GGVHTC6xPaimHn01TkOKOs95G36m0EhMM8T7J3xCVU/6lHMEODUQSBA6pG5N7HODva37KeXZ2C/u7Q=
+	t=1789048000; cv=none; b=edGNJAYTr9Pq31AkLcba4DPoVyTPCjxiMnDfu3/7Sl8zUVdNhnP6G7Ar/yaqPvjuioyQvmx9D56C3KfWegsHeGaS31emW4wXu0aOCZ2cun0RP34DimIAFsqnY7hHttbCxbDM0Sw0n7qmIemGgQpflg423wPikLw36oFtXDc7rBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789047976; c=relaxed/simple;
-	bh=hoPUdoHpfxf391of+pK/LWIVNo4nsjGbHGMPacKzmgY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=f/PnQmbNZX+aVFb+WwNOJXTbV/2NNf4uBil4s6eHl5On4leWYi9ImTLaals8/68xLH8jA5hCFW0ABqQZPsPviSc0cB/zSaDMHYAoClSIvUVIEHUTioHT4z2mJgSmmWYzVQCkHcgtCBxluKVPhxH4iIbU5jZrjIzhJeNrdRwguAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o2o5jaQc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789048000; c=relaxed/simple;
+	bh=AUkXD/rFmYPtCqqzAsWncUxZK0KLle4j6rAaoF5LEDE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=H9PY1miQnVjtYTz2ZtM5GGrWiBEhViDDcpaKn/J4pCP6NeI17HqZ9GC7RmcINTbJ9/NYx3TLuMQSxIegMZ9+tJdlmS54a6WZsYhupg3etIHgaiId4PJG4QdalUV2Dzpa6cSv7SoNTPOKfcUChC9/ewp/ozqya2LCoNN4BUsu3qI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=ThS9jBxE; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o2o5jaQc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A25F1F00898;
-	Thu, 10 Sep 2026 13:46:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789047975;
-	bh=ZyekFsQ0nxrR4L9N8Ghb6GAkJVnZqSRvKNPOeJH2phA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=o2o5jaQcCOJsfj+q6kQoCNaKUsipIXe18mMhVaqT7OnTX5ibFzInK/1n+fkSHWaZj
-	 M1bMfvQMWtRHiJE7yoBgvssFHDVQf5BbanNqoAKqFyYjKB/XSWw1Z6maBliCt2xaGO
-	 H2dwYjcngCG2gs9IO9piMiZiUQcjnTe/v0zVqs1MGXl1Vstl3gNRLMEhKa8HleIPFZ
-	 AktuLWjbai3CvbORhWMAxBMRzEMd9eKEVu8OY0tDssStEIIlmd28jmdBdPdi9MNtMl
-	 CNY3kVvwe/PHI5edkQTw7ixEdfy4AKUXzsRS+RnBK1Lf6FJ4vCoH1McLSIi9QezUc9
-	 UMoXd0hJ++WGA==
-Content-Type: multipart/mixed; boundary="===============7357494171922306859=="
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="ThS9jBxE"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=x/dPzdX9SZpdJrsIHbzEoIUdQCJTs8nVvTgtVxAxF9U=; b=ThS9jBxExUNZ7rwq3HrOi17UmZ
+	/i+WEzaimzU5cDZdvA4KZGkw08PlBooIcsqY0EKo6yD4jGWLdFs4tZYtdeLAIDjYpB98sGdVdOz8Q
+	f7M9Mnleo7i/6PSZeEJIgPqyaihWLctSnH6jy1w1fqwG2zL0CWs9rd9xvSPog0Xj49X+knqOThVvq
+	ya/bsS6D0czByHThCrcNv67rOZWzWxyUyJrHODoMcXh7r6RKUD/DwHHpw0C1c3utGhmQVREQuoaKJ
+	ZveLKkQfg5L75VOf9V8Xzg9yo6g93fkzK4vmHgfvKZwazFFuf3XNK1/YWuG2HzwiCp9SDmDvESdtw
+	eQfwyHhw==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1x4f6i-000YHf-2R;
+	Thu, 10 Sep 2026 13:46:29 +0000
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v2 0/4] netconsole: Support messages ratelimit-ing
+Date: Thu, 10 Sep 2026 06:46:09 -0700
+Message-Id: <20260910-netcons_ratelimit-v2-0-ebf0dd91e26e@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <cf5adc448dc541413def8b6dc4b160345a2f19b5488ce5555f0851256ccfbadc@mail.kernel.org>
-In-Reply-To: <20260910125817.223354-3-cui.tao@linux.dev>
-References: <20260910125817.223354-3-cui.tao@linux.dev>
-Subject: Re: [RFC PATCH v2 2/5] selftests/bpf: add iocost cost model test
-From: bot+bpf-ci@kernel.org
-To: cui.tao@linux.dev,tj@kernel.org,josef@toxicopanda.com,axboe@kernel.dk
-Cc: cgroups@vger.kernel.org,linux-block@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,linux-kselftest@vger.kernel.org,cui.tao@linux.dev,cuitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 10 Sep 2026 13:46:14 +0000 (UTC)
-
---===============7357494171922306859==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKG0omoC/23N0QrCIBSA4VeRcz1DrU3nVe8RI5yetgOloTIWY
+ +8ejC67/uH7NyiYCQtYtkHGhQqlCJaphoGfXZyQUwDLQAnVCSM1j1h9iuWeXcUnvajyTvWjuDh
+ 99q2GhsE744PWw7xBxMojrhWGhsFMpab8OWaLPPrPNX/cRXLBjW+DClJr0/trwJFcPKU8wbDv+
+ xeySZjSvQAAAA==
+X-Change-ID: 20260817-netcons_ratelimit-629b04a73c57
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: Randy Dunlap <rdunlap@infradead.org>, paulmck@kernel.org, 
+ gustavold@gmail.com, asantostc@gmail.com, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
+ kernel-team@meta.com
+X-Mailer: b4 0.16-dev-f8e9d
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2699; i=leitao@debian.org;
+ h=from:subject:message-id; bh=AUkXD/rFmYPtCqqzAsWncUxZK0KLle4j6rAaoF5LEDE=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqorSv0nPvhImQizWFrx+LXLzla8sHJh3/OCHNd
+ ycX6fETru6JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaqK0rwAKCRA1o5Of/Hh3
+ bSL2D/4xIpguvU7M/DmY95shqgvrbjP0BvMqw9YOmFy44uDoLwjV9XMXL/5r/7pLDoroaXm0ot0
+ iwmKlSxVdVP/CyFkZq05WT2RMcm8R6wBhhSARym1fyZRULYEfO4Yg0TJopQTHGRVHsXLuV375+Z
+ ON7tCbNl6B+pv4zJoBgGJdlacM5Q/FDR5cpJtGJ4MfRuppQ4oLElou+ivgKyzQqP9HKQStJS7wU
+ UdhtzVS14lEPfdyyEUSpFk3oP34fJLKmDerKHup8rYAu+s9xnmWO1xT8slwO5IKvJMNAjO5wPZY
+ JAF62g0KX1jv0De4dbgw3DWOy+Kv78soQCifiIbenPbbzCxVCEWl9n06Ss90pkoOJFL4FgTsfum
+ 67b9kaKLWFbq+jW/8rgLXiRWAsAMiex8LHN0MnfQHmfwep9VNjY+ex2MVYy1p9LErjw2V8myZCa
+ 5VV+1PdPf0qv98AXO25qcVMfudwj13jUQOIzd4+Tp6Z3a2gZKaV9DQ2vBV7aX6wlhzWPDmNfVoH
+ 0GaC2AsdXuswX/4U8YZWCchBHu65IY9baXe7fjhVLdJAdxzQloKRiH2bH/OZ25vknziLTesMUdg
+ LoUgBIAC8SHkuNShBTFLUqvC3s0wnj+9JrYbD1IxbK9GbNHddgEe8B4dWLb7qGyCeDySiiyJjhJ
+ EvCnu3P4uKfAtMw==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-> diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-> index 2f79688dcf7c..67a630cb5614 100644
-> --- a/tools/testing/selftests/bpf/config
-> +++ b/tools/testing/selftests/bpf/config
-> @@ -138,3 +138,5 @@ CONFIG_SMC_HS_CTRL_BPF=y
->  CONFIG_DIBS=y
->  CONFIG_DIBS_LO=y
->  CONFIG_PM_WAKELOCKS=y
-> +CONFIG_BLK_CGROUP_IOCOST=y
-> +CONFIG_BLK_CGROUP_IOCOST_BPF=y
-> diff --git a/tools/testing/selftests/bpf/prog_tests/iocost_model.c b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
-> new file mode 100644
-> index 000000000000..e9344b13fba9
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
-> @@ -0,0 +1,193 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include <fcntl.h>
-> +#include <unistd.h>
-> +#include "iocost_model.skel.h"
-> +#include "iocost_ms.skel.h"
+netconsole hands every console message to every enabled target, with no
+bound on the rate.
 
-Does this commit build?  The new test includes iocost_ms.skel.h and
-calls iocost_ms__open_and_load(), iocost_ms__attach(), and
-iocost_ms__destroy() in serial_test_iocost_model_streams() below, but
-this commit adds only progs/iocost_model.c under the progs directory.
-progs/iocost_ms.c is added two commits later by b33a817eec7c.
+At Meta, a few hosts caused some DoS and netconsd was OOM killed in
+some regions, fed by 3 billion RCU messages from thousand hosts and by
+a swap fault that retries forever, which logged 6 million copies of one
+line on a single host in a few hours.
 
-The selftest Makefile derives skeleton generation rules from:
+Both floods are being fixed where they are printed, by Paul and me for RCU
+Tasks [1][2] and by me for the swap fault fix [3], but that only ever
+covers the flood already found, not new issues that might be happening.
 
-  TRUNNER_BPF_SRCS := $(notdir $(wildcard $(TRUNNER_BPF_PROGS_DIR)/*.c))
-  TRUNNER_BPF_SKELS := $(patsubst %.c,$(TRUNNER_OUTPUT)/%.skel.h, ...)
+Use the ratelimit in the kernel to ratelimit messages from netconsole.
 
-so iocost_ms.skel.h has no generation rule at this commit and make
-fails with "No rule to make target '.../iocost_ms.skel.h', needed by
-'.../iocost_model.test.o'".  Because prog_tests/*.o files all feed the
-single test_progs binary, this breaks the build of the entire bpf
-selftest suite.
+Give each target a token bucket, consulted once per message so that a
+message split into several ncfrag packets is sent whole or dropped
+whole.
 
-The multi-stream model and test belong in the later commit, or
-progs/iocost_ms.c belongs in this one.  As-is the series is not
-bisectable.
+It starts with a zero interval, which struct ratelimit_state treats as
+unlimited, so nothing changes until ratelimit_interval_ms and
+ratelimit_burst are written.
 
-[ ... ]
+What the bucket discards leaves nothing on the wire. An extended target
+sees the loss as a gap in the sequence number the header carries:
 
-> +static int readback_model(const char *dev, char *model, size_t model_sz)
-> +{
-> +	char line[256], word[256], *m, *end;
-> +	FILE *fp;
-> +	int found = 0;
-> +
-> +	fp = fopen("/sys/fs/cgroup/io.cost.model", "r");
-> +	if (!fp)
-> +		return -1;
-> +	while (fgets(line, sizeof(line), fp)) {
-> +		if (sscanf(line, "%255s", word) == 1 && !strcmp(word, dev)) {
-> +			found = 1;
-> +			break;
-> +		}
-> +	}
-> +	fclose(fp);
-> +	if (!found)
-> +		return -1;
-> +
-> +	m = strstr(line, "model=");
-> +	if (!m)
-> +		return -1;
-> +	m += strlen("model=");
-> +	end = m;
-> +	while (*end && !isspace(*end))
-> +		end++;
+	7.2.0-rc7-01460-g75848acaf136,13,628,252392647,-;netconsole selftest: netcons_AGujw 1
+	7.2.0-rc7-01460-g75848acaf136,13,629,252392782,-;netconsole selftest: netcons_AGujw 2
+	7.2.0-rc7-01460-g75848acaf136,13,678,254742125,-;netconsole selftest: netcons_AGujw 1
 
-Does this build?  isspace() is used but <ctype.h> is never included.
-The file includes only <test_progs.h>, <fcntl.h> and <unistd.h>.
-test_progs.h includes stdio.h, unistd.h, errno.h, string.h, assert.h,
-regex.h, stdlib.h, stdarg.h, time.h, signal.h and various linux/ and
-sys/ headers, none of which declare isspace() in glibc.
+Crash output is exempt. The bucket is skipped while oops_in_progress is
+set, so a limit configured for steady-state logging cannot cost a target
+part of an oops or a panic.
 
-tools/testing/selftests/bpf/Makefile builds userspace objects with
--Wall -Werror, so the implicit declaration is an error (and is an error
-by default in GCC 14+ / C23 regardless).  The existing precedent in the
-same directory, prog_tests/ctx_rewrite.c, is the only other prog_test
-that calls isspace() and it explicitly includes <ctype.h>.
+[1] https://lore.kernel.org/all/anw8Qw8lfeIykski@gmail.com/
+[2] https://lore.kernel.org/all/20260810-rcu_task_shrink_lruvec-v1-1-4d9f7d5251cb@debian.org/
+[3] https://lore.kernel.org/all/20260813-swap-v2-0-4a625ccabdae@debian.org/
 
-[ ... ]
-
-> +/*
-> + * The dev argument must be present in io.cost.qos already, which
-> + * means iocost is enabled for it.
-> + */
-> +static int dev_has_iocost(const char *dev)
-> +{
-> +	char line[256], word[256];
-> +	FILE *fp;
-> +	int found = 0;
-> +
-> +	fp = fopen("/sys/fs/cgroup/io.cost.qos", "r");
-> +	if (!fp)
-> +		return 0;
-> +	while (fgets(line, sizeof(line), fp)) {
-> +		if (sscanf(line, "%255s", word) == 1 && !strcmp(word, dev)) {
-> +			found = 1;
-> +			break;
-> +		}
-> +	}
-> +	fclose(fp);
-> +	return found;
-> +}
-
-Does this helper match its comment?  The comment asserts that presence
-in io.cost.qos "means iocost is enabled", but ioc_qos_prfill() prints
-a line for every device that has the iocost policy activated, including
-devices with enable=0:
-
-block/blk-iocost.c:ioc_qos_prfill()
-  seq_printf(sf, "%s enable=%d ctrl=%s rpct=...", dname, ioc->enabled, ...);
-
-dev_has_iocost() only matches the leading dname and never looks at the
-enable= field, so it returns 1 for a device where iocost is present but
-disabled.  To match its own comment the helper should parse enable=1.
-
-Relatedly, the commit message states "The runner is skipped unless
-$IOCOST_TEST_DEV gives a major:minor of a device with iocost enabled",
-but the code does not skip in that case:
-
-> +void serial_test_iocost_model(void)
-> +{
-> +	struct iocost_model *skel;
-> +	char buf[300], *dev;
-> +	int err;
-> +
-> +	dev = getenv("IOCOST_TEST_DEV");
-> +	if (!dev || geteuid() != 0) {
-> +		test__skip();
-> +		return;
-> +	}
-> +	if (!ASSERT_TRUE(dev_has_iocost(dev), "iocost_mounted"))
-> +		return;
-
-ASSERT_TRUE calls test__fail() if the condition is false, so setting
-IOCOST_TEST_DEV to a device without iocost, or running where cgroup2 is
-not mounted at /sys/fs/cgroup (fopen fails, dev_has_iocost returns 0),
-produces a hard test failure rather than a skip.
-
-[ ... ]
-
-> +/*
-> + * Write a line to io.cost.model with write(2) and return the errno of
-> + * the failed write, or 0 on success.  stdio is not used here on
-> + * purpose: the kernel's rejection happens in the write() syscall,
-> + * not in the userspace buffer copy, and every write, including
-> + * the error paths of the callers below, is checked.
-> + */
-> +static int write_cost_model(const char *buf)
-> +{
-> +	int fd, err = 0;
-> +	ssize_t n;
-> +
-> +	fd = open("/sys/fs/cgroup/io.cost.model", O_WRONLY);
-> +	if (fd < 0)
-> +		return errno;
-> +	n = write(fd, buf, strlen(buf));
-> +	if (n < 0)
-> +		err = errno;
-> +	close(fd);
-> +	return err;
-> +}
-
-[ ... ]
-
-> +	/*
-> +	 * negative: binding an unknown model name must be rejected,
-> +	 * so a typo cannot silently disable cost model updates
-> +	 */
-> +	snprintf(buf, sizeof(buf), "%s model=no_such_model\n", dev);
-> +	err = write_cost_model(buf);
-> +	ASSERT_EQ(err, ENOENT, "unknown_model_rejected");
-
-Can this negative test distinguish the two failure modes?
-write_cost_model() returns the open() errno and the write() errno
-through the same channel, so its callers cannot tell them apart.  ENOENT
-is exactly what open() returns when /sys/fs/cgroup/io.cost.model does
-not exist (cgroup2 mounted elsewhere, or the io controller not enabled
-in the root cgroup's subtree_control).  The assertion then passes
-without the kernel ever having parsed the model name, i.e. it can report
-success for the opposite of what it means to prove.
-
-The helper's own comment says it returns "the errno of the failed
-write", which does not match the open() path.  Distinguishing the two
-(e.g. a separate return code for open failure, or asserting the file is
-openable first) would make the negative test meaningful.
-
-> diff --git a/tools/testing/selftests/bpf/progs/iocost_model.c b/tools/testing/selftests/bpf/progs/iocost_model.c
-> new file mode 100644
-> index 000000000000..f8ad417b3584
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/iocost_model.c
-> @@ -0,0 +1,116 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Example iocost cost model: the builtin linear HDD formula with all
-> + * costs doubled.
-> + *
-> + * The constants mirror what calc_lcoefs() derives from the AUTOP_HDD
-> + * defaults (rbps=174019176 rseqiops=41708 rrandiops=370, w-side
-> + * analog) in vtime units where 1s == 2^37, expressed with the same
-> + * round-up divisions so they cannot drift from the kernel.  A device
-> + * bound to this model through io.cost.model charges exactly twice the
-> + * builtin model under the same workload, which makes it a convenient
-> + * way to verify that accounting goes through the BPF path.
-
-Does this claim hold for arbitrary devices?  "A device bound to this
-model through io.cost.model charges exactly twice the builtin model
-under the same workload" is only true for a rotational device still on
-ctrl=auto.
-
-The builtin model reads ioc->params.lcoefs[], which calc_lcoefs()
-derives from autop[ioc_autop_idx()] or from user-supplied io.cost.model
-coefficients.  ioc_autop_idx() returns AUTOP_HDD only when
-blk_queue_rot(disk->queue); otherwise it returns AUTOP_SSD_QD1 or
-AUTOP_SSD_DFL, and when ioc->user_cost_model is set it keeps whatever
-the user pinned.
-
-This model hardcodes the AUTOP_HDD i_lcoefs (rbps=174019176 etc., from
-block/blk-iocost.c), so on the non-rotational $IOCOST_TEST_DEV that
-most testers will use, the ratio to the builtin is arbitrary rather than
-2x.  The comment should state the rotational/ctrl=auto precondition (or
-the code should not claim exactness).
-
-Secondly, "expressed with the same round-up divisions so they cannot
-drift from the kernel" overstates the coupling: only the RU() divisions
-mirror calc_lcoefs().  RBPS/RSEQIOPS/RRANDIOPS/WBPS/WSEQIOPS/WRANDIOPS,
-IOC_PAGE_SIZE, IOC_SECT_TO_PAGE_SHIFT and LCOEF_RANDIO_PAGES are
-hardcoded copies of kernel values and will drift silently if the kernel
-changes them.
-
-[ ... ]
-
-> +SEC("struct_ops")
-> +u64 BPF_PROG(iocost_2x_calc_cost, u64 opf, u64 nbytes, u64 sector,
-> +	     struct blkcg *blkcg, u64 model_flags)
-> +{
-> +	u64 pages, seek_pages = 0, base, coef_page, randio, cost;
-> +
-> +	if ((opf & IOCOST_REQ_OP_MASK) == REQ_OP_READ) {
-> +		base = RSEQIO; coef_page = RPAGE; randio = RRANDIO;
-> +	} else if ((opf & IOCOST_REQ_OP_MASK) == REQ_OP_WRITE) {
-> +		base = WSEQIO; coef_page = WPAGE; randio = WRANDIO;
-> +	} else {
-> +		/*
-> +		 * a fully owning model must price every op; unknown
-> +		 * ops are priced as a single page write
-> +		 */
-> +		base = 0; coef_page = WPAGE; randio = 0;
-> +	}
-> +
-> +	/*
-> +	 * mirror the builtin single per-cgroup cursor: the model keeps
-> +	 * its own cursor keyed by the blkcg argument
-> +	 */
-
-Does the keying match the builtin?  The comment says this mirrors "the
-builtin single per-cgroup cursor", but the builtin cursor is not
-per-cgroup - it is per blkg, i.e. per (cgroup, device).  The cursor is
-'sector_t cursor;' in struct ioc_gq, and ioc_gq is allocated by
-blkg_to_iocg(blkg).
-
-cursor_store is keyed by blkcg->css.cgroup only, so if two devices are
-bound to this model the same cgroup shares one cursor between them and
-every alternating IO looks random.
-
-> +	{
-> +		__u64 *cursor, cur;
-> +
-> +		cursor = bpf_cgrp_storage_get(&cursor_store,
-> +					      blkcg->css.cgroup, NULL,
-> +					      BPF_LOCAL_STORAGE_GET_F_CREATE);
-> +		if (!cursor)
-> +			return 2 * (base + RU(nbytes, IOC_PAGE_SIZE) * coef_page);
-> +		cur = *cursor;
-> +		seek_pages = sector > cur ? sector - cur : cur - sector;
-> +		seek_pages >>= IOC_SECT_TO_PAGE_SHIFT;
-
-Does this handle a freshly created cgroup?  bpf_cgrp_storage_get() with
-BPF_LOCAL_STORAGE_GET_F_CREATE returns a zero-filled value
-(bpf_selem_alloc() allocates with __GFP_ZERO), so a new entry has
-cur == 0, which this code treats as a real cursor position rather than
-'no previous IO'.
-
-The builtin only computes a seek distance when the cursor is non-zero:
-
-block/blk-iocost.c:calc_vtime_cost_builtin()
-  if (iocg->cursor) {
-      seek_pages = abs(bio->bi_iter.bi_sector - iocg->cursor);
-      seek_pages >>= IOC_SECT_TO_PAGE_SHIFT;
-  }
-
-Without this guard, the first bio of every cgroup landing past sector
-32768 is priced with randio (368,221,632) instead of seqio (60,266).
-
-> +		if (seek_pages > LCOEF_RANDIO_PAGES)
-> +			base = randio;
-> +		if (!(model_flags & IOCOST_COST_F_MERGE))
-> +			*cursor = sector + RU(nbytes, 512);
-> +	}
-
-Does this cursor update match the builtin?  The cursor is advanced for
-every non-merge call, including calls the builtin model never accounts
-for.
-
-calc_vtime_cost_builtin() returns cost 0 both for
-'!bio->bi_iter.bi_size' and for any op that is not REQ_OP_READ or
-REQ_OP_WRITE, and ioc_rqos_throttle() then does 'if (!abs_cost) return;'
-before 'iocg->cursor = bio_end_sector(bio);'.  So the builtin leaves the
-cursor untouched for flush and discard bios.
-
-This model instead writes 'sector + RU(nbytes, 512)' for them.  A
-dataless flush from blkdev_issue_flush() is 'bio_init(&bio, bdev, NULL,
-0, REQ_OP_WRITE | REQ_PREFLUSH)': bi_sector == 0 and bi_size == 0.
-It matches the REQ_OP_WRITE arm, so this line sets *cursor = 0 + 0 = 0.
-REQ_OP_FLUSH hits the 'unknown op' arm and does the same.
-
-The next read/write in that cgroup is then compared against cursor 0, so
-seek_pages == sector >> 3 and any sector beyond 32768 (16 MiB into the
-device) trips 'seek_pages > LCOEF_RANDIO_PAGES' and is priced with
-randio instead of seqio.  With the AUTOP_HDD constants in this file that
-is RRANDIO = 368,221,632 instead of RSEQIO = 60,266.  For a 4 KiB read,
-roughly 113x instead of the 2x the file comment claims.
-
-On an fsync-heavy workload a flush precedes almost every IO, so a cgroup
-bound to this model is throttled orders of magnitude harder than under
-the builtin model it is supposed to double.  A large discard has the
-mirror-image effect: 'sector + RU(nbytes, 512)' jumps the cursor by the
-whole discard length, so the following sequential read looks random.
-
-Matching the builtin requires only advancing the cursor for the ops that
-were actually priced (READ/WRITE with nbytes != 0).
-
-> +
-> +	pages = RU(nbytes, IOC_PAGE_SIZE);
-> +	if (!pages)
-> +		pages = 1;	/* dataless flush: one page */
-
-Does the page count match the builtin?  The page count rounds up where
-the builtin truncates, so the cost is not 2x for bios that are not a
-whole number of 4 KiB pages.
-
-The builtin uses:
-
-block/blk-iocost.c:calc_vtime_cost_builtin()
-  u64 pages = max_t(u64, bio_sectors(bio) >> IOC_SECT_TO_PAGE_SHIFT, 1);
-
-which is max(nbytes >> 12, 1) - a truncating shift.  RU(nbytes,
-IOC_PAGE_SIZE) is a round-up.  For a 6 KiB bio the builtin charges 1
-page and this model charges 2, i.e. 2*(base + 2*coef_page) instead of
-2*(base + 1*coef_page).  Bios whose size is not a multiple of 4096 are
-routine (writeback of a partial tail, and merged bios on the
-ioc_rqos_merge() path).
-
-Note the file comment claims the constants use "the same round-up
-divisions so they cannot drift from the kernel" - the page count is the
-one division the kernel deliberately does not round up.
-
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changes in v2:
+- Drop the patch that sent a "N messages dropped by rate limit" notice
+  to the target. (Gustavo Luiz Duarte).
+- Link to v1: https://patch.msgid.link/20260818-netcons_ratelimit-v1-0-8c5d2d17789c@debian.org
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Breno Leitao (4):
+      netconsole: add a per-target message rate limit
+      netconsole: allow configuring the rate limit interval through configfs
+      netconsole: allow configuring the rate limit burst through configfs
+      docs: netconsole: document rate limit feature
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34481298417
---===============7357494171922306859==--
+ Documentation/networking/netconsole.rst | 38 +++++++++++++
+ drivers/net/netconsole.c                | 99 +++++++++++++++++++++++++++++++++
+ 2 files changed, 137 insertions(+)
+---
+base-commit: c68a982815dcce5464e3bf2a31ac94f5146c04ca
+change-id: 20260817-netcons_ratelimit-629b04a73c57
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
+
