@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89813B059F;
-	Thu, 10 Sep 2026 08:31:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4521C3BBFD3;
+	Thu, 10 Sep 2026 08:31:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789029095; cv=none; b=tUPOIVGjZSAbFKjZgyjE4D0SX0QHDnGV9fo5bCZVR+OI1byPBjKKgQadPPOnSN6WpwvXaeYBsJWMko8qzKJxRed8yk8/3S0EHJaZdVIzRD6YXxmRB0rrMcyLhIkLvuANZ/fKg/PyG7Dy11M0x2bJDFPa7quHSRq0kh1lwyTh1L0=
+	t=1789029097; cv=none; b=b2YFU3tGCswW0jK8ZOXSSdnCRV7fzQrsROam3lJfplfbzpyD8/vALsDudvBs79rqHAnVvwtQDxpDfQyYkmHZ6JYRhwhUDFl78HLBTO6Wei5WINFiG2mGCelePi9YQZlHwvzWmCmt++XWI1tUHULwP+MG2rEpVirMwNdvggRu2yY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789029095; c=relaxed/simple;
-	bh=0rvktlisGG/pXViy7VnJ86L2uEFtIO+dWsXgYLDpFNQ=;
+	s=arc-20240116; t=1789029097; c=relaxed/simple;
+	bh=gpjLnXjMydggK4Orj4pZwXXB+mJp7VztavgGAtB9s1M=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=FC/6x3Ro4w1NEwZcI+FNsI/lDTCAtDtEt5gpH/sucw9Q62ZFPQRuD4+r4eXZyGhPIJzuNanOGgRcBqPjBmjTHWk8JzPCehZDFEGTsDtD3ntdDZm8+LD4Nt0R6aiciYiTcP5TTKMw26meloIVn38zOwPZ7NODH285uPQ74eciPsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BXb6xkzB; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=OycF+U10ywODYqjaqFxT7qrU+a6m1Zfer7QLPzIDfU7x5WSsZDULe1KBj8VLhwzeCn9HaLQ6Wj2oyKjS4At/mTwzut8jvjAMZ1ZL5fz6tWNRveaoPAEcXYY/8AZ/GiQtxhKUOYMwSwEASwilsJ/HsYclcwKHvMXioq32frTotYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dEtafRVW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BXb6xkzB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51A5A1F000FF;
-	Thu, 10 Sep 2026 08:31:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dEtafRVW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E90C11F00893;
+	Thu, 10 Sep 2026 08:31:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789029093;
-	bh=SIiKgXvOxvLKCbF2u4mFNRdPie6pSoalejtOcLHAoqY=;
+	s=k20260515; t=1789029096;
+	bh=F9PQQQfwAd99e37OOMNmqg5UAEc2Qtv9lx3+OiCRJKM=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=BXb6xkzBSdEABUFcjMwCN4DqW/qyWFeuo9TPNoV7EJNSH1TALisbvsYcLVrJ7M5Zi
-	 ewmGLbDoP+yspYA04x5Cv8gI7mv4WaZwXGXpuCkkYQ1IogV0DNkeGyRC7DBhnLGYaH
-	 fOnmjUQw0zvKubQXra4wISpB+WA+PC4Qajx6eB+8WM3Yz7RhLKPwFztBZpyN3EuyPZ
-	 lc3lNdLgwMdL/V8JQAXUAcsqwLaMV8KfNxWo5lzVZjSqGPr0ks627bJnvzOIhj7ZmJ
-	 quelJgdKREvRzN6WY+49DlqOpbiL0H941n4VOmEaX092+mQkVa6RYIavGaCrwOl1hi
-	 d8gfJXr+6m3eQ==
-Subject:
- Re: [PATCH v7 net-next 4/7] ptp: ptp_vmclock: Implement attributes ioctls
+	b=dEtafRVWc80TnHBpM6ZoitxJxx28+8/6FdkfnIbTt8/4beqq58LbeqN7Kn6vZN6I3
+	 7YGxFQUYT3y2pn7hPT7IcGXB/oi2z0Hk5p51UGRylyFuJ+d8Tl1y/g+HLNvVN8iz5F
+	 ceBT3e5WDO00yhyQmn6V+za9mEnKyyor3JWQ/C7bfsXubWZg4XUpjE5z1iDJCWey9f
+	 a/kbEJnoA7tMdQ6XCjkxCn6IWWgQ4GsommW5wi7nghSdS9FteTXH1Pczl+ylZH2YuX
+	 i61QZk08qDkXU78IIM0IpIgRXfYLxawsNrj6/YaD7biik4rtcesNVdE9RRwHLXr3xA
+	 EPqogYxqiKTDA==
+Subject: Re: [PATCH v7 net-next 5/7] net: ena: Update PHC admin interface for
+ error bound support
 From: netdev-bot+sashiko@kernel.org
 To: akiyano@amazon.com
 Cc: davem@davemloft.net, kuba@kernel.org, richardcochran@gmail.com,
@@ -43,11 +43,11 @@ Cc: davem@davemloft.net, kuba@kernel.org, richardcochran@gmail.com,
  linux-doc@vger.kernel.org, shuah@kernel.org, corbet@lwn.net,
  skhan@linuxfoundation.org, horms@kernel.org, bhelgaas@google.com,
  vadim.fedorenko@linux.dev, dwmw@amazon.co.uk
-Date: Thu, 10 Sep 2026 08:31:30 +0000
-Message-ID: <178902909090.219967.1847972587492686819@kernel.org>
-In-Reply-To: <20260909073136.12863-5-akiyano@amazon.com>
-References: <20260909073136.12863-5-akiyano@amazon.com>
-X-sashiko-severity: Medium
+Date: Thu, 10 Sep 2026 08:31:33 +0000
+Message-ID: <178902909352.219967.7999203905301535022@kernel.org>
+In-Reply-To: <20260909073136.12863-6-akiyano@amazon.com>
+References: <20260909073136.12863-6-akiyano@amazon.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -57,237 +57,182 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 4 potential
+Thank you for your contribution! Sashiko AI review found 2 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 4 · Low: 0
+Critical: 0 · High: 1 · Medium: 1 · Low: 0
 
-- [Medium] vmclock_populate_ptp_attributes()
-  (drivers/ptp/ptp_vmclock.c:193-196) clamps the computed 64-bit worst-…
-- [Medium] vmclock_populate_ptp_attributes() sets have_error_bound (and
-  therefore PTP_ATTRS_VALID_ERROR_BOUND) based on…
-- [Medium] The driver advertises PTP_TIMESCALE_TAI for vmclock devices
-  (drivers/ptp/ptp_vmclock.c:114-115 and the UTC-converted case at…
-- [Medium] vmclock_populate_ptp_attributes() introduces the first
-  *runtime* uses of VMCLOCK_FIELD_PRESENT (drivers/ptp/ptp_vmclock.c:158…
+- [High] The commit message states it "Introduce[s] a feature version
+  mechanism to indicate device supports error_bound", but the mechanism…
+- [Medium] Version handshake is implemented as an exact-equality test
+  against a field this patch documents as the device's *maximum*…
 
 --
 
-ptp: ptp_vmclock: Implement attributes ioctls
+net: ena: Update PHC admin interface for error bound support
 
-This adds gettimexattrs64 and getcrosststampattrs to ptp_vmclock so the
-new PTP_SYS_OFFSET_EXTENDED_ATTRS and PTP_SYS_OFFSET_PRECISE_ATTRS
-ioctls can report an error bound, a clock status and a timescale.  The
-attributes are filled in inside the seq_count loop, and the UNRELIABLE
-check that used to abort the read is moved after the loop so that only
-the legacy ioctls still fail with -EINVAL.
+This extends the ENA admin definitions with an error_bound field in the PHC
+response structure, replaces the PHC type enum with a PHC feature version
+enum, and adds an error flag for error_bound retrieval failures.  The
+handshake in ena_com_phc_config() is updated to request and check the new
+version field.
 
-A few questions about the new attribute code below.
-
-> diff --git a/drivers/ptp/ptp_vmclock.c b/drivers/ptp/ptp_vmclock.c
-> index bb0e14bac9f2..0cd449999139 100644
-> --- a/drivers/ptp/ptp_vmclock.c
-> +++ b/drivers/ptp/ptp_vmclock.c
-
-[ ... ]
-
-> @@ -95,13 +106,113 @@ static bool tai_adjust(struct vmclock_abi *clk, uint64_t *sec)
->  	return false;
->  }
+> diff --git a/drivers/net/ethernet/amazon/ena/ena_admin_defs.h b/drivers/net/ethernet/amazon/ena/ena_admin_defs.h
+> index 898ecd96b96a..2d132c4bc590 100644
+> --- a/drivers/net/ethernet/amazon/ena/ena_admin_defs.h
+> +++ b/drivers/net/ethernet/amazon/ena/ena_admin_defs.h
+> @@ -128,12 +128,14 @@ enum ena_admin_get_stats_scope {
+>  	ENA_ADMIN_ETH_TRAFFIC                       = 1,
+>  };
 >  
-> +static uint8_t vmclock_get_ptp_timescale(uint8_t vmclock_time_type)
-> +{
-> +	switch (vmclock_time_type) {
-> +	case VMCLOCK_TIME_UTC:
-> +		return PTP_TIMESCALE_UTC;
-> +	case VMCLOCK_TIME_TAI:
-> +		return PTP_TIMESCALE_TAI;
-> +	case VMCLOCK_TIME_MONOTONIC:
-> +		return PTP_TIMESCALE_MONOTONIC;
-> +	default:
-> +		return PTP_TIMESCALE_UNKNOWN;
-> +	}
-> +}
+> -enum ena_admin_phc_type {
+> -	ENA_ADMIN_PHC_TYPE_READLESS                 = 0,
+> +enum ena_admin_phc_feature_version {
+> +	/* Readless with error_bound */
+> +	ENA_ADMIN_PHC_FEATURE_VERSION_0             = 0,
+>  };
 
-[ ... ]
+[Severity: High]
+The commit message says:
 
-> +static void vmclock_populate_ptp_attributes(struct vmclock_state *st,
-> +					    struct ptp_clock_attrs *att,
-> +					    uint64_t delta)
-> +{
-> +	uint64_t maxerror_ns = UINT_MAX;
-> +	bool have_error_bound = false;
-> +
-> +	if (!att)
-> +		return;
-> +
-> +	/* Called once per seq_count retry, so don't accumulate stale bits */
-> +	att->valid = 0;
-> +	att->error_bound = 0;
-> +
-> +	/* Only calculate if the base error is flagged as valid
-> +	 * by the hypervisor.
-> +	 */
-> +	if (VMCLOCK_FIELD_PRESENT(st->clk, time_maxerror_nanosec) &&
-> +	    (le64_to_cpu(st->clk->flags) & VMCLOCK_FLAG_TIME_MAXERROR_VALID)) {
-> +		have_error_bound = true;
-> +		maxerror_ns = le64_to_cpu(st->clk->time_maxerror_nanosec);
+  "Introduce a feature version mechanism to indicate device supports
+   error_bound"
 
-[Severity: Medium]
-Is VMCLOCK_FIELD_PRESENT safe to evaluate at ioctl time?  The macro reads
-the size field straight out of the shared mapping:
+Can this mechanism actually indicate that?  ENA_ADMIN_PHC_FEATURE_VERSION_0
+is 0, which is the same wire value as the removed ENA_ADMIN_PHC_TYPE_READLESS
+(also 0), and ena_com_phc_config() still sends 0 in
+feat_common.feature_version and still accepts a response value of 0:
 
-drivers/ptp/ptp_vmclock.c:
-#define VMCLOCK_FIELD_PRESENT(_c, _f)			  \
-	(le32_to_cpu((_c)->size) >= (offsetof(struct vmclock_abi, _f) +	\
-				     sizeof((_c)->_f)))
-
-and size is only compared against the mapping length once, in
-vmclock_probe():
-
-	st->clk = devm_memremap(dev, st->res.start, resource_size(&st->res),
-				MEMREMAP_WB | MEMREMAP_DEC);
+	ret = ena_com_get_feature(ena_dev,
+				  &get_feat_resp,
+				  ENA_ADMIN_PHC_CONFIG,
+				  ENA_ADMIN_PHC_FEATURE_VERSION_0);
 	...
-	if (le32_to_cpu(st->clk->magic) != VMCLOCK_MAGIC ||
-	    le32_to_cpu(st->clk->size) > resource_size(&st->res) ||
+	if (get_feat_resp.u.phc.version != ENA_ADMIN_PHC_FEATURE_VERSION_0) {
 
-Before this patch VMCLOCK_FIELD_PRESENT was only used at probe, right
-after that comparison, so the checked and used values were the same
-snapshot.  These new call sites run long afterwards, and the hypervisor
-can raise size in shared memory at any point.
+So the bytes exchanged with the device look identical to the pre-patch
+exchange, and firmware predating error_bound reports the same value as
+firmware implementing it.  I did not find another discriminator either:
+struct ena_admin_acq_common_desc carries no feature_version echo, and
+enum ena_admin_aq_caps_id has no PHC/error-bound capability bit.
 
-PTP registration only requires size to cover time_frac_sec, i.e. 88
-bytes, while time_maxerror_nanosec sits at bytes 96..103 of struct
-vmclock_abi.  With a resource of 88..103 bytes and a later size write of
-104 or more, does the dereference of st->clk->time_maxerror_nanosec then
-read past the end of the devm_memremap()ed region, and publish whatever
-it finds with PTP_ATTRS_VALID_ERROR_BOUND set?
+Does that matter for the new field?  error_bound is carved out of the
+previously reserved bytes of the device-written DMA buffer
+struct ena_admin_phc_resp:
 
-The seq_count loop does not cover this, since it only detects hypervisor
-updates and never re-validates size against resource_size(&st->res).
-Would snapshotting the validated size at probe time (e.g. a clk_size
-field in struct vmclock_state) and using that at runtime be preferable?
-
-[Severity: Medium]
-Should have_error_bound depend on VMCLOCK_FLAG_TIME_MAXERROR_VALID alone?
-
-time_maxerror_nanosec bounds the error of the reference time at
-counter_value, while counter_period_maxerror_rate_frac_sec bounds the
-error accumulated while extrapolating over the elapsed ticks.  The two
-validity flags are independent bits in
-include/uapi/linux/vmclock-abi.h:
-
-#define VMCLOCK_FLAG_PERIOD_MAXERROR_VALID	(1 << 4)
-#define VMCLOCK_FLAG_TIME_MAXERROR_VALID	(1 << 6)
-
-The timestamp handed back to userspace is taken at counter_value + delta.
-When VMCLOCK_FLAG_PERIOD_MAXERROR_VALID is clear and delta is non-zero,
-the extrapolation error is unknown, yet the code below still sets
-PTP_ATTRS_VALID_ERROR_BOUND on the reference-time error only.  With the
-50 PPM counter tolerance the vmclock ABI header itself mentions, tens of
-seconds of delta already add milliseconds that are not reflected in the
-reported bound.  Would it be more correct to leave
-PTP_ATTRS_VALID_ERROR_BOUND clear in that case?
-
+> @@ -1224,7 +1226,10 @@ struct ena_admin_phc_resp {
+>  	/* PHC timestamp (nsec) */
+>  	u64 timestamp;
+>  
+> -	u8 reserved2[12];
+> +	u8 reserved2[8];
 > +
-> +		/* If frequency error is also valid, accumulate it
-> +		 * over the delta.
-> +		 */
-> +		if (VMCLOCK_FIELD_PRESENT(st->clk, counter_period_maxerror_rate_frac_sec) &&
-> +		    (le64_to_cpu(st->clk->flags) & VMCLOCK_FLAG_PERIOD_MAXERROR_VALID)) {
-> +			uint64_t maxerror_rate, err_hi, err_frac, growth_ns;
-> +
-> +			maxerror_rate = le64_to_cpu(st->clk->counter_period_maxerror_rate_frac_sec);
-> +			err_frac = mul_u64_u64_shr_add_u64(&err_hi, delta,
-> +							   maxerror_rate,
-> +							   st->clk->counter_period_shift,
-> +							   0);
-> +
-> +			if (err_hi >= U64_MAX / NSEC_PER_SEC) {
-> +				maxerror_ns = U64_MAX;
-> +				goto saturate;
-> +			}
-> +
-> +			growth_ns = (err_hi * NSEC_PER_SEC) +
-> +				    mul_u64_u64_shr(err_frac, NSEC_PER_SEC, 64);
-> +
-> +			/* Guard against overflow */
-> +			if (U64_MAX - growth_ns < maxerror_ns)
-> +				maxerror_ns = U64_MAX;
-> +			else
-> +				maxerror_ns += growth_ns;
-> +		}
-> +	}
-> +
-> +saturate:
-> +	if (have_error_bound) {
-> +		att->error_bound = (maxerror_ns > UINT_MAX) ?
-> +			UINT_MAX : (uint32_t)maxerror_ns;
-> +		att->valid |= PTP_ATTRS_VALID_ERROR_BOUND;
-> +	}
+> +	/* Timestamp error limit (nsec) */
+> +	u32 error_bound;
+>  
+>  	/* Bit field of enum ena_admin_phc_error_flags */
+>  	u32 error_flags;
 
-[Severity: Medium]
-Can this report a bound that is smaller than the real one?  The clamp to
-UINT_MAX caps the value at roughly 4.295 s, and PTP_ATTRS_VALID_ERROR_BOUND
-is still set, so userspace has no way to tell that saturation happened.
+If a device that only implements the old readless layout never writes those
+bytes, the driver reads the zero left by the coherent allocation (or stale
+data) and ENA_ADMIN_PHC_ERROR_FLAG_ERROR_BOUND is never set.
 
-The kernel-doc for struct ptp_clock_attrs in include/uapi/linux/ptp_clock.h
-describes the field as:
+Later in this series, ena_phc_gettimexattrs64() publishes that value to
+userspace as authoritative:
 
- * @error_bound: Maximum error (an upper bound, in nanoseconds) between the
- *               returned device_time and true time on the advertised
- *               @timescale; a worst-case bound, not a statistical estimate.
+	if (att) {
+		att->error_bound = error_bound_nsec;
+		att->valid |= PTP_ATTRS_VALID_ERROR_BOUND;
+	}
 
-and defines no saturation sentinel, only allowing the value to be
-distrusted when @status is UNKNOWN or UNRELIABLE.  A hypervisor
-publishing time_maxerror_nanosec above 0xffffffff (a legal __le64 value)
-with status SYNCHRONIZED, or a long enough delta in the growth
-accumulation above, both end up at 0xffffffff with the valid bit set,
-including the explicit maxerror_ns = U64_MAX branches.
+which would report a validated 0 ns error bound on hardware that never
+reported one.  Would giving the error_bound-capable format a distinct value
+(for example VERSION_1) and accepting version >= the requested one keep old
+and new firmware distinguishable?  Once value 0 is shipped as meaning
+"readless with error_bound", that distinction cannot be recovered in
+released kernels.
 
-Would it be better to leave PTP_ATTRS_VALID_ERROR_BOUND clear when the
-value does not fit in __u32, or to define a saturation convention in the
-uAPI?  Related to that, the maxerror_ns = UINT_MAX initializer looks dead
-now, since it is overwritten whenever have_error_bound becomes true.
-
-> +	att->timescale = vmclock_get_ptp_timescale(st->clk->time_type);
-> +	/* tai_adjust() already converted UTC to TAI before we're called */
-> +	if (st->clk->time_type == VMCLOCK_TIME_UTC)
-> +		att->timescale = PTP_TIMESCALE_TAI;
-> +	att->valid |= PTP_ATTRS_VALID_TIMESCALE;
-
-[Severity: Medium]
-Which epoch does PTP_TIMESCALE_TAI imply here?  The two headers that are
-in tree after this series disagree.
-
-include/uapi/linux/vmclock-abi.h:
-
-#define VMCLOCK_TIME_TAI			1	/* Since 1970-01-01 00:00:00z */
-
-and tspec->tv_sec is built directly from time_sec, so the value returned
-to userspace is Unix-epoch based in both the TAI and the tai_adjust()
-converted UTC case.
-
-include/uapi/linux/ptp_clock.h, as added by "ptp: Add ioctls for PHC
-timestamps with quality attributes" in this series, documents:
-
-	/**
-	 * International Atomic Time (TAI)
-	 * Epoch: 1958-01-01 00:00:00.
-	 ...
-	PTP_TIMESCALE_TAI = 1,
-
-in explicit contrast to PTP_TIMESCALE_UTC/POSIX which it documents with
-the 1970 epoch.  A consumer following the enum documentation would be off
-by about 378.7 million seconds.  The commit message also states:
-
-    - timescale: Always reports TAI (UTC sources are converted by tai_adjust()
-      before the attributes are populated)
-
-Should the enum documentation be corrected to the Unix epoch that PHC
-timestamps actually use, or is the driver expected to shift the value?
+> @@ -1035,10 +1037,10 @@ struct ena_admin_queue_ext_feature_desc {
+>  };
+>  
+>  struct ena_admin_feature_phc_desc {
+> -	/* PHC type as defined in enum ena_admin_get_phc_type,
+> -	 * used only for GET command.
+> +	/* PHC version as defined in enum ena_admin_phc_feature_version,
+> +	 * used only for GET command as max supported PHC version by the device.
+>  	 */
+> -	u8 type;
+> +	u8 version;
+>  
+>  	/* Reserved - MBZ */
+>  	u8 reserved1[3];
 
 [ ... ]
+
+> diff --git a/drivers/net/ethernet/amazon/ena/ena_com.c b/drivers/net/ethernet/amazon/ena/ena_com.c
+> index 297fb36ab8c1..40d1fd64bc34 100644
+> --- a/drivers/net/ethernet/amazon/ena/ena_com.c
+> +++ b/drivers/net/ethernet/amazon/ena/ena_com.c
+> @@ -1694,10 +1694,11 @@ int ena_com_phc_config(struct ena_com_dev *ena_dev)
+>  		return ret;
+>  	}
+>  
+> -	/* Supporting only readless PHC retrieval */
+> -	if (get_feat_resp.u.phc.type != ENA_ADMIN_PHC_TYPE_READLESS) {
+> +	/* Supporting only PHC V0 (readless mode with error bound) */
+> +	if (get_feat_resp.u.phc.version != ENA_ADMIN_PHC_FEATURE_VERSION_0) {
+>  		netdev_err(ena_dev->net_device,
+> -			   "Unsupported PHC type, error: %d\n",
+> +			   "Unsupported PHC version (0x%X), error: %d\n",
+> +			   get_feat_resp.u.phc.version,
+>  			   -EOPNOTSUPP);
+>  		return -EOPNOTSUPP;
+>  	}
+
+[Severity: Medium]
+Should this be an ordering test rather than an equality test?  The new
+comment on the same byte in struct ena_admin_feature_phc_desc describes it
+as a ceiling:
+
+	/* PHC version as defined in enum ena_admin_phc_feature_version,
+	 * used only for GET command as max supported PHC version by the device.
+	 */
+	u8 version;
+
+With that meaning, firmware that advertises a maximum of 1 while still
+serving the V0 layout the driver explicitly asked for through
+feat_common.feature_version = ENA_ADMIN_PHC_FEATURE_VERSION_0 fails the
+"!=" test, ena_com_phc_config() returns -EOPNOTSUPP, and ena_phc_init()
+takes the err_ena_com_phc_config path (ena_com_phc_destroy(),
+ena_phc_enable(adapter, false), ena_devlink_disable_phc_param()), leaving
+PHC/PTP unavailable on hardware that supports the requested interface.
+
+The two comments in ena_admin_defs.h also seem to disagree about what the
+device puts in the response.  ena_admin_get_set_feature_common_desc says:
+
+	/* The driver specifies the max feature version it supports and the
+	 * device responds with the currently supported feature version. The
+	 * field is zero based
+	 */
+	u8 feature_version;
+
+that is, a value clamped to what the driver requested, for which equality is
+fine, while the new phc comment says the field carries the device maximum,
+for which equality is wrong.  Which contract applies here?  If the device
+clamps, could the new comment be reworded; if it reports its maximum, should
+the check become something like
+
+	if (get_feat_resp.u.phc.version < ENA_ADMIN_PHC_FEATURE_VERSION_0)
+
+or an explicit minimum-required-version comparison?
+
+For reference, the existing precedent in ena_com_get_max_queue_ext() uses
+equality (get_resp.u.max_queue_ext.version != ENA_FEATURE_MAX_QUEUE_EXT_VER),
+but that field's comment is only "/* version */" and never claims to be a
+maximum.
+
+Also, "Unsupported PHC version (0x%X)" prints a u8 with %X; would %u be
+clearer here, matching the zero based version numbering?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909073136.12863-1-akiyano%40amazon.com
