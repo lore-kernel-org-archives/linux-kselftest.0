@@ -1,40 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58574494839;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584BC493D50;
 	Thu, 10 Sep 2026 13:46:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789048000; cv=none; b=edGNJAYTr9Pq31AkLcba4DPoVyTPCjxiMnDfu3/7Sl8zUVdNhnP6G7Ar/yaqPvjuioyQvmx9D56C3KfWegsHeGaS31emW4wXu0aOCZ2cun0RP34DimIAFsqnY7hHttbCxbDM0Sw0n7qmIemGgQpflg423wPikLw36oFtXDc7rBM=
+	t=1789048000; cv=none; b=FqLRPGNokTEy6eTZXRvztDVIg5BdQJSQIb5FtxMUKPTbaWopauOr7ZtdlBVgmHa1yH1P0ca1ZG/Gnss/Fb8BumoS7dZLKlmD5liJ2cRFJjuZiHqKlSvKxyl3zUWp9QbFawvajehKCi4KD3Y4FTTc55CFjWrINXWMpfFCaROCnFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789048000; c=relaxed/simple;
-	bh=AUkXD/rFmYPtCqqzAsWncUxZK0KLle4j6rAaoF5LEDE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=H9PY1miQnVjtYTz2ZtM5GGrWiBEhViDDcpaKn/J4pCP6NeI17HqZ9GC7RmcINTbJ9/NYx3TLuMQSxIegMZ9+tJdlmS54a6WZsYhupg3etIHgaiId4PJG4QdalUV2Dzpa6cSv7SoNTPOKfcUChC9/ewp/ozqya2LCoNN4BUsu3qI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=ThS9jBxE; arc=none smtp.client-ip=82.195.75.108
+	bh=te3BGjv2ZkjpAtQL+NYq1q8u2tx56jSGzo6NvbWg650=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=HmpFX7JBOEZTK00888uxp6eNpqzTlsAWGKCgo/tL4tDgyp5OeeHTFTKZTvPt44mKz+in4O2/ze9pndalyhfZWZ3uTss2eVMaaKII5gYBtGUa8KMmKhHD8EgI1R1At5g67qPDL+t0CFaLSwejrLkwWbmBo0Q1LuRN8uamoN6ULn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=IVBMUMNf; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="ThS9jBxE"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="IVBMUMNf"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
-	Content-Description:In-Reply-To:References;
-	bh=x/dPzdX9SZpdJrsIHbzEoIUdQCJTs8nVvTgtVxAxF9U=; b=ThS9jBxExUNZ7rwq3HrOi17UmZ
-	/i+WEzaimzU5cDZdvA4KZGkw08PlBooIcsqY0EKo6yD4jGWLdFs4tZYtdeLAIDjYpB98sGdVdOz8Q
-	f7M9Mnleo7i/6PSZeEJIgPqyaihWLctSnH6jy1w1fqwG2zL0CWs9rd9xvSPog0Xj49X+knqOThVvq
-	ya/bsS6D0czByHThCrcNv67rOZWzWxyUyJrHODoMcXh7r6RKUD/DwHHpw0C1c3utGhmQVREQuoaKJ
-	ZveLKkQfg5L75VOf9V8Xzg9yo6g93fkzK4vmHgfvKZwazFFuf3XNK1/YWuG2HzwiCp9SDmDvESdtw
-	eQfwyHhw==;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
+	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
+	From:Reply-To:Content-ID:Content-Description;
+	bh=zhVYq7G9Exl1xvrXgONfvwSZx8+yAyxUVtkgjfCQr/U=; b=IVBMUMNfOCEh5gtOQcoEiFi0pl
+	Al7+8KuZCUeUrSbVcf1JdjbIJO97rr76wEy1FW1wymYAiSj6YrdWkfLwJfZSSGd5B2u6SepE2131Q
+	zwNm83YKwRSL7kfIwOSG7qDfFXVwXSNnDiOTn00Z/+J5lgoaR3wp3W2hoeV7YoQWwe+FGyHTV34eO
+	TOzCtMyzoFQE4GmrzEvgM9X6aqWqbha88ORBkT9rIdrogv/y8cUtf8lv+VTMu5BVOLMWH03yJf2mx
+	8t0chOPDnJcV9QHHzmXrP28Vqz98mXeqVkb9hWsFYiRT5DuhIH5m+ED/pYjNv4GL4wRICzbjLwgrA
+	bzGraNhA==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1x4f6i-000YHf-2R;
-	Thu, 10 Sep 2026 13:46:29 +0000
+	id 1x4f6o-000YHl-1b;
+	Thu, 10 Sep 2026 13:46:34 +0000
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH net-next v2 0/4] netconsole: Support messages ratelimit-ing
-Date: Thu, 10 Sep 2026 06:46:09 -0700
-Message-Id: <20260910-netcons_ratelimit-v2-0-ebf0dd91e26e@debian.org>
+Date: Thu, 10 Sep 2026 06:46:10 -0700
+Subject: [PATCH net-next v2 1/4] netconsole: add a per-target message rate
+ limit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,11 +44,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAKG0omoC/23N0QrCIBSA4VeRcz1DrU3nVe8RI5yetgOloTIWY
- +8ejC67/uH7NyiYCQtYtkHGhQqlCJaphoGfXZyQUwDLQAnVCSM1j1h9iuWeXcUnvajyTvWjuDh
- 99q2GhsE744PWw7xBxMojrhWGhsFMpab8OWaLPPrPNX/cRXLBjW+DClJr0/trwJFcPKU8wbDv+
- xeySZjSvQAAAA==
-X-Change-ID: 20260817-netcons_ratelimit-629b04a73c57
+Message-Id: <20260910-netcons_ratelimit-v2-1-ebf0dd91e26e@debian.org>
+References: <20260910-netcons_ratelimit-v2-0-ebf0dd91e26e@debian.org>
+In-Reply-To: <20260910-netcons_ratelimit-v2-0-ebf0dd91e26e@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -59,83 +58,136 @@ Cc: Randy Dunlap <rdunlap@infradead.org>, paulmck@kernel.org,
  linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
  kernel-team@meta.com
 X-Mailer: b4 0.16-dev-f8e9d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2699; i=leitao@debian.org;
- h=from:subject:message-id; bh=AUkXD/rFmYPtCqqzAsWncUxZK0KLle4j6rAaoF5LEDE=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqorSv0nPvhImQizWFrx+LXLzla8sHJh3/OCHNd
- ycX6fETru6JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaqK0rwAKCRA1o5Of/Hh3
- bSL2D/4xIpguvU7M/DmY95shqgvrbjP0BvMqw9YOmFy44uDoLwjV9XMXL/5r/7pLDoroaXm0ot0
- iwmKlSxVdVP/CyFkZq05WT2RMcm8R6wBhhSARym1fyZRULYEfO4Yg0TJopQTHGRVHsXLuV375+Z
- ON7tCbNl6B+pv4zJoBgGJdlacM5Q/FDR5cpJtGJ4MfRuppQ4oLElou+ivgKyzQqP9HKQStJS7wU
- UdhtzVS14lEPfdyyEUSpFk3oP34fJLKmDerKHup8rYAu+s9xnmWO1xT8slwO5IKvJMNAjO5wPZY
- JAF62g0KX1jv0De4dbgw3DWOy+Kv78soQCifiIbenPbbzCxVCEWl9n06Ss90pkoOJFL4FgTsfum
- 67b9kaKLWFbq+jW/8rgLXiRWAsAMiex8LHN0MnfQHmfwep9VNjY+ex2MVYy1p9LErjw2V8myZCa
- 5VV+1PdPf0qv98AXO25qcVMfudwj13jUQOIzd4+Tp6Z3a2gZKaV9DQ2vBV7aX6wlhzWPDmNfVoH
- 0GaC2AsdXuswX/4U8YZWCchBHu65IY9baXe7fjhVLdJAdxzQloKRiH2bH/OZ25vknziLTesMUdg
- LoUgBIAC8SHkuNShBTFLUqvC3s0wnj+9JrYbD1IxbK9GbNHddgEe8B4dWLb7qGyCeDySiiyJjhJ
- EvCnu3P4uKfAtMw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4007; i=leitao@debian.org;
+ h=from:subject:message-id; bh=te3BGjv2ZkjpAtQL+NYq1q8u2tx56jSGzo6NvbWg650=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqorSvVw2Y1/q8d1jeRobTLospSYvh9UR+LXD8b
+ tGeDwsY7N2JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaqK0rwAKCRA1o5Of/Hh3
+ bXv4D/47oB7YhUpBoxx2TLHcCdY+Q75AGJ2mgSQU6XI6UyyVyr/bBLGCzxFB04wQlXlBo9Et/kD
+ PL+c+L1L92cU6ELWG+XJHLLO5qhpA5rHxInARpRwpHS3OYcqdrYnnUkXfp8Gh9hwUOTqDT95ijq
+ ykGw0frlcZUKwYl7Moo6RKSFwm7S4d9AyuDePQJsyxhpyATPPk3MoWnlpakvzf67w3BGABZC+rR
+ NlLf9LfA1nb/gfp2PLL+2x01JvLmrGnMYeU+K53D9qfOmurX4VDTXQiGxDdkh4MQRe2eMtlp1y6
+ aYgX0+6bfDYITHWPaXFCfq/wBcx+azkoxgMiwmM+yW8eOHxGrm5orOSutVrGJTOczHG0oWG/ejy
+ z73LhEmvy8Prq4yhPFbPMFPEQ+z99AsXN6MtpTEx02F7DVhbjIxmOE65T6WTaq4dJSgQr+McdPb
+ odlbqw/F7NdQsEAsi649fsOrfaDcbiAd6GzDyQBRUPVzJkCHtqRIaVo3YwMVAd8FfWeG6h07nSE
+ Xrzvny9jKvMqBl4CUwmm/BJplpaD8hPLA6zA5zvMlzr/jg5KqxktXCRfp+1Q3VRsLuOX/ssX4JC
+ jiV8pyGZD8S/a5H+Qq4Gt5THSMDA5KUvLLkX/7fQlF95I662/qdEWmj2G/WC2PugaHvfsxjXh74
+ tqlrDgEnOTwerXQ==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-netconsole hands every console message to every enabled target, with no
-bound on the rate.
+Give each target a token bucket and consult it once per message in
+netconsole_write().
 
-At Meta, a few hosts caused some DoS and netconsd was OOM killed in
-some regions, fed by 3 billion RCU messages from thousand hosts and by
-a swap fault that retries forever, which logged 6 million copies of one
-line on a single host in a few hours.
+The bucket is created with a zero interval, which struct ratelimit_state
+treats as unlimited, and nothing can set a nonzero one yet, so no target
+changes behaviour.
 
-Both floods are being fixed where they are printed, by Paul and me for RCU
-Tasks [1][2] and by me for the swap fault fix [3], but that only ever
-covers the flood already found, not new issues that might be happening.
+Skip the bucket while oops_in_progress is set, so a limit configured for
+steady-state logging never truncates an oops, BUG() or panic().
 
-Use the ratelimit in the kernel to ratelimit messages from netconsole.
+The configfs files that expose it come next.
 
-Give each target a token bucket, consulted once per message so that a
-message split into several ncfrag packets is sent whole or dropped
-whole.
-
-It starts with a zero interval, which struct ratelimit_state treats as
-unlimited, so nothing changes until ratelimit_interval_ms and
-ratelimit_burst are written.
-
-What the bucket discards leaves nothing on the wire. An extended target
-sees the loss as a gap in the sequence number the header carries:
-
-	7.2.0-rc7-01460-g75848acaf136,13,628,252392647,-;netconsole selftest: netcons_AGujw 1
-	7.2.0-rc7-01460-g75848acaf136,13,629,252392782,-;netconsole selftest: netcons_AGujw 2
-	7.2.0-rc7-01460-g75848acaf136,13,678,254742125,-;netconsole selftest: netcons_AGujw 1
-
-Crash output is exempt. The bucket is skipped while oops_in_progress is
-set, so a limit configured for steady-state logging cannot cost a target
-part of an oops or a panic.
-
-[1] https://lore.kernel.org/all/anw8Qw8lfeIykski@gmail.com/
-[2] https://lore.kernel.org/all/20260810-rcu_task_shrink_lruvec-v1-1-4d9f7d5251cb@debian.org/
-[3] https://lore.kernel.org/all/20260813-swap-v2-0-4a625ccabdae@debian.org/
+___ratelimit() only trylocks its own raw spinlock, so it is safe with
+target_list_lock held and interrupts disabled, and safe from NMI. Set
+RATELIMIT_MSG_ON_RELEASE so it does not report the suppressed count
+itself, which would printk() from inside the console being serviced.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Changes in v2:
-- Drop the patch that sent a "N messages dropped by rate limit" notice
-  to the target. (Gustavo Luiz Duarte).
-- Link to v1: https://patch.msgid.link/20260818-netcons_ratelimit-v1-0-8c5d2d17789c@debian.org
+ drivers/net/netconsole.c | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
----
-Breno Leitao (4):
-      netconsole: add a per-target message rate limit
-      netconsole: allow configuring the rate limit interval through configfs
-      netconsole: allow configuring the rate limit burst through configfs
-      docs: netconsole: document rate limit feature
+diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+index b358e5c3673510..13292c3f818e9f 100644
+--- a/drivers/net/netconsole.c
++++ b/drivers/net/netconsole.c
+@@ -49,6 +49,7 @@
+ #include <linux/rtnetlink.h>
+ #include <linux/workqueue.h>
+ #include <linux/delay.h>
++#include <linux/ratelimit.h>
+ 
+ MODULE_AUTHOR("Matt Mackall <mpm@selenic.com>");
+ MODULE_DESCRIPTION("Console driver for network interfaces");
+@@ -175,6 +176,7 @@ struct netcons_userdata {
+  * @sysdata:		Cached, formatted string of append
+  * @sysdata_fields:	Sysdata features enabled.
+  * @msgcounter:	Message sent counter.
++ * @ratelimit:	Token bucket used to rate limit messages
+  * @stats:	Packet send stats for the target. Used for debugging.
+  * @state:	State of the target.
+  *		Visible from userspace (read-write).
+@@ -219,6 +221,7 @@ struct netconsole_target {
+ 	u32			sysdata_fields;
+ 	/* protected by target_list_lock */
+ 	u32			msgcounter;
++	struct ratelimit_state	ratelimit;
+ #endif
+ 	struct netconsole_target_stats stats;
+ 	enum target_state	state;
+@@ -282,6 +285,26 @@ static void dynamic_netconsole_mutex_unlock(void)
+ 	mutex_unlock(&dynamic_netconsole_mutex);
+ }
+ 
++static void netconsole_ratelimit_init(struct netconsole_target *nt)
++{
++	ratelimit_state_init(&nt->ratelimit, 0, DEFAULT_RATELIMIT_BURST);
++	/* The flag keeps ___ratelimit() from reporting the suppressed count
++	 * itself, which would printk() from inside the console being
++	 * serviced. Nothing calls ratelimit_state_exit(), so the count is
++	 * never reported on release either.
++	 */
++	ratelimit_set_flags(&nt->ratelimit, RATELIMIT_MSG_ON_RELEASE);
++}
++
++static bool netconsole_ratelimited(struct netconsole_target *nt)
++{
++	/* A limit meant for steady-state logging must not eat a crash dump. */
++	if (oops_in_progress)
++		return false;
++
++	return !__ratelimit(&nt->ratelimit);
++}
++
+ #else	/* !CONFIG_NETCONSOLE_DYNAMIC */
+ 
+ static int __init dynamic_netconsole_init(void)
+@@ -318,6 +341,15 @@ static void dynamic_netconsole_mutex_unlock(void)
+ {
+ }
+ 
++static void netconsole_ratelimit_init(struct netconsole_target *nt)
++{
++}
++
++static bool netconsole_ratelimited(struct netconsole_target *nt)
++{
++	return false;
++}
++
+ #endif	/* CONFIG_NETCONSOLE_DYNAMIC */
+ 
+ /* Check if the target was bound by mac address. */
+@@ -686,6 +718,7 @@ static struct netconsole_target *alloc_and_init(void)
+ 	nt->remote_port = 6666;
+ 	eth_broadcast_addr(nt->remote_mac);
+ 	nt->state = STATE_DISABLED;
++	netconsole_ratelimit_init(nt);
+ 	INIT_WORK(&nt->resume_wq, process_resume_target);
+ 	/* Set up the skb pool primitives once; enabling only refills it. */
+ 	skb_queue_head_init(&nt->skb_pool);
+@@ -2482,6 +2515,9 @@ static void netconsole_write(struct nbcon_write_context *wctxt, bool extended)
+ 		    !netif_running(nt->np.dev))
+ 			continue;
+ 
++		if (netconsole_ratelimited(nt))
++			continue;
++
+ 		/* If nbcon_enter_unsafe() fails, just return given netconsole
+ 		 * lost the ownership, and iterating over the targets will not
+ 		 * be able to re-acquire.
 
- Documentation/networking/netconsole.rst | 38 +++++++++++++
- drivers/net/netconsole.c                | 99 +++++++++++++++++++++++++++++++++
- 2 files changed, 137 insertions(+)
----
-base-commit: c68a982815dcce5464e3bf2a31ac94f5146c04ca
-change-id: 20260817-netcons_ratelimit-629b04a73c57
-
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
+-- 
+2.53.0-Meta
 
