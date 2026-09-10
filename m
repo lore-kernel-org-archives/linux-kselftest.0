@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4521C3BBFD3;
-	Thu, 10 Sep 2026 08:31:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF643C10BA;
+	Thu, 10 Sep 2026 08:31:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789029097; cv=none; b=b2YFU3tGCswW0jK8ZOXSSdnCRV7fzQrsROam3lJfplfbzpyD8/vALsDudvBs79rqHAnVvwtQDxpDfQyYkmHZ6JYRhwhUDFl78HLBTO6Wei5WINFiG2mGCelePi9YQZlHwvzWmCmt++XWI1tUHULwP+MG2rEpVirMwNdvggRu2yY=
+	t=1789029100; cv=none; b=bKjvoiffqynHaDHZ9rtsaAIL6EIOB3ODhpjG2XtbQWeBH8L8/vQvadxAmSk0YzpAaOQN94MtfKD1kRLhBiKivBrAt/FEFvtg5ZH3YPblyOvAgUdiAq/gpbKaaQ8W+6AvXewATWO+l91wL+6xFPvSXFgYlg8Tlb79pH8Be27LPAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789029097; c=relaxed/simple;
-	bh=gpjLnXjMydggK4Orj4pZwXXB+mJp7VztavgGAtB9s1M=;
+	s=arc-20240116; t=1789029100; c=relaxed/simple;
+	bh=CIGQHvLLoACXjfixLkZL3B8Gbv5ycX8kffcfuKagc0E=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OycF+U10ywODYqjaqFxT7qrU+a6m1Zfer7QLPzIDfU7x5WSsZDULe1KBj8VLhwzeCn9HaLQ6Wj2oyKjS4At/mTwzut8jvjAMZ1ZL5fz6tWNRveaoPAEcXYY/8AZ/GiQtxhKUOYMwSwEASwilsJ/HsYclcwKHvMXioq32frTotYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dEtafRVW; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=f5KmZBnx/2FDIi8mZmdCStD5o5Aeh9Rm1yaubF2/5aDG95ExMH8pUz7bgLZElBEejF2euRv3Q1Ybl/ju2jAY5G5ykGddLmxhOhoszsYSun10BYp3x1LqmYT6zgveiVbhS6di/KBUt5espLIUmRddENrahdN5o8NjSr0GFWKVJ6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jbs9L774; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dEtafRVW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E90C11F00893;
-	Thu, 10 Sep 2026 08:31:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jbs9L774"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91E0B1F000FF;
+	Thu, 10 Sep 2026 08:31:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789029096;
-	bh=F9PQQQfwAd99e37OOMNmqg5UAEc2Qtv9lx3+OiCRJKM=;
+	s=k20260515; t=1789029098;
+	bh=PHX2CV6L+xADuSOjNgypR5thAFREjphJZG3812TT6xk=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=dEtafRVWc80TnHBpM6ZoitxJxx28+8/6FdkfnIbTt8/4beqq58LbeqN7Kn6vZN6I3
-	 7YGxFQUYT3y2pn7hPT7IcGXB/oi2z0Hk5p51UGRylyFuJ+d8Tl1y/g+HLNvVN8iz5F
-	 ceBT3e5WDO00yhyQmn6V+za9mEnKyyor3JWQ/C7bfsXubWZg4XUpjE5z1iDJCWey9f
-	 a/kbEJnoA7tMdQ6XCjkxCn6IWWgQ4GsommW5wi7nghSdS9FteTXH1Pczl+ylZH2YuX
-	 i61QZk08qDkXU78IIM0IpIgRXfYLxawsNrj6/YaD7biik4rtcesNVdE9RRwHLXr3xA
-	 EPqogYxqiKTDA==
-Subject: Re: [PATCH v7 net-next 5/7] net: ena: Update PHC admin interface for
- error bound support
+	b=Jbs9L774dWGD9ZHMlCbeL49FX9vlK2YEyc0hEWEdmTcclKioEhnxT+Pw1LsNoDCmD
+	 qcvDnny9irKur50klFnQDq9WEuGJYCZIQGv0qpGsm5buR0hBQC/04l1gxySODQFoq9
+	 QKEF0dhrqpYKtSDWVha8SSsQQphJAYgczpsjJut5CvxrCzTgq6JgotAQKO2zOKPPK/
+	 yfeu8PCxGg0UPuJhW9VaR8y90OOEIlJFrCdbMX45206oswgm1b394Q4RY7AgOc41b9
+	 iSzhT3MZ5pNJekxuiXqIauGaTJKRqegxGlRI+7DP/h2llV9k0AQZrOxDFJ0T0OcunZ
+	 QGeBC5Sp1lqxQ==
+Subject: Re: [PATCH v7 net-next 7/7] net: ena: Implement gettimexattrs64
+ callback for PTP attributes
 From: netdev-bot+sashiko@kernel.org
 To: akiyano@amazon.com
 Cc: davem@davemloft.net, kuba@kernel.org, richardcochran@gmail.com,
@@ -43,11 +43,11 @@ Cc: davem@davemloft.net, kuba@kernel.org, richardcochran@gmail.com,
  linux-doc@vger.kernel.org, shuah@kernel.org, corbet@lwn.net,
  skhan@linuxfoundation.org, horms@kernel.org, bhelgaas@google.com,
  vadim.fedorenko@linux.dev, dwmw@amazon.co.uk
-Date: Thu, 10 Sep 2026 08:31:33 +0000
-Message-ID: <178902909352.219967.7999203905301535022@kernel.org>
-In-Reply-To: <20260909073136.12863-6-akiyano@amazon.com>
-References: <20260909073136.12863-6-akiyano@amazon.com>
-X-sashiko-severity: High
+Date: Thu, 10 Sep 2026 08:31:36 +0000
+Message-ID: <178902909615.219967.17316162800507267391@kernel.org>
+In-Reply-To: <20260909073136.12863-8-akiyano@amazon.com>
+References: <20260909073136.12863-8-akiyano@amazon.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -60,179 +60,139 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 2 potential
 issue(s) to consider:
 
-Critical: 0 · High: 1 · Medium: 1 · Low: 0
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-- [High] The commit message states it "Introduce[s] a feature version
-  mechanism to indicate device supports error_bound", but the mechanism…
-- [Medium] Version handshake is implemented as an exact-equality test
-  against a field this patch documents as the device's *maximum*…
+- [Medium] ena_phc_gettimexattrs64()
+  (drivers/net/ethernet/amazon/ena/ena_phc.c:57-60) unconditionally…
+- [Low] ena_phc_gettimexattrs64()
+  (drivers/net/ethernet/amazon/ena/ena_phc.c:28-62) is a verbatim…
 
 --
 
-net: ena: Update PHC admin interface for error bound support
+net: ena: Implement gettimexattrs64 callback for PTP attributes
 
-This extends the ENA admin definitions with an error_bound field in the PHC
-response structure, replaces the PHC type enum with a PHC feature version
-enum, and adds an error flag for error_bound retrieval failures.  The
-handshake in ena_com_phc_config() is updated to request and check the new
-version field.
+Adds ena_phc_gettimexattrs64() to the ENA PHC code and registers it in
+ena_ptp_clock_info so the PTP_SYS_OFFSET_EXTENDED_ATTRS ioctl is supported.
+The new callback reports the device error_bound value and sets the
+corresponding valid bit; other attributes are left unreported.
 
-> diff --git a/drivers/net/ethernet/amazon/ena/ena_admin_defs.h b/drivers/net/ethernet/amazon/ena/ena_admin_defs.h
-> index 898ecd96b96a..2d132c4bc590 100644
-> --- a/drivers/net/ethernet/amazon/ena/ena_admin_defs.h
-> +++ b/drivers/net/ethernet/amazon/ena/ena_admin_defs.h
-> @@ -128,12 +128,14 @@ enum ena_admin_get_stats_scope {
->  	ENA_ADMIN_ETH_TRAFFIC                       = 1,
->  };
+A couple of questions below.
+
+> diff --git a/drivers/net/ethernet/amazon/ena/ena_phc.c b/drivers/net/ethernet/amazon/ena/ena_phc.c
+> index 2bcb5af564e2..725c36fe3f6e 100644
+> --- a/drivers/net/ethernet/amazon/ena/ena_phc.c
+> +++ b/drivers/net/ethernet/amazon/ena/ena_phc.c
+> @@ -25,6 +25,43 @@ static int ena_phc_feature_enable(struct ptp_clock_info *clock_info,
+>  	return -EOPNOTSUPP;
+>  }
 >  
-> -enum ena_admin_phc_type {
-> -	ENA_ADMIN_PHC_TYPE_READLESS                 = 0,
-> +enum ena_admin_phc_feature_version {
-> +	/* Readless with error_bound */
-> +	ENA_ADMIN_PHC_FEATURE_VERSION_0             = 0,
->  };
-
-[Severity: High]
-The commit message says:
-
-  "Introduce a feature version mechanism to indicate device supports
-   error_bound"
-
-Can this mechanism actually indicate that?  ENA_ADMIN_PHC_FEATURE_VERSION_0
-is 0, which is the same wire value as the removed ENA_ADMIN_PHC_TYPE_READLESS
-(also 0), and ena_com_phc_config() still sends 0 in
-feat_common.feature_version and still accepts a response value of 0:
-
-	ret = ena_com_get_feature(ena_dev,
-				  &get_feat_resp,
-				  ENA_ADMIN_PHC_CONFIG,
-				  ENA_ADMIN_PHC_FEATURE_VERSION_0);
-	...
-	if (get_feat_resp.u.phc.version != ENA_ADMIN_PHC_FEATURE_VERSION_0) {
-
-So the bytes exchanged with the device look identical to the pre-patch
-exchange, and firmware predating error_bound reports the same value as
-firmware implementing it.  I did not find another discriminator either:
-struct ena_admin_acq_common_desc carries no feature_version echo, and
-enum ena_admin_aq_caps_id has no PHC/error-bound capability bit.
-
-Does that matter for the new field?  error_bound is carved out of the
-previously reserved bytes of the device-written DMA buffer
-struct ena_admin_phc_resp:
-
-> @@ -1224,7 +1226,10 @@ struct ena_admin_phc_resp {
->  	/* PHC timestamp (nsec) */
->  	u64 timestamp;
->  
-> -	u8 reserved2[12];
-> +	u8 reserved2[8];
+> +static int ena_phc_gettimexattrs64(struct ptp_clock_info *clock_info,
+> +				   struct timespec64 *ts,
+> +				   struct ptp_system_timestamp *sts,
+> +				   struct ptp_clock_attrs *att)
+> +{
+> +	struct ena_phc_info *phc_info =
+> +		container_of(clock_info, struct ena_phc_info, clock_info);
+> +	u32 error_bound_nsec;
+> +	unsigned long flags;
+> +	u64 timestamp_nsec;
+> +	int rc;
 > +
-> +	/* Timestamp error limit (nsec) */
-> +	u32 error_bound;
->  
->  	/* Bit field of enum ena_admin_phc_error_flags */
->  	u32 error_flags;
+> +	spin_lock_irqsave(&phc_info->lock, flags);
+> +
+> +	ptp_read_system_prets(sts);
+> +
+> +	rc = ena_com_phc_get_timestamp(phc_info->adapter->ena_dev,
+> +				       &timestamp_nsec,
+> +				       &error_bound_nsec);
+> +
+> +	ptp_read_system_postts(sts);
+> +
+> +	spin_unlock_irqrestore(&phc_info->lock, flags);
+> +
+> +	if (rc)
+> +		return rc;
+> +
+> +	*ts = ns_to_timespec64(timestamp_nsec);
+> +
 
-If a device that only implements the old readless layout never writes those
-bytes, the driver reads the zero left by the coherent allocation (or stale
-data) and ENA_ADMIN_PHC_ERROR_FLAG_ERROR_BOUND is never set.
+[Severity: Low]
+This isn't a bug, but the body above is a verbatim copy of
+ena_phc_gettimex64(): same container_of(), same
+spin_lock_irqsave(&phc_info->lock, flags) / ptp_read_system_prets() /
+ena_com_phc_get_timestamp() / ptp_read_system_postts() /
+spin_unlock_irqrestore() sequence, same rc handling and same
+*ts = ns_to_timespec64(timestamp_nsec).
 
-Later in this series, ena_phc_gettimexattrs64() publishes that value to
-userspace as authoritative:
+Since ena_phc_gettimexattrs64() already tolerates att == NULL (and is in
+fact called with sts == NULL and att == NULL from ptp_clock_gettime() in
+drivers/ptp/ptp_clock.c), could ena_phc_gettimex64() simply become:
 
-	if (att) {
-		att->error_bound = error_bound_nsec;
-		att->valid |= PTP_ATTRS_VALID_ERROR_BOUND;
+	static int ena_phc_gettimex64(struct ptp_clock_info *clock_info,
+				      struct timespec64 *ts,
+				      struct ptp_system_timestamp *sts)
+	{
+		return ena_phc_gettimexattrs64(clock_info, ts, sts, NULL);
 	}
 
-which would report a validated 0 ns error bound on hardware that never
-reported one.  Would giving the error_bound-capable format a distinct value
-(for example VERSION_1) and accepting version >= the requested one keep old
-and new firmware distinguishable?  Once value 0 is shipped as meaning
-"readless with error_bound", that distinction cannot be recovered in
-released kernels.
+Passing a non-NULL error_bound to ena_com_phc_get_timestamp() has no side
+effect beyond storing the value, since that function guards the store with
+if (error_bound). Keeping two copies of the PHC doorbell/poll sequence means
+a later fix can land in only one of them.
 
-> @@ -1035,10 +1037,10 @@ struct ena_admin_queue_ext_feature_desc {
->  };
->  
->  struct ena_admin_feature_phc_desc {
-> -	/* PHC type as defined in enum ena_admin_get_phc_type,
-> -	 * used only for GET command.
-> +	/* PHC version as defined in enum ena_admin_phc_feature_version,
-> +	 * used only for GET command as max supported PHC version by the device.
->  	 */
-> -	u8 type;
-> +	u8 version;
->  
->  	/* Reserved - MBZ */
->  	u8 reserved1[3];
-
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/amazon/ena/ena_com.c b/drivers/net/ethernet/amazon/ena/ena_com.c
-> index 297fb36ab8c1..40d1fd64bc34 100644
-> --- a/drivers/net/ethernet/amazon/ena/ena_com.c
-> +++ b/drivers/net/ethernet/amazon/ena/ena_com.c
-> @@ -1694,10 +1694,11 @@ int ena_com_phc_config(struct ena_com_dev *ena_dev)
->  		return ret;
->  	}
->  
-> -	/* Supporting only readless PHC retrieval */
-> -	if (get_feat_resp.u.phc.type != ENA_ADMIN_PHC_TYPE_READLESS) {
-> +	/* Supporting only PHC V0 (readless mode with error bound) */
-> +	if (get_feat_resp.u.phc.version != ENA_ADMIN_PHC_FEATURE_VERSION_0) {
->  		netdev_err(ena_dev->net_device,
-> -			   "Unsupported PHC type, error: %d\n",
-> +			   "Unsupported PHC version (0x%X), error: %d\n",
-> +			   get_feat_resp.u.phc.version,
->  			   -EOPNOTSUPP);
->  		return -EOPNOTSUPP;
->  	}
+> +	if (att) {
+> +		att->error_bound = error_bound_nsec;
+> +		att->valid |= PTP_ATTRS_VALID_ERROR_BOUND;
+> +	}
 
 [Severity: Medium]
-Should this be an ordering test rather than an equality test?  The new
-comment on the same byte in struct ena_admin_feature_phc_desc describes it
-as a ceiling:
+Is PTP_ATTRS_VALID_ERROR_BOUND being advertised here without a device
+capability gate?
 
-	/* PHC version as defined in enum ena_admin_phc_feature_version,
-	 * used only for GET command as max supported PHC version by the device.
-	 */
-	u8 version;
+The only capability check in the driver is in ena_com_phc_config(), which
+accepts:
 
-With that meaning, firmware that advertises a maximum of 1 while still
-serving the V0 layout the driver explicitly asked for through
-feat_common.feature_version = ENA_ADMIN_PHC_FEATURE_VERSION_0 fails the
-"!=" test, ena_com_phc_config() returns -EOPNOTSUPP, and ena_phc_init()
-takes the err_ena_com_phc_config path (ena_com_phc_destroy(),
-ena_phc_enable(adapter, false), ena_devlink_disable_phc_param()), leaving
-PHC/PTP unavailable on hardware that supports the requested interface.
+	/* Supporting only PHC V0 (readless mode with error bound) */
+	if (get_feat_resp.u.phc.version != ENA_ADMIN_PHC_FEATURE_VERSION_0) {
 
-The two comments in ena_admin_defs.h also seem to disagree about what the
-device puts in the response.  ena_admin_get_set_feature_common_desc says:
+ENA_ADMIN_PHC_FEATURE_VERSION_0 is 0, which is the same numeric value that
+pre-series firmware reports for the old name ENA_ADMIN_PHC_TYPE_READLESS.
+The preceding commit only renames u8 type to u8 version and re-documents 0
+as "readless with error_bound"; it also carves u32 error_bound out of the
+previously reserved (must-be-zero) bytes of struct ena_admin_phc_resp.
 
-	/* The driver specifies the max feature version it supports and the
-	 * device responds with the currently supported feature version. The
-	 * field is zero based
-	 */
-	u8 feature_version;
+So can a PHC-capable device whose firmware predates error_bound still pass
+that version check, leave the DMA bytes at zero, and have
+ena_com_phc_get_timestamp() copy that zero out:
 
-that is, a value clamped to what the driver requested, for which equality is
-fine, while the new phc comment says the field carries the device maximum,
-for which equality is wrong.  Which contract applies here?  If the device
-clamps, could the new comment be reworded; if it reports its maximum, should
-the check become something like
+	/* PHC timestamp value is returned to the caller */
+	*timestamp = resp->timestamp;
+	if (error_bound)
+		*error_bound = resp->error_bound;
 
-	if (get_feat_resp.u.phc.version < ENA_ADMIN_PHC_FEATURE_VERSION_0)
+In that case userspace receives error_bound = 0 ns with the validity bit
+asserted, i.e. it is told the timestamp is exact, rather than being told the
+attribute is unavailable, which is what the valid bitmask exists to express.
 
-or an explicit minimum-required-version comparison?
+The device-side error signal does not seem to help here either:
+ENA_ADMIN_PHC_ERROR_FLAG_ERROR_BOUND (checked via ENA_PHC_ERROR_FLAGS) is a
+new flag that error_bound-unaware firmware would never set.
 
-For reference, the existing precedent in ena_com_get_max_queue_ext() uses
-equality (get_resp.u.max_queue_ext.version != ENA_FEATURE_MAX_QUEUE_EXT_VER),
-but that field's comment is only "/* version */" and never claims to be a
-maximum.
+Would it make sense to gate the valid bit on a distinct feature version
+value or an explicitly advertised device bit? Alternatively, if every
+PHC-capable ENA firmware that reports version 0 does populate error_bound
+and no older firmware exists in the field, could the commit message state
+that?
 
-Also, "Unsupported PHC version (0x%X)" prints a u8 with %X; would %u be
-clearer here, matching the zero based version numbering?
+> +
+> +	return 0;
+> +}
+> +
+>  static int ena_phc_gettimex64(struct ptp_clock_info *clock_info,
+>  			      struct timespec64 *ts,
+>  			      struct ptp_system_timestamp *sts)
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909073136.12863-1-akiyano%40amazon.com
