@@ -1,105 +1,143 @@
-Received: from mta0.migadu.com (out-27.mta0.migadu.com [91.218.175.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04EB247DFA0
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 12:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.27
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A19DA47DFA0;
+	Thu, 10 Sep 2026 12:22:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789042847; cv=none; b=IK5U70uInygtaHWFgg+bcxKwNgR3E74DfVLtIwteA06D1Ep3s4QH97Ad7jQAUf3XxwUUS6YsppOI/TREHFQ1fcqRC8nk3UolM6jlPOSXRE9rLBCBCit8Ff1W3W+EOrvMQzzwCBUy2ISMIQv+KJNJCbmRkWdBB7x0gji0yUqqBVs=
+	t=1789042956; cv=none; b=enkVyQl2OiwBZ30H57FOkQLf+vboviMSzFtlp5ndkDLYqY7FAuQRnCBN71K5LyOZ2dWhp9igAXLKkeEKzCi6AbJnPPy7h7KMNYhSoNqWCYeIkucGooiCWd8igivuh0aJA4kLapMv3IGxeygJ+ggCTvb8uLxBw/L0vIcKtl8q7o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789042847; c=relaxed/simple;
-	bh=t64T+HwsunjiOU4dNPon7aRJOGjom1a29RFgPwjvS2Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=myDP1mcMZ7LDDCejvP/h7GhtNz0uXm8cbOojfPY0wgaBf8a4Gd6CA1g1MWtglCI1SjB3pJD6LxBxqNDpPe1friRs/Bwyji/iCzN7JixE+kCL4tWVSwxHG9+R/rB9uK1Xo6AP+ncVj6MVCo7KUO2HcrvK/ti00H3xV425gnysLOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Mxz7wc7q; arc=none smtp.client-ip=91.218.175.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789042956; c=relaxed/simple;
+	bh=JsIchIKXRllzeVMf7NMQL6z5JkaoAhygZYJxaYnc4fY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OtthFeWb98qwBjAlf6G7bGWHLyYFl1EDPyob5982CJ28Uk/yN9+BVrh5R3iJ38XuGkKz+eCcTo8L0GDqKIR+GItBRWqh7URge+MG6jquTb7e4eF6Cdf9n2RW/46gunKBQS8PJMMJR3zhFrpfiY8rVDjqhSfricAiRilA9A6Byjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=TcmdY77q; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Mxz7wc7q"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=t64T+HwsunjiOU4dNPon7aRJOGjom1a29RFgPwjvS2Y=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789042841; v=1; x=1789647641;
- b=Mxz7wc7q4v77crWxqIxBU3SCZfl194G+lfbS8AWKcKlMmjgSJwq+UMhwuLDW933r7mKN5GM2
- p5yfPkpa7JuAMyKtmrXNhCFFe1MS+D7ZT9IMSNxwXN4Ifq//dOcCepLP60/DUZN6u8PvYiwcfQF
- eFp2RATkv1i2aUZyWo/haT2c=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e10979a4866a10ae;
-	Thu, 10 Sep 2026 12:20:41 +0000
-X-Mizu-Trace-ID: e10979a4866a10ae
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <5cabb13b-1079-4e49-af6b-a6c2fc801657@linux.dev>
-Date: Thu, 10 Sep 2026 20:20:29 +0800
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="TcmdY77q"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2299E153B;
+	Thu, 10 Sep 2026 05:22:30 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 519173F7B4;
+	Thu, 10 Sep 2026 05:22:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1789042953; bh=JsIchIKXRllzeVMf7NMQL6z5JkaoAhygZYJxaYnc4fY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TcmdY77qKzttqFzvwR9mi7wmJrNmBStuLbFRP54QqAswfd/Gt3ZeYxC9qk3E4uBj9
+	 HHhqUy/zotOyuh+VCkxwxmEa94gj4LCCZo6ymg1E3zNgS5CEmzZXzEd2rzwsY401vX
+	 UiUf6wU+bGZjCZzqV572xQ6383np7n6UldxEIKjY=
+Date: Thu, 10 Sep 2026 13:22:29 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Nico Pache <nico.pache@linux.dev>,
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+	Usama Arif <usama.arif@linux.dev>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] kselftest: mm: introduce alloc_isolated_mem()
+Message-ID: <aqKhBZorLSGmqDr5@e129823.arm.com>
+References: <20260907-fix_split-v5-0-822b810458bc@arm.com>
+ <20260907-fix_split-v5-3-822b810458bc@arm.com>
+ <5c05b620-7a2f-453d-9725-fed4f536a019@kernel.org>
+ <aqKOVGECsCNtSMIV@e129823.arm.com>
+ <d0b3ea99-e20b-4883-8fa3-67fdbf5b1ee4@kernel.org>
+ <aqKS7CP67X4h6NiM@e129823.arm.com>
+ <31418d0e-9745-4e8d-bc02-dbbd5cb9e193@kernel.org>
+ <aqKU0-Gm4yh78F3V@e129823.arm.com>
+ <d6f2e6b2-9dc9-4f02-be37-14329c1a6798@kernel.org>
+ <aqKfjqa6ye2AOU5k@e129823.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 1/3] bpf: Fix out-of-bounds read of sk_protocol in
- bpf_sock_destroy()
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: xmei5@asu.edu, kuniyu@google.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, sdf@fomichev.me, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- ncardwell@google.com, shuah@kernel.org, aditi.ghag@isovalent.com,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org
-References: <20260910112634.152195-1-jiayuan.chen@linux.dev>
- <0a661bac8b617cc979ba16eeaec5f7c64a0b74bb01be40347dca187cbd7c24e4@mail.kernel.org>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <0a661bac8b617cc979ba16eeaec5f7c64a0b74bb01be40347dca187cbd7c24e4@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aqKfjqa6ye2AOU5k@e129823.arm.com>
 
+> > On 9/10/26 13:30, Yeoreum Yun wrote:
+> > >> On 9/10/26 13:22, Yeoreum Yun wrote:
+> > >>>
+> > >>> As I mentioned in my previous reply, what I’m trying to prevent here is
+> > >>> a failure when checking, immediately after memory allocation,
+> > >>> that a specific vm_flag is not set.
+> > >>>
+> > >>> Yes, I agree that this could have been a problem even before
+> > >>> the internal changes to memalign(). An unwanted VMA merge could already
+> > >>> occur at the time of memory allocation.
+> > >>>
+> > >>> So what I’m trying to avoid is a test failure where, due to such an
+> > >>> unexpected VMA merge during allocation, the subsequent check that
+> > >>> a specific vm_flag is not present fails.
+> > >> Which is only a guard-region marker problem?
+> > > 
+> > > Yes. so if we remove ASSERT_FALSE(check_vmflag_guard(ptr)), TBH
+> > > we don't need this patch unless other usage comes up to prevent unwanted
+> > > VMA merge.
+> > > 
+> > > Would it be better to drop ASSERT_FALSE(check_vmflag_guard(ptr)) in
+> > > guard test?
+> > 
+> > I guess there is value in asserting that not all VMAs by accident start
+> > with an over-indication of maybe having guard pages, which is why Lorenzo
+> > added that check :)
+> > 
+> > But I think even alloc_isolated_mem() is wrong in that regard: if the
+> > original VMA gets merged, we could inherit the guard-marker, no?
+> 
+> True. I overlooked guard bit is sticky.
+> 
+> > 
+> > Maybe the following would be good enough?
+> > 
+> > diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
+> > index 5c8ec3ca75d7d..791bf6a68b9e6 100644
+> > --- a/tools/testing/selftests/mm/guard-regions.c
+> > +++ b/tools/testing/selftests/mm/guard-regions.c
+> > @@ -2257,10 +2257,20 @@ TEST_F(guard_regions, smaps)
+> >         char *ptr, *ptr2;
+> >         int i;
+> > 
+> > -       /* Map a region. */
+> > -       ptr = mmap_(self, variant, NULL, 10 * page_size, PROT_READ | PROT_WRITE, 0, 0);
+> > +       /* Reserve a 10 page region with 1 page space to both sides. */
+> > +       ptr = mmap_(self, variant, NULL, 12 * page_size, PROT_NONE, 0, 0);
+> >         ASSERT_NE(ptr, MAP_FAILED);
+> > 
+> > +       /* Map a new region that is guaranteed to not get merged in any way. */
+> > +       ptr = mmap_(self, variant | MAP_FIXED, ptr + pagesize, 10 * page_size,
+> > +                   PROT_READ | PROT_WRITE, 0, 0);
+> > +       ASSERT_EQ(ptr, ptr + pagesize);
+> > +
+> > +       /* Clean up the excess pages left and right. */
+> > +       munmap(ptr, pagesize);
+> > +       munmap(ptr + 11, pagesize);
+> > +       ptr + = pagesize;
+> > +
+> >         /* We shouldn't yet see a guard flag. */
+> >         ASSERT_FALSE(check_vmflag_guard(ptr));
+> > 
+> > -- 
+> > Cheers,
+> 
+> It's enough but alloc_isolated_mem() could be modified to allocate with
+> PROT_NONE first and then change the prot.
 
-On 9/10/26 8:07 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/net/core/filter.c b/net/core/filter.c
->> index 2a84f9d01131..cae43b999162 100644
->> --- a/net/core/filter.c
->> +++ b/net/core/filter.c
->> @@ -12913,8 +12913,9 @@ __bpf_kfunc_start_defs();
->>    * @sock: Pointer to socket to be destroyed
->>    *
->>    * Return:
->> - * On error, may return EPROTONOSUPPORT, EINVAL.
->> - * EPROTONOSUPPORT if protocol specific destroy handler is not supported.
->> + * On error, may return EOPNOTSUPP, or whatever the protocol specific
->> + * destroy handler returns.
->> + * EOPNOTSUPP if protocol specific destroy handler is not supported.
->>    * 0 otherwise
->>    */
->>   __bpf_kfunc int bpf_sock_destroy(struct sock_common *sock)
->> @@ -12926,8 +12927,12 @@ __bpf_kfunc int bpf_sock_destroy(struct sock_common *sock)
->>   	 * Supporting protocols will need to acquire sock lock in the BPF context
->>   	 * prior to invoking this kfunc.
->>   	 */
->> -	if (!sk->sk_prot->diag_destroy || (sk->sk_protocol != IPPROTO_TCP &&
->> -					   sk->sk_protocol != IPPROTO_UDP))
->> +	if (!sk->sk_prot->diag_destroy)
->> +		return -EOPNOTSUPP;
->> +
->> +	if (sk_fullsock(sk) &&
->> +	    sk->sk_protocol != IPPROTO_TCP &&
->> +	    sk->sk_protocol != IPPROTO_UDP)
->>   		return -EOPNOTSUPP;
->>
->>   	return sk->sk_prot->diag_destroy(sk, ECONNABORTED);
-> This isn't a bug, but would it help to keep the TCP/UDP rationale comment
-> next to the protocol check, and add a short note that sk_protocol is only
-> valid on full socks? The block comment explaining the locking semantics
-> and TCP/UDP restriction now sits two statements away from the protocol
-> test it documents, and the newly added sk_fullsock() guard doesn't have
-> any nearby note explaining why it's there. The reason (sk_protocol is a
-> struct sock member not present in sock_common) is only in the changelog.
->
+Ah, but if merged with PROT_NONE | GURAD still problem...
+Hmm.. might above enough.
 
-Current commit message is enough.
-
-That's why we encourage high quality commit message.
-
+-- 
+Sincerely,
+Yeoreum Yun
