@@ -1,193 +1,133 @@
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013065.outbound.protection.outlook.com [40.107.162.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4370E3C3BEF;
-	Thu, 10 Sep 2026 07:54:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.65
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789026850; cv=fail; b=s2zowSSWWPIMkNtdASJTijNNZgVbpdrVETqF6THlCmojWz8FSQXOip6Q+QRKUe6D/5RFeN3v4B3QmF5KDTm4dB199eDOg0lIFewabmEMiDDWelFuuOxgc+2aQkykrGduMuDhTdp9FOrC2sMJnArn/3aNhJZBHx5XkQ/IWD1SZQI=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789026850; c=relaxed/simple;
-	bh=9iptNl/l+Ju6Y2zXZ3EIzx9RPMvaN2FGvuduvnnmkfg=;
-	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=M+p+f/qvf13b3KmPvAaDsuXZcafmKTM5EIy/yzYnNBZA+GDdTLA3p5gNBcXLTpr972QUxPqV2g/TokeboomzjsSRY3sWcpsmh/oGhlkSYuteR7rliCMmKJg840dLVsaVA3jE844NAmkdLRCSOecKvjdpC1PplzBy3M65gz+KOcs=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=jrUsZkFy; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=jrUsZkFy; arc=fail smtp.client-ip=40.107.162.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4315346A07;
+	Thu, 10 Sep 2026 07:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789027144; cv=none; b=dP1YEK0qYxLX1nzRxOLRLWgt2l7+S8STUJmCrBbDd/o1FuG4r/YeQg8PTBzDPufLN8T1u+ngOx4eHS2RcV1v0J+FdfO6vQiSwnuNO4fyLKXcTLUanyoemCErkQ46PRYMXSlDoS1viNq1OPd8mDNg9VxjdXHMsrfx5341NEj7nHs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789027144; c=relaxed/simple;
+	bh=YN/RJCBh2aKaPe4XRDyXXuL8DMUj6Wq2cWl6F9VwlBE=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=SSrrs4C2cF7q+Aq9ii6Bn+8tzr5/A544/HX2x54mJMocWgiVQboC8Y7Pie/0QmRlL5DPL7q1KwolaWoGiWRuHQeTqmGphOoSTt1UxzB1lvcFWA6bSQjpkWdrec4mVEA3l+2Ob0hGqfTiXHxHM5gbqZxrDiUfFrf1F/KP0iqAm1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gIFdyj2y; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="jrUsZkFy";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="jrUsZkFy"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=LNS5HKbfz2sR/iZC0X9kXSnTvTJ2uYzzEoVTKY57WT/Ey8wVme/GGw5qy40sQDAwGIDBCBDy8f8dz0VwrE22ZcQBFBee7WQu8yZsRpeateX/HX65kSjSb5ZHNQPnwl9MB6HEEvcTAu+OcTRkUA0RvAjiLgk7OJjCPFY69wt8owch9Mydl/KsUIUrT6tCPH1hSKY9r2O2DySfzQB0AM29yYmoE88ODPGI1Ensc4yB526p3VwCDhfK3UyEigNKXVCAtVRBA0sK0gD6gBZdQF8fNaOP6CtzBhD8uR3ajkqpaKcahsSphoEMQCdAT63F4epxWD+LO4ddfuRNqJPcSFOJmg==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7hUBOvmXN2tcAFbkRLLNCK0pBzRWKnuouI4EYw5iq2Y=;
- b=Y+ChenO/GpjqH0o1KRlvT5AqrdliE0OAuTvzCeJXQBjkOc7S3iQy11DD50bxHFpHKLiJu9oFUCeyKiHWf5zI606cCk9TmqIXljfAxVEJdglHGTBUdv5vyaa9hygQ3epdViOTBAxrNAUGOdoqQWWd6VImOzteHlKcFjbAfQ17qNOhpeSoO7jhMnhHGiMYvQQGZmCAUGKkvgUJqssW9uNhTH5njr2twN2rbiMY2mYpO9MyjlQQgIy85VsizlKfn3pJEB0Pgz1PfbP5vi8S/fOIVxvqivsAez/OeBgzWoR6IJ2jobEFaTiB1o8kfUB1VNtOXXRGgdXTqwx5+BSzbWdq1Q==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7hUBOvmXN2tcAFbkRLLNCK0pBzRWKnuouI4EYw5iq2Y=;
- b=jrUsZkFyZSn+SpvXOHieGfWsrqI55CVUh9icd68G0GCaSQ3arnwVmZt7XFUqyqrlToOkaIxamXima/3HwqbAQWwhPh9OuhF1RM/2wpZo8f5lAjfHN7q9JT1my1myAKFpCwGeuBKuY0rC3JF+zEw48PSmid7k6iwAba5mcB6whP0=
-Received: from DU6P191CA0041.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:53f::21)
- by AS8PR08MB9363.eurprd08.prod.outlook.com (2603:10a6:20b:5aa::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.7; Thu, 10 Sep
- 2026 07:54:01 +0000
-Received: from DB5PEPF00014B89.eurprd02.prod.outlook.com
- (2603:10a6:10:53f:cafe::42) by DU6P191CA0041.outlook.office365.com
- (2603:10a6:10:53f::21) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.406.9 via Frontend Transport; Thu, 10
- Sep 2026 07:54:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- DB5PEPF00014B89.mail.protection.outlook.com (10.167.8.197) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.406.5
- via Frontend Transport; Thu, 10 Sep 2026 07:54:01 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PJ20Apcmi6WtcurCo+Vj7pTEGfWTSdaLVKS+ob6KdC07SK+vVy7itz5AJJaD/9KPEBl4N1RlnYhps2vcNvwJukuZ+t8MdtcYG1h9w3AZrNNL4wB+mlN8+0aJjjYjebOyEGxxyhcLjjH8mjQZswaT3y3K/iDmOyVLE54cB7VfiI81Oi1nPAAMxV30+Z1mGPYjNQ6kb9GyKEa0H2HyIMxNacYiqOVtLqUBsB1irJokNJQZydq5I1tsMRCl17I0VYdv9FVMt4Y9pm09oK/BvNt8B7Eie67sHEmxKSmCwRzxGsEbNNzL55XBDXJTUGTy5qU6fTnUHHiMFRYKFF97o/Z4QA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7hUBOvmXN2tcAFbkRLLNCK0pBzRWKnuouI4EYw5iq2Y=;
- b=hSyTSnEH59Kj+QVZErMyfoSb8sNLP5CaQfKEramv0qBwP8hqG13CLb+5OiYnhmAdWO8CxmPDyRk9+xYueS1QdcPc/uRRQSm5jCH8jx80kS8Vjvm6PgXwuYD7r76xooVIddmtP0oJ6JbPGT/uO+xqX1ColhIJzaFcghNnHZyIba2yn+RQSCCgirD4sW6VgnUiQf7Zie3Bw3QI8NWODxHYHfQcSkOXG8Kz16V+oFf8mNabh4GZhsVHibst+BPr0KtDLY6JSnUIUTNehE4Wa7bb3eyBSh/boNk7vQj1VQ+rVgZwwmnfiGAHDaXbuHonwmMuSx4CktF2w9kvj14dHLaLqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7hUBOvmXN2tcAFbkRLLNCK0pBzRWKnuouI4EYw5iq2Y=;
- b=jrUsZkFyZSn+SpvXOHieGfWsrqI55CVUh9icd68G0GCaSQ3arnwVmZt7XFUqyqrlToOkaIxamXima/3HwqbAQWwhPh9OuhF1RM/2wpZo8f5lAjfHN7q9JT1my1myAKFpCwGeuBKuY0rC3JF+zEw48PSmid7k6iwAba5mcB6whP0=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from VI1PR08MB3421.eurprd08.prod.outlook.com (2603:10a6:803:80::16)
- by DB9PR08MB6699.eurprd08.prod.outlook.com (2603:10a6:10:2a7::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.5; Thu, 10 Sep
- 2026 07:53:27 +0000
-Received: from VI1PR08MB3421.eurprd08.prod.outlook.com
- ([fe80::e079:6bd:fbe0:89b4]) by VI1PR08MB3421.eurprd08.prod.outlook.com
- ([fe80::e079:6bd:fbe0:89b4%3]) with mapi id 15.21.0406.004; Thu, 10 Sep 2026
- 07:53:27 +0000
-Message-ID: <9695fac7-bf13-4e34-9cd7-4326ec21fcef@arm.com>
-Date: Thu, 10 Sep 2026 08:53:25 +0100
-User-Agent: Mozilla Thunderbird
-Cc: usama.anjum@arm.com, Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- Jonathan Corbet <corbet@lwn.net>, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
- Leon Romanovsky <leon@kernel.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 6/6] selftests/mm: add a GUP selftest
-To: Mark Brown <broonie@kernel.org>,
- "David Hildenbrand (Arm)" <david@kernel.org>,
- Sarthak Sharma <sarthak.sharma@arm.com>
-References: <20260904123631.198697-1-sarthak.sharma@arm.com>
- <20260904123631.198697-7-sarthak.sharma@arm.com>
- <b0400430-c3b6-40d5-b476-49189b1cc292@kernel.org>
- <5e0b9365-cbac-4f2d-b915-85edf3093508@arm.com>
- <fadb8870-37f8-46f4-aefb-c21bc3a31e5b@kernel.org>
- <07dab220-8497-4eea-a4d2-b27a6e01eaf8@sirena.org.uk>
-From: Muhammad Usama Anjum <usama.anjum@arm.com>
-Content-Language: en-US
-In-Reply-To: <07dab220-8497-4eea-a4d2-b27a6e01eaf8@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PR1P264CA0070.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:102:2cc::10) To VI1PR08MB3421.eurprd08.prod.outlook.com
- (2603:10a6:803:80::16)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gIFdyj2y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A59AD1F000FF;
+	Thu, 10 Sep 2026 07:59:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789027142;
+	bh=TzpxlQ/Q3h5cs9QnDSu/xDBV//zRwzKq5lxcSq+xP2s=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=gIFdyj2yF/qMjHvYRrSPg0Ed31UviF2mzNLdjsffD3H43dMgFBeV0OX2aK78I4Un0
+	 NHWfUNFj8dQHtRlJXVZF+AbfEzOeucUjOlthGFAzcihTuNGra+Xzb93u0xElFxXlki
+	 11/Ah4SwhrZvjMstgk2VNB/pIpwAcdwVggIn4OfFQY5zXemlvC7U8iP94wxTvTOMIy
+	 7xnjWXO4LqcW/StHG6LSQNRJggNCjHOhym9TN39GJPi4SDCYiX3rJad8Gq+Fn/+mMN
+	 wzcbWR6G3aV9pnKUr1HIpClDCOTGETq4fsDJgX5Xu79Zhd3+iyTtfu4LDdHhTa6S3z
+	 BpH8/GHDA2qXg==
+Subject: Re: [PATCH net v2 1/2] tcp: exclude old ACKs from tcp fast path
+From: netdev-bot+sashiko@kernel.org
+To: inbal.lipshtat@mail.huji.ac.il
+Cc: netdev@vger.kernel.org, edumazet@google.com, ncardwell@google.com,
+ kuniyu@google.com, davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
+Date: Thu, 10 Sep 2026 07:59:01 +0000
+Message-ID: <178902714117.219967.14735865272246328849@kernel.org>
+In-Reply-To: <20260909075644.1408171-2-inbal.lipshtat@mail.huji.ac.il>
+References: <20260909075644.1408171-2-inbal.lipshtat@mail.huji.ac.il>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	VI1PR08MB3421:EE_|DB9PR08MB6699:EE_|DB5PEPF00014B89:EE_|AS8PR08MB9363:EE_
-X-MS-Office365-Filtering-Correlation-Id: d1d51c1b-540b-4265-5857-08df0f10ad8e
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|1800799024|376014|23010399003|7416014|366016|10067099003|6133799003|22082099003|18002099003|4143699003|11063799006|56012099006;
-X-Microsoft-Antispam-Message-Info-Original:
- x3QMjGYHyd4JOxXsfTI6Q7YYXos80d56O1QNalvsz0RZKdNWNXlVWEI+oHoSe0xHZdScVw1bzPDMDSsSN8MiZhrTQ7o+9OiajV1Vn37elm+uW1vwlrjvv9DijBeNTYtW0r13N7fYERsVQ2PwYoPzaiCVX55uO96vz/vcYgbBpayNmhs5IGcQ9/mbxiZQw4gqebJumpiY1iIYuZxILQPgV2ltk0JtGR8NWr44lkwua6heB9muDqAnl7Jx7Z9HTUEAFDVPMe5gLniSh47jzq1vDXML+HuCGqDVl2emkJq4EvJToHJXQEUq9zvRtdd+X9mcAZZd4oNXl5phfp1PPHDh9AzmAGhGw5Q9CtrmOBh7UhPinb2tn6eREpHGjNitJJZtl04Gxl6WBp8V8LxicZfNd8Dr2wM6i01dlUoQaFGugIWb2xHi8SR5XBmEAx8QD3q4NbcdKK1cYwl4hLwziBrwizg2BGQRge5nL/UWb17CPCtROuHcMiaV3MZHhuHGOheZqyWl63SonaSGIcwYOnPCFCFFb60Mjdio1ido3gMAeK7lg2MFW55IqFEYApu3YlR5KH37aWyLx2GuxqPEVeEgS5M7bdbPHQdzjrgW9qnkVfHzj+XCbPO4uV8ELG5oEhjvnlOf+cqbuBqfKZqjvP6m4u6FHFI7in9qXqCvrPnrqzY=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3421.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(23010399003)(7416014)(366016)(10067099003)(6133799003)(22082099003)(18002099003)(4143699003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- LHL+J5lUR9brK8poFGmzZiQNygOP8crA6WGMfOlYSR2AhmhyeLzqlTsxm+dxqi5lL2vCkJhbOdATXq4IvfnUJOiRCRlltXDiFxJeMN68cx+KzZMe3cay5KgFc2rO8WZPviLGj7ueQqNlvFA6S8W4kG1k3006e4S+nAu3n6YkbtJ+0YEdev82kTE6rPBPs3Xi/+sifZnOIG1Z5+wfJMdWP2j0zDKobGlBQBL0qA2wbmXH7VuSDVg3XoZ38y4YnSlIbh0niQ3T9MlHM24njctshVZSEkpCk8vclrk5XYaN8G+/ZME7sf+6JUKo4iO2iMVkQy2VGM81mt5Ph+wANgs69A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB6699
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DB5PEPF00014B89.eurprd02.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	4a8d7854-b581-42c0-8c8b-08df0f1098b8
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|23010399003|1800799024|376014|7416014|36860700016|35042699022|14060799003|10067099003|6133799003|56012099006|4143699003|11063799006|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	QR1g5syt/zWnrh1X4nP3lQseS2ngD4OSG+pwL6o9/4ma80P5HE+ZZ63Kz4aC2FxQTBgzKg2QTAP7MHM9bqZfLojTrpvnDqVo+55YrbxaiSfAE6oKN/DlF4f2siHD9y9u7zsDdSbV5PO96UrmqZWCCuF2Cchw7Wm6oMxX8IMSTea++idKKogSX8Pp83O6T8yiZFHBvoSex3IKxaH+88mx8h9e9pMy4OUrIMqyB9/5K14BJkpYaLtvtwRHhqFtNuTU8MVYLW2utEMFdOfZopFEhcq3+ODbSR0ie9TZB2/NnK2ku0BR/MDqtAzeW6Wn+ZOXPGWCnycCht0DMJiX5agRqpRFzW88Ui935maWmbP9TjK6fBs87f307wkJM8tkCtWa9K9K1M4JrgXdlSr5C15Vo4RCvxSvlFXWcyT84M+X99ifqtinO31/fvbHLQXFLAcbRq+v1SE6RaapAckve6vGBTO/UCx7LHR4eOp6bsdpMSbJIHiyNDl1A3ToITL/A9aBhC3p+rbbHjeDgRxtwYwT36AukRmSr8TPvgIaR+mniARqKp8amXMviSUunUqSqJHs7yEy2Jp9ErG+UAJO6UTl6PI9wRpyNXJ7nQ77eD1RUDsc9+jTOuXzn9bnW6Bk3nYdm1bN8mrB2pDUEwQjr7P2ObNzEkiKYMNe++cHa7jVhTsI6xXDqcGdtlqOdcOnIJLbCl8QuipIxpBjJT0FH0mNfQ==
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(23010399003)(1800799024)(376014)(7416014)(36860700016)(35042699022)(14060799003)(10067099003)(6133799003)(56012099006)(4143699003)(11063799006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	Hv+2gYtVp6274o0Hx3IZ9qleX6VU755azENj8SOOFnps08JvbLJpJRCaehdswMymQYHZmDQPdDd/tIEe/fk2c77p2NiKxMWfMJ4C0zAPl1iaqWjnf5bUWoAxjN1YXGrUB9OBMQisjiN70MZtIzMDN4+JdU72mtl9ShYS/TYbD6/DFdnT2+TFBZn7TZ1X6ZG7y4KWaxcZBkaKZqXQ38mKwjT+HKM9VKU5PBNL29xJFPTsNGte/tkKQrIU5TnVMgWACO37N7JOV/knrD8AIyPfm1Vp+xanvZtJVZ/vY1kht+MC9L/7aF64JqmX0zyHX907zba8//OTXdSVhOpr4ad+ymRbFka1afT7cUW9SR0eBsxaa5MurzPgY0AzyjpbRU4QV/ki0sd1WD/ndQBF65JgtxGrY0ECwQkeheAlkgCm4YTDdf0tCqdtdfoZUjHGYiwV
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2026 07:54:01.4541
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1d51c1b-540b-4265-5857-08df0f10ad8e
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DB5PEPF00014B89.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB9363
 
-On 09/09/2026 6:34 pm, Mark Brown wrote:
-> On Wed, Sep 09, 2026 at 07:03:59PM +0200, David Hildenbrand (Arm) wrote:
-> 
->>>> 2) Move it to tools/mm/modules or sth like that.
-> 
-> ...
-> 
->>> This is an interesting change. We can keep this open for discussion
->>> here. If required, I can work on this in the future.
-> 
->> Yes, we should in general try moving all test modules out of the core.
-> 
-> If you're working on this please make sure to take a look at how the
-> various automated testing systems cope with modules built under
-> selftests (personally I think everything I care about uses tuxmake
-> builds, but there's other stuff out there).  I think the answer for a
-> bunch of them right now is badly, but I didn't actually go check.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider:
 
-There is huge discussion in the past on converting test modules into
-kunit modules [1]. Selftests is not a correct place to keep kernel modules.
-People have moved a lot of such modules. But new test modules get
-added over time again.
+Critical: 0 · High: 0 · Medium: 0 · Low: 2
 
-[1] https://lore.kernel.org/all/20250207-bitmap-kunit-convert-v1-0-c520675343b6@gmail.com/
+- [Low] The patch fixes a live, security-relevant input-validation defect
+  (three Reported-by tags, RFC5961 reference) but carries no Fixes: tag,…
+- [Low] The kerneldoc-style block comment above tcp_rcv_established()
+  (net/ipv4/tcp_input.c:6477-6499) enumerates the conditions that…
+
+--
+
+tcp: exclude old ACKs from tcp fast path
+
+This changes the header prediction test in tcp_rcv_established() so that
+segments whose ack_seq is below SND.UNA no longer enter the fast path, in
+addition to the existing rejection of ack_seq above SND.NXT.  Such segments
+now fall through to the slow path where tcp_ack() applies the RFC5961
+validation and challenge ACK handling.
+
+No Link: tags are present in the commit header.
+
+Two notes below.
+
+[Severity: Low]
+The changelog refers to the validation added by commit 3d501dd326fb1c7
+("tcp: do not accept ACK of bytes we never sent") in prose:
+
+    Such ACKs will fall through to the slow path, where tcp_ack()
+    performs the appropriate validation and challenge ACK handling
+    according to RFC5961 and Commit 3d501dd326fb1c7 ("tcp: do not
+    accept ACK of bytes we never sent").
+
+Should this carry a Fixes: tag as well, so stable tooling can pick it up?
+
+git blame on the replaced predicate in tcp_rcv_established() points at
+31770e34e43d6 ("tcp: Revert \"tcp: remove header prediction\""), and
+3d501dd326fb is the commit that added the too-old-ACK check the fast path
+was bypassing, so either looks like a concrete candidate.
+
+There are three Reported-by tags but no Link: to the report, and the
+changelog does not state the user-visible impact.  Could both be added?
+
+> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+> index 0f60a1dbf927..89f9f3913b52 100644
+> --- a/net/ipv4/tcp_input.c
+> +++ b/net/ipv4/tcp_input.c
+> @@ -6539,7 +6539,7 @@ void tcp_rcv_established(struct sock *sk, struct sk_buff *skb)
+>  
+>  	if ((tcp_flag_word(th) & TCP_HP_BITS) == tp->pred_flags &&
+>  	    TCP_SKB_CB(skb)->seq == tp->rcv_nxt &&
+> -	    !after(TCP_SKB_CB(skb)->ack_seq, tp->snd_nxt)) {
+> +	    between(TCP_SKB_CB(skb)->ack_seq, tp->snd_una, tp->snd_nxt)) {
+
+[Severity: Low]
+Should the block comment above tcp_rcv_established() be updated for this
+new rejection class?  It enumerates the cases that disable the fast path
+and then claims the enumeration is complete:
+
+ *	- Unexpected TCP flags/window values/header lengths are received
+ *	  (detected by checking the TCP header against pred_flags)
+ *	- Data is sent in both directions. Fast path only supports pure senders
+ *	  or pure receivers (this means either the sequence number or the ack
+ *	  value must stay constant)
+ *	- Unexpected TCP option.
+ *
+ *	When these conditions are not satisfied it drops into a standard
+ *	receive procedure patterned after RFC793 to handle all cases.
+ *	The first three cases are guaranteed by proper pred_flags setting,
+ *	the rest is checked inline. Fast processing is turned on in
+ *	tcp_data_queue when everything is OK.
+
+Nothing in that list mentions ACK sequence validity.  After this change, a
+reordered or duplicated pure ACK with ack_seq strictly below SND.UNA takes
+the slow path on a plain pure-sender/pure-receiver connection with matching
+pred_flags, which the list above says would be fast-pathed.  A bullet for
+ack_seq outside [SND.UNA, SND.NXT] would keep the comment in agreement with
+the predicate.
+
+>  		int tcp_header_len = tp->tcp_header_len;
+>  		s32 delta = 0;
+>  		int flag = 0;
 
 -- 
-Thanks,
-Usama
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909075644.1408171-1-inbal.lipshtat%40mail.huji.ac.il
