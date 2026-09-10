@@ -1,144 +1,81 @@
-Received: from mta0.migadu.com (out-82.mta0.migadu.com [91.218.175.82])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5ACB5013A3
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 16:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.82
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F293511235
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 16:51:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789058884; cv=none; b=bhiHIy3wpyuVUQdWsq1yWo33AKu1wjZL3bhATs5hpJDa4CKpj0xxvVoDaMnlitIGJH2QKoWJTeUGzDkuUwvICEtzBA/q1zY3dmlJ/hZWpRouzVn0h58fd2lg6Sk45vmVOEb/SVpeScMdNmI8cLhsYeZAvxL0JqyzKYTyWTJUMc8=
+	t=1789059082; cv=none; b=mH4iDhUpuIqijtC2720eVhpuh5J9094PpuM/adEny4ZzF64uli2kJZJMhUBK7bcsgyWaUchsS0O7sO8eErsiMcRjXUjkrjMv0sy3QGXKhgpkfdAbA6/kKslqez1PQ1YBu188SQV4x+MOpVV/LnKJ8TDibQhotsb9D0sAfTO45i4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789058884; c=relaxed/simple;
-	bh=0ha2sGkGjon+eeZcJRjjPBS803qtaTj8dM/pQbd2s7w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YJ8h8In8yO8oRark7ZnQtXO6VfO7g8WZ/1IuN9LM/9j9Mt1/eis4qYSQvVkNUvvS7vZrA1PSDdB+2OywJtwUwt9aiMWfQHmlGznoCOUqTVJJxFOgrrE6/Ebj8NLRPtKC/8qgLzn2YDNzTq5OEvkCVkdPI9PnyuzUkNXHym+wYlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Nw7nC7sZ; arc=none smtp.client-ip=91.218.175.82
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789059082; c=relaxed/simple;
+	bh=HrCbYNmgcS+z2LSJ5VdsjxHeTs6NHzzFMJ25U0e9i20=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=J/bLlRQjKW5ampvsJO9gpVEoxol05B/EAO6cRru98rswO2llSdKyCngcqC4868SzxFf/E9Yu18HtQgv7HPkh+Jo6cvB2REKMv6g2q0oLNi3vxWESqGErvRqo+QckbN5Wckg9vbn0VnxIJ03/PWQsMxCnK9onTD7BFWf0avk88f0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZY3VVNAi; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Nw7nC7sZ"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=0ha2sGkGjon+eeZcJRjjPBS803qtaTj8dM/pQbd2s7w=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789058873; v=1; x=1789663673;
- b=Nw7nC7sZHlrBu1Mxta+EC44VdEdsyWl8pqsRoTjoZgl1d/85uUZ6L8DcVoHFVJS4Bo2k69FT
- r5fvZ1B9iZiBfRALjaYwDgZobKQHrg+07C7mPjMyc7hbqeqicGp6T199iTXaMHyYTnAuu2ILE2f
- ME+2kvdlju54kfBpVBxVCb34=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b8644919bbe2bd5d;
-	Thu, 10 Sep 2026 16:47:53 +0000
-X-Mizu-Trace-ID: b8644919bbe2bd5d
-X-Migadu-Flow: FLOW_OUT
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	john.fastabend@gmail.com,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v2 13/13] selftests/bpf: cover the low-32 link for narrowing stack spills
-Date: Thu, 10 Sep 2026 22:16:35 +0530
-Message-ID: <20260910164635.459558-14-vineet.gupta@linux.dev>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260910164635.459558-1-vineet.gupta@linux.dev>
-References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZY3VVNAi"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 6940C1A0113;
+	Thu, 10 Sep 2026 16:51:17 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id C295D5FC38;
+	Thu, 10 Sep 2026 16:51:16 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 091FB11C787F4;
+	Thu, 10 Sep 2026 18:51:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1789059071; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=Puo/f4i5KVDLdRJ1D40f76FmqplugDPSVWcD8oF1klI=;
+	b=ZY3VVNAiQVBAedQVFDK4t8gmBE9DeejapVidrSilggvhAF1lOCdp3Bs7ZdT2GlHgW/bZNS
+	pq3bRy7yAuXX381iQr4lV4gF+kuSDQ+d9EBuGV81OfJZO+MOkO0DYa2kBrJs9IMTeaGKoq
+	UnzZbDJ8sg7qeANclkyyRuYXUDRIOuAEwskwstfWmjXBt05JP1ClKIuQ066M6nlKoizhdQ
+	UgOELVh8TxxV5x4gHzFG27ZzAFq2umiPPNIgHGt3fxrGnEthaRXPuGNsVU/CjTxsHTIufA
+	WNOa6ryDKkhmH7pzn3hl2VzU9NZ5WzCeg3MrpMXxjg53J6Jgxcbb0vjM2wxcFg==
+Message-ID: <fd239a92-30ce-4084-b2c1-632f1fe3a30e@bootlin.com>
+Date: Thu, 10 Sep 2026 18:51:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next] tools: ynl: Fix out-of-tree build for ynltool
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, davem@davemloft.net,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Bobby Eshleman <bobbyeshleman@gmail.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, matttbe@kernel.org,
+ Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+ linux-kselftest@vger.kernel.org
+References: <20260909071155.1234922-1-maxime.chevallier@bootlin.com>
+ <20260910085931.3c64f2ab@kernel.org>
+Content-Language: en-US
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+In-Reply-To: <20260910085931.3c64f2ab@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Two programs:
+Hi,
 
- - zext_narrowing_spill_keeps_link: a 32-bit spill of a wide register,
-   filled back out, still follows a later narrowing of the source
- - zext_narrowing_spill_byte_no_link: a 1-byte spill forms no link, since
-   the relation is not expressible
+On 9/10/26 17:59, Jakub Kicinski wrote:
+> On Wed,  9 Sep 2026 09:11:54 +0200 Maxime Chevallier (Netdev
+> Foundation) wrote:
+>> thomas.petazzoni@bootlin.com, linux-kselftest@vger.kernel.org
+>> Subject: [PATCH net-next] tools: ynl: Fix out-of-tree build for ynltool
+> 
+> Hi Maxime, thanks for the quick fix. Looks like this did not hit
+> netdev, unfortunately. It reached lore but via a different ML,
+> and our patchwork only trails netdev itself. Please repost.
 
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
----
-v2: new, with 12/13.
- .../bpf/progs/verifier_linked_scalars.c       | 54 +++++++++++++++++++
- 1 file changed, 54 insertions(+)
+Dammit, seems like most of the patches I sent yesterday failed in a
+similar fashion :(
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-index e8a44e7579c8..ca7471f0293d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-@@ -1048,6 +1048,60 @@ __naked void zext_fill_byte_forms_no_link(void)
- 	: __clobber_all);
- }
- 
-+/*
-+ * A narrowing spill stores only the source's low 32 bits, so the slot is their
-+ * zero-extension. A later narrowing of the source must still reach anything
-+ * filled back out of that slot.
-+ */
-+SEC("socket")
-+__success
-+__naked void zext_narrowing_spill_keeps_link(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 = r0;						\
-+	call %[bpf_get_prandom_u32];				\
-+	r0 <<= 32;						\
-+	r6 |= r0;		/* r6 = full 64-bit unknown */	\
-+	*(u32 *)(r10 - 8) = r6;	/* narrowing spill, forms the link */ \
-+	r2 = *(u32 *)(r10 - 8);	/* fill it back */		\
-+	if w6 != 0 goto 1f;	/* narrows r6, propagates to r2 */ \
-+	if r2 == 0 goto 1f;					\
-+	r0 /= 0;						\
-+1:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * A sub-word spill is below the low-32 model, so no link is formed there.
-+ */
-+SEC("socket")
-+__failure __msg("div by zero")
-+__naked void zext_narrowing_spill_byte_no_link(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 = r0;						\
-+	call %[bpf_get_prandom_u32];				\
-+	r0 <<= 32;						\
-+	r6 |= r0;						\
-+	*(u8 *)(r10 - 8) = r6;	/* 1-byte spill: no link */	\
-+	r2 = *(u8 *)(r10 - 8);					\
-+	if w6 != 0 goto 1f;					\
-+	if r2 == 0 goto 1f;	/* not deduced */		\
-+	r0 /= 0;						\
-+1:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- #ifdef CAN_USE_MOVSX
- 
- /*
--- 
-2.53.0-Meta
+I'll resend right-away, sorry about that,
 
+Maxime
