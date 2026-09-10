@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5457B471CF6;
-	Thu, 10 Sep 2026 11:23:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E888447127D;
+	Thu, 10 Sep 2026 11:24:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789039405; cv=none; b=jnYRMz7I5HH+TVr5Kq8P3OND6u66OJDt337Arpr6rStGuTdk9c1KNu3Xo9rVHINaycdKAtX/pXGCBJbLEH+ZRFete2eFm1l84kgOQrPAuZOkW+Gan+Tvj4E9GJJSLe/KFfHdjuRIr0PffrIGQh+bEBacnBzSHNH2McJrE5t96AU=
+	t=1789039467; cv=none; b=Q6QSG/2BMgRKH+FiVKMkpGpi6lPvKn3XVbf/xxzJO2Jlqu76h70tecP7aACRcvTTQoNiLmM8VUdbuj8pWKIqBjZT4qxKotnCNkq35x92hNd6+1D0ToEG9Z2ePEBaybtkbQsydZ4Pqje65+bK5J+i2HFKX1GWu4D7E233M3ShyEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789039405; c=relaxed/simple;
-	bh=diOAojAVJQKoupDCEd9veMN+80hNAizWvafg1m+EIr8=;
+	s=arc-20240116; t=1789039467; c=relaxed/simple;
+	bh=BVBVVjUGIAZgqIbSCdL88puIw63UNRr7Hk0NZHCgLLc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qb90jRMyRL+ShKwnOHcYC5O8xHJjKBLzZlv2zV4o53Zl8FcQxWefkst85ASBfb55UQrnszOZNn32jUdZhVz3Mjju96d7s/NiC0PXQBXqV0nwTdI95HW1hnCKTJXh0r1gcX4KpXPXNd5QtUWNfS1IUq6Jbl/JWvoay4rlOumRong=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T3rhYIz5; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=fn0xYAD1IK54ko7+XNL+rH7AScq9T2c4Huk9Hwtsyd0CxEIz7oPIKs5NkcUaXMHF7PYK+NhIpqpytzfkyczoPmUbqhXJX87Y6seZJNbHe7L4lg3QQ3UAg4CYhmBLF5fk7IIReOOi5OhXN5Y44J8bNBLtOM6v3CJNy/ZSOieyQqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c+VdKMTZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T3rhYIz5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2B2C1F000FF;
-	Thu, 10 Sep 2026 11:23:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c+VdKMTZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E651F000FF;
+	Thu, 10 Sep 2026 11:24:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789039403;
-	bh=E7/3v1GrknKuNpa0yYaqMVP9wTXrVL+HTHd5G2Rj/ek=;
+	s=k20260515; t=1789039465;
+	bh=D8lcb2nj5Qw+R2h/P0sXPBSrOuWk4kRlxcimVGz/6uc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=T3rhYIz5fx4UnQc7d2+m4sOw4xu3ZxZUB0E80NBL18sW9+9WMQ67dISO1JSlPXoeS
-	 jOQN6mnNAw1nZEaDb5LKyGaEWEeraVRLSOdqf4GO7hafNZ38TVyupvSSykhaSmTlNg
-	 rRYBTw6A1kYU2N6fqMt4DmW5o9Gbq3o0IQVwfr7pJidlimblOGVB9wdjafhkPn56wO
-	 1XZcx2g9U7tdh3J25sTNvwsHnhrvPVYZwg/2+qu/mXfYXsdVVKLZI3MgO4rmlmtA5Q
-	 IMmFqzjwdUeKSPte2qodIvgLEvNrLWxwiIbdsuVlY9UH1SjXlUuBI2hgoij07i0huA
-	 C88IYINGacJUA==
-Message-ID: <9750125c-49b4-48b1-adab-3a1cbec4255a@kernel.org>
-Date: Thu, 10 Sep 2026 13:23:15 +0200
+	b=c+VdKMTZQ/uO5Mf/ZmrRZ1jhqqlUW+oRuXyXaXjT6xqCIEI5zWcPjhGXnkfV14n94
+	 W39+6DQ95wE3xgFYkI09MnVXNlKJyymdRZ1bm1IMuI3vuRful0+ig/zVU2VHwAtLX7
+	 dXoyF40NkApa79X324P9AKBcE+efTSKfGCfW7q7bu5VSMT6r3QDpp1FZg0qqRU6BwJ
+	 pK8zPKHy4O4qHAyc6U5EHgZOlXN3BEjm9FmTjfMNJM8PU2bfe65Eu9dz7TBbN5PwZc
+	 Gv6+G37ITEeP5kcyoQVFEXv++15r1ncXxqvhtHVo5CT1yOGSc1xMMrWmgo+WTAYeoF
+	 d9D9zxr7ArzvA==
+Message-ID: <31418d0e-9745-4e8d-bc02-dbbd5cb9e193@kernel.org>
+Date: Thu, 10 Sep 2026 13:24:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/3] kselftest: mm: fix some failure of
- split_huge_page_test
+Subject: Re: [PATCH v5 3/3] kselftest: mm: introduce alloc_isolated_mem()
 To: Yeoreum Yun <yeoreum.yun@arm.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
  Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
@@ -50,10 +49,11 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
  Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20260907-fix_split-v5-0-822b810458bc@arm.com>
- <b923f63c-db7c-4ecb-949d-368bc6311626@kernel.org>
- <aqKHHWKvOonYZPy0@e129823.arm.com>
- <21e0a933-63b6-42b4-8cd7-df05b0c9acfc@kernel.org>
- <aqKRdIjAYB2PEwRN@e129823.arm.com>
+ <20260907-fix_split-v5-3-822b810458bc@arm.com>
+ <5c05b620-7a2f-453d-9725-fed4f536a019@kernel.org>
+ <aqKOVGECsCNtSMIV@e129823.arm.com>
+ <d0b3ea99-e20b-4883-8fa3-67fdbf5b1ee4@kernel.org>
+ <aqKS7CP67X4h6NiM@e129823.arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -100,57 +100,42 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <aqKRdIjAYB2PEwRN@e129823.arm.com>
+In-Reply-To: <aqKS7CP67X4h6NiM@e129823.arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/10/26 13:16, Yeoreum Yun wrote:
-> On Thu, Sep 10, 2026 at 12:45:39PM +0200, David Hildenbrand (Arm) wrote:
->> On 9/10/26 12:31, Yeoreum Yun wrote:
+On 9/10/26 13:22, Yeoreum Yun wrote:
+> On Thu, Sep 10, 2026 at 01:14:42PM +0200, David Hildenbrand (Arm) wrote:
+>> On 9/10/26 13:02, Yeoreum Yun wrote:
 >>>
->>> Well, users currently for using /proc/self/smaps are for check vm-flags:
->>>   - guard-regions where using check_vmflags_guard()
->>>   - pfnmap test where uses check_vmflag_pfnmap()
+>>> Since there is no interface to get vm_flags not via /proc/self/smaps,
+>>> It might be good to have it for preventing unwanted VMA merge.
+>>>
+>>> And might be useful for future to prevent unwated VMA merge.
 >>
->> Most vm-flags should not be an issue when it comes to merging. The only
->> exception are vmflags that do not prevent VMA merging.
+>> See my reply on why vm flags are generally not a problem. Just like other
+>> properties that are not changed during VMA merging.
 >>
->> So it's VM_SOFTDIRTY and VM_MAYBE_GUARD. And I agree that for guard-regions.c we
->> likely have to care such that we don't merge by accident with other VMAs (guard
->> regions).
+>> Let's not perform random code changes without a clear picture.
 >>
->> But that's independent of memalign.
+>> And just to emphasize again: VMA merging could already be a problem before
+>> memalign() internal changes.
 >>
->> ptr = mmap_(self, variant, NULL, 10 * page_size, PROT_READ | PROT_WRITE, 0, 0);
->> ASSERT_FALSE(check_vmflag_guard(ptr));
->>
->> could be problematic on its own (unlikely but possible).
+>> (also observe here how we do a MADV_HUGEPAGE, so this is all rather arbitrary,
+>> which is not good)
 > 
-> Yes. That's why I'm think it would be good to use alloc_isolated_mem()
-> in case of ANON mapping for this case.
-
-It's really only guest-region code that needs this.
-
+> As I mentioned in my previous reply, what I’m trying to prevent here is
+> a failure when checking, immediately after memory allocation,
+> that a specific vm_flag is not set.
 > 
->>
->> For other flags, you really only have to find the smaps area that covers the
->> given address and look at the vm-flags.
->>
->> Or am I missing something important?
->>
->> (merging vnas with VM_PFNMAP is impossible right now IIRC)
+> Yes, I agree that this could have been a problem even before
+> the internal changes to memalign(). An unwanted VMA merge could already
+> occur at the time of memory allocation.
 > 
-> No. what I want to say including the patch #3 is for the above case
-> where you point out -- ASSERT_FALSE(check_vmflag_guard(ptr)).
-> 
-> Since we don't have any interface to check vm_flags execpt smap
-> and for memory mmaped with anon would have a chance to merge,
-> We need something to replace memalign() with preventing unexpected VMA
-> merge. 
-Only for the cases that actually really needs this, which is in my understanding
-guard-regions.
-
-And I repeat, this is not a memalign() problem.
+> So what I’m trying to avoid is a test failure where, due to such an
+> unexpected VMA merge during allocation, the subsequent check that
+> a specific vm_flag is not present fails.
+Which is only a guard-region marker problem?
 
 -- 
 Cheers,
