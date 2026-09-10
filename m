@@ -1,143 +1,166 @@
-Received: from mta0.migadu.com (out-3.mta0.migadu.com [91.218.175.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E339637E5C9
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 03:41:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F98381AFF;
+	Thu, 10 Sep 2026 03:41:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789011698; cv=none; b=ImhovYF49kqk1ZYHSBxtsW4vj5RuHYLSaImw2X0ZwenJCUwm6/27s7PBEWtqO8DN/mxgLCyd8MuEJCPg76xLIgc+sdsw3JEthOW5P+cY+DBCseXc4VxNAfff7AJYIdmNQFh0Yq1pu2Vn6lq4vONOCQwo/8D/2RZTfk7gznvuL6c=
+	t=1789011698; cv=none; b=ZOXCZNa68S2GaafKRB/pf8Cwvm1b4+kqXV5+TzCpAF0x2gU3HRS09Or4wVv6O2nr4X8dSzbebadBHFEH8If70iezFUZChSaRJxbw8HrUEmicJJyQCsVlEEDWYTE3Ee3JOLkipKoFmwoJVQsJXlFNaMUKSapdYpb4wEUIB4V8sFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789011698; c=relaxed/simple;
-	bh=TO9MO5b8bJXJHjB/YLkQtxGsZmZ1QMZjecPQuYKzAKE=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=AJzRT0t01fCLiReuezCb3US8UaieWJ4Cgs7yhnX4+30LMXkOB+P419/JzF3fVe1EQHTpfciq95PXJri+yaHAm9BvYx17d9gMhzUKLR/C2pisG9LJJ2g6ue7UHv3AfuffF+4219RSK3ItZMAqvLs6noAYR8cv40oFNI//+DTMwu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cW5wMLbl; arc=none smtp.client-ip=91.218.175.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	bh=w6YMxGA6TfN/6E70BV+uHG+BsvTlQTsOklfijaKjRio=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HuCjWiQG0z1SmkGsatbx/nYUfzJMlENDKVvffreYIBhyIY0/QOyGsRb9JAZV1M2KddkWPF2CdEoeHqSBbXVESBa4H5mO5lYwELYcKvtHajgDpaLIiAURK1+gjiAvkPT+d1hTWyzYp/K4ghdOHx2uX4r3y/41xrLV+LY4/1V1tUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QphHh3vY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cW5wMLbl"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=TO9MO5b8bJXJHjB/YLkQtxGsZmZ1QMZjecPQuYKzAKE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789011693; v=1; x=1789616493;
- b=cW5wMLblkClkgxEJoNh30xAjz8z07O7j7MGgDXw0ZUHBGm8m6eEWiGn9kuvfIm601GaYDbHZ
- 0nheGPlWP/WwYpoKNjmZCysKfpXEj7omqC9ImaylSqoF7ZxXqBAR5TCOU3I8TBMt1fxQ2Mz+vQ3
- eI4WkcRq/FY7MvZyGTvyBVBo=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 1f201aa16fc70ad7;
-	Thu, 10 Sep 2026 03:41:33 +0000
-X-Mizu-Trace-ID: 1f201aa16fc70ad7
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <3830e505-70eb-4c0b-8d1c-74074f066142@linux.dev>
-Date: Thu, 10 Sep 2026 11:41:26 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QphHh3vY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4962F1F00893;
+	Thu, 10 Sep 2026 03:41:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789011696;
+	bh=DANIVoekU9XiwWA5oMrLYSSaU2xk6/wwTj0I+yT4QfU=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=QphHh3vYLLM7ufXpcqMimO0dLeH5MojSw6HRqN6EkbGDaA0/sDJtZU9Jiv1xmjAhy
+	 9l+RwQ+3Un5Gd0QKk5ltfn8nAFTgRRHrpuqJonm2oZgfuxQFQ3iOiMISSnqJ9HFOct
+	 ZtVlQhaF0c1gs6XRN8DOP/3fC6jxsJa2/8T7Nk/J9T2rpl6z6K4uth6B68VBiU9IBu
+	 2AZ+NEX2Gqbr0kW2CSJD07ZfJnDMVuRWEbFW6LEg+CDnx9XosqVkRYAw3eXU0Pxo1N
+	 YXnoCWOEWVA9SMgUZJo/blduNmHhT80avmcjs12bQYslmprRGXidDM/qpIwYAPVk48
+	 gv1oL33TB+W+g==
+Subject:
+ Re: [PATCH net-next 3/3] selftests: net: test AF_PACKET multicast dumps
+From: netdev-bot+sashiko@kernel.org
+To: sigefriedhyy@gmail.com
+Cc: davem@davemloft.net, dsahern@kernel.org, donald.hunter@gmail.com,
+ edumazet@google.com, idosch@nvidia.com, kuba@kernel.org, kuniyu@google.com,
+ nickgarlis@gmail.com, pabeni@redhat.com, sd@queasysnail.net, shuah@kernel.org,
+ horms@kernel.org, sdf.kernel@gmail.com, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Date: Thu, 10 Sep 2026 03:41:34 +0000
+Message-ID: <178901169484.219967.3624591832079760064@kernel.org>
+In-Reply-To: <20260905093932.43726-4-sigefriedhyy@gmail.com>
+References: <20260905093932.43726-4-sigefriedhyy@gmail.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-Subject: Re: [PATCH 12/17] cgroup/cpuset: Invalidate children outside the new
- CPU mask
-To: Waiman Long <longman@redhat.com>, cgroups@vger.kernel.org
-Cc: ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
- mkoutny@suse.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Guopeng Zhang <zhangguopeng@kylinos.cn>
-References: <20260820124202.517160-1-guopeng.zhang@linux.dev>
- <20260820124202.517160-13-guopeng.zhang@linux.dev>
- <3bf50da2-f13a-4cef-bfb8-cd592f862164@redhat.com>
-Content-Language: en-US
-In-Reply-To: <3bf50da2-f13a-4cef-bfb8-cd592f862164@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider:
 
+Critical: 0 · High: 0 · Medium: 0 · Low: 1
 
-在 2026/8/25 23:11, Waiman Long 写道:
-> On 8/20/26 8:41 AM, Guopeng Zhang wrote:
->> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
->>
->> When cpuset.cpus changes, compute_partition_effective_cpumask() builds a
->> new exclusive mask but checks child partitions against
->> cs->effective_xcpus. That field still contains the old mask, so a child
->> that no longer fits can remain valid.
->>
->> Use new_xcpus for the check. A later partcmd_update() may revisit the
->> newly invalid child. Report PERR_INVCPUS if the child CPUs are outside
->> the parent effective exclusive mask so that this visit does not make the
->> child valid again.
->>
->> Fixes: 0c7f293efc87 ("cgroup/cpuset: Add cpuset.cpus.exclusive.effective for v2")
->> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
->> ---
->>   kernel/cgroup/cpuset.c | 10 +++++++---
->>   1 file changed, 7 insertions(+), 3 deletions(-)
->>
->> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index b9faadf4af6d..b3e749ede7d1 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -1987,12 +1987,16 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->>                   adding = cpumask_and(tmp->addmask,
->>                                cs->effective_xcpus,
->>                                parent->effective_xcpus);
->> -        } else if (is_partition_invalid(cs) && !cpumask_empty(xcpus) &&
->> -               cpumask_subset(xcpus, parent->effective_xcpus)) {
->> +        } else if (is_partition_invalid(cs) && !cpumask_empty(xcpus)) {
->>               struct cgroup_subsys_state *css;
->>               struct cpuset *child;
->>               bool exclusive = true;
->>   +            if (!cpumask_subset(xcpus, parent->effective_xcpus)) {
->> +                part_error = PERR_INVCPUS;
->> +                goto write_error;
->> +            }
->> +
-> A invalid partition means part_error should be set to some error code. This change only makes sure the error code is PERR_INVCPUS. Other than that, I don't see any other tangible change here.
+- [Low] dump_mcaddr_l2_check() in
+  tools/testing/selftests/net/rtnetlink.py dereferences dictionary keys…
 
-Thanks, Longman.
+--
 
-I think there is a functional difference here. `part_error` is a local variable initialized to `PERR_NONE` on every call to `update_parent_effective_cpumask()`; it is not initialized from `cs->prs_err`.
+selftests: net: test AF_PACKET multicast dumps
 
-With the current condition:
+This adds dump_mcaddr_l2_check() to the rtnetlink.py selftest, dumping the
+link-layer multicast addresses of a dummy device over AF_PACKET and
+checking the ifa-index filter, the all-hosts entry flags and the
+SIOCADDMULTI entry flags plus mc-users.  The case skips when the kernel
+answers the dump with EOPNOTSUPP.
 
-} else if (is_partition_invalid(cs) && !cpumask_empty(xcpus) &&
-	   cpumask_subset(xcpus, parent->effective_xcpus)) {
+> diff --git a/tools/testing/selftests/net/rtnetlink.py b/tools/testing/selftests/net/rtnetlink.py
+> index 5cc3ebdcf08de..94340dac0e217 100755
+> --- a/tools/testing/selftests/net/rtnetlink.py
+> +++ b/tools/testing/selftests/net/rtnetlink.py
 
-an invalid partition whose CPUs are no longer a subset of the parent's effective exclusive mask skips this branch entirely, leaving `part_error` as `PERR_NONE`.
+[ ... ]
 
-The later state transition then does:
+> @@ -105,6 +109,53 @@ def dump_mcaddr6_check() -> None:
+>                  s2.close()
+>  
+>  
+> +def dump_mcaddr_l2_check() -> None:
+> +    """
+> +    Verify link-layer multicast addresses in an AF_PACKET RTM_GETMULTICAST
+> +    dump: the ifa-index filter, mc-users and the permanent flag.
+> +    """
+> +
+> +    with NetNS() as ns:
+> +        with NetNSEnter(str(ns)):
+> +            for ifname in ("dummy1", "dummy2"):
+> +                ip(f"link add name {ifname} type dummy")
+> +                ip(f"link set {ifname} up")
+> +            dev_idx = socket.if_nametoindex("dummy1")
+> +            ip(f"maddr add {ETH_TEST_MULTICAST_STR} dev dummy1")
+> +
+> +            rtnl = RtnlAddrFamily()
+> +            try:
+> +                addresses = rtnl.getmulticast(
+> +                    {"ifa-family": socket.AF_PACKET, "ifa-index": dev_idx},
+> +                    dump=True)
+> +            except NlError as e:
+> +                if e.error == errno.EOPNOTSUPP:
+> +                    raise KsftSkipEx(
+> +                        "kernel does not support AF_PACKET multicast dump")
+> +                raise
+> +
+> +            # dummy2 has entries as well, only dummy1 may be listed
+> +            ksft_eq({addr['ifa-index'] for addr in addresses}, {dev_idx},
+> +                    "AF_PACKET multicast dump ignored ifa-index filter")
+> +
+> +            entries = {addr['multicast']: addr for addr in addresses}
+> +
+> +            # Bringing an Ethernet device up joins 224.0.0.1, which maps
+> +            # to 01:00:5e:00:00:01 in the device multicast list.
+> +            ksft_in(ETH_ALL_HOSTS_MULTICAST, entries,
+> +                    "dummy1 does not have the all-hosts link-layer address")
+> +            ksft_not_in('permanent',
+> +                        entries[ETH_ALL_HOSTS_MULTICAST]['ifa-flags'],
+> +                        "protocol entry is permanent")
+> +
+> +            ksft_in(ETH_TEST_MULTICAST, entries,
+> +                    "dummy1 does not have the SIOCADDMULTI address")
+> +            ksft_eq(entries[ETH_TEST_MULTICAST]['mc-users'], 1,
+> +                    "unexpected mc-users for the SIOCADDMULTI address")
+> +            ksft_in('permanent', entries[ETH_TEST_MULTICAST]['ifa-flags'],
+> +                    "SIOCADDMULTI entry is not permanent")
 
-case PRS_INVALID_ROOT:
-case PRS_INVALID_ISOLATED:
-	if (!part_error)
-		new_prs = -old_prs;
-	break;
+[Severity: Low]
+Can the entries[] lookups here raise KeyError in exactly the case the
+preceding checks are meant to report?
 
-so the partition can be changed back to a valid state.
+ksft_in() in tools/testing/selftests/net/lib/py/ksft.py only records the
+failure and returns:
 
-Therefore, this change does more than set the error code to `PERR_INVCPUS`; it also prevents an out-of-mask invalid partition from being made valid again.
+    def ksft_in(a, b, comment=""):
+        if a not in b:
+            _fail("Check failed", a, "not in", b, comment)
 
->>               /*
->>                * Convert invalid partition to valid has to
->>                * pass the cpu exclusivity test.
->> @@ -2144,7 +2148,7 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
->>           WARN_ON_ONCE(is_remote_partition(child));
->>           WRITE_ONCE(child->prs_err, 0);
->>           if (!cpumask_subset(child->effective_xcpus,
->> -                    cs->effective_xcpus))
->> +                    new_xcpus))
->>               WRITE_ONCE(child->prs_err, PERR_INVCPUS);
->>           else if (populated &&
->>                cpumask_subset(new_ecpus, child->effective_xcpus))
-> 
-> This hunk should probably be grouped into the same patch making change to compute_partition_effective_cpumask().
+So when the dump does not contain 01:00:5e:00:00:01, execution continues
+into:
 
-I have included these changes in v4 and moved both changes from this patch into the earlier patch that modifies compute_partition_effective_cpumask().
+    entries[ETH_ALL_HOSTS_MULTICAST]['ifa-flags']
 
-I have also temporarily dropped all selftest patches, including those posted in v3, as the current test design needs some rework.
+and the same applies to entries[ETH_TEST_MULTICAST] for the mc-users and
+permanent checks if the SIOCADDMULTI address is missing.
 
-Thanks,
-Guopeng
+ksft_run() catches this with "except BaseException" and prints a
+traceback, so the case is reported as a failure, but the remaining
+independent checks (mc-users == 1 and the permanent flag on the
+SIOCADDMULTI entry) are never executed.  Note also that the earlier
+ksft_eq() on the ifa-index set does not stop the case either, so
+addresses may legitimately be empty at this point.
 
+Would it be worth following the convention already used elsewhere in this
+file, where _users_for() and dump_mcaddr_check() test membership before
+dereferencing:
+
+    if 'mc-users' not in matches[0]:
+        raise KsftSkipEx(...)
+
+and ipv6_route_del_reason_expired() guards with ksft_not_none(attrs)
+before touching attrs?
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260905093932.43726-1-sigefriedhyy%40gmail.com
