@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1303CF02D;
-	Thu, 10 Sep 2026 10:15:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D8F3AE18C;
+	Thu, 10 Sep 2026 10:15:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789035309; cv=none; b=dQIxmsoIT+4UHV7ftK/4RdxXs12zfHgjg2oHHBJYkYeLfdHCuwv+u6L4N8+bcAexhvMfvhZ+uJKfs0teyGwHiLm9l4eG6HAwefLZUr5EO4aYqNjD+t0ihnasqIoIOxWxp5JC9LEmgfpW5M7Nol3S6nXagocLNY9EPm9WKASc6jA=
+	t=1789035348; cv=none; b=mIL4WvwOO9ag8Sfk93jiS4TMP+e7enGiyHTQKV3gCfghr9ZfyHNd2mlHveb9ZfUfhlyUbzgY1QYR9fTrWoYc/vKrxGLhtvKB28oCXDlTAFma5V4NhYRjzKbMG0XAV9u4nuRjN9krg6Ue2o1t6gh6l8u5Qlzf6yCOnEnynIJOAys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789035309; c=relaxed/simple;
-	bh=pqFEd1KXW8dJjiOz711NjIEpbYBBFCBP0yMYwRyZsqE=;
+	s=arc-20240116; t=1789035348; c=relaxed/simple;
+	bh=QMFu8oeXWAlh7eYN/Zpz++THfspO8DeGK9VYV8zEXT0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MxX8Rdlr6lWp2qfTq/WFZ8VFzuMNc9IPiDoAXaPxCWk6gl5nRF8/QUUvaEAHbf3vSrbAWhRlTlrE5CAhYa7zzD4YLzfuqaUqdCz2rWBi280NSQtNazyFBlfkw49MWF7rTFprT9eQmy1F+sYtCCYb6xP09itfVWefJKaZlxkGa3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n7SPAcaH; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=OCMeYbEq1BnZhuKC+n0/ZQicpJxszw3n4MUXGH1RTMKc36qz/lKkFkxtKk9hhjGixBvfCM8lKxNZwnVR/tMt70gP9b/wSAk9uYOecidU9yLTuX5ryvjtBJS36q86Ogyq41vlG2+IaSzmgv+k2r9oVmuBtfEMiEKkUop3Bb3mzeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gv5fyVsy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n7SPAcaH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9B671F000FF;
-	Thu, 10 Sep 2026 10:15:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gv5fyVsy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6321C1F00893;
+	Thu, 10 Sep 2026 10:15:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789035307;
-	bh=v1jf2BnWKgFOqshUjBVM616Rin+QQtnz67oQ0yj2zIc=;
+	s=k20260515; t=1789035346;
+	bh=J+RbngQimsasuZ1zEF2fUuFweIotw1Um8Y1N5tAyMhQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=n7SPAcaH7guQHXLUvHt39zDD7VkfvXNXJxyLeKOSy6F6EQiJypZAgI/aIPywPRu1T
-	 FOdHJXQrZqg4xzP+8jCUJpEZJfZsnIirc/JEBSmf0Bvoe5qD/BQjspvW5umqigqNqW
-	 wDf192w9WWfKoWcdXfD9l6arb01LZhr9HMEOsKq6ypf/m2cx8gpcqFdCvPynkVeSt7
-	 kDttdVXNtjltJR1LghfDXasLKOWUBgieqp8yckKTf6PZ+mhtuTsXmGD+q0kJuDFIFl
-	 ve8bNEN2iu219o7QnElPB5wznFdMu6Wk04HHNueiYZMtk9WuNkfJiqiRwv9aht1MbU
-	 rD1uHTMkNiTLQ==
-Message-ID: <b923f63c-db7c-4ecb-949d-368bc6311626@kernel.org>
-Date: Thu, 10 Sep 2026 12:15:00 +0200
+	b=gv5fyVsydlN77cN504+9qhijPZ/xYE+efFyMRBFVYdQzq+W4Z5flqI+tMbBqCOxpq
+	 S1MlDoi9sQG0kBV5rkBA7DAQaCXanGvukpUv1Qlu4T3uvn5P/GY7JGGLB0GtfGpNJ5
+	 JkCZAHoooDHyFogj6DKFuf+Y8e/uGsdLi7+piowUr+0QM7mk00cmQeJQbbgRY5j7j9
+	 UcS6XKRKPIpp8HdHV83aiLSkOU08bcXfTkrgJHcgSIe1On1t4piwXp6zrAm3PQZ+2j
+	 GS5+8e6gbHzKh5qfhrp31hiN1+V6ISpDBrKZ08Se2x9VxAS+RzXfkt2ZyTIW9+4TfI
+	 ASJvnWg25XKvw==
+Message-ID: <d5131f23-075f-4e00-941e-aa0d34e2e89c@kernel.org>
+Date: Thu, 10 Sep 2026 12:15:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/3] kselftest: mm: fix some failure of
- split_huge_page_test
+Subject: Re: [PATCH v5 1/3] kselftest: mm: prevent random failure of huge page
+ split for khugepaged
 To: Yeoreum Yun <yeoreum.yun@arm.com>,
  Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
  Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
@@ -50,6 +50,7 @@ To: Yeoreum Yun <yeoreum.yun@arm.com>,
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260907-fix_split-v5-0-822b810458bc@arm.com>
+ <20260907-fix_split-v5-1-822b810458bc@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -96,49 +97,25 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260907-fix_split-v5-0-822b810458bc@arm.com>
+In-Reply-To: <20260907-fix_split-v5-1-822b810458bc@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 On 9/7/26 10:19, Yeoreum Yun wrote:
-> split_huge_page_test can fail for the following reasons:
+> There're some random failure for split_huge_page_test when khugepaged
+> collapses pages into pmd again which had split by the test.
 > 
->   1. During the test, khugepaged may collapse previously split pages again,
->      causing intermittent failures.
+> Prevent the khugepaged's collapses for split page by setting the
+> mapped pmd-huge-page with MADV_NOHUGEPAGE before split.
 > 
->   2. Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
->      glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
->      made by memalign(). The underlying VMA may start at a different address
->      from the aligned address returned by memalign(). Moreover, a subsequent
->      madvise(MADV_HUGEPAGE) call does not split the VMA because it already
->      has the same advice.
-> 
->      This causes the test to fail because the check_huge_xxx() helpers
->      incorrectly require the address returned by memalign() to match the
->      VMA start address reported in /proc/self/smaps.
-> 
-> Address these issues by applying MADV_NOHUGEPAGE after faulting in the
-> huge page, preventing khugepaged from collapsing it again, and instead of
-> relying on /proc/self/smaps, use /proc/self/pagemap and
-> /proc/kpageflags to detect huge-page mappings and large folios:
-> 
->   1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of
->      using check_large_folios(), since only the mapping type matters.
->      This identifies PMD-mapped huge pages.
->   2. Otherwise, use check_large_folios() to detect large folios. This
->      covers mTHP cases.
->   3. Check the folio flags according to the type of huge page.
-> 
-> Also, current usage of memalign() would result memory area may
-> unexpectedly merge with an adjacent VMA, causing tests
-> that inspect it through /proc/self/smaps to fail.
-I'm not particularly happy about this.
+> Suggested-by: Kevin Brodsky <kevin.brodsky@arm.com>
+> Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> Reviewed-by: Zi Yan <ziy@nvidia.com>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> ---
 
-Relying on VMA merging details rather hints that we shouldn't be using smaps to
-query some stats/properties.
-
-Which exact things are test querying through /proc/self/smaps? Could we convert
-the code to just query that stuff through different interfaces?
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
