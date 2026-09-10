@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F183B3D667D;
-	Thu, 10 Sep 2026 10:05:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1303CF02D;
+	Thu, 10 Sep 2026 10:15:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789034743; cv=none; b=H01EL34jnHAu9GAYL70WcKc1BQmvhjOi3PrR9hcJr+TEB7Y0/lK5HyWQhmmmJuHm2Sbn40Ugp4+S3YUNAMJbfbpdqJM5iV2fsLK/K/h3v5IICKM/Qz2UMRCy/e9HUYNsb6jdeeghdC/dkIQZKtOBGa6YN87qRYThOi/2sxqdO8A=
+	t=1789035309; cv=none; b=dQIxmsoIT+4UHV7ftK/4RdxXs12zfHgjg2oHHBJYkYeLfdHCuwv+u6L4N8+bcAexhvMfvhZ+uJKfs0teyGwHiLm9l4eG6HAwefLZUr5EO4aYqNjD+t0ihnasqIoIOxWxp5JC9LEmgfpW5M7Nol3S6nXagocLNY9EPm9WKASc6jA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789034743; c=relaxed/simple;
-	bh=3z0WN4zi1UJFms75zdwhQXh4Qlgba5XU53bM7EcRgQc=;
+	s=arc-20240116; t=1789035309; c=relaxed/simple;
+	bh=pqFEd1KXW8dJjiOz711NjIEpbYBBFCBP0yMYwRyZsqE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=REgr2EKzHmDrVQ78r0ArI/VNnJ49rwMYyyl45ol6WNh+PJwQefvkK5A4eNY+tuVrOFVGyOJTUyiP1Nda4oPb9o+TYnoqxTVJqonn1a0hmY/QzWb7HZHmlW7SQtI16J4krtTUO91QMyZH28zUfsV9k9zUH5yBBsa957fgjpcIhUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QzBHpLL7; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=MxX8Rdlr6lWp2qfTq/WFZ8VFzuMNc9IPiDoAXaPxCWk6gl5nRF8/QUUvaEAHbf3vSrbAWhRlTlrE5CAhYa7zzD4YLzfuqaUqdCz2rWBi280NSQtNazyFBlfkw49MWF7rTFprT9eQmy1F+sYtCCYb6xP09itfVWefJKaZlxkGa3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n7SPAcaH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QzBHpLL7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A3C1F000FF;
-	Thu, 10 Sep 2026 10:05:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n7SPAcaH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9B671F000FF;
+	Thu, 10 Sep 2026 10:15:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789034729;
-	bh=foN56LOD6/Sr9Fuua4UGrrARCTUwXc66j3xzHR63FGE=;
+	s=k20260515; t=1789035307;
+	bh=v1jf2BnWKgFOqshUjBVM616Rin+QQtnz67oQ0yj2zIc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=QzBHpLL73o0QRHBq1BtDWHfKhjgH7vYQlOQTmd/7CsBCnteHkCGmQ//nhe1xBe+XC
-	 B+J/EOTATm18+r68ByFk08E1DHO/jGR+rAnUx1rseFVGhpIozwzwFhzDF7sOLJLeQ+
-	 I9XUGlHlf+t7B+P5tn0YTppgcLchcfIELLFXodhjEkX4ufh+VLtkzkBdboHmg+39OE
-	 6g/BYc6mcelHh8Dvj1YRbZL2cncQvh7KDpBKn2qNLUqTx/qsd0Ozx7Dp6POJfFAdiR
-	 tfvp/PiJB/ZsLE17ZTAn6ACIgPYGEels8eKnoLC09LSAs9Q4EgK8NWvE4szHuqmUUQ
-	 HqOFKQ1qoF9QQ==
-Message-ID: <e0120f1a-d53b-46a3-9542-030212250135@kernel.org>
-Date: Thu, 10 Sep 2026 12:05:15 +0200
+	b=n7SPAcaH7guQHXLUvHt39zDD7VkfvXNXJxyLeKOSy6F6EQiJypZAgI/aIPywPRu1T
+	 FOdHJXQrZqg4xzP+8jCUJpEZJfZsnIirc/JEBSmf0Bvoe5qD/BQjspvW5umqigqNqW
+	 wDf192w9WWfKoWcdXfD9l6arb01LZhr9HMEOsKq6ypf/m2cx8gpcqFdCvPynkVeSt7
+	 kDttdVXNtjltJR1LghfDXasLKOWUBgieqp8yckKTf6PZ+mhtuTsXmGD+q0kJuDFIFl
+	 ve8bNEN2iu219o7QnElPB5wznFdMu6Wk04HHNueiYZMtk9WuNkfJiqiRwv9aht1MbU
+	 rD1uHTMkNiTLQ==
+Message-ID: <b923f63c-db7c-4ecb-949d-368bc6311626@kernel.org>
+Date: Thu, 10 Sep 2026 12:15:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,38 +35,21 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/9] KVM: guest_memfd: implement folio migration for
- non-confidential VMs
-To: Shivank Garg <shivankg@amd.com>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>,
- Vlastimil Babka <vbabka@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
- Matthew Brost <matthew.brost@intel.com>,
- Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
- Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
- Ying Huang <ying.huang@linux.alibaba.com>,
- Alistair Popple <apopple@nvidia.com>, Paolo Bonzini <pbonzini@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Chao Peng <chao.p.peng@linux.intel.com>,
- Nikunj A Dadhania <nikunj@amd.com>, Michael Roth <michael.roth@amd.com>,
- Pankaj Gupta <pankaj.gupta@amd.com>, Ackerley Tng <ackerleytng@google.com>,
- Sean Christopherson <seanjc@google.com>,
- Vishal Annapurve <vannapurve@google.com>,
- Nikita Kalyazin <nikita.kalyazin@linux.dev>,
- Patrick Roy <patrick.roy@linux.dev>, Pratik Sampat <prsampat@amd.com>,
- Ashish Kalra <Ashish.Kalra@amd.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Peter Shier <pshier@google.com>,
- Jim Mattson <jmattson@google.com>, Ricardo Koller <ricarkol@google.com>,
- Ira Weiny <iweiny@kernel.org>, Fuad Tabba <fuad.tabba@linux.dev>
-Cc: linux-fsdevel@vger.kernel.org, linux-coco@lists.linux.dev,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20260805-shivank-gmem-migrate-v3-0-00d8bdec4e1d@amd.com>
- <20260805-shivank-gmem-migrate-v3-3-00d8bdec4e1d@amd.com>
+Subject: Re: [PATCH v5 0/3] kselftest: mm: fix some failure of
+ split_huge_page_test
+To: Yeoreum Yun <yeoreum.yun@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260907-fix_split-v5-0-822b810458bc@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -113,77 +96,49 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260805-shivank-gmem-migrate-v3-3-00d8bdec4e1d@amd.com>
+In-Reply-To: <20260907-fix_split-v5-0-822b810458bc@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/5/26 08:40, Shivank Garg wrote:
-> Implement kvm_gmem_migrate_folio() using filemap_migrate_folio() for
-> non-confidential VMs but don't enable it yet. guest_memfd mappings
-> are still marked unmovable, so MM never calls it.
+On 9/7/26 10:19, Yeoreum Yun wrote:
+> split_huge_page_test can fail for the following reasons:
 > 
-> MM invokes ->migrate_folio() callback with folios already locked and
-> acquires the invalidate lock afterwards. kvm_gmem_punch_hole() takes
-> the invalidate lock before locking folios during truncation, so
-> taking invalidate lock in migration callback can cause an ABBA-deadlock
-> situation. Use filemap_invalidate_trylock_shared() to avoid this.
+>   1. During the test, khugepaged may collapse previously split pages again,
+>      causing intermittent failures.
 > 
-> A subsequent patch adds an opt-in flag to change the mapping to
-> movable and enable migration. Non-confidential VMs can use
-> host-side copy via folio_mc_copy(), whereas confidential VMs will
-> require firmware-assisted copying before they can opt in.
+>   2. Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
+>      glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
+>      made by memalign(). The underlying VMA may start at a different address
+>      from the aligned address returned by memalign(). Moreover, a subsequent
+>      madvise(MADV_HUGEPAGE) call does not split the VMA because it already
+>      has the same advice.
 > 
-> Signed-off-by: Shivank Garg <shivankg@amd.com>
-> ---
->  virt/kvm/guest_memfd.c | 36 ++++++++++++++++++++++++++++++++++--
->  1 file changed, 34 insertions(+), 2 deletions(-)
+>      This causes the test to fail because the check_huge_xxx() helpers
+>      incorrectly require the address returned by memalign() to match the
+>      VMA start address reported in /proc/self/smaps.
 > 
-> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> index 169f75f95433..583341d593c9 100644
-> --- a/virt/kvm/guest_memfd.c
-> +++ b/virt/kvm/guest_memfd.c
-> @@ -488,13 +488,45 @@ static struct file_operations kvm_gmem_fops = {
->  	.fallocate	= kvm_gmem_fallocate,
->  };
->  
-> +#ifdef CONFIG_MIGRATION
->  static int kvm_gmem_migrate_folio(struct address_space *mapping,
->  				  struct folio *dst, struct folio *src,
->  				  enum migrate_mode mode)
->  {
-> -	WARN_ON_ONCE(1);
-> -	return -EINVAL;
-> +	struct inode *inode = mapping->host;
-> +	pgoff_t start, end;
-> +	int ret;
-> +
-> +	/*
-> +	 * Migration invokes ->migrate_folio() while holding the folio lock.
-> +	 * Use a non-blocking trylock to avoid inverting the lock order with
-> +	 * truncation, which takes the invalidate lock before locking the
-> +	 * folios.
-> +	 */
-> +	if (!filemap_invalidate_trylock_shared(mapping))
-> +		return -EAGAIN;
-> +
-> +	start = src->index;
-> +	end = start + folio_nr_pages(src);
-> +
-> +	kvm_gmem_invalidate_start(inode, start, end);
-> +
-> +	/*
-> +	 * For non-confidential guests the folio is host-readable, so
-> +	 * filemap_migrate_folio() can copy the contents itself via
-> +	 * folio_mc_copy().
-> +	 * For confidential guests, this would need firmware assistance.
-> +	 */
+> Address these issues by applying MADV_NOHUGEPAGE after faulting in the
+> huge page, preventing khugepaged from collapsing it again, and instead of
+> relying on /proc/self/smaps, use /proc/self/pagemap and
+> /proc/kpageflags to detect huge-page mappings and large folios:
+> 
+>   1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of
+>      using check_large_folios(), since only the mapping type matters.
+>      This identifies PMD-mapped huge pages.
+>   2. Otherwise, use check_large_folios() to detect large folios. This
+>      covers mTHP cases.
+>   3. Check the folio flags according to the type of huge page.
+> 
+> Also, current usage of memalign() would result memory area may
+> unexpectedly merge with an adjacent VMA, causing tests
+> that inspect it through /proc/self/smaps to fail.
+I'm not particularly happy about this.
 
-I think this is all more closely related to mapping_inaccessible().
+Relying on VMA merging details rather hints that we shouldn't be using smaps to
+query some stats/properties.
 
-If accessible, this is just trivially true that we can support this.
-
-So I would not comment on what to do for confidential VMs for now, and limit it
-only to the shared-only case where pages are accessible.
+Which exact things are test querying through /proc/self/smaps? Could we convert
+the code to just query that stuff through different interfaces?
 
 -- 
 Cheers,
