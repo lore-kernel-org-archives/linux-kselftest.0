@@ -1,79 +1,171 @@
-Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83466480321;
-	Thu, 10 Sep 2026 11:54:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.0.225.12
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E621E47425C;
+	Thu, 10 Sep 2026 11:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789041273; cv=none; b=U0VWJjIHRsiSAo5a/llPCWwSuS3orVCjNdi2UtMR7q7udpUGzl+/R4YQ1qVe0siLHGho8AQQckVT0xp7MUXlE030IOM9aHg6pHe/WEhkYEuQH1tGi5GgGflPclqEN86O3h+EQRdBTvJ1kI/qWCad3Doy1842OejTLYgT3WMLUQM=
+	t=1789041310; cv=none; b=Dpz0ljk+rSgph+rBmY2H1Zl2LiTIVRhT9vJu5V4Me1oS6QfRKQWLikNUTPQ+nmLCk/tIwlUXtPECzPL2H0fJwaWd053moXVM8JOquxWRPwMZftz5IyiUre4TIk+IMSskYMHPvv0ZnK3Kq+Mwp5VxJWhTeh04MGK0FH2lx7US5Sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789041273; c=relaxed/simple;
-	bh=uqNNboBSxUGGzuZYGyCpRAjBDMAc6NAxfl0r51Kr9bY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=evFkqpZpT3/CV+rc+gmrN1FRUCvJBGCN0kugki1DZWi22Q6GrUt1YNjRBQOYU/liIQYciK0sy4cg2Cep2f8gOWCWzucfzll+66+GsuYSmVvyt5ftJ82I5XOXj4gcv1YSIcXQHsIdfC7dE0VqTAK0WUNUkmBdGhRtJ3kOfxjCV0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=210.0.225.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
-Received: from zhaoxin.com (unknown [127.0.0.1])
-	by mx1.zhaoxin.com (MTA) with ESMTP id 4hgbgj0ZDSzbKSt0;
-	Thu, 10 Sep 2026 19:54:25 +0800 (CST)
-Received: from zhaoxin.com (unknown [10.28.208.166])
-	by mx1.zhaoxin.com (MTA) with ESMTP id 4hgbgg5t1CzbKSsl;
-	Thu, 10 Sep 2026 19:54:23 +0800 (CST)
-Received: from ewan-server.tailb932da.ts.net (ewan-server.tailb932da.ts.net [10.28.24.2])
-	by zhaoxin.com (8.30) with ESMTPfbf124a4b3ff5aeb3c4c11f53ca350e2
-	Thu, 10 Sep 2026 19:54:22 +0800
-X-Eyou-Smtpauth: ewanhai-oc@zhaoxin.com
-X-Eyou-EnvelopeSender: ewanhai-oc@zhaoxin.com
-X-Eyou-From: Ewan Hai <ewanhai-oc@zhaoxin.com>
-From: "=?UTF-8?B?RXdhbiBIYWktb2M=?=" <ewanhai-oc@zhaoxin.com>
-To: Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Frank Zhu <frankzhu@zhaoxin.com>,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ewanhai@zhaoxin.com,
-	cobechen@zhaoxin.com
-Subject: [PATCH v2 7/9] KVM: selftests: feature_msrs_test: Extend MSR_IA32_UCODE_REV quirk to Zhaoxin
-Date: Thu, 10 Sep 2026 19:54:12 +0800
-Message-Id: <20260910115414.3015260-8-ewanhai-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260910115414.3015260-1-ewanhai-oc@zhaoxin.com>
-References: <20260910115414.3015260-1-ewanhai-oc@zhaoxin.com>
+	s=arc-20240116; t=1789041310; c=relaxed/simple;
+	bh=08vR67eDLLam5Ol6PmipNh2+kA+2F9Qr6vOEB9hurTo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P3C+bSZNbSgVyvExyGLSV8QiuV2Gchp1z212I5xyaGvajtyiYnByEUp2eE5Tg/scx8CtvvAqAfYSF73IprjHPUrT8kvqruzBbCj8vvckrt+Pg15VeZ22jIJkEJEH0FR9fBS9ml+PqtajjNKgmu08vVFuJDWLBPOnDgxItHT85+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FYsoNed8; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FYsoNed8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64FB11F00893;
+	Thu, 10 Sep 2026 11:55:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789041308;
+	bh=HndTqnttNHPeJm/zRQ/NFvgMrbPvSUK2ZR4N90t4mPU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=FYsoNed8dt8TFC++FzMGu0IQeDK2UoI3RLPtEpoT0pnBrmFQ1lOa3rVFou475gEXs
+	 wkFbUQIkNQaEcJ4+QS3+FnqJvWKEJvRtuzkJUsXSY2kZpsIK8lTJPV9eikYrB4eU93
+	 /bv0s5gJ2ijqFZiP73TUy2y6jmcGaVKL18zOTa5XILUKhdFUv2XgvTmslSxveItrBK
+	 KMaS+cgEmgwRfu3KPSyCkmlhQ0xnc/LNefctnBfIhP3DdD5/E9dc+rkiVbROsBg6ah
+	 FBNPRGq+N1xZ5ooO4fEvSi2/N0497/4dM+qJLv1rJFSLIMJzE33zke+VznPP0rnZgT
+	 PKVhV8f+YzOrA==
+Message-ID: <d6f2e6b2-9dc9-4f02-be37-14329c1a6798@kernel.org>
+Date: Thu, 10 Sep 2026 13:55:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 3/3] kselftest: mm: introduce alloc_isolated_mem()
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260907-fix_split-v5-0-822b810458bc@arm.com>
+ <20260907-fix_split-v5-3-822b810458bc@arm.com>
+ <5c05b620-7a2f-453d-9725-fed4f536a019@kernel.org>
+ <aqKOVGECsCNtSMIV@e129823.arm.com>
+ <d0b3ea99-e20b-4883-8fa3-67fdbf5b1ee4@kernel.org>
+ <aqKS7CP67X4h6NiM@e129823.arm.com>
+ <31418d0e-9745-4e8d-bc02-dbbd5cb9e193@kernel.org>
+ <aqKU0-Gm4yh78F3V@e129823.arm.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <aqKU0-Gm4yh78F3V@e129823.arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Eyou-Sender: <ewanhai-oc@zhaoxin.com>
 
-From: Frank Zhu <frankzhu@zhaoxin.com>
+On 9/10/26 13:30, Yeoreum Yun wrote:
+>> On 9/10/26 13:22, Yeoreum Yun wrote:
+>>>
+>>> As I mentioned in my previous reply, what I’m trying to prevent here is
+>>> a failure when checking, immediately after memory allocation,
+>>> that a specific vm_flag is not set.
+>>>
+>>> Yes, I agree that this could have been a problem even before
+>>> the internal changes to memalign(). An unwanted VMA merge could already
+>>> occur at the time of memory allocation.
+>>>
+>>> So what I’m trying to avoid is a test failure where, due to such an
+>>> unexpected VMA merge during allocation, the subsequent check that
+>>> a specific vm_flag is not present fails.
+>> Which is only a guard-region marker problem?
+> 
+> Yes. so if we remove ASSERT_FALSE(check_vmflag_guard(ptr)), TBH
+> we don't need this patch unless other usage comes up to prevent unwanted
+> VMA merge.
+> 
+> Would it be better to drop ASSERT_FALSE(check_vmflag_guard(ptr)) in
+> guard test?
 
-Zhaoxin CPUs use KVM's VMX backend and therefore observe the same
-KVM-defined initial value as Intel vCPUs. Update feature_msrs_test to
-expect 0x100000000ULL for Zhaoxin vCPUs.
+I guess there is value in asserting that not all VMAs by accident start
+with an over-indication of maybe having guard pages, which is why Lorenzo
+added that check :)
 
-Signed-off-by: Frank Zhu <frankzhu@zhaoxin.com>
----
- tools/testing/selftests/kvm/x86/feature_msrs_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+But I think even alloc_isolated_mem() is wrong in that regard: if the
+original VMA gets merged, we could inherit the guard-marker, no?
 
-diff --git a/tools/testing/selftests/kvm/x86/feature_msrs_test.c b/tools/testing/selftests/kvm/x86/feature_msrs_test.c
-index 9602e29bf..bb339709d 100644
---- a/tools/testing/selftests/kvm/x86/feature_msrs_test.c
-+++ b/tools/testing/selftests/kvm/x86/feature_msrs_test.c
-@@ -72,7 +72,7 @@ static void test_feature_msr(u32 msr)
- 	 * but initializes the vCPU's revision ID to an arbitrary value.
- 	 */
- 	if (msr == MSR_IA32_UCODE_REV)
--		reset_value = host_cpu_is_intel ? 0x100000000ULL : 0x01000065;
-+		reset_value = host_cpu_is_intel_compatible ? 0x100000000ULL : 0x01000065;
- 
- 	/*
- 	 * For quirked MSRs, KVM's ABI is to initialize the vCPU's value to the
+Maybe the following would be good enough?
+
+diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
+index 5c8ec3ca75d7d..791bf6a68b9e6 100644
+--- a/tools/testing/selftests/mm/guard-regions.c
++++ b/tools/testing/selftests/mm/guard-regions.c
+@@ -2257,10 +2257,20 @@ TEST_F(guard_regions, smaps)
+        char *ptr, *ptr2;
+        int i;
+
+-       /* Map a region. */
+-       ptr = mmap_(self, variant, NULL, 10 * page_size, PROT_READ | PROT_WRITE, 0, 0);
++       /* Reserve a 10 page region with 1 page space to both sides. */
++       ptr = mmap_(self, variant, NULL, 12 * page_size, PROT_NONE, 0, 0);
+        ASSERT_NE(ptr, MAP_FAILED);
+
++       /* Map a new region that is guaranteed to not get merged in any way. */
++       ptr = mmap_(self, variant | MAP_FIXED, ptr + pagesize, 10 * page_size,
++                   PROT_READ | PROT_WRITE, 0, 0);
++       ASSERT_EQ(ptr, ptr + pagesize);
++
++       /* Clean up the excess pages left and right. */
++       munmap(ptr, pagesize);
++       munmap(ptr + 11, pagesize);
++       ptr + = pagesize;
++
+        /* We shouldn't yet see a guard flag. */
+        ASSERT_FALSE(check_vmflag_guard(ptr));
+
 -- 
-2.34.1
+Cheers,
 
-
+David
