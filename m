@@ -1,137 +1,229 @@
-Received: from flow-a4-smtp.messagingengine.com (flow-a4-smtp.messagingengine.com [103.168.172.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E217F3FC5A5;
-	Thu, 10 Sep 2026 10:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 027FA4BFE9D;
+	Thu, 10 Sep 2026 10:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789037590; cv=none; b=RvFKro9zsLkWoRqahBYFUDnTni4q5A3hM0ejCTOFNMTEh6ivtyfL0dxgChXS38PZWyRTUexwzZb0cEo7f7SPW7CiUFTP8MK7L9fVoV4Zr3iHTqm6s0+pXk3mF4AGfe5lf4MSUWZnGlHgz4c/t+sNcNaly7y1PX6PUG/3u0Z6SEk=
+	t=1789037669; cv=none; b=Z4ePC3Ls5bOI67A7D0ZBF3f4yqZVao/h4axcYsnuY0XA+EXSCXMmOG3h5zPVhPb9jndBxGhBKecRy2tUAPF50Kti50TgkVQ/voLshEG5UIR3ttr9Hz2L12KdGeYLO++QuY4jyapKjMc9v8XVxxpAtYtftejDaoG57+yrhKdiyGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789037590; c=relaxed/simple;
-	bh=RanAhuVgfYGKMVwe6+jPNBKJGsY9fz/kNrV2Z7HXthI=;
+	s=arc-20240116; t=1789037669; c=relaxed/simple;
+	bh=LZa/mTe3VR25KHQaR9yMTJp7T+IkVsTbaUvpTI1sUo8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZSRXrPT53+zSBi2BegDQjm8jZvzwCP1iDKYXvGn/PSCLfl4sTN1A+af8D8WUpCqmVzXhru2DVt+0sEORudJ5GQvFvohI9srtR7UAkyygggfkVfPvrPb4+wElQVUkB3FLwl96StCWHbbGn/e+RUB0pRbZcmK/LFk1jPC0rhMQYxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=ULGwQTGo; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EurtyFPE; arc=none smtp.client-ip=103.168.172.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	 Content-Type:Content-Disposition:In-Reply-To; b=BDLMJh5r+45DcomNJxHJNI20PeCcNj2Y9//gNCo8tvAc+qbKsIfmezokqmxuN7mn6o14C2vPkGMk9DdJ+pjtwGDv1MzckVho1z4ToVmXv8WbIFwCnxlmHNC0XLBmcihtRWczSFr5ODVLYlhAmexBqN7U6RDSKm7CuLfmCaDHAlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=VN6MoQBj; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="ULGwQTGo";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EurtyFPE"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailflow.phl.internal (Postfix) with ESMTP id 9A3D6138008B;
-	Thu, 10 Sep 2026 06:53:07 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Thu, 10 Sep 2026 06:53:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1789037587; x=
-	1789044787; bh=k+8rtwSHSrI9CyOt3ir8SRov9uZb8NBx1Vr6rpUk4gs=; b=U
-	LGwQTGozNl/IPGGjCXuDMOsntcCez3zg/Ha2dGz9tYT3G61pxwfRKRs0EByPsE3i
-	gmDe4gHet0V520BJCZa4WZApFYAmztGqny8uYeuH6MSgfe71z/damSS4VimZiisx
-	uQSSH7IbN5TwStxojrOoiha0msT0YF4RjZIFsxoonJEnCjSAEyDb4aYaI0mKniQB
-	16NEF0NKnM8/CnlF3TIGi5f06y7rNjk4iR9PENFxKXmIoDuoR2XdN/wkii4qp7A9
-	9Ev1sZ5MhM/tCDitZ0+KS21/T7KXKCg8+l+QctESd2ks4PVqbOI9BJiBlWk2hqBK
-	83qJ3kQf7MKsUueNTyVfA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1789037587; x=1789044787; bh=k+8rtwSHSrI9CyOt3ir8SRov9uZb8NBx1Vr
-	6rpUk4gs=; b=EurtyFPEo2JWSwfUd3esJ0OVwAFP3GtEbaey2gzLSLaSkJcZYpF
-	im3hyvwRNti5b56UUztde85TylbNRDdBMb/14oIRnvQEmBTx/KfUovjS6k5HaIIA
-	cAXSxeyZjzUqrKxy4bxfqFS81PpXgWqaU4SVn0Ea6NSIHenhzf7v2uClGPgd0Uyl
-	YINnbhB432+Rr445boRrAJ117LZMN+nNnxaDMrdMimuJZCVwLUMpfMGiflTuOxx7
-	R58WlvuFyl6Tw6diqkp1dybjQvAGKH/2MRk6uvelvEGMzLHjybMbdZigNl1ycEAJ
-	86McL9Ltfi2sRcwQRGvLl99xm8Y2Y1p34JQ==
-X-ME-Sender: <xms:E4yianSmG3oq4oWvK7XVEmK26ttXq1bXEEykZOHtIyRiCczvXPIJhw>
-    <xme:E4yiapcjisVyAccKNATpuSjubLw9r1WC5PlgqSPXSvLw5M8fkj-lZELgGQDmrWGEZ
-    G25KUplbXORG1TpgwvN8OrwLbxgLV-0jpc3AdAz48q9xo1Hi7KO7FQDNQ>
-X-ME-Received: <xmr:E4yian449icMacN0l0Ek_WlvkH6qEiVI4LT9Gnv0ocDewhm3SIkeEwcZWYk>
-X-ME-Proxy-Cause: dmFkZTGm5Ju+9RBw0LciogPg7Z02SsGVTwF8bQ54/MSBlaYiHGVbwMnPgwR4nFm7A5aN1G
-    ab90Zq85LRgdUM/dlmRESEm7z20IlJXdxeC6kX5GhjGqwvlB68/Nv0mgLB37gddPMzpnPQ
-    vp9rSZz7wN3LWzRxF0mP7S6VPxGBqvdpzzlswY0dXVqVuVn2Z+rEw/6GeA6qrvATGKiYIv
-    Qy0DlhDB5aF38ZdmPHO0pPN3BhKBOXVShFmZniW8ukI3HgOl/hVw0fF02ROKLxbp64XEwY
-    9Kca43nVc9tLTqn5zCuPcIXBRozBqbzB/gDlgSu6QP3tPP6rKHXjE+bjvXYwMnOtQmWRjj
-    pa6OjPgx7sQ5JfXBq2VE3A4gkJiDRh3y77Ml8S03QUzozR5Xqkypwa9U83xSQK3612BPtL
-    iAghnJJWMO8Lz+ZPfvgXWY68Dx5JKFsApypDKirsgwOV1X/pVYy4IH2SZNUtT0PtacMv7n
-    jPihBak+XGcUxCduNS6qmUnf/qrf55FDJCCKseOBjlNEoEGxdRsf6FZvfOjoGmF7H+izJB
-    06oKvbqm5CPP6basFX6LLqpZ4kCLBCqhSCuYbO3o5rNcBxMawrXGBxKfv93FRJk3ndLNYd
-    HHCf8INfIhEhclCzHJVDroPuiahek7lEArIWASnZIZVfzSQBQWww/6EUQFjg
-X-ME-Proxy: <xmx:E4yianATkPXaSjhj-I8Nr-ewS3NuNvy86-98fHFDzar2UrtxpKe_HA>
-    <xmx:E4yiajdwYR0tCmPfEjFxfRUOJkdfAeDr_z0DkKzrTZ1-gIS0W2j5YA>
-    <xmx:E4yiasQ8RzkNXaR3ONt44CbC5AfsN8zG6YVBl4iMYBJc78bZwkRq1Q>
-    <xmx:E4yiaqkbuVPu5g8_DAWCP1vKZydRQsVRYdbMBsPY9ZBsr4ePvyO63A>
-    <xmx:E4yiagwItsHBApP43P-SOVJ5ikHPgxGZ7aiXTyMBNVEWoPwhK669wPhy>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 10 Sep 2026 06:53:06 -0400 (EDT)
-Date: Thu, 10 Sep 2026 11:53:04 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	rppt@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, usama.anjum@arm.com, usama.arif@linux.dev, nico.pache@linux.dev, 
-	ziy@nvidia.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
-	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, ryan.roberts@arm.com, 
-	shuah@kernel.org, surenb@google.com, vbabka@kernel.org, agordeev@linux.ibm.com, 
-	jgg@ziepe.ca, leon@kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v5 11/19] selftests/mm: add order-parameterized
- khugepaged collapse cases
-Message-ID: <aqKKXuNWf7lUuXps@thinkstation>
-References: <20260908125105.1510704-1-kirill@shutemov.name>
- <20260908125105.1510704-12-kirill@shutemov.name>
- <162af233-ae81-40e6-8c71-d13a41b5d892@linux.alibaba.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="VN6MoQBj"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE2211477;
+	Thu, 10 Sep 2026 03:54:15 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 19E8E3F7B4;
+	Thu, 10 Sep 2026 03:54:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1789037659; bh=LZa/mTe3VR25KHQaR9yMTJp7T+IkVsTbaUvpTI1sUo8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VN6MoQBjtpr1/cmo6G/4YZh5bHXuew9SIhpd11l+692psl/N9na3NbHc21NOsAUsU
+	 3+TQmValjDyMFstToPCzXuQUZ63eChLMNCBjyW+gx19SIlNi9MqfNzNAp+KP3fHIbQ
+	 6G3FQnvZE1lwfmo6X/7iJEX6alz2jYz4JAF7kQnc=
+Date: Thu, 10 Sep 2026 11:54:13 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Nico Pache <nico.pache@linux.dev>,
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+	Usama Arif <usama.arif@linux.dev>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] kselftest: mm: replace usage of /proc/self/smaps
+ for check_huge_xxx() helper
+Message-ID: <aqKMVUDvN8bBpwVS@e129823.arm.com>
+References: <20260907-fix_split-v5-0-822b810458bc@arm.com>
+ <20260907-fix_split-v5-2-822b810458bc@arm.com>
+ <956df69d-8c0a-420f-889e-7df2842605dc@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <162af233-ae81-40e6-8c71-d13a41b5d892@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <956df69d-8c0a-420f-889e-7df2842605dc@kernel.org>
 
-On Thu, Sep 10, 2026 at 12:59:14PM +0800, Baolin Wang wrote:
-> > +static bool all_windows_at_order(void *p, size_t len)
+> On 9/7/26 10:19, Yeoreum Yun wrote:
+> > Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
+> > glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
+> > made by memalign().
+> > 
+> > The underlying VMA may start at a different address from the aligned
+> > address returned by memalign(). Furthermore, a subsequent
+> > madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
+> > already set.
+> > 
+> > This causes split_huge_page_test to fail because the check_huge_xxx()
+> > helpers incorrectly require the address returned by memalign() to
+> > match the VMA start address reported in /proc/self/smaps.
+> > 
+> > Instead of relying on /proc/self/smaps, use /proc/self/pagemap and
+> > /proc/kpageflags to detect huge-page mappings and large folios:
+> > 
+> >   1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of
+> >      using check_large_folios(), since only the mapping type matters.
+> >      This identifies PMD-mapped huge pages.
+> >   2. Otherwise, use check_large_folios() to detect large folios. This
+> >      covers mTHP cases.
+> >   3. Check the folio flags according to the type of huge page.
+> > 
+> > Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+> > Suggested-by: Zi Yan <ziy@nvidia.com>
+> > Reviewed-by: Zi Yan <ziy@nvidia.com>
+> > Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> > Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> > Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> > ---
+> >  tools/testing/selftests/mm/vm_util.c | 145 ++++++++++++++++++++++-------------
+> >  tools/testing/selftests/mm/vm_util.h |   1 +
+> >  2 files changed, 92 insertions(+), 54 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> > index 4821a3563036..dc62ce84e143 100644
+> 
+> [...]
+> 
+> >  
+> > -	if (hpage_size == pmd_pagesize)
+> > -		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
+> > +static bool check_huge_type(uint64_t categories, uint64_t kpageflags,
+> > +			    enum check_huge_type type)
 > > +{
-> > +	return is_range_backed_by_order(p, len, collapse_order,
-> > +					pagemap_fd, kpageflags_fd);
+> > +	const bool file = categories & PAGE_IS_FILE;
+> > +	const bool swapbacked = kpageflags & KPF_SWAPBACKED;
+> > +
+> > +	switch (type) {
+> > +	case CHECK_HUGE_ANON:
+> > +		return !file;
+> > +	case CHECK_HUGE_FILE:
+> > +		return file && !swapbacked;
+> > +	case CHECK_HUGE_SHMEM:
+> > +		return file & swapbacked;
+> > +	}
 > 
-> Like I mentioned in patch 8, you can implement these helpers using
-> check_large_folios() in vm_util.c. Then you do not need to add new
-> 'pagemap_fd' and 'kpageflags_fd' variables.
-
-As I mentioned in reply to patch 8, I don't like that
-check_large_folios() keeps re-opening file descriptors per call.
-
-> > @@ -1375,6 +1569,20 @@ int main(int argc, char **argv)
-> >   	parse_test_type(argc, argv);
-> > +	if (mthp_khugepaged_context &&
-> > +	    !(thp_supported_orders() & (1UL << collapse_order)))
-> > +		ksft_exit_skip("Order %d is not a supported anon THP order\n",
-> > +			       collapse_order);
+> Why do we even need CHECK_HUGE_SHMEM?
 > 
-> This check can be moved into parse_test_type(), where the 'mthp_khugepaged'
-> parameter is parsed.
-
-Patch 14 makes -c optional and turns this into the code that builds the
-list of orders to run, next to the "-c has to be above -s" check.  That
-list wants thp_supported_orders() and belongs after parsing rather than in
-it, so I left parse_test_type() to the range check.
-
-> > @@ -1425,6 +1633,10 @@ int main(int argc, char **argv)
-> >   	TEST(collapse_empty, madvise_context, anon_ops);
-> >   	TEST(collapse_single_mthp, mthp_khugepaged_context, anon_ops);
-> > +	TEST(collapse_order_single_window, mthp_khugepaged_context, anon_ops);
-> > +	TEST(collapse_order_partial_window, mthp_khugepaged_context, anon_ops);
-> > +	TEST(collapse_order_max_ptes_none, mthp_khugepaged_context, anon_ops);
-> > +	TEST(collapse_order_mixed_sources, mthp_khugepaged_context, anon_ops);
+> That's really just a legacy thing for using smaps to identify huge pages.
 > 
-> These test cases look good to me. Thanks.
+> It's sufficient to identify CHECK_HUGE_FILE if you know that you have shmem mapping.
+> 
+> You will not arbitrarily have non-shmem folios in a shmem mapping :)
 
-Thanks for going through them!
+Agree. but there seems the case where discern whethr the mapping is
+with regular file or shmem like tmpfs -- khugepaged test where using
+__shmem_ops. So I think it would be better to keep this as-is.
+
+> 
+> >  
+> > -	return check_large_folios(addr, len, nr_hpages, hpage_size);
+> > +	return false;
+> >  }
+> >  
+> > -bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> > +static bool __check_huge(void *addr, size_t len, int nr_hpages,
+> > +			 uint64_t hpage_size, enum check_huge_type type)
+> >  {
+> > -	uint64_t pmd_pagesize = read_pmd_pagesize();
+> > +	bool ret = false;
+> > +	int pagemap_fd, kpageflags_fd;
+> > +	int nr_pmd_mappings = 0;
+> > +	uint64_t pmd_pagesize, scan_mapping_size;
+> > +	uint64_t categories, kpf;
+> > +	unsigned long pfn;
+> > +	bool check_pmd_mapping, allow_nonpresent;
+> > +	char *start = addr;
+> > +	char *end = start + len;
+> >  
+> > +	pmd_pagesize = read_pmd_pagesize();
+> >  	if (!pmd_pagesize)
+> >  		ksft_exit_fail_msg("reading PMD pagesize failed\n");
+> >  
+> > -	if (hpage_size == pmd_pagesize)
+> > -		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
+> > +	check_pmd_mapping = (hpage_size == pmd_pagesize);
+> > +	scan_mapping_size = (nr_hpages > 0) ? hpage_size : psize();
+> > +	/* Some mTHP tests check a partially populated PMD-sized range. */
+> > +	allow_nonpresent = (uint64_t)nr_hpages * hpage_size < len;
+> >  
+> > -	return check_large_folios(addr, len, nr_hpages, hpage_size);
+> > +	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
+> > +	if (pagemap_fd < 0)
+> > +		ksft_exit_fail_msg("open pagemap fail\n");
+> > +
+> > +	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
+> > +	if (kpageflags_fd < 0) {
+> > +		close(pagemap_fd);
+> 
+> No need to cleanup when exiting.
+
+Yes, but some test code does clean it up, so I was just confused
+about the convention :\
+
+> 
+> > +		ksft_exit_fail_msg("open kpageflags fail\n");
+> > +	}
+> > +
+> > +	if (!check_pmd_mapping &&
+> > +	    !check_large_folios(pagemap_fd, kpageflags_fd,
+> > +				addr, len, nr_hpages, hpage_size))
+> > +		goto out;
+> > +
+> > +	for (; start < end; start += scan_mapping_size) {
+> > +		categories = pagemap_scan_get_categories(pagemap_fd, start);
+> > +		pfn = pagemap_get_pfn(pagemap_fd, start);
+> > +		if (pfn == -1UL) {
+> > +			if (!allow_nonpresent)
+> > +				goto out;
+> > +			else
+> > +				continue;
+> > +		}
+> > +		if (pageflags_get(pfn, kpageflags_fd, &kpf))
+> > +			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
+> > +		if (check_pmd_mapping && (categories & PAGE_IS_HUGE))
+> > +			nr_pmd_mappings++;
+> > +		if (kpf & KPF_COMPOUND_TAIL)
+> > +			continue;
+> > +		if (!check_huge_type(categories, kpf, type))
+> > +			goto out;
+> > +	}
+> > +
+> > +	if (check_pmd_mapping && (nr_pmd_mappings != nr_hpages))
+> > +		goto out;
+> > +	ret = true;
+> > +
+> > +out:
+> > +	close(pagemap_fd);
+> > +	close(kpageflags_fd);
+> > +	return ret;
+> >  }
+> 
+> 
+> 
+> -- 
+> Cheers,
+> 
+> David
+> 
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Sincerely,
+Yeoreum Yun
