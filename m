@@ -1,171 +1,96 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E621E47425C;
-	Thu, 10 Sep 2026 11:55:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F12B4BFE90;
+	Thu, 10 Sep 2026 12:07:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789041310; cv=none; b=Dpz0ljk+rSgph+rBmY2H1Zl2LiTIVRhT9vJu5V4Me1oS6QfRKQWLikNUTPQ+nmLCk/tIwlUXtPECzPL2H0fJwaWd053moXVM8JOquxWRPwMZftz5IyiUre4TIk+IMSskYMHPvv0ZnK3Kq+Mwp5VxJWhTeh04MGK0FH2lx7US5Sc=
+	t=1789042037; cv=none; b=d315oWYZXlMChqzcZV6l4dS0Kdasj4o2XQQMs2zLVGH9SGxmd+L92I5zzATuM7/O697qsO8I5PiiN9A4sa2FTJA0DsoQnJbPT2MKSOBoJxxTlMIfp2v/3Vb5P1aiWaJgyZh6C79CUsSz3Z8Q3WkPwr2hY/LOV2UEvFaZR5Nu+10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789041310; c=relaxed/simple;
-	bh=08vR67eDLLam5Ol6PmipNh2+kA+2F9Qr6vOEB9hurTo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P3C+bSZNbSgVyvExyGLSV8QiuV2Gchp1z212I5xyaGvajtyiYnByEUp2eE5Tg/scx8CtvvAqAfYSF73IprjHPUrT8kvqruzBbCj8vvckrt+Pg15VeZ22jIJkEJEH0FR9fBS9ml+PqtajjNKgmu08vVFuJDWLBPOnDgxItHT85+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FYsoNed8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789042037; c=relaxed/simple;
+	bh=g3ZYCEkBBxWt7DIOOlABHsrEKeP+9WdYrIMPeDWEEYg=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=mB6jP8RaE1LbgBtKIKlyJ25GdX6vZwkevhWRV/50at/nuAiajt0e5Suxt6aL44Sz4pEtI4xqRSq6Fd+r3u0oaJO4s3ehuQKfqGCR2G75RdLh5SC9+qIJVJZJWY4O9WyaOw4YbpC78sRnf/GQ6qAFBV4mSdBEXYhuPbcuUugLvjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLGH1bWu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FYsoNed8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64FB11F00893;
-	Thu, 10 Sep 2026 11:55:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLGH1bWu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 479AC1F000FF;
+	Thu, 10 Sep 2026 12:07:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789041308;
-	bh=HndTqnttNHPeJm/zRQ/NFvgMrbPvSUK2ZR4N90t4mPU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=FYsoNed8dt8TFC++FzMGu0IQeDK2UoI3RLPtEpoT0pnBrmFQ1lOa3rVFou475gEXs
-	 wkFbUQIkNQaEcJ4+QS3+FnqJvWKEJvRtuzkJUsXSY2kZpsIK8lTJPV9eikYrB4eU93
-	 /bv0s5gJ2ijqFZiP73TUy2y6jmcGaVKL18zOTa5XILUKhdFUv2XgvTmslSxveItrBK
-	 KMaS+cgEmgwRfu3KPSyCkmlhQ0xnc/LNefctnBfIhP3DdD5/E9dc+rkiVbROsBg6ah
-	 FBNPRGq+N1xZ5ooO4fEvSi2/N0497/4dM+qJLv1rJFSLIMJzE33zke+VznPP0rnZgT
-	 PKVhV8f+YzOrA==
-Message-ID: <d6f2e6b2-9dc9-4f02-be37-14329c1a6798@kernel.org>
-Date: Thu, 10 Sep 2026 13:55:00 +0200
+	s=k20260515; t=1789042035;
+	bh=MXsEo9eDWBwZJSzFE3TWMA2FxYeWZOq70BkLywQ2TBE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=TLGH1bWum3pyP9Q7PJjatv30y2xZA9f5PHUoBquEGbY+D2NTMsYuk5NfdTlJo9Inz
+	 7R07X61lCvBMzc/nvoGuwM6jj/b1s/0szrtFUeEVS48CUpYvyD4Ffp5E4eYi7j9SEQ
+	 aMeXoxE2l04f2cU61JVuzet9l/t6rHI1pqg3vC4JJY5jMeMqtzMcB+qae2G5DtVI3t
+	 KDxX91BpJuTwdXSP+NwkS+Vyx9A04JejHIifpKbINzfoZTtj7rBttHWue5llG6DfPN
+	 WWyr5czrRcqbO3l5fCeSNHoHXe5GbIpM/oVCgcc7JReqYZ/VzDLAFixM2bB9IfQfOC
+	 b15W8BSpXj/7A==
+Content-Type: multipart/mixed; boundary="===============2750645429148041420=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/3] kselftest: mm: introduce alloc_isolated_mem()
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260907-fix_split-v5-0-822b810458bc@arm.com>
- <20260907-fix_split-v5-3-822b810458bc@arm.com>
- <5c05b620-7a2f-453d-9725-fed4f536a019@kernel.org>
- <aqKOVGECsCNtSMIV@e129823.arm.com>
- <d0b3ea99-e20b-4883-8fa3-67fdbf5b1ee4@kernel.org>
- <aqKS7CP67X4h6NiM@e129823.arm.com>
- <31418d0e-9745-4e8d-bc02-dbbd5cb9e193@kernel.org>
- <aqKU0-Gm4yh78F3V@e129823.arm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <aqKU0-Gm4yh78F3V@e129823.arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Message-Id: <0a661bac8b617cc979ba16eeaec5f7c64a0b74bb01be40347dca187cbd7c24e4@mail.kernel.org>
+In-Reply-To: <20260910112634.152195-1-jiayuan.chen@linux.dev>
+References: <20260910112634.152195-1-jiayuan.chen@linux.dev>
+Subject: Re: [PATCH bpf v3 1/3] bpf: Fix out-of-bounds read of sk_protocol in bpf_sock_destroy()
+From: bot+bpf-ci@kernel.org
+To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
+Cc: jiayuan.chen@linux.dev,xmei5@asu.edu,kuniyu@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,ncardwell@google.com,shuah@kernel.org,aditi.ghag@isovalent.com,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 10 Sep 2026 12:07:14 +0000 (UTC)
 
-On 9/10/26 13:30, Yeoreum Yun wrote:
->> On 9/10/26 13:22, Yeoreum Yun wrote:
->>>
->>> As I mentioned in my previous reply, what I’m trying to prevent here is
->>> a failure when checking, immediately after memory allocation,
->>> that a specific vm_flag is not set.
->>>
->>> Yes, I agree that this could have been a problem even before
->>> the internal changes to memalign(). An unwanted VMA merge could already
->>> occur at the time of memory allocation.
->>>
->>> So what I’m trying to avoid is a test failure where, due to such an
->>> unexpected VMA merge during allocation, the subsequent check that
->>> a specific vm_flag is not present fails.
->> Which is only a guard-region marker problem?
-> 
-> Yes. so if we remove ASSERT_FALSE(check_vmflag_guard(ptr)), TBH
-> we don't need this patch unless other usage comes up to prevent unwanted
-> VMA merge.
-> 
-> Would it be better to drop ASSERT_FALSE(check_vmflag_guard(ptr)) in
-> guard test?
+--===============2750645429148041420==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I guess there is value in asserting that not all VMAs by accident start
-with an over-indication of maybe having guard pages, which is why Lorenzo
-added that check :)
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 2a84f9d01131..cae43b999162 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -12913,8 +12913,9 @@ __bpf_kfunc_start_defs();
+>   * @sock: Pointer to socket to be destroyed
+>   *
+>   * Return:
+> - * On error, may return EPROTONOSUPPORT, EINVAL.
+> - * EPROTONOSUPPORT if protocol specific destroy handler is not supported.
+> + * On error, may return EOPNOTSUPP, or whatever the protocol specific
+> + * destroy handler returns.
+> + * EOPNOTSUPP if protocol specific destroy handler is not supported.
+>   * 0 otherwise
+>   */
+>  __bpf_kfunc int bpf_sock_destroy(struct sock_common *sock)
+> @@ -12926,8 +12927,12 @@ __bpf_kfunc int bpf_sock_destroy(struct sock_common *sock)
+>  	 * Supporting protocols will need to acquire sock lock in the BPF context
+>  	 * prior to invoking this kfunc.
+>  	 */
+> -	if (!sk->sk_prot->diag_destroy || (sk->sk_protocol != IPPROTO_TCP &&
+> -					   sk->sk_protocol != IPPROTO_UDP))
+> +	if (!sk->sk_prot->diag_destroy)
+> +		return -EOPNOTSUPP;
+> +
+> +	if (sk_fullsock(sk) &&
+> +	    sk->sk_protocol != IPPROTO_TCP &&
+> +	    sk->sk_protocol != IPPROTO_UDP)
+>  		return -EOPNOTSUPP;
+>
+>  	return sk->sk_prot->diag_destroy(sk, ECONNABORTED);
 
-But I think even alloc_isolated_mem() is wrong in that regard: if the
-original VMA gets merged, we could inherit the guard-marker, no?
+This isn't a bug, but would it help to keep the TCP/UDP rationale comment
+next to the protocol check, and add a short note that sk_protocol is only
+valid on full socks? The block comment explaining the locking semantics
+and TCP/UDP restriction now sits two statements away from the protocol
+test it documents, and the newly added sk_fullsock() guard doesn't have
+any nearby note explaining why it's there. The reason (sk_protocol is a
+struct sock member not present in sock_common) is only in the changelog.
 
-Maybe the following would be good enough?
 
-diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
-index 5c8ec3ca75d7d..791bf6a68b9e6 100644
---- a/tools/testing/selftests/mm/guard-regions.c
-+++ b/tools/testing/selftests/mm/guard-regions.c
-@@ -2257,10 +2257,20 @@ TEST_F(guard_regions, smaps)
-        char *ptr, *ptr2;
-        int i;
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
--       /* Map a region. */
--       ptr = mmap_(self, variant, NULL, 10 * page_size, PROT_READ | PROT_WRITE, 0, 0);
-+       /* Reserve a 10 page region with 1 page space to both sides. */
-+       ptr = mmap_(self, variant, NULL, 12 * page_size, PROT_NONE, 0, 0);
-        ASSERT_NE(ptr, MAP_FAILED);
-
-+       /* Map a new region that is guaranteed to not get merged in any way. */
-+       ptr = mmap_(self, variant | MAP_FIXED, ptr + pagesize, 10 * page_size,
-+                   PROT_READ | PROT_WRITE, 0, 0);
-+       ASSERT_EQ(ptr, ptr + pagesize);
-+
-+       /* Clean up the excess pages left and right. */
-+       munmap(ptr, pagesize);
-+       munmap(ptr + 11, pagesize);
-+       ptr + = pagesize;
-+
-        /* We shouldn't yet see a guard flag. */
-        ASSERT_FALSE(check_vmflag_guard(ptr));
-
--- 
-Cheers,
-
-David
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34471854292
+--===============2750645429148041420==--
