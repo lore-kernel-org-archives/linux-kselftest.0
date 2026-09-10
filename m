@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FBFE4825C1;
-	Thu, 10 Sep 2026 12:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E1C484254;
+	Thu, 10 Sep 2026 12:27:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789043234; cv=none; b=VIOkgXLeYP3EYW18A5R4mAy1zKAvQnRTMyMoCPKrNdMS8fgNZinfHVCvx4GQPWxS8VroL+a8rYNaSHkQ2wD+uI0ikQxJsPPSnHz99nLFpCDssmweA4n/n0bPyJXplssKd2V8wPPNeCmLxLCH8rjlywssS6jD8GKfkmNmW29KLCo=
+	t=1789043235; cv=none; b=Yw1Bv77QVBdJnhl7TN94nIvTNHQv3Y+Nc5jOnefG7GZaEYXhTmhJuSubEiOPcTdHkl0K6gZoiHwOtdzz94SrClmndaqlsyXG251kxrteYSxGcTdqTspb+Ujy0K9W8S4R6RxQr23GP1CVkh51gR4ISIpqdqeLpS1VbfAoBk/WfgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789043234; c=relaxed/simple;
-	bh=nVsUGoOM1a5mvvvQIBYPbretmRmtpUYThx3YTrQx5PM=;
+	s=arc-20240116; t=1789043235; c=relaxed/simple;
+	bh=XS3EAcYLwnUqmUzTOvAWeHgJjnAcdWUI6NWrTs/TbEA=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TPusUNDJe1K4MfJAQEylpEJG5oRvvVamSYLD/Xqnw1XvcEz+7bPm+O9UyHEl4+4IH9btawBCBy4sAcLpikgmyVkj/XxbBX/qP4tYGVVUPN6eXymzCJTqFGgsu8s7q2RdOW4FamYQGnvnveKHuF3AKJqlUkTKlPr/YTrw/fJLshY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GLodpiOV; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=oBODWX9/2tIzhsu9yYJjjV0S6VoTngyDOdYGUh4bsRwLRARGd2V8o2sclsKD8ccpK3OuoHXTWqBtYqLlZE1lwFBY/hLsM7BqTCTnny/+/ImzK0GWdHNFIpyKd9wmmKgMVi1l4e3Sw2ydWFSt7fVRx/+OJZeI1j728GTbvpbjuxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OhcJenGP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GLodpiOV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B0D21F000FF;
-	Thu, 10 Sep 2026 12:27:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OhcJenGP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C2651F00893;
+	Thu, 10 Sep 2026 12:27:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789043232;
-	bh=jlu4+CYpYNhoO3sD4DB7L4wk73GC/0bX4wxiBar4op8=;
+	s=k20260515; t=1789043234;
+	bh=P95AAuvzBO6JOelDPVoR2QHaxFSlmbYkQZsPoZIqGYg=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=GLodpiOVpCRE0H1C1/raXex8GmeAE6xuaDISYnW0SxxeGoToHKVPasplf8uBgBq4T
-	 y7wzEqtx5QGY/35yDgG6wV2tFWFOAG5NRvghq4hdAFaAvTjBBQwGZW8R0+97EXvjTz
-	 u5liyih+29KaYlPyKwoTmsTGyuPcXz7K/x3V3hFB83j1gj0KaTd9JwRX0FVMgsCIdH
-	 amVxSY6bpQUofLbn6cScozj/4+HVYEXG3B7mMQqN6KiVPHxmmbE8iWXzOOX9La06LH
-	 5siDtyUdytrAoR8B1LHm9+FOFeLlx6CP6ge1DLRCKvrE2XWH/etpAWsbR6AQH8WS6o
-	 vRIk4DHiw5JqA==
-Subject: Re: [PATCH net-next v4 1/2] selftests/net/openvswitch: add SCTP flow
- key test over IPv6
+	b=OhcJenGPLMmX5ZZSSrtNyL0Je/XWkutzzmdGVPNkygdjqPH+Jgy6VPktrNt8vVMIs
+	 QsCD9R2jF0f0a8IZqH5I/ebZq6K1W4M8x0xI4ZFZ/h5YpV1ZTrwai9wXgEKev19j3x
+	 HX5YAafSFqu0GCr+KrLtJD4Eq83/SWPybCYy0PYGqa7eiOuYTMCtUyL4atBWkc9p/D
+	 mhX8QM4vPbetsU9pLBs4I6IlWGBcoZnEbYpfIvPRHA9BB8nLk0HECvW4MuSPXQCxQK
+	 R+D3EztZ64nxGySswXz7uAXixJNykUIlweK1CyfSeEXi8Q7+8C0Z6KaJVOLSXYQSo2
+	 5j8K3GPr1ZQ9g==
+Subject: Re: [PATCH net-next v4 2/2] selftests/net/openvswitch: add SCTP NAT
+ test with port translation
 From: netdev-bot+sashiko@kernel.org
 To: houminxi@gmail.com
 Cc: netdev@vger.kernel.org, aconole@redhat.com, echaudro@redhat.com,
  i.maximets@ovn.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
  pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, dev@openvswitch.org,
  linux-kselftest@vger.kernel.org
-Date: Thu, 10 Sep 2026 12:27:11 +0000
-Message-ID: <178904323159.219967.4281963773797281538@kernel.org>
-In-Reply-To: <20260909122521.2687193-2-houminxi@gmail.com>
-References: <20260909122521.2687193-2-houminxi@gmail.com>
-X-sashiko-severity: Low
+Date: Thu, 10 Sep 2026 12:27:12 +0000
+Message-ID: <178904323283.219967.9770445964877842050@kernel.org>
+In-Reply-To: <20260909122521.2687193-3-houminxi@gmail.com>
+References: <20260909122521.2687193-3-houminxi@gmail.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -51,104 +51,92 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 0 · Low: 1
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-- [Low] test_sctp_connect_v6() gates itself on `[ -e /proc/sys/net/ipv6
-  ]` (line 717) and on socat's `WITH_SCTP` define (line 716) only, and…
+- [Medium] tools/testing/selftests/net/openvswitch/config gains
+  CONFIG_NF_CT_PROTO_SCTP=y for the new test_sctp_nat_connect_v4 test…
 
 --
 
-selftests/net/openvswitch: add SCTP flow key test over IPv6
+selftests/net/openvswitch: add SCTP NAT test with port translation
 
-Adds test_sctp_connect_v6 to the openvswitch selftest, mirroring the
-existing IPv4 SCTP test: icmpv6() flows forward neighbour discovery,
-ipv6(proto=132),sctp() flows gate an SCTP association over IPv6, a keyless
-ipv6(proto=132) install is expected to be refused with EINVAL, and a payload
-is pushed across the datapath.
+Adds test_sctp_nat_connect_v4, which runs an SCTP association through a
+ct(commit,nat(dst=ip:port)) DNAT and matches the translated tuple after
+recirculation, plus CONFIG_NF_CT_PROTO_SCTP=y in the config fragment.
+
+> diff --git a/tools/testing/selftests/net/openvswitch/config b/tools/testing/selftests/net/openvswitch/config
+> index a825e0b5c88e..fa90475dc388 100644
+> --- a/tools/testing/selftests/net/openvswitch/config
+> +++ b/tools/testing/selftests/net/openvswitch/config
+> @@ -7,6 +7,7 @@ CONFIG_NET_IPGRE=m
+>  CONFIG_NET_IPGRE_DEMUX=m
+>  CONFIG_NF_CONNTRACK=m
+>  CONFIG_NF_CONNTRACK_OVS=y
+> +CONFIG_NF_CT_PROTO_SCTP=y
+>  CONFIG_OPENVSWITCH=m
+>  CONFIG_PSAMPLE=m
+>  CONFIG_VETH=y
+
+[Severity: Medium]
+Should this fragment also request CONFIG_NF_NAT=m (and
+CONFIG_NETFILTER_ADVANCED=y, which the changelog says the SCTP conntrack
+symbol needs)?
+
+The new test's probe uses a nat() action, and net/openvswitch/Kconfig only
+has:
+
+	select NF_NAT_OVS if NF_NAT
+
+so it never turns NF_NAT on itself.  In net/netfilter/Kconfig, NF_NAT is:
+
+	config NF_NAT
+		tristate "Network Address Translation support"
+		depends on NF_CONNTRACK
+		default m if NETFILTER_ADVANCED=n
+
+With NETFILTER_ADVANCED=y and no iptables/nftables NAT option selected,
+NF_NAT ends up n, and in net/openvswitch/conntrack.c the nat attribute is
+compiled out:
+
+	#if IS_ENABLED(CONFIG_NF_NAT)
+			case OVS_CT_ATTR_NAT: {
 
 > diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> index a31f7fb6882d..1160f8ed7d8a 100755
+> index 1160f8ed7d8a..138a705fc359 100755
 > --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
 > +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
 
 [ ... ]
 
-> @@ -700,6 +701,113 @@ test_sctp_connect_v4() {
->  	return 0
->  }
->  
-> +# sctp_connect_v6 test
-> +# - sctp(dst=4443) matches client-to-server INIT
-> +# - sctp(src=4443) matches server-to-client INIT-ACK
-> +# - icmpv6 NS/NA flows forward neighbour discovery
-> +# - remove flows and verify connection fails, reinstall and recover
-> +test_sctp_connect_v6() {
-> +	local t="test_sctp_connect_v6"
-> +	local v6="eth_type(0x86dd),ipv6(proto=132)"
-> +	local payload="SCTP6_DATA_OK"
-> +	local rxfile="${ovs_base}/${t}/sctp-rx.txt"
-> +
-> +	modprobe -q sctp 2>/dev/null || return "$ksft_skip"
-> +	socat -V 2>&1 | grep -q "define WITH_SCTP" || return "$ksft_skip"
-> +	[ -e /proc/sys/net/ipv6 ] || return "$ksft_skip"
-> +
-> +	sbx_add "$t" || return $?
-> +	ovs_add_dp "$t" sctp6 || return 1
-> +
-> +	info "create namespaces"
-> +	for ns in client server; do
-> +		ovs_add_netns_and_veths "$t" "sctp6" "$ns" \
-> +		    "${ns:0:1}0" "${ns:0:1}1" || return 1
-> +	done
-> +
-> +	ip netns exec client ip addr add fd00::1/64 dev c1 nodad
-> +	ip netns exec client ip link set c1 up
-> +	ip netns exec server ip addr add fd00::2/64 dev s1 nodad
-> +	ip netns exec server ip link set s1 up
-
-[Severity: Low]
-Two questions about the skip/setup handling in test_sctp_connect_v6().
-
-First, the capability probe only greps socat -V for "define WITH_SCTP", while
-this test uses the SCTP6-LISTEN and SCTP6-CONNECT addresses, which also need
-socat's IPv6 support (WITH_IP6). On a socat built with SCTP but without IPv6,
-the probe passes, the listener never comes up, and:
-
-	ovs_wait sctp_eps_has server 4443 || return 1
-
-times out and reports FAIL for the SCTP flow-key path rather than skipping for
-a missing userspace prerequisite. Would it make sense to also grep for the
-IPv6 define here?
-
-Second, the four addressing commands above discard their exit status. The rest
-of the test does not depend on addressing until the association attempt, so if
-"ip addr add fd00::1/64 ... nodad" fails (for example an iproute2 that rejects
-nodad, or IPv6 disabled per-device in the fresh netns via
-net.core.devconf_inherit_init_net), the first visible error is:
-
-	ovs_sbx "$t" ip netns exec client \
-	    timeout 3 socat -u STDIN "SCTP6-CONNECT:[fd00::2]:4443" </dev/null \
-	    || return 1
-
-which attributes a setup failure to the SCTP flow-key path. The file-level
-"trap ovs_exit_sig EXIT TERM INT ERR" does not catch these, since set -e/set -E
-are not in use and run_test() runs the body in a subshell via
-"eval test_${tname}". Should these four commands carry "|| return 1" so the
-failure is reported where it happens? The pre-existing test_icmpv6() and
-test_sctp_connect_v4() use the same unchecked pattern, so this is the current
-convention in the file rather than something new here.
-
-> +
-> +	# NS/NA forwarding
+> @@ -1199,6 +1200,98 @@ test_nat_connect_v4 () {
 
 [ ... ]
 
-> +	ovs_netns_spawn_daemon "$t" "server" \
-> +	    socat -u -t 1 SCTP6-LISTEN:4443,fork \
-> +	    OPEN:"$rxfile",creat,append
-> +	ovs_wait sctp_eps_has server 4443 || return 1
+> +	# Check if the ct and nat actions can be configured.
+> +	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
+> +		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
+> +		'ct(commit,nat(dst=172.31.110.20:5555)),recirc(0x1)' \
+> +		&> /dev/null
+> +	if [ $? == 1 ]; then
+> +		info "no support for ct/nat actions - skipping"
+> +		ovs_exit_sig
+> +		return $ksft_skip
+> +	fi
 
-[ ... ]
+[Severity: Medium]
+Following on from the config question above: when NF_NAT is n, does this
+probe in test_sctp_nat_connect_v4() always fail so the test permanently
+returns $ksft_skip?
+
+That would leave the SCTP arm of ovs_nat_update_key() with no coverage,
+which is the path the changelog says is currently unexercised, and the loss
+would be silent.  The existing test_nat_connect_v4() fails loudly instead:
+
+	ovs_sbx "test_nat_connect_v4" ip netns exec client ping -c 1 -W 1 \
+	    172.31.110.20 || return 1
+
+Would adding CONFIG_NF_NAT to the fragment keep this test running on the
+reference config?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909122521.2687193-1-houminxi%40gmail.com
