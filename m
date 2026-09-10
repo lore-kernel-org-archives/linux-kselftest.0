@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9429951FCD1;
-	Thu, 10 Sep 2026 18:09:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B1C56C62C;
+	Thu, 10 Sep 2026 18:09:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789063761; cv=none; b=mzk/6geBiqTlKMEHFonrVQSlYRtP0ndbTy9Nx6jP8ydp6IbGzzeZNZeDIAXBWr7pCtWOSyLPpqM5rFfBBVEc0FAZbOtK905o+8XNXShYNk0KLIkQdwWxMzTdjIDHdFuzv8qFLluGa4WnkVnrrlkmgeMnS4ZpJDDp14wnJulbLgc=
+	t=1789063773; cv=none; b=oYJoLJ83DnU0mdtwq8fa/C+uqFjNjH+rH3DGrwwfMIVfKGBVvzHcztB5fvQvUk89gd1haDhc+9k9DXJUWsfVD8IyzsWT46RIGpD9flGju+F9L8Tn+GMdcPHVBgSO85ejd9lvkLH7z9yl7ATbhlMnWbKTlmj3qXZEfMjF/Fe6iNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789063761; c=relaxed/simple;
-	bh=qorGJyYS6nvMoW+R7pQhQnJEdYbo6NknBhgmEyCxpbc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kG5VNKrOBybQ52Tk97J+AU1K46R93rr+Nb6AR026S1bu4q+i/Uh59G/ZLif/28nKTwOUoZXXf/w05JJZ0dVDlAhUtJO6pf6rMzRYbUiN8fJv9+mQprOSexceeQNeDL2vIuo35gRkZG8s44l0qeksHh2yIAdpV6P1OIcNE7kwsaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KIh6DKnL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789063773; c=relaxed/simple;
+	bh=Tfuw52YtaaBXZqgBSMLMoP4m9l9L0XwnDIp4xCS3rxM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NQQsSlkAH8C4kBRo8yzhQjQMeTMk4WMSjMQjxWbRvsat5X5oDEIEYnm1xVnztnh70qXYOEBeeXH5Cf+TT38vNCpzL0pCvJ1TUS26Li14JqBjgZ1+74UQoHnPw3LpG2JWDAd6n624n/ZXtnpW39hR22BsKyH01cGW/Ds2rVG6U9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=npZH4chh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KIh6DKnL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CFD51F000FF;
-	Thu, 10 Sep 2026 18:09:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="npZH4chh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B265C1F00893;
+	Thu, 10 Sep 2026 18:09:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789063760;
-	bh=91suzAE6OB+CHTM049kw/QY2viLYB5QINw6In2HnGy4=;
-	h=From:To:Cc:Subject:Date;
-	b=KIh6DKnLn+XFP2Iw49SqoiqxlJBtNdHaIjvQsvVxu9tqdNDhctSv5BVMV35qv1Ous
-	 QsFerCRVpB1YNlFtevXuSu0YYkJ8oW9aArNF562FygwWipuhcaPzhxmCTCShIfKxAj
-	 PcPgHtNqc0BwSPrCJ8rvQdbjR9YC9ATA5TndHuXWniOlIFzRV0AUHaNm8+UK2z0VgD
-	 nzAgNeeHmKCVAg0sHxo7ZvdXrRJouS9bRkmeBM4yPSTvD+SPL0iSBDB8hPCRyvyyyo
-	 z48IhpOtpzA/KF8w/XvuksRQtsUbCiPKB962C/DzYc+6RZSvFT9rFnBf+zhCN07MIv
-	 6SgKOOABXzNTA==
+	s=k20260515; t=1789063765;
+	bh=XlwruAm6gWUToleBgBzypJygbCkpGPiNpwcXKoUZ3j0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=npZH4chhZ5WsZjoyg1RU6vzfevAlijWicz+nxbcZJbvD0WQBaYEUbkw46gkTCCuGd
+	 LyYPZ1y/44a1r/xnN9kawBZpjE+vO3Fynhr9RN0kPjhbWNzES5EPOPr+NfGI9+yx3/
+	 VC6pbTK2mqEpVsH5VyeNoNWeSNXTN2m/KCoR4TlUYBnlsFqGn1jVcqxLfusp1jy4PR
+	 5pTQJ/J3VPlQUcEWwS9fPwx20qmsfniRrzaCbUu6o7HsjDX9ERhNeM2wLJOVZ1jTu9
+	 0MSpvi0ORCs2CJNDfsvBSqIs+le2NF6iTGWRNH9VTnEm1EUtu1QQJ1ptf7FEaWTnsP
+	 3gf2hchnx0FRw==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: Alexander Duyck <alexanderduyck@fb.com>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -39,8 +40,7 @@ To: Alexander Duyck <alexanderduyck@fb.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Daniel Borkmann <daniel@iogearbox.net>
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
+Cc: "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
 	Mohsin Bashir <mohsin.bashr@gmail.com>,
 	Stanislav Fomichev <sdf@fomichev.me>,
 	Bobby Eshleman <bobbyeshleman@meta.com>,
@@ -51,11 +51,14 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Breno Leitao <leitao@debian.org>,
 	Tao Cui <cuitao@kylinos.cn>,
 	Pavel Begunkov <asml.silence@gmail.com>,
-	David Wei <dw@davidwei.uk>
-Subject: [PATCH net-next v2 0/5] fbnic: Support larger RX pages
-Date: Thu, 10 Sep 2026 20:09:00 +0200
-Message-ID: <20260910180908.1506533-1-bjorn@kernel.org>
+	David Wei <dw@davidwei.uk>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+Subject: [PATCH net-next v2 1/5] net: Add netdev_config helpers
+Date: Thu, 10 Sep 2026 20:09:01 +0200
+Message-ID: <20260910180908.1506533-2-bjorn@kernel.org>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260910180908.1506533-1-bjorn@kernel.org>
+References: <20260910180908.1506533-1-bjorn@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,90 +68,152 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi!
+From: Jakub Kicinski <kuba@kernel.org>
 
-The v1 was out end-of-May! I hope you didn't hold your breath! ;-)
-Here goes...
+netdev_config manipulation will become slightly more complicated
+soon and will be used by both ethtool and the queue API.
+Encapsulate the logic in helper functions.
 
-This series adds support for large io_uring zero-copy RX buffers to
-fbnic.
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Björn Töpel <bjorn@kernel.org>
+---
+ net/core/dev.c           |  7 ++-----
+ net/core/dev.h           |  5 +++++
+ net/core/netdev_config.c | 37 +++++++++++++++++++++++++++++++++++++
+ net/ethtool/netlink.c    | 15 +++++++--------
+ 4 files changed, 51 insertions(+), 13 deletions(-)
 
-fbnic hardware consumes receive memory in 4 KiB device pages, while
-io_uring may expose a larger software buffer, such as 256 KiB. Track
-the device-page geometry per BDQ, represent each large buffer with
-consecutive descriptors, and decode completions to the corresponding
-offset within the buffer. HPQ keeps its existing PAGE_SIZE geometry.
-
-Larger buffers also reduce pressure on the memory provider. One
-provider allocation supplies multiple 4 KiB device pages, so the same
-amount of receive memory needs fewer net_iov objects and fewer
-allocation, refill, and recycle operations. Hardware descriptor use
-remains unchanged.
-
-Ring depth and buffer size must be validated together. An ethtool ring
-change can otherwise make an active memory-provider configuration
-invalid. Store accepted ring depths in netdev_config, stage proposed
-values in cfg_pending, and validate the default and each RX queue
-before committing the change. Both netlink and ioctl use the same
-transaction helpers.
-
-The selftest requests a buffer larger than twice the MTU and requires
-a receive CQE to end past the first MTU-sized region. Drivers which
-reject the size are skipped. Drivers which accept it but only use that
-first region fail.
-
-Changes in v2
-=============
-
-- Add generic netdev_config lifecycle helpers, and use
-  netdev_reconfig_start() and __netdev_free_config() from both the
-  netlink and ioctl paths.
-- Store ring parameters in netdev_config and revalidate the default and
-  each RX queue before committing a ring change.
-- Preserve the distinction between accepted and applied HDS state:
-  unrelated SET operations retain an accepted auto value, while
-  RINGS_GET reports the state applied by the driver.
-- Track the fbnic device-page geometry per BDQ and use it when posting
-  buffers and decoding completions.
-- Validate fbnic RX page size, payload fragment count, and the number of
-  software entries available in the payload queue.
-- Replace the manual-only offset check with a portable check run by the
-  Python large-buffer test, and include the received byte count on
-  timeout.
-- Rebase on net-next.
-
-v1: https://lore.kernel.org/netdev/20260522113225.241337-1-bjorn@kernel.org/
-
-Björn Töpel (4):
-  fbnic: Track BDQ device-page geometry per ring
-  net: Revalidate queue config for ringparam changes
-  fbnic: Support larger memory-provider RX pages
-  selftests: drv-net: Test large zcrx buffers
-
-Jakub Kicinski (1):
-  net: Add netdev_config helpers
-
- drivers/net/ethernet/meta/fbnic/fbnic_csr.h   |  34 +---
- .../net/ethernet/meta/fbnic/fbnic_debugfs.c   |   5 +-
- .../net/ethernet/meta/fbnic/fbnic_ethtool.c   |   8 +-
- .../net/ethernet/meta/fbnic/fbnic_netdev.c    |   5 +
- drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  | 165 ++++++++++++++----
- drivers/net/ethernet/meta/fbnic/fbnic_txrx.h  |  12 ++
- include/net/netdev_queues.h                   |  48 ++++-
- net/core/dev.c                                |   7 +-
- net/core/dev.h                                |   7 +
- net/core/netdev_config.c                      |  75 +++++++-
- net/ethtool/common.c                          |   9 +
- net/ethtool/common.h                          |   2 +
- net/ethtool/ioctl.c                           |  24 ++-
- net/ethtool/netlink.c                         |  15 +-
- net/ethtool/rings.c                           |  13 +-
- .../selftests/drivers/net/hw/iou-zcrx.c       |  33 +++-
- .../selftests/drivers/net/hw/iou-zcrx.py      |   6 +-
- 17 files changed, 374 insertions(+), 94 deletions(-)
-
-
-base-commit: 0abe8777490ebc008635ecb20297761d1b317697
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 290e0f099e6b..4a7c5a5e48e5 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -12195,10 +12195,8 @@ struct net_device *alloc_netdev_mqs(int sizeof_priv, const char *name,
+ 	if (!dev->ethtool)
+ 		goto free_all;
+ 
+-	dev->cfg = kzalloc_obj(*dev->cfg, GFP_KERNEL_ACCOUNT);
+-	if (!dev->cfg)
++	if (netdev_alloc_config(dev))
+ 		goto free_all;
+-	dev->cfg_pending = dev->cfg;
+ 
+ 	dev->num_napi_configs = maxqs;
+ 	napi_config_sz = array_size(maxqs, sizeof(*dev->napi_config));
+@@ -12270,8 +12268,7 @@ void free_netdev(struct net_device *dev)
+ 		return;
+ 	}
+ 
+-	WARN_ON(dev->cfg != dev->cfg_pending);
+-	kfree(dev->cfg);
++	netdev_free_config(dev);
+ 	kfree(dev->ethtool);
+ 	netif_free_tx_queues(dev);
+ 	netif_free_rx_queues(dev);
+diff --git a/net/core/dev.h b/net/core/dev.h
+index b757faead4d1..4b52ff779cba 100644
+--- a/net/core/dev.h
++++ b/net/core/dev.h
+@@ -102,6 +102,11 @@ extern struct rw_semaphore dev_addr_sem;
+ extern struct list_head net_todo_list;
+ void netdev_run_todo(void);
+ 
++int netdev_alloc_config(struct net_device *dev);
++void __netdev_free_config(struct netdev_config *cfg);
++void netdev_free_config(struct net_device *dev);
++int netdev_reconfig_start(struct net_device *dev);
++
+ int netdev_queue_config_validate(struct net_device *dev, int rxq_idx,
+ 				 struct netdev_queue_config *qcfg,
+ 				 struct netlink_ext_ack *extack);
+diff --git a/net/core/netdev_config.c b/net/core/netdev_config.c
+index f14af365d5cd..b101341e3251 100644
+--- a/net/core/netdev_config.c
++++ b/net/core/netdev_config.c
+@@ -6,6 +6,43 @@
+ 
+ #include "dev.h"
+ 
++int netdev_alloc_config(struct net_device *dev)
++{
++	struct netdev_config *cfg;
++
++	cfg = kzalloc_obj(*dev->cfg, GFP_KERNEL_ACCOUNT);
++	if (!cfg)
++		return -ENOMEM;
++
++	dev->cfg = cfg;
++	dev->cfg_pending = cfg;
++	return 0;
++}
++
++void __netdev_free_config(struct netdev_config *cfg)
++{
++	kfree(cfg);
++}
++
++void netdev_free_config(struct net_device *dev)
++{
++	WARN_ON(dev->cfg != dev->cfg_pending);
++	__netdev_free_config(dev->cfg);
++}
++
++int netdev_reconfig_start(struct net_device *dev)
++{
++	struct netdev_config *cfg;
++
++	WARN_ON(dev->cfg != dev->cfg_pending);
++	cfg = kmemdup(dev->cfg, sizeof(*dev->cfg), GFP_KERNEL_ACCOUNT);
++	if (!cfg)
++		return -ENOMEM;
++
++	dev->cfg_pending = cfg;
++	return 0;
++}
++
+ static int netdev_nop_validate_qcfg(struct net_device *dev,
+ 				    struct netdev_queue_config *qcfg,
+ 				    struct netlink_ext_ack *extack)
+diff --git a/net/ethtool/netlink.c b/net/ethtool/netlink.c
+index 1af395b54330..383e911f50f7 100644
+--- a/net/ethtool/netlink.c
++++ b/net/ethtool/netlink.c
+@@ -11,6 +11,8 @@
+ #include "module_fw.h"
+ #include "netlink.h"
+ 
++#include "../core/dev.h"
++
+ static struct genl_family ethtool_genl_family;
+ 
+ static bool ethnl_ok __read_mostly;
+@@ -934,12 +936,9 @@ static int ethnl_default_set_doit(struct sk_buff *skb, struct genl_info *info)
+ 	if (need_rtnl)
+ 		rtnl_lock();
+ 	netdev_lock_ops(dev);
+-	dev->cfg_pending = kmemdup(dev->cfg, sizeof(*dev->cfg),
+-				   GFP_KERNEL_ACCOUNT);
+-	if (!dev->cfg_pending) {
+-		ret = -ENOMEM;
+-		goto out_tie_cfg;
+-	}
++	ret = netdev_reconfig_start(dev);
++	if (ret)
++		goto out_unlock;
+ 
+ 	ret = ethnl_ops_begin(dev);
+ 	if (ret < 0)
+@@ -958,9 +957,9 @@ static int ethnl_default_set_doit(struct sk_buff *skb, struct genl_info *info)
+ out_ops:
+ 	ethnl_ops_complete(dev);
+ out_free_cfg:
+-	kfree(dev->cfg_pending);
+-out_tie_cfg:
++	__netdev_free_config(dev->cfg_pending);
+ 	dev->cfg_pending = dev->cfg;
++out_unlock:
+ 	netdev_unlock_ops(dev);
+ 	if (need_rtnl)
+ 		rtnl_unlock();
 -- 
 2.55.0
 
