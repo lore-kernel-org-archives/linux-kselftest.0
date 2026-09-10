@@ -1,101 +1,93 @@
-Received: from mta1.migadu.com (out-247.mta1.migadu.com [95.215.58.247])
+Received: from mta0.migadu.com (out-14.mta0.migadu.com [91.218.175.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D26453F5BFA
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 08:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.247
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5239D3CD8C9
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 08:24:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789027639; cv=none; b=Z/Nrn8mno8UVIBkZQ2dw3wy8NiBY7D5YKuauDQrU6N6APQA8D2CR7z7CrGP6xo99xjruTaWa75pKVjMW3XVoOoyo4Bxl2rrhHnIydRV45ZnsXxpoIKbFDojyCDnOfIx1umwrXmaIPF4G/L5yVc9eCu1JDlmhBzQgVJ6ImdjfxiQ=
+	t=1789028647; cv=none; b=CTlh/BGOUp/dkvCfQJFltmFP9KKOFDTvWdJyEoGqjV0OLD/l+la0d/r8p5EQd728RreigImBRakhNvIIjVwgrAuC15Wul/esR38YL5Psl2vz8H5nFKqAaoB64Yty1o/kfngoJHYIAGVGjFqg2zEIZbZ/kBXFPOUNVlHti+1u7AM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789027639; c=relaxed/simple;
-	bh=RNsmLPwonwNvXWmvwdyUuCmNIqO0zcfuzsQ6a72c5uA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=VbbHJLmq/1quJG4sCYfAFBY/yHbXXuGUrZ9aLDvgw379bBnrBgw+dctoyF09GojK3GPHDdWD7T3d6E1bq691Q+Qg3fwf/96g+xmRZ1IQQoJ0is1mPVefCI8BPWtJlZQ+l8oy7C8LIB6ErxiIzOQ1v48+CO0XpVLWVsJIzFhLpq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UR3ShMZT; arc=none smtp.client-ip=95.215.58.247
+	s=arc-20240116; t=1789028647; c=relaxed/simple;
+	bh=HPYr1lTjIcCMB7NT5Hpi9tecnmvU0n2HOtOh4FXso9Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nJKIpejZD9/5B6m5+bCYH3Y0ScJZNSsKs/1b+jr2a1VE6MYH4D9eq2nejpB9aLjiwVOJUR4Pak06BnZFfmv5iRYs9JFXz6GHlbl69zn3DlSf3kDIO291HQWYRBuX2WN1SBfAghVZzZBDx6MsOsOTsqhegRgqVYYSnU0dkkW+I/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wHSWDRjl; arc=none smtp.client-ip=91.218.175.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UR3ShMZT"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wHSWDRjl"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=RNsmLPwonwNvXWmvwdyUuCmNIqO0zcfuzsQ6a72c5uA=;
+DKIM-Signature: a=rsa-sha256; bh=HPYr1lTjIcCMB7NT5Hpi9tecnmvU0n2HOtOh4FXso9Y=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789027634; v=1; x=1789632434;
- b=UR3ShMZT/lLmRhfgwNzLasLRXoe/rCii7Og3IXCumvSCxti/TT6JxZ3mxTybw5+fBTB5SEeB
- jU7LIDZozLpomb+nuSSrboBEgMufdLdv3U4panC4MCHcV5o2kgP7atMesxYms2MHWdnZdv/H+C4
- A2sQV3YLqFGdO3iwlbXRxxzE=
+ t=1789028639; v=1; x=1789633439;
+ b=wHSWDRjlpjRI81yZdb/RGHlDPP+qTGSXuRWMoLypTh31qli56OCy8kb+jSaQfk/Xt6Wa7TWE
+ 8bHEhPxZyE5sSaAkVYA2ZNP++PBCyhCWTL9Og81RvGzaL7u0So47AddEq8aYZZy3gM8i/isCqXT
+ T0OByouyEo0br3ZChc1jpRKQ=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7030ea7761e91a2c;
-	Thu, 10 Sep 2026 08:07:14 +0000
-X-Mizu-Trace-ID: 7030ea7761e91a2c
+Received: by smtp.migadu.com with ESMTPS id d02be0715170649b;
+	Thu, 10 Sep 2026 08:23:59 +0000
+X-Mizu-Trace-ID: d02be0715170649b
 X-Migadu-Flow: FLOW_OUT
-From: Hangbin Liu <hangbin.liu@linux.dev>
-Date: Thu, 10 Sep 2026 16:06:58 +0800
-Subject: [PATCH net-next] selftests: netdevsim: add TEST_INCLUDES to
- Makefile
+Message-ID: <50286ce9-00cc-484f-9584-9bbe4bf79ef6@linux.dev>
+Date: Thu, 10 Sep 2026 13:53:52 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260910-nsim_lib-v1-1-0be0d49eaa42@kylinos.cn>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MSQqAMAxA0atI1hZqcb6KiHSIGtAorYhQvLvF5
- YPPjxDQEwboswgebwp0cEKRZ2BXzQsKcsmgpKplV0jBgfZpIyPKtrOu0maWTQkpPz3O9PyrARg
- vwfhcML7vBy7FUu9kAAAA
-X-Change-ID: 20260910-nsim_lib-489cd5abf074
-To: Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Hangbin Liu <liuhangbin@kylinos.cn>
-X-Mailer: b4 0.14.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC bpf-next 0/6] bpf: track scalar equality across the low 32
+ bits
+To: Eduard Zingerman <eddyz87@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260814231945.3884596-1-vineet.gupta@linux.dev>
+ <5f1b726cd88f2261f70a5aa99f94ea1434c078c1.camel@gmail.com>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <5f1b726cd88f2261f70a5aa99f94ea1434c078c1.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-From: Hangbin Liu <liuhangbin@kylinos.cn>
+On 8/19/26 10:05 AM, Eduard Zingerman wrote:
+> On Fri, 2026-08-14 at 16:19 -0700, Vineet Gupta wrote:
+>> The verifier's linked-scalar machinery tracks register equality only for the
+>> full 64 bits (optionally with a constant delta). There is no way to record
+>> "these two registers share just their low 32 bits", so a 32-bit mov from a
+>> source with unknown high bits has to drop the relationship entirely, and a
+>> later narrowing of the source never reaches the destination:
+>>
+>>>   r6 = ...                    /* full 64-bit unknown */
+>>>   w7 = w6                     /* 32-bit zero-extending mov          */
+>>>   if w6 != 0 goto .Lxx        /* not taken: r6's low 32 bits are 0  */
+>>>   if w7 == 0 goto .Lok   <-- not deduced today
+>> The same gap exists for the 32-bit sign extension and was the
+>> motivation for this patchset.
+>>
+>>>   0: (61) r2 = *(u32 *)(r1 +24)
+>>>   1: (bf) r0 = (s32)r2
+>>>   2: (56) if w2 != 0x0 goto pc+10       ; R2=0 (branch taken)
+>>>      ...
+>>> 12: (95) exit
+> Note that ldx instructions have similar structure: one can either zero
+> or sign extend on 32-bit load. I think this series should be expanded
+> to cover these cases.
+To scope this, there are two items related to ldx
+  - Narrowing fill off a wide spilled scalar
+  - sign extending loads
 
-Some netdevsim selftests source forwarding/lib.sh and other files, but
-the Makefile doesn't have TEST_INCLUDES targets, which makes
+There's also a case of narrowing spills to handle.
 
-  make INSTALL_PATH=/tmp/kself TARGETS=drivers/net/netdevsim \
-     -C tools/testing/selftests install
+> Also, please drop RFC tag when submitting v2.
 
-failed to install related lib files. Add TEST_INCLUDES to the Makefile
-to install the dependencies.
+Will do, thx.
+v2 modulo ldx is ready (and the selftest runs are at par with RFC) but 
+I'd still like yay/nay on some of the queries before submitting.
 
-Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
----
-As there are multi nsim selftests include the lib.sh but no error report
-for the installation issue. So I won't bother fixes tags and just post
-this patch to net-next.
----
- tools/testing/selftests/drivers/net/netdevsim/Makefile | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/tools/testing/selftests/drivers/net/netdevsim/Makefile b/tools/testing/selftests/drivers/net/netdevsim/Makefile
-index 9808c2fbae9e..bb90fe89d9a1 100644
---- a/tools/testing/selftests/drivers/net/netdevsim/Makefile
-+++ b/tools/testing/selftests/drivers/net/netdevsim/Makefile
-@@ -22,4 +22,12 @@ TEST_FILES := \
- 	ethtool-common.sh
- # end of TEST_FILES
- 
-+TEST_INCLUDES := \
-+	$(wildcard ../../../net/lib/sh/*.sh) \
-+	../../../net/forwarding/devlink_lib.sh \
-+	../../../net/forwarding/fib_offload_lib.sh \
-+	../../../net/forwarding/lib.sh \
-+	../../../net/lib.sh \
-+# end of TEST_INCLUDES
-+
- include ../../../lib.mk
-
----
-base-commit: 63487bb38a97918656751a2a4b74809bbe22eacb
-change-id: 20260910-nsim_lib-489cd5abf074
-
-Best regards,
--- 
-Hangbin Liu <liuhangbin@kylinos.cn>
-
+Thx,
+-Vineet
