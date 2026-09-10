@@ -1,290 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-3.mta0.migadu.com [91.218.175.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D242E0B5C;
-	Thu, 10 Sep 2026 03:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E339637E5C9
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 03:41:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789011696; cv=none; b=hNTNgbL//Axr1QQFxy4cEqnytylZTubQ0R/zy7ttUDs+l9c/ARhTy+ISZgkE675pQpSs9W+8pJQK7jpmeojcD/13IYwVVBwUSUjsh3qeyLCe2ihd1KIVZubwG02tZic/8zxr7Ty7i09gWaOY8QRw+mtmsImiN/Aqg+uJtqrRtDw=
+	t=1789011698; cv=none; b=ImhovYF49kqk1ZYHSBxtsW4vj5RuHYLSaImw2X0ZwenJCUwm6/27s7PBEWtqO8DN/mxgLCyd8MuEJCPg76xLIgc+sdsw3JEthOW5P+cY+DBCseXc4VxNAfff7AJYIdmNQFh0Yq1pu2Vn6lq4vONOCQwo/8D/2RZTfk7gznvuL6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789011696; c=relaxed/simple;
-	bh=1wwDJEpw5gEsXmbo+gLmfDIOdn+qoV5258NG0Z2Ke7k=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QAQi1QvAauC3Dq/xtp15l9CTVmxTR3qcyI8WYzkccpO+QWzDoYamUw3z78P261AzBT3Rdn1gYP0RinA2T3oqr8xArNPJHahw6ASGvXMSyHSyOxQI4z50kMmN5I+dzSV+IJqZVValjBJXl2vFkod3qs/knmZsPOGGqVzvMO6ROVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VVsxcB/p; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789011698; c=relaxed/simple;
+	bh=TO9MO5b8bJXJHjB/YLkQtxGsZmZ1QMZjecPQuYKzAKE=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=AJzRT0t01fCLiReuezCb3US8UaieWJ4Cgs7yhnX4+30LMXkOB+P419/JzF3fVe1EQHTpfciq95PXJri+yaHAm9BvYx17d9gMhzUKLR/C2pisG9LJJ2g6ue7UHv3AfuffF+4219RSK3ItZMAqvLs6noAYR8cv40oFNI//+DTMwu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cW5wMLbl; arc=none smtp.client-ip=91.218.175.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VVsxcB/p"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D16041F000FF;
-	Thu, 10 Sep 2026 03:41:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789011694;
-	bh=ulp+TU34kNx1g0TvXb7mz/lbGuv0wf5Z6rXyYC+guOM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=VVsxcB/pGyJM9Ml91UKvkF1Hv0JQ7OTGjiSEkK4w4TM0XuB63tjIkmN22J27kumv1
-	 meeQxDU7eAO/iT6Y1SVa8o/nqLJO6v+9rOLUkIuRxxXky8i6WBefHfwiX+Z0/ih1ZV
-	 rA7/sbCjMDMp8QajLYV8Am5HCOTextg5VXWTeVsR44HNFrjUOkqjO/M6Uc867j/G2h
-	 I9d5qT50HUDxApthtE5vzCThadHtgY2LwjX2m/tgwKhgND0CgOG7MCh0yrSK3ZePxj
-	 EgC9KNfrnKkTcRvPNTdLJUZinhJX03P7SOStVNqG7oPkuuDWTyOFnzY6lT6UKO/a5n
-	 SpWyygErg7N5A==
-Subject: Re: [PATCH net-next 1/3] rtnetlink: add AF_PACKET multicast dumps
-From: netdev-bot+sashiko@kernel.org
-To: sigefriedhyy@gmail.com
-Cc: davem@davemloft.net, dsahern@kernel.org, donald.hunter@gmail.com,
- edumazet@google.com, idosch@nvidia.com, kuba@kernel.org, kuniyu@google.com,
- nickgarlis@gmail.com, pabeni@redhat.com, sd@queasysnail.net, shuah@kernel.org,
- horms@kernel.org, sdf.kernel@gmail.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Date: Thu, 10 Sep 2026 03:41:33 +0000
-Message-ID: <178901169340.219967.5720246601361596190@kernel.org>
-In-Reply-To: <20260905093932.43726-2-sigefriedhyy@gmail.com>
-References: <20260905093932.43726-2-sigefriedhyy@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cW5wMLbl"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=TO9MO5b8bJXJHjB/YLkQtxGsZmZ1QMZjecPQuYKzAKE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789011693; v=1; x=1789616493;
+ b=cW5wMLblkClkgxEJoNh30xAjz8z07O7j7MGgDXw0ZUHBGm8m6eEWiGn9kuvfIm601GaYDbHZ
+ 0nheGPlWP/WwYpoKNjmZCysKfpXEj7omqC9ImaylSqoF7ZxXqBAR5TCOU3I8TBMt1fxQ2Mz+vQ3
+ eI4WkcRq/FY7MvZyGTvyBVBo=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 1f201aa16fc70ad7;
+	Thu, 10 Sep 2026 03:41:33 +0000
+X-Mizu-Trace-ID: 1f201aa16fc70ad7
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <3830e505-70eb-4c0b-8d1c-74074f066142@linux.dev>
+Date: Thu, 10 Sep 2026 11:41:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+Subject: Re: [PATCH 12/17] cgroup/cpuset: Invalidate children outside the new
+ CPU mask
+To: Waiman Long <longman@redhat.com>, cgroups@vger.kernel.org
+Cc: ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
+ mkoutny@suse.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Guopeng Zhang <zhangguopeng@kylinos.cn>
+References: <20260820124202.517160-1-guopeng.zhang@linux.dev>
+ <20260820124202.517160-13-guopeng.zhang@linux.dev>
+ <3bf50da2-f13a-4cef-bfb8-cd592f862164@redhat.com>
+Content-Language: en-US
+In-Reply-To: <3bf50da2-f13a-4cef-bfb8-cd592f862164@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 4 potential
-issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 2
 
-- [Medium] rtnl_dump_mcaddr()/rtnl_dump_mcaddr_dev()
-  (net/core/rtnetlink.c) resume a truncated dump purely positionally —…
-- [Medium] rtnl_fill_mcaddr() (net/core/rtnetlink.c) copies dev->addr_len
-  bytes out of ha->addr[MAX_ADDR_LEN] into the IFA_MULTICAST attribute:…
-- [Low] Claimed uAPI/YAML divergence: Documentation/netlink/specs/rt-
-  addr.yaml documents op `getmulticast` as 'Get / dump IPv4/IPv6…
-- [Low] Claimed spec/implementation mismatch: rt-addr.yaml lists
-  `cacheinfo` in the getmulticast reply attribute set (mcaddr-attrs) and…
+在 2026/8/25 23:11, Waiman Long 写道:
+> On 8/20/26 8:41 AM, Guopeng Zhang wrote:
+>> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+>>
+>> When cpuset.cpus changes, compute_partition_effective_cpumask() builds a
+>> new exclusive mask but checks child partitions against
+>> cs->effective_xcpus. That field still contains the old mask, so a child
+>> that no longer fits can remain valid.
+>>
+>> Use new_xcpus for the check. A later partcmd_update() may revisit the
+>> newly invalid child. Report PERR_INVCPUS if the child CPUs are outside
+>> the parent effective exclusive mask so that this visit does not make the
+>> child valid again.
+>>
+>> Fixes: 0c7f293efc87 ("cgroup/cpuset: Add cpuset.cpus.exclusive.effective for v2")
+>> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+>> ---
+>>   kernel/cgroup/cpuset.c | 10 +++++++---
+>>   1 file changed, 7 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index b9faadf4af6d..b3e749ede7d1 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -1987,12 +1987,16 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>>                   adding = cpumask_and(tmp->addmask,
+>>                                cs->effective_xcpus,
+>>                                parent->effective_xcpus);
+>> -        } else if (is_partition_invalid(cs) && !cpumask_empty(xcpus) &&
+>> -               cpumask_subset(xcpus, parent->effective_xcpus)) {
+>> +        } else if (is_partition_invalid(cs) && !cpumask_empty(xcpus)) {
+>>               struct cgroup_subsys_state *css;
+>>               struct cpuset *child;
+>>               bool exclusive = true;
+>>   +            if (!cpumask_subset(xcpus, parent->effective_xcpus)) {
+>> +                part_error = PERR_INVCPUS;
+>> +                goto write_error;
+>> +            }
+>> +
+> A invalid partition means part_error should be set to some error code. This change only makes sure the error code is PERR_INVCPUS. Other than that, I don't see any other tangible change here.
 
---
+Thanks, Longman.
 
-rtnetlink: add AF_PACKET multicast dumps
+I think there is a functional difference here. `part_error` is a local variable initialized to `PERR_NONE` on every call to `update_parent_effective_cpumask()`; it is not initialized from `cs->prs_err`.
 
-This adds a PF_PACKET RTM_GETMULTICAST dump handler that walks dev->mc for
-every device in the netns and reports each netdev_hw_addr in the existing
-ifaddrmsg format with IFA_MULTICAST and IFA_MC_USERS.  The dump runs under
-RCU plus netif_addr_lock_bh() and is registered with
-RTNL_FLAG_DUMP_UNLOCKED.
+With the current condition:
 
-A few questions below.
+} else if (is_partition_invalid(cs) && !cpumask_empty(xcpus) &&
+	   cpumask_subset(xcpus, parent->effective_xcpus)) {
 
-> diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-> index 81c5a6104dea1..5e83232c15048 100644
-> --- a/net/core/rtnetlink.c
-> +++ b/net/core/rtnetlink.c
-> @@ -4566,6 +4566,136 @@ static int rtnl_dump_all(struct sk_buff *skb, struct netlink_callback *cb)
->  	return skb->len ? : ret;
->  }
->  
-> +static int rtnl_fill_mcaddr(struct sk_buff *skb, const struct net_device *dev,
-> +			    const struct netdev_hw_addr *ha, u32 portid,
-> +			    u32 seq, unsigned int flags)
-> +{
+an invalid partition whose CPUs are no longer a subset of the parent's effective exclusive mask skips this branch entirely, leaving `part_error` as `PERR_NONE`.
 
-[ ... ]
+The later state transition then does:
 
-> +	if (nla_put(skb, IFA_MULTICAST, dev->addr_len, ha->addr) ||
-> +	    nla_put_u32(skb, IFA_MC_USERS, ha->refcount)) {
+case PRS_INVALID_ROOT:
+case PRS_INVALID_ISOLATED:
+	if (!part_error)
+		new_prs = -old_prs;
+	break;
 
-[Severity: Medium]
+so the partition can be changed back to a valid state.
 
-Can this nla_put() copy uninitialized slab bytes into IFA_MULTICAST when
-dev->addr_len grew after the entry was created?
+Therefore, this change does more than set the error code to `PERR_INVCPUS`; it also prevents an out-of-mask invalid partition from being made valid again.
 
-netdev_hw_addr entries are allocated with plain kmalloc() and only
-addr_len bytes are initialized, and the length used at creation time is
-not recorded anywhere:
+>>               /*
+>>                * Convert invalid partition to valid has to
+>>                * pass the cpu exclusivity test.
+>> @@ -2144,7 +2148,7 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
+>>           WARN_ON_ONCE(is_remote_partition(child));
+>>           WRITE_ONCE(child->prs_err, 0);
+>>           if (!cpumask_subset(child->effective_xcpus,
+>> -                    cs->effective_xcpus))
+>> +                    new_xcpus))
+>>               WRITE_ONCE(child->prs_err, PERR_INVCPUS);
+>>           else if (populated &&
+>>                cpumask_subset(new_ecpus, child->effective_xcpus))
+> 
+> This hunk should probably be grouped into the same patch making change to compute_partition_effective_cpumask().
 
-net/core/dev_addr_lists.c:__hw_addr_create() {
-	alloc_size = sizeof(*ha);
-	if (alloc_size < L1_CACHE_BYTES)
-		alloc_size = L1_CACHE_BYTES;
-	ha = kmalloc(alloc_size, GFP_ATOMIC);
-	if (!ha)
-		return NULL;
-	memcpy(ha->addr, addr, addr_len);
-	...
-}
+I have included these changes in v4 and moved both changes from this patch into the earlier patch that modifies compute_partition_effective_cpumask().
 
-__dev_mc_add() passes dev->addr_len as it is at add time:
+I have also temporarily dropped all selftest patches, including those posted in v3, as the current test design needs some rework.
 
-net/core/dev_addr_lists.c:__dev_mc_add() {
-	err = __hw_addr_add_ex(&dev->mc, addr, dev->addr_len,
-			       NETDEV_HW_ADDR_T_MULTICAST, global, false,
-			       0, false);
-}
+Thanks,
+Guopeng
 
-while rtnl_fill_mcaddr() emits the current dev->addr_len.  One sequence
-that produces a mismatch:
-
-  1. create a tap device (ARPHRD_ETHER, addr_len 6)
-  2. SIOCADDMULTI via dev_ifsioc() -> dev_mc_add_global(), which only
-     requires netif_device_present(), so the device may be down; 6 bytes
-     of ha->addr are initialized
-  3. TUNSETLINK with ARPHRD_TUNNEL6 in drivers/net/tun.c:
-
-	tun->dev->type = (int) arg;
-	tun->dev->addr_len = tun_get_addr_len(tun->dev->type);
-
-     which raises addr_len to 16 and does not purge dev->mc
-  4. run the new RTM_GETMULTICAST/AF_PACKET dump
-
-Would step 4 then emit 16 bytes out of a 6-byte-initialized ha->addr,
-handing 10 bytes of never-written slab memory to user space?  The read
-stays inside ha->addr[MAX_ADDR_LEN], so this is a disclosure of
-uninitialized memory rather than an out-of-bounds access.
-
-The same bytes are already visible through /proc/net/dev_mcast, which
-prints "%*phN" with dev->addr_len, so the underlying unzeroed tail is
-older than this patch, but this adds a second path to it.  Would it make
-sense to either bound the emitted length or zero the address tail in
-__hw_addr_create()?
-
-> +		nlmsg_cancel(skb, nlh);
-> +		return -EMSGSIZE;
-> +	}
-> +
-> +	nlmsg_end(skb, nlh);
-> +	return 0;
-> +}
-> +
-> +static int rtnl_dump_mcaddr_dev(struct net_device *dev, struct sk_buff *skb,
-> +				struct netlink_callback *cb, int *s_addr_idx,
-> +				unsigned int flags)
-> +{
-> +	struct netdev_hw_addr *ha;
-> +	int addr_idx = 0;
-> +	int err = 0;
-> +
-> +	netif_addr_lock_bh(dev);
-> +	netdev_for_each_mc_addr(ha, dev) {
-> +		if (addr_idx < *s_addr_idx) {
-> +			addr_idx++;
-> +			continue;
-> +		}
-> +		err = rtnl_fill_mcaddr(skb, dev, ha, NETLINK_CB(cb->skb).portid,
-> +				       cb->nlh->nlmsg_seq, flags);
-> +		if (err < 0)
-> +			break;
-> +		addr_idx++;
-> +	}
-> +	netif_addr_unlock_bh(dev);
-> +
-> +	*s_addr_idx = err < 0 ? addr_idx : 0;
-
-[Severity: Medium]
-
-Should this dump also maintain a generation counter and call
-nl_dump_check_consistent() so interrupted dumps get NLM_F_DUMP_INTR?
-
-Resume state here is purely positional (ctx->ifindex plus ctx->addr_idx)
-and neither RTNL nor netif_addr_lock is held between two invocations of
-the callback.  netlink_dump() turns the -EMSGSIZE into a continued dump:
-
-net/netlink/af_netlink.c:netlink_dump() {
-	if (nlk->dump_done_errno == -EMSGSIZE && skb->len)
-		nlk->dump_done_errno = skb->len;
-}
-
-so entries added to or removed from dev->mc in that window shift the
-index and entries can be silently repeated or skipped.
-
-cb->seq is never assigned in rtnl_dump_mcaddr(), so the check in
-nl_dump_check_consistent():
-
-	if (cb->prev_seq && cb->seq != cb->prev_seq)
-		nlh->nlmsg_flags |= NLM_F_DUMP_INTR;
-
-can never fire and user space has no way to notice the loss.  The AF_INET
-sibling of the same message type does both halves: inet_dump_addr() sets
-
-	cb->seq = inet_base_seq(tgt_net);
-
-and in_dev_dump_ifmcaddr() calls nl_dump_check_consistent(cb,
-nlmsg_hdr(skb)) for every emitted message.
-
-> +
-> +	return err;
-> +}
-
-[ ... ]
-
-> +static int rtnl_dump_mcaddr(struct sk_buff *skb, struct netlink_callback *cb)
-> +{
-
-[ ... ]
-
-> +	for_each_netdev_dump(net, dev, ctx->ifindex) {
-> +		err = rtnl_dump_mcaddr_dev(dev, skb, cb, &ctx->addr_idx,
-> +					   flags);
-> +		if (err < 0)
-> +			break;
-> +	}
-
-[Severity: Medium]
-
-Related to the above, can a stale ctx->addr_idx be applied to the wrong
-device here?
-
-On -EMSGSIZE, rtnl_dump_mcaddr_dev() keeps the offset in ctx->addr_idx and
-the break skips the ifindex++ of for_each_netdev_dump(), so ctx->ifindex
-still names the interrupted device.  If that device is unregistered before
-the dump resumes:
-
-include/linux/netdevice.h:
-	#define for_each_netdev_dump(net, d, ifindex)				\
-		for (; (d = xa_find(&(net)->dev_by_index, &ifindex,		\
-				    ULONG_MAX, XA_PRESENT)); ifindex++)
-
-xa_find() with XA_PRESENT returns the next device that does exist, and the
-non-zero ctx->addr_idx is passed unchanged into rtnl_dump_mcaddr_dev(), so
-
-		if (addr_idx < *s_addr_idx) {
-			addr_idx++;
-			continue;
-		}
-
-would skip the first ctx->addr_idx multicast entries of an unrelated
-device.  Should ctx->addr_idx be reset when the resumed ifindex does not
-match the recorded one?
-
-> +out:
-> +	rcu_read_unlock();
-> +	return err;
-> +}
-> +
-
-[ ... ]
-
-> @@ -7251,6 +7381,8 @@ static const struct rtnl_msg_handler rtnetlink_rtnl_msg_handlers[] __initconst =
->  	{.msgtype = RTM_SETSTATS, .doit = rtnl_stats_set},
->  	{.msgtype = RTM_NEWLINKPROP, .doit = rtnl_newlinkprop},
->  	{.msgtype = RTM_DELLINKPROP, .doit = rtnl_dellinkprop},
-> +	{.protocol = PF_PACKET, .msgtype = RTM_GETMULTICAST,
-> +	 .dumpit = rtnl_dump_mcaddr, .flags = RTNL_FLAG_DUMP_UNLOCKED},
-
-[Severity: Low]
-
-This isn't a bug, but as of this commit alone the getmulticast op in
-Documentation/netlink/specs/rt-addr.yaml still reads "Get / dump
-IPv4/IPv6 multicast addresses." while the same op now also serves
-AF_PACKET requests with link-layer address semantics.
-
-The follow-up patch in the series, "netlink: specs: rt-addr: document
-AF_PACKET multicast dumps", rewrites that doc to cover ifa-family
-selecting AF_INET, AF_INET6 or AF_PACKET and the permanent-flag meaning,
-so the spec and the implementation do agree at the end of the series.
-Only noting it in case the two patches are ever applied separately.
-
->  	{.protocol = PF_BRIDGE, .msgtype = RTM_GETLINK,
->  	 .dumpit = rtnl_bridge_getlink},
->  	{.protocol = PF_BRIDGE, .msgtype = RTM_DELLINK,
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260905093932.43726-1-sigefriedhyy%40gmail.com
