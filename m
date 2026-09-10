@@ -1,166 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F98381AFF;
-	Thu, 10 Sep 2026 03:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8301E0E14
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 03:48:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789011698; cv=none; b=ZOXCZNa68S2GaafKRB/pf8Cwvm1b4+kqXV5+TzCpAF0x2gU3HRS09Or4wVv6O2nr4X8dSzbebadBHFEH8If70iezFUZChSaRJxbw8HrUEmicJJyQCsVlEEDWYTE3Ee3JOLkipKoFmwoJVQsJXlFNaMUKSapdYpb4wEUIB4V8sFg=
+	t=1789012106; cv=none; b=TqdkPICsLwfPtkuksOSs3GkKa4srphkVYtniG3VS0aq478x7xrgtQckZgx1u9U9Ls9Z5pJQSJo7A7ceMds9c7AgKcTc6fhkL9R+ll0W6WZtrM3gxNAxPPTDLR8gQUQy4VPSJLPxOedR0zu4fFRbQu/DGpMV7j8ymDbvb18O3GGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789011698; c=relaxed/simple;
-	bh=w6YMxGA6TfN/6E70BV+uHG+BsvTlQTsOklfijaKjRio=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HuCjWiQG0z1SmkGsatbx/nYUfzJMlENDKVvffreYIBhyIY0/QOyGsRb9JAZV1M2KddkWPF2CdEoeHqSBbXVESBa4H5mO5lYwELYcKvtHajgDpaLIiAURK1+gjiAvkPT+d1hTWyzYp/K4ghdOHx2uX4r3y/41xrLV+LY4/1V1tUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QphHh3vY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789012106; c=relaxed/simple;
+	bh=rsFI+sdwDURBfYcTPzPK+SDtUqdP4949pxLEKIwiRnk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=dv/dy1qv+QSFSMZ8qO4L82qbIjiveD36SdyDs69aLZ7JtR7n1RyI08fnz4R313Re9LYXoUbZR4bvY83+rSsE1GfCPAbnZdjND226wkyfDcUi9TBVmi5AA5QQUm61Emzrf3S/6wkc0nQdSNEcChUxKnKaHuOiOV4kc7/Pjy1E5YU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XqI7s4t3; arc=none smtp.client-ip=209.85.215.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QphHh3vY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4962F1F00893;
-	Thu, 10 Sep 2026 03:41:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789011696;
-	bh=DANIVoekU9XiwWA5oMrLYSSaU2xk6/wwTj0I+yT4QfU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=QphHh3vYLLM7ufXpcqMimO0dLeH5MojSw6HRqN6EkbGDaA0/sDJtZU9Jiv1xmjAhy
-	 9l+RwQ+3Un5Gd0QKk5ltfn8nAFTgRRHrpuqJonm2oZgfuxQFQ3iOiMISSnqJ9HFOct
-	 ZtVlQhaF0c1gs6XRN8DOP/3fC6jxsJa2/8T7Nk/J9T2rpl6z6K4uth6B68VBiU9IBu
-	 2AZ+NEX2Gqbr0kW2CSJD07ZfJnDMVuRWEbFW6LEg+CDnx9XosqVkRYAw3eXU0Pxo1N
-	 YXnoCWOEWVA9SMgUZJo/blduNmHhT80avmcjs12bQYslmprRGXidDM/qpIwYAPVk48
-	 gv1oL33TB+W+g==
-Subject:
- Re: [PATCH net-next 3/3] selftests: net: test AF_PACKET multicast dumps
-From: netdev-bot+sashiko@kernel.org
-To: sigefriedhyy@gmail.com
-Cc: davem@davemloft.net, dsahern@kernel.org, donald.hunter@gmail.com,
- edumazet@google.com, idosch@nvidia.com, kuba@kernel.org, kuniyu@google.com,
- nickgarlis@gmail.com, pabeni@redhat.com, sd@queasysnail.net, shuah@kernel.org,
- horms@kernel.org, sdf.kernel@gmail.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Date: Thu, 10 Sep 2026 03:41:34 +0000
-Message-ID: <178901169484.219967.3624591832079760064@kernel.org>
-In-Reply-To: <20260905093932.43726-4-sigefriedhyy@gmail.com>
-References: <20260905093932.43726-4-sigefriedhyy@gmail.com>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XqI7s4t3"
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cc1b6f65dacso7306472a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2026 20:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1789012104; x=1789616904; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=zzi//Qm9WAlH1nWPVbEFeyj5g7F/Gg5oP3YDkfmtrmw=;
+        b=XqI7s4t3INGeluRl81D6LJ7LqJixma1+QVvIm9+U4VqoQE+JWklQSTTW6K+CCJWBNX
+         nZ2TSW1O6aHr/fNTtYCZ9GlqSp2LGlkGVI+DN8fxHGUp5VSiHqTfSjr58hbB/kb3OjhD
+         sVhqes8bc3J1WKoI8ppRjt11YWnKtQXow2HJ7fsayz4tbC7P9/oZFcMu7rjZMC/Si1lN
+         PmWfIpxlYpxL78y4H5zqAH2/cQhZFoTUvLhm7fPKqRP2oOxr4075OTvd9uvjzOi2iHVg
+         2NWF6jRgPxQPrRkPXPEryZo+wO/JIFB86tW10YkK+kQn+feMIGMtzAqVhJtViIFdNoUF
+         qAJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789012104; x=1789616904;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zzi//Qm9WAlH1nWPVbEFeyj5g7F/Gg5oP3YDkfmtrmw=;
+        b=Jgh1BLNkgxgm8n+uKTlFZQpuCSk2Ygaml9hwibW1TErEtpMzVDisGrVpUfD8HduXdZ
+         7VyZHaxK1GRVKF65////Kagw5uaUjI9b4FPRxEwZClCJeqWcQ2QQnYivKtsDOW7J0vKa
+         KsLS2b7kk4tJgqfnRrGbyn2bF49SC3351gWS62nqUmxkx6B+aTUb/Re9Ugpm9X4e8OJf
+         JNq9wvSG9JGVGhGj0wFuMnIuDHQ7lV8r4TLRnzjITGyovZQnbOu32JRTZKK3LcDzo1EP
+         R0jX1C9hKsrg8BFhsjlXv0S4WNavOMBRWfclxDmff3k22uq6BmtqARlrBzDcay64nV8Q
+         KN1Q==
+X-Forwarded-Encrypted: i=1; AKwUvByGnK+YQOHNyTVpA2+ej/qivxX8gwISxfj6fIIOrdSeSXQ1gerIoETOsahRdA7Nsd3PY3p09/KhOsyNpB4j58k=@vger.kernel.org
+X-Gm-Message-State: AFuF++mqfwQOw8MXg3UmZtb4UeY5ptxpg8J1jt5/ViXV6ZyRWku8QIQc
+	QSPPJD+TJzP2t81ysYURjVbnUmwTy1rsL9aXflu5QhOd33Mr0mgSmpbaLwgSsAlyzDZdRHv1EQW
+	YTw==
+X-Received: from pgbo38.prod.google.com ([2002:a63:5a26:0:b0:cc1:e48a:53dd])
+ (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:4311:b0:3c3:bbe6:95de
+ with SMTP id adf61e73a8af0-3da39eacfc8mr52193525637.6.1789012104294; Wed, 09
+ Sep 2026 20:48:24 -0700 (PDT)
+Date: Thu, 10 Sep 2026 03:48:21 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.1003.g10538fe699-goog
+Message-ID: <20260910034821.2935214-1-wakel@google.com>
+Subject: [PATCH] selftests: rtc: Support harness test filtering and arguments
+From: Wake Liu <wakel@google.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Wake Liu <wakel@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider:
+rtctest implements its own main() function with a rigid switch (argc)
+check that only accepts an optional single argument for the RTC device
+node path. This prevents kselftest_harness standard arguments from
+working properly:
 
-Critical: 0 · High: 0 · Medium: 0 · Low: 1
+1. Passing filter options like -t <name> or -T <name> triggers a usage
+   error because argc is greater than 2.
+2. Passing -l or -h causes rtctest to treat "-l" or "-h" as the device
+   node path and fail with access() errors before ever reaching the
+   harness argument checker.
 
-- [Low] dump_mcaddr_l2_check() in
-  tools/testing/selftests/net/rtnetlink.py dereferences dictionary keys…
+Parse command line arguments with getopt() to pass all kselftest harness
+options (such as -t, -T, -v, -V, -f, -F, -r, -d, -h, and -l) through to
+test_harness_run(), while preserving the ability to specify an optional
+RTC device node path as a non-option argument. Also ensure optind is
+reset before invoking test_harness_run() so the harness can inspect the
+options, and bypass device accessibility checks when help or test
+listing is requested.
 
---
+Signed-off-by: Wake Liu <wakel@google.com>
+---
+ tools/testing/selftests/rtc/rtctest.c | 44 +++++++++++++++++++++------
+ 1 file changed, 35 insertions(+), 9 deletions(-)
 
-selftests: net: test AF_PACKET multicast dumps
-
-This adds dump_mcaddr_l2_check() to the rtnetlink.py selftest, dumping the
-link-layer multicast addresses of a dummy device over AF_PACKET and
-checking the ifa-index filter, the all-hosts entry flags and the
-SIOCADDMULTI entry flags plus mc-users.  The case skips when the kernel
-answers the dump with EOPNOTSUPP.
-
-> diff --git a/tools/testing/selftests/net/rtnetlink.py b/tools/testing/selftests/net/rtnetlink.py
-> index 5cc3ebdcf08de..94340dac0e217 100755
-> --- a/tools/testing/selftests/net/rtnetlink.py
-> +++ b/tools/testing/selftests/net/rtnetlink.py
-
-[ ... ]
-
-> @@ -105,6 +109,53 @@ def dump_mcaddr6_check() -> None:
->                  s2.close()
->  
->  
-> +def dump_mcaddr_l2_check() -> None:
-> +    """
-> +    Verify link-layer multicast addresses in an AF_PACKET RTM_GETMULTICAST
-> +    dump: the ifa-index filter, mc-users and the permanent flag.
-> +    """
-> +
-> +    with NetNS() as ns:
-> +        with NetNSEnter(str(ns)):
-> +            for ifname in ("dummy1", "dummy2"):
-> +                ip(f"link add name {ifname} type dummy")
-> +                ip(f"link set {ifname} up")
-> +            dev_idx = socket.if_nametoindex("dummy1")
-> +            ip(f"maddr add {ETH_TEST_MULTICAST_STR} dev dummy1")
-> +
-> +            rtnl = RtnlAddrFamily()
-> +            try:
-> +                addresses = rtnl.getmulticast(
-> +                    {"ifa-family": socket.AF_PACKET, "ifa-index": dev_idx},
-> +                    dump=True)
-> +            except NlError as e:
-> +                if e.error == errno.EOPNOTSUPP:
-> +                    raise KsftSkipEx(
-> +                        "kernel does not support AF_PACKET multicast dump")
-> +                raise
-> +
-> +            # dummy2 has entries as well, only dummy1 may be listed
-> +            ksft_eq({addr['ifa-index'] for addr in addresses}, {dev_idx},
-> +                    "AF_PACKET multicast dump ignored ifa-index filter")
-> +
-> +            entries = {addr['multicast']: addr for addr in addresses}
-> +
-> +            # Bringing an Ethernet device up joins 224.0.0.1, which maps
-> +            # to 01:00:5e:00:00:01 in the device multicast list.
-> +            ksft_in(ETH_ALL_HOSTS_MULTICAST, entries,
-> +                    "dummy1 does not have the all-hosts link-layer address")
-> +            ksft_not_in('permanent',
-> +                        entries[ETH_ALL_HOSTS_MULTICAST]['ifa-flags'],
-> +                        "protocol entry is permanent")
-> +
-> +            ksft_in(ETH_TEST_MULTICAST, entries,
-> +                    "dummy1 does not have the SIOCADDMULTI address")
-> +            ksft_eq(entries[ETH_TEST_MULTICAST]['mc-users'], 1,
-> +                    "unexpected mc-users for the SIOCADDMULTI address")
-> +            ksft_in('permanent', entries[ETH_TEST_MULTICAST]['ifa-flags'],
-> +                    "SIOCADDMULTI entry is not permanent")
-
-[Severity: Low]
-Can the entries[] lookups here raise KeyError in exactly the case the
-preceding checks are meant to report?
-
-ksft_in() in tools/testing/selftests/net/lib/py/ksft.py only records the
-failure and returns:
-
-    def ksft_in(a, b, comment=""):
-        if a not in b:
-            _fail("Check failed", a, "not in", b, comment)
-
-So when the dump does not contain 01:00:5e:00:00:01, execution continues
-into:
-
-    entries[ETH_ALL_HOSTS_MULTICAST]['ifa-flags']
-
-and the same applies to entries[ETH_TEST_MULTICAST] for the mc-users and
-permanent checks if the SIOCADDMULTI address is missing.
-
-ksft_run() catches this with "except BaseException" and prints a
-traceback, so the case is reported as a failure, but the remaining
-independent checks (mc-users == 1 and the permanent flag on the
-SIOCADDMULTI entry) are never executed.  Note also that the earlier
-ksft_eq() on the ifa-index set does not stop the case either, so
-addresses may legitimately be empty at this point.
-
-Would it be worth following the convention already used elsewhere in this
-file, where _users_for() and dump_mcaddr_check() test membership before
-dereferencing:
-
-    if 'mc-users' not in matches[0]:
-        raise KsftSkipEx(...)
-
-and ipv6_route_del_reason_expired() guards with ksft_not_none(attrs)
-before touching attrs?
-
-[ ... ]
-
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index 8047d9879039..57dda87ba813 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -486,18 +486,44 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
+ int main(int argc, char **argv)
+ {
+ 	int ret = -1;
++	int opt, i;
++	int non_opt = 0;
++
++	while ((opt = getopt(argc, argv, "dhlF:f:V:v:t:T:r:")) != -1) {
++		switch (opt) {
++		case 'h':
++			fprintf(stderr,
++				"Usage: %s [-h|-l|-d] [-t|-T|-v|-V|-f|-F|-r name] [rtcdev]\n\n",
++				argv[0]);
++			optind = 1;
++			return test_harness_run(argc, argv);
++		case 'l':
++			optind = 1;
++			return test_harness_run(argc, argv);
++		case '?':
++			fprintf(stderr,
++				"Usage: %s [-h|-l|-d] [-t|-T|-v|-V|-f|-F|-r name] [rtcdev]\n",
++				argv[0]);
++			return KSFT_FAIL;
++		default:
++			break;
++		}
++	}
+ 
+-	switch (argc) {
+-	case 2:
+-		rtc_file = argv[1];
+-		/* FALLTHROUGH */
+-	case 1:
+-		break;
+-	default:
+-		fprintf(stderr, "usage: %s [rtcdev]\n", argv[0]);
+-		return 1;
++	for (i = optind; i < argc; i++) {
++		if (non_opt == 0) {
++			rtc_file = argv[i];
++			non_opt++;
++		} else {
++			fprintf(stderr,
++				"Usage: %s [-h|-l|-d] [-t|-T|-v|-V|-f|-F|-r name] [rtcdev]\n",
++				argv[0]);
++			return KSFT_FAIL;
++		}
+ 	}
+ 
++	optind = 1;
++
+ 	/* Run the test if rtc_file is accessible */
+ 	if (access(rtc_file, R_OK) == 0)
+ 		ret = test_harness_run(argc, argv);
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260905093932.43726-1-sigefriedhyy%40gmail.com
+2.55.0.979.g7e5102b832-goog
+
