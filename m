@@ -1,42 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4315346A07;
-	Thu, 10 Sep 2026 07:59:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D72D34A79D;
+	Thu, 10 Sep 2026 07:59:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789027144; cv=none; b=dP1YEK0qYxLX1nzRxOLRLWgt2l7+S8STUJmCrBbDd/o1FuG4r/YeQg8PTBzDPufLN8T1u+ngOx4eHS2RcV1v0J+FdfO6vQiSwnuNO4fyLKXcTLUanyoemCErkQ46PRYMXSlDoS1viNq1OPd8mDNg9VxjdXHMsrfx5341NEj7nHs=
+	t=1789027145; cv=none; b=thzZaoUv0lnIfIKYm+zVEJXULzhpJ/VghxZhKwzxGSb5pvWyVLyhbc8wE2s31qeK7decWy2/x4GUX2vmuixUTTvY3tdp9ET24O76qUwL0P+r/tBgH0dHOmI8gJMMIBXvqguDiOmGf0q2qTnaE49zaYWmXrt2bytw3mMmWmjz5WQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789027144; c=relaxed/simple;
-	bh=YN/RJCBh2aKaPe4XRDyXXuL8DMUj6Wq2cWl6F9VwlBE=;
+	s=arc-20240116; t=1789027145; c=relaxed/simple;
+	bh=2lWcsjCGdX3/u2h9rJeZ2x1Jf+m7SNDdJAOrTnoL3xA=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SSrrs4C2cF7q+Aq9ii6Bn+8tzr5/A544/HX2x54mJMocWgiVQboC8Y7Pie/0QmRlL5DPL7q1KwolaWoGiWRuHQeTqmGphOoSTt1UxzB1lvcFWA6bSQjpkWdrec4mVEA3l+2Ob0hGqfTiXHxHM5gbqZxrDiUfFrf1F/KP0iqAm1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gIFdyj2y; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=ro7v9s+Vs4GKa9NHZXduE1ZvxiM5GFyEk1FcmB1E7ExgNUTuAsopTon5Ej/gMiT6o+1K19sd5ogQswS445b2p0f0EMV3cIeqv1sFphYLYkbxX5O2Qc1dLhXnnVN04zniN8FTACliq+5rrPgkbu5BMoOw2XRTfb4hpEwOhbAKj/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SBfcBttm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gIFdyj2y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A59AD1F000FF;
-	Thu, 10 Sep 2026 07:59:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SBfcBttm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C71C61F00893;
+	Thu, 10 Sep 2026 07:59:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789027142;
-	bh=TzpxlQ/Q3h5cs9QnDSu/xDBV//zRwzKq5lxcSq+xP2s=;
+	s=k20260515; t=1789027143;
+	bh=mYmr/W/BYFQDMbpmKdQ8Fdffbdjog/xig14Mnia7uCo=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=gIFdyj2yF/qMjHvYRrSPg0Ed31UviF2mzNLdjsffD3H43dMgFBeV0OX2aK78I4Un0
-	 NHWfUNFj8dQHtRlJXVZF+AbfEzOeucUjOlthGFAzcihTuNGra+Xzb93u0xElFxXlki
-	 11/Ah4SwhrZvjMstgk2VNB/pIpwAcdwVggIn4OfFQY5zXemlvC7U8iP94wxTvTOMIy
-	 7xnjWXO4LqcW/StHG6LSQNRJggNCjHOhym9TN39GJPi4SDCYiX3rJad8Gq+Fn/+mMN
-	 wzcbWR6G3aV9pnKUr1HIpClDCOTGETq4fsDJgX5Xu79Zhd3+iyTtfu4LDdHhTa6S3z
-	 BpH8/GHDA2qXg==
-Subject: Re: [PATCH net v2 1/2] tcp: exclude old ACKs from tcp fast path
+	b=SBfcBttm6C3tTIq7XA/eFFdsE7Dl9/pGxPJkyZm6jCJeHEhKVEKDCX6svfXji80Vu
+	 Sw8iyxe5n/7s6coJC8bTlQH+PErzDf2w4QHZKyO7HVCvuIcp52c2QxauX2eLujnOmc
+	 H2rf8qVHDwv3DHqquoDZCtwPF2Exc2JZMU4QwIHLS4wKA8VsYtqNzaVfnb9bB3sWYK
+	 izmKMVpIoDAyTEArQRsfK2l+iqUmZXJOiZ/rQuFRhX50Zy17+yfZhcbyVrBmb6rxNL
+	 aQXiB6PxAIjxtv8Hr4ScWLeBwfWofJwOZySv+tmIXH0WftzPbFaIYx4wh+MCcOwoGz
+	 cldMjylGTHpBw==
+Subject: Re: [PATCH net v2 2/2] selftests: net: packetdrill: test exclusion of
+ old ACK from TCP fast path
 From: netdev-bot+sashiko@kernel.org
 To: inbal.lipshtat@mail.huji.ac.il
 Cc: netdev@vger.kernel.org, edumazet@google.com, ncardwell@google.com,
  kuniyu@google.com, davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
  horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
-Date: Thu, 10 Sep 2026 07:59:01 +0000
-Message-ID: <178902714117.219967.14735865272246328849@kernel.org>
-In-Reply-To: <20260909075644.1408171-2-inbal.lipshtat@mail.huji.ac.il>
-References: <20260909075644.1408171-2-inbal.lipshtat@mail.huji.ac.il>
-X-sashiko-severity: Low
+Date: Thu, 10 Sep 2026 07:59:02 +0000
+Message-ID: <178902714239.219967.13667145740374233304@kernel.org>
+In-Reply-To: <20260909075644.1408171-3-inbal.lipshtat@mail.huji.ac.il>
+References: <20260909075644.1408171-3-inbal.lipshtat@mail.huji.ac.il>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -46,88 +47,127 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 0 · Low: 2
+Critical: 0 · High: 0 · Medium: 2 · Low: 1
 
-- [Low] The patch fixes a live, security-relevant input-validation defect
-  (three Reported-by tags, RFC5961 reference) but carries no Fixes: tag,…
-- [Low] The kerneldoc-style block comment above tcp_rcv_established()
-  (net/ipv4/tcp_input.c:6477-6499) enumerates the conditions that…
+- [Medium] tools/testing/selftests/net/packetdrill/tcp_rfc5961_reject-
+  old-ack.pkt does not run the suite's `\`./defaults.sh\`` setup block.
+- [Medium] The companion kernel patch in this series, commit "tcp:
+  exclude old ACKs from tcp fast path" (net/ipv4/tcp_input.c, changing…
+- [Low] The new file
+  tools/testing/selftests/net/packetdrill/tcp_rfc5961_reject-old-ack.pkt…
 
 --
 
-tcp: exclude old ACKs from tcp fast path
+selftests: net: packetdrill: test exclusion of old ACK from TCP fast path
 
-This changes the header prediction test in tcp_rcv_established() so that
-segments whose ack_seq is below SND.UNA no longer enter the fast path, in
-addition to the existing rejection of ack_seq above SND.NXT.  Such segments
-now fall through to the slow path where tcp_ack() applies the RFC5961
-validation and challenge ACK handling.
+This adds a new packetdrill script that feeds an in-sequence data segment
+carrying an excessively old ACK and expects the connection to fall out of
+the header prediction fast path into the slow path, where the RFC 5961 5.2
+check drops the payload and emits a challenge ACK.  No Link: tags are
+present in the commit header.
 
-No Link: tags are present in the commit header.
+A few questions below, one about the companion kernel patch metadata and
+two about the new script itself.
 
-Two notes below.
+> selftests: net: packetdrill: test exclusion of old ACK from TCP fast path
+
+[Severity: Medium]
+A question about the companion patch in this series rather than this test:
+"tcp: exclude old ACKs from tcp fast path" changes the header prediction
+predicate in tcp_rcv_established() from
+
+	!after(TCP_SKB_CB(skb)->ack_seq, tp->snd_nxt)
+
+to
+
+	between(TCP_SKB_CB(skb)->ack_seq, tp->snd_una, tp->snd_nxt)
+
+but carries neither a Fixes: tag nor Cc: stable@vger.kernel.org, even
+though it has Reported-by: credits from external researchers.
+
+Before that change, an in-sequence data segment with an arbitrarily old
+ACK field satisfied the fast path predicate, and in the fast path the
+payload was queued and RCV.NXT advanced before the ACK was validated:
+
+net/ipv4/tcp_input.c:tcp_rcv_established() {
+	...
+	eaten = tcp_queue_rcv(sk, skb, &fragstolen);
+
+	tcp_event_data_recv(sk, skb);
+
+	if (TCP_SKB_CB(skb)->ack_seq != tp->snd_una) {
+		/* Well, only one small jumplet in fast path... */
+		tcp_ack(sk, skb, flag | FLAG_DATA);
+	...
+}
+
+The negative return from tcp_ack() (-SKB_DROP_REASON_TCP_TOO_OLD_ACK,
+produced by the RFC 5961 5.2 branch) was ignored there, so the data was
+already accepted.  Since the input is remote packet data, should the
+companion patch pick up a stable tag?  git blame points at 31770e34e43d6
+("tcp: Revert \"tcp: remove header prediction\"") as the Fixes: candidate
+for the predicate.
+
+> diff --git a/tools/testing/selftests/net/packetdrill/tcp_rfc5961_reject-old-ack.pkt b/tools/testing/selftests/net/packetdrill/tcp_rfc5961_reject-old-ack.pkt
+> new file mode 100644
+> index 000000000000..8e7229127670
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/packetdrill/tcp_rfc5961_reject-old-ack.pkt
+> @@ -0,0 +1,23 @@
+> +// Test rejection of data segments carrying excessively old ACKs
+> +
+> +0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
+
+[Severity: Medium]
+Should this script source the suite's setup block before the socket call?
+Every other .pkt file in tools/testing/selftests/net/packetdrill/ starts
+with it, for example tcp_rfc5961_ack-out-of-window.pkt:
+
+	`./defaults.sh
+	sysctl -q net.ipv4.tcp_invalid_ratelimit=0
+	`
+
+ksft_runner.sh does no sysctl or qdisc setup of its own:
+
+	unshare -n packetdrill ${ip_args[$ip_version]} ${optargs[@]} $script > /dev/null \
+
+so without the block the test runs with host-inherited values for
+net.core.default_qdisc, net.ipv4.tcp_rmem/tcp_wmem, tcp_ecn,
+tcp_timestamps, tcp_congestion_control and tcp_slow_start_after_idle, and
+tun0 never gets the explicit pfifo that defaults.sh installs:
+
+	# Override the default qdisc on the tun device.
+	# Many tests fail with timing errors if the default
+	# is FQ and that paces their flows.
+	tc qdisc add dev tun0 root pfifo
+
+Both expected outbound packets here are asserted at +0, and the receive
+memory sysctls feed into the sk_rcvbuf / sk_forward_alloc state that the
+500-byte priming segment is there to establish.  Can the result of this
+test vary with the host configuration as written?
+
+Also, is tcp_invalid_ratelimit relevant here?  The sibling RFC 5961 test
+pins it to 0 before expecting a challenge ACK.
 
 [Severity: Low]
-The changelog refers to the validation added by commit 3d501dd326fb1c7
-("tcp: do not accept ACK of bytes we never sent") in prose:
+This isn't a bug, but the new file has no SPDX-License-Identifier line.
+Both sibling RFC 5961 scripts start with
 
-    Such ACKs will fall through to the slow path, where tcp_ack()
-    performs the appropriate validation and challenge ACK handling
-    according to RFC5961 and Commit 3d501dd326fb1c7 ("tcp: do not
-    accept ACK of bytes we never sent").
+	// SPDX-License-Identifier: GPL-2.0
 
-Should this carry a Fixes: tag as well, so stable tooling can pick it up?
+(tcp_rfc5961_ack-out-of-window.pkt and tcp_rfc5961_rst-syn-recv.pkt), as
+do 105 of the .pkt scripts in that directory, though the tcp_accecn_*.pkt
+group does not.  Documentation/process/license-rules.rst asks for the tag
+in new files.
 
-git blame on the replaced predicate in tcp_rcv_established() points at
-31770e34e43d6 ("tcp: Revert \"tcp: remove header prediction\""), and
-3d501dd326fb is the commit that added the too-old-ACK check the fast path
-was bypassing, so either looks like a concrete candidate.
+> +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
+> ++0 bind(3, ..., ...) = 0
+> ++0 listen(3, 1024) = 0
 
-There are three Reported-by tags but no Link: to the report, and the
-changelog does not state the user-visible impact.  Could both be added?
-
-> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> index 0f60a1dbf927..89f9f3913b52 100644
-> --- a/net/ipv4/tcp_input.c
-> +++ b/net/ipv4/tcp_input.c
-> @@ -6539,7 +6539,7 @@ void tcp_rcv_established(struct sock *sk, struct sk_buff *skb)
->  
->  	if ((tcp_flag_word(th) & TCP_HP_BITS) == tp->pred_flags &&
->  	    TCP_SKB_CB(skb)->seq == tp->rcv_nxt &&
-> -	    !after(TCP_SKB_CB(skb)->ack_seq, tp->snd_nxt)) {
-> +	    between(TCP_SKB_CB(skb)->ack_seq, tp->snd_una, tp->snd_nxt)) {
-
-[Severity: Low]
-Should the block comment above tcp_rcv_established() be updated for this
-new rejection class?  It enumerates the cases that disable the fast path
-and then claims the enumeration is complete:
-
- *	- Unexpected TCP flags/window values/header lengths are received
- *	  (detected by checking the TCP header against pred_flags)
- *	- Data is sent in both directions. Fast path only supports pure senders
- *	  or pure receivers (this means either the sequence number or the ack
- *	  value must stay constant)
- *	- Unexpected TCP option.
- *
- *	When these conditions are not satisfied it drops into a standard
- *	receive procedure patterned after RFC793 to handle all cases.
- *	The first three cases are guaranteed by proper pred_flags setting,
- *	the rest is checked inline. Fast processing is turned on in
- *	tcp_data_queue when everything is OK.
-
-Nothing in that list mentions ACK sequence validity.  After this change, a
-reordered or duplicated pure ACK with ack_seq strictly below SND.UNA takes
-the slow path on a plain pure-sender/pure-receiver connection with matching
-pred_flags, which the list above says would be fast-pathed.  A bullet for
-ack_seq outside [SND.UNA, SND.NXT] would keep the comment in agreement with
-the predicate.
-
->  		int tcp_header_len = tp->tcp_header_len;
->  		s32 delta = 0;
->  		int flag = 0;
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909075644.1408171-1-inbal.lipshtat%40mail.huji.ac.il
