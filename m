@@ -1,255 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk2-f5.google.com (mail-qk2-f5.google.com [74.125.230.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FCE3B05B2;
-	Thu, 10 Sep 2026 10:21:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789035665; cv=none; b=JdtD+9aQft0RRVN3a7YnluVXG25xlj2F+d/3Xk5g9iy2/IYiUEi0PiwNN6lqFW0a99BpGTO9UIDxbTvBpWD1HLXKBTnkb1Vt9A7FVPXugEopK8bCxDOGkSKNeRuqXzJcrWtwU9EkbFBn1KPbQdomIr9IB/VGtTkXQBF+tnKbo4g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789035665; c=relaxed/simple;
-	bh=wM9NfSZD6O3T04Mhq9A1yZn+d/3E9jbY1u4IYz/CxeI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jjpU+K+vTo7ivmrf25JpjAHgcYMgoZFcE1QSEOTlfb13KJhRwNBEA33dHUPEJ6fudWiEF9xZlFlkjULZs2T2A1S3uIGZZIUmWDEdIIZUlVRC8VguZdDytRUHWFtTSTA4IkLqzhxR5De5kXD6ScS/LcVfgc2mqc6k5xCdrNAeU9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XiLgP0iU; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2413CD8B0
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 10:25:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.197
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789035911; cv=pass; b=NOjUNrGogGQaqXewAPuK3bTeKYT9eafA4sngCvcoMmw+sAncc4YHTt/JzvhEXNd6CMtYbEXNfnIn6mZUBnLw3UgVruQSb77L54wxI0NilKhzRQDpJSNCpoMupaor1W+zc/sLp4Ui+fsmGDq5+OUl2LvqnIPhhoo0pY0hvdfr1b0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789035911; c=relaxed/simple;
+	bh=nDOMwEFmq4ys9LsFhX+YbJ4h+PB/dTq06lEyj7W61bw=;
+	h=MIME-Version:From:In-Reply-To:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PeohD030+VLMb6HVEKgWsTuWjNLUGXYKtkQqBQVfsyWFxz2k0DIfAh1Ffm5lv7exPMTpxsw9D8okZ3USUR21lQXarVbJQMCPpzJSLXTM3RY1ZZJikJhcwfdPNl9/avJPdA8rCcE/AOdTxgorwDoF/M23qD0yZJY78rSEUXLxGW8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=anUyL9X4; arc=pass smtp.client-ip=74.125.230.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XiLgP0iU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E81CA1F00898;
-	Thu, 10 Sep 2026 10:20:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789035663;
-	bh=VNqAmjn7vwuecUWun/yj3LWAkYuAP3u7AHtle9TvBmY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=XiLgP0iUsnOLzVKKvCt33C/duL0ZjMqv/RyWaXpMwHO+aUoP3TNxa2utHfFlAODHu
-	 DmOlmNl6rKZvn1EaUHf0D/ouerBwA1AdWaUok4+mrCeLEf88PbMTDWr6sOzQBi4D17
-	 ngQpqWiIp0cCiHPiLsMNKo3NHa7W4e31E+X3Y7yfbi+83u3xxqYBxmJZW39jnuODZj
-	 kmCw6xTWUioYw3/CbjSkxdML86R6nAwyJ0EX4DvV718lQTaCFTgAArINxrA4iMPYxp
-	 EqUFHNB3AN/f4jNsnaH6S3ZILEK6UbH0GvZrJH86wy7xS7dVO/bDSKQiYRK1Wr4XU0
-	 VRoAiXqnr9tEA==
-Message-ID: <956df69d-8c0a-420f-889e-7df2842605dc@kernel.org>
-Date: Thu, 10 Sep 2026 12:20:56 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="anUyL9X4"
+Received: by mail-qk2-f5.google.com with SMTP id d75a77b69052e-52ff498cf90so44937851cf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 03:25:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789035902; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ZYE+drLMM3VFRAO1S7CPhuAC5CF9kaTOcH597VN2K12yil5ZdG4LuFX8xpjortxDSw
+         AJAXD99hIc3N/FUQV2cETVEx/y2VvTazw2lPoTEFiZMMXooZSyYZG0Q5jf/iFnH3AYSe
+         TpQve66png0QvOT8aY7EGp+H1VS7XM8tUPqV/ewZjXR1qU6x9F5FaPh+zz+fyVEdt524
+         ajFAj4QVQz3YeUX2qeKrOM4ZUekHDtEeXjnzynzAOqZ37QtMMxIBp9Ey3qR2Pty17d5e
+         1Ww+cTjIox2u0VaQp3dNuGNmS0IT4tTUrqPAoTaY8xJHmC2MUVRHbodez97EMhjapW4f
+         iPYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:references:in-reply-to:from
+         :mime-version:dkim-signature;
+        bh=nDOMwEFmq4ys9LsFhX+YbJ4h+PB/dTq06lEyj7W61bw=;
+        fh=0tJBh75BuN+Co7AmHWF4CxWGti2d1A2XvCba2dKMFyM=;
+        b=ceyPCPbrzbp7WmbPo7uDtb6GLUn5Z2M2OToH02Ne0GSzcjFneIAWKDoTJZX7NS3yus
+         JPElVThSKXczMDcM/LFYJXDepdv6gPKXu5xwO7bW8YAQZTg5OWRlMiDFpgojp/LFD+0L
+         ZIjezaufKGBFMQ1Clhujzy3yU3L7H4jgOvpPTzZLT9boCSlEPSy+fDFcoM6rN2VFc95y
+         Vtx3JH8GZabPnSfUjWMGMhnBNTBcy09xOn69jC/oiVcT5v27FYcdYThw0g4xyymjz1dP
+         0n/uGmUWA8kBpoBMDXLvni6f7duEoXSAaYHoyvYoNk3+HlqAt+CAxXxf1Vj2QbMwg3Ul
+         mt6Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789035902; x=1789640702; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
+         :from:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=nDOMwEFmq4ys9LsFhX+YbJ4h+PB/dTq06lEyj7W61bw=;
+        b=anUyL9X4frEDQW6T8L8oMc/S842dBiDqOopxZQptUDW8DWdrFbvj+3YNdhbzICGQ9h
+         kRpTC403AQ13GBVmxhRTuKQwis145LD08UwUd2yMY12MFrJiBDnzqTSjdAmr5nU/sP5S
+         P9UE60Z+vSKccn3npX7/4ppXQ63qNSEZCBQv9bIBffWdw7v9XIoYDp70YBq240PSyMeN
+         K7r5NhKciFwLJucQfjqS08S4vBoRqxoGmTM3BeH1FZOYju+NGz7m95k1FYDba3e/F85G
+         gIpdKzgX7lBwnHl3WOWmpDg/U6ariDrl7M5jCqJ2zFE/MkuYDjhGchQftvc+2GnnMPqQ
+         V3uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789035902; x=1789640702;
+        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
+         :from:mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=nDOMwEFmq4ys9LsFhX+YbJ4h+PB/dTq06lEyj7W61bw=;
+        b=UY+MrcOMP433vU4Ab/Yos0k4Sp2j/bYjKERDym3OmIMVqj0H08JB8RtAdK5TXc11ec
+         iVseQWkJHXBOIBUJUw4R+I+MYGe/kZHsnK30qtDWRO1yjnHvnh9976fnrgb5XgXcgCGF
+         eVS5zocmI1GLeX/tHFW5VD23EzWDT02Qta87wNp01P/f4gpiOjIodz7tVjuhfCuv3LRA
+         b8shq+nNyJ5Fjhize0RqSEWGO2f6pcDVa1F4P8b59Fh4qIdnZyC8abUYrwyVnSNHAl+g
+         +ucN0FjQzE1g2A/s07AGUysLy6D3T1awJwmPLY8JK3U9SaIjVNXU5NwjGBhtl3/w2znt
+         iqiA==
+X-Forwarded-Encrypted: i=1; AKwUvByMnJX1HdSGBupTTtDh3COLFJNpidGjZUTeagq7jfN9d9cT/sVpb13qJV+b5yv0F38f0kKCJsooLf2pglpw304=@vger.kernel.org
+X-Gm-Message-State: AFuF++mNSbly3l/VMU/RosePQaqHxkYo00YBpZzyxpZqJH8rz8bjLOfz
+	2yIlJpfb3GbtbI5XF3+eHlSbDvgUIO/9Z9HUaEiQO7EyU+pP/WFJNlDblddqQNBDYK6ieizjlSP
+	D2tursS1aAKzOjzm3YOpMqBtXUELoftI=
+X-Gm-Gg: AYBFou2doC52QotHlEFjldxlvjRp+sXvyGzHqWP0MdZe/o7C9KnYG2InfV6RbOLmo0K
+	KSCjHPtyy0ikq0iKLj5THt2zRM6BpitPjPAIyOtBk+eR3G/NiFyfi6pqSMnG6uc2GgRMCf/woWY
+	dd9BYwED93dxpX9FUCHpunjXGT0x+4k9u+I5EVGJsr1o0VpdfNrTJSCRlZ0Bn9548g1oytgykF0
+	cL26sB6gPKtFzQqGa3wH4pvn2MRt/n3taUwwpKuJWXNm7z4tABeKKvNgKWGOEcjuLLqfLv7EZWC
+	kDyB/Knph4e+pWlR4xvAevaEGAEJ/Ohw4benCo16nFrQJXDetZ/ZaA==
+X-Received: by 2002:a05:6214:c6c:b0:90e:978e:1c5 with SMTP id
+ 6a1803df08f44-910d0cd306dmr100407746d6.16.1789035902071; Thu, 10 Sep 2026
+ 03:25:02 -0700 (PDT)
+Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
+ Thu, 10 Sep 2026 03:25:00 -0700
+Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
+ Thu, 10 Sep 2026 03:25:00 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/3] kselftest: mm: replace usage of /proc/self/smaps
- for check_huge_xxx() helper
-To: Yeoreum Yun <yeoreum.yun@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260907-fix_split-v5-0-822b810458bc@arm.com>
- <20260907-fix_split-v5-2-822b810458bc@arm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260907-fix_split-v5-2-822b810458bc@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Tianyi Chen <diannaaav@gmail.com>
+In-Reply-To: <17f49997-2bca-4e1e-8d58-bc95e25b9a23@kernel.org>
+References: <CACGbirTvSoSeNSpMCBiifTdRKKDsKbgk7nfvh=09fHw2b0M4Ew@mail.gmail.com>
+ <CACGbirSjNMD1mijDWRp4gLcw-6dJsErrF_jgjwr3nO-geBb1Sw@mail.gmail.com> <17f49997-2bca-4e1e-8d58-bc95e25b9a23@kernel.org>
+Date: Thu, 10 Sep 2026 03:25:00 -0700
+X-Gm-Features: AcwNN1U1KzJJqcIpSm1ihT2K_s37DAftiuJeICzH9uiCZ0P912OBUId5Syhekfg
+Message-ID: <CACGbirSm=AZtAVwJAZRZt0JAGGUGVOCUQVqu-EcEiiGC-=+vJA@mail.gmail.com>
+Subject: Re: [PATCH RESEND v3 1/2] selftests/mm: Reject invalid test
+ selections before running tests
+To: David Hildenbrand <david@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Joel Savitz <jsavitz@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 9/7/26 10:19, Yeoreum Yun wrote:
-> Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-> glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-> made by memalign().
-> 
-> The underlying VMA may start at a different address from the aligned
-> address returned by memalign(). Furthermore, a subsequent
-> madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
-> already set.
-> 
-> This causes split_huge_page_test to fail because the check_huge_xxx()
-> helpers incorrectly require the address returned by memalign() to
-> match the VMA start address reported in /proc/self/smaps.
-> 
-> Instead of relying on /proc/self/smaps, use /proc/self/pagemap and
-> /proc/kpageflags to detect huge-page mappings and large folios:
-> 
->   1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of
->      using check_large_folios(), since only the mapping type matters.
->      This identifies PMD-mapped huge pages.
->   2. Otherwise, use check_large_folios() to detect large folios. This
->      covers mTHP cases.
->   3. Check the folio flags according to the type of huge page.
-> 
-> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-> Suggested-by: Zi Yan <ziy@nvidia.com>
-> Reviewed-by: Zi Yan <ziy@nvidia.com>
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> ---
->  tools/testing/selftests/mm/vm_util.c | 145 ++++++++++++++++++++++-------------
->  tools/testing/selftests/mm/vm_util.h |   1 +
->  2 files changed, 92 insertions(+), 54 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index 4821a3563036..dc62ce84e143 100644
+Hi David,
 
-[...]
+> How did you send out the previous revision? Through b4 or git send-mail?
 
->  
-> -	if (hpage_size == pmd_pagesize)
-> -		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
-> +static bool check_huge_type(uint64_t categories, uint64_t kpageflags,
-> +			    enum check_huge_type type)
-> +{
-> +	const bool file = categories & PAGE_IS_FILE;
-> +	const bool swapbacked = kpageflags & KPF_SWAPBACKED;
-> +
-> +	switch (type) {
-> +	case CHECK_HUGE_ANON:
-> +		return !file;
-> +	case CHECK_HUGE_FILE:
-> +		return file && !swapbacked;
-> +	case CHECK_HUGE_SHMEM:
-> +		return file & swapbacked;
-> +	}
+The v3 sent from hi@tychen.cc on September 8 used git send-email via
+SpaceMail SMTP. The inline Gmail resend on September 9 used Codex's
+Gmail connector. The patches were generated with git format-patch.
 
-Why do we even need CHECK_HUGE_SHMEM?
+The Gmail Sent copy was intact, but the copy received outside Gmail
+had wrapped diff headers and altered whitespace. The attachments were
+a workaround for that sending path. I agree they are inconvenient for
+review.
 
-That's really just a legacy thing for using smaps to identify huge pages.
-
-It's sufficient to identify CHECK_HUGE_FILE if you know that you have shmem mapping.
-
-You will not arbitrarily have non-shmem folios in a shmem mapping :)
-
->  
-> -	return check_large_folios(addr, len, nr_hpages, hpage_size);
-> +	return false;
->  }
->  
-> -bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> +static bool __check_huge(void *addr, size_t len, int nr_hpages,
-> +			 uint64_t hpage_size, enum check_huge_type type)
->  {
-> -	uint64_t pmd_pagesize = read_pmd_pagesize();
-> +	bool ret = false;
-> +	int pagemap_fd, kpageflags_fd;
-> +	int nr_pmd_mappings = 0;
-> +	uint64_t pmd_pagesize, scan_mapping_size;
-> +	uint64_t categories, kpf;
-> +	unsigned long pfn;
-> +	bool check_pmd_mapping, allow_nonpresent;
-> +	char *start = addr;
-> +	char *end = start + len;
->  
-> +	pmd_pagesize = read_pmd_pagesize();
->  	if (!pmd_pagesize)
->  		ksft_exit_fail_msg("reading PMD pagesize failed\n");
->  
-> -	if (hpage_size == pmd_pagesize)
-> -		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
-> +	check_pmd_mapping = (hpage_size == pmd_pagesize);
-> +	scan_mapping_size = (nr_hpages > 0) ? hpage_size : psize();
-> +	/* Some mTHP tests check a partially populated PMD-sized range. */
-> +	allow_nonpresent = (uint64_t)nr_hpages * hpage_size < len;
->  
-> -	return check_large_folios(addr, len, nr_hpages, hpage_size);
-> +	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-> +	if (pagemap_fd < 0)
-> +		ksft_exit_fail_msg("open pagemap fail\n");
-> +
-> +	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
-> +	if (kpageflags_fd < 0) {
-> +		close(pagemap_fd);
-
-No need to cleanup when exiting.
-
-> +		ksft_exit_fail_msg("open kpageflags fail\n");
-> +	}
-> +
-> +	if (!check_pmd_mapping &&
-> +	    !check_large_folios(pagemap_fd, kpageflags_fd,
-> +				addr, len, nr_hpages, hpage_size))
-> +		goto out;
-> +
-> +	for (; start < end; start += scan_mapping_size) {
-> +		categories = pagemap_scan_get_categories(pagemap_fd, start);
-> +		pfn = pagemap_get_pfn(pagemap_fd, start);
-> +		if (pfn == -1UL) {
-> +			if (!allow_nonpresent)
-> +				goto out;
-> +			else
-> +				continue;
-> +		}
-> +		if (pageflags_get(pfn, kpageflags_fd, &kpf))
-> +			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
-> +		if (check_pmd_mapping && (categories & PAGE_IS_HUGE))
-> +			nr_pmd_mappings++;
-> +		if (kpf & KPF_COMPOUND_TAIL)
-> +			continue;
-> +		if (!check_huge_type(categories, kpf, type))
-> +			goto out;
-> +	}
-> +
-> +	if (check_pmd_mapping && (nr_pmd_mappings != nr_hpages))
-> +		goto out;
-> +	ret = true;
-> +
-> +out:
-> +	close(pagemap_fd);
-> +	close(kpageflags_fd);
-> +	return ret;
->  }
-
-
-
--- 
-Cheers,
-
-David
+Thanks,
+Tianyi
