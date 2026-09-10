@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB670576EB3;
-	Thu, 10 Sep 2026 18:09:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C30857982A;
+	Thu, 10 Sep 2026 18:09:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789063791; cv=none; b=TkObBrEqLGem/Q8IGBMRBB/IG0or0WnQ3mv8dxl2x4GLTULnxtJiwoLlYGmyKQUR2qFh3zAqsPsAfVcBekII1YMxwW9RQpSYpdUEKWhP1RORMSfd7zUIyvyMij+lyhV/uXKcgCaJAe8ubEtkHOQvnJ0rG0JLcjb6/Yjjke8IPf0=
+	t=1789063791; cv=none; b=ByO6xQSYLo3yCJVt3hWIdVYIdmE+uYBfdPNsBHjbnUMnBaagIkB4VadGG5Ao7rpSYuxJ967tGh5TQvYceWEBMlgtiQJp8AsnBM4nc15omhJVmhjeD44ykGbjuNSXOzEI0C+2UPNA2zuMZsNBTNhlcBUzDR3UzCxuZjGtK9+RgnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789063791; c=relaxed/simple;
-	bh=sZa9nUo7GWRdbbbuX7Xm0T+s+CXjr+TdOMHiDkK0v1I=;
+	bh=W8EE3u46dp8cHeR4vyIuI1eHp+oIhfLynDuPDtL+npk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WP8icwjJIxWZtW34ujAvK/X8efuaK41hcd/LNQEQv+fYUS4iwzBOqgZzdcQKzOIqcZRhJSVrPe8tsABGZa+4Hi2EPWjrRwyklpjE4rPnHzS8k/4cVfi/cxzYiVtCIOC7p2fOOZmTsutK68QoEI/c4uMPCFlC82obfKx4T9MTyiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BDWZrxWm; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=Ql2d9/8BrO8T9Vqlcfm+OvjdLkUJvPRD/JmUooz/Oq/tWNR74RniI2PVQrmcrb/2W+cFxw2b0esKSZxMUnz0zGDKDQu+Pb8bFZGjxVQ6W3glGsDSRXIwyujZHDIzTBX0BQcB5znEdDBDuuSX9kMldb6/V7L2oRKDQtY6LoQbh/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aCWIsRaa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BDWZrxWm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 875481F00893;
-	Thu, 10 Sep 2026 18:09:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aCWIsRaa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26D151F000FF;
+	Thu, 10 Sep 2026 18:09:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789063782;
-	bh=EEf/YWzFHZGKhM2Jy30+UZPxNnpabVz+Ru9kLig3LpA=;
+	s=k20260515; t=1789063788;
+	bh=2kx4i/5vuO1bwBYb/SFslZeM845NWdOIhPQSfY8uSPU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=BDWZrxWmaGPU2Ss2z8cNmu1Ymbj0DLHxuFbSH3PNuw5A7T3aAVgq2nBP6XIqHT4vg
-	 hbWGYXmwsfTUmdv4e9eFxzGPDeXadN0sP/d3K9JWPDY/v6edfwEigQxFllBlf2SRau
-	 MvkHRsXUGUdcpn9YXdK5Q1FM6GXfLU09sA4fB+ExgN7HpfMRuULqQLqe4cEH5Weu/F
-	 R2Wc+N6AWrQgZ6T1YQXG2AMvl8+OpRxnyMo0GEYamVPQSq6T+w1wF4dNsbn4xhKf3E
-	 Y2csL0jJX4EDbELVzNcvKmd3VyiDS9qf+oPoogMxtg0ywZzUCpWnOxD9/ZIKKN9d5T
-	 q1UcjmIx4/Zgg==
+	b=aCWIsRaazdlT9pc/pa+zVL11V8omSJdY/oDvLyLze5Vp7+yNgwMJ7iaH+l6FKsGC1
+	 aES/9Ulo8PnuqKYa6F6eN0pKNX92YtnvxoADcNDQuq7Ltmq+0ezPcXWv8GSccMzxqA
+	 jIZtga21NM7cjvOJri0ls/NuWKQnKMpCIgiJ3IHvHWiMS8KDgLCv7LT17zpaSA//qY
+	 R9S70NnqN1WZub8M7sbvnT+G+fNslkhjLB2RLpnXzTXynGvo+igT9GB2EMew3W5DEP
+	 A+vbeBCL81oyli6V1IzKWm5MpQZPQLF8bSzHlc4ilM9JoqprXorzrb9WiidFxU/+Ww
+	 6EMdW8UhZoNkw==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: Alexander Duyck <alexanderduyck@fb.com>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -53,9 +53,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Tao Cui <cuitao@kylinos.cn>,
 	Pavel Begunkov <asml.silence@gmail.com>,
 	David Wei <dw@davidwei.uk>
-Subject: [PATCH net-next v2 4/5] fbnic: Support larger memory-provider RX pages
-Date: Thu, 10 Sep 2026 20:09:04 +0200
-Message-ID: <20260910180908.1506533-5-bjorn@kernel.org>
+Subject: [PATCH net-next v2 5/5] selftests: drv-net: Test large zcrx buffers
+Date: Thu, 10 Sep 2026 20:09:05 +0200
+Message-ID: <20260910180908.1506533-6-bjorn@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260910180908.1506533-1-bjorn@kernel.org>
 References: <20260910180908.1506533-1-bjorn@kernel.org>
@@ -68,251 +68,130 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Memory providers can set the receive page size for a queue through
-QCFG_RX_PAGE_SIZE. fbnic creates PAGE_SIZE PPQ page-pool allocations,
-so larger rx_buf_len values are not reflected in the PPQ BDQ geometry.
+A zcrx RX buffer larger than PAGE_SIZE does not prove that the
+driver uses space beyond the first MTU-sized part of the buffer.
 
-Use the rendered rx_page_size for PPQ allocations and completion
-decoding. The NIC still consumes 4 KiB device pages; a larger PPQ page
-is represented by consecutive device-page descriptors, and completion
-IDs decode to offsets within the same netmem allocation.
+The test assumes that a driver which accepts a large rx_buf_len uses
+space beyond the first MTU-sized region during sustained receive
+traffic. Drivers which do not support large buffers are expected to
+reject the requested size; the feature probe then skips them. A driver
+which accepts the size but only uses the first MTU-sized region fails.
 
-Validate rx_page_size against fbnic's fragment-reference budget,
-device-page geometry, and rendered PPQ depth. The page size must be a
-power-of-two of at least one device page, its worst-case payload
-fragment count must fit the page-pool reference bias, and the PPQ must
-retain usable software depth after expansion.
+Request a power-of-two RX buffer larger than twice the device MTU and
+require one zero-copy receive CQE to end past the first MTU-sized
+region.
 
 Signed-off-by: Björn Töpel <bjorn@kernel.org>
 ---
- .../net/ethernet/meta/fbnic/fbnic_ethtool.c   |  8 +-
- .../net/ethernet/meta/fbnic/fbnic_netdev.c    |  5 ++
- drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  | 88 +++++++++++++++++--
- drivers/net/ethernet/meta/fbnic/fbnic_txrx.h  |  6 ++
- 4 files changed, 94 insertions(+), 13 deletions(-)
+ .../selftests/drivers/net/hw/iou-zcrx.c       | 33 ++++++++++++++++---
+ .../selftests/drivers/net/hw/iou-zcrx.py      |  6 +++-
+ 2 files changed, 34 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c b/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c
-index 0e47088ec44b..2def4c26207d 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c
-@@ -334,10 +334,10 @@ fbnic_set_ringparam(struct net_device *netdev, struct ethtool_ringparam *ring,
- 	struct fbnic_net *clone;
- 	int err;
+diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+index f6a8fc5fac24..c0d9065b2103 100644
+--- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
++++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+@@ -84,6 +84,9 @@ static int cfg_oneshot_recvs;
+ static int cfg_send_size = SEND_SIZE;
+ static struct sockaddr_in6 cfg_addr;
+ static unsigned int cfg_rx_buf_len;
++static unsigned int cfg_min_data_end;
++static bool cfg_check_data_end;
++static bool seen_data_end;
+ static bool cfg_dry_run;
  
--	ring->rx_pending	= roundup_pow_of_two(ring->rx_pending);
--	ring->rx_mini_pending	= roundup_pow_of_two(ring->rx_mini_pending);
--	ring->rx_jumbo_pending	= roundup_pow_of_two(ring->rx_jumbo_pending);
--	ring->tx_pending	= roundup_pow_of_two(ring->tx_pending);
-+	ring->rx_pending	= fbnic_ring_size_pow2(ring->rx_pending);
-+	ring->rx_mini_pending	= fbnic_ring_size_pow2(ring->rx_mini_pending);
-+	ring->rx_jumbo_pending	= fbnic_ring_size_pow2(ring->rx_jumbo_pending);
-+	ring->tx_pending	= fbnic_ring_size_pow2(ring->tx_pending);
+ static char *payload;
+@@ -298,6 +301,15 @@ static void process_recvzc(struct io_uring *ring, struct io_uring_cqe *cqe)
+ 	mask = (1ULL << IORING_ZCRX_AREA_SHIFT) - 1;
+ 	data = (char *)area_ptr + (rcqe->off & mask);
  
- 	/* These are absolute minimums allowing the device and driver to operate
- 	 * but not necessarily guarantee reasonable performance. Settings below
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-index 10bf99be3f24..8bc5e6e5c59e 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-@@ -773,6 +773,11 @@ struct net_device *fbnic_netdev_alloc(struct fbnic_dev *fbd)
- 	fbn->ppq_size = FBNIC_PPQ_SIZE_DEFAULT;
- 	fbn->rcq_size = FBNIC_RCQ_SIZE_DEFAULT;
- 
-+	netdev->cfg->rings.rx_pending = fbn->rcq_size;
-+	netdev->cfg->rings.rx_mini_pending = fbn->hpq_size;
-+	netdev->cfg->rings.rx_jumbo_pending = fbn->ppq_size;
-+	netdev->cfg->rings.tx_pending = fbn->txq_size;
++	if (cfg_check_data_end) {
++		unsigned int rx_buf_len = cfg_rx_buf_len ?: page_size;
++		unsigned int data_end_off;
 +
- 	fbn->tx_usecs = FBNIC_TX_USECS_DEFAULT;
- 	fbn->rx_usecs = FBNIC_RX_USECS_DEFAULT;
- 	fbn->rx_max_frames = FBNIC_RX_FRAMES_DEFAULT;
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-index 28b962307c08..5e22905a6373 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-@@ -1022,7 +1022,8 @@ static void fbnic_add_rx_frag(struct fbnic_napi_vector *nv, u64 rcd,
- 	netmem = fbnic_page_pool_get_data(qt, pg_idx);
- 
- 	truesize = FIELD_GET(FBNIC_RCD_AL_PAGE_FIN, rcd) ?
--		   FBNIC_BD_PAGE_SIZE - pg_off : ALIGN(len, 128);
-+		   FBNIC_BD_PAGE_SIZE - pg_off :
-+		   ALIGN(len, FBNIC_RX_PAYLD_ALIGN);
- 
- 	pg_off += fbnic_rcd_bd_page_offset(&qt->sub1, rcd);
- 
-@@ -1030,6 +1031,9 @@ static void fbnic_add_rx_frag(struct fbnic_napi_vector *nv, u64 rcd,
- 	page_pool_dma_sync_netmem_for_cpu(qt->sub1.page_pool, netmem,
- 					  pg_off, truesize);
- 
-+	/* Consecutive device-page completions from one PPQ page are adjacent
-+	 * ranges in the same netmem.
-+	 */
- 	added = xdp_buff_add_frag(&pkt->buff, netmem, pg_off, len, truesize);
- 	if (unlikely(!added)) {
- 		pkt->add_frag_failed = true;
-@@ -1564,7 +1568,7 @@ void fbnic_free_napi_vectors(struct fbnic_net *fbn)
- 
- static int
- fbnic_alloc_qt_page_pools(struct fbnic_net *fbn, struct fbnic_q_triad *qt,
--			  unsigned int rxq_idx)
-+			  unsigned int rxq_idx, u32 rx_page_size)
- {
- 	struct page_pool_params pp_params = {
- 		.order = 0,
-@@ -1599,6 +1603,8 @@ fbnic_alloc_qt_page_pools(struct fbnic_net *fbn, struct fbnic_q_triad *qt,
- 
- 	qt->sub0.page_pool = pp;
- 	if (netif_rxq_has_unreadable_mp(fbn->netdev, rxq_idx)) {
-+		pp_params.order = get_order(rx_page_size);
-+		pp_params.max_len = rx_page_size;
- 		pp_params.flags |= PP_FLAG_ALLOW_UNREADABLE_NETMEM;
- 		pp_params.dma_dir = DMA_FROM_DEVICE;
- 
-@@ -2028,15 +2034,18 @@ static int fbnic_alloc_tx_qt_resources(struct fbnic_net *fbn,
- 
- static int fbnic_alloc_rx_qt_resources(struct fbnic_net *fbn,
- 				       struct fbnic_napi_vector *nv,
--				       struct fbnic_q_triad *qt)
-+				       struct fbnic_q_triad *qt,
-+				       u32 rx_page_size)
- {
- 	struct device *dev = fbn->netdev->dev.parent;
- 	int err;
- 
--	err = fbnic_alloc_qt_page_pools(fbn, qt, qt->cmpl.q_idx);
-+	err = fbnic_alloc_qt_page_pools(fbn, qt, qt->cmpl.q_idx, rx_page_size);
- 	if (err)
- 		return err;
- 
-+	fbnic_bdq_set_page_size(&qt->sub1, rx_page_size);
-+
- 	err = xdp_rxq_info_reg(&qt->xdp_rxq, fbn->netdev, qt->sub0.q_idx,
- 			       nv->napi.napi_id);
- 	if (err)
-@@ -2097,7 +2106,11 @@ static int fbnic_alloc_nv_resources(struct fbnic_net *fbn,
- 
- 	/* Allocate Rx Resources */
- 	for (j = 0; j < nv->rxt_count; j++, i++) {
--		err = fbnic_alloc_rx_qt_resources(fbn, nv, &nv->qt[i]);
-+		struct netdev_queue_config qcfg;
-+
-+		netdev_queue_config(fbn->netdev, nv->qt[i].cmpl.q_idx, &qcfg);
-+		err = fbnic_alloc_rx_qt_resources(fbn, nv, &nv->qt[i],
-+						  qcfg.rx_page_size);
- 		if (err)
- 			goto free_qt_resources;
- 	}
-@@ -2864,21 +2877,75 @@ static int fbnic_queue_mem_alloc(struct net_device *dev,
- 	struct fbnic_napi_vector *nv;
- 
- 	if (!netif_running(dev))
--		return fbnic_alloc_qt_page_pools(fbn, qt, idx);
-+		return fbnic_alloc_qt_page_pools(fbn, qt, idx,
-+						 qcfg->rx_page_size);
- 
- 	real = container_of(fbn->rx[idx], struct fbnic_q_triad, cmpl);
- 	nv = fbn->napi[idx % fbn->num_napi];
- 
- 	fbnic_ring_init(&qt->sub0, real->sub0.doorbell, real->sub0.q_idx,
- 			real->sub0.flags);
--	qt->sub0.bd_page_shift = real->sub0.bd_page_shift;
- 	fbnic_ring_init(&qt->sub1, real->sub1.doorbell, real->sub1.q_idx,
- 			real->sub1.flags);
--	qt->sub1.bd_page_shift = real->sub1.bd_page_shift;
- 	fbnic_ring_init(&qt->cmpl, real->cmpl.doorbell, real->cmpl.q_idx,
- 			real->cmpl.flags);
- 
--	return fbnic_alloc_rx_qt_resources(fbn, nv, qt);
-+	return fbnic_alloc_rx_qt_resources(fbn, nv, qt, qcfg->rx_page_size);
-+}
-+
-+static void fbnic_default_qcfg(struct net_device *dev,
-+			       struct netdev_queue_config *qcfg)
-+{
-+	qcfg->rx_page_size = PAGE_SIZE;
-+}
-+
-+static int fbnic_validate_qcfg(struct net_device *dev,
-+			       struct netdev_queue_config *qcfg,
-+			       struct netlink_ext_ack *extack)
-+{
-+	u32 ppq_size = fbnic_ring_size_pow2(qcfg->rx_jumbo_ring_size);
-+	u32 bd_page_count, ppq_entries, frag_count;
-+	u32 rx_page_size = qcfg->rx_page_size;
-+
-+	if (!is_power_of_2(rx_page_size)) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "rx_page_size must be a power of 2");
-+		return -EINVAL;
++		data_end_off = (rcqe->off & mask) % rx_buf_len + n;
++		if (data_end_off > cfg_min_data_end)
++			seen_data_end = true;
 +	}
 +
-+	if (rx_page_size < FBNIC_BD_PAGE_SIZE) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "rx_page_size must be at least 4K");
-+		return -EINVAL;
-+	}
-+
-+	/* Payload fragments occupy multiples of FBNIC_RX_PAYLD_ALIGN bytes.
-+	 * Keep at least one reference in the bias until fbnic_clean_bdq()
-+	 * observes a completion from a subsequent allocation.
-+	 */
-+	frag_count = rx_page_size / FBNIC_RX_PAYLD_ALIGN;
-+	if (frag_count >= FBNIC_PAGECNT_BIAS_MAX) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "rx_page_size can produce too many fragments");
-+		return -EINVAL;
-+	}
-+
-+	bd_page_count = rx_page_size / FBNIC_BD_PAGE_SIZE;
-+	ppq_entries = ppq_size / bd_page_count;
-+	/* The PPQ is sized in 4 KiB device pages. One software entry tracks
-+	 * each page-pool allocation. In addition to the unused entry for
-+	 * empty/full accounting, cleanup retains the current allocation
-+	 * until a completion identifies a subsequent allocation. A two-entry
-+	 * ring can only post one allocation and cannot make progress.
-+	 * Require at least four entries, since ring sizes are powers of two.
-+	 */
-+	if (ppq_entries < 4) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "rx-jumbo ring size too small for rx_page_size");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
+ 	for (i = 0; i < n; i++) {
+ 		if (*(data + i) != payload[(received + i)])
+ 			error(1, 0, "payload mismatch at %d", i);
+@@ -373,7 +385,10 @@ static void run_server(void)
+ 		server_loop(&ring);
+ 
+ 	if (!stop)
+-		error(1, 0, "test failed\n");
++		error(1, 0, "test failed after receiving %zu bytes", received);
++	if (cfg_check_data_end && !seen_data_end)
++		error(1, 0, "no payload CQE ending past offset %u",
++		      cfg_min_data_end);
  }
  
- static void fbnic_queue_mem_free(struct net_device *dev, void *qmem)
-@@ -2980,4 +3047,7 @@ const struct netdev_queue_mgmt_ops fbnic_queue_mgmt_ops = {
- 	.ndo_queue_mem_free	= fbnic_queue_mem_free,
- 	.ndo_queue_start	= fbnic_queue_start,
- 	.ndo_queue_stop		= fbnic_queue_stop,
-+	.ndo_default_qcfg	= fbnic_default_qcfg,
-+	.ndo_validate_qcfg	= fbnic_validate_qcfg,
-+	.supported_params	= QCFG_RX_PAGE_SIZE,
- };
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
-index 626729b1a8b6..12b3a684f461 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
-@@ -49,12 +49,18 @@ struct fbnic_net;
- #define FBNIC_RX_USECS_DEFAULT		30
- #define FBNIC_RX_FRAMES_DEFAULT		0
+ static void run_client(void)
+@@ -406,8 +421,11 @@ static void run_client(void)
  
-+static inline u32 fbnic_ring_size_pow2(u32 size)
-+{
-+	return size ? roundup_pow_of_two(size) : 0;
-+}
-+
- #define FBNIC_RX_TROOM \
- 	SKB_DATA_ALIGN(sizeof(struct skb_shared_info))
- #define FBNIC_RX_HROOM_PAD		128
- #define FBNIC_RX_HROOM \
- 	(ALIGN(FBNIC_RX_TROOM + FBNIC_RX_HROOM_PAD, 128) - FBNIC_RX_TROOM)
- #define FBNIC_RX_PAD			0
-+#define FBNIC_RX_PAYLD_ALIGN		128
- #define FBNIC_RX_PAYLD_OFFSET		0
- #define FBNIC_RX_PAYLD_PG_CL		0
+ static void usage(const char *filepath)
+ {
+-	error(1, 0, "Usage: %s (-4|-6) (-s|-c) -h<server_ip> -p<port> "
+-		    "-l<payload_size> -i<ifname> -q<rxq_id>", filepath);
++	error(1, 0,
++	      "Usage: %s (-4|-6) (-s|-c) -h<server_ip> -p<port>\n"
++	      "\t-l<payload_size> -i<ifname> -q<rxq_id>\n"
++	      "\t[-x<rx_buf_pages>] [-E<min_data_end>] [-d]\n",
++	      filepath);
+ }
  
+ static void parse_opts(int argc, char **argv)
+@@ -425,7 +443,7 @@ static void parse_opts(int argc, char **argv)
+ 		usage(argv[0]);
+ 	cfg_payload_len = max_payload_len;
+ 
+-	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:d")) != -1) {
++	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:E:d")) != -1) {
+ 		switch (c) {
+ 		case 's':
+ 			if (cfg_client)
+@@ -463,6 +481,10 @@ static void parse_opts(int argc, char **argv)
+ 		case 'x':
+ 			cfg_rx_buf_len = page_size * strtoul(optarg, NULL, 0);
+ 			break;
++		case 'E':
++			cfg_check_data_end = true;
++			cfg_min_data_end = strtoul(optarg, NULL, 0);
++			break;
+ 		case 'd':
+ 			cfg_dry_run = true;
+ 			break;
+@@ -484,6 +506,9 @@ static void parse_opts(int argc, char **argv)
+ 
+ 	if (cfg_payload_len > max_payload_len)
+ 		error(1, 0, "-l: payload exceeds max (%d)", max_payload_len);
++	if (cfg_check_data_end &&
++	    cfg_min_data_end >= (cfg_rx_buf_len ?: page_size))
++		error(1, 0, "-E: offset outside rx_buf_len");
+ }
+ 
+ int main(int argc, char **argv)
+diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
+index b7a225fe4bea..a9f62c6b950b 100755
+--- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
++++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
+@@ -175,9 +175,13 @@ def test_zcrx_large_chunks(cfg) -> None:
+ 
+     single(cfg)
+     page_size = resource.getpagesize()
++    mtu = cfg.dev["mtu"]
+     nr_pages = 2
++    while nr_pages * page_size <= 2 * mtu:
++        nr_pages *= 2
+     rx_buf_len = nr_pages * page_size
+-    rx_cmd = f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} -q {cfg.target} -x {nr_pages}"
++    rx_cmd = (f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} "
++              f"-q {cfg.target} -x {nr_pages} -E {mtu}")
+     tx_cmd = f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {cfg.port} -l 12840"
+ 
+     probe = cmd(rx_cmd + " -d", fail=False)
 -- 
 2.55.0
 
