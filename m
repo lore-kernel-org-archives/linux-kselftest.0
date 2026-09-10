@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B518368291;
-	Thu, 10 Sep 2026 01:48:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A9C36680E;
+	Thu, 10 Sep 2026 01:48:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789004901; cv=none; b=KKKAcA0dYd4VNy2rBDGw4n50XsWsP2ZClhEOqpJMUTUhElo8cAyQlSIK1sui7bd2+mBWlbYJBmVEROkE2KUDNTbV/k9RSgMJKEU8wyPMKbgGvwvRws/XYD1W6KI0uOvnp8+Cg0hr7iJckUHOdEZN0Er+ldqL0yvZoVi2spZH8fI=
+	t=1789004903; cv=none; b=o+m6UZbrf6O2nTj9US1TJX1RNehWz7F7fApdyqrmtTG2tnO4x/yKuChbDMJtbO0O8xfiW5WfIcFuHztfEuj0l7j1Bc9OtHfUjm7Lwmh6yaIc/TiyCbc1fd7sUwQFQDYTrwxngjPTD84em/jPOoahbEdZlTSlMIO+GlpfSNlMon0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789004901; c=relaxed/simple;
-	bh=u8NaKQ9o2x2ktD13eEfew5wiYcy6EbcMB7XVFVvZ0Vk=;
+	s=arc-20240116; t=1789004903; c=relaxed/simple;
+	bh=vOuZWBcSN/9bVgr1W0oHy9JJWPBF47zqq8nNCMusgPA=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kZfdJ1EVHrsxCfa1z3wjROYKPfLsDDAkT0l77C/hlwiyJ/kUI47JVOOV5ZMh6SlL6OJLmvkebW037w3mRhAqk5UjymnatTYr/FkKeU5B74wi8QbVgdmYeXf7TgRFRLlHZLQfFghbiKR2L7h3aU7mWTEgr9Y9SQsr+l9J9bykvlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YQKmQh3N; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=m5fssAPOtFW60LaPNTmVS2tJoVAlD9S1DbF3aJQeeBoUURIm5vUOZ0chw6mGyiclVXpHPxuc17iqOY/Rv+wdLUOwXQ3pTbpKNCmNzKr5x3vxJwa5QEUmXtOLu03ucdOlkHdxhNmxH6kmbe8JFpCgqO+l3REsgdZdzQCpgHEbXr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V3S16SsP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YQKmQh3N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC961F00898;
-	Thu, 10 Sep 2026 01:48:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V3S16SsP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DDA41F00893;
+	Thu, 10 Sep 2026 01:48:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789004896;
-	bh=+6iBRDJ1GgN4ZJK5Ro8Z41kqXbpt9fKjIMyksIwW7Zg=;
+	s=k20260515; t=1789004895;
+	bh=taKI6DHxGvhYFTerPylSqg0o7BwGHq1Kd67Fp50EeJg=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=YQKmQh3NpJ+UUxgMqqiRRAtfIVg6RP8f8PMe2if1vm5BQdGEhJyUW5aQZOtC/LbcV
-	 YViQokj4nKV+LYfEiSvm/6b+L0LlvzpH9zJJyaLoRjOWc/eg/2UxaTjopvOlWGdZY8
-	 IbxQbfw0kZ1OsY4rWccUABsSbwydDLPTsjVzahClerWbjmSY2XmU/BuCgXVVgJ6Y93
-	 rcJ27008o9NqIOWqvc+kzZt2qM9h+sJ9JPWV/amzCCeC8dqj9D59xe7KCS0OJ+4Kx1
-	 b5D2zU6VTuccbGr3LTeLNlYXLYgdeLC7DWrlk33tn0eDXX+yc3wa6wY1Z8tCpIYUJ0
-	 HGxxupDJSpGwA==
-Subject:
- Re: [PATCH net-next v2 3/3] selftests: net: test AF_PACKET multicast dumps
+	b=V3S16SsPwKsQ614sXRTfbZtJisawVds75PAkljiuDVxOm8qRLosCDg2pg0vCsp5lt
+	 n3ZRlY+edX+abh05V6y6UgT+o3nUIhOneNO8dGyu6UfJvVO331zFG03FgqiNuDLd5Q
+	 Wr3Ruy8E7rPSJ+0PkI0EmtSqMuA5AGKoETWWdxbzz9oDxxRCZGIBUZrGn7UkBor+y5
+	 jo/mFjdI2Eo1EhnbyRjKfYJRIl6xlvAGe0hsGZFVxp0KSx5oVdMmPhTKi5mGooduXe
+	 Fjv7ysugpUDwemFe5mRh1qr4zetmzwgIwuhU8kJx+y5qzuJY1r0elO49JwVHKr4e6H
+	 Mfz0E4YUMqEaw==
+Subject: Re: [PATCH net-next v2 2/3] netlink: specs: rt-addr: document
+ AF_PACKET multicast dumps
 From: netdev-bot+sashiko@kernel.org
 To: sigefriedhyy@gmail.com
 Cc: davem@davemloft.net, dsahern@kernel.org, donald.hunter@gmail.com,
@@ -36,11 +36,11 @@ Cc: davem@davemloft.net, dsahern@kernel.org, donald.hunter@gmail.com,
  sd@queasysnail.net, shuah@kernel.org, horms@kernel.org, sdf.kernel@gmail.com,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  netdev@vger.kernel.org
-Date: Thu, 10 Sep 2026 01:48:15 +0000
-Message-ID: <178900489529.219967.8506896899151263500@kernel.org>
-In-Reply-To: <20260909013401.14408-4-sigefriedhyy@gmail.com>
-References: <20260909013401.14408-4-sigefriedhyy@gmail.com>
-X-sashiko-severity: Medium
+Date: Thu, 10 Sep 2026 01:48:13 +0000
+Message-ID: <178900489382.219967.10423938088246016510@kernel.org>
+In-Reply-To: <20260909013401.14408-3-sigefriedhyy@gmail.com>
+References: <20260909013401.14408-3-sigefriedhyy@gmail.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -50,142 +50,125 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Critical: 0 · High: 0 · Medium: 0 (1) · Low: 1
 
-- [Medium] In the new `dump_mcaddr_l2_check()`
-  (tools/testing/selftests/net/rtnetlink.py) the non-fatal presence…
-- [Low] dump_mcaddr_l2_check() creates a netlink socket via `rtnl =
-  RtnlAddrFamily()` (rtnetlink.py:125) inside the temporary netns and…
+- [Low] The new getmulticast doc text in Documentation/netlink/specs/rt-
+  addr.yaml enumerates ifa-family values (AF_INET, AF_INET6, AF_PACKET)…
+
+Pre-existing issues:
+- [Medium] Documentation/netlink/specs/rt-addr.yaml declares a `do:`
+  operation for getmulticast (request value 58, reply value 58), and…
 
 --
 
-selftests: net: test AF_PACKET multicast dumps
+netlink: specs: rt-addr: document AF_PACKET multicast dumps
 
-This adds dump_mcaddr_l2_check() to tools/testing/selftests/net/rtnetlink.py,
-which dumps the link-layer multicast addresses of a dummy device and checks
-the ifa-index filter, the flags of the all-hosts entry joined on link up, and
-the mc-users/permanent state of an address added with SIOCADDMULTI. The case
-is skipped when the kernel answers EOPNOTSUPP.
+This updates the getmulticast doc string in the rt-addr YAML spec to
+describe the ifa-family values it accepts, including the newly added
+AF_PACKET link-layer multicast dumps and the meaning of the permanent
+flag for those entries.
 
-> diff --git a/tools/testing/selftests/net/rtnetlink.py b/tools/testing/selftests/net/rtnetlink.py
-> index 5cc3ebdcf08d..cea636f10aeb 100755
-> --- a/tools/testing/selftests/net/rtnetlink.py
-> +++ b/tools/testing/selftests/net/rtnetlink.py
-
-[ ... ]
-
-> @@ -105,6 +109,52 @@ def dump_mcaddr6_check() -> None:
->                  s2.close()
->  
->  
-> +def dump_mcaddr_l2_check() -> None:
-> +    """
-> +    Verify link-layer multicast addresses in an AF_PACKET RTM_GETMULTICAST
-> +    dump: the ifa-index filter, mc-users and the permanent flag.
-> +    """
-> +
-> +    with NetNS() as ns, NetNSEnter(str(ns)):
-> +        for ifname in ("dummy1", "dummy2"):
-> +            ip(f"link add name {ifname} type dummy")
-> +            ip(f"link set {ifname} up")
-> +        dev_idx = socket.if_nametoindex("dummy1")
-> +        ip(f"maddr add {ETH_TEST_MULTICAST_STR} dev dummy1")
-> +
-> +        rtnl = RtnlAddrFamily()
+> diff --git a/Documentation/netlink/specs/rt-addr.yaml b/Documentation/netlink/specs/rt-addr.yaml
+> index 0ecbd24c890c..2a2310cb0df0 100644
+> --- a/Documentation/netlink/specs/rt-addr.yaml
+> +++ b/Documentation/netlink/specs/rt-addr.yaml
+> @@ -168,7 +168,12 @@ operations:
+>            attributes: *ifaddr-all
+>      -
+>        name: getmulticast
+> -      doc: Get / dump IPv4/IPv6 multicast addresses.
+> +      doc: |
+> +        Get / dump multicast addresses. ifa-family selects the address
+> +        family: AF_INET or AF_INET6 for the IP multicast groups joined on
+> +        a device, AF_PACKET for the link-layer multicast addresses in the
+> +        device filter. Link-layer entries added with SIOCADDMULTI are
+> +        reported with the permanent flag set.
 
 [Severity: Low]
-Does dump_mcaddr_l2_check() leak the netlink socket created here?
+The new text reads as if ifa-family were a plain family selector, but
+should it also mention that an AF_UNSPEC dump does not include the
+AF_PACKET entries?
 
-YnlFamily.__init__() in tools/net/ynl/pyynl/lib/ynl.py opens
-socket.socket(AF_NETLINK, SOCK_RAW, ...) and only releases it from close()
-or __exit__(); there is no __del__, and the class installs
-functools.partial(self._op, op_name) attributes on itself, so reference
-cycles make prompt collection unreliable.
+The PF_PACKET handler is only reachable when the request names the family
+explicitly:
 
-This function has no "with RtnlAddrFamily() as rtnl:", no finally: rtnl.close()
-and no defer(rtnl.close). On the early-exit paths below (KsftSkipEx for
-EOPNOTSUPP, the re-raised NlError) the traceback also keeps this frame alive.
+net/core/rtnetlink.c:
+	{.protocol = PF_PACKET, .msgtype = RTM_GETMULTICAST,
+	 .dumpit = rtnl_dump_mcaddr, .flags = RTNL_FLAG_DUMP_UNLOCKED},
 
-Since the socket is created inside the temporary namespace, it keeps that
-namespace referenced after NetNS teardown runs 'ip netns del'. The same
-file already uses the symmetric idiom in _rtnl_route_subscribe():
+and the "all families" walk in rtnl_dump_all() skips it:
 
-        rtnl = RtnlRouteFamily()
-    defer(rtnl.close)
+net/core/rtnetlink.c:rtnl_dump_all() {
+	...
+		if (idx < s_idx || idx == PF_PACKET)
+			continue;
+	...
+}
 
-Would adding defer(rtnl.close) here be preferable? Note the neighbouring
-dump_mcaddr_check()/dump_mcaddr6_check() have the same open-without-close
-shape, so this is mostly about consistency.
+So a client that sends RTM_GETMULTICAST with ifa_family = AF_UNSPEC and
+NLM_F_DUMP gets only the IP multicast groups, with no error and no hint
+that the device multicast filter was left out.
 
-> +        try:
-> +            addresses = rtnl.getmulticast(
-> +                {"ifa-family": socket.AF_PACKET, "ifa-index": dev_idx},
-> +                dump=True)
-> +        except NlError as e:
-> +            if e.error == errno.EOPNOTSUPP:
-> +                raise KsftSkipEx(
-> +                    "kernel does not support AF_PACKET multicast dump")
-> +            raise
-> +
-> +        # dummy2 has entries as well, only dummy1 may be listed
-> +        ksft_eq({addr['ifa-index'] for addr in addresses}, {dev_idx},
-> +                "AF_PACKET multicast dump ignored ifa-index filter")
-> +
-> +        entries = {addr['multicast']: addr for addr in addresses}
-> +
-> +        # Bringing an Ethernet device up joins 224.0.0.1, which maps
-> +        # to 01:00:5e:00:00:01 in the device multicast list.
-> +        ksft_in(ETH_ALL_HOSTS_MULTICAST, entries,
-> +                "dummy1 does not have the all-hosts link-layer address")
-> +        ksft_not_in('permanent',
-> +                    entries[ETH_ALL_HOSTS_MULTICAST]['ifa-flags'],
-> +                    "protocol entry is permanent")
+Since documenting the new AF_PACKET behaviour is the purpose of this
+change, would it be worth stating that caveat here too?
+
+>        attribute-set: addr-attrs
+>        fixed-header: ifaddrmsg
+>        do:
 
 [Severity: Medium]
-Can this raise KeyError instead of reporting a clean check failure?
+This is a pre-existing issue and not introduced by this patch, but the
+doc string being reworded here still says "Get / dump", and the spec still
+declares a do operation for getmulticast:
 
-ksft_in() in tools/testing/selftests/net/lib/py/ksft.py is non-fatal, it
-neither raises nor returns a value:
+Documentation/netlink/specs/rt-addr.yaml:
+      do:
+        request:
+          value: 58
+          attributes: []
+        reply:
+          value: 58
+          attributes: &mcaddr-attrs
 
-    def ksft_in(a, b, comment=""):
-        if a not in b:
-            _fail("Check failed", a, "not in", b, comment)
+Is there any family that implements a non-dump RTM_GETMULTICAST?  All
+three registrations are dumpit-only:
 
-So when the all-hosts entry is missing from the dump, execution continues to
-entries[ETH_ALL_HOSTS_MULTICAST]['ifa-flags'], which raises KeyError while
-the argument is evaluated. ksft_run() catches BaseException and prints a
-traceback, and the remaining checks in this case never run - including the
-two SIOCADDMULTI checks below.
+net/core/rtnetlink.c:
+	{.protocol = PF_PACKET, .msgtype = RTM_GETMULTICAST,
+	 .dumpit = rtnl_dump_mcaddr, .flags = RTNL_FLAG_DUMP_UNLOCKED},
 
-The same applies to the ETH_TEST_MULTICAST lookups:
+net/ipv4/devinet.c:
+	{.owner = THIS_MODULE, .protocol = PF_INET, .msgtype = RTM_GETMULTICAST,
+	 .dumpit = inet_dump_ifmcaddr, .flags = RTNL_FLAG_DUMP_UNLOCKED},
 
-        ksft_in(ETH_TEST_MULTICAST, entries, ...)
-        ksft_eq(entries[ETH_TEST_MULTICAST]['mc-users'], 1, ...)
-        ksft_in('permanent', entries[ETH_TEST_MULTICAST]['ifa-flags'], ...)
+net/ipv6/addrconf.c:
+	{.owner = THIS_MODULE, .protocol = PF_INET6, .msgtype = RTM_GETMULTICAST,
+	 .dumpit = inet6_dump_ifmcaddr,
+	 .flags = RTNL_FLAG_DUMP_UNLOCKED},
 
-Would a guard before the subscripts be better here, matching the idiom used
-elsewhere in this file, e.g. _users_for():
+The non-dump dispatch path needs a doit callback, otherwise err stays
+-EOPNOTSUPP:
 
-    if 'mc-users' not in matches[0]:
-        return None
+net/core/rtnetlink.c:rtnetlink_rcv_msg() {
+	...
+	link = rtnl_get_link(family, type);
+	if (!link || !link->doit) {
+		family = PF_UNSPEC;
+		link = rtnl_get_link(PF_UNSPEC, type);
+		if (!link || !link->doit)
+			goto out_unlock;
+	}
+	...
+}
 
-and the "if attrs is not None:" guard after ksft_not_none()?
-
-> +
-> +        ksft_in(ETH_TEST_MULTICAST, entries,
-> +                "dummy1 does not have the SIOCADDMULTI address")
-> +        ksft_eq(entries[ETH_TEST_MULTICAST]['mc-users'], 1,
-> +                "unexpected mc-users for the SIOCADDMULTI address")
-> +        ksft_in('permanent', entries[ETH_TEST_MULTICAST]['ifa-flags'],
-> +                "SIOCADDMULTI entry is not permanent")
-> +
-> +
->  def ipv4_devconf_notify() -> None:
-
-[ ... ]
+So a ynl-generated single-object get built from this do block fails for
+every ifa-family value, including the AF_PACKET case being documented
+here.  Since this change is extending the "Get" wording to AF_PACKET,
+would it make sense to either drop the do block or say the operation is
+dump-only?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909013401.14408-1-sigefriedhyy%40gmail.com
