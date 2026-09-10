@@ -1,229 +1,477 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 027FA4BFE9D;
-	Thu, 10 Sep 2026 10:54:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wm2-f6.google.com (mail-wm2-f6.google.com [74.125.225.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6CC446EC76
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 10:56:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789037669; cv=none; b=Z4ePC3Ls5bOI67A7D0ZBF3f4yqZVao/h4axcYsnuY0XA+EXSCXMmOG3h5zPVhPb9jndBxGhBKecRy2tUAPF50Kti50TgkVQ/voLshEG5UIR3ttr9Hz2L12KdGeYLO++QuY4jyapKjMc9v8XVxxpAtYtftejDaoG57+yrhKdiyGY=
+	t=1789037811; cv=none; b=kEE5zhH6prXZx9YTIwPMgG+cKx6mAsvmiiq+J8EkgKStiyia2fZOwoK7MsQGTKMD61LR9INafl8Z6QanR6a9gwfKWglxlePFrKtL68Dy6msE4rywQ08k/jN3ydlaakH1V+RFP19TBmLSJPBLITluXJRQ48Kmrfncr492RI+b+SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789037669; c=relaxed/simple;
-	bh=LZa/mTe3VR25KHQaR9yMTJp7T+IkVsTbaUvpTI1sUo8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BDLMJh5r+45DcomNJxHJNI20PeCcNj2Y9//gNCo8tvAc+qbKsIfmezokqmxuN7mn6o14C2vPkGMk9DdJ+pjtwGDv1MzckVho1z4ToVmXv8WbIFwCnxlmHNC0XLBmcihtRWczSFr5ODVLYlhAmexBqN7U6RDSKm7CuLfmCaDHAlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=VN6MoQBj; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="VN6MoQBj"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE2211477;
-	Thu, 10 Sep 2026 03:54:15 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 19E8E3F7B4;
-	Thu, 10 Sep 2026 03:54:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1789037659; bh=LZa/mTe3VR25KHQaR9yMTJp7T+IkVsTbaUvpTI1sUo8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VN6MoQBjtpr1/cmo6G/4YZh5bHXuew9SIhpd11l+692psl/N9na3NbHc21NOsAUsU
-	 3+TQmValjDyMFstToPCzXuQUZ63eChLMNCBjyW+gx19SIlNi9MqfNzNAp+KP3fHIbQ
-	 6G3FQnvZE1lwfmo6X/7iJEX6alz2jYz4JAF7kQnc=
-Date: Thu, 10 Sep 2026 11:54:13 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] kselftest: mm: replace usage of /proc/self/smaps
- for check_huge_xxx() helper
-Message-ID: <aqKMVUDvN8bBpwVS@e129823.arm.com>
-References: <20260907-fix_split-v5-0-822b810458bc@arm.com>
- <20260907-fix_split-v5-2-822b810458bc@arm.com>
- <956df69d-8c0a-420f-889e-7df2842605dc@kernel.org>
+	s=arc-20240116; t=1789037811; c=relaxed/simple;
+	bh=TwnlEbu5fa8vhkUeGH4BI7kLguEhSrayIGxkbzqHRQ8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oHBlSBoHKVrlq1KzsmRA3btrsOpP5/4TMCcipBUSNdMofkFOL04+1IfHk4WUSrDyBp3raOEGtmUF+ccGQIO0LxdkUDN+vR1a2lgoJL+oC2CSwuTHOmqDlMtYHxPAFGoGIRfqCp9ywl/SwEeUUcgcL60cZFoR6pcZN2gNJVkQHOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.225.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm2-f6.google.com with SMTP id 5b1f17b1804b1-49b0dd21eb8so15215455e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 03:56:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789037797; x=1789642597;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=BxFCPGv8kRt3odkYGIDhBj4Cy6nMTztKwFqF9zi+rH4=;
+        b=V4qYPH817GUr0PEXyc6rUniL/Fw5tpstPPBt/I3eze6gp0ws61ea5uGq05ESA++gdH
+         +wnXuJIOFdNiqnWVpNFAKqDZFxJFFe2d+AqctRvlAK6V+FjexmXuEjuAyzIguVJXV6dt
+         W++AIItqUaKdaOj/fBf4Ihz5qmGJHkjRHyHnE+S9uCMvKca3rDsNLDRML0P11Q7H2eBc
+         pzNtGnXzCy/lXJ6m2PeUN8om8GkzcQjIVoW41b6WF+sUJK984JPzVoC6e4mqqC44TXT0
+         BT+i6PHmlTg8RF6p1ZsS8CIK26VMVj91s2j68ll3US/7w5aok1hPeqSz+p+NkCHEGhH/
+         56yA==
+X-Forwarded-Encrypted: i=1; AKwUvBxovAM3YNxO++XHCOlyAIVkbf4tDWNZ3eggoy6/CsXrV+L27MdEaPWe8CAsmXN8AXHBPCwrO5xucDk+SLo9Bd0=@vger.kernel.org
+X-Gm-Message-State: AFuF++mc7/esXLPZ+3GXVYkUMPHOfd1MgJH0CfSV2XV+1tDAogJj6LNz
+	e8UuXYjkBhUSKcSwJRMnZ3iptK5muBRvc6iJqFe8jhAqL44sDnrphw5f
+X-Gm-Gg: AYBFou1VBkL8ZjeSO0Ycam+zpq1s5be79dF5kGPsnvgwc7EDapszL355LCT5D7WKru3
+	5mU+E4CHhiQxD7NioJ8tjhWxuAS0UrI39A0GQpmRuCVrDka2HE1E3DJsQRjyyvSgyoUKQdo2eG3
+	FfNbCu4PFPN8YG6gljCKto7XELpxDbBU3YNL42T0Z4iulAziUuAwSRZL11brGXb5c3cnqxuHI1x
+	wnYsWWT3nFCKykRMskU8um0GX06ERnDbXAFacaHrvCKyz/nM+D50m8M/sLtGwutbXay3Qb6awqj
+	N/BHgeljPXLmgqOdP6VZtjsM81+PmvR/vzCDvtAe7Qw4u8skbuUIpG037g4dTjBzQ6kxTSyCQhI
+	9Igg06oaInorjqW+kvRDMk6OU/im1u6m71CelAuMC6/cztTFymbmbWn/Y4aSAUfTn5tgrKWik8q
+	/gtfGebx1URrWZZhRCLtiJF14rQdYsLmUrSaJghJKJOu/oiE0xRfY75YN+B9ju9r2603a5k1IP/
+	XR8W83hVPnErZ/G/DZgl+ltGBYdLUukHEdqf8NDVA==
+X-Received: by 2002:a05:600c:46d5:b0:49c:fc6c:be06 with SMTP id 5b1f17b1804b1-49cfc6cc142mr349599165e9.29.1789037797136;
+        Thu, 10 Sep 2026 03:56:37 -0700 (PDT)
+Received: from im-t490s.redhat.corp (37-48-53-4.nat.epc.tmcz.cz. [37.48.53.4])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49d26c2985dsm119191695e9.6.2026.09.10.03.56.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2026 03:56:36 -0700 (PDT)
+From: Ilya Maximets <i.maximets@ovn.org>
+To: netfilter-devel@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	Donald Hunter <donald.hunter@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>,
+	Phil Sutter <phil@nwl.cc>,
+	Shuah Khan <shuah@kernel.org>,
+	=?UTF-8?q?Asbj=C3=B8rn=20Sloth=20T=C3=B8nnesen?= <ast@fiberby.net>,
+	"Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
+	"Remy D. Farley" <one-d-wide@protonmail.com>,
+	linux-kernel@vger.kernel.org,
+	coreteam@netfilter.org,
+	linux-kselftest@vger.kernel.org,
+	Ilya Maximets <i.maximets@ovn.org>
+Subject: [PATCH nf-next v2] netfilter: conntrack: make filtering by zone discoverable
+Date: Thu, 10 Sep 2026 12:54:13 +0200
+Message-ID: <20260910105629.3688497-1-i.maximets@ovn.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <956df69d-8c0a-420f-889e-7df2842605dc@kernel.org>
 
-> On 9/7/26 10:19, Yeoreum Yun wrote:
-> > Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-> > glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-> > made by memalign().
-> > 
-> > The underlying VMA may start at a different address from the aligned
-> > address returned by memalign(). Furthermore, a subsequent
-> > madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
-> > already set.
-> > 
-> > This causes split_huge_page_test to fail because the check_huge_xxx()
-> > helpers incorrectly require the address returned by memalign() to
-> > match the VMA start address reported in /proc/self/smaps.
-> > 
-> > Instead of relying on /proc/self/smaps, use /proc/self/pagemap and
-> > /proc/kpageflags to detect huge-page mappings and large folios:
-> > 
-> >   1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of
-> >      using check_large_folios(), since only the mapping type matters.
-> >      This identifies PMD-mapped huge pages.
-> >   2. Otherwise, use check_large_folios() to detect large folios. This
-> >      covers mTHP cases.
-> >   3. Check the folio flags according to the type of huge page.
-> > 
-> > Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-> > Suggested-by: Zi Yan <ziy@nvidia.com>
-> > Reviewed-by: Zi Yan <ziy@nvidia.com>
-> > Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> > Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> > Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> > ---
-> >  tools/testing/selftests/mm/vm_util.c | 145 ++++++++++++++++++++++-------------
-> >  tools/testing/selftests/mm/vm_util.h |   1 +
-> >  2 files changed, 92 insertions(+), 54 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> > index 4821a3563036..dc62ce84e143 100644
-> 
-> [...]
-> 
-> >  
-> > -	if (hpage_size == pmd_pagesize)
-> > -		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
-> > +static bool check_huge_type(uint64_t categories, uint64_t kpageflags,
-> > +			    enum check_huge_type type)
-> > +{
-> > +	const bool file = categories & PAGE_IS_FILE;
-> > +	const bool swapbacked = kpageflags & KPF_SWAPBACKED;
-> > +
-> > +	switch (type) {
-> > +	case CHECK_HUGE_ANON:
-> > +		return !file;
-> > +	case CHECK_HUGE_FILE:
-> > +		return file && !swapbacked;
-> > +	case CHECK_HUGE_SHMEM:
-> > +		return file & swapbacked;
-> > +	}
-> 
-> Why do we even need CHECK_HUGE_SHMEM?
-> 
-> That's really just a legacy thing for using smaps to identify huge pages.
-> 
-> It's sufficient to identify CHECK_HUGE_FILE if you know that you have shmem mapping.
-> 
-> You will not arbitrarily have non-shmem folios in a shmem mapping :)
+Conntrack flush supports filtering by zone using CTA_ZONE, but this
+attribute is really hard to use from user space applications.  The
+reason is that it is not possible to tell if it's supported or not.
 
-Agree. but there seems the case where discern whethr the mapping is
-with regular file or shmem like tmpfs -- khugepaged test where using
-__shmem_ops. So I think it would be better to keep this as-is.
+Older kernels silently ignore CTA_ZONE.  And in that case they just
+happily flush all the entries from all zones breaking all the existing
+connections.  So, applications have to infer support from the kernel
+version.  While it works in most cases, it's not a particularly
+reliable or desired way to check kernel capabilities from applications
+that aim to be portable.  There should be a better way to probe or
+discover features in the kernel.
 
-> 
-> >  
-> > -	return check_large_folios(addr, len, nr_hpages, hpage_size);
-> > +	return false;
-> >  }
-> >  
-> > -bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> > +static bool __check_huge(void *addr, size_t len, int nr_hpages,
-> > +			 uint64_t hpage_size, enum check_huge_type type)
-> >  {
-> > -	uint64_t pmd_pagesize = read_pmd_pagesize();
-> > +	bool ret = false;
-> > +	int pagemap_fd, kpageflags_fd;
-> > +	int nr_pmd_mappings = 0;
-> > +	uint64_t pmd_pagesize, scan_mapping_size;
-> > +	uint64_t categories, kpf;
-> > +	unsigned long pfn;
-> > +	bool check_pmd_mapping, allow_nonpresent;
-> > +	char *start = addr;
-> > +	char *end = start + len;
-> >  
-> > +	pmd_pagesize = read_pmd_pagesize();
-> >  	if (!pmd_pagesize)
-> >  		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-> >  
-> > -	if (hpage_size == pmd_pagesize)
-> > -		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
-> > +	check_pmd_mapping = (hpage_size == pmd_pagesize);
-> > +	scan_mapping_size = (nr_hpages > 0) ? hpage_size : psize();
-> > +	/* Some mTHP tests check a partially populated PMD-sized range. */
-> > +	allow_nonpresent = (uint64_t)nr_hpages * hpage_size < len;
-> >  
-> > -	return check_large_folios(addr, len, nr_hpages, hpage_size);
-> > +	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-> > +	if (pagemap_fd < 0)
-> > +		ksft_exit_fail_msg("open pagemap fail\n");
-> > +
-> > +	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
-> > +	if (kpageflags_fd < 0) {
-> > +		close(pagemap_fd);
-> 
-> No need to cleanup when exiting.
+The CTA_FILTER interface on the other hand is simple enough to probe.
+We can check for NLM_F_DUMP_FILTERED in the dump to see if filtering
+is supported.  And unknown sub-attributes in CTA_FILTER are rejected
+explicitly since strict validation is in use there.
 
-Yes, but some test code does clean it up, so I was just confused
-about the convention :\
+Let's add new CTA_FILTER_ZONE that signals that CTA_ZONE should be
+filtered on.  It is a flag, since everything in the CTA_FILTER is a
+bit mask, i.e., a form of a flag.  If set, it means that CTA_ZONE must
+be present and be used for filtering.  If the flag is not set however,
+the filtering on CTA_ZONE will still take place to ensure backwards
+compatibility.  So, the flag doesn't really change the filtering
+behavior, but it allows user space applications to properly discover
+support for CTA_ZONE filtering without need to rely on kernel version
+parsing or risk accidental flushes of the entire conntrack table,
+and also without modifying the kernel state.
 
-> 
-> > +		ksft_exit_fail_msg("open kpageflags fail\n");
-> > +	}
-> > +
-> > +	if (!check_pmd_mapping &&
-> > +	    !check_large_folios(pagemap_fd, kpageflags_fd,
-> > +				addr, len, nr_hpages, hpage_size))
-> > +		goto out;
-> > +
-> > +	for (; start < end; start += scan_mapping_size) {
-> > +		categories = pagemap_scan_get_categories(pagemap_fd, start);
-> > +		pfn = pagemap_get_pfn(pagemap_fd, start);
-> > +		if (pfn == -1UL) {
-> > +			if (!allow_nonpresent)
-> > +				goto out;
-> > +			else
-> > +				continue;
-> > +		}
-> > +		if (pageflags_get(pfn, kpageflags_fd, &kpf))
-> > +			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
-> > +		if (check_pmd_mapping && (categories & PAGE_IS_HUGE))
-> > +			nr_pmd_mappings++;
-> > +		if (kpf & KPF_COMPOUND_TAIL)
-> > +			continue;
-> > +		if (!check_huge_type(categories, kpf, type))
-> > +			goto out;
-> > +	}
-> > +
-> > +	if (check_pmd_mapping && (nr_pmd_mappings != nr_hpages))
-> > +		goto out;
-> > +	ret = true;
-> > +
-> > +out:
-> > +	close(pagemap_fd);
-> > +	close(kpageflags_fd);
-> > +	return ret;
-> >  }
-> 
-> 
-> 
-> -- 
-> Cheers,
-> 
-> David
-> 
+A new test variant is added to test with and without the new flag.
+Since the setup code is moved into a shared function, expectations
+replaced with assertions to bail early if the base setup fails to
+avoid the cascade of secondary failures that can be misleading.
+Error return is only for the SKIP cases.
 
+Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+---
+
+One other alternative is to make CTA_FILTER_ZONE a U16 sub-attribute
+instead of a FLAG and prioritize it over the CTA_ZONE.  But it feels
+like a FLAG is better suited for the CTA_FILTER, even if it takes a
+bit of extra space in the request.  Though I'm OK with reworking this
+into U16 or some other mechanism that would make the feature
+discoverable, if there are better ideas.
+
+Version 2:
+ * Mostly a re-post now that CI / selftest build is fixed.
+ * selftest: replaced one missed expectation with an assertion in the
+   conntrack_zone_setup(). [sashiko-gemini]
+ * Switched the doc comment to '>-' style as it seems to be a more
+   common way of writing multi-line comments.
+
+Version 1:
+ * https://lore.kernel.org/all/20260904174452.1913072-1-i.maximets@ovn.org/
+
+ Documentation/netlink/specs/conntrack.yaml    |   6 +
+ .../linux/netfilter/nfnetlink_conntrack.h     |   1 +
+ net/netfilter/nf_conntrack_netlink.c          |  11 ++
+ .../net/netfilter/conntrack_dump_flush.c      | 145 ++++++++++++------
+ 4 files changed, 117 insertions(+), 46 deletions(-)
+
+diff --git a/Documentation/netlink/specs/conntrack.yaml b/Documentation/netlink/specs/conntrack.yaml
+index b1eb102ab8432..9202baf1352a6 100644
+--- a/Documentation/netlink/specs/conntrack.yaml
++++ b/Documentation/netlink/specs/conntrack.yaml
+@@ -371,6 +371,12 @@ attribute-sets:
+         name: reply-flags
+         type: u32
+         doc: bitmask of tuple fields to filter on, reply direction
++      -
++        name: zone
++        type: flag
++        doc: >-
++          Filter on conntrack zone id; requires the top-level zone
++          (``CTA_ZONE``) attribute.
+   -
+     name: conntrack-attrs
+     attributes:
+diff --git a/include/uapi/linux/netfilter/nfnetlink_conntrack.h b/include/uapi/linux/netfilter/nfnetlink_conntrack.h
+index 43233af75b9d5..985f9c08d3e9b 100644
+--- a/include/uapi/linux/netfilter/nfnetlink_conntrack.h
++++ b/include/uapi/linux/netfilter/nfnetlink_conntrack.h
+@@ -285,6 +285,7 @@ enum ctattr_filter {
+ 	CTA_FILTER_UNSPEC,
+ 	CTA_FILTER_ORIG_FLAGS,
+ 	CTA_FILTER_REPLY_FLAGS,
++	CTA_FILTER_ZONE,
+ 	__CTA_FILTER_MAX
+ };
+ #define CTA_FILTER_MAX (__CTA_FILTER_MAX - 1)
+diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
+index 9b4e29557ec33..ffc29a407749d 100644
+--- a/net/netfilter/nf_conntrack_netlink.c
++++ b/net/netfilter/nf_conntrack_netlink.c
+@@ -911,6 +911,7 @@ struct ctnetlink_filter {
+ static const struct nla_policy cta_filter_nla_policy[CTA_FILTER_MAX + 1] = {
+ 	[CTA_FILTER_ORIG_FLAGS]		= NLA_POLICY_MASK(NLA_U32, CTA_FILTER_F_ALL),
+ 	[CTA_FILTER_REPLY_FLAGS]	= NLA_POLICY_MASK(NLA_U32, CTA_FILTER_F_ALL),
++	[CTA_FILTER_ZONE]		= { .type = NLA_FLAG },
+ };
+ 
+ static int ctnetlink_parse_filter(const struct nlattr *attr,
+@@ -930,6 +931,9 @@ static int ctnetlink_parse_filter(const struct nlattr *attr,
+ 	if (tb[CTA_FILTER_REPLY_FLAGS])
+ 		filter->reply_flags = nla_get_u32(tb[CTA_FILTER_REPLY_FLAGS]);
+ 
++	if (tb[CTA_FILTER_ZONE])
++		filter->zone_filter = true;
++
+ 	return 0;
+ }
+ 
+@@ -1006,6 +1010,7 @@ ctnetlink_alloc_filter(const struct nlattr * const cda[], u8 family)
+ 	if (err)
+ 		goto err_filter;
+ 
++	/* CTA_ZONE is allowed without CTA_FILTER_ZONE. */
+ 	if (cda[CTA_ZONE]) {
+ 		err = ctnetlink_parse_zone(cda[CTA_ZONE], &filter->zone);
+ 		if (err < 0)
+@@ -1020,6 +1025,12 @@ ctnetlink_alloc_filter(const struct nlattr * const cda[], u8 family)
+ 	if (err < 0)
+ 		goto err_filter;
+ 
++	/* CTA_FILTER_ZONE cannot be set without CTA_ZONE. */
++	if (filter->zone_filter && !cda[CTA_ZONE]) {
++		err = -EINVAL;
++		goto err_filter;
++	}
++
+ 	if (filter->orig_flags) {
+ 		if (!cda[CTA_TUPLE_ORIG]) {
+ 			err = -EINVAL;
+diff --git a/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c b/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c
+index 31b8250ddc53d..0c777323f4ba7 100644
+--- a/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c
++++ b/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c
+@@ -215,7 +215,22 @@ static int count_entries(const struct nlmsghdr *nlh, void *data)
+ 	return MNL_CB_OK;
+ }
+ 
+-static int conntrack_count_zone(struct mnl_socket *sock, uint16_t zone)
++static void put_zone_attr(struct nlmsghdr *nlh, uint16_t zone,
++			  bool use_cta_filter)
++{
++	struct nlattr *nest;
++
++	mnl_attr_put_u16(nlh, CTA_ZONE, htons(zone));
++
++	if (use_cta_filter) {
++		nest = mnl_attr_nest_start(nlh, CTA_FILTER);
++		mnl_attr_put(nlh, CTA_FILTER_ZONE, 0, NULL);
++		mnl_attr_nest_end(nlh, nest);
++	}
++}
++
++static int conntrack_count_zone(struct mnl_socket *sock, uint16_t zone,
++				bool use_cta_filter)
+ {
+ 	char buf[MNL_SOCKET_BUFFER_SIZE];
+ 	struct nlmsghdr *nlh;
+@@ -235,7 +250,7 @@ static int conntrack_count_zone(struct mnl_socket *sock, uint16_t zone)
+ 	nfh->version = NFNETLINK_V0;
+ 	nfh->res_id = 0;
+ 
+-	mnl_attr_put_u16(nlh, CTA_ZONE, htons(zone));
++	put_zone_attr(nlh, zone, use_cta_filter);
+ 
+ 	ret = mnl_socket_sendto(sock, nlh, nlh->nlmsg_len);
+ 	if (ret < 0) {
+@@ -261,7 +276,8 @@ static int conntrack_count_zone(struct mnl_socket *sock, uint16_t zone)
+ 	return reply_counter;
+ }
+ 
+-static int conntrack_flush_zone(struct mnl_socket *sock, uint16_t zone)
++static int conntrack_flush_zone(struct mnl_socket *sock, uint16_t zone,
++				bool use_cta_filter)
+ {
+ 	char buf[MNL_SOCKET_BUFFER_SIZE];
+ 	struct nlmsghdr *nlh;
+@@ -281,7 +297,7 @@ static int conntrack_flush_zone(struct mnl_socket *sock, uint16_t zone)
+ 	nfh->version = NFNETLINK_V0;
+ 	nfh->res_id = 0;
+ 
+-	mnl_attr_put_u16(nlh, CTA_ZONE, htons(zone));
++	put_zone_attr(nlh, zone, use_cta_filter);
+ 
+ 	ret = mnl_socket_sendto(sock, nlh, nlh->nlmsg_len);
+ 	if (ret < 0) {
+@@ -304,43 +320,40 @@ static int conntrack_flush_zone(struct mnl_socket *sock, uint16_t zone)
+ 	return 0;
+ }
+ 
+-FIXTURE(conntrack_dump_flush)
+-{
+-	struct mnl_socket *sock;
+-};
+-
+-FIXTURE_SETUP(conntrack_dump_flush)
++static int conntrack_zone_setup(struct __test_metadata *_metadata,
++				struct mnl_socket **sock)
+ {
+ 	struct in6_addr src, dst;
+ 	int ret;
+ 
+-	self->sock = mnl_socket_open(NETLINK_NETFILTER);
+-	if (!self->sock) {
++	*sock = mnl_socket_open(NETLINK_NETFILTER);
++	if (!*sock) {
+ 		perror("mnl_socket_open");
+-		SKIP(return, "cannot open netlink_netfilter socket");
++		SKIP(return -1, "cannot open netlink_netfilter socket");
+ 	}
+ 
+-	ret = mnl_socket_bind(self->sock, 0, MNL_SOCKET_AUTOPID);
+-	EXPECT_EQ(ret, 0);
++	ret = mnl_socket_bind(*sock, 0, MNL_SOCKET_AUTOPID);
++	ASSERT_EQ(ret, 0);
+ 
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_count_zone(*sock, TEST_ZONE_ID, false);
+ 	if (ret < 0 && errno == EPERM)
+-		SKIP(return, "Needs to be run as root");
++		SKIP(return -1, "Needs to be run as root");
+ 	else if (ret < 0 && errno == EOPNOTSUPP)
+-		SKIP(return, "Kernel does not seem to support conntrack zones");
++		SKIP(return -1,
++		     "Kernel does not seem to support conntrack zones");
+ 
+-	ret = conntrack_data_generate_v4(self->sock, 0xf0f0f0f0, 0xf1f1f1f1,
++	ret = conntrack_data_generate_v4(*sock, 0xf0f0f0f0, 0xf1f1f1f1,
+ 					 TEST_ZONE_ID);
+-	EXPECT_EQ(ret, 0);
+-	ret = conntrack_data_generate_v4(self->sock, 0xf2f2f2f2, 0xf3f3f3f3,
++	ASSERT_EQ(ret, 0);
++	ret = conntrack_data_generate_v4(*sock, 0xf2f2f2f2, 0xf3f3f3f3,
+ 					 TEST_ZONE_ID + 1);
+-	EXPECT_EQ(ret, 0);
+-	ret = conntrack_data_generate_v4(self->sock, 0xf4f4f4f4, 0xf5f5f5f5,
++	ASSERT_EQ(ret, 0);
++	ret = conntrack_data_generate_v4(*sock, 0xf4f4f4f4, 0xf5f5f5f5,
+ 					 TEST_ZONE_ID + 2);
+-	EXPECT_EQ(ret, 0);
+-	ret = conntrack_data_generate_v4(self->sock, 0xf6f6f6f6, 0xf7f7f7f7,
++	ASSERT_EQ(ret, 0);
++	ret = conntrack_data_generate_v4(*sock, 0xf6f6f6f6, 0xf7f7f7f7,
+ 					 NF_CT_DEFAULT_ZONE_ID);
+-	EXPECT_EQ(ret, 0);
++	ASSERT_EQ(ret, 0);
+ 
+ 	src = (struct in6_addr) {{
+ 		.__u6_addr32 = {
+@@ -358,9 +371,9 @@ FIXTURE_SETUP(conntrack_dump_flush)
+ 			0x02000000
+ 		}
+ 	}};
+-	ret = conntrack_data_generate_v6(self->sock, src, dst,
++	ret = conntrack_data_generate_v6(*sock, src, dst,
+ 					 TEST_ZONE_ID);
+-	EXPECT_EQ(ret, 0);
++	ASSERT_EQ(ret, 0);
+ 	src = (struct in6_addr) {{
+ 		.__u6_addr32 = {
+ 			0xb80d0120,
+@@ -377,9 +390,9 @@ FIXTURE_SETUP(conntrack_dump_flush)
+ 			0x04000000
+ 		}
+ 	}};
+-	ret = conntrack_data_generate_v6(self->sock, src, dst,
++	ret = conntrack_data_generate_v6(*sock, src, dst,
+ 					 TEST_ZONE_ID + 1);
+-	EXPECT_EQ(ret, 0);
++	ASSERT_EQ(ret, 0);
+ 	src = (struct in6_addr) {{
+ 		.__u6_addr32 = {
+ 			0xb80d0120,
+@@ -396,9 +409,9 @@ FIXTURE_SETUP(conntrack_dump_flush)
+ 			0x06000000
+ 		}
+ 	}};
+-	ret = conntrack_data_generate_v6(self->sock, src, dst,
++	ret = conntrack_data_generate_v6(*sock, src, dst,
+ 					 TEST_ZONE_ID + 2);
+-	EXPECT_EQ(ret, 0);
++	ASSERT_EQ(ret, 0);
+ 
+ 	src = (struct in6_addr) {{
+ 		.__u6_addr32 = {
+@@ -416,14 +429,51 @@ FIXTURE_SETUP(conntrack_dump_flush)
+ 			0x08000000
+ 		}
+ 	}};
+-	ret = conntrack_data_generate_v6(self->sock, src, dst,
++	ret = conntrack_data_generate_v6(*sock, src, dst,
+ 					 NF_CT_DEFAULT_ZONE_ID);
+-	EXPECT_EQ(ret, 0);
++	ASSERT_EQ(ret, 0);
+ 
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
++	return 0;
++}
++
++FIXTURE(conntrack_dump_flush)
++{
++	struct mnl_socket *sock;
++};
++
++FIXTURE_VARIANT(conntrack_dump_flush)
++{
++	bool use_cta_filter;
++};
++
++FIXTURE_VARIANT_ADD(conntrack_dump_flush, cta_zone)
++{
++	.use_cta_filter = false,
++};
++
++FIXTURE_VARIANT_ADD(conntrack_dump_flush, cta_filter)
++{
++	.use_cta_filter = true,
++};
++
++FIXTURE_SETUP(conntrack_dump_flush)
++{
++	int ret;
++
++	if (conntrack_zone_setup(_metadata, &self->sock))
++		return;
++
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID, false);
+ 	EXPECT_GE(ret, 2);
+ 	if (ret > 2)
+ 		SKIP(return, "kernel does not support filtering by zone");
++
++	if (variant->use_cta_filter) {
++		ret = conntrack_count_zone(self->sock, TEST_ZONE_ID, true);
++		if (ret < 0 && errno == EINVAL)
++			SKIP(return, "kernel does not support CTA_FILTER_ZONE");
++		ASSERT_GE(ret, 0);
++	}
+ }
+ 
+ FIXTURE_TEARDOWN(conntrack_dump_flush)
+@@ -434,39 +484,42 @@ TEST_F(conntrack_dump_flush, test_dump_by_zone)
+ {
+ 	int ret;
+ 
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID,
++				   variant->use_cta_filter);
+ 	EXPECT_EQ(ret, 2);
+ }
+ 
+ TEST_F(conntrack_dump_flush, test_flush_by_zone)
+ {
++	bool filter = variant->use_cta_filter;
+ 	int ret;
+ 
+-	ret = conntrack_flush_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_flush_zone(self->sock, TEST_ZONE_ID, filter);
+ 	EXPECT_EQ(ret, 0);
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID, filter);
+ 	EXPECT_EQ(ret, 0);
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 1);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 1, filter);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 2);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 2, filter);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntrack_count_zone(self->sock, NF_CT_DEFAULT_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, NF_CT_DEFAULT_ZONE_ID, filter);
+ 	EXPECT_EQ(ret, 2);
+ }
+ 
+ TEST_F(conntrack_dump_flush, test_flush_by_zone_default)
+ {
++	bool filter = variant->use_cta_filter;
+ 	int ret;
+ 
+-	ret = conntrack_flush_zone(self->sock, NF_CT_DEFAULT_ZONE_ID);
++	ret = conntrack_flush_zone(self->sock, NF_CT_DEFAULT_ZONE_ID, filter);
+ 	EXPECT_EQ(ret, 0);
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID, filter);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 1);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 1, filter);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 2);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 2, filter);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntrack_count_zone(self->sock, NF_CT_DEFAULT_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, NF_CT_DEFAULT_ZONE_ID, filter);
+ 	EXPECT_EQ(ret, 0);
+ }
+ 
 -- 
-Sincerely,
-Yeoreum Yun
+2.55.0
+
