@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 946623BC673;
-	Thu, 10 Sep 2026 09:18:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A1613C9EE8;
+	Thu, 10 Sep 2026 09:29:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789031933; cv=none; b=NN1XyyZ4n5gF/ZwdNcE13U7zaQVHgMw4EjnAyyzJbcBUXOkms4KMBtWVIQxbIDkeRIFyJgeJ2is3/JloCIF0XIf7xs1/u10c7krF6nUvKME+YPidhfLzm5J2LFhY6ug8K58wjY1Aeiaeg9m8ALwxjxBfVTjgdo/dk4/7UG7kn1I=
+	t=1789032545; cv=none; b=aEzOH4zMoQtRFV5Q/vLjeBMJW5Q++bbf4NJKYZeQds4nNHcPBQzMXqaI69xLKr2FrDn4zbzRjEcSzYTpPDH6DDWGfgHq4NCBvIGU6R3R9wBUoUaQiF3QeaFSB/3SyAZ6QtySb/Mhz3Go4u1idn4z+1OZlMUbL/6ve3nGiJbFaDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789031933; c=relaxed/simple;
-	bh=liJ1wHlTnmnaxw8gKUNLkS6x1twESLGdepDBi+5TNPs=;
+	s=arc-20240116; t=1789032545; c=relaxed/simple;
+	bh=NQDCepLl/fadlMktGn2UQAqWd18DvXOdxeIDDBE6Dzc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FKygKZQHgd+5bmZdUA8wOrCjNw4rM3EXp5PywSwmmVy5u+4KacYjpEOpsdr7tTjf9kwDAyj/ZNGOjNk49V1kDwKDCRFM3Sq1UdkJq+9hurpS8E9n4iUv+KtzShPExCwkzhh7KX4B7T6Jt3WIOHD/91xisw/BWoOjbg6OydpPeB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mJJy2Sn6; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=Bus40RWjPLNoVeuLg5bH4Dlqj3tPp4x414wQYvMn1IrZ2I0J2D/0fhUGj7UCZnESS8o8GYyg2nG5Hoz6Sh7+76Mjiun3nCeBNQ9HH8dnQMIGJWzrxAkrZ5kVZSQ4V/X/oFjgPLa2BgutF9BImwrvqoDSIzYOqDdXYVhzpJAatOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XCOBrDjQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mJJy2Sn6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C6031F000FF;
-	Thu, 10 Sep 2026 09:18:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XCOBrDjQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 218B81F000FF;
+	Thu, 10 Sep 2026 09:28:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789031932;
-	bh=By4Fo104NqAk6U5B5IXs8V/eedehOHTPHBmWMz+lc8c=;
+	s=k20260515; t=1789032544;
+	bh=HYVaZs8zl6VDRHQDJSaZZ5BLmVDR91bVJIFkLDQKlfc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=mJJy2Sn6+IvRvRzhlXejWzBm8kAbAgnDCT86Q1Nt8mxplIZTo4xCBhQW7ac0t3SxY
-	 Ky1xNFFZVCpRJ4bk9JzrRdjnVP9Z9BoYha/WHY8QdS5UZq1fdEDhNg9L9XUdmfdAa0
-	 zMLIxCJXGlGjYlJ+Llo84pT729AeSDnK0CJ6R7UkYO8qf5x1LZR+LCmo+mP2hQwvcT
-	 VXhzbtm/l1CCE3NkNFIYiMOks2ovwGcP6bdk1I09Hyl1R3PnRVtH/hv+hYgZj5u8oG
-	 R/ssRrPtCw1rKfWAtLTcjtOiazhEj73xo/gRkW+G+EBEIDdqC7yWXYy0cpRgr0JU3R
-	 PJCGb1pTXkAQQ==
-Message-ID: <e8a9c3b2-17d9-43d1-9910-842b9131bf19@kernel.org>
-Date: Thu, 10 Sep 2026 11:18:42 +0200
+	b=XCOBrDjQvCtifR7aIeqbJD4yUvIkMKsz6k9FcqpuOe9ZHpcnnm8lWUEg1EPgA066r
+	 vnVWCXn6i1TTO/UHgeTkWShEoGgA4VhWhAFtbx9lK4aGOcrXGXF0xPSoYx9QghNb7l
+	 TWzygrvb4XWG3zTLZUKzU3SokLPZF/Ls6lkY6FxnadzDknMbEqnboYxnJzG4URGEHz
+	 urm0cxG4G0irCaOevsuoRseDBlApN21xpt/e8KZv8/38yJtyulXg2GRJJqKOAZwp8t
+	 fFwVHfpxfE3VrPAM4yJTEMa2o5xi7xpV7R6TFt7vKbfOXlm1jq1k4ybYp3ovRJrEfB
+	 EMN6oBMRyPl1A==
+Message-ID: <2f1992dc-8dc8-43e1-9bc2-5dd4e3cedbcc@kernel.org>
+Date: Thu, 10 Sep 2026 11:28:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,30 +35,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 6/6] selftests/mm: add a GUP selftest
-To: Muhammad Usama Anjum <usama.anjum@arm.com>,
- Mark Brown <broonie@kernel.org>, Sarthak Sharma <sarthak.sharma@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- Jonathan Corbet <corbet@lwn.net>, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
- Leon Romanovsky <leon@kernel.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+Subject: Re: [PATCH v4 1/3] selftests/mm: emit TAP header in uffd-wp-mremap
+To: Song Hu <husong@kylinos.cn>, akpm@linux-foundation.org,
+ usama.anjum@arm.com
+Cc: linux-mm@kvack.org, shuah@kernel.org, ljs@kernel.org, liam@infradead.org,
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ peterx@redhat.com, sarthak.sharma@arm.com, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-References: <20260904123631.198697-1-sarthak.sharma@arm.com>
- <20260904123631.198697-7-sarthak.sharma@arm.com>
- <b0400430-c3b6-40d5-b476-49189b1cc292@kernel.org>
- <5e0b9365-cbac-4f2d-b915-85edf3093508@arm.com>
- <fadb8870-37f8-46f4-aefb-c21bc3a31e5b@kernel.org>
- <07dab220-8497-4eea-a4d2-b27a6e01eaf8@sirena.org.uk>
- <9695fac7-bf13-4e34-9cd7-4326ec21fcef@arm.com>
+References: <20260825085756.63030-1-husong@kylinos.cn>
+ <20260825085756.63030-2-husong@kylinos.cn>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -105,34 +90,24 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <9695fac7-bf13-4e34-9cd7-4326ec21fcef@arm.com>
+In-Reply-To: <20260825085756.63030-2-husong@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/10/26 09:53, Muhammad Usama Anjum wrote:
-> On 09/09/2026 6:34 pm, Mark Brown wrote:
->> On Wed, Sep 09, 2026 at 07:03:59PM +0200, David Hildenbrand (Arm) wrote:
->>
->>
->> ...
->>
->>
->>> Yes, we should in general try moving all test modules out of the core.
->>
->> If you're working on this please make sure to take a look at how the
->> various automated testing systems cope with modules built under
->> selftests (personally I think everything I care about uses tuxmake
->> builds, but there's other stuff out there).  I think the answer for a
->> bunch of them right now is badly, but I didn't actually go check.
+On 8/25/26 10:57, Song Hu wrote:
+> uffd-wp-mremap calls ksft_set_plan() without ksft_print_header(), so its
+> output is not valid KTAP.  Add the header, like the sibling uffd tests
+> (uffd-stress, uffd-unit-tests).
 > 
-> There is huge discussion in the past on converting test modules into
-> kunit modules [1]. Selftests is not a correct place to keep kernel modules.
+> Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
+> Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> Reviewed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> Signed-off-by: Song Hu <husong@kylinos.cn>
+> ---
 
-I don't care where we move them, but mm/ and lib/ is *certainly not* the right
-place for MM specific test modules.
-
-Anyhow, I think converting stuff to kunit makes sense. I am not sure if that is
-really applicable to e.g., gup_tests though.
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
