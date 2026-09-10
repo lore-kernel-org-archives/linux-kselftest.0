@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-237.mta0.migadu.com [91.218.175.237])
+Received: from mta0.migadu.com (out-8.mta0.migadu.com [91.218.175.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196B5379C38
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 16:47:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.237
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5697452ED24
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 16:47:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789058840; cv=none; b=DitcyMidkD9zKngUvhM5Z0GF0Kg5Ki9j1eSlX5YVcYIMPcYk7DUV5nVklRNZ5KySUcioj6diN2TFR6FaohQ2YnlBcPEoW49zELnVJeuZ39oJbv20yOLyn08DEhSzCBcrmMJnaggVIrpsgDWa+wAUHjh0Nm+GCwtyKpderTlIKa4=
+	t=1789058853; cv=none; b=MOpsr1+vvN566OAk1Z5geQAH6Ww0US2ZaoKs1Br5y/+H77VRuRQHGR2J++ZZSJhn1hbzPpcyWivvWq/aqW+kkR8lC6snh3fqAIwUzib/heMTMOtbZQyJCxjZzfLfnxmz/Ku9XtLTwfAsBF1VVJHf6fK4F7Bld7p8lmooBnXifGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789058840; c=relaxed/simple;
-	bh=p6Dv5uXyCx/XL3sMcXWjyxFbQ0++l2v/EGih7Qb9vXE=;
+	s=arc-20240116; t=1789058853; c=relaxed/simple;
+	bh=S0BTMJ/3CMiKWvRdVO/UaaNhAWtf/hCTg91uhqdRYcM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C/jh0Ujnql62OXIyxZqiMlteqleIsm7HIGXefncRpQL5p/0w/Ig7aeQ/+Km6WJD0/2Tgein41WnnzAn5P1YKz6WVRt74Krr2n4JSy4NpJndNnAADZEHS8L8e0rcHArFLtPoxepSkhpx0M2OqonTBTrjgYEGMVcZYk3XKdnhCLfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SHNa2Z4A; arc=none smtp.client-ip=91.218.175.237
+	 MIME-Version; b=C/uDflp8xQKWQ0gSm5RusN4pfyikM2kXNUlH4FfAcSNCsboscPWoeeEMsaxaolzg5LtZeqg7wuUewKDz8Vgti2ozwztb1F3zOYjqApux9El7S+il0twzFEuEEk8sFPy94euWPFOB41aGPkjjV5tQLxv6sQLKW8jKV/oSQ1598OM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uPPD0DM3; arc=none smtp.client-ip=91.218.175.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SHNa2Z4A"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uPPD0DM3"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=p6Dv5uXyCx/XL3sMcXWjyxFbQ0++l2v/EGih7Qb9vXE=;
+DKIM-Signature: a=rsa-sha256; bh=S0BTMJ/3CMiKWvRdVO/UaaNhAWtf/hCTg91uhqdRYcM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789058834; v=1; x=1789663634;
- b=SHNa2Z4Ahc7T7R5WB9IJUcbSsqkkIPV23aJCty9vCRIomS/KdNKOfeDAYwgs54BQRehZrIAi
- y1s8efc4MMyJQxhbk3tBtkwlfWfiG5a52jvw1PnzbzypWYyujVvu9E5LoDcOAN4FP/wawPOTTDf
- PR/KesLIaHUA/ZP3a8TUPEyI=
+ t=1789058843; v=1; x=1789663643;
+ b=uPPD0DM3ZhrLHjklNiME0axtTU8r9XXFVZlxu/BqytdbBhmMki7SwCAei4q+FdeGq0K1aM2p
+ IIVMXTW0QUrwx36plYQssy+We9UMnHymG13Nj060msEDOuEnz+FRH0pWxleNwZiZyRb0cVwEKpd
+ lnKoJrMcbOczi9kza973n8c0=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id c2c93a19055d0db4;
-	Thu, 10 Sep 2026 16:47:14 +0000
-X-Mizu-Trace-ID: c2c93a19055d0db4
+Received: by smtp.migadu.com with ESMTPS id 88e6ca5c82b124ac;
+	Thu, 10 Sep 2026 16:47:23 +0000
+X-Mizu-Trace-ID: 88e6ca5c82b124ac
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: ast@kernel.org,
@@ -47,9 +47,9 @@ Cc: martin.lau@linux.dev,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v2 05/13] bpf: keep the range across a sign extension that cannot change it
-Date: Thu, 10 Sep 2026 22:16:27 +0530
-Message-ID: <20260910164635.459558-6-vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v2 06/13] selftests/bpf: cover sign extensions that cannot change the range
+Date: Thu, 10 Sep 2026 22:16:28 +0530
+Message-ID: <20260910164635.459558-7-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260910164635.459558-1-vineet.gupta@linux.dev>
 References: <20260910164635.459558-1-vineet.gupta@linux.dev>
@@ -61,84 +61,85 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-coerce_reg_to_size_sx() decides whether a sign extension is lossless by
-comparing the bits above the field in smin and smax:
+Both programs build a range that straddles zero but still fits the target
+field, so the sign extension is a no-op: [-4095, 0] for (s32) and [-63, 0]
+for (s8). The guard that follows can only be resolved statically if the
+range survives, and it protects a div by zero, so a widened range is a
+verification failure rather than a silently weaker test.
 
-	top_smax_value = ((u64)reg_smax(reg) >> num_bits) << num_bits;
-	top_smin_value = ((u64)reg_smin(reg) >> num_bits) << num_bits;
-	if (top_smax_value != top_smin_value)
-		goto out;
-
-Equal high bits do imply the truncation is lossless, but the converse does
-not hold. Whenever the range straddles zero the high bits necessarily
-differ -- smin sign-extends to all ones, smax to all zeroes -- even when
-every value in the range fits the field and (sN)v == v throughout. The
-second gate, "both of s64_max/s64_min positive or negative", rejects the
-same shape again for the same reason.
-
-So a register holding an errno-or-zero value, [-4095, 0], comes out of r0
-= (s32)r0 as the full [S32_MIN, S32_MAX] even though the instruction is a
-no-op on it. The no_sext test at the call site does not help: it is an
-unsigned check, so it only covers non-negative values that fit.
-
-Test the range against the field directly and return early when it fits.
-Sign extension is then the identity, so nothing needs updating -- which
-also preserves var_off, where the existing path would have replaced known
-bits with a coarse tnum_range().
-
-This only tightens: the early return fires exactly where the value is
-provably unchanged, and the cases the current tests do accept still take
-the same path and produce the same bounds.
+These sit in verifier_movsx.c rather than with the linked-scalar tests:
+they exercise the range a sign-extending mov produces, which has nothing
+to do with the ->id machinery, and the file already gates on the cpuv4
+support they need.
 
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
-v2: new. coerce_reg_to_size_sx() is fixed rather than special-cased,
-which is what was asked on RFC 5/6; it removes the RFC's
-call-then-overwrite at the mov site.
+v2: new, with 5/13.
+ .../selftests/bpf/progs/verifier_movsx.c      | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
- kernel/bpf/verifier.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 58e788f53ae5..eb093194e2a3 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5754,6 +5754,7 @@ static void set_sext64_default_val(struct bpf_reg_state *reg, int size)
- static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
- {
- 	s64 init_s64_max, init_s64_min, s64_max, s64_min, u64_cval;
-+	s64 field_smin, field_smax;
- 	u64 top_smax_value, top_smin_value;
- 	u64 num_bits = size * 8;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+index 195b27a51224..3a0e67ebb963 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+@@ -202,6 +202,57 @@ l0_%=:							\
+ 	: __clobber_all);
+ }
  
-@@ -5773,6 +5774,27 @@ static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
- 		return;
- 	}
- 
-+	if (size == 1) {
-+		field_smin = S8_MIN;
-+		field_smax = S8_MAX;
-+	} else if (size == 2) {
-+		field_smin = S16_MIN;
-+		field_smax = S16_MAX;
-+	} else {
-+		/* size == 4 */
-+		field_smin = S32_MIN;
-+		field_smax = S32_MAX;
-+	}
++/*
++ * A range that already fits the field is unchanged by the sign extension.
++ * Both of these straddle zero, so the high bits of smin and smax differ and
++ * the top_s*_value test alone would fall back to the full field range.
++ */
++SEC("socket")
++__description("MOV64SX, S32, negative range is preserved")
++__success __success_unpriv __retval(0)
++__naked void mov64sx_s32_negative_range(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w0 &= 0xfff;					\
++	r0 -= 0xfff;					\
++	/* r0 is [-4095, 0], already a valid s32 */	\
++	r0 = (s32)r0;					\
++	if r0 s< -0xfff goto l0_%=;			\
++	r0 = 0;						\
++	exit;						\
++l0_%=:							\
++	/* unreachable unless the range was widened */	\
++	r0 /= 0;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
 +
-+	/*
-+	 * The range already fits the field, so (sN)v == v for every value the
-+	 * register can hold and the sign extension changes nothing. The tests
-+	 * below cannot reach this case once smin is negative: a negative smin
-+	 * and a non-negative smax never share their high bits.
-+	 */
-+	if (reg_smin(reg) >= field_smin && reg_smax(reg) <= field_smax)
-+		return;
++SEC("socket")
++__description("MOV64SX, S8, negative range is preserved")
++__success __success_unpriv __retval(0)
++__naked void mov64sx_s8_negative_range(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w0 &= 0x3f;					\
++	r0 -= 0x3f;					\
++	/* r0 is [-63, 0], already a valid s8 */	\
++	r0 = (s8)r0;					\
++	if r0 s< -0x3f goto l0_%=;			\
++	r0 = 0;						\
++	exit;						\
++l0_%=:							\
++	/* unreachable unless the range was widened */	\
++	r0 /= 0;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
 +
- 	top_smax_value = ((u64)reg_smax(reg) >> num_bits) << num_bits;
- 	top_smin_value = ((u64)reg_smin(reg) >> num_bits) << num_bits;
- 
+ SEC("socket")
+ __description("MOV64SX, S16, R10 Sign Extension")
+ __failure __msg("R1 type=scalar expected=fp, pkt, pkt_meta, map_key, map_value, mem, ringbuf_mem, buf, trusted_ptr_")
 -- 
 2.53.0-Meta
 
