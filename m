@@ -1,80 +1,47 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C32F44F540
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 12:45:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DBAD47A0DE;
+	Fri, 11 Sep 2026 12:50:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789130735; cv=none; b=JZJ20hAaymyMp+zxXy5s9YSHjXRsEv8uDALBrSf5k73a9XC3rgIH30XKTEGw88GRazSw5pVnd9d6H6HYjVqWhrWGl79mMu40FGM9wX3rzdmS+ASXNuRICvgY3VpQUapQyQXzNsH+D+jPQwo01XgqTtAjZtnJstpoREUn4bpspq4=
+	t=1789131045; cv=none; b=Lfldck04FefzLO6k/mxq7YClyDFWVWqlNOcyKt3BrjGMQQ7Bgnk50bxbr5d0WGAnB7fyxtiJIKRUUjFd/AtP5ju3Mu3A5Ef4jmS/OPesuyykYMo8RRM4z/EXmkqEtSotA92aKVgiIMWzwA+Q2QSOmJILYoqY/PXub1ItQBzABJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789130735; c=relaxed/simple;
-	bh=Cl3LcxVT8UQmoIXm9PgaZHBPSx2BFaVUbDNNdhxXJFw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Je1toh2BeilgC2aWFfmv5THVNIz+CUrIma8w0DYxT68LRKUIvHkfhVi1JtH2mEyd8lwzsJrblPNxof3EHTQ2fy6NBpUxtpfU1Kx/ttxk53A/w2re0SNlVZRlUwQo8spKx02SfokJ6rFlt9hVAT7oxdGar2VWVOQ5Bh9K2NJTDSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y/X8KRqM; arc=none smtp.client-ip=74.125.225.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789131045; c=relaxed/simple;
+	bh=xWtNJUTwM42lJpkUN0xjfcVe8e21SEBz9UB8yrPkMAw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NTeDz4rU8j8x44ERMy0DfqvEgrI9W6/afCE5AQXzKax27kp1HG3Bk+9DunKrXkhog8rEZYYyZgOFZFlzSutv00Axa67zzfkYVJcj9Mk6jUVYSAg+cKINtyzGeYFfNHmMW99i3gYgvgGO5ubbvUS38VtykY3VLRDjBKvlMbr9PSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=cDOU2Mbc; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y/X8KRqM"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-48351e5bb47so250712f8f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 05:45:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789130731; x=1789735531; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=stX4u/q9+UX8srql6LxNnbXBhPlMhXVPibUjinvI7Fc=;
-        b=Y/X8KRqMz6XfNdXa7zDTQ7tX+aaw2GR7bHsC3CjSioT9K5toMHmq3RIG0W7tW5fk5r
-         LA1myiaw0d3QIkhMDiTZO+TaKuw/gDVJreZ4gTSC+bCCCpLFog9mc+sUO/4/zRLrtmrX
-         hby2OqArzwpXWe9lm0Qu9jsQ2ZshZRoPh6MgqcOug239YzwUX6na9WsLHwz0ZmB2mELY
-         AhrhbcYe0uHbYhTc7F5K1c6olALpOeyN9ugqNmfVO3ggSlFXWTj+CpEvyxOh5JYa/Nyn
-         USv4uIR55asx6MupDwzHTZ2fPOyb2NSdOEMH/iaXSpdT+p9GS3KItiGfeicWQDYQrznG
-         akCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789130731; x=1789735531;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=stX4u/q9+UX8srql6LxNnbXBhPlMhXVPibUjinvI7Fc=;
-        b=N+lnK3thep6dn+txLF8BXR2eMlAYpmfTGjjy+H0j7SHOo0hsD3a8dKwjwgx0+7ZW9j
-         NHhHgj1q2bTK6VqtyBdPr8Bg/CpTqP6wKZ8l62r9IHVIU0poCdza7cEdAlmmytM2be6D
-         EQxGiQFXrfJs/bOFjB9U/kD6pACCKV1rqkLIvDSYhsh8xzWC0QjzT6jRjwFuvisXPXse
-         Bpo6DysnfQpnMVyqIufXaMX1vcOaKDgFdWh05wLDdvIs2O2B4CUmeqzS/msdbruraSjG
-         0QggfJ1DLuIBANysE/CYG8anM+QqnvYkmPqw40HwQRJPXRQEv7ALdfuKezjrWuDpb9tU
-         Q6xw==
-X-Forwarded-Encrypted: i=1; AKwUvByPSUdt8eYw1xPz5FSumCZdbEOjLWXJRegaD+ArOF8cuVgLjW0qMKojm/SefWLw9H1pnP+9KyOUwhTYsGq0r28=@vger.kernel.org
-X-Gm-Message-State: AFuF++k1dqo5vjhcNuP/B6KjGITD5pgEL1Dc8g0u+A14qCouPe6qlRVN
-	XRry99B2t1MHr922qToRlYzKTzCoWUcEtYbbnHRRuv7dfcWTBegi49T3
-X-Gm-Gg: AYBFou0kCTln7yQ69EKXEyXPHmIfkLpxTw09yuVfsg6and1GRFkd2TsTN1xA4xSGYPD
-	pVtGG3lT1dr+L3ejCNBmP7Xpt6JqgEwoFUbmMtv8XPob1O1mLbk8Mxz8AfQpX1aii3/fs6oy7Yp
-	Oac5BIiU4Q1OYT2lpMEzx+ACEnYiIIFaLpTjdqvmiJJ1OKEg6iu5hlFNOBwP1tl93cJXqYhCHAa
-	hEHLP12uMYy9Nm6dp6wS+ezg97YBH/BT6E4pu7qFebfNollOJYLkULFN7mUEnaoaJHQkGIvtWmv
-	ohEgRUUPsesbZYuex2wfZAeRoY1hAJZmgd6flJnzM+RQ7AJN9pcwHT+JZee5hHRYfAF8+IglGni
-	ycHTHYwyzERX/Nbvu+haBliqebUxfJmCqDlZMQ72ZRwFUzCtuSUApbrJNwPN9IV95PaQc0ALypi
-	h3SbApqgzGGDHP+/qArP1gYDDUZ7auNk4RzSj3uYEuNU2qGPUdZfBot6XTAoJe7ua8l+qHw/X8k
-	LICnwnRZKG/kwsxnXihESymUXRU+n3cvxKixnQZo+MHNvAKm78dW5OISiqn4TdU
-X-Received: by 2002:a5d:68c9:0:b0:484:3310:710d with SMTP id ffacd0b85a97d-486eb3529admr7227286f8f.25.1789130730835;
-        Fri, 11 Sep 2026 05:45:30 -0700 (PDT)
-Received: from jaeyeonlee.eduroam.tuwien.ac.at ([2001:629:3800:12:5380:8eae:5873:65c8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-486eb357288sm5902298f8f.29.2026.09.11.05.45.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 05:45:30 -0700 (PDT)
-From: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
-To: akpm@linux-foundation.org,
-	shuah@kernel.org
-Cc: david@kernel.org,
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="cDOU2Mbc"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BFF481655;
+	Fri, 11 Sep 2026 05:50:31 -0700 (PDT)
+Received: from e129823.cambridge.arm.com (unknown [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3E8FF3F7B4;
+	Fri, 11 Sep 2026 05:50:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1789131035; bh=xWtNJUTwM42lJpkUN0xjfcVe8e21SEBz9UB8yrPkMAw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=cDOU2MbcaEMP1yBMbopyBDyoAv5Zy9emYA9RaAc3TnMstvdkF4LYm4+k+cEnpKQCI
+	 7/gQ7+WrMc+1qMOvwOBxu+AXs2Vq3icXGCknW6CgdHvPoYvf7lR0variw/Sne9+SLm
+	 O+SKNVnvemrESZxz37YQc/Nlik4oMnL0N1u0LlhI=
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
 	ljs@kernel.org,
 	liam@infradead.org,
 	vbabka@kernel.org,
 	rppt@kernel.org,
 	surenb@google.com,
 	mhocko@suse.com,
-	ziy@nvidia.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
-Subject: [PATCH] selftests/mm: skip khugepaged file tests if mkfs.xfs is unavailable
-Date: Fri, 11 Sep 2026 14:45:17 +0200
-Message-ID: <20260911124517.63714-1-jaeyeon.lee.dev@gmail.com>
+	shuah@kernel.org,
+	Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [PATCH] kselftest: mm: remove exclusion of building soft-dirty test in arm64
+Date: Fri, 11 Sep 2026 13:50:28 +0100
+Message-ID: <20260911125028.1268274-1-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -82,38 +49,36 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The XFS setup for ./khugepaged all:file checks that the kernel supports
-XFS but not that mkfs.xfs is installed. When CONFIG_XFS_FS=y and
-xfsprogs is missing, mkfs.xfs and mount both fail, but
-SPLIT_HUGE_PAGE_TEST_XFS_PATH is assigned from mktemp -d and stays set.
-The test then runs against plain tmpfs and six subtests fail.
+Since commit 0389c305ef56 (“selftests/mm: skip soft-dirty tests when CONFIG_MEM_SOFT_DIRTY is disabled”),
+the soft-dirty test is skipped when soft-dirty is not supported.
 
-The script already has a skip path for this test, but it never runs
-because the path variable is always set. Check that mkfs.xfs exists
-before attempting the XFS setup.
+There is therefore no reason to exclude the test from being built on
+arm64. Remove the arm64-specific exclusion.
 
-Assisted-by: claude.ai:claude-opus-5
-Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- tools/testing/selftests/mm/run_vmtests.sh | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/mm/Makefile | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index d09f9f6a384e..6315b67b6733 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -415,7 +415,8 @@ CATEGORY="thp" run_test ./khugepaged -c 4 mthp_khugepaged:anon
- # Try to create XFS if not provided
- if [ -z "${SPLIT_HUGE_PAGE_TEST_XFS_PATH}" ]; then
-     if test_selected "thp"; then
--	if grep xfs /proc/filesystems &>/dev/null; then
-+	if grep xfs /proc/filesystems &>/dev/null &&
-+	   command -v mkfs.xfs &>/dev/null; then
- 	    XFS_IMG=$(mktemp /tmp/xfs_img_XXXXXX)
- 	    SPLIT_HUGE_PAGE_TEST_XFS_PATH=$(mktemp -d /tmp/xfs_dir_XXXXXX)
- 	    truncate -s 314572800 ${XFS_IMG}
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 2d5366196e30..d3e9bd67904a 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -104,10 +104,7 @@ TEST_GEN_FILES += guard-regions
+ TEST_GEN_FILES += merge
+ TEST_GEN_FILES += rmap
+ TEST_GEN_FILES += folio_split_race_test
+-
+-ifneq ($(ARCH),arm64)
+ TEST_GEN_FILES += soft-dirty
+-endif
+ 
+ ifeq ($(ARCH),x86_64)
+ CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
 -- 
-2.43.0
+LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
