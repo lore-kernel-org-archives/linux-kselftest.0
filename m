@@ -1,104 +1,107 @@
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C257372661
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 16:19:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.69
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52CF49B5DE;
+	Fri, 11 Sep 2026 16:24:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789143594; cv=none; b=jGGYb13Bfipo501bG9M791j5MdfONYyBv73HaIgs8orUMPWIycZNrQmK76IXzpXy4aOTSpJp4nf2yVto6oyU1OrnzigTRGuArfB6n7Xe3PQZ8ofvN6moqSLJAN6APnfGgtk/N5LZ1UgmVNWk9vnN4AC1aA3XN/Of2d4OoQU2BgA=
+	t=1789143849; cv=none; b=bdxK18p6LrZlP9uXERSzIytvlrx9Nbc4TFkaF74y409WglrENwLv/KGbZo/tyBQRZEFzl1e5dTnFkaStuTxWl9w0N3HQJw04k02t4cxSqnMs2O0gTosv1JwiNqNrNw19deWGKLXy0Mt4Jzc4yXmx1N/jf6rLkXSqrtuzoOF0WOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789143594; c=relaxed/simple;
-	bh=0VmX/bfbnx2c4Jtg8/vIZoW31/wztFQKeXEmNZ/1Tso=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Zo257NNHkitn8xw6Gj2sYvLfOfxGi+3jwgnhYU/DU5kCoeHnqFfBo2YHpyNNqQ0UIXFZv26H+GdvLwumrJdBkL16nP93W4BEHMx0iCXaEO+MUI+oRkJvjawADiFgq63sdVLHfwubus6u/J57T5A/GV5K/I9MacuMIwV3vVrs2pM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=doGOexev; arc=none smtp.client-ip=209.85.216.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1789143849; c=relaxed/simple;
+	bh=OAC/+t+zOxm3qX+0sYXiY/CHafOFrJAYbJ+ZXlb/zvc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=upd+YxRZPZPfjzTP+0IeogOeZfQXpMPRQswjHtZN4wM7tk09BV6dTIqMH2cjZOGggNmJqFsAVWqBGW5F3HBAvS5lrjyh1PRfbP/9gZkEM4aRvvve33O12j37EYQgjGwOAGK8oBKgzKCz6lD7exvbdiYF6/nex3D5X1R2NVmfmL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=OHwxFymQ; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="doGOexev"
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-38f57e31b6eso1244209a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 09:19:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789143593; x=1789748393; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=L2XnLpR3B7NyNraeHl2CA87GE+9itrvfOuyFtdLAXmw=;
-        b=doGOexevKxiQ6mnifRQU2B7qaewmsY/ed5Fi3YDfRsgDhihvu4hihst7WEqGz7jPtv
-         eb45YjSAucN99vjdw3gKmHTk33ImgdodS0b87fLYHqqKDBFO4ekAEJ0NDoR7MsPZuWip
-         QxiuTO8D0x2e3pK7xFMS0xMmZdcQaztiytg+dLTtnXtYf5ZQy/Cp8aIPxDvSoeHp0tp0
-         oK+fiFYnVp4oOPCZlLoJucze4uTk9DctHdetJn7ZegJAmTq+DUelcZRTj5l19M+J42Vv
-         CSYUy4t559GtjtRCWA8BgQ07kg5Bq3tCCJqNyPQFNJ6+IczXLSFmSM+TrP5aqCsR4FKi
-         7USQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789143593; x=1789748393;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=L2XnLpR3B7NyNraeHl2CA87GE+9itrvfOuyFtdLAXmw=;
-        b=INgOP6HUOettqewQqvu63pKnMRyS+A9FXRqmkd5SVcxVJGRiLarTdWy1Z8xxWcg9TM
-         FHqQlmya1M3Hu8+jdIReqdH4UVFw86G5DYReAETso8WBry8wKd6INPu0qpl3tUtqwTsa
-         5HOgt5wC8larPHN5p462WZdbowpTWINgsdcoD266tCcKBfmv/333H2YJfRH/ZmGhsS0z
-         DAwy7popBqdi91POUEi4oXQcaN2imPG5eZ6Ol8H/BmlxYLIbLlEbHGLE2f7j6XCrpCD7
-         t6TlZ/9PYLxNriLPHLaWG7yd7I4VK32jVWj3jXkLm8DXcDta1WGtINEr28ryXwgbXeae
-         lTpQ==
-X-Forwarded-Encrypted: i=1; AKwUvByMEZj5ostI4ZcY2TUq7NjWQVbTtQW+2dlQi4K4sZI/19qU//d2GUXc/dncxJmRmhcKAOrw9teYAKV4CTeobAs=@vger.kernel.org
-X-Gm-Message-State: AFuF++n/tDeXOOXrpx7gNYgT1e7D4Ti1hZdPVkNM7blqXjMQoDzeeyAy
-	LaLrfbHTYHXBWKVXcvzjgRNsqVE6J1lYspl1QA6cnzCwKqDZlGmll+jowo1b/+UlB47Qo5d+Pmd
-	dpn6ntA==
-X-Received: from pjbmr15.prod.google.com ([2002:a17:90b:238f:b0:39b:411f:f252])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2741:b0:398:e436:384
- with SMTP id 98e67ed59e1d1-39d9bbd7b60mr8793864a91.1.1789143592529; Fri, 11
- Sep 2026 09:19:52 -0700 (PDT)
-Date: Fri, 11 Sep 2026 09:19:51 -0700
-In-Reply-To: <20260910115414.3015260-7-ewanhai-oc@zhaoxin.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="OHwxFymQ"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2084316F2;
+	Fri, 11 Sep 2026 09:24:03 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E80A73F7B4;
+	Fri, 11 Sep 2026 09:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1789143846; bh=OAC/+t+zOxm3qX+0sYXiY/CHafOFrJAYbJ+ZXlb/zvc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OHwxFymQN1CZmSj6KzKrDt49fRNk5weOzIW7NYzxiKWEgg10ZMDJsC77fZ2boQ10u
+	 yF2KB+PjklYu3mro3DMk2Agd+4GakPF2QCvegJmi8MQBWj5Z22jKKEFt5O/AP9/Ikg
+	 WRKiBqt3cZEqmWE/qZ4Z+xrYuqMtBKAM1anuaYYk=
+Date: Fri, 11 Sep 2026 17:24:02 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Yeoreum Yun <yeoreum.yun@arm.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org, ljs@kernel.org, liam@infradead.org,
+	vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
+	mhocko@suse.com, shuah@kernel.org
+Subject: Re: [PATCH] kselftest: mm: remove exclusion of building soft-dirty
+ test in arm64
+Message-ID: <aqQrIkcPf6uMlouk@e129823.arm.com>
+References: <20260911125028.1268274-1-yeoreum.yun@arm.com>
+ <0e419abb-71ce-4b97-b189-da86a4891920@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260910115414.3015260-1-ewanhai-oc@zhaoxin.com> <20260910115414.3015260-7-ewanhai-oc@zhaoxin.com>
-Message-ID: <aqQqJysVQxS76YIE@google.com>
-Subject: Re: [PATCH v2 6/9] KVM: selftests: Skip PERF_CAPABILITIES vCPU checks
- without PDCM
-From: Sean Christopherson <seanjc@google.com>
-To: Ewan Hai-oc <ewanhai-oc@zhaoxin.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Frank Zhu <frankzhu@zhaoxin.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, ewanhai@zhaoxin.com, cobechen@zhaoxin.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0e419abb-71ce-4b97-b189-da86a4891920@kernel.org>
 
-On Thu, Sep 10, 2026, Ewan Hai-oc wrote:
-> From: Frank Zhu <frankzhu@zhaoxin.com>
+> On 9/11/26 14:50, Yeoreum Yun wrote:
+> > Since commit 0389c305ef56 (“selftests/mm: skip soft-dirty tests when CONFIG_MEM_SOFT_DIRTY is disabled”),
+> > the soft-dirty test is skipped when soft-dirty is not supported.
+> > 
+> > There is therefore no reason to exclude the test from being built on
+> > arm64. Remove the arm64-specific exclusion.
+> > 
+> > Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> > ---
+> >  tools/testing/selftests/mm/Makefile | 3 ---
+> >  1 file changed, 3 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> > index 2d5366196e30..d3e9bd67904a 100644
+> > --- a/tools/testing/selftests/mm/Makefile
+> > +++ b/tools/testing/selftests/mm/Makefile
+> > @@ -104,10 +104,7 @@ TEST_GEN_FILES += guard-regions
+> >  TEST_GEN_FILES += merge
+> >  TEST_GEN_FILES += rmap
+> >  TEST_GEN_FILES += folio_split_race_test
+> > -
+> > -ifneq ($(ARCH),arm64)
+> >  TEST_GEN_FILES += soft-dirty
+> > -endif
+> >  
+> >  ifeq ($(ARCH),x86_64)
+> >  CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
 > 
-> KVM allows userspace to query MSR_IA32_PERF_CAPABILITIES through
-> KVM_GET_MSRS even when PDCM is not exposed in KVM_GET_SUPPORTED_CPUID.
-> However, vCPU accesses to the MSR fail without PDCM.
+> Does that mean we can also the following?
+> 
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> index d09f9f6a384ee..33963535616b2 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -390,10 +390,7 @@ then
+>         CATEGORY="pkey" run_test ./protection_keys_64
+>  fi
+> 
+> -if [ -x ./soft-dirty ]
+> -then
+> -       CATEGORY="soft_dirty" run_test ./soft-dirty
+> -fi
+> +CATEGORY="soft_dirty" run_test ./soft-dirty
+> 
+>  CATEGORY="pagemap" run_test ./pagemap_ioctl
 
-Hrm, no, KVM is supposed to allow reads and drop writes of '0' for MSRs that are
-advertised to userspace, but ultimately unsupported.  I'm pretty sure this is a
-KVM bug.  I think MSR_IA32_ARCH_CAPABILITIES is also affected.
+Ah right. since all archs have the soft-dirty, we can remove the if
+condition.
 
-Completely untested, but I think this?
+Thanks!
 
-diff --git a/arch/x86/kvm/msrs.c b/arch/x86/kvm/msrs.c
-index dd3bb04878ca..fa77cfdbda7e 100644
---- a/arch/x86/kvm/msrs.c
-+++ b/arch/x86/kvm/msrs.c
-@@ -512,9 +512,15 @@ static int kvm_get_feature_msr(struct kvm_vcpu *vcpu, u32 index, u64 *data,
- 
- 	switch (index) {
- 	case MSR_IA32_ARCH_CAPABILITIES:
-+		if (!kvm_cpu_cap_has(X86_FEATURE_ARCH_CAPABILITIES))
-+			return KVM_MSR_RET_UNSUPPORTED;
-+
- 		*data = kvm_get_arch_capabilities();
- 		break;
- 	case MSR_IA32_PERF_CAPABILITIES:
-+		if (!kvm_cpu_cap_has(X86_FEATURE_PDCM))
-+			return KVM_MSR_RET_UNSUPPORTED;
-+
- 		*data = kvm_caps.supported_perf_cap;
- 		break;
- 	case MSR_PLATFORM_INFO:
+-- 
+Sincerely,
+Yeoreum Yun
