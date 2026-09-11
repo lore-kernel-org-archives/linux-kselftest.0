@@ -1,295 +1,85 @@
-Received: from mail-pj2-f11.google.com (mail-pj2-f11.google.com [74.125.227.139])
+Received: from va-2-48.ptr.blmpb.com (va-2-48.ptr.blmpb.com [209.127.231.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D1E3C0634
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 03:47:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE803E1CED
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 03:57:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.231.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789098469; cv=none; b=VMJLmT6wOiIgm1JNAmZA4v76KbL0opIqwxdfVpCQj61jafzqWZi+2RS8SiOAYIfJJ2s+Xwrqkra61Qd1dHrWg62jU/6pPyIe5KOma6fWgLfoWYqciy6kJwpOBhwzFPqRrn58p53va2QoWLyQeAFciz5TyQSxHjylrhnk9z1OE0g=
+	t=1789099025; cv=none; b=afbmLDjdso4/Fnbnion/Uk7D64mEotmH2GFw3U/WK7MvCwzzlnsdtN66oxDgSlvT4Lsq42Z+nX4RAyExms7p5SneTI7B/MOnUfbc/Tg3WzpZxdwpbKAGZ4NBzgm+jxr4/hfwhLQ9T8mtKamwA4zbXg49Wk++lpD+EHdML3Z34/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789098469; c=relaxed/simple;
-	bh=XQw2nJvNdDqF0i/qvi72cAwb8fZCOX0tU/74XvQXXxM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C1D/iu+vP1zbhqd4wPTkvNOEqD/0tVGaa3EQasE4hMsnkkwaZQVmkh4FSs9ONqEKkYvm+4S8yuM+/6/Kr6Dn3aYe92/9iZkI2k9bbvv9FC/KuYF0t5YZCeDL9kMh4uXrfpB8mbn0uvv339DiXZzDQfKZOW0RIcWJ4NdCtGOquQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TfIBjlRA; arc=none smtp.client-ip=74.125.227.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789099025; c=relaxed/simple;
+	bh=P3wN9CDEu2RFhQKqAwjw9EZUqAuIA35RB/NpHVyqdy4=;
+	h=Content-Type:To:Cc:From:Date:Message-Id:Subject:Mime-Version; b=HRWpCeNwJ1u+YyogA6jNYiNgYVvD4cGdVZ6OGIuPo9qp/gO9DLWPsJM/5I2jGY8ynJN5TsmDcEprQS4MMOWM9GpvKsMOVurn1lXB2cxI4qp+ki9f0df2nKvoMMm3Pp2y6jVlLo9PQzMMn7CS5vvmyZiwRqjGDhcukO3M8FeKXKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lanxincomputing.com; spf=pass smtp.mailfrom=lanxincomputing.com; dkim=pass (2048-bit key) header.d=lanxincomputing-com.20200927.dkim.feishu.cn header.i=@lanxincomputing-com.20200927.dkim.feishu.cn header.b=uu8FS7zO; arc=none smtp.client-ip=209.127.231.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lanxincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lanxincomputing.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TfIBjlRA"
-Received: by mail-pj2-f11.google.com with SMTP id 98e67ed59e1d1-38de693676dso270769a91.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 20:47:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789098467; x=1789703267; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=MCQPQxwkJKy3DEd1LSZHV7jWJXwUky4OTtKypkUgOZ4=;
-        b=TfIBjlRARsP3bjw0vc2vXdflCPGg6fYLWpevrR70Xsxv97oCYZFPHhUv2Z+8Cfjsvs
-         7kVJqUi+Zir1wcCE1dpEJTxU/ATHEc1G1VFFPtrqG0EYNDsmYpwc9GLL4GiBfqkRhm2T
-         IGcScyz92Dj+Yg3BzukhMXPY+5ZOw+Is2NdX7azyBEzmSwtBbcNl2NWdpxlvXMZmwt2a
-         LathIHETIYCr3KVUlbmYdMY5jd43K9wTjInuumOWY3hwWQDsa8NxibZP8COm75i69/Tr
-         9kuzcep1he3dE6Oynv2hup28FkblpcqOu15ZOWk88on0Br4+OGaaqcnrz4Y32uELpZyj
-         e2aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789098467; x=1789703267;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=MCQPQxwkJKy3DEd1LSZHV7jWJXwUky4OTtKypkUgOZ4=;
-        b=suu3h1xWq4W7zvXoqrvOS5NwpL1S4/S3wVn3jkxacItcxrfZsBrOxioPqLn91ftOWI
-         RQokp7cG3BAm1V+dJiTvbR5mmc2vtRhwck7WaCDn21jvlbIaKJ7fA9fBBneu5r5xFU3A
-         I6/5a0xkNYiPuf0qMGObIZArb7pxnFXfK6VkXC/Nz84RjoLPC6e1ur6VBJZqIjUJkkUr
-         4RCAVzw4ZH3MVgxfqzCjKPT+fLo0KRWsjQ0zYErxliz1Dw4oF62LnFbNtIKO4FakkfXr
-         6KJBP0hdF4gey5pFbvlz77mtn9CP0KUkQnBiMfQDmRvzWBHe1Am1Yj3z+WYayiDZJxsZ
-         7N1w==
-X-Forwarded-Encrypted: i=1; AKwUvBzNZjby0IuH6+MgU8E+QE0cBbxVkinPoGKbG+CQW+EtRqRe2WcIbc8ehNMZSbb4LVWwzaEBFYeU6cv6kySWGBk=@vger.kernel.org
-X-Gm-Message-State: AFuF++mbbMkcmGSwZuz+VjW2ojDBEXIQGNriQa8bUWdLBU9MKjgM+Rfj
-	QQH6UTMGk/vAAnkdTGYyJ5AO/yK0pYNYuFOMUMbwokjDOmxoel1r50/E
-X-Gm-Gg: AYBFou23hCM3pdzNOuQtlvtrTW7X7n5vd90fxsUjaOI2M4RdhEtRDs3IThq+egQH/zg
-	usatN0YS4R2ReXHeuW7g+2x8dVrdWErt9uUdMPnd/M0S1pnTxTZgQTMSgOChVEh9juVRYgRvvKO
-	x1cHPoyAzpn1myLgYZxrCVBAU0am/oVl4G2rlbyqw3fcD4B2YF8KzfPSOv867WxKG97VvI2y5BR
-	wmIC3Jd2erJznI66vcmp766rrvbMf7Z3uGcTAMGobfA+KA9Dbhy+oRoKgLJ9neKPPP1QxSUPosm
-	cyCCBX9aDvupBf3RQg42LBlPh9gyPXo8eGEx31aero8KEwC28Wm/Kk0AebhadHvX1vc0VUnWlms
-	90la6kUPjcqJVcJP/2kjFp4Wgmry/Gu4D4S/oIJd7TTl6I4WIUzBXW8/3z1PVT6C4qI1PkTu+oH
-	/Fuv2/Qx2+ECUHQLGq+nPOvSHEyrLkbQpciYnzAbrrI9TSEZ5VnWxMus3ggIQTL+7jwBrPlhuAN
-	wQ=
-X-Received: by 2002:a17:90b:540d:b0:398:ba96:1afd with SMTP id 98e67ed59e1d1-39d9bee4822mr3831687a91.8.1789098467216;
-        Thu, 10 Sep 2026 20:47:47 -0700 (PDT)
-Received: from 192.168.5.7 ([69.5.53.41])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d9540fd76sm2770852a91.9.2026.09.10.20.47.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 20:47:46 -0700 (PDT)
-From: Tianyi Chen <diannaaav@gmail.com>
-To: qmo@kernel.org,
-	bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ihor.solodrai@linux.dev,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Check bpftool batch map dump contents
-Date: Fri, 11 Sep 2026 11:47:32 +0800
-Message-ID: <20260911034732.219752-3-diannaaav@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260911034732.219752-1-diannaaav@gmail.com>
-References: <20260911034732.219752-1-diannaaav@gmail.com>
+	dkim=pass (2048-bit key) header.d=lanxincomputing-com.20200927.dkim.feishu.cn header.i=@lanxincomputing-com.20200927.dkim.feishu.cn header.b="uu8FS7zO"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=s1; d=lanxincomputing-com.20200927.dkim.feishu.cn; t=1789099011;
+  h=from:subject:mime-version:from:date:message-id:subject:to:cc:
+ reply-to:content-type:mime-version:in-reply-to:message-id;
+ bh=gFvKIyooDli1jez1sQOWvZyfJBAMmD4w4FTDZhpGNwE=;
+ b=uu8FS7zOJt1KVcRBP63hu9H4sJ6M8NmUc+dBQOSmoOgbI6htGvf6dV7cNb/+eLyldXH9Ye
+ wQz9Ym9GR39GQ8aiwSupafoD1HT33ANnRZkG3FNiHArngbagGs8jGtjFs+0JxYMj6lUKWV
+ e5iu4NvUFR8RcLAegKjVaaukDhXyXUj//QemFM4+T6N9iBxCKL/3i+QcATYti7G49Tz8bI
+ Tbv3vw9PUwUe7sS+upc7WkOqb6dzrR4AA2aRXD8GTHGsIYMKWyg5gheht8XE6Ef/gcc5MX
+ gziyvimxVojdBW8kJlK43h8jHZ9FMuQicLmEhnziMZcxyzI/MPAdTXqmLfTbjw==
+X-Mailer: git-send-email 2.53.0
+Content-Type: text/plain; charset=UTF-8
+To: "Shuah Khan" <shuah@kernel.org>, 
+	"Pablo Neira Ayuso" <pablo@netfilter.org>, 
+	"Florian Westphal" <fw@strlen.de>
+Content-Transfer-Encoding: 7bit
+Cc: <netfilter-devel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, 
+	<linux-kernel@vger.kernel.org>, "Jin Li" <jinli@lanxincomputing.com>
+From: "Jin Li" <jinli@lanxincomputing.com>
+Date: Fri, 11 Sep 2026 03:56:32 +0000
+Message-Id: <20260911035632.491163-1-jinli@lanxincomputing.com>
+X-Original-From: Jin Li <jinli@lanxincomputing.com>
+Received: from ubuntu ([123.120.5.129]) by smtp.feishu.cn with ESMTPS; Fri, 11 Sep 2026 11:56:48 +0800
+X-Lms-Return-Path: <lba+26aa37c01+8b5a09+vger.kernel.org+jinli@lanxincomputing.com>
+Subject: [PATCH] selftests: netfilter: fix nft_audit.sh auditd detection
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
 
-From: Tianyi Chen <hi@tychen.cc>
+The auditd PID file location changed from /var/run/auditd.pid to
+/run/audit/auditd.pid in newer audit-userspace versions, causing the
+skip check in nft_audit.sh to fail silently.
 
-Exercise hash map dumps around the initial batch size and across
-multiple batches, including empty and single-entry maps. Compare each
-complete unordered key/value set with the input data in plain, JSON
-and pretty JSON output.
+Replace the PID file check with pgrep, which works regardless of
+where the PID file is located.
 
-Cover one-byte keys, three-byte values and BTF-formatted maps to catch
-cursor sizing, buffer alignment and formatting regressions.
-
-Assisted-by: LLM
-Signed-off-by: Tianyi Chen <hi@tychen.cc>
+Signed-off-by: Jin Li <jinli@lanxincomputing.com>
 ---
- .../bpf/prog_tests/bpftool_map_batch.c        | 187 ++++++++++++++++++
- 1 file changed, 187 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
+ tools/testing/selftests/net/netfilter/nft_audit.sh | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
-new file mode 100644
-index 00000000000..b4216ed778e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
-@@ -0,0 +1,187 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <bpftool_helpers.h>
-+#include <bpf/btf.h>
-+#include <ctype.h>
-+
-+#define MAX_ENTRIES 1025
-+#define RECORD_SIZE 256
-+#define OUTPUT_SIZE (MAX_ENTRIES * RECORD_SIZE + 1024)
-+
-+struct dump_case {
-+	const char *name;
-+	unsigned int count;
-+	unsigned int key_size;
-+	unsigned int value_size;
-+	bool btf;
-+};
-+
-+static void hex_bytes(char *out, const void *data, unsigned int size, bool json)
-+{
-+	const unsigned char *bytes = data;
-+	unsigned int i;
-+
-+	if (json)
-+		*out++ = '[';
-+	for (i = 0; i < size; i++) {
-+		if (json && i)
-+			*out++ = ',';
-+		out += sprintf(out, json ? "\"0x%02x\"" : "%02x", bytes[i]);
-+	}
-+	if (json)
-+		*out++ = ']';
-+	*out = '\0';
-+}
-+
-+static void expected_record(char *record, const struct dump_case *test,
-+			    unsigned int index, bool json)
-+{
-+	__u32 key = index, value = index * 37 + 11;
-+	unsigned char short_key = index;
-+	char key_hex[64], value_hex[64], formatted[96];
-+
-+	hex_bytes(key_hex, test->key_size == 1 ? (void *)&short_key : &key,
-+		  test->key_size, json);
-+	hex_bytes(value_hex, &value, test->value_size, json);
-+	snprintf(formatted, sizeof(formatted), "{\"key\":%u,\"value\":%u}",
-+		 key, value);
-+	if (json && test->btf)
-+		snprintf(record, RECORD_SIZE,
-+			 "{\"key\":%s,\"value\":%s,\"formatted\":%s}",
-+			 key_hex, value_hex, formatted);
-+	else if (json)
-+		snprintf(record, RECORD_SIZE, "{\"key\":%s,\"value\":%s}",
-+			 key_hex, value_hex);
-+	else if (test->btf)
-+		snprintf(record, RECORD_SIZE, "%s", formatted);
-+	else
-+		snprintf(record, RECORD_SIZE, "key:%svalue:%s", key_hex, value_hex);
-+}
-+
-+static void check_dump(const struct dump_case *test, __u32 id, bool json, bool pretty)
-+{
-+	bool array = json || test->btf;
-+	char command[MAX_BPFTOOL_CMD_LEN], expected[RECORD_SIZE], footer[64];
-+	bool seen[MAX_ENTRIES] = {};
-+	char *output, *src, *dst, *cursor;
-+	unsigned int i, n;
-+	int err;
-+
-+	output = calloc(1, OUTPUT_SIZE);
-+	if (!ASSERT_OK_PTR(output, "alloc_output"))
-+		return;
-+	snprintf(command, sizeof(command), "%smap dump id %u",
-+		 pretty ? "-p " : json ? "-j " : "", id);
-+	err = get_bpftool_command_output(command, output, OUTPUT_SIZE);
-+	if (!ASSERT_OK(err, "map_dump"))
-+		goto out;
-+	/*
-+	 * Ignore presentation whitespace, but compare complete records and all
-+	 * punctuation. Expected contents come only from the input data, never
-+	 * from another map walk or bpftool invocation.
-+	 */
-+	for (src = output, dst = output; *src; src++)
-+		if (!isspace((unsigned char)*src))
-+			*dst++ = *src;
-+	*dst = '\0';
-+	cursor = output;
-+	if (array) {
-+		if (!ASSERT_EQ(*cursor, '[', "array_start"))
-+			goto out;
-+		cursor++;
-+	}
-+	for (n = 0; n < test->count; n++) {
-+		if (array && n) {
-+			if (!ASSERT_EQ(*cursor, ',', "record_separator"))
-+				goto out;
-+			cursor++;
-+		}
-+		for (i = 0; i < test->count; i++) {
-+			if (seen[i])
-+				continue;
-+			expected_record(expected, test, i, json);
-+			if (!strncmp(cursor, expected, strlen(expected)))
-+				break;
-+		}
-+		if (!ASSERT_LT(i, test->count, "unique_expected_record"))
-+			goto out;
-+		seen[i] = true;
-+		cursor += strlen(expected);
-+	}
-+	if (array) {
-+		ASSERT_STREQ(cursor, "]", "array_end_and_count");
-+	} else {
-+		snprintf(footer, sizeof(footer), "Found%uelement%s", test->count,
-+			 test->count == 1 ? "" : "s");
-+		ASSERT_STREQ(cursor, footer, "plain_count");
-+	}
-+out:
-+	free(output);
-+}
-+
-+static void run_dump_case(const struct dump_case *test)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+	struct bpf_map_info info = {};
-+	__u32 info_len = sizeof(info);
-+	struct btf *btf = NULL;
-+	unsigned int i;
-+	int fd = -1;
-+
-+	if (test->btf) {
-+		btf = btf__new_empty();
-+		if (!ASSERT_OK_PTR(btf, "btf_new"))
-+			return;
-+		if (!ASSERT_EQ(btf__add_int(btf, "unsigned int", 4, 0), 1,
-+			       "btf_int") ||
-+		    !ASSERT_OK(btf__load_into_kernel(btf), "btf_load"))
-+			goto out;
-+		opts.btf_fd = btf__fd(btf);
-+		opts.btf_key_type_id = 1;
-+		opts.btf_value_type_id = 1;
-+	}
-+	fd = bpf_map_create(BPF_MAP_TYPE_HASH, "dump_batch", test->key_size,
-+			    test->value_size, test->count ?: 1, &opts);
-+	if (!ASSERT_OK_FD(fd, "map_create"))
-+		goto out;
-+	for (i = 0; i < test->count; i++) {
-+		__u32 key = i, value = i * 37 + 11;
-+		unsigned char short_key = i;
-+		void *key_ptr = test->key_size == 1 ? (void *)&short_key : &key;
-+
-+		if (!ASSERT_OK(bpf_map_update_elem(fd, key_ptr, &value, BPF_ANY),
-+			       "map_update"))
-+			goto out;
-+	}
-+	if (!ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &info_len), "map_info"))
-+		goto out;
-+	check_dump(test, info.id, false, false);
-+	check_dump(test, info.id, true, false);
-+	check_dump(test, info.id, true, true);
-+out:
-+	if (fd >= 0)
-+		close(fd);
-+	btf__free(btf);
-+}
-+
-+void test_bpftool_map_batch(void)
-+{
-+	static const struct dump_case cases[] = {
-+		{ "empty", 0, 4, 4 },
-+		{ "single", 1, 4, 4 },
-+		{ "below_batch", 255, 4, 4 },
-+		{ "exact_batch", 256, 4, 4 },
-+		{ "above_batch", 257, 4, 4 },
-+		{ "multiple_batches", 1025, 4, 4 },
-+		{ "one_byte_key", 256, 1, 4 },
-+		{ "odd_value_size", 257, 4, 3 },
-+		{ "btf_empty", 0, 4, 4, true },
-+		{ "btf_single", 1, 4, 4, true },
-+		{ "btf_multiple_batches", 1025, 4, 4, true },
-+	};
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(cases); i++)
-+		if (test__start_subtest(cases[i].name))
-+			run_dump_case(&cases[i]);
-+}
+diff --git a/tools/testing/selftests/net/netfilter/nft_audit.sh b/tools/testing/selftests/net/netfilter/nft_audit.sh
+index 87f2b4c725aa..85cc4ce7742a 100755
+--- a/tools/testing/selftests/net/netfilter/nft_audit.sh
++++ b/tools/testing/selftests/net/netfilter/nft_audit.sh
+@@ -6,14 +6,9 @@
+ SKIP_RC=4
+ RC=0
+ 
+-if [ -r /var/run/auditd.pid ];then
+-	read pid < /var/run/auditd.pid
+-	p=$(pgrep ^auditd$)
+-
+-	if [ "$pid" -eq "$p" ]; then
+-		echo "SKIP: auditd is running"
+-		exit $SKIP_RC
+-	fi
++if pgrep -x auditd > /dev/null; then
++	echo "SKIP: auditd is running"
++	exit $SKIP_RC
+ fi
+ 
+ nft --version >/dev/null 2>&1 || {
 -- 
-2.55.0
-
+2.53.0
