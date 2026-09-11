@@ -1,71 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-117.mta0.migadu.com [91.218.175.117])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F938261B71;
-	Fri, 11 Sep 2026 10:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477A140DB20
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 10:37:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789123013; cv=none; b=UneYoSxRv9pWkv29anYX9RUcuSYNWtBnqPSBINJ6b2rSg9bu+LRXur61W7mt2uqXC+M8NTXtasZGkujp2bgQZrMgAfsG14aFpa0Lw6HaX6si959A4UkgypaUuc9MXl4/W9f05vXESMYiCAkOoAeLJ/Wyg4yIO5D+81/sSWrlcDA=
+	t=1789123085; cv=none; b=q0ZTjYw2aeOMVb2G4T1SVcbslgaehOq0yFdz3RY0Qn0YjfO2QB6an9g/6yvC5DOfwBRCuOFbrr7cyjH5RAxpNsOVVDiut0Opfi3LkkcPfkUM/mpNH+L+MQ4PA1wnKkNWYRbvkYkGxMBWAqn33PyP9oL0n1M3Qj42CVgyb9trbRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789123013; c=relaxed/simple;
-	bh=4Z0wBwgDK9LJpl+aoC6t5DrR4Cnkpggpd1pLyt0mNxs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PR6DbuM2c0chZaS44UWx64jEoh1UyFJSAhmRItETVORC3vCaI7R9jdpCDq5bz5AsXqwcNCcONKfCRYjGGb2e/90A4Cj1Yd5tq3VldhXnKhvcZrdbXSThb1FDaXHvUp96HXQsDBaaIUe1ueLboApS3PX8BosumanQNq7FdWJr2aU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XCTFwLye; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789123085; c=relaxed/simple;
+	bh=qcidQxwh1HceK3n0EKSlmvhY5SFvKe+nZW7HpSIIh40=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OwW2rf9yh6eLwdZe+EQtW01UA+MlbVF5Ss4GCPY7yVeb9MaCed6JXgJqEGpfhEHU3QATK7VPqNudkAsKjG/gquNomCWSSM3HYCBTZYa9fK3GZSgaNnLp15F9B2L2gi5T8PeosS3u90p4UATYzd136q3ZohjfPcDrf72Kx4cBCuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FeqWRFZj; arc=none smtp.client-ip=91.218.175.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XCTFwLye"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7A301F000FF;
-	Fri, 11 Sep 2026 10:36:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789123006;
-	bh=u5aNvPNusM3lltrFeHu+T3Gy46Tk3FMqRHWpoFiEgHY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=XCTFwLyeNcGWza0A58ztj0+blr86fxoT0uLerrweLvAud52RAU4HEVRqyIDhPRYHl
-	 aqqrxAVE5wyo1jbDIhs6oNDEkHWiqVW2fGnQCzr23+Yi938zllVi6ziOkDtpOUmdw+
-	 gklPi7YNzFHbSLfuOg1apLpJ8xZsZzoaheht1l/XXMGAF5IZPO+yQHr40+r/77QjZz
-	 8MemdgxGBrPDR+q9UwtNqnd5gDLzZfXEXg0QOOyJAMFAh3gFDKHJXqFk0LUOfk9qGQ
-	 ElvihhXGQBZk5UEy2yum15sx7gTjFx49upfF0S/NZQwlV3mfcLbxoM87DCaRkIfyt5
-	 EwEprbKtph2IQ==
-Date: Fri, 11 Sep 2026 11:36:42 +0100
-From: Simon Horman <horms@kernel.org>
-To: Hangbin Liu <hangbin.liu@linux.dev>
-Cc: Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Hangbin Liu <liuhangbin@kylinos.cn>
-Subject: Re: [PATCH net-next] selftests: netdevsim: add TEST_INCLUDES to
- Makefile
-Message-ID: <20260911103642.GB48209@horms.kernel.org>
-References: <20260910-nsim_lib-v1-1-0be0d49eaa42@kylinos.cn>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FeqWRFZj"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=qcidQxwh1HceK3n0EKSlmvhY5SFvKe+nZW7HpSIIh40=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789123076; v=1; x=1789727876;
+ b=FeqWRFZjB8+M+Fh50goi/A+OFT+O+HoW+UcXUzMyc+keEYtc8vXgvqs7sjmqfyU1CZNlAvJm
+ vqmT6wIAgWVFD/Vq4JI2c7t5jzOSMgZYOHKf71wTj88DVAzYPVZ+hgwYzJehSJ9do1xajFlRx0t
+ hJNQ9IlD44neFpl8/JxZ7IPo=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 53bf64e9feeab3da;
+	Fri, 11 Sep 2026 10:37:56 +0000
+X-Mizu-Trace-ID: 53bf64e9feeab3da
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <74387fa7-b2e3-4b12-a75d-d192f08d14ac@linux.dev>
+Date: Fri, 11 Sep 2026 16:07:50 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260910-nsim_lib-v1-1-0be0d49eaa42@kylinos.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 05/13] bpf: keep the range across a sign
+ extension that cannot change it
+To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20260910164635.459558-6-vineet.gupta@linux.dev>
+ <92fc8746a5a16b3e0e544244b584cc6b287a466539230bdb4043e0e8a716c9af@mail.kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <92fc8746a5a16b3e0e544244b584cc6b287a466539230bdb4043e0e8a716c9af@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 10, 2026 at 04:06:58PM +0800, Hangbin Liu wrote:
-> From: Hangbin Liu <liuhangbin@kylinos.cn>
-> 
-> Some netdevsim selftests source forwarding/lib.sh and other files, but
-> the Makefile doesn't have TEST_INCLUDES targets, which makes
-> 
->   make INSTALL_PATH=/tmp/kself TARGETS=drivers/net/netdevsim \
->      -C tools/testing/selftests install
-> 
-> failed to install related lib files. Add TEST_INCLUDES to the Makefile
-> to install the dependencies.
-> 
-> Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+On 9/10/26 11:22 PM, bot+bpf-ci@kernel.org wrote:
+>> bpf: keep the range across a sign extension that cannot change it
+>>
+>> coerce_reg_to_size_sx() decides whether a sign extension is lossless by
+>> comparing the bits above the field in smin and smax:
+>>
+>>          top_smax_value = ((u64)reg_smax(reg) >> num_bits) << num_bits;
+>>          top_smin_value = ((u64)reg_smin(reg) >> num_bits) << num_bits;
+>>          if (top_smax_value != top_smin_value)
+>>                  goto out;
+>>
+>> Equal high bits do imply the truncation is lossless, but the converse does
+>> not hold. Whenever the range straddles zero the high bits necessarily
+>> differ -- smin sign-extends to all ones, smax to all zeroes -- even when
+>> every value in the range fits the field and (sN)v == v throughout. The
+>> second gate, "both of s64_max/s64_min positive or negative", rejects the
+>> same shape again for the same reason.
+>>
+>> So a register holding an errno-or-zero value, [-4095, 0], comes out of r0
+>> = (s32)r0 as the full [S32_MIN, S32_MAX] even though the instruction is a
+>> no-op on it. The no_sext test at the call site does not help: it is an
+>> unsigned check, so it only covers non-negative values that fit.
+>>
+>> Test the range against the field directly and return early when it fits.
+>> Sign extension is then the identity, so nothing needs updating -- which
+>> also preserves var_off, where the existing path would have replaced known
+>> bits with a coarse tnum_range().
+>>
+>> This only tightens: the early return fires exactly where the value is
+>> provably unchanged, and the cases the current tests do accept still take
+>> the same path and produce the same bounds.
+> Does the last sentence accurately describe the change? The early return
+> is placed before the top_s*_value and sign gates, so it intercepts every
+> fitting range, including those the existing gates accept.
+>
+> For example, with 'w0 &= 0x3c; r0 = (s8)r0', the register holds [0, 60]
+> with var_off = (0; 0x3c). The old path passed both gates (equal top bits,
+> both non-negative) and set var_off = tnum_range(0, 60) = TNUM(0, 0x3f),
+> losing the known low bits. The early return now keeps (0; 0x3c).
+>
+> This is the var_off preservation the message describes two sentences
+> earlier, so "produce the same bounds" seems inaccurate. Would "produce
+> bounds no wider than before" be more precise, given that the accepted
+> cases are where the behaviour actually changes?
+
+Yes this is the right phrasing.
+
+
+>> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> This looks like a bug fix for sign extension handling in the verifier.
+> Should this include:
+>
+>    Fixes: 1f9a1ea821ff ("bpf: Support new sign-extension load insns")
+
+This is a limitation not really a regression - I doubt if this would be 
+backported.
+but up to the maintainers.
+
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 58e788f53ae5..eb093194e2a3 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -5754,6 +5754,7 @@ static void set_sext64_default_val(struct bpf_reg_state *reg, int size)
+>>   static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
+>>   {
+>>   	s64 init_s64_max, init_s64_min, s64_max, s64_min, u64_cval;
+>> +	s64 field_smin, field_smax;
+>>   	u64 top_smax_value, top_smin_value;
+>>   	u64 num_bits = size * 8;
+>>
+>> @@ -5773,6 +5774,27 @@ static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
+>>   		return;
+>>   	}
+>>
+>> +	if (size == 1) {
+>> +		field_smin = S8_MIN;
+>> +		field_smax = S8_MAX;
+>> +	} else if (size == 2) {
+>> +		field_smin = S16_MIN;
+>> +		field_smax = S16_MAX;
+>> +	} else {
+>> +		/* size == 4 */
+>> +		field_smin = S32_MIN;
+>> +		field_smax = S32_MAX;
+>> +	}
+>> +
+>> +	/*
+>> +	 * The range already fits the field, so (sN)v == v for every value the
+>> +	 * register can hold and the sign extension changes nothing. The tests
+>> +	 * below cannot reach this case once smin is negative: a negative smin
+>> +	 * and a non-negative smax never share their high bits.
+>> +	 */
+> Is the comment's condition accurate? It says the tests below cannot
+> reach this case once smin is negative, but the justification only covers
+> a negative smin together with a non-negative smax.
+>
+> A fitting range that is entirely negative is reached and accepted by
+> the tests below. For reg_smin = -63, reg_smax = -1 with size == 1:
+>
+>    top_smax_value = ((u64)-1 >> 8) << 8 = 0xffffffffffffff00
+>    top_smin_value = ((u64)-63 >> 8) << 8 = 0xffffffffffffff00
+>
+> The first gate passes (equal top bits), and the second gate also accepts
+> since (s64_max >= 0) == (s64_min >= 0) holds for both negative. The same
+> is true for entirely non-negative fitting cases like [0, 60] with size == 1.
+>
+> So the early return intercepts cases the tests below handle, which is
+> the var_off-preserving improvement the commit message describes. Should
+> the condition be "once the range straddles zero" rather than "once smin
+> is negative"?
+
+Yes this needs fixing.
+
+Thx,
+-Vineet
+
+>> +	if (reg_smin(reg) >= field_smin && reg_smax(reg) <= field_smax)
+>> +		return;
+>> +
+>>   	top_smax_value = ((u64)reg_smax(reg) >> num_bits) << num_bits;
+>>   	top_smin_value = ((u64)reg_smin(reg) >> num_bits) << num_bits;
+>
 > ---
-> As there are multi nsim selftests include the lib.sh but no error report
-> for the installation issue. So I won't bother fixes tags and just post
-> this patch to net-next.
-
-Reviewed-by: Simon Horman <horms@kernel.org>
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34506184282
 
