@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86EA226ED37;
-	Fri, 11 Sep 2026 18:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4314C4AF67F;
+	Fri, 11 Sep 2026 18:16:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789150620; cv=none; b=eIiFT9A/4IoBExmZlOMQa/Gv6jAd0Pl/UGt96wZXciN+9QpwuPkeUZck5iEJr4hXLumrmX44ogr+q3+XXoVlAxy0smN2Dr3MPhX7a2HAjXyHVeH9Fg2faB0mAl3hl/Ii22ngZnVb5G10Luk8y8cVttCQbf3b03FWh+E5a5TeL2E=
+	t=1789150622; cv=none; b=QzNb/UFCRXEheVDvxOU9DkMmKRZHJQeBE94jBsd9ALRxGNPu/mVZKgDfrZZwjR1FSgJ3E8rP/G5JnhVCj1RjrjlsHx/bC5hEp9s9kokYf9vO9vhlzapTYII3YU4WYGixCm0Fd8t6nORJwxv2Qb4iBevMTHn0gUgrV7l+LhtC8BA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789150620; c=relaxed/simple;
-	bh=2mgFDUjbye0G2nwmkqeDpV3WGKw9k9KtH58MFw3YXJA=;
+	s=arc-20240116; t=1789150622; c=relaxed/simple;
+	bh=kaUp194rucXMwbEBWohdBnDbGqFXS+NaelYZxoe1jcM=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CCWVPRP9B/hhvEPVxmLPWD610QPF79J1hj4e5w6wlXZqC1ekbogUvuS2mfwkUigWHbq5JEPwHkLJrHEcDh+Np43S4Ky8J1PJf+i1tjt/RMUBvYRXyQRvashTW6MhPaxJQxBqPZvvJvX4zkX4ptvsa3KONP7fsY2vjg4OWRejWMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PsG+tP8j; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=bRgETDRtcocDqirjNYE//hXoEfwtBuT4gyiocF7XIkyPkGxzVnQFBHWa33ZbQkZnTbihaW4Y+Pthtpgd1t7aq8RbzgYCxLo5NzLkqIKGU2J0G/T94CtaVmLHGE5kL8FL1P5D4BG7PyGupAXMjB5uSd+Siu+iGacxY8G7BBXanPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YMwwD8Pn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PsG+tP8j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72ABC1F000FF;
-	Fri, 11 Sep 2026 18:16:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YMwwD8Pn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AF181F00893;
+	Fri, 11 Sep 2026 18:16:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789150609;
-	bh=Oy5ht02V67SMsL6ObO61SuJ2VWq3uiBqYswZKW/6MdM=;
+	s=k20260515; t=1789150612;
+	bh=9q6E405kevP4Q7t7b7joHYELBjjubVBWDhl+LQ0Baqw=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=PsG+tP8jNb+ZiU7q3DorE6RsuOIY53mTT5aYJ0BAI5bJIsp/ETpzC8AoDw7AwpGKi
-	 FEKO4NLe4/mMoa7EWBnZH40FDYGkaFprOprnlrEPXHv846ElBiWcPvI2oukqDqdenj
-	 A8gLDpB0lEYwvY8qEUbb1DhkhEfkXSfHVvUWtUKYc/cNB5aOSnB1EcWdk5VnQyK3uL
-	 mqwvYSlpWcM8Qo8oN6kNvWfBWhPIyyy+75M+xwy3p4WggSR+gdpXXd0162FTM5EOI/
-	 6QQHUmky6IXoXHLTZeNL7dlxMjs9mbs6AL504drMSPrgt7KwGGxV9FJXS+P9i2OTxf
-	 i1WMDqYmsYM5g==
-Subject: Re: [PATCH net-next v2 3/5] net: Revalidate queue config for
- ringparam changes
+	b=YMwwD8Pn7YneEezooRyFK9bjvMsUbzRutiutWJ0Ri0H42C7t3sf2krlJ9ZFaZotAL
+	 IdsRUNKnHJy8N8yMQU6rZU/Pi0+vOJoePS2RWddoETXwDxmD6C/mPn/8AuwRgQBaQS
+	 yrDRPyKBxUQUhRUydI5COExaFAaQhXAZLGUac1m7nLkWUarYRv9Zzpb4IfE0W++NmC
+	 10P9SEk6CopsOPehRaw8tak7E0lUZgfIMVgnSLcnzWm/SflY9Dwvi35cPoELBG0MEK
+	 vub1EIYcQTaprhHt3Dnr136CBDTeE4yaMoZJT2OwCO7hEJkIstsvAmeVXihkHriClk
+	 0TI1lD0dnu/lA==
+Subject:
+ Re: [PATCH net-next v2 4/5] fbnic: Support larger memory-provider RX pages
 From: netdev-bot+sashiko@kernel.org
 To: bjorn@kernel.org
 Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
@@ -38,11 +38,11 @@ Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
  sdf@fomichev.me, bobbyeshleman@meta.com, daskald@meta.com,
  bestswngs@gmail.com, maxime.chevallier@bootlin.com, jacob.e.keller@intel.com,
  leitao@debian.org, cuitao@kylinos.cn, asml.silence@gmail.com, dw@davidwei.uk
-Date: Fri, 11 Sep 2026 18:16:47 +0000
-Message-ID: <178915060796.219967.9039776741140153103@kernel.org>
-In-Reply-To: <20260910180908.1506533-4-bjorn@kernel.org>
-References: <20260910180908.1506533-4-bjorn@kernel.org>
-X-sashiko-severity: Low
+Date: Fri, 11 Sep 2026 18:16:50 +0000
+Message-ID: <178915061000.219967.7726187707862333281@kernel.org>
+In-Reply-To: <20260910180908.1506533-5-bjorn@kernel.org>
+References: <20260910180908.1506533-5-bjorn@kernel.org>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -52,321 +52,181 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 4 potential
+Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 0 · Low: 4
+Critical: 0 · High: 1 (1) · Medium: 0 · Low: 0
 
-- [Low] struct netdev_config.rings is zero-allocated by
-  netdev_alloc_config() and netdev_qcfg_apply_dev() unconditionally…
-- [Low] The commit message is framed as closing a live misconfiguration
-  hole (naming fbnic's PPQ-entries-per-page behaviour), but in this…
-- [Low] The values stored into dev->cfg->rings after ->set_ringparam()
-  returns are the requested values, not necessarily the ones the…
-- [Low] Both set paths validate the staged ring depths before calling
-  ->set_ringparam(), then re-copy the driver-adjusted depths into…
+- [High] fbnic_alloc_rx_qt_resources() programs the PPQ device-page
+  geometry unconditionally (`fbnic_bdq_set_page_size(&qt->sub1,…
+
+Pre-existing issues:
+- [High] In fbnic_alloc_qt_page_pools()
+  (drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:1611-1623) the local…
 
 --
 
-net: Revalidate queue config for ringparam changes
+fbnic: Support larger memory-provider RX pages
 
-This adds accepted RX/TX ring depths to struct netdev_config, stages
-proposed values in dev->cfg_pending, and revalidates every RX queue
-through ndo_validate_qcfg() before calling the driver's set_ringparam().
-The ioctl and netlink ring-set paths are converted to the same
-reconfiguration transaction.
+The patch lets memory providers pick a larger RX page size for a queue via
+QCFG_RX_PAGE_SIZE, uses that rendered rx_page_size for the PPQ page-pool
+allocations and completion decoding, and adds ndo_default_qcfg /
+ndo_validate_qcfg callbacks to sanity check the requested size.
 
-Link: https://lore.kernel.org/all/20250421222827.283737-14-kuba@kernel.org/
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+> index 28b962307c080..5e22905a63739 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
 
-A few questions below.
-
->     Memory-provider queue configuration is validated when the provider is
->     bound. A later ethtool ring change may invalidate it because drivers
->     can size queue memory from both ring depth and RX page size. For
->     example, fbnic uses multiple PPQ entries for each RX page larger than
->     PAGE_SIZE, which reduces the usable software ring depth.
-[ ... ]
->     Use the same transaction for ioctl and netlink. Drivers without
->     ndo_validate_qcfg skip the new validation.
-
-[Severity: Low]
-The message reads as if it closes a live misconfiguration hole, but at this
-commit no in-tree driver implements a ring-depth-aware ndo_validate_qcfg and
-no driver reads qcfg->rx_ring_size, so netdev_queue_config_revalidate()
-cannot change any validation outcome yet.
-
-The two current ndo_validate_qcfg implementations, bnxt_validate_qcfg() and
-mlx5e_queue_validate_qcfg(), only inspect qcfg->rx_page_size. The fbnic
-consumer named in the message, fbnic_validate_qcfg() reading
-qcfg->rx_jumbo_ring_size, arrives in the following patch of the series.
-
-The last paragraph does disclose the limitation, so this is only about
-framing: could the message state that this is core plumbing and that the
-fbnic consumer lands in the next patch?
-
-> diff --git a/include/net/netdev_queues.h b/include/net/netdev_queues.h
-> index 70c9fe9e83cc4..31121900aac88 100644
-> --- a/include/net/netdev_queues.h
-> +++ b/include/net/netdev_queues.h
-> @@ -4,18 +4,59 @@
->  
->  #include <linux/netdevice.h>
->  
-> +/**
-> + * struct netdev_ring_config - accepted RX/TX ring depth configuration
-[ ... ]
-> + * Note: these values are only used for queue-configuration validation
-> + * today. Some drivers update their ring sizes without reflecting the change
-> + * in @cfg. Before using the stored values for anything else, those cases
-> + * need to be audited, and the core likely needs a driver notification API
-> + * similar to ethtool_rxfh_context_lost().
-> + */
-> +struct netdev_ring_config {
-> +	u32	rx_pending;
-> +	u32	rx_mini_pending;
-> +	u32	rx_jumbo_pending;
-> +	u32	tx_pending;
-> +};
-> +
->  /**
->   * struct netdev_config - queue-related configuration for a netdev
->   * @hds_thresh:		HDS Threshold value.
->   * @hds_config:		HDS value from userspace.
-> + * @rings:		Accepted RX/TX ring depths.
-> + *
-> + * Direct values, such as @hds_thresh and @rings, hold the current
-> + * accepted configuration. Drivers which use them for queue rendering
-> + * must initialize them with their defaults.
->   */
->  struct netdev_config {
->  	u32	hds_thresh;
->  	u8	hds_config;
-> +
-> +	struct netdev_ring_config rings;
->  };
->  
 [ ... ]
 
-> diff --git a/net/core/netdev_config.c b/net/core/netdev_config.c
-> index b101341e32513..1975de42a60d9 100644
-> --- a/net/core/netdev_config.c
-> +++ b/net/core/netdev_config.c
-> @@ -50,6 +50,15 @@ static int netdev_nop_validate_qcfg(struct net_device *dev,
->  	return 0;
->  }
+> @@ -1599,6 +1603,8 @@ fbnic_alloc_qt_page_pools(struct fbnic_net *fbn, struct fbnic_q_triad *qt,
 >  
-> +static void netdev_qcfg_apply_dev(struct netdev_queue_config *qcfg,
-> +				  const struct netdev_config *cfg)
-> +{
-> +	/* Device config overrides callback-provided fallbacks. */
-> +	qcfg->rx_ring_size = cfg->rings.rx_pending;
-> +	qcfg->rx_mini_ring_size = cfg->rings.rx_mini_pending;
-> +	qcfg->rx_jumbo_ring_size = cfg->rings.rx_jumbo_pending;
-> +}
-> +
+>  	qt->sub0.page_pool = pp;
+>  	if (netif_rxq_has_unreadable_mp(fbn->netdev, rxq_idx)) {
+> +		pp_params.order = get_order(rx_page_size);
+> +		pp_params.max_len = rx_page_size;
+>  		pp_params.flags |= PP_FLAG_ALLOW_UNREADABLE_NETMEM;
+>  		pp_params.dma_dir = DMA_FROM_DEVICE;
+>  
+>  		pp = page_pool_create(&pp_params);
+>  		if (IS_ERR(pp))
+>  			goto err_destroy_sub0;
 
-[Severity: Low]
-Can these three assignments hand a rendered config full of zeroes to
-ndo_validate_qcfg()?
+[Severity: High]
+This isn't a bug introduced by this patch, but the patch widens the set of
+inputs that can make this page_pool_create() fail, so it seems worth
+mentioning.
 
-cfg->rings starts out all-zero and the core never seeds it from the driver's
-current ring depths:
+At the err_destroy_sub0 label, pp has already been reassigned to the
+ERR_PTR returned by the second page_pool_create():
 
-net/core/netdev_config.c:netdev_alloc_config() {
-	cfg = kzalloc_obj(*dev->cfg, GFP_KERNEL_ACCOUNT);
-	...
-}
+	err_destroy_sub0:
+		page_pool_destroy(pp);
+		return PTR_ERR(pp);
 
-The only writer is ethtool_ringparam_set_cfg(), so on a device whose ring
-depths were never touched through ethtool, rx_ring_size,
-rx_mini_ring_size and rx_jumbo_ring_size all render as 0.
+page_pool_destroy() only short-circuits on NULL:
 
-The assignment is also unconditional, unlike the memory-provider override a
-few lines below:
+	net/core/page_pool.c:page_pool_destroy() {
+		if (!pool)
+			return;
 
-	mpp = &__netif_get_rx_queue(dev, rxq_idx)->mp_params;
-	if (mpp->rx_page_size)
-		qcfg->rx_page_size = mpp->rx_page_size;
+		if (!page_pool_put(pool))
+			return;
+		...
+	}
 
-so a driver cannot supply ring-depth fallbacks from ndo_default_qcfg() at
-all - they are always overwritten. The comment says that is intended, but
-should the copy be guarded the same way as rx_page_size, or should
-ndo_default_qcfg() not be documented as providing fallbacks for these
-fields?
+and page_pool_put() then does refcount_dec_and_test(&pool->user_cnt) on
+the error pointer. Should the label destroy qt->sub0.page_pool instead,
+and save the error value before overwriting pp?
 
-For the record, nothing appears broken in-tree: the only consumer of the new
-fields, fbnic, seeds netdev->cfg->rings.{rx,rx_mini,rx_jumbo,tx}_pending in
-fbnic_netdev_alloc() in the following patch of the series, and the
-"driver initializes dev->cfg" convention already exists there for
-hds_thresh. bnxt and mlx5e read only rx_page_size.
+Along the same path, is qt->sub0.page_pool leaked together with its DMA
+mappings? fbnic_alloc_rx_qt_resources() returns the error before reaching
+its free_page_pools label, fbnic_alloc_nv_resources()'s "while (i--)"
+unwind skips the failing qt, and on the queue-reconfig side
+netdev_rx_queue_reconfig() goes to err_free_old_mem (kvfree of the qmem
+container only, no ndo_queue_mem_free) when ndo_queue_mem_alloc fails.
 
->  static int __netdev_queue_config(struct net_device *dev, int rxq_idx,
->  				 struct netdev_queue_config *qcfg,
->  				 struct netlink_ext_ack *extack,
-> @@ -70,6 +79,7 @@ static int __netdev_queue_config(struct net_device *dev, int rxq_idx,
->  	/* Get defaults from the driver, in case user config not set */
->  	if (dev->queue_mgmt_ops->ndo_default_qcfg)
->  		dev->queue_mgmt_ops->ndo_default_qcfg(dev, qcfg);
-> +	netdev_qcfg_apply_dev(qcfg, dev->cfg_pending);
->  	err = validate_cb(dev, qcfg, extack);
+The second create can fail for ordinary reasons: page_pool_init() returns
+-ENOMEM for the ptr_ring allocation (up to 16384 entries here) and can
+also propagate an error from pool->mp_ops->init(pool).
+
+[ ... ]
+
+> @@ -2028,15 +2034,18 @@ static int fbnic_alloc_tx_qt_resources(struct fbnic_net *fbn,
+>  
+>  static int fbnic_alloc_rx_qt_resources(struct fbnic_net *fbn,
+>  				       struct fbnic_napi_vector *nv,
+> -				       struct fbnic_q_triad *qt)
+> +				       struct fbnic_q_triad *qt,
+> +				       u32 rx_page_size)
+>  {
+>  	struct device *dev = fbn->netdev->dev.parent;
+>  	int err;
+>  
+> -	err = fbnic_alloc_qt_page_pools(fbn, qt, qt->cmpl.q_idx);
+> +	err = fbnic_alloc_qt_page_pools(fbn, qt, qt->cmpl.q_idx, rx_page_size);
 >  	if (err)
 >  		return err;
+>  
+> +	fbnic_bdq_set_page_size(&qt->sub1, rx_page_size);
+> +
+
+[Severity: High]
+Can the BDQ geometry here end up describing a page pool that was never
+enlarged?
+
+fbnic_bdq_set_page_size(&qt->sub1, rx_page_size) runs unconditionally,
+but fbnic_alloc_qt_page_pools() only raises order/max_len when
+netif_rxq_has_unreadable_mp() is true; otherwise sub1 just takes another
+reference on sub0's order-0, PAGE_SIZE pool. The two predicates are not
+the same:
+
+	net/core/netdev_rx_queue.c:netif_rxq_has_unreadable_mp() {
+		if (rxq_idx < dev->real_num_rx_queues)
+			return __netif_get_rx_queue(dev, rxq_idx)->mp_params.mp_ops;
+		return false;
+	}
+
+	net/core/netdev_config.c:__netdev_queue_config() {
+		mpp = &__netif_get_rx_queue(dev, rxq_idx)->mp_params;
+		if (mpp->rx_page_size)
+			qcfg->rx_page_size = mpp->rx_page_size;
+	}
+
+The config renderer applies the memory provider's rx_page_size with no
+real_num_rx_queues bound check, while netif_rxq_has_unreadable_mp()
+silently reports false above real_num_rx_queues.
+
+When they disagree, does the device get descriptors past the end of the
+mapping? fbnic_bd_prep() posts fbnic_bd_page_count() descriptors from a
+single allocation:
+
+	__le64 *bdq_desc = &bdq->desc[id * fbnic_bd_page_count(bdq)];
+	dma_addr_t dma = page_pool_get_dma_addr_netmem(netmem);
+	u64 bd, i = fbnic_bd_page_count(bdq);
+
+and on the completion side fbnic_rcd_bd_page_offset() decodes offsets up
+to rx_page_size - 1, which fbnic_add_rx_frag() then feeds to
+page_pool_dma_sync_netmem_for_cpu() and xdp_buff_add_frag() as payload
+inside what is really a PAGE_SIZE buffer.
+
+A path that seems to reach this: fbnic only sets real_num_rx_queues in
+fbnic_set_netif_queues() at open, so after probe it equals
+FBNIC_MAX_RXQS from alloc_etherdev_mq(). A devmem/io_uring bind with
+rx-page-size=8K against a high queue index is accepted then, "ip link set
+up" shrinks real_num_rx_queues (netif_set_real_num_rx_queues() has no
+memory-provider check), and a later "ethtool -L combined 32" makes
+fbnic_alloc_nv_resources() allocate that queue while
+netif_rxq_has_unreadable_mp() returns false but qcfg.rx_page_size is
+still 8192.
+
+Before this patch bd_page_shift was always derived from PAGE_SIZE and so
+always matched the order-0 pool. Would it make sense to either derive the
+BDQ page size from the pool that was actually created, or reject
+rx_page_size != PAGE_SIZE when no large-order pool was allocated?
+
+>  	err = xdp_rxq_info_reg(&qt->xdp_rxq, fbn->netdev, qt->sub0.q_idx,
+>  			       nv->napi.napi_id);
+>  	if (err)
+
 [ ... ]
-> @@ -113,3 +125,23 @@ int netdev_queue_config_validate(struct net_device *dev, int rxq_idx,
->  {
->  	return __netdev_queue_config(dev, rxq_idx, qcfg, extack, true);
->  }
-> +
-> +int netdev_queue_config_revalidate(struct net_device *dev,
-> +				   struct netlink_ext_ack *extack)
-> +{
-> +	const struct netdev_queue_mgmt_ops *qops = dev->queue_mgmt_ops;
-> +	struct netdev_queue_config qcfg;
-> +	unsigned int i;
-> +	int err;
-> +
-> +	if (!qops || !qops->ndo_validate_qcfg)
-> +		return 0;
-> +
-> +	for (i = 0; i < dev->real_num_rx_queues; i++) {
-> +		err = netdev_queue_config_validate(dev, i, &qcfg, extack);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	return 0;
-> +}
 
-> diff --git a/net/ethtool/common.c b/net/ethtool/common.c
-> index 23db40618fed1..05ed22fd1f906 100644
-> --- a/net/ethtool/common.c
-> +++ b/net/ethtool/common.c
-> @@ -956,6 +956,15 @@ void ethtool_ringparam_get_cfg(struct net_device *dev,
->  	kparam->hds_thresh = dev->cfg->hds_thresh;
->  }
+> @@ -2097,7 +2106,11 @@ static int fbnic_alloc_nv_resources(struct fbnic_net *fbn,
 >  
-> +void ethtool_ringparam_set_cfg(struct netdev_config *cfg,
-> +			       const struct ethtool_ringparam *param)
-> +{
-> +	cfg->rings.rx_pending = param->rx_pending;
-> +	cfg->rings.rx_mini_pending = param->rx_mini_pending;
-> +	cfg->rings.rx_jumbo_pending = param->rx_jumbo_pending;
-> +	cfg->rings.tx_pending = param->tx_pending;
-> +}
+>  	/* Allocate Rx Resources */
+>  	for (j = 0; j < nv->rxt_count; j++, i++) {
+> -		err = fbnic_alloc_rx_qt_resources(fbn, nv, &nv->qt[i]);
+> +		struct netdev_queue_config qcfg;
 > +
+> +		netdev_queue_config(fbn->netdev, nv->qt[i].cmpl.q_idx, &qcfg);
+> +		err = fbnic_alloc_rx_qt_resources(fbn, nv, &nv->qt[i],
+> +						  qcfg.rx_page_size);
+>  		if (err)
+>  			goto free_qt_resources;
+>  	}
+
 [ ... ]
-
-> diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
-> index 4b0bc503f9307..1320289025b25 100644
-> --- a/net/ethtool/ioctl.c
-> +++ b/net/ethtool/ioctl.c
-[ ... ]
-> @@ -2239,10 +2240,29 @@ static int ethtool_set_ringparam(struct net_device *dev, void __user *useraddr)
->  	    ringparam.tx_pending > max.tx_max_pending)
->  		return -EINVAL;
->  
-> +	ret = netdev_reconfig_start(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);
-> +
-> +	ret = netdev_queue_config_revalidate(dev, NULL);
-> +	if (ret)
-> +		goto out_free_cfg;
-> +
->  	ret = dev->ethtool_ops->set_ringparam(dev, &ringparam,
->  					      &kernel_ringparam, NULL);
-> -	if (!ret)
-> -		ethtool_notify(dev, ETHTOOL_MSG_RINGS_NTF);
-> +	if (ret)
-> +		goto out_free_cfg;
-> +
-> +	/* The driver may adjust the accepted ring depths. */
-> +	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);
-> +	swap(dev->cfg, dev->cfg_pending);
-> +	ethtool_notify(dev, ETHTOOL_MSG_RINGS_NTF);
-
-[Severity: Low]
-Is the committed configuration guaranteed to be one that ndo_validate_qcfg()
-actually saw?
-
-The sequence here is:
-
-	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);   /* requested */
-	netdev_queue_config_revalidate(dev, NULL);                 /* validates */
-	dev->ethtool_ops->set_ringparam(...);                      /* may rewrite */
-	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);   /* adjusted */
-	swap(dev->cfg, dev->cfg_pending);                          /* commits */
-
-If the driver rewrites ringparam in place, the depths that get committed are
-not the depths that were validated, and there is no second
-netdev_queue_config_revalidate() pass. ethnl_set_rings() has the same
-ordering, with the commit done by the framework swap in
-ethnl_default_set_doit().
-
-No in-tree case looks reachable today: the only ring-depth-aware validator,
-fbnic_validate_qcfg(), runs the same fbnic_ring_size_pow2() helper that
-fbnic_set_ringparam() applies, and its ppq_entries >= 4 constraint only gets
-easier as the depth is rounded up. Drivers that do rewrite the caller's
-ringparam, such as mvpp2_ethtool_set_ringparam() via
-mvpp2_check_ringparam_valid(), have no ndo_validate_qcfg, so
-netdev_queue_config_revalidate() returns 0 for them.
-
-Would it be worth revalidating after the driver call, or documenting that
-->set_ringparam() must not adjust depths in a direction its own
-ndo_validate_qcfg() would reject?
-
-> +
-> +out_free_cfg:
-> +	__netdev_free_config(dev->cfg_pending);
-> +	dev->cfg_pending = dev->cfg;
->  	return ret;
->  }
->  
-
-> diff --git a/net/ethtool/rings.c b/net/ethtool/rings.c
-> index 9054c89c5d7bb..c04312fc0d061 100644
-> --- a/net/ethtool/rings.c
-> +++ b/net/ethtool/rings.c
-[ ... ]
-> @@ -299,10 +300,20 @@ ethnl_set_rings(struct ethnl_req_info *req_info, struct genl_info *info)
->  
->  	dev->cfg_pending->hds_config = kernel_ringparam.tcp_data_split;
->  	dev->cfg_pending->hds_thresh = kernel_ringparam.hds_thresh;
-> +	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);
-> +
-> +	ret = netdev_queue_config_revalidate(dev, info->extack);
-> +	if (ret)
-> +		return ret;
->  
->  	ret = dev->ethtool_ops->set_ringparam(dev, &ringparam,
->  					      &kernel_ringparam, info->extack);
-> -	return ret < 0 ? ret : 1;
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* The driver may adjust the accepted ring depths. */
-> +	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);
-> +	return 1;
->  }
-
-[Severity: Low]
-The comment says the driver may adjust the accepted ring depths, but does
-this second copy store the depths the hardware ended up with, or just the
-requested ones?
-
-Drivers that normalize through locals never touch the caller's struct
-ethtool_ringparam, for example mlx5e_ethtool_set_ringparam() computing
-order_base_2() into its own variables, so dev->cfg->rings can end up
-describing a depth the device is not running.
-
-This is already acknowledged in the kernel-doc added by this patch ("Some
-drivers update their ring sizes without reflecting the change in @cfg"), and
-the only consumer of the stored depths, fbnic, does round in place, so
-nothing reads a stale value today. Would it be clearer to say the stored
-values are the requested depths, adjusted only by drivers that write back
-into param?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260910180908.1506533-1-bjorn%40kernel.org
