@@ -1,54 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6333A9622;
-	Fri, 11 Sep 2026 22:47:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C9A3BE643;
+	Fri, 11 Sep 2026 23:08:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789166853; cv=none; b=unLgdKxtBHhMzc8PNU0n6q92zu47Gsb6I6bXQsg++m29bftatxpFo1vobMw7phFMzKS51X3Fskl5QO9Ahvre2hrmTQ5Vo4TXibJLO3otk1tm+UePei4dZjjWxzwettSvHWBKJC6bwVrODLtvDv5ivK6OJXEhI1GLo2sNdytylvE=
+	t=1789168095; cv=none; b=rpyR98X78/HXr9TsMMxnp3vnpNZgGkl+uhCgApc0161PAdFLOK0Xo2Rp2ANlGGHD5nJCB7hDsnm+JEsLSS6VOcNDernBozVwOuWPCGGxeHlW2SDlLWVr9VD3c3mCMwVQVRbDRCm6tail9e/58EAqBPnjukt3zJ7THvEkqOBtpI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789166853; c=relaxed/simple;
-	bh=NAw+HZLaSGi05f8Ch9oX0sWYilzR0uJPZ3tngf688yM=;
+	s=arc-20240116; t=1789168095; c=relaxed/simple;
+	bh=/PwjuMvcSZ0fhPtTH12Ek1tQKVNRKC0iZDzLO91hAS4=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gyGSW3ziqSDgJubhCh+yOtAPXomEnNBS2Gnk5vrtezCRAFO6dcgNJvupTEi26ACsJzym1o0/i5hGXUVZjLa5QsBfx9062EkgiZzmym1Ton7bycVcAFqCAb1lT4WwM0DB2Hk2iV4xsWlN82xtTDNqBKmjwH1JyfiGjRtGSrS+gig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eSYPxCN9; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=UTxlHubh4E+IlOoXVZ4GNoC4aDy+Y42NEVmt81ktYD43XhNX1I9mfPMzN5rsHpWcLMGaAJ3VnGy8BuvhGyatpZdeeO+ppv0X6wVUZaL1I9RIUQWT2P6OlJW8dT+162pkCfsR0v/ts4DWDTLxGoL8RobAZaYJQYBstsFtRKInj0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WN/+fiq+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eSYPxCN9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F3031F00893;
-	Fri, 11 Sep 2026 22:47:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WN/+fiq+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 426961F000FF;
+	Fri, 11 Sep 2026 23:08:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789166851;
-	bh=IQMxpZY4GRpOWmxOkQkfdE8RMYKEu8sXeTMBcFaeC3g=;
+	s=k20260515; t=1789168093;
+	bh=a1Bc2O8PyWz0OyZmMUEMy1c+IMjD9Lmiy7MHPqTb8pc=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=eSYPxCN9WG/DReET9gM3fOsz+5jxLq4W4NwxBzaXgfkx4suKeL240/136lKuhUNLp
-	 Mgvvna69A+DdEQ+uJ1sG+gLk4gAsnBpr7CNmTiZPsQfCyAi73OHJ1ciJj8PkVGXOOP
-	 6dkZKxwAwoihi2jmac4OXDLTIqv4zX/tjXK4L/7hXz0wA4Iju4Fwi5Eml9Hr53UjHv
-	 Rk7sXMTqzSt54IENJhbNQWbM1dxi5q/9CMROYjTZMy8iQ43GNhhzOXo5lEfAwLsLdO
-	 N7SS2In4z5+MyFveV1RpoJEfQzcS44/++8elPcMtcgQgTfS6nouXD443EFEQ3ZOYpz
-	 4xyLlgvgmPjTA==
-Date: Fri, 11 Sep 2026 15:47:29 -0700
+	b=WN/+fiq+NfN2TgjTImeR5jnqaYpEchf9aH7kuH3kSHj9WCdNxkgcIirwXXp1tXxiJ
+	 Rygx/Hx2uKTlCcOX8WmbRZ1jHtRSjf9udjJA2rWlCtNFXYzooPoBZCVoAng1CJ7gta
+	 zw7s9l5C3waLY2ritWse4K4v9TG9nCDdjA6R0++wvgHQDDkBiWDbCscOkwBEhZVQVu
+	 LK7dlXysKF9kMxf8+dhP6QEZPqxN+o31txpzMFG5efjV9qrnOGZrvuI8w1smftYRX2
+	 7C5tKS7M1ndgpNTd12hJHrMyARbzsXie6KSqd7/2Eajzfac/10HY8V2kei9fttk866
+	 kDXxPTuGaWzqQ==
+Date: Fri, 11 Sep 2026 16:08:12 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Alexander Duyck
- <alexanderduyck@fb.com>, kernel-team@meta.com, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
- "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Mohsin Bashir
- <mohsin.bashr@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Bobby
- Eshleman <bobbyeshleman@meta.com>, Dimitri Daskalakis <daskald@meta.com>,
- Weiming Shi <bestswngs@gmail.com>, Maxime Chevallier
- <maxime.chevallier@bootlin.com>, Jacob Keller <jacob.e.keller@intel.com>,
- Tao Cui <cuitao@kylinos.cn>, Pavel Begunkov <asml.silence@gmail.com>, David
- Wei <dw@davidwei.uk>
-Subject: Re: [PATCH net-next v2 1/5] net: Add netdev_config helpers
-Message-ID: <20260911154729.583325d6@kernel.org>
-In-Reply-To: <aqPHdSYLDWhnRSQ_@gmail.com>
-References: <20260910180908.1506533-1-bjorn@kernel.org>
-	<20260910180908.1506533-2-bjorn@kernel.org>
-	<aqPHdSYLDWhnRSQ_@gmail.com>
+To: Hangbin Liu <hangbin.liu@linux.dev>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, David Ahern
+ <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, Andrea Mayer
+ <andrea.mayer@uniroma2.it>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Hangbin Liu
+ <liuhangbin@kylinos.cn>
+Subject: Re: [PATCH net-next v2] selftests: net: move log_test to lib file
+ and remove duplicate code
+Message-ID: <20260911160812.3aaed4f9@kernel.org>
+In-Reply-To: <aqN2K7rAm-S6QI86@fedora>
+References: <20260831-self_log_test-v2-1-eda2e8490cf9@kylinos.cn>
+	<aqN2K7rAm-S6QI86@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,17 +51,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 11 Sep 2026 02:20:35 -0700 Breno Leitao wrote:
-> > +void __netdev_free_config(struct netdev_config *cfg)
-> > +{
-> > +	kfree(cfg);
-> > +}  
+On Fri, 11 Sep 2026 11:31:55 +0800 Hangbin Liu wrote:
+> Hi everyone,
 > 
-> When I read this one, I was expecting __netdev_free_config() to "become
-> more complicated", but, it continues to alway be a single kfree(). How
-> is this helper useful?
+> This patch is a bit too long for review, and maybe cause conflicts for
+> stable backports. I plan to split it into small frags. But there are 2
+> ways to split it.
+> 
+> 1. Split based on the test name. e.g. srv6 part, fib part, test_* part, and
+>    others.
+> 2. Split based on the changes. e.g. group the tests that using exactly same
+>    log_test functions into one patch.
+> 
+> Does anyone has any suggestion?
 
-It was taken out of a series which had per-queue config so there was
-also an allocation of a variable size array. I asked Bjorn to add this
-patch, anyway, otherwise we'd need to open code netdev_reconfig_start()
-in a second place. The per-queue config will come sooner or later.
+I don't think it makes sense to split this.
