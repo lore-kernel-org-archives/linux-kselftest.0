@@ -1,196 +1,160 @@
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9014AF9C2
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 18:41:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59B8456E19;
+	Fri, 11 Sep 2026 20:01:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789152112; cv=none; b=ZK+8CgayTx/WlIbb6lw/kTn5Mevuh6FTSgI5v9atOZHJIuCDGo0oh2DNzAWAFsur+iwpsVlTyRJZ1fnSUiM16ZC7/XdJTQwXuoQWNuwpVKsD3sVRn72PrlXS+lSAOgYzH3399gOtovyQgLbsNd9H6DNmzxslkdTqG5j49myJBVo=
+	t=1789156877; cv=none; b=rop0j2LC/N+Ywb9fpx+NlbKd3JQXmtM+kpPrHwaEKjksgkkY2NHBnDe7bXqW/pjDtNHlEYx6fdLFAi4gR73QPCtxmvsgggZyvtfqJ86xokZETXBYDCaybguUqt+IByZkf5pOTTwj2s5Gi6jVlbeqySNZAB/h1lU9hqzhHRo4/c8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789152112; c=relaxed/simple;
-	bh=CRgZ0azeESVx05XN/DI2CTmUes8DOfM/w7avTS/EtcM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=eWiyfeJKjY0bdRsZ2p5mX6U1yXrwT0KD6PGI//UWfOu8t1r9g4FjfjnRyHKoGap+cUyuG+XeKQDcNZ9Z/7n/nRDX/5OW1s1LrUJy/JC1g6s4iAAgp/tDOvsvGTIqVEi4Vp1qQpiXKdN9MdK3gHvpFvRNYmiXEhsBxFMXPQasLio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=GmvhFeG/; arc=none smtp.client-ip=209.85.210.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789156877; c=relaxed/simple;
+	bh=OUHE6zhTbrOhqldHpcFJbKy0ORJ0zTSZoOleg3b3QLM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uayv4tSBpaGDEeham+V+JQ5qrTRsDbHdjpn2ICDasZOMf/cMT6w04V9RZg0sbLB6vd/HohOGjwem0hLIz7eGkOT89hZFGZEc1uQT72GaiTPkT8rKv4hbNLMXCsAmeqbhGRbpDPTxvVEVq7jkVx4+sko8uT7+IaMpwtLSKZffjSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S7dpufa2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="GmvhFeG/"
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7f4f824de5dso605126a34.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 11:41:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789152102; x=1789756902;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:dkim-signature:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=yMbZw9icvnNTXwCanhAuRSvqQw9hREcvdfSXLJ7VSbo=;
-        b=jeHV0pyHOApPcleVTLuZrCoC9bWsiY+nt6ODPB+JGJdf8id5OYnSJ6WN0/abHetOpt
-         NgeLkv3pS1sOnr0rLJ67pMKd8oMrfGbK2LKagAiQNe9Rjwlm28wJQKFDnvNywDP2xEuS
-         csJsdjNVEgPItwyG7EGvsfXxTsIsXNxVHnHTaZMI+5mFd6SQpxfv9pQz2JXA3yHeGhZC
-         oz/LD8a5dzIxifa64xh36zPZp3qAZ6CBSL4h6xQKXZAD9MhbXhoGHrAzUnU0ba8jqai5
-         lwnFgXNszJJnBXQUKwIpJcfeFqxLNP3mL0HI4DUCNdDgTl/GoTdop7/MkTnTxVSLFgOq
-         3nFA==
-X-Forwarded-Encrypted: i=1; AKwUvBw1vce3tF75tsuHr8IKODU2rvurLYCrpuOZL5iAQGmB9aHrfantsElzPriN7DMX1qMr3mpkGTJtZks8JD/eQ7U=@vger.kernel.org
-X-Gm-Message-State: AFuF++mopG+yB/Qd+IgNzT5jfJ2DoIZBrta5CWpShgckuTjFG1h0sF6d
-	9SrYxUVQG6MuJQv4IVcMTTRHZa8iUpncUyDHGtn/ZDQbY4PSBWsSWMqc
-X-Gm-Gg: AYBFou1ngBVM8gI6ZkZGiapzUPNPxXZo2PxpajkjXZMx2HjDPg+/whCyO2hcHCfP/B9
-	/vSX8dw+xq1WSq8vNyzr7FJcDgsYVSgLnRqS7ecb7M15pFQNbSLlHuP7RkWLKM6dYflKwRMibgy
-	C348SJmLpBBhNxi8gWgJaqatFUmiLV7TdoPIuqCjXcVkbcFyBs/G+ziSMVDFsnlAxFDXCbmc6eQ
-	jGAvNKazibYI6wLdb3FX58E/RSReND8v+gFNc582tjQWsKnEg0+FHuALu3QSpFySXgXvaZWX+od
-	z5PV7b2BnI9z805Je/hDdkCKwB19bjgZ8C7q1+tqQpbgl7Vj8HXBI2dzzVZMyJ3WUvcnQINJfo/
-	LKBw5cN9F6w4zuv4gYfjlnyQjRxQDwXra4cc3J/uKOKS/lVEccNRGja3t93Re52PLjNY1gL/g5D
-	cx5Sen0YGx+K1lUQNR+OPVpjyD1bh6IEdMQVzixoHgxLX/PqWQj7FPs74eqhJHshzqkNfPS3pPF
-	4ogkd3snGNWgcYLSEFxSe0az5aQBYr+1QG7DkLD5LsY+UjKM+QonWZ5427Bp2lZPjGPpCqYibN3
-X-Received: by 2002:a05:6830:67d2:b0:7fa:ab72:9e01 with SMTP id 46e09a7af769-803ffea3bb4mr4180312a34.25.1789152102165;
-        Fri, 11 Sep 2026 11:41:42 -0700 (PDT)
-Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-804e70994aasm1411448a34.19.2026.09.11.11.41.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 11:41:41 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8237260B4C;
-	Fri, 11 Sep 2026 18:41:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=dkim; t=1789152100;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=yMbZw9icvnNTXwCanhAuRSvqQw9hREcvdfSXLJ7VSbo=;
-	b=GmvhFeG/edXAwhxbHy4zVlJAHL3Difik2/7rqr8mkCuh/eBqLiRhB+/rB/z+YRScVpTDWZ
-	jaPlwREiXGWzCpJ87c4wMcm4tF2ScT5m7fye3rL1SQtytITIdf83hgUqxEMZa5lF+J4FJe
-	iQD9OsSY0mWOLNPQb3lOX8gOfOnD1eeK5g9pybwMdWj36qh/OirRFnyFcTth+ELzvFe/PV
-	32C3NzzGMhDvSgXiO3Vm0nNYzNf9wDfm09UFBEUl9m7bRwRQMb490N21y4+OeMwRUR/079
-	KuswwzL9e6PSQV11tX540K0KfngidjL5L1LRUDAin9ak82HUPppUtWnuynvktw==
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
-Date: Fri, 11 Sep 2026 15:41:33 -0300
-Subject: [PATCH net v2] selftests/net: Fix icmp.sh race between ping and
- tcpdump startup
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S7dpufa2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B3B21F00898;
+	Fri, 11 Sep 2026 20:00:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789156863;
+	bh=BZgzmuECJHadzIjRSWdkbG8kEUoKuAgu8NWPQ9kfPIc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=S7dpufa2xYg/PpNyIs1/FKXc7lLDgoTokG4sLnUrwTSwVuSI7BbQ9nao81dva4KNn
+	 xH8z9Y6lvbMpJokh62a/tDvtlaEh/x2+84iBtFDx1I55wl/T4ZLdeTKfnc5JighDfw
+	 leFlQLxIeY2lXXGshZlto7MzOIcsXIkjxPqJTJ0HIhE1O9faULC4LAfNJzE/CjQ3zX
+	 wizdG+PhOeCrJdXBIqX67uT4Or0dJtwFcSac0HX7R308X/hRA7VnTvIPL3JrCeo/xr
+	 2rWLh/hg9Y9IiwxmP0jN+hJ4Zx4SQ4JR1Hel91xr8HRGrrPgB1WodmnYRclUdRkDpE
+	 y5fUJXY7LWJmQ==
+Message-ID: <15910291-2cef-4f25-8daf-4db73aa7a7d9@kernel.org>
+Date: Fri, 11 Sep 2026 22:00:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260911-selftests-net-icmp_race-v2-1-c7458dec9d0b@marliere.net>
-X-B4-Tracking: v=1; b=H4sIAFxLpGoC/4WOQQ6CMBBFr0K6tto2BsGV9zDGlDLAGClkphIN4
- e629QAu/58/L28VDITA4lysgmBBxsnHYHaFcIP1PUhsYxZGmVLVSkuGZxeAA0sPQaIb5ztZB7I
- 0ZdVWVWmONYj4PRN0+M7kq4hTcfuV/Goe4EJiplljGWRD1rshVRNhj/4wWg5A6T4gh4k+2W/RG
- fZXZdFSS9UYa05Qa6vcZbT0RCDYZ5Ft276gfxMX+AAAAA==
-X-Change-ID: 20260901-selftests-net-icmp_race-6268d886249e
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>, 
- =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openssh-sha256; t=1789152095; l=4012;
- i=ricardo@marliere.net; h=from:subject:message-id;
- bh=CRgZ0azeESVx05XN/DI2CTmUes8DOfM/w7avTS/EtcM=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QL6TGAIu2GyzsEiydnqTAMIRSsCPc75Zq4paR9dHvCGfGc8ymZdjH+qmG4Ttl/cy5pGe2sXfUhs
- SezPyzixKOAI=
-X-Developer-Key: i=ricardo@marliere.net; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net 2/2] selftests: drv-net: psp: test PSP and TCP ULP
+ mutual exclusion
+Content-Language: fr
+To: Daniel Zahka <daniel.zahka@gmail.com>, Eric Dumazet
+ <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>
+Cc: Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260910-psp-ktls-fix-v1-0-e3f30aaeca4e@gmail.com>
+ <20260910-psp-ktls-fix-v1-2-e3f30aaeca4e@gmail.com>
+ <DLCFLUP26J73.FNVCZ4ALAUHC@gmail.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <DLCFLUP26J73.FNVCZ4ALAUHC@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-icmp.sh backgrounds ping and then starts tcpdump, with no synchronization
-between the two. If tcpdump is not capturing yet by the time the ICMP
-unreachable replies come back, the test fails even though the kernel
-behaved correctly:
+Hi Daniel,
 
-  FAIL - got ICMP response from , should be 192.0.0.8
+On 11/09/2026 12:57, Daniel Zahka wrote:
+> On Thu Sep 10, 2026 at 7:46 PM EDT, Daniel Zahka wrote:
+>> Test both setting PSP after TLS ULP, and TLS ULP after PSP.
+>>
+>> Add CONFIG_TLS=y to the drivers/net/config.
+>>
+>> Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
+>> ---
+>>  tools/testing/selftests/drivers/net/config |  1 +
+>>  tools/testing/selftests/drivers/net/psp.py | 46 ++++++++++++++++++++++++++++++
+>>  2 files changed, 47 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/selftests/drivers/net/config
+>> index b6989c7d3d9d..4838adf27fa1 100644
+>> --- a/tools/testing/selftests/drivers/net/config
+>> +++ b/tools/testing/selftests/drivers/net/config
+>> @@ -21,5 +21,6 @@ CONFIG_NET_SCH_INGRESS=y
+>>  CONFIG_NET_SCH_PRIO=m
+>>  CONFIG_PPP=y
+>>  CONFIG_PPPOE=y
+>> +CONFIG_TLS=y
+>>  CONFIG_VLAN_8021Q=m
+>>  CONFIG_XDP_SOCKETS=y
+>> diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
+>> index 315648a770d0..12b27f2a3fa1 100755
+>> --- a/tools/testing/selftests/drivers/net/psp.py
+>> +++ b/tools/testing/selftests/drivers/net/psp.py
+>> @@ -23,6 +23,8 @@ from lib.py import NetNSEnter
+>>  from lib.py import bkg, rand_port, wait_port_listen
+>>  from lib.py import ip
+>>  
+>> +TCP_ULP = 31
+>> +
+>>  
+>>  def _get_outq(s):
+>>      one = b'\0' * 4
+>> @@ -333,6 +335,50 @@ def assoc_version_mismatch(cfg):
+>>              ksft_eq(the_exception.nl_msg.error, -errno.EINVAL)
+>>  
+>>  
+>> +def _require_tls_ulp():
+>> +    with socket.create_server(("localhost", 0)) as srv:
+>> +        with socket.create_connection(srv.getsockname()) as s:
+> 
+> ruff is complaining about the nested 'with' statements. I ran ruff
+> locally via nipa, but did not get the same result. It seems nipa doesn't
+> use a ruff config file, and the discrepancy is because I have a
+> different ruff version. I was able to reproduce by upgrading the
+> version.
 
-The empty address is misleading: it means the capture matched nothing
-before its 10s timeout, not that the reply had a wrong source address.
-NS1's Icmp InDestUnreachs counter still increments across such a failure,
-so the replies were generated and did reach NS1. Ping sends several probes
-over its 3s deadline, so losing every one of them takes a multi-second
-stall in tcpdump startup, which does happen on loaded CI hosts [1].
+FYI, the CI is using the 'ruff' package from the Fedora repo. If it
+helps, you can use the NIPA "build" container to have the same environment:
 
-Fix it by starting tcpdump first and waiting for its "listening" banner
-via slowwait() before sending traffic. Run ping synchronously, then kill
-and reap tcpdump if it did not already exit on -c 1.
+https://github.com/linux-netdev/nipa/wiki/Running-Netdev-CI-tests-locally#static-tests
 
-Fixes: 7e9838b7915e ("selftests/net: Add icmp.sh for testing ICMP dummy address responses")
-Link: https://openqa.opensuse.org/tests/5907626/logfile?filename=icmp_sh.tap.txt#line-2 [1]
-Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
----
-Changes in v2:
- - Drop timeout(1) wrapper from tcpdump invocation.
- - Run ping synchronously in the foreground.
- - Kill and reap tcpdump PID after ping returns if it did not exit on -c 1.
- - Simplify commit message description of the fix.
-- Link to v1: https://patch.msgid.link/20260901-selftests-net-icmp_race-v1-1-0b2a27e91a0c@marliere.net
-
-To: "David S. Miller" <davem@davemloft.net>
-To: Eric Dumazet <edumazet@google.com>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-To: Simon Horman <horms@kernel.org>
-To: Shuah Khan <shuah@kernel.org>
-To: Toke Høiland-Jørgensen <toke@redhat.com>
-To: David Ahern <dsahern@kernel.org>
-Cc: netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- tools/testing/selftests/net/icmp.sh | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/net/icmp.sh b/tools/testing/selftests/net/icmp.sh
-index 824cb0e35eff..1670caef2b90 100755
---- a/tools/testing/selftests/net/icmp.sh
-+++ b/tools/testing/selftests/net/icmp.sh
-@@ -28,10 +28,11 @@ RT2=172.16.0.0/24
- H2_IP6=2001:db8:1::2
- 
- TMPFILE=$(mktemp)
-+TCPDUMP_ERR=$(mktemp)
- 
- cleanup()
- {
--    rm -f "$TMPFILE"
-+    rm -f "$TMPFILE" "$TCPDUMP_ERR"
-     cleanup_ns $NS1 $NS2
- }
- 
-@@ -53,11 +54,22 @@ ip -netns $NS2 route add $RT2 via inet6 $H1_IP6
- # Make sure ns2 will respond with ICMP unreachable
- ip netns exec $NS2 sysctl -qw net.ipv4.icmp_ratelimit=0 net.ipv4.ip_forward=1
- 
--# Run the test - a ping runs in the background, and we capture ICMP responses
--# with tcpdump; -c 1 means it should exit on the first ping, but add a timeout
--# in case something goes wrong
--ip netns exec $NS1 ping -w 3 -i 0.5 $PINGADDR >/dev/null &
--ip netns exec $NS1 timeout 10 tcpdump -tpni veth0 -c 1 'icmp and icmp[icmptype] != icmp-echo' > $TMPFILE 2>/dev/null
-+# Run the test - start tcpdump and wait for it to be capturing before
-+# sending any traffic. -c 1 means tcpdump exits on its own once it captures
-+# a reply; kill it afterwards in case it is still waiting.
-+ip netns exec $NS1 tcpdump -tpni veth0 -c 1 \
-+    'icmp and icmp[icmptype] != icmp-echo' > $TMPFILE 2>$TCPDUMP_ERR &
-+TCPDUMP_PID=$!
-+if ! slowwait 3 grep -qs "listening" "$TCPDUMP_ERR"; then
-+    echo "FAIL - tcpdump did not start listening"
-+    cat "$TCPDUMP_ERR"
-+    exit 1
-+fi
-+
-+ip netns exec $NS1 ping -w 3 -i 0.5 $PINGADDR >/dev/null
-+
-+kill $TCPDUMP_PID 2>/dev/null
-+wait $TCPDUMP_PID 2>/dev/null
- 
- # Parse response and check for dummy address
- # tcpdump output looks like:
-
----
-base-commit: 08df884136f1c1197bab2a27814404fd329d9aac
-change-id: 20260901-selftests-net-icmp_race-6268d886249e
-
-Best regards,
---  
-Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
-
+Cheers,
+Matt
