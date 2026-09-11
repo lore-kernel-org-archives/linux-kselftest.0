@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFA54497B62;
-	Fri, 11 Sep 2026 21:42:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4F894A4EEF;
+	Fri, 11 Sep 2026 21:42:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789162954; cv=none; b=tNcvM7Rl44XXWKHCaQlgrZTs/I5B4Lyb7/ptBCyRproZoZKdOFfbi2dHPcolScoWzZf+/tEnzGafJkLjf+FmB+SyI+h94sKm3oABq5YyRP7RoCXjDZdGbG+B+9sSezDHeSYd1MDls7+BqPiCOrpxjNK4UTTnCNn7rgmq10u8BdE=
+	t=1789162962; cv=none; b=ZumEhhBGIuoP+9MButw0jT+bYZDPHBv6Ic0+41fvRo+eaML6KtGqbFvA0ORPV1MAmXZrn9q0tUp8rgoFsRItgYmkKQmnEeZgYq0biDLjSHhXnkAdxM4O+ULELCUt5NBaSdT6Q4jQEfhSb8dxI32y0LvT0XzYHu1O14xOrqMA9RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789162954; c=relaxed/simple;
-	bh=g9xfFIN1eybrlbdeBNPLXC5TVFM8Kvup/yimqq6mDiY=;
+	s=arc-20240116; t=1789162962; c=relaxed/simple;
+	bh=3sP2mJ0al+FQWnF7v1VPsurp6m4st9PEmZ6qJPKe5j4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kpjByyOnh0XRfa0SxTphKnOAJafMpGC6Mzlokusd7vsTt5Q1ZWqpE/AYPVgwxKvfHAONUm2j9kzWHGzv9zs0v7LFijM5zMhqK98pA1loieJYpfHqOn8BjRrh+r7Pd/lweHWWmdgd0nboapuSaeLkMldQyDg15DoY+4YG0StnPFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZfqffOTl; arc=none smtp.client-ip=192.198.163.19
+	 MIME-Version; b=eyAZKdmnl87JvLLJ57un9CyaHT1AkhMxoIbfv6ucpFhipbp8oUPKS/3yaBk1WGLzaCFbigIBH+k3Io7zbtBpzpMblO/4NDlvuh9SvT07whSrtVj6x9C1LteUhG2Uo41ZM1qVQ5S+RLCrTKzcs3DH29QN2k/Dfs47SnJhlJcLK9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EL2Ipan8; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZfqffOTl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EL2Ipan8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789162951; x=1820698951;
+  t=1789162960; x=1820698960;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=g9xfFIN1eybrlbdeBNPLXC5TVFM8Kvup/yimqq6mDiY=;
-  b=ZfqffOTlUxhn0j2kCulcfMstar/88d4h+yHPpX9vKTgAfDl+YrCgKtQR
-   jyLJ1AEJahySKsJkgApija3ogvAmDBxYHEPOqJlCSGTCx2abnbvaFln5X
-   uI/c/asrkwEWZ8y+Yj65teC04kHtRAS0RewDUiEP24MbfwjvdvKSvADxO
-   Fiawzv1peI1AsP5j/JlKfpP+EXczf+mnUosnOV7mfPRCmhgtKapxKDB/X
-   0Uz7vFL2Nc/Zft+BB8tGc8lsstXeIjUFyFHkydIRu5605lIu74twN4Y7Y
-   E72gXZuqdN1T8+bGQQepXdhpNdieXJoSBZ9nxdTtM0UL63mfOpx3NUN8i
+  bh=3sP2mJ0al+FQWnF7v1VPsurp6m4st9PEmZ6qJPKe5j4=;
+  b=EL2Ipan8F58WRhROwV+29KPoZBuTTKfF7Bvticez+1jKpSCe2HRGpVJ4
+   hhRs5Y9ff9NiD295aqkr5rLjhNGXZe3i0OEDAP5TL/HWJHkJhv1eckEGt
+   1GIwTLW8NA821xYxi6ciIHen8tsjbaESjsUKXmRJBselatOFLgx5y82oi
+   Xkp90dwICyZ6URr040i0bpTt1CCC9ECJ9xulBqJ3sDkCVpDi46k/ggjw3
+   nnGVd+EK8TpNwbRMeOo7QSWYupfLzqrG70lAWRlMicpCtPRsvKCWPSAFx
+   3SH4GZ5ULf1WOHwdyEb8liYCeeVx+H1OT9aomN32nQDYylabdze/wc6Vp
    A==;
-X-CSE-ConnectionGUID: 8W4BmMHFQwKWgHPfItMKfw==
-X-CSE-MsgGUID: TsOAfeA5Tiym3g6Dcx+aHA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11902"; a="88572765"
+X-CSE-ConnectionGUID: u87Euv9HSDmMDKBqpDB1Vw==
+X-CSE-MsgGUID: vREBGFATSzatUyNH92gZoQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11902"; a="88572783"
 X-IronPort-AV: E=Sophos;i="6.27,98,1787036400"; 
-   d="scan'208";a="88572765"
+   d="scan'208";a="88572783"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2026 14:42:30 -0700
-X-CSE-ConnectionGUID: 5H0pNPuTQ0m24jT5LNwtgw==
-X-CSE-MsgGUID: TycCSzVRQPWm6hxDCswdhg==
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2026 14:42:39 -0700
+X-CSE-ConnectionGUID: Dk6T9qCIT1uwJxJZnZK4ww==
+X-CSE-MsgGUID: 9aBkbqPdSGCwym1ORCPn2Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,98,1787036400"; 
-   d="scan'208";a="272004180"
+   d="scan'208";a="272004193"
 Received: from sohilmeh.sc.intel.com ([172.25.103.65])
-  by orviesa007.jf.intel.com with ESMTP; 11 Sep 2026 14:42:29 -0700
+  by orviesa007.jf.intel.com with ESMTP; 11 Sep 2026 14:42:38 -0700
 From: Sohil Mehta <sohil.mehta@intel.com>
 To: kvm@vger.kernel.org,
 	x86@kernel.org
@@ -72,9 +72,9 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v10 17/28] KVM: x86: Handle CR4.FRED when emulating RSM
-Date: Fri, 11 Sep 2026 14:36:47 -0700
-Message-ID: <20260911213659.2025974-18-sohil.mehta@intel.com>
+Subject: [PATCH v10 18/28] KVM: VMX: Dump FRED context in dump_vmcs()
+Date: Fri, 11 Sep 2026 14:36:48 -0700
+Message-ID: <20260911213659.2025974-19-sohil.mehta@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260911213659.2025974-1-sohil.mehta@intel.com>
 References: <20260911213659.2025974-1-sohil.mehta@intel.com>
@@ -86,72 +86,121 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Clear CR4.FRED before CR0.PG when leaving long mode on RSM, and restore
-it only after CR0.PG has been set, the same way CR4.PCIDE is already
-handled in both directions.
+From: "Xin Li (Intel)" <xin@zytor.com>
 
-SMI delivery saves all 64 bits of CR4 and RSM restores them so CR4.FRED
-survives SMM. But KVM emulates RSM as a series of individual register
-writes, and so drives the vCPU through an intermediate state with
-CR4.FRED set and EFER.LMA clear. kvm_set_cr4() rejects that combination,
-so RSM of a 64-bit FRED guest fails with X86EMUL_UNHANDLEABLE.
+Add FRED related VMCS fields to dump_vmcs() to dump FRED context.
 
-Note, SMI delivery needs no such handling, as enter_smm() clears CR4 in
-full via the vendor callback rather than kvm_set_cr4().
-
+Signed-off-by: Xin Li (Intel) <xin@zytor.com>
 Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 ---
 v10:
- - New patch
+ - Test the secondary VM-exit controls in the dump_vmcs()
 ---
- arch/x86/kvm/smm.c | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+ arch/x86/kvm/vmx/vmx.c | 43 +++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 36 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/kvm/smm.c b/arch/x86/kvm/smm.c
-index 656a38dad7e7..a504e93fc5f5 100644
---- a/arch/x86/kvm/smm.c
-+++ b/arch/x86/kvm/smm.c
-@@ -435,10 +435,10 @@ static int rsm_enter_protected_mode(struct kvm_vcpu *vcpu,
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index cd041381b322..3a3315a7fc11 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -1501,6 +1501,9 @@ static void vmx_write_guest_fred_rsp0(struct vcpu_vmx *vmx, u64 data)
+ 	vmx_write_guest_host_msr(vmx, MSR_IA32_FRED_RSP0, data,
+ 				 &vmx->msr_guest_fred_rsp0);
+ }
++#else
++/* Make sure it builds on 32-bit */
++static u64 vmx_read_guest_fred_rsp0(struct vcpu_vmx *vmx) { return 0; }
+ #endif
  
- 	/*
- 	 * First enable PAE, long mode needs it before CR0.PG = 1 is set.
--	 * Then enable protected mode.	However, PCID cannot be enabled
--	 * if EFER.LMA=0, so set it separately.
-+	 * Then enable protected mode. However, PCID and FRED cannot be
-+	 * enabled if EFER.LMA=0, so set them separately.
- 	 */
--	bad = kvm_set_cr4(vcpu, cr4 & ~X86_CR4_PCIDE);
-+	bad = kvm_set_cr4(vcpu, cr4 & ~(X86_CR4_PCIDE | X86_CR4_FRED));
- 	if (bad)
- 		return X86EMUL_UNHANDLEABLE;
+ static void grow_ple_window(struct kvm_vcpu *vcpu)
+@@ -6727,7 +6730,7 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
+ 	struct vcpu_vmx *vmx = to_vmx(vcpu);
+ 	u32 vmentry_ctl, vmexit_ctl;
+ 	u32 cpu_based_exec_ctrl, pin_based_exec_ctrl, secondary_exec_control;
+-	u64 tertiary_exec_control;
++	u64 tertiary_exec_control, secondary_vmexit_ctl;
+ 	unsigned long cr4;
+ 	int efer_slot;
  
-@@ -446,7 +446,7 @@ static int rsm_enter_protected_mode(struct kvm_vcpu *vcpu,
- 	if (bad)
- 		return X86EMUL_UNHANDLEABLE;
+@@ -6738,6 +6741,8 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
  
--	if (cr4 & X86_CR4_PCIDE) {
-+	if (cr4 & (X86_CR4_PCIDE | X86_CR4_FRED)) {
- 		bad = kvm_set_cr4(vcpu, cr4);
- 		if (bad)
- 			return X86EMUL_UNHANDLEABLE;
-@@ -599,10 +599,14 @@ int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
- 		struct kvm_segment cs_desc;
- 		unsigned long cr4;
- 
--		/* Zero CR4.PCIDE before CR0.PG.  */
-+		/*
-+		 * Zero CR4.PCIDE and CR4.FRED before CR0.PG, as neither can
-+		 * be set while EFER.LMA is 0, and clearing CR0.PG clears
-+		 * EFER.LMA.
-+		 */
- 		cr4 = kvm_read_cr4(vcpu);
--		if (cr4 & X86_CR4_PCIDE)
--			kvm_set_cr4(vcpu, cr4 & ~X86_CR4_PCIDE);
-+		if (cr4 & (X86_CR4_PCIDE | X86_CR4_FRED))
-+			kvm_set_cr4(vcpu, cr4 & ~(X86_CR4_PCIDE | X86_CR4_FRED));
- 
- 		/* A 32-bit code segment is required to clear EFER.LMA.  */
- 		memset(&cs_desc, 0, sizeof(cs_desc));
+ 	vmentry_ctl = vmcs_read32(VM_ENTRY_CONTROLS);
+ 	vmexit_ctl = vmcs_read32(VM_EXIT_CONTROLS);
++	secondary_vmexit_ctl = cpu_has_secondary_vmexit_ctrls() ?
++			       vmcs_read64(SECONDARY_VM_EXIT_CONTROLS) : 0;
+ 	cpu_based_exec_ctrl = vmcs_read32(CPU_BASED_VM_EXEC_CONTROL);
+ 	pin_based_exec_ctrl = vmcs_read32(PIN_BASED_VM_EXEC_CONTROL);
+ 	cr4 = vmcs_readl(GUEST_CR4);
+@@ -6784,6 +6789,16 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
+ 	vmx_dump_sel("LDTR:", GUEST_LDTR_SELECTOR);
+ 	vmx_dump_dtsel("IDTR:", GUEST_IDTR_LIMIT);
+ 	vmx_dump_sel("TR:  ", GUEST_TR_SELECTOR);
++	if (vmentry_ctl & VM_ENTRY_LOAD_IA32_FRED)
++		pr_err("FRED guest: config=0x%016llx, stack_levels=0x%016llx\n"
++		       "RSP0=0x%016llx, RSP1=0x%016llx\n"
++		       "RSP2=0x%016llx, RSP3=0x%016llx\n",
++		       vmcs_read64(GUEST_IA32_FRED_CONFIG),
++		       vmcs_read64(GUEST_IA32_FRED_STKLVLS),
++		       vmx_read_guest_fred_rsp0(vmx),
++		       vmcs_read64(GUEST_IA32_FRED_RSP1),
++		       vmcs_read64(GUEST_IA32_FRED_RSP2),
++		       vmcs_read64(GUEST_IA32_FRED_RSP3));
+ 	efer_slot = vmx_find_loadstore_msr_slot(&vmx->msr_autoload.guest, MSR_EFER);
+ 	if (vmentry_ctl & VM_ENTRY_LOAD_IA32_EFER)
+ 		pr_err("EFER= 0x%016llx\n", vmcs_read64(GUEST_IA32_EFER));
+@@ -6835,6 +6850,16 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
+ 	       vmcs_readl(HOST_TR_BASE));
+ 	pr_err("GDTBase=%016lx IDTBase=%016lx\n",
+ 	       vmcs_readl(HOST_GDTR_BASE), vmcs_readl(HOST_IDTR_BASE));
++	if (secondary_vmexit_ctl & SECONDARY_VM_EXIT_LOAD_IA32_FRED)
++		pr_err("FRED host: config=0x%016llx, stack_levels=0x%016llx\n"
++		       "RSP0=0x%016lx, RSP1=0x%016llx\n"
++		       "RSP2=0x%016llx, RSP3=0x%016llx\n",
++		       vmcs_read64(HOST_IA32_FRED_CONFIG),
++		       vmcs_read64(HOST_IA32_FRED_STKLVLS),
++		       (unsigned long)task_stack_page(current) + THREAD_SIZE,
++		       vmcs_read64(HOST_IA32_FRED_RSP1),
++		       vmcs_read64(HOST_IA32_FRED_RSP2),
++		       vmcs_read64(HOST_IA32_FRED_RSP3));
+ 	pr_err("CR0=%016lx CR3=%016lx CR4=%016lx\n",
+ 	       vmcs_readl(HOST_CR0), vmcs_readl(HOST_CR3),
+ 	       vmcs_readl(HOST_CR4));
+@@ -6860,25 +6885,29 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
+ 	pr_err("*** Control State ***\n");
+ 	pr_err("CPUBased=0x%08x SecondaryExec=0x%08x TertiaryExec=0x%016llx\n",
+ 	       cpu_based_exec_ctrl, secondary_exec_control, tertiary_exec_control);
+-	pr_err("PinBased=0x%08x EntryControls=%08x ExitControls=%08x\n",
+-	       pin_based_exec_ctrl, vmentry_ctl, vmexit_ctl);
++	pr_err("PinBased=0x%08x EntryControls=0x%08x\n",
++	       pin_based_exec_ctrl, vmentry_ctl);
++	pr_err("ExitControls=0x%08x SecondaryExitControls=0x%016llx\n",
++	       vmexit_ctl, secondary_vmexit_ctl);
+ 	pr_err("ExceptionBitmap=%08x PFECmask=%08x PFECmatch=%08x\n",
+ 	       vmcs_read32(EXCEPTION_BITMAP),
+ 	       vmcs_read32(PAGE_FAULT_ERROR_CODE_MASK),
+ 	       vmcs_read32(PAGE_FAULT_ERROR_CODE_MATCH));
+-	pr_err("VMEntry: intr_info=%08x errcode=%08x ilen=%08x\n",
++	pr_err("VMEntry: intr_info=%08x errcode=%08x ilen=%08x event_data=%016llx\n",
+ 	       vmcs_read32(VM_ENTRY_INTR_INFO_FIELD),
+ 	       vmcs_read32(VM_ENTRY_EXCEPTION_ERROR_CODE),
+-	       vmcs_read32(VM_ENTRY_INSTRUCTION_LEN));
++	       vmcs_read32(VM_ENTRY_INSTRUCTION_LEN),
++	       kvm_cpu_cap_has(X86_FEATURE_FRED) ? vmcs_read64(INJECTED_EVENT_DATA) : 0);
+ 	pr_err("VMExit: intr_info=%08x errcode=%08x ilen=%08x\n",
+ 	       vmcs_read32(VM_EXIT_INTR_INFO),
+ 	       vmcs_read32(VM_EXIT_INTR_ERROR_CODE),
+ 	       vmcs_read32(VM_EXIT_INSTRUCTION_LEN));
+ 	pr_err("        reason=%08x qualification=%016lx\n",
+ 	       vmcs_read32(VM_EXIT_REASON), vmcs_readl(EXIT_QUALIFICATION));
+-	pr_err("IDTVectoring: info=%08x errcode=%08x\n",
++	pr_err("IDTVectoring: info=%08x errcode=%08x event_data=%016llx\n",
+ 	       vmcs_read32(IDT_VECTORING_INFO_FIELD),
+-	       vmcs_read32(IDT_VECTORING_ERROR_CODE));
++	       vmcs_read32(IDT_VECTORING_ERROR_CODE),
++	       kvm_cpu_cap_has(X86_FEATURE_FRED) ? vmcs_read64(ORIGINAL_EVENT_DATA) : 0);
+ 	pr_err("TSC Offset = 0x%016llx\n", vmcs_read64(TSC_OFFSET));
+ 	if (secondary_exec_control & SECONDARY_EXEC_TSC_SCALING)
+ 		pr_err("TSC Multiplier = 0x%016llx\n",
 -- 
 2.43.0
 
