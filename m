@@ -1,165 +1,402 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DBEB38425B;
-	Fri, 11 Sep 2026 04:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DFCC305670
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 05:07:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789101153; cv=none; b=c69XcI3bQVnoZnDVDPVJsnD89hcw29AvXBNl5wqhfH2Wnz4DZY01NOntrkobWu3CquUsAu1+mtXnnVp372EZgTNFcVxkyURcih4YP2OgGI5rAYXi6pdB3enQSG08JMmb1qxhiheLE6IsWvsG1QmQvagcC7mVsCt0T1YQk0g0FWI=
+	t=1789103237; cv=none; b=mBoq6z/EfbuH/ozNC8/F8QJe7YA3azaPi/44OQPJ9thxoKL3yWmZB8q8iAkbcpcehFw3aFn3vL6ScsUqYwbbF/AFqKkcbljPMo0WQQa9L0HB+ruKcQdcibAv7PKlPajRdvdgUMHOQpAaDK7KIQYt5302jGEjcRW5ZFGCf7i5P/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789101153; c=relaxed/simple;
-	bh=6nIY7vDGZl1HSYvtDHEzSpFXJFmf/2f+RPP48FA6xjQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u+pcNdHtjvMj7EKDD/ds/hOfvh8jn+ClFDtNiZGQFVk8Uobv2Xl9lYFt19X9L2VeumdCGsCkx1q5nD5Y4IuWB6NtcyTEjhfr9Uq1ZUz9WFCYIw/aV+FCc4F/0fe7+QPS9R/1AGFssBDo8xQuGAY/cJ4QHECiDONIGveb6HB4Brc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Xmrwydqh; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1789103237; c=relaxed/simple;
+	bh=ZaFGIDfawrHUUxa5nHLH28/OmIOy4WSy0vQhbUcqnB8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JOsJPiRcxwmF48zAxpJIVHh3iUWHgNWPgTE2U/NXL9XuhGL5/ox+nsuJprpKH7cWm/pXSCF21uuT1GQLMgSzVoqHphkZW2pCu8FS1Io0QVvwoC7J0rxfsWcrl8HWAH2XQb/KE5N0WpSnrhhFkD5maz1mgQx5tjqaKNe09tQ3zUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UCvgZbLk; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Xmrwydqh"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75BDC1BCA;
-	Thu, 10 Sep 2026 21:32:25 -0700 (PDT)
-Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2D773F7B4;
-	Thu, 10 Sep 2026 21:32:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1789101149; bh=6nIY7vDGZl1HSYvtDHEzSpFXJFmf/2f+RPP48FA6xjQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XmrwydqhBZ/vf1ECBYZqTArXWHBOiLel894SB9CwN4Xy7DofCaJ+zOog4ySBEP7Hz
-	 4KhKGUpFRrxfJZ2ULqbeOunH7b0q2UHOnOjSo+TkHoCHono2PP0xtQpCYja39Rnbls
-	 4gcwvzdWSOE2J6vNY9m5bsFQyw5Lpa2MPLdctktg=
-Message-ID: <f7416ebc-f897-4c9b-8266-6aa7c9fd5473@arm.com>
-Date: Fri, 11 Sep 2026 10:02:19 +0530
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UCvgZbLk"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2d6efd73032so17063725ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 22:07:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789103235; x=1789708035; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=1qpR/l+l6DSt5PfzhDDrVR6LXxBi2hXX6W33aq3/g/M=;
+        b=UCvgZbLkBj7G52YMDuYt+Eby5N7MGATHfs3otDQ63YNriNfrMFu7T18EnRwAT4siHD
+         2GsmBq5isZbrNQDwTHDR/qP/U201uYJX3x7Fb3pX6J0InWFyxxylDnjzoLTlBH1GJHph
+         oP/marEL8M+ypFEW3FmLhde2WmmC4XgaSgaEZJk619COT9CosFW0BVS2F51tEKPMUj+c
+         IBoY6clVwjIRE0/KZp7VBpmM1d0pZzsTdsiZH6PTXbzpOeHc1pwpLUNRHyA27oWzj3Ql
+         4ZN5izJDTQqMSR+Vo6SzTk6vMU2IsbiFb6UHKKCu952KTTfA54CdLD9LzEKTxsD4Y+U8
+         jEcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789103235; x=1789708035;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1qpR/l+l6DSt5PfzhDDrVR6LXxBi2hXX6W33aq3/g/M=;
+        b=TmT/66mQg7IlBfbwnBPF45OI4nxYb4GCCvfWynMyXvMrgBMfgCooi1mzirj5HmNzcs
+         m+DUhk28wp4xj4t+UAm8J4yiWMfv6xFdjBiAaGsWOh4tekXWCoxHARwtMnj/oFXB/Mtx
+         vCLth3QscwvloJhdr0UqcNKTKJJqi/Bc3ykKt9QVWvZ+bF/hTvrFmeUu7RwFzi3yvlVv
+         OuBAaIDWrsB2B9FS/U4zmdBpxtlXmkTnx1HoU09o7hrZRu8MXeoyWSOV1UQ0eIeh5qba
+         CcpWMSmLQ0qp4kcxe3h0L2eP6wOu0hg5axhISMD9IY2dOxLmRNjIEvhoFC5vTw3NN5SD
+         Tm2A==
+X-Gm-Message-State: AFuF++ku0SWgy7RLTY2PQeUhJuVXenJTAqk05zsUrptIVbZXHAZm17B1
+	JtcIAaPpCLXJIihYg8Q0H+nreT12fiu0rgmmN5IQDjHrVQOY5Js2A2BlF1/FJrEB
+X-Gm-Gg: AYBFou3OdMoA0TurA6+uPonJIfdMQ6r6RoumjINq7sRJ6Jm3PrhYIuV+HL826XCMkMo
+	CgvUSVJYSFluXTsQyeARbniqV5d1WrYBfpX9eE6ODhiqqJfO1itbVMXSPJoTRSyI1ANKCVRvoI1
+	FCc+b+9lQ0PaKblhz91lMjDfVAT2+xY/OQT9e1zbPyRGTXkylO/4eZkSotW2IZiNjFv2p4+wKzK
+	lfPlPqPzHZSMxu71Y5yk+dgF36DiBlv4komNEzNNV7x/yDtMTAWWS6IsBNNNNEZu1QAfuJ5UFHQ
+	FSMDhE8svm5M/SA774zZEUr6v9K4l/mA8ZdfJpYCjkBDMffPwTUbVNYW5Gyr9kBjkDdogOjyJrQ
+	40YXnBwX5Cykh5dHT9M51a5liPR8efImM9465hjEMw2b61hzMaNKvdSs6nCJvHTM6ZMOpnoIAsU
+	6S60iCqk+NCpcicBtAY0etE5YzRwIWZBeRX/3UATTgkG12Rnz+w3kfAZRgzNC227Ms0bQYeMIsZ
+	vFl7sYlFLkZc3SqnrsFgzjD8KQAmJqExsu3
+X-Received: by 2002:a17:90b:54c6:b0:38e:9784:dd47 with SMTP id 98e67ed59e1d1-39d779167ddmr9732189a91.1.1789103234848;
+        Thu, 10 Sep 2026 22:07:14 -0700 (PDT)
+Received: from narcisav-mac.thefacebook.com ([2620:10d:c090:400::5:a575])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33ba4e9a3casm2912806eec.12.2026.09.10.22.07.13
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 10 Sep 2026 22:07:14 -0700 (PDT)
+From: Narcisa Vasile <narcisav.kernel@gmail.com>
+To: netdev@vger.kernel.org,
+	kuba@kernel.org,
+	daniel.zahka@gmail.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	horms@kernel.org,
+	willemb@google.com,
+	petrm@nvidia.com,
+	anubhavsinggh@google.com,
+	richardbgobert@gmail.com
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	narcisav.kernel@gmail.com
+Subject: [PATCH net-next] selftests: drv-net: add BIG TCP test cases
+Date: Thu, 10 Sep 2026 22:06:59 -0700
+Message-ID: <20260911050659.13367-1-narcisav.kernel@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 6/6] selftests/mm: add a GUP selftest
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
- <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Mark Brown <broonie@kernel.org>,
- Anshuman Khandual <anshuman.khandual@arm.com>,
- Muhammad Usama Anjum <usama.anjum@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260904123631.198697-1-sarthak.sharma@arm.com>
- <20260904123631.198697-7-sarthak.sharma@arm.com>
- <b0400430-c3b6-40d5-b476-49189b1cc292@kernel.org>
- <5e0b9365-cbac-4f2d-b915-85edf3093508@arm.com>
- <fadb8870-37f8-46f4-aefb-c21bc3a31e5b@kernel.org>
-Content-Language: en-US
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-In-Reply-To: <fadb8870-37f8-46f4-aefb-c21bc3a31e5b@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi David!
+Add four new test cases that validate coalescing
+under increased size limits (BIG TCP):
 
-On 9/9/26 10:33 PM, David Hildenbrand (Arm) wrote:
->>> BTW, I was wondering what it would take to:
->>>
->>> 1) Turn mm/gup_test.o into an OOT module (would we need more EXPORT_SYMBOL_GPL?
->>> EXPORT_SYMBOL_FOOR_MODULE ?)
->>>
->>> 2) Move it to tools/mm/modules or sth like that.
->>>
->>> 3) Build it with the selftests etc
->>>
->>> 4) Remove GUP_TEST
->>>
->>> 5) Try insmod'ing it from the tools+selftests that need it.
->>
->> This is an interesting change. We can keep this open for discussion
->> here. If required, I can work on this in the future.
-> 
-> Yes, we should in general try moving all test modules out of the core.
-> 
->>>
->>>> +int main(int argc, char **argv)
->>>> +{
->>>> +	char *file = "/dev/zero";
->>>> +	int fd;
->>>> +
->>>> +	fd = open(file, O_RDWR);
->>>> +	if (fd < 0) {
->>>> +		ksft_print_header();
->>>> +		ksft_exit_fail_msg("Unable to open %s: %s\n", file, strerror(errno));
->>>> +	}
->>>> +	close(fd);
->>>
->>>
->>> I'm confused. Why do we have to open+close /dev/zero?
->>
->> This is a pre requisite check. Every test opens and closes /dev/zero and
->> /sys/kernel/debug/gup_test of its own. So I wanted to check before
->> running the harness if these two are available, so that we don't have
->> setup failures for 60 test cases.
-> 
-> But why /dev/zero? We should understand why that would possibly be required.
+big_tcp_data_same
+  - validates that equal-sized segments coalesce past
+   the legacy IP_MAXPACKET limit.
+big_tcp_data_lrg_sml
+  - validates that a smaller final segment coalesces into the
+    previous chain of large-sized segments while crossing the
+    IP_MAXPACKET limit.
+big_tcp_tcp_seq
+  - validates that a packet with a wrong sequence number doesn't
+    coalesce. The test uses a sequence number for which the low 16 bits
+    correspond to the correct sequence number to validate against
+    truncation bugs, since total aggregate length crosses over the
+    legacy size limit for BIG TCP.
+big_tcp_large_max
+  - validates that coalescing stops at the configured BIG TCP limit.
 
-This was carried over from the old test, where /dev/zero was the default
-backing for mmap unless the user selected another file to back the
-mapping. Now since we don't support file backed mappings, we can
-directly use MAP_ANONYMOUS here. Thanks for pointing it out, I'll remove
-it from this patch.
+Signed-off-by: Narcisa Vasile <narcisav.kernel@gmail.com>
+---
+ .../testing/selftests/drivers/net/gro_lib.py  |  50 ++++++-
+ tools/testing/selftests/net/lib/gro.c         | 133 +++++++++++++++++-
+ 2 files changed, 180 insertions(+), 3 deletions(-)
 
-> 
->>
->>>
->>>> +
->>>> +	fd = open(GUP_TEST_FILE, O_RDWR);
->>>> +	if (fd == -1) {
->>>> +		ksft_print_header();
->>>> +		if (errno == EACCES)
->>>> +			ksft_exit_skip("Please run this test as root\n");
->>>
->>> Wouldn't we want to fail here?
->>
->> mm selftests normally skip if the test is not run as root. So I tried
->> keeping the same thing here. Do you think I should change it to fail?
-> 
-> If other tests do that, it's fine!
-> 
-> [...]
-> 
->>>
->>> BTW, why are we using HUGETLB_TARGET_SIZE instead of just using the
->>> default_huge_page_size()?
->>
->> HUGETLB_TARGET_SIZE is the target mapping size and
->> default_huge_page_size() gives the size of a single hugetlb page.
->>
->> Using default_huge_page_size() would reduce coverage for 2MB hugetlb
->> pages. The old test set self->size to be 256 MB for the hugetlb case.
->>
->> Now it was discussed in a previous version of this patchset that we can
->> derive the self->size for hugetlb case by fixing the nr_hugepages and
->> multiplying by hugetlb size, and thought 128 would be a good number for
->> nr_hugepages [1].
->>
->> But in case the hugetlb pages are very large, eg we can have 1 GB
->> hugepages as well, reserving 128 GB is not a good idea. So I tried to
->> keep the target size of the mapping as 256 MB, as it was before in the
->> old gup test. If the hugetlb pages are larger than this, we'll reserve
->> only one of them. Else, we'll reserve (256 MB /
->> default_huge_page_size()) hugetlb pages, which comes out to be 128 for
->> the case of 2MB hugetlb pages.
-> It's odd that 2M gets better test coverage than 512M or 1G.
-> 
-> Is there really a lot of value in testing 128 2M pages? Would, like, 2 already
-> be good enough?
+diff --git a/tools/testing/selftests/drivers/net/gro_lib.py b/tools/testing/selftests/drivers/net/gro_lib.py
+index b7ac0660adc0..229840f8b3ae 100644
+--- a/tools/testing/selftests/drivers/net/gro_lib.py
++++ b/tools/testing/selftests/drivers/net/gro_lib.py
+@@ -40,13 +40,17 @@ Test cases:
+   - ip_v6ext_diff: (IPv6) IPv6 ext header with different payload doesn't coalesce
+   - large_max: Packets exceeding GRO_MAX_SIZE don't coalesce
+   - large_rem: Large packet remainder handling
++  - big_tcp_data_same: Same size packets coalesce past IP_MAXPACKET
++  - big_tcp_data_lrg_sml: Smaller last packet coalesces past IP_MAXPACKET
++  - big_tcp_tcp_seq: Packets with 16-bit truncated seqno don't coalesce
++  - big_tcp_large_max: Packets exceeding the BIG TCP limit don't coalesce
+ """
+ 
+ import glob
+ import os
+ import re
+-from lib.py import ksft_run, ksft_exit, ksft_pr
+-from lib.py import NetDrvEpEnv, KsftFailEx, KsftXfailEx
++from lib.py import ksft_run, ksft_exit, ksft_pr, ksft_eq
++from lib.py import NetDrvEpEnv, KsftFailEx, KsftSkipEx, KsftXfailEx
+ from lib.py import NetdevFamily, EthtoolFamily
+ from lib.py import bkg, cmd, ctl_file_write, defer, ethtool, ip
+ from lib.py import ksft_variants, KsftNamedVariant
+@@ -55,6 +59,8 @@ from lib.py import ksft_variants, KsftNamedVariant
+ # gro.c uses hardcoded DPORT=8000
+ GRO_DPORT = 8000
+ 
++BIG_TCP_GRO_MAX_SIZE = 128000
++
+ 
+ def _resolve_dmac(cfg, ipver):
+     """
+@@ -91,6 +97,34 @@ def _set_mtu_restore(dev, mtu, host):
+         defer(ip, f"link set dev {dev['ifname']} mtu {dev['mtu']}", host=host)
+ 
+ 
++def _set_gro_size_restore(cfg, size):
++    """
++    Set the local device's GRO size limits, then confirm they stuck.
++    """
++
++    _set_mtu_restore(cfg.dev, 4096, None)
++    _set_mtu_restore(cfg.remote_dev, 4096, cfg.remote)
++
++    if "gro_max_size" not in cfg.dev or "gro_ipv4_max_size" not in cfg.dev:
++        raise KsftSkipEx("iproute2 does not report the GRO size limits")
++
++    if (cfg.dev["gro_max_size"] == size and
++            cfg.dev["gro_ipv4_max_size"] == size):
++        return
++
++    old = (f"gro_max_size {cfg.dev['gro_max_size']} "
++           f"gro_ipv4_max_size {cfg.dev['gro_ipv4_max_size']}")
++    new = f"gro_max_size {size} gro_ipv4_max_size {size}"
++
++    ip(f"link set dev {cfg.ifname} {new}")
++    defer(ip, f"link set dev {cfg.ifname} {old}")
++
++    dev = ip("-d link show dev " + cfg.ifname, json=True)[0]
++    ksft_eq(dev["gro_max_size"], size, comment="gro_max_size not applied")
++    ksft_eq(dev["gro_ipv4_max_size"], size,
++            comment="gro_ipv4_max_size not applied")
++
++
+ def _set_ethtool_feat(dev, current, feats, host=None):
+     s2n = {True: "on", False: "off"}
+ 
+@@ -289,6 +323,9 @@ def _setup(cfg, mode, test_name):
+     except KsftXfailEx:
+         pass
+ 
++    if test_name.startswith("big_tcp_"):
++        _set_gro_size_restore(cfg, BIG_TCP_GRO_MAX_SIZE)
++
+ 
+ def _gro_variants():
+     """Generator that yields all combinations of protocol and test types."""
+@@ -304,6 +341,11 @@ def _gro_variants():
+         "large_max", "large_rem",
+     ]
+ 
++    big_tcp_tests = [
++        "big_tcp_data_same", "big_tcp_data_lrg_sml",
++        "big_tcp_tcp_seq", "big_tcp_large_max",
++    ]
++
+     # Tests specific to IPv4
+     ipv4_tests = [
+         "ip_csum",
+@@ -322,6 +364,10 @@ def _gro_variants():
+         for test_name in common_tests:
+             yield protocol, test_name
+ 
++        if protocol in ["ipv4", "ipv6"]:
++            for test_name in big_tcp_tests:
++                yield protocol, test_name
++
+         if protocol in ["ipv4", "ipip"]:
+             for test_name in ipv4_tests:
+                 yield protocol, test_name
+diff --git a/tools/testing/selftests/net/lib/gro.c b/tools/testing/selftests/net/lib/gro.c
+index 7a333155de1a..70b0deb3c11f 100644
+--- a/tools/testing/selftests/net/lib/gro.c
++++ b/tools/testing/selftests/net/lib/gro.c
+@@ -46,6 +46,12 @@
+  *   - large_max: exceeding max size
+  *   - large_rem: remainder handling
+  *
++ * big_tcp_*:
++ *   - big_tcp_data_same:    equal segments coalescing past IP_MAXPACKET
++ *   - big_tcp_data_lrg_sml: a smaller final segment carrying it over
++ *   - big_tcp_tcp_seq:      16-bit truncated sequence number must not coalesce
++ *   - big_tcp_large_max:    coalescing stops at the configured limit
++ *
+  * single, capacity:
+  *  Boring cases used to test coalescing machinery itself and stats
+  *  more than protocol behavior.
+@@ -110,6 +116,16 @@
+ 
+ #define EXIT_OVER_COALESCE	42
+ 
++/* Must match BIG_TCP_GRO_MAX_SIZE in gro_lib.py. */
++#define BIG_TCP_GRO_MAX_SIZE	128000
++
++#define BIG_TCP_RECV_BUF_LEN \
++	(BIG_TCP_GRO_MAX_SIZE + MAX_MSS + L2_HLEN_MAX)
++#define BIG_TCP_MIN_MSS		(ASSUMED_MTU - (MAX_HDR_LEN - ETH_HLEN))
++#define BIG_TCP_MAX_FILL_CNT \
++	((int)((BIG_TCP_GRO_MAX_SIZE - 1 - (MAX_HDR_LEN - ETH_HLEN)) / \
++	       BIG_TCP_MIN_MSS))
++
+ #define ipv6_optlen(p)  (((p)->hdrlen+1) << 3) /* calculate IPv6 extension header len */
+ #define BUILD_BUG_ON(condition) ((void)sizeof(char[1 - 2*!!(condition)]))
+ 
+@@ -166,6 +182,27 @@ static int num_large_pkt(void)
+ 	return max_payload() / calc_mss();
+ }
+ 
++/* How many maximum sized segments fit under the configured limit. */
++static int big_tcp_large_cnt(void)
++{
++	return (BIG_TCP_GRO_MAX_SIZE - 1 - (total_hdr_len - ETH_HLEN)) /
++	       calc_mss();
++}
++
++/* How many calc_mss() sized segments are needed to satisfy the
++ * following condition:
++ * pkt_count * calc_mss() < IP_MAXPACKET < (pkt_count + 1) * calc_mss()
++ */
++static int big_tcp_fill_cnt(void)
++{
++	return IP_MAXPACKET / calc_mss();
++}
++
++static int big_tcp_fill_len(void)
++{
++	return big_tcp_fill_cnt() * calc_mss();
++}
++
+ static void vlog(const char *fmt, ...)
+ {
+ 	va_list args;
+@@ -560,6 +597,61 @@ static void send_data_pkts(int fd, struct sockaddr_ll *daddr,
+ 	write_packet(fd, buf, total_hdr_len + payload_len2, daddr);
+ }
+ 
++/* Send num_pkt segments of pkt_len bytes, then one of remainder len. */
++static void send_big_tcp(int fd, struct sockaddr_ll *daddr, int pkt_len,
++			 int num_pkt, int remainder)
++{
++	static char pkts[BIG_TCP_MAX_FILL_CNT][MAX_HDR_LEN + MAX_MSS];
++	static char last[MAX_HDR_LEN + MAX_MSS];
++	const int filled = num_pkt * pkt_len;
++	int i;
++
++	if (num_pkt > BIG_TCP_MAX_FILL_CNT)
++		error(1, 0, "need %d packets, array holds %d",
++		      num_pkt, BIG_TCP_MAX_FILL_CNT);
++
++	for (i = 0; i < num_pkt; i++)
++		create_packet(pkts[i], i * pkt_len, 0, pkt_len, 0);
++	create_packet(last, filled, 0, remainder, 0);
++
++	for (i = 0; i < num_pkt; i++)
++		write_packet(fd, pkts[i], total_hdr_len + pkt_len, daddr);
++	write_packet(fd, last, total_hdr_len + remainder, daddr);
++}
++
++/* In BIG TCP configuration, the total aggregate length can
++ * be greater than the legacy IP_MAXPACKET. Since the aggregate
++ * length is used in calculating the sequence numbers,
++ * send a packet with a sequence number that differs by IP_MAXPACKET + 1,
++ * to test against truncation bugs.
++ */
++static void send_big_tcp_bad_seq(int fd, struct sockaddr_ll *daddr)
++{
++	static char pkts[BIG_TCP_MAX_FILL_CNT][MAX_HDR_LEN + MAX_MSS];
++	const int num_pkt = big_tcp_fill_cnt() + 1;
++	static char last[MAX_HDR_LEN + MAX_MSS];
++	const int pkt_len = calc_mss();
++	int bad_seq;
++	int filled;
++	int i;
++
++	filled = num_pkt * pkt_len;
++	/* Low 16 bits match with the correct incoming sequence number. */
++	bad_seq = filled - (IP_MAXPACKET + 1);
++
++	if (num_pkt > BIG_TCP_MAX_FILL_CNT)
++		error(1, 0, "need %d packets, array holds %d",
++		      num_pkt, BIG_TCP_MAX_FILL_CNT);
++
++	for (i = 0; i < num_pkt; i++)
++		create_packet(pkts[i], i * pkt_len, 0, pkt_len, 0);
++	create_packet(last, bad_seq, 0, pkt_len, 0);
++
++	for (i = 0; i < num_pkt; i++)
++		write_packet(fd, pkts[i], total_hdr_len + pkt_len, daddr);
++	write_packet(fd, last, total_hdr_len + pkt_len, daddr);
++}
++
+ /* If incoming segments make tracked segment length exceed
+  * legal IP datagram length, do not coalesce
+  */
+@@ -1161,7 +1253,7 @@ static void recv_error(int fd, int rcv_errno)
+ static void check_recv_pkts(int fd, int *correct_payload,
+ 			    int correct_num_pkts)
+ {
+-	static char buffer[IP_MAXPACKET + L2_HLEN_MAX + 1];
++	static char buffer[BIG_TCP_RECV_BUF_LEN];
+ 	int nhoff = ETH_HLEN + (pppoe ? PPPOE_SES_HLEN : 0);
+ 	struct iphdr *iph = (struct iphdr *)(buffer + nhoff);
+ 	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + nhoff);
+@@ -1541,6 +1633,25 @@ static void gro_sender(void)
+ 		send_large(txfd, &daddr, remainder + 1);
+ 		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
+ 
++	/* big tcp sub-tests */
++	} else if (strcmp(testname, "big_tcp_data_same") == 0) {
++		send_big_tcp(txfd, &daddr, calc_mss(), big_tcp_fill_cnt(),
++			     calc_mss());
++		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
++	} else if (strcmp(testname, "big_tcp_data_lrg_sml") == 0) {
++		int remainder = calc_mss() / 2;
++
++		send_big_tcp(txfd, &daddr, calc_mss(), big_tcp_fill_cnt(),
++			     remainder);
++		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
++	} else if (strcmp(testname, "big_tcp_tcp_seq") == 0) {
++		send_big_tcp_bad_seq(txfd, &daddr);
++		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
++	} else if (strcmp(testname, "big_tcp_large_max") == 0) {
++		send_big_tcp(txfd, &daddr, calc_mss(), big_tcp_large_cnt(),
++			     calc_mss());
++		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
++
+ 	/* machinery sub-tests */
+ 	} else if (strcmp(testname, "single") == 0) {
+ 		static char buf[MAX_HDR_LEN + PAYLOAD_LEN];
+@@ -1768,6 +1879,26 @@ static void gro_receiver(void)
+ 		printf("last segment sent individually: ");
+ 		check_recv_pkts(rxfd, correct_payload, 3);
+ 
++	/* big tcp sub-tests */
++	} else if (strcmp(testname, "big_tcp_data_same") == 0) {
++		correct_payload[0] = big_tcp_fill_len() + calc_mss();
++		printf("data packets of same size past IP_MAXPACKET: ");
++		check_recv_pkts(rxfd, correct_payload, 1);
++	} else if (strcmp(testname, "big_tcp_data_lrg_sml") == 0) {
++		correct_payload[0] = big_tcp_fill_len() + calc_mss() / 2;
++		printf("smaller last packet past IP_MAXPACKET: ");
++		check_recv_pkts(rxfd, correct_payload, 1);
++	} else if (strcmp(testname, "big_tcp_tcp_seq") == 0) {
++		correct_payload[0] = (big_tcp_fill_cnt() + 1) * calc_mss();
++		correct_payload[1] = calc_mss();
++		printf("aliased seq past IP_MAXPACKET doesn't coalesce: ");
++		check_recv_pkts(rxfd, correct_payload, 2);
++	} else if (strcmp(testname, "big_tcp_large_max") == 0) {
++		correct_payload[0] = big_tcp_large_cnt() * calc_mss();
++		correct_payload[1] = calc_mss();
++		printf("shouldn't coalesce past gro_max_size: ");
++		check_recv_pkts(rxfd, correct_payload, 2);
++
+ 	/* machinery sub-tests */
+ 	} else if (strcmp(testname, "single") == 0) {
+ 		printf("single data packet: ");
+-- 
+2.53.0-Meta
 
-Yup, seems like keeping 128 pages is not adding an extra value. I'll go
-with 2 hugetlb pages to test both pinning within a hugetlb page and
-across the hugetlb boundary. This would make things a lot simpler.
