@@ -1,193 +1,330 @@
-Received: from mta0.migadu.com (out-98.mta0.migadu.com [91.218.175.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A6C36605D
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 09:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65DCF3803C2;
+	Fri, 11 Sep 2026 09:32:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789119025; cv=none; b=Cn4C3FD4gMHuub5yG/Yz+i0KXOw/0QHAYqRCtuDKCx1lbSqTcH+MQ+Erm1qoMTM/B+la4s8lUTtoNfliboAjqa6XXEEEwRbWk3OcCmpS5i0/qTitYFUcmacZ9TBuFLcCxCbcOO8a5Rztczjqqn87oIkzZibxa3AjqSj/GFOgwpc=
+	t=1789119147; cv=none; b=qQTnb9jvKu79Q4l0vGuCBCyQJQQoENAIQEKiMKjvwrqiSSWhWNJVbbtykg6Qx48neqT7GFwojHLtk6L6yE6d9DzGXeU8qC5B7wCX0MAbprFhw2DDrogrDsgHduSmTV/dlcSZ/Gf/uUPXENREpA/yxBxpSYliCY934DZ8+p4/LZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789119025; c=relaxed/simple;
-	bh=UgDP47cPkmBb/mueTtjUDjQ+T7ZjtzXnEDLcKSfkTG0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=La5EcICMqyWuc7RlN5qsA+z9jEYqZygoi/OalCem9BM9FTNSEthAAEiigzX3SJ9t23qr1m2KINzjsMGhbmCt0Khf7qKA9Sp5LFcHKBosSsgB1gVaFt0Gy1h1koqy8UCRbwgAm1FwUEx2dMc/Z6SO40ReGCWRkYcRORozNvbFuZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YMfmpQu9; arc=none smtp.client-ip=91.218.175.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789119147; c=relaxed/simple;
+	bh=Yih7f6/tNVBNBYGkVJA3bfFcNrZN2aPjeDZKrvcepGM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YwIaUWckVM7dktqcALVxfcaakL8erycw/k8wFtg9+EAhAakRSiwLhRumyd5NMaxx/fFxLrHYhGszeFTrLMS5dQ7ReeJePMRY/+9fVQ6elRemqqyTx2C3ujt0Kjui4YXKcwJCJjNWvsQLtA+iNYPybA3+6JT5Sj3FwGdykZ9Kw3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PyVXNLha; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YMfmpQu9"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=UgDP47cPkmBb/mueTtjUDjQ+T7ZjtzXnEDLcKSfkTG0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789119020; v=1; x=1789723820;
- b=YMfmpQu9UOHhUSiwGv7ncD+te0xt50UVCoLpbVMSpwkU/VmgzbTVGoR0JD5Bj1uvnbDqySq/
- GiMGlW6pGZjjF/5DVGRo1W+B0PFDGwfIl4bV6p82rK/KiS8ntNo69It7WfK5eRkMEZyAN9dmIx4
- zDZD+RQ+Y5IBFWmZjBfy1Vxc=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b64bfc29917c1b89;
-	Fri, 11 Sep 2026 09:30:03 +0000
-X-Mizu-Trace-ID: b64bfc29917c1b89
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <c0a15bf9-0922-42a7-b2a9-d7eff50669a5@linux.dev>
-Date: Fri, 11 Sep 2026 14:59:57 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PyVXNLha"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEA7C1F000FF;
+	Fri, 11 Sep 2026 09:32:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789119146;
+	bh=AAnYNMY4qKWEt8VqW/gq+QbhtFwungyZcJ3iIQPiMA8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=PyVXNLhamoEGYHMpL3Q4rsa62whZA3bWfw9FqxNQ9ZIkavOuDy970b4hzpf2VW5dg
+	 665PYTj+s7h/ZpnGzvIrO7TazHzP/S34FTp1JgiopifMNbEFVlz8LjHjFudfClI06S
+	 fTx1a+taFDlr6OMVCRlomCP09wbk7mrAuXNG3PuHZNmqmO8PmURwzsInlvjuYwC0MY
+	 kfDOwkFljeuVcpEWeZkbjNn2zn2wGDhTWG/JupNmCyWYIItr98C4LEgrD5I8aUCAui
+	 H4W2AMiROm14Ib7hqF0UXbne1UGnoeMO6gi2gMDXWquReVHt2aM95Kmicp6nwQXife
+	 ZCpaJ+H/2FLyQ==
+Date: Fri, 11 Sep 2026 10:32:17 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Fuad Tabba <tabba@google.com>, Joey Gouly <joey.gouly@arm.com>, 
+	Steffen Eiden <seiden@linux.ibm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Jack Thomson <jackabt@amazon.com>, Jack Thomson <jackabt.amazon@gmail.com>, 
+	Alexandru Elisei <alexandru.elisei@arm.com>, Vincent Donnefort <vdonnefort@google.com>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Sean Christopherson <seanjc@google.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Leo Soares Passos <Leo.Bras@arm.com>, 
+	Wei-Lin Chang <weilin.chang@arm.com>
+Subject: Re: [PATCH 8/8] KVM: selftests: Add nested pre-fault test for arm64
+Message-ID: <aqPIUtNTJFwUvJME@gremlin>
+References: <20260825-kvm-arm-prefault-v1-0-befe8947702e@kernel.org>
+ <20260825-kvm-arm-prefault-v1-8-befe8947702e@kernel.org>
+ <aqOgEQKBGH-YqGr3@sm-arm-grace07>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
- across zero-extending movs
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20260910164635.459558-4-vineet.gupta@linux.dev>
- <ad011852b5532901853fbc1c16d5a27d50231065dad9b1e4bbfee1c02b4735e5@mail.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <ad011852b5532901853fbc1c16d5a27d50231065dad9b1e4bbfee1c02b4735e5@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aqOgEQKBGH-YqGr3@sm-arm-grace07>
 
-On 9/10/26 11:22 PM, bot+bpf-ci@kernel.org wrote:
->> @@ -17115,6 +17126,23 @@ static void collect_linked_regs(struct bpf_verifier_env *env,
->>   	}
->>   }
->>
->> +/*
->> + * Set @reg to the zero-extension of @known_reg's low 32 bits: it shares those
->> + * bits and its high half is zero. Copy the base to keep its precise low-32
->> + * tnum, then re-apply the zext_32_to_64() the 32-bit mov itself used.
->> + * @reg->id and ->delta already equal @known_reg's; only ->subreg is its own.
->> + */
->> +static void reconstruct_zext32(struct bpf_reg_state *reg,
->> +			       struct bpf_reg_state *known_reg)
->> +{
->> +	enum bpf_subreg subreg = reg->subreg;
->> +
->> +	*reg = *known_reg;
->> +	reg->subreg = subreg;
->> +	zext_32_to_64(reg);
->> +	reg_bounds_sync(reg);
->> +}
->> +
->>   /* For all R in linked_regs, copy known_reg range into R
->>    * if R->id == known_reg->id.
->>    */
->> @@ -17134,6 +17162,27 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
->>   			continue;
->>   		if (reg->id != known_reg->id)
->>   			continue;
->> +		/*
->> +		 * A ->subreg register shares only the base's low 32 bits, so it
->> +		 * is rebuilt rather than copied. Not modelled together with a
->> +		 * delta, so skip if either side has one (sound, less precise).
->> +		 */
->> +		if (reg->subreg) {
->> +			if (reg->add_const || known_reg->add_const)
->> +				continue;
->> +			reconstruct_zext32(reg, known_reg);
->> +			if (e->is_reg)
->> +				mark_reg_scratched(env, e->regno);
->> +			else
->> +				mark_stack_slot_scratched(env, e->spi);
->> +			continue;
->> +		}
->> +		/*
->> +		 * The reverse: known_reg knows only its low 32 bits, which say
->> +		 * nothing about reg's high half.
->> +		 */
->> +		if (known_reg->subreg)
->> +			continue;
->>   		/*
->>   		 * Skip mixed 32/64-bit links: the delta relationship doesn't
->>   		 * hold across different ALU widths.
-> Can reconstruct_zext32() lose bounds that reg already learned on its own?
++cc Wei-Lin
+
+On Fri, Sep 11, 2026 at 03:30:41PM +0900, Itaru Kitayama wrote:
+> Hi Lorenzo,
 >
-> Looking at the code, reconstruct_zext32() does:
+> On Tue, Aug 25, 2026 at 05:00:42PM +0100, Lorenzo Stoakes (ARM) wrote:
+> > From: Jack Thomson <jackabt@amazon.com>
+> >
+> > Add an arm64 nested-virt selftest for KVM_PRE_FAULT_MEMORY. The guest
+> > enters vEL1 and exits to userspace with a nested/shadow stage-2 MMU as
+> > the vCPU's last-run context.
+> >
+> > Before prefaulting, userspace enables HCR_EL2.VM and points VTTBR_EL2 at
+> > an empty nested stage-2 root. A prefault implementation that incorrectly
+> > treats the userspace GPA as an L2 IPA will fail the ioctl; the correct
+> > path targets the canonical stage-2 and succeeds.
+> >
+> > Restore the original nested state before resuming the guest, then touch
+> > the prefaulted range to check that vEL1 still runs correctly.
+> >
+> > Signed-off-by: Jack Thomson <jackabt@amazon.com>
+> > [ljs: partial progress, >4 KiB pgsize, commit msg, comment fixups]
+> > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> > ---
+> >  tools/testing/selftests/kvm/Makefile.kvm           |   1 +
+> >  .../selftests/kvm/arm64/nv_pre_fault_memory_test.c | 206 +++++++++++++++++++++
+> >  2 files changed, 207 insertions(+)
 >
->      *reg = *known_reg;
->      reg->subreg = subreg;
->      zext_32_to_64(reg);
+> I wonder whether this selftest can use functions Wei-Lin proposed
+> some time ago [1]: 20260325003620.2214766-1-weilin.chang@arm.com
+> or would you prefer this test as propose, since it is clear as
+> to what needs to be done to enter L2.
+
+I think if these aren't merged yet then that could be a follow up?
+
 >
-> This overwrites reg's state wholesale without intersecting it with what reg
-> already knew.
+> Thanks,
+> Itaru.
 >
-> For pre-existing full-64-bit links, sync_linked_regs() propagates changes
-> in both directions, so the base is always at least as narrow as every
-> member and the overwrite can only narrow. But the new low-32 link skips
-> the member->base direction:
->
->      if (known_reg->subreg)
->          continue;
->
-> so the base can end up strictly wider than the ->subreg member.
->
-> Consider this sequence:
->
->    call bpf_get_prandom_u32;    /* r0 -> 64-bit unknown */
->    r6 = r0;                     /* r6 is 64-bit unknown */
->    w7 = w6;                     /* r7->id = r6->id, r7->subreg = SUBREG_ZEXT */
->    if w7 > 7 goto out;          /* fall-through: r7 u32 range [0,7]
->                                  * sync_linked_regs(known_reg=r7) skips r6 due
->                                  * to `if (known_reg->subreg) continue;`
->                                  * so r6 stays fully unknown */
->    if r6 > 100 goto out;        /* fall-through: r6 narrows to [0,100]
->                                  * sync_linked_regs(known_reg=r6) reaches r7
->                                  * via reconstruct_zext32(r7, r6) which does
->                                  * *r7 = *r6 then zext_32_to_64() */
->
-> After the second jump, does r7 become [0,100] instead of staying [0,7]?
+> >
+> > diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+> > index 66a9a4e62888..1e0edd0f99f7 100644
+> > --- a/tools/testing/selftests/kvm/Makefile.kvm
+> > +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> > @@ -173,6 +173,7 @@ TEST_GEN_PROGS_arm64 += arm64/debug-exceptions
+> >  TEST_GEN_PROGS_arm64 += arm64/hello_el2
+> >  TEST_GEN_PROGS_arm64 += arm64/host_sve
+> >  TEST_GEN_PROGS_arm64 += arm64/hypercalls
+> > +TEST_GEN_PROGS_arm64 += arm64/nv_pre_fault_memory_test
+> >  TEST_GEN_PROGS_arm64 += arm64/external_aborts
+> >  TEST_GEN_PROGS_arm64 += arm64/mmio_sign_ext
+> >  TEST_GEN_PROGS_arm64 += arm64/page_fault_test
+> > diff --git a/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c b/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
+> > new file mode 100644
+> > index 000000000000..b3833aea2a34
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
+> > @@ -0,0 +1,206 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * nv_pre_fault_memory_test - Test KVM_PRE_FAULT_MEMORY on a vCPU whose
+> > + * last-run context is nested.
+> > + *
+> > + * The guest starts at vEL2, mirrors its EL2 translation regime into the
+> > + * real EL1 registers, drops HCR_EL2.TGE and ERETs to vEL1, then exits to
+> > + * userspace from vEL1 so that the vCPU's last-run context selects a
+> > + * shadow stage-2 MMU. Userspace then enables an empty nested stage-2
+> > + * before prefaulting. Prefaulting must target the canonical stage-2,
+> > + * regardless of the vCPU's nested state.
+> > + */
+> > +#include "kvm_util.h"
+> > +#include "processor.h"
+> > +#include "test_util.h"
+> > +#include "ucall.h"
+> > +
+> > +#include <asm/sysreg.h>
+> > +#include <linux/sizes.h>
+> > +
+> > +#define TEST_MEM_SLOT		10
+> > +#define NESTED_S2_ROOT_SLOT	11
+> > +#define TEST_MEM_SIZE		SZ_2M
+> > +#define TEST_MEM_GPA		SZ_1G
+> > +#define NESTED_S2_ROOT_GPA	(TEST_MEM_GPA + TEST_MEM_SIZE)
+> > +
+> > +struct nested_s2_state {
+> > +	u64 hcr_el2;
+> > +	u64 vttbr_el2;
+> > +};
+> > +
+> > +static void guest_el1_code(void)
+> > +{
+> > +	u64 offset;
+> > +
+> > +	GUEST_ASSERT_EQ(get_current_el(), 1);
+> > +
+> > +	/* Exit to userspace with the vEL1 (nested) context live. */
+> > +	GUEST_SYNC(1);
+> > +
+> > +	/*
+> > +	 * Touch the prefaulted range. vstage-2 is disabled, so the shadow
+> > +	 * stage-2 is a 1:1 view of the canonical IPA space.
+> > +	 */
+> > +	for (offset = 0; offset < TEST_MEM_SIZE; offset += SZ_4K)
+> > +		READ_ONCE(*(u64 *)(TEST_MEM_GPA + offset));
+> > +
+> > +	GUEST_DONE();
+> > +}
+> > +
+> > +static void guest_code(void)
+> > +{
+> > +	u64 sp;
+> > +
+> > +	GUEST_ASSERT_EQ(get_current_el(), 2);
+> > +
+> > +	/*
+> > +	 * Mirror the EL2 translation regime into the real EL1 registers so
+> > +	 * that vEL1 runs on the test's stage-1 page tables. With E2H=1, the
+> > +	 * _EL1 accessors read the EL2 registers, and the _EL12 accessors
+> > +	 * write the real EL1 registers.
+> > +	 */
+> > +	write_sysreg_s(read_sysreg(sctlr_el1), SYS_SCTLR_EL12);
+> > +	write_sysreg_s(read_sysreg(tcr_el1), SYS_TCR_EL12);
+> > +	write_sysreg_s(read_sysreg(ttbr0_el1), SYS_TTBR0_EL12);
+> > +	write_sysreg_s(read_sysreg(mair_el1), SYS_MAIR_EL12);
+> > +	write_sysreg_s(read_sysreg(cpacr_el1), SYS_CPACR_EL12);
+> > +
+> > +	/* Run vEL1 on the same stack. */
+> > +	asm volatile("mov %0, sp" : "=r"(sp));
+> > +	write_sysreg(sp, sp_el1);
+> > +
+> > +	/*
+> > +	 * Drop TGE so that vEL1 is a nested context rather than host EL0.
+> > +	 * KVM backs it with a shadow stage-2 MMU even though vstage-2 is
+> > +	 * disabled (HCR_EL2.VM=0).
+> > +	 */
+> > +	write_sysreg(read_sysreg(hcr_el2) & ~HCR_EL2_TGE, hcr_el2);
+> > +	isb();
+> > +
+> > +	write_sysreg(PSR_MODE_EL1h | PSR_F_BIT | PSR_I_BIT | PSR_A_BIT |
+> > +		     PSR_D_BIT, spsr_el2);
+> > +	write_sysreg((u64)guest_el1_code, elr_el2);
+> > +	asm volatile("eret");
+> > +
+> > +	GUEST_ASSERT(false);
+> > +}
+> > +
+> > +static void pre_fault(struct kvm_vcpu *vcpu, u64 gpa, u64 size)
+> > +{
+> > +	struct kvm_pre_fault_memory range = {
+> > +		.gpa = gpa,
+> > +		.size = size,
+> > +	};
+> > +	int ret;
+> > +
+> > +	do {
+> > +		ret = __vcpu_ioctl(vcpu, KVM_PRE_FAULT_MEMORY, &range);
+> > +	} while ((!ret && range.size) ||
+> > +		 (ret < 0 && (errno == EINTR || errno == EAGAIN)));
+> > +
+> > +	TEST_ASSERT(!ret, "KVM_PRE_FAULT_MEMORY failed, ret: %d errno: %d",
+> > +		    ret, errno);
+> > +	TEST_ASSERT_EQ(range.size, 0);
+> > +}
+> > +
+> > +static struct nested_s2_state enable_empty_nested_s2(struct kvm_vcpu *vcpu)
+> > +{
+> > +	struct nested_s2_state state = {
+> > +		.hcr_el2 = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2)),
+> > +		.vttbr_el2 = vcpu_get_reg(vcpu,
+> > +					   KVM_ARM64_SYS_REG(SYS_VTTBR_EL2)),
+> > +	};
+> > +
+> > +	TEST_ASSERT(!(state.hcr_el2 & HCR_EL2_TGE),
+> > +		    "vCPU should be in nested/vEL1 context");
+> > +
+> > +	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_VTTBR_EL2),
+> > +		     NESTED_S2_ROOT_GPA);
+> > +	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2),
+> > +		     state.hcr_el2 | HCR_EL2_VM);
+> > +
+> > +	return state;
+> > +}
+> > +
+> > +static void restore_nested_s2(struct kvm_vcpu *vcpu,
+> > +			      struct nested_s2_state *state)
+> > +{
+> > +	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2), state->hcr_el2);
+> > +	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_VTTBR_EL2),
+> > +		     state->vttbr_el2);
+> > +}
+> > +
+> > +int main(void)
+> > +{
+> > +	struct nested_s2_state s2;
+> > +	struct kvm_vcpu_init init;
+> > +	struct kvm_vcpu *vcpu;
+> > +	struct kvm_vm *vm;
+> > +	struct ucall uc;
+> > +	u64 npages;
+> > +
+> > +	TEST_REQUIRE(kvm_check_cap(KVM_CAP_ARM_EL2));
+> > +	TEST_REQUIRE(kvm_check_cap(KVM_CAP_PRE_FAULT_MEMORY));
+> > +
+> > +	vm = vm_create(1);
+> > +
+> > +	kvm_get_default_vcpu_target(vm, &init);
+> > +	init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
+> > +	vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
+> > +	kvm_arch_vm_finalize_vcpus(vm);
+> > +
+> > +	npages = TEST_MEM_SIZE / vm->page_size;
+> > +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, TEST_MEM_GPA,
+> > +				    TEST_MEM_SLOT, npages, 0);
+> > +	virt_map(vm, TEST_MEM_GPA, TEST_MEM_GPA, npages);
+> > +
+> > +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
+> > +				    NESTED_S2_ROOT_GPA, NESTED_S2_ROOT_SLOT,
+> > +				    vm_adjust_num_guest_pages(vm->mode, 1), 0);
+> > +
+> > +	/* Run the guest until it has ERET'd from vEL2 to vEL1. */
+> > +	vcpu_run(vcpu);
+> > +	switch (get_ucall(vcpu, &uc)) {
+> > +	case UCALL_SYNC:
+> > +		TEST_ASSERT_EQ(uc.args[1], 1);
+> > +		break;
+> > +	case UCALL_ABORT:
+> > +		REPORT_GUEST_ASSERT(uc);
+> > +		break;
+> > +	default:
+> > +		TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
+> > +	}
+> > +
+> > +	/*
+> > +	 * The vCPU's last-run context is vEL1, backed by a shadow stage-2
+> > +	 * MMU. Enable nested stage-2 with an empty root so that the ioctl
+> > +	 * fails if it tries to interpret the userspace GPA as an L2 IPA.
+> > +	 *
+> > +	 * Prefault in two halves so that the second ioctl exercises a
+> > +	 * repeated shadow-MMU attach and canonical stage-2 swap.
+> > +	 *
+> > +	 * (Note that an implementation that wrongly populates shadow
+> > +	 * stage-2 page tables would not be caught as userland can't
+> > +	 * inspect these.)
+> > +	 */
+> > +	s2 = enable_empty_nested_s2(vcpu);
+> > +	pre_fault(vcpu, TEST_MEM_GPA, TEST_MEM_SIZE / 2);
+> > +	pre_fault(vcpu, TEST_MEM_GPA + TEST_MEM_SIZE / 2, TEST_MEM_SIZE / 2);
+> > +	restore_nested_s2(vcpu, &s2);
+> > +
+> > +	/* Resume at vEL1 and touch the prefaulted range. */
+> > +	vcpu_run(vcpu);
+> > +	switch (get_ucall(vcpu, &uc)) {
+> > +	case UCALL_DONE:
+> > +		break;
+> > +	case UCALL_ABORT:
+> > +		REPORT_GUEST_ASSERT(uc);
+> > +		break;
+> > +	default:
+> > +		TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
+> > +	}
+> > +
+> > +	kvm_vm_free(vm);
+> > +	return 0;
+> > +}
+> >
+> > --
+> > 2.55.0
+> >
 
-Yes it does and that's a problem.
-
-> If so, a jump on an unrelated wide register would widen the bounds of a
-> narrow copy that the verifier had already proved tighter, on a
-> straight-line path. That would reject programs that narrowed the 32-bit
-> copy first and the wide original second, then relied on the copy's
-> narrower bound for a memory access or helper argument.
-
-Right, sound, but loss of precision.
-
-> The changelog acknowledges the other precision loss this patch introduces
-> ("forming one costs the source its delta ... That loses tracking a wide
-> source used to keep") and the follow-up selftest commit 36b84852a200 pins
-> it down with zext_mov_breaks_add_const_src. But neither the changelog nor
-> reconstruct_zext32()'s comment ("Copy the base to keep its precise low-32
-> tnum"), nor any of the 10 new tests in 36b84852a200, mentions or covers
-> this path. The only test that checks the member's fate is
-> zext_narrow_dst_keeps_base, which verifies the base is not narrowed but
-> does not check what happens to the member afterwards.
-
-Ok. zext_sync_keeps_narrower_member() added and same for sext variant as 
-reconstruct_sext32 gets similar fix.
-
-> Would intersecting the rebuilt state with the member's existing one,
-
-This one.
-
-+       cnum64_intersect_with(&reg->r64, prev.r64);
-+       cnum32_intersect_with(&reg->r32, prev.r32);
-+       reg->var_off = tnum_intersect(reg->var_off, prev.var_off);
-
-> narrowing the base's low half on the member->base direction instead of
-> skipping it, prevent the member from ever being wider than what it already
-> proved?
-
-This is a new propagation path, trying to be conservative here.
-
-Thx,
--Vineet
-
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34506184282
-
+--
+Cheers, Lorenzo
