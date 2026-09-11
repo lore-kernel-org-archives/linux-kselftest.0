@@ -1,38 +1,37 @@
-Received: from mta0.migadu.com (out-58.mta0.migadu.com [91.218.175.58])
+Received: from mta0.migadu.com (out-82.mta0.migadu.com [91.218.175.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2209C485933
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 13:57:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.58
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6036485CE6
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 13:58:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.82
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789135076; cv=none; b=NCzF08SJezO/GP1/ZmAJAEde0yu4Je4mACOfu2H4moz4EZLkgC8wdHG2RiKGVri66XacIFGlpX9nWiLH32L1gYMd/zBSyRfX8zgXQck4ip2hfOn0Ix5bIHRkAnBeFRf0nFNNKRhyd5mAf1WCocfSCvKc5ShOuubO05XGNYoMAkQ=
+	t=1789135093; cv=none; b=nldDFIOywWRctZBC75M46nZTePkh0MVXOsls7UdAfdB3IsmY++z/g1DViLRtmRClmA2urCjuLFu83rrudtHcedl43Qez0U+vPnQQSKajdw2E5Fs8vI1v2vMRa6BQeRCbjpzptmzFMeNtHyy8NKAco20VX9V0GipgZAnHnpdZdQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789135076; c=relaxed/simple;
-	bh=vnXi2B+daHTrr8d0jD+YCxvt2qRsjGk5xYPqsZdUD00=;
+	s=arc-20240116; t=1789135093; c=relaxed/simple;
+	bh=Y1Z75wbINVFfi64a3h8ROlxqvJHvmxs6fuPyZ+LOzxg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mcr6yAcp2YDjCjM+DDWqAJQaVeJO9uYAT7ab75PSjznfY6j97TM/cx025Abgmf2tQTbPFU/uvIyu/nCxbL+kZhEYVWp7KghWQ/W5Vzc7kY4cR0xXkaDvf87XcLqijjnqPyy4BkIpxlyrpGU8FaCyJegYpcb3Q351VbRMtWEecK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xqPzYTNZ; arc=none smtp.client-ip=91.218.175.58
+	 MIME-Version; b=H3WpGZ2sl4K0FylCZWs0ZWvzQuhbRjvMJEg2GWgDYDWvoJsJoXQFDMmsd1l1ubKDI9WtcOJID71NOVF5mG9W2TvO2OvPVFF8Y5b2kT0+kva5aCpQGucoliHmx1aernnEpY1NY0UDsEXgc1N7M7i4P4WoH2F1+jMo2BWmwC/mDNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bYhz38F1; arc=none smtp.client-ip=91.218.175.82
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xqPzYTNZ"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bYhz38F1"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=vnXi2B+daHTrr8d0jD+YCxvt2qRsjGk5xYPqsZdUD00=;
+DKIM-Signature: a=rsa-sha256; bh=Y1Z75wbINVFfi64a3h8ROlxqvJHvmxs6fuPyZ+LOzxg=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789135071; v=1; x=1789739871;
- b=xqPzYTNZuAEu5rRdHiS6DR3nsAs4wZqszkLIMSugKgQDs86jI9+/hapdMjsyGO/pCy64oEIG
- DSaEiLI/qudg+DTzo/F/Mqcee+AbW/Jfuw11JkY+S6aFtWM6gzcVYT9EejKwrOvRuP40PPWonVa
- tNElVuOp3dEOMTRW9BuOpM+Y=
+ t=1789135089; v=1; x=1789739889;
+ b=bYhz38F10Q+JNfTUIYo9jOJVt4exz0GZKZiu7nJs/GRjoobcVKQ7rw1fo8cXjslQSu6V45OE
+ 3U9x7x8Ur5PW1/+uoKyv286hFJE+VXrY+cBUuiWJHqjXaRon9TmedKtn0wdTgt+eQb8Sq7XR6oA
+ THzMaOiazZ/jow44uyxf0Io4=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 02f6325c21f55bda;
-	Fri, 11 Sep 2026 13:57:51 +0000
-X-Mizu-Trace-ID: 02f6325c21f55bda
+Received: by smtp.migadu.com with ESMTPS id 0665a0cd62541a68;
+	Fri, 11 Sep 2026 13:58:09 +0000
+X-Mizu-Trace-ID: 0665a0cd62541a68
 X-Migadu-Flow: FLOW_OUT
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -57,15 +56,15 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Kuniyuki Iwashima <kuniyu@google.com>,
 	Hangbin Liu <liuhangbin@gmail.com>,
 	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
 	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
 	Eelco Chaudron <echaudro@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v3 1/2] bpf, veth: xdp: fix page_pool page leak on skb-backed XDP
-Date: Fri, 11 Sep 2026 21:56:51 +0800
-Message-ID: <20260911135711.109338-2-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf v3 2/2] selftests/bpf: add xdp_shrink_frags
+Date: Fri, 11 Sep 2026 21:56:52 +0800
+Message-ID: <20260911135711.109338-3-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260911135711.109338-1-jiayuan.chen@linux.dev>
 References: <20260911135711.109338-1-jiayuan.chen@linux.dev>
@@ -77,177 +76,361 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_xdp_shrink_data() frees a released frag via __xdp_return() using
-xdp->rxq->mem.type, but that type is wrong for skb-backed XDP: the skb is
-cow'd into page_pool memory while the rxq still says MEM_TYPE_PAGE_SHARED,
-so the page_pool page is freed with page_frag_free() and we hit
-"Bad page state ... page_pool leak".
+Add a test that attaches an xdp.frags program which shrinks a whole frag
+away, so bpf_xdp_shrink_data() frees a page_pool frag.
 
-Both generic XDP and veth are affected. A non-linear skb is cow'd into
-page_pool memory (skb_cow_data_for_xdp() -> skb_pp_cow_data() for generic
-XDP, veth_convert_skb_to_xdp_buff() for veth), so its frags become
-page_pool pages while the rxq keeps MEM_TYPE_PAGE_SHARED.
+test_tun triggers the page-type mismatch on the generic XDP path.
+test_veth triggers the same mismatch on the veth path.
+test_veth_tx bounces the cow'd buff with XDP_TX so the peer runs a frags
+program on the resulting frame, covering the buff -> frame -> buff path.
 
-We can't just fix rxq->mem.type in place:
-- generic XDP: xdp->rxq is dev->_rx[queue].xdp_rxq (see
-  bpf_prog_run_generic_xdp()), a shared rxq that other CPUs may access in
-  parallel, so we must not write to it.
-- veth: rq->xdp_rxq.mem is shared per-queue state that veth resets on XDP
-  teardown, and with GRO that reset runs without stopping in-flight NAPI,
-  so a type stashed there can be clobbered under a packet still in flight.
+A kernel without the fix will report "Bad page state ... page_pool leak".
 
-Adding a check in __xdp_return() or bpf_xdp_shrink_data() itself is not an
-option either: without recording it somewhere, both can only guess the
-frag's memory type, which quickly gets confusing.
+The packet sizes only leave a frag after the cow on 4K pages, so the
+subtests skip elsewhere.
 
-So record it in the xdp_buff. A dedicated mem_type field (mirroring
-xdp_frame->mem_type) would read more naturally, but it grows xdp_buff, and
-struct xdp_page_head embeds two of them, which shifts the layout the
-xdp_do_redirect live-frames selftest hard-codes (MAX_PKT_SIZE). So use a
-flag bit: add XDP_FLAGS_FRAGS_PAGE_POOL, the two skb-cow sites set it, and
-bpf_xdp_shrink_data() frees the frag to the page_pool when it is set,
-otherwise it keeps falling back to xdp->rxq->mem.type unchanged.
-
-The flag describes the buff, so the buff <-> frame conversions have to keep
-it consistent:
-- buff -> frame: xdp_update_frame_from_buff() copies xdp->flags into the
-  frame. veth XDP_TX/XDP_REDIRECT hand the frame to the peer, and cpumap
-  and devmap run a second program on it, so the peer would inherit a stale
-  tag; strip it, an xdp_frame describes its memory with ::mem_type.
-- frame -> buff: xdp_convert_frame_to_buff() rebuilds a buff, and veth and
-  devmap then run a program whose rxq says MEM_TYPE_PAGE_SHARED even for a
-  page_pool frame (only cpumap copies mem_type into the rxq). A shrink
-  there leaks the same way (this predates the series: bpf_xdp_adjust_tail()
-  frees frags by rxq->mem.type), so re-derive the flag from the frame's
-  ::mem_type.
-
-Fixes: e6d5dbdd20aa ("xdp: add multi-buff support for xdp running in generic mode")
-Fixes: 0ebab78cbcbf ("net: veth: add page_pool for page recycling")
-Fixes: bf25146a5595 ("bpf: add frags support to the bpf_xdp_adjust_tail() API")
-Reported-by: syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=237bbeed8dfe0699b7f5
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- drivers/net/veth.c |  6 ++++++
- include/net/xdp.h  | 30 +++++++++++++++++++++++++++++-
- net/core/dev.c     |  6 ++++++
- net/core/filter.c  |  7 +++++++
- 4 files changed, 48 insertions(+), 1 deletion(-)
+ .../bpf/prog_tests/xdp_shrink_frags.c         | 288 ++++++++++++++++++
+ .../selftests/bpf/progs/xdp_shrink_frags.c    |  34 +++
+ 2 files changed, 322 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
+ create mode 100644 tools/testing/selftests/bpf/progs/xdp_shrink_frags.c
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 6ed3ee81153fb..a3fdf1959b76c 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -775,6 +775,12 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
- 	if (skb_shinfo(skb)->nr_frags) {
- 		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
- 		xdp_buff_set_frags_flag(xdp);
-+		/*
-+		 * A nonlinear skb was cow'd into rq->page_pool above, so the
-+		 * frags must be freed to that pool, not via the rxq's
-+		 * MEM_TYPE_PAGE_SHARED.
-+		 */
-+		xdp_buff_set_frag_pp(xdp);
- 	} else {
- 		xdp_buff_clear_frags_flag(xdp);
- 	}
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index aa742f413c358..8fd4139e9cbd3 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -81,6 +81,14 @@ enum xdp_buff_flags {
- 	 * XDP program is not attached.
- 	 */
- 	XDP_FLAGS_FRAGS_UNREADABLE	= BIT(2),
-+	/*
-+	 * frags are page_pool memory even though rxq->mem.type is not: a
-+	 * skb-backed XDP buff (generic XDP, veth) is cow'd into a page_pool.
-+	 * xdp_buff only: an xdp_frame describes its memory with ::mem_type, so
-+	 * this is stripped in xdp_update_frame_from_buff() and re-derived from
-+	 * ::mem_type in xdp_convert_frame_to_buff().
-+	 */
-+	XDP_FLAGS_FRAGS_PAGE_POOL	= BIT(3),
- };
- 
- struct xdp_buff {
-@@ -131,6 +139,16 @@ static __always_inline void xdp_buff_set_frag_unreadable(struct xdp_buff *xdp)
- 	xdp->flags |= XDP_FLAGS_FRAGS_UNREADABLE;
- }
- 
-+static __always_inline void xdp_buff_set_frag_pp(struct xdp_buff *xdp)
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c b/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
+new file mode 100644
+index 0000000000000..ee8f9034a2684
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
+@@ -0,0 +1,288 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <network_helpers.h>
++#include <linux/if_tun.h>
++#include <linux/if_ether.h>
++#include <sys/uio.h>
++#include <net/if.h>
++#include <arpa/inet.h>
++#include "xdp_shrink_frags.skel.h"
++
++/*
++ * A generic-XDP program that shrinks into the frags frees a page_pool frag.
++ * skb-backed XDP first cow's the nonlinear skb into page_pool memory
++ * (skb_cow_data_for_xdp() for generic XDP, skb_pp_cow_data() for veth), but
++ * the shared rxq is registered as MEM_TYPE_PAGE_SHARED, so a buggy kernel
++ * frees the frag with page_frag_free() -> "Bad page state ... page_pool leak".
++ */
++
++#define TAP_NAME	"xdp_shrink0"
++#define TAP_NETNS	"xdp_shrink_tap"
++
++#define NS_NAME_MAX_LEN	32
++#define VETH_LOCAL	"xdp_shrinkA"
++#define VETH_PEER	"xdp_shrinkB"
++#define VETH_LOCAL_IP	"10.9.9.1"
++#define VETH_PEER_IP	"10.9.9.2"
++#define VETH_LOCAL_MAC	"02:00:00:00:00:01"
++
++/*
++ * skb_pp_cow_data() keeps up to one page in the linear part, so the packet
++ * sizes below only leave a frag (smaller than the 3000-byte shrink, so it is
++ * released as a whole) on 4K pages. Skip elsewhere rather than run a test
++ * that cannot tell a fixed kernel from a buggy one.
++ */
++#define PAGE_SIZE_4K	4096
++
++/*
++ * Generous, so a loaded CI does not fail the assert prematurely; normally
++ * the first check already succeeds.
++ */
++#define WAIT_ITERS	10000
++#define WAIT_US		1000
++
++static void wait_for_prog(struct xdp_shrink_frags *skel)
 +{
-+	xdp->flags |= XDP_FLAGS_FRAGS_PAGE_POOL;
++	int i;
++
++	for (i = 0; i < WAIT_ITERS && !skel->bss->shrink_ran; i++)
++		usleep(WAIT_US);
 +}
 +
-+static __always_inline bool xdp_buff_is_frag_pp(const struct xdp_buff *xdp)
++static int create_tap_napi_frags(const char *ifname)
 +{
-+	return !!(xdp->flags & XDP_FLAGS_FRAGS_PAGE_POOL);
++	struct ifreq ifr = {
++		.ifr_flags = IFF_TAP | IFF_NO_PI | IFF_NAPI | IFF_NAPI_FRAGS,
++	};
++	int fd, err;
++
++	strscpy(ifr.ifr_name, ifname);
++
++	fd = open("/dev/net/tun", O_RDWR);
++	if (fd < 0)
++		return -errno;
++
++	err = ioctl(fd, TUNSETIFF, &ifr);
++	if (err) {
++		err = -errno;
++		close(fd);
++		return err;
++	}
++
++	return fd;
 +}
 +
- static __always_inline u32 xdp_buff_get_skb_flags(const struct xdp_buff *xdp)
- {
- 	return xdp->flags;
-@@ -394,6 +412,15 @@ void xdp_convert_frame_to_buff(const struct xdp_frame *frame,
- 	xdp->data_meta = frame->data - frame->metasize;
- 	xdp->frame_sz = frame->frame_sz;
- 	xdp->flags = frame->flags;
++/*
++ * Similar to flow_dissector.c: writev() an IFF_NAPI_FRAGS tap to build a
++ * nonlinear skb that tun runs through do_xdp_generic().
++ */
++static void test_tun(struct xdp_shrink_frags *skel)
++{
++	__u8 head[74], frag1[2048], frag2[2048];
++	struct ethhdr *eth = (void *)head;
++	int tap_fd = -1, ifindex, err;
++	struct netns_obj *ns = NULL;
++	struct iovec iov[3];
++	ssize_t n;
++
++	if (getpagesize() != PAGE_SIZE_4K) {
++		test__skip();
++		return;
++	}
++
++	ns = netns_new(TAP_NETNS, true);
++	if (!ASSERT_OK_PTR(ns, "netns_new"))
++		return;
++
++	tap_fd = create_tap_napi_frags(TAP_NAME);
++	if (!ASSERT_GE(tap_fd, 0, "create_tap"))
++		goto out;
++
++	SYS(out, "ip link set dev " TAP_NAME " up");
++
++	ifindex = if_nametoindex(TAP_NAME);
++	if (!ASSERT_GT(ifindex, 0, "if_nametoindex"))
++		goto out;
++
++	skel->bss->shrink_ran = 0;
++
++	err = bpf_xdp_attach(ifindex, bpf_program__fd(skel->progs.xdp_shrink),
++			     0, NULL);
++	if (!ASSERT_OK(err, "bpf_xdp_attach"))
++		goto out;
++
++	memset(head, 0, sizeof(head));
++	memset(frag1, 0x41, sizeof(frag1));
++	memset(frag2, 0x42, sizeof(frag2));
++	eth->h_proto = htons(ETH_P_IP);
++
++	iov[0].iov_base = head;  iov[0].iov_len = sizeof(head);
++	iov[1].iov_base = frag1; iov[1].iov_len = sizeof(frag1);
++	iov[2].iov_base = frag2; iov[2].iov_len = sizeof(frag2);
++
++	n = writev(tap_fd, iov, ARRAY_SIZE(iov));
++	ASSERT_EQ(n, sizeof(head) + sizeof(frag1) + sizeof(frag2), "writev");
++
++	wait_for_prog(skel);
++	/* a buggy kernel only splats "page_pool leak", it does not fail here */
++	ASSERT_GT(skel->bss->shrink_ran, 0, "xdp_prog_ran");
++
++	bpf_xdp_detach(ifindex, 0, NULL);
++out:
++	if (tap_fd >= 0)
++		close(tap_fd);
++	netns_free(ns);
++}
++
++/*
++ * Both veth ends live in their own namespace, so the traffic really crosses
++ * the pair and nothing is created in the caller's namespace.
++ */
++static int veth_setup(char *ns0, char *ns1)
++{
++	if (!ASSERT_OK(append_tid(ns0, NS_NAME_MAX_LEN), "append_tid ns0"))
++		return -1;
++	if (!ASSERT_OK(append_tid(ns1, NS_NAME_MAX_LEN), "append_tid ns1"))
++		return -1;
++
++	SYS(fail, "ip netns add %s", ns0);
++	SYS(fail_ns0, "ip netns add %s", ns1);
++	SYS(fail_ns1, "ip -n %s link add %s mtu 8000 type veth peer name %s mtu 8000",
++	    ns0, VETH_LOCAL, VETH_PEER);
++	SYS(fail_ns1, "ip -n %s link set %s netns %s", ns0, VETH_PEER, ns1);
++	SYS(fail_ns1, "ip -n %s link set %s address %s", ns0, VETH_LOCAL,
++	    VETH_LOCAL_MAC);
++	SYS(fail_ns1, "ip -n %s addr add %s/24 dev %s", ns0, VETH_LOCAL_IP,
++	    VETH_LOCAL);
++	SYS(fail_ns1, "ip -n %s link set %s up", ns0, VETH_LOCAL);
++	SYS(fail_ns1, "ip -n %s addr add %s/24 dev %s", ns1, VETH_PEER_IP,
++	    VETH_PEER);
++	SYS(fail_ns1, "ip -n %s link set %s up", ns1, VETH_PEER);
++
++	return 0;
++
++fail_ns1:
++	SYS_NOFAIL("ip netns del %s", ns1);
++fail_ns0:
++	SYS_NOFAIL("ip netns del %s", ns0);
++fail:
++	return -1;
++}
++
++static void veth_cleanup(const char *ns0, const char *ns1)
++{
++	/* Dropping the namespaces takes the veth pair and its XDP programs. */
++	SYS_NOFAIL("ip netns del %s", ns1);
++	SYS_NOFAIL("ip netns del %s", ns0);
++}
++
++static int veth_attach(const char *ns, const char *dev, int prog_fd)
++{
++	struct nstoken *nstoken;
++	int ifindex, err;
++
++	nstoken = open_netns(ns);
++	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
++		return -1;
++
++	ifindex = if_nametoindex(dev);
++	if (!ASSERT_GT(ifindex, 0, "if_nametoindex")) {
++		close_netns(nstoken);
++		return -1;
++	}
++
++	err = bpf_xdp_attach(ifindex, prog_fd, 0, NULL);
++	close_netns(nstoken);
++
++	return ASSERT_OK(err, "bpf_xdp_attach") ? 0 : -1;
++}
++
++/* A large ping builds a nonlinear skb that veth cow's into its page_pool. */
++static void test_veth(struct xdp_shrink_frags *skel)
++{
++	char ns0[NS_NAME_MAX_LEN] = "xdp_shrink_ns0-";
++	char ns1[NS_NAME_MAX_LEN] = "xdp_shrink_ns1-";
++
++	if (getpagesize() != PAGE_SIZE_4K) {
++		test__skip();
++		return;
++	}
++
++	if (veth_setup(ns0, ns1))
++		return;
++
++	skel->bss->shrink_ran = 0;
++
++	if (veth_attach(ns0, VETH_LOCAL, bpf_program__fd(skel->progs.xdp_shrink)))
++		goto out;
++
++	SYS_NOFAIL("ip netns exec %s ping -q -s 5000 -c 3 -W 1 %s",
++		   ns1, VETH_LOCAL_IP);
++
++	wait_for_prog(skel);
++	/* a buggy kernel only splats "page_pool leak", it does not fail here */
++	ASSERT_GT(skel->bss->shrink_ran, 0, "xdp_prog_ran");
++out:
++	veth_cleanup(ns0, ns1);
++}
++
++/*
++ * LOCAL cow's the incoming skb and returns XDP_TX, so the buff is turned into
++ * an xdp_frame and bounced to PEER, which shrinks a frag. A page_pool tag
++ * recorded on the buff must not leak into the frame, or PEER frees a plain
++ * page (whose pp was already cleared on the XDP_TX side) as page_pool memory.
++ */
++static void test_veth_tx(struct xdp_shrink_frags *skel)
++{
++	char ns0[NS_NAME_MAX_LEN] = "xdp_shrink_tx0-";
++	char ns1[NS_NAME_MAX_LEN] = "xdp_shrink_tx1-";
++
++	if (getpagesize() != PAGE_SIZE_4K) {
++		test__skip();
++		return;
++	}
++
++	if (veth_setup(ns0, ns1))
++		return;
++
 +	/*
-+	 * frame->flags never carries XDP_FLAGS_FRAGS_PAGE_POOL (it is stripped
-+	 * in xdp_update_frame_from_buff()); re-derive it from the frame's own
-+	 * memory type. veth and devmap rebuild a buff here and run a program
-+	 * whose rxq says MEM_TYPE_PAGE_SHARED, so without this a shrink would
-+	 * free a page_pool frag through page_frag_free().
++	 * LOCAL bounces everything (incl. ARP) with XDP_TX, so pin a static
++	 * neighbour to let the ping's payload actually reach it.
 +	 */
-+	if (frame->mem_type == MEM_TYPE_PAGE_POOL)
-+		xdp_buff_set_frag_pp(xdp);
- }
- 
- static inline
-@@ -420,7 +447,8 @@ int xdp_update_frame_from_buff(const struct xdp_buff *xdp,
- 	xdp_frame->headroom = headroom - sizeof(*xdp_frame);
- 	xdp_frame->metasize = metasize;
- 	xdp_frame->frame_sz = xdp->frame_sz;
--	xdp_frame->flags = xdp->flags;
-+	/* XDP_FLAGS_FRAGS_PAGE_POOL is xdp_buff only, don't carry it over */
-+	xdp_frame->flags = xdp->flags & ~XDP_FLAGS_FRAGS_PAGE_POOL;
- 
- 	return 0;
- }
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 290e0f099e6bf..94268f4d3c5f7 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -5532,6 +5532,12 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
- 	if (skb_is_nonlinear(skb)) {
- 		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
- 		xdp_buff_set_frags_flag(xdp);
-+		/*
-+		 * A nonlinear skb was cow'd into page_pool memory by
-+		 * skb_cow_data_for_xdp() before we got here, so the frags must
-+		 * be freed to that pool, not via the rxq's MEM_TYPE_PAGE_SHARED.
-+		 */
-+		xdp_buff_set_frag_pp(xdp);
- 	} else {
- 		xdp_buff_clear_frags_flag(xdp);
- 	}
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 61940e7535523..d34ba56d79d8f 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4378,6 +4378,13 @@ static bool bpf_xdp_shrink_data(struct xdp_buff *xdp, skb_frag_t *frag,
- 	if (mem_type == MEM_TYPE_XSK_BUFF_POOL) {
- 		netmem = 0;
- 		zc_frag = bpf_xdp_shrink_data_zc(xdp, shrink, tail, release);
-+	} else if (xdp_buff_is_frag_pp(xdp)) {
-+		/*
-+		 * Skb-backed XDP (generic XDP, veth) cow's the frags into a
-+		 * page_pool while the rxq stays MEM_TYPE_PAGE_SHARED, so free
-+		 * the frag to the pool, not via page_frag_free().
-+		 */
-+		mem_type = MEM_TYPE_PAGE_POOL;
- 	}
- 
- 	if (release) {
++	SYS(out, "ip -n %s neigh add %s lladdr %s dev %s nud permanent",
++	    ns1, VETH_LOCAL_IP, VETH_LOCAL_MAC, VETH_PEER);
++
++	skel->bss->shrink_ran = 0;
++
++	if (veth_attach(ns0, VETH_LOCAL, bpf_program__fd(skel->progs.xdp_tx)))
++		goto out;
++	if (veth_attach(ns1, VETH_PEER, bpf_program__fd(skel->progs.xdp_shrink)))
++		goto out;
++
++	SYS_NOFAIL("ip netns exec %s ping -q -s 5000 -c 3 -W 1 %s",
++		   ns1, VETH_LOCAL_IP);
++
++	wait_for_prog(skel);
++	/* a buggy kernel only splats "page_pool leak", it does not fail here */
++	ASSERT_GT(skel->bss->shrink_ran, 0, "xdp_prog_ran");
++out:
++	veth_cleanup(ns0, ns1);
++}
++
++void test_xdp_shrink_frags(void)
++{
++	struct xdp_shrink_frags *skel;
++
++	skel = xdp_shrink_frags__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_load"))
++		return;
++
++	if (test__start_subtest("tun"))
++		test_tun(skel);
++	if (test__start_subtest("veth"))
++		test_veth(skel);
++	if (test__start_subtest("veth_tx"))
++		test_veth_tx(skel);
++
++	xdp_shrink_frags__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c b/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c
+new file mode 100644
+index 0000000000000..ad895ab699303
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c
+@@ -0,0 +1,34 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++int shrink_ran;
++
++SEC("xdp.frags")
++int xdp_shrink(struct xdp_md *ctx)
++{
++	/*
++	 * Runs on both skb-backed XDP paths (generic XDP via tun, and veth):
++	 * the nonlinear skb is cow'd into page_pool memory before we run, so
++	 * shrinking the tail releases a whole frag that has to go back to that
++	 * pool. The counter only tells us the program ran and the helper
++	 * succeeded -- a linear buff returns 0 as well -- it does not prove a
++	 * frag was released.
++	 */
++	if (bpf_xdp_adjust_tail(ctx, -3000) == 0)
++		__sync_fetch_and_add(&shrink_ran, 1);
++	return XDP_PASS;
++}
++
++SEC("xdp.frags")
++int xdp_tx(struct xdp_md *ctx)
++{
++	/*
++	 * Bounce the frame back. On veth this turns the buff into an
++	 * xdp_frame, which is where a buff-scoped page_pool tag must not leak
++	 * into the frame handed to the peer.
++	 */
++	return XDP_TX;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
