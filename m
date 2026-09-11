@@ -1,92 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53824AA02C;
-	Fri, 11 Sep 2026 17:01:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519704AC17E;
+	Fri, 11 Sep 2026 17:41:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789146064; cv=none; b=r/ngaS/39Cs+84VVVaI6TVV2T5kBBP8BUIRUC40rTZid7iUwymRHY434IfIe0sDdr3k6BpbPL7WpUZ/Ok6Hs+cgx9KA/BJsFxRXiLruzbAboCoxGfhBzbET/zmAu9WCN8SzPx1fwEkQKRYZtdZoMvP4iGXJ4Q8DjsHcqFnsB9jQ=
+	t=1789148491; cv=none; b=uNr+6aMg/3gz7ThXscen9zHnInHGTK6mbILG8mbjQw5HEvJAve6AKpR+zR9i2JN2BF83Ni97oy2sDoV2qcyj6OoVIFlNxz1WZtGJVaDt0WtJrBvR5TnBeZkjx7Hf/bCeRXDy0bB+JSuaoY1VLrk8gy2oem1UYiqIg4TjE1/kfxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789146064; c=relaxed/simple;
-	bh=41XYLy/Uw7qtZb8T14KmRylV0FfFdr+MpWrB1dhen8g=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XRwh5Cu9x1yyU5KZRlwTyZQfkT1HOsunqbacnD2Hi0sMbqr4WQbs6N8ITJVycSUCf54hVB6s6NcY6NO8SwjdTAJ9NK43oLYsVblhvqMUo47uxLnYBYE71n0tiWK7Cmy6wPlcqF/x9OzpXBfmcZk35xsTxk4U44kQ6LlBfpOzSSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GSmIEdc1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789148491; c=relaxed/simple;
+	bh=nkjYnm9it1PLpUqDYT4MBNKGK0bpLaGdXMfrEGiCfLY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=MwHktSpAFojKt8OofCcUkRtNYJfSgArfZOeXeyc76YPX6gazHPZcLqTp95cAj6qeHu+2Kj33ECvAwn7P2Y6rF1y6Djd+Kz86aAjBoNc3LwJrhQ6zFSU3Pyo39MJ73pjrZV6eAIJKTMDcixHpEiUgDbWzWmZu/laA7nEJfXee9Xc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mHsFyfXN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GSmIEdc1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 069271F000FF;
-	Fri, 11 Sep 2026 17:01:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mHsFyfXN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB42B1F00899;
+	Fri, 11 Sep 2026 17:41:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789146062;
-	bh=oDQZag0IjV9fYXD0o3OpJmps7IVf8wxhWyOn8F3mH7I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=GSmIEdc1JrYwocqTdJA8fOiJHUh/lok2GuPgJwWgFjnSiA01XXsJeNO93Lhv5QB8u
-	 jtTgmvrtmFtYwSrI7C1q0s7FKm/48mS7JD+fKyVE6Ob7XmXg32VyIOip34ND67TjoM
-	 MqVqfYWZKcjJAVsn0e8IUfPjrxf9IWdyD6MOYQ+mzU6n7bl7IqdvTYjVw8qMERdDdC
-	 QlZQPirvYolm2or/e3/U3pTduT7gBuVJQeAiM6KCHTZvftsbe6ApGG2iPiCJdKqZol
-	 0Z4NzxrSs+bG218tH+2nAa525CvFiB4T4GWB+aIQZjjpJYx5pl5Hk/TDyyhOroN/sM
-	 S41UMkKRHhAqA==
-Date: Fri, 11 Sep 2026 10:01:01 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Narcisa Vasile <narcisav.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, daniel.zahka@gmail.com, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- shuah@kernel.org, horms@kernel.org, willemb@google.com, petrm@nvidia.com,
- anubhavsinggh@google.com, richardbgobert@gmail.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: drv-net: add BIG TCP test cases
-Message-ID: <20260911100101.2c34bdc5@kernel.org>
-In-Reply-To: <20260911050659.13367-1-narcisav.kernel@gmail.com>
-References: <20260911050659.13367-1-narcisav.kernel@gmail.com>
+	s=k20260515; t=1789148472;
+	bh=XStbx5xOqnvisaJEdBjjJufAiJ8sozdyioF/dPvzEnc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=mHsFyfXNfXTG5sWqpzFyfaHc1jxBjUV9XKBBx2FbhxaSiGT/+fVcTNDtK92XURMmt
+	 ei+TNAvyodBV0jmhT9jmQBknAKg6fACDR6aIGJdWrHqD+ofn9Q8mP3UEppymiFGfUW
+	 gr8YvVxKXf5UjyvRSyG+jqRSnbyz9T7afI7ons4aMRBrfZXGGsulDP8HKrV5e6nkjt
+	 mXdCZkzlIs3GdtyNY7VSejSxX2c/6lQ1EpaRpRIhULuXbOA6Bzb/oc9IPC2y+YESGw
+	 BhWgDwI5NqaOVkSapZwXQCBd8G9MvKiufFdd8vNnIcFo0ZQUsU7MjsQqJ3R2g8Jlhl
+	 hqwPdAFSBA5cw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0BCD3924450;
+	Fri, 11 Sep 2026 17:40:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH][next] selftests/bpf: test_xsk: Fix spelling mistake
+ "conigure" -> "configure"
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178914840939.3026440.2048331122548889925.git-patchwork-notify@kernel.org>
+Date: Fri, 11 Sep 2026 17:40:09 +0000
+References: <20260903150351.12725-1-colin.i.king@gmail.com>
+In-Reply-To: <20260903150351.12725-1-colin.i.king@gmail.com>
+To: Colin King (gmail) <colin.i.king@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ shuah@kernel.org, maciej.fijalkowski@intel.com,
+ bastien.curutchet@bootlin.com, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-On Thu, 10 Sep 2026 22:06:59 -0700 Narcisa Vasile wrote:
-> Add four new test cases that validate coalescing
-> under increased size limits (BIG TCP):
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Thu,  3 Sep 2026 16:03:51 +0100 you wrote:
+> There is a spelling mistake in an assert message. Fix it.
 > 
-> big_tcp_data_same
->   - validates that equal-sized segments coalesce past
->    the legacy IP_MAXPACKET limit.
-> big_tcp_data_lrg_sml
->   - validates that a smaller final segment coalesces into the
->     previous chain of large-sized segments while crossing the
->     IP_MAXPACKET limit.
-> big_tcp_tcp_seq
->   - validates that a packet with a wrong sequence number doesn't
->     coalesce. The test uses a sequence number for which the low 16 bits
->     correspond to the correct sequence number to validate against
->     truncation bugs, since total aggregate length crosses over the
->     legacy size limit for BIG TCP.
-> big_tcp_large_max
->   - validates that coalescing stops at the configured BIG TCP limit.
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/xsk.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Looks like SW is struggling to aggregate enough. Do we need longer
-timeouts perhaps? Note that the debug kernel build includes 
-kernel/configs/debug.config
+Here is the summary with links:
+  - [next] selftests/bpf: test_xsk: Fix spelling mistake "conigure" -> "configure"
+    https://git.kernel.org/bpf/bpf-next/c/34b9bde8eea7
 
-AI says:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Thanks for adding the BIG TCP coalescing coverage to gro_sw.py. CI is
-flagging the new subtests as failing on our debug-kernel executor
-(vmksft-net-drv-dbg, gro-sw-py):
-
-  not ok gro_sw.test.ipv4_big_tcp_data_same
-  not ok gro_sw.test.ipv4_big_tcp_data_lrg_sml
-  not ok gro_sw.test.ipv4_big_tcp_tcp_seq
-  not ok gro_sw.test.ipv4_big_tcp_large_max
-  (and the ipv6 equivalents)
-
-The rx side never fully coalesces the injected segments before the
-background receiver gives up and the test's retry loop (6 attempts) is
-exhausted, e.g.:
-
-  Expected {68952 }, Total 1 packets
-  Received {20280 [!=68952]40560 [!=0]8112 [!=0]}, Total 3 packets.
 
