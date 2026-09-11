@@ -1,111 +1,89 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CBE83515C5;
-	Fri, 11 Sep 2026 15:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 281AC322C6D;
+	Fri, 11 Sep 2026 15:27:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789139345; cv=none; b=ZbyrLxyqxiS1sr7AMz6MBg8o0VcsDoS4TeAODZHV6Ng05os+AMoyNNA0X1sTYS6hoS0YaYKqKEVBtd7aI1UkXHtndRu/Ke3E7DvSu9Fxf65XjSyr7VM0UraFRepHSiyWHUJwBDflebi3IFFVjPtKqa+s1LdE12KXKNY7QXSYj2w=
+	t=1789140441; cv=none; b=igfbpX20DO/l4lApRnf+G+EXfFv4yBfEoXKbmYuxnPV2B9y7FOQr9qeWFd5cJjNtd3bSNoouWwy756ebv4BXbrU06KMWzco/HTJEBxOGJqH03FmTmzjRTX+N9qAgaWmMGVfeOI0gp/pTuluBYSbuWtsDCbWAkytP7PsQUZOOBfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789139345; c=relaxed/simple;
-	bh=ppcBcedm4D465IJ58n/qnyBbFm5fXRIDdBbCmMInPrI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UzkKnVXhEc0ytD80LHWx8VAB5lAv2qHB+krQRmEzi0aY8t+TUlOTOCkzGKv4ThjNtqMuRfxd2hayEaqRUwBzygXoo7S1QzUW7P2Yy//jM7rI5MHzJsBwKKYKWS2fEuUThSEkMj04IeDAS3FMG/w6qj8NKvKhywWmkCNrlJeO9MQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NS7gZy6S; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789140441; c=relaxed/simple;
+	bh=/5ngQOz0Fr8fdgWYP5DEuPldXuC86Zqli3ZKMfiIHN4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=kvZbtrVRBggV4Y8Mlxr+tNY/QMofy8Pf8LKw82W/WZSo02yJ9VB/Hsn77Ia9tQVZyTY/GnE33ql5VLlaZfkMeO6jCsRPLuBUqFMZd8+fWBhskbKk86MYlkM4WWv0UaDCS9XNHvmNpOVdzzOd3PCVf4C+0zDRAzpIy/WTTDrOnqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mc+MqGTZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NS7gZy6S"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7C71F000FF;
-	Fri, 11 Sep 2026 15:09:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mc+MqGTZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDA101F000FF;
+	Fri, 11 Sep 2026 15:27:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789139344;
-	bh=kzgXhdLZSs4NxTLiyI14ZA3CfLDXqLC8jREZHJce2fo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=NS7gZy6SN+xnsHuNlU71+OkJM/5LHmagnlEezHZ5rT6uf9tgIQApuw8pZKspwiU8p
-	 8PNJw1lTD37QHu39KAEOXpHuKba5FVQJKhnsAwk2RH7QTdkOTZN5b9XQFT0AWKzKpd
-	 +C8+DVDYjUFAv5cfSGGMF/3uGRjXh/CYOsA6y1qg+2KlvGfCrvT4nM8PEjD7tha+en
-	 KqCGHNmv+loLT6yVd62quyYaGXYOEdTrBIxc7oJ8aMME59uoWMht910OApVHUAHbWE
-	 DQdTQ2Age9vRBLBP0vLzIUVvkmYeHKDwW0B4+JXk9kbCjoKe6XXWxDg2ZMVcfrkHEM
-	 SNphhW8nrqOYg==
-Date: Fri, 11 Sep 2026 16:08:59 +0100
-From: Mark Brown <broonie@kernel.org>
-To: HyeongJun An <sammiee5311@gmail.com>
-Cc: Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>,
-	Shuah Khan <shuah@kernel.org>, linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/alsa: Test writes to IEC958 controls
-Message-ID: <4d02a638-1467-4694-99f8-7dba500944c7@sirena.org.uk>
-References: <21cc0424-8b57-4be4-9555-892b980d2f74@sirena.org.uk>
- <20260911134416.1860354-1-sammiee5311@gmail.com>
+	s=k20260515; t=1789140439;
+	bh=8BJjhrhS+0Oxmm6z0xTBYFFxEtdSj4DGbwn14Xt9haw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Mc+MqGTZCtk4Kp02/a3LLiMpT8xvAjbcK0AaiPqoc+pP/DmZsoFW+uxCBEHwaZKq2
+	 2x6xRErxisglzqqC3UIDxH4aZLu+fUd6c/6NfxwF3TTKm+2XDLCpMUcaMJRNjmT01q
+	 4DK+4+OC3w1ZxO07Ztd7wigs8hkMwebitlVuGIuNoSlL/mwpQyDYeYPva5+TSY4yPQ
+	 8Z85+zDs4l9xQ/aOPZL202F5AtXqTNHo8NDjwBrRpt5mMP76jPeUafzcS5cLyVelNf
+	 kgX/jo4G2Ij2YabAouQaxmVOfnDm9yo1c4aYRAqG1qH+/Y2kvPcugkk0Bn76DtZ7bH
+	 Bw781eWfPUmNg==
+Content-Type: multipart/mixed; boundary="===============1584994168545175848=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="a682oqKC1836CZ7H"
-Content-Disposition: inline
-In-Reply-To: <20260911134416.1860354-1-sammiee5311@gmail.com>
-X-Cookie: Close cover before striking.
+Message-Id: <42eecdb6f344f592a4764f367f13550c93417fa903f5e58a832c2aa01841c9e4@mail.kernel.org>
+In-Reply-To: <20260911141621.1944900-1-sammiee5311@gmail.com>
+References: <20260911141621.1944900-1-sammiee5311@gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Tolerate libarena skeleton failures under BPF_STRICT_BUILD=0
+From: bot+bpf-ci@kernel.org
+To: sammiee5311@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,martin.lau@linux.dev,rbm@suse.com,emil@etsalapatis.com,nickolay.lysenko@gmail.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,sammiee5311@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 11 Sep 2026 15:27:18 +0000 (UTC)
+
+--===============1584994168545175848==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> The Makefile documents BPF_STRICT_BUILD=0 as tolerating any BPF object,
+> skeleton, test object or benchmark failure so that the remaining tests
+> still build.  Every skeleton rule honours that through
+> $(if $(PERMISSIVE),...), except the three that build the libarena
+> skeletons.  Those invoke a sub-make with no guard, so a libarena failure
+> is fatal even in permissive mode.
+>
+> With a libarena source that fails to compile, BPF_STRICT_BUILD=0 stops at
+>
+>   make: *** [libarena/libarena.skel.h] Error 2
+>
+> while an ordinary program failing the same way prints SKIP-BPF and the
+> build carries on.
+>
+> Guard the three sub-makes the way the other skeleton rules are guarded.
+> The build then prints SKIP-SKEL and continues, and test_progs,
+> test_progs-no_alu32, test_progs-cpuv4 and bench all link.  Nothing
+> downstream needs a change, because the missing skeleton drops out through
+> the existing permissive paths and libarena.test.o is reported as
+> SKIP-TEST.  The default BPF_STRICT_BUILD=1 still fails on the same input.
+>
+> Fixes: a6850fa388f6 ("selftests/bpf: Add BPF_STRICT_BUILD toggle")
+> Signed-off-by: HyeongJun An <sammiee5311@gmail.com>
+> Assisted-by: Claude:claude-opus-5
+
+The Fixes: tag points to a6850fa388f6 which introduced BPF_STRICT_BUILD,
+but the inconsistency where other skeleton rules use PERMISSIVE while
+libarena rules don't was actually introduced by commit 7e729028d7ff. That
+commit added PERMISSIVE guards to most skeleton generation rules but
+missed the three libarena skeleton rules. Should the tag be:
+
+  Fixes: 7e729028d7ff ("adding ci files")
 
 
---a682oqKC1836CZ7H
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-On Fri, Sep 11, 2026 at 10:44:16PM +0900, HyeongJun An wrote:
-> On Tue, Sep 08, 2026 at 05:23:19PM +0100, Mark Brown wrote:
-
-> > It seems like we should have a test that we can actually find this
-> > control, right now it looks like we silently ignore it being missing.
-> > Are all IEC958 controls supposed to have one of these?
-
-> I couldn't find anything saying they must. 32 of the 36 writable
-> Playback Defaults in the tree have a Con Mask, Pro Mask or Mask sibling,
-> 4 don't (fsl_spdif, fsl_xcvr, uniperif_player, stm32_sai_sub). The
-> driver docs only ask that mask and default share an iface, and
-> sound/core doesn't check. So unless there's a rule I'm missing I'll keep
-> the non audio guess for those and print that no mask was found, rather
-> than fail them.
-
-I dunno, if 32 of 36 have a mask that sounds more like there is a
-standard for all practical purposes but we've got a few drivers that
-could be improved to better implement things.  This is quite common with
-mixer-test - we generally enforce things relatively laxly compared to
-the spec.  It's probably more helpful all round to add the missing mixer
-controls.
-
-> One thing I'd like to check with you first. Failing on an advertised
-> bit that's dropped turns three drivers that pass today into failures:
-> au88x0 (mask says 0xff, put() reads only the FS bits), ice1712 on Delta
-> 1010 and Mediastation (mask 0xff, no put callback), and rme32 in
-> professional layout (mask advertises the whole emphasis field, the
-> converter reads one value). I think those are the mask not matching the
-> driver, which is the kind of thing the test is for, but I don't have
-> any of that hardware. I'll go with strict for v3 unless you'd rather
-> those were reported without failing. Happy to do either.
-
-Yes, I think this is a reasonable thing to add - like I was saying above
-it's realtively common given our lack of enforcement and general driver
-quality for us to see existing bugs.  Hopefully someone with the
-hardware will notice and take a look, or if they don't perhaps it's not
-actually causing them problems anyway.
-
-Thanks for working on this!
-
---a682oqKC1836CZ7H
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqkGYoACgkQJNaLcl1U
-h9CPYgf/TSElJKQOsYTzDB8LAUkruaKRXRFElVJ5snrCFfmesFoYlu2uo9nnsmDU
-Bew6jr7TXSyhy39PTdLpMM4UtmQ1VOZh4BdqZ9fPIuA8uoi+GPDRt0mjy5yu4+lL
-EzH9ey29Cvjb8seEQZTeSAFo20e4Mf15fkqgblBikw9cBu9HKLPi21J4Q3wyjTBN
-Prnkdmc8WGjeuIBvnBPH8hr5Fg/39yWddOGmgx4bkmOgLKVBlJmhraTjj6dR8Gfs
-l/2davQTUTuD/Bu2bP86StCaZL+nr/OXomZ69/ZlJmlE4z6tIDI4/HipV+rFaZ4X
-U992EcBxigD4UQt3M22v1IK9ZqJwgw==
-=5hq8
------END PGP SIGNATURE-----
-
---a682oqKC1836CZ7H--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34611055093
+--===============1584994168545175848==--
