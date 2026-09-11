@@ -1,90 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DDA5A0AB1;
-	Fri, 11 Sep 2026 20:27:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305C5563FCE
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 20:40:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789158424; cv=none; b=QXI10beHkMbFu5z3ZhG/LTyT02S9vfqT9PZKPB+Yd5OCgnk0Mgdv/awS676r1AFgk1YiEhnCnDM2nyqwGR6btSvlH5JRsh8DV2UIo4uNaR6ILtWHhniUTa99xQ5896pb/wmR3qDP4GCcjUZeuja1qz67oMK4DvEK1RmppdXhM1U=
+	t=1789159227; cv=none; b=NPWEAtimgjFzK3+KJ+ZZ7wv7FXVyaP81ZhHo5wMDculHlnmYbN+TiKBIfbSLOj5Vu9U1OXQl6fj0Tp7CwyrlYpeSIEh0gX+kv+XQlQqaS65xBgiIy2rIUawSn/QcR/pl1E/K/ffBY5/gdZ18YkZwFq9Wf04RYo1J7t3qCX2snF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789158424; c=relaxed/simple;
-	bh=9K8sTy2EJkFOwG3nXiNve5oBGaZajFtxlwGeQzamFJI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=N+Yv5Zu2GaqkRjvJbAOJb4Nc1etEKMo68QbC4JkmKA0gFG3GzVYOr7aRlEA+kw/dHzzxvELneJanZltbl/JXt7+xLsYRPxkmlc6laeyKxijAjPj9mZKbzrbDVSEDJe5KJC0t2DZl+I2/QOHSO3vCFzkvSLCXWPAVQOBciSax9aA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H47aeLbL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789159227; c=relaxed/simple;
+	bh=yOHxJv7/hycz6+JN/DFN4bKkpmVEZPmrKh4UqNfOU6M=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RrlGo6mTo0p7T23asV3Nz0w18AvQBI6mxKRPIlPyCtGM7ZBt+/M48oD+T8aBzEgisb/DV/7aFzjAVc/tNMiqvw/BXBRDGhPdhmr5YnIET+rji1vPS9LUs5JoyVL9U5PlBs29cFY58Wi7N1lEfwG8Jmdh9ZKCdPloXSm1VyKlTEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D7q6OGkL; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H47aeLbL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E0A51F000FF;
-	Fri, 11 Sep 2026 20:26:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789158422;
-	bh=NnR0GeWNRLqdGq338Ey2H6UohBj7tkxzAd4cY3tSTXc=;
-	h=From:Date:Subject:To:Cc;
-	b=H47aeLbLW26mDJ3hIr5REH3iFRbaPcBGJcDZHo1GghYD4vS4dLz7a0QRTB2xk9fiS
-	 NlobfSv0xNl8RzkEHFi+scydb7nYCy8lS/xBRHAQMcsc3Ebb7atLjBuBwpucbsivpS
-	 xDgSKYpBm5gL5PG7124vbl7EAbkP/bZYy7VJC+odk/M4z+XHr83Jxv/wKVEWiSJlgd
-	 NPNhE4VEhTi4pl0NO3vehfVDPAJvRU8LneXVbr6h4tm09X+aErBEhU25V4UcOQTABO
-	 80fJ8Y5/pPgUVJmOubnYen2SYWIRHEyuYtSgVhNOqY7qJEP8VLZ0Nj1ik+KzqJNL0w
-	 kbUAuw8gdlS2g==
-From: Mark Brown <broonie@kernel.org>
-Date: Fri, 11 Sep 2026 21:25:44 +0100
-Subject: [PATCH] kunit: configs: Enable DRM tests
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D7q6OGkL"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-49e6ba045ceso1465825e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 13:40:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789159223; x=1789764023; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=s4wQKJNxifNdByk8MBibmXjCRQpHWJtfW4Ad4PWk7cY=;
+        b=D7q6OGkLEHp4Y0O3I31FGWW8LlvvMkQiHgeXhdkNNoT5nXnJlmVubdf8Nfgj84uYvi
+         V+ApotCmGUCIgKxcS4C9WQ1yjfw1yAwmXd/8LxmwmsVz0Ptot7wJhrhiCSV6xxA1yMoi
+         fD07N9nKNR7QOCGSotd/sbVlC2CK39Ba9ZQau1pKf0oatzzzwqR8KdM+Q8CI4smIKNEe
+         lu9iubwzMVFHVFA8aJ6trQvdwHbIXXtHXGqmGAtbS6gvfoz5IadJiH27l3nvK3KWLM+V
+         SfDQntIKyPEdcDmM3yJo1LgXfEThiIvBjYBwQR1dMnq5/mn0msNm/2ytW8NAmzaLPpu6
+         WFtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789159223; x=1789764023;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=s4wQKJNxifNdByk8MBibmXjCRQpHWJtfW4Ad4PWk7cY=;
+        b=ovIWOI1qLnnFJ2QW2f6yWZooKGGP7rnGAswgy6p8rN9ZIyeRt410KKMcMYulPtQGii
+         P5MKIRZGllw/GwEXyhgZuypa2wBWr5X3lj5QaQQ/hIe5ZzCwKIzYY0h+oUfCC44UNHmr
+         aoXyVnTn8KV17nKk01p2eILXFidnwI7taUq4UTJlIha81y+Ikc7m2EmiaHwWBlcYfgBx
+         IsrlDVP5q4yAi9bkAI0FvC9Yz/DpL50TXqkZSElXUgs39cJvWKINg4uWibMew01XIzSy
+         Cr2rJ4agIZSnk+cqJjYLH2YVsYWT5cBH3FzVlGuNXfe8WhlivrBVKsedEDlHZmE2Vge2
+         ZCtQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwFSn6eugNJV2oKBbU2ZovaLLih07u/PezfIepFFf7Hgtsyz3Q4+Kb8LPQbJaMYjI3BPl1mUatUNzXtZKDL9t0=@vger.kernel.org
+X-Gm-Message-State: AFuF++niwAFQAajb58YcaOtG7uspvIcBFrntfeI/we+aVmcPKZR0BPAa
+	CFb6doQCWv5lrQdv1Dd3HK7WOpA1bPCq/unwjAa2v0BrM9VIa4GVT1/s
+X-Gm-Gg: AYBFou0FWsiow+GiJToV4R5oSt5I1I+WpJJqJd+Oi9mmiqGqQE4/8WDNSpYe8r+fG39
+	BhzjFtWczhJX6xiLTUh+hU8HQGnLcUYqEdw7SBONSoAjwegklVWyobBXHcma7tTD0SLqRd74K55
+	zQUNHJ8Pykgn2lrkDd7w7aXh+ccVmQ+l9p0v1PAIxBwX7/cNI+y/PzfTQC5sZ20kcTut2f+JVlK
+	gYOezI+973DV0r2r3M7k5od2NXDckQ4kEox2P4fDSbRfAyh/RUwoKDJEP+PJctN3vi4Gove6nrR
+	TwYvxjWUbWlkzTfKIOwcLaHCpZjrHn3RxSAoKvIZokxMUr3EWseibtoRlW8/QvQBi8ZONgzx9Xo
+	G/8YzyiPa+BDnY9nGHMZizr7KZfaZCpcC6cwlzCHmmkCfox+/dP27cGMJFeEFLvFNJNnwrHSEHE
+	2CP+A5KppQA41Rfceex2ryfEGSs8o7zzfJ3aCOJ3ixctgcGNdU5YDZc2TH1rFSfzNaohBugySpO
+	x7pTQjbLEFuiVvyuaqGkjss1mJuh06NrHDopigc55NlzFcRPxP7iRJ4mXKZ0ctJWki4/Ank6Gru
+	1TXvZMEgwuHGlXPfPf5eglJ8ajsd97CaC8/z
+X-Received: by 2002:a05:600c:19ce:b0:49c:fc6c:be04 with SMTP id 5b1f17b1804b1-49e619f67bamr68164805e9.27.1789159222962;
+        Fri, 11 Sep 2026 13:40:22 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-095-114-033-154.95.114.pool.telefonica.de. [95.114.33.154])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e6499d57bsm114619865e9.3.2026.09.11.13.40.22
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 11 Sep 2026 13:40:22 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>,
+	Rae Moar <raemoar63@gmail.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Marie Zhussupova <marievic@google.com>,
+	kunit-dev@googlegroups.com
+Cc: Karl Mehltretter <kmehltretter@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] kunit: Fix kunit_register_params_array() reference in kernel-doc
+Date: Fri, 11 Sep 2026 22:39:01 +0200
+Message-Id: <20260911203901.95078-1-kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260911-kunit-drm-v1-1-c5c0f18fc7b0@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAMdjpGoC/yXM0QpAMBSA4VfRubY6m5J5FblgDg4ZbSMl7264/
- Orvv8CTY/JQJhc4OtjzaiNkmoAZGzuQ4C4aFKoctZRi3i0H0blFaGMIMVOEuoDYb456Pr9XVf/
- 2ezuRCe8A7vsBmpJMiW0AAAA=
-X-Change-ID: 20260911-kunit-drm-9cce0032e098
-To: Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>
-Cc: David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org, 
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=904; i=broonie@kernel.org;
- h=from:subject:message-id; bh=9K8sTy2EJkFOwG3nXiNve5oBGaZajFtxlwGeQzamFJI=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBqpGPZ5qOzafPW1n6RJiH1y24fTpXyZzoDENFWj
- ej5JuH31lKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaqRj2QAKCRAk1otyXVSH
- 0FICB/45446yTT2biB8x0NcxbnMLUgt1Afs0YLcAyK73O8t4moNmod2UwBezV/kWzFBZxJK9GMu
- Ss6/qx8jxRmp55biHAkoD0BTGkXL08rtT450nXjuCzrgbufqz6S7Qjxzm0YxvQT+F5Dd0iVloST
- bb2HD8ZRy6nAY5CAjlIDsdSi622QduJzkpGlsppNgt6mXBL+nWY/Z3Us/hvqNyWCtJNU1ZGK3NN
- 4trijc8g50OCBkD0XsZPR24xHMVR98VVGk2OR1dNv80/nKtW/X2OzlB+zkpiGpl33TtKe15DLvt
- lMr8Hb2EUyHkObvRvDgju1IsGfT1hs3v6lH5wtqKxLD5Q7g9
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 
-There are a number of KUnit tests in the DRM subsystem but these are not
-run as standard since they are gated behind the main DRM config option
-and all_tests.config does not ensure that is enabled.  Add it.
+The kernel-doc comment of KUNIT_CASE_PARAM_WITH_INIT() refers to
+kunit_register_param_array, which does not exist. The name is
+kunit_register_params_array. Say kunit_register_params_array.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: b820b9077b7f ("kunit: Enable direct registration of parameter arrays to a KUnit test")
+Assisted-by: LLM
+Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
- tools/testing/kunit/configs/all_tests.config | 2 ++
- 1 file changed, 2 insertions(+)
+ include/kunit/test.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
-index bccc2c77196d5..bee893f9fbbc6 100644
---- a/tools/testing/kunit/configs/all_tests.config
-+++ b/tools/testing/kunit/configs/all_tests.config
-@@ -59,3 +59,5 @@ CONFIG_SND=y
- CONFIG_SND_SOC=y
- CONFIG_SND_SOC_TOPOLOGY_BUILD=y
- CONFIG_SND_SOC_CS35L56_I2C=y
-+
-+CONFIG_DRM=y
-
----
-base-commit: 8cdeaa50eae8dad34885515f62559ee83e7e8dda
-change-id: 20260911-kunit-drm-9cce0032e098
-
-Best regards,
---  
-Mark Brown <broonie@kernel.org>
-
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index da5312e0dfa57f37a7e96c9e618b03b0947ede8b..55548dc54444f8c9f9e9319fbc263d93c0a56093 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -239,7 +239,7 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
+  * that were not managed by the parameterized test, and any other teardown logic.
+  *
+  * Note: If you are registering a parameter array in param_init() with
+- * kunit_register_param_array() then you need to pass kunit_array_gen_params()
++ * kunit_register_params_array() then you need to pass kunit_array_gen_params()
+  * to this as the generator function.
+  */
+ #define KUNIT_CASE_PARAM_WITH_INIT(test_name, gen_params, init, exit)		\
