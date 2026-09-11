@@ -1,266 +1,259 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B81748BD26;
-	Fri, 11 Sep 2026 18:16:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789150624; cv=none; b=e6oR13mlvJv1ehrjbH+SFUDshAYLZEh938mSKO3+of6i4/01lpMVR0wyBW5xTdzBTXFnjEDmHDEQkpNYioW7h9wwxZIpgV5AyqgTU9OBg7C2R7E3cZFUg4puxSvw8GeVN+d1lLZ02SSXA8GYEqZttTFLcVninY9v30xCVQxSe2A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789150624; c=relaxed/simple;
-	bh=k5uSf2dNts7e5vsZyyzqBVgEnBWscvWs8HccNNL80OI=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kLoJAFvzl0aUvMqGLMozN5ODFGcL4SWV+h/f2jFV4EX+c7tmpcI3CGqJi2O5svGGDbXPGZ5zP8eupiuezUGPdBpMCCxC9W44UGb+nRPqxwCw2lkEvWyG6thgpE9INCDTNXeanIIC2lTU8plRGDx7NzC9WiPMO6ikUhTv+wkzGJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JsCitqDT; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECC50472091
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 18:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789150867; cv=pass; b=Yy3NXNbuiuHF6uUH9LLwMBnuULnFIUCYid4RMWIOp/NI6pWrdJCbvVqFbLzdkXfcZA6L9Rr+HB36W1NYyhuASy/p9loABy88ivgLeM+/UQymtijPBF6ko6Xuev16oXLSz+2CgXk9qgyzKauWAcZ8iVsCgsiqyQQZ8vSNjpn+g6g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789150867; c=relaxed/simple;
+	bh=ospiNi4mvJbHDyKvltQYpdK+X0l90zSr5sr0fKih89Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rD2jZmBpLzRInP2O0jWyHFhRPPSLrizF9ANL4SBSKCTUziJtB9cXdm9An/ddkEg4iALQJU2y4Tht+PV0QHWEXufnpYTE9jcAtUYjDaQxk/ffYIcuPCCfC4A0zLbNxCqADIqf6l3QTERi7TMpZpoMK6fvDN4nRIoI+Mo4Px6PMT8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fZy1O7nY; arc=pass smtp.client-ip=74.125.224.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JsCitqDT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E65D1F00898;
-	Fri, 11 Sep 2026 18:16:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789150613;
-	bh=jaXGq5qUGBG8UH/2bm3XnpBY1/FrawintgqnWIzo0gc=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=JsCitqDTiq1dkYFfnOOQFBG3/Fp/h7jMnOseHgDhCGozOAQKCkQYu3xFJOwpoYu0K
-	 s57yboG5tIX9+391bOI/t1zte+w3JrzbNXFGMQl9wb4G3hXU940nGvRCn9rtabC2t3
-	 MhMLU3cxL3DPxOQcRfw1+42SeC+CYURHClfkuuoEQeEce0tnY/vsjavE8YvFeVO7aP
-	 WxIzbwCQWGdOB6YLVDsFFHx03pvJEVXIUruGquBX4yYXEi9VaoM9eY/8xpco/p8rUL
-	 JJOe38Ulse2XUpJDQSAYAflIazzZUxo4h0qNJHYmF3uJVUIoGvt4ls1zA8PccZaSKN
-	 t70Ara3mntAjw==
-Subject:
- Re: [PATCH net-next v2 5/5] selftests: drv-net: Test large zcrx buffers
-From: netdev-bot+sashiko@kernel.org
-To: bjorn@kernel.org
-Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- daniel@iogearbox.net, mike.marciniszyn@gmail.com, mohsin.bashr@gmail.com,
- sdf@fomichev.me, bobbyeshleman@meta.com, daskald@meta.com,
- bestswngs@gmail.com, maxime.chevallier@bootlin.com, jacob.e.keller@intel.com,
- leitao@debian.org, cuitao@kylinos.cn, asml.silence@gmail.com, dw@davidwei.uk
-Date: Fri, 11 Sep 2026 18:16:52 +0000
-Message-ID: <178915061220.219967.16553162669849588226@kernel.org>
-In-Reply-To: <20260910180908.1506533-6-bjorn@kernel.org>
-References: <20260910180908.1506533-6-bjorn@kernel.org>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fZy1O7nY"
+Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-66bd7857841so1311721d50.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 11:21:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789150865; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Kqtp5WoUa983+uz3qzC37Dvql+nw/iz80zLu5/ZQmC/zFVjWX4ddSdhKDldtFtlbMU
+         w+qK9ws1Ktxf64IyCtITwn6ndmoqqxVK6jYdCzAW2f5NWkpa8RY4cJDXK6GROBdKLSBQ
+         nJ6N+WPjbW4uINOA6s/bMbBzP+Fs/87BoNYbfcmM3jppYyDrOt0/670nIvNzU9w65W/g
+         yHDERmid3QJF3BAKEjyoJkEani6uwQmNG0kI29u/3T4zuiZwvhjqTOwpotqQBquD/5r2
+         bm4ZegiZyms2eXS6wc8LS+J/D+vK8cFVWmFTzYoTrTkQztqa2yiIHqoUdc/oNnl7b+9S
+         5sDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0PfkoOh/05AN64bzT3WIDHrUSVJxMax1VSqub7HGYzA=;
+        fh=Ab8c4kPgBwQPZwCEf4E3f7PJvovVSw2uWXjLP81l3C4=;
+        b=MhmfQl9Hhukl1wp/igT1vYsZw1nnLGCAeX66PrxR5rJNigYKNhiMyLB/Vq20Fj7xSv
+         wiyK1ai/c9PMmTj93EQusQio7BLDc3MYvRmGV+28yFhIG8LPpqsyzBFMbxM6qDV8jfIL
+         uTQU9dSW4CHGCbN4ZhiW2XFLrvp/9dH9Pe1wFB7rpjm3JTgtVQL5HpofnpJdRCQj7wSW
+         83PgKrEtThiOjW3D8UTa0zjzEhdO2X9Cdvni7mJOEIOZOzT3mNY+pgLypPBsCQFH2sm2
+         wUovepW5h4MKeK5Y43ZOV8NVPqjn1OCLijnOut/PNjJTBqasEvCB0a0KnQQWsnDb0qeB
+         Lohg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789150865; x=1789755665; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=0PfkoOh/05AN64bzT3WIDHrUSVJxMax1VSqub7HGYzA=;
+        b=fZy1O7nYX4F8RpCBL719cejwO2JBZBHCsQ4M29xWe4J1TICgnhFF4vaFKW0LcVXdmJ
+         7JdqsQw8HdHi3qOgLEDUvZWJMdsBhJvjcwAlk7s4SAP6Ge1bQDyq7QlkphqhoqP2sjxu
+         hlvtKZOtj97s5AEkAIFBG6SfqtoFA9gozAIKE/u7v19trAtrqTj1kwsXEWMxfPpYViU1
+         A6r7wP8ya52+HMgnFwqsiTQib+gLaQKrY4yT8f7y2bOXz5s2XRFZO4o9qvbLDU28U4sZ
+         lUNz9mwfWNtI+Bz1r1H2qcuU/MZANI+qNPsIsj2VRtTm7dbTNkjPC+WsuM/oSxn58NcQ
+         vk5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789150865; x=1789755665;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0PfkoOh/05AN64bzT3WIDHrUSVJxMax1VSqub7HGYzA=;
+        b=tJetxbS2DiYvKUh7VvLUowrkA2VQ3QhvyF8/060s/6Jty280yALhUCR0l50IbEpSZY
+         RxmpoTItHLlUwYbKWzNY5cHgRmv1HfE5WQYtVrgKNndRsZsq8l1yhDU5h929glNroYIW
+         V4BGyDey9yxqB0fx8qKPla9oV6dXj+Trlf3+KXiVekrkuFsx8flVou/ZLBNgIqovI2yC
+         KDU+3TId9Q2/gVwGL/8K339G4EHIrfak6umYX44PjwybnV40xbH0AVJ7QT1uaPcIWbAf
+         YDAwvE9Cl/td6bbmfrvXsUmaGbEDnBLxTmwIs/huE+IY0Arx1Tehco6jJjn4UgaohObx
+         Re+g==
+X-Forwarded-Encrypted: i=1; AKwUvBxDo4iR1bgFU0iLKT73Fmqc/3Ysaov/DTtB6SopgzYQFbZkzfeabTNbOFUCYQGrTRazaz8kf2ce10cJse0xqv0=@vger.kernel.org
+X-Gm-Message-State: AFuF++n6c8A9MKFhnAkARyYslbOMmUMzPl9DU1QWsBICF8W9oyUgjukt
+	MiUxMCtoym2P+eeEsxwXJxAHXoFwpecVE1x9E2WBbUcTAUPpmSv6YhOadNv5PImOgGSlrH0k9cM
+	nweHMHr2dA699PWT//4jnKXitLfRwfZg=
+X-Gm-Gg: AYBFou2RPRtJi92NLRcDVjsa9pOvqprStnpGMwVhuvnQdWATd/loRi+ZMDT9byXStLk
+	J2fyR4ICd+SeBStYJJ7g3I6Hu3Vv+uHxulpiHm0rMOZ49dbU2SY/S8cY7/tWztH/v2qypiqbd+I
+	DF9iCA01mgA41ceZyQ82NncDjksBiJB9lirEj9oo4c6XDMv20RLE1+96mcArvA0xKpOhQvECnVu
+	auhz46HxYvg96aVSnSeeItKGmDLQRGLVe2YYRQm+hu3wNPtpdLE5ecPxZ8AbmfJEdoCGhJrBxLM
+	lrPV0ENNne/ya4dBjrO8sPS1FjMefyM4B77J+moKtkB1kX879mSfVU0KDSmG/4tDNpThKOH9eOM
+	t8ujrdNsnPtk91xkYsC1AyvB7GuT59+JZTg==
+X-Received: by 2002:a05:690e:450f:20b0:66f:c1bc:c072 with SMTP id
+ 956f58d0204a3-671246c1531mr1637688d50.58.1789150864802; Fri, 11 Sep 2026
+ 11:21:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260908-dd-cmap-part2-clean-v9-0-3a3f621f4a10@gmail.com>
+ <20260908-dd-cmap-part2-clean-v9-15-3a3f621f4a10@gmail.com> <20260909-primitive-nano-hound-8ee2aa@l-nschier-aarch64>
+In-Reply-To: <20260909-primitive-nano-hound-8ee2aa@l-nschier-aarch64>
+From: jim.cromie@gmail.com
+Date: Fri, 11 Sep 2026 12:20:38 -0600
+X-Gm-Features: AcwNN1UJu3AgSAwYav9ulJp2R_HPP-fzpsFCD13LL3sQevEBQ_irSbDy0UqSCw8
+Message-ID: <CAJfuBxx0VFCS820JLqawLdcpb49Nj-=xnSYdg6ytOub6NidM4A@mail.gmail.com>
+Subject: Re: [PATCH v9 15/39] kbuild, dyndbg: Clean up builtin module-name ambiguities
+To: Nicolas Schier <n.schier@fritz.com>
+Cc: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@net.net>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider:
+On Wed, Sep 9, 2026 at 9:50=E2=80=AFAM Nicolas Schier <n.schier@fritz.com> =
+wrote:
+>
+> On Tue, Sep 08, 2026 at 06:55:11PM -0600, Jim Cromie via B4 Relay wrote:
+> [...]
+>
+> > diff --git a/Documentation/admin-guide/dynamic-debug-howto.rst b/Docume=
+ntation/admin-guide/dynamic-debug-howto.rst
+> > index 9c2f096ed1d8..99bbae37d34e 100644
+> > --- a/Documentation/admin-guide/dynamic-debug-howto.rst
+> > +++ b/Documentation/admin-guide/dynamic-debug-howto.rst
+> [...]
+> > @@ -161,17 +161,21 @@ file
+> >       file kernel/freezer.c   # ie column 1 of control file
+> >       file drivers/usb/*      # all callsites under it
+> >       file inode.c:start_*    # parse :tail as a func (above)
+> > -     file inode.c:1-100      # parse :tail as a line-range (above)
+> > +     file inode.c:1-100      # parse :tail as a line-range (below)
+> >
+> >  module
+> > -    The given string is compared against the module name
+> > -    of each callsite.  The module name is the string as
+> > -    seen in ``lsmod``, i.e. without the directory or the ``.ko``
+> > -    suffix and with ``-`` changed to ``_``.  Examples::
+> > -
+> > -     module sunrpc
+> > -     module nfsd
+> > -     module drm*     # both drm, drm_kms_helper
+> > +    The query string is compared against the subsystem module name of
+> > +    each callsite, as shown in the control file, or its simple name.
+> > +    The simple module name is the string as seen in ``lsmod``,
+> > +    i.e. without the directory or the ``.ko`` suffix and with ``-``
+> > +    changed to ``_``.
+> > +    Examples::
+> > +
+> > +        module nfsd        # simple modname (as from lsmod)
+> > +     module init/main   # subsystem modname (as in control file)
+> > +     module */main      # any subsystem ending in main
+> > +        module main     # simple modname, selects same as above
+> > +     module drm*        # both drm, drm_kms_helper
+>
+> The five lines above have mixed indentation, please switch them all to
+> one tab (no spaces).
+>
 
-Critical: 0 · High: 0 · Medium: 3 · Low: 0 (1)
+thanks, will fix.
 
-- [Medium] In `process_recvzc()`
-  (tools/testing/selftests/drivers/net/hw/iou-zcrx.c:304-312) the new…
-- [Medium] The new hard failure in `run_server()` (iou-zcrx.c:389-391,
-  `error(1, 0, "no payload CQE ending past offset %u",…
-- [Medium] The test now enforces a placement guarantee that the in-tree
-  zcrx UAPI documentation explicitly disclaims.
+>
+> [...]
+> > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> > index 0a4fdd8bd975..e129c4d10ed8 100644
+> > --- a/scripts/Makefile.lib
+> > +++ b/scripts/Makefile.lib
+> > @@ -23,6 +23,32 @@ modname_flags  =3D -DKBUILD_MODNAME=3D$(call name-fi=
+x,$(modname)) \
+> >                -D__KBUILD_MODNAME=3D$(call name-fix-token,$(modname))
+> >  modfile_flags  =3D -DKBUILD_MODFILE=3D$(call stringify,$(modfile))
+> >
+> > +# Dynamic debug subsystem modname with clean heuristic and override su=
+pport
+> > +dd_modname_override =3D $(strip $(firstword $(DD_MODNAME_$(target-stem=
+).o) \
+> > +                                       $(DD_MODNAME)))
+> > +dd_obj :=3D $(strip $(filter-out .,\
+> > +             $(patsubst drivers/%,%,\
+> > +             $(patsubst arch/$(SRCARCH)/%,%,\
+> > +             $(patsubst arch/%/,%,$(obj))))))
+>
+> May it become problematic if there is a conflict with
+>
+>   arch/sh/drivers/dma/*
+>   arch/sh/drivers/pci/*
+>
+> vs.
+>
+>   drivers/dma/*
+>   drivers/pci/*
+>
+> ?
 
-Pre-existing issues:
-- [Low] The reflowed `usage()` string (iou-zcrx.c:422-429) disagrees with
-  the option parser in the same file and with the Python driver: it…
+2 questions here really -
+- what should happen ?   strip arch/sh/ and then also drivers ?
+- what will happen - I will play with the expressions to find out.
 
---
 
-selftests: drv-net: Test large zcrx buffers
+>
+>
+> > +dd_modname_default =3D $(strip $(if $(filter $(notdir $(obj)),$(__modn=
+ame)),\
+> > +                      $(__modname),\
+> > +                      $(if $(filter main core common util init snapsho=
+t \
+> > +                                    process,$(__modname)),\
+> > +                          $(dd_obj),\
+> > +                          $(if $(word 2,$(__modname)),\
+> > +                              $(dd_obj),\
+> > +                              $(if $(dd_obj),$(dd_obj),$(__modname))))=
+))
+>
+> This looks quite complex.  I _think_ this should be equivalent, but
+> perhaps a bit more simple to maintenance:
+>
+> dd_modname_default =3D \
+>     $(or \
+>         $(filter $(notdir obj), $(__modname)), \
+>         $(filter-out main core common util init snapshot process, $(__mod=
+name)), \
+>         $(dd_obj)))
+>
+> (Removed $(strip) and the last $(__modname) fallback as both are already
+> in definition of 'dd_modname'.)
+>
+> What do you think?
 
-The zcrx selftest now requests an RX buffer larger than twice the device
-MTU and requires at least one zero-copy receive CQE to end past the first
-MTU-sized region of its chunk. A new -E option carries the threshold, and
-the server aborts if no such CQE was observed.
+it does read better.  I will try it too.
 
-> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-> index f6a8fc5fac241..c0d9065b21030 100644
-> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
 
-[ ... ]
 
-> @@ -298,6 +301,15 @@ static void process_recvzc(struct io_uring *ring, struct io_uring_cqe *cqe)
->  	mask = (1ULL << IORING_ZCRX_AREA_SHIFT) - 1;
->  	data = (char *)area_ptr + (rcqe->off & mask);
->  
-> +	if (cfg_check_data_end) {
-> +		unsigned int rx_buf_len = cfg_rx_buf_len ?: page_size;
-> +		unsigned int data_end_off;
-> +
-> +		data_end_off = (rcqe->off & mask) % rx_buf_len + n;
-> +		if (data_end_off > cfg_min_data_end)
-> +			seen_data_end = true;
-> +	}
-> +
 
-[Severity: Medium]
-Can this predicate be satisfied by a driver that only uses the first
-MTU-sized region?  It keys on the end of the fragment, and rcqe->off is the
-payload start offset inside the chunk:
 
-io_uring/zcrx.c:io_zcrx_queue_cqe() {
-	...
-	offset = off + (net_iov_idx(niov) << ifq->niov_shift);
-	rcqe->off = offset + zcrx_area_id_to_token(area->area_id);
-	...
-}
+> > +dd_modname =3D $(strip $(or $(dd_modname_override),\
+> > +                       $(dd_modname_default),\
+> > +                       $(__modname)))
+> > +dd-name-subst =3D $(subst $(comma),_,$(subst -,_,$(strip $1)))
+> > +dd-name-fix-token =3D $(subst $(space),_,$(call dd-name-subst,$1))
+> > +dd_tok =3D $(call dd-name-fix-token,$(dd_modname))
+> > +dd_modname_flags =3D $(if $(dd_modname),\
+> > +     -DKBUILD_DD_MODNAME=3D$(call stringify,$(dd_tok)))
+> > +
+> > +modfile_flags +=3D $(dd_modname_flags)
+>
+> dd-name-subst and dd-name-fix-token are not needed, dd_modname_flags is
+> used only once and can be folded:
+>
+>
+> dd_tok =3D $(call name-fix,$(subst $(space),_,$(dd_modname)))
+>
+> modfile_flags +=3D $(if (dd_modname), -DKBUILD_DD_MODNAME=3D$(dd_tok))
+>
 
-with off derived from skb_frag_off(frag) in io_zcrx_recv_frag() and
-niov_shift == ilog2(rx_buf_len).  So anything the driver places ahead of the
-payload within the chunk (page pool headroom pp->p.offset, or per-packet
-alignment padding such as the 128-byte payload alignment in fbnic) counts
-toward cfg_min_data_end.
+yes, this all looks cleaner and more comprehensible. thanks.
 
-Over IPv6+TCP the maximum payload per segment is mtu - 60 (mtu - 72 with TCP
-timestamps), so the margin here is only around 60 bytes.  A driver that
-stores exactly one full-size segment in a large chunk, but starts the
-payload 60 or more bytes into the chunk, would set seen_data_end and pass —
-which is the case the commit message says should fail:
+>
 
-    "A driver which accepts the size but only uses the first MTU-sized
-    region fails."
-
-I could not point at an in-tree driver that reserves that much payload-buffer
-headroom today, so this is about the strength of the check rather than an
-observed pass.  Would keying on the payload start offset be placement
-independent?
-
-	(rcqe->off & mask) % rx_buf_len >= cfg_min_data_end
-
-Alternatively, should the threshold account for the maximum per-buffer
-headroom and alignment padding?
-
->  	for (i = 0; i < n; i++) {
->  		if (*(data + i) != payload[(received + i)])
->  			error(1, 0, "payload mismatch at %d", i);
-> @@ -373,7 +385,10 @@ static void run_server(void)
->  		server_loop(&ring);
->  
->  	if (!stop)
-> -		error(1, 0, "test failed\n");
-> +		error(1, 0, "test failed after receiving %zu bytes", received);
-> +	if (cfg_check_data_end && !seen_data_end)
-> +		error(1, 0, "no payload CQE ending past offset %u",
-> +		      cfg_min_data_end);
->  }
-
-[Severity: Medium]
-Does this turn a runtime configuration property into a driver failure?
-
-On bnxt, one of the drivers advertising QCFG_RX_PAGE_SIZE, the hardware ends
-each aggregation buffer at end-of-packet when TPA is off:
-
-drivers/net/ethernet/broadcom/bnxt/bnxt.c:bnxt_init_one_rx_agg_ring_rxbd() {
-	...
-	if (!(bp->flags & BNXT_FLAG_TPA))
-		type |= RX_BD_FLAGS_AGG_EOP;
-	...
-}
-
-and BNXT_FLAG_TPA comes only from user-settable features:
-
-drivers/net/ethernet/broadcom/bnxt/bnxt.c:bnxt_set_tpa_flags() {
-	bp->flags &= ~BNXT_FLAG_TPA;
-	...
-	if (bp->dev->features & NETIF_F_LRO)
-		bp->flags |= BNXT_FLAG_LRO;
-	else if (bp->dev->features & NETIF_F_GRO_HW)
-		bp->flags |= BNXT_FLAG_GRO;
-}
-
-So with ethtool -K <dev> rx-gro-hw off, every packet payload starts at offset
-0 of a fresh buffer, the requested rx_buf_len is still fully honored by
-bnxt_validate_qcfg() and the -d probe succeeds, but data_end_off never
-exceeds the MSS and run_server() aborts.
-
-Separately, the threshold comes from the local interface MTU while the
-received segment size is set by the peer and path MSS, so a jumbo-MTU
-receiver talking to a 1500-byte peer cannot produce an end offset past the
-MTU without hardware coalescing.
-
-Should the test require or check for HW-GRO/LRO being enabled (or check an
-offload/queue statistic) before making this a hard failure?
-
-> @@ -406,8 +421,11 @@ static void run_client(void)
->  
->  static void usage(const char *filepath)
->  {
-> -	error(1, 0, "Usage: %s (-4|-6) (-s|-c) -h<server_ip> -p<port> "
-> -		    "-l<payload_size> -i<ifname> -q<rxq_id>", filepath);
-> +	error(1, 0,
-> +	      "Usage: %s (-4|-6) (-s|-c) -h<server_ip> -p<port>\n"
-> +	      "\t-l<payload_size> -i<ifname> -q<rxq_id>\n"
-> +	      "\t[-x<rx_buf_pages>] [-E<min_data_end>] [-d]\n",
-> +	      filepath);
->  }
-
-[Severity: Low]
-This is a pre-existing mismatch and not introduced by this patch, but since
-the string is being reflowed anyway: the usage text still advertises (-4|-6),
-which the parser does not accept, and it omits -o<oneshot_recvs> and
--z<send_size>, which it does accept and which iou-zcrx.py uses in
-test_zcrx_oneshot (-o 4 and -z 16384).
-
->  static void parse_opts(int argc, char **argv)
-> @@ -425,7 +443,7 @@ static void parse_opts(int argc, char **argv)
->  		usage(argv[0]);
->  	cfg_payload_len = max_payload_len;
->  
-> -	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:d")) != -1) {
-> +	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:E:d")) != -1) {
->  		switch (c) {
->  		case 's':
->  			if (cfg_client)
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-> index b7a225fe4beae..a9f62c6b950bb 100755
-> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-> @@ -175,9 +175,13 @@ def test_zcrx_large_chunks(cfg) -> None:
->  
->      single(cfg)
->      page_size = resource.getpagesize()
-> +    mtu = cfg.dev["mtu"]
->      nr_pages = 2
-> +    while nr_pages * page_size <= 2 * mtu:
-> +        nr_pages *= 2
->      rx_buf_len = nr_pages * page_size
-> -    rx_cmd = f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} -q {cfg.target} -x {nr_pages}"
-> +    rx_cmd = (f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} "
-> +              f"-q {cfg.target} -x {nr_pages} -E {mtu}")
->      tx_cmd = f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {cfg.port} -l 12840"
-
-[Severity: Medium]
-Does this contradict the in-tree zcrx documentation, which is not updated by
-this change?
-
-Documentation/networking/iou-zcrx.rst, "Area chunking":
-
-    Larger chunks don't give any additional guarantees about buffer sizes
-    returned in CQEs, and they can vary depending on many factors like
-    traffic pattern, hardware offload, etc.
-
-The commit message states the opposite:
-
-    "A driver which accepts the size but only uses the first MTU-sized
-    region fails."
-
-Mechanically seen_data_end is only set when some CQE satisfies
-(rcqe->off % rx_buf_len) + res > mtu, so the driver has to pack more than one
-fragment per chunk, or return a fragment larger than the L3 MTU via HW-GRO or
-LRO.  A driver that allocates one large niov per frame and places one
-MSS-sized segment at chunk offset 0 matches the documented contract and still
-fails here.
-
-Should the documented contract be tightened in the same change, or should the
-assertion be diagnostic, or gated on a hardware coalescing capability?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260910180908.1506533-1-bjorn%40kernel.org
+>
+>
+> --
+> Nicolas
