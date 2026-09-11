@@ -1,154 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-27.mta0.migadu.com [91.218.175.27])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B63F544BCAE;
-	Fri, 11 Sep 2026 07:44:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D20745DF4A
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 08:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.27
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789112697; cv=none; b=fxp8sSI+oT2dUnxcEEXnTTJ3OUfBNbLtxfEgrs6Q1s1cSNDUA6ea/GdtSy2okBoTFs5bvCZriSS6ns8DdhnMy0HOunbTaTBKR4rj4go4858RJM1jsGvkKd5jlsrFF9mlGj9h6IVjjV8OyoP/7qgPkBB7tJFPqoNjaQ9gpnnrMmw=
+	t=1789113631; cv=none; b=PP3YPDf6GdnW1HdPQ4FGPQNru0MtG709AmWgH8WyOyI1V6RGQTxkPm1FQjblyZasdUdzFWctDne375a5RtuAdNuyRTmYGjv5GoIzQ1B5kpuVkEcGirDjW6yrKlDiiLhtfGfV0JM03eMnsZZDWMonYRumQsxf9qTmIKiLGg918jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789112697; c=relaxed/simple;
-	bh=F5gWWSNqHxis+mEexCTYx+bQntoGdKudDjdbvc/jjEc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=o5UjyWRMp4W2mBwjCapVRECE0d8phAXSjuqor/rowUGpK/zJ3h/YCOm+iPfF40+is6v00+rSsOvAptYkZ1TdIjnF+mGt7cvcTuyOiOhsLQJdsP54vq66P9A7TAPP70YOM7Ht3B8ENOC4UJXf5RHzpJjDl3y3ntzhn9qOqtQB8eY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IndTzz0q; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789113631; c=relaxed/simple;
+	bh=afKiJa6hxOxYUi6bVE0sRytlbJBMbtKUr3nFCUs23Ag=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jNWrbbRXJ+raBO9LmMz8qPKwSTJY9UVqKqRCfVmzCYMknJ02+mYZPxxbUXFakQHyyj5z1XG8m0oxXgl827Y1Ghns/w94EGgnEXZYcCC2BUUWcyPfqOkRrN1LW3393GK6ynANLxD76oIbZMjv5OOGJ5ASeeMRfQ+NIlH9V1KdTdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rqu3dWQw; arc=none smtp.client-ip=91.218.175.27
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IndTzz0q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB6CA1F00893;
-	Fri, 11 Sep 2026 07:44:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789112695;
-	bh=OBzZVFee4S2rVGtg6M6II1AeDxf+F8a1EcPtLaDHgSA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=IndTzz0qx5n84yuYFaj0DWuFbXlMNMPU4pRMRYbKWgxyf4TAx2zBq8olTVJsw4s2u
-	 T8ETqh0czo2f8KDTWd/deX51MYFDkVdIFO3jrx3+oJdStA6flfctbs8Kow9r290h9/
-	 ysBcd4DtTy6jucTnsC9uG3bAlZdzphZM22IDAA+tfNUpb1185+ZTvA0wuTYdkFIDlQ
-	 GY+8MTjJh6Sf1yjKHRdxLJRSR4tsXlWw8dXmKWnC+c0hbF7rNeEftF3Q0uYOwSChKD
-	 6R3SIFMUrqRBR5DKwf4bY4JCkrXjt16eiRWlwNww199xaYLBMnyK0TdnOyRIMGd5MC
-	 z5YYoLKAUXWUw==
-Content-Type: multipart/mixed; boundary="===============1662541605359616403=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rqu3dWQw"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=afKiJa6hxOxYUi6bVE0sRytlbJBMbtKUr3nFCUs23Ag=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789113626; v=1; x=1789718426;
+ b=rqu3dWQw9V6BFWdZ0r6uujuUUxROnGxtXQ4CV8vVd96LEglhrE1mYbclk8R1g1pA/OVicFd0
+ 21jc+5rqtlJIC3HgENk/ZT0aFFHcMnua8iH6S0QlEl2i9e4icrS4hT05imdVu7U1f4kmkZt7zMX
+ rDZSXuFLiI04R716A93u7y2o=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id ae1b02bf5b6b67e0;
+	Fri, 11 Sep 2026 08:00:15 +0000
+X-Mizu-Trace-ID: ae1b02bf5b6b67e0
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <f0fa0178-4109-476d-b42b-0970b398de56@linux.dev>
+Date: Fri, 11 Sep 2026 13:30:04 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c51a056670cea30c7fb85ed0ef80a6be9b7e538196a5ae53cbad3b374db70c2c@mail.kernel.org>
-In-Reply-To: <20260910233303.1063501-5-ziyang.meme@gmail.com>
-References: <20260910233303.1063501-5-ziyang.meme@gmail.com>
-Subject: Re: [PATCH v5 4/4] selftests/sched_ext: build BPF schedulers via the shared lib.bpf.mk
-From: bot+bpf-ci@kernel.org
-To: ziyang.meme@gmail.com,shuah@kernel.org,tj@kernel.org,hannes@cmpxchg.org,mkoutny@suse.com,jikos@kernel.org,bentiss@kernel.org,void@manifault.com,eddyz87@gmail.com
-Cc: vmalik@redhat.com,arighi@nvidia.com,changwoo@igalia.com,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,akpm@linux-foundation.org,inwardvessel@gmail.com,mykolal@meta.com,nathan@kernel.org,ziyang.meme@gmail.com,kernel-team@meta.com,linux-kselftest@vger.kernel.org,cgroups@vger.kernel.org,linux-input@vger.kernel.org,sched-ext@lists.linux.dev,linux-mm@kvack.org,bpf@vger.kernel.org,llvm@lists.linux.dev,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 11 Sep 2026 07:44:53 +0000 (UTC)
-
---===============1662541605359616403==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 08/13] selftests/bpf: cover the low-32 link
+ for sign-extending movs
+To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20260910164635.459558-9-vineet.gupta@linux.dev>
+ <5c3e4124ce20a8c5b435ae68e4facd38b0dab5b9f643e74d014287dc9172076e@mail.kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <5c3e4124ce20a8c5b435ae68e4facd38b0dab5b9f643e74d014287dc9172076e@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
-> index 3cfe90e0f34f..dd3f5594af24 100644
-> --- a/tools/testing/selftests/sched_ext/Makefile
-> +++ b/tools/testing/selftests/sched_ext/Makefile
-> @@ -14,48 +14,29 @@ CURDIR := $(abspath .)
->  REPOROOT := $(abspath ../../../..)
->  TOOLSDIR := $(REPOROOT)/tools
->  LIBDIR := $(TOOLSDIR)/lib
-> -BPFDIR := $(LIBDIR)/bpf
->  TOOLSINCDIR := $(TOOLSDIR)/include
-> -BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
-> -APIDIR := $(TOOLSINCDIR)/uapi
->  GENDIR := $(REPOROOT)/include/generated
->  GENHDR := $(GENDIR)/autoconf.h
-> -SCXTOOLSDIR := $(TOOLSDIR)/sched_ext
->  SCXTOOLSINCDIR := $(TOOLSDIR)/sched_ext/include
+On 9/10/26 11:22 PM, bot+bpf-ci@kernel.org wrote:
+>> selftests/bpf: cover the low-32 link for sign-extending movs
+>>
+>> Five programs, mirroring the zero-extending set:
+>>
+>>   - sext_mov_wide_src: narrowing the source reaches the destination, and
+>>     the value that arrives is sign-extended rather than zero-extended
+>>   - sext_self_mov_keeps_link: r0 = (s32)r0 on an already-linked register
+>>     stays in its set, the shape a sign-extended int return takes
+>>   - sext_self_mov_no_link: the same mov on an unlinked register mints no id
+>>   - sext_no_sync_when_base_has_delta: a delta on the base stops propagation
+>>   - sext_no_sync_from_subreg_base: narrowing the link does not run
+>>     backwards into the rest of the set
+>>   - sext_kinds_reach_different_values: the same low half reaches -1 through
+>>     a sign extension and 0xffffffff through a zero extension
+>>
+>> Each guards a div by zero that is only unreachable if the propagation
+>> happened, so losing the link is a verification failure rather than a test
+>> that quietly stops checking anything.
+> This isn't a bug, but should the count read "six programs", and could the
+> closing sentence be scoped to the two __success programs, since
+> sext_self_mov_no_link has no div and the __failure ones expect it to be
+> reachable?
+
+OK.
+
+>> diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+>> index eb88d9ce6c34..45bfa02a5338 100644
+>> --- a/tools/testing/selftests/bpf/progs/bpf_misc.h
+>> +++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+>> @@ -269,6 +269,14 @@
+>>   #define CAN_USE_BPF_ST
+>>   #endif
+>>
+>> +#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) ||	\
+>> +     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) ||		\
+>> +     defined(__TARGET_ARCH_arm) || defined(__TARGET_ARCH_s390) ||	\
+>> +     defined(__TARGET_ARCH_loongarch)) &&				\
+>> +	(__clang_major__ >= 18 || defined(__BPF_FEATURE_MOVSX))
+>> +#define CAN_USE_MOVSX
+>> +#endif
+>> +
+> This isn't a bug, but now that the gate lives in bpf_misc.h, would it be
+> worth switching verifier_movsx.c's inline #if over to #ifdef CAN_USE_MOVSX
+> so the arch/feature list exists in one place?
+
+Yes.
+
+Thx,
+-Vineet
+
+>> diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+>> index 65cb0efd268f..9d060d8b0c1f 100644
+> [ ... ]
 >
-> -OUTPUT_DIR := $(OUTPUT)/build
-> -OBJ_DIR := $(OUTPUT_DIR)/obj
-> -INCLUDE_DIR := $(OUTPUT_DIR)/include
-> -BPFOBJ_DIR := $(OBJ_DIR)/libbpf
-> -SCXOBJ_DIR := $(OBJ_DIR)/sched_ext
-> -BPFOBJ := $(BPFOBJ_DIR)/libbpf.a
-> -LIBBPF_OUTPUT := $(OBJ_DIR)/libbpf/libbpf.a
-> -
-> -DEFAULT_BPFTOOL := $(OUTPUT_DIR)/host/sbin/bpftool
-> -HOST_OBJ_DIR := $(OBJ_DIR)/host/bpftool
-> -HOST_LIBBPF_OUTPUT := $(OBJ_DIR)/host/libbpf/
-> -HOST_LIBBPF_DESTDIR := $(OUTPUT_DIR)/host/
-> -HOST_DESTDIR := $(OUTPUT_DIR)/host/
-> -
-> -VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)					\
-> -		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)		\
-> -		     ../../../../vmlinux					\
-> -		     /sys/kernel/btf/vmlinux					\
-> -		     /boot/vmlinux-$(shell uname -r)
-> -VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
-> -ifeq ($(VMLINUX_BTF),)
-> -$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)")
-> -endif
-> +# Build scheduler skeletons and subskeletons with the shared BPF rules.
-> +BPF_SRCS        := $(wildcard *.bpf.c)
-> +BPF_SKEL_EXT    := .bpf.skel.h
-> +BPF_GEN_SUBSKEL := 1
-
-This isn't a bug, but is anything consuming the generated
-*.bpf.subskel.h headers? Grepping the directory for "subskel" matches
-only the Makefile itself - no .c or .h file under
-tools/testing/selftests/sched_ext/ includes a subskeleton header. The
-pre-patch rule generated them too, so this preserves existing behavior,
-but the conversion makes the subskeleton an explicit one-line opt-in.
-Would dropping BPF_GEN_SUBSKEL be a reasonable follow-up to save a
-bpftool run per scheduler?
-
-> +# Preserve the existing build/ layout.
-> +BPF_OBJ_DIR  := $(OUTPUT)/build/obj/sched_ext
-> +BPF_SKEL_DIR := $(OUTPUT)/build/include
-> +SCXOBJ_DIR   := $(BPF_OBJ_DIR)
 >
-> -BPFTOOL ?= $(DEFAULT_BPFTOOL)
-> +include ../lib.bpf.mk
-
-[ ... ]
-
-> @@ -64,102 +45,26 @@ endif
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 >
->  LDFLAGS = -lelf -lz -lpthread -lzstd
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34506184282
 
-[ ... ]
-
-> +EXTRA_CLEAN += $(OUTPUT)/build
->
->  ################
->  # C schedulers #
->  ################
->
-> -override define CLEAN
-> -	rm -rf $(OUTPUT_DIR)
-> -	rm -f $(TEST_GEN_PROGS)
-> -endef
-> -
-> -# Every testcase takes all of the BPF progs are dependencies by default. This
-> -# allows testcases to load any BPF scheduler, which is useful for testcases
-> -# that don't need their own prog to run their test.
-> -all_test_bpfprogs := $(foreach prog,$(wildcard *.bpf.c),$(INCLUDE_DIR)/$(patsubst %.c,%.skel.h,$(prog)))
-> +# Build every scheduler before each test.
-> +all_test_bpfprogs := $(BPF_SKELS)
-
-This isn't a bug, but since the variable assignment is otherwise a
-straight substitution (the foreach expression becomes $(BPF_SKELS)),
-would it be worth keeping the original comment wording? The previous
-text explained the rationale - "Every testcase takes all of the BPF
-progs as dependencies by default. This allows testcases to load any BPF
-scheduler, which is useful for testcases that don't need their own prog
-to run their test." - while the replacement restates what the following
-line does and drops the reason a testcase depends on schedulers it does
-not own.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34573210499
---===============1662541605359616403==--
