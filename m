@@ -1,158 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84713CF95A;
-	Thu, 10 Sep 2026 23:55:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5360155747;
+	Fri, 11 Sep 2026 00:01:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789084540; cv=none; b=AZXw7gy5zhjN1NNpvZNwZOsmKUTTx7zQnBSkhNP7giwrn3zNdDNKP9/aA+97//O1gNUzg/Ct0nJShhWLu/rH/xvhwyPhA/VeqHODwLqYQ55sBCOmXVg4G8su5XMV/fDHU9QwtLgWVB5Epq8rTj6buyFxN4z0t7wghoo49iKDCOE=
+	t=1789084871; cv=none; b=DRSE68ilki3vK2+cVfz/TkkA2/aMUDGgIpBhaR+NrYvFfCuRzm6+pSeiPIc47TCsJXUY69uY/29PU678SCrxPv15aV5sKjl2Z1I7gqIQB9ca+6CVk6ZOWCEeEJTBbafNE1sGaf5WqqJVXrhN1vXKMa81bKLEUxLTlWRGYRojNP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789084540; c=relaxed/simple;
-	bh=NQ+m2Gp6DBcXXd5O+sEgVmXG2eWA72DV+yeLNCYqr7E=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=k6YREOupsCN/j4+vZ6X8eqgCSrMWFU3rRkautMFiqRk//xpzTmFdbQgTlBZmQXlOPYCQoAlSoYMOvw0fvD9Ow8QW+2BkQaXxRWsF9bjDnrjecRJyeCO2HOnJyTCjqcGo6wjAoWHQ93URnlQ/DIJzwDckm1g5rBOfXKuvQ4fuLiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h2T9AwJQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1789084871; c=relaxed/simple;
+	bh=kYOCWEPyTwYJ+UXMhHHPV90gDLB+s9KdK/WnD+3jswU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=TpF4qHCSUBPbJzIq+EjjB5gZDz4LnojoSBdHMwLL4yhiKvP5hSaFSfOn9vyKSCty3+ZmbyQaqW4d+OpWmRPjrVvJHRSvBVg2zRoozmjl2U7LwjWsfSjc1WUyNVhHRNOmi7C6SJed1+oRI2yOA46DAD5iHE3tIJrLcaK5FluWW7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TS8lRSh4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h2T9AwJQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A1E3C4AF0C;
-	Thu, 10 Sep 2026 23:55:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1789084540;
-	bh=NQ+m2Gp6DBcXXd5O+sEgVmXG2eWA72DV+yeLNCYqr7E=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=h2T9AwJQhFo60X2vZP1almbLppH5PPFJf1tv2HbB4BTl/Ti/3EXAw+NTO9hLmex84
-	 PIbnBJ5LC6t8RJHRYYd57rIK7DazBa+pkNzjL5OAzLpzXspxHrpgc5LTuAETGIRK3K
-	 F/2czMLaiHVIoMc8JuRMROSXTDU6CP49T/OGM/xBiW26ov0ENG95Hz4HDP5WeXrvWX
-	 kYf1VZEb6lY9xhtINXk0FdGQRVLN4abC/tIPkD17ToSDvjd3/xiUFe6u41ylUSafNi
-	 ACUmhK02No4s8urbBOtAPggN++lk736x39WxTiuQcQFxbu+tidgN3/ioY4N2QiuCAc
-	 oP4wbFuQ3F+vw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70AD3C88E41;
-	Thu, 10 Sep 2026 23:55:40 +0000 (UTC)
-From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Thu, 10 Sep 2026 16:56:04 -0700
-Subject: [PATCH v13 38/44] KVM: selftests: Reset shared memory after
- hole-punching
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TS8lRSh4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A10481F00893;
+	Fri, 11 Sep 2026 00:01:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789084869;
+	bh=QB486oFxzAhnhFSsmKGYqnG8JaJNWaIYF0JI1tL5CbA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=TS8lRSh4DOzEn5htqnj2j4gGtHtDRA71l3KaGeuoPu38gBseLrICquaiyt0YJPavk
+	 dzDYy0yta8G0EJbn9oyBPWt0yFXLI9Bfh2zl4zXQ5k3KY6pDiAVFX3G9W4mcNTW6Gm
+	 KbgURHav3g6qYr5ppe7xk4y7jNtK8iMB9LkWJ0KzVFF7pNVfwDcubc7lN/6+HmKyL5
+	 ybLPNGKhbC5GGTOj1qUEMCmeRLtTYWMl9R5t7sOHF16Gc/7QDKFrdQ3OTfpPq7LIEo
+	 epsbSDenrnGZnsW8zbqM/Ya8W/kDuIgl6AC3RQgK+QrGUUXuykYRYvKHBOIAfoxSH2
+	 L4zZgWxDRLdVA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 196FC3810901;
+	Fri, 11 Sep 2026 00:00:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260910-gmem-inplace-conversion-v13-38-dd6fbf94f4e1@google.com>
-References: <20260910-gmem-inplace-conversion-v13-0-dd6fbf94f4e1@google.com>
-In-Reply-To: <20260910-gmem-inplace-conversion-v13-0-dd6fbf94f4e1@google.com>
-To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
- brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
- jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
- oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
- rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
- steven.price@arm.com, willy@infradead.org, wyihan@google.com, 
- yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org, 
- suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
- Paolo Bonzini <pbonzini@redhat.com>, 
- Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, 
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, 
- Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
- Randy Dunlap <rdunlap@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Jason Gunthorpe <jgg@ziepe.ca>, Fuad Tabba <fuad.tabba@linux.dev>, 
- Vlastimil Babka <vbabka@kernel.org>, Baoquan He <baoquan.he@linux.dev>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
- linux-coco@lists.linux.dev, Ackerley Tng <ackerleytng@google.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1789084533; l=2580;
- i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=qgSSV+iztWlncds2pkMoO3mYfZ9NMVIVqTr/vN3QCpY=;
- b=oTD8dzGF0eTeqnTFELLylphUqFsvuDNQhEUUaeqL+Ct1dCms1Th/dK3+Vy9QGPTpOa+xmlRa3
- 2RqXbEeLGoaCbEGFqawd7O1aQyzJrjsLVziOSsdgZqmt8VrTUVP4isQ
-X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
- pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
-X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
- auth_id=649
-X-Original-From: Ackerley Tng <ackerleytng@google.com>
-Reply-To: ackerleytng@google.com
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v3 0/3] bpf,tcp: Fix bpf_sock_destroy() on TIME_WAIT
+ and
+ listener socks
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178908480688.2150752.11574192436514906023.git-patchwork-notify@kernel.org>
+Date: Fri, 11 Sep 2026 00:00:06 +0000
+References: <20260910112107.148770-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20260910112107.148770-1-jiayuan.chen@linux.dev>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ sdf@fomichev.me, martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ncardwell@google.com,
+ kuniyu@google.com, shuah@kernel.org, aditi.ghag@isovalent.com,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-From: Ackerley Tng <ackerleytng@google.com>
+Hello:
 
-private_mem_conversions_test used to reset the shared memory that was used
-for the test to an initial pattern at the end of each test iteration. Then,
-it would punch out the pages, which would zero memory.
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Without in-place conversion, the resetting would write shared memory, and
-hole-punching will zero private memory, hence resetting the test to the
-state at the beginning of the for loop.
+On Thu, 10 Sep 2026 19:20:44 +0800 you wrote:
+> Fix two bugs in bpf_sock_destroy(). One is an out-of-bounds read of
+> sk->sk_protocol on TIME_WAIT and NEW_SYN_RECV socks, since the field is
+> not in struct sock_common. The other is a might_sleep splat when
+> destroying a listener with children in its accept queue, the
+> cond_resched() in inet_csk_listen_stop() runs under the iterator's
+> rcu_read_lock(). Patch 3 adds a subtest for each.
+> 
+> [...]
 
-With in-place conversion, resetting writes memory as shared, and
-hole-punching zeroes the same physical memory, hence undoing the reset
-done before the hole punch.
+Here is the summary with links:
+  - [bpf,v3,1/3] bpf: Fix out-of-bounds read of sk_protocol in bpf_sock_destroy()
+    https://git.kernel.org/bpf/bpf/c/01b245ba016d
+  - [bpf,v3,2/3] tcp: Skip cond_resched() in inet_csk_listen_stop() under BPF context
+    https://git.kernel.org/bpf/bpf/c/eaab8cab451b
+  - [bpf,v3,3/3] selftests/bpf: Test bpf_sock_destroy() on TIME_WAIT and listener socks
+    https://git.kernel.org/bpf/bpf/c/8036d3a5a658
 
-Move the resetting after the hole-punching, and reset the entire
-PER_CPU_DATA_SIZE instead of just the tested range.
-
-With in-place conversion, this zeroes and then resets the same physical
-memory. Without in-place conversion, the private memory is zeroed, and the
-shared memory is reset to init_p.
-
-This is sufficient since at each test stage, the memory is assumed to start
-as shared, and private memory is always assumed to start zeroed. Conversion
-zeroes memory, so the future test stages will work as expected.
-
-Fixes: 43f623f350ce1 ("KVM: selftests: Add x86-only selftest for private memory conversions")
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-Tested-by: Shivank Garg <shivankg@amd.com>
-Reviewed-by: Fuad Tabba <tabba@google.com>
----
- tools/testing/selftests/kvm/x86/private_mem_conversions_test.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-index f3de2a4ab0551..cf50e9a332c5b 100644
---- a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-+++ b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-@@ -202,15 +202,18 @@ static void guest_test_explicit_conversion(u64 base_gpa, bool do_fallocate)
- 		guest_sync_shared(gpa, size, p3, p4);
- 		memcmp_g(gpa, p4, size);
- 
--		/* Reset the shared memory back to the initial pattern. */
--		memset((void *)gpa, init_p, size);
--
- 		/*
- 		 * Free (via PUNCH_HOLE) *all* private memory so that the next
- 		 * iteration starts from a clean slate, e.g. with respect to
- 		 * whether or not there are pages/folios in guest_mem.
- 		 */
- 		guest_map_shared(base_gpa, PER_CPU_DATA_SIZE, true);
-+
-+		/*
-+		 * Hole-punching above zeroed private memory. Reset shared
-+		 * memory in preparation for the next GUEST_STAGE.
-+		 */
-+		memset((void *)base_gpa, init_p, PER_CPU_DATA_SIZE);
- 	}
- }
- 
-
+You are awesome, thank you!
 -- 
-2.55.0.1007.g17ff1f9808-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
