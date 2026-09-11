@@ -1,456 +1,271 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7430949E136;
-	Fri, 11 Sep 2026 11:10:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789125066; cv=none; b=tTeq7x1uCJUzUmrtPV/yN4sJYkAlQKxd1PulObtNvnOrilO7c3zUxjBHf3e/sEZvdOHxqvp0mojchghvSyni6vP/2VIhxVIi0trsYBwVITx7hh96G2ox4WOGPhHZxYtpB1oMpyxxCVQoW0bdh0Up9ufyXljUyQWxjaKpaXBcnO8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789125066; c=relaxed/simple;
-	bh=9tmo7LnCa2gZ4wvu0gRKk4iwWl/CuwVoGBbOWdqP/EI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jLJWQO0xMZERJ39EekI7euTHadUK2R+jxdg7mcgr3s1Lu/Vk5vmFgQltDjjXeWJFiD/46pzoRuwgULhmDTdKLD3RcKlJQ+EUYlg1zYpP0Uz6TAgoNHO4kKDU4+ZcjwVB7yAwl9GU5iCNkaC3M4Yl2AKuIHJ3f9hMwGKPEWa+5YE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=WVKHKK2C; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011036.outbound.protection.outlook.com [52.101.62.36])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C767330328;
+	Fri, 11 Sep 2026 11:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.36
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789126660; cv=fail; b=OvjB1hosMyJ1a91x/8Fd39njLVsC4lJObQ0djjFXbxLC+eKK9jRmT+Fs75RcGASZ4VzV/74OhXgqSX2S6tFtzXS6sLpAL/usWSBUy6W3V8xhOKBkGVdDMtUIj/y/9JOp7L3ydBSnkH6cX2SWUUqA/1nb7BWnELNaUJfU9ikGZj0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789126660; c=relaxed/simple;
+	bh=c+LluMcVSXRAiFIKIAwbvNy4flUtA3RVmmij6cUH3Do=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=bSDXtqOlA+c0R/roBoC+6hUUuK2/h7N5NLvuJKfKu+9bCPKANqhObSiltHM7E9UshAQANNYN9RoG3OxMeJcAdtPRJ+MSToO5ciVI0K12gfcUvjN46bvUuhEnEFlzH7QCNh3Luk4sq1HE0BqG1ctZnrsqKjHt1I7lTHnXGtciO58=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=yFXWBvXl; arc=fail smtp.client-ip=52.101.62.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="WVKHKK2C"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D1E1416F2;
-	Fri, 11 Sep 2026 04:10:52 -0700 (PDT)
-Received: from a081061.blr.arm.com (a081061.arm.com [10.164.19.84])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DC3523F59E;
-	Fri, 11 Sep 2026 04:10:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1789125056; bh=9tmo7LnCa2gZ4wvu0gRKk4iwWl/CuwVoGBbOWdqP/EI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WVKHKK2CFRceqwP6ticU/SyBU/FGoDLRCcmtzTdsI2lPWtcXGHbIWX88nv7R0yBJA
-	 scGnq6iw62DmXaezxSuhbRbvjeR+vbMnJBddDfuHJkUajBaiCTfFIK52bGgQY68vdZ
-	 6SmcdkicYEKbBoyPttJuiYZxIhCO3JOArbrJ+CSo=
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Peter Xu <peterx@redhat.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Nico Pache <npache@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Mark Brown <broonie@kernel.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Muhammad Usama Anjum <usama.anjum@arm.com>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: [PATCH v10 6/6] selftests/mm: add a GUP selftest
-Date: Fri, 11 Sep 2026 16:39:50 +0530
-Message-ID: <20260911110950.200240-7-sarthak.sharma@arm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260911110950.200240-1-sarthak.sharma@arm.com>
-References: <20260911110950.200240-1-sarthak.sharma@arm.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="yFXWBvXl"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GhCTgb0MIyIOoFV0dpJ6d/vTLcjYlfxoYcLb4v0bkDTXbF5dlNuXN7pwBMZ5O/oni59J7obIDB8DyqBeTSKJ9YVZZK5IFK/ZZGhGcsVwH/oXOfpQZHAvq7VbiXFr0PjuLlkzrpqbDm0rTp3eVrhnqV5gx/dvQFWmjpqHrJZb67WzPgZjoueGFF9uN7SOKcIgAZ7uVC5fb4Awj/pR1mUGpxqIv8teW0glOymn7M1jnTtt+xZFVBSnxTPcmlNpMI9p4vxYC0wSEv3FLE2jzqv+yvxdlyVGdHCuDC8fcLK4roWDkb+VmYAelgxT1hH8bK9cg4gUz/1MkqymsB5qz1Aukg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=c+LluMcVSXRAiFIKIAwbvNy4flUtA3RVmmij6cUH3Do=;
+ b=RzCQlzyv4Rsja3Aqcyf4g7PefWkQpAiIAm2R2cAJUR0TS1z2LzbUhTaUsYQCOkFVqmIdOUjylEzlHc07I5qv3twlqjWH8jiPy+ctXEj33amh9X5M0LRFIir3v5Uyy6494qnC/h/ArTYXLrV+HaBBHt52J0A/UT6kKw2VzCI6i0v+CDoA/uxAyFKeVdsJOl7lhkLeT+MS6d3nG15pKOdJW/kItTj1GExhagRPBDV5+11Lp33LU/Uw0Utsoy5BQX9yJ5JUPmoVrRoRIEgPbTeTEQplbbnZtZ/oXEs/D8nzITFc0raeu1xrRqKPEh0t7dqTbgds7z+OikDkDF7Yy7rqvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=c+LluMcVSXRAiFIKIAwbvNy4flUtA3RVmmij6cUH3Do=;
+ b=yFXWBvXlsjehZ8EnzTAZUd07mMXMdFXFbXmD5Mzacvd5BORvinXr98BBdQvZAEYTQlpZ1qscn6fwvwP1t1inN1kPOAtWkAzSk9O4CYP7U7kID069aHlJD7uF2xwkhM8agkys7+uekjw+zOnMCRT+X5Uag9ttP8uPL+SrzXJWv4k=
+Received: from BN9PR12MB5259.namprd12.prod.outlook.com (2603:10b6:408:100::17)
+ by BN7PPF9507C739C.namprd12.prod.outlook.com (2603:10b6:40f:fc02::6da) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.7; Fri, 11 Sep
+ 2026 11:37:29 +0000
+Received: from BN9PR12MB5259.namprd12.prod.outlook.com
+ ([fe80::122c:cca7:c2b3:90ed]) by BN9PR12MB5259.namprd12.prod.outlook.com
+ ([fe80::122c:cca7:c2b3:90ed%2]) with mapi id 15.21.0406.005; Fri, 11 Sep 2026
+ 11:37:29 +0000
+From: "Garg, Shivank" <shivankg@amd.com>
+To: "Gupta, Pankaj" <Pankaj.Gupta@amd.com>, "Sampat, Pratik Rajesh"
+	<PratikRajesh.Sampat@amd.com>, "nikita.kalyazin@linux.dev"
+	<nikita.kalyazin@linux.dev>, "ying.huang@linux.alibaba.com"
+	<ying.huang@linux.alibaba.com>, "patrick.roy@linux.dev"
+	<patrick.roy@linux.dev>, "joshua.hahnjy@gmail.com" <joshua.hahnjy@gmail.com>,
+	"david@kernel.org" <david@kernel.org>, "pbonzini@redhat.com"
+	<pbonzini@redhat.com>, "jmattson@google.com" <jmattson@google.com>,
+	"hannes@cmpxchg.org" <hannes@cmpxchg.org>, "jack@suse.cz" <jack@suse.cz>,
+	"tglx@kernel.org" <tglx@kernel.org>, "Dadhania, Nikunj"
+	<nikunj.dadhania@amd.com>, "Roth, Michael" <Michael.Roth@amd.com>,
+	"corbet@lwn.net" <corbet@lwn.net>, "mhocko@suse.com" <mhocko@suse.com>,
+	"gourry@gourry.net" <gourry@gourry.net>, "iweiny@kernel.org"
+	<iweiny@kernel.org>, "chao.p.peng@linux.intel.com"
+	<chao.p.peng@linux.intel.com>, "byungchul@sk.com" <byungchul@sk.com>,
+	"x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+	"ricarkol@google.com" <ricarkol@google.com>, "vannapurve@google.com"
+	<vannapurve@google.com>, "shuah@kernel.org" <shuah@kernel.org>,
+	"seanjc@google.com" <seanjc@google.com>, "jackmanb@google.com"
+	<jackmanb@google.com>, "Kalra, Ashish" <Ashish.Kalra@amd.com>,
+	"willy@infradead.org" <willy@infradead.org>, "surenb@google.com"
+	<surenb@google.com>, "pshier@google.com" <pshier@google.com>,
+	"matthew.brost@intel.com" <matthew.brost@intel.com>, "fuad.tabba@linux.dev"
+	<fuad.tabba@linux.dev>, "skhan@linuxfoundation.org"
+	<skhan@linuxfoundation.org>, "hpa@zytor.com" <hpa@zytor.com>,
+	"mingo@redhat.com" <mingo@redhat.com>, "rakie.kim@sk.com" <rakie.kim@sk.com>,
+	"ackerleytng@google.com" <ackerleytng@google.com>, "apopple@nvidia.com"
+	<apopple@nvidia.com>, "ziy@nvidia.com" <ziy@nvidia.com>, "vbabka@kernel.org"
+	<vbabka@kernel.org>, "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+CC: "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"sashiko-bot@kernel.org" <sashiko-bot@kernel.org>, "linux-mm@kvack.org"
+	<linux-mm@kvack.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+Subject: Re: [PATCH v3 0/9] KVM: guest_memfd: folio migration for
+ non-confidential VMs
+Thread-Topic: [PATCH v3 0/9] KVM: guest_memfd: folio migration for
+ non-confidential VMs
+Thread-Index: AQHdJKVsctSiOu4P3kmuA1se5lvKxrbHzHmAgAGuE4A=
+Date: Fri, 11 Sep 2026 11:37:28 +0000
+Message-ID: <4f190c4bfd90ce93b6ebf898fc39371f8aa8e6ea.camel@amd.com>
+References: <20260805-shivank-gmem-migrate-v3-0-00d8bdec4e1d@amd.com>
+	 <0b8c746e-544b-4ec0-91dd-d5e10e1920dd@kernel.org>
+In-Reply-To: <0b8c746e-544b-4ec0-91dd-d5e10e1920dd@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR12MB5259:EE_|BN7PPF9507C739C:EE_
+x-ms-office365-filtering-correlation-id: fb542f87-fd0a-41a7-5f37-08df0ff90f6f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|366016|376014|7416014|23010399003|921020|6133799003|22082099003|18002099003|38070700021|11063799006|4143699003|56012099006|10067099003;
+x-microsoft-antispam-message-info:
+ OpU+tALy053nCp+hAGBFGUbKWJQQcP5H6a1Y/VRNHGCad9xn5MMM5rHDGIroFLhHZxAQ7Pv8WP+LH7DttTMoL2aIEfJliXdrOxhhp8h403THhesKNKgQt2fJBRAAJMdCsisC6eCxUewH7d0Vj1guhMOpLe0Zay9XVkYjxAMAHW2Rgao5pOvdzZ1IZskCt70tt/yM5AcdZYjn7ZUOzYu4dTK+8NrZSaXeJzKF8WC0dplBnLfZmm4B3pqRrVRmYgGIZQ2yc3NDKGhv1ZUDd69yev6YtgIYTbHjWJ6fRWW4bGf4Jur0N2tQlcDRfgh7XbUAVKg4svpXAfrZ8njIhLhqRHWFYUqbVWHLXqx73c/tKQB64+wQxsIAbXk1gQt+PwY2DhObxu0F8LgOztU+NdhMxRJtZyNQAOR6QQH7hwYjE1zs4SllL0tzbSLzRm4TQ7+F3ZTBxliVbrJ9XPbILVrjYnU4JIMWRjT1Xs+8uIrLIBMfD7ln/pa2iYRj/QtFdcyacSDROpp6uJgOKva92xZEgy3AOfaKHADw2GnNFsk7qBNBSiWx6lEVCdsLCdYk6Pjs5QO7G2ohcQMZBitThLi9k7Vgr4a9REAJgx5MMUFpJYoTarWC5a3ED44WiwpveUWM02aColq8lRJhJQohSoGUiK2JtbkA+JSNMsz9mdr/S2YT4XG6pXE/Yr0fR1yl1Wc/
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5259.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(23010399003)(921020)(6133799003)(22082099003)(18002099003)(38070700021)(11063799006)(4143699003)(56012099006)(10067099003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?YUVia0VBVS9GL3lITlY5dFgxMWFVb3N5OXRYMngyV1k5OGV2NHNDM0x5MUxZ?=
+ =?utf-8?B?YnAxT3VlamJzU2Zyd0MvRTRLOUpRU04wZTVLTElqL1JYbmUwNEl2cUJXdmNh?=
+ =?utf-8?B?bnB6akZVRzhWS2d0d3FiRE5ZdTdFcmRyZFA3VExsajRPR2d2TXdMc1JjTWJO?=
+ =?utf-8?B?UTVWMVFGTm1wME11VWZXc3dzMjJiQkl4UjVLWDB1R1FjblB6V3J3OStTMFF4?=
+ =?utf-8?B?dEZpaWVlditFeVhIbDJNbUFHT2lGdFI0T2RPVFhBVVdvWk1WZTcwMDcvU3Fh?=
+ =?utf-8?B?YXc4MEJFa21oR2pyVC8wUlhrNm5OVVVxdUJKSzIyUld2RUt6Q1prcWVkTWlX?=
+ =?utf-8?B?UnhIRXpKZkxRTGJUMVpZZ2tjT2wwRDN6RDk0VGxpWXFrd1loSzdyOUQxeFZ5?=
+ =?utf-8?B?TmlSbDdGU1pjTjVMUitjRGdEaEFoQmg1cDhTajcxVXljVjU1THh3OVRRWElt?=
+ =?utf-8?B?TmE1QUdMUDZxUDl1TmNSY3g3MTRrUC8raXRoQktvT05NNGpJVm5MeUtZV21Y?=
+ =?utf-8?B?aHhtK0IxUi9nL2VOS3hVTWFLcEdTR2hDczNJK1FjTUZ3N3JucHRxODc1NHZL?=
+ =?utf-8?B?aVRnRXUxcGFpeTZGaTZvOG9CZ1ZzMjVqZTFxaFpXaGI0TFVWWjAzTkp0Y3ky?=
+ =?utf-8?B?Y2N3UkZVdnhXNk1aZnU5Mmt2QjNudkM3TGNpY0JBUTcwT1dsbFppRUtpS1Qz?=
+ =?utf-8?B?RzNYakFDeHc2S0x0VGF3eFlzWmN1T0lDNjFDdmxteVptTGNjdU51QUhuSkxM?=
+ =?utf-8?B?NisvbHcxU1RSSTlJTWtIdXVuZUFHcWZieStTejdIREtEMnMvNVpHZUgvSGtj?=
+ =?utf-8?B?VFVNMmErekNCRy96TjZhR1IwM1NPcEU0Y0tSWlhTOTZOVktPRFU2anUzS2R0?=
+ =?utf-8?B?OFBwcDA2eXFOeVpVQ0JWck11bE9rWHVCaXBpR0RUNy9nTXpJbWxUdDBxZnVB?=
+ =?utf-8?B?MHk3eDZLazdaZGQ3SGs4SndKZnZKb2FTZmdndDcvY0wzZGRlTDEvUWd0VytS?=
+ =?utf-8?B?VEpjZXNpS0xGUEdMUlpiUXF2SVRLekROMERiNTJCK1llQytweWlPU3BFZEdw?=
+ =?utf-8?B?Tkh5YkJzNjFIQ085czRiWkMxa2VVdVlrakFVRkk3T0RoaFI1TkdCbWsxU3A3?=
+ =?utf-8?B?QWpUa2lVcGFsRjFGd2oyb2pSN0o5VjlpMGFXaDNkVHQ2R3lqNnFaZGZZQXVG?=
+ =?utf-8?B?WjZnMU50YWZLMnRkTVpPN21RekY1b0lhUjNqOFlXZW91K0xlTXdQUi81a3Ex?=
+ =?utf-8?B?NXJBa1NIWTUvKzUwb2RnWUdvcU9HRGZsbVlNUjBoVDdkWWRkeGcyUEdHMit4?=
+ =?utf-8?B?ODdpbCtSTXBOZTdBN2p4RERkUTViSEZqV0krZDhiWmpWdkZWdk94L0JRbDhy?=
+ =?utf-8?B?dDRHTGh5enVneUc3eXRPbXE3aUd2dnFCaisySEVtWm9oQVhQQkQvMW1wRlBO?=
+ =?utf-8?B?RVVnVG9oRWVPMm5Lcmt3Zk9hT1R0V1hHcVdJaDN4bDhySTI5dUJPR2VWeDI3?=
+ =?utf-8?B?aTVVdVVTaURnZzVOd1BUSm9XWm5Qa3d1VXhXSnFwYmo0RnpMRDNYQWZ5M1M4?=
+ =?utf-8?B?REcyVkREMmRKcUhGR1pPSVF2aWlyZE1HNFVzdGNtRm83Y2J1cnBYSDUyaWRN?=
+ =?utf-8?B?UmVndHBYOVQrMGFNUmk4Qnp4a1Z2TDNhMTdNQzdkZXp1Z3VNeXl3czVUcktN?=
+ =?utf-8?B?K3VkUDBqem5zdGwvaEZPMEtoSU9UaGlBV1ppS0N4dTZEQVZrOGsvVmYwc09j?=
+ =?utf-8?B?elhvVlVsNlNia09lWGkyTWp6T0ZMTUlxTDRFd0lkcHcvaVhXeHNxWVZJaWdT?=
+ =?utf-8?B?eHd2SGVoTU5ZbndtR1RrVWM1NnBIMkt4U2JUK3dNS0NtOEdub0haek9EZncr?=
+ =?utf-8?B?d2Y3L0V0VitwaFVBYmF0VWMrYlYrd1JSYVlCZHpBVG02OFhGaHMrV0lNZzFy?=
+ =?utf-8?B?Q3lVN2tHNEVHd0FOQzBqbjhSYmR2YWxUdGZna3NGV2txbzhaMWpCTzlpaU8x?=
+ =?utf-8?B?eDBBSkZkdlVzQ0VZdElYbUU5N1h6di9jbkE0clRrTkJpWEplVmVSWVpnL3Rz?=
+ =?utf-8?B?QWcvSDQ1bFpmQlZJYk5HNDZxd3Z2Qlc5OUtyY1NGVGEyaFZHRDdqK1k0M0Nj?=
+ =?utf-8?B?WjZWUVhQNHFFbTZBRlpHRFFjKzUxZTJJQjJQRGJxbDBtVVlXSTBObGR5a2Rz?=
+ =?utf-8?B?OXlGV3NsY210NWFza3hiTmgxcnVsc05XTjdqNmtSZXFZSzc0VTdtRnRGRi9i?=
+ =?utf-8?B?cThKbXNybmxPVkEwSCt0eHNPaHM0M0wrNzIrMlRYQ3RQVEZjVXlkN3ZUWXhY?=
+ =?utf-8?B?Z09uYVQyczh2ajJLdW1FZFZ2WTEySEp5OGU5MklBdGM4N2MzTStMZz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E8F764A7112A6A49B8C3C4C267BC7DF9@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5259.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fb542f87-fd0a-41a7-5f37-08df0ff90f6f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Sep 2026 11:37:29.0087
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: h4C8e+NBEBG6RgKMOUaoMLzAAgliW2vgSstx0nCLLTqCKrN6xs89HJbl6g0ZtRP9ayHQ+m126d84Qznl6qoZeA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PPF9507C739C
 
-Add a new GUP selftest which uses kselftest_harness.h. Cover
-12 mapping configurations: THP enabled, THP disabled and
-HugeTLB, each across private/shared mappings and with/without
-FOLL_WRITE. Run 5 test cases for every variant: get_user_pages,
-get_user_pages_fast, pin_user_pages, pin_user_pages_fast and
-pin_user_pages_longterm.
-
-Use two default hugeTLB pages and derive the mapping size from
-their size. This exercises GUP both within a single HugeTLB page
-and across a HugeTLB boundary, without reserving an excessive
-number of pages.
-
-Sweep four nr_pages_per_call values for each test: 1, 512, 123 and
-all pages. This preserves the coverage previously provided by
-run_gup_matrix(): 12 mapping combinations x 5 GUP/PUP operations x 4
-batch sizes. In total the selftest reports 60 TAP cases and issues
-240 ioctls.
-
-Do not carry DUMP_USER_PAGES_TEST into the new selftest because its
-output is written to the kernel log and the selftest does not verify
-that output.
-
-Add the new gup binary to the selftests/mm build, run_vmtests.sh and
-MAINTAINERS. Update mm/Kconfig to describe the benchmark and
-selftest split.
-
-Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
----
- MAINTAINERS                               |   1 +
- mm/Kconfig                                |  19 +-
- tools/testing/selftests/mm/Makefile       |   1 +
- tools/testing/selftests/mm/gup.c          | 263 ++++++++++++++++++++++
- tools/testing/selftests/mm/run_vmtests.sh |   1 +
- 5 files changed, 273 insertions(+), 12 deletions(-)
- create mode 100644 tools/testing/selftests/mm/gup.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cae3af861a7c..c47e655c4111 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17188,6 +17188,7 @@ F:	mm/gup.c
- F:	mm/gup_test.c
- F:	mm/gup_test.h
- F:	tools/mm/gup_bench.c
-+F:	tools/testing/selftests/mm/gup.c
- F:	tools/testing/selftests/mm/gup_longterm.c
- 
- MEMORY MANAGEMENT - KSM (Kernel Samepage Merging)
-diff --git a/mm/Kconfig b/mm/Kconfig
-index c180d40cd671..61ab1b8a2ebd 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -1291,24 +1291,19 @@ config PERCPU_STATS
- 	  be used to help understand percpu memory usage.
- 
- config GUP_TEST
--	bool "Enable infrastructure for get_user_pages()-related unit tests"
-+	bool "Enable infrastructure for get_user_pages()-related unit tests and benchmarks"
- 	depends on DEBUG_FS
- 	help
- 	  Provides /sys/kernel/debug/gup_test, which in turn provides a way
--	  to make ioctl calls that can launch kernel-based unit tests for
--	  the get_user_pages*() and pin_user_pages*() family of API calls.
-+	  to make ioctl calls that can launch kernel-based unit tests and
-+	  benchmarks for the get_user_pages*() and pin_user_pages*() families
-+	  of API calls.
- 
--	  These tests include benchmark testing of the _fast variants of
--	  get_user_pages*() and pin_user_pages*(), as well as smoke tests of
-+	  These include benchmark testing of the _fast variants of
-+	  get_user_pages*() and pin_user_pages*(), as well as tests of
- 	  the non-_fast variants.
- 
--	  There is also a sub-test that allows running dump_page() on any
--	  of up to eight pages (selected by command line args) within the
--	  range of user-space addresses. These pages are either pinned via
--	  pin_user_pages*(), or pinned via get_user_pages*(), as specified
--	  by other command line arguments.
--
--	  See tools/testing/selftests/mm/gup_test.c
-+	  See tools/testing/selftests/mm/gup.c and tools/mm/gup_bench.c.
- 
- comment "GUP_TEST needs to have DEBUG_FS enabled"
- 	depends on !GUP_TEST && !DEBUG_FS
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 11ca9b11fef1..9c03624fd293 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -58,6 +58,7 @@ endif
- 
- TEST_GEN_FILES = cow
- TEST_GEN_FILES += compaction_test
-+TEST_GEN_FILES += gup
- TEST_GEN_FILES += gup_longterm
- TEST_GEN_FILES += hmm-tests
- TEST_GEN_FILES += hugetlb-madvise
-diff --git a/tools/testing/selftests/mm/gup.c b/tools/testing/selftests/mm/gup.c
-new file mode 100644
-index 000000000000..31ae38e09136
---- /dev/null
-+++ b/tools/testing/selftests/mm/gup.c
-@@ -0,0 +1,263 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define __SANE_USERSPACE_TYPES__ // Use ll64
-+#include <fcntl.h>
-+#include <errno.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <dirent.h>
-+#include <sys/ioctl.h>
-+#include <sys/mman.h>
-+#include <mm/gup_test.h>
-+#include "vm_util.h"
-+#include "kselftest_harness.h"
-+
-+#define MB (1UL << 20)
-+
-+/* Just the flags we need, copied from the kernel internals. */
-+#define FOLL_WRITE	0x01	/* check pte is writable */
-+
-+/* Page counts exercising single, THP-batch, partial, and full-mapping GUP. */
-+static const int nr_pages_list[] = { 1, 512, 123, -1 };
-+
-+#define GUP_TEST_FILE "/sys/kernel/debug/gup_test"
-+#define NR_HUGE_PAGES 2
-+
-+static unsigned long hp_size;
-+
-+FIXTURE(gup_test)
-+{
-+	int gup_fd;
-+	char *addr;
-+	unsigned long size;
-+};
-+
-+FIXTURE_VARIANT(gup_test)
-+{
-+	bool thp;
-+	bool hugetlb;
-+	bool write;
-+	bool shared;
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_write)
-+{
-+	.thp = false,
-+	.hugetlb = false,
-+	.write = true,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_read)
-+{
-+	.thp = false,
-+	.hugetlb = false,
-+	.write = false,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_write_thp)
-+{
-+	.thp = true,
-+	.hugetlb = false,
-+	.write = true,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_read_thp)
-+{
-+	.thp = true,
-+	.hugetlb = false,
-+	.write = false,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_write_hugetlb)
-+{
-+	.thp = false,
-+	.hugetlb = true,
-+	.write = true,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_read_hugetlb)
-+{
-+	.thp = false,
-+	.hugetlb = true,
-+	.write = false,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_write)
-+{
-+	.thp = false,
-+	.hugetlb = false,
-+	.write = true,
-+	.shared = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_read)
-+{
-+	.thp = false,
-+	.hugetlb = false,
-+	.write = false,
-+	.shared = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_write_thp)
-+{
-+	.thp = true,
-+	.hugetlb = false,
-+	.write = true,
-+	.shared = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_read_thp)
-+{
-+	.thp = true,
-+	.hugetlb = false,
-+	.write = false,
-+	.shared = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_write_hugetlb)
-+{
-+	.thp = false,
-+	.hugetlb = true,
-+	.write = true,
-+	.shared = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_read_hugetlb)
-+{
-+	.thp = false,
-+	.hugetlb = true,
-+	.write = false,
-+	.shared = true,
-+};
-+
-+FIXTURE_SETUP(gup_test)
-+{
-+	int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS;
-+	char *p;
-+
-+	self->size = 128 * MB;
-+
-+	if (variant->hugetlb) {
-+		if (!hp_size)
-+			SKIP(return, "HugeTLB not available\n");
-+
-+		if (hugetlb_free_default_pages() < NR_HUGE_PAGES)
-+			SKIP(return, "Not enough huge pages\n");
-+
-+		self->size = NR_HUGE_PAGES * hp_size;
-+		mmap_flags |= MAP_HUGETLB;
-+	}
-+
-+	if (variant->shared)
-+		mmap_flags = (mmap_flags & ~MAP_PRIVATE) | MAP_SHARED;
-+
-+	/* gup_fd has to be >= 0. Already checked in main() */
-+	self->gup_fd = open(GUP_TEST_FILE, O_RDWR);
-+	ASSERT_GE(self->gup_fd, 0);
-+
-+	self->addr = mmap(NULL, self->size, PROT_READ | PROT_WRITE,
-+			  mmap_flags, -1, 0);
-+
-+	ASSERT_NE(self->addr, MAP_FAILED) {
-+		int err = errno;
-+
-+		close(self->gup_fd);
-+		TH_LOG("mmap failed: %s", strerror(err));
-+	}
-+
-+	if (variant->thp)
-+		madvise(self->addr, self->size, MADV_HUGEPAGE);
-+	else if (!variant->hugetlb)
-+		madvise(self->addr, self->size, MADV_NOHUGEPAGE);
-+
-+	for (p = self->addr; (unsigned long)p < (unsigned long)self->addr
-+			+ self->size; p += psize())
-+		p[0] = 0;
-+}
-+
-+FIXTURE_TEARDOWN(gup_test)
-+{
-+	munmap(self->addr, self->size);
-+	close(self->gup_fd);
-+}
-+
-+static void run_gup_cmd(struct __test_metadata *_metadata,
-+			 FIXTURE_DATA(gup_test) *self,
-+			 const FIXTURE_VARIANT(gup_test) *variant,
-+			 unsigned long command)
-+{
-+	int i;
-+
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = {
-+			.addr = (unsigned long)self->addr,
-+			.size = self->size,
-+			.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+				self->size / psize() : nr_pages_list[i],
-+			.gup_flags = variant->write ? FOLL_WRITE : 0,
-+		};
-+
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, command, &gup), 0);
-+		ASSERT_EQ(gup.size, self->size);
-+	}
-+}
-+
-+TEST_F(gup_test, get_user_pages)
-+{
-+	run_gup_cmd(_metadata, self, variant, GUP_BASIC_TEST);
-+}
-+
-+TEST_F(gup_test, pin_user_pages)
-+{
-+	run_gup_cmd(_metadata, self, variant, PIN_BASIC_TEST);
-+}
-+
-+TEST_F(gup_test, get_user_pages_fast)
-+{
-+	run_gup_cmd(_metadata, self, variant, GUP_FAST_BENCHMARK);
-+}
-+
-+TEST_F(gup_test, pin_user_pages_fast)
-+{
-+	run_gup_cmd(_metadata, self, variant, PIN_FAST_BENCHMARK);
-+}
-+
-+TEST_F(gup_test, pin_user_pages_longterm)
-+{
-+	run_gup_cmd(_metadata, self, variant, PIN_LONGTERM_BENCHMARK);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int fd;
-+
-+	fd = open(GUP_TEST_FILE, O_RDWR);
-+	if (fd == -1) {
-+		ksft_print_header();
-+		if (errno == EACCES)
-+			ksft_exit_skip("Please run this test as root\n");
-+		if (errno == ENOENT) {
-+			DIR *debugfs = opendir("/sys/kernel/debug");
-+
-+			if (!debugfs)
-+				ksft_exit_skip("Mount debugfs at /sys/kernel/debug\n");
-+			closedir(debugfs);
-+			ksft_exit_skip("Check CONFIG_GUP_TEST in kernel config\n");
-+		}
-+		ksft_exit_fail_msg("Failed to open %s: %s\n", GUP_TEST_FILE, strerror(errno));
-+	}
-+	close(fd);
-+
-+	hp_size = default_huge_page_size();
-+	if (hp_size)
-+		hugetlb_setup_default(NR_HUGE_PAGES);
-+
-+	return test_harness_run(argc, argv);
-+}
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 8f1e828e4f39..ae0ab5efabae 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -251,6 +251,7 @@ fi
- 
- CATEGORY="mmap" run_test ./map_fixed_noreplace
- 
-+CATEGORY="gup_test" run_test ./gup
- CATEGORY="gup_test" run_test ./gup_longterm
- 
- CATEGORY="userfaultfd" run_test ./uffd-unit-tests
--- 
-2.53.0
-
+T24gVGh1LCAyMDI2LTA5LTEwIGF0IDExOjU4ICswMjAwLCBEYXZpZCBIaWxkZW5icmFuZCAoQXJt
+KSB3cm90ZToNCj4gT24gOC81LzI2IDA4OjQwLCBTaGl2YW5rIEdhcmcgd3JvdGU6DQo+ID4gZ3Vl
+c3RfbWVtZmQgZm9saW9zIGFyZSBjdXJyZW50bHkgYWx3YXlzIG1hcmtlZCB1bm1vdmFibGUsIHNv
+IHRoZSBrZXJuZWwgY2Fubm90DQo+ID4gcGVyZm9ybSBtZW1vcnkgY29tcGFjdGlvbiwgb2ZmbGlu
+aW5nLCBldGMuIFRoaXMgaXMgdW5hdm9pZGFibGUgZm9yDQo+ID4gY29uZmlkZW50aWFsIFZNcyAo
+U0VWLVNOUCwgVERYKSwgc2luY2UgbWVtb3J5IGlzIGVuY3J5cHRlZCBhbmQgY29weWluZyBpdA0K
+PiA+IG5lZWRzIGZpcm13YXJlIGFzc2lzdGFuY2UuIEhvd2V2ZXIsIGZvciBub24tY29uZmlkZW50
+aWFsIFZNcyAobGlrZQ0KPiA+IEZpcmVjcmFja2VyKSwgd2UgY2FuIG1pZ3JhdGUgdGhlIGZvbGlv
+cy4NCj4gDQo+IFllcy4NCj4gDQo+ID4gDQo+ID4gVGhpcyBzZXJpZXMgZW5hYmxlcyBmb2xpbyBt
+aWdyYXRpb24gZm9yIG5vbi1jb25maWRlbnRpYWwgZ3Vlc3RfbWVtZmQgYW5kDQo+ID4gYWxzbyBs
+YXlzIHRoZSBncm91bmR3b3JrIGZvciBtaWdyYXRpbmcgY29uZmlkZW50aWFsIGd1ZXN0X21lbWZk
+IGxhdGVyLg0KPiA+IE9uY2UgZmlybXdhcmUtYXNzaXN0ZWQgY29weWluZyBzdXBwb3J0IGlzIGF2
+YWlsYWJsZSwgdGhvc2UgVk1zIGNhbiBiZQ0KPiA+IG1hZGUgbW92YWJsZSwgdGhlIGNvbmZpZGVu
+dGlhbCBmb2xpbyBjb250ZW50IGNhbiBiZSBjb3BpZWQgc2VwYXJhdGVseSwNCj4gPiBhbmQgdGhl
+IGRlc3RpbmF0aW9uIGZvbGlvIG1hcmtlZCB3aXRoIEZPTElPX0NPTlRFTlRfQ09QSUVEWzRdIHNv
+DQo+ID4gX19taWdyYXRlX2ZvbGlvKCkgc2tpcHMgdGhlIGhvc3Qtc2lkZSBmb2xpb19tY19jb3B5
+KCkuDQo+ID4gDQo+ID4gVGVzdGluZw0KPiA+IC0tLS0tLS0NCj4gPiBIb3N0OiA3LjItcmM2Kyhj
+MjFiYjQxOTM4NikgKyB0aGlzLCBBTUQgRVBZQyBaRU4gMywgMiBOVU1BIG5vZGVzDQo+ID4gDQo+
+ID4gLSBLVk0gc2VsZnRlc3Q6IGFsbG9jYXRlIGZvbGlvcyBvbiBub2RlIDAsIG1pZ3JhdGUgdGhl
+bSB0byBub2RlIDEgYW5kDQo+ID4gICBiYWNrIGFuZCB2ZXJpZnkgcmVzdWx0aW5nIE5VTUEgbm9k
+ZSBhbmQgdGhlIGZvbGlvIGNvbnRlbnRzIGF0IGVhY2gNCj4gPiAgIHN0ZXAuDQo+ID4gDQo+ID4g
+LSBGaXJlY3JhY2tlciBbMV06IGJvb3RlZCBhIG1pY3JvVk0gYmFja2VkIGJ5IGd1ZXN0X21lbWZk
+LiBXaGlsZSB0aGUNCj4gPiAgIGd1ZXN0IHdhcyBydW5uaW5nLCBmb3JjZWQgaG9zdC1zaWRlIG1p
+Z3JhdGlvbiBvZiBpdHMgZm9saW9zIHZpYQ0KPiA+ICAgbWlncmF0ZXBhZ2VzKDgpIGFuZCBleHBs
+aWNpdCBtb3ZlX3BhZ2VzKDIpIG9mIGd1ZXN0X21lbWZkDQo+ID4gICBwYWdlcy4gVmVyaWZ5IHdp
+dGggL3Byb2MvZmlyZWNyYWNrZXJfcGlkL251bWFfbWFwcy4NCj4gPiANCj4gPiBOb3Rlcw0KPiA+
+IC0tLS0tDQo+ID4gLSBTYXNoaWtvIHBvaW50ZWQgb3V0IGEgcHJlLWV4aXN0aW5nIEFCQkEgZGVh
+ZGxvY2sgYmV0d2Vlbg0KPiA+ICAga3ZtX2dtZW1fZXJyb3JfZm9saW8oKSBhbmQgdHJ1bmNhdGlv
+bi4gSXQncyBiZWluZyBhZGRyZXNzZWQgc2VwYXJhdGVseQ0KPiA+ICAgYnkgSGFvIFpoYW5nLiBb
+Ml1bM10NCj4gPiANCj4gPiBbMV0gaHR0cHM6Ly9naXRodWIuY29tL2ZpcmVjcmFja2VyLW1pY3Jv
+dm0vZmlyZWNyYWNrZXIvdHJlZS9mZWF0dXJlL3NlY3JldC1oaWRpbmcNCj4gPiAgICAgSW4gYnVp
+bGRlci5ycywgYWRkIEdVRVNUX01FTUZEX0ZMQUdfTUlHUkFUQUJMRSB0byBiaXQtMiBhbmQgcGFz
+cyBpdCBpbnN0ZWFkDQo+ID4gICAgIG9mIEdVRVNUX01FTUZEX0ZMQUdfTk9fRElSRUNUX01BUCB0
+byB2bS5jcmVhdGVfZ3Vlc3RfbWVtZmQoKS4NCj4gPiBbMl0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5v
+cmcvYWxsL2FtYkVkU1BqZXJaSVZOMGJAMTkyLjE2OC4xLjIxNS8NCj4gPiBbM10gaHR0cHM6Ly9z
+YXNoaWtvLmRldi8jL3BhdGNoc2V0LzIwMjYwNjExLXNoaXZhbmstZ21lbS1taWdyYXRlLXYxLTAt
+MmQyNjZiZmM2Zjk1JTQwYW1kLmNvbQ0KPiA+IFs0XSBodHRwczovL2xvcmUua2VybmVsLm9yZy9h
+bGwvMjAyNjA2MzAtc2hpdmFuay1iYXRjaC1taWdyYXRlLW9mZmxvYWQtdjYtMS1kYTk1ZDdlOGI4
+YTJAYW1kLmNvbQ0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IFNoaXZhbmsgR2FyZyA8c2hpdmFu
+a2dAYW1kLmNvbT4NCj4gPiAtLS0NCj4gPiBDaGFuZ2VzIGluIHYzOg0KPiA+IC0gRml4IHVuYmFs
+YW5jZWQgbW11X2ludmFsaWRhdGVfaW5fcHJvZ3Jlc3MgY291bnQgdW5iaW5kaW5nIGR5aW5nIGd1
+ZXN0X21lbWZkLiAoU2FzaGlrbykNCj4gPiAtIEZpeCBtYXhub2RlIGhhbmRsaW5nIGluIHhhcGlj
+X2lwaV90ZXN0IHNlbGZ0ZXN0Lg0KPiA+IC0gQWRkIEdVRVNUX01FTUZEX0ZMQUdfTUlHUkFUQUJM
+RSBkb2N1bWVudGF0aW9uDQo+ID4gLSBSZXBsYWNlIG9wZW4tY29kZWQgc2l6ZW9mKCkgKiA4IGNh
+bGN1bGF0aW9uIHdpdGggQklUU19QRVJfVFlQRSgpDQo+ID4gLSBBZGQgZ2V0X251bWFfbWVtX25v
+ZGVzKCkgYW5kIHVzZSAgTVBPTF9GX01FTVNfQUxMT1dFRCBmb3IgYWxsb3dlZCBOVU1BIG5kb2Vz
+DQo+ID4gICBpbnN0ZWFkIG9mIGhhcmRjb2RlZCBOVU1BIG5vZGUgSURzLiAoU2FzaGlrbykNCj4g
+PiAtIEV4dGVuZCBtaWdyYXRpb24gc2VsZnRlc3QgdG8gdmVyaWZ5IHJlamVjdGlvbiB3aXRob3V0
+IE1JR1JBVEFCTEUgZmxhZyBhbmQNCj4gPiAgIG1vdmUgcmVwZWF0ZWQgY2hlY2tzIGludG8gY29t
+bW9uIGhlbHBlcnMuDQo+ID4gLSBEcm9wIFJGQyB0YWcuDQo+ID4gLSBMaW5rIHRvIHYyOiBodHRw
+czovL2xvcmUua2VybmVsLm9yZy9yLzIwMjYwNzI4LXNoaXZhbmstZ21lbS1taWdyYXRlLXYyLTAt
+MjY5YWMxZjg0ZTJiQGFtZC5jb20NCj4gPiANCj4gPiBDaGFuZ2VzIGluIHYyOg0KPiA+IC0gTWFr
+ZSBmb2xpbyBtaWdyYXRpb24gb3B0LWluIHRocm91Z2ggR1VFU1RfTUVNRkRfRkxBR19NSUdSQVRB
+QkxFLA0KPiA+ICAgcHJlc2VydmluZyB1bm1vdmFibGUgYmVoYXZpb3IgaWYgdXNlcnNwYWNlIGRv
+bid0IGV4cGxpY3RseSBhc2suIChBbGV4YW5kcnUsIERhdmlkLCBTZWFuKQ0KPiA+IC0gQWRkIGt2
+bV9hcmNoX3N1cHBvcnRzX2dtZW1fbWlncmF0aW9uKCkgc28gYXJjaCBjYW4gY29udHJvbCB3aGV0
+aGVyDQo+ID4gICBHVUVTVF9NRU1GRF9GTEFHX01JR1JBVEFCTEUgaXMgYWR2ZXJ0aXNlZC4NCj4g
+PiAtIEFsbG9jYXRlIG1vdmFibGUgZm9saW9zIHdpdGggR0ZQX0hJR0hVU0VSX01PVkFCTEUuIChE
+YXZpZCkNCj4gPiAtIEtlZXAgZ3Vlc3RfbWVtZmQgdW5ldmljdGFibGUuIChEYXZpZCwgU2FzaGlr
+bywgU2VhbikNCj4gPiAtIFNwbGl0IG1pZ3JhdGVfZm9saW8oKSBpbXBsZW1lbnRhdGlvbiBhbmQg
+ZW5hYmxlbWVudCBhcyBzZXBhcmF0ZSBwYXRjaGVzLg0KPiA+IC0gVXBkYXRlIHNlbGZ0ZXN0IHdp
+dGggbmV3IGZsYWcuDQo+ID4gLSBMaW5rIHRvIHYxOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9y
+LzIwMjYwNjExLXNoaXZhbmstZ21lbS1taWdyYXRlLXYxLTAtMmQyNjZiZmM2Zjk1QGFtZC5jb20N
+Cj4gPiANCj4gPiAtLS0NCj4gPiBTaGl2YW5rIEdhcmcgKDkpOg0KPiA+ICAgICAgIEtWTTogZ3Vl
+c3RfbWVtZmQ6IHRha2UgdGhlIGludmFsaWRhdGUgbG9jayB3aGVuIHVuYmluZGluZyBhIGR5aW5n
+IGZpbGUNCj4gPiAgICAgICBtbTogc3BsaXQgQVNfVU5NT1ZBQkxFIGJhY2sgb3V0IG9mIEFTX0lO
+QUNDRVNTSUJMRQ0KPiA+ICAgICAgIEtWTTogZ3Vlc3RfbWVtZmQ6IGltcGxlbWVudCBmb2xpbyBt
+aWdyYXRpb24gZm9yIG5vbi1jb25maWRlbnRpYWwgVk1zDQo+ID4gICAgICAgS1ZNOiBndWVzdF9t
+ZW1mZDogYWRkIEdVRVNUX01FTUZEX0ZMQUdfTUlHUkFUQUJMRQ0KPiANCj4gDQo+IEFzIGRpc2N1
+c3NlZCwgd2Ugc2hvdWxkIGZvciBub3cganVzdCBhbHdheXMgZW5hYmxlIGl0IGFuZCBub3QgZXhw
+b3NlIHN1Y2ggYQ0KPiBmbGFnLiBUaGUgaG9wZSBpcyB0aGF0IHVzZSBjYXNlcyB0aGF0IG5lZWQg
+bWlncmF0aW9uIGRpc2FibGVkIGNhbiBqdXN0IGZpbmQgYQ0KPiB3YXkgZm9yIGt2bSB0byB0ZWxs
+IGd1ZXN0X21lbWZkIGFib3V0IHRoYXQgaW50ZXJuYWxseSAuLi4gb3Igd2UnbGwgYWRkIGENCj4g
+R1VFU1RfTUVNRkRfRkxBR19VTk1JR1JBVEFCTEUgb3Igd2hhdGV2ZXIgbGF0ZXIuDQo+IA0KDQpT
+dXJlLCBtYWtlcyBzZW5zZS4NCkknbGwgZHJvcCBHVUVTVF9NRU1GRF9GTEFHX1VOTUlHUkFUQUJM
+RS4NCg0KPiBXaXRoIG1pZ3JhdGlvbiBpbiBwbGFjZSwgYXMgYWxzbyBkaXNjdXNzZWQsIGl0IHdv
+dWxkIGJlIGludGVyZXN0aW5nIHRvDQo+IGludmVzdGlnYXRlIHdoYXQgaXQgd291bGQgdGFrZSBm
+b3IgdGhlc2Ugc2hhcmVkLW9ubHkgKG5vIGNvbnZlcnNpb24pIGFuZA0KPiBtaWdyYXRhYmxlIGd1
+ZXN0X21lbWZkIGluc3RhbmNlcyB0byBzdXBwb3J0IFRIUHMuDQo+IA0KPiBJJ2QgYXNzdW1lIHdl
+IG1pZ2h0IGhhdmUgdG8gdGVhY2gNCj4gDQo+IDEpIGd1ZXN0X21lbWZkIC8gS1ZNIHBhcnRzIGFi
+b3V0IHRoaXMsIGFsdGhvdWdoIEkgcmVjYWxsIHRoYXQgbW9zdCBvZiBpdCBzaG91bGQNCj4gYmUg
+dGhlcmUNCj4gDQo+IDIpIFVubG9jayBndWVzdF9tZW1mZCBpbiBraHVnZWFwZ2VkDQo+IA0KPiBX
+ZSBkaXNhbGxvd2VkIGtodWdlcGFnZWQgZW50aXJlbHkgaW4gY29tbWl0DQo+IA0KPiBjb21taXQg
+ZGQwODVmZTlhOGViZmM1ZDEwMzE0YzYwNDUyZGIzOGQyYjc1ZTYwOQ0KPiBBdXRob3I6IERlZXBh
+bnNodSBLYXJ0aWtleSA8a2FydGlrZXk0MDZAZ21haWwuY29tPg0KPiBEYXRlOiAgIFNhdCBGZWIg
+MTQgMDU6NDU6MzUgMjAyNiArMDUzMA0KPiANCj4gICAgIG1tOiB0aHA6IGRlbnkgVEhQIGZvciBm
+aWxlcyBvbiBhbm9ueW1vdXMgaW5vZGVzDQo+IA0KPiAgICAgZmlsZV90aHBfZW5hYmxlZCgpIGlu
+Y29ycmVjdGx5IGFsbG93cyBUSFAgZm9yIGZpbGVzIG9uIGFub255bW91cyBpbm9kZXMNCj4gICAg
+IChlLmcuIGd1ZXN0X21lbWZkIGFuZCBzZWNyZXRtZW0pLiBUaGVzZSBmaWxlcyBhcmUgY3JlYXRl
+ZCB2aWENCj4gICAgIGFsbG9jX2ZpbGVfcHNldWRvKCksIHdoaWNoIGRvZXMgbm90IGNhbGwgZ2V0
+X3dyaXRlX2FjY2VzcygpIGFuZCBsZWF2ZXMNCj4gICAgIGlub2RlLT5pX3dyaXRlY291bnQgYXQg
+MC4gQ29tYmluZWQgd2l0aCBTX0lTUkVHKGlub2RlLT5pX21vZGUpIGJlaW5nDQo+ICAgICB0cnVl
+LCB0aGV5IGFwcGVhciBhcyByZWFkLW9ubHkgcmVndWxhciBmaWxlcyB3aGVuDQo+ICAgICBDT05G
+SUdfUkVBRF9PTkxZX1RIUF9GT1JfRlMgaXMgZW5hYmxlZCwgbWFraW5nIHRoZW0gZWxpZ2libGUg
+Zm9yIFRIUA0KPiAgICAgY29sbGFwc2UuDQo+IA0KPiBJdCB3aWxsIGFsc28gYmUgaW50ZXJlc3Rp
+bmcgdG8gZmlndXJlIG91dCBob3cgd2VsbCBraHVnZXBhZ2VkIHdvdWxkIGNvbGxhcHNlDQo+IGd1
+ZXN0X21lbWZkIHdoZW4gbW9zdCBmb2xpb3MgYXJlIG5vdCBhY3R1YWxseSBmYXVsdGVkIGludG8g
+dGhlIHVzZXIgcGFnZSB0YWJsZXMuDQo+IA0KPiBjb2xsYXBzZV9zY2FuX2ZpbGUoKSBkb2VzIG5v
+dCBzZWVtIHRvIHdvcnJ5IGFib3V0IHdoZXRoZXIgZm9saW9zIGFyZSBhY3R1YWxseQ0KPiBtYXBw
+ZWQsIGp1c3QgaWYgdGhleSBhcmUgcHJlc2VudCBpbiB0aGUgcGFnZSBjYWNoZS4NCj4gDQo+IFdo
+aWNoIG1pZ2h0IG1lYW4gdGhhdCBhcyBsb25nIGFzIGd1ZXN0bWVtZmQgaXMgbW1hcCdlZCwgaXQg
+bWlnaHQganVzdCB3b3JrLg0KDQpUaGFua3MgZm9yIHRoZSBwb2ludGVycy4NCkknbGwgdGhpbmsg
+YWJvdXQga2h1Z2VwYWdlZCBpbXBsZW1lbnRhdGlvbiBmb3IgdGhpcy4NCg0KQmVzdCByZWdhcmRz
+LA0KU2hpdmFuaw0KDQo=
