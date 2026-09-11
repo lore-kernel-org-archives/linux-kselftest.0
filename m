@@ -1,63 +1,63 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE294A013F
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 16:07:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EFC94A1E17
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 16:07:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789142825; cv=none; b=FTPDue9g7OA8vFJS/XX9j4HuPuvB1zKjvV9hNbT7iTxJ8Hk3/oeP8Dr9OxFkesiRcWnUFccrf4xPR4hYi0GOtx8tZyhc74aK8try2pHZXIqDz233tOTmEqnjkN3g0tVs2vl0HQhQGpaaqaswsG7Npob4WoZAnWDePzd7lwFzSbw=
+	t=1789142830; cv=none; b=GQgx/AHDyBM0i9H6HAMnYLyt54NTg5mgYoQDGwtzf38iucm2TxCpknyihPVAn/bezh4mamYyUlAFCEY0g0FYlvlw90EUzRAQQA8Jcn1wHjhsd3OUkEL8/8slAg9tTJo/5FGGbmqGSvOGjBC8ihaCp9tc+cgepVNg8epboSTUDqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789142825; c=relaxed/simple;
-	bh=a73nlWUpFLqK5BIq+RCvdpji6ixUwx/paZfTWdzUUB8=;
+	s=arc-20240116; t=1789142830; c=relaxed/simple;
+	bh=d0b26vmiDa6XjATQQbrbQCkSzbGsH3WL8tT83agm6AA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Z/+O8pVi2X5I5YGl8BTA+CabRGHFR/gx9Quw0DkgXmk1oR/RAaVQoCcAj3YkrEAcOkVWubcHiRonJpdqKsl0pM1zpNZgOiWqOs0TPmbNV8LxI0YmHNYO25nEHL5ykkdJQFOs+KVj11dNJ9ySSzkIt00FtXoKquNcYRj5UOD57LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gs.ncku.edu.tw; spf=pass smtp.mailfrom=gs.ncku.edu.tw; dkim=pass (2048-bit key) header.d=gs-ncku-edu-tw.20251104.gappssmtp.com header.i=@gs-ncku-edu-tw.20251104.gappssmtp.com header.b=R3WD5xj+; arc=none smtp.client-ip=209.85.214.178
+	 MIME-Version; b=qyYIs4o+6GWdmZQWs3NjK7B7k3JvJdK+pSVvw4w2fRw+B9dE8hen2Sw3RFWTi9EmNXhgfsGXHwHJPauuGUvAzN9jYPRLL//dp53ZiQekEIcC1Btn075Lfm28DzDtXZVjVV10dGvntcK1RtQgZLtqInxe12HmjU3XSO0oxyH/Pt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gs.ncku.edu.tw; spf=pass smtp.mailfrom=gs.ncku.edu.tw; dkim=pass (2048-bit key) header.d=gs-ncku-edu-tw.20251104.gappssmtp.com header.i=@gs-ncku-edu-tw.20251104.gappssmtp.com header.b=a4Sjrt5n; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gs.ncku.edu.tw
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gs.ncku.edu.tw
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gs-ncku-edu-tw.20251104.gappssmtp.com header.i=@gs-ncku-edu-tw.20251104.gappssmtp.com header.b="R3WD5xj+"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2dcff8f44f2so14863965ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 09:07:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gs-ncku-edu-tw.20251104.gappssmtp.com header.i=@gs-ncku-edu-tw.20251104.gappssmtp.com header.b="a4Sjrt5n"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2db710396ffso19769555ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 09:07:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gs-ncku-edu-tw.20251104.gappssmtp.com; s=20251104; t=1789142822; x=1789747622; darn=vger.kernel.org;
+        d=gs-ncku-edu-tw.20251104.gappssmtp.com; s=20251104; t=1789142828; x=1789747628; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=e2pCUaRthzuM/aWjTr8lb/B8fTUBfn+Ec5IEGb7Sxaw=;
-        b=R3WD5xj+NEJWhpkZHQuer4e4w9OO+aCtG4OkcHJ3mY8kawD+83vgD5XI3TzfTrye4N
-         Gvfmne8fHr9TurUYFVzHceEB/3tY5o6NDH39kPalvFzwd+q6x9LZzeOtrxP7fmPruQKK
-         t7yef9P16tXKv9MttNpOFmra9L2AYeorMnFnVkX/bc71/hozRMM+kG+9/n8eZsQt/QKO
-         4BCL9bciwRItZftUQMI3Sr+lAklT8gT4QoUwT2vgFnVRumuRRNeb5NVnOx2doApvm6A2
-         o7/NINpqpTuWki5MXhzgFaQl1adoR5UrLdNfPc/ZzveGQ49Evi3a9uKOCi3HzGp2s9nh
-         4D5g==
+        bh=AtfvJ4AyUB763MDcXdj9s80UgaBQitUqnV2ZMujP4B0=;
+        b=a4Sjrt5nJQXK6KOXRiSTmXJ8jd1Bfarx5Hf0Qx6EwcT2jFjo199FRfj7epQINyvs5/
+         qHjlSsqXkBJwTcH4lidzpBDjBa4b9EGtXjJ+NjpzoyWlD1XczPYumXvBIL8dxDp3bOsM
+         ZneiWRJAAgUnwi/9k24eXY8OaE/IoOzroCUmeKGi7oaHNcz20RZ5ZcXkxxq5YXiQoMLj
+         +4nG8EboqM/hAuMnV0o7aSb0nniyG/gsa1XrVSbzQFR/I3MsQiSPD0mF8ViKXj15dQZ/
+         LWHmgnKtGCk8arW6NxvhnNIMJCeS9IW9xnVS9NFOHdLAys9A7BZl5g3a2czJKctl2NRr
+         slmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789142822; x=1789747622;
+        d=1e100.net; s=20251104; t=1789142828; x=1789747628;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=e2pCUaRthzuM/aWjTr8lb/B8fTUBfn+Ec5IEGb7Sxaw=;
-        b=RRCxH8XP87Av1gkqmN8akgy6PxQFvUG7HskI4wwIyEAsiG63Ju0HZxKqSwY9zQIumQ
-         +l1g4gxVh0kpOqUbqS+7pwFFA9/CiVsDVy6ub9E0rmFZPOX7l4rl4G60UEcpF+KH9h/N
-         SlwAOOhkteDp5/KMoMFLdtsPAuuoiDiK8aIrHgogVmkq9CcDVFiqtARhlKvRcikXgRMI
-         yQYDmrJpCAxCPHfbcg+r8g8/iFanqCkg/MtcSrWmfnGkzZgYp0S/FADp1wKmMV198HTg
-         EORdG8m+Od0IK+hG0vUlM7mkMA1XvKWAeb9prlo5rKWhPzbbKMJaf8aViCMdlh31z3rn
-         n9Ww==
-X-Gm-Message-State: AFuF++mpDWx90eXB9Tpf0fJVQDUrcStHa0b4LNoZG8rVL+h17AsXaAbs
-	ujxnElJsPBCXCPXJQSaphNo0H57Ogi2CjHuNPVa5CtQNryUa4Ku/sibjc9csMKzi2ls=
-X-Gm-Gg: AYBFou06mrFs5CzU5K6GcKlqKJDdlv6RGshPgkEojEq+YmTnvE9G8qNh+8KWEHZnzsu
-	3gaW2pkMbom+F9L+z9mTVUvYIMmgufKYOK6YpwaE1R1/LV471kHCmmV5UHOzg5hFuBao4+lpZIp
-	ognFy1tpBeXmRvJ2JaKMrmSMXTZm2ftFMxbUn0tbTs3cpb5aMp26JsZ0zvGwUwFel636TPFXN+M
-	ixDsltq5rVypsTODtTt/qnestWBDRu1oIE4xVqh5kvPxIYSuWsH8fl7aPeCAGgRsWwwT5hVZbYQ
-	r6FsUYWu05AwQXOkzxObDALb0nhI4hco0cnbpSqz5fCPwkxYhTlRl+IsM/mOc7+b3eJzT5zSseX
-	WZZga+B7+MQ67lzwC6cvFpAeTaT5somF0CY2He8DksNnG08rH0mZQTn89bxTMlDtjiiPjPgE29A
-	aKI2JZUmgMrjHPecss//QrrNMJ7ccziWQwQ4zHw4O60LfkpfIxo1GVI0Fth5IHtTNvZbn/JLXZU
-	h7lOLBqNRcZAVb06Xbx2fP8TirtnCvZKFoKnZhcPOs+wdDy+aTwmt3e0jk=
-X-Received: by 2002:a17:902:d484:b0:2d8:d4cc:5bb1 with SMTP id d9443c01a7336-2dd2a350491mr83902715ad.17.1789142822209;
-        Fri, 11 Sep 2026 09:07:02 -0700 (PDT)
+        bh=AtfvJ4AyUB763MDcXdj9s80UgaBQitUqnV2ZMujP4B0=;
+        b=LTLl1ve1jf2gRUO1SwjzjAw2h5tWNjrmGc7pwbzdgILG9mYoaSUnz+NyUd5p+JeKpb
+         e8ljDA13fmsqR4rryHsjQQKFtgiW7AciSd/UqMmfXGN/3kFbhKIPvpo9YomKEM85ba7f
+         lmyLBFteEMa1DoW0zaY018BYF2aAwme5M7Q71sGatdmSoCnP6OJuTj4AQnzJglZ8SbW0
+         o0X2PfMgHn93a62HJ1oqWdjxHL96jK8FmlrhE8PgJ1nlYaVc7LtgdTrmYOuFQ5sZZ2R9
+         6Qov9a09ZW8UQ4Ld5HOsA9DTlL7Zcrb+O3XGPv/yQu/1HXB1pgXrodtIpYJ4MuMfPYJz
+         KKqA==
+X-Gm-Message-State: AFuF++noGi/5Aofa2x7Esk49zTaa5EMRm0FJD+chv6FmtnSUAQJhDesJ
+	ef90n0zsE8pKviwi/HpQXsr7WF2XSirkBrh2Y2Wk7Q2YGsH4LZ1EC1IIM8Yo2UkY6yE=
+X-Gm-Gg: AYBFou0ndbKjuJsRjJlLO5uEJ2YVbi6rQc2EP/BacEYoYFsfJ32T0UNKec8pfDDKbm9
+	7rX8Fk/EfPbX0jGR76RneLs0eCGcGT069/J7cjxIk74PB5Qa3Mr2LdtV4sKMhE3JCcn9vDt5+le
+	b5G6FtoN+MSMRLGiL7Sbnhd09rP9+G2GGi+r1kLsahl4FLIFq816K8e08Qj5qGzex6TF52q/RV8
+	i3jSnngJcwSV6PqefN9JScTJbYgb4oBbhFn+wBwHI+SaO7BmoPQB0FnF/umGTbqDSTO2v47ezkk
+	zBC4JeLlpgAdjNzM18w2RizifyGu896J5/d0LyUJoqWtxT0DCFjI7O/SAi7Vu1glcmDnYsxlUJW
+	5xAjvTDbFe6Af/pO/M/BXYiaSZ5F+dxJiK0wH9GOGvpTNmvyPe+tPaPlO4tfgoaPwTNnRV6N5/Q
+	4CM0LUD66ql8CpLL8kZ1rlQ5Ce5NwzVxB0aIS2hqIgpubTzJxLn4QAM5yYMhQEJ2DzBSzIuHNJH
+	cWEQWM0/TWXHhWJF7KUocQRkJhkDj1FHjHToBc8fg+3d2280wUNDZCcIw==
+X-Received: by 2002:a17:903:3d10:b0:2d7:5da6:2af4 with SMTP id d9443c01a7336-2dd0e8a4603mr107761555ad.4.1789142827893;
+        Fri, 11 Sep 2026 09:07:07 -0700 (PDT)
 Received: from localhost.localdomain (111-240-145-155.dynamic-ip.hinet.net. [111.240.145.155])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd2cfcefb6sm13883055ad.56.2026.09.11.09.06.59
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd2cfcefb6sm13883055ad.56.2026.09.11.09.07.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 09:07:01 -0700 (PDT)
+        Fri, 11 Sep 2026 09:07:06 -0700 (PDT)
 From: shuo huang <f64116045@gs.ncku.edu.tw>
 To: netdev@vger.kernel.org
 Cc: linux-kselftest@vger.kernel.org,
@@ -70,9 +70,9 @@ Cc: linux-kselftest@vger.kernel.org,
 	shuah@kernel.org,
 	jiayuan.chen@linux.dev,
 	f64116045@gs.ncku.edu.tw
-Subject: [PATCH net-next v2 1/2] selftests: net: Add TCP payload verification to udpgso_bench_rx
-Date: Sat, 12 Sep 2026 00:06:48 +0800
-Message-Id: <20260911160649.51863-2-f64116045@gs.ncku.edu.tw>
+Subject: [PATCH net-next v2 2/2] selftests: net: Exercise TCP payload verification in udpgso_bench.sh
+Date: Sat, 12 Sep 2026 00:06:49 +0800
+Message-Id: <20260911160649.51863-3-f64116045@gs.ncku.edu.tw>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260911160649.51863-1-f64116045@gs.ncku.edu.tw>
 References: <20260911160649.51863-1-f64116045@gs.ncku.edu.tw>
@@ -84,120 +84,87 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-udpgso_bench_rx supports UDP payload verification but rejects the
-combination of TCP and verification mode. Its TCP receive path discards
-the payload, so it cannot check the data generated by udpgso_bench_tx.
+The benchmark script does not exercise TCP payload verification.
 
-Read the TCP payload into a buffer when verification is requested
-and check it against the transmitter's repeating alphabetic
-pattern. Preserve the verification position across recv() calls
-because TCP does not preserve send boundaries. Restart the pattern
-at the payload length supplied with -l, matching the transmitter's
-pattern restart on each message.
+Add a verification case for IPv4 and IPv6 using 100 4 KiB payloads.
+The payload length is not a multiple of 26, allowing the test to
+detect missing per-payload pattern resets.
 
-Require a nonzero -l value for TCP verification and retain the existing
-discard path when verification is disabled.
+Wait for the receiver and propagate verification failures. Bound
+both processes with timeouts and leave the existing benchmarks
+unchanged.
 
 Signed-off-by: shuo huang <f64116045@gs.ncku.edu.tw>
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- tools/testing/selftests/net/udpgso_bench_rx.c | 51 +++++++++++++++----
- 1 file changed, 42 insertions(+), 9 deletions(-)
+ tools/testing/selftests/net/udpgso_bench.sh | 34 +++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/tools/testing/selftests/net/udpgso_bench_rx.c b/tools/testing/selftests/net/udpgso_bench_rx.c
-index 1cbadd267..5270a46d2 100644
---- a/tools/testing/selftests/net/udpgso_bench_rx.c
-+++ b/tools/testing/selftests/net/udpgso_bench_rx.c
-@@ -89,6 +89,11 @@ static unsigned long gettimeofday_ms(void)
- 	return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
+index 88fa1d53b..d02f206ec 100755
+--- a/tools/testing/selftests/net/udpgso_bench.sh
++++ b/tools/testing/selftests/net/udpgso_bench.sh
+@@ -8,6 +8,8 @@ readonly YELLOW='\033[0;33m'
+ readonly RED='\033[0;31m'
+ readonly NC='\033[0m' # No Color
+ readonly TESTPORT=8000
++# Avoid a multiple of 26 to detect missing payload resets.
++readonly TCP_VERIFY_LEN=$((4 * 1024))
+ 
+ readonly KSFT_PASS=0
+ readonly KSFT_FAIL=1
+@@ -79,6 +81,31 @@ run_one() {
+ 	./udpgso_bench_tx -p "$TESTPORT" ${args}
  }
  
-+static char expected_char(unsigned int off)
-+{
-+	return 'a' + (off % 26);
++run_tcp_verify_one() {
++	local tcp_rx_pid
++	local i=0
++	local -r timeout=10
++
++	timeout -k 1 30 ./udpgso_bench_rx -p "$TESTPORT" -t -v -l "$TCP_VERIFY_LEN" &
++	tcp_rx_pid=$!
++
++	while [ "$i" -lt "$timeout" ]; do
++		ss -lnHt "sport = :$TESTPORT" | grep -q . && break
++		i=$((i + 1))
++		sleep 1
++	done
++	if [ "$i" -eq "$timeout" ]; then
++		echo "timed out while waiting for udpgso_bench_rx"
++		return 1
++	fi
++
++	timeout -k 1 30 ./udpgso_bench_tx -p "$TESTPORT" "$@" \
++		-t -s "$TCP_VERIFY_LEN" -M 100 || return $?
++
++	# A successful sender does not imply that payload verification passed.
++	wait "$tcp_rx_pid"
 +}
 +
- static void do_poll(int fd, int timeout_ms)
- {
- 	struct pollfd pfd;
-@@ -161,14 +166,44 @@ static int do_socket(bool do_tcp)
- 	return fd;
- }
+ run_in_netns() {
+ 	local -r args=$@
  
-+static char sanitized_char(char val)
-+{
-+	return (val >= 'a' && val <= 'z') ? val : '.';
-+}
+@@ -123,6 +150,10 @@ run_tcp() {
+ 	echo "tcp zerocopy"
+ 	run_in_netns ${args} -t -z
+ 
++	echo "tcp verify"
++	./in_netns.sh "$0" __verify_tcp ${args}
++	kselftest_test_exitcode $?
 +
-+static void do_verify_tcp(const char *data, int len)
-+{
-+	static unsigned int stream_off;
-+	int i;
-+
-+	for (i = 0; i < len; i++) {
-+		char expected = expected_char(stream_off);
-+
-+		if (data[i] != expected)
-+			error(1, 0,
-+			      "data[%d]: stream offset %u, %c(%hhu) != %c(%hhu)\n",
-+			      i, stream_off,
-+			      sanitized_char(data[i]), data[i],
-+			      expected, expected);
-+
-+		stream_off++;
-+		if (stream_off == cfg_expected_pkt_len)
-+			stream_off = 0;
-+	}
-+}
-+
- /* Flush all outstanding bytes for the tcp receive queue */
- static void do_flush_tcp(int fd)
- {
-+	static char rbuf[ETH_MAX_MTU];
- 	int ret;
- 
- 	while (true) {
--		/* MSG_TRUNC flushes up to len bytes */
--		ret = recv(fd, NULL, 1 << 21, MSG_TRUNC | MSG_DONTWAIT);
-+		if (cfg_verify)
-+			ret = recv(fd, rbuf, sizeof(rbuf), MSG_DONTWAIT);
-+		else
-+			/* MSG_TRUNC flushes up to len bytes */
-+			ret = recv(fd, NULL, 1 << 21, MSG_TRUNC | MSG_DONTWAIT);
- 		if (ret == -1 && errno == EAGAIN)
- 			return;
- 		if (ret == -1)
-@@ -178,17 +213,15 @@ static void do_flush_tcp(int fd)
- 			exit(0);
- 		}
- 
-+		if (cfg_verify)
-+			do_verify_tcp(rbuf, ret);
-+
- 		packets++;
- 		bytes += ret;
- 	}
- 
- }
- 
--static char sanitized_char(char val)
--{
--	return (val >= 'a' && val <= 'z') ? val : '.';
--}
--
- static void do_verify_udp(const char *data, int len)
- {
- 	char cur = data[0];
-@@ -347,8 +380,8 @@ static void parse_opts(int argc, char **argv)
- 	if (optind != argc)
- 		usage(argv[0]);
- 
--	if (cfg_tcp && cfg_verify)
--		error(1, 0, "TODO: implement verify mode for tcp");
-+	if (cfg_tcp && cfg_verify && !cfg_expected_pkt_len)
-+		error(1, 0, "tcp verify mode requires -l");
- }
- 
- static void do_recv(void)
+ 	# excluding for now because test fails intermittently
+ 	# add -P option to include poll() to reduce possibility of lost messages
+ 	#echo "tcp zerocopy audit"
+@@ -149,6 +180,9 @@ if [[ $# -eq 0 ]]; then
+ elif [[ $1 == "__subprocess" ]]; then
+ 	shift
+ 	run_one $@
++elif [[ $1 == "__verify_tcp" ]]; then
++	shift
++	run_tcp_verify_one "$@"
+ else
+ 	run_in_netns $@
+ fi
 -- 
 2.34.1
+
