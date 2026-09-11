@@ -1,161 +1,193 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-98.mta0.migadu.com [91.218.175.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B25035E1CC;
-	Fri, 11 Sep 2026 09:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A6C36605D
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 09:30:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789118646; cv=none; b=pJn5VIYGVT4H6bJsD2+aWV2Ns5xTvX0WGmejHjP4leZ5TCYeuBjV0oV/N4Pjc9itSqEF0wla94iEKE1XQEG9rtM0DNUPpbz509Y3cjh9vkloemY6HhjBEmrWSYB+dROzW32zO2+UOrNbgM0eNBElD+xi1h3MnYJVnduM1OdAjAo=
+	t=1789119025; cv=none; b=Cn4C3FD4gMHuub5yG/Yz+i0KXOw/0QHAYqRCtuDKCx1lbSqTcH+MQ+Erm1qoMTM/B+la4s8lUTtoNfliboAjqa6XXEEEwRbWk3OcCmpS5i0/qTitYFUcmacZ9TBuFLcCxCbcOO8a5Rztczjqqn87oIkzZibxa3AjqSj/GFOgwpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789118646; c=relaxed/simple;
-	bh=Sfd8ZgRtiG55d4LBdYws7fViMlYKKVBDaZg+zx7RwXU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cB0XKxOwg0LQbd9+oxbk7xRezthYWVdrPM4gvk2+hn9KIM58PHXjiFRaRpAV+1Pw5dIfAozun2EHRdcKeQ9uPuRd9brUDHkwr1o3yOyOyUb/4vG/PUnQMHjLJJgU7gVwKtJzFHSlWizouNjP5sU7u0RJcdgyjje7qW2xKGgqMN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 816ca6bcadc211f19a56ed5b684f684d-20260911
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN
-	HR_FROM_NAME, HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER
-	HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT
-	HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
-	SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
-	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:cd898db3-aa58-4243-9f15-549dc5c5af81,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-INFO: VERSION:1.3.19,REQID:cd898db3-aa58-4243-9f15-549dc5c5af81,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:10
-X-CID-META: VersionHash:7db8b62,CLOUDID:d588ab34e2fae290c15b505d55a92e3c,BulkI
-	D:260911163932ELB1A0S5,BulkQuantity:6,SF:17|19|38|66|78|81|82|102|127|136|
-	850|865|898,TC:nil,Content:0|15|50|99,EDM:-3|-100,IP:-2,URL:0,File:nil,RT:
-	nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0
-	,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 816ca6bcadc211f19a56ed5b684f684d-20260911
-X-User: liuzhe1@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <liuzhe1@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1964776151; Fri, 11 Sep 2026 17:23:53 +0800
-From: Zhe Liu <liuzhe1@kylinos.cn>
-To: tj@kernel.org,
-	hannes@cmpxchg.org,
-	mkoutny@suse.com,
-	corbet@lwn.net,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	juri.lelli@redhat.com,
-	vincent.guittot@linaro.org
-Cc: skhan@linuxfoundation.org,
-	rdunlap@infradead.org,
-	dietmar.eggemann@arm.com,
-	rostedt@goodmis.org,
-	bsegall@google.com,
-	mgorman@suse.de,
-	vschneid@redhat.com,
-	kprateek.nayak@amd.com,
-	dtcccc@linux.alibaba.com,
-	changhuaixin@linux.alibaba.com,
-	shanpeic@linux.alibaba.com,
-	cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Zhe Liu <liuzhe1@kylinos.cn>
-Subject: [PATCH v3 3/3] docs: cgroup-v2: document CPU quota and burst ordering
-Date: Fri, 11 Sep 2026 17:22:58 +0800
-Message-Id: <20260911092258.660771-4-liuzhe1@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260911092258.660771-1-liuzhe1@kylinos.cn>
-References: <20260911092258.660771-1-liuzhe1@kylinos.cn>
+	s=arc-20240116; t=1789119025; c=relaxed/simple;
+	bh=UgDP47cPkmBb/mueTtjUDjQ+T7ZjtzXnEDLcKSfkTG0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=La5EcICMqyWuc7RlN5qsA+z9jEYqZygoi/OalCem9BM9FTNSEthAAEiigzX3SJ9t23qr1m2KINzjsMGhbmCt0Khf7qKA9Sp5LFcHKBosSsgB1gVaFt0Gy1h1koqy8UCRbwgAm1FwUEx2dMc/Z6SO40ReGCWRkYcRORozNvbFuZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YMfmpQu9; arc=none smtp.client-ip=91.218.175.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YMfmpQu9"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=UgDP47cPkmBb/mueTtjUDjQ+T7ZjtzXnEDLcKSfkTG0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789119020; v=1; x=1789723820;
+ b=YMfmpQu9UOHhUSiwGv7ncD+te0xt50UVCoLpbVMSpwkU/VmgzbTVGoR0JD5Bj1uvnbDqySq/
+ GiMGlW6pGZjjF/5DVGRo1W+B0PFDGwfIl4bV6p82rK/KiS8ntNo69It7WfK5eRkMEZyAN9dmIx4
+ zDZD+RQ+Y5IBFWmZjBfy1Vxc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id b64bfc29917c1b89;
+	Fri, 11 Sep 2026 09:30:03 +0000
+X-Mizu-Trace-ID: b64bfc29917c1b89
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <c0a15bf9-0922-42a7-b2a9-d7eff50669a5@linux.dev>
+Date: Fri, 11 Sep 2026 14:59:57 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
+ across zero-extending movs
+To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20260910164635.459558-4-vineet.gupta@linux.dev>
+ <ad011852b5532901853fbc1c16d5a27d50231065dad9b1e4bbfee1c02b4735e5@mail.kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <ad011852b5532901853fbc1c16d5a27d50231065dad9b1e4bbfee1c02b4735e5@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Document that quota and burst can be configured in either order, and that
-the configured burst is retained across quota changes while its runtime
-contribution is capped by the current quota.
+On 9/10/26 11:22 PM, bot+bpf-ci@kernel.org wrote:
+>> @@ -17115,6 +17126,23 @@ static void collect_linked_regs(struct bpf_verifier_env *env,
+>>   	}
+>>   }
+>>
+>> +/*
+>> + * Set @reg to the zero-extension of @known_reg's low 32 bits: it shares those
+>> + * bits and its high half is zero. Copy the base to keep its precise low-32
+>> + * tnum, then re-apply the zext_32_to_64() the 32-bit mov itself used.
+>> + * @reg->id and ->delta already equal @known_reg's; only ->subreg is its own.
+>> + */
+>> +static void reconstruct_zext32(struct bpf_reg_state *reg,
+>> +			       struct bpf_reg_state *known_reg)
+>> +{
+>> +	enum bpf_subreg subreg = reg->subreg;
+>> +
+>> +	*reg = *known_reg;
+>> +	reg->subreg = subreg;
+>> +	zext_32_to_64(reg);
+>> +	reg_bounds_sync(reg);
+>> +}
+>> +
+>>   /* For all R in linked_regs, copy known_reg range into R
+>>    * if R->id == known_reg->id.
+>>    */
+>> @@ -17134,6 +17162,27 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+>>   			continue;
+>>   		if (reg->id != known_reg->id)
+>>   			continue;
+>> +		/*
+>> +		 * A ->subreg register shares only the base's low 32 bits, so it
+>> +		 * is rebuilt rather than copied. Not modelled together with a
+>> +		 * delta, so skip if either side has one (sound, less precise).
+>> +		 */
+>> +		if (reg->subreg) {
+>> +			if (reg->add_const || known_reg->add_const)
+>> +				continue;
+>> +			reconstruct_zext32(reg, known_reg);
+>> +			if (e->is_reg)
+>> +				mark_reg_scratched(env, e->regno);
+>> +			else
+>> +				mark_stack_slot_scratched(env, e->spi);
+>> +			continue;
+>> +		}
+>> +		/*
+>> +		 * The reverse: known_reg knows only its low 32 bits, which say
+>> +		 * nothing about reg's high half.
+>> +		 */
+>> +		if (known_reg->subreg)
+>> +			continue;
+>>   		/*
+>>   		 * Skip mixed 32/64-bit links: the delta relationship doesn't
+>>   		 * hold across different ALU widths.
+> Can reconstruct_zext32() lose bounds that reg already learned on its own?
+>
+> Looking at the code, reconstruct_zext32() does:
+>
+>      *reg = *known_reg;
+>      reg->subreg = subreg;
+>      zext_32_to_64(reg);
+>
+> This overwrites reg's state wholesale without intersecting it with what reg
+> already knew.
+>
+> For pre-existing full-64-bit links, sync_linked_regs() propagates changes
+> in both directions, so the base is always at least as narrow as every
+> member and the overwrite can only narrow. But the new low-32 link skips
+> the member->base direction:
+>
+>      if (known_reg->subreg)
+>          continue;
+>
+> so the base can end up strictly wider than the ->subreg member.
+>
+> Consider this sequence:
+>
+>    call bpf_get_prandom_u32;    /* r0 -> 64-bit unknown */
+>    r6 = r0;                     /* r6 is 64-bit unknown */
+>    w7 = w6;                     /* r7->id = r6->id, r7->subreg = SUBREG_ZEXT */
+>    if w7 > 7 goto out;          /* fall-through: r7 u32 range [0,7]
+>                                  * sync_linked_regs(known_reg=r7) skips r6 due
+>                                  * to `if (known_reg->subreg) continue;`
+>                                  * so r6 stays fully unknown */
+>    if r6 > 100 goto out;        /* fall-through: r6 narrows to [0,100]
+>                                  * sync_linked_regs(known_reg=r6) reaches r7
+>                                  * via reconstruct_zext32(r7, r6) which does
+>                                  * *r7 = *r6 then zext_32_to_64() */
+>
+> After the second jump, does r7 become [0,100] instead of staying [0,7]?
 
-Signed-off-by: Zhe Liu <liuzhe1@kylinos.cn>
----
- Documentation/admin-guide/cgroup-v2.rst |  7 ++++++-
- Documentation/scheduler/sched-bwc.rst   | 22 +++++++++++++---------
- 2 files changed, 19 insertions(+), 10 deletions(-)
+Yes it does and that's a problem.
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 86a2a0099178..e94285d48d0c 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -1231,7 +1231,12 @@ will be referred to. All time durations are in microseconds.
- 	A read-write single value file which exists on non-root
- 	cgroups.  The default is "0".
- 
--	The burst in the range [0, $MAX].
-+	The burst in microseconds, with a lower bound of 0 and an upper bound
-+	independent of the current quota. The configured value is retained
-+	when the quota changes and may be larger than the current quota.
-+	During CFS runtime refill, the burst contribution is capped at the
-+	current quota. The quota and burst files can therefore be written
-+	in either order.
- 
- 	This file affects only processes under the fair-class scheduler and a BPF
- 	scheduler with the ``cgroup_set_bandwidth`` callback depending on what
-diff --git a/Documentation/scheduler/sched-bwc.rst b/Documentation/scheduler/sched-bwc.rst
-index e881a945c188..19cd08195f6b 100644
---- a/Documentation/scheduler/sched-bwc.rst
-+++ b/Documentation/scheduler/sched-bwc.rst
-@@ -90,20 +90,22 @@ bandwidth restriction in place, such a group is described as an unconstrained
- bandwidth group. This represents the traditional work-conserving behavior for
- CFS.
- 
--Writing any (valid) positive value(s) no smaller than cpu.cfs_burst_us will
--enact the specified bandwidth limit. The minimum quota allowed for the quota or
--period is 1ms. There is also an upper bound on the period length of 1s.
--Additional restrictions exist when bandwidth limits are used in a hierarchical
--fashion, these are explained in more detail below.
-+Writing any valid positive quota value will enact the specified bandwidth
-+limit. The minimum quota allowed for the quota or period is 1ms. There is
-+also an upper bound on the period length of 1s. Additional restrictions
-+exist when bandwidth limits are used in a hierarchical fashion, these are
-+explained in more detail below.
- 
- Writing any negative value to cpu.cfs_quota_us will remove the bandwidth limit
- and return the group to an unconstrained state once more.
- 
- A value of 0 for cpu.cfs_burst_us indicates that the group can not accumulate
- any unused bandwidth. It makes the traditional bandwidth control behavior for
--CFS unchanged. Writing any (valid) positive value(s) no larger than
--cpu.cfs_quota_us into cpu.cfs_burst_us will enact the cap on unused bandwidth
--accumulation.
-+CFS unchanged. A valid positive value written to cpu.cfs_burst_us is retained
-+when the quota changes. If it is larger than the current quota, the burst
-+contribution during runtime refill is capped at the current quota.
-+
-+The quota and burst files can be updated in either order.
- 
- Any updates to a group's bandwidth specification will result in it becoming
- unthrottled if it is in a constrained state.
-@@ -243,4 +245,6 @@ Examples
- 	# echo 50000 > cpu.cfs_period_us /* period = 50ms */
- 	# echo 10000 > cpu.cfs_burst_us /* burst = 10ms */
- 
--   Larger buffer setting (no larger than quota) allows greater burst capacity.
-+   A larger buffer setting allows greater burst capacity. If the configured
-+   burst is larger than the quota, the burst contribution is capped at the
-+   quota during runtime refill.
--- 
-2.25.1
+> If so, a jump on an unrelated wide register would widen the bounds of a
+> narrow copy that the verifier had already proved tighter, on a
+> straight-line path. That would reject programs that narrowed the 32-bit
+> copy first and the wide original second, then relied on the copy's
+> narrower bound for a memory access or helper argument.
+
+Right, sound, but loss of precision.
+
+> The changelog acknowledges the other precision loss this patch introduces
+> ("forming one costs the source its delta ... That loses tracking a wide
+> source used to keep") and the follow-up selftest commit 36b84852a200 pins
+> it down with zext_mov_breaks_add_const_src. But neither the changelog nor
+> reconstruct_zext32()'s comment ("Copy the base to keep its precise low-32
+> tnum"), nor any of the 10 new tests in 36b84852a200, mentions or covers
+> this path. The only test that checks the member's fate is
+> zext_narrow_dst_keeps_base, which verifies the base is not narrowed but
+> does not check what happens to the member afterwards.
+
+Ok. zext_sync_keeps_narrower_member() added and same for sext variant as 
+reconstruct_sext32 gets similar fix.
+
+> Would intersecting the rebuilt state with the member's existing one,
+
+This one.
+
++       cnum64_intersect_with(&reg->r64, prev.r64);
++       cnum32_intersect_with(&reg->r32, prev.r32);
++       reg->var_off = tnum_intersect(reg->var_off, prev.var_off);
+
+> narrowing the base's low half on the member->base direction instead of
+> skipping it, prevent the member from ever being wider than what it already
+> proved?
+
+This is a new propagation path, trying to be conservative here.
+
+Thx,
+-Vineet
+
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34506184282
 
