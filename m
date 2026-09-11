@@ -1,203 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-146.mta0.migadu.com [91.218.175.146])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DBAE3B6347;
-	Fri, 11 Sep 2026 09:46:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789120008; cv=fail; b=bOZgYDu8d5xR5NRSQMU4FJmyCALbWM4BA5mi6pg7LXNedzGZTz0x36LoxC4pu4BtYnMO8FZFUh19+7/Kvcc7MmSSGaT+myMqO48Er8bDk64z+rCJGG6vg/P+4SO0dvu5LGha+r1vr3P3B/nJ3q5s7R7Utq9DYHfAfMPrCdOzbpI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789120008; c=relaxed/simple;
-	bh=DIRkyzoPl1oOiPvJHQDi5/e45JQynfbJjFZdhbYSZb0=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Dv6svljL4QZfM90B0PfuCoLW+peSokUqLutXNtw/JLT5LOn5PsLaT4eN46BcriJAQG438fyKqB3HezI6Qbmepk4KHkZjqdi3AtdDUKGwWJ0tQkN5UCaixfftX1QwNMIOyPfcG2qT97av8RajQU9muTj7M7ohufUpjTukbSlI3ng=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DiY82dIp; arc=fail smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A900D3E49D1
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 10:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.146
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789120828; cv=none; b=anEDZTkJZKxH0kdmAgiY/qwsqFrPMB3rq97BB+QllycOhJzoS+8FdHQ4vxquA2UZn/fiQqyHgQP+YnNol6ncs2Gcvfa7xPuHtBYe0mrDDFCvP/6wNzxZQ9D3/EFrbJXgOVQCxs2IUeduvrbDYgC3xHwfpBImwMz9+5wN1g9unlo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789120828; c=relaxed/simple;
+	bh=a4FPr2KXlsFkRV0vRSFXbaQhHPOfudnmvDVa+wHqJbs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=beHIO7+b4PhJth5LykLl2Viu2ik5UkgCm+1oQZtsBObvfnRUd0KwatFjuALzzO5d2GZzTyhAuSrfdVNMAp0t7L1IAzJm84VNfOHiGaSiTteCxmf5ENC8sopilNabUHNN/V2bGxW/OJJd6y7DTO9yRnVy+Bjafg5G4PsUL/+/Jc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Jan8ZJqV; arc=none smtp.client-ip=91.218.175.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DiY82dIp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789120007; x=1820656007;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   in-reply-to:mime-version;
-  bh=DIRkyzoPl1oOiPvJHQDi5/e45JQynfbJjFZdhbYSZb0=;
-  b=DiY82dIpVQ0ELcLziwsgjNLwjNfRl85EaNQ1kilZH4acWdZs1Y+b7NDI
-   wjH9x5h6LYig0m5mwpzazL1Hhbw0Q0sZLKjWsHtUaR5CvnSiUFmZpUN7C
-   Byi8xSJ+giwXiw4p8eXWBzsneMo6ccJoisJzTK8s8i9pq9tf9lIwkMwQa
-   ee0Ny1jJYXK7qLMSIJHLJ675j87QiaPzISlzL3vk6gVvvDUZ9LPZMCQHn
-   WzkRcEJ41qKpKM8GZG1E3wccqyI7XwvpxTSvIhVZY81IpnpXZ9Rrz/6LN
-   4sE2C+mckrDTIkieKrAn3yqyQaCI/QBXb/1Vpccfz9TLle1jF9a2mjXty
-   Q==;
-X-CSE-ConnectionGUID: x3kktdvjSYqilcMINxlldw==
-X-CSE-MsgGUID: 3LWhRAz5Q4Kun5l5UecAIQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11901"; a="115121357"
-X-IronPort-AV: E=Sophos;i="6.27,97,1787036400"; 
-   d="scan'208";a="115121357"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2026 02:46:46 -0700
-X-CSE-ConnectionGUID: Qq3FtTbpRJSRzH2zSHCqHg==
-X-CSE-MsgGUID: QMoPsYZ0S6WMwtyGso2WMQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,97,1787036400"; 
-   d="scan'208";a="296860041"
-Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2026 02:46:44 -0700
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Fri, 11 Sep 2026 02:46:44 -0700
-Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46 via Frontend Transport; Fri, 11 Sep 2026 02:46:44 -0700
-Received: from PH7PR06CU001.outbound.protection.outlook.com (52.101.201.11) by
- edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Fri, 11 Sep 2026 02:46:43 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=al0o8OCZWCIOuRSHGurvYj0/q9Z/R+xVcIa1l5hpobARZxqqnPr9Wauk2+HwqI3rxW1FurjycQswhDT5uXCbj+xcCYjqKEqLygSWFk9i+W1K2Ozxl5vEHP3HDEIS3Xm4mKUm6cZ/mVwXnaTyqSqkmX/i5aQ9XD2lYaevGpZ8VlUsFl3K6eZVFhIRmKk88KSbkeQYwjrSZXRAZxNVaPwV4+S7cwCmA2elznHMQ24LkGJ1c3liFPb1uALpY3jrX+5jdtwSKFycVxm4SkEQbW/9p4cQQtF9UmoHycRaqVnvJeFcol3t1neoqkc690Hkjdv0cJPFjioAzGF4JY/GDzDMuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mXCeD7af4CqN4w3BHA75JQpTrzDCJWHdDp0N+KgWt1s=;
- b=XkSqchKvn2NQTLYpk6X5gFLLRW2waHwQWeI3pS7v0qc3elhN0tZZv/XyCl8mJuCTqdfJ822ZDnHlc5UtU8qTc5QFPAXA2MtG5UFagH7+vsF7yEEsGesvhFSEnsYYv3m+/OwtsXFElUepHfjTQ58mtlNKKKjcqQizIBq57z3bBO/TSwhg5ZTLyZHXjqq6Iqor9z/tgKBzBf3S/W7la80nG26rwahFLYvSNrTHBkNoobi4gHVrbXvrKnbzZX8dJhN06KiF0t5fukgK0pYC/9bMjaff5UTvlqfMxtnqEZnFWJR5SZr8GaGPjmOzNkHUEPc0VmeCTGtup1xD0jJqTwtDNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DSVPR11MB9579.namprd11.prod.outlook.com (2603:10b6:8:383::17)
- by CO1PR11MB5060.namprd11.prod.outlook.com (2603:10b6:303:93::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.9; Fri, 11 Sep
- 2026 09:46:38 +0000
-Received: from DSVPR11MB9579.namprd11.prod.outlook.com
- ([fe80::ab5f:5d0f:fb90:9d]) by DSVPR11MB9579.namprd11.prod.outlook.com
- ([fe80::ab5f:5d0f:fb90:9d%3]) with mapi id 15.21.0406.007; Fri, 11 Sep 2026
- 09:46:37 +0000
-Date: Fri, 11 Sep 2026 17:45:51 +0800
-From: Yan Zhao <yan.y.zhao@intel.com>
-To: <ackerleytng@google.com>
-CC: <aik@amd.com>, <andrew.jones@linux.dev>, <binbin.wu@linux.intel.com>,
-	<brauner@kernel.org>, <chao.p.peng@linux.intel.com>, <david@kernel.org>,
-	<jmattson@google.com>, <jthoughton@google.com>, <michael.roth@amd.com>,
-	<oupton@kernel.org>, <pankaj.gupta@amd.com>, <qperret@google.com>,
-	<rick.p.edgecombe@intel.com>, <rientjes@google.com>, <shivankg@amd.com>,
-	<steven.price@arm.com>, <willy@infradead.org>, <wyihan@google.com>,
-	<forkloop@google.com>, <pratyush@kernel.org>, <suzuki.poulose@arm.com>,
-	<aneesh.kumar@kernel.org>, <liam@infradead.org>, Paolo Bonzini
-	<pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, "Thomas
- Gleixner" <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
-	<mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, "Shuah
- Khan" <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, "Vishal
- Annapurve" <vannapurve@google.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, Kairui Song
-	<kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham
-	<nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, Axel Rasmussen
-	<axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu
-	<weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, Qi Zheng
-	<qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, Kiryl Shutsemau
-	<kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe
-	<jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, Peter Xu
-	<peterx@redhat.com>, <tarunsahu@google.com>, Randy Dunlap
-	<rdunlap@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka
-	<vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, "Suren Baghdasaryan"
-	<surenb@google.com>, Michal Hocko <mhocko@suse.com>, Fuad Tabba
-	<fuad.tabba@linux.dev>, <kvm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-mm@kvack.org>, <linux-coco@lists.linux.dev>, Xiaoyao Li
-	<xiaoyao.li@intel.com>
-Subject: Re: [PATCH v13 00/44] guest_memfd: In-place conversion support
-Message-ID: <aqPNz00MkV5piTyc@yzhao56-desk.sh.intel.com>
-Reply-To: Yan Zhao <yan.y.zhao@intel.com>
-References: <20260910-gmem-inplace-conversion-v13-0-dd6fbf94f4e1@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260910-gmem-inplace-conversion-v13-0-dd6fbf94f4e1@google.com>
-X-ClientProxiedBy: SG2PR01CA0186.apcprd01.prod.exchangelabs.com
- (2603:1096:4:189::14) To DSVPR11MB9579.namprd11.prod.outlook.com
- (2603:10b6:8:383::17)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Jan8ZJqV"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=a4FPr2KXlsFkRV0vRSFXbaQhHPOfudnmvDVa+wHqJbs=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789120824; v=1; x=1789725624;
+ b=Jan8ZJqVUQv4W3QPPSkmZr9su4pC/FyGyJCGpseluAbczInlnR4O9VqbP4H1vHkTzIhXnDtK
+ Rzj6ZhblK+PrIBdL0xLLoba4L0Au3t42uoeJexizfCjactPvZmZGwLGIA3l0GJpGQwhlhKDDFgE
+ YIxMnZLSQI/aEDRuvt58Wh3k=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id fb675a7ecc21192d;
+	Fri, 11 Sep 2026 10:00:20 +0000
+X-Mizu-Trace-ID: fb675a7ecc21192d
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <d2bfd056-2147-4002-a9ee-fa13bbf50dd9@linux.dev>
+Date: Fri, 11 Sep 2026 15:30:15 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DSVPR11MB9579:EE_|CO1PR11MB5060:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3bbc4e4c-ce09-4655-7710-08df0fe9928f
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|1800799024|376014|366016|23010399003|10067099003|6133799003|18002099003|22082099003|56012099006|11063799006;
-X-Microsoft-Antispam-Message-Info: YwqIEbxu4RgKFSc28FM1rd8ymkSWWNGh8C5qMTipL3h1swy6y0eymp20rlNzIpJ8NZXRsdMHLFDPAquP4YWrTY3UL0bh7PM2dI5QM01TEwik4TKjIqKhvDXx7LvV5bKwCkJ6KodLIps0IOZhVn9pKLHE3w+RMSGY+u+v2lQ0X6fHsnq4eWFNBnuaSw/zJEOoK18fWjHd27Tqu1D2WsuTHncMkjuAIaSdaGRFGhOVFHa2LUbTQ9Qf4zAjCdhcsFLjVqCVLiNyYNIslKbpoAxWHx436H4e4CERAKZKiHLlUqm2OclDrqLm6GAxFWXnZpQy9Tn1mVR83/Hzb/F2KFiu3No73VTd+hiCDFF09Wgu9u00JjBXued851Una+eyQteKdWCPUDFOVQdfFBHjhELRchuX7GLe+iytxUjSSF22v/y90PeQRGZaNS9a6WMUzYFC5ajFgKplnbsz/7OiweUh5LxisUs6EdOg7d3zi9zYAJ0XtR7yZGGwfIZ8P3WL15vfKdguTn2UdHVlZHch9p0P5JQlOii7fT8JO3co6ev8+plPoFvaP3Xcu2koNi+Attq9mz8gWSiBg4zqJVpuahOzn5FOxX/8JNINYnIM+TcYrKiFu+R34BVVmjqGudmf5NDd356zwd7jHiVq7/r0E1g0AeU947q3IYWea0aTtprm9is=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DSVPR11MB9579.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(366016)(23010399003)(10067099003)(6133799003)(18002099003)(22082099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?y5UDoVOsLzF31zsJtdqqwphxUuvJtHmZtdDmDMrcq3oLC897PGH00pgN3I9d?=
- =?us-ascii?Q?o4Etr/VoKCMG3xIljF0cBNQQuatbgWVxjgFya3KknPaWmxyhze1CBNCc8Um+?=
- =?us-ascii?Q?RJlaW1uLGXANRT3ErNWHcflHqK/2J/nHrUNVLY1tKkgmnQ7UpY+rP4/Ai/tl?=
- =?us-ascii?Q?zPVhWCQIrtMUTR5DPGp96D+pL1X0Kl9xAoOFElAtc12kcA6RkVTHqbPMTc0l?=
- =?us-ascii?Q?6uKiX2o5psJXOBjQ8szaQXK8VNrXq/0dfeFfageW2tPTMsgoAvYGGFH8dKCw?=
- =?us-ascii?Q?YPVzcwnVCD2WqPwYF59NkQZBtsJM74P2gC0q+n73dLc0PkfTW8Tv2Aqsv2+x?=
- =?us-ascii?Q?ogq3c2pQiLpakFIz1OMlthWVB+IK3b588HcarMYKPc9OeFi9t0OVHgNbMvlj?=
- =?us-ascii?Q?D9suuZMNAOt7r06IpUyDhkxY2OCgiaLxaj4SmiXf10P4VA1EWg/H2ie7nmq1?=
- =?us-ascii?Q?ESM/27BGrCIUKHLc35e6c9hAGuevcQkmi7cfMA3NGzkEjjBvpkDwpUL1QKZm?=
- =?us-ascii?Q?zhj+W3FGw8jg1oLfwBuJffep8lbXqPhqMizhnAUTVLhoth2k5FaWumI2OSCU?=
- =?us-ascii?Q?VpsI3OqTYCHEt3m5IeXMfT7K1Iu1CGeOZeub0C/C0WIwy1KvPI1TQZunsKJZ?=
- =?us-ascii?Q?T/+9Bb8DqaL0CCTwtLfwYNXzYCidNum9f3Oppki75kQ4wM3Us7gis9ywfdMy?=
- =?us-ascii?Q?3jg2x2oE6S+4+O28J9fRuHspu1XwbjC+vSXAMlypAQOBIn1V0t8mmgESJLfo?=
- =?us-ascii?Q?mFn8rKDGwlx2MRtkwhiaeNSij6FaACHCaOf3j7vH7uxJQWyTBZvqTdFNOJJS?=
- =?us-ascii?Q?lWkfH2V94kQDv37tahZuRKo4x/unh5XiDFH1h9wXN5hLT2PWYGYV/qQ3+m0M?=
- =?us-ascii?Q?FNa7+5WOExF13pzJcIyUCo1QWYOmFaVYWWygHqauOaunfQoRYl7V4ykZtfAf?=
- =?us-ascii?Q?ky6V1X8KtTPBJDeZlDCbRaQ6tAPcTiCSuLNAllzeglXSALpjxofnHIHLxReG?=
- =?us-ascii?Q?JJpZodgMn3Kuk5fkigEilVZGzVfLBFLmP6ji2REi5I/ABmxqtTP/YO6PgkRC?=
- =?us-ascii?Q?2G6z1uJHAKcFR8rrT+3CKYJFhOhkh4bRt+2joF0KyhHZ0x2e93azI9ux9T87?=
- =?us-ascii?Q?sbk8YWEJ5ra1Omr2FlPNQAEv/icT6X86L+jF0yk5oEtbLNQipjEEnFMX3Pb+?=
- =?us-ascii?Q?6bu+s0D9OBfxIhMjCDqJ+qd8gwN3KyXCmFMdPxPojT88+Kx+w4aIljCNRbcu?=
- =?us-ascii?Q?OU/x/moAwbTbwwb8Wu00Q6V0+55vyt6+W12Z98tEPMfPUN9LzAoWbtgp622H?=
- =?us-ascii?Q?jmn/aoV8c04XyvRjzk5LqWEmaO42R6BW1wrKWmRbt35CK525qaoRdqiDIh4D?=
- =?us-ascii?Q?ycQu4maT4w8IKXyYpvrIJ3PWUU9Y7N3y66MG5EPnR2FsdJWjUD+T+A6p55Mw?=
- =?us-ascii?Q?fXyCysw8JXiIYhH1+0Bvrgso80TPF8EW/Zs3wcCA8BLzuGLTLvMagWqPtwMw?=
- =?us-ascii?Q?w6rGi9YF491sY8AWKT7tm7Orx/SvenkB5Srzlke8pRG5jeMDaMT0JZFxNSXj?=
- =?us-ascii?Q?Ws9veySehVx1t9oO1LdID2QWXCwcRRvrCg7KmRp0lJJPy1328ltqsMEBSMWs?=
- =?us-ascii?Q?aXIdeWCbZLwCHCNk5wR79bpFcSPBsm5T0l+SCUkZ0JsaSAwMLAN7og0skvM3?=
- =?us-ascii?Q?+ztFADNJ0XQDNMDYAHzAB3Z2kSINg363+RsdzwEbbHtLtIF2Rk6jYLcchnE5?=
- =?us-ascii?Q?XbVqlecMBA=3D=3D?=
-X-Exchange-RoutingPolicyChecked: qXlKzRjHjQNRGW/YS9TxLKSrA8xVBqKvJXzkfG4MO3rd7/p4FyF99H40HlrV8GDRqkp7sFioSyfNkNVkFNfI7Dgk0cnYEudL4CEZ5wGMvCVA1bo50XmkSDoMv+qsNT13HtBTVAIRo4zBMybeSl5doBFBcUegbJnrYUsJ4l1u0dym096Rv+ta5podEd9+b/mrzAUdQ6vm55C3b8cRwtF+Pm+CiUGUHcEqe5SmPbsssua5/bO2UHGEcm5YyB4Sx8YFMifZ/qGvhdOA9oD+FLTJUkd7yknsFr6B16l6XsGNQSVRx6IKUmlOTG9sZz1CxK1FYsKwSZbrr8kBwG85ZvyHVw==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3bbc4e4c-ce09-4655-7710-08df0fe9928f
-X-MS-Exchange-CrossTenant-AuthSource: DSVPR11MB9579.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2026 09:46:37.2334
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sU2sh2dVk/3NYEwKz9tJL907uuq4XCcBV4YfFm53bK6GI686U4tmeh2Fx6QbPUhA6AXFymep1Yd3ObqPrCB+mw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5060
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 07/13] bpf: track low-32 scalar equality
+ across sign-extending movs
+To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20260910164635.459558-8-vineet.gupta@linux.dev>
+ <654adc93a03b1bbeef530ffb6adb9a2d204e5bb01d7707dc0b16889fb05fc3dd@mail.kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <654adc93a03b1bbeef530ffb6adb9a2d204e5bb01d7707dc0b16889fb05fc3dd@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 10, 2026 at 04:55:26PM -0700, Ackerley Tng via B4 Relay wrote:
-> Here's v13. Thanks everyone for the comments and fast responses!
-> We're now at ~3 weeks to soft-close at 7.3-rc5.
-> 
-> v13 is based on 7.3-rc2 and:
-> 
-> + Hugh's patch to export lru_cache_drain_for_folio()
-> + Another series [1], which makes kvm_gmem_get_pfn() NOT return a
->   refcounted page to KVM.
-> 
-> Here's everything stitched together for your convenience:
-> 
-> https://github.com/googleprodkernel/linux-cc/commits/guest_memfd-inplace-conversion-v13
-The following configurations were tested and all booted TDs successfully:
-(1) gmem_in_place_conversion=1, in-place conversions + in-place-add init mem
-(2) gmem_in_place_conversion=1, in-place conversions + out-of-place-add init mem
-(3) gmem_in_place_conversion=0, out-of-place conversions + out-of-place-add init mem
+On 9/10/26 11:22 PM, bot+bpf-ci@kernel.org wrote:
+>> @@ -16248,12 +16258,23 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>>   						return -EACCES;
+>>   					} else if (src_reg->type == SCALAR_VALUE) {
+>>   						bool no_sext;
+>> +						/*
+>> +						 * A 32-bit sign extension keeps the low 32
+>> +						 * bits, so record a low-32 link as the
+>> +						 * zero-extending mov does. A self-mov
+>> +						 * qualifies only if src is already linked.
+>> +						 */
+>> +						bool subreg_link = (insn->off >> 3) == 4 &&
+>> +								   (src_reg != dst_reg ||
+>> +								    src_reg->id);
+>>
+>>   						no_sext = reg_umax(src_reg) < (1ULL << (insn->off - 1));
+>> -						if (no_sext)
+>> +						if (no_sext || subreg_link)
+>>   							assign_scalar_id_before_mov(env, src_reg);
+>                                                          ^^^^
+>
+> Can widening this guard drop an existing ADD_CONST link on the source
+> register?  With 'no_sext || subreg_link', assign_scalar_id_before_mov() now
+> also runs on src_reg when !no_sext, and that helper discards the source's
+> delta tracking:
+>
+> kernel/bpf/verifier.c:assign_scalar_id_before_mov() {
+> 	...
+> 	if (src_reg->add_const)
+> 		clear_scalar_id(src_reg);
+> 	if (!src_reg->id && !tnum_is_const(src_reg->var_off))
+> 		src_reg->id = ++env->id_gen;
+> 	...
+> }
+>
+> clear_scalar_id() zeroes id, delta, add_const and subreg, and the following
+> statement then mints a brand-new id, so src_reg is unlinked from the
+> register set it was tracking.  Before this commit the !no_sext arm left
+> src_reg untouched.
+>
+> For a BPF_ALU64 | BPF_MOV | BPF_X with insn->off == 32:
+>
+> 	r1 = r2			/* r1, r2 share id N */
+> 	r1 += 8			/* r1->add_const = ADD_CONST_64, r1->delta = 8 */
+> 	r3 = (s32)r1		/* r1 is wide -> !no_sext, subreg_link true */
+> 	if r2 < 100 goto out	/* sync_linked_regs() no longer reaches r1 */
+> 	... use r1 ...
+>
+> At the mov, r1 loses its ADD_CONST_64 / delta = 8 link and gets a fresh id,
+> so the following 'if r2 < 100' compare no longer refines r1 to [8, 107].
+> Is that the intent?  This is the compiler idiom described in the comment
+> above adjust_reg_min_max_vals()'s delta handling.
+>
+> The clear also does not look necessary for the new link: since !no_sext, the
+> SUBREG_SEXT link is established through the freshly minted id.
+>
+> Would excluding add_const sources be enough, something like:
+>
+> 	bool subreg_link = (insn->off >> 3) == 4 && !src_reg->add_const &&
+> 			   (src_reg != dst_reg || src_reg->id);
 
-Tested-by: Yan Zhao <yan.y.zhao@intel.com>
+Indeed it needs to fixed with the additional !add_const check.
+
+> The zero-extending arm added earlier in the series uses the same guard
+> shape, so a fix likely wants to cover both.  Looking forward through
+> 2c5433cf9fbb..1d3c4a0831be, the later commits extend the same mechanism to
+> narrowing stack fills and spills and reuse the identical guard, so none of
+> them change this.
+>
+>>   						*dst_reg = *src_reg;
+>> -						if (!no_sext)
+>> +						if (!no_sext && subreg_link && src_reg->id)
+>> +							dst_reg->subreg = SUBREG_SEXT;
+>                                                          ^^^^
+>
+> On a related note, for 'r0 = (s32)r0' where r0 carries add_const,
+> subreg_link is evaluated before the clear and sees the old src_reg->id as
+> non-zero, so it is true.  assign_scalar_id_before_mov() then clears and
+> re-mints the id, and SUBREG_SEXT is applied to a register that is the sole
+> holder of that id.
+>
+> The changelog says:
+>
+>> Unlike the zero-extending arm, a self-mov can form a link here, but only
+>> when src is already linked: r0 = (s32)r0 is how a sign-extended int return
+>> lands. On an unlinked register there is nothing to link to, and minting an
+>> id would leave the register describing itself.
+> bpf_clear_singular_ids() drops singleton ids before state comparison, so
+> this does not look unsound, but does it match the rationale above?
+
+yes the changelog needs to be fixed.
+
+Thx,
+-Vineet
+
+>> +						else if (!no_sext)
+>>   							clear_scalar_id(dst_reg);
+>>   						coerce_reg_to_size_sx(dst_reg, insn->off >> 3);
+>>   					} else {
+> [ ... ]
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34506184282
 
