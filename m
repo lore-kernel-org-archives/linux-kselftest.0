@@ -1,171 +1,177 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F443CBE69;
-	Fri, 11 Sep 2026 03:57:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF51338939;
+	Fri, 11 Sep 2026 04:28:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789099033; cv=none; b=Bfd78wE1FJasnf/Z8BT9hcAUut/6PtJYXveKXkI2CdAblG5gFv34ltFhjY4GxIpbwX/0foSmTTjhgBZhJ9Lk6BDOcf/w5IhfNg/yjMilHWuhq2A3L5YMFYO3TiDTozcJtbz/0ryu/cW+JbDa/59l+pps5u1fAQG4b+IG1rxiumU=
+	t=1789100914; cv=none; b=RXWo9Fza224yOknHQnrYCeo1MlpD1uZxfHdRA9bP4TQhdl0+kSQpQx+bewu3tASBNvWqQCoUP7YDWwwBede67HIlPK5M70+d2ROaRffSKCWEkEHzhmSbGz6Mt+W96Mhum95UiPP4WRpv+Alq8LBbTkJ4q67j5hzgsTlnfxpnokk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789099033; c=relaxed/simple;
-	bh=21nOVExBn5cWQjaT+2dxEYyGtI3Rl3Zv+cu5ICkycEQ=;
+	s=arc-20240116; t=1789100914; c=relaxed/simple;
+	bh=c/YmVaP5Lv3//fdcX609axxuB4op9EaK3jPwljKT5Pk=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=srPps6iN1U1LnrXliA0AzJ1/hPlli2zQNcaJF1GOY4ifE200TEQnsz60kbkp/ySWbqbWfD4iGvYdBE/+eZJJMGuNNiJ180Y3y38WUk40BAz8rciph7+eCML3vdIu0PNVmadSXZUzqrPtYn0RY5S2MK6kCfB9CLZ1bwKntb48BYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q9vg+9SH; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=m/i/dZVetnN9AlgmYh6xj27ffDBP2FBXEwrlRMXKpCGus9OIZ5wYlN8kHRLyU8sr7NXp998+6WUJTcvqVQqBStUSd1AFVAsIYmRs1zLgaDEyQpUyELZisGjDDANkGTRJ0ARtpV+HNXq2Dk+Lrjwe77ZBJmk+MHibpnObYEvBJKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bEwH4IHk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q9vg+9SH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6DE31F000FF;
-	Fri, 11 Sep 2026 03:57:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bEwH4IHk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4353B1F000FF;
+	Fri, 11 Sep 2026 04:28:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789099031;
-	bh=IE1DpzKI7s+8OIo7SRwuyvn8ywBdmopLSwsnhGZuYCw=;
+	s=k20260515; t=1789100912;
+	bh=HdrEKubkyqoCa6VHA9yBwBINmN02gNg/uWhbZibAKtc=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Q9vg+9SHOpPcXwYpjqFhqkp7WNXYm+sbpaGAmte+sST+kP4+gPKsBK7SwKGFSB4pj
-	 CWSO1/3oObNcmpk5o1Jt8SLv+30UuvbMqyM30UbBVOn8cmKsJoCjO3QiduDisbwoXd
-	 JVmcA+d/bRnlHSOaxwT+x5HCyQgZdaS0fa/ZQl5qV1xtU/fKQpBXr9kYgpBkzCXew/
-	 zxe3ZdRcgNBTg/O6xrjdP7rWQ80xCg8Fr8GXlSSsGJ3kEgIFeNdj8GA+9APdgo9quM
-	 6R+HAf+00s8kHPyfsVE2O1vkRl97Yqxx2LtZRaFWTgT2uQrBNDpDCYQqD38NVC/43e
-	 t29Srr9hSSTog==
-Content-Type: multipart/mixed; boundary="===============3672371007177438593=="
+	b=bEwH4IHksJwVx7Hp1TK6vpUTgs1yLMiuemlFEkGJJWs3iNrNXIVWuVGwl/XfIlpjg
+	 qzGQk2+cfP9cgrPdIgCiFggMgzoghk0t6lViYFpGt+/ekzJMQ2VgWMst1dUwHJFEe2
+	 ks6TYk4NF77CBGVJloLGz65xecatX9/JyQzXtnPuoaRHs/VnVJ9J4YtrQXtHUJSDXV
+	 OrDTxLuHzcFntJ2ft7SXFXgAqLGVPu4rGY1uIEqpJ75Y1b0ZHMI8RlTvVG6XkaQSeT
+	 RLGLy370G66H1I+CtRQVq6o4WWoCtSZkDtMIEqNgjYscCQqI9mR6RZA2Bs1MGsTJge
+	 1xGnaaPvZdQ1A==
+Content-Type: multipart/mixed; boundary="===============1357064658013625355=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <07997529fb699289db8722231132a345e5e86b6727ccbc8c0ddb1bfbbf066c9b@mail.kernel.org>
-In-Reply-To: <20260911025114.190899-3-diannaaav@gmail.com>
-References: <20260911025114.190899-3-diannaaav@gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Cover bpftool ring buffer event_pipe
+Message-Id: <4fba1aedc906d6c5072a1ae9a72496e6d307abd60c456cb870077cf93cc8f4ce@mail.kernel.org>
+In-Reply-To: <20260911034715.219552-3-diannaaav@gmail.com>
+References: <20260911034715.219552-3-diannaaav@gmail.com>
+Subject: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Cover recursive bpftool map dumps
 From: bot+bpf-ci@kernel.org
 To: diannaaav@gmail.com,qmo@kernel.org,bpf@vger.kernel.org
 Cc: andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 11 Sep 2026 03:57:10 +0000 (UTC)
+Date: Fri, 11 Sep 2026 04:28:32 +0000 (UTC)
 
---===============3672371007177438593==
+--===============1357064658013625355==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c b/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
+> Exercise recursive map dumping for array-of-maps and hash-of-maps,
+> including shared inner maps, empty outer and inner maps, BTF-formatted
+> values and multiple selected roots.
+>
+> Check complete JSON documents against the existing nonrecursive entry
+> representations, and check plain headers and typed values. Verify both
+> short and long options, root ordering, deduplication and unchanged
+> default output.
+>
+> Cover ordinary and nested perf event arrays to ensure unsupported
+> element lookups retain their error markers without failing the dump.
+> Dump 64 distinct inner maps under RLIMIT_NOFILE=32 in both JSON and
+> plain modes to catch holding every discovered inner-map FD open.
+>
+> Open 32 extra descriptors before forking, close inherited descriptors
+> in the child before imposing the limit, and verify the parent's file
+> descriptors and outer map remain usable.
+
+This isn't a bug, but could the changelog be trimmed to focus on the
+coverage added and the reason RLIMIT_NOFILE=32 / 64 inner maps is the
+interesting case?
+
+The last paragraph in particular restates the code almost line for line
+(opening 32 descriptors, closing inherited descriptors in the child,
+lowering the limit, re-checking the parent), which a reader can get from
+the diff. The load-bearing part of this patch is the one non-obvious idea,
+i.e. that RLIMIT_NOFILE=32 with 64 inner maps is what makes the FD-per-
+inner-map regression detectable.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
 > new file mode 100644
-> index 000000000000..1a4ae88c05a0
+> index 000000000000..1fb877fc68c8
 > --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
-> @@ -0,0 +1,425 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <ctype.h>
-> +#include <fcntl.h>
-> +#include <poll.h>
-> +#include <signal.h>
-> +#include <sys/mman.h>
-> +#include <sys/wait.h>
-> +#include <test_progs.h>
-> +#include "bpftool_ringbuf.skel.h"
-> +
-> +#define WAIT_STEPS 500
-> +#define WAIT_US 10000
-> +
-> +struct consumer {
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
+
+[ ... ]
+
+> +static void test_outer(enum bpf_map_type type, int entries, bool empty_inner,
+> +		       bool typed)
+> +{
+> +	LIBBPF_OPTS(bpf_map_create_opts, opts);
+> +	LIBBPF_OPTS(bpf_map_create_opts, inner_opts);
+> +	struct btf *btf = NULL;
+> +	char outer[OUTPUT_SIZE], inner[OUTPUT_SIZE], output[OUTPUT_SIZE];
+> +	char expected[OUTPUT_SIZE * 3], reference[64];
+> +	const char *type_name = libbpf_bpf_map_type_str(type);
+> +	int inner_fd = -1, outer_fd = -1;
+> +	__u32 root_id, inner_id, key, value = 0x01010101;
+
+[ ... ]
+
+> +	outer_fd = bpf_map_create(type, "dump_outer", sizeof(key), sizeof(__u32),
+> +				  3, &opts);
+> +	if (!ASSERT_OK_FD(outer_fd, "create_outer"))
+> +		goto out;
+> +	/* The unused third array slot also exercises failed lookups. */
+> +	for (key = 0; key < entries; key++)
+> +		if (!ASSERT_OK(bpf_map_update_elem(outer_fd, &key, &inner_fd, BPF_ANY),
+> +			       "populate_outer"))
+> +			goto out;
+
+This isn't a bug, but would it be clearer to say the outer map is over-
+sized so the array_of_maps cases also walk unfilled slots, rather than
+naming 'the unused third array slot'?
+
+The comment describes one specific configuration rather than what the loop
+does across the seven call sites. test_outer is invoked with
+BPF_MAP_TYPE_HASH_OF_MAPS in four of the seven subtests, where a
+hash_of_maps enumerates only the keys that were inserted, so there is no
+third slot and no failed lookup at all; and for entries == 0 or 1 (four
+more subtests) the number of unfilled array slots is three or two, not
+one.
+
+[ ... ]
+
+> +static void test_many_inner_maps(bool json)
+> +{
+> +	enum {
+> +		DUMP_OK,
+> +		DUMP_ERR_RLIMIT,
+> +		DUMP_ERR_COMMAND,
+> +		DUMP_ERR_COUNTS,
+> +		DUMP_ERR_IDS,
+> +		DUMP_ERR_JSON,
+> +		DUMP_ERR_FDS,
+> +	};
+> +	LIBBPF_OPTS(bpf_map_create_opts, opts);
+> +	const struct rlimit limit = { .rlim_cur = 32, .rlim_max = 32 };
+> +	char command[MAX_BPFTOOL_CMD_LEN], token[64];
+> +	__u32 ids[64], root_id, key;
+> +	int inner_fd = -1, outer_fd = -1, status;
+> +	int inherited_fds[32], nr_inherited = 0, i;
+> +	char *output = NULL;
 > +	pid_t pid;
-> +	int fd;
-> +};
-> +
-> +static const char *bpftool_path(void)
-> +{
-> +	const char *path = getenv("BPFTOOL");
-> +
-> +	if (path)
-> +		return access(path, X_OK) ? NULL : path;
-> +	if (!access("./tools/sbin/bpftool", X_OK))
-> +		return "./tools/sbin/bpftool";
-> +	if (!access("../tools/sbin/bpftool", X_OK))
-> +		return "../tools/sbin/bpftool";
-> +	return NULL;
-> +}
-
-Does bpftool_path() need to duplicate the path discovery logic that
-already exists in bpftool_helpers.c?
-
-tools/testing/selftests/bpf/bpftool_helpers.c:detect_bpftool_path()
-performs the identical three-step search:
-
-bpftool_helpers.c:detect_bpftool_path() {
-    ...
-    #define BPFTOOL_DEFAULT_PATH "tools/sbin/bpftool"
-    env_path = getenv("BPFTOOL");
-    if (env_path && access(env_path, X_OK) == 0) ...
-    snprintf(tmp, sizeof(tmp), "./%s", BPFTOOL_DEFAULT_PATH);
-    if (access(tmp, X_OK) == 0) ...
-    snprintf(tmp, sizeof(tmp), "../s", BPFTOOL_DEFAULT_PATH);
-    if (access(tmp, X_OK) == 0) ...
-}
-
-The existing implementation is already linked into test_progs via
-TRUNNER_EXTRA_SOURCES, and it includes diagnostics that this copy drops:
-"bpftool '%s' doesn't exist or is not executable" and "Failed to detect
-bpftool path, use BPFTOOL env var to override", plus comments explaining
-why the '../' fallback exists (for running non-default test_progs
-flavors like no_alu32 or cpuv4).
-
-The public API (run_bpftool_command/get_bpftool_command_output) uses
-popen(), which doesn't work here since this test needs fork/exec with a
-controllable child pid for kill/waitpid and a readable fd for
-poll/read. Could the existing detect_bpftool_path() be exported in
-bpftool_helpers.h to provide just the path lookup without the popen
-machinery?
-
-> +
-> +static void consumer_cleanup(struct consumer *child)
-> +{
-> +	if (child->pid > 0) {
-> +		kill(child->pid, SIGKILL);
-> +		while (waitpid(child->pid, NULL, 0) < 0 && errno == EINTR)
-> +			;
-> +		child->pid = -1;
-> +	}
-> +	if (child->fd >= 0) {
-> +		close(child->fd);
-> +		child->fd = -1;
-> +	}
-> +}
-> +
-> +static bool consumer_start(struct consumer *child, int map_fd, const char *format,
-> +			   const char *pin_path, const char *option,
-> +			   bool pair, bool capture_errors)
-> +{
-
-This isn't a bug, but would a small options struct make the call sites
-more readable than the trailing positional booleans?
-
-Most call sites pass NULL and false for the last few parameters:
-
-consumer_start(&child, fd, format, pinned ? pin_path : NULL,
-               NULL, false, false)
-
-consumer_start(&child, bpf_map__fd(skel->maps.perfbuf), NULL,
-               NULL, NULL, false, false)
-
-At these call sites nothing indicates which NULL is option and which
-false is pair versus capture_errors. Only the reject path ever passes
-non-NULL option or true pair/capture_errors, so those flags could be
-isolated (perhaps a wrapper for the reject case) so the common call
-sites don't have to carry them.
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/bpf/progs/bpftool_ringbuf.c b/tools/testing/selftests/bpf/progs/bpftool_ringbuf.c
-> new file mode 100644
-> index 000000000000..bbbc93c30a83
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/bpftool_ringbuf.c
+> +	root_id = map_id(outer_fd);
+> +	output = calloc(1, 65536);
+> +	if (!root_id || !ASSERT_OK_PTR(output, "allocate_output"))
+> +		goto out;
 
 [ ... ]
+
+> +		snprintf(command, sizeof(command), "%s -r map dump id %u",
+> +			 json ? "-j" : "", root_id);
+> +		if (get_bpftool_command_output(command, output, 65535))
+> +			_exit(DUMP_ERR_COMMAND);
+
+This isn't a bug, but would a macro alongside OUTPUT_SIZE (and passing
+size - 1 to the helper, as the other call sites do) keep these two sizes
+from drifting apart?
+
+The output buffer size is spelled out as two related magic numbers in two
+places (calloc(1, 65536) and get_bpftool_command_output(..., 65535)),
+which have to be kept in the N / N-1 relationship by hand. Every other
+buffer in the file goes through the OUTPUT_SIZE macro and passes
+sizeof(buf) - 1, e.g. dump_map()'s get_bpftool_command_output(command,
+output, OUTPUT_SIZE - 1) and check_plain()'s sizeof(output) - 1, so this
+is the only place where the size is not derived from a single definition.
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34557186664
---===============3672371007177438593==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34560347455
+--===============1357064658013625355==--
