@@ -1,106 +1,246 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305C5563FCE
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 20:40:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789159227; cv=none; b=NPWEAtimgjFzK3+KJ+ZZ7wv7FXVyaP81ZhHo5wMDculHlnmYbN+TiKBIfbSLOj5Vu9U1OXQl6fj0Tp7CwyrlYpeSIEh0gX+kv+XQlQqaS65xBgiIy2rIUawSn/QcR/pl1E/K/ffBY5/gdZ18YkZwFq9Wf04RYo1J7t3qCX2snF8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789159227; c=relaxed/simple;
-	bh=yOHxJv7/hycz6+JN/DFN4bKkpmVEZPmrKh4UqNfOU6M=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RrlGo6mTo0p7T23asV3Nz0w18AvQBI6mxKRPIlPyCtGM7ZBt+/M48oD+T8aBzEgisb/DV/7aFzjAVc/tNMiqvw/BXBRDGhPdhmr5YnIET+rji1vPS9LUs5JoyVL9U5PlBs29cFY58Wi7N1lEfwG8Jmdh9ZKCdPloXSm1VyKlTEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D7q6OGkL; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09DA455176
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 20:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789160354; cv=pass; b=TBC9k4x2wRrNo7fJvymIaaxrNRwTucFAuAgSSsLDSwLVx57KdeDUzv2+vqgJ8ph2+U6MueFT87SKCewZ88nrvzbmVEhFcnJ1HbPuihtau8D7Yu/J9pZM+fXWXgOvPscN4zmGA9KcfUCCIQZ78/HMzQ2haQ366J5RPE4pIlQvZ3o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789160354; c=relaxed/simple;
+	bh=mKPHrWNmrKgczw222t5+R7j7QSjX3I+NtdJQy79SCIs=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=t6dBTwcRi+dgE+5RWHJsLf+A8mZdfmoY6BM2NXOUQ9FkcwWwplY9D7y5SV8AYR1mVfqIbjfoJglUDF6VQNKUq2x7qR/WZeGly9mMhr7TtTEqAm2kkOPGt+s8toW+QHSiVZV6J2+8DUkar6LfllEfnyp+HewAPcKWjWuLGaiCRpA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kjbKZJug; arc=pass smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D7q6OGkL"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-49e6ba045ceso1465825e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 13:40:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kjbKZJug"
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-91053c27a91so13362576d6.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 13:59:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789160351; cv=none;
+        d=google.com; s=arc-20260327;
+        b=QNdVb1itaV9UAhG8R4j2YAW0mNro3I0NrHDR/e+GvB3sAPdwK59WbGs6S6DBkp1gkL
+         EYT3y+nDny8/degqz8zdlne91cue4h8ZzRGMiF/GPkwrvy9QelCNn5jt6pqQr5Frojxr
+         jmccVVsqyvEoikyQFGn9b5IMxu0lH5HIwiq0XIYZ3+KJWDvHVisri/1zqJpFP/9gsnQr
+         F4u88pU07zJi7vZhWs+9nno1iTN7lnOnSswlzkxKwxSmwtmG+OInNQQPNT91k1gazcnD
+         0PnBj57+sSSjh9Ke5mt7HTPKefBTKXMWUDA2evtOzbu5SS642cCERSioTJUoAqbM3fX5
+         NffQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=9mIQ6jM8juF2PvO8eUkaKKIYpJrRvH5Gc2fB112shtA=;
+        fh=IiJT9Z0JWK18k+LUGbBS98iNHQ+J5baAvPpVBI0Ru4s=;
+        b=FZvc962dgRnzdWh2QQw3cPvaNL2cekGg8+Mpgb17upGXig6GUsMkkPpUl9PKDUPxET
+         dLq0PFTvO1HTJeImBCcPZKq+zJ/P5KXxCsmdBKzwMnOTb3t/VbUK3Rd0qmFvA8p00JfA
+         qudXg75Rn7fvgEYTfY88Ob6AGn36HDY9qLa5YA1t1w5gthmXVkc6nQ2tcCsFTk+lFPLX
+         2FSHdZ6QpejPKRrzDbmSGagxHDwB+Ql0iro2TQVsLkn1WX1FlBrK/ydRITKNhNklzs2e
+         vkX1oe+nX9oV1313hteNK+RQZkfnyFd+wDzVT+lc/BUSRsfWA+EtJmLqwTEimZ4Wxgil
+         z0sA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789159223; x=1789764023; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=s4wQKJNxifNdByk8MBibmXjCRQpHWJtfW4Ad4PWk7cY=;
-        b=D7q6OGkLEHp4Y0O3I31FGWW8LlvvMkQiHgeXhdkNNoT5nXnJlmVubdf8Nfgj84uYvi
-         V+ApotCmGUCIgKxcS4C9WQ1yjfw1yAwmXd/8LxmwmsVz0Ptot7wJhrhiCSV6xxA1yMoi
-         fD07N9nKNR7QOCGSotd/sbVlC2CK39Ba9ZQau1pKf0oatzzzwqR8KdM+Q8CI4smIKNEe
-         lu9iubwzMVFHVFA8aJ6trQvdwHbIXXtHXGqmGAtbS6gvfoz5IadJiH27l3nvK3KWLM+V
-         SfDQntIKyPEdcDmM3yJo1LgXfEThiIvBjYBwQR1dMnq5/mn0msNm/2ytW8NAmzaLPpu6
-         WFtg==
+        d=google.com; s=20251104; t=1789160351; x=1789765151; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9mIQ6jM8juF2PvO8eUkaKKIYpJrRvH5Gc2fB112shtA=;
+        b=kjbKZJugfTsOrgBsGtrZJ0JG2GPvuKZ8VQEYu+1lkImZQE+Qq23E9Kh6HmVrQbGBrw
+         YMdXvAzx9NASG63M6s5kKAO8aQZA5FIgYNe90xt8qot6lwDHFonQX0CYGv8zkTeKiaOv
+         zIal7+oJYpi1ER9H2k7ESnhhrV2ltGFub4jyF557ZXU4UhCMic8wMfMq3DS6nGTr81CA
+         eCicXmsDzP433O58VzitrrfFtNSmP6XkTl8G4CRKkQDaDpqJO70JKJ6L+xLFJSdBvkPk
+         BaH8E2JiDPSWYfI8JhWBdrf6MZpeQTRajAbTnUIHIWezTLaUhzKSFf2XwEH0r+GlpfFX
+         E9TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789159223; x=1789764023;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1789160351; x=1789765151;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=s4wQKJNxifNdByk8MBibmXjCRQpHWJtfW4Ad4PWk7cY=;
-        b=ovIWOI1qLnnFJ2QW2f6yWZooKGGP7rnGAswgy6p8rN9ZIyeRt410KKMcMYulPtQGii
-         P5MKIRZGllw/GwEXyhgZuypa2wBWr5X3lj5QaQQ/hIe5ZzCwKIzYY0h+oUfCC44UNHmr
-         aoXyVnTn8KV17nKk01p2eILXFidnwI7taUq4UTJlIha81y+Ikc7m2EmiaHwWBlcYfgBx
-         IsrlDVP5q4yAi9bkAI0FvC9Yz/DpL50TXqkZSElXUgs39cJvWKINg4uWibMew01XIzSy
-         Cr2rJ4agIZSnk+cqJjYLH2YVsYWT5cBH3FzVlGuNXfe8WhlivrBVKsedEDlHZmE2Vge2
-         ZCtQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwFSn6eugNJV2oKBbU2ZovaLLih07u/PezfIepFFf7Hgtsyz3Q4+Kb8LPQbJaMYjI3BPl1mUatUNzXtZKDL9t0=@vger.kernel.org
-X-Gm-Message-State: AFuF++niwAFQAajb58YcaOtG7uspvIcBFrntfeI/we+aVmcPKZR0BPAa
-	CFb6doQCWv5lrQdv1Dd3HK7WOpA1bPCq/unwjAa2v0BrM9VIa4GVT1/s
-X-Gm-Gg: AYBFou0FWsiow+GiJToV4R5oSt5I1I+WpJJqJd+Oi9mmiqGqQE4/8WDNSpYe8r+fG39
-	BhzjFtWczhJX6xiLTUh+hU8HQGnLcUYqEdw7SBONSoAjwegklVWyobBXHcma7tTD0SLqRd74K55
-	zQUNHJ8Pykgn2lrkDd7w7aXh+ccVmQ+l9p0v1PAIxBwX7/cNI+y/PzfTQC5sZ20kcTut2f+JVlK
-	gYOezI+973DV0r2r3M7k5od2NXDckQ4kEox2P4fDSbRfAyh/RUwoKDJEP+PJctN3vi4Gove6nrR
-	TwYvxjWUbWlkzTfKIOwcLaHCpZjrHn3RxSAoKvIZokxMUr3EWseibtoRlW8/QvQBi8ZONgzx9Xo
-	G/8YzyiPa+BDnY9nGHMZizr7KZfaZCpcC6cwlzCHmmkCfox+/dP27cGMJFeEFLvFNJNnwrHSEHE
-	2CP+A5KppQA41Rfceex2ryfEGSs8o7zzfJ3aCOJ3ixctgcGNdU5YDZc2TH1rFSfzNaohBugySpO
-	x7pTQjbLEFuiVvyuaqGkjss1mJuh06NrHDopigc55NlzFcRPxP7iRJ4mXKZ0ctJWki4/Ank6Gru
-	1TXvZMEgwuHGlXPfPf5eglJ8ajsd97CaC8/z
-X-Received: by 2002:a05:600c:19ce:b0:49c:fc6c:be04 with SMTP id 5b1f17b1804b1-49e619f67bamr68164805e9.27.1789159222962;
-        Fri, 11 Sep 2026 13:40:22 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-095-114-033-154.95.114.pool.telefonica.de. [95.114.33.154])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e6499d57bsm114619865e9.3.2026.09.11.13.40.22
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 11 Sep 2026 13:40:22 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>,
-	Rae Moar <raemoar63@gmail.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Marie Zhussupova <marievic@google.com>,
-	kunit-dev@googlegroups.com
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] kunit: Fix kunit_register_params_array() reference in kernel-doc
-Date: Fri, 11 Sep 2026 22:39:01 +0200
-Message-Id: <20260911203901.95078-1-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+        bh=9mIQ6jM8juF2PvO8eUkaKKIYpJrRvH5Gc2fB112shtA=;
+        b=b0Vm9Jr7lYUuzhejOOc0AcK/CvRU+sPuNijt44ENTaD6gEau5wF/9i8caQvEWVFMiB
+         A0zvJwsVqcwYbuLvqqwYzib6hqvzLDSE69syJ9BSxV7PzoYzOXUg+oQz6GNcsOxcJlv0
+         TsNQh0v+vDr4SeetJcz3z/IbShfDu538QnUrbl6npk/WVfwI6zL9LshDA3/3Uqmj0h7f
+         7Ae7Vjhgwf3Bw8RPvk3p7jytAyUNXxOxINQZgT10B6P0gowjSNgfvjuNI+7sMJlabWP7
+         iMENIzZ3dFtPjiMgMDSk4hpsB7Na6pYk2BV3y7XzGDve8CVu5lPRjnP99VJXd6K2CG2r
+         Eo0Q==
+X-Forwarded-Encrypted: i=1; AKwUvBxa9gfzf63VnVmftoCq/aQzwwKgq87Q4JabMvH4cnGb8LEIOJ+UkAZvWkdNOoEhQWB82mY56Uc1ixNFNwZhk38=@vger.kernel.org
+X-Gm-Message-State: AFuF++mtHtcU+Gr/e2uPGhCpERkgDQiZRo58eveLw+xAax1pJ4OSSXjJ
+	olfFo8TR1mAE35Zh7eKjWT7mfNZRf8Z4FF45oLgYdLkeZBfCjs27fzbyA3k/44KsF0HQ4jPwi+s
+	u808OSekYYlt/xTkJnUKTO/62atNgIV+jldqDdEYo
+X-Gm-Gg: AYBFou1OfBYXuESTg4nynMFVbhI2/th3M7YIPrGHWKdLwejE9/FEzJegLHkK6IrVmMP
+	l5KM0fAysg2+bdka+P0GP7ge8tgq+DCPLW9tm8cvTjEydHJzwJKhNg9iD2/yGfasbpYOfMLYz+J
+	2NXf9CbiSQTeN3zlTCcTT23RqYU3hfsklqjdK7IVKh0A1iroArgvhNKdYuoZ4DlVYTgNAYk9Bjp
+	AmUDBesX4FAW9B5QgSlB0uV1ViT9a9c7Bmp7wl3pGRkzcflKHmXBCnPEiMO4PxCIJUn7j5/tCUE
+	PUVVUeMxWEOQMqeWvRy3h3GMVkUzfQd0pcT//iQjjbOd4Y5vXhxx4kz3CD6pqZtm2SwPLtYdMHF
+	QTJjOAnOipgpdQGX6wWm8bv4Plz7x/ugbhb9QLvMfeg==
+X-Received: by 2002:ad4:5f8f:0:b0:910:4c56:76d8 with SMTP id
+ 6a1803df08f44-9121207d6d2mr79542346d6.1.1789160350811; Fri, 11 Sep 2026
+ 13:59:10 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 11 Sep 2026 13:59:09 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 11 Sep 2026 13:59:09 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <aqRFSiicubfsw3N6@google.com>
+References: <20260901180713.4185641-1-dmatlack@google.com> <CAEvNRgEs82CVTL_CUn=Ovrwvt86U1dxzr8psWGu=nk98ZH6Esw@mail.gmail.com>
+ <aqRFSiicubfsw3N6@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Fri, 11 Sep 2026 13:59:09 -0700
+X-Gm-Features: AcwNN1VXiGYQy4JW0rBuiz4KjYly49Wx8Xl5G5ezJF-9TY2IawBLiOKUcfGow4s
+Message-ID: <CAEvNRgFCrcyk6F0vJ11pgj2EDSUAXj6Zw-oEdZpfj2SrH1Cv9g@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/5] liveupdate: LIVEUPDATE_SESSION_RETRIEVE_INTO_FD
+To: David Matlack <dmatlack@google.com>
+Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, 
+	Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-The kernel-doc comment of KUNIT_CASE_PARAM_WITH_INIT() refers to
-kunit_register_param_array, which does not exist. The name is
-kunit_register_params_array. Say kunit_register_params_array.
+David Matlack <dmatlack@google.com> writes:
 
-Fixes: b820b9077b7f ("kunit: Enable direct registration of parameter arrays to a KUnit test")
-Assisted-by: LLM
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
----
- include/kunit/test.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> On 2026-09-11 11:04 AM, Ackerley Tng wrote:
+>> David Matlack <dmatlack@google.com> writes:
+>>
+>> > This series adds support for LIVEUPDATE_SESSION_RETRIEVE_INTO_FD, a new
+>> > UAPI to enable preserved files to be restored into a userspace-provided
+>> > file instead of a kernel-allocated file, and uses this to support
+>> > preserving tmpfs files in-place without any changes to the LUO ABI.
+>> >
+>>
+>> I'm interested in the idea of retrieving folios into an fd for a
+>> different reason, I'm exploring handling over ownership physical memory
+>> to a guest_memfd.
+>>
+>> > The Live Update Orchestrator (LUO) API currently explicitly returns a
+>> > new struct file for every preserved file during retrieve() (e.g. via
+>> > memfd_alloc_file()). This then forces userspace to use anonymous memfds
+>> > for all in-memory files it wants to preserve. This works reasonably well
+>> > for VM guest memory but does not work well for other types of files that
+>> > userspace may want to preserve (e.g. in-memory logs, binaries,
+>> > configuration files, etc.).
+>> >
+>>
+>> Does this assume that VM guest memory is usually provided using
+>> anonymous memfds?
+>>
+>> More generally, is the problem that there isn't a simple way to
+>> implement retrieval into anything other than anonymous memfds?
+>
+> Roughly, yes.
+>
+>> > Preserving entire tmpfs mounts in-place would require a large amount of
+>> > kernel support and would effectively make tmpfs an ABI, which is a
+>> > non-starter (or so I hear). Instead, we can delegate the reconstruction
+>> > of the tmpfs mounts (directory structure, permissions, etc.) post-kexec
+>> > to userspace. The kernel just needs to preserve the contents of tmpfs
+>> > files and provide userspace a mechanism to restore those contents back
+>> > into a specific file on the filesystem after the kexec. Hence,
+>> > LIVEUPDATE_SESSION_RETRIEVE_INTO_FD.
+>> >
+>>
+>> Suppose pre-kexec, the data was in a tmpfs file (and fd), how would the
+>> preservation work? Would the user have to
+>>
+>> 1. Transfer the data from tmpfs fd -> anonymous fd
+>> 2. Preserve from anonymous fd
+>> 3. kexec
+>> 4. Set up the tmpfs fd
+>> 5. Retrieve into the tmpfs fd
+>
+> No, the proposal in this series is to support:
+>
+> 1. ioctl(LIVEUPDATE_SESSION_PRESERVE_FD, {TOKEN, tmpfs_fd})
+> 2. kexec
+> 3. tmpfs_fd = open(..., O_CREAT)
+> 4. ioctl(LIVEUPDATE_SESSION_RETRIEVE_INTO_FD, {TOKEN, tmpfs_fd})
+>
+> No transfering to or from an anonymous fd is required.
+>
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index da5312e0dfa57f37a7e96c9e618b03b0947ede8b..55548dc54444f8c9f9e9319fbc263d93c0a56093 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -239,7 +239,7 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
-  * that were not managed by the parameterized test, and any other teardown logic.
-  *
-  * Note: If you are registering a parameter array in param_init() with
-- * kunit_register_param_array() then you need to pass kunit_array_gen_params()
-+ * kunit_register_params_array() then you need to pass kunit_array_gen_params()
-  * to this as the generator function.
-  */
- #define KUNIT_CASE_PARAM_WITH_INIT(test_name, gen_params, init, exit)		\
+Cool that preserving a tmpfs_fd is supported. How is that done without
+preserving the rest of the tmpfs stuff?
+
+Why is it possible to preserve the fd without the rest of the tmpfs
+stuff but not retrieve without the rest of the tmpfs stuff?
+
+Is retrieving into an fd a bit too much of a shortcut? Would preserving
+the rest of the tmpfs eventually be required, and hence retrieval of the
+rest of tmpfs should also be eventually supported symmetrically?
+
+>> > An alternative approach to restoring data to a named file would be
+>> > supporting a zero-copy sendfile() that can be used to convert named
+>> > tmpfs files to/from memfds across the kexec. But this poses significant
+>> > challenges on the *preserve* side since the preserved file might still
+>> > be actively in use. The benefit of the retrieve-into approach introduced
+>> > in this series is that it does not require dealing with two different
+>> > files. There is only ever one file that owns the preserved memory.
+>> >
+>>
+>> Would it be more symmetric if the process is
+>>
+>> 1. Transfer the data from tmpfs fd -> anonymous fd
+>> 2. Preserve from anonymous fd
+>> 3. kexec
+>> 4. Retrieve into anonymous fd
+>> 5. Transfer the data from anonymous fd -> tmpfs fd
+>>
+>> As to the exact details of "transfer", I think the best we could do
+>> would be some kind of move from one fd's page cache to the other fd's
+>> page cache?
+>>
+>> Is the goal of the transfer to avoid any memcpy and fully transfer
+>> ownership (so, not just by increasing folio refcounts?)
+>
+> Yes this is the alternative proposal that has been proposed and
+> discussed a little bit off list, with sendfile() and copy_file_range()
+> being the possible mechanisms to do the "transfer". I think there are a
+> few fundamental problems with that approach on the pre-kexec side.
+>
+>  1. iommufd requires that fds mapped into it are preserved. If the file
+>     mapped into iommufd is tmpfs, but then we transfer that file to memfd
+>     for preservation, iommufd will fail to preserve because the tmpfs file
+>     is not preserved.
+>
+>  2. Even if you only use this feature for files not mapped into an
+>     iommufd, transfering the contents in a zero-copy way seems
+>     challenging. What do you do if the tmpfs file is still in use when
+>     you want to transfer it?
+>
+
+When you say in-use, I suppose you mean folio is in-use by some IO and
+is mapped in IO page tables, and that the IO must continue while the
+folio is transferred?
+
+Are you expecting guests (as in stage 2 mappings) to continue to be
+functional while the folio is transferred?
+
+I'll have to think a bit more, I was initially thinking of just
+transferring folios where I could unmap from everywhere (processes,
+stage 2, IO page tables) for the transfer.
+
+>> > By leaving file and metadata allocation purely in the purview of
+>> > userspace, programs can create the target files where they want, with
+>> > the names and security permissions they desire, before directing the
+>> > kernel to restore the preserved folios into them.
+>> >
+>> > Currently, only tmpfs shmem files are allowed as valid target receptors.
+>> > Attempting to target populated files, or anything other than an empty
+>> > shmem file, will trigger -EINVAL. HugeTLBfs files could be supported in
+>> > the future.
+>> >
+>>
+>> Is this basically that at some point, all in-memory filesystems' fds can
+>> support transfers?
+>
+> Yes, theoretically.
+>
+>>
+>> >
+>> > [...snip...]
+>> >
