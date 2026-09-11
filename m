@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 032F435201C;
-	Fri, 11 Sep 2026 15:00:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED214363C43;
+	Fri, 11 Sep 2026 15:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789138813; cv=none; b=PdACsX765qRKqyiPM0GnnF8IVSTwX56Qwk8u//t7R6bKJHr3bgQhlkGzFMKqRpNtsqAjWfC+hYYQxJSRL+Y6dJHA8lPBdmQx5RWNAA64g2CZWnvxSUafyZlBlo6yfGxbiTQBtGh1cIJTuoRC4iLUXEGtCtBp5X2UiMOAOehLfXA=
+	t=1789138947; cv=none; b=JHfHQsh+Jgslrh1dl90RejAhXQC3TnWSteQ/jNFmkuXMEhyHax9DcLjX3vHa0QpTXpRBWA8vKjWxg556XV1o1my21woKj0GASDBnOMklXO/9qBb+FuGidG/LeWXlGadWJnbxs1KieeTIzEh/sU1HpsiReiXkRCzHA833RaPPE5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789138813; c=relaxed/simple;
-	bh=BJ+N3tAgrnakwVhfsjLxPfkkn9ft7QFJIjAoHkcyxlo=;
+	s=arc-20240116; t=1789138947; c=relaxed/simple;
+	bh=mvK0XzUvFQt90JZXu3FumK2Xs8BGJgqQg63kn1EarA0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lzLy9oUyuq9yvDTxpLjMHCVYPjDXibKqONGJMafk9ibpXGWF4OyemHn/opbdW011CXHG+aWysg4nRYx510l4QPQAqmesf17v9/wMQ/f0gBPspDtOVkRxdvF5GT4jJcDTlgxYWjdG56gz3lzBTHaytzPG2eokg3Ke+Ld5V0Ylwm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dy8e5PD7; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=opwTL/SgoM5ogtG9BW4zzydS1AXGLPCgkTODh/iI/JdE7uDaD+cK/PN9bSH4Vks2wcNq7tV/+FrX+D4+WvvFr+veRU95MAcKSzYwpKDg1i7rVyfecf0vxrVLpLzancf3s+I2s85R8bE7RxTg7Jut5XgMYFIa3PX116PlhLml8sQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VZh6a5er; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dy8e5PD7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 534911F000FF;
-	Fri, 11 Sep 2026 15:00:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VZh6a5er"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 138301F000FF;
+	Fri, 11 Sep 2026 15:02:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789138811;
-	bh=IwI1Hg5YAjW2rDMwPwYrAQxSLiZRPOJVWVCH8JKII60=;
+	s=k20260515; t=1789138945;
+	bh=1PTWyg4n3qpD4y/aa8UvIgM/ayJsqmzhh3ejIEE3QXI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Dy8e5PD7jr0IjrU9SvA6lmP88wpLBTpJ2VgJbE4UZ9E4t+WK3QtJFI8AwZbcp/bxY
-	 QejuWzp1CfkQjKuJs18bQZcU7L5oyMShHWg9cToHK2Fu0Tl8pcGCdzrqAph6KODNkv
-	 tMHevqRILk8QVJo8pnotb/wn45smu2oYd3L/yiiZTup/gCKM5yJViu1yQFSDodGNO/
-	 jGKg8tRWxEAlZSGwCekSOUizy3bYW7Xka1+MUzP7YWbuU+/s6CNC8i135PgghyABAK
-	 M2mr6Qj6Z5e5J3w18aae2AJr5c8tYUJY9VY31ARrLQOTrJsXwEtyci1BZayipkvXUN
-	 nSr07x6yYKupA==
-Message-ID: <0e419abb-71ce-4b97-b189-da86a4891920@kernel.org>
-Date: Fri, 11 Sep 2026 17:00:05 +0200
+	b=VZh6a5erCAhSab9ROCtz8BS6g7MI1jzhVXl1TxFBYM68Z+fltaZm1xEx6OLItP15Z
+	 nZmBVnNP1V+0/DmEZx6SzFV84s9DU1Cqc3gJdZgKEuLrXE8ZBhvx4UTF2zsQJmzQrU
+	 1ESbS6pHuZFLaLsWPyN7kq3K9C94jNU3KLadDp0qGGPb0YqI8SxZOaAh8rd/J0rPK5
+	 N7z3J3PXvkWkYOSJwSDPZrWHYbCcf4HyZ5juLbh027S7qlmCWyKCaa/zsagr+fkbEo
+	 rjY7sSzeoe/K7U4vNDmzPmvaXdunSPEXnnKxmE3D1cRrG2OGu0oUCAh5OqIXCJVYCC
+	 jemxJj67wfX/Q==
+Message-ID: <62160d6e-5409-4249-814b-cdc33b7d29df@kernel.org>
+Date: Fri, 11 Sep 2026 17:02:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,14 +35,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kselftest: mm: remove exclusion of building soft-dirty
- test in arm64
+Subject: Re: [PATCH v2] kselftest: mm: fix potential failure for merged VMA in
+ guard-regions
 To: Yeoreum Yun <yeoreum.yun@arm.com>, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: akpm@linux-foundation.org, ljs@kernel.org, liam@infradead.org,
- vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
- shuah@kernel.org
-References: <20260911125028.1268274-1-yeoreum.yun@arm.com>
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com
+References: <20260911142904.1825452-1-yeoreum.yun@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -89,56 +88,23 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260911125028.1268274-1-yeoreum.yun@arm.com>
+In-Reply-To: <20260911142904.1825452-1-yeoreum.yun@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 9/11/26 14:50, Yeoreum Yun wrote:
-> Since commit 0389c305ef56 (“selftests/mm: skip soft-dirty tests when CONFIG_MEM_SOFT_DIRTY is disabled”),
-> the soft-dirty test is skipped when soft-dirty is not supported.
+On 9/11/26 16:29, Yeoreum Yun wrote:
+> check_vmflag_guard() uses /proc/self/smaps to retrieve the VMA flags,
+> but this can fail if the mapping is merged with an adjacent VMA.
 > 
-> There is therefore no reason to exclude the test from being built on
-> arm64. Remove the arm64-specific exclusion.
+> To avoid this potential failure, first allocate a temporary region with
+> extra pages at both ends, unmap it, and then map the test region within
+> the temporary address range, leaving an unmapped page on each side to
+> prevent VMA merging.
 > 
-> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
 > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 > ---
->  tools/testing/selftests/mm/Makefile | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-> index 2d5366196e30..d3e9bd67904a 100644
-> --- a/tools/testing/selftests/mm/Makefile
-> +++ b/tools/testing/selftests/mm/Makefile
-> @@ -104,10 +104,7 @@ TEST_GEN_FILES += guard-regions
->  TEST_GEN_FILES += merge
->  TEST_GEN_FILES += rmap
->  TEST_GEN_FILES += folio_split_race_test
-> -
-> -ifneq ($(ARCH),arm64)
->  TEST_GEN_FILES += soft-dirty
-> -endif
->  
->  ifeq ($(ARCH),x86_64)
->  CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
 
-Does that mean we can also the following?
-
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index d09f9f6a384ee..33963535616b2 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -390,10 +390,7 @@ then
-        CATEGORY="pkey" run_test ./protection_keys_64
- fi
-
--if [ -x ./soft-dirty ]
--then
--       CATEGORY="soft_dirty" run_test ./soft-dirty
--fi
-+CATEGORY="soft_dirty" run_test ./soft-dirty
-
- CATEGORY="pagemap" run_test ./pagemap_ioctl
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
