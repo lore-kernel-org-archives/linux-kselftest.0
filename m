@@ -1,56 +1,73 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F1D3F4831;
-	Fri, 11 Sep 2026 10:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F6340DB20
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 10:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789120937; cv=none; b=K2aXZUrzIPN9mOA9YhTLkGzyXb1nHbWiYTYIRgdbRhziljjFOrhF8y3YUy+VQnGR2SDMp51ACw4fbBZTu5qO0Sl79LAr1+6TKJYDiZHFEx7JufVnRzBAizZE2YxjQjXKFU9S5jvJ5zrkNdFp5aviXFT6am4Qlj78NyIficFeWFU=
+	t=1789122073; cv=none; b=jX9Kg1oL9HneiHaToiCjEVCDxH21GC2OIunxiMALI96zQ1wJ2hIRoDgmtlRwQURHlH/p3ffz2RPrjRWDtH+UTHcW5U8MnaEnthCTkgTYdqiwTUcdPiBrppCpTNZYpRDNkLCWYs3DL2Lv5VnEZbaxLvDuJ4GYHkFEmORjLybE4Lo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789120937; c=relaxed/simple;
-	bh=Ap6Qzh//tgwC9TM/BwK9j1bmQLM5lt5in9O/jOI+FVk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=p4gyW50KzRHZBtxdTG1DcQN20zz4YUw0nbGxes29IcA1iVpBkhmz7/zbqTQQJoZPqvhLRAiwzgdUa88vvvmR8UPrV4fz32C1OHWvf2SNL6yLLC0QX/qRbJIztH9PybNPjXTeh0qrm8p7PA07w7Bth2zLfvlAeV0PRG/SVzep7y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: d750eb7eadc711f19a56ed5b684f684d-20260911
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:819c808a-b307-4357-8807-6cad48e8e97a,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:7db8b62,CLOUDID:f324815990e8e8d85fd95d500e816260,BulkI
-	D:nil,BulkQuantity:0,SF:102|136|850|865|898,TC:nil,Content:0|15|50|99,EDM:
-	-3|-100,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,O
-	SA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: d750eb7eadc711f19a56ed5b684f684d-20260911
-X-User: fuqingshuang@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <fuqingshuang@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1742510889; Fri, 11 Sep 2026 18:02:04 +0800
-From: Qingshuang Fu <fuqingshuang@kylinos.cn>
-To: Andy Whitcroft <apw@canonical.com>,
-	Joe Perches <joe@perches.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Anton Danilov <littlesmilingcloud@gmail.com>
-Cc: netdev@vger.kernel.org,
+	s=arc-20240116; t=1789122073; c=relaxed/simple;
+	bh=FkCvNJqJXXmtGAj46QLbuYrsBVXeQMeFMH3sDZF2BDc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CZtLOlI/eXVl6dTOaww9PbTxjCjRL0Pb4GLnVci+rcdF/SELnsa2iE82vO/sk1YM/cwwiP8v0Wrgmcdd+1xEhVcjlEh1hOIdRLmyZmh3uZUTQ5WErSNf921IdzdSrG0GZn8cow7iTGk61348yPZ55eswUtIQrJB9r8XLSbmYLSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A0OrzQ6r; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A0OrzQ6r"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-39b9184fa80so713731a91.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 03:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789122072; x=1789726872; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=VO8IwKriiEzsim6wTkrEMStqXoab8WUQmDv+TV1yfBA=;
+        b=A0OrzQ6rLNdzfVBqLn/hCiNtHTbEwL/LwdupTZjqlX1vf7ssrrYWovE5l0v5dIIzjO
+         h3OTibcAM4V79d388Pl+n3GxZ7Jgg6/fI6fQKvzwIyk+A+caSnynneyGn5cvtPeTHGL+
+         NviYSf4OM6NmCIfXBnCKop/EkHEIQLcb6uH0iaQDyX6ufSa8u3hL4MiQTft/1Yyk/ug4
+         fnciKhELhOKaIETRBM8z7X3M9IIA6Geh3pMMf/N/m0RDzU0Nrzf1qciHfk02nM07LDST
+         pONrqtXBnAjpfZyw6HlaKYoiRArsJ/r+uh9Ou8mG71rmLv6auZIhWM18PFYM804QWmn4
+         Fl6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789122072; x=1789726872;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=VO8IwKriiEzsim6wTkrEMStqXoab8WUQmDv+TV1yfBA=;
+        b=HvuSctPZzF0Y2Kl4cOUDc0FHf8tnWw/CAX239evu6uxCtw/cXYloi2JxESral5mnQ0
+         fJdsyzvZ/GP5RMqKZg/c/J70ZhM3FlW7QPO1XjSnGy9zT2szyRt3PH3dd0aUNJd/wP5M
+         KQINHDjYZB4yFjkjMFuuaMtXbXaNWoPk0mU3RWkKDELNccuRGTFSQrFdCZrky3RHIRJe
+         0Amtct1GbH3A3aoD2aDd5WyxLiKSe3TP5d/r5Vc/29+LI+GMgeY1WikwNuJMwvr0rerg
+         FXsJGIUx+MByoOG6xJW83CB0JYK9AG/HdXw/SLe7pskPSZHvz34FtKZ/cwSQi6qvATQz
+         Pxqg==
+X-Forwarded-Encrypted: i=1; AKwUvBzgLxdSk9dBZC5zqxKbBYpfyXVRAizUbiOehuRLquepGZpZxsIF3enUhuPVOz8u8Bz6YEGLv3ZECmr1lkaCINk=@vger.kernel.org
+X-Gm-Message-State: AFuF++kaM4sFfCfdBlycyUCW6s28r4SQn5Wt5lCuZKzCilXHJOdRnMQ9
+	L1UMs4Qd5ztJw7dK8ZpjbxP/HoUi+a8ai/w+uRv6DhzQg8PlU6NydM+PI0G5zGAG
+X-Gm-Gg: AYBFou10WTkNs9pAUGwyGjfYQ/jMj204piyZfpPdgLLMbcmLZj7sh0VxrcNmNEvaLzk
+	JODqj00PU5YUvImRxZGxgRSqf0NTcEYZdE2VsPT5H4nwZgAceEdAU/Cp5/K5bq6b8kTSmaf/Z6x
+	HdzKdH3blFCfNNHZ7J//+K4wp+eU92w1y023gwFXbePRBpUr3E/WJAcDOyBayAwgEnOnXJ7lyvo
+	7Ajuh959vVhpdA55QxDLg+NYpDHAtYF97moibtgu7IsJIibwyNzdLoiAHSQqjbhiA3TkjxACt7i
+	ThHW+uGWfAY8EL+ZZ8ifcgDCGeBlgwyKJdNdMvaQg9EHWZJPPD94zT55TRBfi1VNejfPifcJfEO
+	jf1hXKVURxPuLRBP1V7F7YvalQcgggaQYiNNz5po2YUkf/GARQF/vxePeA+faocd9wrfYidWRXn
+	MQUHakDPtAqbHzd0GFcALZ2poxJ2Vpc9ag1So6TaFoAKEGqiydLs4Ubb0mHJ4IFreRGWZK2cBy5
+	HHyXRzAPb63MPPHjG4YSEx5NQ==
+X-Received: by 2002:a17:90b:1651:b0:37f:fdc8:71b4 with SMTP id 98e67ed59e1d1-39d9bbf93c5mr4745006a91.2.1789122071437;
+        Fri, 11 Sep 2026 03:21:11 -0700 (PDT)
+Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14365b8ead8sm5701294c88.10.2026.09.11.03.21.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2026 03:21:10 -0700 (PDT)
+From: Hemanth Selam <hemanth.selam@gmail.com>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Qingshuang Fu <fuqingshuang@kylinos.cn>
-Subject: [PATCH] selftests: net: fou_mcast_encap: conditionally load fou module and skip IPv4 case
-Date: Fri, 11 Sep 2026 18:01:58 +0800
-Message-Id: <20260911100158.854183-1-fuqingshuang@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: selftests: Add a test for nested virtual NMI support
+Date: Fri, 11 Sep 2026 15:51:05 +0530
+Message-ID: <20260911102105.1927773-1-hemanth.selam@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,66 +76,249 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The IPv4 FOU/GRETAP multicast test requires the fou module to register
-tunnel encapsulation operations and the FOU generic netlink family.
-Since there is no genetlink module alias, the module cannot be auto-loaded.
+KVM's virtual NMI support for nested guests has no test coverage; "V_NMI"
+doesn't appear anywhere under tools/testing/selftests/kvm/.
 
-The test previously assumed CONFIG_NET_FOU=y. On kernels built with
-CONFIG_NET_FOU=m, setup_ipv4() fails silently without terminating the
-script, causing a false positive test failure with 0/100 received packets.
+Add a test that covers the vNMI controls L1 provides in vmcb12:
 
-Fix this by trying to load the fou module before the IPv4 test. Skip the
-subtest cleanly if the module is unavailable, mirroring the existing
-IPv6 fou6 module handling and following pmtu.sh conventions.
+ - With vNMI enabled but no NMI requested, L2 runs without taking an NMI,
+   and neither V_NMI_PENDING nor V_NMI_BLOCKING is set on exit.
 
-Only module load failures result in a skip. Any other setup errors still
-report a test failure, preserving test coverage.
+ - With V_NMI_PENDING set, L2 takes the NMI on VMRUN.  Exiting to L1 from
+   the NMI handler, i.e. before its IRET, shows the bits hardware wrote:
+   V_NMI_PENDING cleared and V_NMI_BLOCKING set.  Once the handler IRETs,
+   V_NMI_BLOCKING is cleared.  Repeat to verify NMIs can be delivered
+   back to back.
 
-The official selftest config enables CONFIG_NET_FOU=y, but many
-distribution kernels build it as a module. modprobe is a no-op for
-built-in configurations, so existing CI behavior remains unchanged.
+ - Enabling vNMI without intercepting NMIs fails VMRUN with SVM_EXIT_ERR,
+   per the consistency check in nested_vmcb_check_controls().
 
-Fixes: e5382133c51c ("selftests: net: add FOU multicast encapsulation resubmit test")
-Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
+Add the V_NMI_{PENDING,BLOCKING,ENABLE} masks and X86_FEATURE_VNMI to the
+selftest headers, which didn't define them.
+
+Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
 ---
- tools/testing/selftests/net/fou_mcast_encap.sh | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/net/fou_mcast_encap.sh b/tools/testing/selftests/net/fou_mcast_encap.sh
-index 70210d39fba3..d94c19237daf 100755
---- a/tools/testing/selftests/net/fou_mcast_encap.sh
-+++ b/tools/testing/selftests/net/fou_mcast_encap.sh
-@@ -51,8 +51,6 @@ setup_common() {
- }
+Tested on an AMD EPYC system with vNMI supported and enabled.  The test
+passes consistently (50 consecutive runs, no failures).
+
+The int_ctl values L1 observes across a delivered virtual NMI are:
+
+  before VMRUN              V_NMI_ENABLE | V_NMI_PENDING
+  exit from the NMI handler V_NMI_ENABLE | V_NMI_BLOCKING
+  after the handler IRETs   V_NMI_ENABLE
+
+To check the assertions aren't vacuous, each was inverted in turn and
+confirmed to fail against actual behaviour:
+
+  - Not requesting V_NMI_PENDING, so no NMI is delivered:
+      nmi_fired == i
+      0x0 != 0x1 (nmi_fired != i)
+
+  - Asserting V_NMI_BLOCKING is clear while the NMI is in service:
+      !(vmcb->control.int_ctl & (1 << 12))
+
+  - Expecting VMRUN to succeed with V_NMI_ENABLE set and INTERCEPT_NMI
+    cleared:
+      vmcb->control.exit_code == SVM_EXIT_VMMCALL
+      0xffffffffffffffff != 0x81
+
+Where vNMI isn't available the test exits KSFT_SKIP rather than failing.
+No regressions in the other nested SVM selftests.
+
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../selftests/kvm/include/x86/processor.h     |   1 +
+ tools/testing/selftests/kvm/include/x86/svm.h |   9 ++
+ .../selftests/kvm/x86/svm_nested_vnmi_test.c  | 129 ++++++++++++++++++
+ 4 files changed, 140 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86/svm_nested_vnmi_test.c
+
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 96bab7002d39..92e1018e9c8a 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -121,6 +121,7 @@ TEST_GEN_PROGS_x86 += x86/svm_nested_clear_efer_svme
+ TEST_GEN_PROGS_x86 += x86/svm_nested_shutdown_test
+ TEST_GEN_PROGS_x86 += x86/svm_nested_soft_inject_test
+ TEST_GEN_PROGS_x86 += x86/svm_nested_vmcb12_gpa
++TEST_GEN_PROGS_x86 += x86/svm_nested_vnmi_test
+ TEST_GEN_PROGS_x86 += x86/svm_nested_pat_test
+ TEST_GEN_PROGS_x86 += x86/svm_lbr_nested_state
+ TEST_GEN_PROGS_x86 += x86/svm_pmu_host_guest_test
+diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
+index 6e6f70035508..71697a1d5b86 100644
+--- a/tools/testing/selftests/kvm/include/x86/processor.h
++++ b/tools/testing/selftests/kvm/include/x86/processor.h
+@@ -224,6 +224,7 @@ struct kvm_x86_cpu_feature {
+ #define X86_FEATURE_PFTHRESHOLD         KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 12)
+ #define	X86_FEATURE_V_VMSAVE_VMLOAD	KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 15)
+ #define	X86_FEATURE_VGIF		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 16)
++#define X86_FEATURE_VNMI		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 25)
+ #define X86_FEATURE_IDLE_HLT		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 30)
+ #define X86_FEATURE_SEV			KVM_X86_CPU_FEATURE(0x8000001F, 0, EAX, 1)
+ #define X86_FEATURE_SEV_ES		KVM_X86_CPU_FEATURE(0x8000001F, 0, EAX, 3)
+diff --git a/tools/testing/selftests/kvm/include/x86/svm.h b/tools/testing/selftests/kvm/include/x86/svm.h
+index c8539166270e..5779fb285d79 100644
+--- a/tools/testing/selftests/kvm/include/x86/svm.h
++++ b/tools/testing/selftests/kvm/include/x86/svm.h
+@@ -140,6 +140,12 @@ struct __attribute__ ((__packed__)) vmcb_control_area {
+ #define V_GIF_SHIFT 9
+ #define V_GIF_MASK (1 << V_GIF_SHIFT)
  
- setup_ipv4() {
--	# IPv4 FOU (CONFIG_NET_FOU) is built in on kernels configured for
--	# these tests, so no module load is needed here.
- 	ip -n "$NSENDER" addr add 10.0.0.1/24 dev veth_s
- 	ip -n "$NRECV" addr add 10.0.0.2/24 dev veth_r
- 
-@@ -160,8 +158,17 @@ run_ping_test() {
- }
- 
- setup_common
--setup_ipv4
--run_ping_test -4 eoudp4 "$TUN4_R" "FOU/GRETAP IPv4 multicast encap resubmit"
++#define V_NMI_PENDING_SHIFT 11
++#define V_NMI_PENDING_MASK (1 << V_NMI_PENDING_SHIFT)
 +
-+# The fou module registers both the tunnel encap ops used by "encap fou"
-+# and the FOU genetlink family used by "ip fou add", and neither of them
-+# is auto-loaded. modprobe succeeds as a no-op when CONFIG_NET_FOU=y.
-+# Keep any other setup error as a test failure rather than a skip.
-+if modprobe -q fou; then
-+	setup_ipv4
-+	run_ping_test -4 eoudp4 "$TUN4_R" "FOU/GRETAP IPv4 multicast encap resubmit"
-+else
-+	log_test_skip "FOU/GRETAP IPv4 multicast encap resubmit"
-+fi
++#define V_NMI_BLOCKING_SHIFT 12
++#define V_NMI_BLOCKING_MASK (1 << V_NMI_BLOCKING_SHIFT)
++
+ #define V_INTR_PRIO_SHIFT 16
+ #define V_INTR_PRIO_MASK (0x0f << V_INTR_PRIO_SHIFT)
  
- if setup_ipv6; then
- 	run_ping_test -6 eoudp6 "$TUN6_R" "FOU/ip6gretap IPv6 multicast encap resubmit"
-
-base-commit: 08df884136f1c1197bab2a27814404fd329d9aac
+@@ -152,6 +158,9 @@ struct __attribute__ ((__packed__)) vmcb_control_area {
+ #define V_GIF_ENABLE_SHIFT 25
+ #define V_GIF_ENABLE_MASK (1 << V_GIF_ENABLE_SHIFT)
+ 
++#define V_NMI_ENABLE_SHIFT 26
++#define V_NMI_ENABLE_MASK (1 << V_NMI_ENABLE_SHIFT)
++
+ #define AVIC_ENABLE_SHIFT 31
+ #define AVIC_ENABLE_MASK (1 << AVIC_ENABLE_SHIFT)
+ 
+diff --git a/tools/testing/selftests/kvm/x86/svm_nested_vnmi_test.c b/tools/testing/selftests/kvm/x86/svm_nested_vnmi_test.c
+new file mode 100644
+index 000000000000..4e9916a837dd
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86/svm_nested_vnmi_test.c
+@@ -0,0 +1,129 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Test KVM's virtual NMI (vNMI) support for nested guests: the consistency
++ * check on the vNMI controls in vmcb12, delivery of a virtual NMI to L2, and
++ * the V_NMI_PENDING/V_NMI_BLOCKING state L1 observes across the NMI.
++ *
++ * Copyright (C) 2026 Hemanth Selam <hemanth.selam@gmail.com>
++ */
++#include "kvm_util.h"
++#include "processor.h"
++#include "svm_util.h"
++#include "test_util.h"
++
++/* Number of virtual NMIs to deliver; more than one to prove it's repeatable. */
++#define NR_VNMIS	3
++
++static unsigned int nmi_fired;
++
++static void guest_nmi_handler(struct ex_regs *regs)
++{
++	nmi_fired++;
++
++	/*
++	 * Exit to L1 from NMI context, i.e. before this handler's IRET, so
++	 * that L1 can observe V_NMI_BLOCKING while the NMI is in service.
++	 */
++	vmmcall();
++}
++
++static void l2_guest_code(void)
++{
++	vmmcall();
++}
++
++static void l1_vnmi_setup(struct svm_test_data *svm)
++{
++	struct vmcb *vmcb = svm->vmcb;
++
++	generic_svm_setup(svm, l2_guest_code);
++
++	/* KVM requires L1 to intercept NMIs in order to enable vNMI. */
++	vmcb->control.intercept |= BIT(INTERCEPT_NMI);
++	vmcb->control.int_ctl |= V_NMI_ENABLE_MASK;
++}
++
++static void l1_guest_code(struct svm_test_data *svm)
++{
++	struct vmcb *vmcb = svm->vmcb;
++	unsigned int i;
++
++	/* Without a pending virtual NMI, L2 runs to its VMMCALL untouched. */
++	l1_vnmi_setup(svm);
++
++	run_guest(vmcb, svm->vmcb_gpa);
++	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
++	GUEST_ASSERT_EQ(nmi_fired, 0);
++	GUEST_ASSERT(!(vmcb->control.int_ctl & V_NMI_PENDING_MASK));
++	GUEST_ASSERT(!(vmcb->control.int_ctl & V_NMI_BLOCKING_MASK));
++
++	for (i = 1; i <= NR_VNMIS; i++) {
++		/* Request a virtual NMI; L2 must take it on VMRUN. */
++		l1_vnmi_setup(svm);
++		vmcb->control.int_ctl |= V_NMI_PENDING_MASK;
++
++		run_guest(vmcb, svm->vmcb_gpa);
++
++		/*
++		 * The NMI was delivered and L2 exited from the handler, so
++		 * hardware has consumed the request and blocked further NMIs.
++		 */
++		GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
++		GUEST_ASSERT_EQ(nmi_fired, i);
++		GUEST_ASSERT(!(vmcb->control.int_ctl & V_NMI_PENDING_MASK));
++		GUEST_ASSERT(vmcb->control.int_ctl & V_NMI_BLOCKING_MASK);
++
++		/* Resume L2 so the handler can IRET, which unblocks NMIs. */
++		vmcb->save.rip = vmcb->control.next_rip;
++
++		run_guest(vmcb, svm->vmcb_gpa);
++		GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
++		GUEST_ASSERT_EQ(nmi_fired, i);
++		GUEST_ASSERT(!(vmcb->control.int_ctl & V_NMI_BLOCKING_MASK));
++	}
++
++	/*
++	 * Enabling vNMI without intercepting NMIs is illegal, as L1 would have
++	 * no way of observing the NMIs it is nominally responsible for.
++	 */
++	vmcb->control.intercept &= ~BIT(INTERCEPT_NMI);
++
++	run_guest(vmcb, svm->vmcb_gpa);
++	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_ERR);
++
++	GUEST_DONE();
++}
++
++int main(int argc, char *argv[])
++{
++	struct kvm_vcpu *vcpu;
++	struct kvm_vm *vm;
++	struct ucall uc;
++	gva_t svm_gva;
++
++	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM));
++	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_VNMI));
++
++	vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
++
++	vm_install_exception_handler(vm, NMI_VECTOR, guest_nmi_handler);
++
++	vcpu_alloc_svm(vm, &svm_gva);
++	vcpu_args_set(vcpu, 1, svm_gva);
++
++	vcpu_run(vcpu);
++	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
++
++	switch (get_ucall(vcpu, &uc)) {
++	case UCALL_ABORT:
++		REPORT_GUEST_ASSERT(uc);
++		/* NOT REACHED */
++	case UCALL_DONE:
++		break;
++	default:
++		TEST_FAIL("Unexpected ucall: %lu", uc.cmd);
++	}
++
++	kvm_vm_free(vm);
++	return 0;
++}
 -- 
-2.25.1
+2.48.1
 
