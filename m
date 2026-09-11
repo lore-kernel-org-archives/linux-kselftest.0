@@ -1,110 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-28.mta0.migadu.com [91.218.175.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E19BE46D547;
-	Fri, 11 Sep 2026 13:51:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E6213D886
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 13:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789134676; cv=none; b=df4YuN6adu/acvYVXMNEJnKEQPGuBpXTGNme0RBvXP56wa5b1crd5dMTDvBP2Ixu6y2yLBmI3qER8N/rJ5N7AGbXnsuXBvRhtXwIyeKKjjpD2wvYfaqJjsKKGfz/ovj+9BjMPSTK1ukwxgj+Jg0yk4wVkLBr4Nh7KvYizQVnh+4=
+	t=1789135056; cv=none; b=kL5xu5MxByPM9TGmrhmqKLZIlidVf3FBUUBFZXVmddxgRB2uUSRFZFrbMyLhv8n+sxAQNfhV7c/dQi94qMQmzlqRIIt+Hkemu2w5sc1AEqp4l+S6uevlXVsUJLuKId5KGIGgDjNq6S7s/6zHEGtWL9HoKSXAXqK2zpJxXhcr0kI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789134676; c=relaxed/simple;
-	bh=O8AiVgv+7ZnNDH5DozKhDd6mASEQNTU+oE4OIbRt9Jg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OgnBsHR3fJcphN+70fkHeUfaQFux4V1FN5Mi5M5QKhoIq4ZPWzJa/G5i3QTT+aEt/oNKzDuUlEyLZeXiPBW0iMSe7yNLBcrz2umlhVsTgIvMxfdbMuBy2v4OjnaiDdaDAs3bZmpkSm8zlSOtcYUFeDwQkoXR9zB19pVBDmp2UzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JK6EuNJm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789135056; c=relaxed/simple;
+	bh=ln7IoRA07Ilbawg/aAH2sc/zTgGho8RkMvmGvlw20T4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=id9U1rfDbUB9HFAEVrxSEzQIA/cn2/Uv81Bmz5R/OP6ldOJGIQoiSRK6NvfQfQfutSO0YgPCUW0CyOxeFkzmZRK8VDkDDY2m5LAY85vVxpjgPsdQ9Jbmy4MinzHHHHdJx7aB3IOG2AxjgD50QgxQol3OZemHKmqa3yaB7D5haZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EQ6q6sgn; arc=none smtp.client-ip=91.218.175.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JK6EuNJm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E561F000FF;
-	Fri, 11 Sep 2026 13:51:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789134674;
-	bh=fvaClzPibMX8sDId7DsBxokq538mDXT63zj8aRNKY7M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=JK6EuNJmEr0lM0l1PtHdk05vdILf1KZ3cHgK0LH1/k3ct3M/29gKSqzM5MLwZbHAe
-	 1gUFS6ovwrEcu/B9ZWAcXtG9bvRJHVAH5z4f0Yd6I42s3f5SbhyIbGxJoewuXr6FDB
-	 dFducW2cgv4lQDDhHwDWxedcTAtQNfEsaMek6YQEPExnKaYpOgoxx7dyd2M/vAG1A5
-	 a/mlov04vWmIQ+nWhSaCYLqCOYyiF/6ZwcsuSz3nwv5d9tECM0gUPedD4kvHGFwE9f
-	 Zwt60k8LPtqiGwoWswLdjb5wD6pPNvcA+eF4Or99UGjoWpnMO+GnHyhkiL42dlYKpq
-	 wtWxeBy/4zWvA==
-Date: Fri, 11 Sep 2026 14:51:09 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org, david@kernel.org, liam@infradead.org, 
-	vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com
-Subject: Re: [PATCH] kselftest: mm: fix potential failure for merged VMA in
- guard-regions
-Message-ID: <aqQG5LgqXnrmY1_l@gremlin>
-References: <20260911123534.1181501-1-yeoreum.yun@arm.com>
- <aqP29-H0iKl-2CVH@gremlin>
- <aqQDbfMOVasuejA3@e129823.arm.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EQ6q6sgn"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ln7IoRA07Ilbawg/aAH2sc/zTgGho8RkMvmGvlw20T4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789135049; v=1; x=1789739849;
+ b=EQ6q6sgn88EZUtAPzdZnX52wRDt7DfpHmN1/AWc4yMxIcFx6FyBqHs87h8MEypt8P/xomnc/
+ BpDnVOSEIBuvKTN/4MmnVnoTIBQNZKpfMXdj5gdhec+LudvOSXwQRChazrb1IBohWn1y/6xgR8I
+ Noag3xPCbbVMDOhzcp4wttRw=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id e884e9b4b346d9e9;
+	Fri, 11 Sep 2026 13:57:28 +0000
+X-Mizu-Trace-ID: e884e9b4b346d9e9
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Simon Horman <horms@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Martin Karsten <mkarsten@uwaterloo.ca>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
+	Eelco Chaudron <echaudro@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v3 0/2] net: xdp: fix bpf_xdp_shrink_data() page handling on generic XDP and veth
+Date: Fri, 11 Sep 2026 21:56:50 +0800
+Message-ID: <20260911135711.109338-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aqQDbfMOVasuejA3@e129823.arm.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 11, 2026 at 02:34:37PM +0100, Yeoreum Yun wrote:
-> On Fri, Sep 11, 2026 at 01:59:31PM +0100, Lorenzo Stoakes (ARM) wrote:
-> > On Fri, Sep 11, 2026 at 01:35:34PM +0100, Yeoreum Yun wrote:
-> > > check_vmflag_guard() uses /proc/self/smaps to retrieve the VMA flags,
-> > > but this can fail if the mapping is merged with an adjacent VMA.
-> > >
-> > > To avoid this potential failure, first allocate a temporary region with
-> > > extra pages at both ends, unmap it, and then map the test region within
-> > > the temporary address range, leaving an unmapped page on each side to
-> > > prevent VMA merging.
-> > >
-> > > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> > > ---
-> > >  tools/testing/selftests/mm/guard-regions.c | 14 ++++++++++++--
-> > >  1 file changed, 12 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
-> > > index 5c8ec3ca75d7..a28a57d34e97 100644
-> > > --- a/tools/testing/selftests/mm/guard-regions.c
-> > > +++ b/tools/testing/selftests/mm/guard-regions.c
-> > > @@ -2257,8 +2257,18 @@ TEST_F(guard_regions, smaps)
-> > >  	char *ptr, *ptr2;
-> > >  	int i;
-> > >
-> > > -	/* Map a region. */
-> > > -	ptr = mmap_(self, variant, NULL, 10 * page_size, PROT_READ | PROT_WRITE, 0, 0);
-> > > +	/* Try to Map a region. */
-> >
-> > Map -> map
-> >
-> > > +	ptr = mmap_(self, variant, NULL, 12 * page_size, PROT_READ | PROT_WRITE, 0, 0);
-> >
-> > Should be PROT_NONE otherwise it'll merge with the below.
->
-> It doesn't matter. since this memory is unmapped and then second map
-> at ptr + page_size.
->
-> IOW, though the first one is merged, it unammped and then
-> the second is allocated at ptr + page_size, it wouldn't be merged:
->
->   after unmap:
->    [existing VMA][ 12 pages ][existing VMA]
->
->   second:
->    [exiting VMA] [hole (page)] [ 10 pages (for test)] [hole (page)] [existing VMA]
->
-> Am I missing something?
+I'm always confused which tree(net or bpf) should XDP target.
 
-Yeah, unmapped (unfaulted) VMAs can be merged with mapped (faulted) VMAs.
+bpf_xdp_shrink_data() frees a page_pool frag with the wrong memory type on
+skb-backed XDP, hitting "Bad page state ... page_pool leak". Both the
+generic XDP path and the veth path are affected.
 
-In general it's also better to be explicit by specifying distinct attributes
-anyway to spell out clearly that the VMAs are intended to perform that task.
+Patch 1 fixes it by tagging the xdp_buff, so it no longer depends on
+rxq->mem.type (which is shared on generic XDP and gets reset on veth). It
+is reported by syzbot.
 
->
-> --
-> Sincerely,
-> Yeoreum Yun
+Patch 2 adds a selftest that reproduces the leak on both paths.
 
---
-Cheers, Lorenzo
+
+v2 -> v3: handle some feedback from AI review.
+v2: https://lore.kernel.org/bpf/20260824030257.263179-1-jiayuan.chen@linux.dev/
+v1 -> v2: AI found the fix was insufficient and we need a general way
+          to fix them.
+v1: https://lore.kernel.org/bpf/20260816031245.268898-1-jiayuan.chen@linux.dev/
+
+Jiayuan Chen (2):
+  bpf, veth: xdp: fix page_pool page leak on skb-backed XDP
+  selftests/bpf: add xdp_shrink_frags
+
+ drivers/net/veth.c                            |   6 +
+ include/net/xdp.h                             |  30 +-
+ net/core/dev.c                                |   6 +
+ net/core/filter.c                             |   7 +
+ .../bpf/prog_tests/xdp_shrink_frags.c         | 288 ++++++++++++++++++
+ .../selftests/bpf/progs/xdp_shrink_frags.c    |  34 +++
+ 6 files changed, 370 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
+ create mode 100644 tools/testing/selftests/bpf/progs/xdp_shrink_frags.c
+
+-- 
+2.43.0
+
