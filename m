@@ -1,110 +1,136 @@
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f7.google.com (mail-pz2-f7.google.com [74.125.228.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F89539FCAE;
-	Fri, 11 Sep 2026 02:50:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB78D3B6BFA
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 02:50:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789095011; cv=none; b=oxQXBbStXMqsx4xy2vkgFzS9Ji47abOaQ/C1w1PBk4z9yQVF33QpkOPHQ6y3C5nALf1eF5rEss5z9dMfVF2BPqoBMalqvki8onBMPIEnubH753XTxyP/zEv5gJw8LjC0umM/0AJMT5B73TQkYuPd1AqF4B2L5idYACyOs8ZPECE=
+	t=1789095038; cv=none; b=AKsE0FGO0bDGfNN71bKIH3dmYGcWINMiW+eXbm33Onp1v4vDhYSslWZPN3dh6QBWYLpgDjSomvgAZs0pZFCbl52G+BOXu5YyIW8PLH39GDTClISSA8tI3NQ5O9vT8M+rYXNrIg9/nUlvJY1gK/3+/cwCUYXdwdAVO523ZTpN//A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789095011; c=relaxed/simple;
-	bh=wCaPxS/hIt13v/BlRL85KzydtkVELLxvezhjNy6rMuc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GHvDgjhCL4iHgj4UtkVBsjRcPgzsMpjiaxMsnSChjohZNsfVrGNbP3B4Dy64yIj5OPHYNyD5cT6icEIO1IGf+Piq5/ohzz2/paDFm+bZHcwNk2+TERuWhyg9tGRI94VfD3PdDWaSYlaft+lEJQUUdpfmx7LyfSp8y+AIxE5ldnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=OYaoPJtf; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1789095038; c=relaxed/simple;
+	bh=yS5726x5t8pnV7c+W6X/yFuC965jvDlPCyqtMvcSBBk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mg5WPxr1j7q8eoEbbnyCZA5VnC++Xlr/FNKivqeBxbrbaCIlVPZivL1vvlSkCst4HUwdXks5D4xW/4USsBzBe8635eBd1bZQNMu+4z+OAN/AK6YyRAPIZtQf95aZKfc8HsdAkbfjT6gnad8/Uq5aW8Ncxs8pbOfqktnvUh/CRYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=grZl+aTd; arc=none smtp.client-ip=74.125.228.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="OYaoPJtf"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1789095004; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=/qoPgN105gt2P4UL8cGJgEPkDgefVho21FsHOdfrr3Q=;
-	b=OYaoPJtf5rOfFDkfjgDt/nanPwQiaZdKxU1FTNt6Q8dHESj4SjsySxTdy0bHaA+w6Cqw8pwOFNBr84yEqoanx2xgFaYUAjvgnA+ta58zm7sKl90Uzmh22+lJBddPfHA6DCIF3NhbsbZyG7S0BhMhwq9qLfwnk1NpRIVZSKuxUy8=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R631e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=26;SR=0;TI=SMTPD_---0XAj1dJ._1789095001;
-Received: from 30.74.144.118(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0XAj1dJ._1789095001 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Fri, 11 Sep 2026 10:50:02 +0800
-Message-ID: <708fbbe2-4eba-4641-8267-ed930ade0068@linux.alibaba.com>
-Date: Fri, 11 Sep 2026 10:50:00 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="grZl+aTd"
+Received: by mail-pz2-f7.google.com with SMTP id 41be03b00d2f7-cc4ae08cca6so52617a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2026 19:50:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789095036; x=1789699836; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=dtD8lzpYXi5mMb12J8/kWQaCmxdz2twCbPBl5zopPpE=;
+        b=grZl+aTdBswe56BN0SaWk0tnjC5qCf+F1As1HJHkzDIUWt738Lj+F3kaA0pA/PJO6j
+         KKNPX6NQDxl6FuA/piFumU2ugCWJmYMTS79vFIluo7RaIQ2YQN2G8kNFcw59GUGn/cAu
+         9Q1WDEuAuBDF8Ir92oDEDGedlMlU3wnN8m+bfhnB+k2iXCbzEpju8CUGxs4igwYLUYvL
+         lx06Q/dP+HLBVGSrmGgdyWKIQDi4n2bRiHVRcpjJCeVar5dWtm5PJb4ueKD/CzD1Vb+E
+         E8A38w/yBMArLtwwTtPL3slCI21YbjJkMfXNTwF0zOG2nZR3wMnkvzyQTSc6b4ZQib8m
+         OuCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789095036; x=1789699836;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=dtD8lzpYXi5mMb12J8/kWQaCmxdz2twCbPBl5zopPpE=;
+        b=WG3qpZL8W1FUc/ADNkDAcKcXP+N5UGOxc2Aun7hE/dRZ5AReHaPGv4cGkflBIqbiAb
+         ux2qIy4zkgs8mxNpoUFqfvvC1WOGJKHYX/6/VN7CRk9EfRkDqDUcAyGSa8HGMaKLku3o
+         ieXmD+GG5YPR+HQwZnckqTr39+Io6O3/d6DNB64l2w4XD5TI4OR8JlQXK6ing7ch0auN
+         4MgosiHzrO9yM+IaLHZzfOELAU4ARt0eW8IaWv+KnqLTnxVaymgo7U4lZma6UAPeJoHm
+         tKEXsyCCW1W+5oA+Se6ZlQ7TpWDMcHIZtelkUXIgVokNhtxv31P8ffQcGTPcDGrOnufO
+         Uvfg==
+X-Forwarded-Encrypted: i=1; AKwUvBxokFZStapXK93c1ONg+GS2+ye5Iq5JX6idtLbH6WL4KqYFcG4xRTxrQvvX8zwI0rGlEJMabOLlZR9ZkQ6SKzE=@vger.kernel.org
+X-Gm-Message-State: AFuF++m16N+FerBcEo7V7KrP0Ax+k/f2q42n2g6l4JzEdN32SP8UhwYf
+	hJro99xzCUedAHylHgenm2zoeijo1NZzphPygJModd9tVOLoMwEDVXYR
+X-Gm-Gg: AYBFou1+3uTTdrv1utWRBsuRyr01xuKmS8gVTvJKHxSuUWcFu+tLpOrABIFMbKrMZ9u
+	nZmxQ6G/hH3Q6ii9LwwCSc1thh1Qn5VaNbPc8ZZNrOAV0O2fVD0mkhO0GMKbZ0CZy9FQJcfrxdK
+	9drCpNHx0F+REcNvrwVyHrH5s8EvtxijD+36cu5K0BV31MwkzG/py4yaShp6Q95YmRwEDrG/NEp
+	W7PJ/mQ2Gc/F7Jdwu0myGlBKZIwKxnbaivwtq2dEaZXP+BCMb7o627OziOBKXNGVM8i71PMW1Ec
+	Cf3bfM7qXx4xhKtT8r5CnFA4j6EHbwimxMNQTxjy3zKcLih+zLnoTldy8FnsSrKGZyGixXuraN/
+	uzU48uUUe3VHI11gqoRpKLszFYETb3Ii48jH+2/KdExmDBt7lwhcTzo+dqMyrwVm8Cnc5gRxiRD
+	G044EycN+59/Qw2uBsuYfigKYhVZ7F2Vr2hrfGhMluANFdlWi81NtaWpxytC1DcZvK
+X-Received: by 2002:a05:6a00:c586:20b0:86b:b308:b926 with SMTP id d2e1a72fcca58-86bb3183845mr37838b3a.14.1789095036160;
+        Thu, 10 Sep 2026 19:50:36 -0700 (PDT)
+Received: from 192.168.5.7 ([69.5.53.41])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-86b28ec45b2sm378270b3a.23.2026.09.10.19.50.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2026 19:50:35 -0700 (PDT)
+From: Tianyi Chen <diannaaav@gmail.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	bpf@vger.kernel.org
+Cc: memxor@gmail.com,
+	void@manifault.com,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v2] selftests/bpf: Exercise double release in cpumask failure test
+Date: Fri, 11 Sep 2026 10:50:29 +0800
+Message-ID: <20260911025029.190453-1-diannaaav@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 08/19] selftests/mm: add folio-order check for address
- ranges
-To: Kiryl Shutsemau <kirill@shutemov.name>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
- rppt@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, usama.anjum@arm.com, usama.arif@linux.dev,
- nico.pache@linux.dev, ziy@nvidia.com, baohua@kernel.org, dev.jain@arm.com,
- hughd@google.com, lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com,
- ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com,
- vbabka@kernel.org, agordeev@linux.ibm.com, jgg@ziepe.ca, leon@kernel.org,
- kernel-team@meta.com
-References: <20260908125105.1510704-1-kirill@shutemov.name>
- <20260908125105.1510704-9-kirill@shutemov.name>
- <feb76c81-db9d-4a36-9a31-0b2b31e3c3fb@linux.alibaba.com>
- <aqKFXlpSELmCtt-z@thinkstation>
- <65bf1722-c1fd-452a-88c1-c030b042cfbc@linux.alibaba.com>
- <aqKqr62-718Vw35k@thinkstation>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <aqKqr62-718Vw35k@thinkstation>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+From: Tianyi Chen <hi@tychen.cc>
 
+create_cpumask() can return NULL, but test_alloc_double_release does
+not check its result before releasing it. The expected NULL-pointer
+diagnostic allows the test to pass when the first release is rejected,
+without checking the second release at all. Removing the second call
+still produces the same expected rejection.
 
-On 9/10/26 9:04 PM, Kiryl Shutsemau wrote:
-> On Thu, Sep 10, 2026 at 07:14:42PM +0800, Baolin Wang wrote:
->>
->>
->> On 9/10/26 6:45 PM, Kiryl Shutsemau wrote:
->>> On Wed, Sep 09, 2026 at 06:01:13PM +0800, Baolin Wang wrote:
->>>>
->>>>
->>>> On 9/8/26 8:50 PM, Kiryl Shutsemau wrote:
->>>>> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
->>>>>
->>>>> An mTHP collapse test needs to know that a range is backed by folios of the
->>>>> target order, and that they sit where a collapse would put them.  Nothing
->>>>> answers that today: is_backed_by_folio() classifies the folio behind a
->>>>> single page, and check_huge_anon() reads smaps AnonHugePages, which only
->>>>> accounts PMD mappings.
->>>>
->>>> Have you checked check_large_folios() in vm_util.c? It seems to meet your
->>>> requirements, or am I missing something?
->>>
->>> The changelog is out of date, sorry: since 6dedaf0d46a9 check_huge_anon()
->>> counts mTHP folios through check_large_folios() rather than reading
->>> smaps, and it is what check_huge() already uses for mthp_khugepaged.
->>>
->>> It could do this job too, called once per window.
->>>
->>> What is_range_backed_by_order() adds is alignment check: the folio has
->>> to sit at the window start. And check_large_folios() reopens two fds per
->>> per call which kinda wasteful.
->>
->> OK. But can we extend the check_huge_xxx() functions to meet your
->> requirements, for example by adding a check_aligned_huge_xxx() that wraps
->> the underlying implementation of check_large_folios()?
->>
->> I still find it confusing that khugepaged.c has two separate sets of
->> functions for checking large folios.
-> 
-> Agreed that two sets is one too many.  Yeoreum's series rewrites
-> check_huge_xxx() on top of pagemap and kpageflags, which is what
-> is_backed_by_folio() already walks, so once that lands the two can meet:
-> the mTHP branch of check_huge() checks each window for a folio of the
-> order at its start, and is_range_backed_by_order() goes away or becomes
-> its internal.  That also makes the generic mTHP cases stricter for free.
+Return when creation fails and expect the release-ownership diagnostic.
+This makes the verifier accept the first release and reject the second
+use of the invalidated reference.
 
-Look forward to seeing this happen:)
+Fixes: 7b6abcfa15cd ("selftests/bpf: Add selftest suite for cpumask kfuncs")
+Assisted-by: LLM
+Signed-off-by: Tianyi Chen <hi@tychen.cc>
+---
+Changes in v2:
+- Rebase onto current bpf/master; the test logic is unchanged.
+- Keep validation details outside the commit description.
 
-> I would rather do that as a follow-up than fold it into either series
-> now, since both touch the same functions.
+Validation: all 36 cpumask subtests passed, including
+test_alloc_double_release, in an x86-64 KVM guest running the rebuilt
+bpf/master kernel (Linux 7.3.0-rc2), with LLVM 20-built selftests.
+There were no skips or failures.
 
-Sure.
+The v1 CI PR expired after repeated "Patch is empty" reports without
+conflicting hunks. This patch applies cleanly to the current tree and is
+sent in a new thread with git format-patch and git send-email.
+
+v1: https://lore.kernel.org/r/20260906143934.848632-1-hi@tychen.cc
+
+ tools/testing/selftests/bpf/progs/cpumask_failure.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/cpumask_failure.c b/tools/testing/selftests/bpf/progs/cpumask_failure.c
+index 4628feb53d86..e98493bd5758 100644
+--- a/tools/testing/selftests/bpf/progs/cpumask_failure.c
++++ b/tools/testing/selftests/bpf/progs/cpumask_failure.c
+@@ -45,12 +45,14 @@ int BPF_PROG(test_alloc_no_release, struct task_struct *task, u64 clone_flags)
+ }
+ 
+ SEC("tp_btf/task_newtask")
+-__failure __msg("NULL pointer passed to trusted R1")
++__failure __msg("release kfunc bpf_cpumask_release expects referenced PTR_TO_BTF_ID passed to R1")
+ int BPF_PROG(test_alloc_double_release, struct task_struct *task, u64 clone_flags)
+ {
+ 	struct bpf_cpumask *cpumask;
+ 
+ 	cpumask = create_cpumask();
++	if (!cpumask)
++		return 0;
+ 
+ 	/* cpumask is released twice. */
+ 	bpf_cpumask_release(cpumask);
+
+base-commit: 15071f2a1263e82150c77eeb1e94dbfc31950a8e
+-- 
+2.55.0
+
