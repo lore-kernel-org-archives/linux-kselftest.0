@@ -1,68 +1,33 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AE1496D38
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 15:44:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432D749DBB6;
+	Fri, 11 Sep 2026 15:48:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789141496; cv=none; b=FzclXKsNrQZ/6JvSTj9go+cn5lnZVY1KzHuFFfq3VMMuDtWncpMaPMmN8zy3Zbdyc6sWBfx5IBt1ejg873CPG8WBVJrGkRHmxUGgPyDtyADPQfsMr+Aon0UkQeeGiuUuhLpIVfBovwwCmsCDPgotChKY1dD7jkpBbHk9eYEpVsg=
+	t=1789141710; cv=none; b=tyADllyoc7tFe7ldnx9nQmO+8zt/4l8wAauDGV2KdxYPbGrHxIQUAB6/GEYgGAvacmTSQnmwxoAIXOmxQn5bypRDpdVWfDAsX+dLmfTkmbmpQ5guRHFXr6MpcX5dPb0opow6xBIq1rGLcCDQVgEgaLCcdQzCwFWGlyHcGirzVe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789141496; c=relaxed/simple;
-	bh=mmTb3omMSKk79oaBdbfhFPddSgi2tQARhX5tD0VeCPU=;
+	s=arc-20240116; t=1789141710; c=relaxed/simple;
+	bh=Y+NGrhRQ5CXlNd3IQKDekZLbTEeM9snKTFtrc8dgpKI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n791Y+vk77NWK4o3N27MLOTVBh+vj/1zFLzl5wNtMqWp01I6bfsOs46+cAWCEI9ECgit74Z+6GeoQXpHs6pl7jCB4r66IK3yhaHjKKcJf4htnmiAsgt5ZHwhtk1EsoALVnhoszSDzbdVFxUHhlDe6fhKDYntLri9Xlv0Nn+uyIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=LYFe8zN0; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
+	 In-Reply-To:Content-Type; b=qHdEkAcV3aSvhpgb016LhvwrKdmEXVJ6C0u49LznDiFTDoetYO99O0HXEwO8VsvUNSWw38c1PVLePLFlLR6hIudBBlRcyDoTq7rrdcr1H7Ic7w/ylwDlhPqtrRHHUTL/CAxUrcMsp10dAJVlIfzulAIqDuKikGhr74Lncem4DLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZXJpZCg+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="LYFe8zN0"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b4ba7fe26so35315e9.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 08:44:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=6wind.com; s=google; t=1789141491; x=1789746291; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :content-language:from:references:cc:to:subject:reply-to:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=fmKbcth3Cgu8DzPZBrBYeoO4fcpCEJAvt3C9XzTqgyI=;
-        b=LYFe8zN0p6h98dBa4AVduWw+a6hqGLgplXHwgG0TJxNx3fFhs3CJT6K13uUAOYfIUg
-         L4R3JrwyJQuCd7ePKoTlCgIhWZFltYkkLfd4e1NNzuSecUBf+0iShqdhDGR+4P3o1BWa
-         drusHiYk2g6NO96RIeJzXowjj8u0PecbToS+m9e0kJmHekgT0pEbb6DGyNOjvWqytSpn
-         NyhBxWzY5TUpLefrAMHXQgIMs971zgfDBQMZpRTai2WRi7sPn2l03HFBnTEtVOXj/rnw
-         XZjVR17gmwCsA7OzxB4x0sYq9pFKOdzf4r9Vv/sCASucAkA6pfI8XpqEl82jGgOsDLyr
-         5UTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789141491; x=1789746291;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :content-language:from:references:cc:to:subject:reply-to:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=fmKbcth3Cgu8DzPZBrBYeoO4fcpCEJAvt3C9XzTqgyI=;
-        b=f6AEnSEWxSOEJh/a48CE5o4BZ2QabkGdm8sB92B5mlV3+esYokgW2+qpv78tZeQ1VP
-         QJ84AGDnrhscQ/3g6JplLl7/SBCkMczrSG3k6HwjvjtGfkY5IDb2WilF8ZBrGW2CkzxX
-         UFwCFCDhWTwqjzkSCpSflSHenTZmzO2m+5t9NS76WMfIYox4V+iVEAjPGmE3udauB/g2
-         dErQX9mcolactlMR9Jk4YCwjUFF44EZAHTHqWeKYay/yYTX+yHqJM69MhEsIz44b+ga0
-         rhrehtVyydFyefbVaIkqOnKkFqRcHnmuDrABH6jiFmSwvCu+3xfl/74S6pU3lx4V7hch
-         47iw==
-X-Forwarded-Encrypted: i=1; AKwUvBzGqF8tiekejg+WIKi8S0xdP91YMM/G3Ky3NP1upc6WRTlYv4+OfbP/nlMHMO5SQqwlEB9+Zt/BDSxQ6OxDOOM=@vger.kernel.org
-X-Gm-Message-State: AFuF++k0YLCa2ISXHTG1MYklGLzZYaPyKn3DW9+oxgQeEgq0b2fbhRPj
-	VSUGoXeEe+xkEvVnuAfJgFmQOuLKxIpZn7ICwfd2zMlNEL/qnCFoQ+Nt7th9MmYQgR0=
-X-Gm-Gg: AYBFou17yDhmGcxslEZJ6x5abB21EvPMtp1gZ6McVZ3NRDqBC75zMnSOUuK7fG4/ET1
-	ykOL200izzllqHB1OJVgajtUHQtugLp92uyBJFqMXXDdRDZ0hIOo+/te7LcwWDt6XwLsy01Dr6a
-	40CU51TuWmXAV9NGxpUuH3qnLICKao3ei3IiKZvy6Nq6jKUn8dB5CTDjUDp8pldC7dzesBj+A60
-	YDDEs2/tbN99g6pjgtLC8QdEBcLP+um9HIKsZ7eaC3WMetehbky32rAw2GS1OARW/Pvkz2EW0Zp
-	hmrKLxo4uTjDd3IqWUphZaq2VQVKDm8a0T+DZBEvSHJUiEGnLXqa2SBQ4FlscHUW7mpF3cT4okX
-	HIwAiePUIKQ/ZCBEiJ4MiiyXWyAOQMV0+V4E+Ay6h81egi99RHSNZ2Z8uVoHdEk0d79PUtukifW
-	SS7Jvlx1RTalqoQ5/ITe90K5Q5auNFLAwT05QS/D2YKYeEbNNp071ooP6TqsWOzaMAq2K2vMXbg
-	5sSYOpP4avsjvZTDKTGvKr6VURbSxMCUdze8e8mmgPeqic57ogy
-X-Received: by 2002:a05:600c:46d1:b0:49d:798:67a4 with SMTP id 5b1f17b1804b1-49e61640f73mr50975385e9.0.1789141491401;
-        Fri, 11 Sep 2026 08:44:51 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:ab7:2110:6a1d:efff:fe52:1959? ([2a01:e0a:ab7:2110:6a1d:efff:fe52:1959])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49d26b7332asm161865175e9.0.2026.09.11.08.44.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Sep 2026 08:44:50 -0700 (PDT)
-Message-ID: <23770b2b-d5d7-476f-9c25-285e6bd50fea@6wind.com>
-Date: Fri, 11 Sep 2026 17:44:50 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZXJpZCg+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B345D1F000FF;
+	Fri, 11 Sep 2026 15:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789141706;
+	bh=kSE0RFPcW66QetBMRHN3NYdbRmSwi1ygaMp/uike9ZY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=ZXJpZCg+Ka6sQVyvZMjIrT6bir9r5OrfoCjNypIUJsiKw3rmpiJr/dBK1p0h7Iwu7
+	 sQAv+3e4cowP0A1D8qIKRj7Qi7F1x0NTMyuUYQME4Zr5xXRhG3glI476rxTAK05/cJ
+	 4xhnU4imQl9Bd3yjIDZtueffrWuie/DtvHk1WIpOJeBH1ulLzFpVkCu0+2kQg0/TWK
+	 rvEC3zUd9+3bB8gWMOGApGEME1E8UUy7KQ8VpN664AP09xRrVEZ/+h+xOnk94T3ko5
+	 x4uwefjYLsf5zmgGZk9ZfLa4379XjfnvbWCDRrIZP/OUnuwdpcpuRGBPV+nPL77W4z
+	 y0JQ91PEULNlQ==
+Message-ID: <891915e3-3333-45f3-81a8-1ad38fa7ee37@kernel.org>
+Date: Fri, 11 Sep 2026 17:48:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,63 +35,354 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Reply-To: nicolas.dichtel@6wind.com
-Subject: Re: [PATCH net-next v4 2/4] rtnetlink: add AF_PACKET multicast dumps
-To: Yuyang Huang <sigefriedhyy@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>,
- Ido Schimmel <idosch@nvidia.com>, Jacob Keller <jacob.e.keller@intel.com>,
- Jakub Kicinski <kuba@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
- Nikolaos Gkarlis <nickgarlis@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
- Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>,
- Simon Horman <horms@kernel.org>, Stanislav Fomichev <sdf.kernel@gmail.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org
-References: <20260911105103.7771-1-sigefriedhyy@gmail.com>
- <20260911105103.7771-3-sigefriedhyy@gmail.com>
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Subject: Re: [PATCH v10 6/6] selftests/mm: add a GUP selftest
+To: Sarthak Sharma <sarthak.sharma@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
+ <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Mark Brown <broonie@kernel.org>,
+ Anshuman Khandual <anshuman.khandual@arm.com>,
+ Muhammad Usama Anjum <usama.anjum@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Rik van Riel <riel@surriel.com>
+References: <20260911110950.200240-1-sarthak.sharma@arm.com>
+ <20260911110950.200240-7-sarthak.sharma@arm.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
-Organization: 6WIND
-In-Reply-To: <20260911105103.7771-3-sigefriedhyy@gmail.com>
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260911110950.200240-7-sarthak.sharma@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+
+On 9/11/26 13:09, Sarthak Sharma wrote:
+> Add a new GUP selftest which uses kselftest_harness.h. Cover
+> 12 mapping configurations: THP enabled, THP disabled and
+> HugeTLB, each across private/shared mappings and with/without
+> FOLL_WRITE. Run 5 test cases for every variant: get_user_pages,
+> get_user_pages_fast, pin_user_pages, pin_user_pages_fast and
+> pin_user_pages_longterm.
+> 
+> Use two default hugeTLB pages and derive the mapping size from
+> their size. This exercises GUP both within a single HugeTLB page
+> and across a HugeTLB boundary, without reserving an excessive
+> number of pages.
+> 
+> Sweep four nr_pages_per_call values for each test: 1, 512, 123 and
+> all pages. This preserves the coverage previously provided by
+> run_gup_matrix(): 12 mapping combinations x 5 GUP/PUP operations x 4
+> batch sizes. In total the selftest reports 60 TAP cases and issues
+> 240 ioctls.
+> 
+> Do not carry DUMP_USER_PAGES_TEST into the new selftest because its
+> output is written to the kernel log and the selftest does not verify
+> that output.
+> 
+> Add the new gup binary to the selftests/mm build, run_vmtests.sh and
+> MAINTAINERS. Update mm/Kconfig to describe the benchmark and
+> selftest split.
+> 
+> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+> Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
+> ---
+>  MAINTAINERS                               |   1 +
+>  mm/Kconfig                                |  19 +-
+>  tools/testing/selftests/mm/Makefile       |   1 +
+>  tools/testing/selftests/mm/gup.c          | 263 ++++++++++++++++++++++
+>  tools/testing/selftests/mm/run_vmtests.sh |   1 +
+>  5 files changed, 273 insertions(+), 12 deletions(-)
+>  create mode 100644 tools/testing/selftests/mm/gup.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cae3af861a7c..c47e655c4111 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17188,6 +17188,7 @@ F:	mm/gup.c
+>  F:	mm/gup_test.c
+>  F:	mm/gup_test.h
+>  F:	tools/mm/gup_bench.c
+> +F:	tools/testing/selftests/mm/gup.c
+>  F:	tools/testing/selftests/mm/gup_longterm.c
+>  
+>  MEMORY MANAGEMENT - KSM (Kernel Samepage Merging)
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index c180d40cd671..61ab1b8a2ebd 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -1291,24 +1291,19 @@ config PERCPU_STATS
+>  	  be used to help understand percpu memory usage.
+>  
+>  config GUP_TEST
+> -	bool "Enable infrastructure for get_user_pages()-related unit tests"
+> +	bool "Enable infrastructure for get_user_pages()-related unit tests and benchmarks"
+>  	depends on DEBUG_FS
+>  	help
+>  	  Provides /sys/kernel/debug/gup_test, which in turn provides a way
+> -	  to make ioctl calls that can launch kernel-based unit tests for
+> -	  the get_user_pages*() and pin_user_pages*() family of API calls.
+> +	  to make ioctl calls that can launch kernel-based unit tests and
+> +	  benchmarks for the get_user_pages*() and pin_user_pages*() families
+> +	  of API calls.
+>  
+> -	  These tests include benchmark testing of the _fast variants of
+> -	  get_user_pages*() and pin_user_pages*(), as well as smoke tests of
+> +	  These include benchmark testing of the _fast variants of
+> +	  get_user_pages*() and pin_user_pages*(), as well as tests of
+>  	  the non-_fast variants.
+>  
+> -	  There is also a sub-test that allows running dump_page() on any
+> -	  of up to eight pages (selected by command line args) within the
+> -	  range of user-space addresses. These pages are either pinned via
+> -	  pin_user_pages*(), or pinned via get_user_pages*(), as specified
+> -	  by other command line arguments.
+> -
+> -	  See tools/testing/selftests/mm/gup_test.c
+> +	  See tools/testing/selftests/mm/gup.c and tools/mm/gup_bench.c.
+>  
+>  comment "GUP_TEST needs to have DEBUG_FS enabled"
+>  	depends on !GUP_TEST && !DEBUG_FS
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> index 11ca9b11fef1..9c03624fd293 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -58,6 +58,7 @@ endif
+>  
+>  TEST_GEN_FILES = cow
+>  TEST_GEN_FILES += compaction_test
+> +TEST_GEN_FILES += gup
+>  TEST_GEN_FILES += gup_longterm
+>  TEST_GEN_FILES += hmm-tests
+>  TEST_GEN_FILES += hugetlb-madvise
+> diff --git a/tools/testing/selftests/mm/gup.c b/tools/testing/selftests/mm/gup.c
+> new file mode 100644
+> index 000000000000..31ae38e09136
+> --- /dev/null
+> +++ b/tools/testing/selftests/mm/gup.c
+> @@ -0,0 +1,263 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#define __SANE_USERSPACE_TYPES__ // Use ll64
+> +#include <fcntl.h>
+> +#include <errno.h>
+> +#include <stdbool.h>
+> +#include <string.h>
+> +#include <unistd.h>
+> +#include <dirent.h>
+> +#include <sys/ioctl.h>
+> +#include <sys/mman.h>
+> +#include <mm/gup_test.h>
+> +#include "vm_util.h"
+> +#include "kselftest_harness.h"
+> +
+> +#define MB (1UL << 20)
+> +
+> +/* Just the flags we need, copied from the kernel internals. */
+> +#define FOLL_WRITE	0x01	/* check pte is writable */
+
+BTW, it's odd that we support passing GUP-flags ... we should probably switch at
+some point simpler attributes (bool write) or custom flags (but we don't seem to
+need many ...).
+
+> +
+> +/* Page counts exercising single, THP-batch, partial, and full-mapping GUP. */
+> +static const int nr_pages_list[] = { 1, 512, 123, -1 };
 
 
-Le 11/09/2026 à 12:51, Yuyang Huang a écrit :
-> RTM_GETMULTICAST dumps IPv4 and IPv6 multicast group memberships, but
-> the device multicast list (dev->mc) is only available through
-> /proc/net/dev_mcast, so "ip maddr show" still has to parse procfs for
-> its link-layer entries.
-> 
-> Handle RTM_GETMULTICAST dumps with ifa_family set to AF_PACKET and
-> report every entry of dev->mc in the existing ifaddrmsg format:
-> 
->   - IFA_MULTICAST carries the raw link-layer address
->   - IFA_MC_USERS carries the entry reference count
->   - IFA_F_GLOBAL in IFA_FLAGS reports netdev_hw_addr::global_use, set
->     by dev_mc_add_global() (SIOCADDMULTI) and dev_mc_add_excl()
->     ("bridge fdb add ... self"), i.e. entries added explicitly rather
->     than by a protocol join. This is the static column of
->     /proc/net/dev_mcast
->   - ifa_scope is RT_SCOPE_LINK
-> 
-> This covers every column of /proc/net/dev_mcast. AF_PACKET is the
-> family iproute2 already uses for link-layer addresses ("ip -0").
-> 
-> The default FDB dump also walks dev->mc, but only for Ethernet devices
-> without an ndo_fdb_dump of their own, so bridge, vxlan or macvlan
-> devices never show their multicast filter there, and it has no users
-> count or global_use bit. Extending it would change "bridge fdb show"
-> output and add NDA_* attributes.
-> 
-> There are no legacy users of AF_PACKET requests, so they are always
-> validated: prefixlen, flags and scope must be zero and a non-zero
-> ifa_index restricts the dump to that device. IFA_TARGET_NETNSID selects
-> another netns like the IPv4 and IPv6 dumps and is the only attribute
-> accepted. The dump runs under RCU and netif_addr_lock_bh() and does not
-> need RTNL.
-> 
-> Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
+Would we want to calculate 512 dynamically at runtime using the PMD pagesize?
+Could be something for a follow-up patch.
 
-Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+> +
+> +#define GUP_TEST_FILE "/sys/kernel/debug/gup_test"
+> +#define NR_HUGE_PAGES 2
+
+I'd call this "NR_HUGETLB_PAGES".
+
+[...]
+
+> +
+> +FIXTURE_SETUP(gup_test)
+> +{
+> +	int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS;
+> +	char *p;
+> +
+> +	self->size = 128 * MB;
+> +
+> +	if (variant->hugetlb) {
+> +		if (!hp_size)
+> +			SKIP(return, "HugeTLB not available\n");
+> +
+> +		if (hugetlb_free_default_pages() < NR_HUGE_PAGES)
+> +			SKIP(return, "Not enough huge pages\n");
+> +
+> +		self->size = NR_HUGE_PAGES * hp_size;
+> +		mmap_flags |= MAP_HUGETLB;
+> +	}
+> +
+> +	if (variant->shared)
+> +		mmap_flags = (mmap_flags & ~MAP_PRIVATE) | MAP_SHARED;
+> +
+> +	/* gup_fd has to be >= 0. Already checked in main() */
+> +	self->gup_fd = open(GUP_TEST_FILE, O_RDWR);
+> +	ASSERT_GE(self->gup_fd, 0);
+> +
+> +	self->addr = mmap(NULL, self->size, PROT_READ | PROT_WRITE,
+> +			  mmap_flags, -1, 0);
+> +
+> +	ASSERT_NE(self->addr, MAP_FAILED) {
+> +		int err = errno;
+> +
+> +		close(self->gup_fd);
+> +		TH_LOG("mmap failed: %s", strerror(err));
+> +	}
+> +
+> +	if (variant->thp)
+> +		madvise(self->addr, self->size, MADV_HUGEPAGE);
+> +	else if (!variant->hugetlb)
+> +		madvise(self->addr, self->size, MADV_NOHUGEPAGE);
+> +
+> +	for (p = self->addr; (unsigned long)p < (unsigned long)self->addr
+> +			+ self->size; p += psize())
+> +		p[0] = 0;
+> +}
+> +
+> +FIXTURE_TEARDOWN(gup_test)
+> +{
+> +	munmap(self->addr, self->size);
+> +	close(self->gup_fd);
+> +}
+> +
+> +static void run_gup_cmd(struct __test_metadata *_metadata,
+> +			 FIXTURE_DATA(gup_test) *self,
+> +			 const FIXTURE_VARIANT(gup_test) *variant,
+> +			 unsigned long command)
+
+We prefer two tab indents.
+
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
+> +		struct gup_test gup = {
+> +			.addr = (unsigned long)self->addr,
+> +			.size = self->size,
+> +			.nr_pages_per_call = nr_pages_list[i] < 0 ?
+> +				self->size / psize() : nr_pages_list[i],
+> +			.gup_flags = variant->write ? FOLL_WRITE : 0,
+> +		};
+> +
+> +		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
+> +		ASSERT_EQ(ioctl(self->gup_fd, command, &gup), 0);
+> +		ASSERT_EQ(gup.size, self->size);
+> +	}
+> +}
+> +
+> +TEST_F(gup_test, get_user_pages)
+> +{
+> +	run_gup_cmd(_metadata, self, variant, GUP_BASIC_TEST);
+> +}
+> +
+> +TEST_F(gup_test, pin_user_pages)
+> +{
+> +	run_gup_cmd(_metadata, self, variant, PIN_BASIC_TEST);
+> +}
+> +
+> +TEST_F(gup_test, get_user_pages_fast)
+> +{
+> +	run_gup_cmd(_metadata, self, variant, GUP_FAST_BENCHMARK);
+> +}
+> +
+> +TEST_F(gup_test, pin_user_pages_fast)
+> +{
+> +	run_gup_cmd(_metadata, self, variant, PIN_FAST_BENCHMARK);
+> +}
+> +
+> +TEST_F(gup_test, pin_user_pages_longterm)
+> +{
+> +	run_gup_cmd(_metadata, self, variant, PIN_LONGTERM_BENCHMARK);
+> +}
+
+Heh, is there actually a reason why these kernel things are called _BENCHMARK?
+
+I think they are really just tests that can be used for benchmarking ... the
+measurement logic is entirely in user space.
+
+We could consider cleaning that up as a follow-up.
+
+> +
+> +int main(int argc, char **argv)
+> +{
+> +	int fd;
+> +
+> +	fd = open(GUP_TEST_FILE, O_RDWR);
+
+Could do
+
+const int fd = open(GUP_TEST_FILE, O_RDWR);
+
+
+Thanks for doing that!
+
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+
+
+I think reasonable extensions will be to execute tests on all available mTHP
+sizes and all available hugetlb sizes, similar to what cow.c already does.
+
+Can you look into that as part of some follow-up work? mTHP support will be
+interesting for testing some of the patches Rik has been working on.
+
+-- 
+Cheers,
+
+David
