@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4314C4AF67F;
-	Fri, 11 Sep 2026 18:16:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B81748BD26;
+	Fri, 11 Sep 2026 18:16:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789150622; cv=none; b=QzNb/UFCRXEheVDvxOU9DkMmKRZHJQeBE94jBsd9ALRxGNPu/mVZKgDfrZZwjR1FSgJ3E8rP/G5JnhVCj1RjrjlsHx/bC5hEp9s9kokYf9vO9vhlzapTYII3YU4WYGixCm0Fd8t6nORJwxv2Qb4iBevMTHn0gUgrV7l+LhtC8BA=
+	t=1789150624; cv=none; b=e6oR13mlvJv1ehrjbH+SFUDshAYLZEh938mSKO3+of6i4/01lpMVR0wyBW5xTdzBTXFnjEDmHDEQkpNYioW7h9wwxZIpgV5AyqgTU9OBg7C2R7E3cZFUg4puxSvw8GeVN+d1lLZ02SSXA8GYEqZttTFLcVninY9v30xCVQxSe2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789150622; c=relaxed/simple;
-	bh=kaUp194rucXMwbEBWohdBnDbGqFXS+NaelYZxoe1jcM=;
+	s=arc-20240116; t=1789150624; c=relaxed/simple;
+	bh=k5uSf2dNts7e5vsZyyzqBVgEnBWscvWs8HccNNL80OI=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bRgETDRtcocDqirjNYE//hXoEfwtBuT4gyiocF7XIkyPkGxzVnQFBHWa33ZbQkZnTbihaW4Y+Pthtpgd1t7aq8RbzgYCxLo5NzLkqIKGU2J0G/T94CtaVmLHGE5kL8FL1P5D4BG7PyGupAXMjB5uSd+Siu+iGacxY8G7BBXanPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YMwwD8Pn; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=kLoJAFvzl0aUvMqGLMozN5ODFGcL4SWV+h/f2jFV4EX+c7tmpcI3CGqJi2O5svGGDbXPGZ5zP8eupiuezUGPdBpMCCxC9W44UGb+nRPqxwCw2lkEvWyG6thgpE9INCDTNXeanIIC2lTU8plRGDx7NzC9WiPMO6ikUhTv+wkzGJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JsCitqDT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YMwwD8Pn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AF181F00893;
-	Fri, 11 Sep 2026 18:16:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JsCitqDT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E65D1F00898;
+	Fri, 11 Sep 2026 18:16:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789150612;
-	bh=9q6E405kevP4Q7t7b7joHYELBjjubVBWDhl+LQ0Baqw=;
+	s=k20260515; t=1789150613;
+	bh=jaXGq5qUGBG8UH/2bm3XnpBY1/FrawintgqnWIzo0gc=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=YMwwD8Pn7YneEezooRyFK9bjvMsUbzRutiutWJ0Ri0H42C7t3sf2krlJ9ZFaZotAL
-	 IdsRUNKnHJy8N8yMQU6rZU/Pi0+vOJoePS2RWddoETXwDxmD6C/mPn/8AuwRgQBaQS
-	 yrDRPyKBxUQUhRUydI5COExaFAaQhXAZLGUac1m7nLkWUarYRv9Zzpb4IfE0W++NmC
-	 10P9SEk6CopsOPehRaw8tak7E0lUZgfIMVgnSLcnzWm/SflY9Dwvi35cPoELBG0MEK
-	 vub1EIYcQTaprhHt3Dnr136CBDTeE4yaMoZJT2OwCO7hEJkIstsvAmeVXihkHriClk
-	 0TI1lD0dnu/lA==
+	b=JsCitqDTiq1dkYFfnOOQFBG3/Fp/h7jMnOseHgDhCGozOAQKCkQYu3xFJOwpoYu0K
+	 s57yboG5tIX9+391bOI/t1zte+w3JrzbNXFGMQl9wb4G3hXU940nGvRCn9rtabC2t3
+	 MhMLU3cxL3DPxOQcRfw1+42SeC+CYURHClfkuuoEQeEce0tnY/vsjavE8YvFeVO7aP
+	 WxIzbwCQWGdOB6YLVDsFFHx03pvJEVXIUruGquBX4yYXEi9VaoM9eY/8xpco/p8rUL
+	 JJOe38Ulse2XUpJDQSAYAflIazzZUxo4h0qNJHYmF3uJVUIoGvt4ls1zA8PccZaSKN
+	 t70Ara3mntAjw==
 Subject:
- Re: [PATCH net-next v2 4/5] fbnic: Support larger memory-provider RX pages
+ Re: [PATCH net-next v2 5/5] selftests: drv-net: Test large zcrx buffers
 From: netdev-bot+sashiko@kernel.org
 To: bjorn@kernel.org
 Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
@@ -38,11 +38,11 @@ Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
  sdf@fomichev.me, bobbyeshleman@meta.com, daskald@meta.com,
  bestswngs@gmail.com, maxime.chevallier@bootlin.com, jacob.e.keller@intel.com,
  leitao@debian.org, cuitao@kylinos.cn, asml.silence@gmail.com, dw@davidwei.uk
-Date: Fri, 11 Sep 2026 18:16:50 +0000
-Message-ID: <178915061000.219967.7726187707862333281@kernel.org>
-In-Reply-To: <20260910180908.1506533-5-bjorn@kernel.org>
-References: <20260910180908.1506533-5-bjorn@kernel.org>
-X-sashiko-severity: High
+Date: Fri, 11 Sep 2026 18:16:52 +0000
+Message-ID: <178915061220.219967.16553162669849588226@kernel.org>
+In-Reply-To: <20260910180908.1506533-6-bjorn@kernel.org>
+References: <20260910180908.1506533-6-bjorn@kernel.org>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -52,181 +52,215 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider:
 
-Critical: 0 · High: 1 (1) · Medium: 0 · Low: 0
+Critical: 0 · High: 0 · Medium: 3 · Low: 0 (1)
 
-- [High] fbnic_alloc_rx_qt_resources() programs the PPQ device-page
-  geometry unconditionally (`fbnic_bdq_set_page_size(&qt->sub1,…
+- [Medium] In `process_recvzc()`
+  (tools/testing/selftests/drivers/net/hw/iou-zcrx.c:304-312) the new…
+- [Medium] The new hard failure in `run_server()` (iou-zcrx.c:389-391,
+  `error(1, 0, "no payload CQE ending past offset %u",…
+- [Medium] The test now enforces a placement guarantee that the in-tree
+  zcrx UAPI documentation explicitly disclaims.
 
 Pre-existing issues:
-- [High] In fbnic_alloc_qt_page_pools()
-  (drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:1611-1623) the local…
+- [Low] The reflowed `usage()` string (iou-zcrx.c:422-429) disagrees with
+  the option parser in the same file and with the Python driver: it…
 
 --
 
-fbnic: Support larger memory-provider RX pages
+selftests: drv-net: Test large zcrx buffers
 
-The patch lets memory providers pick a larger RX page size for a queue via
-QCFG_RX_PAGE_SIZE, uses that rendered rx_page_size for the PPQ page-pool
-allocations and completion decoding, and adds ndo_default_qcfg /
-ndo_validate_qcfg callbacks to sanity check the requested size.
+The zcrx selftest now requests an RX buffer larger than twice the device
+MTU and requires at least one zero-copy receive CQE to end past the first
+MTU-sized region of its chunk. A new -E option carries the threshold, and
+the server aborts if no such CQE was observed.
 
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-> index 28b962307c080..5e22905a63739 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-
-[ ... ]
-
-> @@ -1599,6 +1603,8 @@ fbnic_alloc_qt_page_pools(struct fbnic_net *fbn, struct fbnic_q_triad *qt,
->  
->  	qt->sub0.page_pool = pp;
->  	if (netif_rxq_has_unreadable_mp(fbn->netdev, rxq_idx)) {
-> +		pp_params.order = get_order(rx_page_size);
-> +		pp_params.max_len = rx_page_size;
->  		pp_params.flags |= PP_FLAG_ALLOW_UNREADABLE_NETMEM;
->  		pp_params.dma_dir = DMA_FROM_DEVICE;
->  
->  		pp = page_pool_create(&pp_params);
->  		if (IS_ERR(pp))
->  			goto err_destroy_sub0;
-
-[Severity: High]
-This isn't a bug introduced by this patch, but the patch widens the set of
-inputs that can make this page_pool_create() fail, so it seems worth
-mentioning.
-
-At the err_destroy_sub0 label, pp has already been reassigned to the
-ERR_PTR returned by the second page_pool_create():
-
-	err_destroy_sub0:
-		page_pool_destroy(pp);
-		return PTR_ERR(pp);
-
-page_pool_destroy() only short-circuits on NULL:
-
-	net/core/page_pool.c:page_pool_destroy() {
-		if (!pool)
-			return;
-
-		if (!page_pool_put(pool))
-			return;
-		...
-	}
-
-and page_pool_put() then does refcount_dec_and_test(&pool->user_cnt) on
-the error pointer. Should the label destroy qt->sub0.page_pool instead,
-and save the error value before overwriting pp?
-
-Along the same path, is qt->sub0.page_pool leaked together with its DMA
-mappings? fbnic_alloc_rx_qt_resources() returns the error before reaching
-its free_page_pools label, fbnic_alloc_nv_resources()'s "while (i--)"
-unwind skips the failing qt, and on the queue-reconfig side
-netdev_rx_queue_reconfig() goes to err_free_old_mem (kvfree of the qmem
-container only, no ndo_queue_mem_free) when ndo_queue_mem_alloc fails.
-
-The second create can fail for ordinary reasons: page_pool_init() returns
--ENOMEM for the ptr_ring allocation (up to 16384 entries here) and can
-also propagate an error from pool->mp_ops->init(pool).
+> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+> index f6a8fc5fac241..c0d9065b21030 100644
+> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
 
 [ ... ]
 
-> @@ -2028,15 +2034,18 @@ static int fbnic_alloc_tx_qt_resources(struct fbnic_net *fbn,
+> @@ -298,6 +301,15 @@ static void process_recvzc(struct io_uring *ring, struct io_uring_cqe *cqe)
+>  	mask = (1ULL << IORING_ZCRX_AREA_SHIFT) - 1;
+>  	data = (char *)area_ptr + (rcqe->off & mask);
 >  
->  static int fbnic_alloc_rx_qt_resources(struct fbnic_net *fbn,
->  				       struct fbnic_napi_vector *nv,
-> -				       struct fbnic_q_triad *qt)
-> +				       struct fbnic_q_triad *qt,
-> +				       u32 rx_page_size)
+> +	if (cfg_check_data_end) {
+> +		unsigned int rx_buf_len = cfg_rx_buf_len ?: page_size;
+> +		unsigned int data_end_off;
+> +
+> +		data_end_off = (rcqe->off & mask) % rx_buf_len + n;
+> +		if (data_end_off > cfg_min_data_end)
+> +			seen_data_end = true;
+> +	}
+> +
+
+[Severity: Medium]
+Can this predicate be satisfied by a driver that only uses the first
+MTU-sized region?  It keys on the end of the fragment, and rcqe->off is the
+payload start offset inside the chunk:
+
+io_uring/zcrx.c:io_zcrx_queue_cqe() {
+	...
+	offset = off + (net_iov_idx(niov) << ifq->niov_shift);
+	rcqe->off = offset + zcrx_area_id_to_token(area->area_id);
+	...
+}
+
+with off derived from skb_frag_off(frag) in io_zcrx_recv_frag() and
+niov_shift == ilog2(rx_buf_len).  So anything the driver places ahead of the
+payload within the chunk (page pool headroom pp->p.offset, or per-packet
+alignment padding such as the 128-byte payload alignment in fbnic) counts
+toward cfg_min_data_end.
+
+Over IPv6+TCP the maximum payload per segment is mtu - 60 (mtu - 72 with TCP
+timestamps), so the margin here is only around 60 bytes.  A driver that
+stores exactly one full-size segment in a large chunk, but starts the
+payload 60 or more bytes into the chunk, would set seen_data_end and pass —
+which is the case the commit message says should fail:
+
+    "A driver which accepts the size but only uses the first MTU-sized
+    region fails."
+
+I could not point at an in-tree driver that reserves that much payload-buffer
+headroom today, so this is about the strength of the check rather than an
+observed pass.  Would keying on the payload start offset be placement
+independent?
+
+	(rcqe->off & mask) % rx_buf_len >= cfg_min_data_end
+
+Alternatively, should the threshold account for the maximum per-buffer
+headroom and alignment padding?
+
+>  	for (i = 0; i < n; i++) {
+>  		if (*(data + i) != payload[(received + i)])
+>  			error(1, 0, "payload mismatch at %d", i);
+> @@ -373,7 +385,10 @@ static void run_server(void)
+>  		server_loop(&ring);
+>  
+>  	if (!stop)
+> -		error(1, 0, "test failed\n");
+> +		error(1, 0, "test failed after receiving %zu bytes", received);
+> +	if (cfg_check_data_end && !seen_data_end)
+> +		error(1, 0, "no payload CQE ending past offset %u",
+> +		      cfg_min_data_end);
+>  }
+
+[Severity: Medium]
+Does this turn a runtime configuration property into a driver failure?
+
+On bnxt, one of the drivers advertising QCFG_RX_PAGE_SIZE, the hardware ends
+each aggregation buffer at end-of-packet when TPA is off:
+
+drivers/net/ethernet/broadcom/bnxt/bnxt.c:bnxt_init_one_rx_agg_ring_rxbd() {
+	...
+	if (!(bp->flags & BNXT_FLAG_TPA))
+		type |= RX_BD_FLAGS_AGG_EOP;
+	...
+}
+
+and BNXT_FLAG_TPA comes only from user-settable features:
+
+drivers/net/ethernet/broadcom/bnxt/bnxt.c:bnxt_set_tpa_flags() {
+	bp->flags &= ~BNXT_FLAG_TPA;
+	...
+	if (bp->dev->features & NETIF_F_LRO)
+		bp->flags |= BNXT_FLAG_LRO;
+	else if (bp->dev->features & NETIF_F_GRO_HW)
+		bp->flags |= BNXT_FLAG_GRO;
+}
+
+So with ethtool -K <dev> rx-gro-hw off, every packet payload starts at offset
+0 of a fresh buffer, the requested rx_buf_len is still fully honored by
+bnxt_validate_qcfg() and the -d probe succeeds, but data_end_off never
+exceeds the MSS and run_server() aborts.
+
+Separately, the threshold comes from the local interface MTU while the
+received segment size is set by the peer and path MSS, so a jumbo-MTU
+receiver talking to a 1500-byte peer cannot produce an end offset past the
+MTU without hardware coalescing.
+
+Should the test require or check for HW-GRO/LRO being enabled (or check an
+offload/queue statistic) before making this a hard failure?
+
+> @@ -406,8 +421,11 @@ static void run_client(void)
+>  
+>  static void usage(const char *filepath)
 >  {
->  	struct device *dev = fbn->netdev->dev.parent;
->  	int err;
+> -	error(1, 0, "Usage: %s (-4|-6) (-s|-c) -h<server_ip> -p<port> "
+> -		    "-l<payload_size> -i<ifname> -q<rxq_id>", filepath);
+> +	error(1, 0,
+> +	      "Usage: %s (-4|-6) (-s|-c) -h<server_ip> -p<port>\n"
+> +	      "\t-l<payload_size> -i<ifname> -q<rxq_id>\n"
+> +	      "\t[-x<rx_buf_pages>] [-E<min_data_end>] [-d]\n",
+> +	      filepath);
+>  }
+
+[Severity: Low]
+This is a pre-existing mismatch and not introduced by this patch, but since
+the string is being reflowed anyway: the usage text still advertises (-4|-6),
+which the parser does not accept, and it omits -o<oneshot_recvs> and
+-z<send_size>, which it does accept and which iou-zcrx.py uses in
+test_zcrx_oneshot (-o 4 and -z 16384).
+
+>  static void parse_opts(int argc, char **argv)
+> @@ -425,7 +443,7 @@ static void parse_opts(int argc, char **argv)
+>  		usage(argv[0]);
+>  	cfg_payload_len = max_payload_len;
 >  
-> -	err = fbnic_alloc_qt_page_pools(fbn, qt, qt->cmpl.q_idx);
-> +	err = fbnic_alloc_qt_page_pools(fbn, qt, qt->cmpl.q_idx, rx_page_size);
->  	if (err)
->  		return err;
->  
-> +	fbnic_bdq_set_page_size(&qt->sub1, rx_page_size);
-> +
-
-[Severity: High]
-Can the BDQ geometry here end up describing a page pool that was never
-enlarged?
-
-fbnic_bdq_set_page_size(&qt->sub1, rx_page_size) runs unconditionally,
-but fbnic_alloc_qt_page_pools() only raises order/max_len when
-netif_rxq_has_unreadable_mp() is true; otherwise sub1 just takes another
-reference on sub0's order-0, PAGE_SIZE pool. The two predicates are not
-the same:
-
-	net/core/netdev_rx_queue.c:netif_rxq_has_unreadable_mp() {
-		if (rxq_idx < dev->real_num_rx_queues)
-			return __netif_get_rx_queue(dev, rxq_idx)->mp_params.mp_ops;
-		return false;
-	}
-
-	net/core/netdev_config.c:__netdev_queue_config() {
-		mpp = &__netif_get_rx_queue(dev, rxq_idx)->mp_params;
-		if (mpp->rx_page_size)
-			qcfg->rx_page_size = mpp->rx_page_size;
-	}
-
-The config renderer applies the memory provider's rx_page_size with no
-real_num_rx_queues bound check, while netif_rxq_has_unreadable_mp()
-silently reports false above real_num_rx_queues.
-
-When they disagree, does the device get descriptors past the end of the
-mapping? fbnic_bd_prep() posts fbnic_bd_page_count() descriptors from a
-single allocation:
-
-	__le64 *bdq_desc = &bdq->desc[id * fbnic_bd_page_count(bdq)];
-	dma_addr_t dma = page_pool_get_dma_addr_netmem(netmem);
-	u64 bd, i = fbnic_bd_page_count(bdq);
-
-and on the completion side fbnic_rcd_bd_page_offset() decodes offsets up
-to rx_page_size - 1, which fbnic_add_rx_frag() then feeds to
-page_pool_dma_sync_netmem_for_cpu() and xdp_buff_add_frag() as payload
-inside what is really a PAGE_SIZE buffer.
-
-A path that seems to reach this: fbnic only sets real_num_rx_queues in
-fbnic_set_netif_queues() at open, so after probe it equals
-FBNIC_MAX_RXQS from alloc_etherdev_mq(). A devmem/io_uring bind with
-rx-page-size=8K against a high queue index is accepted then, "ip link set
-up" shrinks real_num_rx_queues (netif_set_real_num_rx_queues() has no
-memory-provider check), and a later "ethtool -L combined 32" makes
-fbnic_alloc_nv_resources() allocate that queue while
-netif_rxq_has_unreadable_mp() returns false but qcfg.rx_page_size is
-still 8192.
-
-Before this patch bd_page_shift was always derived from PAGE_SIZE and so
-always matched the order-0 pool. Would it make sense to either derive the
-BDQ page size from the pool that was actually created, or reject
-rx_page_size != PAGE_SIZE when no large-order pool was allocated?
-
->  	err = xdp_rxq_info_reg(&qt->xdp_rxq, fbn->netdev, qt->sub0.q_idx,
->  			       nv->napi.napi_id);
->  	if (err)
+> -	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:d")) != -1) {
+> +	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:E:d")) != -1) {
+>  		switch (c) {
+>  		case 's':
+>  			if (cfg_client)
 
 [ ... ]
 
-> @@ -2097,7 +2106,11 @@ static int fbnic_alloc_nv_resources(struct fbnic_net *fbn,
+> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
+> index b7a225fe4beae..a9f62c6b950bb 100755
+> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
+> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
+> @@ -175,9 +175,13 @@ def test_zcrx_large_chunks(cfg) -> None:
 >  
->  	/* Allocate Rx Resources */
->  	for (j = 0; j < nv->rxt_count; j++, i++) {
-> -		err = fbnic_alloc_rx_qt_resources(fbn, nv, &nv->qt[i]);
-> +		struct netdev_queue_config qcfg;
-> +
-> +		netdev_queue_config(fbn->netdev, nv->qt[i].cmpl.q_idx, &qcfg);
-> +		err = fbnic_alloc_rx_qt_resources(fbn, nv, &nv->qt[i],
-> +						  qcfg.rx_page_size);
->  		if (err)
->  			goto free_qt_resources;
->  	}
+>      single(cfg)
+>      page_size = resource.getpagesize()
+> +    mtu = cfg.dev["mtu"]
+>      nr_pages = 2
+> +    while nr_pages * page_size <= 2 * mtu:
+> +        nr_pages *= 2
+>      rx_buf_len = nr_pages * page_size
+> -    rx_cmd = f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} -q {cfg.target} -x {nr_pages}"
+> +    rx_cmd = (f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} "
+> +              f"-q {cfg.target} -x {nr_pages} -E {mtu}")
+>      tx_cmd = f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {cfg.port} -l 12840"
 
-[ ... ]
+[Severity: Medium]
+Does this contradict the in-tree zcrx documentation, which is not updated by
+this change?
+
+Documentation/networking/iou-zcrx.rst, "Area chunking":
+
+    Larger chunks don't give any additional guarantees about buffer sizes
+    returned in CQEs, and they can vary depending on many factors like
+    traffic pattern, hardware offload, etc.
+
+The commit message states the opposite:
+
+    "A driver which accepts the size but only uses the first MTU-sized
+    region fails."
+
+Mechanically seen_data_end is only set when some CQE satisfies
+(rcqe->off % rx_buf_len) + res > mtu, so the driver has to pack more than one
+fragment per chunk, or return a fragment larger than the L3 MTU via HW-GRO or
+LRO.  A driver that allocates one large niov per frame and places one
+MSS-sized segment at chunk offset 0 matches the documented contract and still
+fails here.
+
+Should the documented contract be tightened in the same change, or should the
+assertion be diagnostic, or gated on a hardware coalescing capability?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260910180908.1506533-1-bjorn%40kernel.org
