@@ -1,48 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DB73839BA;
-	Sat, 12 Sep 2026 19:18:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD71E3A4F35;
+	Sat, 12 Sep 2026 20:04:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789240699; cv=none; b=nA5MU7+bT2p8Nw5Z972HACgtXBa7aFckrik9Wqd1LIq2IGQMjtD211BNUEXisa/3oQ8E1crerWlqg/1SvP2xAxnPB38p39kKkULhuuPQeNkGggyh0768GEZ4rSuu7iQnBayxfZ5xBrLXH2XeiqZRthTW5cInxXSiAY5PF/GOv4w=
+	t=1789243487; cv=none; b=s+bPSNPO9KLZCpq5qq8GPnmsQkJzv2WlE32NM/ZzqWQS9/Xjl8UZy/aIKacLsORU6KTOONhVbEpVEOOQam7+A5T9McH5CZf43Fex3Eiu8GINWYXb/8Wlzl1vp3wKr5iC8cY8mROIFYd5J1EMJ3oLjy5VUJ639MwEDZAf+xbAvUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789240699; c=relaxed/simple;
-	bh=zKNBJKJMEE7iDlzCLwTQdJt35qvvUznZGcGFB4z2xBk=;
+	s=arc-20240116; t=1789243487; c=relaxed/simple;
+	bh=tmEvGZIL5vXtpEuXE0uOBicD54Gwa1umGdgnpskAWmA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nvaxe+JJG6fommzQtldvph4AreOmAMmQAuVAvRozz9e2XcOq0wP1IoBCVRce41dyeWDTWA1btA5P8FsQflTI5Vfpli6NYLSboa3OJztmqaNluV3cyoppYKNj7glGAtZN6PG9cTi/ovTg7HI6PIow2EW+Jnlgga5fAL4v+fJy0Sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gkYDo3z4; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=U7ZKL24ko537UtM3ouQ8gYiE2rKBz9vZE6S+zVchOUklwWajI2ayEkUO0GQaD0jpmBOz7KAp4m4PSfvjhr4m/Rh3oDb9iyNJNzNxvkIftsNyUGn3ynVe5SLrXlTki9pcsXWG+eiJRZWQEoPrCBqK61cytXiYN7VrLxGYa9+7xws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k+vwqfpX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gkYDo3z4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 194621F00893;
-	Sat, 12 Sep 2026 19:18:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k+vwqfpX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 130461F0089C;
+	Sat, 12 Sep 2026 20:04:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789240698;
-	bh=as3OPkNFsYYWKFBQO9tZASdaFQXU9TrMOPenfE/ek3g=;
+	s=k20260515; t=1789243481;
+	bh=/AJ0OU1zHH0UlnOeZ0jiSbZa3MIGsSezQQ1wIF4XSOE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=gkYDo3z4bVAwkbLlvRSugF93EZpKUfMq3gUGH37PieSO6VIDLJYlCn6C0IiGcVIt3
-	 hAAyoIGNJWpMGfCVAIjItVbz1vcOKq+TdYEsXUlD7aTEIcVkCM2iLrgIE7tv4MXNF9
-	 gjkWjd6c40ame6/dA9N1nJ05DPvf5PyToguj2EfbcUxweZ73jtv5d24MVkRD8flkW+
-	 F/krcEHjJtPhkE7/3wlsp/Ymk7ge/iULGRdIAaS7GF6BexM39ZpCxyhbd1e1indNE8
-	 XdA5j6tn6UEtSGR0TpEkXUnl3XQAE+BTpsezXsJBmosazSneAA1IMsiQihEzzNhWPj
-	 qcDcUk/EGVgEQ==
-From: SJ Park <sj@kernel.org>
-To: 
-Cc: SJ Park <sj@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
+	b=k+vwqfpXqzzfRi36rfEy+tXdwhyFHr3lJiYwBz0pey0vSVr3A3BFqahfvILJZ1A1v
+	 c72Ip/mYWbvtbA8Rj3xZ0JvWLpBuJBPB3darhsza86m9V77FZjBf2p54DhXXwgfeU1
+	 sYsn77nhTdin21a9O32B3VEOwXthJVqSOeEmKt8FeedgRSFtV47WsKGYc+7AtAudEP
+	 /ReavesP+2Oejcy50vjl5eLNyRSk+KtPKbXeJy7rj9g9g3O3/ukGmYZYs2OsnZOQRb
+	 JPFUxLe5YUlu25C6mwJqU1w7ne8yfS48fIabau0D/MhQ46lG5ODjjCplQbFYTLVgyI
+	 xDj5T/wennp+w==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	daniel.zahka@gmail.com,
+	willemdebruijn.kernel@gmail.com,
+	donald.hunter@gmail.com,
+	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [RFC PATCH 8/8] mm/damon/core-kunit: test invalid damos filter commits
-Date: Sat, 12 Sep 2026 12:18:06 -0700
-Message-ID: <20260912191807.138502-9-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260912191807.138502-1-sj@kernel.org>
-References: <20260912191807.138502-1-sj@kernel.org>
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next 2/6] psp: don't report the main netdevice's ifindex to associated namespaces
+Date: Sat, 12 Sep 2026 13:04:22 -0700
+Message-ID: <20260912200426.121025-3-kuba@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260912200426.121025-1-kuba@kernel.org>
+References: <20260912200426.121025-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,45 +53,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add test cases for testing the validation of damos filter arguments in
-commit time.
+PSP device is visible in a netns if any of the devices (eg. netkit)
+are associated with that PSP device. In the main netns we show
+all the associated netdevs + their netns id. In the "container"
+netns we show only the local devices. But we were listing the main
+netdev in all cases, even though it's meaningless outside of
+the main netns.
 
-Signed-off-by: SJ Park <sj@kernel.org>
+Report ifindex only in the main netdevice's namespace. Absence is
+already unambiguous, the by-association flag is set exactly in the
+messages which no longer carry the ifindex.
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- mm/damon/tests/core-kunit.h | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ Documentation/netlink/specs/psp.yaml | 2 ++
+ net/psp/psp_nl.c                     | 7 +++++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index c9941f3bfb42b..5da84caf4124d 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -1195,6 +1195,13 @@ static void damos_test_commit_filter(struct kunit *test)
- 			.allow = false,
- 			.sz_range = {.min = 234, .max = 345},
- 			}, false);
-+	damos_test_commit_filter_for(test, &dst,
-+			&(struct damos_filter){
-+			.type = DAMOS_FILTER_TYPE_HUGEPAGE_SIZE,
-+			.matching = false,
-+			.allow = false,
-+			.sz_range = {.min = 456, .max = 123},
-+			}, true);
- 	damos_test_commit_filter_for(test, &dst,
- 			&(struct damos_filter){
- 			.type = DAMOS_FILTER_TYPE_UNMAPPED,
-@@ -1208,6 +1215,13 @@ static void damos_test_commit_filter(struct kunit *test)
- 			.allow = false,
- 			.addr_range = {.start = 456, .end = 567},
- 			}, false);
-+	damos_test_commit_filter_for(test, &dst,
-+			&(struct damos_filter){
-+			.type = DAMOS_FILTER_TYPE_ADDR,
-+			.matching = false,
-+			.allow = false,
-+			.addr_range = {.start = 567, .end = 456},
-+			}, true);
- 	damos_test_commit_filter_for(test, &dst,
- 			&(struct damos_filter){
- 			.type = DAMOS_FILTER_TYPE_TARGET,
+diff --git a/Documentation/netlink/specs/psp.yaml b/Documentation/netlink/specs/psp.yaml
+index e9c2ee7e28e0..f3266763c325 100644
+--- a/Documentation/netlink/specs/psp.yaml
++++ b/Documentation/netlink/specs/psp.yaml
+@@ -38,6 +38,8 @@ name: psp
+         doc: |
+           ifindex of the main netdevice linked to the PSP device,
+           or the ifindex to associate with the PSP device.
++          Only reported to the network namespace the main netdevice
++          lives in, an ifindex has no meaning outside of it.
+         type: u32
+       -
+         name: psp-versions-cap
+diff --git a/net/psp/psp_nl.c b/net/psp/psp_nl.c
+index f91665748dde..b57366b5e032 100644
+--- a/net/psp/psp_nl.c
++++ b/net/psp/psp_nl.c
+@@ -294,13 +294,16 @@ psp_nl_dev_fill(struct psp_dev *psd, struct sk_buff *rsp,
+ 		return -EMSGSIZE;
+ 
+ 	if (nla_put_u32(rsp, PSP_A_DEV_ID, psd->id) ||
+-	    nla_put_u32(rsp, PSP_A_DEV_IFINDEX, psd->main_netdev->ifindex) ||
+ 	    nla_put_u32(rsp, PSP_A_DEV_PSP_VERSIONS_CAP, psd->caps->versions) ||
+ 	    nla_put_u32(rsp, PSP_A_DEV_PSP_VERSIONS_ENA, psd->config.versions))
+ 		goto err_cancel_msg;
+ 
+ 	if (cur_net == dev_net(psd->main_netdev)) {
+-		/* Primary device - dump assoc list */
++		/* Primary device - report the netdev, dump assoc list. */
++		if (nla_put_u32(rsp, PSP_A_DEV_IFINDEX,
++				psd->main_netdev->ifindex))
++			goto err_cancel_msg;
++
+ 		err = psp_nl_fill_assoc_dev_list(psd, rsp, cur_net, NULL);
+ 		if (err)
+ 			goto err_cancel_msg;
 -- 
-2.47.3
+2.55.0
+
