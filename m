@@ -1,64 +1,183 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010024.outbound.protection.outlook.com [52.101.85.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8337417D97;
-	Fri, 11 Sep 2026 23:56:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789170978; cv=none; b=MN8Yh68nHJfnpfmY8Gv5tR9F4ExCeaRpE5Zlj7mWuuuXSfK7G2dJL3datn2Rf0A2UDzjvMVndDxQnMusGwOLYhiUWKpMj1VkwJKjSgThCId2Zn9cWniJRC7JSb0KDTQIBDYEM+9v7vzUcJL2UAaWVF5TMIfCikuDNHiOYZ7uAao=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789170978; c=relaxed/simple;
-	bh=y8Ee7hKOcTm9Xrce+1JOFBj3QGB/rXkpZB2rdy/1Y8I=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=SIkEM0ys3OEi6TZ1Ivr/oU7846Y0YlnSNORvq5DMDaHiF8n1wpFcnk+W+reGZ6h4KZ6FJzQ1tVaLTQFIsnaWy8Iy7QkV0ThTMYmYViAw9hoEphdWffN5+bglcwwe1nmOR12rHR1s6Pmto+bqap+H7SAYvnBZlT1do9c+FBDFpL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=V7TZybOt; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589B372618;
+	Sat, 12 Sep 2026 00:06:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.24
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789171585; cv=fail; b=TbDgcSqO8JTN7mSBv0NVgamjB/pEx87SaM8D65LhvgCmGO3+VSb8+A7LlaWbInoKfMQ4J+18OcrGMtz4mHokpL9r69ZjRwgHCGuQPL1HwNj3GiES7JFjCpsCDnF2EqCJHB7k2UK7Z8yk3UiWu4BXYwkrQpZeREUwTL4HitOOntY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789171585; c=relaxed/simple;
+	bh=P4R9BfHj15AxcQg/HfndulfVbYtir3pNdTZmQl2AW1g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jstVTWq2SluHP/smLy9xHOoLaYff5xXGGyCxUIQ6g6Tw0Jp2LBgWxOGDqRcrJGYdRDh3CfRCva6fp5UvnpBjvfbUY8HVKBDzLiS1fWRpOXCIqQc7qk9b0bES/4CSygAiRLXXwjKiNrIX/0Gr+ni5o6A4YpXeTwDjqsfJ3I/51s8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nl+7JrKO; arc=fail smtp.client-ip=52.101.85.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="V7TZybOt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C3921F000FF;
-	Fri, 11 Sep 2026 23:56:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1789170970;
-	bh=wDlrTa5ZZtH4lzzh9UJQLR5eKEupJVTNDkxtOBjcy1E=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=V7TZybOtasBQe1DbZtheFvd5k8G7KLLoawtyEHnlJQBXytmjwN23iPwfu5E8F69yN
-	 P5/rkhES4PfwwF5SIoY51aiiekLzMC+JER2JxuYki01VUaRJAIcoLqNss1IeAQM9SV
-	 Fustsba/D+c5OOzP3VtwHvyVMS6IJoUq9Ohicf2Y=
-Date: Fri, 11 Sep 2026 16:56:10 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>, shuah@kernel.org,
- david@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, ziy@nvidia.com, linux-mm@kvack.org,
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nl+7JrKO"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=kanr8iklBB6xxemk4hVAwj52iVPtVeBUEiNT4JSZ1TGhCDrN1lSiwLbxi/FwbwIVb9ofnIfnoVsrpRpgiQevC2rbH+2cEpYYnG9mDEqvILwVVUh7CY0cjkloQ5F49xKe3JATA+udMKNwcwxMft3tcJtKkBlC8jVTNFed7w3O+rjQpoLgNw1nL0YU6zWp7wvxabqsRjb6arSHd4if4NQM1s7WxwBe0rCsX0GSEbFwnpAKFRK9+tXEFx6tkVBiGzkY65sVoVYnUO9GOZzV2OzcH9BwQvuznb962DRERjSNyXxXTKay35D4ndfJf+U3lobsIMNXlOsFgIUObRIuPTJ58g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UAUHCHOnx5j+hbr/XNU1VgVSvEITj/JE72fDZmnOaEM=;
+ b=ub1SoQlJ7Qdq1WKck00kKkZVBl8EuaZ1lqzHdGxENZtnGTvRM2TJp4DXOwbGw0/FcpXwuNk6Zzdgr/dUCQ7tBjScHdzND9DJZtXdJ9mq4GYMpRP7vhmp3TMcjyA9H4lwIzklT9FR/SJIz2F9ATtdAJkhD7JY9ddRMHG++AnvEIGrLoE4biYpx2qViXAPnyTHqkDKik5k9z9Jj+mUwH5MmozseJ22ku9FOISF9w5jbZeDROB848iK/N1po1mYZ4pu3+8LYW8HM/Repxg0W59ooRVkpGriYEM+0xUuh1SaNiNeqjtUWFAe2Xhhv/wAQi0QonBk3ifzsAamXkBTRxZpeQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UAUHCHOnx5j+hbr/XNU1VgVSvEITj/JE72fDZmnOaEM=;
+ b=nl+7JrKOZDqBl0ldHfqAxHKLPO8giaExyTUWWUqZvpTuBjkH9Sm4HLMM2ycpv8r+NYqwqyi7lf7mTWyLxyyWkdhbXyFlIMfmxLq8aMr3i29X2jVEGQHmO6EtQZQGX0yjTLnvusMU2KZN03W8nOzrBUDlTbDIlrEe7fS3vnuoX/c2aydLn9NkFdaLSuIwUtm5QDV5HwzB0grh2bs4u9kZeUPYWoZl25yQUz7xqSwglnQKbJjc4NAUt+i2j8XLVNeGyQJrUeib0P8E0Es2sWVxcb19ezwUMJoEfrbd8FQ+v27lggawKZtfvkHDF70FQIf2bIIZRY4xTGVKvEf+uj4VUw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
+ by DSVPR12MB999150.namprd12.prod.outlook.com (2603:10b6:8:388::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.9; Sat, 12 Sep
+ 2026 00:06:19 +0000
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16%5]) with mapi id 15.21.0406.007; Sat, 12 Sep 2026
+ 00:06:19 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+Cc: akpm@linux-foundation.org, shuah@kernel.org, david@kernel.org,
+ ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
+ surenb@google.com, mhocko@suse.com, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] selftests/mm: skip khugepaged file tests if mkfs.xfs is
  unavailable
-Message-Id: <20260911165610.e1b1d957e6c73a200b64e546@linux-foundation.org>
-In-Reply-To: <aqP7gW98GIiYgL1z@gremlin>
+Date: Fri, 11 Sep 2026 20:06:22 -0400
+X-Mailer: MailMate (3.0r7032)
+Message-ID: <CC87B3D6-D5BD-42D2-B84C-47745ACAD0AA@nvidia.com>
+In-Reply-To: <20260911124517.63714-1-jaeyeon.lee.dev@gmail.com>
 References: <20260911124517.63714-1-jaeyeon.lee.dev@gmail.com>
-	<aqP7gW98GIiYgL1z@gremlin>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-MS-Reactions: disallow
+X-ClientProxiedBy: BLAPR03CA0020.namprd03.prod.outlook.com
+ (2603:10b6:208:32b::25) To IA0PR12MB8374.namprd12.prod.outlook.com
+ (2603:10b6:208:40e::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|DSVPR12MB999150:EE_
+X-MS-Office365-Filtering-Correlation-Id: fef25f5c-51d3-4215-f82d-08df1061abd0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|23010399003|11063799006|56012099006|10067099003|6133799003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	prQu7zIuuSNd0p4NgoGCvcnIPuIiZ7/lZkM9pk66ICQuLN4O1o8SNNgpgjzg2Vm31XJsUXkK6muIjEpbzhcNFVFdqsCo7N+wtsOT3qLsr1yTPYnLpj/dINXl3sfKTlXTzsa0yKjS0yJKhDaYw3YBwbF7/Ie5EBFSCzQDNZ8fSVjCbAsW/EMfzakEDhY44QmLaRbyUjMgbytIaNQ9AlSBHJNvpAtMfd/v4eNiGnRM8wwlB5OZsPdTmzhc7u6uz5eP2vtrtdxh3y2nQpPlOmXCgIxTStixkulWEVkYT3MdBTGYrNNZghCqTOSebtqGdx36JwtwlVVKxjvudOcOs84jZ2AZI8Wty0UqfXAADUC9kaNV3yx6TKii+5+LtOMgM71JC+TbyK9Fv86zFKMj4O0/rx0Amof5y1KBI4Yh8Ae/CYr9ymRi1wfZvMsqS+PgjovMxFCZ24qA3offDqQ8yx0msU2xsYL7L3UkT2LGNJroAcWU8UlCKzK15ni4Xf4oc9rERpdumcUmwibjK9KLDu3qev6mtdqA1s4LgCTT75gssISAkx9d8bgGd4THda1LoLPp7Z6kyKO90QP3Nur4vM1iWD93wUiQr9nzvDU59HtK5znr1SVzx43az/reWFAXdBjn+Uvyz70S11Um1OBW9nuVmKZswsTVgD9HQOdrWKv/KIE=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(23010399003)(11063799006)(56012099006)(10067099003)(6133799003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?+diLE0SbYMXxhJuoP1GhrQG7aYTKRFo1AcMbj4ueSRZgLbThvoiSgGcm97k0?=
+ =?us-ascii?Q?ziqjsVdCk8AYH7rEreoWZ31k3zCJP/pEMIWgiFxHTcto9Cw0I2EYloc59rDN?=
+ =?us-ascii?Q?xEHR1yBEwfz+KqYnvE5AbLf5zYAuDxAjPnUifSgAWHxleb5S9khFKsv8u9m9?=
+ =?us-ascii?Q?S/jwbSWJK16JYvGjGGEhqu64BwbzYq3IrCHv0pVOWbIYoW8pfUducUUY8G0Y?=
+ =?us-ascii?Q?kmHvvEkW0Cx9uTtrnK4pQk65XV26pvUUpg4++6p+p5mT0lZ5/r5ST2UufcOL?=
+ =?us-ascii?Q?uydlHxk1NivkfU+UnV9e/wAbvayacSLvC9trU8q1mMnyf0scuDqqizY2m2ME?=
+ =?us-ascii?Q?lJWC+xsq8JNZcBC+wZSMzgNWLfmtgQ3XgGdeVSJrFdlIlFeVWfCZWn6u8U4X?=
+ =?us-ascii?Q?lGoq+2kxjB9mqINLuVo5OxJZEOc7777SZriG3komNHlExhzAfuADtRYmoZHM?=
+ =?us-ascii?Q?gjzwdEOMlovNZ8Pz24ecqXu6CBY4MtRyq0y1ipQJncBl7rBSuy4JGS+DPMo8?=
+ =?us-ascii?Q?92uOvrZkG6Fg/sOoVbYGavSDvCW4mYsi47WooT//cnj0f12J5HEMTOTM/0ZC?=
+ =?us-ascii?Q?IUejBkazQdPTzB3XgWaunP63jDk4CL5bNcxzBu4f+kduztOAUiv0CyIXT+oN?=
+ =?us-ascii?Q?CyM6S8Y9iAPZpwCvygvuoLvrKJlmk4e9jFBsFLvJtNZQoZTCcxILEnMwEFXz?=
+ =?us-ascii?Q?ONkvyJdJpghbsL5A7Tze76FOzKk+sAl2GD/aUMND9M71SHqX6Ip4NPhrZCXr?=
+ =?us-ascii?Q?SE8Jx+t+HzzggXnK/BWc3af4as4qINhwOZISvVx7PWBAkC3TD97tEd7IYW1E?=
+ =?us-ascii?Q?7K4CbzYLHxf5qkkF3MTEDbAkzndCDoJ0Nosx6xnMcD1Pr8toxr7houSLGln2?=
+ =?us-ascii?Q?HQOzcLUS472+4W3jzfGM26Y728UxMNQlIT9Ztw0Pr7AvR1DCdHFWseIVVnGf?=
+ =?us-ascii?Q?sBFv1fJvZClc/ba/TD1wS/OEKtr5L2gxOGqCI5ivWEbjtl9805FU8VhOhMil?=
+ =?us-ascii?Q?StvG5JiFNVKdfNR/AyvJa6mIbY7ZHRf2Edo0EI0fX5/ur+VONSbcjy100uP/?=
+ =?us-ascii?Q?xXe1TB91Bm4Hw2vRqmpmknnCGzytfNSoLAIA/U3cL9odV+e1FiHsJLnGP9FL?=
+ =?us-ascii?Q?AGSLo9UDuJqx+UyDHnsII77ydevL0Mmdg0FKeJhX3btAPCmvAmdtW3U9WFvb?=
+ =?us-ascii?Q?WEfx6UbTxhBldzTHEyOBXqXmjGHlFDdJ3LchSISiPWdysjKXMRAuBZSthA2r?=
+ =?us-ascii?Q?T5sFuPUVMyuT/1F29ODUuV28measzGcPB7qhRb29CkOvZW04zKJzJCqRlCgd?=
+ =?us-ascii?Q?84/opLBVMGafNtG/FwGzWhMDYkbals/GDM8YmTU+VupJ0okK/cRWlY6iwAib?=
+ =?us-ascii?Q?vbYtsCMxv4l75dp5wS4q8srZlyb3AtyQpH9c8AEXciuOquYs+tblyPxmX0Gz?=
+ =?us-ascii?Q?dAMkRmpBFywD+SldIsm79/XrafrPxNb3FZMAwgPKM60pKHcjjDNlrLq9JPbG?=
+ =?us-ascii?Q?xZWbKFQYEX4Rld3N17wIl+WBmqcN69Xuw8HnlheA1oCs+EyVbww3AbIu/Iv0?=
+ =?us-ascii?Q?rVhCaQuclbUKJiiW/YKzc9z1FOmuDj7U2RXkeIDfoqNBQO/+CoePoTCsbhkK?=
+ =?us-ascii?Q?YEuNt091pd39S4+EB6UHr8agARCQVCFWCHuipVzotwNI9JakSCWOJJhESsp+?=
+ =?us-ascii?Q?JX3nzImmeDZrX1TTN31aqhWZ+E+tW9SJzFezU4YMMsTXalXug311gDX3lczb?=
+ =?us-ascii?Q?gjQjR9LvAg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fef25f5c-51d3-4215-f82d-08df1061abd0
+X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2026 00:06:19.1565
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JjCsl2mT9/hk7flZrVT4P1G4LMJvlaSgsWi8HLg3BPbmK1/iZWwnm6TyoCSYHY+y
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DSVPR12MB999150
 
-On Fri, 11 Sep 2026 14:01:55 +0100 "Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
+On 11 Sep 2026, at 8:45, Jaeyeon Lee wrote:
 
-> > Assisted-by: claude.ai:claude-opus-5
-> 
-> Convention is now:
-> 
-> Assisted-by: LLM
-> 
-> See https://docs.kernel.org/process/coding-assistants.html
+> The XFS setup for ./khugepaged all:file checks that the kernel supports=
 
-Yeah.  That's so lame.  I like seeing what people are using - it's
-interesting.
+> XFS but not that mkfs.xfs is installed. When CONFIG_XFS_FS=3Dy and
+> xfsprogs is missing, mkfs.xfs and mount both fail, but
+> SPLIT_HUGE_PAGE_TEST_XFS_PATH is assigned from mktemp -d and stays set.=
 
-Also tautological.  What else will we ever place after
-"Assisted-by: "?  Dr Watson?
+> The test then runs against plain tmpfs and six subtests fail.
+>
+> The script already has a skip path for this test, but it never runs
+> because the path variable is always set. Check that mkfs.xfs exists
+> before attempting the XFS setup.
+>
+> Assisted-by: claude.ai:claude-opus-5
+> Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+> ---
+>  tools/testing/selftests/mm/run_vmtests.sh | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/=
+selftests/mm/run_vmtests.sh
+> index d09f9f6a384e..6315b67b6733 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -415,7 +415,8 @@ CATEGORY=3D"thp" run_test ./khugepaged -c 4 mthp_kh=
+ugepaged:anon
+>  # Try to create XFS if not provided
+>  if [ -z "${SPLIT_HUGE_PAGE_TEST_XFS_PATH}" ]; then
+>      if test_selected "thp"; then
+> -	if grep xfs /proc/filesystems &>/dev/null; then
+> +	if grep xfs /proc/filesystems &>/dev/null &&
+> +	   command -v mkfs.xfs &>/dev/null; then
+>  	    XFS_IMG=3D$(mktemp /tmp/xfs_img_XXXXXX)
+>  	    SPLIT_HUGE_PAGE_TEST_XFS_PATH=3D$(mktemp -d /tmp/xfs_dir_XXXXXX)
+>  	    truncate -s 314572800 ${XFS_IMG}
+>
 
+This might be more robust, since it can detect mkfs.xfs and mount failure=
+s.
+
+  if grep xfs /proc/filesystems &>/dev/null; then
+      XFS_IMG=3D$(mktemp /tmp/xfs_img_XXXXXX)
+      XFS_DIR=3D$(mktemp -d /tmp/xfs_dir_XXXXXX)
+      truncate -s 314572800 ${XFS_IMG}
+      if mkfs.xfs -q ${XFS_IMG} && mount -t xfs -o loop ${XFS_IMG} ${XFS_=
+DIR}; then
+          SPLIT_HUGE_PAGE_TEST_XFS_PATH=3D${XFS_DIR}
+          MOUNTED_XFS=3D1
+      else
+          rmdir ${XFS_DIR}
+          rm -f ${XFS_IMG}
+      fi
+  fi
+
+
+
+Best Regards,
+Yan, Zi
