@@ -1,166 +1,125 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-vs2-f5.google.com (mail-vs2-f5.google.com [74.125.227.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3C22F531B;
-	Sat, 12 Sep 2026 12:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789215601; cv=none; b=Car4Mz30zL5nLqkAt87B6fCAmC8iHmzAWULJMXNoQf+oBOXylFPE47unYFvtjHL0lmRO4QAqL4BsUPT0phTvRXGIURdIrThcBSnz+ptlMTUbWMUsgGGfuemTWaz2TgfMm+bCMlMevNr9ez5qy17Z4/F9gRM2PblTQXmB1b8kcpk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789215601; c=relaxed/simple;
-	bh=njrE7iqJKMTKFK+NR3Ogu0Rb202DOR1OeKyUEJuvdrw=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=huMDJW0ktmmeoNnRNZdbPmB9dHtzaQW9itf4z3XetaXtOuqeReIk21vwuaRJp0o0iWE/AZyLwpKk7pjTxhCjt1Qe4Qu3ZTXOFiIF8Vfzf8DDMk+cRFGdOuwa/+zP0HDMGoQDoIanm24pJWFzJc3S8qSNFeZ9hIUcIeug74iAjNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WXBakg4A; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=GriudpHQ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Z1CsYSYe; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=LMEoQED3; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4886E38B7D2
+	for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2026 13:29:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.5
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789219780; cv=pass; b=DNE2+L7TCRxwsJL3yqpi3+NdhFfBaMwGts2dGuRrtc0QGRc3eXf7k8pd6mjgYv/y/hEvqX6m7FZjpw1RgDP1keh+et9vlZrRmKGEH+E3t2mD69Y3soqWbC9a9061PDJ1w4oCAFH4qwo4d2rPMBOvTLht1eAW6T2hb/GgOGqc/Xw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789219780; c=relaxed/simple;
+	bh=w65zAE5RQsKUX0xWxN0GNr/Fkyw6HDNWpiItWtCqaS8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SYuG+dnwlFmDU/c5oNSnQaXUhwP45foTq0mES5HuKRENrMxs8V3guOWw3V/TBXF+25g3jfzfvim1ax8oTKEKlTwGs6WcpziGQx0nFuJ86Q93HFgyyI002CzUcjhUVqUtJiBZv+ym5EKcGGnQQnqLDFjTPa3cBRgHhvldKqjvs+s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q49XP/FV; arc=pass smtp.client-ip=74.125.227.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WXBakg4A";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="GriudpHQ";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Z1CsYSYe";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="LMEoQED3"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 882961F38E;
-	Sat, 12 Sep 2026 12:19:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1789215593; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9nMy6hYw6dcS8rtCTDMkqLgy+g4dqXHOIpTSAw8vyOs=;
-	b=WXBakg4AWgoH/mYAiwaFxKevRAm05WrebE2+9Sjx+tT2ugTIY8v9lwDTE3m8yuFG2Doe9V
-	AUNFFhkG4XNEK8O0TwZtAvvfhPAZF7B/NGZM7PolbrEPDHIdBTKITqbB7yo8IwdGZc+DKZ
-	MUr2TYCuApGAo2xMUEi0OXnwsfoc2Lc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1789215593;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9nMy6hYw6dcS8rtCTDMkqLgy+g4dqXHOIpTSAw8vyOs=;
-	b=GriudpHQKYuTqT/s7m3eFemdHUMWEKkGqgQzR1yVsCwtnSNyyd/KuiPfaS7vjkWAkJDP6/
-	3VWem//csliQHsDw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=Z1CsYSYe;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=LMEoQED3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1789215589; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9nMy6hYw6dcS8rtCTDMkqLgy+g4dqXHOIpTSAw8vyOs=;
-	b=Z1CsYSYet2MsTRCOc7PjJyxiZ5FsdbZjiOtZh/q7+XwvUgVp0DhstDObv6zI1SxV9OroDn
-	j1980gIDtrmTs2ntZpuNL7jWuKGr4Bmz+Ilu8vmWmO133/EGYNmweaWmaotrcD3/LMYU3G
-	b/NbDNOGCmfRcy9UVy2TykPXA5Lgqlg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1789215589;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9nMy6hYw6dcS8rtCTDMkqLgy+g4dqXHOIpTSAw8vyOs=;
-	b=LMEoQED3kGdbJqsSDt+d8Atl4LpRPeNOpR6j07LEUwX1dE/vmTNAhg5rS1f9vcUwgMKHmq
-	0Na7JTIkLaI0UzCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 122CC13687;
-	Sat, 12 Sep 2026 12:19:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id Z7zuAWVDpWq9fQAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Sat, 12 Sep 2026 12:19:49 +0000
-Date: Sat, 12 Sep 2026 14:19:48 +0200
-Message-ID: <878q563bmj.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: HyeongJun An <sammiee5311@gmail.com>
-Cc: broonie@kernel.org,
-	perex@perex.cz,
-	tiwai@suse.com,
-	shuah@kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] selftests/alsa: Test writes to IEC958 controls
-In-Reply-To: <20260912025430.2102149-1-sammiee5311@gmail.com>
-References: <20260904123334.1505003-1-sammiee5311@gmail.com>
-	<20260912025430.2102149-1-sammiee5311@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q49XP/FV"
+Received: by mail-vs2-f5.google.com with SMTP id ada2fe7eead31-78333cbe5bbso1580569137.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2026 06:29:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789219778; cv=none;
+        d=google.com; s=arc-20260327;
+        b=dgOnPRQXQd8bDeZQeWLeNW0fSu7ZMm11XbbNwf4gncK7506zUvMkMQEUoAkuorjk49
+         hHjZcbTOj91q3e3w3LRM8p25PaKjmzZYFKXgi6ZaT8FCgP+FPZ+IHtL83cdoGCMpDVvG
+         UhGtMKnhFeFmzSfOIupAGYcpyxHqOTfCyg+yi3oBVvQk5eWx7wEGlWaky33cgpv5sJcZ
+         HLx+nTCI6HesYnZ/uSenPkcx1usjhKKPU+wN3H03ghWkDp39Ef+I3QyW4R13sGumimHg
+         KbVv58WFqbROJ5Y+sYR/EkOf4h4oy8/Tr0NVEXQuhZAH9UoVnR1c8EBs70Aaqpqtk0B+
+         ElWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=5dLw2loIG/Pp0pl9OY2tY1bLAD5HMO+AaOJKL7LkY40=;
+        fh=LcSwIPXYC6EWiViNUaEJr2BqL4pcJkAsIdegSvqHC3g=;
+        b=FM/C1ymRn07mGOPsxStxjJz+1GBi/OtFcVuC7e8GSqj0TJ3w00U66OV/xq8ys5jl9h
+         GhugXw2NQ51tLDZdgKBWllmuONYJBfHkJ8uPZt7jrw9Bb/53RapTNi2L7lvLeajDfPdA
+         K5o60Ah9twGc/SeKfSHxJ1lAx9PEGJ9bc02Jwlm3Ruzo7xU8SVXF7zr7H8sKNU5jUq5J
+         PHGp3/1W5vwvnlZHrsk76BtfIuTF9FttTc6RfX12T6Qr1U9/S6yJMmO9zhjVbwgifgcs
+         3jKXB7puI7dhpOmMJZX1NR3LurYeKJQaSboA0L3J55TeIrGvo0i9zSd/C8Y/5RQSyZKL
+         6ztg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789219778; x=1789824578; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=5dLw2loIG/Pp0pl9OY2tY1bLAD5HMO+AaOJKL7LkY40=;
+        b=q49XP/FVF+TrhmWvlVGouFMAHQgPBggDvmAd1QTfNVGlnzaYVrcKG9rmf0m0S+MUe8
+         brDY+m2mtDM1OXrrUcDAFmgeRULl2ZJ7cfzlTINzM3v6rjdci6SUhE/YGQkp4bTIlUck
+         s7kaOzuZkumhXR6xnuMD2zsaiWmJ/RHEmvy7n+IYSPM3BGwTc9S7Oo4wb5yaHdo6pnJd
+         YX08HstWpijLP29/3hw7GDNn3gR9o/LTYx/wayTMSc/9M3F+igBJJY5Wmrsz00WU9ZQw
+         zUymXyW8bRMuv1Oyz92JoJHJW7lkNX9jHorLFbsMShPYRH9WsSCK+cSsHHZIZRql7Asf
+         takw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789219778; x=1789824578;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5dLw2loIG/Pp0pl9OY2tY1bLAD5HMO+AaOJKL7LkY40=;
+        b=ctMZ5a3tVRxDTyjDsz2iUshyawlTHtgtqBpwm/rKR1cFcvUo6HBgK19fXBx5Ebilii
+         7VNQG1KlvSkgd8ZN7P5yCFEY0nHa8OgL3CnEuLIiWDsdxJPI7Yn8Ikz5aNuzAlhhr5Yg
+         ZM0v8aBcx+sX7dGAQw6RZXWPTImU/zFCgSrgEEOCCuv/i3HOsDIY6IPjZMbOnxgTqp5Z
+         MZM6+nebn3aFDANkN/hfdzlLzcmjw5vFt5KteQYiTj1odz3YKXGbmE3BYqbIlVh3Uf1Z
+         CCizLBKK3pYbFBvG9jvIdDdCGuIwmm7ZMkQyoDry2qISrq6ShXmWBn8V7XErXAcxBsSi
+         8Oyw==
+X-Forwarded-Encrypted: i=1; AKwUvBxgJuKlfQ64y8IM41zyCH8Y8TzmksmGzenUHPVYXbdKzfPpTWJ2v7Yi8WM92MoJd5PKGxDfhoNwBmXEmmNWeq0=@vger.kernel.org
+X-Gm-Message-State: AFuF++kky8dHsE5BZq0Y9RALwpqEFgJHZ2GdUECl3cvwmgo1ZEQG8AJz
+	Y171nbyzcO2IUBWojMlHDRgsPCmlxQp0vLMalRMxqMxZtvdhH5/OGi1WADma6kKPohSycHb8Kre
+	PX+o8kNR3kqf/PmUhCBVvskoX+zqCHX4=
+X-Gm-Gg: AYBFou2ioXtyitIlSevkf3BEIc9XuZolJvm/NGPh5C4wrjZg0qL9TaOC9r8pxwRCLhn
+	WHCV38M9u576PsAGu/H2y9etuDuJ/GOTRu7kdNmAPVq/lU3/KE+Qkxz5T4MSUUr/E9p8KWo2Gf2
+	RlH970ALBRG7e/2LN6x0w4O+ENDoxoQxOgobYXXOfv+gSGx7JieBXIlTyBGKQ2ZN3YawbgTjvaL
+	Uhnz9VK1QKQPGhfSexEBBEWLDGc93B8v90ri0qdwfpP3kaD+HJTelKHQW0kCh6s+5X/KYrZDM1O
+	vhKt7CdBkmX58t5emuNkLhBmg2ZGqYcOOHDa4CCvEdA/tJlJFzbdPPWKHNkXBNDlDLH8uwAiqqr
+	YZoBfXNC0d5d20RUgfAvJBpDR+xjJ06HGh43JxIMmtEAuOw==
+X-Received: by 2002:a05:6102:3313:b0:790:235e:4209 with SMTP id
+ ada2fe7eead31-792edf64392mr4768111137.12.1789219778089; Sat, 12 Sep 2026
+ 06:29:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: 882961F38E
-X-Spamd-Result: default: False [-3.51 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim,suse.de:mid];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Flag: NO
-X-Spam-Score: -3.51
+MIME-Version: 1.0
+References: <20260911124517.63714-1-jaeyeon.lee.dev@gmail.com> <CC87B3D6-D5BD-42D2-B84C-47745ACAD0AA@nvidia.com>
+In-Reply-To: <CC87B3D6-D5BD-42D2-B84C-47745ACAD0AA@nvidia.com>
+From: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+Date: Sat, 12 Sep 2026 15:29:26 +0200
+X-Gm-Features: AcwNN1Wq5ZTrxV3k1NjhhPK4dlwMKgsnXpdc_cmQ2xjSE7CLbOE09_kryz33d1Y
+Message-ID: <CAD+X6aA=0f8mLN0j-h3tqHCRAq_pi4Xp80FUA6GcZVcZa142-g@mail.gmail.com>
+Subject: Re: [PATCH] selftests/mm: skip khugepaged file tests if mkfs.xfs is unavailable
+To: Zi Yan <ziy@nvidia.com>
+Cc: akpm@linux-foundation.org, shuah@kernel.org, david@kernel.org, 
+	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, 
+	surenb@google.com, mhocko@suse.com, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 12 Sep 2026 04:54:30 +0200,
-HyeongJun An wrote:
-> 
-> Nothing checks that the put() callback of an IEC958 control reports a
-> change, because write_valid skips these controls.
-> 
-> Where the device publishes a mask, toggle every bit in it and check each
-> write.  A bit the mask advertises that does not stick fails the test, the
-> way a rejected value fails for the other control types.
-> 
-> Where none is found, keep the old single guess at the non audio bit,
-> which the device is free to ignore, so only the notification can be
-> counted against it.  That path writes without checking so drop_events()
-> clears what those writes leave behind.
-> 
-> On an HDA card with four HDMI PCMs the Con Mask is 0f ff, so each control
-> walks eleven bits instead of one and all eleven stick:
-> 
->   -# Totals: pass:212 fail:5 xfail:0 xpass:0 skip:56 error:0
->   +# Totals: pass:216 fail:5 xfail:0 xpass:0 skip:52 error:0
-> 
-> A driver whose put() never reports a change still shows up as
-> event_missing.  hdmi-codec and img-spdif-out store every byte and return
-> 0, so boards using them report one event_missing per walked bit, and
-> hdmi-codec advertises the whole block so that is 191 of them.  A driver
-> whose mask claims more than its put() keeps now fails write_valid
-> outright: au88x0 and ice1712 on Delta 1010 and Mediastation advertise
-> bytes they never store, cs46xx, oxygen and ice1724 advertise bits their
-> put() drops, and the RME cards regenerate the whole emphasis field from
-> one bit so the rest of it never reads back.  None of that hardware was
-> to hand, the paths were read rather than run.
-> 
-> write_invalid stays a skip.  Every bit pattern is a valid channel status.
-> 
-> Signed-off-by: HyeongJun An <sammiee5311@gmail.com>
-> Assisted-by: Claude:claude-opus-5
+On Sat, Sep 12, 2026 at 2:06=E2=80=AFAM Zi Yan <ziy@nvidia.com> wrote:
+> This might be more robust, since it can detect mkfs.xfs and mount failure=
+s.
+>
+>   if grep xfs /proc/filesystems &>/dev/null; then
+>       XFS_IMG=3D$(mktemp /tmp/xfs_img_XXXXXX)
+>       XFS_DIR=3D$(mktemp -d /tmp/xfs_dir_XXXXXX)
+>       truncate -s 314572800 ${XFS_IMG}
+>       if mkfs.xfs -q ${XFS_IMG} && mount -t xfs -o loop ${XFS_IMG} ${XFS_=
+DIR}; then
+>           SPLIT_HUGE_PAGE_TEST_XFS_PATH=3D${XFS_DIR}
+>           MOUNTED_XFS=3D1
+>       else
+>           rmdir ${XFS_DIR}
+>           rm -f ${XFS_IMG}
+>       fi
+>   fi
 
-Applied to for-next branch now.  Thanks.
+I'll send v2 with this, adding a Suggested-by: tag and fixing the
+Assisted-by: tag format.
 
+Thanks for the review.
 
-Takashi
+Best regards,
+Jaeyeon Lee
