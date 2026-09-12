@@ -1,133 +1,239 @@
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-qv2-f12.google.com (mail-qv2-f12.google.com [74.125.230.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34CBE40862F
-	for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2026 17:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2573B103B
+	for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2026 18:09:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789234898; cv=none; b=jCGQQL7uRvtjw6yOTcjbHHUCCxexeDZIYT7pS10DFCWicJrA09tzUYyPqg0gku0gHFvtRgKyJu5/n7UgJWOAB5dUNSur5Ucpd74mdw6bwrbyaz6yAZuSO4X6j2WJDsg/Y79qEi2WLa/Joey++J12G//PvC6mGf4M7EW/Y97KQDg=
+	t=1789236568; cv=none; b=rmFuGMmLJuGH+kRyyC2REepXkG33Tcmh3cURnQrVvvfJ6RadYFQsTX6xN9+eo3S4QsAgycVTp/1tYI8z3cJgcYn4k/gz4x2QvaF1Du+H6cDw75c3Wfjuzi8pKiy1DGrhBNsxSWxpaWtYh7GDDdcoEPbwuqOZU0KhY3/jWdOnkNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789234898; c=relaxed/simple;
-	bh=WwdB+ukEtegGwsv+CHfPaA5VNrMqODmWH1XFSPC8TsU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=FfY95uhMBl4EemHN2MoT7dFUXmE5WQ5ctglKzTFc3xMTDjRwYMBlh5ThGmbWllkhdxZSn3hvs+Tp66tYsI9kaB0iaT+tCqenOamFO4ZFu/jBL/Fr+LXRyDx98QDSGyHw4YGiAiF3sGuSiQeFCymjz1a2fuvt1PzRvy2KuLnUWzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=INz7LgxS; arc=none smtp.client-ip=209.85.161.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789236568; c=relaxed/simple;
+	bh=ZCovFqiMjtqVQsqXGw//gYwhLWDer5nSHiejNsreRFY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=WJj8Vuxkz2M+Q03I1gEeAcPrd2lxeAji9sh5Y/oUgF+Jv8+AnzmTWFtIbx70oz64qde5OMIY7bGNAtt8o/d0QvXrCZiElfWuq9KKeNunBaVBczYmoH40XjZ39DKElGVKlN6m4lY4W/bpAZ+BWZhdq1UlYoFjtD4lLV2kuhWI7Eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=hVyRaZI3; arc=none smtp.client-ip=74.125.230.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="INz7LgxS"
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-6b12942ed04so1804636eaf.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2026 10:41:36 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="hVyRaZI3"
+Received: by mail-qv2-f12.google.com with SMTP id 6a1803df08f44-90cdfcc3e03so3630696d6.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2026 11:09:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu.com; s=google; t=1789236566; x=1789841366; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ZVsgq1Aq3D81njq/SPaFOtkNYzTEGSYorhvpSAlQpRk=;
+        b=hVyRaZI38Z8UXT8w82R0UCBIyc/ENY11mz82PxFeY6OMPwFtsPxvPWl6sYhLsY9QO+
+         g4ZD48322JsI/UuKX0kPqaMRViP5X0RWJ2SbuarHdKpOi79J1x2q/hr+cXfdvGv77UNn
+         qIPAu0IMIqFJ/atmc8LFiHowpGRLvwGZWj3pc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789234896; x=1789839696;
-        h=in-reply-to:references:cc:subject:from:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:dkim-signature
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=Rf6X63a3owflg9x45ncqhPfrFvxaABmj6y0D/zWTVkY=;
-        b=CMVuZ6iJgQGV5Vc16oWYlcAbL0+z6Y9rKgOQIgkFRf8LFSpBTSYXuB/4Flqq33OFIU
-         BP52Xr4oc6AOIFuQR65PlKoFlub+dT4RP3j2HjvV9fUZN46uRcjrcbvVzC6J/4Yoimni
-         099iyCT/g6pJ9ZReTVlYqbZ73QGA2/YztOBFEG8Ya2Pj+FMOur06btootNQoi/KFDip5
-         YfaIy54vPAeewYQe2PZCh/FgY17t4TCkpBzvv8CL/wbv1fXK3wsWHWvYrjwOvCYLhkh/
-         P1POEg2gjoHZdavLfHdAIOIVpYhetdttJZMrHoJCteYGCcBApI/sTx8G46Oh88G3WxMt
-         Lg2g==
-X-Forwarded-Encrypted: i=1; AKwUvBzxhR6r1GCHMGilrcAOT3wKDg08y3N/ApxgBmJs9A9rbXmAjITnNYxP1Q6bCkjwZyCTNR4VNcriXqPlCdiNHms=@vger.kernel.org
-X-Gm-Message-State: AFuF++mvUInUGDMEaWk37cFAh4c5upyuJOje45xETmYqnBzJL5oWlS6K
-	dJs3+hOZlofkGgv53tiaq0iw0gGf95vz+o/ossltMIisxi2fYIy6neWS
-X-Gm-Gg: AYBFou2roc51YfTgSwMHuZjEl+s+7SBYD8GCXEznt3vLKDQUDxEHAVccr+hgH57okKj
-	x4rSTdNr+If83WmP/8ewFpB50MpfxbbaeQXKeJxGtIg8BEyZc9sF5xexsuRrrf4aaxzcAv+OK1S
-	VpD4yn92IUaIVAv9+RhIa0gb1hd2lhCK+J5uYdmcSOvv72lmquY73qSnw4Vuf5wMbOhqy9mXkS9
-	hfsjJ9j1oyp/YgwUlH592KEeufU2weCx51wRF6gRmXtln5O6notg7wbJPyj7w/ZObBmUgx+IQGT
-	gKleDQtkNDyZZNuDzmqHiPWNx9jEK/oYJcpAM3K6n0e1O1FIroB6Yru0V1COT/PqazalwVwYiVp
-	yoP8cOUDGzYE5oeTyk6jg6hxHER0m8/MRXG4qPrHwNzzKWiQDYoxpkAlUm9iAm4+eNtZ0uqr+8v
-	zQXbeXJIT+LLkf0TUa8luZZ9gJIHouwTQGyTz0iMz3x+h4fsd4G8LTXUsrhfiDNyjtv4aGFXiwz
-	Nl20RRwFebQxePi2p2ehGAkmF6YRqcSaKqIf51AnSXWq0KUyK5/jvT7/YPSjovdosCk7YtlgnbT
-X-Received: by 2002:a05:6820:5604:20b0:6b7:83c5:fde5 with SMTP id 006d021491bc7-6c0bb1f3cedmr4855066eaf.38.1789234895896;
-        Sat, 12 Sep 2026 10:41:35 -0700 (PDT)
-Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c0996dc5a6sm6063572eaf.6.2026.09.12.10.41.34
+        d=1e100.net; s=20251104; t=1789236566; x=1789841366;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ZVsgq1Aq3D81njq/SPaFOtkNYzTEGSYorhvpSAlQpRk=;
+        b=nlN80mSj88bbMKom/l6qujNie/uZPAwiizpC1EtK1dlvWEkQCKaDKZPs5InL+jbUjy
+         FQGxKWUXnMsHoNwyBFLrJ2mzSPwSAm7M49dYqB1xjdzkt3K1bBmSChll4yxFScKC9FjQ
+         hlsBtUjnPZNZthJTHfActdzdRegIpvVO2zUQHrscRvFKKhUAV7QFz4K+YVuhjGG2/1cB
+         xd+iPedkyy3N4NPOSnALoXHnTlKa+0ljaf4bWcdznR7Dm1JmwkOLE/akEVmVqjyFBE1w
+         vsG0AZvgqzvvgFKxXadbxPqi6dNtweK9G5PI10kUbpOBJm7ZEQlt/p74eydeQ0VJAAAN
+         +Gsg==
+X-Forwarded-Encrypted: i=1; AKwUvByvMcBgraeg2VNxszHq0wCG+tiIjDoIfgX50phPtt7V3LTNXAvLh8gfFEkuIv2gngp7meVB6G+5l6bduHPaw7U=@vger.kernel.org
+X-Gm-Message-State: AFuF++lgu2Y2DFv0rb5xl6iA0C5h0HdTW/K9N2Uril7srbGXHefGqWAU
+	X2iC9Eg/qhOTg8cV4pCR/OHQ8bFvosFG49Qudhldhb50MES9NPKN6GAuoSXpCrrXvEh+JTJm89K
+	BMA56jQ==
+X-Gm-Gg: AYBFou37liOOa4lMiK/vS6Rn4BcYQ8KD+uYx6IHKFXuxP16T1VkEPpk4mj/GRuDQVMN
+	7X9ypWqkQASRTK38WlSztDVPRTRixzltLwhZurecBDfwm7Zm8ZeA3QrjdTZtJtLn9mJXxlUGtv+
+	8sxYina1r9Vg+vPGur0hC9/tGuEJJbFnNzQ90zOlhCriEBWbb5HF1Ouy48OzbssBq40kZhPE+om
+	7VdtiFdbsXcxv5CB3ADNylGlBygXTz/AUoQ2HKV2FML/GbVRpaLUUmAt9Yh2dsrl43cXfCGkKaj
+	8H+elPV0/ShmDnro+tfXcRxi0L74jbeHEzUIwC9DGvR4gDjd5BycSl5pO/8aYTWa9fiPWgvDdh4
+	jX6u34GGxahV1V/gYk+McfsJvHtFEEXGFT3rpCzEYtGcw5ZmSVuH/1cj+c5bIZ70s7tXy/2tx4S
+	q3nSR7/8F/xpVwrCg2TlviClV9vN1+TJcb4KdmBR+GH6jCk9FMWtEVparex76j5nbbEpJOS9MDo
+	xQkLybnImzw3HqWSRuQRW30/iYrnbqJMPKSgjSDmUrwlfnzr9fW0DF+3csHXI5jcdzFF9YP0W/E
+	bFihSs8PsFS8JO8jgZX018s=
+X-Received: by 2002:a05:620a:6f04:b0:939:7d14:1c75 with SMTP id af79cd13be357-939e8afb739mr1339388585a.6.1789236565939;
+        Sat, 12 Sep 2026 11:09:25 -0700 (PDT)
+Received: from majuu.waya (pool-174-112-106-84.cpe.net.cable.rogers.com. [174.112.106.84])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-939e811cffdsm549888285a.46.2026.09.12.11.09.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Sep 2026 10:41:35 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 181FF614C0;
-	Sat, 12 Sep 2026 17:41:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=dkim; t=1789234892;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=Rf6X63a3owflg9x45ncqhPfrFvxaABmj6y0D/zWTVkY=;
-	b=INz7LgxSl5imgrkvj+dGIF2TkBK5hTdU1+riBZTI1WABNWSP3oVx1rqL9aNE//Ce6V0jMs
-	54U/ObBDcHvQq8EkwcUSZ/L2JOqGh7Mseu03lj6sa/HCQhPXi9uzpInQjZEywRe6ps6M4G
-	9SSOY9kOVVxu1OFSya8tYfOwCivhh1oeKfr2+zqqIllXGK3O8CccLrYMZe87sZbDQOPLEP
-	G8ZhhxrFuTzaizjRYvAPA6zCfLeJT+oUR0/8iR4CAPmU7A5q8Wm7bFL//IKucf/ta8GhEG
-	rUUwt2S9uUJfctL2l62UOQqC6FOq+u+M5VMXYZ2D1mp+LW1HbU+JAGbGYlgkzg==
+        Sat, 12 Sep 2026 11:09:25 -0700 (PDT)
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+To: netdev@vger.kernel.org
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Victor Nogueira <victor@mojatatu.com>,
+	hybris <hybris@mojatatu.ai>
+Subject: [PATCH net 2/2] selftests/tc-testing: add hhf hh_limit cap tests
+Date: Sat, 12 Sep 2026 14:09:20 -0400
+Message-Id: <QDISC-B855.v1.20260911153152@mojatatu.com.2>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <QDISC-B855.v1.20260911153152@mojatatu.com>
+References: <QDISC-B855.v1.20260911153152@mojatatu.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 12 Sep 2026 14:41:28 -0300
-Message-Id: <DLDIU0FHU2UY.2SR6QH3U7PYB1@marliere.net>
-To: "Jakub Kicinski" <kuba@kernel.org>,
- =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>
-From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?=
- <ricardo@marliere.net>
-Subject: Re: [PATCH net v2] selftests/net: Fix icmp.sh race between ping and
- tcpdump startup
-Cc: "David S. Miller" <davem@davemloft.net>, "Eric Dumazet"
- <edumazet@google.com>, "Paolo Abeni" <pabeni@redhat.com>, "Simon Horman"
- <horms@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "David Ahern"
- <dsahern@kernel.org>, =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?=
- <toke@redhat.com>, <netdev@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.22.0-16-ge144528849ba
-References: <20260911-selftests-net-icmp_race-v2-1-c7458dec9d0b@marliere.net> <20260911174045.76579e91@kernel.org>
-In-Reply-To: <20260911174045.76579e91@kernel.org>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri Sep 11, 2026 at 9:40 PM -03, Jakub Kicinski wrote:
-> On Fri, 11 Sep 2026 15:41:33 -0300 Ricardo B. Marli=C3=A8re (SUSE) wrote:
->> icmp.sh backgrounds ping and then starts tcpdump, with no synchronizatio=
-n
->> between the two. If tcpdump is not capturing yet by the time the ICMP
->> unreachable replies come back, the test fails even though the kernel
->> behaved correctly:
->>=20
->>   FAIL - got ICMP response from , should be 192.0.0.8
->>=20
->> The empty address is misleading: it means the capture matched nothing
->> before its 10s timeout, not that the reply had a wrong source address.
->> NS1's Icmp InDestUnreachs counter still increments across such a failure=
-,
->> so the replies were generated and did reach NS1. Ping sends several prob=
-es
->> over its 3s deadline, so losing every one of them takes a multi-second
->> stall in tcpdump startup, which does happen on loaded CI hosts [1].
->>=20
->> Fix it by starting tcpdump first and waiting for its "listening" banner
->> via slowwait() before sending traffic. Run ping synchronously, then kill
->> and reap tcpdump if it did not already exit on -c 1.
->
-> It used to pass in NIPA CI and now it fails:
-> https://netdev-ctrl.bots.linux.dev/logs/vmksft/net-dbg/results/819341/86-=
-icmp-sh/stdout
+Cover the new TCA_HHF_HH_FLOWS_LIMIT bound: values above 2*HH_FLOWS_CNT
+(4294967295, 65536, 2049) are rejected with the configured limit left
+untouched on both the change and the add path, the boundary value 2048 is
+accepted (installed at 100 first so the boundary change is load-bearing),
+and an add-time hh_limit 500 is preserved instead of being clobbered by
+the default.
 
-Thanks for the pointer, I'll prepare v3
+Reviewed-by: Victor Nogueira <victor@mojatatu.com>
+Tested-by: hybris <hybris@mojatatu.ai>
+Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+---
+ .../tc-tests/qdiscs/hhf_flows_limit.json      | 128 ++++++++++++++++++
+ 1 file changed, 128 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/hhf_flows_limit.json
 
->
->> Fixes: 7e9838b7915e ("selftests/net: Add icmp.sh for testing ICMP dummy =
-address responses")
->
-> Please don't add Fixes tags to selftest improvements.
-
-Wouldn't this mean that the commit would not be picked up by stable,
-creating a gap there?
-
->
->> Link: https://openqa.opensuse.org/tests/5907626/logfile?filename=3Dicmp_=
-sh.tap.txt#line-2 [1]
->> Signed-off-by: Ricardo B. Marli=C3=A8re (SUSE) <ricardo@marliere.net>
-
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hhf_flows_limit.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hhf_flows_limit.json
+new file mode 100644
+index 000000000000..44538b9266b6
+--- /dev/null
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hhf_flows_limit.json
+@@ -0,0 +1,128 @@
++[
++    {
++        "id": "e3cc",
++        "name": "HHF hh_limit rejects value above 2*HH_FLOWS_CNT cap (4294967295)",
++        "category": [
++            "qdisc",
++            "hhf"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DUMMY handle 1: root hhf"
++        ],
++        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root hhf hh_limit 4294967295",
++        "expExitCode": "2",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc hhf 1: root refcnt [0-9]+.*hh_limit 2048",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root"
++        ]
++    },
++    {
++        "id": "f681",
++        "name": "HHF hh_limit rejects 65536 (above 2*HH_FLOWS_CNT cap)",
++        "category": [
++            "qdisc",
++            "hhf"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DUMMY handle 1: root hhf"
++        ],
++        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root hhf hh_limit 65536",
++        "expExitCode": "2",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc hhf 1: root refcnt [0-9]+.*hh_limit 2048",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root"
++        ]
++    },
++    {
++        "id": "223d",
++        "name": "HHF hh_limit accepts boundary value 2048 (2*HH_FLOWS_CNT)",
++        "category": [
++            "qdisc",
++            "hhf"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DUMMY handle 1: root hhf hh_limit 100"
++        ],
++        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root hhf hh_limit 2048",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc hhf 1: root refcnt [0-9]+.*hh_limit 2048",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root"
++        ]
++    },
++    {
++        "id": "147f",
++        "name": "HHF hh_limit rejects first value above cap (2049)",
++        "category": [
++            "qdisc",
++            "hhf"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DUMMY handle 1: root hhf"
++        ],
++        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root hhf hh_limit 2049",
++        "expExitCode": "2",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc hhf 1: root refcnt [0-9]+.*hh_limit 2048",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root"
++        ]
++    },
++    {
++        "id": "4d4f",
++        "name": "HHF add-time hh_limit 500 is preserved (init does not clobber user value)",
++        "category": [
++            "qdisc",
++            "hhf"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root hhf hh_limit 500",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc hhf 1: root refcnt [0-9]+.*hh_limit 500",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root"
++        ]
++    },
++    {
++        "id": "ca99",
++        "name": "HHF add-time hh_limit 4294967295 is rejected (no qdisc installed)",
++        "category": [
++            "qdisc",
++            "hhf"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root hhf hh_limit 4294967295",
++        "expExitCode": "2",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc hhf 1: root",
++        "matchCount": "0",
++        "teardown": []
++    }
++]
+-- 
+2.43.0
 
