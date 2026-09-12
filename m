@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C1F84BEE3E;
-	Sat, 12 Sep 2026 00:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E298B155757;
+	Sat, 12 Sep 2026 00:06:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789171595; cv=none; b=DPLczFEd+PA6iekTPuRPFay/cO4K4dyxqYy8/DJUZhDZbBImlAJfqIkeOY57UQM1XtpHB7AN/XunI+dXND0/ODLDiU1ThqCVkihKzcVu5ss4+TCiAMrxhvnW4zXRKF5Exw3daewKIIyaQl6v5M5nZkFZNn41gaQmrGxr8l1s4vA=
+	t=1789171597; cv=none; b=AYDr+yqG7s+56wFRMYPBRZ3CrpiXKESHX6q0gJ0J9KFeVXKHe95BgQlXWsnU1nXmDWQltVoQjNCzVYdEbNter1Uht5pF3/apJXoLvC3dGsVVotSZ4Xw8YeZJMVEQPqDrm2mbvgGAT2jG5A1o4Z6Gmo1bEI7V74KMROhkrkX0LqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789171595; c=relaxed/simple;
-	bh=keZxP/D8IgJJnR6TnRD7lh5vqhLtmRamurmBz4YQccs=;
+	s=arc-20240116; t=1789171597; c=relaxed/simple;
+	bh=+9rVoXwUo+loUHrhwKfl0SEBUpgESIgxidYGJ0ZXby8=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JC0p6+bm6FtNU/AR7bKgnPFDsjeETX5uHaQw6grY+pUanbD/bY4WJ6+ReQu2VUs8TxBxciQ+RPT3+0077V/ejEoK65citiT0JCto+IuuhcOj+EYI36a1WikZYhKuT+2ndHY/7dcgUMXKy9btsWTV1so4DzJAXUW1urneoJljqgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N6ujCH0m; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=UBnHviEbwo9lGWavK3/TxX8f1iS9pJB9u6qlT/+Ct8iNKdrycQ1l0sdKZjCrvDjgmguAXYYBbxkvbtCSrHolZ8dF2gEpDKtP+ADP11ckVankj73QgwiCK1PsI8lOrRDnQAz4FNMxIR7u9lkDUiA0rdkgSyns4vV5YJgZRLJ+TCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C3YmBauX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N6ujCH0m"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E02661F000FF;
-	Sat, 12 Sep 2026 00:06:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C3YmBauX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F9F31F00893;
+	Sat, 12 Sep 2026 00:06:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789171593;
-	bh=dPrvIZhhQ5aXmo6tNNfKlwb6lA0WtD1EQiIp+7CTDO8=;
+	s=k20260515; t=1789171595;
+	bh=Bh9F4i1rKKtOqP2EXCs5yBnvymPMLaFceRkIA4Xahac=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=N6ujCH0mVo8k8B6NUPwD0CGn8JIavVj8t2G8hhV0d3KSVGpSeIb17jUaJtDPL1z6k
-	 14s2UzGEU5NS5wEeKMsM8ozqCiJ/cCc9sYZo6p7/gaZkLk969F0ONISPqU0/7PvQ97
-	 XzU+7Keyoogp5avmU5KAvKAVix0uNvXGj9QFKeYmbJyOu7y7U6peIrQx67AWbBKl8t
-	 iKJrve1+gljP73VlQxsm7oZaFTxv5Zwafz38T1t8EPVIYC3SKwOSBB2tmFA7MFT5E+
-	 clEAzrL9ENQduEMBnRuiCRInQd0y22tePw+QJLXCxlFPlULVhKltG4ttTORS5HN5/0
-	 6k/g3zRHxTmkg==
-Subject:
- Re: [PATCH net-next v2 1/4] netconsole: add a per-target message rate limit
+	b=C3YmBauXc2c9pCT9EBPrvHQjyd0Tve5y5IprKcC8oIjkzCy7xNUaVBx9oZUD0Wp3E
+	 QZ5OSy0HcuAcTXiH8kWRl2iGebWSoXjf/+PcJn6X1FQ+bDIO8omKX+tkvL8ehnlJMY
+	 y35A5WmCrVcGTKnDG57Au0z8iCdxBoX55L8Ry2ObV8lV5AT6kB+apHkIf2+akWdK0Q
+	 0M1ShImi1ov12zUIqYagBEaMY7bxLGkVBTL0FAEGhGDDmc87hiYoS5h72QeY7EWDeE
+	 wnId+H+RZknw/qFEC0Duc2Z2uIqdrIco4Kws34M9slK1IkdfZc8Rd9mSlIJIldx+Ya
+	 3qF469kGldsAQ==
+Subject: Re: [PATCH net-next v2 2/4] netconsole: allow configuring the rate
+ limit interval through configfs
 From: netdev-bot+sashiko@kernel.org
 To: leitao@debian.org
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
@@ -37,11 +37,11 @@ Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
  netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
  kernel-team@meta.com
-Date: Sat, 12 Sep 2026 00:06:32 +0000
-Message-ID: <178917159246.219967.9750702498539140287@kernel.org>
-In-Reply-To: <20260910-netcons_ratelimit-v2-1-ebf0dd91e26e@debian.org>
-References: <20260910-netcons_ratelimit-v2-1-ebf0dd91e26e@debian.org>
-X-sashiko-severity: High
+Date: Sat, 12 Sep 2026 00:06:34 +0000
+Message-ID: <178917159410.219967.17501693079389453463@kernel.org>
+In-Reply-To: <20260910-netcons_ratelimit-v2-2-ebf0dd91e26e@debian.org>
+References: <20260910-netcons_ratelimit-v2-2-ebf0dd91e26e@debian.org>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -51,163 +51,125 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider:
 
-Critical: 0 · High: 1 · Medium: 0 · Low: 1
+Critical: 0 · High: 0 · Medium: 0 · Low: 3
 
-- [High] The oops_in_progress bypass in netconsole_ratelimited()
-  (drivers/net/netconsole.c:299-306) does not deliver the guarantee its…
-- [Low] In netconsole_write() (drivers/net/netconsole.c:2518-2534) the
-  rate-limit token is consumed by netconsole_ratelimited() ->…
+- [Low] DISCARDED (resolved later in the series).
+- [Low] DISCARDED (documented as an intentional exception later in the
+  series).
+- [Low] Wrong range bound in ratelimit_interval_ms_store()
+  (drivers/net/netconsole.c:1363-1365): the user value is converted…
 
 --
 
-netconsole: add a per-target message rate limit
+netconsole: allow configuring the rate limit interval through configfs
 
-This adds a struct ratelimit_state token bucket to each netconsole target
-and consults it once per message in netconsole_write(). The bucket is
-initialised with a zero interval (unlimited) and the check is skipped while
-oops_in_progress is set.
+This exposes the per-target token bucket interval as a new configfs
+attribute, ratelimit_interval_ms.  The value is converted from
+milliseconds to jiffies on store and back to milliseconds on show, and
+defaults to zero so a target remains unlimited unless configured.
 
 > diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-> index b358e5c367351..13292c3f818e9 100644
+> index 13292c3f818e9..faf8f9bbc6c0c 100644
 > --- a/drivers/net/netconsole.c
 > +++ b/drivers/net/netconsole.c
-
-[ ... ]
-
-> @@ -282,6 +285,26 @@ static void dynamic_netconsole_mutex_unlock(void)
->  	mutex_unlock(&dynamic_netconsole_mutex);
+> @@ -945,6 +945,14 @@ static ssize_t transmit_errors_show(struct config_item *item, char *buf)
+>  	return sysfs_emit(buf, "%llu\n", xmit_drop_count + enomem_count);
 >  }
 >  
-> +static void netconsole_ratelimit_init(struct netconsole_target *nt)
+> +static ssize_t ratelimit_interval_ms_show(struct config_item *item, char *buf)
 > +{
-> +	ratelimit_state_init(&nt->ratelimit, 0, DEFAULT_RATELIMIT_BURST);
-> +	/* The flag keeps ___ratelimit() from reporting the suppressed count
-> +	 * itself, which would printk() from inside the console being
-> +	 * serviced. Nothing calls ratelimit_state_exit(), so the count is
-> +	 * never reported on release either.
-> +	 */
-> +	ratelimit_set_flags(&nt->ratelimit, RATELIMIT_MSG_ON_RELEASE);
+> +	struct netconsole_target *nt = to_target(item);
+> +
+> +	return sysfs_emit(buf, "%u\n",
+> +			  jiffies_to_msecs(READ_ONCE(nt->ratelimit.interval)));
 > +}
 > +
-> +static bool netconsole_ratelimited(struct netconsole_target *nt)
-> +{
-> +	/* A limit meant for steady-state logging must not eat a crash dump. */
-> +	if (oops_in_progress)
-> +		return false;
-> +
-> +	return !__ratelimit(&nt->ratelimit);
-> +}
-
-[Severity: High]
-Does the oops_in_progress test in netconsole_ratelimited() actually cover
-oops and BUG() output on netconsole?  The changelog says:
-
-    Skip the bucket while oops_in_progress is set, so a limit configured
-    for steady-state logging never truncates an oops, BUG() or panic().
-
-and the documentation patch later in the series repeats it ("Crash output
-bypasses the bucket. While an oops, BUG() or panic() is in progress every
-message is sent").
-
-Both consoles are registered with CON_NBCON_ATOMIC_UNSAFE:
-
-drivers/net/netconsole.c
-    static struct console netconsole = {
-        .name = "netcon",
-        .flags = CON_ENABLED | CON_NBCON | CON_NBCON_ATOMIC_UNSAFE,
-
-and console_is_usable() refuses such a write_atomic() callback unless
-unsafe takeovers are allowed:
-
-include/linux/console.h:console_is_usable() {
-    ...
-            if ((flags & CON_NBCON_ATOMIC_UNSAFE) && !nbcon_allow_unsafe_takeover())
-                    return false;
-    ...
-}
-
-kernel/printk/nbcon.c
-    bool nbcon_allow_unsafe_takeover(void)
-    {
-            return panic_on_this_cpu() && panic_nbcon_allow_unsafe_takeover;
-    }
-
-So during a non-panic oops the atomic flush skips netconsole entirely.  In
-the emergency context that oops_enter() establishes, only nbcon_atomic is
-selected, not nbcon_offload:
-
-kernel/printk/internal.h:printk_get_console_flush_type() {
-    ...
-    case NBCON_PRIO_EMERGENCY:
-            if (have_nbcon_console && !have_boot_console)
-                    ft->nbcon_atomic = true;
-    ...
-}
-
-which means the netconsole kthread is not woken while the backtrace is
-being emitted.  The wake happens later, from
-nbcon_cpu_emergency_exit() -> nbcon_kthreads_wake(), reached via
-oops_exit(), and on x86 oops_end() runs bust_spinlocks(0) (which drops
-oops_in_progress back to 0) before oops_exit().
-
-Doesn't that mean every record of an oops or BUG() backtrace reaches
-netconsole_write() with oops_in_progress == 0 and is charged against the
-bucket?  With the configfs interval knob from the following patch set to a
-nonzero value, a backtrace is many more records than
-DEFAULT_RATELIMIT_BURST (10), so would it be silently truncated?  panic()
-looks protected because it does bust_spinlocks(1) before the panic-CPU
-unsafe atomic flush, but oops/BUG do not appear to be.
-
-Would keying the bypass off the nbcon record/context priority, or the nbcon
-emergency nesting count, work better here than the global oops_in_progress
-flag?
 
 [ ... ]
 
-> @@ -2482,6 +2515,9 @@ static void netconsole_write(struct nbcon_write_context *wctxt, bool extended)
->  		    !netif_running(nt->np.dev))
->  			continue;
+> @@ -1340,6 +1348,29 @@ static ssize_t remote_mac_store(struct config_item *item, const char *buf,
+>  	return ret;
+>  }
 >  
-> +		if (netconsole_ratelimited(nt))
-> +			continue;
+> +static ssize_t ratelimit_interval_ms_store(struct config_item *item,
+> +					   const char *buf, size_t count)
+> +{
+> +	struct netconsole_target *nt = to_target(item);
+> +	unsigned int interval;
+> +	unsigned long jifs;
+> +	ssize_t ret;
 > +
->  		/* If nbcon_enter_unsafe() fails, just return given netconsole
->  		 * lost the ownership, and iterating over the targets will not
->  		 * be able to re-acquire.
+> +	ret = kstrtouint(buf, 10, &interval);
+> +	if (ret)
+> +		return ret;
+> +
+> +	jifs = msecs_to_jiffies(interval);
+> +	if (jifs > INT_MAX)
+> +		return -ERANGE;
 
 [Severity: Low]
-This isn't much of a bug, but is the token spent a bit early here?
-netconsole_ratelimited() -> __ratelimit() decrements rs->rs_n_left:
 
-lib/ratelimit.c:___ratelimit() {
-    ...
-	if (atomic_read(&rs->rs_n_left) > 0 && atomic_dec_return(&rs->rs_n_left) >= 0)
-		ret = 1;
-    ...
+Can the "jifs > INT_MAX" test in ratelimit_interval_ms_store() ever fire on
+a 32-bit kernel?
+
+msecs_to_jiffies() saturates before the comparison happens:
+
+kernel/time/time.c:__msecs_to_jiffies() {
+	if ((int)m < 0)
+		return MAX_JIFFY_OFFSET;
+	return _msecs_to_jiffies(m);
 }
 
-and only afterwards does netconsole_write() check ownership:
+and MAX_JIFFY_OFFSET is defined as:
 
-drivers/net/netconsole.c:netconsole_write() {
-    ...
-	if (!nbcon_enter_unsafe(wctxt))
-		return;
-    ...
-}
+include/linux/jiffies.h:
+	#define MAX_JIFFY_OFFSET ((LONG_MAX >> 1)-1)
 
-If nbcon_enter_unsafe() returns false the message is never transmitted, yet
-the token is gone and there is no way to give it back.  The return value of
-nbcon_exit_unsafe() is also ignored, so a further loop iteration can spend
-another target's token before lost ownership is noticed.
+On 32-bit that is 1073741822, which is smaller than INT_MAX (2147483647).
+For every supported HZ <= 1000 the non-saturating path returns at most
+"interval" itself, so on 32-bit the check looks like dead code.
 
-In practice this only shows up on the panic-CPU unsafe takeover path, since
-console_is_usable() rejects netconsole's write_atomic() for every other
-context, and there the re-emitted record hits the oops_in_progress bypass
-anyway.  Would consuming the token only after the write context is acquired
-(or only on a successful send) be cleaner?
+The visible effect is that the same write behaves differently per
+architecture.  With CONFIG_NETCONSOLE_DYNAMIC on 32-bit:
+
+	echo 3000000000 > /sys/kernel/config/netconsole/<t>/ratelimit_interval_ms
+
+kstrtouint() accepts the value, __msecs_to_jiffies() takes the "(int)m < 0"
+branch and returns MAX_JIFFY_OFFSET, the range check passes, and
+WRITE_ONCE() stores 1073741822 into nt->ratelimit.interval.  The write
+returns success, while the identical write on a 64-bit kernel returns
+-ERANGE.
+
+Would checking MAX_JIFFY_OFFSET, or validating "interval" before the
+conversion, express the intent better here?
+
+> +
+> +	dynamic_netconsole_mutex_lock();
+> +	WRITE_ONCE(nt->ratelimit.interval, jifs);
+> +	dynamic_netconsole_mutex_unlock();
+> +
+> +	return count;
+> +}
+> +
+
+[Severity: Low]
+
+Following on from the clamping above, can the read-back in
+ratelimit_interval_ms_show() wrap on 32-bit?
+
+include/linux/jiffies.h:
+	static inline unsigned int jiffies_to_msecs(const unsigned long j)
+	{
+		return (MSEC_PER_SEC / HZ) * j;
+	}
+
+That multiplication is done in 32-bit arithmetic.  With HZ=100 and the
+stored value 1073741822 from the example above, the attribute prints
+2147483628 rather than 10737418220, so the value read back is unrelated to
+what was written.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260910-netcons_ratelimit-v2-0-ebf0dd91e26e%40debian.org
