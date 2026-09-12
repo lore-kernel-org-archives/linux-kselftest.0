@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F1E3A7580;
-	Sat, 12 Sep 2026 20:04:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD8893A8FE6;
+	Sat, 12 Sep 2026 20:04:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789243491; cv=none; b=W+ZrXEEa6LvWIeeAp/poSgup3aneV6uf0EOTICMV9gt6jkA25OdCL2cGB77dkl6lxo5SBC6JKVp3wHCAb0qs6ZAFOS9PaaAvje1pBGgD5AVC4WAU3Ad2AjXugkHd2UF2TtTw7obb66ywQwmYna+sqkTpue6TLqb8kOQo/kYHjaI=
+	t=1789243490; cv=none; b=qKaOLlyisE1yHahmdZliM3z7KEELsRYH/0YFlolf4t2kkdC/ozIxZC9AsILAnUddKDFp02Y8i6VFlp2vwXqGERJx8jNtDjJvOoImq/3BJ9pZE2NG8YEPnJ55VoVmUkEBd05maxd/SmNwa+2G9thB97USZaz36BjU3PlWJSa+sPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789243491; c=relaxed/simple;
-	bh=tyrhpf8ig/yC3vPM8EQZUMzf6pBLepTVwnkljBuxqXI=;
+	s=arc-20240116; t=1789243490; c=relaxed/simple;
+	bh=ZGBkcg/CotUkXuFJqvq1oy6aRlrVDTSD0Sb9RpUeZek=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CZSQky3QmSqSc/A3X/a9XVPE4aUsoZZteeqC1daLvrlRl8KW9Kd94mplh6a+niD8F4wJKDGVLGMcm7p/PFd7cS0FGPValM8H4hi2qFe5ShA4cQ147bOpXZ4LvBhiscTbeumU4nmxl+q4romXrHkHPuJdAwzmv4P+P04IYQVd7Aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VVQ7NSZq; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=XVeKQNfbQbTnogYxJE5IjuwBvRMwfKaqs7/uwOtpQH9a6rbiKhgznvNSg8h53r6TX7Os1b2DcPGYvC7zexqMx8FVsVI31tvq6qiGpNKJfKxWZPL7Edv7Tps/x8q5tGoeqwuKkWlz/+9GSYzUcv6cvMP6Ud1whhzviWHH+se7bDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eOqc0HCb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VVQ7NSZq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87DB31F0089E;
-	Sat, 12 Sep 2026 20:04:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eOqc0HCb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 926111F000FF;
+	Sat, 12 Sep 2026 20:04:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789243481;
-	bh=vObHyt0BxB5vN1GfH9LbGPdaVnDnDHqDH/rahNOQkno=;
+	s=k20260515; t=1789243480;
+	bh=kPdQOt5UkB3R6qDNT2KZ/ai+Nhh2TS7DjIJZ1fKJP1A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=VVQ7NSZqlcFAoRSVlD/uC3ifFpNqRI9xfQI/8NgTz944K3dN19iBNGoZxTzJlXfM7
-	 oac6LN3gcdYVpCs+6Hp1cdtBXBQlcZuuLzz8YFYBGJ1H/nxqWb/CgjabstvpoeCAqb
-	 gU3TBQiHR10a1MDLlDHAzwUC78cd9PtwIIyFQDeWpKAH5bQ2wV1i9IpxUn9CyNznoU
-	 vRh5yXjP/bkBKkT3lL/pGM8gIpH+MPuWsG1uey/2daiG5beireKv4idLdx5V3qmAes
-	 Gu0in3CZQ/se6f2X3fXTufHKuwwvkfcmldfqZwOawEoF4GGruPMBswpI4oz4khJzgF
-	 OyGoAsNIEuxTA==
+	b=eOqc0HCbRxRfiAZV1YcCJuH5rNMs9qsW0+WsSLxXCPd2a1KG+dndPORCDjzHY9RWe
+	 ZEtt8+zlzMAC7MCG705JfHhCYJbB7zyjErXPFKwqwxylj9kXiYAZvix2HJojvl1COr
+	 zuP6PvFh5AW7KrMuVaV2HX9mJRRjfqvsgO0vStyY6PFwWRL/Mq8VURVg3b5PQE/+E7
+	 lrvL+Ylcpq54Li2I2efql6Db9NZcS2crUJ2w2BiOycDad+iQnvbhxuUsNg9HQNpVGt
+	 y17t6ubHWPsmmJsQb7dnZWrZQOKB0WwNKIUXbCay36pgKGH1R4pnwamRgU6GOhHpxK
+	 ZEm6IdNWHplDw==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -39,9 +39,9 @@ Cc: netdev@vger.kernel.org,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 3/6] selftests: drv-net: psp: check the ifindex an associated netns sees
-Date: Sat, 12 Sep 2026 13:04:23 -0700
-Message-ID: <20260912200426.121025-4-kuba@kernel.org>
+Subject: [PATCH net-next 1/6] selftests: drv-net: psp: fix linter issues
+Date: Sat, 12 Sep 2026 13:04:21 -0700
+Message-ID: <20260912200426.121025-2-kuba@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260912200426.121025-1-kuba@kernel.org>
 References: <20260912200426.121025-1-kuba@kernel.org>
@@ -53,30 +53,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-dev-get must not report the ifindex outside of the main netns.
-The dev-get checks for an associated namespace are already there,
-add the "no main ifindex" assertion.
+Fix ruff 0.16 warnings:
+
+  C403 Unnecessary list comprehension (rewrite as a set comprehension)
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/drivers/net/psp.py | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/drivers/net/psp.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
-index 5e87fb50c348..43780efb84ed 100755
+index 315648a770d0..5e87fb50c348 100755
 --- a/tools/testing/selftests/drivers/net/psp.py
 +++ b/tools/testing/selftests/drivers/net/psp.py
-@@ -749,6 +749,10 @@ from lib.py import ip
+@@ -525,11 +525,11 @@ from lib.py import ip
  
-         ksft_not_none(peer_dev, "No PSP device found with by-association flag in guest netns")
+ def __nsim_psp_rereg(cfg):
+     # The PSP dev ID will change, remember what was there before
+-    before = set([x['id'] for x in cfg.pspnl.dev_get({}, dump=True)])
++    before = {x['id'] for x in cfg.pspnl.dev_get({}, dump=True)}
  
-+        # ifindex of the main netdevice means nothing in this namespace
-+        ksft_true('ifindex' not in peer_dev,
-+                  "ifindex reported to an associated namespace")
-+
-         # Verify assoc-list contains the nk_guest device
-         ksft_true('assoc-list' in peer_dev and len(peer_dev['assoc-list']) > 0,
-                   "Guest device should have assoc-list with local devices")
+     cfg._ns.nsims[0].dfs_write('psp_rereg', '1')
+ 
+-    after = set([x['id'] for x in cfg.pspnl.dev_get({}, dump=True)])
++    after = {x['id'] for x in cfg.pspnl.dev_get({}, dump=True)}
+ 
+     new_devs = list(after - before)
+     ksft_eq(len(new_devs), 1)
 -- 
 2.55.0
 
