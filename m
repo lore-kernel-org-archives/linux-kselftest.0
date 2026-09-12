@@ -1,183 +1,213 @@
-Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010024.outbound.protection.outlook.com [52.101.85.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589B372618;
-	Sat, 12 Sep 2026 00:06:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.24
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789171585; cv=fail; b=TbDgcSqO8JTN7mSBv0NVgamjB/pEx87SaM8D65LhvgCmGO3+VSb8+A7LlaWbInoKfMQ4J+18OcrGMtz4mHokpL9r69ZjRwgHCGuQPL1HwNj3GiES7JFjCpsCDnF2EqCJHB7k2UK7Z8yk3UiWu4BXYwkrQpZeREUwTL4HitOOntY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789171585; c=relaxed/simple;
-	bh=P4R9BfHj15AxcQg/HfndulfVbYtir3pNdTZmQl2AW1g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jstVTWq2SluHP/smLy9xHOoLaYff5xXGGyCxUIQ6g6Tw0Jp2LBgWxOGDqRcrJGYdRDh3CfRCva6fp5UvnpBjvfbUY8HVKBDzLiS1fWRpOXCIqQc7qk9b0bES/4CSygAiRLXXwjKiNrIX/0Gr+ni5o6A4YpXeTwDjqsfJ3I/51s8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nl+7JrKO; arc=fail smtp.client-ip=52.101.85.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C1F84BEE3E;
+	Sat, 12 Sep 2026 00:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789171595; cv=none; b=DPLczFEd+PA6iekTPuRPFay/cO4K4dyxqYy8/DJUZhDZbBImlAJfqIkeOY57UQM1XtpHB7AN/XunI+dXND0/ODLDiU1ThqCVkihKzcVu5ss4+TCiAMrxhvnW4zXRKF5Exw3daewKIIyaQl6v5M5nZkFZNn41gaQmrGxr8l1s4vA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789171595; c=relaxed/simple;
+	bh=keZxP/D8IgJJnR6TnRD7lh5vqhLtmRamurmBz4YQccs=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=JC0p6+bm6FtNU/AR7bKgnPFDsjeETX5uHaQw6grY+pUanbD/bY4WJ6+ReQu2VUs8TxBxciQ+RPT3+0077V/ejEoK65citiT0JCto+IuuhcOj+EYI36a1WikZYhKuT+2ndHY/7dcgUMXKy9btsWTV1so4DzJAXUW1urneoJljqgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N6ujCH0m; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nl+7JrKO"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kanr8iklBB6xxemk4hVAwj52iVPtVeBUEiNT4JSZ1TGhCDrN1lSiwLbxi/FwbwIVb9ofnIfnoVsrpRpgiQevC2rbH+2cEpYYnG9mDEqvILwVVUh7CY0cjkloQ5F49xKe3JATA+udMKNwcwxMft3tcJtKkBlC8jVTNFed7w3O+rjQpoLgNw1nL0YU6zWp7wvxabqsRjb6arSHd4if4NQM1s7WxwBe0rCsX0GSEbFwnpAKFRK9+tXEFx6tkVBiGzkY65sVoVYnUO9GOZzV2OzcH9BwQvuznb962DRERjSNyXxXTKay35D4ndfJf+U3lobsIMNXlOsFgIUObRIuPTJ58g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UAUHCHOnx5j+hbr/XNU1VgVSvEITj/JE72fDZmnOaEM=;
- b=ub1SoQlJ7Qdq1WKck00kKkZVBl8EuaZ1lqzHdGxENZtnGTvRM2TJp4DXOwbGw0/FcpXwuNk6Zzdgr/dUCQ7tBjScHdzND9DJZtXdJ9mq4GYMpRP7vhmp3TMcjyA9H4lwIzklT9FR/SJIz2F9ATtdAJkhD7JY9ddRMHG++AnvEIGrLoE4biYpx2qViXAPnyTHqkDKik5k9z9Jj+mUwH5MmozseJ22ku9FOISF9w5jbZeDROB848iK/N1po1mYZ4pu3+8LYW8HM/Repxg0W59ooRVkpGriYEM+0xUuh1SaNiNeqjtUWFAe2Xhhv/wAQi0QonBk3ifzsAamXkBTRxZpeQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UAUHCHOnx5j+hbr/XNU1VgVSvEITj/JE72fDZmnOaEM=;
- b=nl+7JrKOZDqBl0ldHfqAxHKLPO8giaExyTUWWUqZvpTuBjkH9Sm4HLMM2ycpv8r+NYqwqyi7lf7mTWyLxyyWkdhbXyFlIMfmxLq8aMr3i29X2jVEGQHmO6EtQZQGX0yjTLnvusMU2KZN03W8nOzrBUDlTbDIlrEe7fS3vnuoX/c2aydLn9NkFdaLSuIwUtm5QDV5HwzB0grh2bs4u9kZeUPYWoZl25yQUz7xqSwglnQKbJjc4NAUt+i2j8XLVNeGyQJrUeib0P8E0Es2sWVxcb19ezwUMJoEfrbd8FQ+v27lggawKZtfvkHDF70FQIf2bIIZRY4xTGVKvEf+uj4VUw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
- by DSVPR12MB999150.namprd12.prod.outlook.com (2603:10b6:8:388::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.9; Sat, 12 Sep
- 2026 00:06:19 +0000
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16%5]) with mapi id 15.21.0406.007; Sat, 12 Sep 2026
- 00:06:19 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
-Cc: akpm@linux-foundation.org, shuah@kernel.org, david@kernel.org,
- ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: skip khugepaged file tests if mkfs.xfs is
- unavailable
-Date: Fri, 11 Sep 2026 20:06:22 -0400
-X-Mailer: MailMate (3.0r7032)
-Message-ID: <CC87B3D6-D5BD-42D2-B84C-47745ACAD0AA@nvidia.com>
-In-Reply-To: <20260911124517.63714-1-jaeyeon.lee.dev@gmail.com>
-References: <20260911124517.63714-1-jaeyeon.lee.dev@gmail.com>
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-MS-Reactions: disallow
-X-ClientProxiedBy: BLAPR03CA0020.namprd03.prod.outlook.com
- (2603:10b6:208:32b::25) To IA0PR12MB8374.namprd12.prod.outlook.com
- (2603:10b6:208:40e::7)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N6ujCH0m"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E02661F000FF;
+	Sat, 12 Sep 2026 00:06:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789171593;
+	bh=dPrvIZhhQ5aXmo6tNNfKlwb6lA0WtD1EQiIp+7CTDO8=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=N6ujCH0mVo8k8B6NUPwD0CGn8JIavVj8t2G8hhV0d3KSVGpSeIb17jUaJtDPL1z6k
+	 14s2UzGEU5NS5wEeKMsM8ozqCiJ/cCc9sYZo6p7/gaZkLk969F0ONISPqU0/7PvQ97
+	 XzU+7Keyoogp5avmU5KAvKAVix0uNvXGj9QFKeYmbJyOu7y7U6peIrQx67AWbBKl8t
+	 iKJrve1+gljP73VlQxsm7oZaFTxv5Zwafz38T1t8EPVIYC3SKwOSBB2tmFA7MFT5E+
+	 clEAzrL9ENQduEMBnRuiCRInQd0y22tePw+QJLXCxlFPlULVhKltG4ttTORS5HN5/0
+	 6k/g3zRHxTmkg==
+Subject:
+ Re: [PATCH net-next v2 1/4] netconsole: add a per-target message rate limit
+From: netdev-bot+sashiko@kernel.org
+To: leitao@debian.org
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, corbet@lwn.net,
+ skhan@linuxfoundation.org, shuah@kernel.org, rdunlap@infradead.org,
+ paulmck@kernel.org, gustavold@gmail.com, asantostc@gmail.com,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@meta.com
+Date: Sat, 12 Sep 2026 00:06:32 +0000
+Message-ID: <178917159246.219967.9750702498539140287@kernel.org>
+In-Reply-To: <20260910-netcons_ratelimit-v2-1-ebf0dd91e26e@debian.org>
+References: <20260910-netcons_ratelimit-v2-1-ebf0dd91e26e@debian.org>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|DSVPR12MB999150:EE_
-X-MS-Office365-Filtering-Correlation-Id: fef25f5c-51d3-4215-f82d-08df1061abd0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|23010399003|11063799006|56012099006|10067099003|6133799003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	prQu7zIuuSNd0p4NgoGCvcnIPuIiZ7/lZkM9pk66ICQuLN4O1o8SNNgpgjzg2Vm31XJsUXkK6muIjEpbzhcNFVFdqsCo7N+wtsOT3qLsr1yTPYnLpj/dINXl3sfKTlXTzsa0yKjS0yJKhDaYw3YBwbF7/Ie5EBFSCzQDNZ8fSVjCbAsW/EMfzakEDhY44QmLaRbyUjMgbytIaNQ9AlSBHJNvpAtMfd/v4eNiGnRM8wwlB5OZsPdTmzhc7u6uz5eP2vtrtdxh3y2nQpPlOmXCgIxTStixkulWEVkYT3MdBTGYrNNZghCqTOSebtqGdx36JwtwlVVKxjvudOcOs84jZ2AZI8Wty0UqfXAADUC9kaNV3yx6TKii+5+LtOMgM71JC+TbyK9Fv86zFKMj4O0/rx0Amof5y1KBI4Yh8Ae/CYr9ymRi1wfZvMsqS+PgjovMxFCZ24qA3offDqQ8yx0msU2xsYL7L3UkT2LGNJroAcWU8UlCKzK15ni4Xf4oc9rERpdumcUmwibjK9KLDu3qev6mtdqA1s4LgCTT75gssISAkx9d8bgGd4THda1LoLPp7Z6kyKO90QP3Nur4vM1iWD93wUiQr9nzvDU59HtK5znr1SVzx43az/reWFAXdBjn+Uvyz70S11Um1OBW9nuVmKZswsTVgD9HQOdrWKv/KIE=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(23010399003)(11063799006)(56012099006)(10067099003)(6133799003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?+diLE0SbYMXxhJuoP1GhrQG7aYTKRFo1AcMbj4ueSRZgLbThvoiSgGcm97k0?=
- =?us-ascii?Q?ziqjsVdCk8AYH7rEreoWZ31k3zCJP/pEMIWgiFxHTcto9Cw0I2EYloc59rDN?=
- =?us-ascii?Q?xEHR1yBEwfz+KqYnvE5AbLf5zYAuDxAjPnUifSgAWHxleb5S9khFKsv8u9m9?=
- =?us-ascii?Q?S/jwbSWJK16JYvGjGGEhqu64BwbzYq3IrCHv0pVOWbIYoW8pfUducUUY8G0Y?=
- =?us-ascii?Q?kmHvvEkW0Cx9uTtrnK4pQk65XV26pvUUpg4++6p+p5mT0lZ5/r5ST2UufcOL?=
- =?us-ascii?Q?uydlHxk1NivkfU+UnV9e/wAbvayacSLvC9trU8q1mMnyf0scuDqqizY2m2ME?=
- =?us-ascii?Q?lJWC+xsq8JNZcBC+wZSMzgNWLfmtgQ3XgGdeVSJrFdlIlFeVWfCZWn6u8U4X?=
- =?us-ascii?Q?lGoq+2kxjB9mqINLuVo5OxJZEOc7777SZriG3komNHlExhzAfuADtRYmoZHM?=
- =?us-ascii?Q?gjzwdEOMlovNZ8Pz24ecqXu6CBY4MtRyq0y1ipQJncBl7rBSuy4JGS+DPMo8?=
- =?us-ascii?Q?92uOvrZkG6Fg/sOoVbYGavSDvCW4mYsi47WooT//cnj0f12J5HEMTOTM/0ZC?=
- =?us-ascii?Q?IUejBkazQdPTzB3XgWaunP63jDk4CL5bNcxzBu4f+kduztOAUiv0CyIXT+oN?=
- =?us-ascii?Q?CyM6S8Y9iAPZpwCvygvuoLvrKJlmk4e9jFBsFLvJtNZQoZTCcxILEnMwEFXz?=
- =?us-ascii?Q?ONkvyJdJpghbsL5A7Tze76FOzKk+sAl2GD/aUMND9M71SHqX6Ip4NPhrZCXr?=
- =?us-ascii?Q?SE8Jx+t+HzzggXnK/BWc3af4as4qINhwOZISvVx7PWBAkC3TD97tEd7IYW1E?=
- =?us-ascii?Q?7K4CbzYLHxf5qkkF3MTEDbAkzndCDoJ0Nosx6xnMcD1Pr8toxr7houSLGln2?=
- =?us-ascii?Q?HQOzcLUS472+4W3jzfGM26Y728UxMNQlIT9Ztw0Pr7AvR1DCdHFWseIVVnGf?=
- =?us-ascii?Q?sBFv1fJvZClc/ba/TD1wS/OEKtr5L2gxOGqCI5ivWEbjtl9805FU8VhOhMil?=
- =?us-ascii?Q?StvG5JiFNVKdfNR/AyvJa6mIbY7ZHRf2Edo0EI0fX5/ur+VONSbcjy100uP/?=
- =?us-ascii?Q?xXe1TB91Bm4Hw2vRqmpmknnCGzytfNSoLAIA/U3cL9odV+e1FiHsJLnGP9FL?=
- =?us-ascii?Q?AGSLo9UDuJqx+UyDHnsII77ydevL0Mmdg0FKeJhX3btAPCmvAmdtW3U9WFvb?=
- =?us-ascii?Q?WEfx6UbTxhBldzTHEyOBXqXmjGHlFDdJ3LchSISiPWdysjKXMRAuBZSthA2r?=
- =?us-ascii?Q?T5sFuPUVMyuT/1F29ODUuV28measzGcPB7qhRb29CkOvZW04zKJzJCqRlCgd?=
- =?us-ascii?Q?84/opLBVMGafNtG/FwGzWhMDYkbals/GDM8YmTU+VupJ0okK/cRWlY6iwAib?=
- =?us-ascii?Q?vbYtsCMxv4l75dp5wS4q8srZlyb3AtyQpH9c8AEXciuOquYs+tblyPxmX0Gz?=
- =?us-ascii?Q?dAMkRmpBFywD+SldIsm79/XrafrPxNb3FZMAwgPKM60pKHcjjDNlrLq9JPbG?=
- =?us-ascii?Q?xZWbKFQYEX4Rld3N17wIl+WBmqcN69Xuw8HnlheA1oCs+EyVbww3AbIu/Iv0?=
- =?us-ascii?Q?rVhCaQuclbUKJiiW/YKzc9z1FOmuDj7U2RXkeIDfoqNBQO/+CoePoTCsbhkK?=
- =?us-ascii?Q?YEuNt091pd39S4+EB6UHr8agARCQVCFWCHuipVzotwNI9JakSCWOJJhESsp+?=
- =?us-ascii?Q?JX3nzImmeDZrX1TTN31aqhWZ+E+tW9SJzFezU4YMMsTXalXug311gDX3lczb?=
- =?us-ascii?Q?gjQjR9LvAg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fef25f5c-51d3-4215-f82d-08df1061abd0
-X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2026 00:06:19.1565
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JjCsl2mT9/hk7flZrVT4P1G4LMJvlaSgsWi8HLg3BPbmK1/iZWwnm6TyoCSYHY+y
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DSVPR12MB999150
 
-On 11 Sep 2026, at 8:45, Jaeyeon Lee wrote:
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider:
 
-> The XFS setup for ./khugepaged all:file checks that the kernel supports=
+Critical: 0 · High: 1 · Medium: 0 · Low: 1
 
-> XFS but not that mkfs.xfs is installed. When CONFIG_XFS_FS=3Dy and
-> xfsprogs is missing, mkfs.xfs and mount both fail, but
-> SPLIT_HUGE_PAGE_TEST_XFS_PATH is assigned from mktemp -d and stays set.=
+- [High] The oops_in_progress bypass in netconsole_ratelimited()
+  (drivers/net/netconsole.c:299-306) does not deliver the guarantee its…
+- [Low] In netconsole_write() (drivers/net/netconsole.c:2518-2534) the
+  rate-limit token is consumed by netconsole_ratelimited() ->…
 
-> The test then runs against plain tmpfs and six subtests fail.
->
-> The script already has a skip path for this test, but it never runs
-> because the path variable is always set. Check that mkfs.xfs exists
-> before attempting the XFS setup.
->
-> Assisted-by: claude.ai:claude-opus-5
-> Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
-> ---
->  tools/testing/selftests/mm/run_vmtests.sh | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/=
-selftests/mm/run_vmtests.sh
-> index d09f9f6a384e..6315b67b6733 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -415,7 +415,8 @@ CATEGORY=3D"thp" run_test ./khugepaged -c 4 mthp_kh=
-ugepaged:anon
->  # Try to create XFS if not provided
->  if [ -z "${SPLIT_HUGE_PAGE_TEST_XFS_PATH}" ]; then
->      if test_selected "thp"; then
-> -	if grep xfs /proc/filesystems &>/dev/null; then
-> +	if grep xfs /proc/filesystems &>/dev/null &&
-> +	   command -v mkfs.xfs &>/dev/null; then
->  	    XFS_IMG=3D$(mktemp /tmp/xfs_img_XXXXXX)
->  	    SPLIT_HUGE_PAGE_TEST_XFS_PATH=3D$(mktemp -d /tmp/xfs_dir_XXXXXX)
->  	    truncate -s 314572800 ${XFS_IMG}
->
+--
 
-This might be more robust, since it can detect mkfs.xfs and mount failure=
-s.
+netconsole: add a per-target message rate limit
 
-  if grep xfs /proc/filesystems &>/dev/null; then
-      XFS_IMG=3D$(mktemp /tmp/xfs_img_XXXXXX)
-      XFS_DIR=3D$(mktemp -d /tmp/xfs_dir_XXXXXX)
-      truncate -s 314572800 ${XFS_IMG}
-      if mkfs.xfs -q ${XFS_IMG} && mount -t xfs -o loop ${XFS_IMG} ${XFS_=
-DIR}; then
-          SPLIT_HUGE_PAGE_TEST_XFS_PATH=3D${XFS_DIR}
-          MOUNTED_XFS=3D1
-      else
-          rmdir ${XFS_DIR}
-          rm -f ${XFS_IMG}
-      fi
-  fi
+This adds a struct ratelimit_state token bucket to each netconsole target
+and consults it once per message in netconsole_write(). The bucket is
+initialised with a zero interval (unlimited) and the check is skipped while
+oops_in_progress is set.
 
+> diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+> index b358e5c367351..13292c3f818e9 100644
+> --- a/drivers/net/netconsole.c
+> +++ b/drivers/net/netconsole.c
 
+[ ... ]
 
-Best Regards,
-Yan, Zi
+> @@ -282,6 +285,26 @@ static void dynamic_netconsole_mutex_unlock(void)
+>  	mutex_unlock(&dynamic_netconsole_mutex);
+>  }
+>  
+> +static void netconsole_ratelimit_init(struct netconsole_target *nt)
+> +{
+> +	ratelimit_state_init(&nt->ratelimit, 0, DEFAULT_RATELIMIT_BURST);
+> +	/* The flag keeps ___ratelimit() from reporting the suppressed count
+> +	 * itself, which would printk() from inside the console being
+> +	 * serviced. Nothing calls ratelimit_state_exit(), so the count is
+> +	 * never reported on release either.
+> +	 */
+> +	ratelimit_set_flags(&nt->ratelimit, RATELIMIT_MSG_ON_RELEASE);
+> +}
+> +
+> +static bool netconsole_ratelimited(struct netconsole_target *nt)
+> +{
+> +	/* A limit meant for steady-state logging must not eat a crash dump. */
+> +	if (oops_in_progress)
+> +		return false;
+> +
+> +	return !__ratelimit(&nt->ratelimit);
+> +}
+
+[Severity: High]
+Does the oops_in_progress test in netconsole_ratelimited() actually cover
+oops and BUG() output on netconsole?  The changelog says:
+
+    Skip the bucket while oops_in_progress is set, so a limit configured
+    for steady-state logging never truncates an oops, BUG() or panic().
+
+and the documentation patch later in the series repeats it ("Crash output
+bypasses the bucket. While an oops, BUG() or panic() is in progress every
+message is sent").
+
+Both consoles are registered with CON_NBCON_ATOMIC_UNSAFE:
+
+drivers/net/netconsole.c
+    static struct console netconsole = {
+        .name = "netcon",
+        .flags = CON_ENABLED | CON_NBCON | CON_NBCON_ATOMIC_UNSAFE,
+
+and console_is_usable() refuses such a write_atomic() callback unless
+unsafe takeovers are allowed:
+
+include/linux/console.h:console_is_usable() {
+    ...
+            if ((flags & CON_NBCON_ATOMIC_UNSAFE) && !nbcon_allow_unsafe_takeover())
+                    return false;
+    ...
+}
+
+kernel/printk/nbcon.c
+    bool nbcon_allow_unsafe_takeover(void)
+    {
+            return panic_on_this_cpu() && panic_nbcon_allow_unsafe_takeover;
+    }
+
+So during a non-panic oops the atomic flush skips netconsole entirely.  In
+the emergency context that oops_enter() establishes, only nbcon_atomic is
+selected, not nbcon_offload:
+
+kernel/printk/internal.h:printk_get_console_flush_type() {
+    ...
+    case NBCON_PRIO_EMERGENCY:
+            if (have_nbcon_console && !have_boot_console)
+                    ft->nbcon_atomic = true;
+    ...
+}
+
+which means the netconsole kthread is not woken while the backtrace is
+being emitted.  The wake happens later, from
+nbcon_cpu_emergency_exit() -> nbcon_kthreads_wake(), reached via
+oops_exit(), and on x86 oops_end() runs bust_spinlocks(0) (which drops
+oops_in_progress back to 0) before oops_exit().
+
+Doesn't that mean every record of an oops or BUG() backtrace reaches
+netconsole_write() with oops_in_progress == 0 and is charged against the
+bucket?  With the configfs interval knob from the following patch set to a
+nonzero value, a backtrace is many more records than
+DEFAULT_RATELIMIT_BURST (10), so would it be silently truncated?  panic()
+looks protected because it does bust_spinlocks(1) before the panic-CPU
+unsafe atomic flush, but oops/BUG do not appear to be.
+
+Would keying the bypass off the nbcon record/context priority, or the nbcon
+emergency nesting count, work better here than the global oops_in_progress
+flag?
+
+[ ... ]
+
+> @@ -2482,6 +2515,9 @@ static void netconsole_write(struct nbcon_write_context *wctxt, bool extended)
+>  		    !netif_running(nt->np.dev))
+>  			continue;
+>  
+> +		if (netconsole_ratelimited(nt))
+> +			continue;
+> +
+>  		/* If nbcon_enter_unsafe() fails, just return given netconsole
+>  		 * lost the ownership, and iterating over the targets will not
+>  		 * be able to re-acquire.
+
+[Severity: Low]
+This isn't much of a bug, but is the token spent a bit early here?
+netconsole_ratelimited() -> __ratelimit() decrements rs->rs_n_left:
+
+lib/ratelimit.c:___ratelimit() {
+    ...
+	if (atomic_read(&rs->rs_n_left) > 0 && atomic_dec_return(&rs->rs_n_left) >= 0)
+		ret = 1;
+    ...
+}
+
+and only afterwards does netconsole_write() check ownership:
+
+drivers/net/netconsole.c:netconsole_write() {
+    ...
+	if (!nbcon_enter_unsafe(wctxt))
+		return;
+    ...
+}
+
+If nbcon_enter_unsafe() returns false the message is never transmitted, yet
+the token is gone and there is no way to give it back.  The return value of
+nbcon_exit_unsafe() is also ignored, so a further loop iteration can spend
+another target's token before lost ownership is noticed.
+
+In practice this only shows up on the panic-CPU unsafe takeover path, since
+console_is_usable() rejects netconsole's write_atomic() for every other
+context, and there the re-emitted record hits the oops_in_progress bypass
+anyway.  Would consuming the token only after the write context is acquired
+(or only on a successful send) be cleaner?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260910-netcons_ratelimit-v2-0-ebf0dd91e26e%40debian.org
