@@ -1,107 +1,158 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B166029BD91
-	for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2026 00:59:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1FB130E0F2;
+	Sat, 12 Sep 2026 01:24:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789174779; cv=none; b=oKNjLNLNr5vF2rQtUmx5WaxZpn1WEBpv/VK6HyjSUGQ2WkZqCkTS86p1Yf/G+TQ6xpcMyhal8wwHZsARJ4o2NnFnYXoNSwRS9frc7vYWn9HJxa2iQUMqRijjYEyXCu+gATusxlujwG3zDDTSx4swxCSpAf+4WiZab/hZYeEDoG8=
+	t=1789176277; cv=none; b=GbZUyXR7B7xchE6pNUcm2ZWHWWAx8mwG61kzfv0meTPlBc0gJt+Nn4PHgc+30Ouw6GhKXyTjbHuxDrfRaonViZEFGRhg8xq818R5Sdwusdy5VFDy5hjsqf43VXTPRyIJnXDfvEnAjHHBuDH0aQpmk0qgcOfu9j+mAem0kFfKAic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789174779; c=relaxed/simple;
-	bh=upcwOqTksFzVvwY2xLbduvinMYOV/rJpZ5SFcW3Cl1s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i7XQ4D2b7DsAl2AjonYFsnAryveYZ+c3m16WOpsa22P8YHqX6UIOWiopnhPtgDKtTamofRapouhfhHjm0fTbc2vkqi7mNJkNjbIz8RtxpzyAk6xueSIucQCq0lgquhLOWUfiNDIJ3lWUUAzRTu31ExO/8i1qq2LcuwdnD8MtG/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KtHmTyli; arc=none smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789176277; c=relaxed/simple;
+	bh=LGd6dC0onm1ajNOz0Cb9Sk/OoQsDF8Ak9Js6QeKb3MQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LJN/oQagl7ACsFlQko8tAtbvhdWHeiiNyuuiXCB7i1et7XOBqvzMyn+whKd+hBGuy4Cv7J//mcST69F8Asix1Y6vtRr/MmuKiE184E9D39UssX+BbYoOJjTNNLubTRREW5eqcVM1ZCQVhHN9Wlzf3uA2uFXHsWWRuxYu715Nu+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oginf3Tq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KtHmTyli"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccb65437so86243a91.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 17:59:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789174777; x=1789779577; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=upcwOqTksFzVvwY2xLbduvinMYOV/rJpZ5SFcW3Cl1s=;
-        b=KtHmTyliSUk8JyM5npU4YUgxuNqtQ+hKntmtAMNgMjq6qhbleRyXdCEK/EJKLVebdt
-         4ZtOHWjQOyNLzuMMVBIFedgCsTVZ3iPLAg68MDdH/p9STPZXu6m+0YsJdKc/r5nYkbLV
-         vjD/Kpe9vMykGj/e3TJ2iqUe4tE0W5nWRYajpyqAEwE6ZQNKLSTLgg33IUNGXcGEhNdU
-         64lwOXLlvXrvIBk9HyOgJbdMsFaLihup4KbX2Qhwzp3CoN+oztd8aF7TKsd3EMWD11Jf
-         rH+nkK18lEcdkAzuGUHaiYTvhsRJtzbWVRo5hghSkFyqnNtt7z6RLRG8I4KT5r7qGWfL
-         4jYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789174777; x=1789779577;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=upcwOqTksFzVvwY2xLbduvinMYOV/rJpZ5SFcW3Cl1s=;
-        b=iCj2Yn+2Yp+6qO2XDp9Cf0jPL0x0nRiV3wtwB9XZS2301SNPZnmy0DdjEgtw5jswk4
-         jE3Epshis8GqSnG5btPo4OS4v4S0KwWbm1zWPcrtMDHiEIWOoYKSrlxLLq+J3/YVNLz2
-         nTGbT6LrS3S7bw+bvtVJ4VNATTOosJVVIe2INrGbrAu3osyN/vkPGO9FmH7tO3eCSSY+
-         x3XswLESB8iGdNGWKZptmoYLmCEmheXBF0zopmCRR+cXqmZ7alyl2gfYxkP67M0nJ2fQ
-         FcrQUk2iTcEK3SWGXRl5JIIG2NdJ9XUy4g0StXFogMCjTGrTsLMA4qXG7i3Yl9eJwFHM
-         gDoA==
-X-Forwarded-Encrypted: i=1; AKwUvBxAQaGDMaR6XmCumIiip5MkC+qSoQpU+CdmX+vlRniU+fdFQFEFWk8ekivog/3tx/6ildMKJ0gj1NKkVs/5itA=@vger.kernel.org
-X-Gm-Message-State: AFuF++kOBwqOpIflomqUYLFRoLVc4EwYzJL8Q2opROHvD0xR/OtyNm0Q
-	SJ7mdFMZMD9k5DIVGeLjloKBbgILpPWtioqM/lhwvd4TCR8NbnXbXt81
-X-Gm-Gg: AYBFou2AhU253MO+CBHkwFjSpR7BU/g++wB+ZlR1L8D56h+fLSMeGAojRJO85TkkLIE
-	l2i+oeeLHLz6nSwxrcTHdhDIN6drfJECV184ev2nNYOxtefGMXp9kRtSiQ5r0hppCEIsK7aoi7t
-	ZfVYAWshvmu3zFFl0pczssEMDRjOcdsJaVaEwtR07UkR+ruREhniX3J34DFr7l6J/TG/HKnFKUl
-	Een+zylvSSrsBoa1d1Sjhab38dqwiIhY+XwWowl4BughlycHrTW6KJvk8bWf4Wwk5Aj8pLJXGe+
-	Mo58XNcVEiLWNm14ZNW4a6g1gblAz2RS0gEuqrKM1bTJJ5XYqE1ic4Bjv8fWJ4U6D/rQKGOtJ6g
-	gqbypwL6bC1OeauDLqjKWe+OY8PG+arM6Q4VKYJKgD/q39WvNQ7+ZF96/WYwvOI5vdFipKMU920
-	FRXneblsybpr+WujB9rwoURKnagkMelR0UXz4UpVZoyJjeeXGI8F0dZk9dox0cY6OxvHaCC5dT7
-	U1Ms3vkSKD+tEKpPhsMZ2M82O44JHDvHFr6p36eCJ30JRLeKXWXAKncPhziKqYzAX3VRX5Tr3jy
-X-Received: by 2002:a17:90b:1a92:b0:398:ba0e:96f6 with SMTP id 98e67ed59e1d1-39dbc6f0686mr1143950a91.23.1789174777016;
-        Fri, 11 Sep 2026 17:59:37 -0700 (PDT)
-Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39dbca4c9a5sm233719a91.0.2026.09.11.17.59.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 17:59:36 -0700 (PDT)
-From: HyeongJun An <sammiee5311@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	=?UTF-8?q?Ricardo=20B=20=2E=20Marli=C3=A8re?= <rbm@suse.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Mykola Lysenko <nickolay.lysenko@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Tolerate libarena skeleton failures under BPF_STRICT_BUILD=0
-Date: Sat, 12 Sep 2026 09:59:30 +0900
-Message-ID: <20260912005930.2080724-1-sammiee5311@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <c2235ade283e0258e7ab018bafcc99b32a63f586.camel@gmail.com>
-References: <c2235ade283e0258e7ab018bafcc99b32a63f586.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oginf3Tq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C6F31F00893;
+	Sat, 12 Sep 2026 01:24:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789176275;
+	bh=atCJ+9fOMZNoJYAqBKF0xAZjFgYfz6uFc9U9AXB0XEM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=oginf3TqeM7uCTnaSK2SuDV+DseeP0B+iIawaCsqfcOcAEPw2/T8BBJDHEWf0Mati
+	 mPhpcn0XpCJi8wE/4/udMj2SARyDzkmA9AYn0l0wTxxAQfANYVpFnMXh/iznjjcdFw
+	 wnxVbH3bd/pttFp+27YjeW4LlOpBwhpT/LXOvPFVUQIb0k5OxXYCks7+0dVz9aaFbv
+	 8pdyk/77wDjhk3s9UQH5StrqOgjAffRsyWSTq62xHsouY5JEA1eUNRmg5ygfdk5kKE
+	 nzbELUoF/3YwotA7INyEkPByUamJTwudlxPxHqbj87t17xO8HUiqKxv8hWlq/OpSLU
+	 RQHWGTYsWknAg==
+Date: Fri, 11 Sep 2026 18:24:33 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Tariq Toukan <tariqt@nvidia.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>, Sabrina Dubroca
+ <sd@queasysnail.net>, Bobby Eshleman <bobbyeshleman@meta.com>, Boris
+ Pismenny <borisp@nvidia.com>, Carolina Jubran <cjubran@nvidia.com>, Cosmin
+ Ratiu <cratiu@nvidia.com>, Daniel Zahka <daniel.zahka@gmail.com>, Doruk Tan
+ Ozturk <doruk@0sec.ai>, Dragos Tatulea <dtatulea@nvidia.com>, Gal Pressman
+ <gal@nvidia.com>, Jianbo Liu <jianbol@nvidia.com>, Kees Cook
+ <kees@kernel.org>, Leon Romanovsky <leon@kernel.org>, open list
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-rdma@vger.kernel.org>, Mark Bloch <mbloch@nvidia.com>, Petr Machata
+ <petrm@nvidia.com>, Raed Salem <raeds@nvidia.com>, Rahul Rameshbabu
+ <rrameshbabu@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan
+ <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, Simon Horman
+ <horms@kernel.org>, Willem de Bruijn <willemb@google.com>, Willem de Bruijn
+ <willemdebruijn.kernel@gmail.com>
+Subject: Re: [PATCH net-next V4 14/14] selftests: drv-net: Add PSP HW GRO
+ conformance tests
+Message-ID: <20260911182433.74d3f73c@kernel.org>
+In-Reply-To: <20260908065244.3799142-15-tariqt@nvidia.com>
+References: <20260908065244.3799142-1-tariqt@nvidia.com>
+	<20260908065244.3799142-15-tariqt@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, 2026-09-11 at 13:24 -0700, Eduard Zingerman wrote:
+On Tue, 8 Sep 2026 09:52:44 +0300 Tariq Toukan wrote:
+> From: Cosmin Ratiu <cratiu@nvidia.com>
+> 
+> Add PSP conformance tests using the same gro helper binary as other gro
+> tests , but in --psp mode. SPIs are procured by psp_gro.py from a real
+> PSP device and handed off to the gro sender & receiver. The sender
+> crafts and encrypts packets in software, the receiver relies fully on
+> the HW to decrypt, decapsulate and do HW GRO.
+> 
+> Because the NIC decrypts and decapsulates before the frames reach the
+> receiver AF_PACKET tap, the gro receiver sees the plain frames and the
+> assertions remain exactly the same as other gro tests.
+> 
+> So these tests verify, at length, that the device does PSP HW-GRO the
+> same way as plain TCP.
+> 
+> Additional PSP-specific tests are defined to check that GRO doesn't
+> merge packets across PSP versions, SPIs, encryption-status, etc.
+> 
+> Some gro tests are not included because they don't work:
+> - ip_csum: the checksum is recomputed by psp_dev_rcv().
+> - tcp_csum: packets are marked with CHECKSUM_UNNECESSARY.
+> - ip_frag4/ip_frag6: PSP is incompatible with IP fragmentation.
+> - IPv6 extension header tests: PSP doesn't deal with IPv6 ext headers.
 
-> Why is this change necessary?
-> The whole PERMISSIVE thing is quite ugly and I regret not being
-> involved in it's review.
+Daniel commented on the csum tests already, it'd also be good to
+understand what the problem with frag tests is. Presumably they
+get passed thru still encrypted? Or dropped and counted as errors?
 
-I hit it building selftests against the distro kernel's BTF rather than
-one from the tree. On Ubuntu 6.17 that vmlinux.h has 5 __ksym
-declarations against 269 from a tree-built kernel, and all six libarena
-sources fail on undeclared bpf_preempt_disable, bpf_preempt_enable and
-bpf_stream_vprintk. BPF_STRICT_BUILD=0 looked like the switch for that,
-and the build still stopped at libarena while every other skeleton was
-skipped.
+> diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
+> index 6105be8e590f..daa7e52f236e 100644
+> --- a/tools/testing/selftests/drivers/net/hw/Makefile
+> +++ b/tools/testing/selftests/drivers/net/hw/Makefile
+> @@ -13,6 +13,20 @@ else
+>  $(warning excluding iouring tests, liburing not installed or too old)
+>  endif
+>  
+> +# psp_gro.py uses the gro binary in PSP mode, which requires OpenSSL.
+> +PKG_CONFIG ?= pkg-config
+> +HAVE_OPENSSL := $(shell echo 'int main(void) { return 0; }' | \
+> +		  $(CC) -x c - -include openssl/evp.h \
+> +		  $(shell $(PKG_CONFIG) --cflags --libs libcrypto 2>/dev/null \
+> +			  || echo -lcrypto) \
+> +		  -o /dev/null >/dev/null 2>&1 && echo 1)
+> +
+> +ifeq ($(HAVE_OPENSSL),1)
+> +COND_PROGS += psp_gro.py
+> +else
+> +$(warning excluding PSP GRO tests, libcrypto not installed)
+> +endif
 
-The patch only makes the three libarena rules consistent with the other
-skeleton rules. I don't have a strong opinion on PERMISSIVE itself, so if
-it is going away or being reworked, please drop this rather than take it.
+Looks like slop. Why do this? Just run the test and see if it works.
+Don't hide the python tests because build was lacking. We explicitly
+want to see all tests run and fail if something is missing in the build
+setup in NIPA.
 
-HyeongJun
+If you really want you can "probe" or display the support in some --help
+message from the binary and check at runtime. 
+
+>  TEST_GEN_FILES := \
+>  	$(COND_GEN_FILES) \
+>  # end of TEST_GEN_FILES
+> @@ -40,6 +54,7 @@ TEST_PROGS = \
+>  	nk_qlease.py \
+>  	ntuple.py \
+>  	pp_alloc_fail.py \
+> +	$(COND_PROGS) \
+>  	rss_api.py \
+>  	rss_ctx.py \
+>  	rss_drv.py \
+> @@ -64,6 +79,8 @@ TEST_FILES := \
+>  
+>  TEST_INCLUDES := \
+>  	$(wildcard lib/py/*.py ../lib/py/*.py) \
+> +	../gro_lib.py \
+> +	../psp_lib.py \
+
+ugh, just move the test down to the drv-net dir, and Xfail for
+netdevsim. Both PSP and GRO live in ../ better to keep this test
+there as well.
+
+> +# Tests for both IP versions, a subset of gro tests. Missing:
+> +# - tcp_csum: PSP packets are validated by HW (with the ICV) and marked with
+> +# CHECKSUM_UNNECESSARY.
+> +_COMMON = ["data_same", "data_lrg_sml", "data_sml_lrg", "data_lrg_1byte",
+> +           "data_burst",
+> +           "ack",
+> +           "flags_psh", "flags_syn", "flags_rst", "flags_urg", "flags_cwr",
+> +           "tcp_seq", "tcp_ts", "tcp_opt",
+> +           "ip_ecn", "ip_tos",
+> +           "large_max", "large_rem",
+
+Really not great that we have to duplicate all the cases under psp.
+Narcisa is adding BIG TCP cases for instance, how are we
+going to keep this in sync :S
+
