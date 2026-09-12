@@ -1,45 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA364BEE52;
-	Sat, 12 Sep 2026 00:40:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0421D4BEE49
+	for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2026 00:47:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789173647; cv=none; b=i6XRMg6Zq89cS5PCKPkn8aj1sYFTmN5qDetWvrJnzs9giLviS3tCtRQ6IJPzosPk1fujz1unUQK7/NdqtdcKAd4oLTsz7ceiHPYCIs1Eug67LB+maEwzicvlG7N8/7/0Hd5tk0QGvU9ShgFfDpdT2FhdIx0CeOFrIpqr2yYB0yI=
+	t=1789174044; cv=none; b=o9D2e6YWCVuOidcNg6L8HNZLG4lEWHgdUAQgsRX207h9cTly9qFqFUdyLjQr4uRWGJTpOzK6sGAai3kSuLqiEu12/Brot9SFnUtz2y3dTQ9uPpY14ZnjjaOy/R69I64t4NDpZ2ITAwxgTtq5ojCWhENF8C5r+qKJU2doSdwEr9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789173647; c=relaxed/simple;
-	bh=HTXjFcCENPL0zKD+MVsYIekFBoEEGZnkt/+gmT/74ds=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DuhNQhHSf3RbTUVfqxX6DoMSBOGOL4py9E2EDcRt9SQ9OyFDS6awpHjYuGJzYIf+gAe1v8eGZYaaVO4kSufWtBsdK4SGEd8gK0oakKxM45LGGO9uQzMJfbd6HAQWH7utQ6Vuwyj6FQzV46FURzxoedumc+guolI/xDEPK/hIr+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m2NntCDT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789174044; c=relaxed/simple;
+	bh=UM4owinUOMoIRCg48l083DCebXwOaCZOmO/zB8KlSow=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KBLzX/JS94Sz5xJArzGCDKX/lzPrxm3utvmb0p9U/e5vSvV5DTK1dYTljoagSxrRsF6I+2nL+pxGqXkf+w98dsbVwSWi9ePTYqlQVXs9kn2ohosKS0tGD4vU8P91L8qzIfrdqBaylnY8q5/yBt8Hist1pqERaopf0nHR59Qduy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ov/kTBvT; arc=none smtp.client-ip=74.125.228.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m2NntCDT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB1361F000FF;
-	Sat, 12 Sep 2026 00:40:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789173646;
-	bh=6jQs7l7FH4twYetvS3emoyjZTP1Gvt3n5A3QEPWrLO8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=m2NntCDTGhAlXbCsadl8VWmmEwnIaDSl2tQRiawYAuTmA9jye/gaNt5sDvrzUqtz5
-	 JI9sewL+hfcgsxiueoKgWR1VtVqfYnJacNmOTKR6zxIDEfzrdY+3/G6ggyKMRVGhpE
-	 1YIk3yHS3bVFylE1jjzzLGf9q97/j24Lw4eP3g9MwtR30WzWjjQmcXPtpZIYYNFpkQ
-	 cbVNmNXCz//3DP4sYpNOT/NH2KcocA4Tx0sv+hNyCtzN4eoD36KAeb2n30ej/AAdzg
-	 tZGNhau8/UcyUAvPTETW9XmbDtjOi9ek6E/1B9J3DbdgLqO+BFmZzgH8h8KkoR4qck
-	 R757Xw0g1Yb8g==
-Date: Fri, 11 Sep 2026 17:40:45 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: "Ricardo B. =?UTF-8?B?TWFybGnDqHJl?= (SUSE)" <ricardo@marliere.net>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, David Ahern
- <dsahern@kernel.org>, Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?=
- <toke@redhat.com>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2] selftests/net: Fix icmp.sh race between ping and
- tcpdump startup
-Message-ID: <20260911174045.76579e91@kernel.org>
-In-Reply-To: <20260911-selftests-net-icmp_race-v2-1-c7458dec9d0b@marliere.net>
-References: <20260911-selftests-net-icmp_race-v2-1-c7458dec9d0b@marliere.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ov/kTBvT"
+Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469a34908so125215b3a.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2026 17:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789174042; x=1789778842; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=UM4owinUOMoIRCg48l083DCebXwOaCZOmO/zB8KlSow=;
+        b=ov/kTBvTRbUOzEiD3AWH57jR2+uQNkFZwi9cfNCEDAbM4Oc48yrHxgyxsMgR84Dj1m
+         M7shOwQF55+gomRpEsO4MTW5w5S2pnHwH6uGeRB8EG0zDLCiCSsDp67bnDXH1L81rKy4
+         uP0nQd2D32OelNPh9su6lME7237aD5RVTtl0ucgpF8oAwkdjr07eszs2oI5lpbuaPhu/
+         xU8R6KXv3QH/h1sXflKIlSGzjLYHPAVvy980A5jcpcjlczojs0L4J3BmuIFuVyW/NqOP
+         calXwUbqqc4rvwCa6DHmSYMjbxcdVnHzBl/6wCVADMNrGnTRYKcqnCQuVIE1K/JOIorD
+         PwGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789174042; x=1789778842;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=UM4owinUOMoIRCg48l083DCebXwOaCZOmO/zB8KlSow=;
+        b=aoJkX0ZRiwWQN9XCsuN9MHReuJ53nCHmHWYnPwEk/iHi34LXB5gIAJ7ZsYNEu25fp6
+         +JuC6MB0mwBgEHbwg0ZrfR6FSE+lodPw2bW53N1ClFV4MWBLGV+7Y5cZP6fDBiJDakqH
+         bQ2FjMsJdZDkP5FltbJf5/yEwYNwi/C2/DCDE5c/uK2oHgMmDBxk+BYOUrB0TYOnaOx0
+         a8puia9yKPSky5Qvku8UzpRzSssNE7NJl8xSxXgcfA0C75V7tzXHHY9vyU1xaPx0N7nF
+         jwvXPx+2dPhXbarPI3kuGRfyBeK1DwEUIZNkesjzhLDqqr0mmlzuEQk/qNr8ns4EjFFD
+         S5eQ==
+X-Forwarded-Encrypted: i=1; AKwUvByWn5XrW3SMOpat3bqiYPZCqU+8/Jy7OUwkSCeth3pDx/w+jj6TWuCEsmeh7xfH2C9W/sjdAks0IzXNhLVc6QM=@vger.kernel.org
+X-Gm-Message-State: AFuF++lY87Lj8A3DXJusH1FPLcLJxcWsnwH38Ji6bRHmKuvFZKevf6ia
+	cTVeu5/pAvVTRFjl9YB3gGjaRqIeV12kSSZDv/dTOx7wR74NfgRhjVab
+X-Gm-Gg: AYBFou0PKDqi34TtzGvFgyGbiYj9tmxWIhJvjwDY1lXEH50m37B154pdy6WjzjBorb9
+	lVJm8m/k3mRBTG++ftNXfRumJYmItF1bLqnJNamkvyzcnEODSavBF+dDHHVKjnVGrO2StQKmRK7
+	6mDtTORd9+vxkJ0z0SJ4WDSI/LJEnKCnbIItimI3DgUkN1nzOa6zNQk/DWPuWFq4RHHiJw3grH/
+	oMEUP8MWLjYzi27Ceqgw0im6t+COy1Y5l/XfjAj/Ehp5iJ3+rNmr0GXFFtWlbTi1/8gwFUD3Dse
+	TBK9CUgvI7gC47EYpylH2R2jJeUyo2prDV+agRNXotgXndqvWK0jXwMKYShnDXCn5CweTs+Zp6/
+	2l7n14POhJ6TLkMU7s9iV6cab7EDYaNZh9sOcUcVLfq0zy+BnClT5CiTZAZLFxh1Y5kxaJdfB7s
+	RXRnm1Bi8KMdRQ02x28LbWNjjY9a9+6V9EShDR5HBm8P+QgUuq5xI+Pm3Zt5F8O7Kn39ShVYsT/
+	QLCRhXk1REIrCZMc6wx+HSOyREcTen6723hVSZOHZwr4NSJV3VMKAqNvyd+aPdp/MBlvQkeYfIT
+	yDrfmbC2U+s=
+X-Received: by 2002:a05:6300:220c:b0:3d0:57c3:65f4 with SMTP id adf61e73a8af0-3db0e0ad192mr1140052637.5.1789174042271;
+        Fri, 11 Sep 2026 17:47:22 -0700 (PDT)
+Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc4c6572ecasm1800565a12.22.2026.09.11.17.47.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2026 17:47:21 -0700 (PDT)
+From: HyeongJun An <sammiee5311@gmail.com>
+To: =?UTF-8?q?Ricardo=20B=20=2E=20Marli=C3=A8re?= <ricardo@marliere.net>
+Cc: bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Mykola Lysenko <nickolay.lysenko@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: Tolerate libarena skeleton failures under BPF_STRICT_BUILD=0
+Date: Sat, 12 Sep 2026 09:47:15 +0900
+Message-ID: <20260912004716.2042864-1-sammiee5311@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <DLCONMRV8YJN.2JBF36K590AXX@marliere.net>
+References: <DLCONMRV8YJN.2JBF36K590AXX@marliere.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,36 +87,23 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, 11 Sep 2026 15:41:33 -0300 Ricardo B. Marli=C3=A8re (SUSE) wrote:
-> icmp.sh backgrounds ping and then starts tcpdump, with no synchronization
-> between the two. If tcpdump is not capturing yet by the time the ICMP
-> unreachable replies come back, the test fails even though the kernel
-> behaved correctly:
->=20
->   FAIL - got ICMP response from , should be 192.0.0.8
->=20
-> The empty address is misleading: it means the capture matched nothing
-> before its 10s timeout, not that the reply had a wrong source address.
-> NS1's Icmp InDestUnreachs counter still increments across such a failure,
-> so the replies were generated and did reach NS1. Ping sends several probes
-> over its 3s deadline, so losing every one of them takes a multi-second
-> stall in tcpdump startup, which does happen on loaded CI hosts [1].
->=20
-> Fix it by starting tcpdump first and waiting for its "listening" banner
-> via slowwait() before sending traffic. Run ping synchronously, then kill
-> and reap tcpdump if it did not already exit on -c 1.
+On Fri Sep 11, 2026 at 03:02:35PM -0300, Ricardo B. Marlière (SUSE) wrote:
 
-It used to pass in NIPA CI and now it fails:
-https://netdev-ctrl.bots.linux.dev/logs/vmksft/net-dbg/results/819341/86-ic=
-mp-sh/stdout
+> Under which circumstances does this happen to you? I missed this because I
+> was using defconfig + DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT + DEBUG_INFO_BTF +
+> BPF_SYSCALL + BPF_JIT
 
-> Fixes: 7e9838b7915e ("selftests/net: Add icmp.sh for testing ICMP dummy a=
-ddress responses")
+Building against the distro kernel's BTF rather than one from the tree.
+On Ubuntu 6.17, /sys/kernel/btf/vmlinux carries no bpf_kfunc DECL_TAGs,
+so the vmlinux.h generated from it has 5 __ksym declarations where a
+tree-built kernel gives 269, and all six libarena BPF sources fail on
+undeclared bpf_preempt_disable, bpf_preempt_enable and
+bpf_stream_vprintk. It seems that is why you did not run into it with a
+kernel you built yourself.
 
-Please don't add Fixes tags to selftest improvements.
+Thanks for the ack. I checked what the two bots raised and they are both
+right, including the Fixes: tag, so the patch needs more work than this.
 
-> Link: https://openqa.opensuse.org/tests/5907626/logfile?filename=3Dicmp_s=
-h.tap.txt#line-2 [1]
-> Signed-off-by: Ricardo B. Marli=C3=A8re (SUSE) <ricardo@marliere.net>
+HyeongJun
