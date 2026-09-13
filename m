@@ -1,122 +1,93 @@
-Received: from out28-170.mail.aliyun.com (out28-170.mail.aliyun.com [115.124.28.170])
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70C4356750;
-	Sun, 13 Sep 2026 06:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2E22882AB;
+	Sun, 13 Sep 2026 08:53:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789282170; cv=none; b=mVecCz8TwNU3SZySHJDCAFosIW4a8ALf4gLVr/PRaZs5ztb7OG9m8tFkVguuxQUDytBW4gGh3HSQgZ46Lx59w6iwd6N2+X2VTvSsaipYvF2jAPPRnQU9X+sEfYE/OusCakYbttH7q8Wfb7km/KL+EaSNYfIBeorqTyTCzeOVDAA=
+	t=1789289621; cv=none; b=pWkGTcq7sgOjE5n1oEgkRcGt6eUw93v7jxrIieez50La29kf+NKaZCXhjYnKEeFiOPy6aNRSgjdQfStnYR21joGqptnaw07F76zjUndINllYq1CQuJQS757gJ1szaykoRNbJT9bI7h9fJ72h+8RFwyrP3qQOJzr0oLJnyKWQqbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789282170; c=relaxed/simple;
-	bh=7x8QtBB+wiJGB2umB5DHjOZqtLJRzkfYQIEWVdSP8j8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FTiH5KyJDQXpQLICIqFMpEEKCmRBCoCLogFSMpOKwIs/+dnmapB1Se8FQ5a7FZmuMpKAUlRdFHcoWIE8NTsuDhcwXuU/i1S87sSJwS1FB7QCZwYFmc72LQBFKRULTD27QVAPNNLmEbUHTwML8DEUWfenz7FPcYBCaTa27uN4CdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.0743695|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00574879-0.000771639-0.99348;FP=12601474251787808763|1|1|1|0|-1|-1|-1;HT=maildocker-contentspam033032053168;MF=zhang_wei@open-hieco.net;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.jCORvnL_1789281837;
-Received: from localhost.localdomain(mailfrom:zhang_wei@open-hieco.net fp:SMTPD_---.jCORvnL_1789281837 cluster:ay29)
-          by smtp.aliyun-inc.com;
-          Sun, 13 Sep 2026 14:43:57 +0800
-From: Tina Zhang <zhang_wei@open-hieco.net>
-To: Sean Christopherson <seanjc@google.com>,
-	Jim Mattson <jmattson@google.com>,
-	kvm@vger.kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	zhouyanjing@hygon.cn,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v6 4/8] KVM: nSVM: Propagate hardware DecodeAssist bytes to VMCB12
-Date: Sun, 13 Sep 2026 14:43:44 +0800
-Message-ID: <40f8ac084021e48fbadd5697ef16f674554a4480.1789281096.git.zhang_wei@open-hieco.net>
-X-Mailer: git-send-email 2.43.7
-In-Reply-To: <cover.1789281096.git.zhang_wei@open-hieco.net>
-References: <cover.1789281096.git.zhang_wei@open-hieco.net>
+	s=arc-20240116; t=1789289621; c=relaxed/simple;
+	bh=FI3oVQVgHjGpfIdpLEcDJGluMcJWPhb9Bl4J2XY1VKg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fzE0G6mWPJzSM5QPIDNStn3Cdvhz5DoIj0KZ8uwRP6qKeFVIUBnNsQz78+67+b8prURRO4dksb31PBltmUSu+0OqeCkUHn89PWdgntXzt7Q/V3qK194s/OjMqo8dn+vRAT/6EDp9iDdHXeTEHRw8nM5B7DWi6pM0UEjQNTA+cDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 566F31EAB34; Sun, 13 Sep 2026 16:53:37 +0800 (AWST)
+X-Spam-Level: 
+Received: from [IPV6:2001:8003:8802:7000::41b] (unknown [IPv6:2001:8003:8802:7000::41b])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id 4EA6A1EA8D4;
+	Sun, 13 Sep 2026 16:53:35 +0800 (AWST)
+Message-ID: <8aab06f1-89ed-46f7-87a7-846c820d6d4f@davidgow.net>
+Date: Sun, 13 Sep 2026 16:53:32 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kunit: configs: Enable DRM tests
+To: Mark Brown <broonie@kernel.org>,
+ Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
+ Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
+Cc: David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+References: <20260911-kunit-drm-v1-1-c5c0f18fc7b0@kernel.org>
+Content-Language: en-US
+From: David Gow <david@davidgow.net>
+In-Reply-To: <20260911-kunit-drm-v1-1-c5c0f18fc7b0@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-DecodeAssists provides instruction bytes for nested page faults and
-intercepted page faults caused by data accesses.  When the feature is
-exposed to L1, copy fresh hardware-provided instruction bytes from VMCB02
-to VMCB12 for these exits.
+Le 12/09/2026 à 04:25, 'Mark Brown' via KUnit Development a écrit :
+> There are a number of KUnit tests in the DRM subsystem but these are not
+> run as standard since they are gated behind the main DRM config option
+> and all_tests.config does not ensure that is enabled.  Add it.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
 
-Leave the VMCB12 instruction-byte state untouched when DecodeAssists is
-not exposed.  Otherwise, invalidate the state for instruction-fetch page
-faults, unrelated exits, and exits without fresh hardware bytes.
+I think this is overall a worthwhile change, but the 
+drm_sched_scheduler_overhead_tests do fail on UML at the moment.
 
-Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
----
- arch/x86/kvm/svm/nested.c | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+I've sent a potential fix out (the test seems to fail if CONFIG_HZ is 
+100) here:
+https://lore.kernel.org/all/20260913084155.520015-2-david@davidgow.net/
 
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index 1cc3af8247f2..fba230058870 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -40,6 +40,20 @@ static void nested_svm_invalidate_insn_bytes(struct vmcb *vmcb)
- 	vmcb->control.insn_len = 0;
- }
- 
-+static void nested_svm_copy_insn_bytes(struct vmcb *to,
-+				       const struct vmcb *from)
-+{
-+	u8 insn_len = from->control.insn_len;
-+
-+	if (WARN_ON_ONCE(insn_len > sizeof(from->control.insn_bytes))) {
-+		nested_svm_invalidate_insn_bytes(to);
-+		return;
-+	}
-+
-+	memcpy(to->control.insn_bytes, from->control.insn_bytes, insn_len);
-+	to->control.insn_len = insn_len;
-+}
-+
- static bool nested_svm_vmexit_supports_insn_bytes(const struct vmcb *vmcb)
- {
- 	u64 exit_code = vmcb->control.exit_code;
-@@ -64,6 +78,27 @@ static void nested_svm_invalidate_vmcb02_insn_bytes(struct vcpu_svm *svm)
- 	svm->nested.vmcb02_insn_bytes_valid = false;
- }
- 
-+static void nested_svm_update_vmcb12_insn_bytes(struct kvm_vcpu *vcpu,
-+						struct vmcb *vmcb12,
-+						const struct vmcb *vmcb02)
-+{
-+	struct vcpu_svm *svm = to_svm(vcpu);
-+
-+	if (!guest_cpu_cap_has(vcpu, X86_FEATURE_DECODEASSISTS))
-+		goto out;
-+
-+	if (!nested_svm_vmexit_supports_insn_bytes(vmcb02) ||
-+	    !svm->nested.vmcb02_insn_bytes_valid) {
-+		nested_svm_invalidate_insn_bytes(vmcb12);
-+		goto out;
-+	}
-+
-+	nested_svm_copy_insn_bytes(vmcb12, vmcb02);
-+
-+out:
-+	svm->nested.vmcb02_insn_bytes_valid = false;
-+}
-+
- static void nested_svm_inject_npf_exit(struct kvm_vcpu *vcpu,
- 				       struct x86_exception *fault,
- 				       bool from_hardware)
-@@ -1331,6 +1366,8 @@ static int nested_svm_vmexit_update_vmcb12(struct kvm_vcpu *vcpu)
- 	if (guest_cpu_cap_has(vcpu, X86_FEATURE_NRIPS))
- 		vmcb12->control.next_rip  = vmcb02->control.next_rip;
- 
-+	nested_svm_update_vmcb12_insn_bytes(vcpu, vmcb12, vmcb02);
-+
- 	if (nested_vmcb12_has_lbrv(vcpu))
- 		svm_copy_lbrs(&vmcb12->save, &vmcb02->save);
- 
--- 
-2.43.7
+Ideally, that'd land first so we don't end up with yet more breakage, 
+but otherwise we can perhaps disable those tests on UML for now.
+
+Regardless, this is:
+
+Reviewed-by: David Gow <david@davidgow.net>
+
+Cheers,
+-- David
+
+>   tools/testing/kunit/configs/all_tests.config | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
+> index bccc2c77196d5..bee893f9fbbc6 100644
+> --- a/tools/testing/kunit/configs/all_tests.config
+> +++ b/tools/testing/kunit/configs/all_tests.config
+> @@ -59,3 +59,5 @@ CONFIG_SND=y
+>   CONFIG_SND_SOC=y
+>   CONFIG_SND_SOC_TOPOLOGY_BUILD=y
+>   CONFIG_SND_SOC_CS35L56_I2C=y
+> +
+> +CONFIG_DRM=y
+> 
+> ---
+> base-commit: 8cdeaa50eae8dad34885515f62559ee83e7e8dda
+> change-id: 20260911-kunit-drm-9cce0032e098
+> 
+> Best regards,
+> --
+> Mark Brown <broonie@kernel.org>
+> 
 
