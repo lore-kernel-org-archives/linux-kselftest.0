@@ -1,313 +1,185 @@
-Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazon11010044.outbound.protection.outlook.com [52.101.229.44])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB36E3F326F;
-	Sun, 13 Sep 2026 14:40:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.229.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789310427; cv=fail; b=CYimQy/pbpBxJd8fLj/rLnuqJoXwBQ65VVFNAOPhzHyzWQbWhXvEhJAaAO6/Abs/pWPHZVfAINnW3tAKos4a0U5JG+JyKS476rpb1+N1ZZPMMz9aiB+n8NgYUlllryq5yjWPep9ENLwHuYF670b+YDrj58x3OSkKY2J/YQPgl+k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789310427; c=relaxed/simple;
-	bh=5FGdyIKQ6AaPlZiG7BcadSmKzqCM/sSOjNnP/kz1Lhc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AU3HDQmZvfASLeWAmPtczUvQNtiP5yIkI5/Z0R8q+/h66AE1UqjCu2ZveWEO1ssE5pnGv8enHhAHDYW1yDOg1or2nA3g1kXtDZ7Kt+pAlv7treo3Oy2/M18IrtNxiK5Da48/kipavL3Kjubx6+hxNvpI3hO9Pn86m11kTsVaS8g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=dk9U8Xt6; arc=fail smtp.client-ip=52.101.229.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB6E3F164C
+	for <linux-kselftest@vger.kernel.org>; Sun, 13 Sep 2026 14:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789310616; cv=none; b=blJVbj7axFNEsN0xvKoUYNlsltG7Z0VLrSvxHacFj0AThCwLnQWfkzcisscCHhPEowTXpWtZMW9uuNHfPiQoIlTXxULWfQMnNDhZcZI4pibuWtzYwo4yBNDCJtunsTWIkj97IfdtThs/qGs06V7fwD6Y8WXWPs+jSGSXYpOrB7M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789310616; c=relaxed/simple;
+	bh=XT8FfD4NmF6lYMpg9hBHkdINnzuuQPwagoPHTRzOL2A=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=noRe/GEWm+oIgWFpZQOwcNWBq9lv4x4Xv7efYADYF+zsjL9hXZtjlpazoxQcbZ3VCnX58amL0FNHGaTTXlpgVeX53jnZJX2ANT6gEBzY86fuse/tQy7swg3cEY8X1aYgGF1fPj3ZsYoHCr3NUmeiBswmdAPO84/EQhyqQE9U6vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=TSL789gO; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=UaxkMz4p; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="dk9U8Xt6"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fcoPyezXpSbgN0taR+AeOOqB72VWQ2PdXyXVCaTjJHVX/vK1eggzc3GemMY2WOC76mJ9nCNOve18hWO8eHqmyb5A+1iv9xpGb1CgjukHOOJLF7ncjFG11frmYxotEAqcndaV9M60eF1V7xPouaGh/Bm/37cF4m4ZBlJg+3Zj5r86e1w3iMp9FNsrf3KliVm10/HTQO0RZVdulz/sj4wjGyGFN3kegMFATZy/G5SlNCPWDZyjE/fmmDFsU6F8KuG632shT/xmW6EPDEWIsaEldSfBgbqVTGuC6Ni3O/xF8eTaWAwkSNclOtQdxnj+ITG0iQBUm4dvDvxlrJWMTLzaHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uiHXHpfATgxDU/U9he/NwvDDsl2A+iJIaNORErOV3wY=;
- b=w5sMUWOSVg6JzUk56s1NY06mqsW4ltojh3hYwvHG1oERNSIiJxuAS1R+cXYuvD6oPuoae6y4XqM/hvlVX504cYXx0UIDROqcNxGSwzdcObpl4wtIgU30Ocq8nnM5OuTPFgQQzYsHpcGP15Zr1/kLKFY7YxnjjgUaRPdk+B5upNHPJXQhUGSpJ4lETMXw6b5TC09Ai3heygMIgozTSVouObYhd3H6wNbMk5GB3wtzLssgtiHiry0tZ5JmMqI40IH400J1x82x6Dh0sf6/Px6BDCsAqY2Ge9rCbrOpyjlInobZlLjDhsOh1mlb6fKPif+/BP4GKtXcDyHqMWtl+csJoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 8.62.32.50) smtp.rcpttodomain=davemloft.net smtp.mailfrom=renesas.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=renesas.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uiHXHpfATgxDU/U9he/NwvDDsl2A+iJIaNORErOV3wY=;
- b=dk9U8Xt6BcIuSLi2IhuEchc/ZxuKKL1kOCYQfbJfze1evIzm/1com6+9PqhqzGhF+OgT2LMGDENlCjd5kjIjNJpiIW6Kf+1QmPNkIG5jp7gKduuwyK/L3owG7/xXREsrn6hPgOk7xwXwrc+k4tdRMA9kFqzcHPLRH/REcKqd064=
-Received: from TYWPR01CA0026.jpnprd01.prod.outlook.com (2603:1096:400:aa::13)
- by OS7PR01MB13687.jpnprd01.prod.outlook.com (2603:1096:604:35b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.12; Sun, 13 Sep
- 2026 14:40:12 +0000
-Received: from TY2PEPF00005624.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:aa:cafe::2d) by TYWPR01CA0026.outlook.office365.com
- (2603:1096:400:aa::13) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.406.7 via Frontend Transport; Sun, 13
- Sep 2026 14:40:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 8.62.32.50)
- smtp.mailfrom=renesas.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=renesas.com;
-Received-SPF: Pass (protection.outlook.com: domain of renesas.com designates
- 8.62.32.50 as permitted sender) receiver=protection.outlook.com;
- client-ip=8.62.32.50; helo=ejcrelay005p.adwin.renesas.com; pr=E
-Received: from ejcrelay005p.adwin.renesas.com (8.62.32.50) by
- TY2PEPF00005624.mail.protection.outlook.com (10.167.240.55) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.428.7
- via Frontend Transport; Sun, 13 Sep 2026 14:40:11 +0000
-Received: from vm01.adwin.renesas.com (DEU-5CG20946WF.adwin.renesas.com [10.226.92.2])
-	by ejcrelay005p.adwin.renesas.com (Postfix) with ESMTP id 9C207300024B;
-	Sun, 13 Sep 2026 23:40:08 +0900 (JST)
-From: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-To: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-Subject: [PATCH net-next 2/2] selftests: drv-net: Add VLAN test
-Date: Sun, 13 Sep 2026 14:39:26 +0000
-Message-ID: <20260913143926.77366-3-ovidiu.panait.rb@renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260913143926.77366-1-ovidiu.panait.rb@renesas.com>
-References: <20260913143926.77366-1-ovidiu.panait.rb@renesas.com>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="TSL789gO";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="UaxkMz4p"
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68DE10f5703720
+	for <linux-kselftest@vger.kernel.org>; Sun, 13 Sep 2026 14:43:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Ug9C98lp7dxvXE0xHoDWZuW7wCnDxbIOXSGXdFquQ9U=; b=TSL789gOq5pq0OEL
+	mPpWLg8wu0wB4YS2uFYCegeGt0/9p97h9+jSfsJdXCmgTPtJ7eYDLz/ZGByhHbrV
+	fyeKvqNV5vVfi4biBdAR/LD9wAHgaGvrnWkWgsOVKxqRM2ARUf9O8zXiKyIDDILu
+	D3alpKxJrW2fK/eOL9u8U1V4b2/fNsKx3LCmMeN+kGGUi0HvZlWdH3uAJa/JuMBi
+	lxcTi2+svJcxw4glr+yBX2XKAF+qMeR9NpMwwDoLrI9llReJY3vxfzP3vSTBGsZL
+	QwOL8mO7Etmg6A4jHUjI8UxmTIwnuR6iyAQtNlWgd2gmdXEVhMnkngiAoEBoHNXW
+	LU9cGg==
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4gmywh3chf-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Sun, 13 Sep 2026 14:43:34 +0000 (GMT)
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-38dbf293831so5613975a91.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 13 Sep 2026 07:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1789310613; x=1789915413; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:content-type:references
+         :in-reply-to:subject:cc:to:from:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Ug9C98lp7dxvXE0xHoDWZuW7wCnDxbIOXSGXdFquQ9U=;
+        b=UaxkMz4pWIjgcNvWWY9W2aoK9IQdW9qLLdJDoxmtdfw6oyR1MwSjp+t8vwbxlhE0oU
+         Br51pM2Xfgyk6lGUesbSkGItZChOOiCZSm+ZTSrT9KXqp5LLphH+pCJduZipoLMWBP5E
+         +AlwqF/kC9tu0VgHbahHD3vsFUsZaVxcf0AKDrtZKP0gAlVr8dlkcuK2gNEgv2RyfWxd
+         dFxCpk+Tf4tr0Eq1KnZG8uSJfQzrEyTAuv2M2sFEL8qVyonkg1XYyYM0N3D4GCWNXjiC
+         Je/4VrmmkgMXHaO5utYc+JZ4xWTExLPHBoQfXroTBurpLLZaYpUWxpKBY+hIayLXtKma
+         l/8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789310613; x=1789915413;
+        h=mime-version:content-transfer-encoding:content-type:references
+         :in-reply-to:subject:cc:to:from:message-id:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Ug9C98lp7dxvXE0xHoDWZuW7wCnDxbIOXSGXdFquQ9U=;
+        b=Uc0arTxdz0KKoOGcYh3lKy2IQg57UVIfqa1FjEHAc3gJHO0Kn9LnJO0y1HS0ww9jxv
+         HcgRfv06IKoxiB47rcU/Vo5kft5qFAAHi6nWS/x3vHk1TDwvUs7hH4GkuhVWQk3TPGki
+         LFXARxN9YI92URrmpLC26GTNlODuwjWO69rewHvE6iFp6uXZLSHFlt3qzE5sg4Cdnrv1
+         RPpjv6Ok3kI389LWTKEyPcaZwU4VcA4JPQCQYa3OPAdcYFyHgLEZjFYSa2TPyojskTrd
+         mq8VI/BDxi+4CZD1r0zkUmYw17ITWRb6xpmRfUwHLlteFogYuMOn4C+ujfgMWTO/e43E
+         vA4Q==
+X-Forwarded-Encrypted: i=1; AKwUvBwg322z3QPWIXAqkXLfhwJSwEvKzaxuN3JJC3ut+NxLyCWFhe/65R1ej6tJbgs1Gh3Z1ceKbgnqU7LYZhfitxg=@vger.kernel.org
+X-Gm-Message-State: AFuF++lMyYV020uSwZE4GPveWO+N11hEFeua14HfFqaAviSytcuna5jl
+	maQoGJuTgZjmCkBZt9G+WPL/DMORt0oZOLUtqWroHYDw0exXWsxHBaLZODPHzJoRUU1T5UKFc8T
+	DZ9eCeEjr4+vJ64zrxDt8jYwfKXQx1lpdX25GsQPPbuUUTNkjgSOVQ+N4BKvRBn9XS1+ngEo=
+X-Gm-Gg: AYBFou03VXw9v8LXgbZYa4M/qkF0aWjB/4vkHfBPYNda9hqbdoWCmJxF94fwEvniq5F
+	TYhGkvspu7tqG74awz+QdZEZmVeZfe8bdUWhd2Oy25o2VUX8nEil7lVd65DIAcuka0ToKaTcUxp
+	+15S/w4Zp+jwJzZcFHFTUPHDUeXqhLb2NGoS9w3a3LAXURljQ2D/ZvFUselbGZ38XwyPPEhNHum
+	rVR/kuvX4bfRrrmUp/fzivSqUxEbZ1X4c6BRP3Z8lKV1FyzdmugO4vcZ23fxWDJzEfAHutBnM+H
+	s7e9n8nLnnPlQfJol8Ci9sRUOOD4MhFxo18SJ/J8msDGcg3LeGknGo8abA==
+X-Received: by 2002:a17:90b:586f:b0:39b:66ee:a14 with SMTP id 98e67ed59e1d1-39d9c374d49mr21935967a91.25.1789310613404;
+        Sun, 13 Sep 2026 07:43:33 -0700 (PDT)
+X-Received: by 2002:a17:90b:586f:b0:39b:66ee:a14 with SMTP id 98e67ed59e1d1-39d9c374d49mr21935918a91.25.1789310613011;
+        Sun, 13 Sep 2026 07:43:33 -0700 (PDT)
+Received: from localhost ([2a12:a305:4::30fb])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d99531b16sm16780590a91.14.2026.09.13.07.43.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Sep 2026 07:43:32 -0700 (PDT)
+Date: Sun, 13 Sep 2026 10:43:28 -0400
+Message-ID: <c24e720e279fed0296f1f78630b6a471.guodong.xu@oss.qualcomm.com>
+From: Guodong Xu <guodong.xu@oss.qualcomm.com>
+To: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+        Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@kernel.org>,
+        Chen Wang <chen.wang@linux.dev>, Inochi Amaoto <inochiama@gmail.com>
+Cc: linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        Conor Dooley <conor@kernel.org>, devicetree@vger.kernel.org,
+        spacemit@lists.linux.dev, sophgo@lists.linux.dev,
+        linux-kselftest@vger.kernel.org,
+        Andrew Jones <andrew.jones@oss.qualcomm.com>
+Subject: Re: [PATCH v6 11/11] riscv: hwprobe: Introduce rva23u64 base behavior
+In-Reply-To:
+ <20260812-rva23u64-hwprobe-v2-v6-11-c985af3256b8@oss.qualcomm.com>
+References: <20260812-rva23u64-hwprobe-v2-v6-0-c985af3256b8@oss.qualcomm.com>
+ <20260812-rva23u64-hwprobe-v2-v6-11-c985af3256b8@oss.qualcomm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY2PEPF00005624:EE_|OS7PR01MB13687:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: e65ef164-4649-40c7-243f-08df11a4ea99
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|23010399003|376014|36860700016|10067099003|6133799003|3023799007|18002099003|22082099003|56012099006|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	9rGuPQAuMQVRoUTtyQYsYEx7w0JzeDorexo7WryOARMVJH7F+RIvbGgLahq1xsB+Unke0G80h6KW/DiMg95hwz9TUQvV5oDJ9rok5oxIq4pBRqHExLEqhW3bD2LFpT+YmQ/QQXsXvMIk5TyLG7EP+Tq2O0PlNDdPTj24WsxSpbB40jpe4Wyt0yiMNAHC9pKu701Pc8enHnvoUKJciQ68xkTjNQqkiHh4t59WYvzyGTbZh69AaQSo6ovT8ceqjKX1T0LEyM66LTdUWc1mu8kSdbU8FhKhUQjuzsjV15ZUiShzFKFoOTrYrSAcCFpdSEpjJf6iYc1nVtudmIHf+VNzcnlQ4VICwNEk3giQHj5IJ63mGMuK7CT99+NsM5w/tSTlfIkU2iSKVMlblime4UeoRZxABGbbIGQTx1EuDj1DQlMJDst+zbpySdsf6pgqhQl8dO4F4VDSe7dz5rjq6MiZI9CMtkaO52cZLQiGV0AB+Q/8QiVj0SYYqAINeHfAtRcbS2+PY28i5sbiEUorKAr86lfXhVZ6lSNv8TQ1mj00wtxx/S/syAHGJk5UIZBxkSt7pzWNC6LFbzgchwPlk5XrsdnizesAzzDkEnYoPITnPVo1s5jPf0x1cT/UIZ1wdW8on3ol1Nd/PBVcFgFDeALvvoXIVZbSaRgGsUHlYDovSmXmc6AzpdHHwPj8KVDn6aem6rWkoM+M+lpBnI1TD50/rA==
-X-Forefront-Antispam-Report:
-	CIP:8.62.32.50;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ejcrelay005p.adwin.renesas.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(23010399003)(376014)(36860700016)(10067099003)(6133799003)(3023799007)(18002099003)(22082099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	nXOjwqJaO+AHH84G1eNO/3Ma39cs01ZmFy36apXWoePHXrpJd6R5C8QjXYI1jwbUQFO1FexTI39D8F6MGN8VbpELor+KUIXL5J9d7+avLNEw2rfeH3KslRtECWcOpbjPIEZ+OKedlHNrwRscLkSGF/mNxPznz4YwuzNoGD0yq/R4yA8wSQ1SgOSs4+2VuLRYpfLs6CVUjQ6hh/pxtSp+HznyhYqwuNJMPGcn6QvypGIOcyZuwPShBH+o7zfiTL115hxHukelARGF02LUuR6gO4P4TLD3RLKvlc2xDlMvOTC3TSGkImNrK9fPFoDBYYJdAcfGgCmJ7iS6KlDdvYEFbE6B0ylw/bjvYhTmsoQgx+1eNt2ORpOciD6CfTcRU12VtGW+Ey23p/D7nNEE8ScPlyPvDkzAdD6REhASnVqTROKC+IJBeWAv5w3e9OJZunyl
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2026 14:40:11.7608
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e65ef164-4649-40c7-243f-08df11a4ea99
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=53d82571-da19-47e4-9cb4-625a166a4a2a;Ip=[8.62.32.50];Helo=[ejcrelay005p.adwin.renesas.com]
-X-MS-Exchange-CrossTenant-AuthSource: TY2PEPF00005624.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS7PR01MB13687
+X-Proofpoint-GUID: I3j3wnqmWzOrLzLgRH0r2ud52vkXuk7q
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTEzMDIxMCBTYWx0ZWRfX3FcukYBFXrjC
+ 5spowI7rvZmFHCSg42LxPr6O/qkZGHOpnBAJcC0m9tNBTLZuMAj7poIeY/EBe6rWCg88n0U6UtM
+ miGt8Vxki3MR7d5uLBPFv/1J3KiNlQ2iNviNRgR3aFFiLQJnQmeJfHwkBBrnwHDPYfZkguJ4y+c
+ w1CySD6hhhXujCdBBB97WNSMrUiHKFQUYkh9B1d9RTofg0vgvkdty8oReC0GFlMcPBrXjkdciXg
+ LyAL0AdphrS2Zgp1hXcZlHV4n4SonJYQhXMiZV0YO4ESwkoknpX6T3FlVlt/dia366LxB0uHD/Y
+ j/LXKfVxcY/O0fbiyfuSKjc9fQauYcWlRKUdXSExcEwK0jQn9MCGreCKKOeY3lQw4dfSxxWxPNm
+ Hdxg1ZCWj7U2eDaVmwyq/3rd8eMJK31nuZVkUxMlrHEehOvjuZsY0svpxJjntPyyNGIGTyIHmD4
+ RfS0UAuFUhF6e6PELpg==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTEzMDIxMCBTYWx0ZWRfXz7LlAYgWaDzy
+ u72JqlGnswuHhobW7Yuj5TU2DaddnFWbtOMrceJZpHVVBKv9Ke/+URg1FP9s3wnQTzijThsFvRy
+ +fdvthrFtyv+OtiPByNSO0JopeepvoM=
+X-Proofpoint-ORIG-GUID: I3j3wnqmWzOrLzLgRH0r2ud52vkXuk7q
+X-Authority-Analysis: v=2.4 cv=PsUG/AM3 c=1 sm=1 tr=0 ts=6aa6b696 cx=c_pps
+ a=RP+M6JBNLl+fLTcSJhASfg==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=DJpcGTmdVt4CTyJn9g5Z:22 a=0YUHzDklBslsgzCo5oAA:9
+ a=QEXdDO2ut3YA:10 a=iS9zxrgQBfv6-_F4QbHw:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-13_05,2026-09-11_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 priorityscore=1501 suspectscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 lowpriorityscore=0 phishscore=0 adultscore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609130210
 
-Add a test that validates ping traffic over VLAN interfaces. It aims
-to catch drivers which mishandle hardware VLAN tag stripping, in
-particular QinQ.
+On Wed, 12 Aug 2026 19:33:57 -0400, Guodong Xu wrote:
+> [...]
+>
+> diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwprobe.c
+> index 656cb100ac48..a18465e734b5 100644
+> --- a/arch/riscv/kernel/sys_hwprobe.c
+> +++ b/arch/riscv/kernel/sys_hwprobe.c
+>
+> [...]
+>
+>  	case RISCV_HWPROBE_KEY_BASE_BEHAVIOR:
+> -		pair->value = RISCV_HWPROBE_BASE_BEHAVIOR_IMA;
+> +		pair->value = 0;
 
-Three VLAN configurations are covered, each with hardware RX VLAN
-stripping enabled and disabled (via the rx-vlan-offload and
-rx-vlan-stag-hw-parse features):
-- a single 802.1q VLAN interface
-- a single 802.1ad VLAN interface
-- an 802.1q VLAN stacked on top of an 802.1ad interface
+Today while testing this series with glibc's glibc IFUNC resolver on QEMU
+(-cpu rva23s64), I found that this hunk introduces an initialization
+ordering bug, which affects the KEY_BASE_BEHAVIOR valude in vDSO.
 
-The "hw" test variants enable the RX VLAN stripping features supported
-by the device (rx-vlan-offload and rx-vlan-stag-hw-parse), the "sw"
-test variants disable all of them. A test is xfailed if the requested
-configuration is not possible.
+> +		if (hwprobe_has_isa_base(cpus, RISCV_ISA_BASE_IMA))
+> +			pair->value |= RISCV_HWPROBE_BASE_BEHAVIOR_IMA;
+> +		if (hwprobe_has_isa_base(cpus, RISCV_ISA_BASE_RVA23U64))
+> +			pair->value |= RISCV_HWPROBE_BASE_BEHAVIOR_RVA23U64;
+>  		break;
 
-VLAN insertion offloads are not tested for now.
+Both bits are now derived from hart_isa[cpu].isa_bases, which patch v6
+09/11 populates in riscv_init_isa_bases() at subsys_initcall. The vDSO
+snapshot of all hwprobe values, init_hwprobe_vdso_data(), runs at
+arch_initcall_sync, which is earlier. So the vDSO copy of
+RISCV_HWPROBE_KEY_BASE_BEHAVIOR is taken from empty bitmaps and reads 0:
 
-NETIF=end0 LOCAL_V4=172.16.0.2 REMOTE_V4=172.16.0.3 \
-REMOTE_TYPE=ssh REMOTE_ARGS=root@172.16.0.3 \
-run_kselftest.sh -t drivers/net/hw:vlan.py
- TAP version 13
- 1..1
- # timeout set to 0
- # selftests: drivers/net/hw: vlan.py
- # # Interface: end0, driver: st_gmac
- # TAP version 13
- # 1..6
- # ok 1 vlan.test.8021q_hw
- # ok 2 vlan.test.8021q_sw
- # ok 3 vlan.test.8021ad_hw
- # ok 4 vlan.test.8021ad_sw
- # ok 5 vlan.test.qinq_hw
- # ok 6 vlan.test.qinq_sw
- # # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
- ok 1 selftests: drivers/net/hw: vlan.py
- # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+  raw syscall            : key=3 value=0x3  (IMA | RVA23U64)
+  __riscv_hwprobe (vDSO) : key=3 value=0x0
 
-Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
----
- .../testing/selftests/drivers/net/hw/Makefile |   1 +
- tools/testing/selftests/drivers/net/hw/config |   1 +
- .../testing/selftests/drivers/net/hw/vlan.py  | 127 ++++++++++++++++++
- 3 files changed, 129 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/hw/vlan.py
+Mainline returns 0x1 on both paths, so this also regresses the IMA bit
+for every vDSO user of key 3. The selftests did not catch it because
+they call the system call directly (sys_hwprobe.S); glibc's
+__riscv_hwprobe() takes the vDSO fast path and did.
 
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index bd3b8d2fa47e..5582b644078e 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -54,6 +54,7 @@ TEST_PROGS = \
- 	tso.py \
- 	userns_devmem.py \
- 	uso.py \
-+	vlan.py \
- 	xdp_metadata.py \
- 	xsk_reconfig.py \
- 	#
-diff --git a/tools/testing/selftests/drivers/net/hw/config b/tools/testing/selftests/drivers/net/hw/config
-index d89a9ba17655..c6c2b64bb712 100644
---- a/tools/testing/selftests/drivers/net/hw/config
-+++ b/tools/testing/selftests/drivers/net/hw/config
-@@ -24,5 +24,6 @@ CONFIG_NET_SCH_INGRESS=y
- CONFIG_SYNC_FILE=y
- CONFIG_UDMABUF=y
- CONFIG_USER_NS=y
-+CONFIG_VLAN_8021Q=m
- CONFIG_VXLAN=y
- CONFIG_XFRM_USER=y
-diff --git a/tools/testing/selftests/drivers/net/hw/vlan.py b/tools/testing/selftests/drivers/net/hw/vlan.py
-new file mode 100755
-index 000000000000..f514ad3e5dfd
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/vlan.py
-@@ -0,0 +1,127 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""
-+VLAN tests.
-+
-+Validates that ping traffic is sent and received correctly over 802.1q
-+and 802.1ad VLAN interfaces, with hardware RX VLAN stripping enabled and
-+disabled on the local interface.
-+
-+The "hw" test variants enable the RX VLAN stripping features supported by
-+the device, the "sw" test variants disable all of them. A test is xfailed
-+if the requested configuration is not possible.
-+
-+Test cases:
-+  - 8021q_hw:  Traffic over a single 802.1q VLAN, HW stripping on
-+  - 8021q_sw:  Traffic over a single 802.1q VLAN, HW stripping off
-+  - 8021ad_hw: Traffic over a single 802.1ad VLAN, HW stripping on
-+  - 8021ad_sw: Traffic over a single 802.1ad VLAN, HW stripping off
-+  - qinq_hw:   Traffic over an 802.1q VLAN stacked on an 802.1ad VLAN,
-+               HW stripping on
-+  - qinq_sw:   Traffic over an 802.1q VLAN stacked on an 802.1ad VLAN,
-+               HW stripping off
-+"""
-+
-+import os
-+
-+from lib.py import (
-+    KsftNamedVariant,
-+    KsftXfailEx,
-+    NetDrvEpEnv,
-+    cmd,
-+    defer,
-+    ethtool,
-+    ip,
-+    ksft_exit,
-+    ksft_run,
-+    ksft_variants,
-+    set_ethtool_feat,
-+)
-+
-+OUTER_DEV = f"vlout{os.getpid()}"
-+INNER_DEV = f"vlin{os.getpid()}"
-+
-+OUTER_VID = 100
-+INNER_VID = 200
-+
-+LOCAL_IP = "198.51.100.1"
-+REMOTE_IP = "198.51.100.2"
-+
-+
-+def _vlan_add(base, name, proto, vid, host=None):
-+    """Create a VLAN device on top of base and bring it up."""
-+
-+    ip(f"link add link {base} name {name} type vlan proto {proto} id {vid}",
-+       host=host)
-+    defer(ip, f"link del {name}", host=host)
-+    ip(f"link set {name} up", host=host)
-+
-+
-+def _vlan_setup(base, addr, outer_proto, inner_proto, host=None):
-+    """Create VLAN interfaces on base and set an IP on the innermost one."""
-+
-+    _vlan_add(base, OUTER_DEV, outer_proto, OUTER_VID, host=host)
-+    if inner_proto:
-+        _vlan_add(OUTER_DEV, INNER_DEV, inner_proto, INNER_VID, host=host)
-+
-+    dev = INNER_DEV if inner_proto else OUTER_DEV
-+    ip(f"addr add {addr}/24 dev {dev}", host=host)
-+
-+
-+def _setup(cfg, outer_proto, inner_proto, hw_strip):
-+    """Configure VLAN stripping and create the VLAN interfaces."""
-+
-+    names = ["rx-vlan-offload"]
-+    if outer_proto == "802.1ad":
-+        names.append("rx-vlan-stag-hw-parse")
-+
-+    feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
-+    feats = {}
-+    for name in names:
-+        # hw: skip the features the device does not support
-+        # sw: request all of them off
-+        if hw_strip and feat[name]["fixed"] and not feat[name]["active"]:
-+            continue
-+        feats[name] = hw_strip
-+
-+    if hw_strip and not feats:
-+        raise KsftXfailEx("Device does not support RX VLAN stripping")
-+
-+    set_ethtool_feat(cfg.ifname, feat, feats)
-+
-+    _vlan_setup(cfg.ifname, LOCAL_IP, outer_proto, inner_proto)
-+    _vlan_setup(cfg.remote_ifname, REMOTE_IP, outer_proto, inner_proto,
-+                host=cfg.remote)
-+
-+
-+def _vlan_variants():
-+    """Generator that yields the VLAN protocols and the stripping mode."""
-+
-+    yield KsftNamedVariant("8021q_hw", "802.1q", None, True)
-+    yield KsftNamedVariant("8021q_sw", "802.1q", None, False)
-+    yield KsftNamedVariant("8021ad_hw", "802.1ad", None, True)
-+    yield KsftNamedVariant("8021ad_sw", "802.1ad", None, False)
-+    yield KsftNamedVariant("qinq_hw", "802.1ad", "802.1q", True)
-+    yield KsftNamedVariant("qinq_sw", "802.1ad", "802.1q", False)
-+
-+
-+@ksft_variants(_vlan_variants())
-+def test(cfg, outer_proto, inner_proto, hw_strip):
-+    """Run a single VLAN test"""
-+
-+    _setup(cfg, outer_proto, inner_proto, hw_strip)
-+
-+    cmd(f"ping -c 1 -W 5 {REMOTE_IP}")
-+
-+
-+def main() -> None:
-+    """ Ksft boiler plate main """
-+
-+    with NetDrvEpEnv(__file__) as cfg:
-+        ksft_run(cases=[test], args=(cfg, ))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
--- 
-2.34.1
+The fix is to register riscv_init_isa_bases() at arch_initcall instead
+of subsys_initcall. That is still after core_initcall(tagged_addr_init),
+which it depends on, and before arch_initcall_sync. It belongs in patch
+09/11 and I will fold it in there in v7. With it both paths return 0x3,
+and the hwprobe, cbo and which-cpus selftests pass on rva23s64,
+rva22s64 and on mainline.
 
+I will send v7. Thanks for your patience.
+
+BR,
+Guodong
