@@ -1,64 +1,64 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10A92F8E90
-	for <linux-kselftest@vger.kernel.org>; Sun, 13 Sep 2026 03:32:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B584385D72
+	for <linux-kselftest@vger.kernel.org>; Sun, 13 Sep 2026 03:32:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789270365; cv=none; b=FwSPrxdMWzTPN7ZhiDxUbQH1XxSHuyo4H0SpgntlA3P0MytpkK3q84tcuEsvNb4hPNzQtZS7URT5Caco1Uqxh5kxWVsjp0t/Bm++/QWIdNADL6jXwlXxLv7XQde3ULAWVXz8K5uEP/xyfFt+/6dkIiKQwV3XXbP7uEaCrpY75Zk=
+	t=1789270368; cv=none; b=rVqhP4GxFnyds/+daieRCPE8l941B7GD7LhvwGxBuGUexKdOxnO4vCJ0rPNkMpFDFcxul624+cucY1E3tLvUlec18OMwqf/L0w2N8EP2VIXmFpfe4bj6kIdV3OVPhA3a2ilzhZ7cig62YuUr8a88KDLVe1lLsUcPDtamv9wNnYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789270365; c=relaxed/simple;
-	bh=kCvbVwZC83we+errokyP7K643YD3vh2QxPQNw/0AuPg=;
+	s=arc-20240116; t=1789270368; c=relaxed/simple;
+	bh=BD9OGmpZ3+fJbRvqNTy8brT1EJQoXKQTGDFIJKhBtpA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sO2J4y9hUY+GVl87hsKxcU6NanoGVZQ38Ebwix+/Hi2SO86OSj7YomwOmIfu4rme1sL1uYMXJ2rZIooHbnAfZtzEwdgoevMova5pt04nUUB80RgTx2RP7Vd1GjEM0BnMZpQgzFlEPL0UNH8bRukwxHaOrhWjHWzsZyfkjDUM0Jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YxzJVUzP; arc=none smtp.client-ip=209.85.208.171
+	 MIME-Version; b=FET5hhvQi/E07/pvZTSQFXhC+aRspAIs4gMRcFspZcsuJx2dwxoc4HzoRTHePVYKeH/an9ujQq3HYWttkKGq/L062m0w/fFGGiXNiLq7bDm1NUDGdvP2baRiIhJ9vHEYFtpah7XZedYLQcy/YI/jhUVctgNen7Iai0VDtBrgL3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ie/eSgiE; arc=none smtp.client-ip=209.85.208.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YxzJVUzP"
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-3a1f75277f3so16003441fa.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2026 20:32:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ie/eSgiE"
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-3a1e9f55e03so21163181fa.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2026 20:32:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789270362; x=1789875162; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789270365; x=1789875165; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=zMZTr/1imyQVYMPCbe2CDQylZItl7GAC+PPMeDYEaLA=;
-        b=YxzJVUzPcOQO3IPLgJihQI2ShRUZ9nIZriqRkItz3cW5PrtidhOdIP1UI3ICDRwuz0
-         RfWHzWKQtASqBjKJ+9OEHRBdEeOu6Q08YPpfMfaV8VoJBTylgqTK6ZrEZv5ml22ELsO9
-         SkSNooaMJPzSdOmtSOg25zOWT9/l1JziyaAVkHsoTguN42t2zJbCHBeJqGxDpkAcfs2I
-         jriUsr+BNIVeoZVDdElg+RghWAcImwCbBtVi0ZZVlipZXogecGtPvRJAbnTPQMBGYFXk
-         tYX3hg0vYQn28RSUInppjeoadW7q37kxAwcbNoW9PNOzOAX0LLDEvN+QMzDVOSUtAy2d
-         BYgg==
+        bh=eUxnSrKVNmwG9e50AFcOowKn93UYykTt4+mQ+2qxLTU=;
+        b=ie/eSgiE8BtGZ37xl0C3cQMpi3wy/3wgt3prtU3UU1CmBHfF9oiXmm91fLJWFuvC3A
+         dA7rwZrineOI/k4sqPZfhgQkB7fGO1/FDCrdnPJPNzF+vIYDn9ApMCk8oN9qG9ap72cT
+         Jk/44EBmE5S5IxtSgd8sJdTu9OiAqJ5hH3rFc43SrRzIhNCY2N3T7gE1WGlPaaDAZgbl
+         jPJPIX+wUSBAvduaBekXn/GEE1QZnIJGY+o4H4L6YLbl05nQZspzfOSA9BMltgmN/3Gs
+         7GDepsWxqVZIRjrezMdYgNPmjwUa1BOwoEnA19eL/EvSV88olRYaGWhkjoaMG9uZN1yO
+         YwsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789270362; x=1789875162;
+        d=1e100.net; s=20251104; t=1789270365; x=1789875165;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zMZTr/1imyQVYMPCbe2CDQylZItl7GAC+PPMeDYEaLA=;
-        b=SBECVb3IUtpRxKAco3m5BvgB1/6LltzOnhGtTnTC2IZW0zuc4aqb6+x814VTQzzuyS
-         PQu+Ne5dtyMhbzoKGTOw/raPqFmyCLsWxxTw+wpvfyQbImbvG5E6q9pSj61IcEy//bJL
-         cM+e4fhox0C34uCzVUMNH/4OFaHV4A0rXAC7BNbXQdB5u+/oVstlvmckS7Mr9NM5BzjO
-         jCQwwoehBMH+ZzjPEPNzXumWl5WqWGfELf5DyCKXGASwrtJQbJbjLT2BTSrH1mqnwLwv
-         Q+mfIliYjpznEfrJc8m5Ubl3ezxWg6wsnM6gHj+01hqxksEefT0X94GZEpAMW3l/fzLp
-         QQ2A==
-X-Forwarded-Encrypted: i=1; AKwUvBzlyEXcduqrs+VVpZ2o/76N4vExSAPE1cOtVYu+trFUrqpluvqYlRKhzNz0dK791fzWjgA1ZeqVnrgPnEyPuhs=@vger.kernel.org
-X-Gm-Message-State: AFuF++mD9ucySiCZoOXYsrloUAMj+Vw5OQWnpHRa3REplXSCjF31lenx
-	cvp936wpfx01mbgjSkL/kFd8A8hvu/SAygtXAM7loDsKJbfaOztdlpmOdN3Hd+zJ8Js=
-X-Gm-Gg: AYBFou2mAm4LSWOXaebbOaskVisKRKTx1ZqpOebMYEMz3ZhngQ/1VNLAwQMoZenGgoz
-	lZ5m+u8MgbgzWRCA3QmdRWZl1pSOEduf6vtjiKtaX22r6cdyfbPOa4go3RhOOaxYmqXJ9zM+nMg
-	TeMs+iG8Bn67xwbRH3/AzwoCFGt0xgZaz0bnWwhn4T4GEKg8Pd+MIIJ+j9T+z8oMJmzwAocU8LY
-	aT58mjdsFYBO40Tw4zn2KZEIhPmQVHit0AYYv16AhhgaADbavxAXD/pSHpX6UX1ZkMmdZqpZTBt
-	GTPak5WcIP+JAYwnraSgzPqQwRUFgq+BDBM5NKkS0pPWCkxX738nI270e/ie7avQkqJF91N/QXQ
-	WvQ0b4cRleecUcK15oN6khCeBONNAsfSmMvwUVunZYjQQahdQCACxGAQOFwwUoq0vg/x3J1pFPZ
-	YV+rPi5YTyPtLkz7/SLlAMGL8rRk8NIQh8oSbLQddFGkSmFDOCASVyXpWglA5bTFHlozewX0HXc
-	HcmC2x5VaqHM6N5f+mxILZUK/KPvjM5KzvKq11/iK93
-X-Received: by 2002:a05:651c:19a0:b0:3a4:d4de:bad0 with SMTP id 38308e7fff4ca-3a5a5022d47mr13760621fa.19.1789270361516;
-        Sat, 12 Sep 2026 20:32:41 -0700 (PDT)
+        bh=eUxnSrKVNmwG9e50AFcOowKn93UYykTt4+mQ+2qxLTU=;
+        b=A+gkg25Vbl/zxVC1EWVj0Jo37YzqRWj7JOEu1VK3eofZM3QjapQTjtD5yS5emY5oYg
+         +u5yTl/WlbFHNEKUjWTwDk9j5xx+HFBB+wJwqb692ekSvvWHv4JvgVEtShwQWUgDM1d3
+         nY6C7A5syztaKKGXRFQGG4qs9iVXcLpNIbchWDQFkCTUhjBaLqMac7u1gM0+xCaAHSTd
+         mTgh2H2SV3Y9AwvwHTPyQDjKHILvbFRYOvROcIWFDyJdW0A2K8rsPFLDCtXtJyZLbCZb
+         Z79EZk/bm2+RKDsEyUwrPQUt+M+X3hHa2M+opDMuiQaitdMeoB/2PT2BAIjEc2VVcFbE
+         pJCQ==
+X-Forwarded-Encrypted: i=1; AKwUvBy993FASLj8JKH6empCoylJyP1aQsmRNtrZ70UBiBMoM2olKBgGmEprypxHr1USsQajp7ZT4NsBGljeIJWvHbk=@vger.kernel.org
+X-Gm-Message-State: AFuF++nvOVmq1y7EehvEmyMWTff+jV2l+3ZWhQkqPl/6R8aZJvUYqsCb
+	A6SCbU2kLMC6afZGpalDc3qNgTngfD92auQL30iVVfsSVGVuVPEfIMA3
+X-Gm-Gg: AYBFou1yfheHrDvzR80B+l3Ir14SyKI9G4FTpOJ2UJ+dJ6uuJYUxqtkPh6L1wWZyCe8
+	c07VGt3Yv04PZGlhs/jR+jicnmdIdiHy5giYvachHgBpT0Ik5JDC8g/T+KutAvuzRxxboayl/T6
+	zWto0kPnLFH5MM9Qvb6m1Wqz/FvZGZqKS7FFf/Ymb0PdRE8j1jwCohvU/YyHw5cpMLek2bEfKdC
+	HDErNUDN7FX5tPs8BMYfIJ5h39q0Yb3XPdRx2HULt57Phgx6+gIF81aMzk0vAlj84+YPb4hAs7+
+	W5WZzjX8QM/65xLfwPaHkGy9ZaD1IgY4nxc43e0OjsxZqdc229X+qsRTD09e5ZF4n/3VVBkRleI
+	Me17wJAE6GqfJ1p6ZJ5Stg+cVgbdbdFWjDDakQUPbAIsSTKYlXerqUEKhUCZzvOSuWN9t63ij0f
+	kkOrvpqb0jnvRWDMMFY2s7AL5vXsm/o+PBGh628aClmIkbsafTSrRTG86L44Q2irfeqMP6HiphL
+	GjiKsSSCkCyQhHqQ9TNRJFrkmyfbaF6W5G1PgvInQg1
+X-Received: by 2002:a2e:be90:0:b0:3a3:7682:499e with SMTP id 38308e7fff4ca-3a5a525304bmr12047681fa.19.1789270364978;
+        Sat, 12 Sep 2026 20:32:44 -0700 (PDT)
 Received: from dau-home-pc.. ([95.139.134.117])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3a5a33a1cd1sm17024041fa.42.2026.09.12.20.32.39
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3a5a33a1cd1sm17024041fa.42.2026.09.12.20.32.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Sep 2026 20:32:39 -0700 (PDT)
+        Sat, 12 Sep 2026 20:32:44 -0700 (PDT)
 From: Anton Danilov <littlesmilingcloud@gmail.com>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: netdev@vger.kernel.org,
@@ -71,11 +71,11 @@ Cc: netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH net-next 01/11] ip_tunnel: add drop reasons to the generic RX path
-Date: Sun, 13 Sep 2026 06:31:52 +0300
-Message-ID: <20260913033213.873609-2-littlesmilingcloud@gmail.com>
+Date: Sun, 13 Sep 2026 06:31:53 +0300
+Message-ID: <20260913033213.873609-3-littlesmilingcloud@gmail.com>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260902184718.64ddca2d@kernel.org>
-References: <20260831215137.549324-1-littlesmilingcloud@gmail.com> <20260831215137.549324-2-littlesmilingcloud@gmail.com> <20260902184718.64ddca2d@kernel.org>
+In-Reply-To: <20260902184730.304d2d34@kernel.org>
+References: <20260831215137.549324-1-littlesmilingcloud@gmail.com> <20260831215137.549324-2-littlesmilingcloud@gmail.com> <20260902184730.304d2d34@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,24 +84,13 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Wed, 2 Sep 2026 18:47:18 -0700 Jakub Kicinski wrote:
-> > +	SKB_DROP_REASON_IP_TUNNEL_CFG_OPTS_MISMATCH,  
+On Wed, 2 Sep 2026 18:47:30 -0700 Jakub Kicinski wrote:
+> >  	const struct iphdr *iph = ip_hdr(skb);
+> > +	enum skb_drop_reason reason = SKB_DROP_REASON_NOT_SPECIFIED;
+> >  	int nh, err;  
 > 
-> This name is way too long, maybe
-> 
-> 	SKB_DROP_REASON_TNL_CFG_MISMATCH,
-> 
-> or
-> 
-> 	SKB_DROP_REASON_TNL_OPT_MISMATCH,
+> reverse xmas tree
 
-It was the longest name in the whole list, so fair enough.
-
-Took TNL_OPT_MISMATCH in v2: what gets compared is the options the
-packet carries against the ones the tunnel is configured for, not the
-configuration as a whole.
-
-I also renamed the two other reasons this series adds for the generic
-paths, IP_TUNNEL_OLD_SEQ and IP_TUNNEL_ENCAP, to TNL_OLD_SEQ and
-TNL_ENCAP, so that the three do not end up split over two prefixes.
-The GRE specific ones keep the GRE_ prefix, next to the VXLAN_ ones.
+Fixed in v2, and not only here: the same was wrong in every block where
+the series adds the declaration.  They grew when I gave them an
+initialiser and I never went back over the ordering.
