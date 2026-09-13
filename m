@@ -1,79 +1,116 @@
-Received: from mta0.migadu.com (out-210.mta0.migadu.com [91.218.175.210])
+Received: from mail-lr2-f12.google.com (mail-lr2-f12.google.com [74.125.230.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C04768EA
-	for <linux-kselftest@vger.kernel.org>; Sun, 13 Sep 2026 00:52:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988C1283FDC
+	for <linux-kselftest@vger.kernel.org>; Sun, 13 Sep 2026 03:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789260773; cv=none; b=Q70T8ecJ7HJksEsmFz2DHNW1AuoAZZsH1TaManUYJltT2P9HcrEBPZ/dhPRC1gPbWCmA3h3CECbC2LeqnFZT05rfvmd44bxzadlMDavP9V75C1BOCKgs9w0ALv7/bpYzIjISCK++Q8tZiiZOeSGLXVCTdn+IPagUVxGJOqRzMgU=
+	t=1789270358; cv=none; b=jCt00HfBImrUQAbxdOK9Eg+vr885hpy+DhkZYC5UHXreBHbmBP8bZSKlBc6/ORn5jYa/n+sRvc2fLriUKE2cWsurkszjfQuC1Bz8OPrkxUnPrrcHXxijmlm+FAOZ0UbdYBJrj5MO4OSxO/+4XkVnI9ZVYbwDsbZeZ2EFq49nrn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789260773; c=relaxed/simple;
-	bh=dEqQfU3lTD/bd5QrEcI5VNiNtdR+MT8JPrBJyfy09V4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K85Dd2lJBoiEzEOG+T9WfZHs26yMg7D18Uu3lrcl/bsO4PNm9TmlOYtZZfE8yrmGQczr+a9zpMqcVF2SrMa4ZXqfCEUT2am9zQnPSuI+HzlE/OB6nKot0wLkKRen0JaR8OIXhSyNQzS3fQdHeb098h9hBmXrSDU3FREMYakfb0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bTebRpj8; arc=none smtp.client-ip=91.218.175.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789270358; c=relaxed/simple;
+	bh=qynwl3yegS3zN7wkeohcoAEZv4LlKGQdHuntDJ7koXk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=r99he832gbXlN3L/lSVRn9oYk6xdNHxf2BJ20W/ntkESHiACLkMNo+9HaS2f+B67IvfgYmj98k01lseQWsyMveJd1LKG4sNNBhqGzZ7ncP4OeghrA4upc1rtqg+VjEIVRt+q7Q8i6VeUykj/Mk+pvM2zBYdSWZLjfBQq6U30y4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K+xqe64m; arc=none smtp.client-ip=74.125.230.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bTebRpj8"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=dEqQfU3lTD/bd5QrEcI5VNiNtdR+MT8JPrBJyfy09V4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789260766; v=1; x=1789865566;
- b=bTebRpj8Qgs3LIT+POhy2MZGMmTbTReSxuqKKHeSpY59Jw7czyna8LieX1p/QKFaSMwpWSVY
- mjOA3lUg4MORMplEm9UY7ZO7GyKlR/0mzZWFljLwHC2m/mMENvSV27/krFC0ddtR+Pv6Z9Cv7Zf
- 7fH2X/aHV61EkQ35Llf8vBkw=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 52314063f20a0e10;
-	Sun, 13 Sep 2026 00:52:36 +0000
-X-Mizu-Trace-ID: 52314063f20a0e10
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <be7989d3-648b-44e5-b90e-f4ab8b2066d9@linux.dev>
-Date: Sun, 13 Sep 2026 08:52:28 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K+xqe64m"
+Received: by mail-lr2-f12.google.com with SMTP id 38308e7fff4ca-3a30521ef15so5871091fa.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2026 20:32:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789270354; x=1789875154; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=xjaL8mti/vahJlLkdMnZQO8Ei/dHHViRxDz/+EAVwR4=;
+        b=K+xqe64mRgpbpxbwP50a8Gjn9ttToXXtZlpjd0dHUzX4hfIf/lDYCkhhnDVPXq+KFz
+         7o2+pmeKCd6hsbS6GHLrWGhySFNxYgHXhSnTV9gCb9VuOx8dJRt3kjBzxZ6hoZrhPZMB
+         OYNsqyK6F0BuX9KM4MXBJwwWCW1/i30zypBbJ4QHrvg8yhrrEGZPF7LrhFMuAzAr0sAK
+         1H/WPP6HZYHQa2lchsZB/laJsrthtdbJT7hu6AbhkNiLbHWFsk8e2D9vAh3x2Nv3qsKR
+         zkS5AnByw75wLEg4xhoZ6b3VFRowNutb6Ws6/gTFXgLvoS8TjyXskItoEAi5XlCRhVnm
+         bUgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789270354; x=1789875154;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=xjaL8mti/vahJlLkdMnZQO8Ei/dHHViRxDz/+EAVwR4=;
+        b=kHWPupsDV5qzIDJbSJV0ke8e6fP4k+of+87bT9MeXrkS3/cthb5mrdVHMNGq0P3IUQ
+         XEO76QBKzSRagEuKElrZISBt+sE73MBYY8reKPZBMIUBgxzGXyJw2HnChRBPjbumbDYE
+         XplqZ5lXg71CxCOR74PuPYOmJBEx1WttFOq5FqoScwRCnvW3hwRFG5nWrMrYORlIo4ET
+         W/C6rhcuBfXcZpEBMg5uNZk8pKrShEPWq4pyumDimiGMNVwurrH4srTsJJBRRmJHtkNM
+         bbM6qrDGCc0I7gF/NINMmTEogMXs30kXc178z40jppvbxmXwiZQCikSq5qEaPQ8pi4eK
+         8Dkg==
+X-Forwarded-Encrypted: i=1; AKwUvByX1aylsoio4nYJ8W48XkPyLop9iWpngOxk4Dqp1bcHXHNXcdgaM+IUJ+4Y+bW3DKgecMcz7m3ay8zeMOk8Vok=@vger.kernel.org
+X-Gm-Message-State: AFuF++l0fZr4S/drp9FaaMKy+iCo9M6m6fPxJbwEv8/eFACuUGYlB/B2
+	XyYZchs3aUwiJRla9zQje3gvZ9MEFb+2+ImRzXoDLgGhi6Wthe6zYhzg
+X-Gm-Gg: AYBFou1TeKC1s0ucsg1tSug0Eog6YVGpYmB6mjBrlVUuFIU1jb7mSUqYFuyJPB//l4k
+	6yIcZN0GECzr1ETnoXV5hWf5R9y7let2okcbTuqF+c+dMn8g72FgDpeKYpvdctaT+9JriBPyRwc
+	2PVxOgiz36S1AqK7Sz+enJpPy13Tsc2PzdAAZ3oW8RNUJ3D1NXHsDdDe+QA6ZSJI2y2llGXP/Xn
+	9F2pJuCdLPVUsqrHhZSenIWpzJSbSAJbCDPKwrc94whjKJ6Zofi3hgzRZAGS71bOwqAQbjJq/TY
+	a6zRkDp6B4xwxZAoD8v57h8yjGqMW07X7w8/Qy0YNHgxgn8e9pvuLp1X+mialCeheTSuPMvS4Gs
+	lhEfGd2sjVl/i0UTCOp8F4DTYb03lDiiD8vWNUS6pH16nWtDsT72BliRXJVLDbpvBN/yxiWObzN
+	NMcEBEeJ+XfASN83eZ8QZoRYh3SGSbcQy1t7AZcBqp1pG+fmAgO/9vetWZcTJFZgHa6jXR7lRgD
+	md1geJo6CGjNQzx+aBgIAmMjmAwkQZg3GjOs8LuRJ1/
+X-Received: by 2002:a05:651c:144c:b0:3a5:ba1e:8b05 with SMTP id 38308e7fff4ca-3a5ba1e8dfamr2827451fa.1.1789270354310;
+        Sat, 12 Sep 2026 20:32:34 -0700 (PDT)
+Received: from dau-home-pc.. ([95.139.134.117])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3a5a33a1cd1sm17024041fa.42.2026.09.12.20.32.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Sep 2026 20:32:33 -0700 (PDT)
+From: Anton Danilov <littlesmilingcloud@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 03/11] selftests: net: add a test for the tunnel RX drop reasons
+Date: Sun, 13 Sep 2026 06:31:51 +0300
+Message-ID: <20260913033213.873609-1-littlesmilingcloud@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260902184549.63f37d04@kernel.org>
+References: <20260831215137.549324-1-littlesmilingcloud@gmail.com> <20260831215137.549324-4-littlesmilingcloud@gmail.com> <20260902184549.63f37d04@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] kselftest: mm: remove exclusion of building soft-dirty
- test in arm64
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, akpm@linux-foundation.org, david@kernel.org,
- ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, shuah@kernel.org
-References: <20260911210611.4001419-1-yeoreum.yun@arm.com>
-Content-Language: en-US
-From: Zenghui Yu <zenghui.yu@linux.dev>
-In-Reply-To: <20260911210611.4001419-1-yeoreum.yun@arm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 9/12/26 5:06 AM, Yeoreum Yun wrote:
-> Since commit 0389c305ef56 (“selftests/mm: skip soft-dirty tests when CONFIG_MEM_SOFT_DIRTY is disabled”),
-> the soft-dirty test is skipped when soft-dirty is not supported.
-> 
-> There is therefore no reason to exclude the test from being built on
-> arm64. Remove the arm64-specific exclusion.
-> 
-> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> ---
-> Changes in v2:
->   - remove redundant condition in run_vmtests.sh
->   - add r-b and a-b tag.
->   - Link to v1: https://lore.kernel.org/all/20260911125028.1268274-1-yeoreum.yun@arm.com/
-> ---
->  tools/testing/selftests/mm/Makefile       | 3 ---
->  tools/testing/selftests/mm/run_vmtests.sh | 5 +----
->  2 files changed, 1 insertion(+), 7 deletions(-)
+On Wed, 2 Sep 2026 18:45:49 -0700 Jakub Kicinski wrote:
+> Completely unclear to me what the value of the tests you're adding is.
+> Please look judiciously at the generated code
 
-Tested-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
+Dropped all three selftest patches in v2.
 
-Thanks,
-Zenghui
+What they did: bring up two namespaces joined by veth, build a tunnel
+pair that disagrees in one specific way, send traffic and read the
+reason back from the skb:kfree_skb tracepoint.  It is how I check that
+each path I convert reports what its commit message claims, and it is
+what caught six paths in an earlier revision of this series that still
+freed the skb with SKB_NOT_DROPPED_YET.  That value is in writing the
+series, though, and does not by itself justify 346 lines in
+selftests/net.
+
+If such a test is wanted at all, I would rather come back to it
+separately, once the conversion has landed, and in a smaller form:
+
+ - perf record -e skb:kfree_skb and perf script, the way
+   openvswitch.sh already does it, instead of driving a trace instance
+   by hand;
+ - only the cases that are not evident from reading the code: a peer
+   that reboots and restarts its sequence number, two ends configured
+   with different options, plus a control case where nothing is
+   dropped;
+ - every case tied to the function the drop has to come from, so that
+   the same reason reported by unrelated code cannot make it pass.
+
+Is that worth having, or do you consider drop reason coverage out of
+scope for selftests/net?
