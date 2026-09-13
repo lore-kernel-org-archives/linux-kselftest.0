@@ -1,102 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBF83B9935;
-	Sun, 13 Sep 2026 06:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2DE6374745;
+	Sun, 13 Sep 2026 06:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789279449; cv=none; b=uqadN8JvKRpFizaUM+6/c5WrDOm/bc0EOeRuEgkPK7Bj7MMM7qB42pK8fBjTdkQ2Pp4E7F/ghRyLaurGubqRi3XM5QAb1VI7ez6GVgyO4hlv3Iptxue6hFRFOBjtQnc1+BhQgMXqQMjxTdkY55STzBqZplR3Sm2A+UKRk7HMhu4=
+	t=1789281359; cv=none; b=YFbxYIdt0Iwb+mwJoJF/Kd30alYOEFYVFLgxUDfDeGeK1mQWFG7AG1aJpyQtYfYOFrdVuHUBYqxs8bHSG2xrMdg6BusdREPcoRFJJ92g572DjMTn92fYVhbeEkLS0VorZrzZMGADLrEl2cKSjMawOYq3jlcwJ59Oy7+r1NMYY3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789279449; c=relaxed/simple;
-	bh=ATAeMGZD4vD5HW0k8b3zhd352cXuT2Lwx7r/WSp8mP0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nlqvQnJCvm1ENQ0UJDCi7RNsqh3c3Z4oUfAZLYHegHAoajx91j5hATwAGgSbHNFMgVdGY3I+qN2gKjF+u1A65zsDenndb6nze0efyJGJXk9ErPgjdGibJHd9bTCjgclioM75/9syW83DMSFX8t3UH14DDjI9gCowTaLaeX+zqxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=j07UY2BE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789281359; c=relaxed/simple;
+	bh=ONiEDh5RCxcG+d5MzmF6pFw2I9pINv/Sb5S7kG8toDk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mRLxAWk4bSGUPEizPbXX6+jrovRiVSnFPpPp5AMoYZhluxd5FCm/GlkuufoepjO6etn3YQMZ0XUkj5DMHRXj0zK+9/eWFEKtdl/2tKDCYToYRfosTOUA6/6rQ6uveXSxnhFVAa28Eptj6MLAQ9QMEtiBVdIq2+gEUFKkytJJLwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=T1nXMjx+; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="j07UY2BE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0C931F000FF;
-	Sun, 13 Sep 2026 06:04:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1789279447;
-	bh=O34+2PnHiz3Vm899rLDRRsIYbx1e3lEMZD7bzXxtsPY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=j07UY2BERQjUrfYT81ndLWHVFs/04f9ml+kKFuXCE7upldKkdYIsOgWWavyjpug7X
-	 lXPeg125m6U+ioPUIwbqCL47x5jwY4jU55zwqvABfEsOpw+6zYqOqPHMKxaXN0AC18
-	 m9fXAqF+ikeZhRis0wV3JjJj4z0WHqbLf2oUdkbM=
-Date: Sun, 13 Sep 2026 08:02:17 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Carlos Llamas <cmllamas@google.com>
-Cc: Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-	Todd Kjos <tkjos@android.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, kernel-team@android.com,
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH] binder: rm -f binder.c
-Message-ID: <2026091341-engulf-tattoo-ca3b@gregkh>
-References: <rm-c-binder@google.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="T1nXMjx+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Uy
+	dHFPlT/LvY4TGP582dBZaNlxC8hCkdi8SuWa1765Q=; b=T1nXMjx+/J/TFiLjFu
+	f6FHOP6asrmaE0XFiQPajqVkOvtnPzwaTqr7pu9D2VWOy2CAo//rqRJl+iCntWIm
+	72VSyu4iKX3r+g9+JEQ1UTjEyQ4UVAo4az4Rh81fVuC3gueRfeCOMtCObmZEx89L
+	OonKSwdoTJnXKKviyhtEA5xdE=
+Received: from localhost (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3z+gBRKZq3wuLAQ--.45906S2;
+	Sun, 13 Sep 2026 14:34:42 +0800 (CST)
+From: Hui Su <sh_def@163.com>
+To: mingo@redhat.com,
+	peterz@infradead.org
+Cc: juri.lelli@redhat.com,
+	vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	vschneid@redhat.com,
+	kprateek.nayak@amd.com,
+	shuah@kernel.org,
+	chris.hyser@oracle.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	sh_def@163.com
+Subject: [PATCH v1 2/2] selftests/sched: Retry PR_SCHED_CORE_GET on EBUSY
+Date: Sun, 13 Sep 2026 15:34:39 +0900
+Message-ID: <20260913063439.1513107-3-sh_def@163.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260913063439.1513107-1-sh_def@163.com>
+References: <20260913063439.1513107-1-sh_def@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <rm-c-binder@google.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3z+gBRKZq3wuLAQ--.45906S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww1DGr45Xw4kWFWruw1DGFg_yoW8uFWrpr
+	WfX34DtF4YgF9xtrn3JrWvgryrZrnFqFWUGw4fJryxAw48t3WUtr1xtF4agF17CFWFv3yS
+	yr4ava4YkayDJ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUjjg7UUUUU=
+X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbCwQJVtGqmRALRZgAA3f
 
-On Sat, Sep 12, 2026 at 09:41:10PM +0000, Carlos Llamas wrote:
-> The day has finally come. We are dropping the legacy C implementation
-> of the Binder IPC driver in favor of its Rust version.
-> 
-> For 15+ years, the C driver has grown increasingly complex, making it
-> incredibly painful to maintain and land new features without tripping
-> over vulnerabilities. The Rust implementation alleviates most of
-> these issues, so it's time for a change.
-> 
-> Alice Ryhl has worked hard on the Rust binder for the past couple of
-> years, not only achieving full feature parity but also proving that it
-> can match and often beat the performance of the C counterpart. Having
-> run successfully on Android devices for some time now, we can no longer
-> call this an "experiment".
-> 
-> It's time to move on, yank the C code, and focus all new features and
-> optimizations on the Rust driver.
-> 
-> Long live the new Rust Binder king!
-> 
-> Cc: rust-for-linux@vger.kernel.org
-> Acked-by: Alice Ryhl <aliceryhl@google.com>
-> Signed-off-by: Carlos Llamas <cmllamas@google.com>
-> ---
->  drivers/android/Kconfig                       |   39 +-
->  drivers/android/Makefile                      |    5 +-
->  drivers/android/binder.c                      | 7186 -----------------
->  drivers/android/binder/Makefile               |    4 +-
->  drivers/android/binder/rust_binder_main.rs    |    2 +-
->  drivers/android/binder/rust_binderfs.c        |    2 +-
->  drivers/android/binder_alloc.c                | 1409 ----
->  drivers/android/binder_alloc.h                |  189 -
->  drivers/android/binder_internal.h             |  597 --
->  drivers/android/binder_netlink.c              |   32 -
->  drivers/android/binder_netlink.h              |   21 -
->  drivers/android/binder_trace.h                |  448 -
->  drivers/android/binderfs.c                    |  786 --
->  drivers/android/dbitmap.h                     |  169 -
->  drivers/android/tests/.kunitconfig            |    7 -
->  drivers/android/tests/Makefile                |    6 -
->  drivers/android/tests/binder_alloc_kunit.c    |  572 --
->  rust/bindings/bindings_helper.h               |    2 +-
->  .../filesystems/binderfs/binderfs_test.c      |    2 +-
->  .../selftests/filesystems/binderfs/config     |    1 -
->  20 files changed, 9 insertions(+), 11470 deletions(-)
+During early boot, the pointer hash key may not be initialized when
+PR_SCHED_CORE_GET is called. With the preceding kernel fix, GET reports
+EBUSY until the pointer hash key becomes available.
 
-Yeah!!!
+Retry the operation for up to one second when it returns EBUSY. Report
+other errors immediately, instead of describing every failed GET as an
+unsupported core scheduling system.
 
-Great job everyone on this, I'll queue this up this week when I catch up
-on pending binder fixes/patches...
+cs_prctl_test passes on x86_64 QEMU with normal random initialization.
+A targeted early-boot probe also confirmed that the fixed kernel
+returns EBUSY while pointer hashing is unavailable.
 
-thanks,
+Signed-off-by: Hui Su <sh_def@163.com>
+---
+ tools/testing/selftests/sched/cs_prctl_test.c | 27 ++++++++++++++-----
+ 1 file changed, 20 insertions(+), 7 deletions(-)
 
-greg k-h
+diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
+index 52d97fae4dbd..dcb661cace5e 100644
+--- a/tools/testing/selftests/sched/cs_prctl_test.c
++++ b/tools/testing/selftests/sched/cs_prctl_test.c
+@@ -51,6 +51,8 @@ static pid_t gettid(void)
+ 
+ #define MAX_PROCESSES 128
+ #define MAX_THREADS   128
++#define CORE_COOKIE_RETRIES	100
++#define CORE_COOKIE_RETRY_US	10000
+ 
+ static const char USAGE[] = "cs_prctl_test [options]\n"
+ "    options:\n"
+@@ -112,16 +114,27 @@ static void handle_usage(int rc, char *msg)
+ static unsigned long get_cs_cookie(int pid)
+ {
+ 	unsigned long long cookie;
+-	int ret;
++	int i, ret, err = 0;
++
++	for (i = 0; i < CORE_COOKIE_RETRIES; i++) {
++		ret = prctl(PR_SCHED_CORE, PR_SCHED_CORE_GET, pid, PIDTYPE_PID,
++			    (unsigned long)&cookie);
++		if (!ret)
++			return cookie;
++
++		err = errno;
++		if (err != EBUSY)
++			break;
+ 
+-	ret = prctl(PR_SCHED_CORE, PR_SCHED_CORE_GET, pid, PIDTYPE_PID,
+-		    (unsigned long)&cookie);
+-	if (ret) {
+-		printf("Not a core sched system\n");
+-		return -1UL;
++		usleep(CORE_COOKIE_RETRY_US);
+ 	}
+ 
+-	return cookie;
++	if (err == EBUSY)
++		printf("Timed out waiting for core sched cookie\n");
++	else
++		printf("Failed to get core sched cookie: %s\n", strerror(err));
++
++	return -1UL;
+ }
+ 
+ static int child_func_thread(void __attribute__((unused))*arg)
+-- 
+2.55.0
+
