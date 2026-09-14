@@ -1,165 +1,116 @@
 Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FCA43CE45
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 10:40:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFA543CE45
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 10:41:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.204
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789382432; cv=pass; b=H7aACkXXAO1jNWRdiKR1240CgoxiitKQmC3ffUMUj+iP6K/9if+XtnCoMnV5v7FVF7lobWGlFHbPYjevTrrrX/0xEapEZ5Pznv1BEnFF5U2Z2qsNN7rJRK0CIWWsdWQT8lqzYZOSI11LSVGMrJnj5DtrZdW7plnOhnH0qr3dMSo=
+	t=1789382476; cv=pass; b=Wpu7qJ6Gt0lOFubFay9ruFb/n2fzld880yXZ7WRKaCG7AoQHbR3LUWG3e/OelZr+U3jFHHRUUfDOLo8BzuZDuKDRw2kK4vBjuJ8K6nGvC13YDJI24ATovVR+1+y2bmZNu7e8kOuD4fuv83Y2gLmCiMz7uIjrJr9jXoV0q61qZ+A=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789382432; c=relaxed/simple;
-	bh=uRtnttauUpfeIGypcutrfS/HLykzoQ06BKczAkGSR14=;
+	s=arc-20240116; t=1789382476; c=relaxed/simple;
+	bh=iJOn1fIiQ2XA2NbGR5R+22xMoshBHH07wVpWChHZaPA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u/fpNOg2q7Qp0myeq60PFQyWS+YpPXKjv7kRYEyMsimAGUEq4CB+uPtPniIYC2BROw1nFtXY6fOF0SUKNnOkf+gcw6YuvBxoGklhRDRZOloZRSqpPSvFE4tbbJiiW+7gNSdDjehlmI8P2tjqONc45KP48DsfJ/T8Uhwr88SRZH0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LYkCx/gS; arc=pass smtp.client-ip=74.125.230.204
+	 To:Cc:Content-Type; b=U5A2C8T+4D+ev/92ixDns68gf2iftiYKDVtu6sq1gFdXC/2Fw1F4HhXZTVndMoZIGaWMI9kO5GLIJia7NqRs8Pgc/BT+hCT8rxC63EY6Qo2Z1WG7E3QVc7/LOuQSPYwromqSvTxFoGD2O59a4VDt4dLZ2FUDgO4BOXmeik47S/0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KWD+j5yY; arc=pass smtp.client-ip=74.125.230.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LYkCx/gS"
-Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-52fb769ca2eso22669361cf.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 03:40:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789382428; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KWD+j5yY"
+Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-52fb76c9deeso31772011cf.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 03:41:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789382473; cv=none;
         d=google.com; s=arc-20260327;
-        b=AQeM6wX6HbHoB53AZk189COLhTUu0hXKeZS5CdfnRDxh0PA6nkBFwGWjpphwhAPqv6
-         6NILlxsJWwQX5a4KSJFcjd4Wns+UU6TAVwSKRApTxduPeSBwTCrC3zdZ9Hb/LZVuCLJl
-         XGRreLeMjRnv2KDXHRq2co1bpIsYk6D62/zwt068pHTw0rsLLf9x8QzZkfSySyAwzI8f
-         U1gCqEJvlMrQw2gPBxljoa9Uj+xYP5BrPEJC2sZOiJrsCY2rXhApN1N9X4E3PILcu/bp
-         O6NXrLBlYAzZjXH1vpoVjq38KQ6nZ93cio8XLo3z7IAX9tyrKLSgyNy0Uoe42YgSJ+B9
-         Q8Og==
+        b=ABfCnUR0hq9hbU2+d1UwpymbSF8G7M+BWITVvexe3u7YbTxV/LCe7oSEVBOY8QEn8a
+         0qnAfMKiq+ddhOUdwHvzDVyL2K9IpVAVnFnLXgJsg6TE4NJWJLNUxx6dToexVN+buR5P
+         3jBtl4+PrqM/W7hSxaRhqaPy6lgjlZC/B3XPlhWBqOrYp/j5K9ve1I+EiluxqWPmrA3K
+         /atw+8nsStXmuRGU/ZVb8ZhSp2yIThLNFs1LZXszcFNUBw2HqTR3dm8m5u0Fw8wbF4j+
+         MlexhU7lLs5JVv2IacCUKP9J6j5pYus6vRrXDWCTUA9FK+h2g0F/0H/mFCd0Pm+pKJa8
+         h1KA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=GAKmENrqU15QTtr2B6AdmjiozxUTftLDYrpEGIkKWIg=;
-        fh=K/mCCfChsU4iIuuXUZ0al0AdgpJwtpAwKuvqKEGTGv4=;
-        b=AtVq06T4esdyhgV5OEmbquo1Gi11JKeTAxtVMNb/hXdy67cqH0+q8RwmrL/JlFzf7M
-         zyTP62EezVeqZehgiMkvumHYqSuhK2NTIjFJlIwAhVVRKfW267MPDODcFBGWRFMjRrTq
-         M42mHYpenbu0drB/lAIQOIZxyUDdXdoOqGiUvXNS+HxKeh15OQW7oZpSgnEoE3E//1l5
-         j3HMdN124AXMXEEoO4/Uwm3+Cf/wb3Du7JgzclHFMD3U5NCb064pov6Wy0SjavaT27Bn
-         +ccUBqhnYWr1yl7gAbDfWcHvEeFiTJkfLpb8x5LXxi965gySOMW1QhfWZnC2a4YOLv0V
-         tcNQ==;
+        bh=iJOn1fIiQ2XA2NbGR5R+22xMoshBHH07wVpWChHZaPA=;
+        fh=p1vnQrWqu1fO5EXtkz+hoMs249x38VnOijYgnr5v+iU=;
+        b=Rl9pgsguK7InWrwHQSraa65LrHkx6TqmLZgSYf/iDx2caTlHI41qjotv5BgGOeGVKd
+         sngH15EnzJ+18YC6Xsd6WVxV9udrknm8nZ5Y2y+6TFipHeuGPIZbdvmSy1zw7WzjtVTZ
+         z4V5/76WuHXh4H+bFwkHn2xuS5wbU4MMz8Z5a8eoQ2A3UA7nrY4ThGSKf+kuv8TnVFDO
+         6Q0zVPiJw1H8MzN5rUTo/a5G3qmVqT8WugbEE6AjlWUtGfkGkw8BxGS0il7L/Z18RMqc
+         TMDKGvQn/FD7GqJ9Sy5ZaKCv08K5Vpia3lyKfYVb82psjPlZS1+4JiEDd0xwsLOEjesx
+         3vhw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789382428; x=1789987228; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1789382473; x=1789987273; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=GAKmENrqU15QTtr2B6AdmjiozxUTftLDYrpEGIkKWIg=;
-        b=LYkCx/gS7QPVcr6ioAD7fXJwmgwVOxBSugUgtawV9OIf5SMgWXZLsTsG0o5kQQBPHl
-         Bi81kAshdL8Mkpnvx2tGuj6qOEWQr/TI8xS23/lN0rsfJw82uhZ5nxkwriPjc1mh/G8Q
-         zqKQhyMxxvCS+D+y6dEU24DKZGp966cQ7MBoOrXD3Vl/zzsLesa8QWKSHdmJ7bQIbsLt
-         evQUHNvQ5AJqILSs4lcOBHv3Lvwzg95Z86H9y6GZj7w6n34dH6SfD6PKmydvnyHUgcSL
-         2p5mzw8yrS6UJlprxi+3qyJbJp7ePvRZUu+o5NnvGaBaA6kJD0YRB1iF5kL3pyP31U+Q
-         WqFA==
+        bh=iJOn1fIiQ2XA2NbGR5R+22xMoshBHH07wVpWChHZaPA=;
+        b=KWD+j5yYSlLTfjh6B32lfapLcW1WLl5eR5RwpQSd4k5gd6M8a9mAfJOwod+FqhvzLE
+         4JRVDnX11YIfdW54L+ZvOzyTlFJZOF7lpzKghB0Dpg78uoExI8Wv+srv3K0qNM/53Riu
+         gmqooEuphLPD7EDxlqGoXGuEIeD+1VJD07FMbHnxvUhcSbKNzvP92rjO9wMz7DYssNza
+         Du7+KelOOY8XnZIUlaTkdJ1AKH6Mne7SJN9ExlzSa+1mHAUTxyT7GcJj+zL3elIqkEc6
+         z/B4NHeFrtV0mCGr4kXhHcxllc/nmB39LFYp8lIhWuMf1IZRqmMKc1N0JqtvRbCHOeHI
+         DD2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789382428; x=1789987228;
+        d=1e100.net; s=20251104; t=1789382473; x=1789987273;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GAKmENrqU15QTtr2B6AdmjiozxUTftLDYrpEGIkKWIg=;
-        b=nk0c/mr/H+KFDzpidJfbCmPJhHXBqALx4LdXrvvbJdOg9fHYHo8XbPrSB6tVbd5/uq
-         wmpE7/OjMjkrwgCVbUBEKMUzwfCOnBNmPhL49Ue4stGiJ/cY9h1FB5n/W5oPMWvOncTb
-         2lcDUtIW8mk3zPmyZ0+MeDOa01baasc+UNhOtwN+jRZLt+SQgVx6hpI/9adUBbYrJKlA
-         OBsFqcP+6VLirtwJpZLfppFGwLhmy2izzXsI/Lov5O+eg5Fwv2vPT+9b7w2ANunJHQrO
-         8KcPcGTzANZz5kUxK67TzTx9ajeRETej9ZZV377OOBf2jAMt1Ir7m1irEEgCJEeSbDKO
-         wr0Q==
-X-Forwarded-Encrypted: i=1; AKwUvBzo15ydY7fMruSk2ZO7s///UKWcF0y3yTXSdd1GfYv4DO8ZP+o7pt94KZGuYEGNGqSSu8Rx6CReStWz3aiJH+8=@vger.kernel.org
-X-Gm-Message-State: AFuF++nrmfq/V4BcJcX+SES9VkqCp+WTCCeiEH1Wg8pNvNI6XfSWBpQx
-	IGoH+o41tmUqwPJiOHLK1pTqqG5VFIBHPTrza3CmrqdEg6rozG6Xhw35Y42PHT1mXAa6D2KKhJ8
-	HoT6jiQAquQ/e/c0QekE0qsLxsXL/nU7vZKnjzEgN
-X-Gm-Gg: AYBFou3sjas2VP6IhTR9X3AsMqu2iXWenYinH4HY8lI+kvHiwV+ZeMNKLMh209l2/o6
-	0o2P/5vtSv478Huh+A/2kgxnG5EyzQxvlyoeJ2GGFJtm+SAklSrsezj5tDxrd7TSewWfGZjYkY9
-	bwTIQ2hrIauQVEcpPqXhZz41IMwltjdpg7xOoLXDHaHQ02nZnjSyk3Qhir9g9e2KCwF8uCUOa5F
-	tArXOyjeO6M+1s1k9Idh5SCvUkYcdFg9v6+f3clCJ6LiDub366xWwGYCL1ys7F6g7GOoZmEAI2b
-	uBVIRWD/6LL9StHDNVNlVWoc/a6pSJhJ5rn0yJ8njoLZAOPtPA4D/k2QmEeuN91NW9R4HTxcfZd
-	82FeTNfIE1W5E+Bjxp3x0hSLj/p8KYbYcpjWVTw/neA+fU0UI88+wTUn4YUiebl+PmDI=
-X-Received: by 2002:a05:622a:4005:b0:530:f3b2:9c8b with SMTP id
- d75a77b69052e-5310d093592mr28405701cf.48.1789382427670; Mon, 14 Sep 2026
- 03:40:27 -0700 (PDT)
+        bh=iJOn1fIiQ2XA2NbGR5R+22xMoshBHH07wVpWChHZaPA=;
+        b=YBgK+GcafLs1GdB+nEEfDomAQkIeB6MR2enGDGnnQbxvY9mUVhYfe7DFPZZaQDYvl6
+         I4GNSAyW9yfm539duCc4kK77BTYtD3NNVlEJ0gVzhn543UM2DpPsLW3kDzMfPZz1payR
+         L0Q5NDTdfQauwZIWhxDVOgxFPyLUBJGgd8iLtKXjjUsFh4coSLCe663PJ9drvbvDxcW6
+         zcD8u5lKeUGK8PQ52p2s0nn6M0u5XvirHh1enWoq7kpzJxIheC22fkZBhZZ84H2xsbW9
+         4IZcqpQEagX+Kt341u84WXVtE84FpHrb5M2dPpeJPGnHYqI/AIZnbsUN9NGtkHqbR+/s
+         4VgA==
+X-Forwarded-Encrypted: i=1; AKwUvBzu4uZ8KoDjXxalmsUW4jhC5XUkI1UZviRNMR/LnIOk/U1qSIzDwvT54u+DM/hKUngZKJkp7HFzGgVtNJR9+k4=@vger.kernel.org
+X-Gm-Message-State: AFuF++lV8Kz65t0662wtugSCu2fb6FVW1XdG8FIv4OSKRN83ayYhsvbn
+	i/HkS9JnFxQETZoJ2YNahOOhCltQ0YQumLBp4io2vfNCEmqgapT6X3fdi6siY1BaXECED+T23H8
+	P/EjKApTnGipHd161VzRQ6OaPvHCr+t0GVITnxYFu
+X-Gm-Gg: AYBFou1WNPCel0FPgLlnxmlU8wmNiLri7rSovwjTYY1ABZ6UcBHZUrNW7CqEIYor12S
+	RhCMTGPcspog0u0I7Po5yJUNhNqXM7W5UTvSF0yf588kLdIIVvmggmUC29bYAX8yaL79B6pcxiu
+	JhCZOI18nvh+9zm8TzzTMWweqD1v2Qq3wRojQlGk4/jLCcQkEmXZ0qDqK7CC5JzdiOX/xD9oHxP
+	mvUCDHeQzObLTP8kgMq0Uxjt+YKsehSRIiMWIGZZP0AaWAlZjr1NNhDVYLTYXsMOatV61SDuxZe
+	Id/65VkVjtwkJI/M2Qda12i9enpyIegnA5gw54w3PmRH9CMEURQZWNHkJ7jv/F3UwkSh3GeYE8W
+	MHH0WeNvBveTbSOzDKsfDKBBFybgA5X4NsZKd+fhE1IbmFrgE1tToMe9MWr1SfZnkkrA=
+X-Received: by 2002:ac8:570d:0:b0:530:db17:b1b1 with SMTP id
+ d75a77b69052e-5310cf168e7mr26629401cf.8.1789382472521; Mon, 14 Sep 2026
+ 03:41:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260914090408.1435080-1-inbal.lipshtat@mail.huji.ac.il> <20260914090408.1435080-2-inbal.lipshtat@mail.huji.ac.il>
-In-Reply-To: <20260914090408.1435080-2-inbal.lipshtat@mail.huji.ac.il>
+References: <20260914090408.1435080-1-inbal.lipshtat@mail.huji.ac.il> <20260914090408.1435080-3-inbal.lipshtat@mail.huji.ac.il>
+In-Reply-To: <20260914090408.1435080-3-inbal.lipshtat@mail.huji.ac.il>
 From: Eric Dumazet <edumazet@google.com>
-Date: Mon, 14 Sep 2026 03:40:16 -0700
-X-Gm-Features: AcwNN1XeWYhpp_YIEh50XzUKFPCtVBpqJefPYlt_FATnNskzQk5FMIx10HNP2b0
-Message-ID: <CANn89iLBHj=LnPgxtm6z2iLDUt894yKcUU-wFBrD7vzvz576mw@mail.gmail.com>
-Subject: Re: [PATCH net v3 1/2] tcp: exclude old ACKs from tcp fast path
+Date: Mon, 14 Sep 2026 03:41:01 -0700
+X-Gm-Features: AcwNN1V9iDmM7PzpMeqDOMBzojVOrcgi4pfkAfg8icBKj7kbHhaBUk5wYJMY8oU
+Message-ID: <CANn89iLQdNwzFw9UXNmTiGQ1ge_etUJWz2npXk32Hg2CA+zgyA@mail.gmail.com>
+Subject: Re: [PATCH net v3 2/2] selftests: net: packetdrill: test exclusion of
+ old ACK from TCP fast path
 To: Inbal Schussheim <inbal.lipshtat@mail.huji.ac.il>
 Cc: netdev@vger.kernel.org, ncardwell@google.com, kuniyu@google.com, 
 	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	shuah@kernel.org, linux-kselftest@vger.kernel.org, amit.klein@mail.huji.ac.il, 
-	Tamir Shahar <tamir.shahar1@mail.huji.ac.il>, stable@vger.kernel.org
+	shuah@kernel.org, linux-kselftest@vger.kernel.org, amit.klein@mail.huji.ac.il
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Mon, Sep 14, 2026 at 2:04=E2=80=AFAM Inbal Schussheim
 <inbal.lipshtat@mail.huji.ac.il> wrote:
 >
-> Exclude old ACKs before SND.UNA from the tcp fast path
-> as well as ACKs after SND.NXT.
+> Add a packetdrill test for an in-sequence data segment carrying an
+> excessively old ACK.
 >
-> Such ACKs will fall through to the slow path, where tcp_ack()
-> performs the appropriate validation and challenge ACK handling
-> according to RFC5961 and Commit 3d501dd326fb1c7 ("tcp: do not
-> accept ACK of bytes we never sent").
+> Verify that the segment falls through from the TCP fast path to the slow
+> path, where the existing ACK validation rejects it and sends a challenge
+> ACK. The payload is not accepted and RCV.NXT remains unchanged.
 >
-> This prevents old ACKs from being accepted
-> or modifying connection state as part of the fast path before
-> appropriate ACK validation is applied.
-> In particular, this prevents payload carried by a segment with
-> an excessively old ACK from advancing RCV.NXT before the ACK
-> is rejected.
+> Based on the reproducer from Commit 3d501dd326fb
+> ("tcp: do not accept ACK of bytes we never sent").
 >
-> Fixes: 31770e34e43d ("tcp: Revert "tcp: remove header prediction"")
-> Reported-by: Amit Klein <amit.klein@mail.huji.ac.il>
-> Reported-by: Tamir Shahar <tamir.shahar1@mail.huji.ac.il>
-> Reported-by: Inbal Schussheim <inbal.lipshtat@mail.huji.ac.il>
-
-nit: (no need for a new version)
-You are the patch author, the " Reported-by: Inbal Schussheim
-<inbal.lipshtat@mail.huji.ac.il>"
-is redundant with Signed-off-by from the same person.
+> Signed-off-by: Inbal Schussheim <inbal.lipshtat@mail.huji.ac.il>
 
 Reviewed-by: Eric Dumazet <edumazet@google.com>
-
-> Suggested-by: Eric Dumazet <edumazet@google.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Inbal Schussheim <inbal.lipshtat@mail.huji.ac.il>
-> ---
->  net/ipv4/tcp_input.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> index daff93d51342..03d317a58132 100644
-> --- a/net/ipv4/tcp_input.c
-> +++ b/net/ipv4/tcp_input.c
-> @@ -6490,6 +6490,7 @@ static bool tcp_validate_incoming(struct sock *sk, =
-struct sk_buff *skb,
->   *       or pure receivers (this means either the sequence number or the=
- ack
->   *       value must stay constant)
->   *     - Unexpected TCP option.
-> + *     - ACK sequence number is outside [SND.UNA, SND.NXT].
->   *
->   *     When these conditions are not satisfied it drops into a standard
->   *     receive procedure patterned after RFC793 to handle all cases.
-> @@ -6539,7 +6540,7 @@ void tcp_rcv_established(struct sock *sk, struct sk=
-_buff *skb)
->
->         if ((tcp_flag_word(th) & TCP_HP_BITS) =3D=3D tp->pred_flags &&
->             TCP_SKB_CB(skb)->seq =3D=3D tp->rcv_nxt &&
-> -           !after(TCP_SKB_CB(skb)->ack_seq, tp->snd_nxt)) {
-> +           between(TCP_SKB_CB(skb)->ack_seq, tp->snd_una, tp->snd_nxt)) =
-{
->                 int tcp_header_len =3D tp->tcp_header_len;
->                 s32 delta =3D 0;
->                 int flag =3D 0;
-> --
-> 2.43.0
->
