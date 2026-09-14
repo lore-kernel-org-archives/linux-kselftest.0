@@ -1,57 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B18E47D462;
-	Mon, 14 Sep 2026 14:20:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8063C584A;
+	Mon, 14 Sep 2026 14:20:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789395608; cv=none; b=jXhYSdKb66Y2ZOUsR4drSOGqRgHvICU4fSvbwmM0iUtw7/l9t+bIag33k8ypGgJRG022sMRtN8SNch/NNM0J2oLaZ7qzDvoUm03KG39ucynOjKJ5qb4czlX5xv+uNw7iikb/SXyA4OmZkfUcrgs72WI7K6XO6r6NL29G3kmZJHg=
+	t=1789395612; cv=none; b=Ah9SdRwtaCMAqDkvl1+FenhabiQ2c/G5Jmbd4DiVOcHY6QzzkHMdrS48an7rbC8Kyx78YMr126WnbLg5Stv2+EFQPuEZ6AvSPYB61FdU+KTa+qMisNwS1GjnHzZ6ABUqOlGSk+/W5yShWEj4b4b0Yr1VgEMFIYcdiXkko/BAUAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789395608; c=relaxed/simple;
-	bh=7R50BPVYpr4c2NJfRdDUq8laf344UbkGortnVLm0Lls=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TTIs3B8Icg0sNiNGfEQ97mMQK4Ya+E5DAiMFVKbrI6711PF4I1dUH1LjiRP0mCbbfikBleBr/FJTEeqRGxoMCmeTB3BILK5+UDh7IhsfF46wans7XUsRjxpZY42udIxc4OfdVf113rcELcTRxQtGk+icgNUz6sPykBOBWVqZ5a4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aOxl9EV4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789395612; c=relaxed/simple;
+	bh=2q4xJ0P619evK9DKIBKz/BCbjFgZ1UrTrSqvgshqZNM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=T4RmmM8G3CgarH5Ha67/z2Xh3EqeOl7doh78EwznkVpca2opbFvrboHFZjm2xhWrnZfKUDugUSbAx7Kb/CkJZ9SJK4+fw2AxfoZsATvOSAcPSRk4bNkB0P/4OSVgGxx7wpr+7E2rLbHyCGIAqZNRkcIDYc+QPtqi9qA9XrgOtT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jn2zEmzg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aOxl9EV4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF401F000FF;
-	Mon, 14 Sep 2026 14:19:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jn2zEmzg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57D6A1F00893;
+	Mon, 14 Sep 2026 14:20:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789395600;
-	bh=Xe9pCAP7+znsH3YX32HlW65HgZEqytv0rSrycprzx2U=;
-	h=From:To:Cc:Subject:Date;
-	b=aOxl9EV4HfSn4CW4ndI8Yc7wmc+68nQ/AG7gNNVkiYH+WZ/fZX/7xfou5DflqaULS
-	 lcLmDByziVNq0IgTmy0cqm9KA5KSuXP+p1WglgvPGKksP5/7kx4kEAmyPW5UyheGNI
-	 C/XgdTjlg0zYIIFnR69ygbDwuI4DUke3vlA46dbWm8RBXjz3ZC3FtyiISJhTXHcXtd
-	 LG8nJFRUTA5UBX+nMAViIamKQ/ShECpxvjzgvLm2u6UgOgFpYhzIxIXLWda3ZXu0gT
-	 5L1YRjxd7+KUUPCyMoTJjDYgQ+8U/M3+uvoCct07REl1W6f37ygGoq4imEEiHkAhOg
-	 yRh0Y/qG6F0ug==
+	s=k20260515; t=1789395602;
+	bh=Oi23zu2/PrV0Foc+v/urHYp6bcscQLI0NRalUKOBVW0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Jn2zEmzg+8eiuhpnhyv9+INeK0b0PsfogpmddAwICz0n1DBUnFcadfFFpVffnaSJS
+	 vsKsEiNKXkO/Kl4FgEFeZJFiBlEyx1S6WFKEfjJvy8gnXibdwTLeQU2W9bkshneTkc
+	 XnnGaHWVx9bygDzCyMl+LfVoaw3/8ladZfooOKsSo7poW0P9Pqth+9uzTOMQCgwkf6
+	 Ad6Qmj+4U6jMwKKl1xiZZCvg9G1nHsUbTZRmjczJg1FQxVNn/gaBOSWUYyl2QA6pjj
+	 XO0tChvfTnDPewBNPesDi411NMzSx1kV7ahtGTSRvvqq6uLtRzw90zbOj22GOOeV+0
+	 7Hz7jeFMr+Y0A==
 From: SJ Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SJ Park <sj@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
+Cc: Kunwu Chan <kunwu.chan@gmail.com>,
 	Brendan Higgins <brendan.higgins@linux.dev>,
 	David Gow <davidgow@davidgow.net>,
-	David Hildenbrand <david@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Sang-Heon Jeon <ekffu200098@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
+	SJ Park <sj@kernel.org>,
 	damon@lists.linux.dev,
 	kunit-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH 0/6] mm/damon: misc improvements in tests and documents
-Date: Mon, 14 Sep 2026 07:19:45 -0700
-Message-ID: <20260914141952.91465-1-sj@kernel.org>
+	linux-mm@kvack.org,
+	Lian Wang <lianux.mm@gmail.com>
+Subject: [PATCH 4/6] mm/damon/tests/core-kunit: improve nr_samples_per_aggr test isolation
+Date: Mon, 14 Sep 2026 07:19:49 -0700
+Message-ID: <20260914141952.91465-5-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260914141952.91465-1-sj@kernel.org>
+References: <20260914141952.91465-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,50 +52,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add various improvements to DAMON tests and documents.
+From: Kunwu Chan <kunwu.chan@gmail.com>
 
-Patch 1 and 2 from Zenghui Yu (Huawei) let DAMON selftest to clean up
-its state and output after running the tests.  Patch 3 from Eva
-Kurchatova makes a few selftest be able to run with Python's safe path
-mode.  Patch 4 from Kunwu Chan improves coverage of DAMON kunit tests.
-Finally, patches 5 and 6 from Liew Rui Yan clarify and fix typos on
-documents for DAMOS quota behaviors.
+Test the zero sample interval case with a non-zero aggregation
+interval, and keep the zero/zero case to cover the zero-result
+fallback.
 
-Below are notes that can be removed in the final commit message.
+Also make the overflow case use an explicit sample interval so that
+it does not depend on the zero sample interval fallback.
 
-This is a batched repost of DAMON patches that were individually posted.
-Please refer to each patch for changelog.
+Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
+Reviewed-by: Lian Wang <lianux.mm@gmail.com>
+Reviewed-by: SJ Park <sj@kernel.org>
+Signed-off-by: SJ Park <sj@kernel.org>
+---
+Changes from v2
+- v2: https://lore.kernel.org/20260909070711.2448346-1-kunwu.chan@gmail.com
+- Collect R-b: from SJ.
+- Rebase to latest mm-new.
+Changes from v1
+- v1: https://lore.kernel.org/damon/20260908063635.2208922-1-kunwu.chan@gmail.com/
+- Use 0/0 for the zero-result case, consistent with damon_set_attrs().
+- Update commit msg and add Reviewed-by tag.
 
-Eva Kurchatova (1):
-  selftests/damon: add script dir to sys.path for PYTHONSAFEPATH
-    compatibility
+ mm/damon/tests/core-kunit.h | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
-Kunwu Chan (1):
-  mm/damon/tests/core-kunit: improve nr_samples_per_aggr test isolation
-
-Liew Rui Yan (2):
-  Docs/mm/damon/design: clarify when qt_exceeds increases
-  Docs/mm/damon/design: fix typos in temporal auto-tuning algorithm
-    section
-
-Zenghui Yu (Huawei) (2):
-  selftests/damon: stop kdamond on error exits of no-op commit test
-  selftests/damon: ignore test-generated damon_dump_output
-
- Documentation/mm/damon/design.rst             |  8 +++--
- mm/damon/tests/core-kunit.h                   | 19 +++++++---
- tools/testing/selftests/damon/.gitignore      |  1 +
- .../selftests/damon/damon_nr_regions.py       |  3 ++
- .../selftests/damon/damos_apply_interval.py   |  3 ++
- tools/testing/selftests/damon/damos_quota.py  |  3 ++
- .../selftests/damon/damos_quota_goal.py       |  3 ++
- .../selftests/damon/damos_tried_regions.py    |  3 ++
- .../damon/sysfs_no_op_commit_break.py         | 35 ++++++++++---------
- ...sysfs_update_schemes_tried_regions_hang.py |  3 ++
- ...te_schemes_tried_regions_wss_estimation.py |  3 ++
- 11 files changed, 60 insertions(+), 24 deletions(-)
-
-
-base-commit: d1153a22117b5c6171bdf24d32b7f6c314887d23
+diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
+index c01e6a75cadc1..a47a5cdf285c8 100644
+--- a/mm/damon/tests/core-kunit.h
++++ b/mm/damon/tests/core-kunit.h
+@@ -627,12 +627,20 @@ static void damon_test_set_regions(struct kunit *test)
+ 
+ static void damon_test_nr_samples_per_aggr(struct kunit *test)
+ {
+-	struct damon_attrs attrs = {
++	struct damon_attrs attrs;
++
++	/* Zero sample interval is treated as one. */
++	attrs = (struct damon_attrs){
+ 		.sample_interval = 0,
+-		.aggr_interval = 0,
++		.aggr_interval = 5000,
+ 	};
++	KUNIT_EXPECT_EQ(test, damon_nr_samples_per_aggr(&attrs), 5000);
+ 
+-	/* Zero aggregation interval doesn't cause division by zero */
++	/* Zero sample and aggregation intervals cover the zero-result fallback. */
++	attrs = (struct damon_attrs){
++		.sample_interval = 0,
++		.aggr_interval = 0,
++	};
+ 	KUNIT_EXPECT_EQ(test, damon_nr_samples_per_aggr(&attrs), 1);
+ 
+ 	/*
+@@ -640,7 +648,10 @@ static void damon_test_nr_samples_per_aggr(struct kunit *test)
+ 	 * overflow
+ 	 */
+ 	if (ULONG_MAX > UINT_MAX) {
+-		attrs.aggr_interval = (unsigned long)UINT_MAX + 1;
++		attrs = (struct damon_attrs){
++			.sample_interval = 1,
++			.aggr_interval = (unsigned long)UINT_MAX + 1,
++		};
+ 		KUNIT_EXPECT_EQ(test, damon_nr_samples_per_aggr(&attrs),
+ 				UINT_MAX);
+ 	}
 -- 
 2.47.3
