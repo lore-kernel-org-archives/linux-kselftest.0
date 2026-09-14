@@ -1,64 +1,343 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155C62931D5;
-	Mon, 14 Sep 2026 23:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF3B344DBB
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 23:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789428649; cv=none; b=egMaTwpeYYxo6xS/j7tM3/Cq/PIjdMm3pnn/Ul5OWx/OgrxtCxgoTPIacxNQi5bONeFuB2RRcqrQH2d9IbTQP5Y+q9s9dKknEb9VIEuiZ8cd9NVEyXLv6C+d1RLW2t7HEcI27uGpkh3AijpvUqhL2Cn2C86IKMW4f/ADwgM48oI=
+	t=1789429167; cv=none; b=OgXgoDZz9UIn41Ydv7GWCoDvSD9oQ/QMR4/TVBmeBzzS6pcaUkqAJduO7uIinQX4Xg0lVGLxdB0iuYBuCSBhAGhZrNM6kdWTTuamtSBm+Isc2L13mKyGIQ/HzDrDUpPwY9/BFBl5qAVKcVgZ9IXOFftn5aVLL4Zky0DCQ9DEwWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789428649; c=relaxed/simple;
-	bh=XAFz0MiuvVSfxcOO1LZF3GLJP1qs4uQmOrbUmZVpD3g=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cRGJsnCiJwDF4Iz+oni8NLnPEZYaDozQ4vFzx/D3IrHDqytRTYQFM8cOjLJZXKb0WDKhBEPmrpCnwTv4KsqoYTyLVax9cLwlCTPX3Rm+F/rQPmi09YdN+ivwPcYQiWVqmej+6qmn6sEiT0iC80DhGJS9+qf6SXFuEMhNwJHLsAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hWqoJXF0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789429167; c=relaxed/simple;
+	bh=AVej2iqlBEYdtl5+BTl9FWTkVtSCQEcHVZ4EMOf/dbQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=UKQ88D2c+fKevlgkzWTK96yRqga/RSrxryIKoJrxjcqLkBnBT8NA8Gy6xEFPdBDFg590fiGpOQC1IDsN+Vgl+d352KI2Zav+Diuf8NlQFMJ+JxudNm+VwOeYnkSUR3xiSuVcC9LDmDt6UIoWi0cZoq/xUtA/U9azAS2bLt6tSok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=SmGvOA5c; arc=none smtp.client-ip=74.125.227.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hWqoJXF0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CA341F000FF;
-	Mon, 14 Sep 2026 23:30:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789428647;
-	bh=XAFz0MiuvVSfxcOO1LZF3GLJP1qs4uQmOrbUmZVpD3g=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=hWqoJXF0R3Fhd+kT4bDhPARHgPeqTjifzNa1tf2/FoAJyLG/WVJg3IE5rsnJNqWAW
-	 OnntJ4pwIHkIxYoDkocgUynXdjEJIe6CUooz1O2tgaGPHdCWy2Zl6DHaDa14mMyhSj
-	 qQVMmoqcaPaUDnyt0lafz6pIbrccECvXsFicCfY0ErSftZ1YAkvAwh+rSbQcAQeXLD
-	 Dm1Eote9WE/fsnoEwW2w5VRdrWgnMTIQy3wWV8QLETYpfJifPhc+0A99nqyvig+l5G
-	 H46gpKpYmHlJbtUQjhRY4s6zevLtFsLwZRsUk4MAtViRvYXdhGKWNm5L0O+afBDWEK
-	 zJg7ygeK7gpHg==
-Date: Mon, 14 Sep 2026 16:30:46 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: "Daniel Zahka" <daniel.zahka@gmail.com>
-Cc: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
- <pabeni@redhat.com>, <andrew+netdev@lunn.ch>, <horms@kernel.org>,
- <willemdebruijn.kernel@gmail.com>, <donald.hunter@gmail.com>,
- <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next 2/6] psp: don't report the main netdevice's
- ifindex to associated namespaces
-Message-ID: <20260914163046.601571a1@kernel.org>
-In-Reply-To: <DLF0VHGQ0BW3.V17URE6WVGN4@gmail.com>
-References: <20260912200426.121025-1-kuba@kernel.org>
-	<20260912200426.121025-3-kuba@kernel.org>
-	<DLF0VHGQ0BW3.V17URE6WVGN4@gmail.com>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="SmGvOA5c"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d747ed1368so25366805ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 16:39:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1789429164; x=1790033964; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=RHOj883NdGN/FUoDXIJ1skp4Po4UQoQIExJ8AbqSgLg=;
+        b=SmGvOA5ckQ968BxeHvCJetFCQVwFWWLk2ITZFtJcsaWr7MthyqjgQgkfLlGDYZAMg1
+         YKHfVkTCmVCHWRhkuMT+1z7snDGlbKYnD54KDBV6hxgl7I1sluSd0WoUEFZJLt1jxeFy
+         IAViW3hWjSzV32+Wq1wKpVOfaN9kUcISGkHipxs+mzvnA2SrzTSwpCqcMjtM5lwJFc7U
+         nGvgbi1zIDQTd+asTh6PJ8qrG/TP4vRuOi5CMAduBFdsNTWk9qLu845UuI8G5zzyfA6S
+         KdfccQ2tUnJhX5OvK36bZk1ZKVsPNGaTXnXeAemKiwA1Hx0Yrl1WFZ3n6fKCfd8NZBlY
+         eFiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789429164; x=1790033964;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RHOj883NdGN/FUoDXIJ1skp4Po4UQoQIExJ8AbqSgLg=;
+        b=IMaiBYtTnMH9rjV2RoeiqyYG5MlAYWoyvEwP8YdCTed5FA8uBnP2FBQYgcik/HR4ON
+         j6grPp4r2MQeFu1+i1kEvqajsBTbKgIEluWcmeTk/bXl5J5GvzTBvqoGB/g/WHIkyZ9/
+         g9aimlACzauziYaho5mcjZJa4zDNZgsu8Sd23Z7HNiD7efRe/ub9TdrMGMBepaLDYvmg
+         VgV4KUSTDAZFhoC56fovLn38hIvHujbQBjQZSs5R1d88e7fms6QbhXQ3drLOKScB0u8A
+         yy/VFI3fBJXTd2HZHj1befFQ5G8mFtPe9YiWqfa7yYvgVCjFx+Bt07FrRXYzTM1bJBbY
+         VZ/g==
+X-Forwarded-Encrypted: i=1; AKwUvBwb+IFjN+oHf20cBrphYwSdl8KljH9GPD4KdmWwa+Ey+JKlSgS6e9F6ZfEx+osdo9bytw5GUkmpBhKmH3hz2j0=@vger.kernel.org
+X-Gm-Message-State: AFuF++lUuS1sd7y8iLOpI9WGKo99RrFSvuS5EgpGY464kyhE1S6+K9XW
+	mX+9lN7mS7no2Jio/GNi0JK2GPGnYFmt+4nyRndOWOZhx5T2c4fWmcZY23iRwQyRWiQ=
+X-Gm-Gg: AYBFou05+2mimwjWGS8HWZl7MhbkrjZMR42k9bvSs2zhvzfJrKN6ZXjYCxoTH1fy+8C
+	T92Ehf+YL4W8w7YXR/M75a/xIN0iNM75VPIbKiWKs1bYskqZCmZqRFp+LfOGif9yVm60NXNp86u
+	iZg56vaGtgn4RVmsTjXUEgwz5mbXL8VE+izkWGLANDiXrXqisDTLuu0Hw3wSnQe+9/Lr45N0jfJ
+	S556Jc1nEodHBYBTpwXGk9zVUR9kipe1OLyqH4cYOW5mm2BFGCIUHsnsM1R/cTbHrwjvxDEQJWU
+	UCjjEk7MBgDRkt5vZi1cepTfn0O96lBBozFYnghGj10J/pgJa0yo6O6dbGDoakbeO00kKpeYHWF
+	edIOsJSRX2KVy4tylhGu/HKD5U1bZJ9FVsSobapd+W5NpAmRpRwrHXXm/5/d1MPwe9kDL4TMbTE
+	2hzTqIde/pzsZN9cQ/wI8Wqh+OVyP0tXf4B/YGCl52Gjbox2unOZm2NHWzpkcCYL+fe9hHXvoch
+	u64QziYiWuZV8WJIcbIxApTk2iN
+X-Received: by 2002:a17:902:e74c:b0:2db:1f50:6515 with SMTP id d9443c01a7336-2dd6c5ba26cmr88114975ad.2.1789429163979;
+        Mon, 14 Sep 2026 16:39:23 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd2cfc4403sm56568345ad.52.2026.09.14.16.39.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Sep 2026 16:39:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 14 Sep 2026 23:39:22 +0000
+Message-Id: <DLFFP4P6CAA6.QLQ38A75G2IZ@etsalapatis.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Replace %pK output with 0
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
+ <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20260911145011.kErTVDkS@linutronix.de>
+In-Reply-To: <20260911145011.kErTVDkS@linutronix.de>
 
-On Mon, 14 Sep 2026 08:02:23 -0400 Daniel Zahka wrote:
-> As an aside, this got me looking at psp_nl_fill_assoc_dev_list() again.
-> The PSP_A_ASSOC_DEV_INFO_NSID handling there looks a bit buggy. Caller
-> sees -1 when the assoc dev is in their namespace, unless they are in the
-> psp_dev's main_netdev's netns. In that case, a self referential nsid is
-> allocated with peernet2id_alloc(). It probably would have made more
-> sense to just only include PSP_A_ASSOC_DEV_INFO_NSID if !net_eq(cur_net,
-> dev_net_ns). I don't suppose it makes any real bugs reachable.
+On Fri Sep 11, 2026 at 2:50 PM UTC, Sebastian Andrzej Siewior wrote:
+> Networking used to print the socket pointer with %p as output in the
+> /proc interface. This was later changed to %pK in order not to reveal
+> the actual pointer value. The output format has then been copied to bpf
+> tests which produce the same format including the %pK format modifier.
+>
+> Networking recently replaced the socket output with a plain 0 because
+> the socket pointer added no value to the output and the %pK should be
+> removed fom library handling. The format remained otherwise unchanged in
+> order not to break any tools which are parsing this information.
+>
+> This change removes the %pK modifier from bpf, following the change in
+> networking.
+>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-Ack, I looked at the netns id situation briefly but deferred.
-I think we need a split between the "netns went away" and ENOMEM
-cases, and then have the dump act accordingly. This is a problem
-all over the uAPI tho, so felt quite orthogonal.
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+The bots are being overly picky bere, the tests pass fine and these are
+selftests anyway.
+
+> ---
+>
+> The networking change is in net-next as commit 7c0ec6288b497 ("net:
+> Replace %pK output with 0")
+>
+>  tools/testing/selftests/bpf/README.rst               |  2 +-
+>  tools/testing/selftests/bpf/prog_tests/snprintf.c    |  2 +-
+>  tools/testing/selftests/bpf/progs/bpf_iter_netlink.c |  4 ++--
+>  tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c    | 11 +++++------
+>  tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c    | 11 +++++------
+>  tools/testing/selftests/bpf/progs/bpf_iter_udp4.c    |  4 ++--
+>  tools/testing/selftests/bpf/progs/bpf_iter_udp6.c    |  4 ++--
+>  tools/testing/selftests/bpf/progs/bpf_iter_unix.c    |  3 +--
+>  tools/testing/selftests/bpf/progs/test_snprintf.c    |  4 ++--
+>  9 files changed, 21 insertions(+), 24 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selft=
+ests/bpf/README.rst
+> index 07c834433b388..75ff1142c1857 100644
+> --- a/tools/testing/selftests/bpf/README.rst
+> +++ b/tools/testing/selftests/bpf/README.rst
+> @@ -187,7 +187,7 @@ The symptom for ``bpf_iter/netlink`` looks like
+>    ...
+>    15: (bf) r2 =3D r7
+>    16: (0f) r2 +=3D r1
+> -  ; BPF_SEQ_PRINTF(seq, "%pK %-3d ", s, s->sk_protocol);
+> +  ; BPF_SEQ_PRINTF(seq, "%p %-3d ", s, s->sk_protocol);
+>    17: (7b) *(u64 *)(r7 +0) =3D r2
+>    only read is supported
+> =20
+> diff --git a/tools/testing/selftests/bpf/prog_tests/snprintf.c b/tools/te=
+sting/selftests/bpf/prog_tests/snprintf.c
+> index 4e4a82d54f799..f2cd442c4683c 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/snprintf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/snprintf.c
+> @@ -16,7 +16,7 @@
+>  #define MIN_SYM_RET  sizeof(EXP_SYM_OUT)
+> =20
+>  /* The third specifier, %p, is a hashed pointer which changes on every r=
+eboot */
+> -#define EXP_ADDR_OUT "0000000000000000 ffff00000add4e55 "
+> +#define EXP_ADDR_OUT "ffff00000add4e55 "
+>  #define EXP_ADDR_RET sizeof(EXP_ADDR_OUT "unknownhashedptr")
+> =20
+>  #define EXP_STR_OUT  "str1         a  b c      d e longstr"
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/tools=
+/testing/selftests/bpf/progs/bpf_iter_netlink.c
+> index 00b2ceae81fb0..b9107d3ab6039 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+> @@ -25,12 +25,12 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
+>  		return 0;
+> =20
+>  	if (ctx->meta->seq_num =3D=3D 0)
+> -		BPF_SEQ_PRINTF(seq, "sk               Eth Pid        Groups   "
+> +		BPF_SEQ_PRINTF(seq, "sk Eth Pid        Groups   "
+>  				    "Rmem     Wmem     Dump  Locks    Drops    "
+>  				    "Inode\n");
+> =20
+>  	s =3D &nlk->sk;
+> -	BPF_SEQ_PRINTF(seq, "%pK %-3d ", s, s->sk_protocol);
+> +	BPF_SEQ_PRINTF(seq, "0  %-3d ", s->sk_protocol);
+> =20
+>  	if (!nlk->groups)  {
+>  		group =3D 0;
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_tcp4.c
+> index b1e509b231cd9..d149cf0d07be6 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
+> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
+> @@ -131,8 +131,7 @@ static int dump_tcp_sock(struct seq_file *seq, struct=
+ tcp_sock *tp,
+>  		       icsk->icsk_probes_out,
+>  		       sock_i_ino(sp),
+>  		       sp->sk_refcnt.refs.counter);
+> -	BPF_SEQ_PRINTF(seq, "%pK %lu %lu %u %u %d\n",
+> -		       tp,
+> +	BPF_SEQ_PRINTF(seq, "0 %lu %lu %u %u %d\n",
+>  		       jiffies_to_clock_t(icsk->icsk_rto),
+>  		       jiffies_to_clock_t(icsk->icsk_ack.ato),
+>  		       (icsk->icsk_ack.quick << 1) | inet_csk_in_pingpong_mode(icsk),
+> @@ -161,10 +160,10 @@ static int dump_tw_sock(struct seq_file *seq, struc=
+t tcp_timewait_sock *ttw,
+>  	BPF_SEQ_PRINTF(seq, "%4d: %08X:%04X %08X:%04X ",
+>  		       seq_num, src, srcp, dest, destp);
+> =20
+> -	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n=
+",
+> +	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
+>  		       tw->tw_substate, 0, 0,
+>  		       3, jiffies_delta_to_clock_t(delta), 0, 0, 0, 0,
+> -		       tw->tw_refcnt.refs.counter, tw);
+> +		       tw->tw_refcnt.refs.counter);
+> =20
+>  	return 0;
+>  }
+> @@ -185,9 +184,9 @@ static int dump_req_sock(struct seq_file *seq, struct=
+ tcp_request_sock *treq,
+>  		       seq_num, irsk->ir_loc_addr,
+>  		       irsk->ir_num, irsk->ir_rmt_addr,
+>  		       bpf_ntohs(irsk->ir_rmt_port));
+> -	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n=
+",
+> +	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
+>  		       TCP_SYN_RECV, 0, 0, 1, jiffies_to_clock_t(ttd),
+> -		       req->num_timeout, uid, 0, 0, 0, req);
+> +		       req->num_timeout, uid, 0, 0, 0);
+> =20
+>  	return 0;
+>  }
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_tcp6.c
+> index dbc7166aee91f..cd65fa81f1219 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c
+> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c
+> @@ -135,8 +135,7 @@ static int dump_tcp6_sock(struct seq_file *seq, struc=
+t tcp6_sock *tp,
+>  		       icsk->icsk_probes_out,
+>  		       sock_i_ino(sp),
+>  		       sp->sk_refcnt.refs.counter);
+> -	BPF_SEQ_PRINTF(seq, "%pK %lu %lu %u %u %d\n",
+> -		       tp,
+> +	BPF_SEQ_PRINTF(seq, "0 %lu %lu %u %u %d\n",
+>  		       jiffies_to_clock_t(icsk->icsk_rto),
+>  		       jiffies_to_clock_t(icsk->icsk_ack.ato),
+>  		       (icsk->icsk_ack.quick << 1) | inet_csk_in_pingpong_mode(icsk),
+> @@ -170,10 +169,10 @@ static int dump_tw_sock(struct seq_file *seq, struc=
+t tcp_timewait_sock *ttw,
+>  		       dest->s6_addr32[0], dest->s6_addr32[1],
+>  		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
+> =20
+> -	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n=
+",
+> +	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
+>  		       tw->tw_substate, 0, 0,
+>  		       3, jiffies_delta_to_clock_t(delta), 0, 0, 0, 0,
+> -		       tw->tw_refcnt.refs.counter, tw);
+> +		       tw->tw_refcnt.refs.counter);
+> =20
+>  	return 0;
+>  }
+> @@ -201,9 +200,9 @@ static int dump_req_sock(struct seq_file *seq, struct=
+ tcp_request_sock *treq,
+>  		       dest->s6_addr32[0], dest->s6_addr32[1],
+>  		       dest->s6_addr32[2], dest->s6_addr32[3],
+>  		       bpf_ntohs(irsk->ir_rmt_port));
+> -	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n=
+",
+> +	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
+>  		       TCP_SYN_RECV, 0, 0, 1, jiffies_to_clock_t(ttd),
+> -		       req->num_timeout, uid, 0, 0, 0, req);
+> +		       req->num_timeout, uid, 0, 0, 0);
+> =20
+>  	return 0;
+>  }
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_udp4.c
+> index 23b2aa2604de2..9b789f09f1462 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
+> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
+> @@ -57,13 +57,13 @@ int dump_udp4(struct bpf_iter__udp *ctx)
+>  	BPF_SEQ_PRINTF(seq, "%5d: %08X:%04X %08X:%04X ",
+>  		       ctx->bucket, src, srcp, dest, destp);
+> =20
+> -	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %pK =
+%u\n",
+> +	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %8d =
+%u\n",
+>  		       inet->sk.sk_state,
+>  		       inet->sk.sk_wmem_alloc.refs.counter - 1,
+>  		       rqueue,
+>  		       0, 0L, 0, ctx->uid, 0,
+>  		       sock_i_ino(&inet->sk),
+> -		       inet->sk.sk_refcnt.refs.counter, udp_sk,
+> +		       inet->sk.sk_refcnt.refs.counter, 0,
+>  		       udp_sk->drop_counters.drops0.counter +
+>  		       udp_sk->drop_counters.drops1.counter);
+> =20
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_udp6.c
+> index c48b05aa2a4b2..9766eff7069ff 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
+> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
+> @@ -65,13 +65,13 @@ int dump_udp6(struct bpf_iter__udp *ctx)
+>  		       dest->s6_addr32[0], dest->s6_addr32[1],
+>  		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
+> =20
+> -	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %pK =
+%u\n",
+> +	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %8d =
+%u\n",
+>  		       inet->sk.sk_state,
+>  		       inet->sk.sk_wmem_alloc.refs.counter - 1,
+>  		       rqueue,
+>  		       0, 0L, 0, ctx->uid, 0,
+>  		       sock_i_ino(&inet->sk),
+> -		       inet->sk.sk_refcnt.refs.counter, udp_sk,
+> +		       inet->sk.sk_refcnt.refs.counter, 0,
+>  		       udp_sk->drop_counters.drops0.counter +
+>  		       udp_sk->drop_counters.drops1.counter);
+>  	return 0;
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_unix.c
+> index a2652c8c3616f..36690478992f8 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
+> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
+> @@ -44,8 +44,7 @@ int dump_unix(struct bpf_iter__unix *ctx)
+>  	if (seq_num =3D=3D 0)
+>  		BPF_SEQ_PRINTF(seq, "Num               RefCount Protocol Flags    Type=
+ St    Inode Path\n");
+> =20
+> -	BPF_SEQ_PRINTF(seq, "%pK: %08X %08X %08X %04X %02X %8lu",
+> -		       unix_sk,
+> +	BPF_SEQ_PRINTF(seq, "%08u: %08X %08X %08X %04X %02X %8lu", 0,
+>  		       sk->sk_refcnt.refs.counter,
+>  		       0,
+>  		       sk->sk_state =3D=3D TCP_LISTEN ? __SO_ACCEPTCON : 0,
+> diff --git a/tools/testing/selftests/bpf/progs/test_snprintf.c b/tools/te=
+sting/selftests/bpf/progs/test_snprintf.c
+> index 8fda075440235..48a0025cf2ca8 100644
+> --- a/tools/testing/selftests/bpf/progs/test_snprintf.c
+> +++ b/tools/testing/selftests/bpf/progs/test_snprintf.c
+> @@ -57,8 +57,8 @@ int handler(const void *ctx)
+>  	sym_ret  =3D BPF_SNPRINTF(sym_out,  sizeof(sym_out), "%ps %pS %pB",
+>  				&schedule, &schedule, &schedule);
+>  	/* Kernel pointers */
+> -	addr_ret =3D BPF_SNPRINTF(addr_out, sizeof(addr_out), "%pK %px %p",
+> -				0, 0xFFFF00000ADD4E55, 0xFFFF00000ADD4E55);
+> +	addr_ret =3D BPF_SNPRINTF(addr_out, sizeof(addr_out), "%px %p",
+> +				0xFFFF00000ADD4E55, 0xFFFF00000ADD4E55);
+>  	/* Strings and single-byte character embedding */
+>  	str_ret  =3D BPF_SNPRINTF(str_out, sizeof(str_out), "%s % 9c %+2c %-3c =
+%04c %0c %+05s",
+>  				str1, 'a', 'b', 'c', 'd', 'e', longstr);
+
