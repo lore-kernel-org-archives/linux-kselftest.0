@@ -1,40 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987F0453A5D;
-	Mon, 14 Sep 2026 12:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D92635DA79;
+	Mon, 14 Sep 2026 12:10:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789387840; cv=none; b=lcUHObhF5ttCN4ZJVIH1djwGfuj317cUjb6LvpCkiCyXaNj0HbpQq7XvJa3HsWZ0HndUjiAdhtBgtWOVvLMa1fB3//nwmCDWmk5JpMaZX/LNzbLw1u+2kDRAEo8z35sFcy7+2cBQTg0EL1JhB8jB6zz/AzQOLCfzJm+d7QAMCPU=
+	t=1789387840; cv=none; b=BC/z+nf46Sf9tb86yiK3KH9Jr9tb+efqjYmrUN9d70Qdt9UKdzV6zR0pdVDfZuvoaa6ayF5GKGa9eOR3Atb/vmKecvXD+URpTd4lw373ebnJKYpR7aqeSwGjtjaMs7bTrFQ9zTAci6EK+MW0zDq3rwHj3dJSl/UpGdsWczbSBp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789387840; c=relaxed/simple;
-	bh=hIe5P8i/tRyknhr6WT2uL6WYgTAsFEi+rD40H4hTT7w=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=EWi8HWchbteOUHA0/1uoqY0PZGKDSbRdJCBM2nIKNpbou/+yIBt7JGpv1aZgObDlOdYEWby8p834Auj7+ajYHGlKcxR7DZD3Xqy8ylmNHZLVK40ZKiqcrHhk6A2GQp7EzwBVkIDy2Y2iUexaZ7hpDtmT+IFYT6kIbMdBCXff2vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=lcggmS9J; arc=none smtp.client-ip=82.195.75.108
+	bh=F1mp269SJrZ9Pvz2cWbJ0FKS4STF7zDk96eGRxgxnrY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=EDIF2m6CrXdrr1i+rnX5T8+uR+2b+3JY3P37gjCyzxKUFU4c/xK7qC9mpamMRQNeYUcsZL7mQHrr2N27IJLA1bkGQXE3zqtpau5Ykiib3FEel5cio069W+hZxhGKeGuJ0EcXZNtdhyt6FsiO7Ge/a4LucQvw3m54Jv/eRyi9jYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=tJ3Jkwnt; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="lcggmS9J"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="tJ3Jkwnt"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
-	Content-Description:In-Reply-To:References;
-	bh=lafXIwPAtxRGPpgqbQIXFiai7PzxNad67tNm4Ywy9ZE=; b=lcggmS9JOLMft+et9jDtyK/Oem
-	KMhrHIQFhiXuSwvQlM/Ze5DXM2tguQ4uNnTUVqpo5PECkO/ABvQXAspe0/neTcp9fqPqmpDMNKuIU
-	izXKmrlu1xnUIh+ffKlKkHoZzAdX3/sPmpjkTRQTKYklHcOrn7pbtPpUvrcIefTkqDh3zYPeXADxI
-	Z2ShobH9evzyf9KxHNh+4xXxEAWSldqOsjBP4FJnin2kSKyiBM9lPP/3JiDfHlc/mi1HiK+zNcx/i
-	yhE3MjayIBPpOcEb+DrFAUG3/FhyC6JQmH1NCS+Snm+//0gyDGLiWKMG3a4o099x3JpvTwwqID+Ac
-	UwqTMiBw==;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
+	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
+	From:Reply-To:Content-ID:Content-Description;
+	bh=mZu/Vs5nOQG7irnIZ5aI4mnkQoQp5lbpNJctZOHfslc=; b=tJ3JkwntiFYK6DWmvACoCteIuO
+	x0xBT1R1VCVqe6fAsFwr9S+Os9ReN4udNHvFJg/vefrRUNM1LzhRM4PnPeQC70jAi32HBcsScF5vV
+	8NloT92J4TgJh2/SrYQmUee+1HsIoBznAfuIC4OltQVUnSUPoAeYYQrbJgg47yoM9W2fUhCPzuqL9
+	DgbV38UpTgWzx5ZgakgFBVr8bZ2JO/fpXjD2eQeH8UtcGsDFkLlv5U/DpOlGSbun9RZ7f3CKf1tLW
+	sCuTbfHzktQOF4167gc4CB6FvpI9nYFPLn3iMfWyO8kDMtyo29IexqwBv9QZq0EnWD1ivXuownh+y
+	qsTUKKGg==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1x65W2-003bYk-29;
-	Mon, 14 Sep 2026 12:10:31 +0000
+	id 1x65W8-003bYq-0k;
+	Mon, 14 Sep 2026 12:10:36 +0000
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH net-next v3 0/5] netconsole: Support messages ratelimit-ing
-Date: Mon, 14 Sep 2026 05:09:50 -0700
-Message-Id: <20260914-netcons_ratelimit-v3-0-8e81b789ab37@debian.org>
+Date: Mon, 14 Sep 2026 05:09:51 -0700
+Subject: [PATCH net-next v3 1/5] netconsole: send the oops when oops_only
+ is set
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,11 +44,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAA/kp2oC/23N0QqDIBSA4VeRc51DbaV2tfcYY5Se6sBmQyUa0
- bsPYjAGXf/w/SskjIQJGrZCxJkSTQEaVhYM3NiGATl5aBgooWphpOYBs5tCusc244OelHmtbCf
- OrS5dpaFg8IrY07KbVwiYecAlw61gMFLKU3zvs1nu/euaA3eWXHDjKq+81NpYd/HYURtOUxx2b
- lY/wkpxRCguOHa98N5KVDX+Edu2fQD3rt/cAAEAAA==
-X-Change-ID: 20260817-netcons_ratelimit-629b04a73c57
+Message-Id: <20260914-netcons_ratelimit-v3-1-8e81b789ab37@debian.org>
+References: <20260914-netcons_ratelimit-v3-0-8e81b789ab37@debian.org>
+In-Reply-To: <20260914-netcons_ratelimit-v3-0-8e81b789ab37@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -59,106 +58,94 @@ Cc: Randy Dunlap <rdunlap@infradead.org>, paulmck@kernel.org,
  linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
  kernel-team@meta.com
 X-Mailer: b4 0.16-dev-f8e9d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3983; i=leitao@debian.org;
- h=from:subject:message-id; bh=hIe5P8i/tRyknhr6WT2uL6WYgTAsFEi+rD40H4hTT7w=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqp+QxmUihE6qU/1DYCWfqubAE+DMgbASq4jtL9
- Li+k3P6paiJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaqfkMQAKCRA1o5Of/Hh3
- beiAD/47/kNsSaTzGMe5T9Eb0HwazXLuBp6npC6yeYQXtTva30uAgtJ4GJVJgi/OVLhBK0AgrN/
- iP2QWGI9xcaD2TPWP0KXmXwVl6HOTkgkiCnsqTiANh/GSsiGXY4kEVg062sPqbihDDzqQPXvhNU
- gBE3VmXD0usNOQSgAz+2rRzJ6FRTS2ccWfJU9YWLghY+F+WX1wnz+/laAW3gvuO+oQwCvyYvUAh
- +nfcLj8GwfPYxwhsSrgu9n8fVflHfTFqGkbZpi9Wq9/gisGevpP0lAoZVSCEx2zsMJpLCta6A6H
- WK1dJPrsigjLbQx33goXkFFObGS6V2iGFkTuHhbRChqCEUJxN0oZxfrbTdAtBH15UK4TryZLaPK
- A+BIRoz70A1tT1KjvsHaED9/FHjFxYgBojSSRE3QCDd2t1m+ynj/Ek0dqjh+3weViyLXxUGxd4l
- GIrMciqlz8UX6X295vWuQ3Y3h7d96pdrFNmHvPyVz/QwThebnI9n8djpUzp4SCkfJgD1xLgjIOT
- ULWEtKLXqHQ9TaVjn1U+P+/ZyyolwVdn4z9GAixzLGFUqzGu46Xsu2McSQud4x17Z3LyTIQUiyZ
- YYxRVVVU5stRSdoQrkVTT8JJ7WllqrtnBjJoZSl/VTsxwrkdYK5UTeq1KukDbibHn0H38h0Cfkr
- yPy3hcBznUch7zg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2809; i=leitao@debian.org;
+ h=from:subject:message-id; bh=F1mp269SJrZ9Pvz2cWbJ0FKS4STF7zDk96eGRxgxnrY=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqp+Qxup9S5bWbD7lHUgfQFCPZDlDcmeyK7qufo
+ VdqUxbP86GJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaqfkMQAKCRA1o5Of/Hh3
+ bWq0D/wJBOePDkhusz+9f+T76E90flKTzGSNyRgmzJvCBCyYuQuBzRy2Nj1ErNZT8dItZlZBVUB
+ yJtEuiNm9GAdFHfLP2ghsTqrztMHV+Do1P+U8sKSHaM9Ir0cHvA2drhAZT8gcbXljnPNjR6P5HJ
+ N22QWIVS/FWKGNaPaGN4jh2YIp+q33WuYjhp0I980kU+wZuzkdnH1HL8PC66RkiZtztb545RVef
+ TLXEVMIWBPHM5RU/0CtSa7ygecQcG0Asu0FRxsIYx+PAHI/h5PS9Gwt0lWpSuSis2m2iok8aTMW
+ 5mYt0vBL2/el4Eu4nBKWUrgsFPX/ustMxhnbDBV8v4AEvoiM4d7YDuBLcTcHvhz8E3xzzo9PEyv
+ 9W+pn/wE47DBhI5ME6yxg5xfij35+G9yiZQX2gsQsZLe1l+fhUxXpjCvPfvPWrq/QcGI/2V2DtY
+ ytO/rh1iqHHC5/XP+0q74i+P9WZppO/wGCzSPAhLf7U3cVzJzzrRxNdf4CTZA0iJ/wE0gttdfRt
+ 9/iKNJboKGrQ9W1LnCs1qMxWiqzcOH3rHCqvkrcUP5LG1Fg+nuH5nyDEEA66hZb/T7uX5JMqNk+
+ Ixsw2Ab4gOBZ0X0JYVd60fpF8qmnWVh+f8I0suglZRMzwkjpMnijeG/+lywMcPhhJo2/Yp9VW5B
+ NO8M5dPj1atGVIA==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-netconsole hands every console message to every enabled target, with no
-bound on the rate.
+A target running with oops_only=1 receives nothing when the kernel
+oopses, which is the one thing the option exists for. Only a panic
+still gets through.
 
-At Meta, a few hosts caused some DoS and netconsd was OOM killed in
-some regions, fed by 3 billion RCU messages from thousand hosts and by
-a swap fault that retries forever, which logged 6 million copies of one
-line on a single host in a few hours.
+netconsole_write() bails out unless oops_in_progress is set, and that
+flag is already gone by the time netconsole runs. netconsole is
+CON_NBCON_ATOMIC_UNSAFE, so console_is_usable() keeps it out of the
+emergency flush an oops prints in, and the records only leave the box
+once the printer thread runs.
 
-Both floods are being fixed where they are printed, by Paul and me for RCU
-Tasks [1][2] and by me for the swap fault fix [3], but that only ever
-covers the flood already found, not new issues that might be happening.
+die() wakes that thread from oops_exit(), by which point
+bust_spinlocks(0) has cleared oops_in_progress again. TAINT_DIE is set
+in between, so test that as well, behind a helper.
 
-Use the ratelimit in the kernel to ratelimit messages from netconsole.
+With oops_only=1 on a netdevsim target, an lkdtm EXCEPTION produces 44
+lines of oops. The receiver gets none of them before this change and
+all of them after it, while ordinary messages stay suppressed.
 
-Give each target a token bucket, consulted once per message so that a
-message split into several ncfrag packets is sent whole or dropped
-whole.
+The taint never clears, so from the first oops on, an oops_only target
+sends everything instead of going quiet again. Sending the aftermath of
+a crash beats sending nothing.
 
-It starts with a zero interval, which struct ratelimit_state treats as
-unlimited, so nothing changes until ratelimit_interval_ms and
-ratelimit_burst are written.
-
-What the bucket discards leaves nothing on the wire. An extended target
-sees the loss as a gap in the sequence number the header carries:
-
-	7.2.0-rc7-01460-g75848acaf136,13,628,252392647,-;netconsole selftest: netcons_AGujw 1
-	7.2.0-rc7-01460-g75848acaf136,13,629,252392782,-;netconsole selftest: netcons_AGujw 2
-	7.2.0-rc7-01460-g75848acaf136,13,678,254742125,-;netconsole selftest: netcons_AGujw 1
-
-Crash output is exempt. The bucket is skipped once
-netconsole_kernel_dying() is true, which the first patch adds:
-oops_in_progress covers panic(), TAINT_DIE covers an oops or a BUG(),
-whose records only reach netconsole from the printer thread, after
-oops_end() cleared the flag.
-
-A target that has seen the kernel die stays unlimited until reboot.
-
-[1] https://lore.kernel.org/all/anw8Qw8lfeIykski@gmail.com/
-[2] https://lore.kernel.org/all/20260810-rcu_task_shrink_lruvec-v1-1-4d9f7d5251cb@debian.org/
-[3] https://lore.kernel.org/all/20260813-swap-v2-0-4a625ccabdae@debian.org/
-
+Fixes: 7eab73b18630 ("netconsole: convert to NBCON console infrastructure")
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Changes in v3:
-- New first patch, a fix that stands on its own: oops_only=1 receives
-  nothing on an oops today, because the backtrace reaches netconsole
-  from the printer thread, after oops_end() cleared oops_in_progress.
-  It tests TAINT_DIE too, behind netconsole_kernel_dying(), which the
-  bucket then reuses so that a limit cannot truncate a crash either.
-  (Sashiko)
-- Restart the interval when either knob is written. A target is
-  configured while it floods, with the bucket already empty, and the
-  new limit only applied one interval later. (Sashiko)
-- Reject an interval above INT_MAX ms. msecs_to_jiffies() saturates
-  below INT_MAX on 32-bit, so checking the jiffies value alone took a
-  write there that a 64-bit kernel turns down. (Sashiko)
-- List both files in the target parameter table, and qualify the rule
-  underneath it, which says that only a disabled target can be updated.
-  (Sashiko)
-- Link to v2: https://patch.msgid.link/20260910-netcons_ratelimit-v2-0-ebf0dd91e26e@debian.org
+ drivers/net/netconsole.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-Changes in v2:
-- Drop the patch that sent a "N messages dropped by rate limit" notice
-  to the target. (Gustavo Luiz Duarte).
-- Link to v1: https://patch.msgid.link/20260818-netcons_ratelimit-v1-0-8c5d2d17789c@debian.org
+diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+index b358e5c3673510..833da29717ed1d 100644
+--- a/drivers/net/netconsole.c
++++ b/drivers/net/netconsole.c
+@@ -83,7 +83,8 @@ MODULE_PARM_DESC(netconsole, " netconsole=[src-port]@[src-ip]/[dev],[tgt-port]@<
+ 
+ static bool oops_only;
+ module_param(oops_only, bool, 0600);
+-MODULE_PARM_DESC(oops_only, "Only log oops messages");
++MODULE_PARM_DESC(oops_only,
++		 "Only log oops messages, everything once the kernel died");
+ 
+ #define NETCONSOLE_PARAM_TARGET_PREFIX "cmdline"
+ 
+@@ -96,6 +97,17 @@ static int __init option_setup(char *opt)
+ __setup("netconsole=", option_setup);
+ #endif	/* MODULE */
+ 
++/* The kernel is dying, or has died.
++ *
++ * oops_in_progress only spans the printing of the crash. netconsole is
++ * CON_NBCON_ATOMIC_UNSAFE, so the records reach the target later, from the
++ * printer thread, with the flag already cleared. TAINT_DIE outlives it.
++ */
++static bool netconsole_kernel_dying(void)
++{
++	return oops_in_progress || test_taint(TAINT_DIE);
++}
++
+ /* Linked list of all configured targets */
+ static LIST_HEAD(target_list);
+ /* target_cleanup_list is used to track targets that need to be cleaned outside
+@@ -2474,7 +2486,7 @@ static void netconsole_write(struct nbcon_write_context *wctxt, bool extended)
+ {
+ 	struct netconsole_target *nt;
+ 
+-	if (oops_only && !oops_in_progress)
++	if (oops_only && !netconsole_kernel_dying())
+ 		return;
+ 
+ 	list_for_each_entry(nt, &target_list, list) {
 
----
-Breno Leitao (5):
-      netconsole: send the oops when oops_only is set
-      netconsole: add a per-target message rate limit
-      netconsole: allow configuring the rate limit interval through configfs
-      netconsole: allow configuring the rate limit burst through configfs
-      docs: netconsole: document rate limit feature
-
- Documentation/networking/netconsole.rst |  71 ++++++++++++++----
- drivers/net/netconsole.c                | 126 +++++++++++++++++++++++++++++++-
- 2 files changed, 181 insertions(+), 16 deletions(-)
----
-base-commit: c68a982815dcce5464e3bf2a31ac94f5146c04ca
-change-id: 20260817-netcons_ratelimit-629b04a73c57
-
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
+-- 
+2.53.0-Meta
 
