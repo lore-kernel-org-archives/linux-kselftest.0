@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627E547668C;
-	Mon, 14 Sep 2026 13:59:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC271475340;
+	Mon, 14 Sep 2026 14:01:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789394395; cv=none; b=YCuOhu8WuV4lEtSlHFmndqW+OovxXRvH8FokRmVPfYy37Yv6hr2WWTEobKEueEbOMMomCPgpGQitaqcFLkqeW4VGuOibRfQRepjrlplTgAmIylYzVCFyK7cvwfOlHOIxEYzzORnfktIHrG1xOx7YNJ7FvJwtQ8RD8r3szy6sShc=
+	t=1789394475; cv=none; b=JEoAwYHoIUTHTL5hIMkdg83AYls2b6PzasL31fYuRVTNALrPgYAnop/HvTCWQQMuki5iyVBN7BNz0mQDDGDE/y34V94hG3LNCZIudbKbDmtSPfLQC04uhoreKBSHlPs4GhjzVHwQ/HL9sM2djpXp04Hzvoijafs4z444e5sK4o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789394395; c=relaxed/simple;
-	bh=AYI74+LI+UWLIqrsS1ern4PSNNIFgnjswr39neDMf9c=;
+	s=arc-20240116; t=1789394475; c=relaxed/simple;
+	bh=928iikSY2FxtgsP0I5cGof9s3gWaYBuo0S4CPnEoGtQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GQ8gZ4Z482/VYLLtqBjtvWS8m5aJb1RTpxiPr00N2EQG8ti3ttUL6cMCbyMzJMui/pXkR5ked2Ypa364GSz57fasi6LMOnO6OBIb8WGTZvSXFDBDGe26CxY5x9ng4UYSUu1t5ha8vYOnaCjAVBq/U+6Fj2Ht4JlcMoXqbYVzxJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iINFG8IO; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=b1V7Qi6Z8M0S7wROt1e5Sd9ZrBD2vi532OdVBQB3gvVzNHRcAqHksv/xfK8VjtMkmTgRFbxxoyU+TOYg0VXosLfpcQDpXnKzpNXyBfTr4XAgTddWFX4IlkP9QB48vJI06CQrKGsHqOhj2lFuA+sqOH/HfdNRbj1PUytqHx++Qdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Inq1X2UO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iINFG8IO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE6BF1F000FF;
-	Mon, 14 Sep 2026 13:59:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Inq1X2UO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073C41F000FF;
+	Mon, 14 Sep 2026 14:01:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789394391;
-	bh=+PYFX9H0MkQu60EdSBrCrp/9ixn5ThWGWT8A6TrJ9xo=;
+	s=k20260515; t=1789394472;
+	bh=P/rpbFlDLr3/FaI9P7Zg1rDlT67APBG9Z4kueW2XMzo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=iINFG8IO7eWQH45Ih7otbKXDMJjCXcVkCZvZV6h4eBWHQHgx01x1kZ+JMQpUnfiNh
-	 4D0aEp97w9opqviUKNwUy1EM2vxCihp7GCPu3/PL+7UYOYqmeu0d+869TS/ZbTsGh4
-	 MZ0Z7xGt88jPPzPbFhanR//dWwDsbm6W3YYOqUXjyrTlNg5pUBS1nPIAuggWpss7jl
-	 0oeanG2cEJuUlwnrwSsKPrIyElxLDLw9x1L00eDBYqcxsNmANUFibFj1+w5WdGtdOS
-	 PfKXiAjk0QVVHX+yPUZr1MN8crf4UgwUSZOiZ+f7QsAC9XKapGC3F95qBHFVQytpm8
-	 25UUd1jMG0pFg==
-Message-ID: <5bc1eb42-2901-48ad-89a0-0cc4e8859bad@kernel.org>
-Date: Mon, 14 Sep 2026 15:59:39 +0200
+	b=Inq1X2UOe1dBhqTmIsSdhFCoEPP5h5w5NuyR1I1U6PjQPPOd2m6RFBkaNpDcjUbY2
+	 pqXWwyHqJqaCGHDSGNe9aFIHx1PIJVlhpQze9fMhh79oIEeMbKRCBxtPy+lCeCP15u
+	 AM19x+EJoBxioMpAH0c4frPKP8AFlyIVnzKkd74olaoF/m3+ki0PAgYpI/t85ulbX7
+	 DFOnIwsL38o7geYbyrF4iu4VIvqLttzbbjlb/lEXYCp77jTEDw/kw9zc34P4m0SwY6
+	 60BUGjq36GfUR3br292pkxd1YX4XGcbBY6xgGZeVkOJhXL08ayfMPFapMa6JuDPqBN
+	 T+XwUhJeW/MXg==
+Message-ID: <b88f4ec0-61a8-47b0-901a-d63db115936c@kernel.org>
+Date: Mon, 14 Sep 2026 16:01:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] kselftest: mm: rename read_pmd_pagesize() to
- pmd_psize()
+Subject: Re: [PATCH v3 3/3] kselftest: mm: introduce size_to_shift() helper
 To: Yeoreum Yun <yeoreum.yun@arm.com>, Lorenzo Stoakes <ljs@kernel.org>,
  "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
  Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
@@ -52,7 +51,7 @@ Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
  Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
  Sarthak Sharma <sarthak.sharma@arm.com>
 References: <20260914-fix_hpage_macro-v3-0-c9a305a01d39@arm.com>
- <20260914-fix_hpage_macro-v3-1-c9a305a01d39@arm.com>
+ <20260914-fix_hpage_macro-v3-3-c9a305a01d39@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -99,19 +98,38 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260914-fix_hpage_macro-v3-1-c9a305a01d39@arm.com>
+In-Reply-To: <20260914-fix_hpage_macro-v3-3-c9a305a01d39@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 9/14/26 09:30, Yeoreum Yun wrote:
-> For consistency with psize(), rename read_pmd_pagesize() to
-> pmd_psize(). There is no functional change.
+> Introduce size_to_shift() for future users that need to
+> obtain shift of a huge-page which is other than pmd_psize().
 > 
 > Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
 > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 > ---
+>  tools/testing/selftests/mm/vm_util.c | 10 +++++++++-
+>  tools/testing/selftests/mm/vm_util.h |  1 +
+>  2 files changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index fd1432dc6152..1fef1266429f 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -157,6 +157,14 @@ bool check_for_pattern(FILE *fp, const char *pattern, char *buf, size_t len)
+>  	return false;
+>  }
+>  
+> +uint64_t size_to_shift(uint64_t size)
+> +{
+> +	if (__builtin_popcountll(size) != 1)
+> +		return 0;
+> +
+> +	return ffsl(size) - 1;
+> +}
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Could likely just be an inline helper?
 
 -- 
 Cheers,
