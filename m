@@ -1,173 +1,154 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21190420E9D;
-	Mon, 14 Sep 2026 09:22:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE95941F375;
+	Mon, 14 Sep 2026 09:26:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789377748; cv=none; b=pSY8bQC3hIZ7HwGqQXmhfRFgyP6THmmITZxm6+G+pNs+YW8U09hD2IArc6a9Gpkz3SvQPf2VML6KRD8hrpBT6zR7BjnZ9XrCZrp0GeFyHXoliNaeD2gME5++5t173fFf9FQ66FlqX7hrxWmapH5CIRdbR/YZx4aMX0zDM6kE0lU=
+	t=1789378023; cv=none; b=aRcaXRixPLtBU5SlC4m/UcdfYz35MsDK5A5b2/jiOnFoB9l7JLSiQJm8ajB1d70ZUvBwh/hY9mN6uWKN3FA+5/4QXrwABRJxUsKbRfvQNfFHeFZFQIjb6eDyrM/N37t+LB7H7L5n2nDdRy5lunUhe/WLOv7hblJoxw25q7zInTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789377748; c=relaxed/simple;
-	bh=rmKTVutRr5r4ozn9rP4kxBeXsrYHk02+BBEkn8hwYcY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dGH+18d6Jy19zq56QlWVcN/SoqV04OQD7wkl7iz7jrMc5tSbkxx4/C18wziU2pkzzC1xo5TFNHvKautiQ4KGWYyEKkahUYXhAdw1urJu7XQoDTHxIafxejN21tysTOkLt4KcTsDCbFOvPyig+edx22dsNde9uG8GawT2Q47qxIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XgccO5fc; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Fg0eA/xU; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1789378023; c=relaxed/simple;
+	bh=ps2OuDZrxXJjM0qRGCt2VxBUZ2GkNMrAMVJaEuGI6Hk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Z4ng4dMUzG5lqJIAR+QmW5BmPgkTQuzp/MPlQoC102tQE2wcbXnIZC3bexj+tjChDNmeI8rLFsOOEQ+Y7/Lbp375KdlItN4GD6b9GOFzImZmqwq1s5tcDQskVHHFWfJ4MT6TMYKMf/4YyzhT0LSZWrM1vprMA3tCHsd34NISXEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=odbYtClV; arc=none smtp.client-ip=115.124.30.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XgccO5fc";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Fg0eA/xU"
-Date: Mon, 14 Sep 2026 11:22:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1789377745;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=05x4mMxTSx/33JYljcT44N9GMsyEVpbh4p1MGBKXnB8=;
-	b=XgccO5fcbM1qfJdaRULmKcwi/PQnHDT9T3k6q3/qQlrf64bSZtDtIziQr1yBUS4BQ6cLNR
-	dk+Ecj61qr0gu4M0HyWlB3ZXgrH3a53O7ZEeZJbpgsM+OGhwmRqUMk0osguxXJ1gkBxqIn
-	+cAgagvceZw1OBwesdBP5nnlTlPBU7P91E3/l12+AmlXePyfv73pC7OjurKWz2AcNEIQ+l
-	NNL5UamyjWbo/E4w3sT+rYBRktp+9kVxpufLq63XKPduBZztA4tLoUsl8u9CQWJXKZHuGw
-	NZ2ySvQFWdiTFlfSQF8EksJ0XJo8wED+hrIQ+cQZtUbBWqm6UxqMUd3FTpqgHg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1789377745;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=05x4mMxTSx/33JYljcT44N9GMsyEVpbh4p1MGBKXnB8=;
-	b=Fg0eA/xUKqk/ptXFS1KpDggPsHG6V+mKtkkqLWp9JOrv/715PtA/p6QJK5oZUewIgvlILg
-	x9xrZuZ8m6m8gOCA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, andrii@kernel.org,
-	eddyz87@gmail.com, ihor.solodrai@linux.dev, ast@kernel.org,
-	daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
-	emil@etsalapatis.com, shuah@kernel.org, martin.lau@kernel.org,
-	mason@kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Replace %pK output with 0
-Message-ID: <20260914092223.nZd-E_QE@linutronix.de>
-References: <20260911145011.kErTVDkS@linutronix.de>
- <d8f2687c7b00a0ce9f54fe1ba4ed7d461860dbbe33464a014b90913b0652aa95@mail.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="odbYtClV"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1789378013; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=P8sYn4OtnNWo+w2hJIg0kIU0ugjITLBiiIHDjl7eYks=;
+	b=odbYtClVXrsFIzs2aUvmmmGYlpcgatdh7tPjlLOBOup0YNl8bZDc4ApFuY/EPeb48izp8F4ccRv1fGqOHRFxs3nMHC82Ht8uMRR8EYU1iBJ/WiPxZ8N5tvxH5ZjiQ8bsClItuFOZsznJcLR03vR7r+dZVQscin1yZPZ/nDmnPo4=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0XAuO-lA_1789378009;
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XAuO-lA_1789378009 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 14 Sep 2026 17:26:51 +0800
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+To: palmer@dabbelt.com,
+	pjw@kernel.org,
+	aou@eecs.berkeley.edu
+Cc: alex@ghiti.fr,
+	linux-riscv@lists.infradead.org,
+	oleg@redhat.com,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mark.rutland@arm.com,
+	peterz@infradead.org,
+	mingo@redhat.com,
+	acme@kernel.org,
+	namhyung@kernel.org,
+	alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org,
+	irogers@google.com,
+	adrian.hunter@intel.com,
+	james.clark@linaro.org,
+	jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	shuah@kernel.org,
+	mpdesouza@suse.com,
+	oliver.yang@linux.alibaba.com,
+	zhuo.song@linux.alibaba.com,
+	xueshuai@linux.alibaba.com,
+	jkchen@linux.alibaba.com,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v6 0/7] riscv: Add reliable stack unwinding for livepatch
+Date: Mon, 14 Sep 2026 17:26:41 +0800
+Message-Id: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <d8f2687c7b00a0ce9f54fe1ba4ed7d461860dbbe33464a014b90913b0652aa95@mail.kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On 2026-09-11 15:41:45 [+0000], bot+bpf-ci@kernel.org wrote:
-> > diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
-> > index 07c834433b38..75ff1142c185 100644
-> > --- a/tools/testing/selftests/bpf/README.rst
-> > +++ b/tools/testing/selftests/bpf/README.rst
-> > @@ -187,7 +187,7 @@ The symptom for ``bpf_iter/netlink`` looks like
-> >    ...
-> >    15: (bf) r2 = r7
-> >    16: (0f) r2 += r1
-> > -  ; BPF_SEQ_PRINTF(seq, "%pK %-3d ", s, s->sk_protocol);
-> > +  ; BPF_SEQ_PRINTF(seq, "%p %-3d ", s, s->sk_protocol);
-> >    17: (7b) *(u64 *)(r7 +0) = r2
-> >    only read is supported
-> 
-> This excerpt is a historical clang-10 verifier log illustrating an old
-> failure case. The patch rewrites the quoted source to "%p %-3d ", but the
-> actual code now reads BPF_SEQ_PRINTF(seq, "0  %-3d ", s->sk_protocol) in
-> bpf_iter_netlink.c - the sock pointer argument is gone entirely.
-> 
-> Should the historical log remain untouched, or should it be updated to
-> reflect that the netlink iterator no longer passes a pointer to
-> BPF_SEQ_PRINTF?
+Hi,
 
-I would prefer to remove the K and the plain %p should provide the same
-historical input. Replacing it with 0 (and removing the argument) might
-no longer do the job. As of commit ce3267a39a92b ("kbuild: Bump minimum
-version of LLVM for building the kernel to 17.0.1") the minimum required
-version is way passed 10. I don't know if this also applies to BPF here
-(but why not?). If the required version is 17+, then there is probably
-no need to reference a fix for llvm which is included as 11+.
+This is v6 of the RISC-V reliable stack unwinding series for livepatch.
+Wang Han has left our team, so I am taking over this series from now on.
 
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/snprintf.c b/tools/testing/selftests/bpf/prog_tests/snprintf.c
-> > index 4e4a82d54f79..f2cd442c4683 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/snprintf.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/snprintf.c
-> > @@ -16,7 +16,7 @@
-> >  #define MIN_SYM_RET  sizeof(EXP_SYM_OUT)
-> >
-> >  /* The third specifier, %p, is a hashed pointer which changes on every reboot */
-> > -#define EXP_ADDR_OUT "0000000000000000 ffff00000add4e55 "
-> > +#define EXP_ADDR_OUT "ffff00000add4e55 "
-> >  #define EXP_ADDR_RET sizeof(EXP_ADDR_OUT "unknownhashedptr")
-> 
-> The comment says %p is the third specifier, but after removing %pK from
-> the BPF program (test_snprintf.c:59), %p is now the second specifier in
-> the format string "%px %p".
-> 
-> Should this comment be updated to say "The second specifier"?
+The series adds explicit frame-record metadata, preserves the frame
+pointer through dynamic ftrace, and replaces the open-coded stack walker
+with a conservative frame-pointer based unwinder. It then enables the
+RISC-V livepatch capability and adds the syscall-wrapper selftest prefix.
 
-Yeah, that makes sense.
+Changes since v5:
+* Rebase onto the current riscv/for-next; no functional changes.
+* Fold in the tags collected from the v5 thread:
+  - Reviewed-by: Shuai Xue on 2/7, 3/7, 4/7 and 6/7
+  - Acked-by: Miroslav Benes on 7/7
+* Add my sign-off as the new sender.
 
-> [ ... ]
-> 
-> > diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
-> > index a2652c8c3616..36690478992f 100644
-> > --- a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
-> > +++ b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
-> > @@ -44,8 +44,7 @@ int dump_unix(struct bpf_iter__unix *ctx)
-> >  	if (seq_num == 0)
-> >  		BPF_SEQ_PRINTF(seq, "Num               RefCount Protocol Flags    Type St    Inode Path\n");
-> >
-> > -	BPF_SEQ_PRINTF(seq, "%pK: %08X %08X %08X %04X %02X %8lu",
-> > -		       unix_sk,
-> > +	BPF_SEQ_PRINTF(seq, "%08u: %08X %08X %08X %04X %02X %8lu", 0,
-> >  		       sk->sk_refcnt.refs.counter,
-> >  		       0,
-> >  		       sk->sk_state == TCP_LISTEN ? __SO_ACCEPTCON : 0,
-> 
-> The header shows "Num               RefCount" (18 columns before RefCount).
-> The old format "%pK: " produced 18 columns (16 hex digits + ':' + ' '),
-> matching the header width.
-> 
-> The new format "%08u: " with argument 0 produces "00000000: " (10 columns),
-> so every column from RefCount onward is now shifted 8 characters left of
-> its header label.
-> 
-> Should the header be updated to match the new field width, similar to how
-> bpf_iter_netlink.c was adjusted from "sk               Eth" to "sk Eth"?
+Since the patches are otherwise identical to v5, the v5 validation
+results still apply. For reference, from the v5 cover letter:
+* Built Linux 7.2.0-rc6 with riscv64-unknown-linux-gnu-gcc 15.2.0
+  and binutils 2.46.
+* Standard livepatch configuration built successfully, including
+  Image, vmlinux, modules, compile_commands.json and GDB scripts.
+* CONFIG_IRQ_STACKS=n variant linked successfully with GCC.
+* QEMU 8.2.2, 1 CPU: livepatch selftests PASS: 7, SKIP: 1,
+  FAIL: 0; ftrace function graph 3 passed, 0 failed, 3 unsupported.
+* QEMU 8.2.2, 4 CPUs: livepatch selftests PASS: 7, SKIP: 1,
+  FAIL: 0; ftrace function graph 3 passed, 0 failed, 3 unsupported.
+* No BUG, WARNING, Oops, panic, unreliable stack or Call Trace found
+  by the validation log scans. Expected negative livepatch errors are
+  part of the selftests.
 
-Missed that. The net: version expected a 32bit pointer while the bpf one
-expects always a 64bit pointer. I tried to shrink the net one to
-something smaller but there was a selftest somewhere expecting the exact
-size so I just went with it.
+v5 was posted in early August and has been quiet since then. I would
+appreciate it if the series could be considered for the upcoming merge
+window. Happy to address any remaining feedback.
 
-Let me align everything with net then shrink this one including the
-description, too.
+Base:
+riscv/for-next 77ae27fd98f3 ("Merge tag 'printk-for-7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux")
 
-> Regarding the commit message:
-> 
-> > Networking recently replaced the socket output with a plain 0 because the
-> > socket pointer added no value to the output and the %pK should be removed
-> > fom library handling. The format remained otherwise unchanged in order not
-> > to break any tools which are parsing this information.
-> 
-> There's a typo: "fom library handling" should be "from library handling".
+Previous versions:
+v5: https://lore.kernel.org/r/20260804103626.2803112-1-wanghan@linux.alibaba.com
+v4 RESEND: https://lore.kernel.org/r/20260629072713.3273743-1-wanghan@linux.alibaba.com
+v3: https://lore.kernel.org/r/cover.194d76e3a15b.v3.riscv-livepatch.wanghan@linux.alibaba.com
+v2: https://lore.kernel.org/r/20260528082310.1994388-1-wanghan@linux.alibaba.com
+v1: https://lore.kernel.org/r/20260527123530.2593918-1-wanghan@linux.alibaba.com
 
-Thank you.
+Assisted-by: Qoder:Qwen-3.8-MAX-Preview
 
-> Also, the statement "The format remained otherwise unchanged" is
-> contradicted by the netlink header change from "sk               Eth Pid"
-> to "sk Eth Pid", and by the field width changes across all modified files
-> (varying from 1 to 10 columns vs the original 16-17 columns).
-> 
-> If maintaining format stability for parsers is the stated goal, should the
-> width-preserving spelling be used consistently?
+Wang Han (7):
+  riscv: stacktrace: Add frame record metadata
+  riscv: stacktrace: disable KASAN and KCOV instrumentation for
+    stacktrace.o
+  riscv: ftrace: always preserve s0 in dynamic ftrace register frame
+  riscv: stacktrace: introduce stack-bound tracking helpers
+  riscv: stacktrace: switch to frame-pointer based unwinder
+  riscv: Kconfig: enable HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH
+  selftests/livepatch: Add RISC-V syscall wrapper prefix
 
-"stability for parsers" means not to remove pointer and therefore a
-column so it will work for the human eye but the parse would expect a
-certain column. The padding here is just for the human eye and the
-parser does not care.
+ arch/riscv/Kconfig                            |   4 +
+ arch/riscv/include/asm/ptrace.h               |   9 +
+ arch/riscv/include/asm/stacktrace.h           |  67 ++-
+ arch/riscv/include/asm/stacktrace/common.h    | 159 +++++
+ arch/riscv/include/asm/stacktrace/frame.h     |  53 ++
+ arch/riscv/kernel/Makefile                    |   6 +
+ arch/riscv/kernel/asm-offsets.c               |   6 +
+ arch/riscv/kernel/entry.S                     |  39 +-
+ arch/riscv/kernel/ftrace.c                    |   6 +-
+ arch/riscv/kernel/head.S                      |  23 +
+ arch/riscv/kernel/mcount-dyn.S                |   4 -
+ arch/riscv/kernel/perf_callchain.c            |   2 +-
+ arch/riscv/kernel/process.c                   |  33 +-
+ arch/riscv/kernel/stacktrace.c                | 561 +++++++++++++++---
+ .../livepatch/test_modules/test_klp_syscall.c |   2 +
+ 15 files changed, 868 insertions(+), 106 deletions(-)
+ create mode 100644 arch/riscv/include/asm/stacktrace/common.h
+ create mode 100644 arch/riscv/include/asm/stacktrace/frame.h
 
-Sebastian
+base-commit: 77ae27fd98f3b9ab376239051ec7f9ee34c2c072
+-- 
+2.39.3
+
