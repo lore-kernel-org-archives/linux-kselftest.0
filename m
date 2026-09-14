@@ -1,273 +1,264 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F33B4718FA;
-	Mon, 14 Sep 2026 12:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789388874; cv=none; b=IdwHESI4ETDg4sqNqZPhOJ7HwZcFcVWWLYYtEsY5PGRxbM4AvTBHo+ZwEjxppotR4wNvZFCgf9c/yPvT6EInx+VB8ePWXyT3+o6028myMVf5hcefWUXxQ4m3rggI4UayJNcZTba73/gnXZm65bRTGVlCCil+RLSG3IDX2r16UmE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789388874; c=relaxed/simple;
-	bh=jWGri653x+FF39q+LmajuQGRo5SzD2ymgUKx4l9C5To=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qdIaXOXZRfsYNqeYNTULJXzwX+EZymTN2z5QN/z9r7uA9CEYXaO+0+UiMepKUnJOwgvTr7U3dcJehUejsADyu8PPI3xC+KsGWKsBICSi+2eTJ7f57GPj0+FRWTHbpzW+81CcwWg92gf7VtyDZcQHtb+M2/QKkHrbkDRaXg5R9tE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g4O+bSjA; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91FCF43A812;
+	Mon, 14 Sep 2026 12:33:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789389184; cv=fail; b=BCvRX1FtXPrm8sKu6oNc8xmw66c/wrV5y+u/fOqlOVNyz6e43QYjvpOmH6G5rX+ZpgRmASr5voy8jzs23lUDiaci+m+nYrBCVfG/kD8wfEX8NuYMp1XtAwtGqe4DuFetnDg5uqieSrAW2jyKKo6j6evaeb8zOmvN9CAYfJdP0wo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789389184; c=relaxed/simple;
+	bh=i4K3zjTrMuX4JmnLYywOYPZ/hHhPj1nEqD8SBNNAyAI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=KwpEAwL3CuzXpJp5yY73RVOn7CZ/zBX8M5PT34RdWHJrgSZ1f6Djy5LPYtBZIaw0LPokawgiiqgjY9FboXousSsg3XGRFmP+Q5XZPud089homkREvZvBrQUKp90VSwekgnxiFeWpVTWnMfzlolb6rjSU70RsQ6Jb/iQyPLRMgb0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=C6v+9TNN; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=bcEmHSAi; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g4O+bSjA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52A1A1F000FF;
-	Mon, 14 Sep 2026 12:27:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789388872;
-	bh=BMhGWlwfT+kVNUcgZl5xzinPFe97kBLDh0bd5vegWbI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=g4O+bSjAHjTi57+vAIDvU1ks+7o+rzYFjUbigrjCjg17nvqd1jGyDP1VtSVQxO4g3
-	 iWMBQ/i3EEkRBwXOaeDTT4pefcZnQGoIMQJPBfjuxa3ea1CV2gGJMmaOsQfyvpjeR8
-	 tUqDPxajomLAJnjey9V8wJyuV6Fpsf+U+ztKrhq+6lw83Ofn7SXsMCQ/frfrX2fL0+
-	 SmBdw/QW/JGG6P8p+Zyonz7EODdmwlI0Lx5lKL3/osgipOt0wQTOemgbQKWzU7Y8QB
-	 wxEkxH693Zdw0DzOvJ5KJAkDCk85esyYwPt4Dd0wnxYD5ibhmDjeZOd5ISUHHznqzY
-	 LtCKLs/QHj60w==
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Mon, 14 Sep 2026 13:26:24 +0100
-Subject: [PATCH v2 13/13] KVM: selftests: Add nested pre-fault test for
- arm64
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="C6v+9TNN";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="bcEmHSAi"
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68E0ZRvN268988;
+	Mon, 14 Sep 2026 12:32:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-id:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=i4K3zjTrMuX4JmnLYywOYPZ/hHhPj1nEqD8SBNNAyAI=; b=
+	C6v+9TNN+6ECememfeCU4KC4Z2QCRqCRapCuP1KiPjOs9GL7E84DMCrZT+QEGSA1
+	tiqL0J1HlaJknB780dGB4RbbqBb5Vo2sb+qpTQgGi2dE4m2JNw9rS8ADV1Zl0iGh
+	/cetNGUv8gCvYomvjthyW2EauWL2sTq2L46Iv4RdWx3lngDxOj+M8+Fdma70D+77
+	nE3l1wI7znkDWerIlElketxHgV9d7yWP3YiRMv0N901ehOp/Jcnuka3QrgVpNUPi
+	fNYZSP47QkrPM8RAvbmWOORlIV2zivkMJotZ4q9lm4FnN7OzQtA6WFm6ekXBgyuL
+	MrnPJXUTmQqluK2hBD4IUg==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gmway1t2u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 14 Sep 2026 12:32:43 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68ECUNGV031087;
+	Mon, 14 Sep 2026 12:32:42 GMT
+Received: from bl2pr02cu003.outbound.protection.outlook.com (mail-eastusazon11011025.outbound.protection.outlook.com [52.101.52.25])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gmw6muvrw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 14 Sep 2026 12:32:42 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=I7hE+ypX8qlXPgQidScbM9gdU6pJkHENtZYXTXD4j97IZil3kunAxvNjGyu7KmrZ2lvjAZaYmNNYRD8XeqBtXgpREHgUWVjbfDfcndWKn0iiZRIxzkaObsjwvn+FgPR4QWvTJNxXgMpCJOSHhp/T6sop1ICIovTwrYknWJB7vKfPnBVxAiCA4WKVhwDl89AkualY6MoMhkqXqoStdDlNUilcvIRBbL7BGrm66/6RcQlLBZUSKbSjtImfvw3VhiQZ3w3tUWnuGa13v0y11ZMJtGHJbFYB3dQtRUaTJlYPuvRK6SDl9tLt+14U6gaqPMjXlE84l8Nbb46kvgLXBvQCBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i4K3zjTrMuX4JmnLYywOYPZ/hHhPj1nEqD8SBNNAyAI=;
+ b=qoWE56koU4FE4uZr9LQz6FXn9IwJQv20cpBdberfathpD0ZcPb4qEoOiRibUN8bpuT0d8O3VBnw2l6IgUt6kahUeHFUVLFB7bg7N4OmI6r/6o9lNnpNeul/jyNGBajuqIZcAbE3UARmmW48QE6e7HgJtcWCMlwo/SjOCPEV3n6a8jX7NirS4VA6Gb4keFNrAvZEv3o75GaOOHF/nBLu3V9Xtxnwb2TU0qp9j5PlwohDAmoKTGnMZ6eKNTQFpXPGZeXTCMMWMHUaVkxh4ImFL+65uwM3X63gXe9jxHuFof+/ZMlvJHUWhDplLgQfqujX02MvZ4LBL9rgNuG38hDmZtw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i4K3zjTrMuX4JmnLYywOYPZ/hHhPj1nEqD8SBNNAyAI=;
+ b=bcEmHSAisa2DRhCPLqATbZ1HVLrhgYuzeHij14SU1xELaSqFNpbqHWAroNNiPbhtjEul3rNtlz5Ow7s2hP9aKR15+DUOY9ToadppMCsIEHW2s2pWm9HAYSgr5S/du/saJzXqofMIe7bF21XOjbjLSW5Iqwr1Oceu/+/S4CJt6n4=
+Received: from CY8PR10MB6659.namprd10.prod.outlook.com (2603:10b6:930:53::5)
+ by CH3PR10MB6764.namprd10.prod.outlook.com (2603:10b6:610:144::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.8; Mon, 14 Sep
+ 2026 12:32:40 +0000
+Received: from CY8PR10MB6659.namprd10.prod.outlook.com
+ ([fe80::a09f:da4d:e03b:582a]) by CY8PR10MB6659.namprd10.prod.outlook.com
+ ([fe80::a09f:da4d:e03b:582a%6]) with mapi id 15.21.0428.004; Mon, 14 Sep 2026
+ 12:32:39 +0000
+From: Haakon Bugge <haakon.bugge@oracle.com>
+To: David Laight <david.laight.linux@gmail.com>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Peter
+ Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon
+	<will@kernel.org>, Boqun Feng <boqun@kernel.org>,
+        Waiman Long
+	<longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan
+	<shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>,
+        John Stultz <jstultz@google.com>
+Subject: Re: [PATCH 1/1] kernel/locking: Add mutual exclusion self-test
+Thread-Topic: [PATCH 1/1] kernel/locking: Add mutual exclusion self-test
+Thread-Index: AQHdLkjXOr5CvJFeb06L+v9F7yCyjLbN/EOAgAAxYAA=
+Date: Mon, 14 Sep 2026 12:32:39 +0000
+Message-ID: <6546A220-4B85-4780-8B45-F8B35D24139C@oracle.com>
+References: <20260817130239.343594-1-haakon.bugge@oracle.com>
+ <20260817130239.343594-2-haakon.bugge@oracle.com>
+ <20260914103545.3db6eb45@pumpkin>
+In-Reply-To: <20260914103545.3db6eb45@pumpkin>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-mailer: Apple Mail (2.3864.700.51.1.1)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY8PR10MB6659:EE_|CH3PR10MB6764:EE_
+x-ms-office365-filtering-correlation-id: 7a26da82-9eb1-4159-c564-08df125c43b4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|376014|366016|23010399003|1800799024|38070700021|6133799003|3023799007|10067099003|4143699003|56012099006|18002099003|22082099003;
+x-microsoft-antispam-message-info:
+ Fqx35pvdIreGSS1ml5z9wYSelG6Ot75M9XkcOHx8JSv21XavdaMzrb3fVaqfX4SM6zcLuy3A3rFCYJ/m1BUhYuWU1vlD2wbOm7etgUdWAeleMO0ucoZ5MWUF33FFD3wc4WPnyxZqaacQ7bGvfgL59/yf+6KS1n9P/Dyz9/hVHzf+KAuvdCI5RsvRAJdB0+G8G7VoQ6uZMZTstCa7S2mnEahfR0p3fAnDgO4ShUeBX3IJtCDUrNgeAPxNqaTIurjibIdddk6TwEfzlL+hrN0EbAc+rI0aQ+5Zy6D8/d861bjXJw3tp3O46jdFig6rkt3DAa0Xd6zKskpkYke8kZOOlc16Vw+WXSaD1eWUDihkyddCNDSqvkMUXdi0NmzaqRQkPH0HNP6N3+g7tt/b2C1FftfCCNBiSY4077V9gMuksg7XLVfhjjGV+oqbwE2IyCrz4n5bbJhuBC6sf9Bb9UpFHyw/eKQQNdeIS2tbqvhWIigz1Jw1RN4f/q3W48w5I/Aa+gUQM9j/u6PelhHcBsAtKdirriY5RQ3Wh0kAL2NiCu683Cpi0AlxqCqmKGSO6fLU/rtvcK6uFBvq2C220NRYhmaM+wj4rC36uJ5N7xfippvq633VHClwkmHRvWZ+Wp+Myp5PgxeIlzv4HmPXyFDMxGBENtVnuf91CUVnvh6g1Yxo7b2D7HqydS8f/uU43PppN51OuMUruRE+LV/kk/J/BjEzVssO1CDo4bpwYG1iBmw=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR10MB6659.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(23010399003)(1800799024)(38070700021)(6133799003)(3023799007)(10067099003)(4143699003)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?cWFOL1pnTkxaelFoa2g2YnV3L0w0SkhCTXBiN1NQL2pleHJMajBiOHNpOVBT?=
+ =?utf-8?B?L0NlSWRGMUptWmVJQjR3ZE5WenpXblVOWEdUdGc2VjZvejZSOVJ5cU4zc3kw?=
+ =?utf-8?B?OERUSXJXZUZrNGlwN0RMWnhXeWk3MmFtRmpCb2tMWlFTdEE5dEhSdlJvT0cv?=
+ =?utf-8?B?V2p3Sm4xYTFYM0FyS2VpOVFtTVNBRFVUdGhJRi9jQkhKS1pGaVZNMk5kRzU0?=
+ =?utf-8?B?YmpDa0lOVTNuRXB5blR2RmZmS3hOU0xyTU0wYkYzNDNXMHZKNkxOZHB2V0Yx?=
+ =?utf-8?B?R2dTclQxdnhQYlVJMzZGdGpZMkw1ZThUZldoZUJUOGlGYjJZZHIwMVhWOEpI?=
+ =?utf-8?B?VVJuZkFoWkphVzVNQ0IzVVdHTDFiVG1wRks5MzgxbmRuVWtmWGlOVmswV0hN?=
+ =?utf-8?B?WThKZkdKT3FKM1Jia3RLdk8zQUVqY0hlK1h5T0JucFI5aXlHU3ljVmhIeU0z?=
+ =?utf-8?B?UFRac0lSQU5hU0h3SXA2clFzREl0TVpCWTJSWEZwVldIaVJIWFQ0QkpFL080?=
+ =?utf-8?B?SFFWb0x3M1N2Q2VoT2w0aHB1NlNtSWlmNk8yZUR1OHhPNGoyWUkvR0lOSDZS?=
+ =?utf-8?B?QWp1czQ5RVZmY0xXdkgreUdNVFFybmx0azlLRmNLVW5iMDl0aDBBNU0raTg4?=
+ =?utf-8?B?czd4d2JvcDlqV2twUEZJL0duY05rcEpjbXE4ZzBKU2twMHlKcU12c1VSK3cv?=
+ =?utf-8?B?ZysrejFkYnEzNzBlNlUxM3hwQjhzMUZXZUp4Q3hHa1pSZE5TaFhsdDNlRC9m?=
+ =?utf-8?B?ME1xQmNRYTJRSllDWFlkQzlBMHp2cFEwZmFHSk5iaGY5L2FFMGdHeGt1ekla?=
+ =?utf-8?B?SEFxS09qT1FMY3loTFhjTCtkV0hRdWZqR1psNThWd3ZHYlFGY2doNkFBbGVp?=
+ =?utf-8?B?VXBZVi9xUXFKQVpIRENjQnA3OUMxSDlLRDZMYzlJbXhIVjhjTGxBTlpsbjJM?=
+ =?utf-8?B?dnR2cmRReGpwMEFuaXBWSHJMVG50WmxYVDVJSFZGWHBxV0xlZ1V3dDZ2a1lK?=
+ =?utf-8?B?aFQwRk9vdTVXL0F2TDRsQlo4OEo0S216TGVpR210RHRsdVhUdEFjM1RydFcw?=
+ =?utf-8?B?SWgzYnZnSmx5eUVrKzdlN0oweTQxZEJqc0YzWVhDT29lWmhHQ0pIUk51b1pw?=
+ =?utf-8?B?UWN6cVgwQkJvdXVLSXluUGRya2s4NHAxNWpNcVM3SEtUV1BsL0FxamlZWTMv?=
+ =?utf-8?B?Rmh4K0s0ckRhelpqU0Nhc0c2OVRJMWwza1ByU3FSeVgyL1RHNUZZN3JTdEE1?=
+ =?utf-8?B?UzdYQWVhZ3RwRGdpSkNqdlJDbUF3Zm9uRWx6TUFGVEFVdUtnUW54cVV1U0lG?=
+ =?utf-8?B?amtWM3NvdUVBcGVrQnp6UThWQjRVckJicmdYQ3A4VTZ4bHQrRXUxeE9UbHZX?=
+ =?utf-8?B?UEo5ZkM3MmVLaGp0S2RzV2JzaVpLVENObDJOWm9lSytMZlpVTWNLeVhubE83?=
+ =?utf-8?B?eU1zZzJvNTBYZUU2eDdXczNmNjFidmlzaURPNDltbEpPWG4xYi9BSm15UlRT?=
+ =?utf-8?B?ZGdsWTNFRE42MlZSamZibFpnUm96bURZblUxS200SDdXRUdyYUxwU1Nlc1hJ?=
+ =?utf-8?B?OXF3clowR0Q2eWVmM1diMlBsUUQrd1N1MUFkSmhacHNpRWxwTzVFbTZBYXow?=
+ =?utf-8?B?NjZvblAyUnVCaERpNDAyNkF6QUZGS1EzWU1GeHhHRjk4eDZRSGFudmV4Sm51?=
+ =?utf-8?B?bTQyaTBmdDR0NUFYSDlId0pHYUtlNDNqblQrWldqc3RYcDN5dGZkMUpwMlN2?=
+ =?utf-8?B?U3hobjZSa2tZM2tocTl3UkgwdjhEaFdQNXR2aWMzdXJTSXVjTE4wYy9kMnl4?=
+ =?utf-8?B?dFd6VzNOK3hEYkoxVzNaMEYydTVsVkEyZ0JaZ09WTm8vWm5uRmExVkt6L1ND?=
+ =?utf-8?B?ZkhpNFRwRnFNSnpNY2pNVGpmZmxkK1dZVkJvRWNaU25lUTZrOUJZS1VKNlgy?=
+ =?utf-8?B?bzkzMmlGRXRQbXNnWmIvWDFXTCs2ZkJNbXRFNVo2ejRTNDVtWjlab2k1c3Zq?=
+ =?utf-8?B?TGZTU2ZrSXBnZEQrRXlueE1ld2lwcDlPejZpWHVFY0MyaEtBdWpGNHdxRGRZ?=
+ =?utf-8?B?UFd6OWw5WmIzT1NaSFBDVGRCUE5UeEJnNWVkSVltU2oyU3VFTElmRldKdFBH?=
+ =?utf-8?B?eWVZMm9uaWdRYVBHNU9hWFlPNHdtSGkrQzY1YkQvVXZJdVE5YTlJb29TNEZS?=
+ =?utf-8?B?TE9rWU4vdk9qWk9wV1lRK25XaUx3SGNiOU4xVkJKY0hWaldKckhrSjRKUFJw?=
+ =?utf-8?B?bnJ4eUU5b3VEN0wxNG96ZHhMU0ZQY0srZzR5TWZ6OFhoTnBOT1dBYlhHT3ZZ?=
+ =?utf-8?B?UEtzbWJ1VHU1dnkzU1lHTlg3NVMvQng1WFQxTlQ5ay96clAxc2t1WWNVWS9P?=
+ =?utf-8?Q?8kgkELS0rRY81dUo=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C0E10E19CB1A904BB858F6376E9B2029@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260914-kvm-arm-prefault-v2-13-26fb47f74b73@kernel.org>
-References: <20260914-kvm-arm-prefault-v2-0-26fb47f74b73@kernel.org>
-In-Reply-To: <20260914-kvm-arm-prefault-v2-0-26fb47f74b73@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
- Oliver Upton <oupton@kernel.org>, Fuad Tabba <tabba@google.com>, 
- Joey Gouly <joey.gouly@arm.com>, Steffen Eiden <seiden@linux.ibm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, 
- Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
- Jonathan Corbet <corbet@lwn.net>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Jack Thomson <jackabt@amazon.com>, 
- Jack Thomson <jackabt.amazon@gmail.com>, 
- Alexandru Elisei <alexandru.elisei@arm.com>, 
- Vincent Donnefort <vdonnefort@google.com>, 
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
- Sean Christopherson <seanjc@google.com>, 
- Claudio Imbrenda <imbrenda@linux.ibm.com>, 
- Leo Soares Passos <Leo.Bras@arm.com>, 
- "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6315; i=ljs@kernel.org;
- h=from:subject:message-id; bh=jWGri653x+FF39q+LmajuQGRo5SzD2ymgUKx4l9C5To=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLKWP//mfv35lTUVKdURlyISHZeIll25YXRhSnPj4e5+H
- uO0nmuqHaUsDGJcDLJiiizPv4jvDxIJm9d5wd8NZg4rE8gQBi5OAZhI1FGG//WhzxW2LovbErLl
- ys3M9UGqNv9q1Q+vrde4Liadd7zihRcjw+1iy8RZ/ke3f/TeuUtLKGVVP2PvgelHFezK/zK9qHx
- 3mgMA
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
+X-Exchange-RoutingPolicyChecked:
+	zPT1Aqw0jXycU2C1CIRXg/o125bcZtOjUJUk03a2Se9jhiD+RdPs46dqVkY+GNkN0IaaPMYFgq5GSce6u2aXEvNGgQpBTICEGsgWomXB2jOv8mN3ZAsf/jh0WWhx/bXq2qfqGGhNVaTurLyCxflp2ZpqoLL1YOUppq4UtteAjWqIAMG9nBLCh1msPUV8MAx+ZA3hUqet68RiQZeQzUxIp+U2J+jdvZ1tg34OehYjIvDkojMdDK8Lz6tmmlLNJTIBiX2rc5uUfyJqRmHCfsnzLxUkt+zKjac3h+vE8jREelU0w/rJn/Ns4vVY/BOJRZRm+XiZpHmfaQpwEBbTDaTQgA==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	y8FZIZDrMFdgorcSFVlH75A2tlaiOcaCUX38l45siPwstRAyaejOZ4fvF8eTr18pIQEeB+VkjH4N2kL+R+B9xPxvqgM3obgiGAFR0G1RgtaHUflCdX3Xq4RlsujeKkqQjhu8aKdGHfJRgk9P/oeiQB9m0lSk8xaBJYbx3hgEgEfeRJAs8DPexf9PF7RihMTVosqeOmTkW4gIADd9uTesuWYd2TC4jIYtZByEjoNhNFAVq4JTvVhaMrxnBZP+z7Z/9e3JGSLG1j2/n+oTpsb/wGkI6NDBE3+S+KpsFbRLFQq68S6r9Qd1sdAmURvLYJmMihqE0DRxYHJvOIij5O00oPmwFjMdVzpz41LMyen9t33NJ6F9jydk0F5SKBKR4Q7TIKleb3u1ioNTF0WQQW/704yWiIoWX6Vg6AoGPXqUmR3yX9Zq5ppczRFfZ622Fqu8BMhXrnU5Met944xfSXi06jZ7W/RFQt3hu3tsopn8uw8pxTphWC+nToZV8+DKilzxkk+42klbur5mhv3XrlH0LsxXhVe66Pvjf7EwEmZWH0EuSMkbL58vA+dh5rQTANKqYsztI6oo1D4Caz2pn/vmPWcY2dayIgjBFje1vO04hHY=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR10MB6659.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a26da82-9eb1-4159-c564-08df125c43b4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Sep 2026 12:32:39.1820
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Sspczoh9c9Hv8CQ62ryaJi0MgvQbELARMlTZPmpk9twsJzAhtNV2sgvxT0n4ImiMCbyD6FQRbS4aKMnJboJ/Yw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB6764
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-14_03,2026-09-13_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0
+ lowpriorityscore=0 phishscore=0 adultscore=0 suspectscore=0 bulkscore=0
+ malwarescore=0 spamscore=0 mlxscore=0 mlxlogscore=999 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2609040000
+ definitions=main-2609140178
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE0MDE3OSBTYWx0ZWRfX+WIoQ8whlnB/
+ jAkyPPoVJOaiTpKq1QwnvpSXnqGlEfyt4Ib1smAH8IJAZNAFsMfOtaVvTDraIh/UypiiHlbMMFD
+ OOXr0gbpxVUH6jKfYR+s3VsETsqXnS5+llb80k+xjuS8SDwimk2N
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE0MDE3OSBTYWx0ZWRfX0bc3zzHr08c0
+ jZlmPTipC2DkDAlg/fygWcnUI5AncJ0MDtFPqSJcfTxfk4nG4cz/nTGg8hhNBKA8D9lVq3M0jMn
+ 0uVegMjdCT4vQoDcnVka5dt0936rFZYxLj1fQU4xy3tr8RX2/zynlIEZxK9eEvz/FR0SXE682B8
+ +JxoEAbLQBH3g7xoS7RY8NEXgQBktmWe0cfX/DUlwrkYGklIACKcHA3WUFk5me00b8ayoZbAjAU
+ uWrWynkUB0xXH6mdxN7R6OMh8jHZ5BqNhmbx+y48vogiebciFqIwL3nVE3yDb0UqaOmZE56I7q+
+ 1AgkbnLXj+DEg11iFKfIEIKeKT+S3zgSUmB7ErNRQMneQINGxhM5AhCEqzwRtPGeCM7FZXPTmCl
+ HRG4XuF8DPWHbJdbE3u6daW3ytqHRHhhLbTUbPVOFgfYFmtNUurAr/s4oQOJQGdfbq2rSWD7l7l
+ MzNGcfKbm61m/p3kVvqINaBf23AjvPymUfRTtuSk=
+X-Proofpoint-GUID: mYxTKoJmA3Ic4baiV-sao4Dr-ZIMq_PE
+X-Authority-Analysis: v=2.4 cv=GIadgeNK c=1 sm=1 tr=0 ts=6aa7e96c b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
+ a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=GoEa3M9JfhUA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22 a=RD47p0oAkeU5bO7t-o6f:22
+ a=pGLkceISAAAA:8 a=yPCof4ZbAAAA:8 a=6Gn_LzqnzLPgVX-r_u0A:9 a=QEXdDO2ut3YA:10
+ a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12106
+X-Proofpoint-ORIG-GUID: mYxTKoJmA3Ic4baiV-sao4Dr-ZIMq_PE
 
-Add an arm64 nested-virtualisation selftest for KVM_PRE_FAULT_MEMORY.
-
-The guest enters vEL2, sets up its EL2 translation configuration into the
-real EL1 registers then ERETs to vEL1 and exits to userspace so its vCPU
-last-run context is nested backed by a shadow stage 2 MMU.
-
-The test then asserts that pre-faulting ignores that and instead targets
-the canonical stage 2 page tables only.
-
-Userspace cannot observe a mistargeted pre-fault, so simply assert that the
-pre-faulting works correctly when the last-run context was nested.
-
-Based on a patch by Jack Thomson with gratitude. The test here is
-simplified and focused on what can be asserted.
-
-Link: https://lore.kernel.org/kvmarm/20260612162354.73378-6-jackabt.amazon@gmail.com/
-Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
----
- tools/testing/selftests/kvm/Makefile.kvm           |   1 +
- .../selftests/kvm/arm64/nv_pre_fault_memory_test.c | 158 +++++++++++++++++++++
- 2 files changed, 159 insertions(+)
-
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 66a9a4e62888..1e0edd0f99f7 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -173,6 +173,7 @@ TEST_GEN_PROGS_arm64 += arm64/debug-exceptions
- TEST_GEN_PROGS_arm64 += arm64/hello_el2
- TEST_GEN_PROGS_arm64 += arm64/host_sve
- TEST_GEN_PROGS_arm64 += arm64/hypercalls
-+TEST_GEN_PROGS_arm64 += arm64/nv_pre_fault_memory_test
- TEST_GEN_PROGS_arm64 += arm64/external_aborts
- TEST_GEN_PROGS_arm64 += arm64/mmio_sign_ext
- TEST_GEN_PROGS_arm64 += arm64/page_fault_test
-diff --git a/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c b/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
-new file mode 100644
-index 000000000000..09c1db303856
---- /dev/null
-+++ b/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
-@@ -0,0 +1,158 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * nv_pre_fault_memory_test - Test KVM_PRE_FAULT_MEMORY on a vCPU whose
-+ * last-run context is nested.
-+ *
-+ * The guest enters vEL2, sets up its EL2 translation configuration into the
-+ * real EL1 registers then ERETs to vEL1 and exits to userspace so its vCPU
-+ * last-run context is nested backed by a shadow stage 2 MMU.
-+ *
-+ * Assert that pre-faulting ignores that and targets the canonical stage-2
-+ * page tables only.
-+ */
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "test_util.h"
-+#include "ucall.h"
-+
-+#include <asm/sysreg.h>
-+#include <linux/sizes.h>
-+
-+#define TEST_MEM_SLOT		10
-+#define TEST_MEM_SIZE		SZ_2M
-+#define TEST_MEM_GPA		SZ_1G
-+
-+static void guest_el1_code(void)
-+{
-+	u64 offset;
-+
-+	GUEST_ASSERT_EQ(get_current_el(), 1);
-+
-+	/* Exit to userspace with the vEL1 (nested) context live. */
-+	GUEST_SYNC(1);
-+
-+	/*
-+	 * Touch the prefaulted range. vstage-2 is disabled, so the shadow
-+	 * stage-2 is a 1:1 view of the canonical IPA space.
-+	 */
-+	for (offset = 0; offset < TEST_MEM_SIZE; offset += SZ_4K)
-+		READ_ONCE(*(u64 *)(TEST_MEM_GPA + offset));
-+
-+	GUEST_DONE();
-+}
-+
-+static void guest_code(void)
-+{
-+	u64 sp;
-+
-+	GUEST_ASSERT_EQ(get_current_el(), 2);
-+
-+	/*
-+	 * Mirror the EL2 translation regime into the real EL1 registers so
-+	 * that vEL1 runs on the test's stage-1 page tables. With E2H=1, the
-+	 * _EL1 accessors read the EL2 registers, and the _EL12 accessors
-+	 * write the real EL1 registers.
-+	 */
-+	write_sysreg_s(read_sysreg(sctlr_el1), SYS_SCTLR_EL12);
-+	write_sysreg_s(read_sysreg(tcr_el1), SYS_TCR_EL12);
-+	write_sysreg_s(read_sysreg(ttbr0_el1), SYS_TTBR0_EL12);
-+	write_sysreg_s(read_sysreg(mair_el1), SYS_MAIR_EL12);
-+	write_sysreg_s(read_sysreg(cpacr_el1), SYS_CPACR_EL12);
-+
-+	/* Run vEL1 on the same stack. */
-+	asm volatile("mov %0, sp" : "=r"(sp));
-+	write_sysreg(sp, sp_el1);
-+
-+	/*
-+	 * Drop TGE so that vEL1 is a nested context rather than host EL0.
-+	 * KVM backs it with a shadow stage-2 MMU even though vstage-2 is
-+	 * disabled (HCR_EL2.VM=0).
-+	 */
-+	write_sysreg(read_sysreg(hcr_el2) & ~HCR_EL2_TGE, hcr_el2);
-+	isb();
-+
-+	write_sysreg(PSR_MODE_EL1h | PSR_F_BIT | PSR_I_BIT | PSR_A_BIT |
-+		     PSR_D_BIT, spsr_el2);
-+	write_sysreg((u64)guest_el1_code, elr_el2);
-+	asm volatile("eret");
-+
-+	GUEST_ASSERT(false);
-+}
-+
-+static void pre_fault(struct kvm_vcpu *vcpu, u64 gpa, u64 size)
-+{
-+	struct kvm_pre_fault_memory range = {
-+		.gpa = gpa,
-+		.size = size,
-+	};
-+	int ret;
-+
-+	do {
-+		ret = __vcpu_ioctl(vcpu, KVM_PRE_FAULT_MEMORY, &range);
-+	} while ((!ret && range.size) ||
-+		 (ret < 0 && (errno == EINTR || errno == EAGAIN)));
-+
-+	TEST_ASSERT(!ret, "KVM_PRE_FAULT_MEMORY failed, ret: %d errno: %d",
-+		    ret, errno);
-+	TEST_ASSERT_EQ(range.size, 0);
-+}
-+
-+int main(void)
-+{
-+	struct kvm_vcpu_init init;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	struct ucall uc;
-+	u64 npages;
-+
-+	TEST_REQUIRE(test_supports_el2());
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_PRE_FAULT_MEMORY));
-+
-+	vm = vm_create(1);
-+
-+	kvm_get_default_vcpu_target(vm, &init);
-+	init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
-+	vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
-+	kvm_arch_vm_finalize_vcpus(vm);
-+
-+	npages = TEST_MEM_SIZE / vm->page_size;
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, TEST_MEM_GPA,
-+				    TEST_MEM_SLOT, npages, 0);
-+	virt_map(vm, TEST_MEM_GPA, TEST_MEM_GPA, npages);
-+
-+	/* Run the guest until it has ERET'd from vEL2 to vEL1. */
-+	vcpu_run(vcpu);
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_SYNC:
-+		TEST_ASSERT_EQ(uc.args[1], 1);
-+		break;
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+		break;
-+	default:
-+		TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
-+	}
-+
-+	/*
-+	 * The vCPU's last-run context is vEL1, so its hw_mmu is a shadow
-+	 * stage-2 MMU.
-+	 *
-+	 * Pre-faulting must ignore that and populate the canonical stage-2.
-+	 */
-+	pre_fault(vcpu, TEST_MEM_GPA, TEST_MEM_SIZE);
-+
-+	/* Resume at vEL1 and touch the prefaulted range. */
-+	vcpu_run(vcpu);
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_DONE:
-+		break;
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+		break;
-+	default:
-+		TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
-+	}
-+
-+	kvm_vm_free(vm);
-+	return 0;
-+}
-
--- 
-2.55.0
-
+T24gMTQgU2VwIDIwMjYsIGF0IDExOjM1LCBEYXZpZCBMYWlnaHQgPGRhdmlkLmxhaWdodC5saW51
+eEBnbWFpbC5jb20+IHdyb3RlOg0KPiANCj4gT24gTW9uLCAxNyBBdWcgMjAyNiAxNTowMjozNiAr
+MDIwMA0KPiBIw6Vrb24gQnVnZ2UgPGhhYWtvbi5idWdnZUBvcmFjbGUuY29tPiB3cm90ZToNCj4g
+DQo+ID4gQWRkIGEgc3RyZXNzIHRlc3QgZm9yIGxvY2tpbmcgYW5kIGF0b21pYyBzeW5jaHJvbml6
+YXRpb24gcHJpbWl0aXZlcy4NCj4gPiANCj4gPiBUaGUgdGVzdCBtYWludGFpbnMgYW4gYXJyYXkg
+b2YgZWxlbWVudHMgY29udGFpbmluZyBjb3VudGVycw0KPiA+IGluaXRpYWxpemVkIHRvIHplcm8u
+IEl0IGNyZWF0ZXMgZm91ciB3b3JrZXIgdGhyZWFkcyBwZXIgb25saW5lIENQVS4gT24NCj4gPiBl
+YWNoIGl0ZXJhdGlvbiwgYSB3b3JrZXIgY2hvb3NlcyB0d28gZWxlbWVudHMgYXQgcmFuZG9tLCBp
+bmNyZW1lbnRzDQo+ID4gdGhlIGZpcnN0IGNvdW50ZXIsIGFuZCBkZWNyZW1lbnRzIHRoZSBzZWNv
+bmQuIEVhY2ggY29tcGxldGVkIHBhaXIgb2YNCj4gPiB1cGRhdGVzIHRoZXJlZm9yZSBwcmVzZXJ2
+ZXMgdGhlIHN1bSBvZiBhbGwgY291bnRlcnMuDQo+IC4uLg0KPiANCj4gSSB0aGluayAxMDAwIGVs
+ZW1lbnRzL2xvY2tzL2NvdW50ZXJzIGlzIGZhciB0b28gbWFueS4NCg0KSSBkbyBub3QgaGF2ZSBh
+IHN0cm9uZyBvcGluaW9uLiBNeSBleHBlcmllbmNlIGlzIHRoYXQgaXQgZG9lc24ndA0KbWF0dGVy
+IG11Y2guIEZvciBleGFtcGxlLCBtb2RpZnlpbmcgdGhlICJhdG9taWNfeGNoZyIgdGVzdCB0bzoN
+Cg0KTG9jayBhY3F1aXJlOg0KCXdoaWxlIChhdG9taWNfeGNoZ19hY3F1aXJlKCZlbC0+bXhfYXRv
+bWljX3hjaGcubG9jaywgMSkgIT0gMCkNCgkJY3B1X3JlbGF4KCk7DQoNCkxvY2sgcmVsZWFzZToN
+CglhdG9taWNfc2V0KCZlbC0+bXhfYXRvbWljX3hjaGcubG9jaywgMCk7DQoNCih0aGF0IGlzLCBy
+ZW1vdmluZyAiX3JlbGVhc2UiIGFib3ZlKS4NCg0KVGhpcyBmYWlscyB3aXRoaW4gb25lIHNlY29u
+ZCBvZiBydW50aW1lIGZvciBhbGwgdGVzdGVkIG51bWJlciBvZg0KZWxlbWVudHM6DQoNCjINCjMy
+DQo1MTINCjgxOTINCjEzMTA3Mg0KMjA5NzE1Mg0KMzM1NTQ0MzINCg0Kb24gYSAxNjAgQ1BVIEFy
+bSBCTSBzeXN0ZW0uIFdoYXQgX2lzXyBwYXJhbW91bnQsIGlzIHRoZSBwYWRkaW5nLiBOb25lDQpv
+ZiB0aGUgZmFpbGluZyB0ZXN0cyBmYWlscyBpZiBwYWRkaW5nIGlzIHplcm8uIFNvLCBpbiBvdGhl
+ciB3b3Jkcywgb24NCnRoaXMgcGFydGljdWxhciBtaWNybyBhcmNoaXRlY3R1cmUsIHRoZXJlIG11
+c3QgYmUgY2FzZXMgd2hlcmUgdGhlIGxvY2sNCmFuZCB0aGUgY291bnRlciByZXNpZGVzIGluIGRp
+ZmZlcmVudCBjYWNoZS1saW5lcy4gVHJ1c3QgbWUsIEkgZ290DQpzZXZlcmVseSBjb25mdXNlZCBh
+ZnRlciBNYXR0aGV3IFdpbGNveCcgY29tbWl0IDI1NTAwYmE3ZTc3Yw0KKCJsb2NraW5nL211dGV4
+OiBSZW1vdmUgdGhlIGxpc3RfaGVhZCBmcm9tIHN0cnVjdCBtdXRleCIpLiBTdWRkZW5seSwNCm5v
+bmUgb2YgbXkga25vd24gZmFpbGluZyBjYXNlcyBmYWlsZWQgYW55bW9yZS4uLiAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIA0KDQo+IFlvdSBhcmUgdHJ5aW5nIHRvIGhpdCBjb250ZW50aW9uIHNvIHlvdSB3YW50
+IGEgcmVsYXRpdmVseSBzbWFsbCBudW1iZXIuDQo+IFBvc3NpYmx5IHNpbWlsYXIgdG8gdGhlIG51
+bWJlciBvZiB0aHJlYWRzIHJ1bm5pbmcgdGhlIHRlc3QsIGJ1dCBtYXliZSBsZXNzLg0KPiBQZXJo
+YXBzIG5lYXJlciB0aGUgbnVtYmVyIG9mIGNwdXMuDQo+IA0KPiBBbHNvIHlvdSBhcmUgb25seSBn
+b2luZyB0byBzZWUgYW4gaXNzdWUgaWYgdGhlIFJNVyBvZiB0aGUgJ2NvdW50ZXIgKz0gMScNCj4g
+aXMgc3BsaXQgYnkgdGhlIHNhbWUgUk1XIG9mIGEgZGlmZmVyZW50IHRocmVhZC4NCj4gVGhhdCBp
+cyBwcmV0dHkgdW5saWtlbHkgZXZlbiB3aXRob3V0IGEgbG9jay4NCg0KTm90IGluIG15IG9waW5p
+b24uIEkgaGF2ZSB0aGUgIm14X2J1c3RlZCIgdGVzdCB3aGljaCBkb2VzIGV4YWN0bHkNCnRoaXMs
+IGFuZCBpdCBmYWlscyBpbiBhbGwgY2FzZXMuIEl0IGlzIGFjdHVhbGx5IHVzZWQgYnkgdGhlDQpz
+ZWxmdGVzdCBzY3JpcHQgdG8gdmVyaWZ5IHRoYXQgdGhlIHRlc3QgaGFybmVzcyBpcyBhYmxlIHRv
+IGRldGVjdA0KZXJyb3JzLg0KDQpBbHNvLCB0aGUgYWRkZWQgc2VsZnRlc3Qgc2NyaXB0IHBlcm11
+dGF0ZXMgbWFueSBvZiB0aGUgcGFyYW1ldGVycy4NCg0KPiBJdCB3b3VsZCBiZSBiZXR0ZXIgdG8g
+Zm9yY2UgYSBzaG9ydCBkZWxheSBiZXR3ZWVuIHRoZSBSIGFuZCBXLg0KDQpUaGF0IG1heSBiZSBh
+IGdvb2QgaWRlYS4gQnV0IHVubGVzcyBzb21lb25lIGNhbiBjb21lIHVwIHdpdGggYSBjYXNlDQp3
+aGVyZSBpdCBpcyBuZWVkZWQsIEkgYW0gYWxsdWRpbmcgdG8gbm90IHB1dCBpbiBhbnkgZGVsYXlz
+Lg0KDQo+IElmIHlvdSB1c2UgY2hhbmdlIHRoZSBNWF9BVE9NSUNfQUREIHRvIHVzZSB0aGUgYXRv
+bWljX2xvbmcgZnVuY3Rpb25zDQo+IChJJ3ZlIGZvcmdvdHRlbiB0aGUgZXhhY3QgbmFtZSkgdGhl
+biBhbGwgdGhlIGNvdW50ZXIgYXJlIHRoZSBzYW1lIHR5cGUNCj4gYW5kIGNhbiBiZSByZW1vdmVk
+IGZyb20gdGhlIHVuaW9uLg0KPiBUaGUgZGVmYXVsdCAnanVzdCB1c2UgKz0nIGNvZGUgY2FuIHRo
+ZW4gYmUgbW92ZWQgdG8gdGhlIGJvdHRvbSBvZiBteF9hZGQoKS4NCg0KVGhhdCBpcyBhIGdvb2Qg
+aWRlYSwgYnV0IHdlIHRoZW4gbWlzc2VzIHRlc3QgY292ZXJhZ2UgZm9yIGF0b21pY190LiBCdXQs
+DQp3aGF0IGFib3V0Og0KDQpzdHJ1Y3QgbXhfZWxlbSB7DQogICAgICAgIHVuaW9uIHsNCiAgICAg
+ICAgICAgICAgICBzcGlubG9ja190IHNwaW5fbG9jazsNCgkJOg0KICAgICAgICAgICAgICAgIHN0
+cnVjdCBtdXRleCBtdXRleDsNCiAgICAgICAgfTsNCiAgICAgICAgdW5pb24gew0KICAgICAgICAg
+ICAgICAgIGxvbmcgY291bnRlcjsNCiAgICAgICAgICAgICAgICBhdG9taWNfdCBhdG9tX2NvdW50
+ZXI7DQogICAgICAgICAgICAgICAgYXRvbWljNjRfdCBhdG9tNjRfY291bnRlcjsNCiAgICAgICAg
+fTsNCn07DQoNClRoZW4gYWxsIGxvY2stZnVsbCBjYXNlcyB3aWxsIGhhdmUgYSBzaW5nbGUgIiAr
+PSAiIGNvZGUuDQoNCg0KVGh4cywgSMOla29uDQoNCj4gDQoNCg==
