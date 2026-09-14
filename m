@@ -1,65 +1,65 @@
-Received: from mail-lf2-f13.google.com (mail-lf2-f13.google.com [74.125.229.205])
+Received: from mail-qk2-f13.google.com (mail-qk2-f13.google.com [74.125.230.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1F0468C0A
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 12:42:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF2946F497
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 12:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789389765; cv=none; b=aDhmWYw9RYRLWYvPyu79oVj5pJKKkPX7H5YVSiDZnm1CeVftiE9gzJbUogPrN3v9iZSD9QCx/PY3N6jDTrHxd313TWJcAOs5b1lVqXJPDZ8l/18P29vP291ng0/SrabUMMkwRuQyYCt89jrh1ZjxRbEvRNqjCIhXPeFSv2UAtiU=
+	t=1789390792; cv=none; b=F5vMtL72uCki01ZwhddXyRD5yswzawez1oTbOt+Csh0iH8HJBOe/I1s6AY4I0SuJFHeKIewDn+k6jVUwuhKgstEM++lMZ+xEKJaxl9zqf6ESJu5zhj5+5daD3FQpiZY66DJ3/DQmrO7PNHBQRPFk/ad9I+LGhuaE8HXGEjd1IeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789389765; c=relaxed/simple;
-	bh=diVDcwyPgcEBBc+KdG1wDzNEKWqaSCAeLPsiKcrDYEM=;
+	s=arc-20240116; t=1789390792; c=relaxed/simple;
+	bh=zRGOZLwME3uVs3/LSukmzMmM709P9OpJ9sZ/msp4w6Q=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Y7bQJosYNg5TDzd5NoQnjcuoIIYuLd9pryBx9b1BiKiMDSaZQGbdhIoXB5UoCoZCuGRWSlfFA6qFekzP0/kMjPEHkHAL/wrDrHa8Fnzyk/p85shrYaoXYvo2c4gh4/ZKzMxyg1I/1Hbqb0kncDyDBLAphKmIDL7+PLdtF2SMLcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A/VSxPDK; arc=none smtp.client-ip=74.125.229.205
+	 References:In-Reply-To; b=dubq9LxufAonKeuN9xN3+lKUEtQ7+BGDsIYrYThjms0A8Ci+N9MfjkXVcvDezibh8SbnxLbzoQlNcKKeN6Jpv8HcH/F1+WzCM2b7o5s2AF+vXBwkp7Ydb1e+H53RAJsOSRxNzvXxUPjdQeQ5dQ2KzFxHsNoTjHm6k+0weYHGdMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FvRs+4um; arc=none smtp.client-ip=74.125.230.205
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A/VSxPDK"
-Received: by mail-lf2-f13.google.com with SMTP id 2adb3069b0e04-5b89a0e69dfso2044206e87.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 05:42:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FvRs+4um"
+Received: by mail-qk2-f13.google.com with SMTP id af79cd13be357-93a0fd41a7bso172007985a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 05:59:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789389761; x=1789994561; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789390789; x=1789995589; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=diVDcwyPgcEBBc+KdG1wDzNEKWqaSCAeLPsiKcrDYEM=;
-        b=A/VSxPDKF4U0x4K8hy3hPUhCk5NhbZmHVYC8yJ8lrLrWJtWTaKojwtG8FjcZiiy2q3
-         xm8Xs0fvSrZHMEeRF7+5ZHY+stbXL+i1yLoDok6xrEA8oeF4UCzfSxOyz4eWPVRU5luw
-         +1PCsrBEvQnYxu6IwZg3dsvAvxkGhFLFI2wwCR+P1l+Q1IOuhkzCchWaeABo1dhfQrkb
-         +m0+MwLWFDuf7+4+9uIhozYVXryioc87YA76hvKAxkGYKBrALx5VA9lM57hwdItZsO36
-         Csbw5okZQoqKTGD37Swdt8UTghR2db22l4psN6IM8dd8v/Q4nB5ppuY+4oreud22ZgdD
-         DKNg==
+        bh=zRGOZLwME3uVs3/LSukmzMmM709P9OpJ9sZ/msp4w6Q=;
+        b=FvRs+4um54LzYMPhqvJ96gPoPWkHMh9QpGTc2EtxKK3jt7eURJSzbXTjLuXTc/oGWx
+         NC+KAVfC/bVFNxssMX9aFBLBV91pAiKyckYmlaypELAstWEMTQ9iCzt78U26TXH/yjC7
+         X/gBS6yP2xMGyVkQz041u9nmmJ8c83Mu2+nr+FrXJTYUZ+wsmHWGhXycg3ty5WuOcSpV
+         kxOCGulXAdLY+DBFjNsCzr1PVWN7U0aDKpNb9iN7ljGQEitNactNv7RrjxO91cUD6jhU
+         jih1o0e+bBEBt+ccSQC92Hu9N76F6n1A+iZFLJeoyYZIdaNemePrgrkhxhP1v+madxw8
+         Atfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789389761; x=1789994561;
+        d=1e100.net; s=20251104; t=1789390789; x=1789995589;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=diVDcwyPgcEBBc+KdG1wDzNEKWqaSCAeLPsiKcrDYEM=;
-        b=DhaOPw/KZLDtZ8KZdARRSe1qLsaT0aJXapiGKbwlk+4xNB1D/vKiU3SqI4Bi+o/RBI
-         aRjTdAgX8cHmm81HcilmSRXFGnhVJi+9isnSvl/LiKKfbAMuiLhjMja4bGXv+keS3r6d
-         zkSgfyvSa2nspDJv+nhHM4tDFlOBFA/8xdIAmytmmaRv/JRx8oXLGymMLEY5/xuvAhzR
-         Ar1q4rrjoBxuOj8RH9O8y5LlSprXW/Z2tRz0uCTGq25oSmb6rCWvrpeEmJGfHg5ORfkk
-         ebx5syDhjKzy1UqU6yBW5ATDfS8QvvvrC+UB2m09g56FSCK7gMjLybeyUGyqKLa3Nlx1
-         LVWQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxgfIFWaxBHabkBf4ODEFF9Cvs+v7Ylfp6+GFkZJLNeVAvYtmWNS5uiJDH91JgRqzfyhyQKpUXsK9d3HlCOYJE=@vger.kernel.org
-X-Gm-Message-State: AFuF++lz9h485kVBQDgLgvXaboYIfmYXDmQQxtUNeyjRoTAbmrL2yzrL
-	ofrKsXuZHmHEe323jUpC/ClfsABjsBDe+LUjSYadByrkwycdIGtLgd7a
-X-Gm-Gg: AYBFou156plZGU4ugROw9iQwJXVUM0/epoh0E6Hy/QpIhGYkKqPEXPAE+LuDyCtQRGD
-	8wN9SRtka477gv8TPPBp03BZizBHdTk5ewSwFvEf8zAJ9Bl1RYTt+5aQNuyMcqX/8dSMXoYW/hH
-	vi3kiuEcRGVLv+SNvC9lnvQANfKTRjG2BT0Md8WLHaIcWmID3ef5HEsQIaBVXsWO8WHpLoIJpQV
-	2RPS9JJaKRDdVKNjs7+4DX0mSv8rNlhOAbijWMzS1fWt8Po6lHOmylEmF2+6z9MW/6pZ9OUJp/D
-	4mZxxWidRZHTL6pbMeBbPTEy6kWmTMAFrFPj9jUD5kHFIy1DhTcjqAOLa4LZ99kJ8PEbJ8Mwecf
-	1i9ApcmVjmz2XO+ekh9tAqo2U2mbtY0NmjUOiJw8p786Oar9A0mXXGACJDAJMnidTj0TZHSOk8O
-	BE8Vfeph+m+slbEmmjoo6sxNYpuQxowbwQZalC0PvTchbshBE3Wrt/RhU0bBpa9EqLMWRD6ZWV9
-	SPrd0LmqDtD+XY=
-X-Received: by 2002:a05:6512:68f:b0:5b6:4b2:de81 with SMTP id 2adb3069b0e04-5b8ae69ca7dmr639501e87.31.1789389761097;
-        Mon, 14 Sep 2026 05:42:41 -0700 (PDT)
+        bh=zRGOZLwME3uVs3/LSukmzMmM709P9OpJ9sZ/msp4w6Q=;
+        b=Kq+du/pKVhNFbDzMNZ4gZyCCJdT2xmkGgH408RlFsR44ZXVjfMd1p22NPKi6MU54b1
+         YiHwKSBieZje2UwSJNY4ug5u7qlVCZt7/39m0cofx7A6SJS/7jfbS/SdRteT0ORlYosp
+         M3co1vbZBMc1nmtQAirWAGjw2zD9HTpQdHfmCHwbyrGlL7yerAKaxorS4wu8RpLEfuOR
+         SMRuBwNIZEnpDXk02XCNoCgscIHvu6rKE99yBaCLozr6/qw4YP3tjUlb1dK6PBAWCoqW
+         FzCa3IDXT+IgYJgBsUjr71bwpcfJ+7CqhQ2D0I1sNgV7hdFu27lUqfGnA729xv4sCpg5
+         bs0A==
+X-Forwarded-Encrypted: i=1; AKwUvBwVFd+4UfT7XsnI757y2/WpTagazy9A84Lf8wIUZDFbl1XePygUfIWcslsGqxiFKmbMat21Jv5wOjSZJvZCJlk=@vger.kernel.org
+X-Gm-Message-State: AFuF++lJ0aoeHJbh7s8JmmNwG5gh7wqmXCKSZ4+Jthtx8ZYCqfSUl1FM
+	iT5wWgw5lDCpVEIVoh/hq+Zv/TX+bOFid5ooH2ctdfusGAh/9hnEEPPqDnGFgw==
+X-Gm-Gg: AYBFou0qcsakUELSoN1wSojnSdric4789kPHhgJex0wHYqvsTchN28EqsXLfG2u5Z0f
+	8oyvkWX80tUw1BgGbBPWTrSnEhl5qEVCRqRFuuOLgB0Kh/qJzDKDjQqQQikrfSSUWAbpP/M3eGD
+	YvQ9lSHKWb3AsMBTtFWCkk3pPyXHpWlp2EtOdkgnKYzFI6xaAvmqc2/b13zCg/Xf7ZUzMskvqUp
+	C2Ndo20mUHZDbG9bsd0YffWCezmDMZiRWIby0lFfYc/xqbkaa/hB/Mr3kppUCIKzwh7B0HiOI5J
+	rAREx1lbesiSp2Zk7OGUxiKhgN1ZzkHDhe6K80OIv6Pzjroz4vH+z86cRI+u3a3JH72s3NoQ4jB
+	P5R9kj/vOdX2TwiziB/bzBSfwzoy2hYS1jmaN5HWnVYke1ULuMSFDhxx0weix901ZjD12wElSjx
+	PiLiLrAOyT7y2wP4ZU5IMlgswG7/pvJLaDKon+MUnHGOTeBQ8wqinxE1NcN53nk4LqPOl11VU1w
+	v19
+X-Received: by 2002:a05:620a:170a:b0:939:1864:343e with SMTP id af79cd13be357-93a29a92de9mr317219085a.40.1789390788770;
+        Mon, 14 Sep 2026 05:59:48 -0700 (PDT)
 Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b8a0457246sm2444301e87.23.2026.09.14.05.42.38
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-939fc4a9455sm776097085a.31.2026.09.14.05.59.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Sep 2026 05:42:40 -0700 (PDT)
+        Mon, 14 Sep 2026 05:59:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,36 +68,27 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 14 Sep 2026 08:42:37 -0400
-Message-Id: <DLF1QA7MC6T9.3ETM9IGKE51JA@gmail.com>
+Date: Mon, 14 Sep 2026 08:59:47 -0400
+Message-Id: <DLF23FHH1IS2.50ZFYP7679BL@gmail.com>
 Cc: <netdev@vger.kernel.org>, <edumazet@google.com>, <pabeni@redhat.com>,
  <andrew+netdev@lunn.ch>, <horms@kernel.org>, <daniel.zahka@gmail.com>,
  <willemdebruijn.kernel@gmail.com>, <donald.hunter@gmail.com>,
  <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next 4/6] psp: notify about a disassociation once it
- has happened
+Subject: Re: [PATCH net-next 5/6] selftests: drv-net: psp: factor out
+ creating a netkit in the test netns
 From: "Daniel Zahka" <daniel.zahka@gmail.com>
 To: "Jakub Kicinski" <kuba@kernel.org>, <davem@davemloft.net>
 X-Mailer: aerc 0.21.0-threadmapfix
 References: <20260912200426.121025-1-kuba@kernel.org>
- <20260912200426.121025-5-kuba@kernel.org>
-In-Reply-To: <20260912200426.121025-5-kuba@kernel.org>
+ <20260912200426.121025-6-kuba@kernel.org>
+In-Reply-To: <20260912200426.121025-6-kuba@kernel.org>
 
 On Sat Sep 12, 2026 at 4:04 PM EDT, Jakub Kicinski wrote:
-> The dev-change-ntf generated by dev-disassoc was built before the
-> association was unlinked, so the assoc-list it carried still contained
-> the device which was going away, and nothing corrected it afterwards.
-> We don't really expect associations to change during a lifetime of
-> a netns but this is still wrong. Netlink listeners need to be able
-> to tell the current "state of the world" based on notifications.
->
-> The notification had to be sent early because psp_nl_multicast_per_ns()
-> derives the set of namespaces to notify from the association list, so
-> a namespace losing its last associated device becomes unreachable once
-> the entry is gone. In that case - get the netns from the netdev itself,
-> and send that namespace a dev-del-ntf. If the netns had multiple
-> associated netdevs and only one disassoc'd we'll still send a change
-> notification, just with a correct list.
+> The netkit removal test builds a disposable netkit pair and moves its
+> peer into the test namespace. The next commit needs a second associated
+> device there, so move that to a helper. No functional change, other
+> than looking the new peer up among all netkit devices rather than the
+> two the environment created, which is what makes it reusable.
 >
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 > ---
