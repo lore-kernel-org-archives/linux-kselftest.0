@@ -1,343 +1,222 @@
-Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08100411FA1
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 21:16:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789420609; cv=pass; b=QGovedwEFEWqwqfbi6LSAxnwZLp0j73tlStuI+A8JHJ3VlZmb2egSLnXJRbcrzZXK8k5Ip5ee8H7yvbLQ1KWrO93+42oNB4Jz9O1FTBdWJWZs1OQBkPRTFFR6uzvlLB4/R4xziqQikm7stif6M+f487eLH11YC7ws8a7xIzXghI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789420609; c=relaxed/simple;
-	bh=n31Ma7+KWLGZ53xfxdD4huj/g6IficrcnEKN22gWA4U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HRG9y0IxROc7jk0cSoVPVxwVfIh1EOgEPdfuI8zBttqkDJAuhvAVKgZn4tBcDB0YJfQStKAyCOckOPrHC/cfW3F1odb4vGKSZU0eRYqujsrnRVzabTh0GqXmd3nmpP2qX6a+AlGohZdMSGlI4E5GSOOTVqtBTT64JNYvRQEBnP0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Jjj9zdAz; arc=pass smtp.client-ip=74.125.228.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE84A39280A
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 21:19:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789420775; cv=none; b=HfmAtFhpen3uPXe7KAz/peCgM52fplht1U+CZXXWNxS7uhQ+SDQq1IAu+XADPpkgnQ0IHxFp0i0vxfkp4FxVaXEVISRxGRoaN4+jwxNGto92+qeKFFyQv4xXBQk4rcWaw6YYQg5uNvY1711A3ut87Vzepqof1wvlHny9ox9xBwc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789420775; c=relaxed/simple;
+	bh=6S82DVredtucyesmlNsD6LttbkPj4FqwkwqGgMhpDdI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fiPwq1b2RP6eXisT/TQTyNK9D+vORciKmhtMPGH49VOv08/Em5YuEauWt/ZY5G//fqXBPtwjJ8pfsG4K1vKvIkTbPgJcB/QuNsHeWWwUG1HXmqRrKGcqZi5xY+zsADurzG5DyhGXqp50cISaQcModpsJ+0faKL283G0qyKQVuIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=Gvd+4FWZ; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Jjj9zdAz"
-Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a6141a61c0so12a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 14:16:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789420605; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ay8QDW1JbLlhwYvXXQ59k2DlThwqhj43OvoaD+tFKdM6NT5NUKQuEWiDcGDVOaSYDL
-         97b9uwCkQvYtj1Ur58bBMuKNe9G6W8FGVKxxu3kVbVyFAlfiSwIoG7yxQJlD/U9wOus+
-         ZyrDwGvtxqKSKBsYFdWOpRHF9N6+8+9sAo8T7zT2rtgE9Lw7mmwdH6Ds5SiQvz4W6ZFK
-         VplRhStCMzFYf2qouE4+WIqNeQhjdR5BiNLG6SwvfFZe6hSG972jMnqvbhFO8ji1vyfN
-         +UVbFQtNLjpgGeVNwIRovIXM3wsYN1rcc/EFEhnFhMYch2sDtNGpQv+w4v6wMHqcL+xe
-         lYcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=eeC6WkjWwzuT32tJiZ9pB1qr6n1OgtKzG5VypeJxifs=;
-        fh=oDxUO9Uw7cBd1PixW65rLv6sgv83UNm+bEUs3G951p4=;
-        b=oXbtuLuAkPqm17cj6RMf5UqGINQrv3YcadCZJdylkv+SByZGAS4hn95m9WKqXYRFNB
-         X24oFp43Wumd3QH5plsFZf6GLYzI/T9iY0BXshtEZfX99ndStyyjzai2cqCNW8p2opDw
-         d0wubQZpS1oLElcKqE1hXW0Fk42hjc3jjdoYT3G2LJppXQ1ZB//zHZywULEBLir5meHv
-         9TaUDZEB2UXdDzF2dmoxqj1uMIlkraWBQiwyx2tIWf06Rr6WXdHTfqGWcY1XJVdx/5FV
-         b+gcBbuhzAjB4R1aX2M4JxhRgnVgGEZ7xoMHKSGpURMvVbdJOve4ItYdPAKoAjZpWomV
-         oQbA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789420605; x=1790025405; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=eeC6WkjWwzuT32tJiZ9pB1qr6n1OgtKzG5VypeJxifs=;
-        b=Jjj9zdAz7vweOTPprgbw1+Z0kEPbH3M7/yxmrHZgCwWIB9VH48LIHUANhLIFlXrCro
-         21jawGFS9rk0MD4wlM+018RtGidYd+2wgffYRuM0uKcGZc8L0T/rakq61b8b/TW15gKq
-         QaJgvYeWd13PX+g/rXqvJbFu+LVnfXG8g7G1ymAdT26n8fng+rQ1BQyMce2IJIZcLVRh
-         /TzCfLCezpIUCmhykZ+yxH16RGqR/uuikHfAWvjZYZryWahjeTfnJJYY1C4Bvv+zi1su
-         rO71KBhb2YA7VCFwNqLID+EvHJB3qybTVyd+yGEs3LxDE/HyCfiXHekn9bY9YOB5asap
-         SaAQ==
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="Gvd+4FWZ"
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 033D43F1E4
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 21:19:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1789420763;
+	bh=e9c5Lc0MvQFExiINqSmAM4SmgxHPisXxegde3km6nbg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
+	b=Gvd+4FWZhoaTqwQHlJasm/ni3IUcSaWOReFynxKr/nZ9U3/WQQO6J4FfzxzQOiivY
+	 DaKbCJYY2SlCkyzLYqLxJWQNph9h9D8OHsVwdGAS1MlUgjaaa22a0OCSQdwvoTPWCR
+	 WKVVLK2mo+AREliG+DzSIt/WGZ5d7k2c3H37ui3RLQzV1DknqjhMJjQ3g8gnmsDFuG
+	 A/zV6B8+GwNaMOg/cGJgY/hMmOi7AB6qQzMcXHxI+6zsAuYKOe3Y9CkkNddL9lWb5m
+	 13+OXr8Usfpe2llZobfzIGmPbkPA8+Oz6F5bbh//5xAZao4FgwLiaeqWPTK8ODxiI5
+	 GtYsoQvGv/CvTnTLlBhLSEQdqdKOswbbRMJAO8ARHat2/UjryltDOIOQkL8+sKJRDc
+	 VITfGGsPNS9YYqEvOKFqnBjfrD8hgtDI0Sn5jWIKr/2nNd4jgN0jbyH48uOCjMywjc
+	 eI9U3m84uQ+W5ZdhQIm9LJEXPwcPCiH2KbU7RwuDuOnamN8BzKgOKPN4FusYzEUJDY
+	 OUnavKkh+3L8aZFcd6eC68jfPqnpU3FTWXSEUcDoMSP1JV2S0k1fPaedkIgalbuBI5
+	 kFbeSBuDUqLd9gHGdsypWbNiQJpQYXxgqUiDKunAodfL0NJNH7xOaxzmj+yXAzO2QT
+	 SH1NGGhA7jN5j4w6BosHAjSM=
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-49e6ceb2d54so2223725e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 14:19:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789420605; x=1790025405;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=eeC6WkjWwzuT32tJiZ9pB1qr6n1OgtKzG5VypeJxifs=;
-        b=vyXhCd6vuJY5SDZLb/ThnnxRomTmVz9NJtAUDkW9NvfRKLbwKgsT/OVUHbxz4vqV6U
-         pqBt3lHPEkjHg41ZRzPJelajlHF5b6VpGwLZSei1rFbIDEIZrciiWSQw8N+1LMXLqyXo
-         H1vZmcsvEV70OxpicZn0HpvPSGc4+i1oGSRGJf8/5teMtnktmoptR9uVjwl4lMNah/Ge
-         bzDQH+dftPwAzDtXNnxEMNs2N1HWIaKmZMl6VkJmUOaMk0E1//naZ6wBlOh9OrkxH1b1
-         69hf6BJ4DKC6R8a5i9R75VHxAIPSCyZ39RXruUKt/9zgB/lhp99dAvDsINUDN0kUIBEe
-         3m0Q==
-X-Forwarded-Encrypted: i=1; AKwUvBx6MP4EQb4V9uqPu9OuejBzqcpOGuJ8StsAXX6DLbEbQ6Go8jZQxsoUbU+80SVRcTSHpGyktt6FVR78ca+8SP4=@vger.kernel.org
-X-Gm-Message-State: AFuF++nPyUapyHuK1KeAXaZTHAAI481/TDXwnQZv+GBlkN7T467qxV4Q
-	jm74sw1WBH9CimLl4GEFK/O7ip7iIfTdF5B4hiKiaUsSzYIx/GHYJ10bCr+5VUZX4thhxtzklM4
-	Awg3Q/slNQLv1jVflgeUAbKuwuZ6gvDo4Q6OPddqp
-X-Gm-Gg: AYBFou1126NZlu5k19FgbCi6PUurfD0+G8oYZj0UD4u0P+7APIGGAEibmYIBmB4sCYn
-	0rYoF9HMeW4RujbIcpHn5CU8JMJG+tt8QIy832hxvEeAb/s6gN1PJKngS6xrMPVEXDKuI+TP/Iv
-	5GuxKnCW9c3Mn5XGzTOSK8kA5+g+/OcwV84wVnaa4yQL5ciqXu6Q0NGcKZnbPV3A/hMv0lw174l
-	UzzBCqxEvPf8H76aYW5H/BMfr8heyBMBcafTL6NmHffbJfbN5WDDM8x0/f7ddWPRM3nHDPMfzrw
-	GdAOo7jLOlRCVc1QfjsIquqmu/Fh+KwJnEV+DkhuUHKx7QPIsh0vf5E=
-X-Received: by 2002:aa7:c38f:0:b0:6a7:453c:a166 with SMTP id
- 4fb4d7f45d1cf-6aa0749c8f5mr7106a12.1.1789420604685; Mon, 14 Sep 2026 14:16:44
- -0700 (PDT)
+        d=1e100.net; s=20260707; t=1789420762; x=1790025562;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=e9c5Lc0MvQFExiINqSmAM4SmgxHPisXxegde3km6nbg=;
+        b=y5fz65vvsvSu0n3ktvEQ7GNKwosPMhGG33rD26D/QTs1SUL/nYd6Ujm8BvHZq/KXb5
+         o1MQYrFDWUarOQsGUuT5dA4XUA0agjL9LJnt8kioyTaT+mIR9gsVxHoHef/diKeES/Gu
+         L6f2oXA+G8ImWlUekhuDk1JuHeX+6reVwlLU1vtzVTVI16r2IMEp+jj0kFVK9eDsb2td
+         xwEOMsLWyN4f2666X+7/Aw+L7a9X571u/cF4sDmfjvN9jzJKxjqSNDh+lEtup+zqZbhU
+         eMpOCofV3rl/FI1FTCsIRMyQtBxupFUJRaNiUeJccyJQEQamZjdFTVb1vGciDbyB+0k+
+         orAA==
+X-Forwarded-Encrypted: i=1; AKwUvByTvxRBux/uxV6jVIDBuuXBbhSGvNRZY6ChfrsMnPtIeLhD5l5cMO6k6gAJWk5CPqoKEuquWZanJn6oICT23HY=@vger.kernel.org
+X-Gm-Message-State: AFuF++mwgHrMRwSIYYrHqH4aeifFKho392tDl4LrvnQ+pUrcdWMA0/ko
+	JQXW6qfQJhY7BvebOzQKXz1Kxdkf7WIHtMvsMwVEYcRNC9DlgxKknJNAnmvj5aLLWbhzEQaAtmt
+	oSh/5RYE5fFGBHwm5A5luVwgP4mQfPpRDFNNyjjt8wSnKu32anbw/StrGOJ44ZRTkf36slZ8A2f
+	pYAIECFlT0+A==
+X-Gm-Gg: AYBFou2i4T4V1J126IOEj5eLlQr/t655ng0cI15Eks0Jrmqv5XzN4vcBVWsO0b+HUhR
+	HhPw/KCkjIB7/2daEK9iUg9ddVwfPWRjMFyNImWef5yvjMBJjoLHi1trwrtKVAVLkfZ8gM8GJkf
+	yjUdPk7JChMq6aK97C44usE+BgL9siIBp9Yq+oKmXPCAuME2+6lc8RBd0jIQodzhKc+7HJU0ZiE
+	ZPG3OJNqsAUa1j6UOAFHkvQFfYB8/9ni5Gq/x9RXurOtdmcOuEegduy0utHWmLA5ioZJWL03+Oe
+	K5zfsvtYVCIRfe5fO33pS0vi4sPbHHL8kqqNZ6+SipY77frbwlgYcNqKv3AclC4mTe4qKVjqPSY
+	5X26ESy4FxbLLnxIKAxB/KmZCpXazvQ5177WcWWEhWSXRyvU486fV
+X-Received: by 2002:a05:600c:35cb:b0:49e:479b:c13b with SMTP id 5b1f17b1804b1-49e7a66b723mr56977195e9.1.1789420762628;
+        Mon, 14 Sep 2026 14:19:22 -0700 (PDT)
+X-Received: by 2002:a05:600c:35cb:b0:49e:479b:c13b with SMTP id 5b1f17b1804b1-49e7a66b723mr56976975e9.1.1789420762316;
+        Mon, 14 Sep 2026 14:19:22 -0700 (PDT)
+Received: from localhost (host-79-46-33-118.retail.telecomitalia.it. [79.46.33.118])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e7d2bb40asm10871855e9.3.2026.09.14.14.19.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2026 14:19:21 -0700 (PDT)
+From: Edoardo Canepa <edoardo.canepa@canonical.com>
+To: netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Xu Du <xudu@redhat.com>,
+	Po-Hsu Lin <po-hsu.lin@canonical.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net v2] selftests/net: run tun tests in a dedicated network namespace
+Date: Mon, 14 Sep 2026 23:19:20 +0200
+Message-ID: <20260914211921.3786609-1-edoardo.canepa@canonical.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1789281096.git.zhang_wei@open-hieco.net> <2cb3eb8fa88f2992b895b68010874fa3261c3a37.1789281096.git.zhang_wei@open-hieco.net>
-In-Reply-To: <2cb3eb8fa88f2992b895b68010874fa3261c3a37.1789281096.git.zhang_wei@open-hieco.net>
-From: Jim Mattson <jmattson@google.com>
-Date: Mon, 14 Sep 2026 14:16:31 -0700
-X-Gm-Features: AcwNN1XV3bxP1cVuBoSTgK_SyNWJVjXdXiEEXWOxJWPehr9GBRjFNWmcolwNHHI
-Message-ID: <CALMp9eSSiQWq+ZLaF3mJ5=NmTxXYxsYudC3umr5hL7HQQgq36Q@mail.gmail.com>
-Subject: Re: [PATCH v6 5/8] KVM: nSVM: Fetch DecodeAssist bytes for
- synthesized faults
-To: Tina Zhang <zhang_wei@open-hieco.net>
-Cc: Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, zhouyanjing@hygon.cn, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, Sep 12, 2026 at 11:44=E2=80=AFPM Tina Zhang <zhang_wei@open-hieco.n=
-et> wrote:
->
-> Hardware-reflected #NPF and #PF VM-Exits can propagate instruction bytes
-> from VMCB02, but KVM-synthesized exits have no hardware-provided state fo=
-r
-> the current exit.
->
-> Add kvm_fetch_guest_virt() as a wrapper around the generic guest virtual
-> memory helper that applies instruction-fetch permissions.  When a
-> synthesized data #NPF or #PF has no valid VMCB02 instruction bytes, fetch
-> up to 15 bytes from L2's RIP while constructing VMCB12.  Preserve the byt=
-es
-> already read if a subsequent read cannot be completed.
->
-> Limit each read to the current page so that linear address boundaries can
-> be checked before continuing.  Outside 64-bit mode, truncate each address
-> to 32 bits and limit the window at the code-segment limit.  In 64-bit mod=
-e,
-> stop at a non-canonical address.
->
-> Do not attempt the fallback for SEV guests, as KVM cannot read encrypted
-> guest memory directly.
->
-> Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
-> ---
->  arch/x86/kvm/svm/nested.c | 64 +++++++++++++++++++++++++++++++++++++--
->  arch/x86/kvm/x86.c        | 23 +++++++++++---
->  arch/x86/kvm/x86.h        |  3 ++
->  3 files changed, 83 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index fba230058870..5cb6a9d6907b 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -78,22 +78,80 @@ static void nested_svm_invalidate_vmcb02_insn_bytes(s=
-truct vcpu_svm *svm)
->         svm->nested.vmcb02_insn_bytes_valid =3D false;
->  }
->
-> +static u8 nested_svm_get_insn_bytes_len(struct kvm_vcpu *vcpu, u8 max_by=
-tes)
-> +{
-> +       if (!is_64_bit_mode(vcpu)) {
-> +               u32 eip =3D kvm_rip_read(vcpu);
-> +               u32 limit =3D to_svm(vcpu)->vmcb->save.cs.limit;
-> +
-> +               if (eip > limit)
-> +                       return 0;
-> +               max_bytes =3D min_t(u64, max_bytes, (u64)limit - eip + 1)=
-;
-> +       }
-> +
-> +       return max_bytes;
-> +}
-> +
-> +static u8 nested_svm_fetch_insn_bytes(struct kvm_vcpu *vcpu, u8 *bytes,
-> +                                     u8 max_bytes)
-> +{
-> +       struct x86_exception e;
-> +       gva_t rip =3D kvm_get_linear_rip(vcpu);
-> +       u8 count =3D 0;
-> +
-> +       max_bytes =3D nested_svm_get_insn_bytes_len(vcpu, max_bytes);
-> +
-> +       while (count < max_bytes) {
-> +               gva_t addr =3D rip + count;
-> +               u8 chunk;
-> +
-> +               if (!is_64_bit_mode(vcpu))
-> +                       addr =3D (u32)addr;
-> +               else if (is_noncanonical_address(addr, vcpu, 0))
-> +                       break;
-> +
-> +               /*
-> +                * Read one page at a time to recheck the linear address =
-at each
-> +                * boundary.
-> +                */
-> +               chunk =3D min_t(unsigned int, max_bytes - count,
-> +                             PAGE_SIZE - offset_in_page(addr));
-> +               if (kvm_fetch_guest_virt(vcpu, addr, bytes + count,
-> +                                        chunk, &e) !=3D X86EMUL_CONTINUE=
-)
-> +                       break;
-> +               count +=3D chunk;
-> +       }
-> +
-> +       return count;
-> +}
+The tun_vnet_udptnl fixture creates a fresh tap device and installs an
+IPv6 outer neighbor entry as NUD_PERMANENT before sending packets.  On
+systems where systemd-udevd is running and a systemd .link file sets
 
-Hmmm...You added the wrapper I suggested, but you still have the loop
-I don't like. See my comments on the wrapper, below.
+    MACAddressPolicy=persistent
 
+(the default shipped by systemd in 99-default.link, so this is what
+most systemd-based hosts inherit), systemd-udevd's net_setup_link
+builtin asynchronously sends an RTM_SETLINK to reassign the freshly
+created tap device's MAC to a machine-persistent value.  When that
+netlink message races the test's ip_neigh_add() call, the address
+change kicks the following path:
 
->  static void nested_svm_update_vmcb12_insn_bytes(struct kvm_vcpu *vcpu,
->                                                 struct vmcb *vmcb12,
->                                                 const struct vmcb *vmcb02=
-)
->  {
->         struct vcpu_svm *svm =3D to_svm(vcpu);
-> +       const u8 max_bytes =3D sizeof(vmcb12->control.insn_bytes);
->
->         if (!guest_cpu_cap_has(vcpu, X86_FEATURE_DECODEASSISTS))
->                 goto out;
->
-> -       if (!nested_svm_vmexit_supports_insn_bytes(vmcb02) ||
-> -           !svm->nested.vmcb02_insn_bytes_valid) {
-> +       if (!nested_svm_vmexit_supports_insn_bytes(vmcb02)) {
->                 nested_svm_invalidate_insn_bytes(vmcb12);
->                 goto out;
->         }
->
-> -       nested_svm_copy_insn_bytes(vmcb12, vmcb02);
-> +       if (svm->nested.vmcb02_insn_bytes_valid) {
-> +               nested_svm_copy_insn_bytes(vmcb12, vmcb02);
-> +               goto out;
-> +       }
-> +
-> +       if (!is_sev_guest(vcpu))
-> +               vmcb12->control.insn_len =3D
-> +                       nested_svm_fetch_insn_bytes(vcpu,
-> +                                                   vmcb12->control.insn_=
-bytes,
-> +                                                   max_bytes);
-> +       else
-> +               nested_svm_invalidate_insn_bytes(vmcb12);
->
->  out:
->         svm->nested.vmcb02_insn_bytes_valid =3D false;
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 4b3681796c75..735b67781d55 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -4848,9 +4848,24 @@ static int kvm_read_guest_virt_helper(gva_t addr, =
-void *val, unsigned int bytes,
->  }
->
->  /* used for instruction fetching */
-> -static int kvm_fetch_guest_virt(struct x86_emulate_ctxt *ctxt,
-> -                               gva_t addr, void *val, unsigned int bytes=
-,
-> -                               struct x86_exception *exception)
-> +int kvm_fetch_guest_virt(struct kvm_vcpu *vcpu, gva_t addr, void *val,
-> +                        unsigned int bytes, struct x86_exception *except=
-ion)
-> +{
-> +       u64 access =3D PFERR_FETCH_MASK;
-> +
-> +       if (kvm_x86_call(get_cpl)(vcpu) =3D=3D 3)
-> +               access |=3D PFERR_USER_MASK;
-> +
-> +       memset(exception, 0, sizeof(*exception));
-> +       return kvm_read_guest_virt_helper(addr, val, bytes, vcpu, access,
-> +                                         exception);
-> +}
-> +EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_fetch_guest_virt);
+    do_setlink
+    -> netif_set_mac_address
+       -> call_netdevice_notifiers_info
+          -> ndisc_netdev_event
+             -> neigh_changeaddr
+                -> neigh_flush_dev(tbl, dev, /* skip_perm = */ false)
 
-To make this work the way I envisioned it, you need to add an out
-variable, unsigned int *bytes_read, to kvm_read_guest_virt_helper():
+which flushes every neighbor entry on the interface, including the one
+the test just installed as NUD_PERMANENT.  The subsequent packet
+therefore hits __neigh_create(), triggers NDISC, and times out with:
 
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -4818,7 +4818,8 @@ gpa_t kvm_mmu_gva_to_gpa_system(struct kvm_vcpu
-*vcpu, gva_t gva,
+  tun.c:947:send_gso_packet:Expected ret (0) == variant->data_size (1423)
+  tun.c:948:send_gso_packet:Expected r_num_mss (0) == variant->r_num_mss (2)
 
- static int kvm_read_guest_virt_helper(gva_t addr, void *val, unsigned
-int bytes,
-                                      struct kvm_vcpu *vcpu, u64 access,
--                                     struct x86_exception *exception)
-+                                     struct x86_exception *exception,
-+                                     unsigned int *bytes_read)
+The failure is non-deterministic and can affect both directions.  Both
+recv_gso_packet and send_gso_packet variants can hit it; the failure
+reproduces on a plain systemd-based VM with no containers, and is
+triggered whenever the udev worker's RTM_SETLINK lands after the test
+has installed its neighbor entry.
+
+Fix by calling unshare(CLONE_NEWNET) from both fixture setups.  The
+harness runs each test in its own forked process, so every test gets a
+private network namespace that is torn down with it, and all tap and
+geneve devices are created in a namespace that systemd-udevd (running
+in the init netns) does not watch, so its RTM_SETLINK never fires
+against them.
+
+Creating a network namespace needs CAP_SYS_ADMIN in the current user
+namespace and CONFIG_NET_NS=y, neither of which the tests required
+before.  Where they are unavailable the unshare() is reported with
+SKIP() rather than aborting, so the binary still emits a full TAP
+stream and a runner can tell "network namespaces unavailable" apart
+from a real tun/tap regression.
+
+Verified on a plain systemd-based VM running the affected kernel, with
+the tap and geneve devices removed between iterations so that each one
+starts from a clean state.  1000 repeated invocations of
+
+  tun -r tun_vnet_udptnl.4in6_nogsosz_1byte.recv_gso_packet
+
+produce 266 failures without the fix and zero failures with it, and a
+full run of the test binary fails in 20 out of 20 attempts without the
+fix and in zero out of 20 with it.
+
+Note that without the fix a failure is not self-contained: the fixture
+setup aborts before FIXTURE_TEARDOWN runs, so the tap and geneve
+devices are left behind in the init netns and every later run fails
+right away in geneve_create().  Running in a private namespace also
+removes that, since the namespace is torn down with the test process.
+
+Reported-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+Closes: https://bugs.launchpad.net/bugs/2158217
+Fixes: 24e59f26eef2 ("selftest: tun: Add helpers for GSO over UDP tunnel")
+Assisted-by: Claude:claude-opus-5
+Signed-off-by: Edoardo Canepa <edoardo.canepa@canonical.com>
+---
+v2:
+  - Add the unshare(CLONE_NEWNET) to FIXTURE_SETUP(tun) and
+    FIXTURE_SETUP(tun_vnet_udptnl) instead of replacing
+    TEST_HARNESS_MAIN with a hand-written main(), as suggested by
+    Jakub.
+  - Report an unshare() failure with SKIP() instead of aborting the
+    binary before the harness starts, so the TAP stream stays complete
+    and a runner can tell "no network namespaces" apart from a real
+    tun/tap regression (raised by Sashiko).
+  - Mention the new CAP_SYS_ADMIN / CONFIG_NET_NS prerequisite in the
+    commit message (raised by Sashiko).
+  - Use the Assisted-by: format documented in
+    Documentation/process/coding-assistants.rst.
+  - Redo the measurements in the commit message.  The v1 numbers were
+    taken without cleaning up the tap and geneve devices that a failed
+    run leaves behind, which made runs after the first failure fail in
+    geneve_create() rather than on the race being fixed here.
+v1: https://lore.kernel.org/netdev/20260905085318.3416670-1-edoardo.canepa@canonical.com/
+ tools/testing/selftests/net/tun.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/tools/testing/selftests/net/tun.c b/tools/testing/selftests/net/tun.c
+index abe488bac50b..6db21dad0efe 100644
+--- a/tools/testing/selftests/net/tun.c
++++ b/tools/testing/selftests/net/tun.c
+@@ -4,6 +4,7 @@
+ 
+ #include <errno.h>
+ #include <fcntl.h>
++#include <sched.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -488,6 +489,10 @@ FIXTURE(tun)
+ 
+ FIXTURE_SETUP(tun)
  {
-        struct kvm_pagewalk *gva_walk =3D &vcpu->arch.gva_walk;
-        void *data =3D val;
-@@ -4830,8 +4831,10 @@ static int kvm_read_guest_virt_helper(gva_t
-addr, void *val, unsigned int bytes,
-                unsigned toread =3D min(bytes, (unsigned)PAGE_SIZE - offset=
-);
-                int ret;
++	if (unshare(CLONE_NEWNET))
++		SKIP(return, "Cannot create network namespace: %s",
++		     strerror(errno));
++
+ 	memset(self->ifname, 0, sizeof(self->ifname));
+ 
+ 	self->fd = tun_alloc(self->ifname);
+@@ -732,6 +737,10 @@ FIXTURE_SETUP(tun_vnet_udptnl)
+ 	struct sockaddr_storage ssa, dsa;
+ 	void *sip, *dip, *smac, *dmac;
+ 
++	if (unshare(CLONE_NEWNET))
++		SKIP(return, "Cannot create network namespace: %s",
++		     strerror(errno));
++
+ 	flags = (variant->is_tap ? IFF_TAP : IFF_TUN) | IFF_VNET_HDR |
+ 		IFF_MULTI_QUEUE | IFF_NO_PI;
+ 	features = TUN_F_CSUM | TUN_F_UDP_TUNNEL_GSO |
+-- 
+2.53.0
 
--               if (gpa =3D=3D INVALID_GPA)
--                       return X86EMUL_PROPAGATE_FAULT;
-+               if (gpa =3D=3D INVALID_GPA) {
-+                       r =3D X86EMUL_PROPAGATE_FAULT;
-+                       goto out;
-+               }
-                ret =3D kvm_vcpu_read_guest_page(vcpu, gpa >> PAGE_SHIFT, d=
-ata,
-                                               offset, toread);
-                if (ret < 0) {
-@@ -4844,6 +4847,8 @@ static int kvm_read_guest_virt_helper(gva_t
-addr, void *val, unsigned int bytes,
-                addr +=3D toread;
-        }
- out:
-+       if (bytes_read)
-+               *bytes_read =3D data - val;
-        return r;
- }
-
-Then, kvm_fetch_guest_virt() should return the number of bytes read
-rather than an X86_EMUL_* code.
-
-That should allow you to eliminate the loop in nested_svm_fetch_insn_bytes(=
-).
-
-
-
-> +static int emulator_fetch_guest_virt(struct x86_emulate_ctxt *ctxt,
-> +                                    gva_t addr, void *val,
-> +                                    unsigned int bytes,
-> +                                    struct x86_exception *exception)
->  {
->         struct kvm_vcpu *vcpu =3D emul_to_vcpu(ctxt);
->         struct kvm_pagewalk *gva_walk =3D &vcpu->arch.gva_walk;
-> @@ -5817,7 +5832,7 @@ static const struct x86_emulate_ops emulate_ops =3D=
- {
->         .write_gpr           =3D emulator_write_gpr,
->         .read_std            =3D emulator_read_std,
->         .write_std           =3D emulator_write_std,
-> -       .fetch               =3D kvm_fetch_guest_virt,
-> +       .fetch               =3D emulator_fetch_guest_virt,
->         .read_emulated       =3D emulator_read_emulated,
->         .write_emulated      =3D emulator_write_emulated,
->         .cmpxchg_emulated    =3D emulator_cmpxchg_emulated,
-> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-> index 0f5919b092e4..f03419a79a11 100644
-> --- a/arch/x86/kvm/x86.h
-> +++ b/arch/x86/kvm/x86.h
-> @@ -356,6 +356,9 @@ static inline void adjust_tsc_offset_host(struct kvm_=
-vcpu *vcpu, s64 adjustment)
->  int kvm_read_guest_virt(struct kvm_vcpu *vcpu,
->         gva_t addr, void *val, unsigned int bytes,
->         struct x86_exception *exception);
-> +int kvm_fetch_guest_virt(struct kvm_vcpu *vcpu, gva_t addr, void *val,
-> +                        unsigned int bytes,
-> +                        struct x86_exception *exception);
->
->  int kvm_write_guest_virt_system(struct kvm_vcpu *vcpu,
->         gva_t addr, void *val, unsigned int bytes,
-> --
-> 2.43.7
->
