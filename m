@@ -1,62 +1,64 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4672846AA94;
-	Mon, 14 Sep 2026 12:04:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5DEF46EC86;
+	Mon, 14 Sep 2026 12:04:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789387450; cv=none; b=aAx6w7geG6nzcwNBJazg7PdZJqMTam7f9cVXNUw7thVtL/8USGLgIH1cJA8vxGoglFDihmW2V4rJxekWGKqF0bOql9iTCmGa/4jFKuBaSQqaar+pHJZaMJ2iJQFDQSYK4ur2q9tmuJH8TaANoIObvJBJ+MCTeCLe6HWfso5l6m8=
+	t=1789387457; cv=none; b=ARsb/Q/Gv3wLXAq7lggg0QZhLysTihCIwjGIewI9bwfvVl3LFLBVtGcj6cErEUkD4/MeS7VZ7A9JYIjiNaaSSNyvrNkr5iM1Ms0DtZejk3hQDVAVMbIm+VJRIGt9AeMARsJWNCcp1HlX8tb0uDj+m9Y2763bWXFV1mEPed7HrsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789387450; c=relaxed/simple;
-	bh=gGDcySCBWBsVEpf5yhUBBIVPBCipAn8yEt4ASpBQzqo=;
+	s=arc-20240116; t=1789387457; c=relaxed/simple;
+	bh=F53OZhFkUab24xX0buEm3kIAACPTXkMQuVJTXFN7YAw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ahxrAKebUV/9xFTyhO25nXoX4PXkm11+EYkJCllqI/HOEIH6u+sBGFz2zgOF5sZ4Gr1Q0Be8JOa7Nlg+USGFZSi+3nLqa93bs72Fq20q4MinlZh+7LMPKWWA3pKn3QG87DSjB3bwuCivnO37nohCsKn2pOITxyxv3biwitlxb2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YUiAZs4Z; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=Jk3vK5Xb7O2u0v8kullL1UlSssDlWxCvL0l9/LTJt+I9O0PT01N91ssODXfzjxGrkZsUkUMjvkNh7XLg7fPxDR1zcagXFdaLsGVrJFmjXouZtrVwPqrfbuJoM48hiU7ouZta+GzEd2LgChbLaUFH1O507qDVlEXZhYgoEBOeOUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hUxLR/Xw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YUiAZs4Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFB261F00893;
-	Mon, 14 Sep 2026 12:04:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hUxLR/Xw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4C341F00893;
+	Mon, 14 Sep 2026 12:04:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789387448;
-	bh=oOLL1C5eie9+kGSnrAOXLT9ogy6qmnrvuuUUQyZnKQA=;
+	s=k20260515; t=1789387455;
+	bh=sMpwNCN/PilYOizsb4vbTSRly0vNd+P9tAq4T5tOvSg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=YUiAZs4ZCmd3/F3nbnio15LpDvz2LTIPuBEeUhcKB3CO+db0M/lD/JNFUQAhppwzb
-	 ZxqLMD6s4KoN2nOiLnBxHAA4kqLSJJIvUSdl980qtJIylOtS0pPPCvzMoVAFqUKWZb
-	 s1Uptynq53GXx+MLNZRjKxhUmIwFEpA3ltvauIKC7++8k4IcBC4LCq4reo5HnSWy8y
-	 2jDeIQ6wyPjS7cIoqO2oAAIOqdAog7jkx3mdeSwsfrbPdO4i8T5HUaiQcL8GKrJm2l
-	 FjQpXImE+2RhiS3EpiY00ZkB7uOzzdJAkzqeJnMTDAjr+ot+mUxioEXMXm6bn18XnO
-	 cpNzCXynZjt0g==
+	b=hUxLR/XwBZ8wNJtCuQH3h1F+HL5DxMocu6uC2lWGnqbHe6TO4yYQnlbTcF2WGBKNM
+	 mmd/YztTKVcxrI88onZHwERLpzBdOrsfZSCkKmJmlyXEH7CxJ2T9G7PBPqlq1fCm+k
+	 UGK1WBt/woedV61WjppbviNQA7+SaVvCIuzL5bESHxo5sBdFUCHzjV3/n/RI6synyF
+	 yvwkoERzCX5y7DTHfgb0AkAmvQjElDiOp5jIacg7REOSYf5xwkSZ1ILzQyEdqKx6DM
+	 e5CnaxhKUi6kBJyILesWLDFygsFNxFxbeISAe9+VV5I/lhKnqfpKNSxen0F38v0e2A
+	 JFJe7y3QKJNHg==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <maz@kernel.org>)
-	id 1x65Pq-00000008bDc-3qgi;
-	Mon, 14 Sep 2026 12:04:07 +0000
+	id 1x65Px-00000008bEf-39VU;
+	Mon, 14 Sep 2026 12:04:13 +0000
 From: Marc Zyngier <maz@kernel.org>
 To: Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Tharit Tangkijwanichakul <tharitt97@gmail.com>
+Cc: Fuad Tabba <fuad.tabba@linux.dev>,
 	Joey Gouly <joey.gouly@arm.com>,
 	Steffen Eiden <seiden@linux.ibm.com>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>,
 	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
 	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Hemanth Selam <hemanth.selam@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
 	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
 	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] arm64: fix typos in comments
-Date: Mon, 14 Sep 2026 13:04:06 +0100
-Message-ID: <178938739476.3215146.1948187248567448062.b4-ty@b4>
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev,
+	skhan@linuxfoundation.org,
+	me@brighamcampbell.com,
+	jkoolstra@xs4all.nl,
+	Gokul K <gokul02k@gmail.com>
+Subject: Re: [PATCH] KVM: selftests: Fix VM leak in early return
+Date: Mon, 14 Sep 2026 13:04:12 +0100
+Message-ID: <178938739499.3215146.16232496567237748545.b4-ty@b4>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260907044434.4682-1-hemanth.selam@gmail.com>
-References: <20260907044434.4682-1-hemanth.selam@gmail.com>
+In-Reply-To: <20260906034144.14059-1-tharitt97@gmail.com>
+References: <20260906034144.14059-1-tharitt97@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,29 +68,20 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: oupton@kernel.org, fuad.tabba@linux.dev, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, pbonzini@redhat.com, seanjc@google.com, shuah@kernel.org, hemanth.selam@gmail.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Rcpt-To: oupton@kernel.org, pbonzini@redhat.com, shuah@kernel.org, tharitt97@gmail.com, fuad.tabba@linux.dev, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, seanjc@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev, skhan@linuxfoundation.org, me@brighamcampbell.com, jkoolstra@xs4all.nl, gokul02k@gmail.com
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Mon, 07 Sep 2026 10:14:31 +0530, Hemanth Selam wrote:
-> This is v2 of the spelling fixes for this tree.
+On Sun, 06 Sep 2026 03:41:43 +0000, Tharit Tangkijwanichakul wrote:
+> test_mmio_ease() returns early and skips the call to kvm_vm_free() when
+> ID_AA64PFR1_EL1 is not available.
 > 
-> Changes since v1:
-> The pauth.c change is corrected: the doubled 'is' is a misspelt 'it is',
-> so v1 deleted the wrong word.  Spotted by Fuad Tabba.
-> 
-> Only comments change; no code is touched.
-> 
-> [...]
+> Use a goto so that the early return joins the common exit path.
 
 Applied to next, thanks!
 
-[1/3] arm64: kvm: fix typo "synchonized" in comment
-      commit: e9fac0fc75abadefbbfbcf514f5d3b6e3d8c1196
-[2/3] selftests: kvm: fix typos in comments
-      commit: acf96ecc5fb6a802928a0b71bcded2addc3e58d4
-[3/3] arm64: kvm: fix typo in pauth.c comment
-      commit: dacfc40976411dfa97efbe1cc21650049a391eb7
+[1/1] KVM: selftests: Fix VM leak in early return
+      commit: bb6c7d2bf564cdaa24b14764b7126f5cab45965a
 
 Cheers,
 
