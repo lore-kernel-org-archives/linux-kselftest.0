@@ -1,94 +1,95 @@
 Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6605739EF2E
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 19:17:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ECB03AFD1D
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 19:40:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.76
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789413464; cv=pass; b=WWN7reZiMVhZSueKNyMHc1GoQd3ivcOmxTbvLlgAUQxmnBAt6nx6HLu78hnnN1rek8YDxr0PJMEt2ss0Uk/Xu1btOAlPAAImJApKgNjpurfzG+kfk38YP0WJCKnKn0+C2fmTTZw++iEBE89nGHyrX//3uD41tgLYixxCNgLQUIo=
+	t=1789414843; cv=pass; b=CM9EA/gUQglmW3mQpekxjB25NcgYmgsDKXyU2YVTyzc7iptHIOlPbWJ6sxr0Zbqmnc6OqxufAfomJIpag0KfVZahpqnyUmwR2TtWEdjUIlykCV/tElMebul26F6zxZ4RsBh4VS+bROJifQ/BFBYTmnbJBzaR9uKMO3VhtyHWG74=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789413464; c=relaxed/simple;
-	bh=I70R/0YWeF0y09zlTpACQii1qrXFuiFewaTsH+8kBNo=;
+	s=arc-20240116; t=1789414843; c=relaxed/simple;
+	bh=IOrLEilFHhnJxPSxRVHThux+VKNAZpXoN8B5i5lUFcU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P8Z87c6DpegdUOJKn1PoTM2xZDtb1OOr1rEsNtu/Ulvj9VLU07TrysURdlZmFCdr16Zt0VUuPBw2wqP4Nm0iDBici3QdLETTTwGPmCYeaGxMIxT3mfh82VSeBVMeK+RiO99nhUxTeUNfP+O4D+/yg6naGlKgl6TCciHBwYLL3AI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T0axpJWS; arc=pass smtp.client-ip=74.125.228.76
+	 To:Cc:Content-Type; b=AYOQqsHDVMToRMeTZPl6ig586gTpwVg6MYcNaJtup3brdwvHrK3jw1IzI4pL4ELROEMzGJytH1v2O86XzWuvSE0bNGizXxmdGbwQd8s+GGeDeOefHqiFMuBbuE3f/EmMYCUwlyZoJYGJIFqyCWVryhyAmMkum3P6Rse0i0mnKs0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=J1GTsN2k; arc=pass smtp.client-ip=74.125.228.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T0axpJWS"
-Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a6141a61c0so16522a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 12:17:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789413460; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="J1GTsN2k"
+Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a9a26ce21aso17216a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 12:40:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789414838; cv=none;
         d=google.com; s=arc-20260327;
-        b=KvQjnPtOloaU+MJWTrCceQYsznpqS2fv1sKx48ebXUuwfDxL8TEACycIESb+/9EIh+
-         NcWN9EKKUNg9k/Ai2KaHQUVB19oCVXEuPsJqcTyIIQfc/qLWPOv142LlN/zWotLmZ8RL
-         yEUtOiR+mKtJOM3UQtYgC6U/IJkHuO3T4TfxmsdIMl8bI8mFbs+oIX+4Y9y5hnF/yVXn
-         nMMtE/wY0rdS1s3BgMm/sCUq1EwyjbrRk3zi0hhp1PxHJzAUls6IfdDpU0P0GVjjCYU6
-         J0m6lT42Rn5kMLF3gEzif/hFzU6+rZ6argX71Mqq24Fv4TWuLFZeTgplOxcGghnSuC2s
-         F9ow==
+        b=AQ3nZTQ6/cqAuzheJjXHs0re6ppTlPibXTYIKNoYqWrag1x5LDys26gYyLLLmoyu05
+         nYvvmWiFAUW41uITZCSo07eg1ZKnlh4eXYzO3bOJ40WsSaCHXOXSS6R9wH7RjRKlufPK
+         f1AS7Lx9IB1uTem9gdUHCI92n1kHEkUEZwcyuT/hzekTQAASe11JG+NmrI9Hxbg8PhYL
+         axhn4APwR22Sezr3jj6JJPuF51QzZw9vf/UmESSZNnTuw/bkiKeT06GeYG4ZwUdV+0t8
+         HI/Bc/nbeqLswsbmXe8hjDS9JvDKAMV+HUELzWiIlg0fbxRL5AoROrb5Wh06MW/d2wr0
+         +WpA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=myrSaQTa4vHBu2omtc5agr+BkgMWLQGN5WekDwWEnao=;
-        fh=+9V0/Kyj25lkyK8lyYT8LjuL669V4UMM8iw8DawAArc=;
-        b=DMIwIXujiF76osG+pC9PWtoqVdCoe38AWBsvAGeSU2YiUVoCxhfc76aWEnV+RIPQ8Q
-         mnHsDs/p4XBn7tfGoyyAP8B9xkxwwRmJ1zBwM3ZEwqxlmQgbKbRT8WJ9i4aREHF9EkCY
-         ecioJ80vs8nxxl5OGVjYTjg/TYT/bUkz3ar9wDTxzyGDmFXMtAbgDcqLGJ5Cy3ZDKKly
-         SzWHx2w5hy6b43swsWym6LAjrNWcc2kMC0nua688Ouagaesdopqn7EDjSsxAUF3YWgt9
-         8ErOVlycI/C2ZSPTtZqGJAKe9Y3PE+L8U5wXm/OJ7NBnaYsd5xa+XV2dEupMNxXPBySD
-         yqLA==;
+        bh=eZUBkwIq/fO/gxt56/XDzAsEFFKgZRRoosZ19gkheFQ=;
+        fh=OKGXh6LXyxKvVBuTmHTqfVUeXbnYnfq6KHVc+2EXa/8=;
+        b=FL/yAf4D3Jy1N7jXFe1bjpa1wlaM2W2Z/jux3R04kLvlE5u7CxEgXR/VzbjLNw9LdQ
+         /vM0zKNPgu+1I+9Ajy45v5+yFbZBrLwReKPHRdBumVSbKTM9loStjZJPuV7df5bCU7x9
+         OnlvGtvLRXJ7FXp1w9tsknYqhXFBdSVP7PtN3O1XWFSm5hd5XvRl9QTR3p/UMucusizR
+         fJSZ6fUeI7WlGakb9t/oKZBRG6y6NtXJBB86zhenkdi+giK+xlUe2TmhSeoHULAmcHc2
+         Vp+0kAd1liPEYwoBtPU+d/SWhSs6G01Uihz9yeRaJsattgxcpaPEJj7+QvQMiPMHYgyY
+         TDcQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789413460; x=1790018260; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1789414838; x=1790019638; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=myrSaQTa4vHBu2omtc5agr+BkgMWLQGN5WekDwWEnao=;
-        b=T0axpJWSk2XvqBX5ng9MHBtx3WjHmA3UjvcoCp+HbbWqSyB50puhUo2gV2ZVzeAyxJ
-         DP0PvhpBPkDSWLKQlTa6sP7Tv2JBpMhvUc+p6TY62u91BI0qtBEsb16n93WXxkD6UzZq
-         3ikdC062nh/5V346G2IQc2WBQPyOEhwAmi0fcQlvAS9d+TGVSFLONyzrrHVXiMrTWiQk
-         +aXu0QQAEjtFWC8zYmY7PvA0QKnH6bz31c4UVYPv6NZOlitG2fH/5/We22EWehU4uKP/
-         d+zmoKnT9aCMeZe58dNdVf+hEX4MSqozpzZs3WptX3a1XBl6ZGqjwjEgvyi/yfWhl8wO
-         y1Zg==
+        bh=eZUBkwIq/fO/gxt56/XDzAsEFFKgZRRoosZ19gkheFQ=;
+        b=J1GTsN2kVknyCzdDaEHMj+c1Max/oEEuJNkiiyGK2zH0OcZLZMAkbyk+z+/qWhtBNX
+         nTmb9FpFY7euvMvL4whqstyqFzLc5f+Sa3nJmIi+Wu6IONirPudVcrSNhcMRa27xSgwl
+         pkuwnkOdIq+m/B8u4eaQ2w7BaCzSjZufWFBTLmykU/vu+edqyu211NR+B+2blC9cs4eB
+         8IpgIfwKY3T1MFonCwT0HJiLmuscfg8HImF7BrkBhzAjtS2SwO1FAuPvmVaPBh+uUz1v
+         aiWtdhG0rbe3xhPUxytNNFeNpUnYrt07A/eIgOIPyuYN+zh/PUCUEJyvLEQD1BeMrwqh
+         dksw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789413460; x=1790018260;
+        d=1e100.net; s=20251104; t=1789414838; x=1790019638;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=myrSaQTa4vHBu2omtc5agr+BkgMWLQGN5WekDwWEnao=;
-        b=ESdONwnn2XmdrE1dDrf7rY/4GuwIKwnDJRdP1wRpL3QdufFvecFn8MVNMtqg22hmr4
-         fnlFRCltJW7bTQxM91gKecTTyFPGHAMsMHUy8AE6VbcePeuwWK1iNUXfSBamj7+OrKpC
-         0VXIqhapdAaHU/yT5d8f8JUiJE06s4Flk5K46qhzFfOxN7ZZT+QJfH86i/piWkEGW0J7
-         /+OZRNjwQL1aM1neTWVvzYpFUKKHvfi7/61W0s0SX6xshLltBUJ1XFMZSqHskR5L6A1b
-         fd+aUyQ0iUA+DdgCXl3krOC7vN4gJwqmWnqJIW4QhwxStt44OUV2nGTV/U4dja1MV98D
-         Ogow==
-X-Forwarded-Encrypted: i=1; AKwUvBxRq7AmBv2nEfQWejO6hl2yda7kbZMl0ZMdSWzvchm8uQPI27ZwTY2Tu/2dQTmau/ZtBHPiOnlYJ+58pkcfG5c=@vger.kernel.org
-X-Gm-Message-State: AFuF++mh/7dd4SAwEgPGCP8f4aImBeHGSTYF7qnS4sg3LO46zHiKb6O+
-	N/Ee+y9uiGs+Kw4GcopS8bRFLzkk9rUNyWH5cWFipJ3a0wVe8Ycm0ulWd2HvLwQE/FSvWG+HAR/
-	EniSf5c8UfeLIskZ6/OElfpqrQ6oJgU1DGyrbQyT5
-X-Gm-Gg: AYBFou1UK3/5YqtYUDow1xO8rIk66PpNMq08vGVu0s2U+RAGs/wJxwLj7mlnhJh3qDV
-	oHK7Ttj5Ufze6pAemXaGb+GOL9RlgEylKqs9vy8MgDGWwfEttr3lE4fKloeyl1eB4QQRD0mdHZ0
-	ZiS5oTzmkrqNpoK/ZcH/pemC3L6CLHFWfDfitB+DG3ZJwKSpWVCjGmQB1oh5AR/R5jCYU7az06C
-	QN9bGtmvmxtt3g07aM8M+zxIkCE8/EbjCiQK6e/7zcVcqBjkRP9v6yluo7MNvuTZozL/+k3sqM4
-	7wAJqgdg8EVvALLIuSRoRhucw9vcyYAXIsx1wNdr87pUwpYbgBWCqEWwow1wf1c6eg==
-X-Received: by 2002:aa7:cd18:0:b0:6a4:abe:b08c with SMTP id
- 4fb4d7f45d1cf-6aa043d1f1fmr13883a12.12.1789413459616; Mon, 14 Sep 2026
- 12:17:39 -0700 (PDT)
+        bh=eZUBkwIq/fO/gxt56/XDzAsEFFKgZRRoosZ19gkheFQ=;
+        b=TYAt+aWyGYapC+cK1jCMxhpvIX5VIx/FslVfUyb+QRemnYiE6utLfjA6uCy+r8JEZ9
+         Wskz8GdzYMFXohzjUvb+oyXxRTpx/GXwktn4RzKqzl7xRdgpkFeJhXATU2Fn5Xx0057p
+         eju/00IZ2/hQXcKAqgrw8m8GfGeQLLXd7DgcWdTGOURQtEXR8EkxZ+P2NHkwZeFVEteo
+         u4dIbcq9DRxNRE39bHqgkvHfceQKzkcqCZlXBmlLKULUpFAhbX+3TdypjihfP5aJZfQ2
+         OOZyWBgCw4yG+jn2dW1lcG/v+erezPsJdSE/bMOFJy5RzeDMfhQrI2yXC8VU3snI0qeC
+         GZeQ==
+X-Forwarded-Encrypted: i=1; AKwUvByxD2GLUGF+UH9eaVVeTldNNQmeH9KtV33z94BwXR35rlRvG8qP6wTh1GrO5U1EIesV/KGI/190pejWjiCfuOM=@vger.kernel.org
+X-Gm-Message-State: AFuF++mG3+Nb13xscD4IAEG6R4MKbuTJAWo+bSJYQDZ+vvaouOxYPyh5
+	WyvXVfSfCcg9SMfF24NYnV4Yo0ZFyvf7X9RIVkpMsFnGONhpR3sYxVjll2adgXrdPewoE5A66PB
+	Jxh0TboIT/hW5MtIZtUd1iNl5aphjEP977UKBFJl1
+X-Gm-Gg: AYBFou3HCetGcERjina52RUeTMs7xpZdF1bmrAE93kOBL8wfsrBbRfUqdFvdw19e7G0
+	QaMWHScgKzvuHfdjt7T1eNTgmOvUGxJS5NhTwuYP8KA6ouBEuZkIkqROxNeKiNg5kk5IX19nH5I
+	syfpnRu7bFHYrDg6BCuLt+V06Be8Mn8KMXqALzK7Des7YmED3F2B1jWm3TIWzvpX8KNh4tdOD9d
+	/Y6xBK6y0SaqWk8DMaLcjyTYCbfh/NUjh3V9BDhhWCbxyjsxFcp4bjbWVvCG+6O/oVnJGDbLmFJ
+	zsNQHuUA9LJ+B0SWGJ6LxBH+nZyQ6xdutl5kHtggt9n6GWfNaN6lQ2r7
+X-Received: by 2002:a05:6402:691:b0:6a6:9d10:f52b with SMTP id
+ 4fb4d7f45d1cf-6aa043db7d9mr8757a12.12.1789414837491; Mon, 14 Sep 2026
+ 12:40:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1789281096.git.zhang_wei@open-hieco.net> <37a1f336c303c78bbf942b1babcde828899968f6.1789281096.git.zhang_wei@open-hieco.net>
-In-Reply-To: <37a1f336c303c78bbf942b1babcde828899968f6.1789281096.git.zhang_wei@open-hieco.net>
+References: <cover.1789281096.git.zhang_wei@open-hieco.net> <40f8ac084021e48fbadd5697ef16f674554a4480.1789281096.git.zhang_wei@open-hieco.net>
+In-Reply-To: <40f8ac084021e48fbadd5697ef16f674554a4480.1789281096.git.zhang_wei@open-hieco.net>
 From: Jim Mattson <jmattson@google.com>
-Date: Mon, 14 Sep 2026 12:17:27 -0700
-X-Gm-Features: AcwNN1VzS9Vin9kOzYrPdaEV4UDdLP1p-qtdqTYgtpYlaZGFsre3kVUF8nVDPxU
-Message-ID: <CALMp9eQbk4i3jMz4U7cTy_CNKCs6FfU+2fMLW4WDj612YdDfCA@mail.gmail.com>
-Subject: Re: [PATCH v6 3/8] KVM: nSVM: Track valid hardware DecodeAssist bytes
+Date: Mon, 14 Sep 2026 12:40:24 -0700
+X-Gm-Features: AcwNN1VTxREYw7yGA-RG3H7Iferx9bVJ6dEoqU2hzDKLAla5Isbu_EYHtunu4hY
+Message-ID: <CALMp9eQq0-YwL6-jV_ZJke==J1dHa4YFs+xncN-ue0vr9Me2=w@mail.gmail.com>
+Subject: Re: [PATCH v6 4/8] KVM: nSVM: Propagate hardware DecodeAssist bytes
+ to VMCB12
 To: Tina Zhang <zhang_wei@open-hieco.net>
 Cc: Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, 
 	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, zhouyanjing@hygon.cn, 
@@ -99,123 +100,14 @@ Content-Transfer-Encoding: quoted-printable
 On Sat, Sep 12, 2026 at 11:44=E2=80=AFPM Tina Zhang <zhang_wei@open-hieco.n=
 et> wrote:
 >
-> VMCB02 instruction bytes are valid only for the hardware VM-Exit that
-> populated them.  Track whether VMCB02 contains instruction bytes for the
-> data #PF or #NPF currently being reflected to L1 so that stale bytes are
-> not copied to VMCB12.
+> DecodeAssists provides instruction bytes for nested page faults and
+> intercepted page faults caused by data accesses.  When the feature is
+> exposed to L1, copy fresh hardware-provided instruction bytes from VMCB02
+> to VMCB12 for these exits.
 >
-> Invalidate VMCB02's instruction-byte state when preparing VMCB02,
-> normally in response to an emulated VMRUN.  Mark the bytes as valid only
-> when the current VMCB02 exit is a data #PF or #NPF.  Opcode exits and
-> instruction-fetch faults are excluded by inspecting the exit state.
->
-> A subsequent change will use this state when propagating hardware
-> DecodeAssist instruction bytes to VMCB12.
+> Leave the VMCB12 instruction-byte state untouched when DecodeAssists is
+> not exposed.  Otherwise, invalidate the state for instruction-fetch page
+> faults, unrelated exits, and exits without fresh hardware bytes.
 >
 > Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
-> ---
->  arch/x86/kvm/svm/nested.c | 38 +++++++++++++++++++++++++++++++++++++-
->  arch/x86/kvm/svm/svm.h    |  3 +++
->  2 files changed, 40 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index 73f37b050d0a..1cc3af8247f2 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -35,6 +35,35 @@
->
->  #define CC KVM_NESTED_VMENTER_CONSISTENCY_CHECK
->
-> +static void nested_svm_invalidate_insn_bytes(struct vmcb *vmcb)
-> +{
-> +       vmcb->control.insn_len =3D 0;
-> +}
-> +
-> +static bool nested_svm_vmexit_supports_insn_bytes(const struct vmcb *vmc=
-b)
-> +{
-> +       u64 exit_code =3D vmcb->control.exit_code;
-> +
-> +       if (exit_code !=3D SVM_EXIT_NPF &&
-> +           exit_code !=3D SVM_EXIT_EXCP_BASE + PF_VECTOR)
-> +               return false;
-> +
-> +       return !(vmcb->control.exit_info_1 & PFERR_FETCH_MASK);
-> +}
-> +
-> +static void nested_svm_set_vmcb02_insn_bytes_valid(struct vcpu_svm *svm)
-> +{
-> +       svm->nested.vmcb02_insn_bytes_valid =3D
-> +               static_cpu_has(X86_FEATURE_DECODEASSISTS) &&
-> +               nested_svm_vmexit_supports_insn_bytes(svm->nested.vmcb02.=
-ptr);
-> +}
-> +
-> +static void nested_svm_invalidate_vmcb02_insn_bytes(struct vcpu_svm *svm=
-)
-> +{
-> +       nested_svm_invalidate_insn_bytes(svm->nested.vmcb02.ptr);
-> +       svm->nested.vmcb02_insn_bytes_valid =3D false;
-> +}
-> +
->  static void nested_svm_inject_npf_exit(struct kvm_vcpu *vcpu,
->                                        struct x86_exception *fault,
->                                        bool from_hardware)
-> @@ -68,6 +97,10 @@ static void nested_svm_inject_npf_exit(struct kvm_vcpu=
- *vcpu,
->                                     (fault->error_code & ~PFERR_GUEST_FAU=
-LT_STAGE_MASK);
->         vmcb->control.exit_info_2 =3D fault->address;
->
-> +       if (from_hardware)
-> +               nested_svm_set_vmcb02_insn_bytes_valid(svm);
-> +       else
-> +               svm->nested.vmcb02_insn_bytes_valid =3D false;
-
-For consistency, should the line above be:
-
-nested_svm_invalidate_vmcb02_insn_bytes(svm);
-
->         nested_svm_vmexit(svm);
->  }
->
-> @@ -869,6 +902,7 @@ static void nested_vmcb02_prepare_control(struct vcpu=
-_svm *svm)
->          * Filled at exit: exit_code, exit_info_1, exit_info_2, exit_int_=
-info,
->          * exit_int_info_err, next_rip, insn_len, insn_bytes.
->          */
-> +       nested_svm_invalidate_vmcb02_insn_bytes(svm);
->
->         if (guest_cpu_cap_has(vcpu, X86_FEATURE_VGIF) &&
->             (vmcb12_ctrl->int_ctl & V_GIF_ENABLE_MASK))
-> @@ -1649,8 +1683,10 @@ int nested_svm_exit_handled(struct vcpu_svm *svm)
->
->         vmexit =3D nested_svm_intercept(svm);
->
-> -       if (vmexit =3D=3D NESTED_EXIT_DONE)
-> +       if (vmexit =3D=3D NESTED_EXIT_DONE) {
-> +               nested_svm_set_vmcb02_insn_bytes_valid(svm);
->                 nested_svm_vmexit(svm);
-> +       }
->
->         return vmexit;
->  }
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index e958943b8162..1e12ef1105c0 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -243,6 +243,9 @@ struct svm_nested_state {
->          * on its side.
->          */
->         bool force_msr_bitmap_recalc;
-> +
-> +       /* True if VMCB02 has instruction bytes for the current nested ex=
-it. */
-> +       bool vmcb02_insn_bytes_valid;
->  };
->
->  struct vcpu_sev_es_state {
-> --
-> 2.43.7
->
+Reviewed-by: Jim Mattson <jmattson@google.com>
