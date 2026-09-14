@@ -1,216 +1,266 @@
-Received: from esa2.hc1455-7.c3s2.iphmx.com (esa2.hc1455-7.c3s2.iphmx.com [207.54.90.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-37.mta0.migadu.com [91.218.175.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2203F20ED;
-	Mon, 14 Sep 2026 07:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77C63A7D9E
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 07:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789371090; cv=none; b=OkGv8OQL81aONa5xreSadIoRm6B7ALONBKRZndrefw1z50zD87ID1XssD9rKsERjgvqbf8B1ZX1EqIb+FD/9DliHfA1iuzfN/i+zirkAM1FydDFlZwNhJLsMOtCmYE06gn7IqLlCiTOGUlr/OGa7InRzWwo9zmJbsBSqce4ni6U=
+	t=1789371251; cv=none; b=nF21WA65w6JtLpMGuNoR7N5+8zFuTxVAWOEYyOWxNb5p2L2KWZ8WhmimRvYbOwD4OiMhiZDWgVCAKx6elkZDv5qmA2jkPaBA2Cwk+S0ezyyb/k5sY0u3Vohl/gy7AKEeVZc/61D+0bojJnKeMyFNYn9DTNt2srM2H4aQMspJIA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789371090; c=relaxed/simple;
-	bh=mjC5aEg0jr+yXeG0sa/LeF7keN1owrxkWF90cvUI0lo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ubfvHzz12+A7MZQDAqmocaufAeenIjs0eDcIgzKSb5D5L+LUaAsZiPRFOYRhaGAzm4B5knb9h2xnE4RHXbHZg1c+PdaJYe/HqjkqQmt80cbsHuWmw6T6g+/sYL7LTYeLy0XZQuYSyWmEAKnGxSQjRoVZebQkhfQruWG9uVZG6t0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=eZgoxz9H; arc=none smtp.client-ip=207.54.90.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+	s=arc-20240116; t=1789371251; c=relaxed/simple;
+	bh=T9yqexVIbUceZI9GQ7YgOL3+cqQQ9ZaJeJTzzuJBpjY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y/U+yRPQXkVd/xRhm9+exf3co5BkacanfaO8Gj+m0TubZyszUeVyV4yJP343+DJTn3cBI268RRXFIGgt06IsuT191zfywBiKtoKysjhHyF71/AFDweciOa3OnQ0/DL01Nm28BzXLPB/HiqcifW1Lax7yuyvSozfGFOu/rKvNNnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=b6pCvLLd; arc=none smtp.client-ip=91.218.175.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="eZgoxz9H"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1789371089; x=1820907089;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to:cc;
-  bh=mjC5aEg0jr+yXeG0sa/LeF7keN1owrxkWF90cvUI0lo=;
-  b=eZgoxz9HPxqojfklsB7diHfbJ0HnaQ6E1vh5ZJe777//zBNK2PqWgFUA
-   9bjIjx+xquHYyY2PtJN6kXZBFq3zBIqcCqXmy50jofg7ZG0Lbg9i4fGTh
-   lftib/UlO60p2ZJO/P7EfT4wqfgW7iRQ/34BzL4wcyrMo8wFjd7Phg0oP
-   XY+3NK/oCAtZi3wDGVIPL+Z65UsUvobr0T53cB0fUtS4m8PZyPOB24Q+C
-   K8BS7qxf1EMjrq5JuFzfpzRDERj+SFjPyzH7JglfOb3kqEsMDDh2n0M2q
-   It7YvChHFA/6ovFKu6lcrlV+HY/6QQp3nbwz1cAaj2+bqhW5Wr3OkoyjV
-   w==;
-X-CSE-ConnectionGUID: lEYQd/CUTa60tgM6vXYUtg==
-X-CSE-MsgGUID: j2OXDkbZQlObKG5BXGmuEg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11904"; a="254977303"
-X-IronPort-AV: E=Sophos;i="6.27,102,1786978800"; 
-   d="scan'208";a="254977303"
-Received: from gmgwnl01.global.fujitsu.com ([52.143.17.124])
-  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2026 16:31:10 +0900
-Received: from az2nlsmgm3.fujitsu.com (unknown [10.150.26.205])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by gmgwnl01.global.fujitsu.com (Postfix) with ESMTPS id D8A65100036D;
-	Mon, 14 Sep 2026 07:31:08 +0000 (UTC)
-Received: from az2nlsmom2.o.css.fujitsu.com (unknown [10.150.26.200])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by az2nlsmgm3.fujitsu.com (Postfix) with ESMTPS id 881401800BFA;
-	Mon, 14 Sep 2026 07:31:08 +0000 (UTC)
-Received: from [127.0.1.1] (unknown [10.124.178.20])
-	by az2nlsmom2.o.css.fujitsu.com (Postfix) with ESMTP id C44B118002FD;
-	Mon, 14 Sep 2026 07:31:02 +0000 (UTC)
-From: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-Date: Mon, 14 Sep 2026 16:30:44 +0900
-Subject: [PATCH v2 1/3] KVM: arm64: selftests: Support five-level stage-1
- page tables
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="b6pCvLLd"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=T9yqexVIbUceZI9GQ7YgOL3+cqQQ9ZaJeJTzzuJBpjY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789371246; v=1; x=1789976046;
+ b=b6pCvLLdw//ZztLIUFZYl/nNZFtefyttTJgOyQ/tY0LG1xLrz2Ean29fvXELz9cq70Wj62rX
+ goxiJPaFkT8LEW6c/HYdrhCmmeWlQ6P7f+9rJ8RaZP3ahStCynGXk0PeexfvjQR31BRMcLP8TD9
+ ImvOh8B+ekkSEW2LQkpeyUhY=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id c11aff05638d77e2;
+	Mon, 14 Sep 2026 07:34:06 +0000
+X-Mizu-Trace-ID: c11aff05638d77e2
+X-Migadu-Flow: FLOW_OUT
+From: Tao Cui <cui.tao@linux.dev>
+To: tj@kernel.org,
+	josef@toxicopanda.com,
+	axboe@kernel.dk
+Cc: cgroups@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	linux-kselftest@vger.kernel.org,
+	cui.tao@linux.dev,
+	cuitao@kylinos.cn
+Subject: [RFC PATCH v3 0/5] blk-iocost: BPF struct_ops cost model
+Date: Mon, 14 Sep 2026 15:33:51 +0800
+Message-ID: <20260914073356.791518-1-cui.tao@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260914-arm64-52bit-va-v2-1-3911cb9d4ad4@fujitsu.com>
-References: <20260914-arm64-52bit-va-v2-0-3911cb9d4ad4@fujitsu.com>
-In-Reply-To: <20260914-arm64-52bit-va-v2-0-3911cb9d4ad4@fujitsu.com>
-To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
- Fuad Tabba <fuad.tabba@linux.dev>, Joey Gouly <joey.gouly@arm.com>, 
- Steffen Eiden <seiden@linux.ibm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, 
- Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>
-Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Itaru Kitayama <itaru.kitayama@fujitsu.com>, 
- Takayuki Okamoto <tokamoto@fujitsu.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1789371056; l=4541;
- i=itaru.kitayama@fujitsu.com; s=20260825; h=from:subject:message-id;
- bh=mjC5aEg0jr+yXeG0sa/LeF7keN1owrxkWF90cvUI0lo=;
- b=7DfFUkA8aXGMtM/DD1jgfw6RcVdnLoUN1N2f+Gph7TODeSPeczCqvGITFCrwbSXP0Q82ddjs5
- 9kdbQI1rnOoA3MR8zsljCryu3P+Bnkrq1SgP+zofWwoU+upUoMsOOu+
-X-Developer-Key: i=itaru.kitayama@fujitsu.com; a=ed25519;
- pk=g9bTnr9giRP7JwNSZHy+OMLQZBEUtSE9tUnXso0hH1Y=
+Content-Transfer-Encoding: 8bit
 
-Add support for populating and walking five-level stage-1 page tables.
-A five-level translation starts at architectural level -1, so extend
-the page-table helpers and level validation accordingly.
+From: Tao Cui <cuitao@kylinos.cn>
 
-This enables the page-table infrastructure required by 52-bit VA
-configurations using the 4K translation granule.
+This is v3 of the RFC.  The changes since v2 are listed in the
+changelog at the bottom.
 
-Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-Reviewed-by: Takayuki Okamoto <tokamoto@fujitsu.com>
+Why a pluggable model at all
+----------------------------
+
+When iocost landed in 2019, its commit message already promised that
+"a later patch will also allow using bpf progs for cost models", and
+the code has carried the split for it ever since: calc_vtime_cost()
+is a dispatcher whose only implementation is calc_vtime_cost_builtin().
+Seven years later the builtin linear model is still the only one.
+This series fills that slot, following the TCP congestion control
+model registration pattern: builtin algorithms remain the default
+while new ones can be prototyped in BPF.
+
+The measured problems
+---------------------
+
+The builtin model prices each IO with a binary sequential/random base
+picked by a single per-cgroup cursor and a 16MB seek threshold, plus
+a per-page cost.  On a virtio-blk device with the HDD autop profile,
+a 4k IO costs ~24us when judged sequential and ~2.7ms when judged
+random, a 112x spread, so a wrong judgement becomes a wrong price.
+Three classes of mispricing, all measured:
+
+ 1. Heuristic rigidity.  Two legitimate sequential readers in one
+    cgroup (a database with multiple tablespaces, a threaded backup)
+    ping-pong the single cursor and are all priced random: a
+    measured 89x overcharge collapses throughput under the same
+    weight.  Random IO within a hot window smaller than the 16MB
+    threshold is priced sequential: measured 107x undercharge, an
+    accounting escape for hotspot workloads.  No setting of the six
+    builtin parameters seems able to fix this: telling the streams
+    apart requires per-IO state tracking, which looks like logic
+    rather than coefficients.
+
+ 2. Device nonlinearity.  SLC-cache phases, SMR band placement and
+    shared controllers (multiple NVMe namespaces multiplexing one
+    device) make the real cost of an identical IO vary by an order
+    of magnitude over time or across namespaces.  A static
+    6-parameter linear model has no way to express that.
+
+ 3. Unpriced operations.  Flush and zone append fall through to a
+    cost of zero and bypass throttling entirely, and the same pattern
+    extends to device quirks the builtin model was never taught.
+
+Mispricing feeds directly into the control loop: vtime budgets,
+surplus donation and the vrate feedback all consume the model's
+output, so a wrong model can skew the whole controller.
+
+How
 ---
- .../selftests/kvm/include/arm64/processor.h        |  1 +
- tools/testing/selftests/kvm/lib/arm64/processor.c  | 45 +++++++++++++++++++---
- 2 files changed, 41 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/arm64/processor.h b/tools/testing/selftests/kvm/include/arm64/processor.h
-index b8a902ba8573..7457503df956 100644
---- a/tools/testing/selftests/kvm/include/arm64/processor.h
-+++ b/tools/testing/selftests/kvm/include/arm64/processor.h
-@@ -113,6 +113,7 @@
- 
- #define PTE_VALID		BIT(0)
- #define PGD_TYPE_TABLE		BIT(1)
-+#define P4D_TYPE_TABLE		BIT(1)
- #define PUD_TYPE_TABLE		BIT(1)
- #define PMD_TYPE_TABLE		BIT(1)
- #define PTE_TYPE_PAGE		BIT(1)
-diff --git a/tools/testing/selftests/kvm/lib/arm64/processor.c b/tools/testing/selftests/kvm/lib/arm64/processor.c
-index 01325bf4d36f..b589368bf822 100644
---- a/tools/testing/selftests/kvm/lib/arm64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/arm64/processor.c
-@@ -29,13 +29,25 @@ static u64 pgd_index(struct kvm_vm *vm, gva_t gva)
- 	return (gva >> shift) & mask;
- }
- 
-+static u64 p4d_index(struct kvm_vm *vm, gva_t gva)
-+{
-+	unsigned int shift = 3 * (vm->page_shift - 3) + vm->page_shift;
-+	u64 mask = (1UL << (vm->page_shift - 3)) - 1;
-+
-+	TEST_ASSERT(vm->mmu.pgtable_levels == 5,
-+		    "Mode %d does not have 5 page table levels", vm->mode);
-+
-+	return (gva >> shift) & mask;
-+}
-+
- static u64 pud_index(struct kvm_vm *vm, gva_t gva)
- {
- 	unsigned int shift = 2 * (vm->page_shift - 3) + vm->page_shift;
- 	u64 mask = (1UL << (vm->page_shift - 3)) - 1;
- 
--	TEST_ASSERT(vm->mmu.pgtable_levels == 4,
--		"Mode %d does not have 4 page table levels", vm->mode);
-+	TEST_ASSERT(vm->mmu.pgtable_levels >= 4,
-+		    "Mode %d does not have >= 4 page table levels",
-+		    vm->mode);
- 
- 	return (gva >> shift) & mask;
- }
-@@ -147,6 +159,12 @@ static void _virt_pg_map(struct kvm_vm *vm, gva_t gva, gpa_t gpa,
- 				 PGD_TYPE_TABLE | PTE_VALID);
- 
- 	switch (vm->mmu.pgtable_levels) {
-+	case 5:
-+		ptep = addr_gpa2hva(vm, pte_addr(vm, *ptep)) + p4d_index(vm, gva) * 8;
-+		if (!*ptep)
-+			*ptep = addr_pte(vm, vm_alloc_page_table(vm),
-+					 P4D_TYPE_TABLE | PTE_VALID);
-+		/* fall through */
- 	case 4:
- 		ptep = addr_gpa2hva(vm, pte_addr(vm, *ptep)) + pud_index(vm, gva) * 8;
- 		if (!*ptep)
-@@ -163,7 +181,7 @@ static void _virt_pg_map(struct kvm_vm *vm, gva_t gva, gpa_t gpa,
- 		ptep = addr_gpa2hva(vm, pte_addr(vm, *ptep)) + pte_index(vm, gva) * 8;
- 		break;
- 	default:
--		TEST_FAIL("Page table levels must be 2, 3, or 4");
-+		TEST_FAIL("Page table levels must be 2, 3, 4, or 5");
- 	}
- 
- 	pg_attr = PTE_AF | PTE_ATTRINDX(attr_idx) | PTE_TYPE_PAGE | PTE_VALID;
-@@ -182,18 +200,35 @@ void virt_arch_pg_map(struct kvm_vm *vm, gva_t gva, gpa_t gpa)
- 
- u64 *virt_get_pte_hva_at_level(struct kvm_vm *vm, gva_t gva, int level)
- {
-+	int start_level = 4 - vm->mmu.pgtable_levels;
- 	u64 *ptep;
- 
-+	TEST_ASSERT(level >= start_level && level <= 3,
-+		    "Invalid translation level %d, valid range is %d-3",
-+		    level, start_level);
-+
- 	if (!vm->mmu.pgd_created)
- 		goto unmapped_gva;
- 
- 	ptep = addr_gpa2hva(vm, vm->mmu.pgd) + pgd_index(vm, gva) * 8;
- 	if (!ptep)
- 		goto unmapped_gva;
--	if (level == 0)
-+	/*
-+	 * Stage-1 translation starts at level -1 for a five-level page
-+	 * table, and at levels 0, 1, or 2 for four-, three-, or two-level
-+	 * page tables, respectively.
-+	 */
-+	if (level == start_level)
- 		return ptep;
- 
- 	switch (vm->mmu.pgtable_levels) {
-+	case 5:
-+		ptep = addr_gpa2hva(vm, pte_addr(vm, *ptep)) + p4d_index(vm, gva) * 8;
-+		if (!ptep)
-+			goto unmapped_gva;
-+		if (level == 0)
-+			break;
-+		/* fall through */
- 	case 4:
- 		ptep = addr_gpa2hva(vm, pte_addr(vm, *ptep)) + pud_index(vm, gva) * 8;
- 		if (!ptep)
-@@ -214,7 +249,7 @@ u64 *virt_get_pte_hva_at_level(struct kvm_vm *vm, gva_t gva, int level)
- 			goto unmapped_gva;
- 		break;
- 	default:
--		TEST_FAIL("Page table levels must be 2, 3, or 4");
-+		TEST_FAIL("Page table levels must be 2, 3, 4, or 5");
- 	}
- 
- 	return ptep;
+A bound BPF model fully owns pricing for every IO on the device:
+it is called from the bio charging path and prices every operation
+including flushes.  The completion-time request sizing for the
+latency met/missed accounting still uses the builtin coefficients
+(the request's bio, and with it the issuing cgroup, is gone by then);
+extending the model there is an open question of this interface.  The builtin
+cursor is not exposed; a model is expected to track its own stream
+state.  Note that model state keyed by the blkcg alone is shared
+across every device the model is bound to, unlike the builtin cursor
+which is per (cgroup, device).
+
+    u64 calc_cost(u64 opf, u64 nbytes, sector_t sector,
+		  struct blkcg *blkcg, u64 model_flags)
+
+opf is the full bio->bi_opf (the operation must be extracted with a
+mask, and the REQ_* flag bits, including PREFLUSH/FUA, are part of
+it); model_flags carries iocost-specific metadata which is not part
+of the bio operation flags, such as whether the cost calculation
+is for a merged request; the return value is vtime, clamped to 1
+second of device time per IO.  blkcg is passed so the model can key
+per-cgroup state; state stored in BPF_MAP_TYPE_CGRP_STORAGE
+follows the cgroup lifetime, and optional blkcg_online()/
+blkcg_offline() callbacks mirror the css lifecycle for models
+which want eager setup or teardown.
+
+The registration and binding model follows the TCP congestion
+control model registration pattern: registering a struct_ops makes
+the model available by its name, while io.cost.model binds one
+registered model to a device with "model=<name>" and restores the
+builtin model with "model=linear".  Unregistering a model removes
+it from the registry so it can no longer be selected by name;
+devices already using the model keep using it until they are
+switched back to the builtin model, at which point the reference
+is released.  A model which does not implement calc_cost is
+rejected at load.  Sleepable models are rejected at verification,
+since calc_cost() runs under RCU read lock.  Patch overview:
+
+ 1/5: the BPF struct_ops cost model support: Kconfig, ops
+      definition, name registry, registration, io.cost.model
+      binding, unified dispatch and verifier checks
+ 2/5: selftest with the 2x example model (the full builtin linear
+      HDD formula at double cost) plus a runner and the selftest
+      kernel config entries
+ 3/5: add an iocost_ioc_tick tracepoint emitting the per-period
+      controller state, so model quality can be evaluated without
+      drgn (existing events are state-change driven and silent in
+      steady state)
+ 4/5: a second example model which replaces the single-cursor
+      sequentiality heuristic with per-cgroup multi-stream detection
+      keyed by the cgroup, the first consumer of the state interface
+ 5/5: document the model=<name> binding in cgroup-v2.rst
+
+Does it work
+------------
+
+Mechanism, verified functionally (QEMU, virtio-blk with the HDD
+profile, sequential-read workload from a 1%-weight cgroup, builtin
+vs the 2x example model):
+
+ - per-IO charge: 2882us -> 5722us, a factor of 1.985x; the
+   completed IO count halves and total cost.usage is conserved,
+   i.e. the model output drives both charging and budgeting
+ - edge cases: binding an unknown model name fails with ENOENT
+   and nothing is applied; unregistering a bound model leaves the
+   device correctly priced (2x) until it is switched back; the
+   readback shows the bound model name; the selftest runner
+   checks the write error and errno of every step, including the
+   restoration
+
+Workload-shape verification added in this revision (same setup,
+4k IOs at weight 1000, builtin vs the 2x example model):
+
+ - flush-heavy workload (read/write/fsync alternating): priced
+   1.99x the builtin, i.e. flushes no longer reset the cursor
+   and misjudge the following IO as random
+ - non-page-multiple IO (6 KiB): priced ~2x, matching the
+   builtin's truncating page count
+ - first IO from a high LBA (past 16 MiB): priced 2.01x, i.e.
+   a fresh cgroup's zero cursor no longer misjudges the first IO
+   as random
+
+Payoff, demonstrated with the multi-stream example model (4/5) on
+the same setup, 4k IOs at weight 1000, builtin vs the model:
+
+ - two sequential readers in one cgroup: priced 1961us/op by builtin
+   (both judged random by the single cursor) and 23us/op by the
+   model (each stream keeps its own slot); the completed IO count
+   rises by two orders of magnitude
+ - random IO inside an 8M window: priced 24us/op by builtin
+   (undercharge, an accounting escape) and 2607us/op by the model
+ - single-stream sequential and whole-disk random pricing are
+   unchanged, so the model fixes both directions of mispricing
+   without introducing a new one
+
+Non-interference, measured on enterprise NVMe: no measurable
+overhead when the BPF model is not attached.
+
+---
+Changes in v3:
+- blkcg online/offline notifications follow the model binding, not
+  the name registry; an unregistered but still-bound model keeps
+  receiving them until its last reference is dropped
+- the io.cost.model write resolves the model name before applying
+  anything and swaps the model pointer under ioc->lock, so a bad
+  name rejects the whole write and concurrent writers cannot
+  interleave a half-applied configuration
+- iocost_ioc_tick reports the period's own state, including its
+  measured duration and the period number that just ended
+- a model which does not implement calc_cost is rejected at load
+  (the CFI stub previously satisfied the check and priced every
+  IO at 0)
+- CFI stubs are provided for blkcg_online/blkcg_offline, without
+  which the verifier rejected any model trying to implement the
+  optional lifecycle callbacks
+- the example models match the builtin cursor semantics: a zero
+  cursor means no previous IO, the cursor is only advanced for bios
+  the builtin prices (a dataless flush no longer resets it), the
+  cursor advance truncates to whole sectors like bio_end_sector(),
+  and the page count truncates like the builtin; stream updates
+  are lockless like the builtin cursor, noted in the example
+- the selftest builds at every commit (the streams test moved to
+  the patch adding the multi-stream model), includes <ctype.h>,
+  checks enable=1, skips instead of failing on devices without
+  iocost, distinguishes the open() errno from the write() errno,
+  and reports the restoration error
+
+Tao Cui (5):
+  blk-iocost: add BPF struct_ops cost model support
+  selftests/bpf: add iocost cost model test
+  blk-iocost: add iocost_ioc_tick tracepoint for per-period device
+    summary
+  selftests/bpf: add multi-stream sequentiality example model
+  docs: cgroup-v2: document io.cost model=<name> binding
+
+ Documentation/admin-guide/cgroup-v2.rst       |  12 +
+ block/Kconfig                                 |   9 +
+ block/Makefile                                |   1 +
+ block/blk-cgroup.c                            |   3 +
+ block/blk-iocost-bpf.c                        | 307 ++++++++++++++++++
+ block/blk-iocost.c                            | 229 +++++++++++--
+ include/linux/blk-iocost.h                    |  83 +++++
+ include/trace/events/iocost.h                 |  46 +++
+ tools/testing/selftests/bpf/config            |   2 +
+ .../selftests/bpf/prog_tests/iocost_model.c   | 200 ++++++++++++
+ .../selftests/bpf/progs/iocost_model.c        | 134 ++++++++
+ tools/testing/selftests/bpf/progs/iocost_ms.c | 156 +++++++++
+ 12 files changed, 1158 insertions(+), 24 deletions(-)
+ create mode 100644 block/blk-iocost-bpf.c
+ create mode 100644 include/linux/blk-iocost.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/iocost_model.c
+ create mode 100644 tools/testing/selftests/bpf/progs/iocost_model.c
+ create mode 100644 tools/testing/selftests/bpf/progs/iocost_ms.c
 
 -- 
 2.43.0
