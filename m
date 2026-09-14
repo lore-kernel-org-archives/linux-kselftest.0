@@ -1,41 +1,66 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256654534BB;
-	Mon, 14 Sep 2026 11:48:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CD50442B3E
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 11:50:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789386492; cv=none; b=tXzJpp/KiiFMdKazr4oquf/XQqapH5U14EnsjZVVadJu1PxfyfgrQ2WreimGZiq5294+Dkxdlo2KzElH1p20pAbXxS+kKIxMEoXcx/E4K8vZKe9MI2h3ophmCH7l9fs4P7nu6Geb8gLNsqlDNshd+uzChOTRGSzRoj7jn4v6dv0=
+	t=1789386644; cv=none; b=VnUHzLLrZhGo7r2QejD6cAnNp5IfqdaxzhLA1nLBFmEYAVFP75NQheMsHvHkhUCYd3PJO1RtHySFyiQgVFizJiXuXgymvKERbohWWePgWIFvdGIVFwFqZno5+G1G2rP6Og/D2m0n55z//BNASrUqrgdbAWoJodi6mTx3vchfDwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789386492; c=relaxed/simple;
-	bh=ySVw3BtQ8VdlSvwcAcvu2VldK45kYaHXHC6yP9WKKsg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Z3tYZIM+bKN5mT0NembYb10YdwI/OdHfKiC4SsISiydeP9+NKiqH77xmjROyFGk8Sj89w/DGxi/TnyU/mmpVG7kqIiW+bOQiPWHlFlOj56ik3JYLCEruACfYGNF5ybnsnvBINk/aeoe12y2wysgVQiuPvdapRfynMhcbZd7ZSCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=SXuEO2sa; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	s=arc-20240116; t=1789386644; c=relaxed/simple;
+	bh=ChNWu4SF6NGhwjGjf6K8AWy5RuCiogwQwkyEnV0Sbbs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZHIuXtZrjVgHN6AIJQydqYZKH3iuk0i/rDFvtB3hPS96ljplmxQJSm3apgDUHVi6FyxerJjJxs94aMmtBxciU+M4QhL4EfkBHWsJHa57znDrQ9Jgiyrw0qlUFlmVb4+G5cUu3CMPgfmU0LwII8jkh3C0r70OLfaD14c8aIua5po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tIK/NQHS; arc=none smtp.client-ip=209.85.167.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="SXuEO2sa"
-Received: from h183.csg.ci.i.u-tokyo.ac.jp (h183.csg.ci.i.u-tokyo.ac.jp [133.11.54.183])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 68EBfjsJ084060
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 14 Sep 2026 20:41:57 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=iW6paRDU1WuHVvPa2Tan4+ENXAFGhAHh39Stpx/lGEU=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-Id:To:Subject:Date;
-        s=rs20250326; t=1789386117; v=1;
-        b=SXuEO2saKk20YD2hI4Bd3B6I1m3y39IXjKSDYVMyTHJVPMTQG/DWMsTfg5ROC63a
-         jQn/hizniPKxQGoa4QtbRLVEU85+E7s2+daO7YVK9mG9QtCn58S1tOauNKKtiSV2
-         rgA9ixQDTlU1/m0K8LG0USQ6+PyjRjdGcSGYV1qGyESosnCt3e+dw6Ii5Bv8hD/0
-         e19rtNxCti9KLIb+3XRWxOaN7rt0DXQJs+t1yWxfjNxqRebhgPZGzMpvOugpvHoi
-         RSX+sNZyTMEjUyAPfeRllhhiUhdOq0z8rIfdEgfUVkAEW7O39oHByZAhKO/t0Tnu
-         QykA1SOKzEoWPoyc1NtBKQ==
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Date: Mon, 14 Sep 2026 20:40:56 +0900
-Subject: [PATCH v10 17/20] KVM: arm64: PMU: Pass the target CPU to
- kvm_pmu_probe_armpmu()
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tIK/NQHS"
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-4b381337e1fso3158539b6e.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 04:50:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789386641; x=1789991441; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=MaqTH9IlSFyz/AkXyftEm+wBLkaCkpRXZW0c+BfqTAY=;
+        b=tIK/NQHSBAmP7RSxz+6cJVzVArk+IF9OaELzQI5MHOyrC1YPPp8EB0NKAKbho5v2lT
+         ZsuSA1d3quKF0WJVlYrEGvchK0I4VIWWQyXqSl5gmAnjut+LBU8ZBtST3H+VYxAJtCDD
+         tTi4kskmhoXjwQdQQQI4E9betsCkAoK+eOYT6hd12XulPhyk4qbGNil+1+Tjw/ATB8w8
+         4ZCHrVhYmsXGdwrdKl9K+OIobSw2eMxbGEE21zG3a0KI2wRQVehBcvaAs5ZhjV0SWfe8
+         W52CHr3skm2TkC54qerVPNQAHWJut70mNmWCQ2jZIrFOaOZKHnt6uQVEa4G8BSZnVfmr
+         pQYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789386641; x=1789991441;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=MaqTH9IlSFyz/AkXyftEm+wBLkaCkpRXZW0c+BfqTAY=;
+        b=RxzR7xZ4FHtk3weCKffY4/YC0dBomwRggbeDaDd746N2M8zl7QBmzmRrHbFopXTRGx
+         /xdF8OOECbXcG7uZQh31cn7afnJIadFXLDdDtTdcVzwdVTn692Z+1aS4nsBbkz4kShKB
+         Rqsm2yivOhLB505Cwl2RvDkib7/kuFma6pupN11ODN1IPtH5UlMz1T3N0bbHBGGvH6IL
+         4A6bVtvdj5/qTfEkMPyP1Yq1zdnwmWpNMaLXAb+Ys6LHyt6qvxq/s4o1NakT+yLYmAsN
+         YC3rpV+Ds3pIhiF7Q+NHyBtfgywB55Vx171M/wZK0nHdR+XR7lGY7em9Pf8I3toO5ht6
+         ARgA==
+X-Forwarded-Encrypted: i=1; AKwUvBx2eJWXXBfH480w58PYsL1dQVP1h8M1/7cf3Pi6LPGLPMYHCzGT8IAa2HATUU0A9zb/0SqQvSVDBFZYWvbWMUo=@vger.kernel.org
+X-Gm-Message-State: AFuF++mYmBE0R4ssT7soYN7mOoUU/N9v1VZOagbzqxXBpaCOCRzDkUNd
+	bgO8FsWcEB+U9ljb0Oboi+MHme9pVmfGI4njv3bGbd3cFqW3wVNict0m
+X-Gm-Gg: AYBFou2ep4Sv28P+bH/TmtPBAuHuO3V2/1EknGSDe3v9zstOHNFhsk932ubcN/YVv5u
+	QL2qXx+87a1UrqDXIoUkuXaQTDBYdqJIBNjNPRlcB4tg7aT/0GuQ2IcCStsSQ5BfnfXRdcAVKif
+	BepeIZmAubzFLq7MCixPavIUV+69mnuc5LKS5yN/disg02yhV81EzZITznDjGGxupwhOVYFxDfd
+	8ktCBRCREeNmFFPARprK807Qs+p+bcOK2xOiXAefx7hRAnpLQxJfEDuPQqJSInEOjBnXKxda8R/
+	mIvXQbvid4RifClz1ZFfw7H95435VW7SLJQnKzFPYyVE79qHXiy9vYU6U7UqSrIl5v0bP1/nXEd
+	C9+9baTA++veBi9uEAojjVUfcclEC8sy4X195OZpDuCiB3M2bp19RhAKm+xqdtQC9FUHfdJ2RYD
+	Cd8kitlMcRap0oetuQAesHpqcpnWampSzBFXBqHx6+GKnNcZIzYTSIyMnnZFK36at5UIFASj4WU
+	iM=
+X-Received: by 2002:a05:6808:244c:b0:4b9:e65b:8c31 with SMTP id 5614622812f47-4c7b48b3bd7mr1603457b6e.31.1789386641298;
+        Mon, 14 Sep 2026 04:50:41 -0700 (PDT)
+Received: from [127.0.1.1] ([201.162.69.22])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4c3314b17d0sm9904432b6e.8.2026.09.14.04.50.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2026 04:50:40 -0700 (PDT)
+From: Luis Vieira <luisflavieira@gmail.com>
+Date: Mon, 14 Sep 2026 08:50:31 -0300
+Subject: [PATCH bpf] libbpf: Fix program log buffer size validation
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,156 +69,117 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260914-hybrid-v10-17-92788053a691@rsg.ci.i.u-tokyo.ac.jp>
-References: <20260914-hybrid-v10-0-92788053a691@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <20260914-hybrid-v10-0-92788053a691@rsg.ci.i.u-tokyo.ac.jp>
-To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Steffen Eiden <seiden@linux.ibm.com>, Fuad Tabba <tabba@google.com>,
-        Shannon Zhao <shannon.zhao@linaro.org>,
-        Andrew Jones <drjones@redhat.com>
-Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>,
-        Fuad Tabba <fuad.tabba@linux.dev>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4142;
- i=odaki@rsg.ci.i.u-tokyo.ac.jp; h=from:subject:message-id;
- bh=ySVw3BtQ8VdlSvwcAcvu2VldK45kYaHXHC6yP9WKKsg=;
- b=owGbwMvMwCWmMbc20y1CyJDxtFoSQ9byu2U355cuY5z6LYFNdSLDjY2nWNJbHYwqTMv2haonR
- tcq65h3lLIwiHExyIopsqQU7ebWiK79VJgQ3wIzh5UJZAgDF6cATGRWH8M/bSkpMyOu3ZuiUyKv
- s+34fcnmwj2ftH1hDPOTZrcb/JjQwciwrdDrxrf1b/cXzY3MPyxivDqlxUfFsIJ1b3pkRcrOA5O
- 5AQ==
-X-Developer-Key: i=odaki@rsg.ci.i.u-tokyo.ac.jp; a=openpgp;
- fpr=AEDC03C9AF734F2EC26A7BFFA4BAEAA73536753C
+Message-Id: <20260914-libbpf-log-buf-fix-v1-1-f592caffcc71@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAIbfp2oC/x2MSwqAMAwFryJZG2j9oV5FXLSa1kCp0qII4t0NL
+ ucxbx7IlJgyjMUDiS7OvEcBXRawbCZ6Ql6FoVJVpwZdY2BrD4dh92hPh45vbAbXqrpfjGlXkOO
+ RSOY/OoHIML/vBwCA4vppAAAA
+X-Change-ID: 20260913-libbpf-log-buf-fix-49f5038caa5d
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Luis Vieira <luisflavieira@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1789386635; l=2747;
+ i=luisflavieira@gmail.com; s=20260913; h=from:subject:message-id;
+ bh=ChNWu4SF6NGhwjGjf6K8AWy5RuCiogwQwkyEnV0Sbbs=;
+ b=+BXvKW5XIp+uDGQQdXyt3rRGzNHUx/tWoYxQaix3CUebltrheNoWY5mGbtM9eRw81unJKmOjJ
+ ro5a4w4mBlcCM58XPDG+ywgA/kE9F486ggCw81a1k4FN90xIlRpn/Q8
+X-Developer-Key: i=luisflavieira@gmail.com; a=ed25519;
+ pk=98MeC/NdrC6ah7zYpPnkWiQIoyj62iUP/rNuV3esCW4=
 
-kvm_pmu_probe_armpmu() currently samples the current CPU internally,
-which ties the helper to default PMU selection.
+bpf_program__set_log_buf() intends to reject log buffer sizes larger
+than UINT_MAX.
 
-Move that policy to kvm_arm_set_default_pmu() by passing
-raw_smp_processor_id() from the caller, and make the helper search for
-the pPMU covering an explicit CPU. Move the helper above
-kvm_pmu_create_perf_event() so later code can reuse it when creating
-PMU events for a VCPU's current pCPU.
+However, the function checks the existing prog->log_size instead of
+the incoming log_size argument. As a result, an oversized value can
+be accepted.
 
-This preserves the existing default PMU selection behavior while
-preparing fixed-counters-only mode to select a pPMU at runtime.
+Validate the supplied log_size instead.
 
-Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
+Add a regression test that verifies that values larger than UINT_MAX
+are rejected with -EINVAL on platforms where size_t can represent
+such values.
+
+Fixes: b3ce90795035 ("libbpf: Add per-program log buffer setter and getter")
+Signed-off-by: Luis Vieira <luisflavieira@gmail.com>
 ---
- arch/arm64/kvm/pmu-emul.c | 72 +++++++++++++++++++++++------------------------
- 1 file changed, 35 insertions(+), 37 deletions(-)
+ tools/lib/bpf/libbpf.c                           |  2 +-
+ tools/testing/selftests/bpf/prog_tests/log_buf.c | 25 ++++++++++++++++++++++++
+ 2 files changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
-index 05b48be05abd..ccd268d76235 100644
---- a/arch/arm64/kvm/pmu-emul.c
-+++ b/arch/arm64/kvm/pmu-emul.c
-@@ -694,6 +694,23 @@ static int kvm_map_pmu_event(struct arm_pmu *pmu, unsigned int eventsel)
- 	return eventsel;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index b749c01742ee..e1fed7735614 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9955,7 +9955,7 @@ int bpf_program__set_log_buf(struct bpf_program *prog, char *log_buf, size_t log
+ {
+ 	if (log_size && !log_buf)
+ 		return libbpf_err(-EINVAL);
+-	if (prog->log_size > UINT_MAX)
++	if (log_size > UINT_MAX)
+ 		return libbpf_err(-EINVAL);
+ 	if (prog->obj->state >= OBJ_LOADED)
+ 		return libbpf_err(-EBUSY);
+diff --git a/tools/testing/selftests/bpf/prog_tests/log_buf.c b/tools/testing/selftests/bpf/prog_tests/log_buf.c
+index d6f14a232002..31c842d27fb4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/log_buf.c
++++ b/tools/testing/selftests/bpf/prog_tests/log_buf.c
+@@ -3,6 +3,8 @@
+ 
+ #include <test_progs.h>
+ #include <bpf/btf.h>
++#include <limits.h>
++#include <stdint.h>
+ 
+ #include "test_log_buf.skel.h"
+ #include "bpf_util.h"
+@@ -267,6 +269,27 @@ static void bpf_btf_load_log_buf(void)
+ 	btf__free(btf);
  }
  
-+static struct arm_pmu *kvm_pmu_probe_armpmu(int cpu)
++static void prog_log_buf_size_limit(void)
 +{
-+	struct arm_pmu_entry *entry;
-+	struct arm_pmu *pmu;
++#if SIZE_MAX > UINT_MAX
++	struct test_log_buf *skel;
++	char log_buf[1];
++	int err;
 +
-+	guard(rcu)();
++	skel = test_log_buf__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
 +
-+	list_for_each_entry_rcu(entry, &arm_pmus, entry) {
-+		pmu = entry->arm_pmu;
++	err = bpf_program__set_log_buf(skel->progs.good_prog, log_buf,
++				       (size_t)UINT_MAX + 1);
++	ASSERT_EQ(err, -EINVAL, "set_log_buf_too_big");
 +
-+		if (cpumask_test_cpu(cpu, &pmu->supported_cpus))
-+			return pmu;
-+	}
-+
-+	return NULL;
++	test_log_buf__destroy(skel);
++#else
++	test__skip();
++#endif
 +}
 +
- /**
-  * kvm_pmu_create_perf_event - create a perf event for a counter
-  * @pmc: Counter context
-@@ -823,42 +840,6 @@ void kvm_host_pmu_init(struct arm_pmu *pmu)
- 	list_add_tail_rcu(&entry->entry, &arm_pmus);
+ void test_log_buf(void)
+ {
+ 	if (test__start_subtest("obj_load_log_buf"))
+@@ -275,4 +298,6 @@ void test_log_buf(void)
+ 		bpf_prog_load_log_buf();
+ 	if (test__start_subtest("bpf_btf_load_log_buf"))
+ 		bpf_btf_load_log_buf();
++	if (test__start_subtest("prog_log_buf_size_limit"))
++		prog_log_buf_size_limit();
  }
- 
--static struct arm_pmu *kvm_pmu_probe_armpmu(void)
--{
--	struct arm_pmu_entry *entry;
--	struct arm_pmu *pmu;
--	int cpu;
--
--	guard(rcu)();
--
--	/*
--	 * It is safe to use a stale cpu to iterate the list of PMUs so long as
--	 * the same value is used for the entirety of the loop. Given this, and
--	 * the fact that no percpu data is used for the lookup there is no need
--	 * to disable preemption.
--	 *
--	 * It is still necessary to get a valid cpu, though, to probe for the
--	 * default PMU instance as userspace is not required to specify a PMU
--	 * type. In order to uphold the preexisting behavior KVM selects the
--	 * PMU instance for the core during vcpu init. A dependent use
--	 * case would be a user with disdain of all things big.LITTLE that
--	 * affines the VMM to a particular cluster of cores.
--	 *
--	 * In any case, userspace should just do the sane thing and use the UAPI
--	 * to select a PMU type directly. But, be wary of the baggage being
--	 * carried here.
--	 */
--	cpu = raw_smp_processor_id();
--	list_for_each_entry_rcu(entry, &arm_pmus, entry) {
--		pmu = entry->arm_pmu;
--
--		if (cpumask_test_cpu(cpu, &pmu->supported_cpus))
--			return pmu;
--	}
--
--	return NULL;
--}
--
- static u64 __compute_pmceid(struct arm_pmu *pmu, bool pmceid1)
- {
- 	u32 hi[2], lo[2];
-@@ -1098,7 +1079,24 @@ static void kvm_arm_set_pmu(struct kvm *kvm, struct arm_pmu *arm_pmu)
-  */
- int kvm_arm_set_default_pmu(struct kvm *kvm)
- {
--	struct arm_pmu *arm_pmu = kvm_pmu_probe_armpmu();
-+	/*
-+	 * It is safe to use a stale cpu to iterate the list of PMUs so long as
-+	 * the same value is used for the entirety of the loop. Given this, and
-+	 * the fact that no percpu data is used for the lookup there is no need
-+	 * to disable preemption.
-+	 *
-+	 * It is still necessary to get a valid cpu, though, to probe for the
-+	 * default PMU instance as userspace is not required to specify a PMU
-+	 * type. In order to uphold the preexisting behavior KVM selects the
-+	 * PMU instance for the core during vcpu init. A dependent use
-+	 * case would be a user with disdain of all things big.LITTLE that
-+	 * affines the VMM to a particular cluster of cores.
-+	 *
-+	 * In any case, userspace should just do the sane thing and use the UAPI
-+	 * to select a PMU type directly. But, be wary of the baggage being
-+	 * carried here.
-+	 */
-+	struct arm_pmu *arm_pmu = kvm_pmu_probe_armpmu(raw_smp_processor_id());
- 
- 	if (!arm_pmu)
- 		return -ENODEV;
 
--- 
-2.55.0
+---
+base-commit: ee363e055895364039bf28348ff13c615afad4ba
+change-id: 20260913-libbpf-log-buf-fix-49f5038caa5d
+
+Best regards,
+--  
+Luis Vieira <luisflavieira@gmail.com>
 
