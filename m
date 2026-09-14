@@ -1,97 +1,242 @@
-Received: from mta0.migadu.com (out-94.mta0.migadu.com [91.218.175.94])
+Received: from mta0.migadu.com (out-218.mta0.migadu.com [91.218.175.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A9E3DB335
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 07:34:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC21F3750C4
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 08:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789371277; cv=none; b=Oj64pHLLjPXk6bH/cTa4Qr7qdZ/ACELV/PcncDxk+dvXEmmRROg6dmInN61qEnrrweqfkI1EwMtOIrnHAoqAuken5XJ+M5RFHXWlgqA4a6Hepkj+G3XukopPWWyE8ZQI5281kYrvOqve6LduqhsDIfYx8seKGNRDM52AcqhWc+0=
+	t=1789375584; cv=none; b=Rwb0cOsQadCs60Db2ipLwsFtOyW2hqUuHjDWkoYDe2eZHJWhJWkvnImDLe3FOuCzRPMW5nUAne88dGZvZwyL5Y07VKRRtHHaw5AJULkpFDMlJqtIu6i52YoMPjPQpyww3SPdORjbHTdgToe41glHdyCVCWsWvrrcls/tZAX4uzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789371277; c=relaxed/simple;
-	bh=8AnQPQHmMcavg+NgdFWqfItM439TPTTQXb8sYh9+VlQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SznjGT6sCMnBo3I/LAqBkGKEXVq2xD2rAGKdnEF4q8qOWkadchgwyZzztgezD1xctdGZJ6ezP8GCsacQX+rNM9VpnRL950D5L/nyHHJU3qaeTbjeEAHkyxDAvaqtFgiJak/PzviHh/atogQBRG1yhHN7jCYJKmPv1J0LXGbj7Fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UPwWRVMw; arc=none smtp.client-ip=91.218.175.94
+	s=arc-20240116; t=1789375584; c=relaxed/simple;
+	bh=4Dd0n0gTLPNa/6hflxMCBDhcyfr6bR5PLYgiDXNQGGA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=erD8ywovyJPdG9QaKjIzO1NCAGqL+35xCkfN0izKBm3kN0/aQyVmRHvTTBx9xUfoV7KXcL8Typ2wSC7btzIgxbAHW6ziLMV2REE4h5d/djWR/5hnRmAv1TAPz+7tzUvcCiWi3ktFh4r7WR9zodGR3JGtoqRkDdu/XoYWfP5WfyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=payzUWZ5; arc=none smtp.client-ip=91.218.175.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UPwWRVMw"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="payzUWZ5"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=8AnQPQHmMcavg+NgdFWqfItM439TPTTQXb8sYh9+VlQ=;
+DKIM-Signature: a=rsa-sha256; bh=4Dd0n0gTLPNa/6hflxMCBDhcyfr6bR5PLYgiDXNQGGA=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789371272; v=1; x=1789976072;
- b=UPwWRVMwTBeowfpRjH5V+IBHJOMDC/OxEpvMaU7RFQBZ+9CDflpPDTIjtKL5MhUVUzCFjEs7
- Mn0Qce/54b8afbdN93SaHohaZ/8q/YCvlMCe+1dZ6ny1agcKHeLnyGoYDKhHEH8K5KH/pq6S3Gy
- YnwLWr7Ba2bhMvebI0m1MqC8=
+ t=1789375579; v=1; x=1789980379;
+ b=payzUWZ5IoecKt1DiVG3ZwTtO3Gk5FVcS20RaS/tZQm9sx1TqNn81Rg9rU35lBNM0TWsR7tb
+ 6AVtFYdmVEWiB6htSoxINwC59aXIfl6N3+VGBBHN0hvTukI+KNNuXndimyotES6Qlxvm1EmwKBG
+ IwdyJ8SG4/aRu1rSAceSR+WE=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 569a7bb680ac6dae;
-	Mon, 14 Sep 2026 07:34:32 +0000
-X-Mizu-Trace-ID: 569a7bb680ac6dae
+Received: by smtp.migadu.com with ESMTPS id be2134d539f3b060;
+	Mon, 14 Sep 2026 08:46:19 +0000
+X-Mizu-Trace-ID: be2134d539f3b060
 X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org,
-	josef@toxicopanda.com,
-	axboe@kernel.dk
-Cc: cgroups@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	linux-kselftest@vger.kernel.org,
-	cui.tao@linux.dev,
-	cuitao@kylinos.cn
-Subject: [RFC PATCH v3 5/5] docs: cgroup-v2: document io.cost model=<name> binding
-Date: Mon, 14 Sep 2026 15:33:56 +0800
-Message-ID: <20260914073356.791518-6-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260914073356.791518-1-cui.tao@linux.dev>
-References: <20260914073356.791518-1-cui.tao@linux.dev>
+Message-ID: <8f506ce9-b108-44cf-8f9f-99a686c7d843@linux.dev>
+Date: Mon, 14 Sep 2026 16:46:08 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3 1/2] bpf, veth: xdp: fix page_pool page leak on
+ skb-backed XDP
+To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+Cc: bpf@vger.kernel.org,
+ syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Hangbin Liu <liuhangbin@gmail.com>,
+ Martin Karsten <mkarsten@uwaterloo.ca>,
+ =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+ Eelco Chaudron <echaudro@redhat.com>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260911135711.109338-1-jiayuan.chen@linux.dev>
+ <20260911135711.109338-2-jiayuan.chen@linux.dev> <aqaflCbYxNRe-13p@lore-desk>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <aqaflCbYxNRe-13p@lore-desk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-From: Tao Cui <cuitao@kylinos.cn>
 
-Document the named-model binding of io.cost.model in the
-io.cost.model section of the cgroup v2 documentation: the binding
-and restore syntax, the unknown-name rejection, the full-replacement
-semantics of a bound model and the unregister lifetime.
+On 9/13/26 9:05 PM, Lorenzo Bianconi wrote:
+>> bpf_xdp_shrink_data() frees a released frag via __xdp_return() using
+>> xdp->rxq->mem.type, but that type is wrong for skb-backed XDP: the skb is
+>> cow'd into page_pool memory while the rxq still says MEM_TYPE_PAGE_SHARED,
+>> so the page_pool page is freed with page_frag_free() and we hit
+>> "Bad page state ... page_pool leak".
+>>
+>> Both generic XDP and veth are affected. A non-linear skb is cow'd into
+>> page_pool memory (skb_cow_data_for_xdp() -> skb_pp_cow_data() for generic
+>> XDP, veth_convert_skb_to_xdp_buff() for veth), so its frags become
+>> page_pool pages while the rxq keeps MEM_TYPE_PAGE_SHARED.
+>>
+>> We can't just fix rxq->mem.type in place:
+>> - generic XDP: xdp->rxq is dev->_rx[queue].xdp_rxq (see
+>>    bpf_prog_run_generic_xdp()), a shared rxq that other CPUs may access in
+>>    parallel, so we must not write to it.
+>> - veth: rq->xdp_rxq.mem is shared per-queue state that veth resets on XDP
+>>    teardown, and with GRO that reset runs without stopping in-flight NAPI,
+>>    so a type stashed there can be clobbered under a packet still in flight.
+>>
+>> Adding a check in __xdp_return() or bpf_xdp_shrink_data() itself is not an
+>> option either: without recording it somewhere, both can only guess the
+>> frag's memory type, which quickly gets confusing.
+>>
+>> So record it in the xdp_buff. A dedicated mem_type field (mirroring
+>> xdp_frame->mem_type) would read more naturally, but it grows xdp_buff, and
+>> struct xdp_page_head embeds two of them, which shifts the layout the
+>> xdp_do_redirect live-frames selftest hard-codes (MAX_PKT_SIZE). So use a
+>> flag bit: add XDP_FLAGS_FRAGS_PAGE_POOL, the two skb-cow sites set it, and
+>> bpf_xdp_shrink_data() frees the frag to the page_pool when it is set,
+>> otherwise it keeps falling back to xdp->rxq->mem.type unchanged.
+> I have not looked into the details yet, but I am wondering if it is possible
+> to just move xdp_mem_info type (or ever the full xdp_mem_info) in xdp_buff and
+> remove it from xdp_rxq_info struct. What do you think?
 
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
----
- Documentation/admin-guide/cgroup-v2.rst | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 8d2603751c51a..0d2d0525255cb 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2124,6 +2124,18 @@ IO Interface Files
- 	parameters are written to, "ctrl" become "user" and the
- 	automatic changes are disabled.
- 
-+	When CONFIG_BLK_CGROUP_IOCOST_BPF is enabled, "model" also accepts
-+	the name of a registered iocost_model_ops BPF struct_ops model:
-+	"model=<name>" binds the model to the device and the model fully
-+	replaces the builtin linear pricing, for every operation including
-+	flushes; "model=linear" (or "ctrl=auto/user") restores the builtin
-+	model.  Writing an unknown name fails with ENOENT and nothing is
-+	applied.  Unregistering a model removes its name so it can no
-+	longer be selected; devices already bound keep using it, and keep
-+	receiving cgroup lifecycle notifications, until switched back to
-+	the builtin model.  See include/linux/blk-iocost.h
-+	for the model interface.
-+
- 	When "model" is "linear", the following model parameters are
- 	defined.
- 
--- 
-2.43.0
+I think that would read better, but it touches ~20 datapath sites plus a
+few drivers, so I choose keeping this one small enough to backport.
+
+
+>> The flag describes the buff, so the buff <-> frame conversions have to keep
+>> it consistent:
+>> - buff -> frame: xdp_update_frame_from_buff() copies xdp->flags into the
+>>    frame. veth XDP_TX/XDP_REDIRECT hand the frame to the peer, and cpumap
+>>    and devmap run a second program on it, so the peer would inherit a stale
+>>    tag; strip it, an xdp_frame describes its memory with ::mem_type.
+>> - frame -> buff: xdp_convert_frame_to_buff() rebuilds a buff, and veth and
+>>    devmap then run a program whose rxq says MEM_TYPE_PAGE_SHARED even for a
+>>    page_pool frame (only cpumap copies mem_type into the rxq). A shrink
+>>    there leaks the same way (this predates the series: bpf_xdp_adjust_tail()
+>>    frees frags by rxq->mem.type), so re-derive the flag from the frame's
+>>    ::mem_type.
+>>
+>> Fixes: e6d5dbdd20aa ("xdp: add multi-buff support for xdp running in generic mode")
+>> Fixes: 0ebab78cbcbf ("net: veth: add page_pool for page recycling")
+>> Fixes: bf25146a5595 ("bpf: add frags support to the bpf_xdp_adjust_tail() API")
+>> Reported-by: syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com
+>> Closes: https://syzkaller.appspot.com/bug?extid=237bbeed8dfe0699b7f5
+>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+>> ---
+>>   drivers/net/veth.c |  6 ++++++
+>>   include/net/xdp.h  | 30 +++++++++++++++++++++++++++++-
+>>   net/core/dev.c     |  6 ++++++
+>>   net/core/filter.c  |  7 +++++++
+>>   4 files changed, 48 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+>> index 6ed3ee81153fb..a3fdf1959b76c 100644
+>> --- a/drivers/net/veth.c
+>> +++ b/drivers/net/veth.c
+>> @@ -775,6 +775,12 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
+>>   	if (skb_shinfo(skb)->nr_frags) {
+>>   		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
+>>   		xdp_buff_set_frags_flag(xdp);
+>> +		/*
+>> +		 * A nonlinear skb was cow'd into rq->page_pool above, so the
+>> +		 * frags must be freed to that pool, not via the rxq's
+>> +		 * MEM_TYPE_PAGE_SHARED.
+>> +		 */
+>> +		xdp_buff_set_frag_pp(xdp);
+> Even if it is not a real problem at the moment, I still think we should
+> set it not just if we have a non-liner skb, but for all skb returned by
+> skb_pp_cow_data().
+
+
+It's not an actual problem today, so I won't respin just for this, but
+I'll fold it in if there is a v4.
+
+
+>>   	} else {
+>>   		xdp_buff_clear_frags_flag(xdp);
+>>   	}
+>> diff --git a/include/net/xdp.h b/include/net/xdp.h
+>> index aa742f413c358..8fd4139e9cbd3 100644
+>> --- a/include/net/xdp.h
+>> +++ b/include/net/xdp.h
+>> @@ -81,6 +81,14 @@ enum xdp_buff_flags {
+>>   	 * XDP program is not attached.
+>>   	 */
+>>   	XDP_FLAGS_FRAGS_UNREADABLE	= BIT(2),
+>> +	/*
+>> +	 * frags are page_pool memory even though rxq->mem.type is not: a
+>> +	 * skb-backed XDP buff (generic XDP, veth) is cow'd into a page_pool.
+>> +	 * xdp_buff only: an xdp_frame describes its memory with ::mem_type, so
+>> +	 * this is stripped in xdp_update_frame_from_buff() and re-derived from
+>> +	 * ::mem_type in xdp_convert_frame_to_buff().
+>> +	 */
+>> +	XDP_FLAGS_FRAGS_PAGE_POOL	= BIT(3),
+>>   };
+>>   
+>>   struct xdp_buff {
+>> @@ -131,6 +139,16 @@ static __always_inline void xdp_buff_set_frag_unreadable(struct xdp_buff *xdp)
+>>   	xdp->flags |= XDP_FLAGS_FRAGS_UNREADABLE;
+>>   }
+>>   
+>> +static __always_inline void xdp_buff_set_frag_pp(struct xdp_buff *xdp)
+>> +{
+>> +	xdp->flags |= XDP_FLAGS_FRAGS_PAGE_POOL;
+>> +}
+>> +
+>> +static __always_inline bool xdp_buff_is_frag_pp(const struct xdp_buff *xdp)
+>> +{
+>> +	return !!(xdp->flags & XDP_FLAGS_FRAGS_PAGE_POOL);
+>> +}
+>> +
+>>   static __always_inline u32 xdp_buff_get_skb_flags(const struct xdp_buff *xdp)
+>>   {
+>>   	return xdp->flags;
+>> @@ -394,6 +412,15 @@ void xdp_convert_frame_to_buff(const struct xdp_frame *frame,
+>>   	xdp->data_meta = frame->data - frame->metasize;
+>>   	xdp->frame_sz = frame->frame_sz;
+>>   	xdp->flags = frame->flags;
+>> +	/*
+>> +	 * frame->flags never carries XDP_FLAGS_FRAGS_PAGE_POOL (it is stripped
+>> +	 * in xdp_update_frame_from_buff()); re-derive it from the frame's own
+>> +	 * memory type. veth and devmap rebuild a buff here and run a program
+>> +	 * whose rxq says MEM_TYPE_PAGE_SHARED, so without this a shrink would
+>> +	 * free a page_pool frag through page_frag_free().
+>> +	 */
+>> +	if (frame->mem_type == MEM_TYPE_PAGE_POOL)
+>> +		xdp_buff_set_frag_pp(xdp);
+>>   }
+>>   
+>>   static inline
+>> @@ -420,7 +447,8 @@ int xdp_update_frame_from_buff(const struct xdp_buff *xdp,
+>>   	xdp_frame->headroom = headroom - sizeof(*xdp_frame);
+>>   	xdp_frame->metasize = metasize;
+>>   	xdp_frame->frame_sz = xdp->frame_sz;
+>> -	xdp_frame->flags = xdp->flags;
+>> +	/* XDP_FLAGS_FRAGS_PAGE_POOL is xdp_buff only, don't carry it over */
+>> +	xdp_frame->flags = xdp->flags & ~XDP_FLAGS_FRAGS_PAGE_POOL;
+> IIUC this is only necessary for the veth case, right? If so, I would suggest to
+> move it in veth driver (or to have a helper function called just in veth).
+>
+> Regards,
+> Lorenzo
+
+
+Not only veth - cpumap and devmap call xdp_update_frame_from_buff() too,
+and their buff came from xdp_convert_frame_to_buff(), which sets the bit
+from frame->mem_type.
+
+Without the strip it bites via xdpf_clone() (devmap broadcast):
+
+     memcpy(addr, xdpf, totalsize);          /* copies flags as is */
+     nxdpf->mem_type = MEM_TYPE_PAGE_ORDER0; /* flags left alone */
+
+the clone ends up ORDER0 with the page_pool bit still set, so the next
+xdp_convert_frame_to_buff() hands the prog a buff claiming page_pool
+over an ORDER0 page.
 
