@@ -1,153 +1,136 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5A226FC5;
-	Mon, 14 Sep 2026 16:46:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 029BC40BCC2
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 17:13:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789404404; cv=none; b=GuNC2hkyvFaQKPmbdIA2D2DJbgnftt1WBdI3bJ3cjgHbg7lfWC52pMs6xJ5doiPdTYOO2yNUWWLiMmko+9guECZWh91M23f6YMkspIwKBYQAr4E5F45DkhHrRWHLoMuF2V72nTk1pb2dzFLlxjbsKfJYnpL34NG4NPjxMjpqvJM=
+	t=1789406000; cv=none; b=nnwI6patKRDB3OP4dkZOwtFytvd9eCVym3X0KTzCqy9kp1xv3kTM3wtJ8Y61xYkVrhhnBrA9HZb5254mZX/GSB1v+lG19vjxz3fxIQ1Tt35DV4dUhnNVtCleajsyOpH0HZIbiBS1op5TsKJhclF5rf2BGvZraoM1+HZ1NCB5lO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789404404; c=relaxed/simple;
-	bh=1r0rw5uXWXH7+bTv+MSPJvopnTN1PMSJsWeAueQ3OIw=;
+	s=arc-20240116; t=1789406000; c=relaxed/simple;
+	bh=DWfd+OrYYBBAjoeKGlYddJuwoBUWlcnOVSA19p7gCPQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J6r/IRLjXzYoPJxtrmlnVwMgyJ29CAm2WBG0M2oQZ8NanT5sJF9FNiX7UQKMgT3kZceJWu+Kvk9asFwYU4QjjK9CVayJTCsgF4x6dpT1Jyer6IQ33PU9v3PKKPJaHjKIO21rM4G/VdDTYbTtQo3jQLg1FPT9PVlQu9YLD/qVxoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=uQlLzw5h; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=nRQ+T/TXoe5eMrpB6J5DWO4nKZMNUHUNT9DaQfO+GQmY5PJA6+mUQecta0P6sKVAjXC6ZYdqYp2/eE2kSSShucRP3C7JQrJxoltQOzLaEV9oOX1OFHI9Gm1oy0b96UxxfSmNQmAKHbd38G0eRcmT77Nk0xYIquC+uPI9x4xKPTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MFRnhab0; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="uQlLzw5h"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 64B02153B;
-	Mon, 14 Sep 2026 09:46:38 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2B093F86F;
-	Mon, 14 Sep 2026 09:46:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1789404402; bh=1r0rw5uXWXH7+bTv+MSPJvopnTN1PMSJsWeAueQ3OIw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uQlLzw5hH4+y/inqoVF5LI/F5v/0OKn3hBu6YiJiF5RclJSOU30kwx8YQiz+Vd6PF
-	 Kv7GPxXOdE5fNGfmy84Lk4zDUWKwNpomuiIOPLKBUe5upqoT8HCMnT9CQccy6wU2yp
-	 spL1qj8fM3HA59WNxLYe00SO/h32opTmY4jE0wkM=
-Date: Mon, 14 Sep 2026 17:46:36 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>, Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
-	Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Leon Romanovsky <leon@kernel.org>,
-	Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: Re: [PATCH v3 2/3] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT
- macro
-Message-ID: <aqgk7EVV1K_3Pc86@e129823.arm.com>
-References: <20260914-fix_hpage_macro-v3-0-c9a305a01d39@arm.com>
- <20260914-fix_hpage_macro-v3-2-c9a305a01d39@arm.com>
- <08d3313b-d891-4202-b460-c5cefa96bbce@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MFRnhab0"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-49e78adf099so16629175e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 10:13:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789405997; x=1790010797; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=b+lHxHvQW6ptoO5MEGq5MTyGK+6vHvFuZMkZJq4Ndzc=;
+        b=MFRnhab0hntRf3ahIUL7wo8NO040OIvRogUEtdFVo5Nwzda2TxxX+GMt2UJpWJmWSu
+         Mzvfa2b+TAPy2v3XccD8smBuVpMu3aA8MnscuWlty7Vif266e0Qt2sHReOST2yhq0zBk
+         NKJwrOlBWXjWRm/jl7visdu6zMyfwDnPOW/HYfgxWuY+3zbY+EnptwdRNxqQHQCfedVH
+         kNkdmetUgF8RBD4bfBInEvRgFOfrK3s0X8MtuZETdqJbbBj5CIi/NNWtS25xK/JIGLno
+         VAg65NrBfqvdDs8n7vIxAsMaJdxkay2oAEaGI5sTu8rOJVDMVnWP/HMz2L+QStne0OGg
+         PvCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789405997; x=1790010797;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=b+lHxHvQW6ptoO5MEGq5MTyGK+6vHvFuZMkZJq4Ndzc=;
+        b=LFeSjlibmvWNVyYVKsRRjyDQ2QJcGZBTyO9YLydzYt0V3K0guKke6hXxHkw3W/uCRX
+         TSBpY0KrA9qrvb9IN/eo8G3xREVUh+GnyqqSAi6VdmClAr6Ua4ElUGQKsKL0GntERZk/
+         4NckHq/JEXOp/HL6l7iubRMAprqk46CneRaMCtAK5GSliEVa+2x7GAWuVE0ZzZrtxi7F
+         R7eeDXSbJoga82KRk2FVSsOGPabc5inS+n0mcQSpq1VruTGsSy3i1ZLAzgvALuLfIb54
+         iQAN4cHpl5GzLAY7F+NTs2X63EhJvySpGPUD3vh4GkoIZ0+/Wa6BXsW0TgfYwdDsCKuC
+         ewMg==
+X-Forwarded-Encrypted: i=1; AKwUvBxNrWSqYpFbpJiamOjW3LYEsZW/eJeWcHV+bU8mwH9XceuwqtGkUjKXeFpE0E1RlbOUt0H5wShNnxgQwQVrlBk=@vger.kernel.org
+X-Gm-Message-State: AFuF++kc8sSf6IyL1b9MohQYkelXpXQDdc8ZLraZM6MGyScViok1VlfN
+	kWd1Iaq+e9Tjdf4k/pnlJ06cHLCzoMZW7JvDF0fe6Ja67F7WQIIhvWLI
+X-Gm-Gg: AYBFou2gCrLRC81/cgwsCEmXpDBjlUleFFtuqOQ3ExBxFKR2jdg8um5eh6DnPHFOpYr
+	/vEe60pgRmj2UYsjWmBcDNR6lI22QyBmJZcRrtuy1iJcheLTqLQbxgqSu43xDDvcR28S7wjr8so
+	N4uHJE2kz1z9AudhB7iEkRIqPFXzEkZTg+e+H0pqUXCi9DbPtsXZ6ne/7VyGCuiIyzw8tUPql61
+	vjEO1QtnwEu9Uz76vHnOMzZ7+/wXayWzeav3T7ajVhMrHcQCT9mRuvXDUxEjrxUt40W8zd4T6kO
+	vud55ErGk3LS/L25K0z031JpGZaY9LdVjoKqOU3N01XHzcrT0hHohj8IrIcxQd+N7VHdUKCUhhF
+	DtO3JsD2KFmHzWI8xKZHv/fK2AtHA6MV7A1Yr57lGGZx9LSWUgElH7bTwCfXOocFsELA8WVbvvL
+	2JqVMgWrrGw5hMbxo3LuXlTm+thHippzS5as0OXK78fmPMp3R4c02dyKUyzGROSekh0Xehbr125
+	ByTDDPKAbBBzGaMqyjmb3X7
+X-Received: by 2002:a05:600c:3585:b0:495:4d88:e630 with SMTP id 5b1f17b1804b1-49e7a64b723mr52892565e9.10.1789405996936;
+        Mon, 14 Sep 2026 10:13:16 -0700 (PDT)
+Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e7d675a50sm6040645e9.9.2026.09.14.10.13.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2026 10:13:16 -0700 (PDT)
+Date: Mon, 14 Sep 2026 19:13:15 +0200
+From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
+To: Christopher Lusk <clusk@northecho.dev>
+Cc: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Oleg Nesterov <oleg@redhat.com>, Jiri Slaby <jirislaby@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Tahera Fahimi <fahimitahera@gmail.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	John Johansen <john.johansen@canonical.com>,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] Landlock signal scope and TIOCSIG
+Message-ID: <20260914.239dc75285d2@gnoack.org>
+References: <20260913221958.839429-1-clusk@northecho.dev>
+ <20260914.b8a029f9abb8@gnoack.org>
+ <20260914134013.1457130-1-clusk@northecho.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <08d3313b-d891-4202-b460-c5cefa96bbce@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260914134013.1457130-1-clusk@northecho.dev>
 
-On Mon, Sep 14, 2026 at 04:08:03PM +0200, David Hildenbrand (Arm) wrote:
-> On 9/14/26 09:30, Yeoreum Yun wrote:
-> > HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
-> > When this macro is used in some test, test result would be strange in
-> > the system where PAGE_SIZE is more then 4KB.
-> > 
-> > Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
-> > 
-> >   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
-> >     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
-> >     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> >     ...
-> >   ok 1 Completed
-> > 
-> > Remove the HPAGE_SIZE and HPAGE_SHIFT macro and introduce pmd_pshift()
-> > helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-existing
-> > helper, pmd_psize().
-> > 
-> > Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
-> > which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
-> > and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
-> > PMD-sized units, the test may fail with the previous size of 100 MiB,
-> > which is not a multiple of the PMD size when the base page size is
-> > 16 KiB or 64 KiB.
-> > 
-> > After this patch, output of transhuge-stress:
-> > 
-> >   transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
-> >     2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s	2585 succeed, 1232 failed, 2585 different pages
-> >     2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s	2585 succeed, 1232 failed, 2585 different pages
-> >     2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s	2585 succeed, 1232 failed, 2585 different pages
-> >     2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s	2616 succeed, 1201 failed, 2616 different pages
-> >     2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s	2627 succeed, 1190 failed, 2627 different pages
-> >     2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s	2628 succeed, 1189 failed, 2628 different pages
-> >     2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s	2630 succeed, 1187 failed, 2630 different pages
-> >     2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s	2631 succeed, 1186 failed, 2631 different pages
-> >     ...
-> >   ok 1 Completed
-> > 
-> > Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> > ---
-> 
-> [...]
-> 
-> > index e712a980851c..fd1432dc6152 100644
-> > --- a/tools/testing/selftests/mm/vm_util.c
-> > +++ b/tools/testing/selftests/mm/vm_util.c
-> > @@ -21,6 +21,8 @@
-> >  
-> >  unsigned int __page_size;
-> >  unsigned int __page_shift;
-> > +uint64_t __pmd_psize;
-> > +uint64_t __pmd_pshift;
-> >  
-> >  uint64_t pagemap_get_entry(int fd, char *start)
-> >  {
-> > @@ -161,6 +163,9 @@ uint64_t pmd_psize(void)
-> >  	char buf[20];
-> >  	ssize_t num_read;
-> >  
-> > +	if (__pmd_psize)
-> > +		return __pmd_psize;
-> 
-> The only suboptmial thing about these functions is that we keep querying
-> repeatedly in case of failure.
-> 
-> If it failed once, it will fail always.
-> 
-> You could either add a new variable for "queried" or encode it in the variables like
-> 
-> uint64_t __pmd_psize = -1ull;
-> uint64_t __pmd_pshift = -1ull;
-> 
-> To then set them to 0 or the actual value after we queried.
+Hello!
 
-Okay. I'll respin it with above.
+On Mon, Sep 14, 2026 at 09:40:13AM -0400, Christopher Lusk wrote:
+> Your capability framing convinces me.  Controlling who may attach to (or
+> open a master for) the PTY is the right layer, and the master FD is best
+> thought of as the capability, the same way socketpair() is.
+> 
+> You are also right that the series is incomplete as a fix: the same three
+> signals arrive through the n_tty control-character path (Ctrl-C / Ctrl-\ /
+> Ctrl-Z) that my patch does not touch, and PTYs additionally raise SIGWINCH,
+> SIGHUP and SIGCONT.  That reinforces your point rather than mine.  Chasing
+> individual signal-delivery paths inside the TTY layer is the wrong layer,
+> and a per-ioctl hook would only paper over one entry into a mechanism that
+> is working as designed.
+>
+> One question, mostly so I have the line right in my own notes rather than
+> to relitigate: how do you see this relative to the SIGIO/fowner path that
+> 4b80320ca7ed brought under SCOPE_SIGNAL?  My read of the distinction is
+> that in the SIGIO case the sandboxed process unilaterally selects the target
+> by arming the owner, whereas here the recipients have voluntarily attached
+> to the terminal and the TTY driver delivers job-control signals over that
+> attachment.  If that is the intended boundary, it is a clean one, and I am
+> happy to treat TTY-driven signals as outside the guarantee.
 
-Thanks.
+Yes, that is the difference why SIGIO had to be protected -- in the
+SIGIO case, it was the already landlocked process which could itself
+select the signal recipients through fcntl(fd, F_SETOWN, ...).
+
+In the terminal case, it is the TTY-client-side processes that select
+which processes are attached to the terminal.  With the PTY master FD
+alone, it is not possible to signal processes that aren't already
+attached to the terminal.
 
 
--- 
-Sincerely,
-Yeoreum Yun
+> If it is useful, I would be glad to send a small documentation patch making
+> that explicit: a note in the SCOPE_SIGNAL / IPC-scoping section of
+> landlock.rst that TTY-driver signal delivery (TIOCSIG and the
+> control-character path) is not mediated by SCOPE_SIGNAL, with the practical
+> guidance to control PTY attachment instead.  I will drop the task_kill
+> approach.
+
+Thank you, I would appreciate that!
+
+Thanks,
+–Günther
