@@ -1,223 +1,114 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B654195B5
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 09:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949BF41F379
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 09:35:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789378473; cv=none; b=JsirqWOOUb+FjnD2MqAmnAZPUQGgaT4yhRcn1yCx/JK/ZetIPPiudTspDpPMZ8DFDUpj/8rUww9zGogsQLsSE25q/0K/n6UHGmt/xT00zibJs0pinA2V4gldklnqe3rqH07OqLElyFNR+VSlEdlLu5lgah5B+9U6qvbFj0hD9ZE=
+	t=1789378550; cv=none; b=SDS5C8HtFN4ej04QYensqhhJtNmRw/NFdMpAmrgv1BPBbtgmlVRI6m+M4DHcThc+K6mC5ymfToJwLLWgT51SAUW/s0oDoi9viRvNZ23MKmU20HbwyFED02KNxuJHmE0Mt695Y1rFv25+SX1y+7jDA38A5EUUFbQNjmiC4maXHio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789378473; c=relaxed/simple;
-	bh=F9kREIRf3Ig9UgSB4LaiZ0uAxLqbvVsx82KJvon0pPc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FVI0+rK8WdOLcCc+tID1RKNgipIIc5Z3UP6CoZabrDawDv7sQ5WYl8TN8jENFBfHKVtDgd8NYIFc1gQXuttv/hTGySRadJcu+L/YGEGdawvF2A/mpoXojIphf5ESSwdhN0hW0Yf7x3Ph6+4gepqdAjZc9OEJklzf61OuVaPPzS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qQhRIrby; arc=none smtp.client-ip=209.85.128.42
+	s=arc-20240116; t=1789378550; c=relaxed/simple;
+	bh=sOlPnOIlJOoH8xQSpL/ZeGLPkuQHjT56UXwh/NQM53I=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gBQ99J7p7bMpyqaSU0qQW5DNTakGxzZQcF6I5Zrm1GurUZQZyJtdXDNE+mRLtPYS2ARXmqFJCq3hd1HCFgqPYTc5c0hJx7l3evCpVJE/BjFR8MIZG8bFl10ANjM7PLQFat+JCgwYJ7iXlLRHEKFoQZlP+dm5btPstX0/JmLEcw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G1GfoYQ4; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qQhRIrby"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4998b5a63e2so33383575e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 02:34:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G1GfoYQ4"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-49e78adf099so9244205e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 02:35:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789378470; x=1789983270; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qhpKpTgQJRnbW6lGpwxnwI5Tq36h+wEsmUTgFxtkd1g=;
-        b=qQhRIrbyhJDbMjxJCDYWfa8dclFTfZ/PTd6ToHcD1oaLjrx8n4LQisfy5uO3stUMAV
-         Fbg/91Zb0RaLPbAeH1Vp9CcbPsSbt3aSLPg5HtxUiTmKKI2YsI+OWEvWbEq/dWGi2w6/
-         487elbLNXJ1njGjrZi09CcHJeUAm545UZ9Eqbzf5pDsTuSxuQ7EJJsN5xkA5dc1WH6av
-         FOrTbaCfKtRnndOHl2XWLHivGrBiR+i1P8rfAZZFNLCQpynsZHtPGmuuXA/Ov88LGXtS
-         W8QFl0VKnD8azHW1+3iSl027xZeVKM7Eko65p0pPqlIgLQKB8Ob4XQ1DmPJ+qIT5+X1r
-         wDHQ==
+        d=gmail.com; s=20251104; t=1789378547; x=1789983347; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=sOlPnOIlJOoH8xQSpL/ZeGLPkuQHjT56UXwh/NQM53I=;
+        b=G1GfoYQ4XQLvOqPnBv1trBKUOhmiFCdGWghjVQ++C+C+VVQZu3TVHi2wvEHopudNSK
+         GKenKF37/jsaE45nERqIyJW8SmJUHbScFSKrv0e0ATYru2tbUcJvSwGsk/N0KgAQwOeC
+         PK4o/HI/WOXuPHgD21ybd/tahPy6zjMjfuu59cAEIbNM68mzPSJ4Ld4uNqB+/NsHZW+i
+         ms++4u+D3EK3BHGUhJxkfXhOURu5EY0X6UaAfOdEy+AqxREvYAbxqMfUNqXR1RJ642XU
+         m6KfKvKLnnNWlNvT+2YRyxlZvww3rwmNvY3KdPxTDk3Xo8tLxPPLtulDLJYubMyxh5W0
+         y5/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789378470; x=1789983270;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=qhpKpTgQJRnbW6lGpwxnwI5Tq36h+wEsmUTgFxtkd1g=;
-        b=c7WzjW0xTzOEm0IsUmjLTDFK/cVSYbOi94Ll6iM6qMq4xXOH09bRCjhArFOfmE9l3B
-         LK9VJE3yC/o2f7QUuPKtuAxWMPB//7l+sxGTBuBOchIrMBPyER19Q/zzG6MjWqUGA7vr
-         WwXm2tVZaxOF2nkZ+oxQ7eJjKRWaNeNOyBU9DLdgnOKdVbFM9yb9U/mw8jUGHJleTyzC
-         UdVqhXH1HgWSznrwR5lW0rMMoMFr1q5p8OqnlgrM76Zrkp3Shr8xsuJDJ2OUxAakX/Lq
-         8GYYAEyKNkKyj08k6DMLpqFYiv8lxkjbiQE6NYiN0XE9kFB9AQIs4qLIIBCwLLLs0CCf
-         qZSQ==
-X-Forwarded-Encrypted: i=1; AKwUvByf/ds9aUeEO4nOwoB3KJ1avrnwOjIBOfTOwl++9l1iNCSZAI+QMSRwkQahBAvnDvLM/JrSiIdozsG8GfVlDLw=@vger.kernel.org
-X-Gm-Message-State: AFuF++nsPhKwgRXAJT7Om/GLVV/nrHFAXZMySxIdODZi0aTKJzZVi4Ap
-	YOLs9I/s7Vvnq6e9Z1sGK6V+I5QVE19L9/TjUnf8An8OdtDz79OcObh5
-X-Gm-Gg: AYBFou2bTqwe7K90L7B8ST7kC4rSZDDzCzJuoJ1wm9aYXjWpY1QmRsJ/xkFrjKh3B0X
-	rxtNIs0f4H1ZAXHtbDk5UW/87Lx1klDEthEEhkFq4vUMJGOEO5p9iEaAONgeudULAolkaHU9Hss
-	OQiBQHBz+KKrxJb+g/mxXRIrj/oRW+kRRODFR1TCdQBt/IzV+esX7OE4Dl9owz1uVn5uCfLz1yQ
-	9hwF9LWodhUg503dLo8h8KVqs07JhCPGGLZfu08xfysmlNpI+fgSVhxvjRLpJqgA3xdkwEn6MdB
-	HrPnWZ1JSaPNTOPz+5gwJ3dsLFMLcKJp7aTC8sAtsUy1+b0QViQGzFw4rVMbncN5TH/KXKUlv+t
-	fFtt+mKh6+8aDYgRt22QclqVAfU4uEQ7uWRz5alKUNK1LShJIx3YMBl0FOWRW4M9rzPmw4f43KP
-	JLi/WZDRKNM9Mx3XYtpIhdaFqxi2+bQTuOjB+p7m1/b+xRi83vehohvw+os0aF3wBMukYxTKFqk
-	rgZ4W5Dz+6P5C2Jln8w4slVX2K7WJMXucqk
-X-Received: by 2002:a05:600c:1c19:b0:49e:6cc1:14d9 with SMTP id 5b1f17b1804b1-49e7a691ad9mr22121805e9.32.1789378469602;
-        Mon, 14 Sep 2026 02:34:29 -0700 (PDT)
-Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e63c9a7c9sm509436105e9.13.2026.09.14.02.34.29
+        d=1e100.net; s=20251104; t=1789378547; x=1789983347;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=sOlPnOIlJOoH8xQSpL/ZeGLPkuQHjT56UXwh/NQM53I=;
+        b=GZgzV6q4dDN4r1P7fpg1okrr7CyYRLJtEIMkYR4nwhjCUjjGMVErBfuDHD2b8zV7z1
+         EljArWFSzEs7kordjwNNuMW1sBSmkWt5iuS1IOiiXK1/IE5ffLSUwfQsUpOR8TAXoiV/
+         EI78TjW6Yf7DwuIS7WjfVTOshxf5k89xGnx9ocOQlO8S9uvNzKf8JQMUlTEnJJB7IZqA
+         qQ3pqyyrqONrYQiK3NUpryZtfpbEjy53rROCPaL6QwiTVILnxydbsHNyosO8Ayvrg1VZ
+         GiNzScj+l/EjSRJb+5c/SLVV/bqpfh/azwsrakOTMfwpiBUSVVkGLb54O/8VUOrOcBbV
+         a0Hg==
+X-Forwarded-Encrypted: i=1; AKwUvByALp3w0fWhivHBbidy85qVAFWZyvCdlEREoDI7Do/6eMO2WEkObb6r/T+IriTFtSDkXyTvYo+pplQZH6EEhXM=@vger.kernel.org
+X-Gm-Message-State: AFuF++k7UPgbVbu/wds1stRQ0s6PIp3sTVQMBcMq33k7Vi3iBz8bIGo9
+	LTcDfXrHoKqZfJXqvlMvMWwXHC9X6be7L3AK0TF8YJk2IddJDneaqmhm
+X-Gm-Gg: AYBFou0MIQxFJJSyCV1mSL2rM16jmfErh34Rrq6alSWG3kyPw3vBVBOOxmbBX8RFGFq
+	+Bjuhl+TP0CEoGamVcdIMs+1DF2KQcHITJ1shtkmaygN8bxpsmwtq/VfLu/6IuiZET/tX5XyQyp
+	aKarlDOliWIyPZ63EkiirzfP+Syo8Scj+WS7L7OpqAr3VzHDbBAN0Gy85oRIxkpzsVgJOwkMR9w
+	x2rcKgU9juyCTt5A0yB9YGdGYVstav8Vxot5ONGamiNDsTr5XUHme/mvwOkKmzmr25I1sQVevOx
+	onUOQMrb9bCyDVMospVwC2DAMfsEGooWix8BX7UO0xvGjciQZgG1wKYMJ/i5ZMEkGoUpGFAo5bK
+	AP5GlJyWBcBQ2fIIxtqB3fnRO92DtrDASJeG+8iW7RzpvHZtHPN5vr5wBzgEe/zkYygf3UImrSc
+	mMJ8y5eZ4S7LBbwmyt27TGlYQT3UoRmljf1XzB/OWGLFddxpgBKu6l1BBiRGXJ2MK87nCxtJJAC
+	GUaohfNylGQ1/zaTNHd61ZUESw1jPybBuTwqJ4zS5XnDcY=
+X-Received: by 2002:a05:600c:860b:b0:49e:79c5:ee93 with SMTP id 5b1f17b1804b1-49e7a64b4dbmr18373425e9.8.1789378546566;
+        Mon, 14 Sep 2026 02:35:46 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-486eb34e608sm27261204f8f.23.2026.09.14.02.35.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 02:34:29 -0700 (PDT)
-Date: Mon, 14 Sep 2026 11:34:23 +0200
-From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-To: Christopher Lusk <clusk@northecho.dev>
-Cc: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Oleg Nesterov <oleg@redhat.com>, Jiri Slaby <jirislaby@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Tahera Fahimi <fahimitahera@gmail.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	John Johansen <john.johansen@canonical.com>,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] Landlock signal scope and TIOCSIG
-Message-ID: <20260914.b8a029f9abb8@gnoack.org>
-References: <20260913221958.839429-1-clusk@northecho.dev>
+        Mon, 14 Sep 2026 02:35:46 -0700 (PDT)
+Date: Mon, 14 Sep 2026 10:35:45 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: =?UTF-8?B?SMOla29u?= Bugge <haakon.bugge@oracle.com>
+Cc: linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Boqun Feng
+ <boqun@kernel.org>, Waiman Long <longman@redhat.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, John Stultz <jstultz@google.com>
+Subject: Re: [PATCH 1/1] kernel/locking: Add mutual exclusion self-test
+Message-ID: <20260914103545.3db6eb45@pumpkin>
+In-Reply-To: <20260817130239.343594-2-haakon.bugge@oracle.com>
+References: <20260817130239.343594-1-haakon.bugge@oracle.com>
+	<20260817130239.343594-2-haakon.bugge@oracle.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260913221958.839429-1-clusk@northecho.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hello Christopher!
+On Mon, 17 Aug 2026 15:02:36 +0200
+H=C3=A5kon Bugge <haakon.bugge@oracle.com> wrote:
 
-On Sun, Sep 13, 2026 at 06:19:56PM -0400, Christopher Lusk wrote:
-> Landlock documents LANDLOCK_SCOPE_SIGNAL as limiting signal delivery to
-> processes in the same or a nested Landlock domain.  A retained PTY master
-> can currently use TIOCSIG to deliver SIGINT, SIGQUIT, or SIGTSTP to an
-> out-of-domain slave foreground process group because the privileged TTY
-> signal path never reaches security_task_kill().
-> 
-> This RFC asks two questions before proposing a final interface.
-> 
-> First, should this be classified as SCOPE_SIGNAL under-enforcement, or as
-> part of Landlock's documented inherited-TTY limitation?  The "Current
-> limitations / IOCTL support" section says that IOCTL_DEV does not affect
-> pre-existing descriptors, names TIOCSTI and TIOCLINUX, and recommends
-> closing inherited TTY descriptors.  That text discusses the filesystem
-> IOCTL_DEV right rather than SCOPE_SIGNAL, and unlike the two named ioctls,
-> TIOCSIG is not CAP_SYS_ADMIN-gated.  Commit 4b80320ca7ed fixed the same
-> effect-level class for SIGIO rather than treating the retained signal
-> source as exempt.
-> 
-> Second, if this is a bug, should TIOCSIG use the existing task_kill hook as
-> patch 1 demonstrates, or should it gain a dedicated TTY-signal hook which
-> Landlock can implement without changing other LSM policies?  The prototype
-> is atomic with process-group delivery and behaviorally narrow to TIOCSIG,
-> but calling task_kill means SELinux, Smack, AppArmor, BPF LSM programs, and
-> future implementations also mediate this operation.  The series does not
-> claim that cross-LSM policy change is settled.
+> Add a stress test for locking and atomic synchronization primitives.
+>=20
+> The test maintains an array of elements containing counters
+> initialized to zero. It creates four worker threads per online CPU. On
+> each iteration, a worker chooses two elements at random, increments
+> the first counter, and decrements the second. Each completed pair of
+> updates therefore preserves the sum of all counters.
+...
 
-Thank you for bringing this up; I was not aware of this code path and
-researched it a bit.
+I think 1000 elements/locks/counters is far too many.
+You are trying to hit contention so you want a relatively small number.
+Possibly similar to the number of threads running the test, but maybe less.
+Perhaps nearer the number of cpus.
 
-Let me try to paraphrase the issue to make sure I understand:
+Also you are only going to see an issue if the RMW of the 'counter +=3D 1'
+is split by the same RMW of a different thread.
+That is pretty unlikely even without a lock.
+It would be better to force a short delay between the R and W.
 
-1. A process creates a PTY device and acquires the PTY master FD.
-2. The process then restricts itself into a signal-scoped Landlock domain.
-3. Processes outside of the domain are attached to the terminal
-4. Through the PTY master FD, the master process emulates a terminal
-   to the attached processes.  One of the commands it can issue is
-   TIOCSIG, allowing the PTY master process to send SIGINT ("Ctrl-C"),
-   SIGQUIT ("Ctrl-\") or SIGTSTP ("Ctrl-Z") to TTY-attached processes,
-   which may live *outside* the Landlock domain.  (source:
-   pty_signal() in drivers/tty/pty.c)
+If you use change the MX_ATOMIC_ADD to use the atomic_long functions
+(I've forgotten the exact name) then all the counter are the same type
+and can be removed from the union.
+The default 'just use +=3D' code can then be moved to the bottom of mx_add(=
+).
 
-TIOCSIG was introduced in 2010 in Linux [1] and in 1989 in BSD (quoted
-in the Linux patch).  According to the patch, it is only required in a
-special terminal mode where the mapping of signals is disabled.
-
-In more normal operation modes, the terminal interprets these keyboard
-shortcuts sent as characters.  This is implemented in
-n_tty_receive_char_special() when you write() the characters '\x03'
-(Ctrl-C), '\x1c' (Ctrl-\) or '\x1a' (Ctrl-Z) to the PTY master FD.
-(Your proposed patch does not fix this either, even though it sends
-the same signals.)
-
-Additionally, PTYs can send:
-
-* SIGWINCH (when you do ioctl(TIOCSWINSZ) on the master FD)
-* SIGHUP and SIGCONT
-
-[1] https://lore.kernel.org/all/E1OR73h-0004VN-JE@lirone.symas.net/
-
-
-In summary:
-
-* Sending signals to attached processes is a very normal way how PTYs
-  interact with the attached processes, and TIOCSIG is not the only
-  cause for it.
-* Processes are attached to a PTY because they were started on that
-  PTY or they have voluntarily attached to it.
-
-With these two points in mind, I am leaning towards treating access to
-the PTY master FD as a "capability" whose acquisition can already be
-adequately restricted with existing Landlock controls.  Like
-socketpair(), which Landlock also don't restrict, the creation of a
-new PTY always returns a new master and client side TTY FD and it
-feels to me more effective to control who attaches to these than to
-control the TTY-internal communication protocols itself.
-
-Maybe the way to think about this is to say that it is the *TTY
-driver* which is sending these signals in response to the PTY master
-FD receiving a TIOCSIG or having a Ctrl-C written to it.  This is
-similar to a SSH or Telnet daemon which can also trigger signals for
-the attached processes on the other end of the terminal by sending the
-right commands over the wire, and I also don't see an issue with that,
-because in the same way as here, the client programs have voluntarily
-attached to the TTY. 🤔
-
-Does that seem reasonable?  I am happy to be corrected if this
-analysis is wrong.
-
-If you agree, I think the best path forward might be to document it
-more clearly that TTY interactions are not part of the SCOPE_SIGNAL
-guarantees.
-
-–Günther
-
-> The demonstrated generic impact is low:
-> CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:N/I:N/A:L = 3.8.  Scope is changed
-> because the effect reaches a process outside the sandbox authority, but
-> the primitive is limited to three job-control signals and no independent
-> integrity impact has been reproduced.
-> 
-> Patch 1 is the behaviorally validated proof-of-concept fix.  Patch 2 is a
-> minimal regression test; further test polishing should follow the chosen
-> interface direction.
-> 
-> Validation used the same userspace image against the affected and patched
-> kernels.  Across three boots per image and 32 iterations per cell:
-> 
->   affected: 96/96 cross-domain TIOCSIG deliveries
->   patched:  96/96 cross-domain TIOCSIG denials
->   both:     96/96 unconfined deliveries
->             96/96 same-domain deliveries
->             96/96 scoped direct-kill denials
-> 
-> The regression test separately fails on the affected image and passes on
-> the patched image, with exactly one TAP test executed in each run.
-> 
-> No external report or patch has been sent before this RFC.  Guidance on
-> both classification and hook direction would be appreciated.
-> 
-> Christopher Lusk (2):
->   tty: mediate TIOCSIG through task_kill LSM hooks
->   selftests/landlock: cover TIOCSIG signal scoping
-> 
->  drivers/tty/pty.c                             |   8 +-
->  include/linux/sched/signal.h                  |   1 +
->  kernel/signal.c                               |  30 +++-
->  .../selftests/landlock/scoped_signal_test.c   | 142 ++++++++++++++++++
->  4 files changed, 177 insertions(+), 4 deletions(-)
-> 
-> -- 
-> 2.55.0
+David
