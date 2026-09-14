@@ -1,47 +1,60 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C99D947F76A;
-	Mon, 14 Sep 2026 14:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E8E47F3CB;
+	Mon, 14 Sep 2026 14:50:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789395820; cv=none; b=Ikh0bP/wo7Q1HmQ1QYUCXIrMknss27V9ojFG/uRbhthjDbqkgn/PY/9ZWP4dW7p30vXRXsHllrinKTbSGuzMwpkfQXuWWk9EqJTrFRaDBwJ1H9SkEe5fF5zEyNqAl9s/SjIr/OR6QgtPURQ5/UcbE/fI+AD50VeNgpyTSU9Z/W4=
+	t=1789397438; cv=none; b=KLbdPw7KLbnfJBfk70Uc+3EPSA5mhz5FJLiUYhASLppWc2BdHCdjnPbY2GsLgqHJW029bXpRkuXgb/29RzB5DTjYhmHan7J5snTPBqw5PWpLPzYyEAF7KR3fs02lwgld0x0yZx8d2VGVY6V+1nDi4KDkcxh+SxQN/EKJ+wFRRBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789395820; c=relaxed/simple;
-	bh=zKNBJKJMEE7iDlzCLwTQdJt35qvvUznZGcGFB4z2xBk=;
+	s=arc-20240116; t=1789397438; c=relaxed/simple;
+	bh=uAX6tpMiWWWOWbLHaGqSlvPsehR39N8Jg0uZlK/KESw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a2n0nHTac1AThrf2LtKdYF+52OxJkO2n1Ui3wU2pBsj3xDASpVc8U9jNZ922jHLSieFoSdSpsOd3rlcTcFudX8WS+WONaHGGY1eoy7ZelrIQzKyhErIRSVHkB7n7GSlTxE7quN0520zA90eWvvY1++3f/Z1sHeVSArWoYAGFyRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QfbPjnCU; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=jFupByrku1l2SuKppxqGajnl0mOQokH3vQGD2jhHZ47BkaKUcM+ASCEt4Gd+va9Fqife0I7wSz/tK/EeXHqI4m2BFUD0pDPtiAwQHLpV4CNX56L9pJ0qKP51iPBgmFS+hg1dZloSFlgDHUCSmxr9hF8BPtHbx5G8tpJCwjAOFbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xrh5nycr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QfbPjnCU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9D851F00898;
-	Mon, 14 Sep 2026 14:23:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xrh5nycr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F1861F00893;
+	Mon, 14 Sep 2026 14:50:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789395818;
-	bh=as3OPkNFsYYWKFBQO9tZASdaFQXU9TrMOPenfE/ek3g=;
+	s=k20260515; t=1789397436;
+	bh=DdSX/wEBxUG3+6tT6fIjeyRChWGrmi9MuX4lYifuSLI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=QfbPjnCU+7FZv9NkV7ueIUM52aqYwMTjeAfgvF58Ws5kEex/XIBHYQog+p4kXhpZo
-	 Jr8AVptoounx//8OBjL4AvZZ8QKunrk1w2OQ3E/hpRr2Yu1aGHKCXyQD9+OiARcccp
-	 Fre97vt4S3P4ZH1aAnTqXJw+EFHK64DKtbwa8uC4szNMv36ls5U0u/e9Y01flpGLXQ
-	 Vwm0tQHVRlGbybAGU85NbUGCVmuBfJ3dmdytN1UYurJZQ2Zl1hhfctEvcTmFWdVuFU
-	 E7/IYXrHiX7a3qNFWpwNa6ysYEJilXwJMMOEYZkzh77c8LVOPXx3mk3mWOr6BeUbfm
-	 WbSDnmwPpcx8g==
+	b=Xrh5nycrsmxLdc0/rrB872qvYgTBBsiopVxuoL0Eg76RwQd4wfl7SIELOttWi7vbf
+	 67u945e7BRvfzE1fM69NYRvHQ6om7BFeIp5Axac812YZKEsAioBldiq8FFK6VeO0jr
+	 BWNIimoefN9o7bUuSaYhqlAbZc3jaMMFWlVDrsuBXMOp7bKpdducaLnmKclQ3Ap35H
+	 lPDa3GSujp4JT3vIIiFJ9yuMBzF/cu2rObi4GDzzbloWSDcJk0W4KOLExovapM+7+I
+	 p3NMtyfiLm2goxQuOR042ubCTl0Nn1hsBA/gB4QoXl1xeNoPG2O3jst4eO/QO20/Qy
+	 DBt6n7R3GJiNA==
 From: SJ Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SJ Park <sj@kernel.org>,
+To: SJ Park <sj@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
 	Brendan Higgins <brendan.higgins@linux.dev>,
 	David Gow <davidgow@davidgow.net>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Sang-Heon Jeon <ekffu200098@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
 	damon@lists.linux.dev,
 	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 8/8] mm/damon/core-kunit: test invalid damos filter commits
-Date: Mon, 14 Sep 2026 07:23:25 -0700
-Message-ID: <20260914142327.92510-9-sj@kernel.org>
+Subject: Re: [PATCH 0/6] mm/damon: misc improvements in tests and documents
+Date: Mon, 14 Sep 2026 07:50:27 -0700
+Message-ID: <20260914145028.94705-1-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260914142327.92510-1-sj@kernel.org>
-References: <20260914142327.92510-1-sj@kernel.org>
+In-Reply-To: <20260914141952.91465-1-sj@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,45 +63,18 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add test cases for testing the validation of damos filter arguments in
-commit time.
+On Mon, 14 Sep 2026 07:19:45 -0700 SJ Park <sj@kernel.org> wrote:
 
-Signed-off-by: SJ Park <sj@kernel.org>
----
- mm/damon/tests/core-kunit.h | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+> Add various improvements to DAMON tests and documents.
 
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index c9941f3bfb42b..5da84caf4124d 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -1195,6 +1195,13 @@ static void damos_test_commit_filter(struct kunit *test)
- 			.allow = false,
- 			.sz_range = {.min = 234, .max = 345},
- 			}, false);
-+	damos_test_commit_filter_for(test, &dst,
-+			&(struct damos_filter){
-+			.type = DAMOS_FILTER_TYPE_HUGEPAGE_SIZE,
-+			.matching = false,
-+			.allow = false,
-+			.sz_range = {.min = 456, .max = 123},
-+			}, true);
- 	damos_test_commit_filter_for(test, &dst,
- 			&(struct damos_filter){
- 			.type = DAMOS_FILTER_TYPE_UNMAPPED,
-@@ -1208,6 +1215,13 @@ static void damos_test_commit_filter(struct kunit *test)
- 			.allow = false,
- 			.addr_range = {.start = 456, .end = 567},
- 			}, false);
-+	damos_test_commit_filter_for(test, &dst,
-+			&(struct damos_filter){
-+			.type = DAMOS_FILTER_TYPE_ADDR,
-+			.matching = false,
-+			.allow = false,
-+			.addr_range = {.start = 567, .end = 456},
-+			}, true);
- 	damos_test_commit_filter_for(test, &dst,
- 			&(struct damos_filter){
- 			.type = DAMOS_FILTER_TYPE_TARGET,
--- 
-2.47.3
+Sashiko found no blocker for this series.  Sashiko send its findings to damon@
+mailing list [1], and I reply those if anything needs to be clarified.  Please
+refer to those for details.
+
+[1] https://lore.kernel.org/damon/
+
+
+Thanks,
+SJ
+
+[...]
