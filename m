@@ -1,103 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33405400DE2;
-	Mon, 14 Sep 2026 11:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE72E44AB64;
+	Mon, 14 Sep 2026 11:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789384670; cv=none; b=MiywaZiOtkw4tEYWs9mfEjb7KPO3ehXjK2OdB2qMr3u+URbm1egxERwR6y0xA1qnDmF/C6uc0d7D6NPVBdqx/6w6ERRwpacieUXVNGc5ENwG4CrDNdg2A8wM7KY/kHYHjGQqUAM+uGugKjOC7Rend7vCRBykeeKMd8Wk3jAMGYI=
+	t=1789386187; cv=none; b=tUFWo9tGqWFPbKyfi2THr3ezdkw4b8/tEel3UxzVjee4x97yoEyLQb+EzFlDeJKAS9yVDBhIYFVPc9l+8FTwHQYXK/MBdNkAV3LAVC2Fd9J+VCyWUHmyYv2VyqcF4MQXiJN7f8ckKy2qzvfg0AuxEwiBwrshAnVfabqGiyJuQ/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789384670; c=relaxed/simple;
-	bh=77boNCe4QcHNaZznY3tNscoqXOV4aM836eZT2R5ie9s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mpqVe7QcNhtNu3u5DnWlXbMf+bNei4vd2Itj2OERgv0Ez5eyP02GCNEKDJJLRUa+PBRoh77dN66g55UfRnyIc2xRS/DqHFH8NQr9kAGNGVEtZOCQB3vCXA4VPNLKs8RN6IEcLgRyXuRyaFGhvUOZRb99BbF+/fUzhWjtt9VTyPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=okQVDAHi; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789386187; c=relaxed/simple;
+	bh=MrNqsf8vl79pbAxP49QCfE5TLu/s5O9EUAaIBtYYaqg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=ZF3qaH/vL4ewtxxzt9iwf8k9t1GZSjPCdu5AeCdBqb23yclsyyPUXHBYsImD/hcsR8Tct27OkFeZE5bP1dRWSQaTU0Clb13eVP8xmdkVCcoIL0kXpeyNU554usGa5NZ1KI8WFS2aSdHPh7rIy3aY4no1FH5ecAGFyTAkgH+O9cw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=JSvOxMcl; arc=none smtp.client-ip=49.212.243.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="okQVDAHi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A06B1F00893;
-	Mon, 14 Sep 2026 11:17:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789384668;
-	bh=HKZPATLBOD75vX0HIDgrKuKrxajG+GHW7KZeSn5i2h8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=okQVDAHioY+gpCl/7iWCM7P65IIELg0y29z3PuOQsO2Gy9Z/cTVpKqTF7/jx5ebKq
-	 rP7NWUdwq163cf+CE4eIosXADJRUm8QTifKfGOh14xCI6JbGdX1AGoXYaT1n+YMyRv
-	 xQ39eLBQ/yJ9SoNHKCIeMHpC7FuqfCEijjdJQo57s2+/Lkh44vG71JRNYCYn+oaVuX
-	 v0O8gGIWPvKzf9od0L+4/oi7/uInah4rT1EDn5NwI3A94vubxhKr8CNOQHCxsNxlPF
-	 s83DDvN5g858flKSeTgrC2j3yejMHQdGKy++vMkYPn6C0EfNvh7z6rCRQLngB19w9A
-	 mYZa73BnQoQhg==
-Date: Mon, 14 Sep 2026 12:17:41 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Fuad Tabba <tabba@google.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Joey Gouly <joey.gouly@arm.com>, Steffen Eiden <seiden@linux.ibm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, 
-	kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Jack Thomson <jackabt@amazon.com>, Jack Thomson <jackabt.amazon@gmail.com>, 
-	Alexandru Elisei <alexandru.elisei@arm.com>, Vincent Donnefort <vdonnefort@google.com>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Sean Christopherson <seanjc@google.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Leo Soares Passos <Leo.Bras@arm.com>
-Subject: Re: [PATCH 6/8] KVM: selftests: Enable pre_fault_memory_test for
- arm64
-Message-ID: <aqfXUTCCefQPKJ4a@gremlin>
-References: <20260825-kvm-arm-prefault-v1-0-befe8947702e@kernel.org>
- <20260825-kvm-arm-prefault-v1-6-befe8947702e@kernel.org>
- <CA+EHjTzOKHNrf=0n2c_E+vbt=pGquz6qzBpJ+eLJ5hjK_nyJMA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="JSvOxMcl"
+Received: from h183.csg.ci.i.u-tokyo.ac.jp (h183.csg.ci.i.u-tokyo.ac.jp [133.11.54.183])
+	(authenticated bits=0)
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 68EBfjs5084060
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Mon, 14 Sep 2026 20:41:52 +0900 (JST)
+	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
+DKIM-Signature: a=rsa-sha256; bh=Vt2ftUzXwwEiNRXjnC8qV9jrJvkIkUdpYX0jSjdAkkA=;
+        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
+        h=From:Message-Id:To:Subject:Date;
+        s=rs20250326; t=1789386112; v=1;
+        b=JSvOxMcluoJkyChBZQ3Jczt1nauvL3PDS2eiLK5MKehlRHQ71w55mlC8XjfhJap0
+         t5gptykxB/CvL5DFqs5pDhqrS85hz6m/TMilwvngUxgT9YEjV3YX4PeITiPrTxSl
+         zms5Q/C9UV12Q1x9Jy1b0cTymJ80/0yGR+oerdDm0sydrdc8aDRaxm8gmvG4be36
+         izmTWXsEdtKv3JfcLS7Z8YXNkAXKN2wuTKFHknQB1VK/KcRmrVyeBXE8fSUNIcc9
+         ZXO5W7AGiY7iuhNxRRWtV9xfK9oXyvhTFeGLmwnpGJYe/UFpKnkM6dsap0CuODUu
+         8ThylWGJOr9WkCOZc15T2w==
+From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Date: Mon, 14 Sep 2026 20:40:42 +0900
+Subject: [PATCH v10 03/20] KVM: arm64: PMU: Freeze counter count after
+ first run
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+EHjTzOKHNrf=0n2c_E+vbt=pGquz6qzBpJ+eLJ5hjK_nyJMA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260914-hybrid-v10-3-92788053a691@rsg.ci.i.u-tokyo.ac.jp>
+References: <20260914-hybrid-v10-0-92788053a691@rsg.ci.i.u-tokyo.ac.jp>
+In-Reply-To: <20260914-hybrid-v10-0-92788053a691@rsg.ci.i.u-tokyo.ac.jp>
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Steffen Eiden <seiden@linux.ibm.com>, Fuad Tabba <tabba@google.com>,
+        Shannon Zhao <shannon.zhao@linaro.org>,
+        Andrew Jones <drjones@redhat.com>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>,
+        Fuad Tabba <fuad.tabba@linux.dev>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1162;
+ i=odaki@rsg.ci.i.u-tokyo.ac.jp; h=from:subject:message-id;
+ bh=MrNqsf8vl79pbAxP49QCfE5TLu/s5O9EUAaIBtYYaqg=;
+ b=owGbwMvMwCWmMbc20y1CyJDxtFoSQ9byuzk3ch/zHiueYa99X0ZV3zZfS2wi1wkDgenvL7/51
+ CnGzL2ko5SFQYyLQVZMkSWlaDe3RnTtp8KE+BaYOaxMIEMYuDgFYCJ/ljL84fKTknkjfTXJexFP
+ gvH9Ko+rUpz7V8of+dht6t8XeFhFguF/TcZf1beKHo/9LPrMtv6c/2e93oG+SGc9O0fTKZ8nrZV
+ iAgA=
+X-Developer-Key: i=odaki@rsg.ci.i.u-tokyo.ac.jp; a=openpgp;
+ fpr=AEDC03C9AF734F2EC26A7BFFA4BAEAA73536753C
 
-On Thu, Sep 10, 2026 at 07:52:35PM +0100, Fuad Tabba wrote:
-> On Tue, 25 Aug 2026 at 17:01, Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
-> >
-> > From: Jack Thomson <jackabt@amazon.com>
-> >
-> > Enable the pre_fault_memory_test to run on arm64 by making it work with
-> > different guest page sizes and testing multiple guest configurations.
-> >
-> > Update the test_assert to compare against the UCALL_EXIT_REASON, for
-> > portability, as arm64 exits with KVM_EXIT_MMIO while x86 uses
-> > KVM_EXIT_IO.
->
-> The message says this updates the test_assert for portability, but the
-> parent has no exit-reason assert and no struct kvm_run; this patch
-> adds both, so there was no hardcoded KVM_EXIT_IO to make portable.
+PMU configuration is VM-scoped, but SET_NR_COUNTERS can be issued
+through any vCPU. Checking only whether that vCPU's PMU has been
+initialized allows userspace to change the counter count through an idle
+sibling after another vCPU has run.
 
-Ack will fix up for v2 thanks!
+Reject the attribute once any vCPU has run. This keeps the VM-wide
+implemented counter mask and the PMCR_EL0.N value stable after guest
+execution begins.
 
->
-> ...
->
-> >  int main(int argc, char *argv[])
-> >  {
-> ...
-> > +
-> >         TEST_REQUIRE(kvm_check_cap(KVM_CAP_PRE_FAULT_MEMORY));
-> >
-> >         test_pre_fault_memory(0, false);
->
-> Would it be worth adding an arm64 case for gmem_abort()'s pre-fault path?
+Fixes: b7628c797376 ("KVM: arm64: Allow userspace to limit the number of PMU counters for EL2 VMs")
+Assisted-by: Codex:gpt-5.6-sol
+Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
+---
+ arch/arm64/kvm/pmu-emul.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I think doing this would be quite a bit of work, I think perhaps one for a
-follow-up?
+diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
+index 832dd145af2a..950b7a349659 100644
+--- a/arch/arm64/kvm/pmu-emul.c
++++ b/arch/arm64/kvm/pmu-emul.c
+@@ -1112,6 +1112,9 @@ static int kvm_arm_pmu_v3_set_nr_counters(struct kvm_vcpu *vcpu, unsigned int n)
+ {
+ 	struct kvm *kvm = vcpu->kvm;
+ 
++	if (kvm_vm_has_ran_once(kvm))
++		return -EBUSY;
++
+ 	if (!kvm->arch.arm_pmu)
+ 		return -EINVAL;
+ 
 
->
-> Cheers,
-> /fuad
->
-> >
-> > --
-> > 2.55.0
-> >
+-- 
+2.55.0
 
---
-Cheers, Lorenzo
