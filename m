@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15029478861;
-	Mon, 14 Sep 2026 14:08:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3DE475346;
+	Mon, 14 Sep 2026 14:11:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789394923; cv=none; b=Yj/Og80ziFRw2L3maGBhCFJUDHZrWnVbr71NJxj5ofgdygASRr75ZvbwUdeQ9yPes0j41k8drBqRU1uZYECB2qhSCaNYnr//UgouEazBA6ugwE0zNqhIbGCgG7t3k5J+MSTbMWTk+2kK9CLCyp9R6d8nkkHeWgXvEnmOzcOT/do=
+	t=1789395073; cv=none; b=ZI9AB3stCFyJegSw+PbMnV2Q/+74Un4s2ZxHw1eOkj8aKa5cM5YI5mtaVnquIpxqTHM7C/xzb2pjH8Sz/sCrzPSu+/SUgitL9w0VmQ0TleLww7EUIRPTGksHDmttLelQ40qBtgykeveFSGZDrXgA5GELhLRlpMM1o80MF2iO6Yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789394923; c=relaxed/simple;
-	bh=P4EOYNGyNCPnbiPPJ6jG8zmuF8K4jZIwVADminePbeg=;
+	s=arc-20240116; t=1789395073; c=relaxed/simple;
+	bh=KBhFSgDSgui0idgmKaHGt/gm9hFxkr87C8FSZlh7mKE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C7hVWNUX60x2pTgI2tdH2Uw1/X8dqLKtfNQTb6m2mvVvn9pjTF/McTpVgzsK0CjuJWllt0OEX7crpFUCUzQ+qtJXlKVUHJlCbxvf3Xv8ZeH1IZaEfHNEckyp1/r06Q3pnJAgQqNppCMFN7z3+BrlfhaBLePxe1jvwPTbd6NYdeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UzEF7Zb3; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=CFRAtpqiE2eWMAr8bDNH7A5QbEp0DKd0epRmMNOlqcMht0HH5WnOpHNvkjbsGiA0ox+b9uqJ/tVNgQBHhF+WT6ELqf/TY1JOzVoojt9irySJn4BOU61oUaj1IQImmKZCYaOLig6IIJo8ejqhhVSoOBuItxBO02KkoqM+FkqLm8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oPBPyfc1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UzEF7Zb3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C7751F00893;
-	Mon, 14 Sep 2026 14:08:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oPBPyfc1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD801F000FF;
+	Mon, 14 Sep 2026 14:10:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789394921;
-	bh=AaKFw710LgRLsyJ/sC56wEF2fzSq0uylE86NbWhDQFk=;
+	s=k20260515; t=1789395059;
+	bh=XJFM6JwTF7dpDjv5GxNtlQIn3Xtc8gdA5oCQUi1dIq8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=UzEF7Zb3UJGxecxEcgSsAz99wwyiMM5BiGcoPMbkAEDPDmqMuQ9UFozqJYWHlZdBC
-	 OtsX63NB76meK0n19FgNlFs8oxWKYI39jRpq6yoATZg8qBlLhYWS2YNURkSYoQ5xm0
-	 w550wwCy4R+AOte8TAFL5aCiNtQUOBFzaGeeMsYtCNey2DPwJS8qa5suW1YjHwMa8j
-	 ZVAJhp3SV69xE5m+FWqpS796HgzjC0SiF0GMEclJfrwGOL+gcyuE6m98mwBoPHfNbX
-	 Sgk094fdDxzGYU9Y1iusw2d7abhC1Ah681lUPNzc6QT2SBdnwLG0yQy+iN9+PDNzxR
-	 dBhfuHWyc+ZyQ==
-Message-ID: <c60fa1c7-ac83-4e41-9911-a426c6b42191@kernel.org>
-Date: Mon, 14 Sep 2026 16:08:30 +0200
+	b=oPBPyfc1kHNDvV0t/B1lkdFZs+ykyqVI5bNShXTsSoiQVPf8xN6UWdeaObkeQkREf
+	 8ax7+UL2K7yPDdNetSNNdnqq1r88THf9AVo5p5sdW1Ownwmcuki3zEqP5aiWaSKTeN
+	 6zOeoXVmj8F4SLG6slvFY6AwSDHrk49C9taLXYmMIheTH6WaLP/m8zcW7QZ4yv2a5E
+	 8OxZ7GYqSX8emFAKM6mBmbyseOobDkc6p+LpVU8sgteRScfG0FL26cn4oqeOXL94iz
+	 /G6AKbJD1WYbbubI/tn/N3hHaJ+nfnz7gxB3tz2xWH9YedGquHzsWHSCIIyw6oNo5l
+	 sM/ZM4ix02ztA==
+Message-ID: <6c9727cb-6cfa-4d0a-b8d8-077cbeb5cf4f@kernel.org>
+Date: Mon, 14 Sep 2026 16:10:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,24 +35,22 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] kselftest: mm: introduce size_to_shift() helper
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+Subject: Re: [PATCH v6 2/3] kselftest: mm: replace usage of /proc/self/smaps
+ for check_huge_xxx() helper
+To: Yeoreum Yun <yeoreum.yun@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
  Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Peter Xu <peterx@redhat.com>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- Leon Romanovsky <leon@kernel.org>, Sarthak Sharma <sarthak.sharma@arm.com>
-References: <20260914-fix_hpage_macro-v3-0-c9a305a01d39@arm.com>
- <20260914-fix_hpage_macro-v3-3-c9a305a01d39@arm.com>
- <b88f4ec0-61a8-47b0-901a-d63db115936c@kernel.org>
- <aqf_XGKDq6jH6pJW@e129823.arm.com>
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260914-fix_split-v6-0-16ed7123800b@arm.com>
+ <20260914-fix_split-v6-2-16ed7123800b@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -99,45 +97,32 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <aqf_XGKDq6jH6pJW@e129823.arm.com>
+In-Reply-To: <20260914-fix_split-v6-2-16ed7123800b@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/14/26 16:06, Yeoreum Yun wrote:
-> On Mon, Sep 14, 2026 at 04:01:02PM +0200, David Hildenbrand (Arm) wrote:
->> On 9/14/26 09:30, Yeoreum Yun wrote:
->>> Introduce size_to_shift() for future users that need to
->>> obtain shift of a huge-page which is other than pmd_psize().
->>>
->>> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
->>> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
->>> ---
->>>  tools/testing/selftests/mm/vm_util.c | 10 +++++++++-
->>>  tools/testing/selftests/mm/vm_util.h |  1 +
->>>  2 files changed, 10 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
->>> index fd1432dc6152..1fef1266429f 100644
->>> --- a/tools/testing/selftests/mm/vm_util.c
->>> +++ b/tools/testing/selftests/mm/vm_util.c
->>> @@ -157,6 +157,14 @@ bool check_for_pattern(FILE *fp, const char *pattern, char *buf, size_t len)
->>>  	return false;
->>>  }
->>>  
->>> +uint64_t size_to_shift(uint64_t size)
->>> +{
->>> +	if (__builtin_popcountll(size) != 1)
->>> +		return 0;
->>> +
->>> +	return ffsl(size) - 1;
->>> +}
->>
->> Could likely just be an inline helper?
-> 
-> Okay. If there is no comments on today, I'll post tomorrow with this.
-> 
 
-No need to rush, leave some more days for people to catch up.
+>  
+> -	if (hpage_size == pmd_pagesize)
+> -		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
+> +static bool check_huge_type(uint64_t categories, uint64_t kpageflags,
+> +			    enum check_huge_type type)
+> +{
+> +	const bool file = categories & PAGE_IS_FILE;
+> +	const bool swapbacked = kpageflags & KPF_SWAPBACKED;
+> +
+> +	switch (type) {
+> +	case CHECK_HUGE_ANON:
+> +		return !file;
+> +	case CHECK_HUGE_FILE:
+> +		return file && !swapbacked;
+> +	case CHECK_HUGE_SHMEM:
+> +		return file && swapbacked;
+> +	}
+
+I wasn't probably clear. Don't add an intermediate CHECK_HUGE_SHMEM. Make
+check_huge_shmem() simply use CHECK_HUGE_FILE and remove the function then in
+patch #3.
 
 -- 
 Cheers,
