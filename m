@@ -1,172 +1,202 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E2C41167F
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 21:40:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789422055; cv=none; b=nmnYAV6SWhnp1DvDzFY8JYCNaIr+EsxNNOVnEdQkZ+O2amWFRJxo6i0Y/eJZDV94qaVHoNluI0GmT6CYyMxcP+7WXiMUZt/YfM/dL0x+l0pzAkeXrkwAJTSqypOAK13UgcEihsIiBXblr/gFSWgmhBwoZ94uukuFlUg6JZdDxJE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789422055; c=relaxed/simple;
-	bh=rx4dkN1+TsSSDEILFCQSpnWfgYmGVlwKUZynBUyCi/4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TGBUzRffntFSFkD/OWdjy4PIQpGW8lQTU1w8tqKCSuUBnW88+1aqhm1CBqnfWgPw0dr/fVyb/MDquRCEBOImGmloYSUgPXrZl0sHCXZ5KSU5ot0X6z2m5FiYb+pWSwxxZWTRd86609pJpGgEdG6tOLjsEXUWgG7yHRoPzKAfqNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EpPNOjzU; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB173A0E80
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 22:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789425227; cv=pass; b=KTNr3QDK8RZGs3h8qL5bbe/f1aUy9p/bgT2u3Eeyrz0XestTIyfOACk6LdQRB0ut3adW6J0AI7RUvLQMU9w4EmSpiqDWsDfoI8ttX69Rki5x2YAOyAovlqMxZyJX2LfPINv900uOFzj+8U3luuXT9UInbYu8UI5ik0hz3Dc4vro=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789425227; c=relaxed/simple;
+	bh=RErsm8IuxjqeMbKnZnpM9fWpr2T2HyUPVGa44TsRw5I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CUf1yxSomrme3sYvuH53Gb7AoOSIR5k19s4/EZNeDqN3Dv+y8XTVAq1+/FpY9LOIE5VYfuhLVU8KmAscxkU5D3/2eWdreHI+9dIL98LFiJ0h7g1i8NJkAcJIaHGooONhH3M0gW9wePceq8v9VolEUIWJ59vFMpi0rXfc2iUOfPM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vu2PqzsO; arc=pass smtp.client-ip=74.125.228.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EpPNOjzU"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912e64ccso17157795e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 14:40:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vu2PqzsO"
+Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a613a6bcd8so893a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 15:33:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789425224; cv=none;
+        d=google.com; s=arc-20260327;
+        b=IzXw+hhfhhhCVPWhAZY17N/EodPyoIAXsUaYlxSipx6XOn+gNpozKbRuAdrwhaqSDU
+         s1J9+2pcr3POpgZhLrtQYRMSwVT5+gPjBAn1dHRw8E3Vu9Tx4xq7w7Rg5NIYg33zxSWj
+         eYgt6gFYLOwzmyIv0OBvmcdwnuT5mrCma+JMC5Fs1gFd02j4ONGOSNxvXNyJKIXXkoHE
+         BtVN2Wo/jXjgRkkPU6RzwNy9mj3suELsLHOHyXhDhQ9OcnrfQO93H8wkslJKc86l83pW
+         w7/vcgHF3L0d75jb27FbLyqhJBp0Q9fRG8gLkStRlATmK00bzbB3QHHQZYEQ6hnwXpYY
+         qpkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=8R+DoiNw8tUga/vTi1Xfm5DnH9rWZFwdCJZG7HXQcWY=;
+        fh=WKDH+wcBdEdrJ96XZZjdASELzEYGFh9QAGfzszYPuHU=;
+        b=hAYpAdm7j6tjveQQPeib71NTFavQkwzZ/teE4SfQZUHickB/J1U/WtzP8KQQJunVHP
+         X50rfgafMIU0ET8wr8lgCyjXy5rs2aBUdzfgzxvFpkqr2CRzGHFOcwF6hzMZzEVVGKMv
+         1lYUBxpPp6sXF8cT3BDq8FfQ4LNKDTyx/w9z0479qxXLNpL26pFGxPrbN7vF7SZiFAJz
+         alqJg60P+ssVakqQuh81pBMfN/0Ezukrh35jJV7zw0furOQ2nr2JmdJ4Pm0Y9Z/JbTPE
+         pMV2JJJoPSIcf5KuitFOhEmhkzAythOWwMwlKXopibnvGOaBIK4+7Ae5xfTD5IQzQflQ
+         VmTg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789422052; x=1790026852; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=google.com; s=20251104; t=1789425224; x=1790030024; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=7xb4iCajz/FOeNwMP9/vRI8V9ZVlNq4vmNdv3kXbOu4=;
-        b=EpPNOjzUWGKG9vIVypiYfsTIZ0/3901oSrKNXPC9hycFt74uslD7JMrBF6j3eB42mn
-         Fq/QtQSXQ7Pi37cDbhiOKI+tlPFEwYB9lO9TQ8a2kv98NsvEZT/y9IL+Soy5QQubNSz3
-         Zjinh47mQsfXtSyC36HT3241Gjt5qTbJqD62XD0siqYarwlSoKSxFpURYaGW0ndLJquc
-         SRzum77euaFCAss2TVaw8ddbyqWJI+wno65qT72A0Jrvd5oetuzEyNFIl7+9o/rqWHLk
-         4SiXsam4BF+IhwS+OZhkVZqJd+ACFpQIFn/dJCTziTgME6yt56IU2ITCVaPSn9q7+9GL
-         yGmg==
+        bh=8R+DoiNw8tUga/vTi1Xfm5DnH9rWZFwdCJZG7HXQcWY=;
+        b=vu2PqzsO2PGG4ZpWIE6PJG3dJpgI0uOEXP7raWzusWjJdCwp0KIVCt46YaTHZlnObq
+         SCLsRVU8Em/iuHCYo4nm5B6Dq+cBTK4BL9YBwV3KQr8XRYeMnvtUdf1buSsT2eXVfTtt
+         yAli95KJpEuTUVhyZ3bFG66fCnlz+CqtfEjr2mh8YCrWEuUEI2ubgTf9DOOMjFE7vn/7
+         Coc83N7yezeAniKnHkkFoH0kg+WFBQNECXtxpgWaFTnwMt86nWvYDI0a8Udnm27+JJ89
+         WZnSgS7brpAiTTcp5cp09WVcIFN1i1KoaFynh328uYMVKpL+RsCsCABVNb34xCqa+NmM
+         h5Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789422052; x=1790026852;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1789425224; x=1790030024;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=7xb4iCajz/FOeNwMP9/vRI8V9ZVlNq4vmNdv3kXbOu4=;
-        b=rjPwqGC+kZvyscFM8bFGdDk+Ig/JkDnqufKOIUzM8rbnaTw0qLAWFHXhxm5shsa3fk
-         +eJRiGr6WqnMJJHB9C/Y4NlVvh+XPoT/n2MFctxjgaFL+CdI3eyuR48p7SqjMwqeb6xX
-         QtgnkqN3wnAz6sYgAf6trnft9ytg/tN1yqaSdF8pd7C5TsgehXXo4AxU0wWoujs69lEM
-         gVRNC3ewd4NFYTmjWezibtbyqrT7jyw0RpVwhnJcrepNC2gez44wPzJ9wXQrE3/uCWPW
-         nOeiBtniuhBp/NqxOg3r+FLlldwOWV7V5o8DpXcGOLm+pHWNaa+aJG8VAs5dNxqgZQab
-         RC2A==
-X-Forwarded-Encrypted: i=1; AKwUvBzf9vKuAAz42NOeatUVKbtOKbjkZWKFnyCDQRfp7mLmh9AutzsUPmthz9FXtxqpI8LHuZ1zbxIKJAVVCuVMa8w=@vger.kernel.org
-X-Gm-Message-State: AFuF++m1bRqRGF/vER502nwXXzemZsUr7UnOd644jP+MdzW2aDd0gMQo
-	lX2Mbh6x/hvi0zUegNmQjlKJG16Utot1WloYAF2kEsIw8l+K6j+zQBqe
-X-Gm-Gg: AYBFou21RH+8LsXQr/AaMbUKfXa98VdmBx5PeERFNyjhMo6T1ofpgsInKnKimolTHJQ
-	/17w+Tp+++iJFqXqBdg7xWxR1Tcz43xj7pxL1MowSv+fqTG70aitnBM9Av/m1eCOfNw3b4SDcne
-	k1yup+LkQQMq+tVKHdUIuf19TghZuRF5k7OvfQ7zMrb1xRt9p/VrvTJTQNBEc8Fp/jbEmyvT26p
-	1yw0WBvVvqoay6GcpA95+CPenpejIR9Aglb164w8+KdV8ucZO1pyphI4EaUfAbCAIoeC4Prhyi/
-	FmNScUWyd9rw54sbBicgXIDN+3Od0Rufl70pwbFMebCxPn0v+yK6XTVqVaCp71Ip2JIUW04ck1d
-	CgSvV8qi+DuSFJ/5na9Mxk3Not06pNNorujpsSV6QoHY95hZEHBppeAE+aYUFAl0PAs0OjrzG1h
-	7Hqjpg3lGiXQ+cX+WAgvG1drDs6WIrVSUxeboR4Y2he4tWdECRS9uGnSjo+owHrISQMO+ph1unx
-	udH41ZvpfRabfYtXjfnkPqPX9OM37QKPeKl
-X-Received: by 2002:a05:600c:698e:b0:499:a277:e8b5 with SMTP id 5b1f17b1804b1-49e7a638778mr109073585e9.3.1789422052094;
-        Mon, 14 Sep 2026 14:40:52 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e7d2af31dsm22123915e9.4.2026.09.14.14.40.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 14:40:51 -0700 (PDT)
-Date: Mon, 14 Sep 2026 22:40:45 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Haakon Bugge <haakon.bugge@oracle.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Peter
- Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will
- Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>, Waiman Long
- <longman@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, Shuah Khan
- <shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
- <linux-kselftest@vger.kernel.org>, John Stultz <jstultz@google.com>
-Subject: Re: [PATCH 1/1] kernel/locking: Add mutual exclusion self-test
-Message-ID: <20260914224045.5fdfac58@pumpkin>
-In-Reply-To: <A1E4F810-7A75-4AF8-9DE4-11BBA101F5E5@oracle.com>
-References: <20260817130239.343594-1-haakon.bugge@oracle.com>
-	<20260817130239.343594-2-haakon.bugge@oracle.com>
-	<20260914103545.3db6eb45@pumpkin>
-	<6546A220-4B85-4780-8B45-F8B35D24139C@oracle.com>
-	<A1E4F810-7A75-4AF8-9DE4-11BBA101F5E5@oracle.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        bh=8R+DoiNw8tUga/vTi1Xfm5DnH9rWZFwdCJZG7HXQcWY=;
+        b=aoxxOjb5WyeqmFaQ5XH4Ifxvpgv3PZbdLZ47s4yTJhyv4X+DTjoVNVvoJAT7w9OMs9
+         DhIO2CW/P8DLp1w3wf1vkTS6lCP0IncSrkZeVHUHfSzawk/KzxF6Lw7AN6wFrjPUUIAK
+         XwnmJ+ZT7l/fBab4i4E4ud77wFlwESXebu2RsFpJbW1vhxK/cSD6wh9TtWuSobvdv6oA
+         A1UugC2U5E9hMsNS/WGAXb6PESru/9wowTW3S3O824g4cHROqm6NEoxH0ShIIitJtUxx
+         FYKvqMVeAq00qWzBunUIR/KPzdwEYOIfifrfUq3nqtBjSYVrTAODMnIRQd+6yi0ZBnwb
+         sxzw==
+X-Forwarded-Encrypted: i=1; AKwUvBwulffVY71J9Zx+wv+UNET+yXqBhT4mOgOGnhmF4D6HX9KpeHTHC493bvV3oKsaSszZZ/ZjDZ1DfsCRcNjtK1k=@vger.kernel.org
+X-Gm-Message-State: AFuF++mXm2S1+dTHerwkpQTuLB8kCOIZ3lehSs0Q8ulK8nq1h1vc76p+
+	FXOAQCLg1uI3HydgZNOb9ZfVT8Xtc/Es226ZDctF7u4eCf7dNscXPLecQbRWl0KbO/H3BH/NMm8
+	5Iw+5ASD3CO+8fZHDCzOoRhvmlRykyIt1mpLw/FU6
+X-Gm-Gg: AYBFou2rBbKOdEM0VP78JGv2iLGDyettzJAsqA4909hDjqZnSo5h/rFxMerE2iXTLaS
+	cWHqo9bwNWdHw9tuN/uWkt876icSMGHKkNtoK7GLeMT6W8nG8toWwKUSUUoHAdzzMDkMsLg2+aL
+	YSkThqZCnWYPjubHw/PvdzGHb1V38Lwlg16DOPQ539Tw/tBqnxmHQj1fUBrgP3PW2sxRNFjrwC/
+	ltHeHcl/WDbr3nKF7T0mTE55TXc0hG4hFFoK8382/7avO8YfI1Iij5tcZPuNgpct0/pykw0W8Rc
+	hrCstTmVbWfwBKGT3Hkp1YapcXfuG45zxQa39tJkAyyd0kCOcmlMKAQ=
+X-Received: by 2002:a05:6402:1c0e:b0:6a6:871a:ab96 with SMTP id
+ 4fb4d7f45d1cf-6aa043c1f89mr24144a12.10.1789425223409; Mon, 14 Sep 2026
+ 15:33:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <cover.1789281096.git.zhang_wei@open-hieco.net> <016ecb3a3187b20fac299f1c2cb15aac01358412.1789281096.git.zhang_wei@open-hieco.net>
+In-Reply-To: <016ecb3a3187b20fac299f1c2cb15aac01358412.1789281096.git.zhang_wei@open-hieco.net>
+From: Jim Mattson <jmattson@google.com>
+Date: Mon, 14 Sep 2026 15:33:28 -0700
+X-Gm-Features: AcwNN1UeF8yVhm34VZLyZ4GqN5kQf1hbSkumsh5DDm3dMWJVzB8VwSpiEFZADUQ
+Message-ID: <CALMp9eSnoFAk5PN-JudLc=xB6jzKzERfTVPEeAaRbLTYqtnKKA@mail.gmail.com>
+Subject: Re: [PATCH v6 8/8] KVM: selftests: Add nested SVM DecodeAssists test
+To: Tina Zhang <zhang_wei@open-hieco.net>
+Cc: Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, zhouyanjing@hygon.cn, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, 14 Sep 2026 17:21:41 +0000
-Haakon Bugge <haakon.bugge@oracle.com> wrote:
+On Sat, Sep 12, 2026 at 11:44=E2=80=AFPM Tina Zhang <zhang_wei@open-hieco.n=
+et> wrote:
+>
+> Add a focused nested SVM selftest for DecodeAssists.  Verify that KVM
+> exposes the feature to L1 and synthesizes EXITINFO for representative
+> MOV CR/DR, CLTS, INTn, INVLPG, and INVLPGA intercepts.
+>
+> Exercise instruction bytes for hardware and synthesized #NPF/#PF exits.
+> Cover a synthesized #NPF that follows a hardware #NPF in the same emulate=
+d
+> instruction, an unreadable instruction tail that leaves only the cached
+> opcode, and the absence of bytes for an instruction-fetch #PF.  Modify th=
+e
+> MOVSB opcode while its MMIO read is pending to verify that the emulator's
+> cached bytes are preserved.
+>
+> Inject a userspace #PF while an MMIO read is pending.  Verify that after
+> MMIO completion, L1 receives instruction bytes from the current RIP,
+> not the previous instruction's emulator cache.
+>
+> The synthesized OUTSB #NPF and userspace-injected #PF cases run by
+> default.  The forced-emulation #PF and instruction-intercept cases
+> require kvm.force_emulation_prefix=3D1.
+>
+> Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
+> ---
+> ...
+> +static const struct instruction_intercept_test instruction_intercept_tes=
+ts[] =3D {
+> +       {
+> +               .name =3D "MOV-from-CR4",
+> +               .code =3D l2_fep_mov_from_cr4_code,
+> +               .intercept_cr =3D BIT(INTERCEPT_CR4_READ),
+> +               .exit_code =3D SVM_EXIT_READ_CR4,
+> +               .exit_info_1 =3D BIT_ULL(63) | 10,
+> +               .exit_info_1_mask =3D ~0ULL,
+> +       }, {
+> +               .name =3D "MOV-to-DR7",
+> +               .code =3D l2_fep_mov_to_dr7_code,
+> +               .intercept_dr =3D BIT(INTERCEPT_DR7_WRITE),
+> +               .exit_code =3D SVM_EXIT_WRITE_DR7,
+> +               .exit_info_1 =3D 3,
+> +               .exit_info_1_mask =3D ~0ULL,
+> +       }, {
+> +               .name =3D "CLTS",
+> +               .code =3D l2_fep_clts_code,
+> +               .intercept_cr =3D BIT(INTERCEPT_CR0_WRITE),
+> +               .exit_code =3D SVM_EXIT_WRITE_CR0,
+> +               .exit_info_1_mask =3D BIT_ULL(63),
 
-> > On 14 Sep 2026, at 14:32, Haakon Bugge <haakon.bugge@oracle.com> wrote:
-> >=20
-> > On 14 Sep 2026, at 11:35, David Laight <david.laight.linux@gmail.com> w=
-rote: =20
->=20
-> [snip]
->=20
-> >> If you use change the MX_ATOMIC_ADD to use the atomic_long functions
-> >> (I've forgotten the exact name) then all the counter are the same type
-> >> and can be removed from the union.
-> >> The default 'just use +=3D' code can then be moved to the bottom of mx=
-_add(). =20
-> >=20
-> > That is a good idea, but we then misses test coverage for atomic_t. But,
-> > what about: =20
->=20
-> [snip]
->=20
-> I ended up with:
->=20
-> struct mx_elem {
->         /* This union contains locks and lock-free data types */
->         union {
->                 spinlock_t spinlock;
->                 rwlock_t rwlock;
->                 struct mutex mutex;
->                 atomic_t atomic_lock;
->                 atomic_t atomic_counter;
->                 atomic64_t atomic64_counter;
->                 long cmpxchg_counter;
->                 unsigned long bits;
->                 struct ww_mutex ww_mutex;
->                 struct optimistic_spin_queue osq_lock;
->         };
->         /* A counter protected by one of the locks above */
->         long counter;
-> };
->=20
-> This became quite simpler. I'll test somewhat more, and send out
-> a v2 tomorrow.
+Should this be:
 
-If you split the 'long counter' into a separate array then it won't
-be in the same cache line as the associated lock.
-That should mean the alignment changes aren't needed.
+.exit_info_1 =3D BIT_ULL(63),
+.exit_info_1_mask =3D ~0ULL,
 
-When I mentioned a delay in the RMW for xxx->counter++ I was thinking
-of a few clocks, perhaps something like:
-	c =3D xxx->counter;
-	for (auto i =3D c + 10; i !=3D c; i--)
-		OPTIMIZER_HIDE_VAR(i);
-	OPTIMIZER_HIDE_VAR(i);
-	xxx->counter =3D i + delta;
 
-I may have a '3am can't sleep' part model for the arm cache.
-It might be that when one cpu writes to a 'shared' cache line the 'invalida=
-te'
-that is broadcast is only partial; the invalidate is remembered, but the
-contents of the cache line are still used to satisfy reads.
-So a memory read for a different cache line could easily pick up a write
-that was done later.
-A read barrier actually invalidates all the 'invalidated' cache lines
-so later reads can't use the 'stale' data.
+> +       }, {
+> +               .name =3D "INTn",
+> +               .code =3D l2_fep_int_code,
+> +               .intercept =3D BIT_ULL(INTERCEPT_INTn),
+> +               .exit_code =3D SVM_EXIT_SWINT,
+> +               .exit_info_1 =3D TEST_INT_VECTOR,
+> +               .exit_info_1_mask =3D ~0ULL,
+> +       }, {
+> +               .name =3D "INVLPG",
+> +               .code =3D l2_fep_invlpg_code,
+> +               .intercept =3D BIT_ULL(INTERCEPT_INVLPG),
+> +               .exit_code =3D SVM_EXIT_INVLPG,
+> +               .exit_info_1 =3D (u64)&npf_target,
+> +               .exit_info_1_mask =3D ~0ULL,
+> +       }, {
+> +               .name =3D "INVLPGA",
+> +               .code =3D l2_fep_invlpga_code,
+> +               .intercept =3D BIT_ULL(INTERCEPT_INVLPGA),
+> +               .exit_code =3D SVM_EXIT_INVLPGA,
+> +               .exit_info_1_mask =3D ~0ULL,
+> +               .check_rax =3D true,
+> +               .rax =3D (u64)&npf_target,
+> +       },
+> +};
 
-Just need a model for the write barrier now.
-It might just that each 'cache line wide' entry in the store buffer fifo
-can have multiple addresses associated with different groups of writes.
-Then the writes for one fifo entry could happen in any order (or be
-merged into a single wider write.
-(But that is real guesswork.)
+If you omit the FEP from the assembly in
+instruction_intercept_tests[], KVM will copy VMCS02's EXITINFO1 to
+VMCS12. Assuming L1 itself is not nested, this can be used to validate
+KVM emulator behavior against hardware. (Maybe this can be used to see
+if I'm right about CR0_SEL_WRITE, which is currently untested.)
 
-It is nice to a have a simple model that mostly matches the observed
-behaviour.
+> ...
+> +static void run_intercept_test(struct svm_test_data *svm,
+> +                              const struct instruction_intercept_test *t=
+est)
+> +{
+> +       struct vmcb *vmcb =3D svm->vmcb;
+> +       struct vmcb_control_area *control =3D &vmcb->control;
+> +       u64 expected_exit_info_1 =3D test->exit_info_1 & test->exit_info_=
+1_mask;
+> +
+> +       control->intercept |=3D test->intercept;
+> +       control->intercept_cr |=3D test->intercept_cr;
+> +       control->intercept_dr |=3D test->intercept_dr;
+> +
+> +       control->exit_info_1 =3D ~0ULL;
 
-David
-
->=20
->=20
-> Thxs, H=C3=A5kon
->=20
-
+Perhaps you should poison insn_len and insn_bytes here as well?
