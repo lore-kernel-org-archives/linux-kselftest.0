@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B19C3D8122;
-	Mon, 14 Sep 2026 14:08:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15029478861;
+	Mon, 14 Sep 2026 14:08:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789394900; cv=none; b=GDEBk6oAjI3b5yafBnzHyo6FdHOOEfEJDal8DZelxYHOZ4/4vcZt0s3hv0LfcoiSWEkAaNMcTCRYSwz7la1OJX64cyp5xJ4kgnRig8L2btZExnW67feXn4G5zRsMP/KOwYHO4clvTH8W/XnUqXkUMgAJRLKkDrt/bIvazBCe9hM=
+	t=1789394923; cv=none; b=Yj/Og80ziFRw2L3maGBhCFJUDHZrWnVbr71NJxj5ofgdygASRr75ZvbwUdeQ9yPes0j41k8drBqRU1uZYECB2qhSCaNYnr//UgouEazBA6ugwE0zNqhIbGCgG7t3k5J+MSTbMWTk+2kK9CLCyp9R6d8nkkHeWgXvEnmOzcOT/do=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789394900; c=relaxed/simple;
-	bh=QbMoY0kbPygeeQy0FJU1Cj2La8CunPtMn2ln+8667cw=;
+	s=arc-20240116; t=1789394923; c=relaxed/simple;
+	bh=P4EOYNGyNCPnbiPPJ6jG8zmuF8K4jZIwVADminePbeg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hrNJ0nEpAS27lVxeSfQa4YNXf+mvwdhiPsOR7X/uYyQFEnklnUM2MYCdqr0SRrkpoHw63b0Ab+g6mIPU68xC0E7+kNEygGxFeeazqmy3erTHzDBded5bdO8CgaHCqy9z0nOojAL17vd1dEfU6+pdZhLGXFH2vNorp9rEKukRAdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yc6puxwy; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=C7hVWNUX60x2pTgI2tdH2Uw1/X8dqLKtfNQTb6m2mvVvn9pjTF/McTpVgzsK0CjuJWllt0OEX7crpFUCUzQ+qtJXlKVUHJlCbxvf3Xv8ZeH1IZaEfHNEckyp1/r06Q3pnJAgQqNppCMFN7z3+BrlfhaBLePxe1jvwPTbd6NYdeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UzEF7Zb3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yc6puxwy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0828A1F000FF;
-	Mon, 14 Sep 2026 14:08:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UzEF7Zb3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C7751F00893;
+	Mon, 14 Sep 2026 14:08:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789394895;
-	bh=k1MgQ4YkjRCW7c7SjK50zV8Sm2h6ALPWZtu7yelOo0s=;
+	s=k20260515; t=1789394921;
+	bh=AaKFw710LgRLsyJ/sC56wEF2fzSq0uylE86NbWhDQFk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Yc6puxwy6rANj0lip7bIhBodmX1qJbjM7I+eZjazdFIQgAemi/LuQ/7RNRagtnNYA
-	 kL/jlNMvO0jZZrmkjZPX1AvXnzQrWtFRMkeMrp+JxEZ3hI0sd+/5uBronsBq3KPWNp
-	 ccFHv2YRryjKhdQe2NNuGHsKZnZV4qc+g1yWE+sfNKT32zVC/pZqOI7UNqvqlCeJRH
-	 Ch1W0FCUb21LyLByzEO2iQZwQPorZmXrlsdBknrOviWNrA+vaLvetPBWqP/rcVPTmm
-	 Pc/JZzqv1Sws6ZkzQF9W/qkTOKyUeuh+cSMn3d0JraAGtN+iuO/RXRmrJEPzds6d1n
-	 mKxTDI+qlHl/w==
-Message-ID: <08d3313b-d891-4202-b460-c5cefa96bbce@kernel.org>
-Date: Mon, 14 Sep 2026 16:08:03 +0200
+	b=UzEF7Zb3UJGxecxEcgSsAz99wwyiMM5BiGcoPMbkAEDPDmqMuQ9UFozqJYWHlZdBC
+	 OtsX63NB76meK0n19FgNlFs8oxWKYI39jRpq6yoATZg8qBlLhYWS2YNURkSYoQ5xm0
+	 w550wwCy4R+AOte8TAFL5aCiNtQUOBFzaGeeMsYtCNey2DPwJS8qa5suW1YjHwMa8j
+	 ZVAJhp3SV69xE5m+FWqpS796HgzjC0SiF0GMEclJfrwGOL+gcyuE6m98mwBoPHfNbX
+	 Sgk094fdDxzGYU9Y1iusw2d7abhC1Ah681lUPNzc6QT2SBdnwLG0yQy+iN9+PDNzxR
+	 dBhfuHWyc+ZyQ==
+Message-ID: <c60fa1c7-ac83-4e41-9911-a426c6b42191@kernel.org>
+Date: Mon, 14 Sep 2026 16:08:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,24 +35,24 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT
- macro
-To: Yeoreum Yun <yeoreum.yun@arm.com>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
+Subject: Re: [PATCH v3 3/3] kselftest: mm: introduce size_to_shift() helper
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
  Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
  Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
  Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
  Kiryl Shutsemau <kas@kernel.org>, Peter Xu <peterx@redhat.com>,
  linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Sarthak Sharma <sarthak.sharma@arm.com>
+ linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+ Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Leon Romanovsky <leon@kernel.org>, Sarthak Sharma <sarthak.sharma@arm.com>
 References: <20260914-fix_hpage_macro-v3-0-c9a305a01d39@arm.com>
- <20260914-fix_hpage_macro-v3-2-c9a305a01d39@arm.com>
+ <20260914-fix_hpage_macro-v3-3-c9a305a01d39@arm.com>
+ <b88f4ec0-61a8-47b0-901a-d63db115936c@kernel.org>
+ <aqf_XGKDq6jH6pJW@e129823.arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -99,89 +99,45 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260914-fix_hpage_macro-v3-2-c9a305a01d39@arm.com>
+In-Reply-To: <aqf_XGKDq6jH6pJW@e129823.arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/14/26 09:30, Yeoreum Yun wrote:
-> HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
-> When this macro is used in some test, test result would be strange in
-> the system where PAGE_SIZE is more then 4KB.
+On 9/14/26 16:06, Yeoreum Yun wrote:
+> On Mon, Sep 14, 2026 at 04:01:02PM +0200, David Hildenbrand (Arm) wrote:
+>> On 9/14/26 09:30, Yeoreum Yun wrote:
+>>> Introduce size_to_shift() for future users that need to
+>>> obtain shift of a huge-page which is other than pmd_psize().
+>>>
+>>> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+>>> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+>>> ---
+>>>  tools/testing/selftests/mm/vm_util.c | 10 +++++++++-
+>>>  tools/testing/selftests/mm/vm_util.h |  1 +
+>>>  2 files changed, 10 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+>>> index fd1432dc6152..1fef1266429f 100644
+>>> --- a/tools/testing/selftests/mm/vm_util.c
+>>> +++ b/tools/testing/selftests/mm/vm_util.c
+>>> @@ -157,6 +157,14 @@ bool check_for_pattern(FILE *fp, const char *pattern, char *buf, size_t len)
+>>>  	return false;
+>>>  }
+>>>  
+>>> +uint64_t size_to_shift(uint64_t size)
+>>> +{
+>>> +	if (__builtin_popcountll(size) != 1)
+>>> +		return 0;
+>>> +
+>>> +	return ffsl(size) - 1;
+>>> +}
+>>
+>> Could likely just be an inline helper?
 > 
-> Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
+> Okay. If there is no comments on today, I'll post tomorrow with this.
 > 
->   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
->     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
->     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     ...
->   ok 1 Completed
-> 
-> Remove the HPAGE_SIZE and HPAGE_SHIFT macro and introduce pmd_pshift()
-> helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-existing
-> helper, pmd_psize().
-> 
-> Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
-> which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
-> and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
-> PMD-sized units, the test may fail with the previous size of 100 MiB,
-> which is not a multiple of the PMD size when the base page size is
-> 16 KiB or 64 KiB.
-> 
-> After this patch, output of transhuge-stress:
-> 
->   transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
->     2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s	2585 succeed, 1232 failed, 2585 different pages
->     2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s	2585 succeed, 1232 failed, 2585 different pages
->     2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s	2585 succeed, 1232 failed, 2585 different pages
->     2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s	2616 succeed, 1201 failed, 2616 different pages
->     2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s	2627 succeed, 1190 failed, 2627 different pages
->     2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s	2628 succeed, 1189 failed, 2628 different pages
->     2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s	2630 succeed, 1187 failed, 2630 different pages
->     2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s	2631 succeed, 1186 failed, 2631 different pages
->     ...
->   ok 1 Completed
-> 
-> Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> ---
 
-[...]
-
-> index e712a980851c..fd1432dc6152 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -21,6 +21,8 @@
->  
->  unsigned int __page_size;
->  unsigned int __page_shift;
-> +uint64_t __pmd_psize;
-> +uint64_t __pmd_pshift;
->  
->  uint64_t pagemap_get_entry(int fd, char *start)
->  {
-> @@ -161,6 +163,9 @@ uint64_t pmd_psize(void)
->  	char buf[20];
->  	ssize_t num_read;
->  
-> +	if (__pmd_psize)
-> +		return __pmd_psize;
-
-The only suboptmial thing about these functions is that we keep querying
-repeatedly in case of failure.
-
-If it failed once, it will fail always.
-
-You could either add a new variable for "queried" or encode it in the variables like
-
-uint64_t __pmd_psize = -1ull;
-uint64_t __pmd_pshift = -1ull;
-
-To then set them to 0 or the actual value after we queried.
+No need to rush, leave some more days for people to catch up.
 
 -- 
 Cheers,
