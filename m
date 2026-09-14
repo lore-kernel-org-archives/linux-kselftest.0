@@ -1,117 +1,156 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed2-f9.google.com (mail-ed2-f9.google.com [74.125.228.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD76F3E49DB;
-	Mon, 14 Sep 2026 07:21:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F253B2D39
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 07:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789370505; cv=none; b=mPcDdoljGuO1H9k9f9YgDslvzB8tTLRlEjjPq1CMOjBewBPboqywOyvWrLmE6Th7xIqS6G14pnve4F606S+3CxI5YvfLVBgvLOlYzwHYQ7urkxneukc38fEsC+6pzP7NOs1blXEBdK+B4QE3Iw6T1E1DUp6KlQ7KWzMV8GWettQ=
+	t=1789370748; cv=none; b=hg2xhs9LDjxy5lhwb1U+lazCmgSErkjX7O/BxPUhDOcRRBi61t1VDdUAQJD02rYfAWlj+BcvO9S9xgu9aUy4adMzKVqNUmX9M1JVNbq7v/a9JdlutrfjFqQ8t3dFd02AHHexqiYXAnGO5WODLdH1uzt5xI3xRC6e2Epdj+RZIJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789370505; c=relaxed/simple;
-	bh=z9NLyr5qGPBtCirsQG24bDt1NKIi/i+eyRvxZel7a9Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Y1WY5z8i4bAYQdNnyiY726c64cWq4if7SY95VhQPD0R25SIDc6tUdN82tR8O54i3o8Eq6t2g7Vr2XEtODZtlaNvYbBzbYaB/J6BFq0xIE8Z+0IuTqPOsEev/tZZNkalY99zW5GiF2Dvqf6i70MT62j7y79r2p7M8LWXSLmRU91Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=riad50NH; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1789370748; c=relaxed/simple;
+	bh=PbFleIiEMM4EcOk80K3i/aLj+DU6YW6VYPFpTkRWFdw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QonQX2jMeolC1w/N9IV8aoiX6+0mpDi7CY+O8F/3iRIF8hRS3FfobwoJdivLAuuysBmJXMrSePj1w1vlokDlEXX94moG8WPAGKnarsf2VItzHDiglLu7Oby0IWdS17rvhaUyL31boQTNn6C2IpEZglVc5W1jK3DXrVcJNEJNXR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de; spf=pass smtp.mailfrom=bairaktaris.de; dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b=HrlhERzv; arc=none smtp.client-ip=74.125.228.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="riad50NH"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68E61ZIX1243011;
-	Mon, 14 Sep 2026 07:21:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=aSrUav
-	tWrPoutvo8Widw7jUErDEtIcp0dpPIVdX3eXk=; b=riad50NHXo6+I+VazMTrSK
-	pw/Z9BjSWPsadrfwhS1VoyRDt3nFmRUXFq0cYwGfp8h9g5dSJIk84U3w8lAAzEeb
-	1hTdsyqZcOiv+c6fmm9muizFByLPlPeaBmrzffN1FHv+5gjN3cv6qxYCVr0NPbmI
-	gJyBx6MTAbX0LITFQ9/N8tbs4dw7HXkaEZB+IJFMJ0tebzILZbKnnZmJtikWbTms
-	tZYVG3Cs72wjSJz7aS3JZNF1uX18/bYYANBF25CbTnnUtTVEiwwX64sKwBEzLgJx
-	IW3s9KRqYHz+HYxS7vuEZHfQXU+9eRxJHz7ROeJQ2kQThj4OX5fAda6nRysed55g
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gmxcuqkab-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 14 Sep 2026 07:21:26 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68E5o4VJ1775096;
-	Mon, 14 Sep 2026 07:21:26 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4gnhevvp6c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Sep 2026 07:21:26 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68E7LONR52298030
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 14 Sep 2026 07:21:24 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 02E5320043;
-	Mon, 14 Sep 2026 07:21:24 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8051C2004B;
-	Mon, 14 Sep 2026 07:21:20 +0000 (GMT)
-Received: from Linuxdev.ibmuc.com (unknown [9.43.93.83])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 14 Sep 2026 07:21:20 +0000 (GMT)
-From: Madhavan Srinivasan <maddy@linux.ibm.com>
-To: mpe@ellerman.id.au, longlong yan <yanlonglong@kylinos.cn>
-Cc: npiggin@gmail.com, chleroy@kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/powerpc: use MAP_FAILED instead of (void *)-1 in tm-signal-context-force-tm
-Date: Mon, 14 Sep 2026 12:51:18 +0530
-Message-ID: <178919368041.441103.208453892352199243.b4-ty@linux.ibm.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260722023428.932-1-yanlonglong@kylinos.cn>
-References: <20260722023428.932-1-yanlonglong@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.b="HrlhERzv"
+Received: by mail-ed2-f9.google.com with SMTP id 4fb4d7f45d1cf-6a99cd510ecso1549119a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 00:25:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bairaktaris.de; s=google; t=1789370744; x=1789975544; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=qJ86Zw0v4ma0tFKlF0YzcCNn6ZjfpJhPEM6cbbu9cJI=;
+        b=HrlhERzv16GJowlpSwSwRzhGC4CyVKDxIMOr2L4ClQFpqohN1SIx6aU15FdTk2OUSM
+         qTz03o+CtiNcmGRxpRMhnAP3AKJkFsnfBV8hGW2GOYJoJWKb0ffy0Vojq8fvuRvHCZJf
+         VLJG4oy5gx6QQ+btAbIUouO7D1KdDipmaEsWoqPRz54U9g0n4a/zab87zK3a6SClar4p
+         NWnKyF7g3Eab1tgpbburmMCq2/D3vun8WziluNIJ5rTZ0uOsAgWVLpN1QJc1ke2hcKZp
+         3Y5KNam31omL9YHakilPEOwug7ys1+Ro7velGPt4SdQZnWrY2T75ERqyRqJ5Uh5Ot5aF
+         69dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789370744; x=1789975544;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=qJ86Zw0v4ma0tFKlF0YzcCNn6ZjfpJhPEM6cbbu9cJI=;
+        b=jcZy9FeAhQYqcTB+3BK6htjPPdTAjqF8uMOtSrSwTPUuylJ/FCmQDAH2dQ6oZlifU4
+         gd6TjpvTRaB3yut4/05hPngTuodMqUIpKw+nyt3xnEdAPV2BCAGFaQV5uPbWI6hCSGrx
+         uZao6dtOy0fz/YS5EtHlcj2aPj0RgaIZ9Eq6DBYryQvH/kPKzMo0xAsTGBm/iypdHS/s
+         gQI4T1NvOFHoms9gtLZW99yuo1Ze+jk+mgtPzv4gnWELTfyoo8PTItvvGxDpoTS9+Acm
+         Vj0+MgLyyBv4EMbk+aaeo+Yb2EMHmccGuL5L2yub8Lne/mwxHcwWAK2zFu1E656kWIxg
+         lf3A==
+X-Forwarded-Encrypted: i=1; AKwUvBxCd3PCrVLwerVZrjmzGptiK82RjJvRlGN08Dmq2oa4CftpmHh4Qh+dUvqv5oXE/w8QEpEYtoKDxy+izDWezXE=@vger.kernel.org
+X-Gm-Message-State: AFuF++keWHuvG6bwghiaBOJzAwYGOO8b/hHEIAvidMFmf9K2roVHmpTT
+	BK7cibGJSYQun/MeyAsPmjgPCWB/EHrCM3+7t3TlcUw8cGDhcykOiooYTOZ5l0+e4sGVT8tOzS+
+	doPE9/KbZsigwByvH
+X-Gm-Gg: AYBFou172i5+L+M0RoLWJewxBsXE6j35rQzIUJ3mh5hG85BCkj0h44coUbViKIdO6ov
+	pSWHnLjr8e903tKXZfNRrI7SyhKR8N1CEKe0m6gvCl4oksMWdTkVutwGQPwBeP62uqiYlbXAsTZ
+	1uE0BrPkpQcCKnABrjqo11pGlN/HFtYCrWqZ9XcBptNXjD10QyF4B5PNXAg3L5br4nbtuRgg5/u
+	2j6EM7R2YEfVmnUiBTSaTRi9YTruVHcghKzTJeYwBnZAwIKjtVyapx9XTy480mS6UbLGpOgdGUu
+	l0zSywcvdZY4gsK5/JXN3H499dCPhFqiFU39N4Ggr7esf/bV8wpAOh0bw2LwDtnur2xGVyt3sY3
+	kVOwCMMEp0detkSqU61KCEsv1u39YzXZ9h7kmgeOx7WizO/x4aTO76jKnMesztvUM/wek9s8xbd
+	cMu37fMKQya+Hngp90Jm/YSxrEO3FgJ7SXV0BtaO1lddC0e4owBW4/vAbmv3JZyFW4psH7AM5Kj
+	SgJq59OLAo6Ubk2jXj6G/Uf8qo5H2E1aZJF9S3YxBHs+lZ+ZqdSpnhrq3q6tbviPu8czY0IIADt
+	gorT49VKwGs1h7qSmlkoWi300Bxsw/xH27pSYox/T5jIXkrI1AlwIMPTANBhePOLGWMT7pPMutF
+	aM+qP1xevZSVWvrtNbUEuqF6sPxZha1b8gwlkAaB7v2D9h9WS5Z2iLVffxb2armSgvTTOMxwD+R
+	fqlSeoeY+h
+X-Received: by 2002:a05:6402:4149:b0:6a5:d8eb:da01 with SMTP id 4fb4d7f45d1cf-6a9f61583a0mr1933700a12.0.1789370744430;
+        Mon, 14 Sep 2026 00:25:44 -0700 (PDT)
+Received: from Desktop.fritz.box ([185.152.145.208])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2965c4e8a1sm382835666b.6.2026.09.14.00.25.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2026 00:25:43 -0700 (PDT)
+From: Julius Bairaktaris <julius@bairaktaris.de>
+To: netfilter-devel@vger.kernel.org
+Cc: pablo@netfilter.org,
+	fw@strlen.de,
+	kadlec@netfilter.org,
+	phil@nwl.cc,
+	horms@kernel.org,
+	davem@davemloft.net,
+	razor@blackwall.org,
+	ericwouds@gmail.com,
+	dqfext@gmail.com,
+	netdev@vger.kernel.org,
+	coreteam@netfilter.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH nf-next v5 0/3] flow offload teardown when layer 2 roaming
+Date: Mon, 14 Sep 2026 09:25:38 +0200
+Message-ID: <20260914072541.897040-1-julius@bairaktaris.de>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE0MDA5OCBTYWx0ZWRfX2YKcleLpq/6b
- EYBj2joxXjDI3dPvzTrjakaAEZeLzPC7s9zauSPkN3qhTwcBobuJjwv8AxR/XFThvtf/V89khRn
- sqY60/pv5nKG4t0b/4XGUIuCyPQdHKE=
-X-Proofpoint-ORIG-GUID: krgBYSi_lFhbe7FdT2mAxXhvJFkqvcb2
-X-Proofpoint-GUID: St9xalCv9EvyCscc7RDcekdq2WZGIA3j
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE0MDA5OCBTYWx0ZWRfX/7p7cbieHdBj
- ucC0sRuIqMHgoI1Abr/qxl6MKEAT5ws9Bcm3g/9lFUSAtPW3jPJ0XjrZp8gnSRjBge1b1IMHndi
- QumEombF6cEv9Fm2TMQ8NsDUHT7+K1/tepw3tVxm1xQGIMXEGn69U7kMrkWPTqxHjJxAzcSSHub
- LLe2Jl/icfkpl8YWaLekyCpk+SlpW2HC4O1nQ/R1RgG2BDHRQBk57lD6FqSbQnvZ7Irgv/1Hnie
- ZX/R1LEKMXXejOBiZcA+5rxjgxGYkfuFz6Xkiv9ebxyjHCSmnSOn++45ykeLE5YAzgVjyMhmrlm
- Khp0NuYGwsodL1aQVgwkcQ316T9BuYL/y5e4BwfOVVO67hm2LBhpKDrnGdDs6hXP+hHq+M3PtnO
- fapCAaOY5o4S9FvvwXrdYHqdCVGgmrUCGKI8io6NPi6fi4TcjayejcKY38d9z2hWAom767R200x
- zUMjGhqsAnSO8MllALw==
-X-Authority-Analysis: v=2.4 cv=F+7C5ahN c=1 sm=1 tr=0 ts=6aa7a077 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
- a=jyw6kHy9CTd0Shu9bYAA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-14_02,2026-09-13_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 phishscore=0 clxscore=1015 malwarescore=0
- lowpriorityscore=0 bulkscore=0 spamscore=0 impostorscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609140098
 
-On Wed, 22 Jul 2026 10:34:28 +0800, longlong yan wrote:
-> mmap() is documented to return MAP_FAILED on error, but
-> tm-signal-context-force-tm.c compares the return value against
-> (void *)-1. Replace these with the standard MAP_FAILED macro for
-> better readability and type safety.
-> 
-> 
+A direct xmit flow keeps the bridge port and destination address that the
+fdb resolved when the flow was created. When the host moves to another
+port of the bridge, for example a station roaming to another access
+point, the bridge moves the fdb entry and the flow keeps forwarding to the
+old port. Every packet the sender keeps transmitting refreshes the flow,
+so it does not age out, and a hardware offloaded flow never sees a packet
+on the software path where the stale port could be corrected.
 
-Applied to powerpc/fixes.
+The bridge notifies SWITCHDEV_FDB_DEL_TO_DEVICE for the old port before it
+moves the entry. Patch 2 tears down the matching direct xmit flows on that
+notification. Patch 1 stores the bridge vid in the tuple so the vid of the
+deleted entry can be compared. Patch 3 adds a selftest.
 
-[1/1] selftests/powerpc: use MAP_FAILED instead of (void *)-1 in tm-signal-context-force-tm
-      https://git.kernel.org/powerpc/c/bf1d8287816194457c1a936056ad2d1e1e478944
+Tested on an ipq807x router (OpenWrt, fw4 flowtable with the offload flag)
+with a station roaming between the two radios of one bridge during a
+download: without the patches the download stalls for as long as the
+station stays on the other radio and resumes only after it roams back,
+with them it continues through the roam, three runs each. A host moving
+from a switch port with a hardware offloaded flow to a radio gets the flow
+torn down and re-offloaded towards the radio.
 
-cheers
+Changes in v5:
+- Rebase onto nf-next; the forward path resolution now lives in
+  nf_flow_table_path.c and the tuple has no hw_ifidx.
+- Store the bridge port in the tuple and match on it: the out interface
+  is the lowest device of the path and differs from the port when the
+  port is a vlan device.
+- Add a helper for the per-tuple match.
+- Drop the WARN_ON on allocation failure; the flow then ages out as
+  before, the same way dsa_user_fdb_event() drops the hardware fdb
+  update when its work item cannot be allocated.
+- Skip local fdb entries, kick the gc once per flowtable.
+- Hold the device with netdev_hold()/netdev_put() and a tracker.
+- Add a selftest that roams a host between two bridge ports, plain and
+  vlan, mid-transfer.
+
+Changes in v4:
+- Removed patch "don't follow fastpath when marked teardown".
+- Use a work queue to process the event.
+
+Changes in v3:
+- static nf_flow_table_switchdev_nb.
+
+Changes in v2:
+- Unchanged, only tags RFC net-next to PATCH nf-next.
+
+v4: https://lore.kernel.org/netfilter-devel/20250925182623.114045-1-ericwouds@gmail.com/
+
+Eric Woudstra (2):
+  netfilter: flow: Add bridge_vid member
+  netfilter: flowtable: teardown direct xmit flows when the fdb entry
+    moves
+
+Julius Bairaktaris (1):
+  selftests: netfilter: nft_flowtable.sh: roam a host between two bridge
+    ports
+
+ include/net/netfilter/nf_flow_table.h         |   4 +
+ net/netfilter/nf_flow_table_core.c            | 109 ++++++++++++++
+ net/netfilter/nf_flow_table_path.c            |   9 ++
+ tools/testing/selftests/net/netfilter/config  |   1 +
+ .../selftests/net/netfilter/nft_flowtable.sh  | 140 ++++++++++++++++++
+ 5 files changed, 263 insertions(+)
+
+-- 
+2.53.0
+
