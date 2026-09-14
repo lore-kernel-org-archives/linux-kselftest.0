@@ -1,59 +1,61 @@
-Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED329416873
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 09:04:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322F538F255
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 09:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789376679; cv=none; b=DsAanPv7FLC4g8fzMEoJ0HPx5hEEW8YUUPOcVUvEk7sM4c1FBNPnCVqrtZXtb1Ia7uhz2yuPbuLx5WzMNZJWaIzbyxitVMNBNs3FrolSbezIGOCJdkkCoIX4PuQjkOx0ngwWjjnnQFiL14llVviMWBZUrl453rZaGp0x1zJOWyA=
+	t=1789376683; cv=none; b=T35DqNoxT5KEtwN4AlbEWHdd/HOj51x/SACVPelfkNjCIQwOANPYcxTBeMjOkZDy/xDHNrhzgTUkj34ufEr7t+GTSk2JrpwaAlHupyUSOqBAT8NHKq9ygBqvQ/e2hi/IHDY/AIMZuIRJf78NrMdajT1qq9liM9x5gt7+ZmE1lT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789376679; c=relaxed/simple;
-	bh=pAks+KPInh9ZWtI6ct5/genc48SB9KuXEC2hZWx4L/4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R8uiYlYWQcPkfMS8+Nx8aOkLlCGFX6kfWWHehvPR9mrcrgIj4o9Xy3RAWyKdHwVg/HwClaLj+MgpMFm/PXlsyoxEDqTn1kqhOIMjsilKxTd64KzKCPFEd9aDFRpqHGC/WbcuAhiSwpUZQNNO4fiQYG2AwyGEYDUKmWHzuG1Rdew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mail.huji.ac.il; spf=pass smtp.mailfrom=mail.huji.ac.il; dkim=pass (1024-bit key) header.d=mail.huji.ac.il header.i=@mail.huji.ac.il header.b=UQW1AmI6; arc=none smtp.client-ip=74.125.225.141
+	s=arc-20240116; t=1789376683; c=relaxed/simple;
+	bh=gyJC0b7hJECF7fJ8CFQosnxeuVtyVlQMTv/hlVGegkM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OtgV1InrZdfH3+rcEKEfnObAYwWoWaTM2bIO8AR7CF+cJsvwXQkVAZbuxkmWMgKgv0QYyP1pyGenrHCs0GH5HoUAFm0n3lid29xajUpLsxm/bodb2p8qWgtZcQCPC0MTz3+uO2BcLAJTvr6VVrJFsZCkG4w1AmZuL6Ra38B5bao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mail.huji.ac.il; spf=pass smtp.mailfrom=mail.huji.ac.il; dkim=pass (1024-bit key) header.d=mail.huji.ac.il header.i=@mail.huji.ac.il header.b=Q1rTI8UX; arc=none smtp.client-ip=74.125.225.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mail.huji.ac.il
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.huji.ac.il
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mail.huji.ac.il header.i=@mail.huji.ac.il header.b="UQW1AmI6"
-Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e7af75f51so86435e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 02:04:34 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mail.huji.ac.il header.i=@mail.huji.ac.il header.b="Q1rTI8UX"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4843703c170so263445f8f.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 02:04:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mail.huji.ac.il; s=mailhuji; t=1789376673; x=1789981473; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=fmdVUI1/NR1WuBXeu4WYA7tw+26r3ITA6s7ZdRYWlzo=;
-        b=UQW1AmI6gZa8aEIz7daQRPEBLdrPQaBUqmR4bhHzecYwiIQbpZ757T+fs5syCsHNyg
-         TPJCDILI+Zstl+jTXYmibw/BFQJ1F08+0OrGyzVnM9HMJyf4FbnFrAKLwhII0c/nMVsN
-         aPbl6JEq0TMsoJpXoeZUHw61lvENz3nOQ90RA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789376673; x=1789981473;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=mail.huji.ac.il; s=mailhuji; t=1789376679; x=1789981479; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=fmdVUI1/NR1WuBXeu4WYA7tw+26r3ITA6s7ZdRYWlzo=;
-        b=hHupJe3nlpe6Qd+jXzODy6oq43EmUJHoHxEHmJ6yQYYGqZGTeWrib9o7A1+ZtQvxyA
-         F8+FWjjCwgNtFLgjIFQTssHWquoHF5Enc8QgYMe2TwfFMF/9ZrCnG9IhH6SpCuPd64j/
-         GqlJ3l5JqRIMJWDwwBFbARYYlEMicFDD2rmvtBkXbpzYuHpREej+wBFOH1DKWN6m9fw3
-         jiggKrm0wykSP0Hotml4bKEWYMnJQiGc8oajOfUU2r/SOcNtj/P4uAffbLR0F0oTBETQ
-         TgcIlyDp/5pKloXm0CjCdihbAB77eVgYHFRhkqa9AOJoA8WJXt0nP2M3yc0zK6WBRwt1
-         3Cdw==
-X-Forwarded-Encrypted: i=1; AKwUvBy9i7bhrEOH0ku1w1MArxMMg+P/+gSTRQqzn2vrVRM0uTwopATU4afQr6MOxXSBBnBsnAWfLknE1/3HgUVg9c4=@vger.kernel.org
-X-Gm-Message-State: AFuF++mkKRkXiHcwZQS90gYTvPFsYdWAX+HvcwfeFvO056gx1gV5NHcW
-	4C8691aHnMyH03j1HRI9gIcv/6RQvNuWdrhl/Go477yKn+Yc9+uprjS+uEQONYh57A==
-X-Gm-Gg: AYBFou138dA96STjwHLs1Kjl9B/rmupy83m6pbHb/0+cqyfuwGBT0xIalZ+Iap4HQvA
-	i7FcgOSHoOdB8fpc3LBjYpDulStjqoestvWoXseRuCrQx/EA/IhobSY0l4KW72f8r5/6sO/7Pfj
-	ld0JsdKGCPTg/aGap1aTxrBaYO/p6G+D49ASkeOynLwpWCtpQq4/LHHzbGVRVevyA7YoqPVp3XY
-	9ohH5cp5d7lzx/q9/qWSM4+fowkWZdxBnLQiI0Nc/FQRvcERFQvcoYApr9bBXzV9w6d/ATYkP2S
-	FOvOTNVaVn67z5W78BGysWJf59khFUNS3VHOEih2ozYrLem18Ky7Sb5zmG0aLeHNqa2nYb8kaMF
-	wC9urg/uw1u7R61gqhAhOTWgW70APdEGQqaXf37m95OCm+HfL7uIm1/imxMSYu+YqzPKX6CpCYh
-	4K4AJkd+ztFXpaC258ovxnEP3EvAOFEClwN04pmeiI3uGeMw2/eVPCu92hDZ5d5Pu5H1y0JdBV0
-	5+MjEhxCxXa45Ro4rOsWy1gg9jcgXOLP1VP
-X-Received: by 2002:a05:600c:a18e:b0:49e:7c8b:fdef with SMTP id 5b1f17b1804b1-49e7c8bfe12mr1732005e9.2.1789376673036;
-        Mon, 14 Sep 2026 02:04:33 -0700 (PDT)
+        bh=AAgSKAAxXcQr8Y2vgjRRhe3XjvoOC28UTrglxB/skkM=;
+        b=Q1rTI8UXiF8QRRi0LJYc2vmt+A/LOrNNETT5fdy4qsEo+H8j9aMyap3kFXihcnhsVV
+         u9OGPa8s0c8ueZF73P832Q5KDZQ1GmZHvjSuyPY1hyY0jn8P7tgQCD5Z/LW31wtFMzFl
+         YCAetz+2oR6wKOs4exe8u4bmPwSosntVB8pjY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789376679; x=1789981479;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=AAgSKAAxXcQr8Y2vgjRRhe3XjvoOC28UTrglxB/skkM=;
+        b=KsdWutAn5zsenomk5ckq+o06g3f4pO6umDgLFyt5XSzrO1xFFnB4bDCONrVxQifajk
+         f62oz/Ncb2to9Tl2uVd3u7WSiTa7/JLxG27cwkpT0tE0FxpPRPJobV+nOBl70bhx+rUX
+         S8W7e5oev29a4jbF2/pa496hWjiiPct1Q4hpgoWrXMTp99SrYa9Nsb13yub0VgGGrGsX
+         zGNwhAj1/hbFZRg01Wk2DiKzdjLj1fXU05j+TcTDr6GzPBXxOcZervSe7QkzPKJ6fZqW
+         v3pb71WECeFQXElAUFZ6yUC+CYhaDPpbvx5WtB8h8Kv+mCFlxdKwyBAw+R4r2XitAjZ6
+         h4eQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxxLJFHRysgqaaU0GdE3za0MQSwLRKaHEMV9gTGPtjAhTXmsmXxc2mZa9IYIMI7CK3fmzNONq39/reQhxaNJ4o=@vger.kernel.org
+X-Gm-Message-State: AFuF++mrxBNL+F+XJ2Gpq6bJ0kyE9lBb0BwgYxiX3GGkQ+lSD2Zt2WyE
+	BDRpW0vC+Sfj92/yQtzuJl6x3L/wfGPOv+dR10vwP8PWSef4tQgBo71TjjK9jo47xg==
+X-Gm-Gg: AYBFou3u2Ln4DxRm4NdDmkV+hvWQUhpPu1su3AtWDPiyaRQVNk0FSmPxUmj92CUw9Q1
+	/Jqo5CyScq9S+UkH0KGZzMBOpKRKKA+atqNP/iin7p03lHjgPXsKISAJLZzbZGXqZqLeZ0ZptwR
+	hhKR9YXcfGtkLQ2hJGyGhUaJjNk5U8SerYKF3lo3L8nN1ECE+Hv3s1XLhrIiBepn/2wNiVnPPsx
+	HITW7BcRDVtIYOLTOnb2oi5K2J4xxKMvTC90T0rWZl5HVDVMQ8LAXZV9cL02VSAHKDrRjwcAfiF
+	UVnECuYUKpNvWpKRUQH0KdTR97wT0T9nf6RVqXkD47+Feb/5/a7Ej5NsZ9rMAla4lSWSg4NTjKo
+	QXGdkX5MwsrAM9IPMKWWW+/RE5AMZD2wyIt+Pzc5eDE9DP5TI3t7l/NHwguVB908RMT5Ldzby9V
+	e2EEk6AS1Yaazj2S+szExWjslBQ/sJDHmVhbY6bA/GcY6w6nc+NUpyK5nZUmo2KERHQK1zfRYAj
+	luBFO4/JGbpQ6Gwv2rj/2e43Ne5N28K77cScMEuJ1Z4lMc=
+X-Received: by 2002:a05:600c:3b9f:b0:499:d95a:41f with SMTP id 5b1f17b1804b1-49e7a5f41a5mr21428035e9.0.1789376679039;
+        Mon, 14 Sep 2026 02:04:39 -0700 (PDT)
 Received: from inbal-OptiPlex-Micro-7020.tailf3f5b8.ts.net ([2a06:c701:c272:d400::7])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e6a06cfb8sm227502585e9.5.2026.09.14.02.04.31
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e6a06cfb8sm227502585e9.5.2026.09.14.02.04.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 02:04:32 -0700 (PDT)
+        Mon, 14 Sep 2026 02:04:38 -0700 (PDT)
 From: Inbal Schussheim <inbal.lipshtat@mail.huji.ac.il>
 To: netdev@vger.kernel.org
 Cc: edumazet@google.com,
@@ -66,11 +68,15 @@ Cc: edumazet@google.com,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	amit.klein@mail.huji.ac.il,
-	Inbal Schussheim <inbal.lipshtat@mail.huji.ac.il>
-Subject: [PATCH net v3 0/2] tcp: exclude old ACKs from fast path
-Date: Mon, 14 Sep 2026 12:04:06 +0300
-Message-ID: <20260914090408.1435080-1-inbal.lipshtat@mail.huji.ac.il>
+	Inbal Schussheim <inbal.lipshtat@mail.huji.ac.il>,
+	Tamir Shahar <tamir.shahar1@mail.huji.ac.il>,
+	stable@vger.kernel.org
+Subject: [PATCH net v3 1/2] tcp: exclude old ACKs from tcp fast path
+Date: Mon, 14 Sep 2026 12:04:07 +0300
+Message-ID: <20260914090408.1435080-2-inbal.lipshtat@mail.huji.ac.il>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260914090408.1435080-1-inbal.lipshtat@mail.huji.ac.il>
+References: <20260914090408.1435080-1-inbal.lipshtat@mail.huji.ac.il>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,47 +85,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Exclude ACKs outside [SND.UNA, SND.NXT] from TCP header prediction so
-that they fall through to the slow path, where ACK
-validation is applied.
+Exclude old ACKs before SND.UNA from the tcp fast path
+as well as ACKs after SND.NXT.
 
-Add a packetdrill test for a data segment carrying an
-excessively old ACK. The test fails on the unpatched kernel and passes
-with the fix.
+Such ACKs will fall through to the slow path, where tcp_ack()
+performs the appropriate validation and challenge ACK handling
+according to RFC5961 and Commit 3d501dd326fb1c7 ("tcp: do not
+accept ACK of bytes we never sent").
 
+This prevents old ACKs from being accepted
+or modifying connection state as part of the fast path before
+appropriate ACK validation is applied.
+In particular, this prevents payload carried by a segment with
+an excessively old ACK from advancing RCV.NXT before the ACK
+is rejected.
+
+Fixes: 31770e34e43d ("tcp: Revert "tcp: remove header prediction"")
+Reported-by: Amit Klein <amit.klein@mail.huji.ac.il>
+Reported-by: Tamir Shahar <tamir.shahar1@mail.huji.ac.il>
+Reported-by: Inbal Schussheim <inbal.lipshtat@mail.huji.ac.il>
+Suggested-by: Eric Dumazet <edumazet@google.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Inbal Schussheim <inbal.lipshtat@mail.huji.ac.il>
 ---
+ net/ipv4/tcp_input.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Changes in v3:
-- Add a Fixes tag and stable Cc.
-- Clarify the visible impact of accepting payload carried by an
-  excessively old ACK (RCV.NXT is advanced before the ACK is rejected).
-- Document ACK sequence validity as a TCP fast-path condition.
-- Initialize the packetdrill test with the suite defaults and disable
-  invalid-packet rate limiting.
-- Add an SPDX license identifier to the packetdrill test.
-
-Changes in v2:
-
-- Exclude all ACKs before SND.UNA from header prediction instead of
-  duplicating old-ACK validation in the fast path.
-- Cover pure ACKs as well as data-carrying segments.
-- Let the existing slow path handle validation and challenge ACKs.
-- Remove the packetdrill reproducer from the commit message; add the
-  packetdrill test separately.
-
-v2: https://lore.kernel.org/netdev/20260909075644.1408171-1-inbal.lipshtat@mail.huji.ac.il/
-v1: https://lore.kernel.org/netdev/20260906123151.1391349-1-inbal.lipshtat@mail.huji.ac.il/T/#u
-
-Inbal Schussheim (2):
-  tcp: exclude old ACKs from tcp fast path
-  selftests: net: packetdrill: test exclusion of old ACK from TCP fast
-    path
-
- net/ipv4/tcp_input.c                          |  3 +-
- .../tcp_rfc5961_reject-old-ack.pkt            | 29 +++++++++++++++++++
- 2 files changed, 31 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_rfc5961_reject-old-ack.pkt
-
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index daff93d51342..03d317a58132 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -6490,6 +6490,7 @@ static bool tcp_validate_incoming(struct sock *sk, struct sk_buff *skb,
+  *	  or pure receivers (this means either the sequence number or the ack
+  *	  value must stay constant)
+  *	- Unexpected TCP option.
++ *	- ACK sequence number is outside [SND.UNA, SND.NXT].
+  *
+  *	When these conditions are not satisfied it drops into a standard
+  *	receive procedure patterned after RFC793 to handle all cases.
+@@ -6539,7 +6540,7 @@ void tcp_rcv_established(struct sock *sk, struct sk_buff *skb)
+ 
+ 	if ((tcp_flag_word(th) & TCP_HP_BITS) == tp->pred_flags &&
+ 	    TCP_SKB_CB(skb)->seq == tp->rcv_nxt &&
+-	    !after(TCP_SKB_CB(skb)->ack_seq, tp->snd_nxt)) {
++	    between(TCP_SKB_CB(skb)->ack_seq, tp->snd_una, tp->snd_nxt)) {
+ 		int tcp_header_len = tp->tcp_header_len;
+ 		s32 delta = 0;
+ 		int flag = 0;
 -- 
 2.43.0
 
