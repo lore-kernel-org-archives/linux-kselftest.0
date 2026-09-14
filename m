@@ -1,770 +1,223 @@
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B830A42E401;
-	Mon, 14 Sep 2026 09:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B654195B5
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 09:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789378043; cv=none; b=LbSNGNHfGFYlCU48EpLlZee7iKnAevTvBDv0J+Oup8SPwDZtiaSKXy5cZgmWg0CO75e/QPaSJOZyLJrcFjMkX39ufmmzFxETAWB6vNoyjdRw4CAWZdaIoG8G8X4n757kYGCw9CPn/fjdPw5u0t0rZY24EENN9q7NhgJyi1YoaJs=
+	t=1789378473; cv=none; b=JsirqWOOUb+FjnD2MqAmnAZPUQGgaT4yhRcn1yCx/JK/ZetIPPiudTspDpPMZ8DFDUpj/8rUww9zGogsQLsSE25q/0K/n6UHGmt/xT00zibJs0pinA2V4gldklnqe3rqH07OqLElyFNR+VSlEdlLu5lgah5B+9U6qvbFj0hD9ZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789378043; c=relaxed/simple;
-	bh=ANNRCwPD6zhf87eScOPy4QwWeFvcd/OOgssUjry83L8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PpqvI9mQ5g0rmAJE/Uyg3G8SvKeDCpPhr6A6WaoE0/zAIeNt2lHHg5j157qnfkDdhIIe6hSAU+1ff6pR8LcjoCqw1nNvLRe97GMm2mzyEhedSmg3qD6eZRzcYJNZRt8xO+pg4+Y4aE/Ym1uhqT46ssFBd4lHb8fLgpuuv25a5gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=BxWdBcIE; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1789378473; c=relaxed/simple;
+	bh=F9kREIRf3Ig9UgSB4LaiZ0uAxLqbvVsx82KJvon0pPc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FVI0+rK8WdOLcCc+tID1RKNgipIIc5Z3UP6CoZabrDawDv7sQ5WYl8TN8jENFBfHKVtDgd8NYIFc1gQXuttv/hTGySRadJcu+L/YGEGdawvF2A/mpoXojIphf5ESSwdhN0hW0Yf7x3Ph6+4gepqdAjZc9OEJklzf61OuVaPPzS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qQhRIrby; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="BxWdBcIE"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1789378027; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=AQFhP47l8rFzilFqOvieFgth2jRNrpzFYg9Ga06WTho=;
-	b=BxWdBcIE9K/ROxCOZh4occTBMgQIoBYmxYFdvdcCdZ4nBgeqwrf0XOTqsOangeJ6sbZO8kjoLyPgupWZOcSZsIL58D0KCltNplm+QDi2kex5qorcWYXXH7VhSHrJHdjgyj9IeY1LajS+FI4ZHf8fAAS+fpTYf4NHr6Vu8uYJKWM=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037026112;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0XAuO-pA_1789378022;
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XAuO-pA_1789378022 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 14 Sep 2026 17:27:03 +0800
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-To: palmer@dabbelt.com,
-	pjw@kernel.org,
-	aou@eecs.berkeley.edu
-Cc: alex@ghiti.fr,
-	linux-riscv@lists.infradead.org,
-	oleg@redhat.com,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mark.rutland@arm.com,
-	peterz@infradead.org,
-	mingo@redhat.com,
-	acme@kernel.org,
-	namhyung@kernel.org,
-	alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org,
-	irogers@google.com,
-	adrian.hunter@intel.com,
-	james.clark@linaro.org,
-	jpoimboe@kernel.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	joe.lawrence@redhat.com,
-	shuah@kernel.org,
-	mpdesouza@suse.com,
-	oliver.yang@linux.alibaba.com,
-	zhuo.song@linux.alibaba.com,
-	xueshuai@linux.alibaba.com,
-	jkchen@linux.alibaba.com,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v6 5/7] riscv: stacktrace: switch to frame-pointer based unwinder
-Date: Mon, 14 Sep 2026 17:26:46 +0800
-Message-Id: <20260914092648.51254-6-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
-References: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qQhRIrby"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4998b5a63e2so33383575e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 02:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789378470; x=1789983270; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=qhpKpTgQJRnbW6lGpwxnwI5Tq36h+wEsmUTgFxtkd1g=;
+        b=qQhRIrbyhJDbMjxJCDYWfa8dclFTfZ/PTd6ToHcD1oaLjrx8n4LQisfy5uO3stUMAV
+         Fbg/91Zb0RaLPbAeH1Vp9CcbPsSbt3aSLPg5HtxUiTmKKI2YsI+OWEvWbEq/dWGi2w6/
+         487elbLNXJ1njGjrZi09CcHJeUAm545UZ9Eqbzf5pDsTuSxuQ7EJJsN5xkA5dc1WH6av
+         FOrTbaCfKtRnndOHl2XWLHivGrBiR+i1P8rfAZZFNLCQpynsZHtPGmuuXA/Ov88LGXtS
+         W8QFl0VKnD8azHW1+3iSl027xZeVKM7Eko65p0pPqlIgLQKB8Ob4XQ1DmPJ+qIT5+X1r
+         wDHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789378470; x=1789983270;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=qhpKpTgQJRnbW6lGpwxnwI5Tq36h+wEsmUTgFxtkd1g=;
+        b=c7WzjW0xTzOEm0IsUmjLTDFK/cVSYbOi94Ll6iM6qMq4xXOH09bRCjhArFOfmE9l3B
+         LK9VJE3yC/o2f7QUuPKtuAxWMPB//7l+sxGTBuBOchIrMBPyER19Q/zzG6MjWqUGA7vr
+         WwXm2tVZaxOF2nkZ+oxQ7eJjKRWaNeNOyBU9DLdgnOKdVbFM9yb9U/mw8jUGHJleTyzC
+         UdVqhXH1HgWSznrwR5lW0rMMoMFr1q5p8OqnlgrM76Zrkp3Shr8xsuJDJ2OUxAakX/Lq
+         8GYYAEyKNkKyj08k6DMLpqFYiv8lxkjbiQE6NYiN0XE9kFB9AQIs4qLIIBCwLLLs0CCf
+         qZSQ==
+X-Forwarded-Encrypted: i=1; AKwUvByf/ds9aUeEO4nOwoB3KJ1avrnwOjIBOfTOwl++9l1iNCSZAI+QMSRwkQahBAvnDvLM/JrSiIdozsG8GfVlDLw=@vger.kernel.org
+X-Gm-Message-State: AFuF++nsPhKwgRXAJT7Om/GLVV/nrHFAXZMySxIdODZi0aTKJzZVi4Ap
+	YOLs9I/s7Vvnq6e9Z1sGK6V+I5QVE19L9/TjUnf8An8OdtDz79OcObh5
+X-Gm-Gg: AYBFou2bTqwe7K90L7B8ST7kC4rSZDDzCzJuoJ1wm9aYXjWpY1QmRsJ/xkFrjKh3B0X
+	rxtNIs0f4H1ZAXHtbDk5UW/87Lx1klDEthEEhkFq4vUMJGOEO5p9iEaAONgeudULAolkaHU9Hss
+	OQiBQHBz+KKrxJb+g/mxXRIrj/oRW+kRRODFR1TCdQBt/IzV+esX7OE4Dl9owz1uVn5uCfLz1yQ
+	9hwF9LWodhUg503dLo8h8KVqs07JhCPGGLZfu08xfysmlNpI+fgSVhxvjRLpJqgA3xdkwEn6MdB
+	HrPnWZ1JSaPNTOPz+5gwJ3dsLFMLcKJp7aTC8sAtsUy1+b0QViQGzFw4rVMbncN5TH/KXKUlv+t
+	fFtt+mKh6+8aDYgRt22QclqVAfU4uEQ7uWRz5alKUNK1LShJIx3YMBl0FOWRW4M9rzPmw4f43KP
+	JLi/WZDRKNM9Mx3XYtpIhdaFqxi2+bQTuOjB+p7m1/b+xRi83vehohvw+os0aF3wBMukYxTKFqk
+	rgZ4W5Dz+6P5C2Jln8w4slVX2K7WJMXucqk
+X-Received: by 2002:a05:600c:1c19:b0:49e:6cc1:14d9 with SMTP id 5b1f17b1804b1-49e7a691ad9mr22121805e9.32.1789378469602;
+        Mon, 14 Sep 2026 02:34:29 -0700 (PDT)
+Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e63c9a7c9sm509436105e9.13.2026.09.14.02.34.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2026 02:34:29 -0700 (PDT)
+Date: Mon, 14 Sep 2026 11:34:23 +0200
+From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
+To: Christopher Lusk <clusk@northecho.dev>
+Cc: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Oleg Nesterov <oleg@redhat.com>, Jiri Slaby <jirislaby@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Tahera Fahimi <fahimitahera@gmail.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	John Johansen <john.johansen@canonical.com>,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] Landlock signal scope and TIOCSIG
+Message-ID: <20260914.b8a029f9abb8@gnoack.org>
+References: <20260913221958.839429-1-clusk@northecho.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260913221958.839429-1-clusk@northecho.dev>
 
-From: Wang Han <wanghan@linux.alibaba.com>
+Hello Christopher!
 
-Replace the open-coded frame-pointer walker in arch_stack_walk() with a
-robust kunwind state machine, modelled on arch/arm64/kernel/stacktrace.c
-and retargeted to the RISC-V {fp, ra} frame record convention. The new
-walker tracks stack bounds, consumes frame records monotonically,
-understands the metadata pt_regs records added in the previous frame
-record metadata patch, and recovers return addresses replaced by
-function graph tracing and kretprobes.
+On Sun, Sep 13, 2026 at 06:19:56PM -0400, Christopher Lusk wrote:
+> Landlock documents LANDLOCK_SCOPE_SIGNAL as limiting signal delivery to
+> processes in the same or a nested Landlock domain.  A retained PTY master
+> can currently use TIOCSIG to deliver SIGINT, SIGQUIT, or SIGTSTP to an
+> out-of-domain slave foreground process group because the privileged TTY
+> signal path never reaches security_task_kill().
+> 
+> This RFC asks two questions before proposing a final interface.
+> 
+> First, should this be classified as SCOPE_SIGNAL under-enforcement, or as
+> part of Landlock's documented inherited-TTY limitation?  The "Current
+> limitations / IOCTL support" section says that IOCTL_DEV does not affect
+> pre-existing descriptors, names TIOCSTI and TIOCLINUX, and recommends
+> closing inherited TTY descriptors.  That text discusses the filesystem
+> IOCTL_DEV right rather than SCOPE_SIGNAL, and unlike the two named ioctls,
+> TIOCSIG is not CAP_SYS_ADMIN-gated.  Commit 4b80320ca7ed fixed the same
+> effect-level class for SIGIO rather than treating the retained signal
+> source as exempt.
+> 
+> Second, if this is a bug, should TIOCSIG use the existing task_kill hook as
+> patch 1 demonstrates, or should it gain a dedicated TTY-signal hook which
+> Landlock can implement without changing other LSM policies?  The prototype
+> is atomic with process-group delivery and behaviorally narrow to TIOCSIG,
+> but calling task_kill means SELinux, Smack, AppArmor, BPF LSM programs, and
+> future implementations also mediate this operation.  The series does not
+> claim that cross-LSM policy change is settled.
 
-This commit introduces arch_stack_walk_reliable() but does not yet
-select HAVE_RELIABLE_STACKTRACE; that is done in a follow-up Kconfig
-patch so this commit can be reviewed and bisected as a pure unwinder
-replacement. Until that Kconfig change lands, livepatch is not yet
-enabled and arch_stack_walk_reliable() has no in-tree caller.
+Thank you for bringing this up; I was not aware of this code path and
+researched it a bit.
 
-Three related callers are updated to keep the same frame-record
-assumptions everywhere:
+Let me try to paraphrase the issue to make sure I understand:
 
-  * Function graph tracing: the old RISC-V unwinder matched function
-    graph return-stack entries by the saved return-address slot. That
-    was consistent with the static mcount path, but not with the dynamic
-    ftrace path where the parent slot is ftrace_regs::ra. Use the
-    architectural frame pointer as the function graph return-address
-    cookie, matching the kunwind walker.
+1. A process creates a PTY device and acquires the PTY master FD.
+2. The process then restricts itself into a signal-scoped Landlock domain.
+3. Processes outside of the domain are attached to the terminal
+4. Through the PTY master FD, the master process emulates a terminal
+   to the attached processes.  One of the commands it can issue is
+   TIOCSIG, allowing the PTY master process to send SIGINT ("Ctrl-C"),
+   SIGQUIT ("Ctrl-\") or SIGTSTP ("Ctrl-Z") to TTY-attached processes,
+   which may live *outside* the Landlock domain.  (source:
+   pty_signal() in drivers/tty/pty.c)
 
-  * Perf callchains: route kernel callchain collection through
-    arch_stack_walk() so perf sees the same frame-pointer unwind
-    behaviour as dump_stack() and the upcoming livepatch path.
+TIOCSIG was introduced in 2010 in Linux [1] and in 1989 in BSD (quoted
+in the Linux patch).  According to the patch, it is only required in a
+special terminal mode where the mapping of signals is disabled.
 
-  * dump_backtrace() / __get_wchan() / show_stack(): these now go
-    through arch_stack_walk(); the explicit "Call Trace:" header is
-    moved into dump_backtrace() to preserve the original output.
+In more normal operation modes, the terminal interprets these keyboard
+shortcuts sent as characters.  This is implemented in
+n_tty_receive_char_special() when you write() the characters '\x03'
+(Ctrl-C), '\x1c' (Ctrl-\) or '\x1a' (Ctrl-Z) to the PTY master FD.
+(Your proposed patch does not fix this either, even though it sends
+the same signals.)
 
-The non-frame-pointer fallback walker is kept untouched for
-!CONFIG_FRAME_POINTER builds.
+Additionally, PTYs can send:
 
-Assisted-by: Qoder:Qwen-3.8-MAX-Preview
-Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
----
- arch/riscv/kernel/ftrace.c         |   6 +-
- arch/riscv/kernel/perf_callchain.c |   2 +-
- arch/riscv/kernel/stacktrace.c     | 561 ++++++++++++++++++++++++-----
- 3 files changed, 473 insertions(+), 96 deletions(-)
+* SIGWINCH (when you do ioctl(TIOCSWINSZ) on the master FD)
+* SIGHUP and SIGCONT
 
-diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
-index be8b685144174..0facd824c911d 100644
---- a/arch/riscv/kernel/ftrace.c
-+++ b/arch/riscv/kernel/ftrace.c
-@@ -245,7 +245,8 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
- 	 */
- 	old = *parent;
- 
--	if (!function_graph_enter(old, self_addr, frame_pointer, parent))
-+	if (!function_graph_enter(old, self_addr, frame_pointer,
-+				  (void *)frame_pointer))
- 		*parent = return_hooker;
- }
- 
-@@ -267,7 +268,8 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
- 	 */
- 	old = *parent;
- 
--	if (!function_graph_enter_regs(old, ip, frame_pointer, parent, fregs))
-+	if (!function_graph_enter_regs(old, ip, frame_pointer,
-+				       (void *)frame_pointer, fregs))
- 		*parent = return_hooker;
- }
- #endif /* CONFIG_DYNAMIC_FTRACE */
-diff --git a/arch/riscv/kernel/perf_callchain.c b/arch/riscv/kernel/perf_callchain.c
-index b465bc9eb870e..436af96ea59ca 100644
---- a/arch/riscv/kernel/perf_callchain.c
-+++ b/arch/riscv/kernel/perf_callchain.c
-@@ -44,5 +44,5 @@ void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry,
- 		return;
- 	}
- 
--	walk_stackframe(NULL, regs, fill_callchain, entry);
-+	arch_stack_walk(fill_callchain, entry, NULL, regs);
- }
-diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
-index c7555447149bf..0ce0cf0da6060 100644
---- a/arch/riscv/kernel/stacktrace.c
-+++ b/arch/riscv/kernel/stacktrace.c
-@@ -11,98 +11,16 @@
- #include <linux/sched/task_stack.h>
- #include <linux/stacktrace.h>
- #include <linux/ftrace.h>
-+#include <linux/kprobes.h>
-+#include <linux/llist.h>
- 
- #include <asm/stacktrace.h>
- 
--#ifdef CONFIG_FRAME_POINTER
--
- /*
-- * This disables KASAN checking when reading a value from another task's stack,
-- * since the other task could be running on another CPU and could have poisoned
-- * the stack in the meantime.
-+ * Non-frame-pointer fallback unwinder.
-+ * Only compiled when CONFIG_FRAME_POINTER is not enabled.
-  */
--#define READ_ONCE_TASK_STACK(task, x)			\
--({							\
--	unsigned long val;				\
--	unsigned long addr = x;				\
--	if ((task) == current)				\
--		val = READ_ONCE(addr);			\
--	else						\
--		val = READ_ONCE_NOCHECK(addr);		\
--	val;						\
--})
--
--extern asmlinkage void handle_exception(void);
--extern unsigned long ret_from_exception_end;
--
--static inline int fp_is_valid(unsigned long fp, unsigned long sp)
--{
--	unsigned long low, high;
--
--	low = sp + sizeof(struct stackframe);
--	high = ALIGN(sp, THREAD_SIZE);
--
--	return !(fp < low || fp > high || fp & 0x07);
--}
--
--void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
--			     bool (*fn)(void *, unsigned long), void *arg)
--{
--	unsigned long fp, sp, pc;
--	int graph_idx = 0;
--	int level = 0;
--
--	if (regs) {
--		fp = frame_pointer(regs);
--		sp = user_stack_pointer(regs);
--		pc = instruction_pointer(regs);
--	} else if (task == NULL || task == current) {
--		fp = (unsigned long)__builtin_frame_address(0);
--		sp = current_stack_pointer;
--		pc = (unsigned long)walk_stackframe;
--		level = -1;
--	} else {
--		/* task blocked in __switch_to */
--		fp = task->thread.s[0];
--		sp = task->thread.sp;
--		pc = task->thread.ra;
--	}
--
--	for (;;) {
--		struct stackframe *frame;
--
--		if (unlikely(!__kernel_text_address(pc) || (level++ >= 0 && !fn(arg, pc))))
--			break;
--
--		if (unlikely(!fp_is_valid(fp, sp)))
--			break;
--
--		/* Unwind stack frame */
--		frame = (struct stackframe *)fp - 1;
--		sp = fp;
--		if (regs && (regs->epc == pc) && fp_is_valid(frame->ra, sp)) {
--			/* We hit function where ra is not saved on the stack */
--			fp = frame->ra;
--			pc = regs->ra;
--		} else {
--			fp = READ_ONCE_TASK_STACK(task, frame->fp);
--			pc = READ_ONCE_TASK_STACK(task, frame->ra);
--			pc = ftrace_graph_ret_addr(task, &graph_idx, pc,
--						   &frame->ra);
--			if (pc >= (unsigned long)handle_exception &&
--			    pc < (unsigned long)&ret_from_exception_end) {
--				if (unlikely(!fn(arg, pc)))
--					break;
--
--				pc = ((struct pt_regs *)sp)->epc;
--				fp = ((struct pt_regs *)sp)->s0;
--			}
--		}
--
--	}
--}
--
--#else /* !CONFIG_FRAME_POINTER */
-+#ifndef CONFIG_FRAME_POINTER
- 
- void notrace walk_stackframe(struct task_struct *task,
- 	struct pt_regs *regs, bool (*fn)(void *, unsigned long), void *arg)
-@@ -133,7 +51,12 @@ void notrace walk_stackframe(struct task_struct *task,
- 	}
- }
- 
--#endif /* CONFIG_FRAME_POINTER */
-+#endif /* !CONFIG_FRAME_POINTER */
-+
-+/*
-+ * Common trace helpers.
-+ * These are used by both the FP (kunwind) and non-FP (walk_stackframe) paths.
-+ */
- 
- static bool print_trace_address(void *arg, unsigned long pc)
- {
-@@ -146,12 +69,12 @@ static bool print_trace_address(void *arg, unsigned long pc)
- noinline void dump_backtrace(struct pt_regs *regs, struct task_struct *task,
- 		    const char *loglvl)
- {
--	walk_stackframe(task, regs, print_trace_address, (void *)loglvl);
-+	printk("%sCall Trace:\n", loglvl);
-+	arch_stack_walk(print_trace_address, (void *)loglvl, task, regs);
- }
- 
- void show_stack(struct task_struct *task, unsigned long *sp, const char *loglvl)
- {
--	pr_cont("%sCall Trace:\n", loglvl);
- 	dump_backtrace(NULL, task, loglvl);
- }
- 
-@@ -171,17 +94,469 @@ unsigned long __get_wchan(struct task_struct *task)
- 
- 	if (!try_get_task_stack(task))
- 		return 0;
--	walk_stackframe(task, NULL, save_wchan, &pc);
-+	arch_stack_walk(save_wchan, &pc, task, NULL);
- 	put_task_stack(task);
- 	return pc;
- }
- 
--noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry, void *cookie,
--		     struct task_struct *task, struct pt_regs *regs)
-+/*
-+ * Frame-pointer-based kernel unwind infrastructure.
-+ * Only compiled when CONFIG_FRAME_POINTER is enabled.
-+ *
-+ * See: arch/arm64/kernel/stacktrace.c for the reference implementation.
-+ */
-+#ifdef CONFIG_FRAME_POINTER
-+
-+/*
-+ * Per-cpu stacks are only accessible when unwinding the current task in a
-+ * non-preemptible context.
-+ */
-+#define STACKINFO_CPU(task, name)				\
-+	({							\
-+		(((task) == current) && !preemptible())		\
-+			? stackinfo_get_##name()		\
-+			: stackinfo_get_unknown();		\
-+	})
-+
-+enum kunwind_source {
-+	KUNWIND_SOURCE_UNKNOWN,
-+	KUNWIND_SOURCE_FRAME,
-+	KUNWIND_SOURCE_CALLER,
-+	KUNWIND_SOURCE_TASK,
-+	KUNWIND_SOURCE_REGS_PC,
-+};
-+
-+union unwind_flags {
-+	unsigned long	all;
-+	struct {
-+		unsigned long	fgraph : 1,
-+				kretprobe : 1;
-+	};
-+};
-+
-+/*
-+ * Kernel unwind state
-+ *
-+ * @common:    Common unwind state.
-+ * @task:      The task being unwound.
-+ * @graph_idx: Used by ftrace_graph_ret_addr() for optimized stack unwinding.
-+ * @kr_cur:    When KRETPROBES is selected, holds the kretprobe instance
-+ *             associated with the most recently encountered replacement ra
-+ *             value.
-+ */
-+struct kunwind_state {
-+	struct unwind_state common;
-+	struct task_struct *task;
-+	int graph_idx;
-+#ifdef CONFIG_KRETPROBES
-+	struct llist_node *kr_cur;
-+#endif
-+	enum kunwind_source source;
-+	union unwind_flags flags;
-+	struct pt_regs *regs;
-+};
-+
-+static __always_inline void
-+kunwind_init(struct kunwind_state *state,
-+	     struct task_struct *task)
-+{
-+	unwind_init_common(&state->common);
-+	state->task = task;
-+	state->source = KUNWIND_SOURCE_UNKNOWN;
-+	state->flags.all = 0;
-+	state->regs = NULL;
-+}
-+
-+/*
-+ * Start an unwind from a pt_regs.
-+ *
-+ * The unwind will begin at the PC within the regs.
-+ *
-+ * The regs must be on a stack currently owned by the calling task.
-+ */
-+static __always_inline void
-+kunwind_init_from_regs(struct kunwind_state *state,
-+		       struct pt_regs *regs)
-+{
-+	kunwind_init(state, current);
-+
-+	state->regs = regs;
-+	state->common.fp = frame_pointer(regs);
-+	state->common.pc = instruction_pointer(regs);
-+	state->source = KUNWIND_SOURCE_REGS_PC;
-+}
-+
-+/*
-+ * Start an unwind from a caller.
-+ *
-+ * The unwind will begin at the caller of whichever function this is inlined
-+ * into.
-+ *
-+ * The function which invokes this must be noinline.
-+ */
-+static __always_inline void
-+kunwind_init_from_caller(struct kunwind_state *state)
-+{
-+	unsigned long fp = (unsigned long)__builtin_frame_address(0);
-+	struct frame_record *record = (struct frame_record *)fp - 1;
-+
-+	kunwind_init(state, current);
-+
-+	state->common.fp = READ_ONCE(record->fp);
-+	state->common.pc = READ_ONCE(record->ra);
-+	state->source = KUNWIND_SOURCE_CALLER;
-+}
-+
-+/*
-+ * Start an unwind from a blocked task.
-+ *
-+ * The unwind will begin at the blocked task's saved PC (i.e. the caller of
-+ * __switch_to).
-+ *
-+ * The caller should ensure the task is blocked in __switch_to for the
-+ * duration of the unwind, or the unwind will be bogus. It is never valid to
-+ * call this for the current task.
-+ */
-+static __always_inline void
-+kunwind_init_from_task(struct kunwind_state *state,
-+		       struct task_struct *task)
-+{
-+	kunwind_init(state, task);
-+
-+	state->common.fp = task->thread.s[0];
-+	state->common.pc = task->thread.ra;
-+	state->source = KUNWIND_SOURCE_TASK;
-+}
-+
-+static __always_inline int
-+kunwind_recover_return_address(struct kunwind_state *state)
-+{
-+#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-+	if (state->task->ret_stack &&
-+	    state->common.pc == (unsigned long)return_to_handler) {
-+		unsigned long orig_pc;
-+
-+		orig_pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
-+						state->common.pc,
-+						(void *)state->common.fp);
-+		if (state->common.pc == orig_pc) {
-+			WARN_ON_ONCE(state->task == current);
-+			return -EINVAL;
-+		}
-+		state->common.pc = orig_pc;
-+		state->flags.fgraph = 1;
-+	}
-+#endif /* CONFIG_FUNCTION_GRAPH_TRACER */
-+
-+#ifdef CONFIG_KRETPROBES
-+	if (is_kretprobe_trampoline(state->common.pc)) {
-+		unsigned long orig_pc;
-+
-+		orig_pc = kretprobe_find_ret_addr(state->task,
-+						  (void *)state->common.fp,
-+						  &state->kr_cur);
-+		if (!orig_pc)
-+			return -EINVAL;
-+		state->common.pc = orig_pc;
-+		state->flags.kretprobe = 1;
-+	}
-+#endif /* CONFIG_KRETPROBES */
-+
-+	return 0;
-+}
-+
-+/*
-+ * When we reach an exception boundary marked by a metadata frame record,
-+ * extract pt_regs from the stack and continue unwinding from the saved
-+ * context (epc and s0/fp).
-+ *
-+ * On RISC-V, fp points above the metadata record, so the record's
-+ * frame_record portion is at fp - sizeof(struct frame_record).
-+ */
-+static __always_inline int
-+kunwind_next_regs_pc(struct kunwind_state *state)
-+{
-+	struct stack_info *info;
-+	unsigned long fp = state->common.fp;
-+	struct pt_regs *regs;
-+
-+	regs = container_of((unsigned long *)(fp - sizeof(struct frame_record)),
-+			    struct pt_regs, stackframe.record.fp);
-+
-+	info = unwind_find_stack(&state->common, (unsigned long)regs,
-+				 sizeof(*regs));
-+	if (!info)
-+		return -EINVAL;
-+
-+	unwind_consume_stack(&state->common, info, (unsigned long)regs,
-+			     sizeof(*regs));
-+
-+	state->regs = regs;
-+	state->common.pc = regs->epc;
-+	state->common.fp = frame_pointer(regs);
-+	state->source = KUNWIND_SOURCE_REGS_PC;
-+	return 0;
-+}
-+
-+/*
-+ * Handle a metadata frame record embedded in pt_regs.
-+ *
-+ * On RISC-V, fp points above the record (fp = metadata + 16), so the
-+ * frame_record_meta starts at fp - sizeof(struct frame_record).
-+ *
-+ * FRAME_META_TYPE_FINAL: This is the outermost exception entry
-+ *   (user -> kernel). Unwinding terminates successfully.
-+ * FRAME_META_TYPE_PT_REGS: This is a nested exception entry
-+ *   (kernel -> kernel). Continue unwinding from the saved context.
-+ */
-+static __always_inline int
-+kunwind_next_frame_record_meta(struct kunwind_state *state)
-+{
-+	struct task_struct *tsk = state->task;
-+	unsigned long fp = state->common.fp;
-+	unsigned long meta_base = fp - sizeof(struct frame_record);
-+	struct frame_record_meta *meta;
-+	struct stack_info *info;
-+
-+	info = unwind_find_stack(&state->common, meta_base, sizeof(*meta));
-+	if (!info)
-+		return -EINVAL;
-+
-+	meta = (struct frame_record_meta *)meta_base;
-+	switch (READ_ONCE(meta->type)) {
-+	case FRAME_META_TYPE_FINAL:
-+		if (meta == &task_pt_regs(tsk)->stackframe)
-+			return -ENOENT;
-+		WARN_ON_ONCE(tsk == current);
-+		return -EINVAL;
-+	case FRAME_META_TYPE_PT_REGS:
-+		return kunwind_next_regs_pc(state);
-+	default:
-+		WARN_ON_ONCE(tsk == current);
-+		return -EINVAL;
-+	}
-+}
-+
-+/*
-+ * Unwind from one frame record to the next.
-+ *
-+ * On RISC-V, the frame record sits at fp - sizeof(struct frame_record),
-+ * immediately below the address pointed to by fp/s0. This applies to both
-+ * normal frame records and metadata frame records (embedded in pt_regs).
-+ *
-+ * A metadata record is identified by both fp and ra being zero in the
-+ * frame_record portion, with a type value following at fp + 16.
-+ */
-+static __always_inline int
-+kunwind_next_frame_record(struct kunwind_state *state)
-+{
-+	unsigned long fp = state->common.fp;
-+	struct frame_record *record;
-+	struct stack_info *info;
-+	unsigned long new_fp, new_pc;
-+	unsigned long record_base;
-+
-+	if (fp & 0x7)
-+		return -EINVAL;
-+
-+	record_base = fp - sizeof(*record);
-+
-+	info = unwind_find_stack(&state->common, record_base, sizeof(*record));
-+	if (!info)
-+		return -EINVAL;
-+
-+	record = (struct frame_record *)record_base;
-+	new_fp = READ_ONCE(record->fp);
-+	new_pc = READ_ONCE(record->ra);
-+
-+	if (!new_fp && !new_pc)
-+		return kunwind_next_frame_record_meta(state);
-+
-+	unwind_consume_stack(&state->common, info, record_base,
-+			     sizeof(*record));
-+
-+	state->common.fp = new_fp;
-+	state->common.pc = new_pc;
-+	state->source = KUNWIND_SOURCE_FRAME;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Unwind from one frame record (A) to the next frame record (B).
-+ *
-+ * We terminate early if the location of B indicates a malformed chain of frame
-+ * records (e.g. a cycle), determined based on the location and fp value of A
-+ * and the location (but not the fp value) of B.
-+ */
-+static __always_inline int
-+kunwind_next(struct kunwind_state *state)
-+{
-+	int err;
-+
-+	state->flags.all = 0;
-+
-+	switch (state->source) {
-+	case KUNWIND_SOURCE_FRAME:
-+	case KUNWIND_SOURCE_CALLER:
-+	case KUNWIND_SOURCE_TASK:
-+	case KUNWIND_SOURCE_REGS_PC:
-+		err = kunwind_next_frame_record(state);
-+		break;
-+	default:
-+		err = -EINVAL;
-+	}
-+
-+	if (err)
-+		return err;
-+
-+	return kunwind_recover_return_address(state);
-+}
-+
-+typedef bool (*kunwind_consume_fn)(const struct kunwind_state *state, void *cookie);
-+
-+static __always_inline int
-+do_kunwind(struct kunwind_state *state, kunwind_consume_fn consume_state,
-+	   void *cookie)
-+{
-+	int ret;
-+
-+	ret = kunwind_recover_return_address(state);
-+	if (ret)
-+		return ret;
-+
-+	while (1) {
-+		if (!consume_state(state, cookie))
-+			return -EINVAL;
-+		ret = kunwind_next(state);
-+		if (ret == -ENOENT)
-+			return 0;
-+		if (ret < 0)
-+			return ret;
-+	}
-+}
-+
-+static __always_inline int
-+kunwind_stack_walk(kunwind_consume_fn consume_state,
-+		   void *cookie, struct task_struct *task,
-+		   struct pt_regs *regs)
-+{
-+	struct task_struct *tsk = task ?: current;
-+	struct stack_info stacks[] = {
-+		stackinfo_get_task(tsk),
-+#ifdef CONFIG_IRQ_STACKS
-+		STACKINFO_CPU(tsk, irq),
-+#endif
-+#ifdef CONFIG_VMAP_STACK
-+		STACKINFO_CPU(tsk, overflow),
-+#endif
-+	};
-+	struct kunwind_state state = {
-+		.common = {
-+			.stacks = stacks,
-+			.nr_stacks = ARRAY_SIZE(stacks),
-+		},
-+	};
-+
-+	if (regs) {
-+		if (tsk != current)
-+			return -EINVAL;
-+		kunwind_init_from_regs(&state, regs);
-+	} else if (tsk == current) {
-+		kunwind_init_from_caller(&state);
-+	} else {
-+		kunwind_init_from_task(&state, tsk);
-+	}
-+
-+	return do_kunwind(&state, consume_state, cookie);
-+}
-+
-+struct kunwind_consume_entry_data {
-+	stack_trace_consume_fn consume_entry;
-+	void *cookie;
-+};
-+
-+static __always_inline bool
-+arch_kunwind_consume_entry(const struct kunwind_state *state, void *cookie)
-+{
-+	struct kunwind_consume_entry_data *data = cookie;
-+
-+	return data->consume_entry(data->cookie, state->common.pc);
-+}
-+
-+static __always_inline bool
-+arch_reliable_kunwind_consume_entry(const struct kunwind_state *state, void *cookie)
-+{
-+	/*
-+	 * At an exception boundary we can reliably consume the saved PC. We do
-+	 * not know whether ra was live when the exception was taken, and
-+	 * so we cannot perform the next unwind step reliably.
-+	 *
-+	 * All that matters is whether the *entire* unwind is reliable, so give
-+	 * up as soon as we hit an exception boundary.
-+	 */
-+	if (state->source == KUNWIND_SOURCE_REGS_PC)
-+		return false;
-+
-+	return arch_kunwind_consume_entry(state, cookie);
-+}
-+
-+#endif /* CONFIG_FRAME_POINTER */
-+
-+/*
-+ * arch_stack_walk - dual implementation.
-+ *
-+ * When CONFIG_FRAME_POINTER is enabled, uses the kunwind infrastructure for
-+ * robust frame-pointer-based unwinding, consistent with arch_stack_walk_reliable.
-+ *
-+ * When CONFIG_FRAME_POINTER is disabled, falls back to the simple stack scan
-+ * in walk_stackframe().
-+ */
-+#ifdef CONFIG_FRAME_POINTER
-+
-+noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry,
-+				      void *cookie, struct task_struct *task,
-+				      struct pt_regs *regs)
-+{
-+	struct kunwind_consume_entry_data data = {
-+		.consume_entry = consume_entry,
-+		.cookie = cookie,
-+	};
-+
-+	kunwind_stack_walk(arch_kunwind_consume_entry, &data, task, regs);
-+}
-+
-+#else
-+
-+noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry,
-+				      void *cookie, struct task_struct *task,
-+				      struct pt_regs *regs)
- {
- 	walk_stackframe(task, regs, consume_entry, cookie);
- }
- 
-+#endif /* CONFIG_FRAME_POINTER */
-+
-+/*
-+ * Reliable stack walk for livepatch (CONFIG_FRAME_POINTER only).
-+ */
-+#ifdef CONFIG_FRAME_POINTER
-+
-+noinline noinstr int arch_stack_walk_reliable(stack_trace_consume_fn consume_entry,
-+					      void *cookie,
-+					      struct task_struct *task)
-+{
-+	struct kunwind_consume_entry_data data = {
-+		.consume_entry = consume_entry,
-+		.cookie = cookie,
-+	};
-+
-+	return kunwind_stack_walk(arch_reliable_kunwind_consume_entry, &data,
-+				  task, NULL);
-+}
-+
-+#endif /* CONFIG_FRAME_POINTER */
-+
- /*
-  * Get the return address for a single stackframe and return a pointer to the
-  * next frame tail.
--- 
-2.39.3
+[1] https://lore.kernel.org/all/E1OR73h-0004VN-JE@lirone.symas.net/
 
+
+In summary:
+
+* Sending signals to attached processes is a very normal way how PTYs
+  interact with the attached processes, and TIOCSIG is not the only
+  cause for it.
+* Processes are attached to a PTY because they were started on that
+  PTY or they have voluntarily attached to it.
+
+With these two points in mind, I am leaning towards treating access to
+the PTY master FD as a "capability" whose acquisition can already be
+adequately restricted with existing Landlock controls.  Like
+socketpair(), which Landlock also don't restrict, the creation of a
+new PTY always returns a new master and client side TTY FD and it
+feels to me more effective to control who attaches to these than to
+control the TTY-internal communication protocols itself.
+
+Maybe the way to think about this is to say that it is the *TTY
+driver* which is sending these signals in response to the PTY master
+FD receiving a TIOCSIG or having a Ctrl-C written to it.  This is
+similar to a SSH or Telnet daemon which can also trigger signals for
+the attached processes on the other end of the terminal by sending the
+right commands over the wire, and I also don't see an issue with that,
+because in the same way as here, the client programs have voluntarily
+attached to the TTY. 🤔
+
+Does that seem reasonable?  I am happy to be corrected if this
+analysis is wrong.
+
+If you agree, I think the best path forward might be to document it
+more clearly that TTY interactions are not part of the SCOPE_SIGNAL
+guarantees.
+
+–Günther
+
+> The demonstrated generic impact is low:
+> CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:N/I:N/A:L = 3.8.  Scope is changed
+> because the effect reaches a process outside the sandbox authority, but
+> the primitive is limited to three job-control signals and no independent
+> integrity impact has been reproduced.
+> 
+> Patch 1 is the behaviorally validated proof-of-concept fix.  Patch 2 is a
+> minimal regression test; further test polishing should follow the chosen
+> interface direction.
+> 
+> Validation used the same userspace image against the affected and patched
+> kernels.  Across three boots per image and 32 iterations per cell:
+> 
+>   affected: 96/96 cross-domain TIOCSIG deliveries
+>   patched:  96/96 cross-domain TIOCSIG denials
+>   both:     96/96 unconfined deliveries
+>             96/96 same-domain deliveries
+>             96/96 scoped direct-kill denials
+> 
+> The regression test separately fails on the affected image and passes on
+> the patched image, with exactly one TAP test executed in each run.
+> 
+> No external report or patch has been sent before this RFC.  Guidance on
+> both classification and hook direction would be appreciated.
+> 
+> Christopher Lusk (2):
+>   tty: mediate TIOCSIG through task_kill LSM hooks
+>   selftests/landlock: cover TIOCSIG signal scoping
+> 
+>  drivers/tty/pty.c                             |   8 +-
+>  include/linux/sched/signal.h                  |   1 +
+>  kernel/signal.c                               |  30 +++-
+>  .../selftests/landlock/scoped_signal_test.c   | 142 ++++++++++++++++++
+>  4 files changed, 177 insertions(+), 4 deletions(-)
+> 
+> -- 
+> 2.55.0
