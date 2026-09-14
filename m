@@ -1,195 +1,238 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EF3426D03;
-	Mon, 14 Sep 2026 10:44:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2906F43DEA1
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 10:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789382701; cv=none; b=qa4+LKQjLMBFvBxw66FnseyPPS2xRLzR5FUeIXw7pgDwcYYJ7rCdifIY1To/X1plW0WcYEWzFyCMCfjc/ordE7wv+fgQT66zfKqDGCxk/+E6jR00ib/MNlm7bkTZiMXIXOwd+RJeFuLbvo3XzGG2pGjUeUhB+n2GMp43UJIQYec=
+	t=1789382724; cv=none; b=EO4Oy0m+3RlHu27HiWhXlFcWK5Zih0K2QnSpyW01YP9leCo1rbNnQyfhI9EFfTZEu0BU3L+DVf2fOqB1di8B18Fy8eLTL5pxS4fUb0n2KRghaMH3F8ZC0oNFMcYThIPlJ3OMpOhVx6S94+f4W86MIOVljFTud9FLInel1YMntUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789382701; c=relaxed/simple;
-	bh=xLHXZn3Puf64p2btSuTlnBlLyW9MWfIh73UeUba0Wus=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=WhuQOD6Fiw9qLp3xkY4AsnLbYLWlSSoKSG85vXhhXp/wjZRimT3Oi8aEXivT3YbkNr3KZs6wXq/HiZDm6r3fkE7JhEjfCAtYr9+tPq3TL+QCfjKwCxnnCDTIOCZmSwoKMztVdWtC3if9LeJ3zqR+Q1PFd9C/GJFK+HAXRmYbC0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N278Zs7h; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789382724; c=relaxed/simple;
+	bh=e7vNYM+WHo2QHJFS+H0w5tDbhh5kApZbGem+B9fbWps=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hmS4EqQWvNzAlxTdotaIP37s4ZFvghtrlo27OiMWT1TtKmJBYxqWPZD0wUE67uOuved0FrEYJScgkkJi76z08qGkS6QShrfmV9Nv1njJuxKvJqju7lLX5mnEe7pTVVNzA2pSKaAdK3vpgWBElCenMpcU7OyugA4PhXA8lgvaEe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q/b4F+y1; arc=none smtp.client-ip=74.125.228.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N278Zs7h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9411F000FF;
-	Mon, 14 Sep 2026 10:44:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789382695;
-	bh=Zgkv+k4iBESbCVXAtCuYGBCd++Hb/fOZYZ+TTVD4Isk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=N278Zs7hhbk6XLPGmhx3Bv1jpvaeK0H2PRXXY0V8DvNiH2eXWlE3TUJ/gTxLVtBzx
-	 M+CP7h73E3tBpVshR0vxx4G3tGoY9Nzn/eobiETo2/Hb3KiJEDviQBEFs8ISVpN1ev
-	 GSBT0a/+4Kq0zujQAv5IlKUUqL8GkMMU4jmuad/8DPgvClRAIT9FzSSOK3H26apQ5Z
-	 CpAVSHSRqjd9tnxNusbF8k4p0ckHW3G+yFfN07cI7F7+Kc5jssaXYBMokVMYkq9HLk
-	 dcf2fugbT488NPqHIW1pSjbBYm6EWI1Iz9AvwQ9TJ3xLyhFCLuFGmQTz+DX+xe9xQs
-	 u7O6NpggZhPhQ==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: netdev-bot+sashiko@kernel.org
-Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, daniel@iogearbox.net,
- mike.marciniszyn@gmail.com, mohsin.bashr@gmail.com, sdf@fomichev.me,
- bobbyeshleman@meta.com, daskald@meta.com, bestswngs@gmail.com,
- maxime.chevallier@bootlin.com, jacob.e.keller@intel.com,
- leitao@debian.org, cuitao@kylinos.cn, asml.silence@gmail.com,
- dw@davidwei.uk
-Subject: Re: [PATCH net-next v2 3/5] net: Revalidate queue config for
- ringparam changes
-In-Reply-To: <178915060796.219967.9039776741140153103@kernel.org>
-References: <20260910180908.1506533-4-bjorn@kernel.org>
- <178915060796.219967.9039776741140153103@kernel.org>
-Date: Mon, 14 Sep 2026 12:44:51 +0200
-Message-ID: <87pkygnmcc.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q/b4F+y1"
+Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469e25400so1350640b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 03:45:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789382712; x=1789987512; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=3m3SP6e9NrbIRaMkWtj1uZEt6uHgAf5jXfUplg45r+k=;
+        b=Q/b4F+y1zaus5GPjXUMwdXQy5YzJ1u4dB/R/4Y7DzoUWAdypnZJ8DjopjVzVU+5/12
+         L7xLQNnUjhvdsG0R5ZuaPoTVfz7nQ/+k/UeC7vo2OexscvKCKtW8UJRa4lFUo2uh2TNk
+         zA/GEOuGWuq+wYpq6gEtqsei0TD9dn3RdyJhNLkfc4LSZADcShzrZiXqi16dG8tPeE5S
+         /nz94xSXpug3PLyGfuovLmbIrD6cCNS/tCWy9PGjf4krVy83632LKQHstvslt5/Wpr6X
+         rD/0H+HDpPvOI3Z8qSsI45b1P/85TdIq0YeHhvsVkGs8SDwn7XdPrV1EtctFTFwclo+N
+         O7Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789382712; x=1789987512;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=3m3SP6e9NrbIRaMkWtj1uZEt6uHgAf5jXfUplg45r+k=;
+        b=hTlxd38nId67epDFj14xBdiESEmaMlmDXX7hKO/RQ3asgT1skzU3O2C+VZ054qVU9W
+         QmJ92SeVXAeEra1oaZKXYie0GHOPpsYuLgm9LUtKZ+++fYTQWnUjc2VYvfIfvaG0IBaO
+         18kJw87mnIlBy0MjG7CutmGKzpLZmiZde2SCgaOtA6nOhbpJXYjZebNQ2UH0a2RenAnz
+         2/B5otybHqOrF2wiE5X5cEGo772wB8PLHx3GWthuf+MuWqtXYClpq+ZGv2enexXBydX2
+         8DMbMYn/BEvAGwvoh+Ws3rxFUXrrTjzBJkTpf4gAcglG9wGibwiimLXgqB2hmqrT7zS/
+         0PNQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwQQEJJ5//fdglfUqBImvyTeZjEK6AB08FGlec+PyepV6hPTaSP9n3D5XdcrIwI/CSYagNc2r9y7NUg2xi3uME=@vger.kernel.org
+X-Gm-Message-State: AFuF++mZd0wbwyUKgzMhHbfl/q/LMFqt6QUQmnpgV3rlTeXRtaj21aU2
+	gTzjEhiCQ2hv6Y+twXzJRkpuBN3eapfzp9cUdE+bV+i5Vq9A1Rfea0L+
+X-Gm-Gg: AYBFou0BSXzi9NTZ1s4dBU9lxAyBFHFOzvnQebilxf/F0Bq82l+VvXG8+3+vi10pWnS
+	B40WLhT6CThP1FZj7iQOKTdaTWBEm/vpIp4WDUCTwFPRxPUZZznXgadH2EV5uAnutV7tHp5fpbi
+	v8GsR52zR5cDoAsrxgjVEoS/tC4FTl9XJFJrr2J/KuTyRDMHJugijA8v19pALlRTwZJy43xouoD
+	liyfzqpLpFcR85sqzp7OkhvUH1o+fOlishL888/JONEuSlmyxwm+doDxNq61o9zlKH0EOcNYDth
+	BqKayEgoI9gjCnCwjitTcRlfpiidwVlqWqO7Rj3DaqvZ016o3mFXjWaRtsVo1npXtQwc9Uru89b
+	Z8WbVkAkxEMxji++971g7gid+Kvgtlz2xtbwrAjfakn1B+Tlo1/g2P40K30iXK53hp3zC881PMJ
+	lpkw02twOZKMwqNz3rfSx6NUGy6fYnKLi62vnK93cAGqCgYN8rSe3LlwsZuBYVRAlEsSIxmW/ET
+	Vqq9/8PyVte9V79bUAlsa6Se2zf3BolZIa1qMSXBgWQJ3C0yoEJSNzOSiQJfDVNgTq9uB0tIZu1
+	uK5yLlBJAlb2PN0M7lAHcFinek9Tdm2pEhYqAevXtsNo4k45sNCMlgmrWAIS1HU=
+X-Received: by 2002:a05:6a00:21c2:b0:857:7384:b5fd with SMTP id d2e1a72fcca58-86f8737ced2mr3809414b3a.25.1789382712304;
+        Mon, 14 Sep 2026 03:45:12 -0700 (PDT)
+Received: from spider.bream-herring.ts.net ([103.252.203.158])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-86b28fd0e0dsm4234386b3a.26.2026.09.14.03.45.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2026 03:45:11 -0700 (PDT)
+From: Matthias Goergens <matthias.goergens@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Matthias Goergens <matthias.goergens@gmail.com>,
+	Chris Li <chrisl@kernel.org>,
+	Kairui Song <kasong@tencent.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	David Hildenbrand <david@kernel.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Kemeng Shi <shikemeng@huaweicloud.com>,
+	Nhat Pham <nphamcs@gmail.com>,
+	Yosry Ahmed <yosry@kernel.org>,
+	Youngjun Park <youngjun.park@lge.com>,
+	Baoquan He <baoquan.he@linux.dev>,
+	Barry Song <baohua@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	Alejandro Colomar <alx@kernel.org>,
+	linux-man@vger.kernel.org,
+	Karel Zak <kzak@redhat.com>,
+	util-linux@vger.kernel.org,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH 0/3] mm/swap: reserve swap areas for deliberate offload
+Date: Mon, 14 Sep 2026 18:44:58 +0800
+Message-ID: <20260914104501.3960616-1-matthias.goergens@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-netdev-bot+sashiko@kernel.org writes:
+Some swap backends are useful for deliberate cold-page offload but are poor
+dependencies for ordinary reclaim under acute memory pressure. Swap on ZFS
+zvols is an existing example, with documented deadlocks under memory
+pressure [3]. Compressed swap is another attractive target: accepting a
+write may require memory for compression or storage even when logical swap
+slots remain free.
 
->>     Memory-provider queue configuration is validated when the provider is
->>     bound. A later ethtool ring change may invalidate it because drivers
->>     can size queue memory from both ring depth and RX page size. For
->>     example, fbnic uses multiple PPQ entries for each RX page larger than
->>     PAGE_SIZE, which reduces the usable software ring depth.
-> [ ... ]
->>     Use the same transaction for ioctl and netlink. Drivers without
->>     ndo_validate_qcfg skip the new validation.
->
-> [Severity: Low]
-> The message reads as if it closes a live misconfiguration hole, but at th=
-is
-> commit no in-tree driver implements a ring-depth-aware ndo_validate_qcfg =
-and
-> no driver reads qcfg->rx_ring_size, so netdev_queue_config_revalidate()
-> cannot change any validation outcome yet.
->
-> The two current ndo_validate_qcfg implementations, bnxt_validate_qcfg() a=
-nd
-> mlx5e_queue_validate_qcfg(), only inspect qcfg->rx_page_size. The fbnic
-> consumer named in the message, fbnic_validate_qcfg() reading
-> qcfg->rx_jumbo_ring_size, arrives in the following patch of the series.
->
-> The last paragraph does disclose the limitation, so this is only about
-> framing: could the message state that this is core plumbing and that the
-> fbnic consumer lands in the next patch?
+This series adds an offload-only swap-area policy for such deployments,
+alongside a conventional swap reserve for pressure reclaim.
 
-Ok! I reworded the commit message to state that fbnic consumer followes
-the next patch.
+Proactive offloading is already established by TMO/Senpai [4], which uses
+pressure feedback to offload cold pages to compressed memory or SSDs.
+DAMON_RECLAIM [5] also uses free-memory watermarks to suspend proactive
+reclaim under severe pressure. These control when reclaim runs; this RFC
+restricts which swap areas ordinary reclaim may write, including through
+retained swap entries. The existing memory.zswap.writeback control [6]
+restricts backing-swap writes per cgroup, rather than reserving individual
+swap areas for explicitly admitted offload.
 
-...
+The minimum contract is that ordinary reclaim must not initiate a new,
+non-zero backend write to an offload-only area. Reads, swapoff, zero-page
+metadata, architecture preparation, and I/O that was already admitted remain
+valid. If no eligible swap remains, existing reclaim and OOM behaviour applies.
+This RFC does not promise a performance result or define a new workload policy.
 
->> diff --git a/net/core/netdev_config.c b/net/core/netdev_config.c
->> index b101341e32513..1975de42a60d9 100644
->> --- a/net/core/netdev_config.c
->> +++ b/net/core/netdev_config.c
->> @@ -50,6 +50,15 @@ static int netdev_nop_validate_qcfg(struct net_device=
- *dev,
->>  	return 0;
->>  }
->>=20=20
->> +static void netdev_qcfg_apply_dev(struct netdev_queue_config *qcfg,
->> +				  const struct netdev_config *cfg)
->> +{
->> +	/* Device config overrides callback-provided fallbacks. */
->> +	qcfg->rx_ring_size =3D cfg->rings.rx_pending;
->> +	qcfg->rx_mini_ring_size =3D cfg->rings.rx_mini_pending;
->> +	qcfg->rx_jumbo_ring_size =3D cfg->rings.rx_jumbo_pending;
->> +}
->> +
->
-> [Severity: Low]
-> Can these three assignments hand a rendered config full of zeroes to
-> ndo_validate_qcfg()?
+Cgroup v2 memory.reclaim and per-node reclaim establish admission. Manual
+MGLRU eviction currently does too, but its debugfs interface is not stable
+ABI. Ordinary direct reclaim, kswapd, MADV_PAGEOUT and DAMON reclaim do not
+gain access. This is an explicit operator policy; the kernel does not measure
+physical headroom or automatically classify backends.
 
-Yes, unless thte driver initializes the fields. Device-wide config is
-authoritative -- including zero! I've clarified the requirements in the
-docs for next version.
+The three patches are based on mm-new as refreshed on 11 September, at
+995829088503:
 
->> diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
->> index 4b0bc503f9307..1320289025b25 100644
->> --- a/net/ethtool/ioctl.c
->> +++ b/net/ethtool/ioctl.c
-> [ ... ]
->> @@ -2239,10 +2240,29 @@ static int ethtool_set_ringparam(struct net_devi=
-ce *dev, void __user *useraddr)
->>  	    ringparam.tx_pending > max.tx_max_pending)
->>  		return -EINVAL;
->>=20=20
->> +	ret =3D netdev_reconfig_start(dev);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);
->> +
->> +	ret =3D netdev_queue_config_revalidate(dev, NULL);
->> +	if (ret)
->> +		goto out_free_cfg;
->> +
->>  	ret =3D dev->ethtool_ops->set_ringparam(dev, &ringparam,
->>  					      &kernel_ringparam, NULL);
->> -	if (!ret)
->> -		ethtool_notify(dev, ETHTOOL_MSG_RINGS_NTF);
->> +	if (ret)
->> +		goto out_free_cfg;
->> +
->> +	/* The driver may adjust the accepted ring depths. */
->> +	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);
->> +	swap(dev->cfg, dev->cfg_pending);
->> +	ethtool_notify(dev, ETHTOOL_MSG_RINGS_NTF);
->
-> [Severity: Low]
-> Is the committed configuration guaranteed to be one that ndo_validate_qcf=
-g()
-> actually saw?
+1. The complete swap-area policy, including eligible-capacity accounting and
+   recovery of eligible cache entries.
+2. zram03/zram04 coverage for reclaim routing, zswap bypass, discard policy
+   and file workingset activation.
+3. zram05 coverage for retained swap entries, including ordinary-write
+   refusal, proactive recovery, data integrity and checked teardown.
 
-A driver implementing ndo_validate_qcfg must use the same normalization.
-I documented that requirement, fbnic uses the same rounding helper in
-both paths.
+The implementation is intended to make these questions reviewable:
 
->> diff --git a/net/ethtool/rings.c b/net/ethtool/rings.c
->> index 9054c89c5d7bb..c04312fc0d061 100644
->> --- a/net/ethtool/rings.c
->> +++ b/net/ethtool/rings.c
-> [ ... ]
->> @@ -299,10 +300,20 @@ ethnl_set_rings(struct ethnl_req_info *req_info, s=
-truct genl_info *info)
->>=20=20
->>  	dev->cfg_pending->hds_config =3D kernel_ringparam.tcp_data_split;
->>  	dev->cfg_pending->hds_thresh =3D kernel_ringparam.hds_thresh;
->> +	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);
->> +
->> +	ret =3D netdev_queue_config_revalidate(dev, info->extack);
->> +	if (ret)
->> +		return ret;
->>=20=20
->>  	ret =3D dev->ethtool_ops->set_ringparam(dev, &ringparam,
->>  					      &kernel_ringparam, info->extack);
->> -	return ret < 0 ? ret : 1;
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	/* The driver may adjust the accepted ring depths. */
->> +	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);
->> +	return 1;
->>  }
->
-> [Severity: Low]
-> The comment says the driver may adjust the accepted ring depths, but does
-> this second copy store the depths the hardware ended up with, or just the
-> requested ones?
+1. Should pressure eligibility be a durable property activated with the
+   physical swap area, or should it be selected late during backend migration?
+2. Do provenance, allocation filtering, eligible capacity, and retained-entry
+   refusal provide a useful minimum contract for userspace and controllers?
+3. Is redirtying or activating a retained dirty folio, with possible churn or
+   OOM, acceptable, or is backend migration a prerequisite?
+4. How should persistent activation fail closed and remain auditable when
+   /proc/swaps and swapon --show do not expose the policy?
+5. Should an ineligible fast-path cluster be invalidated immediately, and
+   should an offload-only area recover its own cache entries based on eligible
+   fullness rather than global swap fullness?
+6. Should the workingset activation heuristic continue to count offload-only
+   capacity when pressure reclaim cannot allocate from it?
 
-It captures only adjustments that the driver reports through ringparam.
-I updated the comments and docs.
+Build checks passed on x86 with i915 built-in or modular, and with swap or
+memory cgroups disabled. The affected arm64 MTE objects also compiled.
+
+The routing and workingset tests passed in x86 QEMU guests. In the
+retained-entry test, ordinary reclaim wrote nothing to offload-only swap;
+proactive reclaim then wrote the dirty folio, and all data verified
+correctly. With the write guard removed, the same test failed because
+ordinary reclaim wrote to the offload-only area.
+
+Persistent fstab encoding remains unsettled. When hibernation is about to
+save an image, an active offload-only area named by resume= is rejected as
+the image target with -ENODEV. Virtual Swap Space v4 [1] separates swap
+entries from their physical backing, while swap tiers v10 [2] proposes
+per-cgroup backend selection. These raise the question of whether offload
+eligibility belongs to physical swap areas or a later placement decision;
+this RFC does not assume those interfaces are settled.
+
+An explicit-only util-linux companion implementing swapon --offload-only
+is prepared for separate submission.
+
+Feedback on the eligibility contract, its placement in the swap stack,
+and the unresolved ABI and reclaim-policy questions would be welcome.
+
+[1] https://patchew.org/linux/20260825153238.2695446-1-nphamcs@gmail.com/
+[2] https://patchew.org/linux/20260713025644.170839-1-youngjun.park@lge.com/
+[3] https://openzfs.github.io/openzfs-docs/Project%20and%20Community/FAQ.html#using-a-zvol-for-a-swap-device-on-linux
+[4] https://engineering.fb.com/2022/06/20/data-infrastructure/transparent-memory-offloading-more-memory-at-a-fraction-of-the-cost-and-power/
+[5] https://www.kernel.org/doc/html/latest/admin-guide/mm/damon/reclaim.html
+[6] https://www.kernel.org/doc/html/latest/admin-guide/mm/zswap.html
+
+Matthias Goergens (3):
+  mm: restrict offload-only swap to proactive reclaim
+  selftests: zram: cover offload-only swap policy
+  selftests: zram: cover retained offload-only entries
+
+ Documentation/mm/swap.rst                     |  87 ++++
+ drivers/gpu/drm/i915/gem/i915_gem_shrinker.c  |   2 +-
+ .../gpu/drm/i915/gem/selftests/huge_pages.c   |   6 +-
+ drivers/gpu/drm/msm/msm_gem_shrinker.c        |   2 +-
+ drivers/gpu/drm/panthor/panthor_gem.c         |   2 +-
+ drivers/gpu/drm/ttm/ttm_backup.c              |   2 +-
+ drivers/gpu/drm/xe/tests/xe_bo.c              |   2 +-
+ include/linux/swap.h                          |  29 +-
+ include/linux/vm_event_item.h                 |   1 +
+ mm/memcontrol.c                               |  20 +-
+ mm/page_io.c                                  |  24 +-
+ mm/swapfile.c                                 | 126 +++++-
+ mm/vmscan.c                                   |  31 +-
+ mm/vmstat.c                                   |   1 +
+ tools/testing/selftests/zram/.gitignore       |   2 +
+ tools/testing/selftests/zram/Makefile         |   4 +-
+ tools/testing/selftests/zram/config           |  10 +-
+ tools/testing/selftests/zram/swap_offload.c   | 402 ++++++++++++++++++
+ .../selftests/zram/workingset_offload.c       | 206 +++++++++
+ tools/testing/selftests/zram/zram03.sh        | 166 ++++++++
+ tools/testing/selftests/zram/zram04.sh        | 149 +++++++
+ tools/testing/selftests/zram/zram05.sh        | 360 ++++++++++++++++
+ tools/testing/selftests/zram/zram_lib.sh      |  28 ++
+ 23 files changed, 1620 insertions(+), 42 deletions(-)
+ create mode 100644 tools/testing/selftests/zram/swap_offload.c
+ create mode 100644 tools/testing/selftests/zram/workingset_offload.c
+ create mode 100755 tools/testing/selftests/zram/zram03.sh
+ create mode 100755 tools/testing/selftests/zram/zram04.sh
+ create mode 100755 tools/testing/selftests/zram/zram05.sh
 
 
-Bj=C3=B6rn
+base-commit: 9958290885035431e2494159f555e332c3c14906
+-- 
+2.55.0
+
