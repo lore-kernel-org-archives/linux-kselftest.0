@@ -1,142 +1,105 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178AE48875D
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 15:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3A4F36829D
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 16:04:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789401462; cv=none; b=jKjnHa4tfLhxH4e3uNHfnbX8cHr+UBOSwVpVAFFDyTZwk0vKo6gqfdASWwI6LLTelKW73/sUG5Pu3eKlew1Gjou1OeV4ytR0ANfvsdEpJKoj9jdPkaNIS2qLJz/W+tUOpaW2wVjhSxl/g0KfMBDkYuWujAm9CnQVtemfgRr4vHs=
+	t=1789401894; cv=none; b=kvESncCwqYREf3l4rP0dOoHN6A06fVQjIE2bcXgpXkGL/LOpTro965L88f9BjTkws8LbhzXdua1eIzs1KHPeg3ozc+RPnXKaPUqbqyfJCB5z4zEjJUozj3zvSzXzQ05BtJDeIvOZgkYN3HMHE4CbYJTZ62aRIip0k2P1ABRlUWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789401462; c=relaxed/simple;
-	bh=5ZiwVFQlAD3lG8hrfLGRLnNhI7uqv5EcZ+cUO/c5qno=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n+IU2Iu5A8iJ24gFgXAlN19oOz7aIghMwfJ2nH5D6TgCAW7429fjzWpv6U5tIyPF/hyOCYTsw4Ah5QXSDGriX6kJDyM8W/PDK78LL7jU+CW8BkeyVdiSFoQEKCR8sYHBmeII8mnHRf0PJdxOQAY9RX8DNcYWjpYsS1dwHvhidi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s5crcDED; arc=none smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789401894; c=relaxed/simple;
+	bh=Sgn87V/ffdQ0Mw2u0QtttnnD5720T1tTrgEBiXpaGcA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r3v21gFuRCnsRg6nYLdK1YYPJH276mI8FaT/b0oeoop+kpZoEq/Gn0dvr8Uf9YYlXNkI7WuFAIeYM1pAJotXlJTaUcddYnSv/XHMbcS1p6zYI+GcoJwvNBgOghjyu1h0MkPQLPvNzBsLTwF2TKBX8yKGTKVuvBR1xg7AnuRuG7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=XzkbyW0i; arc=none smtp.client-ip=74.125.225.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s5crcDED"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-39b31b4281eso2326563a91.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 08:57:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="XzkbyW0i"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e7c6dbc60so455195e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 09:04:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789401459; x=1790006259; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=uLQyzx/jS9wKpt8k6euuDCFOGH2TJfuVVKt6HxhJ5XY=;
-        b=s5crcDEDrEGinEphgbx+6WdcNDsc6gC8hMTl/7FH9Q1YhEZPrtEF58M5ITFiRTTf+e
-         Kes8XSMUjtysT+ZzQ6ZsKdQ58MMNXie9NaCP/atQmeyazWlLf0Cevkvjl9l04IIIrUqU
-         3yoaywlItCpfglxiWv7NC+MdqvjtWEV0GWGaEcujo7yWy2xdcHJacwHCgFGjhUkNrOb2
-         eOmmcq+UCfE7Zt7uDaTgRUeM5yko8xn6AABQwhCodhM0UyJ4JdnHpjLjUKqpPx8u84lF
-         Y++PNXXxcXrYw0bwf6OcBUIZunx9VAWGQgfGNB+lwlZziQPEZNdk0ZoabuF04BKYmK9z
-         zMeg==
+        d=6wind.com; s=google; t=1789401891; x=1790006691; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=c2e/oQkBlRuHGocwCZrcUxkwTAc0GxvFf1MGdOjknyk=;
+        b=XzkbyW0iKKz9d9PcJHOTcSIob/MlbyKvGe+ZoDPvMtkwwmacU2JdDY9recjcpaOQ7h
+         5pu6SGEDKVamOzoyR+0xkW8N66anfEntWbVcxiYwkM8tyJf36EwXrnJ+fqg3j1IlWu5T
+         hHSyEymKM7mtizy6MSXOoBchAloasbUMrncWHzaxx5cz/+EAzDz6CHJwS9VmgKdcmKAO
+         uLEqCPdAUabWxhA8fZ0JP3PxaN4Nll/7kth5HYohg+oVIlEeJ5UsmpuIWQ9sGXC3xIkL
+         0dRzB1nPv4OX5eRhHsWkLbmh8YEryB41Yweu4EbesKuEwR60pHr2R9Og9BDskNmB7si3
+         jAVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789401459; x=1790006259;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=uLQyzx/jS9wKpt8k6euuDCFOGH2TJfuVVKt6HxhJ5XY=;
-        b=Fpb5YHA31JZwturI8c/UYOOomtgUc6IJoW8hX9iIFTkBmPtF2wJuVNNb9+KiUWBHye
-         yT/2SCjbrfFjO9I+9KO6A9nI8PeuMID8m7RFYTg+Kpg9HWXf6mH7IPdPetcLwxFh5yQf
-         nqMXuW/ma4H7LoLgStSmaAgefWbMaIsfOsQj6PEjawCtJyzL8IAUGSuXiDK+HW9z1Sbe
-         IWXXzIR6Ka+OrTobjLGYXFfih2PKU3PlCS+bWYEvGmFR/G+7sroEJGkV6knULlJs8P1e
-         TE6DN7uYkgZfScPIjRqzC1xLHThfjhkJzwD4ooqQP0aMaL4RTdqbtlqG+7OzlnqVsyPs
-         kqJQ==
-X-Forwarded-Encrypted: i=1; AKwUvBz067I301DxyXeASl0kSgTmUWnJYwjjyFG+CnH0EjIp6tTNdNKzjt4LAxBcyPAF5dMWhBK61rVPfiCE+d4id18=@vger.kernel.org
-X-Gm-Message-State: AFuF++kWKwS6GPebGaKy/ugqOUsPXavBaSzlfnI1eRwWJrB36ErEwm2P
-	4Qon9l/T3w0NvJa2t4E05nQ/aOaMiV3qic4jiNX5RwliwNr93zkXrb31
-X-Gm-Gg: AYBFou1pff4395szPeSBi5nOGZxPCqrFPo9cXa3E8Bh98OxpFyGrS6u5/k27mnlo6R2
-	5bBV16ptjhIvOmja7+pfZO29O6IRqXH9ZzklAtFaBNSW0NZzIusxvX4rF2Z2uhIKCnNlED0SDi2
-	wn3fSG6JNalB3KRbzdOnz9DrD6NBx9mAngeLiorpe4LDGER0SrABlAfJrHbJDVpR2gUxdzYfIj7
-	rl3MbEdJyB2fsyDR4DM++/ojrTnN4N1VAqtjXrNuQ9u6u4dDp9RU4j7UpapwS2bi1oSjqnykXDy
-	nCeVpEfEnwMUv9HDeApZDY+1QAOciIpcsVXQYn+vDJtPWLEFtGTsbLvEAyIkCOw5pKsCHR0rh1f
-	+3/hRkAaJmWHV+qxBCDjQMlMw91ttBQJT3NDxPMNHu5egpWMJdolk3TYGXPHA1I+Ki0R/LOENDF
-	5p5L6rwfx121Ms5eK5mlXOGIAOn2dzdP3I8Nq/kRC6WEO6J3dodQi1+SzgR6LZazzqmwd4dg==
-X-Received: by 2002:a17:90b:3c47:b0:393:19a3:4f1 with SMTP id 98e67ed59e1d1-39debf8d92cmr6628202a91.6.1789401458739;
-        Mon, 14 Sep 2026 08:57:38 -0700 (PDT)
-Received: from gmail.com ([185.220.238.35])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39dfda8bdf4sm141419a91.12.2026.09.14.08.57.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 08:57:38 -0700 (PDT)
-From: Kunwu Chan <kunwu.chan@gmail.com>
-To: SJ Park <sj@kernel.org>
-Cc: Kunwu Chan <kunwu.chan@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [RFC PATCH 8/8] mm/damon/core-kunit: test invalid damos filter commits
-Date: Mon, 14 Sep 2026 23:57:27 +0800
-Message-ID: <20260914155729.1518105-1-kunwu.chan@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260912191807.138502-9-sj@kernel.org>
-References: 
+        d=1e100.net; s=20251104; t=1789401891; x=1790006691;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=c2e/oQkBlRuHGocwCZrcUxkwTAc0GxvFf1MGdOjknyk=;
+        b=Dtwrpm0hKWMlPjcSRZ7EA/PUNBLauY6VZqmrTfc6vLjutQ6M04vJoUOOOOvNlBSxEX
+         D4ggx0IHWJaeXTbC+pJSPhCpC7ydWKmcyPQ0WbG4QNtBjmQlToLBYZqe6B/44WTtgq4V
+         4WB46p1rlHLuGsWQWeQwUplkSsVGL4kRuoPNmhL6NCyS3JJUyDy4pQYXXQ+ySMos/CpI
+         eU+X6woh5Nf2KXmbxQAB12kf2zeBjWzTQmZlUHfDViNF7DiVnfYrOAeAZF38eEeCbQg+
+         Csw4hCuSZr4iop9Nzj7aeN+EjgbUjaRs9g6IyaSN9RKTfxfaqL0duGL77ZKULkXfFXIy
+         J5Vw==
+X-Forwarded-Encrypted: i=1; AKwUvBzQIyF944ipXkKxzsy9FqR1vpW4du2OKG2iG62WLsSQI7tz1yjvnLwDNJc7PQYYIdXL6C621UIBoBAsTJfjJEA=@vger.kernel.org
+X-Gm-Message-State: AFuF++nIAvxAsZKyu7RGKocS/KPl8uiYdH5oMI9y3arPhkjCw70dAZ2T
+	UZfyPZnXLqaYDxiPq8XUL3x8I7Bq4LNngjZucuG4+cJANtr3ii+ELECMeUN3+cdVbaY=
+X-Gm-Gg: AYBFou1YUXA59s/HOaLNc6K/+0DLFJQ8C+eNo5MvILIwboV/X7i1WdzSZcnpreVtBbW
+	0OlT4CovxnLe4VGZRLDbMgP8xvxADcdxVJwPoTho20bqtb7O7kbPgZMa7kVBS7cQSKJD7rZQFYU
+	k2khvrUb0REWPPaj+B0cqIhISwPXmKAU2zZUI9Xc9AJ3pAy8M6hF9RshQYKb8CyRJNXdwTT2Hia
+	huHX1zQkUa6cxqMVohOaVmYlbpMP0Nht5JIwHq9J+IzqAfyIb5a3x/hV0JExBMlx2kKm5xaFx+7
+	v93VcdEhcHKNfinzCbpVG8bg6n4WfmhhLurYoDkFBHIX5eI675VGeA246CFJ3y2yQ68jh28NDFi
+	BuspAoIbfjSqvM5snxI2su5UY0+rveTVqbmAu+Ttd7uJksoxKSbfOGZ1T3r6upvV9Socx+b5w0e
+	gEfTJtGObOe85ATYKi5InTaDUw477XiX1DdwdtpS19MfwIdzCLwhVRDC73NUdYsuh/hl+T9sokH
+	2VMFEPKP/hO1mFFgoBwREebrjPLPr5To59oMJiyPm+su72hGn7Q
+X-Received: by 2002:a05:600c:19cf:b0:49d:1da4:511b with SMTP id 5b1f17b1804b1-49e7a6859e1mr35897685e9.1.1789401891025;
+        Mon, 14 Sep 2026 09:04:51 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:ab7:2110:6a1d:efff:fe52:1959? ([2a01:e0a:ab7:2110:6a1d:efff:fe52:1959])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-486eb35bed0sm28874405f8f.32.2026.09.14.09.04.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Sep 2026 09:04:50 -0700 (PDT)
+Message-ID: <29afa1c3-b1db-4e98-9640-104251cdfa2e@6wind.com>
+Date: Mon, 14 Sep 2026 18:04:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [PATCH net-next v5 4/4] selftests: net: test AF_PACKET multicast
+ dumps
+To: Yuyang Huang <sigefriedhyy@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>,
+ Ido Schimmel <idosch@nvidia.com>, Jacob Keller <jacob.e.keller@intel.com>,
+ Jakub Kicinski <kuba@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
+ Nikolaos Gkarlis <nickgarlis@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
+ Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>,
+ Simon Horman <horms@kernel.org>, Stanislav Fomichev <sdf.kernel@gmail.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ netdev@vger.kernel.org
+References: <20260914014539.5015-1-sigefriedhyy@gmail.com>
+ <20260914014539.5015-5-sigefriedhyy@gmail.com>
+From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Content-Language: en-US
+Organization: 6WIND
+In-Reply-To: <20260914014539.5015-5-sigefriedhyy@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Sat, 12 Sep 2026 12:18:06 -0700 SJ Park <sj@kernel.org> wrote:
-
-> Add test cases for testing the validation of damos filter arguments in
-> commit time.
+Le 14/09/2026 à 03:45, Yuyang Huang a écrit :
+> Dump the link-layer multicast addresses of a dummy device and verify
+> that ifa_index restricts the dump to that device, that the all-hosts
+> address joined on link up is listed without IFA_F_GLOBAL, that an
+> address added with SIOCADDMULTI is listed with IFA_F_GLOBAL and
+> IFA_MC_USERS, and that IFA_TARGET_NETNSID dumps another netns. Skip
+> when the kernel does not support AF_PACKET dumps.
 > 
-> Signed-off-by: SJ Park <sj@kernel.org>
-> ---
->  mm/damon/tests/core-kunit.h | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-> index c9941f3bfb42b..5da84caf4124d 100644
-> --- a/mm/damon/tests/core-kunit.h
-> +++ b/mm/damon/tests/core-kunit.h
-> @@ -1195,6 +1195,13 @@ static void damos_test_commit_filter(struct kunit *test)
->  			.allow = false,
->  			.sz_range = {.min = 234, .max = 345},
->  			}, false);
-> +	damos_test_commit_filter_for(test, &dst,
-> +			&(struct damos_filter){
-> +			.type = DAMOS_FILTER_TYPE_HUGEPAGE_SIZE,
-> +			.matching = false,
-> +			.allow = false,
-> +			.sz_range = {.min = 456, .max = 123},
-> +			}, true);
->  	damos_test_commit_filter_for(test, &dst,
->  			&(struct damos_filter){
->  			.type = DAMOS_FILTER_TYPE_UNMAPPED,
-> @@ -1208,6 +1215,13 @@ static void damos_test_commit_filter(struct kunit *test)
->  			.allow = false,
->  			.addr_range = {.start = 456, .end = 567},
->  			}, false);
-> +	damos_test_commit_filter_for(test, &dst,
-> +			&(struct damos_filter){
-> +			.type = DAMOS_FILTER_TYPE_ADDR,
-> +			.matching = false,
-> +			.allow = false,
-> +			.addr_range = {.start = 567, .end = 456},
-> +			}, true);
-
-Could we also test an invalid PROBE_HITS_WSUM range here?
-
-Patch 4 adds the same max < min validation for
-DAMOS_FILTER_TYPE_PROBE_HITS_WSUM, but this test only covers
-ADDR and HUGEPAGE_SIZE.
-
-Thanks,
-Kunwu
-
->  	damos_test_commit_filter_for(test, &dst,
->  			&(struct damos_filter){
->  			.type = DAMOS_FILTER_TYPE_TARGET,
-> -- 
-> 2.47.3
-> 
-
-Sent using hkml (https://github.com/sjp38/hackermail)
+> Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
+Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
