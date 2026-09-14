@@ -1,103 +1,109 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C34936DA1A
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 06:09:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6458630AAD8;
+	Mon, 14 Sep 2026 07:04:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789366144; cv=none; b=Ptr+bG+F5+KJeEDTaf5BK/a64GpXj2gHp9TX4WwsjdRQ3gvXvYuEkPOCrRNc2TeC/JFVv3+/rLsMy17z4bB0idveNLyo8linm/b9V05oOxcmUp+wLWtLjoDg8UqseZobuP09LtltxUZyN3mH93fXYrt5SrqFhpBZlCta7pgdFpQ=
+	t=1789369456; cv=none; b=gsK/CTleuyE78YlC8wnrfQj9/Qb+dV0SBCOjW3LCZ7Nps0N24pkmO9IOgvQ5vcQQ2NmEjUNXmOkf7Cwe088pJOB1bq+PU9sYWNxkFXg3iINiKFv5nFhvl575M/G1amPN3pM0EfCnhIkUrfSD/zBiuHFuagUgnTIOGOX36ABa1vw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789366144; c=relaxed/simple;
-	bh=vY19FPTkTGgFEXUz7E3y70WuMjZlCOtv+gJ53myAkDg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VwFU1V9BuPch+EnQ9qrI/KGALRCDl2PQU39vCt3WTPH5x6KcQwjGIo6v62NbU1BHsnAzrgo3fxINZVuwkhVGKd3y88d4P+3T5eh3/Lzdg8EO0/Wf20F2gxGCEZwoSHNjnDvmm2OqL1fEDGkhXYB3iXOgG2yQBGYcLmFYRZrEEGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=COyYFlfn; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789369456; c=relaxed/simple;
+	bh=1Mv3L2QItE8RoxwCenyGeU9TirmqvmTopUEpRBc7Pj0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bAZARxXm6m4qDXvaA9IHthLMP0saw996wIS5hmG2C14Pyxcyz5zuTEtItJqdPesUpAGTpMAEz9oqWn0lLjvmmXIkLwj3mliJrjed/ycr+xHBGBGj4nddfvnaVh6RZjw/lVD5+9HwlUTNyKG02nEupD3VdW8nf2Ayyfo9GjIQx0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iYGcAxK2; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="COyYFlfn"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-38dfe7eb825so2545966a91.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 13 Sep 2026 23:09:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789366142; x=1789970942; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=vY19FPTkTGgFEXUz7E3y70WuMjZlCOtv+gJ53myAkDg=;
-        b=COyYFlfnBHB8v/nx/XshDjDVasJem7bV/4x/RJsm5p94eA6I/IuAUEAEZrD0ztYd0V
-         KhmmC/WHUenAv0tXqwTk4jxMeoNPMpN8aqYx3sz6ZO0LzgbomykliekNj1d0CdT5DQB+
-         D8zv24mPhrzfPM5wpGzT8Xyns9MlaTALyscP5E15sZxXRqQxWFBx+aAsbnJQOCI+Ra8j
-         hLH9qw+OATINzvgrsZ36FV4YoxDYsvS5nERzHwT9gQNMQGmddO23GtgELPDGiNF9M7jY
-         8Ev0llDmjFg3ZQ8kydEiMPEU9AP0d8vpZhbU8PoNwpu3nd9NwY31WOnJmrogCkEfVP1z
-         UATw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789366142; x=1789970942;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vY19FPTkTGgFEXUz7E3y70WuMjZlCOtv+gJ53myAkDg=;
-        b=PmrKDw0chhswWFDE5Y24GmcFNmMXcdVtwXkFgN3nPALzOswQe+br1Rm8+eqJG2SARt
-         3vylA0tkSX30e2j2R3rvINyJEJVD4eVQywo1LXck4Dn4sPPVb2x4+4y7J8paJOTrUqvg
-         FtY3fnvOLzM4zmiggJA51odwHHgPz/+Cz5heTwTEExKhYN16yE538AeV04KCamXDT9Xr
-         wWnjRApXhMDyx1gsJVoPM8KPZFBcUkbrky8rIDf4FGbBl2g4uaLzCom4HqI+ziDB9JmP
-         P93wUIYDQIg1MqBwwSFbcJLafhmPcPE0oR0m3uQ0KjfPnNA+KOafXNYMb01kKUE9Awv5
-         qn2Q==
-X-Forwarded-Encrypted: i=1; AKwUvBzVdLnDvEMcuOL9pEEu3xSxq+Af7nVd65y9NZuM38+v5HQMmxWxwtxRR5NpW5VXn8Ls2iiNXH5nk12Fb0ySOuM=@vger.kernel.org
-X-Gm-Message-State: AFuF++lDrdFqkHd0lGB6TfeNxXZeKtBq5q1ZjNzfM64TXiiCKXxEQUNh
-	K7/pkjiVaVInqrx18CRbZAmecCdX9PyorB3iyMRVsjip4KhxJJWMugtq
-X-Gm-Gg: AYBFou1tgAjjeGujKxi1ijyxSV8W2EHtHaO8sUY6dxFInO32SrwfTnw2uKvr5+YBIgj
-	I9F7Qy7Mt7d1J7Gz7Hl6aALWbgFlIF7GQJKY00sWMJYemjClJuX/9PQCH7kIEx5gPFa5M4jRjse
-	WVn2EBMkop/yaZ+HgBuzEf8MEf5s1bKwN0KoYjjVyF1Ddj+T4ls3yrvJaHAXbzLhFUa0vc2lbI/
-	YFBmpMXuMy5oWsZ9+BJ0WVVAtjRsUj6fhtK/4ah6sbrBhc7czvpE1/BAMffUM46+NUEbFzbbHMW
-	HrhgEXSEZY9ULcfpz3Y/fwkDSHrsbwWr6O8xARVdV5/1AUO0jbnv6OhqPS3EDwrAlk/1GpYiRgC
-	I7boDTtN55JBFzkutTvA7u65hVrZbOWKXC2SrE0URAh/OUS5b1XTlBqDCu99UZaWj2tdXvnXZxp
-	FzVMtk5TcbW8oBdPTHOJOUDAZrACxQI6nzHbgEstJT3eeHvuQEjDXqGlvqzkjvM3NFK0vlmuM98
-	hg+MfJSZOvjWCnPSJYTUvw5cPPBjnKm7oyzXlQS
-X-Received: by 2002:a17:90b:264d:b0:399:1f8b:d255 with SMTP id 98e67ed59e1d1-39debf6d6cemr2759878a91.5.1789366142037;
-        Sun, 13 Sep 2026 23:09:02 -0700 (PDT)
-Received: from lipengfei28-ThinkStation-P368.mioffice.cn ([2408:8607:1b00:8:a252:ce11:2d53:3638])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d9959ac65sm18651790a91.16.2026.09.13.23.08.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Sep 2026 23:09:01 -0700 (PDT)
-From: Li Pengfei <ljdlns1987@gmail.com>
-X-Google-Original-From: Li Pengfei <lipengfei28@xiaomi.com>
-To: sashiko-bot@kernel.org
-Cc: Pengfei Li <lipengfei28@xiaomi.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	kernel test robot <lkp@intel.com>,
-	Bo Zhang <zhangbo56@xiaomi.com>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v7 08/10] selftests/ftrace: add a stackmap basic functionality test
-Date: Mon, 14 Sep 2026 14:08:24 +0800
-Message-Id: <20260914060824.4003131-2-lipengfei28@xiaomi.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260912090213.C77861F00893@smtp.kernel.org>
-References: <20260912083753.3426176-1-lipengfei28@xiaomi.com> <20260912083753.3426176-9-lipengfei28@xiaomi.com> <20260912090213.C77861F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iYGcAxK2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789369455; x=1820905455;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1Mv3L2QItE8RoxwCenyGeU9TirmqvmTopUEpRBc7Pj0=;
+  b=iYGcAxK23cXRtqZQrcN94GGJ1s2lsZtyDXP7U9/c8WpHc5DzIK85eEBi
+   ZSa7rD/fKTHSg/fHPfYdS6xa6vMRXFLlDH5PojRwCa0iCOkniwUxQkGmw
+   ERkrxPNEonqlhpLmV5ybM4xOfVpEVTXBooTsKXtVLMA8Hzh55WbVimTPQ
+   NEt3PnrMeV9+jYxvlmSAJKZqJQ6kpQsgXVMO6QMOS4Nc1ddAEZGEspdAE
+   MRh5bsppDahEZxHbN3vhEBLRmoYI0VKv7fyvW9qgim0LrRiIUJLfmOV+9
+   VbjPIkrjTX4WH1gavchTofPbMopgx5iMccTJ5dASdR74gqgWwLJLHmg7X
+   A==;
+X-CSE-ConnectionGUID: YTmbsZOGQX+/FvW7OUvCzQ==
+X-CSE-MsgGUID: LEbSOpALQ0Koj7Kq+N1pgA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11904"; a="89761903"
+X-IronPort-AV: E=Sophos;i="6.27,102,1787036400"; 
+   d="scan'208";a="89761903"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2026 00:04:14 -0700
+X-CSE-ConnectionGUID: 9MS817mvTFuMVOm6lsPOtQ==
+X-CSE-MsgGUID: g7h+fQMETdC/lGzje22yIQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,102,1787036400"; 
+   d="scan'208";a="310837852"
+Received: from unknown (HELO [10.238.2.139]) ([10.238.2.139])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2026 00:04:08 -0700
+Message-ID: <dd7b17e4-8d84-426a-9962-3ae693dcf401@linux.intel.com>
+Date: Mon, 14 Sep 2026 15:04:06 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 09/28] KVM: VMX: Save/restore guest FRED RSP0
+To: Sohil Mehta <sohil.mehta@intel.com>, kvm@vger.kernel.org, x86@kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
+ <hpa@zytor.com>, Xin Li <xin@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Andrew Cooper <andrew.cooper3@citrix.com>,
+ Tom Lendacky <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
+ Shivansh Dhiman <shivansh.dhiman@amd.com>,
+ David Woodhouse <dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>,
+ Zhao Liu <zhao1.liu@intel.com>, Yosry Ahmed <yosry@kernel.org>,
+ David Matlack <dmatlack@google.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>
+References: <20260911213659.2025974-1-sohil.mehta@intel.com>
+ <20260911213659.2025974-10-sohil.mehta@intel.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20260911213659.2025974-10-sohil.mehta@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-From: Pengfei Li <lipengfei28@xiaomi.com>
+On 9/12/2026 5:36 AM, Sohil Mehta wrote:
+> From: "Xin Li (Intel)" <xin@zytor.com>
+> 
+> Save guest FRED RSP0 in vmx_prepare_switch_to_host() and restore it
+> in vmx_prepare_switch_to_guest() because MSR_IA32_FRED_RSP0 is passed
+> through to the guest, thus is volatile/unknown.
+> 
+> Note, host FRED RSP0 is restored in arch_exit_to_user_mode_prepare(),
+> regardless of whether it is modified in KVM.
+> 
+> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+> Reviewed-by: Chao Gao <chao.gao@intel.com>
+> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+> ---
+> v10:
+>  - No change
+> 
+> Note, an equivalent TDX side implementation is missing. No TDX module
+> with FRED support exists yet so this would be an issue for future
+> platforms. A generic discussion regarding this is ongoing at:
+> https://lore.kernel.org/kvm/20260827031837.2863609-1-binbin.wu@linux.intel.com/
 
-> Should the commit message be revised to reflect the actual test logic that
-> intentionally skips this comparison?
+For old KVM versions, we want to defer the opt-in design or backport decision.
+(https://lore.kernel.org/kvm/c6b240bd-3c45-4abe-b17c-72a1a7da582f@linux.intel.com/)
 
-Yes, the changelog is stale. I dropped that comparison because the writer
-resumes as soon as reset() returns, so the counter is not a stable sample,
-and I forgot to update the message. Will fix in v8. No code change.
-
-Pengfei
+We may finally choose to backport the TDX CPUID filtering patch series to stable
+kernels. If this patch series lands first, should we add FRED in the deny list for
+TDX as a temporary solution to avoid having some version(s) that allow FRED for
+TDX without FRED support in KVM? 
