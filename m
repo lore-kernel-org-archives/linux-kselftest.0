@@ -1,41 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D92635DA79;
-	Mon, 14 Sep 2026 12:10:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E90444A72C;
+	Mon, 14 Sep 2026 12:10:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789387840; cv=none; b=BC/z+nf46Sf9tb86yiK3KH9Jr9tb+efqjYmrUN9d70Qdt9UKdzV6zR0pdVDfZuvoaa6ayF5GKGa9eOR3Atb/vmKecvXD+URpTd4lw373ebnJKYpR7aqeSwGjtjaMs7bTrFQ9zTAci6EK+MW0zDq3rwHj3dJSl/UpGdsWczbSBp4=
+	t=1789387846; cv=none; b=fTtZ9E2BruOOrhGbXHtDBt1LcN67RAOV5hxu4n5lFDx+UtSx9cfBtics46fnDuFiUsbb/U6jY0LQaah9Km7aq3WEGU6gwmGFESwrFcB7JuMLRfjsB8ckvpk2GO/hVhu/BvFbCTOLllKUeHTeu6K8/YBZ/OXs/VyuwnVGNvpAIB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789387840; c=relaxed/simple;
-	bh=F1mp269SJrZ9Pvz2cWbJ0FKS4STF7zDk96eGRxgxnrY=;
+	s=arc-20240116; t=1789387846; c=relaxed/simple;
+	bh=cpmQcxGuCsqpL2FWjhLOvXk3o+1MsiFVU+67fFK602Y=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EDIF2m6CrXdrr1i+rnX5T8+uR+2b+3JY3P37gjCyzxKUFU4c/xK7qC9mpamMRQNeYUcsZL7mQHrr2N27IJLA1bkGQXE3zqtpau5Ykiib3FEel5cio069W+hZxhGKeGuJ0EcXZNtdhyt6FsiO7Ge/a4LucQvw3m54Jv/eRyi9jYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=tJ3Jkwnt; arc=none smtp.client-ip=82.195.75.108
+	 In-Reply-To:To:Cc; b=BljqBWCLKErLVcIyDsgKK1x9JuewfJUOh4p2uIxSl2nQ9Hmgwhkc/qekhbRIlcruKSS4ygx6ppXyPmElmr3rYhkzjty90E/Jua/x6OYlFA0hC+AHQFWJAZrfLmevBV96o1axDsfK0B2/DBIJ8mDa+r6GgB1SWhXrJ5Dp+Pf8noI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=RMtoEGG8; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="tJ3Jkwnt"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="RMtoEGG8"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
 	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
 	From:Reply-To:Content-ID:Content-Description;
-	bh=mZu/Vs5nOQG7irnIZ5aI4mnkQoQp5lbpNJctZOHfslc=; b=tJ3JkwntiFYK6DWmvACoCteIuO
-	x0xBT1R1VCVqe6fAsFwr9S+Os9ReN4udNHvFJg/vefrRUNM1LzhRM4PnPeQC70jAi32HBcsScF5vV
-	8NloT92J4TgJh2/SrYQmUee+1HsIoBznAfuIC4OltQVUnSUPoAeYYQrbJgg47yoM9W2fUhCPzuqL9
-	DgbV38UpTgWzx5ZgakgFBVr8bZ2JO/fpXjD2eQeH8UtcGsDFkLlv5U/DpOlGSbun9RZ7f3CKf1tLW
-	sCuTbfHzktQOF4167gc4CB6FvpI9nYFPLn3iMfWyO8kDMtyo29IexqwBv9QZq0EnWD1ivXuownh+y
-	qsTUKKGg==;
+	bh=v6GxCrbwntxQGiCi6ExZJmvVyBpKpf0qD6c1T1VcByc=; b=RMtoEGG8t/4TlO1cuQyRhc+I5n
+	ia8fG3oFvEdmVI+Iq6rKKBroFFtMUd3jlJzo/NdAgW9Ex89qioepbuyq18DZCkJatoueleYENcAUr
+	9vzMqWmTDSQoX/3mjkJWwnmi5lQ1zbm2VqddU7Q+1uVkobG7mM0s8trCBRQvEdoOs+laWG8Nhdt8P
+	dILNlDNNNqXJJl9woc17N+FwuRD21oOsJeTn1gkIz97VVmavhuPRZuMZZRy46RmN4U26P/UdOBDhZ
+	QQ+42qkdlSDox6+7mJ264DXNbNzFJKrk7FKNJ71JkR51Xl3Xc9R2KtmHPoSQ9IS1+CyEdL1a4coNP
+	g1ATNlQQ==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1x65W8-003bYq-0k;
-	Mon, 14 Sep 2026 12:10:36 +0000
+	id 1x65WD-003bYw-0w;
+	Mon, 14 Sep 2026 12:10:41 +0000
 From: Breno Leitao <leitao@debian.org>
-Date: Mon, 14 Sep 2026 05:09:51 -0700
-Subject: [PATCH net-next v3 1/5] netconsole: send the oops when oops_only
- is set
+Date: Mon, 14 Sep 2026 05:09:52 -0700
+Subject: [PATCH net-next v3 2/5] netconsole: add a per-target message rate
+ limit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260914-netcons_ratelimit-v3-1-8e81b789ab37@debian.org>
+Message-Id: <20260914-netcons_ratelimit-v3-2-8e81b789ab37@debian.org>
 References: <20260914-netcons_ratelimit-v3-0-8e81b789ab37@debian.org>
 In-Reply-To: <20260914-netcons_ratelimit-v3-0-8e81b789ab37@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -58,93 +58,137 @@ Cc: Randy Dunlap <rdunlap@infradead.org>, paulmck@kernel.org,
  linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
  kernel-team@meta.com
 X-Mailer: b4 0.16-dev-f8e9d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2809; i=leitao@debian.org;
- h=from:subject:message-id; bh=F1mp269SJrZ9Pvz2cWbJ0FKS4STF7zDk96eGRxgxnrY=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqp+Qxup9S5bWbD7lHUgfQFCPZDlDcmeyK7qufo
- VdqUxbP86GJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaqfkMQAKCRA1o5Of/Hh3
- bWq0D/wJBOePDkhusz+9f+T76E90flKTzGSNyRgmzJvCBCyYuQuBzRy2Nj1ErNZT8dItZlZBVUB
- yJtEuiNm9GAdFHfLP2ghsTqrztMHV+Do1P+U8sKSHaM9Ir0cHvA2drhAZT8gcbXljnPNjR6P5HJ
- N22QWIVS/FWKGNaPaGN4jh2YIp+q33WuYjhp0I980kU+wZuzkdnH1HL8PC66RkiZtztb545RVef
- TLXEVMIWBPHM5RU/0CtSa7ygecQcG0Asu0FRxsIYx+PAHI/h5PS9Gwt0lWpSuSis2m2iok8aTMW
- 5mYt0vBL2/el4Eu4nBKWUrgsFPX/ustMxhnbDBV8v4AEvoiM4d7YDuBLcTcHvhz8E3xzzo9PEyv
- 9W+pn/wE47DBhI5ME6yxg5xfij35+G9yiZQX2gsQsZLe1l+fhUxXpjCvPfvPWrq/QcGI/2V2DtY
- ytO/rh1iqHHC5/XP+0q74i+P9WZppO/wGCzSPAhLf7U3cVzJzzrRxNdf4CTZA0iJ/wE0gttdfRt
- 9/iKNJboKGrQ9W1LnCs1qMxWiqzcOH3rHCqvkrcUP5LG1Fg+nuH5nyDEEA66hZb/T7uX5JMqNk+
- Ixsw2Ab4gOBZ0X0JYVd60fpF8qmnWVh+f8I0suglZRMzwkjpMnijeG/+lywMcPhhJo2/Yp9VW5B
- NO8M5dPj1atGVIA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4127; i=leitao@debian.org;
+ h=from:subject:message-id; bh=cpmQcxGuCsqpL2FWjhLOvXk3o+1MsiFVU+67fFK602Y=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqp+QxtS9uEIDU3gN2gXsniyP3CBrK3X7wrbX1a
+ xzj6DdmeACJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaqfkMQAKCRA1o5Of/Hh3
+ bQhzEACs1hVz1YViAq+iVDXuSAAsuyd5wcgTsrUcIZkgjQU4w0jZa0On06Kcs0qlS8Rfgrink7n
+ U59r7dBSxupI6E4YPB5zCuSHunM3UVxUigsoqz5Z/AoQZNj08zxuCzfr/BuEsZ7QCzuty+q2i6Q
+ FoHGfas6VRwxV9faDlis8uKibC279LYpnItRGKN4FN+d05feGj2J3GWwklR8ghSHrEFV/e9oPe1
+ 8/YueIffwTLzOWw4QW+sBHZrImjEJLqXPVXuFGDg1cqCYbsoBb7/FT5cqNfh+ifTR8TCPGL5GmP
+ xxjo2TqFBj+xrc9t2xDKEMXMh0ytizYsCvEUoU/KvvnBoY9MZHrsbgfH4mDApfY/lEsyGKokM91
+ xRIqSCcfMiTS/EXav27BEgQl2tWxHatYdKeQKXLtUr9T+bRw1Odt36c8fe4xC0OIxKbySoYBbzM
+ cweVNb3uK+yNIztLBv5YZp7rZEtvyKoxPhciLzIjfwmYKPfOJQlZn+eFtYIzSq5l4dGzmaobQRH
+ +V4Y0ILuFfb0LifYq3PGLxB3A9Kd9rIkZKDJ8qXGFN7xZeVEvsxbav85FZXma+JDZKpIQojgi9c
+ upu4pia74hJPnhQHb8ARVZ1UOF4cW/MEdHXnLszQKyBXHvOcwQioCqn6WTEwbQylLNmCqTYSjqb
+ yaLe3pAYqpsXwnQ==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-A target running with oops_only=1 receives nothing when the kernel
-oopses, which is the one thing the option exists for. Only a panic
-still gets through.
+Give each target a token bucket and consult it once per message in
+netconsole_write().
 
-netconsole_write() bails out unless oops_in_progress is set, and that
-flag is already gone by the time netconsole runs. netconsole is
-CON_NBCON_ATOMIC_UNSAFE, so console_is_usable() keeps it out of the
-emergency flush an oops prints in, and the records only leave the box
-once the printer thread runs.
+The bucket is created with a zero interval, which struct ratelimit_state
+treats as unlimited, and nothing can set a nonzero one yet, so no target
+changes behaviour.
 
-die() wakes that thread from oops_exit(), by which point
-bust_spinlocks(0) has cleared oops_in_progress again. TAINT_DIE is set
-in between, so test that as well, behind a helper.
+Skip the bucket while the kernel is dying, reusing the helper the
+oops_only fix added, so a limit configured for steady-state logging
+never truncates an oops, BUG() or panic().
 
-With oops_only=1 on a netdevsim target, an lkdtm EXCEPTION produces 44
-lines of oops. The receiver gets none of them before this change and
-all of them after it, while ordinary messages stay suppressed.
+The configfs files that expose it come next.
 
-The taint never clears, so from the first oops on, an oops_only target
-sends everything instead of going quiet again. Sending the aftermath of
-a crash beats sending nothing.
+___ratelimit() only trylocks its own raw spinlock, so it is safe with
+target_list_lock held and interrupts disabled, and safe from NMI. Set
+RATELIMIT_MSG_ON_RELEASE so it does not report the suppressed count
+itself, which would printk() from inside the console being serviced.
 
-Fixes: 7eab73b18630 ("netconsole: convert to NBCON console infrastructure")
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- drivers/net/netconsole.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ drivers/net/netconsole.c | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
 diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-index b358e5c3673510..833da29717ed1d 100644
+index 833da29717ed1d..c1c92413c0a5c5 100644
 --- a/drivers/net/netconsole.c
 +++ b/drivers/net/netconsole.c
-@@ -83,7 +83,8 @@ MODULE_PARM_DESC(netconsole, " netconsole=[src-port]@[src-ip]/[dev],[tgt-port]@<
+@@ -49,6 +49,7 @@
+ #include <linux/rtnetlink.h>
+ #include <linux/workqueue.h>
+ #include <linux/delay.h>
++#include <linux/ratelimit.h>
  
- static bool oops_only;
- module_param(oops_only, bool, 0600);
--MODULE_PARM_DESC(oops_only, "Only log oops messages");
-+MODULE_PARM_DESC(oops_only,
-+		 "Only log oops messages, everything once the kernel died");
+ MODULE_AUTHOR("Matt Mackall <mpm@selenic.com>");
+ MODULE_DESCRIPTION("Console driver for network interfaces");
+@@ -187,6 +188,7 @@ struct netcons_userdata {
+  * @sysdata:		Cached, formatted string of append
+  * @sysdata_fields:	Sysdata features enabled.
+  * @msgcounter:	Message sent counter.
++ * @ratelimit:	Token bucket used to rate limit messages
+  * @stats:	Packet send stats for the target. Used for debugging.
+  * @state:	State of the target.
+  *		Visible from userspace (read-write).
+@@ -231,6 +233,8 @@ struct netconsole_target {
+ 	u32			sysdata_fields;
+ 	/* protected by target_list_lock */
+ 	u32			msgcounter;
++	/* carries its own lock, writers hold dynamic_netconsole_mutex */
++	struct ratelimit_state	ratelimit;
+ #endif
+ 	struct netconsole_target_stats stats;
+ 	enum target_state	state;
+@@ -294,6 +298,26 @@ static void dynamic_netconsole_mutex_unlock(void)
+ 	mutex_unlock(&dynamic_netconsole_mutex);
+ }
  
- #define NETCONSOLE_PARAM_TARGET_PREFIX "cmdline"
- 
-@@ -96,6 +97,17 @@ static int __init option_setup(char *opt)
- __setup("netconsole=", option_setup);
- #endif	/* MODULE */
- 
-+/* The kernel is dying, or has died.
-+ *
-+ * oops_in_progress only spans the printing of the crash. netconsole is
-+ * CON_NBCON_ATOMIC_UNSAFE, so the records reach the target later, from the
-+ * printer thread, with the flag already cleared. TAINT_DIE outlives it.
-+ */
-+static bool netconsole_kernel_dying(void)
++static void netconsole_ratelimit_init(struct netconsole_target *nt)
 +{
-+	return oops_in_progress || test_taint(TAINT_DIE);
++	ratelimit_state_init(&nt->ratelimit, 0, DEFAULT_RATELIMIT_BURST);
++	/* The flag keeps ___ratelimit() from reporting the suppressed count
++	 * itself, which would printk() from inside the console being
++	 * serviced. Nothing calls ratelimit_state_exit(), so the count is
++	 * never reported on release either.
++	 */
++	ratelimit_set_flags(&nt->ratelimit, RATELIMIT_MSG_ON_RELEASE);
 +}
 +
- /* Linked list of all configured targets */
- static LIST_HEAD(target_list);
- /* target_cleanup_list is used to track targets that need to be cleaned outside
-@@ -2474,7 +2486,7 @@ static void netconsole_write(struct nbcon_write_context *wctxt, bool extended)
++static bool netconsole_ratelimited(struct netconsole_target *nt)
++{
++	/* A limit meant for steady-state logging must not eat a crash dump. */
++	if (netconsole_kernel_dying())
++		return false;
++
++	return !__ratelimit(&nt->ratelimit);
++}
++
+ #else	/* !CONFIG_NETCONSOLE_DYNAMIC */
+ 
+ static int __init dynamic_netconsole_init(void)
+@@ -330,6 +354,15 @@ static void dynamic_netconsole_mutex_unlock(void)
  {
- 	struct netconsole_target *nt;
+ }
  
--	if (oops_only && !oops_in_progress)
-+	if (oops_only && !netconsole_kernel_dying())
- 		return;
++static void netconsole_ratelimit_init(struct netconsole_target *nt)
++{
++}
++
++static bool netconsole_ratelimited(struct netconsole_target *nt)
++{
++	return false;
++}
++
+ #endif	/* CONFIG_NETCONSOLE_DYNAMIC */
  
- 	list_for_each_entry(nt, &target_list, list) {
+ /* Check if the target was bound by mac address. */
+@@ -698,6 +731,7 @@ static struct netconsole_target *alloc_and_init(void)
+ 	nt->remote_port = 6666;
+ 	eth_broadcast_addr(nt->remote_mac);
+ 	nt->state = STATE_DISABLED;
++	netconsole_ratelimit_init(nt);
+ 	INIT_WORK(&nt->resume_wq, process_resume_target);
+ 	/* Set up the skb pool primitives once; enabling only refills it. */
+ 	skb_queue_head_init(&nt->skb_pool);
+@@ -2494,6 +2528,9 @@ static void netconsole_write(struct nbcon_write_context *wctxt, bool extended)
+ 		    !netif_running(nt->np.dev))
+ 			continue;
+ 
++		if (netconsole_ratelimited(nt))
++			continue;
++
+ 		/* If nbcon_enter_unsafe() fails, just return given netconsole
+ 		 * lost the ownership, and iterating over the targets will not
+ 		 * be able to re-acquire.
 
 -- 
 2.53.0-Meta
