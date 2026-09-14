@@ -1,126 +1,87 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6504A26A0A7
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 03:00:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80EDF36F42D;
+	Mon, 14 Sep 2026 05:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789354857; cv=none; b=BJbf4uMQBlVy8HE9aVswJSscuOoDN40++3aH/Itc38b9OYSYk9KA335DLuRrVWRSzU57rDwKTjP6BLV5g6PB6AnvUIiQjRNgtTPPJB1JWqXZxY/kU3ffWIY126/7kLZ4BjC3wONglyT+5/l9eU+Mn5ZhQqq+qs3ZF8KmqQ/Eqgg=
+	t=1789362072; cv=none; b=H+w0yuZH9mDbQKN68ML9IgJTTMNGXII2yLHc8EqaXg50XlY4q3F+7ITRN9hJpOTCjY0mJ+zJdWXZR1ThCWPSXuOEG1PxPth4rei12Ax3iufKDOw7J4ENH5tQo9okrC6wxIHLuroG6AT17piX5sAQl7ZxfxqdKOA0R56cLYEVf1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789354857; c=relaxed/simple;
-	bh=oEl58bP/UH+8tXLxbnzZOu4bTiFj6HAc0qcwIrjp0jk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LMm1ETUrPbPMw3XNJeRIGV92wVZzmVxbx7F3Yiqz5C8yJAVqo8C8wqRX7/HO+boDibmIYbBc6Vh83isdqGbbUoLdCpP06PzthDnXDTMH19VczR21y/Dno6ZkdMAOg00BywI2N6B41MAN1YVGzhVG18cqZJJQnrLDEvCV51Qaek4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sn26i98n; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789362072; c=relaxed/simple;
+	bh=rl1Taj6AjWu6rTiKiDblKEGYsSPMRPXyhM1T3hd2MfE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=SWBBpS7mmM9xBYw0tFXIRygEbhR+V5bTMDE3oSgtOe9KENyJjScFbhzL/qes1jzHIBM7VscZNN7Vbl9gS6ngi+UECVUZMRdFihrv0KUz8DklK5XpGuYURO3pRgvpdBLy7MOFHB5T4tlWvPXmcHeiPZN+7N6M8ecr25AR2TX9PvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MzfrEe12; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sn26i98n"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-482ea739de2so1784598f8f.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 13 Sep 2026 20:00:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789354854; x=1789959654; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=M+1/RF4dnaWQrl22BIUng3R9TZwvSQPnvcZ+w1JR75g=;
-        b=sn26i98n7/F6JXRMOm5ZtAVVL4LC7Oia0PxfKOOwu2Q9V/l7xX0TTQu5DEFkCilPPl
-         COB07Ek69v158rlJv+1i/YNfjXlllZpq36KRqriKXG2MbCchu9zVV7ADTm8iLoJ2qdv/
-         0jVqFCPHCkdLSmnJ9g9qHE2CEsYwu8PGvFexzsS1ph6iiSMP4H23gnVnSICIWman9DU3
-         YTecf39ZAYgjqspYeN01kaIOgU5ymNidJb6JK8WsCWUytGh3q9s5P/GXQ8SvoNejKKfz
-         khR7C/8M5P4FsaR28CJy6m1Gg8/AvuUOB2AhI2aidIBLO2zxI7RkfcokYaal7RwkfEGW
-         t15Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789354854; x=1789959654;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=M+1/RF4dnaWQrl22BIUng3R9TZwvSQPnvcZ+w1JR75g=;
-        b=X4bL0GZRJ4IYmkH71VomPTZPF2t+YfcULo5Pd4c/1QtiD7wpH0g7YkQZjHUvkMqRVH
-         hLYZ9kmvYgqHBmfNfO3YmVW0acObwsypU+S0kKlmHyxBli29gg2APV5r4JMHsTrUaEME
-         79WBH4XQ84ooQEVB6mo4hcnFtC8t5+Z+/88JnTToYGcXOFAgI8u4OtjGE2q9q049dNVQ
-         sMnysx3hbitcyQlFtBSwI58pnnGes7sjJlvdrCnljI8avg/dPIlBKvPjAwPHXnmebbuq
-         y8ehxdv24eSn1znTS8KS6NNSMa2p7d9i1js2iTTQfppENlXFLhYTSX1/vgT29WVdZKIP
-         R7jA==
-X-Forwarded-Encrypted: i=1; AKwUvBz7wr9fCXvagCFG4b1aKROjRuzoW4iifBNfx186YG0QrQUQhzXDs3m0WiDCuN0wtNmBqwufIqbntPCE/Jnzhoo=@vger.kernel.org
-X-Gm-Message-State: AFuF++nvSCie7Pe7SY2T/VNv7HgsXUt/b978qOVS5+q3a9mT/yg0GcDn
-	gesf2zbMV6UZDxXb/iSG3HzZgses1sICoDpx8Ec2c+0t07pglj0J1WgJEndJj/pt
-X-Gm-Gg: AYBFou1VZDgTuzkuzimFkMaPW5zDy/Wh2mSelBsa8orzcd2rIx1dS95U8Fm+I36k9o8
-	uwewF7A5vqtCZmhO5jsaPZ9e8FpMZfI9xOKyxAoRs/maPZj9cybE2TrVPn1kaRpg1F2ulcz1BtL
-	FhTX9sbXs/TXcobmyZCB+xs1aXMaBMaWlHavqq/98CBAgImxasLkoQ/3t3Cu+I4fhdhsDZFWRy5
-	hyu1yvUKPVYouEvC8d/XX0j//rMoXL1eYwbAEuGzPM10UkTk0Z58lYkQ81DItJfLBUPvdmTXuFV
-	RrD2G688NN7dWq2lTaSZ5nVkr0M16r/NO4mdhPeZSLy9i10w+BI3PW/gewtrsSXymeTHMfRCR6j
-	RW07TJdGZBv55x4WBF7bKXtd9kxX50RAgwoiFWnpWdhmtkTym28mIgPusY4J86RS2AIKvD0J7bV
-	yE4vpdmdEcBd21uwCbmwSMzokJ8ObKgkw3p0utRJzOHrflaYwtbwjodTHmZPTPO9kSktC4nCCHK
-	kOr5vKASY9MzdjR1tJN3vMMASGx9Rvp5Dao3c9lyThuWRhJdk4J3xOGa5JtxHeT5WMZHc78eKaM
-	DStXzYEIVY1RABj78paNCr+E3qJN8EP2FUuF4X6X7E/vdgoqFYUgORdz
-X-Received: by 2002:a05:6000:4a0f:b0:485:7cb9:4ec4 with SMTP id ffacd0b85a97d-48702ab8ed9mr375913f8f.5.1789354854252;
-        Sun, 13 Sep 2026 20:00:54 -0700 (PDT)
-Received: from MacBook-Pro-von-Karl.localdomain (dynamic-077-007-122-014.77.7.pool.telefonica.de. [77.7.122.14])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-486eb33e020sm24477516f8f.18.2026.09.13.20.00.52
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 13 Sep 2026 20:00:53 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>,
-	Rae Moar <raemoar63@gmail.com>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH next] kunit: Initialize filter error before disabled cleanup
-Date: Mon, 14 Sep 2026 04:59:33 +0200
-Message-Id: <20260914025933.9832-1-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20260901-kunit-void-v1-1-c91952391d66@linutronix.de>
-References: <20260901-kunit-void-v1-1-c91952391d66@linutronix.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MzfrEe12"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36FE51F00893;
+	Mon, 14 Sep 2026 05:01:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789362071;
+	bh=awjZKh7j/ZRrPK+GXT6udEHhIXB9OMAIaNBEONO6aO4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=MzfrEe12hYSqbGVTplWa4njgyWOrfqH7Bu4RHAp6yEb8dnGCFMV/sLgfs+a4N7Q0Y
+	 m7vjGW1XU4foQpTw48Fu9PGF2fB8rTymKQ7nYTu4GaCSLCliipPxN2LfnWwx8KcU4E
+	 qjm5eaBQ7KNqlAz3C+j6Xs7ayTFFvaUBnxOqJIWqKtclQ+TkFgxTfqK21IfCYDyqML
+	 tqUG5ItUIvt7xZw1Ab931fdECl0ewhSrYP9aprus88AJ6wPOyYGAgiIAv03t6M0T8t
+	 ohwjI7O5RKPARbcZhh2tBsiUSx0P8SJmo8UHeoOK9yo8PQytXTXMMJFOZZ5akMgH9t
+	 KBzPGYVW+KP+Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0AB9380AA63;
+	Mon, 14 Sep 2026 05:00:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v3 0/2] bpf,
+ arm64: fix the exception callback's frame pointer
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178936200639.325205.5759223935386282492.git-patchwork-notify@kernel.org>
+Date: Mon, 14 Sep 2026 05:00:06 +0000
+References: <20260907130624.611942-1-donggeunyoo.kernel@gmail.com>
+In-Reply-To: <20260907130624.611942-1-donggeunyoo.kernel@gmail.com>
+To: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+Cc: ast@kernel.org, andrii@kernel.org, catalin.marinas@arm.com,
+ daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, jolsa@kernel.org, memxor@gmail.com,
+ mark.rutland@arm.com, martin.lau@linux.dev, puranjay@kernel.org,
+ shuah@kernel.org, song@kernel.org, will@kernel.org, xukuohai@huaweicloud.com,
+ yonghong.song@linux.dev, bpf@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-kunit_run_all_tests() jumps to free_out when KUnit execution is disabled.
-If a boot filter is configured, free_out tests err even though
-kunit_filter_suites() was never called to initialize it.
+Hello:
 
-Clang's -Wconditional-uninitialized diagnoses this path. KMSAN confirms
-the runtime use.
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-With CONFIG_KUNIT_DEFAULT_ENABLED=n,
-CONFIG_KUNIT_DEFAULT_FILTER_GLOB="*", CONFIG_INIT_STACK_NONE=y and
-CONFIG_KMSAN=y, KMSAN reports an uninitialized-value use in
-kunit_run_all_tests() and identifies local variable err as its origin.
+On Mon,  7 Sep 2026 22:06:22 +0900 you wrote:
+> The arm64 JIT does not set BPF_REG_FP in the prologue of an exception
+> callback, so the callback runs with whatever x25 held when bpf_throw()
+> was called. A callback that materializes the register, for instance to
+> pass the address of a local variable to a helper, then works on the
+> frame of the subprogram that threw.
+> 
+> Patch 1 sets ctx->fp_used on that path, the same fix commit b114fcee766d
+> ("bpf, arm64: Fix fp initialization for exception boundary") made for
+> the exception boundary. Patch 2 adds a selftest that reaches the case.
+> 
+> [...]
 
-Restore the zero initializer. It remains necessary as cleanup state after
-kunit_run_all_tests() was changed to return void.
+Here is the summary with links:
+  - [bpf,v3,1/2] bpf, arm64: set up the frame pointer for the exception callback
+    https://git.kernel.org/bpf/bpf/c/ef1fb82f1218
+  - [bpf,v3,2/2] selftests/bpf: cover the exception callback using its own BPF stack
+    https://git.kernel.org/bpf/bpf/c/26a43a5f8c31
 
-Fixes: e38f53f04824 ("kunit: Return void from kunit_run_all_tests()")
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
----
- lib/kunit/executor.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index c798a02470d8..6e4664ad82ad 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -382,7 +382,7 @@ void kunit_run_all_tests(void)
- 		__kunit_suites_start, __kunit_suites_end,
- 	};
- 	size_t init_num_suites = init_suite_set.end - init_suite_set.start;
--	int err;
-+	int err = 0;
- 
- 	if (init_num_suites > 0) {
- 		suite_set = kunit_merge_suite_sets(init_suite_set, normal_suite_set);
-
-base-commit: 68142f986ff04b2b70b31db00f719bf690f64a9a
+You are awesome, thank you!
 -- 
-2.53.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
