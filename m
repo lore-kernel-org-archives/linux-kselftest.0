@@ -1,35 +1,59 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABEEE3E4C90;
-	Mon, 14 Sep 2026 07:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2A53E1CE1;
+	Mon, 14 Sep 2026 07:31:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.36.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789371071; cv=none; b=oBjXVejIPbMRzX1AtaCxLbF4P+2jxkEpqKX1ALuzYGjPPFeFKRtXsa7sDwL4gMGxpotJxz/yO+H+JkkV83xQX0k+zWIhbimOoleCcIKpNWq4RSxLfTjemrKlOjA87r4KAH7XsWu9ualDTZj85jg4ruBY5FsFHljuTtzeBV1kC3Q=
+	t=1789371074; cv=none; b=tVVSk8d7O1/Ydsf/k+Waimw4V82L7Mz41qhrLjDRg6p9DSM9XQCFT4bFwhiTaJirGoPx3LjPKe8zlkNErFT1DiGzpB8Sp9VSiJC8ciBh4Tk5Lf538sXGLEF6aipOnlY4J/yHTYcsfBJmCAYes9c7jXNSYQGFDtlKrvCxkJsyCfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789371071; c=relaxed/simple;
-	bh=utuQ5Qw9PHZyHCVvUbwACf+tdMWlTIbrwdI3rerxdQA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ppitfUKg1hHvHIOaW1l2+EzSQcDhrr06MleT88CveUn/TwIXs/IBLsN/W+E9ZDzAQ7fBBH7hoECLHdrzb5vIXeDiNguE4XwPvjmhnV0aJ25qr2WrlVOOArP6uFdKAnhzxuWb8NIms17ka5R/WOHB+XGobNA+Mnuhs/IgJPd+kIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=OPHlJX+M; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1789371074; c=relaxed/simple;
+	bh=5/qH9WQH0xnxZiSwc57XSnnm6CjMDXhHBj4pLQbDsZk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=oBOsuQ7E9NBekRKHLWBQdYRoY6//D04onUMf03WDJw5Bpf0vX8mY0NRkRIZXZ0+yY/FBfvx1LG+PlBmx/uUD3StjnVsp+ortkTT2Pu/8OxWLVZeWc3qykijicrvrv5q0z9cIY/X1wXzc5uzR01IphHztqboc5BsM5a3K3J/HYa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=q53rWFx3; arc=none smtp.client-ip=139.138.36.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="OPHlJX+M"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F5251570;
-	Mon, 14 Sep 2026 00:31:04 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E39B3F59E;
-	Mon, 14 Sep 2026 00:31:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1789371067; bh=utuQ5Qw9PHZyHCVvUbwACf+tdMWlTIbrwdI3rerxdQA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=OPHlJX+Mm3VJajJB1BXzm3KaXutP5muvUHjdzs6Mpk9Xf9yoNzGoPYet2V9rDbwqM
-	 iQXRrV84FxW7EjXoH6VwZUnJXlJUoaYsdf0ivpXm/LaQbmMuwXKyNpj+fL45CnUNSM
-	 Qb7GlLz40/tOQ3qkha4sWMrRleFv+fCwRU2M0/hI=
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-Date: Mon, 14 Sep 2026 08:30:46 +0100
-Subject: [PATCH v3 1/3] kselftest: mm: rename read_pmd_pagesize() to
- pmd_psize()
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="q53rWFx3"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
+  t=1789371072; x=1820907072;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to:cc;
+  bh=5/qH9WQH0xnxZiSwc57XSnnm6CjMDXhHBj4pLQbDsZk=;
+  b=q53rWFx33peYG2ja8yAHvZ9cwyK1hSHm8QH9uPM/kiUAtzKI11W7CvY8
+   hh9i41UlgerMlDU++bdm+egyq6d9IvwPu8JGm1sfYEsN7smzzotmr8Dr1
+   UlNEypukUbGxb2gjWHNBX6abKd96CDtWvwg9iUhOgQ0C2cI2FZNkwfH9r
+   qsLFSyvNNtAMcDIvui33D9dAVXgwJ+VcTCMgR2NUOSawe6Ot9edgDJ8fN
+   ILXMU7pRRJN8MaRATITObUKQwVYiD6bOvkp7mrNLjNVHqzR8FLvv4n4+p
+   hOtd+IaaPzY/3sG3N8NUBd9D8c3CPgQukH4MPx7/Fccq2JPpszcGqaTK5
+   A==;
+X-CSE-ConnectionGUID: vy+R9QidReCnrqDAwfuhiQ==
+X-CSE-MsgGUID: HJZ/aiUAS/64Qr3Av5XdEg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11904"; a="242463258"
+X-IronPort-AV: E=Sophos;i="6.27,102,1786978800"; 
+   d="scan'208";a="242463258"
+Received: from gmgwuk01.global.fujitsu.com ([172.187.114.235])
+  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2026 16:31:03 +0900
+Received: from az2uksmgm4.o.css.fujitsu.com (unknown [10.151.22.201])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by gmgwuk01.global.fujitsu.com (Postfix) with ESMTPS id 9954082071A;
+	Mon, 14 Sep 2026 07:31:03 +0000 (UTC)
+Received: from az2nlsmom2.o.css.fujitsu.com (unknown [10.150.26.200])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by az2uksmgm4.o.css.fujitsu.com (Postfix) with ESMTPS id 3DD2C14003FD;
+	Mon, 14 Sep 2026 07:31:03 +0000 (UTC)
+Received: from [127.0.1.1] (unknown [10.124.178.20])
+	by az2nlsmom2.o.css.fujitsu.com (Postfix) with ESMTP id 65571180012C;
+	Mon, 14 Sep 2026 07:30:57 +0000 (UTC)
+From: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+Subject: [PATCH v2 0/3] 52-bit VA guest mode ID support
+Date: Mon, 14 Sep 2026 16:30:43 +0900
+Message-Id: <20260914-arm64-52bit-va-v2-0-3911cb9d4ad4@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,447 +62,97 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260914-fix_hpage_macro-v3-1-c9a305a01d39@arm.com>
-References: <20260914-fix_hpage_macro-v3-0-c9a305a01d39@arm.com>
-In-Reply-To: <20260914-fix_hpage_macro-v3-0-c9a305a01d39@arm.com>
-To: Lorenzo Stoakes <ljs@kernel.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Zi Yan <ziy@nvidia.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, 
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
- Kiryl Shutsemau <kas@kernel.org>, Peter Xu <peterx@redhat.com>, 
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
- Sarthak Sharma <sarthak.sharma@arm.com>, Yeoreum Yun <yeoreum.yun@arm.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=15952; i=yeoreum.yun@arm.com;
- h=from:subject:message-id; bh=utuQ5Qw9PHZyHCVvUbwACf+tdMWlTIbrwdI3rerxdQA=;
- b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBqp6KzPEr1wVDDj2wVTFEpz1goBrf0Yh2206PGQ
- m/Abq57twaJAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCaqeiswAKCRBt1cPRWsUx
- Mz38C/9dFZF/5oqpApRVeyneKUy8Mi000DqWf/jJinZozi7rVr1tjQn4HzDLV6PYfSNDw0mlgnI
- C3/DrQcfSkFWdaGyOuPpTGbfawqMUQQYfmCPVf2Rt/Hrn5lSbhVjiUdmzdnuSXGbwPEap087QzE
- sqJVm8MHiVWxGjJWfo+2ZfmkKwUdkxYkTlrx+FFFu5TmLJZk/e/yyGPZlGImNyxymu8/cr3Gvwp
- I4ajSsAsA0G0pKTWbgBjuItuQgVJxWGd1T8f5VGKr2gTVTCZVoazOr54S6gk5Aw9wGL0G+bL9Ge
- 9i5w4lJ+Kz83PZv1tlQfKe/oLS9M0zB+bavoTEkqLHVP2g8WjH0Bp1mS3Us8/qvquOlIQQyyDBh
- M7UaDtUUgVJtyB2jaRfJykGKSWieGUIarROyB0dsKzVgLj+5UmNcT4kmP2jq7NvgjtJVjW0SSoB
- 46fOBVhY73qmM1TqXZ9jFrfq+FVhLP+gcoxJzdDSSogBt1c4NJTgy22rRhAxuh5iGQxFg=
-X-Developer-Key: i=yeoreum.yun@arm.com; a=openpgp;
- fpr=2D83E092DD0533B85875A49D6DD5C3D15AC53133
+X-B4-Tracking: v=1; b=H4sIAKOip2oC/12NQQ6CMBBFr0Jm7Zh2gAZdeQ/DAkorQwKYtjQaw
+ t2lGDcuX/L++yt449h4uGYrOBPZ8zztQKcMdN9MD4Pc7QwkSImKSmzcqAosqeWAscGcrLSF7kQ
+ pOthHT2csv47gvf6yX9rB6JAqyejZh9m9j8cok/eLq/94lChQFkZfKpIyV/nNLgMHv5z1PEK9b
+ dsHgk4c3MAAAAA=
+X-Change-ID: 20260825-arm64-52bit-va-32f1f4cd050d
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+ Fuad Tabba <fuad.tabba@linux.dev>, Joey Gouly <joey.gouly@arm.com>, 
+ Steffen Eiden <seiden@linux.ibm.com>, 
+ Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Itaru Kitayama <itaru.kitayama@fujitsu.com>, 
+ Takayuki Okamoto <tokamoto@fujitsu.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1789371056; l=3154;
+ i=itaru.kitayama@fujitsu.com; s=20260825; h=from:subject:message-id;
+ bh=5/qH9WQH0xnxZiSwc57XSnnm6CjMDXhHBj4pLQbDsZk=;
+ b=Vrji+rOz7LhmW6GdQCEDDXWddYrkAdBps2e04+1rLpswYZDXxv+ahTbGMs9yqV0gtrDVHhhwN
+ LFHDUSJNmUnDuyYdXr8NBnwbrjHCUMRBlvptVI8wlBP+R+wwItjuMqR
+X-Developer-Key: i=itaru.kitayama@fujitsu.com; a=ed25519;
+ pk=g9bTnr9giRP7JwNSZHy+OMLQZBEUtSE9tUnXso0hH1Y=
 
-For consistency with psize(), rename read_pmd_pagesize() to
-pmd_psize(). There is no functional change.
+This patch series extends the arm64 KVM selftest framework
+to support 52-bit guest virtual address (VA) modes in addition to
+the existing 52-bit physical address (PA) configurations.
+The motivation is to enable validation of LPA2 guest memory-management
+behaviour in configurations that use a 52-bit VA space.
+While the selftest framework already supports testing 52-bit PA
+configurations, it lacks the ability to exercise guests running with
+52-bit virtual addresses, leaving part of the LPA2 functionality untested.
+To address this, the series introduces new guest modes for 52-bit VA
+operation, adds five-level page table support where required, and
+performs runtime detection of host 52-bit VA capability so that
+LPA2-enabled guest VA tests are executed only on supported systems.
 
-Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+Testing:
+
+Built and ran lpa_test on QEMU with 52-bit VA support. 
+The test verified shared mappings at low and high guest virtual addresses, 
+then remapped the high VA to a different GPA and verified that 
+the mappings remained independent.
+
+Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+Reviewed-by: Takayuki Okamoto <tokamoto@fujitsu.com>
 ---
- tools/testing/selftests/mm/cow.c                   |  2 +-
- tools/testing/selftests/mm/folio_split_race_test.c |  2 +-
- tools/testing/selftests/mm/hmm-tests.c             | 22 +++++++++++-----------
- tools/testing/selftests/mm/khugepaged.c            |  2 +-
- tools/testing/selftests/mm/migration.c             |  4 ++--
- tools/testing/selftests/mm/mkdirty.c               |  2 +-
- tools/testing/selftests/mm/pagemap_ioctl.c         |  2 +-
- tools/testing/selftests/mm/prctl_thp_disable.c     |  4 ++--
- tools/testing/selftests/mm/process_madv.c          |  2 +-
- tools/testing/selftests/mm/soft-dirty.c            |  2 +-
- tools/testing/selftests/mm/split_huge_page_test.c  |  2 +-
- tools/testing/selftests/mm/uffd-common.c           |  6 +++---
- tools/testing/selftests/mm/uffd-unit-tests.c       |  8 ++++----
- tools/testing/selftests/mm/uffd-wp-mremap.c        |  2 +-
- tools/testing/selftests/mm/vm_util.c               |  8 ++++----
- tools/testing/selftests/mm/vm_util.h               |  2 +-
- 16 files changed, 36 insertions(+), 36 deletions(-)
+Changes in v2:
+- Reorganize the series so that each patch builds independently.
+- Move all P52V52 mode definitions and uses into the same patch.
+- Use the standard "KVM: arm64: selftests:" subject prefix.
+- Reuse one probe VM and vCPU for IPA and 64K VA capability detection.
+- Make the VARange result explicitly specific to the 64K granule.
+- Clarify that only the 4K P52V52 mode uses five page-table levels.
+- Link to v1: https://patch.msgid.link/20260826-arm64-52bit-va-v1-0-14ec98211363@fujitsu.com
 
-diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
-index 8aa5249d9bef..e42edeccfd7a 100644
---- a/tools/testing/selftests/mm/cow.c
-+++ b/tools/testing/selftests/mm/cow.c
-@@ -1889,7 +1889,7 @@ int main(int argc, char **argv)
- 	thp_save_settings();
- 
- 	pagesize = getpagesize();
--	pmdsize = read_pmd_pagesize();
-+	pmdsize = pmd_psize();
- 	if (pmdsize) {
- 		/* Only if THP is supported. */
- 		thp_read_settings(&default_settings);
-diff --git a/tools/testing/selftests/mm/folio_split_race_test.c b/tools/testing/selftests/mm/folio_split_race_test.c
-index 1960635a953e..a956e5c74c65 100644
---- a/tools/testing/selftests/mm/folio_split_race_test.c
-+++ b/tools/testing/selftests/mm/folio_split_race_test.c
-@@ -235,7 +235,7 @@ int main(void)
- 	ksft_print_header();
- 
- 	page_size = getpagesize();
--	pmd_pagesize = read_pmd_pagesize();
-+	pmd_pagesize = pmd_psize();
- 
- 	if (!thp_available() || !pmd_pagesize)
- 		ksft_exit_skip("Transparent Hugepages not available\n");
-diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
-index e2642eca0d02..ad14372b75d9 100644
---- a/tools/testing/selftests/mm/hmm-tests.c
-+++ b/tools/testing/selftests/mm/hmm-tests.c
-@@ -569,7 +569,7 @@ TEST_F(hmm, anon_write_child)
- 
- 	for (migrate = 0; migrate < 2; ++migrate) {
- 		for (use_thp = 0; use_thp < 2; ++use_thp) {
--			npages = ALIGN(use_thp ? read_pmd_pagesize() : HMM_BUFFER_SIZE,
-+			npages = ALIGN(use_thp ? pmd_psize() : HMM_BUFFER_SIZE,
- 				       self->page_size) >> self->page_shift;
- 			ASSERT_NE(npages, 0);
- 			size = npages << self->page_shift;
-@@ -730,7 +730,7 @@ TEST_F(hmm, anon_write_huge)
- 	int *ptr;
- 	int ret;
- 
--	size = 2 * read_pmd_pagesize();
-+	size = 2 * pmd_psize();
- 
- 	buffer = hmm_buffer_alloc(size, size,
- 				  PROT_READ | PROT_WRITE,
-@@ -1941,7 +1941,7 @@ TEST_F(hmm, migrate_anon_huge_empty)
- 	int *ptr;
- 	int ret;
- 
--	size = read_pmd_pagesize();
-+	size = pmd_psize();
- 
- 	buffer = hmm_buffer_alloc(2 * size, size,
- 				  PROT_READ,
-@@ -1984,7 +1984,7 @@ TEST_F(hmm, migrate_anon_huge_zero)
- 	int ret;
- 	int val;
- 
--	size = read_pmd_pagesize();
-+	size = pmd_psize();
- 
- 	buffer = hmm_buffer_alloc(2 * size, size,
- 				  PROT_READ,
-@@ -2038,7 +2038,7 @@ TEST_F(hmm, migrate_anon_huge_free)
- 	int *ptr;
- 	int ret;
- 
--	size = read_pmd_pagesize();
-+	size = pmd_psize();
- 
- 	buffer = hmm_buffer_alloc(2 * size, size,
- 				  PROT_READ | PROT_WRITE,
-@@ -2091,7 +2091,7 @@ TEST_F(hmm, migrate_anon_huge_fault)
- 	int *ptr;
- 	int ret;
- 
--	size = read_pmd_pagesize();
-+	size = pmd_psize();
- 
- 	buffer = hmm_buffer_alloc(2 * size, size,
- 				  PROT_READ | PROT_WRITE,
-@@ -2161,7 +2161,7 @@ TEST_F(hmm, migrate_partial_unmap_fault)
- {
- 	struct hmm_buffer *buffer;
- 	unsigned long npages;
--	unsigned long size = read_pmd_pagesize();
-+	unsigned long size = pmd_psize();
- 	unsigned long unmap_size;
- 	unsigned long offsets[3];
- 	unsigned long i;
-@@ -2226,7 +2226,7 @@ TEST_F(hmm, migrate_remap_fault)
- {
- 	struct hmm_buffer *buffer;
- 	unsigned long npages;
--	unsigned long size = read_pmd_pagesize();
-+	unsigned long size = pmd_psize();
- 	unsigned long offsets[3];
- 	unsigned long i;
- 	void *old_ptr, *new_ptr = NULL;
-@@ -2323,7 +2323,7 @@ TEST_F(hmm, migrate_anon_huge_err)
- 	int *ptr;
- 	int ret;
- 
--	size = read_pmd_pagesize();
-+	size = pmd_psize();
- 
- 	buffer = hmm_buffer_alloc(2 * size, 2 * size,
- 				  PROT_READ | PROT_WRITE,
-@@ -2413,7 +2413,7 @@ TEST_F(hmm, migrate_anon_huge_zero_err)
- 	int *ptr;
- 	int ret;
- 
--	size = read_pmd_pagesize();
-+	size = pmd_psize();
- 
- 	buffer = hmm_buffer_alloc(2 * size, 2 * size,
- 				  PROT_READ,
-@@ -2609,7 +2609,7 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
- TEST_F_TIMEOUT(hmm, benchmark_thp_migration, 120)
- {
- 	struct benchmark_results thp_results, regular_results;
--	size_t thp_size = read_pmd_pagesize();
-+	size_t thp_size = pmd_psize();
- 	int iterations = 5;
- 
- 	if (!thp_size)
-diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index f82673f5f6b4..76c1fbcc5260 100644
---- a/tools/testing/selftests/mm/khugepaged.c
-+++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -1330,7 +1330,7 @@ int main(int argc, char **argv)
- 		ksft_exit_skip("Transparent Hugepages not available\n");
- 
- 	page_size = getpagesize();
--	hpage_pmd_size = read_pmd_pagesize();
-+	hpage_pmd_size = pmd_psize();
- 	if (!hpage_pmd_size)
- 		ksft_exit_fail_msg("Reading PMD pagesize failed\n");
- 	hpage_pmd_nr = hpage_pmd_size / page_size;
-diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
-index f19d53c69576..4280d2c87b22 100644
---- a/tools/testing/selftests/mm/migration.c
-+++ b/tools/testing/selftests/mm/migration.c
-@@ -229,7 +229,7 @@ TEST_F_TIMEOUT(migration, private_anon_thp, 2*RUNTIME)
- 	if (!thp_is_enabled())
- 		SKIP(return, "Transparent Hugepages not available");
- 
--	pmdsize = read_pmd_pagesize();
-+	pmdsize = pmd_psize();
- 	if (!pmdsize)
- 		SKIP(return, "Reading PMD pagesize failed");
- 
-@@ -263,7 +263,7 @@ TEST_F_TIMEOUT(migration, shared_anon_thp, 2*RUNTIME)
- 	if (!thp_is_enabled())
- 		SKIP(return, "Transparent Hugepages not available");
- 
--	pmdsize = read_pmd_pagesize();
-+	pmdsize = pmd_psize();
- 	if (!pmdsize)
- 		SKIP(return, "Reading PMD pagesize failed");
- 
-diff --git a/tools/testing/selftests/mm/mkdirty.c b/tools/testing/selftests/mm/mkdirty.c
-index 68dd447a5454..49ef643a6e63 100644
---- a/tools/testing/selftests/mm/mkdirty.c
-+++ b/tools/testing/selftests/mm/mkdirty.c
-@@ -330,7 +330,7 @@ int main(void)
- 	int err, tests = 2;
- 
- 	pagesize = getpagesize();
--	thpsize = read_pmd_pagesize();
-+	thpsize = pmd_psize();
- 	if (thpsize) {
- 		ksft_print_msg("[INFO] detected THP size: %zu KiB\n",
- 			       thpsize / 1024);
-diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-index d9a4fb782ecf..d0e34dd5850b 100644
---- a/tools/testing/selftests/mm/pagemap_ioctl.c
-+++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -1654,7 +1654,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
- 	ksft_print_header();
- 
- 	page_size = getpagesize();
--	hpage_size = read_pmd_pagesize();
-+	hpage_size = pmd_psize();
- 
- 	if (init_uffd())
- 		ksft_exit_skip("Failed to initialize userfaultfd\n");
-diff --git a/tools/testing/selftests/mm/prctl_thp_disable.c b/tools/testing/selftests/mm/prctl_thp_disable.c
-index 82c6e96ea6eb..d0290c4567bd 100644
---- a/tools/testing/selftests/mm/prctl_thp_disable.c
-+++ b/tools/testing/selftests/mm/prctl_thp_disable.c
-@@ -133,7 +133,7 @@ FIXTURE_SETUP(prctl_thp_disable_completely)
- 	if (!thp_available())
- 		SKIP(return, "Transparent Hugepages not available\n");
- 
--	self->pmdsize = read_pmd_pagesize();
-+	self->pmdsize = pmd_psize();
- 	if (!self->pmdsize)
- 		SKIP(return, "Unable to read PMD size\n");
- 
-@@ -241,7 +241,7 @@ FIXTURE_SETUP(prctl_thp_disable_except_madvise)
- 	if (!thp_available())
- 		SKIP(return, "Transparent Hugepages not available\n");
- 
--	self->pmdsize = read_pmd_pagesize();
-+	self->pmdsize = pmd_psize();
- 	if (!self->pmdsize)
- 		SKIP(return, "Unable to read PMD size\n");
- 
-diff --git a/tools/testing/selftests/mm/process_madv.c b/tools/testing/selftests/mm/process_madv.c
-index 3fffd5f7e6fb..7e32bad8ab2a 100644
---- a/tools/testing/selftests/mm/process_madv.c
-+++ b/tools/testing/selftests/mm/process_madv.c
-@@ -141,7 +141,7 @@ TEST_F(process_madvise, remote_collapse)
- 		void *map_addr;
- 	} info;
- 
--	huge_page_size = read_pmd_pagesize();
-+	huge_page_size = pmd_psize();
- 	if (huge_page_size <= 0)
- 		SKIP(return, "Could not determine a valid huge page size.\n");
- 
-diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/selftests/mm/soft-dirty.c
-index 5f278913c4d7..670fcad083b5 100644
---- a/tools/testing/selftests/mm/soft-dirty.c
-+++ b/tools/testing/selftests/mm/soft-dirty.c
-@@ -88,7 +88,7 @@ static void test_hugepage(int pagemap_fd, int pagesize)
- 		return;
- 	}
- 
--	size_t hpage_len = read_pmd_pagesize();
-+	size_t hpage_len = pmd_psize();
- 	if (!hpage_len)
- 		ksft_exit_fail_msg("Reading PMD pagesize failed");
- 
-diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-index c01d227d7fd6..295a6769d670 100644
---- a/tools/testing/selftests/mm/split_huge_page_test.c
-+++ b/tools/testing/selftests/mm/split_huge_page_test.c
-@@ -658,7 +658,7 @@ int main(int argc, char **argv)
- 
- 	pagesize = getpagesize();
- 	pageshift = ffs(pagesize) - 1;
--	pmd_pagesize = read_pmd_pagesize();
-+	pmd_pagesize = pmd_psize();
- 	if (!pmd_pagesize)
- 		ksft_exit_fail_msg("Reading PMD pagesize failed\n");
- 
-diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
-index 1fb967ef4985..0b8bbb55c335 100644
---- a/tools/testing/selftests/mm/uffd-common.c
-+++ b/tools/testing/selftests/mm/uffd-common.c
-@@ -137,7 +137,7 @@ static void shmem_release_pages(uffd_global_test_opts_t *gopts, char *rel_area)
- static int shmem_allocate_area(uffd_global_test_opts_t *gopts, void **alloc_area, bool is_src)
- {
- 	void *area_alias = NULL;
--	size_t bytes = gopts->nr_pages * gopts->page_size, hpage_size = read_pmd_pagesize();
-+	size_t bytes = gopts->nr_pages * gopts->page_size, hpage_size = pmd_psize();
- 	unsigned long offset = is_src ? 0 : bytes;
- 	char *p = NULL, *p_alias = NULL;
- 	int mem_fd = uffd_mem_fd_create(bytes * 2, false);
-@@ -194,10 +194,10 @@ static void shmem_alias_mapping(uffd_global_test_opts_t *gopts, __u64 *start,
- 
- static void shmem_check_pmd_mapping(uffd_global_test_opts_t *gopts, void *p, int expect_nr_hpages)
- {
--	size_t len = expect_nr_hpages * read_pmd_pagesize();
-+	size_t len = expect_nr_hpages * pmd_psize();
- 
- 	if (!check_huge_shmem(gopts->area_dst_alias, len, expect_nr_hpages,
--			      read_pmd_pagesize()))
-+			      pmd_psize()))
- 		err("Did not find expected %d number of hugepages",
- 		    expect_nr_hpages);
- }
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index 6f2360f9b75d..dcb1755c35fb 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -646,7 +646,7 @@ static void uffd_minor_test_common(uffd_global_test_opts_t *gopts, bool test_col
- 		uffd_test_ops->check_pmd_mapping(gopts,
- 						 gopts->area_dst,
- 						 gopts->nr_pages * gopts->page_size /
--						 read_pmd_pagesize());
-+						 pmd_psize());
- 		/*
- 		 * This won't cause uffd-fault - it purely just makes sure there
- 		 * was no corruption.
-@@ -1975,7 +1975,7 @@ static void uffd_move_handle_fault(uffd_global_test_opts_t *gopts, struct uffd_m
- static void uffd_move_pmd_handle_fault(uffd_global_test_opts_t *gopts, struct uffd_msg *msg,
- 				       struct uffd_args *args)
- {
--	uffd_move_handle_fault_common(gopts, msg, args, read_pmd_pagesize());
-+	uffd_move_handle_fault_common(gopts, msg, args, pmd_psize());
- }
- 
- static void
-@@ -2086,7 +2086,7 @@ static void uffd_move_pmd_test(uffd_global_test_opts_t *gopts, uffd_test_args_t
- {
- 	if (madvise(gopts->area_dst, gopts->nr_pages * gopts->page_size, MADV_HUGEPAGE))
- 		err("madvise(MADV_HUGEPAGE) failure");
--	uffd_move_test_common(gopts, targs, read_pmd_pagesize(),
-+	uffd_move_test_common(gopts, targs, pmd_psize(),
- 			      uffd_move_pmd_handle_fault);
- }
- 
-@@ -2094,7 +2094,7 @@ static void uffd_move_pmd_split_test(uffd_global_test_opts_t *gopts, uffd_test_a
- {
- 	if (madvise(gopts->area_dst, gopts->nr_pages * gopts->page_size, MADV_NOHUGEPAGE))
- 		err("madvise(MADV_NOHUGEPAGE) failure");
--	uffd_move_test_common(gopts, targs, read_pmd_pagesize(),
-+	uffd_move_test_common(gopts, targs, pmd_psize(),
- 			      uffd_move_pmd_handle_fault);
- }
- 
-diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
-index 572c2516e874..f46edd3ee6d8 100644
---- a/tools/testing/selftests/mm/uffd-wp-mremap.c
-+++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
-@@ -38,7 +38,7 @@ static int detect_thp_sizes(size_t sizes[], int max)
- 	int i;
- 
- 	/* thp not supported at all. */
--	if (!read_pmd_pagesize())
-+	if (!pmd_psize())
- 		return 0;
- 
- 	orders = thp_supported_orders();
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 4821a3563036..e712a980851c 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -155,7 +155,7 @@ bool check_for_pattern(FILE *fp, const char *pattern, char *buf, size_t len)
- 	return false;
- }
- 
--uint64_t read_pmd_pagesize(void)
-+uint64_t pmd_psize(void)
- {
- 	int fd;
- 	char buf[20];
-@@ -412,7 +412,7 @@ static bool check_large_folios(void *addr, size_t len, int nr_hpages,
- 
- bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
- {
--	uint64_t pmd_pagesize = read_pmd_pagesize();
-+	uint64_t pmd_pagesize = pmd_psize();
- 
- 	if (!pmd_pagesize)
- 		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-@@ -425,7 +425,7 @@ bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
- 
- bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
- {
--	uint64_t pmd_pagesize = read_pmd_pagesize();
-+	uint64_t pmd_pagesize = pmd_psize();
- 
- 	if (!pmd_pagesize)
- 		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-@@ -438,7 +438,7 @@ bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
- 
- bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
- {
--	uint64_t pmd_pagesize = read_pmd_pagesize();
-+	uint64_t pmd_pagesize = pmd_psize();
- 
- 	if (!pmd_pagesize)
- 		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index 9a49af88702e..a40e40c820ef 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -88,7 +88,7 @@ bool pagemap_is_populated(int fd, char *start);
- unsigned long pagemap_get_pfn(int fd, char *start);
- void clear_softdirty(void);
- bool check_for_pattern(FILE *fp, const char *pattern, char *buf, size_t len);
--uint64_t read_pmd_pagesize(void);
-+uint64_t pmd_psize(void);
- unsigned long rss_anon(void);
- bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size);
- bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size);
+To: Marc Zyngier <maz@kernel.org>
+To: Oliver Upton <oupton@kernel.org>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+To: Joey Gouly <joey.gouly@arm.com>
+To: Steffen Eiden <seiden@linux.ibm.com>
+To: Suzuki K Poulose <suzuki.poulose@arm.com>
+To: Zenghui Yu <yuzenghui@huawei.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+To: Sean Christopherson <seanjc@google.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: kvmarm@lists.linux.dev
+Cc: kvm@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
--- 
-2.43.0
+---
+Itaru Kitayama (3):
+      KVM: arm64: selftests: Support five-level stage-1 page tables
+      KVM: arm64: selftests: Add 52-bit VA guest modes
+      KVM: arm64: selftests: Test 52-bit guest virtual addresses
+
+ tools/testing/selftests/kvm/Makefile.kvm           |   1 +
+ tools/testing/selftests/kvm/arm64/lpa_test.c       | 124 +++++++++++++++++++++
+ .../selftests/kvm/include/arm64/processor.h        |   3 +-
+ tools/testing/selftests/kvm/include/kvm_util.h     |   3 +
+ tools/testing/selftests/kvm/lib/arm64/processor.c  |  60 +++++++++-
+ tools/testing/selftests/kvm/lib/guest_modes.c      |   7 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c         |  11 ++
+ 7 files changed, 200 insertions(+), 9 deletions(-)
+---
+base-commit: 28924df2a08f440c73991b83028032c901de2ae4
+change-id: 20260825-arm64-52bit-va-32f1f4cd050d
+
+Best regards,
+--  
+Itaru Kitayama <itaru.kitayama@fujitsu.com>
 
