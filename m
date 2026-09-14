@@ -1,117 +1,172 @@
-Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE4B38F253
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 21:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789421709; cv=pass; b=JKRDiOaE7MTD1YI5pUmshmzgRf3US4J7ZzlWsUf98GrMsq9QHordO2biFS1PDg75L3D0tIscSt2NB/2jdHvmh2QY7wCEcH2vUqsT592Z08psF/wIKU377UrMjs4bymjljbF86QZzLg+Pk5L+uBAF50BdWwcC41lEIxmf6QGP2v4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789421709; c=relaxed/simple;
-	bh=nD7LUp1TGjJhbOe9RG6LS0btJNgYnVlQKhEwxYeyMdM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W7KXWeOmoyMae+h1dyrq7MY23HhxhKMXv5pgrucyv3ogb3eqa+0w0q4Fp/jwhPr98NyEuVFCRzuhyXQLuB8GCyt6pqSNlAl3hZl/pia4UZJJR0RsG2nrEWc1lonTrq9uW9pRZUoShK1eD558PoBn9q14eI8VBTUlA8c13sEQxcE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mfD9xvzy; arc=pass smtp.client-ip=74.125.228.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E2C41167F
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 21:40:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789422055; cv=none; b=nmnYAV6SWhnp1DvDzFY8JYCNaIr+EsxNNOVnEdQkZ+O2amWFRJxo6i0Y/eJZDV94qaVHoNluI0GmT6CYyMxcP+7WXiMUZt/YfM/dL0x+l0pzAkeXrkwAJTSqypOAK13UgcEihsIiBXblr/gFSWgmhBwoZ94uukuFlUg6JZdDxJE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789422055; c=relaxed/simple;
+	bh=rx4dkN1+TsSSDEILFCQSpnWfgYmGVlwKUZynBUyCi/4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TGBUzRffntFSFkD/OWdjy4PIQpGW8lQTU1w8tqKCSuUBnW88+1aqhm1CBqnfWgPw0dr/fVyb/MDquRCEBOImGmloYSUgPXrZl0sHCXZ5KSU5ot0X6z2m5FiYb+pWSwxxZWTRd86609pJpGgEdG6tOLjsEXUWgG7yHRoPzKAfqNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EpPNOjzU; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mfD9xvzy"
-Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a9a26ce21aso196a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 14:35:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789421706; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Vud7ja7IyJYLCLcuwcgGlr45QVsRDK1a8RgZH2x9uQCxjGFS9VmSDGhIXKPBGtSLxF
-         beXimumOD1wJJGvRdBVTPOEgo9VN6uC2OEoGj3v4z5fP9C4jXVna7UZVinKIauaB4HI2
-         nvO/HAbgf3xwq+zmpwDOSH3tz49YhEGR338SLZa+33rUzzeNKOi+yrJTw5//1vNZlXeg
-         F5vC40zmQGmi+cSkDFKde6W5lM4pf0ZEJ16Jc+qbuZs0UmVMO1J2AY2rPV3Y393kbm/3
-         QFRvTsKhGiIRSMq0mXqgrt5OH6+s4teIjXvz3FwahOp80Ck+IzbD4GRSr22Tzl0cV2h0
-         Tipg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Z4CU8owMLFOiT53jD0/3aR022cej9IEBn58BpJ7gK4Y=;
-        fh=krPp85pK/CguCX9IE+P7cH7QE8/nGUFSh375/bcvvr0=;
-        b=Yc9HDG10oa/I4Vlz1J59ZGw4ScxHkaWN2PQ8haSiBnfYtxJQxh3CvCw1IYGUADq/LA
-         UDvBhw8Nj+Kfjp8tx88DOyKJ7jRMjDbmhEKBGFytVV5MEF78DDIwE/6uNr/XESgCOBYq
-         oXnyYSYoaTgYxCdGQs5fKGYN+egf/gCggiMTZ9LIINonC31YBLkc909uvtkmypKjWSDX
-         AuR6rtyq3BbQ9S1E7fZlaUvW7tVmtFYORW1sRDqPYbrDMV/dw/6FEBV+r9XGwQzO+M9L
-         Rkk5BgBnqmu75NR3uRO3kE/ELXngpuODDdl+OdwZ9xZx3pyFYNCt4zmIyEdCvdkaD6SM
-         GbHQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EpPNOjzU"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912e64ccso17157795e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 14:40:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789421706; x=1790026506; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1789422052; x=1790026852; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Z4CU8owMLFOiT53jD0/3aR022cej9IEBn58BpJ7gK4Y=;
-        b=mfD9xvzyWJGAPeq+d9eQYU+2z2VTXEuL0D0i6SsclMnFbpex0Vt7qTMC6F9qgeGDYD
-         dZbcUKnNRezlqh8MsvgSeqjVus/74loRon24EC4i1pq4GLqsljGK9bOdT+yS5O9PY83t
-         3PfXQNQ0QvalKofpIBhIi3BGDiYApF100nOigLlt9L6P5qNeD1deVSfU88AZ0bAO/uIk
-         T1coE91kDijzV+eszTYGqzTnkFmE4tbB57U2q5xxqyhxBZ8I2Bje+qerphnSAxriwNkz
-         A/P6OJrKiXa6J/HnhcLQvjM21Ml5BS9s2OZBgad3C6LKIt1VzEqzWeoZXAk3c5by65M6
-         IoHQ==
+        bh=7xb4iCajz/FOeNwMP9/vRI8V9ZVlNq4vmNdv3kXbOu4=;
+        b=EpPNOjzUWGKG9vIVypiYfsTIZ0/3901oSrKNXPC9hycFt74uslD7JMrBF6j3eB42mn
+         Fq/QtQSXQ7Pi37cDbhiOKI+tlPFEwYB9lO9TQ8a2kv98NsvEZT/y9IL+Soy5QQubNSz3
+         Zjinh47mQsfXtSyC36HT3241Gjt5qTbJqD62XD0siqYarwlSoKSxFpURYaGW0ndLJquc
+         SRzum77euaFCAss2TVaw8ddbyqWJI+wno65qT72A0Jrvd5oetuzEyNFIl7+9o/rqWHLk
+         4SiXsam4BF+IhwS+OZhkVZqJd+ACFpQIFn/dJCTziTgME6yt56IU2ITCVaPSn9q7+9GL
+         yGmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789421706; x=1790026506;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1789422052; x=1790026852;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Z4CU8owMLFOiT53jD0/3aR022cej9IEBn58BpJ7gK4Y=;
-        b=jEoJjUgVJRffJ0nm1dmVoDMh4dBL2po1dLKJazZlcET7eN79S6j7PTOV3xp9Ikw+ng
-         EjvheQA5wGjdVxlikJS9w81gBsNfgMccoPLKVCNQWOlbOh4cYO4eWGBob1l8G650chqu
-         rZv1w4Ww42g7GwZ7ZXsfJWS56SeCoj8/BD3lah14arnA8362eKg59DvGZzm3NJHtDfW3
-         XUxsm1dzawZQLtuSO1GnJQxETRjoUcVKwwJ7l0GPMHpsvS8/XFwdD64BAH+EfsAB2lLS
-         dgwlO81JL9384+QjNU6SvYUlj1KA5dRX+9Z3BJ6u3xKaol36RtPAD3LNt8NdJl1C4IGg
-         Z1xQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwF6d3X10Madq+goRrtuT8oY6zRi2MF4XykFfstOS0Ahys3sz54hwqo43rUOr19JW5X3JKrWt9H6dQ4FfbyskU=@vger.kernel.org
-X-Gm-Message-State: AFuF++lIxgugoSyH7+qilVB7FzSezdOR/eeU6ho8DTJr1wHpBz5w0tcF
-	pgVmDN4Fl7DMsY6bMAqitCg027xUc/bE+gGm1yOWtR7C0ODJmPWXTND38y6jJffIWojYAmDSBSc
-	4cIxV/VF3JZDBJhynlQh1esCwv8cUBTrb4mTx0IWh
-X-Gm-Gg: AYBFou1aj9roMExB0d6IzVehtehC9dLAwq8BtkSrxQ8mJloMLrsc3rIj0zvNBnTnAt4
-	qKvxU80pnz6zQL0PeznGPEXRan598qAFhtGhvh1BBnDCJlOBZfAjuursmKcgbblxWH+0R8Xj/1Q
-	X1verJtFMVMHx2cLkOWwS7z3X43WzE2Gu3Z+ZYGi5+QFcQaupcP+VDctMP/fit+k0V2GXWhXVjo
-	wwwniRzfDkr9bgzndbVolKmOFlcl9CWSgs6SDBJG4j+owkC0Qbs9nfImLr8/G7DGMpDk5+PoQoY
-	AgUatReriHkdFc9P594ln+pcuYnelWQjvEHRy8cWuHjBnfgEuj/dcxDH+BfjT7CpnQ==
-X-Received: by 2002:a05:6402:a6ca:10b0:6a6:f2a5:1b4f with SMTP id
- 4fb4d7f45d1cf-6aa0435f63fmr15092a12.4.1789421705458; Mon, 14 Sep 2026
- 14:35:05 -0700 (PDT)
+        bh=7xb4iCajz/FOeNwMP9/vRI8V9ZVlNq4vmNdv3kXbOu4=;
+        b=rjPwqGC+kZvyscFM8bFGdDk+Ig/JkDnqufKOIUzM8rbnaTw0qLAWFHXhxm5shsa3fk
+         +eJRiGr6WqnMJJHB9C/Y4NlVvh+XPoT/n2MFctxjgaFL+CdI3eyuR48p7SqjMwqeb6xX
+         QtgnkqN3wnAz6sYgAf6trnft9ytg/tN1yqaSdF8pd7C5TsgehXXo4AxU0wWoujs69lEM
+         gVRNC3ewd4NFYTmjWezibtbyqrT7jyw0RpVwhnJcrepNC2gez44wPzJ9wXQrE3/uCWPW
+         nOeiBtniuhBp/NqxOg3r+FLlldwOWV7V5o8DpXcGOLm+pHWNaa+aJG8VAs5dNxqgZQab
+         RC2A==
+X-Forwarded-Encrypted: i=1; AKwUvBzf9vKuAAz42NOeatUVKbtOKbjkZWKFnyCDQRfp7mLmh9AutzsUPmthz9FXtxqpI8LHuZ1zbxIKJAVVCuVMa8w=@vger.kernel.org
+X-Gm-Message-State: AFuF++m1bRqRGF/vER502nwXXzemZsUr7UnOd644jP+MdzW2aDd0gMQo
+	lX2Mbh6x/hvi0zUegNmQjlKJG16Utot1WloYAF2kEsIw8l+K6j+zQBqe
+X-Gm-Gg: AYBFou21RH+8LsXQr/AaMbUKfXa98VdmBx5PeERFNyjhMo6T1ofpgsInKnKimolTHJQ
+	/17w+Tp+++iJFqXqBdg7xWxR1Tcz43xj7pxL1MowSv+fqTG70aitnBM9Av/m1eCOfNw3b4SDcne
+	k1yup+LkQQMq+tVKHdUIuf19TghZuRF5k7OvfQ7zMrb1xRt9p/VrvTJTQNBEc8Fp/jbEmyvT26p
+	1yw0WBvVvqoay6GcpA95+CPenpejIR9Aglb164w8+KdV8ucZO1pyphI4EaUfAbCAIoeC4Prhyi/
+	FmNScUWyd9rw54sbBicgXIDN+3Od0Rufl70pwbFMebCxPn0v+yK6XTVqVaCp71Ip2JIUW04ck1d
+	CgSvV8qi+DuSFJ/5na9Mxk3Not06pNNorujpsSV6QoHY95hZEHBppeAE+aYUFAl0PAs0OjrzG1h
+	7Hqjpg3lGiXQ+cX+WAgvG1drDs6WIrVSUxeboR4Y2he4tWdECRS9uGnSjo+owHrISQMO+ph1unx
+	udH41ZvpfRabfYtXjfnkPqPX9OM37QKPeKl
+X-Received: by 2002:a05:600c:698e:b0:499:a277:e8b5 with SMTP id 5b1f17b1804b1-49e7a638778mr109073585e9.3.1789422052094;
+        Mon, 14 Sep 2026 14:40:52 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e7d2af31dsm22123915e9.4.2026.09.14.14.40.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2026 14:40:51 -0700 (PDT)
+Date: Mon, 14 Sep 2026 22:40:45 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Haakon Bugge <haakon.bugge@oracle.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Peter
+ Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will
+ Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>, Waiman Long
+ <longman@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, Shuah Khan
+ <shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
+ <linux-kselftest@vger.kernel.org>, John Stultz <jstultz@google.com>
+Subject: Re: [PATCH 1/1] kernel/locking: Add mutual exclusion self-test
+Message-ID: <20260914224045.5fdfac58@pumpkin>
+In-Reply-To: <A1E4F810-7A75-4AF8-9DE4-11BBA101F5E5@oracle.com>
+References: <20260817130239.343594-1-haakon.bugge@oracle.com>
+	<20260817130239.343594-2-haakon.bugge@oracle.com>
+	<20260914103545.3db6eb45@pumpkin>
+	<6546A220-4B85-4780-8B45-F8B35D24139C@oracle.com>
+	<A1E4F810-7A75-4AF8-9DE4-11BBA101F5E5@oracle.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1789281096.git.zhang_wei@open-hieco.net> <f991a17dc1833f94bd6b01a777ddbde1c934933b.1789281096.git.zhang_wei@open-hieco.net>
-In-Reply-To: <f991a17dc1833f94bd6b01a777ddbde1c934933b.1789281096.git.zhang_wei@open-hieco.net>
-From: Jim Mattson <jmattson@google.com>
-Date: Mon, 14 Sep 2026 14:34:53 -0700
-X-Gm-Features: AcwNN1W8DpIFYqNLRxuWVsKDVFF3RdiLezPbxp2u-Etse3aKt2NiEhNr2J6UFOk
-Message-ID: <CALMp9eQ4Kg=50BhBZHAQVa8BMsqcB7U3OGrUYqfZWxeqqFM5sQ@mail.gmail.com>
-Subject: Re: [PATCH v6 6/8] KVM: nSVM: Use emulator bytes for synthesized
- nested #NPF
-To: Tina Zhang <zhang_wei@open-hieco.net>
-Cc: Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, zhouyanjing@hygon.cn, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 12, 2026 at 11:44=E2=80=AFPM Tina Zhang <zhang_wei@open-hieco.n=
-et> wrote:
->
-> Preserve the bytes used by the emulator when synthesizing a data #NPF.
-> Reuse the fetch cache only when the fault is the current emulator
-> exception, identified by fault =3D=3D &ctxt->exception.
->
-> Add an emulator accessor to copy cached instruction bytes, checking
-> the RIP and cache bounds.  These checks alone do not establish that
-> the cache belongs to the current emulation.
->
-> Write the cached bytes directly to VMCB02 and fetch any missing tail
-> through the instruction-fetch helper.  If the tail cannot be read,
-> report only the bytes already available.  For SEV guests, retain only
-> the cached bytes because KVM cannot fetch plaintext guest instructions.
->
-> Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
-Reviewed-by: Jim Mattson <jmattson@gmail.com>
+On Mon, 14 Sep 2026 17:21:41 +0000
+Haakon Bugge <haakon.bugge@oracle.com> wrote:
+
+> > On 14 Sep 2026, at 14:32, Haakon Bugge <haakon.bugge@oracle.com> wrote:
+> >=20
+> > On 14 Sep 2026, at 11:35, David Laight <david.laight.linux@gmail.com> w=
+rote: =20
+>=20
+> [snip]
+>=20
+> >> If you use change the MX_ATOMIC_ADD to use the atomic_long functions
+> >> (I've forgotten the exact name) then all the counter are the same type
+> >> and can be removed from the union.
+> >> The default 'just use +=3D' code can then be moved to the bottom of mx=
+_add(). =20
+> >=20
+> > That is a good idea, but we then misses test coverage for atomic_t. But,
+> > what about: =20
+>=20
+> [snip]
+>=20
+> I ended up with:
+>=20
+> struct mx_elem {
+>         /* This union contains locks and lock-free data types */
+>         union {
+>                 spinlock_t spinlock;
+>                 rwlock_t rwlock;
+>                 struct mutex mutex;
+>                 atomic_t atomic_lock;
+>                 atomic_t atomic_counter;
+>                 atomic64_t atomic64_counter;
+>                 long cmpxchg_counter;
+>                 unsigned long bits;
+>                 struct ww_mutex ww_mutex;
+>                 struct optimistic_spin_queue osq_lock;
+>         };
+>         /* A counter protected by one of the locks above */
+>         long counter;
+> };
+>=20
+> This became quite simpler. I'll test somewhat more, and send out
+> a v2 tomorrow.
+
+If you split the 'long counter' into a separate array then it won't
+be in the same cache line as the associated lock.
+That should mean the alignment changes aren't needed.
+
+When I mentioned a delay in the RMW for xxx->counter++ I was thinking
+of a few clocks, perhaps something like:
+	c =3D xxx->counter;
+	for (auto i =3D c + 10; i !=3D c; i--)
+		OPTIMIZER_HIDE_VAR(i);
+	OPTIMIZER_HIDE_VAR(i);
+	xxx->counter =3D i + delta;
+
+I may have a '3am can't sleep' part model for the arm cache.
+It might be that when one cpu writes to a 'shared' cache line the 'invalida=
+te'
+that is broadcast is only partial; the invalidate is remembered, but the
+contents of the cache line are still used to satisfy reads.
+So a memory read for a different cache line could easily pick up a write
+that was done later.
+A read barrier actually invalidates all the 'invalidated' cache lines
+so later reads can't use the 'stale' data.
+
+Just need a model for the write barrier now.
+It might just that each 'cache line wide' entry in the store buffer fifo
+can have multiple addresses associated with different groups of writes.
+Then the writes for one fifo entry could happen in any order (or be
+merged into a single wider write.
+(But that is real guesswork.)
+
+It is nice to a have a simple model that mostly matches the observed
+behaviour.
+
+David
+
+>=20
+>=20
+> Thxs, H=C3=A5kon
+>=20
+
