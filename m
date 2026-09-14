@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3DE475346;
-	Mon, 14 Sep 2026 14:11:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D178468C16;
+	Mon, 14 Sep 2026 14:16:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789395073; cv=none; b=ZI9AB3stCFyJegSw+PbMnV2Q/+74Un4s2ZxHw1eOkj8aKa5cM5YI5mtaVnquIpxqTHM7C/xzb2pjH8Sz/sCrzPSu+/SUgitL9w0VmQ0TleLww7EUIRPTGksHDmttLelQ40qBtgykeveFSGZDrXgA5GELhLRlpMM1o80MF2iO6Yk=
+	t=1789395412; cv=none; b=Q9CtR+TdrucjZX0fTMkQyTWn2FK+Xk/4f44or/AqtW9XJ5bc4PJ8eQFN2tWQ6fE7pD/icZps0poaNyHwJIYofyyACcExDdRzEq41Zu/848laPW7kD30rCGbQYDND3xD4CK6ETDWrzIvHVuhvANhUppG0qdNPv0CB8ZSoTT3+Xj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789395073; c=relaxed/simple;
-	bh=KBhFSgDSgui0idgmKaHGt/gm9hFxkr87C8FSZlh7mKE=;
+	s=arc-20240116; t=1789395412; c=relaxed/simple;
+	bh=9ph6JD/rGtaTs7atEMOpAZuMWpgVt0vwZ0Za+ZRkM6M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CFRAtpqiE2eWMAr8bDNH7A5QbEp0DKd0epRmMNOlqcMht0HH5WnOpHNvkjbsGiA0ox+b9uqJ/tVNgQBHhF+WT6ELqf/TY1JOzVoojt9irySJn4BOU61oUaj1IQImmKZCYaOLig6IIJo8ejqhhVSoOBuItxBO02KkoqM+FkqLm8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oPBPyfc1; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=g649GZE2L6XwvgsKsffjrIgVCdH1CJDb4Z+e5hOa/cGDb5QZy8E5YVwZXuhv4EvFyuuHmTYAlzqxYadASRTwwscCthTW8EYW0XKhDpYnz7Y1ylotqfD+enOqWBVn+s2SsLRNYAzkPFe5hEw16+n685r6vZ/XSZ0h40CeGjoetUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dL0j20gf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oPBPyfc1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD801F000FF;
-	Mon, 14 Sep 2026 14:10:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dL0j20gf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C94C71F000FF;
+	Mon, 14 Sep 2026 14:16:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789395059;
-	bh=XJFM6JwTF7dpDjv5GxNtlQIn3Xtc8gdA5oCQUi1dIq8=;
+	s=k20260515; t=1789395410;
+	bh=o/3IRmLFAEksJkCPHyaGPKVzpnZlgfypBxMxwnYS0Xs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=oPBPyfc1kHNDvV0t/B1lkdFZs+ykyqVI5bNShXTsSoiQVPf8xN6UWdeaObkeQkREf
-	 8ax7+UL2K7yPDdNetSNNdnqq1r88THf9AVo5p5sdW1Ownwmcuki3zEqP5aiWaSKTeN
-	 6zOeoXVmj8F4SLG6slvFY6AwSDHrk49C9taLXYmMIheTH6WaLP/m8zcW7QZ4yv2a5E
-	 8OxZ7GYqSX8emFAKM6mBmbyseOobDkc6p+LpVU8sgteRScfG0FL26cn4oqeOXL94iz
-	 /G6AKbJD1WYbbubI/tn/N3hHaJ+nfnz7gxB3tz2xWH9YedGquHzsWHSCIIyw6oNo5l
-	 sM/ZM4ix02ztA==
-Message-ID: <6c9727cb-6cfa-4d0a-b8d8-077cbeb5cf4f@kernel.org>
-Date: Mon, 14 Sep 2026 16:10:49 +0200
+	b=dL0j20gfGBQmg5awWBbdF5fL/EH5b8s8ec0E0HvyyjR8q++TGEItDKFOzaAhuM9L4
+	 FtzWIcsbBq5yn8LkP68emA2wr/CpECfLPrU4RSqVn5cutqiss1hS5jKWLbMzHo0rYg
+	 gIUnfV+HekT/x1yzaZfiy6uAak5hcEf0hx9dOqa79qqGgFTZDaNxA1lHblr9ychJ87
+	 V1WdIBQkk293e/YBfYYgTKgMovRiL1rlpcHomv0+1wY7OPxlDkEAgGNGIvqq94rRBd
+	 ziSueEAIEgfUEiUU4HHeXyBXNtBtYo4bmiKY5S3vaK6lUs/s0h8tiHjo0ugHO7yeBf
+	 10YqmeaZotnBA==
+Message-ID: <1be327b0-aec3-4b46-9a96-c701e87d3c3a@kernel.org>
+Date: Mon, 14 Sep 2026 16:16:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/3] kselftest: mm: replace usage of /proc/self/smaps
- for check_huge_xxx() helper
+Subject: Re: [PATCH v6 3/3] kselftest: mm: remove check_huge_shmem()
 To: Yeoreum Yun <yeoreum.yun@arm.com>,
  Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
  Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
@@ -50,7 +49,7 @@ To: Yeoreum Yun <yeoreum.yun@arm.com>,
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260914-fix_split-v6-0-16ed7123800b@arm.com>
- <20260914-fix_split-v6-2-16ed7123800b@arm.com>
+ <20260914-fix_split-v6-3-16ed7123800b@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -97,32 +96,80 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260914-fix_split-v6-2-16ed7123800b@arm.com>
+In-Reply-To: <20260914-fix_split-v6-3-16ed7123800b@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-
+On 9/14/26 09:30, Yeoreum Yun wrote:
+> check_huge_shmem() was required to distinguish shmem huge pages because
+> /proc/self/smaps reports them using a dedicated “ShmemPmdMapped” entry,
+> as opposed to “FilePmdMapped” for file-backed huge pages.
+> 
+> Now that /proc/self/smaps is no longer used to detect huge pages and
+> /proc/kpageflags is used instead, it is sufficient to distinguish
+> between file-backed and anonymous pages since the ShmemPmdMapped is also
+> kind of file-backed.
+> 
+> Therefore, remove check_huge_shmem() and use check_huge_file() instead.
+> 
+> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> ---
+>  tools/testing/selftests/mm/folio_split_race_test.c |  2 +-
+>  tools/testing/selftests/mm/khugepaged.c            |  5 ++---
+>  tools/testing/selftests/mm/uffd-common.c           |  4 ++--
+>  tools/testing/selftests/mm/vm_util.c               | 11 +----------
+>  tools/testing/selftests/mm/vm_util.h               |  2 --
+>  5 files changed, 6 insertions(+), 18 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/folio_split_race_test.c b/tools/testing/selftests/mm/folio_split_race_test.c
+> index 1960635a953e..4c0d3b6a411b 100644
+> --- a/tools/testing/selftests/mm/folio_split_race_test.c
+> +++ b/tools/testing/selftests/mm/folio_split_race_test.c
+> @@ -182,7 +182,7 @@ static uint64_t run_iteration(void)
+>  	for (i = 0; i < TOTAL_PAGES; i++)
+>  		fill_page(mmap_base, i);
 >  
-> -	if (hpage_size == pmd_pagesize)
-> -		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
-> +static bool check_huge_type(uint64_t categories, uint64_t kpageflags,
-> +			    enum check_huge_type type)
-> +{
-> +	const bool file = categories & PAGE_IS_FILE;
-> +	const bool swapbacked = kpageflags & KPF_SWAPBACKED;
-> +
-> +	switch (type) {
-> +	case CHECK_HUGE_ANON:
-> +		return !file;
-> +	case CHECK_HUGE_FILE:
-> +		return file && !swapbacked;
-> +	case CHECK_HUGE_SHMEM:
-> +		return file && swapbacked;
-> +	}
+> -	if (!check_huge_shmem(mmap_base, FILE_SIZE, NR_PMD_PAGE, pmd_pagesize))
+> +	if (!check_huge_file(mmap_base, FILE_SIZE, NR_PMD_PAGE, pmd_pagesize))
+>  		ksft_exit_fail_msg("No shmem THP is allocated\n");
+>  
+>  	if (pthread_barrier_init(&ctl.barrier, NULL, NUM_READER_THREADS + 1) != 0)
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index f82673f5f6b4..6cd1effea465 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -416,9 +416,8 @@ static bool file_check_huge(void *addr, size_t len, int nr_hpages,
+>  {
+>  	switch (finfo.type) {
+>  	case VMA_FILE:
+> -		return check_huge_file(addr, len, nr_hpages, hpage_size);
+>  	case VMA_SHMEM:
+> -		return check_huge_shmem(addr, len, nr_hpages, hpage_size);
+> +		return check_huge_file(addr, len, nr_hpages, hpage_size);
+>  	default:
+>  		ksft_exit_fail_msg("Unknown VMA type\n");
+>  		return false;
 
-I wasn't probably clear. Don't add an intermediate CHECK_HUGE_SHMEM. Make
-check_huge_shmem() simply use CHECK_HUGE_FILE and remove the function then in
-patch #3.
+
+Assuming we do:
+
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index f82673f5f6b47..9542173a748e2 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -53,7 +53,7 @@ struct mem_ops {
+        void *(*setup_area)(int nr_hpages);
+        void (*cleanup_area)(void *p, unsigned long size);
+        void (*fault)(void *p, unsigned long start, unsigned long end);
+-       bool (*check_huge)(void *addr, size_t len, int nr_hpages, unsigned long hpage_size);
++       bool (*check_huge)(void *addr, size_t len, int nr_hpages, uint64_t hpage_size);
+        const char *name;
+ };
+
+
+Could we then simply use check_huge_anon/check_huge_file directly and get rid of
+these helpers anon_check_huge + check_huge_file entirely?
 
 -- 
 Cheers,
