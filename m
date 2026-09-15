@@ -1,110 +1,142 @@
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949FA2D2382
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 08:04:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3020A21C173;
+	Tue, 15 Sep 2026 08:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789459454; cv=none; b=U2q9dC7NzJKdF18teBAw7bnvZWtyOE3sdK/Bmhznw8c1MyI/8xD/AFEu2L47UHT+Hyc/onm291wmXWihrs+Ky10pr0p3CcBOtTDt6pcu+OYm/xSMUf/prvkFlN/MV2Z86ixwLpa1cpKYAD61IEVvvU79RcQDPZPzadpftALy4Es=
+	t=1789460174; cv=none; b=Pjkdhxdoq/pElzaFd3UeZ5lewJnNvMKwM+Sfje9/ukqUcSkSyOezJLY8jc8tbl3OCp4FasS2YIHMphd3qTgfm3yP5swKamCig7zDA4rcfp5oDo2MExoFV5KKX7shG58EdyBsTrUIRjYFW+aOx0r4sVET0kIJ5GuVooVeEsgY8es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789459454; c=relaxed/simple;
-	bh=GPKtH/OWWOMpvaRAq0q/oZ/4JxZxKopos6ivVhFrOqA=;
-	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References; b=bLKxEOS5ORr7GR7F7IFnW3AeNeywo5ClWKC5g7MHuHRnK9sWOixzCkalgMQjDoc+3feavcNBuBu619eF6Lgt+kcwQxaUsCaJV/D3BKrY5A+5dDZifI6GyVMDWC4TwDvT+lXzbHYmsXnttmMnmsnczmtg53BsCU+qV5PPU/z1sQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VKXqTuVB; arc=none smtp.client-ip=209.85.161.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789460174; c=relaxed/simple;
+	bh=KK3epFEJIZvBiKL0GnFmvRR596hNeaW3d3VO1KIRJiA=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=hvyutjzPB+g4TkNtWvzFsjjx3gEScy2GjMcgCP8iHY3beejZwBjDihlEJVrnW6h+mq783/9XyBn/ySympPNY11MdE0ljtm7MBx+/sa+wpSCWGw9hEq3RewzEsNP8sE2dS9ULX87jDwd/bXuyUCwVf4Q5b/tkvs/2TLkHvN1N9S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=pijrW107; arc=none smtp.client-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VKXqTuVB"
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6b1afdf98dfso2906442eaf.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 01:04:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789459451; x=1790064251; darn=vger.kernel.org;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=skIHTRCMg076kDWG2pdx8YKlOQsvXC/Hd109poRNzB4=;
-        b=VKXqTuVB6bwRAuMvauNyTgI4yvTz9pBgt1AZzEQpWW9VBlDLo26GDcuY7FxjFNYuZJ
-         n0xRMcBU+VW9zgtsn6lqVSfvVhmv9Rg/cLCTbRR16Lcs5stul8I24BunrSmwV4Y+abgM
-         OeZTUHHRBj33nnf3RD/U0tuofHjlXxFIbRrDh2BsIKxIPvmR2Lfrk2yaCF2Mejs855/n
-         GbUAaZI1w57gRTI/fO2nnxtaTy8/+V+k6ErKKlfFeCxa7Mxkwj3UCLwFLSIVKGTnnihR
-         4A2lTlb6leSrkRIK2sCZd27DVQRtL1vZ0YqDP7BSuso0Ia84Vivj8eq5UeDtqC1I4TT7
-         gTyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789459451; x=1790064251;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=skIHTRCMg076kDWG2pdx8YKlOQsvXC/Hd109poRNzB4=;
-        b=UKz+SIzkRRR91sn87nuq3/rCnETBR+XWYQ59fL8/7aVHHQBEc6kYQ9fag3xmIzQDMY
-         QkbH7BI7BnuTGKmUwt/ZDdwPSTq5vSdZaXpjb58cCd5HYcY7rfrxn4psvleNMQ/geTS+
-         fVsCnUnAeCBM4OOh88Dxpt+mJrIGIjxGw5SBDu0XZcPvKRXcHUsgGGDEjtfDHSuI3FD/
-         WYu9PHJ+m5uCMgfGHRVCje3xys2WeVwfd4aIN/S3pRouPiO2GS8pJzAYUgyTAH5+vTfk
-         UDIDXXMVR5P2uK2QhA+J6vikIGXCIeodkyoV61o7FWk8J8QLadV3y3KvyP2zRO9FiKVh
-         Y0VA==
-X-Forwarded-Encrypted: i=1; AKwUvBySaVMaQ3y20A41vEm1GpPWJZ81Hz9cn8v4RyJXaCcj9kp4Tgth2YU+WiyRwMKTNkUbUYQpDMnrHAcElKjOaAc=@vger.kernel.org
-X-Gm-Message-State: AFuF++ne0XgJ79uWhWciFM7JIbL7JyI5YzcxNw31hWR3xxh0TqGfOK/q
-	c6yDmLwMC85+ildCNcp+5fvMiaOmdxJlChFpnYhKP8QMDJTy8mKRpX7m
-X-Gm-Gg: AYBFou3ZdcZHSmU+WCbqFK5wmHTwomXnGnnPtgMi5CAim60XcxWCvKw/MBAnHaBBcup
-	9rtt8TtiZDEdZ68cfV/ucC0+Oh8FvVIEt2IbKRDMy8zCKgJ2+TJp4NJUm+yP5JGE1QTGYn5UtU8
-	bV4SlA/D82IAygrqnGiONHMGWTHdL/ruvaGoZ7twkM89wsVo8LRNHLmWQbnU/Phm5e0Yc2dJOpe
-	CBNFeCpZCp5XlzRdYY9wxP+HeJ/+7VnrpDOBxdpzzHCsajwM6kdG+5DwErCmv6CZ4T7Hn0/mtCl
-	7iKstF1QGFJhtODUFJQ5w+oNYmhJ2Pwf29wNpeX9SNyJrj9zFNXcChpiOqSYoCXZPtgFp+tFSB1
-	u2HpYhyJb7Dir2fiUXvcXtuusPqOUMx4V4vI2ynon7cJ7nZMepnnWRzb7olZhdX/aNP4x4KYVGp
-	/qPVjxBHFrjF3xFGbj5yuGIA7MLZ09jBLf/dYpRloox9wj6X6LTS6C7dwjKk5cTSSeoMX9liqkw
-	aKr9m1sBPLPNyXfoLbYuUvGknyEQoPP2iiSbxzTtps8IYMuZxCdFRY=
-X-Received: by 2002:a05:6820:1628:b0:6b8:ef7d:e181 with SMTP id 006d021491bc7-6c544daaf8cmr3999047eaf.54.1789459451326;
-        Tue, 15 Sep 2026 01:04:11 -0700 (PDT)
-Received: from pve-server ([49.205.216.49])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14365b97994sm57642954c88.12.2026.09.15.01.04.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2026 01:04:10 -0700 (PDT)
-From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-To: Chris Chiu <chris.chiu@canonical.com>, maddy@linux.ibm.com, shuah@kernel.org
-Cc: sshegde@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Chris Chiu <chris.chiu@canonical.com>
-Subject: Re: [PATCH] selftests/powerpc: Fix exec_prot test failure on Hash MMU
-In-Reply-To: <wlsnyvt2.ritesh.list@gmail.com>
-Date: Tue, 15 Sep 2026 13:32:02 +0530
-Message-ID: <v787ymbp.ritesh.list@gmail.com>
-References: <20260909050919.3344699-1-chris.chiu@canonical.com> <wlsnyvt2.ritesh.list@gmail.com>
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="pijrW107"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B2F42A47BC;
+	Tue, 15 Sep 2026 10:16:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1789460168; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=UWfZD0ncUW0ItxAIq9SE2xIusb6qLhUzEXxsMlCILUU=;
+	b=pijrW107OkWL2Homrrkn0XhV1JPT70vA+JjfxqxntJSEKMmV1x1BugJ/dH2Thxr3sKNNl/
+	Nbk/KbfPJ5vN+eCgFKUimi8d5rln3R3LURQT6IkDtlne/qnyj+mP+IxOK/KC3Oh4orppi0
+	6hB92wx/s9cxbQXyTcvxjEH9EpBFoGH46BMcFuvuFMAA1Oqg3kiMB9KeV08voHSBKVK6wu
+	tPzkMx1mzp+bF9KAU3FzNpW5kV/zNhBFWyr/iCWL+iFJIxrKaxATO2Fv9FqyZj0hi7tRQS
+	9uMYKljgm/s5punLBxzakAVCg8Qt3bFucA3vrOt6UBo/5CpAdR3/r5APz7zlsw==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Date: Tue, 15 Sep 2026 10:16:06 +0200
+From: Nicolai Buchwitz <nb@tipi-net.de>
+To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 2/2] selftests: drv-net: Add VLAN test
+In-Reply-To: <20260913143926.77366-3-ovidiu.panait.rb@renesas.com>
+References: <20260913143926.77366-1-ovidiu.panait.rb@renesas.com>
+ <20260913143926.77366-3-ovidiu.panait.rb@renesas.com>
+Message-ID: <62229b50d8cafb952fa234d46bc78782@tipi-net.de>
+X-Sender: nb@tipi-net.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Ritesh Harjani (IBM) <ritesh.list@gmail.com> writes:
+Hi Ovidiu
 
-> So, I think what we need here is:
->
-> diff --git a/tools/testing/selftests/powerpc/mm/exec_prot.c b/tools/testing/selftests/powerpc/mm/exec_prot.c
-> index db75b2225de1..51ac2f9c14a6 100644
-> --- a/tools/testing/selftests/powerpc/mm/exec_prot.c
-> +++ b/tools/testing/selftests/powerpc/mm/exec_prot.c
-> @@ -167,13 +167,17 @@ static int test(void)
->          * Read an instruction word from the address when the page
->          * is execute only. This should generate an access fault.
->          */
-> -       fault_code = -1;
-> -       remaining_faults = 1;
-> -       printf("Testing read on --x, should fault...");
-> -       FAIL_IF(mprotect(insns, pgsize, PROT_EXEC) != 0);
-> -       i = *fault_addr;
-> -       FAIL_IF(remaining_faults != 0 || !is_fault_expected(fault_code));
-> -       printf("ok!\n");
-> +       if (pkeys_supported) {
-One quick correction - I think this should be
-            if (!hash_mmu || pkeys_supported)
+On 13.9.2026 16:39, Ovidiu Panait wrote:
+> Add a test that validates ping traffic over VLAN interfaces. It aims
+> to catch drivers which mishandle hardware VLAN tag stripping, in
+> particular QinQ.
+> 
+> Three VLAN configurations are covered, each with hardware RX VLAN
+> stripping enabled and disabled (via the rx-vlan-offload and
+> rx-vlan-stag-hw-parse features):
+> - a single 802.1q VLAN interface
+> - a single 802.1ad VLAN interface
+> - an 802.1q VLAN stacked on top of an 802.1ad interface
+> 
+> The "hw" test variants enable the RX VLAN stripping features supported
+> by the device (rx-vlan-offload and rx-vlan-stag-hw-parse), the "sw"
+> test variants disable all of them. A test is xfailed if the requested
+> configuration is not possible.
+> 
+> VLAN insertion offloads are not tested for now.
+> 
+> NETIF=end0 LOCAL_V4=172.16.0.2 REMOTE_V4=172.16.0.3 \
+> REMOTE_TYPE=ssh REMOTE_ARGS=root@172.16.0.3 \
+> run_kselftest.sh -t drivers/net/hw:vlan.py
+>  TAP version 13
+>  1..1
+>  # timeout set to 0
+>  # selftests: drivers/net/hw: vlan.py
+>  # # Interface: end0, driver: st_gmac
+>  # TAP version 13
+>  # 1..6
+>  # ok 1 vlan.test.8021q_hw
+>  # ok 2 vlan.test.8021q_sw
+>  # ok 3 vlan.test.8021ad_hw
+>  # ok 4 vlan.test.8021ad_sw
+>  # ok 5 vlan.test.qinq_hw
+>  # ok 6 vlan.test.qinq_sw
+>  # # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
+>  ok 1 selftests: drivers/net/hw: vlan.py
+>  # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
 
-> +               fault_code = -1;
-> +               remaining_faults = 1;
-> +               printf("Testing read on --x, should fault...");
-> +               FAIL_IF(mprotect(insns, pgsize, PROT_EXEC) != 0);
-> +               i = *fault_addr;
-> +               FAIL_IF(remaining_faults != 0 || !is_fault_expected(fault_code));
-> +               printf("ok!\n");
-> +       } else {
-> +               printf("Testing read on --x, skipped on Hash MMU without pkeys\n");
-> +       }
->
->
+> [...]
 
--ritesh
+> +def _setup(cfg, outer_proto, inner_proto, hw_strip):
+> +    """Configure VLAN stripping and create the VLAN interfaces."""
+> +
+> +    names = ["rx-vlan-offload"]
+> +    if outer_proto == "802.1ad":
+> +        names.append("rx-vlan-stag-hw-parse")
+> +
+> +    feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
+> +    feats = {}
+> +    for name in names:
+> +        # hw: skip the features the device does not support
+> +        # sw: request all of them off
+> +        if hw_strip and feat[name]["fixed"] and not 
+> feat[name]["active"]:
+> +            continue
+> +        feats[name] = hw_strip
+> +
+> +    if hw_strip and not feats:
+> +        raise KsftXfailEx("Device does not support RX VLAN stripping")
+> +
+> +    set_ethtool_feat(cfg.ifname, feat, feats)
+
+If a driver refuses to set the feature, set_ethtool_feat() would not 
+fail
+and the test would be false positive.
+
+I did a quick search and at least intel iavf could run into this:
+
+    drivers/net/ethernet/intel/iavf/iavf_main.c:iavf_fix_strip_features() 
+{
+         [...]
+         if ((netdev->features & NETIF_F_RXFCS) && is_vlan_strip) {
+                 requested_features &= ~vlan_strip;
+         [...]
+    }
+
+IMHO the test should check if the feature actually got enabled. This
+could be wrapped in set_ethtool_feat() or be checked afterwards. I would
+lean towards the first one.
+
+> [...]
+
+Thanks,
+Nicolai
