@@ -1,33 +1,50 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F39FF46AA8B;
-	Tue, 15 Sep 2026 08:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270CA374E40;
+	Tue, 15 Sep 2026 08:43:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789461571; cv=none; b=Z6YFP0rTAlrlJA1aOUAm8fBKdpiVXRwwII3o+44Z9dZq1/RVK3FII3ECTVAFVyZr5ce269pEU9LplErsfWv6Rami0GmMhy5SNWFPYOjJu8Sjrqytfq5RU5ruNCU7uAtxxSkkGM0VrwdZtXQFz7uWkftQEfshe5boM96EOwwEckM=
+	t=1789461804; cv=none; b=UDmIXQwNfQCvZo9UdnvzVYLcKYgVFVrC29xDeU47ruHrCN3dUy7ULkDO65wC+GKiipulVCshJsYgNM1H+QLG+ec7Qex0FiifgV4cVsuBSteFbViim1U3tBg5YCz9SkEhh6widJy5LL0FeNar/PauOWv08bCmjDa/C/eQAHUuGhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789461571; c=relaxed/simple;
-	bh=yHlIrOdPfLjj9Gu8t0QO/KBvaVLhX4WuZRnvoHBDFI8=;
+	s=arc-20240116; t=1789461804; c=relaxed/simple;
+	bh=cyRG1T2PDPHf7Ppda6R4nWqA/AhxSLime81k93QDI4o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q+0LSZVnLW9NUBY+6NRN/dy6wanm1b+tnd44qhKJRruqv22moim9CF36LHlDkyuMcXsh0Lpmw353ssewfpB315wwzgm9NrPJcmhHva/p92HXGXqOB1loHM8dqcpr9oFKO2znZBD+zUTA6ycap3LE6yNHI4XYCS5FBUWnln5nXuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ZQ+8sTEO; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 In-Reply-To:Content-Type; b=EascnJf2jUsQ1+e5RI3p4ayF5yZY+/Z6UKtB2aijh8cv8YsbviPiDjAeANeNvH+1esKJZSKUOXB4d3jbDVVM02aAye/gvER4vbzKME34X/XHuBTb3C7zAzf+g5819vSDJmDqBpwIwO8sV99TA1O7PYXaiDujHBxQrYTi/7+dzvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VlvIT/GE; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ZQ+8sTEO"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 963E0169C;
-	Tue, 15 Sep 2026 01:39:24 -0700 (PDT)
-Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C1D203F7B4;
-	Tue, 15 Sep 2026 01:39:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1789461568; bh=yHlIrOdPfLjj9Gu8t0QO/KBvaVLhX4WuZRnvoHBDFI8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZQ+8sTEOSXh+kPQv2ubox6sTg5+iNgLqJuOkCnT+cygDDQ9XBo7U6XJaXymP1pGJ+
-	 Y0DmwYp1Zo0S2RIxo6AMwXMKi0Cw0M1zWx99eH1J1EXwt/XnrQjnJAF3bhvS8fMaz7
-	 9qNmLrgH0LmpVPxUIkfIWBGKVDlRCIz9VcfSw9kU=
-Message-ID: <e6caa3e6-084c-442b-8d0e-e851ba75914c@arm.com>
-Date: Tue, 15 Sep 2026 14:09:18 +0530
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VlvIT/GE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789461802; x=1820997802;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cyRG1T2PDPHf7Ppda6R4nWqA/AhxSLime81k93QDI4o=;
+  b=VlvIT/GEVxOWZ2tnkpIWo6Q5+aVFSGuc6FIaKuTQy0JOHTVO+M+vTuFV
+   nSSGqRo2+0wwurWOLcic/+//2NZ7gwBUa90wsjB5VKo9eVnvHLa/Pnnq/
+   MapUZrMNOHDOWDMUGcpv+CmQBHQK81Nmra62/opqUO8rBq+IChx/hnKT/
+   Rg3dTy+MM0gj2QRRD+sTaSraLPFV5sBwJ9EVyarpQlwincB0Jlh+erqRE
+   UflDdv5OjHwlj0l2nIQRYQLIQmUPFnFuL8Z6jmBn+fxEmVKoafJ8xVVOv
+   IiTX1E0Z78nugpBUkBE5761dcMe+99jm6hUeWUqlhglM3POqC88KHRWKC
+   g==;
+X-CSE-ConnectionGUID: Kf9x3PViSeOVEIl2WTPf3g==
+X-CSE-MsgGUID: BTCX2F/RSle0Rb/mOvFIOA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="90024768"
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="90024768"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2026 01:43:22 -0700
+X-CSE-ConnectionGUID: OyZntYNITX+nXcX5R7EO1w==
+X-CSE-MsgGUID: 2wD6B4vlSpSOQa7VbCzv3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="273410897"
+Received: from unknown (HELO [10.238.2.139]) ([10.238.2.139])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2026 01:43:11 -0700
+Message-ID: <93667a03-f7ae-46eb-82f5-8167f74f16c2@linux.intel.com>
+Date: Tue, 15 Sep 2026 16:43:07 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,167 +52,72 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 6/6] selftests/mm: add a GUP selftest
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
- <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Mark Brown <broonie@kernel.org>,
- Anshuman Khandual <anshuman.khandual@arm.com>,
- Muhammad Usama Anjum <usama.anjum@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Rik van Riel <riel@surriel.com>
-References: <20260911110950.200240-1-sarthak.sharma@arm.com>
- <20260911110950.200240-7-sarthak.sharma@arm.com>
- <891915e3-3333-45f3-81a8-1ad38fa7ee37@kernel.org>
+Subject: Re: [PATCH v10 09/28] KVM: VMX: Save/restore guest FRED RSP0
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+ "Mehta, Sohil" <sohil.mehta@intel.com>,
+ "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "x86@kernel.org"
+ <x86@kernel.org>
+Cc: "corbet@lwn.net" <corbet@lwn.net>,
+ "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+ "luto@kernel.org" <luto@kernel.org>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+ "dmatlack@google.com" <dmatlack@google.com>,
+ "seanjc@google.com" <seanjc@google.com>, "xin@zytor.com" <xin@zytor.com>,
+ "pbonzini@redhat.com" <pbonzini@redhat.com>,
+ "mingo@redhat.com" <mingo@redhat.com>,
+ "shivansh.dhiman@amd.com" <shivansh.dhiman@amd.com>,
+ "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "nikunj@amd.com" <nikunj@amd.com>, "hpa@zytor.com" <hpa@zytor.com>,
+ "tglx@kernel.org" <tglx@kernel.org>,
+ "peterz@infradead.org" <peterz@infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
+ "Liu, Zhao1" <zhao1.liu@intel.com>, "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "yosry@kernel.org" <yosry@kernel.org>
+References: <20260911213659.2025974-1-sohil.mehta@intel.com>
+ <20260911213659.2025974-10-sohil.mehta@intel.com>
+ <dd7b17e4-8d84-426a-9962-3ae693dcf401@linux.intel.com>
+ <22c2c3f67198185a8e3a6bda43e4f12b78305cbf.camel@intel.com>
 Content-Language: en-US
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-In-Reply-To: <891915e3-3333-45f3-81a8-1ad38fa7ee37@kernel.org>
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <22c2c3f67198185a8e3a6bda43e4f12b78305cbf.camel@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-
-
-On 9/11/26 9:18 PM, David Hildenbrand (Arm) wrote:
-
-[...]
-
->> +
->> +/* Just the flags we need, copied from the kernel internals. */
->> +#define FOLL_WRITE	0x01	/* check pte is writable */
+On 9/15/2026 12:14 AM, Edgecombe, Rick P wrote:
+> On Mon, 2026-09-14 at 15:04 +0800, Binbin Wu wrote:
+>>> Note, an equivalent TDX side implementation is missing. No TDX module
+>>> with FRED support exists yet so this would be an issue for future
+>>> platforms. A generic discussion regarding this is ongoing at:
+>>> https://lore.kernel.org/kvm/20260827031837.2863609-1-binbin.wu@linux.intel.com/
+>>
+>> For old KVM versions, we want to defer the opt-in design or backport decision.
+>> (
+>> https://lore.kernel.org/kvm/c6b240bd-3c45-4abe-b17c-72a1a7da582f@linux.intel.co
+>> m/)
+>>
+>> We may finally choose to backport the TDX CPUID filtering patch series to
+>> stable kernels. If this patch series lands first, should we add FRED in the
+>> deny list for TDX as a temporary solution to avoid having some version(s) that
+>> allow FRED for TDX without FRED support in KVM?
 > 
-> BTW, it's odd that we support passing GUP-flags ... we should probably switch at
-> some point simpler attributes (bool write) or custom flags (but we don't seem to
-> need many ...).
+> The specific FRED problem starts with FRED host usage + TDX, so I don't think
+> there is a reason to tie and temporary fixups to VMX FRED support, in any case.
+> Or were you thinking to blame userspace for not respecting
+> KVM_GET_SUPPORTED_CPUID, which would change after this series? 
 
-Agreed
+My concern is if there is a release x with this patch set, but the release is not
+a LTS/stable kernel branch. Then backporting of TDX CPUID filtering patch series
+will skip this release. When the TDX module with FRED support released and work
+with the kernel release, it will have problem.
 
-> 
->> +
->> +/* Page counts exercising single, THP-batch, partial, and full-mapping GUP. */
->> +static const int nr_pages_list[] = { 1, 512, 123, -1 };
-> 
-> 
-> Would we want to calculate 512 dynamically at runtime using the PMD pagesize?
-> Could be something for a follow-up patch.
-
-Yeah this can be done.
-
-> 
->> +
->> +#define GUP_TEST_FILE "/sys/kernel/debug/gup_test"
->> +#define NR_HUGE_PAGES 2
-> 
-> I'd call this "NR_HUGETLB_PAGES".
-
-Okay.
-
-[...]
-
->> +static void run_gup_cmd(struct __test_metadata *_metadata,
->> +			 FIXTURE_DATA(gup_test) *self,
->> +			 const FIXTURE_VARIANT(gup_test) *variant,
->> +			 unsigned long command)
-> 
-> We prefer two tab indents.
-
-Okay.
 
 > 
->> +{
->> +	int i;
->> +
->> +	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
->> +		struct gup_test gup = {
->> +			.addr = (unsigned long)self->addr,
->> +			.size = self->size,
->> +			.nr_pages_per_call = nr_pages_list[i] < 0 ?
->> +				self->size / psize() : nr_pages_list[i],
->> +			.gup_flags = variant->write ? FOLL_WRITE : 0,
->> +		};
->> +
->> +		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
->> +		ASSERT_EQ(ioctl(self->gup_fd, command, &gup), 0);
->> +		ASSERT_EQ(gup.size, self->size);
->> +	}
->> +}
->> +
->> +TEST_F(gup_test, get_user_pages)
->> +{
->> +	run_gup_cmd(_metadata, self, variant, GUP_BASIC_TEST);
->> +}
->> +
->> +TEST_F(gup_test, pin_user_pages)
->> +{
->> +	run_gup_cmd(_metadata, self, variant, PIN_BASIC_TEST);
->> +}
->> +
->> +TEST_F(gup_test, get_user_pages_fast)
->> +{
->> +	run_gup_cmd(_metadata, self, variant, GUP_FAST_BENCHMARK);
->> +}
->> +
->> +TEST_F(gup_test, pin_user_pages_fast)
->> +{
->> +	run_gup_cmd(_metadata, self, variant, PIN_FAST_BENCHMARK);
->> +}
->> +
->> +TEST_F(gup_test, pin_user_pages_longterm)
->> +{
->> +	run_gup_cmd(_metadata, self, variant, PIN_LONGTERM_BENCHMARK);
->> +}
-> 
-> Heh, is there actually a reason why these kernel things are called _BENCHMARK?
-> 
-> I think they are really just tests that can be used for benchmarking ... the
-> measurement logic is entirely in user space.
-> 
-> We could consider cleaning that up as a follow-up.
+> Since there are plenty of released kernels with FRED host support already, I'd
+> think to wait until we settle the opt-in question. Which doesn't seem like it
+> should be too much longer. It will be less thrash.
 
-Yeah this can be worked on as well.
-
-> 
->> +
->> +int main(int argc, char **argv)
->> +{
->> +	int fd;
->> +
->> +	fd = open(GUP_TEST_FILE, O_RDWR);
-> 
-> Could do
-> 
-> const int fd = open(GUP_TEST_FILE, O_RDWR);
-
-Okay.
-
-> 
-> 
-> Thanks for doing that!
-> 
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-
-Thank you David!
-
-> 
-> 
-> I think reasonable extensions will be to execute tests on all available mTHP
-> sizes and all available hugetlb sizes, similar to what cow.c already does.
-> 
-> Can you look into that as part of some follow-up work? mTHP support will be
-> interesting for testing some of the patches Rik has been working on.
-
-Yup, I'll take that up.
-
-Apart from the indentation, const int fd and the NR_HUGE_PAGES rename,
-is there anything else I should incorporate in a respin? I think other
-changes would require a separate series. If you want me to fold any
-other change in a respin, please let me know.
-
+OK
