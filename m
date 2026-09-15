@@ -1,67 +1,52 @@
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-61.mta0.migadu.com [91.218.175.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283F9303C97;
-	Tue, 15 Sep 2026 01:18:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.147.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60DE338B149
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 01:40:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.61
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789435127; cv=none; b=GFtopZ/1VGqMF03/U7WW/Lbub4qhul6lFlY3NLqalTVUNoo3CNhDjhVIBcfygfsqAb4Q+1YUlwCWSPim9LpWHgQxWN51tIC/u0tAgeGyubXl0zql9SZfOqQc7MuPV9oVvitRLj0OnQ1vDqO8xgSBgq6Xlt7NjzzQkvVZr5yu+RM=
+	t=1789436443; cv=none; b=akotadHQQRou9xVhdAgOQQB7Y0M960nyi4qbH5dERw531OoN1JdOxJ2RchhW3eWvwoKdV0ap31fnpmtN5+fcUAygfdeILkPtatyAsd4+TiqV87iAbjb5Y+8CrYj4Bs1macRnWLZEcRAmtMhODqSPERMP72sqxFWz5lns6qMshBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789435127; c=relaxed/simple;
-	bh=XD0cqZXnDU5BH5AH6gAr8KsRREQSPgxoCdth75mTNyU=;
+	s=arc-20240116; t=1789436443; c=relaxed/simple;
+	bh=05uRaWUcaOG/Q/CWJc/l3BnefdP/MWiBuuzMMUHj9ko=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A56E+gTNNQLhwvAMNrn9G9KPfSGelrmelNIztYwuuzpVXi6R6+TMYYfyc4IbiOzE0421Vbo4FlEjoNf2ZcybXh/NPdngdqPpSfb8ewWVbTJcCgn76kAA1mgflagOS9LgB1+co+G3ZuXC50TEME+nUqThMykT1Oc6dzx6GJCwZms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=oHRZ7SjR; arc=none smtp.client-ip=148.163.147.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=lzmKWiOQ3PUSAVJeac9njGps6XlKj+qI9m7wR60yPnIUpl3bgq/6nTkLvj+YGexxRkUtnZJhn9WHW/jWSu0NHnqxlmkxwQwwU7ZMUrDul74M0vCKy064hHnNaSBLMvfSWFQsAp/bRH9PRe4vlgI5UyVE6Z6O8OKZGLexX8mF+B4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xG6JBmrM; arc=none smtp.client-ip=91.218.175.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="oHRZ7SjR"
-Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68EN3pS43403440;
-	Tue, 15 Sep 2026 00:57:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps0720; bh=OS259iErZnBxTgbybAxhMxIa2S
-	Cl4Sz3q64JgdnS2yg=; b=oHRZ7SjRZFoWlHuqcXVhmfDJ0wGKX+/3mpgx0AfSCG
-	zyvpc5MC3hwNTiLzQDrzBIcuzozkvFEuZ2U0h3QlKnj6bu76KZiuB95M40+5Zdvi
-	sMZvrP4xkB/agoUhMwd92aKH/pFhyeEf9PGN9KBBy+IG0WFQJm9Ue1306kpaZJMt
-	sAJCVikyL/DAIgbkMcDD7l4eR7ge+5yXnMGYKQiPS8AWGEGhYcxmIaXcB02aeNBE
-	bYNvgxFlxVGYxdpLnrj5+A9Wzi/5WMGWCVEbJ8HRouGFvb6RUAMgQrjiJIY9dEi/
-	YIpPCYED1oKg9SOWDfBqiWEMW4ZJTxbvdm/s+Y0DfquQ==
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 4gppy1khtu-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 15 Sep 2026 00:57:11 +0000 (GMT)
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by p1lg14881.it.hpe.com (Postfix) with ESMTPS id B5122806B2F;
-	Tue, 15 Sep 2026 00:57:09 +0000 (UTC)
-Received: from HPE-5CG20646DK.localdomain (unknown [16.231.227.39])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 827A7801710;
-	Tue, 15 Sep 2026 00:57:05 +0000 (UTC)
-Date: Mon, 14 Sep 2026 19:57:03 -0500
-From: Kyle Meyer <kyle.meyer@hpe.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: corbet@lwn.net, david@redhat.com, linmiaohe@huawei.com, shuah@kernel.org,
-        tony.luck@intel.com, jane.chu@oracle.com, jiaqiyan@google.com,
-        Liam.Howlett@oracle.com, bp@alien8.de, hannes@cmpxchg.org,
-        jack@suse.cz, joel.granados@kernel.org, laoar.shao@gmail.com,
-        lorenzo.stoakes@oracle.com, mclapinski@google.com, mhocko@suse.com,
-        nao.horiguchi@gmail.com, osalvador@suse.de, rafael.j.wysocki@intel.com,
-        rppt@kernel.org, russ.anderson@hpe.com, shawn.fan@intel.com,
-        surenb@google.com, vbabka@suse.cz, linux-acpi@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3] mm/memory-failure: Support disabling soft offline for
- HugeTLB pages
-Message-ID: <aqiX3-TxmbFkU8xs@hpe.com>
-References: <aqiIEkrc6aDBOqRg@hpe.com>
- <20260914173700.346dc533f1f21ef170b7722f@linux-foundation.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xG6JBmrM"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=05uRaWUcaOG/Q/CWJc/l3BnefdP/MWiBuuzMMUHj9ko=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789436438; v=1; x=1790041238;
+ b=xG6JBmrMklm9hb4prYYVKhT91g9W8p/yh24RxHsUyes/Efqo68xd1mIPhyqat/8RSxqSv/gB
+ RBzYZxWBJ8naglS9uPzcsXgY9qTEsqov1G6p0D1Yw2BecHxXJR8FtaGkDtyXLoXF/WgkbYgMtNO
+ YSq0O1Hd8W6GLCpIN8A10vCg=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 98afbac615a21c5e;
+	Tue, 15 Sep 2026 01:40:38 +0000
+X-Mizu-Trace-ID: 98afbac615a21c5e
+X-Migadu-Flow: FLOW_OUT
+Date: Mon, 14 Sep 2026 18:40:34 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Hui Zhu <hui.zhu@linux.dev>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	JP Kobryn <inwardvessel@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Shuah Khan <shuah@kernel.org>, Barry Song <baohua@kernel.org>, 
+	Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, Hui Zhu <zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next v10 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+Message-ID: <aqihfvKMqJAudSQK@linux.dev>
+References: <cover.1789091855.git.zhuhui@kylinos.cn>
+ <e00910f328c129fea716e9fd031dada328e60313.1789091855.git.zhuhui@kylinos.cn>
+ <DLF8UFBL6NEL.MAD9F5418DIG@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,78 +55,118 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260914173700.346dc533f1f21ef170b7722f@linux-foundation.org>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE1MDAxMCBTYWx0ZWRfX1J48re0Pg76+
- isfei2rI9AQNEKpzmp0oGGQ7+UgNmRXG6g8gKGs2bzMjqbPzityDM73+bGjAhzPS7KlFCRTCd6j
- QEblYzHBFdNln+P8vYgR6jBTU38dP7nj6rvUn3bMbYb8CRJo1k+YIt5PaeCLeHORqzXQOxOuBrO
- I8e93cWpAPEWJNzwwrwrz2az0ri83aYEgZ8crHhfDN9frN75ABYbJ+xDz80Xw/eBo1oxSUFC+Vz
- mhelffqylCDlX0b/AXClyQzByaSWykcB4IQ32kZVL1g1P/GP16ZXC6MhHKJW6YZorpvib3ebP8n
- ucJmktJ/5oVpXLCDQ1rpCzsSbpqx5VrDiQ22zMz2u7LB0I8m1CdoOEzEApVT4mKgUIWwFEwJ41f
- YpvNg/IZtZe8dbRFuYIUda9LA5pMXFFSFa7NC5ALQ8Iw8bF7+wcL/XvdVowuMIeBT/8idp1S1Oc
- 0BqsyKKMAIbzqutDtvA==
-X-Authority-Analysis: v=2.4 cv=LKbz05W9 c=1 sm=1 tr=0 ts=6aa897e7 cx=c_pps
- a=FAnPgvRYq/vnBSvlTDCQOQ==:117 a=FAnPgvRYq/vnBSvlTDCQOQ==:17
- a=kj9zAlcOel0A:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=gQcMVamqm3wCPoSYhaRC:22 a=ModqzXLkJJ0tFyq98apW:22 a=VwQbUJbxAAAA:8
- a=MvuuwTCpAAAA:8 a=QyXUC8HyAAAA:8 a=8QjRa3sHNxljrvLfDkgA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-ORIG-GUID: r2HkFnvshq4dFtHu-OxLp914XimHte7n
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE1MDAxMCBTYWx0ZWRfX/uPv4lyY3U70
- +n+WkuZ7wkaUjohP3ln1OA8ZTlhbOl5UdaLjpEvIfoodrGnwjaYFQsQPhtK/bFJW9pReige7eOf
- Bef4U7tldSqIwBnAlrNfoL7YPykIIto=
-X-Proofpoint-GUID: r2HkFnvshq4dFtHu-OxLp914XimHte7n
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-14_05,2026-09-14_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
- priorityscore=1501 spamscore=0 impostorscore=0 bulkscore=0 clxscore=1015
- phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
- definitions=main-2609150010
+In-Reply-To: <DLF8UFBL6NEL.MAD9F5418DIG@gmail.com>
 
-On Mon, Sep 14, 2026 at 05:37:00PM -0700, Andrew Morton wrote:
-> On Mon, 14 Sep 2026 18:49:38 -0500 Kyle Meyer <kyle.meyer@hpe.com> wrote:
-
-[...]
-
-> I'm hitting some rejects against
-> https://lore.kernel.org/20260825085756.63030-4-husong@kylinos.cn . 
-> Please update this against mm.git's mm-unstalbe branch or linux-next.
-
-Sure, I'll send a v4.
-
-> I'd updated v2's changelog with this:
+On Mon, Sep 14, 2026 at 08:17:09PM +0200, Kumar Kartikeya Dwivedi wrote:
+> On Fri Sep 11, 2026 at 4:20 AM CEST, Hui Zhu wrote:
+> > From: Hui Zhu <zhuhui@kylinos.cn>
+> >
+> > BPF programs can observe memory pressure on a cgroup (e.g. refault
+> > stats via bpf_mem_cgroup_page_state()), but cannot act on it:
+> > triggering reclaim on a chosen cgroup requires writing to
+> > memory.reclaim, which BPF cannot do. Add bpf_proactive_reclaim(),
+> > a sleepable kfunc which performs one proactive reclaim pass on a
+> > given memory cgroup, similar to a write to memory.reclaim but
+> > without retrying until the target is reached, so that when and how
+> > hard to reclaim is BPF policy rather than hard-coded thresholds.
+> >
+> > Since some bpf program types may be invoked while holding fs locks,
+> > limit the kfunc to BPF_PROG_TYPE_SYSCALL only, to avoid deadlocking
+> > in filesystem shrinkers on the reclaim path. A SYSCALL program can
+> > invoke the kfunc directly, or asynchronously from its bpf_wq or
+> > task_work callbacks, which run in process context and keep the
+> > SYSCALL program type.
+> >
+> > The reclaim target of a single call is capped at MEMCG_CHARGE_BATCH,
+> > following the precedent of high_work_func(), the memory.high
+> > workqueue fallback. Note that only the reclaim target is capped: the
+> > actual scanning work and its duration are not bounded. Reclaiming more
+> > than one batch is left to the BPF program rather than enforced by the
+> > kfunc: with one call per bpf_wq callback and the same work item
+> > requeued for the next batch, the program can also stop submitting
+> > batches in between, e.g. once the target cgroup is dying.
+> >
+> > Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> > ---
+> >  mm/bpf_memcontrol.c | 88 ++++++++++++++++++++++++++++++++++++++++++++-
+> >  mm/internal.h       | 10 +++---
+> >  2 files changed, 93 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+> > index 716df49d7647..d8827bc388ef 100644
+> > --- a/mm/bpf_memcontrol.c
+> > +++ b/mm/bpf_memcontrol.c
+> > @@ -8,6 +8,8 @@
+> >  #include <linux/memcontrol.h>
+> >  #include <linux/bpf.h>
+> >
+> > +#include "internal.h"
+> > +
+> >  __bpf_kfunc_start_defs();
+> >
+> >  /**
+> > @@ -159,6 +161,74 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
+> >  	mem_cgroup_flush_stats(memcg);
+> >  }
+> >
+> > +/**
+> > + * bpf_proactive_reclaim - proactively reclaim memory from a memory
+> > + *                         cgroup
+> > + * @memcg: the target memory cgroup to reclaim from
+> > + * @size:  the amount of memory to reclaim, in bytes, clamped to
+> > + *         MEMCG_CHARGE_BATCH (64 pages)
+> > + * @swappiness: the reclaim swappiness, in the range
+> > + *         [MIN_SWAPPINESS, SWAPPINESS_ANON_ONLY], where
+> > + *         SWAPPINESS_ANON_ONLY means anon-only reclaim, or -1 to use
+> > + *         the memcg's own swappiness
+> > + *
+> > + * Trigger one proactive reclaim pass on @memcg, similar to a write to
+> > + * memory.reclaim, but without retrying until @size is reached.
+> > + *
+> > + * Only the reclaim target is capped: @size is clamped to
+> > + * MEMCG_CHARGE_BATCH, following the precedent of high_work_func(),
+> > + * the memory.high workqueue fallback, which bounds each reclaim
+> > + * request the same way. The actual scanning work and its duration
+> > + * are not bounded. To reclaim more, call this kfunc repeatedly
+> > + * instead of passing a larger @size.
+> > + *
+> > + * The kfunc can be called directly from a BPF_PROG_TYPE_SYSCALL
+> > + * program, synchronously in the context of the thread running the
+> > + * program, or from the bpf_wq and task_work callbacks of a SYSCALL
+> > + * program, which run in process context and keep the SYSCALL program
+> > + * type. It is registered for BPF_PROG_TYPE_SYSCALL only, because
+> > + * generic sleepable programs may run with filesystem locks held or
+> > + * in NOFS/NOIO contexts, where the reclaim path could deadlock on
+> > + * those locks via filesystem shrinkers.
+> > + *
+> > + * For asynchronous reclaim of more than one batch, driving the
+> > + * reclaim from a bpf_wq callback is recommended: call this kfunc
+> > + * once per callback and requeue the same work item for the next
+> > + * batch, instead of looping inside the callback and monopolizing a
+> > + * workqueue worker, and give each target memcg its own work item,
+> > + * as high_work_func() does with one work item per memcg. Whether
+> > + * to submit the next batch is up to the BPF program, which can stop
+> > + * at any point, e.g. once the target cgroup is dying.
+> > + *
+> > + * Return: The amount of memory reclaimed, in bytes, or 0 if @size is
+> > + * smaller than a page, or (unsigned long)-1 if @swappiness is out of
+> > + * range.
+> > + */
+> > +__bpf_kfunc unsigned long bpf_proactive_reclaim(struct mem_cgroup *memcg,
+> > +						unsigned long size,
+> > +						int swappiness)
 > 
+> I'm going to have to request one final change, sorry.
 > 
-> Tony said:
+> I think long is more meaningful as return value than unsigned long. It's already
+> restricted to MEMCG_CHARGE_BATCH. We return error for various arguments, we
+> should probably change to -EINVAL.
 > 
-> : Recap of original problem is that some BIOS keep track of error
-> : threshold per-rank and use this GHES mechanism to report threshold
-> : exceeded on the rank.
-> : 
-> : Systems that stay up a long time can accumulate enough soft errors to
-> : trigger this threshold.  But the action of taking a page offline isn't
-> : going to help.  For a 4K page this is merely annoying.  For 1G page it
-> : can mess things up badly.
-> : 
-> : My original patch for this just skipped the GHES->offline process for
-> : huge pages.  But I wasn't aware of the sysctl control.  That provides a
-> : better solution.
-> 
-> Which is cumbersome but I think there's useful info here so please
-> incorporate in some way.
+> Apart from that it looks ok to me, but please, also wait for Shakeel to review
+> the set before you respin v11.
 
-OK, thank you.
+My only feedback is: please don't write essays in the comments. Just couple of
+sentences should be sufficient. (Please ask your AI to be very very concise for
+the comments and commit messages.)
 
-> > Suggested-by: Tony Luck <tony.luck@intel.com>
-> > Signed-off-by: Kyle Meyer <kyle.meyer@hpe.com>
-> 
-> v2 had
-> 
-> Reported-by: Shawn Fan <shawn.fan@intel.com>
-> 
-> which got lost.
-
-checkpatch.pl complained about a missing "Closes: or Link:" and I don't have a
-pointer to report, but I'll add that back to v4.
+Other than that please follow Kumar's suggestion and send the next version.
