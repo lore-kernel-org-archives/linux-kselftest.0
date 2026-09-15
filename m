@@ -1,194 +1,166 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59BC247F3BF
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 10:54:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E6B390C9E;
+	Tue, 15 Sep 2026 11:30:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789469645; cv=none; b=Ye1ap7VUNpAC5hCsPZ6BXZsbZeDcbJ1hq8oC4znSkfTqj/gx+15lsmT9iYH+MebsDbApg2D3yGpWVLyoAiUN5DDlvZjUUjOvceTy2GzDDmJElnojq6m8+O/TEYZCUNdzkGfpYv0gvCtE+Y1dlMTH2IZ+NOYrOxs8BC0RgfyYZiI=
+	t=1789471848; cv=none; b=utPHLQR3LLq5yIP/v/ZJoXwshSEURCOFpVY1bovCBK6RcityVrmCOngfPOibPi7sBa/C6Srx5wiY5Xg3TCfXdyv3N08AXKg1YsIeV5kWtYMXA0T2/bvDgXrgLnYXigVDiHsFmYp0gMeb3KzZLqpFLhUDkI+VR+5dLDmv/lHTR4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789469645; c=relaxed/simple;
-	bh=nb2RIXlQ0/aRASJBKEZq3D9ambOv+y39SwJ6g+quxCI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WTCE24ee6rmFwwzj8RwLVosh8LOkEwBUBOd/IZ24dHaDvftDaW5g9YZF9h//Pe7o2dYMPhvwhymWNy93exd5er+WP7yJA+gMynq+VNmaSCdUUj3fHn/nhErGqkYoPY4YYxkry1z4o62rGY+spkk2Id0glXGVLVzp+JUT0NoD+1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Zh1jrL2Y; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=BhrRy1Q0; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1789471848; c=relaxed/simple;
+	bh=odVPNm+7LRHp0tjKuPnp4sfEi1fdkqz/WFeeAWo6QFA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VeW9ZZAzP4bC1O7cEf+b6GEwn6NlkNd/hDJGI5XBWERlf5er0YmIZyywF8QIJzx0+lxei5AOoxicSt8wllxAfo/Mi1cZMBGSPP3w4rCf5TsP7BRNbptxfOZUGROjIMqBD/6Bs8XosE5qtaZ3aj5XZs96NiKjkBPHcc0rJADR+X4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jgHCyQAl; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Zh1jrL2Y";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="BhrRy1Q0"
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68FA4oQV3611558
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 10:54:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	jIBKtCCL7rBKzn22XwtnmfzBi1tEWXKJPUbDrZ+6fSo=; b=Zh1jrL2Y4g639Tq8
-	hhqfVj8jfLLsRUarNAZl/MV2SQiRWOVLv55CzWOMC3lPvitIW4QNpTPy7jkuLs1w
-	c3zJZ/QMZxOosikbiiF+V8vlD2+nRosTnDY6wWbFPk/hIJgOBHYrMZwxXmft7qoz
-	z2EZypSw7bkAyedopwXn1IkixBvztQCWt87n/NJC8FbhCPUGE/aZ7gW+N/FBOROF
-	MsEkRiLiA8Y3CrfIOSifBhVDpLcpHuqRAo1RWjUz8K/bZrLybi6REx/UesUSLz/P
-	SPKZ8IiJ9Tq1Ja/Cp3ttmndiGp55MeEBFTGUpQdeCszC+jZFFBJnSc41IYRbyftx
-	ay/C0g==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4gq3xtr76t-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 10:54:03 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-93a0050a554so801319685a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 03:54:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1789469642; x=1790074442; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jIBKtCCL7rBKzn22XwtnmfzBi1tEWXKJPUbDrZ+6fSo=;
-        b=BhrRy1Q0VSaRT0yp1gBSeugYSvb5nBsoH/S3Gh6EJwa6VBU+UBo5Dvzigkvun7iMrF
-         XXwxEtm/Gl2MCbGdoAR0aMm+PFn7Rlm17V9W/kBG+wuEiQvd5MGkCIgnxhZ/bgaHh8gj
-         o05NyHLDmI5ddlV6h98bwIZ07NS6lQhGfuySR+r8QTruNkNS1ck/oe5VqHJN6hhUtTrw
-         RoJgR2nK0zOOKyK4o8ojykb+2mY6RYoRJewvTGKIie3WH3K7UvBBMZYRduD42SnCebOB
-         0qF9z7ynw8/lRgESKVEL8upQfw8X97xlT2Vto4I6bxTWN9szo0/QQGFj8sZDOGfw+mfz
-         3/kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789469642; x=1790074442;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jIBKtCCL7rBKzn22XwtnmfzBi1tEWXKJPUbDrZ+6fSo=;
-        b=OoGleDMaRo/Fijj02Ht3Dzj24aA122qbkR8fjjgCm9oZw3JDGcUjQ+AkbbtefBvkca
-         ZumTCPDMIAKFOyo/Dycl0/7nOnQr3gbzEHjZ5HEkF5vLYMQTB9fuhIvgQCgLJAZmCBGU
-         7iMCFZMrVYXLYCJVopCWDMOeoOEME6N1hUCsrQQXVvX2CJg/KM/lJ/yKhKhcNxpB8Tij
-         qxYXhlHnUXw8GndmnHXlx8vKiZzixveOtTcclEG4hepRge0HSqi+PPFg7Iw5cybBCKIV
-         icYECf29PquIdBRS+5g5V2wny20eY8IVPY3ew1fc2hwya4U+QywkoPAUpxqY7Fi+R+7C
-         UAOQ==
-X-Forwarded-Encrypted: i=1; AKwUvBz9k0o5N7M9FZUtByITze2BE/tUeQCGtQQYSh0vADmvIcDd9lz6tojI4XoNrrppZqUk/U93tJwIxignpl7DnBI=@vger.kernel.org
-X-Gm-Message-State: AFuF++l2TXSFDXJ2jur0HEVJmRlfr2hvhnQaloloxMtXopVjA4DnK8Oh
-	bw/LxjjHdgHrNMnCu7zz5AMoTKedGquKRCMD9PmSHNmEdmsPhmU50oFxJNKcXCSUNm/py2HwHqM
-	zUQC65EOKgZ4EJLMOFQHoLRrh4Up7Ivto/rA/dxqu5gslz3vgFqbPqo6C4hln/eE6K27Grj0=
-X-Gm-Gg: AYBFou3iWAsd8XH2X6oEl9BOIlGam2OUAdWi3aBDAS/qUZoH4nZhXqHa7xKnDOpY7pA
-	1eEENMdu4PAp1dlLTmTXvSIiMzBU0iBzVEFuUmp21oSOpyt+NcL0P+NlFoV5bW1ikjGMKc+T0G+
-	zh5m2e/d8s1X30rlQ8Qs6ELj2+E5s87KIIM/UTMcB7rVtOU6+cD6ii6iw07uwlyzpNpCvrJ8vjC
-	f/tklOOxbuEEr51E7YwFwdFjohMT6DPGX8zkBfM/c3sIzeZbvIvOrvq/BLcuW3FR+SEgKeFIY6z
-	dZkMW7BZ9y7ts9ZsVUgN+RoUlnS+V6lzg/3FKk2PQiaZJvMcFj5JeSkkPoSPCvNG1rywxyVOCei
-	+TajWHnZwP4FzXP0oghY/9GOiON5v94p5jYHwUWekZ8avzE6HkINFF1agJeJPOQE=
-X-Received: by 2002:a05:620a:172a:b0:939:6dfc:8abd with SMTP id af79cd13be357-93a29c362efmr1011649385a.52.1789469642536;
-        Tue, 15 Sep 2026 03:54:02 -0700 (PDT)
-X-Received: by 2002:a05:620a:172a:b0:939:6dfc:8abd with SMTP id af79cd13be357-93a29c362efmr1011644785a.52.1789469642069;
-        Tue, 15 Sep 2026 03:54:02 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:3e33:7d00:9ea1:7aa5? ([2a05:6e02:1041:c10:3e33:7d00:9ea1:7aa5])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e822b7b57sm12603375e9.8.2026.09.15.03.54.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2026 03:54:01 -0700 (PDT)
-Message-ID: <71932f61-5721-4363-b163-427432fedab4@oss.qualcomm.com>
-Date: Tue, 15 Sep 2026 12:54:00 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jgHCyQAl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789471846; x=1821007846;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=odVPNm+7LRHp0tjKuPnp4sfEi1fdkqz/WFeeAWo6QFA=;
+  b=jgHCyQAlFd1IU9RO337FWJ/aIZIL1T92wdb5MGeVEEBjnHEcpa381rG8
+   eBTyPiL3i6KidPS4IQI9MRL8T6I6Gx74yOPN7OLZsSgfhwmzbOL1E6mTK
+   pF+0YafUzr6swhjCVA9mNEAlnhk9HUHTZvogTue6Ggb3nyxfn4fN+YBFN
+   GshiPEr6+BVI64iklwU+7kK4aMjKSJZkRx5IV4FGPCngGevo2oA/6qakB
+   AD0tYH839L80Qw03RzhNEdx9zrqkpu/v6WYYj5vbRRb0bDoH8Uo5eNMfB
+   EznSjpPqDfSaSefzlATMxtidycSL7ky9FopJGhqRHYtEauHNCA4qDALf/
+   Q==;
+X-CSE-ConnectionGUID: 6i3y18k2RPK5hlGN1nLxAQ==
+X-CSE-MsgGUID: Bs9oq7zsR0SBmqPiWAan5g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="100495589"
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="100495589"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2026 04:30:45 -0700
+X-CSE-ConnectionGUID: qWT5UoJmQryOQlPvSltQgg==
+X-CSE-MsgGUID: EEBG6GS1QbCdK3y/0gtbZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="270348266"
+Received: from fdefranc-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.246.253])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2026 04:30:40 -0700
+Date: Tue, 15 Sep 2026 14:30:36 +0300
+From: Tony Lindgren <tony.lindgren@linux.intel.com>
+To: =?iso-8859-1?Q?J=F6rg_R=F6del?= <joro@8bytes.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Liam Merwick <liam.merwick@oracle.com>,
+	Vishal Annapurve <vannapurve@google.com>,
+	Ninad Naik <ninadnaik07@gmail.com>,
+	Joerg Roedel <joerg.roedel@amd.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	coconut-svsm@lists.linux.dev
+Subject: Re: [PATCH v2 6/8] KVM: SEV: Add SNP vCPU state get and set commands
+Message-ID: <aqksXLLcmFDkM9Xj@tlindgre-MOBL1>
+References: <20260908103338.427254-1-joro@8bytes.org>
+ <20260908103338.427254-7-joro@8bytes.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] powercap: Introduce generic hierarchy helpers and
- selftests
-To: Lukasz Luba <lukasz.luba@arm.com>, rafael@kernel.org
-Cc: linux-pm@vger.kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, manaf.pallikunhi@oss.qualcomm.com
-References: <20260806110159.69690-1-daniel.lezcano@oss.qualcomm.com>
- <ef124b64-e7d2-4c9c-9890-00685e34f314@oss.qualcomm.com>
- <350caba2-4a95-4945-91dd-0be89b2d3e22@arm.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-In-Reply-To: <350caba2-4a95-4945-91dd-0be89b2d3e22@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: cHzdE5wL_eqkeGetCK2QM-GEAC6XGWB0
-X-Proofpoint-GUID: cHzdE5wL_eqkeGetCK2QM-GEAC6XGWB0
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE1MDE1NyBTYWx0ZWRfXyRnj6ZfTfck8
- n9mMvM+G7Si+q90XL/jPQpVNjJvfRkuZ/+gsHhoP+pApbBv1bc1MSxCwlza3zw3HfUU/D7D+tK5
- lwLqv5jBSdBZB7Bp6Mv97AB1qBxeS/4=
-X-Authority-Analysis: v=2.4 cv=As97T+9P c=1 sm=1 tr=0 ts=6aa923cb cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22 a=VwQbUJbxAAAA:8
- a=EUspDBNiAAAA:8 a=zqZC_6FzlEIiEw2tXyAA:9 a=QEXdDO2ut3YA:10
- a=PEH46H7Ffwr30OY-TuGO:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE1MDE1NyBTYWx0ZWRfX/F9R932m3SvF
- Nk85/vKRG2lsEWUdj0CeVQiNuPts7wvuvg16rFqTcBMZxgOMURiSnHL5jgDL2A/pDjnUN+M9fZZ
- UCuvXvtkFIdQ6h3cWtpDUQSWk1amkEf9AgujTPLAw+8Fil8IuBgpk6hBF+h7EVCDxFBrBgmpCEh
- MeEfkdCGyvJZ8p9ehDuIAHhM1p7RAPARUulmERLM2zAfI07eWoYEsi/WWK+MBWliqDBjNE56Scj
- 0XF6hG9lUHAcL8zW1zksUj7iU0ww3jHRMUrglFXn2Jq5s3ZlEhQygI9Y8nG1aQrxp6LsAlQTnfS
- IE1/dIXqipii46/fwyLPQTIJKCr3xs6CFB7V96oc2YVwyzQpd5CcFy6LR8ATlCcvKwRwV7IXYr8
- 2tES/oTR96fD0myOYg+5mTr59psFf8QkeD6iM4kaNYryJKD470FY8d60JsMUqm0yNZQ+9F3FTXx
- O5zeDZRcSd7BawIPb/g==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-15_03,2026-09-14_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 malwarescore=0 bulkscore=0 clxscore=1015 impostorscore=0
- priorityscore=1501 phishscore=0 lowpriorityscore=0 spamscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609150157
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260908103338.427254-7-joro@8bytes.org>
 
+On Tue, Sep 08, 2026 at 12:33:36PM +0200, Jörg Rödel wrote:
+> From: Joerg Roedel <joerg.roedel@amd.com>
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+...
+> +static int snp_get_vcpu_state(struct kvm_vcpu *vcpu,
+> +			      struct kvm_sev_cmd *argp)
+> +{
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +	struct kvm *kvm = vcpu->kvm;
+> +	struct kvm_sev_snp_vcpu_state state = {};
+> +
+> +	if (!is_sev_snp_guest(vcpu))
+> +		return -ENOTTY;
+> +	if (!to_kvm_sev_info(kvm)->snp_context)
+> +		return -EINVAL;
+> +
+> +	guard(mutex)(&svm->sev_es.snp_vmsa_mutex);
+> +
+> +	if (VALID_PAGE(svm->sev_es.snp_guest_vmsa_gpa) &&
+> +	    VALID_PAGE(svm->vmcb->control.vmsa_pa)) {
+> +		state.vmsa_gpa = svm->sev_es.snp_guest_vmsa_gpa;
+> +		state.valid_fields |= KVM_SEV_SNP_VCPU_STATE_VMSA_VALID;
+> +	}
+> +
+> +	if (VALID_PAGE(svm->vmcb->control.ghcb_gpa)) {
+> +		state.ghcb_gpa = svm->vmcb->control.ghcb_gpa;
+> +		state.valid_fields |= KVM_SEV_SNP_VCPU_STATE_GHCB_VALID;
+> +	}
+> +
+> +	if (copy_to_user(u64_to_user_ptr(argp->data), &state, sizeof(state)))
+> +		return -EFAULT;
+> +
+> +	return 0;
+> +}
+> +
+> +static int snp_set_vcpu_state(struct kvm_vcpu *vcpu,
+> +			      struct kvm_sev_cmd *argp)
+> +{
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +	struct kvm *kvm = vcpu->kvm;
+> +	struct kvm_sev_info *sev = to_kvm_sev_info(kvm);
+> +	struct kvm_sev_snp_vcpu_state state;
+> +	int ret;
+> +
+> +	if (!is_sev_snp_guest(vcpu))
+> +		return -ENOTTY;
+> +	if (!sev->snp_direct_vmsa)
+> +		return -EINVAL;
+> +	if (!sev->snp_context || kvm->arch.pre_fault_allowed)
+> +		return -EINVAL;
+> +
+> +	if (copy_from_user(&state, u64_to_user_ptr(argp->data), sizeof(state)))
+> +		return -EFAULT;
+> +
+> +	if (memchr_inv(state.pad, 0, sizeof(state.pad)) ||
+> +	    state.valid_fields & ~(KVM_SEV_SNP_VCPU_STATE_VMSA_VALID |
+> +				   KVM_SEV_SNP_VCPU_STATE_GHCB_VALID))
+> +		return -EINVAL;
+> +
+> +	if (state.valid_fields & KVM_SEV_SNP_VCPU_STATE_VMSA_VALID) {
+> +		if (!PAGE_ALIGNED(state.vmsa_gpa) ||
+> +		    !page_address_valid(vcpu, state.vmsa_gpa) ||
+> +		    IS_ALIGNED(state.vmsa_gpa, PMD_SIZE))
+> +			return -EINVAL;
+> +	}
+> +
+> +	guard(mutex)(&svm->sev_es.snp_vmsa_mutex);
+> +
+> +	if (state.valid_fields & KVM_SEV_SNP_VCPU_STATE_VMSA_VALID) {
+> +		ret = sev_snp_install_guest_vmsa(svm, state.vmsa_gpa);
+> +		if (ret)
+> +			return ret;
+> +	} else {
+> +		svm->sev_es.snp_has_guest_vmsa = true;
+> +		svm->sev_es.snp_guest_vmsa_gpa = INVALID_PAGE;
+> +		svm->vmcb->control.vmsa_pa = INVALID_PAGE;
+> +	}
+> +
+> +	if (state.valid_fields & KVM_SEV_SNP_VCPU_STATE_GHCB_VALID)
+> +		svm->vmcb->control.ghcb_gpa = state.ghcb_gpa;
+> +	else
+> +		svm->vmcb->control.ghcb_gpa = INVALID_PAGE;
+> +
+> +	vmcb_mark_all_dirty(svm->vmcb);
+> +	return 0;
+> +}
+> +
 
-Hi,
-
-
-On 9/7/26 12:46, Lukasz Luba wrote:
-> Hi Daniel,
-> 
-> On 9/7/26 11:03, Daniel Lezcano wrote:
->>
->> Hi Rafael,
->>
->> On 8/6/26 13:01, Daniel Lezcano wrote:
->>> Powercap controllers frequently expose a hierarchy of power zones (for
->>> example package, clusters and CPUs). Until now, each driver had to
->>> implement its own hierarchy traversal, parent lookup, error handling and
->>> teardown logic.
->>>
->>> This series introduces a generic hierarchy description and helper
->>> functions allowing a controller to instantiate and destroy an entire
->>> powercap hierarchy from a static description. The framework takes 
->>> care of
->>> duplicating the hierarchy description, rebasing parent pointers,
->>> creating zones in dependency order and performing the appropriate
->>> rollback and cleanup on errors.
->>>
->>> The series also adds a kselftest exercising the new API by creating a
->>> synthetic hierarchy, validating the exported sysfs hierarchy and
->>> attributes, and ensuring that all resources are correctly released when
->>> the hierarchy is destroyed.
->>>
->>> The patches are organized as follows:
->>>
->>> 1. powercap: Add generic zone hierarchy creation helpers
->>> 2. selftests/powercap: Add powercap hierarchy creation API tests
->>>
->>> The API was primarily motivated by the recently posted SPEL series and
->>> also provides a migration path for DTPM to use the same generic
->>> infrastructure instead of maintaining its own hierarchy handling.
->>>
->>> Link: SPEL cover letter <https://lore.kernel.org/lkml/20260702- 
->>> qcom_spel_driver_upstream-v3-0-434d50f0c5b0@oss.qualcomm.com/>
->>>
->>> Daniel Lezcano (2):
->>> powercap: Add generic zone hierarchy creation helpers
->>> selftests/powercap: Add powercap hierarchy creation API tests
->>>
->>> -- 
->> It was easy to migrate DTPM to this API and AFAICT Manaf was able to 
->> migrate also its series to this new API.
->>
->> Is it possible to consider it for merging ?
-> 
-> I will do a review for this patch set today...
-> 
-> I can see some potential improvements there.
-This patch is a blocker for more changes: DTPM, powercap cooling device 
-and SPEL drivers from Manaf.
-
-It has been tested and there is a selftest with. Is it possible to 
-consider these two patches for merging.
-
-Given it is not a fast path, improvements can be proposed later.
+Nice, looks like snp_get/set_vcpu_state() could quite easily make use
+of KVM_EXPORT/IMPORT_VCPU?
