@@ -1,46 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A4230146C;
-	Tue, 15 Sep 2026 10:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD5747A0A6;
+	Tue, 15 Sep 2026 10:40:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789467716; cv=none; b=rtaPdou+fL74Fvk7gJTTV4uCpSOzzF651yN1wUfiO3bFkeaym6eIYGFPcA/TTcjAsl8HSz10/RVgEMSet+v/Fyv8BYYcjMSBrMDZfaIboOaV/ueIBIwVN6MzFQT3ZM/QL9jVmdvmuvCbgHW1rM6Wc566z82tMY+0duTWnpl7EJI=
+	t=1789468844; cv=none; b=UatfIZzT2JWXRZEsrPucrcGEWdEYlf+CNj+GjHoxR3+9s8FW1/XTIbZ2wQ2n05I8LLA7amARJFJnc/XbbzNnihU6iEHMcmn2xok4hmRsY3GoLmRb6ZbA2EMQt2dz+7WdrWiI9GrrJHV895GtpUSp5rNgKISFbEgAh8WdhZBN3YU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789467716; c=relaxed/simple;
-	bh=hf8crpYjeJnwwOsNEbF0Mekxrkj2tylRQn9EriVaRfM=;
+	s=arc-20240116; t=1789468844; c=relaxed/simple;
+	bh=A4kgPFQ6UkzFS/sD8VUIM9bIlArc5N4YWEOby/vnMQ0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fXLngXEzE+xjcOzybvuVsgLqIyvRl6br1PPyJldEuI93sk1lUfEDqT5GpcC+x//AvYOl/+pF3oDwsmSpUwr/hnIYYTlJHDRG4uJurlxRL9rzdw6c3f4TEkUJK3pbWgxhF7aHbv1Z64/Jyi8fUQ05tXMPM39xLjCR8SRhO/nqf3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cQuaEnvy; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=SClGMJ8d01e2hevUFRenpHCPvR16B5+tQFJh1LXImIjFQ93g0B+y/rQa9BBbA1XQYufZkOfGOFiBAylUJ/emC87hMwBGt6yxypK9eWEXemtvE/Wcvn+x4h+pEvkNzcrDqM1x1bzHzXlV7oH1BfYoEhuYgC1/i5ZjW+QmdfG1+cM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=lKsecUK6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LnZRN66h; arc=none smtp.client-ip=202.12.124.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cQuaEnvy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2E3A1F000FF;
-	Tue, 15 Sep 2026 10:21:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789467715;
-	bh=fkiyvcxknqqa2FD78gZjvgffhDSvTiUS9a23EkmipXA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=cQuaEnvyIVzF1iyxdJAkXqhmxDCZYMNY9j2eYZJ07Mb6eI4uuD6iCsTsS+XpIax5b
-	 wX76OJsUvCoHl44rzpGGKNbDUnkQZdxlMma60wLmSTyYPzGIgHgsFm1eUQU//wGMlD
-	 XkLaNUmR9cJYUhhJcYebFLcWjw6QOfQ2MYSbJYY0ycp+xgVXdunHq6/e+yfNYiUdxE
-	 E6pJrCmbnIC1vM+8lUjIKIleVNO8CY3bc05B66ou/M/Pr3PYwIiSk/KWDfEyynFjl4
-	 Cymr2wIIm3yXem2ANvwX2ZqgPbMUlLxxmycHSORHJHSC2b7YT6yQ8S03CF/Yj4r8FR
-	 9HL8UnSyELE5A==
-Date: Tue, 15 Sep 2026 11:21:53 +0100
-From: Harry Yoo <harry@kernel.org>
-To: SJ Park <sj@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Yosry Ahmed <yosry@kernel.org>, 
-	Nhat Pham <nphamcs@gmail.com>, Usama Arif <usamaarif642@gmail.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Tejun Heo <tj@kernel.org>, 
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Joshua Hahn <joshua.hahnjy@gmail.com>, 
-	Kiryl Shutsemau <kas@kernel.org>, linux-mm@kvack.org, cgroups@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/cgroup: ignore memory.reclaim -EAGAIN for
- zswap writeback test
-Message-ID: <aqkavo7OfQdMOpLf@thinkstation>
-References: <20260914-test-zswap-wb-ignore-eagain-v1-1-6fb715c22cd8@kernel.org>
- <20260915001817.101713-1-sj@kernel.org>
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="lKsecUK6";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LnZRN66h"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailflow.stl.internal (Postfix) with ESMTP id 6AC9F1300501;
+	Tue, 15 Sep 2026 06:40:39 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Tue, 15 Sep 2026 06:40:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1789468839; x=
+	1789476039; bh=GR5i+ZoXZtVmjVFbg/5ljADDJkwxtSAlXIoGrwBZebs=; b=l
+	KsecUK6b0SRJRaq+hc/eB8E8+E+0OS3TOgWMDQbkRUi99Sm6DGJRnpgm8BmabSww
+	94irUqC7athEF5czc5H34GvEV4gCjrkDH9KM/KFN0XAw5nUNvVVq8ZeeSm/NIPw/
+	PUg16rQKCi5d57z4wVR9Yu2ZGdO6Pi0Vhgwli0EWkCkteSF72+SYP3fVidRcnze5
+	pEbe+q4EUL40mUCPAn39M/JQBgEsmy/LAFVXDQyjxIbepLwUH+rvZYaW43SkUwbe
+	FyxzhyuB5/Z9JophI2poul52Ab9s1BBMp64H0JpfyjCaZwvySDR7e5rEtbG3eOD7
+	UoFLCPzfGxpymeQlTS45A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1789468839; x=1789476039; bh=GR5i+ZoXZtVmjVFbg/5ljADDJkwxtSAlXIo
+	GrwBZebs=; b=LnZRN66hWtnwspXOjsG7LYeKMX9nv/hfkWjD/rulqw4ftSSQMIb
+	6Y1xvTgEUtkRJsi2+7XeBVytHuFl9n1BCAdNuR4cf7u+M8fbFeXtoToAU/FrRlKG
+	M5xVcp1J14A1W5A4TAUCW/kqAZbA9oTtFCOsRl+sC0AOdGxZUlHKXa+02PREbtpl
+	q0B3S6azIA90MT3hN1Xhw3mVppbWdJBkGCanFCXWgBd4fSZ1/FVuLBGkPwJsqXa5
+	pQg96MBVgQKXynEQaBjlx2bqLH6yGxnGX0hxMIeXRxAr8ymnzfIMGySzTQXBjbF5
+	Z+31RqMy2PEHzdrEc4FhySNOYxWD6DPzC0Q==
+X-ME-Sender: <xms:piCparUGOh-7OzOBTWJ9bVDSpNpcvcTxlfTEG3iDldDj8AxLeuuxFQ>
+    <xme:piCpakDxqbF2o17pItwMoDiNI7hxLrRQVe9DwAWaaTYA-LJzV41qSF_wbgHG821KO
+    k8J9BC-Y-FIbF2baYXh8fzTQI4xYmhtyQ1n-oE8O6t5O1rd0C9hYo6s>
+X-ME-Received: <xmr:piCpao3Ofeem80nKOe_L-k3lfV1i-3UxZmkarxLkgRSY75RSG5CpoULtF18>
+X-ME-Proxy-Cause: dmFkZTEhemmXWsnAsUPz8NwfFxfaJLXIIfsZPuNrLsudoDyPOrg10URvNaoJjcAhSb4BJ6
+    NGycg3zzbEkaFXLNIYaIayK1e5/D+4SX7QMtqs/19tsC2OTy0fD7MUb/ayjwUbYpRSvsny
+    dWBBTGqUIjlS66WbFOOR0xO4P3cCOQtscZKQqpTDLonV1xgI83aTnwikIox+H2hLH+T6Km
+    Hgh5ZYol3xHjmHDHrcYHJERVc1jNMjSO/LlooMWTYDb7VOTAB0CN7EA0Sskbxhnz6Az/n6
+    ysmT947gDGrbmIdSFz1qxgnaVFaBn+TD6H59jKLDiF5HDUCwv2dSJ9A3WfAg1o/EWxqJoX
+    abUCfAfCQuyjhs1hHxdWdl4efy1FhwNrm7bf3fgzdv8pc9dZNhdHd1rWL0WQkES6aLPrfi
+    +7KysM0c70bc6V7BqYJP+x65hrmyKszDDmY1Ozro56v8Z18cBjhzIFu2zTkzVC8g2+rYaW
+    j3MsQy2Yiq9cBFh31x+Sk45MsPHmV6oWBsxBSfAOr7JKPQ/Im4JL1Au1MSg91IBdqo35qJ
+    uaMgB4SHkBXLNn7s8/qefkzXTZr7CaL+EOmJ2qBJE2v/TJPRaXQ0FpUC1S1mSRgJC5RTcD
+    QNEiW/TiJiUyIKaPsfb3NUIub2mi5cu3cNDEiisw8whWf1yTjs7Kd7pYxY3Q
+X-ME-Proxy: <xmx:piCpamXHynRvRmnQQtsmeNVRFhIOjnlI-4P_hCf6v7bjhgfR7GsGzQ>
+    <xmx:piCpak8QJ1pEaKAxoJXOmqSu7QHC0nQccZmqxIDFeSpNd0H7fd04kw>
+    <xmx:piCpar0mqM4C9apv8P7erX07yB2EwEMo_pV-l94m-zuObpKhC2hb-w>
+    <xmx:piCpavBeIKdVeu0j8h5FkJi7ms2m6pb9RzR7KCnnekk51XsPuvcRbA>
+    <xmx:pyCpaswXJmJy2chSPwK7aUflrlr_ilJw5UxkfOGcWWIEKicpYgcn-w9q>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 15 Sep 2026 06:40:37 -0400 (EDT)
+Date: Tue, 15 Sep 2026 11:40:36 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, akpm@linux-foundation.org, 
+	nico.pache@linux.dev, baolin.wang@linux.alibaba.com, baohua@kernel.org, 
+	dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev, liam@infradead.org, 
+	mhocko@suse.com, rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, 
+	surenb@google.com, usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com, 
+	usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, jannh@google.com, 
+	willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, mhiramat@kernel.org, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
+ primitives
+Message-ID: <aqkQSMX6GuXhow-V@thinkstation>
+References: <20260816224609.308019-1-kirill@shutemov.name>
+ <aoLAly-oL2OAa4n8@lucifer>
+ <aoLkMUtmzRVuv2Hx@thinkstation>
+ <aoQ77EcD3M2kjeya@lucifer>
+ <0153303d-f9d6-45ea-a276-fbf2e5625ef9@kernel.org>
+ <aoXn1B7cPnPq7uxd@thinkstation>
+ <25a39c58-a188-4dda-a832-5deff2c8b8c0@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,67 +97,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260915001817.101713-1-sj@kernel.org>
+In-Reply-To: <25a39c58-a188-4dda-a832-5deff2c8b8c0@kernel.org>
 
-On Mon, Sep 14, 2026 at 05:18:17PM -0700, SJ Park wrote:
-> Hi Harry,
+On Mon, Sep 14, 2026 at 04:54:06PM +0200, David Hildenbrand (Arm) wrote:
+> I saw that you started sending out cleanups, good. :)
 
-Hi SJ, thanks for looking into it!
+Right. I have few more cleanup ideas in the queue, before substantive
+changes.
 
-> On Mon, 14 Sep 2026 21:36:39 +0100 "Harry Yoo (Meta)" <harry@kernel.org> wrote:
-> Makes sense to me.
-
-Thanks!
-
-> [...]
-> > --- a/tools/testing/selftests/cgroup/test_zswap.c
-> > +++ b/tools/testing/selftests/cgroup/test_zswap.c
-> > @@ -346,7 +346,16 @@ static int attempt_writeback(const char *cgroup, void *arg)
-> >  	 * it can't writeback to swap.
-> >  	 */
-> >  	ret = cg_write_numeric(cgroup, "memory.reclaim", memsize);
-> > -	if (!wb_enabled)
-> > +
-> > +	/*
-> > +	 * When writeback is enabled, memory.reclaim may still fail to reclaim
-> > +	 * the requested amount of memory due to a slow swap device.
-> > +	 * Ignore -EAGAIN here. The caller determines pass/fail based on the
-> > +	 * zswap writeback counter.
-> > +	 */
-> > +	if (wb_enabled && ret == -EAGAIN)
-> > +		ret = 0;
-> > +	else if (!wb_enabled)
-> >  		ret = (ret == -EAGAIN) ? 0 : -1;
+> Nobody can really review 39 patches of RFC.
 > 
-> My humble eyes were unable to easily understand the change.  Is the change
-> effectively same to below, and if so, would this be easier to read?
+> Often it's more helpful to propose an overall design idea, and then discuss if
+> and how to get there.
+
+Fair.
+
+The overall design one-pager is in comment in mm/collapse.c in 07/57.
+
+I can pull it out, expand and post as RFD if it helpful.
+
+> > Do we want to find file collapse candidates by walking the virtual
+> > address space at all?
 > 
-> '''
-> @@ -344,10 +344,11 @@ static int attempt_writeback(const char *cgroup, void *arg)
->          * writeback as zswap.max is 1/4 of what was needed when reclaim ran the first time.
->          * If writeback is disabled, memory reclaim will fail as zswap is limited and
->          * it can't writeback to swap.
-> +        * Even if writeback is enabled, it could return -EAGAIN due to a slow
-> +        * swap device.
->          */
->         ret = cg_write_numeric(cgroup, "memory.reclaim", memsize);
-> -       if (!wb_enabled)
-> -               ret = (ret == -EAGAIN) ? 0 : -1;
-> +       ret = (ret == -EAGAIN) ? 0 : -1;
+> In guest_memfd, we recently discussed that we actually would want a mechanism to
+> collapse even without walking the VA space .... but maybe guest_memfd is just
+> too special, not sure.
+> 
+> You still need a mmap to identify the candidate file IIRC.
 
-Hmm, no. This will mark the test as failed when a write to
-memory.reclaim returns zero even when wb_enabled is true.
+At the moment, yes. But it is not the only option. We can start from
+walking inodes for superblocks that opted in for collapse.
 
-It's not the same because when wb_enabled == true we consider
-ret == 0 or ret == -EAGAIN as success, while with wb_enabled == false
-we consider ret == -EAGAIN as success.
+> The churn is always the problem.
+> 
+> Small, controlled increments please.
 
-Not sure we can reduce that to one line of code.
+Ack.
 
->  out:
->         free(mem);
-> '''
+Just to re-iterate what I told Lorenzo: I never intended to push this as
+one big patchset. The purpose of the RFC was to demonstrate the end
+state I pursue. I am flexible on how we get there.
 
 -- 
-Cheers,
-Harry / Hyeonggon
+  Kiryl Shutsemau / Kirill A. Shutemov
