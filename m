@@ -1,1359 +1,187 @@
-Received: from mta0.migadu.com (out-44.mta0.migadu.com [91.218.175.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2C93F075A
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 03:15:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789442105; cv=none; b=lBJVsGXUHSCuKueubSsW3o44OyeVRa4aoeiGftDF/Yva3Gba9R5+Hct9btwz4x5VIOfQlNoEknQcYYaDO1iAQBjpr5TxAvFbzChpxb0031WbfYRCFdlKRrUtNlq8hNt10Dioo3kigi/keucSLCClMlO8fkWQ3DU54AuS6zgzC9s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789442105; c=relaxed/simple;
-	bh=Qa8Vly7RulKS2JBIZD+Gu4sZkYJSYa4JWst14GCqdas=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=R4xHAy0wE2o15OzohpY1wQUa6CUbC+WvUTD7tCYQ3p5kg4BFIqUV2/ZsKC4F2CAZ15Y1pa8RN9bB6SNr13w4eTKklOURbekA2tp6xLzcVuOlaHlb6F9yOfosy5MayUM+5rQHNjVXEfFAm5tIJKYJzYV2fNFWUEe/h3uKwO7WWAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QVSSf9fi; arc=none smtp.client-ip=91.218.175.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EEBA3A59A8;
+	Tue, 15 Sep 2026 03:16:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789442214; cv=fail; b=j0fz0kQlsSA/iTU4Rtq4ZP4kNHPKzFskoFSBA/63+30OLfLye/jruZ5Gw3ktuO3wg/YBVhZOkfP7Upr6pA5RxXmqBfLAVVtnowlL5Lg3KJIRtA6SutuUGEFDZxUrnZYpnI19Sf3k2MfuyVMWkIKy908Fuatb9CrCqX7SiJgdRDE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789442214; c=relaxed/simple;
+	bh=d6JBfI7Skf+6DJY9vZ18DDZTcFvcAoTgWz6BqqiFKw4=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ft+jr3EPwDj8FA7fCFdrsM76r2rYbOa50DuOX4j12zV/EugcObERavD0Ej57AfzXn1KLeHO616o4bo4bwWGlBLrNW6LAkueJGQr9tTaiger1hy/cIMpZ6BsqCzxqxlj+4PEsgT26M1S6fewKaH46QA7TV1SVZpUi93rpDFBysYA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NLpUgnny; arc=fail smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QVSSf9fi"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Qa8Vly7RulKS2JBIZD+Gu4sZkYJSYa4JWst14GCqdas=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789442100; v=1; x=1790046900;
- b=QVSSf9fiU7ZV2WlVpxKABW9yd6g9raYiAnNYFD3UlCOzTsW95PsipnA0+Lrk3uSzTnRObLtZ
- 9YZCsGJG/pw2Sb8LJc5/+5iYCEoqRgg8QweZGhIDOEm9Vg2yTFMm3lKS9hI6tzKIFREqRF4KfO9
- WViLz0r2KtcGMRnDArHEKJo0=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 439ad2520c42de5b;
-	Tue, 15 Sep 2026 03:14:59 +0000
-X-Mizu-Trace-ID: 439ad2520c42de5b
-X-Migadu-Flow: FLOW_OUT
-From: Hangbin Liu <hangbin.liu@linux.dev>
-Date: Tue, 15 Sep 2026 11:14:43 +0800
-Subject: [PATCH net-next v3] selftests: net: move log_test to lib file and
- remove duplicate code
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NLpUgnny"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789442213; x=1820978213;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=d6JBfI7Skf+6DJY9vZ18DDZTcFvcAoTgWz6BqqiFKw4=;
+  b=NLpUgnnymm0XiIebXuwZSR6/OwVJLh1iwL7cbqwJw8HY4c9Xr6yTZxui
+   Iae/CC7XR7kDlu3Z28jbeiabSRhr/dycgoQUfVAL1hHnJkkG48rzPUX9D
+   RfU2EDj49ViOCWmIZ/7DZgq2es9cRutBABtXeGnJu0TY7VknXOM4WSN7r
+   abq0IhQgIWis3AAEyf6RCrdn1Fv4zn/nDcYt+0ALVM0q2wddzj5F5SywD
+   nM9ivypAyyKp9g/qBD8hnuIZeZRBpNKROy1IjIbS8mMKdzGgyzB5R+V4i
+   UtczVwRZmXBN0m1qGAI0IRyjkq4b9S2Z8wUcyFZTOnbbV1xqITlzh/zmS
+   g==;
+X-CSE-ConnectionGUID: xXfzFzr4Tx6y+krZ0GiTSw==
+X-CSE-MsgGUID: IyEn+lYdQGGsWxS+lHmTUA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="93497300"
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="93497300"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2026 20:16:53 -0700
+X-CSE-ConnectionGUID: TzXIMW18S+SMFwvuGfIs+Q==
+X-CSE-MsgGUID: V+xb5M3gQCWDeme2BgWMRw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="270188633"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2026 20:16:52 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46; Mon, 14 Sep 2026 20:16:51 -0700
+Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46 via Frontend Transport; Mon, 14 Sep 2026 20:16:51 -0700
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (40.93.195.59)
+ by edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46; Mon, 14 Sep 2026 20:16:51 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Tx0LjIknXrdNmpy+b+VSVcSU8R1B53zXUG3aaQuCjvJ876VHLGZx/E5TdhPZMKs2OuvxXhcQQLpLYSdd5WkhS9lOt0FxVopAZXfWtFmcKCtPwJt/5+FjB6bFzGCfhcK/b7lHjJ72bS2+yb1foMG5JVKAlz/gghVV3VEDpvQmJkpo7YFB9JGI/gDIuxeAEAt3vhXHbsHLgTgxPq+TK3JsIruEietSHUj1TuPRDn7SyF/3oJh+Mb/SiSPA8ELbjdguwUpuSOwaHisJqdU7WSkodvUD9g4/jTjGjBPQjO1lyEHMZefkXNpHaKn9ekMQWaCrd8nbJYpXA5ZttR+D+Xe5/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=47WLckmg0VNtxvd1q/qP2OKBAGk2rI1kSavX3xNF7eg=;
+ b=w3N2HirG1ewaG22SBJ68VMyMradVi2YFwrUWsv24WleKVR1PdDT0fFNFynpDrL/IMxnP0HH70H5FCW5Z1tm41BXiz/5VxBptEcQ6jvmzwPotaXg5myxp8unQhekHx5B8pBBDJGAeTNsQwbMARkYRWPFiaxZymKDqDqX4u8nc3A4ebi8Jymtb0CcWQmAW53GyrZjager6dSXiHH1LqNfXuIg1GBqB7t6HodnWdEaeMovPR1jsmrQqVaaOs0C0Yy+RGSpmBaKvOR3tYg2vgmxiwwE1P5IjbCd/8s1+lNVA0sTgmhU3u0SKffQOhc+KT8qPYJQiiGm3+xaVge1DBjgfgQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH7PR11MB6932.namprd11.prod.outlook.com (2603:10b6:510:207::5)
+ by SJ2PR11MB7473.namprd11.prod.outlook.com (2603:10b6:a03:4d2::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.12; Tue, 15 Sep
+ 2026 03:16:40 +0000
+Received: from PH7PR11MB6932.namprd11.prod.outlook.com
+ ([fe80::cca2:8c49:b4b1:761e]) by PH7PR11MB6932.namprd11.prod.outlook.com
+ ([fe80::cca2:8c49:b4b1:761e%4]) with mapi id 15.21.0406.007; Tue, 15 Sep 2026
+ 03:16:39 +0000
+Message-ID: <322574c3-8470-414b-a089-9d07f2c3a689@intel.com>
+Date: Mon, 14 Sep 2026 20:16:37 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 7/7] selftests/x86: Add a userspace test for LASS
+ enforcement
+Content-Language: en-US
+To: "Chang S. Bae" <chang.seok.bae@intel.com>, <kvm@vger.kernel.org>,
+	<x86@kernel.org>
+CC: Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+	<pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, "H . Peter Anvin" <hpa@zytor.com>, Shuah Khan
+	<shuah@kernel.org>, Binbin Wu <binbin.wu@linux.intel.com>, Peter Zijlstra
+	<peterz@infradead.org>, Kai Huang <kai.huang@intel.com>, Fuad Tabba
+	<fuad.tabba@linux.dev>, Chao Gao <chao.gao@intel.com>, Yosry Ahmed
+	<yosry@kernel.org>, Claudio Imbrenda <imbrenda@linux.ibm.com>, David Matlack
+	<dmatlack@google.com>, Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+	Kishen Maloor <kishen.maloor@intel.com>, Rick Edgecombe
+	<rick.p.edgecombe@intel.com>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20260806011536.4172258-1-sohil.mehta@intel.com>
+ <20260806011536.4172258-8-sohil.mehta@intel.com>
+ <2ae0a300-49eb-432f-8627-4c786c840755@intel.com>
+From: Sohil Mehta <sohil.mehta@intel.com>
+In-Reply-To: <2ae0a300-49eb-432f-8627-4c786c840755@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY1P220CA0026.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:a03:5c3::17) To PH7PR11MB6932.namprd11.prod.outlook.com
+ (2603:10b6:510:207::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260915-self_log_test-v3-1-a17728176334@kylinos.cn>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/12NywrDIBQFfyW4rkWvITFd9T9KCXlcE2nQoiIJI
- f9ekS7aLIfDzNmJR6fRk1uxE4dRe21NAnEpyDB3ZkKqx8QEGFRMcqAeF9UudmoD+kD7usJO1QJ
- BKJKct0Ol19x7EIOBGlwDeaZl1j5Yt+WjyPP+bYpTM3LKqZKy55zVsgS8v7ZFG+uvg8mpCD+64
- Gcdko5jByjLhg2q+dOP4/gA7y5vkPQAAAA=
-X-Change-ID: 20260812-self_log_test-b76eaf73e23f
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>, 
- Ido Schimmel <idosch@nvidia.com>, Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Hangbin Liu <liuhangbin@kylinos.cn>
-X-Mailer: b4 0.14.3
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR11MB6932:EE_|SJ2PR11MB7473:EE_
+X-MS-Office365-Filtering-Correlation-Id: 12cbe476-0615-463c-e919-08df12d7c21f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|23010399003|1800799024|56012099006|11063799006|4143699003|10067099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info: MyYiUw4wP4bBna2hCadseOYSLm15UHKumvxM5Nc1HbcqJ8GqIkavYo+zNntAWGW/Sf9sTM/GRr+YnBA4vpNOEhVfH5w6P3jwr2fZ98jNFQN1L1bmV+0fH0dDN6I4epd0XZBY4jLoa0wG4PGLl3V4NiQmR3qnLtcXiCg5J9Y4Fyso06tpoHBACsmHcdyNPnZCa3MZzBHzQEboz3CJwkYk4rwfjrIepTz3hHf+g6kHQB/gILuhtTaEZ/wwt++4X5LJ8uQrYqCxEalV0viuMK5J6zRn2bNVegShyZfqNVRkQHIchRA1TbkivlA0Thh46NB8c4J/PWPHW1EwSNpLPjK2IKTmkfhPqsC9wpeOIcQMCIeycjW0fMIWAykcwpsqfzMf8rCodpfHsJg3DFyCbCUqWVXQFrofI3uFDx0KKZW+Dz5Xgb2xrRHNsF5sJUnu0Iq97D8jbDt1Ece5bes+2gw31LnnfcZSogm7tYhJPBfNoyH/GXEVWvQaYX7rqz69XA3XiX9SdmzvcLK1kFyBDRZn+5ysy2Lv107AtriqEJPS7UbqoyexRRQHu7roweY+owp+sXy7t4WWwCeSN8XgeNVNt+BpwtsU90lWthJsnCBJyo3I3uhYI3kx+KDON3iM+MGXtXpgRkLA4zbwndMRPv6R/zOJ5rvuOqrHy30dRHHuqrQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6932.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(23010399003)(1800799024)(56012099006)(11063799006)(4143699003)(10067099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OFFOWWxNb1I5MjZmNFdKOC8rVFBiU0Rla1lYTjhNZjJVaEt3L1hrZ1VudCs5?=
+ =?utf-8?B?cGhIUUZTYWIycHpSaUVCK1VuSTVwVzdqckczdlFCZUFUdHA0UjZxenBUOVVw?=
+ =?utf-8?B?S3RLNEN3T1NkU3dnZDdibVlEYUdVY1R4VUtYdWFic2NKMVZBeGVJU0R6eUhZ?=
+ =?utf-8?B?aGtzQVcrTHhTSnRvNlMyUm40L0Q4MkJmNXo2Y1dkVlZabjN4T09BWjNkZ25N?=
+ =?utf-8?B?N2YrMUI1Z2hSMVV6WHp1RnhvS3dkUFNYcHk0emhiaUZ1OFAydE4wZmVsZFRi?=
+ =?utf-8?B?SGxid2dMbzl6WVBCVGpCSHJ3VklWbTBVODVGRmlJeVZndUxwMDNqRjVFSVBy?=
+ =?utf-8?B?NXM0LzFoOTJtWWJ0d1REUWJDMnNERnk2ZE1YRXdOYTg1NUVyQUZtRzFxSzRy?=
+ =?utf-8?B?ZTFnNndUZklmTG1ybEw0YjYza1FPbVlraDdMSkcvdHEzVlNSa3JGUTBYWk9u?=
+ =?utf-8?B?cmwvTUo0WlZqM2gwS2MvTGwxWFpxekpQc0xqNFRTK1NRVnQyWlZ4TzBJMU80?=
+ =?utf-8?B?aEk2SFZHSm93Y1MveEl5T3hHeCs0K3B3ek91Y0dDRzFLdXI4azh5Y0pReEg5?=
+ =?utf-8?B?b254aWFkc1YyYlhaejJodTUrZWNoWXZjUzhEZWhjRnJyeGszZllMMGNsRmo3?=
+ =?utf-8?B?MXhYOGJFaXByUFJEUk5oekJCdVlhZzA1akJHaytnTXZLS3VDV1ZibnVYSENz?=
+ =?utf-8?B?dXptNXJyTFIrdmlaSVMxdDRlSWVyZ0sxVXVZTTBSUDZFQnZ0M3VIMGpZbWFN?=
+ =?utf-8?B?L1lIQTVTZnJkcUNXWDlSN0pJZ0lrMGpJbDJpYWpGaTJJSk9QZ0J6VzF4TW8v?=
+ =?utf-8?B?K0ZJZXVmc2hic1ZrVVRqV1MwaHRyd0JHTXpsNzVMNUpJdW5BRjB3blBGSXZm?=
+ =?utf-8?B?Z0ZXd0FsOTJmSkdNUVNvRVJRM0s1UzlLbmxMajgwZWJxYnFOSFgveFpqT25E?=
+ =?utf-8?B?YnRVNVJhNTlpSTFmK3RqL0t1Tk1LdVl1emQwck5LMFo0VjcyZmJqK1hQRWV4?=
+ =?utf-8?B?SU04NCsrT0JlMGdLN3UxVjFvSUZub2cyWWdIc3A4bzBiaHA1bVdaZG1lanh0?=
+ =?utf-8?B?dW9BM2RudHN4eWNxVzVMdUpsR0RYaHBENmxQZmtxMVVpRTZ5bzVtOTQzRFJa?=
+ =?utf-8?B?VGU3d0wyTzFnNHVCbEFIWEJNcU1kWDJMZVd5cWY3djdpbDV1UzN5NVV6dHpW?=
+ =?utf-8?B?eTYwbWtVejVKL1ZUQkJxNVNTdFc4cW03RVdoN3FpNW5LL1ZnT2dTYndxMEdm?=
+ =?utf-8?B?RmdrQzdrajkwS0xHYXVlY082YnA4R1hUM2Zwb3dsbENPeWdFQktjR282ZmNK?=
+ =?utf-8?B?N01yeUlRc2o1c1JpNHdQNE1mQTlYNzFEV01Ma0RFZUxkREwyclMzRHkvK0g0?=
+ =?utf-8?B?cDg5SWNqYmxrQUwzODR6Y1J5SVpZSWgvZVVEN3kzUzF5ZDJZbGkwZGxRam9s?=
+ =?utf-8?B?RGhTeTZqZ3JNemF2c1FSckdyTm53SVF6aVJvTUhCd25GZlpyZlY1SlRrRTdY?=
+ =?utf-8?B?Y003cFcwUXd3Q2s1YzBtQmVITkZvQXVYcEhKUTBjcndmY1U3dUwwSmxycmsw?=
+ =?utf-8?B?YjNGTUxrL1NMblVtS1Q1bG9nZENjNndSUFlZMDRMenM4Q1JtdThzT3J6QWtL?=
+ =?utf-8?B?SStHTXFmWWFsd2RMWGFFTlR6OFdYd3lPTVM3SzBHeVVHQ3k4Nm5CeERkWk5Z?=
+ =?utf-8?B?bHBkSEZCdmJMNUpOZkJaR0MzZDFxdzJ6dGZOTng3N0hHRmhyYm5sZVU1djEx?=
+ =?utf-8?B?ajFVSkFlUmQwS1Y1RVBzb3h0dmdBQk01ZzZReFVHKzZWdUVTY3d6Y2tYemdl?=
+ =?utf-8?B?bUpFblFXbDQrdTRteEZlbXhaaTNTeHJEU3ArZkJCWWVQTHFLUjZnWUZtNjh2?=
+ =?utf-8?B?KzlQTnhseHNFK3FHK2JHMnVRSUVydDBiam5yQXNtbElyalZISU5kOFBFUFBt?=
+ =?utf-8?B?azVNQktuUkFJNDF6dnNKRE9RcEJaZlhycWFKb2FDYUJLK2R2QlBzL01BMldN?=
+ =?utf-8?B?QmQ4bS9KUzNkWEVibnpRa2tTM2VLMW1mai9YZ3lMWEp3dUU1a0lVVFNnT1Zx?=
+ =?utf-8?B?UTZ4OVY5c3FZcGlMdFB5MlBGd3FFSHZSK2xLdHM5eFZvRU0zbnBlS1doUUhV?=
+ =?utf-8?B?V29lTHpZV2E3ZVgyeDRrWWRKcGpCZ21qK29SZjdyamJNNVI1RTBIT0xSbGoz?=
+ =?utf-8?B?Vk5HQWh2MnNJRlcvNmZSNXlweGlTeWtFUGZGMjFOLzFsdlVPMmlubHM2TW5r?=
+ =?utf-8?B?dVNxd1QwbjZwdGFOU0JSRmpPK1R5aWF5SHJWM0Vrb2YrbnVTNGdPUGtzK1dQ?=
+ =?utf-8?B?QlZoaVNYcjFQVnZZKzNYVmFERkVmNnc4MkpwNnljbTB0K1liSTdqZz09?=
+X-Exchange-RoutingPolicyChecked: eL2/EBeOscdr5KaQk8R+BaJ0Hq8S6tuskbEbVNiBqFEfh2kJl/mY76SSPMtEaNL5LthWMVKPP5DgUfAeGqFJpBYpM8VZ/8pXKyuVZosAY27zQG8zBIpQDy0dhziF6JBSdKkPUsKWDMyuOi9HEzRYeMXbWA7cD3GxbJV/c52qUIIPYBSHOUZq+iMAfHbAAkMulA0NlCNz1+f7SuHeQL2w4KbwAzoyUci2RTm5guBLKjUpmdkgs1UAwztjvINfDDSHKRzQeoMMMZl678f3wsq/eIpIsXWYEgDCwi0MrOG8yEOuQcXy/KlAVVikFe9O7Cg1L37qe4kF15ii2GH1oYtW5g==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12cbe476-0615-463c-e919-08df12d7c21f
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6932.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2026 03:16:39.6981
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: g2l5pWepHehP0ieVlvISK+iPDPUIVCNHQUcNMBAdcFyGFfOuWOo/BpGg6Spq8PklL+TXgCybbX7edbXvQzn1sw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB7473
+X-OriginatorOrg: intel.com
 
-From: Hangbin Liu <liuhangbin@kylinos.cn>
 
-Many test scripts under tools/testing/selftests/net/ each define their
-own log_test() function with near-identical logic for comparing a return
-code against an expected value and printing OK/FAIL. Add a shared
-log_test_expected() to lib.sh so we can replace each local definitions.
+> Hmm... Curious what's the expectation from the KVM maintainers for this 
+> patch. Couldn't be directly sent out to the x86 maintainer?
+> 
 
-The function is named log_test_expected() rather than log_test() because
-lib.sh already exports log_test() with a different signature used by
-the forwarding tests.
+I developed the test during KVM development and mainly kept it here for
+reference. As mentioned in the cover letter, patches 1-5 should only be
+considered for inclusion for KVM support.
 
-Most of the checks in log_test_expected() are the same as log_test()
-in other tests. The differences are:
+Yes, eventually planning to submit it directly to the x86 maintainers.
 
-- On failure, ret is set via ksft_exit_status_merge() instead of ret=1,
-  so we can propagate ksft_xfail status correctly.
-- The function always returns 0 to avoid influencing later code.
-- On failure with VERBOSE=1, the actual and expected return codes are
-  printed (echo "    rc=$rc, expected $expected").
-- A PAUSE_ON_FAIL check is added via pause_on_fail() for scripts that
-  did not have one.
-- A PAUSE=yes check is added for scripts that did not have one.
-- A trailing [ "$VERBOSE" = "1" ] && echo is added for scripts that
-  did not have one.
-
-Several tests required special handling:
-
-- fcnal-test.sh
-  - Print format: it uses %-70s, while log_test_expected() uses %-60s.
-  - The old code always printed "expected rc $expected; actual rc $rc"
-    on failure. The new code only prints when VERBOSE=1.
-  - The old [ "${VERBOSE}" = "1" ] && echo ran before the comparison;
-    now it runs after the PAUSE check.
-- fdb_flush.sh
-  - It used local ret, nsuccess, and nfail, which are not used outside
-    the function. The log_test_expected() uses global variables as all
-    other tests do.
-- fib-onlink-tests.sh
-  - Print format: it uses %-50s, while log_test_expected() uses %-60s.
-- fib_nexthops.sh
-  - this test checked for ksft_skip (exit code 4) inside log_test(),
-    but no test in the file produces that code. The check is removed,
-    callers that need to report a skip should use log_test_skip() instead.
-  - Two callers compared against exit code 2 are left as-is since code 2
-    correctly counts as a failure in the previous log_test().
-- srv6_end_dx*.sh and srv6_end_flavors_test.sh
-  - These three tests previously defined ksft_skip locally instead of
-    sourcing lib.sh. They now source lib.sh, which provides ksft_skip
-    and other framework constants. Note that srv6_end_flavors_test.sh
-    previously declared ksft_skip as readonly; the lib.sh definition
-    does not use readonly.
-
-In addition to the above, 13 tests that previously used "TEST:" now use
-"    TEST:" (4-space prefix), and srv6 tests plus vrf_strict_mode_test.sh
-that previously used "\n    TEST:" (newline + 4-space prefix) now with no
-leading newline.
-
-Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
----
-Changes in v3:
-- Always return 0 for log_test_expected (Jakub)
-- Add detailed change log in commit description.
-- Link to v2: https://lore.kernel.org/r/20260831-self_log_test-v2-1-eda2e8490cf9@kylinos.cn
-
-Changes in v2:
-- Remove skip/xfail checking in lib.sh, as any command can exits with 2 or 4 (sashiko)
-- Remove nskip counter in fib_nexthops.sh
-- Link to v1: https://lore.kernel.org/r/20260813-self_log_test-v1-1-f88b1107842e@kylinos.cn
----
- tools/testing/selftests/net/drop_monitor_tests.sh  | 13 +------
- tools/testing/selftests/net/fcnal-test.sh          | 29 +-------------
- tools/testing/selftests/net/fdb_flush.sh           | 35 +----------------
- tools/testing/selftests/net/fib-onlink-tests.sh    | 18 +--------
- .../selftests/net/fib_nexthop_multiprefix.sh       | 21 +----------
- tools/testing/selftests/net/fib_nexthop_nongw.sh   | 21 +----------
- tools/testing/selftests/net/fib_nexthops.sh        | 44 ++--------------------
- tools/testing/selftests/net/fib_rule_tests.sh      | 19 +---------
- tools/testing/selftests/net/fib_tests.sh           | 26 +------------
- tools/testing/selftests/net/gre_gso.sh             | 26 +------------
- tools/testing/selftests/net/icmp_redirect.sh       | 19 +---------
- tools/testing/selftests/net/l2tp.sh                | 19 +---------
- tools/testing/selftests/net/lib.sh                 | 33 ++++++++++++++++
- .../selftests/net/ndisc_unsolicited_na_test.sh     | 26 +------------
- .../selftests/net/srv6_encap_lookup_l3vpn_test.sh  | 19 +---------
- .../selftests/net/srv6_end_dt46_l3vpn_test.sh      | 19 +---------
- .../selftests/net/srv6_end_dt4_l3vpn_test.sh       | 19 +---------
- .../selftests/net/srv6_end_dt6_l3vpn_test.sh       | 19 +---------
- .../selftests/net/srv6_end_dx4_netfilter_test.sh   | 23 ++---------
- .../selftests/net/srv6_end_dx6_netfilter_test.sh   | 23 ++---------
- .../testing/selftests/net/srv6_end_flavors_test.sh | 23 ++---------
- .../selftests/net/srv6_end_next_csid_l3vpn_test.sh | 19 +---------
- .../net/srv6_end_x_next_csid_l3vpn_test.sh         | 19 +---------
- .../selftests/net/srv6_hencap_red_l3vpn_test.sh    | 19 +---------
- .../selftests/net/srv6_hl2encap_red_l2vpn_test.sh  | 19 +---------
- .../selftests/net/test_bridge_backup_port.sh       | 32 +---------------
- .../selftests/net/test_bridge_neigh_suppress.sh    | 34 +----------------
- tools/testing/selftests/net/test_vxlan_mdb.sh      | 32 +---------------
- .../selftests/net/test_vxlan_nolocalbypass.sh      | 32 +---------------
- .../selftests/net/test_vxlan_vnifiltering.sh       | 26 +------------
- tools/testing/selftests/net/vrf-xfrm-tests.sh      | 19 +---------
- tools/testing/selftests/net/vrf_route_leaking.sh   | 19 +---------
- .../testing/selftests/net/vrf_strict_mode_test.sh  | 19 +---------
- 33 files changed, 73 insertions(+), 710 deletions(-)
-
-diff --git a/tools/testing/selftests/net/drop_monitor_tests.sh b/tools/testing/selftests/net/drop_monitor_tests.sh
-index 507d0a82f5f0..7da85608561b 100755
---- a/tools/testing/selftests/net/drop_monitor_tests.sh
-+++ b/tools/testing/selftests/net/drop_monitor_tests.sh
-@@ -18,18 +18,7 @@ DEVLINK_DEV=netdevsim/${DEV}
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "    TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "    TEST: %-60s  [FAIL]\n" "${msg}"
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- setup()
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 890c3f8e51bb..a50609535fed 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -97,34 +97,7 @@ fi
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--	local ans
--
--	[ "${VERBOSE}" = "1" ] && echo
--
--	if [ ${rc} -eq ${expected} ]; then
--		nsuccess=$((nsuccess+1))
--		printf "TEST: %-70s  [ OK ]\n" "${msg}"
--	else
--		nfail=$((nfail+1))
--		printf "TEST: %-70s  [FAIL]\n" "${msg}"
--		echo "    expected rc $expected; actual rc $rc"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read ans
--			[ "$ans" = "q" ] && exit 1
--		fi
--	fi
--
--	if [ "${PAUSE}" = "yes" ]; then
--		echo
--		echo "hit enter to continue, 'q' to quit"
--		read ans
--		[ "$ans" = "q" ] && exit 1
--	fi
-+	log_test_expected "$1" "$2" "$3"
- 
- 	kill_procs
- }
-diff --git a/tools/testing/selftests/net/fdb_flush.sh b/tools/testing/selftests/net/fdb_flush.sh
-index 9931a1e36e3d..4965e52d5ef5 100755
---- a/tools/testing/selftests/net/fdb_flush.sh
-+++ b/tools/testing/selftests/net/fdb_flush.sh
-@@ -67,40 +67,7 @@ run_cmd()
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--	local nsuccess
--	local nfail
--	local ret
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "$VERBOSE" = "1" ]; then
--			echo "    rc=$rc, expected $expected"
--		fi
--
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--		echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
--
--	if [ "${PAUSE}" = "yes" ]; then
--		echo
--		echo "hit enter to continue, 'q' to quit"
--		read a
--		[ "$a" = "q" ] && exit 1
--	fi
--
--	[ "$VERBOSE" = "1" ] && echo
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- MAC_POOL_1="
-diff --git a/tools/testing/selftests/net/fib-onlink-tests.sh b/tools/testing/selftests/net/fib-onlink-tests.sh
-index e0d45292a298..a26075abf7d2 100755
---- a/tools/testing/selftests/net/fib-onlink-tests.sh
-+++ b/tools/testing/selftests/net/fib-onlink-tests.sh
-@@ -85,23 +85,7 @@ PBR_TABLE=101
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		nsuccess=$((nsuccess+1))
--		printf "    TEST: %-50s  [ OK ]\n" "${msg}"
--	else
--		nfail=$((nfail+1))
--		printf "    TEST: %-50s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- log_section()
-diff --git a/tools/testing/selftests/net/fib_nexthop_multiprefix.sh b/tools/testing/selftests/net/fib_nexthop_multiprefix.sh
-index e85248609af4..bd0b8a053ea1 100755
---- a/tools/testing/selftests/net/fib_nexthop_multiprefix.sh
-+++ b/tools/testing/selftests/net/fib_nexthop_multiprefix.sh
-@@ -23,26 +23,7 @@ which ping6 > /dev/null 2>&1 && ping6=$(which ping6) || ping6=$(which ping)
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
--
--	[ "$VERBOSE" = "1" ] && echo
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- run_cmd()
-diff --git a/tools/testing/selftests/net/fib_nexthop_nongw.sh b/tools/testing/selftests/net/fib_nexthop_nongw.sh
-index 1ccf56f10171..4d483cb83593 100755
---- a/tools/testing/selftests/net/fib_nexthop_nongw.sh
-+++ b/tools/testing/selftests/net/fib_nexthop_nongw.sh
-@@ -18,26 +18,7 @@ ret=0
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
--
--	[ "$VERBOSE" = "1" ] && echo
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- run_cmd()
-diff --git a/tools/testing/selftests/net/fib_nexthops.sh b/tools/testing/selftests/net/fib_nexthops.sh
-index 431d7bed7622..d0d979e8e438 100755
---- a/tools/testing/selftests/net/fib_nexthops.sh
-+++ b/tools/testing/selftests/net/fib_nexthops.sh
-@@ -70,44 +70,7 @@ nsid=100
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		if [[ $rc -eq $ksft_skip ]]; then
--			[[ $ret -eq 0 ]] && ret=$ksft_skip
--			nskip=$((nskip+1))
--			printf "TEST: %-60s  [SKIP]\n" "${msg}"
--		else
--			ret=1
--			nfail=$((nfail+1))
--			printf "TEST: %-60s  [FAIL]\n" "${msg}"
--		fi
--
--		if [ "$VERBOSE" = "1" ]; then
--			echo "    rc=$rc, expected $expected"
--		fi
--
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--		echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
--
--	if [ "${PAUSE}" = "yes" ]; then
--		echo
--		echo "hit enter to continue, 'q' to quit"
--		read a
--		[ "$a" = "q" ] && exit 1
--	fi
--
--	[ "$VERBOSE" = "1" ] && echo
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- run_cmd()
-@@ -1258,7 +1221,7 @@ ipv6_fcnal_runtime()
- 		run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
- 		log_test $? 0 "Ping - group blackhole replaced with gateways"
- 	else
--		log_test 2 0 "Ping - multipath failed"
-+		log_test $rc 0 "Ping - multipath failed"
- 	fi
- 
- 	#
-@@ -1915,7 +1878,7 @@ ipv4_fcnal_runtime()
- 		run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
- 		log_test $? 0 "Ping - group blackhole replaced with gateways"
- 	else
--		log_test 2 0 "Ping - multipath failed"
-+		log_test $rc 0 "Ping - multipath failed"
- 	fi
- 
- 	#
-@@ -2729,7 +2692,6 @@ done
- if [ "$TESTS" != "none" ]; then
- 	printf "\nTests passed: %3d\n" ${nsuccess}
- 	printf "Tests failed: %3d\n"   ${nfail}
--	printf "Tests skipped: %2d\n"  ${nskip}
- fi
- 
- exit $ret
-diff --git a/tools/testing/selftests/net/fib_rule_tests.sh b/tools/testing/selftests/net/fib_rule_tests.sh
-index 5fbdd2a0b537..5d66b00e61b2 100755
---- a/tools/testing/selftests/net/fib_rule_tests.sh
-+++ b/tools/testing/selftests/net/fib_rule_tests.sh
-@@ -31,24 +31,7 @@ SELFTEST_PATH=""
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		nsuccess=$((nsuccess+1))
--		printf "    TEST: %-60s  [ OK ]\n" "${msg}"
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- setup()
-diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-index b338bfb196a2..7df967a2d669 100755
---- a/tools/testing/selftests/net/fib_tests.sh
-+++ b/tools/testing/selftests/net/fib_tests.sh
-@@ -24,31 +24,7 @@ which ping6 > /dev/null 2>&1 && ping6=$(which ping6) || ping6=$(which ping)
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "    TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--		echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
--
--	if [ "${PAUSE}" = "yes" ]; then
--		echo
--		echo "hit enter to continue, 'q' to quit"
--		read a
--		[ "$a" = "q" ] && exit 1
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- setup()
-diff --git a/tools/testing/selftests/net/gre_gso.sh b/tools/testing/selftests/net/gre_gso.sh
-index 5100d90f92d2..4ebe1ed6e9c9 100755
---- a/tools/testing/selftests/net/gre_gso.sh
-+++ b/tools/testing/selftests/net/gre_gso.sh
-@@ -16,31 +16,7 @@ PID=
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "    TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--		echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
--
--	if [ "${PAUSE}" = "yes" ]; then
--		echo
--		echo "hit enter to continue, 'q' to quit"
--		read a
--		[ "$a" = "q" ] && exit 1
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- setup()
-diff --git a/tools/testing/selftests/net/icmp_redirect.sh b/tools/testing/selftests/net/icmp_redirect.sh
-index 35357d02e823..e724f895ae2c 100755
---- a/tools/testing/selftests/net/icmp_redirect.sh
-+++ b/tools/testing/selftests/net/icmp_redirect.sh
-@@ -61,24 +61,7 @@ log_section()
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- log_debug()
-diff --git a/tools/testing/selftests/net/l2tp.sh b/tools/testing/selftests/net/l2tp.sh
-index 88de7166c8ae..41e8b19d1bd3 100755
---- a/tools/testing/selftests/net/l2tp.sh
-+++ b/tools/testing/selftests/net/l2tp.sh
-@@ -23,24 +23,7 @@ which ping6 > /dev/null 2>&1 && ping6=$(which ping6) || ping6=$(which ping)
- #
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- run_cmd()
-diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-index d46d2cec89e4..f698fa3d2bd5 100644
---- a/tools/testing/selftests/net/lib.sh
-+++ b/tools/testing/selftests/net/lib.sh
-@@ -454,6 +454,39 @@ log_test_xfail()
- 	RET=$ksft_xfail retmsg= log_test "$@"
- }
- 
-+# Log test result with expected return value
-+log_test_expected()
-+{
-+	local rc=$1
-+	local expected=$2
-+	local msg="$3"
-+
-+	if [ "${rc}" -eq "${expected}" ]; then
-+		nsuccess=$((nsuccess+1))
-+		printf "    TEST: %-60s  [ OK ]\n" "${msg}"
-+	else
-+		ret=$(ksft_exit_status_merge "$ret" "$ksft_fail")
-+		nfail=$((nfail+1))
-+		printf "    TEST: %-60s  [FAIL]\n" "${msg}"
-+		if [ "$VERBOSE" = "1" ]; then
-+			echo "    rc=$rc, expected $expected"
-+		fi
-+
-+		pause_on_fail
-+	fi
-+
-+	if [ "${PAUSE}" = "yes" ]; then
-+		echo
-+		echo "hit enter to continue, 'q' to quit"
-+		read -r a
-+		[ "$a" = "q" ] && exit 1
-+	fi
-+
-+	[ "$VERBOSE" = "1" ] && echo
-+
-+	return 0
-+}
-+
- log_info()
- {
- 	local msg=$1
-diff --git a/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh b/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
-index 5db69dad0cfc..89072d30fc59 100755
---- a/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
-+++ b/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
-@@ -30,31 +30,7 @@ tcpdump_stderr=
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "    TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--		echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
--
--	if [ "${PAUSE}" = "yes" ]; then
--		echo
--		echo "hit enter to continue, 'q' to quit"
--		read a
--		[ "$a" = "q" ] && exit 1
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- setup()
-diff --git a/tools/testing/selftests/net/srv6_encap_lookup_l3vpn_test.sh b/tools/testing/selftests/net/srv6_encap_lookup_l3vpn_test.sh
-index d6249303b7ea..8241de6827de 100755
---- a/tools/testing/selftests/net/srv6_encap_lookup_l3vpn_test.sh
-+++ b/tools/testing/selftests/net/srv6_encap_lookup_l3vpn_test.sh
-@@ -202,24 +202,7 @@ PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
- 
- log_test()
- {
--	local rc="$1"
--	local expected="$2"
--	local msg="$3"
--
--	if [ "${rc}" -eq "${expected}" ]; then
--		nsuccess=$((nsuccess+1))
--		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read -r a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- print_log_test_results()
-diff --git a/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
-index 50e37d3217ea..900a2ae42335 100755
---- a/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
-@@ -208,24 +208,7 @@ PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		nsuccess=$((nsuccess+1))
--		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- print_log_test_results()
-diff --git a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-index 037e5fe1da2a..260170dc8443 100755
---- a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-@@ -177,24 +177,7 @@ PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		nsuccess=$((nsuccess+1))
--		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- print_log_test_results()
-diff --git a/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
-index 9a29e0d6c912..6d4d6a23ecc4 100755
---- a/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
-@@ -178,24 +178,7 @@ PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		nsuccess=$((nsuccess+1))
--		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- print_log_test_results()
-diff --git a/tools/testing/selftests/net/srv6_end_dx4_netfilter_test.sh b/tools/testing/selftests/net/srv6_end_dx4_netfilter_test.sh
-index e23210aa547f..aeddbef536d6 100755
---- a/tools/testing/selftests/net/srv6_end_dx4_netfilter_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_dx4_netfilter_test.sh
-@@ -111,8 +111,8 @@
- # +---------------------------------------------------+
- #
- 
--# Kselftest framework requirement - SKIP code is 4.
--ksft_skip=4
-+# shellcheck source=lib.sh
-+source lib.sh
- 
- readonly IPv6_RT_NETWORK=2001:11
- readonly IPv4_HS_NETWORK=10.0.0
-@@ -126,24 +126,7 @@ PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		nsuccess=$((nsuccess+1))
--		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- print_log_test_results()
-diff --git a/tools/testing/selftests/net/srv6_end_dx6_netfilter_test.sh b/tools/testing/selftests/net/srv6_end_dx6_netfilter_test.sh
-index 9e69a2ed5bc3..8fbeda1372e1 100755
---- a/tools/testing/selftests/net/srv6_end_dx6_netfilter_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_dx6_netfilter_test.sh
-@@ -111,8 +111,8 @@
- # +---------------------------------------------------+
- #
- 
--# Kselftest framework requirement - SKIP code is 4.
--ksft_skip=4
-+# shellcheck source=lib.sh
-+source lib.sh
- 
- readonly IPv6_RT_NETWORK=2001:11
- readonly IPv6_HS_NETWORK=cafe
-@@ -126,24 +126,7 @@ PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		nsuccess=$((nsuccess+1))
--		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- print_log_test_results()
-diff --git a/tools/testing/selftests/net/srv6_end_flavors_test.sh b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-index 318487eda671..30a939392eea 100755
---- a/tools/testing/selftests/net/srv6_end_flavors_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-@@ -194,8 +194,8 @@
- # after the IPv6 header. At this point, the packet with IPv6 DA=cafe::1 is sent
- # to the destination, i.e. hs-1.
- 
--# Kselftest framework requirement - SKIP code is 4.
--readonly ksft_skip=4
-+# shellcheck source=lib.sh
-+source lib.sh
- 
- readonly RDMSUFF="$(mktemp -u XXXXXXXX)"
- readonly DUMMY_DEVNAME="dum0"
-@@ -224,24 +224,7 @@ nfail=0
- 
- log_test()
- {
--	local rc="$1"
--	local expected="$2"
--	local msg="$3"
--
--	if [ "${rc}" -eq "${expected}" ]; then
--		nsuccess=$((nsuccess+1))
--		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- print_log_test_results()
-diff --git a/tools/testing/selftests/net/srv6_end_next_csid_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_next_csid_l3vpn_test.sh
-index 4bc135e5c22c..2e2ae21974ae 100755
---- a/tools/testing/selftests/net/srv6_end_next_csid_l3vpn_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_next_csid_l3vpn_test.sh
-@@ -323,24 +323,7 @@ nfail=0
- 
- log_test()
- {
--	local rc="$1"
--	local expected="$2"
--	local msg="$3"
--
--	if [ "${rc}" -eq "${expected}" ]; then
--		nsuccess=$((nsuccess+1))
--		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- print_log_test_results()
-diff --git a/tools/testing/selftests/net/srv6_end_x_next_csid_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_x_next_csid_l3vpn_test.sh
-index 34b781a2ae74..b492a7f0297f 100755
---- a/tools/testing/selftests/net/srv6_end_x_next_csid_l3vpn_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_x_next_csid_l3vpn_test.sh
-@@ -368,24 +368,7 @@ nfail=0
- 
- log_test()
- {
--	local rc="$1"
--	local expected="$2"
--	local msg="$3"
--
--	if [ "${rc}" -eq "${expected}" ]; then
--		nsuccess=$((nsuccess+1))
--		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- print_log_test_results()
-diff --git a/tools/testing/selftests/net/srv6_hencap_red_l3vpn_test.sh b/tools/testing/selftests/net/srv6_hencap_red_l3vpn_test.sh
-index cd7d061e21f8..64ea4e2308b6 100755
---- a/tools/testing/selftests/net/srv6_hencap_red_l3vpn_test.sh
-+++ b/tools/testing/selftests/net/srv6_hencap_red_l3vpn_test.sh
-@@ -197,24 +197,7 @@ HAS_TUNSRC=false
- 
- log_test()
- {
--	local rc="$1"
--	local expected="$2"
--	local msg="$3"
--
--	if [ "${rc}" -eq "${expected}" ]; then
--		nsuccess=$((nsuccess+1))
--		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- print_log_test_results()
-diff --git a/tools/testing/selftests/net/srv6_hl2encap_red_l2vpn_test.sh b/tools/testing/selftests/net/srv6_hl2encap_red_l2vpn_test.sh
-index 0979b5316fdf..31e41cc4922e 100755
---- a/tools/testing/selftests/net/srv6_hl2encap_red_l2vpn_test.sh
-+++ b/tools/testing/selftests/net/srv6_hl2encap_red_l2vpn_test.sh
-@@ -146,24 +146,7 @@ nfail=0
- 
- log_test()
- {
--	local rc="$1"
--	local expected="$2"
--	local msg="$3"
--
--	if [ "${rc}" -eq "${expected}" ]; then
--		nsuccess=$((nsuccess+1))
--		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- print_log_test_results()
-diff --git a/tools/testing/selftests/net/test_bridge_backup_port.sh b/tools/testing/selftests/net/test_bridge_backup_port.sh
-index 2a7224fe74f2..8bc76be2b2d3 100755
---- a/tools/testing/selftests/net/test_bridge_backup_port.sh
-+++ b/tools/testing/selftests/net/test_bridge_backup_port.sh
-@@ -56,37 +56,7 @@ PING_TIMEOUT=5
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "$VERBOSE" = "1" ]; then
--			echo "    rc=$rc, expected $expected"
--		fi
--
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--		echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
--
--	if [ "${PAUSE}" = "yes" ]; then
--		echo
--		echo "hit enter to continue, 'q' to quit"
--		read a
--		[ "$a" = "q" ] && exit 1
--	fi
--
--	[ "$VERBOSE" = "1" ] && echo
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- run_cmd()
-diff --git a/tools/testing/selftests/net/test_bridge_neigh_suppress.sh b/tools/testing/selftests/net/test_bridge_neigh_suppress.sh
-index e9ed0d750996..9d2dc0faf741 100755
---- a/tools/testing/selftests/net/test_bridge_neigh_suppress.sh
-+++ b/tools/testing/selftests/net/test_bridge_neigh_suppress.sh
-@@ -72,39 +72,7 @@ PAUSE=no
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		# shellcheck disable=SC2154
--		ret=$(ksft_exit_status_merge "$ret" "$ksft_fail")
--		nfail=$((nfail+1))
--		printf "TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "$VERBOSE" = "1" ]; then
--			echo "    rc=$rc, expected $expected"
--		fi
--
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--		echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
--
--	if [ "${PAUSE}" = "yes" ]; then
--		echo
--		echo "hit enter to continue, 'q' to quit"
--		read a
--		[ "$a" = "q" ] && exit 1
--	fi
--
--	[ "$VERBOSE" = "1" ] && echo
--	return 0
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- run_cmd()
-diff --git a/tools/testing/selftests/net/test_vxlan_mdb.sh b/tools/testing/selftests/net/test_vxlan_mdb.sh
-index f9600aabd4a2..2ebb4d8a3026 100755
---- a/tools/testing/selftests/net/test_vxlan_mdb.sh
-+++ b/tools/testing/selftests/net/test_vxlan_mdb.sh
-@@ -133,37 +133,7 @@ PAUSE=no
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "$VERBOSE" = "1" ]; then
--			echo "    rc=$rc, expected $expected"
--		fi
--
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--		echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
--
--	if [ "${PAUSE}" = "yes" ]; then
--		echo
--		echo "hit enter to continue, 'q' to quit"
--		read a
--		[ "$a" = "q" ] && exit 1
--	fi
--
--	[ "$VERBOSE" = "1" ] && echo
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- run_cmd()
-diff --git a/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh b/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
-index b8805983b728..c51ca0b532dd 100755
---- a/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
-+++ b/tools/testing/selftests/net/test_vxlan_nolocalbypass.sh
-@@ -24,37 +24,7 @@ PAUSE=no
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "$VERBOSE" = "1" ]; then
--			echo "    rc=$rc, expected $expected"
--		fi
--
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--		echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
--
--	if [ "${PAUSE}" = "yes" ]; then
--		echo
--		echo "hit enter to continue, 'q' to quit"
--		read a
--		[ "$a" = "q" ] && exit 1
--	fi
--
--	[ "$VERBOSE" = "1" ] && echo
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- run_cmd()
-diff --git a/tools/testing/selftests/net/test_vxlan_vnifiltering.sh b/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
-index 8deacc565afa..6fb5af013dac 100755
---- a/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
-+++ b/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
-@@ -98,31 +98,7 @@ which ping6 > /dev/null 2>&1 && ping6=$(which ping6) || ping6=$(which ping)
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "    TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--		echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
--
--	if [ "${PAUSE}" = "yes" ]; then
--		echo
--		echo "hit enter to continue, 'q' to quit"
--		read a
--		[ "$a" = "q" ] && exit 1
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- run_cmd()
-diff --git a/tools/testing/selftests/net/vrf-xfrm-tests.sh b/tools/testing/selftests/net/vrf-xfrm-tests.sh
-index b64dd891699d..a4617e5dace7 100755
---- a/tools/testing/selftests/net/vrf-xfrm-tests.sh
-+++ b/tools/testing/selftests/net/vrf-xfrm-tests.sh
-@@ -35,24 +35,7 @@ which ping6 > /dev/null 2>&1 && ping6=$(which ping6) || ping6=$(which ping)
- #
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		printf "TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- run_cmd_host1()
-diff --git a/tools/testing/selftests/net/vrf_route_leaking.sh b/tools/testing/selftests/net/vrf_route_leaking.sh
-index ce34cb2e6e0b..abf106e0f0c0 100755
---- a/tools/testing/selftests/net/vrf_route_leaking.sh
-+++ b/tools/testing/selftests/net/vrf_route_leaking.sh
-@@ -99,24 +99,7 @@ log_section()
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ "${rc}" -eq "${expected}" ]; then
--		printf "TEST: %-60s  [ OK ]\n" "${msg}"
--		nsuccess=$((nsuccess+1))
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read -r a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- run_cmd()
-diff --git a/tools/testing/selftests/net/vrf_strict_mode_test.sh b/tools/testing/selftests/net/vrf_strict_mode_test.sh
-index 01552b542544..7de1873362ba 100755
---- a/tools/testing/selftests/net/vrf_strict_mode_test.sh
-+++ b/tools/testing/selftests/net/vrf_strict_mode_test.sh
-@@ -16,24 +16,7 @@ TESTS="init testns mix"
- 
- log_test()
- {
--	local rc=$1
--	local expected=$2
--	local msg="$3"
--
--	if [ ${rc} -eq ${expected} ]; then
--		nsuccess=$((nsuccess+1))
--		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
--	else
--		ret=1
--		nfail=$((nfail+1))
--		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo
--			echo "hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--	fi
-+	log_test_expected "$1" "$2" "$3"
- }
- 
- print_log_test_results()
-
----
-base-commit: 272a65db243bfa34b9277632830e0e06d7e3518e
-change-id: 20260812-self_log_test-b76eaf73e23f
-
-Best regards,
--- 
-Hangbin Liu <liuhangbin@kylinos.cn>
 
