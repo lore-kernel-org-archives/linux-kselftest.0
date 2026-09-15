@@ -1,35 +1,35 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D60AF39792B;
-	Tue, 15 Sep 2026 09:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF762472F66;
+	Tue, 15 Sep 2026 09:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789464116; cv=none; b=huTOOCAML/BZ/6KsQIzQObzDI4PG3/2paFRhl2ql/sGGtu6e8kOo1By30J3a5/Me8GKccBOnzoj+OKQ9RCBkVRPy7vbd8eYBF+4kR4Zu/nqpx+ZjNdAIfa284Owoa5TaIWQnwbKMQPZbFOX7d4+k1qYyd29Ooo+0jIYe0idgU9o=
+	t=1789464119; cv=none; b=r2iJlRD+r4kJ4HipfnpaM3kpk21JgLP6JrnxqykCDQ/p8DKfVF+DDW6CeLfRQJAjk5B6vCWD49AIqdXE14IrSo8ZResWZvM3JDJ+8TmKSUdXI8Mg/ASKWo1hZqhLs9nUU6KgT6NREQilI52J4KhmmIs/+DODYS3jgv/Tspwh7wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789464116; c=relaxed/simple;
-	bh=D8etrFh5PGy5HLvPhwqGM1Wl5RU8d5sdnQrtvxeo55k=;
+	s=arc-20240116; t=1789464119; c=relaxed/simple;
+	bh=yxQR2EiRSnlOGVI9wDjEBOU2jCM7zzSGFANR8dJ9rAs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ovE1s7GBV346eqNEbVAuiCD/skPpjgmBUtYwANEp4/n5XbTkrw6igRmZHfnLUp4gwNe4TW60ma27DuuxOL4qiskHrdWXPGhElndk1Kee35LRlH8ySGB8Ervm0pGtn44i8+kov8pW6PwJHlywbdi6lQBUfeF/6P740mp1BAEEA0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=p4rMo+IJ; arc=none smtp.client-ip=217.140.110.172
+	 In-Reply-To:To:Cc; b=WymIqiFVfL1TD2lfSWgWQQgEbFmmcRIrolmt3sVu5JTM9JQ94utRDkn/aoAj79F51azci9SidT1JGljNzr3PJAKd7aDfzfraQt2+slAg18AfGba4CDEQDVF5QkMEXe+OJ684MlznhS3z6Bo0gIbW1w4bzPqr1sQUVAYDAsfbo8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=J+kAJGL2; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="p4rMo+IJ"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="J+kAJGL2"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 63483169E;
-	Tue, 15 Sep 2026 02:21:49 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A9B1716F3;
+	Tue, 15 Sep 2026 02:21:52 -0700 (PDT)
 Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0F3F93F86F;
-	Tue, 15 Sep 2026 02:21:49 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 52A473F86F;
+	Tue, 15 Sep 2026 02:21:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1789464113; bh=D8etrFh5PGy5HLvPhwqGM1Wl5RU8d5sdnQrtvxeo55k=;
+	t=1789464116; bh=yxQR2EiRSnlOGVI9wDjEBOU2jCM7zzSGFANR8dJ9rAs=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=p4rMo+IJ/Gkhmw6l4doFJOhI3kq5Jsrz6oPJZQHc42wSQRksETR+uZr0N63rimdPT
-	 TulTZLc1rZ7RX5Uo2fH7NNx47T6wNGRrtEkh4ryD1XR5bYqV0pzgpeiWYhM0iI144d
-	 fz13VfZSG3KjlMxrf7pKTlhU4YDzO7wL/2D02w1I=
+	b=J+kAJGL2BjHbdj6nYrlMZsL3L9Lj2PjwDM80cYWXHd1Vp1lOWJjcq7Q2Qm/j5XnHw
+	 OjgNB6wv7FOdPdyIcamVigwYNKsdDZGFctCFK0J3gYwPRK/VObjoS9MkLMoYsaBWd+
+	 iOZ73SrYMpRizoPmYiqkSnm4/uZLMV/BOtsF+YYY=
 From: Yeoreum Yun <yeoreum.yun@arm.com>
-Date: Tue, 15 Sep 2026 10:21:36 +0100
-Subject: [PATCH 1/2] kselftest: mm: return fail when child test result is
- fail in khugepaged
+Date: Tue, 15 Sep 2026 10:21:37 +0100
+Subject: [PATCH 2/2] kselftest: mm: fix intermittent failure khugepaged
+ test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,8 +37,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260915-fix_khugepagd_fail-v1-1-bb6f04c8759f@arm.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260915-fix_khugepagd_fail-v1-2-bb6f04c8759f@arm.com>
 References: <20260915-fix_khugepagd_fail-v1-0-bb6f04c8759f@arm.com>
 In-Reply-To: <20260915-fix_khugepagd_fail-v1-0-bb6f04c8759f@arm.com>
 To: Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
@@ -54,28 +54,25 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
  David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>, 
  Yeoreum Yun <yeoreum.yun@arm.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3364; i=yeoreum.yun@arm.com;
- h=from:subject:message-id; bh=D8etrFh5PGy5HLvPhwqGM1Wl5RU8d5sdnQrtvxeo55k=;
- b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBqqQ4pqgL4yB1OOTyqBCX0ujLg4uw+AK27HNSUj
- klNmhjYVguJAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCaqkOKQAKCRBt1cPRWsUx
- M9jODAC1p2pD+ImErVv4cHBblEws2o83F5MqG+kFAp3hq2sM3JAWDCTu/5rzPSZ96XYiCOJhGfQ
- Rz1CgascbrrgUX2lkNITzBJZxvDWiN3vHHkFSDHAq7vN0Nb1JX/FwmMDbUGU6sokZ/crr7W6B0E
- G6uz2lKxu5jE1uaNPROWId6JjXzJN8H2Tk3JQQFCPb/fwWOxZQ9lo1i07Xj4WiNkR/NhfeurO/m
- YhBJ4okasmpw3TKuufoFso92MjiKWPoZHJY89APsnRUuE808RM4W0m3+X2MPEdoHgJv87iNzuIp
- mlE7lt1w9eHwawcgv1VKEtNtN/BfFLuVSOoC/2IqrIvFwEoQr1A4MBCDO/moKVMRO82eYnFoX0j
- EX2FBnBXoIuILwFvQIDXGgCBC/hayweE+WrJL1J2iGBky7rP649fMnf9lsQZEwSatQDRw7ZfVaR
- AFpGz+ZgIS5jCcn7qJr2/3bbGw7p2VjhBZXC6ewfU63Kf22QhYcek+UTvZ0FuUZaIsKf4=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4423; i=yeoreum.yun@arm.com;
+ h=from:subject:message-id; bh=yxQR2EiRSnlOGVI9wDjEBOU2jCM7zzSGFANR8dJ9rAs=;
+ b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBqqQ4qQATMvvJEK3ZYgcRPUbjS+53++Tk8Ysis4
+ XDYAEUYOq6JAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCaqkOKgAKCRBt1cPRWsUx
+ M78uC/9CIAfRf6zmk9YykwQpH7GNfMsVHT0Grsqco4DCwk9jbC2K1EPyUOVkW0gj+SOVAz1/CO0
+ mYO/mSYIKo6ElFDUjk1tg/UIANN7l2em3oLht51OtL6Mvj6Bb5ZYfWi1dTBpW+gp+0NTNBW1zER
+ ejI7obz8sZUIuzHc5osND5TB9ClnKht4UKAcIYHSvtstrRj5Fpd5gejXxDVmiUkjCY/SVh0PVbw
+ tX/4G46b+FvLKW5Z6XYUxTwpJGZXhdZUWZw6jj0GygVml0ZgEXG4kN+7Uj60v2C5+FG6Fe+yPxH
+ mdZ62oyYjMykd6NiUqitvlkKtE64uhCNF+q18Jz72OWlv1/ZutO7xi0qkSrzHxBtUAnQ4TLjQJ2
+ 4VTylKZKrAw4Dk74VkTlgui5x47mZW3zuRBYevCgvbOutVIppYF8XbIlb/C+ykVM2nOgWlcb4T1
+ RRWqJCj2bpT9Fn6qeA1coHIsV37cXOjbs0uI3u3zI7L15ZxPHBo1JWaSVDXUkyrEJDcm0=
 X-Developer-Key: i=yeoreum.yun@arm.com; a=openpgp;
  fpr=2D83E092DD0533B85875A49D6DD5C3D15AC53133
 
-Although the child process in collapse_fork*() or collapse_max_ptes_shared()
-reports `KSFT_FAIL`, the result is ignored because the test only checks
-whether the parent’s page was collapsed into a huge page.
+There are intermittent failures in collapse_max_ptes_swap() and
+collapse_max_ptes_shared() when using the khugepaged_context:
 
-As a result, the test is considered successful whenever the parent’s page
-is a huge page, even if the child test fails, as shown below:
+  // while running ./khugepaged -s 2
 
-  #
   # Run test: collapse_max_ptes_shared (khugepaged:anon)
   # Allocate huge page... OK
   # Share huge page over fork()... OK
@@ -84,75 +81,109 @@ is a huge page, even if the child test fails, as shown below:
   # Trigger CoW on page 1024 of 2048... Fail
   Bail out! Unexpected huge page
   # Planned tests != run tests (26 != 23)
-  # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0  // child failed.
-  # Check if parent still has huge page... OK              // parent hpage success
-  ok 24 collapse_max_ptes_shared                           // considered as success
-  ...
-  # Totals: pass:26 fail:0 xfail:0 xpass:0 skip:0 error:0
+  # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0
 
-To address this, propagate the child’s failure and skip the subsequent
-check in the parent.
+  # Run test: collapse_max_ptes_swap (khugepaged:anon)
+  # Swapout 257 of 2048 pages... OK
+  # Maybe collapse with max_ptes_swap exceeded.... OK
+  # Swapout 256 of 2048 pages... OK
+  Bail out! Unexpected huge page
+  # Planned tests != run tests (26 != 17)
+  # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+This happens because khugepaged may collapse the pages before wait_for_scan()
+is called, causing a sanity check that expects uncollapsed pages to fail.
+
+For example, in collapse_max_ptes_swap(), after faulting the pages back in
+and paging out up to max_ptes_swap pages, khugepaged may collapse them again
+before c->collapse() is called.
+
+To prevent this, change the khugepaged setting from ALWAYS to MADVICE for
+the affected tests, and mark the VMA with MADV_NOHUGEPAGE after it has been
+collapsed by wait_for_scan(). This prevents khugepaged from collapsing it
+again before c->collapse() is called.
+
+This failure was observed on NVIDIA Spark with 16KB page.
 
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- tools/testing/selftests/mm/khugepaged.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ tools/testing/selftests/mm/khugepaged.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index f82673f5f6b47..c32244b565658 100644
+index c32244b565658..83e9386bbc842 100644
 --- a/tools/testing/selftests/mm/khugepaged.c
 +++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -1009,6 +1009,8 @@ static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
+@@ -578,6 +578,8 @@ static bool wait_for_scan(const char *msg, char *p, size_t len,
+ 		usleep(TICK);
+ 	}
  
- 	wait(&wstatus);
- 	exit_status = WEXITSTATUS(wstatus);
-+	if (exit_status == KSFT_FAIL)
-+		goto out;
- 
- 	ksft_print_msg("Check if parent still has small page...");
- 	if (ops->check_huge(p, hpage_pmd_size, 0, hpage_pmd_size))
-@@ -1016,6 +1018,7 @@ static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
- 	else
- 		fail("Fail");
- 	validate_memory(p, 0, page_size);
-+out:
- 	ops->cleanup_area(p, hpage_pmd_size);
- 	ksft_test_result_report(exit_status, "%s\n", __func__);
++	madvise(p, len, MADV_NOHUGEPAGE);
++
+ 	return timeout == -1;
  }
-@@ -1056,6 +1059,8 @@ static void collapse_fork_compound(struct collapse_context *c, struct mem_ops *o
  
- 	wait(&wstatus);
- 	exit_status = WEXITSTATUS(wstatus);
-+	if (exit_status == KSFT_FAIL)
-+		goto out;
+@@ -839,6 +841,7 @@ static void collapse_swapin_single_pte(struct collapse_context *c, struct mem_op
  
- 	ksft_print_msg("Check if parent still has huge page...");
- 	if (ops->check_huge(p, hpage_pmd_size, 1, hpage_pmd_size))
-@@ -1063,6 +1068,7 @@ static void collapse_fork_compound(struct collapse_context *c, struct mem_ops *o
- 	else
- 		fail("Fail");
+ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *ops)
+ {
++	struct thp_settings settings = *thp_current_settings();
+ 	int max_ptes_swap = thp_read_num("khugepaged/max_ptes_swap");
+ 	void *p;
+ 
+@@ -860,6 +863,9 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
  	validate_memory(p, 0, hpage_pmd_size);
-+out:
- 	ops->cleanup_area(p, hpage_pmd_size);
- 	ksft_test_result_report(exit_status, "%s\n", __func__);
- }
-@@ -1114,6 +1120,8 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
  
- 	wait(&wstatus);
- 	exit_status = WEXITSTATUS(wstatus);
-+	if (exit_status == KSFT_FAIL)
-+		goto out;
+ 	if (c->enforce_pte_scan_limits) {
++		settings.hugepages[collapse_order].enabled = THP_MADVISE;
++		thp_push_settings(&settings);
++
+ 		ops->fault(p, 0, hpage_pmd_size);
+ 		ksft_print_msg("Swapout %d of %d pages...", max_ptes_swap,
+ 		       hpage_pmd_nr);
+@@ -869,12 +875,15 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
+ 			success("OK");
+ 		} else {
+ 			fail("Fail");
++			thp_pop_settings();
+ 			goto out;
+ 		}
  
- 	ksft_print_msg("Check if parent still has huge page...");
- 	if (ops->check_huge(p, hpage_pmd_size, 1, hpage_pmd_size))
-@@ -1121,6 +1129,7 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
- 	else
- 		fail("Fail");
- 	validate_memory(p, 0, hpage_pmd_size);
-+out:
+ 		c->collapse("Collapse with max_ptes_swap pages swapped out", p,
+ 			    1, ops, true);
+ 		validate_memory(p, 0, hpage_pmd_size);
++
++		thp_pop_settings();
+ 	}
+ out:
  	ops->cleanup_area(p, hpage_pmd_size);
- 	ksft_test_result_report(exit_status, "%s\n", __func__);
- }
+@@ -1075,6 +1084,7 @@ static void collapse_fork_compound(struct collapse_context *c, struct mem_ops *o
+ 
+ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops *ops)
+ {
++	struct thp_settings settings = *thp_current_settings();
+ 	int max_ptes_shared = thp_read_num("khugepaged/max_ptes_shared");
+ 	int wstatus;
+ 	void *p;
+@@ -1100,6 +1110,9 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
+ 			    1, ops, !c->enforce_pte_scan_limits);
+ 
+ 		if (c->enforce_pte_scan_limits) {
++			settings.hugepages[collapse_order].enabled = THP_MADVISE;
++			thp_push_settings(&settings);
++
+ 			ksft_print_msg("Trigger CoW on page %d of %d...",
+ 			       hpage_pmd_nr - max_ptes_shared, hpage_pmd_nr);
+ 			ops->fault(p, 0, (hpage_pmd_nr - max_ptes_shared) *
+@@ -1111,6 +1124,8 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
+ 
+ 			c->collapse("Collapse with max_ptes_shared PTEs shared",
+ 				    p, 1, ops, true);
++
++			thp_pop_settings();
+ 		}
+ 
+ 		validate_memory(p, 0, hpage_pmd_size);
 
 -- 
 2.43.0
