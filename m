@@ -1,150 +1,79 @@
-Received: from mail-vs2-f30.google.com (mail-vs2-f30.google.com [74.125.227.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C48E03B6341
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 12:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 636D83BB665;
+	Tue, 15 Sep 2026 13:21:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789477090; cv=none; b=A+pGDPZu155lQgwjepS+O4pHzQ/ePx3cSCHCL03sFviMTQG+84vF+YGFIqiJ9wCoM36U/2JZjfEHPyroaV1Q8mreif6KUOVnC4fgXryHwifqRXcGxEIgpVcq4z9YZdqR9IpTma9P00LnkbKd88+gleHQRxr/rfIEAVqTvbn5hmM=
+	t=1789478477; cv=none; b=q5TVSpo6MDB55Tnnb6+1GrG2/OM5708W1LW2LxDYWMiU0UGk9CZmFYz4OVBrP38AABKvt9oqPx4UkxzhHf2lJ/ZN41aixuk1YM7mZzqa26xaq4RG/cCww0oN2sGF+Tm+2qPwMJF1jotJbnBE3tyMNttyIHjmhYU53IGNrvUivbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789477090; c=relaxed/simple;
-	bh=BRxd8wSlB7E2SQMnKygjHENZYzxvB1TF13r/v+CPDeg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Lv2l6U57d75d5bbpP1Bws9ZuAAPzL2d4lKnLkN1YEqaVVX0tSNSgvEba2V3+aTjNWWyIRLLY1GNdkRAsMvVw/QJTAwVakKmk3u4+qXLIAKcoZ3jZbUDTpenK6M0fGOBkZKigh4hzy6Ee9TaMYqC3AfY09vPwd/hRJ1rErFCdOTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.227.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs2-f30.google.com with SMTP id 71dfb90a1353d-5c7e8a17839so476823e0c.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 05:58:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789477087; x=1790081887;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=IgE9SQeMzyYPYC75O9wUrB+kCn+Vwoe0FuhgCIRqcx4=;
-        b=FQEbQogfwLcgFYYKNJ7wxFDET4MmDN29iupX4y2fvgRssCUNMM0/jMc9UaSCIu1R3c
-         T+xJplg+a3w8mGklrP0y7MX/uJZD6ke5SE7nmssNSzVAXTJZbUy+0AooRSYZJfjitzgs
-         DwcRNJ8NNdbLCZp47Gudn82yVUj39yMtrLymnlvsIwLcSp8LfqBfLn9dxZhxojKhjpOA
-         T0M2GW6vs7YIRVrGEC1LMPoxLzHdXpYM3H78HWMzsvlTBECMnPpbP7E10PfdWzLS4X+Q
-         h8S7RCpuNxUZ/aeKZaadPHTIJuAgbm3Ta2Oi24us2EbIaOuhUnUEnDy31tEkiGbwy1LT
-         rv6w==
-X-Forwarded-Encrypted: i=1; AKwUvBzTVhV3SJX3mEWii2GPI8/QszOx2FLGCEHzbcdmbbaEggYr/xgCdaKgiKxy3eJ66e/cr1/WfxGKkfetVZQUg3c=@vger.kernel.org
-X-Gm-Message-State: AFuF++mowuxZkcYM+s8NzKL/4kAelFSDjhVEpWcS2Wdkmj9EAFVsq8Ql
-	Lwu0ZRWQIPbgBEiI4RHukWE2u7D2KgjuwelP6lOq6OoNLlQer1Ijnn7sSMwF2Xx3
-X-Gm-Gg: AYBFou2FFIjv65QtlLG4C+jOMPbc6QVW7wkOAwhoRL9rFMYycI2wjsvysGJWinJJLdj
-	/ThboEPAYa5wgcXO+8OVf324pT13JzrshWDKLYOUD8LAYcsrkKvJ7E4h1ArGjXhADxg+/MEi3lZ
-	JxAsdSymMR6XMl/r89Uy8uRdCknfgFqWxYhsYwOrnnqt30I2emtdv3Uwy6E6nkiRMF9uvrwtUux
-	u0DeHfM8Y7XWb35hoFcUKKYnC9Fa+30X9Tcn3RKah2Yjw3NSVy+4tmDwvRqc6r/2XH5VWgqDM9F
-	VSH75RFYv0zKrFJOI2V0q/vVyp+3By3EymKPaUTyJHQuwcU+mOUR8A2yGvX/+90xIEEuP/EDLLT
-	RNglHnNkP3h4ycpCr6+3TXJvlYvj2IIy+0jvERsO/M1bvKUx07nbetNonltlx0hCkCU8W7cPUwj
-	ajBpJUJ3GkuFEPpV2NWMbRT+cIiv2IaWJm5dR4kPWq9JLzAdINwS3xchb8faHpndCkYRzhU+EPz
-	aQFqG77RTFY0MlEUhQYXp/qomcTRlgYap0v
-X-Received: by 2002:a05:6102:1623:b0:79b:29e3:2aed with SMTP id ada2fe7eead31-79d24242362mr1457973137.4.1789477087532;
-        Tue, 15 Sep 2026 05:58:07 -0700 (PDT)
-Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7927cbdf17fsm13023245137.3.2026.09.15.05.58.06
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2026 05:58:07 -0700 (PDT)
-Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-9830aa5523bso421772241.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 05:58:06 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBw9MQQpwMKA9pXi8YXvaGqsZn/pbHj54W+MhgonJzZn5O+mA0MrogGg6V48ypI+0he1HPVReCUsc4NftVANIvM=@vger.kernel.org
-X-Received: by 2002:a67:fd97:0:b0:744:d517:b0b0 with SMTP id
- ada2fe7eead31-79d2757b2e3mr1341211137.10.1789477086677; Tue, 15 Sep 2026
- 05:58:06 -0700 (PDT)
+	s=arc-20240116; t=1789478477; c=relaxed/simple;
+	bh=+JsWzmN2x7ok/jbVtK4ryUsxYFRqDmntcO4U2+A7bwg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=MwnNlNwhqOfH3B0gVTQo2P0JWkrbONEiwtBlvAuQ5rjvIMHu3tFlQITBX/6tZ25+5ECEaGkJxAi1YliYOryboxpQfX0hvqVnxQspdy6BdZkDZxRZQlqyKjXRdxGj1Q+zXkL8CPd7af2Xvg7YOwu2QayIygI1Wb3TkR98pHlnXYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LbaBz4Rw; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LbaBz4Rw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3701F1F00899;
+	Tue, 15 Sep 2026 13:21:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789478476;
+	bh=iZ0OT81GnnfBo2UbN0m1x6+zUTdGfgm9PS+qco9aLzQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=LbaBz4Rwlp8d+BVARhq1NHMFTRL6WBfyRGGbRxbj+NM2vRk0OiOM2Ks0/wPwsd93A
+	 dDhvcgurOhhsbBVWFPo5v+P0AaZBaEb5+xUrJWbxtt0SeGo14XtJuRVER9bowG2S9v
+	 JmcM95nLioO8NGDJYm7dL1DEZU08M2ldAQNi+bvr+8hKTC4JIvKrQZ2f/dOaiM7HKo
+	 g0WbPDpQmJdNCBxEPosXtU5AiBeyYHXlJU2cHadmKyTX4VvL3AkEXgGjeUJCUZiOvH
+	 WY9j7cxXURmK837KCBBG0grpi201dkcoI4bkCBs/K1TL16DOZzyzZsAsw4Oj4dpjDF
+	 lXtopKLHFAPPQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1977F39263A5;
+	Tue, 15 Sep 2026 13:20:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1787978627.git.kmehltretter@gmail.com> <e9659617ce2f1466f227d562f47b961f340ab3c7.1787978627.git.kmehltretter@gmail.com>
-In-Reply-To: <e9659617ce2f1466f227d562f47b961f340ab3c7.1787978627.git.kmehltretter@gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 15 Sep 2026 14:57:55 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVcZ5cV4-HrjLYfFKh6UshiVxq5eXCNyp0Z1k_SMAvF5g@mail.gmail.com>
-X-Gm-Features: AcwNN1We6JvHroelTMDgiuev4qCnhIIlzUn7-aK8UKQI_PPoPrsqy0x60B6d-t0
-Message-ID: <CAMuHMdVcZ5cV4-HrjLYfFKh6UshiVxq5eXCNyp0Z1k_SMAvF5g@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] lib/842: add KUnit tests for the decompressor
-To: Karl Mehltretter <kmehltretter@gmail.com>
-Cc: Haren Myneni <haren@us.ibm.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	Dan Streetman <ddstreet@ieee.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] selftests: drv-net: devmem: set reuseaddr on
+ the
+ sender's source port
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178947841062.1617434.1531485800956403325.git-patchwork-notify@kernel.org>
+Date: Tue, 15 Sep 2026 13:20:10 +0000
+References: <20260912203101.153688-1-kuba@kernel.org>
+In-Reply-To: <20260912203101.153688-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ leitao@debian.org, bobbyeshleman@meta.com, shuah@kernel.org, sdf@fomichev.me,
+ razor@blackwall.org, linux-kselftest@vger.kernel.org
 
-Hi Karl,
+Hello:
 
-On Sun, 30 Aug 2026 at 05:05, Karl Mehltretter <kmehltretter@gmail.com> wrote:
-> Add table-driven tests for the 842 decompressor's output and history
-> validation.
->
-> Three malformed streams cover an indexed copy larger than the remaining
-> output, short data larger than the remaining output, and a repeat after
-> fewer than eight output bytes. Every case checks the return value, output
-> length and fixed guard bands on both sides of the output. Successful cases
-> also check complete contents from a poison-filled destination. The repeat
-> vector's CRC includes the leading guard byte, so the unfixed decoder
-> successfully validates the CRC after reading before the buffer.
->
-> Three valid streams cover the same boundaries at equality: an I8 index
-> consuming the final eight bytes, five short-data bytes consuming the final
-> five, and a repeat with exactly one block of history.
->
-> On an unmodified baseline the malformed cases fail and the boundary cases
-> pass; with the preceding fixes all six pass.
->
-> Assisted-by: LLM
-> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+This patch was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Thanks for your patch, which is now commit cca072cb1423191c
-("lib/842: add KUnit tests for the decompressor") in crypto/master
+On Sat, 12 Sep 2026 13:31:01 -0700 you wrote:
+> devmem.py fails on the HW runners with:
+> 
+>   CMD[remote]: dd if=/dev/zero bs=512 count=1 2>/dev/null | socat -b 512 \
+>     -u - TCP6:[fd00:2::1]:50051,bind=[fd00:2::2]:50051,nodelay
+>     STDERR: socat[41018] W bind(5, {AF=10 [fd00:2::2]:50051}, 28): \
+>             Address already in use
+> 
+> [...]
 
-> ---
-> Review notes:
->
->   - CONFIG_842_DECOMPRESS_KUNIT_TEST=m selects 842_DECOMPRESS=m.
->   - A fixed x86_64 CONFIG_PROVE_LOCKING=y run passes all six cases without
->     a lockdep report.
+Here is the summary with links:
+  - [net-next,v2] selftests: drv-net: devmem: set reuseaddr on the sender's source port
+    https://git.kernel.org/netdev/net-next/c/b8e9e7d82e7e
 
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2225,6 +2225,21 @@ menuconfig RUNTIME_TESTING_MENU
->
->  if RUNTIME_TESTING_MENU
->
-> +config 842_DECOMPRESS_KUNIT_TEST
-> +       tristate "KUnit tests for the 842 decompressor" if !KUNIT_ALL_TESTS
-> +       depends on KUNIT
-> +       select 842_DECOMPRESS
-
-Enabling a (modular) test should not silently enable additional kernel
-functionality, as that may increase the attack vector for a product.
-
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         Enable stream-validation and boundary tests for the software 842
-> +         decompressor. The tests exercise indexed copies, short data and
-> +         repeat operations at valid and invalid output or history boundaries.
-> +
-> +         For more information on KUnit and unit tests in general, refer to
-> +         Documentation/dev-tools/kunit/.
-> +
-> +         If unsure, say N.
-> +
->  config TEST_DHRY
->         tristate "Dhrystone benchmark test"
->         help
-
-Gr{oetje,eeting}s,
-
-                        Geert
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
