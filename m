@@ -1,179 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75D4424641;
-	Tue, 15 Sep 2026 06:04:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20B84418E4;
+	Tue, 15 Sep 2026 06:05:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789452271; cv=none; b=O+DvQpmFm/8y9fO54a9L6EZz/YURNC7Emk8hU2SpVqUoKyJbnrQG+Ym0r0qHukY6B2NbCWOnvIllMdi4Nci+9gET3Z2VSrsYS1Fy4twNqo0LF12nuSHJ2cLZcRYA+ds2aIMAO6dPVe6YUHl+mAVHPJlqYelp1giHjtA30XA5PRw=
+	t=1789452322; cv=none; b=kGCx7ur0qetQp6NwIoqrtJDu8vcrFz1oCDKALv2fZ++3wyBukvXedScq2zlFWkbpZ79nmMpfVW/1HJ+IGSZlMMmIsW5Lr0TXR0u+zatFHqgeIfCMXzTHDQCeuZ1vdCCz3QvI0MC/7W4E+xM96VR91V9zVj+n3i7JWu1TZxGwb2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789452271; c=relaxed/simple;
-	bh=6UHtDyYM6OWKSCPkTbi/AeSRgvbIBj18Xsu9z1YCciw=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fEO9Pb92YShaZrghaQRpBTJHrhUWDiZjdCCnAARON7yowHZURadXwIxyn/P3lk6xaACdWNOH2x/bTXeLOp6F2JUZGPYhOyB6thCUp1ltL6VFCuxozYhHA1eJYZD+dEseH1zcV3V4rGViJhh0XAjtOjeeHxeeIDhQJBhdp/BcSVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fd3S5An/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789452322; c=relaxed/simple;
+	bh=6Nt6m2Qz0cVYm7G7zMH/eNhNXyxSiiVOC/rcCL//w+Q=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=XL+qvhdmDK47I3fOK3DqVkPowCsVVelyQRMFQ3BfOO9ddnybd/LWaQv5dB5m2gWMDb+i78wTKVk620XNCNphB8XPTFv2wjcVRxF9Zx7VMhxZdg1uuUn74IGVJ5g3QxwuYsI5s4C/AWlBceDeaRaTvWPaTNlZBE1saj7/iwm55Qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=aoU71I/d; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fd3S5An/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 284401F00898;
-	Tue, 15 Sep 2026 06:04:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789452266;
-	bh=PupuCo1j5IqDRgiFXYVZIJHrxp+DMysVA/OQpVYYJbU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Fd3S5An/s08xbjt7BpEgOvEanD4romA2/Tk5SE9oY6oI8TWFEek81mMSOD/Esvedx
-	 b8qJ8j+C/8nauqDLjOgKHr2+v6IKxxSiUAXughMCpcTs6RLaJB7DUrT31nY7iqwvK9
-	 F/yxx72cv3QgLjISeS2QuyfL5ES+lntjcWBWU8bPEvDFZ0KNKx+pc1ehpI9IDjGB5u
-	 0LpMGq4OmOpLIKkW4gsMaC9xfs9X6d8JtKdXNgD5MLq+oQ2N8QlMaYj4pKkOYnw4cj
-	 vRq+TXyyF3qvktr7KWTwFETCR2+DbnopDNubY5StExxHOMLMIGvllQw7FnAj2KtOlB
-	 gYN326xBiJBiw==
-Subject: Re: [PATCH net-next 6/6] selftests: drv-net: psp: check the PSP
- disassociation notifications
-From: netdev-bot+sashiko@kernel.org
-To: kuba@kernel.org
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- daniel.zahka@gmail.com, willemdebruijn.kernel@gmail.com,
- donald.hunter@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org
-Date: Tue, 15 Sep 2026 06:04:25 +0000
-Message-ID: <178945226574.22033.964225107132506366@kernel.org>
-In-Reply-To: <20260912200426.121025-7-kuba@kernel.org>
-References: <20260912200426.121025-7-kuba@kernel.org>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="aoU71I/d"
+Received: from smtpclient.apple (c-24-130-165-117.hsd1.ca.comcast.net [24.130.165.117])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 68F645cT1083902
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Mon, 14 Sep 2026 23:04:05 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 68F645cT1083902
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026082801; t=1789452247;
+	bh=kMbNlcyr2runurKlfcpyMm8L91tCFL2wOIlEwpghqJY=;
+	h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
+	b=aoU71I/dDFZGyvRpBTaC+mihM5jqQFw1luhdtJkJ0/7ZZQhMsBgsLOrWq5WxE6x7g
+	 yC+C/0WJ58YNr0ZszrdgausAk5B6yEpxq8eMjcMwCUmi5QyZcAUlPIfy1kvNmInrEr
+	 CypFSLQXNk+KVNPyB302QG3lnV66s3Q1QF7DhJQsytupxJvPpIUZ9j89QVcYipRBAO
+	 Oa1gX72z/2vNoo9Lds1dMmEh2rTb8sTkF+N9+Q+izKt78W9qVHAAs3+OBZPb3zsQZ/
+	 ibOhsnQCRQmoJSrTg4V8rHW8IfzoDF/x9ojrY3whZvkB8BR7eJJbzuqZhWA8SFY9Hy
+	 wZhP1xczogyrA==
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3901.100.1.1.11\))
+Subject: Re: [PATCH v10 00/28] KVM: Enable FRED support with KVM VMX
+From: Xin Li <xin@zytor.com>
+In-Reply-To: <20260911213659.2025974-1-sohil.mehta@intel.com>
+Date: Mon, 14 Sep 2026 23:03:54 -0700
+Cc: kvm@vger.kernel.org, x86@kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Shivansh Dhiman <shivansh.dhiman@amd.com>,
+        David Woodhouse <dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>,
+        Binbin Wu <binbin.wu@linux.intel.com>, Zhao Liu <zhao1.liu@intel.com>,
+        Yosry Ahmed <yosry@kernel.org>, David Matlack <dmatlack@google.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E7D55C5F-91DF-45AC-BCC8-BD2759CEE0C4@zytor.com>
+References: <20260911213659.2025974-1-sohil.mehta@intel.com>
+To: Sohil Mehta <sohil.mehta@intel.com>
+X-Mailer: Apple Mail (2.3901.100.1.1.11)
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+> On Sep 11, 2026, at 2:36=E2=80=AFPM, Sohil Mehta =
+<sohil.mehta@intel.com> wrote:
+>=20
+> I mainly rebased the patches to the latest kvm-x86/next branch and =
+fixed
+> a handful of issues reported during internal testing and basic AI
+> reviews. I've avoided making any major code changes or commit message
+> updates as this is the first iteration that I am posting.=20
 
-- [Medium] `_dev_disassoc_notify_one_of_two_netkit()` in
-  tools/testing/selftests/drivers/net/psp.py does not verify the…
+Thanks a lot for taking care of the patch series.
 
---
+>=20
+> Going forward, based on the feedback, I'll rework the patches as =
+needed.
+> I've listed a few opens below that need additional discussion or
+> clarification. I'm relatively new to the KVM subsystem, so please feel
+> free to provide suggestions on the series structure, code organization
+> as well as commit log clarity to smoothen the review process.
 
-selftests: drv-net: psp: check the PSP disassociation notifications
+I=E2=80=99ve been thinking about an optimization: because FRED drops =
+most of the old   =20
+syscall MSRs (IA32_LSTAR/IA32_CSTAR/IA32_SFMASK), we should be able to =
+omit    =20
+them from KVM's uret MSR tracking entirely as if host enables FRED (no =
+matter  =20
+whether a guest uses FRED).
 
-Adds two new psp.py subtests which subscribe to the mgmt multicast group in
-the main and guest namespaces, then verify the notifications generated by
-dev-disassoc and by netdevice removal.  Also extends
-_psp_dev_assoc_cleanup_on_netkit_del() to check the same notifications.
-
-> diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
-> index d44d2c83473ee..13ff5188cca3f 100755
-> --- a/tools/testing/selftests/drivers/net/psp.py
-> +++ b/tools/testing/selftests/drivers/net/psp.py
-
-[ ... ]
-
-> @@ -723,6 +723,111 @@ def _dev_change_notify_multi_ns_netkit(cfg):
-
-[ ... ]
-
-> +def _get_dev_ntf(cfg, pspnl, label):
-> +    """Wait for the next notification about the PSP device under test."""
-> +    for ntf in pspnl.poll_ntf(duration=10):
-> +        if ntf['msg'].get('id') == cfg.psp_dev_id:
-> +            return ntf
-> +    raise KsftFailEx(f"No notification received in the {label} namespace")
-> +
-> +
-> +def _check_disassoc_ntf(cfg, main_pspnl, peer_pspnl, ifindex):
-> +    """Check the notifications for a netns losing its last association."""
-> +    ntf = _get_dev_ntf(cfg, main_pspnl, "main")
-> +    ksft_eq(ntf['name'], 'dev-change-ntf')
-> +    for assoc in ntf['msg'].get('assoc-list', []):
-> +        if assoc['nsid'] != cfg.psp_dev_peer_nsid:
-> +            continue
-> +        ksft_ne(assoc['ifindex'], ifindex,
-> +                "Disassociated device still listed in the notification")
-> +
-> +    # The device is gone as far as the disassociated namespace is concerned
-> +    ntf = _get_dev_ntf(cfg, peer_pspnl, "guest")
-> +    ksft_eq(ntf['name'], 'dev-del-ntf')
-> +    ksft_true('ifindex' not in ntf['msg'],
-> +              "ifindex reported to an associated namespace")
-
-[ ... ]
-
-> +def _dev_disassoc_notify_one_of_two_netkit(cfg):
-> +    """Test the notifications with two netkits associated in one netns.
-> +
-> +    Disassociating the first netkit leaves the PSP device visible in the
-> +    guest namespace, generates a dev-change-ntf.
-> +    Disassociating the second one takes the device out of its view,
-> +    generates 'dev-del-ntf'.
-> +    """
-
-[ ... ]
-
-> +    main_pspnl, peer_pspnl = _subscribe_mgmt(cfg)
-> +
-> +    # One of the two goes away, the device stays visible in the guest netns
-> +    cfg.pspnl.dev_disassoc({'id': cfg.psp_dev_id, 'ifindex': tmp_ifindex,
-> +                            'nsid': cfg.psp_dev_peer_nsid})
-> +
-> +    ntf = _get_dev_ntf(cfg, main_pspnl, "main")
-> +    ksft_eq(ntf['name'], 'dev-change-ntf')
-> +
-> +    ntf = _get_dev_ntf(cfg, peer_pspnl, "guest")
-> +    ksft_eq(ntf['name'], 'dev-change-ntf')
-> +    found = False
-> +    for assoc in ntf['msg'].get('assoc-list', []):
-> +        ksft_ne(assoc['ifindex'], tmp_ifindex,
-> +                "Disassociated device still listed in the notification")
-> +        found |= assoc['ifindex'] == cfg.nk_guest_ifindex
-> +    ksft_true(found, "Remaining association missing from the notification")
-
-[Severity: Medium]
-
-Does this block actually check the property the commit message describes,
-that "a namespace which still has another association is only told about
-the change"?
-
-_get_dev_ntf() returns as soon as it sees one message for the device, so
-only the first guest notification is inspected.  If the kernel also sent a
-dev-del-ntf to the guest here (i.e. still_visible in
-psp_nl_notify_disassoc() were computed wrongly), nothing in this phase
-would notice it.
-
-The stale message is not just ignored, it is later consumed as if it were
-fresh.  ynl queues notifications that poll_ntf() did not hand out:
-
-tools/net/ynl/pyynl/lib/ynl.py:poll_ntf() {
-	...
-	while True:
-		try:
-			yield self.async_msg_queue.get_nowait()
-	...
-}
-
-so a bogus dev-del-ntf from the first dev_disassoc() stays in
-peer_pspnl's queue, and the second phase picks it up:
-
-_check_disassoc_ntf() {
-	...
-	ntf = _get_dev_ntf(cfg, peer_pspnl, "guest")
-	ksft_eq(ntf['name'], 'dev-del-ntf')
-	ksft_true('ifindex' not in ntf['msg'],
-		  "ifindex reported to an associated namespace")
-}
-
-Both assertions pass on the stale message, because psp_nl_dev_fill() only
-emits PSP_A_DEV_IFINDEX when cur_net == dev_net(psd->main_netdev), so any
-del-ntf destined for a non-main netns lacks ifindex.
-
-That leaves the test only able to catch a missing notification, not an
-extra one.  Would it make sense to drain both sockets after the first
-change-ntf and assert that no further notification for this device arrives
-(a short poll_ntf() that must yield nothing), before running the second
-dev_disassoc()?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260912200426.121025-1-kuba%40kernel.org
+Thanks!
+Xin=
