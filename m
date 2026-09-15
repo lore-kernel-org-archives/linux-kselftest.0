@@ -1,216 +1,150 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1AE2418A28
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 04:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA98339D6CC
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 05:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789447990; cv=none; b=XHef4Bzz5LwLqR9JrFndg44TF03R+FGte4qDL5otmGzS31g1dQx7KLF5OeNnfN7tp5Y80+vyNs7YaDnLB/gzhnc5hh4puZ9L+FHF/9Bbj5CHcPkJYeeowGRosGxVGsQD/VDHYeU5wrFTjZiW9AJHzvMkp9m0OV2cVKsSgr1HiZ0=
+	t=1789448498; cv=none; b=L4WrNGSQ7F9g7PhoJ+bfgeOwmDFelfon5MzsmgwrMI9W29Tm5L/QQDr5AWCXthXEkKbxnVOjL0Xyzc+eSjH9L5fOAUjIBstDOAIn0Hv3Gn3BMssMgweaMwUo2S6sXj1sDP+xGJz9y0iZSxR8yVL3xgbFN1NAiTJ33dTvAT3TNW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789447990; c=relaxed/simple;
-	bh=PROcPA9h/eIHns0/JNm/9Pp+kQzscBwZHfrMH3A0lIc=;
-	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References; b=ERmb3NkQJ2RBdfE7uxrOdXJ7dQ4EYiYPFzRelAXDvbOpu9ZJkRtDidCYBCWyObZURGQVs+r7d+52L+VQaQOtN5leR7spkJs2xc6m4ciDMXTK0OiNkZ8+IRn06D6zt5PkERp8ftInlPnqnQnnu7UtGhSN0noyQWXGEn1TDBjSZDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NQg7upzL; arc=none smtp.client-ip=209.85.210.169
+	s=arc-20240116; t=1789448498; c=relaxed/simple;
+	bh=WvJDz0SMer3VBOphKTbusnWx9vBwOwyigPUnd+wAAiA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AB97BGpUaJkimuI1Iz/25GiJa+CkRHzLJoadNFrwayrU3timh7yuX6LTHWm+GwhrnaddMtITVgtn/ys43so7E8zTbhPlnLl77EcKWLYR9alOlryq6OsP1ncBEtry36QuV5jfXf570qk3QSS+vgx50iCptLm48tWZvOHosWUsjEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CESLyb8q; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NQg7upzL"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-86265451beeso2652467b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 21:53:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CESLyb8q"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccafb752so2832977a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 22:01:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789447988; x=1790052788; darn=vger.kernel.org;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=ru4Ea1MD4/XyVDmXcP+1ObXpaU2Tn0Ejgynjuli47y4=;
-        b=NQg7upzLcg1XDS+HTFOnnqAO5MUxye5vc/vKWnLUtwwlbiMHzCkYNmAoRVPG+uNu3i
-         2BciHp+UaJDa1uFxlDnAxojOVZ1ppNY8xt/KyR/3tDai8wVI/rzaGj4zPoj7vn+WRjG4
-         EaUw4VZoM8X69xiCO6tsKkdZaeUkeRoFC8M2fHag8qzjiN8gYLq4fCdXnwsAR2f7xj5R
-         lrYsDpmOMccusPuzJ+S7jZQzFyDl6q5GOEkDTfycOy7jmQ0fl9cEyZeqf2ys52KBrR/J
-         FxsSIfmAtg+WFIw0lWS1A8BhlycNrnoM8YTZudRt+evLeUvG5/cBIKLUlP82Z+hvhB5u
-         epeQ==
+        d=gmail.com; s=20251104; t=1789448495; x=1790053295; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ptBV0v6Gt6jAGsqstGkmrulpyxyqgfaikKMDt/h5aaw=;
+        b=CESLyb8qb9mC71opDonoVuBQSmNLGkr0FyokxmGTXBXKnoGBaohfQtCFhF9iYDfSZX
+         OfGYYFOzGxa4dsd6j/zDtS3Cj4a3AGa5Jgfo/pd75wLuIaRmJ60D350O2I53HL0JbM7Y
+         SE4OMaXtERlI24QAe/wrufjpOkVXCuFppv5+fe5PKlShsccsf0EP2nRdjP+6sMye1e1i
+         brCrnikbGHwPIZF0H5foqV7lrJ0oGAEgNgHtTVhR7uTwHOOmREhZUCnimhLJMchiBk6G
+         w0hU0HuoY3ONKkoG5l27rBui5zgFaPh48lKsfBqYcAqTFfo24Z938eEoWWXxi/ZA7q8W
+         EBpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789447988; x=1790052788;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ru4Ea1MD4/XyVDmXcP+1ObXpaU2Tn0Ejgynjuli47y4=;
-        b=Vei9mg9PyVsymxHP7SL6yN30bOqBED1kNuV+VeCYKj0jT+5h//9rzh1EYa8VKVIDUL
-         om4K8dM9qV8/QXkbhlj4zYrQel0JJYCTyx2RUgC7tYU6CiqbdpNTamkoRkvDVaxZdLXK
-         W1MFoe18Fx8uNsMQDNBRo/G25imufVz/PyMy73e/GAVcu1Ifg5Gzkrm+XKIaZxS1Xlth
-         Vc8MSV+4gxFvkljupiY87fA8ol1EvT7Hh1qo4CtCD/w+Fa/QDMSPaYaVpXALr+EPsktk
-         KE9b9qdd5Bg+Vjgp8toT959sQ6hM/gWdyORwy4vvXzgHZNs6QMGBjuaZllFQMgg+WKTP
-         IVDw==
-X-Forwarded-Encrypted: i=1; AKwUvBz2RC28a/n3MrsIjnMoLYpLpkOv/Mm/0gtFQbQ9tN31EhSSQVNg5dJqdqusU64zcGW3laHl9gIx74kEiUSeHno=@vger.kernel.org
-X-Gm-Message-State: AFuF++mfPKgjQFMXt+HOTmurWxs6Ik6kDtxc4SUF1pwCyRaIB5fbgGbc
-	Y16I5ijJm4qEZ1UwcCmmBhFOuKKTA2r7734+dLw9Rq4dF/VaT5sh4ouN
-X-Gm-Gg: AYBFou3QbGGnpHVDPAXb744Zd3n7DOXZJGLOTuR/o4MmEe8HN0bma1r4+pDFuAISrJh
-	lxmyBO+pWudc79L9DlzyB+A1D1p5iBQiazQCpFT3lqBHXF4dl1lShJ/57UYv1LXDsWL/8Lc0Fbc
-	JJWOxBwZqyInQ1NnisRcw5oEV3YfdWiA9tgDYYCJVrsGHAKoZYoQf5LmP58wRbysMt+JVSrGfR/
-	/dchBtbv05pLijYxUbdRi/TyJxkUs5zpq0id3h6OmuWcSw4peGbvGRaEUd8qSYyUJn4VEZrFGKd
-	jdakKMAv1qVADQZvqMD3Rc6UoaVZg9x+ohoZF8tGczt9Im7C6OKDqT7jYY7O5JOUomXKj/SQ47N
-	XkwgqEkmWwg6K+RUew1ImXmUy4WzThYGydn6ZKAf9gA/i9/0qgf4xg1M/A7H7S0Ia7lgl8+Mwbv
-	yhK2bGZEZc8qZE0SPIKAkZWQIS80iueoQ5qAi3KpPTdJpcuKmIreRa6eu+cPmijSgQbp3GZkjuY
-	P3vWsG98sEOmUK1Yp2IbWWEcKyRgWXk7rq6c8hXCb6rnqier+fR6YM=
-X-Received: by 2002:a05:6a20:c88b:b0:3d1:c0e2:936b with SMTP id adf61e73a8af0-3db404269e1mr14358079637.7.1789447987855;
-        Mon, 14 Sep 2026 21:53:07 -0700 (PDT)
-Received: from pve-server ([49.205.216.49])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33beb8b2872sm849937eec.15.2026.09.14.21.53.03
+        d=1e100.net; s=20260707; t=1789448495; x=1790053295;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ptBV0v6Gt6jAGsqstGkmrulpyxyqgfaikKMDt/h5aaw=;
+        b=etyce+WH02unT5I8EMIG3TU37R1vTZTppLpH3X6DPFpzfHC1t2Am9CciMbreQ+pQnc
+         YMo19vEIc2c3StyKflfVd53BYPu7jD/AMo+sFT8h2SjweWIsECX85AfCPVAubi9AFNC8
+         3zvbco7Jx7H0I1gjKqgumB5sScy/eITQ27Ba+MDONiJn84vpdfZnwA31slWOfyOPUduz
+         A39Ijaz1WJE90EYpd6ir+L/FcRGwu/GpWLKyCI/JuVyskMoUURKZdeXqF5i6bQSkIK1a
+         Xu2vLqTooMZbc5pMJE1BrbDo2nxuT1fcDxWNX5LlKYlGD31uSOh6Hirr8oYcENz8BVel
+         ketw==
+X-Forwarded-Encrypted: i=1; AKwUvBxhJOfSFr23FsU0AXMudW8LRD/rOdxGyPS551XYyuYbxUkEkuVDWbV4oZUfH36jY6Oym9xwGVN8eZJbvd220pw=@vger.kernel.org
+X-Gm-Message-State: AFuF++n8s0IyQB+3VWMcVcO+Yrt0rm9oF/6//cV4CG/2176F2OBZJQ3N
+	pOwrzMTpioHv0FXAb1cK+cxgotRZxoIudZSqvbkekPqnQ1wx6iyD4+bO
+X-Gm-Gg: AYBFou2cIudxqTQjNmbeqny4Gktfdo9BPqmCRv1mBTA1tJ5XlelCjsGJtwT9nbaSOzH
+	ECd2EAvlIxNPaKj8xFu+QNSH5W4wxD9kWc0lKaSbtxy2izys0RHVKCiRQ0o8co48WfSnNwBTPD/
+	MnBSj9dRfSwm7abP7TJjDryxJGTdSPQ1mzeVUxXw+iisTdZMlEKFTd6c5tgSXo6hv4nbBu8U1vW
+	AK87BVDhdFDeudS4T03T5usD80SyoqiaAgGQ29KZzOaGskzP1hFBYsUvbd1kyR98tZylrI2onf7
+	Scb/9Tt3lZ/mWjTijXFTwVmIo4s0XNDf5tUSQMcm6znV9UDVIrijeEh0Tati0xchzKlvh0c7XVI
+	ru1oQtT3P7CGHiw5mPMuM9jJYYKzfx2JyxVLyWMSOxkD7MY3o6MwTh6tmXeisDXQa9fZ2zmneY5
+	NhC/bLdWafVoM5c5zJ8ojl9VfvuMVQV1uRBO+BKKCf/4FEIXGu3cxnJul+0bAP5A0pfLB6nv2Ah
+	CqBETvN8y9miyi44OCoo69RkJzOfIU1q+XaCC5qyEE+fat8J4IHWba+zHxkGs1fA2vEg56AkNfI
+	WMnGgRt/fuhwSauz7QF+
+X-Received: by 2002:a17:90b:57cb:b0:39d:f130:f8fd with SMTP id 98e67ed59e1d1-39df13108cdmr11368757a91.11.1789448494978;
+        Mon, 14 Sep 2026 22:01:34 -0700 (PDT)
+Received: from lawlee-vm0.d4y3nv5wwgfelhhopdxv1tqjld.dx.internal.cloudapp.net ([13.93.150.60])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33ba4e51449sm26872358eec.5.2026.09.14.22.01.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 21:53:06 -0700 (PDT)
-From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-To: Chris Chiu <chris.chiu@canonical.com>, maddy@linux.ibm.com, shuah@kernel.org
-Cc: sshegde@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Chris Chiu <chris.chiu@canonical.com>
-Subject: Re: [PATCH] selftests/powerpc: Fix exec_prot test failure on Hash MMU
-In-Reply-To: <20260909050919.3344699-1-chris.chiu@canonical.com>
-Date: Tue, 15 Sep 2026 10:07:13 +0530
-Message-ID: <wlsnyvt2.ritesh.list@gmail.com>
-References: <20260909050919.3344699-1-chris.chiu@canonical.com>
+        Mon, 14 Sep 2026 22:01:34 -0700 (PDT)
+From: Lawrence Lee <lfqlee314@gmail.com>
+To: David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Simon Horman <horms@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	netdev@vger.kernel.org,
+	Arun Ajith S <aajith@arista.com>,
+	Roopa Prabhu <roopa@nvidia.com>,
+	Jaehee Park <jhpark1013@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexander Aring <alex.aring@gmail.com>,
+	linux-wpan@vger.kernel.org,
+	linux-bluetooth@vger.kernel.org
+Subject: [PATCH net-next v2 0/2] ipv6: update NUD_FAILED neighbors from NA messages
+Date: Tue, 15 Sep 2026 05:01:30 +0000
+Message-ID: <cover.1789448374.git.lfqlee314@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Chris Chiu <chris.chiu@canonical.com> writes:
+Neighbor Advertisements for existing NUD_FAILED entries are currently
+ignored. This can leave a first-hop router with an unusable neighbor after
+the host becomes reachable and announces itself, particularly when
+forwarding is offloaded away from the kernel and traffic destined to the
+FAILED neighbor is unable to trigger the kernel's normal neighbor
+resolution process.
+Allowing neighbor entries to be updated from NAs already received by the
+kernel is preferable since it creates less work compared to periodically
+probing FAILED neighbors (e.g. using NTF_EXT_MANAGED).
 
-> Hash MMU maps execute-only pages as readable at the PTE level, so reading
-> from a PROT_EXEC-only mapping does not fault there. The exec_prot test
-> currently treats that as a failure, while the rest of the permission
-> checks are still valid.
->
-> Use the existing using_hash_mmu() helper and skip only the read-on-
-> execute-only subtest on Hash MMU. Keep the rest of the test unchanged so
-> the fix stays local to the unsupported execute-only-read expectation.
->
+Extend accept_untracked_na to treat FAILED entries like absent entries.
+Require a target link-layer address, IPv6 forwarding, and acceptance by the
+sysctl, including its source-prefix check in mode 2. Recover the entry only
+to STALE, including for solicited NAs, to maintain parity with handling of
+non-existent neighbor cache entries.
 
-Hi Chris,
+Patch #1 implements the behavior and updates RFC 9131-related comments and
+accept_untracked_na documentation.
 
-Thanks for the patch. However the patch is not entirely correct.
-Do you mind me asking - how did you find this problem? Did you run this
-on an actual Power Hardware? Can you share the details of that please?
+Patch #2 extends ndisc_unsolicited_na_test.sh to cover FAILED-entry
+recovery and each acceptance gate, including in-prefix and out-of-prefix
+mode 2.
 
-Also - from your .config can you share the following?
+Thanks to Ido Schimmel for feedback on the original RFC.
 
-cat .config |grep -iE "_PPC_"
+---
+v2:
+- Full implementation of logic to update FAILED entries to STALE.
+- Update the RFC 9131-related comments and sysctl documentation.
+- Add selftests to verify state changes only when the accept_untracked_na
+  setting is enabled.
 
+v1 (RFC):
+https://lore.kernel.org/r/20260813233344.445265-1-lfqlee314@gmail.com
 
-So what you described in the commit msg is correct but only when PKEY
-support is disabled with Hash mmu. However when pkey is enabled, and
-when the process does mprotect(PROT_EXEC), kernel assigns a execute only
-pkey for that mapping. With that - we can still get a fault when we try
-to load from that PROT_EXEC mapping and the test should work fine.
+Testing:
+- x86_64 current-config and allyesconfig builds with W=1
+- tools/testing/selftests/net/ndisc_unsolicited_na_test.sh: 14 passed
+- Local NIPA checks: all substantive checks passed
+- Sashiko local review completed
 
-So, I think what we need here is:
+Lawrence Lee (2):
+  ipv6: update NUD_FAILED neighbors from NA messages
+  selftests: net: test untracked NA recovery of FAILED neighbors
 
-diff --git a/tools/testing/selftests/powerpc/mm/exec_prot.c b/tools/testing/selftests/powerpc/mm/exec_prot.c
-index db75b2225de1..51ac2f9c14a6 100644
---- a/tools/testing/selftests/powerpc/mm/exec_prot.c
-+++ b/tools/testing/selftests/powerpc/mm/exec_prot.c
-@@ -167,13 +167,17 @@ static int test(void)
-         * Read an instruction word from the address when the page
-         * is execute only. This should generate an access fault.
-         */
--       fault_code = -1;
--       remaining_faults = 1;
--       printf("Testing read on --x, should fault...");
--       FAIL_IF(mprotect(insns, pgsize, PROT_EXEC) != 0);
--       i = *fault_addr;
--       FAIL_IF(remaining_faults != 0 || !is_fault_expected(fault_code));
--       printf("ok!\n");
-+       if (pkeys_supported) {
-+               fault_code = -1;
-+               remaining_faults = 1;
-+               printf("Testing read on --x, should fault...");
-+               FAIL_IF(mprotect(insns, pgsize, PROT_EXEC) != 0);
-+               i = *fault_addr;
-+               FAIL_IF(remaining_faults != 0 || !is_fault_expected(fault_code));
-+               printf("ok!\n");
-+       } else {
-+               printf("Testing read on --x, skipped on Hash MMU without pkeys\n");
-+       }
+ Documentation/networking/ip-sysctl.rst        |  28 ++--
+ include/net/ndisc.h                           |  15 ++-
+ net/6lowpan/ndisc.c                           |  15 ++-
+ net/ipv6/ndisc.c                              |  94 ++++++++-----
+ .../net/ndisc_unsolicited_na_test.sh          | 124 +++++++++++++++---
+ 5 files changed, 201 insertions(+), 75 deletions(-)
 
 
-w/o the above diff when PKEYS are disabled on Hash
-(# CONFIG_PPC_MEM_KEYS is not set) we get the following error:
-
-test: exec_prot
-tags: git_version:v7.3-rc3-9-g704340f1cd0d
-[SKIP] Test skipped on line 100
-[FAIL] Test FAILED on line 175
-Testing read on --x, should fault...failure: exec_prot
-
-But with the above diff:
-
-test: exec_prot
-tags: git_version:v7.3-rc3-9-g704340f1cd0d-dirty
-[SKIP] Test skipped on line 100
-Testing read on --x, skipped on Hash MMU without pkeys
-Testing write on --x, should fault...ok!
-Testing exec on ---, should fault...ok!
-Testing exec on r--, should fault...ok!
-Testing exec on -w-, should fault...ok!
-Testing exec on rw-, should fault...ok!
-Testing exec on --x, should succeed...ok!
-Testing exec on r-x, should succeed...ok!
-Testing exec on -wx, should succeed...ok!
-Testing exec on rwx, should succeed...ok!
-success: exec_prot
-
-
-Care to verify this from your end on your hardware and submit a v2 with
-this change?
-
--ritesh
-
-
-> Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
-> ---
->  .../testing/selftests/powerpc/mm/exec_prot.c  | 21 ++++++++++++-------
->  1 file changed, 14 insertions(+), 7 deletions(-)
->
-> diff --git a/tools/testing/selftests/powerpc/mm/exec_prot.c b/tools/testing/selftests/powerpc/mm/exec_prot.c
-> index db75b2225de1..bd44f49d8449 100644
-> --- a/tools/testing/selftests/powerpc/mm/exec_prot.c
-> +++ b/tools/testing/selftests/powerpc/mm/exec_prot.c
-> @@ -108,11 +108,14 @@ static int check_exec_fault(int rights)
->  static int test(void)
->  {
->  	struct sigaction segv_act, trap_act;
-> +	bool hash_mmu;
->  	int i;
->  
->  	/* Skip the test if the CPU doesn't support Radix */
->  	SKIP_IF(!have_hwcap2(PPC_FEATURE2_ARCH_3_00));
->  
-> +	FAIL_IF(using_hash_mmu(&hash_mmu));
-> +
->  	/* Check if pkeys are supported */
->  	pkeys_supported = pkeys_unsupported() == 0;
->  
-> @@ -167,13 +170,17 @@ static int test(void)
->  	 * Read an instruction word from the address when the page
->  	 * is execute only. This should generate an access fault.
->  	 */
-> -	fault_code = -1;
-> -	remaining_faults = 1;
-> -	printf("Testing read on --x, should fault...");
-> -	FAIL_IF(mprotect(insns, pgsize, PROT_EXEC) != 0);
-> -	i = *fault_addr;
-> -	FAIL_IF(remaining_faults != 0 || !is_fault_expected(fault_code));
-> -	printf("ok!\n");
-> +	if (!hash_mmu) {
-> +		fault_code = -1;
-> +		remaining_faults = 1;
-> +		printf("Testing read on --x, should fault...");
-> +		FAIL_IF(mprotect(insns, pgsize, PROT_EXEC) != 0);
-> +		i = *fault_addr;
-> +		FAIL_IF(remaining_faults != 0 || !is_fault_expected(fault_code));
-> +		printf("ok!\n");
-> +	} else {
-> +		printf("Testing read on --x, skipped on Hash MMU\n");
-> +	}
->  
->  	/*
->  	 * Write an instruction word to the address when the page
-> -- 
-> 2.43.0
+base-commit: 272a65db243bfa34b9277632830e0e06d7e3518e
+-- 
+2.43.0
