@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EE133998;
-	Tue, 15 Sep 2026 06:04:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75D4424641;
+	Tue, 15 Sep 2026 06:04:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789452268; cv=none; b=C6rZK92oxlhr4MeY6a5P/BhmWs9JVLQWlNDBdwQpG2Rf8ctQfgURN/nzdW18LeiEI4s+zucJXIpdyDjzZqhSiWRR7ja0+py4SDMDpQAV+B70SsXAAf8Y266ZJYGEekQOF6iOwhQxlcCvypPkJ6B/GKtvlNIHF+wytq066POYICg=
+	t=1789452271; cv=none; b=O+DvQpmFm/8y9fO54a9L6EZz/YURNC7Emk8hU2SpVqUoKyJbnrQG+Ym0r0qHukY6B2NbCWOnvIllMdi4Nci+9gET3Z2VSrsYS1Fy4twNqo0LF12nuSHJ2cLZcRYA+ds2aIMAO6dPVe6YUHl+mAVHPJlqYelp1giHjtA30XA5PRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789452268; c=relaxed/simple;
-	bh=wRlRm5RGVQXTIf8FaigOdHMm9sWUI2iXYZkMq27o8kA=;
+	s=arc-20240116; t=1789452271; c=relaxed/simple;
+	bh=6UHtDyYM6OWKSCPkTbi/AeSRgvbIBj18Xsu9z1YCciw=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=F2lSWbH8tlGSH2JLKwJmtPP89OfDbaN8A5ZKcakA7T7VdMLUqRYNdf7ueXY9fhd3yPzWB6KVm0tm3K/86X/UPLPr0/CrIzAS8bwzhw8G7A2IVJahnHghz42SIUQaRH4t+qvsjPRnbXJO0BIBwfOpybcGcrmhHego9vOS+yirYjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b4pTd8q5; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=fEO9Pb92YShaZrghaQRpBTJHrhUWDiZjdCCnAARON7yowHZURadXwIxyn/P3lk6xaACdWNOH2x/bTXeLOp6F2JUZGPYhOyB6thCUp1ltL6VFCuxozYhHA1eJYZD+dEseH1zcV3V4rGViJhh0XAjtOjeeHxeeIDhQJBhdp/BcSVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fd3S5An/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b4pTd8q5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7A9C1F00893;
-	Tue, 15 Sep 2026 06:04:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fd3S5An/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 284401F00898;
+	Tue, 15 Sep 2026 06:04:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789452265;
-	bh=ak6XBSdUUAQcVd+0a31LigiWxYjqMY5wvXGnsJkPEPQ=;
+	s=k20260515; t=1789452266;
+	bh=PupuCo1j5IqDRgiFXYVZIJHrxp+DMysVA/OQpVYYJbU=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=b4pTd8q5j9Qej8cAsZsImCAGpYafKABl2hmk6N38qnC3wbbJ6f3se4POf9ZbGWc2x
-	 e68M9frN2X2bv/NNcRikzswWGK3Ka83k8rstqnxjCa5pg1rHGjQ+GZDr4Jvw5GhPr7
-	 KkqmFBptq7UtpybqT6p/nA8EXkyCmoIh3gqaQNJhKZEHHrAsgfpSn8WoZa+zdXht5S
-	 vOmOjhTZIOrLRxDIgf6AH2BAwcy7qmdgFTYzY2kV3zxENNWC1AZfFAylc5QHEUGVE0
-	 Sk50eMNkaAPENdMu63z3908UXBcDwFOAcOOpBURJeUJRiqI5OO3AWlcXFW/pk6zmW5
-	 56xjiLzkG7W/w==
-Subject: Re: [PATCH net-next 4/6] psp: notify about a disassociation once it
- has happened
+	b=Fd3S5An/s08xbjt7BpEgOvEanD4romA2/Tk5SE9oY6oI8TWFEek81mMSOD/Esvedx
+	 b8qJ8j+C/8nauqDLjOgKHr2+v6IKxxSiUAXughMCpcTs6RLaJB7DUrT31nY7iqwvK9
+	 F/yxx72cv3QgLjISeS2QuyfL5ES+lntjcWBWU8bPEvDFZ0KNKx+pc1ehpI9IDjGB5u
+	 0LpMGq4OmOpLIKkW4gsMaC9xfs9X6d8JtKdXNgD5MLq+oQ2N8QlMaYj4pKkOYnw4cj
+	 vRq+TXyyF3qvktr7KWTwFETCR2+DbnopDNubY5StExxHOMLMIGvllQw7FnAj2KtOlB
+	 gYN326xBiJBiw==
+Subject: Re: [PATCH net-next 6/6] selftests: drv-net: psp: check the PSP
+ disassociation notifications
 From: netdev-bot+sashiko@kernel.org
 To: kuba@kernel.org
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
  pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
  daniel.zahka@gmail.com, willemdebruijn.kernel@gmail.com,
  donald.hunter@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org
-Date: Tue, 15 Sep 2026 06:04:24 +0000
-Message-ID: <178945226440.22033.5430499132880217307@kernel.org>
-In-Reply-To: <20260912200426.121025-5-kuba@kernel.org>
-References: <20260912200426.121025-5-kuba@kernel.org>
-X-sashiko-severity: Low
+Date: Tue, 15 Sep 2026 06:04:25 +0000
+Message-ID: <178945226574.22033.964225107132506366@kernel.org>
+In-Reply-To: <20260912200426.121025-7-kuba@kernel.org>
+References: <20260912200426.121025-7-kuba@kernel.org>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -48,171 +48,132 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 0 · Low: 2
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-- [Low] The patch establishes 'PSP device stopped being visible in a
-  netns' => PSP_CMD_DEV_DEL_NTF (net/psp/psp_nl.c:381-388), but the…
-- [Low] The commit fixes user-visible Generic Netlink behaviour ('the
-  assoc-list it carried still contained the device which was going away…
+- [Medium] `_dev_disassoc_notify_one_of_two_netkit()` in
+  tools/testing/selftests/drivers/net/psp.py does not verify the…
 
 --
 
-psp: notify about a disassociation once it has happened
+selftests: drv-net: psp: check the PSP disassociation notifications
 
-The disassociation notification is moved so it is generated after the
-association entry has been unlinked, and a netns which loses its last
-associated device is sent a dev-del-ntf instead (using the netns taken
-from the netdev). Both the netlink dev-disassoc path and the
-NETDEV_UNREGISTER path are converted to the new helper.
+Adds two new psp.py subtests which subscribe to the mgmt multicast group in
+the main and guest namespaces, then verify the notifications generated by
+dev-disassoc and by netdevice removal.  Also extends
+_psp_dev_assoc_cleanup_on_netkit_del() to check the same notifications.
 
-> diff --git a/net/psp/psp_main.c b/net/psp/psp_main.c
-> index 91473f96ad211..273b010d2355c 100644
-> --- a/net/psp/psp_main.c
-> +++ b/net/psp/psp_main.c
-
-[ ... ]
-
-> @@ -438,9 +440,13 @@ static int psp_netdev_event(struct notifier_block *nb, unsigned long event,
->  	if (psd && psp_dev_tryget(psd)) {
->  		rcu_read_unlock();
->  		mutex_lock(&psd->lock);
-> -		if (psp_dev_is_registered(psd))
-> -			psp_nl_notify_dev(psd, PSP_CMD_DEV_CHANGE_NTF);
-> -		psp_dev_disassoc_one(psd, dev);
-> +		/* Nothing to report if the device was never on the list,
-> +		 * dev-assoc may have failed after publishing dev->psp_dev,
-> +		 * and this is also the main netdevice's path.
-> +		 */
-> +		if (psp_dev_disassoc_one(psd, dev) &&
-> +		    psp_dev_is_registered(psd))
-> +			psp_nl_notify_disassoc(psd, dev_net(dev));
->  		mutex_unlock(&psd->lock);
->  		psp_dev_put(psd);
->  	} else {
-
-> diff --git a/net/psp/psp_nl.c b/net/psp/psp_nl.c
-> index b57366b5e032b..cdfc2d72fb390 100644
-> --- a/net/psp/psp_nl.c
-> +++ b/net/psp/psp_nl.c
-> @@ -356,6 +356,40 @@ void psp_nl_notify_dev(struct psp_dev *psd, u32 cmd)
->  				psp_nl_build_dev_ntf, &cmd);
->  }
->  
-> +/**
-> + * psp_nl_notify_disassoc() - notify about a device losing an association
-> + * @psd: PSP device (must be locked)
-> + * @net: netns of the netdevice which got disassociated
-> + *
-> + * Must be called once @psd no longer has the association, so that the
-> + * notifications carry the state after the change.
-> + */
-> +void psp_nl_notify_disassoc(struct psp_dev *psd, struct net *net)
-> +{
-> +	struct sk_buff *ntf;
-> +	bool still_visible;
-> +	u32 cmd;
-> +
-> +	lockdep_assert_held(&psd->lock);
-> +
-> +	psp_nl_notify_dev(psd, PSP_CMD_DEV_CHANGE_NTF);
-> +
-> +	/* psp_nl_notify_dev() reaches the main netdevice's netns and every
-> +	 * netns which still has an associated device. If @net is neither,
-> +	 * the device is gone from @net and we should send a delete ntf.
-> +	 */
-> +	still_visible = !psp_dev_check_access(psd, net, false);
-> +	if (still_visible || !maybe_get_net(net))
-> +		return;
-> +
-> +	cmd = PSP_CMD_DEV_DEL_NTF;
-> +	ntf = psp_nl_build_dev_ntf(psd, net, &cmd);
-> +	if (ntf)
-> +		genlmsg_multicast_netns(&psp_nl_family, net, ntf, 0,
-> +					PSP_NLGRP_MGMT, GFP_KERNEL);
-> +	put_net(net);
-> +}
-
-[Severity: Low]
-
-This isn't a bug, but should the assoc side be made symmetric with this?
-
-After this change, losing visibility of a PSP device in a netns produces
-PSP_CMD_DEV_DEL_NTF, while gaining visibility for the first time still
-produces only a change notification in psp_nl_dev_assoc_doit():
-
-	list_add_tail(&psp_assoc_dev->dev_list, &psd->assoc_dev_list);
-	psd->assoc_dev_cnt++;
-
-	put_net(net);
-
-	psp_nl_notify_dev(psd, PSP_CMD_DEV_CHANGE_NTF);
-
-For a netns where this is the first association, psp_dev_check_access(psd,
-net, false) would have returned -ENOENT just before the list_add_tail(),
-i.e. the device was not visible there at all, yet the netns is only told
-about it with a change notification.
-
-Documentation/netlink/specs/psp.yaml describes dev-add-ntf as "Notification
-about device appearing" and dev-del-ntf as "Notification about device
-disappearing", and psp_dev_create()/psp_dev_unregister() use that add/del
-pair. A mgmt listener in an associated namespace would then get a change-ntf
-for an object it was never told about, followed later by a del-ntf for it.
-
-Since notification semantics become uAPI once released, would it make sense
-to emit PSP_CMD_DEV_ADD_NTF to a namespace which becomes able to see the
-device for the first time?
-
-> +
->  int psp_nl_dev_get_doit(struct sk_buff *req, struct genl_info *info)
->  {
->  	struct psp_dev *psd = info->user_ptr[0];
+> diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
+> index d44d2c83473ee..13ff5188cca3f 100755
+> --- a/tools/testing/selftests/drivers/net/psp.py
+> +++ b/tools/testing/selftests/drivers/net/psp.py
 
 [ ... ]
 
-> @@ -620,13 +654,6 @@ int psp_nl_dev_disassoc_doit(struct sk_buff *skb, struct genl_info *info)
->  		return -ENOMEM;
->  	}
->  
-> -	put_net(net);
-> -
-> -	/* Notify before removal so listeners in the disassociated namespace
-> -	 * still receive the notification.
-> -	 */
-> -	psp_nl_notify_dev(psd, PSP_CMD_DEV_CHANGE_NTF);
-> -
->  	/* Remove from the association list */
->  	list_del(&found->dev_list);
->  	psd->assoc_dev_cnt--;
-> @@ -634,6 +661,9 @@ int psp_nl_dev_disassoc_doit(struct sk_buff *skb, struct genl_info *info)
->  	netdev_put(found->assoc_dev, &found->dev_tracker);
->  	kfree(found);
->  
-> +	psp_nl_notify_disassoc(psd, net);
-> +	put_net(net);
+> @@ -723,6 +723,111 @@ def _dev_change_notify_multi_ns_netkit(cfg):
+
+[ ... ]
+
+> +def _get_dev_ntf(cfg, pspnl, label):
+> +    """Wait for the next notification about the PSP device under test."""
+> +    for ntf in pspnl.poll_ntf(duration=10):
+> +        if ntf['msg'].get('id') == cfg.psp_dev_id:
+> +            return ntf
+> +    raise KsftFailEx(f"No notification received in the {label} namespace")
 > +
->  	return psp_nl_reply_send(rsp, info);
->  }
+> +
+> +def _check_disassoc_ntf(cfg, main_pspnl, peer_pspnl, ifindex):
+> +    """Check the notifications for a netns losing its last association."""
+> +    ntf = _get_dev_ntf(cfg, main_pspnl, "main")
+> +    ksft_eq(ntf['name'], 'dev-change-ntf')
+> +    for assoc in ntf['msg'].get('assoc-list', []):
+> +        if assoc['nsid'] != cfg.psp_dev_peer_nsid:
+> +            continue
+> +        ksft_ne(assoc['ifindex'], ifindex,
+> +                "Disassociated device still listed in the notification")
+> +
+> +    # The device is gone as far as the disassociated namespace is concerned
+> +    ntf = _get_dev_ntf(cfg, peer_pspnl, "guest")
+> +    ksft_eq(ntf['name'], 'dev-del-ntf')
+> +    ksft_true('ifindex' not in ntf['msg'],
+> +              "ifindex reported to an associated namespace")
 
-[Severity: Low]
+[ ... ]
 
-Should this carry Fixes: tags?
+> +def _dev_disassoc_notify_one_of_two_netkit(cfg):
+> +    """Test the notifications with two netkits associated in one netns.
+> +
+> +    Disassociating the first netkit leaves the PSP device visible in the
+> +    guest namespace, generates a dev-change-ntf.
+> +    Disassociating the second one takes the device out of its view,
+> +    generates 'dev-del-ntf'.
+> +    """
 
-The changelog says the old ordering "is still wrong", and the corrected
-behaviour is user-visible netlink content in two paths that both exist in
-released code:
+[ ... ]
 
-- psp_nl_dev_disassoc_doit(), the notify-before-removal block removed here,
-  came from commit 06c2dce2d0f6 ("psp: add new netlink cmd for dev-assoc
-  and dev-disassoc")
-- psp_netdev_event(), converted to psp_nl_notify_disassoc(), came from
-  commit 0ddb69e2406e ("psp: add a new netdev event for dev unregister")
+> +    main_pspnl, peer_pspnl = _subscribe_mgmt(cfg)
+> +
+> +    # One of the two goes away, the device stays visible in the guest netns
+> +    cfg.pspnl.dev_disassoc({'id': cfg.psp_dev_id, 'ifindex': tmp_ifindex,
+> +                            'nsid': cfg.psp_dev_peer_nsid})
+> +
+> +    ntf = _get_dev_ntf(cfg, main_pspnl, "main")
+> +    ksft_eq(ntf['name'], 'dev-change-ntf')
+> +
+> +    ntf = _get_dev_ntf(cfg, peer_pspnl, "guest")
+> +    ksft_eq(ntf['name'], 'dev-change-ntf')
+> +    found = False
+> +    for assoc in ntf['msg'].get('assoc-list', []):
+> +        ksft_ne(assoc['ifindex'], tmp_ifindex,
+> +                "Disassociated device still listed in the notification")
+> +        found |= assoc['ifindex'] == cfg.nk_guest_ifindex
+> +    ksft_true(found, "Remaining association missing from the notification")
 
-Documentation/process/maintainer-netdev.rst says "for fixes the ``Fixes:``
-tag is required, regardless of the tree", so adding the two trailers would
-make stable selection and backporting reliable.
+[Severity: Medium]
+
+Does this block actually check the property the commit message describes,
+that "a namespace which still has another association is only told about
+the change"?
+
+_get_dev_ntf() returns as soon as it sees one message for the device, so
+only the first guest notification is inspected.  If the kernel also sent a
+dev-del-ntf to the guest here (i.e. still_visible in
+psp_nl_notify_disassoc() were computed wrongly), nothing in this phase
+would notice it.
+
+The stale message is not just ignored, it is later consumed as if it were
+fresh.  ynl queues notifications that poll_ntf() did not hand out:
+
+tools/net/ynl/pyynl/lib/ynl.py:poll_ntf() {
+	...
+	while True:
+		try:
+			yield self.async_msg_queue.get_nowait()
+	...
+}
+
+so a bogus dev-del-ntf from the first dev_disassoc() stays in
+peer_pspnl's queue, and the second phase picks it up:
+
+_check_disassoc_ntf() {
+	...
+	ntf = _get_dev_ntf(cfg, peer_pspnl, "guest")
+	ksft_eq(ntf['name'], 'dev-del-ntf')
+	ksft_true('ifindex' not in ntf['msg'],
+		  "ifindex reported to an associated namespace")
+}
+
+Both assertions pass on the stale message, because psp_nl_dev_fill() only
+emits PSP_A_DEV_IFINDEX when cur_net == dev_net(psd->main_netdev), so any
+del-ntf destined for a non-main netns lacks ifindex.
+
+That leaves the test only able to catch a missing notification, not an
+extra one.  Would it make sense to drain both sockets after the first
+change-ntf and assert that no further notification for this device arrives
+(a short poll_ntf() that must yield nothing), before running the second
+dev_disassoc()?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260912200426.121025-1-kuba%40kernel.org
