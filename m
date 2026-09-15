@@ -1,88 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-145.mta0.migadu.com [91.218.175.145])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9996534AB03;
-	Tue, 15 Sep 2026 19:45:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65D74CC61A
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 20:31:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789501504; cv=none; b=mOO2CuVy4Svd5BrVx+ksZUu8xeqLtCb9OrNaRRTHUGV5fWUK1ICW+CT2Vjz9o9raHPfNQYg+PYnSI3NatEPMn7HBd1DShKi5LXQ+dvHaGMCqkTeZIbVisSrtL4o9ut4FD5ohPmDGVEyKd/wYfhrPKyUtB15adzAMESrYbiANhA8=
+	t=1789504313; cv=none; b=sIUtaDib6rHebnjSM+LmyrSwYlfd9E6LmSS8DWjdSsUHVIBT4P+n5MpB33ouDmD4YZ4J6tq9yrdcqtiD13Z1BJQZ+HQXc2Bxpl7DfPf1Fm0d2b21HlKd678hQ1MYUBF3BDQRbG5nONftzJIZNh3B/TjafoYxUyvbYzHA5uyEzN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789501504; c=relaxed/simple;
-	bh=JiY1Ux06iumYydaI0Z726KeWwjypfbajQ7WuDjwY62Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eWKXPgFRcQNlbyJbPAES3zO+GTqB4dq3fQ2Tc6we90z3N4I+ada2xUfzlbv08wePKRV9tcJoLk2SaT4A1URoYMVYuQ5UTODfHfgquSz80KB8I5F3pBUm4faTOap+KEGoxy3yDTLlvo9gGPXrncVaDqWPktRdi56rnA9rdOtagE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G5JcrM9P; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789504313; c=relaxed/simple;
+	bh=DlNMEgBAu/+jKGuLmjW2kT9UG/Wuidvpo60GYwCs51s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=K14DrKRimSOeim3BAu3JssisCmKa7OXSdKxjdN7GAOSR5IzSFiBpeUucW1nL/Ittp71k8PW9TLPqgiyyhEys8r3xXyC828UuplnT9AovvUCSEwCmW5BuauYh0TeRW3XA07zJnarrGziKBOYQZkKwaS+EfX5LjmnCyfOId8q14pE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bjAoyw+h; arc=none smtp.client-ip=91.218.175.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G5JcrM9P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A704E1F000FF;
-	Tue, 15 Sep 2026 19:44:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789501501;
-	bh=mwcAcp8dKHIcVLbR1Sy5crPPZNPInwTc17fNJxNfqaY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=G5JcrM9PrajOvrqsFgUONEi6epP/pEryvQv8AB8cbkaHakvZHXXK19cAi4pezk9hm
-	 i9rZJWfeF6TS9fcKv7usCHgqECqFqvtlJrGU9k9ZnqRUPGe0IRqBsya5oJLp1uJf/U
-	 LZ3MW8rB2hfJnqJdwcsvYzyWXTpP5g0DXsEIGotN1yEYyMIq/KyIYJia9alW93A7TC
-	 Hu3FXr3zV/+3dZLdgd0EWPDoTyPbqrROABspI/QXzfmb5fIvPADs1TA7RjsnK+e6wd
-	 3MAuoqi8iApr0IrquWgqwrDXWqjjByxrYb1Z6WmeOz39uYw7HFucq17zWa0uNPxsaX
-	 RhBStf5YyX85w==
-From: Chuck Lever <cel@kernel.org>
-To: Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	NeilBrown <neil@brown.name>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>,
-	Tom Talpey <tom@talpey.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>
-Cc: linux-nfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 0/5] nfsd/sunrpc: allow userland to handle rpcbind registration
-Date: Tue, 15 Sep 2026 15:44:56 -0400
-Message-ID: <178950149074.1556771.1876157080795591020.b4-ty@b4>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260915-nfsd-norpcb-v3-0-3c60d49ade02@kernel.org>
-References: <20260915-nfsd-norpcb-v3-0-3c60d49ade02@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bjAoyw+h"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=DlNMEgBAu/+jKGuLmjW2kT9UG/Wuidvpo60GYwCs51s=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789504309; v=1; x=1790109109;
+ b=bjAoyw+hx9ScjmWn+XzdmmIsHl1KOWAeUHfH+1DlxCv2xMcLZRafbbhTZxAZv0bArm99zlnE
+ aBsni+IGn8vYEy0zcw6ETvtT2Cde4DutkCbJj9Kq4soDtkWA305kPm/bNo01P8Ka1hsvtqmmjrk
+ k7KKEpoFLVRNB1lvoSL2E1iM=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4f20671e3b41c2d0;
+	Tue, 15 Sep 2026 20:31:49 +0000
+X-Mizu-Trace-ID: 4f20671e3b41c2d0
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <4ab75099-0e95-4fee-81da-6f4198e3e6a0@linux.dev>
+Date: Tue, 15 Sep 2026 13:31:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
+ across zero-extending movs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+ <20260910164635.459558-4-vineet.gupta@linux.dev>
+ <DLDKI0ZXYI7H.1XQZZE2RCU7IF@gmail.com>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <DLDKI0ZXYI7H.1XQZZE2RCU7IF@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On Tue, 15 Sep 2026 12:57:41 -0400, Jeff Layton wrote:
-> This version fixes a few problems that Chuck and agentic review pointed
-> out. Original cover letter follows:
-> 
-> While working on the recent hardening patches for the nfsd listener
-> netlink interface, Chuck mentioned that we could allow userland to
-> handle rpcbind registation itself.
-> 
-> [...]
+On 9/12/26 11:59 AM, Alexei Starovoitov wrote:
+> On Thu Sep 10, 2026 at 9:46 AM PDT, Vineet Gupta wrote:
+>> Linked-scalar equality is full-64-bit only. A 32-bit mov from a source
+>> with unknown high bits therefore has to drop the relationship, and a later
+>> narrowing of the source never reaches the destination:
+>>
+>>    r6 = ...              /* full 64-bit unknown */
+>>    w7 = w6               /* 32-bit zero-extending mov */
+>>    if w6 != 0 goto ...   /* not taken: r6's low 32 bits are 0 */
+>>    if w7 == 0 goto ...   /* not deduced today */
+>>
+>> Record a low-32-only link instead: dst shares src's low 32 bits and its
+>> high half is zero. On a later narrowing, sync_linked_regs() rebuilds such
+>> a register from the base rather than copying it, by re-applying the same
+>> zext_32_to_64() the mov used. The reverse direction is skipped: a ->subreg
+>> base knows nothing about a full register's high half.
+> at the first glance SUBREG_ZEXT is exactly the same as ADD_CONST32 delta == 0.
+> no?
+> Both are unidirectional:
+> w6->id == 1
+> w7->id == 1, add_const == 32, delta == 0
+>
+> will zero extend w7.
+>
+> This new SUBREG_ZEXT will do the same.
+> What am I missing?
 
-Applied to nfsd-testing, thanks!
+The 2 examples below both imply ADD_CONST32 + delta=0, with different 
+semantics and need special casing.
 
-[1/5] SUNRPC: allow a service to opt out of rpcbind registration
-      commit: 0b1f0103eab9ecf05d95f5061cc0058322bd61a8
-[2/5] NFSD: add a userspace-rpcbind flag to listener_set
-      commit: f66e0fff8d18320e0aad2492aa222783e2790494
-[3/5] NFSD: honour the userspace-rpcbind flag in listener_set
-      commit: cd5be08177a2b4bcb93f119d8ad8fb076c45a425
-[4/5] NFSD: report registerable programs in the listener_set reply
-      commit: d1b98fc668643dc4243176024e63f340a555d6f5
-[5/5] selftests/nfsd: exercise the userspace-rpcbind listener_set flag
-      commit: 0e02d8dcaca57c95bd51f5a0ffd4d258275c5841
+w3 = w2; w3 += 0
+w7 = w6; (r6 was wide)
 
---
-Chuck Lever
+With code hacks it could in fact me made to work, but its less cleaner.
 
+
+Current approach we have something like below in sync_linked_regs()
+
+               /*
+                * A ->subreg register shares only the base's low 32 
+bits, so it
+                * is rebuilt rather than copied. Not modelled together 
+with a
+                * delta, so skip if either side has one (sound, less 
+precise).
+                */
+               if (reg->subreg) {
+                       if (reg->add_const || known_reg->add_const)
+                               continue;
+                       if (reg->subreg == SUBREG_ZEXT)
+                               reconstruct_zext32(reg, known_reg);
+                       else
+                               reconstruct_sext32(reg, known_reg);
+                       if (e->is_reg)
+                               mark_reg_scratched(env, e->regno);
+                       else
+                               mark_stack_slot_scratched(env, e->spi);
+                       continue;
+               }
+               /*
+                * The reverse: known_reg knows only its low 32 bits, 
+which say
+                * nothing about reg's high half.
+                */
+               if (known_reg->subreg)
+                       continue;
+
+
+With the suggested approach it looks something like below.
+ADD_CONST_32, delta == 0 has to be disambiguated from a real += 0 by 
+inspecting another register's bounds.
+
+               /*
+                * A low-32 link shares only the base's low 32 bits, so it is
+                * rebuilt rather than copied.
+                *
+                * SIGN_EXTEND_32 says so outright. ADD_CONST_32 with 
+delta == 0
+                * does not: it is also what "w3 = w2; w3 += 0" records, 
+which is
+                * a plain equality. The two are separable only by the base's
+                * width
+                */
+               if (reg->add_const == SIGN_EXTEND_32 && 
+!known_reg->add_const) {
+                       reconstruct_sext32(reg, known_reg);
+                       goto scratched;
+               }
+               if (reg->add_const == ADD_CONST_32 && reg->delta == 0 &&
+                   !known_reg->add_const) {
+                       reconstruct_zext32(reg, known_reg);
+                       goto ...;
+               }
+               /*
+                * The reverse:
+                */
+               if (known_reg->add_const == SIGN_EXTEND_32)
+                       continue;
+               if (known_reg->add_const == ADD_CONST_32 &&
+                   known_reg->delta == 0 && get_reg_width(reg) > 32)
+                       continue;
+
+There are other knock-on effects which use add_const as a bool.
+
+log.c:655        if (reg->add_const) -> prints "%+d" delta
+
+There are many more such places and would need to be handled for special 
+case of add_const but delta=0 to mean something else.
+
+My opinion would be stick to the current ZEXT,SEXT split.
+
+Thx,
+-Vineet
