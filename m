@@ -1,341 +1,234 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9B743F4CE
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 05:47:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5371942E42C;
+	Tue, 15 Sep 2026 06:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789451222; cv=none; b=dKFcL3uLyT98AQgQ+lSqQXFBYEQQ/zVK8AYbeMZ1PiymXe3G58SOPvgW+5RuWwGG6kFe37I4bOM3ou2k2nKDxiJt8rwVd/tlu/ylhEWRf7GSQwV3tKwxyI+J9m/2IoNRfnYnYJRyAci2wV61v5d0/Lq7lmv3A7GKfP7XcL1stUA=
+	t=1789452267; cv=none; b=IPW6JdMtQYwNgC8FW7BTjHPgymRejPCTEAKDqtqYx+eoCDvRSVnmFIE5a2UqPxdbsGFsOHEkVX/Zc2HFS/zwCwawr5DpnvMA7AQ3v5yrOqmxz4M/HAxunDDQURp0eRWcGVbPZwtboDR0akg49nkKMJ0IZzAoybRybvgHjS7OU44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789451222; c=relaxed/simple;
-	bh=AZG3iR9wcf3utrA5wuxhKWvFiHMmo63opwAJYxLjKpE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ko1Z8lUJdEJtf8EbUzhQeP+WTtaXkCOrHuR4ZM5nLJleGIUTn7zx8mX5bU6zMrkWXmH74KJru5kfZyu1+7bcIpC9p4Z9WY1fPAMxhcR062Q8HUkY8jFFO4k1ZbnSkeJu5r6U267tu8zHPEA+5oweu6JLjLAftKcmng2gvlHvqXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZcGhOqjI; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789452267; c=relaxed/simple;
+	bh=ZDquD5VWIvUhppVwEp/0zYUJq5Mp9j1h5a/1yrT8lCs=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jiUWQn5vtbTdO5CtiJAHHW+w2AvGHabLEPG0L9qWIQfGBvbXh27hD9LI3RDy85WFH0r0Cj1TwftfyK2Z+suRTr39c+ldpCqWLxoFgNT6b+rlwb+bVvM1R413VC04YJa8ybvvN/1b3sC9iig5i5rEo+xox2IvV02zsCuBuiIuMHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SJN0+diB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZcGhOqjI"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-38dfe7eb825so3654460a91.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 22:47:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789451219; x=1790056019; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=R2iqQEA0P5F3XhuV+R4n4igK6yI3Yfdu5e82KuFRih0=;
-        b=ZcGhOqjI8UgEWA3b2PK60VNZN6v9DI++dFQQdd/cNNupUcdgqEVS6WRlb3NEe/UGjc
-         /e+uLjGiR2THB5XWUsbPY5dz/jed2ZTyTaqKWYIA62oKikrv0OBIkbvijgNfvSnrP+OJ
-         ii16L46XNgazFrs8Wm+24FLDLQSYmrhHRp0ZYFMmdtpjkZD0BBlM+ZOTzc7ZN9L9AjKA
-         pQv2EDl6yM4JWaFeFTreHe2BEvTTxCR1UvlH9dwNQhLoqEpdwkpn7Ty5MRZaQOASVehN
-         tZrrNFTmhvFsi8DyS/AegrfrAqgMe0qCDkGyQC+W1Ipcpg51dSmGW6cufyyM8ikxG6Fi
-         2s7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789451219; x=1790056019;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=R2iqQEA0P5F3XhuV+R4n4igK6yI3Yfdu5e82KuFRih0=;
-        b=sflPkju9n1gGGY1YXq4oP8imldMYT2Xlg2Y2NBFfCGQ98bxlcbdjFFzjlaUvjDkhti
-         lVNYmsUW0Tpm5ye654A3AECpdlp5/IuJ5azoRTsdqXPodOwt1jVEEznRyi9myLoOg8py
-         jmNjO5j+pwiAWjF/rbGoysrvSUHMSuslmncFMzA9ou3ckW5ZqFqUPjPrhtZ61AmhgfTf
-         j43X9htJ3f/jfDtVCg/bbLRsQOdObOx/uDjdxXNPMeLAfIALO4+UD5TskvvQliv0ING5
-         6TOKrmiXqTb6NxfgZlDO+oneaZB0MNuEh9x5hD7udNcEaMPqVbwbuazIjvaYcmPb6Ak0
-         aVZQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwKUEeN9vJ51WnlQwc0vzwLL3TZFK7/YbDtx5GrGi2bml18kHOLa9wLJRLUEIsXSH8Vt5Z2HCZJlGf+dq9zEXI=@vger.kernel.org
-X-Gm-Message-State: AFuF++nIRO9yta3rixXi6SNj4gUMDSV/zKsX0aR6iYDlgQJaZPM+eojY
-	4f5Kx6RQB1nMB1CGK97Dy77sscr8hY+d89cC34dqWf36svwBbVMGgpSz3OqlHH/s
-X-Gm-Gg: AYBFou10VRJyrta38JChdYaFLuGAFp83QeCO+3Z05HTwPw/JU4q/69BB5TGQMf/renf
-	AZWy9FdI4yEA2zsmItW+DsUhVtE5+7U4O4pPGMsolaJBCi9PO6KAMgRacEzDPD40dryaMvfA24T
-	QzEYVDRKKOrhAz5PVAzKZnQYWEGjhbs86sdL2/mEkWB6C6WKjnfClf1rsn7bYLglLfMIi37QWOQ
-	95wYpJ87yUccy5TWlnY38YHFi564f8E7lSkf/NL7kch9teuAvEIlfB/VC+w7WufACHLGqd5m0hB
-	/ERh1MpSWKVCOJ96UuE8ujDCegeeoXVuhARbC79vtLjy4o6Sqj+Q9KplU1b9uNBh9agsPJKNjd0
-	kn2Cy0O7mjaFjUW6I0MeUoHxL7szUDwLUL+9DXBuoVB/Z6fqnsQILHUJFUMkO46Zn+MzRqWzrdE
-	azEWtd1345q6rzmM4f42z2oQNBAqD8DwOHk/uHVLwWu5kIu+nwTAyi8jtgPxf0asIx6kiSc8afg
-	KwwBI3aB6sfYDGaBd1PJUrQjA==
-X-Received: by 2002:a17:90b:4c4b:b0:39e:4fb:fdcf with SMTP id 98e67ed59e1d1-39e050b7e5cmr2306437a91.14.1789451219209;
-        Mon, 14 Sep 2026 22:46:59 -0700 (PDT)
-Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14365ba729dsm47594159c88.14.2026.09.14.22.46.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 22:46:58 -0700 (PDT)
-From: Hemanth Selam <hemanth.selam@gmail.com>
-To: Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] KVM: selftests: Add a test for nested virtual NMI support
-Date: Tue, 15 Sep 2026 11:16:53 +0530
-Message-ID: <20260915054653.227359-1-hemanth.selam@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20260911102105.1927773-1-hemanth.selam@gmail.com>
-References: <20260911102105.1927773-1-hemanth.selam@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SJN0+diB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C8A1F000FF;
+	Tue, 15 Sep 2026 06:04:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789452264;
+	bh=fX+PsnjgHG6hqm/1A1ftLGS4DNmg/riIF50tsTdV5KU=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=SJN0+diBVLlNKE3vz5kyOkJp9s2NuuOKZsKQwCkascMJfrpmEIEAckC05u1r1xemS
+	 zGnJGl5248XKTpXES0IrW06f5UA6dlchrdFqJ4vwdL9nTGLhfDm/bDvjaUK8AN0ZbR
+	 V73EWHq6qdatZU31T48d2Vyhy6kVYfwpcf5CpuMSjcedfGzKtS2yNb7AUBELrKqhQB
+	 hrQ4eIVglI0hZpAdN8NMqEFfzeE8cbqThdY1wcWa4HCvU5YKJNFTO3VSBsWHMl9KRl
+	 4ndsy7retWY5/+hG6vueWE5uyiMuzVYW3SnD7vgilgrJsdql+RpZldsx4Yi4B9Fzss
+	 zCpQ4BALHJt/A==
+Subject: Re: [PATCH net-next 2/6] psp: don't report the main netdevice's
+ ifindex to associated namespaces
+From: netdev-bot+sashiko@kernel.org
+To: kuba@kernel.org
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ daniel.zahka@gmail.com, willemdebruijn.kernel@gmail.com,
+ donald.hunter@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org
+Date: Tue, 15 Sep 2026 06:04:23 +0000
+Message-ID: <178945226311.22033.17255405958222817792@kernel.org>
+In-Reply-To: <20260912200426.121025-3-kuba@kernel.org>
+References: <20260912200426.121025-3-kuba@kernel.org>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-KVM's virtual NMI support for nested guests has no test coverage; "V_NMI"
-doesn't appear anywhere under tools/testing/selftests/kvm/.
+Thank you for your contribution! Sashiko AI review found 4 potential
+issue(s) to consider:
 
-Add a test that covers the vNMI controls L1 provides in vmcb12:
+Critical: 0 · High: 0 · Medium: 1 · Low: 3
 
- - With vNMI enabled but no NMI requested, L2 runs without taking an NMI,
-   and neither V_NMI_PENDING nor V_NMI_BLOCKING is set on exit.
+- [Medium] psp_nl_dev_fill() (net/psp/psp_nl.c:294-312) stops emitting
+  PSP_A_DEV_IFINDEX in every dev-get reply / dump entry / dev-…
+- [Low] The emitter contract changed (PSP_A_DEV_IFINDEX is now optional
+  in dev-get replies/dumps) but the in-tree consumers still treat it as…
+- [Low] As of this patch alone, psp.yaml documents that PSP_A_DEV_IFINDEX
+  is 'Only reported to the network namespace the main netdevice lives…
+- [Low] psp_nl_dev_fill() (net/psp/psp_nl.c:301-305) decides whether to
+  report PSP_A_DEV_IFINDEX with `cur_net == dev_net(psd->main_netdev)`…
 
- - With V_NMI_PENDING set, L2 takes the NMI on VMRUN.  Exiting to L1 from
-   the NMI handler, i.e. before its IRET, shows the bits hardware wrote:
-   V_NMI_PENDING cleared and V_NMI_BLOCKING set.  Once the handler IRETs,
-   V_NMI_BLOCKING is cleared.  Repeat to verify NMIs can be delivered
-   back to back.
+--
 
- - Enabling vNMI without intercepting NMIs fails VMRUN with SVM_EXIT_ERR,
-   per the consistency check in nested_vmcb_check_controls().
+psp: don't report the main netdevice's ifindex to associated namespaces
 
-Add the V_NMI_{PENDING,BLOCKING,ENABLE} masks and X86_FEATURE_VNMI to the
-selftest headers, which didn't define them.
+PSP_A_DEV_IFINDEX is moved inside the branch that handles the main
+netdevice's namespace in psp_nl_dev_fill(), so namespaces which only see
+the PSP device by association no longer get the main netdev's ifindex.
+The psp.yaml spec documentation for the attribute is updated to describe
+the new rule.
 
-Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
----
+A few questions below.
 
-v2:
- - Keep the update to nmi_fired ahead of the exit to L1 with barrier(),
-   as vmmcall() doesn't clobber memory and so nothing stops the compiler
-   from sinking the store past the VM-Exit (Sashiko AI review).  Note
-   that vmmcall() not clobbering memory affects any test that hands data
-   to L1 in a global; svm_nested_soft_inject_test.c works around it with
-   atomics.  Happy to fix the helper instead if that's preferred.
+> diff --git a/Documentation/netlink/specs/psp.yaml b/Documentation/netlink/specs/psp.yaml
+> index e9c2ee7e28e02..f3266763c3253 100644
+> --- a/Documentation/netlink/specs/psp.yaml
+> +++ b/Documentation/netlink/specs/psp.yaml
+> @@ -38,6 +38,8 @@ attribute-sets:
+>          doc: |
+>            ifindex of the main netdevice linked to the PSP device,
+>            or the ifindex to associate with the PSP device.
+> +          Only reported to the network namespace the main netdevice
+> +          lives in, an ifindex has no meaning outside of it.
+>          type: u32
 
-v1: https://lore.kernel.org/all/20260911102105.1927773-1-hemanth.selam@gmail.com/
+[Severity: Low]
+As of this commit, is the newly documented rule verified anywhere in
+tree?  The only test which inspects dev-get output taken from an
+associated namespace is _psp_dev_get_check_netkit_psp_assoc() (Check 2)
+in tools/testing/selftests/drivers/net/psp.py, and at this commit it only
+looks for the by-association entry and validates the assoc-list.
 
-Tested on an AMD EPYC system with vNMI supported and enabled.  The test
-passes consistently (50 consecutive runs, no failures), and the other
-nested SVM selftests are unaffected.
+Note the following patch in the series, "selftests: drv-net: psp: check
+the ifindex an associated netns sees", adds exactly the missing
+assertions:
 
-The int_ctl values L1 observes across a delivered virtual NMI are:
+        ksft_true('ifindex' not in peer_dev,
+                  "ifindex reported to an associated namespace")
 
-  before VMRUN              V_NMI_ENABLE | V_NMI_PENDING
-  exit from the NMI handler V_NMI_ENABLE | V_NMI_BLOCKING
-  after the handler IRETs   V_NMI_ENABLE
+and the equivalent check in _check_disassoc_ntf(), so the gap is closed
+before the end of the series.  Mentioning this only for completeness.
 
-To check the assertions aren't vacuous, each was inverted in turn and
-confirmed to fail against actual behaviour:
+> diff --git a/net/psp/psp_nl.c b/net/psp/psp_nl.c
+> index f91665748dde0..b57366b5e032b 100644
+> --- a/net/psp/psp_nl.c
+> +++ b/net/psp/psp_nl.c
+> @@ -294,13 +294,16 @@ psp_nl_dev_fill(struct psp_dev *psd, struct sk_buff *rsp,
+>  		return -EMSGSIZE;
+>  
+>  	if (nla_put_u32(rsp, PSP_A_DEV_ID, psd->id) ||
+> -	    nla_put_u32(rsp, PSP_A_DEV_IFINDEX, psd->main_netdev->ifindex) ||
+>  	    nla_put_u32(rsp, PSP_A_DEV_PSP_VERSIONS_CAP, psd->caps->versions) ||
+>  	    nla_put_u32(rsp, PSP_A_DEV_PSP_VERSIONS_ENA, psd->config.versions))
+>  		goto err_cancel_msg;
+>  
+>  	if (cur_net == dev_net(psd->main_netdev)) {
+> -		/* Primary device - dump assoc list */
+> +		/* Primary device - report the netdev, dump assoc list. */
+> +		if (nla_put_u32(rsp, PSP_A_DEV_IFINDEX,
+> +				psd->main_netdev->ifindex))
+> +			goto err_cancel_msg;
+> +
 
-  - Not requesting V_NMI_PENDING, so no NMI is delivered:
-      nmi_fired == i
-      0x0 != 0x1 (nmi_fired != i)
+[Severity: Medium]
+Should this carry a Fixes: tag?
 
-  - Asserting V_NMI_BLOCKING is clear while the NMI is in service:
-      !(vmcb->control.int_ctl & (1 << 12))
+The unconditional PSP_A_DEV_IFINDEX in psp_nl_dev_fill() has been in the
+dev-get reply, the dump entries and the dev add/change/del notifications
+since 06c2dce2d0f69 ("psp: add new netlink cmd for dev-assoc and
+dev-disassoc"), which was based on v7.1-rc7 and therefore shipped in the
+released v7.2.  The tree here is v7.3.0-rc2.
 
-  - Expecting VMRUN to succeed with V_NMI_ENABLE set and INTERCEPT_NMI
-    cleared:
-      vmcb->control.exit_code == SVM_EXIT_VMMCALL
-      0xffffffffffffffff != 0x81
+That means the message layout narrowed between two released kernels for
+the same command: an application built against v7.2 sees the attribute in
+by-association messages, while v7.3 and later omit it, and netlink gives
+userspace no way to probe for the difference.
 
-Where vNMI isn't available the test exits KSFT_SKIP rather than failing.
+Would adding
 
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../selftests/kvm/include/x86/processor.h     |   1 +
- tools/testing/selftests/kvm/include/x86/svm.h |   9 ++
- .../selftests/kvm/x86/svm_nested_vnmi_test.c  | 132 ++++++++++++++++++
- 4 files changed, 143 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86/svm_nested_vnmi_test.c
+  Fixes: 06c2dce2d0f69 ("psp: add new netlink cmd for dev-assoc and dev-disassoc")
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 96bab7002d39..92e1018e9c8a 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -121,6 +121,7 @@ TEST_GEN_PROGS_x86 += x86/svm_nested_clear_efer_svme
- TEST_GEN_PROGS_x86 += x86/svm_nested_shutdown_test
- TEST_GEN_PROGS_x86 += x86/svm_nested_soft_inject_test
- TEST_GEN_PROGS_x86 += x86/svm_nested_vmcb12_gpa
-+TEST_GEN_PROGS_x86 += x86/svm_nested_vnmi_test
- TEST_GEN_PROGS_x86 += x86/svm_nested_pat_test
- TEST_GEN_PROGS_x86 += x86/svm_lbr_nested_state
- TEST_GEN_PROGS_x86 += x86/svm_pmu_host_guest_test
-diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
-index 6e6f70035508..71697a1d5b86 100644
---- a/tools/testing/selftests/kvm/include/x86/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86/processor.h
-@@ -224,6 +224,7 @@ struct kvm_x86_cpu_feature {
- #define X86_FEATURE_PFTHRESHOLD         KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 12)
- #define	X86_FEATURE_V_VMSAVE_VMLOAD	KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 15)
- #define	X86_FEATURE_VGIF		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 16)
-+#define X86_FEATURE_VNMI		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 25)
- #define X86_FEATURE_IDLE_HLT		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 30)
- #define X86_FEATURE_SEV			KVM_X86_CPU_FEATURE(0x8000001F, 0, EAX, 1)
- #define X86_FEATURE_SEV_ES		KVM_X86_CPU_FEATURE(0x8000001F, 0, EAX, 3)
-diff --git a/tools/testing/selftests/kvm/include/x86/svm.h b/tools/testing/selftests/kvm/include/x86/svm.h
-index c8539166270e..5779fb285d79 100644
---- a/tools/testing/selftests/kvm/include/x86/svm.h
-+++ b/tools/testing/selftests/kvm/include/x86/svm.h
-@@ -140,6 +140,12 @@ struct __attribute__ ((__packed__)) vmcb_control_area {
- #define V_GIF_SHIFT 9
- #define V_GIF_MASK (1 << V_GIF_SHIFT)
- 
-+#define V_NMI_PENDING_SHIFT 11
-+#define V_NMI_PENDING_MASK (1 << V_NMI_PENDING_SHIFT)
-+
-+#define V_NMI_BLOCKING_SHIFT 12
-+#define V_NMI_BLOCKING_MASK (1 << V_NMI_BLOCKING_SHIFT)
-+
- #define V_INTR_PRIO_SHIFT 16
- #define V_INTR_PRIO_MASK (0x0f << V_INTR_PRIO_SHIFT)
- 
-@@ -152,6 +158,9 @@ struct __attribute__ ((__packed__)) vmcb_control_area {
- #define V_GIF_ENABLE_SHIFT 25
- #define V_GIF_ENABLE_MASK (1 << V_GIF_ENABLE_SHIFT)
- 
-+#define V_NMI_ENABLE_SHIFT 26
-+#define V_NMI_ENABLE_MASK (1 << V_NMI_ENABLE_SHIFT)
-+
- #define AVIC_ENABLE_SHIFT 31
- #define AVIC_ENABLE_MASK (1 << AVIC_ENABLE_SHIFT)
- 
-diff --git a/tools/testing/selftests/kvm/x86/svm_nested_vnmi_test.c b/tools/testing/selftests/kvm/x86/svm_nested_vnmi_test.c
-new file mode 100644
-index 000000000000..b4bde81a4e54
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86/svm_nested_vnmi_test.c
-@@ -0,0 +1,132 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Test KVM's virtual NMI (vNMI) support for nested guests: the consistency
-+ * check on the vNMI controls in vmcb12, delivery of a virtual NMI to L2, and
-+ * the V_NMI_PENDING/V_NMI_BLOCKING state L1 observes across the NMI.
-+ *
-+ * Copyright (C) 2026 Hemanth Selam <hemanth.selam@gmail.com>
-+ */
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "svm_util.h"
-+#include "test_util.h"
-+
-+/* Number of virtual NMIs to deliver; more than one to prove it's repeatable. */
-+#define NR_VNMIS	3
-+
-+static unsigned int nmi_fired;
-+
-+static void guest_nmi_handler(struct ex_regs *regs)
-+{
-+	nmi_fired++;
-+
-+	/*
-+	 * Exit to L1 from NMI context, i.e. before this handler's IRET, so
-+	 * that L1 can observe V_NMI_BLOCKING while the NMI is in service.
-+	 * Keep the update to nmi_fired ahead of the exit, as vmmcall() doesn't
-+	 * clobber memory and L1 reads nmi_fired as soon as L2 exits.
-+	 */
-+	barrier();
-+	vmmcall();
-+}
-+
-+static void l2_guest_code(void)
-+{
-+	vmmcall();
-+}
-+
-+static void l1_vnmi_setup(struct svm_test_data *svm)
-+{
-+	struct vmcb *vmcb = svm->vmcb;
-+
-+	generic_svm_setup(svm, l2_guest_code);
-+
-+	/* KVM requires L1 to intercept NMIs in order to enable vNMI. */
-+	vmcb->control.intercept |= BIT(INTERCEPT_NMI);
-+	vmcb->control.int_ctl |= V_NMI_ENABLE_MASK;
-+}
-+
-+static void l1_guest_code(struct svm_test_data *svm)
-+{
-+	struct vmcb *vmcb = svm->vmcb;
-+	unsigned int i;
-+
-+	/* Without a pending virtual NMI, L2 runs to its VMMCALL untouched. */
-+	l1_vnmi_setup(svm);
-+
-+	run_guest(vmcb, svm->vmcb_gpa);
-+	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-+	GUEST_ASSERT_EQ(nmi_fired, 0);
-+	GUEST_ASSERT(!(vmcb->control.int_ctl & V_NMI_PENDING_MASK));
-+	GUEST_ASSERT(!(vmcb->control.int_ctl & V_NMI_BLOCKING_MASK));
-+
-+	for (i = 1; i <= NR_VNMIS; i++) {
-+		/* Request a virtual NMI; L2 must take it on VMRUN. */
-+		l1_vnmi_setup(svm);
-+		vmcb->control.int_ctl |= V_NMI_PENDING_MASK;
-+
-+		run_guest(vmcb, svm->vmcb_gpa);
-+
-+		/*
-+		 * The NMI was delivered and L2 exited from the handler, so
-+		 * hardware has consumed the request and blocked further NMIs.
-+		 */
-+		GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-+		GUEST_ASSERT_EQ(nmi_fired, i);
-+		GUEST_ASSERT(!(vmcb->control.int_ctl & V_NMI_PENDING_MASK));
-+		GUEST_ASSERT(vmcb->control.int_ctl & V_NMI_BLOCKING_MASK);
-+
-+		/* Resume L2 so the handler can IRET, which unblocks NMIs. */
-+		vmcb->save.rip = vmcb->control.next_rip;
-+
-+		run_guest(vmcb, svm->vmcb_gpa);
-+		GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-+		GUEST_ASSERT_EQ(nmi_fired, i);
-+		GUEST_ASSERT(!(vmcb->control.int_ctl & V_NMI_BLOCKING_MASK));
-+	}
-+
-+	/*
-+	 * Enabling vNMI without intercepting NMIs is illegal, as L1 would have
-+	 * no way of observing the NMIs it is nominally responsible for.
-+	 */
-+	vmcb->control.intercept &= ~BIT(INTERCEPT_NMI);
-+
-+	run_guest(vmcb, svm->vmcb_gpa);
-+	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_ERR);
-+
-+	GUEST_DONE();
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	struct ucall uc;
-+	gva_t svm_gva;
-+
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM));
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_VNMI));
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
-+
-+	vm_install_exception_handler(vm, NMI_VECTOR, guest_nmi_handler);
-+
-+	vcpu_alloc_svm(vm, &svm_gva);
-+	vcpu_args_set(vcpu, 1, svm_gva);
-+
-+	vcpu_run(vcpu);
-+	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
-+
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+		/* NOT REACHED */
-+	case UCALL_DONE:
-+		break;
-+	default:
-+		TEST_FAIL("Unexpected ucall: %lu", uc.cmd);
-+	}
-+
-+	kvm_vm_free(vm);
-+	return 0;
-+}
+plus a sentence in the changelog about the userspace-visible narrowing be
+appropriate, so the correction lands in the same stable trees as the
+feature?
+
+[Severity: Low]
+With the attribute now optional, do the in-tree consumers still handle a
+dump that mixes entries with and without it?
+
+tools/testing/selftests/drivers/net/psp.py, _init_psp_dev():
+
+        for dev in cfg.pspnl.dev_get({}, dump=True):
+            if dev['ifindex'] == target_ifindex:
+
+ynl omits absent attributes, so a dump containing a by-association entry
+raises a Python KeyError here and aborts the test file, where before this
+patch it fell through to the clean:
+
+        raise KsftSkipEx("No PSP devices found")
+
+Would dev.get('ifindex') be better?  In the suite as configured every
+_init_psp_dev() call uses the host-namespace socket, so the current tests
+should not hit it, but the dump is no longer guaranteed to contain the
+key.
+
+The same applies more mildly to tools/testing/selftests/drivers/net/
+psp_responder.c, in the -i selection loop in main():
+
+        if (opts.ifindex) {
+            if (d->ifindex != opts.ifindex)
+                continue;
+
+With the attribute absent d->ifindex is 0, so such a device is silently
+skipped and the responder reports the device as not found.  This one is
+not a behaviour regression as such, since the top-level ifindex it
+compared previously belonged to another namespace anyway.
+
+[Severity: Low]
+Can the namespace test and the ifindex read disagree here?
+
+The branch predicate reads dev_net(psd->main_netdev) and the attribute
+then performs a second, independent read of psd->main_netdev->ifindex.
+The psp family is registered with parallel_ops and the dev-get and
+notification paths take only psd->lock, no RTNL, while a concurrent
+migration in netif_change_net_namespace() publishes the netns before the
+new ifindex:
+
+net/core/dev.c:netif_change_net_namespace() {
+    ...
+    netdev_lock(dev);
+    dev_net_set(dev, net);
+    netdev_unlock(dev);
+    dev->ifindex = new_ifindex;
+    ...
+}
+
+Nothing in psp re-pins the psd on a netns move - psp_netdev_event() bails
+out for anything other than NETDEV_UNREGISTER:
+
+net/psp/psp_main.c:psp_netdev_event() {
+    if (event != NETDEV_UNREGISTER)
+        return NOTIFY_DONE;
+    ...
+}
+
+so a reader can pass the test with the old netns and then serialize the
+ifindex the device has in its new namespace, which is the case the doc
+hunk declares meaningless.  Symmetrically, a notification built for the
+main_net already pinned by psp_nl_multicast_per_ns() can flip to the
+by-association encoding, since psp_nl_dev_fill() re-reads dev_net()
+rather than using that pinned net:
+
+net/psp/psp_nl.c:psp_nl_multicast_per_ns() {
+    /* device may be changing netns in parallel */
+    rcu_read_lock();
+    main_net = maybe_get_net(dev_net_rcu(psd->main_netdev));
+    rcu_read_unlock();
+    ...
+}
+
+Would reading the netns and the ifindex once under a single
+rcu_read_lock() with dev_net_rcu(), or passing the already-pinned
+main_net down into psp_nl_dev_fill(), close the window?  The
+consequence is only a stale or foreign u32 in one message.
+
+>  		err = psp_nl_fill_assoc_dev_list(psd, rsp, cur_net, NULL);
+>  		if (err)
+>  			goto err_cancel_msg;
+
 -- 
-2.48.1
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260912200426.121025-1-kuba%40kernel.org
