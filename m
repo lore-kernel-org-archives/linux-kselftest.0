@@ -1,111 +1,194 @@
-Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70688480947;
-	Tue, 15 Sep 2026 10:46:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59BC247F3BF
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 10:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789469167; cv=none; b=MbumCuYbNDBy4Zy/RgRKiYnWrlGMYKflJXHkgY04TBvH4weERLkvpQwUxo0/0CISSwQxgbruthDiBlrl7Cz2nJtbImgQY81QzWPn2wbjgrTHCd1LwudBSy3SKAExS02FkQEklDrc1kMDkHFuejg/mnYogNXNrpPe0rzBEfEn1Bg=
+	t=1789469645; cv=none; b=Ye1ap7VUNpAC5hCsPZ6BXZsbZeDcbJ1hq8oC4znSkfTqj/gx+15lsmT9iYH+MebsDbApg2D3yGpWVLyoAiUN5DDlvZjUUjOvceTy2GzDDmJElnojq6m8+O/TEYZCUNdzkGfpYv0gvCtE+Y1dlMTH2IZ+NOYrOxs8BC0RgfyYZiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789469167; c=relaxed/simple;
-	bh=tPPCaI+dc6oCnB4eW0zp2YzwMrmZd7d0mP5zizY6mKg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kM1/+WqdQUvK84ME7wXVO2XCklRVn+isfdn5bmlDpEHWKPe9CJd1fLI+cTGZxJxlRux5vWZxdqQEIOQ84zOb9AQlKiizVHlNkMWSeKT0QAQLRugZNBPQk08KG47sRyxx9Tm6AETYx11zKj6B7BdxdGRtGASNnqICRBgI8L/eTew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=L6Rc9ri6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=prKVy886; arc=none smtp.client-ip=202.12.124.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	s=arc-20240116; t=1789469645; c=relaxed/simple;
+	bh=nb2RIXlQ0/aRASJBKEZq3D9ambOv+y39SwJ6g+quxCI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WTCE24ee6rmFwwzj8RwLVosh8LOkEwBUBOd/IZ24dHaDvftDaW5g9YZF9h//Pe7o2dYMPhvwhymWNy93exd5er+WP7yJA+gMynq+VNmaSCdUUj3fHn/nhErGqkYoPY4YYxkry1z4o62rGY+spkk2Id0glXGVLVzp+JUT0NoD+1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Zh1jrL2Y; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=BhrRy1Q0; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="L6Rc9ri6";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="prKVy886"
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailflow.stl.internal (Postfix) with ESMTP id E145B130051A;
-	Tue, 15 Sep 2026 06:46:02 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Tue, 15 Sep 2026 06:46:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1789469162; x=
-	1789476362; bh=r3KZSIAXGNgRgXQOPp8px8yy9kwrf84Q26i0MJdE59o=; b=L
-	6Rc9ri6gxOuiD4wi+F4wef0a+UJG3EiKJgnLWTLHVEuP2+3wj7T8IKZ0B6yDEWWG
-	Rm4ZRGyt51MckaWR05Hr0T7xAGvJE1ALKaZd1VUKZgJokVcvrRTR7mUWsWRqXK2E
-	9+hdo5R2yNg8kExFfkOQ17IGg3Jw+kuhOZtz9N0fC4Eh9Oga3O5w95DDEze/K3T6
-	I1nJLl8V6uAVt03r/Z3CSUr0gayS/pNXiEHpjJi7+CgQAKIy1lxlU/jT3MRV0cNP
-	OKVwiEHLiK2BmanG+W8XUrQo47YFtv5+v7VrZqADMQfaMmTJ/QQaXjb2SyeSVIbR
-	UfCmgsW2N7P4jiCYK7yGA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1789469162; x=1789476362; bh=r3KZSIAXGNgRgXQOPp8px8yy9kwrf84Q26i
-	0MJdE59o=; b=prKVy886uXsn6neUNmcdJmKXoR9+2Oz849wVpc5xfxikecwlI1v
-	OzTaFGnwulqZJsN3UMQ5VPHGPOcKz8ao3fvIBIxcZwacIJyFJHFvtfUhyLFjjY0S
-	tu/wZ0EKacJ2aleR1w+W16vNGjBiWW59PmESpJWe4sqC1c8sUAVCAkdllibLM1Gt
-	JACF7lYog81yldUY55iIK0dJDUioDZofFF+gf5+JoQi70DEeKNg/AYfMbm/MxE5K
-	yfSlV6GWZP3WU7W0ZC3I3QvwgzUjTRBjPVk/pLkMd4ArdYD4nr/XcWFFrogWI0sD
-	vb5KsMOM84YDaUtr2pJGLL6zjS0BSZW5N9A==
-X-ME-Sender: <xms:6SGpavVCAue0eV8cvmHt1ZCUzT6awTHI5y_G8H-cjxPLULy7t9yadg>
-    <xme:6SGpap42XUC_IC4BjACzT-tlborJZP-U77tyl_4xpZchdpZVxMrkC9r0Y87lws1Zw
-    A94vbuVjfertnWE1tp1382I-eUaB7y6HY67AxPpzUg05ab4kQofEtef>
-X-ME-Received: <xmr:6SGpaqJcFbEvAl65vM5X_uwTe1dEIaQDTcugMUgG0htPpEOgLEEUHRxiSqE>
-X-ME-Proxy-Cause: dmFkZTFDaruGlOr6fTdt0YZFnkPzwcHHkwV4lV9ndG6J2fASDcnXeHcQHuo3f91XsUJ2pA
-    HU/uv77nPp1rP5u/CbuPdLN/p1jpq3LVrMj2+B0r4SYZ7ziJEAJcJenoZ8R0wqbx6uZdgx
-    iwTu6LwFZHMvs/xqnUg2729mQ1gnrMulHt85qf2gQIHouioHBhh4T8jxnHZTj4Ry1kp9wz
-    upUTCMcgIk4OAkHdMZTxTifA04sMoR4eTQ43U9O+yMhwCEBYBv0BpxD4y1bzDxD6miaZ+0
-    f1p8SRDckwuQcEfweit5QYJe3BE3SEy4P90VboaSv38MUixnvuoBh8IePTHqg6uI6uPwSQ
-    9TnlZDd3WFxpHdKywm9yfMnU/s7dF/B8Dv/U6Mr+3+8NScUaikLRHSGmTXPt+/oh6dqnmk
-    6e/qjUYVd0japbWkdvtZpESil5JyXy91rl5ZhL0+cWwfCfNqOkCDdT+5qnXiTucG0iuVtF
-    EkDTimZuGUuiqYGPAyIrjcyUXuso9C/YJp1sDYYIcDspQyRxdqx/HHBc9WMlpIkxe8qydI
-    9ecVBuO3NoCqT3ImcHztcP3MfpOaGOm+I7hu0xyohn5YiEyq6gVd6BnqgUe27onY+gXnNB
-    35uBC2q/EENiA+1aXvvah/BYgPogoJCqQsxuAbiN8clRuqmZKm1nn8TiWeww
-X-ME-Proxy: <xmx:6SGpakhpOYKJaTFw4kZPYqtjdtCwcfNdN7HVop_yjwrlEWB-d4LxcA>
-    <xmx:6SGpasK-800YAOZRVu7WXruEk_79vLmMCl6tQEVAZtTR6UUIhZoX_Q>
-    <xmx:6SGpahGXgD-PlfvDBrMuI_H4LSSUXL-bLvomY3yUdXoMhyBTszbf-A>
-    <xmx:6SGpak2rKS216hDIjSz-nBdsOO-FC6wZhkrn9oTdK17KmMZ7K01OgA>
-    <xmx:6iGpasX0no-uhE96hzvYa67Wne1yGJN4-TV6_rq8-nnEI3DQG57hLGFw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 15 Sep 2026 06:46:00 -0400 (EDT)
-Date: Tue, 15 Sep 2026 11:46:00 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev, 
-	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
-	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
-	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
-	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	jannh@google.com, willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, 
-	mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
- primitives
-Message-ID: <aqkg_iU46BJghUNk@thinkstation>
-References: <20260816224609.308019-1-kirill@shutemov.name>
- <9f51ac27-24b2-495b-b397-84865f977d24@kernel.org>
- <aoXRi3ngBhO54Akk@thinkstation>
- <fd179a26-fd69-4b5f-9af1-b3755ba9030a@kernel.org>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Zh1jrL2Y";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="BhrRy1Q0"
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68FA4oQV3611558
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 10:54:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	jIBKtCCL7rBKzn22XwtnmfzBi1tEWXKJPUbDrZ+6fSo=; b=Zh1jrL2Y4g639Tq8
+	hhqfVj8jfLLsRUarNAZl/MV2SQiRWOVLv55CzWOMC3lPvitIW4QNpTPy7jkuLs1w
+	c3zJZ/QMZxOosikbiiF+V8vlD2+nRosTnDY6wWbFPk/hIJgOBHYrMZwxXmft7qoz
+	z2EZypSw7bkAyedopwXn1IkixBvztQCWt87n/NJC8FbhCPUGE/aZ7gW+N/FBOROF
+	MsEkRiLiA8Y3CrfIOSifBhVDpLcpHuqRAo1RWjUz8K/bZrLybi6REx/UesUSLz/P
+	SPKZ8IiJ9Tq1Ja/Cp3ttmndiGp55MeEBFTGUpQdeCszC+jZFFBJnSc41IYRbyftx
+	ay/C0g==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4gq3xtr76t-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 10:54:03 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-93a0050a554so801319685a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 03:54:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1789469642; x=1790074442; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jIBKtCCL7rBKzn22XwtnmfzBi1tEWXKJPUbDrZ+6fSo=;
+        b=BhrRy1Q0VSaRT0yp1gBSeugYSvb5nBsoH/S3Gh6EJwa6VBU+UBo5Dvzigkvun7iMrF
+         XXwxEtm/Gl2MCbGdoAR0aMm+PFn7Rlm17V9W/kBG+wuEiQvd5MGkCIgnxhZ/bgaHh8gj
+         o05NyHLDmI5ddlV6h98bwIZ07NS6lQhGfuySR+r8QTruNkNS1ck/oe5VqHJN6hhUtTrw
+         RoJgR2nK0zOOKyK4o8ojykb+2mY6RYoRJewvTGKIie3WH3K7UvBBMZYRduD42SnCebOB
+         0qF9z7ynw8/lRgESKVEL8upQfw8X97xlT2Vto4I6bxTWN9szo0/QQGFj8sZDOGfw+mfz
+         3/kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789469642; x=1790074442;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jIBKtCCL7rBKzn22XwtnmfzBi1tEWXKJPUbDrZ+6fSo=;
+        b=OoGleDMaRo/Fijj02Ht3Dzj24aA122qbkR8fjjgCm9oZw3JDGcUjQ+AkbbtefBvkca
+         ZumTCPDMIAKFOyo/Dycl0/7nOnQr3gbzEHjZ5HEkF5vLYMQTB9fuhIvgQCgLJAZmCBGU
+         7iMCFZMrVYXLYCJVopCWDMOeoOEME6N1hUCsrQQXVvX2CJg/KM/lJ/yKhKhcNxpB8Tij
+         qxYXhlHnUXw8GndmnHXlx8vKiZzixveOtTcclEG4hepRge0HSqi+PPFg7Iw5cybBCKIV
+         icYECf29PquIdBRS+5g5V2wny20eY8IVPY3ew1fc2hwya4U+QywkoPAUpxqY7Fi+R+7C
+         UAOQ==
+X-Forwarded-Encrypted: i=1; AKwUvBz9k0o5N7M9FZUtByITze2BE/tUeQCGtQQYSh0vADmvIcDd9lz6tojI4XoNrrppZqUk/U93tJwIxignpl7DnBI=@vger.kernel.org
+X-Gm-Message-State: AFuF++l2TXSFDXJ2jur0HEVJmRlfr2hvhnQaloloxMtXopVjA4DnK8Oh
+	bw/LxjjHdgHrNMnCu7zz5AMoTKedGquKRCMD9PmSHNmEdmsPhmU50oFxJNKcXCSUNm/py2HwHqM
+	zUQC65EOKgZ4EJLMOFQHoLRrh4Up7Ivto/rA/dxqu5gslz3vgFqbPqo6C4hln/eE6K27Grj0=
+X-Gm-Gg: AYBFou3iWAsd8XH2X6oEl9BOIlGam2OUAdWi3aBDAS/qUZoH4nZhXqHa7xKnDOpY7pA
+	1eEENMdu4PAp1dlLTmTXvSIiMzBU0iBzVEFuUmp21oSOpyt+NcL0P+NlFoV5bW1ikjGMKc+T0G+
+	zh5m2e/d8s1X30rlQ8Qs6ELj2+E5s87KIIM/UTMcB7rVtOU6+cD6ii6iw07uwlyzpNpCvrJ8vjC
+	f/tklOOxbuEEr51E7YwFwdFjohMT6DPGX8zkBfM/c3sIzeZbvIvOrvq/BLcuW3FR+SEgKeFIY6z
+	dZkMW7BZ9y7ts9ZsVUgN+RoUlnS+V6lzg/3FKk2PQiaZJvMcFj5JeSkkPoSPCvNG1rywxyVOCei
+	+TajWHnZwP4FzXP0oghY/9GOiON5v94p5jYHwUWekZ8avzE6HkINFF1agJeJPOQE=
+X-Received: by 2002:a05:620a:172a:b0:939:6dfc:8abd with SMTP id af79cd13be357-93a29c362efmr1011649385a.52.1789469642536;
+        Tue, 15 Sep 2026 03:54:02 -0700 (PDT)
+X-Received: by 2002:a05:620a:172a:b0:939:6dfc:8abd with SMTP id af79cd13be357-93a29c362efmr1011644785a.52.1789469642069;
+        Tue, 15 Sep 2026 03:54:02 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:3e33:7d00:9ea1:7aa5? ([2a05:6e02:1041:c10:3e33:7d00:9ea1:7aa5])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e822b7b57sm12603375e9.8.2026.09.15.03.54.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Sep 2026 03:54:01 -0700 (PDT)
+Message-ID: <71932f61-5721-4363-b163-427432fedab4@oss.qualcomm.com>
+Date: Tue, 15 Sep 2026 12:54:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd179a26-fd69-4b5f-9af1-b3755ba9030a@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] powercap: Introduce generic hierarchy helpers and
+ selftests
+To: Lukasz Luba <lukasz.luba@arm.com>, rafael@kernel.org
+Cc: linux-pm@vger.kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, manaf.pallikunhi@oss.qualcomm.com
+References: <20260806110159.69690-1-daniel.lezcano@oss.qualcomm.com>
+ <ef124b64-e7d2-4c9c-9890-00685e34f314@oss.qualcomm.com>
+ <350caba2-4a95-4945-91dd-0be89b2d3e22@arm.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+In-Reply-To: <350caba2-4a95-4945-91dd-0be89b2d3e22@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: cHzdE5wL_eqkeGetCK2QM-GEAC6XGWB0
+X-Proofpoint-GUID: cHzdE5wL_eqkeGetCK2QM-GEAC6XGWB0
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE1MDE1NyBTYWx0ZWRfXyRnj6ZfTfck8
+ n9mMvM+G7Si+q90XL/jPQpVNjJvfRkuZ/+gsHhoP+pApbBv1bc1MSxCwlza3zw3HfUU/D7D+tK5
+ lwLqv5jBSdBZB7Bp6Mv97AB1qBxeS/4=
+X-Authority-Analysis: v=2.4 cv=As97T+9P c=1 sm=1 tr=0 ts=6aa923cb cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22 a=VwQbUJbxAAAA:8
+ a=EUspDBNiAAAA:8 a=zqZC_6FzlEIiEw2tXyAA:9 a=QEXdDO2ut3YA:10
+ a=PEH46H7Ffwr30OY-TuGO:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE1MDE1NyBTYWx0ZWRfX/F9R932m3SvF
+ Nk85/vKRG2lsEWUdj0CeVQiNuPts7wvuvg16rFqTcBMZxgOMURiSnHL5jgDL2A/pDjnUN+M9fZZ
+ UCuvXvtkFIdQ6h3cWtpDUQSWk1amkEf9AgujTPLAw+8Fil8IuBgpk6hBF+h7EVCDxFBrBgmpCEh
+ MeEfkdCGyvJZ8p9ehDuIAHhM1p7RAPARUulmERLM2zAfI07eWoYEsi/WWK+MBWliqDBjNE56Scj
+ 0XF6hG9lUHAcL8zW1zksUj7iU0ww3jHRMUrglFXn2Jq5s3ZlEhQygI9Y8nG1aQrxp6LsAlQTnfS
+ IE1/dIXqipii46/fwyLPQTIJKCr3xs6CFB7V96oc2YVwyzQpd5CcFy6LR8ATlCcvKwRwV7IXYr8
+ 2tES/oTR96fD0myOYg+5mTr59psFf8QkeD6iM4kaNYryJKD470FY8d60JsMUqm0yNZQ+9F3FTXx
+ O5zeDZRcSd7BawIPb/g==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-15_03,2026-09-14_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 malwarescore=0 bulkscore=0 clxscore=1015 impostorscore=0
+ priorityscore=1501 phishscore=0 lowpriorityscore=0 spamscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609150157
 
-On Mon, Sep 14, 2026 at 05:07:37PM +0200, David Hildenbrand (Arm) wrote:
-> > As I mentioned above, we drop the ptl after the freeze. And take it a
-> > second time for the install.  Allocation and the copy run in between with
-> > no lock held -- on 64K the copy at PMD order is 512M of it, which is why
-> > it cannot sit under either lock.
+
+Hi,
+
+
+On 9/7/26 12:46, Lukasz Luba wrote:
+> Hi Daniel,
 > 
-> Hold on, are freezing all folios to collapse? That cannot possibly work with
-> COW-shared folios that are mapped into other address spaces.
+> On 9/7/26 11:03, Daniel Lezcano wrote:
+>>
+>> Hi Rafael,
+>>
+>> On 8/6/26 13:01, Daniel Lezcano wrote:
+>>> Powercap controllers frequently expose a hierarchy of power zones (for
+>>> example package, clusters and CPUs). Until now, each driver had to
+>>> implement its own hierarchy traversal, parent lookup, error handling and
+>>> teardown logic.
+>>>
+>>> This series introduces a generic hierarchy description and helper
+>>> functions allowing a controller to instantiate and destroy an entire
+>>> powercap hierarchy from a static description. The framework takes 
+>>> care of
+>>> duplicating the hierarchy description, rebasing parent pointers,
+>>> creating zones in dependency order and performing the appropriate
+>>> rollback and cleanup on errors.
+>>>
+>>> The series also adds a kselftest exercising the new API by creating a
+>>> synthetic hierarchy, validating the exported sysfs hierarchy and
+>>> attributes, and ensuring that all resources are correctly released when
+>>> the hierarchy is destroyed.
+>>>
+>>> The patches are organized as follows:
+>>>
+>>> 1. powercap: Add generic zone hierarchy creation helpers
+>>> 2. selftests/powercap: Add powercap hierarchy creation API tests
+>>>
+>>> The API was primarily motivated by the recently posted SPEL series and
+>>> also provides a migration path for DTPM to use the same generic
+>>> infrastructure instead of maintaining its own hierarchy handling.
+>>>
+>>> Link: SPEL cover letter <https://lore.kernel.org/lkml/20260702- 
+>>> qcom_spel_driver_upstream-v3-0-434d50f0c5b0@oss.qualcomm.com/>
+>>>
+>>> Daniel Lezcano (2):
+>>> powercap: Add generic zone hierarchy creation helpers
+>>> selftests/powercap: Add powercap hierarchy creation API tests
+>>>
+>>> -- 
+>> It was easy to migrate DTPM to this API and AFAICT Manaf was able to 
+>> migrate also its series to this new API.
+>>
+>> Is it possible to consider it for merging ?
+> 
+> I will do a review for this patch set today...
+> 
+> I can see some potential improvements there.
+This patch is a blocker for more changes: DTPM, powercap cooling device 
+and SPEL drivers from Manaf.
 
-I break COW for worthy candidates in the faultin prepass before freeze,
-alongside swapin. It simplifies the picture substantially. No rmap mess.
+It has been tested and there is a selftest with. Is it possible to 
+consider these two patches for merging.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Given it is not a fast path, improvements can be proposed later.
