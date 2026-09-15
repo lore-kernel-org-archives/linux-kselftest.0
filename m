@@ -1,141 +1,78 @@
-Received: from mta0.migadu.com (out-37.mta0.migadu.com [91.218.175.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07DC47DFBF
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 21:19:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F6417BCA;
+	Tue, 15 Sep 2026 22:25:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789507156; cv=none; b=KOH621eKeYuxjQP3SX8uWalkw5YoL4EWY7D0pw81+3AJwALwzsiCVaU3mInlUawm9bCMgBNzoAIguUCkDBOk3EzXgGKMso1tOvbvSvMn7tVHmsNGknUymsQVQfJKtQwlWyBXYt/yncFqVckWfAgY9FTNfhZ37BZt6R50L9k+h14=
+	t=1789511146; cv=none; b=gu5Pzs/U6OWSWiJoAnaTt2S5s4EE5TWWfOAq0V3gCQZdSIrKKwjnr1nd8Zp6G994hls0+SqW/v9R9gprBV2+xz1yBewMrTdT5Fl04E/+MJBQD/i86lepHAMGb6YDK4dr8dllv3JAKLyHiViCKjHT+GQnUHHry1vRS6dyfq+PxBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789507156; c=relaxed/simple;
-	bh=ql4sab1w7TKwOgBM/Ql7wMbRLphrnVowff5ABO0qUKo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lz2dH5Oiyry+5oryGZGKDWQWHSIXbTV+OPZmoP6KrFxOn+fLKDjrfZmi/D2h9zld86O9Lq9IHh6THUHxI4ur0JdfY055gK8Y/u7/QsUnFjBOeYL8LSZbc2v4HESBTb3k/EUq5CPzfjlofYIlCSyhH4g449iIwld75Ji20q3uu9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Gm0H8Fgb; arc=none smtp.client-ip=91.218.175.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789511146; c=relaxed/simple;
+	bh=WmWs9jPf1QhIbh0wratZlEyglAqvOhfdXBCOK1ktGew=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lCCAJtC3Kvxo+okshAbGQjefA1C5eUhjCEosP1ryELOAgujvJdZcXsWV5udW6bhdY6IdqB5tni1AgtKW1h8RZtJ3Q5+xhcWCanaoeqqYbuM8brhhubwj8bSrvFXzCtSyMlO8jONoaRMMIfaCoAt0aDhNw/4WnT+uzlB7k+LGm6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i5IXNL+f; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Gm0H8Fgb"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ql4sab1w7TKwOgBM/Ql7wMbRLphrnVowff5ABO0qUKo=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789507151; v=1; x=1790111951;
- b=Gm0H8FgbdU85gAElkhAXF0ajvFpBHozVEoFQ1VzQqBxdHzrEB8WU8/WPCbrHOMqzT4b3Z8X2
- sOFk2MxyVR1jEG27iIru9gxpy94LhRFbvkV1c/KBAbGNStUS8Uhk5pfV+JDTIVKfkZrCOflLAIG
- J91080cEB4u/VNM0bOl9Asqc=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 190437f01fc1c6cc;
-	Tue, 15 Sep 2026 21:19:01 +0000
-X-Mizu-Trace-ID: 190437f01fc1c6cc
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <e1d1fc67-1035-433e-97a9-7bbf2628ccf5@linux.dev>
-Date: Tue, 15 Sep 2026 14:18:55 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i5IXNL+f"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EC881F000FF;
+	Tue, 15 Sep 2026 22:25:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789511145;
+	bh=2kecQaR0F7g0/H9mop9k/ZA1PCRux2SHgqjXnuf3tgU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=i5IXNL+fVFTtOFiiRyVTkNuytpziNyfhPeJrdEo9rSE5W+iLdKiE3IJQYf+PtFR2x
+	 wTtpo6KRfyPuBDuWwyIB7v1BQAfmCl05JRLSWdlBCiZaDhMw3UucXQudZ3qG3tvEHW
+	 rbPFfmhXJf2YcVEeeN/pggWtlHx9N64OBke0aa+ueA0xGpd5MP/L8Z8VME3U24tApq
+	 TmPswHCzQD0LWELmWVs6W+hyy9+dKlpg08xPNt8/a4EorHlXr4r1aTMKNKrhKWVuPr
+	 2+BB4KwfZNPp+HgbCIq/92kvRyWg/hMn3yeb7u0Ck3LVPGzLWjmyjUSggfDR4Eu3k2
+	 z6n1C3Y21E0pQ==
+From: Oliver Upton <oupton@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Fuad Tabba <fuad.tabba@linux.dev>,
+	Mark Brown <broonie@kernel.org>
+Cc: Oliver Upton <oupton@kernel.org>,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Leonardo Bras <leo.bras@arm.com>,
+	Wei-Lin Chang <weilin.chang@arm.com>,
+	Yao Yuan <yaoyuan@linux.alibaba.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v20 02/14] KVM: arm64: Fix FGT mapping for HFGITR_EL2.nGCSEPP
+Date: Tue, 15 Sep 2026 15:25:32 -0700
+Message-ID: <178951103683.10790.7238421458148276106.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260901-arm64-gcs-v20-2-f31750bdfadb@kernel.org>
+References: <20260901-arm64-gcs-v20-2-f31750bdfadb@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 05/13] bpf: keep the range across a sign
- extension that cannot change it
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260910164635.459558-1-vineet.gupta@linux.dev>
- <20260910164635.459558-6-vineet.gupta@linux.dev>
- <DLDKK1NH3BO1.SZN02MHQTX00@gmail.com>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <DLDKK1NH3BO1.SZN02MHQTX00@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On 9/12/26 12:02 PM, Alexei Starovoitov wrote:
-> On Thu Sep 10, 2026 at 9:46 AM PDT, Vineet Gupta wrote:
->> coerce_reg_to_size_sx() decides whether a sign extension is lossless by
->> comparing the bits above the field in smin and smax:
->>
->> 	top_smax_value = ((u64)reg_smax(reg) >> num_bits) << num_bits;
->> 	top_smin_value = ((u64)reg_smin(reg) >> num_bits) << num_bits;
->> 	if (top_smax_value != top_smin_value)
->> 		goto out;
->>
->> Equal high bits do imply the truncation is lossless, but the converse does
->> not hold. Whenever the range straddles zero the high bits necessarily
->> differ -- smin sign-extends to all ones, smax to all zeroes -- even when
->> every value in the range fits the field and (sN)v == v throughout. The
->> second gate, "both of s64_max/s64_min positive or negative", rejects the
->> same shape again for the same reason.
->>
->> So a register holding an errno-or-zero value, [-4095, 0], comes out of r0
->> = (s32)r0 as the full [S32_MIN, S32_MAX] even though the instruction is a
->> no-op on it. The no_sext test at the call site does not help: it is an
->> unsigned check, so it only covers non-negative values that fit.
->>
->> Test the range against the field directly and return early when it fits.
->> Sign extension is then the identity, so nothing needs updating -- which
->> also preserves var_off, where the existing path would have replaced known
->> bits with a coarse tnum_range().
->>
->> This only tightens: the early return fires exactly where the value is
->> provably unchanged, and the cases the current tests do accept still take
->> the same path and produce the same bounds.
->>
->> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
->> ---
->> v2: new. coerce_reg_to_size_sx() is fixed rather than special-cased,
->> which is what was asked on RFC 5/6; it removes the RFC's
->> call-then-overwrite at the mov site.
->>
->>   kernel/bpf/verifier.c | 22 ++++++++++++++++++++++
->>   1 file changed, 22 insertions(+)
->>
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 58e788f53ae5..eb093194e2a3 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -5754,6 +5754,7 @@ static void set_sext64_default_val(struct bpf_reg_state *reg, int size)
->>   static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
->>   {
->>   	s64 init_s64_max, init_s64_min, s64_max, s64_min, u64_cval;
->> +	s64 field_smin, field_smax;
->>   	u64 top_smax_value, top_smin_value;
->>   	u64 num_bits = size * 8;
->>   
->> @@ -5773,6 +5774,27 @@ static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
->>   		return;
->>   	}
->>   
->> +	if (size == 1) {
->> +		field_smin = S8_MIN;
->> +		field_smax = S8_MAX;
->> +	} else if (size == 2) {
->> +		field_smin = S16_MIN;
->> +		field_smax = S16_MAX;
->> +	} else {
->> +		/* size == 4 */
->> +		field_smin = S32_MIN;
->> +		field_smax = S32_MAX;
->> +	}
->> +
->> +	/*
->> +	 * The range already fits the field, so (sN)v == v for every value the
->> +	 * register can hold and the sign extension changes nothing. The tests
->> +	 * below cannot reach this case once smin is negative: a negative smin
->> +	 * and a non-negative smax never share their high bits.
->> +	 */
->> +	if (reg_smin(reg) >= field_smin && reg_smax(reg) <= field_smax)
->> +		return;
->> +
-> This patch can be a patch 1, since it looks unrelated to the rest?
-> Would be good to test it individually. veristat run before/after.
+On Tue, 01 Sep 2026 22:47:00 +0100, Mark Brown wrote:
+> The encoding to trap mapping currently maps a FGT on OP_GCSPOPX to
+> HFGITR_EL2.nGCSEPP but as per DDI0601 2026-06 this FGT controls trapping
+> of GCSPUSHX and GCSPOPCX, and not the separate GCSPOPX instruction.
+> Update the mapping to reflect the architecture.
+> 
+> 
 
-OK, and the corresponding patch moves too.
+Applied to fixes, thanks!
 
-Thx,
--Vineet
+[02/14] KVM: arm64: Fix FGT mapping for HFGITR_EL2.nGCSEPP
+        https://git.kernel.org/kvmarm/kvmarm/c/089e4f3c4862
+
+--
+Best,
+Oliver
