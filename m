@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA2D4AEBCB;
-	Tue, 15 Sep 2026 15:47:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7884AE129;
+	Tue, 15 Sep 2026 15:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789487242; cv=none; b=ivP2tsiTJXK0kykduvQOs0V4LHFuPqMZNIohfrvvOypxzT9yyB2x1+lV4hAA3xyLywyra99gDr1hFmID7dCn4PW77HQ8GaXbbcXfV4i0R0StLNXQ+t1Km2Bzun6QjxgBi1+R2TFhme72pgw88Z8rP01WfiI/Fkggixsa9EnQPFY=
+	t=1789487245; cv=none; b=S8Vfx+h/zJtLmDQm9Cg/31cpeZPn5K9o5S1Rbg8dXT0UTyv3I092SI63ssCdOqnHlX2vXAme4KnBDJJOauJW6x2JMId7mLbP3JfNmd/5v3gmTpk1kIapewQA18jjijfKzbUMTW33E69AR/DhYuNbfB8tl13KpjbvtCxb8TJ2D/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789487242; c=relaxed/simple;
-	bh=zY4CZInE9nLBGNkxeghMCLlB9OdPxGnlo1CTH0VAYCk=;
+	s=arc-20240116; t=1789487245; c=relaxed/simple;
+	bh=0dYP8z90v/+3pLXtp/DmVmsrtJDmQxR8xm5XIMMTco4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qvw5ia5rT3UkHRte6Y3zrNyslOkVHSRz2Z2ASGP82fCtzm8eKwRSSWy9QgcSdb4yrUtvOdHOGITTH4VLkBT2uv2GQgTLuYfxD8aelUAvnz2e50J9rOWgWYCG0dRkD9Zhi9MO7jBDZ6zmXoS0YFUBnk1Bge1mjAHPj0vRyULXu1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y79Px71l; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=ZmGt0lnarfk9n4Aw+D2ZudmTqeD5Z1on+fpQcnTfWpbY206VR6MH2nNVPPAqGAXIgJPhRoaIhTO3GIcAk0eC8klOu2adSf8jzNCB8dXV++s4CLQf/LryiPKH61ZNjQ3dYMf2sYXvdqF48GlKXcXRE45znuadFWO465z361TuGKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cM2vWMID; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y79Px71l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D5531F00893;
-	Tue, 15 Sep 2026 15:47:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cM2vWMID"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FA7E1F00898;
+	Tue, 15 Sep 2026 15:47:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789487237;
-	bh=cJVzqwsaXl7vbHKq/ephxVNEzhNEsZjIGYsDCEghqJc=;
+	s=k20260515; t=1789487239;
+	bh=DoojKGc4o04NPyiuOz3QFmMOfxrqdrEBJZtCwqmeqic=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=Y79Px71lo3t8omhG8TiAqRvEkdxZFuVL99AWyBrTJdDBbp92DJK/Eu3RxjcalLb1l
-	 CpgfENCvqxgvfJw/eZ3UtLHRpOSsSExou6kn1paL+Lq0UMxrH2314kHkkqOj7touSQ
-	 2+qRH4iwWt4LHORD0Hf6FphARDN83B9+9+OKsjEvjLnQdaNfHYVSwnYR7gtynMYh7d
-	 vHbOO3Gnt13lJOJ19UO+s1LWArIK6tsXImnydiAxbzjqpLG0Y/ILsLEi54oeRnXadI
-	 bgSy1jB9BPWlMXmoZ8reqA73bRBiXgWqMQyMOXDFv20Kv57JNdBMzOea2Cua9C9WEz
-	 2VVbHVX+km+/A==
+	b=cM2vWMIDif2Ez+W8h5h1+bnqf9+83/xld+RC6NoUswXDkcwvxdYveNYkZXM7wuPyD
+	 YlImqqD016SeorGdLFs80bqzuiWGloxfU2SH7FTHgyGA5il/2OmCxp+Jxw5Da6UWjr
+	 /BTBv+mHz37D1sT0TVrT3F1ZWBfAdXGHmFuoJLTj680yYfDB+1eKSdZjLS9MwgDGBS
+	 U4bp06L4o7DhnJTCOT5OOuB5xbiacjGrT88qqMuJwiI9JHUoqmPh9itNeOG9BPPGVG
+	 VVX7c4jLoqxT8Y/Ace0m06P10gec6JovTCn1vOxNgk38xe37VovhacM8kacyj0LR27
+	 lJb3jNNMLYhNQ==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Tue, 15 Sep 2026 17:46:57 +0200
-Subject: [PATCH 1/2] HID: bpf: cast size to ssize_t when checking
+Date: Tue, 15 Sep 2026 17:46:58 +0200
+Subject: [PATCH 2/2] selftest/hid: add test for negative return codes for
  hid_bpf_hw_request
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -38,56 +38,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260915-wip-bpf-signed_size-v1-1-6bc8f3d09f5b@kernel.org>
+Message-Id: <20260915-wip-bpf-signed_size-v1-2-6bc8f3d09f5b@kernel.org>
 References: <20260915-wip-bpf-signed_size-v1-0-6bc8f3d09f5b@kernel.org>
 In-Reply-To: <20260915-wip-bpf-signed_size-v1-0-6bc8f3d09f5b@kernel.org>
 To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>, 
- stable@vger.kernel.org
+ linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1789487234; l=1438;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1789487234; l=1584;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=zY4CZInE9nLBGNkxeghMCLlB9OdPxGnlo1CTH0VAYCk=;
- b=pAJRBdsTq3rYaU9G3i6YPDYntJCSwF8MujODJ6FvlWbaYWHycuQNReb4yWoY9LqzrtiQ2t/4H
- 8qdufqfnPFiBpfcOn7PIER7zMrf7OXf3muwMROzq7y5tqLB6n5mX21g
+ bh=0dYP8z90v/+3pLXtp/DmVmsrtJDmQxR8xm5XIMMTco4=;
+ b=ZC0ZcIFVr5RjtRpgD/cR7LerAXA0DadoPSYEVj+Wgn0c9uXvpruSd+3StKgKVNvGzQxveidC7
+ +TctbRh4AbeCGeWIkvinKSK8p9Hly0YIMV83opCkOive3cpN+D4C+xq
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-As reported by Sashiko:
-If a transport driver encounters a hardware error and returns a negative
-error code such as -EPIPE, ret is implicitly promoted to size_t when
-compared against size. This causes the negative error code to evaluate
-as a large positive number, making the (ret > size) condition true.
+If the transport driver returns an error, we should ensure we actually
+get the error, not a success value.
 
-This silently converts the hardware error into a success return value
-and copies the unmodified buffer back, which could leave BPF programs
-operating on uninitialized or stale data.
-
-Fix this by casting size into ssize_t to return the actual negative
-error code.
-
-Link: https://lore.kernel.org/all/20260904130354.A79471F00A3D@smtp.kernel.org/
-Fixes: 2b658c1c442e ("HID: bpf: prevent buffer overflow in hid_hw_request")
-Cc: stable@vger.kernel.org
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- drivers/hid/bpf/hid_bpf_dispatch.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/hid/hid_bpf.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index b1de1dd0f21d..ece2c7c45ea6 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.c
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -453,7 +453,7 @@ hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz,
- 					      (u64)(long)ctx,
- 					      true); /* prevent infinite recursions */
+diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
+index 32d81ba15a25..8c41ebfb85e4 100644
+--- a/tools/testing/selftests/hid/hid_bpf.c
++++ b/tools/testing/selftests/hid/hid_bpf.c
+@@ -546,6 +546,37 @@ TEST_F(hid_bpf, test_hid_user_raw_request_call)
+ 	ASSERT_EQ(args.data[1], 2);
+ }
  
--	if (ret > size)
-+	if (ret > (ssize_t)size)
- 		ret = size;
- 	if (ret > 0)
- 		memcpy(buf, dma_data, ret);
++/*
++ * Call hid_hw_raw_request against the given uhid device,
++ * check that the program is called and does the expected.
++ */
++TEST_F(hid_bpf, test_hid_user_raw_request_call_eio)
++{
++	struct hid_hw_request_syscall_args args = {
++		.retval = -1,
++		.type = HID_FEATURE_REPORT,
++		.request_type = HID_REQ_GET_PROTOCOL,
++		.size = MAX_BUF_SIZE,
++	};
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattrs,
++			    .ctx_in = &args,
++			    .ctx_size_in = sizeof(args),
++	);
++	int err, prog_fd;
++
++	LOAD_BPF;
++
++	args.hid = self->hid.hid_id;
++	args.data[0] = 1; /* report ID */
++
++	prog_fd = bpf_program__fd(self->skel->progs.hid_user_raw_request);
++
++	err = bpf_prog_test_run_opts(prog_fd, &tattrs);
++	ASSERT_OK(err) TH_LOG("error while calling bpf_prog_test_run_opts");
++
++	ASSERT_EQ(args.retval, -EIO);
++}
++
+ /*
+  * Call hid_hw_raw_request against the given uhid device,
+  * check that the program is called and prevents the
 
 -- 
 2.55.0
