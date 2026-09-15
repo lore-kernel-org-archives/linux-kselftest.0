@@ -1,236 +1,156 @@
-Received: from mail-oo2-f43.google.com (mail-oo2-f43.google.com [74.125.231.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 236344BE454
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 18:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805EA3D411D;
+	Tue, 15 Sep 2026 18:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789496096; cv=none; b=XjLmDsW7kCSvZ/r/JNsFcXNqXYDOllgq9/xizuidk3ZEXsd3dZ8SSKMvhjS0tf6qlwZI63mS1XLRgzdZ+daikybIf+DNNNJ7xEXIkUwNuq+AXEQmylhx/yoVeTsWRP4/z4Lu7SEeRg67nyfqrED5E8UpMERTtJh9gJ5XYbz+qL0=
+	t=1789496483; cv=none; b=GCXDYc0bOhkiuvlpbDkqL8UiZooJyOcjFZJSxIApva/cxGJRJzNMr6AYy6/5IstQYMyXqY7EfFZ3e5+fbKp3HdK5owJiE21gcqJXwhL15lQ4DU36vV8lwv23XlZGl/WK/v5YMm9kQ+nB5ddKSHVSxtiMSQ0ZyyKJEOd5Vc6k9UQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789496096; c=relaxed/simple;
-	bh=Zqxttmoi5XngJammIPSIG6qDpq3OZ3kZrZhzLN5W27E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cgGM8cD7OeHZ7d+U3Ftj2yFxI2PDKQpE7s8AKYT+kDMC4oRqM95KW+uPB5WjNOJdpOqEZKVXq/FrqxWbPxmmah91jYqzEnsrKjRzEl2l/EGWMWPRPZGrY63EpdaTr8+eVDlUqjT/fN76uZGsVbZAlBzqi/W3lpBfNMu90MapK5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=abmd9RTM; arc=none smtp.client-ip=74.125.231.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789496483; c=relaxed/simple;
+	bh=VEPKiJaR6yfaiZyD7Fq5ykuC9ZtROuv8ISrp/eFw3Yk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fKz1FJ1iZZhMX8dw7ZQ/YNLyLerqsj2cvZ4XeMUT6If7Ovb0Hf94RukIlEtUzucMsPqmzF7Bk91lW8gaTvFGkzqu3AeowlyPeCti1mh1x2kk49UWALJOEd0l+Cv2yqRazaPoOO0H7wo0u7T0jtLoSqjj4sx3QC7vX+BAq0P7SRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L6gEsnf2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="abmd9RTM"
-Received: by mail-oo2-f43.google.com with SMTP id 006d021491bc7-6bcc0c495efso79005eaf.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 11:14:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789496092; x=1790100892; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=F+aeTxhSeWnPEIt7QVJiINGNEEjF9/lqEswuPk0DNjA=;
-        b=abmd9RTMWEHC4D1pnO27SnbXu1y/pm4qIDT0WA0sc99tY2QaXG3uYveQKYQ61uvPgK
-         F9y2zn7s+lKxQH6hF9aKGxtKyNRg1gfLk+mbjLmZCn4ttFjd4jmttZwT3Khhy4434JhE
-         b4ZlrsD05U9pLCuImu77A+Pjal2TCcMj5R84x/B/l8X24WtfKYx4gc0pTEtevr2t6edH
-         jtqPIQpLKL1fM879/+tjEuyv/sPqH21ULXSgklwKlnA5Qgh/EfThqOit6TivJwrBzMl3
-         z/ECNn9yCvcin6dxkq2dakQDKDnBdPvfGT0E9HaDO2ylfQKEGIRwrU6NTgKIOT5vp0ru
-         4K9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789496092; x=1790100892;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=F+aeTxhSeWnPEIt7QVJiINGNEEjF9/lqEswuPk0DNjA=;
-        b=htu6ZoWMeqfKGdOdZGTp1qAzQC0YyAarvz6+UQYk1P1b4l2Ab0AZZTBos/C4ZsNWJj
-         XSqoGpKvqktfJHiycDxeN5pVHc9pZVIYqV5/M8aLO/pQ3I+bz9tnK3QEwNVh731ZrZYW
-         kQg+cMvHcqmYFHEGqFrh2uyLjh96mcJ3hrzWEHL5fZEn99bKo+AigDOJfeAY5TJg5kJm
-         Hq7YVRtwhCX0T9rUAmQIbXwYFLiqd7A97/vMb2g5cCvF880l6utRE4OrAbwrn6S9yAkh
-         VOxEevjjwR2rQVCq1HGR4MSPkTCsSvMGAx4SdqF36AsiukYq8za71l2tUVgvaTfSCEs8
-         StgQ==
-X-Forwarded-Encrypted: i=1; AKwUvByPUiGGSPSWatOKR6MfV+AQ/JK6elB99EMOwsiXPAjjMr6vmlE9GXzSmJ3nmRC7H4kVpXIB+Nodj3Zogc1IoFM=@vger.kernel.org
-X-Gm-Message-State: AFuF++lyMKg6GT5rTXAORySheqinzBMQDZYzYeeO/yjXW9sDs89sVlJe
-	FTebn0KXReO9L7Rh+k3nt21je1ZgyTZHN4ticPblWBdPoNsIecTpsrpj
-X-Gm-Gg: AYBFou3SFBXi8ixzc1MNCvv6n73MYeMS2mwsvx306sCvNB842MbDxIODFuQ2nxffiNP
-	q3MN13ufCaag6a3Scw5bQGfjMbADoacSB/lxFbnCjram/t6MrZh5ul4BOWihRCCyJ5LQ9oJoRUm
-	E0Fzi3J0UAJ7xjhU8rVgSRKMm98vcMjUDd8JSM4DQAtsnaLK7DD7m/oxLgH2Cqa7kH6M030CRmI
-	ueUEJDGqwy+1HHUwyMHoYMV3gy/JJ6ISP/TAsuZ+eDBrCgQLIDiT295YG8L82KJUDkBaeYxw/EW
-	hsbgY5op/jOPSVJsyD7yjbXhPexYlPHyFHfcctolUoESY86+amcDzhLL37eXrtgGnSDKoaBqahb
-	7ULD7dKur9qmMl8YzR1ysO9LRXi0Vfz85TRVVAAE7Gu6yi+KznGhEmevIMp8xRCFN9Igcu0C38v
-	cT/cFQ9+f/iheuVom5BrFyWbwuIJJoSnE10u7zqlL0dMX+jVQK8fIVMLwgSgbT63TjXUPxKkYSM
-	o50z9xjFF26BGRbgiI+uryA4hl9uww=
-X-Received: by 2002:a05:6820:1c94:b0:6b7:8415:d780 with SMTP id 006d021491bc7-6c738db60e1mr1840407eaf.43.1789496091809;
-        Tue, 15 Sep 2026 11:14:51 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:70::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-80b049fb51asm115974a34.1.2026.09.15.11.14.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2026 11:14:51 -0700 (PDT)
-Date: Tue, 15 Sep 2026 11:14:47 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L6gEsnf2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFEA01F000FF;
+	Tue, 15 Sep 2026 18:21:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789496481;
+	bh=KIdGYMcq+dBeGCbsrx5rPMqcCMjSKW7LVZY+ETyow5E=;
+	h=From:To:Cc:Subject:Date;
+	b=L6gEsnf2QYLY9c+87eGsl9SPz1nxzikE10FVdyIC6b2zvorUTkDZCU4Vss94P9USF
+	 XHw2Y7mDsd//WkIOsBkQsEtWVe/t8eIoQS2u1lMx0ElMqXWBuhbJQILoLrOKsUwHb8
+	 1HJ0EpRnc0dGSxNDC9DBhJURzJ7brLBi13rckAh9AniasujBuEy+E3Oi32fEzqXpXP
+	 g7gULYko1Y41RaW8RMrnmIYobGzwACLIuUsf7hQoG3MfBavCfh2tR8zDaHAxOh3vvJ
+	 SPAqdrJY1mGJU2kX4ohQGcJcU1qA2na3FvWISelxED0bAD5IWv0IMjDx3MBJ0bFTad
+	 uxRWSXbvs/ayg==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: Alexander Duyck <alexanderduyck@fb.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	kernel-team@meta.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowangio@gmail.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	sargun@sargun.me, jlinbox@meta.com,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next 3/6] vsock/virtio: support guest device network
- namespace
-Message-ID: <aqmLFzcF3MmwRITz@devvm29614.prn0.facebook.com>
-References: <20260902-vsock-guest-ns-v1-0-9995383e9a8b@meta.com>
- <20260902-vsock-guest-ns-v1-3-9995383e9a8b@meta.com>
- <aqlkWGyoUYrgQUzz@sgarzare-redhat>
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
+	Mohsin Bashir <mohsin.bashr@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>,
+	Dimitri Daskalakis <daskald@meta.com>,
+	Weiming Shi <bestswngs@gmail.com>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Breno Leitao <leitao@debian.org>,
+	Tao Cui <cuitao@kylinos.cn>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	David Wei <dw@davidwei.uk>
+Subject: [PATCH net-next v3 0/5] fbnic: Support larger RX pages
+Date: Tue, 15 Sep 2026 20:20:58 +0200
+Message-ID: <20260915182105.4162425-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aqlkWGyoUYrgQUzz@sgarzare-redhat>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 15, 2026 at 05:47:02PM +0200, Stefano Garzarella wrote:
-> On Wed, Sep 02, 2026 at 04:00:49PM -0700, Bobby Eshleman wrote:
-> > From: Bobby Eshleman <bobbyeshleman@meta.com>
-> > 
-> > virtio-vsock did not have namespace support (the device was always
-> > accessible to any global namespace).
-> > 
-> > Make the virtio-vsock device assignable to a namespace and initialize it
-> > to init_net. Because virtio-vsock and init_net are both hardcoded to
-> > global mode, nothing changes until the assign ioctl is issued.
-> > 
-> > When the device's local-mode namespace is being destroyed, received
-> > packets are reset until new valid a namespace has been assigned and/or
-> > automatically returned to, and the next RX batch begins (in
-> > virtio_transport_rx_work). They are reset rather than dropped because
-> > vsock does not retransmit, so a silent drop would leave the host waiting
-> > for a timeout, and a connection request arriving in that window has no
-> > socket whose teardown would tell it otherwise. This requires making
-> > virtio_transport_reset_no_sock() available outside of the common code.
-> > 
-> > When a device is assigned to a namespace, every already established
-> > vsock socket that is no longer able to reach the device is forcibly
-> > reset. For that reason, adding new sockets to the connected table must
-> > be performed atomically with regards to namespace assignment. This
-> > ensures that when the socket is added to the connected table that it
-> > actually passes the new reachability conditions set by ns assignment. If
-> > it wins the race to the table and does NOT pass the reachability tests,
-> > then the reset sweep will correctly catch it. This is the purpose
-> > of the new helper 'vsock_maybe_set_connected()'.
-> > 
-> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> > ---
-> > include/linux/virtio_vsock.h            |  2 ++
-> > net/vmw_vsock/virtio_transport.c        | 28 ++++++++++++++++++++++------
-> > net/vmw_vsock/virtio_transport_common.c | 28 +++++++++++++++++++++-------
-> > 3 files changed, 45 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
-> > index f91704731057..9c68ce1d7fb4 100644
-> > --- a/include/linux/virtio_vsock.h
-> > +++ b/include/linux/virtio_vsock.h
-> > @@ -286,6 +286,8 @@ void virtio_transport_inc_tx_pkt(struct virtio_vsock_sock *vvs, struct sk_buff *
-> > u32 virtio_transport_get_credit(struct virtio_vsock_sock *vvs, u32 wanted);
-> > void virtio_transport_put_credit(struct virtio_vsock_sock *vvs, u32 credit);
-> > void virtio_transport_deliver_tap_pkt(struct sk_buff *skb);
-> > +int virtio_transport_reset_no_sock(const struct virtio_transport *t,
-> > +				   struct sk_buff *skb, struct net *net);
-> > int virtio_transport_purge_skbs(void *vsk, struct sk_buff_head *list);
-> > int virtio_transport_read_skb(struct vsock_sock *vsk, skb_read_actor_t read_actor);
-> > int virtio_transport_notify_set_rcvlowat(struct vsock_sock *vsk, int val);
-> > diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
-> > index 4f9aa9c4c3aa..a453a4f828dc 100644
-> > --- a/net/vmw_vsock/virtio_transport.c
-> > +++ b/net/vmw_vsock/virtio_transport.c
-> > @@ -540,9 +540,14 @@ static bool virtio_transport_msgzerocopy_allow(void)
-> > 	return true;
-> > }
-> > 
-> > +static bool virtio_transport_netns_assign_allow(void)
-> > +{
-> > +	return true;
-> > +}
-> > +
-> > bool virtio_transport_stream_allow(struct vsock_sock *vsk, u32 cid, u32 port)
-> > {
-> > -	return vsock_net_mode_global(vsk);
-> > +	return vsock_g2h_net_reachable(sock_net(sk_vsock(vsk)));
-> > }
-> > 
-> > static bool virtio_transport_seqpacket_allow(struct vsock_sock *vsk,
-> > @@ -587,6 +592,7 @@ static struct virtio_transport virtio_transport = {
-> > 		.seqpacket_has_data       = virtio_transport_seqpacket_has_data,
-> > 
-> > 		.msgzerocopy_allow        = virtio_transport_msgzerocopy_allow,
-> > +		.netns_assign_allow       = virtio_transport_netns_assign_allow,
-> > 
-> > 		.notify_poll_in           = virtio_transport_notify_poll_in,
-> > 		.notify_poll_out          = virtio_transport_notify_poll_out,
-> > @@ -616,7 +622,7 @@ virtio_transport_seqpacket_allow(struct vsock_sock *vsk, u32 remote_cid)
-> > 	struct virtio_vsock *vsock;
-> > 	bool seqpacket_allow;
-> > 
-> > -	if (!vsock_net_mode_global(vsk))
-> > +	if (!vsock_g2h_net_reachable(sock_net(sk_vsock(vsk))))
-> > 		return false;
-> > 
-> > 	seqpacket_allow = false;
-> > @@ -634,6 +640,9 @@ static void virtio_transport_rx_work(struct work_struct *work)
-> > 	struct virtio_vsock *vsock =
-> > 		container_of(work, struct virtio_vsock, rx_work);
-> > 	struct virtqueue *vq;
-> > +	struct net *net;
-> > +
-> > +	net = vsock_g2h_net_get();
-> > 
-> > 	mutex_lock(&vsock->rx_lock);
-> > 
-> > @@ -682,10 +691,14 @@ static void virtio_transport_rx_work(struct work_struct *work)
-> > 
-> > 			virtio_transport_deliver_tap_pkt(skb);
-> > 
-> > -			/* Force virtio-transport into global mode since it
-> > -			 * does not yet support local-mode namespacing.
-> > -			 */
-> > -			virtio_transport_recv_pkt(&virtio_transport, skb, NULL);
-> > +			if (unlikely(!net)) {
-> > +				virtio_transport_reset_no_sock(
-> > +					&virtio_transport, skb, &init_net);
-> 
-> Why init_net?
+Hi!
 
-This parameter is actually unused by virtio_transport_reset_no_sock(),
-its call to virtio_transport_send_pkt(), and even the eventual call to
-virtio_transport_deliver_tap_pkt()... so maybe NULL w/ a comment would
-be better?
+This series adds support for large io_uring zero-copy RX buffers to
+fbnic.
 
-> 
-> > +				kfree_skb(skb);
-> > +				continue;
-> > +			}
-> > +
-> > +			virtio_transport_recv_pkt(&virtio_transport, skb, net);
-> > 		}
-> > 	} while (!virtqueue_enable_cb(vq));
-> > 
-> > @@ -694,6 +707,9 @@ static void virtio_transport_rx_work(struct work_struct *work)
-> > 		virtio_vsock_rx_fill(vsock);
-> > out_nofill:
-> > 	mutex_unlock(&vsock->rx_lock);
-> > +
-> > +	if (net)
-> > +		put_net(net);
-> 
-> put_net() should handle NULL net, right?
+fbnic hardware consumes receive memory in 4 KiB device pages, while
+io_uring may expose a larger software buffer, such as 256 KiB. Track
+the device-page geometry per BDQ, represent each large buffer with
+consecutive descriptors, and decode completions to the corresponding
+offset within the buffer. HPQ keeps its existing PAGE_SIZE geometry.
 
-It does, and somehow I forgot that.
+Larger buffers also reduce pressure on the memory provider. One
+provider allocation supplies multiple 4 KiB device pages, so the same
+amount of receive memory needs fewer net_iov objects and fewer
+allocation, refill, and recycle operations. Hardware descriptor use
+remains unchanged.
 
-Thanks,
-Bobby
+Ring depth and buffer size must be validated together. An ethtool ring
+change can otherwise make an active memory-provider configuration
+invalid. Store accepted ring depths in netdev_config, stage proposed
+values in cfg_pending, and validate the default and each RX queue
+before committing the change. Both netlink and ioctl use the same
+transaction helpers.
+
+The selftest requests a power-of-two buffer larger than twice the MTU,
+checks the reported buffer length, and verifies received data. It does
+not assume how packets are placed within the buffer.
+
+Sashiko found, as usual, a number of bugs. I've sent the relevant ones
+to net.
+
+Changes in v3
+=============
+
+- Carry Breno's Reviewed-by on the netdev_config helper patch.
+- Clarify that the fbnic ring-depth consumer follows the core patch.
+- Document initialization, override, normalization, and stored ring
+  depth semantics.
+- Drop the CQE placement assertion from the large-buffer test.
+- Reject a zero RX-jumbo depth before validating large RX pages.
+- Rebase on net-next.
+
+Changes in v2
+=============
+
+- Add generic netdev_config lifecycle helpers for the netlink and ioctl
+  paths.
+- Store ring parameters in netdev_config and revalidate RX queues before
+  committing a ring change.
+- Preserve the distinction between accepted and applied HDS state.
+- Track fbnic device-page geometry per BDQ.
+- Validate the fbnic RX page size, fragment count, and PPQ depth.
+- Add automated large-buffer test coverage.
+
+
+v2: https://lore.kernel.org/netdev/20260910180908.1506533-1-bjorn@kernel.org/
+v1: https://lore.kernel.org/netdev/20260522113225.241337-1-bjorn@kernel.org/
+
+Björn Töpel (4):
+  fbnic: Track BDQ device-page geometry per ring
+  net: Revalidate queue config for ringparam changes
+  fbnic: Support larger memory-provider RX pages
+  selftests: drv-net: Request larger zcrx buffers
+
+Jakub Kicinski (1):
+  net: Add netdev_config helpers
+
+ drivers/net/ethernet/meta/fbnic/fbnic_csr.h   |  34 +---
+ .../net/ethernet/meta/fbnic/fbnic_debugfs.c   |   5 +-
+ .../net/ethernet/meta/fbnic/fbnic_netdev.c    |   5 +
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  | 173 ++++++++++++++----
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.h  |   7 +
+ include/net/netdev_queues.h                   |  49 ++++-
+ net/core/dev.c                                |   7 +-
+ net/core/dev.h                                |   7 +
+ net/core/netdev_config.c                      |  75 +++++++-
+ net/ethtool/common.c                          |   9 +
+ net/ethtool/common.h                          |   2 +
+ net/ethtool/ioctl.c                           |  24 ++-
+ net/ethtool/netlink.c                         |  15 +-
+ net/ethtool/rings.c                           |  13 +-
+ .../selftests/drivers/net/hw/iou-zcrx.py      |   6 +-
+ 15 files changed, 345 insertions(+), 86 deletions(-)
+
+
+base-commit: b8e9e7d82e7eefd5d2d528469d94ec20e96b38c3
+-- 
+2.55.0
+
