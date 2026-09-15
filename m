@@ -1,214 +1,216 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B5F9212542;
-	Tue, 15 Sep 2026 03:22:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.17
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789442568; cv=fail; b=qadliyDkSknDqwzcUcjCwxG9IysHVrIGhvkKnrXm0eTn4pckftYxGsAxi42wVJ7CSz7LMJpTf7yOX4N2iQ+4ERWFg4/KHzxqribGNwr1HJoyOEsTYCf65yjGxi/D1fYdxFT6MCR1Qg286+jDVoM0K1wkR224SR54XTwe1hen8SQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789442568; c=relaxed/simple;
-	bh=zXwQzk+ygXlfuQ6gINXyDQsCVZNW6EY+11FV7T/dfPA=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=XiYZf6Vrj+KCSUZt5wlZDFAVP6bwvcqmkkuI7yTH/1u1vTOBx1jYBULj3l0ec8xBDse1UTgZAQxZk21ERf2PKGtuxDeSqBdPuYesZoVKf+tk9mNW6bz6FE65tX9aXUhtYBPHfGyjrVgeefBwS3Vzy6Li/ntrnfwi5TppA2LN3gc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C2TkqCMG; arc=fail smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1AE2418A28
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 04:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789447990; cv=none; b=XHef4Bzz5LwLqR9JrFndg44TF03R+FGte4qDL5otmGzS31g1dQx7KLF5OeNnfN7tp5Y80+vyNs7YaDnLB/gzhnc5hh4puZ9L+FHF/9Bbj5CHcPkJYeeowGRosGxVGsQD/VDHYeU5wrFTjZiW9AJHzvMkp9m0OV2cVKsSgr1HiZ0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789447990; c=relaxed/simple;
+	bh=PROcPA9h/eIHns0/JNm/9Pp+kQzscBwZHfrMH3A0lIc=;
+	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References; b=ERmb3NkQJ2RBdfE7uxrOdXJ7dQ4EYiYPFzRelAXDvbOpu9ZJkRtDidCYBCWyObZURGQVs+r7d+52L+VQaQOtN5leR7spkJs2xc6m4ciDMXTK0OiNkZ8+IRn06D6zt5PkERp8ftInlPnqnQnnu7UtGhSN0noyQWXGEn1TDBjSZDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NQg7upzL; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C2TkqCMG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789442566; x=1820978566;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=zXwQzk+ygXlfuQ6gINXyDQsCVZNW6EY+11FV7T/dfPA=;
-  b=C2TkqCMG1TcTWRGkxrze5a0oo2Ok+Rs9lwtNSFNbwSGPrHeK0IztZVIL
-   ymVCY5PNdIrFqb8xaXXJrctqXW9+Gvgy4qZxDVYz/j1NPx4qnl3NQiura
-   kHDqKC7UzRvLOxVnvwB2m+AGTihovB6BtduQp0zdg8bjIZDSLUdrx8MB6
-   hyIO9hoUr78bScPSwJNfQdQYqGeLupA1pVdcnnRXSjGW4mH0ZOm/9UDcG
-   h6nAL+fXBgbylYg/6iGwJaxxRSXC7u2Ol4slB8P0yjUhHn1W6wySeEu2z
-   LtmF8kZqqV7eKvOd6Yhb5GCu9PAV+LZWuRfTTmAA/CVSqwF0rIPk+t0JY
-   g==;
-X-CSE-ConnectionGUID: qNfUn+roQ9WrGj2Pw+3vYw==
-X-CSE-MsgGUID: eJwo7CUJQoqr/gTAhVj2uQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="89669393"
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="89669393"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2026 20:22:45 -0700
-X-CSE-ConnectionGUID: aThE39ShRN2a826x7DRXKQ==
-X-CSE-MsgGUID: A7pv0oYKTfqT5jb4s2zbkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="271008187"
-Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
-  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2026 20:22:45 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Mon, 14 Sep 2026 20:22:44 -0700
-Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46 via Frontend Transport; Mon, 14 Sep 2026 20:22:44 -0700
-Received: from CH4PR04CU002.outbound.protection.outlook.com (40.107.201.49) by
- edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Mon, 14 Sep 2026 20:22:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CgcNYEte9+4pWUFVyWnBqbju8jvBnJq5QvkpyVHj/Qz1gyZJhk6dwRXqVURCDgy2wQG9yL6jP7Wnw5wJ5y7E8KQx/u3aYhKKJA7Tkb9I4vCW7cW51uibmgk04olAdeZ6HA04ToiV1cGvD8yx1ZjRrKypsKpGQic+bY1LWlEIFkgZVg+Pg0iTiIMWOCdJg7WILoXfnjBKABNQESU82NH1XhRhlal2QrRkMEQTFUmUb09148Rpv5gDXpeCvKt56p9Z/nLWOkDKSWvRPpQ8UngX47O7qCi4cFMR1E0/O8YNLAkb8GkfVHcL3IYk9CXTjn9xr+mPhXC4ldKCeRacmOm1Mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DrVRYLT0y9UG508ttRHSRzw4T6JXmcAiOR8cBjXIhAs=;
- b=LI7JqeouNDJjrBIliHwiQiB0gd7xTx1OgY4BcnmUiRVJExhjBnElPEbKmT3GWnONzBcXFT4VK4HaDOT0y/04+5OZh77ST3D+rYpuhYPDE+oPQWs0+8808391684qsNPLDlXH+gTfHsfDpfegz7oS41BH+x04MSGkZNCwLhF5JwDbZHNxEfKT3aJ6Y/2FjlEvBf9MpMPaCMcym8GRWsdn4sPNl8HayYgznl76kjustweyw+uHsJa7pMvU9zjf7rUWR6Zp461QhEZh3zRTWRXVZLKEJCyBLHpIkYed/uEY3KkF+X2uBU5WLtSwdBOVlCDIuQPyNhHHZ5e33OAXVrE44w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH7PR11MB6932.namprd11.prod.outlook.com (2603:10b6:510:207::5)
- by CH4PR11MB335913.namprd11.prod.outlook.com (2603:10b6:610:50e::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.12; Tue, 15 Sep
- 2026 03:22:39 +0000
-Received: from PH7PR11MB6932.namprd11.prod.outlook.com
- ([fe80::cca2:8c49:b4b1:761e]) by PH7PR11MB6932.namprd11.prod.outlook.com
- ([fe80::cca2:8c49:b4b1:761e%4]) with mapi id 15.21.0406.007; Tue, 15 Sep 2026
- 03:22:32 +0000
-Message-ID: <c77b9400-f896-4582-98af-fd3399a39443@intel.com>
-Date: Mon, 14 Sep 2026 20:22:30 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 7/7] selftests/x86: Add a userspace test for LASS
- enforcement
-Content-Language: en-US
-To: Binbin Wu <binbin.wu@linux.intel.com>
-CC: <kvm@vger.kernel.org>, <x86@kernel.org>, Sean Christopherson
-	<seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner
-	<tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
-	<hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Peter Zijlstra
-	<peterz@infradead.org>, "Chang S . Bae" <chang.seok.bae@intel.com>, Kai Huang
-	<kai.huang@intel.com>, Fuad Tabba <fuad.tabba@linux.dev>, Chao Gao
-	<chao.gao@intel.com>, Yosry Ahmed <yosry@kernel.org>, Claudio Imbrenda
-	<imbrenda@linux.ibm.com>, David Matlack <dmatlack@google.com>,
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>, Kishen Maloor
-	<kishen.maloor@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20260806011536.4172258-1-sohil.mehta@intel.com>
- <20260806011536.4172258-8-sohil.mehta@intel.com>
- <e6f853c7-ec9f-4e1a-bf7a-3b97ff84d3aa@linux.intel.com>
-From: Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <e6f853c7-ec9f-4e1a-bf7a-3b97ff84d3aa@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY1P220CA0020.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:a03:5c3::7) To PH7PR11MB6932.namprd11.prod.outlook.com
- (2603:10b6:510:207::5)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NQg7upzL"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-86265451beeso2652467b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2026 21:53:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789447988; x=1790052788; darn=vger.kernel.org;
+        h=references:message-id:date:in-reply-to:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=ru4Ea1MD4/XyVDmXcP+1ObXpaU2Tn0Ejgynjuli47y4=;
+        b=NQg7upzLcg1XDS+HTFOnnqAO5MUxye5vc/vKWnLUtwwlbiMHzCkYNmAoRVPG+uNu3i
+         2BciHp+UaJDa1uFxlDnAxojOVZ1ppNY8xt/KyR/3tDai8wVI/rzaGj4zPoj7vn+WRjG4
+         EaUw4VZoM8X69xiCO6tsKkdZaeUkeRoFC8M2fHag8qzjiN8gYLq4fCdXnwsAR2f7xj5R
+         lrYsDpmOMccusPuzJ+S7jZQzFyDl6q5GOEkDTfycOy7jmQ0fl9cEyZeqf2ys52KBrR/J
+         FxsSIfmAtg+WFIw0lWS1A8BhlycNrnoM8YTZudRt+evLeUvG5/cBIKLUlP82Z+hvhB5u
+         epeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789447988; x=1790052788;
+        h=references:message-id:date:in-reply-to:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ru4Ea1MD4/XyVDmXcP+1ObXpaU2Tn0Ejgynjuli47y4=;
+        b=Vei9mg9PyVsymxHP7SL6yN30bOqBED1kNuV+VeCYKj0jT+5h//9rzh1EYa8VKVIDUL
+         om4K8dM9qV8/QXkbhlj4zYrQel0JJYCTyx2RUgC7tYU6CiqbdpNTamkoRkvDVaxZdLXK
+         W1MFoe18Fx8uNsMQDNBRo/G25imufVz/PyMy73e/GAVcu1Ifg5Gzkrm+XKIaZxS1Xlth
+         Vc8MSV+4gxFvkljupiY87fA8ol1EvT7Hh1qo4CtCD/w+Fa/QDMSPaYaVpXALr+EPsktk
+         KE9b9qdd5Bg+Vjgp8toT959sQ6hM/gWdyORwy4vvXzgHZNs6QMGBjuaZllFQMgg+WKTP
+         IVDw==
+X-Forwarded-Encrypted: i=1; AKwUvBz2RC28a/n3MrsIjnMoLYpLpkOv/Mm/0gtFQbQ9tN31EhSSQVNg5dJqdqusU64zcGW3laHl9gIx74kEiUSeHno=@vger.kernel.org
+X-Gm-Message-State: AFuF++mfPKgjQFMXt+HOTmurWxs6Ik6kDtxc4SUF1pwCyRaIB5fbgGbc
+	Y16I5ijJm4qEZ1UwcCmmBhFOuKKTA2r7734+dLw9Rq4dF/VaT5sh4ouN
+X-Gm-Gg: AYBFou3QbGGnpHVDPAXb744Zd3n7DOXZJGLOTuR/o4MmEe8HN0bma1r4+pDFuAISrJh
+	lxmyBO+pWudc79L9DlzyB+A1D1p5iBQiazQCpFT3lqBHXF4dl1lShJ/57UYv1LXDsWL/8Lc0Fbc
+	JJWOxBwZqyInQ1NnisRcw5oEV3YfdWiA9tgDYYCJVrsGHAKoZYoQf5LmP58wRbysMt+JVSrGfR/
+	/dchBtbv05pLijYxUbdRi/TyJxkUs5zpq0id3h6OmuWcSw4peGbvGRaEUd8qSYyUJn4VEZrFGKd
+	jdakKMAv1qVADQZvqMD3Rc6UoaVZg9x+ohoZF8tGczt9Im7C6OKDqT7jYY7O5JOUomXKj/SQ47N
+	XkwgqEkmWwg6K+RUew1ImXmUy4WzThYGydn6ZKAf9gA/i9/0qgf4xg1M/A7H7S0Ia7lgl8+Mwbv
+	yhK2bGZEZc8qZE0SPIKAkZWQIS80iueoQ5qAi3KpPTdJpcuKmIreRa6eu+cPmijSgQbp3GZkjuY
+	P3vWsG98sEOmUK1Yp2IbWWEcKyRgWXk7rq6c8hXCb6rnqier+fR6YM=
+X-Received: by 2002:a05:6a20:c88b:b0:3d1:c0e2:936b with SMTP id adf61e73a8af0-3db404269e1mr14358079637.7.1789447987855;
+        Mon, 14 Sep 2026 21:53:07 -0700 (PDT)
+Received: from pve-server ([49.205.216.49])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33beb8b2872sm849937eec.15.2026.09.14.21.53.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2026 21:53:06 -0700 (PDT)
+From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+To: Chris Chiu <chris.chiu@canonical.com>, maddy@linux.ibm.com, shuah@kernel.org
+Cc: sshegde@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Chris Chiu <chris.chiu@canonical.com>
+Subject: Re: [PATCH] selftests/powerpc: Fix exec_prot test failure on Hash MMU
+In-Reply-To: <20260909050919.3344699-1-chris.chiu@canonical.com>
+Date: Tue, 15 Sep 2026 10:07:13 +0530
+Message-ID: <wlsnyvt2.ritesh.list@gmail.com>
+References: <20260909050919.3344699-1-chris.chiu@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR11MB6932:EE_|CH4PR11MB335913:EE_
-X-MS-Office365-Filtering-Correlation-Id: d1e3d1f2-eb6e-4677-2ff3-08df12d8948f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|23010399003|366016|56012099006|6133799003|4143699003|11063799006|10067099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info: HB3oi3L+Pz8etwUSRKk491GsSc/gEByw575Y7e7jONO37x056yVuAN9W8OI5AgrmM83zb3JVWXlbl3t/J2VsWwTje1Vz9r6w63BJVQHrGbyhflQM4dFQMtdXRQCXBzN8HV0QTYam1J0IVIwLk8SHs67vaGMP29lrHUvKZKSWvDEAbupHIC3xJCTbq35/lIM2oshq3nrwUoOopojeFLZG+3GrfzWOh381e/zsStnxJlsFHA4JUSqBlCxZ/8qVKpWFNr5JWGV4RvifInzZ0xQkdXTJsSxCnYqH6HOKUskqGEPtASQMeXvxYXZq9e2HrP3ue8HGf6xHVF15d8RVm0tMW4P1N2/KA+Nn+GZ8YbndNdu5BIjHHcgbSyUUCyTCeavXzpFme2hsAqmOdfaXQV/PZ1Km3wvPoKJXtEacqiMeNwvnhRUlDGEHq6Xyw3X2yPOgBGx7fk4FBAOynVfTbWLOuayB64pG6aQGb0NlyOJP88YhAxQv+XERadBcw+LdLD7f5ho6Sk7PRnSYeIcoOUwg0v6J1BJl97MHjA9THzQMvL7y+kwJjGaKKDPZkiVKeg4/NJN4pLxvUq5KufnxKA8OezY0Bvo3C5QxnIggOgukg1R8Q6+Ml6y3w5B6AD+BflxDHjWGCRB/zR5jxw+a8+Kr1vgH3drseYdwIDpvmbhNK7I=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6932.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(23010399003)(366016)(56012099006)(6133799003)(4143699003)(11063799006)(10067099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MXdwUytSSUp1OGJFdTZrL3RsOHZUSDBTV1Npcnd3UjE3Y2tVTCtZbkl1dEty?=
- =?utf-8?B?U1RSS0M3VjVJSEdPMVo0Uis3OTE1YnpMZ011cGxTOXZCZ3dHYWs4SVRSZ1Fa?=
- =?utf-8?B?Q09CNTRkRzBBTTRxOWRzSmFwTFUvM3puUk9ZRGVUQVpaeGJEalRkMjN6QSs3?=
- =?utf-8?B?K2d1NEVqNXpXMHFsZmZQY251WlBWbzRneEtZMnc3K2lSRjBtRlcrbHFaME9l?=
- =?utf-8?B?V0sycUJIWnZSdjhYM3FsaE51dmN0bkVubHpPS2VNSVkrVGlTUUgvQ2NxQlB3?=
- =?utf-8?B?bkdWdFJtODhWK1lyS3A3c3NaSHN5VzQvTUFjVGNVY1pkSXNCb0toRzNJODJl?=
- =?utf-8?B?cm5MQURKWXBlUzB3ODRjaGhPTEZXQ2ZHemtmUUVSK2VBcmg1YzMrTnUrMHMx?=
- =?utf-8?B?NFV6U3l2NTJ0Y21QWU5zTjlnSnJXVlQ5aWtoU2VUS0t6ak1nS3RXVU9vNlVk?=
- =?utf-8?B?bHlocCtvd0xCRjBmd2x6TEJZbUFLZzJOYUxTaW5pNzVrc0FXMFBqbVdPNkh2?=
- =?utf-8?B?VTgxdWNocHlVWWxKcXJOdU51L0grY3lSOFF6VG4wdmJkeE4zSXFNd0ZYRE9s?=
- =?utf-8?B?aVBlaWhwTlpnNFJWUm93YTRhb3k4am90dWREQ1J2aFM5YjdXSTRaeGU1M0lC?=
- =?utf-8?B?S0IycEx5bitNbEF3UzNsMTVKd29ZZmVHaDlFbGpMeWRJbDg1a0w3bUcrNG5u?=
- =?utf-8?B?dmpEOXdiS0RRTmVLZGloQ2dPR1JRSk4xK05TVll0UnJhRG03eXpYdDBQSzJ2?=
- =?utf-8?B?YTAxLzluTG54ZzNtaitKY3JoOENsSmhZTzBkd3YvZnVCaEd5M0orcCs4Z3hD?=
- =?utf-8?B?cnVMYWdVQ3ZMdENHZE1uWWQyWHltNmdjU1djeWNscTJsak9IVVV0bFFWSlNJ?=
- =?utf-8?B?WGg0aFBkNGwxRW12S0JkU1hSUk9pZGFONGJka2pDY3k0R0o0Y04zNGFmNmpE?=
- =?utf-8?B?ZXpxN1JSM2pTR1RnNG81dEZaZ3U4QzRvRHpJTUthLzFvelVmUzBtSnFjRE96?=
- =?utf-8?B?QmxQNXMzVmtrOTVLWFlaNUpvVDhtaExENllxTWlhazNtTjBiUStxa1VzVE5y?=
- =?utf-8?B?c0hyQllZRE85U0RpUFcwNkJpZGpQTUYrY1NaYm5JTTZvcmhNNk9pQ0J6aFFE?=
- =?utf-8?B?VFUweUpTWjIwakJHeVpzYU1MZ2d6Y0EwUHg3TVVONTE5TnAzTG1pZUJVVkVO?=
- =?utf-8?B?NkR3TVlKL3VYbytPS2s3aEc2eURSYjFwYUc4bkE3UkZVZ2tUeGlnbWU5ejEv?=
- =?utf-8?B?MG11TDdPRFIyYWRVL3lBcDRsTzhlOHFuakdyc1lTVVVDSkxyUHYrbi9MbFh6?=
- =?utf-8?B?VXhqZ05LMytiVkprTkdQUHI2d1c3WDN3VzFaVDNhclpwOFRzYVlqcE0xdVVr?=
- =?utf-8?B?QW9TbWFTZDVWUTlLalhtMnlsaldrMHVFSDJUbksrdlFSck90NmlxM1Q4NlZh?=
- =?utf-8?B?UDhBSXk2MGJjQWczdHozVGs3YkRtRjBZR1czWE5HL2FpbVJhQjdZalJLMFJy?=
- =?utf-8?B?dVRXbTBscXZoc3dTYXIwb2VaNVB1ZWVoUHNBdWhrTGhyTisrbVpTd0t6VHdH?=
- =?utf-8?B?SXU1MWI3aUxjRFd4bmlxK0JvTWhyUGlFTGVjeTBLbDVSdGtObUk5SkdISE5M?=
- =?utf-8?B?MURMNnVhczVwampNQ3M3d1hvYjllRThoVUlFMGtIVUc2VGczdGJvTmdCVDY3?=
- =?utf-8?B?UnJLY050Rmg5OFg5Yjl4Ris0WnlpSTFFenQyWFhKcmZyM2t0N0ZIbzVnNTBB?=
- =?utf-8?B?MGQrbHQ3c0NWZHo5T2hnMkxaeVpzaStSaFlPM2ZvTGhKMUFCaTZhVHZ3dnN1?=
- =?utf-8?B?RnRZMXlJNlN0ZlFGcWNibWJpTWs0bDdXMmdieWxseWlVUzFoNjE2bWhMVmND?=
- =?utf-8?B?Vzk0alRDNENvUDVDWGc3aEx0clV5T253MzQ4SUtFa0pBRDVlbHJOZHhqVm8y?=
- =?utf-8?B?dHJlZFh1YjJtQmh1TkxERFFENkRQOEJXTXRmNWhGWlpWQXh6QllCRFVnSitL?=
- =?utf-8?B?OC96ZytkZ0VLYUUrUmVyTGJDcGdpVmxPU3k3ckN3KzhkT0NWOU5JVTM5MC81?=
- =?utf-8?B?azNydng0ZVdJbFJyU1dzcnZTWHRuQm5tRWFZaGhVaVM0Y283Z0pqbW5GMkgv?=
- =?utf-8?B?VTRLaStFNVljOXFTakhRR1RQaTZma1VvRkFCekV4WVZnRnl5MnJaTHN3SWVP?=
- =?utf-8?B?RDBjcnRNUmtLaGI0QnNzV2QwenNJTjNnbUZzdmRLSW92b29ualNTdWY0N0pY?=
- =?utf-8?B?ZlBNZVFBc2FFc09WUC9GdXpheHYvZDhGRDRocjRTbzAyV1J0SWxRcDNKMmtC?=
- =?utf-8?B?MXovVlF4dGZrV0ZPZkV2aDV2RnpDb1NxU3labm9PclZ4bERtS1JaUT09?=
-X-Exchange-RoutingPolicyChecked: hmtsxGePQBH8fpJ/m/oEkwE8MWW3uD5apvgGsJ7d7zfOn5cAo9apmzAOp6owVaCNMhK0RePpuO86rWSvzoYsIz8wps1lq1bPxxRLk+MzguUfIaYqfTns21xKWcDDkvwYA587Phl0ptr54HRxN8dZBs288SuPLTS3kYKXmkSrwlKzI+RCKMT44N+HUnxnnH/KonCyP4mU41pN/DcvrBrpOpdK6VZbliIdjVNXIas6qCpJiV9efz9xtLpntJG8N6WJT2huvMXErvcgZlu/+j3w1FfFIbhONt+A1a+A+M6/3sFa+sIwFcMQGOQjjy9ncLt+BBxgRYE3fvRxY1za2LfPQA==
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1e3d1f2-eb6e-4677-2ff3-08df12d8948f
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6932.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2026 03:22:32.6398
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iMrZ6y+zqPSE4eYFyFiBTP2vfHYx+FWm85dqFOwZW6uygKTSd7dVx9Xgt85bS1aH+ph6C1sqps3XQRk38k81yw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH4PR11MB335913
-X-OriginatorOrg: intel.com
+
+Chris Chiu <chris.chiu@canonical.com> writes:
+
+> Hash MMU maps execute-only pages as readable at the PTE level, so reading
+> from a PROT_EXEC-only mapping does not fault there. The exec_prot test
+> currently treats that as a failure, while the rest of the permission
+> checks are still valid.
+>
+> Use the existing using_hash_mmu() helper and skip only the read-on-
+> execute-only subtest on Hash MMU. Keep the rest of the test unchanged so
+> the fix stays local to the unsupported execute-only-read expectation.
+>
+
+Hi Chris,
+
+Thanks for the patch. However the patch is not entirely correct.
+Do you mind me asking - how did you find this problem? Did you run this
+on an actual Power Hardware? Can you share the details of that please?
+
+Also - from your .config can you share the following?
+
+cat .config |grep -iE "_PPC_"
 
 
-> 
->> +int main(void)
->> +{
->> +	ksft_print_header();
->> +
->> +	if (!is_lass_active())
->> +		ksft_exit_skip("LASS is not enabled\n");
->> +
->> +	ksft_set_plan(TOTAL_TESTS);
->> +
->> +	sethandler(SIGSEGV, fault_handler, 0);
->> +	/* Only to report a #SS; LASS shouldn't cause one here. */
->> +	sethandler(SIGBUS, fault_handler, 0);
-> 
-> So the purpose is that if there is an unexpected #SS, fails the test instead of
-> killing it, right?
-> 
+So what you described in the commit msg is correct but only when PKEY
+support is disabled with Hash mmu. However when pkey is enabled, and
+when the process does mprotect(PROT_EXEC), kernel assigns a execute only
+pkey for that mapping. With that - we can still get a fault when we try
+to load from that PROT_EXEC mapping and the test should work fine.
 
-Sorry, I missed this question earlier. Yes, the goal is to catch the
-SIGBUS and report a failure.
+So, I think what we need here is:
 
-I think it isn't worth keeping in the first place. My initial plan was
-to trigger an LASS violation #SS. But, it turned out to be much harder
-to trigger. I'll probably remove it because it creates a distraction.
+diff --git a/tools/testing/selftests/powerpc/mm/exec_prot.c b/tools/testing/selftests/powerpc/mm/exec_prot.c
+index db75b2225de1..51ac2f9c14a6 100644
+--- a/tools/testing/selftests/powerpc/mm/exec_prot.c
++++ b/tools/testing/selftests/powerpc/mm/exec_prot.c
+@@ -167,13 +167,17 @@ static int test(void)
+         * Read an instruction word from the address when the page
+         * is execute only. This should generate an access fault.
+         */
+-       fault_code = -1;
+-       remaining_faults = 1;
+-       printf("Testing read on --x, should fault...");
+-       FAIL_IF(mprotect(insns, pgsize, PROT_EXEC) != 0);
+-       i = *fault_addr;
+-       FAIL_IF(remaining_faults != 0 || !is_fault_expected(fault_code));
+-       printf("ok!\n");
++       if (pkeys_supported) {
++               fault_code = -1;
++               remaining_faults = 1;
++               printf("Testing read on --x, should fault...");
++               FAIL_IF(mprotect(insns, pgsize, PROT_EXEC) != 0);
++               i = *fault_addr;
++               FAIL_IF(remaining_faults != 0 || !is_fault_expected(fault_code));
++               printf("ok!\n");
++       } else {
++               printf("Testing read on --x, skipped on Hash MMU without pkeys\n");
++       }
 
->> +
->> +	ksft_print_msg("Accessing the kernel address 0x%lx from userspace\n",
->> +		       (unsigned long)KERNEL_ADDR);
->> +	test_kernel_read();
->> +	test_kernel_write();
->> +	test_kernel_fetch();
->> +
->> +	clearhandler(SIGBUS);
->> +	clearhandler(SIGSEGV);
->> +
->> +	ksft_finished();
->> +}
-> 
 
+w/o the above diff when PKEYS are disabled on Hash
+(# CONFIG_PPC_MEM_KEYS is not set) we get the following error:
+
+test: exec_prot
+tags: git_version:v7.3-rc3-9-g704340f1cd0d
+[SKIP] Test skipped on line 100
+[FAIL] Test FAILED on line 175
+Testing read on --x, should fault...failure: exec_prot
+
+But with the above diff:
+
+test: exec_prot
+tags: git_version:v7.3-rc3-9-g704340f1cd0d-dirty
+[SKIP] Test skipped on line 100
+Testing read on --x, skipped on Hash MMU without pkeys
+Testing write on --x, should fault...ok!
+Testing exec on ---, should fault...ok!
+Testing exec on r--, should fault...ok!
+Testing exec on -w-, should fault...ok!
+Testing exec on rw-, should fault...ok!
+Testing exec on --x, should succeed...ok!
+Testing exec on r-x, should succeed...ok!
+Testing exec on -wx, should succeed...ok!
+Testing exec on rwx, should succeed...ok!
+success: exec_prot
+
+
+Care to verify this from your end on your hardware and submit a v2 with
+this change?
+
+-ritesh
+
+
+> Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
+> ---
+>  .../testing/selftests/powerpc/mm/exec_prot.c  | 21 ++++++++++++-------
+>  1 file changed, 14 insertions(+), 7 deletions(-)
+>
+> diff --git a/tools/testing/selftests/powerpc/mm/exec_prot.c b/tools/testing/selftests/powerpc/mm/exec_prot.c
+> index db75b2225de1..bd44f49d8449 100644
+> --- a/tools/testing/selftests/powerpc/mm/exec_prot.c
+> +++ b/tools/testing/selftests/powerpc/mm/exec_prot.c
+> @@ -108,11 +108,14 @@ static int check_exec_fault(int rights)
+>  static int test(void)
+>  {
+>  	struct sigaction segv_act, trap_act;
+> +	bool hash_mmu;
+>  	int i;
+>  
+>  	/* Skip the test if the CPU doesn't support Radix */
+>  	SKIP_IF(!have_hwcap2(PPC_FEATURE2_ARCH_3_00));
+>  
+> +	FAIL_IF(using_hash_mmu(&hash_mmu));
+> +
+>  	/* Check if pkeys are supported */
+>  	pkeys_supported = pkeys_unsupported() == 0;
+>  
+> @@ -167,13 +170,17 @@ static int test(void)
+>  	 * Read an instruction word from the address when the page
+>  	 * is execute only. This should generate an access fault.
+>  	 */
+> -	fault_code = -1;
+> -	remaining_faults = 1;
+> -	printf("Testing read on --x, should fault...");
+> -	FAIL_IF(mprotect(insns, pgsize, PROT_EXEC) != 0);
+> -	i = *fault_addr;
+> -	FAIL_IF(remaining_faults != 0 || !is_fault_expected(fault_code));
+> -	printf("ok!\n");
+> +	if (!hash_mmu) {
+> +		fault_code = -1;
+> +		remaining_faults = 1;
+> +		printf("Testing read on --x, should fault...");
+> +		FAIL_IF(mprotect(insns, pgsize, PROT_EXEC) != 0);
+> +		i = *fault_addr;
+> +		FAIL_IF(remaining_faults != 0 || !is_fault_expected(fault_code));
+> +		printf("ok!\n");
+> +	} else {
+> +		printf("Testing read on --x, skipped on Hash MMU\n");
+> +	}
+>  
+>  	/*
+>  	 * Write an instruction word to the address when the page
+> -- 
+> 2.43.0
