@@ -1,110 +1,143 @@
-Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB820441619
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 09:11:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.76
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E3CB471D0F;
+	Tue, 15 Sep 2026 09:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789463511; cv=none; b=pP7Kz9rWHoyrqFlkIrAV6F5ozaQ4q7xzIAmtOF8QKdktFE7ieG2PeOM/Hf3hOAqDkhA8ewS9eNT2knPlBeaArJ7m507YcQ1A8cZrfPnXYMRdUTf47ZsMPtB289maamDybQmShvJO+4+RALi6SSnGUyycOxyGvxvyDYJ6Rpxe3kA=
+	t=1789464113; cv=none; b=Epm1JNLo1pTFFSRm2JfkqoG0ETqfSgrIGMw+UvHAYd5Z8X7HhFWkJdhtPy4TUgfXm9gVW2/jG1hhC3iLwL5ypW6vDRGyE6WHADS92z4W6jY4/NqEwduaDk5TdiaxgwSWgeHZascxOedmSuqzZ253P0OoAskrxP1FSe9u5evcniA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789463511; c=relaxed/simple;
-	bh=DZY/0oI6mCnWUve6D7j+vwx+OdhyO4q+XgrHXvoBa3g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sh0ZQs0/D4ll5Ct65LbKSz6czRhf2SFbtJHku1rNVQpdp9gRLdQYWtFMFbTSqX2qxh9risHgvQ4/At0uB39zkMPx2Q7xSrY4K3jTV90NW1IHlMafbCi+3qq8xGs9BZ8f6bT376QXM3fOcNNxnfXXXwXyJH3FW6OIRrrdLNT6804=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MUDszfQv; arc=none smtp.client-ip=74.125.228.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789464113; c=relaxed/simple;
+	bh=AFgqujhkJrGASZuwK6HMERYmbZ5P2W2+hv4OhaNPtQ4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=R7e4s2s/ZrmbmGhmO0avF0yxORQ2hwa5kNKc8kMgvADHm8Wz1+uYg89m9SzPMAspIiEzZE/2N6tDbpUrPcTXo757C+9mK3zbtcalbUcY45pNunY+Q4559xe8zga/GuDnjA5c5Ft6ORHB3GVOXpyKRwY0eArau9HBbSODxH0G31w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=uJAj+7Fx; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MUDszfQv"
-Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a60590a85bso77409a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 02:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789463508; x=1790068308; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=xTNpzrYwTyZX7H+h2rvNKx7E/X9ORfxmeaOuxO0zcfQ=;
-        b=MUDszfQv96UPwPS5ok4vuNwBOTLjcfqtyCffTdzm0seTn5xh8LMoHdS0cKrSP8/Dvn
-         HQMrmZbD5/xplZyvkYov+XrkwI2RjeeUJ3j8d8kf3ZZo6XH8OsFT1JmzCExHWzP0yMd2
-         00VcuHrOyUS9qst6pmgF9GdhJ6Vpqgmz8ywmA6gOKrvboEVIIC3eh6w99sZ/P+n+qAyD
-         fI814Js+YigS4H3pJrgWPhOzA+XFQtTDhd6Qr9StURQEOy3JJ0kXx7FWyVnD+spjn7VK
-         MmWvOHHCRdlNb60ZfO/6b/c8YvR05YFSg4869KCQM6KFb6rpkLvM+a4hcenNwOS8F7uN
-         F+bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789463508; x=1790068308;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=xTNpzrYwTyZX7H+h2rvNKx7E/X9ORfxmeaOuxO0zcfQ=;
-        b=MCUdzbSiZn069LRZ5+1k8JOdPEIyRtAsTpKkMpYQnO4DYGrz5tIMRK0vU4qmC9sBOY
-         oHmQKeSaX9La9wUa9BdgKNd6VfCLWE5f/oQtGudgtM7wh84BL+OMNjpru2Ym9amdGyiX
-         QHUKZbfp3yv7E2UsYO5p6tqbAcapRjpn0HRsFYtV7pyb8qTbN8C2jphhNhFqRVJ5b/2m
-         eO2YgiCITbLz0ONPZ39d2onMmpNYlKlAjbcTqE9WFP5IfiGBXAp8XKWr8f4QW4ClLYgZ
-         hWlMOgiipVnDHZFsUBGbzbGJ0FRW4K/MbRb13hw/CECLNSRU1RvHAj8XOvpfym+xAoDY
-         /4Zw==
-X-Forwarded-Encrypted: i=1; AKwUvBw9iEGQVynmi2GOg+ZQM2W+sfIaPT8A/lWALe2ukQ+TDOhuEJVkSCELjCH91pWrOBzvkckouiRdrkhZXrJkoVM=@vger.kernel.org
-X-Gm-Message-State: AFuF++nSCH6XLLUATVuauZ6+H5Wm7g+QfeeHGJKv7SdwrKLkOwkh9pQk
-	ZbRzJvIxNO+fEGDQz5XpIzPw+pYmjyUDnV2DnCvzP0ZdQCjppj+tZ+Ke
-X-Gm-Gg: AYBFou2Slg66+vHvP6UOxv1apmaxt535w/7tFSpe3AqWSVGNJl7GVtPklAsSth0YA5R
-	LBdZex0Auz21gaxBbSPmep1h0NVLrFMG8Epu3lP8Kzi6EcClJqQvKUkckrZ4CWQGajkNNqH6j4T
-	un52iZXc2EZYGGkGBI4fw5lIpoh49hoLZcl7WVramVzBolQ90oycA4U3Uwzd3kkr4bSLnRb8WUM
-	H17mbGkUxb86xeoeR5skIIh8OlZLhY5FHLh6sSaZLW/vUsL2leZmvoFpb1NeCMb/AGv6W8m09dh
-	/l4kOQYKXqmoTjJYLD+nATFLu9s6Yea2IWyuRTbSmPfuU+PZAvLsCrZf4MpS+0ceocGo8SDHE4X
-	j+fa8ilFTtBzOYaYf3eQyPA9sXgpvEGbo/CTCYaz+kuTpA+n5EB4QnNa2RgDNNxjIRyXGHf52NO
-	l40UVgmapT5PTPBlmaghvMZH0XRZkOeBNTsgECNO8ppC4pds6PJKShthy1n+TPXl4dsMgf2Kh7H
-	r7ULJ/bCw==
-X-Received: by 2002:a17:907:8995:b0:c29:53ed:f0c6 with SMTP id a640c23a62f3a-c29d779c3aamr23025166b.17.1789463507903;
-        Tue, 15 Sep 2026 02:11:47 -0700 (PDT)
-Received: from mobilestation ([185.195.191.165])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2965c4e8a1sm552850266b.6.2026.09.15.02.11.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2026 02:11:47 -0700 (PDT)
-Date: Tue, 15 Sep 2026 12:11:43 +0300
-From: Joseph Steel <recv.jo@gmail.com>
-To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, shuah@kernel.org, 
-	joabreu@synopsys.com, yi.fang.gan@intel.com, jun.ann.lai@intel.com, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v4 3/7] net: stmmac: Rework S-VLAN handling
-Message-ID: <ybotecadvx2x3ucgqjunv77fuyeaxmwl5tn77fswraztiklrdo@ajhpl4c52hcy>
-References: <20260908164309.59282-1-ovidiu.panait.rb@renesas.com>
- <20260908164309.59282-4-ovidiu.panait.rb@renesas.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="uJAj+7Fx"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2122E169C;
+	Tue, 15 Sep 2026 02:21:46 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE9F33F86F;
+	Tue, 15 Sep 2026 02:21:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1789464109; bh=AFgqujhkJrGASZuwK6HMERYmbZ5P2W2+hv4OhaNPtQ4=;
+	h=From:Subject:Date:To:Cc:From;
+	b=uJAj+7FxYyzFDCCin5QvAMgMxPqvJQYfLVI2/HM4PNsF5rh2/8JMKPohoHSA675sB
+	 /zIu1nMYAXMldL4IMU/sq1jciDGHZZxs/vLJia2obRP/Xw/wNT18Vt7R1d16piAWPJ
+	 6Oa8fY5OWlEyWPhEPw6dTHJkCh4Gud8xXkJbMN9Q=
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [PATCH 0/2] kselftest: mm: fix intermittent failure khugepaged
+ test
+Date: Tue, 15 Sep 2026 10:21:35 +0100
+Message-Id: <20260915-fix_khugepagd_fail-v1-0-bb6f04c8759f@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260908164309.59282-4-ovidiu.panait.rb@renesas.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAB8OqWoC/x2MQQqAIBAAvxJ7TlAj0b4SIZKbLkWFUgTS35OOA
+ zNTIGMizDA0BRLelOnYK4i2gTm6PSAjXxkkl4ob0bOFHrvGK+DpgreLo40Zr00nlTaSc6jhmbB
+ a/3Sc3vcD6VER72QAAAA=
+To: Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>, 
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
+ Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, 
+ Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Yeoreum Yun <yeoreum.yun@arm.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2907; i=yeoreum.yun@arm.com;
+ h=from:subject:message-id; bh=AFgqujhkJrGASZuwK6HMERYmbZ5P2W2+hv4OhaNPtQ4=;
+ b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBqqQ4pqW6CqNXPPPXfOrgAwKvwi1qdYYBTYZw8A
+ wg9WRl42COJAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCaqkOKQAKCRBt1cPRWsUx
+ M+kMDAC+icNdo9ex8a/XcN4CcH19iOYi5hhEqweD7ih7Mxr27WHC7//A5zWJh+JHmFtogpa656r
+ A+t4r94LEmHzKngogkWejKyL0zYh8qgWeSg92dkn2zl0LDabvqduoG1tiGEQVuxsVUN6FEQIEB1
+ csmMDOU4SJEJ0P/lWZ53+wjTrbakbVfGdhsM1Yr8B56pBMZXGBm9nYA3bSyPNSWIHKvPRm5os/X
+ CqtM278tZymubu/tsOzNHqlXWCICpqQPyDjtbB2yI2glavvAKPjnDjUpmgZvfWnpFsrm/s8Hzex
+ ht1miaQ0sXrxIjYOjDY9xIml3vMGEdOFixFXsMf81kr48k1eA+HaosqW6C1rEmbr/+ZPaSktVQ3
+ bvAHVHo1SMeQtdLJdeJsgcrYrqwqj+oaGJS2hTApcgvI77BWpr7WVGd7inBbZRz6BxM7Jlt7OZa
+ rtI1EWUJ/GOA4WcAFlX7c3hDWxuP+4IuHKXPGL7qc50OhJ0C3hz+36AZuwbpoZxNxUwd8=
+X-Developer-Key: i=yeoreum.yun@arm.com; a=openpgp;
+ fpr=2D83E092DD0533B85875A49D6DD5C3D15AC53133
 
-Hi
+There are intermittent failures in collapse_max_ptes_swap() and
+collapse_max_ptes_shared() when using the khugepaged_context:
 
-On Tue, Sep 08, 2026 at 04:43:05PM +0000, Ovidiu Panait wrote:
-> The ESVL and DOVLTC bits control S-VLAN tag processing and have
-> nothing to do with the double VLAN feature, which only provides a way
-> to process an additional inner VLAN tag. However, the driver code
-> that handles them always refers to "double VLAN", which is unrelated
-> and makes the implementation confusing. The driver does not use any
-> of the inner VLAN tag features, and the networking core does not
-> support offloads for the inner tag anyway.
-> 
-> To simplify the logic and to reduce the confusion regarding S-Tag vs
-> double VLAN handling, drop the is_double logic and add a hw_svlan_en
-> flag that is set when S-Tag hardware handling is enabled.
+  # Run test: collapse_max_ptes_shared (khugepaged:anon)
+  # Allocate huge page... OK
+  # Share huge page over fork()... OK
+  # Trigger CoW on page 1023 of 2048... OK
+  # Maybe collapse with max_ptes_shared exceeded.... OK
+  # Trigger CoW on page 1024 of 2048... Fail
+  Bail out! Unexpected huge page
+  # Planned tests != run tests (26 != 23)
+  # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0
 
-I believe I suggested to just change the "double" word to "svlan", and
-not to drop the respective logic completely. The number of S-VLAN tags
-added/removed must be still counted, otherwise any subsequent VLAN
-S-Tag removal will disable S-VLAN processing even if there are S-Tags
-left added.
+  # Run test: collapse_max_ptes_swap (khugepaged:anon)
+  # Swapout 257 of 2048 pages... OK
+  # Maybe collapse with max_ptes_swap exceeded.... OK
+  # Swapout 256 of 2048 pages... OK
+  Bail out! Unexpected huge page
+  # Planned tests != run tests (26 != 17)
+  # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:0 error:0
 
--Joseph
+This happens because khugepaged may collapse the pages before wait_for_scan()
+is called, causing a sanity check that expects uncollapsed pages to fail.
 
-> 
+For example, in collapse_max_ptes_swap(), after faulting the pages back in
+and paging out up to max_ptes_swap pages, khugepaged may collapse them again
+before c->collapse() is called.
+
+To prevent this, change the khugepaged setting from ALWAYS to MADVICE for
+the affected tests, and mark the VMA with MADV_NOHUGEPAGE after it has been
+collapsed by wait_for_scan(). This prevents khugepaged from collapsing it
+again before c->collapse() is called.
+
+Also, fix false-positive results when a child process fails in tests
+such as collapse_fork*() or collapse_max_ptes_shared():
+
+  # -------------------------
+  # running ./khugepaged -s 2
+  # -------------------------
+  #
+  # Run test: collapse_max_ptes_shared (khugepaged:anon)
+  # Allocate huge page... OK
+  # Share huge page over fork()... OK
+  # Trigger CoW on page 1023 of 2048... OK
+  # Maybe collapse with max_ptes_shared exceeded.... OK
+  # Trigger CoW on page 1024 of 2048... Fail
+  Bail out! Unexpected huge page
+  # Planned tests != run tests (26 != 23)
+  # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0  // child failed.
+  # Check if parent still has huge page... OK              // parent hpage success
+  ok 24 collapse_max_ptes_shared                           // considered as success
+  ...
+  # Totals: pass:26 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+This failure was observed on NVIDIA Spark with 16KB page and this patch
+is based on mm/mm-unstable
+
+---
+Yeoreum Yun (2):
+      kselftest: mm: return fail when child test result is fail in khugepaged
+      kselftest: mm: fix intermittent failure khugepaged test
+
+ tools/testing/selftests/mm/khugepaged.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+---
+base-commit: 6b41451631cabf9ea3b384c2a099088e1598f963
+change-id: 20260915-fix_khugepagd_fail-9d8932689200
+
+Best regards,
+-- 
+Sincerely,
+Yeoreum Yun
 
