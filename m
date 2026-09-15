@@ -1,166 +1,220 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-242.mta0.migadu.com [91.218.175.242])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E6B390C9E;
-	Tue, 15 Sep 2026 11:30:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96F4E4A8FD1
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 12:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.242
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789471848; cv=none; b=utPHLQR3LLq5yIP/v/ZJoXwshSEURCOFpVY1bovCBK6RcityVrmCOngfPOibPi7sBa/C6Srx5wiY5Xg3TCfXdyv3N08AXKg1YsIeV5kWtYMXA0T2/bvDgXrgLnYXigVDiHsFmYp0gMeb3KzZLqpFLhUDkI+VR+5dLDmv/lHTR4Y=
+	t=1789475411; cv=none; b=CMmaO8HDCXeTQ3mgKG4HgP4RErs8ymR6059YNfaFuALlk49LYTXem13Ap0/+9eilUJeBk8uaTEQS7IT4QChKINE6nDwn57t/pO+2XIGT4sO6AKskAIhnK2/4vKKZtzkC/kQdU9dmZ5CMD64Ju7pATGmV/KUfg48WI72IBbYzMIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789471848; c=relaxed/simple;
-	bh=odVPNm+7LRHp0tjKuPnp4sfEi1fdkqz/WFeeAWo6QFA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VeW9ZZAzP4bC1O7cEf+b6GEwn6NlkNd/hDJGI5XBWERlf5er0YmIZyywF8QIJzx0+lxei5AOoxicSt8wllxAfo/Mi1cZMBGSPP3w4rCf5TsP7BRNbptxfOZUGROjIMqBD/6Bs8XosE5qtaZ3aj5XZs96NiKjkBPHcc0rJADR+X4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jgHCyQAl; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1789475411; c=relaxed/simple;
+	bh=TcY2wxf5+iePUwSde/atrLl8tfnWU0M7vr2yTNPUWv0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=prMXkqNAlMEIoNrcS9J9Okw+6mNpDzapzPpGxFTUyFn/2dastIMvLNGIDs6wO6WhIKdZXTH5GRJhGa/zg3lcAPzZ5k9FLndfOfeh+93bL2Rmhk8I8ZYFovaIspD0DlE4Gk6NVB3EYNIuZsm2gWC4RkbOR7Lm/sldBbQordCti6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=m1iq0bE6; arc=none smtp.client-ip=91.218.175.242
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jgHCyQAl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789471846; x=1821007846;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=odVPNm+7LRHp0tjKuPnp4sfEi1fdkqz/WFeeAWo6QFA=;
-  b=jgHCyQAlFd1IU9RO337FWJ/aIZIL1T92wdb5MGeVEEBjnHEcpa381rG8
-   eBTyPiL3i6KidPS4IQI9MRL8T6I6Gx74yOPN7OLZsSgfhwmzbOL1E6mTK
-   pF+0YafUzr6swhjCVA9mNEAlnhk9HUHTZvogTue6Ggb3nyxfn4fN+YBFN
-   GshiPEr6+BVI64iklwU+7kK4aMjKSJZkRx5IV4FGPCngGevo2oA/6qakB
-   AD0tYH839L80Qw03RzhNEdx9zrqkpu/v6WYYj5vbRRb0bDoH8Uo5eNMfB
-   EznSjpPqDfSaSefzlATMxtidycSL7ky9FopJGhqRHYtEauHNCA4qDALf/
-   Q==;
-X-CSE-ConnectionGUID: 6i3y18k2RPK5hlGN1nLxAQ==
-X-CSE-MsgGUID: Bs9oq7zsR0SBmqPiWAan5g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="100495589"
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="100495589"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2026 04:30:45 -0700
-X-CSE-ConnectionGUID: qWT5UoJmQryOQlPvSltQgg==
-X-CSE-MsgGUID: EEBG6GS1QbCdK3y/0gtbZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="270348266"
-Received: from fdefranc-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.246.253])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2026 04:30:40 -0700
-Date: Tue, 15 Sep 2026 14:30:36 +0300
-From: Tony Lindgren <tony.lindgren@linux.intel.com>
-To: =?iso-8859-1?Q?J=F6rg_R=F6del?= <joro@8bytes.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Liam Merwick <liam.merwick@oracle.com>,
-	Vishal Annapurve <vannapurve@google.com>,
-	Ninad Naik <ninadnaik07@gmail.com>,
-	Joerg Roedel <joerg.roedel@amd.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	coconut-svsm@lists.linux.dev
-Subject: Re: [PATCH v2 6/8] KVM: SEV: Add SNP vCPU state get and set commands
-Message-ID: <aqksXLLcmFDkM9Xj@tlindgre-MOBL1>
-References: <20260908103338.427254-1-joro@8bytes.org>
- <20260908103338.427254-7-joro@8bytes.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m1iq0bE6"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=TcY2wxf5+iePUwSde/atrLl8tfnWU0M7vr2yTNPUWv0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789475407; v=1; x=1790080207;
+ b=m1iq0bE6EI1OQpSG+bG1D6g7smnMjWbjXFBjVnAylHtNqW8p8FjKqrOXNzpflkqhr9HFX/V1
+ QIc6qA3QAWdDdj0r49Dp8lNwEwBCWHcX37nJcAqHH+AJj2QK7m8eeyZeflT0Iyi7KQEOyBPyR2X
+ +dBrxi4bjVYQtIzyvR27j/Hw=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 93ffe1fc753e266b;
+	Tue, 15 Sep 2026 12:30:04 +0000
+X-Mizu-Trace-ID: 93ffe1fc753e266b
+X-Migadu-Flow: FLOW_OUT
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Roman Gushchin <roman.gushchin@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v11 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+Date: Tue, 15 Sep 2026 20:29:35 +0800
+Message-ID: <ee6bcf945910babab2200f05040975492aed21b3.1789475073.git.zhuhui@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1789475073.git.zhuhui@kylinos.cn>
+References: <cover.1789475073.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260908103338.427254-7-joro@8bytes.org>
 
-On Tue, Sep 08, 2026 at 12:33:36PM +0200, Jörg Rödel wrote:
-> From: Joerg Roedel <joerg.roedel@amd.com>
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-...
-> +static int snp_get_vcpu_state(struct kvm_vcpu *vcpu,
-> +			      struct kvm_sev_cmd *argp)
-> +{
-> +	struct vcpu_svm *svm = to_svm(vcpu);
-> +	struct kvm *kvm = vcpu->kvm;
-> +	struct kvm_sev_snp_vcpu_state state = {};
-> +
-> +	if (!is_sev_snp_guest(vcpu))
-> +		return -ENOTTY;
-> +	if (!to_kvm_sev_info(kvm)->snp_context)
-> +		return -EINVAL;
-> +
-> +	guard(mutex)(&svm->sev_es.snp_vmsa_mutex);
-> +
-> +	if (VALID_PAGE(svm->sev_es.snp_guest_vmsa_gpa) &&
-> +	    VALID_PAGE(svm->vmcb->control.vmsa_pa)) {
-> +		state.vmsa_gpa = svm->sev_es.snp_guest_vmsa_gpa;
-> +		state.valid_fields |= KVM_SEV_SNP_VCPU_STATE_VMSA_VALID;
-> +	}
-> +
-> +	if (VALID_PAGE(svm->vmcb->control.ghcb_gpa)) {
-> +		state.ghcb_gpa = svm->vmcb->control.ghcb_gpa;
-> +		state.valid_fields |= KVM_SEV_SNP_VCPU_STATE_GHCB_VALID;
-> +	}
-> +
-> +	if (copy_to_user(u64_to_user_ptr(argp->data), &state, sizeof(state)))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
-> +static int snp_set_vcpu_state(struct kvm_vcpu *vcpu,
-> +			      struct kvm_sev_cmd *argp)
-> +{
-> +	struct vcpu_svm *svm = to_svm(vcpu);
-> +	struct kvm *kvm = vcpu->kvm;
-> +	struct kvm_sev_info *sev = to_kvm_sev_info(kvm);
-> +	struct kvm_sev_snp_vcpu_state state;
-> +	int ret;
-> +
-> +	if (!is_sev_snp_guest(vcpu))
-> +		return -ENOTTY;
-> +	if (!sev->snp_direct_vmsa)
-> +		return -EINVAL;
-> +	if (!sev->snp_context || kvm->arch.pre_fault_allowed)
-> +		return -EINVAL;
-> +
-> +	if (copy_from_user(&state, u64_to_user_ptr(argp->data), sizeof(state)))
-> +		return -EFAULT;
-> +
-> +	if (memchr_inv(state.pad, 0, sizeof(state.pad)) ||
-> +	    state.valid_fields & ~(KVM_SEV_SNP_VCPU_STATE_VMSA_VALID |
-> +				   KVM_SEV_SNP_VCPU_STATE_GHCB_VALID))
-> +		return -EINVAL;
-> +
-> +	if (state.valid_fields & KVM_SEV_SNP_VCPU_STATE_VMSA_VALID) {
-> +		if (!PAGE_ALIGNED(state.vmsa_gpa) ||
-> +		    !page_address_valid(vcpu, state.vmsa_gpa) ||
-> +		    IS_ALIGNED(state.vmsa_gpa, PMD_SIZE))
-> +			return -EINVAL;
-> +	}
-> +
-> +	guard(mutex)(&svm->sev_es.snp_vmsa_mutex);
-> +
-> +	if (state.valid_fields & KVM_SEV_SNP_VCPU_STATE_VMSA_VALID) {
-> +		ret = sev_snp_install_guest_vmsa(svm, state.vmsa_gpa);
-> +		if (ret)
-> +			return ret;
-> +	} else {
-> +		svm->sev_es.snp_has_guest_vmsa = true;
-> +		svm->sev_es.snp_guest_vmsa_gpa = INVALID_PAGE;
-> +		svm->vmcb->control.vmsa_pa = INVALID_PAGE;
-> +	}
-> +
-> +	if (state.valid_fields & KVM_SEV_SNP_VCPU_STATE_GHCB_VALID)
-> +		svm->vmcb->control.ghcb_gpa = state.ghcb_gpa;
-> +	else
-> +		svm->vmcb->control.ghcb_gpa = INVALID_PAGE;
-> +
-> +	vmcb_mark_all_dirty(svm->vmcb);
-> +	return 0;
-> +}
-> +
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-Nice, looks like snp_get/set_vcpu_state() could quite easily make use
-of KVM_EXPORT/IMPORT_VCPU?
+BPF programs can observe memory pressure on a cgroup, e.g. refault
+stats via bpf_mem_cgroup_page_state(), but cannot act on it:
+triggering reclaim requires writing to memory.reclaim, which BPF
+cannot do.
+
+Add bpf_proactive_reclaim(), a sleepable kfunc performing one
+proactive reclaim pass on a memcg, like a write to memory.reclaim
+but without retrying until the target is reached, so that when and
+how hard to reclaim is BPF policy rather than hard-coded thresholds.
+The reclaim target of a single call is capped at MEMCG_CHARGE_BATCH,
+as high_work_func() does for memory.high; reclaiming more is left to
+the program, which can call the kfunc once per bpf_wq callback and
+stop at any point. It is limited to BPF_PROG_TYPE_SYSCALL, because
+other sleepable programs may run with filesystem locks held, on
+which the reclaim path could deadlock via filesystem shrinkers.
+
+Convert MIN_SWAPPINESS, MAX_SWAPPINESS and SWAPPINESS_ANON_ONLY from
+macros to an enum so that they are emitted into BTF and usable from
+BPF programs via vmlinux.h.
+
+Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+---
+ mm/bpf_memcontrol.c | 61 ++++++++++++++++++++++++++++++++++++++++++++-
+ mm/internal.h       | 10 +++++---
+ 2 files changed, 66 insertions(+), 5 deletions(-)
+
+diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+index 716df49d7647..d6b6f4f8359a 100644
+--- a/mm/bpf_memcontrol.c
++++ b/mm/bpf_memcontrol.c
+@@ -8,6 +8,8 @@
+ #include <linux/memcontrol.h>
+ #include <linux/bpf.h>
+ 
++#include "internal.h"
++
+ __bpf_kfunc_start_defs();
+ 
+ /**
+@@ -159,6 +161,47 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
+ 	mem_cgroup_flush_stats(memcg);
+ }
+ 
++/**
++ * bpf_proactive_reclaim - proactively reclaim memory from a memory cgroup
++ * @memcg: the target memory cgroup to reclaim from
++ * @size: the amount of memory to reclaim, in bytes, clamped to
++ *        MEMCG_CHARGE_BATCH
++ * @swappiness: the reclaim swappiness, in the range [MIN_SWAPPINESS,
++ *              SWAPPINESS_ANON_ONLY], or -1 to use the memcg's own
++ *
++ * Performs one proactive reclaim pass on @memcg, like a write to
++ * memory.reclaim but without retrying until @size is reached. Call it
++ * repeatedly to reclaim more than one batch.
++ *
++ * Only available to BPF_PROG_TYPE_SYSCALL, because other sleepable programs
++ * may run with filesystem locks held, which the reclaim path can deadlock
++ * on via filesystem shrinkers.
++ *
++ * Return: The amount of memory reclaimed, in bytes, or a negative error.
++ */
++__bpf_kfunc long bpf_proactive_reclaim(struct mem_cgroup *memcg,
++				       unsigned long size,
++				       int swappiness)
++{
++	unsigned long nr_reclaimed;
++	unsigned long nr_pages;
++
++	if (swappiness < -1 || swappiness > SWAPPINESS_ANON_ONLY)
++		return -EINVAL;
++
++	if (size < PAGE_SIZE)
++		return -EINVAL;
++
++	nr_pages = min(size / PAGE_SIZE, (unsigned long)MEMCG_CHARGE_BATCH);
++
++	nr_reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages, GFP_KERNEL,
++						    MEMCG_RECLAIM_MAY_SWAP |
++						    MEMCG_RECLAIM_PROACTIVE,
++						    swappiness == -1 ? NULL : &swappiness);
++
++	return nr_reclaimed * PAGE_SIZE;
++}
++
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(bpf_memcontrol_kfuncs)
+@@ -174,19 +217,35 @@ BTF_ID_FLAGS(func, bpf_mem_cgroup_flush_stats, KF_SLEEPABLE)
+ 
+ BTF_KFUNCS_END(bpf_memcontrol_kfuncs)
+ 
++BTF_KFUNCS_START(bpf_memcontrol_reclaim_kfuncs)
++BTF_ID_FLAGS(func, bpf_proactive_reclaim, KF_SLEEPABLE)
++BTF_KFUNCS_END(bpf_memcontrol_reclaim_kfuncs)
++
+ static const struct btf_kfunc_id_set bpf_memcontrol_kfunc_set = {
+ 	.owner          = THIS_MODULE,
+ 	.set            = &bpf_memcontrol_kfuncs,
+ };
+ 
++static const struct btf_kfunc_id_set bpf_memcontrol_reclaim_kfunc_set = {
++	.owner          = THIS_MODULE,
++	.set            = &bpf_memcontrol_reclaim_kfuncs,
++};
++
+ static int __init bpf_memcontrol_init(void)
+ {
+ 	int err;
+ 
+ 	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
+ 					&bpf_memcontrol_kfunc_set);
+-	if (err)
++	if (err) {
+ 		pr_warn("error while registering bpf memcontrol kfuncs: %d", err);
++		return err;
++	}
++
++	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
++					&bpf_memcontrol_reclaim_kfunc_set);
++	if (err)
++		pr_warn("error registering bpf reclaim kfuncs: %d\n", err);
+ 
+ 	return err;
+ }
+diff --git a/mm/internal.h b/mm/internal.h
+index 38b1165212c9..44e95e87e3cd 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -74,11 +74,13 @@ unsigned long lruvec_lru_size(struct lruvec *lruvec, enum lru_list lru,
+ 
+ #define MEMCG_RECLAIM_MAY_SWAP (1 << 1)
+ #define MEMCG_RECLAIM_PROACTIVE (1 << 2)
+-#define MIN_SWAPPINESS 0
+-#define MAX_SWAPPINESS 200
++enum {
++	MIN_SWAPPINESS = 0,
++	MAX_SWAPPINESS = 200,
+ 
+-/* Just reclaim from anon folios in proactive memory reclaim */
+-#define SWAPPINESS_ANON_ONLY (MAX_SWAPPINESS + 1)
++	/* Just reclaim from anon folios in proactive memory reclaim */
++	SWAPPINESS_ANON_ONLY = MAX_SWAPPINESS + 1,
++};
+ 
+ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 					   unsigned long nr_pages,
+-- 
+2.43.0
+
