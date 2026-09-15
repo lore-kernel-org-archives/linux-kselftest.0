@@ -1,91 +1,68 @@
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1E14BD79A
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 17:43:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B9649E5E6;
+	Tue, 15 Sep 2026 17:56:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.147.86
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789494216; cv=none; b=QcAaCq6bmm0KCnszhlFiyDjEEr/xl33cLYABnOJVQUu8oNUHNeVv0higlcwTLDQ+1h49wSyQ+ysM3qmVcBQSGmUHqRZos2GXfF7+MgXIWUg3JXNlWVBSXE57sErEKeODJtPy7HLlAWP+1CW+adjmWQdBVdjfkWKAjHm6BA2moL0=
+	t=1789494980; cv=none; b=DB8NlwizsfdHQDYCC2tybaTcg9dV6M7Uf5a/XHEbo2TdU+nROr4yYXcTPIUQfTr9G0ihyb6MVTsAHxHIHsh0WEmWWzubyB3XiT198SH+Ee6qEsEYGxDnhYHS7eW/yIXKiksgUbDJUfXCl6uDgKC1SY7KNGgPmI8EB/6TnDbxgCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789494216; c=relaxed/simple;
-	bh=2Qb0/zNGbWdfLqIl2/hEdN2XdIGVrGsupUwvjhaalpI=;
+	s=arc-20240116; t=1789494980; c=relaxed/simple;
+	bh=EwzSM2YpKfya0JXRveWZ69rYR1xw5kgFdDFZ8hLc6HA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gQz0fx1up9NZpbRrSqqmZB49w8fSVAyuWx5P4pyvB+pZv7x9d19eq+RLew1Rhrlqf/YGjqbhCswnJENVGg75Og4uUiux8xtIIyXnIbGcJI2kk4uzuHiLtJsL70thEq6JTgoTsbZylyKOPToX67Qc3OpzXKgI/vYKwgzwm3awN6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CXQVWNfr; arc=none smtp.client-ip=209.85.210.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=IIPXy0gSGUhChIq94CbuID7ItJHmRK71c23nHUqBiFdBbkhvEJHXtT9lz/KnjBrB2zsXFeJxelCam5q5hQC/IY0kH+DZ9L9KYagxaBAQVa5xUrIUTcq8O5MXdNJNVjNKElRSE6Nc8hdrdlpqCjwZELOJn5n4qsDseyx7n9+pUAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=JtkvPdj9; arc=none smtp.client-ip=148.163.147.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CXQVWNfr"
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7f4df360cc9so1060718a34.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 10:43:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789494208; x=1790099008; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=UT4ouAJLFU2Y0pobOZCiwGU7eYX5lu0wzqAZh/2lqXU=;
-        b=CXQVWNfrRZ4GnugKS8hGIPnD7dMR/gXzEetZyPwZSE2DDKUsfZtdlzj98QdyrAwIDI
-         /bORgxtSnHh89UNA+O88gYJAFws1ttU0Dbf97zY37lcazcji8aJ01U8/BFi8urW3/NvK
-         KewIyg3ns3zr5KfncK3SudwyiqJqLg+VYranZ8FKw1PueJdAvCfsKjz2NKISQGCiyC9f
-         WY94ZVtxsKqIHFrpInLlVuG73iNhY8YXqbEe4LKHPDpuKCgluVzIrw+4Lm5m8wuOtEXF
-         fdr3nYXbs9PwnJZtyNzMUWagftl/N5lYOlokb6k0uau/bMWxDWIxDpXzsckTYHXZJe7t
-         QuAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789494208; x=1790099008;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UT4ouAJLFU2Y0pobOZCiwGU7eYX5lu0wzqAZh/2lqXU=;
-        b=yuNRzjLi5dgTl7KrXEMP2YLUIi97mf+0ErFRhfq5Jwhpp8jFcys1VeOzIyzRv429oZ
-         m8PPStGDp997Y6iQIvRR+Q0F0f+07WRx47HyUUAikL2moMS7r+bZyBsBfgVY0Rn9YVlh
-         O0Q3k3Go6U/Yk4CmrRkSyqPJqj4I4gEtv+avnypYhy89T2OsxBOVckjnRDbIIc9V3qCL
-         4qeJIRQW0WSGdJDOtzn0qL6z3r/aPkkMdVSe3FHvmxCgOLnVhJ8Jo+cDxQ6fiWBuB4yQ
-         octbC3JGn5zXX25F6SQmMgXR+TrOO65GsWbK71sEkPXbc2RPuk+j9ufb1AiTGoFOpSR8
-         VCzw==
-X-Forwarded-Encrypted: i=1; AKwUvBzUYXXoZjYKsdQlCFNXWwchoDJTBK5lrM5rXRwxgwxf7bkrD8hYFhwJDYJX8KpIA07Ge8REMafPfdhDsHv1qSM=@vger.kernel.org
-X-Gm-Message-State: AFuF++nqUOZb8U4cCsqxmk/FqnGKXdeSa89vZSacpGIJzQ1CR2dg5v9L
-	BM12liGXbpAlzeP32vWJJdFCtMqkfKam1iBX/HJhyY5VJjKo3J01yQHT
-X-Gm-Gg: AYBFou0xq8wKpPd1zT1kltAIgHsFjudcWWZKx4EF2RJKqe49YlVTutZKoKnE7oMAHiJ
-	lkccFhh4hrp/Bc8/elWRIeNOOWDfEdHwmWvG2qcpJdHilpmCCcNPxna+jVURL9geFlLd0+RCceA
-	f6kSUYOayPdViyx4GO6PFff3dT2KokOP9finoGYA/afL2+zoKRncG17/Hv+ODiu9AcTLyQgCO4s
-	1P6GK9FdbL84ow+Cwl/G3PsHTIKsdQdVTQdzpK4bulkIM57rklVUO9UWPJ7UK/TDJ6n7BLdmV30
-	J4eLzGFO7efqno7X7wIbenz8lA9bvINZLnEs3dEmwaOPqEw8gC54rdlZ3wBfKKerj+AqMT7vTtY
-	8z40fhs541ed+x3udAjwRh+DCQBzeKfDCNZh/oWPYczM2UxExgZClFGJ48Q8hGhcHqWLOKRwiyh
-	20/Ww2VBY+eFi8Fg+0DyevaQI2gIzkiaLLH0SxCHAMHpIeUkyPv7HaMCqWfaH2A1CkA6dVxIb6l
-	ZrjW/0V6uQpvd7uP/I5
-X-Received: by 2002:a9d:7d8d:0:b0:804:36ec:d875 with SMTP id 46e09a7af769-809823dcba1mr2371764a34.4.1789494207629;
-        Tue, 15 Sep 2026 10:43:27 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:50::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-80505548bbfsm12975740a34.18.2026.09.15.10.43.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2026 10:43:27 -0700 (PDT)
-Date: Tue, 15 Sep 2026 10:43:23 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowangio@gmail.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	sargun@sargun.me, jlinbox@meta.com,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next 0/6] vsock: assign the guest vsock device to a
- network namespace
-Message-ID: <aqmDuxMuEN5lS/0J@devvm29614.prn0.facebook.com>
-References: <20260902-vsock-guest-ns-v1-0-9995383e9a8b@meta.com>
- <apqGcFDFm9_Wtw4q@sgarzare-redhat>
- <apsANK7ySuRzzK0V@devvm29614.prn0.facebook.com>
- <aqkaTXHDf5nfPL9w@sgarzare-redhat>
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="JtkvPdj9"
+Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
+	by mx0a-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68FHsVqr2942025;
+	Tue, 15 Sep 2026 17:55:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pps0720; bh=PNlXKXX5IyXBrJN4ylgfbuPEUG
+	zQwPHtOwfHhk/bIe4=; b=JtkvPdj9EgRpDPcHrWl7UiRg4FD51sG7bJwVBqU6NW
+	Uf9ZBrOUOIdWZdWKf3O6D1LdCvuCCfHBVsothhkDzcEQvQqpUa+X3DE2tXlkrmaq
+	TwHA1tHiyDDO39sk9SEBf3lo8SVxRGAdRe/PmOH1oG2U32Ew1HRH3/0SvQnq+ooO
+	K2eGSGVE35K+NtUNjDt9OOnemYoYORplPC7JhdkdpeH9DTdCYMi3Gziqdeq3MRUw
+	O5s18X3g6ws5CMnEnGIjZAuhE5rAO37Xlpzok4myiSzSteUdQL3O4OYsdgwNOqRJ
+	wJibhZ7YuJ/A1lYAxITpmgTpsQD3Am432oLyRbNyZ3hw==
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 4gq95pstj8-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 15 Sep 2026 17:55:12 +0000 (GMT)
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 6BD1312EB9;
+	Tue, 15 Sep 2026 17:55:11 +0000 (UTC)
+Received: from HPE-5CG20646DK.localdomain (unknown [16.231.227.36])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTPS id B4FBC805E88;
+	Tue, 15 Sep 2026 17:55:06 +0000 (UTC)
+Date: Tue, 15 Sep 2026 12:55:03 -0500
+From: Kyle Meyer <kyle.meyer@hpe.com>
+To: Michal Hocko <mhocko@suse.com>
+Cc: akpm@linux-foundation.org, corbet@lwn.net, david@redhat.com,
+        linmiaohe@huawei.com, shuah@kernel.org, tony.luck@intel.com,
+        jane.chu@oracle.com, jiaqiyan@google.com, Liam.Howlett@oracle.com,
+        bp@alien8.de, hannes@cmpxchg.org, jack@suse.cz,
+        joel.granados@kernel.org, laoar.shao@gmail.com,
+        lorenzo.stoakes@oracle.com, mclapinski@google.com,
+        nao.horiguchi@gmail.com, osalvador@suse.de, rafael.j.wysocki@intel.com,
+        rppt@kernel.org, russ.anderson@hpe.com, shawn.fan@intel.com,
+        surenb@google.com, vbabka@suse.cz, linux-acpi@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v3] mm/memory-failure: Support disabling soft offline for
+ HugeTLB pages
+Message-ID: <aqmGd0GGUCkbZpkZ@hpe.com>
+References: <aqiIEkrc6aDBOqRg@hpe.com>
+ <aqkCbgHmMGxI_GLG@tiehlicka>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,98 +71,97 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aqkaTXHDf5nfPL9w@sgarzare-redhat>
+In-Reply-To: <aqkCbgHmMGxI_GLG@tiehlicka>
+X-Proofpoint-ORIG-GUID: ZGyhASJQPrkZtald6s-qe-XaJzb3rLwu
+X-Authority-Analysis: v=2.4 cv=SJ3Xx+vH c=1 sm=1 tr=0 ts=6aa98681 cx=c_pps
+ a=5jkVtQsCUlC8zk5UhkBgHg==:117 a=5jkVtQsCUlC8zk5UhkBgHg==:17
+ a=kj9zAlcOel0A:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=gQcMVamqm3wCPoSYhaRC:22 a=_ZmgHqWwjZUDpi_pur5s:22 a=VwQbUJbxAAAA:8
+ a=MvuuwTCpAAAA:8 a=OCHxr62PC90mTwIpeikA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE1MDI2MCBTYWx0ZWRfX/bF3jfMe5L2R
+ j63mU1nIBKQUtxaBXijRxEhjpUkMVc4zIvOsjeAo1gXa6d8EaQ3zY67L76NuqyOpj1PqfHtArmO
+ 2vl0Zj/ywj1xKqs1a/mzZMNwlkOXYrqejAwJQ505r93PdMuHej9YKGoy+OOhjdgIGcbnHU5kPaU
+ yvvrSCWy5ejLgHtdaE3GjSon0dkRbhoyLPGlPM5ivm10iaII7ndWeW/6v4Wb+WicsOGN6iGbq5y
+ TmACnEazHYCmP+PBiUKK1AlL2cSjGIx6qbmqEPScHv5nRJqfghhw+WYCVTjioKj934H6QVwbEyn
+ +l7ofYSeMOrVz1JhspzsrFr1N4lD/2CI+O885v1QKv5nzT3CrROQPCxW5DGn1rcxZV1AAEnv7EB
+ 8HBx6GOAVf7DeSMdD7b3ATQFGeRAgDSkWYdpFHxj64RkQev4NJH17HwCiED+iffIRQ5Flebq0JV
+ zWia0hniMaXW7l/WWHg==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE1MDI2MCBTYWx0ZWRfX63h0+WaHo6KX
+ o28u0TT4xIFnPPwvxBVPnt73ZCm6PXqMR4K+TANuw3CaFV5L9FIl2AQlI4GVDKvAEj81K9dRKGJ
+ DaYbaSq0UXlb+dnZCcP9Cbxr0DS1x+w=
+X-Proofpoint-GUID: ZGyhASJQPrkZtald6s-qe-XaJzb3rLwu
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-15_05,2026-09-15_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 priorityscore=1501 phishscore=0 adultscore=0 bulkscore=0
+ clxscore=1015 lowpriorityscore=0 malwarescore=0 spamscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609150260
 
-On Tue, Sep 15, 2026 at 12:16:47PM +0200, Stefano Garzarella wrote:
-> On Fri, Sep 04, 2026 at 10:30:28AM -0700, Bobby Eshleman wrote:
-> > On Fri, Sep 04, 2026 at 10:55:17AM +0200, Stefano Garzarella wrote:
-> > > On Wed, Sep 02, 2026 at 04:00:46PM -0700, Bobby Eshleman wrote:
-> > > > vsock network namespaces let a host put each VM in a namespace of its
-> > > > own. A guest has no equivalent yet. It has a single G2H device that
-> > > > cannot be assigned to a network namespace.
-> > > 
-> > > Thanks for this, I'll do a proper review next week, in the mean time some
-> > > comments below:
-> > > 
-> > > >
-> > > > This series lets a guest move that device into a network namespace. A
-> > > > new ioctl on /dev/vsock, IOCTL_VM_SOCKETS_ASSIGN_G2H_NETNS, assigns the
-> > > > device to the namespace of the calling process. The namespace's existing
-> > > 
-> > > Why an ioctl?
-> > > 
-> > > I'm asking because I'd like to know if you've already considered any
-> > > alternatives (sysfs, netlink, etc.)
-> > > 
-> > > How do you think the ioctl should be used? Should we provide an userspace
-> > > tool, or extending some existing tools?
-> > > 
-> > > Thanks,
-> > > Stefano
+On Tue, Sep 15, 2026 at 10:31:42AM +0200, Michal Hocko wrote:
+> On Mon 14-09-26 18:49:38, Kyle Meyer wrote:
+> > Soft offlining a HugeTLB page dissolves it, permanently reducing the
+> > HugeTLB page pool. This can be problematic for workloads that depend on
+> > a fixed number of HugeTLB pages.
 > > 
-> > Really only because /dev/vsock exists and the prior series used it.
-> 
-> Yeah, I vaguely remember that we may have discussed switching to netlink in
-> that thread, but I can't find it.
-> 
+> > Currently, soft offline must be disabled to prevent HugeTLB pages from
+> > being soft offlined.
 > > 
-> > Considering netlink, it might be the better option because there is a
-> > lot of prior art solving problems we might have in the future. For
-> > example, I was thinking about when users suddenly lose access to vsock,
-> > with just the current assign ioctl there is no way for apps or users to
-> > figure out why this happened. We can have an ioctl() setter for user,
-> > but in netdev world users can actually get a notification via netlink as
-> > to which namespace the device went to and what its ifindex is there (see
-> > __dev_change_net_namespace() for the RTM_DELLINK and RTM_NEWLINK
-> > messages). There is probably more, but that's the case that comes to
-> > mind.
-> 
-> netlink seems like the right way to go, do you think it'll be a real pain to
-> implement?
-
-It is really not bad... it'll include a yaml spec in
-Documentation/netlink/specs/ of call names and perms, a new target for
-generated code in the Makefile, a handler, and then
-tools/net/ynl/ynl-regen.sh generates the plumbing.
-
-> 
+> > This patch allows soft offline to be disabled for HugeTLB pages while
+> > remaining enabled for non-HugeTLB pages.
 > > 
-> > > 
-> > > > ns_mode then decides who may use it: a "global" namespace shares the
-> > > > device with every other global namespace, and a "local" namespace keeps
-> > > > the host connection to itself. The device starts out in the initial
-> > > > namespace, so until the ioctl is issued nothing has moved and no mode
-> > > > has changed. There is no explicit unassign as assigning the device back
-> > > > to the initial namespace is equivalent.
-> > > >
-> > > > The ioctl requires CAP_NET_ADMIN in the initial user namespace.
-> > > >
-> > > > Connections that can no longer reach the device after a move are reset,
-> > > > so that a namespace which has lost access cannot keep using a socket it
-> > > > opened while it still had access. Following netdevs, the device returns
-> > > > to the initial namespace when the namespace it was moved to is deleted.
-> > > >
-> > > > Transports opt in through a new netns_assign_allow callback. Only
-> > > > virtio-vsock implements it here.
-> > > 
-> > > Why? (Not asking to support all the others, asking to explain the reason or
-> > > ask helps from others to extend it)
-> > > 
-> > > Thanks,
-> > > Stefano
+> > Commit 56374430c5dfc ("mm/memory-failure: userspace controls
+> > soft-offlining pages") introduced the following sysctl interface to
+> > control soft offline:
 > > 
-> > Sure, can add a note here about extending it. I just didn't want to
-> > implement code without having an environment allowing me to test it.
+> > /proc/sys/vm/enable_soft_offline
+> > 
+> > The interface does not distinguish between page types:
+> > 
+> >     0 - Soft offline is disabled
+> >     1 - Soft offline is enabled
+> > 
+> > Convert enable_soft_offline to a bitmask and support disabling soft
+> > offline for HugeTLB pages:
+> > 
+> > Bits:
+> > 
+> >     0 - Enable soft offline
+> >     1 - Disable soft offline for HugeTLB pages
+> > 
+> > Supported values:
+> > 
+> >     0 - Soft offline is disabled
+> >     1 - Soft offline is enabled
+> >     3 - Soft offline is enabled (disabled for HugeTLB pages)
+> > 
+> > Existing behavior is preserved.
+> > 
+> > Update documentation and HugeTLB soft offline selftests.
 > 
-> It's fine, I'm not asking you to do it ;-)
-> 
-> Sorry again for the delay, I hope to review this series today/tomorrow.
-> 
-> Thanks,
-> Stefano
-> 
+> This is adding a lot of user interfaces to control something you can
+> disable by config option for an admin only functionality.
 
-No rush!
+I may be missing it, but I'm not aware of a config option that disables soft
+offline specifically for HugeTLB pages.
 
-Thanks,
-Bobby
+> I fail to to see any actual justification for all of that. If an admin
+> can disolve a hugetlb page it has power to allocate a new one as well.
+
+Allocating HugeTLB pages after boot is not guaranteed.
+
+> Not to menation that the whole soft offlining is mostly a testing
+> feature so adding a lot of fine grained configuration space seems
+> excessive to me.
+
+Can you elaborate on "mostly a testing feature"? For example, how does that
+apply to the BIOS/GHES path discussed here?
+
+https://lore.kernel.org/all/aMkOCmGBhZKhKPrI@hpe.com
+
+If you think this should be handled differently, I'm open to suggestions.
+
+Thanks for the feedback,
+Kyle Meyer
