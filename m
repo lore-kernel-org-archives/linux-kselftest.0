@@ -1,68 +1,90 @@
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f43.google.com (mail-oo2-f43.google.com [74.125.231.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B9649E5E6;
-	Tue, 15 Sep 2026 17:56:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.147.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 236344BE454
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 18:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789494980; cv=none; b=DB8NlwizsfdHQDYCC2tybaTcg9dV6M7Uf5a/XHEbo2TdU+nROr4yYXcTPIUQfTr9G0ihyb6MVTsAHxHIHsh0WEmWWzubyB3XiT198SH+Ee6qEsEYGxDnhYHS7eW/yIXKiksgUbDJUfXCl6uDgKC1SY7KNGgPmI8EB/6TnDbxgCA=
+	t=1789496096; cv=none; b=XjLmDsW7kCSvZ/r/JNsFcXNqXYDOllgq9/xizuidk3ZEXsd3dZ8SSKMvhjS0tf6qlwZI63mS1XLRgzdZ+daikybIf+DNNNJ7xEXIkUwNuq+AXEQmylhx/yoVeTsWRP4/z4Lu7SEeRg67nyfqrED5E8UpMERTtJh9gJ5XYbz+qL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789494980; c=relaxed/simple;
-	bh=EwzSM2YpKfya0JXRveWZ69rYR1xw5kgFdDFZ8hLc6HA=;
+	s=arc-20240116; t=1789496096; c=relaxed/simple;
+	bh=Zqxttmoi5XngJammIPSIG6qDpq3OZ3kZrZhzLN5W27E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IIPXy0gSGUhChIq94CbuID7ItJHmRK71c23nHUqBiFdBbkhvEJHXtT9lz/KnjBrB2zsXFeJxelCam5q5hQC/IY0kH+DZ9L9KYagxaBAQVa5xUrIUTcq8O5MXdNJNVjNKElRSE6Nc8hdrdlpqCjwZELOJn5n4qsDseyx7n9+pUAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=JtkvPdj9; arc=none smtp.client-ip=148.163.147.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=cgGM8cD7OeHZ7d+U3Ftj2yFxI2PDKQpE7s8AKYT+kDMC4oRqM95KW+uPB5WjNOJdpOqEZKVXq/FrqxWbPxmmah91jYqzEnsrKjRzEl2l/EGWMWPRPZGrY63EpdaTr8+eVDlUqjT/fN76uZGsVbZAlBzqi/W3lpBfNMu90MapK5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=abmd9RTM; arc=none smtp.client-ip=74.125.231.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="JtkvPdj9"
-Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
-	by mx0a-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68FHsVqr2942025;
-	Tue, 15 Sep 2026 17:55:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps0720; bh=PNlXKXX5IyXBrJN4ylgfbuPEUG
-	zQwPHtOwfHhk/bIe4=; b=JtkvPdj9EgRpDPcHrWl7UiRg4FD51sG7bJwVBqU6NW
-	Uf9ZBrOUOIdWZdWKf3O6D1LdCvuCCfHBVsothhkDzcEQvQqpUa+X3DE2tXlkrmaq
-	TwHA1tHiyDDO39sk9SEBf3lo8SVxRGAdRe/PmOH1oG2U32Ew1HRH3/0SvQnq+ooO
-	K2eGSGVE35K+NtUNjDt9OOnemYoYORplPC7JhdkdpeH9DTdCYMi3Gziqdeq3MRUw
-	O5s18X3g6ws5CMnEnGIjZAuhE5rAO37Xlpzok4myiSzSteUdQL3O4OYsdgwNOqRJ
-	wJibhZ7YuJ/A1lYAxITpmgTpsQD3Am432oLyRbNyZ3hw==
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 4gq95pstj8-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 15 Sep 2026 17:55:12 +0000 (GMT)
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 6BD1312EB9;
-	Tue, 15 Sep 2026 17:55:11 +0000 (UTC)
-Received: from HPE-5CG20646DK.localdomain (unknown [16.231.227.36])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTPS id B4FBC805E88;
-	Tue, 15 Sep 2026 17:55:06 +0000 (UTC)
-Date: Tue, 15 Sep 2026 12:55:03 -0500
-From: Kyle Meyer <kyle.meyer@hpe.com>
-To: Michal Hocko <mhocko@suse.com>
-Cc: akpm@linux-foundation.org, corbet@lwn.net, david@redhat.com,
-        linmiaohe@huawei.com, shuah@kernel.org, tony.luck@intel.com,
-        jane.chu@oracle.com, jiaqiyan@google.com, Liam.Howlett@oracle.com,
-        bp@alien8.de, hannes@cmpxchg.org, jack@suse.cz,
-        joel.granados@kernel.org, laoar.shao@gmail.com,
-        lorenzo.stoakes@oracle.com, mclapinski@google.com,
-        nao.horiguchi@gmail.com, osalvador@suse.de, rafael.j.wysocki@intel.com,
-        rppt@kernel.org, russ.anderson@hpe.com, shawn.fan@intel.com,
-        surenb@google.com, vbabka@suse.cz, linux-acpi@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3] mm/memory-failure: Support disabling soft offline for
- HugeTLB pages
-Message-ID: <aqmGd0GGUCkbZpkZ@hpe.com>
-References: <aqiIEkrc6aDBOqRg@hpe.com>
- <aqkCbgHmMGxI_GLG@tiehlicka>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="abmd9RTM"
+Received: by mail-oo2-f43.google.com with SMTP id 006d021491bc7-6bcc0c495efso79005eaf.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 11:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789496092; x=1790100892; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=F+aeTxhSeWnPEIt7QVJiINGNEEjF9/lqEswuPk0DNjA=;
+        b=abmd9RTMWEHC4D1pnO27SnbXu1y/pm4qIDT0WA0sc99tY2QaXG3uYveQKYQ61uvPgK
+         F9y2zn7s+lKxQH6hF9aKGxtKyNRg1gfLk+mbjLmZCn4ttFjd4jmttZwT3Khhy4434JhE
+         b4ZlrsD05U9pLCuImu77A+Pjal2TCcMj5R84x/B/l8X24WtfKYx4gc0pTEtevr2t6edH
+         jtqPIQpLKL1fM879/+tjEuyv/sPqH21ULXSgklwKlnA5Qgh/EfThqOit6TivJwrBzMl3
+         z/ECNn9yCvcin6dxkq2dakQDKDnBdPvfGT0E9HaDO2ylfQKEGIRwrU6NTgKIOT5vp0ru
+         4K9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789496092; x=1790100892;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=F+aeTxhSeWnPEIt7QVJiINGNEEjF9/lqEswuPk0DNjA=;
+        b=htu6ZoWMeqfKGdOdZGTp1qAzQC0YyAarvz6+UQYk1P1b4l2Ab0AZZTBos/C4ZsNWJj
+         XSqoGpKvqktfJHiycDxeN5pVHc9pZVIYqV5/M8aLO/pQ3I+bz9tnK3QEwNVh731ZrZYW
+         kQg+cMvHcqmYFHEGqFrh2uyLjh96mcJ3hrzWEHL5fZEn99bKo+AigDOJfeAY5TJg5kJm
+         Hq7YVRtwhCX0T9rUAmQIbXwYFLiqd7A97/vMb2g5cCvF880l6utRE4OrAbwrn6S9yAkh
+         VOxEevjjwR2rQVCq1HGR4MSPkTCsSvMGAx4SdqF36AsiukYq8za71l2tUVgvaTfSCEs8
+         StgQ==
+X-Forwarded-Encrypted: i=1; AKwUvByPUiGGSPSWatOKR6MfV+AQ/JK6elB99EMOwsiXPAjjMr6vmlE9GXzSmJ3nmRC7H4kVpXIB+Nodj3Zogc1IoFM=@vger.kernel.org
+X-Gm-Message-State: AFuF++lyMKg6GT5rTXAORySheqinzBMQDZYzYeeO/yjXW9sDs89sVlJe
+	FTebn0KXReO9L7Rh+k3nt21je1ZgyTZHN4ticPblWBdPoNsIecTpsrpj
+X-Gm-Gg: AYBFou3SFBXi8ixzc1MNCvv6n73MYeMS2mwsvx306sCvNB842MbDxIODFuQ2nxffiNP
+	q3MN13ufCaag6a3Scw5bQGfjMbADoacSB/lxFbnCjram/t6MrZh5ul4BOWihRCCyJ5LQ9oJoRUm
+	E0Fzi3J0UAJ7xjhU8rVgSRKMm98vcMjUDd8JSM4DQAtsnaLK7DD7m/oxLgH2Cqa7kH6M030CRmI
+	ueUEJDGqwy+1HHUwyMHoYMV3gy/JJ6ISP/TAsuZ+eDBrCgQLIDiT295YG8L82KJUDkBaeYxw/EW
+	hsbgY5op/jOPSVJsyD7yjbXhPexYlPHyFHfcctolUoESY86+amcDzhLL37eXrtgGnSDKoaBqahb
+	7ULD7dKur9qmMl8YzR1ysO9LRXi0Vfz85TRVVAAE7Gu6yi+KznGhEmevIMp8xRCFN9Igcu0C38v
+	cT/cFQ9+f/iheuVom5BrFyWbwuIJJoSnE10u7zqlL0dMX+jVQK8fIVMLwgSgbT63TjXUPxKkYSM
+	o50z9xjFF26BGRbgiI+uryA4hl9uww=
+X-Received: by 2002:a05:6820:1c94:b0:6b7:8415:d780 with SMTP id 006d021491bc7-6c738db60e1mr1840407eaf.43.1789496091809;
+        Tue, 15 Sep 2026 11:14:51 -0700 (PDT)
+Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:70::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-80b049fb51asm115974a34.1.2026.09.15.11.14.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2026 11:14:51 -0700 (PDT)
+Date: Tue, 15 Sep 2026 11:14:47 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowangio@gmail.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+	virtualization@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	sargun@sargun.me, jlinbox@meta.com,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next 3/6] vsock/virtio: support guest device network
+ namespace
+Message-ID: <aqmLFzcF3MmwRITz@devvm29614.prn0.facebook.com>
+References: <20260902-vsock-guest-ns-v1-0-9995383e9a8b@meta.com>
+ <20260902-vsock-guest-ns-v1-3-9995383e9a8b@meta.com>
+ <aqlkWGyoUYrgQUzz@sgarzare-redhat>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,97 +93,144 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aqkCbgHmMGxI_GLG@tiehlicka>
-X-Proofpoint-ORIG-GUID: ZGyhASJQPrkZtald6s-qe-XaJzb3rLwu
-X-Authority-Analysis: v=2.4 cv=SJ3Xx+vH c=1 sm=1 tr=0 ts=6aa98681 cx=c_pps
- a=5jkVtQsCUlC8zk5UhkBgHg==:117 a=5jkVtQsCUlC8zk5UhkBgHg==:17
- a=kj9zAlcOel0A:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=gQcMVamqm3wCPoSYhaRC:22 a=_ZmgHqWwjZUDpi_pur5s:22 a=VwQbUJbxAAAA:8
- a=MvuuwTCpAAAA:8 a=OCHxr62PC90mTwIpeikA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE1MDI2MCBTYWx0ZWRfX/bF3jfMe5L2R
- j63mU1nIBKQUtxaBXijRxEhjpUkMVc4zIvOsjeAo1gXa6d8EaQ3zY67L76NuqyOpj1PqfHtArmO
- 2vl0Zj/ywj1xKqs1a/mzZMNwlkOXYrqejAwJQ505r93PdMuHej9YKGoy+OOhjdgIGcbnHU5kPaU
- yvvrSCWy5ejLgHtdaE3GjSon0dkRbhoyLPGlPM5ivm10iaII7ndWeW/6v4Wb+WicsOGN6iGbq5y
- TmACnEazHYCmP+PBiUKK1AlL2cSjGIx6qbmqEPScHv5nRJqfghhw+WYCVTjioKj934H6QVwbEyn
- +l7ofYSeMOrVz1JhspzsrFr1N4lD/2CI+O885v1QKv5nzT3CrROQPCxW5DGn1rcxZV1AAEnv7EB
- 8HBx6GOAVf7DeSMdD7b3ATQFGeRAgDSkWYdpFHxj64RkQev4NJH17HwCiED+iffIRQ5Flebq0JV
- zWia0hniMaXW7l/WWHg==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE1MDI2MCBTYWx0ZWRfX63h0+WaHo6KX
- o28u0TT4xIFnPPwvxBVPnt73ZCm6PXqMR4K+TANuw3CaFV5L9FIl2AQlI4GVDKvAEj81K9dRKGJ
- DaYbaSq0UXlb+dnZCcP9Cbxr0DS1x+w=
-X-Proofpoint-GUID: ZGyhASJQPrkZtald6s-qe-XaJzb3rLwu
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-15_05,2026-09-15_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 priorityscore=1501 phishscore=0 adultscore=0 bulkscore=0
- clxscore=1015 lowpriorityscore=0 malwarescore=0 spamscore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609150260
+In-Reply-To: <aqlkWGyoUYrgQUzz@sgarzare-redhat>
 
-On Tue, Sep 15, 2026 at 10:31:42AM +0200, Michal Hocko wrote:
-> On Mon 14-09-26 18:49:38, Kyle Meyer wrote:
-> > Soft offlining a HugeTLB page dissolves it, permanently reducing the
-> > HugeTLB page pool. This can be problematic for workloads that depend on
-> > a fixed number of HugeTLB pages.
+On Tue, Sep 15, 2026 at 05:47:02PM +0200, Stefano Garzarella wrote:
+> On Wed, Sep 02, 2026 at 04:00:49PM -0700, Bobby Eshleman wrote:
+> > From: Bobby Eshleman <bobbyeshleman@meta.com>
 > > 
-> > Currently, soft offline must be disabled to prevent HugeTLB pages from
-> > being soft offlined.
+> > virtio-vsock did not have namespace support (the device was always
+> > accessible to any global namespace).
 > > 
-> > This patch allows soft offline to be disabled for HugeTLB pages while
-> > remaining enabled for non-HugeTLB pages.
+> > Make the virtio-vsock device assignable to a namespace and initialize it
+> > to init_net. Because virtio-vsock and init_net are both hardcoded to
+> > global mode, nothing changes until the assign ioctl is issued.
 > > 
-> > Commit 56374430c5dfc ("mm/memory-failure: userspace controls
-> > soft-offlining pages") introduced the following sysctl interface to
-> > control soft offline:
+> > When the device's local-mode namespace is being destroyed, received
+> > packets are reset until new valid a namespace has been assigned and/or
+> > automatically returned to, and the next RX batch begins (in
+> > virtio_transport_rx_work). They are reset rather than dropped because
+> > vsock does not retransmit, so a silent drop would leave the host waiting
+> > for a timeout, and a connection request arriving in that window has no
+> > socket whose teardown would tell it otherwise. This requires making
+> > virtio_transport_reset_no_sock() available outside of the common code.
 > > 
-> > /proc/sys/vm/enable_soft_offline
+> > When a device is assigned to a namespace, every already established
+> > vsock socket that is no longer able to reach the device is forcibly
+> > reset. For that reason, adding new sockets to the connected table must
+> > be performed atomically with regards to namespace assignment. This
+> > ensures that when the socket is added to the connected table that it
+> > actually passes the new reachability conditions set by ns assignment. If
+> > it wins the race to the table and does NOT pass the reachability tests,
+> > then the reset sweep will correctly catch it. This is the purpose
+> > of the new helper 'vsock_maybe_set_connected()'.
 > > 
-> > The interface does not distinguish between page types:
+> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> > ---
+> > include/linux/virtio_vsock.h            |  2 ++
+> > net/vmw_vsock/virtio_transport.c        | 28 ++++++++++++++++++++++------
+> > net/vmw_vsock/virtio_transport_common.c | 28 +++++++++++++++++++++-------
+> > 3 files changed, 45 insertions(+), 13 deletions(-)
 > > 
-> >     0 - Soft offline is disabled
-> >     1 - Soft offline is enabled
+> > diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
+> > index f91704731057..9c68ce1d7fb4 100644
+> > --- a/include/linux/virtio_vsock.h
+> > +++ b/include/linux/virtio_vsock.h
+> > @@ -286,6 +286,8 @@ void virtio_transport_inc_tx_pkt(struct virtio_vsock_sock *vvs, struct sk_buff *
+> > u32 virtio_transport_get_credit(struct virtio_vsock_sock *vvs, u32 wanted);
+> > void virtio_transport_put_credit(struct virtio_vsock_sock *vvs, u32 credit);
+> > void virtio_transport_deliver_tap_pkt(struct sk_buff *skb);
+> > +int virtio_transport_reset_no_sock(const struct virtio_transport *t,
+> > +				   struct sk_buff *skb, struct net *net);
+> > int virtio_transport_purge_skbs(void *vsk, struct sk_buff_head *list);
+> > int virtio_transport_read_skb(struct vsock_sock *vsk, skb_read_actor_t read_actor);
+> > int virtio_transport_notify_set_rcvlowat(struct vsock_sock *vsk, int val);
+> > diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+> > index 4f9aa9c4c3aa..a453a4f828dc 100644
+> > --- a/net/vmw_vsock/virtio_transport.c
+> > +++ b/net/vmw_vsock/virtio_transport.c
+> > @@ -540,9 +540,14 @@ static bool virtio_transport_msgzerocopy_allow(void)
+> > 	return true;
+> > }
 > > 
-> > Convert enable_soft_offline to a bitmask and support disabling soft
-> > offline for HugeTLB pages:
+> > +static bool virtio_transport_netns_assign_allow(void)
+> > +{
+> > +	return true;
+> > +}
+> > +
+> > bool virtio_transport_stream_allow(struct vsock_sock *vsk, u32 cid, u32 port)
+> > {
+> > -	return vsock_net_mode_global(vsk);
+> > +	return vsock_g2h_net_reachable(sock_net(sk_vsock(vsk)));
+> > }
 > > 
-> > Bits:
+> > static bool virtio_transport_seqpacket_allow(struct vsock_sock *vsk,
+> > @@ -587,6 +592,7 @@ static struct virtio_transport virtio_transport = {
+> > 		.seqpacket_has_data       = virtio_transport_seqpacket_has_data,
 > > 
-> >     0 - Enable soft offline
-> >     1 - Disable soft offline for HugeTLB pages
+> > 		.msgzerocopy_allow        = virtio_transport_msgzerocopy_allow,
+> > +		.netns_assign_allow       = virtio_transport_netns_assign_allow,
 > > 
-> > Supported values:
+> > 		.notify_poll_in           = virtio_transport_notify_poll_in,
+> > 		.notify_poll_out          = virtio_transport_notify_poll_out,
+> > @@ -616,7 +622,7 @@ virtio_transport_seqpacket_allow(struct vsock_sock *vsk, u32 remote_cid)
+> > 	struct virtio_vsock *vsock;
+> > 	bool seqpacket_allow;
 > > 
-> >     0 - Soft offline is disabled
-> >     1 - Soft offline is enabled
-> >     3 - Soft offline is enabled (disabled for HugeTLB pages)
+> > -	if (!vsock_net_mode_global(vsk))
+> > +	if (!vsock_g2h_net_reachable(sock_net(sk_vsock(vsk))))
+> > 		return false;
 > > 
-> > Existing behavior is preserved.
+> > 	seqpacket_allow = false;
+> > @@ -634,6 +640,9 @@ static void virtio_transport_rx_work(struct work_struct *work)
+> > 	struct virtio_vsock *vsock =
+> > 		container_of(work, struct virtio_vsock, rx_work);
+> > 	struct virtqueue *vq;
+> > +	struct net *net;
+> > +
+> > +	net = vsock_g2h_net_get();
 > > 
-> > Update documentation and HugeTLB soft offline selftests.
+> > 	mutex_lock(&vsock->rx_lock);
+> > 
+> > @@ -682,10 +691,14 @@ static void virtio_transport_rx_work(struct work_struct *work)
+> > 
+> > 			virtio_transport_deliver_tap_pkt(skb);
+> > 
+> > -			/* Force virtio-transport into global mode since it
+> > -			 * does not yet support local-mode namespacing.
+> > -			 */
+> > -			virtio_transport_recv_pkt(&virtio_transport, skb, NULL);
+> > +			if (unlikely(!net)) {
+> > +				virtio_transport_reset_no_sock(
+> > +					&virtio_transport, skb, &init_net);
 > 
-> This is adding a lot of user interfaces to control something you can
-> disable by config option for an admin only functionality.
+> Why init_net?
 
-I may be missing it, but I'm not aware of a config option that disables soft
-offline specifically for HugeTLB pages.
+This parameter is actually unused by virtio_transport_reset_no_sock(),
+its call to virtio_transport_send_pkt(), and even the eventual call to
+virtio_transport_deliver_tap_pkt()... so maybe NULL w/ a comment would
+be better?
 
-> I fail to to see any actual justification for all of that. If an admin
-> can disolve a hugetlb page it has power to allocate a new one as well.
+> 
+> > +				kfree_skb(skb);
+> > +				continue;
+> > +			}
+> > +
+> > +			virtio_transport_recv_pkt(&virtio_transport, skb, net);
+> > 		}
+> > 	} while (!virtqueue_enable_cb(vq));
+> > 
+> > @@ -694,6 +707,9 @@ static void virtio_transport_rx_work(struct work_struct *work)
+> > 		virtio_vsock_rx_fill(vsock);
+> > out_nofill:
+> > 	mutex_unlock(&vsock->rx_lock);
+> > +
+> > +	if (net)
+> > +		put_net(net);
+> 
+> put_net() should handle NULL net, right?
 
-Allocating HugeTLB pages after boot is not guaranteed.
+It does, and somehow I forgot that.
 
-> Not to menation that the whole soft offlining is mostly a testing
-> feature so adding a lot of fine grained configuration space seems
-> excessive to me.
-
-Can you elaborate on "mostly a testing feature"? For example, how does that
-apply to the BIOS/GHES path discussed here?
-
-https://lore.kernel.org/all/aMkOCmGBhZKhKPrI@hpe.com
-
-If you think this should be handled differently, I'm open to suggestions.
-
-Thanks for the feedback,
-Kyle Meyer
+Thanks,
+Bobby
