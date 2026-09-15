@@ -1,110 +1,138 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DBC4481FA1;
-	Tue, 15 Sep 2026 16:52:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3232137DAA9;
+	Tue, 15 Sep 2026 16:58:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789491152; cv=none; b=b8gi//R5FtFvgu1mv4Ke0ilAfMXY8N22gXF3GAz8cgwtKQ51Ccl3vONNHz0PQoDNiA8jTwH5U63dhUTwGDgIcj1HNfIIBX4wsT/D9ngKM14fW8WhK8B7M6rGPnD43BbGrk1ed12Q/I0+nfTnCRdk0WgJYIHkF+PHGG8WAl7Jr30=
+	t=1789491502; cv=none; b=JDufRno4VDwcaLFxfyQ92vxqFoWKyEviiM3RVrC4s7dpO4nDqEViKRyZ2kaX4U8PXMU3ei3iR6CIHAtYMxK3vYXmk0ys4cyNmHZD+X7xMR9soa0ohhA6obuX2oBL16Itp/N6mKYGtubsGje97+DeQySSCn5Jcea1eA/KfY3dP78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789491152; c=relaxed/simple;
-	bh=ypzeoRTb6xYEsb/0WCuvTZKzTa2DaEvHlXj54ddwHQY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N7hYa4lrVtnxf5x5UhpgXyqTt1UBwcejW8SJu9EobR8bx4wdu6kyeHbh2pL/At+Isl4Iikp5k4Wooomm4mjNQ70I5X0nvgqFWMxO4b4fuB+iEt97jxK9UbFBZTgSbOTE9CGetkLVSNzqHkslhdAl2QOMT7Ywq+h/ZmyMeUDfzro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cuDOM1nN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789491502; c=relaxed/simple;
+	bh=i4/iwR4TYPYiKzsSzezhQodaLtViQj+bGNSvh82u/Zc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=aysJ1hofdc4IICWwZwQ2c1dQR9UhbNLfRN1Wq0P8bre8GP9PKyZz6f9P9NxXqTSyRpnQxKzvRyxDRR2gmjIAwxKYuZ8hRvKlR8NgNpqG2HdZxVUBeZfD0ZgfnZ1Hw96RKQqPdQvXy0H5YmbE2A2Z239d2YJsHsN12dJPM8FuNvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dwj1QLWW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cuDOM1nN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB07D1F000FF;
-	Tue, 15 Sep 2026 16:52:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dwj1QLWW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65CC21F000FF;
+	Tue, 15 Sep 2026 16:58:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789491151;
-	bh=ypzeoRTb6xYEsb/0WCuvTZKzTa2DaEvHlXj54ddwHQY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=cuDOM1nNDsxtF7PlFuKdms5h3NHvIeOPwqUQNtOl5kbk9O5dbaHIR/RrEzZUyG/3i
-	 qSeL1n5WZRN1ll37KYIKax7VZLddYiaN5mCgEA+o5Jyf4GNB5aC/E77HsxtUsnI0Nl
-	 TizghtMccZece/nmMV3joeDyInkBxIB4OBAn5L2KplAWNR6bK5s1N1tafFN5vdesA0
-	 mzBUc/1bIzzXDMQsb27ampVmHD+ZSaxXeuOhxBtBRcKTAhYKq3nIPvhi6hW3nkeHk/
-	 x8tY7cksKZJULwkgj3LWM16v3X62dPLE/HyWNWZe9O8tqegycyv7ZTSrdYI+6t4ilu
-	 /oyUBJKLv7xuw==
-Date: Tue, 15 Sep 2026 17:52:23 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Guodong Xu <guodong.xu@oss.qualcomm.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@kernel.org>,
-	Chen Wang <chen.wang@linux.dev>,
-	Inochi Amaoto <inochiama@gmail.com>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	devicetree@vger.kernel.org, spacemit@lists.linux.dev,
-	sophgo@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	Palmer Dabbelt <palmer@sifive.com>,
-	Andy Chiu <tchiu@tenstorrent.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Peter Bergner <bergner@oss.tenstorrent.com>,
-	Zihong Yao <zihong.plct@isrc.iscas.ac.cn>,
-	Mark Harris <mark.hsj@gmail.com>,
-	Aurelien Jarno <aurelien@aurel32.net>,
-	Andrew Jones <andrew.jones@oss.qualcomm.com>
-Subject: Re: [PATCH v7 09/11] riscv: cpufeature: Introduce ISA bases bitmap
- and rva23u64 detection
-Message-ID: <20260915-widget-defiling-e22497c228cc@spud>
-References: <20260915-rva23u64-hwprobe-v2-v7-0-aa35ebd9ae96@oss.qualcomm.com>
- <20260915-rva23u64-hwprobe-v2-v7-9-aa35ebd9ae96@oss.qualcomm.com>
+	s=k20260515; t=1789491500;
+	bh=DhhkI+gCW/CKJwCKSjhSiYlpELpksTa48mZKJjz6KQU=;
+	h=From:Subject:Date:To:Cc;
+	b=Dwj1QLWWrUs9kpawpZzG55uPG/buJNut9cFxs+/Q5PapdBb379ALSG1IiwrRK1GOT
+	 CQ9CLl5C+fXocAVoBv9ecpBNX4pBk2NePcsnI13DGPwFgussL0GE73JkhJDQUOpD4b
+	 rz6h+oLe0rPhG3obcxl0XdoEE/iaI85Sq+06OEOK5ThF3cV8UpKJA3nbEHqHdSPyh0
+	 rqP9Et+VcINOj+83UeIEIh5b5gg4QNvDNZVNFbuJLs9dID9e84Yub0FeHL8hG0VEFm
+	 28dO1hS3yJ/cx8bv0XrxylV2Kg/yGuJkeq3vUVXPDbQ6camk33jj3QSMYO1iB+FiEs
+	 oxK+pFmVHQ4SA==
+From: Jeff Layton <jlayton@kernel.org>
+Subject: [PATCH v3 0/5] nfsd/sunrpc: allow userland to handle rpcbind
+ registration
+Date: Tue, 15 Sep 2026 12:57:41 -0400
+Message-Id: <20260915-nfsd-norpcb-v3-0-3c60d49ade02@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="HzK562KHekWwgPYZ"
-Content-Disposition: inline
-In-Reply-To: <20260915-rva23u64-hwprobe-v2-v7-9-aa35ebd9ae96@oss.qualcomm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/1XMSwrDIBSF4a2EO65Fr0aSjrqP0kF8JdKiQYu0h
+ Oy9JnTQDM+B/1sg2+RthkuzQLLFZx9DHfzUgJ6GMFriTd2AFCXtKSfBZUNCTLNWBJk2enAopFJ
+ QizlZ59+7drvXPfn8iumz44Vt789h9OAURihRwrSsQyO50NeHTcE+zzGNsEEF/2NxjLHGvEPJt
+ XRtr/AQr+v6BeLAowLkAAAA
+X-Change-ID: 20260903-nfsd-norpcb-21cdcaf246bb
+To: Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
+ Chuck Lever <cel@kernel.org>, NeilBrown <neil@brown.name>, 
+ Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, 
+ Tom Talpey <tom@talpey.com>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Jeff Layton <jlayton@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2955; i=jlayton@kernel.org;
+ h=from:subject:message-id; bh=i4/iwR4TYPYiKzsSzezhQodaLtViQj+bGNSvh82u/Zc=;
+ b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBqqXkl99V3efaeRQtByxE0NWUcZmZ439lWk42EP
+ LrTG9WWZ+mJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCaql5JQAKCRAADmhBGVaC
+ Fa0ZD/96M6aYJf+0JxvHX9ddfzEQMrQDsqC+ckxGxzCIoM63qWto9YYLaCGPLRIAsTpe4caghb6
+ I1ibNqPrU+vD3Gh7/jz/h1BKLs59z2S6oCg7x/uc8fBG89f/uAjDctKLKVNlfiBDSrbGAQUadEB
+ ZA7l94aTrZOM61G8Uge9/gjhkkHbD4ZYn354W9eA/kmZ1wvTwfL/6VpUoJNZSlplCEIUxNzultY
+ YlbzJizwB21Bfo3rd8lBEzAqShAYnSw3rLSLzOJdFHM0oqwh+KgQ+GDDFv1BGN1lhdQemXOzgcI
+ v1x99TcO1uJjO9btaKk1FVNvjZLllzH9wDiCTL4L+tHIC0j6fgr6dHF5kynfftgGKMmfo9z6dm6
+ /mFcc6FjInxPwWAFyedeLwKk7Klurye3VyVC4krAUy+iF+2IXXAAvc60+f1XDs7XERmYxuQkW92
+ toDsKR5KHbNE9dPUUn8GsMLyxxrQPsggIWD4o1tmDHJWKIVYvsy+V7L+Vt07j5aeNqpqr98WGu8
+ IlP51r16pA4j4CRYCXO5KHB5TDTF7Wr6bWNGDlXRwmcH1xmjgfyVlFEyj9pN304ZFFX6AYDS6sL
+ JR2ovSVNu0lQUfOk8slsRf1vxe4xP/bry+3M5zuBWVFU1fwP6caNe0fMoTq14zxwNVxOTHBXBI3
+ fR27Jfe2DqwajOw==
+X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
+ fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
 
---HzK562KHekWwgPYZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This version fixes a few problems that Chuck and agentic review pointed
+out. Original cover letter follows:
 
-On Tue, Sep 15, 2026 at 03:15:35AM -0400, Guodong Xu wrote:
-> Introduce a per-hart and host-wide bitmap of conformant ISA "bases"
-> (named profile-class sets such as IMA and RVA23U64), computed at init
-> time by riscv_init_isa_bases().
->=20
-> Register riscv_init_isa_bases() as an arch_initcall. That is late
-> enough that core_initcall(tagged_addr_init) has probed senvcfg.PMM and
-> populated have_user_pmlen_*; without that ordering,
-> riscv_have_user_pmlen(7) would still return its default false and the
-> RVA23U64 detection path would always bail. It is also early enough that
-> arch_initcall_sync(init_hwprobe_vdso_data) finds the bases populated
-> when it snapshots the hwprobe values into the vDSO data page.
->=20
-> Consider this as the cache that subsequent consumers (hwprobe's
-> RVA23U64 base behavior bit, /proc/cpuinfo's "isa bases" lines, etc.)
-> can read without recomputing, which keeps them consistent with
-> each other.
->=20
-> Signed-off-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
-> Signed-off-by: Guodong Xu <guodong.xu@oss.qualcomm.com>
+While working on the recent hardening patches for the nfsd listener
+netlink interface, Chuck mentioned that we could allow userland to
+handle rpcbind registation itself.
 
-Something is wrong here with the signoffs here, Drew's probably missing
-either authorship or a Co-developed-by tag?
+This adds such a mechanism to the netlink listener set interface. The
+main idea is to add a new optional flag to the netlink downcall that
+tells the kernel to skip rpcbind registration altogether for the nfsd
+listeners.
 
---HzK562KHekWwgPYZ
-Content-Type: application/pgp-signature; name=signature.asc
+Note that NLM registration is not affected and is still handled by the
+kernel.  Handling that is trickier since it can be started by the
+client.
 
------BEGIN PGP SIGNATURE-----
+Patches to nfsdctl will follow.
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaql3xwAKCRB4tDGHoIJi
-0j7yAP91eT382HzKXLp423gHB51yfWxN+iAs4R+MhBlF05j5GwEA5GjMcnOJVD8Y
-sEFBqUBTL8evUR1CilJLWuZxaN1wQAU=
-=myHc
------END PGP SIGNATURE-----
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+Changes in v3:
+- Exempt an empty listener list from the rpcbind ownership check.
+- Drop the dead nfsacl test in nfsd_version_registerable().
+- Set an extack when the listener_set reply cannot be built.
+- selftests: check nlmsg_len against the recv() count before parsing the reply.
+- selftests: cover teardown in both ownership directions.
+- Link to v2: https://lore.kernel.org/r/20260914-nfsd-norpcb-v2-0-38263c6f59b2@kernel.org
 
---HzK562KHekWwgPYZ--
+Changes in v2:
+- Refuse the legacy portlist add-fd write against a userspace-rpcbind
+  serv. nfsd_create_serv() cannot flip ownership back for an existing
+  serv, svc_addsock() expects svc_register() to register the listener,
+  and there is no way to tell the rpcbind owner about it.
+- selftests: require NFSv3 in the reply and skip where NFSv4 is not
+  built, rather than passing when neither is present.
+- selftests: cover the portlist refusal.
+- Link to v1: https://lore.kernel.org/r/20260910-nfsd-norpcb-v1-0-b4d5182d634c@kernel.org
+
+---
+Jeff Layton (5):
+      SUNRPC: allow a service to opt out of rpcbind registration
+      NFSD: add a userspace-rpcbind flag to listener_set
+      NFSD: honour the userspace-rpcbind flag in listener_set
+      NFSD: report registerable programs in the listener_set reply
+      selftests/nfsd: exercise the userspace-rpcbind listener_set flag
+
+ Documentation/netlink/specs/nfsd.yaml              |  55 ++-
+ fs/nfsd/netlink.c                                  |   5 +-
+ fs/nfsd/nfsctl.c                                   | 195 +++++++++-
+ fs/nfsd/nfsd.h                                     |   4 +-
+ fs/nfsd/nfssvc.c                                   |  66 ++--
+ include/linux/sunrpc/svc.h                         |   2 +
+ include/uapi/linux/nfsd_netlink.h                  |  20 +
+ net/sunrpc/svc.c                                   |   5 +
+ net/sunrpc/svc_xprt.c                              |   2 +-
+ .../testing/selftests/nfsd/nfsd_netlink_listener.c | 404 ++++++++++++++++++++-
+ 10 files changed, 718 insertions(+), 40 deletions(-)
+---
+base-commit: 4d46e877c21d07ddcad03da7f3b05ad2cc22b5b3
+change-id: 20260903-nfsd-norpcb-21cdcaf246bb
+
+Best regards,
+-- 
+Jeff Layton <jlayton@kernel.org>
+
