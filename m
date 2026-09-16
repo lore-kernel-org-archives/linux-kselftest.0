@@ -1,88 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EB13932F7;
-	Wed, 16 Sep 2026 01:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 905FE37A857;
+	Wed, 16 Sep 2026 02:21:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789521673; cv=none; b=Td9DBRgaBg5HcQ/SlgvCAFThE8hYvnkDxNjVfqBWDp4ZsBkGbEFZFofslGZgOorUj2DA7rly9yqPNRCN2EmYlQqDGVEYKWcpt0/CLc6aLsaeGYnYc+fNE3qtoAubCmNpdop1xWoKVFy6XIiRnB9x0FDMBVvup3U3/azwDXQ7iKg=
+	t=1789525310; cv=none; b=iyp0jBAOX2ahSIpUWw1dUrXG15tRLAtf2TxDotY87SvNhdMOpU54p5HB0KMGfDUeAq0wSF6HwG2MDt0DbgFa+afQjgJz9Ble/5RP4vv6xU5uW73x+Yp3D4cTRcBU9CgRPgiZ3UClF+9wu5s0ynWpd3VcdaDfjoO7r8+xhhj+FRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789521673; c=relaxed/simple;
-	bh=oI92Wam/lQoBwstvPVwR3/HPyFDsnVIDEeKqVR6QMWI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=UCdfnJeBs/e6Nuh8sa2sBfMytM2+CXTmKVZz1n4tZvio4YIvrVaEiDDdCAFZe8GR1GOeO6QDUvlbpB62ebZuFR/uq+8dl7YSdrAj6uOaTjYaKU5DqcIZ0YfCH8LyaM3x+oRSiCk5u3JWGNdeqDKDuq4+sgH4EQJi60NXXaMEzK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cnKvLkdP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789525310; c=relaxed/simple;
+	bh=S4w36axQ/SJ69u2USTyQfVcFaYAkRYJZPUbJ4PAI6Oo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pJo2GrOiZuKpl6ULEpJw8QoWZKo8YhAdeuDcIXZSmA7FkcTT1EXvGJcP7J/fFPR7rNIDt9bYey+nREXLbBBwp4E2kLt0dLBrbRt2/qDt24rtd92Kc/mr3DumKWGfDKm6arbtU1ujQaKGopdbrqE5GnKiV45mKvxmZkqgvChK8xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=JoXbFyMV; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cnKvLkdP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8DA11F000FF;
-	Wed, 16 Sep 2026 01:21:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789521671;
-	bh=tJGnSDJBD7jFz/PgAAhvgU1uY3opvratXJ9XZoONXLQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=cnKvLkdPQ+qH5MXhJFJg6u1qg+pkQrrW7kSb/Inysck7+EwYg2ldYToH5YHJvgoWU
-	 jxGhByhkgZVc06+8Idzy8KDT6fl6dfbZGoWreuETbezhccl84wCReRJpGBIunL7i6n
-	 4vx2wi8GX9UjX2YigAEKryY1L081RQngAox004gWMGrhbyN24U1x5eVGHFx8SdxQWs
-	 mZCg5xFFpTXIYzZzmo/8uW3bgXaGqvQzdTz0tZNX6Wtg7WUzazwgk+C8zntac3nYKL
-	 HPoCE+55plErNnwx4Bbp5haH40rH91wLcnQfUG1b9HB+A6uNZqQgrDtLOiYQOWQ5hA
-	 9NytsZcXZOvTA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 569E93927075;
-	Wed, 16 Sep 2026 01:20:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="JoXbFyMV"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 877521516;
+	Tue, 15 Sep 2026 19:21:38 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0E8F33F882;
+	Tue, 15 Sep 2026 19:21:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1789525302; bh=S4w36axQ/SJ69u2USTyQfVcFaYAkRYJZPUbJ4PAI6Oo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JoXbFyMVWWZjqZk7Hc5TRbF/vgpn9cjNNGutfJNMW8RhND0pNpA5AXidlK9Ldvtsa
+	 TWTQ+aTujtaCejCqatN/QhAotVYLBDh5r4kqL5fLeY+perXuNG1cI8QD+Ep0/zP7o5
+	 E/bEJGq1a8cTncs9O48EsuAoacSHe0uhQShjZ2Z0=
+Date: Wed, 16 Sep 2026 03:21:36 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Yeoreum Yun <yeoreum.yun@arm.com>, Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Nico Pache <nico.pache@linux.dev>,
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 0/2] kselftest: mm: fix intermittent failure khugepaged
+ test
+Message-ID: <aqn9MBPcN4nctCBI@e129823.arm.com>
+References: <20260915-fix_khugepagd_fail-v1-0-bb6f04c8759f@arm.com>
+ <20260915181519.648c2962143b761cf02efd17@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/6] psp: correct notifications and device info
- around device assoc
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178952160613.2349576.14604204352404694369.git-patchwork-notify@kernel.org>
-Date: Wed, 16 Sep 2026 01:20:06 +0000
-References: <20260912200426.121025-1-kuba@kernel.org>
-In-Reply-To: <20260912200426.121025-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- daniel.zahka@gmail.com, willemdebruijn.kernel@gmail.com,
- donald.hunter@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260915181519.648c2962143b761cf02efd17@linux-foundation.org>
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sat, 12 Sep 2026 13:04:20 -0700 you wrote:
-> We recently added the ability to associate a HW PSP device with
-> a software device like netkit or veth to be able to make PSP
-> usable from containers. This stretches the visibility of a PSP
-> device to multiple netns's.
+> On Tue, 15 Sep 2026 10:21:35 +0100 Yeoreum Yun <yeoreum.yun@arm.com> wrote:
 > 
-> Correct two minor issues:
+> > There are intermittent failures in collapse_max_ptes_swap() and
+> > collapse_max_ptes_shared() when using the khugepaged_context:
+> > 
+> >   # Run test: collapse_max_ptes_shared (khugepaged:anon)
+> >   # Allocate huge page... OK
+> >   # Share huge page over fork()... OK
+> >   # Trigger CoW on page 1023 of 2048... OK
+> >   # Maybe collapse with max_ptes_shared exceeded.... OK
+> >   # Trigger CoW on page 1024 of 2048... Fail
+> >   Bail out! Unexpected huge page
+> >   # Planned tests != run tests (26 != 23)
+> >   # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > 
+> >   # Run test: collapse_max_ptes_swap (khugepaged:anon)
+> >   # Swapout 257 of 2048 pages... OK
+> >   # Maybe collapse with max_ptes_swap exceeded.... OK
+> >   # Swapout 256 of 2048 pages... OK
+> >   Bail out! Unexpected huge page
+> >   # Planned tests != run tests (26 != 17)
+> >   # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > 
+> > This happens because khugepaged may collapse the pages before wait_for_scan()
+> > is called, causing a sanity check that expects uncollapsed pages to fail.
 > 
-> [...]
+> Is this something we should be testing for?  If I'm understanding
+> correctly, success/failure is dependent on timing vargaries inside the
+> kernel and that isn't something we can reliably test for.
+> 
+> IOW, should we say "bad idea" and just delete this test case?
 
-Here is the summary with links:
-  - [net-next,1/6] selftests: drv-net: psp: fix linter issues
-    https://git.kernel.org/netdev/net-next/c/fbcd35eb1871
-  - [net-next,2/6] psp: don't report the main netdevice's ifindex to associated namespaces
-    https://git.kernel.org/netdev/net-next/c/cf3302111b1a
-  - [net-next,3/6] selftests: drv-net: psp: check the ifindex an associated netns sees
-    https://git.kernel.org/netdev/net-next/c/4d5d9f3a1968
-  - [net-next,4/6] psp: notify about a disassociation once it has happened
-    https://git.kernel.org/netdev/net-next/c/fb3ddbe2b577
-  - [net-next,5/6] selftests: drv-net: psp: factor out creating a netkit in the test netns
-    https://git.kernel.org/netdev/net-next/c/b711865f68ce
-  - [net-next,6/6] selftests: drv-net: psp: check the PSP disassociation notifications
-    https://git.kernel.org/netdev/net-next/c/4d3c1d963c6f
+If the test environment can be set up to control those timing vagaries,
+I believe in that such cases are meaningful for verifying the expected
+behavior.
 
-You are awesome, thank you!
+This patch sets up the conditions needed to make the result reliable,
+so I don't think this test case should be dismissed as a bad idea or
+deleted as inherently unreliable.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Sincerely,
+Yeoreum Yun
