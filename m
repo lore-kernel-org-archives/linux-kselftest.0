@@ -1,176 +1,162 @@
-Received: from mail-ej2-f14.google.com (mail-ej2-f14.google.com [74.125.228.142])
+Received: from mail-qk2-f13.google.com (mail-qk2-f13.google.com [74.125.230.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A0547F77E
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 08:52:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213E74BA1F4
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 10:01:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789548752; cv=none; b=RNcHBUf6SXm2Gw+t24zTQEqDay4P7XtwRykCUB56T2LQQqlJ/3srX7eGLrv2Y9FX1OrBI1vUs+Lwwwl2PjG+oWZk3rjVug78zDLm41UCzvrxdVJSyo1BjDae1MtsVamJI8lc72E7mTjwWnWVQrVNZxVJH9Yn2/ut9jKufXbZpUg=
+	t=1789552901; cv=none; b=d1vUkNhdqoezh3WL6Q1yKtHfbD4FhJqBf62zBFC3JOoIRUME/5IBphNGAIZCV1xv9nkRWa/IxOxa8UABXTHYQhYs09z+VQs52vhnXxRYuKrpAsPBVlGgo2RkPwSHMG185lTWLXfJLA83ojMeHdjEKNSYBnvXMAkY4oJT5tum/Iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789548752; c=relaxed/simple;
-	bh=jQe43yJCJSdBQPYhkUb4CHVlXYabrmzIiAW+OtPpy4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hU6svzlHuSGU66NzDvbORSW7buMdMj4ElqQMLhkCO6IHAWf5Z8ARG1BMapBClg1c3f1se9JsqodttMPWl3YI1KsIfmkrEp8OTSRjfCA0REcjpPt2bGkUOG1LZEMXAVZkpP37x9h0FQhg4jeXuWqG7BGy4JJKgrGlLD5ngjnHYqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fEqDAcyK; arc=none smtp.client-ip=74.125.228.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1789552901; c=relaxed/simple;
+	bh=6Y63ypW1o8fSc5npG6Ogumje01PNdZEHgLH/DsEfGOU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=t9DjWUtRurQ0XQIUq54dtrniPyz668W4ONTjeKbrhUs6Xa/a5G/9j5yfrq5SrfxUwSMzRI5CZ5mkT2grrXRAvoH/USyU6+rvAorvzrpdRpu6twQIsSHgtf5o3w9FCKf+z8d/BN3abIfyJpXTV/cb44k1r1fClDR2R6qnle/AYdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=H7xRn2Gn; arc=none smtp.client-ip=74.125.230.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fEqDAcyK"
-Received: by mail-ej2-f14.google.com with SMTP id a640c23a62f3a-c254f9f0b1fso111838466b.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 01:52:27 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="H7xRn2Gn"
+Received: by mail-qk2-f13.google.com with SMTP id d75a77b69052e-52fb76798a2so2199241cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 03:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1789548742; x=1790153542; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=2LBbelDPdAVQ0Ns+BBW49QmFOaM2BGUlkuMpM25cdq0=;
-        b=fEqDAcyKNp+DJ1SwWiq1SfYEyZRUgBbvXAUy6MDKVrcwjAIHREkhioM+ZQCirDQ4cc
-         EttlU3c2HkkbbYmFFp/uoqam1pLAKWbJhLDfnagViBSzT/WPOECIbhfWgmRgiXOQ94A5
-         NMJebi+kxBCWrfibB/+VSa0l+HkSpQ1m+HilG4QUz54rYaZ+XvY7Zni0Mcyv/Nr+gtXL
-         o7G1Esip5+5FD4/02R95+w/Rz3o0vlb3/5Gx8l6HWP4nOi4Wn4+zApWl1dUv8wuS4h6z
-         d22Cy6QopW/s7q6LcFpXqDqV0zfEHQLupfKVLuQ0IdwWWZ9r3g/4X0DtaadnCEPLmdAm
-         p1ig==
+        d=mojatatu.com; s=google; t=1789552883; x=1790157683; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=79RUTy9GyyU8S0QtOXN8RnXRh3vSK+UyTrb4wdm1wK4=;
+        b=H7xRn2Gn2ryKxTLVSRACVJ/24kgNOReV8nRaa8Qb5SanMp5gc5tUfodV+KdNZljlsv
+         CDe/sFfoIeYWJksth4/N/tyk/mn11BkrnwjXpZbViKjvZc3K5Z1Ffz7kmuhcYG44BJlE
+         nA386saKw+prb6me9fI9G3DTyhIWcF9oVKULw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789548742; x=1790153542;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2LBbelDPdAVQ0Ns+BBW49QmFOaM2BGUlkuMpM25cdq0=;
-        b=ItqzLvMZ2klNPuC/rdYSMaG2ZmF/xob+KY/KGY0t2w8zhajw/MzJ17sEKk+ZkEZhbp
-         3KDIqz1ukoaVBgjJOmbEWVzqlpJIMl14FNX2BPYJF1FnaYJrylEWweGGdz/oFLLEXNKq
-         RRvmhpHgZakZMZwK/7UIH9tTR4Cm7uqKlVVQyiACcoHurU4KzZeGJbaaiKc7V3kHu+yj
-         t18cwe5hhOVhrXL6ex1pN2AKHtGwYf8OCIMgTvpvcsZ2LdGQjk6XYn67+Gezc5Cksy5t
-         BDB5DmGvSe0MoVItFxld1SgKGQMS5NBvZoIHbncWM3DErrCncwxYnyfVqurjvpkD9HfN
-         s0og==
-X-Forwarded-Encrypted: i=1; AKwUvBxT95nbcbGCWWeCZNqV3H0Dhs/xCjGWfuQx0+UAhQJu/tdabJTH00GjvaNm/JcLigLPSGJyReJCMQiSd+o6hzE=@vger.kernel.org
-X-Gm-Message-State: AFuF++n0EmsVRoLS0s5mA9lHYFRmi+qfjxD5xRP3uXRdWQ2BW9D2KaGf
-	AGbqY2LKRB6RexvMS58cl4gMIPdShIcSz/4Ftnf+PIWKUm5mbrWM0/j95PiACUV+mvg=
-X-Gm-Gg: AYBFou0koHP62pL4f19LqIJDso//MN7B5+qCc9b07beWs5cNfo9Ve8c7DbcJpsymSQ/
-	UnGNXAWPXIZ179z7SiUj1FuMQAcZiAj5mA1J/sBjJvroLo6x0AxSVTTcsfiyijvwCdFCX4PjL+/
-	8C1W86DPYbOFrFemOMAV8zzu6xUFSn0h7M5U5XzBZJvLpHZTs25SALSrneUuD/soh3HR/U1gvE9
-	1liLAEtCmfY952jII8Ufw2+GZDWBuPXVPFBJTfQI0SfHQLfg3NXgXRz9yJyP4wU+/nS1D3cGUNR
-	G0mh8u09I8fGd/CqUlkBylz7chc3yaxAvoJ8qoYmaHeYT83tXsfLh8TacStjl1L7jiIrab1RfB3
-	0hheC2Wg/8D9+o4ndXdxYeJvrPfwJaxIs0rO/+KBJFtaKD9qtTOqvDXrDBt+LYUw+0bbpJnfJqG
-	C85Mstdxfl96eKZ3fRcXYghoCe3OxlciiEQY6+/OQJ8+SQUOAOT9JJOqXta3nH
-X-Received: by 2002:a17:907:928a:b0:c29:4d81:c5f0 with SMTP id a640c23a62f3a-c29e51b1ad7mr218786066b.6.1789548741687;
-        Wed, 16 Sep 2026 01:52:21 -0700 (PDT)
-Received: from localhost ([2a02:aa7:4656:2314:c23c:9eda:81d:3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c29de68fafdsm93069566b.63.2026.09.16.01.52.21
+        d=1e100.net; s=20260707; t=1789552883; x=1790157683;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=79RUTy9GyyU8S0QtOXN8RnXRh3vSK+UyTrb4wdm1wK4=;
+        b=b/RtSID4FCkr+dC1xn1I0f3mIJssGhBQQk6fNPW9rJupmO3TK/JXqLpABrymPrYp2J
+         VevT3W2PP/3wDG8isG3CeV6siirhcRAh/7HcsqjaY/qu1b4gN5Zon2NxaWWfOIjwoLQq
+         N8zAqqOJbn2UJaryE8UqW+wwAcb21Y/sq1QGNKHXojhTyAQBYZ7fktVPouhwEB71h/hb
+         tJlfu9Aup1Kmo0FbaTNcTvl3bSh93iL7HONtKcRqEmQFmu43wpjXsMghup/kNpAVPlWP
+         m1YLILDATjRx1JSbsyuRJlcB98Qbrjv90BXoyQUciNAastL1VznvoEbwpWkoFkvjvDvF
+         aYsg==
+X-Forwarded-Encrypted: i=1; AKwUvBzHe1suPTlpMFLx2cBLxWykSVWLwtwdSzGO8m7ijHs+9DETizUOc0S+shsedwZdNDFphc1qzQdlMV9OeBjvyL4=@vger.kernel.org
+X-Gm-Message-State: AFuF++lDUwGW1guQ7JHmAx9oVh6WagE/iFoWKmY8oTm7wbsXx+r/qaAt
+	SWSD8s/+K23O3Gi1NTP2XPsDTNuUw7jeImn7IVlpemczzmo4m+tHS97V2hGml+MApw==
+X-Gm-Gg: AYBFou2nGC5k8MscRgCmsvE4StM9qio3W1yIanmBvI8jD6mlAeHAQccEH52UY4lRRLa
+	93aZrVogoMYN+Hc4Fbzjl8X3dbANkZUBU+mWRSUJX9duZpkwd7jn6G+8AntV51HAVtLb/n5qich
+	ef0RRkYmex69X7I3epx0TN42/Q7GvvBZiUGvyh8Hl+8mEOihVLPyyuxYGchsDhwPPw5B9MDqqx/
+	fHXSCVjpW1dsZEFRFFhJuhfuLeGLkHzogHacL6guAgAiRv+Wy6EXd89+n/ix+S7EXB+5Vm4ovB/
+	PkiWwVlqQ3yAyqfCmGzcJNKnYa/CG12K4cdaihkl98AqP84na1jnKoQ0zzcrPgWUyiYwXI93x41
+	nwQr581A7g4SyGraE5LpkAXfsOIcBoByIZ7LB68iW9M8rG5DaE1RSlOiY42RHr74uuHfqw0m9ob
+	/uE54cuT+HQ6raogJkhXNynZrR5wWMtiDoFu56qzshPeTLIOIFtrDCO+FO0eWBi5ljNPRqpyGA6
+	LsG+g0wnRPrugedXaEs+4L9nO350GB1bzHY77JxEGw4W3BjWIXpiJNCLTo=
+X-Received: by 2002:ac8:5747:0:b0:530:fbb1:7a92 with SMTP id d75a77b69052e-5327f58d052mr20346921cf.32.1789552883374;
+        Wed, 16 Sep 2026 03:01:23 -0700 (PDT)
+Received: from mbili.ht.home ([64.203.83.2])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-53262021a9esm18026851cf.14.2026.09.16.03.01.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2026 01:52:21 -0700 (PDT)
-Date: Wed, 16 Sep 2026 10:52:20 +0200
-From: Michal Hocko <mhocko@suse.com>
-To: Kyle Meyer <kyle.meyer@hpe.com>
-Cc: akpm@linux-foundation.org, corbet@lwn.net, david@redhat.com,
-	linmiaohe@huawei.com, shuah@kernel.org, tony.luck@intel.com,
-	jane.chu@oracle.com, jiaqiyan@google.com, Liam.Howlett@oracle.com,
-	bp@alien8.de, hannes@cmpxchg.org, jack@suse.cz,
-	joel.granados@kernel.org, laoar.shao@gmail.com,
-	lorenzo.stoakes@oracle.com, mclapinski@google.com,
-	nao.horiguchi@gmail.com, osalvador@suse.de,
-	rafael.j.wysocki@intel.com, rppt@kernel.org, russ.anderson@hpe.com,
-	shawn.fan@intel.com, surenb@google.com, vbabka@suse.cz,
-	linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH v3] mm/memory-failure: Support disabling soft offline for
- HugeTLB pages
-Message-ID: <aqpYxAktjexhaMGc@tiehlicka>
-References: <aqiIEkrc6aDBOqRg@hpe.com>
- <aqkCbgHmMGxI_GLG@tiehlicka>
- <aqmGd0GGUCkbZpkZ@hpe.com>
+        Wed, 16 Sep 2026 03:01:22 -0700 (PDT)
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+To: netdev@vger.kernel.org
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Victor Nogueira <victor@mojatatu.com>,
+	hybris <hybris@mojatatu.ai>
+Subject: [PATCH net 2/2] selftests/tc-testing: add u32 manual table handle IDR tests
+Date: Wed, 16 Sep 2026 06:01:15 -0400
+Message-Id: <QDISC-LQFE.v1.20260911041746.2@mojatatu.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <QDISC-LQFE.v1.20260911041746.1@mojatatu.com>
+References: <QDISC-LQFE.v1.20260911041746.1@mojatatu.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aqmGd0GGUCkbZpkZ@hpe.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue 15-09-26 12:55:03, Kyle Meyer wrote:
-> On Tue, Sep 15, 2026 at 10:31:42AM +0200, Michal Hocko wrote:
-> > On Mon 14-09-26 18:49:38, Kyle Meyer wrote:
-> > > Soft offlining a HugeTLB page dissolves it, permanently reducing the
-> > > HugeTLB page pool. This can be problematic for workloads that depend on
-> > > a fixed number of HugeTLB pages.
-> > > 
-> > > Currently, soft offline must be disabled to prevent HugeTLB pages from
-> > > being soft offlined.
-> > > 
-> > > This patch allows soft offline to be disabled for HugeTLB pages while
-> > > remaining enabled for non-HugeTLB pages.
-> > > 
-> > > Commit 56374430c5dfc ("mm/memory-failure: userspace controls
-> > > soft-offlining pages") introduced the following sysctl interface to
-> > > control soft offline:
-> > > 
-> > > /proc/sys/vm/enable_soft_offline
-> > > 
-> > > The interface does not distinguish between page types:
-> > > 
-> > >     0 - Soft offline is disabled
-> > >     1 - Soft offline is enabled
-> > > 
-> > > Convert enable_soft_offline to a bitmask and support disabling soft
-> > > offline for HugeTLB pages:
-> > > 
-> > > Bits:
-> > > 
-> > >     0 - Enable soft offline
-> > >     1 - Disable soft offline for HugeTLB pages
-> > > 
-> > > Supported values:
-> > > 
-> > >     0 - Soft offline is disabled
-> > >     1 - Soft offline is enabled
-> > >     3 - Soft offline is enabled (disabled for HugeTLB pages)
-> > > 
-> > > Existing behavior is preserved.
-> > > 
-> > > Update documentation and HugeTLB soft offline selftests.
-> > 
-> > This is adding a lot of user interfaces to control something you can
-> > disable by config option for an admin only functionality.
-> 
-> I may be missing it, but I'm not aware of a config option that disables soft
-> offline specifically for HugeTLB pages.
+35fc: create a manual table with handle 801:, then add an auto-allocated
+table. Before the fix, the auto allocation reuses id 1 and hands out the
+same handle 0x80100000, aliasing the manual table; the test requires the
+manual 801: handle to keep exactly one entry in the dump.
 
-No, there is none. And IMHO there shouldn't be any. We do not want
-config nor runtime option for any random type of page to be soft
-offlined. You can disable the whole feature. If we need to enforce a
-boot time parameter then I can be convinced about usefulness because
-distro kernels need to enable config to be generally available but there
-are usecases where this might be better disabled during runtime.
+a6e8: with a live u32 table keeping the tc_u_common alive, add and delete
+a manual table with handle 901:, then re-add it. Unpatched, the delete
+leaks the raw-keyed IDR entry and the re-add fails with -ENOSPC; the
+test requires the re-add to succeed.
 
-> > I fail to to see any actual justification for all of that. If an admin
-> > can disolve a hugetlb page it has power to allocate a new one as well.
-> 
-> Allocating HugeTLB pages after boot is not guaranteed.
+Reviewed-by: Victor Nogueira <victor@mojatatu.com>
+Tested-by: hybris <hybris@mojatatu.ai>
+Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+---
+ .../tc-testing/tc-tests/filters/u32.json      | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-yes, and so what?
-
-> > Not to menation that the whole soft offlining is mostly a testing
-> > feature so adding a lot of fine grained configuration space seems
-> > excessive to me.
-> 
-> Can you elaborate on "mostly a testing feature"? For example, how does that
-> apply to the BIOS/GHES path discussed here?
-> 
-> https://lore.kernel.org/all/aMkOCmGBhZKhKPrI@hpe.com
-
-OK, so apparently there are some BIOSes which abuse this feature to
-mimic a real HW poisoning. This doesn't change the overall picture
-though
-
-> If you think this should be handled differently, I'm open to suggestions.
-
-Yes, do not treat hugetlb pages any special. In case there is a HW
-related problem which decides to offline portion of the hugetlb page
-then bad for you. It wouldn't be too much different if this was handled
-through a real HW poisoning.
--- 
-Michal Hocko
-SUSE Labs
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/u32.json b/tools/testing/selftests/tc-testing/tc-tests/filters/u32.json
+index e2b03f2b5e89..edc5148a8d97 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/filters/u32.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/filters/u32.json
+@@ -376,5 +376,53 @@
+         "teardown": [
+             "$TC qdisc del dev $DUMMY clsact"
+         ]
++    },
++    {
++        "id": "35fc",
++        "name": "u32 manual table then auto table: auto allocation must not alias a live manual handle",
++        "category": [
++            "filter",
++            "u32"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress",
++            "$TC filter add dev $DEV1 ingress protocol ip pref 1 handle 801: u32 divisor 16"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 ingress protocol ip pref 2 u32 divisor 16",
++        "expExitCode": "0",
++        "verifyCmd": "$TC -d filter show dev $DEV1 ingress",
++        "matchPattern": "fh 801:",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
++    },
++    {
++        "id": "a6e8",
++        "name": "u32 manual table add/del does not leak its idr entry (re-adding the same handle succeeds)",
++        "category": [
++            "filter",
++            "u32"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DEV1 ingress",
++            "$TC filter add dev $DEV1 ingress protocol ip pref 1 u32 divisor 16",
++            "$TC filter add dev $DEV1 ingress protocol ip pref 5 handle 901: u32 divisor 1",
++            "$TC filter del dev $DEV1 ingress protocol ip pref 5 handle 901: u32"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DEV1 ingress protocol ip pref 6 handle 901: u32 divisor 1",
++        "expExitCode": "0",
++        "verifyCmd": "$TC -d filter show dev $DEV1 ingress",
++        "matchPattern": "fh 901: ht divisor 1",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 ingress"
++        ]
+     }
+ ]
+--
+2.43.0
