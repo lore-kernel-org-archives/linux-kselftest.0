@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076DF51357C;
-	Wed, 16 Sep 2026 15:22:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6484392C25;
+	Wed, 16 Sep 2026 15:26:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789572163; cv=none; b=sc/vGphRwUu1JlYRORmDNpBdNC8B5wdc3Ix2Y7+Edqu4xFFUq88ieJ6oiiX4M/CUesYbzVWNQJccVRqy2uuEDZFeCd4HAqYINrWo2O3soIY8hpdeup2BYwks7js1k5ZjVVurblpi40oSaA2ifdwnJDhSRZeXL5D+WXgvZ5ll5c8=
+	t=1789572390; cv=none; b=bfn2FbHQh72EFj3wZX8qHb62Qz+R/aCRj33lTVoO8B0YX3y/UX3z4agMbhYbrO0iCP551nIe96VGqB2JFM/gM1GtfGCisAcrvCUeXRAoJdzzAWHN6s18IYrCxJk4t5KMOnnUPw+yjJ/Jdx5eJoebvBQEhZ/cO/olmgW1rH9ZKHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789572163; c=relaxed/simple;
-	bh=MdSYXNcj5cpRxN9+K4F4LkrmAThRRmL35UayAoBa7fs=;
+	s=arc-20240116; t=1789572390; c=relaxed/simple;
+	bh=Fu4/E3gQeWwFK3ricNNpNoNorv/tjeWKQdpqaAuI/7M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TZR6BDs3gBdwyl/uUmlc3+J/1qN0XNNIPiGQf5kly2DnDDMteksA88oChToyu1ifF826XZFJyeeGlHXdXgsVjjMpSIEjF8FLq1ViI08y+R+wjDnD/Dveb7CSe0e3FHMVTsOjd6TB+L4NukBdPym46LCiEWabYbqZXeg0YNonNCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VTzvFepa; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=rTYubCDxckETGVwsJE6DahpyLlumxkmB8vN+Rk49oKPNlJ5th0q5zTpKVzCEvsZNBLYdc/BFmXJJC8Qw6+K5bNuTEQ1PqgYOEiXHEoF0f/OH9+vX84C/cFxCW3rzzqyCieEEEzl5O+5zqTuH5Ov/n9eyxeifNuYyroyaMge+NKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YWZEbHAh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VTzvFepa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D9981F000FF;
-	Wed, 16 Sep 2026 15:22:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YWZEbHAh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 729C01F00893;
+	Wed, 16 Sep 2026 15:26:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789572159;
-	bh=AuNmQA5s10qS4VTTL4v5s8UJsbG/ZONw29ACJG8o3kA=;
+	s=k20260515; t=1789572384;
+	bh=QEb5Qb19FcDbTyVRiixInWMHYbzxTpZ71E1UuOSUWXA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=VTzvFepapuMdEsmQOK1nJWTfIC9oryTuBzH3wAtW5cW7djRLKD9vRibINmbgqLfV0
-	 Dd1+5D9STEb8HHfB0Kxw4xWx7JfkKyTpPJqU3O8NSDVebC801uRdbYWPcy4SpJLrFQ
-	 gdzhpfcn/gcXWbX3Rrz2NiFnZu7LNEadUzvImie2OQbbZTu684/X0ysV0nacmcm0cr
-	 FPEo/2C+DtYpM0uQPgqbJpP4KFQUvFpyxTx/KlGlBDJj0+1mhh/ZlvSsjMoq7mDIox
-	 TK68BiyrEe2bBcNUlfumABJfDnLuS1yzZZOweN4HPgPz8+pohI7VWRu6j6yD4Zj7O2
-	 9m6HQaaXKT4Rw==
-Message-ID: <8bdc32dd-9d0a-40c7-908f-6f3a18b46a7b@kernel.org>
-Date: Wed, 16 Sep 2026 17:22:32 +0200
+	b=YWZEbHAhFP0bHivxSTeQa8jR/rVVQOGd3LcrNX5A9uMW2DcBaYw3fXpCHdJsTu9gU
+	 TYgAWl9hi2rdHAv1SfgsV8/ZELPY6oJnCuT6E70cEUh5UzBgI2qZrG1Abl/PB5U4NR
+	 w7gTwp2pIqXV+SUz1zVJws6jUEzFjUSpeCJCdQLIwepYYL2kHvj5oV6tuVlnB5z9p6
+	 CLh2ZKWW5zu11TzghgNKaENcetvQNAH2KnLpo7CpZhsUt65VEAmVuQygMZgWDPCTU2
+	 zyb2AYQbr+TqczE7YdgfKan+ykk4v2Hw9AQYtNtZNCUagSifr34t6ZBH9eaJCdKRPX
+	 xd5FeYKQ2Iq1Q==
+Message-ID: <8f3d1fa0-aebb-4e2c-9e7a-63934ffb3de5@kernel.org>
+Date: Wed, 16 Sep 2026 17:26:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,24 +35,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v11 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Hui Zhu <hui.zhu@linux.dev>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>,
- JP Kobryn <inwardvessel@gmail.com>, Andrew Morton
- <akpm@linux-foundation.org>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai
- <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- Barry Song <baohua@kernel.org>, Geliang Tang <geliang@kernel.org>,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, Hui Zhu <zhuhui@kylinos.cn>
-References: <cover.1789475073.git.zhuhui@kylinos.cn>
- <ee6bcf945910babab2200f05040975492aed21b3.1789475073.git.zhuhui@kylinos.cn>
- <aql_rkQMtlLmMstC@linux.dev> <DLGU6EUUD8HP.3SFNWRU1728IJ@gmail.com>
+Subject: Re: [PATCH v2 1/3] selftests/mm: fix size truncation in pagemap_ioctl
+ test
+To: Zenghui Yu <zenghui.yu@linux.dev>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: akpm@linux-foundation.org, ljs@kernel.org, liam@infradead.org,
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ shuah@kernel.org, gourry@gourry.net
+References: <20260908134117.84405-1-zenghui.yu@linux.dev>
+ <20260908134117.84405-2-zenghui.yu@linux.dev>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -99,47 +90,32 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <DLGU6EUUD8HP.3SFNWRU1728IJ@gmail.com>
+In-Reply-To: <20260908134117.84405-2-zenghui.yu@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/16/26 17:12, Kumar Kartikeya Dwivedi wrote:
-> On Tue Sep 15, 2026 at 7:26 PM CEST, Shakeel Butt wrote:
->> On Tue, Sep 15, 2026 at 08:29:35PM +0800, Hui Zhu wrote:
->>> From: Hui Zhu <zhuhui@kylinos.cn>
->>>
->>> BPF programs can observe memory pressure on a cgroup, e.g. refault
->>> stats via bpf_mem_cgroup_page_state(), but cannot act on it:
->>> triggering reclaim requires writing to memory.reclaim, which BPF
->>> cannot do.
->>>
->>> Add bpf_proactive_reclaim(), a sleepable kfunc performing one
->>> proactive reclaim pass on a memcg, like a write to memory.reclaim
->>> but without retrying until the target is reached, so that when and
->>> how hard to reclaim is BPF policy rather than hard-coded thresholds.
->>> The reclaim target of a single call is capped at MEMCG_CHARGE_BATCH,
->>> as high_work_func() does for memory.high; reclaiming more is left to
->>> the program, which can call the kfunc once per bpf_wq callback and
->>> stop at any point. It is limited to BPF_PROG_TYPE_SYSCALL, because
->>> other sleepable programs may run with filesystem locks held, on
->>> which the reclaim path could deadlock via filesystem shrinkers.
->>>
->>> Convert MIN_SWAPPINESS, MAX_SWAPPINESS and SWAPPINESS_ANON_ONLY from
->>> macros to an enum so that they are emitted into BTF and usable from
->>> BPF programs via vmlinux.h.
->>>
->>> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
->>
->> Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+On 9/8/26 15:41, Zenghui Yu wrote:
+> From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
 > 
-> Hi Andrew and David,
+> On arm64 with 64K base pages, the huge page size is 512 MiB, and
+> hpage_unit_tests() builds a 5 GiB range (10 * 512 MiB) for its tests.  This
+> exceeds the range of the int size parameters of gethugepage(),
+> wp_addr_range() and pagemap_ioctl().  The implicit truncation to 1 GiB
+> makes gethugepage() allocate a too small buffer, while the callers keep
+> operating on the original 5 GiB range, resulting in spurious failures or
+> SIGSEGV.
 > 
-> This looks good to me (from BPF side) and Shakeel, Hui might respin once more to
-> address some of the selftest concerns.
+> Fix the truncation by changing those size parameters to size_t, and for
+> consistency, also convert the remaining size-related parameters and
+> variables that use int, long or unsigned long long to size_t.
 > 
-> After that, any objections to taking this through bpf-next?
+> Fixes: 46fd75d4a3c9 ("selftests: mm: add pagemap ioctl tests")
+> Assisted-by: GLM-5.3 OpenCode
+> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+> Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
+> ---
 
-Fine with me, I don't expect any conflicts in mm/internal.h.
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
