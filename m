@@ -1,138 +1,218 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12FB3B42DE
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 03:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF231E47CC;
+	Wed, 16 Sep 2026 03:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789528201; cv=none; b=YegNtbpArUKDPOmByHL1YXm5/PRfAchKqCJKQQ8U9YLn96vRePwJ5qhVgB6lgu+R4Ajp6I1pPb2mocxfgC3N2Lu8eQQHaqnNqKj4GXJdAOIYs4t6Hh1FzsOq2/ZjdcOfnNWRyEeJ0d2SQyTsLwDjB0mfq3rY/CfrOXpZcsdT++U=
+	t=1789530432; cv=none; b=Na/YloEBGHE42CJN8R4TtD2DHk11FhuXUALogHWFCVgV3nbUZvOTpkFQU4xJ7LP6HuNFRlgelMztn/qDkm4d5LPXiqi0oHDGfUlmT2VZXn8r/fBNfGktoP3Dgb/iSE8VPd4cKGcJi3dYgjxzrzFqXnClTYhMnZfm4G4wp6Q4vUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789528201; c=relaxed/simple;
-	bh=s3onKEyrT+0WHtiaDzpK2XQ5j/0XZyztY0aypjYq4dE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=el7U9m5CXI6R8I9Wp20Fv2+fHUAiSyCBF1GDQurDJr4mpJF1XZwGupfvv/vGYw/POgkXdopihQe/wtLZm9J4kG+iuxZx9yvYfDzD1dVZS7rdaPdUUBsm2AnkYuwPYFRX59/W56tknLJ2cj2ipv3qJOfW79ogvYJ/EsxoJqBl/2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JTuSBm/W; arc=none smtp.client-ip=74.125.228.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789530432; c=relaxed/simple;
+	bh=gOP7mzIR6JicHMR6kpk3glCyrPVAZFRo2ZW+FrgmoTc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ayEufar5PpzAVVg9p5Xw/da3RAdF4VAOPQhukW9phr6rgJACwSWt3EU/WldIna75MuHoiIDlamoEzKnb3oxktOGZnzrpRXsb5e1LdTQ+HmjLnDcUrUxWm8qdcsxit5Tdq3G4Mu4kWxJf5FYur0ofIhWkLh4Cf5l1HpSuz5BEP0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=tnJJ08F2; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JTuSBm/W"
-Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc50b9e8a45so308803a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 20:09:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789528199; x=1790132999; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Xo/F38+zAwDZOYgaXngSmzbr3sc8wNw9Tr/i8NiK348=;
-        b=JTuSBm/WipSCDtIsyDkAXXnr4lekbxN0M/G0OXJAq2pQx6qoLk/QEFCBpsFbfESfNU
-         nGdL9umXrre0dDHQWnmrJzQXQw69/74CkqzB38gGf+riHLFcf02mcx+A+sWByGJ0PqIb
-         FeM61oI5hLLwiMF6DiWjafX1Q396Y8v0n+1p0g+mxYGfLQ1Xui/L91UhrEd4W9XMtpQ+
-         warOOBaKdz+V/0ncqm8CxhchItw2B4ndN1a4Wyl71bjXfbB8J1ZmsH8Ge0diVp5UHrIl
-         PekM+6NaV3Ohn85DZH2ns6++euHQl2Lm2YLNLKoJT/lAKhX8hKml9N+Io/sEmaOVHpPV
-         /Oag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789528199; x=1790132999;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Xo/F38+zAwDZOYgaXngSmzbr3sc8wNw9Tr/i8NiK348=;
-        b=0sL20t5X1NS6gb3q2IA57qcp6DjfgKkoOqgBfMGwpq5ZT8unlgSYyTpic8gDS2MknH
-         4jAjDJBRFckH4fvNI5nw+/42pq65kGXYGvk/jaaPGRfA9zNSJB+o1p/cJP8TBw8LhAQD
-         lsAfF8T1kqR3tcnhqxhBhFq2LXNA3Z00R13k/9IL9YpVQjcQFrvxI+bLQGgLR9y9DZg+
-         qoqRDalRKvCFhoHyzMQ2CnvVeAZ46XIcHcKJujtJOTT/SWmHUqkTF5CzgwwskwdOZHJf
-         6gx3TMfKIpobn7KNlqAWfKBRE4h0z+af4tKZOLAlw0uK0BdHeMJjpFej/VPSuXzAs/IU
-         UlDw==
-X-Forwarded-Encrypted: i=1; AKwUvBxhHhghX+cyRp0tfjH095kRqPQ+Mo40wpm72jyfJQjkNq91C0rtpROmHtgmrr0AX/dCvm1UGJ64D34NjxTpjJY=@vger.kernel.org
-X-Gm-Message-State: AFuF++nSPf2wnRQ/YaT+trR6ze27skR3Nkl1WFyipRk4LZ6bCb5spTqT
-	PQ+3GYEL1hIX1cKZZAq3jpRlDqphKC9qD96p1zFcWQkNKISegbe/viZe
-X-Gm-Gg: AYBFou1dnAzgVtx0Fh1pW1fW6k2yZmlsgaqLqxRRF9iToF1cOYNsaqAPxWPvik33PhV
-	mqhsw1JfR5utfWuMq3lXtuV3s9ayUuidV0w2+rw7WTM1gGOZhTh/v1kfeXKZe2W7o17Ix9OpDGn
-	RCPlJNmafA1S8sI8nhTS9ksESgv8IG1+O/UcdQ9G8C3XzOZqqj0jJ83l7dXhQTfET5XZj0IAW/o
-	b4koxBJMzu47a9OI4z7EpEaZhOm+oUwkZKP40Kvcgr0D+MPcvYHe1Q9G+2Ta/8ZWz0Rzx35Mdw4
-	/rZtnSKJBji0NuW+iiT6mRHQ/KKr1lJffO6sygSE4A0A+iCaEUNq6bPhPYDeChK2XHc4p8GI1+M
-	U7RiSbdQtEU4LdTUm0jMp2VAMhE36I5/wRk7tHWwp/8riu9nk+Wwp8AVTrQm+FhhqLNajwyjhoj
-	y8cERqRM1GRqvO8N7Lcx7grcfa6013M2y3KUVsCJgx5RcsWAYggdkjoF030Y7oX1IrzaxBFpPqP
-	fsM5iA5mAKIo68ErkWaQHSZSHraXcWKWUAJt4AcJIuzEQH+L2Zb9hcaa28Onz02KXOAcXaujbP9
-	jw==
-X-Received: by 2002:a17:90b:2744:b0:398:ba56:b926 with SMTP id 98e67ed59e1d1-39e1e5770b9mr2371994a91.25.1789528198934;
-        Tue, 15 Sep 2026 20:09:58 -0700 (PDT)
-Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:13da:4baf:148d:4ebb])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14397197dc8sm1984591c88.3.2026.09.15.20.09.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2026 20:09:58 -0700 (PDT)
-From: "Hemendra M. Naik" <hemendranaik@gmail.com>
-To: kuba@kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	hemendranaik@gmail.com,
-	horms@kernel.org,
-	jhs@mojatatu.com,
-	jiri@resnulli.us,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	tahiliani@nitk.edu.in,
-	vishy0777@gmail.com
-Subject: Re: [PATCH net-next v5 3/3] net/sched: pie: correct tc_pie_xstats field documentation
-Date: Wed, 16 Sep 2026 08:39:50 +0530
-Message-Id: <20260916030950.6667-1-hemendranaik@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260904231758.4082471-1-kuba@kernel.org>
-References: <20260904231758.4082471-1-kuba@kernel.org>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="tnJJ08F2"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D8ADC1516;
+	Tue, 15 Sep 2026 20:47:04 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D860B3F882;
+	Tue, 15 Sep 2026 20:47:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1789530428; bh=gOP7mzIR6JicHMR6kpk3glCyrPVAZFRo2ZW+FrgmoTc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tnJJ08F2B08v+fsmMrIYOk0W1spMzOSuvw85ZIxDRL/cerfM015Dh3CGI9V7nyzyf
+	 pN74mS7hOpVty/3zNCtYAkuo4HA6jeKDhcnCFOMGC7vZcmFtYKiYsulg+fFme8yPHo
+	 CeN5iGihTx4JeaKQbPMyN1tnhGhFIBW2U9blnLao=
+Date: Wed, 16 Sep 2026 04:47:03 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: Yeoreum Yun <yeoreum.yun@arm.com>, Zi Yan <ziy@nvidia.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Nico Pache <nico.pache@linux.dev>,
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 2/2] kselftest: mm: fix intermittent failure khugepaged
+ test
+Message-ID: <aqoRN6_qo2nEy27c@e129823.arm.com>
+References: <20260915-fix_khugepagd_fail-v1-0-bb6f04c8759f@arm.com>
+ <20260915-fix_khugepagd_fail-v1-2-bb6f04c8759f@arm.com>
+ <24690e82-3aab-4f2d-95a7-3bba332ca5bc@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <24690e82-3aab-4f2d-95a7-3bba332ca5bc@linux.alibaba.com>
 
-Hi @Jakub,
+> 
+> 
+> On 9/15/26 5:21 PM, Yeoreum Yun wrote:
+> > There are intermittent failures in collapse_max_ptes_swap() and
+> > collapse_max_ptes_shared() when using the khugepaged_context:
+> > 
+> >    // while running ./khugepaged -s 2
+> > 
+> >    # Run test: collapse_max_ptes_shared (khugepaged:anon)
+> >    # Allocate huge page... OK
+> >    # Share huge page over fork()... OK
+> >    # Trigger CoW on page 1023 of 2048... OK
+> >    # Maybe collapse with max_ptes_shared exceeded.... OK
+> >    # Trigger CoW on page 1024 of 2048... Fail
+> >    Bail out! Unexpected huge page
+> >    # Planned tests != run tests (26 != 23)
+> >    # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > 
+> >    # Run test: collapse_max_ptes_swap (khugepaged:anon)
+> >    # Swapout 257 of 2048 pages... OK
+> >    # Maybe collapse with max_ptes_swap exceeded.... OK
+> >    # Swapout 256 of 2048 pages... OK
+> >    Bail out! Unexpected huge page
+> >    # Planned tests != run tests (26 != 17)
+> >    # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > 
+> > This happens because khugepaged may collapse the pages before wait_for_scan()
+> > is called, causing a sanity check that expects uncollapsed pages to fail.
+> > 
+> > For example, in collapse_max_ptes_swap(), after faulting the pages back in
+> > and paging out up to max_ptes_swap pages, khugepaged may collapse them again
+> > before c->collapse() is called.
+> > 
+> > To prevent this, change the khugepaged setting from ALWAYS to MADVICE for
+> > the affected tests, and mark the VMA with MADV_NOHUGEPAGE after it has been
+> > collapsed by wait_for_scan(). This prevents khugepaged from collapsing it
+> > again before c->collapse() is called.
+> > 
+> > This failure was observed on NVIDIA Spark with 16KB page.
+> > 
+> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> > ---
+> >   tools/testing/selftests/mm/khugepaged.c | 15 +++++++++++++++
+> >   1 file changed, 15 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> > index c32244b565658..83e9386bbc842 100644
+> > --- a/tools/testing/selftests/mm/khugepaged.c
+> > +++ b/tools/testing/selftests/mm/khugepaged.c
+> > @@ -578,6 +578,8 @@ static bool wait_for_scan(const char *msg, char *p, size_t len,
+> >   		usleep(TICK);
+> >   	}
+> > +	madvise(p, len, MADV_NOHUGEPAGE);
+> 
+> This looks incorrect to me and would reintroduce the previous problem.
+> Please see commit 7962e05a835f ("selftests: khugepaged: fix the shmem
+> collapse failure").
 
-Thank you for the review. Replies are inline below.
+But, after the thp_enabled changed the THP_MADVISE and then fault,
+there is the chance to be collpased for anon.
 
-> Should the vendored copy in tools/include/uapi/linux/pkt_sched.h be
-> updated in the same patch? [...] So after this change the two in-tree
-> copies of the same structure describe the same field with different
-> units. [...] Would a resync of tools/include/uapi/linux/pkt_sched.h,
-> or at least of the tc_pie_xstats comments, be appropriate so the stale
-> documentation the commit message aims to eliminate is actually gone
-> from the tree?
+I overlook the shmem case. but simple could we do like:
 
-We would prefer to leave this out of v6. The v4 review asked us to drop
-that, and we did; adding it back now would undo that. The copy is
-stale well beyond this one comment (u32 prob, no dq_rate_estimating, no
-FQ-PIE additions at all), so fixing a single unit comment there would
-not help much. A proper resync feels like its own patch.
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index c32244b565658..047524f001532 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -578,6 +578,9 @@ static bool wait_for_scan(const char *msg, char *p, size_t len,
+                usleep(TICK);
+        }
 
-> This isn't a bug introduced by this patch, but does the exported value
-> always match the newly documented microsecond unit? [...] a qdelay
-> whose nanosecond value exceeds 2^32-1 (roughly 4.295 s) wraps modulo
-> 2^32 ns and then gets divided, reporting a small microsecond number
-> for a large delay. [...] Would moving the cast after the division in
-> both sch_pie.c and sch_fq_pie.c be worth a follow-up, so the code
-> matches the microsecond contract this comment now states?
++       if (!strncmp(ops->name, "anon", 4))
++               madvise(p, len, MADV_NOHUGEPAGE);
++
+        return timeout == -1;
+ }
 
-Thank you for catching this; the bug is real, and you already flagged
-the same issue for sch_fq_pie.c on patch 1 — we will fix it there with
-div_u64(). No code change is needed for this patch itself; it is 
-comment-only and correct as posted. We will send the sch_pie.c fix as 
-a follow-up after this series.
+> 
+> > +
+> >   	return timeout == -1;
+> >   }
+> > @@ -839,6 +841,7 @@ static void collapse_swapin_single_pte(struct collapse_context *c, struct mem_op
+> >   static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *ops)
+> >   {
+> > +	struct thp_settings settings = *thp_current_settings();
+> >   	int max_ptes_swap = thp_read_num("khugepaged/max_ptes_swap");
+> >   	void *p;
+> > @@ -860,6 +863,9 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
+> >   	validate_memory(p, 0, hpage_pmd_size);
+> >   	if (c->enforce_pte_scan_limits) {
+> > +		settings.hugepages[collapse_order].enabled = THP_MADVISE;
+> > +		thp_push_settings(&settings);
+> 
+> I'm not sure why the collapse_order setting needs to be changed here. In
+> your test case, you did not use the '-c' parameter to specify the collapse
+> order.
 
+What a stupid of me and I post wrong one... thie should be thp_enabled...
+Apologise :(
 
+> 
+> > +
+> >   		ops->fault(p, 0, hpage_pmd_size);
+> >   		ksft_print_msg("Swapout %d of %d pages...", max_ptes_swap,
+> >   		       hpage_pmd_nr);
+> > @@ -869,12 +875,15 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
+> >   			success("OK");
+> >   		} else {
+> >   			fail("Fail");
+> > +			thp_pop_settings();
+> >   			goto out;
+> >   		}
+> >   		c->collapse("Collapse with max_ptes_swap pages swapped out", p,
+> >   			    1, ops, true);
+> >   		validate_memory(p, 0, hpage_pmd_size);
+> > +
+> > +		thp_pop_settings();
+> >   	}
+> >   out:
+> >   	ops->cleanup_area(p, hpage_pmd_size);
+> > @@ -1075,6 +1084,7 @@ static void collapse_fork_compound(struct collapse_context *c, struct mem_ops *o
+> >   static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops *ops)
+> >   {
+> > +	struct thp_settings settings = *thp_current_settings();
+> >   	int max_ptes_shared = thp_read_num("khugepaged/max_ptes_shared");
+> >   	int wstatus;
+> >   	void *p;
+> > @@ -1100,6 +1110,9 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
+> >   			    1, ops, !c->enforce_pte_scan_limits);
+> >   		if (c->enforce_pte_scan_limits) {
+> > +			settings.hugepages[collapse_order].enabled = THP_MADVISE;
+> > +			thp_push_settings(&settings);
+> 
+> Ditto.
 
+Sorry this should be thp_enabled...
 
-One more query: I see that the counterpart iproute2 v5 patches are currently
-marked as "Awaiting Upstream". In that case, is it necessary to post a v6 of 
-the iproute2 series, or can we wait for the v5 patch to be reviewed?
+> 
+> > +
+> >   			ksft_print_msg("Trigger CoW on page %d of %d...",
+> >   			       hpage_pmd_nr - max_ptes_shared, hpage_pmd_nr);
+> >   			ops->fault(p, 0, (hpage_pmd_nr - max_ptes_shared) *
+> > @@ -1111,6 +1124,8 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
+> >   			c->collapse("Collapse with max_ptes_shared PTEs shared",
+> >   				    p, 1, ops, true);
+> > +
+> > +			thp_pop_settings();
+> >   		}
+> >   		validate_memory(p, 0, hpage_pmd_size);
+> > 
+> 
 
+Thanks!
 
-
-Thanks,
-Hemendra
-
-
+-- 
+Sincerely,
+Yeoreum Yun
