@@ -1,349 +1,226 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F26F24AB3B9;
-	Wed, 16 Sep 2026 15:55:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789574178; cv=none; b=Q77uxxz/bgUG+qAd+HAVTXGYAMDAalacvFsBzF+mcXdwThbTFPvHLspEjaY240KMqGaa0CHxxY3IRL+pTfR67OcwVhP91c6T2GERcSfw8Z8e75upne/w/BqmTW4Rnnqb/ubm5+OaIXiPxV/YktOXRwCvtGYyKZyB0V9d0rHd974=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789574178; c=relaxed/simple;
-	bh=z3zjr0XsNuHaANYr0dL6PUWN/3yZajpQbLCKUWbd+ps=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pGJ5SO0H5QjHhDf6YpU0cPxQvKREfzoOcQFGI/jc7vXtCqJ2Km5MCjY0OMLKl1ynh+pXeVuniN5L0P5zuqJvxtDFlaYJjZQAXOESjDz0mqypmNA1NjhwkSFQ0sGVXiEScPyPn9+oaedVgIpHC0IQmOG6sPSGb2KTNYdYZ+xRoLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=OrBMENQc; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF5D4D7974
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 16:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789575908; cv=pass; b=N+R14h0CRjlpKI+mdhthzrhkOOZNfb1YduGHfrDiDFSr0HdX+m+AlYxx40kJ3+RXSqwmyaVg0PGdzmoUMtbyepmFtquLiQsioZLMGPeN6MKB76xOV8dRFc4y22nhFf1NQPoZnR4xUyFSuBJmiWkHSTZ2Djr3Yds1zVEKbojdVKg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789575908; c=relaxed/simple;
+	bh=Tfy5DSiHTM2ZgjvWMzhVCdG5j/zkio3GvqabXlNj/F8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K0169bHCicvDWghQg2uU8h305hXLqutHGvyGVMp0NXoduCvQlfqhAwjcD9fa9vpNHsr20g0GTnb7UxCW6RcBYo/mMs4nxGZWY+0jJrVryQiSxcowC3Udc66YY3xLteHkBjs7NS2pPXIK5MKptbdQDj+t/m7Hfe9vuzHKqHu7XCc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bZekhNhp; arc=pass smtp.client-ip=74.125.228.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="OrBMENQc"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:From:Reply-To; bh=rIMeXjQ7oism9g1OPJrivzQXheiMOSH8xcFeWnoY0Hc=; b=
-	OrBMENQc4cJDM938i7GRiUMHsuAhlCaH9K5zWWxpbu+2W4PL2SsUL5nEMGlRV73pGePUdis8NBN3U
-	yMkkh5us6/LYmYiK9lJF/odwM/oZIH+astpm9MHbffyvxfZg0JET73h6moIuLD9HI2VVQzbc7vy9t
-	rd/dOoJ+g3sDFzqL5K9zkIUVJ6oPhAzQMTOfnvGRQshubFpQFCuA4kBBB9HEZvaRYuWmhvNKTmXib
-	v18JNIxLp1ItnO1gCuQllgXqBD4ci+fddMwpsh/2RTKJYWmGxTTOTZK2yHeuBu5n+H9gkluRk631V
-	KTos77qpmqLU5bQZqVOs6mzzxxj1W829Ng==;
-Received: from bl21-120-122.dsl.telepac.pt ([2.82.120.122] helo=localhost)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1x6ryy-0031Jr-Dv; Wed, 16 Sep 2026 17:55:36 +0200
-From: Luis Henriques <luis@igalia.com>
-To: Miklos Szeredi <miklos@szeredi.hu>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Chen Linxuan <me@black-desk.cn>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: fuse-devel@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Matt Harvey <mharvey@jumptrading.com>,
-	kernel-dev@igalia.com,
-	Luis Henriques <luis@igalia.com>
-Subject: [RFC PATCH v4 6/8] selftests/fuse: add some extra ACL caching tests
-Date: Wed, 16 Sep 2026 16:56:27 +0100
-Message-ID: <20260916155629.32421-7-luis@igalia.com>
-In-Reply-To: <20260916155629.32421-1-luis@igalia.com>
-References: <20260916155629.32421-1-luis@igalia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bZekhNhp"
+Received: by mail-pz2-f41.google.com with SMTP id 41be03b00d2f7-cc1cea4bfb6so598301a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 09:25:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789575899; cv=none;
+        d=google.com; s=arc-20260327;
+        b=nj7pntqZc6tvc/ifj6D4+WZ15f4h7UF1XnABHZYm383NNzjD1YqQAueWw4TjxGpfFz
+         3GvKqvFBVWTm4XL+kdV4cMg0cvP+1Rqkp26DD4K0FlwVfmL4L6LfHSbeTueVVf2f2W/l
+         O81zyKi/JEPDnmmqeoEt9AEj3evM9f9NR+dyAiwwhYkY+Mwu39X1WzlDZblUi5bYHTY5
+         Ldp/WKiV+DdzBSsVGoX6+BHYAZqvyW2y9jfXGh1Mg7xBKdxpDj4xoX5IcoK5o0nkwdYU
+         6LWQ9z+fQWgtvNwvrwiEjDb9CoJxBtjTzjkUCPMYvDdjPqqIUPN+p8ZWtAZvZ0RCJQI5
+         AHKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=T8vXUt64r835ESBTJB/dxhUkslLOOIq8gAbMXJNheR4=;
+        fh=heJIAiO6vA8pP89XD2fHG6LD10pq/5PYH5DFfsNzttE=;
+        b=RGYnTvQ2flCqKEFGDF+BxZhYfnNzQPUNSc6ndpOXML5iFWiTbtjYkGZx/rw8QvEsGn
+         AuC3mKo49s5va5FOV0XbDJ+pyMBSHOTVbkAeFEUQjJILVOdw7/GCYntBGLBr/z8nHfdB
+         wImCtI5Qz0vHuGTqeWwaPODx0WiH8A7Wh8/+2Yoif3CcbcV0hoS1I3+fVLoJKimMatMF
+         WYdAOriRNneQ2hH9SoBXux55B21+bvV08kQP3udnZO7kyDdGiJNAxV5K+wl7lu09AEWc
+         bNQC7Exmy6LaVnPQLwIqJm5Uzkytc/gTFJxD/LI6CjXUALHCnYPmQsMorKQHm30YNy2c
+         PHjA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789575899; x=1790180699; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=T8vXUt64r835ESBTJB/dxhUkslLOOIq8gAbMXJNheR4=;
+        b=bZekhNhpcg/1WhRHKG+Te+9vs6pKpnPaeYDWYjxmHME2wRqUKJwf+jbgpyIQk0f+6V
+         O13fJ64qVUx0EbIwbu58oC0t+S3pdV9MTIHi1uM7QDpLJvzHlet/u3tlnO9/FgAuHkFh
+         WQBPJoP8/NXvDcjpTh7jSeinHytvfkuVsSilIQSGdhzC2KUbYqJliGCs21YfYXqSqETO
+         rk4Z7qavbTXqB03s39SBI4JfjdMg19KoHEWsWzptpKFTAEnE0Gt5Uy1Na+pOvclqT9gz
+         q66MNxfH6dcaNjRIEoaniNrjEW7bksizf8f9c6V1JGBGPZLtsddsnaFpbNi/nmwiAOf1
+         wJFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789575899; x=1790180699;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=T8vXUt64r835ESBTJB/dxhUkslLOOIq8gAbMXJNheR4=;
+        b=fnAW1k4N+bRAqIxaIxZxTpmcpaDaR2MNEVKjAvCR3EAcKkXakF2GPt/UcAz9RWSTAM
+         y56fl5Xes58iL0YrJB71BCocX3dMLYwgiWP44qbO6DlkaZyqHQeKyTBzb+NwhkvY8p+R
+         1F82ENy45ZOoQt0yVN4KF0Eit/8XDZJKLYRZJy6QvaTaZ1TegjqEV60G/zSZcY4ysW0z
+         mc1xrWP3ti7LAoWeloPbS/Kht1eugddj/AXkbBTk+ElYvIMCItoS98w4x4yfjramrhoG
+         4Qqz7NtK/SzZ5xyTi4NgrygdbvRlvO8b1zZExXSg1c4wMIHJOmi9JuxGnwgZTTZSIVxL
+         lTLg==
+X-Forwarded-Encrypted: i=1; AKwUvBzqFlfBHlbjMrrcnw8wHFfXO1d6NsT1w02ZTen2+ZsFAWwvIenxL0oRVBGYKgghJAF9MFhTMR1lZOSMkSfxWMY=@vger.kernel.org
+X-Gm-Message-State: AFuF++nY8Q9etX1eGptbysWu64MzdR8SHPRLDLSWevXRU1Jw7rEY8fGr
+	HpaddbTyDUoIckBOADDtYmLxgl6bg54tZ16/CAjKZbUhbSrPSzBmeKXMiu3ZxreUVnJ6vcgOUnH
+	U4vMzdLWTtkR2pruX0n5gUZPbWqR0mv8=
+X-Gm-Gg: AYBFou0oZgf/VWf/1pJNWe4Bk2MYEXoGvnoKa/QA8At+PaAQHEh5DeAPuXVlVKlWRNM
+	eFsfOxKNN6B7Uh8CfyVUqxYW5bP6EocT6aTO8icRFrUMrDPUl657Z2RxGvJl0TmM9eHt4un7zKy
+	ZYVLabdGeHeUbybhQkWokkizzck9kTEYYQVsBC5cb6ajutjg+r4uNb+lTgK2IHFyRXNbtsMuFoo
+	NOB3d9MJ7G7EnidZI+qVkcvpJuOhEGVK0o7CEcA0q+U/AzJBKDdKu8p/0nxKG19mmfsdbnPwG6E
+	x+2u63XLMR4wtpF3ebTcvmi67QpSg1OsXNDfxH/7/tIGEhkyImZEpGBm+JsyYNevo2PbnXPzrFo
+	JQIYbc/Hy/dlOMDZOQ3s2/wUK88dtDxBYwoZ+h27/pnMdVqvVG/fj4VSiHWhxLZsacUm16jpqN2
+	FuNvjvcpLj5taKEEz5Sz+PRVQep+hqTzY=
+X-Received: by 2002:a05:6a20:9c9b:b0:3d3:adbf:7781 with SMTP id
+ adf61e73a8af0-3dd5f73f2fdmr9852912637.22.1789575898997; Wed, 16 Sep 2026
+ 09:24:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260916112554.413933-1-madhav.khoslaa@gmail.com> <fe92569462dc4decf36f4dcb3b45372fc0d42fb6842eda0d3396fa18ee32aa55@mail.kernel.org>
+In-Reply-To: <fe92569462dc4decf36f4dcb3b45372fc0d42fb6842eda0d3396fa18ee32aa55@mail.kernel.org>
+From: Madhav Khosla <madhav.khoslaa@gmail.com>
+Date: Wed, 16 Sep 2026 16:24:46 +0000
+X-Gm-Features: AcwNN1U8QHUiHDV5g4tLvSfFw01ei7S3h8NzFnBoBxITmcE6o6f_L5XxCkZd1mI
+Message-ID: <CAHFb0oABUaKNWVcNZwrxPv0MJU=3Jt1X+iv3fJX9RgO97uu4iQ@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf] selftests/bpf: Fix csum_partial() dropping
+ trailing byte on odd length
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	alexis.lothore@bootlin.com, eddyz87@gmail.com, ihor.solodrai@linux.dev, 
+	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	shuah@kernel.org, davem@davemloft.net, kuba@kernel.org, hawk@kernel.org, 
+	john.fastabend@gmail.com, sdf@fomichev.me, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This adds some extra tests to ACL caching:
-- Verify that reading ACLs results in the expected number of requests
-  being sent user-space, depending on whether cache is enabled or disabled
-- Verify caching behaviour on some caching invalidation scenarios
+> This isn't a bug, but would it be clearer to paste the full failure
+> output or mark the elision? The summary line says six subtests failed
+> (1/6 FAILED) while only the ipv6 one is shown, and test_progs.c runs
+> three ASSERT_EQ calls per subtest ('test first port', 'test second port',
+> 'test third port'), so 'test first port' would have failed too. And
+> '1/0 PASSED' reports one passing test, which cannot come from a run whose
+> only named test failed.
 
-While there, add test binary to .gitignore.
+Not a bug. That log is the test failing on the TEST_PACKET_LEN=3D99 case
+against the old (pre-fix) csum_partial(), not my patch. My change is
+what makes the test catch it; it passes with the fix applied.
 
-Signed-off-by: Luis Henriques <luis@igalia.com>
----
- .../selftests/filesystems/fuse/.gitignore     |   1 +
- .../filesystems/fuse/fuse_acl_cache_test.c    | 203 +++++++++++++++++-
- 2 files changed, 202 insertions(+), 2 deletions(-)
+Madhav
 
-diff --git a/tools/testing/selftests/filesystems/fuse/.gitignore b/tools/testing/selftests/filesystems/fuse/.gitignore
-index fb51603fe419..f7f3dd345a50 100644
---- a/tools/testing/selftests/filesystems/fuse/.gitignore
-+++ b/tools/testing/selftests/filesystems/fuse/.gitignore
-@@ -2,3 +2,4 @@
- fuse_mnt
- fusectl_test
- write_extend_eof_test
-+fuse_acl_cache_test
-diff --git a/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c b/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
-index fb4e3554e3c9..173063efeee8 100644
---- a/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
-+++ b/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
-@@ -84,6 +84,9 @@ struct daemon_state {
- 	uint8_t		*acl;
- 	size_t          acl_size;
- 	int             getxattr_count;
-+	uid_t           uid;
-+	uid_t           gid;
-+	bool            cache;
- };
- 
- /*
-@@ -92,9 +95,17 @@ struct daemon_state {
-  */
- static struct daemon_state g_ds = {
- 	.lock = PTHREAD_MUTEX_INITIALIZER,
-+	.cache = false,
- };
- 
- /* ---- FUSE lowlevel callbacks -------------------------------------------- */
-+static void fs_init(void *userdata, struct fuse_conn_info *conn)
-+{
-+	pthread_mutex_lock(&g_ds.lock);
-+	if (g_ds.cache)
-+		fuse_set_feature_flag(conn, FUSE_CAP_POSIX_ACL);
-+	pthread_mutex_unlock(&g_ds.lock);
-+}
- 
- static void fs_lookup(fuse_req_t req, fuse_ino_t parent, const char *name)
- {
-@@ -116,6 +127,10 @@ static void fs_lookup(fuse_req_t req, fuse_ino_t parent, const char *name)
- 	e.attr.st_ino     = FILE_INO;
- 	e.attr.st_mode    = S_IFREG | 0644;
- 	e.attr.st_nlink   = 1;
-+	pthread_mutex_lock(&g_ds.lock);
-+	e.attr.st_uid = g_ds.uid;
-+	e.attr.st_gid = g_ds.gid;
-+	pthread_mutex_unlock(&g_ds.lock);
- 	fuse_reply_entry(req, &e);
- }
- 
-@@ -133,6 +148,10 @@ static void fs_getattr(fuse_req_t req, fuse_ino_t ino,
- 		st.st_ino   = FILE_INO;
- 		st.st_mode  = S_IFREG | 0644;
- 		st.st_nlink = 1;
-+		pthread_mutex_lock(&g_ds.lock);
-+		st.st_uid = g_ds.uid;
-+		st.st_gid = g_ds.gid;
-+		pthread_mutex_unlock(&g_ds.lock);
- 	} else {
- 		fuse_reply_err(req, ENOENT);
- 		return;
-@@ -161,12 +180,14 @@ static void fs_getxattr(fuse_req_t req, fuse_ino_t ino, const char *name,
- 	}
- 	pthread_mutex_lock(&g_ds.lock);
- 	acl_size = g_ds.acl_size;
--	if (acl && (size >= acl_size))
-+	if (acl && acl_size && (size >= acl_size))
- 		memcpy(acl, g_ds.acl, acl_size);
- 	g_ds.getxattr_count++;
- 	pthread_mutex_unlock(&g_ds.lock);
- 
--	if (size == 0)
-+	if (acl_size == 0)
-+		fuse_reply_err(req, ENODATA);
-+	else if (size == 0)
- 		fuse_reply_xattr(req, acl_size);
- 	else if (size < acl_size)
- 		fuse_reply_err(req, ERANGE);
-@@ -176,10 +197,42 @@ static void fs_getxattr(fuse_req_t req, fuse_ino_t ino, const char *name,
- 	free(acl);
- }
- 
-+static void fs_setxattr(fuse_req_t req, fuse_ino_t ino, const char *name,
-+			    const char *value, size_t size, int flags)
-+{
-+	int ret = 0;
-+	uint8_t *acl;
-+
-+	if (ino != FILE_INO) {
-+		ret = ENOENT;
-+		goto out;
-+	} else if (strcmp(name, "system.posix_acl_access") != 0) {
-+		ret = ENOTSUP;
-+		goto out;
-+	}
-+	acl = malloc(size);
-+	if (!acl) {
-+		ret = ENOMEM;
-+		goto out;
-+	}
-+	memcpy(acl, value, size);
-+	pthread_mutex_lock(&g_ds.lock);
-+	if (g_ds.acl)
-+		free(g_ds.acl);
-+	g_ds.acl = acl;
-+	g_ds.acl_size = size;
-+	pthread_mutex_unlock(&g_ds.lock);
-+
-+out:
-+	fuse_reply_err(req, ret);
-+}
-+
- static const struct fuse_lowlevel_ops fs_ops = {
-+	.init     = fs_init,
- 	.lookup   = fs_lookup,
- 	.getattr  = fs_getattr,
- 	.getxattr = fs_getxattr,
-+	.setxattr = fs_setxattr,
- };
- 
- /* ---- kselftest harness --------------------------------------------------- */
-@@ -198,6 +251,9 @@ FIXTURE_SETUP(acl_cache)
- 	ASSERT_NE(g_ds.acl, NULL);
- 	memcpy(g_ds.acl, acl_a, g_ds.acl_size);
- 	g_ds.getxattr_count = 0;
-+	g_ds.uid = getuid();
-+	g_ds.gid = getgid();
-+	g_ds.cache = false;
- 
- 	if (fs_setup(&fs_ops, &g_ds.ctx, err))
- 		SKIP(goto out, err);
-@@ -325,4 +381,147 @@ TEST_F(acl_cache, stale_after_force_sync)
- 	EXPECT_EQ(count, 4);
- }
- 
-+FIXTURE(acl_cache_onoff)
-+{
-+	char pathname[PATH_MAX];
-+};
-+
-+FIXTURE_VARIANT(acl_cache_onoff) { bool cache; };
-+FIXTURE_VARIANT_ADD(acl_cache_onoff, nocache) { .cache = false, };
-+FIXTURE_VARIANT_ADD(acl_cache_onoff, docache) { .cache = true, };
-+
-+FIXTURE_SETUP(acl_cache_onoff)
-+{
-+	char err[MAX_ERR_MSG];
-+
-+	pthread_mutex_lock(&g_ds.lock);
-+	g_ds.acl = NULL;
-+	g_ds.acl_size = 0;
-+	g_ds.getxattr_count = 0;
-+	g_ds.cache = variant->cache;
-+	g_ds.uid = getuid();
-+	g_ds.gid = getgid();
-+
-+	if (fs_setup(&fs_ops, &g_ds.ctx, err))
-+		SKIP(goto out, err);
-+
-+	snprintf(self->pathname, sizeof(self->pathname),
-+		 "%s/" FILE_NAME, g_ds.ctx.mountpoint);
-+out:
-+	pthread_mutex_unlock(&g_ds.lock);
-+}
-+
-+FIXTURE_TEARDOWN(acl_cache_onoff)
-+{
-+	pthread_mutex_lock(&g_ds.lock);
-+	fs_teardown(&g_ds.ctx);
-+	pthread_mutex_unlock(&g_ds.lock);
-+	free(g_ds.acl);
-+}
-+
-+/*
-+ * This is the most basic ACL caching test: verify that, when reading ACLs for
-+ * an inode, user-space is called:
-+ * - Only once if ACLs cache is enabled, or
-+ * - Once per access if cache i disabled.
-+ */
-+TEST_F(acl_cache_onoff, test_acl_cache_enable_disable)
-+{
-+	char buf[512];
-+	ssize_t sz;
-+	bool cache;
-+	int counter;
-+	int i;
-+
-+	ASSERT_EQ(lsetxattr(self->pathname, "system.posix_acl_access",
-+			    acl_a, sizeof(acl_a), 0), 0);
-+
-+	for (i = 0; i < 100; i++) {
-+		sz = lgetxattr(self->pathname, "system.posix_acl_access",
-+			       buf, sizeof(buf));
-+		ASSERT_EQ(sz, sizeof(acl_a));
-+		ASSERT_EQ(memcmp(buf, acl_a, sz), 0);
-+	}
-+
-+	pthread_mutex_lock(&g_ds.lock);
-+	counter = g_ds.getxattr_count;
-+	cache = g_ds.cache;
-+	pthread_mutex_unlock(&g_ds.lock);
-+
-+	if (cache) {
-+		ASSERT_EQ(counter, 1);
-+	} else {
-+		ASSERT_EQ(counter, 100);
-+	}
-+
-+	TH_LOG("User-space called %d time(s) with ACL caching %s",
-+	       counter, cache ? "enabled" : "disabled");
-+}
-+
-+/*
-+ * Test caching invalidation for several scenarios:
-+ * 1. When a new ACL is set
-+ * 2. When invalidating an inode (NOTIFY_INODE_INVAL)
-+ */
-+TEST_F(acl_cache_onoff, test_acl_cache_invalidation)
-+{
-+	char buf[512];
-+	ssize_t sz;
-+	int counter;
-+	bool cache;
-+	int i;
-+
-+	/* Set an ACL */
-+	ASSERT_EQ(lsetxattr(self->pathname, "system.posix_acl_access",
-+			    acl_a, sizeof(acl_a), 0), 0);
-+
-+	for (i = 0; i < 100; i++) {
-+		sz = lgetxattr(self->pathname, "system.posix_acl_access",
-+			       buf, sizeof(buf));
-+		ASSERT_EQ(sz, sizeof(acl_a));
-+		ASSERT_EQ(memcmp(buf, acl_a, sz), 0);
-+	}
-+
-+	/* 1. force cache invalidation by setting a new ACL */
-+	ASSERT_EQ(lsetxattr(self->pathname, "system.posix_acl_access",
-+			    acl_b, sizeof(acl_b), 0), 0);
-+
-+	sz = lgetxattr(self->pathname, "system.posix_acl_access",
-+		       buf, sizeof(buf));
-+	ASSERT_EQ(sz, sizeof(acl_b));
-+	ASSERT_EQ(memcmp(buf, acl_b, sz), 0);
-+
-+	pthread_mutex_lock(&g_ds.lock);
-+	counter = g_ds.getxattr_count;
-+	cache = g_ds.cache;
-+	pthread_mutex_unlock(&g_ds.lock);
-+
-+	if (cache) {
-+		ASSERT_EQ(counter, 2);
-+	} else {
-+		ASSERT_EQ(counter, 101);
-+	}
-+	TH_LOG("Invalidation by setting new ACL: OK");
-+
-+	/* 2. send FUSE_NOTIFY_INVAL_INODE */
-+	fuse_lowlevel_notify_inval_inode(g_ds.ctx.se, FILE_INO, 0, 0);
-+
-+	sz = lgetxattr(self->pathname, "system.posix_acl_access",
-+		       buf, sizeof(buf));
-+	ASSERT_EQ(sz, sizeof(acl_b));
-+	ASSERT_EQ(memcmp(buf, acl_b, sz), 0);
-+
-+	pthread_mutex_lock(&g_ds.lock);
-+	counter = g_ds.getxattr_count;
-+	cache = g_ds.cache;
-+	pthread_mutex_unlock(&g_ds.lock);
-+
-+	if (cache) {
-+		ASSERT_EQ(counter, 3);
-+	} else {
-+		ASSERT_EQ(counter, 102);
-+	}
-+	TH_LOG("Invalidation through FUSE_NOTIFY_INVAL_INODE: OK");
-+}
-+
- TEST_HARNESS_MAIN
+On Wed, Sep 16, 2026 at 12:13=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
+>
+> > diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/test=
+ing/selftests/bpf/network_helpers.h
+> > index 75133119c04a3..878c9fc5c37ca 100644
+> > --- a/tools/testing/selftests/bpf/network_helpers.h
+> > +++ b/tools/testing/selftests/bpf/network_helpers.h
+> > @@ -129,12 +129,23 @@ static __u16 csum_fold(__u32 csum)
+> >
+> >  static __wsum csum_partial(const void *buf, int len, __wsum sum)
+> >  {
+> > -     __u16 *p =3D (__u16 *)buf;
+> > +     const __u8 *p =3D buf;
+> >       int num_u16 =3D len >> 1;
+> >       int i;
+> >
+> >       for (i =3D 0; i < num_u16; i++)
+> > -             sum +=3D p[i];
+> > +             sum +=3D ((const __u16 *)p)[i];
+> > +
+> > +     /*
+> > +      * RFC 1071: an odd-length buffer's trailing byte is paired with
+> > +      * a zero pad byte to form the final 16-bit word.
+> > +      */
+> > +     if (len & 1) {
+> > +             __u16 tail =3D 0;
+> > +
+> > +             __builtin_memcpy(&tail, p + len - 1, 1);
+> > +             sum +=3D tail;
+> > +     }
+> >
+> >       return sum;
+> >  }
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector_clas=
+sification.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector_classi=
+fication.c
+> > index 80b153d3ddecf..421dfa6c4ea36 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/flow_dissector_classificat=
+ion.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector_classificat=
+ion.c
+> > @@ -27,7 +27,7 @@
+> >  #define TEST_NAME_MAX_LEN (32 + SUBTEST_NAME_MAX_LEN)
+> >  #define MAX_SOURCE_PORTS 3
+> >  #define TEST_PACKETS_COUNT 10
+> > -#define TEST_PACKET_LEN 100
+> > +#define TEST_PACKET_LEN 99
+> >  #define TEST_PACKET_PATTERN 'a'
+> >  #define TEST_IPV4 "192.168.0.1/32"
+> >  #define TEST_IPV6 "100::a/128"
+>
+> The commit message body includes:
+>
+> >     v1 -> v2:
+> >     - comment style: opening /* on its own line, per BPF selftests styl=
+e
+> >     - Retarget the Fixes tag to bcc00987bc56. commit f4504af68575
+> >       ("selftests/bpf: move ip checksum helper to network helpers") mov=
+ed
+> >       the helper, but sizeof(iphdr) is always a multiple of 32 bit word=
+s /
+> >       4 Bytes (iph->ihl counts in 4-byte words), so the odd-length path
+> >       was never reachable through build_ip_csum(). csum_partial() first
+> >       gets called with a length that isn't guaranteed even in
+> >       bcc00987bc56, via build_udp_v4_csum()/build_udp_v6_csum().
+> >     - TEST_PACKET_LEN 100 -> 99 so an existing test catches this instea=
+d
+> >       of the bug staying unexercised
+>
+> This isn't a bug, but could the 'v1 -> v2:' block move below the '---'
+> line so it stays out of the committed changelog? Documentation/process/
+> submitting-patches.rst asks for inter-version changelogs to go below the
+> '---' separator so they are dropped when the patch is applied. The
+> content itself is useful review material, especially the reasoning for
+> retargeting the Fixes tag.
+>
+> The commit message also includes this test failure excerpt:
+>
+> >     Without the fix and with TEST_PACKET_LEN=3D99, flow_dissector_class=
+ification
+> >     fails under vmtest.sh:
+> >
+> >         test_flow_dissector_classification:FAIL:test third port unexpec=
+ted
+> >         test third port: actual 0 !=3D expected 10
+> >         #137/6   flow_dissector_classification/ipv6:FAIL
+> >         #137     flow_dissector_classification:FAIL
+> >         Summary: 1/0 PASSED, 0 SKIPPED, 1/6 FAILED
+>
+> This isn't a bug, but would it be clearer to paste the full failure
+> output or mark the elision? The summary line says six subtests failed
+> (1/6 FAILED) while only the ipv6 one is shown, and test_progs.c runs
+> three ASSERT_EQ calls per subtest ('test first port', 'test second port',
+> 'test third port'), so 'test first port' would have failed too. And
+> '1/0 PASSED' reports one passing test, which cannot come from a run whose
+> only named test failed.
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/350910=
+50280
