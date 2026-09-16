@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6484392C25;
-	Wed, 16 Sep 2026 15:26:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F59D51476D;
+	Wed, 16 Sep 2026 15:27:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789572390; cv=none; b=bfn2FbHQh72EFj3wZX8qHb62Qz+R/aCRj33lTVoO8B0YX3y/UX3z4agMbhYbrO0iCP551nIe96VGqB2JFM/gM1GtfGCisAcrvCUeXRAoJdzzAWHN6s18IYrCxJk4t5KMOnnUPw+yjJ/Jdx5eJoebvBQEhZ/cO/olmgW1rH9ZKHE=
+	t=1789572437; cv=none; b=lWJaprSPozytd7Q6VNs3JpHx00CblyWmczpePYoBNvU9wyp7jCqdGIlSNj5TTvTT4XcM+alqTBGgQF+krLnwZmoDhJZdN7xlN2rzi9I80PDJmJo3+iRdJhY5ZlkVql+2bfjwF0BszlAIl+3P7s18CW1C3s/Kc+hQlCLYGfqSguE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789572390; c=relaxed/simple;
-	bh=Fu4/E3gQeWwFK3ricNNpNoNorv/tjeWKQdpqaAuI/7M=;
+	s=arc-20240116; t=1789572437; c=relaxed/simple;
+	bh=J5IUzn5jWVSvUHw8EEJo+HSH8W0oYtJMMRaB/fsOUtc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rTYubCDxckETGVwsJE6DahpyLlumxkmB8vN+Rk49oKPNlJ5th0q5zTpKVzCEvsZNBLYdc/BFmXJJC8Qw6+K5bNuTEQ1PqgYOEiXHEoF0f/OH9+vX84C/cFxCW3rzzqyCieEEEzl5O+5zqTuH5Ov/n9eyxeifNuYyroyaMge+NKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YWZEbHAh; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=ofg0gUMCoCA6z8Vwg+PyPgGNDn6GIcP3FuOzgHZOYYwTkMtlsqyuu+Uzv1V7wM6zfa/FtYyiTzzYPuRrfWIoRrY/WvCj7PwPFfkSNPXN1bD4EEEqD9FEVjO4QTPHdf8nuj5cEa2rl7i/IdTWxryJUsrmW9EjWM5ss7PYrN05WBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M147Y4WN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YWZEbHAh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 729C01F00893;
-	Wed, 16 Sep 2026 15:26:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M147Y4WN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 396991F00898;
+	Wed, 16 Sep 2026 15:27:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789572384;
-	bh=QEb5Qb19FcDbTyVRiixInWMHYbzxTpZ71E1UuOSUWXA=;
+	s=k20260515; t=1789572432;
+	bh=pEp4ZnPbrejlMbShDfgZlS9JJ0BVmM1UYTzr+qTasEE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=YWZEbHAhFP0bHivxSTeQa8jR/rVVQOGd3LcrNX5A9uMW2DcBaYw3fXpCHdJsTu9gU
-	 TYgAWl9hi2rdHAv1SfgsV8/ZELPY6oJnCuT6E70cEUh5UzBgI2qZrG1Abl/PB5U4NR
-	 w7gTwp2pIqXV+SUz1zVJws6jUEzFjUSpeCJCdQLIwepYYL2kHvj5oV6tuVlnB5z9p6
-	 CLh2ZKWW5zu11TzghgNKaENcetvQNAH2KnLpo7CpZhsUt65VEAmVuQygMZgWDPCTU2
-	 zyb2AYQbr+TqczE7YdgfKan+ykk4v2Hw9AQYtNtZNCUagSifr34t6ZBH9eaJCdKRPX
-	 xd5FeYKQ2Iq1Q==
-Message-ID: <8f3d1fa0-aebb-4e2c-9e7a-63934ffb3de5@kernel.org>
-Date: Wed, 16 Sep 2026 17:26:20 +0200
+	b=M147Y4WNSRLQzLz095+KM8Q0tz8N4DxvBUKJ4Z1D6WyxX19+dYyjefg3rZGCnN3gC
+	 jGZASvaW1D0vNi/vmu1kfxeuULgNODd29T16eicployzlDPWQjTOuf8Y83Uyfft1FU
+	 iwQ5EiVCmg/SNdqMqQouOSxKothPEymGg24/WlS4SJ/A+2o37vS5Ie6Jjcaew79+bb
+	 XNF9+5Ymfy9YJFIA4vsG4xWjagM5OLwQTgXChBKTZeeih7yNO+G5Ab5PryIjS+NUJf
+	 D681IKJHKhNfiXD1M2t7sbtihOOg1W3nde2w4nRq09CPyo9FdA4UCJ5g4O8W66HbGa
+	 Zfut5LYDRi49w==
+Message-ID: <88807afb-06a6-46df-a936-ec2a56cb4319@kernel.org>
+Date: Wed, 16 Sep 2026 17:27:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,15 +35,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] selftests/mm: fix size truncation in pagemap_ioctl
- test
+Subject: Re: [PATCH v2 2/3] selftests/mm: mark file-local symbols of
+ pagemap_ioctl.c static
 To: Zenghui Yu <zenghui.yu@linux.dev>, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: akpm@linux-foundation.org, ljs@kernel.org, liam@infradead.org,
  vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
  shuah@kernel.org, gourry@gourry.net
 References: <20260908134117.84405-1-zenghui.yu@linux.dev>
- <20260908134117.84405-2-zenghui.yu@linux.dev>
+ <20260908134315.84431-1-zenghui.yu@linux.dev>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -90,30 +90,23 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260908134117.84405-2-zenghui.yu@linux.dev>
+In-Reply-To: <20260908134315.84431-1-zenghui.yu@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/8/26 15:41, Zenghui Yu wrote:
+On 9/8/26 15:43, Zenghui Yu wrote:
 > From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
 > 
-> On arm64 with 64K base pages, the huge page size is 512 MiB, and
-> hpage_unit_tests() builds a 5 GiB range (10 * 512 MiB) for its tests.  This
-> exceeds the range of the int size parameters of gethugepage(),
-> wp_addr_range() and pagemap_ioctl().  The implicit truncation to 1 GiB
-> makes gethugepage() allocate a too small buffer, while the callers keep
-> operating on the original 5 GiB range, resulting in spurious failures or
-> SIGSEGV.
+> The file-scope variables (pagemap_fd, uffd, page_size, hpage_size and
+> progname) and most functions of the pagemap_ioctl test are only used
+> locally, but lack the static storage class.  Mark them static so that the
+> compiler can catch accidental outer references.
 > 
-> Fix the truncation by changing those size parameters to size_t, and for
-> consistency, also convert the remaining size-related parameters and
-> variables that use int, long or unsigned long long to size_t.
-> 
-> Fixes: 46fd75d4a3c9 ("selftests: mm: add pagemap ioctl tests")
-> Assisted-by: GLM-5.3 OpenCode
 > Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
 > Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
 > ---
+
+Thanks!
 
 Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
