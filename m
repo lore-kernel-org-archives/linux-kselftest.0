@@ -1,41 +1,50 @@
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A574E06E5;
-	Wed, 16 Sep 2026 20:50:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2F7457E47;
+	Wed, 16 Sep 2026 20:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789591832; cv=none; b=pEOBBhMlz1AFc7BeANKEAPux7b4rdGPTUxj3CaljQIjc04HqRya6pEyVLE/oCygKcu1WUFP2boJRAM965HJfoNhJgHL5y1YTQZqLb2Qc8MWdoIwnmgQKpSK+AeKKLxSexRGbPHHOuoaTOvicpsNOHmOcqM+ZJ7yb/2fgrcaQ5D0=
+	t=1789591861; cv=none; b=IaRvjcchWwqa2cwmLX8/2h7AnkyXguvYe/yWi1E0cFAVmZoGNQlF/THnGWonMXrIAzNRUaZcyfRZAAxqCGvYpSEsAAe6kJ6oKmU/2Ic4MK8Eh9pc8QwKO1aM+haHQBOAjeMx83xhAE4WYT+CrwoecQyzklcZ0G5KeWQY5LENzWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789591832; c=relaxed/simple;
-	bh=hN39DPrceczeiOT9/MPgWeZTqKMJCZNfoFUibqz6o38=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BtbM5nyInIKzp7/5btus+PpqwDmhvmp7SzZZt9z79PrzA+ImxtDs0qdV9BwBQNSQF+b75v5O5GRcCjOr3Ord0HUUIwRBPWimKgT8X+Jq63Z9ZpDjT83Pp8QV12UeXrdkhuYUhANS3h0X5oRvhy9jVBkQEvGhghssIAGk21ZFvvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=AMAl9QJd; arc=none smtp.client-ip=130.117.225.111
+	s=arc-20240116; t=1789591861; c=relaxed/simple;
+	bh=bWJrz4s4s4Jv7sK9Wa6htRKbmqEKsCYgmvl9+dlKg+w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fSSzkJaGMP0pgwBELVdDsT39++umfhkVln875c28GgpHjiprbQf8M828vkBv5QSxa5rxQJi4BUuUovrS9axtoREXmscEs4120k4iAUNQqiwuMFMixJWDiaWX6rl8GeN2wLas78o93hnECmVB2+CPtUuXyyc3ZSA63J3PHJ+qma8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=jCHyUCJr; arc=none smtp.client-ip=130.117.225.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="AMAl9QJd"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="jCHyUCJr"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=B/jUuH40yCXAgR383WQv9aqk10dUHBpNo4ONwhWZDC8=; b=AMAl9QJdwmxl
-	gs1NQ956C/U1qh1cKooBeal9yBA3MBZ0h4zmfidKMPMyG1rwrOZKfd0F5nmkHr7darUeXXiuW63Gw
-	fCG8lhYcEWJMdIpa4SfTepIcmTRRs+UPuclz0Dt18SbS6HgU/c6XvadnspSJgsCt5kmNa9BHo9QJZ
-	mg+W3Z7vGNHsMUr7ZEJotWY65FQwvYn8SKQ4gQVN9N3oZE8lEe50c8CRDv6D7BYW7AWoiOaw55LUJ
-	PioaN4IgYPXbJUSvujxqq7f6+r4TW1b1qGdmI+oJXei9rYwpfZCVIc2+mzmZz4hA+/OKQIXIPt/6p
-	knwJ/HrGZdju/N+h+u7Ccg==;
+	Content-Type; bh=XPqpgfCd+NVaFwI3tbS5RTUSF1zYM8sxZ4o4/8h5BXg=; b=jCHyUCJr9WhX
+	ih7kzgf/yHidk9RuChcbpZvi+tVtDRRxw08PY6vidW74MKuku5q0JfmzUvyO5ETx35QwCz5jUyh+K
+	MeHdDYGWmtITH7NMHX9LC7Kr9WGpl2lE+dAGryNrZZEYwAbEe1l48wsj8UUtPkURapQR2I5hANXGi
+	TJpWXTjeAQbDeC5xiBjxFHcb6BkcxGjckC9bw7yLLSHBN3GCK7vZD3w+3q4ywuAU4Z2vP4Bm6DzCB
+	147Nz2GA0tT8gBh2lI9/DoEldBjb2i8IG1AfuVIz8M5PzTchHs1uNFrZqG9j53W1i4t/wTKsHYOp8
+	hIojTPDlMTxpIHxgm8ZJAg==;
 Received: from ch-vpn.virtuozzo.com ([130.117.225.6] helo=LekKit-T14)
 	by relay.virtuozzo.com with esmtp (Exim 4.96)
 	(envelope-from <eva.kurchatova@virtuozzo.com>)
-	id 1x6wXL-00Cmfg-2V;
-	Wed, 16 Sep 2026 22:50:13 +0200
+	id 1x6wRz-00CfhM-1M;
+	Wed, 16 Sep 2026 22:44:41 +0200
 From: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
-To: Shuah Khan <shuah@kernel.org>
+To: Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Tejun Heo <tj@kernel.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org,
 	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
+	cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests: prctl: skip anon VMA naming test when unsupported
-Date: Wed, 16 Sep 2026 23:50:07 +0300
-Message-ID: <20260916205008.822717-1-eva.kurchatova@virtuozzo.com>
+Subject: [PATCH] selftests: cgroup: give the O_TMPFILE open in get_temp_fd() a mode
+Date: Wed, 16 Sep 2026 23:44:31 +0300
+Message-ID: <20260916204436.821378-1-eva.kurchatova@virtuozzo.com>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -45,42 +54,40 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-PR_SET_VMA_ANON_NAME returns EINVAL on a kernel built without
-CONFIG_ANON_VMA_NAME, and every case in the renaming test then fails on
-a feature that is not there.
+O_TMPFILE, like O_CREAT, needs the third argument. Without it glibc
+refuses the call at compile time as soon as fortification is on:
 
-Probe once in the fixture setup with a throwaway mapping and skip when
-the kernel answers EINVAL. Only that error means the feature is
-missing; the test still checks that an invalid name is refused with
-EINVAL later, on a kernel that has it.
+  In function 'open',
+      inlined from 'get_temp_fd' at test_memcontrol.c:33:9:
+  /usr/include/bits/fcntl2.h:52:11: error: call to '__open_missing_mode'
+    declared with attribute error: open with O_CREAT or O_TMPFILE in
+    second argument needs 3 arguments
 
+The fortify checks take effect only once the compiler optimises, and
+cgroup/Makefile builds with "-Wall -pthread" alone, so this goes
+unnoticed in a plain build. Building the tests with the flags
+distributions commonly use, -O2 -D_FORTIFY_SOURCE=3, loses
+test_memcontrol entirely.
+
+Fixes: 84092dbcf901 ("selftests: cgroup: add memory controller self-tests")
 Signed-off-by: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
 ---
- .../testing/selftests/prctl/set-anon-vma-name-test.c  | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ tools/testing/selftests/cgroup/test_memcontrol.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/prctl/set-anon-vma-name-test.c b/tools/testing/selftests/prctl/set-anon-vma-name-test.c
-index 5f9589534da8..2d49a5114497 100644
---- a/tools/testing/selftests/prctl/set-anon-vma-name-test.c
-+++ b/tools/testing/selftests/prctl/set-anon-vma-name-test.c
-@@ -80,6 +80,17 @@ FIXTURE(vma) {
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 3a84d068fbf3..0ed82347044e 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -30,7 +30,7 @@ static int page_size;
  
- FIXTURE_SETUP(vma) {
- 	char template[] = "./set-anon-vma-test-XXXXXX";
-+	void *probe;
-+	int res;
-+
-+	/* Naming anonymous VMAs needs CONFIG_ANON_VMA_NAME. */
-+	probe = mmap(NULL, AREA_SIZE, PROT_READ | PROT_WRITE,
-+					MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(probe, MAP_FAILED);
-+	res = rename_vma((unsigned long)probe, AREA_SIZE, GOOD_NAME);
-+	munmap(probe, AREA_SIZE);
-+	if (res == -EINVAL)
-+		SKIP(return, "CONFIG_ANON_VMA_NAME is not enabled");
+ int get_temp_fd(void)
+ {
+-	return open(".", O_TMPFILE | O_RDWR | O_EXCL);
++	return open(".", O_TMPFILE | O_RDWR | O_EXCL, 0600);
+ }
  
- 	self->ptr_anon = mmap(NULL, AREA_SIZE, PROT_READ | PROT_WRITE,
- 					MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+ int alloc_pagecache(int fd, size_t size)
 -- 
 2.55.0
 
