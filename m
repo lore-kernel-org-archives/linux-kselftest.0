@@ -1,114 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej2-f14.google.com (mail-ej2-f14.google.com [74.125.228.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648723BADB1;
-	Wed, 16 Sep 2026 08:22:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A0547F77E
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 08:52:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789546952; cv=none; b=Gd4F9QXTlGb8FrLHWffrjtIxgLI49XJ37R8WqFjJelStq4udeP8HzG7f+qTs+EIi8O4lm/vngHdhe+CTilDtOZ9QY4qhLiAnVlQJWEr2J9BUldKgZXZpOPBLKNcnhh/P0utky7kl8/vTtQ+HGBRGOrGfV/qLmAyrldljhFE9C/k=
+	t=1789548752; cv=none; b=RNcHBUf6SXm2Gw+t24zTQEqDay4P7XtwRykCUB56T2LQQqlJ/3srX7eGLrv2Y9FX1OrBI1vUs+Lwwwl2PjG+oWZk3rjVug78zDLm41UCzvrxdVJSyo1BjDae1MtsVamJI8lc72E7mTjwWnWVQrVNZxVJH9Yn2/ut9jKufXbZpUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789546952; c=relaxed/simple;
-	bh=/2DWkwAr4DbilIKZi5zshYXsB8JYRx9NpzZk7GA/7eY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=e8+W0szN4AUKYcyUfiH/pE31GD3Ow/Ib/u74CNRDOS7Sr0iLz8Rrs6iJ4+3AahYg5JrUCagRia081kphFlc3HyamBaMOpeZstdSttBO2+A+X9DMF8Ndny6rU/FB7VcvY5yaYvaEjl7Zu696Yijs/d/P798Tt8hhUwrFdy15Guss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y9kJ4uXT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789548752; c=relaxed/simple;
+	bh=jQe43yJCJSdBQPYhkUb4CHVlXYabrmzIiAW+OtPpy4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hU6svzlHuSGU66NzDvbORSW7buMdMj4ElqQMLhkCO6IHAWf5Z8ARG1BMapBClg1c3f1se9JsqodttMPWl3YI1KsIfmkrEp8OTSRjfCA0REcjpPt2bGkUOG1LZEMXAVZkpP37x9h0FQhg4jeXuWqG7BGy4JJKgrGlLD5ngjnHYqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fEqDAcyK; arc=none smtp.client-ip=74.125.228.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y9kJ4uXT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C04841F000FF;
-	Wed, 16 Sep 2026 08:22:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789546935;
-	bh=ypMNq+uBTf3bV0CvKLttQpjmF2H7YeAIaADnmZI1vjM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Y9kJ4uXTO8jmgCrbabFZrGG+Cqu40q+3yBPBFjRCxeEkcAJ1SRZ/H89hbQe5z8w89
-	 Fi9gMsrOIaWTkPHU6Z1O9nZjGEXyqJhLCxwViizvownKur6BfX/MrBOJG6DXFnWAOH
-	 V5Dd5q4wz/bPTyZNGAQkocKkxZlk8034cB2zHzCbqVs6rCcVuv0u1J3fnY2JD/z/o+
-	 SyvrY+p1ei9y3FZx5Ge+FpI8UkcZ8j+XJiUY7/6hvmBbkIu+fs9J4x8oxFoHjRCoHt
-	 NWZhmCLG2N9BtlgxQExVcY/Nj3qeXi5ZkRzuZiQx+Bx+6u8i4mfb9U7IiXn0Lve3Xo
-	 7wsXa5wYt3CjA==
-Content-Type: multipart/mixed; boundary="===============0215795013638696076=="
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fEqDAcyK"
+Received: by mail-ej2-f14.google.com with SMTP id a640c23a62f3a-c254f9f0b1fso111838466b.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 01:52:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1789548742; x=1790153542; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2LBbelDPdAVQ0Ns+BBW49QmFOaM2BGUlkuMpM25cdq0=;
+        b=fEqDAcyKNp+DJ1SwWiq1SfYEyZRUgBbvXAUy6MDKVrcwjAIHREkhioM+ZQCirDQ4cc
+         EttlU3c2HkkbbYmFFp/uoqam1pLAKWbJhLDfnagViBSzT/WPOECIbhfWgmRgiXOQ94A5
+         NMJebi+kxBCWrfibB/+VSa0l+HkSpQ1m+HilG4QUz54rYaZ+XvY7Zni0Mcyv/Nr+gtXL
+         o7G1Esip5+5FD4/02R95+w/Rz3o0vlb3/5Gx8l6HWP4nOi4Wn4+zApWl1dUv8wuS4h6z
+         d22Cy6QopW/s7q6LcFpXqDqV0zfEHQLupfKVLuQ0IdwWWZ9r3g/4X0DtaadnCEPLmdAm
+         p1ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789548742; x=1790153542;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2LBbelDPdAVQ0Ns+BBW49QmFOaM2BGUlkuMpM25cdq0=;
+        b=ItqzLvMZ2klNPuC/rdYSMaG2ZmF/xob+KY/KGY0t2w8zhajw/MzJ17sEKk+ZkEZhbp
+         3KDIqz1ukoaVBgjJOmbEWVzqlpJIMl14FNX2BPYJF1FnaYJrylEWweGGdz/oFLLEXNKq
+         RRvmhpHgZakZMZwK/7UIH9tTR4Cm7uqKlVVQyiACcoHurU4KzZeGJbaaiKc7V3kHu+yj
+         t18cwe5hhOVhrXL6ex1pN2AKHtGwYf8OCIMgTvpvcsZ2LdGQjk6XYn67+Gezc5Cksy5t
+         BDB5DmGvSe0MoVItFxld1SgKGQMS5NBvZoIHbncWM3DErrCncwxYnyfVqurjvpkD9HfN
+         s0og==
+X-Forwarded-Encrypted: i=1; AKwUvBxT95nbcbGCWWeCZNqV3H0Dhs/xCjGWfuQx0+UAhQJu/tdabJTH00GjvaNm/JcLigLPSGJyReJCMQiSd+o6hzE=@vger.kernel.org
+X-Gm-Message-State: AFuF++n0EmsVRoLS0s5mA9lHYFRmi+qfjxD5xRP3uXRdWQ2BW9D2KaGf
+	AGbqY2LKRB6RexvMS58cl4gMIPdShIcSz/4Ftnf+PIWKUm5mbrWM0/j95PiACUV+mvg=
+X-Gm-Gg: AYBFou0koHP62pL4f19LqIJDso//MN7B5+qCc9b07beWs5cNfo9Ve8c7DbcJpsymSQ/
+	UnGNXAWPXIZ179z7SiUj1FuMQAcZiAj5mA1J/sBjJvroLo6x0AxSVTTcsfiyijvwCdFCX4PjL+/
+	8C1W86DPYbOFrFemOMAV8zzu6xUFSn0h7M5U5XzBZJvLpHZTs25SALSrneUuD/soh3HR/U1gvE9
+	1liLAEtCmfY952jII8Ufw2+GZDWBuPXVPFBJTfQI0SfHQLfg3NXgXRz9yJyP4wU+/nS1D3cGUNR
+	G0mh8u09I8fGd/CqUlkBylz7chc3yaxAvoJ8qoYmaHeYT83tXsfLh8TacStjl1L7jiIrab1RfB3
+	0hheC2Wg/8D9+o4ndXdxYeJvrPfwJaxIs0rO/+KBJFtaKD9qtTOqvDXrDBt+LYUw+0bbpJnfJqG
+	C85Mstdxfl96eKZ3fRcXYghoCe3OxlciiEQY6+/OQJ8+SQUOAOT9JJOqXta3nH
+X-Received: by 2002:a17:907:928a:b0:c29:4d81:c5f0 with SMTP id a640c23a62f3a-c29e51b1ad7mr218786066b.6.1789548741687;
+        Wed, 16 Sep 2026 01:52:21 -0700 (PDT)
+Received: from localhost ([2a02:aa7:4656:2314:c23c:9eda:81d:3])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c29de68fafdsm93069566b.63.2026.09.16.01.52.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Sep 2026 01:52:21 -0700 (PDT)
+Date: Wed, 16 Sep 2026 10:52:20 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: Kyle Meyer <kyle.meyer@hpe.com>
+Cc: akpm@linux-foundation.org, corbet@lwn.net, david@redhat.com,
+	linmiaohe@huawei.com, shuah@kernel.org, tony.luck@intel.com,
+	jane.chu@oracle.com, jiaqiyan@google.com, Liam.Howlett@oracle.com,
+	bp@alien8.de, hannes@cmpxchg.org, jack@suse.cz,
+	joel.granados@kernel.org, laoar.shao@gmail.com,
+	lorenzo.stoakes@oracle.com, mclapinski@google.com,
+	nao.horiguchi@gmail.com, osalvador@suse.de,
+	rafael.j.wysocki@intel.com, rppt@kernel.org, russ.anderson@hpe.com,
+	shawn.fan@intel.com, surenb@google.com, vbabka@suse.cz,
+	linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH v3] mm/memory-failure: Support disabling soft offline for
+ HugeTLB pages
+Message-ID: <aqpYxAktjexhaMGc@tiehlicka>
+References: <aqiIEkrc6aDBOqRg@hpe.com>
+ <aqkCbgHmMGxI_GLG@tiehlicka>
+ <aqmGd0GGUCkbZpkZ@hpe.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a68ffeb7497f88f7798107f2d93c0ca707fbbb5f1a080f8f268eb5d13367159d@mail.kernel.org>
-In-Reply-To: <20260916072302.1068871-6-cui.tao@linux.dev>
-References: <20260916072302.1068871-6-cui.tao@linux.dev>
-Subject: Re: [RFC PATCH v4 5/5] docs: cgroup-v2: document io.cost model=<name> binding
-From: bot+bpf-ci@kernel.org
-To: cui.tao@linux.dev,tj@kernel.org,josef@toxicopanda.com,axboe@kernel.dk,ameryhung@gmail.com
-Cc: cgroups@vger.kernel.org,linux-block@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,linux-kselftest@vger.kernel.org,cui.tao@linux.dev,cuitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 16 Sep 2026 08:22:14 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aqmGd0GGUCkbZpkZ@hpe.com>
 
---===============0215795013638696076==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue 15-09-26 12:55:03, Kyle Meyer wrote:
+> On Tue, Sep 15, 2026 at 10:31:42AM +0200, Michal Hocko wrote:
+> > On Mon 14-09-26 18:49:38, Kyle Meyer wrote:
+> > > Soft offlining a HugeTLB page dissolves it, permanently reducing the
+> > > HugeTLB page pool. This can be problematic for workloads that depend on
+> > > a fixed number of HugeTLB pages.
+> > > 
+> > > Currently, soft offline must be disabled to prevent HugeTLB pages from
+> > > being soft offlined.
+> > > 
+> > > This patch allows soft offline to be disabled for HugeTLB pages while
+> > > remaining enabled for non-HugeTLB pages.
+> > > 
+> > > Commit 56374430c5dfc ("mm/memory-failure: userspace controls
+> > > soft-offlining pages") introduced the following sysctl interface to
+> > > control soft offline:
+> > > 
+> > > /proc/sys/vm/enable_soft_offline
+> > > 
+> > > The interface does not distinguish between page types:
+> > > 
+> > >     0 - Soft offline is disabled
+> > >     1 - Soft offline is enabled
+> > > 
+> > > Convert enable_soft_offline to a bitmask and support disabling soft
+> > > offline for HugeTLB pages:
+> > > 
+> > > Bits:
+> > > 
+> > >     0 - Enable soft offline
+> > >     1 - Disable soft offline for HugeTLB pages
+> > > 
+> > > Supported values:
+> > > 
+> > >     0 - Soft offline is disabled
+> > >     1 - Soft offline is enabled
+> > >     3 - Soft offline is enabled (disabled for HugeTLB pages)
+> > > 
+> > > Existing behavior is preserved.
+> > > 
+> > > Update documentation and HugeTLB soft offline selftests.
+> > 
+> > This is adding a lot of user interfaces to control something you can
+> > disable by config option for an admin only functionality.
+> 
+> I may be missing it, but I'm not aware of a config option that disables soft
+> offline specifically for HugeTLB pages.
 
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index 86a2a0099178e..5786d86eceeae 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
+No, there is none. And IMHO there shouldn't be any. We do not want
+config nor runtime option for any random type of page to be soft
+offlined. You can disable the whole feature. If we need to enforce a
+boot time parameter then I can be convinced about usefulness because
+distro kernels need to enable config to be generally available but there
+are usecases where this might be better disabled during runtime.
 
-[ ... ]
+> > I fail to to see any actual justification for all of that. If an admin
+> > can disolve a hugetlb page it has power to allocate a new one as well.
+> 
+> Allocating HugeTLB pages after boot is not guaranteed.
 
-> @@ -2120,6 +2120,18 @@ IO Interface Files
->  	parameters are written to, "ctrl" become "user" and the
->  	automatic changes are disabled.
->
-> +	When CONFIG_BLK_CGROUP_IOCOST_BPF is enabled, "model" also accepts
-> +	the name of a registered iocost_model_ops BPF struct_ops model:
-> +	"model=<name>" binds the model to the device and the model fully
-> +	replaces the builtin linear pricing, for every operation including
-> +	flushes; "model=linear" (or "ctrl=auto/user") restores the builtin
-> +	model.  Writing an unknown name fails with ENOENT and nothing is
-> +	applied.  Unregistering a model removes its name so it can no
-> +	longer be selected; devices already bound keep using it, and keep
-> +	receiving cgroup lifecycle notifications, until switched back to
-> +	the builtin model.  See
-> +	include/linux/blk-iocost.h for the model interface.
-> +
+yes, and so what?
 
-Does this section need to document what io.cost.model reads back with
-a BPF model bound?
+> > Not to menation that the whole soft offlining is mostly a testing
+> > feature so adding a lot of fine grained configuration space seems
+> > excessive to me.
+> 
+> Can you elaborate on "mostly a testing feature"? For example, how does that
+> apply to the BIOS/GHES path discussed here?
+> 
+> https://lore.kernel.org/all/aMkOCmGBhZKhKPrI@hpe.com
 
-Looking at ioc_cost_model_prfill() in block/blk-iocost.c, when a BPF
-model is bound, the file prints:
+OK, so apparently there are some BIOSes which abuse this feature to
+mimic a real HW poisoning. This doesn't change the overall picture
+though
 
-    seq_printf(sf, "%s ctrl=%s model=%s\n",
-        dname, model ? "bpf" : ioc->user_cost_model ? "user" : "auto",
-        model ? model->name : "linear");
+> If you think this should be handled differently, I'm open to suggestions.
 
-So with a model bound, io.cost.model reads back "ctrl=bpf model=<name>".
-
-The nested-key table nine lines above this paragraph lists the possible
-values:
-
-    =====           ================================
-    ctrl            "auto" or "user"
-    model           The cost model in use - "linear"
-    =====           ================================
-
-This table doesn't include "bpf" as a ctrl value or "<name>" as a model
-value. The new paragraph also doesn't mention that "ctrl=bpf" is accepted
-on write - ioc_cost_model_write() special-cases it so saved configurations
-can be restored:
-
-    } else if (!strcmp(buf, "bpf")) {
-        /* readback value; keep the bound model */
-        continue;
-    }
-
-Should the table be updated to include the "bpf" ctrl value and the
-"<name>" model value, so the section documents what the kernel actually
-prints?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35070283830
---===============0215795013638696076==--
+Yes, do not treat hugetlb pages any special. In case there is a HW
+related problem which decides to offline portion of the hugetlb page
+then bad for you. It wouldn't be too much different if this was handled
+through a real HW poisoning.
+-- 
+Michal Hocko
+SUSE Labs
