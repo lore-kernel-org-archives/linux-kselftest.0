@@ -1,218 +1,223 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF231E47CC;
-	Wed, 16 Sep 2026 03:47:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789530432; cv=none; b=Na/YloEBGHE42CJN8R4TtD2DHk11FhuXUALogHWFCVgV3nbUZvOTpkFQU4xJ7LP6HuNFRlgelMztn/qDkm4d5LPXiqi0oHDGfUlmT2VZXn8r/fBNfGktoP3Dgb/iSE8VPd4cKGcJi3dYgjxzrzFqXnClTYhMnZfm4G4wp6Q4vUQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789530432; c=relaxed/simple;
-	bh=gOP7mzIR6JicHMR6kpk3glCyrPVAZFRo2ZW+FrgmoTc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ayEufar5PpzAVVg9p5Xw/da3RAdF4VAOPQhukW9phr6rgJACwSWt3EU/WldIna75MuHoiIDlamoEzKnb3oxktOGZnzrpRXsb5e1LdTQ+HmjLnDcUrUxWm8qdcsxit5Tdq3G4Mu4kWxJf5FYur0ofIhWkLh4Cf5l1HpSuz5BEP0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=tnJJ08F2; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F200F38F255
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 04:23:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789532602; cv=pass; b=IKvJ6wRwjAd7d3sISvjtBRMs6xSHh/YoAup1vqL3Jic8PfRDK1Y0jekdqkOdnhKnYkywfHDOCACz6tjG9PJHGEPiXXVyyWiyrrfpD2UexA/P6hcDYCe6e7HgzgXf8bTNfYH+gPnGBAZpkeqa+/kjG59tguvS9LyH33L9isukY/g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789532602; c=relaxed/simple;
+	bh=sufgCmERkq8BhvzxeLr9+DCQH6M2RGa+zHXe9QrcWq0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tRhtgr7YGB1xb/fPhElpRVfWNxEpEgqfRvP3wWJ4pq47v+P6dYndSeG+Dvii7riTw0NNECJQAswUcTZl93b0Ar4gW/amRga/HTO5oReQWdPi3JArxCcNdzXIZ/+wNEFlKNAU81fLwyqjXy/uyGxjR9BWpldzZ41w11IoJOM0tcI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SN9d4Ua8; arc=pass smtp.client-ip=74.125.227.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="tnJJ08F2"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D8ADC1516;
-	Tue, 15 Sep 2026 20:47:04 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D860B3F882;
-	Tue, 15 Sep 2026 20:47:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1789530428; bh=gOP7mzIR6JicHMR6kpk3glCyrPVAZFRo2ZW+FrgmoTc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tnJJ08F2B08v+fsmMrIYOk0W1spMzOSuvw85ZIxDRL/cerfM015Dh3CGI9V7nyzyf
-	 pN74mS7hOpVty/3zNCtYAkuo4HA6jeKDhcnCFOMGC7vZcmFtYKiYsulg+fFme8yPHo
-	 CeN5iGihTx4JeaKQbPMyN1tnhGhFIBW2U9blnLao=
-Date: Wed, 16 Sep 2026 04:47:03 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>, Zi Yan <ziy@nvidia.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 2/2] kselftest: mm: fix intermittent failure khugepaged
- test
-Message-ID: <aqoRN6_qo2nEy27c@e129823.arm.com>
-References: <20260915-fix_khugepagd_fail-v1-0-bb6f04c8759f@arm.com>
- <20260915-fix_khugepagd_fail-v1-2-bb6f04c8759f@arm.com>
- <24690e82-3aab-4f2d-95a7-3bba332ca5bc@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SN9d4Ua8"
+Received: by mail-pj2-f43.google.com with SMTP id d9443c01a7336-2db1ca069c8so4465545ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2026 21:23:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789532600; cv=none;
+        d=google.com; s=arc-20260327;
+        b=NQvEMRh5oO9wkT+VUlN0oYekNXVZHYuDO77x2yaqmjbD92R+jms3IEl1saffgr0pl1
+         mJro+cFppvjhXrbAQv0k3fKZFEx2YdeS6QdGY+N/BMfbSk20H5RDPfD75zsbZaRc29r6
+         XWYsDGEpO/+arVzTMJBX/jM815Zm3dAq00eJoIZ92OJNIP4jv8QQ0fBEiqYdm619I1L2
+         FGr7pShOeJV7N76knFYvI/cSR+iy3AsjdfBgtUJAjh/lHKa7EaWAqCiHXAhkpqeMRTUO
+         kPycxSx0wd+hiwdjqWnhiyVZ7LGpJ9WyxAMQr2rMfRkB27vMrVU1ZT4pHq0VoF4WIjQM
+         OUzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Qpv+I+ll+AWjEBkVqvOiwNT8JvM6ZrpwZw+bmn6KWNk=;
+        fh=l8YucxIyCf4ZP5zJ4uMbLWkPnK6NAbVEKl5Rhv62XD4=;
+        b=ZdIOiWkEhb2NE9oFzmASVaEH1oryEJgX1/UkXbWIFuh5+jIueUhVH9FuXeNsOs2JBH
+         VKSr2o1OJg8onwp7n5Qbl79iO1AvcczRpZSmBO+dUXBgiHwPgzK7fTWlWOuXwOVr6aHZ
+         QgbuAcxlubGg5w+XO10UTyqoL+W8FPdOezb6Yrz7QByUEIqL+Jev/FxjOJfVcTpfr4nw
+         VY8os92SCXwnMM3Mmi8x/UON6psGjoSvdtI3c308o79r6bAaOJYX3RGVQUN75/0Y2Ufn
+         yvULygLshxq+n1YfxgsRS9UdUVks2E2AgJYnnawVZvIj68smazz0jzM6HiP+mTV02l7V
+         r/2g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789532600; x=1790137400; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Qpv+I+ll+AWjEBkVqvOiwNT8JvM6ZrpwZw+bmn6KWNk=;
+        b=SN9d4Ua8tr0yhhKBebrbwLuVvWr+GzMnLhZTOvXS//slM3nTT8m8xRBedDKtIh8v+t
+         garlUV2mXIGU0Pmtjk5wBQ6VDc+ZH+DEpeMBUwzDTnnAq1pu+LAGd1RX20WuGPu+M7P/
+         dsdjcJ5J1ojUuo0PQ00xCV8B+gbf23lyhkSEkoW3At2XNeVMvuXnvOaZjhyP1H8h2SoK
+         LnOxoaOVTrguqFpEUmjIcLIKtYDe2/ZTPJv6tybWkHO28tHwBtyqk4tVK5TU4NTLtQl4
+         bNOMxdIZOtN/aLJyZjU6Lf/khz0rlj+J4P7yeRNVl9BdxZeua8q8ok6hHZpnfVHyjkvk
+         +orQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789532600; x=1790137400;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Qpv+I+ll+AWjEBkVqvOiwNT8JvM6ZrpwZw+bmn6KWNk=;
+        b=i5vnasOOtyPakC+FQDD5aP1JWVKXImvJRUgazb8/NC2hFSfp4e7jVOXiRgsuIq/Oa6
+         XRbhGmPCId04G6U8dkJWxw8rpFqqD5b1jBVQhFiCOM+lfUp0tuoln/fenBTprrs28Dsi
+         FTNwLVZQDy0pdw43gAIUuqHJ3ltCIZ5+85357DdRGUtb0oIaBPDfK92cQBGGhnd0Dj15
+         r4w+eYmC8qtV5kZYaV9BDV76IoXfDFgISupN8xCnuTJgVtG4xkLy5TiPlfdSErNfFuON
+         WWCYYW4YjnuhMVkY8lyzqY9HkC+mHEoVWY05237e5/ZRWJLinbpWzbwcVUlqI6Y8MkT7
+         2ijA==
+X-Forwarded-Encrypted: i=1; AKwUvBz67h9YeH1LuxB/aEum2noR3/mIXdwTWu68XRMsLk6YIjVjwiWYebRZ9vJgLtTTxGwG0UnlojzP9Scdbn4JSc0=@vger.kernel.org
+X-Gm-Message-State: AFuF++mJk5lag3CLhcELPvJ95FEJhtyReijpTYSkPDdGDVIdAfNL6eD8
+	o+HsC5qGffDszZuLI4K08Oqp2xzQmKzzrBiNS+ok6/nLwdM6YLpH56iIMSKLufnNZ4EP+x4FEKQ
+	MRmMqsK3gf8YxEeHxzgNdQUzwLU0/aO0=
+X-Gm-Gg: AYBFou2XVUEcgKK43TsyMF8msMPY6bVEhILWlI4S7x1NeP3BpCP+eQrIq+g+f363D9M
+	pqS3LizOLKqqC407DD+GBDYWnnF7v0ZbYzPIkWs2UZffiLtXSdcPsnMgU6KsODc3c7NACsH81TG
+	tbgn/dSGeyOiVnu4+Du7TDpiQ9w50sw0il7fl57AKsxAotKPh5kytYGHDO3Sb0C/9WBPQxDBOMN
+	mv1btRlclXBKDmh6hCDVjn5EMnDqMYSP4XRx+Tx61spwGuz3hQjdyU/7ee0ikiNd/Na+b2yWWWJ
+	ouR09kPZgCRBby8JTmYWbsEza5g1OS1Y9FwI0aZFYTfHQFChQocxP0Qlzh0MJWjB7fCCU6kqxpO
+	A3CTbHW91J2DL3uqMVdtl4Fhw8NxtyowcrZNXYRG6
+X-Received: by 2002:a17:902:eac9:b0:2db:5c0a:f18c with SMTP id
+ d9443c01a7336-2dd8e00ecdamr15104775ad.6.1789532600085; Tue, 15 Sep 2026
+ 21:23:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24690e82-3aab-4f2d-95a7-3bba332ca5bc@linux.alibaba.com>
+References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+ <20260910164635.459558-4-vineet.gupta@linux.dev> <DLDKI0ZXYI7H.1XQZZE2RCU7IF@gmail.com>
+ <4ab75099-0e95-4fee-81da-6f4198e3e6a0@linux.dev>
+In-Reply-To: <4ab75099-0e95-4fee-81da-6f4198e3e6a0@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 15 Sep 2026 21:23:07 -0700
+X-Gm-Features: AcwNN1WihaATHBhwxK9WTwB-lsHa37kIkPVuYEXTCQRAV-qB8ftIsulPsZMM9so
+Message-ID: <CAADnVQ+N9tzBJ0Bbvp8_8QvR+QcCP4ej5CgV_kRHt=iw4BANSQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
+ across zero-extending movs
+To: Vineet Gupta <vineet.gupta@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> 
-> On 9/15/26 5:21 PM, Yeoreum Yun wrote:
-> > There are intermittent failures in collapse_max_ptes_swap() and
-> > collapse_max_ptes_shared() when using the khugepaged_context:
-> > 
-> >    // while running ./khugepaged -s 2
-> > 
-> >    # Run test: collapse_max_ptes_shared (khugepaged:anon)
-> >    # Allocate huge page... OK
-> >    # Share huge page over fork()... OK
-> >    # Trigger CoW on page 1023 of 2048... OK
-> >    # Maybe collapse with max_ptes_shared exceeded.... OK
-> >    # Trigger CoW on page 1024 of 2048... Fail
-> >    Bail out! Unexpected huge page
-> >    # Planned tests != run tests (26 != 23)
-> >    # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > 
-> >    # Run test: collapse_max_ptes_swap (khugepaged:anon)
-> >    # Swapout 257 of 2048 pages... OK
-> >    # Maybe collapse with max_ptes_swap exceeded.... OK
-> >    # Swapout 256 of 2048 pages... OK
-> >    Bail out! Unexpected huge page
-> >    # Planned tests != run tests (26 != 17)
-> >    # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > 
-> > This happens because khugepaged may collapse the pages before wait_for_scan()
-> > is called, causing a sanity check that expects uncollapsed pages to fail.
-> > 
-> > For example, in collapse_max_ptes_swap(), after faulting the pages back in
-> > and paging out up to max_ptes_swap pages, khugepaged may collapse them again
-> > before c->collapse() is called.
-> > 
-> > To prevent this, change the khugepaged setting from ALWAYS to MADVICE for
-> > the affected tests, and mark the VMA with MADV_NOHUGEPAGE after it has been
-> > collapsed by wait_for_scan(). This prevents khugepaged from collapsing it
-> > again before c->collapse() is called.
-> > 
-> > This failure was observed on NVIDIA Spark with 16KB page.
-> > 
-> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> > ---
-> >   tools/testing/selftests/mm/khugepaged.c | 15 +++++++++++++++
-> >   1 file changed, 15 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-> > index c32244b565658..83e9386bbc842 100644
-> > --- a/tools/testing/selftests/mm/khugepaged.c
-> > +++ b/tools/testing/selftests/mm/khugepaged.c
-> > @@ -578,6 +578,8 @@ static bool wait_for_scan(const char *msg, char *p, size_t len,
-> >   		usleep(TICK);
-> >   	}
-> > +	madvise(p, len, MADV_NOHUGEPAGE);
-> 
-> This looks incorrect to me and would reintroduce the previous problem.
-> Please see commit 7962e05a835f ("selftests: khugepaged: fix the shmem
-> collapse failure").
+On Tue, Sep 15, 2026 at 1:31=E2=80=AFPM Vineet Gupta <vineet.gupta@linux.de=
+v> wrote:
+>
+> On 9/12/26 11:59 AM, Alexei Starovoitov wrote:
+> > On Thu Sep 10, 2026 at 9:46 AM PDT, Vineet Gupta wrote:
+> >> Linked-scalar equality is full-64-bit only. A 32-bit mov from a source
+> >> with unknown high bits therefore has to drop the relationship, and a l=
+ater
+> >> narrowing of the source never reaches the destination:
+> >>
+> >>    r6 =3D ...              /* full 64-bit unknown */
+> >>    w7 =3D w6               /* 32-bit zero-extending mov */
+> >>    if w6 !=3D 0 goto ...   /* not taken: r6's low 32 bits are 0 */
+> >>    if w7 =3D=3D 0 goto ...   /* not deduced today */
+> >>
+> >> Record a low-32-only link instead: dst shares src's low 32 bits and it=
+s
+> >> high half is zero. On a later narrowing, sync_linked_regs() rebuilds s=
+uch
+> >> a register from the base rather than copying it, by re-applying the sa=
+me
+> >> zext_32_to_64() the mov used. The reverse direction is skipped: a ->su=
+breg
+> >> base knows nothing about a full register's high half.
+> > at the first glance SUBREG_ZEXT is exactly the same as ADD_CONST32 delt=
+a =3D=3D 0.
+> > no?
+> > Both are unidirectional:
+> > w6->id =3D=3D 1
+> > w7->id =3D=3D 1, add_const =3D=3D 32, delta =3D=3D 0
+> >
+> > will zero extend w7.
+> >
+> > This new SUBREG_ZEXT will do the same.
+> > What am I missing?
+>
+> The 2 examples below both imply ADD_CONST32 + delta=3D0, with different
+> semantics and need special casing.
+>
+> w3 =3D w2; w3 +=3D 0
+> w7 =3D w6; (r6 was wide)
+>
+> With code hacks it could in fact me made to work, but its less cleaner.
+>
+>
+> Current approach we have something like below in sync_linked_regs()
+>
+>                /*
+>                 * A ->subreg register shares only the base's low 32
+> bits, so it
+>                 * is rebuilt rather than copied. Not modelled together
+> with a
+>                 * delta, so skip if either side has one (sound, less
+> precise).
+>                 */
+>                if (reg->subreg) {
+>                        if (reg->add_const || known_reg->add_const)
+>                                continue;
+>                        if (reg->subreg =3D=3D SUBREG_ZEXT)
+>                                reconstruct_zext32(reg, known_reg);
+>                        else
+>                                reconstruct_sext32(reg, known_reg);
+>                        if (e->is_reg)
+>                                mark_reg_scratched(env, e->regno);
+>                        else
+>                                mark_stack_slot_scratched(env, e->spi);
+>                        continue;
+>                }
+>                /*
+>                 * The reverse: known_reg knows only its low 32 bits,
+> which say
+>                 * nothing about reg's high half.
+>                 */
+>                if (known_reg->subreg)
+>                        continue;
+>
+>
+> With the suggested approach it looks something like below.
+> ADD_CONST_32, delta =3D=3D 0 has to be disambiguated from a real +=3D 0 b=
+y
+> inspecting another register's bounds.
+>
+>                /*
+>                 * A low-32 link shares only the base's low 32 bits, so it=
+ is
+>                 * rebuilt rather than copied.
+>                 *
+>                 * SIGN_EXTEND_32 says so outright. ADD_CONST_32 with
+> delta =3D=3D 0
+>                 * does not: it is also what "w3 =3D w2; w3 +=3D 0" record=
+s,
+> which is
+>                 * a plain equality. The two are separable only by the bas=
+e's
+>                 * width
+>                 */
+>                if (reg->add_const =3D=3D SIGN_EXTEND_32 &&
+> !known_reg->add_const) {
+>                        reconstruct_sext32(reg, known_reg);
+>                        goto scratched;
+>                }
+>                if (reg->add_const =3D=3D ADD_CONST_32 && reg->delta =3D=
+=3D 0 &&
+>                    !known_reg->add_const) {
+>                        reconstruct_zext32(reg, known_reg);
+>                        goto ...;
+>                }
 
-But, after the thp_enabled changed the THP_MADVISE and then fault,
-there is the chance to be collpased for anon.
-
-I overlook the shmem case. but simple could we do like:
-
-diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index c32244b565658..047524f001532 100644
---- a/tools/testing/selftests/mm/khugepaged.c
-+++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -578,6 +578,9 @@ static bool wait_for_scan(const char *msg, char *p, size_t len,
-                usleep(TICK);
-        }
-
-+       if (!strncmp(ops->name, "anon", 4))
-+               madvise(p, len, MADV_NOHUGEPAGE);
-+
-        return timeout == -1;
- }
-
-> 
-> > +
-> >   	return timeout == -1;
-> >   }
-> > @@ -839,6 +841,7 @@ static void collapse_swapin_single_pte(struct collapse_context *c, struct mem_op
-> >   static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *ops)
-> >   {
-> > +	struct thp_settings settings = *thp_current_settings();
-> >   	int max_ptes_swap = thp_read_num("khugepaged/max_ptes_swap");
-> >   	void *p;
-> > @@ -860,6 +863,9 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
-> >   	validate_memory(p, 0, hpage_pmd_size);
-> >   	if (c->enforce_pte_scan_limits) {
-> > +		settings.hugepages[collapse_order].enabled = THP_MADVISE;
-> > +		thp_push_settings(&settings);
-> 
-> I'm not sure why the collapse_order setting needs to be changed here. In
-> your test case, you did not use the '-c' parameter to specify the collapse
-> order.
-
-What a stupid of me and I post wrong one... thie should be thp_enabled...
-Apologise :(
-
-> 
-> > +
-> >   		ops->fault(p, 0, hpage_pmd_size);
-> >   		ksft_print_msg("Swapout %d of %d pages...", max_ptes_swap,
-> >   		       hpage_pmd_nr);
-> > @@ -869,12 +875,15 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
-> >   			success("OK");
-> >   		} else {
-> >   			fail("Fail");
-> > +			thp_pop_settings();
-> >   			goto out;
-> >   		}
-> >   		c->collapse("Collapse with max_ptes_swap pages swapped out", p,
-> >   			    1, ops, true);
-> >   		validate_memory(p, 0, hpage_pmd_size);
-> > +
-> > +		thp_pop_settings();
-> >   	}
-> >   out:
-> >   	ops->cleanup_area(p, hpage_pmd_size);
-> > @@ -1075,6 +1084,7 @@ static void collapse_fork_compound(struct collapse_context *c, struct mem_ops *o
-> >   static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops *ops)
-> >   {
-> > +	struct thp_settings settings = *thp_current_settings();
-> >   	int max_ptes_shared = thp_read_num("khugepaged/max_ptes_shared");
-> >   	int wstatus;
-> >   	void *p;
-> > @@ -1100,6 +1110,9 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
-> >   			    1, ops, !c->enforce_pte_scan_limits);
-> >   		if (c->enforce_pte_scan_limits) {
-> > +			settings.hugepages[collapse_order].enabled = THP_MADVISE;
-> > +			thp_push_settings(&settings);
-> 
-> Ditto.
-
-Sorry this should be thp_enabled...
-
-> 
-> > +
-> >   			ksft_print_msg("Trigger CoW on page %d of %d...",
-> >   			       hpage_pmd_nr - max_ptes_shared, hpage_pmd_nr);
-> >   			ops->fault(p, 0, (hpage_pmd_nr - max_ptes_shared) *
-> > @@ -1111,6 +1124,8 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
-> >   			c->collapse("Collapse with max_ptes_shared PTEs shared",
-> >   				    p, 1, ops, true);
-> > +
-> > +			thp_pop_settings();
-> >   		}
-> >   		validate_memory(p, 0, hpage_pmd_size);
-> > 
-> 
-
-Thanks!
-
--- 
-Sincerely,
-Yeoreum Yun
+I think that's a problem with reconstruct_zext32().
+It shouldn't be necessary.
+The existing code that adds a constant should
+already handle it.
+If not, we have a bug in add_const_32.
+Instead of losing link at wx=3Dwy time
+we can keep it with delta =3D=3D 0
+and sync_linked_regs() shouldn't need any new code.
