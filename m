@@ -1,56 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D024D23D7E3;
-	Wed, 16 Sep 2026 21:30:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D4A493635
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 21:31:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789594244; cv=none; b=H7bIyCtJXJD8ctqswALuR8EO3iANtCoYjIHHR0Fi3FtXIC9emwsriyMYMsDGWC/MU/ZxU8xa3e91wWsWvqSG+KDkNHqiM/ud3fnlwTnwuyR3qjiR5NlAYKZN2XIRFUh4QrG9i4xS0ZL7vF2W/cNumQcp2UhG30ZtwJhh9aNjnE8=
+	t=1789594313; cv=none; b=GQweUzN1TCCMb+lVjnBI99UCKpCBgS4j/ENoFdheU3VtLot1U0dZ2jdyogFzt13AD8jS0oWLryQ9R3MqaGL1Ay+4pJgOY9wlk1NnOqDw1ow0JmXhaTDVOwnzfAeTFzzF8zfeDq7N6qgdroIZKh2b/hCeznCqDwAaVP/31SdEF9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789594244; c=relaxed/simple;
-	bh=2nzSzoycrfwe2uud5bUJoBtH/3BuHnvkcQd1i3N2lQs=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=CthZkBZz2GE6kq3EhdjieqobAJp2bgAuoZfmSRzEO6OQvYx13r7zmIZwzmtxj94bEz9620mPe8GfOyJcP72ckaWfNfgTVGiL5M5KTRL6awPJRLZE3/0MjF1yjnWVIUbS9+vD9pi+3Yqh2U/lGREjWzjKqLq+JKtEOTfiYPCY4hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fXT7mazK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789594313; c=relaxed/simple;
+	bh=1DHSr8bh4abwlIz0FoHBbbLkBEesDe6+96WV7AzDtCA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dNA1byMZ7cFZrb7/LcdxNlAdOWP57Bji6359iO7LwRW9i7fKbR8RH0AoQja8K+GBZMlEG2e7u6ir5HvXM3WrF/s4w/TLe9GB5qI4IyCM9LVpzS8kWLpaSofvwZmJuv6cFKtQcl2vSlwR9sYVVoZWYCNjvwHXb+QKaM13A3HjN6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=L0JJBdG2; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fXT7mazK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D9B91F000FF;
-	Wed, 16 Sep 2026 21:30:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789594233;
-	bh=2nzSzoycrfwe2uud5bUJoBtH/3BuHnvkcQd1i3N2lQs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=fXT7mazKQbr7VC4dIrK8QNIGQs58lRoCJ/K+BUq9p+JNhS5vuNDvCYwDuXNvaM2qK
-	 Hno3Hr6eonSY36B6fsG6bFel35zeRT8jQfGlQuS4jqWQ4m7+FUlaaz0R/n/Ivxcr0A
-	 wksc+thKIWuB/RJJfb5JpuZm3BllRqhJUPcmrdBgi5UkQ44PQ/WCybTKg5J5bL7Vw7
-	 zZFoTq8hC/pbw2h5wgdx6ajVXa8cFM8QaBkH1tZiQzwmS+0xktzpIkpM2P8roHzSwV
-	 GmhMykbXU3N0HRCIeqEpcePHHe26kF+vQFxbKD4e96LLW5hvn3nrzj9igIUdi4KGyR
-	 IIAn2Jjcsf2mA==
-Date: Wed, 16 Sep 2026 11:30:32 -1000
-Message-ID: <37f5a5fa8fc2552c4cb6c5320e6c71f6@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Tejun Heo <tj@kernel.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: cgroup: give the O_TMPFILE open in
- get_temp_fd() a mode
-In-Reply-To: <20260916204436.821378-1-eva.kurchatova@virtuozzo.com>
-References: <20260916204436.821378-1-eva.kurchatova@virtuozzo.com>
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="L0JJBdG2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:in-reply-to:references:mime-version:content-transfer-encoding;
+	 s=k1; bh=spZ5aNvOpiG/e94c8K+wmvSJl9kN3mWTpFV4sJ0UNh0=; b=L0JJBd
+	G2bMpiN92U8ptFTAXiDskOudT/gxtb9jOmRdrgUwdAgXA63wwsXC9PEoCwhh2sAy
+	8ud++UZYHAja8XHFiOuwXSa//x7Ip3o1ZFGnO1yT8P+QJ9AYGRaB4T+48B7P9l5o
+	+/KpUJAig+wEpT7jq+K2cT3s85hH80sN7tQ4Fw5WwSSWpiJnOxfOTxt0zYH0TE5b
+	z3C4GwNUnEV6+0enlJdijQlxf2vz/ht1kO1H+BpOj2fnzZp0re26fLC4RZ1Rgd8w
+	gflBrfXN2iRir1NHGW6OUlL9kIqedoB2JTb/OCDE6csq757dAwkTyoy6REDi3qft
+	FS9E4wGeAzRVSKcg==
+Received: (qmail 1715372 invoked from network); 16 Sep 2026 23:31:40 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 16 Sep 2026 23:31:40 +0200
+X-UD-Smtp-Session: l3s3148p1@MPeVZKBb4sQujnt4
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-rtc@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 2/3] selftest: rtc: rtctest: make missing UIEs really skip
+Date: Wed, 16 Sep 2026 23:31:10 +0200
+Message-ID: <20260916213108.9234-7-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260916213108.9234-5-wsa+renesas@sang-engineering.com>
+References: <20260916213108.9234-5-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hello,
+Use the proper framework call to mark a test as skipped. Currently, the
+test is considered good, only the printout mentions the skip.
 
-Applied to cgroup/for-7.3-fixes.
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ tools/testing/selftests/rtc/rtctest.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Thanks.
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index 077cdc2c6f87..962050a32985 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -163,8 +163,7 @@ TEST_F_TIMEOUT(rtc, uie_read, NUM_UIE + 2) {
+ 	rc = ioctl(self->fd, RTC_UIE_ON, 0);
+ 	if (rc == -1) {
+ 		ASSERT_EQ(EINVAL, errno);
+-		TH_LOG("skip update IRQs not supported.");
+-		return;
++		SKIP(return, "update IRQs are not supported.");
+ 	}
+ 
+ 	for (i = 0; i < NUM_UIE; i++) {
+@@ -192,8 +191,7 @@ TEST_F(rtc, uie_select) {
+ 	rc = ioctl(self->fd, RTC_UIE_ON, 0);
+ 	if (rc == -1) {
+ 		ASSERT_EQ(EINVAL, errno);
+-		TH_LOG("skip update IRQs not supported.");
+-		return;
++		SKIP(return, "update IRQs are not supported.");
+ 	}
+ 
+ 	for (i = 0; i < NUM_UIE; i++) {
+-- 
+2.53.0
 
---
-tejun
