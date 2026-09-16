@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F59D51476D;
-	Wed, 16 Sep 2026 15:27:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95215538D94;
+	Wed, 16 Sep 2026 15:30:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789572437; cv=none; b=lWJaprSPozytd7Q6VNs3JpHx00CblyWmczpePYoBNvU9wyp7jCqdGIlSNj5TTvTT4XcM+alqTBGgQF+krLnwZmoDhJZdN7xlN2rzi9I80PDJmJo3+iRdJhY5ZlkVql+2bfjwF0BszlAIl+3P7s18CW1C3s/Kc+hQlCLYGfqSguE=
+	t=1789572625; cv=none; b=EOD+iLTxDSIDKwcdcM01QUmTX+tkdhIzgWx9X7wcq/Jx2S5dypwuphxo3gmefua/r4ehg43jMmCtK6MXvI92EaEKCo/+yiB33imfdj7doblfFsC/hUBZxt9Lsbl9fjmi9DgKCWRjwzLq43RcXBEONPimPHgTt05KHJeC2q5nbN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789572437; c=relaxed/simple;
-	bh=J5IUzn5jWVSvUHw8EEJo+HSH8W0oYtJMMRaB/fsOUtc=;
+	s=arc-20240116; t=1789572625; c=relaxed/simple;
+	bh=wOBL72sGseDarsjjygbyWkUNodnYuZEAV5D0auhSHQM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ofg0gUMCoCA6z8Vwg+PyPgGNDn6GIcP3FuOzgHZOYYwTkMtlsqyuu+Uzv1V7wM6zfa/FtYyiTzzYPuRrfWIoRrY/WvCj7PwPFfkSNPXN1bD4EEEqD9FEVjO4QTPHdf8nuj5cEa2rl7i/IdTWxryJUsrmW9EjWM5ss7PYrN05WBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M147Y4WN; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=esDJSklaLb4yDC/JLVwkjjpTQH8ms0kEX6FRglRa6k9XHoajrjx/lAoXzfF2F3DYu8ApBe9WZK/W90InvApG0Nl++WdHOoBZ87T8F7iKu4yEpxn54HJ/Rty/WvfN7xmkX3Y2N6XdCB65ErnMH3Z0kCEtVYU78iF5bHia2Mq7nWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YCWEXLU7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M147Y4WN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 396991F00898;
-	Wed, 16 Sep 2026 15:27:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YCWEXLU7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3968E1F000FF;
+	Wed, 16 Sep 2026 15:30:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789572432;
-	bh=pEp4ZnPbrejlMbShDfgZlS9JJ0BVmM1UYTzr+qTasEE=;
+	s=k20260515; t=1789572618;
+	bh=Zwm/p1nyzNJMkp1pYGg0loyufpT3OLyoisEPtQ8zWEg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=M147Y4WNSRLQzLz095+KM8Q0tz8N4DxvBUKJ4Z1D6WyxX19+dYyjefg3rZGCnN3gC
-	 jGZASvaW1D0vNi/vmu1kfxeuULgNODd29T16eicployzlDPWQjTOuf8Y83Uyfft1FU
-	 iwQ5EiVCmg/SNdqMqQouOSxKothPEymGg24/WlS4SJ/A+2o37vS5Ie6Jjcaew79+bb
-	 XNF9+5Ymfy9YJFIA4vsG4xWjagM5OLwQTgXChBKTZeeih7yNO+G5Ab5PryIjS+NUJf
-	 D681IKJHKhNfiXD1M2t7sbtihOOg1W3nde2w4nRq09CPyo9FdA4UCJ5g4O8W66HbGa
-	 Zfut5LYDRi49w==
-Message-ID: <88807afb-06a6-46df-a936-ec2a56cb4319@kernel.org>
-Date: Wed, 16 Sep 2026 17:27:07 +0200
+	b=YCWEXLU7Ho0eK2dCD4wWUTu+jg+3YfdTNXIS7vLT6hWD4fZbBsgoVrqAKTI5EXN4j
+	 4EIHOueKpzwfKorjR+heQNQjUQVfiJAHmosWvRpe2h/CLxK+4CjSQiQD5xx5YAyPkG
+	 R3HMcMOuvpgTFJO0XaBD23b6CQVqkyKKDS7SDRtJ0VSdAZKgvqlZaDpGcfvLtRvcn2
+	 Z4nhpIBsvK4LNJGmgvTRLybBOKOHb3L5K0DF9vGrqSn5UYuFkSrroZrB9GZRKWPSGs
+	 c3fogHHH2EFC9HvHkDdy3rRARFlCLlrrq2a8PCXOxucrmi+jL1ZzJRyCQ/aPX9i4/A
+	 kRzAlsI2vt/+A==
+Message-ID: <b1f2a146-1a61-42bd-98c5-fc4380b6ae49@kernel.org>
+Date: Wed, 16 Sep 2026 17:30:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,15 +35,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] selftests/mm: mark file-local symbols of
- pagemap_ioctl.c static
+Subject: Re: [PATCH v2 3/3] selftests/mm: init page sizes early in
+ pagemap_ioctl test
 To: Zenghui Yu <zenghui.yu@linux.dev>, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: akpm@linux-foundation.org, ljs@kernel.org, liam@infradead.org,
  vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
  shuah@kernel.org, gourry@gourry.net
 References: <20260908134117.84405-1-zenghui.yu@linux.dev>
- <20260908134315.84431-1-zenghui.yu@linux.dev>
+ <20260908134405.84448-1-zenghui.yu@linux.dev>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -90,25 +90,62 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260908134315.84431-1-zenghui.yu@linux.dev>
+In-Reply-To: <20260908134405.84448-1-zenghui.yu@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/8/26 15:43, Zenghui Yu wrote:
+On 9/8/26 15:44, Zenghui Yu wrote:
 > From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
 > 
-> The file-scope variables (pagemap_fd, uffd, page_size, hpage_size and
-> progname) and most functions of the pagemap_ioctl test are only used
-> locally, but lack the static storage class.  Mark them static so that the
-> compiler can catch accidental outer references.
+> Initialize page_size and hpage_size before calling init_uffd(),
+> hugetlb_setup_default(), etc.  That won't fix anything, but it is safer and
+> saner to get these globals set up before doing other things.
 > 
-> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+> While at it, drop the page_size parameter of transact_test(), which is
+> actually unnecessary.
+> 
+> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
 > Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
 > ---
+>  tools/testing/selftests/mm/pagemap_ioctl.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+> index 1a87b7483316..d9a4fb782ecf 100644
+> --- a/tools/testing/selftests/mm/pagemap_ioctl.c
+> +++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+> @@ -1489,7 +1489,7 @@ static void *thread_proc(void *mem)
+>  	return NULL;
+>  }
+>  
+> -static void transact_test(int page_size)
+> +static void transact_test(void)
+>  {
+>  	unsigned int i, count, extra_pages;
+>  	unsigned int c;
+> @@ -1653,6 +1653,9 @@ int main(int __attribute__((unused)) argc, char *argv[])
+>  
+>  	ksft_print_header();
+>  
+> +	page_size = getpagesize();
+> +	hpage_size = read_pmd_pagesize();
+> +
+>  	if (init_uffd())
+>  		ksft_exit_skip("Failed to initialize userfaultfd\n");
+>  
+> @@ -1661,9 +1664,6 @@ int main(int __attribute__((unused)) argc, char *argv[])
+>  
+>  	ksft_set_plan(119);
+>  
+> -	page_size = getpagesize();
+> -	hpage_size = read_pmd_pagesize();
+> -
+We have some other code rework that part, so I expect some conflicts for whoever
+goes in first.
 
-Thanks!
+Why not
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+initialize them right when defining the variables, marking them const?
 
 -- 
 Cheers,
