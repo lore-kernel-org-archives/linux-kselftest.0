@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4F045335BC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9EAB534448;
 	Wed, 16 Sep 2026 15:33:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789572783; cv=none; b=UXkzWaZl+YKlsCcYYXRqeK2iyyRuDUUMoL0rzp4ubryczNqW/TXf+cLdX3aGwzS3aOfS3OPP/JhD6eP5Bw+8OUia5ZOYyFd/68dQ7VnnB/keVlU4yk4RTSIG4hNnLX/D9/QU49D6xyMXU0l5TdOB0LnNOdF0luys7jUUXWd7kqI=
+	t=1789572784; cv=none; b=jjl+nHKxN0q1TnXT49e+pVXK+B3oxmSMBhbtaqaFLBdqI7ViqhK+qEdbTVFl2R4CoCIQye+1U+vb6KpMxXxkS8xrLhID/RHVRD/EP75RYIa8RBD/QLp/URE2zXSxGeFpmRrKgHfqsgpTviag1zGSW6NkcbaxA/MjNtPQl7aFqTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789572783; c=relaxed/simple;
-	bh=5wIY341RZO/8kpnGfoygcOPij5SPta1VXvNSyTDvloo=;
+	s=arc-20240116; t=1789572784; c=relaxed/simple;
+	bh=NON11zdwLh1jBYgUrUe50YBgyTAFscgK+5XuaYRqhl0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VzyEGhB496sHtNrXXwB+9qHMiCKUujEGFdt+da4gnIpum9/sxqNtPYxr/JKaBGNcS3nmqZ2b7TJ/jIRWQqJ3Z14QHrW9qdhoLrRXV4HFzYBSFi84ByRhJ5Qwcn1sAysS24niFTCIUh/v4IQs9bQZSfSd+eu/Vk8KsWbpC6QeRBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rWXzi4R0; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=F6VOybkOctRyVQ8doQ1UA5NQnk8JwKmuTek2CmlCzsx1LKywo172axINWxEIu/fiqbD/xDTnU7rfQUUzwhPehE0AMVjs2eJ6xIvkw5dUdAIiEEEsQZRvIB/PjNxZE3M7N9n9dPesENdX9mdtD0xFAkoweB3qrDIQnvhn8qWT7L4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=my9IdKUD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rWXzi4R0"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 74445C32786;
-	Wed, 16 Sep 2026 15:33:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="my9IdKUD"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 01295C4AF0C;
+	Wed, 16 Sep 2026 15:33:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1789572781;
-	bh=5wIY341RZO/8kpnGfoygcOPij5SPta1VXvNSyTDvloo=;
+	s=k20201202; t=1789572782;
+	bh=NON11zdwLh1jBYgUrUe50YBgyTAFscgK+5XuaYRqhl0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=rWXzi4R0hAAdjHDL1Yq7fRvlyi/ZE2ASLa6jO8bU4QX/EQP7/j77qf170x8Vp6Bes
-	 hGESXSzbAb+BNaOgA1ehiM9h/g0x/vFttwFtz8IOtmaQcJQMTWxhUgSaKLjhfP8XOL
-	 N8ilyRtEb9wKHMwznC7gMQ5nhZnWLjQgWS2cZYxh8R85z3Y+675s502jq8FOoxYwA8
-	 QdEkloKLP2TyhdSa5vOGe1Ig2W5iPpf1AkZ2+ltx8aAr/mmBCdo+veTK07QemmNUwh
-	 Tps1i7xAQku1FuwUajF3w5oF2iX+3tPv6yCOSQ7sZCqXCkgiV/2z2kGtfxkWLUEka7
-	 K846XPUVgkKPg==
+	b=my9IdKUDGj1w5i1oZkUs2p828k4i4K80ouPR/WZmohj7t0uS/8nymRdj7sIMOiZ/U
+	 aomirwRW4fBd8fBVJRVYayrhenIWlxw6EUZy0900XB6lzkrCeZ1h2AOGuxq+IVEOIs
+	 ajnyxQO7ROI6ADPNKWsy7cohAxI7fJR0gOHHpGcKhLc8GNctWz9aN53SO0Oa2q0cUd
+	 0RIQOuXMR89KjsryomLz2w6oz5dGd2zvkulFOgkhJMZ1IM4P3Za7VjyD/sKt8AMmF9
+	 ybA2ZWMxXsUx3h7b1IIRhi0w13ScdzrBztAwZ4aomY4h/0L06ItJwtfpijq4EJlAG3
+	 fITRwln4oPHAQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E1F3C982C3;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E25F9C982C9;
 	Wed, 16 Sep 2026 15:33:01 +0000 (UTC)
 From: Jim Cromie via B4 Relay <devnull+jim.cromie.gmail.com@kernel.org>
-Date: Wed, 16 Sep 2026 09:33:11 -0600
-Subject: [PATCH v10 19/38] dyndbg: reduce class param storage to u32
+Date: Wed, 16 Sep 2026 09:33:16 -0600
+Subject: [PATCH v10 24/38] selftests/dyndbg: Enable FT_classmap_inheritance
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,7 +40,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260916-dd-cmap-part2-clean-v10-19-af4cf4767707@gmail.com>
+Message-Id: <20260916-dd-cmap-part2-clean-v10-24-af4cf4767707@gmail.com>
 References: <20260916-dd-cmap-part2-clean-v10-0-af4cf4767707@gmail.com>
 In-Reply-To: <20260916-dd-cmap-part2-clean-v10-0-af4cf4767707@gmail.com>
 To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
@@ -64,11 +64,11 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
  Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1789572777; l=9168;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1789572777; l=5931;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=zmKabooMhWV4JvaL9Gl2blvVpugNJ9hf6IHOm23U8eM=;
- b=CooaxEA/HCqFf5catSvgblObDOS1uULMQ0Z4N8vNS0SkKr8Kwk3V1Y5SN7Moq2WxOFlRUvgKO
- YwPeSU16HtxAvyIvmA8mJ2gWTFx32A9emFSYjW2rIgZHxAdJVS+ZHJT
+ bh=6OJ9UW17PHmqcN0g3YruYiGL+oiRmIXie0aYgidVUu0=;
+ b=++kI8qArwuxEzMKHq4StXWqdWptUzDszSvpOM/3L/YkwYo86t5hk2xEofy93NPwpHpVKRXFdf
+ X2f9LpeYqQ9DBFrgIBH9nWtjL96clDN6XT1DKf0Sis6HdYVx9uOW20e
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 X-Endpoint-Received: by B4 Relay for jim.cromie@gmail.com/20260203 with
@@ -78,244 +78,143 @@ Reply-To: jim.cromie@gmail.com
 
 From: Jim Cromie <jim.cromie@gmail.com>
 
-Currently, `struct ddebug_class_param` uses pointers to `unsigned
-long` values which store the state of `bits` and `lvl`, so it changes
-sizes depending upon the architecture.  Make it always u32 for
-consistency.
+Exercise classmap state inheritance between supermod and submod,
+verifying that class settings and controlling parameter states propagate
+from parent classmap definitions to dependent class users upon module
+load and during runtime reconfiguration.
 
-The bits field references __drm_debug, which was unsigned int, before
-commit f158936b60a7 ("drm: POC drm on dyndbg - use in core, 2 helpers, 3 drivers.")
-changed it to unsigned long.  This patch changes it back.
-
-That enlargement was a thinko; although modules can have up to 63
-classes, and *could* have put all those classes in a single classmap,
-the reason for it is to support multiple classmaps (with
-non-overlapping class-id ranges).
-
-32 bits is a practical limit for a class-param's usability since all
-classes are set together with a single write of a hex value; 16 would
-be a realistic limit, drm.debug has ~12 classes.
-
-  #> echo 0x0fff > /sys/module/drm/parameters/debug
-
-Several followon patches add a number of compile-time validations,
-including a num-classes <=32 check.
+Add FT_classmap_inheritance to exercise classmap parameter propagation
+across test_dynamic_debug and test_dynamic_debug_submod. Enable it under
+modular_tests and register its 8 golden record checksums.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
-v8: add a <32 limit to prevent undefined shifts on 32 bit number
-v5: u32 for all arches
-v4: undo change struct ddebug_class_param to _ddebug_class_param
+ .../selftests/dynamic_debug/dyndbg_selftest.sh     | 84 +++++++++++++++++++++-
+ 1 file changed, 83 insertions(+), 1 deletion(-)
 
-v3:
-fix undefd behavior when classmaps is all 64 bits.
-change module_param_named( type-arg from ulong to ullong)
-change struct ddebug_class_param to _ddebug_class_param
-
-in drivers/gpu/drm/drm_print.{c,h}
-api change later
-
-v2:
-
-patch was "make bits & lvl same size"
-but that size was unsigned long, only 32 bits on i386 etc
-use u64 for all bits, and %llu %llx
-
-u64-fix
-
-u64-drm-dbg
----
- drivers/gpu/drm/drm_print.c   |  4 ++--
- include/drm/drm_print.h       |  2 +-
- include/linux/dynamic_debug.h |  4 ++--
- lib/dynamic_debug.c           | 37 ++++++++++++++++++++-----------------
- lib/test_dynamic_debug.c      |  2 +-
- 5 files changed, 26 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_print.c b/drivers/gpu/drm/drm_print.c
-index 86cef1a37678..794417c62097 100644
---- a/drivers/gpu/drm/drm_print.c
-+++ b/drivers/gpu/drm/drm_print.c
-@@ -40,7 +40,7 @@
-  * __drm_debug: Enable debug output.
-  * Bitmask of DRM_UT_x. See include/drm/drm_print.h for details.
-  */
--unsigned long __drm_debug;
-+u32 __drm_debug;
- EXPORT_SYMBOL(__drm_debug);
+diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+index 09a8dbf239dc..51338ebc74bf 100755
+--- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
++++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+@@ -64,6 +64,7 @@ function ifrmmod {
+ }
  
- MODULE_PARM_DESC(debug, "Enable debug output, where each bit enables a debug category.\n"
-@@ -56,7 +56,7 @@ MODULE_PARM_DESC(debug, "Enable debug output, where each bit enables a debug cat
- "\t\tBit 9 (0x200) will enable DRMRES messages (managed resources code)");
+ # Clean up any leftover loaded test modules at initialization
++ifrmmod test_dynamic_debug_submod
+ ifrmmod test_dynamic_debug
  
- #if !defined(CONFIG_DRM_USE_DYNAMIC_DEBUG)
--module_param_named(debug, __drm_debug, ulong, 0600);
-+module_param_named(debug, __drm_debug, uint, 0600);
- #else
- /* classnames must match vals of enum drm_debug_category */
- DECLARE_DYNDBG_CLASSMAP(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
-diff --git a/include/drm/drm_print.h b/include/drm/drm_print.h
-index 2adc5ac688e1..50b3ba0ae76d 100644
---- a/include/drm/drm_print.h
-+++ b/include/drm/drm_print.h
-@@ -39,7 +39,7 @@ struct drm_device;
- struct seq_file;
+ # ===========================================================================
+@@ -196,7 +197,7 @@ function FT_grammar_ok {
  
- /* Do *not* use outside of drm_print.[ch]! */
--extern unsigned long __drm_debug;
-+extern u32 __drm_debug;
+     # use 4 keywords (max 9 words inc flags)
+     ddcmd "module foo file bar.c func buz class D2_CORE +_"	# 4 keywords
+-    #ddcmd "module foo file bar.c func buz class D2 line 100 +_" # 5 keywords
++    ddcmd "module foo file bar.c func buz class D2 line 100 +_" # 5 keywords
  
- /**
-  * DOC: print
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index 02a1abdc5b3f..27cae68552e5 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -102,8 +102,8 @@ struct _ddebug_info {
+     # 3. Dedicated lineno range grammar assertions (side-effect-free proofs)
+     ddcmd "line 42 +_"		# test exact line syntax
+@@ -298,6 +299,78 @@ function FT_basic_queries {
+     ddcmd "file $f =_" "$f"
+ }
  
- struct ddebug_class_param {
- 	union {
--		unsigned long *bits;
--		unsigned int *lvl;
-+		u32 *bits;
-+		u32 *lvl;
- 	};
- 	char flags[8];
- 	const struct ddebug_class_map *map;
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 4d5f495968d9..fd47ae5078e5 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -585,6 +585,7 @@ static int ddebug_exec_query(char *query_string, const char *modname)
- 		pr_err("query parse failed\n");
- 		return -EINVAL;
- 	}
++function FT_classmap_inheritance {
++    v_echo "${GREEN}# TEST_MOD_SUBMOD ${NC}"
 +
- 	/* actually go and implement the change */
- 	nfound = ddebug_change(&query, &modifiers);
- 	v3pr_info_dq(&query, nfound ? "applied" : "no-match");
-@@ -635,8 +636,7 @@ static int ddebug_exec_queries(char *query, const char *modname)
- 
- /* apply a new class-param setting */
- static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
--				     const unsigned long *new_bits,
--				     const unsigned long old_bits,
-+				     const u32 *new_bits, const u32 old_bits,
- 				     const char *query_modname)
- {
- #define QUERY_SIZE 128
-@@ -646,24 +646,27 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
- 	int bi, ct;
- 
- 	if (*new_bits != old_bits)
--		v2pr_info("apply bitmap: 0x%lx to: 0x%lx for %s\n", *new_bits,
-+		v2pr_info("apply bitmap: 0x%x to: 0x%x for %s\n", *new_bits,
- 			  old_bits, query_modname ?: "'*'");
- 
--	for (bi = 0; bi < map->length; bi++) {
--		if (test_bit(bi, new_bits) == test_bit(bi, &old_bits))
-+	for (bi = 0; bi < map->length && bi < 32; bi++) {
-+		bool new_b = !!(*new_bits & BIT(bi));
-+		bool old_b = !!(old_bits & BIT(bi));
++    ifrmmod test_dynamic_debug_submod
++    ifrmmod test_dynamic_debug
 +
-+		if (new_b == old_b)
- 			continue;
++    # modprobe with plain-old +p & 3 class enablements
++    my_modprobe test_dynamic_debug \
++	"dyndbg=+p;class D2_CORE +pf;class D2_KMS +pt;class D2_ATOMIC +pm"
++    verify_control_slice '\[test_dynamic_debug\]'
++
++    set_param 5 /sys/module/test_dynamic_debug/parameters/p_level_num
++    verify_control_slice '\[test_dynamic_debug\]'
++
++    my_modprobe test_dynamic_debug_submod
++    verify_control_slice 'test_dynamic_debug_submod'
++
++    # fresh start, to clear all above flags (test-fn limits)
++    ifrmmod test_dynamic_debug_submod
++    ifrmmod test_dynamic_debug
++
++    # load submod, which loads supermod
++    my_modprobe test_dynamic_debug_submod \
++	"dyndbg=+p;class D2_CORE +pfs;class D2_KMS +pts;class D2_ATOMIC +pmf"
++    verify_control_slice 'test_dynamic_debug'
++
++    # runtime changes to both
++    set_param 0x57 /sys/module/test_dynamic_debug/parameters/p_disjoint_bits
++    set_param 4 /sys/module/test_dynamic_debug/parameters/p_level_num
++    verify_control_slice 'test_dynamic_debug'
++
++    ifrmmod test_dynamic_debug_submod
++    ifrmmod test_dynamic_debug
++
++    # set super-mod params at load-time
++    my_modprobe test_dynamic_debug p_disjoint_bits=0x16 p_level_num=5
++    verify_control_slice '\[test_dynamic_debug\]'
++
++    # see them picked up by submod
++    my_modprobe test_dynamic_debug_submod
++    verify_control_slice 'test_dynamic_debug'
++
++    # Real-time mathematical proof that load-time (modprobe) parameter parsing
++    # and runtime (sysfs write) parameter configurations are perfectly equivalent!
++    local hash_modprobe=$(slice_and_hash_ddctrl '\[test_dynamic_debug\]')
++
++    # Fresh load with default parameters, then configure them dynamically at runtime
++    ifrmmod test_dynamic_debug_submod
++    ifrmmod test_dynamic_debug
++    my_modprobe test_dynamic_debug
++    my_modprobe test_dynamic_debug_submod
++    echo 0x16 > /sys/module/test_dynamic_debug/parameters/p_disjoint_bits
++    echo 5 > /sys/module/test_dynamic_debug/parameters/p_level_num
++
++    local hash_sysfs=$(slice_and_hash_ddctrl '\[test_dynamic_debug\]')
++    if [ "$hash_modprobe" != "$hash_sysfs" ]; then
++        echo -e "${RED}: Load-time vs runtime parameter equivalence check failed!${NC}"
++        exit $ksft_fail
++    else
++        v_echo "${GREEN}: Proven: parameter load-time (modprobe) " \
++            "and runtime (sysfs write) are equivalent!${NC}"
++    fi
++    # --- Live Content Fingerprinting Phase ---
++    log_start
++    echo 1 > /sys/module/test_dynamic_debug/parameters/do_prints
++    echo 1 > /sys/module/test_dynamic_debug_submod/parameters/do_prints
++    log_stop
++
++    ifrmmod test_dynamic_debug_submod
++    ifrmmod test_dynamic_debug
++}
++
+ # Built-in Feature Tests (Can run on any CONFIG_DYNAMIC_DEBUG kernel, modular or monolithic)
+ builtin_tests=(
+     FT_grammar_ok
+@@ -307,6 +380,7 @@ builtin_tests=(
  
- 		snprintf(query, QUERY_SIZE, "class %s %c%s", map->class_names[bi],
--			 test_bit(bi, new_bits) ? '+' : '-', dcp->flags);
-+			 new_b ? '+' : '-', dcp->flags);
+ # Modular Feature Tests (Require CONFIG_MODULES=y and test_dynamic_debug*.ko available)
+ modular_tests=(
++    FT_classmap_inheritance
+ )
  
- 		ct = ddebug_exec_queries(query, query_modname);
- 		matches += ct;
- 
--		v2pr_info("bit_%d: %d matches on class: %s -> 0x%lx\n", bi,
-+		v2pr_info("bit_%d: %d matches on class: %s -> 0x%x\n", bi,
- 			  ct, map->class_names[bi], *new_bits);
- 	}
- 	if (*new_bits != old_bits)
--		v2pr_info("applied bitmap: 0x%lx to: 0x%lx for %s\n", *new_bits,
-+		v2pr_info("applied bitmap: 0x%x to: 0x%x for %s\n", *new_bits,
- 			  old_bits, query_modname ?: "'*'");
- 
- 	return matches;
-@@ -672,7 +675,7 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
- /* stub to later conditionally add "$module." prefix where not already done */
- #define KP_NAME(kp)	kp->name
- 
--#define CLASSMAP_BITMASK(width) ((1UL << (width)) - 1)
-+#define CLASSMAP_BITMASK(width) ((width) >= 32 ? ~0U : (1U << (width)) - 1)
- 
- /*
-  * param-setter helper to validate numeric input, clamp its value by
-@@ -684,10 +687,10 @@ static int param_set_dyndbg_module_classes(const char *instr,
- {
- 	const struct ddebug_class_param *dcp = kp->arg;
- 	const struct ddebug_class_map *map = dcp->map;
--	unsigned long inrep, new_bits, old_bits, old_val;
-+	u32 inrep, new_bits, old_bits, old_val;
- 	int rc, totct = 0;
- 
--	rc = kstrtoul(instr, 0, &inrep);
-+	rc = kstrtou32(instr, 0, &inrep);
- 	if (rc) {
- 		int len = strcspn(instr, "\n");
- 
-@@ -700,26 +703,26 @@ static int param_set_dyndbg_module_classes(const char *instr,
- 	case DD_CLASS_TYPE_DISJOINT_BITS:
- 		/* expect bits. mask and warn if too many */
- 		if (inrep & ~CLASSMAP_BITMASK(map->length)) {
--			pr_warn("%s: input: 0x%lx exceeds mask: 0x%lx, masking\n",
-+			pr_warn("%s: input: 0x%x exceeds mask: 0x%x, masking\n",
- 				KP_NAME(kp), inrep, CLASSMAP_BITMASK(map->length));
- 			inrep &= CLASSMAP_BITMASK(map->length);
- 		}
- 		old_val = READ_ONCE(*dcp->bits);
--		v2pr_info("bits:0x%lx > %s.%s\n", inrep, mod_name ?: "*", KP_NAME(kp));
-+		v2pr_info("bits:0x%x > %s.%s\n", inrep, mod_name ?: "*", KP_NAME(kp));
- 		totct += ddebug_apply_class_bitmap(dcp, &inrep, old_val, mod_name);
- 		WRITE_ONCE(*dcp->bits, inrep);
- 		break;
- 	case DD_CLASS_TYPE_LEVEL_NUM:
- 		/* input is bitpos, of highest verbosity to be enabled */
- 		if (inrep > map->length) {
--			pr_warn("%s: level:%ld exceeds max:%d, clamping\n",
-+			pr_warn("%s: level:%u exceeds max:%d, clamping\n",
- 				KP_NAME(kp), inrep, map->length);
- 			inrep = map->length;
- 		}
- 		old_val = READ_ONCE(*dcp->lvl);
- 		old_bits = CLASSMAP_BITMASK(old_val);
- 		new_bits = CLASSMAP_BITMASK(inrep);
--		v2pr_info("lvl:%ld bits:0x%lx > %s\n", inrep, new_bits, KP_NAME(kp));
-+		v2pr_info("lvl:%u bits:0x%x > %s\n", inrep, new_bits, KP_NAME(kp));
- 		totct += ddebug_apply_class_bitmap(dcp, &new_bits, old_bits, mod_name);
- 		WRITE_ONCE(*dcp->lvl, inrep);
- 		break;
-@@ -765,9 +768,9 @@ int param_get_dyndbg_classes(char *buffer, const struct kernel_param *kp)
- 
- 	switch (map->map_type) {
- 	case DD_CLASS_TYPE_DISJOINT_BITS:
--		return scnprintf(buffer, PAGE_SIZE, "0x%lx\n", *dcp->bits);
-+		return scnprintf(buffer, PAGE_SIZE, "0x%x\n", *dcp->bits);
- 	case DD_CLASS_TYPE_LEVEL_NUM:
--		return scnprintf(buffer, PAGE_SIZE, "%d\n", *dcp->lvl);
-+		return scnprintf(buffer, PAGE_SIZE, "%u\n", *dcp->lvl);
- 	default:
- 		return -1;
- 	}
-diff --git a/lib/test_dynamic_debug.c b/lib/test_dynamic_debug.c
-index 74d183ebf3e0..9e8e028461ad 100644
---- a/lib/test_dynamic_debug.c
-+++ b/lib/test_dynamic_debug.c
-@@ -40,7 +40,7 @@ module_param_cb(do_prints, &param_ops_do_prints, NULL, 0600);
-  * - tie together sysname, mapname, bitsname, flagsname
-  */
- #define DD_SYS_WRAP(_model, _flags)					\
--	static unsigned long bits_##_model;				\
-+	static u32 bits_##_model;					\
- 	static struct ddebug_class_param _flags##_model = {		\
- 		.bits = &bits_##_model,					\
- 		.flags = #_flags,					\
+ # ==============================================================================
+@@ -390,6 +464,14 @@ function GOLDEN_RECORDS {
+ #K= 02e4fd94602e108cb89bfc70d47a5dad FT_basic_queries.5
+ #K= f03a7ca7316e8db4c0e16523dc41e75d FT_basic_queries.6
+ #K= c518a50ba30ba8099d0dc874a27ecf16 FT_basic_queries.7
++#K= fb294f02a4207b28b2a874524ef07afd FT_classmap_inheritance.1
++#K= 7a0b87016fdc237077dfe96bbbb3661b FT_classmap_inheritance.2
++#K= 2784d60f5056fc5cc03b3ceb854293f5 FT_classmap_inheritance.3
++#K= bf66aaf8ff612272c0cda29778ed2131 FT_classmap_inheritance.4
++#K= 49fdd29d91a4c1d16f8b59bb431e741b FT_classmap_inheritance.5
++#K= a8aa244285d048b5ebe33061fa99c424 FT_classmap_inheritance.6
++#K= 3060b86a0f553dd5a826bb7023284925 FT_classmap_inheritance.7
++#K= f43e0aff8a4b38435b73d90ed8100d1b FT_classmap_inheritance.8
+ EOF
+         # Read the K-recs and skip those for tests that can't run
+         while read -r line; do
 
 -- 
 2.55.0
