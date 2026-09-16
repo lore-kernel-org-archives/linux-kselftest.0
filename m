@@ -1,126 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E08937CD53;
-	Wed, 16 Sep 2026 13:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9E54F4746
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 13:29:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789565291; cv=none; b=oLAdL63SHg0skNVhxIEynVxNelxnRXdHApEiAxNVakWRtXv/AEYDQhfGjHiWupuYbtmPg8YQzW1LU11c2n82WCBV2guACd8i9LNfU1i2uoXWor34Re4Lgzx1MA5XegSywvKlQegFRmULCf1GwBh7k1WTSPWhJZZcPWxHWyoanqI=
+	t=1789565348; cv=none; b=mXSCEjnpKQ++fymLmJtDZcD29c+MzopgJ6+gGwKms/MxPLDQlzfnc0Eg+d+f5o9nNf1qAUZNaV6aGpBVM/4cQOjejcfX+XdcvESc8ZLLV6uEHo3YzwGEkM3as54/lOgcUTMwe3e29t9zbj/pdxEVIFfnfX6RcROOpT2AVWDio4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789565291; c=relaxed/simple;
-	bh=YdHSYudCjLtB9BQajl1W2vF7++bTRpKZvAa96IWUaVc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HMP7j8jjf5rMtkPb6WAxTXRFWRTBx+yRZRxtE/nG6CQh+qU8jdv9o+6tvLJq2HpzVEtIiwrg2h4YTiLY4uV+3Rhu0v2jB3GmcHTBWoB6SltOQqXGCusWxxG1GcRqq3EVGX53MDDH6MxXG1fn+3ANIgdlQRnBfXIeYa29lP4CxbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rd3UjnUT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789565348; c=relaxed/simple;
+	bh=DuCtb9s3GxBflb05RsmY9gtapXBWYniJ4ybKet7iHtI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=aIK9PemvjnVk0anzXQE/4zKUYZtSKqFiSa0zCc57HDkugUhwXKHuURB4+rtcOKj9QpYenoWfZ3+tsI7JMZk2yHpKo8c26axQ2/YJcHtbVc7W6hLWeaJdtQFr/V3M7KBPlI6aTen5KTCOkuuxj16O+UFQouBMMnAaBQgRBzUvZO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=K2YJ7V+7; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rd3UjnUT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B45701F000FF;
-	Wed, 16 Sep 2026 13:28:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789565289;
-	bh=5j6rnx+mCo8gZ3esGUeGF9jFOvp+62a04sJQH5jFRdk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Rd3UjnUTcvpqRiaaowqjEmO3ozv8vavlwqVS5OfoAf8TapeUXK0yvEM0CrFG92Zdd
-	 TFTdyD8mvwM6jFpN4Vnu4C8eaav3iumlt7jzB35F0bwihU6EG4vLoPnAkIAQIrdkIW
-	 zNWQcRLFo25SSjf5fkZVBGVFCGQwPhc53AdpvCAXn2uGoOJSCLCM/plU3r5bxXysiS
-	 ohAV4KTlEStwISQMdEVQtutcphPSzETZDeavREp9kkBAwJuiYnvJHVLKIsAb/k2ALw
-	 83ucoZOzANwOa/7u0qmGFh01siZWiahoSm5hvkwKHLNpeKZWscncwflvEyEmeVZiSC
-	 ki41kZ3naXcqQ==
-Message-ID: <36480c86-fc59-4387-91a4-cad839f502f2@kernel.org>
-Date: Wed, 16 Sep 2026 15:28:01 +0200
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="K2YJ7V+7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1789565346;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yujGt1GkWQ2RNAZS1blJViwQT7Osz6xYsfGP32GibmQ=;
+	b=K2YJ7V+7u80AxCTfk91GNxqyPFVmfnQWk+0U5LQ7gTx7j73eoSBtQbx6IG+QJF+UI5AqtR
+	Syi+QO7t+N5TeXQNUYx5/nJsjSytXE6YuUXGpLuLNOckaYvn4+xBph820lTfxQW7PBsSiT
+	Yc6pGsiHwubGWyizsbcucFmgYIyBcnA=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-622-GM2OBS7_MN-1pfIICxINqQ-1; Wed,
+ 16 Sep 2026 09:29:02 -0400
+X-MC-Unique: GM2OBS7_MN-1pfIICxINqQ-1
+X-Mimecast-MFC-AGG-ID: GM2OBS7_MN-1pfIICxINqQ_1789565341
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 40DB319539BE;
+	Wed, 16 Sep 2026 13:29:00 +0000 (UTC)
+Received: from jstancek-thinkpadt14gen5.redhat.corp (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B26A030001BB;
+	Wed, 16 Sep 2026 13:28:58 +0000 (UTC)
+From: Jan Stancek <jstancek@redhat.com>
+To: shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: jstancek@redhat.com,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftests/timens: extend CFLAGS to keep options from environment
+Date: Wed, 16 Sep 2026 15:28:47 +0200
+Message-ID: <06b3bb05b9512695a9833a9bb291b768516578e2.1789565191.git.jstancek@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] mm/memory-failure: Support disabling soft offline for
- HugeTLB pages
-To: Michal Hocko <mhocko@suse.com>
-Cc: Kyle Meyer <kyle.meyer@hpe.com>, akpm@linux-foundation.org,
- corbet@lwn.net, linmiaohe@huawei.com, shuah@kernel.org, tony.luck@intel.com,
- jane.chu@oracle.com, jiaqiyan@google.com, Liam.Howlett@oracle.com,
- bp@alien8.de, hannes@cmpxchg.org, jack@suse.cz, joel.granados@kernel.org,
- laoar.shao@gmail.com, lorenzo.stoakes@oracle.com, mclapinski@google.com,
- nao.horiguchi@gmail.com, osalvador@suse.de, rafael.j.wysocki@intel.com,
- rppt@kernel.org, russ.anderson@hpe.com, shawn.fan@intel.com,
- surenb@google.com, vbabka@suse.cz, linux-acpi@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-References: <aqiIEkrc6aDBOqRg@hpe.com> <aqkCbgHmMGxI_GLG@tiehlicka>
- <aqmGd0GGUCkbZpkZ@hpe.com> <aqpYxAktjexhaMGc@tiehlicka>
- <ad36cd54-7319-4bb4-bf8f-9fcc7b009158@kernel.org>
- <aqqXbwglwYTyTuUG@tiehlicka>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
- dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
- QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
- XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
- Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
- PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
- WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
- UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
- jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
- B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
- ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
- AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
- 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
- g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
- ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
- 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
- /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
- jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
- DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
- HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
- 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
- LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
- 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
- VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
- /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
- iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
- 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
- zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
- azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
- FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
- sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
- 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
- EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
- IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
- 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
- Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
- sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
- yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
- 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
- r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
- 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
- CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
- qIws/H2t
-In-Reply-To: <aqqXbwglwYTyTuUG@tiehlicka>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 9/16/26 15:19, Michal Hocko wrote:
-> On Wed 16-09-26 15:08:45, David Hildenbrand wrote:
->>
->>>
->>> OK, so apparently there are some BIOSes which abuse this feature to
->>> mimic a real HW poisoning. This doesn't change the overall picture
->>> though
->>
->> Is this really abusing? We know that a page is shaky and will likely go bad in
->> the future, For now it is still accessible. Trying to migrate off that page stop
->> using it right away sounds pretty logical to me.
-> 
-> Yes, no dispute on that. But we have HW poisoning for exactly that
-> purpose, no?
+Package build environments like Fedora rpmbuild introduced hardening
+options (e.g. -pie -Wl,-z,now) by passing a -spec option to CFLAGS
+and LDFLAGS.
 
-Well, that tells you that the page content is effectively gone and should be
-tried to be recovered / migrated away. Unless I am messing up terminology here.
+Some Makefiles currently override CFLAGS but not LDFLAGS, which leads
+to a mismatch and build failure, for example:
 
+  CC       timens
+  /usr/bin/ld: /tmp/cc2nZXqb.o: relocation R_X86_64_32 against `.rodata'
+    can not be used when making a PIE object; recompile with -fPIE
+  /usr/bin/ld: failed to set dynamic section sizes: bad value
+
+This mimics fixes already done in other tests, for example:
+  commit 23b3a7c4a758 ("selftests: mptcp: extend CFLAGS to keep options
+  from environment")
+
+Signed-off-by: Jan Stancek <jstancek@redhat.com>
+---
+ tools/testing/selftests/timens/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+v2: Rebased to v7.3-rc3
+
+diff --git a/tools/testing/selftests/timens/Makefile b/tools/testing/selftests/timens/Makefile
+index f0d51d4d2c87..357077792395 100644
+--- a/tools/testing/selftests/timens/Makefile
++++ b/tools/testing/selftests/timens/Makefile
+@@ -1,7 +1,7 @@
+ TEST_GEN_PROGS := timens timerfd timer clock_nanosleep procfs exec futex vfork_exec
+ TEST_GEN_PROGS_EXTENDED := gettime_perf
+ 
+-CFLAGS := -Wall -Werror -pthread
++CFLAGS += -Wall -Werror -pthread
+ LDLIBS := -lrt -ldl
+ 
+ include ../lib.mk
 -- 
-Cheers,
+2.55.0
 
-David
