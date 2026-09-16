@@ -1,162 +1,110 @@
-Received: from mail-qk2-f13.google.com (mail-qk2-f13.google.com [74.125.230.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213E74BA1F4
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 10:01:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E4D4D990A;
+	Wed, 16 Sep 2026 10:59:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789552901; cv=none; b=d1vUkNhdqoezh3WL6Q1yKtHfbD4FhJqBf62zBFC3JOoIRUME/5IBphNGAIZCV1xv9nkRWa/IxOxa8UABXTHYQhYs09z+VQs52vhnXxRYuKrpAsPBVlGgo2RkPwSHMG185lTWLXfJLA83ojMeHdjEKNSYBnvXMAkY4oJT5tum/Iw=
+	t=1789556395; cv=none; b=SnCNF0W284oFci/NoYLtsBDeb4JITlrkEBtj59E1RpUII437Ib8sQPUFmEQQuQmvlAFYEmXG2afD+q2QXNxLubUzVVk2FhbGZl/yf8MCmn4v0HZg9bqyBIXAj0ZPrC1CQ7db0QV1dpz5iC0+leXKN4Gt9PXnXAXYsVeklI3Ox7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789552901; c=relaxed/simple;
-	bh=6Y63ypW1o8fSc5npG6Ogumje01PNdZEHgLH/DsEfGOU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=t9DjWUtRurQ0XQIUq54dtrniPyz668W4ONTjeKbrhUs6Xa/a5G/9j5yfrq5SrfxUwSMzRI5CZ5mkT2grrXRAvoH/USyU6+rvAorvzrpdRpu6twQIsSHgtf5o3w9FCKf+z8d/BN3abIfyJpXTV/cb44k1r1fClDR2R6qnle/AYdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=H7xRn2Gn; arc=none smtp.client-ip=74.125.230.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	s=arc-20240116; t=1789556395; c=relaxed/simple;
+	bh=ObKnDO5ak6ielNK0q/7eij4BH1Dk4Yq0sraa2CEgg50=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UmN68pNC4nwvSCEQEH8xofICIhe6NBij1FW9//r8ujpO1cns4Fwc4P/RQIfynEYb++AEkcLDWj2qnjbCtTA/UwG2iMFKmWHdY8yxjX1sdLJcXv/N97qyv/kwx6HxaDAPxiEitQqkD6fEqsBzcRKctOlhPR5C+kjcNVq8alti10g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LAql0rPt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="H7xRn2Gn"
-Received: by mail-qk2-f13.google.com with SMTP id d75a77b69052e-52fb76798a2so2199241cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 03:01:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1789552883; x=1790157683; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=79RUTy9GyyU8S0QtOXN8RnXRh3vSK+UyTrb4wdm1wK4=;
-        b=H7xRn2Gn2ryKxTLVSRACVJ/24kgNOReV8nRaa8Qb5SanMp5gc5tUfodV+KdNZljlsv
-         CDe/sFfoIeYWJksth4/N/tyk/mn11BkrnwjXpZbViKjvZc3K5Z1Ffz7kmuhcYG44BJlE
-         nA386saKw+prb6me9fI9G3DTyhIWcF9oVKULw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789552883; x=1790157683;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=79RUTy9GyyU8S0QtOXN8RnXRh3vSK+UyTrb4wdm1wK4=;
-        b=b/RtSID4FCkr+dC1xn1I0f3mIJssGhBQQk6fNPW9rJupmO3TK/JXqLpABrymPrYp2J
-         VevT3W2PP/3wDG8isG3CeV6siirhcRAh/7HcsqjaY/qu1b4gN5Zon2NxaWWfOIjwoLQq
-         N8zAqqOJbn2UJaryE8UqW+wwAcb21Y/sq1QGNKHXojhTyAQBYZ7fktVPouhwEB71h/hb
-         tJlfu9Aup1Kmo0FbaTNcTvl3bSh93iL7HONtKcRqEmQFmu43wpjXsMghup/kNpAVPlWP
-         m1YLILDATjRx1JSbsyuRJlcB98Qbrjv90BXoyQUciNAastL1VznvoEbwpWkoFkvjvDvF
-         aYsg==
-X-Forwarded-Encrypted: i=1; AKwUvBzHe1suPTlpMFLx2cBLxWykSVWLwtwdSzGO8m7ijHs+9DETizUOc0S+shsedwZdNDFphc1qzQdlMV9OeBjvyL4=@vger.kernel.org
-X-Gm-Message-State: AFuF++lDUwGW1guQ7JHmAx9oVh6WagE/iFoWKmY8oTm7wbsXx+r/qaAt
-	SWSD8s/+K23O3Gi1NTP2XPsDTNuUw7jeImn7IVlpemczzmo4m+tHS97V2hGml+MApw==
-X-Gm-Gg: AYBFou2nGC5k8MscRgCmsvE4StM9qio3W1yIanmBvI8jD6mlAeHAQccEH52UY4lRRLa
-	93aZrVogoMYN+Hc4Fbzjl8X3dbANkZUBU+mWRSUJX9duZpkwd7jn6G+8AntV51HAVtLb/n5qich
-	ef0RRkYmex69X7I3epx0TN42/Q7GvvBZiUGvyh8Hl+8mEOihVLPyyuxYGchsDhwPPw5B9MDqqx/
-	fHXSCVjpW1dsZEFRFFhJuhfuLeGLkHzogHacL6guAgAiRv+Wy6EXd89+n/ix+S7EXB+5Vm4ovB/
-	PkiWwVlqQ3yAyqfCmGzcJNKnYa/CG12K4cdaihkl98AqP84na1jnKoQ0zzcrPgWUyiYwXI93x41
-	nwQr581A7g4SyGraE5LpkAXfsOIcBoByIZ7LB68iW9M8rG5DaE1RSlOiY42RHr74uuHfqw0m9ob
-	/uE54cuT+HQ6raogJkhXNynZrR5wWMtiDoFu56qzshPeTLIOIFtrDCO+FO0eWBi5ljNPRqpyGA6
-	LsG+g0wnRPrugedXaEs+4L9nO350GB1bzHY77JxEGw4W3BjWIXpiJNCLTo=
-X-Received: by 2002:ac8:5747:0:b0:530:fbb1:7a92 with SMTP id d75a77b69052e-5327f58d052mr20346921cf.32.1789552883374;
-        Wed, 16 Sep 2026 03:01:23 -0700 (PDT)
-Received: from mbili.ht.home ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-53262021a9esm18026851cf.14.2026.09.16.03.01.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2026 03:01:22 -0700 (PDT)
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Victor Nogueira <victor@mojatatu.com>,
-	hybris <hybris@mojatatu.ai>
-Subject: [PATCH net 2/2] selftests/tc-testing: add u32 manual table handle IDR tests
-Date: Wed, 16 Sep 2026 06:01:15 -0400
-Message-Id: <QDISC-LQFE.v1.20260911041746.2@mojatatu.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <QDISC-LQFE.v1.20260911041746.1@mojatatu.com>
-References: <QDISC-LQFE.v1.20260911041746.1@mojatatu.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LAql0rPt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2864E1F00893;
+	Wed, 16 Sep 2026 10:59:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789556378;
+	bh=Tc4Aai0SNxDfo1WleUJPJGNkJ8xTAXJ3SVOUXDOmepE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=LAql0rPtvN5VzBdHGrrh/28DRXddvV4XNsfz7emfkcWzFbpvCnlr1v9fPfik/3GNu
+	 oQIH4coNS8f4gXlb1t/PXKzMN2X/OLhhF/G22WPMrfA+fyx5lJVR7pR4VVbawRrM0c
+	 sfgZQFx1l/TtxwgjTfr2do/TkmhGicmOFC4UuhhCLqY6Mlwh7dFSop8+ryPaXsvLSc
+	 wr5lV1pv0O36ymg2AkdWG9hAGP2clOuagYzdggJs54UToGTpf3aDDXpTn5n4qyy/Oa
+	 F4lxmrwPTLEoVdkhKegoGRDADlwxt+Bp4eeV3NIf/KkBM0WJqnFKaiV35rTXZKj0aD
+	 3xyN7hV1fg6Ug==
+Date: Wed, 16 Sep 2026 11:59:32 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+Cc: akpm@linux-foundation.org, shuah@kernel.org, david@kernel.org, 
+	liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
+	mhocko@suse.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>
+Subject: Re: [PATCH v2] selftests/mm: skip khugepaged file tests if mkfs.xfs
+ is unavailable
+Message-ID: <aqp16Lp3mPwszQUc@gremlin>
+References: <20260912202903.16157-1-jaeyeon.lee.dev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260912202903.16157-1-jaeyeon.lee.dev@gmail.com>
 
-35fc: create a manual table with handle 801:, then add an auto-allocated
-table. Before the fix, the auto allocation reuses id 1 and hands out the
-same handle 0x80100000, aliasing the manual table; the test requires the
-manual 801: handle to keep exactly one entry in the dump.
+On Sat, Sep 12, 2026 at 10:29:03PM +0200, Jaeyeon Lee wrote:
+> The XFS setup for ./khugepaged all:file checks that the kernel supports
+> XFS but not that mkfs.xfs is installed. When CONFIG_XFS_FS=y and
+> xfsprogs is missing, mkfs.xfs and mount both fail, but
+> SPLIT_HUGE_PAGE_TEST_XFS_PATH is assigned from mktemp -d and stays set.
+> The test then runs against plain tmpfs and six subtests fail.
+>
+> The script already has a skip path for this test, but it never runs
+> because the path variable is always set. Assign
+> SPLIT_HUGE_PAGE_TEST_XFS_PATH only once mkfs.xfs and mount have both
+> succeeded, and remove the image and directory otherwise.
+>
+> Suggested-by: Zi Yan <ziy@nvidia.com>
+> Assisted-by: LLM
+> Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
 
-a6e8: with a live u32 table keeping the tc_u_common alive, add and delete
-a manual table with handle 901:, then re-add it. Unpatched, the delete
-leaks the raw-keyed IDR entry and the re-add fails with -ENOSPC; the
-test requires the re-add to succeed.
+I guess you didn't propagate my tag as it changed a bit? Anyway LGTM so:
 
-Reviewed-by: Victor Nogueira <victor@mojatatu.com>
-Tested-by: hybris <hybris@mojatatu.ai>
-Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
----
- .../tc-testing/tc-tests/filters/u32.json      | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
+Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/u32.json b/tools/testing/selftests/tc-testing/tc-tests/filters/u32.json
-index e2b03f2b5e89..edc5148a8d97 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/u32.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/u32.json
-@@ -376,5 +376,53 @@
-         "teardown": [
-             "$TC qdisc del dev $DUMMY clsact"
-         ]
-+    },
-+    {
-+        "id": "35fc",
-+        "name": "u32 manual table then auto table: auto allocation must not alias a live manual handle",
-+        "category": [
-+            "filter",
-+            "u32"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 ingress protocol ip pref 1 handle 801: u32 divisor 16"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 ingress protocol ip pref 2 u32 divisor 16",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC -d filter show dev $DEV1 ingress",
-+        "matchPattern": "fh 801:",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "a6e8",
-+        "name": "u32 manual table add/del does not leak its idr entry (re-adding the same handle succeeds)",
-+        "category": [
-+            "filter",
-+            "u32"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 ingress protocol ip pref 1 u32 divisor 16",
-+            "$TC filter add dev $DEV1 ingress protocol ip pref 5 handle 901: u32 divisor 1",
-+            "$TC filter del dev $DEV1 ingress protocol ip pref 5 handle 901: u32"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 ingress protocol ip pref 6 handle 901: u32 divisor 1",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC -d filter show dev $DEV1 ingress",
-+        "matchPattern": "fh 901: ht divisor 1",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-     }
- ]
+> ---
+> Changes in v2:
+> - Attempt mkfs.xfs and mount and fall back if either fails, rather than
+>   only checking whether mkfs.xfs exists (Zi Yan)
+> - Fix Assisted-by tag format
+>
+> v1: https://lore.kernel.org/linux-mm/20260911124517.63714-1-jaeyeon.lee.dev@gmail.com/
+>
+>  tools/testing/selftests/mm/run_vmtests.sh | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> index d09f9f6a384e..b870d21c055a 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -417,11 +417,15 @@ if [ -z "${SPLIT_HUGE_PAGE_TEST_XFS_PATH}" ]; then
+>      if test_selected "thp"; then
+>  	if grep xfs /proc/filesystems &>/dev/null; then
+>  	    XFS_IMG=$(mktemp /tmp/xfs_img_XXXXXX)
+> -	    SPLIT_HUGE_PAGE_TEST_XFS_PATH=$(mktemp -d /tmp/xfs_dir_XXXXXX)
+> +	    XFS_DIR=$(mktemp -d /tmp/xfs_dir_XXXXXX)
+>  	    truncate -s 314572800 ${XFS_IMG}
+> -	    mkfs.xfs -q ${XFS_IMG}
+> -	    mount -o loop ${XFS_IMG} ${SPLIT_HUGE_PAGE_TEST_XFS_PATH}
+> -	    MOUNTED_XFS=1
+> +	    if mkfs.xfs -q ${XFS_IMG} && mount -t xfs -o loop ${XFS_IMG} ${XFS_DIR}; then
+> +	        SPLIT_HUGE_PAGE_TEST_XFS_PATH=${XFS_DIR}
+> +	        MOUNTED_XFS=1
+> +	    else
+> +	        rmdir ${XFS_DIR}
+> +	        rm -f ${XFS_IMG}
+> +	    fi
+>  	fi
+>      fi
+>  fi
+> --
+> 2.43.0
+>
+
 --
-2.43.0
+Cheers, Lorenzo
