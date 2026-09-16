@@ -1,205 +1,216 @@
-Received: from mail-qk2-f17.google.com (mail-qk2-f17.google.com [74.125.230.209])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011005.outbound.protection.outlook.com [52.101.62.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3123F4EBAE6
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 23:39:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.209
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789601976; cv=none; b=k2fXtUyncA2erJxbMsu1bqM2/ldEKIGimRd4+U7hcm8B/3HdNUCwAS9bBtATWmvb+PpXTLhKu8EIWyp7ioH6isji+CrV/pJHv6++7uwkJMj7MPVLl/Dh2v/8YAfMW1HEN9FEgGhbiCjQPoRMd/U8ynqIiLp3Xcab0XZKQJ0eGzI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789601976; c=relaxed/simple;
-	bh=o/1cXNMKllqm3FfhHGbUe5JNifvPjGvgnfKea2bEwo8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=EX4pTmr6uQNXWYC5cQPQIm9pi3yAHCVPl3VubcEtRqmgtJVwMGzZ3w9UWfbKCeagyyqyRqNVCdiGygU9rNGPDoksekdypJ0yAWMN8TZ7U8gwIlootqB42Ll5LNIvu/u+shOvXb/Trv4i6o4wRRsaPzOLeiHFpHa2SfSscttcE4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XzFP/g/6; arc=none smtp.client-ip=74.125.230.209
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7E15013C2;
+	Wed, 16 Sep 2026 23:50:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.5
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789602638; cv=fail; b=Ce/sOxYfSzuBxWZutIZ6kAPo7P+CCea6CtC2pEIomf4BdizGUqV1nlRDNx9R4jAhLvOWDVLbHcxJPzec+RDcPRmxqJ5n5Fu2Wi4BSl4X7d/Gf/RgMA+ouYQ7h0En26S5VlM1VBrbDJlAdu8a1L0ufPgkGBKXhn0fdphJ4rIycOc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789602638; c=relaxed/simple;
+	bh=VfsO4hcdLx7ZK2t4VSlVcUHQVuzYaoZv92tXND63qzc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=YijMX8MzfzmdTDFWwIlfY/Lpah59pBRmJWiReVGrMtQTLgrDdq3bK02JR44FZSn8NkHF9ff11jWLtZ1SfQmVrfMal2u6NJrVUHqxHIUxAf/Qn1PCSk3IgkBbeaZx/8gOeKEDbPkoR/D9csfpVKr4IkbTPsoyJX8taEUF0lmFj50=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CV66vWAD; arc=fail smtp.client-ip=52.101.62.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XzFP/g/6"
-Received: by mail-qk2-f17.google.com with SMTP id af79cd13be357-93910ca5aa7so22421685a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 16:39:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789601969; x=1790206769; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=qCyz2WlilgMN9JjRRCrcLN6jJ/n6W+SPG53PAnMMlJ4=;
-        b=XzFP/g/6E52X/WyI9EyukwOXNp41STQUsp5n2BC0Uo/rdpiVJAScVZSzixv5Yf/Uaj
-         XX13BMEnnlbv1Mjqx9bV/pMmTx12qWmqE4gIxuBh0N0L2lYi0qR6P4+6JDu5T/pY4jke
-         Gz6xAqz92NpJnrcPxoNjoFNcZkMl37ak96X9i4UpmrTrdpIQkMGqs3s4IFZIjn6Vaa8c
-         dixKoiqiQdJxAmdyfCz/lXenFmWHa+uHZ9rLF//1p1sYjff+lHfIleaqV6mIn0OJHDhZ
-         URYOvwSB5WUEu7X4iwC0qdd/GMeNyj4VaxS+AxW6gur50Crxf6wLM2BPHCmG/lQ/zTSV
-         zcpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789601969; x=1790206769;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qCyz2WlilgMN9JjRRCrcLN6jJ/n6W+SPG53PAnMMlJ4=;
-        b=wii4AsvePuLE8HJ/eCdSZbARXZWMmEagh2p8xMYcwMAe0jlCZk17uJl8gXekcpmfTP
-         tSMDUUhMG+La91ePQ79nfYiPt8euEbrNB3GUqL4l7fnpUMYWOcLG7xWAouuuKiC+m0U2
-         icmJKDsGW5z0GR7EBQ+7Tm2YZA8GwuBxFJona8JvgN9PVRlGg1j+yTgQa/RALgLh+d/1
-         42pggrzleSCYgl7AHlPVfRBoEDlH2OtHOZfFaA6Kin9dckXeS04UcpR4VwO0Xj75IZk2
-         KvNO2BsHQB4rJYFsa2bZSEfPw8KwR7VZ5aUWoJOw97V5CDzvx0K4cYuFVrTaGRwGyB29
-         wdTg==
-X-Forwarded-Encrypted: i=1; AKwUvBwyn87hhmzroXlukIPZw4PitOgECLf9JQTAgQqk5xnbvJ2//r6IXqXr0AzLZS1jNDLiL78wl6syurO8pC+XemQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++lFWowNqEU8IXTFiXH8IiTKGOLXC8nteBjvQl8z6AIAjuY6+CMH
-	kftzMx0EQG31r5dQwBeOg6Op1rtQ8h4b5cI2C+auMfOU4//PkDvjgF4J
-X-Gm-Gg: AYBFou1QouY0Rvbb+X0dtvHKKR24VAHFlBy/FWQCdMaTibD4pHKRUryeRJ3bF/8H7iJ
-	vit4Tgm1h70Tp+pf/dvGvQqWzxznfD8c/zGJJ3NnUB//Klq6bMafuwgc610lWS5tOM37QEM5pjp
-	2TPle/TqBDVvLxWrzJe3QQx6Kf7n6BFxakuzJtKsU820FnNZspXUDz/ugT20kQFLnQ+bAoqdK8A
-	xdWOqKiot0Llli9vFAL9h3S2AjTKUZqqZ18oJURK7LuDeUjC1zoxiw/8SErmOvbnJ+9bQQoIeZN
-	hGOR2COrrM0pUFw8hTcOKu1sppGO32Us2buzDkBBISSS+LewLPrsvHqGMJTQ46Kfp2Yc64MZhs3
-	wUENcq/e6Cj94iWYqLkMflbdAys527dx43OTbKXCpXQG3f6yluqIbNCy5oUPgWVrOpYjQRzRAOB
-	aPZxE2zlyNIjjFXeZ89M8SBU2Hc7MLTCBRNFZHiPEXglWNiAAIp0W+rXQz/p+cO/lOqC/dArLMh
-	2s/
-X-Received: by 2002:a05:620a:1788:b0:936:df48:d507 with SMTP id af79cd13be357-93bb772d20fmr873622885a.18.1789601968958;
-        Wed, 16 Sep 2026 16:39:28 -0700 (PDT)
-Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-9123be7c43bsm38304186d6.23.2026.09.16.16.39.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Sep 2026 16:39:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CV66vWAD"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Q6P9nBiBJJqFLNGHW4nTVnkSrsqVh1DBgqOn8iO96jjEMSE7l7tq8KAxrRwbApk+ZNsnIBDy8h9IdVkiM/G/KlSUhcgDuPfis7842NBmkwA08dSZZ0xB1ivGyKv/LK9WDQMMRslAGLTvr+T46h3yHkX5ICHkYscC0chrYD6WrnzU1O4OZnc/eHTr2y127pDj4XBEt1PLSCLIJDp4N7WmiVrOJb3C63WDrF14zoVcvjK2nfB5ebx9a/TsGFLbYmab6P3pVMCpsQqIZolfeKGErY9Se0Hy7QIzsMzqz++50Ri946Ogzj2axFx27e3Gcnzp6+SHCDNlWavY0YB7BhI9Dw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0I4ILH2uM4pfxmoBtm2U0QuqZwP1ujxiG/2/wu+rSws=;
+ b=eCW46zvIsQ2lzBIUVHKqrpGYhJi26hFKQTcMhDUESiEqbcuxnhyPZYS4nKOeerLM8EmqLGlFXR4VjoP9BZoZkFn5AHjGSa5WI0RlcpwQTC5d3t/V4BY59YmpTLJfWHQzj387bOLKJpqJiFssXuutFlrYTwugz3dqePxosMAhlXHhs2vAk3fwkAEIOAhPh4wqNEsY0F8OfkN6rUmwK5+RlhPxYAVksxyYA08FXKwTIbJ4h8XrM1zpG+1M+nqPzkGzdS67LEFwJObSwXGNQw6EqaMIVQVwAegchy7PfvqOtFC3zcL1tCrs6UiQfhVchKn5yrgOeI+qv5dVbgQsRFpy3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0I4ILH2uM4pfxmoBtm2U0QuqZwP1ujxiG/2/wu+rSws=;
+ b=CV66vWADp2esWTFeUOnfztpdMwS+8GxMy30iuF61zLxt7SUnsC5KXP4mwYWC6KoImNP/VxqGY9HC/bDzic5UpZDnMGvJLvb0DrMZ/Zo4mwj0Op7461RyRl9TlNhOWWz0hSqpZBotv7KemmDBTHO/XHIN0O8PyZqI+v439H/MT/B4M5la7InGHPufDvaDH79FLHpHQRr2zMFwhzGhDjRJ6NuTRKhWA6npEWh1mexnpxUp9cN6pXSBUoxnVE4FjHEDX6yGOSpQUIwWK6/LLk1rtEwweVGow+3jEsFb3NNR5ec1yszbVyPKutC1ouUC1am3cwofRLk1cJasIegI2S3Ejw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CHBPR12MB731189.namprd12.prod.outlook.com
+ (2603:10b6:610:33d::12) by IA4PR12MB9787.namprd12.prod.outlook.com
+ (2603:10b6:208:54d::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.9; Wed, 16 Sep
+ 2026 23:50:00 +0000
+Received: from CHBPR12MB731189.namprd12.prod.outlook.com
+ ([fe80::b0e5:123d:fe06:e10d]) by CHBPR12MB731189.namprd12.prod.outlook.com
+ ([fe80::b0e5:123d:fe06:e10d%6]) with mapi id 15.21.0428.011; Wed, 16 Sep 2026
+ 23:50:00 +0000
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alex Williamson <alex@shazbot.org>,
+	David Matlack <dmatlack@google.com>,
+	kvm@vger.kernel.org,
+	Leon Romanovsky <leon@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	Mark Bloch <mbloch@nvidia.com>,
+	netdev@vger.kernel.org,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>
+Cc: patches@lists.linux.dev
+Subject: [PATCH v6 04/10] net/mlx5: Add ONCE and MMIO accessor variants to mlx5_ifc_macros.h
+Date: Wed, 16 Sep 2026 20:49:52 -0300
+Message-ID: <4-v6-8af36cf7b73f+e2-mlx5st_jgg@nvidia.com>
+In-Reply-To: <0-v6-8af36cf7b73f+e2-mlx5st_jgg@nvidia.com>
+References:
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MN0PR04CA0006.namprd04.prod.outlook.com
+ (2603:10b6:208:52d::23) To CHBPR12MB731189.namprd12.prod.outlook.com
+ (2603:10b6:610:33d::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 16 Sep 2026 19:39:27 -0400
-Message-Id: <DLH4YA9CBAOR.302OMMH65TVUD@gmail.com>
-Cc: <edumazet@google.com>, <ncardwell@google.com>, <kuniyu@google.com>,
- <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
- <horms@kernel.org>, <willemdebruijn.kernel@gmail.com>,
- <andrew+netdev@lunn.ch>, <shuah@kernel.org>, <willemb@google.com>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net v2 1/2] net: psp: avoid conflicts with
- skb->decrypted and sk_validate_xmit_skb()
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-To: <netdev-bot+sashiko@kernel.org>, <daniel.zahka@gmail.com>
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20260915-psp-ktls-fix-v2-1-0eedc3b148ec@gmail.com>
- <178960039456.22033.8739239860645875280@kernel.org>
-In-Reply-To: <178960039456.22033.8739239860645875280@kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CHBPR12MB731189:EE_|IA4PR12MB9787:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7e7c0581-63aa-45e9-f64f-08df144d3829
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|23010399003|366016|921020|10067099003|11063799006|56012099006|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	e/CEjykKRohHzzmZssYle+ugeLFueu6+mhTmZnkzWaiGyEmqvwYCuZnQ6b4iig7TrUibnTLkPnYJF1VWLjnhzQqi0JC0J2ImhytRvWJ8qKKdmeCoR98knxmsnhlmmPGjmu6gu1VNt+UolZo7Y8cXvAJJ/839SMQ0odE8aEGNh3OR0VCDO3iTD7/TaRgh262JZh8kXY+f2E5rqR7FnDQG/xe4Mq1KIpT2YZDX11VdaEt+9aztoejOINfN0f5BS/xn3mfIfY5VVLeLlE9WGs4ck7/CuBGTgD3X07YuxWn0lQdaCb/OSzI0wgGMx8LO/PqsAUPNhDJcCOKAaP4pAH+U7owhN1wbYMGzOH3olscu3oEpE84jkuQIwbhAA04ir5y+mT0DQC/mtMPBlzdF7K33Bx8kNvT05vXA0FHKLitFFa9oQwqd2ZuW/qHIRIOnVpKNm6OdlOau7gQH4ICng/OWd4RfA4hhQWj3NIInzTCU5Ueoy3Voog+n/cF6gzBnB9qqNRI0BWyqtGqMSYCUuQwG68G1AGHoZlsz6vkFMbUR/BnXISLz+agWb0KIriHvKTA/AzPfuxLSBM/sCP86hyReigkI4Z7y645oLrCetP1sfgGGtnUT2k/waIqrhv3H/OOistdl0hEj5LQf+zB/KIRDQ97rb+Y/GfWZF+9WfRw1rVpefanHmMqM/54eL97+kKNbDVE7nBXdtiuNPELfdHREHw==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CHBPR12MB731189.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(23010399003)(366016)(921020)(10067099003)(11063799006)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?CYDaalIAMOStcfaF6x1paKg2Wjx4vqzE7AMWPT0krV0vyK8GfPFyaRi5bkWm?=
+ =?us-ascii?Q?ff0Ewyrg4+GUu5XWAf2Fe0yIplIE1GdlIjZUa7aQepx9/PIedj7RjCU+6gpD?=
+ =?us-ascii?Q?ZYm8TZWyamggy40a4DQRaxCTpnpG52U1m342/H6w4RW3a3e+DVx/93+wODTn?=
+ =?us-ascii?Q?AtzjDZ/RS6ywv0XIuF+jjxiHkxeTOtHgtxFZs4OqUNpfw+/QHQ5CSXvvrMh+?=
+ =?us-ascii?Q?UX+7Fo8VxyveiLSwfr6iLG1qDAbIX13QoYcwBBpEzK/a86bXpS6lkAn1Q87z?=
+ =?us-ascii?Q?hD0jeqloAy7DDwxJHs+tgTzHheyGrmgApoQr/cD3kO+HemlIfb9NbXHJWxqk?=
+ =?us-ascii?Q?3Ipc0CGUTswIuXQ2/2x6emRTCH/nkx3jU1cZtI1xVy/i5BFY0mSp1MEMa40j?=
+ =?us-ascii?Q?UXmFVVK+gqcXxOl8BZ2vKEOa9PfbUULyWJCjwDV2j99RJoCrQYm7r5Nhp8vr?=
+ =?us-ascii?Q?up/xHrBcXuzJoZmo62XpI74P/9EGIuWasWIS8DiawvcLHiYK1qS6UMVCHMIZ?=
+ =?us-ascii?Q?F4sfDwCFOZWdFZiekMN7WrN1PpoChFOLXNYT0La/sXI1VK/RRrDGllHirFUD?=
+ =?us-ascii?Q?+JdncWNR6Sp8hhRyRmytwj3FmZFE1upXQUPvz8MtQ9lZZUYsphaEeC8t+4Fv?=
+ =?us-ascii?Q?04XLqYrNd6l7H7A5JnF3s7mSBIp/wMmXDmxRC/2dZjHmep+5k8sh3h7akBym?=
+ =?us-ascii?Q?QYGiaAhBpl3yvHS5A1A6G/+Vm4TvJUaPtLSBzA6bjr79BvsWTdZz1MHCIYdX?=
+ =?us-ascii?Q?RE4Q867jYA0E1nXG6eZ6zP6v0jLotQGFThf/gV0cNFoN8RvuYmMfK6MPhYTg?=
+ =?us-ascii?Q?kUaju3Ss8vtsYZGSMiPm8O691XHkVRaOZ+uQkcsvioXmvAtmN/kX4j9jjsP8?=
+ =?us-ascii?Q?lkTYZeoQL0ZMH9qhQ4d8Dc637wP60Di1imam8a59h4q7zPlAr3Oij1lc1EbM?=
+ =?us-ascii?Q?NqdFxfmbbuTtC9DVVWaMLvnBhGxhbj8Ym8MyhWbhT6CJ/MgbTGRcDoCc8bCR?=
+ =?us-ascii?Q?7XaQuQVraMHF4ACGdp9IMQPJqCAg0mO5IKJllANJyGe6u3Sr0ymukKJn3358?=
+ =?us-ascii?Q?oMef50G9Z5Tru/Kk5kr9y90jwMWlcmL/C3jFud45mUKkBxCtoQLFYJUwFSGL?=
+ =?us-ascii?Q?xOBeJ9+FeZJDK07qnGpqeM4jnOROLfFGKQe7vUWAr4yrmBZTbYYcdahNWhcd?=
+ =?us-ascii?Q?5pgPK6EV/xMIVUKHw+fZbKxcD519hNZiWmHwVLnvB20VmZJdK9YcIK9Iqr0i?=
+ =?us-ascii?Q?a49t6UyCVHBfpTnlHF7itscjgqmKfK+499FmNGjiv9fDd6Phssu+kwFfNI1t?=
+ =?us-ascii?Q?P5ymeQp12FRRyRzPaCx9TuGfB6YIMm791ZsLEfMj0IDBe2POxoKehvPP6Nvh?=
+ =?us-ascii?Q?tBf5fu0j+MCNTWdsbdlr+BPcRj9MwoAsTCe3VsDGkjWeahTGDGLU3zs91uiD?=
+ =?us-ascii?Q?l7rqfLdLyG5MzV9h5Bhs8QQGBGoZoQgONrIy7RXK1wmtQD6O7H6CWiRus9xW?=
+ =?us-ascii?Q?vJzYfDamN71D+E2Nkb0i8SfyJe0vCcdrQqT3K7NoIS/2KZvVpFU+Hn9yRNxr?=
+ =?us-ascii?Q?Y0xnHdo979A57c+FPQiZAoh/RklXja1uqbAz0lY/7eo0ZJK5C3EvfQFTdaaB?=
+ =?us-ascii?Q?UqfzKXMc2gWP+pe5JCgboDwDyLQMDaJe+F+35AcTF5j6n3ouacMriHX/uacu?=
+ =?us-ascii?Q?VczXzxar4GUn/YfkM8b08xlD5XwLKg6QHgZP7Cw8w+DBrv1Q?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e7c0581-63aa-45e9-f64f-08df144d3829
+X-MS-Exchange-CrossTenant-AuthSource: CHBPR12MB731189.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2026 23:49:59.7910
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PhBFX72OXUMDNRBURPGVvaSruNkRnB6eWzzgp2B96pJMz3I4SbGMQO4mODdHEtaZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA4PR12MB9787
 
-On Wed Sep 16, 2026 at 7:13 PM EDT, netdev-bot+sashiko wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider:
->
-> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 0 =C2=B7 Low: 1
->
-> - [Low] The patch adds a new, user-visible restriction to two already-
->   shipped interfaces without updating Documentation/networking/psp.rst:=
-=E2=80=A6
->
-> --
->
-> net: psp: avoid conflicts with skb->decrypted and sk_validate_xmit_skb()
->
-> This makes PSP and TCP ULPs mutually exclusive, since PSP and TLS both us=
-e
-> skb->decrypted and sk->sk_validate_xmit_skb(). A new helper
-> sk_has_decrypt_user() is added and checked from both __tcp_set_ulp() and
-> psp_sock_assoc_set_rx().
->
->> diff --git a/net/core/sock.c b/net/core/sock.c
->> index fa60b7494c586..9489d9c479493 100644
->> --- a/net/core/sock.c
->> +++ b/net/core/sock.c
->
-> [ ... ]
->
->> @@ -2670,6 +2671,12 @@ void sk_setup_caps(struct sock *sk, struct dst_en=
-try *dst)
->>  }
->>  EXPORT_SYMBOL_GPL(sk_setup_caps);
->> =20
->> +bool sk_has_decrypt_user(const struct sock *sk)
->> +{
->> +	return psp_sk_assoc(sk) ||
->> +	       (sk_is_inet(sk) && inet_csk_has_ulp(sk)); /* for tls */
->> +}
->> +
->>  /*
->>   *	Simple resource managers for sockets.
->>   */
->> diff --git a/net/ipv4/tcp_ulp.c b/net/ipv4/tcp_ulp.c
->> index 2aa442128630e..b58045df101e5 100644
->> --- a/net/ipv4/tcp_ulp.c
->> +++ b/net/ipv4/tcp_ulp.c
->> @@ -136,6 +136,10 @@ static int __tcp_set_ulp(struct sock *sk, const str=
-uct tcp_ulp_ops *ulp_ops)
->>  	if (icsk->icsk_ulp_ops)
->>  		goto out_err;
->> =20
->> +	err =3D -EINVAL;
->> +	if (sk_has_decrypt_user(sk))
->> +		goto out_err;
->> +
->>  	if (sk->sk_socket)
->>  		clear_bit(SOCK_SUPPORT_ZC, &sk->sk_socket->flags);
->> =20
->> diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
->> index 1a2a6b7516b0f..e9b53eedf8dba 100644
->> --- a/net/psp/psp_sock.c
->> +++ b/net/psp/psp_sock.c
->> @@ -143,6 +143,10 @@ int psp_sock_assoc_set_rx(struct sock *sk, struct p=
-sp_assoc *pas,
->>  		NL_SET_ERR_MSG(extack, "Socket already has PSP state");
->>  		err =3D -EBUSY;
->>  		goto exit_unlock;
->> +	} else if (sk_has_decrypt_user(sk)) {
->> +		NL_SET_ERR_MSG(extack, "Socket has incompatible state");
->> +		err =3D -EINVAL;
->> +		goto exit_unlock;
->>  	}
->
-> [Severity: Low]
-> Should Documentation/networking/psp.rst be updated along with this?
->
-> Two already-shipped interfaces grow a new failure mode here:
-> psp_sock_assoc_set_rx() now returns -EINVAL for the rx-assoc netlink
-> command, and __tcp_set_ulp() now returns -EINVAL for
-> setsockopt(TCP_ULP).
->
-> The "Securing a connection" section enumerates the restrictions of the
-> rx-assoc/tx-assoc sequence:
->
-> 	PSP encryption is currently only supported for TCP connections.
-> 	Rx and Tx keys are allocated separately. First the ``rx-assoc``
-> 	Netlink command needs to be issued, specifying a target TCP socket.
->
-> but does not mention that a socket with a ULP attached is now rejected.
->
-> The "User facing API" section also suggests a TLS-then-PSP bootstrap:
->
-> 	The expectation is that higher layer protocols will take care of
-> 	protocol and key negotiation. For example one may use TLS key exchange,
-> 	announce the PSP capability, and switch to PSP if both endpoints
-> 	are PSP-capable.
->
-> and "Kernel implementation notes" says PSP "follows the TLS offload more
-> closely ... and the use of skb->decrypted", with nothing stating that kTL=
-S
-> and PSP can no longer share a socket.
->
-> One more thing worth spelling out in the docs: the check is not restricte=
-d
-> to TLS. inet_csk_has_ulp() only tests icsk_ulp_ops, so any registered TCP
-> ULP blocks rx-assoc, which is broader than the subject line suggests. The
-> commit message explains this is intentional, but nothing in-tree tells
-> userspace about it.
->
-> The follow-up patch in the series ("selftests: drv-net: psp: test PSP and
-> TCP ULP mutual exclusion") adds tests for both directions but does not
-> touch Documentation/, so the gap remains at the end of the series.
+Add MLX5_GET_ONCE / MLX5_SET_ONCE which include READ_ONCE/WRITE_ONCE
+semantics for touching ownership bits that hardware may read or write
+at any time. The kernel driver doesn't use the IFC struct for these
+ownership bits, but the VFIO driver will and needs these helpers.
 
-I can incorporate some changes to psp.rst into a v3 if others think
-that improves the quality of this patch and the PSP code. Personally, I
-don't think this suggestion is worth while. What this code prevents is
-something I would be surprised if a user were to try without heavily
-inspecting both the implementations of PSP and TLS ULP first, at which
-point I don't know if using up words in this doc is worth it.
+Add MLX5_GET_MMIO / MLX5_SET_MMIO for accessing the init seg using
+the IFC offsets. They embed a readl/writel using the IFC struct to
+generate the addressing.
+
+Add MLX5_ARRAY_GET64(), the missing counterpart to
+MLX5_ARRAY_SET64().
+
+Assisted-by: Claude:claude-opus-4.6
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+---
+ include/linux/mlx5/mlx5_ifc_macros.h | 52 ++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+
+diff --git a/include/linux/mlx5/mlx5_ifc_macros.h b/include/linux/mlx5/mlx5_ifc_macros.h
+index d357acfd351de2..1b9e39a509495a 100644
+--- a/include/linux/mlx5/mlx5_ifc_macros.h
++++ b/include/linux/mlx5/mlx5_ifc_macros.h
+@@ -85,6 +85,13 @@ __mlx5_mask(typ, fld))
+ 	__MLX5_SET64(typ, p, fld[idx], v); \
+ } while (0)
+ 
++#define MLX5_ARRAY_GET64(typ, p, fld, idx)                                   \
++	({                                                                   \
++		BUILD_BUG_ON(__mlx5_bit_off(typ, fld) % 64);                 \
++		be64_to_cpu(                                                 \
++			*((__be64 *)(p) + __mlx5_64_off(typ, fld) + (idx))); \
++	})
++
+ #define MLX5_GET64(typ, p, fld) be64_to_cpu(*((__be64 *)(p) + __mlx5_64_off(typ, fld)))
+ 
+ #define MLX5_GET64_PR(typ, p, fld) ({ \
+@@ -130,4 +137,49 @@ __mlx5_mask16(typ, fld))
+ 		tmp;							  \
+ 		})
+ 
++/*
++ * Use READ_ONCE/WRITE_ONCE for a single field that hardware may read/write
++ * unpredictably, mostly owner bits. All other bits in the DW must be stable.
++ * Usually a dma_wmb() will be required before a write and a dma_rmb() after a
++ * read.
++ */
++#define MLX5_GET_ONCE(typ, p, fld)                                              \
++	((be32_to_cpu(READ_ONCE(*((__be32 *)(p) + __mlx5_dw_off(typ, fld)))) >> \
++	  __mlx5_dw_bit_off(typ, fld)) &                                        \
++	 __mlx5_mask(typ, fld))
++
++#define MLX5_SET_ONCE(typ, p, fld, v)                                      \
++	do {                                                               \
++		u32 _v = v;                                                \
++		__be32 *_dw = (__be32 *)(p) + __mlx5_dw_off(typ, fld);     \
++		BUILD_BUG_ON(__mlx5_st_sz_bits(typ) % 32);                 \
++		WRITE_ONCE(*_dw,                                           \
++			   cpu_to_be32((be32_to_cpu(READ_ONCE(*_dw)) &     \
++					(~__mlx5_dw_mask(typ, fld))) |     \
++				       (((_v) & __mlx5_mask(typ, fld))     \
++					<< __mlx5_dw_bit_off(typ, fld)))); \
++	} while (0)
++
++/* Access MMIO registers, usually the init segment, using IFC structs. */
++#define MLX5_GET_MMIO(typ, p, fld)                                         \
++	((ioread32be(((__be32 __iomem *)(p) + __mlx5_dw_off(typ, fld))) >> \
++	  __mlx5_dw_bit_off(typ, fld)) &                                   \
++	 __mlx5_mask(typ, fld))
++
++/* The set is not relaxed so there is an integrated dma_wmb(). */
++#define MLX5_SET_MMIO(typ, p, fld, v)                                         \
++	do {                                                                  \
++		u32 _v = v;                                                   \
++		void __iomem *_dw =                                           \
++			((__be32 __iomem *)(p) + __mlx5_dw_off(typ, fld));    \
++		if (__mlx5_bit_sz(typ, fld) == 32)                            \
++			iowrite32be(_v, _dw);                                 \
++		else                                                          \
++			iowrite32be((ioread32be(_dw) &                        \
++				     (~__mlx5_dw_mask(typ, fld))) |           \
++					    ((_v & __mlx5_mask(typ, fld))     \
++					     << __mlx5_dw_bit_off(typ, fld)), \
++				    _dw);                                     \
++	} while (0)
++
+ #endif /* MLX5_IFC_MACROS_H */
+-- 
+2.43.0
+
