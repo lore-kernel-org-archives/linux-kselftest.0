@@ -1,233 +1,449 @@
-Received: from mail-oo2-f39.google.com (mail-oo2-f39.google.com [74.125.231.167])
+Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8204D0CCE
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 17:06:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4CC4EBAD4
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 17:43:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789578399; cv=none; b=M6tsKbtDMTfgXHjgCVrU5IjP2paYcGaQlrDjUopaq5drdalxDYprhTWspiIHFIYgI70EskpsGoxa18TdS0WemPP63HLRAwrR+5NrVinoOWSHIAK5SQ4lDPq+tFdtOMNTNzL5/ftzkwkh6VlhOHZukEwn+N2NRS2VZmwSOUSHeeQ=
+	t=1789580619; cv=none; b=YCCisRDYsA6wxEnBQ2Dm8ahard7H4iJXZU1Bp0wZ+aiC1l79A+bpSJcGxSxuIbw7I97DXWxLcrlDg8OR908dYNhA6z3beNJLA1cb69lF6D6b1e/p5jdE3er1LYrd61l6H2rartfN+ccYlG5OsAKbZQnoamW/jv6I/DfBQ4Qa9Ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789578399; c=relaxed/simple;
-	bh=qfLN5WLAFy26QaPMK2Ae9ZgOW29L0epdNq5+HfGEGw4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rSRRfC1ahV9zHtbCS2Q4Cvs0+R1T7dOeTfzmYbeUcUl4uWzZ5fEkxGY/7d5vScHhY4UfGiH5dcmUI/Q1rvDOJ5F8S5Eq7SOufEeVE+MebGEK/oecIZAVU5nYBAwjRNqCLuRb1clcAAOMfJ5OWCX2rYpMp3EK6uFyfJGFq0lXJ3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OF3Bp44b; arc=none smtp.client-ip=74.125.231.167
+	s=arc-20240116; t=1789580619; c=relaxed/simple;
+	bh=/EQmlTpPWabY3NIR14EHBnf/GGPLY/Gd8xk8Z8Tii4A=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=Tom1SN1YAVTdjDeBkuUMlOC7Hb4IvHbJ1H1iqJA3J285E3gYYBZDUqq3UOi4rtwTiFUCKdIyGKYArn7BQXgg0piofwnnMX4/fFvl8vLKc7/dvm+BnfRpByilw43qjh1qlgO+4MPjxpP/oWQkRiQIGQpxzANHrlZlXFHyEhVtZ3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b4xNSpuX; arc=none smtp.client-ip=74.125.228.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OF3Bp44b"
-Received: by mail-oo2-f39.google.com with SMTP id 46e09a7af769-804ef461aedso801892a34.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 10:06:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b4xNSpuX"
+Received: by mail-pz2-f43.google.com with SMTP id d2e1a72fcca58-85469b35611so799248b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 10:43:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789578389; x=1790183189; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=r0v/Glg/t1TxvoAL2KbqVzGsnLvj1ftPu+eZkPIP73o=;
-        b=OF3Bp44bpUHGzhDGJCQyV5nTYALEW303eyPqI3c6y/9UORrFy3uH3WBx93s3iPRh4f
-         /VNDTg4gBjm/ANrj0Sdt8DlgE2TRS1KVL/UV3tpzaf040HlsGm2KouRmnLXLLIeGG+GQ
-         8FmtDK6WvW0sMMjfF52BJqspAkG3dmVX0JO8McYLdEOFOCnax0XgB0dyLVbGOCP6LL6Y
-         wT1NZYvuE3deFY3Q57lx1syhNauHUYbGmuhVVUJYjmZ0Oq1t7kLkIYbJ/4+pXdB8TaL4
-         PnX5HzxGxlcxnFMjl11Q+zWLNTnJu1iZRrOuhKek2zjB2/wkrbvpuVzBKq2uP7gZ923Q
-         8x9A==
+        d=gmail.com; s=20251104; t=1789580594; x=1790185394; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ZbW+4m7Ckt5T3Vp0i2qlknolTY3jp+RjMzIv0/DlDJ8=;
+        b=b4xNSpuXwmkzbsZ28awrx3a9n1EIPa+llNW8kvJCGPnDmKCHETbeohmM586vr+jBH8
+         5gxI/Ob0Hx4vTDFDTLD9ica7af62Q9dZcbXceIJhu5ewU+4A1ovkPkVFCJ47HSj2yzx0
+         6hY2Q0K3uSEPviQttYxhBnoZ7Ydk3yWvPVbn/QX/po4jLmSFubWZWaeOZwPLBjk7pLWG
+         54Jz6wN2EXSsKtMEqrL2IMlIf6RJiyNakQZjliLs2vod6uIA3TQlgphITZAXx4YiYVnE
+         pOfWgmYe4++elR77Hy8S7Ul2Pazi0qfcawN5fRN/DrY36dySh/p0WK6UXNXBaXkHMZUt
+         hNbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789578389; x=1790183189;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1789580594; x=1790185394;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=r0v/Glg/t1TxvoAL2KbqVzGsnLvj1ftPu+eZkPIP73o=;
-        b=rveQ0FWeoF8sDS6popI49Adp1jYkQFl7/Y0E1CXYziejIlqJbEPvpqsIYuoFuSDrWJ
-         KQSdpwO9qdHNKen/qFgk4Pukq+KtM9ehk9EKPiLDrOrfQKAx+Qn94LJVqa+QHvPxxkKv
-         kgbo8i2Ayj13t8tx+bcC28X3flZyW85mlvxHhT9sjLcDg0liSCOPepEkHHa71zVz91B5
-         u5GCeMsiv/meOj/Zbd3Sr2cibXm8iewRsdIOc4UbWWqhDgTTiFvg/lQ+IqywwUIMk9OL
-         Tgi04Jy9UvbNl7j+698U20KCVnfEi7jL8lIs6zHAvNqXryyU6GAQo1iXa5osyvgAcOEy
-         zW8w==
-X-Forwarded-Encrypted: i=1; AKwUvBw4KKXEVNPGiKytAah44b0RTT/CzaoJ7FvKAUshR1AygbyhDKbq23e1t3HP35WEaDeRqB74K+JHVuKXq0mSwPo=@vger.kernel.org
-X-Gm-Message-State: AFuF++n1+YpfskuC7dUNqxdGCQD/tegDY2OZnEl9Idd08dLUABAGOtMw
-	iQ/skdY6NY4G1TuPl5YVrA1SAggydVZ2Ji7wq6+GQNTIHCF6VJkzFyiP
-X-Gm-Gg: AYBFou0CT9nw6B2NWbaxZr/8SxWhD6+Da6lwdHayYWWoZ/llpfVJ+AjvXRt5xuXDIgW
-	bqBVQZ2Zhlmyq2yCNEkD8a38XS1nYkgb0CWiVSION/1vjeUBvplhA0Ln2MsDzP5FCfpLW+OBnha
-	zeP6iHidknEFdqw3tiKtKeLcimW8SkoCK9b1bA1E/DQPCKtKkR4uBNEHRbfgJ9ASwEVVTf4eNu7
-	fbHsu9DfNyShHhQ/BvehVpd+GN/Io2VqDfJeL+3GlyzqN6F3nyf0Ech9CKdfh47iasD3Y8ZHJko
-	kjZy/a5/S4X/V87yY4L9nPt0kxksZ6J9aHJYZUx2GQVgSTABi0hje9LOPUHUGxaOOE04HLUZoAx
-	5tylgxUOhCFyxtgNV6Sn2BksT+VzwrvAJo5CSkvWSaz2Hp1/vzdzZy/sLIJliV2glL/Kd7nVGCj
-	3egEA11PW6PEQli4Hcb1DfBnb+szxGkwfqKJJqx1jAishdm3TgcSqmcHbuZmhZcVhFUzuI2Pr84
-	OvLuj1gZcH0Xj11+opG1goxkxrAKgk=
-X-Received: by 2002:a05:6830:2705:b0:806:1e7:4167 with SMTP id 46e09a7af769-80b2da2b31fmr3730712a34.13.1789578388877;
-        Wed, 16 Sep 2026 10:06:28 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:46::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-80c46199e89sm362502a34.9.2026.09.16.10.06.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2026 10:06:28 -0700 (PDT)
-Date: Wed, 16 Sep 2026 10:06:24 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowangio@gmail.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	sargun@sargun.me, jlinbox@meta.com,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next 3/6] vsock/virtio: support guest device network
- namespace
-Message-ID: <aqrMkHgwZdEz1dq+@devvm29614.prn0.facebook.com>
-References: <20260902-vsock-guest-ns-v1-0-9995383e9a8b@meta.com>
- <20260902-vsock-guest-ns-v1-3-9995383e9a8b@meta.com>
- <aqlkWGyoUYrgQUzz@sgarzare-redhat>
- <aqmLFzcF3MmwRITz@devvm29614.prn0.facebook.com>
- <aqqNZX0gk0I6AbVG@sgarzare-redhat>
+        bh=ZbW+4m7Ckt5T3Vp0i2qlknolTY3jp+RjMzIv0/DlDJ8=;
+        b=rfz1bBWa4p+Gm8e87ElBLsmwhVbK5mYdXBIlk9q7QyKXXrgsz1kaRxR3hWglTrfVQq
+         vpbChRasbxXO3e6nWyTzbr3h4InLKuNVi55945Iv9+NVAE4tJ1VFbGBY75LMd7d6csCc
+         g1vxJS0p+Mfav1XjTx+YiUH1INqYK/ktARj1RdNVQNz1DZN/m6IjK5r12g7m/n05fMtn
+         eGOoLluOAKhe3M9T0XipPSjV/QSZkLGvIfJ7wMUIh27NMqRBaN9Vb0OfsCgeehHGaBMu
+         P10y98izOSFU3fNMqh3/xlM1WNyBUu2yKWt8hIfRr/nXwPCDrCOshb/9tHXbnIYdRaJq
+         CYnw==
+X-Forwarded-Encrypted: i=1; AKwUvByNwYfhSkyVTbsO0FyRUNkURpjEJqIsZXLaKnNHus03rLvOPxA7FW/X2Mnvgl6qufnHpSy4Sx3Q1lsIzT3JPMc=@vger.kernel.org
+X-Gm-Message-State: AFuF++kLlcAAlJsNQmSKuGZZZ8GmseqSB1cq83ALIjahvq/pFUKEkjia
+	d4H0e3LGHrrzJnvssr18wrvpsh7Y+MDhn+/q+Tl1GKOKlGBl1tqjxG5w
+X-Gm-Gg: AYBFou11+U4yXbJN+Tlmo/XeYiJ2b0HjtV3IoDJ7t6P/LKGkAyj8JhBmwQJqaO9k69N
+	8E4C6rntmTiy60Hy5ygZUYKVc8B/TT4Q8zQsULodQvhmTD4zxxobOKJzBJMMAbrV+G1AYWti5Nr
+	gqojLF/BKRc537sUJafePO+xwY5BO0aJjuMdYgbKv75RcjKx6QAdR7lIKNyuZG6MoAUbtA+c7ta
+	aNauo7evBHHYZCXVHwjHNl0p5h7UvnZDPitOx6GX8j6ohTXshi8hM3eETP1S42WF9NVuGLahiVY
+	7aD29JWVWAS/X/6RitxV9Itefe3zjf83raexD2mEiHjRft6hU4FgTn991DTer+pxQueVBuas0NI
+	PFOu0bATT3jeQJedgmzPR5FZJOOG1/QUtz8Sr4FlOCfj75qMCx9Fg7vxob/P/erPAzsEG9jdGCk
+	YzEovMkkdIwo4l7IiLrudUFBkU34/3CvieYllWJ0Pg195u8XjxvCzQkDEVJ5msVVNsmImxroe6J
+	SSMwyd10it7I1xSFN/Vga8yZA==
+X-Received: by 2002:a05:6a00:6088:b0:857:73e2:9106 with SMTP id d2e1a72fcca58-87239aa08b2mr7833547b3a.22.1789580594131;
+        Wed, 16 Sep 2026 10:43:14 -0700 (PDT)
+Received: from localhost ([13.93.150.60])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-871febde2f7sm1700356b3a.6.2026.09.16.10.43.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Sep 2026 10:43:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aqqNZX0gk0I6AbVG@sgarzare-redhat>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 16 Sep 2026 17:43:11 +0000
+Message-Id: <DLGXDIB879EO.IDZNAIRY0VFJ@gmail.com>
+Subject: Re: [PATCH net-next v2 1/2] ipv6: update NUD_FAILED neighbors from
+ NA messages
+From: "Lawrence Lee" <lfqlee314@gmail.com>
+To: "Ido Schimmel" <idosch@nvidia.com>
+Cc: "David Ahern" <dsahern@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>,
+ <netdev@vger.kernel.org>, "Arun Ajith S" <aajith@arista.com>, "Roopa
+ Prabhu" <roopa@nvidia.com>, "Jaehee Park" <jhpark1013@gmail.com>, "Jonathan
+ Corbet" <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>, "Shuah
+ Khan" <shuah@kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ "Alexander Aring" <alex.aring@gmail.com>, <linux-wpan@vger.kernel.org>,
+ <linux-bluetooth@vger.kernel.org>
+X-Mailer: aerc 0.17.0
+References: <cover.1789448374.git.lfqlee314@gmail.com>
+ <6596966f734f3d416bfa83722f7a595149bcc3f8.1789448374.git.lfqlee314@gmail.com> <20260916120202.GA935660@shredder>
+In-Reply-To: <20260916120202.GA935660@shredder>
 
-On Wed, Sep 16, 2026 at 02:44:28PM +0200, Stefano Garzarella wrote:
-> On Tue, Sep 15, 2026 at 11:14:47AM -0700, Bobby Eshleman wrote:
-> > On Tue, Sep 15, 2026 at 05:47:02PM +0200, Stefano Garzarella wrote:
-> > > On Wed, Sep 02, 2026 at 04:00:49PM -0700, Bobby Eshleman wrote:
-> > > > From: Bobby Eshleman <bobbyeshleman@meta.com>
-> > > >
-> > > > virtio-vsock did not have namespace support (the device was always
-> > > > accessible to any global namespace).
-> > > >
-> > > > Make the virtio-vsock device assignable to a namespace and initialize it
-> > > > to init_net. Because virtio-vsock and init_net are both hardcoded to
-> > > > global mode, nothing changes until the assign ioctl is issued.
-> > > >
-> > > > When the device's local-mode namespace is being destroyed, received
-> > > > packets are reset until new valid a namespace has been assigned and/or
-> > > > automatically returned to, and the next RX batch begins (in
-> > > > virtio_transport_rx_work). They are reset rather than dropped because
-> > > > vsock does not retransmit, so a silent drop would leave the host waiting
-> > > > for a timeout, and a connection request arriving in that window has no
-> > > > socket whose teardown would tell it otherwise. This requires making
-> > > > virtio_transport_reset_no_sock() available outside of the common code.
-> > > >
-> > > > When a device is assigned to a namespace, every already established
-> > > > vsock socket that is no longer able to reach the device is forcibly
-> > > > reset. For that reason, adding new sockets to the connected table must
-> > > > be performed atomically with regards to namespace assignment. This
-> > > > ensures that when the socket is added to the connected table that it
-> > > > actually passes the new reachability conditions set by ns assignment. If
-> > > > it wins the race to the table and does NOT pass the reachability tests,
-> > > > then the reset sweep will correctly catch it. This is the purpose
-> > > > of the new helper 'vsock_maybe_set_connected()'.
-> > > >
-> > > > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> > > > ---
-> > > > include/linux/virtio_vsock.h            |  2 ++
-> > > > net/vmw_vsock/virtio_transport.c        | 28 ++++++++++++++++++++++------
-> > > > net/vmw_vsock/virtio_transport_common.c | 28 +++++++++++++++++++++-------
-> > > > 3 files changed, 45 insertions(+), 13 deletions(-)
-> > > >
-> > > > diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
-> > > > index f91704731057..9c68ce1d7fb4 100644
-> > > > --- a/include/linux/virtio_vsock.h
-> > > > +++ b/include/linux/virtio_vsock.h
-> > > > @@ -286,6 +286,8 @@ void virtio_transport_inc_tx_pkt(struct virtio_vsock_sock *vvs, struct sk_buff *
-> > > > u32 virtio_transport_get_credit(struct virtio_vsock_sock *vvs, u32 wanted);
-> > > > void virtio_transport_put_credit(struct virtio_vsock_sock *vvs, u32 credit);
-> > > > void virtio_transport_deliver_tap_pkt(struct sk_buff *skb);
-> > > > +int virtio_transport_reset_no_sock(const struct virtio_transport *t,
-> > > > +				   struct sk_buff *skb, struct net *net);
-> > > > int virtio_transport_purge_skbs(void *vsk, struct sk_buff_head *list);
-> > > > int virtio_transport_read_skb(struct vsock_sock *vsk, skb_read_actor_t read_actor);
-> > > > int virtio_transport_notify_set_rcvlowat(struct vsock_sock *vsk, int val);
-> > > > diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
-> > > > index 4f9aa9c4c3aa..a453a4f828dc 100644
-> > > > --- a/net/vmw_vsock/virtio_transport.c
-> > > > +++ b/net/vmw_vsock/virtio_transport.c
-> > > > @@ -540,9 +540,14 @@ static bool virtio_transport_msgzerocopy_allow(void)
-> > > > 	return true;
-> > > > }
-> > > >
-> > > > +static bool virtio_transport_netns_assign_allow(void)
-> > > > +{
-> > > > +	return true;
-> > > > +}
-> > > > +
-> > > > bool virtio_transport_stream_allow(struct vsock_sock *vsk, u32 cid, u32 port)
-> > > > {
-> > > > -	return vsock_net_mode_global(vsk);
-> > > > +	return vsock_g2h_net_reachable(sock_net(sk_vsock(vsk)));
-> > > > }
-> > > >
-> > > > static bool virtio_transport_seqpacket_allow(struct vsock_sock *vsk,
-> > > > @@ -587,6 +592,7 @@ static struct virtio_transport virtio_transport = {
-> > > > 		.seqpacket_has_data       = virtio_transport_seqpacket_has_data,
-> > > >
-> > > > 		.msgzerocopy_allow        = virtio_transport_msgzerocopy_allow,
-> > > > +		.netns_assign_allow       = virtio_transport_netns_assign_allow,
-> > > >
-> > > > 		.notify_poll_in           = virtio_transport_notify_poll_in,
-> > > > 		.notify_poll_out          = virtio_transport_notify_poll_out,
-> > > > @@ -616,7 +622,7 @@ virtio_transport_seqpacket_allow(struct vsock_sock *vsk, u32 remote_cid)
-> > > > 	struct virtio_vsock *vsock;
-> > > > 	bool seqpacket_allow;
-> > > >
-> > > > -	if (!vsock_net_mode_global(vsk))
-> > > > +	if (!vsock_g2h_net_reachable(sock_net(sk_vsock(vsk))))
-> > > > 		return false;
-> > > >
-> > > > 	seqpacket_allow = false;
-> > > > @@ -634,6 +640,9 @@ static void virtio_transport_rx_work(struct work_struct *work)
-> > > > 	struct virtio_vsock *vsock =
-> > > > 		container_of(work, struct virtio_vsock, rx_work);
-> > > > 	struct virtqueue *vq;
-> > > > +	struct net *net;
-> > > > +
-> > > > +	net = vsock_g2h_net_get();
-> > > >
-> > > > 	mutex_lock(&vsock->rx_lock);
-> > > >
-> > > > @@ -682,10 +691,14 @@ static void virtio_transport_rx_work(struct work_struct *work)
-> > > >
-> > > > 			virtio_transport_deliver_tap_pkt(skb);
-> > > >
-> > > > -			/* Force virtio-transport into global mode since it
-> > > > -			 * does not yet support local-mode namespacing.
-> > > > -			 */
-> > > > -			virtio_transport_recv_pkt(&virtio_transport, skb, NULL);
-> > > > +			if (unlikely(!net)) {
-> > > > +				virtio_transport_reset_no_sock(
-> > > > +					&virtio_transport, skb, &init_net);
-> > > 
-> > > Why init_net?
-> > 
-> > This parameter is actually unused by virtio_transport_reset_no_sock(),
-> > its call to virtio_transport_send_pkt(), and even the eventual call to
-> > virtio_transport_deliver_tap_pkt()... so maybe NULL w/ a comment would
-> > be better?
-> 
-> mmm, should we remove that parameter if unused?
+On Wed Sep 16, 2026 at 12:02 PM UTC, Ido Schimmel wrote:
+> On Tue, Sep 15, 2026 at 05:01:31AM +0000, Lawrence Lee wrote:
+> > Transition a FAILED neighbor entry to STALE upon receipt of an NA
+> > message on routers when accept_untracked_na is enabled. This extends th=
+e
+> > RFC 9131 accept_untracked_na behavior so that FAILED entries are treate=
+d
+> > the same as non-existent entries. In the context of RFC 4861 which
+> > introduced NDP, both non-existent and FAILED entries are considered
+> > untracked since they do not have a valid neighbor cache entry.
+>
+> RFC 4861 didn't introduce NDP (RFC 1970 did), so please omit this bit.
+> But if you're going to mention RFC 4861, then cite 7.3.3 which says that
+> "If address resolution fails, the entry SHOULD be deleted". The fact
+> that Linux keeps it as FAILED is an implementation detail and treating
+> it as untracked is correct from RFC perspective.
+>
 
-Sadly the vhost path uses it for its vhost_vsock lookup by CID. I guess
-it would be needed by g2h too if it had multiple devices and had to
-lookup by net+CID.
+That's my mistake, I'll update this to mention that 4861 is just the=20
+most recent NDP standard and will cite 7.3.3.
 
-> 
-> Anyway, not in this series/patch.
-> 
-> Here, anything is fine, just put a comment with the reason.
+> >=20
+> > Trying to resolve FAILED neighbors via periodic probing (e.g. using
+> > NTF_EXT_MANAGED) is more work compared to this approach which uses
+> > information in NAs that the kernel may already be receiving. Note that
+> > because this behavior in IPv6 is dependent on the accept_untracked_na
+> > sysctl setting, this approach is more conservative than IPv4 which
+> > transitions FAILED neighbors to STALE by default upon receiving GARPs.
+> >=20
+> > Link: https://lore.kernel.org/r/20260813233344.445265-1-lfqlee314@gmail=
+.com
+> > Assisted-by: LLM Sashiko sparse
+> > Signed-off-by: Lawrence Lee <lfqlee314@gmail.com>
+> > ---
+> >  Documentation/networking/ip-sysctl.rst | 28 ++++----
+> >  include/net/ndisc.h                    | 15 ++--
+> >  net/6lowpan/ndisc.c                    | 15 ++--
+> >  net/ipv6/ndisc.c                       | 94 +++++++++++++++++---------
+> >  4 files changed, 96 insertions(+), 56 deletions(-)
+>
+> The RFC was:
+>
+> 1 file changed, 11 insertions(+), 2 deletions(-)
+>
+> I'm not sure how this ballooned to this size...
+>
 
+Some of the additional size can be attributed to doc/comment changes,=20
+but a lot of it comes from changes I implemented to address issues found=20
+by the local Sashiko review I ran. It was definitely an oversight on my=20
+part to not mention these in either the commit message or comments,=20
+sorry about that.
 
-Sounds good!
+> > diff --git a/include/net/ndisc.h b/include/net/ndisc.h
+> > index 96e3bb6e83af..7fb3f10eca6c 100644
+> > --- a/include/net/ndisc.h
+> > +++ b/include/net/ndisc.h
+> > @@ -154,11 +154,13 @@ void __ndisc_fill_addr_option(struct sk_buff *skb=
+, int type, const void *data,
+> >   *     option parser will take care about that option.
+> >   *
+> >   * void (*update)(const struct net_device *dev, struct neighbour *n,
+> > - *		  u32 flags, u8 icmp6_type,
+> > + *		  u32 flags, bool failed_recovery, u8 icmp6_type,
+> >   *		  const struct ndisc_options *ndopts):
+> >   *     This function is called when IPv6 ndisc updates the neighbour c=
+ache
+> >   *     entry. Additional options which can be updated may be previousl=
+y
+> >   *     parsed by parse_opts callback and accessible over ndopts parame=
+ter.
+> > + *     failed_recovery indicates that ndisc accepted the packet to rec=
+over
+> > + *     an entry observed in NUD_FAILED.
+> >   *
+> >   * int (*opt_addr_space)(const struct net_device *dev, u8 icmp6_type,
+> >   *			 struct neighbour *neigh, u8 *ha_buf,
+> > @@ -197,7 +199,7 @@ struct ndisc_ops {
+> >  				 struct nd_opt_hdr *nd_opt,
+> >  				 struct ndisc_options *ndopts);
+> >  	void	(*update)(const struct net_device *dev, struct neighbour *n,
+> > -			  u32 flags, u8 icmp6_type,
+> > +			  u32 flags, bool failed_recovery, u8 icmp6_type,
+> >  			  const struct ndisc_options *ndopts);
+> >  	int	(*opt_addr_space)(const struct net_device *dev, u8 icmp6_type,
+> >  				  struct neighbour *neigh, u8 *ha_buf,
+> > @@ -227,12 +229,13 @@ static inline int ndisc_ops_parse_options(const s=
+truct net_device *dev,
+> >  }
+> > =20
+> >  static inline void ndisc_ops_update(const struct net_device *dev,
+> > -					  struct neighbour *n, u32 flags,
+> > -					  u8 icmp6_type,
+> > -					  const struct ndisc_options *ndopts)
+> > +				    struct neighbour *n, u32 flags,
+> > +				    bool failed_recovery, u8 icmp6_type,
+> > +				    const struct ndisc_options *ndopts)
+> >  {
+> >  	if (dev->ndisc_ops && dev->ndisc_ops->update)
+> > -		dev->ndisc_ops->update(dev, n, flags, icmp6_type, ndopts);
+> > +		dev->ndisc_ops->update(dev, n, flags, failed_recovery,
+> > +				       icmp6_type, ndopts);
+> >  }
+>
+> All the changes in this file can be dropped. See below.
+>
 
-Thanks,
-Bobby
+This is tied to the lowpan changes below.
+
+> > =20
+> >  static inline int ndisc_ops_opt_addr_space(const struct net_device *de=
+v,
+> > diff --git a/net/6lowpan/ndisc.c b/net/6lowpan/ndisc.c
+> > index 868d28583c0a..8fedfef93740 100644
+> > --- a/net/6lowpan/ndisc.c
+> > +++ b/net/6lowpan/ndisc.c
+> > @@ -47,7 +47,8 @@ static int lowpan_ndisc_parse_options(const struct ne=
+t_device *dev,
+> >  	}
+> >  }
+> > =20
+> > -static void lowpan_ndisc_802154_update(struct neighbour *n, u32 flags,
+> > +static void lowpan_ndisc_802154_update(struct neighbour *n,
+> > +				       bool failed_recovery,
+> >  				       u8 icmp6_type,
+> >  				       const struct ndisc_options *ndopts)
+> >  {
+> > @@ -87,20 +88,24 @@ static void lowpan_ndisc_802154_update(struct neigh=
+bour *n, u32 flags,
+> >  		ieee802154_be16_to_le16(&neigh->short_addr, lladdr_short);
+> >  		if (!lowpan_802154_is_valid_src_short_addr(neigh->short_addr))
+> >  			neigh->short_addr =3D cpu_to_le16(IEEE802154_ADDR_SHORT_UNSPEC);
+> > +	} else if (failed_recovery) {
+> > +		neigh->short_addr =3D cpu_to_le16(IEEE802154_ADDR_SHORT_UNSPEC);
+> >  	}
+> >  	write_unlock_bh(&n->lock);
+> >  }
+> > =20
+> >  static void lowpan_ndisc_update(const struct net_device *dev,
+> > -				struct neighbour *n, u32 flags, u8 icmp6_type,
+> > +				struct neighbour *n, u32 flags,
+> > +				bool failed_recovery, u8 icmp6_type,
+> >  				const struct ndisc_options *ndopts)
+> >  {
+> >  	if (!lowpan_is_ll(dev, LOWPAN_LLTYPE_IEEE802154))
+> >  		return;
+> > =20
+> > -	/* react on overrides only. TODO check if this is really right. */
+> > -	if (flags & NEIGH_UPDATE_F_OVERRIDE)
+> > -		lowpan_ndisc_802154_update(n, flags, icmp6_type, ndopts);
+> > +	/* React to overrides or accepted FAILED-entry recovery. */
+> > +	if ((flags & NEIGH_UPDATE_F_OVERRIDE) || failed_recovery)
+> > +		lowpan_ndisc_802154_update(n, failed_recovery, icmp6_type,
+> > +					   ndopts);
+> >  }
+> > =20
+> >  static int lowpan_ndisc_opt_addr_space(const struct net_device *dev,
+>
+> I'm not sure why you added these lowpan changes to the patch. They are
+> not described in the commit message. Given that lowpan_ndisc_update()
+> already has a TODO comment about only handling overrides, I suggest to
+> ignore it. If needed, it can be modified in the future by someone who
+> can explain the use case and test the change.
+>
+
+I added the lowpan changes after my local Sashiko review run identified=20
+an issue where a FAILED neighbor can retain an outdated private short=20
+address if it's moved to STALE by a non-override NA. Happy to drop all=20
+lowpan-related changes or update comments/commit message to reflect the=20
+changes, please let me know your preference.
+
+> > diff --git a/net/ipv6/ndisc.c b/net/ipv6/ndisc.c
+> > index 90cd5d852569..84d70c09205a 100644
+> > --- a/net/ipv6/ndisc.c
+> > +++ b/net/ipv6/ndisc.c
+> > @@ -778,13 +778,23 @@ static int pndisc_is_router(const void *pkey,
+> >  	return ret;
+> >  }
+> > =20
+> > +static void __ndisc_update(const struct net_device *dev,
+> > +			   struct neighbour *neigh, const u8 *lladdr, u8 new,
+> > +			   u32 flags, bool failed_recovery, u8 icmp6_type,
+> > +			   struct ndisc_options *ndopts)
+> > +{
+> > +	neigh_update(neigh, lladdr, new, flags, 0);
+> > +	/* report ndisc ops about neighbour update */
+> > +	ndisc_ops_update(dev, neigh, flags, failed_recovery, icmp6_type,
+> > +			 ndopts);
+> > +}
+> > +
+> >  void ndisc_update(const struct net_device *dev, struct neighbour *neig=
+h,
+> >  		  const u8 *lladdr, u8 new, u32 flags, u8 icmp6_type,
+> >  		  struct ndisc_options *ndopts)
+> >  {
+> > -	neigh_update(neigh, lladdr, new, flags, 0);
+> > -	/* report ndisc ops about neighbour update */
+> > -	ndisc_ops_update(dev, neigh, flags, icmp6_type, ndopts);
+> > +	__ndisc_update(dev, neigh, lladdr, new, flags, false, icmp6_type,
+> > +		       ndopts);
+> >  }
+>
+> This hunk can be dropped.
+>
+
+Tied to the lowpan changes above.
+
+> > =20
+> >  static enum skb_drop_reason ndisc_recv_ns(struct sk_buff *skb)
+> > @@ -972,14 +982,18 @@ static enum skb_drop_reason ndisc_recv_ns(struct =
+sk_buff *skb)
+> > =20
+> >  static int accept_untracked_na(struct inet6_dev *idev, struct in6_addr=
+ *saddr)
+> >  {
+> > +    /* For any given neighbor IP address, consider it an untracked nei=
+ghbor if
+> > +     * it is absent from the neighbor cache or if it has a NUD_FAILED =
+entry in
+> > +     * the neighbor cache
+> > +     */
+>
+> Redundant given the comments in the caller and the sysctl documentation.
+> Simply modify the existing comments below to mention FAILED case.
+>
+
+Will update.
+
+> >  	switch (READ_ONCE(idev->cnf.accept_untracked_na)) {
+> > -	case 0: /* Don't accept untracked na (absent in neighbor cache) */
+> > +	case 0: /* Reject NAs for untracked neighbours */
+> >  		return 0;
+> > -	case 1: /* Create new entries from na if currently untracked */
+> > +	case 1: /* Accept NAs for untracked neighbours */
+> >  		return 1;
+> > -	case 2: /* Create new entries from untracked na only if saddr is in t=
+he
+> > +	case 2: /* Accept NAs for untracked neighbours only if saddr is in th=
+e
+> >  		 * same subnet as an address configured on the interface that
+> > -		 * received the na
+> > +		 * received the NA
+> >  		 */
+> >  		return !!ipv6_chk_prefix(saddr, idev->dev);
+> >  	default:
+> > @@ -1001,6 +1015,9 @@ static enum skb_drop_reason ndisc_recv_na(struct =
+sk_buff *skb)
+> >  	struct neigh_table *tbl;
+> >  	struct neighbour *neigh;
+> >  	struct inet6_dev *idev;
+> > +	bool neigh_failed =3D false;
+> > +	bool neigh_untracked =3D false;
+> > +	bool accept_untracked =3D false;
+>
+> Try to maintain reverse xmas tree:
+>
+> https://docs.kernel.org/next/process/maintainer-netdev.html#local-variabl=
+e-ordering-reverse-xmas-tree-rcs
+>
+
+Will fix.
+
+> >  	new_state =3D msg->icmph.icmp6_solicited ? NUD_REACHABLE :=20
+> >  	NUD_STALE;
+> > -	if (!neigh && lladdr && idev && READ_ONCE(idev->cnf.forwarding)) {
+> > -		if (accept_untracked_na(idev, saddr)) {
+> > -			neigh =3D neigh_create(tbl, &msg->target, dev);
+> > -			new_state =3D NUD_STALE;
+> > -		}
+> > -	}
+> > +	neigh_failed =3D neigh &&
+> > +		       (READ_ONCE(neigh->nud_state) & NUD_FAILED);
+> > +	neigh_untracked =3D !neigh || neigh_failed;
+> > +	if (neigh_untracked) {
+> > +		accept_untracked =3D lladdr && idev &&
+> > +				   READ_ONCE(idev->cnf.forwarding) &&
+> > +				   accept_untracked_na(idev, saddr);
+> > +		new_state =3D NUD_STALE;
+> > +	}
+> > +	if (!neigh && accept_untracked)
+> > +		neigh =3D neigh_create(tbl, &msg->target, dev);
+> > =20
+> >  	if (neigh && !IS_ERR(neigh)) {
+> > +		u32 update_flags;
+> >  		u8 old_flags =3D neigh->flags;
+> > =20
+> > -		if (READ_ONCE(neigh->nud_state) & NUD_FAILED)
+> > +		if (neigh_untracked && !accept_untracked)
+> >  			goto out;
+> > =20
+> >  		/*
+>
+> This can be simplified to:
+>
+> diff --git a/net/ipv6/ndisc.c b/net/ipv6/ndisc.c
+> index 90cd5d852569..7d114bdb263e 100644
+> --- a/net/ipv6/ndisc.c
+> +++ b/net/ipv6/ndisc.c
+> @@ -1082,19 +1082,21 @@ static enum skb_drop_reason ndisc_recv_na(struct =
+sk_buff *skb)
+>  	 * Note that we don't do a (daddr =3D=3D all-routers-mcast) check.
+>  	 */
+>  	new_state =3D msg->icmph.icmp6_solicited ? NUD_REACHABLE : NUD_STALE;
+> -	if (!neigh && lladdr && idev && READ_ONCE(idev->cnf.forwarding)) {
+> -		if (accept_untracked_na(idev, saddr)) {
+> -			neigh =3D neigh_create(tbl, &msg->target, dev);
+> -			new_state =3D NUD_STALE;
+> +	if (!neigh || (READ_ONCE(neigh->nud_state) & NUD_FAILED)) {
+> +		if (!lladdr || !idev || !READ_ONCE(idev->cnf.forwarding) ||
+> +		    !accept_untracked_na(idev, saddr)) {
+> +			if (neigh)
+> +				neigh_release(neigh);
+> +			return reason;
+>  		}
+> +		if (!neigh)
+> +			neigh =3D neigh_create(tbl, &msg->target, dev);
+> +		new_state =3D NUD_STALE;
+>  	}
+> =20
+>  	if (neigh && !IS_ERR(neigh)) {
+>  		u8 old_flags =3D neigh->flags;
+> =20
+> -		if (READ_ONCE(neigh->nud_state) & NUD_FAILED)
+> -			goto out;
+> -
+>  		/*
+>  		 * Don't update the neighbor cache entry on a proxy NA from
+>  		 * ourselves because either the proxied node is off link or it
+>
+
+Was originally unsure if I should modify the existing logical structure. =
+=20
+Thanks for the suggestion, will implement this. Is it appropriate to=20
+credit you with a commit tag?
+
+> > =20
+> >  		if ((old_flags & ~neigh->flags) & NTF_ROUTER) {
+> >  			/*
+> >  			 * Change: router to host
+> >  			 */
+> > -			rt6_clean_tohost(dev_net(dev),  saddr);
+> > +			rt6_clean_tohost(net,
+> > +					 neigh_failed ? &msg->target : saddr);
+> >  		}
+>
+> What is the reason for this change? It's also not explained in the
+> commit message and I suspect it's not needed.
+
+This was added in response to another Sashiko local review finding. =20
+Let's say we have some FAILED neighbor T with NTF_ROUTER set. If we get=20
+an NA from source address S with target address T and with the Router=20
+bit clear, existing kernel code will cleanup routes with gateway S, but=20
+IMO we should clean routes with gateway T instead since that is the=20
+neighbor which was updated by the NA. I can either update=20
+comments/commit message to reflect this or remove the change entirely,=20
+please let me know your preference.
+
