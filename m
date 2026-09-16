@@ -1,129 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D41E4F4730;
-	Wed, 16 Sep 2026 13:08:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4D833CE80
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 13:19:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789564135; cv=none; b=Lc4ZG5aMbdcz32bh3NHtCUaCoeTKgcTZVyQiYXtDI+y1RWGfO1LpSINFfXEkI5ef3Byrmo7xxIDrXi2XsmrQmW/J9tr9oCpFDDHqg8z29P0u1XaXWDpa7bDenTJrY8hF6OHjpIH8PremrdTeOG7mNA0GSKqDAQPDP77a7rBcsJk=
+	t=1789564787; cv=none; b=kVkLy/jjIk6eX1JeeiQfEU/pRG5dn9SuWCWftOyQHWzIV/Cye3wyverEgN+NRTAHh/OfwrAEuSwa7Wz79xw3BgMQzKKmtkXekki1esifqakz9RqSzRBRXRdDNUOQB2KZjGbGnverIgxiV+AUfmtejrZtwz63xlnWq9HamDvxv24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789564135; c=relaxed/simple;
-	bh=OLcJdj7KSU+qAs2aXbulktmzQrneMknG4IxIVipcf6I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jeRWN5BOsRNouCVntlCc8sQvDvpJH5gwxmBHJe5LXqGACAm+Q5Wp7vqaZVZJanVp9zMfz+nAd/4x89skkSmvMVjYc66hlR1OgZ5V2+iZG7whnKSh3uQgMhY6fTZ0ikiTn5AXy+IGifQvtJOXLyF6B12unTnk9b1aB3QOCxYf92U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gr6/24qa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789564787; c=relaxed/simple;
+	bh=fCWw0Trjnxse44I8g0/geXOuyNpXr43fX6tn+i6FZ7c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YRfOK+so/PBZ6LGHR2dxfBnZNjjk8Mf+HpCoUdWlRszOK8RV+hKHzzNlsFsNjDa7lly0Z551DJh/gv8In7B17Hj4ICljVp5zlWPYet6abNg9trutZc8MHfBFrH2qqv1ySskP/R5bxIIvjerXnbY/ZgWa1yKytl9CgiAu9Bb40P0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=b3ddw9Uf; arc=none smtp.client-ip=74.125.228.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gr6/24qa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B58041F000FF;
-	Wed, 16 Sep 2026 13:08:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789564133;
-	bh=B4HuTK4jePJtH8LBf+QEidf509ABsOfiRp9Jj0ByiJA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Gr6/24qanQtWXcVV0Zm473sUWdftheBN8Dl6S2dota+JDIBegvD/U6oepXZtL0zbG
-	 5gR5/rAGlAwe5BfF4pSvarTVpMTl1dTPor4Q0tRwz45laIq1a8ZunG55FpWdvrHwYG
-	 1ef5CdHmOW7oE6g9Hs0EPHK+K0i/mb0ecUgC3D9re1Kw9X1s/yIc+5KWjhTIvGcgXx
-	 BuPm307qwWX0eGUnbe7prJ5l4McvA9c9raYOAOEqbixvqOfV8eLMBudNkmLsTVMXNg
-	 mTWgc2YB5Bh13UiNbjRlEh/KPlMbqI03KM9t8Wt+aXexc0waO4BjOJyrEcX+GXGDAM
-	 F2euRBinNH1wQ==
-Message-ID: <ad36cd54-7319-4bb4-bf8f-9fcc7b009158@kernel.org>
-Date: Wed, 16 Sep 2026 15:08:45 +0200
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="b3ddw9Uf"
+Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a99cd5115bso1608010a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 06:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1789564784; x=1790169584; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=/g2oyb1OwyLHE2WzpJBh/jQ1AsTk6Ezgm+5y3dxq+Tw=;
+        b=b3ddw9UfrwqrjZKQdivrcL7IsRbQHVgcfyFeGHsFlpyaekr3MZ6dZJqrYetG2drAWb
+         PqjCrWOKKycNtnxpZhmY4w52K41AlzsA+Ser7/c2ufy95x1eGBC0BA1aqnStI731RFou
+         rOIvcsv/quJqQLFCpAMEp2TMKullerHStCDF4aU/Eipsc0Lm3GD/dQ4sIXsd3ZMh0RXH
+         ejmIuUU7EUFn6tXyJ2Mvr6mSv4bFIELlpywYnakWr1n1AlToDECyk5kO8hnPseBF4bV8
+         YIzaiQVqULQhlAPBXk+6afXTA4NSglZHfKxxmVGC41hjP8Msm692XGXc//25fX1s67lr
+         raLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789564784; x=1790169584;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/g2oyb1OwyLHE2WzpJBh/jQ1AsTk6Ezgm+5y3dxq+Tw=;
+        b=ujI9TlRV+OiRGoaSeiLscjRlmv+HxedZH2LR6qP9RycifpbaJTy9XoREdt+N+ujlZk
+         WKF6R3GSpUwidkPb2zKANDNNng0QsYRzCfotZ7GiysEHnj5ARKk4yf8PwpCrOOYXQ4AW
+         VspHW4IvmejJPC+ukZfKgXOoD+z/ELy525i49q/V/LCFHyT0XuYTxd/k3bl8BcP/4mb3
+         b6A3iyuYFmkPuav2/siBqTs0J5hCrQFDE1fmqolbiDzdBAr6wpCnjMRlPt4iX5gfazoL
+         Pt5uQfQOwP7pfZZ/DVx2Iv1KTGpbYRTp5QFiFJ6xaehYQXqsac6TXUaWIr0pH+AVpcFC
+         3LZA==
+X-Forwarded-Encrypted: i=1; AKwUvByHMg+BOrIxl7LnKse87jbP/x86CbUML8Msl1rRIsyUvEw7+tquAEApIePvCa4p+eN1BYVb/p7xHygxIuiR4yI=@vger.kernel.org
+X-Gm-Message-State: AFuF++mITzYARzod7HN1brCoECVUsRximQALCpnWq4HnIduxRHSkPaUv
+	z5e1CZQAhdaoErkP3TWL/js4hkTibV1oS27upzbxQCP71JpOnmWEOJuX71yQVow0GuU=
+X-Gm-Gg: AYBFou0BZZ8T2Xzx6N2ZBrEDBeidMtj2ZThdyVRBlQhs0gm4WCQLWOWhAIWUslHry5Q
+	MLwk2d1bxOS5Ba/XQaF2Z7HkqjxubKvTFoWjmFTRlFPhoxOT+aUT6IYUEygueGv8Fxp5phWXnP1
+	EeuuSW9o+IhkTZ9PoPK42M8NulSkmxM2Aih5ulyNzD63N9yEVSxkeFxX/Z29SetHRBepyPgmutT
+	XhuiRQGYQOKmhMctumbRyucwsAyocLaqJ9M+kqoCa77D9zS61wiLJxydK8i1Ne5orgGSeOx0xTx
+	fJkR29YIi5sDLKavfhuxdH9b/L6XTOEkOrLZj9kqHBlji/hsi6BxF5O+/TiCFtNtKdHIC5SGFcc
+	zd3IK1o01IrTKT64bp4pLm8R0WpBZb8BGQO8KETHfMhY2RQG1N0DsPzxe8+HMUJYyhgBjwH2Jiq
+	smUiL0ayjgYjX4vMyPpMCIJfa/9FDj9Z0qLmYIH0ZOW6BGbDym5q0M3ZMsLZND
+X-Received: by 2002:a05:6402:1f12:b0:6a9:a5e7:f8d3 with SMTP id 4fb4d7f45d1cf-6aa223a42b5mr1916895a12.19.1789564784428;
+        Wed, 16 Sep 2026 06:19:44 -0700 (PDT)
+Received: from localhost ([2a02:aa7:4656:2314:c23c:9eda:81d:3])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6aa1cfe07e4sm1748298a12.2.2026.09.16.06.19.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Sep 2026 06:19:44 -0700 (PDT)
+Date: Wed, 16 Sep 2026 15:19:43 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Kyle Meyer <kyle.meyer@hpe.com>, akpm@linux-foundation.org,
+	corbet@lwn.net, linmiaohe@huawei.com, shuah@kernel.org,
+	tony.luck@intel.com, jane.chu@oracle.com, jiaqiyan@google.com,
+	Liam.Howlett@oracle.com, bp@alien8.de, hannes@cmpxchg.org,
+	jack@suse.cz, joel.granados@kernel.org, laoar.shao@gmail.com,
+	lorenzo.stoakes@oracle.com, mclapinski@google.com,
+	nao.horiguchi@gmail.com, osalvador@suse.de,
+	rafael.j.wysocki@intel.com, rppt@kernel.org, russ.anderson@hpe.com,
+	shawn.fan@intel.com, surenb@google.com, vbabka@suse.cz,
+	linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH v3] mm/memory-failure: Support disabling soft offline for
+ HugeTLB pages
+Message-ID: <aqqXbwglwYTyTuUG@tiehlicka>
+References: <aqiIEkrc6aDBOqRg@hpe.com>
+ <aqkCbgHmMGxI_GLG@tiehlicka>
+ <aqmGd0GGUCkbZpkZ@hpe.com>
+ <aqpYxAktjexhaMGc@tiehlicka>
+ <ad36cd54-7319-4bb4-bf8f-9fcc7b009158@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] mm/memory-failure: Support disabling soft offline for
- HugeTLB pages
-To: Michal Hocko <mhocko@suse.com>, Kyle Meyer <kyle.meyer@hpe.com>
-Cc: akpm@linux-foundation.org, corbet@lwn.net, linmiaohe@huawei.com,
- shuah@kernel.org, tony.luck@intel.com, jane.chu@oracle.com,
- jiaqiyan@google.com, Liam.Howlett@oracle.com, bp@alien8.de,
- hannes@cmpxchg.org, jack@suse.cz, joel.granados@kernel.org,
- laoar.shao@gmail.com, lorenzo.stoakes@oracle.com, mclapinski@google.com,
- nao.horiguchi@gmail.com, osalvador@suse.de, rafael.j.wysocki@intel.com,
- rppt@kernel.org, russ.anderson@hpe.com, shawn.fan@intel.com,
- surenb@google.com, vbabka@suse.cz, linux-acpi@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-References: <aqiIEkrc6aDBOqRg@hpe.com> <aqkCbgHmMGxI_GLG@tiehlicka>
- <aqmGd0GGUCkbZpkZ@hpe.com> <aqpYxAktjexhaMGc@tiehlicka>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <aqpYxAktjexhaMGc@tiehlicka>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ad36cd54-7319-4bb4-bf8f-9fcc7b009158@kernel.org>
 
-
+On Wed 16-09-26 15:08:45, David Hildenbrand wrote:
 > 
-> OK, so apparently there are some BIOSes which abuse this feature to
-> mimic a real HW poisoning. This doesn't change the overall picture
-> though
-
-Is this really abusing? We know that a page is shaky and will likely go bad in
-the future, For now it is still accessible. Trying to migrate off that page stop
-using it right away sounds pretty logical to me.
-
-Now, the weird thing is that for hugetlb we wants a different behavior (keep
-using the page and ignore the request to evacuate).
-
+> > 
+> > OK, so apparently there are some BIOSes which abuse this feature to
+> > mimic a real HW poisoning. This doesn't change the overall picture
+> > though
 > 
->> If you think this should be handled differently, I'm open to suggestions.
-> 
-> Yes, do not treat hugetlb pages any special. In case there is a HW
-> related problem which decides to offline portion of the hugetlb page
-> then bad for you. It wouldn't be too much different if this was handled
-> through a real HW poisoning.
+> Is this really abusing? We know that a page is shaky and will likely go bad in
+> the future, For now it is still accessible. Trying to migrate off that page stop
+> using it right away sounds pretty logical to me.
 
-I agree with that.
+Yes, no dispute on that. But we have HW poisoning for exactly that
+purpose, no?
+
+> Now, the weird thing is that for hugetlb we wants a different behavior (keep
+> using the page and ignore the request to evacuate).
+
+Exactly
 
 -- 
-Cheers,
-
-David
+Michal Hocko
+SUSE Labs
