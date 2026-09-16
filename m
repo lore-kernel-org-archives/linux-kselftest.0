@@ -1,103 +1,190 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 905FE37A857;
-	Wed, 16 Sep 2026 02:21:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C123B71A2;
+	Wed, 16 Sep 2026 02:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789525310; cv=none; b=iyp0jBAOX2ahSIpUWw1dUrXG15tRLAtf2TxDotY87SvNhdMOpU54p5HB0KMGfDUeAq0wSF6HwG2MDt0DbgFa+afQjgJz9Ble/5RP4vv6xU5uW73x+Yp3D4cTRcBU9CgRPgiZ3UClF+9wu5s0ynWpd3VcdaDfjoO7r8+xhhj+FRY=
+	t=1789527405; cv=none; b=DcpzXA9f4+XkJbCebt94CTXPTPJkQYSJ3gOeCgpA8O/4fg1QAqS7OtJPHaz96UNr9RJxwBcs4quaKp0YBC9il8nVzbwqPzkDrrEJV/zQVH9BYTbLEnsyHiNiGhUTh6q3HdEOTknGLCUFsKFrdpQPk2MMew9U4LpSacrk6jOFMu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789525310; c=relaxed/simple;
-	bh=S4w36axQ/SJ69u2USTyQfVcFaYAkRYJZPUbJ4PAI6Oo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pJo2GrOiZuKpl6ULEpJw8QoWZKo8YhAdeuDcIXZSmA7FkcTT1EXvGJcP7J/fFPR7rNIDt9bYey+nREXLbBBwp4E2kLt0dLBrbRt2/qDt24rtd92Kc/mr3DumKWGfDKm6arbtU1ujQaKGopdbrqE5GnKiV45mKvxmZkqgvChK8xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=JoXbFyMV; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1789527405; c=relaxed/simple;
+	bh=J3qFvdLzZ394L9jRCrceXYYUiShywQS8LAyOf+npOb4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hhJYhzeXMTn+1tSOK6/KvEZGKJ6P035UsyaHbVzMBVcAZZoLg/rZTFnB76bBv/aEXGdK8Kuq7Q3LflL9e4KdvGBiimGsFijuRHUcHURWl1X5QZNqUh+IhjqrdmdsdmWxjn7t2YC9CYAUYaRMxtZExKa7X+Z1LzglbrGLL7rZtJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=WL01MGvS; arc=none smtp.client-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="JoXbFyMV"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 877521516;
-	Tue, 15 Sep 2026 19:21:38 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0E8F33F882;
-	Tue, 15 Sep 2026 19:21:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1789525302; bh=S4w36axQ/SJ69u2USTyQfVcFaYAkRYJZPUbJ4PAI6Oo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JoXbFyMVWWZjqZk7Hc5TRbF/vgpn9cjNNGutfJNMW8RhND0pNpA5AXidlK9Ldvtsa
-	 TWTQ+aTujtaCejCqatN/QhAotVYLBDh5r4kqL5fLeY+perXuNG1cI8QD+Ep0/zP7o5
-	 E/bEJGq1a8cTncs9O48EsuAoacSHe0uhQShjZ2Z0=
-Date: Wed, 16 Sep 2026 03:21:36 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 0/2] kselftest: mm: fix intermittent failure khugepaged
- test
-Message-ID: <aqn9MBPcN4nctCBI@e129823.arm.com>
-References: <20260915-fix_khugepagd_fail-v1-0-bb6f04c8759f@arm.com>
- <20260915181519.648c2962143b761cf02efd17@linux-foundation.org>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="WL01MGvS"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1789527401; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=ltwHG9lHNDsQHaMaee1Lnu6kVGSGJpl1ybgHT6WGVmg=;
+	b=WL01MGvSeI7oaUh7Vt5BEq3MOTAUOantCIhBvcTmuLIpI6xDcsp7mQwXRMu5u1xhHa6sJn9D/VZmW6ClOB2HumwXG1QgfipnnikKNcgb9HpN9Xt56oi36YfoONx0IHRkgD/HzpKindXTZ3tQs5Mnn92MR/oWVkyUn23Vvt1QrOA=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0XB3ZciG_1789527399;
+Received: from 30.74.144.115(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0XB3ZciG_1789527399 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 16 Sep 2026 10:56:39 +0800
+Message-ID: <24690e82-3aab-4f2d-95a7-3bba332ca5bc@linux.alibaba.com>
+Date: Wed, 16 Sep 2026 10:56:38 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260915181519.648c2962143b761cf02efd17@linux-foundation.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] kselftest: mm: fix intermittent failure khugepaged
+ test
+To: Yeoreum Yun <yeoreum.yun@arm.com>, Zi Yan <ziy@nvidia.com>,
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>
+References: <20260915-fix_khugepagd_fail-v1-0-bb6f04c8759f@arm.com>
+ <20260915-fix_khugepagd_fail-v1-2-bb6f04c8759f@arm.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20260915-fix_khugepagd_fail-v1-2-bb6f04c8759f@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> On Tue, 15 Sep 2026 10:21:35 +0100 Yeoreum Yun <yeoreum.yun@arm.com> wrote:
+
+
+On 9/15/26 5:21 PM, Yeoreum Yun wrote:
+> There are intermittent failures in collapse_max_ptes_swap() and
+> collapse_max_ptes_shared() when using the khugepaged_context:
 > 
-> > There are intermittent failures in collapse_max_ptes_swap() and
-> > collapse_max_ptes_shared() when using the khugepaged_context:
-> > 
-> >   # Run test: collapse_max_ptes_shared (khugepaged:anon)
-> >   # Allocate huge page... OK
-> >   # Share huge page over fork()... OK
-> >   # Trigger CoW on page 1023 of 2048... OK
-> >   # Maybe collapse with max_ptes_shared exceeded.... OK
-> >   # Trigger CoW on page 1024 of 2048... Fail
-> >   Bail out! Unexpected huge page
-> >   # Planned tests != run tests (26 != 23)
-> >   # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > 
-> >   # Run test: collapse_max_ptes_swap (khugepaged:anon)
-> >   # Swapout 257 of 2048 pages... OK
-> >   # Maybe collapse with max_ptes_swap exceeded.... OK
-> >   # Swapout 256 of 2048 pages... OK
-> >   Bail out! Unexpected huge page
-> >   # Planned tests != run tests (26 != 17)
-> >   # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > 
-> > This happens because khugepaged may collapse the pages before wait_for_scan()
-> > is called, causing a sanity check that expects uncollapsed pages to fail.
+>    // while running ./khugepaged -s 2
 > 
-> Is this something we should be testing for?  If I'm understanding
-> correctly, success/failure is dependent on timing vargaries inside the
-> kernel and that isn't something we can reliably test for.
+>    # Run test: collapse_max_ptes_shared (khugepaged:anon)
+>    # Allocate huge page... OK
+>    # Share huge page over fork()... OK
+>    # Trigger CoW on page 1023 of 2048... OK
+>    # Maybe collapse with max_ptes_shared exceeded.... OK
+>    # Trigger CoW on page 1024 of 2048... Fail
+>    Bail out! Unexpected huge page
+>    # Planned tests != run tests (26 != 23)
+>    # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0
 > 
-> IOW, should we say "bad idea" and just delete this test case?
+>    # Run test: collapse_max_ptes_swap (khugepaged:anon)
+>    # Swapout 257 of 2048 pages... OK
+>    # Maybe collapse with max_ptes_swap exceeded.... OK
+>    # Swapout 256 of 2048 pages... OK
+>    Bail out! Unexpected huge page
+>    # Planned tests != run tests (26 != 17)
+>    # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> This happens because khugepaged may collapse the pages before wait_for_scan()
+> is called, causing a sanity check that expects uncollapsed pages to fail.
+> 
+> For example, in collapse_max_ptes_swap(), after faulting the pages back in
+> and paging out up to max_ptes_swap pages, khugepaged may collapse them again
+> before c->collapse() is called.
+> 
+> To prevent this, change the khugepaged setting from ALWAYS to MADVICE for
+> the affected tests, and mark the VMA with MADV_NOHUGEPAGE after it has been
+> collapsed by wait_for_scan(). This prevents khugepaged from collapsing it
+> again before c->collapse() is called.
+> 
+> This failure was observed on NVIDIA Spark with 16KB page.
+> 
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> ---
+>   tools/testing/selftests/mm/khugepaged.c | 15 +++++++++++++++
+>   1 file changed, 15 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index c32244b565658..83e9386bbc842 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -578,6 +578,8 @@ static bool wait_for_scan(const char *msg, char *p, size_t len,
+>   		usleep(TICK);
+>   	}
+>   
+> +	madvise(p, len, MADV_NOHUGEPAGE);
 
-If the test environment can be set up to control those timing vagaries,
-I believe in that such cases are meaningful for verifying the expected
-behavior.
+This looks incorrect to me and would reintroduce the previous problem. 
+Please see commit 7962e05a835f ("selftests: khugepaged: fix the shmem 
+collapse failure").
 
-This patch sets up the conditions needed to make the result reliable,
-so I don't think this test case should be dismissed as a bad idea or
-deleted as inherently unreliable.
+> +
+>   	return timeout == -1;
+>   }
+>   
+> @@ -839,6 +841,7 @@ static void collapse_swapin_single_pte(struct collapse_context *c, struct mem_op
+>   
+>   static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *ops)
+>   {
+> +	struct thp_settings settings = *thp_current_settings();
+>   	int max_ptes_swap = thp_read_num("khugepaged/max_ptes_swap");
+>   	void *p;
+>   
+> @@ -860,6 +863,9 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
+>   	validate_memory(p, 0, hpage_pmd_size);
+>   
+>   	if (c->enforce_pte_scan_limits) {
+> +		settings.hugepages[collapse_order].enabled = THP_MADVISE;
+> +		thp_push_settings(&settings);
 
--- 
-Sincerely,
-Yeoreum Yun
+I'm not sure why the collapse_order setting needs to be changed here. In 
+your test case, you did not use the '-c' parameter to specify the 
+collapse order.
+
+> +
+>   		ops->fault(p, 0, hpage_pmd_size);
+>   		ksft_print_msg("Swapout %d of %d pages...", max_ptes_swap,
+>   		       hpage_pmd_nr);
+> @@ -869,12 +875,15 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
+>   			success("OK");
+>   		} else {
+>   			fail("Fail");
+> +			thp_pop_settings();
+>   			goto out;
+>   		}
+>   
+>   		c->collapse("Collapse with max_ptes_swap pages swapped out", p,
+>   			    1, ops, true);
+>   		validate_memory(p, 0, hpage_pmd_size);
+> +
+> +		thp_pop_settings();
+>   	}
+>   out:
+>   	ops->cleanup_area(p, hpage_pmd_size);
+> @@ -1075,6 +1084,7 @@ static void collapse_fork_compound(struct collapse_context *c, struct mem_ops *o
+>   
+>   static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops *ops)
+>   {
+> +	struct thp_settings settings = *thp_current_settings();
+>   	int max_ptes_shared = thp_read_num("khugepaged/max_ptes_shared");
+>   	int wstatus;
+>   	void *p;
+> @@ -1100,6 +1110,9 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
+>   			    1, ops, !c->enforce_pte_scan_limits);
+>   
+>   		if (c->enforce_pte_scan_limits) {
+> +			settings.hugepages[collapse_order].enabled = THP_MADVISE;
+> +			thp_push_settings(&settings);
+
+Ditto.
+
+> +
+>   			ksft_print_msg("Trigger CoW on page %d of %d...",
+>   			       hpage_pmd_nr - max_ptes_shared, hpage_pmd_nr);
+>   			ops->fault(p, 0, (hpage_pmd_nr - max_ptes_shared) *
+> @@ -1111,6 +1124,8 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
+>   
+>   			c->collapse("Collapse with max_ptes_shared PTEs shared",
+>   				    p, 1, ops, true);
+> +
+> +			thp_pop_settings();
+>   		}
+>   
+>   		validate_memory(p, 0, hpage_pmd_size);
+> 
+
