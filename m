@@ -1,35 +1,56 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A255523798;
-	Thu, 17 Sep 2026 13:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0720450EBFF;
+	Thu, 17 Sep 2026 14:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789651896; cv=none; b=GuUcGDfI4so/f3gyAa6htFe1DBBMPbvgj02oWIHgmts0Lru0OvAVkUbCM0T+StPTjXITmrBH+flu5nGo/FZ9yv7TgOC5KMUcIThiECcaLgjFdjJGSKbTvGPiUuNoULToMvdGkbiy8zOksoikUgeqpwZxv5XT2YbkoHKjf0iKZuU=
+	t=1789654941; cv=none; b=Ps8xPSdsfuyLAxnq0MIfikzEZQZb+wjFbzbwFv2zPDWJ+N4yWumucVGwj52UR3W9RRBHcoPOwabinSfugMEu9nZlaKT8ZyySvRRnWyVdQ8V2loL5Y8uMQ2TKGdnryMip5+2KUyo50a6NKonJL53c/dES8C7dqKhxc51f2Pye6Pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789651896; c=relaxed/simple;
-	bh=lJhhl7rqp0R+kTEn3u7cXqS0lMDRNpKykndKN5Xbdss=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=cByTFhMz9Nb0+XzMIicUnl5i8ZRbNcRncYaTaOD7mNcrk3f5/z5xpPbvL4dvotSMWwvvlEpdbQvyLg/rlUdVPUcXtVvl0deu2YjU92i0UjFIrs1TWAkMzAt1om6L5cJNgAo7/fXyUYUDB0HMbxvvxeOVT7/AmztIBMJOjlqyNjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X3VQzBW2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789654941; c=relaxed/simple;
+	bh=KOp46QavelWc9MpAB/7pUoY+w8+SCJr5MpMBLdzDA6o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Se/SD4rdqjYmHXUApCDjyj71gaCPSdObweQ2suL+ClBS0aHYu/gRPJuPd0gMQ13Waf+F99AQ8q1rE3gbPi/SQB/SThB7uEPQRqrGC5CVTD7pPK5EbyPW4Zen4QEURCetyL/8WrRdEkV27G0YATshxAzyRL2euLH4i9FKzjchFlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gb8759cU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X3VQzBW2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01D221F000FF;
-	Thu, 17 Sep 2026 13:31:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gb8759cU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA5FF1F000FF;
+	Thu, 17 Sep 2026 14:22:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789651886;
-	bh=d+xMAagAIt0peOBIqSsZ+vAYsCvSqqqp7DxtScD872M=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=X3VQzBW2/pH1w01pGHJUniIITmoUTlatUz6fhgtsefZalRbxXXWo6oUX9STUNXRtk
-	 nX5wd3ZetQ8fxA7DKoJSnU4P+P5UUZu27d7RSaUzNwsMmcDkWBeeFUCywetw0W1fIK
-	 KmdaQqVJuvXDpKig2x2BIlQqOZ4QNL9mSPMKj7UFu9HPSa9Dxw+/WP7OjcOGjeROa/
-	 BN2YlI7ak33F2bRS7cuOkz2/N2QZ7yYnmQ/lKjVCpgW4oZ1MEkPBjvUbqOLWg+8hCJ
-	 gP9Q4/pjGS/8I4SPKtaKoUEinRKj8VIEfJyz71pVrpE/DscTYBTzuWzeuWRCOW6UlY
-	 4E9RAoz4GTN0Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0A663811957;
-	Thu, 17 Sep 2026 13:30:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1789654938;
+	bh=tjofGGPSHVfcqzboPWJ6IAtm4wQQNel3C2UWwfDef+A=;
+	h=From:To:Cc:Subject:Date;
+	b=Gb8759cUP4F7z65rAz0mmY+nlIY5k81T3VIPeUin1rbrmVvM+ZXx62gTB7IFUlPVt
+	 Znub8YBvftvVjKpiRv/Na/rttLudHP4zP3b5qv5/6Cb08R3CMx/ieJA/PHNqJiyb0e
+	 q+xwyomlbMEpEbPz44JLrIlBc60dY49oaQajc+RJhHynUja3RL78LslqWtO+fZ8s9a
+	 UQNA3D/GkIuYY41/1Hi/x6veTaZm1zuE3Ef6iQiV0P++pYoKj83T+oU+3AhJp6FMJf
+	 dk6acrZuagzDiLn58yIB62qgsy4eAbprozdbTgJIylfUestjXzCTphymOIHUroWuJN
+	 5jqJ3swApSXPQ==
+From: SJ Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SJ Park <sj@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH 00/10] mm/damon: improve readability, clarity and test coverage
+Date: Thu, 17 Sep 2026 07:21:58 -0700
+Message-ID: <20260917142210.90829-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,44 +58,47 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3 0/2] tcp: exclude old ACKs from fast path
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178965181963.3645898.3635212098501972895.git-patchwork-notify@kernel.org>
-Date: Thu, 17 Sep 2026 13:30:19 +0000
-References: <20260914090408.1435080-1-inbal.lipshtat@mail.huji.ac.il>
-In-Reply-To: <20260914090408.1435080-1-inbal.lipshtat@mail.huji.ac.il>
-To: Inbal Schussheim <inbal.lipshtat@mail.huji.ac.il>
-Cc: netdev@vger.kernel.org, edumazet@google.com, ncardwell@google.com,
- kuniyu@google.com, davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- amit.klein@mail.huji.ac.il
 
-Hello:
+Yet another batch of miscellaneous DAMON minor improvements.  Mostly
+focused on readability and clarity of code and document, and unit/self
+test coverage.  No user-visible behavioral change is intended.
 
-This series was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+Changes from RFC v2
+- RFC v2: https://lore.kernel.org/20260917040537.107341-1-sj@kernel.org
+- Drop RFC tag.
+- Rebase to the latest mm-new.
+Changes from RFC
+- RFC: https://lore.kernel.org/20260912200814.145612-1-sj@kernel.org
+- Fix a typo in the selftest warning message.
+- Collect A-b: from Randy.
+- Split out damos_adjust_quota() fix to an individual hotfix patch.
+- Add a patch for initializing walk_control_obsolete in damon_new_ctx().
+- Add a patch for probe_hits_wsum damos filter commit kunit test.
+- Trivial patch sequence update.
+- Rebase to the latest mm-new.
 
-On Mon, 14 Sep 2026 12:04:06 +0300 you wrote:
-> Exclude ACKs outside [SND.UNA, SND.NXT] from TCP header prediction so
-> that they fall through to the slow path, where ACK
-> validation is applied.
-> 
-> Add a packetdrill test for a data segment carrying an
-> excessively old ACK. The test fails on the unpatched kernel and passes
-> with the fix.
-> 
-> [...]
+SJ Park (10):
+  mm/damon/api: remove NR_DAMOS_FILTER_TYPES
+  mm/damon/core: use abs_diff() in damon_feed_loop_next_input()
+  mm/damon/core: use mult_frac() in damon_feed_loop_next_input()
+  mm/damon/core: set damon_ctx->walk_control_obsolete in damon_new_ctx()
+  mm/damon/core: document damon_call()/damon_start() race hang issue
+  mm/damon/paddr: remove pa parameter from damon_pa_filter_pass()
+  mm/damon/tests/core-kunit: test eligible_mem_bp commitment
+  mm/damon/tests/core-kunit: add probe_hits_wsum damos filter commit
+    test
+  selftests/damon/sysfs_memcg_path_leak: fail only for real DAMON leak
+  Docs/mm/damon/design: clarify bp is basis point
 
-Here is the summary with links:
-  - [net,v3,1/2] tcp: exclude old ACKs from tcp fast path
-    https://git.kernel.org/netdev/net/c/f81e6c3fb063
-  - [net,v3,2/2] selftests: net: packetdrill: test exclusion of old ACK from TCP fast path
-    https://git.kernel.org/netdev/net/c/d841cd7513f3
+ Documentation/mm/damon/design.rst             |  5 ++--
+ include/linux/damon.h                         |  2 --
+ mm/damon/core.c                               | 19 ++++--------
+ mm/damon/paddr.c                              |  5 ++--
+ mm/damon/tests/core-kunit.h                   | 30 +++++++++++++++++++
+ .../selftests/damon/sysfs_memcg_path_leak.sh  |  7 +++++
+ 6 files changed, 48 insertions(+), 20 deletions(-)
 
-You are awesome, thank you!
+
+base-commit: 942682790e570c9422a389bf34097e74c4777fe9
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+2.47.3
