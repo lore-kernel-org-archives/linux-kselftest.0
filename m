@@ -1,102 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 258C73AD535;
-	Thu, 17 Sep 2026 06:27:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAFF14477FF
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 06:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789626477; cv=none; b=AyYYb8KJhnEbUkERyRGETuu8QVKYp4/I8AGcmS2Xb8L+1erTO3eeGhR+gCMLK/aM80Xc94l5CNAELgeXdt3KWTzkulZHyA9IVL63O9QKJuTg7Hq9cJqTE15j6CF9tijLxLIZ0MLQdmpnGg+8mAgQ7v8c+aWms6c5BDlFK+wSqCA=
+	t=1789627668; cv=none; b=UDedXuDgYZkYMcuSLIZ7vKQcDRBRwIF7ZY2aKdjQ/hDez85QIoF26dHRxG6FBggAikzgWO2DbGcdYWnF1Gjxjubji1nMUVN3PQ0jNOKFuFZMRLygZ8vgmQ55Jc9utTxqIxSfoWDDo6+FZHlZMwAJQs0dQzRdt2KYNrjSPmibYuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789626477; c=relaxed/simple;
-	bh=6HgOEnc9wNdaEzeo1Tl1Hz7oAQt7xSh7oQ4zoNXsuWg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fjUKQOG7WoadXy4eBvdYrGOgiT0nVgz+xlaK8ZNHzuiW0pkKRHRpcbyvC8/VzxCzda5X72iTNyGZoHRyyfEqXW7zaLX5c6hWmg1SPE1YZdnbqzfgesut+hciWE0pEHqT44qkF9vW3MKt4TVyRrWdzWdMjaN5yj4YX3TTY+B/PO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LzGKa3ql; arc=none smtp.client-ip=192.198.163.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1789627668; c=relaxed/simple;
+	bh=3AdI/BQYPg6y23Mk+YkLKGWL7iI3glitB+qiS7zTldk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZPtlJy2L/N4+5EMq+R33//zWgsADdqVSARIOCeuUOB+9heVVfxWuwknmHA9i3NQKiUh3teeCLxNBd0awvw9vMf+4q8FBFv1J4SWEcaNT/nysVzTN9pitCiFLtR2ikr0dn8ubv/vM/CbNeQzYtREh4F3OMexQ5qa+6JJajxHNeTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OTD4+RoM; arc=none smtp.client-ip=74.125.225.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LzGKa3ql"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789626476; x=1821162476;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=6HgOEnc9wNdaEzeo1Tl1Hz7oAQt7xSh7oQ4zoNXsuWg=;
-  b=LzGKa3qlAlYXfYmJ08aP4Q0MOLq8Q0008vm7oym4JSfopvOfZaSE2Kiz
-   ilr4VtdthFLyI9uSiTBrOjUX1rXxyrvIxgNSMCOj7WomLSnp9VPgBMPH4
-   ZZEO8OPLKFuZBxuACO/T+6nju5TiCCiCnAeOt+m3PC3mQdwrpMbgdVy6F
-   /kCKr9wtA4He065UuAXiVYiQfkoSxbbfgSOUwriyB7jdX592ksJgvGDzI
-   9Timv+2qFsZZGggU6RovRFSeFzFci5gfBIS+ST9ajPrt2UXk608adbWwL
-   F05OcLOakq8VMTnSg9nM0LbAjbmBa+pq8qtNGjGohd6/WKGKjJpa5qdh5
-   g==;
-X-CSE-ConnectionGUID: qrzzvqNNT3O8AA+YGw2WDA==
-X-CSE-MsgGUID: ujyYDf2YT8yUlIklak9LGQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="523766"
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="523766"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa115.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2026 23:27:55 -0700
-X-CSE-ConnectionGUID: le6Qgjs9RQ29hl1uGdEs6Q==
-X-CSE-MsgGUID: XXqs4qwTTrGWZEqFWCXwzQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="269896440"
-Received: from mjarzebo-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.246.73])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2026 23:27:50 -0700
-Date: Thu, 17 Sep 2026 09:27:47 +0300
-From: Tony Lindgren <tony.lindgren@linux.intel.com>
-To: =?iso-8859-1?Q?J=F6rg_R=F6del?= <joro@8bytes.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Liam Merwick <liam.merwick@oracle.com>,
-	Vishal Annapurve <vannapurve@google.com>,
-	Ninad Naik <ninadnaik07@gmail.com>,
-	Joerg Roedel <joerg.roedel@amd.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	coconut-svsm@lists.linux.dev
-Subject: Re: [PATCH v2 6/8] KVM: SEV: Add SNP vCPU state get and set commands
-Message-ID: <aquIYzwDOx6jzy3T@tlindgre-MOBL1>
-References: <20260908103338.427254-1-joro@8bytes.org>
- <20260908103338.427254-7-joro@8bytes.org>
- <aqksXLLcmFDkM9Xj@tlindgre-MOBL1>
- <aqrDUgB7nfdgzXpQ@8bytes.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OTD4+RoM"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e71cdb22bso3140135e9.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 23:47:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789627664; x=1790232464; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=y3wbvAbBWnutdIwHnF3F6m/7uEF6jqU2B+avYv0omNg=;
+        b=OTD4+RoM5uTERP3mOlPQntz1c/c6k9oR7kAwKmVnnSEeUVZh0AXJ7rR2JE3mw7v5Ts
+         JksLeD1O37XZWAITYjFxSdcfSWknGG9MV2xnWMsdtDg/P4fwM6adS/y5LETFkn31gLAc
+         kFGkB8OpXiTo70mDlI+DWVUAeshK5lUC9zIrjHszqLM+HL7ogoFk2fjqpKsdAMDBClKu
+         ThjsBWFcpI4P4RwdfE1NxpRJG1nnA88KCIdoz3HXf+6zktfMyQbnZPiaoePBk2M3tDkg
+         wCKaFdZmpIEwtn48SLfezt30nJQIE/l3/ETu9I+IslMkRl8+2g17ZhgRBWRNTAFwAe4x
+         tWAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789627664; x=1790232464;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=y3wbvAbBWnutdIwHnF3F6m/7uEF6jqU2B+avYv0omNg=;
+        b=qgl8Mohsi2MexSZ6c8HlPaWne4PaKdnc31n/i3VAn6+g4vCM0k70yZxe9TGk7CHEas
+         Ot0TeWHunQ4akBTOI9D+2VqC8yAHlch8g3ztGH9vAJl727klA0/WFqti5aA8jtfCsL5B
+         R5z5uBzdprQAO/OHjMAMpiGHuaZbkWBXGw2wcZ2reKxQO23dCg1lhbaTI0CibjP1oeWQ
+         MK/FOIxKZjQVWwy40xdg8Jqshjm1q/zGa9CsnXCnV6lNhwIGY5K8nQZ8xEfFQBfqxIVy
+         Ujt7/qmUO/1lPR19E+GpJmQl7j7aa5Ph0poi4/3ZEriEzETCdOkyyMfVquQYp0lhpdAz
+         JK7g==
+X-Forwarded-Encrypted: i=1; AKwUvBxaySq8RcCgESNvnUQ9ciq5mBPCr7jLzaU1nEK3xoL/9DSlP4HcRoo+RMaencZYKb1aRyfdJ1pZ3f+B+KhPG+I=@vger.kernel.org
+X-Gm-Message-State: AFuF++lZj+HuikIWEvLOpZ/NEfzmki+UGS++3lXLpmvTniNMsDGZw+S2
+	LY/GBBirQjIDCZCsBz1YGQd2lF/TS2gce6V7JFokrmAZHnRS/n15hs1E
+X-Gm-Gg: AYBFou3WOPRKGcyh6drIow/1AJl/urOoPwqfEtf9x0OjVI11IDdysSEoSzvNRHzzL/N
+	8vEMpzbHeMrGzyrXkAkyDBEM6nDHbTFmK0n8NWRznhXvjYXbF9xPDAKTeRC27s3DQYz1zScpfcC
+	pOWaF37YXK74Ma1VYELbGZpExq6tRqKXWryvpB6WQRK/U/nRXzoGYCCTkUJAryGKpMIfVrIEOcl
+	GjwW4jlUN9SZid9uFBDKj7wtYw2tG53EQEQCym79PiUhHtdEu0DBhMXnBgIL5njF/EOLaBkWS+B
+	ydA31Xr17lke+RFjn+5rU3NC6fMJ9Dc0yga6tSqyxgBPORkqCJiceIhHAFpSGoW1TGgBGgu0ang
+	o1smdCdhATnXCTPDIuX1dABxeFntVjkQXDdtCrbjpwjgOS/B1UZeipw5YZzlGqtqhA71zV05kUD
+	44XaL/JzaRijh6iCE7xSqEXvY9SgZGj+0JFy3XjimZ8sucdR+GOfeSzt2D503s5fbqCe23IVK+1
+	7gSNxF155ya+22dmNshFEmDkwWmy+DV3VQ7KPV04rxz8/LQbf+RCoztdrm9DiCjJPgJwGLVoQIh
+	Pd0fNma0Gpr9UdeqZK6/+eoGXsKZAf7XUz1iQlr6EY4gU07P2Vs+QIg9+YB/ByG+ayQNPY+Q/8U
+	8
+X-Received: by 2002:a05:600c:8b17:b0:49c:fa20:cc0a with SMTP id 5b1f17b1804b1-49eb7339522mr57916485e9.33.1789627663778;
+        Wed, 16 Sep 2026 23:47:43 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a02-3100-9dc6-c001-54ee-4741-4927-0a28.310.pool.telefonica.de. [2a02:3100:9dc6:c001:54ee:4741:4927:a28])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4870bf438fbsm13129266f8f.36.2026.09.16.23.47.42
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 16 Sep 2026 23:47:43 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Steen Hegelund <Steen.Hegelund@microchip.com>,
+	Daniel Machon <daniel.machon@microchip.com>,
+	UNGLinuxDriver@microchip.com
+Cc: Karl Mehltretter <kmehltretter@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-arm-kernel@lists.infradead.org,
+	netdev@vger.kernel.org,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>,
+	Rae Moar <raemoar63@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net] net: microchip: vcap: Stop selecting DEBUG_FS for KUnit tests
+Date: Thu, 17 Sep 2026 08:47:36 +0200
+Message-Id: <20260917064736.77354-1-kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aqrDUgB7nfdgzXpQ@8bytes.org>
 
-Hi Jörg,
+VCAP_KUNIT_TEST enables DEBUG_FS even when the kernel configuration
+leaves it disabled. Remove the selection, following the dependency rule
+in Documentation/dev-tools/kunit/style.rst.
 
-On Wed, Sep 16, 2026 at 06:31:04PM +0200, Jörg Rödel wrote:
-> On Tue, Sep 15, 2026 at 02:30:36PM +0300, Tony Lindgren wrote:
-> > Nice, looks like snp_get/set_vcpu_state() could quite easily make use
-> > of KVM_EXPORT/IMPORT_VCPU?
-> 
-> That depends on whether KVM_EXPORT/IMPORT_VCPU will migrate the confidential
-> VCPU state (registers) only or hypervisor state as well. The get/set_state
-> helpers here only export/import the hypervisor tracking state for the guest
-> VCPUs.
+The debugfs implementation and its tests are already built only with
+DEBUG_FS. The other VCAP tests can run without it.
 
-Oh OK, so calling for both hypervisor and confidential VCPU state would be
-needed. The difference could be specified in the struct kvm_vcpu_transfer
-flags?
- 
-> On AMD the confidential VCPU state is migrated as part of the memory image when
-> guest execution has stopped on the source side.
+Fixes: 552b7d131aa0 ("net: microchip: sparx5: Add VCAP debugfs KUNIT test")
+Assisted-by: LLM
+Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+---
+Validation on net c9151088f167: x86_64 LLVM builds and QEMU runs
+with DEBUG_FS disabled and enabled. The other VCAP suites pass in both
+configurations. The debugfs suite is present only with DEBUG_FS=y and
+all four cases pass.
 
-This part for the confidential VCPU transfer matches what we are doing
-for TDX.
+ drivers/net/ethernet/microchip/vcap/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-Regards,
+diff --git a/drivers/net/ethernet/microchip/vcap/Kconfig b/drivers/net/ethernet/microchip/vcap/Kconfig
+index 97f43fd4473f..1af30a358a15 100644
+--- a/drivers/net/ethernet/microchip/vcap/Kconfig
++++ b/drivers/net/ethernet/microchip/vcap/Kconfig
+@@ -40,7 +40,6 @@ config VCAP_KUNIT_TEST
+ 	bool "KUnit test for VCAP library" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
+ 	depends on KUNIT=y && VCAP=y && y
+-	select DEBUG_FS
+ 	default KUNIT_ALL_TESTS
+ 	help
+ 	  This builds unit tests for the VCAP library.
 
-Tony
+base-commit: c9151088f1674fd29ff26a20f5fc687acf53a2f0
