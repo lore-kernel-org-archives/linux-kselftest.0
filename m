@@ -1,125 +1,93 @@
-Received: from mail.netfilter.org (mail.netfilter.org [217.70.190.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0561E4562BD;
-	Thu, 17 Sep 2026 08:55:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.190.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7697B3F44FC;
+	Thu, 17 Sep 2026 09:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789635316; cv=none; b=LuB2hCX19ORY8+g2zdSES08DFMTd0O3qdEVPLeqAv9lehxYuoZJoZ13Yiwu2e79O29jzfQYvU+JDrtNtz/ThnvgzrTJTXCZWUGgxUlMZn+g1KHrXYRqtbYvBElsfHvO/nEs7ELfGxG/fXwRV0W6MEl/QfwNf7DTV33CyvqB11FY=
+	t=1789635628; cv=none; b=NakrexF0V1oVqBs6f3j6rjfGnCFpb1PFTt4ZcMxFprU9RU8Rr64iLFN0Mrm6pY7bH0VlgZBt4e+y2KOZ4+pIr0UdeVWOnp5LW+ZNFr/iF003GKkuiaKV6pEd7N3E1VWZGUmnXBKuBfThPWDYQXc8s/FcKsCzLJVfHk/v6Jo6NQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789635316; c=relaxed/simple;
-	bh=vn31ij5EjMpSY4fNULl9mNiHva1/BB4PcHzqjFUIWVM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q4DZOt8IBiKZrMu54PXTXb6+KjEvPzUtx+fuO5Dvl7xrdrzDzrrEgnwHJbanKnbDOE10xoQ3+pSCYh5/3SXpfBwsUojkoypKWSgO6K0RoW9zB3IoY2qU6m324cO4ZeHioxtake93xa7ejPQuKxmZk/53DY/qJFzYxIf2mhvtVoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org; spf=pass smtp.mailfrom=netfilter.org; dkim=pass (2048-bit key) header.d=netfilter.org header.i=@netfilter.org header.b=E24bQLqZ; arc=none smtp.client-ip=217.70.190.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netfilter.org
+	s=arc-20240116; t=1789635628; c=relaxed/simple;
+	bh=Y5bSJVysvr9ddQz4rfopfu0hHQ1wIqTnyODV0L3nxM0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=RpkVyKmJn13aUq7pxBpgvtRVpVgdvuzFCzZ92jBIBc4iMjrC17Vn6XQNdTqE2mX2B/6MxN2ZgoL4XI5paW2wcxEGADzNJ2I9vKMPKbDH6EobkNcOYpXPw/6U7DPjrkWpy1YfHx3LEHQYq6TVsxcq7sj7Udvai8TI2t8CP6jAf3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xg1bdiFO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=netfilter.org header.i=@netfilter.org header.b="E24bQLqZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netfilter.org;
-	s=2025; t=1789635308;
-	bh=VyrNncgMjLTsBvabQF8/YlHLzKKib3TBgXLmZZSfKgQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E24bQLqZqCbhYofFpFX5C/Yn90lZRe1Y1Sl92lkL5j5M0O9HmOV/qfTuszP+xhHMZ
-	 PHgtIrJLt1Cmp9zNstWDEva8MV+TOpfIOOGS3+ge9KpPnCGTwcnq0yz+rlsZ1KlMyp
-	 +vq4s4VZYDlux6eyjR9b7eMbj375oF+kgQXvTWbHA4pkLKuOhr3fom7iTZp0KNyE9I
-	 yLDpyxv8KzYcp9FiUJju60ACYct+BWomEPCeqvjhM4j6ErtuYmYPrZsZMCAArGhFau
-	 4xUQE97+l1D5vk3XmZBUshNUkKbwXKerlMtqkh4AKdD0+Nr95zNzHgTT4DuGfneKfl
-	 cbtKQePrSd1nA==
-Received: from netfilter.org (mail-agni [217.70.190.124])
-	by mail.netfilter.org (Postfix) with UTF8SMTPSA id 9A1346005F;
-	Thu, 17 Sep 2026 10:55:08 +0200 (CEST)
-Date: Thu, 17 Sep 2026 10:55:05 +0200
-From: Pablo Neira Ayuso <pablo@netfilter.org>
-To: Fernando Fernandez Mancera <fmancera@suse.de>
-Cc: Hangbin Liu <hangbin.liu@linux.dev>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org, mptcp@lists.linux.dev,
-	Hangbin Liu <liuhangbin@kylinos.cn>
-Subject: Re: [PATCH net] selftests: net: update netfilter netlink config
-Message-ID: <aquq6fEQiDq5Ey59@chamomile>
-References: <20260917-selftest_config-v1-1-bf25ccbfb18e@kylinos.cn>
- <f557e44a-86b6-4ebb-ad35-d7bc5902929a@suse.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xg1bdiFO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB3C1F000FF;
+	Thu, 17 Sep 2026 09:00:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789635627;
+	bh=G3cWCrQW8tliOjWvk/U88u+h7FNtLXaFA7KtU9Vk1E0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Xg1bdiFO3MxUqftaFIxMcl2cc5az3in6IBLWAl2tn1XvzSZa3qZN59HJAB45B1ZRW
+	 xU6UOENwYGWC2SRiyFk1+q0fxSaYbgT2D3T+5rYmiKPK7bTuLcFEAvKgRQj8v8lkvf
+	 njOQA2IrD2zjkiyoboWOe/mGJqt+Kbm6ternkZ/oEJ5KDLb03kK/hAcjVvpanZ8UjN
+	 JrtXSILtFMeMu5Oe2IurTA0JY5vJNR6l2fzwlsgfmAKaAg4dcqbIr/92fVyLVZ8eMn
+	 AEup1d+Ofbjsu26cK3TzxhVB8PAZB/UdPRWpS7JrGhS9ZylO4dgGF6mm8HDBtJ5B7p
+	 bYXHVjkOapazg==
+Content-Type: multipart/mixed; boundary="===============2675516372883015014=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f557e44a-86b6-4ebb-ad35-d7bc5902929a@suse.de>
+Message-Id: <80c4a1ad857e4007c54a10110ff85897791545942a2cb3be4d9f5e69cd17de82@mail.kernel.org>
+In-Reply-To: <20260917080839.462038-2-luyun_611@163.com>
+References: <20260917080839.462038-2-luyun_611@163.com>
+Subject: Re: [PATCH bpf 1/2] selftests/bpf: Fix timing-dependent assertions in task work stress test
+From: bot+bpf-ci@kernel.org
+To: luyun_611@163.com,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
+Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 17 Sep 2026 09:00:26 +0000 (UTC)
 
-On Thu, Sep 17, 2026 at 09:06:48AM +0200, Fernando Fernandez Mancera wrote:
-> On 9/17/26 4:17 AM, Hangbin Liu wrote:
-> > From: Hangbin Liu <liuhangbin@kylinos.cn>
-> > 
-> > Since commit d4349ba9872d ("netfilter: allow nfnetlink built-in only"),
-> > NETFILTER_NETLINK was changed to a bool. Use 'y' instead of 'm'.
-> > Otherwise the build emits:
-> > 
-> >    .config:5688:warning: symbol value 'm' invalid for NETFILTER_NETLINK
-> > 
-> > Fixes: d4349ba9872d ("netfilter: allow nfnetlink built-in only")
-> > Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
-> 
-> Reviewed-by: Fernando Fernandez Mancera <fmancera@suse.de>
+--===============2675516372883015014==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Acked-by: Pablo Neira Ayuso <pablo@netfilter.org>
+> task_work_run() assumes every stress run observes both scheduler
+> contention and, when the delete thread is enabled, cancellation of at
+> least one pending callback.
+>
+> Neither outcome is guaranteed. Contention is observed only when another
+> scheduler selects the same one of 128 map values while its task work is
+> outstanding. A valid run can therefore have no scheduling errors. This
+> was reproduced with a single scheduler: more than one million callbacks
+> were scheduled and completed while schedule_error remained zero.
 
-Thanks.
+This isn't a bug, but would it read more clearly to say something like 'the
+task_work_stress test helper' (or name the file) instead of the bare
+task_work_run() in the opening sentence?  There are three functions with
+that name in the tree: kernel/task_work.c, prog_tests/test_task_work.c, and
+the static helper being changed here in prog_tests/task_work_stress.c, so
+the bare name could be mistaken for the kernel function on first reading.
 
-> Thanks!
-> 
-> > ---
-> > This is a simple update addressing the same issue, so I’d like to post it
-> > directly to netdev instead of bothering two separate subsystems
-> > (mptcp and netfilter).
-> > ---
-> >   tools/testing/selftests/net/mptcp/config     | 2 +-
-> >   tools/testing/selftests/net/netfilter/config | 2 +-
-> >   2 files changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/net/mptcp/config b/tools/testing/selftests/net/mptcp/config
-> > index 59051ee2a986..bb9c4c97c620 100644
-> > --- a/tools/testing/selftests/net/mptcp/config
-> > +++ b/tools/testing/selftests/net/mptcp/config
-> > @@ -18,7 +18,7 @@ CONFIG_NET_CLS_ACT=y
-> >   CONFIG_NET_CLS_FW=m
-> >   CONFIG_NETFILTER=y
-> >   CONFIG_NETFILTER_ADVANCED=y
-> > -CONFIG_NETFILTER_NETLINK=m
-> > +CONFIG_NETFILTER_NETLINK=y
-> >   CONFIG_NETFILTER_XTABLES=m
-> >   CONFIG_NETFILTER_XTABLES_LEGACY=y
-> >   CONFIG_NETFILTER_XT_MATCH_BPF=m
-> > diff --git a/tools/testing/selftests/net/netfilter/config b/tools/testing/selftests/net/netfilter/config
-> > index c3c121b6f300..629b2b29ed1a 100644
-> > --- a/tools/testing/selftests/net/netfilter/config
-> > +++ b/tools/testing/selftests/net/netfilter/config
-> > @@ -44,7 +44,7 @@ CONFIG_NET_CLS_U32=m
-> >   CONFIG_NETDEVSIM=m
-> >   CONFIG_NETFILTER=y
-> >   CONFIG_NETFILTER_ADVANCED=y
-> > -CONFIG_NETFILTER_NETLINK=m
-> > +CONFIG_NETFILTER_NETLINK=y
-> >   CONFIG_NETFILTER_NETLINK_QUEUE=m
-> >   CONFIG_NETFILTER_SYNPROXY=m
-> >   CONFIG_NETFILTER_XTABLES=m
-> > 
-> > ---
-> > base-commit: 1dd85662fee6e2ac580b1c4f9a0c0a7ae6e31f0e
-> > change-id: 20260917-selftest_config-286bdd44b22b
-> > 
-> > Best regards,
-> 
+This isn't a bug, but was nthreads reduced locally to get the
+single-scheduler run quoted here? The test hardcodes 'int nthreads = 16;'
+(prog_tests/task_work_stress.c:50) and the only environment knob is
+BPF_TASK_WORK_TEST_TIME for the duration. A reader trying to reproduce the
+quoted numbers has no way to get there without editing the file. It might
+help to say so explicitly, or give the 16-thread numbers, since the test
+has no knob for the thread count.
+
+> Likewise, a successful map deletion may remove a value after its
+> callback has completed. delete_success can therefore be nonzero without
+> callback_success being smaller than callback_scheduled.
+>
+> Drop the assertion that schedule_error is nonzero. Keep requiring exact
+> callback accounting when deletion is disabled. With deletion enabled,
+> allow equal counts but still reject callback_success greater than
+> callback_scheduled.
+>
+> Fixes: c6ae18e0af5e ("selftests/bpf: add bpf task work stress tests")
+> Signed-off-by: Yun Lu <luyun@kylinos.cn>
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35199472874
+--===============2675516372883015014==--
