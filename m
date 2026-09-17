@@ -1,114 +1,69 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1594D9F95;
-	Thu, 17 Sep 2026 12:04:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25BA4F55DA;
+	Thu, 17 Sep 2026 12:08:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789646700; cv=none; b=XechbJ5BwPV8wf+oF6h3GqcxJnYQLYznuwxWJGq6MujcIWqaExHDdcTGSiZwRdr+0hDMriGKuQomSRZCZEluUKGH40Y4IdQLdskHRCO/FCEu3bGKtfBuImppKtw23fqzvRBcSds3qFHRbo1fbHxMT595iGr2XC2KRll00gH+JGE=
+	t=1789646914; cv=none; b=Ym4+hydWRpQXWE8Z1TfFDgZ/sYQ5VhEwEjd839f2bSLJLXRzYpJhtt4lrJJhhl64c24Ya4XzoEJNzNzftGMkt2oGxXPh3H+mO+XwbQirfO5PP8Z9UWc66S/v9LkqjMNYscf29uxTfQ2+FBCTnd4R6YMK8tbLXkBAF4iyYlqgUSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789646700; c=relaxed/simple;
-	bh=gPf0Wv9V06yPZ6NfessAKocdDrOInglc1/+DED/jGgM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a8UdBowmejWyu8lqOHxXSDs/OK5NJ0g6x3gJ+DyPP/gLNs7sstz6aXzrZ+zZmW27NrBLDHg6DAJ1QIgGfKwmi86vSVNNNTRss/WXIiviHTBlMpOA22lU5wEi6t7O2MDPvfNqpqQLUurrlP+VpHoxlUdE2BWpkkiz4DuPRkzOWhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=arfuc46m; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789646914; c=relaxed/simple;
+	bh=FZsdvWQFJ1GgHIyPu07rN60LuIicHhed3AlRLarvfxI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i1pFZyt91SrZrKSnaWxaMDjNJ41KfKV/3/KLa23eCztICN/tFwqJKtzkrgQxCD6vy4zJr1eBjd07Bzsjg4+iL4CQtLVmgb7RecmMK6kmtw31FLrrnI3+EvPQuoQom0XuAkxJB+cRQP+8jrHz7w8AbOtvRTsfAtr9iIoAV4pCDbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mj7/Xadm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="arfuc46m"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 651DA1F00898;
-	Thu, 17 Sep 2026 12:04:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mj7/Xadm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B50C1F000FF;
+	Thu, 17 Sep 2026 12:08:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789646689;
-	bh=fqJctqSsWUaKTmU/Qz+H8xUGqGsrUtaLocLOYT0DIdU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=arfuc46mcpeq3nGAg25G36a71FXJd6dWRq4pyk3PftRT2itdvbqIkv6yZVDwiZ++g
-	 MA/uAdcGSJsI+lSE5qF+rqacUrScsG4O1GkI6wDn6B5x8nXpyfqu6U7OOeqxG8I6tH
-	 UQ857KF8y5QGyhOqMWfT0wb+NMm1N5Cx+TRzkRxuYeznWnKG/uhRbqQ4bBsp3mofRt
-	 dMiOefNEliwx7xx4hLE5o52pNo4pquFYFAUna1Sax6CwHLyvcaonIKMyDKwkc6tjxb
-	 87qYkbJZIdXYID/9qZkHOdETSlsdreLL1/DVIHpceuXdobVoPBtm8hAHRyswqujRKT
-	 GT697KV9qqKAQ==
-Message-ID: <046917ac-3de6-40e5-85c3-93b55160b098@kernel.org>
-Date: Thu, 17 Sep 2026 13:04:45 +0100
+	s=k20260515; t=1789646899;
+	bh=KuzN7+adFVVihVcZ1qWllq0YX4TYIzhAkBl9u1gApZ8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Mj7/XadmTyOjQj+jXV9nDdv42Nx0WNrWaoGcBK9G1mutdVCe7CFpkys/fYhHRoh+z
+	 AAt4PrTVq11PNSP7O4y7WAlOOQFdiW84bnOvfEEpNUAlShH7FSa2tqLj14GaPZWgIg
+	 MvZbJYIAmjSyPJSUXq2o42wUjrZo2e2qdvHa5X9iK6uUfObv80kbSBfWCY7bYA+Rgf
+	 81vr3zwZVaq0yk3wwjFK7lbf1GCDdgZXqgj5NsFu9af4pCRzYzHH6n7xFZZzdrcEcY
+	 XQLz03wtpsyuce4i9SARSBZCQRGdZwCoxogelX8Rc8XXbZ83rfYOislvRmIs62Dgvw
+	 znHKmaiTqJ3Zw==
+Date: Thu, 17 Sep 2026 13:08:14 +0100
+From: Simon Horman <horms@kernel.org>
+To: Jamal Hadi Salim <jhs@mojatatu.com>
+Cc: netdev@vger.kernel.org, Jiri Pirko <jiri@resnulli.us>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	Victor Nogueira <victor@mojatatu.com>, hybris <hybris@mojatatu.ai>
+Subject: Re: [PATCH net 2/2] selftests/tc-testing: add u32 manual table
+ handle IDR tests
+Message-ID: <20260917120814.GB51261@horms.kernel.org>
+References: <QDISC-LQFE.v1.20260911041746.1@mojatatu.com>
+ <QDISC-LQFE.v1.20260911041746.2@mojatatu.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Verify program FD after
- non-autoload programs in lskel
-To: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>,
- Leon Hwang <leon.hwang@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
- KP Singh <kpsingh@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260909042433.1775591-1-tweek@google.com>
- <20260909042433.1775591-3-tweek@google.com>
- <424ef244-f0e0-46e7-bc27-fffee80f348d@linux.dev>
- <CA+zpnLeRmo3RTAxmMUHepm+kmpG4nw+z_vhR_kNubqEEEAVxbA@mail.gmail.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <CA+zpnLeRmo3RTAxmMUHepm+kmpG4nw+z_vhR_kNubqEEEAVxbA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <QDISC-LQFE.v1.20260911041746.2@mojatatu.com>
 
-2026-09-17 11:06 UTC+1000 ~ Thiébaud Weksteen <tweek@google.com>
-> On Thu, Sep 10, 2026 at 3:49 PM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->> On 9/9/26 12:24, Thiébaud Weksteen wrote:
->>> In test_global_percpu_data.c, dump_percpu_data is defined after two
->>> non-autoload SEC("?kprobe") programs (verifier_strncmp and
->>> verifier_snprintf). Verify in test_global_percpu_data_lskel() that
->>> lskel->progs.dump_percpu_data.prog_fd is properly populated (> 0) when
->>> loaded via the light skeleton.
->>>
->>> Signed-off-by: Thiébaud Weksteen <tweek@google.com>
->>> ---
->>> No changes since v1.
->>
->> The Fixes tags of v1 are dropped.
->>
->>>
->>>  tools/testing/selftests/bpf/prog_tests/global_data_init.c | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->>> index 7c539cbcf3a1..ebda60200b71 100644
->>> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->>> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->>> @@ -214,6 +214,8 @@ static void test_global_percpu_data_lskel(void)
->>>       lskel = test_global_percpu_data_lskel__open_and_load();
->>>       if (!ASSERT_OK_PTR(lskel, "test_global_percpu_data_lskel__open_and_load"))
->>>               goto out;
->>> +     if (!ASSERT_GT(lskel->progs.dump_percpu_data.prog_fd, 0, "dump_percpu_data.prog_fd"))
->>> +             goto out;
->>
->> When the light skeleton does not skip the non-autoload progs,
->> lskel->progs.dump_percpu_data.prog_fd is 0, actually.
->>
->> But, theoretically, this ASSERT_GT() is not good enough to prove the FD
->> is the correct FD of dump_percpu_data prog.
->>
->> How about running the iter subtest against the lskel? Factor out
->> test_global_percpu_data_iter_fd() helper first. Then, add an iter
->> subtest using lskel.
->> When factoring out test_global_percpu_data_iter_fd() helper, pls change
->> 'do { } while (0);' to '{ /* no-op */ }' btw.
->>
+On Wed, Sep 16, 2026 at 06:01:15AM -0400, Jamal Hadi Salim wrote:
+> 35fc: create a manual table with handle 801:, then add an auto-allocated
+> table. Before the fix, the auto allocation reuses id 1 and hands out the
+> same handle 0x80100000, aliasing the manual table; the test requires the
+> manual 801: handle to keep exactly one entry in the dump.
 > 
-> Thanks for the review Leon. That sounds good, I can implement these
-> changes. I am just waiting for Quentin's feedback on the first patch
-> in this series before spinning up a new patch set.
+> a6e8: with a live u32 table keeping the tc_u_common alive, add and delete
+> a manual table with handle 901:, then re-add it. Unpatched, the delete
+> leaks the raw-keyed IDR entry and the re-add fails with -ENOSPC; the
+> test requires the re-add to succeed.
 > 
+> Reviewed-by: Victor Nogueira <victor@mojatatu.com>
+> Tested-by: hybris <hybris@mojatatu.ai>
+> Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
 
+Reviewed-by: Simon Horman <horms@kernel.org>
 
-Apologies for the delay. Patch 1 looks good to me, I just posted some
-minor suggestions regarding comments. Thank you!
-
-Quentin
