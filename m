@@ -1,138 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DDCD4B4029;
-	Thu, 17 Sep 2026 09:39:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503F04BB295;
+	Thu, 17 Sep 2026 09:57:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789637973; cv=none; b=O758mkVDX8eBPDBxlECCjO5uLCj7Ow8hVuDjtFhGZkl1JhxJ9ixOBP58Bz4Zl+Z+3oSyYjAAlCU6bOXwZ7JmsdPSk4eUP6Al23tHTwI4On6jm8mmmpgTt4yCpeJh0hJ6i7T0erE54g0gMesKa5fzJdHKP6zWX+PZYwcBkpwzQFo=
+	t=1789639056; cv=none; b=mm+0j0OHLDWAixnsZHO8+mf45yj4b38F6IH76ExQo9Wm1BNII7hjeXosdpDiU+F6BiRIAuLKMIsIHy2XLxNrzmXZ6EqjnIxknEoEMEcRTO4bVONPJx75W3gX8InYZLr6B8y8pAKos8pAiv4A87g4cLY1hPMelNVmBaX1iyfLOe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789637973; c=relaxed/simple;
-	bh=qs0Qs9f1CAXZV4pvkENkuuQzTf9nmkq8FUqeSbStJxU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aHSg7EfH26qsL0M01WE3P46BnYUAqbQ/ycd9Sfk8N7gf9TUXD/oX0UT85du7I3gWt5StWqFg4mvaJQUV1YXzUIesH9XwPfuS+g5mXTmWRU8gbfXy1ziQV8espmFWWl9ndF9aSBJWeMMhZzElS+5x54/jUTQOPL7II5ihhDQjPNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l34x4uKC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789639056; c=relaxed/simple;
+	bh=FAsssfLMGkwSNAPbPzbQEG9zdxT0RYlR68aFGyuLz14=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XO1Sckx4n7y3bWVlVTwNS2cGBzm5ISKU5SgkkQnmeENaEVVwsh6NVx5CZK+SOVvLQn8ECenawWvTBSLDZegT3IDauz2QrojQ/lz2Xgpzaz6JhpXIGPB5kjQUyLPpVyF+xBRRFuFJEXhTIiAMgwanduor/5Q4cnhwXUA9EVKk6RM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pueb4EYl; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l34x4uKC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26F841F00893;
-	Thu, 17 Sep 2026 09:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789637964;
-	bh=AGmPfvqR+AEX+fQIJ9rO8q0L0Nj7UzcGqGjgB3p8pdY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=l34x4uKCwuwF6ULQg8SXUMHbRJdJmkD+FI+xs0F0foTS5b1L8XLQIINvNcLiueDU/
-	 GrcCDKcvc8uOmvcbR+IwkUhWyrWprJ7ZoMBSSMw6t2M+w5bpxzpjL/1BkRoInh+IEe
-	 VarSgKLwEz2m+dxx3pXdrRezqOHBj7EwZdL+JhHR72TSPHi8JmLmswhj7AOPsFS2/F
-	 fIhzdQG/kMEHCKX9IA6v4gxY/GJ185Fs8276H7gWaOI7/ef9mM6NcrnhxTg27AuK/n
-	 O2TY5/51aK7XnygJ8nx7JJuXSZIecCcqtMyKk6QFcC8jBBv3Y3qryBjd5Jusnejwja
-	 kM4eMWsPfHvyg==
-Message-ID: <18f86b06-7477-4750-b57e-094df4310e4a@kernel.org>
-Date: Thu, 17 Sep 2026 11:39:13 +0200
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pueb4EYl"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68H621Th1716417;
+	Thu, 17 Sep 2026 09:57:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=DiOZEtwxuCpwIExuWBZEe7Ztzh42CDAzkWy0L8wmU
+	gg=; b=pueb4EYlvBTWVuIonjR3pCZ38wkdQaLCKwiS/4eeBu05iFDeEEQ92VzVP
+	LGue15mGmGXuJA6G+rL+LV51J3inAcpB7P56/SX1fsqLZ8yXgx+LzZhObtHe2V8h
+	0FyEH0LdCm8obpHnIpAq4U7COVu+9c393usptdZx8vkqw06AUhblzq6RhInSh5Nw
+	E2gBYWbJ4w2D0j1bQYWQHgGo6HWYm9nbI1ycI62llvPZzg2L5sPLhfsUKv05vaem
+	ftde1V8BcNw/pVvURFUs0zAGcAhaaS0zTvH1AhUJZ194RqM4gNvNfwx9Hdh5IYIV
+	nYhHzHuGapJIjYZbiIlB7Fo5rv7XA==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gmxf59n2d-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Thu, 17 Sep 2026 09:57:21 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68H9aLWo2879606;
+	Thu, 17 Sep 2026 09:57:21 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4gra3f8vcv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 17 Sep 2026 09:57:20 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68H9vIAF48366074
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 17 Sep 2026 09:57:19 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D9E7B20040;
+	Thu, 17 Sep 2026 09:57:18 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 88D0F20043;
+	Thu, 17 Sep 2026 09:57:17 +0000 (GMT)
+Received: from macbookpro.bl1-in.ibm.com (unknown [9.123.4.160])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 17 Sep 2026 09:57:17 +0000 (GMT)
+From: Disha Goel <disgoel@linux.ibm.com>
+To: shuah@kernel.org
+Cc: aleksa@amutable.com, brauner@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Disha Goel <disgoel@linux.ibm.com>
+Subject: [PATCH 1/2] selftests/filesystems/openat2: fix O_LARGEFILE definitions for non-arm64 architectures
+Date: Thu, 17 Sep 2026 15:27:05 +0530
+Message-ID: <20260917095707.16986-1-disgoel@linux.ibm.com>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH bpf v1 1/2] mptcp, bpf: reject bpf_sk_release() on msk
-Content-Language: fr
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org,
- mptcp@lists.linux.dev
-Cc: VEGA <vega@nebusec.ai>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- Matt Bobrowski <mattbobrowski@google.com>, Tejun Heo <tj@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org, Kalpan Jani <kalpan.jani@mpiricsoftware.com>,
- Paolo Abeni <pabeni@redhat.com>
-References: <20260917081209.361367-1-jiayuan.chen@linux.dev>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260917081209.361367-1-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: o7fMyLegHouPWTSpCWxsC2uRRq3uak7E
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE3MDEzMCBTYWx0ZWRfX56D5x6CmINzE
+ HXI4ZC738bvMyLZ03h1kXDMBediVM7BTxyd47ECXxW1rXQt/YP02JTxQsgpWJ/+Vc8JPG1d6rex
+ 2Wm96T6VS4h9AlaNnxc9mGF7SZ/vpGY=
+X-Authority-Analysis: v=2.4 cv=cvgOAF4i c=1 sm=1 tr=0 ts=6aabb982 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8 a=WGwT2ls776tvMD3njmUA:9
+X-Proofpoint-ORIG-GUID: o7fMyLegHouPWTSpCWxsC2uRRq3uak7E
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE3MDEzMCBTYWx0ZWRfX3LJVPuV1BweS
+ WZGy/R7qmcbWOE/w5tZgwGw9zScpbyjKoJDZypsliZ39wctfnkkejEGvt3n7CrGH3CtZGd9BrK5
+ kIw935r2xNN2L5hBaifiaOIaNua8mGIXReNH8qoAwVzA2ibr/wgEXFpKWH4MsPnKLSuLA5omV2P
+ hxvP/sVjlAoZWW9TOZCdnTeK21YkHVv6p+duR5DUp/1IcikZROjkz1PpN3s1H8UylKbdOeuYAE7
+ 7AiVVytsn7TJIhRlskfM9k3lVtvWq5dUjSQCodTqJVgf4IHspHYshg554PgZmSZep3MKLykyrTl
+ jxYdAgwG/+vbI5r0bILVStBeJhAUYpJ4ShAeXnNXgyrWYB0UoEP4ywzNJHwOdl7ezFGFRzI7lsr
+ eJrQyJ87imL3GuX9rvzNjktwVtCpBsnUEx79knCm+SV/H7hGVuJFcowHivjSTPmsWD/mfoNjsvV
+ SaaJp3ooAPBk5HqWY/w==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-17_01,2026-09-16_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 lowpriorityscore=0 clxscore=1015 priorityscore=1501
+ suspectscore=0 bulkscore=0 impostorscore=0 phishscore=0 spamscore=0
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
+ definitions=main-2609170130
 
-Hi Jiayuan,
+The openat2_test.c code previously hardcoded O_LARGEFILE to 0x8000 on
+all architectures other than arm64 (aarch64).
 
-+Cc Kalpan, Paolo.
+However, on several architectures this value is different. For example,
+on PowerPC (including ppc64le), O_LARGEFILE is defined as 0x10000,
+whereas 0x8000 is actually O_NOFOLLOW.
 
-On 17/09/2026 10:11, Jiayuan Chen wrote:
-> A bpf prog can do this today:
-> 
-> 	subflow = bpf_skc_lookup_tcp(...);
-> 	msk = bpf_skc_to_mptcp_sock(subflow);
-> 	bpf_sk_release(msk);
-> 
-> bpf_skc_to_mptcp_sock() returns subflow->conn without taking any
-> reference, so bpf_sk_release() drops a refcount nobody took on the msk,
-> and the subflow reference is leaked:
-Thank you for looking at this!
+This mismatch caused the flag_validation test case to pass
+O_PATH | O_NOFOLLOW instead of O_PATH | O_LARGEFILE. Since
+O_PATH | O_NOFOLLOW is a valid and compatible flag combination, the
+kernel successfully opened the file instead of failing with -EINVAL,
+causing a false test failure on PowerPC.
 
-Note that Kalpan was looking at this [1], and Paolo suggested removing
-the helper [2] (but we failed to review the last version so far, sorry
-about that...)
+Fix this by introducing proper architecture-specific definitions for
+O_LARGEFILE matching their respective UAPI asm/fcntl.h values.
 
-I don't know if there are progs already using it. If yes, I guess your
-approach is better (but I'm not comfortable reviewing verifier's code).
+Signed-off-by: Disha Goel <disgoel@linux.ibm.com>
+---
+ .../selftests/filesystems/openat2/openat2_test.c       | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-@Kalpan, WDYT?
-
-[1] https://lore.kernel.org/20260818120437.3949686-1-kalpan.jani@mpiricsoftware.com
-[2] https://lore.kernel.org/e039e866-fe7e-41ef-ad41-92a76a123713@redhat.com
-
-Cheers,
-Matt
+diff --git a/tools/testing/selftests/filesystems/openat2/openat2_test.c b/tools/testing/selftests/filesystems/openat2/openat2_test.c
+index 6f5afbe2d8d3..e08c94ce0530 100644
+--- a/tools/testing/selftests/filesystems/openat2/openat2_test.c
++++ b/tools/testing/selftests/filesystems/openat2/openat2_test.c
+@@ -23,8 +23,16 @@
+  * XXX: This is wrong on {mips, parisc, powerpc, sparc}.
+  */
+ #undef	O_LARGEFILE
+-#ifdef __aarch64__
++#if defined(__aarch64__) || defined(__alpha__)
+ #define	O_LARGEFILE 0x20000
++#elif defined(__powerpc__) || defined(__ppc__)
++#define	O_LARGEFILE 0x10000
++#elif defined(__sparc__)
++#define O_LARGEFILE 0x40000
++#elif defined(__mips__)
++#define O_LARGEFILE 0x2000
++#elif defined(__parisc__)
++#define O_LARGEFILE 0x800
+ #else
+ #define	O_LARGEFILE 0x8000
+ #endif
 -- 
-Sponsored by the NGI0 Core fund.
+2.45.1
 
