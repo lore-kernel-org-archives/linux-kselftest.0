@@ -1,100 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB18214A9B;
-	Thu, 17 Sep 2026 00:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789605632; cv=none; b=j4jChHP75YQ8JNbG1y/a0BZmQwyIwlNWmTLQMuhtqdQjJLykCuGa4kNSh4DX5KVs1SryBOBrqE2dW2Q+tvK36TemSm1/cIlOA/L33xYOc/MVakwwway70RH65MjpIAUKZsGSOM6d5wuHF4LuerNP18zZIF2D/MiXHDMglo/Ow+M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789605632; c=relaxed/simple;
-	bh=Aayokhv9XINqpz9W3aYBaHx+9q0KQLiRqlTP3OiBn6M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SBsrdhvPJ/G6SX6VmOUve9WxlvjTgQRu+HhPS4Jpugsd+ziazXVQM00HRMcDWRswzNoTkRztXGnYLHcMVybO5mrju0s+rYJB1/6U4vSm1OWQ1OamqjmwL1LQJsI6sL029hsCOPIXjpW9eC0hkxXX9aMo6o9pJgrZFP9fLItLKD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fs8NFO0r; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3393334F247
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 01:06:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.204
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789607210; cv=pass; b=l9NNouyEbdnS67UaDhLH03PvuqHF18oa6mFTbv3zEh6uZJIELvniKAknHAiYTWYWxM5auL8jEV2Z1mXV4BiY9suOLKkeWNY3v1wfDbbSqoX2LWvYdYQfJLXJkrjMQzsFmsRs2DeH3YHleiG0gwaICccODv22qZvyBqVyXDfYtA4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789607210; c=relaxed/simple;
+	bh=UfmsZp708Ijy54fCK/57bC1uRgIZdRWU2UrdakwbYmo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JOKPhs/g4Kmwn5Wh9RSrOgVTqFCKeT1FGBPPyUsiv8inwzSd8uz+uXpJvjBLENS0YWcE3B3JmEVBxBgzTcbG00gAie+1akPF6ARjUSTVHzp8jlNA/Rm+mAg8mZgPjHStEgNipz+HKsXULo4PAm3HVYPAIpp5H8Z/5Oc/v0nvFic=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i9Ja+iYr; arc=pass smtp.client-ip=74.125.230.204
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fs8NFO0r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A99791F00893;
-	Thu, 17 Sep 2026 00:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789605631;
-	bh=DqUJTAEx6W7xs/2kQ2owmDa2Y73pdtkDzqIy+nPJS6U=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Fs8NFO0rCFBFzFPxQUu8UJzobooawYqXltlnciKSXUb0T/ZigSSN/3U+KPgv7mzqj
-	 J+BbNcfoh4ShIcIzel0DNKrGSrlQrAdmMJ6opdByOS6Iwpu2QAoHpzcdvIt9s4ezbr
-	 FerNjXN8LBXt8kfzbApbivGKi0Bn2ZRIVHGtuuL2G83SD41AkaWzewuccfUbrmxQT3
-	 Qjq/fffjjfGhMStn57NEJco0ACqVYv7ifaXsDns0whlxQh+ZTbhf9mIcL6m4GTWz9W
-	 TvY3sV78M30PLQ/07Xs+LkOccBLh4BEol0EaaYOaDj8K2Yl0Ag3KxTDrjMiSpZqviB
-	 64ffUs7b5nkGg==
-Date: Wed, 16 Sep 2026 17:40:29 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Qingshuang Fu <fuqingshuang@kylinos.cn>
-Cc: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Willem de Bruijn
- <willemb@google.com>, Anton Danilov <littlesmilingcloud@gmail.com>,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: net: fou_mcast_encap: conditionally load fou
- module and skip IPv4 case
-Message-ID: <20260916174029.78939f6b@kernel.org>
-In-Reply-To: <20260911100158.854183-1-fuqingshuang@kylinos.cn>
-References: <20260911100158.854183-1-fuqingshuang@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i9Ja+iYr"
+Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-530411c7ee1so106511cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 18:06:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789607206; cv=none;
+        d=google.com; s=arc-20260327;
+        b=RTmvmJ3v/6/B5BnhTBQShroDstGDsrTxVKgbu3cQj01e677gPmqvqJUVGFCjtegeXw
+         c1pu4n1ENJh/79E++RLmhYmiI5Nr6pBZL88pAwPDbmJvdaymWut2OkagvodJDN8W8Fqr
+         Vx681zMEI/xt7PpPvTzOx+gl7Ck0j4LGQfeWCV/bdE73wh8+35xZ4pAwIGxesFe5KFhm
+         cYfsDlYjpXa9V1u5Y/4a9cQgFCFb3ckhPHXH1W5zcR+FAfJDSxHWXdREcHVo8s1BWSsH
+         dBiZNjjpnQ8Ixqzhb7rhmRnWypdcbLN6U8SeFUKptZM+p+82/YzZ7fuy6ZG87dK4XdUQ
+         zDGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=eVqnTRvwlJyUC6eESGjXw1fA+M9qex3i/sfxeqTQDo8=;
+        fh=4tiE8iGzGnwDotUv0phBiVls31yAmNESmxh0pGnyRQo=;
+        b=Naq4X4KPmtG4CCrwaBZMLUzdJr3FgTHePg5iNkzP66k76oSqH2ZIXa3AKN1WD/vD3Z
+         SpT9Zand60A2K5uBgqY6DALeipU9u1heLNXyli4sWJV/8w+P1vqRaqgIwUrjSzHTMLRq
+         PG8aByBfhfF4IDWTcLobt0NtCZxwfGxcMAz6AoOHFI26awOYmKTDlEwVkIOCU+rTsGIp
+         G37rrIQFmQXE/HBmO/Sam5DuZXHPRh94Qgb4Wl8936v+bcDhtY8k2vbQBE3SRFduCwF7
+         jOMxshETErVbNx03udNoK1egV0oeYo3O6ASyTSsPV1maG7V9LhNwGfpOzVXqtRNiBPTm
+         eIKQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1789607206; x=1790212006; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=eVqnTRvwlJyUC6eESGjXw1fA+M9qex3i/sfxeqTQDo8=;
+        b=i9Ja+iYrTGq5fF4BO36dSNnLpRptWxPGLH6SXtT7gj+Cw5YBVAlrObueq2Bt18qX2/
+         9XQHZ1nQ7pWh9tvDWO8OhlDb13n2yZ7NIBqOJ/JC6/62WMsCRYPXJhUr1jBEkm6cMRAh
+         6uloYJIwr8CJe+FdYE1ADVB2eOnY34mx6LPXcrj0DbK+hggtBMydfwKXvmQJwyHRj0fX
+         Ud6UFw0+aP7pEp8vRYK8qvaC4snzE+wXA7X07QqrwAqZkGdIYECW9/qoE9PkACD4LKsd
+         RSSj8bydQIEUE9qworxEVBDOMpCmqhckOTbsou8+v+/exJQH71VoMW6+QhY/e6DePVgQ
+         nVOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789607206; x=1790212006;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=eVqnTRvwlJyUC6eESGjXw1fA+M9qex3i/sfxeqTQDo8=;
+        b=PK/HfVzqPsgVgaLPjtSFDabvQe9JfgP3BolhCLM9MASjmYTjxKPBIQCg/x4Mg4Yg4v
+         vcPF/4bJRamAq9YQNDB4jdTKvo0xGn70Qe1QXKRI1Tamb2rWLXDX2zxm35/wZxrAA4kG
+         EVduPfDWaW8xVm2hlYODYZvRRvMgdg3vIVHQFDV9Rwgl2ZIJSuDIPjwaRDaw7T0cHx1Y
+         emkpnlYXQHdprpXEy6LIezOz9tATmtSNO6akZSsaW8ARxTJp0WKHw7TRQb/lJgvNDlOX
+         f8xUKt0/R/yaj2LDd/ETCDiqlrOpANhnX/boDKqeAknjlkwEWyr66c+is33iuKWlobqk
+         tKig==
+X-Forwarded-Encrypted: i=1; AKwUvBxcqAqGtv6htZVFexOd0D8ZrIHH6GYvxlOBDs+VN4EcCcNK2tb/OZ2Z7AZtLr3Z8Dq+/D1+DkE2a2jmVHJZPGY=@vger.kernel.org
+X-Gm-Message-State: AFuF++mvNf7RYP7cyEUWAj0KKgLR6WHeUxcOZsNgwED6CxC3Ftmyto+G
+	/t4TlGYl9qEYwhwxRu6AB968BLh+8frQuVeFapd+mfy0Dbnv942PXRF6hR7wi8HHmukevUDxz2W
+	+Vv6KODIVymuJvp1c3ZtMO/oqoPJwoyoInZU7Ht4AVy6bPtn5i32geg==
+X-Gm-Gg: AYBFou13SL85inig5xBIj1ga/rEHom9uD3GzsKD4waEJAfuMPvrqzP0rOigSv6T9HVP
+	8KySP3JtVRHC4lf0TJ7MW1eSX/gxWF5pWhXTfytuaGp1Mp8od/OcllH4K1Hc6mXXJH2otfXydqx
+	KoCSTNSIv9c/lqSFxu3vtQZi59lf1CoU9daDj24/NY8BKd30UwClsPEtCK02qaLy4jOCzydZgiC
+	Gf8ZGTO9O1kw7k4Oy19+tf0xVxBhnY1MIa7FC6gL5LVFvV7gZvJsz7jspDrdBdygsTH5/qwSuPV
+	OZvOb4qptgEgh03MuotNGYDHnLQFxV+N9hJm4AtzZhCAVWwwX+ny76LTGvh9VZkOZspuW7YSzvw
+	CwVlbFInkNh8gKZio9bt8DdugtlYhcJwpitxenNQ=
+X-Received: by 2002:a05:622a:997:b0:531:2284:4b09 with SMTP id
+ d75a77b69052e-5328f60023bmr5751171cf.11.1789607205250; Wed, 16 Sep 2026
+ 18:06:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260909042433.1775591-1-tweek@google.com> <20260909042433.1775591-3-tweek@google.com>
+ <424ef244-f0e0-46e7-bc27-fffee80f348d@linux.dev>
+In-Reply-To: <424ef244-f0e0-46e7-bc27-fffee80f348d@linux.dev>
+From: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
+Date: Thu, 17 Sep 2026 11:06:27 +1000
+X-Gm-Features: AcwNN1UtZ3hvthqV8zrZe_2I0a-BHp5mZjUvG6bkreK5qsDS51UGzgeJ9gYHVWk
+Message-ID: <CA+zpnLeRmo3RTAxmMUHepm+kmpG4nw+z_vhR_kNubqEEEAVxbA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Verify program FD after
+ non-autoload programs in lskel
+To: Leon Hwang <leon.hwang@linux.dev>, Quentin Monnet <qmo@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, KP Singh <kpsingh@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 11 Sep 2026 18:01:58 +0800 Qingshuang Fu wrote:
-> Fixes: e5382133c51c ("selftests: net: add FOU multicast encapsulation resubmit test")
+On Thu, Sep 10, 2026 at 3:49=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
+>
+> On 9/9/26 12:24, Thi=C3=A9baud Weksteen wrote:
+> > In test_global_percpu_data.c, dump_percpu_data is defined after two
+> > non-autoload SEC("?kprobe") programs (verifier_strncmp and
+> > verifier_snprintf). Verify in test_global_percpu_data_lskel() that
+> > lskel->progs.dump_percpu_data.prog_fd is properly populated (> 0) when
+> > loaded via the light skeleton.
+> >
+> > Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
+> > ---
+> > No changes since v1.
+>
+> The Fixes tags of v1 are dropped.
+>
+> >
+> >  tools/testing/selftests/bpf/prog_tests/global_data_init.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c =
+b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> > index 7c539cbcf3a1..ebda60200b71 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> > @@ -214,6 +214,8 @@ static void test_global_percpu_data_lskel(void)
+> >       lskel =3D test_global_percpu_data_lskel__open_and_load();
+> >       if (!ASSERT_OK_PTR(lskel, "test_global_percpu_data_lskel__open_an=
+d_load"))
+> >               goto out;
+> > +     if (!ASSERT_GT(lskel->progs.dump_percpu_data.prog_fd, 0, "dump_pe=
+rcpu_data.prog_fd"))
+> > +             goto out;
+>
+> When the light skeleton does not skip the non-autoload progs,
+> lskel->progs.dump_percpu_data.prog_fd is 0, actually.
+>
+> But, theoretically, this ASSERT_GT() is not good enough to prove the FD
+> is the correct FD of dump_percpu_data prog.
+>
+> How about running the iter subtest against the lskel? Factor out
+> test_global_percpu_data_iter_fd() helper first. Then, add an iter
+> subtest using lskel.
+> When factoring out test_global_percpu_data_iter_fd() helper, pls change
+> 'do { } while (0);' to '{ /* no-op */ }' btw.
+>
 
-No fixes tag, please, this is barely worth applying at all, let along
-as a fix.
-
-> diff --git a/tools/testing/selftests/net/fou_mcast_encap.sh b/tools/testing/selftests/net/fou_mcast_encap.sh
-> index 70210d39fba3..d94c19237daf 100755
-> --- a/tools/testing/selftests/net/fou_mcast_encap.sh
-> +++ b/tools/testing/selftests/net/fou_mcast_encap.sh
-> @@ -51,8 +51,6 @@ setup_common() {
->  }
->  
->  setup_ipv4() {
-> -	# IPv4 FOU (CONFIG_NET_FOU) is built in on kernels configured for
-> -	# these tests, so no module load is needed here.
->  	ip -n "$NSENDER" addr add 10.0.0.1/24 dev veth_s
->  	ip -n "$NRECV" addr add 10.0.0.2/24 dev veth_r
->  
-> @@ -160,8 +158,17 @@ run_ping_test() {
->  }
->  
->  setup_common
-> -setup_ipv4
-> -run_ping_test -4 eoudp4 "$TUN4_R" "FOU/GRETAP IPv4 multicast encap resubmit"
-> +
-> +# The fou module registers both the tunnel encap ops used by "encap fou"
-> +# and the FOU genetlink family used by "ip fou add", and neither of them
-> +# is auto-loaded. modprobe succeeds as a no-op when CONFIG_NET_FOU=y.
-> +# Keep any other setup error as a test failure rather than a skip.
-
-Drop this comment please, its obvious. Well, to people with basic
-kernel familiarity it is.
-
-> +if modprobe -q fou; then
-> +	setup_ipv4
-> +	run_ping_test -4 eoudp4 "$TUN4_R" "FOU/GRETAP IPv4 multicast encap resubmit"
-> +else
-> +	log_test_skip "FOU/GRETAP IPv4 multicast encap resubmit"
-> +fi
-
-Two very important questions you must answer before posting v2 or any
-other similar fix:
-
-Have you actually run into this or it's a result of an LLM scan?
-
-How many of such fixes would we need to make all the net/ tests 
-clean from similar issues?
+Thanks for the review Leon. That sounds good, I can implement these
+changes. I am just waiting for Quentin's feedback on the first patch
+in this series before spinning up a new patch set.
