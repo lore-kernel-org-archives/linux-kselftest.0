@@ -1,55 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB7C113776B;
-	Thu, 17 Sep 2026 02:26:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98ECF393DF3;
+	Thu, 17 Sep 2026 02:31:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789611965; cv=none; b=bLaXzP1NgOYJTKKC9UwHTBaSgBKh2boOlcbD8U01eoTrTCXH2tfM8UntMzmE4cunQlUIE7mlpI7dhTOusljc1mcAtRv96sPr1IgdBMaVM6JOcZxyO1SGjidX6q4QAn4/PWAye/4rH/tyz++pmNdKpNJL+X0o4IOnZGnlHL2M+9M=
+	t=1789612294; cv=none; b=k09HbQ1sQt+owFxRgUZ+YU0wCoww+dFMbYXT4oItlNZz3YwG7Gj0sWLf3lHWKhdWkhKGvFTyTtBIHQFBBZNP7DMkEU9fg1IST7kCnVqt3W3deykTlCzKloPlr4rP33OPncatv96xHOObj3zgMxUjHPWPctlxoZikW1kmCjlZTFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789611965; c=relaxed/simple;
-	bh=UeFfFnvZcuhyCykwabSQ07AeIlNc2U9+wB0sc88VGs8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ahtv5hnuqAz7HFP6xR3cGV/U7Ih9nEm0OnQbxdiIQRjDpygj3r379RZmibtuiRLZRyqJnCZwiO4XfOVOI8IGMXQfvLEcVPEbfg1qwTXO7NQss86x5M6cYQ41vQ2ZN5v/rNSobdeR6cRBeDyKDuCA3dhYBnM6VSifQEuGNqxhEiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TBq02MSt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789612294; c=relaxed/simple;
+	bh=J8cqoGcOsyptVN0Opp2KpEo0JtP2WC5ccAc+V36dgSc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=GA2IFjAY71Nu5iyK9P1NpcYIsd2JbZiEJ0CKUSB/rNA+NGOpiCIfRvVOql43LAEJGkwc8Pu7r/AYu+5k1Ai4nKeBA3hK9gDFBfTWDSuTFyizYmkE8p8Wd6mqm6IWSfbI4Psc6xUT72XWUeCBzXfVfvlSmrqtxvwlP2ElMIEa4xI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mZoxOUKr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TBq02MSt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE06B1F00893;
-	Thu, 17 Sep 2026 02:26:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mZoxOUKr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C388B1F000FF;
+	Thu, 17 Sep 2026 02:31:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789611964;
-	bh=UeFfFnvZcuhyCykwabSQ07AeIlNc2U9+wB0sc88VGs8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=TBq02MStJuouRJHgZj5IN/w+K2JkwSbPgnVQVZny3OIulVEbX/4Jik94uACrxmpCw
-	 kocwOal59EduGQU1fRLfWv49yw7uXCPUAd+q7QFHXt5WAKVJrc1NGbz2XY+2dmiYHu
-	 zFwZA+nhX21HlJYrkzZYydl2iHycJSaiEsUTl2shH48KN7AgfjIQEK1fVGf9jmDmw3
-	 sN77Is1j0MwDqiCrx2HXv+9GEk1pY7DYW5ZnIdGySJAMQTmPHYAXHKxcNzSSBMeLD6
-	 U/AL3soDctumszwzqhak5SQDaaVuJYGnIydjsRZpQi2UY66WGhIjOJh+Gdz6YS9n2x
-	 ikFdUXbwqNH1g==
-Date: Wed, 16 Sep 2026 19:26:03 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 0/2] selftests: drv-net: Add VLAN test
-Message-ID: <20260916192603.09415e57@kernel.org>
-In-Reply-To: <20260913143926.77366-1-ovidiu.panait.rb@renesas.com>
-References: <20260913143926.77366-1-ovidiu.panait.rb@renesas.com>
+	s=k20260515; t=1789612278;
+	bh=6f7z0MmMVQc6i7Kb2t/3+orNirPwd4Z0/B7z599bz88=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=mZoxOUKrGPAlCQuCsDYAwb5X1AqyUtmjwbvErPBrKmA7Npyg2ZAlmVYUSkoGS5oqz
+	 esRXNHl9rRJtb/lsHkVQdV8x3ZK33lUWjsi0h9l3zyXvobymTtTX+/OjsQgMEq7MJi
+	 kW1Bo+uaiwbed5zURWtcJDl5Ip5DHidd6ELuOqITxnzcPT3oYEB0YAKpKFExu2xGsy
+	 7qeCXn3Jw1FOapGlAL+7n/jqxxHBiqjgoy1hnjvtEHGHbsiXmdKERHLpqc/8OTqIq4
+	 4YaUkE9wF5QYyEuOgrfSNXhhmTAxCKzwDEWgkS7EUE5dMUIxrI2xVwznQjy8ycv1Gb
+	 oI5rTLEaiTm4A==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0A0939E960A;
+	Thu, 17 Sep 2026 02:30:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2 0/2] net: psp: avoid conflicts with skb->decrypted
+ and sk_validate_xmit_skb()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178961221263.3383832.6287862160202388316.git-patchwork-notify@kernel.org>
+Date: Thu, 17 Sep 2026 02:30:12 +0000
+References: <20260915-psp-ktls-fix-v2-0-0eedc3b148ec@gmail.com>
+In-Reply-To: <20260915-psp-ktls-fix-v2-0-0eedc3b148ec@gmail.com>
+To: Daniel Zahka <daniel.zahka@gmail.com>
+Cc: edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
+ davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ willemdebruijn.kernel@gmail.com, andrew+netdev@lunn.ch, shuah@kernel.org,
+ willemb@google.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-On Sun, 13 Sep 2026 14:39:24 +0000 Ovidiu Panait wrote:
-> This series adds a selftest that pings over 802.1q, 802.1ad and
-> QinQ VLAN interfaces with RX VLAN stripping offloads enabled
-> and disabled.
+Hello:
 
-Thanks for posting.
-Nicolai's suggestion make sense, please make sure you fetch net-next
-and rebase because the gro test has changed.
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 15 Sep 2026 16:11:36 -0700 you wrote:
+> Sashiko's review of commit da630d1da2b1 ("netdevsim: psp: drop tx key
+> ops") [1] showed that there is a hazard between PSP and offloaded TLS,
+> where both can clobber what the other set in the sk_validate_xmit_skb
+> callback.
+> 
+> It was discussed further on the mailing list [2], and it was pointed out
+> that there are conflicts with PSP and TLS ULP both using the
+> skb->decrypted bit.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v2,1/2] net: psp: avoid conflicts with skb->decrypted and sk_validate_xmit_skb()
+    https://git.kernel.org/netdev/net/c/a41f24c612c3
+  - [net,v2,2/2] selftests: drv-net: psp: test PSP and TCP ULP mutual exclusion
+    https://git.kernel.org/netdev/net/c/b4288c59bda8
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
