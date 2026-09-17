@@ -1,187 +1,409 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C30E49D584
-	for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 20:26:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAAFC3D75BE
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 20:28:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789676804; cv=none; b=kbhUZM3GgiBUN6tz1fL103W/Fh+z6SyhEBQ4iYYglNie+e4TLkiWeJqCsW9nR1tgoeP3Df7v5QYex2buuCXzBCAzSGZCSW+dWJl3hvm6tMRgLMYqsADwiXOkH3J58Kl4vR/YonVHRISeXzsxdSWZlL/RnMo4+qmcg+XSVCnFRIE=
+	t=1789676913; cv=none; b=cfJ0oNLo1QvMfo98qP22BDe1VzJ/kc+Wr5TfdqcPT1f090wk+9UiUZttieOIJ+WfHaZIgH2QVWPWxmpCSsHDIr5phjlUfDTszE7INvpUqcM80JgEBst4bvb8IKK3NzttJM4cCMEJoQKj2/xdfnHL58Jg1g3welFDEXsmI5Slbj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789676804; c=relaxed/simple;
-	bh=/wm6upxZhNKjCNldD9EE0n5yIdNuPgK9lrIwGU6QUEc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=lNsLj7UzrpoAQqh8JP+KreZXPNGB3R1u2Q/hS20OUzoSpnHVIo8I2WlmzPec9WmmmrntRTCmClbzQD4rZBDtTpg00v6TScUNJT5YVIyy1xzNJRzcZOgCatsiJ93d6FIUZLjWuqq0mmb61XA57t4w+aKtiGAZ5QU/HEepoafb7kQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yi6MDRhJ; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789676913; c=relaxed/simple;
+	bh=uUjZWdIpWlAwaQPdNzoaWhOmXie5LnP8Gn87IaLOOnA=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=K2DH7k/c9Ut+My4I+Kv3p/jAALkoEE1Gm9k8DeFQBX7MsH9Vd17iTw4CRqppDaco/Im6gEH2gy/xaXyW0anV2XGloz3kOYQ76HtBk8jI61aVQPHobJ5SEe+eoAfooaHI9e+qrSoRFwqMwaQd216a2I37S5J/gDh/wAjfuhoZT8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X0kgWExT; arc=none smtp.client-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yi6MDRhJ"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2dd1dcdcf95so9340165ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 13:26:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X0kgWExT"
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2dd53f2b27cso759285ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 13:28:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789676802; x=1790281602; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=cSGFqbf3XjQKoM9IeVQurnJH7q0lWkBYjjfyEjg57UQ=;
-        b=Yi6MDRhJ9LrvWVAkj858t/31R0nZadrF8vfYStOZG6VVyMneMCehw1cRw5T1Ukg2If
-         c6/LHD1Rt9lbG6IlNFhtXa69i8tWPEYRQxfT2z4DrU1AKEejkn9mlVbRUADkQno0ixiD
-         zHCMLkudWX7+7bM1IroDrKu9LWJlrr4tO7+P7xZDnVnfQwB+qJAl9oE5GLtk4RkaEK2P
-         dTn27ty04JD/u5DcpT0EE39WRj9GQG0QeRw008o8tJuL6aCMbJv9G8aai/sH0NZpO142
-         51QUNNOYC5rwN42gTi8hK8/HWiRsgmalboFahfbRy/h9m/EiDCVKWC6U6mjXdkEgkjET
-         vgIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789676802; x=1790281602;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1789676910; x=1790281710; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=cSGFqbf3XjQKoM9IeVQurnJH7q0lWkBYjjfyEjg57UQ=;
-        b=V0t3SFPyAo9T7BoZ0JF15pVcHXTHR2uaBPw4jUEVdVsTlHe3/hUGYU78jlwwfjE4if
-         +goQGJFyaMBc7irIO42c2DJx7GYD8iXCOdoknjPGFzjAr8o3DK66s+NihJu9kCpbfbCB
-         i8BPxVMZ8Fde3sMCzz7icrbPhHZ7ZnI7JeT453LAqn7hP88bkFlVnw1qcTZpvNK+UVtD
-         f0dbejR+XVm5FAO19GtxhxfkPIYwvV35xjAOLMKP7md2TNdco9gnwQmj524ugEKah0AV
-         zXfKdmjMqKeC/DkxBXgEHAk2M94tER5/B77IaJD+OEf4+o+pCTBRHPADcv08Ce3AOXVj
-         eKGQ==
-X-Forwarded-Encrypted: i=1; AKwUvByIqYzSQFlnYPV/RF9KWjgcPS6wGMhIOYOxhAjdWRHKmbSxXC2xr84Ow5VJMfwBOVPpLOrLhtddR/sYXxh/zkI=@vger.kernel.org
-X-Gm-Message-State: AFuF++m9uPvoVEOZyCMv9zLjmxxbrN3RgPjWtFq4vrkBMLm7NsKVPCgP
-	g/+qp7ROHyKepf/IhEAfzhLUArmf+/nTK2H+7FKzaksDlwCP/mK72oic
-X-Gm-Gg: AYBFou0MgYhn8zF4qqHz7zoxWwFFdENy64dnRHSbjYbFis2YADltpNC5PZmWIuohrzw
-	+emrpBTp+XVoqbQ5HvuL7QMIwjQEFWGS/i5R95eVIBW5qaTf/CwwCrW7N1/a+FegVYsrSzVTRyk
-	cTiZV0E+qUklHlj3gIVCHvVCtASmWOyPYcLyZNQXsenJrD2hRWH4tZonN8sTBEgsHlqCZOAAwcI
-	R7JZQhnATsJltx+zo7WYAAJRO62D7Ljs/fOAxELM97W4ISOHzTB8HfZtO9GzkW3+ke3jZu0yolL
-	y/hl4sHjqAFtJW/hhlWYkXNbJ9Pjg4eEDwsSk3y+BgdV8F3zekcdLea10+EK24Qo/CTfKnl/Xzd
-	wyfNo0YJtNt9Y1OoTKtGpGJKwvMgmvD5F6snX5LYZr3gQAjHTT2jYsKsuekg3nN0J4V7PZe9C5d
-	/tp5kO7oPbTZENw8ieF8KSZZSm+8XycZe6lEkUBvR4J4l+OVXkjN9PK3BYYdR5gYooIfVm3qKE/
-	BVpt+/zouMOvTMc0Mpe74KtalYeNQD1KuOqtw==
-X-Received: by 2002:a17:903:1a4e:b0:2d8:d4d2:d13a with SMTP id d9443c01a7336-2dd9ca3f373mr62050225ad.22.1789676801756;
-        Thu, 17 Sep 2026 13:26:41 -0700 (PDT)
-Received: from localhost ([13.93.150.60])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33bf5a93f1fsm17829614eec.11.2026.09.17.13.26.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Sep 2026 13:26:41 -0700 (PDT)
+        bh=uJv/QmRLFs30Ez/o33oaP/4NGGWedRYL/v2RmSEliLQ=;
+        b=X0kgWExTMAL5VwkkdIiTiedTZO7gy4pfj9SuYrCPe9tF26rvViS9jtPzBHAEve3TZK
+         pR0EMO93hhGbczTI4KbweXmLR3VFr93SBevjVTIixEvZzeY/d3IFYyM769BcF5Ek8s+c
+         L69oHw4m71u22ESza3zbOIcVTTzMSdNfofx0b/Q8c3+MSLWx+pfVKWeLNhzD94MOa95w
+         Zj1gJ1Pk/6qCQWPlApz3C15Iq3/n7Ifu32DEwzXtv2HLRsbcWCqwZd/lZdk9qURwEiM+
+         ZXo4W/c7rPQjSurj63jH7VfSi8pfrMn6O7hAAPTu5XjodfvfzsOXL4ycx9sKdOPxqGCY
+         nHlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789676910; x=1790281710;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=uJv/QmRLFs30Ez/o33oaP/4NGGWedRYL/v2RmSEliLQ=;
+        b=t5o3BF86QlKSrqoycpzQOJg9nyToxXmOEVYU1UKKtftOk+bj6Rhm8DxumtcNun95w/
+         paf6hjMNLQvOhIFPEKyEcnmlrxofZ5ErjfuyEhwTDMoX9e+N/B2GgT/evbGkGsLD14Co
+         h7/k8IgkaVWDHnVG13402KgWCZVa1XHMZIUw6vtuv7AE/NSYGTAg6EHTFf7RqJCiNXkn
+         H1UZAxseiM7u/AcMtZR63gsYvuU8ITZlSmoKl1wkfhUcF1vq18ECJ0nLfD0UJdCci/VW
+         99Dq07+bQ3EKB2rdgG/tfUsFjYrK9L2wNNf9SGollMOHw73uSz9Ja2hExTzB0mFf0PKX
+         yKQQ==
+X-Forwarded-Encrypted: i=1; AKwUvBw0cwmrhEiWGVtctJx/NSWpxx7OAjCql1KcvB3jdb3tn/HQaBMZ7cr99IMm14IfE+mprdq8Fpz/K4Sdl43BZ40=@vger.kernel.org
+X-Gm-Message-State: AFuF++lW8EOMiwC0Hefav/7TDMY5f76QdSbLPZc/8H1rxW07/QZGtKGs
+	5vzf27z+ljM8/tFWqD6rEQNltMdIR/ZT3keN3gn5U/9MhpebBfjvN9kI7RAbFRglEDNdXYYD6xg
+	a75ozhA==
+X-Received: from plcm18.prod.google.com ([2002:a17:902:f212:b0:2dd:31d9:e5c6])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3e0c:b0:2da:e634:370e
+ with SMTP id d9443c01a7336-2ddb1b79029mr4700125ad.14.1789676909742; Thu, 17
+ Sep 2026 13:28:29 -0700 (PDT)
+Date: Thu, 17 Sep 2026 13:28:29 -0700
+In-Reply-To: <20260917181028.288194-1-gokul02k@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 17 Sep 2026 20:26:39 +0000
-Message-Id: <DLHVH7E0GSI7.EEUHJ5ZOUYIM@gmail.com>
-Cc: <dsahern@kernel.org>, <idosch@nvidia.com>, <davem@davemloft.net>,
- <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
- <horms@kernel.org>, <rdunlap@infradead.org>, <netdev@vger.kernel.org>,
- <aajith@arista.com>, <roopa@nvidia.com>, <jhpark1013@gmail.com>,
- <corbet@lwn.net>, <skhan@linuxfoundation.org>, <shuah@kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <alex.aring@gmail.com>,
- <linux-wpan@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 1/2] ipv6: update NUD_FAILED neighbors from
- NA messages
-From: "Lawrence Lee" <lfqlee314@gmail.com>
-To: <netdev-bot+sashiko@kernel.org>
-X-Mailer: aerc 0.17.0
-References: <6596966f734f3d416bfa83722f7a595149bcc3f8.1789448374.git.lfqlee314@gmail.com> <178966456087.22033.11671220306303617581@kernel.org>
-In-Reply-To: <178966456087.22033.11671220306303617581@kernel.org>
+References: <20260917181028.288194-1-gokul02k@gmail.com>
+Message-ID: <aqxNbR9u5F1sqB3p@google.com>
+Subject: Re: [PATCH] KVM: selftests: Drop the unsigned >= 0 assertions in test_write/test_read
+From: Sean Christopherson <seanjc@google.com>
+To: Gokul K <gokul02k@gmail.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Thu Sep 17, 2026 at 5:02 PM UTC,  wrote:
+On Thu, Sep 17, 2026, Gokul K wrote:
+> test_write() and test_read() both open with
+> 
+> 	TEST_ASSERT(count >= 0, "Unexpected count, count: %li", count);
+> 
+> but @count is a size_t, so the condition is always true and the assertion
+> can never fire. Building the selftests with -Wextra says so:
+> 
+>   lib/io.c:51:27: warning: comparison of unsigned expression in '>= 0'
+>                   is always true [-Wtype-limits]
+>   lib/io.c:128:27: warning: comparison of unsigned expression in '>= 0'
+>                   is always true [-Wtype-limits]
+> 
+> @count has been a size_t since these helpers were added in commit
+> 6089ae0bd5e1 ("kvm: selftests: add sync_regs_test"), so this has never
+> guarded anything; nothing regressed and there is no behavioural change.
+> 
+> Note also that the message the assertion would have printed is wrong: %li
+> takes a long, not a size_t. That has gone unnoticed precisely because the
+> assertion is unreachable, which is a fair summary of the value it adds.
+> 
+> Delete both. The comment above each one is about a count of zero being
+> legitimate, which remains true and is worth keeping.
 
-> > diff --git a/net/ipv6/ndisc.c b/net/ipv6/ndisc.c
-> > index 90cd5d8525698..84d70c09205a2 100644
-> > --- a/net/ipv6/ndisc.c
-> > +++ b/net/ipv6/ndisc.c
->
-> [ ... ]
->
-> > @@ -972,14 +982,18 @@ static enum skb_drop_reason ndisc_recv_ns(struct =
-sk_buff *skb)
-> > =20
-> >  static int accept_untracked_na(struct inet6_dev *idev, struct in6_addr=
- *saddr)
-> >  {
-> > +    /* For any given neighbor IP address, consider it an untracked nei=
-ghbor if
-> > +     * it is absent from the neighbor cache or if it has a NUD_FAILED =
-entry in
-> > +     * the neighbor cache
-> > +     */
->         ^^^^
->
-> [Severity: Low]
-> This isn't a bug, but this comment block in accept_untracked_na() is
-> indented with spaces while the switch statement right below it uses tabs,
-> so checkpatch reports "ERROR: code indent should use tabs where possible"=
-.
->
-> The comment also describes what the caller considers "untracked", based o=
-n
-> the neighbour cache, but accept_untracked_na() only reads the sysctl valu=
-e
-> and never sees the neighbour entry. Would it fit better next to
->
-> 	neigh_untracked =3D !neigh || neigh_failed;
->
-> in ndisc_recv_na(), where the RFC 9131 decision table already documents t=
-he
-> same concept?
-This comment will be removed as per maintainer feedback.
+I disagree.  This code is all rather non-sensical.  Keeping the comment with code
+that doesn't handle it correct can't work.  Because per the manpage:
 
+  a read() with a count of 0 returns zero and has no other effects.
 
-> [Severity: Low]
-> Is the new FAILED handling covered by an in-tree test at this point in th=
-e
-> series? As of this commit, ndisc_unsolicited_na_test.sh and
-> arp_ndisc_untracked_subnets.sh only seed absent entries, so the whole
-> FAILED to STALE half of the knob, including the mode 2 same-subnet
-> qualification, would still pass if it were broken.
->
-> For the record, this looks resolved later in the same series: the follow-=
-up
-> patch "selftests: net: test untracked NA recovery of FAILED neighbors"
-> (7be3b5fcfd3f9adb7489aff8013c6d4beacbf20c) seeds entries with
->
-> 	ip neigh replace ... nud failed extern_learn
->
-> and adds the failed combinations covering every row of the new table,
-> including the in-prefix and out-of-prefix mode 2 cases. Mentioning it her=
-e
-> only for completeness.
->
-The tests are added in the next patch of this series
+which means passing in a size of 0 will hit the "case 0" and fail:
 
-> [Severity: Medium]
-> Why does the gateway address handed to rt6_clean_tohost() now depend on t=
-he
-> previous NUD state of the entry? Before this patch the same "router to
-> host" event always flushed routes keyed by saddr.
->
-> fib6_clean_tohost() in net/ipv6/route.c matches the argument against the
-> gateway of RA-installed routes and against cached exceptions:
->
-> 	if (((rt->fib6_flags & RTF_RA_ROUTER) =3D=3D RTF_RA_ROUTER) &&
-> 	    nh->fib_nh_gw_family && ipv6_addr_equal(gateway, &nh->fib_nh_gw6))
-> 		return -1;
->
-> so it expects the address of the node that stopped being a router, which =
-is
-> unrelated to whether the cache entry happened to be in NUD_FAILED.
->
-> When saddr differs from msg->target, and that is allowed since RFC 4861 4=
-.4
-> only requires the NA source to be an address of the sending interface (a
-> router advertising a global target from its link-local source, or the pro=
-xy
-> NA case handled a few lines above via pneigh_lookup()), the FAILED recove=
-ry
-> path flushes routes keyed by msg->target while every other path flushes
-> routes keyed by saddr. Can both be right for the identical event?
->
-> If saddr was the wrong key all along, would it make sense to fix that
-> separately for all cases, with a Fixes: tag, rather than changing it only
-> for the FAILED path? The changelog describes only the FAILED to STALE
-> transition and does not mention this change of key.
-This change will be removed in the next version of the series as=20
-discussed in another thread:=20
-https://lore.kernel.org/all/DLHV5GF21AY4.3GAK241ZI2UR8@gmail.com/
+		rc = read(fd, ptr, num_left);
+
+		switch (rc) {
+		case -1:
+			TEST_ASSERT(errno == EAGAIN || errno == EINTR,
+				    "Unexpected read failure,\n"
+				    "  rc: %zi errno: %i", rc, errno);
+			break;
+
+		case 0:
+			TEST_FAIL("Unexpected EOF,\n"  <==========================
+				  "   rc: %zi num_read: %zi num_left: %zu",
+				  rc, num_read, num_left);
+			break;
+
+		default:
+			TEST_ASSERT(rc > 0, "Unexpected ret from read,\n"
+				    "  rc: %zi errno: %i", rc, errno);
+			num_read += rc;
+			num_left -= rc;
+			ptr += rc;
+			break;
+
+The only user of test_read() is tools/testing/selftests/kvm/lib/elf.c, and all
+users guarantee a non-zero count.  test_write() is dead code, and test_seq_read()
+has a defunct declaration.
+
+The names are also confusing, because it's easy to read it as "test the read()
+sycall", not "do read() for this test".
+
+So, I think we should move test_read() into elf.c, drop the absurdly verbose and
+unhelpful commentry, then kill off io.c, test_write() and the stale test_seq_read().
+
+diff --git tools/testing/selftests/kvm/Makefile.kvm tools/testing/selftests/kvm/Makefile.kvm
+index 6a1482e3a286..610b4d959673 100644
+--- tools/testing/selftests/kvm/Makefile.kvm
++++ tools/testing/selftests/kvm/Makefile.kvm
+@@ -6,7 +6,6 @@ all:
+ LIBKVM += lib/assert.c
+ LIBKVM += lib/elf.c
+ LIBKVM += lib/guest_modes.c
+-LIBKVM += lib/io.c
+ LIBKVM += lib/kvm_util.c
+ LIBKVM += lib/lru_gen_util.c
+ LIBKVM += lib/memstress.c
+diff --git tools/testing/selftests/kvm/include/test_util.h tools/testing/selftests/kvm/include/test_util.h
+index a6a3e1657895..e558346c3b69 100644
+--- tools/testing/selftests/kvm/include/test_util.h
++++ tools/testing/selftests/kvm/include/test_util.h
+@@ -49,10 +49,6 @@ do {								\
+ 
+ #define TEST_REQUIRE(f) __TEST_REQUIRE(f, "Requirement not met: %s", #f)
+ 
+-ssize_t test_write(int fd, const void *buf, size_t count);
+-ssize_t test_read(int fd, void *buf, size_t count);
+-int test_seq_read(const char *path, char **bufp, size_t *sizep);
+-
+ void __printf(5, 6) test_assert(bool exp, const char *exp_str,
+ 				const char *file, unsigned int line,
+ 				const char *fmt, ...);
+diff --git tools/testing/selftests/kvm/lib/elf.c tools/testing/selftests/kvm/lib/elf.c
+index 1924a9895834..d996e289f4af 100644
+--- tools/testing/selftests/kvm/lib/elf.c
++++ tools/testing/selftests/kvm/lib/elf.c
+@@ -12,6 +12,44 @@
+ 
+ #include "kvm_util.h"
+ 
++static ssize_t elf_read(int fd, void *buf, size_t count)
++{
++	ssize_t rc;
++	ssize_t num_read = 0;
++	size_t num_left = count;
++	char *ptr = buf;
++
++	TEST_ASSERT(count, "Count must be non-zero");
++
++	do {
++		rc = read(fd, ptr, num_left);
++
++		switch (rc) {
++		case -1:
++			TEST_ASSERT(errno == EAGAIN || errno == EINTR,
++				    "Unexpected read failure,\n"
++				    "  rc: %zi errno: %i", rc, errno);
++			break;
++
++		case 0:
++			TEST_FAIL("Unexpected EOF,\n"
++				  "   rc: %zi num_read: %zi num_left: %zu",
++				  rc, num_read, num_left);
++			break;
++
++		default:
++			TEST_ASSERT(rc > 0, "Unexpected ret from read,\n"
++				    "  rc: %zi errno: %i", rc, errno);
++			num_read += rc;
++			num_left -= rc;
++			ptr += rc;
++			break;
++		}
++	} while (num_read < count);
++
++	return num_read;
++}
++
+ static void elfhdr_get(const char *filename, Elf64_Ehdr *hdrp)
+ {
+ 	off_t offset_rv;
+@@ -31,7 +69,7 @@ static void elfhdr_get(const char *filename, Elf64_Ehdr *hdrp)
+ 	 * the real size of the ELF header.
+ 	 */
+ 	unsigned char ident[EI_NIDENT];
+-	test_read(fd, ident, sizeof(ident));
++	elf_read(fd, ident, sizeof(ident));
+ 	TEST_ASSERT((ident[EI_MAG0] == ELFMAG0) && (ident[EI_MAG1] == ELFMAG1)
+ 		&& (ident[EI_MAG2] == ELFMAG2) && (ident[EI_MAG3] == ELFMAG3),
+ 		"ELF MAGIC Mismatch,\n"
+@@ -79,7 +117,7 @@ static void elfhdr_get(const char *filename, Elf64_Ehdr *hdrp)
+ 	offset_rv = lseek(fd, 0, SEEK_SET);
+ 	TEST_ASSERT(offset_rv == 0, "Seek to ELF header failed,\n"
+ 		"  rv: %zi expected: %i", offset_rv, 0);
+-	test_read(fd, hdrp, sizeof(*hdrp));
++	elf_read(fd, hdrp, sizeof(*hdrp));
+ 	TEST_ASSERT(hdrp->e_phentsize == sizeof(Elf64_Phdr),
+ 		"Unexpected physical header size,\n"
+ 		"  hdrp->e_phentsize: %x\n"
+@@ -146,7 +184,7 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
+ 
+ 		/* Read in the program header. */
+ 		Elf64_Phdr phdr;
+-		test_read(fd, &phdr, sizeof(phdr));
++		elf_read(fd, &phdr, sizeof(phdr));
+ 
+ 		/* Skip if this header doesn't describe a loadable segment. */
+ 		if (phdr.p_type != PT_LOAD)
+@@ -186,7 +224,7 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
+ 				"  expected: 0x%jx",
+ 				n1, errno, (intmax_t) offset_rv,
+ 				(intmax_t) phdr.p_offset);
+-			test_read(fd, addr_gva2hva(vm, phdr.p_vaddr),
++			elf_read(fd, addr_gva2hva(vm, phdr.p_vaddr),
+ 				phdr.p_filesz);
+ 		}
+ 	}
+diff --git tools/testing/selftests/kvm/lib/io.c tools/testing/selftests/kvm/lib/io.c
+deleted file mode 100644
+index fedb2a741f0b..000000000000
+--- tools/testing/selftests/kvm/lib/io.c
++++ /dev/null
+@@ -1,157 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * tools/testing/selftests/kvm/lib/io.c
+- *
+- * Copyright (C) 2018, Google LLC.
+- */
+-
+-#include "test_util.h"
+-
+-/* Test Write
+- *
+- * A wrapper for write(2), that automatically handles the following
+- * special conditions:
+- *
+- *   + Interrupted system call (EINTR)
+- *   + Write of less than requested amount
+- *   + Non-block return (EAGAIN)
+- *
+- * For each of the above, an additional write is performed to automatically
+- * continue writing the requested data.
+- * There are also many cases where write(2) can return an unexpected
+- * error (e.g. EIO).  Such errors cause a TEST_ASSERT failure.
+- *
+- * Note, for function signature compatibility with write(2), this function
+- * returns the number of bytes written, but that value will always be equal
+- * to the number of requested bytes.  All other conditions in this and
+- * future enhancements to this function either automatically issue another
+- * write(2) or cause a TEST_ASSERT failure.
+- *
+- * Args:
+- *  fd    - Opened file descriptor to file to be written.
+- *  count - Number of bytes to write.
+- *
+- * Output:
+- *  buf   - Starting address of data to be written.
+- *
+- * Return:
+- *  On success, number of bytes written.
+- *  On failure, a TEST_ASSERT failure is caused.
+- */
+-ssize_t test_write(int fd, const void *buf, size_t count)
+-{
+-	ssize_t rc;
+-	ssize_t num_written = 0;
+-	size_t num_left = count;
+-	const char *ptr = buf;
+-
+-	/* Note: Count of zero is allowed (see "RETURN VALUE" portion of
+-	 * write(2) manpage for details.
+-	 */
+-	TEST_ASSERT(count >= 0, "Unexpected count, count: %li", count);
+-
+-	do {
+-		rc = write(fd, ptr, num_left);
+-
+-		switch (rc) {
+-		case -1:
+-			TEST_ASSERT(errno == EAGAIN || errno == EINTR,
+-				    "Unexpected write failure,\n"
+-				    "  rc: %zi errno: %i", rc, errno);
+-			continue;
+-
+-		case 0:
+-			TEST_FAIL("Unexpected EOF,\n"
+-				  "  rc: %zi num_written: %zi num_left: %zu",
+-				  rc, num_written, num_left);
+-			break;
+-
+-		default:
+-			TEST_ASSERT(rc >= 0, "Unexpected ret from write,\n"
+-				"  rc: %zi errno: %i", rc, errno);
+-			num_written += rc;
+-			num_left -= rc;
+-			ptr += rc;
+-			break;
+-		}
+-	} while (num_written < count);
+-
+-	return num_written;
+-}
+-
+-/* Test Read
+- *
+- * A wrapper for read(2), that automatically handles the following
+- * special conditions:
+- *
+- *   + Interrupted system call (EINTR)
+- *   + Read of less than requested amount
+- *   + Non-block return (EAGAIN)
+- *
+- * For each of the above, an additional read is performed to automatically
+- * continue reading the requested data.
+- * There are also many cases where read(2) can return an unexpected
+- * error (e.g. EIO).  Such errors cause a TEST_ASSERT failure.  Note,
+- * it is expected that the file opened by fd at the current file position
+- * contains at least the number of requested bytes to be read.  A TEST_ASSERT
+- * failure is produced if an End-Of-File condition occurs, before all the
+- * data is read.  It is the callers responsibility to assure that sufficient
+- * data exists.
+- *
+- * Note, for function signature compatibility with read(2), this function
+- * returns the number of bytes read, but that value will always be equal
+- * to the number of requested bytes.  All other conditions in this and
+- * future enhancements to this function either automatically issue another
+- * read(2) or cause a TEST_ASSERT failure.
+- *
+- * Args:
+- *  fd    - Opened file descriptor to file to be read.
+- *  count - Number of bytes to read.
+- *
+- * Output:
+- *  buf   - Starting address of where to write the bytes read.
+- *
+- * Return:
+- *  On success, number of bytes read.
+- *  On failure, a TEST_ASSERT failure is caused.
+- */
+-ssize_t test_read(int fd, void *buf, size_t count)
+-{
+-	ssize_t rc;
+-	ssize_t num_read = 0;
+-	size_t num_left = count;
+-	char *ptr = buf;
+-
+-	/* Note: Count of zero is allowed (see "If count is zero" portion of
+-	 * read(2) manpage for details.
+-	 */
+-	TEST_ASSERT(count >= 0, "Unexpected count, count: %li", count);
+-
+-	do {
+-		rc = read(fd, ptr, num_left);
+-
+-		switch (rc) {
+-		case -1:
+-			TEST_ASSERT(errno == EAGAIN || errno == EINTR,
+-				    "Unexpected read failure,\n"
+-				    "  rc: %zi errno: %i", rc, errno);
+-			break;
+-
+-		case 0:
+-			TEST_FAIL("Unexpected EOF,\n"
+-				  "   rc: %zi num_read: %zi num_left: %zu",
+-				  rc, num_read, num_left);
+-			break;
+-
+-		default:
+-			TEST_ASSERT(rc > 0, "Unexpected ret from read,\n"
+-				    "  rc: %zi errno: %i", rc, errno);
+-			num_read += rc;
+-			num_left -= rc;
+-			ptr += rc;
+-			break;
+-		}
+-	} while (num_read < count);
+-
+-	return num_read;
+-}
+
