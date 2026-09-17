@@ -1,257 +1,205 @@
-Received: from mta0.migadu.com (out-187.mta0.migadu.com [91.218.175.187])
+Received: from mail-qk2-f13.google.com (mail-qk2-f13.google.com [74.125.230.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B15217704
-	for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 00:08:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A316E214A9B
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 00:11:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789603709; cv=none; b=aAZ8FWGVqsJWw9xWvbYGK1KIa1zXbqamaRN2hHWm8MoEj4ogCF03FAMeWGJO2KpdOOCdnBKEE9NdHY0P+rmVbDnufYUt9hqnxtSHbK4vVJ7QKJUBpseybqioP8+eJOS/B7RlOodNiBStbpH06o6xKlRuTk/mkk5ljCrrIC4eETI=
+	t=1789603890; cv=none; b=nNPgDUloRLLyISg7lBRgAuOrW1XJd1OhS3szvLxtSL88fIYOL82FAIrNJDzwmSmdhIqmXpaRWfwvd9qNRPaXHyEzZ0k1T2XvO1fzUxNwtZYZOi9iMPUeTu6EAyxFfcqMH1/Wg8miTplLANEmENq/6gf+NV+IqNVq2S0ioW84Leo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789603709; c=relaxed/simple;
-	bh=stXunbVkIdx4k59uImIa4pDdXbqX+msrN9yjZYDiyb0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J8tVm/x9ahmYZGFC8zDeOGpoZYNWsselszRsoUzD602Fcgy0NEC4QtzeZo9ZuTd6B7mDDNbwAYwxIZmhiUCSxtcghJxN2bKRA5+D/jZimIDVevKTn2ss3mtqeFS8NjKFXDDgRs25JIKxo6QuRcG9/NF+3Sgnb8F4KIerF/L/5Z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=N+I3Reme; arc=none smtp.client-ip=91.218.175.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789603890; c=relaxed/simple;
+	bh=ckLfNY5m7sw42q1GlHV4ctBFyqc0HiyBfdvgQ/3RKy4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=kpIP4I0tlL+NhAzgc1GyqlGlpu8MsW4n/LGKS4y21qrEVG7LkyEcTFLVp8/7kk09lPQ1EAJHyivisC5uRXnJnGT/IPUF/J2d34n7+adpf8tu2iULjwDSGKrG8C3JpUZfo/EGiF1whBWJ07vM5PSAa4eio9rlbERmWXorCzU+m4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dYIlCm+g; arc=none smtp.client-ip=74.125.230.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="N+I3Reme"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=stXunbVkIdx4k59uImIa4pDdXbqX+msrN9yjZYDiyb0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789603704; v=1; x=1790208504;
- b=N+I3Reme10cccECT0mBJre6ky0ZzzL1KUu0OENGJyYFiLPDb5EcHML/GJu6Odmbhmdus2lLq
- qm7qh4Cgmgj9Kip/7lgKDi8NKtPzfeN2MWKM/N/nEyOznOGXUCBrYE1er17fKsvCaBFVR7gdvlA
- XqQY5O0Iw6mjNKDTey7xto6A=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 35f6557e0c1272c7;
-	Thu, 17 Sep 2026 00:08:24 +0000
-X-Mizu-Trace-ID: 35f6557e0c1272c7
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <202c45e2-58ba-4ad5-a234-c90703031f91@linux.dev>
-Date: Wed, 16 Sep 2026 17:08:16 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dYIlCm+g"
+Received: by mail-qk2-f13.google.com with SMTP id af79cd13be357-93a135ffb08so29206785a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 17:11:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789603887; x=1790208687; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Kxh7qp6INDtgYuziuWlOBCsKbnHlhHZqtJui1JeMELI=;
+        b=dYIlCm+gUgCP/q0SLLM4KC/RBdn1c5VrpBkO7l+OnCJQgZzjVKbNz8hqCm6FyS9qIv
+         nAtxfpikhHTdgaAdSHvbpTmVNmwHLpnqmW9qBK96bWS1TPKyWgjVGRgt7vrl+sjh1Z47
+         UUvx1i3jgvDlSBApn0FZeOqGCJqvLTHujCbicDy0tn/rwklpKuYamyU0iaeFu883BHkq
+         e/N054p86VQWPMtXD+2PblBLI5Xhq8wo8Ww0r1C4xP4B7swCTkhy+fuXDclKqVutqzTV
+         l3QAKB2PiupnA+aiTih4fh418DE0qE8nP+PDeT/YYfJe3+1+YaAfyqrUeI3Mrq5jLUwr
+         Lgug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789603887; x=1790208687;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Kxh7qp6INDtgYuziuWlOBCsKbnHlhHZqtJui1JeMELI=;
+        b=DqNipmGycHJQJ2+B6FWg0jUcuzY2JB8F5WOadHYqaB45wMJlc1/cGbEOkvScSoii6h
+         6wQm8aQInK5Irzq6BG00qGsiEPnsFk5vFE9i1YF33hXk+pX74W2fnYQ/QS53S9GV/dwk
+         fBU7tOReWbY6xv32YmlzPlz6bnKfftWAs8VzLEoX3HvLnATXkt6rLctXgbSX9r52iRqN
+         yOwZGtFLa11xtEahdM2HHMgH10wK4sgwp4LLm9M4ZsR6SDLkxjZTnDfUVBnj0JrccPs3
+         NOB6G767RiUDPHwJTD9dvKz9W8vh+zD66Mh9rpYi+JyzAjN6g7DK7nt6ld0W3YWxt8SI
+         m/kw==
+X-Forwarded-Encrypted: i=1; AKwUvBzvMBvVot2vs7NxiGL3DrBicvDcYxP6uS5fLllEqe6qpQMlJwRWAnUrpcc+JIaAbpCKyK4yp0pyN/XMUMVaS4A=@vger.kernel.org
+X-Gm-Message-State: AFuF++m3acAjywWTaHGI/mo2mqQJ2xRV7bOz68NuNTNs0dNK0M/3Llus
+	tmrQDEE3GuCkU3ZBe4UtqONEm3vDeyWyrMdGB/oxUN749h/vk9PLo5JG
+X-Gm-Gg: AYBFou0uPFxR2CgiKKUORPY6rpRYj+zTxd4TAwf2HaTrq28AabbVh4YJBQHfBjD1/n7
+	xdskjmwf5gVynIYx3R67eXyP/rqVphKPJfSpZIic1kAkLE/DXZXEk+xILbrvbQB8Pcj3c8NdW9r
+	SpRrqmxTOljv8K+F5XAPjf2CfLDg0ADpiR0gUIe7ft3/RJttTz1p6sNTJLCqKtrFQCYNWCq6XV6
+	POBjs/0x++lfi8wli2aN0UKT+YQ/j862QeqeDmS/IhZIGt/Q5m/Dl27fP7iZsyxDZRQQpKEZ1fQ
+	UkpcS+zM9xPF/OHISkPz19tO7p8TLOo2TyVVvIPfMhAGSNhni+HUiTHfIxgXeV0vxadJdLa6rCf
+	WfP8fYdKXnEHgHUuGa1cQ1wnoB15j99lEReqR1R1aEOin1fhlH/1S2NutLEqdaCQLJ5kEAQLwX7
+	ZNTVj09DjplOQjfsMN88Y0+wyrhE5CAxHQn5MDozp/F+kPnEGWMjakVXcQOuRomu1biGiHQUAvb
+	Qajj/1mRBfAHcU=
+X-Received: by 2002:a05:620a:294a:b0:937:27fb:96f8 with SMTP id af79cd13be357-93bb7900601mr761224785a.41.1789603887335;
+        Wed, 16 Sep 2026 17:11:27 -0700 (PDT)
+Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93b7824d7b1sm338655085a.27.2026.09.16.17.11.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Sep 2026 17:11:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
- across zero-extending movs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>,
- bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20260910164635.459558-1-vineet.gupta@linux.dev>
- <20260910164635.459558-4-vineet.gupta@linux.dev>
- <DLDKI0ZXYI7H.1XQZZE2RCU7IF@gmail.com>
- <4ab75099-0e95-4fee-81da-6f4198e3e6a0@linux.dev>
- <CAADnVQ+N9tzBJ0Bbvp8_8QvR+QcCP4ej5CgV_kRHt=iw4BANSQ@mail.gmail.com>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <CAADnVQ+N9tzBJ0Bbvp8_8QvR+QcCP4ej5CgV_kRHt=iw4BANSQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 16 Sep 2026 20:11:25 -0400
+Message-Id: <DLH5MRIK84UU.1ZS2B8TGS8TKO@gmail.com>
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+To: <netdev-bot+sashiko@kernel.org>, <daniel.zahka@gmail.com>
+Cc: <edumazet@google.com>, <ncardwell@google.com>, <kuniyu@google.com>,
+ <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+ <horms@kernel.org>, <willemdebruijn.kernel@gmail.com>,
+ <andrew+netdev@lunn.ch>, <shuah@kernel.org>, <willemb@google.com>,
+ <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net v2 2/2] selftests: drv-net: psp: test PSP and TCP
+ ULP mutual exclusion
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20260915-psp-ktls-fix-v2-2-0eedc3b148ec@gmail.com>
+ <178960039600.22033.386517201454373799@kernel.org>
+In-Reply-To: <178960039600.22033.386517201454373799@kernel.org>
 
-On 9/15/26 9:23 PM, Alexei Starovoitov wrote:
-> On Tue, Sep 15, 2026 at 1:31 PM Vineet Gupta <vineet.gupta@linux.dev> wrote:
->> On 9/12/26 11:59 AM, Alexei Starovoitov wrote:
->>> On Thu Sep 10, 2026 at 9:46 AM PDT, Vineet Gupta wrote:
->>>> Linked-scalar equality is full-64-bit only. A 32-bit mov from a source
->>>> with unknown high bits therefore has to drop the relationship, and a later
->>>> narrowing of the source never reaches the destination:
->>>>
->>>>     r6 = ...              /* full 64-bit unknown */
->>>>     w7 = w6               /* 32-bit zero-extending mov */
->>>>     if w6 != 0 goto ...   /* not taken: r6's low 32 bits are 0 */
->>>>     if w7 == 0 goto ...   /* not deduced today */
->>>>
->>>> Record a low-32-only link instead: dst shares src's low 32 bits and its
->>>> high half is zero. On a later narrowing, sync_linked_regs() rebuilds such
->>>> a register from the base rather than copying it, by re-applying the same
->>>> zext_32_to_64() the mov used. The reverse direction is skipped: a ->subreg
->>>> base knows nothing about a full register's high half.
->>> at the first glance SUBREG_ZEXT is exactly the same as ADD_CONST32 delta == 0.
->>> no?
->>> Both are unidirectional:
->>> w6->id == 1
->>> w7->id == 1, add_const == 32, delta == 0
->>>
->>> will zero extend w7.
->>>
->>> This new SUBREG_ZEXT will do the same.
->>> What am I missing?
->> The 2 examples below both imply ADD_CONST32 + delta=0, with different
->> semantics and need special casing.
->>
->> w3 = w2; w3 += 0
->> w7 = w6; (r6 was wide)
->>
->> With code hacks it could in fact me made to work, but its less cleaner.
->>
->>
->> Current approach we have something like below in sync_linked_regs()
->>
->>                 /*
->>                  * A ->subreg register shares only the base's low 32
->> bits, so it
->>                  * is rebuilt rather than copied. Not modelled together
->> with a
->>                  * delta, so skip if either side has one (sound, less
->> precise).
->>                  */
->>                 if (reg->subreg) {
->>                         if (reg->add_const || known_reg->add_const)
->>                                 continue;
->>                         if (reg->subreg == SUBREG_ZEXT)
->>                                 reconstruct_zext32(reg, known_reg);
->>                         else
->>                                 reconstruct_sext32(reg, known_reg);
->>                         if (e->is_reg)
->>                                 mark_reg_scratched(env, e->regno);
->>                         else
->>                                 mark_stack_slot_scratched(env, e->spi);
->>                         continue;
->>                 }
->>                 /*
->>                  * The reverse: known_reg knows only its low 32 bits,
->> which say
->>                  * nothing about reg's high half.
->>                  */
->>                 if (known_reg->subreg)
->>                         continue;
->>
->>
->> With the suggested approach it looks something like below.
->> ADD_CONST_32, delta == 0 has to be disambiguated from a real += 0 by
->> inspecting another register's bounds.
->>
->>                 /*
->>                  * A low-32 link shares only the base's low 32 bits, so it is
->>                  * rebuilt rather than copied.
->>                  *
->>                  * SIGN_EXTEND_32 says so outright. ADD_CONST_32 with
->> delta == 0
->>                  * does not: it is also what "w3 = w2; w3 += 0" records,
->> which is
->>                  * a plain equality. The two are separable only by the base's
->>                  * width
->>                  */
->>                 if (reg->add_const == SIGN_EXTEND_32 &&
->> !known_reg->add_const) {
->>                         reconstruct_sext32(reg, known_reg);
->>                         goto scratched;
->>                 }
->>                 if (reg->add_const == ADD_CONST_32 && reg->delta == 0 &&
->>                     !known_reg->add_const) {
->>                         reconstruct_zext32(reg, known_reg);
->>                         goto ...;
->>                 }
-> I think that's a problem with reconstruct_zext32().
-> It shouldn't be necessary.
-> The existing code that adds a constant should
-> already handle it.
-> If not, we have a bug in add_const_32.
+On Wed Sep 16, 2026 at 7:13 PM EDT, netdev-bot+sashiko wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider:
+>
+> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 1 =C2=B7 Low: 0
+>
+> - [Medium] In tools/testing/selftests/drivers/net/psp.py, the new helper
+>   `_require_tls_ulp()` (lines 338-344) wraps=E2=80=A6
+>
+> --
+>
+> selftests: drv-net: psp: test PSP and TCP ULP mutual exclusion
+>
+> This adds two psp.py cases that check PSP associations and TCP ULPs are
+> mutually exclusive in both orders, plus a _require_tls_ulp() helper that
+> skips when kTLS is unavailable, and enables CONFIG_TLS=3Dy in the
+> drivers/net selftest config.
+>
+>> diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/=
+selftests/drivers/net/psp.py
+>> index 315648a770d00..a5b1e14f120f0 100755
+>> --- a/tools/testing/selftests/drivers/net/psp.py
+>> +++ b/tools/testing/selftests/drivers/net/psp.py
+>
+> [ ... ]
+>
+>> @@ -333,6 +335,50 @@ def assoc_version_mismatch(cfg):
+>>              ksft_eq(the_exception.nl_msg.error, -errno.EINVAL)
+>> =20
+>> =20
+>> +def _require_tls_ulp():
+>> +    with socket.create_server(("localhost", 0)) as srv, \
+>> +         socket.create_connection(srv.getsockname()) as s:
+>> +        try:
+>> +            s.setsockopt(socket.SOL_TCP, TCP_ULP, b"tls")
+>> +        except OSError as exc:
+>> +            raise KsftSkipEx("kTLS not available") from exc
+>
+> [Severity: Medium]
+>
 
-Not really a bug, but a deliberate design choice in the past.
+I understand the point, but I'm not sure this really worth the change. I
+considered checking for specific error codes here, but decided against
+it because maybe that would be end up being brittle if someone in the
+future changed or added error codes. Aside from ENOENT when the feature
+is not available, I think the only other error this could throw is
+ENOMEM.
 
-if (alu32 && (dst_umax > U32_MAX))
-       goto clear_id;
+> Should this handler be narrowed to the errnos that actually mean "no
+> kTLS"?  As written, every OSError from the TCP_ULP setsockopt turns into
+> a skip, including -EINVAL, which is exactly the errno the kernel side of
+> this series returns:
+>
+> net/ipv4/tcp_ulp.c:__tcp_set_ulp() {
+> 	...
+> 	err =3D -EINVAL;
+> 	if (sk_has_decrypt_user(sk))
+> 		goto out_err;
+> 	...
+> }
+>
+> The probe socket here is a plain loopback TCP connection with no PSP
+> association, so the only legitimate reasons to skip are the "ULP unknown
+> / TLS not built" errnos, ENOENT from __tcp_ulp_find_autoload() and
+> EOPNOTSUPP.
+>
+> If sk_has_decrypt_user() ever returns true for an ordinary TCP socket -
 
-So the core change is ADD_CONST_32 needs to be allowed on wider regs.
-So treating it as
-     reg = (u32)(base + delta)
+The code in question can't take this branch as it is now, and if it did,
+a skip seems arguably more appropriate to me, because otherwise how
+would we even interpret the result of the test.
 
-which simplifies to zero-extend for delta==0 and base can be either wide 
-or narrow.
+> and the parent commit anticipates growth there ("As other users of
+> skb->decrypted come along, they can be added to sk_has_decrypt_user()") -
+> the probe fails with EINVAL and the helper reports a skip.
+>
+> Would restricting the skip to exc.errno in (errno.ENOENT,
+> errno.EOPNOTSUPP) and letting other errnos propagate keep the assertions
+> below load-bearing?
+>
+>> +
+>> +
+>> +def assoc_psp_ulp_exclusive(cfg):
+>> +    """ Test that a TCP ULP cannot be attached to a PSP socket """
+>> +    _init_psp_dev(cfg)
+>> +    _require_tls_ulp()
+>
+> [Severity: Medium]
+>
+> Since _require_tls_ulp() is the first gate in both assoc_psp_ulp_exclusiv=
+e()
+> and assoc_ulp_psp_exclusive(), does an over-broad kernel-side
+> sk_has_decrypt_user() end up disabling both directions of the
+> mutual-exclusion check at once?  The result would be two skips in CI rath=
+er
+> than a failure for the case these tests were added to catch.
+>
+>> +
+>> +    with _make_clr_conn(cfg) as s:
+>> +        try:
+>> +            cfg.pspnl.rx_assoc({"version": 0,
+>> +                                "dev-id": cfg.psp_dev_id,
+>> +                                "sock-fd": s.fileno()})
+>> +            with ksft_raises(OSError) as cm:
+>> +                s.setsockopt(socket.SOL_TCP, TCP_ULP, b"tls")
+>> +            ksft_eq(cm.exception.errno, errno.EINVAL)
+>> +        finally:
+>> +            _close_conn(cfg, s)
+>> +
+>> +
+>> +def assoc_ulp_psp_exclusive(cfg):
+>> +    """ Test that a PSP assoc cannot be added to a socket with a TCP UL=
+P """
+>> +    _init_psp_dev(cfg)
+>> +    _require_tls_ulp()
+>
+> [ ... ]
 
-> Instead of losing link at wx=wy time
-> we can keep it with delta == 0
-> and sync_linked_regs() shouldn't need any new code.
-
-I toyed with a prototype which essentially lifts the restriction above 
-(and ensuing adjustments)
-FWIW it *does* require a reverse guard in sync_linked_regs() - so some 
-additional code there (at least in my version).
-
-It ended up with full testsuite run parity - after 4 incremental patches.
-But the pattern of all those patches was adding some predicate / 
-special-casing to reg->add_const
-
-hunk 1
-
--       if (src_reg->add_const)
-+       if (src_reg->add_const && src_reg->delta)
-
-
-hunk 2
-
--               if (dst_reg->add_const) {
-+               if (dst_reg->add_const && !dst_reg->delta &&
-+                   dst_reg->add_const == (alu32 ? ADD_CONST_32 : ADD_CONST_64)) {
-+                       dst_reg->delta = off;
-+               } else if (dst_reg->add_const) {
-
-
-hunk 3
-
--                               if (subreg_link && reg->id)
--                                       state->regs[dst_regno].subreg =  is_ldsx ? SUBREG_SEXT : SUBREG_ZEXT;
-+                               if (subreg_link && reg->id) {
-+                                       if (is_ldsx) {
-+                                               state->regs[dst_regno].subreg_sext = true;
-+                                       } else {
-+                                               state->regs[dst_regno].add_const = ADD_CONST_32;
-+                                               state->regs[dst_regno].delta = 0;
-+                                       }
-+                               }
-
-
-hunk 4
-
--               if (known_reg->subreg)
-+               if (known_reg->subreg_sext)
-+                       continue;
-+               /*
-+                * Same for a zero-extending link, now spelled ADD_CONST_32:
-+                * reg == (u32)(base + delta) does not invert once the base is
-+                * wider than 32 bits.
-+                */
-+               if (known_reg->add_const == ADD_CONST_32 &&
-+                   get_reg_width(reg) > 32)
-                         continue;
-
-
-Yes it does allow removal of reconstruct_zext32()
-
--               if (reg->subreg) {
-+               if (reg->subreg_sext) {
-                         if (reg->add_const || known_reg->add_const)
-                                 continue;
--                       if (reg->subreg == SUBREG_ZEXT)
--                               reconstruct_zext32(reg, known_reg);
--                       else
--                               reconstruct_sext32(reg, known_reg);
-+                       reconstruct_sext32(reg, known_reg);
-
-
-but personally speaking reading the code feels a bit more harder now.
-
-I can send over the full patch which converts the v2 SUBREG_ZEXT into 
-ADD_CONST32+delta=0 to give a feel for all the special casings, were it 
-to be subsumed into the orig zext support work, but I think you 
-understand what I'm getting at ;-)
-
-Happy to pursue whatever your maintainer hat tells you.
-
-Thx,
--Vineet
