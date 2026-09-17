@@ -1,126 +1,102 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD083F4829
-	for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 05:56:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 258C73AD535;
+	Thu, 17 Sep 2026 06:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789624619; cv=none; b=IWKWrvjDz8kWCizMutQ1F4H8+IK9dlhnK0csckUug69cums00Hge4DBwjRHibiLz6yM1Fe7+B8OIZLcD2YbGSEcWRLPcKoeZ9zRtOVdicP7RbsbaYAcc4pxCInIzdxxJBFImkw+HIsFsYIGMzkH22ylPcs5w834u+u6gYHOW5HM=
+	t=1789626477; cv=none; b=AyYYb8KJhnEbUkERyRGETuu8QVKYp4/I8AGcmS2Xb8L+1erTO3eeGhR+gCMLK/aM80Xc94l5CNAELgeXdt3KWTzkulZHyA9IVL63O9QKJuTg7Hq9cJqTE15j6CF9tijLxLIZ0MLQdmpnGg+8mAgQ7v8c+aWms6c5BDlFK+wSqCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789624619; c=relaxed/simple;
-	bh=axjKGAd5Z/3bPAjXWt5In13wd/F8lTzuocyx1Fp1oag=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Nr8uur3BDwr5cJQsDytdB0CNBZfLJwSqWwNmOO560z8pm9ILw4X4GJolBT/luBEQULdMpJts9vkgGNx6gXC9vzavI4VyvkUidxuRfcbX7Wqyf687S5UrBHtoSIIfwvsFIrBzInIYsZusmJ+SK32T+3lAzUtWWrr+vNHkfrk7GN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Is5sYCTW; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789626477; c=relaxed/simple;
+	bh=6HgOEnc9wNdaEzeo1Tl1Hz7oAQt7xSh7oQ4zoNXsuWg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fjUKQOG7WoadXy4eBvdYrGOgiT0nVgz+xlaK8ZNHzuiW0pkKRHRpcbyvC8/VzxCzda5X72iTNyGZoHRyyfEqXW7zaLX5c6hWmg1SPE1YZdnbqzfgesut+hciWE0pEHqT44qkF9vW3MKt4TVyRrWdzWdMjaN5yj4YX3TTY+B/PO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LzGKa3ql; arc=none smtp.client-ip=192.198.163.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Is5sYCTW"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d3920so3209275e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 22:56:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789624616; x=1790229416; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TXa2jqQKkTliyGqricPHkYJ8GTisx6eCrgeiQ3lmh5M=;
-        b=Is5sYCTWeKu+bYQiM7B63cAOJ4NXKZMHIlOUp3yaK8FDUJ1KZcoqjSR1X/xWKwnM1f
-         jVroKGDczKboO785tS2sjWOQFbNE27Vamk1fuf3HV83H7xU1UTPEJnWuiEwcSi2gI+hO
-         IBfCWz7SPEcShWvkoND1vmR4cBDHVVNQhDz1JDn6eBTMKsPOhe0bFyYCKgMjMspmipwB
-         Fa+fMNzl6fijGcFfsRQ/XBNuLIYcggAY7cSPhNoXTRrMoKywa6hAUstG8EDxh2QhjM8r
-         Jv2F8MldT4XWRNOTczerGxCD4Pl8fKHSk+kB5zf0IqPMm41uHVc/NfkH/0RR2n98lSQv
-         kRYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789624616; x=1790229416;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=TXa2jqQKkTliyGqricPHkYJ8GTisx6eCrgeiQ3lmh5M=;
-        b=hdcQcCp3BDZye7lSQJh6JmTvoP6LKPIgqPoNPVNXU3rWFCeiZE06iyJ40YWmluarrL
-         PUY5EBZ03wIc6GZEg17jdVL7ixa97mi6LzrS1ijjdHiOQANR6bIK25qZZ2QTH24HX8Mw
-         IU0xMl4a/nJqr8wkzCf0QhBEr5sLyRIaD2FACbD0MIi3goMncA57RK3iSf10ASrAZD1y
-         qGxj3n+DcDCRfAKNOTDY/3hxTGJMpAhYXa3Qpi3Ww2eG7ws+m9Wl3U6gjqFjy8mcdAKa
-         CKCUiMmuWV3NJDDFqyY7vxkHhK+dACDFGzCaize8yh6lM3+MiafxOtJCR8R4p6fkX/MV
-         R77A==
-X-Forwarded-Encrypted: i=1; AKwUvBxE3A5JuytgyVQvnACUarqcJTQs+HjBqHnDhVDooApfJFxSZEqVnY0510vP+h/nqcqCLPrCocQ/mw4EzcSvglA=@vger.kernel.org
-X-Gm-Message-State: AFuF++m6eeeCg21Lf8ZSv0P5Gu9nZYj7Y462Ah/lUKq5Zf5tPHxIESCY
-	73DnBrdpd6uTblvDfSP6V4MCKlNSB2SmJ+Upae+8+vR1Hhcs/4x/PGnn
-X-Gm-Gg: AYBFou3kA7RDreCZXYtiacfdrPEniTJ5qcUPHpPeFeNJN6tJ5LNbxXRDHwklFQAmifT
-	c7BWBF78Yel8spthBJsrHYY5aiLzyDu7x+msMB1P5KCb1wtpvaP3p0NpW014tzxiodhYsp7aYeX
-	xAQdPJ1XTwH49A26dyUoNUKiIZyZifqSAXrGBdT5rJ6F5AXFRnqmNrB0zo1h9K43JU4WL1JrCBz
-	njLWzKKa5mIw2CG5rXiPbrHzWmK23mxVf65Db8m3L5utlz6CTcr+pNjBr1EFvNpgS6RHUzAEYq1
-	0HmcUDY0RHNakRNV+xyY5GBkTAYZN2T/Mvqgn2jb46C/BB+IVkCvu2YwltP6LpebdTFecglehgZ
-	O30+QM9VBGw2fJCm5Ui0U5G9zIEUBCeX8d3BcjFhCUbFjkHoArFXAq320BMdzE8JIFq1YycJWhb
-	JscLLcdjoYOjdRJDcyK8gAx6fkN99zXOEtVJEVsiLBEeWYgl2vY5etx+/GCi9eQGTAX9yyMe+BL
-	OZXPY3KDVfBc8AfX/Th6KB+EczW+vfVyhGjCLTBFmTIbYCSigAVH96Tn15EwSU3VmKC5Xre5qQ/
-	E8IOpIJ/MeMCFTw4zE3URQA2BbBfSgbe/FincJBuRxZ6AmTHUwL3U9nl0wt08D82lYpVZsALHdh
-	Kj74+BgUjKDi+Wm8ui/4czBi7OA==
-X-Received: by 2002:a05:600c:c8f:b0:49c:fc6c:be15 with SMTP id 5b1f17b1804b1-49eb733c62dmr64900215e9.27.1789624616385;
-        Wed, 16 Sep 2026 22:56:56 -0700 (PDT)
-Received: from MacBook-Pro-von-Karl.localdomain (dynamic-2a02-3100-9dc6-c001-54ee-4741-4927-0a28.310.pool.telefonica.de. [2a02:3100:9dc6:c001:54ee:4741:4927:a28])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e847eab65sm76230685e9.2.2026.09.16.22.56.54
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 16 Sep 2026 22:56:55 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	Haren Myneni <haren@us.ibm.com>,
-	Dan Streetman <ddstreet@ieee.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-crypto@vger.kernel.org,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>,
-	Rae Moar <raemoar63@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] lib/842: depend on the decompressor for KUnit tests
-Date: Thu, 17 Sep 2026 07:56:45 +0200
-Message-Id: <20260917055645.26780-1-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LzGKa3ql"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789626476; x=1821162476;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=6HgOEnc9wNdaEzeo1Tl1Hz7oAQt7xSh7oQ4zoNXsuWg=;
+  b=LzGKa3qlAlYXfYmJ08aP4Q0MOLq8Q0008vm7oym4JSfopvOfZaSE2Kiz
+   ilr4VtdthFLyI9uSiTBrOjUX1rXxyrvIxgNSMCOj7WomLSnp9VPgBMPH4
+   ZZEO8OPLKFuZBxuACO/T+6nju5TiCCiCnAeOt+m3PC3mQdwrpMbgdVy6F
+   /kCKr9wtA4He065UuAXiVYiQfkoSxbbfgSOUwriyB7jdX592ksJgvGDzI
+   9Timv+2qFsZZGggU6RovRFSeFzFci5gfBIS+ST9ajPrt2UXk608adbWwL
+   F05OcLOakq8VMTnSg9nM0LbAjbmBa+pq8qtNGjGohd6/WKGKjJpa5qdh5
+   g==;
+X-CSE-ConnectionGUID: qrzzvqNNT3O8AA+YGw2WDA==
+X-CSE-MsgGUID: ujyYDf2YT8yUlIklak9LGQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="523766"
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="523766"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa115.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2026 23:27:55 -0700
+X-CSE-ConnectionGUID: le6Qgjs9RQ29hl1uGdEs6Q==
+X-CSE-MsgGUID: XXqs4qwTTrGWZEqFWCXwzQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="269896440"
+Received: from mjarzebo-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.246.73])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2026 23:27:50 -0700
+Date: Thu, 17 Sep 2026 09:27:47 +0300
+From: Tony Lindgren <tony.lindgren@linux.intel.com>
+To: =?iso-8859-1?Q?J=F6rg_R=F6del?= <joro@8bytes.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Liam Merwick <liam.merwick@oracle.com>,
+	Vishal Annapurve <vannapurve@google.com>,
+	Ninad Naik <ninadnaik07@gmail.com>,
+	Joerg Roedel <joerg.roedel@amd.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	coconut-svsm@lists.linux.dev
+Subject: Re: [PATCH v2 6/8] KVM: SEV: Add SNP vCPU state get and set commands
+Message-ID: <aquIYzwDOx6jzy3T@tlindgre-MOBL1>
+References: <20260908103338.427254-1-joro@8bytes.org>
+ <20260908103338.427254-7-joro@8bytes.org>
+ <aqksXLLcmFDkM9Xj@tlindgre-MOBL1>
+ <aqrDUgB7nfdgzXpQ@8bytes.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <aqrDUgB7nfdgzXpQ@8bytes.org>
 
-842_DECOMPRESS_KUNIT_TEST selects the decompressor even when no other
-option needs it, including through KUNIT_ALL_TESTS.
+Hi Jörg,
 
-Depend on 842_DECOMPRESS as required by
-Documentation/dev-tools/kunit/style.rst. This also prevents the test from
-promoting a modular decompressor to built-in.
+On Wed, Sep 16, 2026 at 06:31:04PM +0200, Jörg Rödel wrote:
+> On Tue, Sep 15, 2026 at 02:30:36PM +0300, Tony Lindgren wrote:
+> > Nice, looks like snp_get/set_vcpu_state() could quite easily make use
+> > of KVM_EXPORT/IMPORT_VCPU?
+> 
+> That depends on whether KVM_EXPORT/IMPORT_VCPU will migrate the confidential
+> VCPU state (registers) only or hypervisor state as well. The get/set_state
+> helpers here only export/import the hypervisor tracking state for the guest
+> VCPUs.
 
-Fixes: cca072cb1423 ("lib/842: add KUnit tests for the decompressor")
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Closes: https://lore.kernel.org/r/CAMuHMdVcZ5cV4-HrjLYfFKh6UshiVxq5eXCNyp0Z1k_SMAvF5g@mail.gmail.com/
-Assisted-by: LLM
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
----
-Follow-up to the accepted commit, based on cryptodev-2.6/master.
+Oh OK, so calling for both hypervisor and confidential VCPU state would be
+needed. The difference could be specified in the struct kvm_vcpu_transfer
+flags?
+ 
+> On AMD the confidential VCPU state is migrated as part of the memory image when
+> guest execution has stopped on the source side.
 
-Testing: Checked Kconfig dependency resolution for eight x86_64
-configurations before and after the change, including KUNIT_ALL_TESTS
-and modular/built-in combinations.
+This part for the confidential VCPU transfer matches what we are doing
+for TDX.
 
- lib/Kconfig.debug | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Regards,
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 48201092b3df..49f74005394b 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2228,7 +2228,7 @@ if RUNTIME_TESTING_MENU
- config 842_DECOMPRESS_KUNIT_TEST
- 	tristate "KUnit tests for the 842 decompressor" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
--	select 842_DECOMPRESS
-+	depends on 842_DECOMPRESS
- 	default KUNIT_ALL_TESTS
- 	help
- 	  Enable stream-validation and boundary tests for the software 842
-
-base-commit: 9e06d371730b841ad8fe79ebfccf0def9470201f
--- 
-2.39.5 (Apple Git-154)
+Tony
