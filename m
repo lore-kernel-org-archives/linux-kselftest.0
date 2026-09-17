@@ -1,112 +1,126 @@
-Received: from mail-yx2-f13.google.com (mail-yx2-f13.google.com [74.125.224.141])
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1245317161
-	for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 00:26:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D4A533688D
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 00:30:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.12
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789604809; cv=pass; b=njr8bvKrODEM2gxvn6hTfCjEAG7XnxElmZ9bmyH8uqEhg0nqSnG46LiJFfRu2s3Loacz8UVxNZzLx+GA1xwB+DRlFG8TinH6KvVx9s2TDa9JO1Pc0Uj6svsCuxW2qzSitnpTZhGltUG1h9ESw4VE9NWl0acAKaOOUNVoczAwG9M=
+	t=1789605031; cv=pass; b=Q8jqCqa6UE4APugKUdkW4ScCZ2RDkva7bP1CMT1FIkmO2Pyg0JYfBLJuObeZ8586W4q6EhIbaz2hROn2k9bmk8fbp5S6Pd4DSKXH8PFcKmNQU4qoXymCemUfHIArOyMA4OtTSixh0aJYIdstWU6XxJgLsdpxStdK0cJhzYYM+Eo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789604809; c=relaxed/simple;
-	bh=TSVKi+8VuQ9HAj+OFANA6kyNZpknRB6POVRr7Paq/fA=;
+	s=arc-20240116; t=1789605031; c=relaxed/simple;
+	bh=tlmyzNUENvNb4Oylh+WHiAZUPw2m3n5RaX0zH+LuxaU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DeB1tbnGghGHcbTEaFcC7YXfAAsr8sR/JonfXZKDplIvGq4u9x41FMWtqo1VPUKjGj8Hasbx4iFGReM1ymcBkLiIm6ptaBF5/W/ioZQ8iw3HnabSS09V/4gy6gUqFqFRA7JWPrzOqv6L1olNUnWZVPoh07Lgi/A3Esg44rj1ye8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R7zbMB0u; arc=pass smtp.client-ip=74.125.224.141
+	 To:Cc:Content-Type; b=TjmwY2WYpYUT2GhLDtQi4z7+AFXjPGRvKbJ8syqF2eAaibSEq6OHmF0aFIcecOsiApwkY/UQcOEUGWRjYssNBNFMm5XkpTRmVY2GG4XpPePiwRIS8iPUnmlCohawX/Q+2b2xjNKYTnUPPYCuEzkgtQbs+6GBxvLgA1lR1KaR3QY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rYvz5cCa; arc=pass smtp.client-ip=74.125.228.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R7zbMB0u"
-Received: by mail-yx2-f13.google.com with SMTP id 956f58d0204a3-66e4ab22370so211827d50.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 17:26:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789604805; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rYvz5cCa"
+Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc1cea50dc0so88098a12.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2026 17:30:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789605027; cv=none;
         d=google.com; s=arc-20260327;
-        b=CwesTDKUzrVKwyLWkNV+jlp7Z2JiXYtauxZc261s0Uh8vY0odZkfZg3BBswGHUn0NA
-         y2biC3oUuZkjVk1N8rUNY0T85SPyC85w47J51rcDN9wvt/CdC3XqmOPik0fkUT0W3iIu
-         d2p63QhwXCMEXufYkeMq7yMhAWi66gf0EarFKqQeIZviM8Iy6Df+Zoy2T+rLMQvodadS
-         FmSOQtlm5HQDXyLvNemdsZYh/0lRRykdDUBo/SLYmj7Fla+Q42S+fDxUksfI0vNxBky2
-         5aTmeJ3iF75zpaeehK71eDn7xg64KbPAUj4tpraWbt5h1b8tGHosuFlMdsTookXUgQ3+
-         6OTA==
+        b=nXgI5lgr/xTk69F05XwmIvN1CP+70iB3dqjCRQK4AKntg1PkTG16zqXXoPuEClFG3g
+         P2cUuFNv2m795f8QbrTfPehHHyUEXRoXVCQHbBooJ/RInt7inKJ4JpFPgxX5mXBgjDi4
+         4znSMAUAkT4CFFcSe9dnXaLkqHQlG5jlzrbX8rnCCO8rftwT/TxAzxIiV4gYk6988bN8
+         1EvnVPlbpXyZTG1ukDGJiDPArnUmIIb+0b28wWK/LVvdOiEhBDatBAEUu7tNDiyxLOAz
+         H2EvvHbCqk19EOnwa57abLmBYzHRZT7IjMxBJhpz6Skuf6QWsFozO47JTvTFyLO/gB2t
+         aGoQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=TSVKi+8VuQ9HAj+OFANA6kyNZpknRB6POVRr7Paq/fA=;
-        fh=UKM0SZcqeYI8unrdX6Y6SciTO5CIkEXmQBlroFi6sCc=;
-        b=o2FdGRjuFGae4vr8e9RJar6CmUbN5CndLm4EKVerclx4xSrr/Z7C2JFM03DvJjysr+
-         Ky3JuT9SNL31ozRPxPdhzj1w9J7dV0pTpJnM6i8hmy9ntTHnf+TCKHkDA/nJ0k8cHNDD
-         pA38hHIaEBKR+PqpKM1CV6d6093ixQc+AYy+jsOZMDm6OFyjGK/JdKeVqdOrRkskUTcn
-         Zc6+2sqqNmBeE5lJrQ4cbE84WnueAFXdLiIwmE7A8Fb/ZEIOOa73swgDmg25LEhfST32
-         +LqdwIw5Zb1SbRY3fXHGW5BrJyrp1cG+D3AImF3SPmQYPVLN2trBtakWoXv1dg9Dmh8S
-         AE3Q==;
+        bh=nH+1D62/vONjE3NQ4kwcRmw4ufbdwDd91huhFb0U00k=;
+        fh=FV1mtHZh2ZOsA4Ah77uQP+bKDm/MsOxTnMCePc3Ycqs=;
+        b=KNVXMyKB++xdhTjqn5lN1a8ZMuL1LGhGTlP8e1EfbxHCCrPu4dII9mSvtOgIWl1bE1
+         4+jNleBCykcHe37Wo9ezFs8RYCih5ymJIiD8vSCRcWSBH0izvqiErQDkyLy1K3qVgE8F
+         s7yD4tYFN5a1jGfqK7kB4T+r+ADrote6A7fSat1TdPnpAIX5SFSG3i+ZXPYhyfgdgXHr
+         Vof6de14tbiWDaJNXY1W7FtWW0zLJX5nbM4uIpKFL7za53yarcqq43ZsldkBZN7YEELg
+         Hw2k6qm+QIg7LzCWBGTniiJdE5jNGSIBCVVwWdvv65GP5NDljBmezE4ZJT01wHl34IbS
+         HHAQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789604805; x=1790209605; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789605027; x=1790209827; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=TSVKi+8VuQ9HAj+OFANA6kyNZpknRB6POVRr7Paq/fA=;
-        b=R7zbMB0ukOrSvm+sSvkK6bhpdf3R9H7NBii9uuxLZDvFXffAEMUy2HvZQA5d5aNWfH
-         DZKXIUU0zO2MQ8c5WKPJE1XKVF9wbdzgOsEH6QE5asqErD7a5JoENZLx4CnTrgsvuzRr
-         vcmZ8bKuexAuAp/fJiidb0W6zHP1eml9tWMRR0rn/rynjPM0qpYEJh5L+9sDtJH7JFSC
-         /BLd1QJcfSXsd1xNLLBk3vLEWcxkOCqPxpVCX54SNCF6tEOlJ8VpyEBRyTsTd4G80SH9
-         7XL1C5DKgvL9P3dZmz2VpvgEpzoV70a1v6mdIuwwH5zR/2pNu0pHoZfDhRJzJ1Tj89Ch
-         0VbQ==
+        bh=nH+1D62/vONjE3NQ4kwcRmw4ufbdwDd91huhFb0U00k=;
+        b=rYvz5cCao9532scJdPg8dvAXksLLWHZC8u/uMD+Yl4rpF5S2Olha51c6mQFPgD1Qhg
+         9mzvjgRE+OAMLsa5Az0N2pU2eMAtjjGRm+vKNo6llTGrjPC5iae6TXq/CWk4WwiWp/gZ
+         X6iePs+W6uecExiRhYDtyL9qeONmnGGMOtWiRGP5ioNSPzfi99oLwoJzzgyXyxutZByo
+         KmW4RRR0p8gZt7jl4r/yxWr15vO4Gn7vgqe4VzOYItSj8xxfsKHQsnjSpfnNGNnM1Ty3
+         0lxhL7/AU3cSXUluSVHELJMZkGSaB4iSnXos+WFUsOyCGr2E35L4N5zgkJm5kPYTrs84
+         DANQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789604805; x=1790209605;
+        d=1e100.net; s=20260707; t=1789605027; x=1790209827;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=TSVKi+8VuQ9HAj+OFANA6kyNZpknRB6POVRr7Paq/fA=;
-        b=U2d6uo7i4muYijqZAcejRXawLVXxFEGzMxT95oghlfrqCx4IVsM1EUKe8PQkklrKEn
-         a3W66AVAhz0eBphBwq7q4WQKjEoayD1D5xPyy9hf3l8opGrnT6yQpSZpBUHScFYtaJZS
-         29lEsd6LX1ebm6UsDN7HS7SRdjY2b6Q7lfh/WcUpL9AkQohss931INGqtx4gaW4awrkX
-         SWDq904R7tsriV95RnUWih6FeTH7UmcXWhOUGyxOXzIJg18NoAhZqZuP/OvroyuRnZaS
-         Htoa4+lX8bnNyNfAQMxTcLD0E5q0jpjtkBODtI1lFm7nDNYBYJplaoVuB9oxkYKOHkHh
-         Aqow==
-X-Forwarded-Encrypted: i=1; AKwUvBwbvIOTvhDi/hvJvPDw2AlxytCstqvWm1DBKVq/Akp9ZoAuoyKNIczm0rnAUKxA/wiLGMuBcustkq491Iv4APc=@vger.kernel.org
-X-Gm-Message-State: AFuF++nooCC5dIUHisxaJ3WCv/9XUeBQxLny498TUNsyyKV57i4QdX58
-	oOPzMzyNZBasYiZJ6WyRVgrz2vluJ5Rmpb9hj9Ut1exJ1A2dGfiuB/kffisDxtL395dfKpJ9Dfi
-	jciJH4cFYZB3J/TI4GOJrN44lUKunNOs=
-X-Gm-Gg: AYBFou2GIotugp5x/S7H2IzTEx1GUXZxN6dOntVbVcetH6TFjhUQICVZ7QpDM7KFRVp
-	788H1wutsTqm6nsjBv2+VwwHbv46EvtvjL8rY7O+7Y1D1fJfdaDlU6IwO7aTJU0BL2QIghlXt5T
-	AhV7WarbzwB8BIxRlQ6VLYUitT/c1r50C+vm0CPll2vduHsYi50Qwpl6XgelxHz7jJD8X5WaUbw
-	lzOQEn6/nMB9XSmnDvdEAC8q6JMDgR34SlA2E/Dz8ISUi4ipWH1AcoTjyzn7fC/jHTRhhYu4fpx
-	mc02eLZv/xe8xee1JuyUp5BPP1RiFJsNJU4tM+GAZCDK8vYQNIjLgUsOS7fv3jlgwro=
-X-Received: by 2002:a05:690e:1c08:b0:66f:c1be:3160 with SMTP id
- 956f58d0204a3-6716329371cmr1669803d50.55.1789604804788; Wed, 16 Sep 2026
- 17:26:44 -0700 (PDT)
+        bh=nH+1D62/vONjE3NQ4kwcRmw4ufbdwDd91huhFb0U00k=;
+        b=MvKyQOr5d/Iw8TNx/g9z9jf8Al+agvfsIXpunZvGhMrRTnPhRHbe7zHogGlfN0rPZF
+         mjnrZGp4tghgwRGBthDaTZcAzlh0PpaSEITBmhe0JtpskIdTlbcYlnY73Gs6esYjWf6a
+         Zaw6RlEuHUS/6OTK0B3xsodniRPCCi9kqRcIEcC96HvAJtz4UEoOj5zxpExuO2pHCNyh
+         Eod4+LByd/iZaeuj97XyUFJnkMN40+JVMBTGLLZ6UgBf313Ijs1D38hKNAUHgEyXb+tO
+         XJgiYzKM2BnZjnrX83d88XlcVy06NuMoFrDhowGSg93reTN5R+vZgvmwRGa7mfqiv+QB
+         eDkA==
+X-Forwarded-Encrypted: i=1; AKwUvBw/4UfVlrP1jTAKkpg7WuSFFWFEj8f0MIB7OKC9TBTo1chtWw2hM2KMw0FBBCWO7Pqkqx/emRJIwBsDI7JLCHE=@vger.kernel.org
+X-Gm-Message-State: AFuF++kXRz6qRWgdUs++r9sYUBToPqZlUfgnS4tiVeKHiN+eVoX2w6Ij
+	8HRO82zj8ETG5DC9SrFBz5cPnGAEz+pY5b0Z8PYZ5arpb/7NZoiUeOpItnPYyr6wX9Z2hdc7rN+
+	KagGpZ5aehAvV+Pbwi2tu390yV97Qiig=
+X-Gm-Gg: AYBFou1odkkpUMrmNxbiPPf5Hb7jw1vW9JbrLYE/8XhB2ELBgRvDU6zzYC+1jqoEVVo
+	WzdYMKQmlms9wyo9x/cZDY6YCK79hiaRSIPNqPpu9+8Nzo1EKiYzns7Sihk9otoSV8lVYa7KeR4
+	pK0ww38J6dX9TEXPpWeR52A2AiyR7Ebu0Cxr8hvpdMvF8IBqxH6JJwqa1Mq0JbNNAcuDK8Dy1WG
+	cz+PoiurVMxo9C6IsBZW9axUzLzBB2dHnWapiGcraaFocz8xfkVZkPloe0Knw/ovXAySYcS5BtK
+	IpuavXUJ7xYwIDrnt+XeS/Sjo9Z9BDTNqMOVR7tPo0BBKdEpSvHPaOUy3uEjfw/DqGByo7UkOvH
+	hnj7fAHdjBRsicx2oJeImNMK99WagxNzEFH0on1jhOg==
+X-Received: by 2002:a05:6a21:3315:b0:3d0:9590:7148 with SMTP id
+ adf61e73a8af0-3dd5f5d86a1mr12651151637.17.1789605027369; Wed, 16 Sep 2026
+ 17:30:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260915-psp-ktls-fix-v2-0-0eedc3b148ec@gmail.com> <20260915-psp-ktls-fix-v2-2-0eedc3b148ec@gmail.com>
-In-Reply-To: <20260915-psp-ktls-fix-v2-2-0eedc3b148ec@gmail.com>
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date: Wed, 16 Sep 2026 20:26:03 -0400
-X-Gm-Features: AcwNN1UJ2iJTwgwlT9180M0OEUFsX3crsB8-LF7eHYBnlBr14UoftWKUxJaOO4E
-Message-ID: <CAF=yD-K5AJwgGEzmdAe=kwp0DuVX5pT=aM_hR9-hc-Jsv8L1Fg@mail.gmail.com>
-Subject: Re: [PATCH net v2 2/2] selftests: drv-net: psp: test PSP and TCP ULP
- mutual exclusion
-To: Daniel Zahka <daniel.zahka@gmail.com>
-Cc: Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, 
-	Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+ <20260910164635.459558-4-vineet.gupta@linux.dev> <DLDKI0ZXYI7H.1XQZZE2RCU7IF@gmail.com>
+ <4ab75099-0e95-4fee-81da-6f4198e3e6a0@linux.dev> <CAADnVQ+N9tzBJ0Bbvp8_8QvR+QcCP4ej5CgV_kRHt=iw4BANSQ@mail.gmail.com>
+ <202c45e2-58ba-4ad5-a234-c90703031f91@linux.dev>
+In-Reply-To: <202c45e2-58ba-4ad5-a234-c90703031f91@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 16 Sep 2026 17:30:16 -0700
+X-Gm-Features: AcwNN1XLUhSaujLVZNDBYUznBk2B1PEMW-Z99HXDCfKhyI83tPo-EfJkONx0oj4
+Message-ID: <CAADnVQ+Si9Au8J_j2nt+ZzFq6WPaz8hpmh0n=_dFysZmSOeipA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
+ across zero-extending movs
+To: Vineet Gupta <vineet.gupta@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 15, 2026 at 7:11=E2=80=AFPM Daniel Zahka <daniel.zahka@gmail.co=
-m> wrote:
+On Wed, Sep 16, 2026 at 5:08=E2=80=AFPM Vineet Gupta <vineet.gupta@linux.de=
+v> wrote:
 >
-> Test both setting PSP after TLS ULP, and TLS ULP after PSP.
+> It ended up with full testsuite run parity - after 4 incremental patches.
+> But the pattern of all those patches was adding some predicate /
+> special-casing to reg->add_const
 >
-> Add CONFIG_TLS=3Dy to the drivers/net/config.
+> hunk 1
 >
-> Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
+> -       if (src_reg->add_const)
+> +       if (src_reg->add_const && src_reg->delta)
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+why? It should not.
+My point is that zero is not special.
+It should be handled within the current framework.
+All these extra hunks are not correct.
+ADD_CONST_32 logic should work for delta =3D=3D 0 just like
+it works for delta =3D=3D 1.
