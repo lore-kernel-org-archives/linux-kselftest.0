@@ -1,93 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7697B3F44FC;
-	Thu, 17 Sep 2026 09:00:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7533A8740;
+	Thu, 17 Sep 2026 09:04:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789635628; cv=none; b=NakrexF0V1oVqBs6f3j6rjfGnCFpb1PFTt4ZcMxFprU9RU8Rr64iLFN0Mrm6pY7bH0VlgZBt4e+y2KOZ4+pIr0UdeVWOnp5LW+ZNFr/iF003GKkuiaKV6pEd7N3E1VWZGUmnXBKuBfThPWDYQXc8s/FcKsCzLJVfHk/v6Jo6NQQ=
+	t=1789635897; cv=none; b=akcSKdfsDCj6CxT3sgZe/U1RwaEqDwE28WSyhLJ2t50FkchKOY6pB5jySKtSCvNaMH4Tfo0c3d85H+M6RlrFSghL4KtCWrCmCiEY9MVyKndjjdUNIr+HFwpuEfWA9Zh9JONqh7aGFXyWqSVmNESBN+i+YOPMbi9zZ2XA+qAzpZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789635628; c=relaxed/simple;
-	bh=Y5bSJVysvr9ddQz4rfopfu0hHQ1wIqTnyODV0L3nxM0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=RpkVyKmJn13aUq7pxBpgvtRVpVgdvuzFCzZ92jBIBc4iMjrC17Vn6XQNdTqE2mX2B/6MxN2ZgoL4XI5paW2wcxEGADzNJ2I9vKMPKbDH6EobkNcOYpXPw/6U7DPjrkWpy1YfHx3LEHQYq6TVsxcq7sj7Udvai8TI2t8CP6jAf3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xg1bdiFO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789635897; c=relaxed/simple;
+	bh=H6OPmzFwTjfe2eL8uEAAuQ1eUL3Da6keNYthN0hTbXE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u7A6+aB9e7rs9YhQhYBhIWaSKBOIEwFa0yBjQ4+HXcto2sIG5z1NfmUw1l9rhu8xhLQEpJQJFmXkGcTIZqwKGNDfpu5KO7V03V83g/zjYRk7vPXwaTqqb50cFAqJhftNr7EE86skkQ9+D7xNpGxWnP6Iq2itNg+oXX9/trHxDr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cQogZB/F; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xg1bdiFO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB3C1F000FF;
-	Thu, 17 Sep 2026 09:00:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cQogZB/F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB8351F000FF;
+	Thu, 17 Sep 2026 09:04:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789635627;
-	bh=G3cWCrQW8tliOjWvk/U88u+h7FNtLXaFA7KtU9Vk1E0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Xg1bdiFO3MxUqftaFIxMcl2cc5az3in6IBLWAl2tn1XvzSZa3qZN59HJAB45B1ZRW
-	 xU6UOENwYGWC2SRiyFk1+q0fxSaYbgT2D3T+5rYmiKPK7bTuLcFEAvKgRQj8v8lkvf
-	 njOQA2IrD2zjkiyoboWOe/mGJqt+Kbm6ternkZ/oEJ5KDLb03kK/hAcjVvpanZ8UjN
-	 JrtXSILtFMeMu5Oe2IurTA0JY5vJNR6l2fzwlsgfmAKaAg4dcqbIr/92fVyLVZ8eMn
-	 AEup1d+Ofbjsu26cK3TzxhVB8PAZB/UdPRWpS7JrGhS9ZylO4dgGF6mm8HDBtJ5B7p
-	 bYXHVjkOapazg==
-Content-Type: multipart/mixed; boundary="===============2675516372883015014=="
+	s=k20260515; t=1789635896;
+	bh=r81n00ylFVbyi96blicKVcB99WJF9XijQa/VIFWtlN0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=cQogZB/FKoirxTs55cGY3oQTBAKjyLSqUKFQUl8h6Xz5BCC7tYntnrwYJmIVk89po
+	 27sDFLDfwdyjZX4vyejb54CEeApvVokldjnrisu5slepHYkDG9cUhVUMazhzHIA+4q
+	 CLuuSrMPNbT+29zz5o/j9s+Fw7h+xHC/0EUVEH1dqugAbcUqvAFe/47k5ec0hw8Afj
+	 hoJYO19SdICilqFotCwrlF2oKhJlnJHVZ4pXo74GrEXpbHCWMWtYMN16DIyZ0VXGkg
+	 6QBGKLnB/z9Ur/EsfJHieNjkMRhLDn/8Zk+u2CLr13552mxiBKZzU5mjiSjSl/PAVF
+	 BoayYu/uGq55w==
+Message-ID: <fc614ec4-428a-4e3d-b366-9db5f6e44078@kernel.org>
+Date: Thu, 17 Sep 2026 11:04:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <80c4a1ad857e4007c54a10110ff85897791545942a2cb3be4d9f5e69cd17de82@mail.kernel.org>
-In-Reply-To: <20260917080839.462038-2-luyun_611@163.com>
-References: <20260917080839.462038-2-luyun_611@163.com>
-Subject: Re: [PATCH bpf 1/2] selftests/bpf: Fix timing-dependent assertions in task work stress test
-From: bot+bpf-ci@kernel.org
-To: luyun_611@163.com,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 17 Sep 2026 09:00:26 +0000 (UTC)
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net] selftests: net: update netfilter netlink config
+Content-Language: fr
+To: Hangbin Liu <hangbin.liu@linux.dev>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+ coreteam@netfilter.org, mptcp@lists.linux.dev,
+ Hangbin Liu <liuhangbin@kylinos.cn>,
+ Fernando Fernandez Mancera <fmancera@suse.de>,
+ Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>,
+ Phil Sutter <phil@nwl.cc>
+References: <20260917-selftest_config-v1-1-bf25ccbfb18e@kylinos.cn>
+ <f557e44a-86b6-4ebb-ad35-d7bc5902929a@suse.de>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <f557e44a-86b6-4ebb-ad35-d7bc5902929a@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---===============2675516372883015014==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi Hangbin,
 
-> task_work_run() assumes every stress run observes both scheduler
-> contention and, when the delete thread is enabled, cancellation of at
-> least one pending callback.
->
-> Neither outcome is guaranteed. Contention is observed only when another
-> scheduler selects the same one of 128 map values while its task work is
-> outstanding. A valid run can therefore have no scheduling errors. This
-> was reproduced with a single scheduler: more than one million callbacks
-> were scheduled and completed while schedule_error remained zero.
+On 17/09/2026 09:06, Fernando Fernandez Mancera wrote:
+> On 9/17/26 4:17 AM, Hangbin Liu wrote:
+>> From: Hangbin Liu <liuhangbin@kylinos.cn>
+>>
+>> Since commit d4349ba9872d ("netfilter: allow nfnetlink built-in only"),
+>> NETFILTER_NETLINK was changed to a bool. Use 'y' instead of 'm'.
+>> Otherwise the build emits:
+>>
+>>    .config:5688:warning: symbol value 'm' invalid for NETFILTER_NETLINK
+>>
+>> Fixes: d4349ba9872d ("netfilter: allow nfnetlink built-in only")
+>> Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+> 
+> Reviewed-by: Fernando Fernandez Mancera <fmancera@suse.de>
+Acked-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
-This isn't a bug, but would it read more clearly to say something like 'the
-task_work_stress test helper' (or name the file) instead of the bare
-task_work_run() in the opening sentence?  There are three functions with
-that name in the tree: kernel/task_work.c, prog_tests/test_task_work.c, and
-the static helper being changed here in prog_tests/task_work_stress.c, so
-the bare name could be mistaken for the kernel function on first reading.
+Thanks!
 
-This isn't a bug, but was nthreads reduced locally to get the
-single-scheduler run quoted here? The test hardcodes 'int nthreads = 16;'
-(prog_tests/task_work_stress.c:50) and the only environment knob is
-BPF_TASK_WORK_TEST_TIME for the duration. A reader trying to reproduce the
-quoted numbers has no way to get there without editing the file. It might
-help to say so explicitly, or give the 16-thread numbers, since the test
-has no knob for the thread count.
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
-> Likewise, a successful map deletion may remove a value after its
-> callback has completed. delete_success can therefore be nonzero without
-> callback_success being smaller than callback_scheduled.
->
-> Drop the assertion that schedule_error is nonzero. Keep requiring exact
-> callback accounting when deletion is disabled. With deletion enabled,
-> allow equal counts but still reject callback_success greater than
-> callback_scheduled.
->
-> Fixes: c6ae18e0af5e ("selftests/bpf: add bpf task work stress tests")
-> Signed-off-by: Yun Lu <luyun@kylinos.cn>
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35199472874
---===============2675516372883015014==--
