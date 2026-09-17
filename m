@@ -1,130 +1,239 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9331238E5C5
-	for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 18:10:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 311EB4D17B3
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 19:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789668642; cv=none; b=Z/TyQaP6VCQMuZyyxJ09h/2NQjUhpTya+PeeAlPu6t8w/+w/TM4mWocxZAuJkfyBzdoCmWFxVJZ8j6OElgs6WC3lzYD+KiZhB/v8WmCAFmBFvAMo2FchegfqUGM+4Ut7rCZcH90IC31Nesdqv8rTrf6dV8zW/oY9c6/EmvY9SfE=
+	t=1789673745; cv=none; b=ZFNIIchGejivTh5k2+bQWHJ3br9dKsj+kG6eCwBhr5h9OlRVvuDAmu46xBxgZQ4rgZwEI83cKyraka/FYE6rIjKlZj4HMh2zDgNplqMttyR8LgkGNF4W3JTweLWQHJE5l3TocaBL274aqMgyZ98sFPnBl6xDa4ugUc35PEWm54c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789668642; c=relaxed/simple;
-	bh=kr+z+SDuUt1hcjAlDkjURs5lDqW6XfYcaxmQkcluc18=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XyJWr1xsI4P804pgFePeBt4rww4epjEUNOt9UzvhIHGqWivadh2/9Ax6XlfwUAK+W87imTzXSiwKPC3bu+8GXn4RlTws1zMJYB06SgHBpYlvYbCOIZfxA6R0BWZX3L/kmElSKKlFpi46c1ild+qzjcozsaUh9ALDBGQbVp1ijnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jG/kxUiu; arc=none smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789673745; c=relaxed/simple;
+	bh=CFbJiR+V6GoupLt9b/9ikjwGkfcFR3qlMuOgtlHDU6g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QU2Dx6GxB9rsR4mKqOxU9i5QqdMqlCrjC194DRH/qoHyf80vpulSZdhnsw+EU3fRMEuMVaplPltXpgSJXwQYLdCPmoeOSDwxbaT0d6YK7tRoiR+2n90iWWy0H34Byd0YHeCkIluOBDwdHlqy2ZEQXCi0uFOGK+eACd7v4gbf2WQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NVL6Vt27; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jG/kxUiu"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccb65437so954105a91.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 11:10:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789668640; x=1790273440; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3uVaG3wnObeyDihPCO3OxQZpu9/0jLGD4D30QeEXjgQ=;
-        b=jG/kxUiu+kHH6JE7fKoVZ3z5nMU25LtYr2UT8z/0MqyoUxe3ysrvJHB9A4kcSsZoVA
-         t0PereHMYkHlsMz6ZYQzZ9RoJJBgJboVH28zixyfl8PlxBKm2v6t8nqMemxUtx1q8LpQ
-         bxSPc4N2AHGUOHlFU9kr/jcGRQWn5FcGU0jTrAOOMyyjQpOnDXiOCfno0vqyPUkXMSjz
-         NpuWxoZEpZiinS384SG1nhhuQduDttRRjcCEW/TSNVSI6aOCRqcVxsjfTMJx/0eTnpbP
-         jxeoQrxAGy/FUpUrPy8BtkM4WG2UTu5nxC4k5HNuoqhTPSkrK2XmGZnOBN92V7+IU0lJ
-         Felg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789668640; x=1790273440;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=3uVaG3wnObeyDihPCO3OxQZpu9/0jLGD4D30QeEXjgQ=;
-        b=ANw/b2bCdQgT2nduqeXgBElMAiHR8KD4FePS1TUJ9fHl8KZUawNdjGNbeVpBEFqqUY
-         0OHbbgbnkAMewFkObTmk6Rz12XE73AQ8xWMKBSsOGPzEqwVkfYQ01HY6OM8QXz1QeTYr
-         HsPbpDvNun1jURXl9SR0c1aXMwS9za4Lcoay+4Kw5il34EPIAlbpBFb4m/xqGNySZTR9
-         ELY0epRjTV/SWrxmwH+NoKWzTJxuNFlcPreQ+qM5sLqLGsMNm9UdfBTZeiAIbakkccHc
-         bd+2++dOsIynTdy2JPNcRfkOkZ8YTs9/ypxAh0TNrpfoQUCmn0TAqkV1YpW8dRDirZyn
-         F8/g==
-X-Forwarded-Encrypted: i=1; AKwUvBzT0P9liiwl/gGtE0vsfMPfAdebb1KIyOMP8vzMG4FeAxjVmkUo8lDLCRlkJYRavRW3aWqOomudK3LahZw7Ypg=@vger.kernel.org
-X-Gm-Message-State: AFuF++nDnA4bM5g4co/eZe6OuS/ycF5gVRQD4VK6LLD7aTI0KMGpz7vR
-	LPJsLsGVsSe2+dGazpyf8PERU9fwnorpkVC6La+VDiIxkKshwiLRxMuG
-X-Gm-Gg: AYBFou1DcyLyLbwEXmvjQkkCaKQ5g032OlwgU+hM8gwDVWU5mLITxHDlS4LblJngtJi
-	B1xbuUWyw89ds7bZ7wPkXm2/AQyUKzMpFV5QZyGWfmahBHKv0bLHTMq73di9i3eCgFJdp/Gw+om
-	HDnXEPuY3yMlq6rsAeEH/BmE5AHihK6Q+AVl/mUxIxZXPBeq133bQluBxYisZ1Z7AbnWImjW0wq
-	sKUQmy8h6+Yf6Bx16q3xVWQvPUgBNf3dIab1uMp09lA6sSQhU6BXH6kZVAXGQoPVCvALWg1i36/
-	h5xeawe45UHjv2/gDuttJlFWl5N6AQ/UKaGtn/Xrln5+WsY/UHd/mBKhGuXJxlL4iUtR8sXBu14
-	vlbqH5SPExnwN2JBZYXJKH+bLNT5yzF60LJyVMpKdOGWtvHQSIpBhTSuzslDSQ6u5hlgdX4ANXT
-	RfZ6nD7O+AICpVXjcLPdGZRoeCPcG0sSyEF/hR1QLoRiNb1ZZBE+BvjXzilj1fb3Cb5j3ZSqKPY
-	Iq3PQmdlay3
-X-Received: by 2002:a17:90b:2ecb:b0:39e:4154:130a with SMTP id 98e67ed59e1d1-39e54d8d5e3mr10862a91.10.1789668639710;
-        Thu, 17 Sep 2026 11:10:39 -0700 (PDT)
-Received: from 10-86-27-207.ban-spse ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14395cacce6sm15059432c88.1.2026.09.17.11.10.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 11:10:39 -0700 (PDT)
-From: Gokul K <gokul02k@gmail.com>
-To: Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	kvm@vger.kernel.org
-Cc: Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: selftests: Drop the unsigned >= 0 assertions in test_write/test_read
-Date: Thu, 17 Sep 2026 23:40:28 +0530
-Message-ID: <20260917181028.288194-1-gokul02k@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NVL6Vt27"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10AE31F0089F
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 19:35:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789673744;
+	bh=3a9FjfFkPEGSCX372g1imqPw8idUvhGgu5KPAwR8rKE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=NVL6Vt27Edo/gnQShR2JzSRyrdEffclsbWg48H2x33Sk9wV1iaLfZRJ1MFsD8gtug
+	 I9o2MtLeiPJ3QUQPkZqwwdz9tfqDdHRVh6z/qJUTLqWpTcxAIbI/u4I4bjR7NmsfWR
+	 Ui30j3BAEYmPVhSbA6oSRgsIo5WtUEYXJ3+tJUbJ3aKq6fgo6HlYG1UjEgyTrFg5rJ
+	 Is01Rxk5yMOCOIMwrcnx8MAHPi4xOVszR7x1BmzAVBIRRxg7vuiFAhUYub9Dq6jcg9
+	 5ebeggvj+W+56sLcILaeLZMxwSYkrN1MVZnMZiiXbwiKooq9FL8axCtnUjLRCOm1VK
+	 T6c28dxUsoajQ==
+Received: by mail-lf2-f13.google.com with SMTP id 2adb3069b0e04-5b5e4f1801fso1238178e87.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 12:35:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBwzUSi9aU0jM8bdNz6iP2qtuwSfXA/v9jW0ddACbPOR381HqVKitnj8+625ubYmMkS1UAAdsGXBj39HYrxvEvw=@vger.kernel.org
+X-Gm-Message-State: AFuF++kppiqYFjj6Eas2AUi357zVQ4TdfQNHUMClVgqm4qKQF7qItCGn
+	lyENOsctlyA39zEKXdY1gEJCBhJVvoNBdFqHg+FJWMC1FtUNH7dwIq05MjUN0SYCd1liT0C09ZB
+	Jz1wPPs1UlwcltiPc1rVMX15S74iwrx0=
+X-Received: by 2002:a05:6512:3b90:b0:5b8:b428:4abb with SMTP id
+ 2adb3069b0e04-5b8b6612144mr2409946e87.9.1789673742273; Thu, 17 Sep 2026
+ 12:35:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260729061549.13419-1-tianyaxiong@kylinos.cn>
+In-Reply-To: <20260729061549.13419-1-tianyaxiong@kylinos.cn>
+From: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
+Date: Thu, 17 Sep 2026 21:34:19 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jbOz=vdxrLQTOrM=iTL-+n0KioCvN0Y9XNoFcnj5ETZQ@mail.gmail.com>
+X-Gm-Features: AcwNN1XWajak3BVQusHHcAXgW7Pb_sHWQ7is5G5UHOuR4DJVyjca-MmiBMcS2q8
+Message-ID: <CAJZ5v0jbOz=vdxrLQTOrM=iTL-+n0KioCvN0Y9XNoFcnj5ETZQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] cpuidle: speed up do_idle() by caching the
+ governor latency QoS constraint
+To: Yaxiong Tian <tianyaxiong@kylinos.cn>
+Cc: rafael@kernel.org, daniel.lezcano@kernel.org, christian.loehle@arm.com, 
+	lenb@kernel.org, pavel@kernel.org, shuah@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-test_write() and test_read() both open with
+On Wed, Jul 29, 2026 at 8:16=E2=80=AFAM Yaxiong Tian <tianyaxiong@kylinos.c=
+n> wrote:
+>
+> cpuidle_governor_latency_req() is evaluated on every idle-state
+> selection.  It aggregates the per-CPU resume latency with the global
+> CPU latency and wakeup latency QoS limits
 
-	TEST_ASSERT(count >= 0, "Unexpected count, count: %li", count);
+True.
 
-but @count is a size_t, so the condition is always true and the assertion
-can never fire. Building the selftests with -Wextra says so:
+> by repeatedly calling
+> get_cpu_device() and pm_qos_read_value() cpu_latency_qos_limit()
+> cpu_wakeup_latency_qos_limit().
 
-  lib/io.c:51:27: warning: comparison of unsigned expression in '>= 0'
-                  is always true [-Wtype-limits]
-  lib/io.c:128:27: warning: comparison of unsigned expression in '>= 0'
-                  is always true [-Wtype-limits]
+I would say "every time" rather than "repeatedly", but fair enough.
 
-@count has been a size_t since these helpers were added in commit
-6089ae0bd5e1 ("kvm: selftests: add sync_regs_test"), so this has never
-guarded anything; nothing regressed and there is no behavioural change.
+However, those functions don't do anything expensive except for
+defensive checks that can be omitted.  Have you tried to omit them?
 
-Note also that the message the assertion would have printed is wrong: %li
-takes a long, not a size_t. That has gone unnoticed precisely because the
-assertion is unreachable, which is a fair summary of the value it adds.
+>
+> Use ftrace's function_graph, we can see:
+> parent:          do_idle
+> parent_total_ns: 36671010505
+> parent_count:    5994
+>
+> SYMBOL                                                      TIME_NS    %R=
+OOT  %PARENT      COUNT
+> -------------------------------------------------------------------------=
+-------------------------
+> do_idle                                                 36671010505  100.=
+00%  100.00%       5994
+>   cpuidle_idle_call                                     35566528731   96.=
+99%   96.99%       8570
+>     call_cpuidle                                        35476606844   96.=
+74%   99.75%       8561
+>       cpuidle_enter                                     35472932468   96.=
+73%   99.99%       8526
+>     cpuidle_select                                         52097031    0.=
+14%    0.15%       8580
+>       menu_select                                          49555181    0.=
+14%   95.12%       8580
+>         tick_nohz_get_sleep_length                         28843887    0.=
+08%   58.21%       8570
+>         cpuidle_governor_latency_req                        9567488    0.=
+03%   19.31%       8580
+>         tick_nohz_tick_stopped                              2057031    0.=
+01%    4.15%      15695
+>     cpuidle_reflect                                        11427201    0.=
+03%    0.03%       8561
+>       menu_reflect                                          6579506    0.=
+02%   57.58%       8526
+>         tick_nohz_idle_got_tick                             2231559    0.=
+01%   33.92%       8526
+>       __sysvec_apic_timer_interrupt                          105520    0.=
+00%    0.92%          3
+>     tick_nohz_idle_stop_tick                                8279641    0.=
+02%    0.02%       1475
+>     ---- skip
+>
+> The majority of the time spent in cpuidle_enter for CPUs entering
+> idle state has already been charged to the idle path. Among the
+> remaining contributors, cpuidle_governor_latency_req() accounts
+> for a non-negligible portion of the overall latency.
+>
+> Under the menu governor this shows up hot: ftrace data shows,
+>  cpuidle_governor_latency_req() accounts for about 19.9% of
+> menu_select() time (~1.9 us/call).  After caching the aggregated
+> value per CPU and invalidating via QoS notifiers, that share drops to
+> about 4.2% (~0.3 us/call), roughly a 6x reduction on this path.
 
-Delete both. The comment above each one is about a count of zero being
-legitimate, which remains true and is worth keeping.
+Is there any real-world workload in which that difference is actually visib=
+le?
 
-Signed-off-by: Gokul K <gokul02k@gmail.com>
----
- tools/testing/selftests/kvm/lib/io.c | 2 --
- 1 file changed, 2 deletions(-)
+> The ftrace data before and after the optimization is shown below:
+> 1) original
+> parent:          menu_select
+> parent_total_ns: 160492937
+> parent_count:    16718
+>
+> SYMBOL                                                      TIME_NS    %R=
+OOT  %PARENT      COUNT
+> -------------------------------------------------------------------------=
+-------------------------
+> menu_select                                               160492937  100.=
+00%  100.00%      16718
 
-diff --git a/tools/testing/selftests/kvm/lib/io.c b/tools/testing/selftests/kvm/lib/io.c
-index fedb2a741f0b..356586250595 100644
---- a/tools/testing/selftests/kvm/lib/io.c
-+++ b/tools/testing/selftests/kvm/lib/io.c
-@@ -48,7 +48,6 @@ ssize_t test_write(int fd, const void *buf, size_t count)
- 	/* Note: Count of zero is allowed (see "RETURN VALUE" portion of
- 	 * write(2) manpage for details.
- 	 */
--	TEST_ASSERT(count >= 0, "Unexpected count, count: %li", count);
- 
- 	do {
- 		rc = write(fd, ptr, num_left);
-@@ -125,7 +124,6 @@ ssize_t test_read(int fd, void *buf, size_t count)
- 	/* Note: Count of zero is allowed (see "If count is zero" portion of
- 	 * read(2) manpage for details.
- 	 */
--	TEST_ASSERT(count >= 0, "Unexpected count, count: %li", count);
- 
- 	do {
- 		rc = read(fd, ptr, num_left);
--- 
-2.54.0
+Where did you lose menu_update()?
 
+>   tick_nohz_get_sleep_length                              100262940   62.=
+47%   62.47%      16698
+>     tick_nohz_next_event                                   67891299   42.=
+30%   67.71%      16689
+>       rcu_needs_cpu                                         2825649    1.=
+76%    4.16%      16689
+>       timekeeping_max_deferment                             2380377    1.=
+48%    3.51%      15296
+>     hrtimer_next_event_without                             17865162   11.=
+13%   17.82%      15296
+>       hrtimer_bases_next_event_without                      2707631    1.=
+69%   15.16%      15296
+>       _raw_spin_lock_irqsave                                2461132    1.=
+53%   13.78%      15296
+>         native_queued_spin_lock_slowpath                        177    0.=
+00%    0.01%          1
+>       _raw_spin_unlock_irqrestore                           2364647    1.=
+47%   13.24%      15296
+>     can_stop_idle_tick                                      2906072    1.=
+81%    2.90%      16698
+>   cpuidle_governor_latency_req                             31988150   19.=
+93%   19.93%      16718
+>     get_cpu_device                                          4122502    2.=
+57%   12.89%      16718
+>     pm_qos_read_value                                       3427318    2.=
+14%   10.71%      16718
+>     cpu_latency_qos_limit                                   3005804    1.=
+87%    9.40%      16718
+>     cpu_wakeup_latency_qos_limit                            3005475    1.=
+87%    9.40%      16718
+>   tick_nohz_tick_stopped                                    4551981    2.=
+84%    2.84%      29496
+>
+> %ROOT =3D share of menu_select; %PARENT =3D share of immediate caller (in=
+clusive)
+>
+> 2) post-optimized
+> parent:          menu_select
+> parent_total_ns: 55428604
+> parent_count:    7626
+>
+> SYMBOL                                                      TIME_NS    %R=
+OOT  %PARENT      COUNT
+> -------------------------------------------------------------------------=
+-------------------------
+> menu_select                                                55428604  100.=
+00%  100.00%       7626
 
+And here?
+
+>   tick_nohz_get_sleep_length                               37464607   67.=
+59%   67.59%       7544
+>     tick_nohz_next_event                                   24076913   43.=
+44%   64.27%       7522
+>       get_next_timer_interrupt                             16332381   29.=
+47%   67.83%       5854
+>       rcu_needs_cpu                                         1489633    2.=
+69%    6.19%       7522
+>       timekeeping_max_deferment                              870851    1.=
+57%    3.62%       5586
+>     hrtimer_next_event_without                              6140153   11.=
+08%   16.39%       5586
+>       hrtimer_bases_next_event_without                       979000    1.=
+77%   15.94%       5586
+>       _raw_spin_lock_irqsave                                 808786    1.=
+46%   13.17%       5586
+>       _raw_spin_unlock_irqrestore                            785518    1.=
+42%   12.79%       5586
+>     can_stop_idle_tick                                      1583137    2.=
+86%    4.23%       7544
+>   cpuidle_governor_latency_req                              2321119    4.=
+19%    4.19%       7626
+>   tick_nohz_tick_stopped                                    1863015    3.=
+36%    3.36%      12751
+>
+> %ROOT =3D share of menu_select; %PARENT =3D share of immediate caller (in=
+clusive)
+>
+> This series:
+> - patch1~pathc3: Add QoS notifiers-related infrastructure and updates to
+> latency_req_gen.
+> - patch4: Implement QoS constraint for cache-aggregated governor latency
+> - patch5: add latency_req QoS idle-state selection test
+> - patch6: add idle-state disable selftest
+
+So this adds two per-CPU variables and a ton of extra complexity to
+optimize the case in which the majority of the governor computations
+aren't actually done.
+
+I'm totally unconvinced.
+
+Thanks!
