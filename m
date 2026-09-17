@@ -1,229 +1,208 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98AE04D9558;
-	Thu, 17 Sep 2026 11:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472664D5978;
+	Thu, 17 Sep 2026 12:03:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789644054; cv=none; b=WwrrGsARN3EVXbvEl/9WqJQeIYm7DvCujLKMhRxk3SW58JdT/Juf0iqIFFiB8/qqf5k2bwSgpaIHDqtjRlSPhrH1/V3LyizwHAtC3QNdBsVlgBQ4NltHbd4vR0FJdsSKssOinfTYrCMpMCExqysrpkSJgD7hO+6Ppi4RMuaDZD8=
+	t=1789646645; cv=none; b=fUzQWo22QICQlTTTrcEzAI7CapHYJvqzXThds/vUU9ueELb1TsD8Lavxyd654zbO24bCdbxVy9aS1wGd1YjV3srGtr2eC8Blk+GyYSMI1gZuH38HP7XqO/u4szt8eLHqSn3g4p6q43lVKzD5lt15ACJX3lt8bakFI2tGvyEA4Qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789644054; c=relaxed/simple;
-	bh=PEYyoFGukDb2bBQUvTSPCNCEuNRH1wR3RMvfZBD9GHI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Mbwcd8UdEWsIMYDnmPwSwYpXei0qBEa9An9ynwxbyd3X1H/8qDp5geJ8jYzKRu7JIuVZcjw04E5M/QSOtxWk9W1gmYrOrxMu1LP9/ejPameHioSSTbbV2NToRdflM7NrrrntkMNMp1bcocczHTFz4ugdGcZhmgQo4Ks1qC/F2lY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=fteDMx2J; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1789646645; c=relaxed/simple;
+	bh=27hrIHlTi/Xxb9kYCmvZTCbF2jcTeNf/ozQwRSb/PXA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SaG7W53M9yrBm1q4tqVUabz0kEvg874MKK0idCC4FBhXxpmc33xRKsCB1CpBJV8Cqz3dLbQbUAvOPPDKfcnndeikKLohs02OXre96QnRje/Q2tBQYM5+LuDUcaJXUzOAUJWlFChZdWPriC7MGJFzgh8fA64qZQl8aVJDHnL77/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=khrDcBto; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="fteDMx2J"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F2EAA1A9A;
-	Thu, 17 Sep 2026 04:20:34 -0700 (PDT)
-Received: from a081061.blr.arm.com (a081061.arm.com [10.164.19.84])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 44AD53F7B4;
-	Thu, 17 Sep 2026 04:20:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1789644038; bh=PEYyoFGukDb2bBQUvTSPCNCEuNRH1wR3RMvfZBD9GHI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fteDMx2JXw2jO+b6+TfrQR0QyYetpxi0BpWpEmfKSfTVvXgJ1N1cszzrLmUpxfRpy
-	 /PJehkPcYKqSHTq/2EDIBTW1hSyDLew+S94/g6RWeHHCEP/lBeOJlL6jgaNDtrJ3KG
-	 Bb7fX8NJOz7NmJu9rtd2nEeULeEKyxIgRtJ/r5+o=
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: [PATCH 7/9] selftests/mm: mremap_test: remove perf tests and timing
-Date: Thu, 17 Sep 2026 16:49:49 +0530
-Message-ID: <20260917111951.188266-8-sarthak.sharma@arm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260917111951.188266-1-sarthak.sharma@arm.com>
-References: <20260917111951.188266-1-sarthak.sharma@arm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="khrDcBto"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92D651F00898;
+	Thu, 17 Sep 2026 12:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789646626;
+	bh=aUacRQG1g7tHz64HhFRLKgogcY6me3feXGZ84iqMDC0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=khrDcBtoiaSncXgdSk3jwvcK2bzD2aUf1iItol53CvkHZXoBiaJzsyld2HWYkOMwa
+	 qyJBXrGeIEbpls1yHYnu0lUkoGXqrtewwvYtwqxkFE7OAEZrGW8OsFfAsYwLGzPS+9
+	 lTdGv252qFJiULWj55YH7+AT7WjzK4WEmo5oqkQYkb/dVKRNqTql9eHqopMMMNRpyH
+	 Go7FUODulAnf3Ibv6ZoIK5ncAuIKnwOyvQqsB0IIxtgBrQI9YtDe+IFT7JEyUMDMNS
+	 XmkDxm/nQdhxHajxroD1VrXMq6tr5fYAHxDPZxGP/fSxdJqovdkLc+pEGIVYCqtZRS
+	 WciUVpzt0qbSQ==
+Message-ID: <6abcb9eb-ddaa-4a4f-9516-7a6a031944cd@kernel.org>
+Date: Thu, 17 Sep 2026 13:03:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/3] bpftool: Skip non-autoload programs when
+ generating light skeletons
+To: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ KP Singh <kpsingh@kernel.org>, Leon Hwang <leon.hwang@linux.dev>,
+ Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260909042433.1775591-1-tweek@google.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260909042433.1775591-1-tweek@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-mremap_test contains three perf tests that report the time
-taken to move 1GB mappings with different page table level
-alignments. Although they validate the remapped data,
-their main purpose it to report timing information. The
-recorded time also does not affect the test result. Also,
-they are skipped with the default validation threshold.
+On 09/09/2026 05:24, Thiébaud Weksteen wrote:
+> When generating a light skeleton (bpftool gen skeleton -L),
+> bpf_object__load() skips loading programs marked as non-autoload (e.g.
+> SEC("?...")), so the generated loader program only records and populates
+> file descriptors for autoloaded programs.
+> 
+> Previously, bpftool emitted struct bpf_prog_desc fields, link fields,
+> and attach/detach/destroy functions for all programs in the BPF object,
+> causing the loader program to store subsequent program FDs into
+> incorrect skeleton struct fields when non-autoload programs were
+> present.
+> 
+> Furthermore, bpf_object__load() can update a program's autoload status
+> during preparation (e.g. for struct_ops programs when resolving kernel
+> BTF members or adjusting autoload based on map autocreate settings).
+> Move bpf_object__gen_loader() and bpf_object__load() out of gen_trace()
+> into do_skeleton() before counting programs and emitting struct fields so
+> that struct field declarations and attach/detach/destroy functions all
+> observe the final post-load autoload state.
+> 
+> Skip programs with !bpf_program__autoload(prog) when counting programs
+> and generating progs/links struct fields as well as attach, detach, and
+> destroy functions for light skeletons.
+> 
+> Fixes: d510296d331a ("bpftool: Use syscall/loader program in "prog load" and "gen skeleton" command.")
+> Signed-off-by: Thiébaud Weksteen <tweek@google.com>
+> ---
+> Changes since v1:
+> - Move bpf_object__gen_loader() and bpf_object__load() out of gen_trace()
+> 
+>  .../bpf/bpftool/Documentation/bpftool-gen.rst |  4 +-
+>  tools/bpf/bpftool/gen.c                       | 64 ++++++++++++-------
+>  2 files changed, 44 insertions(+), 24 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+> index d0a36f442db7..1cdecf3e4fa5 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+> @@ -184,7 +184,9 @@ OPTIONS
+>  -L, --use-loader
+>      For skeletons, generate a "light" skeleton (also known as "loader"
+>      skeleton). A light skeleton contains a loader eBPF program. It does not use
+> -    the majority of the libbpf infrastructure, and does not need libelf.
+> +    the majority of the libbpf infrastructure, and does not need libelf. BPF
+> +    programs marked as non-autoload (e.g., via **SEC("?...")**) are skipped and
+> +    not included in the generated skeleton.
+>  
+>  -S, --sign
+>      For skeletons, generate a signed skeleton. This option must be used with
+> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+> index a50540ef6521..e9a1a018f270 100644
+> --- a/tools/bpf/bpftool/gen.c
+> +++ b/tools/bpf/bpftool/gen.c
 
-Remove these tests and the timing infrastructure from
-mremap_test.c. The regular tests continue to cover PUD
-and PMD aligned remaps.
+[...]
 
-Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
----
- tools/testing/selftests/mm/mremap_test.c | 61 +++---------------------
- 1 file changed, 7 insertions(+), 54 deletions(-)
+> @@ -712,19 +721,6 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
+>  	char ident[256];
+>  	int err = 0;
+>  
+> -	if (sign_progs)
+> -		opts.gen_hash = true;
+> -
+> -	err = bpf_object__gen_loader(obj, &opts);
+> -	if (err)
+> -		return err;
+> -
+> -	err = bpf_object__load(obj);
+> -	if (err) {
+> -		p_err("failed to load object file");
+> -		goto out;
+> -	}
+> -
+>  	/* If there was no error during load then gen_loader_opts
+>  	 * are populated with the loader program.
+>  	 */
 
-diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-index 7b4c9ab3bf14..04ea072f8cd1 100644
---- a/tools/testing/selftests/mm/mremap_test.c
-+++ b/tools/testing/selftests/mm/mremap_test.c
-@@ -13,7 +13,6 @@
- #include <sys/ioctl.h>
- #include <sys/mman.h>
- #include <syscall.h>
--#include <time.h>
- #include <stdbool.h>
- #include <stdint.h>
- 
-@@ -23,7 +22,6 @@
- #define EXPECT_FAILURE 1
- #define NON_OVERLAPPING 0
- #define OVERLAPPING 1
--#define NS_PER_SEC 1000000000ULL
- #define VALIDATION_DEFAULT_THRESHOLD 4	/* 4MB */
- #define VALIDATION_NO_THRESHOLD 0	/* Verify the entire region */
- 
-@@ -897,12 +895,11 @@ static void mremap_move_multi_invalid_vmas(FILE *maps_fp, unsigned long page_siz
- }
- #endif /* __NR_userfaultfd */
- 
--/* Returns the time taken for the remap on success else returns -1. */
--static long long remap_region(struct config c, unsigned int threshold_mb)
-+static int remap_region(struct config c, unsigned int threshold_mb)
- {
- 	void *addr, *tmp_addr, *src_addr, *dest_addr, *dest_preamble_addr = NULL;
--	struct timespec t_start = {0, 0}, t_end = {0, 0};
--	long long  start_ns, end_ns, align_mask, ret, offset;
-+	long long align_mask, offset;
-+	int ret = 0;
- 	unsigned long long threshold;
- 	char *preamble_pattern;
- 
-@@ -963,10 +960,8 @@ static long long remap_region(struct config c, unsigned int threshold_mb)
- 		memcpy(dest_preamble_addr, preamble_pattern, c.dest_preamble_size);
- 	}
- 
--	clock_gettime(CLOCK_MONOTONIC, &t_start);
- 	dest_addr = mremap(src_addr, c.region_size, c.region_size,
- 					  MREMAP_MAYMOVE|MREMAP_FIXED, (char *) addr);
--	clock_gettime(CLOCK_MONOTONIC, &t_end);
- 
- 	if (dest_addr == MAP_FAILED) {
- 		ksft_print_msg("mremap failed: %s\n", strerror(errno));
-@@ -989,16 +984,7 @@ static long long remap_region(struct config c, unsigned int threshold_mb)
- 		goto clean_up_dest;
- 	}
- 
--	start_ns = t_start.tv_sec * NS_PER_SEC + t_start.tv_nsec;
--	end_ns = t_end.tv_sec * NS_PER_SEC + t_end.tv_nsec;
--	ret = end_ns - start_ns;
--
--/*
-- * Since the destination address is specified using MREMAP_FIXED, subsequent
-- * mremap will unmap any previous mapping at the address range specified by
-- * dest_addr and region_size. This significantly affects the remap time of
-- * subsequent tests. So we clean up mappings after each test.
-- */
-+/* Clean up mappings after each test. */
- clean_up_dest:
- 	munmap(dest_addr, c.region_size);
- clean_up_dest_preamble:
-@@ -1076,9 +1062,9 @@ static void mremap_move_1mb_from_start(void)
- static void run_mremap_test_case(struct test test_case,
- 				 unsigned int threshold_mb)
- {
--	long long remap_time = remap_region(test_case.config, threshold_mb);
-+	int ret = remap_region(test_case.config, threshold_mb);
- 
--	if (remap_time < 0) {
-+	if (ret < 0) {
- 		if (test_case.expect_failure)
- 			ksft_test_result_xfail("%s: expected mremap failure\n",
- 					       test_case.name);
-@@ -1088,14 +1074,6 @@ static void run_mremap_test_case(struct test test_case,
- 		if (test_case.expect_failure)
- 			ksft_test_result_fail("%s: unexpected mremap success\n",
- 					      test_case.name);
--		/*
--		 * Comparing mremap time is only applicable if entire region
--		 * was faulted in.
--		 */
--		else if (threshold_mb == VALIDATION_NO_THRESHOLD ||
--			 test_case.config.region_size <= threshold_mb * _1MB)
--			ksft_test_result_pass("%s: mremap time: %12lldns\n",
--					      test_case.name, remap_time);
- 		else
- 			ksft_test_result_pass("%s\n", test_case.name);
- 	}
-@@ -1149,11 +1127,9 @@ static void fill_pattern(uint32_t *pattern, size_t pattern_size, size_t page_siz
- }
- 
- #define MAX_TEST 15
--#define MAX_PERF_TEST 3
- int main(int argc, char **argv)
- {
- 	unsigned int i;
--	int run_perf_tests;
- 	unsigned int threshold_mb = VALIDATION_DEFAULT_THRESHOLD;
- 
- 	/* hard-coded test configs */
-@@ -1164,7 +1140,6 @@ int main(int argc, char **argv)
- 	int num_expand_tests = 2;
- 	int num_misc_tests = 9;
- 	struct test test_cases[MAX_TEST] = {};
--	struct test perf_test_cases[MAX_PERF_TEST];
- 	int page_size;
- 	FILE *maps_fp;
- 
-@@ -1251,22 +1226,7 @@ int main(int argc, char **argv)
- 				  "5MB mremap - Source 1MB-aligned, Dest 1MB-aligned with 40MB Preamble");
- 	test_cases[14].config.dest_preamble_size = 10 * _4MB;
- 
--	perf_test_cases[0] =  MAKE_TEST(page_size, page_size, _1GB, NON_OVERLAPPING, EXPECT_SUCCESS,
--					"1GB mremap - Source PTE-aligned, Destination PTE-aligned");
--	/*
--	 * mremap 1GB region - Page table level aligned time
--	 * comparison.
--	 */
--	perf_test_cases[1] = MAKE_TEST(PMD, PMD, _1GB, NON_OVERLAPPING, EXPECT_SUCCESS,
--				       "1GB mremap - Source PMD-aligned, Destination PMD-aligned");
--	perf_test_cases[2] = MAKE_TEST(PUD, PUD, _1GB, NON_OVERLAPPING, EXPECT_SUCCESS,
--				       "1GB mremap - Source PUD-aligned, Destination PUD-aligned");
--
--	run_perf_tests =  (threshold_mb == VALIDATION_NO_THRESHOLD) ||
--				(threshold_mb * _1MB >= _1GB);
--
--	ksft_set_plan(ARRAY_SIZE(test_cases) + (run_perf_tests ?
--		      ARRAY_SIZE(perf_test_cases) : 0) + num_expand_tests + num_misc_tests);
-+	ksft_set_plan(ARRAY_SIZE(test_cases) + num_expand_tests + num_misc_tests);
- 
- 	for (i = 0; i < ARRAY_SIZE(test_cases); i++)
- 		run_mremap_test_case(test_cases[i], threshold_mb);
-@@ -1293,13 +1253,6 @@ int main(int argc, char **argv)
- 
- 	fclose(maps_fp);
- 
--	if (run_perf_tests) {
--		ksft_print_msg("%s\n",
--			       "mremap HAVE_MOVE_PMD/PUD optimization time comparison for 1GB region:");
--		for (i = 0; i < ARRAY_SIZE(perf_test_cases); i++)
--			run_mremap_test_case(perf_test_cases[i], threshold_mb);
--	}
--
- 	munmap(pattern, pattern_size);
- 
- 	ksft_finished();
--- 
-2.53.0
 
+This comment could be updated (or moved to do_skeleton()).
+
+
+> @@ -752,7 +748,7 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
+>  				goto cleanup;				    \n\
+>  			skel->ctx.sz = (char *)&skel->links - (char *)skel; \n\
+>  		",
+> -		obj_name, opts.data_sz);
+> +		obj_name, opts->data_sz);
+>  	bpf_object__for_each_map(map, obj) {
+>  		const void *mmap_data = NULL;
+>  		size_t mmap_size = 0;
+> @@ -795,22 +791,22 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
+>  			static const char opts_data[] __attribute__((__aligned__(8))) = \"\\\n\
+>  		",
+>  		obj_name);
+> -	print_hex(opts.data, opts.data_sz);
+> +	print_hex(opts->data, opts->data_sz);
+>  	codegen("\
+>  		\n\
+>  		\";							    \n\
+>  			static const char opts_insn[] __attribute__((__aligned__(8))) = \"\\\n\
+>  		");
+> -	print_hex(opts.insns, opts.insns_sz);
+> +	print_hex(opts->insns, opts->insns_sz);
+>  	codegen("\
+>  		\n\
+>  		\";\n");
+>  
+>  	if (sign_progs) {
+> -		sopts.insns = opts.insns;
+> -		sopts.insns_sz = opts.insns_sz;
+> -		sopts.data = opts.data;
+> -		sopts.data_sz = opts.data_sz;
+> +		sopts.insns = opts->insns;
+> +		sopts.insns_sz = opts->insns_sz;
+> +		sopts.data = opts->data;
+> +		sopts.data_sz = opts->data_sz;
+>  		sopts.excl_prog_hash = prog_sha;
+>  		sopts.excl_prog_hash_sz = sizeof(prog_sha);
+>  		sopts.signature = sig_buf;
+> @@ -1250,6 +1246,7 @@ static int do_skeleton(int argc, char **argv)
+>  	char header_guard[MAX_OBJ_NAME_LEN + sizeof("__SKEL_H__")];
+>  	size_t map_cnt = 0, prog_cnt = 0, attach_map_cnt = 0, file_sz, mmap_sz;
+>  	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts);
+> +	DECLARE_LIBBPF_OPTS(gen_loader_opts, gen_opts);
+>  	char obj_name[MAX_OBJ_NAME_LEN] = "", *obj_data;
+>  	struct bpf_object *obj = NULL;
+>  	const char *file;
+> @@ -1326,6 +1323,21 @@ static int do_skeleton(int argc, char **argv)
+>  		goto out_obj;
+>  	}
+>  
+> +	if (use_loader) {
+> +		if (sign_progs)
+> +			gen_opts.gen_hash = true;
+> +
+> +		err = bpf_object__gen_loader(obj, &gen_opts);
+> +		if (err)
+> +			goto out;
+> +
+> +		err = bpf_object__load(obj);
+> +		if (err) {
+> +			p_err("failed to load object file");
+> +			goto out;
+> +		}
+> +	}
+
+
+Could you please add a comment above this block to explain why it's at
+the current location (to avoid autoload flags update), to avoid people
+moving it by accident, please?
+
+Looks good otherwise, thank you!
