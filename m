@@ -1,72 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CFA325B088;
-	Thu, 17 Sep 2026 23:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2589D215075;
+	Fri, 18 Sep 2026 00:08:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789689431; cv=none; b=XKwkdpZTYgtBAyCOIPGY8lHEOjxcj9fCZEqr7TtjFfZruYKg0lgAcgTYaAS91bu67EuLqEqckAcUZZRxf8qKOzrPA5kjprFOTE/H2gBgCzTrSrMcVXXVfn6+t9t0u93j+Cxnrczf+yB7kJjwZ01A0jihZixEocWLKJ6ak6wplOA=
+	t=1789690106; cv=none; b=b8lvCMu/JCLf/8JOKt+Rb+D/NsUx7nt9th7FAM7jqKMeNj8E0fteHTKwU+uqn2epBg3BP6Zh+ZsoLN8QgOAyWpiSFht/wKXjCpX9pQe0uzAysk6+YuXdBUEq5gVmdfjFyn63+t2FnoaG0Sf6u3zKfRGo2XUmhsdDUnmDWbE849E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789689431; c=relaxed/simple;
-	bh=gw3INg6uIfC1G6EKWoZ/02FnyzQwz2sZoOsL+WCKyG0=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=UskwUPLkWfY/LT+yqD0bpbE11PgIahRWku7kON7mJetZUaOE5XBf9wFCa46iYGWp3YO0wWyZWfG7z0miPUVd37Qu77/KUPe/oh2KAO+Vg58KCw0WbLZMaT/uWgOPGm7cxZoB4snY9W1pcemwZyw3lNtP4njbGiBCbo4iyYVWpYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=M41eWb1A; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789690106; c=relaxed/simple;
+	bh=bRpVdYQx6iYLeWrHXp9Ny4rnmAQ1K+WqtwYWne90iGc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=goJyEwq+JyPDXxkLLurKCpI+0OHzEucMLDtJIgBNqM0mOgLtkZsReuLvq5Tk/ZeJBkRJv7DZ0sfcwM4Qc5fCaKrtbQXyY5iLAYsHTGtNYJLyCYhq80NxTtzsJFem6U2IrhLP8ZYlDVTLr/G/eQOHYGwQ8Qp+AVOk1v2+/ac4aTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=IRnmqpPw; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="M41eWb1A"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E6461F000FF;
-	Thu, 17 Sep 2026 23:57:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1789689430;
-	bh=okDvTsO6fMQp5UAsrpdoSDKyHL/mxyvqlyiV5FJOiJQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=M41eWb1Aamc30Pu9mvZdY4CNShDDW5roFqOaWSyyS4sL1qEuksxPjyYFFmigSOsbg
-	 ITwKrF9vU6YvlgyMOJxgZdeu4w+pkTCH7LPWY716hVQhlbzPxA+WJJTUSfJEUjGnHc
-	 K/i58BTWTIfAaS26v0pvxgty4iCU/ynPraxtxBwU=
-Date: Thu, 17 Sep 2026 16:57:08 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Lisa Wang <wyihan@google.com>
-Cc: Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
- <nao.horiguchi@gmail.com>, Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Hugh Dickins <hughd@google.com>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, David Hildenbrand <david@kernel.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren
- Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Andi Kleen <andi@firstfloor.org>, Hidehiro
- Kawai <hidehiro.kawai.ez@hitachi.com>, Rik van Riel <riel@redhat.com>, Yu
- Zhang <yu.c.zhang@linux.intel.com>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, rientjes@google.com,
- seanjc@google.com, ackerleytng@google.com, vannapurve@google.com,
- michael.roth@amd.com, jiaqiyan@google.com, tabba@google.com,
- dave.hansen@linux.intel.com, Isaku Yamahata <isaku.yamahata@intel.com>,
- Xiaoyao Li <xiaoyao.li@intel.com>
-Subject: Re: [PATCH v6 0/5] mm: Fix MF_DELAYED handling on memory failure
-Message-Id: <20260917165708.0ffa717945e3e81dc7c25544@linux-foundation.org>
-In-Reply-To: <20260917-memory-failure-mf-delayed-fix-v6-0-4b00856b5364@google.com>
-References: <20260917-memory-failure-mf-delayed-fix-v6-0-4b00856b5364@google.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="IRnmqpPw"
+Received: from [172.27.3.124] (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 68I07oYR3566522
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Thu, 17 Sep 2026 17:07:51 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 68I07oYR3566522
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026082801; t=1789690072;
+	bh=6kBTD2Ow5ari7NgIizG1exdB4ovI+H1dTdCVAKQkXnc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IRnmqpPwCOdvZf1J5qa6ajyPYLbgNept9V+/ToOvjJOu/8RtZ898S1hldNTP0p4Za
+	 do9xN2Umq3TnPBvqNJFIBk/qQ9AjTvzvglJiL7W83y4dqko6/R5oB1Zu8kayXJ9oB/
+	 uVoeSZGc6W5dmYQBKBVaKYkQrYML6Uh1kEkV+jhNRgQkxtCNzo+zoKsg1K6jtMUf/l
+	 yJhkO0dQAZMmL3EWuKXPJpp1SvaFThBLURg1lR3HyAzzazdZltUK6iwWVLeTXCUhoi
+	 +br4AUf/FM91fMhvgV86jU6f1FKTvIXPwVtfG/Jz7+nqIKJhk+IGVuTEXdV7BxI7JW
+	 2W/yzuioxXkOw==
+Message-ID: <6141901e-b7a2-4b8e-bf77-eca4a40644e7@zytor.com>
+Date: Thu, 17 Sep 2026 17:07:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] x86/fred: Reconstruct the #GP context for rejected
+ INT instructions
+To: Matthew Schwartz <matthew.schwartz@linux.dev>, Xin Li <xin@zytor.com>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Lionel Landwerlin <lionel.g.landwerlin@intel.com>,
+        Shuah Khan <shuah@kernel.org>, stable@vger.kernel.org
+References: <20260917230907.2080792-1-matthew.schwartz@linux.dev>
+ <20260917230907.2080792-2-matthew.schwartz@linux.dev>
+Content-Language: en-US, sv-SE
+From: "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <20260917230907.2080792-2-matthew.schwartz@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Thu, 17 Sep 2026 20:43:46 +0000 Lisa Wang <wyihan@google.com> wrote:
+On 2026-09-17 16:09, Matthew Schwartz wrote:
+> FRED event delivery does not use the IDT, so the gate DPL check that
+> rejects a user INT n falls to software (Intel FRED specification [1],
+> section 8.3). fred_intx() rejects the same vectors as IDT delivery, but
+> reports a zero error code and the IP after the INT. This breaks the
+> signal ABI. Wine uses the error code to recognize INT 0x2d, so the
+> changed context turns a handled breakpoint into an access violation in
+> Elden Ring.
+> 
+> Rewind IP using the instruction length in the augmented SS and
+> synthesize the IDT selector error code, (vector << 3) | 2. Set RF in the
+> saved flags, as the CPU does for a #GP fault. Section 5.2.1 defines the
+> saved vector, instruction length and RF state. The supplied length
+> handles prefixes without reading user memory. Limit the changes to
+> already-rejected software interrupts, preserving the accepted INT3, INT4
+> and enabled INT80 paths and hardware exceptions. With IA32 emulation
+> disabled, INT 0x80 now reports the same #GP as the DPL 0 gate IDT
+> installs there. The rewound IP also stops fixup_iopl_exception() from
+> inspecting the byte after the INT.
+> 
+> Also clear the software event flag. Section 6.2.3 specifies that ERETU
+> with this flag and TF set traps before executing any user instruction. A
+> tracer that suppresses SIGSEGV and resumes with TF set expects the next
+> instruction to run first, as after IRET. The sigreturn path clears the
+> same flag for this reason in prevent_single_step_upon_eretu().
+> 
+> [1] Intel Flexible Return and Event Delivery (FRED) Specification,
+> revision 9.0 (346446-009US), sections 5.2.1, 6.2.3 and 8.3.
+> 
+> Fixes: 14619d912b65 ("x86/fred: FRED entry/exit and dispatch code")
+> Reported-by: Paul Gofman <pgofman@codeweavers.com>
+> Closes: https://gitlab.freedesktop.org/mesa/mesa/-/work_items/15745
+> Closes: https://gitlab.freedesktop.org/mesa/mesa/-/work_items/16132
+> Signed-off-by: Matthew Schwartz <matthew.schwartz@linux.dev>
+> Link: https://cdrdv2.intel.com/v1/dl/getContent/678938 # [1]
 
-> Here's a sixth revision to fix MF_DELAYED handling on memory failure.
+Reviewed-by: H. Peter Anvin <hpa@zytor.com>
 
-Thanks.  Yourself and your reviewers.
+This really should go into -stable.
 
-I've added this to mm.git's mm-new branch.  If it doesn't break
-horribly then after a few days I'll move it into the mm-unstable
-branch, from where it will be pulled in linux-next.
-
-All being well, a few weeks from now I'll move it into mm.git's
-non-rebasing mm-stable branch.  mm-stable is where we assemble material
-for upstreaming in the upcoming mainline merge window.
-
+	-hpa
 
