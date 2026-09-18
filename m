@@ -1,156 +1,253 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57304A4F1F
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 13:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44DFA4FECD4
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 14:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789739376; cv=none; b=AxYKg76tz/p7VjWNNJpkRUFN3gop1+A/dDgebFa60jswPKm0VwnDVL9wwYFAd8kWio7CRh3Mugo4b318QTi9FepTz684ICJK9CIFVo8ZhVO6/kn/hOlDg/+GMBpreBh56iMs7gLwpT2Yu1D+07FvcZJkiy3hCk9UlvqxBZFwUQE=
+	t=1789741281; cv=none; b=IYMjIeRfiP6ciG5ZvYh968Q5F6Z4E+0HDr7VCxj+oPMLb7KP0Ol05Z0cMc+wTlc8vCU/dCfkOiESfkJEOzDAYAPvzHYWjnM5IKXzjFD3xenJZS+Dn3ZeQTLBygi/8AC+qiXX323qpxtBUdzjFwoCnITdXN6ILKtFrXdfpVgDyf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789739376; c=relaxed/simple;
-	bh=Ep+wq/i2umiA8YS7Pl1zPbiNgVmnMR53naO/aGKJnfw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YROlzbuBcUQw4+vhHuXYAQ+qXR5jZkfmXvDOAo28ByGEB0ZscfBDSvdGztT9RfZPV+GDlkfPpWCgAk1VkrrgyEerKLZP2KIKmCAchuUoHKZaWZ5JT3eDFsIDcdw6IAifO5d2ruk9ZLODILHjtYqwaVthz7Ru6SbujQlA9Nrva0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dHTR+nNn; arc=none smtp.client-ip=74.125.228.12
+	s=arc-20240116; t=1789741281; c=relaxed/simple;
+	bh=rdkuxtYhkkz5bw7bkfe0Y9gpgI/oRos0ZP5NsumQ488=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K4QCNOhNaWBnDNJsNE/2nBCn4u3fi1BUpGe72EzHtF1HHEGdGDc/2gs73coQeSiGfSTBatLCC8ONVBhebbvanrlBEmX3uLc1iEQjk0Jl6hHn1d4W+8/KOpzRaLk0mcwDQBSxzJYQnnA7SuqUaCNoRhGqX5ZL/e7g6RirWEsYZDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wh6ySA0g; arc=none smtp.client-ip=74.125.228.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dHTR+nNn"
-Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469e211a3so682241b3a.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 06:49:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wh6ySA0g"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc1cebcb8d7so202804a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 07:21:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789739374; x=1790344174; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=FZ2x5YA1Wkn+XLaTMl1C5PiwQkP5R3MNLqBp+wmPsGk=;
-        b=dHTR+nNnvAj0ZAW1rFW/ydcNrcY/lehNv6RPuL0etSjAiewifT6Oyh+vEVj+ctkwRm
-         0iLCr5H+j1zj3p4EPRcEUvGh2bQbS7dZKSJTHtRgnoTFd13dbjyK8g6mnOfeCbdl5HCH
-         D8zWjgMHagCOuxt6Pxlal48PBlV2gL3d+tbSbNLN0ir48NzKC1E5sOXkOd4EQxITV0fe
-         pbsVvB+3tKBfyaxZy2JeFscNlkuj4PoayAQdoH3qI/pkVllPNIrBtA6nN50OeUUDGpTj
-         xOi6A1fTSJQx/Ltih73tOvKHRQOzCBJ11kwAvyMZD55LmN8oe5TeYvrtIF5mWfGZXDzo
-         qbOQ==
+        d=gmail.com; s=20251104; t=1789741279; x=1790346079; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=t6++YPkG1Ju+PwnB1ApEm7KTa+NYDmrm6+vHdir/OXs=;
+        b=Wh6ySA0gJoK5q7GylEoTNkH2wcS5xvymx3+zilbI6e21o826XZbGOdYTYyfqVk4JFQ
+         mFd+DsRrjKsvZSESjSUOuSP5yDYIbJiMxIAQ4LElBA74tRqGGCobPCxcaGWC2CuiGrVr
+         iOB5L9MwWZRBavK/wU3UyBrYNmFt4XPttzE3S7h/GYOjT7m1GIdO9tTPJ3SSQOSQY0GW
+         rdB+IhO+MfKZ+7A+8g2YqyFY5rIg/2iFRHz2lYRIC2oQuvZO1QzY27DfwWfWWajxEZmv
+         Qdz+9CR2rnPCfsyCafNuxwyvxDkMra/p1CHVr7z1sFPE8yCBi4Dn+b7HPcrCjB7dE6te
+         mAnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789739374; x=1790344174;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=FZ2x5YA1Wkn+XLaTMl1C5PiwQkP5R3MNLqBp+wmPsGk=;
-        b=FjqHq5Uds5L2JFnYotO26sVkqx7IdE6WKtScwvDLenfjhjNQA3QDC14+c0Prqiyjxa
-         wLmiwVvvagfOxWnHIgbkrSVPycigHR3WU+OaDZpm24TpOx7ED8lKtidqoC0pEe/lK4bd
-         sVeTV2VgzTSzVTa1Y06xsRpC3b8R6AuAnX8XfMm4VGATHqIgeB3SA+xWtjFYt/Z99oMP
-         hXDxuorjNR/qHnvFOCfFHJ6Pt+gSVCkpvhXCknDSVlsT8pccss0p/VIxL8jTrVBL6YhZ
-         jASniyuiJo3wcieJ/dwD9P+hP9MceCoenQZKM056FNZDnGEQ8+y5d4f8ZO3/UMdAKnpw
-         HN8w==
-X-Forwarded-Encrypted: i=1; AKwUvBz56OWeNCj5iVvfql5KTnVtf1yTxWxWx1aJgschLDj81Ycou6flUfx2kpnwL8KaOBplFemMjFqgia6S4JFip2I=@vger.kernel.org
-X-Gm-Message-State: AFuF++mmvhQn+SvhJLvSnkUqDA64PviSP6l0GJTxg3eFzjkYyHs7HcO3
-	QCHghtBlPT2TjRfNWj2nOk9pTcXjX+ZQP6+6NOPn/Ffj+e7uO6W7tBz9
-X-Gm-Gg: AYBFou1ZC3Hc78z1LzQdmTmLBQiXl3STx/MwneTJiST2N9/ch7hDt6+saZLe7iyratz
-	NPnFYO+Ay3ghmf3q4uAiPVGqpSH5qO/fpNZ6C2BDFpNU/nYFNknPRb8eiYNsWmNXrxoJMSQs8N5
-	YNFrX9quR2mfPk/bXeINIq4QE3TLA4xixq7DYq0hlUZubDEGAQPdc02Qydby2LibCpl1hIwVsHy
-	EpkRMOlW64PH3rZBuoHAkAJJ1+fQASEzq3WKND7hPrDeNoPxutiHBx/M7FiC3onbAuDEoSmldUp
-	SBrzE+Teirt5jL20X/7sQH+0h75aW5nCJHoSAFXxmPXWlYhaxZim/Qe/lTYLBmE1HzrNwDGhcRf
-	DpomsvbAtM3n9nLHjenZSoTvH5hT9hGr5keioqT1Rl7Uxk4QikmCRIuU5y87OwbWJCo5ug+tyXC
-	lnGYo4JbpYxsnCQVDCk9CHGJUy1bCtaNp3jThdcuX815ojg4tcyTepYucNjZdYZGABA5cKa+rVO
-	pwTKv9wVA==
-X-Received: by 2002:a05:6a00:2d26:b0:857:72f8:dc99 with SMTP id d2e1a72fcca58-874dddfd214mr5511344b3a.26.1789739373932;
-        Fri, 18 Sep 2026 06:49:33 -0700 (PDT)
-Received: from [163.43.103.131] ([163.43.103.131])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-875cf12d57bsm888878b3a.1.2026.09.18.06.49.31
+        d=1e100.net; s=20260707; t=1789741279; x=1790346079;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=t6++YPkG1Ju+PwnB1ApEm7KTa+NYDmrm6+vHdir/OXs=;
+        b=oD9/RrrimyjUScYMa8gxFTEkAcSndK9K2wsD/7dXsK8UOKIaaMyS2AUcv0qZoYcE1s
+         JMFygeew/lTpNVXrnWQiyzvn1mmOr81fIU9k53XISKrQJyzP4l4LqTCcoTz6uoF7Zt7Y
+         qUazEaGouGXXRzk6bB6xYoQyH9KroDmm654lla1NhraFcx4HCTTzLyJjY3YtkFbW/7u6
+         LBZQiEPIreRr3BF6qrjB3/BkYxlUPZr1Pzc/4AU/QYASXskfhBAI+PxUSjCToDEqz52f
+         YMLEEynhtScAdP8yIJIYh6me87HVsg5WqofQTBLFHqZqcQaZ8Vv3T2vJMCo+0FEFEoE2
+         McDg==
+X-Forwarded-Encrypted: i=1; AKwUvBzY7XLlliZNKnjY9hTv9hMkXQRYLo1mUBRmHsqycFJY5FJvCHh3a8B6omdTd+3GUvGVETucTwI9jmUzlw0OyWg=@vger.kernel.org
+X-Gm-Message-State: AFuF++lf3DJ/aGioXAFk1r77IURpdoyQjirvzjIlk8Ah6X/4IvXaMQJA
+	KqFRd6ZnMqRi4L+vg0eo2bOqYcZ8R/O+2TvsYD8AOaBr8850F7qvLW8zgnxBCw==
+X-Gm-Gg: AYBFou3uv1hbbVe8TwpbLy6MSGwR69rzwCbVkUxyA9riR96vJBXgGcnrA2+wx4qz7dJ
+	I29d9cDxfKqVAVXQyRMbjGh/Vl4HtTPJy+OZk1Yf0jT0dzASrhuc3BimIKEGCyF67lttDtvTFvE
+	M4/dd3aODFP5AJeHFK+bUYxVQOjYA7+KELaMZ1eyGZLGpPy8r01FvYPGvADIeX5Bmyu5fz4kh9i
+	aHmsVcZcwq6VQWwz4S+ioySB2PR/bp428c+RqOzEacPhuwJJyNLF6agHr37ikmlNUTRrMRcur0m
+	c2eaW5KnIOoJGSjC7sjKyasBSvJGrs3JWevh9R41pAjtysMn7DBOzCburhLV71IokwtscQtOsxe
+	sDhd1R7bziOlXcvEl9uB4PhRk1AmFcra3ACWmcmtu8K4a8JoM0saTTUVq2TAIXBKhCLCi/oThlL
+	p/MCXYLVNB4xKN9VG2xrScXFj/PHJxq3RYH3oA06INzdzyJNVzRiuMgtcF9oMBS6IEvs3aFThny
+	B6wTVCl8cTMv2fGaSHUngQ=
+X-Received: by 2002:a17:90b:4c87:b0:39e:4c7e:bc6 with SMTP id 98e67ed59e1d1-39e5573521amr3158853a91.20.1789741279214;
+        Fri, 18 Sep 2026 07:21:19 -0700 (PDT)
+Received: from x1c ([2405:9800:b670:b64b:f2cd:1bf9:a704:c687])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e3617443asm13420739a91.9.2026.09.18.07.21.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 06:49:33 -0700 (PDT)
-From: Yuya Kusakabe <yuya.kusakabe@gmail.com>
-Date: Fri, 18 Sep 2026 22:49:30 +0900
-Subject: [PATCH net] selftests: net: fix CONFIG_SYSCTL sort order in
- configs
+        Fri, 18 Sep 2026 07:21:18 -0700 (PDT)
+From: Tharit Tangkijwanichakul <tharitt97@gmail.com>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Sean Christopherson <seanjc@google.com>,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev,
+	skhan@linuxfoundation.org,
+	me@brighamcampbell.com,
+	jkoolstra@xs4all.nl,
+	Tharit Tangkijwanichakul <tharitt97@gmail.com>
+Subject: [PATCH v2] KVM: selftests: Test partial KVM_CLEAR_DIRTY_LOG requests
+Date: Fri, 18 Sep 2026 21:20:52 +0700
+Message-ID: <20260918142053.10127-1-tharitt97@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260918-selftests-net-config-sort-v1-1-968ea6e8c1b7@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAGpBrWoC/yWM0QrCMBAEf6XcswdNLGr9FemDJpt6IonkThFK/
- 92oj7PszEKKKlA6dgtVvESl5AZu01G4nvMMltiYfO93/egOrLgng5pyhnEoOcnMWqrxEN0W0aV
- h9Htq/qMiyfvXPlE70/Qf9Xm5Idi3Suv6AeYWqSyCAAAA
-X-Change-ID: 20260918-selftests-net-config-sort-4d13ed1f4927
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>
-Cc: Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Oleg Nesterov <oleg@redhat.com>, Joel Granados <joel.granados@kernel.org>, 
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Yuya Kusakabe <yuya.kusakabe@gmail.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1797;
- i=yuya.kusakabe@gmail.com; h=from:subject:message-id;
- bh=Ep+wq/i2umiA8YS7Pl1zPbiNgVmnMR53naO/aGKJnfw=;
- b=owEBbQKS/ZANAwAIASrX0XUqXRtNAcsmYgBqrUFr4VG06BZEuZlW16iTbpLGKfNzDeuCZJWZ8
- h0XS22oePeJAjMEAAEIAB0WIQTaB7usAfxNKMeqa6Yq19F1Kl0bTQUCaq1BawAKCRAq19F1Kl0b
- TbH3D/4vwDjKgb51jQAQukW1Lr1H3sYEgNU2J4cJ5vAJctFgsT8JFa3uwrQl9iMWVZJgLPtfyeX
- Co8L1xtmER6SdKxVhJaRQFbnI6plvU6ESGuthghGbw02CuSd+e8GmrplFDl6UL10bZLatncJF7M
- 9NPAGQuaZP738D7UmRhzqlZCNjij7temifArHwwwkpobD9z1yqe9IuqUNlaNgzYW8J24GGlEQij
- RzYTaoOy/9rW5leTuMSc+N4rG1KM7YAADRbURMvhjNDsf4154KeYRwHHkDI7EpWbvo9gBw59ER6
- kxV+yodMa7NyXegA1gcsGjHO49e48ZalxKjjFYZnXFCe7ndcVCYoS3ImQSIIpUlSgJp3N1B/3tv
- eaksZQ7bUlzer483RJkc+Gsz5OklacaiiCzKC4zqBO8HIYeetpWrBbF/U3ZcXUPT+HKjO61cxHi
- 5y7ymRKsFQxT96iLf2eN8z4zPAkdSVfC9DfRMb00z/7xGJexzrWBLUwD1Nh7MUzjpGqsx/Yb5UX
- 4C0YR5kenl6Dxux7HP0UlxIwJ0U0paaquE8ImVCnPDXG6D5g1vgxPAqR08R5H9O0ot+GkvGEpqs
- G581Ei+zYX56lGE5N55pAQnpJ7gPdsqBcP4sQn0fcdu008iwVI1D6I2GC0NwsjIdd/MJFK6fQvv
- nThWWOF3UQOtDyw==
-X-Developer-Key: i=yuya.kusakabe@gmail.com; a=openpgp;
- fpr=DA07BBAC01FC4D28C7AA6BA62AD7D1752A5D1B4D
+Content-Transfer-Encoding: 8bit
 
-Commit 8d75c338f0bc ("sysctl: remove CONFIG_PROC_SYSCTL, it just mirrors
-CONFIG_SYSCTL") renamed CONFIG_PROC_SYSCTL to CONFIG_SYSCTL in place,
-which left the entry out of alphabetical order in the net and
-packetdrill configs. The netdev CI check for sorted selftest configs
-now fails for every patch that touches either file.
+The clear-log mode invokes KVM_CLEAR_DIRTY_LOG with first_page set to
+zero and num_pages covering the entire memory slot. But the clear-log
+allows targeted clearing. So, the test does not verify that KVM
+correctly applies a bitmap relative to a nonzero first_page,
+or that pages not selected by a partial request remain dirty.
 
-Fixes: 8d75c338f0bc ("sysctl: remove CONFIG_PROC_SYSCTL, it just mirrors CONFIG_SYSCTL")
-Assisted-by: LLM
-Signed-off-by: Yuya Kusakabe <yuya.kusakabe@gmail.com>
+Add a focused test that creates a memory slot with
+KVM_DIRTY_LOG_INITIALLY_SET, then submits a 64-page clear request
+starting at page 64 with only bitmap bit 1 set. Verify that memslot page
+65 becomes clean while every other host-page bit remains dirty.
+
+Write to page 65 from the guest and verify that dirty tracking was
+re-enabled and the page becomes dirty again.
+
+Signed-off-by: Tharit Tangkijwanichakul <tharitt97@gmail.com>
 ---
- tools/testing/selftests/net/config             | 2 +-
- tools/testing/selftests/net/packetdrill/config | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes in v2:
+Address two issues from Sashiko's review
+ - Address Out-of-bound guest access when host page size
+exceeds the guest page size by sizing the test memslot from 192 host
+pages, converting to guest pages before applying the allocation
+adjustment. 
+ - Skip the partial-clear test if KVM_DIRTY_LOG_INITIALLY_SET is not
+supported, since the test requires the bitmap to start with all
+pages marked dirty.
 
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 30d5fcb09a83..737e7e6327b3 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -118,10 +118,10 @@ CONFIG_NFT_NAT=m
- CONFIG_NUMA=y
- CONFIG_OPENVSWITCH=m
- CONFIG_PAGE_POOL_STATS=y
--CONFIG_SYSCTL=y
- CONFIG_PSAMPLE=m
- CONFIG_RPS=y
- CONFIG_SYN_COOKIES=y
-+CONFIG_SYSCTL=y
- CONFIG_SYSFS=y
- CONFIG_TAP=m
- CONFIG_TCP_CONG_DCTCP=y
-diff --git a/tools/testing/selftests/net/packetdrill/config b/tools/testing/selftests/net/packetdrill/config
-index 83dde525c53c..b7df8bf30920 100644
---- a/tools/testing/selftests/net/packetdrill/config
-+++ b/tools/testing/selftests/net/packetdrill/config
-@@ -4,8 +4,8 @@ CONFIG_IPV6=y
- CONFIG_NET_NS=y
- CONFIG_NET_SCH_FIFO=y
- CONFIG_NET_SCH_FQ=y
--CONFIG_SYSCTL=y
- CONFIG_SYN_COOKIES=y
-+CONFIG_SYSCTL=y
- CONFIG_TCP_CONG_CUBIC=y
- CONFIG_TCP_MD5SIG=y
- CONFIG_TUN=y
-
+Test Results:
+- on x86_64 with 4K host and guest pages:
+	./dirty_log_test -M clear-log
+	PASS
+- on arm64 Rock 5B with 4K host pages, including 4K, 16K and
+64K guest page modes:
+	./dirty_log_test -M clear-log
+	PASS
 ---
-base-commit: 46bc52d13594848023e681860df8700c8db14354
-change-id: 20260918-selftests-net-config-sort-4d13ed1f4927
+ tools/testing/selftests/kvm/dirty_log_test.c | 112 +++++++++++++++++++
+ 1 file changed, 112 insertions(+)
 
-Best regards,
---  
-Yuya Kusakabe <yuya.kusakabe@gmail.com>
+diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
+index af5eb0334a74..3976748f3940 100644
+--- a/tools/testing/selftests/kvm/dirty_log_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_test.c
+@@ -815,6 +815,114 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	kvm_vm_free(vm);
+ }
+ 
++/* Use the 2nd 64-page range to exercise a non-zero offset. */
++#define TEST_CLEAR_LOG_FIRST_PAGE	64
++#define TEST_CLEAR_LOG_NUM_PAGES	64
++#define TEST_CLEAR_LOG_BIT		1
++#define TEST_CLEAR_LOG_PAGE		(TEST_CLEAR_LOG_FIRST_PAGE + \
++					 TEST_CLEAR_LOG_BIT)
++static void guest_code_clear_log(void)
++{
++	u64 addr = guest_test_virt_mem + TEST_CLEAR_LOG_PAGE * host_page_size;
++
++	while (true) {
++		vcpu_arch_put_guest(*(u64 *)addr, 1);
++		GUEST_SYNC(1);
++	}
++}
++
++/*
++ * Verify KVM_CLEAR_DIRTY_LOG only clears (and re-arms) the requested range:
++ * with KVM_DIRTY_LOG_INITIALLY_SET every page starts dirty; clearing a single
++ * page must leave its neighbours dirty and must write-protect the page so the
++ * next guest write re-dirties it.
++ */
++static void run_clear_log_partial_test(enum vm_guest_mode mode, void *arg)
++{
++	unsigned long *bmap, *clear_bmap;
++	struct kvm_vcpu *vcpu;
++	struct kvm_vm *vm;
++	u64 page;
++
++	/* Allocate enough memory for three 64-host-page range */
++	guest_num_pages = vm_adjust_num_guest_pages(mode,
++			vm_num_guest_pages(mode, 3 * 64));
++
++	vm = create_vm(mode, &vcpu, 2 * guest_num_pages, guest_code_clear_log);
++
++	guest_page_size = vm->page_size;
++	host_num_pages = vm_num_host_pages(mode, guest_num_pages);
++	host_page_size = getpagesize();
++
++	guest_test_virt_mem = DEFAULT_GUEST_TEST_MEM;
++	guest_test_phys_mem = (vm->max_gfn - guest_num_pages) * guest_page_size;
++	guest_test_phys_mem = align_down(guest_test_phys_mem, host_page_size);
++
++	bmap = bitmap_zalloc(host_num_pages);
++	clear_bmap = bitmap_zalloc(BITS_PER_LONG);
++
++	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
++				    guest_test_phys_mem, TEST_MEM_SLOT_INDEX,
++				    guest_num_pages, KVM_MEM_LOG_DIRTY_PAGES);
++	virt_map(vm, guest_test_virt_mem, guest_test_phys_mem, guest_num_pages);
++
++	sync_global_to_guest(vm, host_page_size);
++	sync_global_to_guest(vm, guest_test_virt_mem);
++
++	kvm_vm_get_dirty_log(vm, TEST_MEM_SLOT_INDEX, bmap);
++	for (page = 0; page < host_num_pages; page++)
++		TEST_ASSERT(test_bit_le(page, bmap),
++			    "Page %lu should be dirty after INITIALLY_SET", page);
++
++	__set_bit_le(TEST_CLEAR_LOG_BIT, clear_bmap);
++	kvm_vm_clear_dirty_log(vm, TEST_MEM_SLOT_INDEX, clear_bmap,
++			       TEST_CLEAR_LOG_FIRST_PAGE,
++			       TEST_CLEAR_LOG_NUM_PAGES);
++
++	kvm_vm_get_dirty_log(vm, TEST_MEM_SLOT_INDEX, bmap);
++	for (page = 0; page < host_num_pages; page++) {
++		if (page == TEST_CLEAR_LOG_PAGE)
++			TEST_ASSERT(!test_bit_le(page, bmap),
++				    "Cleared page %lu should be clean", page);
++		else
++			TEST_ASSERT(test_bit_le(page, bmap),
++				    "Page %lu should still be dirty", page);
++	}
++
++	/* The cleared page is now write-protected; a guest write must re-arm it */
++	vcpu_run(vcpu);
++	TEST_ASSERT(get_ucall(vcpu, NULL) == UCALL_SYNC,
++		    "Unexpected guest exit: %s",
++		    exit_reason_str(vcpu->run->exit_reason));
++
++	kvm_vm_get_dirty_log(vm, TEST_MEM_SLOT_INDEX, bmap);
++	TEST_ASSERT(test_bit_le(TEST_CLEAR_LOG_PAGE, bmap),
++		    "Page %lu should be dirty again after re-arming",
++		    (u64)TEST_CLEAR_LOG_PAGE);
++
++	free(bmap);
++	free(clear_bmap);
++	kvm_vm_free(vm);
++}
++
++static void test_clear_log_partial(void)
++{
++	host_log_mode = LOG_MODE_CLEAR_LOG;
++	if (!log_mode_supported()) {
++		print_skip("Log mode '%s' not supported",
++			   log_modes[host_log_mode].name);
++		return;
++	}
++
++	if (!(kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2) &
++		KVM_DIRTY_LOG_INITIALLY_SET)) {
++		print_skip("KVM_DIRTY_LOG_INITIALLY_SET not supported");
++		return;
++	}
++
++	for_each_guest_mode(run_clear_log_partial_test, NULL);
++}
++
+ static void help(char *name)
+ {
+ 	puts("");
+@@ -913,5 +1021,9 @@ int main(int argc, char *argv[])
+ 		for_each_guest_mode(run_test, &p);
+ 	}
+ 
++	if (host_log_mode_option == LOG_MODE_ALL ||
++	    host_log_mode_option == LOG_MODE_CLEAR_LOG)
++		test_clear_log_partial();
++
+ 	return 0;
+ }
+-- 
+2.53.0
 
