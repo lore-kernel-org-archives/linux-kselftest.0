@@ -1,253 +1,217 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44DFA4FECD4
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 14:21:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51FBE4D9F92
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 14:27:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789741281; cv=none; b=IYMjIeRfiP6ciG5ZvYh968Q5F6Z4E+0HDr7VCxj+oPMLb7KP0Ol05Z0cMc+wTlc8vCU/dCfkOiESfkJEOzDAYAPvzHYWjnM5IKXzjFD3xenJZS+Dn3ZeQTLBygi/8AC+qiXX323qpxtBUdzjFwoCnITdXN6ILKtFrXdfpVgDyf0=
+	t=1789741680; cv=none; b=dnC8q8b2OoxtxT4JhC6tB02qu67LTqDd0o3M23XCv34ekwYRGjhlShA6BRC9drfgqLrWlk3oQiRcI//oc8OXKuwySJIRLtf7BojJTRtjcEFu58U2/zI+wi0mrjtTciQMs1VAMtndA/yS8jcMUjzz7xyb8kX8C/jyXYXhKDD0uRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789741281; c=relaxed/simple;
-	bh=rdkuxtYhkkz5bw7bkfe0Y9gpgI/oRos0ZP5NsumQ488=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K4QCNOhNaWBnDNJsNE/2nBCn4u3fi1BUpGe72EzHtF1HHEGdGDc/2gs73coQeSiGfSTBatLCC8ONVBhebbvanrlBEmX3uLc1iEQjk0Jl6hHn1d4W+8/KOpzRaLk0mcwDQBSxzJYQnnA7SuqUaCNoRhGqX5ZL/e7g6RirWEsYZDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wh6ySA0g; arc=none smtp.client-ip=74.125.228.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789741680; c=relaxed/simple;
+	bh=qWPM8mEcQAiZiBe5wIuy4aqUTDeswnrEyUyg1zkQHi0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZXyKEQWkaXAP1ExdhTLK+mUXCFstBgP42p9iMcV32G+DcS+SEosr2H46vxBkanROpu3HIUiIdUU7Qe6hS/qJgJXikb8IRDmz8HfHaQOnAhf1XpoBTdV7yqz4xH2t3gY7mDFmoh2825tkR0/KlJrzxtgtwnzWLsW97f5eGNS+AyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YkYrkVSK; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=VuApddnk; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wh6ySA0g"
-Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc1cebcb8d7so202804a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 07:21:20 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YkYrkVSK";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="VuApddnk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1789741676;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Tzy4rg64m2nfrHznucdcUVmAGxkvGHwxFBaPQdjr128=;
+	b=YkYrkVSK+1em0CaBrSnAFiTUIwgfaX3bMTKCTXJ5nOl38OrSUaOSEAZQPg1DHtEzFTbno2
+	RHcaR1Dg03346Knt8dNZFn5gT3yfwsNcXNzn1OIYcsLyEU6HwIVI26xpf/k3P0K7ek/JPL
+	m8tCLbaP8J5nJlxDYWs4JxaLd9iddKM=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-665-cCuI8ihkPLi9XZpTKm6H4A-1; Fri, 18 Sep 2026 10:27:54 -0400
+X-MC-Unique: cCuI8ihkPLi9XZpTKm6H4A-1
+X-Mimecast-MFC-AGG-ID: cCuI8ihkPLi9XZpTKm6H4A_1789741674
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-487038bc9b8so566156f8f.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 07:27:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789741279; x=1790346079; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=t6++YPkG1Ju+PwnB1ApEm7KTa+NYDmrm6+vHdir/OXs=;
-        b=Wh6ySA0gJoK5q7GylEoTNkH2wcS5xvymx3+zilbI6e21o826XZbGOdYTYyfqVk4JFQ
-         mFd+DsRrjKsvZSESjSUOuSP5yDYIbJiMxIAQ4LElBA74tRqGGCobPCxcaGWC2CuiGrVr
-         iOB5L9MwWZRBavK/wU3UyBrYNmFt4XPttzE3S7h/GYOjT7m1GIdO9tTPJ3SSQOSQY0GW
-         rdB+IhO+MfKZ+7A+8g2YqyFY5rIg/2iFRHz2lYRIC2oQuvZO1QzY27DfwWfWWajxEZmv
-         Qdz+9CR2rnPCfsyCafNuxwyvxDkMra/p1CHVr7z1sFPE8yCBi4Dn+b7HPcrCjB7dE6te
-         mAnQ==
+        d=redhat.com; s=google; t=1789741674; x=1790346474; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Tzy4rg64m2nfrHznucdcUVmAGxkvGHwxFBaPQdjr128=;
+        b=VuApddnk/9f1dbbIDkrhZdd49nsYl55RFr7buqScLO4uZUY7MCD5IguFyR4lEjT6zz
+         v3iWSWt8GCxuz1KrV/3ut0kiw6DvvLOXGRu4pYwMliXydBroNCIYNgBW6Aprm+S2YQ6s
+         f9Df0bFyE1wXxnj8sSt1uXCMFn0dkbzMNvxYULapRZZzL/I5yXwbGF4yne2GIl3hCK9U
+         YPHRaflnHVtL/blt9lE8VjdLEeONNiu8wY3zD3elw9z7/46zo4SAwGAlhk5op/PAMXCD
+         MJQJH320bmG7tCrqYgW2hIJruoswKCJQxXGxOj+FekBgHjHlXbPyAh9p+y+qCGOVnyFb
+         ZnUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789741279; x=1790346079;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=t6++YPkG1Ju+PwnB1ApEm7KTa+NYDmrm6+vHdir/OXs=;
-        b=oD9/RrrimyjUScYMa8gxFTEkAcSndK9K2wsD/7dXsK8UOKIaaMyS2AUcv0qZoYcE1s
-         JMFygeew/lTpNVXrnWQiyzvn1mmOr81fIU9k53XISKrQJyzP4l4LqTCcoTz6uoF7Zt7Y
-         qUazEaGouGXXRzk6bB6xYoQyH9KroDmm654lla1NhraFcx4HCTTzLyJjY3YtkFbW/7u6
-         LBZQiEPIreRr3BF6qrjB3/BkYxlUPZr1Pzc/4AU/QYASXskfhBAI+PxUSjCToDEqz52f
-         YMLEEynhtScAdP8yIJIYh6me87HVsg5WqofQTBLFHqZqcQaZ8Vv3T2vJMCo+0FEFEoE2
-         McDg==
-X-Forwarded-Encrypted: i=1; AKwUvBzY7XLlliZNKnjY9hTv9hMkXQRYLo1mUBRmHsqycFJY5FJvCHh3a8B6omdTd+3GUvGVETucTwI9jmUzlw0OyWg=@vger.kernel.org
-X-Gm-Message-State: AFuF++lf3DJ/aGioXAFk1r77IURpdoyQjirvzjIlk8Ah6X/4IvXaMQJA
-	KqFRd6ZnMqRi4L+vg0eo2bOqYcZ8R/O+2TvsYD8AOaBr8850F7qvLW8zgnxBCw==
-X-Gm-Gg: AYBFou3uv1hbbVe8TwpbLy6MSGwR69rzwCbVkUxyA9riR96vJBXgGcnrA2+wx4qz7dJ
-	I29d9cDxfKqVAVXQyRMbjGh/Vl4HtTPJy+OZk1Yf0jT0dzASrhuc3BimIKEGCyF67lttDtvTFvE
-	M4/dd3aODFP5AJeHFK+bUYxVQOjYA7+KELaMZ1eyGZLGpPy8r01FvYPGvADIeX5Bmyu5fz4kh9i
-	aHmsVcZcwq6VQWwz4S+ioySB2PR/bp428c+RqOzEacPhuwJJyNLF6agHr37ikmlNUTRrMRcur0m
-	c2eaW5KnIOoJGSjC7sjKyasBSvJGrs3JWevh9R41pAjtysMn7DBOzCburhLV71IokwtscQtOsxe
-	sDhd1R7bziOlXcvEl9uB4PhRk1AmFcra3ACWmcmtu8K4a8JoM0saTTUVq2TAIXBKhCLCi/oThlL
-	p/MCXYLVNB4xKN9VG2xrScXFj/PHJxq3RYH3oA06INzdzyJNVzRiuMgtcF9oMBS6IEvs3aFThny
-	B6wTVCl8cTMv2fGaSHUngQ=
-X-Received: by 2002:a17:90b:4c87:b0:39e:4c7e:bc6 with SMTP id 98e67ed59e1d1-39e5573521amr3158853a91.20.1789741279214;
-        Fri, 18 Sep 2026 07:21:19 -0700 (PDT)
-Received: from x1c ([2405:9800:b670:b64b:f2cd:1bf9:a704:c687])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e3617443asm13420739a91.9.2026.09.18.07.21.14
+        d=1e100.net; s=20260707; t=1789741674; x=1790346474;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Tzy4rg64m2nfrHznucdcUVmAGxkvGHwxFBaPQdjr128=;
+        b=HsOUY1xnLMutDlzA/a3s2B9A+yH8SioS6yujkQ0vZ5tzG6pWnMPRMlcmx5x1Vcn3XD
+         Nfbwx4/1lUMsaWehwSebSJ0wxgXK9dQGt3Rxt7UVGKGHvdn+G9p2pkHHF960ssG9ieoO
+         dm+++oJHf/YuZ+4HR+4Slgw37y+AsxLAQ2oVSP7sgzK0zs4BXLxZEpKFRwQdNiCpDef4
+         DK4ncEOvF0pLbk6i3YQlBVKTNmGHpoKO7sj1JLK6L3KhVQNXjNuwmVTCAVrjYW2Jd9wu
+         0nr1VMucCJd9A963RYhl9hdzo+hqY7BXb+6QCVfdUCnzvqKiEdDrLPWrVT7UI5Xpufxr
+         VQ7w==
+X-Forwarded-Encrypted: i=1; AKwUvBz3fUwpGJgClRi/sCeDUnRCCbKLfgB6leeomYCm2YW76eyPgmIVc3ILpZm+qXTzs18TiIFv/ESiNWDPPMdRJkQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++kTBAVOf0U4jFAYkV15nTIY5n67qgaSFNonWPX5vjLVZr8xA1fu
+	FqKQxA7YjdG/0rYCb/WDF0HJ1S8Lx7YSMsd+3Og5EHUOAF4G9ri2utTxC5YsozF4mPIJ5D6ZwjU
+	gwi2aWoVme8F8BpohZLrd4kPfvPBd5KK6bdU6K24vqyNUnqaNme6C0GwWRLCUcI6kueojdQ==
+X-Gm-Gg: AYBFou3/gLUB5ezckA3RGKVpLYKuaEbwCovB50uCpPV3HIcf+JckGjkmkLkJrJiIUDp
+	N4DsMhaWES8hbXqFdKbuZeFddSj9AWgPzNhF6ZApYRxt8cDwG1GnikyhKnenR8JVOGj5pfEiOHa
+	+RVqBgX7Gu/EqEVML9CU2ByE8d0rC4U4OxHdAaxNK/EmPfZUa3/m3EfR3usnhoffLEvbMX5ZRg4
+	qCIeLiTJHqkjRgZtlc2GlRXTlZRFWmR0U3qiIN/J69qKTcCxLdzkYTt/UeZ9M7ur8NLYP0W5XkW
+	16sP2rppKrj3rOQx/4Q1PvptoQfu2G0G4+ZIh3mTCBnZtvo+9sh5NrC79aZPHe6q21ZLgIHj6/H
+	y+4uxhQ0pYs03BSMBvwhYCXkFUMhqJSRxluSQQcmnVdFCXw==
+X-Received: by 2002:a05:600d:4449:10b0:49f:cc2a:f73a with SMTP id 5b1f17b1804b1-49fcc2af743mr10053795e9.25.1789741673590;
+        Fri, 18 Sep 2026 07:27:53 -0700 (PDT)
+X-Received: by 2002:a05:600d:4449:10b0:49f:cc2a:f73a with SMTP id 5b1f17b1804b1-49fcc2af743mr10053175e9.25.1789741672904;
+        Fri, 18 Sep 2026 07:27:52 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-53-30-11.retail.telecomitalia.it. [79.53.30.11])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48720081426sm4196721f8f.33.2026.09.18.07.27.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 07:21:18 -0700 (PDT)
-From: Tharit Tangkijwanichakul <tharitt97@gmail.com>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Sean Christopherson <seanjc@google.com>,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linux.dev,
-	skhan@linuxfoundation.org,
-	me@brighamcampbell.com,
-	jkoolstra@xs4all.nl,
-	Tharit Tangkijwanichakul <tharitt97@gmail.com>
-Subject: [PATCH v2] KVM: selftests: Test partial KVM_CLEAR_DIRTY_LOG requests
-Date: Fri, 18 Sep 2026 21:20:52 +0700
-Message-ID: <20260918142053.10127-1-tharitt97@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        Fri, 18 Sep 2026 07:27:52 -0700 (PDT)
+Date: Fri, 18 Sep 2026 16:27:46 +0200
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
+	Jason Wang <jasowangio@gmail.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, sargun@sargun.me, jlinbox@meta.com, 
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next 2/6] vsock: add IOCTL_VM_SOCKETS_ASSIGN_G2H_NETNS
+Message-ID: <aq1D1S9p9vRl7eV_@sgarzare-redhat>
+References: <20260902-vsock-guest-ns-v1-0-9995383e9a8b@meta.com>
+ <20260902-vsock-guest-ns-v1-2-9995383e9a8b@meta.com>
+ <aqlTlFvQL34-WViB@sgarzare-redhat>
+ <aqmTYoCMmzx1BM1v@devvm29614.prn0.facebook.com>
+ <aqqPXr2LNJUM4yMW@sgarzare-redhat>
+ <aqsI5BXRB96dkIHm@devvm29614.prn0.facebook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <aqsI5BXRB96dkIHm@devvm29614.prn0.facebook.com>
 
-The clear-log mode invokes KVM_CLEAR_DIRTY_LOG with first_page set to
-zero and num_pages covering the entire memory slot. But the clear-log
-allows targeted clearing. So, the test does not verify that KVM
-correctly applies a bitmap relative to a nonzero first_page,
-or that pages not selected by a partial request remain dirty.
+On Wed, Sep 16, 2026 at 02:23:48PM -0700, Bobby Eshleman wrote:
+>On Wed, Sep 16, 2026 at 02:57:43PM +0200, Stefano Garzarella wrote:
+>> On Tue, Sep 15, 2026 at 11:50:10AM -0700, Bobby Eshleman wrote:
+>> > On Tue, Sep 15, 2026 at 05:28:25PM +0200, Stefano Garzarella wrote:
+>> > > On Wed, Sep 02, 2026 at 04:00:48PM -0700, Bobby Eshleman wrote:
+>> > > > From: Bobby Eshleman <bobbyeshleman@meta.com>
+>> > > >
+>> > > > Namespaces let a host isolate a VM's vsock traffic to a specific
+>> > > > namespace, but in a guest vsock traffic cannot be isolated to a
+>> > > > namespace. The vsock device is hardcoded to global mode and can't be
+>> > > > moved into a local-mode namespace.
+>> > > >
+>> > > > Introduce ioctl IOCTL_VM_SOCKETS_ASSIGN_G2H_NETNS on /dev/vsock that
+>> > >
+>> > > We already discussed about netlink, but I'm not sure how much work can
+>> > > take, here just another alternative, what about adding
+>> > > /proc/sys/net/vsock/g2h_owner sysctl that can be read/write where:
+>> > > 0 - no owner
+>> > > 1 - owner
+>> > >
+>> > > 0 -> 1 transition, move the device in the new nets
+>> > > 1 -> 0 transition, reset back to init_ns
+>> >
+>> > That seems reasonable, but if multi-device support ever lands, this
+>> > might be harder to adapt cleanly?
+>>
+>> I see, but maybe we can have a dev0/ dev1/ subfolders in that case.
+>>
+>> >
+>> > >
+>> > > > gives userspace a way to move the device to the calling pid's namespace.
+>> > > > The call requires CAP_NET_ADMIN in the root user namespace. A privileged
+>> > > > user wishing to "unassign" the device can move it to the init_netns,
+>> > > > which is hardcoded to global mode (so no unassign call is necessary).
+>> > > >
+>> > > > A getter to read the current assignment back was considered, returning
+>> > > > either the namespace's net_cookie or its nsfs inode number, but neither
+>> > > > seemed useful enough to bake into the uAPI now. It can be added later if
+>> > > > a user turns up that needs it.
+>> > > >
+>> > > > Add a transport hook to indicate support for guest namespacing, so that
+>> > > > transports may opt in/out. A transport that opts out keeps the
+>> > > > reachability rules it had before this ioctl existed.
+>> > > >
+>> > > > Sockets are reset when the underlying device moves to a different
+>> > > > namespace, so as to prevent reachability from the previous and now
+>> > > > disallowed namespace.
+>> > > >
+>> > > > Following the approach of netdevs, the device returns to init_net when
+>> > > > its namespace is removed. Care is taken to not break flows when the
+>> > > > device is inside a global namespace that is being torn down and alive
+>> > > > sockets are in a different global namespace. In this scenario, the
+>> > > > device's netns getter pre-emptively falls back to the init_net (always
+>> > > > global) so that these flows are not disrupted. If init_netns ever
+>> > > > supports local-mode in the future, this logic will have to be changed.
+>> > > >
+>> > > > Suggested-by: Stefano Garzarella <sgarzare@redhat.com>
+>> > > > Link: https://lore.kernel.org/all/20200427142518.uwssa6dtasrp3bfc@steredhat/
+>> > > > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+>> > > > ---
+>> > > > Documentation/admin-guide/sysctl/net.rst |  18 +++
+>> > > > include/net/af_vsock.h                   |   7 ++
+>> > > > include/uapi/linux/vm_sockets.h          |   6 +
+>> > > > net/vmw_vsock/af_vsock.c                 | 198 ++++++++++++++++++++++++++++++-
+>> > > > 4 files changed, 228 insertions(+), 1 deletion(-)
+>> > > >
+>>
+>> [...]
+>>
+>> >
+>> > One thing I realized when answering your uAPI questions and looking at
+>> > the code is that IOCTL_VM_SOCKETS_GET_LOCAL_CID is not namespace aware,
+>> > but I think it probably should be? I remember for host ns we strived for
+>> > truly strong isolation.
+>>
+>> Can you elabore a bit more?
+>>
+>
+>I'm wondering if IOCTL_VM_SOCKETS_GET_LOCAL_CID should not reveal the
 
-Add a focused test that creates a memory slot with
-KVM_DIRTY_LOG_INITIALLY_SET, then submits a 64-page clear request
-starting at page 64 with only bitmap bit 1 set. Verify that memslot page
-65 becomes clean while every other host-page bit remains dirty.
+Okay, I see now, too many IOCTL_VM_SOCKETS involved and I didn't get you 
+were referring to the GET_LOCAL_CID xD
 
-Write to page 65 from the guest and verify that dirty tracking was
-re-enabled and the page becomes dirty again.
+>CID of the g2h device if the device has been moved to an inaccessible
+>namespace? In this case, fallback to the results of h2g/local and
+>through to returning VMADDR_CID_ANY if neither of those transports are
+>loaded.
 
-Signed-off-by: Tharit Tangkijwanichakul <tharitt97@gmail.com>
----
-Changes in v2:
-Address two issues from Sashiko's review
- - Address Out-of-bound guest access when host page size
-exceeds the guest page size by sizing the test memslot from 192 host
-pages, converting to guest pages before applying the allocation
-adjustment. 
- - Skip the partial-clear test if KVM_DIRTY_LOG_INITIALLY_SET is not
-supported, since the test requires the bitmap to start with all
-pages marked dirty.
+Yeah, I agree. I'm not 100% sure if it's really an issue if we reveal it 
+to any workspace, but I also don't see why we should do that. So, yeah, 
+if possible we should reveal it only in the namespace assigned to the 
+G2H.
 
-Test Results:
-- on x86_64 with 4K host and guest pages:
-	./dirty_log_test -M clear-log
-	PASS
-- on arm64 Rock 5B with 4K host pages, including 4K, 16K and
-64K guest page modes:
-	./dirty_log_test -M clear-log
-	PASS
----
- tools/testing/selftests/kvm/dirty_log_test.c | 112 +++++++++++++++++++
- 1 file changed, 112 insertions(+)
+>
+>I also considered whether or not /dev/vsock should even be visible from
+>within an inaccessible namespace in order to not leak even the mere
+>presence of the vsock device, but it seems to me that /dev/vsock's
+>presence doesn't leak anything besides the presence of the vsock module.
+>
 
-diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
-index af5eb0334a74..3976748f3940 100644
---- a/tools/testing/selftests/kvm/dirty_log_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_test.c
-@@ -815,6 +815,114 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	kvm_vm_free(vm);
- }
- 
-+/* Use the 2nd 64-page range to exercise a non-zero offset. */
-+#define TEST_CLEAR_LOG_FIRST_PAGE	64
-+#define TEST_CLEAR_LOG_NUM_PAGES	64
-+#define TEST_CLEAR_LOG_BIT		1
-+#define TEST_CLEAR_LOG_PAGE		(TEST_CLEAR_LOG_FIRST_PAGE + \
-+					 TEST_CLEAR_LOG_BIT)
-+static void guest_code_clear_log(void)
-+{
-+	u64 addr = guest_test_virt_mem + TEST_CLEAR_LOG_PAGE * host_page_size;
-+
-+	while (true) {
-+		vcpu_arch_put_guest(*(u64 *)addr, 1);
-+		GUEST_SYNC(1);
-+	}
-+}
-+
-+/*
-+ * Verify KVM_CLEAR_DIRTY_LOG only clears (and re-arms) the requested range:
-+ * with KVM_DIRTY_LOG_INITIALLY_SET every page starts dirty; clearing a single
-+ * page must leave its neighbours dirty and must write-protect the page so the
-+ * next guest write re-dirties it.
-+ */
-+static void run_clear_log_partial_test(enum vm_guest_mode mode, void *arg)
-+{
-+	unsigned long *bmap, *clear_bmap;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	u64 page;
-+
-+	/* Allocate enough memory for three 64-host-page range */
-+	guest_num_pages = vm_adjust_num_guest_pages(mode,
-+			vm_num_guest_pages(mode, 3 * 64));
-+
-+	vm = create_vm(mode, &vcpu, 2 * guest_num_pages, guest_code_clear_log);
-+
-+	guest_page_size = vm->page_size;
-+	host_num_pages = vm_num_host_pages(mode, guest_num_pages);
-+	host_page_size = getpagesize();
-+
-+	guest_test_virt_mem = DEFAULT_GUEST_TEST_MEM;
-+	guest_test_phys_mem = (vm->max_gfn - guest_num_pages) * guest_page_size;
-+	guest_test_phys_mem = align_down(guest_test_phys_mem, host_page_size);
-+
-+	bmap = bitmap_zalloc(host_num_pages);
-+	clear_bmap = bitmap_zalloc(BITS_PER_LONG);
-+
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+				    guest_test_phys_mem, TEST_MEM_SLOT_INDEX,
-+				    guest_num_pages, KVM_MEM_LOG_DIRTY_PAGES);
-+	virt_map(vm, guest_test_virt_mem, guest_test_phys_mem, guest_num_pages);
-+
-+	sync_global_to_guest(vm, host_page_size);
-+	sync_global_to_guest(vm, guest_test_virt_mem);
-+
-+	kvm_vm_get_dirty_log(vm, TEST_MEM_SLOT_INDEX, bmap);
-+	for (page = 0; page < host_num_pages; page++)
-+		TEST_ASSERT(test_bit_le(page, bmap),
-+			    "Page %lu should be dirty after INITIALLY_SET", page);
-+
-+	__set_bit_le(TEST_CLEAR_LOG_BIT, clear_bmap);
-+	kvm_vm_clear_dirty_log(vm, TEST_MEM_SLOT_INDEX, clear_bmap,
-+			       TEST_CLEAR_LOG_FIRST_PAGE,
-+			       TEST_CLEAR_LOG_NUM_PAGES);
-+
-+	kvm_vm_get_dirty_log(vm, TEST_MEM_SLOT_INDEX, bmap);
-+	for (page = 0; page < host_num_pages; page++) {
-+		if (page == TEST_CLEAR_LOG_PAGE)
-+			TEST_ASSERT(!test_bit_le(page, bmap),
-+				    "Cleared page %lu should be clean", page);
-+		else
-+			TEST_ASSERT(test_bit_le(page, bmap),
-+				    "Page %lu should still be dirty", page);
-+	}
-+
-+	/* The cleared page is now write-protected; a guest write must re-arm it */
-+	vcpu_run(vcpu);
-+	TEST_ASSERT(get_ucall(vcpu, NULL) == UCALL_SYNC,
-+		    "Unexpected guest exit: %s",
-+		    exit_reason_str(vcpu->run->exit_reason));
-+
-+	kvm_vm_get_dirty_log(vm, TEST_MEM_SLOT_INDEX, bmap);
-+	TEST_ASSERT(test_bit_le(TEST_CLEAR_LOG_PAGE, bmap),
-+		    "Page %lu should be dirty again after re-arming",
-+		    (u64)TEST_CLEAR_LOG_PAGE);
-+
-+	free(bmap);
-+	free(clear_bmap);
-+	kvm_vm_free(vm);
-+}
-+
-+static void test_clear_log_partial(void)
-+{
-+	host_log_mode = LOG_MODE_CLEAR_LOG;
-+	if (!log_mode_supported()) {
-+		print_skip("Log mode '%s' not supported",
-+			   log_modes[host_log_mode].name);
-+		return;
-+	}
-+
-+	if (!(kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2) &
-+		KVM_DIRTY_LOG_INITIALLY_SET)) {
-+		print_skip("KVM_DIRTY_LOG_INITIALLY_SET not supported");
-+		return;
-+	}
-+
-+	for_each_guest_mode(run_clear_log_partial_test, NULL);
-+}
-+
- static void help(char *name)
- {
- 	puts("");
-@@ -913,5 +1021,9 @@ int main(int argc, char *argv[])
- 		for_each_guest_mode(run_test, &p);
- 	}
- 
-+	if (host_log_mode_option == LOG_MODE_ALL ||
-+	    host_log_mode_option == LOG_MODE_CLEAR_LOG)
-+		test_clear_log_partial();
-+
- 	return 0;
- }
--- 
-2.53.0
+Will this break userspace doing IOCTL_VM_SOCKETS_GET_LOCAL_CID on 
+loopback, etc. ?
+
+Thanks,
+Stefano
 
