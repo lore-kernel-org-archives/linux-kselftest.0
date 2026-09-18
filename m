@@ -1,87 +1,83 @@
-Received: from mail-yx2-f18.google.com (mail-yx2-f18.google.com [74.125.224.146])
+Received: from mail-yx2-f42.google.com (mail-yx2-f42.google.com [74.125.224.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EEAE52E04D
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 21:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282CC35201B
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 21:53:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789768417; cv=none; b=Le44JqgfL9cTU4ykJ4IJVbnA/o8gLfl1oGbKYSJhji+IkVfQ5b1RqkngizlGFAbZMsLpAZPaJgz0jHryiTnjEpVfr7ei/UtLLLYl3B8hYEXxPrMGLYap4l9YA8UCG6MqwwyFKCIfH3AMHIHFqXVLrY1iz4pW8Y6B0Jl3lY3eVQA=
+	t=1789768432; cv=none; b=vC0oH71n4XTNg+BvhgltDG4OnR9eDXNWl2djp+ALh+HHS6J3zMLSk9NcdGllAUvJtp1xrOVuZpjROmWR0yWrpZzBDupPYDfT4odJZvXATyJZHFxs0J7UT1D2NHDHGOA64KEOV90XTalIPWwKa367GMX4TXo3Y6668TjZQ13zHyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789768417; c=relaxed/simple;
-	bh=uwZv/c7tQiEL+ej6aYvVHDvYLKpa83n1lVZNexSFEAI=;
+	s=arc-20240116; t=1789768432; c=relaxed/simple;
+	bh=yZCLh9FYzdm/xaUKV2QwRGQ+s6VMsJPtmVEdYsPHSFk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RxNhr+PL2gxk4QfMOPal2qOvaOCn0yuxlkqbaPTox1rzLSjhfw+ZRXImFTX30vFIOYf0fhtbhJ7EuzURCDpyfuosfGZcHsArfivRGtKgpCAu0Bf/apXzY16Noit1SG8gd44rtfk0F4uZFp8RscSeRISF1JNcAxHTyvQvcGzS0Qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tenstorrent.com; spf=pass smtp.mailfrom=tenstorrent.com; dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b=hlCIICG/; arc=none smtp.client-ip=74.125.224.146
+	 MIME-Version; b=LgElGAyXGMaQHqxKCAeXepzflk2r+SQLgm6o9xGuF+oe2n6VrkaKh5CAkLSqr2QfVzHoid8fNmUCt3NGhKY/WA33UYjZX9tzZ7Y3lwd/RXQ31P6e4jwlJUxCj8EBEIo2eInIjTaTk/vXz1crXXRM2L65yiY3VaUli2FZ2myWXFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tenstorrent.com; spf=pass smtp.mailfrom=tenstorrent.com; dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b=fYjf/Ykt; arc=none smtp.client-ip=74.125.224.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tenstorrent.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tenstorrent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b="hlCIICG/"
-Received: by mail-yx2-f18.google.com with SMTP id 956f58d0204a3-66e4aac92dbso1166490d50.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 14:53:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b="fYjf/Ykt"
+Received: by mail-yx2-f42.google.com with SMTP id 00721157ae682-8961cca9193so15792357b3.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 14:53:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tenstorrent.com; s=google; t=1789768414; x=1790373214; darn=vger.kernel.org;
+        d=tenstorrent.com; s=google; t=1789768430; x=1790373230; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=SICfyq893WKBo2pXS1GifsnKMH4aQWw4kYwqMwKqsmQ=;
-        b=hlCIICG/y76Q7C7/+xr1+gg8iVFMnecV0knCiz5BeI5Fz63i91sepsuGTMUpWBHSga
-         SBIyyYLavRjNK32FpFNb7vRgQdFDR1EcZJxsS4s/H075VLg9KaFk3WX7Vl6btU6e/mAp
-         4wuRlqO4WiSNhC/Ls/vVWCYqPy+nUyQjp9fkC+o+A0AacY3KIA+aliajZ/A4ITpjCUE/
-         rkIMR1GIQolluW0W3dDcpGMYkcsKA/0QZ62HdA5TXjLLCNkvWX8IrPx6wjXUibrm5W4o
-         51SpihrxJUxCPlMg5pYWhLONxW47lgZQ0oTzUBeTz+tEOFv1WJ0zDzCdnoTuPkuXzagj
-         +4UQ==
+        bh=YgKQxSeRnOzoiZ3Got1iPeMZXr/r/xBvpSPq8RVnIaQ=;
+        b=fYjf/Yktuwipk+TfStlUBujhXHl3jw5r1hpx/fag1xAtxuSnDYMARHwJboYHRqS4it
+         hd3e6JWf+Coy2VbRvpGAuihXlzkDDAPSjaUVoc7du46rKxUzjEO6AORSu0PbD07bdf1h
+         nOE7b5HzOEv6XkL91ED4kWVej/BMZg9cpocJpH/RwVRcLodnABgsO6dIVWv95Q/FOFZV
+         uo6eVyuWsbJrzXM6gr7Xs6R97NcCI1xP1fGpLSwfKrvwaLNyMPfrJAuFCifExeMPOR+6
+         BcTw1puxaft3du8ibYEaauXspP/SvZFnv25c42QBaGJykQUC7jMTAm0YLS7FYIo2WSeP
+         UBGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789768414; x=1790373214;
+        d=1e100.net; s=20260707; t=1789768430; x=1790373230;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SICfyq893WKBo2pXS1GifsnKMH4aQWw4kYwqMwKqsmQ=;
-        b=Fce1xcNkATSGkgXTzzlYt7l2L4yaOSFLfRLdSn1QGy4gISfLmuyz4fNpFAT2UWtoqd
-         J5jt0linAXi8R75TypCCsEeYzAiNo9KKgHh8tilmBT4RkVT1aRuAFIKLTHdseIoCNehB
-         VSK49BOLZAFoklLw8fGZReNmvXqIKnjxiMZSyJpyoj09UTOTODzAZgcGFjJF3QSvM3iX
-         r7RM8rZ9qhN/QD0jJ8zfzCGSCzreknxw8fb0goeQ1oE+gYwhFnOZPO4itpSVeMZ7ilXv
-         Gi6XZdyW43chn7F1BS75+oreHISZGz9099HRg2J7YqPvZvW75hZcK+Cwiby7UClm0duk
-         AhAg==
-X-Forwarded-Encrypted: i=1; AKwUvBzzYAziC4+3F8lr2dwy//09i9LPjif0aU254HJ0q5KeZ59U4jz+HcutGuHlYyuJ3O58PcMq4gK5Q2cBUobT6+c=@vger.kernel.org
-X-Gm-Message-State: AFuF++n6VKfTfTXi48bm0a44LeAax5qOuZYg4LZckWef5U/DGYxsh/rX
-	j06tJ412CcjCHdnvATL4K9lysvQb/ErMJeVzQ+mw84lrc3N3Z97AMB3/vBGxfsAKhl4=
-X-Gm-Gg: AYBFou2Bp1hbz2qL5PTz9HAwO5HsR8ua7vIc/eSBBrnn7NLrQ0ahs5kUsUnzyc6itPa
-	IUnJSV00ZP8URRQx57tqsn6koyc46Q1BIIh5ZV4FgsKHXBECOhq8lXc36Ytf0BKISOhaPQoZqm6
-	Ml3EUQalm6AM4krNyiLKtt0X9RqnPUpCzzcyI+cjr/KhgX7WrDvX89iAB+gfN4KUCba0o1TYI4a
-	M80HW0odp3Uk0xHiBTZlCWnymkVRimjhIPgH0Rmf6hI6OCRBeA/Zl2BmLNQlrjTaCgFbLCgBGxN
-	LGsCiAIfVzVyL8Y7pLinFAVSCpBO2MxcqFqScfVgnJxLZ2kKqFsrm/Qkznh78UIcSS5AfcntaSR
-	A7w4KSACWeCjXFjrZiUst/m6f6/nKXKTgohcwyb21s1/brEzT5W/QYZ1dhn4NXoP83KMUQ855tI
-	W94lu4/WMSSJGXY7GnNAQSCEpin4/sWM+Skevnp04l3/Ss9lZVupg+PozBG7pWVz12nyezsezD8
-	Iq4ZXp8nE78+EN3KfnY/Z5YKDCkRVbhTM3h
-X-Received: by 2002:a05:690e:4548:20b0:670:fe0f:fe39 with SMTP id 956f58d0204a3-6717fdfd203mr887495d50.88.1789768414543;
-        Fri, 18 Sep 2026 14:53:34 -0700 (PDT)
+        bh=YgKQxSeRnOzoiZ3Got1iPeMZXr/r/xBvpSPq8RVnIaQ=;
+        b=ei9q6r0LYgiM1RNQL4nnn5o5HVvPEZu3eDqmeLSIxESKOnIMrIyzJuq2fTY+gJp6gr
+         XCl7ANX7vdBso1Ety4kn6eRsk+XDJ1csAa4grBcoA4TKTfTM5RCQueZWSXUOAnr1H/EY
+         u5aGuFIRc6tEhbfbRmG7Gkpz0XRwZdkNQxVv+ga1e6axszRAAOt3gsqdeKVrgS3ujIH7
+         TKwjalHcVOXpaA0KesCIl9VSQnsk4pVkphxNyHuLKXwPJGJcydExV2nuvyl8YXZw/nCq
+         8VBUvNEXk4LkkAs1h+xI6XFJGbM0bI3ybBQI5peLPz7Balsq3Pl902hjDZnJ3yhk3w3n
+         5sRA==
+X-Forwarded-Encrypted: i=1; AKwUvBzEg2DKACibMIcuYmyzFF8+FWXnGieHH22O6wKibZSHXC5Su/FLt2UyD0Oux8DRhV2BdGuChNmep7EfVhspoko=@vger.kernel.org
+X-Gm-Message-State: AFuF++kZdOgO7uYTnNVfscGkbWRryUNfMgsmQxlGERONoR5zo8rVeWM0
+	Q/UK4HrMTVyukczi20YZ11hBkNoBWOGz/oVrBVjH11pt62F4gem1B754zcmGDc01izU=
+X-Gm-Gg: AYBFou1cn4XspHOZ9IylEoFHZTuLkAMn3L8e17KLjkoyUuK4betqWlMS4vvsAkAJokK
+	01LaPJDdz1c0FwigMfU/0oayECRUt/IMahX7hQI4AR/IDx68wD/dXyqVxAFReTdU27cetAB17QQ
+	Kq+Axcyb7zJVE0Xvg5fN9pJWUoPsox+7qwbWS2D2FuARh+Dx4lY6VJLgGOJJsI4ljYxWF4E2W6B
+	ybhmjjymbXGQ/zMquqEGGsJndiXEPYoUbKVU9RlP1i/A3R1KYPfxvQcpiBcYYt28wMTKoPBznSc
+	9nGhskFPI/PbSfb5C1HgHiDGE4xBQmCgxbnk9A5ivQd9hNMv7xChRzX3bomkdbpibYBzX6Vz4pC
+	07+12o05Hd3jAZpXS8+uCLY3q/uP3ppNpYD92k3Yiag6DgW2bjiEdQWCvu9efdC9ls4zJu69svi
+	e26uRYs+at1sPk6U+ibYshvyQ59+GVonP+q2wQ5V+QngNaSpVoXeQF0ZtAqJQfcyfdLT3d+ZAF7
+	ZoySNbgx5TefLf5xZToFxoR12vQT5BMUDFI
+X-Received: by 2002:a05:690c:93:b0:872:1e2e:b496 with SMTP id 00721157ae682-89736948fdfmr26927807b3.31.1789768430101;
+        Fri, 18 Sep 2026 14:53:50 -0700 (PDT)
 Received: from lima-default.tail89d63.ts.net ([12.55.13.134])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-89a45d8fb3csm4017757b3.13.2026.09.18.14.53.32
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-89a45d8fb3csm4017757b3.13.2026.09.18.14.53.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 14:53:34 -0700 (PDT)
+        Fri, 18 Sep 2026 14:53:49 -0700 (PDT)
 From: Andy Chiu <tchiu@tenstorrent.com>
 To: Shuah Khan <shuah@kernel.org>,
 	Paul Walmsley <pjw@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Albert Ou <aou@eecs.berkeley.edu>,
 	Alexandre Ghiti <alex@ghiti.fr>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
 	linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev
+	linux-riscv@lists.infradead.org
 Cc: andybnac@gmail.com,
 	Andy Chiu <tchiu@tenstorrent.com>,
 	dfustini@oss.tenstorrent.com,
 	greentime.hu@sifive.com,
-	Sergey Matyukevich <geomatsi@gmail.com>,
-	Zong Li <zong.li@sifive.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+	Wei Yang <richard.weiyang@gmail.com>,
 	Yong-Xuan Wang <yongxuan.wang@sifive.com>
-Subject: [PATCH v6 3/8] selftest: riscv: test vectorized user copy
-Date: Fri, 18 Sep 2026 16:51:17 -0500
-Message-ID: <20260918215154.2481482-4-tchiu@tenstorrent.com>
+Subject: [PATCH v6 7/8] selftests: riscv: Extend vector tests for sigreturn and ptrace
+Date: Fri, 18 Sep 2026 16:51:21 -0500
+Message-ID: <20260918215154.2481482-8-tchiu@tenstorrent.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260918215154.2481482-1-tchiu@tenstorrent.com>
 References: <20260918215154.2481482-1-tchiu@tenstorrent.com>
@@ -93,274 +89,268 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a test that pushes a 1KiB pseudo-random stream through a pipe, so
-write() and read() copy it in and out of the kernel on the vectorized
-uaccess path, and compares the result against the original. Both buffers
-shift every iteration to sweep all relative alignments, and 16 processes
-per online CPU keep the vector unit contended. The compare is a byte at a
-time loop through volatile pointers rather than memcmp(), keeping it scalar
-and independent of the user vector state.
+Add new test cases to verify the vector state restorations at syscall
+stops for ptrace and signal interfaces. Specifically:
+1. Signal handler should read all ones at syscall stop and modifying
+   context should success.
+2. Ptrace should read all ones but any modification to NT_RISCV_VECTOR
+   is silently dropped.
 
-Assisted-by: Claude-Code:claude-opus-5
 Signed-off-by: Andy Chiu <tchiu@tenstorrent.com>
 ---
-Changelog v5:
- - new patch since v5
+Changelog v6:
+ - reformat code to slience checkpatch
+Changelog v4:
+ - remove timer dependency from the signal delivery (Sashiko)
+ - solve 2 memory leaks in ptrace (Sashiko)
+Changelog v3:
+ - new patch since v3
 ---
- tools/testing/selftests/riscv/vector/Makefile |   6 +-
- .../selftests/riscv/vector/v_uaccess_stress.c | 221 ++++++++++++++++++
- 2 files changed, 226 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/riscv/vector/v_uaccess_stress.c
+ .../selftests/riscv/sigreturn/sigreturn.c     |  69 +++++++++++
+ .../selftests/riscv/vector/vstate_ptrace.c    | 111 +++++++++++++++++-
+ 2 files changed, 176 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/riscv/vector/Makefile b/tools/testing/selftests/riscv/vector/Makefile
-index 7e0017b3fb8b..0ed09b69dd8a 100644
---- a/tools/testing/selftests/riscv/vector/Makefile
-+++ b/tools/testing/selftests/riscv/vector/Makefile
-@@ -2,7 +2,8 @@
- # Copyright (C) 2021 ARM Limited
- # Originally tools/testing/arm64/abi/Makefile
+diff --git a/tools/testing/selftests/riscv/sigreturn/sigreturn.c b/tools/testing/selftests/riscv/sigreturn/sigreturn.c
+index e10873d95fed..386367cf28be 100644
+--- a/tools/testing/selftests/riscv/sigreturn/sigreturn.c
++++ b/tools/testing/selftests/riscv/sigreturn/sigreturn.c
+@@ -7,6 +7,7 @@
+ #include "kselftest_harness.h"
  
--TEST_GEN_PROGS := v_initval vstate_prctl vstate_ptrace validate_v_ptrace
-+TEST_GEN_PROGS := v_initval vstate_prctl vstate_ptrace validate_v_ptrace \
-+		  v_uaccess_stress
- TEST_GEN_PROGS_EXTENDED := vstate_exec_nolibc v_exec_initval_nolibc
- TEST_GEN_LIBS := v_helpers.c sys_hwprobe.c
+ #define RISCV_V_MAGIC		0x53465457
++#define END_MAGIC		0
+ #define DEFAULT_VALUE		2
+ #define SIGNAL_HANDLER_OVERRIDE	3
  
-@@ -36,4 +37,7 @@ $(OUTPUT)/vstate_ptrace: vstate_ptrace.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_hel
- $(OUTPUT)/validate_v_ptrace: validate_v_ptrace.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_helpers.o
- 	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
+@@ -61,6 +62,74 @@ static int vector_sigreturn(int data, void (*handler)(int, siginfo_t *, void *))
+ 	return after_sigreturn;
+ }
  
-+$(OUTPUT)/v_uaccess_stress: v_uaccess_stress.c
-+	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
-+
- EXTRA_CLEAN += $(TEST_GEN_OBJ)
-diff --git a/tools/testing/selftests/riscv/vector/v_uaccess_stress.c b/tools/testing/selftests/riscv/vector/v_uaccess_stress.c
-new file mode 100644
-index 000000000000..d70e0387e246
---- /dev/null
-+++ b/tools/testing/selftests/riscv/vector/v_uaccess_stress.c
-@@ -0,0 +1,221 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Stress the kernel's user copy path from several processes at once.
-+ *
-+ * Each child pushes a 1KiB pseudo-random byte stream through a pipe: write()
-+ * copies it from user space into the kernel (copy_from_user()) and read()
-+ * copies it back out (copy_to_user()). The round trip is repeated 512 times
-+ * per child, and every iteration the buffers are shifted so that the copies
-+ * cover all of the source/destination alignment combinations.
-+ *
-+ * On RISC-V those copies may be serviced by kernel-mode vector routines, so
-+ * the payload is generated and verified with plain scalar loads and stores
-+ * only. The comparison goes through volatile pointers, which keeps both GCC
-+ * and clang from turning the loop into a vectorised compare and keeps the
-+ * check independent of the user vector state the kernel is supposed to
-+ * preserve. memcmp() is avoided for the same reason: the libc version is free
-+ * to use vector instructions.
-+ */
-+
-+#include <errno.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/wait.h>
-+
-+#include "kselftest_harness.h"
-+
-+#define ITERATIONS	32768
-+#define STREAM_SIZE	1024
-+#define MAX_SHIFT	16
-+#define BUF_SIZE	(STREAM_SIZE + MAX_SHIFT)
-+
-+#define CONCURRENCY	16
-+
-+/* xorshift64*, so the payload does not depend on any libc or kernel helper. */
-+static unsigned long prng_state;
-+
-+static unsigned long prng_next(void)
++#define V_TEST_PATTERN_SIGNAL 0x98
++int nulled_val;
++static void sigalrm_handler(int sig, siginfo_t *info, void *vcontext)
 +{
-+	prng_state ^= prng_state >> 12;
-+	prng_state ^= prng_state << 25;
-+	prng_state ^= prng_state >> 27;
++	struct __riscv_extra_ext_header *ext;
++	struct __riscv_v_ext_state *v_state;
++	ucontext_t *context = vcontext;
++	struct __riscv_ctx_hdr *hdr;
++	uint8_t *ext_ptr;
 +
-+	return prng_state * 2685821657736338717UL;
-+}
++	/* Find the vector context */
++	ext = (void *)(&context->uc_mcontext.__fpregs);
++	ext_ptr = (uint8_t *)ext;
++	hdr = &ext->hdr;
 +
-+static void fill_random(unsigned char *buf, size_t len)
-+{
-+	size_t i;
-+
-+	for (i = 0; i < len; i++)
-+		buf[i] = (unsigned char)(prng_next() >> 24);
-+}
-+
-+/*
-+ * Scalar, byte at a time comparison. Returns the offset of the first
-+ * mismatching byte, or len when the two streams are identical.
-+ */
-+static size_t scalar_diff(const unsigned char *a, const unsigned char *b,
-+			  size_t len)
-+{
-+	const volatile unsigned char *va = a;
-+	const volatile unsigned char *vb = b;
-+	size_t i;
-+
-+	for (i = 0; i < len; i++) {
-+		if (va[i] != vb[i])
++	while (hdr->magic != END_MAGIC) {
++		if (hdr->magic == RISCV_V_MAGIC) {
++			v_state = (struct __riscv_v_ext_state *)(hdr + 1);
++			/* Assume a valid datap */
++			nulled_val = *(int *)v_state->datap;
++			/* Fill all vector registers with magic pattern */
++			memset(v_state->datap, V_TEST_PATTERN_SIGNAL, v_state->vlenb * 32);
++			/*
++			 * We must also set the vector configuration so that when
++			 * userspace reads v0, it uses a valid element width (e8).
++			 */
++			v_state->vl = v_state->vlenb;
++			v_state->vtype = 0; /* e8, m1, tu, mu */
 +			break;
++		}
++		/* Move to the next extension header */
++		ext_ptr += hdr->size;
++		hdr = (struct __riscv_ctx_hdr *)ext_ptr;
 +	}
-+
-+	return i;
 +}
 +
-+static ssize_t write_all(int fd, const unsigned char *buf, size_t len)
-+{
-+	size_t done = 0;
++TEST(test_signal_syscall_ucontext) {
++	struct sigaction sa;
 +
-+	while (done < len) {
-+		ssize_t ret = write(fd, buf + done, len - done);
++	/* Make sure we get V in ucontext by executing vsetvli */
++	asm volatile (".option push\n\t"
++		      ".option		arch, +v\n\t"
++		      "vsetivli	x0, 1, e32, m1, ta, ma\n\t"
++		      ".option pop\n\t" : : :);
 +
-+		if (ret < 0) {
-+			if (errno == EINTR)
-+				continue;
-+			return -1;
-+		}
-+		done += ret;
-+	}
++	sa.sa_flags = SA_SIGINFO;
++	sa.sa_sigaction = sigalrm_handler;
++	sigemptyset(&sa.sa_mask);
++	if (sigaction(SIGALRM, &sa, NULL) == -1)
++		ksft_exit_fail_msg("Failed to register signal handler\n");
 +
-+	return done;
++	raise(SIGALRM);
++	/*
++	 * If the kernel successfully parsed and restored our modified ucontext,
++	 * v0 will contain V_TEST_PATTERN_SIGNAL.
++	 */
++	unsigned char v0_val;
++
++	asm volatile(".option push\n\t"
++		     ".option arch, +zve32x\n\t"
++		     "vmv.x.s %0, v0\n\t"
++		     ".option pop\n\t"
++		     : "=r" (v0_val));
++
++	EXPECT_EQ(v0_val, V_TEST_PATTERN_SIGNAL);
++	EXPECT_EQ(nulled_val, -1);
 +}
 +
-+static ssize_t read_all(int fd, unsigned char *buf, size_t len)
+ TEST(vector_restore)
+ {
+ 	int result;
+diff --git a/tools/testing/selftests/riscv/vector/vstate_ptrace.c b/tools/testing/selftests/riscv/vector/vstate_ptrace.c
+index 1479abc0c9cb..863a16f6e1a3 100644
+--- a/tools/testing/selftests/riscv/vector/vstate_ptrace.c
++++ b/tools/testing/selftests/riscv/vector/vstate_ptrace.c
+@@ -21,6 +21,41 @@ static long do_ptrace(enum __ptrace_request op, pid_t pid, long type, size_t siz
+ 	return ptrace(op, pid, type, &v_iovec);
+ }
+ 
++static int do_child_syscall_stop(void)
 +{
-+	size_t done = 0;
++	int out;
 +
-+	while (done < len) {
-+		ssize_t ret = read(fd, buf + done, len - done);
-+
-+		if (ret < 0) {
-+			if (errno == EINTR)
-+				continue;
-+			return -1;
-+		}
-+		if (ret == 0)
-+			return -1;
-+		done += ret;
++	if (ptrace(PTRACE_TRACEME, -1, NULL, NULL)) {
++		ksft_perror("PTRACE_TRACEME failed\n");
++		return EXIT_FAILURE;
 +	}
 +
-+	return done;
++	raise(SIGSTOP);
++
++	asm volatile (".option push\n\t"
++		".option	arch, +v\n\t"
++		"vsetivli	x0, 1, e32, m1, ta, ma\n\t"
++		"vmv.s.x	v31, %[in]\n\t"
++		".option pop\n\t"
++		:
++		: [in] "r" (child_set_val));
++
++	getpid();
++
++	asm volatile (".option push\n\t"
++		".option	arch, +v\n\t"
++		"vsetivli	x0, 1, e32, m1, ta, ma\n\t"
++		"vmv.x.s	%[out], v31\n\t"
++		".option pop\n\t"
++		: [out] "=r" (out)
++		:);
++
++	if (out != -1)
++		return EXIT_FAILURE;
++
++	return EXIT_SUCCESS;
 +}
 +
-+/* Runs in the child. Returns the exit status to hand back to the parent. */
-+static int child_loop(unsigned long seed)
+ static int do_child(void)
+ {
+ 	int out;
+@@ -59,7 +94,7 @@ static void do_parent(pid_t child)
+ 			goto out;
+ 		} else if (WIFSTOPPED(status) && (WSTOPSIG(status) == SIGTRAP)) {
+ 			size_t size;
+-			void *data, *v31;
++			void *vctx, *v31;
+ 			struct __riscv_v_regset_state *v_regset_hdr;
+ 			struct user_regs_struct *gpreg;
+ 
+@@ -73,9 +108,11 @@ static void do_parent(pid_t child)
+ 				goto out;
+ 
+ 			ksft_print_msg("vlenb %ld\n", v_regset_hdr->vlenb);
+-			data = realloc(data, size + v_regset_hdr->vlenb * 32);
+-			if (!data)
++			vctx = realloc(data, size + v_regset_hdr->vlenb * 32);
++			if (!vctx)
+ 				goto out;
++			data = vctx;
++
+ 			v_regset_hdr = (struct __riscv_v_regset_state *)data;
+ 			v31 = (void *)(data + size + v_regset_hdr->vlenb * 31);
+ 			size += v_regset_hdr->vlenb * 32;
+@@ -109,11 +146,65 @@ static void do_parent(pid_t child)
+ 	free(data);
+ }
+ 
++static void do_parent_syscall_stop(pid_t child)
 +{
-+	unsigned char src[BUF_SIZE], dst[BUF_SIZE];
-+	int pipefd[2];
-+	int i;
++	int status;
++	void *data = NULL;
 +
-+	prng_state = seed;
-+
-+	if (pipe(pipefd)) {
-+		fprintf(stderr, "pid %d: pipe() failed: %s\n",
-+			getpid(), strerror(errno));
-+		return 1;
-+	}
-+
-+	for (i = 0; i < ITERATIONS; i++) {
-+		/*
-+		 * Walk the source and destination through every relative
-+		 * alignment, including the case where both are equally
-+		 * misaligned.
-+		 */
-+		unsigned char *in = src + (i % MAX_SHIFT);
-+		unsigned char *out = dst + ((i / MAX_SHIFT) % MAX_SHIFT);
-+		size_t off;
-+
-+		fill_random(in, STREAM_SIZE);
-+		memset(out, 0, STREAM_SIZE);
-+
-+		if (write_all(pipefd[1], in, STREAM_SIZE) < 0) {
-+			fprintf(stderr, "pid %d: iteration %d: write() failed: %s\n",
-+				getpid(), i, strerror(errno));
-+			return 1;
-+		}
-+
-+		if (read_all(pipefd[0], out, STREAM_SIZE) < 0) {
-+			fprintf(stderr, "pid %d: iteration %d: read() failed: %s\n",
-+				getpid(), i, strerror(errno));
-+			return 1;
-+		}
-+
-+		off = scalar_diff(in, out, STREAM_SIZE);
-+		if (off != STREAM_SIZE) {
-+			fprintf(stderr,
-+				"pid %d: iteration %d: mismatch at byte %zu of %d (in %p, out %p): expected 0x%02x, got 0x%02x\n",
-+				getpid(), i, off, STREAM_SIZE, in, out,
-+				in[off], out[off]);
-+			return 1;
-+		}
-+	}
-+
-+	close(pipefd[0]);
-+	close(pipefd[1]);
-+
-+	return 0;
-+}
-+
-+static int nr_children(void)
-+{
-+	long online = sysconf(_SC_NPROCESSORS_ONLN);
-+
-+	return online * CONCURRENCY;
-+}
-+
-+TEST(uaccess_round_trip)
-+{
-+	int nr = nr_children();
-+	int failures = 0;
-+	pid_t pids[nr];
-+	int i;
-+
-+	ksft_print_msg("%d children, %d iterations of %d bytes each\n",
-+		       nr, ITERATIONS, STREAM_SIZE);
-+
-+	for (i = 0; i < nr; i++) {
-+		pids[i] = fork();
-+		ASSERT_LE(0, pids[i]) {
-+			TH_LOG("fork() failed: %s", strerror(errno));
-+		}
-+
-+		if (pids[i] == 0) {
-+			/* A distinct, reproducible stream per child. */
-+			_exit(child_loop(0x9e3779b97f4a7c15UL + i));
-+		}
-+	}
-+
-+	for (i = 0; i < nr; i++) {
-+		int status;
-+
-+		if (waitpid(pids[i], &status, 0) < 0) {
-+			TH_LOG("waitpid(%d) failed: %s", pids[i],
-+			       strerror(errno));
-+			failures++;
++	while (waitpid(child, &status, 0)) {
++		if (WIFEXITED(status)) {
++			ksft_test_result(WEXITSTATUS(status) == 0,
++					 "SETREGSET vector at syscall stop\n");
++			goto out;
++		} else if (WIFSTOPPED(status) && (WSTOPSIG(status) == SIGSTOP)) {
++			/* Attach to the child at syscall stop */
++			ptrace(PTRACE_SYSCALL, child, NULL, NULL);
 +			continue;
-+		}
++		} else if (WIFSTOPPED(status) && (WSTOPSIG(status) == SIGTRAP)) {
++			size_t size;
++			void *vctx, *v31;
++			struct __riscv_v_regset_state *v_regset_hdr;
 +
-+		if (WIFSIGNALED(status)) {
-+			TH_LOG("child %d killed by signal %d", pids[i],
-+			       WTERMSIG(status));
-+			failures++;
-+		} else if (!WIFEXITED(status) || WEXITSTATUS(status)) {
-+			TH_LOG("child %d failed", pids[i]);
-+			failures++;
++			size = sizeof(*v_regset_hdr);
++			data = malloc(size);
++			if (!data)
++				goto out;
++			v_regset_hdr = (struct __riscv_v_regset_state *)data;
++
++			if (do_ptrace(PTRACE_GETREGSET, child, NT_RISCV_VECTOR, size, data))
++				goto out;
++
++			ksft_print_msg("vlenb %ld\n", v_regset_hdr->vlenb);
++			vctx = realloc(data, size + v_regset_hdr->vlenb * 32);
++			if (!vctx)
++				goto out;
++			data = vctx;
++
++			v_regset_hdr = (struct __riscv_v_regset_state *)data;
++			v31 = (void *)(data + size + v_regset_hdr->vlenb * 31);
++			size += v_regset_hdr->vlenb * 32;
++
++			if (do_ptrace(PTRACE_GETREGSET, child, NT_RISCV_VECTOR, size, data))
++				goto out;
++
++			ksft_test_result(*(int *)v31 == -1, "GETREGSET vector at syscall stop\n");
++
++			*(int *)v31 = parent_set_val;
++			if (do_ptrace(PTRACE_SETREGSET, child, NT_RISCV_VECTOR, size, data))
++				goto out;
 +		}
++		ptrace(PTRACE_CONT, child, NULL, NULL);
 +	}
 +
-+	ASSERT_EQ(0, failures);
++out:
++	free(data);
 +}
 +
-+TEST_HARNESS_MAIN
+ int main(void)
+ {
+ 	pid_t child;
+ 
+-	ksft_set_plan(2);
++	ksft_set_plan(4);
+ 	if (!is_vector_supported() && !is_xtheadvector_supported())
+ 		ksft_exit_skip("Vector not supported\n");
+ 
+@@ -130,5 +221,17 @@ int main(void)
+ 
+ 	do_parent(child);
+ 
++	parent_set_val = 0x53355457;
++	child_set_val = 0x49504F21;
++
++	child = fork();
++	if (child < 0)
++		ksft_exit_fail_msg("Fork failed %d\n", child);
++
++	if (!child)
++		return do_child_syscall_stop();
++
++	do_parent_syscall_stop(child);
++
+ 	ksft_finished();
+ }
 -- 
 2.43.0
 
