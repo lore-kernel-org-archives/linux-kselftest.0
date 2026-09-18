@@ -1,87 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out28-121.mail.aliyun.com (out28-121.mail.aliyun.com [115.124.28.121])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3621E30D3F1;
-	Fri, 18 Sep 2026 08:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0C83DDDDA;
+	Fri, 18 Sep 2026 08:56:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.121
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789721037; cv=none; b=LO02gTE8sz4aqqtWEMi2oqtWMj3P++RY2Aa9m18RL0GnaCXuSZJV3hcJ3T7T1suep5sr3CxftFc3kNTjRUO6JqE6TNilMHV2Sz+fBHefQtPzhsIeOMWkyMXRhtwyneeLeCqaXCy6IFf1C/vd/yYnPdSgg2UcRxxT6296yxdww/w=
+	t=1789721799; cv=none; b=MnTtHhQQR1xEK0g4HH5gMETmBqb10DAAYQUQC4gf0kE93CkeSfjEJca3BKFcpj4qvp/W4bZ9st0D6U53bQtLcx6w7k+qYRUcoT5FUwoapxP+l+YFSFXCs3aVPXt4kqrm8jiN3oeWE5VrATF3nDOl3nxBzXCty887ojkeukWzQ3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789721037; c=relaxed/simple;
-	bh=ydMCf8UeCKVTabrS2pzlAs+ixDGgnsY1Oj1eP8jCuVY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZoiYjqiUCVQPdsl0hfEzPYUw0v6bKTRnW26+uuokea9JpFjEEm9w/BAheBoIQUANeTs4W7hpjfwElPOOnPyYUNqgDJHKeAwSqQkl9qFPsNRdx6G6Pq+dhNjzYPz9pdw449nUeVDn4/kUXMaiteOHkxrUp2ey8Ldjfeql5kSqUJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l2w0L1Ea; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l2w0L1Ea"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55F911F000FF;
-	Fri, 18 Sep 2026 08:43:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789721036;
-	bh=p7yW5RQQpzce61fxOhF/6V3uC/yEcVaMlk0RaYCfGUI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=l2w0L1EaCBM+Y6IyCZk0McWa1cU1klEYgp9+DejVz4E8TGx02JDSLpInw1Rtsb+G7
-	 8PzZLnXoeZ1ZKX1GSfunBrrR+/z8odss8QPpEz4cpU9rlESsLV234fcMqZDegSNWuj
-	 uGr2+GJQb4oi2TrlLgFQt0zoqFciEC163dJHSDeWkIDhA/Mo1YwLQXhbnNDGz2gcCy
-	 zYRknFQZHNSJGB3PaPJjIWbusT2TU3fxBiuaSfwJexAxwfe6ijtoZjIEgp9GCpWQP4
-	 hcEjFcBzGXFVTJJSaowXo8RcXhHlcgtV+f5syvI5rj7UZq2QT9NqYMuOZHKsz7n56l
-	 2Hg22LcJULBVA==
-Message-ID: <aa563c53-2d79-483a-999e-159006d59026@kernel.org>
-Date: Fri, 18 Sep 2026 09:43:52 +0100
+	s=arc-20240116; t=1789721799; c=relaxed/simple;
+	bh=SahbJPI13NcaMddeZB5l4j/Hma7utggxzTou9ZuCX94=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pRBFlsIdomnshls7l9ZWvg2et/3nUI5zqZ7gimbaLp6c67zRSJ7YGzSslnY5KpmD+6/rTbce1O9Eh2u1Pl785GkMlQDrDX36I/5qMvnr6T3yGcQy54Jniw4TY/lyNg7k/crLD9NEjO/a067dPkk4nGm+dy0AdKiNf5puye4JBlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.121
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.07437021|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0051405-0.000603857-0.994256;FP=13826454449977765883|1|1|1|0|-1|-1|-1;HT=maildocker-contentspam033037026024;MF=zhang_wei@open-hieco.net;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.jGgS5Q7_1789721788;
+Received: from localhost.localdomain(mailfrom:zhang_wei@open-hieco.net fp:SMTPD_---.jGgS5Q7_1789721788 cluster:ay29)
+          by smtp.aliyun-inc.com;
+          Fri, 18 Sep 2026 16:56:28 +0800
+From: Tina Zhang <zhang_wei@open-hieco.net>
+To: Sean Christopherson <seanjc@google.com>,
+	Jim Mattson <jmattson@google.com>,
+	kvm@vger.kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	zhouyanjing@hygon.cn,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v7 4/8] KVM: nSVM: Propagate hardware DecodeAssist bytes to VMCB12
+Date: Fri, 18 Sep 2026 16:56:14 +0800
+Message-ID: <2ad6f220b531cb59cd3e8065c472c2a3fd27987a.1789721173.git.zhang_wei@open-hieco.net>
+X-Mailer: git-send-email 2.43.7
+In-Reply-To: <cover.1789721173.git.zhang_wei@open-hieco.net>
+References: <cover.1789721173.git.zhang_wei@open-hieco.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 1/3] bpftool: Skip non-autoload programs when
- generating light skeletons
-To: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
- KP Singh <kpsingh@kernel.org>, Leon Hwang <leon.hwang@linux.dev>,
- Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260918040919.3402577-1-tweek@google.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260918040919.3402577-1-tweek@google.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-2026-09-18 14:09 UTC+1000 ~ Thiébaud Weksteen <tweek@google.com>
-> When generating a light skeleton (bpftool gen skeleton -L),
-> bpf_object__load() skips loading programs marked as non-autoload (e.g.
-> SEC("?...")), so the generated loader program only records and populates
-> file descriptors for autoloaded programs.
-> 
-> Previously, bpftool emitted struct bpf_prog_desc fields, link fields,
-> and attach/detach/destroy functions for all programs in the BPF object,
-> causing the loader program to store subsequent program FDs into
-> incorrect skeleton struct fields when non-autoload programs were
-> present.
-> 
-> Furthermore, bpf_object__load() can update a program's autoload status
-> during preparation (e.g. for struct_ops programs when resolving kernel
-> BTF members or adjusting autoload based on map autocreate settings).
-> Move bpf_object__gen_loader() and bpf_object__load() out of gen_trace()
-> into do_skeleton() before counting programs and emitting struct fields so
-> that struct field declarations and attach/detach/destroy functions all
-> observe the final post-load autoload state.
-> 
-> Skip programs with !bpf_program__autoload(prog) when counting programs
-> and generating progs/links struct fields as well as attach, detach, and
-> destroy functions for light skeletons.
-> 
-> Fixes: d510296d331a ("bpftool: Use syscall/loader program in "prog load" and "gen skeleton" command.")
-> Signed-off-by: Thiébaud Weksteen <tweek@google.com>
+DecodeAssists provides instruction bytes for nested page faults and
+intercepted page faults caused by data accesses.  When the feature is
+exposed to L1, copy fresh hardware-provided instruction bytes from VMCB02
+to VMCB12 for these exits.
 
+Leave the VMCB12 instruction-byte state untouched when DecodeAssists is
+not exposed.  Otherwise, invalidate the state for instruction-fetch page
+faults, unrelated exits, and exits without fresh hardware bytes.
 
-Reviewed-by: Quentin Monnet <qmo@kernel.org>
+Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
+Reviewed-by: Jim Mattson <jmattson@google.com>
+---
+ arch/x86/kvm/svm/nested.c | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-Thanks!
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index 378467288716..d99706e1b9c0 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -40,6 +40,20 @@ static void nested_svm_invalidate_insn_bytes(struct vmcb *vmcb)
+ 	vmcb->control.insn_len = 0;
+ }
+ 
++static void nested_svm_copy_insn_bytes(struct vmcb *to,
++				       const struct vmcb *from)
++{
++	u8 insn_len = from->control.insn_len;
++
++	if (WARN_ON_ONCE(insn_len > sizeof(from->control.insn_bytes))) {
++		nested_svm_invalidate_insn_bytes(to);
++		return;
++	}
++
++	memcpy(to->control.insn_bytes, from->control.insn_bytes, insn_len);
++	to->control.insn_len = insn_len;
++}
++
+ static bool nested_svm_vmexit_supports_insn_bytes(const struct vmcb *vmcb)
+ {
+ 	u64 exit_code = vmcb->control.exit_code;
+@@ -64,6 +78,27 @@ static void nested_svm_invalidate_vmcb02_insn_bytes(struct vcpu_svm *svm)
+ 	svm->nested.vmcb02_insn_bytes_valid = false;
+ }
+ 
++static void nested_svm_update_vmcb12_insn_bytes(struct kvm_vcpu *vcpu,
++						struct vmcb *vmcb12,
++						const struct vmcb *vmcb02)
++{
++	struct vcpu_svm *svm = to_svm(vcpu);
++
++	if (!guest_cpu_cap_has(vcpu, X86_FEATURE_DECODEASSISTS))
++		goto out;
++
++	if (!nested_svm_vmexit_supports_insn_bytes(vmcb02) ||
++	    !svm->nested.vmcb02_insn_bytes_valid) {
++		nested_svm_invalidate_insn_bytes(vmcb12);
++		goto out;
++	}
++
++	nested_svm_copy_insn_bytes(vmcb12, vmcb02);
++
++out:
++	svm->nested.vmcb02_insn_bytes_valid = false;
++}
++
+ static void nested_svm_inject_npf_exit(struct kvm_vcpu *vcpu,
+ 				       struct x86_exception *fault,
+ 				       bool from_hardware)
+@@ -1335,6 +1370,8 @@ static int nested_svm_vmexit_update_vmcb12(struct kvm_vcpu *vcpu)
+ 	if (guest_cpu_cap_has(vcpu, X86_FEATURE_NRIPS))
+ 		vmcb12->control.next_rip  = vmcb02->control.next_rip;
+ 
++	nested_svm_update_vmcb12_insn_bytes(vcpu, vmcb12, vmcb02);
++
+ 	if (nested_vmcb12_has_lbrv(vcpu))
+ 		svm_copy_lbrs(&vmcb12->save, &vmcb02->save);
+ 
+-- 
+2.43.7
+
