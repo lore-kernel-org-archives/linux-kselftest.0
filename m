@@ -1,189 +1,72 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A9E31AF2D
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 19:45:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1408D1DF248;
+	Fri, 18 Sep 2026 19:50:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789760708; cv=none; b=kvObisDV5JNLApcrAzV8UlMun2/Xl31Vp+mThHyN7BuETHUmqOGXyPm+HyLzgBG8RUPR5I+ni1IQxTDtMx0Tr3nztktVmElFBOL/R6en2BsQs4+30xC5lkJahVRYtJSLg/aCOwAoktcUionXQ9QMJMU0WuoEXYblTGfKtjkdUVs=
+	t=1789761057; cv=none; b=WC1oujm32tsxDoMBHGeuLZTen/8e77C8ALuNnD+90k58o92E9MnimTbjUQi4k3RQ3d/TEDftiDmJNgRzYaC3uu2FF2CoSmvPajRO+Ji1bk6vf7BPWtSEpKXcz5PjVMo1gp9Z3dWYnYqLJpVbVwk7atpNzsDUcqFSuoFn/gF+GPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789760708; c=relaxed/simple;
-	bh=8ZTrrIxJky21okgg3OV+LOiHHfsI6KM7FDw7JnLT294=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QdpmuUGyMBLnWCo5iRNhNC1evWUFHKLThPb9zRsEZTNpPd/d2i2w8cgzpebziJ+het/E3giTgFZEhsswv10yi7yT59cteqa3FWTymV/kzKMhMvZo9wZszGKREsb61YCUJT/sj5GL0I2549UnAOXNf6aZhGrCVmjV2C5W6sr0C6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HkdNQCCU; arc=none smtp.client-ip=74.125.228.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789761057; c=relaxed/simple;
+	bh=zYTZ+a3hvb3MO2zc8985ACXIphue/Oi0UNjX/6mxJ2Y=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=TuWkgGppkLXRG4ieIdDgj9jMLvz/VMw16O/o8TpkplhNN2D/FejPAoYxaWK3TxcvsanhPeGamkKgXRFiKYCdiXVHEBd/2NBpfnpa6ObnEyKujv4Biv35h5iwSYM1Uu4KbptTWIsK6QH+L0ReJxtZQz7jJm1LIx9TDPnVk95Ityc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=t6x4ghAH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HkdNQCCU"
-Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc4d2fe2056so735560a12.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 12:45:06 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="t6x4ghAH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A521F000FF;
+	Fri, 18 Sep 2026 19:50:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789760706; x=1790365506; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=szCxdCB52TPTOMoJOhzrKbvc6KVcFeMOqRe/OAFYPcE=;
-        b=HkdNQCCUSzoRPufrnynAs9T6fTxmu4H2nO7mxIszLEOl9Yl4l7RKzLs8TBuG5Jdf1q
-         /UK/KOHfhtFF54ibrxFbzw39YAQolmjoJsRaNS+VXFhTappT6SwpHf0ybYh90ExHX5Gg
-         QppZmOINR6aj3WnNvkIFxHCyj7eYV18+5qsC7ZOERFEpIMSuZgofK14hrtgnh5F2xR3r
-         iF9QhUY3wrjQa6lAc+wETeQdjkM5GvIygA49Ah0VyMakgy7t6Q3S5txQ9uFygov9DaXW
-         z72AAQL6Ym/5heeIEeN6x3ijKNFuRbjV5AFjO+MEA9pvHto2VBBbDriMfqirB5lRqCnL
-         TSew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789760706; x=1790365506;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=szCxdCB52TPTOMoJOhzrKbvc6KVcFeMOqRe/OAFYPcE=;
-        b=BJGP2yd8BU0jIRSdEcTYUPtQuaKeDYp184dwdRPySNtckLUamrGO1Z5uUcXusrtcuL
-         VXA1N10bI6s/NKbIW5JcNFoDMHNcMPbIF4uyNr4QHBylWMJSuJftrTlsJzUav6mneYCq
-         OlgV0ScXSOxcM9UHCMxe78jY7YXSuLQJp3l4L6rRRBYWtDTZ/qIv7wH0qOOQ/6SMoPMS
-         CKs1YmHv6f/hqhi6GHP/9mzL6opU64ON97GbFm2zc9CkB7/Pgx0JtI85EKzSn7G4W7zB
-         fasHNgDBeU7c9nBckq1Bf+LuFkS0zKrLTOq8i73s59PpwwJYCi8s0TeHPRwK4ZKf/ryH
-         nbzA==
-X-Forwarded-Encrypted: i=1; AKwUvBw4yDz48egwoUvrRZmoxUIne29vcCYreAUdwRl5/1FRupxVS5GM0haSTcSKJESCrv0rNcwuP0FGu9qhZ7c8QzQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++mAjZkC8a8g87VcyqHWGliklXnOksy3yvpXzQiuI2zlAM61Elmj
-	bulfAidkBE+x2EQcgLfuuXQutFZC5BgyKz8IYH95ndi+s4wlMp1Ei5IY
-X-Gm-Gg: AYBFou19QFprhYwHPITc8QdYJTS/b9c0ySNT3kIeb3KrCHZpISwZOHwV0ko/w9kIyb/
-	1rsr0qhhhdbA133H56+Eo9AP3nGRTXogfxEGlm1UpwDRtNAHFBEdakj0Z4KRbuqPOK4INZVi9O+
-	fpwMtGpxOWS4C1Cq8kBuddYc3CZKCjmwT+g0WqISa3A5/MCjclUnpbT15cAWkLnj+h8WqGWg/oR
-	smYzzm0eowMx6nsQX8tWkABUFtHmNelWfVqwnf9KiYYVpHP+iso/ey+ZGJb4Z1hmuqzSQyFl4zd
-	LOAJYSEcSKbUbTwSCSuwKyoQk9A1NT1Y5QE9p3A8YYqJm9pntYFmQuIM/2OJrVotEyw3uUVCM/t
-	z2oxQ7JsJ3lA9gJMmgv6kDIUUUZSmw8cqWzFKnl63Ea/pfr+JTmuRJfemR1LltFMFhzfAKAWc1i
-	WSg4Boctt1hagcWWYLul+QP9losZVNu3oC1jJ5enj/rxVweeAEYIguY3Wy7YBMFH9QcBfwB8lHt
-	IOjMOM=
-X-Received: by 2002:a17:902:fc4b:b0:2dd:ad74:ac2f with SMTP id d9443c01a7336-2ddb1ba7187mr75143905ad.24.1789760705947;
-        Fri, 18 Sep 2026 12:45:05 -0700 (PDT)
-Received: from [192.168.2.190] ([24.23.128.127])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33c331b0d6esm670462eec.27.2026.09.18.12.45.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Sep 2026 12:45:04 -0700 (PDT)
-Message-ID: <b115ece2-33a1-412e-ac25-38f339a13599@gmail.com>
-Date: Fri, 18 Sep 2026 12:45:01 -0700
+	d=linux-foundation.org; s=korg; t=1789761055;
+	bh=oK9evgZZNkEjZWEHUtv6caDlyb48jPUVEPSBClyBGM0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=t6x4ghAHbv1VQgBHnN35Y+v+6gqPbE3L6Oh7kMmnGTgCMMB4pAn0U1Lhso5WvJBoR
+	 7GbAJGyG1fjkTcbZyD18iQn+XdKkW1L3338hN+7gJ/4Hmc+U3ghxTOooh7a+NRbMXt
+	 OSxfaanc6e+ZMBl8vAr7031V/wto/32CRB9nR4kA=
+Date: Fri, 18 Sep 2026 12:50:54 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Sarthak Sharma <sarthak.sharma@arm.com>
+Cc: David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@suse.com>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, Shuah Khan
+ <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, Jason
+ Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, Peter Xu
+ <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>, Zi Yan
+ <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache
+ <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain
+ <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, Lance Yang
+ <lance.yang@linux.dev>, Mark Brown <broonie@kernel.org>, Anshuman Khandual
+ <anshuman.khandual@arm.com>, Muhammad Usama Anjum <usama.anjum@arm.com>,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 0/6] selftests/mm: separate GUP microbenchmarking
+ from functional testing
+Message-Id: <20260918125054.f22d85a4def29dba081fd07e@linux-foundation.org>
+In-Reply-To: <20260918112234.195857-1-sarthak.sharma@arm.com>
+References: <20260918112234.195857-1-sarthak.sharma@arm.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v12 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
-To: Hui Zhu <hui.zhu@linux.dev>, Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- David Hildenbrand <david@kernel.org>, Barry Song <baohua@kernel.org>,
- Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Cc: Hui Zhu <zhuhui@kylinos.cn>
-References: <cover.1789714023.git.zhuhui@kylinos.cn>
- <02f0a8dc45a840d7801ec17e0c1168f7dacf9b73.1789714023.git.zhuhui@kylinos.cn>
-Content-Language: en-US
-From: JP Kobryn <inwardvessel@gmail.com>
-In-Reply-To: <02f0a8dc45a840d7801ec17e0c1168f7dacf9b73.1789714023.git.zhuhui@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 9/17/26 11:58 PM, Hui Zhu wrote:
-> From: Hui Zhu <zhuhui@kylinos.cn>
+On Fri, 18 Sep 2026 16:52:28 +0530 Sarthak Sharma <sarthak.sharma@arm.com> wrote:
+
+> gup_test.c currently serves two separate purposes: benchmarking
+> (GUP_FAST_BENCHMARK, PIN_FAST_BENCHMARK and PIN_LONGTERM_BENCHMARK) and
+> functional testing (GUP_BASIC_TEST, PIN_BASIC_TEST and
+> DUMP_USER_PAGES_TEST). Keeping both in one program makes the functional
+> tests harder to run and report individually, while run_vmtests.sh has to
+> invoke the program repeatedly with different options.
 > 
-> BPF programs can observe memory pressure on a cgroup, e.g. refault
-> stats via bpf_mem_cgroup_page_state(), but cannot act on it:
-> triggering reclaim requires writing to memory.reclaim, which BPF
-> cannot do.
-> 
-> Add bpf_proactive_reclaim(), a sleepable kfunc performing one
-> proactive reclaim pass on a memcg, like a write to memory.reclaim
-> but without retrying until the target is reached, so that when and
-> how hard to reclaim is BPF policy rather than hard-coded thresholds.
-> The reclaim target of a single call is capped at MEMCG_CHARGE_BATCH,
-> as high_work_func() does for memory.high; reclaiming more is left to
-> the program, which can call the kfunc once per bpf_wq callback and
-> stop at any point. It is limited to BPF_PROG_TYPE_SYSCALL, because
-> other sleepable programs may run with filesystem locks held, on
-> which the reclaim path could deadlock via filesystem shrinkers.
-> 
-> Convert MIN_SWAPPINESS, MAX_SWAPPINESS and SWAPPINESS_ANON_ONLY from
-> macros to an enum so that they are emitted into BTF and usable from
-> BPF programs via vmlinux.h.
-> 
-> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
-> Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
-> ---
->   mm/bpf_memcontrol.c | 62 ++++++++++++++++++++++++++++++++++++++++++++-
->   mm/internal.h       | 10 +++++---
->   2 files changed, 67 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
-> index 716df49d7647..c5d7f29ade85 100644
-> --- a/mm/bpf_memcontrol.c
-> +++ b/mm/bpf_memcontrol.c
-> @@ -8,6 +8,8 @@
->   #include <linux/memcontrol.h>
->   #include <linux/bpf.h>
->   
-> +#include "internal.h"
-> +
->   __bpf_kfunc_start_defs();
->   
->   /**
-> @@ -159,6 +161,48 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
->   	mem_cgroup_flush_stats(memcg);
->   }
->   
-> +/**
-> + * bpf_proactive_reclaim - proactively reclaim memory from a memory cgroup
-> + * @memcg: the target memory cgroup to reclaim from.
-> + * @size: the amount of memory to reclaim, in bytes, clamped to
-> + *        MEMCG_CHARGE_BATCH.
-> + * @swappiness: the reclaim swappiness, in the range [MIN_SWAPPINESS,
-> + *              SWAPPINESS_ANON_ONLY], or -1 to use the memcg's own
-> + *              swappiness.
+> Separate these roles into tools/mm/gup_bench for benchmarking and
+> tools/testing/selftests/mm/gup for functional testing. Move the shared
+> file and hugepage helpers to tools/lib/mm/ so both programs can use them
+> without duplicating the implementation.
 
-The ANON_ONLY enumerator shouldn't be included as part of the range. I
-would change this to [MIN_SWAPPINESS, MAX_SWAPPINESS] and then specify
-that ANON_ONLY is a special mode like -1 is.
-
-> + *
-> + * Performs one proactive reclaim pass on @memcg, like a write to
-> + * memory.reclaim but without retrying until @size is reached. Call it
-> + * repeatedly to reclaim more than one batch.
-> + *
-> + * Only available to BPF_PROG_TYPE_SYSCALL, because other sleepable programs
-> + * may run with filesystem locks held, which the reclaim path can deadlock
-> + * on via filesystem shrinkers.
-> + *
-> + * Return: The amount of memory reclaimed, in bytes, or a negative error.
-> + */
-> +__bpf_kfunc long bpf_proactive_reclaim(struct mem_cgroup *memcg,
-> +				       unsigned long size,
-> +				       int swappiness)
-> +{
-> +	unsigned long nr_reclaimed;
-> +	unsigned long nr_pages;
-> +
-> +	if (swappiness < -1 || swappiness > SWAPPINESS_ANON_ONLY)
-> +		return -EINVAL;
-
-Related to the previous comment, you treat the special values as part of
-the range. It works currently, but creates a layout dependency on the
-enum. I think it would be more future-proof if you did:
-
-if (swappiness != -1 && swappiness != SWAPPINESS_ANON_ONLY) {
-	if (swappiness < MIN_SWAPPINESS || swappiness > MAX_SWAPPINESS)
-		return -EINVAL;
-}
-
-The previous comments I brought up are now resolved, so assuming you'll
-make the changes above you can include:
-
-Reviewed-by: JP Kobryn <jp.kobryn@linux.dev>
+Thanks, all queued up.  Including [1/6]'s read_num() fix.
