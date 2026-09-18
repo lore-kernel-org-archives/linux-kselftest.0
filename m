@@ -1,322 +1,312 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2443191D6;
-	Fri, 18 Sep 2026 09:15:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4F193B0AE8;
+	Fri, 18 Sep 2026 09:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789722943; cv=none; b=TZmp/B7a7umVvOpXoMDZY5GranjH5n1Y0G/v1DPzZTi17cGbuQkJqO6pZKYTHy3e8FDNpkQsKt5IyujcpulkAn4Zya8u6vEXGON8tju1Vvbt24i4O5OFU2fe0CUl52SSMea1OCayKs46JDr9jmwLqLyRp9SALodxVe0khvBIX+A=
+	t=1789723311; cv=none; b=dVeuYpwx0g6/kpd1tR/1nezZZ9LZHpoO8uCgNmnbeh1atTbKIaeoGrXw6f3cxlPKRqvr4Ic0UoFtkrd+sx2V5XPH3xlKH5RUFZvDkZh3+94WRMuHtOButjJxoVyJR7h4kHFRLreY99wb6re/jWpzv3XKUr43XyM1yAQtU3lHqQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789722943; c=relaxed/simple;
-	bh=A1h4kC1T7dfRaWVqhU0+2qj29ASuahdCobD58dIuLEo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=dbROTdOa06kqG5aCGQaBpypyoNSnjXw2BDoFMrClrVgkfDfmIMQg0oYBU00dgR4smXeeHcAi3A4LWYDHSDFnE80t9W2FoCtLheg6kFOxneg9AJyk5OO719KBd1yBiYga2MssN/1jDuFkf1RPU20XHE0JPbmT9G5J2vUD/f4InlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=om1JOGOO; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	s=arc-20240116; t=1789723311; c=relaxed/simple;
+	bh=OY6Jh9Q29Sy5pd4tIcGxABWXn/gC6dTo4Rs/F8qnUVc=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=E7r/8Cz1GIUv0IAVU+PmACTwRHFnz2Onf9x5xniV9m1+XA6sZRmKiyPntHNk2Yfprc4OVRSzY31ErQz/FgK5GYX1fCsEXybVAbzgvB4yOye+JZrK1OgfOcLPAzx+0oPLUaXRuwlRZfDLlfKll/+fFYlqBFyCnS5XGUNdjI8seJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WjOvf89Y; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="om1JOGOO"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:
-	Date:Subject:Cc:To:From:From:Reply-To;
-	bh=e0iblB/xd0bKyqJQCHwHSoDSJbGjYAfM5ex62TtVuKY=; b=om1JOGOOEPD+kovLlVVZHQuV01
-	btKeH0+/69t8mp1Wp6G6QUkRJNalDE+0r6X1VifWHI5jV2elmWBpVmAXQCfnQ3fiIu1vA09kb7Ew2
-	OzCDDT2cbeqouJMQDdsT/sRhET3GAgoLCiyj7pD14qpjKyLl08UPL6xUPeAQwFcS+6CKSoOwWxTxz
-	IUQXSClSbvVZDCbQkzvxs31cZvCmGTI8SrJVY9qKufThtAmz1GjDKReBA+CG9YqEnSN7goKKkonGe
-	Zuc3tvjr40jSnLruxqqcPmHHPpSml4CHu1sy04G3WJgNq76HlUhkOsQm6YBbwrAZ+m25aKyMnSkqj
-	XZSbbKbg==;
-Received: from bl21-120-122.dsl.telepac.pt ([2.82.120.122] helo=localhost)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1x7Ugq-003rMZ-BS; Fri, 18 Sep 2026 11:15:28 +0200
-From: Luis Henriques <luis@igalia.com>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: Miklos Szeredi <miklos@szeredi.hu>,  Chen Linxuan <me@black-desk.cn>,
-  Jonathan Corbet <corbet@lwn.net>,  Shuah Khan
- <skhan@linuxfoundation.org>,  fuse-devel@lists.linux.dev,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,  Matt
- Harvey <mharvey@jumptrading.com>,  kernel-dev@igalia.com
-Subject: Re: [RFC PATCH v4 1/8] Documentation: fuse: add document on caches
- being used by FUSE
-In-Reply-To: <CAOQ4uxipJkiiy8pURxRFdKYbruBM8wQxArd8uAiv2Dh=tPwNhA@mail.gmail.com>
-References: <20260916155629.32421-1-luis@igalia.com>
-	<20260916155629.32421-2-luis@igalia.com>
-	<CAOQ4uxipJkiiy8pURxRFdKYbruBM8wQxArd8uAiv2Dh=tPwNhA@mail.gmail.com>
-Date: Fri, 18 Sep 2026 10:16:26 +0100
-Message-ID: <87o6du6hsl.fsf@igalia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WjOvf89Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 413091F000FF;
+	Fri, 18 Sep 2026 09:21:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789723309;
+	bh=295Wvk59sbhsQmqs9ne1jysymlz6dNmKESaIVQc+dJE=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=WjOvf89YmajlrlPhhR4+YMc0NJCsrdvSYRcRY4J98bxV2lKMT7eNIfQNyptVrTErj
+	 6AwWlYXwlKDO4GBzUKwPEO9TW9EGcitOB30vzBfb+hvmDJ4ZLmC3jJQwki4NFL5qD3
+	 46jliRxICCEKu+qw0QibSPisaGkSsTrAAHFan/r0+Tht7dB7A6USC2cdlbBNFGRulM
+	 7PLqODpk7IZ9D/FUuUT3/3O4H1cTjFqd9af2kTXV+kLuwS9QT6VO0E0GCH2ssqKYHZ
+	 rGAGyHNQ1lz+Zbdi3KaAY6VsMq1t5KF72Rmu7fX+GeW9YMIh4p65G8EXv8Kfp//1TL
+	 mgQOZHywU3ZKQ==
+Subject: Re: [PATCH net-next v3 3/5] net: Revalidate queue config for
+ ringparam changes
+From: netdev-bot+sashiko@kernel.org
+To: bjorn@kernel.org
+Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ daniel@iogearbox.net, mike.marciniszyn@gmail.com, mohsin.bashr@gmail.com,
+ sdf@fomichev.me, bobbyeshleman@meta.com, daskald@meta.com,
+ bestswngs@gmail.com, maxime.chevallier@bootlin.com, jacob.e.keller@intel.com,
+ leitao@debian.org, cuitao@kylinos.cn, asml.silence@gmail.com, dw@davidwei.uk
+Date: Fri, 18 Sep 2026 09:21:47 +0000
+Message-ID: <178972330781.22033.2530049115348913249@kernel.org>
+In-Reply-To: <20260915182105.4162425-4-bjorn@kernel.org>
+References: <20260915182105.4162425-4-bjorn@kernel.org>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 17 2026, Amir Goldstein wrote:
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider:
 
-> On Wed, Sep 16, 2026 at 5:55=E2=80=AFPM Luis Henriques <luis@igalia.com> =
-wrote:
->>
->> This new file aims at documenting the caches that are used by FUSE.  At
->> the moment only symlink, attributes, ACLs and readdir caches are describ=
-ed.
->>
->> Signed-off-by: Luis Henriques <luis@igalia.com>
->> ---
->>  .../filesystems/fuse/fuse-caches.rst          | 148 ++++++++++++++++++
->>  Documentation/filesystems/fuse/index.rst      |   1 +
->>  2 files changed, 149 insertions(+)
->>  create mode 100644 Documentation/filesystems/fuse/fuse-caches.rst
->>
->> diff --git a/Documentation/filesystems/fuse/fuse-caches.rst b/Documentat=
-ion/filesystems/fuse/fuse-caches.rst
->> new file mode 100644
->> index 000000000000..b133066429b1
->> --- /dev/null
->> +++ b/Documentation/filesystems/fuse/fuse-caches.rst
->> @@ -0,0 +1,148 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +
->> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> +FUSE Caches
->> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> +
->> +Introduction
->> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> +
->> +This document summarises the different types of caches used in FUSE. Fo=
-r each
->> +cache type, it documents the rules to insert data into it. It also docu=
-ments the
->> +rules for validating and invalidating data in the cache.
->> +
->> +symlink caching
->> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> +
->> +Whenever there's a link resolution request for a FUSE filesystem, the V=
-FS will
->> +call into ``fuse_get_link()``, the ``->get_link()`` inode operation. Th=
-is
->> +function will then send a ``FUSE_READLINK`` request to the user-space F=
-USE
->> +server.
->> +
->> +The server can ask the kernel to cache all link resolutions by setting =
-the
->> +``FUSE_CACHE_SYMLINKS`` flag during the ``FUSE_INIT`` negotiation. If t=
-his flag
->> +is set, when the VFS calls into the ``->get_link()`` operation, FUSE wi=
-ll
->> +immediately call ``__page_get_link()``. The first time this is done for=
- a
->> +specific inode, it will result in sending the ``FUSE_READLINK`` request=
- to
->> +user-space. But the result returned from this request will then be adde=
-d into
->> +the page-cache. The next time this link needs to be resolved, it will u=
-se the
->> +link resolution already cached, and will only fallback to user-space if=
- the
->> +folio isn't up-to-date.
->> +
->> +Attributes caching
->> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> +
->> +Inode attributes may be obtained from user-space by different FUSE oper=
-ations.
->> +For example, ``FUSE_LOOKUP``, ``FUSE_GETATTR``, and also several other
->> +operations that create file system objects (e.g. ``FUSE_MKDIR``). These
->> +attributes obtained from user-space are cached by the kernel. They have,
->> +however, a timeout associated and once it expires, they are invalidated=
-. The
->> +next time the attributes are needed, a request (``FUSE_GETATTR``) will =
-be sent
->> +to the FUSE server.
->> +
->> +The ``FUSE_GETATTR`` request can be sent to user-space in three differe=
-nt
->> +scenarios:
->> +
->> +#. if the attributes for the inode aren't yet available in the kernel;
->> +#. if they are not valid any more (timed-out, or have been invalidated)=
-, or
->> +#. if there is an explicit request for forcing the request to be sent (=
-for
->> +   example, by using the ``AT_STATX_FORCE_SYNC`` flag in ``statx``).
->> +
->> +Regarding the attributes invalidation, they may happen in several occas=
-ions. For
->> +example, upon a user-space request for invalidation, through
->> +``FUSE_NOTIFY_INVAL_INODE``, ``FUSE_NOTIFY_INVAL_ENTRY``, or
->> +``FUSE_NOTIFY_DELETE`` requests.
->> +
->> +FUSE uses fine-grained invalidation masks rather than invalidating all
->> +attributes at once. The principle is that each operation only invalidat=
-es the
->> +specific attributes that the operation could have changed on the server=
-. The
->> +masks used are:
->> +
->> +- ``STATX_ATIME`` - after reads and readlink, since the server may upda=
-te access
->> +  time
->> +- ``STATX_CTIME`` - after xattr changes (including ACL set/remove) and =
-rename
->> +- ``STATX_BLOCKS`` - after a successful flush with writeback cache, sin=
-ce the
->> +  server's block count may differ from the local one
->> +- ``FUSE_STATX_MODIFY`` (``STATX_MTIME | STATX_CTIME | STATX_BLOCKS``) =
-- after
->> +  writeback completion (without writeback cache), since the server may =
-have
->> +  updated modification metadata
->> +- ``FUSE_STATX_MODSIZE`` (``FUSE_STATX_MODIFY | STATX_SIZE``) - after w=
-rites,
->> +  truncate-on-open, and fallocate, since the server's size and modifica=
-tion
->> +  metadata may have changed
->> +- ``FUSE_STATX_MODDIR`` (``FUSE_STATX_MODSIZE | STATX_NLINK``) - after =
-directory
->> +  modifications (create, unlink, mkdir, rmdir, rename), since the serve=
-r may
->> +  have updated the directory's size, timestamps, and link count
->> +- ``STATX_BASIC_STATS`` - as a full invalidation, used for server-initi=
-ated
->> +  invalidation (FUSE\ :sub:`NOTIFY`\ \_INVAL\ :sub:`INODE`), interrupted
->
-> What is this odd subscript format and why? Please remove it.
+Critical: 0 · High: 0 · Medium: 0 · Low: 3
 
-Oops!  I use pandoc to convert the text into rst, and looks like it's
-misbehaving here.  I'll investigate what went wrong and fix this.  (And
-next time I'll re-read the doc in rst.)
+- [Low] netdev_qcfg_apply_dev() (net/core/netdev_config.c:53-60)
+  unconditionally copies cfg->rings.{rx,rx_mini,rx_jumbo}_pending over…
+- [Low] ethtool_ringparam_get_cfg() (net/ethtool/common.c:943-956)
+  deliberately restores kparam->tcp_data_split / hds_thresh from…
+- [Low] The struct netdev_ring_config kernel-doc
+  (include/net/netdev_queues.h:18-21) says "These values are only used…
 
-Thanks a lot for your feedback, I'll incorporate the suggestions below
-into v5.
+--
 
-Cheers,
---=20
-Lu=C3=ADs
+net: Revalidate queue config for ringparam changes
 
->> +  setattr, and interrupted link
->> +
->> +The full set of invalidation points can be found by searching for
->> +``fuse_invalidate_attr_mask()`` in the FUSE source.
->> +
->> +ACL caching
->> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> +
->> +FUSE has allowed the usage of POSIX Access Control Lists (ACLs) for a l=
-ong time,
->> +as they can be set and accessed simply as extended attributes. However,=
- it was
->> +only with the introduction of the ``FUSE_POSIX_ACL`` flag that ACLs sta=
-rted to
->> +be fully supported. Without this flag being set during the ``FUSE_INIT``
->> +negotiation, ACLs can still be set, but the VFS won't use them for perf=
-orming
->> +permission checks - that would be the user-space server's responsibilit=
-y.
->> +
->> +Also, without setting ``FUSE_POSIX_ACL``, ACLs will not be cached by th=
-e kernel.
->
-> This Also, feels out of place and unneeded for the document flow.
->
->> +In this case, new inodes ``i_acl`` and ``i_default_acl`` fields will be=
- set to
->> +``ACL_DONT_CACHE``.
->> +
->> +On the other hand, if the ``FUSE_POSIX_ACL`` flag is set then, when an =
-inode ACL
->
-> This OTOH, feels out of place and unneeded for the document flow.
->
->> +is accessed, VFS will first check if it's already cached. If it is not,=
- FUSE
->> +``->get_acl()`` operation (``fuse_get_acl()``) is called, which will ev=
-entually
->> +send a user-space request. Future accesses to this inode ACL will use t=
-he cached
->> +data.
->> +
->> +Setting an ACL in an inode will also result in sending a request to the=
- FUSE
->> +server for setting it. But this operation won't immediately cache the A=
-CL -- it
->> +will only be cached after it is accessed again and requested from user-=
-space.
->> +
->> +On the other hand, ACLs will be removed from the cache in the following
->
-> This OTOH, feels out of place and unneeded for the document flow.
-> Which text is it referring to? Anyway, text seems better and clear withou=
-t it.
->
->> +situations:
->> +
->> +- When setting an ACL in an inode (and the ``FUSE_POSIX_ACL`` flag is s=
-et),
->> +  previously cached ACLs for this inode will be invalidated.
->> +- When invalidating an inode through the ``FUSE_NOTIFY_INVAL_INODE`` op=
-eration.
->> +- After setting an inode attribute (i.e. operation ``FUSE_SETATTR`` is =
-sent to
->> +  user-space), the user-space server may have also updated the ACLs. Th=
-us, any
->> +  cached ACLs for this inode are also invalidated.
->> +- Whenever attributes are refreshed from the server. For example, when =
-while
->
-> stray while - please remove
->
->> +  revalidating a dentry (``->d_revalidate()``), or when updating a dent=
-ry during
->> +  while processing a ``FUSE_READDIRPLUS``.
->
-> stray while - please remove
->
->> +- In general, when there is the need to send a ``FUSE_STATX`` or
->> +  ``FUSE_GETATTR`` to user-space (e.g. when attributes expired).
->> +
->> +readdir caching
->> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> +
->> +When opening a directory a ``FUSE_OPENDIR`` will be sent to the FUSE se=
-rver, and
->> +server will be responsible for setting the open flags related with cach=
-ing,
->> +namely ``FOPEN_KEEP_CACHE`` and ``FOPEN_CACHE_DIR``.
->> +
->> +If neither flags are set by the user-space FUSE server, then every ``re=
-addir``
->> +will result in a ``FUSE_READDIR`` (or ``FUSE_READDIRPLUS``) request bei=
-ng sent.
->> +If ``FOPEN_CACHE_DIR`` is set by the server, then the result of a ``rea=
-ddir``
->> +will be cached by the kernel and reused for the current open.
->
-> I understand what you mean but it sounds confusing.
->
->> +``FOPEN_KEEP_CACHE`` is about keeping the cache on **this** open, not o=
-n some
->> +**next** open.
->
-> Suggest:
->
-> FOPEN_CACHE_DIR determines if readdir results of this open will be cached=
- and if
-> readdir cache will be used to return readdir results during the current o=
-pen.
-> If FOPEN_KEEP_CACHE is set, any readdir cache from previous opens is pres=
-erved
-> when the directory is opened. Otherwise, the old readdir cache is
-> invalidated on open.
->
-> If you accept this phrasing and fix the style nits above, feel free to add
->
-> Reviewed-by: Amir Goldstein <amir73il@gmail.com>
->
-> Thanks,
-> Amir.
+This adds accepted RX/TX ring depths to struct netdev_config, stages
+proposed depths in cfg_pending, and revalidates every RX queue through
+ndo_validate_qcfg before the driver applies a ringparam change. The same
+transaction is used for both the ioctl and netlink ring-set paths.
 
+Link: https://lore.kernel.org/all/20250421222827.283737-14-kuba@kernel.org/
+
+> diff --git a/include/net/netdev_queues.h b/include/net/netdev_queues.h
+> index 70c9fe9e83cc4..6f6f6d74de2e5 100644
+> --- a/include/net/netdev_queues.h
+> +++ b/include/net/netdev_queues.h
+> @@ -4,18 +4,58 @@
+>  
+>  #include <linux/netdevice.h>
+>  
+> +/**
+> + * struct netdev_ring_config - accepted RX/TX ring depth configuration
+> + * @rx_pending:		Size of the regular RX ring.
+> + * @rx_mini_pending:	Size of the RX mini ring.
+> + * @rx_jumbo_pending:	Size of the RX jumbo ring.
+> + * @tx_pending:		Size of the TX ring.
+> + *
+> + * This stores only persistent configuration values. Capability fields,
+> + * such as max ring sizes, are reported by drivers but are not part of the
+> + * accepted configuration.
+> + *
+> + * These values are only used for queue-configuration validation today.
+
+[Severity: Low]
+Is this sentence accurate for all four members?  netdev_qcfg_apply_dev() is
+the only place that transfers netdev_config.rings into the struct
+netdev_queue_config handed to ndo_validate_qcfg(), and it copies only the
+three RX depths:
+
+	qcfg->rx_ring_size = cfg->rings.rx_pending;
+	qcfg->rx_mini_ring_size = cfg->rings.rx_mini_pending;
+	qcfg->rx_jumbo_ring_size = cfg->rings.rx_jumbo_pending;
+
+struct netdev_queue_config has no TX member, so rings.tx_pending, which
+ethtool_ringparam_set_cfg() writes on both the ioctl and netlink paths, can
+never reach a validation callback and is write-only state today.
+
+Would it be worth rewording this to say the RX depths feed validation and
+that tx_pending is recorded for completeness?
+
+> + * Drivers may normalize ring sizes without reporting the result through
+> + * struct ethtool_ringparam, so they are not necessarily the applied
+> + * hardware depths.
+> + */
+> +struct netdev_ring_config {
+> +	u32	rx_pending;
+> +	u32	rx_mini_pending;
+> +	u32	rx_jumbo_pending;
+> +	u32	tx_pending;
+> +};
+> +
+>  /**
+>   * struct netdev_config - queue-related configuration for a netdev
+>   * @hds_thresh:		HDS Threshold value.
+>   * @hds_config:		HDS value from userspace.
+> + * @rings:		Accepted RX/TX ring depths.
+> + *
+> + * Direct values, such as @hds_thresh and @rings, hold the accepted
+> + * configuration and always override callback-provided defaults, including
+> + * when zero. Drivers which use them for queue rendering must initialize them.
+
+[Severity: Low]
+Is this "must initialize them" requirement stated anywhere a driver author
+would find it?  It appears only here, and not in the commit message or in
+the @ndo_default_qcfg documentation, which still reads that the queue config
+struct is passed to the callback "before the user-requested settings are
+applied".
+
+netdev_alloc_config() only kzalloc()s the struct, and the only core writer of
+cfg->rings is ethtool_ringparam_set_cfg() on the two ring-set paths.  So
+until userspace performs a ring change, cfg->rings is all zeroes and
+netdev_qcfg_apply_dev() copies those zeroes over whatever ndo_default_qcfg()
+supplied.
+
+Would an "unset" guard, similar to the memory-provider override just below
+it, or a core-side seeding step from the driver's current ringparam be
+preferable to the per-driver requirement?
+
+For what it's worth, this does not misbehave in-tree at the end of the
+series: no in-tree ndo_default_qcfg populates ring depths (bnxt, mlx5e and
+fbnic only set qcfg->rx_page_size), the only reader of the new
+rx_*_ring_size fields is fbnic_validate_qcfg(), and the following fbnic
+patch seeds netdev->cfg->rings from fbn->{rcq,hpq,ppq,txq}_size in
+fbnic_netdev_alloc() before registration.  The concern here is the doc
+contradiction and the fragile contract rather than an observable failure.
+
+>   */
+>  struct netdev_config {
+>  	u32	hds_thresh;
+>  	u8	hds_config;
+> +
+> +	struct netdev_ring_config rings;
+>  };
+>  
+> +/**
+> + * struct netdev_queue_config - rendered configuration for an RX queue
+> + * @rx_page_size:	Size of one RX page-pool allocation.
+> + * @rx_ring_size:	Configured size of the regular RX ring.
+> + * @rx_mini_ring_size:	Configured size of the RX mini ring.
+> + * @rx_jumbo_ring_size:	Configured size of the RX jumbo ring.
+> + */
+>  struct netdev_queue_config {
+>  	u32	rx_page_size;
+> +	u32	rx_ring_size;
+> +	u32	rx_mini_ring_size;
+> +	u32	rx_jumbo_ring_size;
+>  };
+>  
+>  /* See the netdev.yaml spec for definition of each statistic */
+
+[ ... ]
+
+> diff --git a/net/core/netdev_config.c b/net/core/netdev_config.c
+> index b101341e32513..1975de42a60d9 100644
+> --- a/net/core/netdev_config.c
+> +++ b/net/core/netdev_config.c
+> @@ -50,6 +50,15 @@ static int netdev_nop_validate_qcfg(struct net_device *dev,
+>  	return 0;
+>  }
+>  
+> +static void netdev_qcfg_apply_dev(struct netdev_queue_config *qcfg,
+> +				  const struct netdev_config *cfg)
+> +{
+> +	/* Device config overrides callback-provided fallbacks. */
+> +	qcfg->rx_ring_size = cfg->rings.rx_pending;
+> +	qcfg->rx_mini_ring_size = cfg->rings.rx_mini_pending;
+> +	qcfg->rx_jumbo_ring_size = cfg->rings.rx_jumbo_pending;
+> +}
+> +
+>  static int __netdev_queue_config(struct net_device *dev, int rxq_idx,
+>  				 struct netdev_queue_config *qcfg,
+>  				 struct netlink_ext_ack *extack,
+> @@ -70,6 +79,7 @@ static int __netdev_queue_config(struct net_device *dev, int rxq_idx,
+>  	/* Get defaults from the driver, in case user config not set */
+>  	if (dev->queue_mgmt_ops->ndo_default_qcfg)
+>  		dev->queue_mgmt_ops->ndo_default_qcfg(dev, qcfg);
+> +	netdev_qcfg_apply_dev(qcfg, dev->cfg_pending);
+
+[Severity: Low]
+Does the existing comment still describe what happens here?  It says the
+driver defaults are fetched "in case user config not set", but the new call
+replaces the three ring fields unconditionally, whether or not the user ever
+set them.
+
+Compare with the memory-provider override a few lines further down, which is
+guarded:
+
+	mpp = &__netif_get_rx_queue(dev, rxq_idx)->mp_params;
+	if (mpp->rx_page_size)
+		qcfg->rx_page_size = mpp->rx_page_size;
+
+Should netdev_qcfg_apply_dev() skip zero values in the same way, or should
+the comment be updated to say the ring fields are always taken from
+cfg_pending?
+
+>  	err = validate_cb(dev, qcfg, extack);
+>  	if (err)
+>  		return err;
+
+[ ... ]
+
+> diff --git a/net/ethtool/common.c b/net/ethtool/common.c
+> index 23db40618fed1..05ed22fd1f906 100644
+> --- a/net/ethtool/common.c
+> +++ b/net/ethtool/common.c
+> @@ -956,6 +956,15 @@ void ethtool_ringparam_get_cfg(struct net_device *dev,
+>  	kparam->hds_thresh = dev->cfg->hds_thresh;
+>  }
+>  
+> +void ethtool_ringparam_set_cfg(struct netdev_config *cfg,
+> +			       const struct ethtool_ringparam *param)
+> +{
+> +	cfg->rings.rx_pending = param->rx_pending;
+> +	cfg->rings.rx_mini_pending = param->rx_mini_pending;
+> +	cfg->rings.rx_jumbo_pending = param->rx_jumbo_pending;
+> +	cfg->rings.tx_pending = param->tx_pending;
+> +}
+
+[Severity: Low]
+Should the get side be extended to match this?  ethtool_ringparam_get_cfg()
+deliberately overrides two fields with the accepted config:
+
+	/* Driver gives us current state, we want to return current config */
+	kparam->tcp_data_split = dev->cfg->hds_config;
+	kparam->hds_thresh = dev->cfg->hds_thresh;
+
+but it leaves the four ring depths exactly as reported by
+get_ringparam(), i.e. the driver's current hardware state.
+
+ethnl_set_rings() seeds struct ethtool_ringparam from that helper and then
+calls ethtool_ringparam_set_cfg() for all four fields, so a request carrying
+only ETHTOOL_A_RINGS_TX re-stages and commits RX depths sourced from the
+driver's reported state rather than from the previously accepted config.
+
+Which side is meant to be authoritative for the ring depths?
+
+For the record, this does not diverge for the only in-tree reader of
+cfg->rings: fbnic_get_ringparam() reports fbn->{rcq,hpq,ppq,txq}_size, which
+are the normalized values the core already recorded, and the bnxt and mlx5e
+validation callbacks only look at rx_page_size.
+
+>  
+>  static void ethtool_init_tsinfo(struct kernel_ethtool_ts_info *info)
+>  {
+>  	memset(info, 0, sizeof(*info));
+
+[ ... ]
+
+> diff --git a/net/ethtool/rings.c b/net/ethtool/rings.c
+> index 9054c89c5d7bb..e3810c0320e35 100644
+> --- a/net/ethtool/rings.c
+> +++ b/net/ethtool/rings.c
+> @@ -299,10 +300,20 @@ ethnl_set_rings(struct ethnl_req_info *req_info, struct genl_info *info)
+>  
+>  	dev->cfg_pending->hds_config = kernel_ringparam.tcp_data_split;
+>  	dev->cfg_pending->hds_thresh = kernel_ringparam.hds_thresh;
+> +	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);
+> +
+> +	ret = netdev_queue_config_revalidate(dev, info->extack);
+> +	if (ret)
+> +		return ret;
+>  
+>  	ret = dev->ethtool_ops->set_ringparam(dev, &ringparam,
+>  					      &kernel_ringparam, info->extack);
+> -	return ret < 0 ? ret : 1;
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Capture ring depth adjustments reported by the driver. */
+> +	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);
+> +	return 1;
+>  }
+
+Thanks for looking at these.
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260915182105.4162425-1-bjorn%40kernel.org
