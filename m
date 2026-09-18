@@ -1,33 +1,33 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9ED4AB3C0;
-	Fri, 18 Sep 2026 12:18:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A66D4EBAED;
+	Fri, 18 Sep 2026 12:25:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789733922; cv=none; b=LfRGm994YrFB5O3boDkzUMo/PNwr72Mwp4JYQl/du0RxYpvSox79CG+QkZARkzG74JwwLJt8U0oOSbdb1f6T6DhFf6EDsq8omvyl69qvgzG44+CrZk5N/EuztsYesrtIaVlyXb54g+IqxiNBG465FhRKQC+8LNEsS9Y1Eo+080I=
+	t=1789734359; cv=none; b=IXwK1sgmUtJNnQ7WytCMn4yLjBEH4jK8Z5eDCracWaa1O8XIz1CWJw81ICVIpwUHdOqpr+DffmVVUQ9Qvr8zs9peOBZLlJMoBQ6xEIkTY+vwT6UsO3Rf6XHGqi1uW9XL/ZPm1Fz8aQ9uKGWh+x/D6EmJdrmAuMhtmHzwIEEMjiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789733922; c=relaxed/simple;
-	bh=W30kLLrcOgwsVvtEnHgzJIoxD686qATyr73s4hc2OCc=;
+	s=arc-20240116; t=1789734359; c=relaxed/simple;
+	bh=bzLjVbV2XLshhPh87slsfNupz1y3zpt+smqxp/pTH6E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DiQU6JD5zNsyKfkRtw8u+tmndAYVVJ2DLJBJokKUvS3yVd8UT3rOntfG45soyVFJeo6LYsGBBv9/EF4rJvqnsucMvjmRplZ9tzMWa1ZuVzZL4WJyD84nzjeCNtN1a0UQQjvIJkEDv0HlFvcDBG9by0M+7bCwtCXZkvg2Nugqdxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mws1UsRB; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=TsVwigd23g44az/p+7uCj0Z3AIH15bjO5E0vf7cs3hzPhk8aB1LBYUkR/JAsKRhKg/YZ6eNXMVDt2oVw6njwZtxL72vOQwdCJefgiRroMW7lraF8MMev2DzcByQlGs+gvMhKJ0imPW6DLm5VZ976xXKa3YjAUFfls/BGrblMmU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=J6Yr5t9j; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mws1UsRB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C03D11F000FF;
-	Fri, 18 Sep 2026 12:18:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789733920;
-	bh=1TYvlIfCtLdqHpeJoQsXsU42SLAAUvbsKO95maH9PDY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=mws1UsRBTP1Dx9MUaCMx7CciHF+x8bsh6VQal9UxLrLB+bJ/C01mAIno+zKKrOcbM
-	 6r92UejHJgIYuRD5xxtmdyiccvuFmzgYtA6y0SgVbN+kOFAAaInYK7PIPhtGNzuFeS
-	 wo5P0ir1dFYlpLycvD00qzkUvEThUHPkwmhlmAPrInngwcSxDBsKvGWovoNm4UWwe4
-	 wknqsQCmG7EXWpjRWce03zvAGjVz9hjsEpLBhB7Ywm7zFatE5BbkJ0kmIUCR9TGgoY
-	 PgW6dmrkbo1HL70lEA8I0B+vWw/22hvDVNBaGJryCOfX147XNrUMl7EvIrF8LCDYwT
-	 I9ExzcVWzp1WQ==
-Message-ID: <5bded51f-d0f9-41ae-92ad-e1ce008a101e@kernel.org>
-Date: Fri, 18 Sep 2026 13:18:39 +0100
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="J6Yr5t9j"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8DEA2168F;
+	Fri, 18 Sep 2026 05:25:42 -0700 (PDT)
+Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C5F223F86F;
+	Fri, 18 Sep 2026 05:25:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1789734346; bh=bzLjVbV2XLshhPh87slsfNupz1y3zpt+smqxp/pTH6E=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=J6Yr5t9jOHufl2Hjx55B6CUtsmoGSJkiZNp3ty7YyOQ789q6L3J/hEyTjh9dj/T3s
+	 lVGkdOZmKzRKHURxizUKFUkeVaVfK4NHxPl+UXNlgRa99qTclq23pmBEtuOkXQpgjZ
+	 QkcEm7i1eGR3tTmvJygym8i+Vxa2Mt+KlUeGCixw=
+Message-ID: <937939c3-ae9a-4148-a601-0f8876216423@arm.com>
+Date: Fri, 18 Sep 2026 17:55:36 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,155 +35,105 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Cover bpftool ring buffer
- event_pipe
-To: Tianyi Chen <diannaaav@gmail.com>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- linux-kselftest@vger.kernel.org
-References: <20260911025114.190899-1-diannaaav@gmail.com>
- <20260911025114.190899-3-diannaaav@gmail.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260911025114.190899-3-diannaaav@gmail.com>
+Subject: Re: [PATCH v11 1/6] selftests/mm: make file helpers return errors
+To: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
+ <liam@infradead.org>, Vlastimil Babka <vbabka@suse.com>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Mark Brown <broonie@kernel.org>,
+ Anshuman Khandual <anshuman.khandual@arm.com>,
+ Muhammad Usama Anjum <usama.anjum@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260918112234.195857-1-sarthak.sharma@arm.com>
+ <20260918112234.195857-2-sarthak.sharma@arm.com>
+Content-Language: en-US
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+In-Reply-To: <20260918112234.195857-2-sarthak.sharma@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-2026-09-11 10:51 UTC+0800 ~ Tianyi Chen <diannaaav@gmail.com>
-> From: Tianyi Chen <hi@tychen.cc>
+
+
+On 9/18/26 4:52 PM, Sarthak Sharma wrote:
+> Change read_file(), write_file(), read_num(), write_num() and
+> write_num_ignore_einval() in vm_util.c to report failures to callers
+> instead of exiting from the helper.
 > 
-> Produce known ring buffer records and check complete plain, JSON and
-> pretty JSON output. Exercise ID and pinned map selection, SIGINT and
-> SIGTERM shutdown, empty streams and invalid map types or selectors.
+> Make read_file() return a negative errno on failure and 0 on success, so
+> callers can distinguish a successful read from an I/O error. Also make
+> read_num() reject negative and malformed values.
 > 
-> Also produce a perf event sample and check its existing header and raw
-> payload output. Use a payload whose size plus the raw sample length
-> field is aligned to eight bytes so the expected bytes exclude implicit
-> perf padding.
+> Keep write_num_ignore_einval() silent for -EINVAL while returning other
+> errors to its caller.
 > 
-> Assisted-by: LLM
-> Signed-off-by: Tianyi Chen <hi@tychen.cc>
+> Update callers to print diagnostics and fail wherever required. Modify
+> a comment which implies write_num() uses ksft_exit_fail_msg(). Also add
+> a helper print_file_access_error() in hugepage_settings.c to print
+> TAP-compatible errors without a kselftest dependency. This prepares the
+> helpers to be moved to tools/lib/mm without a kselftest dependency.
+> 
+> Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+> Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
 > ---
->  .../bpf/prog_tests/bpftool_ringbuf.c          | 425 ++++++++++++++++++
->  .../selftests/bpf/progs/bpftool_ringbuf.c     |  47 ++
->  2 files changed, 472 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
->  create mode 100644 tools/testing/selftests/bpf/progs/bpftool_ringbuf.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c b/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
-> new file mode 100644
-> index 000000000000..1a4ae88c05a0
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
-> @@ -0,0 +1,425 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <ctype.h>
-> +#include <fcntl.h>
-> +#include <poll.h>
-> +#include <signal.h>
-> +#include <sys/mman.h>
-> +#include <sys/wait.h>
-> +#include <test_progs.h>
-> +#include "bpftool_ringbuf.skel.h"
-> +
-> +#define WAIT_STEPS 500
-> +#define WAIT_US 10000
-> +
-> +struct consumer {
-> +	pid_t pid;
-> +	int fd;
-> +};
-> +
-> +static const char *bpftool_path(void)
-> +{
-> +	const char *path = getenv("BPFTOOL");
-> +
-> +	if (path)
-> +		return access(path, X_OK) ? NULL : path;
-> +	if (!access("./tools/sbin/bpftool", X_OK))
-> +		return "./tools/sbin/bpftool";
-> +	if (!access("../tools/sbin/bpftool", X_OK))
-> +		return "../tools/sbin/bpftool";
-> +	return NULL;
-> +}
+Hi Andrew!
+
+This fixes an MM selftest build failure in patch 1/6: read_num() changed
+its interface, but hugetlb_nr_resv_pages() was missed during the caller
+conversion. I'm sorry for missing this.
+
+Can you please apply this fixlet after this patch and before the next
+one? Sorry for the inconvenience again.
 
 
-As bpf-ci's review says, please look into reusing the existing helpers
-if possible.
+From f7cfae95a1d0554ea03df320d91641979a9ac473 Mon Sep 17 00:00:00 2001
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+Date: Fri, 18 Sep 2026 17:40:50 +0530
+Subject: [PATCH] fixup! selftests/mm: make file helpers return errors
 
+Convert hugetlb_nr_resv_pages(), which was missed when read_num()
+changed to return an error and store the parsed value through an output
+pointer.
 
-> +
-> +static void consumer_cleanup(struct consumer *child)
-> +{
-> +	if (child->pid > 0) {
-> +		kill(child->pid, SIGKILL);
-> +		while (waitpid(child->pid, NULL, 0) < 0 && errno == EINTR)
-> +			;
-> +		child->pid = -1;
-> +	}
-> +	if (child->fd >= 0) {
-> +		close(child->fd);
-> +		child->fd = -1;
-> +	}
-> +}
-> +
-> +static bool consumer_start(struct consumer *child, int map_fd, const char *format,
-> +			   const char *pin_path, const char *option,
-> +			   bool pair, bool capture_errors)
-> +{
-> +	struct bpf_map_info info = {};
-> +	__u32 len = sizeof(info);
-> +	const char *path = bpftool_path();
-> +	char *argv[12], id[16];
-> +	int out[2], ready[2], n = 0, err, err_fd;
-> +	struct pollfd pfd;
-> +
-> +	if (!ASSERT_OK_PTR(path, "bpftool path (set BPFTOOL to override)") ||
-> +	    !ASSERT_OK(bpf_map_get_info_by_fd(map_fd, &info, &len), "map info"))
-> +		return false;
-> +	snprintf(id, sizeof(id), "%u", info.id);
-> +	argv[n++] = (char *)path;
-> +	if (format)
-> +		argv[n++] = (char *)format;
-> +	argv[n++] = "map";
-> +	argv[n++] = "event_pipe";
-> +	argv[n++] = pin_path ? "pinned" : "id";
-> +	argv[n++] = pin_path ? (char *)pin_path : id;
-> +	if (option) {
-> +		argv[n++] = (char *)option;
-> +		argv[n++] = "0";
-> +		if (pair) {
-> +			argv[n++] = "index";
-> +			argv[n++] = "0";
-> +		}
-> +	}
-> +	argv[n] = NULL;
-> +	if (!ASSERT_OK(pipe2(out, O_CLOEXEC), "output pipe"))
-> +		return false;
-> +	if (!ASSERT_OK(pipe2(ready, O_CLOEXEC), "exec pipe")) {
-> +		close(out[0]);
-> +		close(out[1]);
-> +		return false;
-> +	}
-> +	child->pid = fork();
-> +	if (!child->pid) {
-> +		close(out[0]);
-> +		close(ready[0]);
-> +		err_fd = capture_errors ? out[1] : open("/dev/null", O_WRONLY);
-> +		if (dup2(out[1], STDOUT_FILENO) < 0 ||
-> +		    dup2(err_fd, STDERR_FILENO) < 0)
-> +			goto exec_fail;
-> +		if (!capture_errors)
-> +			close(err_fd);
-> +		close(out[1]);
-> +		execv(path, argv);
-> +exec_fail:
-> +		err = errno;
-> +		write(ready[1], &err, sizeof(err));
+Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
+---
+ tools/testing/selftests/mm/hugepage_settings.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/mm/hugepage_settings.c
+b/tools/testing/selftests/mm/hugepage_settings.c
+index 9a63420d0744..6f3abd357385 100644
+--- a/tools/testing/selftests/mm/hugepage_settings.c
++++ b/tools/testing/selftests/mm/hugepage_settings.c
+@@ -515,10 +515,18 @@ unsigned long hugetlb_free_pages(unsigned long size)
+ unsigned long hugetlb_nr_resv_pages(unsigned long size)
+ {
+ 	char path[PATH_MAX];
++	unsigned long nr;
++	int ret;
 
-I think that ignoring the return value from write() can produce a
-compiler warning (-Wunused-result).
+ 	hugetlb_sysfs_path(path, sizeof(path), size, "resv_hugepages");
 
-[...]
+-	return read_num(path);
++	ret = read_num(path, &nr);
++	if (ret) {
++		print_file_access_error(path, ret);
++		exit(EXIT_FAILURE);
++	}
++
++	return nr;
+ }
 
-Looks OK otherwise, thank you
+ static bool __hugetlb_setup(unsigned long size, unsigned long nr)
+-- 
+2.53.0
