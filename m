@@ -1,108 +1,137 @@
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E934511E9F
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 16:24:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD78502546;
+	Fri, 18 Sep 2026 16:55:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789748697; cv=none; b=AjgYHZNoDTSfoJkri6BB2u2jY7ULEGsCX1izp7DELXB3Q72s6jrKnOWw6N+xmH+th6Wfur3zNXzABbfUym9h4iN3GYdKMAfq+OTXn8Q6eFv3pivM+Y1DHrfGkaxVVvoIOxRKMW1woWeufM843OD70SpO8OckLuWZxmv1JKOlEeo=
+	t=1789750529; cv=none; b=ISn1kAMUrIE/D6o4Hu7ULaxOnm0x1ly4OVB+Ipmr7TDJ5+9vp1kMDGhWCiRXK7XTmyqfg4QpYgpwIQSWWrVFg93jywJembFjZbMsoP0HYFLOIjMVucWUrlJXnEvXQ/tD6BuCutpd/GnoS5SbJd+xURL26lkJ2FJ0PDHDvR4zEnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789748697; c=relaxed/simple;
-	bh=/VEJ+LucLRgG3GQveLMeKu8gGNtxOYLsCkVGmvtubPI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=oQmAJNNf6sWgwvE0K3CDBBjsactuunxcdVplstVquQoQLMMcW+pC/9/19+mAU91uuw5+q54UN2b4dhlpCqD8VOkiNy3im5wdZ/ui43+Q7hKHvt+RwnrhW3u+9LYtrgkNZin5YWhOB94LXqspUxlNJcObdCk41SUsId2pJUR0qtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NypGK/y/; arc=none smtp.client-ip=209.85.216.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1789750529; c=relaxed/simple;
+	bh=BkrTBUWgtEY3ZSDZV8TWluEgqo3j0w8r8xpczDpSQ8U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CxT5JQI8JiMLtuOklC6zFASZY6wm6wFaijA5hf2m7BpMXzDEtGFPKgPax9/2YcLHmb7+2XIgcQNOpKoXo7eVjA69Zc6l3ctL2CD4gxOopNkVVQR3fBw1UhZ5kQ5swPYW70xEeCb8zVZEJF/5ef0UWfD+SMQ6v039Xp3Nv2C08zM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E6BpMVdL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NypGK/y/"
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-39de1f85cb2so1264154a91.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 09:24:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789748694; x=1790353494; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=JHL6ulY39G3oYupBS7XaH4v+pqwb8EWJ7uPAAnt0DUo=;
-        b=NypGK/y/QMSj7kykXuqffJBWeSeURdROrAIZpIjuU6YeyErphUB3XGkaWeL2TTFWM7
-         Dw1NqYCmMfCvkxWkgE9RsPF44QZMqZRzbs9CW0P87Ol92pkhzwkm08TuBGctGbDyvkpt
-         5v4qiJQy1BrdD1A8GZ4Q8RiLJWn0xo3RmKll+MD+wjEhuk2UXDQD+1AfVFh6QMlzhds5
-         t2AfPNf7zS8NHrsQAYAKI/QUWS8gi2xZNh//prS01ORUYnKTDn+eBzF7YM4yBH6rzlt/
-         JxarJucsIc4pVy6OOg1TwahbnKgkf9bOT5CPlDV5G45LBUzqaecPyYQVh52tgfTS1sYR
-         GoIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789748694; x=1790353494;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=JHL6ulY39G3oYupBS7XaH4v+pqwb8EWJ7uPAAnt0DUo=;
-        b=bHZY9U88XbDsXw0MtzpUUt5ijljARwbqMK+1A4Lavy3HKuu4x3/0tjvgh2iWjSYEYV
-         tJNnvimA47byGu/kODzMyMeTJblI+VynTK0vz/3RiIaKhjvddnmmdsj38cdnoafGSM57
-         nBhmbLgs//TRb0gVDJCTS1PJ0O0+bDL2D/gC/mcTSpvTe3NAjrYMkbSZ7x01OMRwohKU
-         Ns/lq58i3rLXws0dq7RWFCua00wgCkavJUCEZd2h/VABUhuLdzrYJGa+ZAtl9fZpf4Sb
-         MbqogKEjRjw89yGGO2iHNc+tktA3YyDbHKmapS3etcWadFvlUowU3bB+RXJy/yzRgOCQ
-         CCiQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwfzTgYzIPWxK0ejPT9biKSbZEhnvkQUgv0uD2WrWxGM/OaAtk9UPLY5GnQjdMFNh/7UE4+iCDTBVOmNCnYj9c=@vger.kernel.org
-X-Gm-Message-State: AFuF++nFe+HMhlf7e313MJ1eFNt110KIqUugPhrWVllN0ReLUf1u32sU
-	txzsOAEIvvR/HLL3aI6hWnKrVd2eulo/IZx3z255A0nOG9Biy3eh9J+0UV9NTqJemoiVU3yeZ4c
-	2tEsrZg==
-X-Received: from pjbiw20.prod.google.com ([2002:a17:90b:4214:b0:39e:ac:d0a2])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:d648:b0:39e:6c6a:4b6f
- with SMTP id 98e67ed59e1d1-39e6c6a5502mr182977a91.57.1789748693726; Fri, 18
- Sep 2026 09:24:53 -0700 (PDT)
-Date: Fri, 18 Sep 2026 09:24:53 -0700
-In-Reply-To: <20260918113631.634233-2-gokul02k@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E6BpMVdL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6D4B1F000FF;
+	Fri, 18 Sep 2026 16:55:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789750527;
+	bh=PvwBJ7+u8wV5by4QEYGYKiQPXw9/Ehg40Xjxdr7Muyw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=E6BpMVdL81jmC7IBcPG67lnce8x94k97ydWHTrsA8eoEV+P8rKu0DRpo3tvVFZcu5
+	 IXEJXJkXcio0bnBnZiSFUoBa6Z1Ebt0FKmBlcPWIwlfE6XcOXQgwyaHXmXe76L6clI
+	 vLzbljjppIW3bnB9W7N69Ox7YLexvc7GfwsLsDlYuNdbDf8TF3gzkUnSuRj8o/OZak
+	 JshdBOUDm0FR0GU2HxfTgpevHuxTwF9lP/FKQ9pu6fWzADu+CPCjlsnpScN+nuKdLB
+	 fOrPGrqoN6qG+ACLyeHqi6nt/efIA1wI328uj+HcU5OE2fhorZ/AXRlffelBKyHnDf
+	 7txM+/X/ytTNg==
+Date: Fri, 18 Sep 2026 18:55:21 +0200
+From: Joel Granados <joel.granados@kernel.org>
+To: Yuya Kusakabe <yuya.kusakabe@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Oleg Nesterov <oleg@redhat.com>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] selftests: net: fix CONFIG_SYSCTL sort order in
+ configs
+Message-ID: <lf2colzrbojg7ob4qg5z2wldikuitjkls5x47m535h2zgr5ffy@2iqctneklykj>
+References: <20260918-selftests-net-config-sort-v1-1-968ea6e8c1b7@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260918113631.634233-1-gokul02k@gmail.com> <20260918113631.634233-2-gokul02k@gmail.com>
-Message-ID: <aq1l1WwdySbfX0qt@google.com>
-Subject: Re: [PATCH 1/3] KVM: selftests: Delete the unused sparsebit copy and
- count helpers
-From: Sean Christopherson <seanjc@google.com>
-To: Gokul K <gokul02k@gmail.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="zvjvgykwrsi2inxe"
+Content-Disposition: inline
+In-Reply-To: <20260918-selftests-net-config-sort-v1-1-968ea6e8c1b7@gmail.com>
 
-On Fri, Sep 18, 2026, Gokul K wrote:
-> sparsebit_copy() and sparsebit_num_set() have no callers.  Nor does the
-> FUZZ harness at the bottom of lib/sparsebit.c, which exercises most of
-> the rest of the API and still builds and links with both removed.
-> 
-> sparsebit_copy() was the only non-recursive caller of
-> node_copy_subtree(), which leaves that unreachable too.  It is static,
-> so keeping it would trip -Wunused-function; delete it as well.
-> 
-> The comment on the num_set member gives sparsebit_num_set() as the
-> reason the count is maintained.  The member stays - it is what lets
-> sparsebit_all_set() answer in O(1), and the dump path prints it - so
-> point the comment at what still uses it.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Gokul K <gokul02k@gmail.com>
+
+--zvjvgykwrsi2inxe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Sep 18, 2026 at 10:49:30PM +0900, Yuya Kusakabe wrote:
+> Commit 8d75c338f0bc ("sysctl: remove CONFIG_PROC_SYSCTL, it just mirrors
+> CONFIG_SYSCTL") renamed CONFIG_PROC_SYSCTL to CONFIG_SYSCTL in place,
+> which left the entry out of alphabetical order in the net and
+> packetdrill configs. The netdev CI check for sorted selftest configs
+> now fails for every patch that touches either file.
+>=20
+> Fixes: 8d75c338f0bc ("sysctl: remove CONFIG_PROC_SYSCTL, it just mirrors =
+CONFIG_SYSCTL")
+> Assisted-by: LLM
+> Signed-off-by: Yuya Kusakabe <yuya.kusakabe@gmail.com>
 > ---
->  .../testing/selftests/kvm/include/sparsebit.h |  2 -
->  tools/testing/selftests/kvm/lib/sparsebit.c   | 63 +------------------
->  2 files changed, 1 insertion(+), 64 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/sparsebit.h b/tools/testing/selftests/kvm/include/sparsebit.h
-> index e027e5790946..8a2ab11dae6f 100644
-> --- a/tools/testing/selftests/kvm/include/sparsebit.h
-> +++ b/tools/testing/selftests/kvm/include/sparsebit.h
-> @@ -30,7 +30,6 @@ typedef u64 sparsebit_num_t;
->  
->  struct sparsebit *sparsebit_alloc(void);
->  void sparsebit_free(struct sparsebit **sbitp);
-> -void sparsebit_copy(struct sparsebit *dstp, const struct sparsebit *src);
+>  tools/testing/selftests/net/config             | 2 +-
+>  tools/testing/selftests/net/packetdrill/config | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests=
+/net/config
+> index 30d5fcb09a83..737e7e6327b3 100644
+> --- a/tools/testing/selftests/net/config
+> +++ b/tools/testing/selftests/net/config
+> @@ -118,10 +118,10 @@ CONFIG_NFT_NAT=3Dm
+>  CONFIG_NUMA=3Dy
+>  CONFIG_OPENVSWITCH=3Dm
+>  CONFIG_PAGE_POOL_STATS=3Dy
+> -CONFIG_SYSCTL=3Dy
+>  CONFIG_PSAMPLE=3Dm
+>  CONFIG_RPS=3Dy
+>  CONFIG_SYN_COOKIES=3Dy
+> +CONFIG_SYSCTL=3Dy
+>  CONFIG_SYSFS=3Dy
+>  CONFIG_TAP=3Dm
+>  CONFIG_TCP_CONG_DCTCP=3Dy
+> diff --git a/tools/testing/selftests/net/packetdrill/config b/tools/testi=
+ng/selftests/net/packetdrill/config
+> index 83dde525c53c..b7df8bf30920 100644
+> --- a/tools/testing/selftests/net/packetdrill/config
+> +++ b/tools/testing/selftests/net/packetdrill/config
+> @@ -4,8 +4,8 @@ CONFIG_IPV6=3Dy
+>  CONFIG_NET_NS=3Dy
+>  CONFIG_NET_SCH_FIFO=3Dy
+>  CONFIG_NET_SCH_FQ=3Dy
+> -CONFIG_SYSCTL=3Dy
+>  CONFIG_SYN_COOKIES=3Dy
+> +CONFIG_SYSCTL=3Dy
+>  CONFIG_TCP_CONG_CUBIC=3Dy
+>  CONFIG_TCP_MD5SIG=3Dy
+>  CONFIG_TUN=3Dy
+>=20
+> ---
+> base-commit: 46bc52d13594848023e681860df8700c8db14354
+> change-id: 20260918-selftests-net-config-sort-4d13ed1f4927
+>=20
+> Best regards,
+> -- =20
+> Yuya Kusakabe <yuya.kusakabe@gmail.com>
+>=20
 
-I'm somewhat tempted to keep sparsebit_copy() even though there are no users.
-In the unlikely scenario someone wanted/needed to make a copy, it seems like a
-potentially painful waste of time to have to recreate this or hunt down its prior
-existence.
+This LGTM in the sense that it has no direct consequence for sysctl.
+Reviewed-by: Joel Granados <joel.granados@kernel.org>
 
-Anyone else have an opinion?
+--zvjvgykwrsi2inxe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmqtbO8ACgkQupfNUreW
+QU9L0wwAgpoP6YFACelPgtPRto4VMmIq9V6bG1FQaf+nbGhE4PZOFoVwe7Xj+LPK
+hZeEhcsNAWTU+GmGQGI6OmV8p7Dq0V6zSspyB/pI7TN2RMZQXIrLEdXtizeLLCbW
+zlXylPdvwz/EALdPgjGYymgBWNB1aOG1KsDyViBftQDsj4Q2uPf2wZyJKM1P17Yd
+Njxa5iHycmW6RM7z1ckDUNHnDlVQGhBa5aWh1o+mBVyOXnMvdKW1gJ+8haIzUf4R
+2FzmNNvAS74LOmagILuHUE4BXTWMiPTrIYbrFfdPWhr0aUaOgQ85ggYJMiaIi9Z9
+JcJA2CeTgcX4wEtN8wY5yE71Jx4SE9vmYbjNnZcG2aOeDItbL1SlZJAh5kI3W+uC
+YApQfri1i+rHoEltVFdvnA3P7X0msL1wjv+W8EEcKwa//spM85Y5FMbey4FgIA9a
+7FSt5qJj/2BIXZxr48mqI/2fhhMBh+b44nwwsH5UXL8zscAmkoLD1GMPsvS8U6VD
+hFaHh3mv
+=gKQZ
+-----END PGP SIGNATURE-----
+
+--zvjvgykwrsi2inxe--
