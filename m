@@ -1,420 +1,279 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+Received: from mta0.migadu.com (out-105.mta0.migadu.com [91.218.175.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B8A1FFC59
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 05:44:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005BE2CCC5
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 05:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789710272; cv=none; b=sI1J2dkPpI8ziRMqyokxIhg19g6w04AUCtRCeWcsNrmUMyzXDVbvC+MQQsnP/nRnl9A3cc4NeXBhTKF1LakrVlbOr2/gaYtFPtDGE7LHZm5r/j7cwWCrKHVnLFam6KjRVGzr9fREurtaAtUmLIiBHe9fI5/per5hAC5ikfuO/bM=
+	t=1789710521; cv=none; b=dk7dbewNJOt44w4qFyGnyNYbzWYizskPQcbBHJVXYsOQgGHvXK2GaK6PJ0AxFfTm/ALvPOl+PHULEaxtwHKgONnrOdndMqpD5U5YKXGywEOsi/8fU6+eGHmEE55sswyoz00uLLJmujFsm+VRlinnzpegyNK1cRHCsfXd+/beQO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789710272; c=relaxed/simple;
-	bh=0EcWla/t7r2Is/Gsalb7DquSD5xPWNfAMnNZ1W4EqQ8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SlYw9y3D8TTve2uASbO29BKEByO2JPo/4W4GKQOwaKG1bJzrzj6rpDiwxzxdmYfOVYmfZ4dbha+vD+KFL5L0R3BBY7u9qBFTH80Wl/bLKwTfXQDYFXFztQZ99tHOSHSlJOyLIpn/ZMKtKmF6Je6E2GRnTqzi+VN5v5vChgcWogs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iD6LUm8g; arc=none smtp.client-ip=74.125.228.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789710521; c=relaxed/simple;
+	bh=PshD76OGVb+/ieHp7MefuQ6CWTqmMkYsJi2+RDu7jWA=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Ozc9Kl8PL7r074pAUKJiuI4rBpYFOlb5GV6dSB0iPjKNBoGVR/qCgwCEDE1I92BiQ9c4hrVEkHU5hYf2ZMPrDMijGvhrFOMVQBgB3jhgaz6dT06wdoulKs9PfgM8FIcEygFOY800c9446iK6Pa/+T1LB9YiOjV6vtTxGcYXSN6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uLeZ3TpD; arc=none smtp.client-ip=91.218.175.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iD6LUm8g"
-Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469b2e1d5so383225b3a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 22:44:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789710270; x=1790315070; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DICFuZRT/wM26itDo1qul7ObG4+wCWuvarS8L5JEZpg=;
-        b=iD6LUm8gu/+9qIkeAYgZ06uD8K2AzEfa/PjpUsXvIaANekpFA5IsIrTSTnHbJ7uhYi
-         p8mm/ge2NatOxiLy0s01fxQcQUTq433w8dYKpxjh0ZeDAl4ukl0rNs4maYa2W6aejIiT
-         dZrnRww3qyHAUdQpHPiWJdFVdYeOpsOe6Hmq9uKqkf7XnzPIi1QFZQzc/YIzMgfHJ+J6
-         BFh9un4Cv2kJfDDHLvTHAs5qqT5Qoqy+3nTQc5lwtAPjTt95s2lLXJuR2KeyYWXdxr3p
-         vYWkoSEF2+yO7L5X4xuBSV9PknyPYbxrHOz5vvF29MX373HbfNrkO7H/RtnpfPM+l7vp
-         1OYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789710270; x=1790315070;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=DICFuZRT/wM26itDo1qul7ObG4+wCWuvarS8L5JEZpg=;
-        b=wgwwCrYuhgBvknTPNlYfk9o8b5sJG53H4XLXLJ3BAFuMmH/ZOQ9iyoHy4DyYqJ//K6
-         iNACSW0jkI6UQObYcpAXZyDBY2hsMaLUM1F6PvR5M/XClw6SpR+Ve+BTL+/CPmKFz8gl
-         VpElvmR0KtC1zFSXv0kF/sdAXemr6PqtnSRmg9NqrIr+tFzanoXOoWvRFv7PZkD/FuCt
-         oeCKienyz6ioBhz51csS1AA11Vd+cPzMZQD0K5ImU361eq/6AaCgTQpDq2c2M19YGxP8
-         v6RFj6CZvPNyE40sIIw4a1bftocj5LVFUQiGYLrFADQQNltmf/7wO5CQQ+3qKiPj6Z/O
-         IbQw==
-X-Forwarded-Encrypted: i=1; AKwUvBxPZzsbaKc8suWW2NJS2d4gwKTHerjedtlX47X+bYj90uO7T30NzV0k9hJQE1GHE2aZVtamOG82/4B/p6OrJZw=@vger.kernel.org
-X-Gm-Message-State: AFuF++l+GIRLieHdzxAXlhV5mWGCiYisYB6dIK6z3QL3R/Vr11GfsMm6
-	29mQKy7KThj8XthcTq49K+m5iSBP97S7Bu8tW9fwlv58Yfyk+Dut/Zr9
-X-Gm-Gg: AYBFou3t3V06AgOWd3eV+VNFxBsKju93z3fuicvZ80qBbaG8d2nfzgt5jdtckQTFbSe
-	tlRRcRNdfoWjUAUKfaoHFzjhC9zczUR5l9kz1cwI6pECmGwNbuOl0hFChRIOVEYJJThcOFqNpQk
-	UM6Rv7FtoWggfsG0pe5RbF93hjs4Fi1ny90DCs5JEPLBhqnePL8aXe2G5RTeWjyAKj6IUZxACEZ
-	D4N0aHkn7wQZZ50Ih7n2PNzkto63aNHNTYvsiGa+QZaC9Xn9ooOIM6yjFupBAvK7wONaX803NCr
-	jo5Nb9RZ+sv9mLD31n8ZU9ycLBj9fQ6+En1LuPjDgZYo0iavITd/DXLCvqZ3buxY57fkRUxj3/8
-	xHJEdJ6TIIYJMbhNHwbciZwVpiCnTxDibh67AEDD45TnvCLffFtksdurnXSFCziVSL1N3nKVEVJ
-	AbB7G3WUHNCe3QyJgND9x7PZQvZKTxg8eEXuTM1rkMrvdiaadftnEZzf5pJfZDtwMriefl3L26J
-	JOCLk7d6CFj
-X-Received: by 2002:a05:6a20:2d08:b0:3dd:85a8:4c61 with SMTP id adf61e73a8af0-3dd8c5c9c87mr2704565637.40.1789710269816;
-        Thu, 17 Sep 2026 22:44:29 -0700 (PDT)
-Received: from 10-86-27-207.ban-spse ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-144ce052a20sm1690447c88.12.2026.09.17.22.44.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 22:44:29 -0700 (PDT)
-From: Gokul K <gokul02k@gmail.com>
-To: Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	kvm@vger.kernel.org
-Cc: Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] KVM: selftests: Move test_read() into elf.c and delete lib/io.c
-Date: Fri, 18 Sep 2026 11:14:20 +0530
-Message-ID: <20260918054420.338842-1-gokul02k@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uLeZ3TpD"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=PshD76OGVb+/ieHp7MefuQ6CWTqmMkYsJi2+RDu7jWA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789710515; v=1; x=1790315315;
+ b=uLeZ3TpDtKSMwFZO4y1o5Z5aWHGVp59T4ue8SYPbIJpnu06Zi3BJQudD+8AWdGNE/8bWVq6M
+ QgK2kKPTgr1e9IGF0hqhFNGJktzjWkV5sUp3ZyzjQyXJU/0tjAaoDZd27kgstC2NXxdKQh4POhy
+ C+XGXkjBIk2FHAyDYDQVetho=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 7690daf423a0b019;
+	Fri, 18 Sep 2026 05:48:35 +0000
+X-Mizu-Trace-ID: 7690daf423a0b019
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a314cf09-c9c8-4ac2-9721-04ba19f4b857@linux.dev>
+Date: Fri, 18 Sep 2026 13:48:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ linux-kselftest@vger.kernel.org, cuitao@kylinos.cn
+Subject: Re: [RFC PATCH v5 0/5] blk-iocost: BPF struct_ops cost model
+To: tj@kernel.org, josef@toxicopanda.com, axboe@kernel.dk, ameryhung@gmail.com
+References: <20260918031751.1255420-1-cui.tao@linux.dev>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <20260918031751.1255420-1-cui.tao@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-lib/io.c has outlived its purpose.  test_read() has exactly one caller,
-lib/elf.c; test_write() has none at all; and test_seq_read() is a
-declaration in test_util.h with no definition anywhere in the tree.
+Hi,
 
-Both surviving helpers open with
+在 2026/9/18 11:17, Tao Cui 写道:
+> From: Tao Cui <cuitao@kylinos.cn>
+> 
+> This is v5 of the RFC.  The changes since v4 are listed in the
+> changelog at the bottom.
+> 
 
-	TEST_ASSERT(count >= 0, "Unexpected count, count: %li", count);
+Please ignore that change in v5; v6 is authoritative and
+removes the extra put.
 
-which can never fire, because @count is a size_t.  Building with -Wextra
-points this out:
+It was based on a bad measurement: a SIGKILLed loader never
+unregistered its model, and the leftover reference was mistaken for
+a racing-writers leak.  The single iocost_bpf_model_put(old) was
+already balanced.
 
-  lib/io.c:51:27: warning: comparison of unsigned expression in '>= 0'
-                  is always true [-Wtype-limits]
-  lib/io.c:128:27: warning: comparison of unsigned expression in '>= 0'
-                  is always true [-Wtype-limits]
+v6 will follow shortly.
 
-The comment above each assertion is worse than the assertion itself: it
-cites the read(2) and write(2) manpages to claim that a count of zero is
-allowed, but a zero count lands in "case 0" and fails the test outright.
-The helper has never accepted what the comment promises.
+Thanks,
+Tao
 
-Move test_read() into elf.c as a static elf_read(), named for what it
-does rather than reading as "test the read() syscall", and assert that
-@count is non-zero, which is what the code has always required and what
-every caller already passes.  Drop the commentary describing retry
-behaviour that the code makes obvious.  Nothing is then left in
-lib/io.c, so remove the file along with test_write() and the stale
-test_seq_read() declaration.
-
-No functional change intended.
-
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Link: https://lore.kernel.org/all/aqxNbR9u5F1sqB3p@google.com
-Signed-off-by: Gokul K <gokul02k@gmail.com>
----
-v2: Implement Sean's suggestion instead of the original one-line
-    deletion: move test_read() into elf.c as a static elf_read(),
-    assert @count is non-zero rather than >= 0, and delete lib/io.c
-    along with test_write() and the test_seq_read() declaration.
-    v1: https://lore.kernel.org/all/20260917181028.288194-1-gokul02k@gmail.com
-
-The only deviation from the diff Sean posted is the indentation of the
-continuation line in the last elf_read() call: elf_read is one character
-shorter than test_read, so checkpatch --strict flags the alignment.  With
-that the patch is checkpatch-clean apart from the MAINTAINERS warning any
-file deletion produces, and MAINTAINERS covers the directory rather than
-lib/io.c individually.
-
-Built with and without -Wextra: both -Wtype-limits warnings are gone, and
-the patch introduces no diagnostic the tree did not already have.
-kvm_binary_stats_test and ten other x86 selftests give identical results
-before and after, which exercises the moved code for real -- every VM
-goes through kvm_vm_elf_load(), which is the only caller of elf_read().
-
- tools/testing/selftests/kvm/Makefile.kvm      |   1 -
- .../testing/selftests/kvm/include/test_util.h |   4 -
- tools/testing/selftests/kvm/lib/elf.c         |  48 +++++-
- tools/testing/selftests/kvm/lib/io.c          | 157 ------------------
- 4 files changed, 43 insertions(+), 167 deletions(-)
- delete mode 100644 tools/testing/selftests/kvm/lib/io.c
-
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 96bab7002d39..d12c1c738956 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -6,7 +6,6 @@ all:
- LIBKVM += lib/assert.c
- LIBKVM += lib/elf.c
- LIBKVM += lib/guest_modes.c
--LIBKVM += lib/io.c
- LIBKVM += lib/kvm_util.c
- LIBKVM += lib/lru_gen_util.c
- LIBKVM += lib/memstress.c
-diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index a6a3e1657895..e558346c3b69 100644
---- a/tools/testing/selftests/kvm/include/test_util.h
-+++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -49,10 +49,6 @@ do {								\
- 
- #define TEST_REQUIRE(f) __TEST_REQUIRE(f, "Requirement not met: %s", #f)
- 
--ssize_t test_write(int fd, const void *buf, size_t count);
--ssize_t test_read(int fd, void *buf, size_t count);
--int test_seq_read(const char *path, char **bufp, size_t *sizep);
--
- void __printf(5, 6) test_assert(bool exp, const char *exp_str,
- 				const char *file, unsigned int line,
- 				const char *fmt, ...);
-diff --git a/tools/testing/selftests/kvm/lib/elf.c b/tools/testing/selftests/kvm/lib/elf.c
-index 1924a9895834..d5adb68fd7c0 100644
---- a/tools/testing/selftests/kvm/lib/elf.c
-+++ b/tools/testing/selftests/kvm/lib/elf.c
-@@ -12,6 +12,44 @@
- 
- #include "kvm_util.h"
- 
-+static ssize_t elf_read(int fd, void *buf, size_t count)
-+{
-+	ssize_t rc;
-+	ssize_t num_read = 0;
-+	size_t num_left = count;
-+	char *ptr = buf;
-+
-+	TEST_ASSERT(count, "Count must be non-zero");
-+
-+	do {
-+		rc = read(fd, ptr, num_left);
-+
-+		switch (rc) {
-+		case -1:
-+			TEST_ASSERT(errno == EAGAIN || errno == EINTR,
-+				    "Unexpected read failure,\n"
-+				    "  rc: %zi errno: %i", rc, errno);
-+			break;
-+
-+		case 0:
-+			TEST_FAIL("Unexpected EOF,\n"
-+				  "   rc: %zi num_read: %zi num_left: %zu",
-+				  rc, num_read, num_left);
-+			break;
-+
-+		default:
-+			TEST_ASSERT(rc > 0, "Unexpected ret from read,\n"
-+				    "  rc: %zi errno: %i", rc, errno);
-+			num_read += rc;
-+			num_left -= rc;
-+			ptr += rc;
-+			break;
-+		}
-+	} while (num_read < count);
-+
-+	return num_read;
-+}
-+
- static void elfhdr_get(const char *filename, Elf64_Ehdr *hdrp)
- {
- 	off_t offset_rv;
-@@ -31,7 +69,7 @@ static void elfhdr_get(const char *filename, Elf64_Ehdr *hdrp)
- 	 * the real size of the ELF header.
- 	 */
- 	unsigned char ident[EI_NIDENT];
--	test_read(fd, ident, sizeof(ident));
-+	elf_read(fd, ident, sizeof(ident));
- 	TEST_ASSERT((ident[EI_MAG0] == ELFMAG0) && (ident[EI_MAG1] == ELFMAG1)
- 		&& (ident[EI_MAG2] == ELFMAG2) && (ident[EI_MAG3] == ELFMAG3),
- 		"ELF MAGIC Mismatch,\n"
-@@ -79,7 +117,7 @@ static void elfhdr_get(const char *filename, Elf64_Ehdr *hdrp)
- 	offset_rv = lseek(fd, 0, SEEK_SET);
- 	TEST_ASSERT(offset_rv == 0, "Seek to ELF header failed,\n"
- 		"  rv: %zi expected: %i", offset_rv, 0);
--	test_read(fd, hdrp, sizeof(*hdrp));
-+	elf_read(fd, hdrp, sizeof(*hdrp));
- 	TEST_ASSERT(hdrp->e_phentsize == sizeof(Elf64_Phdr),
- 		"Unexpected physical header size,\n"
- 		"  hdrp->e_phentsize: %x\n"
-@@ -146,7 +184,7 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
- 
- 		/* Read in the program header. */
- 		Elf64_Phdr phdr;
--		test_read(fd, &phdr, sizeof(phdr));
-+		elf_read(fd, &phdr, sizeof(phdr));
- 
- 		/* Skip if this header doesn't describe a loadable segment. */
- 		if (phdr.p_type != PT_LOAD)
-@@ -186,8 +224,8 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
- 				"  expected: 0x%jx",
- 				n1, errno, (intmax_t) offset_rv,
- 				(intmax_t) phdr.p_offset);
--			test_read(fd, addr_gva2hva(vm, phdr.p_vaddr),
--				phdr.p_filesz);
-+			elf_read(fd, addr_gva2hva(vm, phdr.p_vaddr),
-+				 phdr.p_filesz);
- 		}
- 	}
- 	close(fd);
-diff --git a/tools/testing/selftests/kvm/lib/io.c b/tools/testing/selftests/kvm/lib/io.c
-deleted file mode 100644
-index fedb2a741f0b..000000000000
---- a/tools/testing/selftests/kvm/lib/io.c
-+++ /dev/null
-@@ -1,157 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * tools/testing/selftests/kvm/lib/io.c
-- *
-- * Copyright (C) 2018, Google LLC.
-- */
--
--#include "test_util.h"
--
--/* Test Write
-- *
-- * A wrapper for write(2), that automatically handles the following
-- * special conditions:
-- *
-- *   + Interrupted system call (EINTR)
-- *   + Write of less than requested amount
-- *   + Non-block return (EAGAIN)
-- *
-- * For each of the above, an additional write is performed to automatically
-- * continue writing the requested data.
-- * There are also many cases where write(2) can return an unexpected
-- * error (e.g. EIO).  Such errors cause a TEST_ASSERT failure.
-- *
-- * Note, for function signature compatibility with write(2), this function
-- * returns the number of bytes written, but that value will always be equal
-- * to the number of requested bytes.  All other conditions in this and
-- * future enhancements to this function either automatically issue another
-- * write(2) or cause a TEST_ASSERT failure.
-- *
-- * Args:
-- *  fd    - Opened file descriptor to file to be written.
-- *  count - Number of bytes to write.
-- *
-- * Output:
-- *  buf   - Starting address of data to be written.
-- *
-- * Return:
-- *  On success, number of bytes written.
-- *  On failure, a TEST_ASSERT failure is caused.
-- */
--ssize_t test_write(int fd, const void *buf, size_t count)
--{
--	ssize_t rc;
--	ssize_t num_written = 0;
--	size_t num_left = count;
--	const char *ptr = buf;
--
--	/* Note: Count of zero is allowed (see "RETURN VALUE" portion of
--	 * write(2) manpage for details.
--	 */
--	TEST_ASSERT(count >= 0, "Unexpected count, count: %li", count);
--
--	do {
--		rc = write(fd, ptr, num_left);
--
--		switch (rc) {
--		case -1:
--			TEST_ASSERT(errno == EAGAIN || errno == EINTR,
--				    "Unexpected write failure,\n"
--				    "  rc: %zi errno: %i", rc, errno);
--			continue;
--
--		case 0:
--			TEST_FAIL("Unexpected EOF,\n"
--				  "  rc: %zi num_written: %zi num_left: %zu",
--				  rc, num_written, num_left);
--			break;
--
--		default:
--			TEST_ASSERT(rc >= 0, "Unexpected ret from write,\n"
--				"  rc: %zi errno: %i", rc, errno);
--			num_written += rc;
--			num_left -= rc;
--			ptr += rc;
--			break;
--		}
--	} while (num_written < count);
--
--	return num_written;
--}
--
--/* Test Read
-- *
-- * A wrapper for read(2), that automatically handles the following
-- * special conditions:
-- *
-- *   + Interrupted system call (EINTR)
-- *   + Read of less than requested amount
-- *   + Non-block return (EAGAIN)
-- *
-- * For each of the above, an additional read is performed to automatically
-- * continue reading the requested data.
-- * There are also many cases where read(2) can return an unexpected
-- * error (e.g. EIO).  Such errors cause a TEST_ASSERT failure.  Note,
-- * it is expected that the file opened by fd at the current file position
-- * contains at least the number of requested bytes to be read.  A TEST_ASSERT
-- * failure is produced if an End-Of-File condition occurs, before all the
-- * data is read.  It is the callers responsibility to assure that sufficient
-- * data exists.
-- *
-- * Note, for function signature compatibility with read(2), this function
-- * returns the number of bytes read, but that value will always be equal
-- * to the number of requested bytes.  All other conditions in this and
-- * future enhancements to this function either automatically issue another
-- * read(2) or cause a TEST_ASSERT failure.
-- *
-- * Args:
-- *  fd    - Opened file descriptor to file to be read.
-- *  count - Number of bytes to read.
-- *
-- * Output:
-- *  buf   - Starting address of where to write the bytes read.
-- *
-- * Return:
-- *  On success, number of bytes read.
-- *  On failure, a TEST_ASSERT failure is caused.
-- */
--ssize_t test_read(int fd, void *buf, size_t count)
--{
--	ssize_t rc;
--	ssize_t num_read = 0;
--	size_t num_left = count;
--	char *ptr = buf;
--
--	/* Note: Count of zero is allowed (see "If count is zero" portion of
--	 * read(2) manpage for details.
--	 */
--	TEST_ASSERT(count >= 0, "Unexpected count, count: %li", count);
--
--	do {
--		rc = read(fd, ptr, num_left);
--
--		switch (rc) {
--		case -1:
--			TEST_ASSERT(errno == EAGAIN || errno == EINTR,
--				    "Unexpected read failure,\n"
--				    "  rc: %zi errno: %i", rc, errno);
--			break;
--
--		case 0:
--			TEST_FAIL("Unexpected EOF,\n"
--				  "   rc: %zi num_read: %zi num_left: %zu",
--				  rc, num_read, num_left);
--			break;
--
--		default:
--			TEST_ASSERT(rc > 0, "Unexpected ret from read,\n"
--				    "  rc: %zi errno: %i", rc, errno);
--			num_read += rc;
--			num_left -= rc;
--			ptr += rc;
--			break;
--		}
--	} while (num_read < count);
--
--	return num_read;
--}
--- 
-2.54.0
-
+> Why a pluggable model at all
+> ----------------------------
+> 
+> When iocost landed in 2019, its commit message already promised that
+> "a later patch will also allow using bpf progs for cost models", and
+> the code has carried the split for it ever since: calc_vtime_cost()
+> is a dispatcher whose only implementation is calc_vtime_cost_builtin().
+> Seven years later the builtin linear model is still the only one.
+> This series fills that slot, following the TCP congestion control
+> model registration pattern: builtin algorithms remain the default
+> while new ones can be prototyped in BPF.
+> 
+> The measured problems
+> ---------------------
+> 
+> The builtin model prices each IO with a binary sequential/random base
+> picked by a single per-cgroup cursor and a 16MB seek threshold, plus
+> a per-page cost.  On a virtio-blk device with the HDD autop profile,
+> a 4k IO costs ~24us when judged sequential and ~2.7ms when judged
+> random, a 112x spread, so a wrong judgement becomes a wrong price.
+> Three classes of mispricing, all measured:
+> 
+>  1. Heuristic rigidity.  Two legitimate sequential readers in one
+>     cgroup (a database with multiple tablespaces, a threaded backup)
+>     ping-pong the single cursor and are all priced random: a
+>     measured 89x overcharge collapses throughput under the same
+>     weight.  Random IO within a hot window smaller than the 16MB
+>     threshold is priced sequential: measured 107x undercharge, an
+>     accounting escape for hotspot workloads.  No setting of the six
+>     builtin parameters seems able to fix this: telling the streams
+>     apart requires per-IO state tracking, which looks like logic
+>     rather than coefficients.
+> 
+>  2. Device nonlinearity.  SLC-cache phases, SMR band placement and
+>     shared controllers (multiple NVMe namespaces multiplexing one
+>     device) make the real cost of an identical IO vary by an order
+>     of magnitude over time or across namespaces.  A static
+>     6-parameter linear model has no way to express that.
+> 
+>  3. Unpriced operations.  Flush and zone append fall through to a
+>     cost of zero and bypass throttling entirely, and the same pattern
+>     extends to device quirks the builtin model was never taught.
+> 
+> Mispricing feeds directly into the control loop: vtime budgets,
+> surplus donation and the vrate feedback all consume the model's
+> output, so a wrong model can skew the whole controller.
+> 
+> How
+> ---
+> 
+> A bound BPF model fully owns pricing for every IO on the device:
+> it is called from the bio charging path and prices every operation
+> including flushes.  The completion-time request sizing for the
+> latency met/missed accounting still uses the builtin coefficients
+> (the request's bio, and with it the issuing cgroup, is gone by then);
+> extending the model there is left open by this interface.  The builtin
+> cursor is not exposed; a model is expected to track its own stream
+> state.  Model state keyed by the blkcg alone is shared across every
+> device the model is bound to, unlike the builtin cursor which is
+> per (cgroup, device).
+> 
+>     u64 calc_cost(u64 opf, u64 nbytes, sector_t sector,
+> 		  struct blkcg *blkcg, u64 model_flags)
+> 
+> opf is the full bio->bi_opf (the operation must be extracted with a
+> mask, and the REQ_* flag bits, including PREFLUSH/FUA, are part of
+> it); model_flags carries iocost-specific metadata which is not part
+> of the bio operation flags, such as whether the cost calculation
+> is for a merged request; the return value is vtime, clamped to 1
+> second of device time per IO.  blkcg is passed so the model can key
+> per-cgroup state; state stored in BPF_MAP_TYPE_CGRP_STORAGE
+> follows the cgroup lifetime, and optional blkcg_online()/
+> blkcg_offline() callbacks mirror the css lifecycle for models
+> which want eager setup or teardown.
+> 
+> The registration and binding model follows the TCP congestion
+> control model registration pattern: registering a struct_ops makes
+> the model available by its name, while io.cost.model binds one
+> registered model to a device with "model=<name>" and restores the
+> builtin model with "model=linear".  Unregistering a model removes
+> it from the registry so it can no longer be selected by name;
+> devices already using the model keep using it until they are
+> switched back to the builtin model, at which point the reference
+> is released.  A model which does not implement calc_cost is
+> rejected at load.  Sleepable models are rejected at verification,
+> since calc_cost() runs under RCU read lock.  Patch overview:
+> 
+>  1/5: the BPF struct_ops cost model support: Kconfig, ops
+>       definition, name registry, registration, io.cost.model
+>       binding, unified dispatch and verifier checks
+>  2/5: selftest with the 2x example model (the full builtin linear
+>       HDD formula at double cost) plus a runner and the selftest
+>       kernel config entries
+>  3/5: add an iocost_ioc_tick tracepoint emitting the per-period
+>       controller state, so model quality can be evaluated without
+>       drgn (existing events are state-change driven and silent in
+>       steady state)
+>  4/5: a second example model which replaces the single-cursor
+>       sequentiality heuristic with per-cgroup multi-stream detection
+>       keyed by the cgroup, the first consumer of the state interface
+>  5/5: document the model=<name> binding in cgroup-v2.rst
+> 
+> Does it work
+> ------------
+> 
+> Mechanism, verified functionally (QEMU, virtio-blk with the HDD
+> profile, sequential-read workload from a 1%-weight cgroup, builtin
+> vs the 2x example model):
+> 
+>  - per-IO charge: 2882us -> 5722us, a factor of 1.985x; the
+>    completed IO count halves and total cost.usage is conserved,
+>    i.e. the model output drives both charging and budgeting
+>  - edge cases: binding an unknown model name fails with ENOENT
+>    and nothing is applied; unregistering a bound model leaves the
+>    device correctly priced (2x) until it is switched back; the
+>    readback shows the bound model name; the selftest runner
+>    checks the write error and errno of every step, including the
+>    restoration
+> 
+> Workload-shape verification added in this revision (same setup,
+> 4k IOs at weight 1000, builtin vs the 2x example model):
+> 
+>  - flush-heavy workload (read/write/fsync alternating): priced
+>    1.99x the builtin, i.e. flushes no longer reset the cursor
+>    and misjudge the following IO as random
+>  - non-page-multiple IO (6 KiB): priced ~2x, matching the
+>    builtin's truncating page count
+>  - first IO from a high LBA (past 16 MiB): priced 2.01x, i.e.
+>    a fresh cgroup's zero cursor no longer misjudges the first IO
+>    as random
+> 
+> Payoff, demonstrated with the multi-stream example model (4/5) on
+> the same setup, 4k IOs at weight 1000, builtin vs the model:
+> 
+>  - two sequential readers in one cgroup: priced 1961us/op by builtin
+>    (both judged random by the single cursor) and 23us/op by the
+>    model (each stream keeps its own slot); the completed IO count
+>    rises by two orders of magnitude
+>  - random IO inside an 8M window: priced 24us/op by builtin
+>    (undercharge, an accounting escape) and 2607us/op by the model
+>  - single-stream sequential and whole-disk random pricing are
+>    unchanged, so the model fixes both directions of mispricing
+>    without introducing a new one
+> 
+> Non-interference, measured on enterprise NVMe: no measurable
+> overhead when the BPF model is not attached.
+> 
+> Changes in v5 (fixes from the v4 review):
+> - a model which is unregistered but still bound to a device keeps
+>   working by name for io.cost.model writes until the last device
+>   unbinds: a coefficient-only write on such a device used to fail
+>   with ENOENT because the name lookup only searched the registry
+> - the notify-list detach condition in iocost_bpf_model_put() is
+>   corrected for a registered model bound to several devices: the
+>   first unbind no longer removes the model from the lifecycle list
+>   while other devices are still bound, which also leaked the BPF map
+>   reference of the remaining bindings
+> - the 2x example model advances its cursor for merged bios too,
+>   matching the builtin backmerge behaviour, so a long merged stream
+>   no longer drifts past the 16MB seek threshold and misprices the
+>   following IO as random
+> - a concurrent-write leak is fixed: two racing io.cost.model writes
+>   resolving the same model each took a reference on it, but the write
+>   whose commit found the model already bound (old == new) did not drop
+>   one, leaking a map reference; that path now puts the redundant
+>   reference
+> - the cgroup-v2 documentation covers the BPF readback: the
+>   nested-key table lists "bpf" as a ctrl value and a bound model name
+>   as a model value, and the text notes that writing "ctrl=bpf" is
+>   accepted so a saved configuration can be restored as-is
+> - multi-line comments use the opening marker on its own line
+> 
+> Link: https://lore.kernel.org/r/20260908100143.47598-1-cui.tao@linux.dev # v1
+> Link: https://lore.kernel.org/r/20260910125817.223354-1-cui.tao@linux.dev # v2
+> Link: https://lore.kernel.org/r/20260914073356.791518-1-cui.tao@linux.dev # v3
+> Link: https://lore.kernel.org/r/20260916072302.1068871-1-cui.tao@linux.dev # v4
+> 
+> Tao Cui (5):
+>   blk-iocost: add BPF struct_ops cost model support
+>   selftests/bpf: add iocost cost model test
+>   blk-iocost: add iocost_ioc_tick tracepoint for per-period device
+>     summary
+>   selftests/bpf: add multi-stream sequentiality example model
+>   docs: cgroup-v2: document io.cost model=<name> binding
+> 
+>  Documentation/admin-guide/cgroup-v2.rst       |  19 +
+>  block/Kconfig                                 |   9 +
+>  block/Makefile                                |   1 +
+>  block/blk-cgroup.c                            |   4 +
+>  block/blk-iocost-bpf.c                        | 321 ++++++++++++++++++
+>  block/blk-iocost.c                            | 228 +++++++++++++--
+>  include/linux/blk-iocost.h                    |  86 +++++
+>  include/trace/events/iocost.h                 |  45 +++
+>  tools/testing/selftests/bpf/config            |   2 +
+>  .../selftests/bpf/prog_tests/iocost_model.c   | 200 ++++++++++++
+>  .../selftests/bpf/progs/iocost_model.c        | 135 ++++++++
+>  tools/testing/selftests/bpf/progs/iocost_ms.c | 156 +++++++++
+>   12 files changed, 1198 insertions(+), 19 deletions(-)
+>  create mode 100644 block/blk-iocost-bpf.c
+>  create mode 100644 include/linux/blk-iocost.h
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/iocost_model.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/iocost_model.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/iocost_ms.c
+> 
 
