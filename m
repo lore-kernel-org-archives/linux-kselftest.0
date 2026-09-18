@@ -1,199 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B034397945;
-	Fri, 18 Sep 2026 01:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8831B355F53
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 01:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789695096; cv=none; b=h5GEieJ3FsiTCajimMVxqzc4qwQP3i/vqWFhjemennhdF1b04CaoA7kpGms8sws5qlMnQMSMQNuK9OV9F8gyuLwQRrCdp7WCMdbQ5UqVIdNQ1WsxJZUP4NOYOhiXi2iDJFmh+OwxISIWK4hZgfY9iXC6D1PCKhZHsalmeerEs2s=
+	t=1789695655; cv=none; b=u9lVWijj3jKaNRQOI46ZeoDwA+aQv87p9LDGNhqqOe2RJ+hcHcFn1wooALX9xHeJ0oh6gS79n5xMjMiScbpI6QaTD/7SzRJs642UIovBeTJwFSbmf4Ila+Bi735cnVhmHD5NBHdgB4dIcwyLBpfbmVt03GtFzNoeo52A2svjgM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789695096; c=relaxed/simple;
-	bh=KcvIEKDbuHaSZeVIuvf/LZGzwrzfBHO5EJbBtNbuUBs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q05p7gWu+F+7Gq6orwHelBhLdqc5JZsj/n5Cq/iafJjQjSelFuBWakeEKWBJT2A4ZvXjs8rdEXvfu8AXy22W+n+xfRsU6qSwef3CqXAt6hWayxMx/pGKqsQuQYevQv5ZIUCi4l8zsOL1jZrTxQvo6T5HLeeb3emb1jA7Zc0V5pw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9w5twsB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789695655; c=relaxed/simple;
+	bh=Eo/yga4vDEGayDHqVP6iJdYvyA2lrJe+j+Dvmd1JbAo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YOqQN9Ct7TpfcL5aOarARhgFufGCZJpsjbVO2bCKz3Bvn8OXrj0tavh0yeraCUq3bsyLBEdKUa0TzN0bYFTZLq/AoQmXaIaBJ48ovRtCj/VtI4q5T82ZQ1BXgXO5PRssu1Puz8V2MO0NLldiTQQ1wxzdNrJBvJ9OMeUqWRYD/Fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mGODxZPG; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9w5twsB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FA281F000FF;
-	Fri, 18 Sep 2026 01:31:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789695094;
-	bh=QS9nIJ3FvUZ63E7dpFZbqyaI/csq1+1IMiM7Bt7yE8s=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=n9w5twsBM6EzMXlxvcWG4u/vYk2lqGpSEyjvZ+w/lx+KsrBL9AsgAfnTj9YcM/VvQ
-	 KhwpJ+VBMdAqTDp0K2Mit49WC4iVAWXyHGpH+C9A/JFAimcxytx6ykFU7oMxehEbHH
-	 5nQerTdmRBLFhhZXdXZ06ni5GUavO9XvfvwZ7isK3JFGdxqDV2ByviJK0Z8di8ewc+
-	 PFVKXlrFUG6sLDA8FGGEPSc3gBzQi7R/Dm8LBAGSueQtwIdntC7EeJQLhc5Ot7dKr3
-	 jlvy0KyKep/mYA5llKFugdPAMuQhR62IEBEeRiWKCjgRyV4zbh23d+woIf0XJirnNR
-	 1qqt0iSpHt7+w==
-From: Jakub Kicinski <kuba@kernel.org>
-To: jiayuan.chen@linux.dev
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	bpf@vger.kernel.org,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	horms@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	shuah@kernel.org,
-	kuniyu@google.com,
-	liuhangbin@gmail.com,
-	mkarsten@uwaterloo.ca,
-	toke@redhat.com,
-	lorenzo.bianconi@oss.qualcomm.com,
-	echaudro@redhat.com,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v3 1/2] bpf, veth: xdp: fix page_pool page leak on skb-backed XDP
-Date: Thu, 17 Sep 2026 18:31:28 -0700
-Message-ID: <20260918013128.3451350-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260911135711.109338-2-jiayuan.chen@linux.dev>
-References: <20260911135711.109338-2-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mGODxZPG"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2d8fd7a3f38so31105ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 18:40:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1789695651; x=1790300451; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=76px+Ex0r5rs6bbVIuEECvEPc+oBZjVRzvMFC1AHdA8=;
+        b=mGODxZPGmp4Gdmnap0fOCFwlstLS+6T+Ak9EigAGvei6IWTd5xh5f0lhBDolSuV4Qa
+         Mj6IVGf+qeVqlURhLCx8r16hI39W4K8mGkWVQAvV0DjJsWMs/OECj1qtIbEstV29xhjH
+         DrrprQbdseo/DSVmi0noPc9DlLSj1tRWW2AV7JjoH7m2FImDfqG7ukg2YDUc/JKQ6X9y
+         dt5cA9F1pRP96HQRBXWf/PGb6jNzM27k2yMowMsrws7rxa7NKIqMkgGSlLIe7pv2GMMG
+         cvbE9cpWRF7Itf6s0XKXvSf3mUOhwjwEPTy6J8px8lndxJxjwrP/HLH/tfcO0a7zS7gn
+         3tVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789695651; x=1790300451;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=76px+Ex0r5rs6bbVIuEECvEPc+oBZjVRzvMFC1AHdA8=;
+        b=SIgIkT0UFllMwa8wLG3DQRO7QtLHwh5Cn0DqFY793+kZ2gsTi5XvS4YZwC9cRSQnNK
+         vVNx1I6KKZcC0Z83PRImjadoyoBOEoN1EkpCM+Ui9keV4qg460skQs8Fl71noR1NCNZJ
+         hCZGMi6jcFHAJL9YxarMrGSQPVDhb9ZqrkbkRwZqas5jj4Vn0uo9yMa2X2qjFT7SqiM9
+         QOHWl8VqGh7KG5Sp9gKB4M2BGzJpCgZevnZ2aTdZKuQ7XTON1lCRjGMZnakn/8YZZ62N
+         cCNCUtZ1g+KM0tWS9cttlSiHfVRzNqfGkVILyAP8l3AjeZ/Q5X7DR7l8lXWcM5YlbdiB
+         LFbw==
+X-Forwarded-Encrypted: i=1; AKwUvBwdxgI+sPbgeWFIEpFgePFpW6Ir2BlkW9t1cNFqFlCqZogNMd0Wf70K/91bnvMWjLVmWqnu3HljkUZcyjuLtyY=@vger.kernel.org
+X-Gm-Message-State: AFuF++lAjMMHoiNBrpmJVdaxFCAg13n3YE3IDnDbuvZ/QWJELtROFD3L
+	22AJeNs3/yTcQUiV3okjpslMCtQBF6Y3yx16oNO5sFpPiZZD9IRwoN1u8p6xLlDGBg==
+X-Gm-Gg: AYBFou3Q0EhFgiaAEp6B7lMQEYjHbUiBf06Ce/S1qr1wERPSEdcrZtYBzePdj7dvBGx
+	q2F/HjUBVX2mk6b26lpT8KPsrtpwyTI6DXRasM5KN4ximIB1u7HZUgFozqge7+U0MK+oQlhyKF2
+	SbY+iHvnIQ43Sl+B0EW7x7J2NJSjaaVTuhd9QKfZCidzF3l3+HKi2zgT55CV4P1CLTFHGhQNM/k
+	WnL/3nmQLDqsyUzVL3HRZHFQ9QBjheCv6mKmBlK/vgacIRb1nuLBTwwr4uDef2a4ecIB/QrLD2s
+	KE5gjWF5x96Q70kuRm4QwmBYVGZMwoBa0IuZJrkEbblkjM1mJdV2PLG3/3ZYr8e35awpKeWexKA
+	BIByeXpsSnosNE23877syEaxMxkSqcXK/RDc7htBasrjzWmCNOIV74YxCOGSFhWAXxVoYz0ML6i
+	tlhanNlE7+dOdVnW0NVlVp5jYYeuDA+1gpF5QUilbKtO9lS05ZgdbOvZH5uJZrKynBSD5f0g9/J
+	aEc2/1ToDyn3jcXi+s17HvbEPW/S5Ir
+X-Received: by 2002:a17:903:4b4c:b0:2dd:3a08:d47b with SMTP id d9443c01a7336-2ddb2bdaca1mr2575225ad.13.1789695649908;
+        Thu, 17 Sep 2026 18:40:49 -0700 (PDT)
+Received: from google.com (230.0.127.34.bc.googleusercontent.com. [34.127.0.230])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e36116920sm7796342a91.5.2026.09.17.18.40.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2026 18:40:49 -0700 (PDT)
+Date: Fri, 18 Sep 2026 01:40:45 +0000
+From: Lisa Wang <wyihan@google.com>
+To: Xiaoyao Li <xiaoyao.li@intel.com>
+Cc: Ackerley Tng <ackerleytng@google.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Binbin Wu <binbin.wu@linux.intel.com>,
+	Chao Gao <chao.gao@intel.com>,
+	Chenyi Qiang <chenyi.qiang@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Erdem Aktas <erdemaktas@google.com>,
+	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Roger Wang <runanwang@google.com>,
+	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
+	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [PATCH v14 03/22] KVM: selftests: Initialize the TDX VM
+Message-ID: <aqyWnaGBa7Az5sND@google.com>
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <20260722-tdx-selftests-v14-3-15ad654a50db@google.com>
+ <c8b7a800-58ed-4ef7-91bd-31da77763717@intel.com>
+ <ap_Bpe7dZm_eWsJ2@google.com>
+ <CAEvNRgFHTAPYTVQ8a_PVdFLqQ8z07Uep2XhA9r_Ypw+D0WAC8w@mail.gmail.com>
+ <07cf5761-48fe-40b7-9310-b64712f5e314@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <07cf5761-48fe-40b7-9310-b64712f5e314@intel.com>
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
----
-bpf, veth: xdp: fix page_pool page leak on skb-backed XDP
+On Wed, Sep 09, 2026 at 06:00:53PM +0800, Xiaoyao Li wrote:
+> >> The reason we could not use __TEST_ASSERT_VM_VCPU_IOCTL() directly[2] is
+> >> because it formats ther return value as %i (32-bit), whereas
+> >> __tdx_vm_ioctl might return a u64 hardware error code.
+> >>
+> 
+> Since we cannot simply use hw_error to replace ret, there will be not 32bit
+> vs 64bit issue. But ...
+> 
+> >> I agree with your suggestion to introduce a new
+> >> TEST_ASSERT_TDX_VM_VCPU_IOCTL() macro to print out u64 hardware error
+> >> code properly.
+> 
+> ... if we want to print hw_error as well, we still need a new macro.
+> 
+> >> [2]: https://lore.kernel.org/all/a58e2941-77f9-43cf-a54d-023506dd7eb0@linux.intel.com/
+> >>
+> > 
+> > Is tdx_vm_ioctl() the only place where TEST_ASSERT_TDX_VM_VCPU_IOCTL()
+> > is going to be used though? If so, maybe we should defer introducing
+> > TEST_ASSERT_TDX_VM_VCPU_IOCTL() till later.
+> 
+> I think tdx_vcpu_ioctl() will use it as well?
 
-This adds an XDP_FLAGS_FRAGS_PAGE_POOL xdp_buff flag that the two skb-cow
-sites (generic XDP and veth) set, so bpf_xdp_shrink_data() frees a released
-frag to the page_pool instead of using xdp->rxq->mem.type. The flag is
-stripped on buff -> frame conversion and re-derived from frame->mem_type on
-frame -> buff conversion.
+Thanks for replying.
 
-Closes: https://syzkaller.appspot.com/bug?extid=237bbeed8dfe0699b7f5
+I agree all of the other parts of your comments.
 
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> index aa742f413c358..8fd4139e9cbd3 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
+Just wanted to point out one detail: tdx_vm_ioctl() is the only place
+that actually needs to evaluate hw_error right now. Unlike the VM-scoped
+ioctls in the x86 kernel code, the functions dispatched via
+tdx_vcpu_unlocked_ioctl() (such as tdx_vcpu_init or
+tdx_vcpu_init_mem_region) do not currently return the TDX SEAMCALL error
+codes into the hw_error field.
 
-[ ... ]
+Thus, I would prefer to inline TEST_ASSERT directly inside tdx_vm_ioctl()
+instead of introducing a new TEST_ASSERT_TDX_VM_VCPU_IOCTL() right now.
 
-> @@ -394,6 +412,15 @@ void xdp_convert_frame_to_buff(const struct xdp_frame *frame,
->  	xdp->data_meta = frame->data - frame->metasize;
->  	xdp->frame_sz = frame->frame_sz;
->  	xdp->flags = frame->flags;
-> +	/*
-> +	 * frame->flags never carries XDP_FLAGS_FRAGS_PAGE_POOL (it is stripped
-> +	 * in xdp_update_frame_from_buff()); re-derive it from the frame's own
-> +	 * memory type. veth and devmap rebuild a buff here and run a program
-> +	 * whose rxq says MEM_TYPE_PAGE_SHARED, so without this a shrink would
-> +	 * free a page_pool frag through page_frag_free().
-> +	 */
-> +	if (frame->mem_type == MEM_TYPE_PAGE_POOL)
-> +		xdp_buff_set_frag_pp(xdp);
->  }
+Lisa
 
-[ ... ]
-
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 532405988fd98..861c878d0a6d6 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -4377,6 +4377,13 @@ static bool bpf_xdp_shrink_data(struct xdp_buff *xdp, skb_frag_t *frag,
->  	if (mem_type == MEM_TYPE_XSK_BUFF_POOL) {
->  		netmem = 0;
->  		zc_frag = bpf_xdp_shrink_data_zc(xdp, shrink, tail, release);
-> +	} else if (xdp_buff_is_frag_pp(xdp)) {
-> +		/*
-> +		 * Skb-backed XDP (generic XDP, veth) cow's the frags into a
-> +		 * page_pool while the rxq stays MEM_TYPE_PAGE_SHARED, so free
-> +		 * the frag to the pool, not via page_frag_free().
-> +		 */
-> +		mem_type = MEM_TYPE_PAGE_POOL;
->  	}
->  
->  	if (release) {
-
-[Severity: High]
-The new flag only overrides mem_type in one direction (towards
-MEM_TYPE_PAGE_POOL), while mem_type is still initialized from the shared
-xdp->rxq->mem.type:
-
-net/core/filter.c:bpf_xdp_shrink_data() {
-	enum xdp_mem_type mem_type = xdp->rxq->mem.type;
-	...
-}
-
-The commit message says veth's rq->xdp_rxq.mem "is shared per-queue state"
-that "can be clobbered under a packet still in flight". veth also writes a
-frame's memory type into it and never restores it:
-
-drivers/net/veth.c:veth_xdp_rcv_one() {
-	case XDP_TX:
-		orig_frame = *frame;
-		xdp->rxq->mem.type = frame->mem_type;
-	...
-	case XDP_REDIRECT:
-		orig_frame = *frame;
-		xdp->rxq->mem.type = frame->mem_type;
-}
-
-Only veth_disable_xdp_range() puts rq->xdp_rxq.mem back to rq->xdp_mem.
-
-So can the opposite direction still go wrong on a veth queue?
-
-1) A multi-buff frame with frame->mem_type == MEM_TYPE_PAGE_POOL (e.g.
-   redirected in from a page_pool NIC) takes XDP_TX or XDP_REDIRECT, and
-   rq->xdp_rxq.mem.type stays MEM_TYPE_PAGE_POOL for every later packet on
-   that queue.
-
-2) A later multi-buff frame whose frame->mem_type is MEM_TYPE_PAGE_SHARED
-   (the peer's veth_xdp_rcv_skb() XDP_TX/XDP_REDIRECT path stamps
-   xdp->rxq->mem = rq->xdp_mem into the frame) or MEM_TYPE_PAGE_ORDER0
-   arrives. xdp_convert_frame_to_buff() does not set
-   XDP_FLAGS_FRAGS_PAGE_POOL for it, and it does not clear the flag either,
-   so bpf_xdp_shrink_data() picks up the stale MEM_TYPE_PAGE_POOL from the
-   rxq.
-
-3) If the program then calls bpf_xdp_adjust_tail() with a negative offset
-   that consumes a whole frag, the release path ends in:
-
-net/core/xdp.c:__xdp_return() {
-	case MEM_TYPE_PAGE_POOL:
-		netmem = netmem_compound_head(netmem);
-		...
-		/* No need to check netmem_is_pp() as mem->type knows this a
-		 * page_pool page
-		 */
-		page_pool_put_full_netmem(netmem_get_pp(netmem), netmem,
-					  napi_direct);
-}
-
-There is no netmem_is_pp() validation here, so netmem_get_pp() on a plain
-page returns whatever occupies the overlaid field, and NULL for a page that
-veth already released from its pool. Can that dereference a garbage or NULL
-struct page_pool *, or hand a foreign page to an unrelated pool's cache?
-
-Would it be more robust for bpf_xdp_shrink_data() to derive the frag memory
-type entirely from the buff (i.e. also express "not page_pool" instead of
-falling back to rxq->mem.type), so the shared and clobberable veth rxq type
-is not consulted at all?
-
-Note this residual path is not addressed later in the series: the diff of
-net/, drivers/net/veth.c and include/net/xdp.h between this commit and
-6c9c432f is empty, the following patch only adds a selftest.
+> > I think the issue with if (ret) is just that TEST_ASSERT(!ret) already
+> > does that same check, and so we can drop the if (ret) part.
+> > 
