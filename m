@@ -1,271 +1,365 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59683B7B7F;
-	Fri, 18 Sep 2026 09:21:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459743859D7;
+	Fri, 18 Sep 2026 09:27:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789723313; cv=none; b=Sm3Fh4nNm8V2D4tRnYy4INc/e5MK9DWvgYFTc/deOqNqTZuz5HyMZZOQKlUa6nbzWh77JvZBuVgjIZHXkgV0rSMlvG3bItDIt1yisftX7UHM+q4DnVt+3S53e8Lhwt9yZc3n3YvPwpp0ten2EPgFJpnpTe6xyobSSO2j6L29KcU=
+	t=1789723637; cv=none; b=pdsJHdjFlsD5Vfft43uVDShrFrT/j2mLrv5eagVe2s4kYAGSkoGG5Bin4YR7AV2Twpcee/OfV2zkm+QLqpQl8mAnYXmIhgyDNmGKuiTfVqNn8h22vSi5mjBl9fxXisS5W5rca3XeMx0fDj0CSNj7QU5371W+v37ckXkPf6FCbLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789723313; c=relaxed/simple;
-	bh=OlRLXVIn2r5aG9Ji4gyVA8JaMSQ+3b6MaSdtt6+4vAY=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=g173teoa1jUMSrFoPJ8C+ZsdRWhTOzcNt0BhL0/YDVZR+LJGLLafBlcukzvRoURl+WNXWrAMCyxHRvpEZyJAcG/Vaz0FkK+RlPCGU+fK5+YltrDzA7k+KYITd56mnRY0c0WzXtuIYz6Nk0pT5r4dHUFq/cDbSVoF3Agb2/bd8FI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EM10W6rE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789723637; c=relaxed/simple;
+	bh=Te3k78FtHQODlS8vaGxp5J/W285GftnYzSs6n4Z3G1M=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=P0OEi1b7XsEhwu3pr2/eaQ4BKQbxJDFuHmof91euKPg1P8KzhptRZGSEpXV7gmmjcAqlDmAVuFTkpC+0JhlIO7f/rEunjdEo5wvwhhKC9EbUNNvuPgmEsVcMCeYc1GPg4uCknSNPOiiH3bGusf8s5xC1pxPQl8UtqN+KNQoJJ54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=aCOhb5kV; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EM10W6rE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AA6F1F00893;
-	Fri, 18 Sep 2026 09:21:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789723311;
-	bh=2RGK9msVdh8rZ3KN+uyXUzb15p/yT1hKDC+8zsV21pk=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=EM10W6rEGqAHMMcQlNMKnSaIN1Glhot6FkS+TnSfaE5Xrsz61Lxjrcej6/aQ4csL+
-	 axkh7902etjxnqpEgSVysPsyMzHFutNe8FJdgfJqK+oZRr5/iz0UCqdQeGxy8o+Ze0
-	 HVi6MrRWSHxBvjnmWUUeMSJmGS3VIeegYzmHsyz18zV4Xl8BvRdxKbVco/n3iltt30
-	 0xNzZ+P69SPEX99EkjZ9GOs/z2vR1diiczgTqmzj4RKqEEmrVPB/Q1vAIKT3gfEsGO
-	 YVeHPO5wT+UX4iQhhI1xCFt38daaXTq2/dnweJPOdJwWvulXCD7UDD4T/Rw4ajvvoL
-	 jRxwcRq+bQgLQ==
-Subject:
- Re: [PATCH net-next v3 4/5] fbnic: Support larger memory-provider RX pages
-From: netdev-bot+sashiko@kernel.org
-To: bjorn@kernel.org
-Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- daniel@iogearbox.net, mike.marciniszyn@gmail.com, mohsin.bashr@gmail.com,
- sdf@fomichev.me, bobbyeshleman@meta.com, daskald@meta.com,
- bestswngs@gmail.com, maxime.chevallier@bootlin.com, jacob.e.keller@intel.com,
- leitao@debian.org, cuitao@kylinos.cn, asml.silence@gmail.com, dw@davidwei.uk
-Date: Fri, 18 Sep 2026 09:21:49 +0000
-Message-ID: <178972330968.22033.5908779973524437697@kernel.org>
-In-Reply-To: <20260915182105.4162425-5-bjorn@kernel.org>
-References: <20260915182105.4162425-5-bjorn@kernel.org>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="aCOhb5kV"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:
+	Date:Subject:Cc:To:From:From:Reply-To;
+	bh=QiuzCePKqgJODz3geyNPYIV352fWdv3Mgyzmoh66kOI=; b=aCOhb5kV9dJuzyGxOMUi67zPFI
+	NGC088DhKisMOEbLiuQDSl4UISkZqAffFIVkXjUMgGnkwOXAs3Wr6XSZy8Ou5sHJA1SFGLc/vk9ld
+	SZpMHFhamStWnv0OjtNlBgJa/ukfVRI1sPErDag5q8MbDgwDgjG6UZ5TlFmVtIPOkhQ1SGKVt7m1Q
+	KTW3EQMHckyz07v7Jw6QNyCi0UQWGjyBiuFbL6Fe642k/c+s6r7UTm4iXurnJJgiIPQz4Vsx0/hmL
+	AZ3Uo8DvZBhNDqES2JdgusmwGXByijmTsgVuodg3ksg8zk7FoC/Cyae7IDgSxzO2TG2rbujSul6pG
+	m05oaW9A==;
+Received: from bl21-120-122.dsl.telepac.pt ([2.82.120.122] helo=localhost)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1x7Us5-003rhC-HF; Fri, 18 Sep 2026 11:27:05 +0200
+From: Luis Henriques <luis@igalia.com>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Miklos Szeredi <miklos@szeredi.hu>,  Chen Linxuan <me@black-desk.cn>,
+  Jonathan Corbet <corbet@lwn.net>,  Shuah Khan
+ <skhan@linuxfoundation.org>,  fuse-devel@lists.linux.dev,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,  Matt
+ Harvey <mharvey@jumptrading.com>,  kernel-dev@igalia.com
+Subject: Re: [RFC PATCH v4 4/8] selftests/fuse: factor-out test fixture
+ setup/teardown
+In-Reply-To: <CAOQ4uxgOGm3Eo97M32CK84HWEsXNgnYU5uunTV0g_Si9NRj5tw@mail.gmail.com>
+References: <20260916155629.32421-1-luis@igalia.com>
+	<20260916155629.32421-5-luis@igalia.com>
+	<CAOQ4uxgOGm3Eo97M32CK84HWEsXNgnYU5uunTV0g_Si9NRj5tw@mail.gmail.com>
+Date: Fri, 18 Sep 2026 10:28:03 +0100
+Message-ID: <87fqz66h98.fsf@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider:
+On Thu, Sep 17 2026, Amir Goldstein wrote:
 
-Critical: 0 · High: 1 (1) · Medium: 0 · Low: 0
+> On Wed, Sep 16, 2026 at 5:55=E2=80=AFPM Luis Henriques <luis@igalia.com> =
+wrote:
+>>
+>> In order to reduce new tests setup/teardown code duplication, factor-out
+>> these functions from the existing acl_cache test into a new fuse_common.c
+>> file that can be reused in other tests.
+>>
+>> While there, also move some of the FIXTURE members into a fuse_common_ctx
+>> structure that can be passed into setup/teardown instead of passing them=
+ by
+>> reference.
+>>
+>> Signed-off-by: Luis Henriques <luis@igalia.com>
+>> ---
+>>  .../selftests/filesystems/fuse/Makefile       |  8 +-
+>>  .../filesystems/fuse/fuse_acl_cache_test.c    | 73 ++++---------------
+>>  .../selftests/filesystems/fuse/fuse_common.c  | 58 +++++++++++++++
+>>  .../selftests/filesystems/fuse/fuse_common.h  | 31 ++++++++
+>>  4 files changed, 111 insertions(+), 59 deletions(-)
+>>  create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_common=
+.c
+>>  create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_common=
+.h
+>>
+>> diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/t=
+esting/selftests/filesystems/fuse/Makefile
+>> index a3ee9b3a2f5d..7744f796eb06 100644
+>> --- a/tools/testing/selftests/filesystems/fuse/Makefile
+>> +++ b/tools/testing/selftests/filesystems/fuse/Makefile
+>> @@ -21,8 +21,12 @@ ifeq ($(VAR_LDLIBS),)
+>>  VAR_LDLIBS :=3D -lfuse3 -pthread
+>>  endif
+>>
+>> +CFLAGS +=3D $(VAR_CFLAGS)
+>> +LDLIBS +=3D $(VAR_LDLIBS)
+>> +
+>>  $(OUTPUT)/fuse_mnt: CFLAGS +=3D $(VAR_CFLAGS)
+>>  $(OUTPUT)/fuse_mnt: LDLIBS +=3D $(VAR_LDLIBS)
+>>
+>> -$(OUTPUT)/fuse_acl_cache_test: CFLAGS +=3D $(VAR_CFLAGS)
+>> -$(OUTPUT)/fuse_acl_cache_test: LDLIBS +=3D $(VAR_LDLIBS)
+>> +$(OUTPUT)/fuse_acl_cache_test: fuse_common.c fuse_acl_cache_test.c
+>> +
+>> +EXTRA_CLEAN :=3D fuse_common.o
+>> diff --git a/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_tes=
+t.c b/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
+>> index 2411a6e285f1..d5a966e7fc15 100644
+>> --- a/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
+>> +++ b/tools/testing/selftests/filesystems/fuse/fuse_acl_cache_test.c
+>> @@ -33,23 +33,15 @@
+>>   */
+>>
+>>  #define _GNU_SOURCE
+>> -#include <errno.h>
+>>  #include <fcntl.h>
+>>  #include <linux/limits.h>
+>> -#include <pthread.h>
+>>  #include <stdint.h>
+>> -#include <stdio.h>
+>> -#include <stdlib.h>
+>> -#include <string.h>
+>> -#include <sys/stat.h>
+>>  #include <sys/xattr.h>
+>> -#include <unistd.h>
+>> -
+>> -#define FUSE_USE_VERSION 31
+>> -#include <fuse_lowlevel.h>
+>>
+>>  #include "kselftest_harness.h"
+>>
+>> +#include "fuse_common.h"
+>> +
+>>  /* ---- ACL binary encoding -------------------------------------------=
+----- */
+>>  /*
+>>   * POSIX ACL v2 xattr format (little-endian):
+>> @@ -88,6 +80,7 @@ static const uint8_t acl_b[] =3D {
+>>
+>>  struct daemon_state {
+>>         pthread_mutex_t lock;
+>> +       struct fuse_common_ctx ctx;
+>>         const uint8_t  *acl;
+>>         size_t          acl_size;
+>>         int             getxattr_count;
+>> @@ -176,69 +169,35 @@ static const struct fuse_lowlevel_ops fs_ops =3D {
+>>         .getxattr =3D fs_getxattr,
+>>  };
+>>
+>> -/* ---- Daemon thread -------------------------------------------------=
+------ */
+>> -
+>> -static void *run_daemon(void *arg)
+>> -{
+>> -       fuse_session_loop((struct fuse_session *)arg);
+>> -       return NULL;
+>> -}
+>> -
+>>  /* ---- kselftest harness ---------------------------------------------=
+------ */
+>>
+>>  FIXTURE(acl_cache) {
+>> -       struct fuse_session *se;
+>> -       char                 mountpoint[PATH_MAX];
+>> -       char                 file_path[PATH_MAX];
+>> -       pthread_t            thread;
+>> +       char file_path[PATH_MAX];
+>>  };
+>>
+>
+> Hi Luis,
+>
+> Thanks for the followup cleanup.
+> Question: why did you move struct fuse_common_ctx out of the test
+> fixture and into the global state?
+> It not terribly wrong but seems unnecessary and inconsistent -
+> fs_setup/teardown are in FIXTURE_SETUP/TEARDOWN
+> so it is more consistent that fuse_common_ctx stays embedded in the
+> fixure object, unless you have a reason to counter.
 
-- [High] fbnic_alloc_qt_page_pools() and fbnic_alloc_rx_qt_resources()
-  use two non-equivalent predicates for the same decision, which lets…
+Well, I do not have a good reason so I'll move that struct into the
+FIXTURE :-)
 
-Pre-existing issues:
-- [High] In fbnic_alloc_qt_page_pools() the error label err_destroy_sub0
-  calls page_pool_destroy(pp) after `pp` has been overwritten with the…
+You're right, it probably makes more sense to keep these separate from the
+test state.  I'll fix this test (and the other ones).
 
---
+Cheers,
+--=20
+Lu=C3=ADs
 
-fbnic: Support larger memory-provider RX pages
 
-Renders the per-queue rx_page_size and uses it for the PPQ page-pool
-allocation order and the PPQ BDQ page geometry, so one page-pool
-allocation is described by consecutive 4 KiB device-page descriptors.
-Also adds ndo_default_qcfg/ndo_validate_qcfg and advertises
-QCFG_RX_PAGE_SIZE.
+> With that fix, feel free to add
+>
+> Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+>
+> Thanks,
+> Amir.
+>
+>>  FIXTURE_SETUP(acl_cache)
+>>  {
+>> -       char *fuse_argv[] =3D { "fuse_acl_cache_test", NULL };
+>> -       struct fuse_args args =3D FUSE_ARGS_INIT(1, fuse_argv);
+>> +       char err[MAX_ERR_MSG];
+>>
+>> -       g_ds.acl            =3D acl_a;
+>> -       g_ds.acl_size       =3D sizeof(acl_a);
+>> +       pthread_mutex_lock(&g_ds.lock);
+>> +       g_ds.acl =3D acl_a;
+>> +       g_ds.acl_size =3D sizeof(acl_a);
+>>         g_ds.getxattr_count =3D 0;
+>>
+>> -       strcpy(self->mountpoint, "/tmp/acl_cache_test_XXXXXX");
+>> -       if (!mkdtemp(self->mountpoint))
+>> -               SKIP(return, "mkdtemp: %s", strerror(errno));
+>> +       if (fs_setup(&fs_ops, &g_ds.ctx, err))
+>> +               SKIP(goto out, err);
+>>
+>>         snprintf(self->file_path, sizeof(self->file_path),
+>> -                "%s/" FILE_NAME, self->mountpoint);
+>> -
+>> -       self->se =3D fuse_session_new(&args, &fs_ops, sizeof(fs_ops), NU=
+LL);
+>> -       if (!self->se) {
+>> -               rmdir(self->mountpoint);
+>> -               SKIP(return, "fuse_session_new failed");
+>> -       }
+>> -
+>> -       if (fuse_session_mount(self->se, self->mountpoint)) {
+>> -               fuse_session_destroy(self->se);
+>> -               rmdir(self->mountpoint);
+>> -               SKIP(return, "fuse_session_mount failed "
+>> -                            "(missing fusermount3 or insufficient privi=
+leges)");
+>> -       }
+>> -
+>> -       if (pthread_create(&self->thread, NULL, run_daemon, self->se)) {
+>> -               fuse_session_unmount(self->se);
+>> -               fuse_session_destroy(self->se);
+>> -               rmdir(self->mountpoint);
+>> -               SKIP(return, "pthread_create: %s", strerror(errno));
+>> -       }
+>> -
+>> -       fuse_opt_free_args(&args);
+>> +                "%s/" FILE_NAME, g_ds.ctx.mountpoint);
+>> +out:
+>> +       pthread_mutex_unlock(&g_ds.lock);
+>>  }
+>>
+>>  FIXTURE_TEARDOWN(acl_cache)
+>>  {
+>> -       fuse_session_exit(self->se);
+>> -       fuse_session_unmount(self->se);
+>> -       pthread_join(self->thread, NULL);
+>> -       fuse_session_destroy(self->se);
+>> -       rmdir(self->mountpoint);
+>> +       pthread_mutex_lock(&g_ds.lock);
+>> +       fs_teardown(&g_ds.ctx);
+>> +       pthread_mutex_unlock(&g_ds.lock);
+>>  }
+>>
+>>  static int do_force_statx(const char *path)
+>> diff --git a/tools/testing/selftests/filesystems/fuse/fuse_common.c b/to=
+ols/testing/selftests/filesystems/fuse/fuse_common.c
+>> new file mode 100644
+>> index 000000000000..d1d3dfd2ea67
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/filesystems/fuse/fuse_common.c
+>> @@ -0,0 +1,58 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +
+>> +#include "fuse_common.h"
+>> +
+>> +static void *run_daemon(void *arg)
+>> +{
+>> +       fuse_session_loop((struct fuse_session *)arg);
+>> +       return NULL;
+>> +}
+>> +
+>> +int fs_setup(const struct fuse_lowlevel_ops *fs_ops,
+>> +            struct fuse_common_ctx *ctx, char *err)
+>> +{
+>> +       char *fuse_argv[] =3D { "fuse_test", NULL };
+>> +       struct fuse_args args =3D FUSE_ARGS_INIT(1, fuse_argv);
+>> +
+>> +       strcpy(ctx->mountpoint, MOUNTPOINT_TEMPLATE);
+>> +       if (!mkdtemp(ctx->mountpoint)) {
+>> +               snprintf(err, MAX_ERR_MSG, "mkdtemp: %s", strerror(errno=
+));
+>> +               return -1;
+>> +       }
+>> +
+>> +       ctx->se =3D fuse_session_new(&args, fs_ops, sizeof(*fs_ops), NUL=
+L);
+>> +       if (!ctx->se) {
+>> +               rmdir(ctx->mountpoint);
+>> +               snprintf(err, MAX_ERR_MSG, "fuse_session_new failed");
+>> +               return -1;
+>> +       }
+>> +
+>> +       if (fuse_session_mount(ctx->se, ctx->mountpoint)) {
+>> +               fuse_session_destroy(ctx->se);
+>> +               rmdir(ctx->mountpoint);
+>> +               snprintf(err, MAX_ERR_MSG, "fuse_session_mount failed "
+>> +                       "(missing fusermount3 or insufficient privileges=
+)");
+>> +               return -1;
+>> +       }
+>> +
+>> +       if (pthread_create(&ctx->thread, NULL, run_daemon, ctx->se)) {
+>> +               fuse_session_unmount(ctx->se);
+>> +               fuse_session_destroy(ctx->se);
+>> +               rmdir(ctx->mountpoint);
+>> +               snprintf(err, MAX_ERR_MSG, "pthread_create: %s", strerro=
+r(errno));
+>> +               return -1;
+>> +       }
+>> +
+>> +       fuse_opt_free_args(&args);
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +void fs_teardown(struct fuse_common_ctx *ctx)
+>> +{
+>> +       fuse_session_exit(ctx->se);
+>> +       fuse_session_unmount(ctx->se);
+>> +       pthread_join(ctx->thread, NULL);
+>> +       fuse_session_destroy(ctx->se);
+>> +       rmdir(ctx->mountpoint);
+>> +}
+>> diff --git a/tools/testing/selftests/filesystems/fuse/fuse_common.h b/to=
+ols/testing/selftests/filesystems/fuse/fuse_common.h
+>> new file mode 100644
+>> index 000000000000..e3dd85daa4b0
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/filesystems/fuse/fuse_common.h
+>> @@ -0,0 +1,31 @@
+>> +#ifndef __SELFTEST_FUSE_COMMON_H__
+>> +#define __SELFTEST_FUSE_COMMON_H__
+>> +
+>> +#define _GNU_SOURCE
+>> +#include <errno.h>
+>> +#include <pthread.h>
+>> +#include <stdio.h>
+>> +#include <stdlib.h>
+>> +#include <string.h>
+>> +#include <unistd.h>
+>> +#include <limits.h>
+>> +
+>> +#define FUSE_USE_VERSION 31
+>> +#include <fuse_lowlevel.h>
+>> +
+>> +#define MAX_ERR_MSG 256
+>> +
+>> +#define MOUNTPOINT_TEMPLATE "/tmp/fuse_test_XXXXXX"
+>> +#define MOUNTPOINT_SZ 64
+>> +
+>> +struct fuse_common_ctx {
+>> +       struct fuse_session *se;
+>> +       char mountpoint[MOUNTPOINT_SZ];
+>> +       pthread_t thread;
+>> +};
+>> +
+>> +int fs_setup(const struct fuse_lowlevel_ops *fs_ops,
+>> +            struct fuse_common_ctx *ctx, char *err);
+>> +void fs_teardown(struct fuse_common_ctx *ctx);
+>> +
+>> +#endif /* __SELFTEST_FUSE_COMMON_H__ */
 
-A couple of questions about the two predicates used for the page-pool
-geometry, and about the existing error label in
-fbnic_alloc_qt_page_pools().
-
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-> index fef51d4541026..615b74fc7bef4 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-
-[ ... ]
-
-> @@ -1600,6 +1604,8 @@ fbnic_alloc_qt_page_pools(struct fbnic_net *fbn, struct fbnic_q_triad *qt,
->  
->  	qt->sub0.page_pool = pp;
->  	if (netif_rxq_has_unreadable_mp(fbn->netdev, rxq_idx)) {
-> +		pp_params.order = get_order(rx_page_size);
-> +		pp_params.max_len = rx_page_size;
->  		pp_params.flags |= PP_FLAG_ALLOW_UNREADABLE_NETMEM;
->  		pp_params.dma_dir = DMA_FROM_DEVICE;
->  
-
-[Severity: High]
-This isn't a bug introduced by this patch, but the error label reached by
-the second page_pool_create() in this function looks broken, and the new
-order/max_len parameters add failure modes to that call:
-
-drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:fbnic_alloc_qt_page_pools() {
-	...
-		pp = page_pool_create(&pp_params);
-		if (IS_ERR(pp))
-			goto err_destroy_sub0;
-	...
-err_destroy_sub0:
-	page_pool_destroy(pp);
-	return PTR_ERR(pp);
-}
-
-At the label, pp is the ERR_PTR from the failed create, not
-qt->sub0.page_pool. page_pool_destroy() only guards against NULL:
-
-net/core/page_pool.c:page_pool_destroy() {
-	if (!pool)
-		return;
-
-	if (!page_pool_put(pool))
-		return;
-	...
-}
-
-so page_pool_put() does refcount_dec_and_test(&pool->user_cnt) on an error
-pointer. Can this oops, and does it also leak the sub0 page_pool together
-with its DMA mappings, given the caller propagates the error and
-netdev_rx_queue_reconfig() goes to err_free_old_mem without calling
-ndo_queue_mem_free?
-
-Should the label be something like:
-
-err_destroy_sub0:
-	page_pool_destroy(qt->sub0.page_pool);
-	return PTR_ERR(pp);
-
-The reason this comes up here is that pp_params.order is now derived from
-a user-supplied value, and the memory provider validates it:
-
-net/core/devmem.c:mp_dmabuf_devmem_init() {
-	...
-	if (pool->p.order != binding->niov_shift - PAGE_SHIFT)
-		return -E2BIG;
-	...
-}
-
-fbnic_validate_qcfg() accepts any power-of-two rx_page_size >= 4 KiB, so on
-a host with PAGE_SIZE larger than 4 KiB get_order(rx_page_size) can differ
-from the provider's chunk order and this create fails deterministically,
-not just on -ENOMEM. The label exists verbatim at b8e9e7d82e7e and is
-still present at dadc755bdd0c.
-
-> @@ -2029,15 +2035,18 @@ static int fbnic_alloc_tx_qt_resources(struct fbnic_net *fbn,
->  
->  static int fbnic_alloc_rx_qt_resources(struct fbnic_net *fbn,
->  				       struct fbnic_napi_vector *nv,
-> -				       struct fbnic_q_triad *qt)
-> +				       struct fbnic_q_triad *qt,
-> +				       u32 rx_page_size)
->  {
->  	struct device *dev = fbn->netdev->dev.parent;
->  	int err;
->  
-> -	err = fbnic_alloc_qt_page_pools(fbn, qt, qt->cmpl.q_idx);
-> +	err = fbnic_alloc_qt_page_pools(fbn, qt, qt->cmpl.q_idx, rx_page_size);
->  	if (err)
->  		return err;
->  
-> +	fbnic_bdq_set_page_size(&qt->sub1, rx_page_size);
-> +
-
-[Severity: High]
-Can the sub1 BDQ geometry end up describing more memory than the pool
-actually allocates here?
-
-The pool order is only raised inside the memory-provider branch of
-fbnic_alloc_qt_page_pools():
-
-	if (netif_rxq_has_unreadable_mp(fbn->netdev, rxq_idx)) {
-		pp_params.order = get_order(rx_page_size);
-		pp_params.max_len = rx_page_size;
-
-but fbnic_bdq_set_page_size(&qt->sub1, rx_page_size) above runs
-unconditionally. The two are not the same test:
-
-net/core/netdev_rx_queue.c:netif_rxq_has_unreadable_mp() {
-	if (rxq_idx < dev->real_num_rx_queues)
-		return __netif_get_rx_queue(dev, rxq_idx)->mp_params.mp_ops;
-	return false;
-}
-
-net/core/netdev_config.c:__netdev_queue_config() {
-	...
-	mpp = &__netif_get_rx_queue(dev, rxq_idx)->mp_params;
-	if (mpp->rx_page_size)
-		qcfg->rx_page_size = mpp->rx_page_size;
-	...
-}
-
-So for rxq_idx >= dev->real_num_rx_queues the rendered rx_page_size still
-reflects the installed mp_params while netif_rxq_has_unreadable_mp() is
-false. sub1 then shares sub0's order-0, PAGE_SIZE, DMA_BIDIRECTIONAL pool
-while bd_page_shift claims rx_page_size / 4096 device pages, and
-fbnic_bd_prep() posts that many consecutive addresses off one netmem:
-
-drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:fbnic_bd_prep() {
-	do {
-		*bdq_desc = cpu_to_le64(bd);
-		bd += FIELD_PREP(FBNIC_BD_DESC_ADDR_MASK, 1) |
-		      FIELD_PREP(FBNIC_BD_DESC_ID_MASK, 1);
-		bdq_desc++;
-	} while (--i);
-}
-
-Does that hand the NIC up to rx_page_size - PAGE_SIZE bytes of addresses
-past the end of the allocation?
-
-The sequence I think reaches this, all with CAP_NET_ADMIN:
-
-  - with the interface down, dev->real_num_rx_queues is FBNIC_MAX_RXQS,
-    since alloc_etherdev_mq() sets it and only fbnic_set_netif_queues()
-    (called from __fbnic_open()) narrows it
-  - bind a dmabuf with rx-page-size 32768 to a high queue index, say 64;
-    netif_mp_open_rxq() only checks rxq_idx < real_num_rx_queues, and
-    the !netif_running() path of fbnic_queue_mem_alloc() just creates and
-    frees page pools, leaving mp_params installed
-  - bring the link up; fbnic_set_netif_queues() calls
-    netif_set_real_num_rx_queues(8), and rx_queue_release() does not clear
-    mp_params at index 64
-  - ethtool -L combined 128 while up; growing the queue count is not
-    guarded, and fbnic_alloc_nv_resources() then does
-
-	netdev_queue_config(fbn->netdev, nv->qt[i].cmpl.q_idx, &qcfg);
-
-    which returns rx_page_size 32768 for index 64 while
-    netif_rxq_has_unreadable_mp(dev, 64) is false
-
-Would keying both the page-pool parameters and fbnic_bdq_set_page_size()
-off the same condition (or clamping rx_page_size to PAGE_SIZE when the
-queue has no memory provider) close this?
-
-> @@ -2098,7 +2107,11 @@ static int fbnic_alloc_nv_resources(struct fbnic_net *fbn,
->  
->  	/* Allocate Rx Resources */
->  	for (j = 0; j < nv->rxt_count; j++, i++) {
-> -		err = fbnic_alloc_rx_qt_resources(fbn, nv, &nv->qt[i]);
-> +		struct netdev_queue_config qcfg;
-> +
-> +		netdev_queue_config(fbn->netdev, nv->qt[i].cmpl.q_idx, &qcfg);
-> +		err = fbnic_alloc_rx_qt_resources(fbn, nv, &nv->qt[i],
-> +						  qcfg.rx_page_size);
->  		if (err)
->  			goto free_qt_resources;
->  	}
-
-[ ... ]
-
-> @@ -2997,4 +3072,7 @@ const struct netdev_queue_mgmt_ops fbnic_queue_mgmt_ops = {
->  	.ndo_queue_mem_free	= fbnic_queue_mem_free,
->  	.ndo_queue_start	= fbnic_queue_start,
->  	.ndo_queue_stop		= fbnic_queue_stop,
-> +	.ndo_default_qcfg	= fbnic_default_qcfg,
-> +	.ndo_validate_qcfg	= fbnic_validate_qcfg,
-> +	.supported_params	= QCFG_RX_PAGE_SIZE,
->  };
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260915182105.4162425-1-bjorn%40kernel.org
