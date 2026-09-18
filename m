@@ -1,218 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-112.mta0.migadu.com [91.218.175.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B613368BD;
-	Fri, 18 Sep 2026 08:07:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5377623E334
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 08:41:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.112
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789718840; cv=none; b=EBm6Eyos8CxWsVrn1M859wBQJeLugZrkbpvOCxfZc6Ow4QUDosDn+uCuANb8sydHd3WquHwvyW6uVVedDOkK03fm1lL3q1xzh78cmK7xdrwQFgK0rIN/7XuZd86fRASd8JeL7DGCKaBS/sT4PR6ndId1WNb885MFZiaSp+25P5w=
+	t=1789720902; cv=none; b=LpYzdzAGky6ff36ICWwM7j1xhnK6zVV5G7WqIRh0XPuaLkBWYvIOzxkVmuvu+ssWZYHPf10q8ee9ypJNYHclTRwYjfw3HcaB6v3uwVXnut9cLiXdJuHG7s1LMQ+5KL02s+bh88WyPsVdBlg9zr5JRlXCEeRm4MkQS322aXJXDEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789718840; c=relaxed/simple;
-	bh=o7tPmMLnWOySzuuH11+7UgSh8Zn51tGFq5NyRcH52AA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=FsUUvEL45DBkksb5SQ/ndy5wJZeOHySC1/+2qKe9bomBrrkfBt16Uz8Lzmj7RFq+LdqhqeDTpszQfCCOP96b2Gn9tLLlnchz+Wkt8jBFKPZcNtiVE/topmOItnFEN/JBjeAUstph9OO+2t6TS6SyIUf604/rmZlp6LFIWQ5pVno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EzLAjqFr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789720902; c=relaxed/simple;
+	bh=JElqU/CfjtnbJ5NPjx4WXkCgDHopsxoLIGs4TX2nu4s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pUL2riSo5cyCYmJHgPXvZcdwygNq9e5T6+u0t/rmPcM5N1oGZkIhfOSui9tsCM6W2zTniNaNHlKS222curshUZmYErQdLuqaXxU3pzkIGQW3ZnOjw4+6tD/FctcowFsmgj+z8NtwtInrbEzkvLV1AlKpKnHdk3X/H0eXVZi4e3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=USfhicqd; arc=none smtp.client-ip=91.218.175.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EzLAjqFr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C4A1F000FF;
-	Fri, 18 Sep 2026 08:07:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789718838;
-	bh=CN62GKBYW4Gh6bEa4wTsqXz2IMYSV3OeaKs617jAh5o=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=EzLAjqFrG/HO3b+fLf1D9Lt53vKdK0OdUUVjk5YI3Lwzhadh+82qXHwYpuhwmQUCg
-	 eOXEM2M6FedgnfOSuonmYdMRy/5J7ClJ9gSZ2Lp+u74Me/uicrhxCgdBsWv9BwPwxu
-	 +YUYFNW3gjP3X5DMztp0Vuw3IIcTjj+viPvQKZz/HI1g2XQffgnEtZ08EbcVYBroRM
-	 uTDk0CsvRTpR+4zqn1AayHLHNSCjYPp3t9HH0kLoFBC578e7ZNcTnxZ/O8qqJxv3wT
-	 dTW1t1os0gil5fq9pnx5Q7gHqKbtNbp1WhYcclPslLeedj6HMicDWAf2A2p7UXOG57
-	 PMonpcJTaZ/Uw==
-Content-Type: multipart/mixed; boundary="===============2924590592151832210=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="USfhicqd"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=JElqU/CfjtnbJ5NPjx4WXkCgDHopsxoLIGs4TX2nu4s=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789720897; v=1; x=1790325697;
+ b=USfhicqdE2pEL0yae1C7m5Z1cUOFh27Y8v3DVzWPvJU7vho78uNlFNPaXiWrJ9dSZ9tHPeKX
+ 6FHeNSlNaXJuKvIEDSCilAdusUJw35cZLWhQnAhCiWtueO5pI3Ti0vg737wwvSwJl1C/QRlVNcP
+ KWGFpIqvoMKiaMqTSl27MV/A=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id f1a32158248d01e8;
+	Fri, 18 Sep 2026 08:41:37 +0000
+X-Mizu-Trace-ID: f1a32158248d01e8
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v8 0/3] bpf: arena: handle memory.max on fault-in with reclaim
+Date: Fri, 18 Sep 2026 16:40:24 +0800
+Message-ID: <20260918084123.39477-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a96829b3ce33af67ccab9e1307714102daf95118dea89d95796ed440562acd12@mail.kernel.org>
-In-Reply-To: <44f7fcfafd5f33072dd2b9abc31aa9bf5eacd9bb.1789714023.git.zhuhui@kylinos.cn>
-References: <44f7fcfafd5f33072dd2b9abc31aa9bf5eacd9bb.1789714023.git.zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next v12 2/2] selftests/bpf: Add memcg async reclaim test
-From: bot+bpf-ci@kernel.org
-To: hui.zhu@linux.dev,roman.gushchin@linux.dev,inwardvessel@gmail.com,shakeel.butt@linux.dev,akpm@linux-foundation.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,david@kernel.org,baohua@kernel.org,geliang@kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-mm@kvack.org,linux-kselftest@vger.kernel.org
-Cc: zhuhui@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 18 Sep 2026 08:07:17 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============2924590592151832210==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Since commit e66fe1bc6d25 ("bpf: arena: Reintroduce memcg accounting"),
+arena pages are charged to the memcg of the process that created the arena.
+That exposes a problem in the arena user page fault path: the fault-in
+allocation runs under arena->spinlock, so it can only use the non-blocking
+allocator, which never reclaims. Once memory.current is at memory.max the
+allocation simply fails, even when the memcg is full of page cache that
+could be dropped right away. Reaching memory.max is completely normal for a
+healthy application - e.g. reading a large file fills memory.current with
+page cache - and the process then gets SIGSEGV on a perfectly valid arena
+address.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
-> new file mode 100644
-> index 0000000000000..179b64fb6de84
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
-
-[ ... ]
-
-> +	/*
-> +	 * Optional baseline for the benchmark numbers below: run the
-> +	 * same workload once without the BPF program, so the log can
-> +	 * report how much async reclaim improved the pressured cgroup.
-> +	 */
-> +	if (bench) {
-> +		err = run_high_low_workload(dir, &base_high_time,
-> +					    &base_low_time, READ_TIMES);
-> +		if (!ASSERT_OK(err, "run_high_low_workload baseline"))
-> +			goto out;
-> +
-> +		/*
-> +		 * The baseline left up to CG_LIMIT of page cache charged to the
-> +		 * high and low cgroups, and memcg charges outlive the workload
-> +		 * processes. Recreate the cgroups so that the instrumented run
-> +		 * below starts from the same cold state the baseline did;
-> +		 * otherwise the reported speedup compares a cold run against a
-> +		 * warm one.
-> +		 */
-> +		cleanup_cgroup_environment();
-
-Does this comment accurately describe why the cgroups are recreated?
-
-Looking at run_high_low_workload(), its cleanup block closes all four file
-descriptors and then unlinks all four temp files after both children have
-been reaped. With link count zero and no remaining open descriptors or
-mappings, the inodes are evicted, their page cache is truncated, and the
-memcg charges are released - so memory.current for the high and low
-cgroups is already back to near zero when control returns here.
-
-What actually survives the baseline is memory.stat, particularly the
-WORKINGSET_REFAULT_FILE counter that the BPF program samples via
-should_reclaim_cgroup(). Without recreating the cgroups, wq_prog_init()
-would start elem->prev_event at 0 while the counter is already large from
-the baseline, so the very first timer tick would see a huge delta and kick
-off a reclaim round unconditionally. Recreating the cgroups zeroes those
-counters.
-
-Could the comment be updated to describe that the recreation clears the
-WORKINGSET_REFAULT_FILE counters in memory.stat rather than page cache
-charges, which are already released when the files are unlinked?
-
-[ ... ]
-
-> +	reader_pid = spawn_keepalive_reader(data_fd);
-> +	if (!ASSERT_GT(reader_pid, 0, "fork keepalive reader"))
-> +		goto out;
-> +
-> +	/* Wait for reclaim rounds to reach the live target cgroup. */
-> +	for (i = 0; i < EVENT_POLL_ROUNDS && !seen.called; i++) {
-> +		n = ring_buffer__poll(rb, EVENT_POLL_TIMEOUT_MS);
-> +		if (!ASSERT_GE(n, 0, "ring_buffer__poll"))
-> +			goto out;
-> +
-> +		/*
-> +		 * The reader loops until killed, so finding it already gone
-> +		 * means the refaults the BPF program waits for never started.
-> +		 * Report its exit code rather than letting the assert below
-> +		 * blame the kernel for the full poll window.
-> +		 */
-> +		if (waitpid(reader_pid, &status, WNOHANG) == reader_pid) {
-> +			/* Reaped, so cleanup must not signal a reused PID. */
-> +			reader_pid = -1;
-> +			if (WIFEXITED(status))
-> +				PRINT_FAIL("keepalive reader exited early: %s",
-> +					   child_exit_str(WEXITSTATUS(status)));
-> +			else
-> +				PRINT_FAIL("keepalive reader died, status 0x%x",
-> +					   status);
-> +			goto out;
-> +		}
-> +	}
-> +	if (!ASSERT_GT(seen.called, 0, "reclaim events")) {
-> +		report_timer_failures(skel);
-> +		goto out;
-> +	}
-> +
-> +	remove_cgroup(CG_DYING_TARGET_DIR);
-> +
-> +	/* Let reclaim passes that were already in flight drain. */
-> +	usleep(DYING_SETTLE_US);
-> +
-> +	calls_before = skel->bss->reclaim_calls;
-> +
-> +	/*
-> +	 * Wait for a reclaim round to hit the removed cgroup. Only TARGET_GONE
-> +	 * ends the wait: an attempt that lands inside the rmdir window reports
-> +	 * SKIPPED_DYING first, and stopping there would miss the events that
-> +	 * follow it.
-> +	 */
-> +	for (i = 0; i < EVENT_POLL_ROUNDS && !seen.target_gone; i++) {
-> +		n = ring_buffer__poll(rb, EVENT_POLL_TIMEOUT_MS);
-> +		if (!ASSERT_GE(n, 0, "ring_buffer__poll"))
-> +			goto out;
-> +	}
-
-The second poll loop here drops the keepalive-reader liveness check that
-the first loop performs, although both loops depend on the reader equally.
-
-TARGET_GONE is only emitted when a reclaim round actually starts, and a
-round only starts when should_reclaim_cgroup() sees a fresh
-WORKINGSET_REFAULT_FILE delta - which only happens while the reader keeps
-refaulting. If the reader dies during this second window, refaults stop, no
-TARGET_GONE ever arrives, and the test reports "no reclaim round hit the
-removed cgroup (gone=0, dying=0)", blaming the kernel for a dead child.
-
-That is exactly the misattribution the first loop added a waitpid(WNOHANG)
-check to avoid. The reader's exit code is still available here, since a
-reader that dies during the second loop is left unreaped until the out:
-label. Should the second loop include the same liveness check to avoid
-misattributing a dead reader as a kernel issue?
-
-> +	/*
-> +	 * TARGET_GONE is what the test can rely on: by the time rmdir has
-> +	 * returned, bpf_cgroup_from_id() has stopped resolving the target.
-> +	 * SKIPPED_DYING only happens if an attempt lands inside the rmdir
-> +	 * window, so it is reported here rather than asserted.
-> +	 */
-> +	if (!seen.target_gone) {
-> +		report_timer_failures(skel);
-> +		PRINT_FAIL("no reclaim round hit the removed cgroup (gone=%d, dying=%d)",
-> +			   seen.target_gone, seen.skipped_dying);
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * Reclaim must have stopped with the target. Both counters stay put for
-> +	 * the same reason: once rmdir has returned, bpf_cgroup_from_id() fails,
-> +	 * so every attempt takes the TARGET_GONE path before it can reach
-> +	 * reclaim_calls++. This therefore checks that reclaim really stops, not
-> +	 * that cgroup_is_dying() works -- see that function in the BPF program
-> +	 * for why the dying window cannot be hit reliably from userspace.
-> +	 *
-> +	 * reclaimed_bytes is compared against 0 rather than against its
-> +	 * pre-removal value: the target is empty for the whole test, so
-> +	 * bpf_proactive_reclaim() has nothing to reclaim and must have returned
-> +	 * 0 on every call, before and after the removal alike. An "unchanged"
-> +	 * comparison would be 0 == 0 and could never fail.
-> +	 */
-
-Does the reclaimed_bytes explanation make sense? The comment argues that
-comparing reclaimed_bytes against a pre-removal snapshot "would be 0 == 0
-and could never fail", but by its own premise that snapshot is 0, so the
-snapshot comparison is literally the assertion that was written:
-ASSERT_EQ(skel->bss->reclaimed_bytes, 0ULL). Both forms read
-reclaimed_bytes after the removal window and both fail exactly when a
-post-removal reclaim adds bytes; neither is vacuous and neither is stronger
-than the other.
-
-As written the comment tells a reader that one of two identical checks
-cannot fail, which is misleading. Could it just state that
-bpf_proactive_reclaim() returns 0 on the empty target throughout the test,
-without the comparison that makes them sound different?
+Preallocate the page outside the lock (patch 1), the way do_anonymous_page()
+does, so the allocation can sleep and reclaim. It never invokes the OOM
+killer: the page is charged to the map's memcg, which need not be the
+faulting task's, so an OOM there could kill unrelated tasks in the map's
+cgroup. On a genuine failure the fault returns VM_FAULT_SIGBUS. patch 2&3
+adds a selftest that fills a memcg with reclaimable page cache and faults an
+arena in under memory.max: without the fix the child gets SIGSEGV on a valid
+address, with it the fault-in reclaims and succeeds.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+v7 -> v8:
+   - Merge patch 1 into patch 2. (Alexei Starovoitov)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35318390791
---===============2924590592151832210==--
+v4 -> v7:
+   - Simplify the implementation: do not aim for OOM anymore. An arena is
+     shared between processes and can be shared across cgroups, so the OOM
+     killer is the wrong tool here - it would act on the map's memcg, which
+     need not be the faulting task's. Only try to reclaim now, via
+     __GFP_RETRY_MAYFAIL. Everything else is kept as before.
+   - selftest: changed accordingly - fill the memcg with reclaimable page
+     cache and check that the arena fault-in succeeds by reclaiming it,
+     instead of relying on an OOM kill.
+
+v3 -> v4:
+   - rebase bpf-next and fix conflict
+   - add Reviewed-by tag from Emil Tsalapatis
+
+v2 -> v3:
+   - selftest: check the memcg OOM via memory.events "oom_kill" instead of
+     the exit signal; it only aims to pass on the fixed kernel, since the
+     unfixed SIGSEGV is racy.
+
+v1 -> v2:
+   - Rebase on the separate deadlock fix (found by the Sashiko AI review),
+     now applied to bpf-next.
+   - Honor the map's NUMA node on fault-in.
+   - Return VM_FAULT_SIGBUS for the non-recoverable faults (lock, range-tree
+     and page-table failures); a scratch-page hole stays VM_FAULT_SIGSEGV
+     only under BPF_F_SEGV_ON_FAULT. (Kumar Kartikeya Dwivedi)
+   - Add read_cgroup_file() to cgroup_helpers instead of open-coding the
+     /mnt/... path in the test. (Emil Tsalapatis)
+   - Dump the cgroup memory stats on test failure to ease debugging.
+
+v7:
+https://lore.kernel.org/bpf/20260917015618.7488-1-jiayuan.chen@linux.dev/#r
+v4:
+https://lore.kernel.org/bpf/20260821050250.35112-1-jiayuan.chen@linux.dev/T/#t
+v2:
+https://lore.kernel.org/bpf/20260805091720.139924-1-jiayuan.chen@linux.dev/
+v1:
+https://lore.kernel.org/bpf/20260727062521.376231-1-jiayuan.chen@linux.dev/
+
+Jiayuan Chen (3):
+  bpf: arena: allocate the fault-in page outside the lock
+  selftests/bpf: Add read_cgroup_file() to cgroup_helpers
+  selftests/bpf: Add a test for arena fault-in under memory.max
+
+ kernel/bpf/arena.c                            |  90 ++++++--
+ tools/testing/selftests/bpf/cgroup_helpers.c  |  67 ++++++
+ tools/testing/selftests/bpf/cgroup_helpers.h  |   4 +
+ .../selftests/bpf/prog_tests/arena_memcg.c    | 196 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_memcg.c |  23 ++
+ 5 files changed, 360 insertions(+), 20 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_memcg.c
+
+-- 
+2.43.0
+
