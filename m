@@ -1,168 +1,162 @@
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.35.192.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8A83AA1BB
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 04:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC67154707E;
+	Fri, 18 Sep 2026 04:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.35.192.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789705273; cv=none; b=PeNO3uQGX927A8B8Pr7pZP0dgJByMRluar3FadNTprs4xFskLYawpNEL+TCy57AzenCu9R47mfo8rIPMDTLV4N7c8FliFT56aFm1arSV+d56wciGcCke7LpxC10wY3cRj/LWOGmEoNLhhBUEtAkUzjq5ZiUUUbutCCxZZYcgwng=
+	t=1789707032; cv=none; b=Z6YFIYROKJ1D+68ZMG5wZCbA1b49jkPlklDHMZz6+CAk1RRNzd7vmkE7BTw3wpV1f8Jb0REEtsdAOafw79pRLGm5RQs1OdEw3Njckm2rFdOPwEdkoaJFrI5MZ9eyN/C/4P9CYxKdQC9FfSBT6AtXkdx8Yl12RgwZCZDeUjNqFaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789705273; c=relaxed/simple;
-	bh=HgVChyUTOcyzNCJwiIdYVGsxrb9H5tsBkHG9/o032Ug=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=VQfnfE9qIVMvjD9N5h+O5wOFnx2aJ+mKBkVtOOIQ9pMIvoZhEjpEHzRJYVBln3Em7WN3xw/V73D9OisAQ+FplDE5JYhg0mNvHDVxqrDF/hzoL3M788B20Kk33fgVErbWcm+zi/J8QefAkDzXl0ZkNaWYRzH2n9H80PJ1eLVwx10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rFF1wZq+; arc=none smtp.client-ip=209.85.216.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	s=arc-20240116; t=1789707032; c=relaxed/simple;
+	bh=n2piDbYsTAYFwqdXcKxPJVurKNps3aJYTe9GNTCvdd8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AMXs/SfqBgs/EO32w5OE0f0OEbkbr7Vu0XRfn35vb+9oA00fPqytsf61UhHxqdIX9SprxG5DH/12+4yM708uKqzw9ds94t++gyfxnuLutpNmeaJG2I9AFBxRUcyR7z/LVynNHnBHRJ2zqoJnoBEYbaZmR5w/9W/a45y0mPK7mco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=DCNMqRQM; arc=none smtp.client-ip=52.35.192.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rFF1wZq+"
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-39aee9b4cf2so724364a91.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 21:21:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="DCNMqRQM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789705271; x=1790310071; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=hUGgKz+5IFwH2YryveMVo1XtdCg84f8FM+ky5NHRSuI=;
-        b=rFF1wZq+KDghNBSpohUmaU7OByFEy8a67nK+0lVUXTjHsJPX60nvuog6AUa0uhohnQ
-         D5Uv/LA6nWkd+TlxDGYUY5qE6fJZJt7wn3KBNASREAXdyouNfA6QkSZX8+dGUVk5iPlr
-         U9IU3SKuDyQAwt83Ai4+KnNTKPNutcG9lUxBGDYKurTyNEt3yyLVm8a6u7XFU/uhkdfD
-         N9mH9HYwcmYddokx4+HNnfc71MQWxlq5HjLeJsCNbYFVYhiXkaUBNIaUX9JGVkuMXCs5
-         0gjWJhdYzNhoFLMYg6ypW0k6ppz41B3ky6DdXu1jcKzlecxu3CjmFhWsCYMVErbMhH8v
-         2QkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789705271; x=1790310071;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=hUGgKz+5IFwH2YryveMVo1XtdCg84f8FM+ky5NHRSuI=;
-        b=rB5QCNaIKRuUapuEZct8ulkqEVckq9bZFTWFLPMoIM8qva+NE8Lpi2pdeJfMvFfkkf
-         m+PbQkGzbl6qqkLglolcOxOeZS26/rMFzPXllCsQLVNsk40NmlggtdJ9F1/aFPJe7Td3
-         yQAOmTo+w8ph1lUKWUbzSvQyy6DtN1NmPBxRcfwVjRl+FkhdJ7nfeh/GQnhqN6IOxyB7
-         J2FAiTZShF1Z/fGaz25l0qadVomaognPosfwGCMzD1wyp0Eo8y6PwqhC0R4IqjzXoO1z
-         oVmFYPQOCrPNIIPPgeBEHb/ugl6T3lmHl98aQGt3UQstVEik1KgtNwy3bB1qB5DTyrGS
-         mQdw==
-X-Forwarded-Encrypted: i=1; AKwUvBzI3cCbaLcXI/tnACurnBTyOh6t6HxvseRS2reh9fze4afjtszu0+8dvGhEOwPS9I/fv6pa3c888gz46ljsu9M=@vger.kernel.org
-X-Gm-Message-State: AFuF++kDO4wI/7/o1RL5FGHpXqXxNciz6ieuE/HKUxV2CVtQnWQOtUym
-	CFd98htnjN4xUqjtq9WdTA1Ngzjvy5yvY07FQ4fd8xO04El/9b29kIfK68W1uQHfPFFTjGMNJxc
-	tRGhXaA==
-X-Received: from pjut11.prod.google.com ([2002:a17:90a:d50b:b0:39b:7adc:45e1])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:d410:b0:39d:f024:c7e2
- with SMTP id 98e67ed59e1d1-39e54cb099bmr2855960a91.4.1789705271176; Thu, 17
- Sep 2026 21:21:11 -0700 (PDT)
-Date: Fri, 18 Sep 2026 04:19:34 +0000
-In-Reply-To: <aqyIEE5bRoxRyrFZ@20HS2G4>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1789707030; x=1821243030;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SyFwGRaqH3oiMPjnkPS47mB6Cdto9junyyZzujrDe6s=;
+  b=DCNMqRQMjkVRhhROTSIQLHYLbDPcRvcW1TTC/o61SrczHEiZ885S6b0f
+   WglGbS3TzeZ8wigyrvi/3SK/dwAF15Gc0eZX7dL22vxLldsJCRG1zwFqn
+   L9oN4j8FVBCB2ydlH42jtPxrNXhqy0kDhQF3O362WmKnFWs1FwsLSAiI3
+   RSOw3UuF2T/A5OBWgXFtCOsASB1A2vQ1X9m9NdKqyuGXzKs6nuoRJALVa
+   K1220oobKfN8Pxy0yviMDl4S2tbJ5ySlS70Zm0WlEitdn5wTwKhM/fpHb
+   j7YxY5kjfIuqz1IepdFAKC9dxRTa/k5Z7YaAfOyjA6BIiQzZQV0kBzCQi
+   Q==;
+X-CSE-ConnectionGUID: BNh80O8jRzexf/r4DoH8og==
+X-CSE-MsgGUID: VtQlHfxkTZS7CXiOdcjmww==
+X-IronPort-AV: E=Sophos;i="6.27,103,1787011200"; 
+   d="scan'208";a="28762656"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2026 04:50:30 +0000
+Received: from EX19MTAUWB001.ant.amazon.com [205.251.233.104:30209]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.1.232:2525] with esmtp (Farcaster)
+ id f7103714-67e9-45c2-bbf4-f7afe6d43e37; Fri, 18 Sep 2026 04:50:30 +0000 (UTC)
+X-Farcaster-Flow-ID: f7103714-67e9-45c2-bbf4-f7afe6d43e37
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.46;
+ Fri, 18 Sep 2026 04:50:29 +0000
+Received: from 6c7e67c92ceb.amazon.com (10.187.170.24) by
+ EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.46;
+ Fri, 18 Sep 2026 04:50:29 +0000
+From: Nathan Gao <zcgao@amazon.com>
+To: <edumazet@google.com>, <ncardwell@google.com>, <davem@davemloft.net>,
+	<kuba@kernel.org>, <pabeni@redhat.com>
+CC: <kuniyu@google.com>, <horms@kernel.org>, <shuah@kernel.org>,
+	<netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Nathan Gao <zcgao@amazon.com>
+Subject: [PATCH net-next] selftests/net: packetdrill: check rcv_ssthresh vs scaling_ratio changes
+Date: Thu, 17 Sep 2026 21:50:21 -0700
+Message-ID: <20260918045021.42138-1-zcgao@amazon.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <aqyIEE5bRoxRyrFZ@20HS2G4>
-X-Mailer: git-send-email 2.55.0.1082.g2b9226bbc0-goog
-Message-ID: <20260918042110.2581679-1-kuniyu@google.com>
-Subject: Re: [PATCH net-next v3 0/3] net: hash uncached route lists by device
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: carges@cloudflare.com
-Cc: davem@davemloft.net, dsahern@kernel.org, edumazet@google.com, 
-	horms@kernel.org, idosch@nvidia.com, kernel-team@cloudflare.com, 
-	kuba@kernel.org, kuniyu@google.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
-	shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D036UWB003.ant.amazon.com (10.13.139.172) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-From: Chris Arges <carges@cloudflare.com>
-Date: Thu, 17 Sep 2026 19:38:40 -0500
-> On 2026-09-17 22:10:22, Kuniyuki Iwashima wrote:
-> > From: Chris J Arges <carges@cloudflare.com>
-> > Date: Thu, 17 Sep 2026 14:38:21 -0500
-> > > We have observed hung tasks blocked on rtnl_mutex while network namespaces
-> > > were being removed. The namespaces contained many network devices, and the
-> > > host had accumulated a large population of entries on the global per-CPU
-> > > uncached route lists. A perf profile collected during one incident
-> > > attributed most of the cleanup worker's samples to rt_flush_dev():
-> > > 
-> > > ```
-> > > 99.92% kworker/u384:3-  worker_thread
-> > >   `-88.71% process_one_work
-> > >       `-81.02% cleanup_net
-> > >           `-81.00% unregister_netdevice_many_notify
-> > >               `-79.42% notifier_call_chain
-> > >                   `-78.05% fib_netdev_event
-> > >                       `-77.92% rt_flush_dev
-> > > ```
-> > > 
-> > > For each device, rt_flush_dev() visits every possible CPU and scans the
-> > > global uncached route population while its caller holds rtnl_mutex. If N is
-> > > the number of devices, C the number of possible CPUs, and R the number of
-> > > uncached routes, the cost is O(N * (C + R)).
-> > > 
-> > > During namespace cleanup, other processes that issue RTNETLINK operations
-> > > requiring the RTNL lock can stall until cleanup releases the lock.
-> > > 
-> > > A minimal reproducer is available here:
-> > > https://github.com/arges/linux-reproducers/tree/main/rtnl-flush-storm
-> > > 
-> > > This series replaces each per-CPU uncached route list with a hash table
-> > > using the network device as its key. Each table uses 64 buckets.
-> > 
-> > This sounds a bit overkill.  Also, this series still leaves
-> > O(N * C) loops.
-> > 
-> > Given unregistering a single device is less common than
-> > destroying netns, I think the right approach should be to
-> > make the route flush once in cleanup_net() + outside RTNL.
-> > 
-> > Could you try this change ? (only compile-tested)
-> > 
-> Excellent, I'll test this and report back.
+tcp_measure_rcv_mss() recomputes tp->scaling_ratio from
+skb->len/skb->truesize and updates tp->window_clamp accordingly. Commit
+f5da7c45188e ("tcp: adjust rcvq_space after updating scaling ratio")
+made that update go through tcp_set_window_clamp(), which also shrinks
+tp->rcv_ssthresh, so every scaling_ratio dip cut the advertised window
+as well. Commit 0e125ecfe20c ("tcp: do not change rcv_ssthresh in
+tcp_measure_rcv_mss()") restored the plain window_clamp update.
 
-I found a pre-existing issue, which affects the previous
-diff, so on top of it, please apply this patch
+Add a packetdrill test for it, as suggested during the review of that
+fix. A fixed SO_RCVBUF pins sk_rcvbuf, so window_clamp can only move
+when scaling_ratio does, and the peer announces TCP_MIN_MSS so that
+icsk_ack.rcv_mss sits at its 88 byte floor. A single 89 byte segment is
+then measured, and 89 bytes of payload in a ~900 byte skb is far below
+the 50% that TCP_DEFAULT_SCALING_RATIO assumes, so scaling_ratio and
+window_clamp drop sharply. Nothing puts the socket under memory
+pressure, so rcv_ssthresh must not move at all.
 
-  https://lore.kernel.org/netdev/20260918041439.2575935-1-kuniyu@google.com/T/#u
+The test checks the state it depends on instead of assuming it.
+tcp_measure_rcv_mss() only measures segments of at least rcv_mss bytes,
+so rcv_mss is checked to be 88 before the segment is sent. It is checked
+to be 89 afterwards, because rcv_mss is only updated by the same code
+that recomputes scaling_ratio, so this proves the segment was measured.
+rcv_ssthresh is compared against the value it had right after the
+handshake, not against a fixed number, so the test does not depend on
+the receive buffer size or on how the architecture accounts skb memory.
 
-and this diff :
+Verified on net-next, where it passes for ipv4, ipv6 and
+ipv4-mapped-ipv6, and on the same tree with the fix reverted, where it
+fails in all three modes with rcv_ssthresh cut from 260684 to 51200.
 
----8<---
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index d35b66b33bbc..c12e20e07749 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -1567,12 +1567,13 @@ void rt_add_uncached_list(struct rtable *rt)
- {
- 	struct uncached_list *ul = raw_cpu_ptr(&rt_uncached_list);
- 
-+	rt->dst.rt_uncached_list = ul;
+Signed-off-by: Nathan Gao <zcgao@amazon.com>
+---
+ .../tcp_rcv_ssthresh_scaling_ratio.pkt        | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_rcv_ssthresh_scaling_ratio.pkt
+
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_rcv_ssthresh_scaling_ratio.pkt b/tools/testing/selftests/net/packetdrill/tcp_rcv_ssthresh_scaling_ratio.pkt
+new file mode 100644
+index 0000000000000..f99ecb8a224f7
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_rcv_ssthresh_scaling_ratio.pkt
+@@ -0,0 +1,46 @@
++// SPDX-License-Identifier: GPL-2.0
++// tcp_measure_rcv_mss() lowers tp->window_clamp when a segment carries less
++// payload per byte of memory than the ratio it had assumed. Test that it does
++// not lower tp->rcv_ssthresh as well: rcv_ssthresh is cut back under
++// memory pressure, and it only grows back slowly, through tcp_grow_window().
 +
- 	spin_lock_bh(&ul->lock);
- 
- 	if (!check_net(dst_dev_net_rcu(&rt->dst))) {
- 		rt_replace_uncached_list(rt);
- 	} else {
--		rt->dst.rt_uncached_list = ul;
- 		list_add_tail(&rt->dst.rt_uncached, &ul->head);
- 	}
- 
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index 6cffe8440b44..f22793abbbb8 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -155,12 +155,13 @@ void rt6_uncached_list_add(struct rt6_info *rt)
- {
- 	struct uncached_list *ul = raw_cpu_ptr(&rt6_uncached_list);
- 
-+	rt->dst.rt_uncached_list = ul;
++--mss=1000
 +
- 	spin_lock_bh(&ul->lock);
- 
- 	if (!check_net(dst_dev_net_rcu(&rt->dst))) {
- 		rt6_uncached_list_replace(rt);
- 	} else {
--		rt->dst.rt_uncached_list = ul;
- 		list_add_tail(&rt->dst.rt_uncached, &ul->head);
- 	}
- 
----8<---
++`./defaults.sh`
++
++// A fixed SO_RCVBUF keeps sk_rcvbuf from moving, so window_clamp can only
++// change when the ratio does. The MSS of 88 (TCP_MIN_MSS) is the smallest
++// segment size TCP will measure, and window scaling lets rcv_ssthresh start
++// well above 64 KB. The window the peer announces does not matter here, this
++// side never sends data.
++   +0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 setsockopt(3, SOL_SOCKET, SO_RCVBUF, [262144], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
++
++   +0 < S 0:0(0) win 65535 <mss 88,nop,nop,sackOK,nop,wscale 7>
++   +0 > S. 0:0(0) ack 1 <...>
++  +.1 < . 1:1(0) ack 1 win 65535
++
++   +0 accept(3, ..., ...) = 4
++
++// Only segments of at least rcv_mss bytes are measured. Note it down, along
++// with the rcv_ssthresh the connection starts with.
++   +0 %{
++assert tcpi_rcv_mss == 88, tcpi_rcv_mss
++ssthresh_0 = tcpi_rcv_ssthresh
++}%
++
++// One segment, one byte above that threshold. 89 bytes of payload sit in an
++// skb of about 900 bytes, far below the 50% ratio TCP assumes by default, so
++// window_clamp drops sharply.
++   +0 < P. 1:90(89) ack 1 win 65535
++   +0 > . 1:1(0) ack 90
++
++// rcv_mss is only updated by the code that recomputes the ratio, so 89 here
++// means the segment was measured. rcv_ssthresh must have been left alone.
++   +0 %{
++assert tcpi_rcv_mss == 89, tcpi_rcv_mss
++assert tcpi_rcv_ssthresh >= ssthresh_0, (tcpi_rcv_ssthresh, ssthresh_0)
++}%
 
-Thanks !
+base-commit: 4982d3552a3bf94de503acf93433277d08421de6
+-- 
+2.50.1
+
