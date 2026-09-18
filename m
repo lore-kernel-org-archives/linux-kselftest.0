@@ -1,70 +1,70 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9466348C5D
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 21:47:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625B4525A9E
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 21:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789768031; cv=none; b=E3UuRbfNfvkDcr+BoPXndMMOfZeh5XCFgZ9f5MWBcyaVZQxJzer+X86CwZCFc0C51CfOWj2EfbL6GMLGW4uV72Hcu0Avt3sIZpU5IvnbEDIklOSV2CvkLBXwOzNsXWmkPo1am8BIIBE+vheY1M7sNICL/Z0iLTb3MQt8/+xhAww=
+	t=1789768247; cv=none; b=uDOAepElhYpuWnRBbXI8Fgobb+V4pV7AnQLdBll6hk1n3ZYBPmLLhWT1/Rh1zSBsnhFBXzlLjO0v/5PSOk/BeHUa2eQ0/GYxC/kcyHHsXxR9s6qxnLVUitIwPkV3g26ae8phdnzxgfg/n4p0J2pojVq9SG5RuTJQWxY/TFfRApc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789768031; c=relaxed/simple;
-	bh=3f7g3bR00ng/Tc3oO4+2cJdqY2qayCdHr7YSAaWNT/s=;
+	s=arc-20240116; t=1789768247; c=relaxed/simple;
+	bh=8lFK5oAIN3UPCIPodD7oNRYoewM6xA0f85WZD5FvR4o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DKAWN/mC5IZAaZSqfQfhBN4h2L52GAUJ+Rks1HDUXESGAlrQJNG6s0RUQBVJ44RzKlKo5GxKIvOZgKbPyoWSdG9ab21IGKvv1mJBr0GJZc7lznKU4yfQNeXpqEdyLS9llqAf2xHKHVgzktEQHeTONbQqR3eH2cgGOam8Wk+0y0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SOVcWlF8; arc=none smtp.client-ip=74.125.225.76
+	 In-Reply-To:Content-Type; b=ixNOiZH9lzLdimSUDtFLwbeRZ/0zWJbJIbshqdZSZOXTVYwQRqzmdsQnM1kpeFKetjRXXLuRCpQl0Tw0KUQeVoeNGkyE4hw8xrz8cqJNOtByFthZsZDGOE/Me3QYO0NGIYXz8ouNnMHqUGvInaSELCu+344SXXMLLv2Ly3t9Kh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JznJLopL; arc=none smtp.client-ip=74.125.225.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SOVcWlF8"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4843af75de5so126773f8f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 14:47:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JznJLopL"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e7c6dbc60so884525e9.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 14:50:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789768028; x=1790372828; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789768245; x=1790373045; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=4kF3kCqnenPmPclF7uOFxJbCVONn+n/x6kt5/bRZ8cs=;
-        b=SOVcWlF8uxRJsPnebPFJtLFtAhcltlnRWIw7bvdxhl9WGnecGh42Hf563JX4x+zGG6
-         RV95aig81LDU5I6H5agskz2dSOGMdd6/tOhQriNOWmQJgmKznM7WW+nQRHkwgVxQY0QX
-         4GsWpg7W6HeRj6Lkdg3AjsWMc9d7MstVE8ehsrbVzioaNPSXy3ftwAc+mlDHpJTqkqv0
-         sJ405U6Zxy/FLtBufDFwsKfajRAMlBjqbalgXbw8zNh1UHrPUW56PEtgbICxBJoYP5MK
-         uOiR2hcO0uK9b9zqqU6Qt/XbjSCz3izGJByY7c7WbOqqmCAFhX5c+B5H09oxBt/PAk9U
-         dZSQ==
+        bh=hRu9WFQ43wFkJswy5poP93mM4ID1VlyzM9+cjmFxTAM=;
+        b=JznJLopLmD1v/ZNdN8N+DlCoAhGbI5VlSDgtdYbUSi/ed3pUnb60RXKH+wbzTKBSp9
+         Dh4Y/bYQWa9s20a/p8R1j6ungz14eTurX+GKkzIOQ2VKgcwNCfAijgaZs/dANfhycJs9
+         0rvc95ZHQ9mZXfoQmVV9ONx9VaQMphxym0kCg4Ef4qYZP7GCMu0qK/Tu0nzy8wlnYHn9
+         Mj+1xFJ4+kdFCd1YWcA34X5VspQ8A7j+PlpVtwwgk0kNeZt0nRF3Ix1ERmORTLRDc30k
+         deM8UNHB8R+U+5kIhjqP1lhS5CfwK5AO9OH3fCThNdLBkHfYvnQEoCNjVn+TMZYifKMJ
+         +IOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789768028; x=1790372828;
+        d=1e100.net; s=20260707; t=1789768245; x=1790373045;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=4kF3kCqnenPmPclF7uOFxJbCVONn+n/x6kt5/bRZ8cs=;
-        b=X3bri1m2abcrYTJFWBMQkuQ7J+HpGkR/NBmaPirOMq9hZMvsCeeRSD7ZO0lO16IQ7E
-         bUpSU42dAJFdVpIb4W8z8DZhSPQ1cO2kFMKpjmSd2zrpusqnzazInBJgtIqmHOU9CjnZ
-         QeLxT/RsGyAFdI0+7XNKyI/7Au6YPseR0e5aVmLICs/wc1Z94V6h9q0Yn+DUrbY29g/0
-         P2LAirpwbgsZmaLf7biwusjwBEewYFKR3ymh7W/m5FhKVMwe3e8EIl4jy7ZnoiS0al5k
-         yxzCdlEor6dGQjSc2KQ+Up20C8fcl6Xa8FgHXgi0S+ha8bz3JZZtB9Xn1tuzcZ0bPR5s
-         oeHg==
-X-Forwarded-Encrypted: i=1; AKwUvBx5XnZQpDHW7Bd1lwIVDwzYG4lyznV23ePkDaQMkHySfYTHvhOynINljKTdoKhyyxC1/Y1IT+4b1dxm7po/+4g=@vger.kernel.org
-X-Gm-Message-State: AFuF++kWDsYU+t4OxenB/VvUtfhTpA9BMjXNs75pc3ExvxUMWEzgCUOM
-	hYuwTGFwnjydpK7GpSkp/g94DgFcT89tqPCXIYLwWPu282LZ7FZCAYhJ
-X-Gm-Gg: AYBFou0uRpQS9igpQ/ewHuqyhmUMjKXEGVmurse0J2ULUdS7n9gbBpm28XQDc81ZFZ9
-	AVTTUa54Kaz4G2ESw7n13bdgiqsQqp0up7rFu8dhVPuCbQSEnHSWi4tSGPpMC0dANx13wRzQWTC
-	vn3WyMiTIoiqHvwiI0xx/I9MztgGw0Kei3q72Notsk01GaDeUJhtfLmg4uVrsJKKWp+R4eavmDU
-	BQ/NYMMX07Io75X60+SiNetMBEWzxjQ7QiRgz79c9PwBwBW0oOrGieg6Bwx5f3Wmb5R+u59AjVS
-	Hm4+N6qlF6XOkLzn4ln3AOVxuR2jpAitBGSoDSZseJ+m44uRb857s2HnimPrUCGrlhPymuVsAq0
-	VvqKLk333xBgAhYHmNfNA+6uWqs1jQGwFUEfP7hR5XRwezYO0b0OksanKtjllr2tYZXWyCDqCnG
-	+PfGaVr3ELpPqUw8S8Ty36egNGp07AqfX5IfaWEucbrqHYHZPGEAn6ntYOvMUdGSfVjwkolQoR+
-	sLpsMhp8/+3A2B/elZQMGcswguymATC0PZXAFYxB/20Wks1o7syTRfaYnscyIWi0kvxrKi3bXSe
-	xhNp5Z9KXIEHL+K/0nThdkYjAs+K3FMPRzzf/ZVmQS7hDBYa22ec+cKAP5sa/uJmS0C87jkT8OW
-	wG62W/qbJz6b/5s8NZQ==
-X-Received: by 2002:a05:600c:3b99:b0:49e:6683:d227 with SMTP id 5b1f17b1804b1-49fc7bbfe4bmr50760085e9.0.1789768027874;
-        Fri, 18 Sep 2026 14:47:07 -0700 (PDT)
+        bh=hRu9WFQ43wFkJswy5poP93mM4ID1VlyzM9+cjmFxTAM=;
+        b=Yl4zijR1JNyULaqLx8A0wbRoojQwMzqd4rlgvE+CzDQ+SYsMzhOPPbzrarFQtfi6SD
+         CDhd9sQ4nJQ/AEV2r1LwVvM3ig8KdmdHazP23gX0toQ9Dd9PrmdFwvjsk5z74pbwFQdT
+         i/XQgav0zjmKlX8bmTpoRnEnVrwob968ypwFBO2btZOnfBnz1qX5W27Tc+0KNGgZtcPB
+         QCla3SEdHVs3Z31XDK/5vpDBIUd4HrSxbeov4vn97Kq6XOwzk2YT5iAkMEj16jaNddN3
+         NrfDxJoKDgXOxmoKTfTqbJCV8CqmwLlGEiCC6MoCCauV1UxOnRlFcHa5JfiCcyb/YkR7
+         nI/w==
+X-Forwarded-Encrypted: i=1; AKwUvBzXI8fWtcJA0uOMBRB6ABxRof3YkWKQOMYPtFfG6rggZiB7RArBV1cefTrccKZeZyI4g0bCfOqsJGdnit2cFbk=@vger.kernel.org
+X-Gm-Message-State: AFuF++mOg0D8iD7Ij2ubPQOL9IvOhN3fXHYxvYv/GwYZsMfxIGsMEYal
+	3S47nHyYOaSgHPlSYr3YNF/b43aAqO36UB5lu4sNOtp5axeIbq7Brj3w
+X-Gm-Gg: AYBFou39T9ahPa9hsnGdjRNrK4xUaAl2yd5jGpZ+Br5Ag2xn4grnbPxq1920kiY0DL8
+	x715eLPzLH3LViBznziuBK6lekbclX/drpLnWFsXc5w1Bng9bb2hRguJe8ZFhVcNqx/Yqmtto2R
+	eBw3/z5E7c+EroVKXVmyY93KrozyIFp0dTssIr5PhJ6M4xesjCGmRrH89J/wpFYsyUSgokvGSh0
+	oj1NHfs38Cmq/zRdwp1pEDI1ZRZXtMjs7TNNRgh2dUB82XCDJh6BPSiCoJOMgXz6InK9JA03eEL
+	p+KxntMXFccJAw23LIzKeuURgOomFDIHWR4mJQrNZ9LZmljKHrHkppY2OQIUPY2lgyfoz0IICKi
+	aTviADHigFSgvHgUVHD9+Ag8gY4T+TQ545iBvU9K4Bd8hmpPOPz42rvWu/fYaSixgevomgMfrMg
+	IUmfdIlnQAxyB4M+3LMYuwSFo/Bpn2v5MQqa1Ws4w/hn3PabsRI+X/TELnviHLZwJZXHfNprsB+
+	gOlPZ4sr0JKcRsTroWRSI1kmv8LCilqVTvGFhdr/4Va/fSuYTlbJEsjGTscSg2Y/XSdOIyUtZnT
+	KwGTgk/iuN45kqw76H5ILNe8FrZVB2cC6tziiVbXlPWDkw54kItGIvYnYTeYRbIjw0TcDe1tLKr
+	ZOtCqw2vHwZJdzssA9Q==
+X-Received: by 2002:a05:600c:35c2:b0:49d:1da4:511b with SMTP id 5b1f17b1804b1-49fc7dd94c0mr46884445e9.1.1789768244519;
+        Fri, 18 Sep 2026 14:50:44 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:59ae:19fc:400:b6b0:efdd:810c? (dynamic-2a02-3100-59ae-19fc-0400-b6b0-efdd-810c.310.pool.telefonica.de. [2a02:3100:59ae:19fc:400:b6b0:efdd:810c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fcd086ce9sm33996685e9.12.2026.09.18.14.47.06
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fcd1149e0sm20470715e9.13.2026.09.18.14.50.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Sep 2026 14:47:07 -0700 (PDT)
-Message-ID: <d1aad031-6670-44ae-84d4-dc02ec23ba8f@gmail.com>
-Date: Fri, 18 Sep 2026 23:47:06 +0200
+        Fri, 18 Sep 2026 14:50:43 -0700 (PDT)
+Message-ID: <f36f2ae7-9c48-4663-b3ba-7eb45c0bb977@gmail.com>
+Date: Fri, 18 Sep 2026 23:50:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,16 +72,16 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v3 1/3] net: hsr: privatize interlink-bound skbs
- before address mutation
+Subject: Re: [PATCH net v3 2/3] net: hsr: return private clones from the
+ tagged-frame helpers
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: davem@davemloft.net, pabeni@redhat.com, edumazet@google.com,
  horms@kernel.org, shuah@kernel.org, lukma@denx.de, m-karicheri2@ti.com,
  fmaurer@redhat.com, luka.gejak@linux.dev, bigeasy@linutronix.de,
  ali@iusegentoo.com, qingfang.deng@linux.dev, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-References: <20260808004525.1551-2-xiexinet@gmail.com>
- <20260814012736.2805965-1-kuba@kernel.org>
+References: <20260808004525.1551-3-xiexinet@gmail.com>
+ <20260814012738.2806035-1-kuba@kernel.org>
 Content-Language: en-GB
 From: Xin Xie <xiexinet@gmail.com>
 Autocrypt: addr=xiexinet@gmail.com; keydata=
@@ -118,29 +118,25 @@ Autocrypt: addr=xiexinet@gmail.com; keydata=
  +ZmcHnCzsuo6uuNYX8VvmWqYsVajykjnpjdCGmU89QUsVmrtnDPBrfr8VVJcZPnCJhE595Pk
  LO29Oj0au9kr7kMW5Q+fBeHj5zz6VggAaRRU74/sgtwLODBWESPZ9LqUUdB5L/XbrSq2VDlD
  sNySbH3veZ/55EtlXA==
-In-Reply-To: <20260814012736.2805965-1-kuba@kernel.org>
+In-Reply-To: <20260814012738.2806035-1-kuba@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 14/08/2026 03:27, Jakub Kicinski wrote:
-> [Severity: Medium]
-> Is the enumeration in this comment complete?  The unconditional interlink
-> source-address rewrite is pre-existing and was not introduced by this
-> patch, but the new guard and the commit message claim ("Other interlink
-> traffic keeps its zero-copy behavior") assert that the uncovered cases are
-> safe, and there looks to be one that isn't.
+> [Severity: High]
+> This isn't a bug introduced by this patch, but should the sibling
+> get_untagged_frame() callbacks be privatized the same way?
 > ... 
-> Since skb_cow(skb, 0) is a no-op for a non-cloned skb (__skb_cow() only
-> calls pskb_expand_head() when skb_cloned() or extra headroom is needed),
-> could the call be keyed on the actual sharing state, or simply made
-> unconditional for HSR_PT_INTERLINK, instead of on the topology predicate?
-Correct, the enumeration is incomplete. For TAG_RM ingress retained
-in frame->skb_std, a queued packet-socket clone can still share its data
-even when the frame is not locally destined. The interlink source rewrite
-can then change that clone.
+> One more consumer of the same bytes: an AF_PACKET listener on the slave
+> device gets its clone in packet_rcv() before hsr_handle_frame() runs, so
+> does it also observe the rewritten h_source?
+Yes. Master delivery can rewrite frame->skb_std through its clone before
+the later slave copies it. When the learned A and B addresses differ,
+that copy preserves the substituted address rather than the original
+source. An earlier packet-socket clone can also be affected.
 
-I'll remove the topology-based assumption when revising the COW handling
-for v4.
+I'll compare private untagged returns with COW at the writers before
+settling the v4 ownership changes.
 
 -- 
 Xin
