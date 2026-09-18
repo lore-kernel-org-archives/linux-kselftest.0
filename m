@@ -1,127 +1,106 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2669650255F;
-	Fri, 18 Sep 2026 17:24:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15A97437852
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 17:51:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789752306; cv=none; b=YCIP53VXhWJFRycHKwcXg6gjNtYHvNoVICEXoHJqC0gJ14OJwemPC7p0GB6SrgljHhlBUXVxXKvSpg80zaeRAfNGtoWmXxO8cQGzGdhN2f4Q7d3fSpZV35OjEAxq+jKKtzTepFI/VACoEF64GRiZoGNkg2VBQzCQXIGJpGSJBnk=
+	t=1789753871; cv=none; b=aQ8wv6fH4XJ3fJVvdBoBjBqOyDyLlMr6k9qqJGc/c/6gmzgBZ63U+YjxepdWjezJGYkmydV8IUJrWYY2JS/pmZuoZVBGDps9ZqMuNg8u0CwGB5adBJpJqA5NOS9zhLjltFbDOKWYVmNGjmu99qpPlkf2gHK5Wii2v0CGk0+xsJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789752306; c=relaxed/simple;
-	bh=LaO+SqfW2deYM/scbJpdFmumIN9PsPB68r8/lRl4k94=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qy/gvLwFcGdWLMTjF9XbRu+80Nw39mN0fuchuloPm766OLGjHjoatIvSHWazG7YF70s+L8/GopUjDvoimOk+yMHcBPww6vSXp94YWx/YFsUE0uMCkiI7SlMlxUpra4devDgpquAysI8R++g1AoakJdEorUidKrysipBBarcPHdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=QYYah+fV; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1789753871; c=relaxed/simple;
+	bh=AGC23GphtnXjMJTjuZKvIzgHBrkaAvob99EdJZgn52k=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=t3iPkeRV0k9+FY91MJd7HHKPWXoAEa8pfrHffgCB7YP/qigvTao5bRH2JL46W/ARw82FdGxK5RPGxE8Zo1fBs+ZDhnDfOAIhlYguQ15f22C2Cl5kL7o5d3+MTBQCFD7r/XzQSk7PwMmWMlQ9B+qijkgKsTPnsQhKzgbYdYvtbvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i3KUVXPY; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="QYYah+fV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Ti
-	9A+/UoRybWlQcIRPQ3w4tKAGiqMm7blYW1NdiCiEc=; b=QYYah+fVudniydHECO
-	JIqm6UwIWfMPUPWHzmCh6CHxYeMhilNsZTBYjkWRdOP2T/NjDzMxpCyYr4by5uT2
-	Oyjb27Em2F5w0F2QvrqOzDy8FuXoiLg95X0TIAU6aZwinZkyVG3xjEetwkXyAjQw
-	0WoFW+hPQOpk/iTmPe5l752B0=
-Received: from localhost (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wCnLZG5c61qRycvBQ--.1403S2;
-	Sat, 19 Sep 2026 01:24:10 +0800 (CST)
-From: Hui Su <sh_def@163.com>
-To: bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>,
-	Quentin Monnet <qmo@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hui Su <sh_def@163.com>
-Subject: [PATCH bpf 1/3] bpf: Report BPF_F_PREORDER in cgroup program queries
-Date: Sat, 19 Sep 2026 02:24:05 +0900
-Message-ID: <20260918172407.3459188-2-sh_def@163.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260918172407.3459188-1-sh_def@163.com>
-References: <20260918172407.3459188-1-sh_def@163.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i3KUVXPY"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747eb79f7so7658395ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 10:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789753862; x=1790358662; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=AGC23GphtnXjMJTjuZKvIzgHBrkaAvob99EdJZgn52k=;
+        b=i3KUVXPYLIZpzT+21K9/Hq6wcnP49yNOkGgWwXXwIl0JkdDPRDudjBXqR/jvmZPalG
+         oKXnZRsxGwH6kztgjV4qGANk8YALBTta3ZWTJ0/mI/6izHp24mBNlEGTpqmH+AlIGdUh
+         U+1UMeE6GAbHC60YPU5nwK/XPl6wctyTHXml7lZLKd71dmrJsqE7rk56RKxKL+VyHUy3
+         APDAXBwr8VxxUNXAgiJ8jtzvETC+ud8Bj4pF+l6T8PWPzdq4PXQTsPCA/R//e6lyNOcM
+         DnGMRHIYnCQOQGvZlyuQfUh1fMXfHNmfdhIvgLUTJpkeddntSkXZ/qrpv0SIDGLXzsGW
+         nNWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789753862; x=1790358662;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=AGC23GphtnXjMJTjuZKvIzgHBrkaAvob99EdJZgn52k=;
+        b=QowBiRaaC0Xu6xQyvwTs6VjyGTYejZXE6ZME1yZddjvWTD0hD/B5rzmMSOAvX3bTVs
+         kSUkWsotJ0z4hvW/Hm3EICWK8ZbYKdMDEpdcgXRHXYsDs8O83Sn3abjUOIRCo7yeOols
+         PgIm8xLfB0v4M6bscbBAQH+LgiUKsSXyfbZV8QUJsCyFTDmlT9iCHzhUomNspWxNcH1o
+         KXLMJ9POzuxT4jpr69v848GjgSnkIK2tICpVbW0+JEJkoDM8uWsfFIvVIVwGXdKKWkes
+         FnwSzdkekjH+pRWdflclOepvvz7nAkRvXjZ7tY/Qs9P8p/WhVcTIRGANOufuitf8Ex/F
+         MZDg==
+X-Forwarded-Encrypted: i=1; AKwUvBwrgkoB21lQrf/Djd+kLNgqVnhuQMt6qZ6+Wyh11gBGp7gEqJt0IlhpQHS6MRCg94+wk8V/X0/L4eYjeorGK5A=@vger.kernel.org
+X-Gm-Message-State: AFuF++kvdiyqRogIkvfqC43nZhfk6gv1dtkLu2q9rIv7HijG4QY+zget
+	b2hcMkhlnDziOQeeh2yDcXzYd4swjF5jbbaa7YrKLlHacraPpIhRrkwh
+X-Gm-Gg: AYBFou0YqpkpCZ7b+iKB+mTOj3FC+IEws9cmFLYTj2t9xDwCp0j39EUr79fFsi4NXkr
+	bYhsbbbn8eDlH1P+l8ZjUlS1yzX+93l5alkEm9F4NoRRIy55faLzgb6XXASO7phUd5+APgbdOwP
+	JnghHd1DBLzMCg81MQLEBBnENg8meHBqi5gwroJ/qFFJb28hyjfn2SyU1d3bBjxWzhpD3IqCpJV
+	fMaqro8xTaSxNbzMRbJm88JfytIDZyOBJtYLenXqkmlJvJrQbLq5CXumMLi+45yAZA90MoiGD2J
+	YD5KOCn1mY9EVRpSRKVJs3VA8pQXJGVp6JwLfO8/Ic7rQ8sM3fCbdsng64BTatI7a4SdvjuQErd
+	K3j+QwvWH2oS9Y04W0tU6sN7F82rmW0owod05o//ZkizuMonCLjD/CrOb/Ll9dlkVHlx91jY+pn
+	53cncVw5gH7+w+K0AHlWxsLl4kLx+Ege8ae+knOOHbQNZGOuYk5Wme6VwiQHTym68dFKB4qi/Rr
+	OfCwCA3B60ran1juzJJZ5zXXuUrM32bokiZD+0uWuLnxdBc3bVVyRZNx1yr8T1m7ftlBMzkpfAp
+	Ks7M
+X-Received: by 2002:a17:903:2990:b0:2dd:c053:82f5 with SMTP id d9443c01a7336-2ddc0538431mr8558415ad.44.1789753862316;
+        Fri, 18 Sep 2026 10:51:02 -0700 (PDT)
+Received: from localhost ([153.61.198.240])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ddc17ba719sm421205ad.56.2026.09.18.10.51.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Sep 2026 10:51:01 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 18 Sep 2026 17:51:01 +0000
+Message-Id: <DLIMSLBJKPTP.30HFFHKGPF2R@gmail.com>
+Cc: "Yonghong Song" <yonghong.song@linux.dev>, "Quentin Monnet"
+ <qmo@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Jiri Olsa" <jolsa@kernel.org>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Shuah
+ Khan" <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf 1/3] bpf: Report BPF_F_PREORDER in cgroup program
+ queries
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Hui Su" <sh_def@163.com>, <bpf@vger.kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>
+In-Reply-To: <20260918172407.3459188-2-sh_def@163.com>
+References: <20260918172407.3459188-1-sh_def@163.com> <20260918172407.3459188-2-sh_def@163.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCnLZG5c61qRycvBQ--.1403S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tr1rXr17uF1rJFyxZrWxtFb_yoW8uFWfpF
-	4kXFy7Wa1qvr12qanFv3yrXFW8Kwn3XF4UCFZxJw1rCFW3Wr1IyryIkFWYvFy5ArZFyr10
-	yF90vrn0gF1DZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zioq2tUUUUU=
-X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbCwRoRcGqtc7pTUwAA30
 
-Commit 4b82b181a26c ("bpf: Allow pre-ordering for bpf cgroup progs")
-introduced BPF_F_PREORDER to request pre-order execution across the
-cgroup hierarchy, altering the effective prog array ordering.
+On Sat, Sep 19, 2026 at 02:24 AM Hui Su <sh_def@163.com> wrote:
+> As a result, user space tools and query callers cannot distinguish
+> pre-ordered programs from standard multi-prog attachments via
+> BPF_PROG_QUERY.
 
-While pl->flags stores BPF_F_PREORDER for each attached program,
-__cgroup_bpf_query() currently fails to report it. When querying
-attached programs (!effective_query), __cgroup_bpf_query() fills
-prog_attach_flags[] with cgrp->bpf.flags[atype] for all entries,
-omitting the per-program BPF_F_PREORDER attribute.
+[...]
 
-As a result, user space tools and query callers cannot distinguish
-pre-ordered programs from standard multi-prog attachments via
-BPF_PROG_QUERY.
+> Fixes: 4b82b181a26c ("bpf: Allow pre-ordering for bpf cgroup progs")
 
-Fix this by merging (pl->flags & BPF_F_PREORDER) with the cgroup-wide
-flags when copying prog_attach_flags to user space. Only BPF_F_PREORDER
-is extracted from pl->flags to ensure transient positioning flags (such
-as BPF_F_BEFORE, BPF_F_AFTER, BPF_F_ID, or BPF_F_REPLACE) are not
-leaked to user space. Also perform both ID and attach flags copies
-within the same hlist iteration.
+That's not a fix. Nothing is broken.
+The patch changes what BPF_PROG_QUERY returns to user space and
+existing bpftool will start printing "unknown(42)" for such progs.
+That shouldn't go to stable.
+Drop the Fixes tag and resend the series for bpf-next.
 
-Fixes: 4b82b181a26c ("bpf: Allow pre-ordering for bpf cgroup progs")
-Signed-off-by: Hui Su <sh_def@163.com>
----
- kernel/bpf/cgroup.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 149672c76c49..e7c7efa1baa7 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1353,19 +1353,19 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
- 				id = prog->aux->id;
- 				if (copy_to_user(prog_ids + i, &id, sizeof(id)))
- 					return -EFAULT;
-+				if (prog_attach_flags) {
-+					flags = cgrp->bpf.flags[atype] |
-+						(pl->flags & BPF_F_PREORDER);
-+					if (copy_to_user(prog_attach_flags + i,
-+							 &flags, sizeof(flags)))
-+						return -EFAULT;
-+				}
- 				if (++i == cnt)
- 					break;
- 			}
- 
--			if (prog_attach_flags) {
--				flags = cgrp->bpf.flags[atype];
--
--				for (i = 0; i < cnt; i++)
--					if (copy_to_user(prog_attach_flags + i,
--							 &flags, sizeof(flags)))
--						return -EFAULT;
-+			if (prog_attach_flags)
- 				prog_attach_flags += cnt;
--			}
- 		}
- 
- 		prog_ids += cnt;
--- 
-2.55.0
-
+pw-bot: cr
