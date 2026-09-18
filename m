@@ -1,154 +1,320 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AECA03FCB3D;
-	Fri, 18 Sep 2026 09:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA0D4B2034;
+	Fri, 18 Sep 2026 10:26:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789725100; cv=none; b=QiLsrMnuK+zgaSk17pS92T8NjORolLjfLanzosjixmAJ59rnmUYll6cp/u/uUHpmZeR9InpLTKgCjDBoXFtKqd8MdQXJZFjBmtzOCVnR+zT1KhXr8Ei1JXwSs+N0oLWWx7Tv6ir729VWF9MIjiVCLFVbqRNYJ71uyM/RIVuHhWM=
+	t=1789727175; cv=none; b=FTNktXZAPp5i8f9jEnAWIsYb8804G7bs4+DYTij/ujlx40VoGSG0QgIDupu9Costiliv7RE7tnujJP989xyGyQ+toFrtgA8jgtP7Twr3ddt2w03aBHgwPYzE5YefZD9wcCXcbN5D+SYJVFtjMbLVZ3RsdryZXDGqeHf9A5kLM5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789725100; c=relaxed/simple;
-	bh=Ap44lbM4H0d5i6d9TTif8rcALcODXGrK6BA7mAJhPR0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=SkwWTaNI9oudFQdpgXO99jNoAbyMjJ0MxjrcMmGAe+eOci6eBQbok5QzUWXGEW7SaJJwo45xYJhqEiipqRG69jOFCTTnb5qlv7WujpDa9mJRAHnHVaCu2je0sjyJBNo7SslofYtpfeMrjSHnD42BVr6BjN69XG5EPmcFXC2HPIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YjtpKzLD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789727175; c=relaxed/simple;
+	bh=loL0NiLAjp5iTAH9HPWhC5LPpDbWZJVSjszbtqpz5gE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=uiu4N3m66HVT1xt3w8GdPz0hCOMRIoixHvlNRyHZ8pdk8iDOYeT3BNy1SfV3BAxN0fSJe6HR4CQk08OEUJ/YEsDBHp+jXtChB0/66QA9vMKU75UU+Vebhf0n+0jQed/KVp71t8OfAVAE/eGh28k43uNc+rY3AKBJKWc2UxXa/VA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FYZ7Cejy; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=8r+vX8Dl; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YjtpKzLD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9008B1F000FF;
-	Fri, 18 Sep 2026 09:51:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789725098;
-	bh=pIeSjUP6pelSiOVn9QZc67xovoxMXQZc3F1Y0h1vU2Q=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=YjtpKzLDubYhkAosaf7zfaAOoLO/yyOjsazOlYBqOyb3ThMWK7PmM4dwudRUyR/Og
-	 LuGCF/SNG0hU2uzZlPi80kfnVfAqxRj2OfoJMsHtfAX+EgQCD/ffX3itxKoX2rDyu/
-	 c9OvSl7NBjICbo8NN3kfy0HqwiihXrGiW5wj5YaFP5BKKhdxI+BV5sSa7MYCqUQHS3
-	 5HO92sGfnhWwBF0qBdHfzQwQDBx3Zt/+KghZyPwSfHwdDC3MtNnQz/EmxG/7kNfRGS
-	 RE1DwUkD/IkB9UBabeUhLuVesVu1ts4JvVWxp50MJEBg6JrNJ1SPd7c2bEf7CQgjtl
-	 SKgPqMeKMvlLA==
-Content-Type: multipart/mixed; boundary="===============7454123760235835643=="
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FYZ7Cejy";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="8r+vX8Dl"
+Date: Fri, 18 Sep 2026 12:26:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1789727171;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+F6KanK2dKkgBQkaStorjsVXPxHRSnOFUadn46f10vk=;
+	b=FYZ7Cejy/zsiX0SVh/rv8cE+fYoJbjKdiV5vKePcCgI7EjStAYSIHQaZoTOgBnAkzemK9Z
+	KY2zfq6iiXEv4wDvDz7uCq/NQu6LpK55dk0jTX41AL74lU5jo6jka9PDeM6Ix1lHmKZGnF
+	ZUz08BDe78Y+QRhjDp+2oy9+0PPNOjn7Wv7k58QgLboI4s9hrY5NnNep8JzoAP3BqcDZKN
+	+HQkXmYwGAJD/m7UOFUqQRJvsCVwBFXCUczYHK0AGfdzVtiaLuwzCVN7ZATg8j/u8HLLYV
+	qEZ6eLUfAdY8aNq5wqssMEmAo0GMXj5JXBN2Nrbb60wfp6hYGGugSNzFIBc8uA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1789727171;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+F6KanK2dKkgBQkaStorjsVXPxHRSnOFUadn46f10vk=;
+	b=8r+vX8Dlqn7qsQOQB75tW5s7tzoz1xhwS0H0nxSeKz26tPx6v1hvvHxZDM8vGivzjTVZb6
+	mNcHfI3D/ob++uDw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>
+Subject: [PATCH v2 bpf-next] selftests/bpf: Use %p for pointer formatting
+Message-ID: <20260918102610.gxA3km8_@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <437383abef881a965c3ad04222c851a7958b9f5b931927d23b0514aa09db24ca@mail.kernel.org>
-In-Reply-To: <20260918084123.39477-2-jiayuan.chen@linux.dev>
-References: <20260918084123.39477-2-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf-next v8 1/3] bpf: arena: allocate the fault-in page outside the lock
-From: bot+bpf-ci@kernel.org
-To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,emil@etsalapatis.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,ihor.solodrai@linux.dev,shuah@kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 18 Sep 2026 09:51:37 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
---===============7454123760235835643==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Networking used to print the socket pointer with %p as output in the
+/proc interface. This was later changed to %pK in order not to reveal
+the actual pointer value. The output format has then been copied to bpf
+tests which produce the same format including the %pK format modifier.
 
-> arena_vm_fault() allocated the page while holding arena->spinlock, so it
-> could only use the non-blocking allocator, which never reclaims. Once the
-> memcg is at memory.max that allocation just fails, the fault turns into
-> VM_FAULT_SIGSEGV, and the process gets a SIGSEGV on a perfectly valid
-> arena address. Hitting memory.max is routine (e.g. page cache from
-> reading a big file), so this kills innocent processes over memory that
-> reclaim could have freed.
->
-> Rework the fault handler:
->
-> - Preallocate the page before taking the lock, like do_anonymous_page()
->   does, so it can sleep and reclaim, instead of turning a routine
->   memory.max into a fake segfault. The allocation uses
->   __GFP_RETRY_MAYFAIL so it never invokes the OOM killer: the page is
->   charged to the map's memcg, which need not be the faulting task's, so
->   an OOM there could kill unrelated tasks in the map's cgroup while a
->   foreign faulter could never be its victim. Like the other bpf map
->   allocators it places the page on the map's numa_node rather than
->   following the task's mempolicy; arena memory is shared, so the map's
->   node is the right placement policy.
+Networking recently replaced the socket output with a plain 0 because
+the socket pointer added no value to the output and the %pK should be
+removed from library handling. The format remained otherwise unchanged in
+order not to break any tools which parsing this information.
 
-This isn't a bug, but since arena_map_alloc() rejects BPF_F_NUMA_NODE,
-map->numa_node is always NUMA_NO_NODE here. Is the numa_node rationale in
-the changelog saying more than 'unchanged, still the local node'?
+This change removes the %pK modifier from bpf, following the change in
+networking.
 
-> - On allocation failure fall through to the locked recheck rather than
->   failing right away: a page a concurrent allocator installed meanwhile
->   is used, otherwise the non-blocking fallback fails and we return
->   VM_FAULT_SIGBUS. Not VM_FAULT_OOM: nothing ran the OOM killer, and the
->   fault path would just retry it forever.
->
-> - A lockless probe skips that preallocation when a page is already mapped
->   (e.g. allocated by the bpf program), so the common case wastes no
->   allocation. The rare race where such a page is freed before we take the
->   lock falls back to the non-blocking allocator under the lock.
->
-> - Return VM_FAULT_SIGBUS for the other non-recoverable errors (lock
->   failure, range-tree and page-table failures) instead of
->   VM_FAULT_SIGSEGV; only BPF_F_SEGV_ON_FAULT, and a scratch-page hole
->   under that flag, is a real user addressing error and keeps
->   VM_FAULT_SIGSEGV.
-
-Small changelog nit: the lock-failure path already returned VM_FAULT_SIGBUS
-before this patch -- would it be clearer to list only the range-tree/
-page-table/allocation failures as the ones changing from VM_FAULT_SIGSEGV?
-
-> - Tidy up the error labels.
->
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 7b6847200b431..2d0efc0232afd 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
-
-[ ... ]
-
-> @@ -489,59 +490,108 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
->  	kbase = bpf_arena_get_kern_vm_start(arena);
->  	kaddr = kbase + (u32)(vmf->address);
->
-> -	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
-> +	page = vmalloc_to_page((void *)kaddr);
-> +	if (!page && !(arena->map.map_flags & BPF_F_SEGV_ON_FAULT)) {
-> +		/*
-> +		 * Preallocate outside the lock so the allocation can sleep and
-> +		 * reclaim, which the non-blocking allocator under
-> +		 * arena->spinlock cannot. __GFP_RETRY_MAYFAIL: reclaim, but
-> +		 * never OOM-kill in the map's memcg, which need not be the
-> +		 * faulting task's. On failure, fallthrough: the locked
-> +		 * recheck below picks up a page a concurrent allocator may
-> +		 * have installed meanwhile, and otherwise the non-blocking
-> +		 * fallback fails and we return VM_FAULT_SIGBUS. Not
-> +		 * VM_FAULT_OOM: nothing ran the OOM killer, and the fault path
-> +		 * would just retry it forever.
-> +		 */
-> +		bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
-> +		new_page = alloc_pages_node(map->numa_node,
-> +					    GFP_KERNEL | __GFP_ZERO |
-> +					    __GFP_ACCOUNT | __GFP_NOWARN |
-> +					    __GFP_RETRY_MAYFAIL, 0);
-> +		bpf_map_memcg_exit(old_memcg, new_memcg);
-> +	}
-> +
-> +	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
->  		/*
->  		 * A failed lock means a possible deadlock was detected. Don't
->  		 * return VM_FAULT_RETRY: this handler never took mmap_lock, but
->  		 * the fault path would re-take it on retry and deadlock. Fail.
->  		 */
-> +		if (new_page)
-> +			free_pages_nolock(new_page, 0);
->  		return VM_FAULT_SIGBUS;
-> +	}
-
-[ ... ]
-
-
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+v1=E2=80=A6v2: https://lore.kernel.org/all/20260911145011.kErTVDkS@linutron=
+ix.de/
+  - sync dump_udp4(), dump_udp6() with net (0, spacing). The columns are
+    (were) not aligned.
+  - Update comment in snprintf.c
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35327041280
---===============7454123760235835643==--
+ tools/testing/selftests/bpf/README.rst               |  2 +-
+ tools/testing/selftests/bpf/prog_tests/snprintf.c    |  4 ++--
+ tools/testing/selftests/bpf/progs/bpf_iter_netlink.c |  4 ++--
+ tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c    | 11 +++++------
+ tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c    | 11 +++++------
+ tools/testing/selftests/bpf/progs/bpf_iter_udp4.c    |  4 ++--
+ tools/testing/selftests/bpf/progs/bpf_iter_udp6.c    |  4 ++--
+ tools/testing/selftests/bpf/progs/bpf_iter_unix.c    |  5 ++---
+ tools/testing/selftests/bpf/progs/test_snprintf.c    |  4 ++--
+ 9 files changed, 23 insertions(+), 26 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftes=
+ts/bpf/README.rst
+index 07c834433b388..75ff1142c1857 100644
+--- a/tools/testing/selftests/bpf/README.rst
++++ b/tools/testing/selftests/bpf/README.rst
+@@ -187,7 +187,7 @@ The symptom for ``bpf_iter/netlink`` looks like
+   ...
+   15: (bf) r2 =3D r7
+   16: (0f) r2 +=3D r1
+-  ; BPF_SEQ_PRINTF(seq, "%pK %-3d ", s, s->sk_protocol);
++  ; BPF_SEQ_PRINTF(seq, "%p %-3d ", s, s->sk_protocol);
+   17: (7b) *(u64 *)(r7 +0) =3D r2
+   only read is supported
+=20
+diff --git a/tools/testing/selftests/bpf/prog_tests/snprintf.c b/tools/test=
+ing/selftests/bpf/prog_tests/snprintf.c
+index 4e4a82d54f799..ccfb02bd4e7cd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/snprintf.c
++++ b/tools/testing/selftests/bpf/prog_tests/snprintf.c
+@@ -15,8 +15,8 @@
+ #define EXP_SYM_OUT  "schedule schedule+0x0/"
+ #define MIN_SYM_RET  sizeof(EXP_SYM_OUT)
+=20
+-/* The third specifier, %p, is a hashed pointer which changes on every reb=
+oot */
+-#define EXP_ADDR_OUT "0000000000000000 ffff00000add4e55 "
++/* The second specifier, %p, is a hashed pointer which changes on every re=
+boot */
++#define EXP_ADDR_OUT "ffff00000add4e55 "
+ #define EXP_ADDR_RET sizeof(EXP_ADDR_OUT "unknownhashedptr")
+=20
+ #define EXP_STR_OUT  "str1         a  b c      d e longstr"
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/tools/t=
+esting/selftests/bpf/progs/bpf_iter_netlink.c
+index 00b2ceae81fb0..b9107d3ab6039 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+@@ -25,12 +25,12 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
+ 		return 0;
+=20
+ 	if (ctx->meta->seq_num =3D=3D 0)
+-		BPF_SEQ_PRINTF(seq, "sk               Eth Pid        Groups   "
++		BPF_SEQ_PRINTF(seq, "sk Eth Pid        Groups   "
+ 				    "Rmem     Wmem     Dump  Locks    Drops    "
+ 				    "Inode\n");
+=20
+ 	s =3D &nlk->sk;
+-	BPF_SEQ_PRINTF(seq, "%pK %-3d ", s, s->sk_protocol);
++	BPF_SEQ_PRINTF(seq, "0  %-3d ", s->sk_protocol);
+=20
+ 	if (!nlk->groups)  {
+ 		group =3D 0;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c b/tools/test=
+ing/selftests/bpf/progs/bpf_iter_tcp4.c
+index b1e509b231cd9..d149cf0d07be6 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
+@@ -131,8 +131,7 @@ static int dump_tcp_sock(struct seq_file *seq, struct t=
+cp_sock *tp,
+ 		       icsk->icsk_probes_out,
+ 		       sock_i_ino(sp),
+ 		       sp->sk_refcnt.refs.counter);
+-	BPF_SEQ_PRINTF(seq, "%pK %lu %lu %u %u %d\n",
+-		       tp,
++	BPF_SEQ_PRINTF(seq, "0 %lu %lu %u %u %d\n",
+ 		       jiffies_to_clock_t(icsk->icsk_rto),
+ 		       jiffies_to_clock_t(icsk->icsk_ack.ato),
+ 		       (icsk->icsk_ack.quick << 1) | inet_csk_in_pingpong_mode(icsk),
+@@ -161,10 +160,10 @@ static int dump_tw_sock(struct seq_file *seq, struct =
+tcp_timewait_sock *ttw,
+ 	BPF_SEQ_PRINTF(seq, "%4d: %08X:%04X %08X:%04X ",
+ 		       seq_num, src, srcp, dest, destp);
+=20
+-	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n",
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
+ 		       tw->tw_substate, 0, 0,
+ 		       3, jiffies_delta_to_clock_t(delta), 0, 0, 0, 0,
+-		       tw->tw_refcnt.refs.counter, tw);
++		       tw->tw_refcnt.refs.counter);
+=20
+ 	return 0;
+ }
+@@ -185,9 +184,9 @@ static int dump_req_sock(struct seq_file *seq, struct t=
+cp_request_sock *treq,
+ 		       seq_num, irsk->ir_loc_addr,
+ 		       irsk->ir_num, irsk->ir_rmt_addr,
+ 		       bpf_ntohs(irsk->ir_rmt_port));
+-	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n",
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
+ 		       TCP_SYN_RECV, 0, 0, 1, jiffies_to_clock_t(ttd),
+-		       req->num_timeout, uid, 0, 0, 0, req);
++		       req->num_timeout, uid, 0, 0, 0);
+=20
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c b/tools/test=
+ing/selftests/bpf/progs/bpf_iter_tcp6.c
+index dbc7166aee91f..cd65fa81f1219 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c
+@@ -135,8 +135,7 @@ static int dump_tcp6_sock(struct seq_file *seq, struct =
+tcp6_sock *tp,
+ 		       icsk->icsk_probes_out,
+ 		       sock_i_ino(sp),
+ 		       sp->sk_refcnt.refs.counter);
+-	BPF_SEQ_PRINTF(seq, "%pK %lu %lu %u %u %d\n",
+-		       tp,
++	BPF_SEQ_PRINTF(seq, "0 %lu %lu %u %u %d\n",
+ 		       jiffies_to_clock_t(icsk->icsk_rto),
+ 		       jiffies_to_clock_t(icsk->icsk_ack.ato),
+ 		       (icsk->icsk_ack.quick << 1) | inet_csk_in_pingpong_mode(icsk),
+@@ -170,10 +169,10 @@ static int dump_tw_sock(struct seq_file *seq, struct =
+tcp_timewait_sock *ttw,
+ 		       dest->s6_addr32[0], dest->s6_addr32[1],
+ 		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
+=20
+-	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n",
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
+ 		       tw->tw_substate, 0, 0,
+ 		       3, jiffies_delta_to_clock_t(delta), 0, 0, 0, 0,
+-		       tw->tw_refcnt.refs.counter, tw);
++		       tw->tw_refcnt.refs.counter);
+=20
+ 	return 0;
+ }
+@@ -201,9 +200,9 @@ static int dump_req_sock(struct seq_file *seq, struct t=
+cp_request_sock *treq,
+ 		       dest->s6_addr32[0], dest->s6_addr32[1],
+ 		       dest->s6_addr32[2], dest->s6_addr32[3],
+ 		       bpf_ntohs(irsk->ir_rmt_port));
+-	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n",
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
+ 		       TCP_SYN_RECV, 0, 0, 1, jiffies_to_clock_t(ttd),
+-		       req->num_timeout, uid, 0, 0, 0, req);
++		       req->num_timeout, uid, 0, 0, 0);
+=20
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c b/tools/test=
+ing/selftests/bpf/progs/bpf_iter_udp4.c
+index 23b2aa2604de2..d4079a619da66 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
+@@ -57,13 +57,13 @@ int dump_udp4(struct bpf_iter__udp *ctx)
+ 	BPF_SEQ_PRINTF(seq, "%5d: %08X:%04X %08X:%04X ",
+ 		       ctx->bucket, src, srcp, dest, destp);
+=20
+-	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %pK %u=
+\n",
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d 0 %u\n=
+",
+ 		       inet->sk.sk_state,
+ 		       inet->sk.sk_wmem_alloc.refs.counter - 1,
+ 		       rqueue,
+ 		       0, 0L, 0, ctx->uid, 0,
+ 		       sock_i_ino(&inet->sk),
+-		       inet->sk.sk_refcnt.refs.counter, udp_sk,
++		       inet->sk.sk_refcnt.refs.counter,
+ 		       udp_sk->drop_counters.drops0.counter +
+ 		       udp_sk->drop_counters.drops1.counter);
+=20
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c b/tools/test=
+ing/selftests/bpf/progs/bpf_iter_udp6.c
+index c48b05aa2a4b2..dadc5f73ff098 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
+@@ -65,13 +65,13 @@ int dump_udp6(struct bpf_iter__udp *ctx)
+ 		       dest->s6_addr32[0], dest->s6_addr32[1],
+ 		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
+=20
+-	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %pK %u=
+\n",
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d 0 %u\n=
+",
+ 		       inet->sk.sk_state,
+ 		       inet->sk.sk_wmem_alloc.refs.counter - 1,
+ 		       rqueue,
+ 		       0, 0L, 0, ctx->uid, 0,
+ 		       sock_i_ino(&inet->sk),
+-		       inet->sk.sk_refcnt.refs.counter, udp_sk,
++		       inet->sk.sk_refcnt.refs.counter,
+ 		       udp_sk->drop_counters.drops0.counter +
+ 		       udp_sk->drop_counters.drops1.counter);
+ 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c b/tools/test=
+ing/selftests/bpf/progs/bpf_iter_unix.c
+index a2652c8c3616f..df3d971b21e8a 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
+@@ -42,10 +42,9 @@ int dump_unix(struct bpf_iter__unix *ctx)
+ 	seq =3D ctx->meta->seq;
+ 	seq_num =3D ctx->meta->seq_num;
+ 	if (seq_num =3D=3D 0)
+-		BPF_SEQ_PRINTF(seq, "Num               RefCount Protocol Flags    Type S=
+t    Inode Path\n");
++		BPF_SEQ_PRINTF(seq, "Num       RefCount Protocol Flags    Type St    Ino=
+de Path\n");
+=20
+-	BPF_SEQ_PRINTF(seq, "%pK: %08X %08X %08X %04X %02X %8lu",
+-		       unix_sk,
++	BPF_SEQ_PRINTF(seq, "%08u: %08X %08X %08X %04X %02X %8lu", 0,
+ 		       sk->sk_refcnt.refs.counter,
+ 		       0,
+ 		       sk->sk_state =3D=3D TCP_LISTEN ? __SO_ACCEPTCON : 0,
+diff --git a/tools/testing/selftests/bpf/progs/test_snprintf.c b/tools/test=
+ing/selftests/bpf/progs/test_snprintf.c
+index 8fda075440235..48a0025cf2ca8 100644
+--- a/tools/testing/selftests/bpf/progs/test_snprintf.c
++++ b/tools/testing/selftests/bpf/progs/test_snprintf.c
+@@ -57,8 +57,8 @@ int handler(const void *ctx)
+ 	sym_ret  =3D BPF_SNPRINTF(sym_out,  sizeof(sym_out), "%ps %pS %pB",
+ 				&schedule, &schedule, &schedule);
+ 	/* Kernel pointers */
+-	addr_ret =3D BPF_SNPRINTF(addr_out, sizeof(addr_out), "%pK %px %p",
+-				0, 0xFFFF00000ADD4E55, 0xFFFF00000ADD4E55);
++	addr_ret =3D BPF_SNPRINTF(addr_out, sizeof(addr_out), "%px %p",
++				0xFFFF00000ADD4E55, 0xFFFF00000ADD4E55);
+ 	/* Strings and single-byte character embedding */
+ 	str_ret  =3D BPF_SNPRINTF(str_out, sizeof(str_out), "%s % 9c %+2c %-3c %0=
+4c %0c %+05s",
+ 				str1, 'a', 'b', 'c', 'd', 'e', longstr);
+--=20
+2.55.0
+
