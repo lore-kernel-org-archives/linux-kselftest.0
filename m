@@ -1,120 +1,123 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873DB4E50BA
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 11:27:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789730870; cv=pass; b=Mk8bmIppDyJ+TZH+PKi6PgXvDQVZRg9oTD+/LxvVvfMrP/lcy/kHGICvwbNaD/laDZMfQzsdfrzIpkoJazcjiKqhxnWp+vNne7T12ZpBnjgLuAKdjMOGhP1KrxCiS7RO8cueqZJ9wSLY7MHtFg59tO/PtSaXX99aPU0hATNGx/0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789730870; c=relaxed/simple;
-	bh=1T4Ypx73b49lIoEeXBKDKWASxqKm0qUZYs1hZl9y4gQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u66m0gEhirxPtjl6NuYS+vtcjKBN914cZ0PCWTsGxqfhobZb2OUvXyoUWlmf3qZa2h1AVS+NAVc8ga2bzKx/rjENmG94IliZ0CnW00yOG5aTicsMC2OfP8GcZO7DoslWtE0tRR7hBu6YvtTuDrnEQIK/IfHBlX4yElexl/gLRMU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bnicj358; arc=pass smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423504D90D4
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 11:36:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789731405; cv=none; b=M/lz7+Eg5NKLTKOxauIQiPKdNZXAAwksnEGhLWuk1ajzjjNEz/TYNSK9LW5W8s1Q+0ENznJF5LHFf8N0bDP5lVyxqNBVfsNHIZ1AFg/n/ITlUbC6f/54ifnlhywuYejDyDycHHoazoN4Fm1HiSpZASZJ43zuk/qAwfs/XRZ6Nvo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789731405; c=relaxed/simple;
+	bh=UV2MS265JeG/XFufAaOIglzfguLQfCex0JpmNsNklXo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ToYVRaZoopRa+HAT6gLneKPpTlaCBD2iL6y2rB+W1ma/pIYWgqtcnTwQlilTlPH4HCxLXLBbzY5DvHw2STHlk30xmpepyKrrmzqaPPHr0WQBVMGWAzecPXuV5MtwokhAStT3UaInrLNhi9j5PCIdPHgPHyVo5vQ72EdS9+92y04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ANcyKfNn; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bnicj358"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6aa13d8d9d0so6585a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 04:27:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789730866; cv=none;
-        d=google.com; s=arc-20260327;
-        b=JrHso2HyFSt7FbYooIVm4WW02GGUc3ykQWo5Ah5pGzkDLZgeVSnT4zp2C3RJ3RDX2M
-         y4uNWKNq/sej0LqLuwDk7idYAa6AU9WWjO3L6IZsKJAxz5SijIGQZRRzvhGrRQkNm7Q3
-         jv1Jm2Lcx1qdqcCeIqosT/RlNYLaqXP1YEwRYzr3JP/jPMqj5NWrgncoDGcpm13McCKY
-         Xt7NAmbzJ9QIcsG4ZURdFSUDvGtymi1AwgEhs7WbGIKMFGA1sMjP6egsh+hXOKMVHZyd
-         d2RnMPG40Lrh3xajSl3U4yoFJHvLRcMpWBBsjDBYqFLol+f4VZlfXVZ7OiFRNv8bqP3R
-         d8+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2zkFlHoWQ2AWCYz/XBKFNT4MlZs4AcmAdTGygjovBbU=;
-        fh=pn8i63R9jh52ESikXUZD4z/BDWWg0cSA8hNbflX1PJA=;
-        b=OiOuqoqCzMBcii1bywCL2vMYUv7ctfr3PgaqhEk9wBORV5j+LERkWbn0N10bXA5dr2
-         6Xp3LdzhGzKCHtDKujriem3mw/fJ4fGdpPlIdAlzSgaUo3YPA7Er5IX0s3dwm89SKgam
-         HMDPMWe1aRYQkHqAhZebhvIJiJTNqX6iLUjaN9CeTlCUMaAzV2I7sYR13ou0Fmq4NblV
-         qHzR9MKY6y6gfFJy1istwio0OFNjrwPKs8NSaEth0EjLnu4mj8uZyXoICUN1cfSLBHTY
-         btbcs1OFWq1El7D9MqmWHAIrt/HjJrrmXiCpv1eMaCwys4okr/Hm8JTB/K7+NvWY8uJo
-         DZiA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ANcyKfNn"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396cccbba92so587972a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 04:36:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789730866; x=1790335666; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=2zkFlHoWQ2AWCYz/XBKFNT4MlZs4AcmAdTGygjovBbU=;
-        b=bnicj358p8BvR+0cPsy7nSRI+syhPcD8q9t1kzH/MM7jD3Ex2AgecRNFRaIh2hoD12
-         t69llh4Gd79xFNGgrtRQqTucY8HzpYZPkiePEQvpXaaU8L8B6vuctbaMv3j7t2O9Ulyg
-         DiBifT7wFrrd8V7NIOZMz36SDefcD0ExuZmo5B6UeU6MQSLwhUINU0tQ03hQsFspBqPl
-         cJ9yoiFMNZR7Soz591jRZzlMG4yr/651O4S2Bz3yZoTMWjRHQo0FbxuNxeXOteLlQZ37
-         +7/+dO2nFfXN2gatJZt3WwO/AMmDtcVXhxc8N+bcdTHovBGad+zyhtC7YwAbu1P2BYKT
-         K3zg==
+        d=gmail.com; s=20251104; t=1789731403; x=1790336203; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=K3/YTpNBvG9JEca/s1uHfv5ByQp08abPn2Zh1wtqNdk=;
+        b=ANcyKfNnJsqUL/riu3aFN9O+kzhsJDwxyhf73w6aJgSejjbt5e7dWZKaQ0Vv6LtXQt
+         RqhAmbFRoZr2upqUEUiyV7PmSxbC3NGlXaMR0tB3cmKO8KDMh3v86rtLDUPeoWTPqGi0
+         XHMtj4efJX/i17f1YufN+aTFMICFZss9L6oPglwPxb1+3PulelXNvoVFsq3kodoSLVCJ
+         GtYx3cOufcIf7mvjzKeCVAIFK+RAxGzCMqWEfVvD01gnJ75Jrrsbam2rkoEdv4D6DeUU
+         p8CrUuFHYbl6RpEdXoBTy5J/m0xPRHHlkSOyYOZ0YX7YijVmdNojYKzxuGy27Fp0cGJR
+         1x3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789730866; x=1790335666;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2zkFlHoWQ2AWCYz/XBKFNT4MlZs4AcmAdTGygjovBbU=;
-        b=dr0oSvIFv8jJac/mupbE7S9nVvqRhoZFPhwns92m6l0fWYfhrKqbjvuwSTZWOJGWvi
-         nnLXWLFCXGukYwXwfr0K4twJaqIlOiWmUHK40XE+YfvIuKjwW9ycdJw5af+/6kx19z0h
-         ZeJSrs4NjVjW3RSRioL/BymoVVwrYvqnjNdaPQ8LLAWt4zQPFJClBXsRK/yD6A1u+3/H
-         yjhAE2cLi/Lxlv8DsU9mPbxO7SqW1l9U/+x26fAht4Y9QuigYIGcer2gsHy/+jhaRra4
-         vhtTOLXG+aK16G+hOW/ZWcU4mXC8re5D7ZafXewwnxj5yQptLNOuZyQTQjwy08aVQB+a
-         XILQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxLp2WABxXM6+p0uUNI8VQi5J7nQ6UNCnVyJqd06Kaklvm00zILhWsh4GgkGBnEjqFmI6axWxEBjrWu/uwszu0=@vger.kernel.org
-X-Gm-Message-State: AFuF++mFdJ7DpwZ1TEst1lQo9Dk/t2yMlhJ00fVLc5hpMc+CTqKvcFxk
-	SZ05ajmWheIjI9N4YHyslpZQ7A0LbhAweupikVWvyEvR941Ctongu9CcCvQrEA+TkV2fsIXvoun
-	Ja3qIcHTDCxPxZ4rbLNfqV2y5Htb43j4PYgDl351mNgY0BJaLQcg6Dt0N
-X-Gm-Gg: AYBFou1lXkLytElqS+xGU7B3EPO5ANboJWJFTeDpD60xZmr5kpUhflPS9HwJx+BXFfw
-	9G8NoWmzYjDe4Megw7t/lkF/TBRp1+abVpbVXEXCD6cinUje5ZIJvtqEmOhZRkrQKr+TNarg9Cq
-	GXNwwBDWW2K74W6n0P1EexNtplBssSPwgqlphRV2WQZIvK7S7sFsxYToTsaSj7iIlkMfumEXALK
-	Y1tQAY3s0wjOHhEPiENiIC3nUhvLDwNWiArXUDUePTaKgF/qB3QD5D+CeywxDpSfHS7KC6xB0CU
-	MTmgUvy7QrhPrbyL/V7J4r7hUFoUBjMcZaJ0Blt9IKjzePmV4VJBzOk=
-X-Received: by 2002:a05:6402:a588:20b0:6a6:f2a5:1b4f with SMTP id
- 4fb4d7f45d1cf-6aa4df2139bmr25284a12.4.1789730866074; Fri, 18 Sep 2026
- 04:27:46 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1789731403; x=1790336203;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=K3/YTpNBvG9JEca/s1uHfv5ByQp08abPn2Zh1wtqNdk=;
+        b=lBgDCiQpDs9YKI6lMoh1LjTNcB73fihAVsgf5WHuIjZCbV+UIw65ELDqKrQyiFJ19/
+         n+goYAr2jU8MBoLHy7JQdCFuFzCw+Lc5b1bRIX/b5VzfY3yJ8zMq1L7REE3wtnCWGDgZ
+         NX9eJBc+7a3zwfKNIlz7MsOV79ijvnX1DR/8zNk4+rU6MxlaoU3mPMxoNs+zvhr2us/0
+         xwGDeWLIKdhuF9rgq07CD5W8DOkMnYWH7GJ3Myi04L5Ph+/wRxzIeaJ348D/cWionVmI
+         x8K0F+5mCXIgkARJUlyrF95tn5I2QtB6nRieYjYBXTpIXerM2X97chGMMBzuUSwoMjA2
+         Sb9w==
+X-Forwarded-Encrypted: i=1; AKwUvBwc9X+TgZUpLjbyqFB634pdltt3h4rt3ABFQEA1U5gaugevjp/eZE09ZouBawwTTeiDgHIniJtoM4hI+pSqRfg=@vger.kernel.org
+X-Gm-Message-State: AFuF++nHWujQq7JEuHBeudDBJP+Jnm8UUYEw9UeMmchXRWbd2elhofCX
+	4nh75xnSEHEyru9X0rcrPlb497yNAo05NvyDmIWp8kA4vQTA1d714Lyf
+X-Gm-Gg: AYBFou0Mw8dU4WBaizMBkC8Yci5i4tU7r9IWc8gxN9xn+45t7P5RJx2qH8althQyZ9w
+	GAAUD6Mor6Sd5+bumvUWl3+ccU97Eyjs6lfpntGWjJh6pBmT2DLlETLEN4YGmTmP+Bbwpitavvw
+	GeCe/l0Yhfla6qkZPYfhUMZAWVeNVMkS5Aj5wiS/F+Aex0ApwydxJ8/YSvRw7fwyhsjtthzhcE+
+	GeN8xdvy5VbZk8CA1AY1jvWy5cqowWIPDfEpIrbhDKe+zr0eve5eiwpGmKRislOXWvaYTdbVrV3
+	/NYPktxN8jbCfRZtzByZ5bvgKoYtbK26yK3vTd/6zBh1TUQu88bH0q9/RkntjRTR50Zq/Tziq14
+	vA0sBC9qNZeO5080xovhE0X2cos40huJM3CFx9+vwN7gJohjsESJ0HLeohetPrqe7bvEfvWBeFo
+	BtHloTkYit1bodN2hitFNGTDw3eMNctjkXr5xyFo+NsveBoU2rGApj/4gXfByj/eQOmOY9mvuuR
+	2fXQbkfPVr3j/90x+Gu6cs=
+X-Received: by 2002:a17:90b:4e85:b0:39e:21a7:5df5 with SMTP id 98e67ed59e1d1-39e54d5ca4fmr4800851a91.24.1789731403361;
+        Fri, 18 Sep 2026 04:36:43 -0700 (PDT)
+Received: from 10-86-27-207.ban-spse ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-144ce069246sm3922628c88.15.2026.09.18.04.36.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2026 04:36:42 -0700 (PDT)
+From: Gokul K <gokul02k@gmail.com>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	kvm@vger.kernel.org
+Cc: Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] KVM: selftests: Delete three pieces of dead library code
+Date: Fri, 18 Sep 2026 17:06:28 +0530
+Message-ID: <20260918113631.634233-1-gokul02k@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1789721173.git.zhang_wei@open-hieco.net> <2b30c180a7ec1fb22033cc1b89debc36c9f569d0.1789721173.git.zhang_wei@open-hieco.net>
-In-Reply-To: <2b30c180a7ec1fb22033cc1b89debc36c9f569d0.1789721173.git.zhang_wei@open-hieco.net>
-From: Jim Mattson <jmattson@google.com>
-Date: Fri, 18 Sep 2026 04:27:34 -0700
-X-Gm-Features: AcwNN1XiB8HFa2Js9NBlTZk2TxW38UVMUVZNntIOccJ00GWuWntEdr41p3Y9JBA
-Message-ID: <CALMp9eT0RjVUYbcHbhd-phmaXs1yPsh25j+qkfmizqp+DCV=fA@mail.gmail.com>
-Subject: Re: [PATCH v7 2/8] KVM: nSVM: Synthesize DecodeAssists EXITINFO for
- emulated intercepts
-To: Tina Zhang <zhang_wei@open-hieco.net>
-Cc: Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, zhouyanjing@hygon.cn, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 18, 2026 at 1:56=E2=80=AFAM Tina Zhang <zhang_wei@open-hieco.ne=
-t> wrote:
->
-> When the x86 emulator encounters an instruction intercepted by L1,
-> svm_check_intercept() synthesizes a nested VM-Exit without fresh hardware
-> DecodeAssist state.  Populate the architectural EXITINFO1 field when
-> DecodeAssists is exposed to L1.
->
-> Provide the GPR number for MOV CR/DR, the interrupt vector for INTn, and
-> the linear address for INVLPG.  Preserve the MOV-to-CR0 decode informatio=
-n
-> when a selective CR0 write intercept is triggered.  Leave EXITINFO1 clear
-> for CLTS, LMSW, SMSW, and INVLPGA; the INVLPGA address remains in guest
-> rAX.  Leave EXITINFO1 unchanged when DecodeAssists is not exposed, and
-> leave unrelated intercepts unchanged.
->
-> Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
+Three unused things in the selftest library, found by asking the linker
+rather than by reading: build the selftests, then look for global symbols
+in lib/ that no object refers to, and check each survivor against the
+whole source tree by hand.
 
-I think Sashiko is hallucinating.
+  1/3  sparsebit_copy() and sparsebit_num_set(), neither called
+  2/3  the declaration of vcpu_set_cpuid_maxphyaddr(), which has no
+       definition anywhere
+  3/3  guest_snprintf(), a varargs wrapper nobody calls
 
-Reviewed-by: Jim Mattson <jmattson@google.com>
+Each is independent and they can be taken in any order.
+
+A note on what is deliberately *not* here, because the same scan turns it
+up and the obvious next step is wrong. sparsebit.c still exports nine more
+functions that no caller outside the file uses - sparsebit_all_set(),
+sparsebit_is_clear(), sparsebit_validate_internal() and friends. They are
+not dead: they are called from inside sparsebit.c, mostly from the
+assertions in sparsebit_validate_internal() and from asserts in live
+functions, so deleting them would not build. Making them static and
+dropping their declarations is a defensible follow-up, but it is a change
+of intent about what the library exposes rather than a removal of dead
+code, so it does not belong in this series.
+
+No functional change intended. Built with and without -Wextra, and a
+sample of twelve x86 selftests gives identical results before and after;
+kvm_binary_stats_test and the rest still pass. The two that fail here fail
+identically without the series, because this host's kernel is older than
+the tree.
+
+Gokul K (3):
+  KVM: selftests: Delete the unused sparsebit copy and count helpers
+  KVM: selftests: Delete the declaration of vcpu_set_cpuid_maxphyaddr()
+  KVM: selftests: Delete the unused guest_snprintf()
+
+ tools/testing/selftests/kvm/include/sparsebit.h    |  2 -
+ tools/testing/selftests/kvm/include/test_util.h    |  1 -
+ .../testing/selftests/kvm/include/x86/processor.h  |  1 -
+ tools/testing/selftests/kvm/lib/guest_sprintf.c    | 12 -----
+ tools/testing/selftests/kvm/lib/sparsebit.c        | 63 +---------------------
+ 5 files changed, 1 insertion(+), 78 deletions(-)
+
+-- 
+2.51.0
+
+
