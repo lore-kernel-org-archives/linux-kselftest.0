@@ -1,138 +1,106 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA39253951;
-	Fri, 18 Sep 2026 06:38:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDEC48E0F6;
+	Fri, 18 Sep 2026 06:50:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789713509; cv=none; b=NRuSEERRVuAYVtc7Nx7FhQGLxbv2YQ+D0CcV2pwP5BIJkQU0C2CO85VpTbCEb/DvHmcchopLQx39oTVHVCwVN+ku8uaJOFRSRqadDHPmVXyTQlq4wRjhNsGDzzbsXxZ0iwQ/yCbYLETpMK+WRHERAxZDzM30qu+x78Ol0lSUaEA=
+	t=1789714249; cv=none; b=ZSdVR9+kIBBVxLklADys9j7u8+DyA+NHhbgFDai+h4U75UALgvditHl6hgVbOLv/rPMenYMpWQ58ufusJmZ4cNn9qCYLJqdyLpyVD/7Ys6eBBmzXQF+7UI0Pr8cBU4MsP/M5jLGgnnoq1+TyQ2htRcjoyPJbR8r+F23hMcQcCAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789713509; c=relaxed/simple;
-	bh=EvREG//rprTPwzkjU3xlpNpW9eqUNwyIliraATJKrZ0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Subject:Cc:From:
-	 References:In-Reply-To; b=Qn5fwTj0sscYKonTUiwDoFXYUxT6bxUdRqtpZihaEPFh0IrjCjgIIt2j/sLx4xuIKHe38HI0z9oomiska9385waDLIVUoawCqqeO9tctMOA2G0UbaKhlrQEAXUHbNRYn6mxltJQe7Iae/XsEPWk148lUaFSgIRZuH79OghbKLUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jPH/TTPb; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1789714249; c=relaxed/simple;
+	bh=lzO27TDxIULlI2uv8uwh01ObA3Ym1uCEMM5Rkpb91pQ=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BgAfeQe8JcjbFkusO7MZ7ytdhbyPuKqfLEbFGVVRlZScYNp70Q9uIDxuUOkdkFhqS1CgGx+FFz1BdopLieuFw/e795w2pN3W+ZFj/CAgYGeGOrnEtwFAhQabJQ4G3BN6eE1cefr2Q63mlu6rLsWgav6LpjwsBV+EJO+op9KnAaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=JIpqf56G; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jPH/TTPb"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 02D7A4E4081C;
-	Fri, 18 Sep 2026 06:38:26 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C4D2960649;
-	Fri, 18 Sep 2026 06:38:25 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AACCD11C7B021;
-	Fri, 18 Sep 2026 08:38:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1789713504; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=RyoX66ARo1jdjaeeIXDPztqT4qPSKypJMdksTTMQhHc=;
-	b=jPH/TTPb9FOoRC5kvu6MMqiNDyg9OvecsolVYtmZiPny5z+PQmJ9B5g3grgQ2mluezmDxI
-	pl6eoQAlSEbRXNVjNgEgh8y0yb0/HntnH1eEZH5BDzqjY+czOGwL4cXp2SVmJJWh965kZ8
-	V02bAl8UTVmrWFad/eAMbHbA+7IRVeg8UufqosZd0N/H+Z3nNOMlarzCWwNmxyg6hz0G8L
-	m7ZeGkioDDOW1TrgGx+lut6d2AQmjBCAGNWwwmKpV2rm7LUfYMPTkCoYWKpPw4VRGzWykb
-	EOB+SCdbJ0Tta3pMAxAQG531DR/pGxvYwFb7Qd107TwYuqglFCptBMp3cLCLKw==
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="JIpqf56G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1789714247; x=1821250247;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lzO27TDxIULlI2uv8uwh01ObA3Ym1uCEMM5Rkpb91pQ=;
+  b=JIpqf56GGBA++2JNb8W68Q3MCTCvVb9/N8VK1dJZogxg6xtOHgs8cy0X
+   IYIEuuFZRjprXsriFO/KxRE9nJnTnyOoyUCUBIxZnpPOw7DXgxhT1PpeN
+   1AWZAeumufxzK439rUJrpYhXFxvMqPK9nhdIiiMH8Ldpgmj4DyClT57xJ
+   vvH1aBYzWsidWFpt6/xrBXSpzbHDx3LEl9VK3aCg0OIcCRJIjubxPCZut
+   Mcrc0uYH2Qf/Lh4N8bcEDIfjEjq8CAZrDV3Xo+UPDh07+2Wi1Q+hbpC7c
+   6PJuz34oXIuQlawPTXDw4ov9Jtk6gJH7HH+moh6Q3VXTyxmHMJfdaBRDt
+   Q==;
+X-CSE-ConnectionGUID: NjezbUk0SYGudewq8HMiog==
+X-CSE-MsgGUID: 1gxp3NzKSy++vdXcREIq4g==
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="73876652"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Sep 2026 23:50:41 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Thu, 17 Sep 2026 23:50:40 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Thu, 17 Sep 2026 23:50:37 -0700
+Date: Fri, 18 Sep 2026 08:50:37 +0200
+From: Daniel Machon <daniel.machon@microchip.com>
+To: Karl Mehltretter <kmehltretter@gmail.com>
+CC: Steen Hegelund <Steen.Hegelund@microchip.com>,
+	<UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	<linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>, "Geert
+ Uytterhoeven" <geert@linux-m68k.org>, Brendan Higgins
+	<brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, Rae Moar
+	<raemoar63@gmail.com>, <linux-kselftest@vger.kernel.org>,
+	<kunit-dev@googlegroups.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] net: microchip: vcap: Stop selecting DEBUG_FS for
+ KUnit tests
+Message-ID: <20260918065037.bs2mcha2laf5efg7@DEN-DL-M70577.microsemi.net>
+References: <20260917064736.77354-1-kmehltretter@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 18 Sep 2026 08:38:17 +0200
-Message-Id: <DLI8HIES5WAV.3A4W5G22Z6I1H@bootlin.com>
-To: "Madhav Khosla" <madhav.khoslaa@gmail.com>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>
-Subject: Re: [PATCH v2 bpf] selftests/bpf: Fix csum_partial() dropping
- trailing byte on odd length
-Cc: <alexis.lothore@bootlin.com>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan"
- <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>, "Jakub
- Kicinski" <kuba@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>, "Stanislav Fomichev"
- <sdf@fomichev.me>, "open list:BPF [SELFTESTS] (Test Runners &
- Infrastructure)" <bpf@vger.kernel.org>, "open list:KERNEL SELFTEST
- FRAMEWORK" <linux-kselftest@vger.kernel.org>, "open list"
- <linux-kernel@vger.kernel.org>, "open list:XDP (eXpress Data
- Path):Keyword:(?:b|_)xdp(?:b|_)" <netdev@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260916112554.413933-1-madhav.khoslaa@gmail.com>
-In-Reply-To: <20260916112554.413933-1-madhav.khoslaa@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260917064736.77354-1-kmehltretter@gmail.com>
 
-Hi Madhav,
+> VCAP_KUNIT_TEST enables DEBUG_FS even when the kernel configuration
+> leaves it disabled. Remove the selection, following the dependency rule
+> in Documentation/dev-tools/kunit/style.rst.
+> 
+> The debugfs implementation and its tests are already built only with
+> DEBUG_FS. The other VCAP tests can run without it.
+> 
+> Fixes: 552b7d131aa0 ("net: microchip: sparx5: Add VCAP debugfs KUNIT test")
+> Assisted-by: LLM
+> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+> ---
+> Validation on net c9151088f167: x86_64 LLVM builds and QEMU runs
+> with DEBUG_FS disabled and enabled. The other VCAP suites pass in both
+> configurations. The debugfs suite is present only with DEBUG_FS=y and
+> all four cases pass.
+> 
+>  drivers/net/ethernet/microchip/vcap/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/microchip/vcap/Kconfig b/drivers/net/ethernet/microchip/vcap/Kconfig
+> index 97f43fd4473f..1af30a358a15 100644
+> --- a/drivers/net/ethernet/microchip/vcap/Kconfig
+> +++ b/drivers/net/ethernet/microchip/vcap/Kconfig
+> @@ -40,7 +40,6 @@ config VCAP_KUNIT_TEST
+>         bool "KUnit test for VCAP library" if !KUNIT_ALL_TESTS
+>         depends on KUNIT
+>         depends on KUNIT=y && VCAP=y && y
+> -       select DEBUG_FS
+>         default KUNIT_ALL_TESTS
+>         help
+>           This builds unit tests for the VCAP library.
+> 
+> base-commit: c9151088f1674fd29ff26a20f5fc687acf53a2f0
 
-On Wed Sep 16, 2026 at 1:25 PM CEST, Madhav Khosla wrote:
-> csum_partial() computes num_u16 =3D len >> 1 and only sums that many
-> 16-bit words, so the last byte of an odd-length buffer never gets
-> added to the checksum. RFC 1071 says it should be padded with a zero
-> byte and summed as one more word, not dropped.
->
-> This backs build_ip_csum(), build_udp_v4_csum() and
-> build_udp_v6_csum(), used by flow_dissector_classification.c and
-> xdp_metadata.c to hand-build packets. No current caller builds an
-> odd-length payload, so nothing fails today, but a future one would
-> get a silently wrong checksum.
->
-> Also bump flow_dissector_classification's TEST_PACKET_LEN from 100 to
-> 99 so this actually gets exercised instead of staying latent.
-
-Great, thanks for the update.
-
-> Without the fix and with TEST_PACKET_LEN=3D99, flow_dissector_classificat=
-ion
-> fails under vmtest.sh:
->
->     test_flow_dissector_classification:FAIL:test third port unexpected
->     test third port: actual 0 !=3D expected 10
->     #137/6   flow_dissector_classification/ipv6:FAIL
->     #137     flow_dissector_classification:FAIL
->     Summary: 1/0 PASSED, 0 SKIPPED, 1/6 FAILED
->
-> Kernel just drops the packet over a bad checksum. With the fix, both
-> flow_dissector_classification and xdp_metadata pass.
->
-> v1 -> v2:
-> - comment style: opening /* on its own line, per BPF selftests style
-> - Retarget the Fixes tag to bcc00987bc56. commit f4504af68575
->   ("selftests/bpf: move ip checksum helper to network helpers") moved
->   the helper, but sizeof(iphdr) is always a multiple of 32 bit words /
->   4 Bytes (iph->ihl counts in 4-byte words), so the odd-length path
->   was never reachable through build_ip_csum(). csum_partial() first
->   gets called with a length that isn't guaranteed even in
->   bcc00987bc56, via build_udp_v4_csum()/build_udp_v6_csum().
-> - TEST_PACKET_LEN 100 -> 99 so an existing test catches this instead
->   of the bug staying unexercised
-
-Could you please move the patch changelog under --- so it does not end
-up in the commit once it is merged ? You can also drop the Link tag, one
-will automatically be added on the latest revision once it is merged.
-
-Up to some extent, you could also move the ./test_progs sample output in
-the comments under --- as well.
-
-> Fixes: bcc00987bc56 ("selftests/bpf: add network helpers to generate udp =
-checksums")
-
-You chose to use bcc00987bc56 rather than e2a46d54d7a1, but I guess it
-is ok.
-
-> Link: https://lore.kernel.org/bpf/DLG5TIIHIMC2.2YCCY0UX86YQF@bootlin.com/=
-T/#t
-> Signed-off-by: Madhav Khosla <madhav.khoslaa@gmail.com>
-
-Thanks,
-
-Alexis
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Reviewed-by: Daniel Machon <daniel.machon@microchip.com>
