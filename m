@@ -1,116 +1,209 @@
-Received: from mta0.migadu.com (out-29.mta0.migadu.com [91.218.175.29])
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FCE485953
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 05:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.29
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28DE248592C
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 05:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789710657; cv=none; b=ocTo0xa8E8mBjt+Vh5C4RB4UEk6QZeGjkySHviXoFhPriVrNQkd9UP4xJP/O891BdAea2s3AGztNOFEBVzYLZ9NAOUgAVOny5bGax57YQkzYcrFHAxjg0lWiJc7V63/LtvQxxm3aoVZAp1O1W1BMEEk77KQHgt/oIhPFGbtGxQo=
+	t=1789710776; cv=none; b=B8jBiSw/IvmUfSwpnRy7QPTv91c1yOfHCDb99x8SOYngvpg4bs3Xyd2zGVVVFl/cVghMzw5um9zv8UI6afaCUdLzs9CscY0yBe6GEDFS2tmrx3ilSZUKJiGZ2q0YTyfECyFiZaeyUk9NpHEdjLnxiIjjykdj7qJoMz4ZYxdh3B0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789710657; c=relaxed/simple;
-	bh=540cxTg5uDW77sA6XWjeiYlrh41jTEnl7CqpEmnjPE0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RE3woRZUvrM9tmtnGZOE0LXr9XmsoaUuqJhRFX4Ka0YCKLhqNRUO1lLpjr+NVI7jGpIplW8nvTEcuLzmPUv/Wons/Xs4tHQQ9iOsz8s/dfK/+3ohz3O1OaiO6y8fxIseQ8fz6sJF5NcgfQWBa0/9OPE31Nvevp0/69ZMYLmejNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CuWFIohJ; arc=none smtp.client-ip=91.218.175.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789710776; c=relaxed/simple;
+	bh=V99jLj2gEYsH462fTqhUwsqP0GqMQkk41b67V5dynz0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=cew8uqL0VC+yJppy+LUc/UBdnxNjOnqEXY8Ig2/VNtUUO/3Vwk5s9dF9msqe/n4+bmVGLQoaNjnJnXO/b63LswpjR3crlhQ1mEbCsAIuLmHkceGcsEcqrCKtPRge+MXUFbqByB0qT1liyMddxEntq5Hs6tVGGx9Rc3IbeOcxh8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LH1/Yndx; arc=none smtp.client-ip=74.125.228.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CuWFIohJ"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=540cxTg5uDW77sA6XWjeiYlrh41jTEnl7CqpEmnjPE0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789710649; v=1; x=1790315449;
- b=CuWFIohJhBqDiqWliYaqGcXq/qrhRdi/69jPdab26umkT8TF5KwPlnlHEVkcE5Bm77tnQ5nW
- lgxC2EOH7FUjWc1ZW5B2mtOVLg86RC843vTMeg3ITHXAVOhKYsZ4V8fODNFfA65ClzZgFCMJwUP
- dUY3oX9FAKG11kGAtZReF+7k=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 05ce3288277777a3;
-	Fri, 18 Sep 2026 05:50:49 +0000
-X-Mizu-Trace-ID: 05ce3288277777a3
-X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org,
-	josef@toxicopanda.com,
-	axboe@kernel.dk,
-	ameryhung@gmail.com
-Cc: cgroups@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	linux-kselftest@vger.kernel.org,
-	cui.tao@linux.dev,
-	cuitao@kylinos.cn
-Subject: [RFC PATCH v6 5/5] docs: cgroup-v2: document io.cost model=<name> binding
-Date: Fri, 18 Sep 2026 13:50:01 +0800
-Message-ID: <20260918055001.1273840-6-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260918055001.1273840-1-cui.tao@linux.dev>
-References: <20260918055001.1273840-1-cui.tao@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LH1/Yndx"
+Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc1cea4bfb6so118515a12.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 22:52:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789710773; x=1790315573; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=RoqQBX0V764x0A/v/amZwGuN9suY1fEbdmSCiYW1k5w=;
+        b=LH1/YndxdKdTqJTRoOSlt0kiCmgEVtwTVWQ2dNzfDSEY9XCp7y4XkQQsRQsO5sGLdv
+         u4MsRZUs9PrK9+cdV4t88JtvJCAHyKi7lNtx55zWSiC5jvb5+vGABqO1ZZumgYbJtFfJ
+         hY4c6wdKEssCOyGYKh06SJaa/wuFCT8ZXM07tBmeEZ8bfCdXgVdRoxZk4hnY9hIbiwDQ
+         KzveBiurcVwDtjShw5SNupSOCA/2HmuyCAD/Gc8sxGi23g7IZ1kBi4MTd8At3tM73xaK
+         AAeJV9jgE6XlxjBVIofS387c2mof0UM1QiHLKWeCk3NUhc00RRKMxAcZyHpxohn3BaN7
+         XU9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789710773; x=1790315573;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RoqQBX0V764x0A/v/amZwGuN9suY1fEbdmSCiYW1k5w=;
+        b=xOSYPwvydulJi/zsM9PGGyynY22yqYWdwjerX+HpgLCxnGtXJGEVJYM1zGtynBMICK
+         HWd1AtEZKiiP0drB+XZCo3GsNwampHLabBsdJuYc/s6fZv6P4CJQCR51gs1dw0v+lkMA
+         U4arFzYjscY7vpAcHN7zj81IWorrqL/dop0ua2DFErvhYwC0re/I2rIJkMI/WrLF2n5S
+         W2VvVaMCjfEcVMBSP84cgfYWqgf+UfonPKsHN9Gc5Dl8NdKMSftoEninOANlXF4c3GRf
+         ne9amaRJy0JdRS2UW5/h+tugJA2JAKXVZ+JL8OGyLzMaqi54LLF2cF0T8j8iInxVYYo7
+         QD+Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzk/bo7x3XHcShv4JBleYz2kitOQb5l7A4LBfJBK7o0A7NICxFeA5M96KcyG/+jcEayykuDKYj5VbMENLuKSRs=@vger.kernel.org
+X-Gm-Message-State: AFuF++nmws3xtq+InoixPpK7Q7m08CCk8eqOi+OcThpmB7LBxZ7YbHu3
+	o6UiSVxt1a7r05dxqWmWCaCMzKfTNEuJfEDNShn1KhBW0vs/geWBsi4t
+X-Gm-Gg: AYBFou1KnObQhalius28OuZNaNzHdgjca785TlVCyhd9vKxKC5xZL1gWLZTD75egrv4
+	Z88gl88/fijLMPzVanXQYD7nm5ku52AdPOhN/MNJDcRdb1s01JeKws8lVKVS7yXnuef1TS3YSeF
+	B4Fsgu3t6YbLb7u4o+aWsOCfr6YPHR9GkvdPVpuv8nsduqzlLZqh1qD3syvwVz/6Ug0vP58trlx
+	k4l60XI8+EyXmUyxr2qlU3bKtlP92BRERDgrdNtTnaVT5kiUqyNczmIoYIMq6Sofx5GC/6E/Ngx
+	ROGJw4wHPxQ4Jd7V7DWz3f+eygyXFj0aDeQbiHl9DQlbKjf5pngqbMLnwft8of7C1zAg4N/j2Ds
+	+nQe4wpN3Ttb2inz+KFiAqluNM9XtktIV0qtyK6lwlBDe0t9ARlbqcIm7bvYbAgxpf/a8h4HW34
+	tlK7MjZdzf/vRgs10b7MxAIMgxKZItD7s1ZFR5mYzHPNWTZ0J9/903kaAEH7Y46jTbwTmpZqJeC
+	fGabaTFaLc9vev76FMOEJixRw==
+X-Received: by 2002:a05:6a21:9e0f:b0:3dd:85a8:caca with SMTP id adf61e73a8af0-3dd8c47d1c6mr2792351637.33.1789710773192;
+        Thu, 17 Sep 2026 22:52:53 -0700 (PDT)
+Received: from localhost ([13.93.150.60])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33c28721895sm1518873eec.13.2026.09.17.22.52.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Sep 2026 22:52:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 18 Sep 2026 05:52:50 +0000
+Message-Id: <DLI7IPF4DIYX.3BAFFWR52DHUY@gmail.com>
+Subject: Re: [PATCH net-next v2 2/2] selftests: net: test untracked NA
+ recovery of FAILED neighbors
+From: "Lawrence Lee" <lfqlee314@gmail.com>
+To: <netdev-bot+sashiko@kernel.org>
+Cc: <dsahern@kernel.org>, <idosch@nvidia.com>, <davem@davemloft.net>,
+ <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+ <horms@kernel.org>, <rdunlap@infradead.org>, <netdev@vger.kernel.org>,
+ <aajith@arista.com>, <roopa@nvidia.com>, <jhpark1013@gmail.com>,
+ <corbet@lwn.net>, <skhan@linuxfoundation.org>, <shuah@kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <alex.aring@gmail.com>,
+ <linux-wpan@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>
+X-Mailer: aerc 0.17.0
+References: <3f33052571409614b953a3dc7778114c51c43669.1789448374.git.lfqlee314@gmail.com> <178966456270.22033.8952247046783062389@kernel.org>
+In-Reply-To: <178966456270.22033.8952247046783062389@kernel.org>
 
-From: Tao Cui <cuitao@kylinos.cn>
+> [Severity: Low]
+> Should verify_ndisc() also check the link-layer address that the
+> advertisement carried?
+>
+> The seed in test_unsolicited_na_common() deliberately creates the entry
+> without one:
+>
+> 	${IP_ROUTER} neigh replace "${HOST_ADDR}" dev "${ROUTER_INTF}" \
+> 		nud failed extern_learn
+>
+> while the recovery path in net/ipv6/ndisc.c:ndisc_recv_na() pulls the tar=
+get
+> link-layer address out of the options and passes it down:
+>
+> 	lladdr =3D ndisc_opt_addr_data(ndopts.nd_opts_tgt_lladdr, dev);
+> 	...
+> 	__ndisc_update(dev, neigh, lladdr,
+> 		       new_state, update_flags, neigh_failed,
+> 		       NDISC_NEIGHBOUR_ADVERTISEMENT, &ndopts);
+>
+> Since the only assertions here are the state substring and extern_learn,
+> would a change that moves FAILED -> STALE but installs no lladdr, or an
+> incorrect one, still report OK?  Comparing the resulting lladdr against t=
+he
+> host veth MAC would close that gap.
+>
+I will update the tests to verify the lladdr
 
-Document the named-model binding of io.cost.model in the
-io.cost.model section of the cgroup v2 documentation: the binding
-and restore syntax, the unknown-name rejection, the full-replacement
-semantics of a bound model and the unregister lifetime.
 
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
----
- Documentation/admin-guide/cgroup-v2.rst | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+> [Severity: Low]
+> Can this switch actually isolate the mode 2 in-prefix gate?
+>
+> Moving HOST_ADDR from 2000:20::2 to 2000:21::2 changes the source address=
+ of
+> the advertisement, its target address, and the key of the seeded neighbou=
+r
+> entry all at once, while the router keeps 2000:20::1/64.
+>
+> The advertisement under test comes from addrconf_dad_completed(), and
+> ndisc_send_na() uses the same address for both fields when it is local:
+>
+> net/ipv6/ndisc.c:ndisc_send_na() {
+> 	ifp =3D ipv6_get_ifaddr(dev_net(dev), solicited_addr, dev, 1);
+> 	if (ifp) {
+> 		src_addr =3D solicited_addr;
+> 	...
+> 		.target =3D *solicited_addr,
+> }
+>
+> so saddr =3D=3D target for every packet this test generates.  The kernel =
+gate is
+> source based:
+>
+> net/ipv6/ndisc.c:accept_untracked_na() {
+> 	case 2:
+> 		return !!ipv6_chk_prefix(saddr, idev->dev);
+> }
+>
+> and Documentation/networking/ip-sysctl.rst describes mode 2 in terms of "=
+the
+> source IP address".  Would a change that tested msg->target instead of sa=
+ddr
+> leave both new mode 2 rows green?  Keeping HOST_ADDR fixed and instead
+> varying the prefix configured on the router side would exercise the gate
+> without also moving the target and the entry key.
+>
+Will update the tests to cover one source address outside the prefix and=20
+one inside.
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 8d2603751c51a..d9d82559e2bc6 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2115,8 +2115,10 @@ IO Interface Files
- 	are defined.
- 
- 	  =====		================================
--	  ctrl		"auto" or "user"
-+	  ctrl		"auto", "user" or "bpf"
- 	  model		The cost model in use - "linear"
-+			or the name of the bound
-+			model
- 	  =====		================================
- 
- 	When "ctrl" is "auto", the kernel may change all parameters
-@@ -2124,6 +2126,23 @@ IO Interface Files
- 	parameters are written to, "ctrl" become "user" and the
- 	automatic changes are disabled.
- 
-+	When CONFIG_BLK_CGROUP_IOCOST_BPF is enabled, a bound model is
-+	read back as "ctrl=bpf model=<name>", and writing "ctrl=bpf" is
-+	accepted as a no-op so a saved configuration can be restored as-is.
-+	"model" also accepts
-+	the name of a registered iocost_model_ops BPF struct_ops model:
-+	"model=<name>" binds the model to the device and the model fully
-+	replaces the builtin linear pricing, for every operation including
-+	flushes; "model=linear" (or "ctrl=auto/user") restores the builtin
-+	model.  Writing an unknown name fails with ENOENT and nothing is
-+	applied.  Unregistering a model removes its name from the
-+	registry; devices already bound keep using it, and keep receiving
-+	cgroup lifecycle notifications, until switched back to the builtin
-+	model, and its name keeps working for writes (so a coefficient-only
-+	write does not disturb the binding) until the last device unbinds.
-+	See
-+	include/linux/blk-iocost.h for the model interface.
-+
- 	When "model" is "linear", the following model parameters are
- 	defined.
- 
--- 
-2.43.0
+> [Severity: Medium]
+> The comment says "add a delay to ensure neighbour processing is done", bu=
+t
+> link_up, start_tcpdump and verify_ndisc run back to back with no sleep an=
+d no
+> retry.  Where is the delay?
+>
+> start_tcpdump() blocks on:
+>
+> 	${IP_ROUTER_EXEC} timeout 15s \
+> 		tcpdump --immediate-mode -tpni ${ROUTER_INTF} -c 1 \
+> 		"icmp6 && icmp6[0] =3D=3D 136 && src ${HOST_ADDR}"
+>
+> but the AF_PACKET tap that satisfies -c 1 is fed from ptype_all delivery =
+in
+> __netif_receive_skb_core(), which runs ahead of the state change the test
+> looks at:
+>
+> ipv6_rcv() -> icmpv6_rcv() -> ndisc_recv_na() -> __ndisc_update() ->
+> neigh_update()
+>
+> Does tcpdump exiting really order against that update, given verify_ndisc=
+()
+> takes a single un-retried snapshot of ip neigh show?
+>
+> There is a second effect for the new rows.  In the four expect-FAILED=20
+> cases:
+>
+> 	test_unsolicited_na_combination 0 0 1 failed
+> 	test_unsolicited_na_combination 0 1 0 failed
+> 	test_unsolicited_na_combination 1 1 1 failed
+> 	test_unsolicited_na_combination 0 2 1 failed 0
+>
+> the expected value FAILED is exactly the state the entry was seeded with,=
+ so
+> "still FAILED" and "the advertisement was never processed" look identical=
+.
+> Would a bounded poll for the expected state, or an explicit settle, make
+> these rows able to distinguish the two?
+>
+> Related question on ordering of the capture: tcpdump is started after
+> link_up, so can the single unsolicited advertisement emitted at DAD
+> completion be missed if the fork and exec are slow?  In that case timeout
+> exits 124 while set -e is in effect inside start_tcpdump, which aborts th=
+e
+> whole script rather than failing one row.  Would arming the capture befor=
+e
+> link_up avoid that?
+>
+Will change the tests to start the capture prior to bringing up the host=20
+side
 
