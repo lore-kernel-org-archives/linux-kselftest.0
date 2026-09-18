@@ -1,66 +1,67 @@
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9B4503BD2
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 16:05:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E934511E9F
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 16:24:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789747521; cv=none; b=Jtu70IblW4Vd7DxUVlMjn2I1zd4pUQRshvZwv4uPxQ2nTUdnnbcVjnc/UocwfZdX06uqMgXhmlgcO5TVSKxYzy/EX9rKKzHkdSQSznXfgV5hBYBUC9Gqhbyj9mZy3QyXe+1eUlfr62Ea4IYi2jSp4FMb+3DkrPkm3an2evgZZGA=
+	t=1789748697; cv=none; b=AjgYHZNoDTSfoJkri6BB2u2jY7ULEGsCX1izp7DELXB3Q72s6jrKnOWw6N+xmH+th6Wfur3zNXzABbfUym9h4iN3GYdKMAfq+OTXn8Q6eFv3pivM+Y1DHrfGkaxVVvoIOxRKMW1woWeufM843OD70SpO8OckLuWZxmv1JKOlEeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789747521; c=relaxed/simple;
-	bh=cOI0RAoQy97P9npu9EIGH+tMQjJx1JRj7SjKcDInChM=;
+	s=arc-20240116; t=1789748697; c=relaxed/simple;
+	bh=/VEJ+LucLRgG3GQveLMeKu8gGNtxOYLsCkVGmvtubPI=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=gba0ulo8hQyAxp+f7UZ9D0GttSj8l0mAEKbX0Y56aF9/OlJM4hIwKlXvyZr0cdIMt+NJP7tbbP6R4KOoj316lUZ76KoM+CEAjh9WttaG4GD/awmJKh+J4cRtXYVoaHiHz8Xx8Eun+mnPlHNfQ0sw3eIFjZVIzYr4/5Z5LZRj8Ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QfmZiCY7; arc=none smtp.client-ip=209.85.210.198
+	 To:Cc:Content-Type; b=oQmAJNNf6sWgwvE0K3CDBBjsactuunxcdVplstVquQoQLMMcW+pC/9/19+mAU91uuw5+q54UN2b4dhlpCqD8VOkiNy3im5wdZ/ui43+Q7hKHvt+RwnrhW3u+9LYtrgkNZin5YWhOB94LXqspUxlNJcObdCk41SUsId2pJUR0qtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NypGK/y/; arc=none smtp.client-ip=209.85.216.69
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QfmZiCY7"
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-86b3c58d686so1821453b3a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 09:05:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NypGK/y/"
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-39de1f85cb2so1264154a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 09:24:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789747519; x=1790352319; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1789748694; x=1790353494; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=unXnQHfl7O6IYkwSNLEzXDjPIDBkaOiWJaYXq+gOmlg=;
-        b=QfmZiCY7wXf/qMX9UWDVvR8M3tu06JXOIlJfGRVPQSu9Le02rWdNEryETXFf4MCiag
-         NBDAChqT6xWUT5qI+2Gd0GjwstpFClmNFr+XCqakqzo+10JcWds/PukZs5l07OMdG3J4
-         T4TGbX/QlxCui1xj4s0mmw6tjoH0onI5/lbgvx640/F4ks8Q1zNbC5rEgl8CPl9yLMNq
-         EVVycmUG11oUV4HTApx3jt5DAuPONbRwv/mtfxbHYaVIt8zILKnOkNJo5x4xrMnnHYli
-         2Rb2yhQ0qyMqkFPc65B5ZSiMkbjJUUxKsKTkDK/s+WEGntw4edHrhYN6Ck86HQ3IJh6K
-         Q0CA==
+        bh=JHL6ulY39G3oYupBS7XaH4v+pqwb8EWJ7uPAAnt0DUo=;
+        b=NypGK/y/QMSj7kykXuqffJBWeSeURdROrAIZpIjuU6YeyErphUB3XGkaWeL2TTFWM7
+         Dw1NqYCmMfCvkxWkgE9RsPF44QZMqZRzbs9CW0P87Ol92pkhzwkm08TuBGctGbDyvkpt
+         5v4qiJQy1BrdD1A8GZ4Q8RiLJWn0xo3RmKll+MD+wjEhuk2UXDQD+1AfVFh6QMlzhds5
+         t2AfPNf7zS8NHrsQAYAKI/QUWS8gi2xZNh//prS01ORUYnKTDn+eBzF7YM4yBH6rzlt/
+         JxarJucsIc4pVy6OOg1TwahbnKgkf9bOT5CPlDV5G45LBUzqaecPyYQVh52tgfTS1sYR
+         GoIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789747519; x=1790352319;
+        d=1e100.net; s=20260707; t=1789748694; x=1790353494;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=unXnQHfl7O6IYkwSNLEzXDjPIDBkaOiWJaYXq+gOmlg=;
-        b=n7u7vqsUPoHvmkVIzRmPDL+rsEn1MW6j07WZKyHG77vujhmvAMdXK7sIGjvBXIFaoU
-         wYHYIDrT2HR7+ZMDjLd1RqR6QaUuS0fQVtqcl+lJEwsUpKuhK9/AJu2/qXaId5/TitJn
-         cL5zh78iZC74xzNGkvmsuFFx1ShYnAevgK1dFgAm+CNxf63hkdJ/mAnf0a7ilj+HIp3s
-         Hplr6wVCKRL6G3Zc2tEqq7kJKXy0ukURnFCBLEW0yJqucDCjbRcsS5PazoR7H156B0x9
-         NBCzYtHKvlAYDbx9dTvUw/koyDpLNorPUHx+edpJx8nAVoKZqMurODBgv7DwYHrotnTB
-         iRkg==
-X-Forwarded-Encrypted: i=1; AKwUvByCOMhlMN8XuBQHcxf4SdnJl8q5Bri9Is/vDcp3Lh1ljQzsCUR8v6iB3jgiBeh0z7xlZTVJCOcPCuxFnWqY0n4=@vger.kernel.org
-X-Gm-Message-State: AFuF++lCf12d3QX1qN9UtxJ6+ZHeRIfomvyptwarm8S/aA1TkzlBLZ92
-	ttA5mE6RwvgzX6/xipd5GG3CUqrj+Q5+R4syNgPndXO3gJ/EyDDtLp5XN/LLhHCN5NEx8ugWO2I
-	pyu/Dbg==
-X-Received: from pfnn7.prod.google.com ([2002:a05:6a00:2b87:b0:871:1f86:b3d4])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:94fb:b0:86a:59ca:6cb6
- with SMTP id d2e1a72fcca58-874ddff72a7mr6173681b3a.20.1789747519214; Fri, 18
- Sep 2026 09:05:19 -0700 (PDT)
-Date: Fri, 18 Sep 2026 09:05:18 -0700
-In-Reply-To: <20260918113631.634233-4-gokul02k@gmail.com>
+        bh=JHL6ulY39G3oYupBS7XaH4v+pqwb8EWJ7uPAAnt0DUo=;
+        b=bHZY9U88XbDsXw0MtzpUUt5ijljARwbqMK+1A4Lavy3HKuu4x3/0tjvgh2iWjSYEYV
+         tJNnvimA47byGu/kODzMyMeTJblI+VynTK0vz/3RiIaKhjvddnmmdsj38cdnoafGSM57
+         nBhmbLgs//TRb0gVDJCTS1PJ0O0+bDL2D/gC/mcTSpvTe3NAjrYMkbSZ7x01OMRwohKU
+         Ns/lq58i3rLXws0dq7RWFCua00wgCkavJUCEZd2h/VABUhuLdzrYJGa+ZAtl9fZpf4Sb
+         MbqogKEjRjw89yGGO2iHNc+tktA3YyDbHKmapS3etcWadFvlUowU3bB+RXJy/yzRgOCQ
+         CCiQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwfzTgYzIPWxK0ejPT9biKSbZEhnvkQUgv0uD2WrWxGM/OaAtk9UPLY5GnQjdMFNh/7UE4+iCDTBVOmNCnYj9c=@vger.kernel.org
+X-Gm-Message-State: AFuF++nFe+HMhlf7e313MJ1eFNt110KIqUugPhrWVllN0ReLUf1u32sU
+	txzsOAEIvvR/HLL3aI6hWnKrVd2eulo/IZx3z255A0nOG9Biy3eh9J+0UV9NTqJemoiVU3yeZ4c
+	2tEsrZg==
+X-Received: from pjbiw20.prod.google.com ([2002:a17:90b:4214:b0:39e:ac:d0a2])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:d648:b0:39e:6c6a:4b6f
+ with SMTP id 98e67ed59e1d1-39e6c6a5502mr182977a91.57.1789748693726; Fri, 18
+ Sep 2026 09:24:53 -0700 (PDT)
+Date: Fri, 18 Sep 2026 09:24:53 -0700
+In-Reply-To: <20260918113631.634233-2-gokul02k@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260918113631.634233-1-gokul02k@gmail.com> <20260918113631.634233-4-gokul02k@gmail.com>
-Message-ID: <aq1hPuxq2yIeflyH@google.com>
-Subject: Re: [PATCH 3/3] KVM: selftests: Delete the unused guest_snprintf()
+References: <20260918113631.634233-1-gokul02k@gmail.com> <20260918113631.634233-2-gokul02k@gmail.com>
+Message-ID: <aq1l1WwdySbfX0qt@google.com>
+Subject: Re: [PATCH 1/3] KVM: selftests: Delete the unused sparsebit copy and
+ count helpers
 From: Sean Christopherson <seanjc@google.com>
 To: Gokul K <gokul02k@gmail.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
@@ -68,161 +69,40 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, Shuah Khan <shuah@
 Content-Type: text/plain; charset="us-ascii"
 
 On Fri, Sep 18, 2026, Gokul K wrote:
-> guest_snprintf() is a varargs wrapper around guest_vsnprintf() that nothing
-> calls. Its declaration in test_util.h and its definition in
-> lib/guest_sprintf.c are the only two mentions anywhere under
-> tools/testing/selftests.
+> sparsebit_copy() and sparsebit_num_set() have no callers.  Nor does the
+> FUZZ harness at the bottom of lib/sparsebit.c, which exercises most of
+> the rest of the API and still builds and links with both removed.
 > 
-> The rest of the family is alive: guest_vsnprintf() does the work and
-> ucall_common.c calls it, so this deletes the wrapper and nothing else.
+> sparsebit_copy() was the only non-recursive caller of
+> node_copy_subtree(), which leaves that unreachable too.  It is static,
+> so keeping it would trip -Wunused-function; delete it as well.
+> 
+> The comment on the num_set member gives sparsebit_num_set() as the
+> reason the count is maintained.  The member stays - it is what lets
+> sparsebit_all_set() answer in O(1), and the dump path prints it - so
+> point the comment at what still uses it.
 > 
 > No functional change intended.
 > 
 > Signed-off-by: Gokul K <gokul02k@gmail.com>
 > ---
->  tools/testing/selftests/kvm/include/test_util.h |  1 -
->  tools/testing/selftests/kvm/lib/guest_sprintf.c | 12 ------------
->  2 files changed, 13 deletions(-)
+>  .../testing/selftests/kvm/include/sparsebit.h |  2 -
+>  tools/testing/selftests/kvm/lib/sparsebit.c   | 63 +------------------
+>  2 files changed, 1 insertion(+), 64 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-> index a6a3e1657895..fbdf0e0c15d1 100644
-> --- a/tools/testing/selftests/kvm/include/test_util.h
-> +++ b/tools/testing/selftests/kvm/include/test_util.h
-> @@ -238,7 +238,6 @@ static inline u32 atoi_non_negative(const char *name, const char *num_str)
->  }
+> diff --git a/tools/testing/selftests/kvm/include/sparsebit.h b/tools/testing/selftests/kvm/include/sparsebit.h
+> index e027e5790946..8a2ab11dae6f 100644
+> --- a/tools/testing/selftests/kvm/include/sparsebit.h
+> +++ b/tools/testing/selftests/kvm/include/sparsebit.h
+> @@ -30,7 +30,6 @@ typedef u64 sparsebit_num_t;
 >  
->  int guest_vsnprintf(char *buf, int n, const char *fmt, va_list args);
-> -__printf(3, 4) int guest_snprintf(char *buf, int n, const char *fmt, ...);
->  
->  char *strdup_printf(const char *fmt, ...) __attribute__((format(printf, 1, 2), nonnull(1)));
->  
-> diff --git a/tools/testing/selftests/kvm/lib/guest_sprintf.c b/tools/testing/selftests/kvm/lib/guest_sprintf.c
-> index 7a33965349a7..6caebb456f3d 100644
-> --- a/tools/testing/selftests/kvm/lib/guest_sprintf.c
-> +++ b/tools/testing/selftests/kvm/lib/guest_sprintf.c
-> @@ -300,15 +300,3 @@ int guest_vsnprintf(char *buf, int n, const char *fmt, va_list args)
->  	*str = '\0';
->  	return str - buf;
->  }
-> -
-> -int guest_snprintf(char *buf, int n, const char *fmt, ...)
-> -{
-> -	va_list va;
-> -	int len;
-> -
-> -	va_start(va, fmt);
-> -	len = guest_vsnprintf(buf, n, fmt, va);
-> -	va_end(va);
-> -
-> -	return len;
-> -}
+>  struct sparsebit *sparsebit_alloc(void);
+>  void sparsebit_free(struct sparsebit **sbitp);
+> -void sparsebit_copy(struct sparsebit *dstp, const struct sparsebit *src);
 
-Hmm, I would rather turn guest_snprintf() into a macro so that it can be used in
-variadic functions.  I can't think of any reason why this wouldn't work (and
-emperically, guest printing works as expected).
+I'm somewhat tempted to keep sparsebit_copy() even though there are no users.
+In the unlikely scenario someone wanted/needed to make a copy, it seems like a
+potentially painful waste of time to have to recreate this or hunt down its prior
+existence.
 
----
-
-From: Sean Christopherson <seanjc@google.com>
-Date: Fri, 18 Sep 2026 08:57:37 -0700
-Subject: [PATCH] KVM: selftests: Make guest_snprintf() a macro and use it as
- appropriate
-
-Turn guest_snprintf() into a macro so that it can be used by variadic
-functions, and use it in the ucall APIs instead of open coding the VA goo.
-
-Reported-by: Gokul K <gokul02k@gmail.com>
-Closes: https://lore.kernel.org/all/20260918113631.634233-4-gokul02k@gmail.com
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/testing/selftests/kvm/include/test_util.h | 12 +++++++++++-
- tools/testing/selftests/kvm/lib/guest_sprintf.c | 12 ------------
- tools/testing/selftests/kvm/lib/ucall_common.c  | 10 ++--------
- 3 files changed, 13 insertions(+), 21 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index a6a3e1657895..817d4d5ca7cc 100644
---- a/tools/testing/selftests/kvm/include/test_util.h
-+++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -238,7 +238,17 @@ static inline u32 atoi_non_negative(const char *name, const char *num_str)
- }
- 
- int guest_vsnprintf(char *buf, int n, const char *fmt, va_list args);
--__printf(3, 4) int guest_snprintf(char *buf, int n, const char *fmt, ...);
-+
-+#define guest_snprintf(__buf, __n, __fmt)		\
-+({							\
-+	va_list va;					\
-+	int len;					\
-+							\
-+	va_start(va, __fmt);				\
-+	len = guest_vsnprintf(__buf, __n, __fmt, va);	\
-+	va_end(va);					\
-+	len;						\
-+})
- 
- char *strdup_printf(const char *fmt, ...) __attribute__((format(printf, 1, 2), nonnull(1)));
- 
-diff --git a/tools/testing/selftests/kvm/lib/guest_sprintf.c b/tools/testing/selftests/kvm/lib/guest_sprintf.c
-index 7a33965349a7..6caebb456f3d 100644
---- a/tools/testing/selftests/kvm/lib/guest_sprintf.c
-+++ b/tools/testing/selftests/kvm/lib/guest_sprintf.c
-@@ -300,15 +300,3 @@ int guest_vsnprintf(char *buf, int n, const char *fmt, va_list args)
- 	*str = '\0';
- 	return str - buf;
- }
--
--int guest_snprintf(char *buf, int n, const char *fmt, ...)
--{
--	va_list va;
--	int len;
--
--	va_start(va, fmt);
--	len = guest_vsnprintf(buf, n, fmt, va);
--	va_end(va);
--
--	return len;
--}
-diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
-index 029ce21f9f2f..e9df71197367 100644
---- a/tools/testing/selftests/kvm/lib/ucall_common.c
-+++ b/tools/testing/selftests/kvm/lib/ucall_common.c
-@@ -83,7 +83,6 @@ void ucall_assert(u64 cmd, const char *exp, const char *file,
- 		  unsigned int line, const char *fmt, ...)
- {
- 	struct ucall *uc;
--	va_list va;
- 
- 	uc = ucall_alloc();
- 	uc->cmd = cmd;
-@@ -92,9 +91,7 @@ void ucall_assert(u64 cmd, const char *exp, const char *file,
- 	WRITE_ONCE(uc->args[GUEST_FILE], (u64)(file));
- 	WRITE_ONCE(uc->args[GUEST_LINE], line);
- 
--	va_start(va, fmt);
--	guest_vsnprintf(uc->buffer, UCALL_BUFFER_LEN, fmt, va);
--	va_end(va);
-+	guest_snprintf(uc->buffer, UCALL_BUFFER_LEN, fmt);
- 
- 	ucall_arch_do_ucall((gva_t)uc->hva);
- 
-@@ -104,14 +101,11 @@ void ucall_assert(u64 cmd, const char *exp, const char *file,
- void ucall_fmt(u64 cmd, const char *fmt, ...)
- {
- 	struct ucall *uc;
--	va_list va;
- 
- 	uc = ucall_alloc();
- 	uc->cmd = cmd;
- 
--	va_start(va, fmt);
--	guest_vsnprintf(uc->buffer, UCALL_BUFFER_LEN, fmt, va);
--	va_end(va);
-+	guest_snprintf(uc->buffer, UCALL_BUFFER_LEN, fmt);
- 
- 	ucall_arch_do_ucall((gva_t)uc->hva);
- 
-
-base-commit: 70c944caf570fda2d79baa71435589a8db39f048
--- 
-
+Anyone else have an opinion?
