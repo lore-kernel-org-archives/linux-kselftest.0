@@ -1,23 +1,23 @@
-Received: from out28-173.mail.aliyun.com (out28-173.mail.aliyun.com [115.124.28.173])
+Received: from out28-147.mail.aliyun.com (out28-147.mail.aliyun.com [115.124.28.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD034A6CFB;
-	Fri, 18 Sep 2026 08:56:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A56503DDDBE;
+	Fri, 18 Sep 2026 08:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789721805; cv=none; b=g3Ks/qGsM2xYW0fGWQMl4lB4ZeS/5RX+Q2eu+khvC1SlxiTTqdZTs2sstkeFBw4hQdB2h5HYNgrLdbmKx0E6KZnSnJgNgD4DP7kmg+A+pMQM39F3bwJrj8Pn2gaYQ3+O6Ufv83xswINhAZCJ/4HSHn4GM02BHaEFSuDdP/ZmcD4=
+	t=1789721808; cv=none; b=Q955J1R5oV2dh4HADBK6OtO8pYMShEwGmSuOhiOyhpcLCFcDKYSas9Ox+ajhciDRhguNuN5UxMcwDgCGQwpefnDt0UBIxOSHqu8cTi6oSt3/Bb7cx//tdggWtm0wRu94DWBhrJhDax83+aaJN68sO2J4ajkeTSe2iFO3VlZY4cw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789721805; c=relaxed/simple;
-	bh=q/jrRFTbP7ROaTK4FUqOWWE6YjOvkIR4dZveVTKToL0=;
+	s=arc-20240116; t=1789721808; c=relaxed/simple;
+	bh=QZWNxZ4MgCDhMSom6fOG0nlRZxBeFW2QDH9whnu0/7c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mY+jVU4Z8h28Za+lCAbPFU2dzUXwW6eWMdU9rp6E3SpR0YnV4OwvHLBPa99E1OonYOV2LMtY51qsnpU72S2s1/hOyL0DQn+BwoiF330c2R/yQoToZdX+GSKNwgr3efk3vWUIE8+UxHNUP8S1OU+Sgqiw/E1NCMWhcZHyBED5do8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.173
+	 MIME-Version; b=TWKB9ryqGRmA/fiVzmGmyjvGlXFKIiRMKHAHVPIoyxdzZBNx5Dnqb0bnYfm2XNNzsHClW6Amr3Cofya2iT8GUa6lvMUEg1oWkOGS+32TwxIgW77mzKd5B0atfSpMXrPvGUsQs1yJa9mLniz4/bXLdO2Y+Gc3scTDL44km+wYqC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.147
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.2100021|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.158478-0.00122291-0.840299;FP=4966202699363141559|1|1|1|0|-1|-1|-1;HT=maildocker-contentspam011083013073;MF=zhang_wei@open-hieco.net;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.jGgS5Oq_1789721787;
-Received: from localhost.localdomain(mailfrom:zhang_wei@open-hieco.net fp:SMTPD_---.jGgS5Oq_1789721787 cluster:ay29)
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.2010712|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00822565-0.00404493-0.987729;FP=16639321896244676075|1|1|1|0|-1|-1|-1;HT=maildocker-contentspam033032053168;MF=zhang_wei@open-hieco.net;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.jGgS5SK_1789721790;
+Received: from localhost.localdomain(mailfrom:zhang_wei@open-hieco.net fp:SMTPD_---.jGgS5SK_1789721790 cluster:ay29)
           by smtp.aliyun-inc.com;
-          Fri, 18 Sep 2026 16:56:27 +0800
+          Fri, 18 Sep 2026 16:56:30 +0800
 From: Tina Zhang <zhang_wei@open-hieco.net>
 To: Sean Christopherson <seanjc@google.com>,
 	Jim Mattson <jmattson@google.com>,
@@ -27,9 +27,9 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>,
 	zhouyanjing@hygon.cn,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v7 2/8] KVM: nSVM: Synthesize DecodeAssists EXITINFO for emulated intercepts
-Date: Fri, 18 Sep 2026 16:56:12 +0800
-Message-ID: <2b30c180a7ec1fb22033cc1b89debc36c9f569d0.1789721173.git.zhang_wei@open-hieco.net>
+Subject: [PATCH v7 7/8] KVM: nSVM: Advertise DecodeAssists to L1
+Date: Fri, 18 Sep 2026 16:56:17 +0800
+Message-ID: <b716bb603fe3fff0160aa7b2af102cb5e9738086.1789721173.git.zhang_wei@open-hieco.net>
 X-Mailer: git-send-email 2.43.7
 In-Reply-To: <cover.1789721173.git.zhang_wei@open-hieco.net>
 References: <cover.1789721173.git.zhang_wei@open-hieco.net>
@@ -41,83 +41,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When the x86 emulator encounters an instruction intercepted by L1,
-svm_check_intercept() synthesizes a nested VM-Exit without fresh hardware
-DecodeAssist state.  Populate the architectural EXITINFO1 field when
-DecodeAssists is exposed to L1.
+Advertise DecodeAssists to L1 now that KVM virtualizes the
+guest-visible DecodeAssist state in VMCB12: EXITINFO1 decode data for
+MOV CR/DR, INTn, and INVLPG exits, plus instruction bytes for nested
+page faults and intercepted #PF exits.  INVLPGA's linear address remains
+available directly from the saved guest rAX, as required by the APM.
 
-Provide the GPR number for MOV CR/DR, the interrupt vector for INTn, and
-the linear address for INVLPG.  Preserve the MOV-to-CR0 decode information
-when a selective CR0 write intercept is triggered.  Leave EXITINFO1 clear
-for CLTS, LMSW, SMSW, and INVLPGA; the INVLPGA address remains in guest
-rAX.  Leave EXITINFO1 unchanged when DecodeAssists is not exposed, and
-leave unrelated intercepts unchanged.
+Expose the feature only when supported by hardware, as KVM still relies
+on hardware DecodeAssists for VM-Exits that are reflected directly from
+L2.
+
+With DecodeAssists exposed, QEMU configurations that require the feature
+(e.g. "-cpu ...,+decodeassists,...,enforce") are no longer rejected.
 
 Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
+Reviewed-by: Jim Mattson <jmattson@google.com>
 ---
- arch/x86/kvm/svm/svm.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ arch/x86/kvm/cpuid.c   | 1 +
+ arch/x86/kvm/svm/svm.c | 2 ++
+ 2 files changed, 3 insertions(+)
 
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 7c63ef90fc60..52dcde011987 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -1195,6 +1195,7 @@ void kvm_initialize_cpu_caps(void)
+ 		VENDOR_F(NPT),
+ 		VENDOR_F(VMCBCLEAN),
+ 		VENDOR_F(FLUSHBYASID),
++		VENDOR_F(DECODEASSISTS),
+ 		VENDOR_F(NRIPS),
+ 		VENDOR_F(TSCRATEMSR),
+ 		VENDOR_F(V_VMSAVE_VMLOAD),
 diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index f5aa3d7d3a10..e83e4e5e7b93 100644
+index e83e4e5e7b93..82de844f63ad 100644
 --- a/arch/x86/kvm/svm/svm.c
 +++ b/arch/x86/kvm/svm/svm.c
-@@ -4837,6 +4837,7 @@ static int svm_check_intercept(struct kvm_vcpu *vcpu,
- 	int vmexit, ret = X86EMUL_CONTINUE;
- 	struct __x86_intercept icpt_info;
- 	struct vmcb *vmcb = svm->vmcb;
-+	bool decode_assists;
+@@ -5557,6 +5557,8 @@ static __init void svm_set_cpu_caps(void)
+ 		 */
+ 		kvm_cpu_cap_set(X86_FEATURE_FLUSHBYASID);
  
- 	if (info->intercept >= ARRAY_SIZE(x86_intercept_map))
- 		goto out;
-@@ -4846,14 +4847,26 @@ static int svm_check_intercept(struct kvm_vcpu *vcpu,
- 	if (stage != icpt_info.stage)
- 		goto out;
++		kvm_cpu_cap_check_and_set(X86_FEATURE_DECODEASSISTS);
++
+ 		if (nrips)
+ 			kvm_cpu_cap_set(X86_FEATURE_NRIPS);
  
-+	decode_assists = guest_cpu_cap_has(vcpu, X86_FEATURE_DECODEASSISTS);
-+
- 	switch (icpt_info.exit_code) {
- 	case SVM_EXIT_READ_CR0:
- 		if (info->intercept == x86_intercept_cr_read)
- 			icpt_info.exit_code += info->modrm_reg;
-+
-+		if (decode_assists)
-+			vmcb->control.exit_info_1 =
-+				info->intercept == x86_intercept_cr_read ?
-+				CR_VALID | (info->modrm_rm & SVM_EXITINFO_REG_MASK) : 0;
- 		break;
- 	case SVM_EXIT_WRITE_CR0: {
- 		unsigned long cr0, val;
- 
-+		if (decode_assists)
-+			vmcb->control.exit_info_1 =
-+				info->intercept == x86_intercept_cr_write ?
-+				CR_VALID | (info->modrm_rm & SVM_EXITINFO_REG_MASK) : 0;
-+
- 		/*
- 		 * Adjust the exit code accordingly if a CR other than CR0 is
- 		 * being written, and skip straight to the common handling as
-@@ -4898,6 +4911,20 @@ static int svm_check_intercept(struct kvm_vcpu *vcpu,
- 	case SVM_EXIT_READ_DR0:
- 	case SVM_EXIT_WRITE_DR0:
- 		icpt_info.exit_code += info->modrm_reg;
-+		if (decode_assists)
-+			vmcb->control.exit_info_1 = info->modrm_rm & SVM_EXITINFO_REG_MASK;
-+		break;
-+	case SVM_EXIT_SWINT:
-+		if (decode_assists)
-+			vmcb->control.exit_info_1 = info->src_val & 0xff;
-+		break;
-+	case SVM_EXIT_INVLPG:
-+		if (decode_assists)
-+			vmcb->control.exit_info_1 = info->invlpg_linear_addr;
-+		break;
-+	case SVM_EXIT_INVLPGA:
-+		if (decode_assists)
-+			vmcb->control.exit_info_1 = 0;
- 		break;
- 	case SVM_EXIT_MSR:
- 		if (info->intercept == x86_intercept_wrmsr)
 -- 
 2.43.7
 
