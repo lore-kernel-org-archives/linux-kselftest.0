@@ -1,145 +1,95 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8831B355F53
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 01:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3083AE189;
+	Fri, 18 Sep 2026 01:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789695655; cv=none; b=u9lVWijj3jKaNRQOI46ZeoDwA+aQv87p9LDGNhqqOe2RJ+hcHcFn1wooALX9xHeJ0oh6gS79n5xMjMiScbpI6QaTD/7SzRJs642UIovBeTJwFSbmf4Ila+Bi735cnVhmHD5NBHdgB4dIcwyLBpfbmVt03GtFzNoeo52A2svjgM0=
+	t=1789696344; cv=none; b=JmAFOxPbUIzT3nQlWRbX2Fe2QYz8GZKYJp18md42S0cLhNqva4jY+4RVJR7aAmj4njxVtbPNl1+iTRHPIgP92gwe3pV1xiKciAnUR7f1KpjuA1+P5+dGJBZtmLVEoh3ZV3ra08CGVNWI6j797pV3lWwKrm/sivqAsulk2V/Xp5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789695655; c=relaxed/simple;
-	bh=Eo/yga4vDEGayDHqVP6iJdYvyA2lrJe+j+Dvmd1JbAo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YOqQN9Ct7TpfcL5aOarARhgFufGCZJpsjbVO2bCKz3Bvn8OXrj0tavh0yeraCUq3bsyLBEdKUa0TzN0bYFTZLq/AoQmXaIaBJ48ovRtCj/VtI4q5T82ZQ1BXgXO5PRssu1Puz8V2MO0NLldiTQQ1wxzdNrJBvJ9OMeUqWRYD/Fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mGODxZPG; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mGODxZPG"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2d8fd7a3f38so31105ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2026 18:40:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789695651; x=1790300451; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=76px+Ex0r5rs6bbVIuEECvEPc+oBZjVRzvMFC1AHdA8=;
-        b=mGODxZPGmp4Gdmnap0fOCFwlstLS+6T+Ak9EigAGvei6IWTd5xh5f0lhBDolSuV4Qa
-         Mj6IVGf+qeVqlURhLCx8r16hI39W4K8mGkWVQAvV0DjJsWMs/OECj1qtIbEstV29xhjH
-         DrrprQbdseo/DSVmi0noPc9DlLSj1tRWW2AV7JjoH7m2FImDfqG7ukg2YDUc/JKQ6X9y
-         dt5cA9F1pRP96HQRBXWf/PGb6jNzM27k2yMowMsrws7rxa7NKIqMkgGSlLIe7pv2GMMG
-         cvbE9cpWRF7Itf6s0XKXvSf3mUOhwjwEPTy6J8px8lndxJxjwrP/HLH/tfcO0a7zS7gn
-         3tVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789695651; x=1790300451;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=76px+Ex0r5rs6bbVIuEECvEPc+oBZjVRzvMFC1AHdA8=;
-        b=SIgIkT0UFllMwa8wLG3DQRO7QtLHwh5Cn0DqFY793+kZ2gsTi5XvS4YZwC9cRSQnNK
-         vVNx1I6KKZcC0Z83PRImjadoyoBOEoN1EkpCM+Ui9keV4qg460skQs8Fl71noR1NCNZJ
-         hCZGMi6jcFHAJL9YxarMrGSQPVDhb9ZqrkbkRwZqas5jj4Vn0uo9yMa2X2qjFT7SqiM9
-         QOHWl8VqGh7KG5Sp9gKB4M2BGzJpCgZevnZ2aTdZKuQ7XTON1lCRjGMZnakn/8YZZ62N
-         cCNCUtZ1g+KM0tWS9cttlSiHfVRzNqfGkVILyAP8l3AjeZ/Q5X7DR7l8lXWcM5YlbdiB
-         LFbw==
-X-Forwarded-Encrypted: i=1; AKwUvBwdxgI+sPbgeWFIEpFgePFpW6Ir2BlkW9t1cNFqFlCqZogNMd0Wf70K/91bnvMWjLVmWqnu3HljkUZcyjuLtyY=@vger.kernel.org
-X-Gm-Message-State: AFuF++lAjMMHoiNBrpmJVdaxFCAg13n3YE3IDnDbuvZ/QWJELtROFD3L
-	22AJeNs3/yTcQUiV3okjpslMCtQBF6Y3yx16oNO5sFpPiZZD9IRwoN1u8p6xLlDGBg==
-X-Gm-Gg: AYBFou3Q0EhFgiaAEp6B7lMQEYjHbUiBf06Ce/S1qr1wERPSEdcrZtYBzePdj7dvBGx
-	q2F/HjUBVX2mk6b26lpT8KPsrtpwyTI6DXRasM5KN4ximIB1u7HZUgFozqge7+U0MK+oQlhyKF2
-	SbY+iHvnIQ43Sl+B0EW7x7J2NJSjaaVTuhd9QKfZCidzF3l3+HKi2zgT55CV4P1CLTFHGhQNM/k
-	WnL/3nmQLDqsyUzVL3HRZHFQ9QBjheCv6mKmBlK/vgacIRb1nuLBTwwr4uDef2a4ecIB/QrLD2s
-	KE5gjWF5x96Q70kuRm4QwmBYVGZMwoBa0IuZJrkEbblkjM1mJdV2PLG3/3ZYr8e35awpKeWexKA
-	BIByeXpsSnosNE23877syEaxMxkSqcXK/RDc7htBasrjzWmCNOIV74YxCOGSFhWAXxVoYz0ML6i
-	tlhanNlE7+dOdVnW0NVlVp5jYYeuDA+1gpF5QUilbKtO9lS05ZgdbOvZH5uJZrKynBSD5f0g9/J
-	aEc2/1ToDyn3jcXi+s17HvbEPW/S5Ir
-X-Received: by 2002:a17:903:4b4c:b0:2dd:3a08:d47b with SMTP id d9443c01a7336-2ddb2bdaca1mr2575225ad.13.1789695649908;
-        Thu, 17 Sep 2026 18:40:49 -0700 (PDT)
-Received: from google.com (230.0.127.34.bc.googleusercontent.com. [34.127.0.230])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e36116920sm7796342a91.5.2026.09.17.18.40.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 18:40:49 -0700 (PDT)
-Date: Fri, 18 Sep 2026 01:40:45 +0000
-From: Lisa Wang <wyihan@google.com>
-To: Xiaoyao Li <xiaoyao.li@intel.com>
-Cc: Ackerley Tng <ackerleytng@google.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Binbin Wu <binbin.wu@linux.intel.com>,
-	Chao Gao <chao.gao@intel.com>,
-	Chenyi Qiang <chenyi.qiang@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Erdem Aktas <erdemaktas@google.com>,
-	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Roger Wang <runanwang@google.com>,
-	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
-	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
-	x86@kernel.org
-Subject: Re: [PATCH v14 03/22] KVM: selftests: Initialize the TDX VM
-Message-ID: <aqyWnaGBa7Az5sND@google.com>
-References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
- <20260722-tdx-selftests-v14-3-15ad654a50db@google.com>
- <c8b7a800-58ed-4ef7-91bd-31da77763717@intel.com>
- <ap_Bpe7dZm_eWsJ2@google.com>
- <CAEvNRgFHTAPYTVQ8a_PVdFLqQ8z07Uep2XhA9r_Ypw+D0WAC8w@mail.gmail.com>
- <07cf5761-48fe-40b7-9310-b64712f5e314@intel.com>
+	s=arc-20240116; t=1789696344; c=relaxed/simple;
+	bh=e/lRjJ3+0ylDa5qqKZe3WO1iGQ/o0RNmydhQSJdETcg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=skl1oPIiL5h4x2jVvVcMqm8BhZbJl8EWtP7XlUgmdy/XCOuL0CM2JB2CKJiEapwat8KU+Uqhi2iRF07og5HRFHny7RjgiK71hbw1BQCwfaXpr8vz/jS4NABJWnDRdGqtupXYA6ROzXVHXkFefyOFxYTlyjKDi8PMBqd7WCR4vcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 8e99a290b30311f19a56ed5b684f684d-20260918
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:743c455c-ddcc-4a3f-90c8-a9647306c3b1,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:7db8b62,CLOUDID:3acd2fdb907b06de407f209f64066ba7,BulkI
+	D:nil,BulkQuantity:0,SF:80|81|82|83|102|136|865|898,TC:nil,Content:0|15|52
+	|99,EDM:-3|-100,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+	,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 8e99a290b30311f19a56ed5b684f684d-20260918
+X-User: fuqingshuang@kylinos.cn
+Received: from [10.42.20.11] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <fuqingshuang@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 1751355845; Fri, 18 Sep 2026 09:52:08 +0800
+Message-ID: <b33bba50-38ce-477a-be0d-ec4eeb0703b1@kylinos.cn>
+Date: Fri, 18 Sep 2026 09:52:05 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <07cf5761-48fe-40b7-9310-b64712f5e314@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: net: fou_mcast_encap: conditionally load fou
+ module and skip IPv4 case
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Willem de Bruijn <willemb@google.com>,
+ Anton Danilov <littlesmilingcloud@gmail.com>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260911100158.854183-1-fuqingshuang@kylinos.cn>
+ <20260916174029.78939f6b@kernel.org>
+ <14cff809-d338-4a95-8e7d-10759615b394@kylinos.cn>
+ <20260917152439.64d14833@kernel.org>
+Content-Language: en-US
+From: Qingshuang Fu <fuqingshuang@kylinos.cn>
+In-Reply-To: <20260917152439.64d14833@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 09, 2026 at 06:00:53PM +0800, Xiaoyao Li wrote:
-> >> The reason we could not use __TEST_ASSERT_VM_VCPU_IOCTL() directly[2] is
-> >> because it formats ther return value as %i (32-bit), whereas
-> >> __tdx_vm_ioctl might return a u64 hardware error code.
-> >>
+在 2026/9/18 06:24, Jakub Kicinski 写道:
+
 > 
-> Since we cannot simply use hw_error to replace ret, there will be not 32bit
-> vs 64bit issue. But ...
+> I did not ask about FOU
+
+Apologies, I completely misread the scope.
+
+I've now done a systematic check across tools/testing/selftests/net/.
+FOU is the only relevant module lacking any auto-load mechanism
+in these tests:
+
+All other tunnel/encap modules (bareudp, vxlan, geneve, gre, ip_gre,
+ip6_gre, amt, ifb, xfrm, l2tp) have proper module aliases and can be
+auto-loaded via netlink or rtnetlink requests.
+
+In contrast, the fou module has no MODULE_ALIAS_GENL_FAMILY, no
+rtnl link alias, and no net-pf-proto alias, so it never auto-loads.
+
+Among the three selftests using FOU, pmtu.sh and rtnetlink.sh already
+load the module explicitly, while fou_mcast_encap.sh is the only missing
+case.
+
+A naive grep for "encap|tunnel" across the net selftests returns 23
+scripts, all of which rely on auto-loading and require no fixes.
+
 > 
-> >> I agree with your suggestion to introduce a new
-> >> TEST_ASSERT_TDX_VM_VCPU_IOCTL() macro to print out u64 hardware error
-> >> code properly.
+> I guess I wasn't clear enough. When I say "before posting v2"
+> I was hoping you'd give me a chance to respond too :/
 > 
-> ... if we want to print hw_error as well, we still need a new macro.
-> 
-> >> [2]: https://lore.kernel.org/all/a58e2941-77f9-43cf-a54d-023506dd7eb0@linux.intel.com/
-> >>
-> > 
-> > Is tdx_vm_ioctl() the only place where TEST_ASSERT_TDX_VM_VCPU_IOCTL()
-> > is going to be used though? If so, maybe we should defer introducing
-> > TEST_ASSERT_TDX_VM_VCPU_IOCTL() till later.
-> 
-> I think tdx_vcpu_ioctl() will use it as well?
+Noted, and sorry for jumping the gun. Won't happen again.
 
-Thanks for replying.
-
-I agree all of the other parts of your comments.
-
-Just wanted to point out one detail: tdx_vm_ioctl() is the only place
-that actually needs to evaluate hw_error right now. Unlike the VM-scoped
-ioctls in the x86 kernel code, the functions dispatched via
-tdx_vcpu_unlocked_ioctl() (such as tdx_vcpu_init or
-tdx_vcpu_init_mem_region) do not currently return the TDX SEAMCALL error
-codes into the hw_error field.
-
-Thus, I would prefer to inline TEST_ASSERT directly inside tdx_vm_ioctl()
-instead of introducing a new TEST_ASSERT_TDX_VM_VCPU_IOCTL() right now.
-
-Lisa
-
-> > I think the issue with if (ret) is just that TEST_ASSERT(!ret) already
-> > does that same check, and so we can drop the if (ret) part.
-> > 
