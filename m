@@ -1,356 +1,138 @@
-Received: from mail-yx2-f42.google.com (mail-yx2-f42.google.com [74.125.224.170])
+Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282CC35201B
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 21:53:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F92A26738D
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 21:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789768432; cv=none; b=vC0oH71n4XTNg+BvhgltDG4OnR9eDXNWl2djp+ALh+HHS6J3zMLSk9NcdGllAUvJtp1xrOVuZpjROmWR0yWrpZzBDupPYDfT4odJZvXATyJZHFxs0J7UT1D2NHDHGOA64KEOV90XTalIPWwKa367GMX4TXo3Y6668TjZQ13zHyI=
+	t=1789768758; cv=none; b=dqL1QFcNMlW4q3T5dvwC/t+qLQBnANrnXv9PWNedv7T3GGJN0cnFS2jc3kR3DH3xW8B+kCFMOZ55teNKg5lR0mSyeduUubYvXczJB2h2UXw3e2qLVhcVKZoFhCGTF44fxqwbFGWJgjKcHuz2V1kTZY8gbK6kFaeHloBmjvsM9p8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789768432; c=relaxed/simple;
-	bh=yZCLh9FYzdm/xaUKV2QwRGQ+s6VMsJPtmVEdYsPHSFk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LgElGAyXGMaQHqxKCAeXepzflk2r+SQLgm6o9xGuF+oe2n6VrkaKh5CAkLSqr2QfVzHoid8fNmUCt3NGhKY/WA33UYjZX9tzZ7Y3lwd/RXQ31P6e4jwlJUxCj8EBEIo2eInIjTaTk/vXz1crXXRM2L65yiY3VaUli2FZ2myWXFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tenstorrent.com; spf=pass smtp.mailfrom=tenstorrent.com; dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b=fYjf/Ykt; arc=none smtp.client-ip=74.125.224.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tenstorrent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tenstorrent.com
+	s=arc-20240116; t=1789768758; c=relaxed/simple;
+	bh=3ig1oj0ucAknrG7KmJfScqO7st+Sj4aA3FThIeKv09g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y3qbZcg5xirSmw1d2pLhGRefA7RYnb68DcYQSVkj0JQdH/HNYwODOg05TpdiFxH6Szgj2i5lBRyBQDbAN2Y+9wP73yJK283SVspMUTaBCBYoSsEjVfPb4yzzk3HxLikNSRKDTkesuDyvHRMOiDRqwG9jYuh15InhNvbYsb1zZYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DLHbH4qu; arc=none smtp.client-ip=74.125.225.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b="fYjf/Ykt"
-Received: by mail-yx2-f42.google.com with SMTP id 00721157ae682-8961cca9193so15792357b3.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 14:53:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DLHbH4qu"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4843178b1c8so170576f8f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 14:59:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tenstorrent.com; s=google; t=1789768430; x=1790373230; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=YgKQxSeRnOzoiZ3Got1iPeMZXr/r/xBvpSPq8RVnIaQ=;
-        b=fYjf/Yktuwipk+TfStlUBujhXHl3jw5r1hpx/fag1xAtxuSnDYMARHwJboYHRqS4it
-         hd3e6JWf+Coy2VbRvpGAuihXlzkDDAPSjaUVoc7du46rKxUzjEO6AORSu0PbD07bdf1h
-         nOE7b5HzOEv6XkL91ED4kWVej/BMZg9cpocJpH/RwVRcLodnABgsO6dIVWv95Q/FOFZV
-         uo6eVyuWsbJrzXM6gr7Xs6R97NcCI1xP1fGpLSwfKrvwaLNyMPfrJAuFCifExeMPOR+6
-         BcTw1puxaft3du8ibYEaauXspP/SvZFnv25c42QBaGJykQUC7jMTAm0YLS7FYIo2WSeP
-         UBGQ==
+        d=gmail.com; s=20251104; t=1789768755; x=1790373555; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zobxd8dDfc3X9MOmFn6Ig1Mve7PgRgvEMzrNYO/gZLw=;
+        b=DLHbH4qu14uW0p97sznhdxRVrgG2b/EbOAKviRNT0jLlrPfYd1NBJyq+hsU2rX9AVU
+         W/t5rB79tda/MhA3quV3PX4Ro/edJ5KpueX9jtSukeuhWrXyQprWGc15rnjcHL3oyOtF
+         qRm39cFHKsoIlCvyxYYvsUVMk/zY5Sy+Si3h5bTepuGOYKH48oLBCjdeZ3554ZsiXXMm
+         zmicYcpMDe3Pt/Fj0pPc3IhPWGY65GYxoulXXQVCBmv5jzVQoOgjZ6tgSMLjuyMkBAQ4
+         el6BVZYXQwLyw9k1FDf/U8PICKq+z01OmOpqzfao4fRePSbJWCgPqtA3v72Pwd5X3l6x
+         0h6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789768430; x=1790373230;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YgKQxSeRnOzoiZ3Got1iPeMZXr/r/xBvpSPq8RVnIaQ=;
-        b=ei9q6r0LYgiM1RNQL4nnn5o5HVvPEZu3eDqmeLSIxESKOnIMrIyzJuq2fTY+gJp6gr
-         XCl7ANX7vdBso1Ety4kn6eRsk+XDJ1csAa4grBcoA4TKTfTM5RCQueZWSXUOAnr1H/EY
-         u5aGuFIRc6tEhbfbRmG7Gkpz0XRwZdkNQxVv+ga1e6axszRAAOt3gsqdeKVrgS3ujIH7
-         TKwjalHcVOXpaA0KesCIl9VSQnsk4pVkphxNyHuLKXwPJGJcydExV2nuvyl8YXZw/nCq
-         8VBUvNEXk4LkkAs1h+xI6XFJGbM0bI3ybBQI5peLPz7Balsq3Pl902hjDZnJ3yhk3w3n
-         5sRA==
-X-Forwarded-Encrypted: i=1; AKwUvBzEg2DKACibMIcuYmyzFF8+FWXnGieHH22O6wKibZSHXC5Su/FLt2UyD0Oux8DRhV2BdGuChNmep7EfVhspoko=@vger.kernel.org
-X-Gm-Message-State: AFuF++kZdOgO7uYTnNVfscGkbWRryUNfMgsmQxlGERONoR5zo8rVeWM0
-	Q/UK4HrMTVyukczi20YZ11hBkNoBWOGz/oVrBVjH11pt62F4gem1B754zcmGDc01izU=
-X-Gm-Gg: AYBFou1cn4XspHOZ9IylEoFHZTuLkAMn3L8e17KLjkoyUuK4betqWlMS4vvsAkAJokK
-	01LaPJDdz1c0FwigMfU/0oayECRUt/IMahX7hQI4AR/IDx68wD/dXyqVxAFReTdU27cetAB17QQ
-	Kq+Axcyb7zJVE0Xvg5fN9pJWUoPsox+7qwbWS2D2FuARh+Dx4lY6VJLgGOJJsI4ljYxWF4E2W6B
-	ybhmjjymbXGQ/zMquqEGGsJndiXEPYoUbKVU9RlP1i/A3R1KYPfxvQcpiBcYYt28wMTKoPBznSc
-	9nGhskFPI/PbSfb5C1HgHiDGE4xBQmCgxbnk9A5ivQd9hNMv7xChRzX3bomkdbpibYBzX6Vz4pC
-	07+12o05Hd3jAZpXS8+uCLY3q/uP3ppNpYD92k3Yiag6DgW2bjiEdQWCvu9efdC9ls4zJu69svi
-	e26uRYs+at1sPk6U+ibYshvyQ59+GVonP+q2wQ5V+QngNaSpVoXeQF0ZtAqJQfcyfdLT3d+ZAF7
-	ZoySNbgx5TefLf5xZToFxoR12vQT5BMUDFI
-X-Received: by 2002:a05:690c:93:b0:872:1e2e:b496 with SMTP id 00721157ae682-89736948fdfmr26927807b3.31.1789768430101;
-        Fri, 18 Sep 2026 14:53:50 -0700 (PDT)
-Received: from lima-default.tail89d63.ts.net ([12.55.13.134])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-89a45d8fb3csm4017757b3.13.2026.09.18.14.53.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 14:53:49 -0700 (PDT)
-From: Andy Chiu <tchiu@tenstorrent.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Cc: andybnac@gmail.com,
-	Andy Chiu <tchiu@tenstorrent.com>,
-	dfustini@oss.tenstorrent.com,
-	greentime.hu@sifive.com,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
-	Wei Yang <richard.weiyang@gmail.com>,
-	Yong-Xuan Wang <yongxuan.wang@sifive.com>
-Subject: [PATCH v6 7/8] selftests: riscv: Extend vector tests for sigreturn and ptrace
-Date: Fri, 18 Sep 2026 16:51:21 -0500
-Message-ID: <20260918215154.2481482-8-tchiu@tenstorrent.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260918215154.2481482-1-tchiu@tenstorrent.com>
-References: <20260918215154.2481482-1-tchiu@tenstorrent.com>
+        d=1e100.net; s=20260707; t=1789768755; x=1790373555;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=zobxd8dDfc3X9MOmFn6Ig1Mve7PgRgvEMzrNYO/gZLw=;
+        b=m+Iv9ur+QE3Fg2JZYAo1MxnEzTJ09oNdQvGnZh0WldxFrmjBUMmHYH434US3L0odVT
+         4xa2XMswxn7AewDxF3ZasHZlhme35Gc0797F5fJKufojYT0icE/zCLKBklP7+KRMZgjq
+         q7w5SZ9U0AA+SMFHi97ZAPa7idfQGBvx263vsu1XZ8WfPN8BZYEPEccm9uSUZp+I3b/6
+         bKTsZRg/RvJKK07+qq+uXCo0SziRMlhA4hFnfb73JDh+aTFgkEYPpFWrSvbT0vrQPJ+b
+         OV0CH4WfXUP1Oowjdgkw84v+0vCiY8Ibz0Ffl/0PC/oLLItAaOAjSpb71vNPtqixAuZg
+         Enjg==
+X-Forwarded-Encrypted: i=1; AKwUvBxXvsxdt8DBD+EHoQW7piN5OXMeYLaBhx19HzqQpEAPIWhDM4kqbp/MzMy2puNMpCRHVZZybT/HnbzujUD1yRE=@vger.kernel.org
+X-Gm-Message-State: AFuF++me8sftuiXoKZe75vWmQN4wckNl6MfnCBi/5mea+id0IaGajAOX
+	pWtamLTWzoy4FQvoypmnVckzh/O/lraWoEtMjVORdQlDJ7/ErnEV8+AM
+X-Gm-Gg: AYBFou3+hcxcuDAb3NmP6KDp9PX2rn3VPhHMvd3Zqi+GyHzyHG1603Uzgwjcr7endwW
+	SpRH/NmWdvFFX9LOPqlCXxVzMjQS4QaXblv10yOBqKldlMOQoEYMjUFvPIrPzi01CyRXIh1Vktq
+	kA8tz7Suwg8fyFfNAGnVOnXrD9tu2iVkCp6GcOpINiBPMHQtJ81nWyxZ85cE8T/xZBEtHPnMWKj
+	mJxyOLO+okTY1YGbKixIxpvkXZJNXmQJeQX2Ki3iSAi+Y2L1Y23M3F5D5V0FmLrLMVUh6smq/o/
+	v+La2e4NA7q7EOdNAOBUsOeY/8z/mztCtESG/xQzvQFQeKukyLSVSyz6PS1x9vOu1xa2dCwAJVX
+	PSDxdWaQJS+w+8FqPxZDauQMipbdO6O0qi0Ci/zAKluLNLWcNJ6UhBZMG4jUHeFh2QYu1ZT5Xcg
+	MmNxw4iTjTzxuZ+cDfGJTLegPfpISmvxFdKCr7wLyI+LGBdkIrYw62JRmMP+0LzBDbspaxkG53W
+	pt4HNp8pJz8ij9swB950SeHDO6SOsb2zWiSqTMe8LF1VBA2REmKV4J4IN84P6pNj5JksXo6AfqX
+	C25hZgs0gncYEZ3VH1LcBCk182f+baiNHNBR5V0QcTVT/fLDic5PPxl7vR+B9+c852FgfCqt1W4
+	GMEJ/6YptFS61hARFhQ==
+X-Received: by 2002:a05:600c:609b:b0:49c:f9b8:bae0 with SMTP id 5b1f17b1804b1-49fc7f2bdc8mr55491205e9.2.1789768755473;
+        Fri, 18 Sep 2026 14:59:15 -0700 (PDT)
+Received: from ?IPV6:2a02:3100:59ae:19fc:400:b6b0:efdd:810c? (dynamic-2a02-3100-59ae-19fc-0400-b6b0-efdd-810c.310.pool.telefonica.de. [2a02:3100:59ae:19fc:400:b6b0:efdd:810c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fcd0f8563sm26575855e9.6.2026.09.18.14.59.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Sep 2026 14:59:14 -0700 (PDT)
+Message-ID: <c6bcd422-ae6c-40d4-a8ed-3261ccc3dd7b@gmail.com>
+Date: Fri, 18 Sep 2026 23:59:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v3 3/3] selftests: net: hsr: add shared-mutation
+ regression test
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, pabeni@redhat.com, edumazet@google.com,
+ horms@kernel.org, shuah@kernel.org, lukma@denx.de, m-karicheri2@ti.com,
+ fmaurer@redhat.com, luka.gejak@linux.dev, bigeasy@linutronix.de,
+ ali@iusegentoo.com, qingfang.deng@linux.dev, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260808004525.1551-1-xiexinet@gmail.com>
+ <20260808004525.1551-4-xiexinet@gmail.com>
+ <20260813183008.31e14297@kernel.org>
+Content-Language: en-GB
+From: Xin Xie <xiexinet@gmail.com>
+Autocrypt: addr=xiexinet@gmail.com; keydata=
+ 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
+ sNySbH3veZ/55EtlXA==
+In-Reply-To: <20260813183008.31e14297@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add new test cases to verify the vector state restorations at syscall
-stops for ptrace and signal interfaces. Specifically:
-1. Signal handler should read all ones at syscall stop and modifying
-   context should success.
-2. Ptrace should read all ones but any modification to NT_RISCV_VECTOR
-   is silently dropped.
+On 14/08/2026 03:30, Jakub Kicinski wrote:
+> It's a "no" on embedded Python in bash scripts.
+> Where do people get that from? Did AI generate it or are there projects
+> in which this is common practice?
+> 
+> Please write the whole test in Python (see .../net/lib/py/ helpers),
+> or move the python code out to its own scrip under TEST_FILES
+Yes, that snippet was AI-generated, I should have properly separated it. My bad! 
 
-Signed-off-by: Andy Chiu <tchiu@tenstorrent.com>
----
-Changelog v6:
- - reformat code to slience checkpatch
-Changelog v4:
- - remove timer dependency from the signal delivery (Sashiko)
- - solve 2 memory leaks in ptrace (Sashiko)
-Changelog v3:
- - new patch since v3
----
- .../selftests/riscv/sigreturn/sigreturn.c     |  69 +++++++++++
- .../selftests/riscv/vector/vstate_ptrace.c    | 111 +++++++++++++++++-
- 2 files changed, 176 insertions(+), 4 deletions(-)
+I will extract the Python logic into its own helper script, put it under TEST_FILES, and clean this up for v4. 
 
-diff --git a/tools/testing/selftests/riscv/sigreturn/sigreturn.c b/tools/testing/selftests/riscv/sigreturn/sigreturn.c
-index e10873d95fed..386367cf28be 100644
---- a/tools/testing/selftests/riscv/sigreturn/sigreturn.c
-+++ b/tools/testing/selftests/riscv/sigreturn/sigreturn.c
-@@ -7,6 +7,7 @@
- #include "kselftest_harness.h"
- 
- #define RISCV_V_MAGIC		0x53465457
-+#define END_MAGIC		0
- #define DEFAULT_VALUE		2
- #define SIGNAL_HANDLER_OVERRIDE	3
- 
-@@ -61,6 +62,74 @@ static int vector_sigreturn(int data, void (*handler)(int, siginfo_t *, void *))
- 	return after_sigreturn;
- }
- 
-+#define V_TEST_PATTERN_SIGNAL 0x98
-+int nulled_val;
-+static void sigalrm_handler(int sig, siginfo_t *info, void *vcontext)
-+{
-+	struct __riscv_extra_ext_header *ext;
-+	struct __riscv_v_ext_state *v_state;
-+	ucontext_t *context = vcontext;
-+	struct __riscv_ctx_hdr *hdr;
-+	uint8_t *ext_ptr;
-+
-+	/* Find the vector context */
-+	ext = (void *)(&context->uc_mcontext.__fpregs);
-+	ext_ptr = (uint8_t *)ext;
-+	hdr = &ext->hdr;
-+
-+	while (hdr->magic != END_MAGIC) {
-+		if (hdr->magic == RISCV_V_MAGIC) {
-+			v_state = (struct __riscv_v_ext_state *)(hdr + 1);
-+			/* Assume a valid datap */
-+			nulled_val = *(int *)v_state->datap;
-+			/* Fill all vector registers with magic pattern */
-+			memset(v_state->datap, V_TEST_PATTERN_SIGNAL, v_state->vlenb * 32);
-+			/*
-+			 * We must also set the vector configuration so that when
-+			 * userspace reads v0, it uses a valid element width (e8).
-+			 */
-+			v_state->vl = v_state->vlenb;
-+			v_state->vtype = 0; /* e8, m1, tu, mu */
-+			break;
-+		}
-+		/* Move to the next extension header */
-+		ext_ptr += hdr->size;
-+		hdr = (struct __riscv_ctx_hdr *)ext_ptr;
-+	}
-+}
-+
-+TEST(test_signal_syscall_ucontext) {
-+	struct sigaction sa;
-+
-+	/* Make sure we get V in ucontext by executing vsetvli */
-+	asm volatile (".option push\n\t"
-+		      ".option		arch, +v\n\t"
-+		      "vsetivli	x0, 1, e32, m1, ta, ma\n\t"
-+		      ".option pop\n\t" : : :);
-+
-+	sa.sa_flags = SA_SIGINFO;
-+	sa.sa_sigaction = sigalrm_handler;
-+	sigemptyset(&sa.sa_mask);
-+	if (sigaction(SIGALRM, &sa, NULL) == -1)
-+		ksft_exit_fail_msg("Failed to register signal handler\n");
-+
-+	raise(SIGALRM);
-+	/*
-+	 * If the kernel successfully parsed and restored our modified ucontext,
-+	 * v0 will contain V_TEST_PATTERN_SIGNAL.
-+	 */
-+	unsigned char v0_val;
-+
-+	asm volatile(".option push\n\t"
-+		     ".option arch, +zve32x\n\t"
-+		     "vmv.x.s %0, v0\n\t"
-+		     ".option pop\n\t"
-+		     : "=r" (v0_val));
-+
-+	EXPECT_EQ(v0_val, V_TEST_PATTERN_SIGNAL);
-+	EXPECT_EQ(nulled_val, -1);
-+}
-+
- TEST(vector_restore)
- {
- 	int result;
-diff --git a/tools/testing/selftests/riscv/vector/vstate_ptrace.c b/tools/testing/selftests/riscv/vector/vstate_ptrace.c
-index 1479abc0c9cb..863a16f6e1a3 100644
---- a/tools/testing/selftests/riscv/vector/vstate_ptrace.c
-+++ b/tools/testing/selftests/riscv/vector/vstate_ptrace.c
-@@ -21,6 +21,41 @@ static long do_ptrace(enum __ptrace_request op, pid_t pid, long type, size_t siz
- 	return ptrace(op, pid, type, &v_iovec);
- }
- 
-+static int do_child_syscall_stop(void)
-+{
-+	int out;
-+
-+	if (ptrace(PTRACE_TRACEME, -1, NULL, NULL)) {
-+		ksft_perror("PTRACE_TRACEME failed\n");
-+		return EXIT_FAILURE;
-+	}
-+
-+	raise(SIGSTOP);
-+
-+	asm volatile (".option push\n\t"
-+		".option	arch, +v\n\t"
-+		"vsetivli	x0, 1, e32, m1, ta, ma\n\t"
-+		"vmv.s.x	v31, %[in]\n\t"
-+		".option pop\n\t"
-+		:
-+		: [in] "r" (child_set_val));
-+
-+	getpid();
-+
-+	asm volatile (".option push\n\t"
-+		".option	arch, +v\n\t"
-+		"vsetivli	x0, 1, e32, m1, ta, ma\n\t"
-+		"vmv.x.s	%[out], v31\n\t"
-+		".option pop\n\t"
-+		: [out] "=r" (out)
-+		:);
-+
-+	if (out != -1)
-+		return EXIT_FAILURE;
-+
-+	return EXIT_SUCCESS;
-+}
-+
- static int do_child(void)
- {
- 	int out;
-@@ -59,7 +94,7 @@ static void do_parent(pid_t child)
- 			goto out;
- 		} else if (WIFSTOPPED(status) && (WSTOPSIG(status) == SIGTRAP)) {
- 			size_t size;
--			void *data, *v31;
-+			void *vctx, *v31;
- 			struct __riscv_v_regset_state *v_regset_hdr;
- 			struct user_regs_struct *gpreg;
- 
-@@ -73,9 +108,11 @@ static void do_parent(pid_t child)
- 				goto out;
- 
- 			ksft_print_msg("vlenb %ld\n", v_regset_hdr->vlenb);
--			data = realloc(data, size + v_regset_hdr->vlenb * 32);
--			if (!data)
-+			vctx = realloc(data, size + v_regset_hdr->vlenb * 32);
-+			if (!vctx)
- 				goto out;
-+			data = vctx;
-+
- 			v_regset_hdr = (struct __riscv_v_regset_state *)data;
- 			v31 = (void *)(data + size + v_regset_hdr->vlenb * 31);
- 			size += v_regset_hdr->vlenb * 32;
-@@ -109,11 +146,65 @@ static void do_parent(pid_t child)
- 	free(data);
- }
- 
-+static void do_parent_syscall_stop(pid_t child)
-+{
-+	int status;
-+	void *data = NULL;
-+
-+	while (waitpid(child, &status, 0)) {
-+		if (WIFEXITED(status)) {
-+			ksft_test_result(WEXITSTATUS(status) == 0,
-+					 "SETREGSET vector at syscall stop\n");
-+			goto out;
-+		} else if (WIFSTOPPED(status) && (WSTOPSIG(status) == SIGSTOP)) {
-+			/* Attach to the child at syscall stop */
-+			ptrace(PTRACE_SYSCALL, child, NULL, NULL);
-+			continue;
-+		} else if (WIFSTOPPED(status) && (WSTOPSIG(status) == SIGTRAP)) {
-+			size_t size;
-+			void *vctx, *v31;
-+			struct __riscv_v_regset_state *v_regset_hdr;
-+
-+			size = sizeof(*v_regset_hdr);
-+			data = malloc(size);
-+			if (!data)
-+				goto out;
-+			v_regset_hdr = (struct __riscv_v_regset_state *)data;
-+
-+			if (do_ptrace(PTRACE_GETREGSET, child, NT_RISCV_VECTOR, size, data))
-+				goto out;
-+
-+			ksft_print_msg("vlenb %ld\n", v_regset_hdr->vlenb);
-+			vctx = realloc(data, size + v_regset_hdr->vlenb * 32);
-+			if (!vctx)
-+				goto out;
-+			data = vctx;
-+
-+			v_regset_hdr = (struct __riscv_v_regset_state *)data;
-+			v31 = (void *)(data + size + v_regset_hdr->vlenb * 31);
-+			size += v_regset_hdr->vlenb * 32;
-+
-+			if (do_ptrace(PTRACE_GETREGSET, child, NT_RISCV_VECTOR, size, data))
-+				goto out;
-+
-+			ksft_test_result(*(int *)v31 == -1, "GETREGSET vector at syscall stop\n");
-+
-+			*(int *)v31 = parent_set_val;
-+			if (do_ptrace(PTRACE_SETREGSET, child, NT_RISCV_VECTOR, size, data))
-+				goto out;
-+		}
-+		ptrace(PTRACE_CONT, child, NULL, NULL);
-+	}
-+
-+out:
-+	free(data);
-+}
-+
- int main(void)
- {
- 	pid_t child;
- 
--	ksft_set_plan(2);
-+	ksft_set_plan(4);
- 	if (!is_vector_supported() && !is_xtheadvector_supported())
- 		ksft_exit_skip("Vector not supported\n");
- 
-@@ -130,5 +221,17 @@ int main(void)
- 
- 	do_parent(child);
- 
-+	parent_set_val = 0x53355457;
-+	child_set_val = 0x49504F21;
-+
-+	child = fork();
-+	if (child < 0)
-+		ksft_exit_fail_msg("Fork failed %d\n", child);
-+
-+	if (!child)
-+		return do_child_syscall_stop();
-+
-+	do_parent_syscall_stop(child);
-+
- 	ksft_finished();
- }
 -- 
-2.43.0
-
+Xin
