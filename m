@@ -1,105 +1,180 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BED49D59B;
-	Fri, 18 Sep 2026 10:33:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789727603; cv=none; b=qv/iso1WJAVeIgTq2NZHCEKAgkw/GVxbw0UQHglSGnWV6dD4TMinhi36b4MQKHorqbyBLaBjNtaRDFbfwvNxCRexuhdj7QHSgZq9VjMWA+Em+HcnZx+VAba9ow+sGny59c42FAQ0D0gBqlMgcMQupqs4GM2avxBS7iwdhDZtgrc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789727603; c=relaxed/simple;
-	bh=Pp8+qYV14aM+8W8YxzWRx95w9FPTwKpIBNo9Up4J1BQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JgJXDdfOX275Zi4O9QHJuiYg8A++iJwYK18wfNvL9kOv/F+Jx8w11UE2SEsQ1YTo2Go4AZHLN27or0vNObAlNjvtVXf+tN/JS7UZP/8J5Cp6N4K/kNBDWiLHCdd/zXQy5uN6Et9FfY3T2xlMO7Hqg8VdEiFlLZqSwwsLC8FzQrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=UnSOAEVN; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AE484A260F
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 11:10:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789729841; cv=pass; b=auIyXu9USm04kbmuywGXsAZ9u22Ww8WmYMVtUoZ5fE1654RgcW+G/VCzIj+99RDL6VsLBlkeBRsRqax2eSPOabmCsNiDIYZ5s3SlDDKyZEibDi7wsc4wRMLkHsU3LyUJjo/Lr1hs6d3S9mybY0OtzxIkyK6Uts/BN6DH1dXiXVE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789729841; c=relaxed/simple;
+	bh=D8NQlMTkB0EOhznxgeBx1U32SLb3Dti876hh7jNPEbY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ztk4Xf+mhPGpkL6eV3D8C3DO91RYQnVT/xJjXVQDCe0c9kd6fonkiMvUCAAy+Db1NCol1FmWh8B2wC0teQ0ElNi/ch+RtjF8lueQN4B8RT+5p18bkj7B12YcmHnJkVo8i8LA9pXk66tJuXQKzarj0kM6KaxxpF+xdzW7NCa47ww=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GKSzWx26; arc=pass smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="UnSOAEVN"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Hg7QkNef5zMThE+MRw8udQqkGZAjpML9pXHh4uxv5K8=; b=UnSOAEVNKYj/W3EgeF6N+/mXS/
-	sTndR9zyc6HFJY+aOzLsorEmd/dUtVp4iaVerhqfpAZGewFUgvV8FCOelcRLyw+Ti8HHUYO0RLTTC
-	okWxf1cF972zBGB/x97EtpSA0w7JdHX4omJjiJcsyIDfSneZdPSJ/T7lUQSPauWJ829E/mo3slvh7
-	AVvOf2gGlp4/8L8VXyimdliN3zf++rvpabQJTiBop+lIfaEQ6b9qIWJcThLgfalyCyiMAgKRJzv96
-	Uh7ZkU29r22Efp9HmRKN3orQ+m4Ov1hR85gsH6hSTuXqDUKvKP5TUc/3VeAuil+j6tj42heWdIAGL
-	1wv4mqfQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
-	id 1x7Vtx-00000009w0D-3SuZ;
-	Fri, 18 Sep 2026 10:33:06 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 377FB30057F; Fri, 18 Sep 2026 12:33:04 +0200 (CEST)
-Date: Fri, 18 Sep 2026 12:33:04 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Matthew Schwartz <matthew.schwartz@linux.dev>, Xin Li <xin@zytor.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Paul Gofman <pgofman@codeweavers.com>,
-	Lionel Landwerlin <lionel.g.landwerlin@intel.com>,
-	Shuah Khan <shuah@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] x86/fred: Reconstruct the #GP context for rejected
- INT instructions
-Message-ID: <20260918103304.GK776954@noisy.programming.kicks-ass.net>
-References: <20260917230907.2080792-1-matthew.schwartz@linux.dev>
- <20260917230907.2080792-2-matthew.schwartz@linux.dev>
- <6141901e-b7a2-4b8e-bf77-eca4a40644e7@zytor.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GKSzWx26"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6a5f9b036f9so5123a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 04:10:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789729837; cv=none;
+        d=google.com; s=arc-20260327;
+        b=sqJdUNahf/8BcRe95gOw4HoA98l1lC98Vg49a0fSQpIO8KxdmZe/Dt+BHLMbvMDqx/
+         npF2/1v54CWRGq+CHnPMVbSm/AsJ9iTRimaNdE2zhyKop4O3ZdTjQZE169jy6n/HtZXj
+         fV6/ncfyf+pjVElQeDgtgdtWScsaAyU8w0J+iYWHyg2cO8L172xoe63BmaMLtZz3BFUZ
+         55ZsflB2Xt/iL3B+5+bQgoCi24BIJQVoAU9o0ZnkQ9TIUu4Vgg7QmqpWo3S0mxk13GbN
+         5Otk2PtJFPrvA6jYo7E3zGjViQ12/bL3WiZvyb5N28zzbB9ItW5ssUg7e+I7POY8dZzs
+         qIAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Qq/2MH8S5nK6mySG3u3/RDyzhbqeFuAbCFn+abDQdoY=;
+        fh=llfEWHs+nClow163EWm3jpbwdIVaZ8lpg/lO1JBfetg=;
+        b=MfNSyscBH+JTKMC7RaP0FaIkZTldWZivlhIz4hPfrUel6Goo3db4khT+hthoXJ0jj1
+         1FuKg0waIN5Ha80z4LcXX6tLTPIOHb5ygFzCNXUFBf72Hidw7qXeOlNfY6spf1F5Z0ak
+         ukJNOFVp+hq2yJrDFes3ezdfkkRJEmscvZLAAf5qYpsLHcP6G+5RFPPhWQd9eTOLbZjR
+         pbG8Lz6/KskAUAZUn3NP50ICMXKkbWOj1GSqog/vtDq8QhGoTWiRHL41tXL0xTbQWg2t
+         uFgnCAYqohcPuJWWko4BHVnxTFwNUaGwl9Ouv8qLsnUZ0449lcMYllgHW+YVl8dW1Zba
+         uTsw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1789729837; x=1790334637; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Qq/2MH8S5nK6mySG3u3/RDyzhbqeFuAbCFn+abDQdoY=;
+        b=GKSzWx26MRfk5eV66AXJq5XBRNsa/MC5hsTmlKaDDqaGzxoVdJMOkyawIKZhVNHD4V
+         GjNsGlgsknooExv/i+bhqpvtdmSPDc2MC25KLBiUzlriaoFn1CNzXqEJhQiClFKQTL0P
+         ERsk1mXPwe7mqvUZat8BPA+OTwTFdOdc6kxftXBJtGO0Is2X62Tcb9q9AWsrukPLKgx2
+         Y7ugiNzTsCgD/GUwVFxR6tvsT1Pnh7Qt0WRquvdwCswNOio/KxNxG76YvmqHMcZCGMzL
+         8+IAGFbfmhtOG+U1yyd98RYY+NVd3OOkhmrmmwPkd/N4VtbRt+FDzXMIYclSjLM5oqA8
+         fFNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789729837; x=1790334637;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Qq/2MH8S5nK6mySG3u3/RDyzhbqeFuAbCFn+abDQdoY=;
+        b=WRQi0JL9GW8FAs8BwFbVgZnwymvaaQJzaoQQnyQSVjZu4hO/V1F2oTNmn0gCzcXDdl
+         3Cf7kKZWiW4u+l+btkds65GxzOF8ZBTqHab4w9pemQtgS+HBTNeO7BUHiAr5WCCz6E37
+         CLCvhtDPglQSdonqCM5jXC0asZGe8n26ZDo0Kh6klzMSTUXbcAkKW+UjvqY6B16liMyD
+         G3g1e/zYOh9NPCD7Clp3RkBLMaGtG/qEDGow+KCqGDm/4kE3pBWXQXQ4Ksaf58HR6xtN
+         A2FtpRC1UVPxjO0vjGXqx6HmrXTvII3LR+5HstcYTKyHaPIJKQMHfw0VaFZQ/JV8vL7y
+         AnZg==
+X-Forwarded-Encrypted: i=1; AKwUvBwQaeks7iukVnk+nnQX9cPJJu7+oW3NJJDo3KC/yXqMqNXF+WmjuLY+WN8BiqdWMNp1lrkngPO2y719PuTlWgk=@vger.kernel.org
+X-Gm-Message-State: AFuF++ntLswId3LjHDf69MHEWPbBFsbKiXZSqgxNtKzMshE2RYLrDPEk
+	pbC4n1KKFHTnQlUfCOy7HCt2uiiqcHNszmKv/7Db6BhaBaB3i9NbTq37q/+eDW9K+AXyaJzsrgv
+	F2AzuXGWwTgD9v2LFC7oFmOU/1e8ahYmf8H9J0qoJ
+X-Gm-Gg: AYBFou3/6+oP161lONyDScXvuTpLhHNr+XlQL9wojObWaiPCwM6RMKb/njjLBITyOxQ
+	uASD+1upFB0MC5j8pJadoFzSw2jy2fbbxpkHNbkKefAXRII2fpTIcrykOosUTWV0kehnoJjb8S0
+	mvDjZxG3AqaakJazidpEojXWU2bfz9WT8uKJ4OxcUNxzVePCxl7rkrhSSLJXaBZlqoWkE6IIA4Q
+	fdVXrxI0TmGSOPGRpUWHQIKZTgqntAl+MgWhxcxpEGFweOU4p9JugIBM/2gTF9nV3QfW8wBtdct
+	t1s1fnSGF1I52shG61J/N2suAdjS2YaMsbI+C5g7fa768/Am5EqLLn8=
+X-Received: by 2002:aa7:d0c3:0:b0:6a9:d188:2374 with SMTP id
+ 4fb4d7f45d1cf-6aa5221e1a1mr19881a12.1.1789729836834; Fri, 18 Sep 2026
+ 04:10:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6141901e-b7a2-4b8e-bf77-eca4a40644e7@zytor.com>
+References: <cover.1789721173.git.zhang_wei@open-hieco.net> <2d608f82681532f3010db14ff8d4293f57620514.1789721173.git.zhang_wei@open-hieco.net>
+In-Reply-To: <2d608f82681532f3010db14ff8d4293f57620514.1789721173.git.zhang_wei@open-hieco.net>
+From: Jim Mattson <jmattson@google.com>
+Date: Fri, 18 Sep 2026 04:10:24 -0700
+X-Gm-Features: AcwNN1V-rgmx99EAasoSRH5nrhUVDqdiVaLr-XvIiqfmCZLZ0zQJlJ6-mPzgGz4
+Message-ID: <CALMp9eQo1WZhtCEmPhsK=BoCkeSmMfwXh-JHsq6-E0HCkOunVQ@mail.gmail.com>
+Subject: Re: [PATCH v7 1/8] KVM: x86: Provide INVLPG linear address to
+ intercept handlers
+To: Tina Zhang <zhang_wei@open-hieco.net>
+Cc: Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, zhouyanjing@hygon.cn, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 17, 2026 at 05:07:45PM -0700, H. Peter Anvin wrote:
-> On 2026-09-17 16:09, Matthew Schwartz wrote:
-> > FRED event delivery does not use the IDT, so the gate DPL check that
-> > rejects a user INT n falls to software (Intel FRED specification [1],
-> > section 8.3). fred_intx() rejects the same vectors as IDT delivery, but
-> > reports a zero error code and the IP after the INT. This breaks the
-> > signal ABI. Wine uses the error code to recognize INT 0x2d, so the
-> > changed context turns a handled breakpoint into an access violation in
-> > Elden Ring.
-> > 
-> > Rewind IP using the instruction length in the augmented SS and
-> > synthesize the IDT selector error code, (vector << 3) | 2. Set RF in the
-> > saved flags, as the CPU does for a #GP fault. Section 5.2.1 defines the
-> > saved vector, instruction length and RF state. The supplied length
-> > handles prefixes without reading user memory. Limit the changes to
-> > already-rejected software interrupts, preserving the accepted INT3, INT4
-> > and enabled INT80 paths and hardware exceptions. With IA32 emulation
-> > disabled, INT 0x80 now reports the same #GP as the DPL 0 gate IDT
-> > installs there. The rewound IP also stops fixup_iopl_exception() from
-> > inspecting the byte after the INT.
-> > 
-> > Also clear the software event flag. Section 6.2.3 specifies that ERETU
-> > with this flag and TF set traps before executing any user instruction. A
-> > tracer that suppresses SIGSEGV and resumes with TF set expects the next
-> > instruction to run first, as after IRET. The sigreturn path clears the
-> > same flag for this reason in prevent_single_step_upon_eretu().
-> > 
-> > [1] Intel Flexible Return and Event Delivery (FRED) Specification,
-> > revision 9.0 (346446-009US), sections 5.2.1, 6.2.3 and 8.3.
-> > 
-> > Fixes: 14619d912b65 ("x86/fred: FRED entry/exit and dispatch code")
-> > Reported-by: Paul Gofman <pgofman@codeweavers.com>
-> > Closes: https://gitlab.freedesktop.org/mesa/mesa/-/work_items/15745
-> > Closes: https://gitlab.freedesktop.org/mesa/mesa/-/work_items/16132
-> > Signed-off-by: Matthew Schwartz <matthew.schwartz@linux.dev>
-> > Link: https://cdrdv2.intel.com/v1/dl/getContent/678938 # [1]
-> 
-> Reviewed-by: H. Peter Anvin <hpa@zytor.com>
-> 
-> This really should go into -stable.
+On Fri, Sep 18, 2026 at 1:56=E2=80=AFAM Tina Zhang <zhang_wei@open-hieco.ne=
+t> wrote:
+>
+> INVLPG's memory operand is decoded with NoAccess, and thus src_val does
+> not contain the operand address.  Intercept handlers therefore cannot
+> construct exit state that reports the linear address from the existing
+> x86_instruction_info fields.
+>
+> Add get_invlpg_linear_addr() to compute the address through __linearize()=
+,
+> using the same flags as em_invlpg(), and pass the result through
+> x86_instruction_info.
+>
+> Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
+> ---
+>  arch/x86/kvm/emulate.c     | 23 +++++++++++++++++++++++
+>  arch/x86/kvm/kvm_emulate.h |  1 +
+>  2 files changed, 24 insertions(+)
+>
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index c1b21282187f..2972a35b0ac0 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -411,6 +411,9 @@ static int em_salc(struct x86_emulate_ctxt *ctxt)
+>         _fault ? X86EMUL_UNHANDLEABLE : X86EMUL_CONTINUE; \
+>  })
+>
+> +static u64 get_invlpg_linear_addr(struct x86_emulate_ctxt *ctxt,
+> +                                 enum x86_intercept intercept);
+> +
+>  static int emulator_check_intercept(struct x86_emulate_ctxt *ctxt,
+>                                     enum x86_intercept intercept,
+>                                     enum x86_intercept_stage stage)
+> @@ -428,6 +431,7 @@ static int emulator_check_intercept(struct x86_emulat=
+e_ctxt *ctxt,
+>                 .src_type   =3D ctxt->src.type,
+>                 .dst_type   =3D ctxt->dst.type,
+>                 .ad_bytes   =3D ctxt->ad_bytes,
+> +               .invlpg_linear_addr =3D get_invlpg_linear_addr(ctxt, inte=
+rcept),
+>                 .rip        =3D ctxt->eip,
+>                 .next_rip   =3D ctxt->_eip,
+>         };
+> @@ -684,6 +688,25 @@ static __always_inline int __linearize(struct x86_em=
+ulate_ctxt *ctxt,
+>                 return emulate_gp(ctxt, 0);
+>  }
+>
+> +static u64 get_invlpg_linear_addr(struct x86_emulate_ctxt *ctxt,
+> +                                 enum x86_intercept intercept)
+> +{
+> +       unsigned int max_size;
+> +       unsigned long linear =3D 0;
+> +
+> +       if (intercept !=3D x86_intercept_invlpg)
+> +               return 0;
+> +
+> +       /*
+> +        * Use the same address calculation as em_invlpg() for the addres=
+s
+> +        * reported to L1.  Ignore address-check failures, as __linearize=
+()
+> +        * sets linear before reporting a failure.
+> +        */
 
-It has a Fixes tag, afaik they really good at picking those up. Let me
-go queue them in x86/urgent.
+That comment misses the main point. Perhaps something like:
+
+        /*
+         * Ignore faults, just as em_invlpg() does. Calling __linearize()
+         * exactly as em_invlpg() does guarantees agreement with
+         * em_invlpg() on the linear address.
+         */
+
+> +       __linearize(ctxt, ctxt->src.addr.mem, &max_size, 1, ctxt->mode,
+> +                   &linear, X86EMUL_F_INVLPG);
+> +       return linear;
+> +}
+> +
+>  static int linearize(struct x86_emulate_ctxt *ctxt,
+>                      struct segmented_address addr,
+>                      unsigned size, bool write,
