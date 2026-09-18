@@ -1,101 +1,106 @@
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82935511E7C
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 17:02:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8127751AFEA;
+	Fri, 18 Sep 2026 17:24:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789750968; cv=none; b=IW8OZSO30yTogUFDlJ5G9IMAHO2jxYPwXMCrq7u+mUERZzEgMbz0d/WtDTa6zy52mVSjHOHoY5BI/jyLuWwm7v2O7k39gSYwIyF0UWq/wxckkyWtf5lztbk8FLbI87tmADVitvAFWaQVvwABYFCQV+W7V1y8nPhNRrPwuMpkePs=
+	t=1789752297; cv=none; b=rWomO53zBghXHCXgm8KbTHiwlQU8RijDGP7tY17H3FgAxs64ZgwnksCPIfPROS3w6ljtTKyPWdGh5jEpaO0UB4cQOw1KpxIKO2WXlhsxEG1kzXYeJIOJ860Dg7+9b6e0igTW2wf6xzzhwJO3vMqY9cUFjqaNgpNRgidI6KkSZQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789750968; c=relaxed/simple;
-	bh=bDpGvspOu4nFgSreC2Aw9attytrT9KqmqH3NWl0cZ7g=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Vtz3Sbfz1P0dbMV+2c7DFvilm0bS7W8JWF54uCjK/ZVUXmLy/cOIyS1BDdaPcH3r8DXYtMojn/kpTdDjVaomkC7D3KC24ynFdCugPVU4I4NXeUeGHCYf5N+19iD1yMLGDQsf4O/qNYzlGq74mwkUkgIfv+LzM3MTTz4dAG2Ae+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gOGp/X5O; arc=none smtp.client-ip=209.85.214.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com
+	s=arc-20240116; t=1789752297; c=relaxed/simple;
+	bh=ewm89oLwdgqoff9BKgJbHCnB264ne4OCj7LKEJTGXow=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QN5KtRSOF77AnHpEyTKh16jIpK3Bgt4F2hrrvFVWSEXLgI44oiHHtpLQUx06e/L2BVrQKqLJOul/8kIcjI/Fi7fpoGZiDTPdmjvGoj63iVS4cHSPJRrenlBsqSvbsTriF1e4E3XAOMaeQZs+YLc7xLZoCFlCDySn63pUQuvqwDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=WFbIdxwr; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gOGp/X5O"
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2cfa4e4684bso22407735ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 10:02:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789750966; x=1790355766; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=NSaA4/uDxQE6ypmPHF+DraAaXm7U/OoqsySVnlQHd24=;
-        b=gOGp/X5OCAeXmkvZ6r/Rs8YgHIjxwsD4iWl8xR6EtKhO+1n4tmQvRRh0oN/g1vaJFu
-         nRFnfmsKiwTaDwsW9ABmVAFhLI62xiMEqch1O0weqCakyYiHZmAujXnJ8XB4/0yelwsB
-         jiews6SI5vLdvuetGbilTiBz5P1vMAKLxeZQxPOIYz9Kt7L+4ep1QM9Z8dr6QMwqg4E1
-         FNjGrx/goyoZggC21S6a/or1wwh22RrZqZNByU7MV/Sna5n64S+9/zE+dNaRlFPS4sQ/
-         ZFAtE9e52SoSEnxFZnoicfy8e0rIJGjpXBJx8qeSdbZZbGuyGqkXQk6vU1Om/k1s/ewp
-         1leg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789750966; x=1790355766;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=NSaA4/uDxQE6ypmPHF+DraAaXm7U/OoqsySVnlQHd24=;
-        b=NgPUo0S6ZSgx9cUf5hfsjATdQgaltVFG/XK4vmjuZJDhvKxhUFSCyuTGJzZCglQ8A2
-         TFyn7k3/0xnuRArz7U6Dhv1BjWeLfpSbbFV6H1QcTp4qU7Re6R6FJY5QYQPieu93plgj
-         tLEzXFCHKntFXxLJtGg2cdyY+Taan+Hwbjm/7KaTwATabOo088iT8jas7Ax76GUJBc3C
-         QVbGb8ZwXMpuc4A5caK9lakLccUxvIVB4icdYzSEMJGl51cXfsNkM7TmWTz3/sQLHGGi
-         IXfg/8aPTc8xBAs1j6qF+dkik3xEydoi6kmu9/CbS3o777fZ8Ij32/Q0jJtiLemO7RxQ
-         hJlA==
-X-Forwarded-Encrypted: i=1; AKwUvByZRir1601+GCL3fumOaCwYHJkiJeGqaeN86OH2+R7CXLuq6iiiYr0R2Ex2agit6o2ZRRzPlrUSZG4MTURuAUU=@vger.kernel.org
-X-Gm-Message-State: AFuF++k2JmNmrKzLEtPDqL115A9OLRXRf+JA+PNebSs8Lw1FdVACYDJ7
-	Wlz/i3EyUVvQ7+GVbmdga5evh5uJM+tPiim+mwf6vOvNDFuncDo0Z49ri3OUBgKiJzAqfwaChaP
-	RI7aHrBqGbd7bLJIxl09FL6/+UxKBY3KghA==
-X-Received: from plld8.prod.google.com ([2002:a17:902:7288:b0:2db:60a3:afae])
- (user=rathodpriyank job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:2388:b0:2dd:ad74:ac1d with SMTP id d9443c01a7336-2ddb1bb0740mr74481335ad.24.1789750965612;
- Fri, 18 Sep 2026 10:02:45 -0700 (PDT)
-Date: Fri, 18 Sep 2026 17:02:44 +0000
-In-Reply-To: <20260904-pcie-link-endpoints-v3-0-4b9a91bd4b35@google.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="WFbIdxwr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=go
+	hjN9hBMAGWK5ad3+hPjR3cuLDekbzWSmw+EIY8kR4=; b=WFbIdxwrxyV2kcECj4
+	npgwskZP4bq38X9XGixzHCBELIC2SV/bstQ47LSIR5MW3MRxzf1TErFmXAbevkEr
+	LkBnU8rle4ExctUSL9DE3mrTQQZAtEJlsCmPUW4irZb9snI9Ds8itYlOhj3quRru
+	QjIVxKVX+dF3Yw/TCQ3g7Vy4E=
+Received: from localhost (unknown [])
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wD3P5e3c61qq5pkBg--.59142S2;
+	Sat, 19 Sep 2026 01:24:08 +0800 (CST)
+From: Hui Su <sh_def@163.com>
+To: bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>,
+	Quentin Monnet <qmo@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hui Su <sh_def@163.com>
+Subject: [PATCH bpf 0/3] bpf: expose cgroup preorder attachment state to userspace
+Date: Sat, 19 Sep 2026 02:24:04 +0900
+Message-ID: <20260918172407.3459188-1-sh_def@163.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260904-pcie-link-endpoints-v3-0-4b9a91bd4b35@google.com>
-X-Mailer: git-send-email 2.55.0.1082.g2b9226bbc0-goog
-Message-ID: <20260918170244.75711-1-rathodpriyank@google.com>
-Subject: Re: [PATCH v3 0/3] PCI/pcie: Add PCIe Lane Margining at Receiver
- (LMR) support
-From: Priyank Rathod <rathodpriyank@google.com>
-To: Bjorn Helgaas <bhelgaas@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Kees Cook <kees@kernel.org>, "Gustavo A . R . Silva" <gustavoars@kernel.org>
-Cc: "=?UTF-8?q?Ilpo=20J=C3=A4rvinen?=" <ilpo.jarvinen@linux.intel.com>, linux-pci@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3P5e3c61qq5pkBg--.59142S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tr17AFyDJFy5Aw48tr17GFg_yoW8Cry3pF
+	Z5uFs8Wa4fG343A3say3y0qFWSkFs3Xr4UCF1rtry8Cr4Iqry8trWIkF1rZr1aqFZxtry2
+	vwsavr93Gw1jvFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi75r7UUUUU=
+X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbC6hkRcGqtc7md1wAA3V
 
-Hi Bjorn, Ilpo,
+Commit 4b82b181a26c ("bpf: Allow pre-ordering for bpf cgroup progs")
+introduced BPF_F_PREORDER to request pre-order execution across the
+cgroup hierarchy. While the kernel records BPF_F_PREORDER in pl->flags,
+__cgroup_bpf_query() currently fails to report it to user space in
+prog_attach_flags[] during direct cgroup program queries.
 
-Gentle ping on this series - it has been two weeks since v3 was posted
-and I haven't seen any feedback yet.
+This series fixes the kernel query path, extends BPF selftests to
+verify the fix, and updates bpftool to recognize and format the
+BPF_F_PREORDER flag.
 
-v3 restructured the original monolithic LMR driver (v7) into the 3-patch
-stack Ilpo suggested during the v7 review, moving the link endpoint
-traversal into the PCI core rather than duplicating it in the feature
-driver:
+Patch 1 fixes __cgroup_bpf_query() to merge (pl->flags & BPF_F_PREORDER)
+with cgroup flags when copying per-program attach flags to user space.
 
-  1/3 PCI: Add pcie_get_link_endpoints() helper
-  2/3 PCI/ASPM: Add pci_aspm_inhibit() helper for temporary link state
-      suppression
-  3/3 PCI/pcie: Add PCIe Lane Margining at Receiver (LMR) support
+Patch 2 extends selftests/bpf (cgroup_mprog_opts) to verify that direct
+and link queries report BPF_F_PREORDER (0x42), matching programs by
+prog_id with guarded failure paths.
 
-The LMR driver itself is now strictly self-contained in
-drivers/pci/pcie/margin.c, with no modifications to drivers/pci/pci.c,
-drivers/pci/pci-driver.c or drivers/pci/pci.h. The series builds clean
-with W=1 and is checkpatch clean on x86_64 and arm64.
+Patch 3 adds bpftool support: a bitmask flags formatter for cgroup show,
+support for "preorder" in cgroup attach, documentation updates, and bash
+completion.
 
-Feedback on patches 1 and 2 would be especially useful, since they are
-the core helpers patch 3 builds on. I'm happy to respin if the split
-isn't what you had in mind, or to rebase onto a newer base if that helps
-review.
+Testing:
+- Verified on unpatched kernel: selftest reproduces failure
+  (actual 2 != expected 66).
+- Verified on patched kernel (bpf/master): both cgroup_mprog_opts and
+  cgroup_preorder pass 100% in QEMU guest environment.
+- Verified bpftool build, format unit tests, and checkpatch
+  (0 errors, 0 warnings).
 
-Thanks,
-Priyank
+Hui Su (3):
+  bpf: Report BPF_F_PREORDER in cgroup program queries
+  selftests/bpf: Test querying BPF_F_PREORDER cgroup attachments
+  bpftool: Add support for BPF_F_PREORDER cgroup attach flag
+
+ kernel/bpf/cgroup.c                           | 16 ++--
+ .../bpftool/Documentation/bpftool-cgroup.rst  |  9 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |  2 +-
+ tools/bpf/bpftool/cgroup.c                    | 55 +++++++----
+ .../bpf/prog_tests/cgroup_mprog_opts.c        | 94 ++++++++++++++++++-
+ 5 files changed, 144 insertions(+), 32 deletions(-)
+
+-- 
+2.55.0
+
