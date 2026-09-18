@@ -1,34 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B128C517BB7;
-	Fri, 18 Sep 2026 18:38:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D6F51EDF2;
+	Fri, 18 Sep 2026 18:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789756726; cv=none; b=tQS6SAJSd5QzVuTnEvPQTBAoeLE/xuwmlvNFr85dQWH45zqejhtaFDHY/RTB9QbjRaVoG4At1QpGtzXvGWLEFJ7hIqkgz5X0LN34Xvy8f4Hqhl/So1GWbQZXqukHe1OBT+u1248ApvC7MuNFeeiVYRBbcx5nr0tk633dlzZEGfU=
+	t=1789756738; cv=none; b=uiTLLm3HOoVcw01MLb0xm38l2ORTchN1j68o/JnYhE4gXkFJKxfPAPuIummFxfPJ8R70geBieB5u6q4k0ggjoxgRHGVS5y6nUl0N25XOjBVRKlqQf+29Xs+E4R23Ue3RIZcwBPorefwaGVC2ycYUTJQre71epTnWZdeYJgC6ayY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789756726; c=relaxed/simple;
-	bh=ij0ZLOqV4a1NW73gHHs+zwV1KBHd/t0FJBBKKAs5pkY=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=iokHv8CwLfYSwJZi7SnpSTJNnpAIILPLjXMM0CmVwq8SB2qdwEDy76USi33YEMIrkjUSmxQ0lIiiTZtCfpFnlR5U3kcIrd8E9zCcYX3cWn5ZJPtWuiKYHd/OV77KUMfDR5jMYIZhvBDR6G9cgJbUH+Z72qz4XCv2znx2bksK6KQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=owQs0ZMv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789756738; c=relaxed/simple;
+	bh=g3to6dCeHn6zMM/3AMYugP+pLtURStDEBkyEbyy+1GY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jRlbR8iV3BUAB0hixukm14heNTrJQuXXsqEfX8oBGo8n/VF7bRhih6OJkn67T4NxLTkyhsGUuXvgwkvFp2bXXfdragK6uI1dLhAb4xlOtVhnwTapEDk59SNFVLaSwEc2USScDjewByEwVEIt+GjNRAHC0KGZsXWvajWC7HCdMT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O4c3uU5/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="owQs0ZMv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24AC21F000FF;
-	Fri, 18 Sep 2026 18:38:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O4c3uU5/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC1B1F0089B;
+	Fri, 18 Sep 2026 18:38:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789756718;
-	bh=biC+8SCAXKWW6NiMDcUaJ7XQBN7jv400DbE8wg+PFYI=;
-	h=From:Subject:Date:To:Cc;
-	b=owQs0ZMvbbQdREl0izVLnvsC9/nO61Jokthh9WdsAOb2OjfBA3VTrAGTxmcamEbgM
-	 JKYrwd8heRB+yJCzADyufp3+Sk4cTMitjIrlitVatG81CFtkz68kXiCkLuTIS2SScI
-	 Evx00jZjwbRrKqrmrDlfQki9VCrIUJ+h6ueGkMeDM+KV3mEy6qO+OwhSmZNesOCbRh
-	 Dzq0FtQY/VRpdwUAqVx2qhlAqU8gA1PhnQLhPSRsDRU6jhb3+dGDGAZ+Jm8n4CmI6w
-	 ADeEBzfedONNgCCE525vfAYeeIwNF+xIxIppynYOd7eM0EP0MOzvARAy1UTcCe1ZKy
-	 nd+FS+wYua3lg==
+	s=k20260515; t=1789756728;
+	bh=ab97ABeWx519BjZUlq/57k57+C5FyDQmJadIWx10vY8=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=O4c3uU5/gLdDxORBoMVwmzOYdl3Ugn7dGHPDY/a9mQ8UpbhgAf21TgHGCIa2s4XKB
+	 nbwmNAXweQGTT4iWEucVptmgsb4ykWhQpC5r6nn9ZV4ETmYfc40RDciizxq1w9AxlL
+	 H4/QaG9AGtIdL2xqc2Ie9XnJlucpdNi15t+RZY3O4MRpvhjOHq0PO27N/4ioCQNBYS
+	 nNJB1nBIU8mUIg85BVk1ZqVBGYJ7D7d/Uc6uATTpZ2W29O/3HnM9ICUanH+HnzNBkQ
+	 jVnPHbE4r+M2YcidPtTQuiae+l0VyjdwH7NurYC7YpWom9rXAzYG23oj4y/h0tnIVf
+	 INLpOu5/rg4Sg==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net-next 0/4] mptcp: support MSG_ERRQUEUE
-Date: Fri, 18 Sep 2026 20:38:24 +0200
-Message-Id: <20260918-net-next-mptcp-msg_errqueue-v1-0-dd77e1738248@kernel.org>
+Date: Fri, 18 Sep 2026 20:38:28 +0200
+Subject: [PATCH net-next 4/4] selftests: mptcp: cover IP_RECVERR sockopt
+ propagation
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,10 +38,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/zWMywrCMBBFf6XM2oFJlGL9FZFS47WO0BjzkELpv
- xsVF3dxuJyzUEJUJDo0C0W8NOnDVzCbhtxt8CNYL5XJim2lM3v2yHVz5ilkF3hKY48YnwUFLLC
- y64atSGuoFkLEVedv/Uh/kU6/J5XzHS5/4rSub1qghdSJAAAA
-X-Change-ID: 20260918-net-next-mptcp-msg_errqueue-0e2049a30061
+Message-Id: <20260918-net-next-mptcp-msg_errqueue-v1-4-dd77e1738248@kernel.org>
+References: <20260918-net-next-mptcp-msg_errqueue-v1-0-dd77e1738248@kernel.org>
+In-Reply-To: <20260918-net-next-mptcp-msg_errqueue-v1-0-dd77e1738248@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -50,57 +50,132 @@ Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
  David Carlier <devnexen@gmail.com>, Shuah Khan <shuah@kernel.org>, 
  linux-kselftest@vger.kernel.org
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2108; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=ij0ZLOqV4a1NW73gHHs+zwV1KBHd/t0FJBBKKAs5pkY=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLLWtqqb2j8yqGHQ9nVjObg54jHTZvmpLxYsntCXtr+AU
- dPNK/55RykLgxgXg6yYIot0W2T+zOdVvCVefhYwc1iZQIYwcHEKwESmz2X4Z8bif/soj0Rp8heX
- a8fNRad/O+1mfmaXxBJbwWuiky5Ne87wh3fm8f32ua2qex5I1SokCL+x+eRmsPRQn36dnc762Tc
- 4mAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3312; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=UW1zAcPF+yaxAXuK61+P5ERyAUnUn0OOq8Dg98C2P+w=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLLWtmrHmnk/dFK7+PJ7+86D7DtqfacKPQlrZJ0bMP/qJ
+ HEv9TT1jlIWBjEuBlkxRRbptsj8mc+reEu8/Cxg5rAygQxh4OIUgInYtDMy/Pxj2rbN00/1inBz
+ tlA7+1xB/uacCas6Fh7bsve1eNTVH4wMJwuiJk6SE1/dxfarT1u9Z3uPddnK3yFiLIcF1QSyQ55
+ zAQA=
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-This series lets MPTCP applications use poll(EPOLLERR) and
-recvmsg(MSG_ERRQUEUE) on the MPTCP socket to drain TX timestamps
-through the standard inet ABI, the same way they would on a plain TCP
-socket. ICMP-derived errors stay on the subflow queue: the legacy
-RECVERR ABI cannot convey their per-subflow peer identity, and they
-are intended for a future MPTCP_RECERR channel.
+From: David Carlier <devnexen@gmail.com>
 
-- Patch 1 splices subflow err-skbs onto the MPTCP's sk_error_queue at
-  error-report time. All forwarded events go through sock_queue_err_skb,
-  which re-homes skb->sk onto the MPTCP and charges sk_rmem_alloc, so
-  the MPTCP's error queue stays bounded by sk_rcvbuf and is dropped under
-  rmem pressure, matching tcp's tx-timestamp path and ip_icmp_error() /
-  ipv6_icmp_error(). mptcp_recvmsg(MSG_ERRQUEUE) forwards directly to
-  inet_recv_error(), and mptcp_poll() advertises EPOLLERR purely on the
-  MPTCP's sk_err / sk_error_queue, matching tcp_poll().
+Exercise setsockopt/getsockopt of IP_RECVERR and IPV6_RECVERR on the
+MPTCP parent socket, including the empty-errqueue EAGAIN contract on
+MSG_ERRQUEUE|MSG_DONTWAIT.
 
-- Patch 2 factors the existing inet_flags subflow-propagation hard-coded
-  list into a mask, so the next patch can extend it without churn.
+End-to-end errqueue delivery (ICMP, TX timestamps, zerocopy) depends on
+subflow-side producers that are out of scope for this series and will be
+covered by follow-up work.
 
-- Patch 3 makes IP_RECVERR / IPV6_RECVERR (and the RFC4884 variants)
-  propagate to the subflows. The MPTCP stores the bit so MPTCP-aware
-  helpers can branch on it.
-
-- Patch 4 is a selftest covering the propagation path.
-
+Assisted-by: Codex:gpt-5
+Signed-off-by: David Carlier <devnexen@gmail.com>
+Acked-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-David Carlier (4):
-      mptcp: support MSG_ERRQUEUE on the parent socket
-      mptcp: sockopt: factor inet_flags propagation into a mask
-      mptcp: propagate RECVERR sockopts to subflows
-      selftests: mptcp: cover IP_RECVERR sockopt propagation
-
- net/mptcp/protocol.c                              |  55 ++++++--
- net/mptcp/sockopt.c                               | 155 ++++++++++++++++++----
- tools/testing/selftests/net/mptcp/mptcp_sockopt.c |  70 ++++++++++
- 3 files changed, 246 insertions(+), 34 deletions(-)
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
 ---
-base-commit: 4bb9710c6a68d35207f123aef55dcd50e7195ec5
-change-id: 20260918-net-next-mptcp-msg_errqueue-0e2049a30061
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.c | 70 +++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-Best regards,
---  
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.c b/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
+index b6e58d936ebe..d68515b7903b 100644
+--- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
++++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
+@@ -183,6 +183,13 @@ static void xgetaddrinfo(const char *node, const char *service,
+ 	}
+ }
+ 
++static bool expect_all_features(void)
++{
++	char *env = getenv("SELFTESTS_MPTCP_LIB_EXPECT_ALL_FEATURES");
++
++	return env && strcmp(env, "1") == 0;
++}
++
+ static int sock_listen_mptcp(const char * const listenaddr,
+ 			     const char * const port)
+ {
+@@ -769,6 +776,68 @@ static void test_ip_tos_sockopt(int fd)
+ 		xerror("expect socklen_t == -1");
+ }
+ 
++static void test_ip_recverr_sockopt(int fd)
++{
++	struct iovec iov = {
++		.iov_base = &(char){ 0 },
++		.iov_len = 1,
++	};
++	struct msghdr msg = {
++		.msg_iov = &iov,
++		.msg_iovlen = 1,
++	};
++	int one = 1, zero = 0, val = -1;
++	socklen_t s = sizeof(val);
++	int level, optname, r;
++
++	switch (pf) {
++	case AF_INET:
++		level = SOL_IP;
++		optname = IP_RECVERR;
++		break;
++	case AF_INET6:
++		level = SOL_IPV6;
++		optname = IPV6_RECVERR;
++		break;
++	default:
++		xerror("Unknown pf %d\n", pf);
++	}
++
++	r = setsockopt(fd, level, optname, &one, sizeof(one));
++	if (r) {
++		/* For older kernels not supporting IP(V6)_RECVERR yet */
++		if (errno == EOPNOTSUPP && !expect_all_features()) {
++			fprintf(stderr, "IP(V6)_RECVERR not supported, SKIP\n");
++			return;
++		}
++
++		die_perror("setsockopt IP(V6)_RECVERR on");
++	}
++
++	r = getsockopt(fd, level, optname, &val, &s);
++	if (r)
++		die_perror("getsockopt IP(V6)_RECVERR on");
++	if (s != sizeof(val) || val != one)
++		xerror("IP(V6)_RECVERR on mismatch val=%d len=%u", val, s);
++
++	r = recvmsg(fd, &msg, MSG_ERRQUEUE | MSG_DONTWAIT);
++	if (r != -1 || errno != EAGAIN)
++		xerror("expected empty errqueue to return EAGAIN, r=%d err=%d",
++		       r, errno);
++
++	r = setsockopt(fd, level, optname, &zero, sizeof(zero));
++	if (r)
++		die_perror("setsockopt IP(V6)_RECVERR off");
++
++	val = -1;
++	s = sizeof(val);
++	r = getsockopt(fd, level, optname, &val, &s);
++	if (r)
++		die_perror("getsockopt IP(V6)_RECVERR off");
++	if (s != sizeof(val) || val != zero)
++		xerror("IP(V6)_RECVERR off mismatch val=%d len=%u", val, s);
++}
++
+ static int client(int pipefd)
+ {
+ 	int fd = -1;
+@@ -787,6 +856,7 @@ static int client(int pipefd)
+ 	}
+ 
+ 	test_ip_tos_sockopt(fd);
++	test_ip_recverr_sockopt(fd);
+ 
+ 	connect_one_server(fd, pipefd);
+ 
+
+-- 
+2.55.0
 
