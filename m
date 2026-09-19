@@ -1,73 +1,73 @@
 Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF6225B0BE;
-	Sat, 19 Sep 2026 00:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F79E2AD00;
+	Sat, 19 Sep 2026 00:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789777522; cv=none; b=TeoClQbmOw9EL7SeM/v2TL05GYuN1EyX1g7Qk41ryz0zE0k7d1ImnCC7+PTgmKgmz7smrKwzL8AUE/CYykLlT39/hb2i3cNC1Q2gD4L3o3BGV4fipH6VgY00YSikKQdLFkDwEneWrQiALaHBNZoJ4lhHPHuYyIXGkse1f3vCr64=
+	t=1789777525; cv=none; b=q62i9bbC5m0ijCEN1M8UB6aQtmKVVKmz0R0/7R/UqFjQtRfdLMW/IHkJQdKZ/5+Hb+sW15weYfLup2pU1a0gAnsPfRiCVdobSyi0rvBxO/VCagmRmmf/60HNFDmpCY75rO7HV+5lQ3dnvCnUrjIrJDTCod3WowY/mZIBBQoc+2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789777522; c=relaxed/simple;
-	bh=bFbAdD5WwJ7BRCb9eIeM5k8fGbdRcmIshjpH6mjf5U0=;
+	s=arc-20240116; t=1789777525; c=relaxed/simple;
+	bh=xHxWWQVPiX1xV2ngFVQTcENr5JBXW5gWgYQElXhF1D8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NPIWUnxR9Mddk6LeOG4vvy1gP1UIONWO5xn3Dgg2ABsFBgTStwuA6LGRIWRmA5rseRzAjJ5HSMG/jaNVXGFt2IxqLucyOz2JS73tZCl7iWt+F4Fx5kukIEJb8w7+TeaGVglRPLXykBeZeQfrZHr3NJ192pm2NKktoq+eXznXSyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=YyYYiDI3; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OG3pXCew; arc=none smtp.client-ip=103.168.172.144
+	 MIME-Version; b=lxUGd1pvuh5YbhW3ARd5UYswvaOq9QCEfmDlTd/Q9f5xAfL4Q676p4LoUCc+hF9/QXc+KNV8+gxXfcu7CimaXQpktTbaMYR94ZHFvH+2SmLE15ExISseDrAWOMuw0X/3r1A7Ps0mjBOsGvWtAIYRIbSeJicW0WKBVaSy5gxbMCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=fP3GmIiB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bhpMb4fE; arc=none smtp.client-ip=103.168.172.144
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="YyYYiDI3";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OG3pXCew"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfout.phl.internal (Postfix) with ESMTP id B0774EC020B;
-	Fri, 18 Sep 2026 20:25:17 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Fri, 18 Sep 2026 20:25:17 -0400
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="fP3GmIiB";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bhpMb4fE"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfout.phl.internal (Postfix) with ESMTP id 50048EC0198;
+	Fri, 18 Sep 2026 20:25:21 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-06.internal (MEProxy); Fri, 18 Sep 2026 20:25:21 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1789777517; x=
-	1789863917; bh=OrQSW9PySTD5pqcXZKw4HeeHztfLYLHLZ88GO+dc7EA=; b=Y
-	yYYiDI3Q5HTbw/tbAfd8rDW/2Kzi8T4+aoFUJbTMd88hjoSGBOKD7sbiEyvJ8Jpb
-	m/l8Ly2mhl2+c/lhnEkzKc5QOBwKryezfTZfZBPbGcLQbDqGWu6naXJ+9ao/PsD7
-	8Joaxcb4r1SMQxlxpsD9vo3EzRcWKOV+VJKav7kAcwG/OnpKLF0yFf3FSsqcsNLo
-	It5ppUBxc6Xbyt1ZZCw1OpQjsyoeQYC/fTWNzJ9yjTTRmxPLgbJnWRmK+phXu+8j
-	wrFTa4rULui9mCUr6pXIFi/UDEhXQL66+8IIEiz3PRbUEXhbyBSedz89j3MreGdq
-	fz6MNO+yZuiUHRWJ+u/MQ==
+	:reply-to:subject:subject:to:to; s=fm2; t=1789777521; x=
+	1789863921; bh=woAtTKSUrAOJywezkPjP/PLaIChkiihi6VKhVfSPERI=; b=f
+	P3GmIiBK6HZ5fGIcXGDIUODVSOcL3LT8XoaXdTMNuubaa/Qjxlum0+xGM0OBxsSi
+	6jBfVNsTabaUnVA3uDuZAwm7nZh168ozs3/hM/lQe64SogUKSeWsEqE9Ds4XdcQu
+	X+iIRvRdiidDvM/029MXNvpgBihgvuJT7Cy6KlCymZ+TPQggaPBkYsso5h72KEZP
+	Dpb/NMgYdfkPHFwYTwBBGK4T8kZiZR38LSEKKapXFxeQuTQwegCzeSIVk+AjyA8v
+	OJ7Jv1i+BHDcgegmQeom/1EUWZCTs+fZxUhRgfzko/Tz9zhusEap/mwGsSq8TJLR
+	egJaZyUZqRm8i3otAidPg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm1; t=1789777517; x=1789863917; bh=O
-	rQSW9PySTD5pqcXZKw4HeeHztfLYLHLZ88GO+dc7EA=; b=OG3pXCewdhljr8JHr
-	YlH6l8CooCxcfLobrHKScUPuGADBAA718f+YWA56zlFjCNaw/IcUL5wrAqHDXwu0
-	ABGXQlqANJGVE9Cvoak5T4ABiD+Xqymx/Vv5tN5PSNbUlDRf8r4v5J91mrtI1JLt
-	KbZbOFMiC29sxwWuylGJ8y7rVKcjSmLb5pIYJx8fW0zcSACEQm64bCwuWR0tHhmQ
-	qKAfgQS/3UULY/yDbwp62jIEA4zJs3oaCwewsSK4EpKFAQ5TKHraHeGU8yUoBuaM
-	gM6Y65XkbjxQYpMnLO2R/kgy2DegAja/mP1tkNGaPmYBWbQhUJRZe59X/LEDKmyc
-	0FidQ==
-X-ME-Sender: <xms:bdatalhvenWA70PwFZvHMU1RAqFBldRm68eHr0OlLQcEw38iHVTwoQ>
-    <xme:bdataiYRj2SG8NxJkYMugMlsmq3g6V5N2h_aruXSymhNnoRS3RfBzxOWQk6_fPFFP
-    zKClXB5kos-kt35i5zWrNJQDQm6x0n5snI0AulSfjrgbgJLysEKtg>
-X-ME-Received: <xmr:bdatanTJHkjJmj79Vj84lX8xzzu4iUkrmSCsYfZrP7_9wrOmxQe0iN8KvdI>
-X-ME-Proxy-Cause: dmFkZTEzseHgHAxanvosBbYuJPOsY+n0X5UbYs0PPazNY//kQZ3NkUWvwvZaeFG4K6MaM1
-    51QpOH4aelOmHBptEhruNIkMmEsuOQeZbGrvL7mQj2kdmmCNYrJ7V/Gxu8ar4BzJpo5rV7
-    vKP2ia7U0+Vm59vAPsz2JcwivFHP+0OmSoqV+JfA3yKlcOkTPrhdGkX4AgOHLm4XJUt5mM
-    HeqMESXl6ibr/xrgjBd4IZM9oAbU6DWk9Q3+fqdUek4rHv8tNSmXbmq+2iLXuPMZjgN42W
-    gGRNasGU39A5UL6wnmEy31YC46agADHTZYQX6KPmc3+B0CXfmIhRtSns1d+buSvmpYlDYa
-    Ea8F6iMJgeQKGBr6iJ6jS5t/l5kFUJnfWycrqY24cckliWVai2FLR26JRYV4iw4sX32X2i
-    EfEzbad5eybuXifwnMO7/nyVEQbt6L9OQsQxevONb3UmKp3N0K6snWnX7lTO2MJ66Mbb0b
-    slMcJIV8yM6ej+537hiz0S4+IctIiyGVy6byPF1QrbNmJisJ2MPp6v9lpvP0vwF3Q7FXRI
-    Z2sJIQMS6uXkTcnCkwcV8MQ0b3yHsVQ9xH51hEsMbxMwVPHHjfkyMMnQxNsc8pzBomEkfY
-    5HGoXJzje8BjlIPd8fmeLOd/xchC2spbg+r8krgCEAGrEh22jNHSVdd32VTg
-X-ME-Proxy: <xmx:bdataiEwaJ47wcwh-YVjQIIohd0eGIO2393yP8NSoMEp6bmdi-_aEw>
-    <xmx:bdatak2N11NAf8qa1VgNyPIm8u1l83pwwH5ZkWYpPqas9TapygJSLQ>
-    <xmx:bdatagu3xaiW43j9LgjsqpWOehBdpx48jJypEvW_ILpyvkh9dbWsAg>
-    <xmx:bdatarl7uGrtTS6lWpBNlssEjZvl_5WX35ZTXKMCex3NeD39og3gtA>
-    <xmx:bdatatLf-mGqw6-soCAKOMm-FKpomYwM1onQoUXWOXRc0GIHQolGeA90>
+	:x-me-sender:x-sasl-enc; s=fm1; t=1789777521; x=1789863921; bh=w
+	oAtTKSUrAOJywezkPjP/PLaIChkiihi6VKhVfSPERI=; b=bhpMb4fEi+7Sz9LZv
+	A39GMVPwJcBjPP4KIjaqnyhb+Mw81Xzt3EcZ/kGZKzJH4cgJLfrt4uMyjd4F/tF4
+	oh/u+IUIxWvXZ6i6gbtAgrUAMlcGECDs0wPlEqNE39OS52lrI7qCJPDU8PcYGBLw
+	cUmJ9VwdKTVNUYfWy7T/SI26ZBNnnLmGfxLYn0TDWVbDdVthuds5yA9bdgEFqUa/
+	f7Xz89aX7bFwMYjqd1EDofwI+eRi1kpFAOpIUHJyXItwbVF81Sk98IvsyjMnCWEs
+	HYpL/QIZSvdSZjGzaeU3WmY4mU4ONFqL3eybrIhuKg05BvSszWiseuNtR9QFymts
+	uN03w==
+X-ME-Sender: <xms:cdataiVCUOpL6mZ7CM44hKh4N7UqJqzc08jeQ-lYDn6cJLkYkI5h7Q>
+    <xme:cdatam8A-lnAxVdqQpkDZNz9o-G9-D_DBLr-_vhkw0d07yZ1lMXE6M1hJZk090QD9
+    7O0NNZDQiwAT4waLAgq4u8kH9qKfD0AIrvPtVzYz4gCTXdaCPbM2p2q>
+X-ME-Received: <xmr:cdataolB7r5mB7htWrnsaRBPHUNVwr3Pqta5a_fsX3JspznRAg52ZMFJ8q8>
+X-ME-Proxy-Cause: dmFkZTFyC+XeKYnZ766rqTYe4SsoatN0doBd7ADemiperjFlmE10ggdkgYpZeWmNOU4aBc
+    lm02WEvCO2QGG+A0SGXMzCjVWjDSVCQ5WJ/xmSMbLZJLqVjt5aEnrGd0hUbHPJ/ejcqjFa
+    xrmYY/YNxh9EpvRrTjNMqslNp6oZ1XKAjj0b9YUD/U+Umt4HJhNRFStrIx7jR3Gf+CAD8k
+    /TwEvtSve0+WgA7utVqBt9LeXDUSIUkf7dn/1M9JWIyORT8Kp2cNKrwYutOzK/Z35sBm5S
+    qWNICJAq9yYROUOkEgx1cQSYtjkPP2DMZwKGXS3JxTiE+xMdBmJUepOSBHs3/DvnVTIMBw
+    QQND7SieWtt/aXz5uKT9DiEHRhvYRwDLjNMrZi9QZALZ/12AZ3Zf4NPQaM79q8yJXhO5D4
+    mgydrB4dpKv6oFpVFxvKxTxzuzkzF6JzHSfyfPOE/W2C8Ho6P08KlQEN5muATVcjHH/zY1
+    fe7odX8BguwojpsMGHN4w0lhDpxTXbH+2bMpQs1mlkdAPd+xnvCJg/Sdle46ItJw+HmJ/A
+    BoNbGTbzr371oySzuTVZvONAaXSjwrSB47KlvqxJxbd/6f6gASMpVlCZ11o/leCgCgUkpP
+    A+2GeiX63HVUrzXdmDcz4kER+634TQWkynYMIc9RDoAJuY0Bif+jfDP05mUQ
+X-ME-Proxy: <xmx:cdatahIv_YN-9HOcpG8EocjHHsiuItf0vVHzsh0cYkveTaA6jkqz4w>
+    <xmx:cdatauqfgPU_t3vr_zrz4SMBP9VvLdHLxlv2n1ze0yVz94yRqJjHEg>
+    <xmx:cdatauSxN7POkfoIlBSu3l8ufS86_XlV3OJ5nl7OZ2KIZMz-x6_f3g>
+    <xmx:cdatah5Aq7KU4TofOTyTg4Y6m2ZKAZHPVL4xLzVp8LdHND2FbhCtZA>
+    <xmx:cdatakM2SDSrCJcpy3wWGUF1WbJu2jf2nZ3e7wfXLO3Ppi1mMUvNjJLh>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Sep 2026 20:25:17 -0400 (EDT)
+ 18 Sep 2026 20:25:20 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	"David Hildenbrand (Arm)" <david@kernel.org>,
@@ -96,9 +96,9 @@ Cc: "Kiryl Shutsemau (Meta)" <kas@kernel.org>,
 	Jason Gunthorpe <jgg@ziepe.ca>,
 	Leon Romanovsky <leon@kernel.org>,
 	kernel-team@meta.com
-Subject: [PATCH v6 10/19] selftests/mm: add khugepaged completion barrier helper
-Date: Sat, 19 Sep 2026 01:24:40 +0100
-Message-ID: <20260919002451.496763-11-kirill@shutemov.name>
+Subject: [PATCH v6 12/19] selftests/mm: parameterize the mixed-source collapse case by source order
+Date: Sat, 19 Sep 2026 01:24:42 +0100
+Message-ID: <20260919002451.496763-13-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260919002451.496763-1-kirill@shutemov.name>
 References: <20260919002451.496763-1-kirill@shutemov.name>
@@ -112,133 +112,101 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-A khugepaged test has to tell "not collapsed" from "not scanned yet", and
-nothing in the selftests can.  wait_for_scan() in khugepaged.c comes
-closest: it polls full_scans until the counter has advanced by two, since
-the pass in progress may already have passed the test's mm.  But it only
-returns in time if scan_sleep_millisecs happens to be short, and it is
-private to that one test.
+collapse_order_mixed_sources() faults its region as order-2 folios and
+collapses them to the -c target.  Order 2 is below the contpte size on
+every arm64 page size, so nothing in this suite collapses a contpte-mapped
+source on purpose.
 
-Add khugepaged_full_pass() to hugepage_settings, built on the same
-advance-by-two wait but driven through sysfs: a store to
-scan_sleep_millisecs wakes the daemon, so the barrier completes whatever
-the scan cadence.  A store made while the daemon is scanning rather than
-sleeping is lost, so the helper keeps storing until the pass lands.
+Let -s name the source order alongside -c.  The case then faults at that
+order, keeping order 2 when -s is absent, and the source order has to be a
+supported mTHP order below the target.  The other mTHP cases are
+unaffected: mthp_push_target_order() enables only the target order.
 
-One wake completes one pass only if pages_to_scan covers every mm on the
-list, so callers need it large.
+A -c at or below -s is refused before any case runs: the sources would
+already be the size being asked for.  Without the check the generic cases
+fail on that one by one instead of saying why.
 
-Settings pushes must not start passes of their own.  A store to either
-sleep knob wakes the daemon, so thp_write_settings() now writes a
-khugepaged knob only when its value changes.
+"-s 5 -c 7" on arm64/64K then collapses contpte-mapped sources into a
+larger mTHP.
 
 Assisted-by: LLM
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- tools/lib/mm/hugepage_settings.c | 60 +++++++++++++++++++++++++++-----
- tools/lib/mm/hugepage_settings.h |  2 ++
- 2 files changed, 53 insertions(+), 9 deletions(-)
+ tools/testing/selftests/mm/khugepaged.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/tools/lib/mm/hugepage_settings.c b/tools/lib/mm/hugepage_settings.c
-index 656442c8d395..77918677a9cd 100644
---- a/tools/lib/mm/hugepage_settings.c
-+++ b/tools/lib/mm/hugepage_settings.c
-@@ -217,6 +217,13 @@ void thp_read_settings(struct thp_settings *settings)
- 	}
- }
- 
-+/* A store to either sleep knob wakes khugepaged, so write only on change */
-+static void thp_update_num(const char *name, unsigned long num)
-+{
-+	if (thp_read_num(name) != num)
-+		thp_write_num(name, num);
-+}
-+
- void thp_write_settings(struct thp_settings *settings)
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index 51bda01446cd..9d1c47bd5013 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -1354,11 +1354,13 @@ static void collapse_order_max_ptes_none(struct collapse_context *c,
+ static void collapse_order_mixed_sources(struct collapse_context *c,
+ 					 struct mem_ops *ops)
  {
- 	struct khugepaged_settings *khugepaged = &settings->khugepaged;
-@@ -232,15 +239,15 @@ void thp_write_settings(struct thp_settings *settings)
- 			shmem_enabled_strings[settings->shmem_enabled]);
- 	thp_write_num("use_zero_page", settings->use_zero_page);
++	int source_order = anon_order ? anon_order : MIN_MTHP_ORDER;
+ 	struct thp_settings settings;
+ 	void *p;
  
--	thp_write_num("khugepaged/defrag", khugepaged->defrag);
--	thp_write_num("khugepaged/alloc_sleep_millisecs",
--			khugepaged->alloc_sleep_millisecs);
--	thp_write_num("khugepaged/scan_sleep_millisecs",
--			khugepaged->scan_sleep_millisecs);
--	thp_write_num("khugepaged/max_ptes_none", khugepaged->max_ptes_none);
--	thp_write_num("khugepaged/max_ptes_swap", khugepaged->max_ptes_swap);
--	thp_write_num("khugepaged/max_ptes_shared", khugepaged->max_ptes_shared);
--	thp_write_num("khugepaged/pages_to_scan", khugepaged->pages_to_scan);
-+	thp_update_num("khugepaged/defrag", khugepaged->defrag);
-+	thp_update_num("khugepaged/alloc_sleep_millisecs",
-+		       khugepaged->alloc_sleep_millisecs);
-+	thp_update_num("khugepaged/scan_sleep_millisecs",
-+		       khugepaged->scan_sleep_millisecs);
-+	thp_update_num("khugepaged/max_ptes_none", khugepaged->max_ptes_none);
-+	thp_update_num("khugepaged/max_ptes_swap", khugepaged->max_ptes_swap);
-+	thp_update_num("khugepaged/max_ptes_shared", khugepaged->max_ptes_shared);
-+	thp_update_num("khugepaged/pages_to_scan", khugepaged->pages_to_scan);
- 
- 	if (dev_queue_read_ahead_path[0]) {
- 		int ret = write_num(dev_queue_read_ahead_path,
-@@ -271,6 +278,41 @@ void thp_write_settings(struct thp_settings *settings)
+-	if (collapse_order <= MIN_MTHP_ORDER) {
+-		ksft_test_result_skip("%s: no source order below target\n",
++	if (source_order >= collapse_order ||
++	    !(thp_supported_orders() & (1UL << source_order))) {
++		ksft_test_result_skip("%s: no supported source order below target\n",
+ 				      __func__);
+ 		return;
  	}
+@@ -1366,7 +1368,7 @@ static void collapse_order_mixed_sources(struct collapse_context *c,
+ 	mthp_push_target_order();
+ 
+ 	settings = *thp_current_settings();
+-	settings.hugepages[MIN_MTHP_ORDER].enabled = THP_ALWAYS;
++	settings.hugepages[source_order].enabled = THP_ALWAYS;
+ 	thp_push_settings(&settings);
+ 	p = ops->setup_area(1);
+ 	ops->fault(p, 0, hpage_pmd_size);
+@@ -1376,10 +1378,9 @@ static void collapse_order_mixed_sources(struct collapse_context *c,
+ 	 * The allocator can fall back to smaller folios under fragmentation;
+ 	 * having nothing to collapse from is not a failure.
+ 	 */
+-	if (!is_range_backed_by_order(p, hpage_pmd_size, MIN_MTHP_ORDER,
++	if (!is_range_backed_by_order(p, hpage_pmd_size, source_order,
+ 				      pagemap_fd, kpageflags_fd)) {
+-		ksft_print_msg("No order-%d sources to collapse...",
+-			       MIN_MTHP_ORDER);
++		ksft_print_msg("No order-%d sources to collapse...", source_order);
+ 		skip("Skip");
+ 		ops->cleanup_area(p, hpage_pmd_size);
+ 		thp_pop_settings();
+@@ -1389,7 +1390,8 @@ static void collapse_order_mixed_sources(struct collapse_context *c,
+ 
+ 	if (madvise(p, hpage_pmd_size, MADV_HUGEPAGE))
+ 		ksft_exit_fail_perror("madvise(MADV_HUGEPAGE)");
+-	ksft_print_msg("Collapse region backed by smaller large folios...");
++	ksft_print_msg("Collapse region backed by order-%d sources...",
++		       source_order);
+ 	if (!khugepaged_full_pass(MTHP_PASS_TIMEOUT_S))
+ 		fail("Timeout");
+ 	else if (all_windows_at_order(p, hpage_pmd_size))
+@@ -1420,6 +1422,7 @@ static void usage(void)
+ 	fprintf(stderr,	"\t\t-s: mTHP size, expressed as page order.\n");
+ 	fprintf(stderr,	"\t\t    Defaults to 0. Use this size for anon or shmem allocations.\n");
+ 	fprintf(stderr,	"\t\t-c: collapse order for mTHP collapse, expressed as page order.\n");
++	fprintf(stderr,	"\t\t    -s, if set, is the source order for the mixed-source case.\n");
+ 	exit(1);
  }
  
-+/*
-+ * Wait for a full khugepaged scan pass that started after this call: the
-+ * pass in progress may already have passed this mm, so full_scans has to
-+ * advance twice.
-+ *
-+ * A store to scan_sleep_millisecs wakes the daemon, but one made while it
-+ * is scanning rather than sleeping is lost, so keep storing until the pass
-+ * lands.
-+ *
-+ * One wake is one pass only if pages_to_scan covers every mm on the list.
-+ */
-+bool khugepaged_full_pass(unsigned int timeout_s)
-+{
-+	unsigned long deadline_ms = timeout_s * 1000UL;
-+	unsigned long elapsed_ms = 0, poll_ms = 10;
-+	unsigned long sleep_ms;
-+	int pass;
-+
-+	sleep_ms = thp_read_num("khugepaged/scan_sleep_millisecs");
-+	for (pass = 0; pass < 2; pass++) {
-+		unsigned long target =
-+			thp_read_num("khugepaged/full_scans") + 1;
-+
-+		while (thp_read_num("khugepaged/full_scans") < target) {
-+			if (elapsed_ms >= deadline_ms)
-+				return false;
-+			thp_write_num("khugepaged/scan_sleep_millisecs",
-+				      sleep_ms);
-+			usleep(poll_ms * 1000);
-+			elapsed_ms += poll_ms;
-+		}
-+	}
-+	return true;
-+}
-+
- struct thp_settings *thp_current_settings(void)
- {
- 	if (!settings_index) {
-diff --git a/tools/lib/mm/hugepage_settings.h b/tools/lib/mm/hugepage_settings.h
-index 94d9fc747f49..8f4581099b7a 100644
---- a/tools/lib/mm/hugepage_settings.h
-+++ b/tools/lib/mm/hugepage_settings.h
-@@ -83,6 +83,8 @@ static inline void thp_save_settings(void)
- 	hugepage_save_settings(/* thp = */ true, /* hugetlb = */ false);
- }
+@@ -1575,6 +1578,9 @@ int main(int argc, char **argv)
+ 	    !(thp_supported_orders() & (1UL << collapse_order)))
+ 		ksft_exit_skip("Order %d is not a supported anon THP order\n",
+ 			       collapse_order);
++	if (mthp_khugepaged_context && collapse_order <= anon_order)
++		ksft_exit_skip("-c %d needs a source order below it, -s says %d\n",
++			       collapse_order, anon_order);
  
-+bool khugepaged_full_pass(unsigned int timeout_s);
-+
- void thp_set_read_ahead_path(char *path);
- unsigned long thp_supported_orders(void);
- unsigned long thp_shmem_supported_orders(void);
+ 	if (mthp_khugepaged_context) {
+ 		pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
 -- 
 2.54.0
 
