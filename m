@@ -1,107 +1,102 @@
-Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
+Received: from mta0.migadu.com (out-102.mta0.migadu.com [91.218.175.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B0653090C2
-	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 06:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D57837204C
+	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 07:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789799182; cv=none; b=gRzS89zyFBymSayxQ3A+1mIqUOfokit+AqUBVDfWa9PVpESnvFR3fmKMy/zbw7cNW84N5VYpFuvuNT+EeP74tNIGYxRYr+DGx0zw5oTEvKhtxQCCAsRzNHYKKedifq09bfHqJXv8prcXtx6DdP724HEo3PeHdRRN95T6xZJAXeA=
+	t=1789803306; cv=none; b=n2OuCwFQclhzAm4J7zyBfs0ny4q451Gi21IpeSvXZmn9d60DOgjxiaY+MpZkrYcu+01TIxIp4cFuvUkqJzm8bqZ/nwgDgkdYy4FpjSsdgFtHuv76fMI/Yns2QkpKXrikPNRMz+zS5rj+5TtNtfTeg2ulx1+o7U1D8TRRvw7tJm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789799182; c=relaxed/simple;
-	bh=RI0ZyrQb4ytJDsiZVvOM12kdk0OUkZvDp4TPA2K7Ci4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MQnAmNM3iN5BX94eLKyOhxa0nCBy+yIf5oR43GsGBceoszK9pYMJntiQhp7CYk/xUJPDiLG1LJ3ONDA+V5O2saaxNkloI7lBLinC+PI5mx9Atl/ET83rsWVeVGxulaRpprZvCZ44P/i7v0lYQGGax3d9XqSfNXVOhDUgmdORHU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WMKr1klE; arc=none smtp.client-ip=74.125.228.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789803306; c=relaxed/simple;
+	bh=bwTHF6NnPL2Nf6L0KvSVWduTuK3JmVHwj2sjNly6dPo=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=e9SCtOGpM5EssfPLlXT432aIASxPPrk11my9ZrzGn2R5HRTc0XyJU6UyRNBn9hyA0uldqD0OVDtJfrvY3tYQsC6PlAQWIP34G6KFf40/c/b9vXG0cRTkKQnCI4O1PYnsNxBTE3RpFfQcdbyIZGnO8GoXn2N/idsLmXDnGLBd1rI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jrkY5f59; arc=none smtp.client-ip=91.218.175.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WMKr1klE"
-Received: by mail-pz2-f41.google.com with SMTP id 41be03b00d2f7-cc50d1b048eso1256183a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 23:26:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789799181; x=1790403981; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=gsbsJnG4mmaQW0/v8FF/QfgvuP03odNJwcWgXIjZTuM=;
-        b=WMKr1klEL2EjBRHb9nE4HRvfFZzbj2oGOa64zPPDjO1wXWp2GBSS/kkURwj61Q2zsL
-         rhPKDYX7fMcQJ6VBW67WaX57V88AZ0BCFv7+pgRxKECnZt1QV+wyoh5iU0WPwkMfWXNI
-         y23/WwFUbwaxvVHGuZIpSY0Zo0BQLW9N/46WpoU/fEqZLAVEFtyozKeKsS6a/d9tv/wL
-         JE7MurYL99A8ydCC9E6pBM/yn/HOOEskiUkcqOR/MmFCsi8sb6J/P6lpea4mdu2wBEzD
-         7oArvDleRznu4XcBvFWQTpN5nr6ud/6ws+nC0b/Y8ADmU7fIqxHdpL0Q9EIe8EwuyxbY
-         +LsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789799181; x=1790403981;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=gsbsJnG4mmaQW0/v8FF/QfgvuP03odNJwcWgXIjZTuM=;
-        b=JnuFcBBRVBzG3OOvbv2b3pOGWK9NDPJnIEv5dBDiKUe08VD/h16g+9SNmHlPtLaTjv
-         8qvq4Sq5Qar1CBHprtQzv78UeqnovCzaRD1u+H7NJ0cJsiVR/FiynzF0cQkHKfkTHli0
-         zGpfT3Z9LeThSUKzWlSem6Rw5YG3+019vlHKIezT7JX8pegawILZ4d0pTUdN8KEWnFEu
-         rhGYUxfqH8FHqdtEFGu8dUaQjkNlCssT+AfaMmWq41kGrRf0q0D11sjKhDQamtiVrfJN
-         TJqgM4m2e1ogSeJP+S3ZB0JKJ8v+DQz0LGBLw7Aezl4Cbx3EL0QpPeb0IbPo5iqxvwPD
-         8xyg==
-X-Forwarded-Encrypted: i=1; AKwUvBxuJCeNIvCVAsyffMO61XoYojInc9adS7E0Wq9eNfb8nxAguI1jtAuLMfRpm23Rk9M4mp8QMma13tHTAiI8HcE=@vger.kernel.org
-X-Gm-Message-State: AFuF++kxyRQ54iaJdVnCbI6i8iOgPgjX1MWUBUvVw1/vRpWzx9Oys3yV
-	uXDDsWOJYmTaHvpVqGiypUC8SX/Pk9KE8+vvK88VrEqLqj1ghvZVLbUT
-X-Gm-Gg: AYBFou2IiQJQgi/lwQhRtw1Gj/ylLhOSZpTbWvgor74xhuo0OAobi6nr8bBLiIR67H7
-	r7BvT1QuP6oBfFJTlBexprvvDYNwOrSMK5Uq0OUnMBn8zvWHFGzL8ZUFI60mtVydFY0fGCo+/u7
-	hoHhbawxSU+hp1nV2S9eFOA+k79y3sZpMkPzJhHFcDAWdmUkkBDIJ5nOki6MqFo8Za3+cB3ceJD
-	AY07XjKGSW+JufiGha7omqC5CpT5OPOyHaFjBw3TPlIXc/S0MMTdjbKvS7RqK4z89JFtbJWgvfG
-	sJmhVFWsiBZn2pRvUvow2VU6/3FELz5YoWe8/Hf19DlcXz+p5shew43Y434em9e3dKqqiW/myre
-	VfIheteCQe+Q0Dc8bW3iXoFQWBtDp/V14OiIDg3KgP5rdUiBG42vSFNlXoS6BPgXsaqwZhN5HgS
-	0H2EzX6+/LXlzO06yYAAHOhL7Rmcft35G1w5xYrabI/awC/lL5E1tfVWoAlXnW9innBOMr0hdr7
-	LpnmcjOLu/T5G2y8eFKfM3dRJPznBwVjZFwNMVGwKOGf6X872IaJbZesXb5DXgDWAUdvY5J75w=
-X-Received: by 2002:a05:6a21:a393:b0:3dd:a196:69e8 with SMTP id adf61e73a8af0-3dda196789bmr2864142637.67.1789799180848;
-        Fri, 18 Sep 2026 23:26:20 -0700 (PDT)
-Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:d11b:773b:fa83:c49a])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33c32da4960sm4310485eec.0.2026.09.18.23.26.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 23:26:20 -0700 (PDT)
-From: "Hemendra M. Naik" <hemendranaik@gmail.com>
-To: kuba@kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	hemendranaik@gmail.com,
-	horms@kernel.org,
-	jhs@mojatatu.com,
-	jiri@resnulli.us,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	tahiliani@nitk.edu.in,
-	vishy0777@gmail.com
-Subject: Re: [PATCH net-next v6 0/3] net/sched: sch_fq_pie: add per-flow class statistics
-Date: Sat, 19 Sep 2026 11:56:13 +0530
-Message-Id: <20260919062613.42379-1-hemendranaik@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260918155906.13d01c2a@kernel.org>
-References: <20260918155906.13d01c2a@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jrkY5f59"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=bwTHF6NnPL2Nf6L0KvSVWduTuK3JmVHwj2sjNly6dPo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789803301; v=1; x=1790408101;
+ b=jrkY5f59AO1rrkbeDGnUAJiQsf+UARwOfR38Ih2pV3qCG2BVedCN66sS6Xh0Jrj/JMBRBcvS
+ eHgCAPTBrTtqIzGAGLootoakKC2dk4qpdIGe79VYB5ro4Dc2C7AaFKdiQP/QKyj2gbstDh8/Jt7
+ juo3vlu9A57wjuDarjhlfKMA=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 95f1a4aad28e81c8;
+	Sat, 19 Sep 2026 07:35:01 +0000
+X-Mizu-Trace-ID: 95f1a4aad28e81c8
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <748ca00e-61af-4698-86a9-cb28a41c7471@linux.dev>
+Date: Sat, 19 Sep 2026 15:34:52 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, daniel@iogearbox.net, linux-kselftest@vger.kernel.org,
+ cuitao@kylinos.cn
+Subject: Re: [RFC PATCH v5 1/5] blk-iocost: add BPF struct_ops cost model
+ support
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, tj@kernel.org,
+ josef@toxicopanda.com, axboe@kernel.dk, ameryhung@gmail.com
+References: <20260918031751.1255420-1-cui.tao@linux.dev>
+ <20260918031751.1255420-2-cui.tao@linux.dev>
+ <DLIK37JYD35X.3NZ4ZHTHDKAFX@gmail.com>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <DLIK37JYD35X.3NZ4ZHTHDKAFX@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi Jakub,
+Hi Alexei,
 
-We've posted the new patches for kernel (v7) and iproute2 (v6) 
-after rebasing.
+在 2026/9/18 23:43, Alexei Starovoitov 写道:
+> On Fri, Sep 18, 2026 at 11:17 AM Tao Cui <cui.tao@linux.dev> wrote:
+>> The registration and binding model follows the TCP congestion
+>> model registration pattern: registering a struct_ops makes the model
+>> available by its name (char name[IOCOST_MODEL_NAME_LEN], validated at
+>> init_member), while
+>> io.cost.model binds one registered model to a device with
+>> "model=<name>" and unbinds with "model=linear" or "ctrl=auto/user".
+>> Unregistering a model removes it from the registry, but its name
+> 
+> I don't think it's what Tejun asked for in v1. He asked for a per-device
+> struct_ops instance where attaching switches the device to bpf and
+> detaching switches it back. Instead there is a global name registry,
+> a lifecycle list, an "unregistered but still bound" state and a
+> refcount_t on top of bpf_struct_ops_get(), and every version since v3
+> had a lifetime bug in exactly that code.
+> Do it like hid_bpf_ops does with hid_id: device in the struct_ops,
+> bind in .reg, unbind in .unreg, and le
+> t struct_ops own the lifetime.
+> 
 
-The mailing list threads can be tracked here:
-- Kernel v7: https://lore.kernel.org/netdev/20260919060125.38063-1-hemendranaik@gmail.com/
-- iproute2 v6: https://lore.kernel.org/netdev/20260919061254.39678-1-hemendranaik@gmail.com/
+Thanks for pointing this out.
 
-As requested, we have also posted the latest 
-patches on GitHub which can be found here:
+You are right. I misunderstood Tejun's comment from v1. I took
+"per-device" as selecting a registered model by name for each device,
+which led to the current registry/lifecycle design.
 
-- https://github.com/H-N41K/linux-net-next/tree/fq_pie_class_stats/
-- https://github.com/H-N41K/iproute2-next/tree/fq_pie_class_stats/
+My original implementation followed the tcp-cc style named model
+approach, but that was not what Tejun was suggesting. The intended
+model should be a per-device struct_ops instance, with attach/detach
+controlling the switch between the BPF model and the builtin model,
+and the struct_ops core owning the lifetime.
+
+> pls wait for Tejun's feedback before respinning.
+> 
+
+I'll rework the design in that direction and wait for Tejun's feedback
+before sending another revision.
 
 Thanks,
-Hemendra
+Tao
+
+> pw-bot: cr
+
