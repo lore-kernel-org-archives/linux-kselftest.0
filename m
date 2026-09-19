@@ -1,73 +1,73 @@
 Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63DCF1DF261;
-	Sat, 19 Sep 2026 00:25:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE572DB789;
+	Sat, 19 Sep 2026 00:25:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789777513; cv=none; b=t7bZqaU5wfia1Ov/RopRr40i/ehh3s431aEIJp9vna0rsZOQ0yqG07a0rZLRB3yRGbYKgzP1ReQcgxHq9Q19q/TY9QUZ8N844C9cq3snEG7TEO6eE9mQ20QY68EtKKHAiGYOCU1I2Jsz1dCIKgxGeL4nQWh1FCpZVfL7LYK/6sA=
+	t=1789777515; cv=none; b=YA/xrMBEvnuRAyrxjkOtlpqfEqWucBCpXD7RTC16lydFwJFK4x+/UIytisUXsfuw9LRct5obJ+vMJD+2BxCJ6tRCWm4/aAi7J4qPOBk68tkaYaBCsxH7ddGX9xXstBH0QXg5flLTnZfwtm7Rxyc9fSB6W/tGNQEd26LvqfRtCQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789777513; c=relaxed/simple;
-	bh=74sW+EnsmK5iOfReG2R+O+Tx+lpNiK3mfv6p06M79xA=;
+	s=arc-20240116; t=1789777515; c=relaxed/simple;
+	bh=36dbQvhiQV0zFlNjYIAZbcxcfSfThnt1hKEK6mMHXm0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tIbxFgcC7HIv/AqvSR3w8drQS6DIEX+QIdTjW2G0G12ApdnI/N+j55LIri+DRMkQtWKPuhY79Eb2qlQ2smqPQ5a8iMcLBJMdsJAsrBUl3Xt8XqwpyUZ/qOocRTFIojiKR7G34AJ0DrjrikEG6YR+Uf+8fD0IwXngGdS2cmfgWDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=QK6trjxA; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=okjo/XZx; arc=none smtp.client-ip=103.168.172.144
+	 MIME-Version; b=XAM7TuTZAlOLAhMw1AFZLbPeUasfzh9jZev4pBhkTG1sQKBbd13i3UykYivdipenZZr2kWifrT002CPyo0l6CzZeY4x8Gue2a/SWu60okROn1qRA9HOVf8VacxYMtsQfjrq80HlssNMBXNAqY1ClR6A0vQAL0+5wA9o1NY4BuRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=dzcUVM1Z; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OAtfrkZO; arc=none smtp.client-ip=103.168.172.144
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="QK6trjxA";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="okjo/XZx"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfout.phl.internal (Postfix) with ESMTP id 8DF9BEC01A0;
-	Fri, 18 Sep 2026 20:25:08 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Fri, 18 Sep 2026 20:25:08 -0400
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="dzcUVM1Z";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OAtfrkZO"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfout.phl.internal (Postfix) with ESMTP id AE46BEC0232;
+	Fri, 18 Sep 2026 20:25:12 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Fri, 18 Sep 2026 20:25:12 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1789777508; x=
-	1789863908; bh=0jxXZ932RTloRPkXJ26iTQ69+3zOv0gA9f87bGPUF1Y=; b=Q
-	K6trjxA1vG1JZ/W8coRdqkfpWyM7J20BUChzzZo376iEalMb1/yBRYFSfm3J2MgA
-	aKDB6+vRsZljeBE0T43fZBzaHRNG5W+HtZmx+fkJ7Fgjqka9klZPcBWAJRGUkpMN
-	PeQbOt3Ypu/xl4uwhAMeUACvoWY5AbHzJjeNpVkEylYN1ibl/siIBK2p+7dV4OPk
-	1/zkUaR87Pw+ILjEK+CGAAbHfxrVJebmtBWowP7WK4zQCbdIblYHBkvVFdsLqV8i
-	NzgQJuhLED39AR1vG8gOyOAD43cLavsqpq7HljSGwfjvzfzi7znubjoEWrjiC35t
-	2RN21e0qGVwglFoIJ6dHw==
+	:reply-to:subject:subject:to:to; s=fm2; t=1789777512; x=
+	1789863912; bh=E20qks4EGRXlLr5iwwk3xar+b94xA/2CHubWgJ4qnkI=; b=d
+	zcUVM1Zub0MueH1wRB6cZbScLWZsIjm0WsCXCmlW65fcbX3MDA1WcsrjsQCHXFas
+	1UXuuGhUBJcBgg68DJy2MHUi68VLZA0fjqHRZ3c1w+akUpK7iYkmIZDU597p2GIC
+	BC7fRP4YbfGG10J0VCMwRp887LsAH/+tBc9F7+loTw2jgRQqxgRKKoHeWS1I9TyI
+	E3p1e/cmaNuoLf3z+parbFJS5LaIVXprQtm2jCgesrPjPsErl/hPkIdLqnSEbvle
+	VFWufWVEqWK+OPl3eBZ0xpZco/4iXBxSvgfFF/TDgvG8wfEKRV+RnDBijYaEq/WH
+	Ge+nPuFx4KJ/8HvFMlxGQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm1; t=1789777508; x=1789863908; bh=0
-	jxXZ932RTloRPkXJ26iTQ69+3zOv0gA9f87bGPUF1Y=; b=okjo/XZxMMeDR5lHq
-	JfCHFY+gIsfdka8yKm6PiF+WLXMeE19SdTPTAi3zxsVGH3E8EaEfzIe+8DtOpUbl
-	qi3DUkIzZLn4ynGlpKoVRLiH/xuAOFxFVemms/k1vUZGdk26hKmk5w/nM7AhlZKU
-	2zSy0cgCPOpmTy7DxYg3a+dG2uYMa+fGkRq72sJ6PkJWwcLL5BCxmsyLv6oyZJcQ
-	+LH4CXmjV6R6px7RGAYnrqRtFSxmKmmDn14cp1vflO8NVgYEzLAIOPoFoLnvnpa6
-	byXNIdGcV1M2VdxQaA8v4y2WG7r/RPinfRvVGhJs7jA7IIrXnhiXMhZg32uA2j/k
-	L0bmw==
-X-ME-Sender: <xms:ZNatamJupdE8vMTCc9UXdPO-FPJNgk3fRhcdPxHZXT2wkywMkG3yow>
-    <xme:ZNatamikOA3AXUoDz9WiPHKgupdtZLL0qtSz075bm1jHmH9Unvwxh6H5omhbXjJA8
-    m-PxaK4eDEPUMAKu9-hR7z1jVba5ghG9sO5iqqPJSJIXH-TCEZUEV8>
-X-ME-Received: <xmr:ZNatao7Id28xLDR6HRvCrzlqomqV7EnKx6ZTJnR5rZkSa8r0POCFNc1jT-c>
+	:x-me-sender:x-sasl-enc; s=fm1; t=1789777512; x=1789863912; bh=E
+	20qks4EGRXlLr5iwwk3xar+b94xA/2CHubWgJ4qnkI=; b=OAtfrkZOIBPmRkb6u
+	zmmiAT0WXBX0k6glN1ORs9tpqV7JoeCnkmND+oXdLCNcDStC9HJzAjL+PloWSoZe
+	Nx2ffaaVrBCPEXZFYQGwY76Hc707EDcEy8dtDSBLZSjgSGeI1R7HS8EhfIxlDv3c
+	N1+2p3VTSzMsDvIDAZi/KAVOb5SVh3Zu1Zk9dKkhuLHvBXE/fyj8ICvOtFhRuqTM
+	68v5f4S5Lr9A7AhlyTpDYWTJKpiXYTVDj5tI+jHBM4TbBTInsAn6NRjRc4R7DfZv
+	8E7F2SBim/TXwNc+Emt76W65rDU/i0PuhOjowLdku97OAb/wkfpR0bIX5Rfuiko0
+	0TraA==
+X-ME-Sender: <xms:aNatan9vEyO48Uv1o21ycefis0NXHUGZty045SJMiaWhCtGJj4mUOg>
+    <xme:aNatalnrSnsJssMSo2L_-JtnL-FGgjPlZw-_A54HMlrNfzjypFImTsFckRjlECKaM
+    QhylXLN26BMJbx58P6p0t4iweiW0af2nSmAoCmK0bgmiTUWNhY34QXN>
+X-ME-Received: <xmr:aNataqJcwuM-qSAekEkMf-meqJzH84XsXNhdfiwGclo54-b5ISXtG2g3jgM>
 X-ME-Proxy-Cause: dmFkZTFyC+XeKYnZ766rqTYe4SsoatN0doBd7ADemiperjFlmE10ggdkgYpZeWmNOU4aBc
     lm02WEvCO2QGG+A0SGXMzCjVWjDSVCQ5WJ/xmSMbLZJLqVjt5aEnrGd0hUbHPJ/ejcqjFa
     xrmYY/YNxh9EpvRrTjNMqslNp6oZ1XKAjj0b9YUD/U+Umt4HJhNRFStrIx7jR3Gf+CAD8k
     /TwEvtSve0+WgA7utVqBt9LeXDUSIUkf7dn/1M9JWIyORT8Kp2cNKrwYutOzK/Z35sBm5S
-    qWNICJAq9yYROUOkEgx1cQSYtjkPP2DMZwKGXS3JxTiE+xMdBmJUepOSBHs3/DvnVTIMFK
-    gChYU2BEFFB9NOF1vNFE7k40lrB57q5k5i69CWvfmdsQKgad4bHeO3w/G34aFpcNwxvZGe
-    ufJ1PCPrsJvoR2vup6W1g+fn0IkEMfRA6RUqWDjWoOW6hqdvB3U+zwIUdoYlJhLK5arfDX
-    LJiqlHH+P0e7oXO8WGzpoqUmdA5LXT4pc5sWKdCjE8FpUjM8z0X7M1nYUIpQEI59TyEN+D
-    esLRpRcwcZdpOu8A47+q8O+pQykY29kuTM456oHHusrDmTikzbG9Tfbid2g5c4noHAsuOT
-    gy89aAeKZdFV6BEEx2YfQuDRFo67aWXGhOpI0SeNlPJV9a7GzSWOMqN4rEgQ
-X-ME-Proxy: <xmx:ZNatajMqdgy9i24lfJKwANyHtLHHNSfr-ghLsF5FVs7wVBDscvZuCw>
-    <xmx:ZNatavcyD-NRDZjkOIl71zkKnp6ta9HSpFA26AAxUIHepPVMZoA79A>
-    <xmx:ZNatam38BcfJtmeWqFZHm1dJ0hofwYzhl-cBU2Y9IL_uGewtqTXlpA>
-    <xmx:ZNatanMSxPyGvEyDDGETfCdDoOMDSjzT_wSRogMm1WvrKrfLxeknOw>
-    <xmx:ZNataunTqQCeC25dD9HYralZp2xMeyvAR9ngW_lJhYxKmiWTY_pfkbc4>
+    qWNICJAq9yYROUOkEgx1cQSYtjkPP2DMZwKGXS3JxTiE+xMdBmJUepOSBHs3/DvnVTIMpb
+    L5ESyndOi5bpaoFBmYeOsEvwEeyOHIUd7LfqffZ1zJn/8T6rxqqLc5X+pIl0tLpk/I/6lI
+    /m45Kkjv6LalblttsA9sVVkWfW66qntLgNMH+qJw1GNJLP4FWUOa1W8xhs7TwkJFRw4FTH
+    y+wT+BZuEF+uA2L7okyeFi3weDYxSq6LAiBZLt+3uD+C0GGXGaCMA8qHFifjwmTCNGcw6C
+    7DP3l6YC/8NPz72pHkfr1IAbIxWRIGx+Uc+g2wFMtzscVj8gpIsVDAdGm8YUYEyZiLpZos
+    lrS40yPVOEWU/+6cprb6tzvgBFdWbi8bVY0ROLUzRB+i4cuDKvn1etqkrH7Q
+X-ME-Proxy: <xmx:aNatajpmJMTgKZ4CHQYdYFSW6174vGkOGz-c3suU6woNv6bMwpeuxQ>
+    <xmx:aNatavQB3wThDRTtrzPkXdqc5Q2iD9UAa1uCykADEgW277_8p1A-bg>
+    <xmx:aNatau62lndZQ6Pye9_36gB0DcsEt2Xd44-8uHiDwenJlxls4ZwZ0g>
+    <xmx:aNatavYO5RJ3hL8z5bpTKbp31nNjL33a1yEuWgcXE9Q5OwdtNoKdpA>
+    <xmx:aNataqzVx9XknLhaLnLsW4CHJiUPSYIEwPyLwBOaOR4rzSRSbT1vBb0J>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Sep 2026 20:25:07 -0400 (EDT)
+ 18 Sep 2026 20:25:11 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	"David Hildenbrand (Arm)" <david@kernel.org>,
@@ -96,9 +96,9 @@ Cc: "Kiryl Shutsemau (Meta)" <kas@kernel.org>,
 	Jason Gunthorpe <jgg@ziepe.ca>,
 	Leon Romanovsky <leon@kernel.org>,
 	kernel-team@meta.com
-Subject: [PATCH v6 05/19] selftests/mm: make the swap cases' swapout reliable
-Date: Sat, 19 Sep 2026 01:24:35 +0100
-Message-ID: <20260919002451.496763-6-kirill@shutemov.name>
+Subject: [PATCH v6 07/19] selftests/mm: move is_backed_by_folio() into vm_util
+Date: Sat, 19 Sep 2026 01:24:37 +0100
+Message-ID: <20260919002451.496763-8-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260919002451.496763-1-kirill@shutemov.name>
 References: <20260919002451.496763-1-kirill@shutemov.name>
@@ -112,116 +112,185 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-collapse_swapin_single_pte() and collapse_max_ptes_swap() swap a range out
-and then require smaps to report exactly the count they asked for.  Two
-things keep that count from arriving.
+Checking that an address range is backed by a folio of a given order is
+useful to any test that builds or collapses large folios.  mTHP collapse
+coverage in the khugepaged selftest needs exactly that.
 
-MADV_PAGEOUT is best effort, so the count often turns up a moment late.
+split_huge_page_test.c already has the building block:
+is_backed_by_folio() reads the compound head and tail flags from
+/proc/kpageflags to classify the folio behind a page.
 
-And wait_for_scan() leaves the range eligible for collapsing, so
-khugepaged is still working on it.  Collapsing reads the swapped-out pages
-back in, so the daemon empties the swap as fast as the case fills it.  On
-arm64 with 64K pages max_ptes_swap is 1024 pages, which is 64M a step, and
-the case loses the race:
-
-    # Swapout 1024 of 8192 pages... Fail
-    not ok 10 collapse_max_ptes_swap
-
-Retry for up to two seconds, holding the range out of khugepaged's reach
-meanwhile.  The collapse each case runs next restores MADV_HUGEPAGE, so
-only the setup is affected.
-
-If the pages still won't swap out, skip: no swap, swap too small or full,
-a memcg cap or busy writeback. None of that is a kernel bug.
+Move it into vm_util so other tests can use it.  No functional change.
 
 Assisted-by: LLM
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- tools/testing/selftests/mm/khugepaged.c | 41 +++++++++++++++++--------
- 1 file changed, 29 insertions(+), 12 deletions(-)
+ .../selftests/mm/split_huge_page_test.c       | 61 -------------------
+ tools/testing/selftests/mm/vm_util.c          | 61 +++++++++++++++++++
+ tools/testing/selftests/mm/vm_util.h          |  2 +
+ 3 files changed, 63 insertions(+), 61 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index 5318f3cfc0d0..13a2a47ab110 100644
---- a/tools/testing/selftests/mm/khugepaged.c
-+++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -221,6 +221,29 @@ static bool check_swap(void *addr, unsigned long size)
- 	return swap;
+diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+index 68f508c9a355..c5d96a4b1db3 100644
+--- a/tools/testing/selftests/mm/split_huge_page_test.c
++++ b/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -41,67 +41,6 @@ const char *kpageflags_proc = "/proc/kpageflags";
+ int pagemap_fd;
+ int kpageflags_fd;
+ 
+-static bool is_backed_by_folio(char *vaddr, int order, int pagemap_fd,
+-		int kpageflags_fd)
+-{
+-	const uint64_t folio_head_flags = KPF_THP | KPF_COMPOUND_HEAD;
+-	const uint64_t folio_tail_flags = KPF_THP | KPF_COMPOUND_TAIL;
+-	const unsigned long nr_pages = 1UL << order;
+-	unsigned long pfn_head;
+-	uint64_t pfn_flags;
+-	unsigned long pfn;
+-	unsigned long i;
+-
+-	pfn = pagemap_get_pfn(pagemap_fd, vaddr);
+-
+-	/* non present page */
+-	if (pfn == -1UL)
+-		return false;
+-
+-	if (pageflags_get(pfn, kpageflags_fd, &pfn_flags))
+-		goto fail;
+-
+-	/* check for order-0 pages */
+-	if (!order) {
+-		if (pfn_flags & (folio_head_flags | folio_tail_flags))
+-			return false;
+-		return true;
+-	}
+-
+-	/* non THP folio */
+-	if (!(pfn_flags & KPF_THP))
+-		return false;
+-
+-	pfn_head = pfn & ~(nr_pages - 1);
+-
+-	if (pageflags_get(pfn_head, kpageflags_fd, &pfn_flags))
+-		goto fail;
+-
+-	/* head PFN has no compound_head flag set */
+-	if ((pfn_flags & folio_head_flags) != folio_head_flags)
+-		return false;
+-
+-	/* check all tail PFN flags */
+-	for (i = 1; i < nr_pages; i++) {
+-		if (pageflags_get(pfn_head + i, kpageflags_fd, &pfn_flags))
+-			goto fail;
+-		if ((pfn_flags & folio_tail_flags) != folio_tail_flags)
+-			return false;
+-	}
+-
+-	/*
+-	 * check the PFN after this folio, but if its flags cannot be obtained,
+-	 * assume this folio has the expected order
+-	 */
+-	if (pageflags_get(pfn_head + nr_pages, kpageflags_fd, &pfn_flags))
+-		return true;
+-
+-	/* If we find another tail page, then the folio is larger. */
+-	return (pfn_flags & folio_tail_flags) != folio_tail_flags;
+-fail:
+-	ksft_exit_fail_msg("Failed to get folio info\n");
+-}
+-
+ static int check_after_split_folio_orders(char *vaddr_start, size_t len,
+ 		int pagemap_fd, int kpageflags_fd, int orders[], int nr_orders)
+ {
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index 4751db798c3a..cc5dfd1e6c94 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -494,6 +494,67 @@ int pageflags_get(unsigned long pfn, int kpageflags_fd, uint64_t *flags)
+ 	return 0;
  }
  
-+static bool swapout_range(void *p, unsigned long size)
++bool is_backed_by_folio(char *vaddr, int order, int pagemap_fd,
++			int kpageflags_fd)
 +{
-+	int i;
++	const uint64_t folio_head_flags = KPF_THP | KPF_COMPOUND_HEAD;
++	const uint64_t folio_tail_flags = KPF_THP | KPF_COMPOUND_TAIL;
++	const unsigned long nr_pages = 1UL << order;
++	unsigned long pfn_head;
++	uint64_t pfn_flags;
++	unsigned long pfn;
++	unsigned long i;
 +
-+	/* keep khugepaged from collapsing the range and swapping it back in */
-+	if (madvise(p, size, MADV_NOHUGEPAGE))
-+		ksft_exit_fail_perror("madvise(MADV_NOHUGEPAGE)");
++	pfn = pagemap_get_pfn(pagemap_fd, vaddr);
++
++	/* non present page */
++	if (pfn == -1UL)
++		return false;
++
++	if (pageflags_get(pfn, kpageflags_fd, &pfn_flags))
++		goto fail;
++
++	/* check for order-0 pages */
++	if (!order) {
++		if (pfn_flags & (folio_head_flags | folio_tail_flags))
++			return false;
++		return true;
++	}
++
++	/* non THP folio */
++	if (!(pfn_flags & KPF_THP))
++		return false;
++
++	pfn_head = pfn & ~(nr_pages - 1);
++
++	if (pageflags_get(pfn_head, kpageflags_fd, &pfn_flags))
++		goto fail;
++
++	/* head PFN has no compound_head flag set */
++	if ((pfn_flags & folio_head_flags) != folio_head_flags)
++		return false;
++
++	/* check all tail PFN flags */
++	for (i = 1; i < nr_pages; i++) {
++		if (pageflags_get(pfn_head + i, kpageflags_fd, &pfn_flags))
++			goto fail;
++		if ((pfn_flags & folio_tail_flags) != folio_tail_flags)
++			return false;
++	}
 +
 +	/*
-+	 * Retry several times because MADV_PAGEOUT is best effort.  Sleep
-+	 * between the retries to give outstanding writeback a chance to
-+	 * finish.
++	 * check the PFN after this folio, but if its flags cannot be obtained,
++	 * assume this folio has the expected order
 +	 */
-+	for (i = 0; i < 40; i++) {
-+		if (madvise(p, size, MADV_PAGEOUT))
-+			ksft_exit_fail_perror("madvise(MADV_PAGEOUT)");
-+		if (check_swap(p, size))
-+			return true;
-+		usleep(50 * 1000);
-+	}
-+	return false;
++	if (pageflags_get(pfn_head + nr_pages, kpageflags_fd, &pfn_flags))
++		return true;
++
++	/* If we find another tail page, then the folio is larger. */
++	return (pfn_flags & folio_tail_flags) != folio_tail_flags;
++fail:
++	ksft_exit_fail_msg("Failed to get folio info\n");
 +}
 +
- static void *alloc_mapping(int nr)
- {
- 	void *p;
-@@ -828,12 +851,10 @@ static void collapse_swapin_single_pte(struct collapse_context *c, struct mem_op
- 	ops->fault(p, 0, hpage_pmd_size);
+ /* If `ioctls' non-NULL, the allowed ioctls will be returned into the var */
+ int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
+ 			      bool miss, bool wp, bool minor, uint64_t *ioctls)
+diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+index 64a86e8a0c41..f12979a70135 100644
+--- a/tools/testing/selftests/mm/vm_util.h
++++ b/tools/testing/selftests/mm/vm_util.h
+@@ -99,6 +99,8 @@ int64_t allocate_transhuge(void *ptr, int pagemap_fd);
+ int pageflags_get(unsigned long pfn, int kpageflags_fd, uint64_t *flags);
+ int gather_folio_orders(char *vaddr_start, size_t len,
+ 		int pagemap_fd, int kpageflags_fd, int orders[], int nr_orders);
++bool is_backed_by_folio(char *vaddr, int order, int pagemap_fd,
++			int kpageflags_fd);
  
- 	ksft_print_msg("Swapout one page...");
--	if (madvise(p, page_size, MADV_PAGEOUT))
--		ksft_exit_fail_perror("madvise(MADV_PAGEOUT)");
--	if (check_swap(p, page_size)) {
-+	if (swapout_range(p, page_size)) {
- 		success("OK");
- 	} else {
--		fail("Fail");
-+		skip("Could not swap out");
- 		goto out;
- 	}
- 
-@@ -854,12 +875,10 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
- 	ops->fault(p, 0, hpage_pmd_size);
- 
- 	ksft_print_msg("Swapout %d of %d pages...", max_ptes_swap + 1, hpage_pmd_nr);
--	if (madvise(p, (max_ptes_swap + 1) * page_size, MADV_PAGEOUT))
--		ksft_exit_fail_perror("madvise(MADV_PAGEOUT)");
--	if (check_swap(p, (max_ptes_swap + 1) * page_size)) {
-+	if (swapout_range(p, (max_ptes_swap + 1) * page_size)) {
- 		success("OK");
- 	} else {
--		fail("Fail");
-+		skip("Could not swap out");
- 		goto out;
- 	}
- 
-@@ -871,12 +890,10 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
- 		ops->fault(p, 0, hpage_pmd_size);
- 		ksft_print_msg("Swapout %d of %d pages...", max_ptes_swap,
- 		       hpage_pmd_nr);
--		if (madvise(p, max_ptes_swap * page_size, MADV_PAGEOUT))
--			ksft_exit_fail_perror("madvise(MADV_PAGEOUT)");
--		if (check_swap(p, max_ptes_swap * page_size)) {
-+		if (swapout_range(p, max_ptes_swap * page_size)) {
- 			success("OK");
- 		} else {
--			fail("Fail");
-+			skip("Could not swap out");
- 			goto out;
- 		}
- 
+ int uffd_register(int uffd, void *addr, uint64_t len,
+ 		  bool miss, bool wp, bool minor);
 -- 
 2.54.0
 
