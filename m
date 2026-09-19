@@ -1,45 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF691248896;
-	Sat, 19 Sep 2026 02:48:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5268B3B47F3;
+	Sat, 19 Sep 2026 02:48:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789786136; cv=none; b=qe7Pu2qkud7gJonGnS8nR57kFVuzcmO0qMuQ6jM1ucq0kMRJ4J7OXdquIb5P442ihvQrI4HpyP3QxVn4VmvRY+3rqQ1PLvQkqiWppQ0oeTk9mHRg92G3H0RZyEdZwrHap622nCqsA+Ng8Yu9GTlVf/l4KizxDsu7UIZs8Hpahdc=
+	t=1789786137; cv=none; b=jD/D5kg/DCyUCMmtuYCBV/FWF+wXwnR8uWukMZnvcB9Da1+GLU/6iM5801YB3xxtDWQd9fWa47cqS48xcgQOyPF6OEzPqxbT/+EjeNqhF7c5cx46dLhTqTi6ZpMKlIu+poqcxrp0ghYClZb36yG3bcODX/WRjvp4GBx4yZuSFvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789786136; c=relaxed/simple;
-	bh=qz+NsUa5lXt/i2LNRAapsVttDKE/gTx6LOu0gERrM5g=;
+	s=arc-20240116; t=1789786137; c=relaxed/simple;
+	bh=hmK1KmJnPGtFZiSqwkb8jUmFtgTVb6VkH8huqrCAcd4=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BIsuHGyFQZj4UWaRS+nQt0UEdSvRdIE/FZjXcMiKAof+kJDTR7bubX/GJ6JAOcxzPH7DTxaJexfC/QHxAZTNlyomIggqf18jjTMJLdgZb316ssQChut0mpKkkqeCUzM4Qs9qa2be4ssyviEVUl7hnGemTvnhjBaxq0jAnE2PJGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZOhvb8u1; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=Ynw2Bj6WlslWrzd/KvNBUWGAitro7BPHtHdb6fJwqdwmEJZkiaOorN4mKYbxJ/wN9MUMFfQEZLfmKgs2OvYQSq88Wy5kkAScIXhSRfcDoOvizyUYdhVwVBRnFcsC0NUec9MVOfMrIHti5MTVUJJw2nvqhwBOymM2UE5ZV4IDF1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cb3bG/Wt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZOhvb8u1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9A891F00898;
-	Sat, 19 Sep 2026 02:48:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cb3bG/Wt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 327BE1F000FF;
+	Sat, 19 Sep 2026 02:48:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789786134;
-	bh=ievwpJsrj4/rXPuR988T9wuBXxdFL1CuhpO72vj7BSA=;
+	s=k20260515; t=1789786135;
+	bh=Lzb//P0FRNtOAyMRhQ6NZyCRfipS3HuTWg658oFykSw=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ZOhvb8u14K2RjsmfMj2nJJDklMIPDB8hRNASnet4ThiPT1n1/vY+wi5WJCorwCIQ7
-	 JvbtJWHis7DOPXkXc4ReKcf8ND0E4I7JqzJmy+ZKoH94WBu7sE/VMX9HgDdzyAlMpN
-	 8NjuyQjqao27YLxbOuGbLhqprFgZeeqTlat2iblhgm//oqaOg16oXDiv7BfMqniEsp
-	 tnv9lEW+Ov+76MZhW7hxHUl+9iqow1GSJpQo2dlXIN7bPbK5J//ngmbbr8Kn6bMeGD
-	 nhmJl4RZ/KGzcDY4IoFQqyo+eRGjbx9CnbfhNbqJnla6cbbxWaHZqV1N1Ifh4o9CB1
-	 aZPxtN/N0scfQ==
-Subject: Re: [PATCH net-next v2 2/3] ipv6: hash uncached routes by device
+	b=cb3bG/Wt/qyKy8ky0hjVCYl5vf7V+Dyfh2ZgLVLxTnIVGrzNzA6sv5CJc44qMLKQi
+	 Zp3AEUPZphftRw87pMibsiyHDU/N/54Uygly/DTiWc3bMbDB/IsIcKqG2w0zwqftuo
+	 HKp/Zw8DhPgOedO7SXsQ0zFjMwZ7+z+iDPqGGapagCcNBxhTUO0gGIj29/bwJtuSaV
+	 NIUkM116mpvsk43YBFru2Aiu0JV/fetfK1jdCQkPaDh3qEIzjkJvNBGIVj4X8AW2EW
+	 I1RVOCra4SIP8kBxWSJpCfxfINFF3O2Gwy9KFUNs6jKhMMCaFtaVNq/gzAuOOWxRAE
+	 HovmYhRlZuyjg==
+Subject: Re: [PATCH net-next v2 3/3] selftests: net: cover IPv6 uncached route
+ device mismatch
 From: netdev-bot+sashiko@kernel.org
 To: carges@cloudflare.com
 Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
  edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
  shuah@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com
-Date: Sat, 19 Sep 2026 02:48:53 +0000
-Message-ID: <178978613343.22033.13619712358346014012@kernel.org>
+Date: Sat, 19 Sep 2026 02:48:54 +0000
+Message-ID: <178978613474.22033.16435022861441934492@kernel.org>
 In-Reply-To:
- <20260914-hash-bucket-route-lists-v2-2-29f6297d8a5a@cloudflare.com>
+ <20260914-hash-bucket-route-lists-v2-3-29f6297d8a5a@cloudflare.com>
 References:
- <20260914-hash-bucket-route-lists-v2-2-29f6297d8a5a@cloudflare.com>
-X-sashiko-severity: Low
+ <20260914-hash-bucket-route-lists-v2-3-29f6297d8a5a@cloudflare.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -49,208 +50,246 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
+Thank you for your contribution! Sashiko AI review found 5 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 (1) · Medium: 0 · Low: 1
+Critical: 0 · High: 1 · Medium: 2 · Low: 2
 
-- [Low] Changelog/code mismatch: the commit message states "Hash uncached
-  routes by their inet6 device", but rt6_uncached_list_add()…
-
-Pre-existing issues:
-- [High] rt6_uncached_list_flush() (net/ipv6/route.c:177-207) unlinks a
-  route from its uncached list as soon as EITHER of its two device…
+- [High] test_ipv6_uncached_mismatch() (tools/testing/selftests/net/vrf-
+  xfrm-tests.sh:388-417) asserts that `timeout 2 ip link del eth0`…
+- [Medium] Both setup steps of the new test are unchecked.
+- [Medium] `run_cmd_host1 timeout 2 ip link del eth0`
+  (tools/testing/selftests/net/vrf-xfrm-tests.sh:415) is used as the…
+- [Low] test_ipv6_uncached_mismatch() mutates and then destroys the
+  shared fixture without any teardown: it replaces the VRF root qdisc…
+- [Low] The retention of the uncached route depends solely on a 10 s
+  netem timer armed at enqueue, and nothing re-verifies that the packet…
 
 --
 
-ipv6: hash uncached routes by device
+selftests: net: cover IPv6 uncached route device mismatch
 
-This replaces the single per-CPU uncached route list with a per-CPU hash
-table plus a separate "mismatch" list, so that device teardown only has to
-walk the bucket belonging to the device being removed. A new
-CONFIG_IPV6_UNCACHED_ROUTE_HASH_BITS controls the bucket count.
+This adds a new test case to vrf-xfrm-tests.sh that creates a local IPv6
+route through a VRF so that dst.dev is the VRF while rt6i_idev stays on the
+member interface, holds the resulting uncached route in a netem queue, and
+then deletes the member interface. A few questions below about the new test
+function and about the commit message.
 
-Two questions below, one about the changelog wording and one about the
-flush path.
+> diff --git a/tools/testing/selftests/net/vrf-xfrm-tests.sh b/tools/testing/selftests/net/vrf-xfrm-tests.sh
+> index b64dd891699d3..4f409d135a99a 100755
+> --- a/tools/testing/selftests/net/vrf-xfrm-tests.sh
+> +++ b/tools/testing/selftests/net/vrf-xfrm-tests.sh
+> @@ -385,6 +385,37 @@ run_tests()
+>  	cleanup_xfrm_dev
+>  }
+>  
+> +test_ipv6_uncached_mismatch()
+> +{
+> +	local sender_pid
+> +	local backlog
+> +	local rc
+> +
+> +	# A local route through a VRF uses the VRF as dst.dev while retaining
+> +	# the VRF member interface in rt6i_idev. Raw header sends create uncached
+> +	# routes, and netem keeps them referenced while the interface is deleted.
+> +	run_cmd_host1 tc qdisc replace dev ${VRF} root netem limit 1 delay 10s
+> +	ip -6 -netns "$host1" route add local ${HOST1_6}/128 dev eth0
 
-    Hash uncached routes by their inet6
-    device so ordinary device teardown only visits the matching bucket on each
-    CPU.
+[Severity: Medium]
+Should the exit status of these two setup steps be checked?
+
+The tc qdisc replace status is discarded, and the route add is not run
+through run_cmd_host1 at all, so it is invisible under -v and has no
+log_test either.
+
+If CONFIG_NET_SCH_NETEM is not built, the qdisc is never installed, but
+msg_zerocopy still exits 0 because rawv6_send_hdrinc() in net/ipv6/raw.c
+masks -ENOBUFS:
+
+	err = ip6_push_pending_frames(sk);
+	...
+	if (err == -ENOBUFS && !inet6_test_bit(RECVERR6, sk))
+		err = 0;
+
+So the first log_test passes and the failure instead shows up later as
+"Retain uncached IPv6 routes in VRF qdisc" FAIL, which reads as a kernel
+route-retention regression rather than a missing scheduler. Would a check
+plus a skip be clearer here?
+
+The same applies to the route add: it is the precondition that creates the
+dst.dev(VRF) versus rt6i_idev(eth0) mismatch the test is named after. If it
+fails (EEXIST, table/rule differences, older iproute2), the test either
+fails at the sender assertion or silently exercises an unrelated path. The
+later "[ $rc -ne 0 ] && return" guard cannot help, since rc only carries
+msg_zerocopy's status.
+
+Related to this, the commit message says:
+
+	verify route creation, qdisc retention, and prompt interface
+	deletion.
+
+Is "verify route creation" accurate?  No assertion covers the route add; the
+first log_test only reports the sender program's exit status.
+
+> +	ip netns exec "$host1" ./msg_zerocopy -6 \
+> +		-S ${HOST1_6} -D ${HOST1_6} -s 1200 -t 0 raw_hdrincl \
+> +		>/dev/null 2>&1 &
+> +	sender_pid=$!
+> +	wait "$sender_pid"
+> +	rc=$?
+> +	log_test $rc 0 "Create uncached IPv6 routes with mismatched devices"
+> +	[ $rc -ne 0 ] && return
+> +
+> +	backlog=$(ip netns exec "$host1" tc -s qdisc show dev ${VRF})
+> +	if ! echo "$backlog" | grep -Eq 'backlog .* [1-9][0-9]*p'; then
+> +		log_test 1 0 "Retain uncached IPv6 routes in VRF qdisc"
+> +		return
+> +	fi
+> +	log_test 0 0 "Retain uncached IPv6 routes in VRF qdisc"
 
 [Severity: Low]
-Is this description accurate?  In rt6_uncached_list_add() the bucket key is
-the dst device, not the inet6 device:
+Is the retention window here deterministic?
 
-	struct net_device *rt_dev = dst_dev(&rt->dst);
-	...
-		ul = &table->buckets[hash_ptr(rt_dev,
-					      CONFIG_IPV6_UNCACHED_ROUTE_HASH_BITS)];
+The only thing holding the uncached route is the 10s netem timer armed at
+enqueue, and the backlog is sampled once and then assumed to still hold at
+the ip link del below.  Between enqueue and the delete the script runs
+msg_zerocopy for its full runtime (cfg_runtime_ms is 200 + 0 * 1000 with
+-t 0, see tools/testing/selftests/net/msg_zerocopy.c), one ip netns exec tc
+-s qdisc show, and two more process spawns.
 
-rt6i_idev is only used as a discriminator to divert a route onto the
-mismatch list, and rt6_uncached_list_flush_dev() likewise computes
-hash_ptr(dev) for the device being unregistered.
+If the timer fires before the grep, the result is a spurious FAIL. If it
+fires after the grep but before the delete, all three checks pass while
+nothing is actually exercised. Would a much longer netem delay, or a
+re-check of the backlog immediately before the delete, make this
+deterministic?
 
-Since ip6_rt_get_dev_rcu() can make dst.dev and rt6i_idev->dev refer to
-different devices, which of the two is the key matters when auditing which
-routes a given flush pass can reach.  Could the changelog say "hash uncached
-routes by their dst device" instead?
-
-> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-> index 7535b09068a06..080dce3291682 100644
-> --- a/net/ipv6/route.c
-> +++ b/net/ipv6/route.c
-
-[ ... ]
-
-> @@ -133,11 +134,27 @@ struct uncached_list {
->  	struct list_head	head;
->  };
->  
-> -static DEFINE_PER_CPU_ALIGNED(struct uncached_list, rt6_uncached_list);
-> +#define RT6_UNCACHED_HASH_SIZE	BIT(CONFIG_IPV6_UNCACHED_ROUTE_HASH_BITS)
 > +
-> +struct rt6_uncached_table {
-> +	struct uncached_list buckets[RT6_UNCACHED_HASH_SIZE];
-> +	/* Routes that must be discoverable through two different devices. */
-> +	struct uncached_list mismatch;
-> +};
-> +
-> +static DEFINE_PER_CPU_ALIGNED(struct rt6_uncached_table, rt6_uncached_table);
->  
->  void rt6_uncached_list_add(struct rt6_info *rt)
->  {
-> -	struct uncached_list *ul = raw_cpu_ptr(&rt6_uncached_list);
-> +	struct rt6_uncached_table *table = raw_cpu_ptr(&rt6_uncached_table);
-> +	struct net_device *rt_dev = dst_dev(&rt->dst);
-> +	struct uncached_list *ul;
-> +
-> +	if (rt->rt6i_idev && rt->rt6i_idev->dev != rt_dev)
-> +		ul = &table->mismatch;
-> +	else
-> +		ul = &table->buckets[hash_ptr(rt_dev,
-> +					      CONFIG_IPV6_UNCACHED_ROUTE_HASH_BITS)];
->  
->  	rt->dst.rt_uncached_list = ul;
->  
-> @@ -157,40 +174,51 @@ void rt6_uncached_list_del(struct rt6_info *rt)
->  	}
->  }
->  
-> +static void rt6_uncached_list_flush(struct uncached_list *ul,
-> +				    struct net_device *dev)
-> +{
-> +	struct rt6_info *rt, *safe;
-> +
-> +	if (list_empty(&ul->head))
-> +		return;
-> +
-> +	spin_lock_bh(&ul->lock);
-> +	list_for_each_entry_safe(rt, safe, &ul->head, dst.rt_uncached) {
-> +		struct inet6_dev *rt_idev = rt->rt6i_idev;
-> +		struct net_device *rt_dev = dst_dev(&rt->dst);
-> +		bool handled = false;
-> +
-> +		if (rt_idev && rt_idev->dev == dev) {
-> +			rt->rt6i_idev = in6_dev_get(blackhole_netdev);
-> +			in6_dev_put(rt_idev);
-> +			handled = true;
-> +		}
-> +
-> +		if (rt_dev == dev) {
-> +			rt->dst.dev = blackhole_netdev;
-> +			netdev_ref_replace(rt_dev, blackhole_netdev,
-> +					   &rt->dst.dev_tracker, GFP_ATOMIC);
-> +			handled = true;
-> +		}
-> +		if (handled)
-> +			list_del_init(&rt->dst.rt_uncached);
+> +	run_cmd_host1 timeout 2 ip link del eth0
+> +	log_test $? 0 "Flush uncached IPv6 routes with mismatched devices"
 
 [Severity: High]
-This isn't a bug introduced by this patch, the handled/list_del_init()
-sequence is textually identical to the pre-patch loop in
-rt6_uncached_list_flush_dev().  But does the new mismatch list turn it into
-a net_device reference leak?
+Can this assertion pass on the tree the patch applies to?
 
-handled is set independently by the rt6i_idev branch and the dst.dev branch,
-and the route is then unlinked even when only one of the two matched.
+The uncached dst created via ip6_pol_route() -> ip6_rt_cache_alloc() ->
+rt6_uncached_list_add() holds a reference on the local route's fib6_info
+through ip6_rt_copy_init() -> rt6_set_from(). That fib6_info's nexthop holds
+a tracked netdev reference on eth0:
 
-For a route on table->mismatch the two fields point at two different real
-devices by construction:
+net/ipv6/route.c:fib6_nh_init() {
+	...
+	dev = netdev_get_by_index(net, cfg->fc_ifindex,
+				  dev_tracker, gfp_flags);
+	...
+}
 
-	if (rt->rt6i_idev && rt->rt6i_idev->dev != rt_dev)
-		ul = &table->mismatch;
+and that reference is only dropped by fib6_nh_release(), which runs from
+fib6_info_destroy_rcu(), i.e. after the last fib6_info reference goes away.
 
-Such routes are produced by ordinary local traffic through an enslaved
-interface.  ip6_rt_cache_alloc() takes dst.dev from ip6_rt_get_dev_rcu():
+The teardown path does not break that chain:
 
-	if (res->fib6_flags & (RTF_LOCAL | RTF_ANYCAST)) {
-		if (netif_is_l3_slave(dev) && !rt6_need_strict(...))
-			dev = l3mdev_master_dev_rcu(dev) ? :
-			      dev_net(dev)->loopback_dev;
+net/ipv6/route.c:rt6_disable_ip() {
+	...
+	rt6_sync_down_dev(dev, event);
+	rt6_uncached_list_flush_dev(dev);
+	neigh_ifdown(nd_table(net), dev);
+	...
+}
 
-while ip6_rt_copy_init() sets the inet6 device from the nexthop:
+and rt6_uncached_list_flush_dev() only swaps rt6i_idev/dst.dev to
+blackhole_netdev:
 
-	rt->rt6i_idev = dev ? in6_dev_get(dev) : NULL;
+	if (rt_idev && rt_idev->dev == dev) {
+		rt->rt6i_idev = in6_dev_get(blackhole_netdev);
+		in6_dev_put(rt_idev);
+		handled = true;
+	}
 
-So deleting eth0 first retargets only rt6i_idev to blackhole_netdev, sets
-handled and calls list_del_init(), leaving dst.dev still holding the VRF
-master or loopback device together with its dst.dev_tracker reference.
+It never touches rt->from. The xchg(&rt->from, NULL) in ip6_dst_ifdown() is
+only reached through dst->ops->ifdown from dst_dev_put(), which is not
+called for this dst because ip6_rt_get_dev_rcu() gives the VRF master as
+dst.dev for an RTF_LOCAL route on an enslaved device - the very mismatch
+described in the commit message.
 
-After the unlink, rt6_uncached_list_flush_dev() can no longer find that
-route:
+So eth0's refcount stays elevated until netem dequeues the skb roughly 10s
+later, ip link del blocks in netdev_wait_allrefs_any() for that long,
+timeout 2 returns non-zero, and this log_test reports FAIL. The commit
+message does not name a kernel fix this test accompanies and does not
+mention an expected failure. Is a corresponding kernel change meant to be
+part of this series?
 
-	ul = &table->buckets[hash_ptr(dev,
-				      CONFIG_IPV6_UNCACHED_ROUTE_HASH_BITS)];
-	rt6_uncached_list_flush(ul, dev);
-	rt6_uncached_list_flush(&table->mismatch, dev);
+[Severity: Medium]
+Separately, can timeout bound this operation at all?
 
-the route is on neither the keyed bucket nor mismatch, so a later teardown
-of the VRF master or loopback never runs netdev_ref_replace() on it.  If the
-dst is pinned past that point by sk_dst_cache or a queued skb, does
-unregister_netdevice() then loop in netdev_wait_allrefs() printing
-"unregister_netdevice: waiting for <dev> to become free", blocking the
-netdev todo queue and netns teardown?
+RTM_DELLINK finishes unregistration synchronously in the caller's syscall
+context via rtnl_unlock() -> netdev_run_todo() -> netdev_wait_allrefs_any(),
+whose loop is:
 
-The reverse order looks symmetric: deleting the VRF master or loopback first
-leaves the eth0 inet6_dev reference in place, which pins eth0 through
-idev->dev_tracker.
+net/core/dev.c:netdev_wait_allrefs_any() {
+	...
+		} else {
+			msleep(wait);
+			wait = min(wait << 1, WAIT_REFS_MAX_MSECS);
+		}
+	...
+}
 
-This also matches the comment added just above:
+There is no signal check there, so the SIGTERM that timeout 2 queues cannot
+be delivered until the syscall returns, and killing ip would not roll back
+the in-kernel unregistration either. During that window the half-removed
+device also emits the periodic "unregister_netdevice: waiting for eth0 to
+become free" messages.
 
-	/* Routes that must be discoverable through two different devices. */
-	struct uncached_list mismatch;
+That makes the verdict of this log_test depend on signal delivery timing
+rather than on the outcome of the delete, and if a reference were genuinely
+never released the script would block indefinitely and never reach the
+summary printf and exit $ret.
 
-Would it be better to keep the route linked (or relink it into the surviving
-device's bucket) until both device references captured at insertion time
-have been retargeted, rather than unlinking on the first match?
+The test also never removes the retaining netem qdisc, which is the one
+action that would release the pinning skb immediately. Would deleting the
+qdisc before the link delete, and checking device refcounts instead of
+wrapping ip in timeout, be a more reliable detector?
 
-The accompanying selftest only deletes eth0 and checks that the delete
-completes promptly, so it would not observe the surviving reference on the
-VRF master or loopback.
-
->  	}
-> +	spin_unlock_bh(&ul->lock);
 > +}
 > +
->  static void rt6_uncached_list_flush_dev(struct net_device *dev)
->  {
->  	int cpu;
->  
->  	for_each_possible_cpu(cpu) {
-> -		struct uncached_list *ul = per_cpu_ptr(&rt6_uncached_list, cpu);
-> -		struct rt6_info *rt, *safe;
-> +		struct rt6_uncached_table *table;
-> +		struct uncached_list *ul;
->  
-> +		table = per_cpu_ptr(&rt6_uncached_table, cpu);
-> +		ul = &table->buckets[hash_ptr(dev,
-> +					      CONFIG_IPV6_UNCACHED_ROUTE_HASH_BITS)];
-> +		rt6_uncached_list_flush(ul, dev);
-> +		rt6_uncached_list_flush(&table->mismatch, dev);
->  	}
->  }
 
-[ ... ]
+[Severity: Low]
+Does test_ipv6_uncached_mismatch() need to restore what it changes?
+
+It replaces the VRF root qdisc with netem limit 1 delay 10s, adds
+local ${HOST1_6}/128 dev eth0, and then deletes eth0, which is the veth
+carrying the whole host1/host2 topology built once by setup().
+
+Neither early return ("[ $rc -ne 0 ] && return" and the backlog-grep
+return) removes the qdisc or the added route, and the success path also
+leaves the 10s qdisc on the VRF.
+
+Because the shared fixture is consumed, the file also gains an implicit
+ordering constraint: the test only works while it is the last thing invoked.
+Adding anything after it, or repeating run_tests, would fail.
+
+> @@ -425,6 +456,10 @@ echo
+>  echo "netem qdisc on VRF device"
+>  run_tests
+>  
+> +echo
+> +echo "Uncached IPv6 route with mismatched devices"
+> +test_ipv6_uncached_mismatch
+> +
+
+Continuing the point above: the earlier phase leaves netem delay 100ms on the
+same VRF device, so if the replace in the new test fails the leftover qdisc
+can still produce a non-zero backlog and satisfy the grep without holding the
+route past the two-second timeout.
+
+The script also has no final cleanup and no EXIT trap. The existing
+"cleanup 2>/dev/null" runs before setup() while $host1/$host2 are still
+unset, so cleanup_ns gets no arguments. That part is pre-existing and not
+introduced by this patch, but with eth0 now deleted and the qdisc and route
+left in place the namespaces are leaked in a modified state.
+
+>  printf "\nTests passed: %3d\n" ${nsuccess}
+>  printf "Tests failed: %3d\n"   ${nfail}
+>
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260914-hash-bucket-route-lists-v2-0-29f6297d8a5a%40cloudflare.com
