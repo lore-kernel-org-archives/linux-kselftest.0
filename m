@@ -1,112 +1,131 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46AC3F4108
-	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 09:39:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3C83CBE79;
+	Sat, 19 Sep 2026 09:44:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789810794; cv=none; b=mr0LS3PhTkhvX17n2BJNT0bSilMnj8mfihS6ue9grBr7j1cIyAH7Jomu0PJPcm7A8+cDf3V3OKohN+lVSnlw0gVYZ/btqjG1ou6Bp99jRdQwsBPZt9CPq4wYWfLyl/PHljLKGBDnUUpDuYp/2mIlDiuty46FZkFk7r8Tb6QTQsc=
+	t=1789811101; cv=none; b=Ku7gK04ciiQKUnfqWWP+6TJ9OkoSz3AIerG7mVZ9P6f1EmKzJHh9K7qWOpZy6PlwurO6ksUNiNC7HBkc+d2ITZKTVijcU6LSExTo4j2A6/qwIdWO/3TBZMpJvY0c0/6WJz7D2hIk0WNIFCCiI0i+TwxQLxGVw9BYfGfZeT4ovsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789810794; c=relaxed/simple;
-	bh=tHdHCeV3i/53pBzx+BvRaG4iEMebCHpkPsy50Fuskxk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rvB1wVhBEJJleEjtiU/2odtZsF2aHUtluxKD2AGFv7Hv71ZFXpYWBU8gVIkZed31pMzMz2xgqDNkIlUg+p2MSQeW82MiQPDzFAv9Oya6H04+CYa22VqwUoMZ0hJoLMTl+oTpDMIx08WEHMJgspM03eXlD4OtGDjtM1/q6uxQtac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QcDGXE9v; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789811101; c=relaxed/simple;
+	bh=J0VzSDZQmuR/ny4xw4pcK0QXPE0s4hb51DZx21HbVTc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JBceb/bYKmI526E1uiqpd0W/X74HImP2merw8HUGSGSe5Mwok3h6zEWUIzaEJmHGpG+LJt4KstkroMpYoDrgRbhlEkS/cxqQEogTPwn+2GZJdh+yZFg3poGZ73DJgLp+54qXVu/3mSIym5OyY/ErC1YrVDxyp/6ub/Wvn2nuPDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=hJzQBPlb; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QcDGXE9v"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49e69b9e16aso15998385e9.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 02:39:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789810791; x=1790415591; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=G7D6znmpASqvbzZksdBAJ2aUTbJ7HvmNoE6FBY58urg=;
-        b=QcDGXE9vmm/H8m4H5M7wjApIcK1rfcHQ4bH6+pzWqT/pcTdIEgATWEUucjdZPixKK0
-         ELFSRmPrh1/I82b3TSRUZE7sMNGGxJAcAPCYS5Tu6oTiwZwYVo75pnao4p7E9DRO1xxs
-         FE2dhZ9g+MCW0DkDaqh4F7yNxvViK2ClO9JUcgsV0e03pXZyhqM1lCoL29UF5E3m+NBY
-         1slOKaaOnH+bzU+qLC/lXcVFIZ3qc3myHL08DAs3aJLYNydQf9o2H2Twx8MIYl0pVzFi
-         lfM72nR1e96Am1bEriXQUISdbDBXfeTcf0JOglWdsAb0funNzAsxxm+z+zbCUiUOoLAo
-         Tpag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789810791; x=1790415591;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=G7D6znmpASqvbzZksdBAJ2aUTbJ7HvmNoE6FBY58urg=;
-        b=2Je9eVLNKFvbSKvncOK1ExpysI+oIID17AJ7H2eLbZDRw6IrZKnUdzEBWz2BeLIbbc
-         Bts9YDYhkDHBTA4NWImwUWevPpzbWTAmrS3HMcY80WrN8o8tYoa0sgiaRSRU58ZCOORe
-         lSIqbVFwzlPglSNhYJrnWFUOcPXb21vPCkbFkG/SE48UQbjCjeHcqp3wBtwrvMazXahs
-         R95wxQTOYDiXvGUKZj34eCSp5B0FNG9HLJ/c7Ei2Et5Rwx6DuiTEG3GY6sZLqUBKcU+v
-         ZQwfbJP4VLbm1SCSfFraGhL5b303/wMWkHK9G2/7+JSzXL2ifAnfo6qyC3EFz7D1uQOQ
-         Tksw==
-X-Forwarded-Encrypted: i=1; AKwUvByywEjAlHiIYfwkeizIRSWjoF/PMY/+bhop5jVfMPgZLOi+AUB0BsQ/BTEWD6TmBMmhm3dvu/DeLeUuAvrlpyc=@vger.kernel.org
-X-Gm-Message-State: AFuF++mAj0O40SlmgISUb669MGvEbGngabciGRz52eQQA+VVBUoJuwZ2
-	rITh4Ou413xidRSL0uQELU27Gn0/kMt2D8/tj4CoIth1P4wqul2STimI
-X-Gm-Gg: AYBFou0hU0nWg+iL350p/w56OjUz3nvmyjC6e0Ui151bZlGslfFpk/c0ZFsd88iejk6
-	8PY4G4OVADqD2/Mb/Ah1GlXKFo2kNDbrMslew8ZrD6Iadc/TYaN7r1DNffogbs60H+cTIRbx5ro
-	Cn8PDVCjgBGC/0lgXW6tX1MwhhGGdzaltMqPmdM+IHqZoOSyU/kfUHiIakjzIls6qF3V8TVEa1Q
-	CfxGtvtxvaN14qIpPWwkx+cD89+/fJ08oebdkM6vgyhwl2EIQOPBl7Exmnun3QlQJddzD8B56zh
-	/yTu+CtmYZuui6Q/ivvrsQNAmipsjGuDQpGn9BDbJFGyVK7R3uTRteGDh03GiDAgFYMYr/LiaK8
-	VMqnDEmrQA70/34F5+llvDj/007rQ5u6D0qm9UdEU5n03W29SWHGrxwDhiTpcBkqVFj8fsWv9Xu
-	GBnfoU62ZgiJTzeLF04f+m7ZJXSJ27kC5G52y+JkWpTZIVAUsp6Sy/apMOH7/eJxqHaZKE5OshK
-	CHbKaN+TKG1ri5M03jFRIA9gtI7D1nDVJvnnTIYfWnv1u7hNZLc8NN0O5TG7RAB/l5C7TZNXM8j
-	daMWg4ahawwti6q/y99dRUEpyYghpWvhvB5BbNkkf/t028z/Dmv5VAkXWV2UFQSk9TgP0XWMVfd
-	wFYqBsPPY
-X-Received: by 2002:a05:600d:848f:10b0:49d:827:e5b6 with SMTP id 5b1f17b1804b1-49fc5735351mr48923145e9.20.1789810790822;
-        Sat, 19 Sep 2026 02:39:50 -0700 (PDT)
-Received: from unknown748F3CBA5068 (dynamic-2a02-3100-a017-2b01-05fe-203b-7cd2-a640.310.pool.telefonica.de. [2a02:3100:a017:2b01:5fe:203b:7cd2:a640])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fc6ca43edsm124495965e9.0.2026.09.19.02.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Sep 2026 02:39:50 -0700 (PDT)
-Date: Sat, 19 Sep 2026 11:39:47 +0200
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Cc: Harry Yoo <harry@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>, 
-	David Rientjes <rientjes@google.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	linux-hardening@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 3/5] slab: handle ERR_PTR values in kfree and hardened
- usercopy
-Message-ID: <aq5YL3P6tuFy4eTU@gmail.com>
-References: <20260903203720.63689-1-kmehltretter@gmail.com>
- <20260903203720.63689-4-kmehltretter@gmail.com>
- <497a85d3-e062-4930-bcb8-c86a8205e7b2@kernel.org>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="hJzQBPlb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Il
+	rQt5VrdhD9gIkiQAfFKZQskxVSv6LD4qqQfdMNGgw=; b=hJzQBPlbFV1h4tRMDn
+	gaoNsMuib3Ca4eU4Ndo9DPfetlMSphMfYEJEzm1cNvpLRKT51VJcEnqV6BKxsgys
+	LHmdfkizEfKsAHtWZSUHT1Jzfe9UiitPbtVEM78NeuJ3RndOak5/TzByOcuaVmC6
+	VU6LkyWbT+ZES0M9cFWOFmXDY=
+Received: from localhost (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wAn5MxhWa5qaUAsBg--.43112S2;
+	Sat, 19 Sep 2026 17:44:02 +0800 (CST)
+From: Hui Su <sh_def@163.com>
+To: bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>,
+	Quentin Monnet <qmo@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hui Su <sh_def@163.com>
+Subject: [PATCH bpf-next v2 1/3] bpf: Report BPF_F_PREORDER in cgroup program queries
+Date: Sat, 19 Sep 2026 18:43:58 +0900
+Message-ID: <20260919094400.600585-2-sh_def@163.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260919094400.600585-1-sh_def@163.com>
+References: <20260919094400.600585-1-sh_def@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <497a85d3-e062-4930-bcb8-c86a8205e7b2@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wAn5MxhWa5qaUAsBg--.43112S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tr1rXr17uF1rJFyxZrWxtFb_yoW8Kw4kpF
+	4vqFW7C3W7Zr1aqa18t3yFvFW0g3Z3XF1UCF9xJw15uay7Wr1xtr92yFW5uFy5ArW7Ar10
+	vF90vrn8WF1jvF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zioq2tUUUUU=
+X-CM-SenderInfo: xvkbvvri6rljoofrz/
 
-> > +	if (WARN_ON(IS_ERR(object)))
-> 
-> Wonder if WARN_ON_ONCE() would be better.
-> Also wonder about the benefits for hardening (as opposed to debugging).
-> Without this check it would fault. Now it warns, but hardened setups often
-> use panic_on_warn anyway, so the result is the same?
-> 
+Commit 4b82b181a26c ("bpf: Allow pre-ordering for bpf cgroup progs")
+introduced BPF_F_PREORDER to request pre-order execution across the
+cgroup hierarchy, altering the effective prog array ordering.
 
-Yes, I'll switch to WARN_ON_ONCE().
+While pl->flags stores BPF_F_PREORDER for each attached program,
+__cgroup_bpf_query() currently does not report it. When querying
+attached programs (!effective_query), __cgroup_bpf_query() fills
+prog_attach_flags[] with cgrp->bpf.flags[atype] for all entries,
+omitting the per-program BPF_F_PREORDER attribute.
 
-You're right about panic_on_warn. The benefit is a clearer diagnostic
-and, when warnings aren't fatal, returning before virt_to_page().
+Extend direct cgroup program queries to merge (pl->flags & BPF_F_PREORDER)
+with the cgroup-wide flags when copying prog_attach_flags to user space.
+Only BPF_F_PREORDER is extracted from pl->flags to ensure transient
+positioning flags (such as BPF_F_BEFORE, BPF_F_AFTER, BPF_F_ID, or
+BPF_F_REPLACE) are not leaked to user space. Also perform both ID and
+attach flags copies within the same hlist iteration.
 
-I'll split out the ERR_PTR patches as Harry suggested and recheck the
-KUnit warning-count test with WARN_ON_ONCE().
+This extends prog_attach_flags[] with the per-program BPF_F_PREORDER bit.
+This can introduce new prog_attach_flags[] values with BPF_F_PREORDER set,
+for example 0x40 (BPF_F_PREORDER), 0x41 (BPF_F_ALLOW_OVERRIDE |
+BPF_F_PREORDER), or 0x42 (BPF_F_ALLOW_MULTI | BPF_F_PREORDER) depending
+on the cgroup-wide attachment mode.
 
-Thanks,
-Karl
+Older bpftool versions treat such combinations as unknown flags; bpftool
+support is updated later in this series.
+
+Signed-off-by: Hui Su <sh_def@163.com>
+---
+ kernel/bpf/cgroup.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 696b27383974..eb9e0985ac43 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1515,19 +1515,19 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
+ 				id = prog_list_id(pl);
+ 				if (copy_to_user(prog_ids + i, &id, sizeof(id)))
+ 					return -EFAULT;
++				if (prog_attach_flags) {
++					flags = cgrp->bpf.flags[atype] |
++						(pl->flags & BPF_F_PREORDER);
++					if (copy_to_user(prog_attach_flags + i,
++							 &flags, sizeof(flags)))
++						return -EFAULT;
++				}
+ 				if (++i == cnt)
+ 					break;
+ 			}
+ 
+-			if (prog_attach_flags) {
+-				flags = cgrp->bpf.flags[atype];
+-
+-				for (i = 0; i < cnt; i++)
+-					if (copy_to_user(prog_attach_flags + i,
+-							 &flags, sizeof(flags)))
+-						return -EFAULT;
++			if (prog_attach_flags)
+ 				prog_attach_flags += cnt;
+-			}
+ 		}
+ 
+ 		prog_ids += cnt;
+-- 
+2.55.0
+
