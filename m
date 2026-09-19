@@ -1,184 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7BF4718C2;
-	Sat, 19 Sep 2026 10:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AED17557E
+	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 11:05:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789815487; cv=none; b=Yw+QrO5ST733C6s9WSVubxod3RbxNfGflQOLIkLULxqBcvPyISD7F/toytCoZl1NXaUiAr6H/+dUjRwQKzw730xH0QxDOxbma72AqE/vpfrn1qol3V18cqRr2v+5Qn1XNPoM66orhEg/e+qgnMVyHFTzrJmKjkbJg/LVslJBukQ=
+	t=1789815905; cv=none; b=UUNhdjZTuMCosCeCY48qlqH/eoahx8CfCxYC6qfafKbs7xa1G6Q3hGZZxyzrR4esb/oyBmMnosWbP5VSrkf1f4PSb0DECGuvLVUDH0kxJwm39WhEgNI0YbVgmLAC/85j36W4/fnwOvoUZ8PZ879pIVIlYgdBvyJAd6do4bhnlFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789815487; c=relaxed/simple;
-	bh=TaVj+3b14vT6k0Ii5z+03MFmQXVfMnls5tg9LOf7NIk=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=UtG3Kj83xTF00fa2knrZrjnrdNZxt4jkLjpKoQaoL4nfNDn9PMHpvaauXuJLGBG+qC2feIhk9tejHy8RTCtFnx7bNVUB0545yEQDOcMK2Z+bdO7X5u+ZKFsocFiw82SimNJ+/Bk51IOHgr/yGyx/dVVF65CKeKMG9+wuV4KZgDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F21au6lc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789815905; c=relaxed/simple;
+	bh=gQDfqWyvWhhukz0RZPe3Rxu+FRVDAMr+ZZPy6EzA9hs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=a8/N503XZGpwzmR7Q4N2fv1wYj4aTq3oUDTbG7nQfo/8APWPRKwYScfEcxcBoDzvkc+CAYUZHBWj8A/I2r3M18Cu5iAVYdP8h6yTyx5oaDtPJShRDoSZgWXuuqNDXR0KqJarJ7i+QwDmD8xLXRw9B81fGJwezDngVhtXfReP1hY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aIKZrqxj; arc=none smtp.client-ip=74.125.225.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F21au6lc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EE9F1F000FF;
-	Sat, 19 Sep 2026 10:58:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789815485;
-	bh=G3Q9JVNPeVatCTin9yOa9ai9BXWQ8jKY4rKL0xwmaWY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=F21au6lcrZGNmtRqXyyiO3WGHwd1pVNAYESr3vIBk0/uQaKSrpHe30tP8sREgpEBz
-	 Lj8kVoCY7ihQBdvi/4asm2jcknTug9uIP+qG3ycKPqAGP8toc2KxdoaINLSCtvZmEt
-	 LgEwvKQ2gFdEZqfefloTInsMlEp+xuW5FKc+ef8b3ygZ4nFS3KD2RYeVuklBqmPO/e
-	 e2WqWPj1tW9iKcWhUHZxFvCfS8M9UFQpNOWDuTM0kDXGKLE2bXB01+1P7oPROic/aW
-	 UaVpzf9vAn7gkcBeqp4xWDvcYN0V180SHd5t8grHKPSoGO3HTsq+K/+Lxv4t/+cTL3
-	 Qn2d/gNesLpxw==
-Content-Type: multipart/mixed; boundary="===============3854488706741688450=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aIKZrqxj"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4843c3ee4cfso820350f8f.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 04:05:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789815899; x=1790420699; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=7rwy3osRntuCmj5MLCO/i0SriZXb6Zy0hh2IOAi6LGs=;
+        b=aIKZrqxjF4VPN1406UeZ5bCtjM0v7OATVattud/Vgqfpi6VI5CN4dIoxiRwXGqvccH
+         JcbdKdV83LLv3hndd3GQaMKJ2V8q5XmwYEZJaIaAlrnpRg52hjnRkvxkIiQokSlkBVOb
+         RYUdGliBMWg1LOorOB0MG9VsFyRTKmLXLCf0xDJELBBsUMxpiBJIccrbrsbRD1N6WxPF
+         rwZzN7Y2gVQwIB93QWEDzJ3le3YoYEVk+4jEuiiXOaApfcSTH6jOBIMPnsUmEkd+izLD
+         IJSfVghYfk8of+6CG8ToupnlUn9CaERhykWxJ1PbRaWCgjIJ5VWvA5124A9grCHwrhZA
+         aAvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789815899; x=1790420699;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7rwy3osRntuCmj5MLCO/i0SriZXb6Zy0hh2IOAi6LGs=;
+        b=RwiT/Q8VizsgXmReWBYC1QMWBWaqQ12VHDzXnSBT4uzWHjBX8l2U+w4pH0E5oBZkxk
+         0n4GUeoAmQo8e0ShsA5nWrYqz86oNXAwoj1nwsq+9CN07966CmgkRwipPVAw+ajT57Ps
+         gxAuSPO3Fzsh3DIpHRf5kdqQ2SGRwTWoYox2vhzsU7p4s0Q8saMIYGpTodRv6T1NTm/N
+         YAuLOtLYY5q1HSXz6kzRSjLLK0AX7NtjVYgh1Vbloc65OfrIgIt6jLgI33s/Gu+vVYz7
+         2Qd5kfUoHV/j+jhb84VNcLBeSyEmjqTEleAWBZm6Ks1cIJHYCvfw3jB+wLLcQWM5gR+k
+         jklg==
+X-Forwarded-Encrypted: i=1; AKwUvBytve9WyrjnDK17KegRJSYY5+oxP5bHBgAs5J6XAHC84U5yDOdU30u/RJ7f21pzcxHedyp2KnMntnphi1+nksg=@vger.kernel.org
+X-Gm-Message-State: AFuF++mHzzInnCMw8I6CYHa7RDrb9hhzlqV/npuqBU9WCtLQ5xEYhFjD
+	5QB3idvo63XT9gFWDTiPShkwSwVFqSOWudFH8L1Lud4ZCaSJmTP0kmls
+X-Gm-Gg: AYBFou2Sq56EQRB4SNbWKRoqRNOIaw7fqJQbkLc/RTZ/qif/OD1jUvvsurdjZN8z9VD
+	TVqHq5kJMHv9fQFUXJYf1jIgrsRbYnzvAuUUmZjYi/n9TWpfGUbgZvhOMV8qK8ENb/ODqsrc2/2
+	3IOpOvI5gi4Y/owU7Wzn5oRKEBVgIZUpODBpyVO5fQQsoFrx+eAwYgtpafWtgoDKiyUnrVkXifE
+	OUFvthYU0goyjgBKfMpdmPRv2w7J+MnjaFO+CWiu+1p1KQXfJcg0ZW/l/h/sOkNQGUDL5ITycLn
+	XgKHliHep/eoFyo5gO8yDMwq6MwTPX3cpOxaCIFT8tcDGwzEEXVjhHCE10ZxD9+cNpIz54KnUr3
+	/VX3CZn8XKEeDS/dUFkrRviD2jx98Pk0nbXCPB/DB15vetFAwjGMZPNsq4EaDW1wxIeIyjn9P8G
+	rMQ1hAw9kdKEnWT7TEhM516z2ZxWLorx+r4rYmCley2xP/VQQarwPPVEgnrDrlwMYrxc39vjIdE
+	63Pgam7OKCU9g7KAvOtYATBMkZqABT/87Gu
+X-Received: by 2002:a5d:5d02:0:b0:485:8ee5:5ffa with SMTP id ffacd0b85a97d-4871e36b1c7mr7900927f8f.38.1789815898629;
+        Sat, 19 Sep 2026 04:04:58 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48724460767sm6267511f8f.13.2026.09.19.04.04.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Sep 2026 04:04:58 -0700 (PDT)
+Date: Sat, 19 Sep 2026 12:04:56 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Karl Mehltretter <kmehltretter@gmail.com>
+Cc: Vlastimil Babka <vbabka@kernel.org>, Harry Yoo <harry@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Rasmus Villemoes
+ <linux@rasmusvillemoes.dk>, Hao Li <hao.li@linux.dev>, Christoph Lameter
+ <cl@gentwo.org>, David Rientjes <rientjes@google.com>, Roman Gushchin
+ <roman.gushchin@linux.dev>, Catalin Marinas <catalin.marinas@arm.com>, Kees
+ Cook <kees@kernel.org>, "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH v3 3/5] slab: handle ERR_PTR values in kfree and
+ hardened usercopy
+Message-ID: <20260919120456.5575e0a4@pumpkin>
+In-Reply-To: <20260903203720.63689-4-kmehltretter@gmail.com>
+References: <20260903203720.63689-1-kmehltretter@gmail.com>
+	<20260903203720.63689-4-kmehltretter@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <ae4fd719188ae85855405378e066df2483b55a1d9667a65defa410f2f295681e@mail.kernel.org>
-In-Reply-To: <20260919094400.600585-4-sh_def@163.com>
-References: <20260919094400.600585-4-sh_def@163.com>
-Subject: Re: [PATCH bpf-next v2 3/3] bpftool: Add support for BPF_F_PREORDER cgroup attach flag
-From: bot+bpf-ci@kernel.org
-To: sh_def@163.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: yonghong.song@linux.dev,qmo@kernel.org,martin.lau@linux.dev,song@kernel.org,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,sh_def@163.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 19 Sep 2026 10:58:03 +0000 (UTC)
-
---===============3854488706741688450==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-> index e8185596a759b..f8408ed44d748 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+On Thu,  3 Sep 2026 22:37:18 +0200
+Karl Mehltretter <kmehltretter@gmail.com> wrote:
 
-[ ... ]
+> Passing an ERR_PTR to kfree() currently reaches virt_to_page() and may
+> fault. Warn and return instead, leaving the bad caller visible without
+> using the pointer as allocator metadata.
+> 
+> Also reject ERR_PTR values in hardened usercopy. Keep both checks
+> separate from ZERO_OR_NULL_PTR(), whose exact matching is required by
+> krealloc().
+> 
+> Link: https://lore.kernel.org/r/CAG48ez05QVn6_gQ2TBrRa1a_DWQoaSSYubUsu5YMWxx-gqMijQ@mail.gmail.com
+> Link: https://lore.kernel.org/r/202608111716.0FA9DB17@keescook
+> Link: https://github.com/KSPP/linux/issues/93
+> Assisted-by: LLM
+> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+> ---
+>  mm/slub.c     | 3 +++
+>  mm/usercopy.c | 3 +++
+>  2 files changed, 6 insertions(+)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index f9b56cb439e7..027b44dd7f07 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -6780,6 +6780,9 @@ void kfree(const void *object)
+>  	if (unlikely(ZERO_OR_NULL_PTR(object)))
+>  		return;
+>  
+> +	if (WARN_ON(IS_ERR(object)))
+> +		return;
+> +
 
-> diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-> index 75cbcb512ebae..a51c68029e16f 100644
-> --- a/tools/bpf/bpftool/bash-completion/bpftool
-> +++ b/tools/bpf/bpftool/bash-completion/bpftool
+Since kfree isn't usually called with NULL it is likely to be better to
+have a initial single check for all the error cases.
+Something like:
+	if (unlikely((unsigned long)object + MAX_ERRNO <= MAX_ERRNO + ZERO_SIZE_PTR) {
+		WARN_ON(!ZERO_OR_NULL_PTR(object))
+		return;
+	}
 
-[ ... ]
+Although is would save a lot of code elsewhere if kfree(-errno) were valid.
 
-> diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
-> index ce69d1e5468e3..6ea0492ea5327 100644
-> --- a/tools/bpf/bpftool/cgroup.c
-> +++ b/tools/bpf/bpftool/cgroup.c
-> @@ -56,7 +56,7 @@ static const int cgroup_attach_types[] = {
->  };
->
->  #define HELP_SPEC_ATTACH_FLAGS						\
-> -	"ATTACH_FLAGS := { multi | override }"
-> +	"ATTACH_FLAGS := { multi [ preorder ] | override [ preorder ] | preorder }"
+David
 
-[ ... ]
-
-> @@ -269,6 +269,39 @@ static int show_effective_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
->  	return 0;
+>  	page = virt_to_page(object);
+>  	slab = page_slab(page);
+>  	if (!slab) {
+> diff --git a/mm/usercopy.c b/mm/usercopy.c
+> index 5de7a518b1b1..c8d8703544c6 100644
+> --- a/mm/usercopy.c
+> +++ b/mm/usercopy.c
+> @@ -157,6 +157,9 @@ static inline void check_bogus_address(const unsigned long ptr, unsigned long n,
+>  	/* Reject if NULL or ZERO-allocation. */
+>  	if (ZERO_OR_NULL_PTR(ptr))
+>  		usercopy_abort("null address", NULL, to_user, ptr, n);
+> +
+> +	if (IS_ERR_VALUE(ptr))
+> +		usercopy_abort("ERR_PTR", NULL, to_user, ptr, n);
 >  }
->
-> +static const char *format_attach_flags(__u32 attach_flags, char *buf, size_t sz)
-> +{
-> +	static const struct {
-> +		__u32 flag;
-> +		const char *name;
-> +	} flags[] = {
-> +		{ BPF_F_ALLOW_MULTI, "multi" },
-> +		{ BPF_F_ALLOW_OVERRIDE, "override" },
-> +		{ BPF_F_PREORDER, "preorder" },
-> +	};
-> +	size_t len = 0;
-> +	size_t i;
-> +	int n;
-> +
-> +	buf[0] = '\0';
-> +	for (i = 0; i < ARRAY_SIZE(flags); i++) {
-> +		if (attach_flags & flags[i].flag) {
-> +			n = snprintf(buf + len, sz - len, "%s%s",
-> +				     len ? "," : "", flags[i].name);
-> +			if (n < 0 || (size_t)n >= sz - len)
-> +				return buf;
-> +			len += n;
-> +			attach_flags &= ~flags[i].flag;
-> +		}
-> +	}
-> +
-> +	if (attach_flags)
-> +		snprintf(buf + len, sz - len, "%sunknown(%x)",
-> +			 len ? "," : "", attach_flags);
-> +
-> +	return buf;
-> +}
-> +
->  static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
->  				   int level)
->  {
-> @@ -276,7 +309,7 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
->  	__u32 prog_attach_flags[1024] = {0};
->  	const char *attach_flags_str;
->  	__u32 prog_ids[1024] = {0};
-> -	char buf[32];
-> +	char buf[64];
->  	__u32 iter;
->  	int ret;
->
-> @@ -296,21 +329,7 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
->  		__u32 attach_flags;
->
->  		attach_flags = prog_attach_flags[iter] ?: p.attach_flags;
-> -
-> -		switch (attach_flags) {
-> -		case BPF_F_ALLOW_MULTI:
-> -			attach_flags_str = "multi";
-> -			break;
-> -		case BPF_F_ALLOW_OVERRIDE:
-> -			attach_flags_str = "override";
-> -			break;
-> -		case 0:
-> -			attach_flags_str = "";
-> -			break;
-> -		default:
-> -			snprintf(buf, sizeof(buf), "unknown(%x)", attach_flags);
-> -			attach_flags_str = buf;
-> -		}
-> +		attach_flags_str = format_attach_flags(attach_flags, buf, sizeof(buf));
->
->  		show_bpf_prog(prog_ids[iter], type,
->  			      attach_flags_str, level);
+>  
+>  static inline void check_heap_object(const void *ptr, unsigned long n,
 
-Can the comma-separated flag strings here misalign the Name column?
-
-The new formatter produces strings like "override,preorder" (17 chars) and
-"multi,override,preorder" (23 chars), but the plain-text output table in
-do_show() and do_show_tree() formats the AttachFlags column with %-15s:
-
-    printf("%-8s %-15s %-15s %-15s\n", "ID", "AttachType",
-           "AttachFlags", "Name");
-
-and show_bpf_prog() uses the same width:
-
-    printf(" %-15s %-15s", attach_flags_str, prog_name);
-
-Since %-15s doesn't truncate, strings exceeding 15 characters will push
-the Name column to the right for those rows. Before this patch, the same
-attachments displayed as "unknown(41)" or "unknown(42)", which fit within
-15 characters.
-
-> @@ -593,6 +612,8 @@ static int do_attach(int argc, char **argv)
->  			attach_flags |= BPF_F_ALLOW_MULTI;
->  		} else if (is_prefix(argv[i], "override")) {
->  			attach_flags |= BPF_F_ALLOW_OVERRIDE;
-> +		} else if (is_prefix(argv[i], "preorder")) {
-> +			attach_flags |= BPF_F_PREORDER;
->  		} else {
->  			p_err("unknown option: %s", argv[i]);
->  			goto exit_cgroup;
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35436378806
---===============3854488706741688450==--
