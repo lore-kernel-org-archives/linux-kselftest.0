@@ -1,210 +1,100 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D022494D8
-	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 14:15:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014D32D7DC6;
+	Sat, 19 Sep 2026 14:38:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789827349; cv=none; b=oYWDTkb9Pv9u+X2H1L0yMPoWiG9n6TFjksknV2tQMdACbCE6Gr0kpqOwqCx6SMSPzEH7Br0GNZaeqE6cmdqIHYeR6JtLHu0Lbw3p9ihbjvMdAYNgB+S+3iBUiO14zp/Ha8cRNoqDV9Ok8CTvmrEQyHA+/AHymlW77L93tAxK7Ko=
+	t=1789828703; cv=none; b=PjuXzUq/YHSaIIXMegpc8azZL6mc001xhXFsN5K3AU8+DZ64qS+NNSOcIFVybqWKezLW/aVpGM+bun5Hp+T3Th0oa78MBtGSfLQBYOPw1elY7sDgiua/rAIY7TgkwF3lKWDxfF1k2kA8YeTM3MtUk1asI1R0t4HyUY1fIJdtIcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789827349; c=relaxed/simple;
-	bh=7Ywu9wHGDJY8V6jFJ2w6Ivi/pbw62GoKi2blMN5etwM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JbUrOj5K6m1qB3OJvYG+W/NcmXdVxHsJeEqmM/Y+ousmNDeQdwR0bBEAEWS1PkFJC3fcvuQNopc49zMfDEM69O2QPZ+Skbls/96mvTG+/RWaJogBltkt/IOhX5vgkV+3MLI+yfrV9btZHOZcSPwR5gWSpKKa9VOPopfskwfKjM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G23z1QDz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789828703; c=relaxed/simple;
+	bh=ZG/lbqdTzFGaQFxKi4UzQSfafZtlh1LxnqaiYUObSFA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=diWqH153o87iBYMJJt7BMUT/VLc83wOT9ixBSclUT4Q/7dphAR4nZfc47yzytbBhh856JvoEuz2KQLOqQbV58qNbtIjo/DPPwS+CLO7EQIrVlwgUwQRv7SLarW8pBqhZTaELu6NAcoFHnmNx6pRWvne3/vDOa5XncP8ClEL51SY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=heTMxLEe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G23z1QDz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B6E91F008A5
-	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 14:15:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="heTMxLEe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C26C1F000FF;
+	Sat, 19 Sep 2026 14:38:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789827347;
-	bh=ZHQNt2F7ph//QKd/Dcx1X0C3z22bcWkHaUtkyigDYBI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=G23z1QDzc3fsSxuhTrLJIpBQgKbxieWQRWlzynMgFWSINgiqaTqh+lYvFgxMKLhJl
-	 P5g+IxmxBWkqE9KttwTeaIyQdPkFB5m29YiCCQOHIJtEETSDKv1uBvcpedPCfMOt9l
-	 IZYJlQnO4sDaZSCuqa5UxFM+hTJMX3cChIrtb8bGYu/VaXfyTKknqX5r6AlmwJep0x
-	 No90WJ3vojX8xw+Bn4YSUwzZV6oOuAkdi7JoEprJS2ZBTP28ByKCvHmTl1gD5olAjb
-	 CeRnCsNOqOPiucci/V+AnzxFD4ZDK3DhPntFhf84SooweR4VOloAZlq07NKzVY4eWf
-	 a8R9WHhLJ3ndA==
-Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a9a2b95b72so2641596a12.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 07:15:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBz/qxFcE3xR2RH7qDlM727jqwwVkmS1jGxbQ24a9k4SsHwnEWUwUnpqf/BpDFjIByTYemU8Oa3cgsHyfLzTmTI=@vger.kernel.org
-X-Gm-Message-State: AFuF++npTGpk8+eeUnnb+QQaF2lu/d5T8a6+zRXsAD++UD1vuzeS/7mu
-	Wy+B5WLBC7H1L4iZXm9znXRshLiKw1boj2/JFFC46hnO4gieI8ZQofNlnCkX8P18IJTtnw+QH6a
-	fPyjVY+m7AsjDC4UmoW4NFSrOBPQwl50=
-X-Received: by 2002:a05:6402:21d3:b0:6a9:a5d6:622d with SMTP id
- 4fb4d7f45d1cf-6aa577f53cdmr3570046a12.3.1789827345998; Sat, 19 Sep 2026
- 07:15:45 -0700 (PDT)
+	s=k20260515; t=1789828701;
+	bh=Ye5WbKjKFgkqarhBNRF073Cdbb5tflcWG8IEwR1LEuk=;
+	h=From:To:Cc:Subject:Date;
+	b=heTMxLEeMBgy0w7Wxjh+VA34+suUXXAMK1aIMFooksiCr0ru0Z6Ait3WeidESrT23
+	 1UmvPqBKhvt7LwqRvsMA1DqJtJ53DsmmXsVABZNjQz9lkz3FTN5lg8q5XY1+TiwAiU
+	 Qz59ugb/oOKRQ65QG10XzypTM7k/iMNnwsmVmSb15sqWvQ64trs7IJA7J/kE9T1JQx
+	 D2+nVNEMiGFGMvMRRg7nK24zeMHsQL2uuTc2GseSNvY2JiN7zQ9c4ZksSPCiP4KVNF
+	 NdX+U9xWLuNNz/psGU0z2nJRDzrshoZPeJmSEChw/e6VXSOoGQyrZfoc6wkT6XKFvy
+	 WryK7B15Eitvw==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Jonathan Corbet <corbet@lwn.net>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/2] tracing: Override trace_instance parameter
+Date: Sat, 19 Sep 2026 23:38:16 +0900
+Message-ID: <178982869661.289221.2143320719673148321.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260904100852.26006-1-dongtai.guo@linux.dev> <20260904100852.26006-3-dongtai.guo@linux.dev>
-In-Reply-To: <20260904100852.26006-3-dongtai.guo@linux.dev>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Sat, 19 Sep 2026 22:15:37 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6uKKzXgrb8YK+VAdW55ODWtXp0bEju=dcmm7=MVxcc-A@mail.gmail.com>
-X-Gm-Features: AcwNN1UTKroSTs8ThQILzapvRn9O7BvQxeeOOihMqsFr5wFvKBxjbfZvuj-g5Cw
-Message-ID: <CAAhV-H6uKKzXgrb8YK+VAdW55ODWtXp0bEju=dcmm7=MVxcc-A@mail.gmail.com>
-Subject: Re: [PATCH v5 2/5] liveupdate: synchronize EFI KHO channel at execution
-To: George Guo <dongtai.guo@linux.dev>
-Cc: rppt@kernel.org, pasha.tatashin@soleen.com, pratyush@kernel.org, 
-	ardb@kernel.org, shuah@kernel.org, ilias.apalodimas@linaro.org, 
-	akpm@linux-foundation.org, baoquan.he@linux.dev, ruirui.yang@linux.dev, 
-	guodongtai@kylinos.cn, kernel@xen0n.name, graf@amazon.com, 
-	liukexin@kylinos.cn, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-efi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi, George,
+Hi,
 
-On Fri, Sep 4, 2026 at 6:10=E2=80=AFPM George Guo <dongtai.guo@linux.dev> w=
-rote:
->
-> From: George Guo <guodongtai@kylinos.cn>
->
-> The EFI KHO configuration table is a global channel. Updating it while
-> a candidate kexec image is still being loaded can leave the channel
-> pointing at the failed candidate even though the previous image remains
-> installed. Synchronize it instead from the image selected for execution.
->
-> Use the actual scratch payload size rather than its page-aligned segment
-> size, and propagate update failures before live-update serialization.
-> Keep clearing the channel for cold and crash images best-effort.
->
-> Signed-off-by: George Guo <guodongtai@kylinos.cn>
-> ---
->  kernel/crash_core.c                |  7 +++++++
->  kernel/kexec_core.c                |  5 +++++
->  kernel/kexec_internal.h            |  3 +++
->  kernel/liveupdate/kexec_handover.c | 33 ++++++++++++++++++++++++++++++
->  4 files changed, 48 insertions(+)
->
-> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-> index 2b36aa9fade0..6166ce4203d3 100644
-> --- a/kernel/crash_core.c
-> +++ b/kernel/crash_core.c
-> @@ -138,6 +138,13 @@ void __noclone __crash_kexec(struct pt_regs *regs)
->                 if (kexec_crash_image) {
->                         struct pt_regs fixed_regs;
->
-> +                       /*
-> +                        * A crash image carries no KHO state: clear the
-> +                        * transport so the crash kernel boots cold inste=
-ad
-> +                        * of reviving from stale state.
-> +                        */
-> +                       (void)kho_sync_channel(kexec_crash_image);
-> +
->                         crash_setup_regs(&fixed_regs, regs);
->                         crash_save_vmcoreinfo();
->                         machine_crash_shutdown(&fixed_regs);
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index dc770b9a6d05..147f5b5b23d4 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -1146,6 +1146,11 @@ int kernel_kexec(void)
->                 goto Unlock;
->         }
->
-> +       /* Synchronize the handover transport with the image being execut=
-ed. */
-> +       error =3D kho_sync_channel(kexec_image);
-> +       if (error)
-> +               goto Unlock;
-> +
->         if (!kexec_image->preserve_context) {
->                 error =3D liveupdate_reboot();
->                 if (error)
-> diff --git a/kernel/kexec_internal.h b/kernel/kexec_internal.h
-> index 228bb88c018b..4d4c2290e85c 100644
-> --- a/kernel/kexec_internal.h
-> +++ b/kernel/kexec_internal.h
-> @@ -46,6 +46,7 @@ struct kexec_buf;
->  int kho_locate_mem_hole(struct kexec_buf *kbuf,
->                         int (*func)(struct resource *, void *));
->  int kho_fill_kimage(struct kimage *image);
-> +int kho_sync_channel(struct kimage *image);
->  #else
->  static inline int kho_locate_mem_hole(struct kexec_buf *kbuf,
->                                       int (*func)(struct resource *, void=
- *))
-> @@ -54,5 +55,7 @@ static inline int kho_locate_mem_hole(struct kexec_buf =
-*kbuf,
->  }
->
->  static inline int kho_fill_kimage(struct kimage *image) { return 0; }
-> +
-> +static inline int kho_sync_channel(struct kimage *image) { return 0; }
->  #endif /* CONFIG_KEXEC_HANDOVER */
->  #endif /* LINUX_KEXEC_INTERNAL_H */
-> diff --git a/kernel/liveupdate/kexec_handover.c b/kernel/liveupdate/kexec=
-_handover.c
-> index 39f489a258d9..3aa5c66dfc6d 100644
-> --- a/kernel/liveupdate/kexec_handover.c
-> +++ b/kernel/liveupdate/kexec_handover.c
-> @@ -14,6 +14,7 @@
->  #include <linux/cma.h>
->  #include <linux/kmemleak.h>
->  #include <linux/count_zeros.h>
-> +#include <linux/efi.h>
->  #include <linux/kasan.h>
->  #include <linux/kexec.h>
->  #include <linux/kexec_handover.h>
-> @@ -2074,6 +2075,38 @@ int kho_fill_kimage(struct kimage *image)
->         return 0;
->  }
->
-> +/*
-> + * Synchronize the handover transport with the image that is about to be
-> + * executed.  The EFI config table channel is global, while kexec keeps
-> + * separate images for a normal reboot and for crash.  Write the state o=
-f the
-> + * selected image immediately before it is executed, rather than while a
-> + * candidate image is being loaded, so a failed replacement cannot leave=
- the
-> + * channel pointing at that failed image.
-> + *
-> + * An image loaded through the legacy kexec_load() syscall, a crash imag=
-e, or
-> + * an image loaded while KHO is disabled carries no handover state.  Cle=
-ar the
-> + * channel for those images so the next kernel boots cold instead of rev=
-iving
-> + * from stale state.  Clearing is best-effort because an absent channel =
-cannot
-> + * affect a cold boot.
-> + */
-> +int kho_sync_channel(struct kimage *image)
-> +{
-> +       int err;
-> +
-> +       if (!image->kho.fdt || !image->kho.scratch) {
-> +               efi_kho_update(0, 0, 0, 0);
-> +               return 0;
-> +       }
-> +
-> +       err =3D efi_kho_update(image->kho.fdt, PAGE_SIZE,
-> +                            image->kho.scratch->mem,
-> +                            image->kho.scratch->bufsz);
-You can combine the last two lines.
+This changes the trace_instance= kernel parameter to be overriden
+by latter parameters. Currently if the user specifies the same
+name trace_instance at boot time, the later one is skipped.
+However, this does not allow user to override the trace_instance
+setting via bootloader if user specifies the default trace_instance
+in the bootconfig, because the bootconfig parameter is prepend to
+the kernel cmdline. (IOW, the bootconfig expects kernel parameters
+are LAST_WIN policy.)
+
+To fix this issue, the [1/2] splits the command line parsing loop
+and trace instance initialization loop. The parser checks the
+overlap of the trace instance name and override by the later one
+if those have the same name.
+
+This series also have a test set as [2/2], which is based on
+ftrace boottime test patchset [1], which is currently on
+probes/core branch.
+
+(Steve, can you review the boottime test series too? I think we
+should have this kind of test anyway, and is nicer to have one in
+the kernel tree.)
+
+[1] https://lore.kernel.org/all/178649540853.438282.4271870161169100680.stgit@devnote2/
+
+Thank you,
+
+---
+
+Masami Hiramatsu (Google) (2):
+      tracing: Override the same name trace_instance= by latter one
+      selftests/ftrace: Add test case for overriding trace_instance parameter
 
 
-Huacai
+ Documentation/admin-guide/kernel-parameters.txt    |    7 +
+ Documentation/trace/debugging.rst                  |   15 ++
+ kernel/trace/trace.c                               |  127 +++++++++++++++-----
+ .../cmdline-07-trace-instance-override.bconf       |    2 
+ .../cmdline-07-trace-instance-override.cmdline     |    1 
+ .../tests/cmdline-07-trace-instance-override.sh    |   56 +++++++++
+ 6 files changed, 174 insertions(+), 34 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/cmdline-07-trace-instance-override.bconf
+ create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/cmdline-07-trace-instance-override.cmdline
+ create mode 100644 tools/testing/selftests/ftrace/boottime/tests/cmdline-07-trace-instance-override.sh
 
-> +       if (err)
-> +               pr_warn("failed to update EFI config table: %d\n", err);
-> +
-> +       return err;
-> +}
-> +
->  static int kho_walk_scratch(struct kexec_buf *kbuf,
->                             int (*func)(struct resource *, void *))
->  {
-> --
-> 2.53.0
->
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
