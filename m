@@ -1,135 +1,214 @@
-Received: from mail-lr2-f12.google.com (mail-lr2-f12.google.com [74.125.230.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9DA3BFE42
-	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 01:26:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789781163; cv=pass; b=O/9OUx+ESvjOJWzos1r+EjzCuacBFQvF3P0GB1XxhaGL2M62QXPL2nLxoRbThnLL690DUf5ZaO/3YPt9Ed/It4jb6qsSt1Z6fJi1fOp81YBtfBmtLhGhlfAnc5q0y4aWxpr8U39WDfEiERBrvUd2OTXkP99k4pje21Tncw0wfAY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789781163; c=relaxed/simple;
-	bh=XSgdQN2yictpDS59TUHTRXPj7NA5/+Qdu1X4xC4oFhw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T4Sl2EdxhlWKcZ25OOc15oNpUAcUv5UHLP5smSABZRWqejsDucgd0IR/1LBikcq1lyte10yRDdCwv6t1EQ9FzC1538y80DiRMWh0bqctmXMV0r8WYoJqoiHiMJDm8NMQIcutqyP59tfSn2BerbPzNxdqZoMYxYHuOT8v1TKovMI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IFlcyJbK; arc=pass smtp.client-ip=74.125.230.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56C01F5842;
+	Sat, 19 Sep 2026 02:48:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789786135; cv=none; b=CNslOps6Govn7QKJF5gdDRrho7GX4gGp5iTS0Ckm5jSvucTqN2wWDtb4ZvD5EbC6mq75h4zqlqQa8YEzptG/GRDw0FVPXwe1+vH4PNW562CnlWBCG99xq6bszPcOhJ6t1I3ivjsbIka7bY3hHiKyXpgyfV/SQdS9YEOgzD3Xthg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789786135; c=relaxed/simple;
+	bh=e+fKUdStNDlVUr1AkKCbqcymZihuh49EDouecr8mpps=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=V5+BxobvxSJBwyA/oY7sZTNWiegyFvZV1Suft3coWVnUSWDpU/6St5ePuvihpHV2A1BprFj+apQIM3lo4U9+b+Hx0LAhZQuWS6mYY3W2YXBGQFNW3OQ6o9T7UQ9i2onyDCGbydaLhgHXWId43le6FGp68JZ18sNsrijnhiHTOV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OROA7NmM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IFlcyJbK"
-Received: by mail-lr2-f12.google.com with SMTP id 38308e7fff4ca-3a58fef219fso5380831fa.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2026 18:26:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789781158; cv=none;
-        d=google.com; s=arc-20260327;
-        b=dmBkqDSFKL0lxj30ohIdaDT8pD/5cIrzvG+P38D3l2u7L+dJ8ozIrFr2E9jeeGOIMP
-         0fN0TWC+x8dRqg/8AivQv9y0yPjY3O0XSpQHClZ0difVvQgcpqTUBAfhhAxNBZ6dD6uA
-         pAWuub0ExQ8M6NB1P9yUd3of4pyuO9BoKSIK4GvSMi2VoBlMTzD2o3EZ0ftVP/sAPWkH
-         yAA2tDuCjxENNQ2qurb/Hv4Qq5IYUEk/fncV4cGBK6bWxKyThOWy2FkwPE8v/zBEvncH
-         e+axioyx5QkriVj7hSEFTiKQX3ZyZLIBh3jW5qGe81fDPO+DxDzNWDOHmevaXPnMs6Di
-         TQ2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=WAjkQmQffedcstioBR/bPz7WWF/kUAkcKil242Qiu6U=;
-        fh=xtALwn7x45o6I7VSn7AYqURS8eD/EBdEU1o1zVPQXDY=;
-        b=jJX4ogfWh83uF5d35JEQa96BcBCwfoqN3eG+Bcg6lU1Y8VsPa9N07qNKUDtnyD4LXc
-         0XTDzPLgqXJ+RM3ILcQ+nmJnScs8aq+jzrzliLnUBjAzVYCTS5iHGWZu62eu6dEhh6Eu
-         +KqZjzBiWVLIuNh8gTXtbRFmb97AU3GFSVxINrRYL8Wql/uwBUPQwQi7pzF8tL+mQSOd
-         jFzM6rzaKzPNgu43vfM1zdbrSTj8DHYE3xdnizblvasvDS9sxH4gHvNBranG9OOUONmq
-         WM9kXEhvTkOMz7R3VxxouHP6Z97VFSJgO/Uhzs6QvEle0MwgyuTiNoj06MViFNwpwwy/
-         PbPQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789781158; x=1790385958; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=WAjkQmQffedcstioBR/bPz7WWF/kUAkcKil242Qiu6U=;
-        b=IFlcyJbKQZ1ErOnOi0LDEaqgvPiYJArojrTtIKp4QVqlRaXW45OnoOWbTiPaHtx1FT
-         4IvSzcMkAxYHUhhvR6o3O/CKLNUXTN1waf8AU1UyidwjQT2yLv4ZsDdQQQML8qUJhTVc
-         +sUb+5AMYmeaWLt05vdQKMVQs4/cDHRU+h4fUG0ijzIvaFXc33amookTzvGPWs2W6kpl
-         5xyGKESlfKwhIK7D+v/DD+4Z00tjiR4yR94O2CW9tbWQ9T/yYPNNtmXYwvIlzhiYCoc6
-         s29mix6pd2Rym4fXaXnyNC25wp2SQbhIO+P0mGtzWcF3YlrMfkoAonE9nf+T8krb6KXV
-         STUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789781158; x=1790385958;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=WAjkQmQffedcstioBR/bPz7WWF/kUAkcKil242Qiu6U=;
-        b=RFRSqWRXhcuM8pTV+Y73yI3TPjiO4KLk8iBLWCh3EPfi10W7HTdXQ3EiS5Bm5WZtBm
-         84pH6hsQe3NgSfY0DLvhrFRfWnhZugVME0V27XlxycKPd/3T8WUeDMCXFmhQUsl61saR
-         BYcgWmgJFSJYRsdYyWxgDv47IRSg3oLemjghf3MhScQ62jrdKmqbM96iYRtxmXXuZd0Z
-         xwyjZHDndNAUYLb1bNY/twUhJnqUuWLWE31NXPIS5uhk7ZsrcXwXgaaE2lH9Iu7oKtlj
-         sCbwbrMK0SXSXjljNDwIg/vDi1zi4A3ej6MYtLz0VnK5w8nqiMsLjr895Guym2cclFuD
-         G7qA==
-X-Forwarded-Encrypted: i=1; AKwUvBz9KCsI/oP22lYeOu4tw1FrmWjrMjlm8AIQzGcm1Zgp85ZlfbPXnMNLYFAZT4itEYBWYkFBBjLYOENhq+C7nw0=@vger.kernel.org
-X-Gm-Message-State: AFuF++nSzJ12BQWEoObsOdk8zmgWEHi6yU50vRMrYPgexo67FY5G4lyv
-	oL/4HnBFgvMxO6TlFgjsGf7df6gSTX8xKXd9C3T9ly5uTFbBXdamOlHhTUzs3TDy3CvvoguSvSu
-	wY8bWTEMzQ/K/l1vzGqRzwGBwzgfRamk=
-X-Gm-Gg: AYBFou0eqhtfct2OblP2FLK/T35srniYGFUADdnPdTcNHOPw55PVqvkwXDqvIAPA2SU
-	aQp8kM/qvTiOi4c7YSR2GqaSnforguhRknYjeEIecGM9fuOeb4onSzASORr2DK3HJIGfgiOrNEL
-	fxiHKY7sudhowoZ9zo1MN4IwKOO9zatF4arRGOH08v3Tdx+re1/6paV5975a1VFxGlPvpF1Jh3z
-	4V8JUiqse3WnbVpxmJCR+d4kx+O5YJwfKCRDamt7rIA1F6OpMkcLaSvKYQhroLXIlNI8YrB9zto
-	Y9JZL+aKGoBYygGVCJqeaNpYgWyJm7UbLvwMbdlUGBZZnS4Po+fFcSCiJxmMBWx1MbPrr//6/AE
-	z3s0K56F+R8t/Iucnako4/XqcsWw5tYNkofqCVUqFqKnc
-X-Received: by 2002:a05:651c:2213:b0:3a5:a4bd:bff6 with SMTP id
- 38308e7fff4ca-3a5faeb291emr7755411fa.0.1789781157892; Fri, 18 Sep 2026
- 18:25:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OROA7NmM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88CA41F000FF;
+	Sat, 19 Sep 2026 02:48:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789786133;
+	bh=Sg3hkjaSEJduiZ/Scn0ZyJUoGBGD+r0DK/nqgxMbMbs=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=OROA7NmMo1WVWfjYpFybGN6QC30Q2ARZAdB3gBqvs/2UBJOqLYiPx4l2BnxHhbAQR
+	 WcKSoEi/eVP1l+5tM9HRq8PcGrboMUI+m3vq/NLnsxDr5ury6FYnRb5q2S+chIPUPC
+	 FcVOBK1rwikmOTwehDX+pCu9xE4A0gdgjEpfUVZ88zYWI66B4pDUWG1VpUbw8kW1Hv
+	 JW7KfO6YO84P25hnh1EMcWVdEpEGDyzz3PWB2S9vKQbp1vbWFYsjgFbnxHvofy8DGD
+	 9yHHVaumDvaXggbu6R+RO9EHmDqqBsWxJIdzqAZghsOJq1BW4LzFEZYz8a7uVLrc6K
+	 yM/MiXXF3ZqAA==
+Subject: Re: [PATCH net-next v2 1/3] ipv4: hash uncached routes by device
+From: netdev-bot+sashiko@kernel.org
+To: carges@cloudflare.com
+Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ shuah@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com
+Date: Sat, 19 Sep 2026 02:48:52 +0000
+Message-ID: <178978613205.22033.14339626208083556786@kernel.org>
+In-Reply-To:
+ <20260914-hash-bucket-route-lists-v2-1-29f6297d8a5a@cloudflare.com>
+References:
+ <20260914-hash-bucket-route-lists-v2-1-29f6297d8a5a@cloudflare.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260914014539.5015-1-sigefriedhyy@gmail.com> <20260916184748.52ae812d@kernel.org>
-In-Reply-To: <20260916184748.52ae812d@kernel.org>
-From: Yuyang Huang <sigefriedhyy@gmail.com>
-Date: Sat, 19 Sep 2026 10:25:47 +0900
-X-Gm-Features: AcwNN1VKSMsHXXhl9wsuuXYQn2cCHvXHrr3pGmCERUzA0N73AkVzctfHurZKado
-Message-ID: <CA+7S2vKmeaPRBqu84FtVWUjo=U8jTm+LGO04BW6M9h2nRzkHkg@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 0/4] rtnetlink: dump link-layer multicast addresses
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Donald Hunter <donald.hunter@gmail.com>, 
-	Eric Dumazet <edumazet@google.com>, Ido Schimmel <idosch@nvidia.com>, 
-	Jacob Keller <jacob.e.keller@intel.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Nicolas Dichtel <nicolas.dichtel@6wind.com>, Nikolaos Gkarlis <nickgarlis@gmail.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>, 
-	Simon Horman <horms@kernel.org>, Stanislav Fomichev <sdf.kernel@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 17, 2026 at 10:47=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> w=
-rote:
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider:
 
-> You compare the situation to IP but for L2 the UC addresses
-> are not exposed via RTM_GETADDR. Are you going to add it?
+Critical: 0 · High: 0 · Medium: 0 · Low: 3
 
-I'm not sure exposing dev->uc via RTM_GETADDR is useful: I haven't
-found a use case, and iproute2 does not dump it today either ("ip
-addr" only shows IFLA_ADDRESS). If you think
-it is worth having for consistency, I'm happy to do it as a follow-up.
+- [Low] Performance-only change submitted with no measurement of the
+  benefit it claims.
+- [Low] Concern that the identical full per-CPU walk remains for IPv6 in
+  rt6_uncached_list_flush_dev(), so on dual-stack hosts the scaling…
+- [Low] The patch introduces a prompted (user-visible) Kconfig integer,
+  IP_UNCACHED_ROUTE_HASH_BITS (net/ipv4/Kconfig:106-117), which becomes…
 
-> Is that the only justification? To avoid reading proc?
-> Are you planning to extend this interface with new features?
+--
 
-For more background:  we have some hardware offload control logic in
-userspace that
-needs the L2 and L3 multicast state of devices. L3 already comes
-over netlink; dev->mc is the last piece read from procfs, so we have to
-maintain two copies of the code, one for netlink and one for procfs,
-and parsing procfs has none of the benefits netlink gives (e.g. per
-interface filtering).
+ipv4: hash uncached routes by device
 
-The same split exists in iproute2, where "ip maddr" parses
-/proc/net/dev_mcast for the link-layer entries. I already updated
-iproute2 to get rid of the procfs parsing for IPv4/IPv6 multicast; L2
-multicast is the final piece, and I have something working locally.
-Once this patchset is merged, I plan to send the iproute2 patchset.
+This replaces the per-CPU uncached route list in net/ipv4/route.c with a
+per-CPU hash table keyed on the route's netdevice, so rt_flush_dev() only
+walks the bucket matching the device being removed.  The bucket count is a
+new build-time Kconfig value, IP_UNCACHED_ROUTE_HASH_BITS, defaulting to 6.
 
-Thanks,
+> diff --git a/net/ipv4/Kconfig b/net/ipv4/Kconfig
+> index 301b47660305b..7d40ca22d2b21 100644
+> --- a/net/ipv4/Kconfig
+> +++ b/net/ipv4/Kconfig
+> @@ -103,6 +103,19 @@ config IP_ROUTE_VERBOSE
+>  config IP_ROUTE_CLASSID
+>  	bool
+>  
+> +config IP_UNCACHED_ROUTE_HASH_BITS
+> +	int "IPv4 uncached route hash bits"
+> +	range 1 10
+> +	default 6
+> +	help
+> +	  This option sets the number of buckets used in the IPv4 uncached
+> +	  route hash table to 2^IP_UNCACHED_ROUTE_HASH_BITS buckets. The
+> +	  allowed values select between 2 and 1024 buckets. Larger values
+> +	  reduce collisions, but each additional bit doubles the per-CPU
+> +	  memory used by the table.
+> +
+> +	  If unsure, use the default of 6 bits (64 buckets).
+> +
 
-Yuyang
+[Severity: Low]
+Could the reasoning for making the bucket count a prompted Kconfig value be
+spelled out?  The bucket count is baked in at build time:
+
+	#define RT_UNCACHED_HASH_SIZE	BIT(CONFIG_IP_UNCACHED_ROUTE_HASH_BITS)
+
+	struct uncached_table {
+		struct uncached_list buckets[RT_UNCACHED_HASH_SIZE];
+	};
+
+so this becomes a permanent user-visible interface.  Would a fixed constant,
+or a size derived at ip_rt_init() time from nr_cpu_ids, work instead?
+
+The help text says only "Larger values reduce collisions", which gives no
+observable criterion for choosing a value, so is there anything a
+distribution could measure to pick something other than the default?
+
+Also, "range 1 10" allows 1 bit, i.e. two buckets.  Is that configuration
+useful?  With two buckets the behaviour is essentially the pre-patch single
+list plus a hash_ptr() call and one extra indirection in both
+rt_add_uncached_list() and rt_flush_dev().  Should the low end of the range
+start higher?
+
+> diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+> index d7da2f1acbb59..e28e2140cf621 100644
+> --- a/net/ipv4/route.c
+> +++ b/net/ipv4/route.c
+
+[ ... ]
+
+> @@ -1552,11 +1553,21 @@ struct uncached_list {
+>  	struct list_head	head;
+>  };
+>  
+> -static DEFINE_PER_CPU_ALIGNED(struct uncached_list, rt_uncached_list);
+> +#define RT_UNCACHED_HASH_SIZE	BIT(CONFIG_IP_UNCACHED_ROUTE_HASH_BITS)
+> +
+> +struct uncached_table {
+> +	struct uncached_list buckets[RT_UNCACHED_HASH_SIZE];
+> +};
+> +
+> +static DEFINE_PER_CPU_ALIGNED(struct uncached_table, rt_uncached_table);
+>  
+>  void rt_add_uncached_list(struct rtable *rt)
+>  {
+> -	struct uncached_list *ul = raw_cpu_ptr(&rt_uncached_list);
+> +	struct uncached_table *table = raw_cpu_ptr(&rt_uncached_table);
+> +	struct uncached_list *ul;
+> +
+> +	ul = &table->buckets[hash_ptr(dst_dev(&rt->dst),
+> +				      CONFIG_IP_UNCACHED_ROUTE_HASH_BITS)];
+>  
+>  	rt->dst.rt_uncached_list = ul;
+
+[Severity: Low]
+Can before/after numbers be added for this?  The changelog motivates the
+change entirely with "makes teardown increasingly expensive as the number of
+devices grows", but there is no device count, no uncached route count, no
+workload and no timing, so it is hard to tell at what scale the win appears.
+
+The route insertion side also gets slightly more expensive and that is not
+mentioned.  rt_add_uncached_list() now computes hash_ptr() and dereferences a
+hash-selected bucket inside the per-CPU table instead of using a single
+cacheline-aligned list head, and it is reached per uncached route creation
+from rt_set_nexthop(), rt_cache_route(), ip_route_input_slow() and
+xfrm4_fill_dst().  Was any effect measurable on those paths?
+
+On the memory side, the changelog quantifies only the default in a
+non-debug build ("approximately 1.5 KiB per possible CPU on x86-64"; 64
+buckets x 24 bytes for struct uncached_list).  At the maximum allowed 10 bits
+that is roughly 24 KiB per possible CPU, and with CONFIG_DEBUG_SPINLOCK or
+CONFIG_DEBUG_LOCK_ALLOC struct uncached_list grows, multiplying both figures.
+Could the changelog and the Kconfig help text state those cases too?
+
+> @@ -1588,14 +1599,19 @@ void rt_flush_dev(struct net_device *dev)
+>  	int cpu;
+>  
+>  	for_each_possible_cpu(cpu) {
+> -		struct uncached_list *ul = &per_cpu(rt_uncached_list, cpu);
+> +		struct uncached_table *table;
+> +		struct uncached_list *ul;
+> +
+> +		table = per_cpu_ptr(&rt_uncached_table, cpu);
+> +		ul = &table->buckets[hash_ptr(dev,
+> +					      CONFIG_IP_UNCACHED_ROUTE_HASH_BITS)];
+>  
+>  		if (list_empty(&ul->head))
+>  			continue;
+>  
+>  		spin_lock_bh(&ul->lock);
+>  		list_for_each_entry_safe(rt, safe, &ul->head, dst.rt_uncached) {
+> -			if (rt->dst.dev != dev)
+> +			if (dst_dev(&rt->dst) != dev)
+>  				continue;
+
+[Severity: Low]
+On a dual-stack host, is the same walk still paid for IPv6 after this patch?
+fib_netdev_event() calls rt_flush_dev() on NETDEV_UNREGISTER, and the same
+device removal also drives rt6_uncached_list_flush_dev(), which still does
+the full per-CPU list walk:
+
+	for_each_possible_cpu(cpu) {
+		struct uncached_list *ul = per_cpu_ptr(&rt6_uncached_list, cpu);
+
+The IPv6 flush also matches on two keys, rt->rt6i_idev->dev and
+rt->dst.dev, so it cannot be converted the same way without handling the
+case where those differ.
+
+Checking the rest of the series, the following patch "ipv6: hash uncached
+routes by device" does convert rt6_uncached_list_flush_dev() to the same
+per-CPU bucket scheme and handles the two-key case with a dedicated
+"mismatch" list that rt6_uncached_list_add() uses when rt6i_idev->dev differs
+from dst_dev(), and the third patch adds selftest coverage for the VRF case.
+So this is addressed within the series; would it be worth a sentence in this
+changelog noting that the IPv6 counterpart follows?
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260914-hash-bucket-route-lists-v2-0-29f6297d8a5a%40cloudflare.com
