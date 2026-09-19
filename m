@@ -1,79 +1,192 @@
-Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C24325495;
-	Sat, 19 Sep 2026 21:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959CB34107D
+	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 22:36:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789854211; cv=none; b=LkxtW3g2dMJidJUX+Kiwwa5CENm1YyEmjW8Msp1e2VVzszsZfw9UmxKN18iEpMnu9J72ljP1G/5MIYm27tCYMvUL2Z5QgN+nRTLFcsjGA/vL9WRcBZyZoTxZm80RvtcRFSGzDFLBMEQmm83Ko8ONdUn9VHtSv4rkJyaYv+yh4SI=
+	t=1789857392; cv=none; b=SQTZgy8U16LJbq7aK/hQSNxAc7JDCmU32lkbRDUhdXrRC20eA6lzOvz6By7i7JiuEvlFwt+oQVJUjoWTpBaE1G4be7xmGVTL59gDdmrwVvGt6FuK/Whhc/qnxrcSgQ3M5cNguHkByrVFlqKdC4f1lv6DgTi7dlWYQwM86I0EFuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789854211; c=relaxed/simple;
-	bh=y8T7uKwp88RKw458oX43TjgLBPGw7XCPF08vtPwEaM0=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=hP9hc5yLKSbPB6mWUgG0H6IXD7Nxf6usvVlsG4kaup2rs5h4i83GgOsni2Sx1rvErsu0ZxsETyXdp217xDW32IjXDOuqOq9SzfMVgQ4dfEw3vm+2CdKEqPzX5vPcmQt8j59M7qwlRU4lNL3JPYVsj5daNTknWncl32ENiKBxmnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=dacEkFVf; arc=none smtp.client-ip=194.13.80.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
+	s=arc-20240116; t=1789857392; c=relaxed/simple;
+	bh=bPEvA2A4ZpKwIHJPbmB+FxxnRtX8BqDaGq2Qwt6JLK8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i5tiRnETsX/S8m/6ljRQIem2WCy3TViita4j6b3cAGHEGzm01R7MgFbID6mvWfXEeJhgg6+15w+K5UOohJVHQGjgwonfCn0ZVOBw9yTtDMLDmOtwXbpJFLVfrNZiUy53QqkyR74ojK8rVMDUMXneBUKwV0l7Tc10QaxQcats0is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ilHVXshj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="dacEkFVf"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 81E88A02B3;
-	Sat, 19 Sep 2026 23:43:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
-	t=1789854197; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=Dsyp/2bxguVs04v4lLYBK6hkBkZbr47ghJs3bwtV7oA=;
-	b=dacEkFVf7LzHPxs1J8hrFjwsDbzrHN6G+DPQrY+l1vQofUVaK8RmkUigp+a/oK0eRBiQ6A
-	G3fnLvkQ3U7KBYl4yYgZc6ljEqcq4fitMNwExP4Q5HLPCnhOTnlijiAhVbyvQMlyNH6a0p
-	f9EFW/y+rnr1XrlLSMRo/u+ckMQdv9/x8u0z1+t4zeSLUmq7Dr/sOIN3+XDN1yv5h+up1x
-	zrcWXE0kk//gZ3sNOcToHqKt+WMv68VMnknICJkX/do9Mtxys0na5lSVr9Orw3HkuvtAzj
-	/QGUuGJlKW4k190eFJXgZEBEH/QA1HtGy2PXvJyqkszH70GpWflYXjcjqoa2+g==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ilHVXshj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BDB21F008BD
+	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 22:36:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789857389;
+	bh=fOnejZtZ70+DKIPLXePAGmfZNKSXLHPlt3aY/hwoAA0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=ilHVXshjQfbUx4z8E+/LSAwQAGYONhpJwcU2y94p+xhWI+S9srA5RD3Z/M1lzZ5De
+	 hyHwqkDMea+fm6m3E/2400AFZe0VFVbPdFN72ZMN8+mvJENkIoT9wC6fiVamLAwkJv
+	 f2Bb4Zt/ntOosM2gdEQpY6S8MVKUspGkkWAK6r+RDUZS/zQ1KJDx/9ApM59rRmpDur
+	 a11yTkmo0BR3DL1pt8QSOyUr8mP8whSOqsB2ICPI2Y1SElNBf8A9zVqOtfd0u172nR
+	 CEYXa9W1b8gWr+bUlp/B8yvYWsmju0Km/kWvl5b8XjyzhUh8pn/LqLURHlsdHYV3gi
+	 0u8yBYAqOMsNA==
+Received: by mail-qk2-f37.google.com with SMTP id af79cd13be357-93910cc46c8so224983585a.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 15:36:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBz3Amp3V5ZAa4GNXPN9ZGOqdsZpmavv00VpD58I/BbFI7rBFnoJnM+F0+zzY6JVaHmjJVJUMS5ZEK3okx664Fo=@vger.kernel.org
+X-Gm-Message-State: AFuF++ntSHuwKttRww+gROopgmlQzUMAr/hi+rw/CibgHEBLVDJbMk5w
+	jyMmDd/EXl6xMg90hI8TVZfv86yURer4AtJUVVcTPxomloFS+pUmZjzmfxXMIzWc0PkVoXkgirv
+	W03Ipwk63LGV5pVPPwvpL0ntim3+owRE=
+X-Received: by 2002:a05:620a:1d03:b0:939:a199:45b4 with SMTP id
+ af79cd13be357-93bf5731ad3mr305110885a.39.1789857388560; Sat, 19 Sep 2026
+ 15:36:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Sat, 19 Sep 2026 23:43:15 +0200
-From: Nicolai Buchwitz <nb@tipi-net.de>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Ovidiu Panait <ovidiu.panait.rb@renesas.com>, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- shuah@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 3/3] selftests: drv-net: Add VLAN test
-In-Reply-To: <20260918151225.304410cf@kernel.org>
-References: <20260918112529.96039-1-ovidiu.panait.rb@renesas.com>
- <20260918112529.96039-4-ovidiu.panait.rb@renesas.com>
- <5be2136e4142427285566f01d95c1b7b@tipi-net.de>
- <20260918151225.304410cf@kernel.org>
-Message-ID: <ff8435132a6b0fbc0f92187e1d9b0f18@tipi-net.de>
-X-Sender: nb@tipi-net.de
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+References: <cover.1789714023.git.zhuhui@kylinos.cn> <02f0a8dc45a840d7801ec17e0c1168f7dacf9b73.1789714023.git.zhuhui@kylinos.cn>
+ <b115ece2-33a1-412e-ac25-38f339a13599@gmail.com> <aq2bo5Q-YUj7lkxn@linux.dev>
+In-Reply-To: <aq2bo5Q-YUj7lkxn@linux.dev>
+From: Barry Song <baohua@kernel.org>
+Date: Sun, 20 Sep 2026 06:36:17 +0800
+X-Gmail-Original-Message-ID: <CAGsJ_4wauwY1-xRdM4aVb7FkSttKYzsKsWH4pF4i=Sspri0-jw@mail.gmail.com>
+X-Gm-Features: AcwNN1VZWalfWGDIaTagEHYpKVctjCpRyPqfufx6tRrX4Dk2SxYyw4KLGYnYEYE
+Message-ID: <CAGsJ_4wauwY1-xRdM4aVb7FkSttKYzsKsWH4pF4i=Sspri0-jw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v12 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: JP Kobryn <inwardvessel@gmail.com>, Hui Zhu <hui.zhu@linux.dev>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+	David Hildenbrand <david@kernel.org>, Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	Hui Zhu <zhuhui@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 19.9.2026 00:12, Jakub Kicinski wrote:
-> On Fri, 18 Sep 2026 14:04:13 +0200 Nicolai Buchwitz wrote:
->> > +LOCAL_IP = os.environ.get("VLAN_LOCAL_V4", "198.51.100.1")
->> > +REMOTE_IP = os.environ.get("VLAN_REMOTE_V4", "198.51.100.2")
->> 
->>    LOCAL_IP = "198.51.100.1"
->>    REMOTE_IP = "198.51.100.2"
-> 
-> LOCAL_IP / REMOTE_IP are in the default network segment (vlan 0)
-> Here we need some "unused" IP subnet that we can assign without
-> conflicts. Getting it from the config would indeed be good, but
-> since this is the first use perhaps we should defer until it actually
-> bothers someone?
+On Sat, Sep 19, 2026 at 4:15=E2=80=AFAM Shakeel Butt <shakeel.butt@linux.de=
+v> wrote:
+>
+> On Fri, Sep 18, 2026 at 12:45:01PM -0700, JP Kobryn wrote:
+> > On 9/17/26 11:58 PM, Hui Zhu wrote:
+> > > From: Hui Zhu <zhuhui@kylinos.cn>
+> > >
+> > > BPF programs can observe memory pressure on a cgroup, e.g. refault
+> > > stats via bpf_mem_cgroup_page_state(), but cannot act on it:
+> > > triggering reclaim requires writing to memory.reclaim, which BPF
+> > > cannot do.
+> > >
+> > > Add bpf_proactive_reclaim(), a sleepable kfunc performing one
+> > > proactive reclaim pass on a memcg, like a write to memory.reclaim
+> > > but without retrying until the target is reached, so that when and
+> > > how hard to reclaim is BPF policy rather than hard-coded thresholds.
+> > > The reclaim target of a single call is capped at MEMCG_CHARGE_BATCH,
+> > > as high_work_func() does for memory.high; reclaiming more is left to
+> > > the program, which can call the kfunc once per bpf_wq callback and
+> > > stop at any point. It is limited to BPF_PROG_TYPE_SYSCALL, because
+> > > other sleepable programs may run with filesystem locks held, on
+> > > which the reclaim path could deadlock via filesystem shrinkers.
+> > >
+> > > Convert MIN_SWAPPINESS, MAX_SWAPPINESS and SWAPPINESS_ANON_ONLY from
+> > > macros to an enum so that they are emitted into BTF and usable from
+> > > BPF programs via vmlinux.h.
+> > >
+> > > Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> > > Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+> > > ---
+> > >   mm/bpf_memcontrol.c | 62 ++++++++++++++++++++++++++++++++++++++++++=
+++-
+> > >   mm/internal.h       | 10 +++++---
+> > >   2 files changed, 67 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+> > > index 716df49d7647..c5d7f29ade85 100644
+> > > --- a/mm/bpf_memcontrol.c
+> > > +++ b/mm/bpf_memcontrol.c
+> > > @@ -8,6 +8,8 @@
+> > >   #include <linux/memcontrol.h>
+> > >   #include <linux/bpf.h>
+> > > +#include "internal.h"
+> > > +
+> > >   __bpf_kfunc_start_defs();
+> > >   /**
+> > > @@ -159,6 +161,48 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(stru=
+ct mem_cgroup *memcg)
+> > >     mem_cgroup_flush_stats(memcg);
+> > >   }
+> > > +/**
+> > > + * bpf_proactive_reclaim - proactively reclaim memory from a memory =
+cgroup
+> > > + * @memcg: the target memory cgroup to reclaim from.
+> > > + * @size: the amount of memory to reclaim, in bytes, clamped to
+> > > + *        MEMCG_CHARGE_BATCH.
+> > > + * @swappiness: the reclaim swappiness, in the range [MIN_SWAPPINESS=
+,
+> > > + *              SWAPPINESS_ANON_ONLY], or -1 to use the memcg's own
+> > > + *              swappiness.
+> >
+> > The ANON_ONLY enumerator shouldn't be included as part of the range. I
+> > would change this to [MIN_SWAPPINESS, MAX_SWAPPINESS] and then specify
+> > that ANON_ONLY is a special mode like -1 is.
+> >
+> > > + *
+> > > + * Performs one proactive reclaim pass on @memcg, like a write to
+> > > + * memory.reclaim but without retrying until @size is reached. Call =
+it
+> > > + * repeatedly to reclaim more than one batch.
+> > > + *
+> > > + * Only available to BPF_PROG_TYPE_SYSCALL, because other sleepable =
+programs
+> > > + * may run with filesystem locks held, which the reclaim path can de=
+adlock
+> > > + * on via filesystem shrinkers.
+> > > + *
+> > > + * Return: The amount of memory reclaimed, in bytes, or a negative e=
+rror.
+> > > + */
+> > > +__bpf_kfunc long bpf_proactive_reclaim(struct mem_cgroup *memcg,
+> > > +                                  unsigned long size,
+> > > +                                  int swappiness)
+> > > +{
+> > > +   unsigned long nr_reclaimed;
+> > > +   unsigned long nr_pages;
+> > > +
+> > > +   if (swappiness < -1 || swappiness > SWAPPINESS_ANON_ONLY)
+> > > +           return -EINVAL;
+> >
+> > Related to the previous comment, you treat the special values as part o=
+f
+> > the range. It works currently, but creates a layout dependency on the
+> > enum. I think it would be more future-proof if you did:
+> >
+> > if (swappiness !=3D -1 && swappiness !=3D SWAPPINESS_ANON_ONLY) {
+> >       if (swappiness < MIN_SWAPPINESS || swappiness > MAX_SWAPPINESS)
+> >               return -EINVAL;
+> > }
+> >
+> > The previous comments I brought up are now resolved, so assuming you'll
+> > make the changes above you can include:
+> >
+> > Reviewed-by: JP Kobryn <jp.kobryn@linux.dev>
+>
+> Hui, please make these changes and just send this patch in next version.
 
-Fine with me. Having the the selftest in place is probably more useful
-than re-spinning for sole config issues. Let's fix this once someone 
-needs it.
+Hi JP and Shakeel,
 
-> [...]
+This feels a bit weird to me, since 0=E2=80=93201 are all valid
+swappiness values.
 
-Reviewed-by: Nicolai Buchwitz <nb@tipi-net.de>
+201 (`SWAPPINESS_ANON_ONLY`) is just as valid a swappiness value
+as 200. In contrast, -1 is a different story, as it indicates
+completely different semantics.
 
-Thanks,
-Nicolai
+If 201 is treated as a special value, then 0 (`MIN_SWAPPINESS`)
+should be treated the same way for MGLRU, since 0 means file-only
+reclaim there. This isn't the case for CLRU, where swappiness 0
+can still reclaim anon folios.
+
+If possible, I'd vote for keeping Hui's current code :-)
+
+Best Regards
+Barry
