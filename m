@@ -1,40 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959CB34107D
-	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 22:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9310838424C
+	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 23:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789857392; cv=none; b=SQTZgy8U16LJbq7aK/hQSNxAc7JDCmU32lkbRDUhdXrRC20eA6lzOvz6By7i7JiuEvlFwt+oQVJUjoWTpBaE1G4be7xmGVTL59gDdmrwVvGt6FuK/Whhc/qnxrcSgQ3M5cNguHkByrVFlqKdC4f1lv6DgTi7dlWYQwM86I0EFuY=
+	t=1789860117; cv=none; b=fQEXzkgewLlfkjAPcL0pi+HRJE/IsypRvBJ9/fmbX9fDJqKa0nNxbgMs0Hq0DI34jRDtSQnrtcJl6hzeZ7tqw8xrgkwYQYLWehwfZwk7AX/THtshWgPaHriZ0lrgBkaniM8cf+Ko+jZeGG881OA4nJnGUEh6110ViOFOOUxU2FQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789857392; c=relaxed/simple;
-	bh=bPEvA2A4ZpKwIHJPbmB+FxxnRtX8BqDaGq2Qwt6JLK8=;
+	s=arc-20240116; t=1789860117; c=relaxed/simple;
+	bh=Dz9Pg/RisBylqu21YuBa+QNZhpaAG0yys7Xa/DGJtIw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i5tiRnETsX/S8m/6ljRQIem2WCy3TViita4j6b3cAGHEGzm01R7MgFbID6mvWfXEeJhgg6+15w+K5UOohJVHQGjgwonfCn0ZVOBw9yTtDMLDmOtwXbpJFLVfrNZiUy53QqkyR74ojK8rVMDUMXneBUKwV0l7Tc10QaxQcats0is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ilHVXshj; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=DYPcEbMh9wSsTZuSAL8+KG4ta3YmVFjbH093++q1Bu2NKl1QA6fz5Hmal2ffTioIeGLJqqmFWWDykYnX6aLjfJeh45LfOqyq79uH5hXbCJzcejkXJSlxIwrNbBIoU5tDlVdROR9J4vO7BpUc2NYChKbQzZypxVyhqmfR4yLUdng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NoQpOaeQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ilHVXshj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BDB21F008BD
-	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 22:36:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NoQpOaeQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 535321F00899
+	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 23:21:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789857389;
-	bh=fOnejZtZ70+DKIPLXePAGmfZNKSXLHPlt3aY/hwoAA0=;
+	s=k20260515; t=1789860116;
+	bh=M2emGDt6ZD/PlD99DnGeYO2tV70JoaEZig2v2GPbr3o=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=ilHVXshjQfbUx4z8E+/LSAwQAGYONhpJwcU2y94p+xhWI+S9srA5RD3Z/M1lzZ5De
-	 hyHwqkDMea+fm6m3E/2400AFZe0VFVbPdFN72ZMN8+mvJENkIoT9wC6fiVamLAwkJv
-	 f2Bb4Zt/ntOosM2gdEQpY6S8MVKUspGkkWAK6r+RDUZS/zQ1KJDx/9ApM59rRmpDur
-	 a11yTkmo0BR3DL1pt8QSOyUr8mP8whSOqsB2ICPI2Y1SElNBf8A9zVqOtfd0u172nR
-	 CEYXa9W1b8gWr+bUlp/B8yvYWsmju0Km/kWvl5b8XjyzhUh8pn/LqLURHlsdHYV3gi
-	 0u8yBYAqOMsNA==
-Received: by mail-qk2-f37.google.com with SMTP id af79cd13be357-93910cc46c8so224983585a.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 15:36:29 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBz3Amp3V5ZAa4GNXPN9ZGOqdsZpmavv00VpD58I/BbFI7rBFnoJnM+F0+zzY6JVaHmjJVJUMS5ZEK3okx664Fo=@vger.kernel.org
-X-Gm-Message-State: AFuF++ntSHuwKttRww+gROopgmlQzUMAr/hi+rw/CibgHEBLVDJbMk5w
-	jyMmDd/EXl6xMg90hI8TVZfv86yURer4AtJUVVcTPxomloFS+pUmZjzmfxXMIzWc0PkVoXkgirv
-	W03Ipwk63LGV5pVPPwvpL0ntim3+owRE=
-X-Received: by 2002:a05:620a:1d03:b0:939:a199:45b4 with SMTP id
- af79cd13be357-93bf5731ad3mr305110885a.39.1789857388560; Sat, 19 Sep 2026
- 15:36:28 -0700 (PDT)
+	b=NoQpOaeQ8eRPAsoWhljliNHLMkQ3/VkCPq6Mf60ggXZAQjaDGR6EPOhCbZRKkA6zP
+	 8JBQFtSBywHZeSqZfLnBOH5Zx/p5FjaAKlGGTY1dvS0QJqFV0QxptDo0/2tkHVhsp6
+	 C89emFqbNAmUG8VoLQ1KAD1/IJfvIgrDMhgX9EPcwrrJj8CBMkZDJGL/d8kv/1XWij
+	 Loos/gXqaRuxQl84fpy6qp6QCz2U0IHfuQmZMaZOQpZHAlcd5HWlvCPlcShakGYqut
+	 cwl4F1iAQgnFHslRlVMhk+RJaYI9PkSU3wF6CxecEhBKkk3x+3DUvGsJ9WX0A3N8V1
+	 JcOYmO4jYetTg==
+Received: by mail-qv2-f12.google.com with SMTP id 6a1803df08f44-912355b1bf6so7048526d6.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 16:21:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBwfqTko30pFv/LC233y16HNIu1s2dNN9cSN7sEI6PWmDbEdCcVj6m395aSMedYcVziI2/q+GXRU06/swOyKX10=@vger.kernel.org
+X-Gm-Message-State: AFuF++l3/ILwFQUiqfmmdpnfKTFHgasEOVu6S2KriUHd7Djhl3trnIgC
+	dyDvYYo8h/gpisNguLWkwSIYUDSVgBzZ3086CzAeNsndZaTrsEdqONItKG51zTWrN0GCN7/hYI2
+	OGLNcfgSYSEtmm6/IfCTDIjxa1cWGhXI=
+X-Received: by 2002:a05:620a:4416:b0:93b:d7a4:9d4d with SMTP id
+ af79cd13be357-93bf5770d59mr363723285a.32.1789860115649; Sat, 19 Sep 2026
+ 16:21:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,13 +42,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <cover.1789714023.git.zhuhui@kylinos.cn> <02f0a8dc45a840d7801ec17e0c1168f7dacf9b73.1789714023.git.zhuhui@kylinos.cn>
- <b115ece2-33a1-412e-ac25-38f339a13599@gmail.com> <aq2bo5Q-YUj7lkxn@linux.dev>
-In-Reply-To: <aq2bo5Q-YUj7lkxn@linux.dev>
+ <b115ece2-33a1-412e-ac25-38f339a13599@gmail.com> <aq2bo5Q-YUj7lkxn@linux.dev> <CAGsJ_4wauwY1-xRdM4aVb7FkSttKYzsKsWH4pF4i=Sspri0-jw@mail.gmail.com>
+In-Reply-To: <CAGsJ_4wauwY1-xRdM4aVb7FkSttKYzsKsWH4pF4i=Sspri0-jw@mail.gmail.com>
 From: Barry Song <baohua@kernel.org>
-Date: Sun, 20 Sep 2026 06:36:17 +0800
-X-Gmail-Original-Message-ID: <CAGsJ_4wauwY1-xRdM4aVb7FkSttKYzsKsWH4pF4i=Sspri0-jw@mail.gmail.com>
-X-Gm-Features: AcwNN1VZWalfWGDIaTagEHYpKVctjCpRyPqfufx6tRrX4Dk2SxYyw4KLGYnYEYE
-Message-ID: <CAGsJ_4wauwY1-xRdM4aVb7FkSttKYzsKsWH4pF4i=Sspri0-jw@mail.gmail.com>
+Date: Sun, 20 Sep 2026 07:21:44 +0800
+X-Gmail-Original-Message-ID: <CAGsJ_4yXMcPASKtOBZWnyN1ztoGFoGjChT3N25UrFL9QovAdGw@mail.gmail.com>
+X-Gm-Features: AcwNN1U1j2QcyV3XRNhP_V-Q0Z2asX8-vPO3_K_IxjKnLVixdgROQw93LqTOeL0
+Message-ID: <CAGsJ_4yXMcPASKtOBZWnyN1ztoGFoGjChT3N25UrFL9QovAdGw@mail.gmail.com>
 Subject: Re: [PATCH bpf-next v12 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
 To: Shakeel Butt <shakeel.butt@linux.dev>
 Cc: JP Kobryn <inwardvessel@gmail.com>, Hui Zhu <hui.zhu@linux.dev>, 
@@ -65,128 +65,56 @@ Cc: JP Kobryn <inwardvessel@gmail.com>, Hui Zhu <hui.zhu@linux.dev>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 19, 2026 at 4:15=E2=80=AFAM Shakeel Butt <shakeel.butt@linux.de=
-v> wrote:
+On Sun, Sep 20, 2026 at 6:36=E2=80=AFAM Barry Song <baohua@kernel.org> wrot=
+e:
+[...]
+> > > Related to the previous comment, you treat the special values as part=
+ of
+> > > the range. It works currently, but creates a layout dependency on the
+> > > enum. I think it would be more future-proof if you did:
+> > >
+> > > if (swappiness !=3D -1 && swappiness !=3D SWAPPINESS_ANON_ONLY) {
+> > >       if (swappiness < MIN_SWAPPINESS || swappiness > MAX_SWAPPINESS)
+> > >               return -EINVAL;
+> > > }
+> > >
+> > > The previous comments I brought up are now resolved, so assuming you'=
+ll
+> > > make the changes above you can include:
+> > >
+> > > Reviewed-by: JP Kobryn <jp.kobryn@linux.dev>
+> >
+> > Hui, please make these changes and just send this patch in next version=
+.
 >
-> On Fri, Sep 18, 2026 at 12:45:01PM -0700, JP Kobryn wrote:
-> > On 9/17/26 11:58 PM, Hui Zhu wrote:
-> > > From: Hui Zhu <zhuhui@kylinos.cn>
-> > >
-> > > BPF programs can observe memory pressure on a cgroup, e.g. refault
-> > > stats via bpf_mem_cgroup_page_state(), but cannot act on it:
-> > > triggering reclaim requires writing to memory.reclaim, which BPF
-> > > cannot do.
-> > >
-> > > Add bpf_proactive_reclaim(), a sleepable kfunc performing one
-> > > proactive reclaim pass on a memcg, like a write to memory.reclaim
-> > > but without retrying until the target is reached, so that when and
-> > > how hard to reclaim is BPF policy rather than hard-coded thresholds.
-> > > The reclaim target of a single call is capped at MEMCG_CHARGE_BATCH,
-> > > as high_work_func() does for memory.high; reclaiming more is left to
-> > > the program, which can call the kfunc once per bpf_wq callback and
-> > > stop at any point. It is limited to BPF_PROG_TYPE_SYSCALL, because
-> > > other sleepable programs may run with filesystem locks held, on
-> > > which the reclaim path could deadlock via filesystem shrinkers.
-> > >
-> > > Convert MIN_SWAPPINESS, MAX_SWAPPINESS and SWAPPINESS_ANON_ONLY from
-> > > macros to an enum so that they are emitted into BTF and usable from
-> > > BPF programs via vmlinux.h.
-> > >
-> > > Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
-> > > Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
-> > > ---
-> > >   mm/bpf_memcontrol.c | 62 ++++++++++++++++++++++++++++++++++++++++++=
-++-
-> > >   mm/internal.h       | 10 +++++---
-> > >   2 files changed, 67 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
-> > > index 716df49d7647..c5d7f29ade85 100644
-> > > --- a/mm/bpf_memcontrol.c
-> > > +++ b/mm/bpf_memcontrol.c
-> > > @@ -8,6 +8,8 @@
-> > >   #include <linux/memcontrol.h>
-> > >   #include <linux/bpf.h>
-> > > +#include "internal.h"
-> > > +
-> > >   __bpf_kfunc_start_defs();
-> > >   /**
-> > > @@ -159,6 +161,48 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(stru=
-ct mem_cgroup *memcg)
-> > >     mem_cgroup_flush_stats(memcg);
-> > >   }
-> > > +/**
-> > > + * bpf_proactive_reclaim - proactively reclaim memory from a memory =
-cgroup
-> > > + * @memcg: the target memory cgroup to reclaim from.
-> > > + * @size: the amount of memory to reclaim, in bytes, clamped to
-> > > + *        MEMCG_CHARGE_BATCH.
-> > > + * @swappiness: the reclaim swappiness, in the range [MIN_SWAPPINESS=
-,
-> > > + *              SWAPPINESS_ANON_ONLY], or -1 to use the memcg's own
-> > > + *              swappiness.
-> >
-> > The ANON_ONLY enumerator shouldn't be included as part of the range. I
-> > would change this to [MIN_SWAPPINESS, MAX_SWAPPINESS] and then specify
-> > that ANON_ONLY is a special mode like -1 is.
-> >
-> > > + *
-> > > + * Performs one proactive reclaim pass on @memcg, like a write to
-> > > + * memory.reclaim but without retrying until @size is reached. Call =
-it
-> > > + * repeatedly to reclaim more than one batch.
-> > > + *
-> > > + * Only available to BPF_PROG_TYPE_SYSCALL, because other sleepable =
-programs
-> > > + * may run with filesystem locks held, which the reclaim path can de=
-adlock
-> > > + * on via filesystem shrinkers.
-> > > + *
-> > > + * Return: The amount of memory reclaimed, in bytes, or a negative e=
-rror.
-> > > + */
-> > > +__bpf_kfunc long bpf_proactive_reclaim(struct mem_cgroup *memcg,
-> > > +                                  unsigned long size,
-> > > +                                  int swappiness)
-> > > +{
-> > > +   unsigned long nr_reclaimed;
-> > > +   unsigned long nr_pages;
-> > > +
-> > > +   if (swappiness < -1 || swappiness > SWAPPINESS_ANON_ONLY)
-> > > +           return -EINVAL;
-> >
-> > Related to the previous comment, you treat the special values as part o=
-f
-> > the range. It works currently, but creates a layout dependency on the
-> > enum. I think it would be more future-proof if you did:
-> >
-> > if (swappiness !=3D -1 && swappiness !=3D SWAPPINESS_ANON_ONLY) {
-> >       if (swappiness < MIN_SWAPPINESS || swappiness > MAX_SWAPPINESS)
-> >               return -EINVAL;
-> > }
-> >
-> > The previous comments I brought up are now resolved, so assuming you'll
-> > make the changes above you can include:
-> >
-> > Reviewed-by: JP Kobryn <jp.kobryn@linux.dev>
+> Hi JP and Shakeel,
 >
-> Hui, please make these changes and just send this patch in next version.
+> This feels a bit weird to me, since 0=E2=80=93201 are all valid
+> swappiness values.
+>
+> 201 (`SWAPPINESS_ANON_ONLY`) is just as valid a swappiness value
+> as 200. In contrast, -1 is a different story, as it indicates
+> completely different semantics.
+>
+> If 201 is treated as a special value, then 0 (`MIN_SWAPPINESS`)
+> should be treated the same way for MGLRU, since 0 means file-only
+> reclaim there. This isn't the case for CLRU, where swappiness 0
+> can still reclaim anon folios.
+>
+> If possible, I'd vote for keeping Hui's current code :-)
 
-Hi JP and Shakeel,
+On second thought, you might be right, as there could theoretically be a
+case where `SWAPPINESS_ANON_ONLY` is not defined as
+`MAX_SWAPPINESS + 1`, but as, for example, 400 or some other value.
 
-This feels a bit weird to me, since 0=E2=80=93201 are all valid
-swappiness values.
+That said, I find `MAX_SWAPPINESS` and `SWAPPINESS_ANON_ONLY` really
+weird. Somehow, I feel `MAX_SWAPPINESS` should be
+`SWAPPINESS_ANON_ONLY`, since 201 is actually the maximum valid
+swappiness value, rather than 200.
 
-201 (`SWAPPINESS_ANON_ONLY`) is just as valid a swappiness value
-as 200. In contrast, -1 is a different story, as it indicates
-completely different semantics.
+For the change suggested by JP, I think it is right if we don't clean up
+`MAX_SWAPPINESS` and `SWAPPINESS_ANON_ONLY` properly.
 
-If 201 is treated as a special value, then 0 (`MIN_SWAPPINESS`)
-should be treated the same way for MGLRU, since 0 means file-only
-reclaim there. This isn't the case for CLRU, where swappiness 0
-can still reclaim anon folios.
+With the change suggested by JP,
 
-If possible, I'd vote for keeping Hui's current code :-)
-
-Best Regards
-Barry
+Reviewed-by: Barry Song <baohua@kernel.org>
