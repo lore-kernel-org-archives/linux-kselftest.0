@@ -1,63 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A651A325495;
-	Sat, 19 Sep 2026 21:33:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C24325495;
+	Sat, 19 Sep 2026 21:43:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789853591; cv=none; b=MxkJEagAvvgLyMgTq/wOsyPDZKagqZawRH/suraZcYe+IRyBvP8Gs27DsSDXUYaG22xwcSgqoOUI1KhkxeCebRbH4kuQTLIODOrinhDQOBcJlG3Hsx1kHgRSJw+d8iDbEDh+5GNIgvNJiNVqO0P6HyyUtKm205iuwhQBknPkLI4=
+	t=1789854211; cv=none; b=LkxtW3g2dMJidJUX+Kiwwa5CENm1YyEmjW8Msp1e2VVzszsZfw9UmxKN18iEpMnu9J72ljP1G/5MIYm27tCYMvUL2Z5QgN+nRTLFcsjGA/vL9WRcBZyZoTxZm80RvtcRFSGzDFLBMEQmm83Ko8ONdUn9VHtSv4rkJyaYv+yh4SI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789853591; c=relaxed/simple;
-	bh=5AUe9pR5+LIYnFyHHPPntJsuVAxz88FPBfhlX1IxENo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FhbxEL26+92e4zDH/LW+FdT9rBqm67NtrcZNl0K5yZnaEwd12EzzfXEGCvAmtDYta6eXoaN2UXxB+oht31LZZAzFAJPcl9Dvh4ksjTewTdU2ju0L21oTVvNbKuaQ39ZKtHUiAV9C8J827KaQ5mYDrvpk5QXzxDwrDz4yaeUVlaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ldhJehX7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789854211; c=relaxed/simple;
+	bh=y8T7uKwp88RKw458oX43TjgLBPGw7XCPF08vtPwEaM0=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=hP9hc5yLKSbPB6mWUgG0H6IXD7Nxf6usvVlsG4kaup2rs5h4i83GgOsni2Sx1rvErsu0ZxsETyXdp217xDW32IjXDOuqOq9SzfMVgQ4dfEw3vm+2CdKEqPzX5vPcmQt8j59M7qwlRU4lNL3JPYVsj5daNTknWncl32ENiKBxmnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=dacEkFVf; arc=none smtp.client-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ldhJehX7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E0481F000FF;
-	Sat, 19 Sep 2026 21:33:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789853590;
-	bh=5AUe9pR5+LIYnFyHHPPntJsuVAxz88FPBfhlX1IxENo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=ldhJehX7WOFzseiMKJvpcsWG0rbdXrwAAJ4OLQ8itqXbzME2HT/g+jbWAdJB3wLvV
-	 MgqGX5nV5PLZEqnI+es03Ixi0QHNGLRIfD0J5Tcav91NGMXjDYE/hrojDXuUaF4nM+
-	 foligc8srf8rJ5X1paHHAhC46Ux4HySO7RRKPS6ghE55ZgmuQFfMkjK1RG70T2IdgX
-	 zk7388aR0mX13+yZlNLV7SR+RiNL2DETIuPvJa2EwiJRGA4IFXaA82rlajqB6VRr5r
-	 jPmlpv8PlixH3T8ptI1oKAPu5IRWIuWV+W2GJ2rCt2kJ2ImVdBQjrvds5Fr9KNn9u2
-	 9WHQSuuHRYnow==
-Date: Sat, 19 Sep 2026 14:33:08 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, Andrew
- Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
- "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Mohsin Bashir
- <mohsin.bashr@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Bobby
- Eshleman <bobbyeshleman@meta.com>, Dimitri Daskalakis <daskald@meta.com>,
- Weiming Shi <bestswngs@gmail.com>, Maxime Chevallier
- <maxime.chevallier@bootlin.com>, Jacob Keller <jacob.e.keller@intel.com>,
- Breno Leitao <leitao@debian.org>, Tao Cui <cuitao@kylinos.cn>, Pavel
- Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>
-Subject: Re: [PATCH net-next v3 0/5] fbnic: Support larger RX pages
-Message-ID: <20260919143308.078da03b@kernel.org>
-In-Reply-To: <20260915182105.4162425-1-bjorn@kernel.org>
-References: <20260915182105.4162425-1-bjorn@kernel.org>
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="dacEkFVf"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 81E88A02B3;
+	Sat, 19 Sep 2026 23:43:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1789854197; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=Dsyp/2bxguVs04v4lLYBK6hkBkZbr47ghJs3bwtV7oA=;
+	b=dacEkFVf7LzHPxs1J8hrFjwsDbzrHN6G+DPQrY+l1vQofUVaK8RmkUigp+a/oK0eRBiQ6A
+	G3fnLvkQ3U7KBYl4yYgZc6ljEqcq4fitMNwExP4Q5HLPCnhOTnlijiAhVbyvQMlyNH6a0p
+	f9EFW/y+rnr1XrlLSMRo/u+ckMQdv9/x8u0z1+t4zeSLUmq7Dr/sOIN3+XDN1yv5h+up1x
+	zrcWXE0kk//gZ3sNOcToHqKt+WMv68VMnknICJkX/do9Mtxys0na5lSVr9Orw3HkuvtAzj
+	/QGUuGJlKW4k190eFJXgZEBEH/QA1HtGy2PXvJyqkszH70GpWflYXjcjqoa2+g==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Date: Sat, 19 Sep 2026 23:43:15 +0200
+From: Nicolai Buchwitz <nb@tipi-net.de>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Ovidiu Panait <ovidiu.panait.rb@renesas.com>, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ shuah@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v2 3/3] selftests: drv-net: Add VLAN test
+In-Reply-To: <20260918151225.304410cf@kernel.org>
+References: <20260918112529.96039-1-ovidiu.panait.rb@renesas.com>
+ <20260918112529.96039-4-ovidiu.panait.rb@renesas.com>
+ <5be2136e4142427285566f01d95c1b7b@tipi-net.de>
+ <20260918151225.304410cf@kernel.org>
+Message-ID: <ff8435132a6b0fbc0f92187e1d9b0f18@tipi-net.de>
+X-Sender: nb@tipi-net.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Tue, 15 Sep 2026 20:20:58 +0200 Bj=C3=B6rn T=C3=B6pel wrote:
-> This series adds support for large io_uring zero-copy RX buffers to
-> fbnic.
+On 19.9.2026 00:12, Jakub Kicinski wrote:
+> On Fri, 18 Sep 2026 14:04:13 +0200 Nicolai Buchwitz wrote:
+>> > +LOCAL_IP = os.environ.get("VLAN_LOCAL_V4", "198.51.100.1")
+>> > +REMOTE_IP = os.environ.get("VLAN_REMOTE_V4", "198.51.100.2")
+>> 
+>>    LOCAL_IP = "198.51.100.1"
+>>    REMOTE_IP = "198.51.100.2"
+> 
+> LOCAL_IP / REMOTE_IP are in the default network segment (vlan 0)
+> Here we need some "unused" IP subnet that we can assign without
+> conflicts. Getting it from the config would indeed be good, but
+> since this is the first use perhaps we should defer until it actually
+> bothers someone?
 
-Good sir, this series conflicts with some net/main material,
-please circle back after the Thursday merge.
+Fine with me. Having the the selftest in place is probably more useful
+than re-spinning for sole config issues. Let's fix this once someone 
+needs it.
+
+> [...]
+
+Reviewed-by: Nicolai Buchwitz <nb@tipi-net.de>
+
+Thanks,
+Nicolai
