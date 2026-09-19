@@ -1,73 +1,73 @@
 Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166ED282F3A;
-	Sat, 19 Sep 2026 00:25:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544772BEC52;
+	Sat, 19 Sep 2026 00:25:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789777507; cv=none; b=rPWprj+6kgaTEmjC1MatuuAj5jUOHbUTLSnyGXbx8EWyzaPW4tthdIf8gXDdud20cdfj/vilQmvLCp0LiNWGfsmXLOE9YyC1Z9XT6L879r8vvCAgRGiSDrK5FDL50SfmWn7AvP+bw6+X+ptDe9eBgAbcJO8lvNh5wbFCaNojCwc=
+	t=1789777509; cv=none; b=n+ArE4CqEfP3FQ3WrmfT9EH71idK2/QEpdtY8rUq6RtaYMFqS+G+76jdPghc3BmDYV0vAJS8zE9n3ylA6qd4+4mk2JxWI8s2Ru95tyLWKQAL2eBJJpGFaj6Pe2mmIALG/geLNMtFNZUj5M+odieVuDGEYyiaHrLXot2tGjL9f70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789777507; c=relaxed/simple;
-	bh=FGJJxjxAXxiWCjd6HdT7/p3aXTUUliCrodLMid3aH30=;
+	s=arc-20240116; t=1789777509; c=relaxed/simple;
+	bh=r9KxW/pUOtDOKWAXtqy9E5Dqp/slGSIywK9qYd8Fz7E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AcykUJp/OaW21B2V4hGRozlM+YCdlgJwCQCNROVEUtZXkiLiPMxr1Pnygsw3YLVFjpuF+bruiUS0mLtpfix+Xa9PzdkWOh2gn95EgmjMIijX3V92AFnqgsuybYCtLaGzsFtDra5KBpdaoAEb/Xw/M6lG5adaJjmI8196xufLdw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=WD69CBLt; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UNIpvzQ8; arc=none smtp.client-ip=103.168.172.153
+	 MIME-Version; b=Ndo4RIHZ9z7erYl1eQZyxHjazAtjg13ZJ7Ky/hsmvVZiwzQa0re04UL8PLSlMPXkmAbbdZyCwxccFwNI1+Q6vZYsquP7a9UE0MgBGD3b3IqLnVSQWv3EIWIuJLihKen/hEKvgDt/O61Sa06vLUQHFppYZwCJpB1GnGwFoBAgdyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=bmRjiuXt; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Uwkym9r6; arc=none smtp.client-ip=103.168.172.153
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="WD69CBLt";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UNIpvzQ8"
-Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 334BB140016D;
-	Fri, 18 Sep 2026 20:25:04 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="bmRjiuXt";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Uwkym9r6"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 745F014000FE;
+	Fri, 18 Sep 2026 20:25:06 -0400 (EDT)
 Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-09.internal (MEProxy); Fri, 18 Sep 2026 20:25:04 -0400
+  by phl-compute-05.internal (MEProxy); Fri, 18 Sep 2026 20:25:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1789777504; x=
-	1789863904; bh=bpxeXbnbOj0UDoqQAf9nzaCtUzuS3tS0/UkkxEQ26AA=; b=W
-	D69CBLtOWCM4S7EgMjV+POR/cncBs71Ol5PFqjoveP+zL0lLDfATApzdjzXErQTv
-	pCCdYMTcEHkLDfqG8SusK6XpnC1BJ7+mXi1dmAAd96P00qRHylj/ZdqRBS5fUoCy
-	9Z5kqcx1AcyXW5stzXt+O2DmT6F94UJ7IqMO8XJUCASiqfhc+itLaboOlENSqnX9
-	kLgNZPq/yx5S6L/DQg+MIKnCKkxnltu64Zov2nD/4kE3S0ZNu3uUMMQ868XaTCyf
-	Rb3IUx8wo4T2hLwUYFJFDnyzU5z5snYMiGarp9+Vv5J0sGTZxbtLXSHGorLSTaVM
-	c30x70h+MJO5GGGPT/kcw==
+	:reply-to:subject:subject:to:to; s=fm2; t=1789777506; x=
+	1789863906; bh=O8IAR5vD5SCVxu0A7qSyVndGraz+I6DqEP+PM8vYqhw=; b=b
+	mRjiuXtVkQEoqqZ5x10ZX0KiN0ZIkJBVsZOqKr3gZCMjKugrjhF7jhdtDD31ygAs
+	fiZpvJuDVkg7XLTCgSDmZ0JUaSqxLsKX6p8g/6XLvvLsJjcvgljiaCPMFHoprXHC
+	aMtJw0MqxTDEGCN5TLTBDddtVIEeJ0DcWsOkmSYgQzfD2Byx4j4jE3XOPgnuVVOB
+	/Bh3u59fFWE3HdN7s13Gsf/GyUj2LLtCaghHeoVfK6jvz3JhhhqJkJXs4JxppDxe
+	uicz6l8k1s/W5XjVEakg+mUgq0foZuFRN3XrFc9wgRqnLBqKFgj0gewgYoimokVP
+	ta2wmnrWuFYWizEK1BRMw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm1; t=1789777504; x=1789863904; bh=b
-	pxeXbnbOj0UDoqQAf9nzaCtUzuS3tS0/UkkxEQ26AA=; b=UNIpvzQ8QvAF4nnvz
-	n1f2aIKArJF208zrbfoFonPfqId8ELG8wNOjh9WKlkkuj9F085SzDnoO3ifiGPIY
-	bwifGzSRFqQ2ZEA5mMn1oXCC8DwXnJ8/sbttkKG1Uuq/vueaXecxsfFWWI69pTDy
-	Ds4hTBcw5jIVzwLHGRHwa4rrtmf107xj1NlGNauP0SJjOTvRymlrAyGQewy9ucM+
-	MeGzFr5k3U4ft26q6vbuuwKiINxAtcmRgSdoqSOyRzMlTtFkJ4yHfWGs1/uYVsj2
-	tEWuGkLlYEGpsHG9m9433p6qqq3UoTN16wnDPtKSv+OvWDwuaOQxYNRsnRlIkVoH
-	lE0sQ==
-X-ME-Sender: <xms:X9atajhmjDDBJWTpivZAiP0HnBwEguADxUtN1_KvVkRNN_mOElnWww>
-    <xme:X9ataoZuggW1TVOOIJgxv5C3dCx0yYGpH89WPRYvP7zsnruIY5ceGaCFvpFwmd0eM
-    wZYy1Yc7pdG3cqUAyy4Ux0nmSI8Kg_HwlLzeKMZ6d9URcszsYH85fp1>
-X-ME-Received: <xmr:X9atalTLIcpAQ3L4_br_jCzCt3Dhan5HYiJxT1wOO9Gt16p1pdMZpuV_aU0>
+	:x-me-sender:x-sasl-enc; s=fm1; t=1789777506; x=1789863906; bh=O
+	8IAR5vD5SCVxu0A7qSyVndGraz+I6DqEP+PM8vYqhw=; b=Uwkym9r6sk6LSf5y3
+	1OIZVjTH5YY64arTcBH5+3mB39tDcNEfwn/QbCBM2vAlTNi5NPEgzwmRLPTLNb2z
+	IEJBUGRHxKwUD0IEIzfWUOczDGcndI6qjXytwx0wgJpEc7PGcaZTdOhcddn2Q6I0
+	nR3DF0LA1ksKWffVvaTrzWl3W09oF/RPmWu0BWO5+HDrQrXEfeKI4pi9SENAQ2Pm
+	uLier1DZNO9lg0EEDS24T5EwXgGDH206Dl4Z4Mt09qB6qUrQ/AB/N6jb62PHLJWO
+	GzkqgKq45gGbfFLY82a4s/yDkBbZQdfidBX5VYXjJCe+KiXlGI4jG10jrtiI8uYN
+	UI6LQ==
+X-ME-Sender: <xms:YtatajWGPGPvNYMsWwnZqdpXql6S-ilkY7eXzxVmFAvLSxVN4K-lSA>
+    <xme:Ytataj9bebqGChIloQUzACXlVR4GiwhoB24xS4vy7yK_JLOhIT6Go_FZrFp1AqdvE
+    LBcQhdhIkwn8su7K9XvZW1eKxJXoM_h718fOfLtBu7MM4LPJbymppGZ>
+X-ME-Received: <xmr:YtatahnMflhhqITmRiIw_PoELrTEPTNvcGfcLxyS4UlyYlDLczxs3DI7eYE>
 X-ME-Proxy-Cause: dmFkZTFyC+XeKYnZ766rqTYe4SsoatN0doBd7ADemiperjFlmE10ggdkgYpZeWmNOU4aBc
     lm02WEvCO2QGG+A0SGXMzCjVWjDSVCQ5WJ/xmSMbLZJLqVjt5aEnrGd0hUbHPJ/ejcqjFa
     xrmYY/YNxh9EpvRrTjNMqslNp6oZ1XKAjj0b9YUD/U+Umt4HJhNRFStrIx7jR3Gf+CAD8k
     /TwEvtSve0+WgA7utVqBt9LeXDUSIUkf7dn/1M9JWIyORT8Kp2cNKrwYutOzK/Z35sBm5S
-    qWNICJAq9yYROUOkEgx1cQSYtjkPP2DMZwKGXS3JxTiE+xMdBmJUepOSBHs3/DvnVTIMIe
-    80jfhDgdcpW6UhorbgwxywTZCRoFQkugBsnXE60iKAHu6CWCEz+3/Sut+Y/Bb3aLG2bIoj
-    WvUoU6rTcFqk0WIqlh8qHR2eG0EAGRtxYfIf/ek2w0O0USb7kaH5nMk3XesCrpUjr+rmNq
-    JER5ODHTHu47swWt67U0UUEtu2enEF/aDTyo0trZQsguHJup2ecb9W8gzFHwiuRqlva4ul
-    y8yQ+jewxXn4ORXu1KYoK8ziKwYC8cKxWzwRpdy5Z6hYsegvHTXOX9XV3tTiZr3hu6b8hJ
-    guYj9GBQmINoPf5hK2Mr+zb+PMNCOYxJAP0JUj8zJDLtAk0zRIBEQSMGykFQ
-X-ME-Proxy: <xmx:X9ataoE836cUG5yAuFnhslm-yKgrX--c-EGvvIMJIW1yFYuwDs29yg>
-    <xmx:X9atai0SJvnnNfrWUEhB-S1rvoc3v2CHRsKKmkMx6-P2SDBQMrh3fw>
-    <xmx:X9atamuKFVUQqcEaU0ZKhs1rdZbECqwOaJ-XP5RqMkq4NhDZzopcZA>
-    <xmx:X9atapm7HZ0BYdVN2RobGDJKMk99-zq1Tc9AB__U9KZX-s0fzaocsw>
-    <xmx:YNatajK8edntNF98ieZbbtcv4zw1NZDp3B-YEOPSDQ0ZPPuk8JluZd6u>
+    qWNICJAq9yYROUOkEgx1cQSYtjkPP2DMZwKGXS3JxTiE+xMdBmJUepOSBHs3/DvnVTIMfx
+    L1imsBc7GKPy3QB909e6AYlrfJuc9CCvY/TvwvN4F5Vf1wSeUPBayPkIcewsfuXZ//CXkK
+    d5MzgPYuC6cU1zvr0k0SVhh5xDRsAj55w2AIO4FC+DCXwaZqtxhIKXhyU6Vth+RIi1lt1t
+    b/LmP9emsC9mVyKTP7veK7dUgrf5UuOrk+nN78P77e3vnH5A71G4tACFpN33j9Bq0+wy9P
+    k4L2UX9tA2sDKLLbhGYnKBZ4Vo4fkZZfoKw6CW2vEY+Bjlq+tCE2PL2skC15yAqD6v+IV1
+    W7217gqf/GHG4JK0cB1fGe5Elqk3Bcb3vKSm5tnwX8hqTxBqQan3Wp4AsW5A
+X-ME-Proxy: <xmx:YtatamKOxV8YpfemJT0Gsc8i847sJRz_AecNndmApwat59Y2GezLKQ>
+    <xmx:YtatavoUM81yuE_fc9ulr6U8ksXVO5hXeRwB9vwjsZXk6Q4JIoTSuQ>
+    <xmx:YtatarTpH6qBHC_yCjLbSqTymYy_NHKC6Zyog3UX2N_hdNgMOA_CGg>
+    <xmx:Ytataq7jb0nimO5J6uMWJOzYwJ0iygLPKAsSckrOewcs6c0WXTOI3Q>
+    <xmx:YtatapPtkY_VquIALI4VI6eS11VOqPNjesAanB9TWxPLH5pF_VHzURH0>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Sep 2026 20:25:03 -0400 (EDT)
+ 18 Sep 2026 20:25:05 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	"David Hildenbrand (Arm)" <david@kernel.org>,
@@ -96,9 +96,9 @@ Cc: "Kiryl Shutsemau (Meta)" <kas@kernel.org>,
 	Jason Gunthorpe <jgg@ziepe.ca>,
 	Leon Romanovsky <leon@kernel.org>,
 	kernel-team@meta.com
-Subject: [PATCH v6 03/19] selftests/mm: scale khugepaged's collapse wait with the PMD size
-Date: Sat, 19 Sep 2026 01:24:33 +0100
-Message-ID: <20260919002451.496763-4-kirill@shutemov.name>
+Subject: [PATCH v6 04/19] selftests/mm: skip khugepaged page cache cases without a PMD folio
+Date: Sat, 19 Sep 2026 01:24:34 +0100
+Message-ID: <20260919002451.496763-5-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260919002451.496763-1-kirill@shutemov.name>
 References: <20260919002451.496763-1-kirill@shutemov.name>
@@ -112,52 +112,80 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-wait_for_scan() gives every case the same three seconds, whatever the huge
-page costs to build.  collapse_full() asks for four of them: 8M at a 2M
-PMD, but 2G at a 512M PMD -- arm64 with 64K base pages.  Three seconds is
-thin at that size, and the case has reported a failure for a collapse that
-was still going.
+The page cache caps folio order at MAX_PAGECACHE_ORDER, which is below the
+PMD order on arm64 with 64K pages, where a PMD is 512M.  A PMD-sized page
+cache folio is impossible there, so the kernel refuses these collapses:
+MADV_COLLAPSE answers -EINVAL and khugepaged passes over the range.  Four
+shmem cases ask for a PMD-sized folio anyway, fail, and the run bails out
+in the middle.
 
-The timeout is a ceiling on a poll loop, not a sleep: the loop stops as
-soon as ops->check_huge() sees the collapse, or as soon as full_scans has
-advanced by two.  Raising it costs a passing case nothing.  Across 80 runs
-of collapse_full() on arm64 with 64K pages the wait was half a second in
-73 of them, with a tail to two seconds.
+Skip the shmem and file mem types where the cap is below the PMD order.
 
-Keep three seconds as the floor and add a second per 128M collapsed.  A 2M
-PMD is unchanged, so x86-64 is too; a 512M PMD gets 19 seconds.
+The cap is not shmem-specific: it applies to every file folio.  Add
+thp_file_supported_orders() to read the orders the page cache allows.
 
-On arm64 with 64K pages a passing ./khugepaged all:anon takes 49 seconds
-under TCG before and after this change.
+Anonymous collapse is unaffected: its orders are not capped this way.
 
 Assisted-by: LLM
-Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- tools/testing/selftests/mm/khugepaged.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/lib/mm/hugepage_settings.h        |  9 +++++++++
+ tools/testing/selftests/mm/khugepaged.c | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+)
 
+diff --git a/tools/lib/mm/hugepage_settings.h b/tools/lib/mm/hugepage_settings.h
+index 548e9d288d1d..94d9fc747f49 100644
+--- a/tools/lib/mm/hugepage_settings.h
++++ b/tools/lib/mm/hugepage_settings.h
+@@ -87,6 +87,15 @@ void thp_set_read_ahead_path(char *path);
+ unsigned long thp_supported_orders(void);
+ unsigned long thp_shmem_supported_orders(void);
+ 
++/*
++ * The per-order shmem_enabled attribute is created for the orders the page
++ * cache can hold, not just for shmem, so it answers for regular files too.
++ */
++static inline unsigned long thp_file_supported_orders(void)
++{
++	return thp_shmem_supported_orders();
++}
++
+ bool thp_available(void);
+ bool thp_is_enabled(void);
+ 
 diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index 8a6d708026b7..189cc4fee18f 100644
+index 189cc4fee18f..5318f3cfc0d0 100644
 --- a/tools/testing/selftests/mm/khugepaged.c
 +++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -561,8 +561,11 @@ static bool wait_for_scan(const char *msg, char *p, size_t len,
- 		int nr_hpages, int collap_order, struct mem_ops *ops)
- {
- 	unsigned long hpage_size = page_size << collap_order;
--	int full_scans;
--	int timeout = 6; /* 3 seconds */
-+	unsigned long bytes = (unsigned long)nr_hpages * hpage_size;
-+	int timeout, full_scans;
-+
-+	/* Half-second ticks: three seconds floor, plus a second per 128M */
-+	timeout = 6 + 2 * (bytes / (128UL << 20));
+@@ -1358,6 +1358,25 @@ int main(int argc, char **argv)
  
- 	/* Sanity check */
- 	if (!ops->check_huge(p, len, 0, hpage_size))
+ 	setbuf(stdout, NULL);
+ 
++	/*
++	 * Without a PMD-order page cache folio the kernel refuses these
++	 * collapses, so there is nothing to test.
++	 */
++	if (!(thp_file_supported_orders() & (1UL << hpage_pmd_order))) {
++		if (shmem_ops) {
++			ksft_print_msg("no PMD-order page cache folio: skipping shmem\n");
++			shmem_ops = NULL;
++		}
++		if (read_only_file_ops) {
++			ksft_print_msg("no PMD-order page cache folio: skipping file\n");
++			read_only_file_ops = NULL;
++			read_write_file_read_ops = NULL;
++			read_write_file_write_ops = NULL;
++		}
++		if (!anon_ops && !shmem_ops && !read_only_file_ops)
++			ksft_exit_skip("No mem_type left to run\n");
++	}
++
+ 	default_settings.khugepaged.max_ptes_none = hpage_pmd_nr - 1;
+ 	default_settings.khugepaged.max_ptes_swap = hpage_pmd_nr / 8;
+ 	default_settings.khugepaged.max_ptes_shared = hpage_pmd_nr / 2;
 -- 
 2.54.0
 
