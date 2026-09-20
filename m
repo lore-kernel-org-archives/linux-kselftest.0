@@ -1,420 +1,317 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ECBA403B18;
-	Sun, 20 Sep 2026 11:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 540F1347BA9;
+	Sun, 20 Sep 2026 11:56:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789903347; cv=none; b=q4drIvlXGbGq4XLzUjttGfDb7EFbc3yzkVspsfi8Kd+LA66vCWCC8n1Li0416mMOo8Pd31bBKO97WKXu4/JL3XGrq3/Dvy1xahvUSr4FwpCNqEwgGbKeKtVqZmlHNi77mZugC7N1mzd1S02yGTrukj8FOU4XQ+e6o4RGXfBePk8=
+	t=1789905392; cv=none; b=R/jTKts9lxieRF7qbH7uUjhmtlKhAP8Gug1NkqwFeAII+8+H7dBzHUR0M+HEjLhI9YXo728+H9nftB3MEGF/FgZWXrwDxWKEy+psaGlfmaelhXJt4C3KBriEe4nZppVdvGD6pnY4uj/2EQeDOWFlNbgF/iAO+5vJU4DVvguiF6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789903347; c=relaxed/simple;
-	bh=z4iUiM9bC55rfw6jduOct1366YhypIYol3KPCgIE8E8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=JoH0jnLRFYwXWc2GVT3/Fa/CyKPi13PTe+gD/Mjk/F313qWljFvprIR63B/wmttN8iApuWIxMBkt9on/qjruOGOUtRgVCI4nM+DZ25jWN4u/R4QcsVVBKeSoaIeef340r4BECzYzGUvKa+s/cVQCOmWI/ybJGoD6hESQkO+98dI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=knbWzXqg; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	s=arc-20240116; t=1789905392; c=relaxed/simple;
+	bh=ZIPYjqYciGVphhbYnTgn5E+0Kyitjs4W/8Qb8mOv2gA=;
+	h=Date:From:To:CC:Subject:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type; b=jkC9yLn36+lcnmL7u42F7wNNSva139jrjXymPc0V94XzLHpJ9hYkQu1lc3P0bOX9bZQiTLwskmLUo49mb0hxNXL2qfItq6NcvTE/PszIkgnxV+qJ7sn3CiAUnQGe29z4nUTwFrNELy2PGcFn9MpsoZ6IlWCgLyACDA/NlIijJY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=owqherd3; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=zByV/oKc; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="knbWzXqg"
-Received: from [192.168.10.153] (p865013-ipoe.ipoe.ocn.ne.jp [153.242.222.12])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 68KBG36i088236
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Sun, 20 Sep 2026 20:16:18 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=TtZpVD+c3rEb0z9kPtnuF7Xmt0s3q4Ts6qjSmqh3PZU=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-Id:To:Subject:Date;
-        s=rs20250326; t=1789902978; v=1;
-        b=knbWzXqg8NGeKxxhNW04XuYdUmIIlyxOVRVcxJSJvJ9rPqczPdFOHatE3ABD5YFh
-         cosIOiiP3gvshNhdlb4jY5Qm6kEbit1xoU616ejx8GZrR4RlQPPcaCqvJazYdFUx
-         tlabv8FYQZhC2JcUYnaJzy+Tfq+HY2yLaPgnFhKSEUEhO5OOL8g+gd4sDnqFCoos
-         mJzlwIX3BgiLB3lSthVIVbEWs73/92JGukf7Q38yBHldW2BQ7wsU1jhTsxHPRyAV
-         OQ0uY9VoHuFufi0fl/x6gxYwe9lgugbAznnJ3ZIlfeyBzxuEkWLqiahdM2zw/7vt
-         O/hy7puc/Ge+CirW1Z694g==
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Date: Sun, 20 Sep 2026 20:16:02 +0900
-Subject: [PATCH v11 21/21] KVM: arm64: selftests: Test
- PMU_V3_FIXED_COUNTERS_ONLY
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="owqherd3";
+	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="zByV/oKc"
+DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
+	h=Message-ID:Subject:To:From:Date; t=1789905387; bh=YUmmqfrOHURhxdHBd/AfXiT
+	B6Cxf0E05PkLPnMSDFIY=; b=owqherd3hZQtNypTLYbSCkNC16Zl5rZxu5Mv+P7OAAuXo+UvGn
+	KnsoqPtf+NGmSW52LwLR8wD/lw7uT8hDLy8uVlrbPOL0+955Rv4Otfc8CfOcaVtqBWm/G74GI1x
+	Ws8qYylE7o6IAInd9tfc+A/ZtOo1HY0ZPsubPUHSKQkPgl9t06EwMflRyUCSUjpNaJj8Fbuib4e
+	Wy1xbzl5F9RztB/vBjjgd/TZ8NQaKqF55qrkJKBz1VHKHCn33l33p0VPnW7DCwXlZPfDFUOxJsT
+	dW1+sOzntCj27XUWBb53yD13QyHQ+T4LulVEWmh56m0daP1som0ToLMcuHzLt8CshTw==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
+	h=Message-ID:Subject:To:From:Date; t=1789905387; bh=YUmmqfrOHURhxdHBd/AfXiT
+	B6Cxf0E05PkLPnMSDFIY=; b=zByV/oKcQpZABHhCNjtvcz1t3vt4yecgRe3aTnfhgbHrzB4Scd
+	f+H8YjHT4/mkzy5XtFm80rz5gqZV6uEydaAw==;
+Date: Sun, 20 Sep 2026 12:56:27 +0100
+From: Bradley Morgan <brads@mainlining.org>
+To: benquike@gmail.com
+CC: kees@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, luto@amacapital.net, shuah@kernel.org,
+ wad@chromium.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3=5D_seccomp=3A_restore_knotif-=3Estat?=
+ =?US-ASCII?Q?e_when_SECCOMP=5FADDFD=5FFLAG=5FSEND_is_interrupted?=
+In-Reply-To: <20260920072036.3888061-1-benquike@gmail.com>
+Message-ID: <A3F8F45D-3B9B-4E52-B076-7924FF3AF360@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260920-hybrid-v11-21-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
-References: <20260920-hybrid-v11-0-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <20260920-hybrid-v11-0-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
-To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Steffen Eiden <seiden@linux.ibm.com>,
-        Andrew Jones <andrew.jones@oss.qualcomm.com>,
-        Fuad Tabba <fuad.tabba@linux.dev>, Mark Rutland <mark.rutland@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Shannon Zhao <shannon.zhao@linaro.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Fuad Tabba <fuad.tabba@linux.dev>
-Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11665;
- i=odaki@rsg.ci.i.u-tokyo.ac.jp; h=from:subject:message-id;
- bh=z4iUiM9bC55rfw6jduOct1366YhypIYol3KPCgIE8E8=;
- b=owGbwMvMwCWmMbc20y1CyJDxtFoSQ9b6A8VvJ3Qf+/Dv8eKyjJOhy///YDpYOX+l8BO51bM2P
- /vzPn6+XkcpC4MYF4OsmCJLStFubo3o2k+FCfEtMHNYmUCGMHBxCsBEZm1iZPijnHTtUdfBDQFp
- D6qd0zlfRjZNS6pJYIvXXHw2eFJa+yaG/1HvK5isJxUJVDypvCfvP8k+02lJoVLr7QkcIqJG02T
- O8QMA
-X-Developer-Key: i=odaki@rsg.ci.i.u-tokyo.ac.jp; a=openpgp;
- fpr=AEDC03C9AF734F2EC26A7BFFA4BAEAA73536753C
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8bit
 
-Assert the following:
-- FIXED_COUNTERS_ONLY is unset at initialization.
-- FIXED_COUNTERS_ONLY can be set.
-- Setting an event filter when FIXED_COUNTERS_ONLY has already been set
-  results in EBUSY.
-- Setting FIXED_COUNTERS_ONLY when an event filter has already been set
-  results in EBUSY.
-- Setting FIXED_COUNTERS_ONLY when a VCPU has already run results in
-  EBUSY.
+On 20 September 2026 08:20:36 BST, Hui Peng <benquike@gmail.com> wrote:
+>In seccomp_notify_addfd(), when SECCOMP_ADDFD_FLAG_SEND is set in
+>addfd.flags, knotif->state is optimistically transitioned from
+>SECCOMP_NOTIFY_SENT to SECCOMP_NOTIFY_REPLIED before waking the tracee
+>and waiting on kaddfd.completion:
+>
+>	if (addfd.flags & SECCOMP_ADDFD_FLAG_SEND) {
+>		knotif->state = SECCOMP_NOTIFY_REPLIED;
+>		...
+>	}
+>
+>If wait_for_completion_interruptible(&kaddfd.completion) is interrupted
+>by a signal before the tracee dequeues the kaddfd request
+>(!list_empty(&kaddfd.list)), seccomp_notify_addfd() removes kaddfd from
+>knotif->addfd and returns -EINTR to the supervisor without having
+>installed the file descriptor.
+>
+>However, knotif->state is left as SECCOMP_NOTIFY_REPLIED (with
+>knotif->error == 0 and knotif->val == 0). This causes two problems:
+>
+>1. When the tracee runs in do_user_notif(), it checks
+>   if (knotif.state != SECCOMP_NOTIFY_REPLIED) after calling
+>   seccomp_handle_addfd(). Because knotif->state is already
+>   SECCOMP_NOTIFY_REPLIED, the tracee exits the notification wait loop
+>   prematurely and returns 0 from the trapped syscall without the file
+>   descriptor ever having been installed.
+>
+>2. If the supervisor retries SECCOMP_IOCTL_NOTIF_ADDFD or
+>   SECCOMP_IOCTL_NOTIF_SEND before the tracee runs, it fails with
+>   -EINPROGRESS because knotif->state is no longer SECCOMP_NOTIFY_SENT.
+>
+>Fix this by restoring knotif->state back to SECCOMP_NOTIFY_SENT if
+>SECCOMP_ADDFD_FLAG_SEND was set and kaddfd was not consumed before the
+>interrupted wait. Also add a seccomp_bpf selftest
+>(user_notification_addfd_send_interrupted) covering this race.
+>
+>Fixes: 0ae71c1990f3 ("seccomp: Add a flag to atomically addfd and perform send")
 
-Also verify that strict PMUv3 initialization requires a PMU selection
-and succeeds after selecting fixed-counters-only mode.
+Oh my godd you
 
-Run the existing PMU and MDCR_EL2 tests in fixed-only mode. Verify that
-enabling the mode preserves the userspace MDCR_EL2 value until a
-subsequent KVM_ARM_VCPU_INIT resets HPMN to zero.
+1: removed me from CC
+2: removed my R-B tag!
 
-Assisted-by: Codex:gpt-5.5
-Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
----
- .../selftests/kvm/arm64/vpmu_counter_access.c      | 202 ++++++++++++++++++---
- 1 file changed, 173 insertions(+), 29 deletions(-)
+What is your AI doing!
 
-diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-index 73b4f1870d3d..637653f7a25b 100644
---- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-+++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-@@ -411,12 +411,7 @@ static void create_vpmu_vm(void *guest_code)
- {
- 	struct kvm_vcpu_init init;
- 	u8 pmuver, ec;
--	u64 dfr0, irq = 23;
--	struct kvm_device_attr irq_attr = {
--		.group = KVM_ARM_VCPU_PMU_V3_CTRL,
--		.attr = KVM_ARM_VCPU_PMU_V3_IRQ,
--		.addr = (u64)&irq,
--	};
-+	u64 dfr0;
- 
- 	/* The test creates the vpmu_vm multiple times. Ensure a clean state */
- 	memset(&vpmu_vm, 0, sizeof(vpmu_vm));
-@@ -442,8 +437,6 @@ static void create_vpmu_vm(void *guest_code)
- 	TEST_ASSERT(pmuver != ID_AA64DFR0_EL1_PMUVer_IMP_DEF &&
- 		    pmuver >= ID_AA64DFR0_EL1_PMUVer_IMP,
- 		    "Unexpected PMUVER (0x%x) on the vCPU with PMUv3", pmuver);
--
--	vcpu_ioctl(vpmu_vm.vcpu, KVM_SET_DEVICE_ATTR, &irq_attr);
- }
- 
- static void destroy_vpmu_vm(void)
-@@ -493,13 +486,22 @@ static void set_nr_counters(struct kvm_vcpu *vcpu,
- }
- 
- static void test_create_vpmu_vm_with_nr_counters(unsigned int nr_counters,
-+						 bool fixed_counters_only,
- 						 bool expect_fail)
- {
- 	struct kvm_vcpu *vcpu;
-+	u64 irq = 23;
- 
- 	create_vpmu_vm(guest_code);
- 	vcpu = vpmu_vm.vcpu;
- 
-+	if (fixed_counters_only)
-+		vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+				     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-+
-+	vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+			     KVM_ARM_VCPU_PMU_V3_IRQ, &irq);
-+
- 	set_nr_counters(vcpu, nr_counters, expect_fail);
- 
- 	vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL, KVM_ARM_VCPU_PMU_V3_INIT, NULL);
-@@ -509,15 +511,15 @@ static void test_create_vpmu_vm_with_nr_counters(unsigned int nr_counters,
-  * Create a guest with one vCPU, set the PMCR_EL0.N for the vCPU to @pmcr_n,
-  * and run the test.
-  */
--static void run_access_test(u64 pmcr_n)
-+static void run_access_test(u64 pmcr_n, bool fixed_counters_only)
- {
- 	u64 sp;
- 	struct kvm_vcpu *vcpu;
- 	struct kvm_vcpu_init init;
- 
--	pr_debug("Test with pmcr_n %lu\n", pmcr_n);
-+	pr_debug("Test with pmcr_n %lu, fixed_counters_only %d\n", pmcr_n, fixed_counters_only);
- 
--	test_create_vpmu_vm_with_nr_counters(pmcr_n, false);
-+	test_create_vpmu_vm_with_nr_counters(pmcr_n, fixed_counters_only, false);
- 	vcpu = vpmu_vm.vcpu;
- 
- 	/* Save the initial sp to restore them later to run the guest again */
-@@ -553,14 +555,14 @@ static struct pmreg_sets validity_check_reg_sets[] = {
-  * Create a VM, and check if KVM handles the userspace accesses of
-  * the PMU register sets in @validity_check_reg_sets[] correctly.
-  */
--static void run_pmregs_validity_test(u64 pmcr_n)
-+static void run_pmregs_validity_test(u64 pmcr_n, bool fixed_counters_only)
- {
- 	int i;
- 	struct kvm_vcpu *vcpu;
- 	u64 set_reg_id, clr_reg_id, reg_val;
- 	u64 valid_counters_mask, max_counters_mask;
- 
--	test_create_vpmu_vm_with_nr_counters(pmcr_n, false);
-+	test_create_vpmu_vm_with_nr_counters(pmcr_n, fixed_counters_only, false);
- 	vcpu = vpmu_vm.vcpu;
- 
- 	valid_counters_mask = get_counters_mask(pmcr_n);
-@@ -605,13 +607,15 @@ static void run_pmregs_validity_test(u64 pmcr_n)
- 	destroy_vpmu_vm();
- }
- 
--static void run_mdcr_el2_validity_test(u64 pmcr_n)
-+static void run_mdcr_el2_validity_test(u64 pmcr_n, bool fixed_counters_only)
- {
- 	struct kvm_vcpu_init init;
- 	struct kvm_vcpu *vcpu;
- 	u64 expected_mdcr, mdcr;
-+	u64 irq = 23;
- 
--	pr_debug("MDCR_EL2 test with pmcr_n %lu\n", pmcr_n);
-+	pr_debug("MDCR_EL2 test with pmcr_n %lu, fixed_counters_only %d\n",
-+		 pmcr_n, fixed_counters_only);
- 
- 	create_vpmu_vm(guest_code);
- 	if (!vm_supports_el2(vpmu_vm.vm)) {
-@@ -632,6 +636,16 @@ static void run_mdcr_el2_validity_test(u64 pmcr_n)
- 		    "MDCR_EL2 was not properly updated after HPMN write (expected 0x%lx, got 0x%lx)",
- 		    expected_mdcr, mdcr);
- 
-+	if (fixed_counters_only) {
-+		vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+				     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-+
-+		mdcr = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MDCR_EL2));
-+		TEST_ASSERT(mdcr == expected_mdcr,
-+			    "MDCR_EL2 changed after PMU_V3_FIXED_COUNTERS_ONLY (expected 0x%lx, got 0x%lx)",
-+			    expected_mdcr, mdcr);
-+	}
-+
- 	set_nr_counters(vcpu, pmcr_n, false);
- 
- 	mdcr = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MDCR_EL2));
-@@ -639,6 +653,9 @@ static void run_mdcr_el2_validity_test(u64 pmcr_n)
- 		    "MDCR_EL2 changed after PMU_V3_SET_NR_COUNTERS (expected 0x%lx, got 0x%lx)",
- 		    expected_mdcr, mdcr);
- 
-+	vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+			     KVM_ARM_VCPU_PMU_V3_IRQ, &irq);
-+
- 	vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
- 			     KVM_ARM_VCPU_PMU_V3_INIT, NULL);
- 
-@@ -673,11 +690,11 @@ static void run_mdcr_el2_validity_test(u64 pmcr_n)
-  * the vCPU to @pmcr_n, which is larger than the host value.
-  * The attempt should fail as @pmcr_n is too big to set for the vCPU.
-  */
--static void run_error_test(u64 pmcr_n)
-+static void run_error_test(u64 pmcr_n, bool fixed_counters_only)
- {
- 	pr_debug("Error test with pmcr_n %lu (larger than the host)\n", pmcr_n);
- 
--	test_create_vpmu_vm_with_nr_counters(pmcr_n, true);
-+	test_create_vpmu_vm_with_nr_counters(pmcr_n, fixed_counters_only, true);
- 	destroy_vpmu_vm();
- }
- 
-@@ -738,25 +755,152 @@ static void test_set_nr_counters_after_vcpu_run(void)
- 	kvm_vm_free(vm);
- }
- 
--int main(void)
-+static void test_config(u64 pmcr_n, bool fixed_counters_only)
-+{
-+	u64 i;
-+
-+	for (i = 0; i <= pmcr_n; i++) {
-+		run_access_test(i, fixed_counters_only);
-+		run_pmregs_validity_test(i, fixed_counters_only);
-+		run_mdcr_el2_validity_test(i, fixed_counters_only);
-+	}
-+
-+	for (i = pmcr_n + 1; i < ARMV8_PMU_MAX_COUNTERS; i++)
-+		run_error_test(i, fixed_counters_only);
-+}
-+
-+static void test_fixed_counters_only_strict(void)
-+{
-+	struct kvm_vcpu_init init;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	u64 irq = 23;
-+	int ret;
-+
-+	if (!kvm_has_cap(KVM_CAP_ARM_PMU_V3_STRICT))
-+		return;
-+
-+	vm = vm_create(1);
-+	kvm_get_default_vcpu_target(vm, &init);
-+	init.features[0] |= BIT(KVM_ARM_VCPU_PMU_V3) |
-+			    BIT(KVM_ARM_VCPU_PMU_V3_STRICT);
-+	vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code_done);
-+	kvm_arch_vm_finalize_vcpus(vm);
-+	vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+			     KVM_ARM_VCPU_PMU_V3_IRQ, &irq);
-+
-+	/* STRICT still requires a PMU selection before initialization. */
-+	ret = __vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+				     KVM_ARM_VCPU_PMU_V3_INIT, NULL);
-+	TEST_ASSERT(ret == -1 && errno == ENXIO,
-+		    KVM_IOCTL_ERROR(KVM_SET_DEVICE_ATTR, ret));
-+
-+	vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+			     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-+	vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+			     KVM_ARM_VCPU_PMU_V3_INIT, NULL);
-+
-+	kvm_vm_free(vm);
-+}
-+
-+static void test_fixed_counters_only(void)
- {
--	u64 i, pmcr_n;
-+	struct kvm_pmu_event_filter filter = { .nevents = 0 };
-+	struct kvm_vm *vm;
-+	struct kvm_vcpu *running_vcpu;
-+	struct kvm_vcpu *stopped_vcpu;
-+	struct kvm_vcpu_init init;
-+	int ret;
-+	u64 irq = 23;
-+
-+	create_vpmu_vm(guest_code);
-+	ret = __vcpu_has_device_attr(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+				     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY);
-+	if (ret) {
-+		TEST_ASSERT(ret == -1 && errno == ENXIO,
-+			    KVM_IOCTL_ERROR(KVM_HAS_DEVICE_ATTR, ret));
-+		destroy_vpmu_vm();
-+		return;
-+	}
-+
-+	/* Assert that FIXED_COUNTERS_ONLY is unset at initialization. */
-+	ret = __vcpu_device_attr_get(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+				     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-+	TEST_ASSERT(ret == -1 && errno == ENXIO,
-+		    KVM_IOCTL_ERROR(KVM_GET_DEVICE_ATTR, ret));
-+
-+	/* Assert that setting FIXED_COUNTERS_ONLY succeeds. */
-+	vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+			     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-+
-+	/* Assert that FIXED_COUNTERS_ONLY is set. */
-+	vcpu_device_attr_get(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+			     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-+
-+	/*
-+	 * Setting an event filter when FIXED_COUNTERS_ONLY has already been set
-+	 * results in EBUSY.
-+	 */
-+	ret = __vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+				     KVM_ARM_VCPU_PMU_V3_FILTER, &filter);
-+	TEST_ASSERT(ret == -1 && errno == EBUSY,
-+		    KVM_IOCTL_ERROR(KVM_SET_DEVICE_ATTR, ret));
-+
-+	destroy_vpmu_vm();
-+
-+	create_vpmu_vm(guest_code);
-+
-+	/*
-+	 * Assert that setting FIXED_COUNTERS_ONLY when an event filter has
-+	 * already been set results in EBUSY.
-+	 */
-+	vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+			     KVM_ARM_VCPU_PMU_V3_FILTER, &filter);
-+
-+	ret = __vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+				     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-+	TEST_ASSERT(ret == -1 && errno == EBUSY,
-+		    KVM_IOCTL_ERROR(KVM_SET_DEVICE_ATTR, ret));
-+
-+	destroy_vpmu_vm();
-+
-+	/*
-+	 * Assert that setting FIXED_COUNTERS_ONLY when a VCPU has already run
-+	 * results in EBUSY.
-+	 */
-+	vm = vm_create(2);
-+	vm_ioctl(vm, KVM_ARM_PREFERRED_TARGET, &init);
-+	init.features[0] |= (1 << KVM_ARM_VCPU_PMU_V3);
-+	running_vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code_done);
-+	stopped_vcpu = aarch64_vcpu_add(vm, 1, &init, guest_code_done);
-+	kvm_arch_vm_finalize_vcpus(vm);
-+	vcpu_device_attr_set(running_vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+			     KVM_ARM_VCPU_PMU_V3_IRQ, &irq);
-+	vcpu_device_attr_set(running_vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+			     KVM_ARM_VCPU_PMU_V3_INIT, NULL);
-+	run_vcpu(running_vcpu);
-+
-+	ret = __vcpu_device_attr_set(stopped_vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-+				     KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-+	TEST_ASSERT(ret == -1 && errno == EBUSY,
-+		    KVM_IOCTL_ERROR(KVM_SET_DEVICE_ATTR, ret));
-+
-+	kvm_vm_free(vm);
-+
-+	test_fixed_counters_only_strict();
- 
-+	test_config(0, true);
-+}
-+
-+int main(void)
-+{
- 	TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_PMU_V3));
- 	TEST_REQUIRE(kvm_supports_vgic_v3());
- 	TEST_REQUIRE(kvm_supports_nr_counters_attr());
- 
- 	test_set_nr_counters_after_vcpu_run();
--
--	pmcr_n = get_pmcr_n_limit();
--	for (i = 0; i <= pmcr_n; i++) {
--		run_access_test(i);
--		run_pmregs_validity_test(i);
--		run_mdcr_el2_validity_test(i);
--	}
--
--	for (i = pmcr_n + 1; i < ARMV8_PMU_MAX_COUNTERS; i++)
--		run_error_test(i);
-+	test_config(get_pmcr_n_limit(), false);
-+	test_fixed_counters_only();
- 
- 	return 0;
- }
+NAK. I can't review something like this!
 
--- 
-2.55.0
+Add a assisted by tag and CC me and I'll look at it
 
+
+>Signed-off-by: Hui Peng <benquike@gmail.com>
+>---
+>Changes in v3:
+>- Actually include the tools/testing/selftests/seccomp/seccomp_bpf.c
+>  regression test in the patch diff (v2 accidentally omitted the selftest
+>  hunk), with detailed comments explaining the race and test setup.
+>
+>Changes in v2:
+>- Add user_notification_addfd_send_interrupted regression test to
+>  tools/testing/selftests/seccomp/seccomp_bpf.c as requested by Kees Cook.
+>
+> kernel/seccomp.c                              |   2 +
+> tools/testing/selftests/seccomp/seccomp_bpf.c | 161 ++++++++++++++++++
+> 2 files changed, 163 insertions(+)
+>
+>diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+>index 86cf4460d69e..94c7ba80a8f7 100644
+>--- a/kernel/seccomp.c
+>+++ b/kernel/seccomp.c
+>@@ -1808,10 +1808,13 @@ static long seccomp_notify_addfd(struct seccomp_filter *filter,
+> 	 * We need to check again if the addfd request has been handled,
+> 	 * and if not, we will remove it from the queue.
+> 	 */
+>-	if (list_empty(&kaddfd.list))
+>+	if (list_empty(&kaddfd.list)) {
+> 		ret = kaddfd.ret;
+>-	else
+>+	} else {
+> 		list_del(&kaddfd.list);
+>+		if (addfd.flags & SECCOMP_ADDFD_FLAG_SEND)
+>+			knotif->state = SECCOMP_NOTIFY_SENT;
+>+	}
+> 
+> out_unlock:
+> 	mutex_unlock(&filter->notify_lock);
+>diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+>index 0622bc2acad4..e565728f9eb2 100644
+>--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+>+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+>@@ -4368,6 +4368,173 @@ TEST(user_notification_addfd_rlimit)
+> 	close(memfd);
+> }
+> 
+>+static void sigusr1_handler(int signo)
+>+{
+>+}
+>+
+>+/*
+>+ * Verify that when SECCOMP_IOCTL_NOTIF_ADDFD with SECCOMP_ADDFD_FLAG_SEND is
+>+ * interrupted by a signal before the tracee dequeues the addfd request,
+>+ * knotif->state is restored from SECCOMP_NOTIFY_REPLIED back to
+>+ * SECCOMP_NOTIFY_SENT so that:
+>+ *   1. The woken tracee sees knotif->state == SECCOMP_NOTIFY_SENT in
+>+ *      do_user_notif() and goes back to sleep instead of prematurely
+>+ *      returning 0 from the trapped syscall without the FD installed.
+>+ *   2. The supervisor can retry SECCOMP_IOCTL_NOTIF_ADDFD (or
+>+ *      SECCOMP_IOCTL_NOTIF_SEND) instead of failing with -EINPROGRESS.
+>+ *
+>+ * To deterministically hit the race window where the supervisor sleeps in
+>+ * wait_for_completion_interruptible(&kaddfd.completion) after waking the
+>+ * tracee (complete(&knotif->ready)) but before the tracee runs
+>+ * seccomp_handle_addfd(), pin all processes to a single CPU and enforce a
+>+ * strict 3-tier scheduling priority hierarchy on that CPU:
+>+ *   - Supervisor:            SCHED_FIFO priority 99 (highest)
+>+ *   - Signal helper (sig_pid): SCHED_FIFO priority 50 (middle)
+>+ *   - Tracee (pid):          SCHED_IDLE             (lowest)
+>+ */
+>+TEST(user_notification_addfd_send_interrupted)
+>+{
+>+	/*
+>+	 * Save parent_pid before user_notif_syscall(__NR_getppid, ...) installs
+>+	 * the seccomp filter on the calling process; children inherit that
+>+	 * filter, so sig_pid must not call getppid().
+>+	 */
+>+	pid_t pid, sig_pid, parent_pid = getpid();
+>+	long ret;
+>+	int status, listener, memfd;
+>+	struct seccomp_notif_addfd addfd = {};
+>+	struct seccomp_notif req = {};
+>+	struct sigaction sa = {};
+>+	struct sched_param sp_tracee_idle = { .sched_priority = 0 };
+>+	struct sched_param sp_supervisor_fifo = { .sched_priority = 99 };
+>+	struct sched_param sp_sig_helper_fifo = { .sched_priority = 50 };
+>+	struct timespec delay = { .tv_nsec = 15000000 };
+>+	cpu_set_t cpuset;
+>+	int cpu;
+>+
+>+	/* Pin the supervisor (and its future child processes) to one CPU. */
+>+	cpu = sched_getcpu();
+>+	if (cpu >= 0) {
+>+		CPU_ZERO(&cpuset);
+>+		CPU_SET(cpu, &cpuset);
+>+		sched_setaffinity(0, sizeof(cpuset), &cpuset);
+>+	}
+>+
+>+	sa.sa_handler = sigusr1_handler;
+>+	ASSERT_EQ(sigaction(SIGUSR1, &sa, NULL), 0);
+>+
+>+	memfd = memfd_create("test", 0);
+>+	ASSERT_GE(memfd, 0);
+>+
+>+	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
+>+	ASSERT_EQ(0, ret) {
+>+		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
+>+	}
+>+
+>+	/*
+>+	 * Follow the convention of other user_notification_* tests in this
+>+	 * file by trapping __NR_getppid: because the filter is installed on
+>+	 * the supervisor before fork(), the trapped syscall must be a
+>+	 * side-effect-free syscall that the supervisor itself never invokes.
+>+	 * Even though getppid() does not normally return an FD,
+>+	 * SECCOMP_ADDFD_FLAG_SEND replaces the trapped syscall's return value
+>+	 * with the newly installed FD number (42).
+>+	 */
+>+	listener = user_notif_syscall(__NR_getppid,
+>+				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
+>+	ASSERT_GE(listener, 0);
+>+
+>+	pid = fork();
+>+	ASSERT_GE(pid, 0);
+>+
+>+	if (pid == 0) {
+>+		/*
+>+		 * Tracee: invoke __NR_getppid as a dummy trigger syscall to
+>+		 * trap into do_user_notif(). Verify that the syscall returns
+>+		 * the injected FD number (42) and that FD 42 is open.
+>+		 */
+>+		ret = syscall(__NR_getppid);
+>+		exit(ret != 42 || fcntl(42, F_GETFD) < 0);
+>+	}
+>+
+>+	/* Wait for the tracee to trap in do_user_notif(). */
+>+	ASSERT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
+>+
+>+	/*
+>+	 * Demote the tracee to SCHED_IDLE and promote the supervisor to
+>+	 * SCHED_FIFO(99) on the same CPU.
+>+	 */
+>+	sched_setscheduler(pid, SCHED_IDLE, &sp_tracee_idle);
+>+	if (sched_setscheduler(0, SCHED_FIFO, &sp_supervisor_fifo) != 0) {
+>+		close(listener);
+>+		close(memfd);
+>+		kill(pid, SIGKILL);
+>+		waitpid(pid, NULL, 0);
+>+		SKIP(return, "SCHED_FIFO requires CAP_SYS_NICE");
+>+	}
+>+
+>+	addfd.srcfd = memfd;
+>+	addfd.newfd_flags = O_CLOEXEC;
+>+	addfd.newfd = 42;
+>+	addfd.id = req.id;
+>+	addfd.flags = SECCOMP_ADDFD_FLAG_SETFD | SECCOMP_ADDFD_FLAG_SEND;
+>+
+>+	/*
+>+	 * Fork a signal helper on the same CPU and set it to SCHED_FIFO(50).
+>+	 * Because the supervisor is currently running at SCHED_FIFO(99) on
+>+	 * this CPU, sig_pid is queued on the runqueue but cannot run until the
+>+	 * supervisor blocks inside the kernel.
+>+	 *
+>+	 * When the supervisor invokes ioctl(SECCOMP_IOCTL_NOTIF_ADDFD) below:
+>+	 *   1. seccomp_notify_addfd() sets knotif->state = SECCOMP_NOTIFY_REPLIED,
+>+	 *      wakes the tracee (SCHED_IDLE), and blocks in
+>+	 *      wait_for_completion_interruptible(&kaddfd.completion).
+>+	 *   2. The CPU scheduler immediately runs sig_pid (SCHED_FIFO 50)
+>+	 *      ahead of the woken tracee (SCHED_IDLE).
+>+	 *   3. sig_pid sends SIGUSR1 to parent_pid, waking the supervisor
+>+	 *      (SCHED_FIFO 99), which immediately preempts sig_pid, aborts the
+>+	 *      wait with -ERESTARTSYS (-EINTR), removes kaddfd from
+>+	 *      knotif->addfd, and restores knotif->state = SECCOMP_NOTIFY_SENT
+>+	 *      before the tracee has executed a single instruction.
+>+	 */
+>+	sig_pid = fork();
+>+	ASSERT_GE(sig_pid, 0);
+>+	if (sig_pid == 0) {
+>+		sched_setscheduler(0, SCHED_FIFO, &sp_sig_helper_fifo);
+>+		kill(parent_pid, SIGUSR1);
+>+		_exit(0);
+>+	}
+>+
+>+	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), -1);
+>+	EXPECT_EQ(errno, EINTR);
+>+	EXPECT_EQ(waitpid(sig_pid, &status, 0), sig_pid);
+>+
+>+	/*
+>+	 * Restore normal scheduling and sleep briefly so the woken tracee
+>+	 * runs in do_user_notif(). With knotif->state restored to
+>+	 * SECCOMP_NOTIFY_SENT, the tracee must loop back to sleep waiting for
+>+	 * the notification reply rather than returning 0 from __NR_getppid.
+>+	 */
+>+	sched_setscheduler(0, SCHED_OTHER, &sp_tracee_idle);
+>+	sched_setscheduler(pid, SCHED_OTHER, &sp_tracee_idle);
+>+	nanosleep(&delay, NULL);
+>+
+>+	/*
+>+	 * Retry SECCOMP_IOCTL_NOTIF_ADDFD. Because knotif->state is
+>+	 * SECCOMP_NOTIFY_SENT, the retry succeeds (returns 42) instead of
+>+	 * failing with -EINPROGRESS, installs FD 42 into the tracee, and wakes
+>+	 * the tracee to complete the syscall with return value 42.
+>+	 */
+>+	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), 42);
+>+
+>+	EXPECT_EQ(waitpid(pid, &status, 0), pid);
+>+	EXPECT_EQ(true, WIFEXITED(status));
+>+	EXPECT_EQ(0, WEXITSTATUS(status));
+>+
+>+	close(listener);
+>+	close(memfd);
+>+}
+>+
+> #ifndef SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP
+> #define SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP (1UL << 0)
+> #define SECCOMP_IOCTL_NOTIF_SET_FLAGS  SECCOMP_IOW(4, __u64)
+>
+
+--- Thanks!
+"I'm not a very positive person" - Linus torvalds
