@@ -1,41 +1,40 @@
 Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6FE3FCB10;
-	Sun, 20 Sep 2026 11:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A972C15A0;
+	Sun, 20 Sep 2026 11:17:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789903070; cv=none; b=T/iqnieyQvekPf6E637hYb3WthC1bGpJB/g1miD48df76aGjOzWN0sBmtc8Bih7ljChNNYs0bjaKV/+sUvtqR0bExXiBFtN1NCEabyBduSQ9YT1JizZQ/aMxjudgqmvWbW5Yc+uQjE2WrfSYniiINA8Typ6frlxqJuopT1CyUvI=
+	t=1789903070; cv=none; b=BSfIU1+oFegvU3sx5CuKRNUacUOz0wLxWCktX830hmIebXuNwIP6TeI7NMuN+mdHiH3lBrHtFNPqRKF//V3EdbZbGNTsSeK2HoGzhBmdigHpx7le1d97TkJzxEmXRdBtR3PQvO0AgDgb3k2iXrEfcbdijxxL2jQK5T7XGHPcUXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789903070; c=relaxed/simple;
-	bh=MrNqsf8vl79pbAxP49QCfE5TLu/s5O9EUAaIBtYYaqg=;
+	bh=0gFY16czEJJdVIZNruax1OboJIq4DgiNXWKP5yi8iWI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Jy5+Mni996P/y5MU32h398t+8eDJx7eA3bYSP0K+dyeG9rYVRJIayEiIZQ0KqEolkSCZLM5BJI/pl9Td2AH06pld0eF2VYFyM733q+N2laibtYZQVpawovzicUiPDQiqI2Q+COwIYG4O6Ve8msmj1MF9GMwOWurx3ywscq0Pl5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=dtHQfMG4; arc=none smtp.client-ip=49.212.243.89
+	 In-Reply-To:To:Cc; b=lmqzrr1VfU9wjO+TLF0D1P/nNw6M7Cs1clxPB2VSc5LwxEGSUZOtAIS0b82sf/Z6icPpKTXi2bgbHj2txxpNC7pNfOxLpdfL0NS8E3zaKUXOX94QEnSp4DnrbU8eGz9p9aNlrr4qMMY+atnZC8yx+LSzSNYup0GgxLIAToOxJNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=wST8YOyR; arc=none smtp.client-ip=49.212.243.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="dtHQfMG4"
+	dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="wST8YOyR"
 Received: from [192.168.10.153] (p865013-ipoe.ipoe.ocn.ne.jp [153.242.222.12])
 	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 68KBG36Q088236
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 68KBG36Z088236
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Sun, 20 Sep 2026 20:16:09 +0900 (JST)
+	Sun, 20 Sep 2026 20:16:13 +0900 (JST)
 	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=Vt2ftUzXwwEiNRXjnC8qV9jrJvkIkUdpYX0jSjdAkkA=;
+DKIM-Signature: a=rsa-sha256; bh=sdoc/fNZ3/8mGQaouIvfU+D4x9tivmX8+zHcMnaA4Lw=;
         c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
         h=From:Message-Id:To:Subject:Date;
-        s=rs20250326; t=1789902969; v=1;
-        b=dtHQfMG4J2oxJlDgsvUSENT5TaRXH95fbJnfsmbO5SiUXP0qi43UfHw9XdeKmQcU
-         C2aJZyVoKZJZ5V34b/ghwMae+i4XGXhHQ0IkhKWUDMcHcPoi6y2Pn+PItiXSTaBs
-         gJCN2IMpk1hvdE6i5GXLYzlmbQW033yNoRgoFwdsT4zDccsewrBDZm9xMo3CBcra
-         6Nd7XH7vsKaZ/2qUzD9eQtgM8igEGIDl15ZP2/MgOF9wIVkBztK1JINUuF/MXhV5
-         8xWnUvuwf3Ck9EfSxBH2hoX6q3UiG27qQrHVIfk1YD3s7fVk4ycDTVgWJIdg+8Ws
-         RNgPKnCepB808TqDXFcXGQ==
+        s=rs20250326; t=1789902974; v=1;
+        b=wST8YOyR3tflDV0qWGSbQkBzHm4onY042T/KqofQhCB5cWfqGvfpNd5RBrSR27PV
+         x4VwM13HbqRhBGbMatvO+wdb5lkv8zzNcz5z9zvSDZNeS3ubmspV3KFExUs6vDLM
+         k87ziOa7mu+q0LXMd/649Qw7zrvqcTOYqxOZtTKWZJxO4aNbWfIdbglB+CF7Yenz
+         /JEuQfB7ZRbxEagYCnhjn6UbdF/zzLHWyselof44mUATFIbmB96swxsgT2Q0NTQd
+         GtfrQSVaowIFAiZxTS3/F7qyXqUFibYhtnVppXk3rgTsfPjn7B/Q20JjvOljBiDc
+         RgaklXn9JtNC3WyECw5VYw==
 From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Date: Sun, 20 Sep 2026 20:15:44 +0900
-Subject: [PATCH v11 03/21] KVM: arm64: PMU: Freeze counter count after
- first run
+Date: Sun, 20 Sep 2026 20:15:53 +0900
+Subject: [PATCH v11 12/21] tools headers: Use u* types for bitfield helpers
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,7 +43,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260920-hybrid-v11-3-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
+Message-Id: <20260920-hybrid-v11-12-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
 References: <20260920-hybrid-v11-0-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
 In-Reply-To: <20260920-hybrid-v11-0-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
 To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
@@ -71,47 +70,83 @@ Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
         linux-kselftest@vger.kernel.org,
         Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1162;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3005;
  i=odaki@rsg.ci.i.u-tokyo.ac.jp; h=from:subject:message-id;
- bh=MrNqsf8vl79pbAxP49QCfE5TLu/s5O9EUAaIBtYYaqg=;
- b=owGbwMvMwCWmMbc20y1CyJDxtFoSQ9b6A6mrD1z5vilWVrfGcs7FU0/+ayX3nOlcpnzU2NNdb
- 1d2Xp9RRykLgxgXg6yYIktK0W5ujejaT4UJ8S0wc1iZQIYwcHEKwESsrzD892bUPfGsa2OmuNom
- TpF0vhDW8NcsfcuYXugWzBe2vGc9neGfJctU3as6p2cUnTneJXuy7sbuJSrnltjsjJMLqW70cyv
- gBwA=
+ bh=0gFY16czEJJdVIZNruax1OboJIq4DgiNXWKP5yi8iWI=;
+ b=owGbwMvMwCWmMbc20y1CyJDxtFoSQ9b6Azkr16mpCGi+jGqJeMRluOH4S0b256HPtjbkfKyZe
+ uq4wc5THaUsDGJcDLJiiiwpRbu5NaJrPxUmxLfAzGFlAhnCwMUpABPZu5Dhf9Vtsyn6b5hdXPlP
+ lF3ivvf7A9uliJbSRK2thtf/GczapcXIMOFIV+fjKn5n05+b+epZmY/5vPXOCnqUPH/6kRshmiu
+ 1+QA=
 X-Developer-Key: i=odaki@rsg.ci.i.u-tokyo.ac.jp; a=openpgp;
  fpr=AEDC03C9AF734F2EC26A7BFFA4BAEAA73536753C
 
-PMU configuration is VM-scoped, but SET_NR_COUNTERS can be issued
-through any vCPU. Checking only whether that vCPU's PMU has been
-initialized allows userspace to change the counter count through an idle
-sibling after another vCPU has run.
+Commit 9486aa387716 ("perf tools: Fix 64 bit integer format strings")
+defined the tools-local u64 as uint64_t so that PRI*64 format macros
+match its underlying C type. On architectures where uint64_t and __u64
+are distinct types, however, ____MAKE_OP() still gives the u64_*
+helpers an __u64 interface.
 
-Reject the attribute once any vCPU has run. This keeps the VM-wide
-implemented counter mask and the PMCR_EL0.N value stable after guest
-execution begins.
+Teach ____MAKE_OP() to accept the helper name and storage type
+separately. Keep endian helpers on __le* and __be*, and generate the
+native helpers using the tools-local u* types.
 
-Fixes: b7628c797376 ("KVM: arm64: Allow userspace to limit the number of PMU counters for EL2 VMs")
 Assisted-by: Codex:gpt-5.6-sol
 Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
 ---
- arch/arm64/kvm/pmu-emul.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/include/linux/bitfield.h | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
-index 832dd145af2a..950b7a349659 100644
---- a/arch/arm64/kvm/pmu-emul.c
-+++ b/arch/arm64/kvm/pmu-emul.c
-@@ -1112,6 +1112,9 @@ static int kvm_arm_pmu_v3_set_nr_counters(struct kvm_vcpu *vcpu, unsigned int n)
- {
- 	struct kvm *kvm = vcpu->kvm;
- 
-+	if (kvm_vm_has_ran_once(kvm))
-+		return -EBUSY;
-+
- 	if (!kvm->arch.arm_pmu)
- 		return -EINVAL;
- 
+diff --git a/tools/include/linux/bitfield.h b/tools/include/linux/bitfield.h
+index ddf81f24956b..1c633343d576 100644
+--- a/tools/include/linux/bitfield.h
++++ b/tools/include/linux/bitfield.h
+@@ -142,32 +142,32 @@ static __always_inline u64 field_mask(u64 field)
+ 	return field / field_multiplier(field);
+ }
+ #define field_max(field)	((typeof(field))field_mask(field))
+-#define ____MAKE_OP(type,base,to,from)					\
+-static __always_inline __##type type##_encode_bits(base v, base field)	\
++#define ____MAKE_OP(name,type,base,to,from)				\
++static __always_inline type name##_encode_bits(base v, base field)	\
+ {									\
+ 	if (__builtin_constant_p(v) && (v & ~field_mask(field)))	\
+ 		__field_overflow();					\
+ 	return to((v & field_mask(field)) * field_multiplier(field));	\
+ }									\
+-static __always_inline __##type type##_replace_bits(__##type old,	\
+-					base val, base field)		\
++static __always_inline type name##_replace_bits(type old,		\
++						base val, base field)	\
+ {									\
+-	return (old & ~to(field)) | type##_encode_bits(val, field);	\
++	return (old & ~to(field)) | name##_encode_bits(val, field);	\
+ }									\
+-static __always_inline void type##p_replace_bits(__##type *p,		\
++static __always_inline void name##p_replace_bits(type *p,		\
+ 					base val, base field)		\
+ {									\
+-	*p = (*p & ~to(field)) | type##_encode_bits(val, field);	\
++	*p = (*p & ~to(field)) | name##_encode_bits(val, field);	\
+ }									\
+-static __always_inline base type##_get_bits(__##type v, base field)	\
++static __always_inline base name##_get_bits(type v, base field)	\
+ {									\
+ 	return (from(v) & field)/field_multiplier(field);		\
+ }
+-#define __MAKE_OP(size)							\
+-	____MAKE_OP(le##size,u##size,cpu_to_le##size,le##size##_to_cpu)	\
+-	____MAKE_OP(be##size,u##size,cpu_to_be##size,be##size##_to_cpu)	\
+-	____MAKE_OP(u##size,u##size,,)
+-____MAKE_OP(u8,u8,,)
++#define __MAKE_OP(size)									\
++	____MAKE_OP(le##size,__le##size,u##size,cpu_to_le##size,le##size##_to_cpu)	\
++	____MAKE_OP(be##size,__be##size,u##size,cpu_to_be##size,be##size##_to_cpu)	\
++	____MAKE_OP(u##size,u##size,u##size,,)
++____MAKE_OP(u8,u8,u8,,)
+ __MAKE_OP(16)
+ __MAKE_OP(32)
+ __MAKE_OP(64)
 
 -- 
 2.55.0
