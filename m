@@ -1,203 +1,172 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F73B3F23A6
-	for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 09:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBDA3BC673;
+	Sun, 20 Sep 2026 09:41:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789896737; cv=none; b=rxcCxvcIZ9pGKbuLyce5UqiAxUxPF3y8UE7G0xJH6pdCDkxLbEHaO0/17qqv/Dtk42O2D/+CHPNIpdnI2MmrQ7O+rxMKIQZSbL7b1nxCA5jXjOhRrAgizFytrKLViEDgpYsSdm66uKw4nc3Dr1KP44eYKOtBi85a4R+42QQerCE=
+	t=1789897309; cv=none; b=fHkcOG/Mt43HjI+Mz7URohLeFt7ipSEWqRkil2UXSMSwI4Ndmi78hq1XbwY1QPVPLgjzlB3IgOBd3kVYvYUEK1PjlhPqJ2syr0qbQLKsi4efGFvyuvT7k52LPn0UAfJlX6eMet7cOkhAXkGicx7Z9LR2jBAnXTL+Wy+b+s22zPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789896737; c=relaxed/simple;
-	bh=PfQzAlFTJmP5nOozLR51GBXWUn9nRQSC5bCLYL7vjKI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aHNdyKNNvl6RcLQSY8UfxLp2k5NMAFBKnxdDI6NnPN4J2F7WpdSshiwmcqJqtE698qAfssT13PBiPV1XZcDlLGOxYd5ImH/mSZ51Wgc9cdGDT+47+YCOtR6JvemUsPqqmxm+0xhWjQv/LQt9KSY1YE6MRVG1ezjGoq6svT26Jls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s5WKTDUC; arc=none smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789897309; c=relaxed/simple;
+	bh=TTuOuv7aCRRrAmn0YrBd7cx6tuRrzf8AFE1A+BSio7c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RVTikAhAQG9Gm/Lcbip/qyz7zspYE5VJcWuUrrKAGykGmbR91IWxslTkGwPOvGsm9S16ANZCmy00Mw9jkuckfsUee7fxpbrlXM4YMAnY5kjnuWs7j6wMql0XXrWCBv6+mNG/rlWmJufckeBpQmILSa29n04gaUgNO/97tkll2Ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Fw3c/ebX; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s5WKTDUC"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccd4f99cso2258198a91.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 02:32:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789896726; x=1790501526; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=I8CYADlMulmBrbeU/nI2e7mucfs6KlRtSnU3QkA587M=;
-        b=s5WKTDUCFleeJgXTo+MAu7z7U2iNrDEvOnbqAWTqEZtBGGienHUi5wmdwxumR7dfiG
-         +JQNnm5NXBgtdDUpQkG60wv0LsFeHlEYkA6gXnU8i2uncb474M2yiNVD/53pkrbc3GbY
-         mxy6x050RTTETzUCwRhTiPuuKmHazIEWnmib6MtzhuCEOB0TLZfUO5JZNN7jYWJ72ADa
-         ODYirkNWamwtjk90kqRzx0YmoylKX/NOfNU7bFTdtOBuJ4c3qrY/eIqMTq/xLi/7qg+Y
-         A1IWot8fX/tqj04iSiTPeTYgYpgmWyFAoHp6q54QP3oUgwLVTJYnewii0gouu9Li+WMH
-         d8Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789896726; x=1790501526;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=I8CYADlMulmBrbeU/nI2e7mucfs6KlRtSnU3QkA587M=;
-        b=cgytXOobUoydB1T8//A1HQ5+sbnMd1THkHUs4/RqGs6x3KUgEA1PHJsWY006xvZq5w
-         EpGKgEDcOwwRv9fMDlCDfdecDmswpCaDhpJHqlY+HT+7tMZI4JxiY84cH+lpyRRIton2
-         xysOMsFR1ozp+AL22iNFR9IArUdBn8Agw7ebBsFHQ/wv2BWFIc42/lwumyyDEU5FTy4D
-         MPIDC5kyUNRF9NuStbsucH5NnOFjOyec2jqpJ7caVwjY3LJTZh/gGGJZm+j92JzGeWky
-         CtwXQnQQ7yjLrQxaqxOR0igi7WV9aGlaolhygBZ7KcYviM4z0Tzn+4LD4nvdenw8D64I
-         gNHQ==
-X-Forwarded-Encrypted: i=1; AKwUvBy0p86/Xh87wF3QhuH/wYDFnb68fZCQJbicjym9AgaeggDqibcJZwzzdVHUslrkWxOEjdfZtAadOh3j5lw7P5o=@vger.kernel.org
-X-Gm-Message-State: AFuF++lHNbEMXzgxhDdVp9Tg79xfzWEbT2Eqcim57CXBxsaBnpf2STjd
-	2wxVoTqtZuYFXnXl9B17OJePB7qe5yFtNn6Y5uAJRy9AcmO9dJyyL40=
-X-Gm-Gg: AYBFou26mj8RUuGcq0HSBAJVc8c5ForYIcPp8ck/K6CGEuPe+C3jtHjKRSBjE4a7TfJ
-	pJ31YKTyj8XKFJB/5r3LGlqAjx/UHsgdkIb9DQiKYtxWekcPKRZ9SjJ25FvRcBO/1AAsiGYlGRY
-	zdGgpWyJ//NsvDaoZwdb2Px/j7wh40DxqAk6PqwhnDX2qSwS9OV8IrwznWVm7uh+RadvoMZVX6R
-	SA27+Gz44bXKvDT0khxpQRhiPNKGGZrGJj9P1BnlHUrzvirwKhK1h/z6+J0lFtd0vY+ooEsrtJ0
-	P4UBYp/lPmrrhIdxZPEApM3OQlMRfBxcnxcYKPK2aFRywgaP+K1rKX52PuMfyG9paQPxMMniVHP
-	qbMQHCFRMxr3XhDmxVqSf+8iazl+dM1KZefDLcmgeJoe1J74xDdl2qtznEYF4fOoEJUcvcv8UXw
-	aR6EJNUF9RONRxLR24CNtTF/AzK0nZM63DYgT9BqVbSoKDQKcF2ahwFlwp9CiBuuP+PMztePUpr
-	lbax6XufCGdK7VH1HLyNyLKe4TCNYXHFBkkiL0=
-X-Received: by 2002:a17:90a:104f:b0:39e:574d:3d2f with SMTP id 98e67ed59e1d1-39e574d3f4fmr8126566a91.7.1789896726217;
-        Sun, 20 Sep 2026 02:32:06 -0700 (PDT)
-Received: from ydg-Zenbook-14-UM3406GA ([2001:2d8:7f00:8c85:e0d6:4b87:c472:c9ae])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6fb75539sm8093503a91.3.2026.09.20.02.32.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Sep 2026 02:32:05 -0700 (PDT)
-From: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	donggeunyoo.kernel@gmail.com
-Subject: [PATCH bpf 2/2] selftests/bpf: Test per-cpu initialization of a BPF_F_CPU created element
-Date: Sun, 20 Sep 2026 18:31:53 +0900
-Message-ID: <20260920093153.439743-3-donggeunyoo.kernel@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260920093153.439743-1-donggeunyoo.kernel@gmail.com>
-References: <20260920093153.439743-1-donggeunyoo.kernel@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Fw3c/ebX"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68K8ZYce373513;
+	Sun, 20 Sep 2026 09:41:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=Skt4E0DlbpMQaShuF9ydyq8SUj/gva
+	nvR/EkNnFxXm8=; b=Fw3c/ebXgKWj1n14V+oJNAra/0LQzJXiLzppQWFy6MNAEe
+	RCRDORY/2dwtOFLIEj/ZeiA6Z5zkkGg7ZZ5PIIRUjGXpPoUCGKKt0nXYYr3t8gHd
+	dvP3K7DWdXD9l/rnjDNw+ZGLL/4jrabKAPIpka0Wjq1+LcLKkDpNg9LTKHx1a649
+	VyogLuwWKb73ARV1Q6m5/8jJZbFo9KUQ9hgcez+IhkxIsgXIELDfiPNcWLVVtda8
+	hVjsEOm1e7Sdj5r13mSlUKbXUDpkQCfU7rcORBrboG6UnFBtfjG6HOU3HnMBwnOb
+	tIQ8jtRvAh7hkmcJg4pixZkEOz5AyTdds2A513kQ==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gske1c2uk-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Sun, 20 Sep 2026 09:41:24 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68K8WV0O3689145;
+	Sun, 20 Sep 2026 09:41:24 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4gt4qq18yj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 20 Sep 2026 09:41:23 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68K9fKRj32309506
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 20 Sep 2026 09:41:20 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 308A920040;
+	Sun, 20 Sep 2026 09:41:20 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 040AC20043;
+	Sun, 20 Sep 2026 09:41:16 +0000 (GMT)
+Received: from li-dc0c254c-257c-11b2-a85c-98b6c1322444.ibm.com (unknown [9.124.209.136])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Sun, 20 Sep 2026 09:41:15 +0000 (GMT)
+Date: Sun, 20 Sep 2026 15:11:12 +0530
+From: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To: Disha Goel <disgoel@linux.ibm.com>
+Cc: shuah@kernel.org, brauner@kernel.org, cyphar@cyphar.com,
+        amir73il@gmail.com, jack@suse.cz, yeswanth@linux.ibm.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maddy@linux.ibm.com, ritesh.list@gmail.com
+Subject: Re: [PATCH v3 2/2] selftests/filesystems: skip listxattr kernfs test
+ if xattrs are present
+Message-ID: <aq-qON6GF3Brn7pK@li-dc0c254c-257c-11b2-a85c-98b6c1322444.ibm.com>
+References: <20260803150837.91604-1-disgoel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260803150837.91604-1-disgoel@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: ONjsAxR8EUk4zd5baJ3F741udYP9QYvY
+X-Authority-Analysis: v=2.4 cv=EOCTQFZC c=1 sm=1 tr=0 ts=6aafaa45 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=kj9zAlcOel0A:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=Y5d25qPl2hKq6r7L3g4A:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTIwMDEzOCBTYWx0ZWRfX4L0gnUadzTFY
+ Gqkdx9+V+dvOgwAMevoQmsIJiZdFC1ALorZHU1x6XNnIbWhM1z2uy8gOmaWAooeVJWVJzLkKxnY
+ LPncSj69TiL/lvnlDxmQU7OAOJg1QcQ=
+X-Proofpoint-GUID: B6jI9vcFy1WNlvGhwbGXD670-dEl7ZQz
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTIwMDEzOCBTYWx0ZWRfXyEiUiIlPckrb
+ 1aQdWzl3KwvG3SEUcYTxYlmuccHtHyGnbeIFyvGnQZSFUTjQ4OF6ryVrU8aGESwy8oe00JA8evQ
+ hMtDUKyCaPsV5RyhVjKVqYbZK2sIywN76+wNIhk9O55Y8yHgElXbgjsYyENltQ8GVYZJ/eRnteC
+ 4XZXNFlWS8R/C34R1xzVeOdhvyOQ959Z12XddWlAkmpNbAWZ+s5KYhpVVGzk8zKuHjhvlMcNDu7
+ GsCbP8/soTrYzzJIUAq6/hQff27OKJ5JDeFymf1r2PwyEpqvkg3zPmT6C14CMQAEe9nTXPB2oIY
+ zxgTMQfEqB7X5XDmPXGz97PzEEPMLXuvtLSrgxWVdoFx2y6cvyBoFWAHQfQ9WURz/QPs8ZarsS7
+ oEp6idowg1q70qvJOwZ3bs+CcpYq010VA9pwYm2VVqsVMEET5ImOCYwd5C9WnLvKeTyLqPpG1Fz
+ Om34WkuMBsjnwcSt5OA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-20_03,2026-09-16_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 phishscore=0 priorityscore=1501 clxscore=1011 spamscore=0
+ adultscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609200138
 
-The existing cpu_flag subtests always prime a key with BPF_F_ALL_CPUS
-before any BPF_F_CPU write, so the element always exists by the time the
-flag is used and the create path is never covered.
+On Mon, Aug 03, 2026 at 08:38:37PM +0530, Disha Goel wrote:
+> kernfs_test assumes that flistxattr() on /sys/kernel/warn_count always
+> returns an empty list. However, systems with SELinux enabled may expose
+> security.selinux xattr via listxattr() during policy load, which makes
+> the test fail even though kernfs is behaving correctly.
+> 
+> Skip the xattr content check if any xattrs are present, while still
+> verifying that flistxattr() succeeds (returns >= 0) on a kernfs file.
+> The existing user.foo getxattr check remains unchanged.
+> 
+> This avoids false failures on SELinux-enabled systems while preserving
+> the original purpose of the test.
+> 
+> Tested-by: Yeswanth Krishna <yeswanth@linux.ibm.com>
+> Signed-off-by: Disha Goel <disgoel@linux.ibm.com>
+> ---
+> v2 -> v3
+> - Skip the xattr content check instead of allowlisting security.selinux,
+>   as suggested by Ojaswin.
+> - Add Tested-by tag.
+> 
+> Link to v2: https://lore.kernel.org/all/20260521101758.14639-2-disgoel@linux.ibm.com/
 
-Add a subtest that creates the element with BPF_F_CPU on a map whose
-max_entries is 1, so the key can only reuse the element the previous key
-released, and check that the CPUs the update did not name read back zero
-rather than the previous key's value.  Run it for PERCPU_HASH both
-preallocated and BPF_F_NO_PREALLOC, whose per-cpu areas are recycled by
-different allocators, and for LRU_PERCPU_HASH, which is always
-preallocated.
+Thanks for the change, looks good now.
 
-Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
----
- .../selftests/bpf/prog_tests/percpu_alloc.c   | 74 +++++++++++++++++++
- 1 file changed, 74 insertions(+)
+Feel free to add:
+Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-index a72ae0b29f6e9..d0084a2405bed 100644
---- a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-@@ -350,6 +350,74 @@ static void test_lru_percpu_hash_cpu_flag(void)
- 	test_percpu_map_cpu_flag(BPF_MAP_TYPE_LRU_PERCPU_HASH);
- }
+Regards,
+ojaswin
  
-+/* A BPF_F_CPU update that creates an element must zero the value on the other
-+ * cpus, rather than leave them holding whatever the recycled element last
-+ * contained.  max_entries is 1 so the second key can only reuse the element
-+ * the first one released.
-+ */
-+static void test_percpu_map_cpu_flag_create(enum bpf_map_type map_type, __u32 map_flags)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = map_flags);
-+	const u32 stale = 0xDEADC0DE, fresh = 0xC0FFEE;
-+	int nr_cpus, cpu, map_fd, err, key;
-+	u32 value;
-+	u64 flags;
-+
-+	nr_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(nr_cpus, 1, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	map_fd = bpf_map_create(map_type, "cpu_flag_create", sizeof(key), sizeof(value), 1, &opts);
-+	if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
-+		return;
-+
-+	key = 1;
-+	value = stale;
-+	err = bpf_map_update_elem(map_fd, &key, &value, BPF_F_ALL_CPUS);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem all_cpus"))
-+		goto out;
-+
-+	err = bpf_map_delete_elem(map_fd, &key);
-+	if (!ASSERT_OK(err, "bpf_map_delete_elem"))
-+		goto out;
-+
-+	key = 2;
-+	value = fresh;
-+	flags = BPF_F_CPU;
-+	err = bpf_map_update_elem(map_fd, &key, &value, flags);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem specified cpu"))
-+		goto out;
-+
-+	for (cpu = 0; cpu < nr_cpus; cpu++) {
-+		value = 0;
-+		flags = (u64)cpu << 32 | BPF_F_CPU;
-+		err = bpf_map_lookup_elem_flags(map_fd, &key, &value, flags);
-+		if (!ASSERT_OK(err, "bpf_map_lookup_elem_flags specified cpu"))
-+			goto out;
-+		if (!ASSERT_EQ(value, cpu ? 0 : fresh, "value on specified cpu"))
-+			goto out;
-+	}
-+
-+out:
-+	close(map_fd);
-+}
-+
-+static void test_percpu_hash_cpu_flag_create(void)
-+{
-+	test_percpu_map_cpu_flag_create(BPF_MAP_TYPE_PERCPU_HASH, 0);
-+}
-+
-+static void test_percpu_hash_cpu_flag_create_malloc(void)
-+{
-+	test_percpu_map_cpu_flag_create(BPF_MAP_TYPE_PERCPU_HASH, BPF_F_NO_PREALLOC);
-+}
-+
-+static void test_lru_percpu_hash_cpu_flag_create(void)
-+{
-+	/* lru without prealloc is -ENOTSUPP, so there is no malloc variant. */
-+	test_percpu_map_cpu_flag_create(BPF_MAP_TYPE_LRU_PERCPU_HASH, 0);
-+}
-+
- static void test_percpu_cgroup_storage_cpu_flag(void)
- {
- 	struct percpu_alloc_array *skel = NULL;
-@@ -454,6 +522,12 @@ void test_percpu_alloc(void)
- 		test_percpu_hash_cpu_flag();
- 	if (test__start_subtest("cpu_flag_lru_percpu_hash"))
- 		test_lru_percpu_hash_cpu_flag();
-+	if (test__start_subtest("cpu_flag_create_percpu_hash"))
-+		test_percpu_hash_cpu_flag_create();
-+	if (test__start_subtest("cpu_flag_create_percpu_hash_malloc"))
-+		test_percpu_hash_cpu_flag_create_malloc();
-+	if (test__start_subtest("cpu_flag_create_lru_percpu_hash"))
-+		test_lru_percpu_hash_cpu_flag_create();
- 	if (test__start_subtest("cpu_flag_percpu_cgroup_storage"))
- 		test_percpu_cgroup_storage_cpu_flag();
- 	if (test__start_subtest("cpu_flag_array"))
--- 
-2.53.0
-
+> 
+>  .../testing/selftests/filesystems/kernfs_test.c  | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/filesystems/kernfs_test.c b/tools/testing/selftests/filesystems/kernfs_test.c
+> index 84c2b910a60d..ca13646c9328 100644
+> --- a/tools/testing/selftests/filesystems/kernfs_test.c
+> +++ b/tools/testing/selftests/filesystems/kernfs_test.c
+> @@ -12,12 +12,24 @@
+>  
+>  TEST(kernfs_listxattr)
+>  {
+> +	ssize_t len;
+>  	int fd;
+>  
+> -	/* Read-only file that can never have any extended attributes set. */
+> +	/* Read-only file that can never have any extended attributes set.
+> +	 * However, on systems with SELinux enabled, security.selinux xattr
+> +	 * may be present. Skip the content check if any xattrs are found.
+> +	 */
+>  	fd = open("/sys/kernel/warn_count", O_RDONLY | O_CLOEXEC);
+>  	ASSERT_GE(fd, 0);
+> -	ASSERT_EQ(flistxattr(fd, NULL, 0), 0);
+> +
+> +	len = flistxattr(fd, NULL, 0);
+> +	ASSERT_GE(len, 0);
+> +
+> +	if (len > 0) {
+> +		close(fd);
+> +		SKIP(return, "xattrs present on /sys/kernel/warn_count, skipping xattr content check");
+> +	}
+> +
+>  	EXPECT_EQ(close(fd), 0);
+>  }
+>  
+> -- 
+> 2.45.1
+> 
