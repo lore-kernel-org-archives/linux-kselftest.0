@@ -1,109 +1,109 @@
-Received: from mail-pj2-f42.google.com (mail-pj2-f42.google.com [74.125.227.170])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C497946EF94
-	for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 17:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D75445AD0
+	for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 18:14:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789924048; cv=none; b=WRUvEHaLBfZF3M9vYSlhK1f2CWeKlaPhJPOKTmNZFEjm+k4nnl8Gm3y1nWgdo+xnM3atgoR06r10b3aTLoCEtvw74gn32koKujQ1xWjmeXhawEv5/fXwBG8ce24vs7pR6HgON2ini/VRJrf5XRUJQCRBiQUt7j0KKbS3jjfdWH0=
+	t=1789928090; cv=none; b=fsyLfeOSNII49/wz+tRC//nJ43AliCWZ4iVY2Ed+vxbXk7MhbC4cHhx5XLZsUppPSC3jusg0nvzEK/aug1P/rTZ+FmXn2mDnM/YREi/JjqoQdsnddCdJUrvM6BXxmak02GiSqTaaxFu9oT19duRulioc7ghd5t/RgX0eU6S/bBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789924048; c=relaxed/simple;
-	bh=MoNEDcWdGlP7UcyCq8wXBRR56spV4f4PPUO0eUL2OZE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=ctVGSCGo5Uim86XuucXYv0lN8Dwen61IGDEMSz/F+oyh9kLnzz3YPtH47Ab7+ssTlOSK6zYq2VzWqQklTN9I7dVgec3KywCZLWZ8v1NYrpPYEhQ/ry9hnpCxaF9GNNkGzkfKCkyOl/lHE94pdne3hu5DMv255T/PAN39Z2EPm48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YxbYk8Rs; arc=none smtp.client-ip=74.125.227.170
+	s=arc-20240116; t=1789928090; c=relaxed/simple;
+	bh=WXF66WmtMtCT657v10dcTOpqc4WfEbuJJpMl3klh4YM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZrYbDfCI1eAv8MyAu61KuMxrlV+7zVKDRRPTVmISlKwPlcOrDBpw2ktBkTYLrL+rhBo6YBuQSZmHPJLHuUcNkAv4jBK6NIO5nc9X5T7iaeJWTKdUMQGbqs3ifeY0lC4apBiHSmWFAFFoC1eIzOBvDQkYyvTT73qhTfvQR60qCrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MzyzQgNr; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YxbYk8Rs"
-Received: by mail-pj2-f42.google.com with SMTP id 98e67ed59e1d1-396ccb65437so1704570a91.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 10:07:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MzyzQgNr"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747eefae4so6822885ad.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 11:14:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789924046; x=1790528846; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=+5OXkFTl19euajO1h3c9jy1KZ0WClYAUhVVTBNP2yF4=;
-        b=YxbYk8RstqpNoQLxSV22rHj2WD/9cVINT6vI6PCf3oDmUoVKamqBQMaITd6AMf88zW
-         +WmYeNe6xhJyLXwgGa6owSWwffxx4malxAJX6EA0iQyCCoQk0f12JSMk4cygi1+vHALH
-         ISbQsG/471I0i6Pyxu59MVm33urf6afCcopbGmfOwlZN1GPazdMyUSnUvQw6ob9EzVsU
-         kqw87eLGW250yl3z0Z0Hl1idiuFfetYTFeiYJ1bXPP6iWQeyLvngAy8ag0xFPqVX2fXb
-         Yb7oyGHZ5YMP6A4OIs3U3TsuiSYRS7TUs1lU955TL3Cob3eDECtyDjzqYXXfdApXH8Nw
-         VVYA==
+        d=gmail.com; s=20251104; t=1789928089; x=1790532889; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:content-type:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=WXF66WmtMtCT657v10dcTOpqc4WfEbuJJpMl3klh4YM=;
+        b=MzyzQgNrlzdBXuR15LDX/wzqNolpU1UwdkIVxi/HRm72W2hdgmjeU7kBu7paxZUhLH
+         MU001Llk/9EjOHxIt+bYWriyKz2cIAcVQFuWnJAm20y/9YclW/xlhRKNGtLhRU9b0T7C
+         erCzrzkA+kITuHhc3kwsUobmG1VufZ/UMlaxn2+wsb/nMI2EEz5qprM1NdpnInTssXJi
+         hrZac22HhWLrOQG6ABtkoTzpca8JiNkW+4Ty7uMSphQlbLbhDdwxfq+Z5BBHIXF3t7ut
+         ZDNHmvKMBZjZaivhdyOsHtduT7zxxnjiu6WBmcerExlcGNAYIgzYwpjwtdTwulQyto8M
+         pmPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789924046; x=1790528846;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1789928089; x=1790532889;
+        h=mime-version:content-transfer-encoding:content-type:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=+5OXkFTl19euajO1h3c9jy1KZ0WClYAUhVVTBNP2yF4=;
-        b=QjCaFuiavyGSaD2yu0Ot0B/tKXSuclUBtjrD+PIJKIwX3erCyEpZYm9MojGPjfHycS
-         v051/Vl8uAnN8zDXNZNQze6uj9pdqpXGojmWkHabd4iEoL5s9hEx9yYAHTjvZuRrJ8NU
-         a/WeTDDBZqtDIcmfjufeACsdVGZ6UDaaJam7Y5Hpb8V+yL+QeOvbYS0ozdVFXfUCTVNq
-         tJ8tD2qerxHKii45NBJCI0+srbmUA4tfyiWfwI6GhKXGcmoroLgWSOX5J46W2Uh/eUe+
-         qnhfrsi2tDXYBlbVy59z/2zBxji1bPlzdVTHzwc51bsF30oPLM45nE/UH+fPD502Lsr5
-         ISOQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx5JPgUxPMb7IYfRbn35jY9c/9jTAxt13BgEUKMJymyxZBnxnKm+RAM83H0JguL9e2zq1uU/MOHkYYk+zo4iBw=@vger.kernel.org
-X-Gm-Message-State: AFuF++mfxNRIqNHHOfhQOTnzwoLcUYjzA7GcAJujNkA2SksORU9EcRVw
-	rN74F3ruauJXVVoeMgiqWgTb5i509sYpam0Babd7FXpbscAcdZ1kKl1I
-X-Gm-Gg: AYBFou0QjIwNPQSh0fxbXIhSar2WZtaVZhss4AYE5zce/3DrmQl0lPI9/f0ZptMdKCP
-	QJbhOr7XjhLLuDlthvzSodef3pYNoI6qK9tGblpQmIb77Vdib5MI4isT1s8n9GtZRb7mxC9SwZf
-	bLEA0Awjdw7+f1kV+8GsApWjnIRXKCxZTWPBXeNHSPMwPHEuwAmUbbVv0FdeH4vouN+xs6nuk5i
-	WQvuHTJWlSuw/weXpJm5QQgq0ntR7p6vNp2rVEngnfpW8Wxt5Hafnq+xCR4YkYL437LDmfByFvg
-	LJdCS5a7DCWFUSyAtVBjeHMk+kiFtiQIqj8LHwe1+BLx76szF6HlSKB/jFlSY3iadGsMUf0uoMz
-	oxQpS47qZbVwksEG943hgro8Iu+dqA/eN2Tqbv+Xdkzeg3oa8+8X3s213ctFL0kr5h5AFcC8mb4
-	Cv4lfRtFZv20RullPkJvUCNuZJi1myo0QGQOoXEXmMpEFKXsD9XQBF+VWso852z1pXtShDgR5Tt
-	jF2kw+peLxZcJxIE3+0iuaRCfbgU6INuiTQIQuaJ16y9J8iuH1VKrWVEXC4h4eAw37OnkLg8SVW
-	diJ7
-X-Received: by 2002:a17:90b:2b43:b0:39e:1ff0:331b with SMTP id 98e67ed59e1d1-39e54d37ad0mr12487465a91.2.1789924045869;
-        Sun, 20 Sep 2026 10:07:25 -0700 (PDT)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a02900f84fsm8679011a91.2.2026.09.20.10.07.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Sep 2026 10:07:25 -0700 (PDT)
+        bh=WXF66WmtMtCT657v10dcTOpqc4WfEbuJJpMl3klh4YM=;
+        b=PP4PsLYBfVqatJwXIa3jT/vG/ZkseZ7NGrHUa9q2MRJ6lGNI8//J70/E0DYoxyVSfR
+         CIYk3a9vbqC7cfY3d6Yy2ouWJsOsv5PBW9BmRUOXblqgzChvd1U2sAPRv7jFA9LgbyW+
+         IoGOx3riF7v19ECRGr25COi2uZ3LbvzwGIJTWzVWuToJiNDEjBBbB0iiX+cqdx98nEXK
+         ph/g+eOgNUZZCUYqowdDqo71PnpImVF7beIIm4uK7d2nC+thn2JPOb8brvlHoxqac1PQ
+         UPvAD53PBs7Rp6RodwLz02E9H/wHLKIsO7+e7KdfSl6p2Bc4ByH01dsFXZdfZSd8GU68
+         FEQg==
+X-Forwarded-Encrypted: i=1; AKwUvBxTJmt2fn8lA4WO6MIYr7PfMSaREPRO7SZerbPl4D8HBgT6tKZdOCIrBQzql4JK937+cM/CM5caNSxPIsWE1V0=@vger.kernel.org
+X-Gm-Message-State: AFuF++ljLqDwHBzVolllqxEnp3T/ybVkPpivj0+gJo3/9tfjNOQpiGJ7
+	p3mwI38/EJy0m6eBUN85RH+O37KVB2kBBL33MlzPqdHF8kCGGcgTR72P
+X-Gm-Gg: AYBFou0v2XP2/W2VUdkQNhNTY6ONBPabFPWZbaxQTOuhsR8xQB+JzvsPMZDTVV8KUKw
+	+4Kgwu0g63gJ0gKhtrWBPP5bRYl2n0sMbnoLkO+0oSGsYt4SmgZobLj6Emnke64rWLna94zNvLt
+	MeZssqS2drQFp8CA0zG4nUHNStG3nt83btgcIhcxaQOsIeI/lcemnuDu6LI710hPm7LI0UIx0GS
+	FrTf5Q6J12Vhjs8Fq7drljMradafOncdgeTiugPZeY/kLKwTiRhmI7ifnFTje6INsXIx9sfaIb/
+	cIvJPshqMjBzl9VRCCbVSL+g5Wl1pzNeoAPfwq8k7BBJ5JYGSjRIMDHOTREC7WSwFKGuuDCUjgs
+	HNsb9i9Xx+i3svi7weJpVIZRJd+Vg7JnQOv3dEXXbU1dA5DehHGdzriO1GhZm92rS1sapZ7A7Ja
+	PT9onKOBzFoLcU4NVrKc62u0MbSox31sgn4va3P+L0dTNu+Dnd7KKKqfx/eY2BwjZciBb2nYWdl
+	n3Z3Yw5WymahIyS5VEyCvgaLV/I5RO6G7Mh+QBx0v5aOIjuu1lr/V9UR2AxWcpKnHHMxTQYDakS
+	e0H9
+X-Received: by 2002:a17:90a:a82:b0:39e:6c66:cbdd with SMTP id 98e67ed59e1d1-39e6c66d00bmr3882116a91.21.1789928089015;
+        Sun, 20 Sep 2026 11:14:49 -0700 (PDT)
+Received: from phui-2.c.googlers.com (78.123.83.34.bc.googleusercontent.com. [34.83.123.78])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e554e5529sm5863256a91.4.2026.09.20.11.14.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Sep 2026 11:14:48 -0700 (PDT)
+From: Hui Peng <benquike@gmail.com>
+To: Guopeng Zhang <guopeng.zhang@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Waiman Long <longman@redhat.com>,
+ Ridong Chen <ridong.chen@linux.dev>
+Cc: Michal Koutny <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
+ cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] cgroup/cpuset: prevent local partition activation
+ over remote partition and sibling xcpus conflict
+Date: Sun, 20 Sep 2026 18:14:47 +0000
+Message-ID: <178992808796.3122215.5327280843811501376@gmail.com>
+In-Reply-To: <aa90bb73-c2af-4d13-8f2a-0435aa528058@linux.dev>
+References: <139d9231-4723-4365-9af7-8142e6581ede@linux.dev>
+ <20260920082335.257680-1-benquike@gmail.com>
+ <20260920082335.257680-2-benquike@gmail.com>
+ <aa90bb73-c2af-4d13-8f2a-0435aa528058@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 20 Sep 2026 17:07:24 +0000
-Message-Id: <DLKB4AJ21W5Y.VSMC8ZB4EK9@gmail.com>
-Cc: <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, "Peter
- Oskolkov" <posk@google.com>, "Xiang Mei" <xmei5@asu.edu>,
- <stable@vger.kernel.org>
-Subject: Re: [PATCH v3 1/3] bpf: propagate cb_access from freplace programs
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Weiming Shi" <bestswngs@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "John
- Fastabend" <john.fastabend@gmail.com>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "David S . Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
- Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20260920163211.795547-1-bestswngs@gmail.com>
- <20260920163211.795547-2-bestswngs@gmail.com>
-In-Reply-To: <20260920163211.795547-2-bestswngs@gmail.com>
+MIME-Version: 1.0
 
-On Sun Sep 20, 2026 at 4:32 PM UTC, Weiming Shi wrote:
-> =20
->  struct bpf_prog {
->  	u16			pages;		/* Number of allocated pages */
-> +	bool			cb_access;	/* Is control block accessed? */
->  	u32			jited:1,	/* Is our filter JIT'ed? */
->  				jit_requested:1,/* archs need to JIT the prog */
->  				jit_required:1,	/* program strictly requires JIT compiler */
->  				gpl_compatible:1, /* Is filter GPL compatible? */
-> -				cb_access:1,	/* Is control block accessed? */
+On Sun, Sep 20, 2026 at 04:57:39PM +0800, Guopeng Zhang wrote:
+> I think this patch is still missing a Fixes: tag for the
+> cpus_excl_conflict() change.
+>
+> The validate_partition() change can be covered by 6da580ec656a.
+>
+> However, the sibling CPU ownership issue fixed in cpus_excl_conflict()
+> was introduced by the following commit:
+> Fixes: 2a3602030d80 ("cgroup/cpuset: Don't invalidate sibling partitions on=
+ cpuset.cpus conflict")
 
-No. keep the signle bit.
+Thanks for pointing this out, Guopeng!
+
+In v3, I have split the validate_partition() change (with
+Fixes: 6da580ec656a) and the cpus_excl_conflict() change (with
+Fixes: 2a3602030d80) into separate patches ([PATCH v3 2/3] and
+[PATCH v3 3/3]) so that each patch fixes a single logical issue with its
+corresponding Fixes: tag.
+
+Best regards,
+Hui
