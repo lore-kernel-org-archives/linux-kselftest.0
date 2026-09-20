@@ -1,145 +1,139 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
+Received: from mail-lf2-f12.google.com (mail-lf2-f12.google.com [74.125.229.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E8E818787A
-	for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 04:16:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1B93D9DB0
+	for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 06:46:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.204
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789877793; cv=none; b=A4o+1JA/5Ko2FwXhUjloNO+LFMvc1Sh3qF7sGg+NVEcFRfc2tuAy2u3X20rsz8XiXeoQxDUQTKoqE+rYicAnXqXKktv7Cxhr5h5fcpVl65HT7OnMwojxsAVNjGmhlJxV5SuhH8vCAoUKDbPpwbAXBgxGaoSi0dkHPGVTqSiYlbI=
+	t=1789886816; cv=none; b=MkwW6GKbjugxfmEDsaA6elEsnJCcVddBx64xU2LQmi3PBJGp60JWhx7IevJNqV58hRR4+vZCAWVIrQZdbWBOPXTJ0WZs0i0yfmV6jtK9rZvH4Asr7tUQfJuNICejKX9kJd1NHs9yMOQKLWLMMOdgsHLDV+Mq0OOY3jCsm0JkfXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789877793; c=relaxed/simple;
-	bh=5i/xrXB05pYpB7Y/jzFUA4x4HQXReMiHhsF4dRiUhF0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XnVX8TEGac0m7CIRgNAcu1pIFb8P/FAYfqyHnjvWNmwE8b3Dslv+P9fBfNUmPKYVhOdR7ubVt+AnpP7EWwv2FbNfIfQsRKI9nylJGM+285hAEqT5YynYkDw3LjFHDqtiPwCi24hAODPUMOA2QlNXrb3c57Lo9Dlm1ts/RWg3BIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AxnfrBK4; arc=none smtp.client-ip=74.125.228.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789886816; c=relaxed/simple;
+	bh=BKLHZGPBT1ra9/o3RySzPt6GWmDIvoVinMejtLiDi40=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=irTgK4vmoksI3Pxqav8aYha8bVapgFZM3ThiMcUy1oye/EWiQuq9NgZiYjdQLSeVEccPCU7UHkPIgvDMVlSu7ZKtxYhE2BbRhr7h0oU6D959d5mnMyDbuTvs66oFgtiBMM3LkbnHp8pGsEO9JaA1HoKDTNYwvsUiq7JU9hMFMOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b=RpNCRhpU; arc=none smtp.client-ip=74.125.229.204
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AxnfrBK4"
-Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc50bcf87b2so1166154a12.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 21:16:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b="RpNCRhpU"
+Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b899413537so3019001e87.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 23:46:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789877791; x=1790482591; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=K+PFKba1M+eQHsH9jb2Yf4iAy2Pla/AL+6DEGCYNYE8=;
-        b=AxnfrBK40LxkI/APVw21uuaAwQYTTiz9x7iarwxv+D2AVOSIGdjyA0vMVOfzQuUNOB
-         lzAK26rCMJAK1+jOGNAXqMSTmiFH5IauIL7CWN65MWXF5/f9pvF7mkcbvswixd6XSxx3
-         I4I6F9E7dohqbkFsodt+TVRSoNYLbWVoBNL/fanCvYA90ni9fxuY7Lmeg7OlE5iqydY2
-         1lxuvfTW17k2rN2087p7Nm5tA1P3lTZyoY/L2sE8IM5xjRELlg9S0TyNf2acWTZETlNo
-         nrBBO2SexocMDSDm4Er25r0J6yu3EzQ2mpUAVLqI3wEKdFUx0S67F3yoO/rpzNsLV7gv
-         hzyA==
+        d=resnulli-us.20251104.gappssmtp.com; s=20251104; t=1789886809; x=1790491609; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=NaOoXMCD5+08vNUZK7B5Sw9F8Wgv/VWmCEv3fUCICio=;
+        b=RpNCRhpUf0euCWxZSxksNGwOXQD3gwl/UtG3sxPbBNbzNGxr5u3l+CGvEAU7mCJ+8F
+         vjIqubp10bYk/trSLHG45OKJxvBGEa60wYA93tY4egC2zN9EC843CAZlcoquZkkaQ4du
+         CVowpR54SAsW5X89fmvmXqPVKBPKBUiOM7WbUzeTgheKnPxANcOhDRu3qaD3bQWAnyXy
+         U8QJe4j6V+JraJ//LJz148kDobS2PZ1VmKWyzx1omeo/GkNi3p5MHVJvi4WQzYo6gGXL
+         u9affkz8g7I5xbhmJVo15yQUkUvIWZHFFX1IHiGAIm/70YJc5RQ11HpfUeShZbotYTNo
+         Twhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789877791; x=1790482591;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=K+PFKba1M+eQHsH9jb2Yf4iAy2Pla/AL+6DEGCYNYE8=;
-        b=sZ83LGkZ8MHwOnYjpvFMmWPMj95K9JMRDS9ZMJsjDlMwq4s29jBwaZwR6vBMFtCPs3
-         ZAN8pMygpUzbMWReeAVYumfPyn8rAYDRKwOdexK0CA7TOuWdfBj9Dm1otVmHE7ctyyc3
-         kaiEFjNyqcchOqE2QGy/oAZr3wfGmzNvFFeWBccA4hAt6FLZRCnh2jrWQSE6gtQcmBv2
-         uXg0NzvPJWGIPtb/fGbM4POcgtoSGqyfSbnkOnK1u9shvLsCx4t+K735A9hUkwGzWoBm
-         wSs19CPTidlIInr1NEt00JK7ryIxeh5sl5286ySlJbJhZj1HCWsigwc+ErXJ7cjIql4C
-         EjEQ==
-X-Forwarded-Encrypted: i=1; AKwUvByRL/MEmH6nA6Jn+MPaZIfe6WlDPCI3ZlFEteEXnZnxXLeOJv0CCKmi3hqyILXz40UXNCeLf2q4aSjPOAY9PNo=@vger.kernel.org
-X-Gm-Message-State: AFuF++ld91AzRa9apT9fQObTIwCGFJm8HMGvWrIwfPJb55XtogA17wld
-	3MpwonWqmd6Lzl72JJNBksd1LC/GmbaEnsOePMrF5DuIRBK0IvBu9wLK
-X-Gm-Gg: AYBFou1B26zSx3GZ+nS30bzE1194971w+tmS18Q5RdwIhEMvNAxP//ZkZ5NxkrZnCQR
-	TejFt5H+iTakd6JxjOV8fnWOa0pQcUgkMYGBWV6YqtB59ygREG4QYi1ulBLzS9nihw2G+GCDfrx
-	S4185uDsxitzOzFTKvDNZcpsR8DY0CWOrOnsRzI5BwPy5fEPOtSqkRJhi+o2+m2tGJpF05zROh6
-	wS2D0G75aswysE54418d2JrGHx8e3e6baS2baah/WtLifImAuAsIWXHZRfcVUCN+KuDtm2Hql4B
-	m4yu8WCJfkpQVdtPo0I4eKZNya+E7IegoNKCpQc9Xi4JhbzTA3UdREC3dzWCoTTouCgGS+8j4jO
-	yVmwtucWuSSfU4rO01/M99w4L3jIcYjubwq75T8j2EmuRr444Xe1vh/G8xXTO0Urw4sGrOja+Nt
-	8rP8u2WshEpVwowIyWZ5zDDC+Pj1+5+tKPS3IK2nBEhIsHks0K00tsLZsPv6gqnAvdPz3EOQp3k
-	G1QOosWCgJYOgVDtLoVTsTnvSlhmNnlCb2+VAUc0umNSsSR52JQOvF6RA7fjXYTQjUivGjBM7Mo
-	qvLpkPhapg==
-X-Received: by 2002:a05:6a21:6915:b0:3d0:cc29:ff63 with SMTP id adf61e73a8af0-3dd8c2ea2afmr10710958637.12.1789877791485;
-        Sat, 19 Sep 2026 21:16:31 -0700 (PDT)
-Received: from phui-2.c.googlers.com.com (78.123.83.34.bc.googleusercontent.com. [34.83.123.78])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc72aecaa7fsm1613635a12.21.2026.09.19.21.16.30
+        d=1e100.net; s=20260707; t=1789886809; x=1790491609;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NaOoXMCD5+08vNUZK7B5Sw9F8Wgv/VWmCEv3fUCICio=;
+        b=NSQP4keSFs1JICbCm/T4pRcLs0IAucDwS8++TNcD5uaMLxgcF3GUAnaEzfTjQIl8VX
+         wgJnm96Gd+8Eui2G4NUcU2u1+OkfjajqfLsdWuR73KKjV0ka7anPIQCK6SKCXDjtl4Z5
+         R3s1JbnWaOzVfTT4WoJeq5Rm1O+5OHAq0Q3viUTGAUxXagCgYZdg+kpzJeTHN+LicFWi
+         BEyngkXBJC82UHV8ibO/lhHVWMl8JjQaE2tPGhn36JuAfhzK1XYSHpzUtimeS0ASKemi
+         68+pkIx69bmw1LCbP8eMhgwQINVX9CAHLecTFzi3dyyWtA1WG1HvG8oJimTfO7He0Jee
+         QJFA==
+X-Forwarded-Encrypted: i=1; AKwUvByMHlWOU9LEsvDiw+Bmw1G0eQUw+j34/xiEYhHHjk5KZZpve+8jHhC0MznM8bxr6BbEjbscXI9/zPF+do3Dflk=@vger.kernel.org
+X-Gm-Message-State: AFuF++kFmRAIJ/KwOXZbC/ARn128bFa+xomaLAGQLJBLX+IqAsBz95UR
+	SU9b/zFQnukCKoUON6wMYdCSjaf0NkGANEBoV46szMVZKJ9H4oIHfcThowco8jbtg98=
+X-Gm-Gg: AYBFou38bB3Kre3keUTLQh+ojSNNv9HiPZ+ktpbmh8DQaDqWvNmAs7BVsa7fzIQBlH9
+	dOFDsp0TgYNvjaLEVPY6KT8yF4Au4FWHrRSVadcm3Gd3yF78MEAipqvdPO17mypxQNLdHiVf5Tx
+	ieucEc5ueghamlaXcpvIjTl9tgVhUV56Lr/tX39BjmBdyhq1w76c3krz8RDf3QJ6J4FbO56UaS+
+	xW1vxuZPwXoaGoVQyy4Ecikz0dhvoa/Lvh4gCApd5RcNVMr5oIqQuD7rLg5TuYGn1Z7lINrpuk3
+	/Md25kgWrVKxLO0pXZryn34siuNC4swhmStGLy0Sn2U3DJp8NvDEKLQ1SQuPX3WiVdqUAg4PF8X
+	TU9+QAlulAGisOG3VmDAf0gGHuagCGM3Dckty5BvT5jMKxh0ku5Jttph7334RCGa3nNPUHGkUEZ
+	inZ1ffygPVh6fSgTuD7Zmb59AnhHFB7PtVmFOEGjeZD7cn5+rgpuQ4bWulfxq1Tt5g2BRaSxXVX
+	sEZcy6f
+X-Received: by 2002:a05:6512:3a8d:b0:5b8:c147:f363 with SMTP id 2adb3069b0e04-5b8c19618a8mr1949385e87.64.1789886809102;
+        Sat, 19 Sep 2026 23:46:49 -0700 (PDT)
+Received: from localhost ([140.209.217.211])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b8c88d537bsm891722e87.45.2026.09.19.23.46.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Sep 2026 21:16:30 -0700 (PDT)
-From: Hui Peng <benquike@gmail.com>
-To: Kees Cook <kees@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>
-Cc: Bradley Morgan <brads@mainlining.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Hui Peng <benquike@gmail.com>
-Subject: [PATCH v2] seccomp: restore knotif->state when SECCOMP_ADDFD_FLAG_SEND is interrupted
-Date: Sun, 20 Sep 2026 04:16:29 +0000
-Message-ID: <20260920041629.2453290-1-benquike@gmail.com>
-X-Mailer: git-send-email 2.55.0.1082.g2b9226bbc0-goog
-In-Reply-To: <202609192050.D1E0CD96@keescook>
-References: <20260919203514.2580997-1-benquike@gmail.com> <202609192050.D1E0CD96@keescook>
+        Sat, 19 Sep 2026 23:46:48 -0700 (PDT)
+Date: Sun, 20 Sep 2026 08:46:44 +0200
+From: Jiri Pirko <jiri@resnulli.us>
+To: Konstantin Sinyuk <ksinyuk@kernel.org>
+Cc: dri-devel@lists.freedesktop.org, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Francois Dugast <francois.dugast@intel.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Ilia Levi <ilia.levi@intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, jhs@mojatatu.com, jgg@nvidia.com
+Subject: Re: [RFC PATCH 0/12] drm/fabric: vendor-neutral topology
+ infrastructure for scale-up accelerator interconnects
+Message-ID: <aq-AwReIVop1qv82@FV6GYCPJ69>
+References: <cover.1787552412.git.ksinyuk@kernel.org>
+ <apAsfOowcG0cTvT8@FV6GYCPJ69>
+ <fabric-jiri-reply.1788176464.ksinyuk@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fabric-jiri-reply.1788176464.ksinyuk@kernel.org>
 
-In seccomp_notify_addfd(), when SECCOMP_ADDFD_FLAG_SEND is set,
-knotif->state is transitioned from SECCOMP_NOTIFY_SENT to
-SECCOMP_NOTIFY_REPLIED before dropping filter->notify_lock and waiting
-in wait_for_completion_interruptible(&kaddfd.completion).
+Mon, Aug 31, 2026 at 01:45:15PM +0200, ksinyuk@kernel.org wrote:
+>On Thu, Aug 27, 2026 at 02:35:16PM +0200, Jiri Pirko wrote:
+>> Using generic netlink instead of sysfs for this makes a lot of sense,
+>> but it may be a bit odd to use it outside the networking area.
+>> I've been struggling with the same in another non-networking use-case
+>> as well.
+>
+>Agreed, and the series shows the friction. The namespace handling is
+>nominal, and CAP_NET_ADMIN as the mutation gate is another borrowed
+>part of the model. I went into that in more detail in the reply to
+>Jason.
+>
+>> - One character device per registered instance, not one global family.
+>>   Access control is the file: udev rules, ACLs, an fd passed into
+>>   a container.
+>
+>The fd-based access and event model addresses real problems with one
+>global family and one multicast group.
+>
+>The main question is what the CTLV instance would represent. A fabric
+>can span multiple devices and has its own lifetime. An endpoint can also
+>be detached from a fabric with fabric-id 0 and continue to exist. A
+>character device per accelerator would not provide the same global view
+>as the current family.
 
-If wait_for_completion_interruptible() is interrupted by a signal before
-the target task processes the kaddfd entry, seccomp_notify_addfd()
-removes kaddfd.list from knotif->addfd via list_del(&kaddfd.list), but
-leaves knotif->state set to SECCOMP_NOTIFY_REPLIED.
+CTVL is supposed to be just "transport". So however you use it is up to
+you.
 
-As a consequence:
-1. When the target task wakes in seccomp_do_user_notification(), it
-   observes knotif->state == SECCOMP_NOTIFY_REPLIED with an empty addfd
-   list and zeroed knotif->val / knotif->error / knotif->flags, causing
-   the supervised syscall to prematurely complete with return value 0
-   without installing the file descriptor.
-2. Any subsequent retry of SECCOMP_IOCTL_NOTIF_SEND or
-   SECCOMP_IOCTL_NOTIF_ADDFD by the supervisor fails with -EINPROGRESS
-   (or -ENOENT after the target exits) because knotif->state is no
-   longer SECCOMP_NOTIFY_SENT.
 
-Restore knotif->state = SECCOMP_NOTIFY_SENT when removing an unhandled
-SECCOMP_ADDFD_FLAG_SEND request from knotif->addfd, and add a
-kselftest (user_notification_addfd_send_interrupted) to cover this race.
+>
+>Can a CTLV instance represent a multi-device fabric or the global
+>fabric registry rather than one physical device?
 
-Fixes: 7cf97b125455 ("seccomp: Introduce addfd ioctl to seccomp user notifier")
-Reviewed-by: Bradley Morgan <brads@mainlining.org>
-Assisted-by: LLM
-Signed-off-by: Hui Peng <benquike@gmail.com>
----
-Changes in v2:
-- Added kselftest regression test (user_notification_addfd_send_interrupted)
-  in tools/testing/selftests/seccomp/seccomp_bpf.c per Kees Cook.
-- Collected Reviewed-by tag from Bradley Morgan.
+Yes, whoever creates the ctlv instance is in charge of the lifecycle.
 
- kernel/seccomp.c                              |  7 +-
- tools/testing/selftests/seccomp/seccomp_bpf.c | 98 +++++++++++++++++++
- 2 files changed, 103 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index 86cf4460d69e..94c7ba80a8f7 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -1808,10 +1808,13 @@ static long seccomp_notify_addfd(struct seccomp_filter *filter,
- 	 * We need to check again if the addfd request has been handled,
- 	 * and if not, we will remove it from the queue.
- 	 */
--	if (list_empty(&kaddfd.list))
-+	if (list_empty(&kaddfd.list)) {
- 		ret = kaddfd.ret;
--	else
-+	} else {
- 		list_del(&kaddfd.list);
-+		if (addfd.flags & SECCOMP_ADDFD_FLAG_SEND)
-+			knotif->state = SECCOMP_NOTIFY_SENT;
-+	}
- 
- out_unlock:
- 	mutex_unlock(&filter->notify_lock);
--- 
-2.47.3
+>
+>> Would this make sense to use for you?
+>
+>In principle, yes. I cannot base this series on an out-of-tree pre-RFC,
+>but the fabric, endpoint, port and peer model is separate from the
+>current serialization.
+>
+>Changing transports would be more than regeneration, so I will read the
+>draft before saying more.
+>
+>Thanks,
+>Konstantin
