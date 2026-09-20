@@ -1,282 +1,335 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB96F391E76
-	for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 07:20:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDBD61A0BF1
+	for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 07:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789888815; cv=none; b=teIucASo8H8pjlcU1xvB1xJsnhPr7MZrv52jHcb2U1PSF3DBPUTH/aLOOipExTSsmZlRzWPF073mh2lbUB2W7VnGsUReKpOw4glPs15rnUhsKn+A85C5xfFpi3q/T7fpkvElrFfEJBu8YZ/pfvThDihyb75A9cMfTT0pLtaGvlU=
+	t=1789888842; cv=none; b=aHVIInh14BkfR+hFmH1lMKCAMXsqA9/PRrs4a005lT9wm+8TsMJo2k2Mlz8twzRq1THSiwmD/ruF1Jlv0QW7j8lx2sb8c+00cD+Q24DzdNzAKkvsu2YccSej8lIQJivxHhVxe6tUa+YEKzayEhTvasqULE5mvT61ih4hEcLqfrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789888815; c=relaxed/simple;
-	bh=YgS/IB4s8WPaIOMiZ6JH29qlGPXEFMhKzue+pmpKLGc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pVxGfEDxMiO8XOYEDhh23VWkpjgBXZoMe8BUvfhIsrQq5RBqD3pejQ62Q7VkMLwrs2DxpGgB9++9e8+AtVSPia382/P7IwdjDlGBFcCbjFBH9iBV21PDlT3jNqDbVVb95j4lPwOjh0SpaWCaW7Dst2ZPQzmNx/8L04fKaQ9T69s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=QrWy3Jbx; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=BdLhvTqm; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1789888842; c=relaxed/simple;
+	bh=Bahp3kxrHBjatSfpkgnaRh889D7Q2r/ojrekaxKXonc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mdKkPEZXpx9nPXncB3O5mwcf8/8wZFxCGm1ikyGUqNNdb05h9871uQWv/2S26MzObm6uKmVBO5/KqvfaINcmUP9XNZTmeyEmyNsVDxNe4LL1jrim6w929dgvT0K+KB8BDUaBcBRLbSnztJ1+FR+8ZSSPy5vjybpj9ciVewv5Nt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HzBIReeq; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="QrWy3Jbx";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="BdLhvTqm"
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68K55eBo827303
-	for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 07:20:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	HsgA0tk3dRgdOjoRTGQ8Mt9RLPyoih0R+wzz46tu9l8=; b=QrWy3Jbxa/9A9xki
-	0xtBBUiAf6w1VFoyAQVQZFTg9AgaKDYZ6MkMaieHlPUVSvmbTct1oLK09R385Or4
-	jGLNR070jFWIVQWBojRKsLTaSC8MfpPPqLv7BB04SlKtGylLWCdvrXbfEI4gqCg0
-	E4iwc2SppLmWuLcPypBmIg4TpSprjr6rf1qzORywuoGNlIg+pG8vOLAR2J68Isqc
-	ZUkVl3sjbnJ+TIaQ7K+Q6uyx367+lPS/OH/s2/A+Pf+AbT2CB5fGrnSFwOFMAEHG
-	esWIA3vN6P4uKYS2BFLw5bI2CVZoI3/X7AI+O/bKnLczk2CtNlXp0cOgMGhusHse
-	syj1cA==
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4gsjs82dv1-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 07:20:12 +0000 (GMT)
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2d6fb956002so28734105ad.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 00:20:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HzBIReeq"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-39d654f02baso1735490a91.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 00:20:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1789888811; x=1790493611; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1789888839; x=1790493639; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HsgA0tk3dRgdOjoRTGQ8Mt9RLPyoih0R+wzz46tu9l8=;
-        b=BdLhvTqmNl0eQwgVyVvoinT6v5KWwR01X8FBV2ASzrFDZFSY0FErxPVB7CH9rafst8
-         /EqBPUVTs09nHVfXD8CzwCFfN0kTiPP6hcpTgXXxWwl8EQl37fWo190Xm5bA0KUGw3v1
-         KGSVg5bFRNDre6pXTWRcdrtLoFUG4plY9cFelpIX7/1TpNE3bTmeNf4CooYeGBuJESWS
-         j6zT/Rru6xVYvD/QfyE/pTP4SyqMBt9Vj0v8V6e7VJRKDDYJIyYrE6j6rAWvJgT+iCQA
-         qCoCTyUon5npKzH0uyeA7cOYwXUVzASXYPWiXnrcZB861KQLUIho0me3lbhmrP2WAIFV
-         lbEg==
+        bh=1kgBE5sZukO+BKrvKP8udVj6iMzKq546dLIF59T8CjI=;
+        b=HzBIReeq1yq66tRXXz68tHzWtuDLQEmM7JDKd2emQGrO6Rp1rK33lwH2sYMBRkjOD2
+         VZ0y3hF7ZBj/ZiFEDaOmZCE80dO9u3Zhvb7WgvdYBTY+KSgizL0VlKrX/u1NeWMiwE5X
+         5xZ1erfdJ5gAnVDVwki/Z1jCwae300O8HqPYKANIAs9YE6ARtHCmnQHun9oYIwKVbF6c
+         f58bvpwu/5PAPE8HkHE+OM88k7XtzEIlZNudCG5HkG3gxvv68GrlwuI0LFMPtqaHMxNB
+         CvCZmmOHnNw2jOfM0H7YJGxPBqsXeoGywyOpQFKT4UlMY/H2rQ8mzssYcquSJdY4Y0Ik
+         FTMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789888811; x=1790493611;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HsgA0tk3dRgdOjoRTGQ8Mt9RLPyoih0R+wzz46tu9l8=;
-        b=Wkr/vX3kUMNxgj9JpYLwIEmGiCxtXrUbhOf+LIZW2IUFm/Fan+C3Kj3+/lSwsTKP3R
-         srmBc5AtREY43YSvks9AtNbvIohGzYjllAUBCE1TjqlTIWixnRctY7mb4+147cKsDLKx
-         ItFVzmnlFPl3pMQRFMvJPuOH4W8XF9hXXwKFgXd+dYnPomfuR/dbSEKeElATg5F6I7NX
-         huM29KBq+2ttkJjHkI3u5BnUza1oDedmTa5Nnt/gC994dty1W8dqBCJVqkwBTF9Ju+BE
-         kUsL1i+GLkF+8eu3sDM6SN+2hCfV50YZzYPa7wurKhOdYOg/2NUxM4IvPLWiLBHLitwz
-         MRjQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwfwdM38FIyHJattGHLbCypJKjig1ObJZIyLabXetHvql+M9n1/viiafydqfbGI/KpxGcwAPy+S3u4MPIm5xb4=@vger.kernel.org
-X-Gm-Message-State: AFuF++mv+3wkuIoYT9gmH9E63/OkZ8ZhV3O8j5kI4MG4lJAxhNxLm/JD
-	bcarWqWo3qzK9vD27nf+kKar45B0pbJlCaDHkat3YQ6RXSzy0cXbsuRZhW/KfsNhMEnnj1KIXhQ
-	faHj1q2/CpVpb4t8ovLIpzrKZ7o4UDIDaqoEXWUGV5jdPweMQdFmOGbOzDkvNFWZd24j9A4IpUv
-	zGdmdDJA==
-X-Gm-Gg: AYBFou1OLygBkNfeqIdUiry/bwvODLKnh02PBE5V2TZeUgARzqvjZ944KSkvTIkLRDE
-	yNaIvRNt6GW1gqoImKNsdTLPjf36mRSwsxfJ/uW66C51iMe3kw8a9ontTvAp2vOfETxXEN8xsf0
-	jQ8jZ/aybfSqE6NxmbonA5I2udxtJMO5OB9SssxpmiZURgh2uDbdfx7lRiU5Bup/23Io2aDKNH/
-	BOWvvoPSaqa12hDfcfUrAYCY0y+KTcRKnc3Fm9cxV3o392CY03v48ZGtrW8RoihlCHaWFJm+PjY
-	xndiCtRSZ3Z+fT1PbYtw7U/6vPnhDFe3ZJjztEbQhgYRJqaZ7e7+Qyp7SkY=
-X-Received: by 2002:a17:903:b47:b0:2dd:c053:d740 with SMTP id d9443c01a7336-2ddc053d7a9mr61039675ad.39.1789888811053;
-        Sun, 20 Sep 2026 00:20:11 -0700 (PDT)
-X-Received: by 2002:a17:903:b47:b0:2dd:c053:d740 with SMTP id d9443c01a7336-2ddc053d7a9mr61039295ad.39.1789888810468;
-        Sun, 20 Sep 2026 00:20:10 -0700 (PDT)
-Received: from [127.0.1.1] ([2a12:a305:4::30fb])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df346152d7sm13908655ad.16.2026.09.20.00.20.02
+        d=1e100.net; s=20260707; t=1789888839; x=1790493639;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=1kgBE5sZukO+BKrvKP8udVj6iMzKq546dLIF59T8CjI=;
+        b=Y5NVR4Buli45cKv7ymcyE8rsncd01munYf5DPSeb7FJhOoJ0Hh7lqhvChkGFXUI/oW
+         FLasW460rowBDX8IuFIEDR3Lg9He8mkRZXFkFV3Fh6T/vaZ+g5uAg1WyDntzONgwExu9
+         ge4P6Dzd7IlDhqishwPsK0phm42QeH3R1NNzswNAJ+ESn42BGRCerJvX1j6+bYjXQo92
+         i6n1b8EBRUcUJv7eec8kNsimkQhQALxV0UYggi8JQGpTGa1IpR7axvB15O5WBBO0b9h6
+         dIbpGeSFbJ57D/TV6rhrqTYavnBlFkvKYFXuEilsWBxq6KS2nWiCswzhJ3JVZDRPR0zl
+         ir4A==
+X-Forwarded-Encrypted: i=1; AKwUvBw2+Ukt9eyPrTsix8Qbh/7inqsTqOviexCQmwSCSTpufZM9E5FXwcxkYxEZyxzwuN76/dvfqoM6H3aL3gfHipQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++lC37RVrvpWzLMRIr0QKn8i1aRS/uLDZnNhMDINxz/WNAjw4ARp
+	f2ZT6ZZ41ZGghj6HLXjYMXi+32wjJV23d+qiU1MgsNJZPO5FP/U4J9c7
+X-Gm-Gg: AYBFou3d6DhluvD0wGN3h/icKhqkZu3KCY3khJVKUS14J125BKgcmXWAgPWBmp2ZOP8
+	LGd4aFfeJRr/iO9X5I+AvwEVK6H8MOMRd/dcXBNrnMhOTnEWlmPv6CyO41fFY2o4JFT4T9Up8Ec
+	0clMELvJJe3wavT9qguZW9mzustDWkA9vzuIEOD8AiFIV3uFWNA+G9sUwYoDL5Dw8hgK3/pATA1
+	K1XuG9qmLPiY0NyaMmEO7oVso4kiQ9FmD2bwNvPX3CeoU3OSVuoJC4CIiBmo+DLa2cQ0AyQJm/g
+	JvJeG8651X9T2VyWj6cjpTF7ipDjAF+yeCmDz4+ADZ00zQWLaFomrlPFQF2D/tkZBQP7YMYyNpA
+	6N04cMzWDkX1aA+f8y0cQbPg1fAbD8Sgwe07qyCc0FAj6kJPJCaYL9TQCzDtLwYuxBBIMERJhMJ
+	v4IFi5xQ1htgrEHYcj/pC0HGv0nIjH+sU87NnKYu6fFcC2gwuk2Rzw8VdjpM3qTp0164UfEkUEg
+	NZoxC81Z8zdtiS4F5xaB9ZJYHVB1RsIIk1Q/jRIGhU/ZlDyvm6g6Yo++4j5kv3myxhotaFOOtmp
+	IVR0n0kHyQ==
+X-Received: by 2002:a17:90b:5690:b0:398:bee5:61d6 with SMTP id 98e67ed59e1d1-39e54cfabf6mr12319727a91.24.1789888838645;
+        Sun, 20 Sep 2026 00:20:38 -0700 (PDT)
+Received: from phui-2.c.googlers.com.com (78.123.83.34.bc.googleusercontent.com. [34.83.123.78])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a041b87bfesm541212a91.3.2026.09.20.00.20.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Sep 2026 00:20:09 -0700 (PDT)
-From: Guodong Xu <guodong.xu@oss.qualcomm.com>
-Date: Sun, 20 Sep 2026 03:18:31 -0400
-Subject: [PATCH v8 11/11] riscv: hwprobe: Introduce rva23u64 base behavior
+        Sun, 20 Sep 2026 00:20:38 -0700 (PDT)
+From: Hui Peng <benquike@gmail.com>
+To: Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Hui Peng <benquike@gmail.com>
+Subject: [PATCH v3] seccomp: restore knotif->state when SECCOMP_ADDFD_FLAG_SEND is interrupted
+Date: Sun, 20 Sep 2026 07:20:36 +0000
+Message-ID: <20260920072036.3888061-1-benquike@gmail.com>
+X-Mailer: git-send-email 2.55.0.1082.g2b9226bbc0-goog
+In-Reply-To: <202609192050.D1E0CD96@keescook>
+References: <202609192050.D1E0CD96@keescook>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260920-rva23u64-hwprobe-v2-v8-11-5f14bc5c23d3@oss.qualcomm.com>
-References: <20260920-rva23u64-hwprobe-v2-v8-0-5f14bc5c23d3@oss.qualcomm.com>
-In-Reply-To: <20260920-rva23u64-hwprobe-v2-v8-0-5f14bc5c23d3@oss.qualcomm.com>
-To: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
-        Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@kernel.org>,
-        Chen Wang <chen.wang@linux.dev>, Inochi Amaoto <inochiama@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor@kernel.org>, devicetree@vger.kernel.org,
-        spacemit@lists.linux.dev, sophgo@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, Andy Chiu <tchiu@tenstorrent.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Peter Bergner <bergner@oss.tenstorrent.com>,
-        Zihong Yao <zihong.plct@isrc.iscas.ac.cn>,
-        Mark Harris <mark.hsj@gmail.com>,
-        Aurelien Jarno <aurelien@aurel32.net>,
-        Guodong Xu <guodong.xu@oss.qualcomm.com>,
-        Andrew Jones <andrew.jones@oss.qualcomm.com>
-X-Mailer: b4 0.15.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5683;
- i=guodong.xu@oss.qualcomm.com; s=default; h=from:subject:message-id;
- bh=YgS/IB4s8WPaIOMiZ6JH29qlGPXEFMhKzue+pmpKLGc=;
- b=owGbwMvMwCXWtEl1Z3CGpCDjabUkhqz1Hacz970yXrFEP7L8taGpf8LFybPPm9XXZ+lYu5/OV
- 50hqfmvo5SFQYyLQVZMkeXw0Zbsra98on2fc/6AmcPKBDKEgYtTACay+QojwxZex7L/k6u7WXpq
- 3u9ROaKy+f+009EZ30737pmuvejg436G/1mq58UvJL1MiZqk/F7spLXDpnwNvhkfKv35/6ke2l7
- kxwYA
-X-Developer-Key: i=guodong.xu@oss.qualcomm.com; a=openpgp;
- fpr=90B1DC3DF0BD10FD1227BD6344F254AF42F143EE
-X-Proofpoint-ORIG-GUID: ApNQYibbMNi62U6KXsoJuy5ge6sVVR8a
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTIwMDEwNCBTYWx0ZWRfX92GUbkYCAicX
- d3Ersq1cVVz5bh8x6RjvW8sQN7OPlQIP5yM+HATF4s2l4bOROcUvO7olnQ8OLPTVQXQV0bLN89Q
- C4JAq4VhpJYr6CIdDKnxwpDa/rpbGVs=
-X-Authority-Analysis: v=2.4 cv=YqWa1IYX c=1 sm=1 tr=0 ts=6aaf892c cx=c_pps
- a=IZJwPbhc+fLeJZngyXXI0A==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=yx91gb_oNiZeI1HMLzn7:22 a=EUspDBNiAAAA:8
- a=npia3EAcFH_frxJIFygA:9 a=QEXdDO2ut3YA:10 a=uG9DUKGECoFWVXl0Dc02:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTIwMDEwNCBTYWx0ZWRfX7S3KrpXIRMCl
- 6JTySogdB5dgfQRPlZF86YHSNnxiCI2mrwtvoij5/VWmu+KdDIYzKAz3hyiE2vi7wlJxG7JHcwr
- cuXTTNuyLJnWBgKbZRuyhHLX+lzC0UMAKDrAsMAjqS+H9EklYCTqiB8Svqnz7jAq/03NjRJOB4P
- a0DVOpf7EBFx0Luouqic4RaKsYe/6+gZeCriLUx7P7J4gC/eV27gItn4cjI3eikBFmbzA3qm1uy
- /yVPrAecIyjNKK/4OApfB8stCewHGn5SoUPq/crHG5wTT3nMvGp1+s4VAY/viQfgAdloHJyzwaC
- krGj9AlCEimOU6Sf7Xi7+DYzfJ1ai7bw2ZXnD1knQKHO0UUY4CDVwBFhrgUV97pfp0q968EJR5C
- R4k2ic8ZpysadalI1+ZQ86fLbAgz9+ZR6EWKdVMY9NNjzJbU1POHCj/YYqpAyCsbQC2a/ANG2Iy
- 9viZ3r0P4cPql6IAlIQ==
-X-Proofpoint-GUID: ApNQYibbMNi62U6KXsoJuy5ge6sVVR8a
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-20_02,2026-09-16_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 clxscore=1015 lowpriorityscore=0 spamscore=0 phishscore=0
- malwarescore=0 priorityscore=1501 bulkscore=0 impostorscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609200104
+Content-Transfer-Encoding: 8bit
 
-Provide a hwprobe base-behavior bit so userspace can check RVA23U64
-support in one call.  Without it, a consumer needs five hwprobe
-calls and four prctl calls, which is error-prone to require of every
-caller.  Most software treats RVA23U64 as a new base anyway, so
-expose it directly.
+In seccomp_notify_addfd(), when SECCOMP_ADDFD_FLAG_SEND is set in
+addfd.flags, knotif->state is optimistically transitioned from
+SECCOMP_NOTIFY_SENT to SECCOMP_NOTIFY_REPLIED before waking the tracee
+and waiting on kaddfd.completion:
 
-The IMA bit is now derived from the same cached bases instead of being
-hardcoded, so it agrees with AT_HWCAP and the "isa bases" cpuinfo lines;
-on any system this kernel can run on it stays set.
+	if (addfd.flags & SECCOMP_ADDFD_FLAG_SEND) {
+		knotif->state = SECCOMP_NOTIFY_REPLIED;
+		...
+	}
 
-Co-developed-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
-Signed-off-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
-Signed-off-by: Guodong Xu <guodong.xu@oss.qualcomm.com>
+If wait_for_completion_interruptible(&kaddfd.completion) is interrupted
+by a signal before the tracee dequeues the kaddfd request
+(!list_empty(&kaddfd.list)), seccomp_notify_addfd() removes kaddfd from
+knotif->addfd and returns -EINTR to the supervisor without having
+installed the file descriptor.
+
+However, knotif->state is left as SECCOMP_NOTIFY_REPLIED (with
+knotif->error == 0 and knotif->val == 0). This causes two problems:
+
+1. When the tracee runs in do_user_notif(), it checks
+   if (knotif.state != SECCOMP_NOTIFY_REPLIED) after calling
+   seccomp_handle_addfd(). Because knotif->state is already
+   SECCOMP_NOTIFY_REPLIED, the tracee exits the notification wait loop
+   prematurely and returns 0 from the trapped syscall without the file
+   descriptor ever having been installed.
+
+2. If the supervisor retries SECCOMP_IOCTL_NOTIF_ADDFD or
+   SECCOMP_IOCTL_NOTIF_SEND before the tracee runs, it fails with
+   -EINPROGRESS because knotif->state is no longer SECCOMP_NOTIFY_SENT.
+
+Fix this by restoring knotif->state back to SECCOMP_NOTIFY_SENT if
+SECCOMP_ADDFD_FLAG_SEND was set and kaddfd was not consumed before the
+interrupted wait. Also add a seccomp_bpf selftest
+(user_notification_addfd_send_interrupted) covering this race.
+
+Fixes: 0ae71c1990f3 ("seccomp: Add a flag to atomically addfd and perform send")
+Signed-off-by: Hui Peng <benquike@gmail.com>
 ---
-v8:
-- Add Co-developed-by for Andrew Jones (Conor).
-- Say in the body that the IMA bit is now computed, not hardcoded.
-- Rebase onto riscv/for-next: drop the BASE_BEHAVIOR case's own
-  pair->value = 0; hwprobe_one_pair() zeroes it since commit
-  d0fc6fab2046 ("riscv: hwprobe: initialize pair->value in
-  hwprobe_one_pair()").
-v7: Use riscv_isa_base_available().
-v6: Rebase onto riscv/for-next: define
-    RISCV_HWPROBE_BASE_BEHAVIOR_RVA23U64 in the _BITULL() style of
-    commit 8da45c93dfa9.
-v5: No change.
-v4: No change.
-v3: No change.
-v2:
-- Detect RVA23U64 by reading from the cached hart_isa[].isa_bases
-  bitmap populated by riscv_init_isa_bases() at init time, sharing
-  one source of truth with /proc/cpuinfo.
----
- Documentation/arch/riscv/hwprobe.rst               |  8 ++++++++
- arch/riscv/include/uapi/asm/hwprobe.h              |  3 ++-
- arch/riscv/kernel/sys_hwprobe.c                    | 22 +++++++++++++++-------
- tools/testing/selftests/riscv/hwprobe/which-cpus.c |  2 +-
- 4 files changed, 26 insertions(+), 9 deletions(-)
+Changes in v3:
+- Actually include the tools/testing/selftests/seccomp/seccomp_bpf.c
+  regression test in the patch diff (v2 accidentally omitted the selftest
+  hunk), with detailed comments explaining the race and test setup.
 
-diff --git a/Documentation/arch/riscv/hwprobe.rst b/Documentation/arch/riscv/hwprobe.rst
-index 8454a6ae6fd15..0392a8f41d86d 100644
---- a/Documentation/arch/riscv/hwprobe.rst
-+++ b/Documentation/arch/riscv/hwprobe.rst
-@@ -67,6 +67,14 @@ * :c:macro:`RISCV_HWPROBE_KEY_BASE_BEHAVIOR`: A bitmask containing the base
-       programs (it may still be executed in userspace via a
-       kernel-controlled mechanism such as the vDSO).
+Changes in v2:
+- Add user_notification_addfd_send_interrupted regression test to
+  tools/testing/selftests/seccomp/seccomp_bpf.c as requested by Kees Cook.
+
+ kernel/seccomp.c                              |   2 +
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 161 ++++++++++++++++++
+ 2 files changed, 163 insertions(+)
+
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 86cf4460d69e..94c7ba80a8f7 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -1808,10 +1808,13 @@ static long seccomp_notify_addfd(struct seccomp_filter *filter,
+ 	 * We need to check again if the addfd request has been handled,
+ 	 * and if not, we will remove it from the queue.
+ 	 */
+-	if (list_empty(&kaddfd.list))
++	if (list_empty(&kaddfd.list)) {
+ 		ret = kaddfd.ret;
+-	else
++	} else {
+ 		list_del(&kaddfd.list);
++		if (addfd.flags & SECCOMP_ADDFD_FLAG_SEND)
++			knotif->state = SECCOMP_NOTIFY_SENT;
++	}
  
-+  * :c:macro:`RISCV_HWPROBE_BASE_BEHAVIOR_RVA23U64`: Support for all mandatory
-+    extensions of RVA23U64, as defined in the RISC-V Profiles specification
-+    starting from commit 0273f3c921b6 ("rva23/rvb23 ratified").
-+
-+    The RVA23U64 base is based upon the IMA base and therefore IMA extension
-+    keys (e.g. :c:macro:`RISCV_HWPROBE_KEY_IMA_EXT_0`:) may be used to probe
-+    optional extensions.
-+
- * :c:macro:`RISCV_HWPROBE_KEY_IMA_EXT_0`: A bitmask containing extensions
-   that are compatible with the :c:macro:`RISCV_HWPROBE_BASE_BEHAVIOR_IMA`:
-   base system behavior.
-diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
-index 9a121ee3b4369..4f5d51788c416 100644
---- a/arch/riscv/include/uapi/asm/hwprobe.h
-+++ b/arch/riscv/include/uapi/asm/hwprobe.h
-@@ -22,7 +22,8 @@ struct riscv_hwprobe {
- #define RISCV_HWPROBE_KEY_MARCHID	1
- #define RISCV_HWPROBE_KEY_MIMPID	2
- #define RISCV_HWPROBE_KEY_BASE_BEHAVIOR	3
--#define		RISCV_HWPROBE_BASE_BEHAVIOR_IMA	_BITULL(0)
-+#define		RISCV_HWPROBE_BASE_BEHAVIOR_IMA		_BITULL(0)
-+#define		RISCV_HWPROBE_BASE_BEHAVIOR_RVA23U64	_BITULL(1)
- #define RISCV_HWPROBE_KEY_IMA_EXT_0	4
- #define		RISCV_HWPROBE_IMA_FD		_BITULL(0)
- #define		RISCV_HWPROBE_IMA_C		_BITULL(1)
-diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwprobe.c
-index 8a38a4d37806f..2290126792797 100644
---- a/arch/riscv/kernel/sys_hwprobe.c
-+++ b/arch/riscv/kernel/sys_hwprobe.c
-@@ -223,6 +223,17 @@ static bool hwprobe_ext0_has(const struct cpumask *cpus, u64 ext)
- 	return (pair.value & ext);
+ out_unlock:
+ 	mutex_unlock(&filter->notify_lock);
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 0622bc2acad4..e565728f9eb2 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -4368,6 +4368,173 @@ TEST(user_notification_addfd_rlimit)
+ 	close(memfd);
  }
  
-+static bool hwprobe_has_isa_base(const struct cpumask *cpus, unsigned int base)
++static void sigusr1_handler(int signo)
 +{
-+	int cpu;
-+
-+	for_each_cpu(cpu, cpus) {
-+		if (!riscv_isa_base_available(hart_isa[cpu].isa_bases, base))
-+			return false;
-+	}
-+	return true;
 +}
 +
- #if defined(CONFIG_RISCV_PROBE_UNALIGNED_ACCESS)
- static u64 hwprobe_misaligned(const struct cpumask *cpus)
- {
-@@ -307,14 +318,11 @@ static void hwprobe_one_pair(struct riscv_hwprobe *pair,
- 	case RISCV_HWPROBE_KEY_MIMPID:
- 		hwprobe_arch_id(pair, cpus);
- 		break;
--	/*
--	 * The kernel already assumes that the base single-letter ISA
--	 * extensions are supported on all harts, and only supports the
--	 * IMA base, so just cheat a bit here and tell that to
--	 * userspace.
--	 */
- 	case RISCV_HWPROBE_KEY_BASE_BEHAVIOR:
--		pair->value = RISCV_HWPROBE_BASE_BEHAVIOR_IMA;
-+		if (hwprobe_has_isa_base(cpus, RISCV_ISA_BASE_IMA))
-+			pair->value |= RISCV_HWPROBE_BASE_BEHAVIOR_IMA;
-+		if (hwprobe_has_isa_base(cpus, RISCV_ISA_BASE_RVA23U64))
-+			pair->value |= RISCV_HWPROBE_BASE_BEHAVIOR_RVA23U64;
- 		break;
- 
- 	case RISCV_HWPROBE_KEY_IMA_EXT_0:
-diff --git a/tools/testing/selftests/riscv/hwprobe/which-cpus.c b/tools/testing/selftests/riscv/hwprobe/which-cpus.c
-index 587feb198c049..f8c797b1d0fd9 100644
---- a/tools/testing/selftests/riscv/hwprobe/which-cpus.c
-+++ b/tools/testing/selftests/riscv/hwprobe/which-cpus.c
-@@ -105,7 +105,7 @@ int main(int argc, char **argv)
- 	pairs[0] = (struct riscv_hwprobe){ .key = RISCV_HWPROBE_KEY_BASE_BEHAVIOR, };
- 	rc = riscv_hwprobe(pairs, 1, 0, NULL, 0);
- 	assert(rc == 0 && pairs[0].key == RISCV_HWPROBE_KEY_BASE_BEHAVIOR &&
--	       pairs[0].value == RISCV_HWPROBE_BASE_BEHAVIOR_IMA);
-+	       (pairs[0].value & RISCV_HWPROBE_BASE_BEHAVIOR_IMA));
- 
- 	pairs[0] = (struct riscv_hwprobe){ .key = RISCV_HWPROBE_KEY_IMA_EXT_0, };
- 	rc = riscv_hwprobe(pairs, 1, 0, NULL, 0);
-
++/*
++ * Verify that when SECCOMP_IOCTL_NOTIF_ADDFD with SECCOMP_ADDFD_FLAG_SEND is
++ * interrupted by a signal before the tracee dequeues the addfd request,
++ * knotif->state is restored from SECCOMP_NOTIFY_REPLIED back to
++ * SECCOMP_NOTIFY_SENT so that:
++ *   1. The woken tracee sees knotif->state == SECCOMP_NOTIFY_SENT in
++ *      do_user_notif() and goes back to sleep instead of prematurely
++ *      returning 0 from the trapped syscall without the FD installed.
++ *   2. The supervisor can retry SECCOMP_IOCTL_NOTIF_ADDFD (or
++ *      SECCOMP_IOCTL_NOTIF_SEND) instead of failing with -EINPROGRESS.
++ *
++ * To deterministically hit the race window where the supervisor sleeps in
++ * wait_for_completion_interruptible(&kaddfd.completion) after waking the
++ * tracee (complete(&knotif->ready)) but before the tracee runs
++ * seccomp_handle_addfd(), pin all processes to a single CPU and enforce a
++ * strict 3-tier scheduling priority hierarchy on that CPU:
++ *   - Supervisor:            SCHED_FIFO priority 99 (highest)
++ *   - Signal helper (sig_pid): SCHED_FIFO priority 50 (middle)
++ *   - Tracee (pid):          SCHED_IDLE             (lowest)
++ */
++TEST(user_notification_addfd_send_interrupted)
++{
++	/*
++	 * Save parent_pid before user_notif_syscall(__NR_getppid, ...) installs
++	 * the seccomp filter on the calling process; children inherit that
++	 * filter, so sig_pid must not call getppid().
++	 */
++	pid_t pid, sig_pid, parent_pid = getpid();
++	long ret;
++	int status, listener, memfd;
++	struct seccomp_notif_addfd addfd = {};
++	struct seccomp_notif req = {};
++	struct sigaction sa = {};
++	struct sched_param sp_tracee_idle = { .sched_priority = 0 };
++	struct sched_param sp_supervisor_fifo = { .sched_priority = 99 };
++	struct sched_param sp_sig_helper_fifo = { .sched_priority = 50 };
++	struct timespec delay = { .tv_nsec = 15000000 };
++	cpu_set_t cpuset;
++	int cpu;
++
++	/* Pin the supervisor (and its future child processes) to one CPU. */
++	cpu = sched_getcpu();
++	if (cpu >= 0) {
++		CPU_ZERO(&cpuset);
++		CPU_SET(cpu, &cpuset);
++		sched_setaffinity(0, sizeof(cpuset), &cpuset);
++	}
++
++	sa.sa_handler = sigusr1_handler;
++	ASSERT_EQ(sigaction(SIGUSR1, &sa, NULL), 0);
++
++	memfd = memfd_create("test", 0);
++	ASSERT_GE(memfd, 0);
++
++	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
++	}
++
++	/*
++	 * Follow the convention of other user_notification_* tests in this
++	 * file by trapping __NR_getppid: because the filter is installed on
++	 * the supervisor before fork(), the trapped syscall must be a
++	 * side-effect-free syscall that the supervisor itself never invokes.
++	 * Even though getppid() does not normally return an FD,
++	 * SECCOMP_ADDFD_FLAG_SEND replaces the trapped syscall's return value
++	 * with the newly installed FD number (42).
++	 */
++	listener = user_notif_syscall(__NR_getppid,
++				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	ASSERT_GE(listener, 0);
++
++	pid = fork();
++	ASSERT_GE(pid, 0);
++
++	if (pid == 0) {
++		/*
++		 * Tracee: invoke __NR_getppid as a dummy trigger syscall to
++		 * trap into do_user_notif(). Verify that the syscall returns
++		 * the injected FD number (42) and that FD 42 is open.
++		 */
++		ret = syscall(__NR_getppid);
++		exit(ret != 42 || fcntl(42, F_GETFD) < 0);
++	}
++
++	/* Wait for the tracee to trap in do_user_notif(). */
++	ASSERT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
++
++	/*
++	 * Demote the tracee to SCHED_IDLE and promote the supervisor to
++	 * SCHED_FIFO(99) on the same CPU.
++	 */
++	sched_setscheduler(pid, SCHED_IDLE, &sp_tracee_idle);
++	if (sched_setscheduler(0, SCHED_FIFO, &sp_supervisor_fifo) != 0) {
++		close(listener);
++		close(memfd);
++		kill(pid, SIGKILL);
++		waitpid(pid, NULL, 0);
++		SKIP(return, "SCHED_FIFO requires CAP_SYS_NICE");
++	}
++
++	addfd.srcfd = memfd;
++	addfd.newfd_flags = O_CLOEXEC;
++	addfd.newfd = 42;
++	addfd.id = req.id;
++	addfd.flags = SECCOMP_ADDFD_FLAG_SETFD | SECCOMP_ADDFD_FLAG_SEND;
++
++	/*
++	 * Fork a signal helper on the same CPU and set it to SCHED_FIFO(50).
++	 * Because the supervisor is currently running at SCHED_FIFO(99) on
++	 * this CPU, sig_pid is queued on the runqueue but cannot run until the
++	 * supervisor blocks inside the kernel.
++	 *
++	 * When the supervisor invokes ioctl(SECCOMP_IOCTL_NOTIF_ADDFD) below:
++	 *   1. seccomp_notify_addfd() sets knotif->state = SECCOMP_NOTIFY_REPLIED,
++	 *      wakes the tracee (SCHED_IDLE), and blocks in
++	 *      wait_for_completion_interruptible(&kaddfd.completion).
++	 *   2. The CPU scheduler immediately runs sig_pid (SCHED_FIFO 50)
++	 *      ahead of the woken tracee (SCHED_IDLE).
++	 *   3. sig_pid sends SIGUSR1 to parent_pid, waking the supervisor
++	 *      (SCHED_FIFO 99), which immediately preempts sig_pid, aborts the
++	 *      wait with -ERESTARTSYS (-EINTR), removes kaddfd from
++	 *      knotif->addfd, and restores knotif->state = SECCOMP_NOTIFY_SENT
++	 *      before the tracee has executed a single instruction.
++	 */
++	sig_pid = fork();
++	ASSERT_GE(sig_pid, 0);
++	if (sig_pid == 0) {
++		sched_setscheduler(0, SCHED_FIFO, &sp_sig_helper_fifo);
++		kill(parent_pid, SIGUSR1);
++		_exit(0);
++	}
++
++	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), -1);
++	EXPECT_EQ(errno, EINTR);
++	EXPECT_EQ(waitpid(sig_pid, &status, 0), sig_pid);
++
++	/*
++	 * Restore normal scheduling and sleep briefly so the woken tracee
++	 * runs in do_user_notif(). With knotif->state restored to
++	 * SECCOMP_NOTIFY_SENT, the tracee must loop back to sleep waiting for
++	 * the notification reply rather than returning 0 from __NR_getppid.
++	 */
++	sched_setscheduler(0, SCHED_OTHER, &sp_tracee_idle);
++	sched_setscheduler(pid, SCHED_OTHER, &sp_tracee_idle);
++	nanosleep(&delay, NULL);
++
++	/*
++	 * Retry SECCOMP_IOCTL_NOTIF_ADDFD. Because knotif->state is
++	 * SECCOMP_NOTIFY_SENT, the retry succeeds (returns 42) instead of
++	 * failing with -EINPROGRESS, installs FD 42 into the tracee, and wakes
++	 * the tracee to complete the syscall with return value 42.
++	 */
++	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), 42);
++
++	EXPECT_EQ(waitpid(pid, &status, 0), pid);
++	EXPECT_EQ(true, WIFEXITED(status));
++	EXPECT_EQ(0, WEXITSTATUS(status));
++
++	close(listener);
++	close(memfd);
++}
++
+ #ifndef SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP
+ #define SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP (1UL << 0)
+ #define SECCOMP_IOCTL_NOTIF_SET_FLAGS  SECCOMP_IOW(4, __u64)
 -- 
-2.43.0
-
+2.49.0
