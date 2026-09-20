@@ -1,120 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9310838424C
-	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 23:21:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A113F3203B4;
+	Sun, 20 Sep 2026 01:26:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789860117; cv=none; b=fQEXzkgewLlfkjAPcL0pi+HRJE/IsypRvBJ9/fmbX9fDJqKa0nNxbgMs0Hq0DI34jRDtSQnrtcJl6hzeZ7tqw8xrgkwYQYLWehwfZwk7AX/THtshWgPaHriZ0lrgBkaniM8cf+Ko+jZeGG881OA4nJnGUEh6110ViOFOOUxU2FQ=
+	t=1789867608; cv=none; b=PKlfrode5GwJ21a1hD2rl19xAUJdx5Wh+nTmY1D+9IUAKYLA3jbhbZFoZcaciaY3mOQISwHjAg4/ACRY/wz1LnWRV3xFeCDtX5Hl+rlTLkUk+pTxFfhOTh9NGEu2tHdCqNB8czp35dNw+BsuJ34ewszbKdyAWwcWVICQb1uRF6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789860117; c=relaxed/simple;
-	bh=Dz9Pg/RisBylqu21YuBa+QNZhpaAG0yys7Xa/DGJtIw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DYPcEbMh9wSsTZuSAL8+KG4ta3YmVFjbH093++q1Bu2NKl1QA6fz5Hmal2ffTioIeGLJqqmFWWDykYnX6aLjfJeh45LfOqyq79uH5hXbCJzcejkXJSlxIwrNbBIoU5tDlVdROR9J4vO7BpUc2NYChKbQzZypxVyhqmfR4yLUdng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NoQpOaeQ; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NoQpOaeQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 535321F00899
-	for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 23:21:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789860116;
-	bh=M2emGDt6ZD/PlD99DnGeYO2tV70JoaEZig2v2GPbr3o=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=NoQpOaeQ8eRPAsoWhljliNHLMkQ3/VkCPq6Mf60ggXZAQjaDGR6EPOhCbZRKkA6zP
-	 8JBQFtSBywHZeSqZfLnBOH5Zx/p5FjaAKlGGTY1dvS0QJqFV0QxptDo0/2tkHVhsp6
-	 C89emFqbNAmUG8VoLQ1KAD1/IJfvIgrDMhgX9EPcwrrJj8CBMkZDJGL/d8kv/1XWij
-	 Loos/gXqaRuxQl84fpy6qp6QCz2U0IHfuQmZMaZOQpZHAlcd5HWlvCPlcShakGYqut
-	 cwl4F1iAQgnFHslRlVMhk+RJaYI9PkSU3wF6CxecEhBKkk3x+3DUvGsJ9WX0A3N8V1
-	 JcOYmO4jYetTg==
-Received: by mail-qv2-f12.google.com with SMTP id 6a1803df08f44-912355b1bf6so7048526d6.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2026 16:21:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBwfqTko30pFv/LC233y16HNIu1s2dNN9cSN7sEI6PWmDbEdCcVj6m395aSMedYcVziI2/q+GXRU06/swOyKX10=@vger.kernel.org
-X-Gm-Message-State: AFuF++l3/ILwFQUiqfmmdpnfKTFHgasEOVu6S2KriUHd7Djhl3trnIgC
-	dyDvYYo8h/gpisNguLWkwSIYUDSVgBzZ3086CzAeNsndZaTrsEdqONItKG51zTWrN0GCN7/hYI2
-	OGLNcfgSYSEtmm6/IfCTDIjxa1cWGhXI=
-X-Received: by 2002:a05:620a:4416:b0:93b:d7a4:9d4d with SMTP id
- af79cd13be357-93bf5770d59mr363723285a.32.1789860115649; Sat, 19 Sep 2026
- 16:21:55 -0700 (PDT)
+	s=arc-20240116; t=1789867608; c=relaxed/simple;
+	bh=hQ2YQtKo+lGFX5pz4R9iNvjn2ddTKSsWKeIbp79soKE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QOQX+Fcbn6vxBCgPd2FgjnSF9dDlI311/+Ux9gwoSO/6cIXIF3Qk8OI9HAJNo6IfyvC2JgdsIVEcg1JPHdXv/q/If7WpXTu6ac+/XYiuyKQPfZqfvXiw73W+y6Y9vI9rGikcC47ZPuwNDaA/J9dr9LQBHdlZ7ENEBgSDeFq+OUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 53c3b2a6b49211f19a56ed5b684f684d-20260920
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:663688f7-5d7c-4453-8f6e-b72763eef6d6,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:7db8b62,CLOUDID:173d2fe8b43c80a999446499db76668c,BulkI
+	D:nil,BulkQuantity:0,SF:80|81|82|83|102|865|898,TC:nil,Content:0|15|50|99,
+	EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OS
+	A:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 53c3b2a6b49211f19a56ed5b684f684d-20260920
+X-User: tianyaxiong@kylinos.cn
+Received: from [10.42.13.21] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <tianyaxiong@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 1775970865; Sun, 20 Sep 2026 09:26:38 +0800
+Message-ID: <ac745597-8a43-43d0-b468-07896c3ac9a9@kylinos.cn>
+Date: Sun, 20 Sep 2026 09:26:35 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1789714023.git.zhuhui@kylinos.cn> <02f0a8dc45a840d7801ec17e0c1168f7dacf9b73.1789714023.git.zhuhui@kylinos.cn>
- <b115ece2-33a1-412e-ac25-38f339a13599@gmail.com> <aq2bo5Q-YUj7lkxn@linux.dev> <CAGsJ_4wauwY1-xRdM4aVb7FkSttKYzsKsWH4pF4i=Sspri0-jw@mail.gmail.com>
-In-Reply-To: <CAGsJ_4wauwY1-xRdM4aVb7FkSttKYzsKsWH4pF4i=Sspri0-jw@mail.gmail.com>
-From: Barry Song <baohua@kernel.org>
-Date: Sun, 20 Sep 2026 07:21:44 +0800
-X-Gmail-Original-Message-ID: <CAGsJ_4yXMcPASKtOBZWnyN1ztoGFoGjChT3N25UrFL9QovAdGw@mail.gmail.com>
-X-Gm-Features: AcwNN1U1j2QcyV3XRNhP_V-Q0Z2asX8-vPO3_K_IxjKnLVixdgROQw93LqTOeL0
-Message-ID: <CAGsJ_4yXMcPASKtOBZWnyN1ztoGFoGjChT3N25UrFL9QovAdGw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v12 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: JP Kobryn <inwardvessel@gmail.com>, Hui Zhu <hui.zhu@linux.dev>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
-	David Hildenbrand <david@kernel.org>, Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	Hui Zhu <zhuhui@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/6] cpuidle: speed up do_idle() by caching the
+ governor latency QoS constraint
+To: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
+Cc: daniel.lezcano@kernel.org, christian.loehle@arm.com, lenb@kernel.org,
+ pavel@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260729061549.13419-1-tianyaxiong@kylinos.cn>
+ <1789693766158145.347.seg@mailgw.kylinos.cn>
+ <b81b66cc-1761-4653-9cdb-c8a8286718bf@kylinos.cn>
+ <1789866017803592.362.seg@mailgw.kylinos.cn>
+Content-Language: en-US
+From: Yaxiong Tian <tianyaxiong@kylinos.cn>
+In-Reply-To: <1789866017803592.362.seg@mailgw.kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, Sep 20, 2026 at 6:36=E2=80=AFAM Barry Song <baohua@kernel.org> wrot=
-e:
-[...]
-> > > Related to the previous comment, you treat the special values as part=
- of
-> > > the range. It works currently, but creates a layout dependency on the
-> > > enum. I think it would be more future-proof if you did:
-> > >
-> > > if (swappiness !=3D -1 && swappiness !=3D SWAPPINESS_ANON_ONLY) {
-> > >       if (swappiness < MIN_SWAPPINESS || swappiness > MAX_SWAPPINESS)
-> > >               return -EINVAL;
-> > > }
-> > >
-> > > The previous comments I brought up are now resolved, so assuming you'=
-ll
-> > > make the changes above you can include:
-> > >
-> > > Reviewed-by: JP Kobryn <jp.kobryn@linux.dev>
-> >
-> > Hui, please make these changes and just send this patch in next version=
-.
->
-> Hi JP and Shakeel,
->
-> This feels a bit weird to me, since 0=E2=80=93201 are all valid
-> swappiness values.
->
-> 201 (`SWAPPINESS_ANON_ONLY`) is just as valid a swappiness value
-> as 200. In contrast, -1 is a different story, as it indicates
-> completely different semantics.
->
-> If 201 is treated as a special value, then 0 (`MIN_SWAPPINESS`)
-> should be treated the same way for MGLRU, since 0 means file-only
-> reclaim there. This isn't the case for CLRU, where swappiness 0
-> can still reclaim anon folios.
->
-> If possible, I'd vote for keeping Hui's current code :-)
 
-On second thought, you might be right, as there could theoretically be a
-case where `SWAPPINESS_ANON_ONLY` is not defined as
-`MAX_SWAPPINESS + 1`, but as, for example, 400 or some other value.
-
-That said, I find `MAX_SWAPPINESS` and `SWAPPINESS_ANON_ONLY` really
-weird. Somehow, I feel `MAX_SWAPPINESS` should be
-`SWAPPINESS_ANON_ONLY`, since 201 is actually the maximum valid
-swappiness value, rather than 200.
-
-For the change suggested by JP, I think it is right if we don't clean up
-`MAX_SWAPPINESS` and `SWAPPINESS_ANON_ONLY` properly.
-
-With the change suggested by JP,
-
-Reviewed-by: Barry Song <baohua@kernel.org>
+On 2026/9/18 20:06, Rafael J. Wysocki (Intel) wrote:
+> On Fri, Sep 18, 2026 at 4:09 AM Yaxiong Tian <tianyaxiong@kylinos.cn> wrote:
+>>
+>> On 2026/9/18 03:34, Rafael J. Wysocki (Intel) wrote:
+>>> On Wed, Jul 29, 2026 at 8:16 AM Yaxiong Tian <tianyaxiong@kylinos.cn> wrote:
+>>>> cpuidle_governor_latency_req() is evaluated on every idle-state
+>>>> selection.  It aggregates the per-CPU resume latency with the global
+>>>> CPU latency and wakeup latency QoS limits
+>>> True.
+>>>
+>>>> by repeatedly calling
+>>>> get_cpu_device() and pm_qos_read_value() cpu_latency_qos_limit()
+>>>> cpu_wakeup_latency_qos_limit().
+>>> I would say "every time" rather than "repeatedly", but fair enough.
+>>>
+>>> However, those functions don't do anything expensive except for
+>>> defensive checks that can be omitted.  Have you tried to omit them?
+>> I haven't tried that, but I found that function_graph may introduce measurement errors, especially for very short functions.
+>>>> Use ftrace's function_graph, we can see:
+>>>> parent:          do_idle
+>>>> parent_total_ns: 36671010505
+>>>> parent_count:    5994
+>>>>
+>>>> SYMBOL                                                      TIME_NS    %ROOT  %PARENT      COUNT
+>>>> --------------------------------------------------------------------------------------------------
+>>>> do_idle                                                 36671010505  100.00%  100.00%       5994
+>>>>   cpuidle_idle_call                                     35566528731   96.99%   96.99%       8570
+>>>>     call_cpuidle                                        35476606844   96.74%   99.75%       8561
+>>>>       cpuidle_enter                                     35472932468   96.73%   99.99%       8526
+>>>>     cpuidle_select                                         52097031    0.14%    0.15%       8580
+>>>>       menu_select                                          49555181    0.14%   95.12%       8580
+>>>>         tick_nohz_get_sleep_length                         28843887    0.08%   58.21%       8570
+>>>>         cpuidle_governor_latency_req                        9567488    0.03%   19.31%       8580
+>>>>         tick_nohz_tick_stopped                              2057031    0.01%    4.15%      15695
+>>>>     cpuidle_reflect                                        11427201    0.03%    0.03%       8561
+>>>>       menu_reflect                                          6579506    0.02%   57.58%       8526
+>>>>         tick_nohz_idle_got_tick                             2231559    0.01%   33.92%       8526
+>>>>       __sysvec_apic_timer_interrupt                          105520    0.00%    0.92%          3
+>>>>     tick_nohz_idle_stop_tick                                8279641    0.02%    0.02%       1475
+>>>>     ---- skip
+>>>>
+>>>> The majority of the time spent in cpuidle_enter for CPUs entering
+>>>> idle state has already been charged to the idle path. Among the
+>>>> remaining contributors, cpuidle_governor_latency_req() accounts
+>>>> for a non-negligible portion of the overall latency.
+>>>>
+>>>> Under the menu governor this shows up hot: ftrace data shows,
+>>>>  cpuidle_governor_latency_req() accounts for about 19.9% of
+>>>> menu_select() time (~1.9 us/call).  After caching the aggregated
+>>>> value per CPU and invalidating via QoS notifiers, that share drops to
+>>>> about 4.2% (~0.3 us/call), roughly a 6x reduction on this path.
+>>> Is there any real-world workload in which that difference is actually visible?
+>> Sorry, I only tested it under no load.
+>>
+>>>> The ftrace data before and after the optimization is shown below:
+>>>> 1) original
+>>>> parent:          menu_select
+>>>> parent_total_ns: 160492937
+>>>> parent_count:    16718
+>>>>
+>>>> SYMBOL                                                      TIME_NS    %ROOT  %PARENT      COUNT
+>>>> --------------------------------------------------------------------------------------------------
+>>>> menu_select                                               160492937  100.00%  100.00%      16718
+>>> Where did you lose menu_update()?
+>> Because menu_update() was optimized away by the compiler, it can't be seen in /proc/kallsyms, so it won't be traced by ftrace either.
+> How could it be optimized away?
+Sorry, "optimized away" was a poor choice of words. Nothing was removed
+- menu_update() still runs, but the compiler inlined it into its only
+caller, so no out-of-line body is emitted. No body -> no function entry
+-> no call fentry site in __mcount_loc -> no kallsyms symbol -> nothing
+for function_graph to trace. GCC can do that because menu_update() is
+static, has exactly one caller (menu.c:228) .
