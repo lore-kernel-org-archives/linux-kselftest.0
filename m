@@ -1,82 +1,144 @@
-Received: from mail-pj2-f36.google.com (mail-pj2-f36.google.com [74.125.227.164])
+Received: from mail-yx2-f29.google.com (mail-yx2-f29.google.com [74.125.224.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E013D3D11
-	for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 18:59:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.164
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A814718E4
+	for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 19:36:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789930754; cv=none; b=h+BgKqcxcAAglhJEqcM4/DOfXKStTXEKg8WkF5mTfB+2KzYkdC7OAh3iLD0PXkmbZbLkSMohPhDu942DqsTagKSHssxuww5q04ZnSBYnCQwPEP0ERftYGvsI7sW2zMrozegInvVe0Fcd1Hs2FnQ2MTIiiWSndxXG6b1APUCC5OQ=
+	t=1789933021; cv=none; b=RTE10ZxG0Z2PiOy26DW84xkIghe3JRmOBogzoA/joJLK9Glab6pJxH2PK5MaAL09gDWAkHXK3c+PBcsq+ZlE7DQfEx/GP864yZWVzUeJlHEZUnZusDgTrE93FuW5AQXdM+Dw9g29NUFMyqNUpEmyFMulw5aCFVEV9HAYTYOiSbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789930754; c=relaxed/simple;
-	bh=46uMN4lJrSmclQBpzEHuI1ksKCrff2Sc5bU/8mZe8KI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CRU53lS/gAUdRyy7uF6TuLT1yIa8w7n8dQawYmLjnadacFCaMixkk+Gj4SNC6b/qgFDbr7LE0XRjYuM0onIHK8ZvP41gAHWYwOkuQpGhZCHV8iY/T89CSaMstVQ+hSuTfX8CB7XIwUhl2ONkzKAl1tZ0xewpjsz9IEBNXaHcCF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ffgKgLAb; arc=none smtp.client-ip=74.125.227.164
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789933021; c=relaxed/simple;
+	bh=5/jzvqe0BI1q/7sUFWqbU0QbLDpwftKxNlY814+z1KU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=J5B5i2s2PIwIA8UC3Gp+/17buMH3GVdZUWaWSw1511XgqG2jrMzPDzMw8m3sdxuYo7N9nNyFdyz5IGfCe5l7jhZ/cy1vmrLYpzDWQSxsvmodpLU6QwSaDUOJl6vVrhUS67gjTD9BeGIrgY2sSi3nBcBMeyJZPWUaWA2Py/3nO2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=AvImfVfI; arc=none smtp.client-ip=74.125.224.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ffgKgLAb"
-Received: by mail-pj2-f36.google.com with SMTP id d9443c01a7336-2d8fdc579daso26174245ad.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 11:59:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="AvImfVfI"
+Received: by mail-yx2-f29.google.com with SMTP id 00721157ae682-85d43da99easo18599857b3.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 12:36:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789930752; x=1790535552; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=X3PDFqCazi4Kprb1qz6IGJP/J9CVmi8tfYOpx0/Dzzg=;
-        b=ffgKgLAbQaZECqL+qKjbUDFWWeAUFMvS/DDrYuKOgqA1oeYQrAGDaCVwrkU+cHXF8I
-         EvOM6nbWqsJzA3VlLfiPwedKqFK3ODReBpjWsLzwGtbtLMLoGS53KQJR///+DldmV7PV
-         8sgvYGaUN8VajREmG3rIQCBAp69faeNmp4jffVcPvHNoL1a64Qu3zKazyvUecF1ia6qx
-         3TtOMskVh3zdxCsRa8e4uSAocg1llJOvpQ5ViIC7o+1yLBpP2amMkRway2SQwnpBxq0d
-         C9/EepQhhCTTApqtpxMlMVoPugxzopBCjQvtMel0h3DiRNtuFpRXCPhTU5MKVLxzHBK7
-         tYtg==
+        d=soleen.com; s=google; t=1789933016; x=1790537816; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=SWKz/8OeAkiGFbZLGJoBxcLgC1DzN7WUJVOWNvZAQ8A=;
+        b=AvImfVfIdCW/Dfk4XZaI7UWuEdRsKmVEuFU8ofYzauV0Hxs/2CA35OLQp5t9Ue21SX
+         Tfkbh3jo93YySvVWu2FBgbkBNYu4IICj3XdsmU8NHtsHa716NMybJhp8pG6SSFx60rJA
+         11ehw9r5wtePfHkWu811BKn30QJ5DFzPTiVlF46sVXdCFltbPvD/GQj8bAxv8QqPjX84
+         lRrX+IdH6IAfmThiqwupUP2gKpTYl7W3n1stAR7e3Q+PIRDCPWLeNGigBK9z8S/NyoWF
+         cGRLygFSsiu4jZprClJUTaj7eZ9X7I9tscTNU8+E1wN5/W/9d1ew97uMoT08V+gN8QjZ
+         8GwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789930752; x=1790535552;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=X3PDFqCazi4Kprb1qz6IGJP/J9CVmi8tfYOpx0/Dzzg=;
-        b=y9zHJbhTTNdhDNOwCan/AGA+15IeXQtvS98jYikPKUe3kKv53TNQFW8l6XB4Htq8vA
-         QWMEnKseZV8ElfWopDbSI4HDQPxNHiUcb9SZKmQ9fNeIqXp2tpU79W95anlGT/vedcuJ
-         XdFMR08cvDyvDgBcGUmGz4+sFApWbiIgoWJAo2+7tCeWb8VVtKr6FhiyH/1f/WFz1zvq
-         d30MgHhmpr2V0Y/4UgtCor9t0o7u0wJKb8aj9uK3aLuIGC0AFA135jsbyIxAzC39i7Rg
-         3+e9ZqmqSA9eYky7uoo+sjg7PCE/7PKlF0Vg0uB3HCEQb6iCRiQIrn2vMASqXBqZNk4K
-         vqOA==
-X-Forwarded-Encrypted: i=1; AKwUvBwCMnFDNKF7T27t8HL2Aqoc+2PpW7kXNEiSpgcYGeCYdDtXRLsZKdtX+fD8WB6QI2FApBbBleWYilZfr6nxpf0=@vger.kernel.org
-X-Gm-Message-State: AFuF++nb6Cqp0+DqF8u4ICEl2FGhhM18C6zJ+Myw7VSYRc4rz5YlAgQF
-	XpLAb12BD+T2jJlWSHb7NGpfm5dObE/XMeLqXbSFlLTuR4i3/bO/GpeJ
-X-Gm-Gg: AYBFou2MyIbhYB5iuX2wTGFieChBK/zSPX+NCtRuJzxVo+pbz6Xg6oVZkZzoOWJ+zvX
-	2GDbXPMCYBoZ2fREdOdqyeDkmQTwSpxEghYue+nQRkBceCWYGrp5nyxT0qa4z3EIWbd6uL6VYIx
-	X6mtxhtRM+vaaCV3QvbXxi55cAahMFG6/T0zUxx8gqMr52VHlZECin0i5SdUFq6ggYA8f9jdhPC
-	XKTixBdNa5JJzDU3ErCgEKd04z8QpJHU3zn9oYjIUXtJLxA/JtktII7i2qfSWaJTylWyq34oQJj
-	YGZExkrS1pckzUcKnEICBuKXU+wJu/qsXHxihGMiJora62pDJQLG3FXh6QzMD2TfEfXdWCRr++B
-	NQ5WnemqMcIyeVVR8f+IN3ZomaTZsweLR3IfJyyB+P8ul9mw62Bhm5pxpFRTnUuegNqpOhaef7u
-	Xe/m2ioCcJVIC7j/7I+ayRWe/AmV+zft/wyRBe9ar40gSPzIgOHqSa2vJI43TnvNmw63UYw4z9e
-	eaVY7fA6RUmeEMAya3c2cFkWC6A8C15fRRjPom8FFGjXW+FPNyGPmscBkh7dyF21vMWGw1RWllj
-	veNGBKFYcw==
-X-Received: by 2002:a17:902:eccb:b0:2dd:c100:3140 with SMTP id d9443c01a7336-2ddc100325fmr74778415ad.60.1789930752358;
-        Sun, 20 Sep 2026 11:59:12 -0700 (PDT)
-Received: from phui-2.c.googlers.com.com (67.51.127.34.bc.googleusercontent.com. [34.127.51.67])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df475fd2bcsm3912305ad.7.2026.09.20.11.59.11
+        d=1e100.net; s=20260707; t=1789933016; x=1790537816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=SWKz/8OeAkiGFbZLGJoBxcLgC1DzN7WUJVOWNvZAQ8A=;
+        b=Ydds4J6ir5KmsDLeJND7froyhvRh+EzXup/+4FI4Bd4IzHKyv/at5ouOkkfB81ZhXb
+         tVMRU5XFHVhbj7XJC/yQfxmIkCT0qTPYnfR09Ha/5c9+F4lYjJHY3eDBHHqjhy9uwklm
+         uqyIJkHWBJjJkU3go849keTGJLHjIbyQ62ExuQsAO89qR0L/kILlSV0+xriV51co1hcd
+         BqNt+xen1FKpRko93DJolz1i5046souDMqhNkR6RiY7nknnGj94Jn5UwjrqwfYlJvbyd
+         gxGt3Srw1DAVUtZPt3izgdSU2j94fNbFnP0izYsZmMFpAsH+TTFRfgR/n1N81I2wUng0
+         GjaQ==
+X-Gm-Message-State: AFuF++lxi8A2SuHjVRSoI7SR15WIkEwbfIdwqCqPr7ZaPe0XzzvlFwVu
+	xD6IgIsKrRkMEs7TeR+l3eRdPGF5b9shqoDA57s1V7P3uMnPSHEXZKsJhh6GDP5WDPC3uKkaC0A
+	6lno2sI4=
+X-Gm-Gg: AYBFou20GoH9qEe92YZcnIaNnQHdf5JHnLBzfTyhXSHoaytQDGg3xrc/rlmzohzyerZ
+	sKWjkIcE0GASV1bPlpDlXwR548YjwxCS57/hYxhNeGrLRZcmT+x/Acs9j7mxCqmtvvGWXE4JOJY
+	TAGlgE5c0zHYfbQkER8Vf6mbb7mwM6GGKqyQVIMXIQd0e9xrMswmkL3lrZ0G7cPKC1TudkROXlB
+	gZy3AWBgwYlg0RJZ1Jio7hcxuTib7uFDxz+QNPhZgO9z4yjZ+ieAXLpVnFhPJKz9y7GtncsP2WM
+	EwxD3fMFhsDD1Pb64RZ27l0srTkz+1cxvjolxz8j6lMcPathJAKQ9xdk7F+qS0n39MxbOy5L6jO
+	m0nE9b4Tb9lvjDuZBCbKrms563GurVgmdhRsCNKyMMDyBGeWaINtVDuZ01LEzX/mwcd2+RzTUVZ
+	rVTm+hoEgd7ti2lYUltgWw64FUubZwqG4R/lxDg7ygmyBb2SiyONFYlvFFxHYUAwYBd+/PXCSGY
+	MKnqoBSPSut0ud97dXtKLY3yvDR07wCrYsAyDq02xT9w+kM66vr8VOFUdodGMh5tR7s1b7fPvJ3
+	NgVe2lAokC4h+ojJ21s=
+X-Received: by 2002:a05:690c:c6d2:b0:873:5bd1:98cf with SMTP id 00721157ae682-89738781626mr20406527b3.65.1789933015865;
+        Sun, 20 Sep 2026 12:36:55 -0700 (PDT)
+Received: from soleen.c.googlers.com.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-89a415208bfsm19230137b3.3.2026.09.20.12.36.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Sep 2026 11:59:11 -0700 (PDT)
-From: Hui Peng <benquike@gmail.com>
-To: Kees Cook <kees@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Bradley Morgan <brads@mainlining.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
+        Sun, 20 Sep 2026 12:36:55 -0700 (PDT)
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: linux-kselftest@vger.kernel.org,
+	legion@kernel.org,
+	kees@kernel.org,
+	will@kernel.org,
+	ruanjinjie@huawei.com,
+	atomlin@atomlin.com,
+	rppt@kernel.org,
+	jani.nikula@intel.com,
+	hamzamahfooz@linux.microsoft.com,
+	joey.gouly@arm.com,
+	tglx@kernel.org,
+	nsc@kernel.org,
+	alexandre.chartre@oracle.com,
+	james.morse@arm.com,
+	dianders@chromium.org,
+	bp@alien8.de,
+	jpoimboe@kernel.org,
+	shuah@kernel.org,
+	catalin.marinas@arm.com,
+	linux-kbuild@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	jaredwhite@microsoft.com,
+	johan@kernel.org,
+	pbonzini@redhat.com,
+	mingo@redhat.com,
+	linux-mm@kvack.org,
+	seanjc@google.com,
+	mark.rutland@arm.com,
+	vdonnefort@google.com,
+	tarunsahu@google.com,
+	gshan@redhat.com,
+	skhan@linuxfoundation.org,
+	linux-doc@vger.kernel.org,
+	xur@google.com,
+	djbw@kernel.org,
+	oupton@kernel.org,
+	nogikh@google.com,
+	sumitg@nvidia.com,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org,
-	Hui Peng <benquike@gmail.com>
-Subject: [PATCH v4] seccomp: restore knotif->state when SECCOMP_ADDFD_FLAG_SEND is interrupted
-Date: Sun, 20 Sep 2026 18:59:10 +0000
-Message-ID: <20260920185910.3307638-1-benquike@gmail.com>
+	zengheng4@huawei.com,
+	peterz@infradead.org,
+	corbet@lwn.net,
+	suzuki.poulose@arm.com,
+	luto@kernel.org,
+	hpa@zytor.com,
+	zhangpengjie2@huawei.com,
+	x86@kernel.org,
+	yuzenghui@huawei.com,
+	jic23@kernel.org,
+	ardb@kernel.org,
+	pasha.tatashin@soleen.com,
+	petr.pavlu@suse.com,
+	ryan.roberts@arm.com,
+	kexec@lists.infradead.org,
+	pratyush@kernel.org,
+	dave.hansen@linux.intel.com,
+	rdunlap@infradead.org,
+	kvm@vger.kernel.org,
+	fuad.tabba@linux.dev,
+	maz@kernel.org,
+	mbenes@suse.cz,
+	jgross@suse.com,
+	seiden@linux.ibm.com,
+	pierre.gondois@arm.com,
+	song@kernel.org,
+	nathan@kernel.org,
+	pmladek@suse.com,
+	graf@amazon.com,
+	chao.gao@intel.com,
+	zhenglifeng1@huawei.com,
+	arnd@arndb.de,
+	sidnayyar@google.com,
+	linux-arm-kernel@lists.infradead.org,
+	vladimir.murzin@arm.com,
+	kas@kernel.org
+Subject: [RFC PATCH 00/46] Orphaned Virtual Machines
+Date: Sun, 20 Sep 2026 15:36:04 -0400
+Message-ID: <20260920193650.3373435-1-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.55.0.1082.g2b9226bbc0-goog
-In-Reply-To: <A3F8F45D-3B9B-4E52-B076-7924FF3AF360@mainlining.org>
-References: <A3F8F45D-3B9B-4E52-B076-7924FF3AF360@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,268 +147,472 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In seccomp_notify_addfd(), when SECCOMP_ADDFD_FLAG_SEND is set in
-addfd.flags, knotif->state is optimistically transitioned from
-SECCOMP_NOTIFY_SENT to SECCOMP_NOTIFY_REPLIED before waking the tracee
-and waiting on kaddfd.completion:
+This RFC series is a PoC intended to showcase e2e working OrphanVMs
+uninterrupted continuing execution on preserved physical CPUs across a
+host kernel live update, prepared for the LPC'26 presentation at the
+KVM Microconf [1].
 
-	if (addfd.flags & SECCOMP_ADDFD_FLAG_SEND) {
-		knotif->state = SECCOMP_NOTIFY_REPLIED;
-		...
-	}
+The original design proposal discussion can be found at [2].
 
-If wait_for_completion_interruptible(&kaddfd.completion) is interrupted
-by a signal before the tracee dequeues the kaddfd request
-(!list_empty(&kaddfd.list)), seccomp_notify_addfd() removes kaddfd from
-knotif->addfd and returns -EINTR to the supervisor without having
-installed the file descriptor.
+This series is applied on top of v7.3-rc1 + the "[PATCH v4 00/11]
+liveupdate: kvm: Guest_memfd preservation" series [3]. The whole branch
+can be accessed at [4].
 
-However, knotif->state is left as SECCOMP_NOTIFY_REPLIED (with
-knotif->error == 0 and knotif->val == 0). This causes two problems:
+It was tested on Intel Xeon Granite Rapids-AP, AMD EPYC Turin, and ARM
+Neoverse V2, as well as in emulation on QEMU and Intel Simics. However,
+it is still very early WIP, and is not anywhere near being production
+ready.
 
-1. When the tracee runs in do_user_notif(), it checks
-   if (knotif.state != SECCOMP_NOTIFY_REPLIED) after calling
-   seccomp_handle_addfd(). Because knotif->state is already
-   SECCOMP_NOTIFY_REPLIED, the tracee exits the notification wait loop
-   prematurely and returns 0 from the trapped syscall without the file
-   descriptor ever having been installed.
+Overview & Submission Strategy
+==============================
+While this RFC bundles the e2e stack, it is NOT intended to be merged as
+a single series, the goal of this series is to have a discussion about
+the technical layers, and the challenges that need to be solved in order
+to have full Caretaker support within the kernel.
 
-2. If the supervisor retries SECCOMP_IOCTL_NOTIF_ADDFD or
-   SECCOMP_IOCTL_NOTIF_SEND before the tracee runs, it fails with
-   -EINPROGRESS because knotif->state is no longer SECCOMP_NOTIFY_SENT.
+Some of the arch/* changes duplicate small helpers (such as GICv3 list
+register accessors or low-level VMCS/VMCB/sysreg helpers) that could be
+shared with existing KVM/arch code if those routines and their callees
+are moved to static inlines or annotated with __cpu_preserved_text (and
+built without ftrace/KASAN/per-CPU references, as enforced by objtool
+and modpost). To avoid sprinkling __cpu_preserved_text annotations
+across core arch/* files in this PoC, those helpers are kept local to
+caretaker.c for now and can be consolidated when individual platform
+support is upstreamed.
 
-Fix this by restoring knotif->state back to SECCOMP_NOTIFY_SENT if
-SECCOMP_ADDFD_FLAG_SEND was set and kaddfd was not consumed before the
-interrupted wait. Also add a seccomp_bpf selftest
-(user_notification_addfd_send_interrupted) covering this race.
+The series is structured into at least 8 workstreams that will be
+discussed and worked on separately:
 
-Tested in QEMU against Linux 7.3.0-rc3 by exercising kernel/seccomp.c
-and verifying the fix with KASAN enabled.
+1. Workstream 1: Preparation Patches (Patches 01-06)
+   Architecture-neutral and arch-specific preparatory cleanups (in
+   future these could be bundled with the workstreams that require these
+   changes):
+     01. KVM: luo: Delegate VM creation type to kvm_arch_vm_luo_preserve
+     02. KVM: arm64: Split demux_c15_{get,set}_val from userspace
+         accessors
+     03. KVM: arm64: Split kvm_sys_reg_{get,set}_user from kernel
+         accessors
+     04. x86/mm/ident_map: Add force_pte to support 4K PTE identity
+         mappings
+     05. arm64: mm: Add trans_pgd_map_range() support
+     06. x86/smp: Skip offline CPUs for REBOOT_VECTOR in
+         native_stop_other_cpus()
 
-Fixes: 0ae71c7720e3 ("seccomp: Support atomic "addfd + send reply"")
-Cc: stable@vger.kernel.org
-Reviewed-by: Bradley Morgan <brads@mainlining.org>
-Assisted-by: LLM
-Signed-off-by: Hui Peng <benquike@gmail.com>
----
-Changes in v4:
-- Restore Reviewed-by: Bradley Morgan <brads@mainlining.org> and Cc:
-  stable@vger.kernel.org tags from v1 (and restore Bradley Morgan to Cc),
-  and add Assisted-by: LLM tag.
-- Fix Fixes: tag SHA and subject (0ae71c7720e3 ("seccomp: Support atomic
-  "addfd + send reply"")).
-- Fix truncated word "interrupted" in the Subject line.
+2. Workstream 2: In-Kernel In-RAM vCPU State Preservation via LUO
+   (Patches 07-10)
+   Allows performing suspend/resume-type preservation across kexec
+   without carrying the vCPU internal state in the VMM in userspace,
+   keeping all vCPU state in-kernel:
+     07. KVM: luo: Support vCPU file preservation across live updates
+     08. KVM: x86: Add x86 vCPU LUO preservation ABI and register
+         helpers
+     09. KVM: x86: Implement architectural vCPU state preservation via
+         LUO
+     10. KVM: arm64: Implement architectural vCPU state preservation via
+         LUO
 
-Changes in v3:
-- Actually include the tools/testing/selftests/seccomp/seccomp_bpf.c
-  regression test in the patch diff (v2 accidentally omitted the selftest
-  hunk), with detailed comments explaining the race and test setup.
+3. Workstream 3: Physical CPU Preservation Core & x86 Support
+   (Patches 11-24)
+   Introduces the physical CPU preservation subsystem (cpu_preserve),
+   linker sections (.text.cpu_preserved, .data.cpu_preserved) with
+   build-time section isolation checks in modpost and objtool, isolated
+   transition page table management (struct cpu_preserved_as), and sysfs
+   interfaces. Allows booting the machine with some CPUs removed from
+   the OS scheduler, and provides infrastructure for executing orphaned
+   jobs on such CPUs:
+     11. liveupdate: Define CPU preservation linker sections
+     12. liveupdate: Add liveupdate_session_name() helper
+     13. cpu_preserve: Add physical CPU preservation ABI and core API
+         headers
+     14. cpu_preserve: Add core physical CPU preservation state and park
+         loop
+     15. cpu_preserve: Add physical CPU preservation lifecycle and build
+         rules
+     16. liveupdate: cpu_preserve: Add sysfs interface
+     17. liveupdate: cpu_preserve: Add isolated address space management
+         API
+     18. liveupdate: cpu_preserve: Add LUO file handler for preserved
+         physical CPUs
+     19. x86: liveupdate: Add low-level physical CPU preservation
+         assembly
+     20. x86: liveupdate: Add physical CPU preservation context and page
+         table support
+     21. selftests: liveupdate: Add physical CPU preservation unit tests
+     22. selftests: liveupdate: Add physical CPU preservation live
+         update tests
+     23. Documentation: liveupdate: Add physical CPU preservation
+         documentation
+     24. MAINTAINERS: Add entry for KVM Caretaker
 
-Changes in v2:
-- Add user_notification_addfd_send_interrupted regression test to
-  tools/testing/selftests/seccomp/seccomp_bpf.c as requested by Kees Cook.
+4. Workstream 4: ARM64 Support for Physical CPU Preservation (Patch 25)
+   Enables physical CPU preservation on ARM64 using isolated transition
+   page tables (trans_pgd_map_range()), cache maintenance to PoC, and
+   GICv3 redistributor SGI wake helpers:
+     25. arm64: liveupdate: Add support for physical CPU preservation
 
- kernel/seccomp.c                              |   2 +
- tools/testing/selftests/seccomp/seccomp_bpf.c | 161 ++++++++++++++++++
- 2 files changed, 163 insertions(+)
+5. Workstream 5: On-Core Scheduling Framework (oncore) (Patches 26-27)
+   (Note: This layer sits between cpu_preserve and the KVM Caretaker and
+   Kernel Caretaker (Future Work for Orphaned Processes))
+   Provides a runqueue and time-slice scheduling framework
+   (kernel/liveupdate/oncore.c) that multiplexes preserved workloads
+   onto preserved physical CPUs during the kexec blackout window:
+     26. oncore: Add on-core KHO ABI and public framework headers
+     27. oncore: Implement on-core session lifecycle and scheduling loop
 
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index 86cf4460d69e..94c7ba80a8f7 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -1808,10 +1808,13 @@ static long seccomp_notify_addfd(struct seccomp_filter *filter,
- 	 * We need to check again if the addfd request has been handled,
- 	 * and if not, we will remove it from the queue.
- 	 */
--	if (list_empty(&kaddfd.list))
-+	if (list_empty(&kaddfd.list)) {
- 		ret = kaddfd.ret;
--	else
-+	} else {
- 		list_del(&kaddfd.list);
-+		if (addfd.flags & SECCOMP_ADDFD_FLAG_SEND)
-+			knotif->state = SECCOMP_NOTIFY_SENT;
-+	}
- 
- out_unlock:
- 	mutex_unlock(&filter->notify_lock);
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 0622bc2acad4..e565728f9eb2 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -4368,6 +4368,173 @@ TEST(user_notification_addfd_rlimit)
- 	close(memfd);
- }
- 
-+static void sigusr1_handler(int signo)
-+{
-+}
-+
-+/*
-+ * Verify that when SECCOMP_IOCTL_NOTIF_ADDFD with SECCOMP_ADDFD_FLAG_SEND is
-+ * interrupted by a signal before the tracee dequeues the addfd request,
-+ * knotif->state is restored from SECCOMP_NOTIFY_REPLIED back to
-+ * SECCOMP_NOTIFY_SENT so that:
-+ *   1. The woken tracee sees knotif->state == SECCOMP_NOTIFY_SENT in
-+ *      do_user_notif() and goes back to sleep instead of prematurely
-+ *      returning 0 from the trapped syscall without the FD installed.
-+ *   2. The supervisor can retry SECCOMP_IOCTL_NOTIF_ADDFD (or
-+ *      SECCOMP_IOCTL_NOTIF_SEND) instead of failing with -EINPROGRESS.
-+ *
-+ * To deterministically hit the race window where the supervisor sleeps in
-+ * wait_for_completion_interruptible(&kaddfd.completion) after waking the
-+ * tracee (complete(&knotif->ready)) but before the tracee runs
-+ * seccomp_handle_addfd(), pin all processes to a single CPU and enforce a
-+ * strict 3-tier scheduling priority hierarchy on that CPU:
-+ *   - Supervisor:            SCHED_FIFO priority 99 (highest)
-+ *   - Signal helper (sig_pid): SCHED_FIFO priority 50 (middle)
-+ *   - Tracee (pid):          SCHED_IDLE             (lowest)
-+ */
-+TEST(user_notification_addfd_send_interrupted)
-+{
-+	/*
-+	 * Save parent_pid before user_notif_syscall(__NR_getppid, ...) installs
-+	 * the seccomp filter on the calling process; children inherit that
-+	 * filter, so sig_pid must not call getppid().
-+	 */
-+	pid_t pid, sig_pid, parent_pid = getpid();
-+	long ret;
-+	int status, listener, memfd;
-+	struct seccomp_notif_addfd addfd = {};
-+	struct seccomp_notif req = {};
-+	struct sigaction sa = {};
-+	struct sched_param sp_tracee_idle = { .sched_priority = 0 };
-+	struct sched_param sp_supervisor_fifo = { .sched_priority = 99 };
-+	struct sched_param sp_sig_helper_fifo = { .sched_priority = 50 };
-+	struct timespec delay = { .tv_nsec = 15000000 };
-+	cpu_set_t cpuset;
-+	int cpu;
-+
-+	/* Pin the supervisor (and its future child processes) to one CPU. */
-+	cpu = sched_getcpu();
-+	if (cpu >= 0) {
-+		CPU_ZERO(&cpuset);
-+		CPU_SET(cpu, &cpuset);
-+		sched_setaffinity(0, sizeof(cpuset), &cpuset);
-+	}
-+
-+	sa.sa_handler = sigusr1_handler;
-+	ASSERT_EQ(sigaction(SIGUSR1, &sa, NULL), 0);
-+
-+	memfd = memfd_create("test", 0);
-+	ASSERT_GE(memfd, 0);
-+
-+	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
-+	}
-+
-+	/*
-+	 * Follow the convention of other user_notification_* tests in this
-+	 * file by trapping __NR_getppid: because the filter is installed on
-+	 * the supervisor before fork(), the trapped syscall must be a
-+	 * side-effect-free syscall that the supervisor itself never invokes.
-+	 * Even though getppid() does not normally return an FD,
-+	 * SECCOMP_ADDFD_FLAG_SEND replaces the trapped syscall's return value
-+	 * with the newly installed FD number (42).
-+	 */
-+	listener = user_notif_syscall(__NR_getppid,
-+				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
-+	ASSERT_GE(listener, 0);
-+
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+
-+	if (pid == 0) {
-+		/*
-+		 * Tracee: invoke __NR_getppid as a dummy trigger syscall to
-+		 * trap into do_user_notif(). Verify that the syscall returns
-+		 * the injected FD number (42) and that FD 42 is open.
-+		 */
-+		ret = syscall(__NR_getppid);
-+		exit(ret != 42 || fcntl(42, F_GETFD) < 0);
-+	}
-+
-+	/* Wait for the tracee to trap in do_user_notif(). */
-+	ASSERT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
-+
-+	/*
-+	 * Demote the tracee to SCHED_IDLE and promote the supervisor to
-+	 * SCHED_FIFO(99) on the same CPU.
-+	 */
-+	sched_setscheduler(pid, SCHED_IDLE, &sp_tracee_idle);
-+	if (sched_setscheduler(0, SCHED_FIFO, &sp_supervisor_fifo) != 0) {
-+		close(listener);
-+		close(memfd);
-+		kill(pid, SIGKILL);
-+		waitpid(pid, NULL, 0);
-+		SKIP(return, "SCHED_FIFO requires CAP_SYS_NICE");
-+	}
-+
-+	addfd.srcfd = memfd;
-+	addfd.newfd_flags = O_CLOEXEC;
-+	addfd.newfd = 42;
-+	addfd.id = req.id;
-+	addfd.flags = SECCOMP_ADDFD_FLAG_SETFD | SECCOMP_ADDFD_FLAG_SEND;
-+
-+	/*
-+	 * Fork a signal helper on the same CPU and set it to SCHED_FIFO(50).
-+	 * Because the supervisor is currently running at SCHED_FIFO(99) on
-+	 * this CPU, sig_pid is queued on the runqueue but cannot run until the
-+	 * supervisor blocks inside the kernel.
-+	 *
-+	 * When the supervisor invokes ioctl(SECCOMP_IOCTL_NOTIF_ADDFD) below:
-+	 *   1. seccomp_notify_addfd() sets knotif->state = SECCOMP_NOTIFY_REPLIED,
-+	 *      wakes the tracee (SCHED_IDLE), and blocks in
-+	 *      wait_for_completion_interruptible(&kaddfd.completion).
-+	 *   2. The CPU scheduler immediately runs sig_pid (SCHED_FIFO 50)
-+	 *      ahead of the woken tracee (SCHED_IDLE).
-+	 *   3. sig_pid sends SIGUSR1 to parent_pid, waking the supervisor
-+	 *      (SCHED_FIFO 99), which immediately preempts sig_pid, aborts the
-+	 *      wait with -ERESTARTSYS (-EINTR), removes kaddfd from
-+	 *      knotif->addfd, and restores knotif->state = SECCOMP_NOTIFY_SENT
-+	 *      before the tracee has executed a single instruction.
-+	 */
-+	sig_pid = fork();
-+	ASSERT_GE(sig_pid, 0);
-+	if (sig_pid == 0) {
-+		sched_setscheduler(0, SCHED_FIFO, &sp_sig_helper_fifo);
-+		kill(parent_pid, SIGUSR1);
-+		_exit(0);
-+	}
-+
-+	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), -1);
-+	EXPECT_EQ(errno, EINTR);
-+	EXPECT_EQ(waitpid(sig_pid, &status, 0), sig_pid);
-+
-+	/*
-+	 * Restore normal scheduling and sleep briefly so the woken tracee
-+	 * runs in do_user_notif(). With knotif->state restored to
-+	 * SECCOMP_NOTIFY_SENT, the tracee must loop back to sleep waiting for
-+	 * the notification reply rather than returning 0 from __NR_getppid.
-+	 */
-+	sched_setscheduler(0, SCHED_OTHER, &sp_tracee_idle);
-+	sched_setscheduler(pid, SCHED_OTHER, &sp_tracee_idle);
-+	nanosleep(&delay, NULL);
-+
-+	/*
-+	 * Retry SECCOMP_IOCTL_NOTIF_ADDFD. Because knotif->state is
-+	 * SECCOMP_NOTIFY_SENT, the retry succeeds (returns 42) instead of
-+	 * failing with -EINPROGRESS, installs FD 42 into the tracee, and wakes
-+	 * the tracee to complete the syscall with return value 42.
-+	 */
-+	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), 42);
-+
-+	EXPECT_EQ(waitpid(pid, &status, 0), pid);
-+	EXPECT_EQ(true, WIFEXITED(status));
-+	EXPECT_EQ(0, WEXITSTATUS(status));
-+
-+	close(listener);
-+	close(memfd);
-+}
-+
- #ifndef SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP
- #define SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP (1UL << 0)
- #define SECCOMP_IOCTL_NOTIF_SET_FLAGS  SECCOMP_IOW(4, __u64)
+6. Workstream 6: KVM Caretaker Core & Intel VMX Support
+   (Patches 28-39)
+   Introduces the KVM Caretaker execution engine (virt/kvm/caretaker.c),
+   vCPU detach/attach/cancel lifecycle, optional cross-kexec execution
+   telemetry and debugfs reporting, x86 TDP MMU KHO page table
+   preservation, x86 common Caretaker runtime (LAPIC timer injection,
+   VM-exit dispatch, instruction decoding), and the Intel VMX Caretaker
+   backend:
+     28. KVM: caretaker: Add Caretaker control block and architecture
+         ops headers
+     29. KVM: caretaker: Implement Caretaker session memory mapping
+         helpers
+     30. KVM: caretaker: Integrate Caretaker vCPU detach, attach, and
+         cancel with KVM
+     31. KVM: caretaker: Add generic KHO ABI telemetry and debugfs
+         reporting
+     32. KVM: x86: Add TDP MMU KHO preservation helpers
+     33. KVM: x86: Add Caretaker x86 KHO ABI and runtime context headers
+     34. KVM: x86: Implement Caretaker LAPIC timer and interrupt
+         injection
+     35. KVM: x86: Implement Caretaker VM-exit dispatch and instruction
+         decoders
+     36. KVM: x86: Implement Caretaker run loop and LUO detach/attach
+         lifecycle
+     37. KVM: VMX: Add Caretaker VMX assembly guest entry/exit routine
+         and helpers
+     38. KVM: VMX: Implement Caretaker VMX VMCS lifecycle and exit
+         dispatch
+     39. KVM: VMX: Integrate Caretaker VMX detach serialization and KVM
+         registration
+
+7. Workstream 7: KVM Caretaker for AMD SVM (Patches 40-41)
+   Implements the AMD SVM Caretaker backend (caretaker_vmenter.S, VMCB
+   lifecycle, exit decoding, and next-RIP sync):
+     40. KVM: SVM: Add Caretaker SVM assembly guest entry/exit routine
+     41. KVM: SVM: Implement Caretaker SVM VMCB lifecycle and exit
+         dispatch
+
+8. Workstream 8: KVM Caretaker for ARM64 (Patches 42-46)
+   Implements the ARM64 VHE Caretaker backend (caretaker_vmenter.S,
+   EL2 exception vectors, GICv3 CPU interface & arch timer emulation,
+   system register trap handling, and Stage-2 fault handling):
+     42. KVM: arm64: Add Caretaker arm64 KHO ABI and runtime context
+         headers
+     43. KVM: arm64: Add Caretaker EL2 exception vectors and guest
+         entry/exit assembly
+     44. KVM: arm64: Implement Caretaker GICv3 CPU interface and arch
+         timer emulation
+     45. KVM: arm64: Implement Caretaker system register trap and
+         exception handlers
+     46. KVM: arm64: Implement Caretaker vCPU run loop and LUO
+         detach/attach lifecycle
+
+Architectural Design Layers
+===========================
+The OrphanVM architecture is layered so that each subsystem has zero
+upward symbol dependencies:
+
+  +--------------------------------------------------------------------+
+  | Layer 4: KVM Caretaker Engine (virt/kvm/caretaker.c + arch/kvm/*)  |
+  |   - VMENTER/VMRUN/ERET guest execution loop                        |
+  |   - Handling of timer preemption, HLT/WFI, MSR/sysreg traps        |
+  |   - Yield on unhandled I/O or Stage-2 MMIO faults                  |
+  +--------------------------------------------------------------------+
+                                    |
+                                    v (registers oncore jobs)
+  +--------------------------------------------------------------------+
+  | Layer 3: On-Core Scheduler Framework (kernel/liveupdate/oncore.c)  |
+  |   - Runqueue and time-slice scheduler on preserved cores           |
+  |   - Architecture-neutral counter frequency deadline calculation    |
+  |   - Session memory mapping into isolated address spaces            |
+  +--------------------------------------------------------------------+
+                                    |
+                                    v (attaches cpu_preserve workload)
+  +--------------------------------------------------------------------+
+  | Layer 2: Physical CPU Preservation (kernel/liveupdate/cpu_preserve)|
+  |   - Offlines CPUs into preserved park loop (.text.cpu_preserved)   |
+  |   - Switches CR3/TTBR to isolated transition page tables           |
+  |   - Manages cpu_present state across kexec and hotplug reclaim     |
+  +--------------------------------------------------------------------+
+                                    |
+                                    v (persists state via KHO / LUO)
+  +--------------------------------------------------------------------+
+  | Layer 1: KHO & LUO                                                 |
+  |   - Preserves guest_memfd RAM, TDP/Stage-2 MMU, and vCPU state     |
+  |   - Cross-kexec ABI (include/linux/kho/abi/*)                      |
+  +--------------------------------------------------------------------+
+
+1. Layer 1: KHO & LUO In-RAM Preservation (kvm_luo)
+   Preserves VM and vCPU file descriptors across kexec using KHO memory
+   preservation. Guest memory (guest_memfd) and secondary MMU page
+   tables remain in place in physical RAM. Architectural vCPU state is
+   serialized into struct kvm_vcpu_arch_luo_state buffers.
+
+2. Layer 2: Physical CPU Preservation (cpu_preserve)
+   Before kexec, selected physical CPUs are taken offline and
+   transitioned into a park loop compiled into .text.cpu_preserved and
+   copied into KHO-preserved pages outside KHO scratch memory. Each
+   preserved CPU switches to an isolated address space (struct
+   cpu_preserved_as) that maps ONLY the preserved text/data, per-CPU
+   stack, and mapped workload buffers. Build-time section checks in
+   modpost and objtool enforce that .text.cpu_preserved and
+   .data.cpu_preserved do not reference unmapped host kernel symbols.
+   Because preserved CPUs are marked !cpu_present(cpu) while preserved,
+   the host kernel's SMP stop routines and incoming kernel's SMP boot
+   bringup skip them without hotplug workarounds.
+
+3. Layer 3: On-Core Scheduling Framework (oncore)
+   Provides a runqueue and session scheduler (kernel/liveupdate/oncore.c)
+   that runs inside the cpu_preserve park loop. Multiple preserved
+   workloads (such as vCPUs) can be scheduled across one or more
+   preserved physical CPUs using hardware counter deadlines (TSC on x86,
+   CNTPCT_EL0 on ARM64).
+
+4. Layer 4: KVM Caretaker Execution Engine (caretaker)
+   Attaches preserved KVM vCPUs to oncore jobs. During the kexec
+   blackout window, the Caretaker enters the guest directly from
+   preserved text with baseline speculative execution mitigations
+   (VERW CPU buffer clearing on x86 VM-entry, RSB stuffing on x86
+   VM-exit, and Spectre-BHB loop clearing on ARM64 EL2 guest exit):
+   - On Intel VMX (vmx/caretaker.c), executes VMLAUNCH/VMRESUME against
+     a preserved VMCS page and handles VMX preemption timer / physical
+     LAPIC timer, HLT, PAUSE, CPUID, RDTSC, COM1 UART, and basic MSR
+     exits. Software emulation of x2APIC ICR IPIs is intentionally
+     omitted (trapped ICR writes park the vCPU until the incoming kernel
+     reclaims it); instead, the Caretaker KHO-preserves the virtual APIC
+     page and the VM's Posted-Interrupt Descriptor pointer table
+     (pid_table), allowing hardware with APICv and Intel IPIv to deliver
+     inter-vCPU IPIs without VM-exits.
+   - On AMD SVM (svm/caretaker.c), executes VMRUN with a preserved VMCB,
+     preserved MSR/IO permission bitmaps (msrpm/iopm), and host save
+     area (MSR_VM_HSAVE_PA), sharing the common x86 Caretaker exit and
+     timer handlers.
+   - On ARM64 VHE (arm64/kvm/caretaker.c), switches EL2 exception
+     vectors (VBAR_EL2) to Caretaker vectors, emulates the GICv3 CPU
+     interface (including inter-vCPU SGI delivery via ICC_SGI1R_EL1
+     trapping and GICv3 List Register injection) and arch timer, and
+     handles WFI/WFE and system register traps.
+   - Note that the set of supported VM-exits can be adjusted as needed;
+     initial upstreaming can start by not supporting any VM-exits at
+     all, waiting in the Caretaker loop if a vCPU exits until the
+     incoming host kernel finishes booting and reclaims the vCPU.
+   - Cross-Kexec Re-Attachment: When the incoming kernel boots and
+     retrieves the preserved VM, it signals detach via the Caretaker
+     control block. The Caretaker serializes live hardware state on the
+     preserved core into struct kvm_vcpu_arch_luo_state before yielding,
+     exits the park loop, and allows the incoming kernel to reclaim the
+     physical CPU and resume KVM execution. Optional execution telemetry
+     (runs, exits, stalls, exit reasons, and last RIP) is preserved via
+     the KHO ABI and exposed in dmesg and per-vCPU debugfs
+     (caretaker_telemetry), both live during detached execution and upon
+     re-attachment.
+
+Links
+=====
+[1] https://lpc.events/event/20/contributions/2553/
+[2] https://lore.kernel.org/all/afEwWZksU0Fw61oT@plex/
+[3] https://lore.kernel.org/all/20260728121138.1103610-1-tarunsahu@google.com/#r
+[4] https://github.com/soleen/linux/tree/ovm/rfc/v1
+
+Pasha Tatashin (46):
+  KVM: luo: Delegate VM creation type to kvm_arch_vm_luo_preserve
+  KVM: arm64: Split demux_c15_{get,set}_val from userspace accessors
+  KVM: arm64: Split kvm_sys_reg_{get,set}_user from kernel accessors
+  x86/mm/ident_map: Add force_pte to support 4K PTE identity mappings
+  arm64: mm: Add trans_pgd_map_range() support
+  x86/smp: Skip offline CPUs for REBOOT_VECTOR in
+    native_stop_other_cpus()
+  KVM: luo: Support vCPU file preservation across live updates
+  KVM: x86: Add x86 vCPU LUO preservation ABI and register helpers
+  KVM: x86: Implement architectural vCPU state preservation via LUO
+  KVM: arm64: Implement architectural vCPU state preservation via LUO
+  liveupdate: Define CPU preservation linker sections
+  liveupdate: Add liveupdate_session_name() helper
+  cpu_preserve: Add physical CPU preservation ABI and core API headers
+  cpu_preserve: Add core physical CPU preservation state and park loop
+  cpu_preserve: Add physical CPU preservation lifecycle and build rules
+  liveupdate: cpu_preserve: Add sysfs interface
+  liveupdate: cpu_preserve: Add isolated address space management API
+  liveupdate: cpu_preserve: Add LUO file handler for preserved physical
+    CPUs
+  x86: liveupdate: Add low-level physical CPU preservation assembly
+  x86: liveupdate: Add physical CPU preservation context and page table
+    support
+  selftests: liveupdate: Add physical CPU preservation unit tests
+  selftests: liveupdate: Add physical CPU preservation live update tests
+  Documentation: liveupdate: Add physical CPU preservation documentation
+  MAINTAINERS: Add entry for KVM Caretaker
+  arm64: liveupdate: Add support for physical CPU preservation
+  oncore: Add on-core KHO ABI and public framework headers
+  oncore: Implement on-core session lifecycle and scheduling loop
+  KVM: caretaker: Add Caretaker control block and architecture ops
+    headers
+  KVM: caretaker: Implement Caretaker session memory mapping helpers
+  KVM: caretaker: Integrate Caretaker vCPU detach, attach, and cancel
+    with KVM
+  KVM: caretaker: Add generic KHO ABI telemetry and debugfs reporting
+  KVM: x86: Add TDP MMU KHO preservation helpers
+  KVM: x86: Add Caretaker x86 KHO ABI and runtime context headers
+  KVM: x86: Implement Caretaker LAPIC timer and interrupt injection
+  KVM: x86: Implement Caretaker VM-exit dispatch and instruction
+    decoders
+  KVM: x86: Implement Caretaker run loop and LUO detach/attach lifecycle
+  KVM: VMX: Add Caretaker VMX assembly guest entry/exit routine and
+    helpers
+  KVM: VMX: Implement Caretaker VMX VMCS lifecycle and exit dispatch
+  KVM: VMX: Integrate Caretaker VMX detach serialization and KVM
+    registration
+  KVM: SVM: Add Caretaker SVM assembly guest entry/exit routine
+  KVM: SVM: Implement Caretaker SVM VMCB lifecycle and exit dispatch
+  KVM: arm64: Add Caretaker arm64 KHO ABI and runtime context headers
+  KVM: arm64: Add Caretaker EL2 exception vectors and guest entry/exit
+    assembly
+  KVM: arm64: Implement Caretaker GICv3 CPU interface and arch timer
+    emulation
+  KVM: arm64: Implement Caretaker system register trap and exception
+    handlers
+  KVM: arm64: Implement Caretaker vCPU run loop and LUO detach/attach
+    lifecycle
+
+ .../ABI/testing/sysfs-devices-system-cpu      |   20 +
+ Documentation/liveupdate/cpu_preservation.rst |   48 +
+ Documentation/liveupdate/index.rst            |   11 +
+ Documentation/liveupdate/vmm.rst              |   15 +
+ Documentation/virt/kvm/api.rst                |   16 +
+ MAINTAINERS                                   |   11 +
+ arch/arm64/Kconfig                            |    1 +
+ arch/arm64/include/asm/caretaker.h            |   56 +
+ arch/arm64/include/asm/cpu_preserve.h         |   44 +
+ arch/arm64/include/asm/oncore.h               |   24 +
+ arch/arm64/include/asm/trans_pgd.h            |    4 +
+ arch/arm64/kernel/Makefile                    |    7 +
+ arch/arm64/kernel/cpu_preserve.c              |  674 ++++++
+ arch/arm64/kernel/preserve_cpu.S              |   44 +
+ arch/arm64/kernel/smp.c                       |    8 +-
+ arch/arm64/kernel/vmlinux.lds.S               |    1 +
+ arch/arm64/kvm/Kconfig                        |    2 +
+ arch/arm64/kvm/Makefile                       |   14 +
+ arch/arm64/kvm/caretaker.c                    | 1162 +++++++++++
+ arch/arm64/kvm/caretaker.h                    |  130 ++
+ arch/arm64/kvm/caretaker_vmenter.S            |  248 +++
+ arch/arm64/kvm/kvm_luo.c                      |  304 +++
+ arch/arm64/kvm/sys_regs.c                     |  247 ++-
+ arch/arm64/kvm/sys_regs.h                     |    4 +
+ arch/arm64/mm/trans_pgd.c                     |   70 +
+ arch/x86/Kconfig                              |    1 +
+ arch/x86/include/asm/cpu_preserve.h           |   34 +
+ arch/x86/include/asm/init.h                   |    3 +-
+ arch/x86/include/asm/oncore.h                 |   25 +
+ arch/x86/kernel/Makefile                      |    7 +
+ arch/x86/kernel/cpu_preserve.c                |  432 ++++
+ arch/x86/kernel/preserve_cpu.S                |   62 +
+ arch/x86/kernel/smp.c                         |    2 +-
+ arch/x86/kernel/vmlinux.lds.S                 |    2 +
+ arch/x86/kvm/Kconfig                          |    2 +
+ arch/x86/kvm/Makefile                         |   32 +
+ arch/x86/kvm/caretaker.c                      | 1129 ++++++++++
+ arch/x86/kvm/caretaker.h                      |  238 +++
+ arch/x86/kvm/caretaker_asm.h                  |  117 ++
+ arch/x86/kvm/cpuid.c                          |    4 +-
+ arch/x86/kvm/cpuid.h                          |    1 +
+ arch/x86/kvm/kvm-asm-offsets.c                |   32 +
+ arch/x86/kvm/kvm_luo.c                        |  368 ++++
+ arch/x86/kvm/mmu.h                            |    7 +
+ arch/x86/kvm/mmu/kho.c                        |  193 ++
+ arch/x86/kvm/msrs.c                           |   17 +
+ arch/x86/kvm/msrs.h                           |    2 +
+ arch/x86/kvm/regs.c                           |    8 +-
+ arch/x86/kvm/regs.h                           |    4 +
+ arch/x86/kvm/svm/caretaker.c                  |  467 +++++
+ arch/x86/kvm/svm/caretaker.h                  |   63 +
+ arch/x86/kvm/svm/caretaker_vmenter.S          |   91 +
+ arch/x86/kvm/svm/svm.c                        |   11 +-
+ arch/x86/kvm/vmx/caretaker.c                  |  658 ++++++
+ arch/x86/kvm/vmx/caretaker.h                  |   78 +
+ arch/x86/kvm/vmx/caretaker_vmenter.S          |  110 +
+ arch/x86/kvm/vmx/vmx.c                        |    6 +-
+ arch/x86/kvm/vmx/vmx.h                        |    1 +
+ arch/x86/kvm/x86.c                            |    8 +-
+ arch/x86/kvm/x86.h                            |    4 +
+ arch/x86/mm/ident_map.c                       |   72 +-
+ include/asm-generic/vmlinux.lds.h             |   29 +
+ include/linux/cpu_preserve.h                  |  464 +++++
+ include/linux/kho/abi/cpu.h                   |  151 ++
+ include/linux/kho/abi/kvm.h                   |  137 +-
+ include/linux/kho/abi/kvm_arm64.h             |   93 +
+ include/linux/kho/abi/kvm_x86.h               |  106 +
+ include/linux/kvm_caretaker.h                 |  439 ++++
+ include/linux/kvm_host.h                      |   63 +
+ include/linux/liveupdate.h                    |    6 +
+ include/linux/oncore.h                        |  129 ++
+ include/uapi/linux/kvm.h                      |    2 +
+ kernel/cpu.c                                  |    2 +
+ kernel/liveupdate/Kconfig                     |   45 +
+ kernel/liveupdate/Makefile                    |   15 +
+ kernel/liveupdate/cpu_preserve.c              | 1811 +++++++++++++++++
+ kernel/liveupdate/luo_session.c               |   14 +
+ kernel/liveupdate/oncore.c                    |  947 +++++++++
+ scripts/mod/modpost.c                         |   32 +-
+ tools/objtool/check.c                         |   35 +-
+ tools/objtool/include/objtool/check.h         |    1 +
+ tools/objtool/include/objtool/elf.h           |    2 +-
+ tools/testing/selftests/liveupdate/Makefile   |    1 +
+ tools/testing/selftests/liveupdate/config     |    6 +
+ tools/testing/selftests/liveupdate/init.c     |   27 +-
+ .../testing/selftests/liveupdate/liveupdate.c |  251 +++
+ .../selftests/liveupdate/luo_cpu_preserve.c   |  145 ++
+ .../selftests/liveupdate/run-vmtests.sh       |    1 +
+ tools/testing/selftests/liveupdate/vmtest.sh  |    4 +-
+ virt/kvm/Kconfig                              |   41 +
+ virt/kvm/Makefile.kvm                         |    8 +
+ virt/kvm/caretaker.c                          |  639 ++++++
+ virt/kvm/caretaker_debug.c                    |  120 ++
+ virt/kvm/kvm_luo.c                            |  249 ++-
+ virt/kvm/kvm_main.c                           |   66 +-
+ 95 files changed, 13415 insertions(+), 122 deletions(-)
+ create mode 100644 Documentation/liveupdate/cpu_preservation.rst
+ create mode 100644 Documentation/liveupdate/index.rst
+ create mode 100644 arch/arm64/include/asm/caretaker.h
+ create mode 100644 arch/arm64/include/asm/cpu_preserve.h
+ create mode 100644 arch/arm64/include/asm/oncore.h
+ create mode 100644 arch/arm64/kernel/cpu_preserve.c
+ create mode 100644 arch/arm64/kernel/preserve_cpu.S
+ create mode 100644 arch/arm64/kvm/caretaker.c
+ create mode 100644 arch/arm64/kvm/caretaker.h
+ create mode 100644 arch/arm64/kvm/caretaker_vmenter.S
+ create mode 100644 arch/arm64/kvm/kvm_luo.c
+ create mode 100644 arch/x86/include/asm/cpu_preserve.h
+ create mode 100644 arch/x86/include/asm/oncore.h
+ create mode 100644 arch/x86/kernel/cpu_preserve.c
+ create mode 100644 arch/x86/kernel/preserve_cpu.S
+ create mode 100644 arch/x86/kvm/caretaker.c
+ create mode 100644 arch/x86/kvm/caretaker.h
+ create mode 100644 arch/x86/kvm/caretaker_asm.h
+ create mode 100644 arch/x86/kvm/kvm_luo.c
+ create mode 100644 arch/x86/kvm/mmu/kho.c
+ create mode 100644 arch/x86/kvm/svm/caretaker.c
+ create mode 100644 arch/x86/kvm/svm/caretaker.h
+ create mode 100644 arch/x86/kvm/svm/caretaker_vmenter.S
+ create mode 100644 arch/x86/kvm/vmx/caretaker.c
+ create mode 100644 arch/x86/kvm/vmx/caretaker.h
+ create mode 100644 arch/x86/kvm/vmx/caretaker_vmenter.S
+ create mode 100644 include/linux/cpu_preserve.h
+ create mode 100644 include/linux/kho/abi/cpu.h
+ create mode 100644 include/linux/kho/abi/kvm_arm64.h
+ create mode 100644 include/linux/kho/abi/kvm_x86.h
+ create mode 100644 include/linux/kvm_caretaker.h
+ create mode 100644 include/linux/oncore.h
+ create mode 100644 kernel/liveupdate/cpu_preserve.c
+ create mode 100644 kernel/liveupdate/oncore.c
+ create mode 100644 tools/testing/selftests/liveupdate/luo_cpu_preserve.c
+ create mode 100644 virt/kvm/caretaker.c
+ create mode 100644 virt/kvm/caretaker_debug.c
+
 -- 
-2.49.0
+2.55.0.1082.g2b9226bbc0-goog
+
