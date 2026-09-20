@@ -1,65 +1,65 @@
-Received: from mail-yx2-f31.google.com (mail-yx2-f31.google.com [74.125.224.159])
+Received: from mail-yx2-f13.google.com (mail-yx2-f13.google.com [74.125.224.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF51474263
-	for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 19:38:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6577B475349
+	for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 19:38:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789933084; cv=none; b=tbBUrp11hjuivId7TGAyJ8bMgZLLsnhuyaYZ96uLoC01Xd2wjPrBA6C9m/6lBuNcSMoI8jIpxVJvrdDZL4gq+vmjYy8FUoUgWssNUmfZbfDhV+3jwpzzp7gP6yeSnZr6QQBEoxLrZBbFCCWrWK1KtpSMLRqyycOkfy5jwPCTbJM=
+	t=1789933089; cv=none; b=T21j0nf1h3hRB/tffZhWXL3hhqEBaQPnF+AvuFbzlYZGe94l1kGLpxHibgSN68AIZay1xhSW871PqjK8Wsx9G4H628OpPOwwIeKy0kea/SUbV1PhjoFdc4k6rbnVB7JX0U+Ebd3hIJeI/D47NcEeU4DlVvAAVl/fQXZJ070U2QY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789933084; c=relaxed/simple;
-	bh=imCJBTRWC29jkMd/LmPmOa+lPJP7kW1KilAUtySFuZw=;
+	s=arc-20240116; t=1789933089; c=relaxed/simple;
+	bh=vD3k0UChVcsUPV8WCpzl60xjcOJJ7AH4O6Kwg/ASCvo=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JtmaeJn3awTq4tZ7MUqke7+V4ZE+UEuKScV0HOHHdkl4W2ZvlNLXlXCmL3llLZrOraAhLCWdD7EYnANOsOcLr4+kidpeWMG+vWPZonIY/oNXFTCMpRqD6uRyRTaQo4554eZyMIqWsDz8RQQY1SYS4w59kYXVLu0xxSNP2NY0l2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=ZlqWWOAL; arc=none smtp.client-ip=74.125.224.159
+	 MIME-Version; b=mao8YbMXa//ueoplO6UohbRN4j0ZXgKQmnRFshbdUZbKn5ZTlPcPSj9LOEfAMjzvzMhKFSKrFzAx4l3LnV3G7LZ1EACBrkW+tgY+hC+X6s7oGTu+L/ej3vfssZnc7Acj0o8TzrurMlRcu6xsaXWz28rIWjZbIfroMDq3sxpdsFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=RrlNGgY0; arc=none smtp.client-ip=74.125.224.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="ZlqWWOAL"
-Received: by mail-yx2-f31.google.com with SMTP id 00721157ae682-8659af7454eso21817217b3.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 12:38:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="RrlNGgY0"
+Received: by mail-yx2-f13.google.com with SMTP id 956f58d0204a3-66fded6b087so2183712d50.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 12:38:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1789933081; x=1790537881; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1789933086; x=1790537886; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=H+SlWroSdaGxZWUb4GAQgkH+PVdX8bfzP0oz7opOlFk=;
-        b=ZlqWWOAL743qYYu5tDI12Xv2eemUd4mR4Cb8/Ihj2ZDMOhy/ILAgI18PJfuDHl2Dbs
-         ko8ybku1oSGpf8LuiiKRcBeZAFK4OWLPd5tjnik9aVBB8i0sgbN8qnIoaTxetIO5395e
-         3UAraUO/G32OOQF97+mQUpsNLrXtbw4AvbDo44YvI5jmxdaPcIBQ3mJ6uT4hgXhEQYb4
-         CIiTu9x0uUjLoh7VNwbXD+syK1lqo1HK3FxVReSniUhHbKClfv1ProsK3jxXyCitDUUX
-         VsPnWeAOZnwpxOB6feFiWB/KboaIFM2MQL38z6S3+WYVnham6FzoSCXSiW7oSteB8GKI
-         f+Jw==
+        bh=Xd0t5fQ0wbqovFneONezXRLopfuFSVDwWIsqSLQ6+6E=;
+        b=RrlNGgY0iJCLHvLzaOqKkf3gLzRqZRNs3AAepRwIwDleyCYaiOghA4vqiXA6qubzC+
+         24dvZefH6rJFbESqgiBexlht9k2P4jayHUVOxKavkv047Iwi3j68ZxrHzNYxx4AhE2Qb
+         aKxGtjXjJX6+0Sgcy+nXo4muIMtbk+5iXSH83LreZrlNlj5brul3XvqxZuXYyMkJHbx2
+         M9kE4SgGfjg/AgZJ+kZyRU2gcJRKIyvpm8ZE27VVSIw/faLLB90ylpqTLqx8w3sMAtH5
+         fDGymuvYj2dE2L3f3IPD7SWIbaWLjxdGzXi9W7OVFRvoL20by8hHYOwrYpq+32pX2pRJ
+         NpJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789933081; x=1790537881;
+        d=1e100.net; s=20260707; t=1789933086; x=1790537886;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=H+SlWroSdaGxZWUb4GAQgkH+PVdX8bfzP0oz7opOlFk=;
-        b=Jbqg/D0JohgtZYihWl59d8uba/WffXrWOXUi3epnMobVOrXC1EbVl6kBdCK9ulHC8e
-         m4RP9EnnCDLfGSoGn3Njf2GZgihuZk0aWJVmJcu/Ja0Po5eVy4/33gI5PC2xdtA5oF+x
-         TPa4bWroZkcd7OoBCMsj2JVH9RVQLtMmsLhEDw8ebp+OwRa1WbS4Esa87WuXEuTcQHFL
-         Sf0xfW98BLkLvSjlDH4H9V4lpvski8WNCUb4A+FgcZ/qPRyBESP8ybzERXXK8ac7GmuG
-         2aDgpNypozY4J+UpbZJbqkyojD/QGW6O248Q5WvJS54yks8MFNUCUenOHNn/3JyfmlaC
-         ob5g==
-X-Gm-Message-State: AFuF++kdXYm/OV2p53nOXADm2SAvy7sh5tq1E4OW5tAJbsQBzjEA3z1i
-	4f95OzYXKNuW28u21WG26XKMY0qLXfh4cuRiw6O7vfc/5hF0cBYfeKt5ZvVg04WQWHhm7h6mThH
-	7dqzBKxs=
-X-Gm-Gg: AYBFou3YecqmA0ms1n/10HVBbzq5/FCGMugyza/xbvXjf1/chGw8qTbi9pFijhSBG+y
-	xBeLkH21qOiKnA4epvDXa85iaKeSK1A2OBkePo3u+uW2tN8B3IUfhSsFg3pQwQTR1wPwiHgRpwg
-	kw6e0BH14Ca6wBgMK2ptXR+1BWf/cYubuZYpkXzdNVOG43tFRISt6m019Y8IvWkyx0itFN4hPdO
-	zUPAs+uQkeWJcfdu3BJKohPkRImk5H97mQuCEAEKnZ2KMcULIS6cukkoUCPxAFTwMg+ndGPjpMa
-	VdiWHcIQJ8B8T54DoBZxBDJYHVlqpGw6iiWrO5o3a5pAW2jxjMdI5S7JADHlR5s59K7ce154FjQ
-	/+Raz/ZNEmiGf9KvG5xli/Za6/X2i5FPSBYl+Gd9h+ypthSAnc/81EuFMaq6qBAAT8Kjr0Rq/T+
-	sAwY4HNeyHG+pYOofNR8B1TNrBDI3SubzLJ5f6SLgM8bfXlN3BjukkSTABN4E/CFe8X8W96nOdM
-	A7Uz/ZyQE2P4JQ+pd0lyx3wYruYlpOwIc/p4N+oATMljRx+f21D8vIwn6Le+4jJfYZa8SpyC1o0
-	AfzCi/peHZao19q7TFn3
-X-Received: by 2002:a05:690c:60c7:b0:873:5c0f:280 with SMTP id 00721157ae682-89735f6df22mr25869157b3.42.1789933081162;
-        Sun, 20 Sep 2026 12:38:01 -0700 (PDT)
+        bh=Xd0t5fQ0wbqovFneONezXRLopfuFSVDwWIsqSLQ6+6E=;
+        b=qUSeocUIaT3O7Z2jZmukIN4T7bIk8auKddJDF0W4kUV9Z1h0LM5/TF+M8TINjlT6G2
+         RpyTbQML0Zs2MrzbbqvnX6zJNYIDKzS8D6EKksURHlzT7v8YvUuQfSzzDkC/aGKPFWWb
+         3ypY2we7hJb0iT8y8cas9Rl9jtTXh3/3K6We3n+ADlfaXZCpvwhn+I43ToLZQmddVsW7
+         OB+WN9HmYCZKJE2N+pOx4Ztk4O+GmOawmapnHTEK+tv0FWm2+C0M6Ud0bxupA+M+9mYi
+         bLuHMh2d/Lsd7b+7FzaKzOkHXKXCVr8WLNr9JF7nFsh1OMR0xpv6nYdNnT2syrrdOlw8
+         sGnA==
+X-Gm-Message-State: AFuF++k3hrefqwH7cdDdiaU3qzAWlIw0Q2jKqoQErUqzhMqcXP/L58Dz
+	EikUZRMY3B58WOCBrbIEuu9zbBiyTTDsR2x6GVDGAKLd9e11vPdGnsCE45BQOsuMjfbeyIgGOoQ
+	f95kOyCc=
+X-Gm-Gg: AYBFou3KjDclr8S6NyErutB4p/HAaKFnkanpnKveJjUhdgnevw9UFx4JQ8qYk6mjQGR
+	d1Q3D2zVqhcPo2wmhluymTJcnvogBO6zl3g2a0GZBzCGIsH7Q6lYzol6bjao6YAS5O9IncLbznO
+	zz81iwBblrl3e5GsrgKhitcDSIeHIIhXBWDNlEkeWxvPR60hr3uFTkELX39lXG+7J5ATOrq4zh2
+	4YA54RaCDIWACE22IL1yorHoxvfuG7yKG1ShCOBr2FGC+m+ciMqHPHmDYn1iO5SIyqkcrN8g/AR
+	Pq8U6JXWK0/ycMhIXcLnm6X9tBPKgGBatAgelfVi+qtjOf1RrPzaFIlLmBFW3+8Wcz64bV8twj+
+	/ukKuLQI4C6EbzjRqEFOYslBjckFN/fEUSYtC0R/VbF32LRLmQ21kQxP03hZfqO1h3el7JtnWbH
+	SEcdm4Mmjje1J6CcCmhiIxl9hD6FMPGYo6lt4cMfRgZ+RPSHv9wJfqeQ1LLOCJ+U50MH7eg7dVM
+	xY872Fv38qheBRGlnUx4iviBku9B2ZVfAOnAuUvjDRE4+3MRERPRX69KYbxmiJtMIDSi/aYhF6a
+	xTaKEigeleg+4jenjTI=
+X-Received: by 2002:a05:690e:dce:b0:66f:c1be:a646 with SMTP id 956f58d0204a3-6717fd8f1ddmr2788927d50.56.1789933086522;
+        Sun, 20 Sep 2026 12:38:06 -0700 (PDT)
 Received: from soleen.c.googlers.com.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-89a46a44699sm18596057b3.19.2026.09.20.12.37.57
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-672991445desm2614214d50.20.2026.09.20.12.38.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Sep 2026 12:37:59 -0700 (PDT)
+        Sun, 20 Sep 2026 12:38:06 -0700 (PDT)
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
 To: linux-kselftest@vger.kernel.org,
 	legion@kernel.org,
@@ -137,9 +137,9 @@ To: linux-kselftest@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	vladimir.murzin@arm.com,
 	kas@kernel.org
-Subject: [RFC PATCH 11/46] liveupdate: Define CPU preservation linker sections
-Date: Sun, 20 Sep 2026 15:36:15 -0400
-Message-ID: <20260920193650.3373435-12-pasha.tatashin@soleen.com>
+Subject: [RFC PATCH 12/46] liveupdate: Add liveupdate_session_name() helper
+Date: Sun, 20 Sep 2026 15:36:16 -0400
+Message-ID: <20260920193650.3373435-13-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.55.0.1082.g2b9226bbc0-goog
 In-Reply-To: <20260920193650.3373435-1-pasha.tatashin@soleen.com>
 References: <20260920193650.3373435-1-pasha.tatashin@soleen.com>
@@ -151,297 +151,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Define CPU_PRESERVED_TEXT and CPU_PRESERVED_DATA linker macros to place
-code and data required for CPU preservation into dedicated sections
-(.text.cpu_preserved and .data.cpu_preserved).
+Provide an accessor function liveupdate_session_name() to retrieve the
+name of a live update session from its session handle.
 
-These sections are preserved across live update transitions and mapped
-executable/read-write as needed.
+This allows kernel subsystems like CPU preservation to identify the
+session managing preserved resources.
 
 Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 ---
- include/asm-generic/vmlinux.lds.h     | 29 +++++++++++++++++
- include/linux/cpu_preserve.h          | 47 +++++++++++++++++++++++++++
- scripts/mod/modpost.c                 | 32 +++++++++++++++---
- tools/objtool/check.c                 | 35 +++++++++++++++++++-
- tools/objtool/include/objtool/check.h |  1 +
- tools/objtool/include/objtool/elf.h   |  2 +-
- 6 files changed, 140 insertions(+), 6 deletions(-)
- create mode 100644 include/linux/cpu_preserve.h
+ include/linux/liveupdate.h      |  6 ++++++
+ kernel/liveupdate/luo_session.c | 14 ++++++++++++++
+ 2 files changed, 20 insertions(+)
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index b2988aa12f66..0dbaac582bcc 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -655,6 +655,34 @@
- 		*(.static_call.text)					\
- 		__static_call_text_end = .;
+diff --git a/include/linux/liveupdate.h b/include/linux/liveupdate.h
+index 6051abc0612c..119ad0f82705 100644
+--- a/include/linux/liveupdate.h
++++ b/include/linux/liveupdate.h
+@@ -256,6 +256,7 @@ int liveupdate_get_file_incoming(struct liveupdate_session *s, u64 token,
+ /* Get a token for an outgoing file, or -ENOENT if file is not preserved */
+ int liveupdate_get_token_outgoing(struct liveupdate_session *s,
+ 				  struct file *file, u64 *tokenp);
++const char *liveupdate_session_name(struct liveupdate_session *s);
  
-+/*
-+ * Page-aligned text and data sections for preserved CPUs.
-+ * This code and data are KHO preserved when CPUs are preserved across
-+ * live update.
-+ */
-+#ifdef CONFIG_LIVEUPDATE_CPU
-+#define CPU_PRESERVED_TEXT						\
-+		. = ALIGN(PAGE_SIZE);					\
-+		__cpu_preserved_text_start = .;				\
-+		*(.text.cpu_preserved .text.cpu_preserved.*)		\
-+		*(.cpu_preserved.text .cpu_preserved.text.*)		\
-+		. = ALIGN(PAGE_SIZE);					\
-+		__cpu_preserved_text_end = .;
-+
-+#define CPU_PRESERVED_DATA						\
-+		. = ALIGN(PAGE_SIZE);					\
-+		__cpu_preserved_data_start = .;				\
-+		*(.data.cpu_preserved .data.cpu_preserved.*)		\
-+		*(.cpu_preserved.data .cpu_preserved.data.*)		\
-+		*(.rodata.cpu_preserved .rodata.cpu_preserved.*)	\
-+		*(.bss..data.cpu_preserved .bss..data.cpu_preserved.*)	\
-+		. = ALIGN(PAGE_SIZE);					\
-+		__cpu_preserved_data_end = .;
-+#else
-+#define CPU_PRESERVED_TEXT
-+#define CPU_PRESERVED_DATA
-+#endif
-+
- /* Section used for early init (in .S files) */
- #define HEAD_TEXT  KEEP(*(.head.text))
+ #else /* CONFIG_LIVEUPDATE */
  
-@@ -1155,6 +1183,7 @@
- 		INIT_TASK_DATA(inittask)				\
- 		NOSAVE_DATA						\
- 		PAGE_ALIGNED_DATA(pagealigned)				\
-+		CPU_PRESERVED_DATA					\
- 		CACHE_HOT_DATA(cacheline)				\
- 		CACHELINE_ALIGNED_DATA(cacheline)			\
- 		READ_MOSTLY_DATA(cacheline)				\
-diff --git a/include/linux/cpu_preserve.h b/include/linux/cpu_preserve.h
-new file mode 100644
-index 000000000000..f653838c383d
---- /dev/null
-+++ b/include/linux/cpu_preserve.h
-@@ -0,0 +1,47 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2026, Google LLC.
-+ * Pasha Tatashin <pasha.tatashin@soleen.com>
-+ *
-+ * Preserved CPU across Live Update
-+ */
-+#ifndef _LINUX_CPU_PRESERVE_H
-+#define _LINUX_CPU_PRESERVE_H
-+
-+#include <linux/compiler.h>
-+
-+#ifdef CONFIG_LIVEUPDATE_CPU
-+
-+/*
-+ * __cpu_preserved_text: Code executed by preserved physical CPUs during live
-+ * update kexec handover in orphan mode.
-+ *
-+ * All code in this section must run without stack protector checks because
-+ * per-CPU canary state may be invalid during handover and __stack_chk_fail()
-+ * resides in regular .text, which gets overwritten during kexec before the
-+ * incoming kernel boots.
-+ *
-+ * Architecture-specific requirements (such as disabling external retpolines
-+ * and return thunks on x86) are supplied via ARCH_CPU_PRESERVED_TEXT.
-+ */
-+#ifndef ARCH_CPU_PRESERVED_TEXT
-+#define ARCH_CPU_PRESERVED_TEXT
-+#endif
-+
-+#define __cpu_preserved_text					\
-+	__section(".text.cpu_preserved")			\
-+	__no_stack_protector					\
-+	ARCH_CPU_PRESERVED_TEXT
-+#define __cpu_preserved_data	__section(".data.cpu_preserved")
-+
-+extern char __cpu_preserved_text_start[], __cpu_preserved_text_end[];
-+extern char __cpu_preserved_data_start[], __cpu_preserved_data_end[];
-+
-+#else /* !CONFIG_LIVEUPDATE_CPU */
-+
-+#define __cpu_preserved_text
-+#define __cpu_preserved_data
-+
-+#endif /* CONFIG_LIVEUPDATE_CPU */
-+
-+#endif /* _LINUX_CPU_PRESERVE_H */
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 75374c64b8cc..51631cd2f6c4 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -810,13 +810,27 @@ static void check_section(struct module *mod, struct elf_info *elf,
- #define ALL_INIT_SECTIONS ".init.*"
- #define ALL_EXIT_SECTIONS ".exit.*"
+@@ -321,5 +322,10 @@ static inline int liveupdate_get_token_outgoing(struct liveupdate_session *s,
+ 	return -EOPNOTSUPP;
+ }
  
-+#define ALL_CPU_PRESERVED_TEXT_SECTIONS \
-+	".text.cpu_preserved", ".text.cpu_preserved.*", \
-+	".cpu_preserved.text", ".cpu_preserved.text.*"
-+
-+#define ALL_CPU_PRESERVED_DATA_SECTIONS \
-+	".data.cpu_preserved", ".data.cpu_preserved.*", \
-+	".cpu_preserved.data", ".cpu_preserved.data.*", \
-+	".rodata.cpu_preserved", ".rodata.cpu_preserved.*", \
-+	".bss..data.cpu_preserved", ".bss..data.cpu_preserved.*"
-+
-+#define ALL_CPU_PRESERVED_SECTIONS \
-+	ALL_CPU_PRESERVED_TEXT_SECTIONS, ALL_CPU_PRESERVED_DATA_SECTIONS
-+
- #define DATA_SECTIONS ".data", ".data.rel"
- #define TEXT_SECTIONS ".text", ".text.*", ".sched.text", \
- 		".kprobes.text", ".cpuidle.text", ".noinstr.text", \
- 		".ltext", ".ltext.*"
- #define OTHER_TEXT_SECTIONS ".ref.text", ".head.text", ".spinlock.text", \
- 		".fixup", ".entry.text", ".exception.text", \
--		".coldtext", ".softirqentry.text", ".irqentry.text"
-+		".coldtext", ".softirqentry.text", ".irqentry.text", \
-+		ALL_CPU_PRESERVED_TEXT_SECTIONS
- 
- #define ALL_TEXT_SECTIONS  ".init.text", ".exit.text", \
- 		TEXT_SECTIONS, OTHER_TEXT_SECTIONS
-@@ -827,6 +841,7 @@ enum mismatch {
- 	ANY_INIT_TO_ANY_EXIT,
- 	ANY_EXIT_TO_ANY_INIT,
- 	EXTABLE_TO_NON_TEXT,
-+	CPU_PRESERVED_TO_NON_PRESERVED,
- };
- 
- /**
-@@ -843,13 +858,19 @@ enum mismatch {
-  * @mismatch: Type of mismatch.
-  */
- struct sectioncheck {
--	const char *fromsec[20];
--	const char *bad_tosec[20];
--	const char *good_tosec[20];
-+	const char *fromsec[32];
-+	const char *bad_tosec[32];
-+	const char *good_tosec[32];
- 	enum mismatch mismatch;
- };
- 
- static const struct sectioncheck sectioncheck[] = {
-+/* Do not reference non-preserved code/data from cpu_preserved sections */
++static inline const char *liveupdate_session_name(struct liveupdate_session *s)
 +{
-+	.fromsec = { ALL_CPU_PRESERVED_SECTIONS, NULL },
-+	.good_tosec = { ALL_CPU_PRESERVED_SECTIONS, NULL },
-+	.mismatch = CPU_PRESERVED_TO_NON_PRESERVED,
-+},
- /* Do not reference init/exit code/data from
-  * normal code and data
-  */
-@@ -960,6 +981,9 @@ static const struct sectioncheck *section_mismatch(
- static int secref_whitelist(const char *fromsec, const char *fromsym,
- 			    const char *tosec, const char *tosym)
- {
-+	if (match(fromsec, PATTERNS(ALL_CPU_PRESERVED_SECTIONS)))
-+		return 1;
++	return NULL;
++}
 +
- 	/* Check for pattern 1 */
- 	if (match(tosec, PATTERNS(ALL_INIT_DATA_SECTIONS)) &&
- 	    match(fromsec, PATTERNS(DATA_SECTIONS)) &&
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 464f6c9d9ff0..77389fbfd9ea 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -329,6 +329,8 @@ static void init_insn_state(struct objtool_file *file, struct insn_state *state,
+ #endif /* CONFIG_LIVEUPDATE */
+ #endif /* _LINUX_LIVEUPDATE_H */
+diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_session.c
+index f48e9a4185f9..3c4f195d375d 100644
+--- a/kernel/liveupdate/luo_session.c
++++ b/kernel/liveupdate/luo_session.c
+@@ -683,3 +683,17 @@ int luo_session_serialize(void)
  
- 	if (opts.noinstr && sec)
- 		state->noinstr = sec->noinstr;
-+	if (sec)
-+		state->cpu_preserved = sec->cpu_preserved;
+ 	return err;
  }
- 
- static struct cfi_state *cfi_alloc(void)
-@@ -419,6 +421,14 @@ static int decode_instructions(struct objtool_file *file)
- 		u8 prev_len = 0;
- 		u8 idx = 0;
- 
-+		if (!strncmp(sec->name, ".text.cpu_preserved", 19) ||
-+		    !strncmp(sec->name, ".cpu_preserved.text", 19) ||
-+		    !strncmp(sec->name, ".data.cpu_preserved", 19) ||
-+		    !strncmp(sec->name, ".cpu_preserved.data", 19) ||
-+		    !strncmp(sec->name, ".rodata.cpu_preserved", 21) ||
-+		    !strncmp(sec->name, ".bss..data.cpu_preserved", 24))
-+			sec->cpu_preserved = true;
 +
- 		if (!is_text_sec(sec))
- 			continue;
- 
-@@ -3511,6 +3521,17 @@ static int validate_call(struct objtool_file *file,
- 			 struct instruction *insn,
- 			 struct insn_state *state)
- {
-+	if (state->cpu_preserved) {
-+		struct symbol *dest = insn_call_dest(insn);
++/**
++ * liveupdate_session_name - Get the name of a liveupdate session
++ * @s: Live update session pointer.
++ *
++ * Return: Pointer to session name string.
++ */
++const char *liveupdate_session_name(struct liveupdate_session *s)
++{
++	struct luo_session *session = (struct luo_session *)s;
 +
-+		if (dest && (dest->sec->idx != SHN_UNDEF || opts.link) &&
-+		    !dest->sec->cpu_preserved) {
-+			WARN_INSN(insn, "call to %s() leaves .text.cpu_preserved section",
-+				  call_dest_name(insn));
-+			return 1;
-+		}
-+	}
-+
- 	if (state->noinstr && state->instr <= 0 &&
- 	    !noinstr_call_dest(file, insn, insn_call_dest(insn))) {
- 		WARN_INSN(insn, "call to %s() leaves .noinstr.text section", call_dest_name(insn));
-@@ -4164,7 +4185,13 @@ static int validate_retpoline(struct objtool_file *file)
- 		if (insn->retpoline_safe)
- 			continue;
- 
--		if (insn->sec->init)
-+		/*
-+		 * Preserved CPU text (.text.cpu_preserved) executes across
-+		 * kexec when the outgoing kernel's retpoline/rethunk targets
-+		 * are no longer mapped.
-+		 */
-+		if (insn->sec->init ||
-+		    !strcmp(insn->sec->name, ".text.cpu_preserved"))
- 			continue;
- 
- 		if (insn->type == INSN_RETURN) {
-@@ -4440,6 +4467,12 @@ static int validate_noinstr_sections(struct objtool_file *file)
- 		warnings += validate_unwind_hints(file, sec);
- 	}
- 
-+	sec = find_section_by_name(file->elf, ".text.cpu_preserved");
-+	if (sec) {
-+		warnings += validate_section(file, sec);
-+		warnings += validate_unwind_hints(file, sec);
-+	}
-+
- 	return warnings;
- }
- 
-diff --git a/tools/objtool/include/objtool/check.h b/tools/objtool/include/objtool/check.h
-index 063f5985fecd..18318f2faf11 100644
---- a/tools/objtool/include/objtool/check.h
-+++ b/tools/objtool/include/objtool/check.h
-@@ -16,6 +16,7 @@ struct insn_state {
- 	bool uaccess;
- 	bool df;
- 	bool noinstr;
-+	bool cpu_preserved;
- 	s8 instr;
- };
- 
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index a82517a76a0f..bac9e5f4921f 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -58,7 +58,7 @@ struct section {
- 	Elf_Data *data;
- 	const char *name;
- 	int idx;
--	bool _changed, text, rodata, noinstr, init, truncate;
-+	bool _changed, text, rodata, noinstr, init, cpu_preserved, truncate;
- 	struct reloc *relocs;
- 	unsigned long nr_alloc_relocs;
- 	struct section *twin;
++	return session->name;
++}
++EXPORT_SYMBOL_GPL(liveupdate_session_name);
 -- 
 2.55.0.1082.g2b9226bbc0-goog
 
