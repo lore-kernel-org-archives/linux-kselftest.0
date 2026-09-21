@@ -1,90 +1,91 @@
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E674C4A43E2
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 14:07:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0204A68B9
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 14:07:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789999646; cv=none; b=hbVAo3pmCOzRZauUzf6HJLfr9/4IN+zMSIvlTapJYK9oer5GbcXZa6ISDfrRPQp5ZTdg8M1nuKmq15bDBCLGomMSYKinRSTHapBqd3iyifMSYFuB2grgYs+jwRl3BprWawA1KZZO1qUM7qadUmE1ddKZVYvUygO3cmDMGx0ukmo=
+	t=1789999650; cv=none; b=XcxjmeyLk3wdNd4uJOk6jFLGwZuSonGKffFO/O9ITrmblIEQrrBjfTeMGRYoCVn/HuQP3qISnKcBNkJPh5udAK6AkJ6dtT3+ci7at5+kk3wpvT6wwvHG9k2LpwVr8eOQaFgGq+10M3Mq1lka9H0FjICWm7sIv2Ya2oxa1vTb0q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789999646; c=relaxed/simple;
-	bh=aVY+77+Rg4LdrLfAH6xlK0pN+kCKSnGa0twjylLa7m4=;
+	s=arc-20240116; t=1789999650; c=relaxed/simple;
+	bh=l74fNDk6VO8vPprQl+zeIl7U2mcronWS4nPqTAUnEVg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=noyNiQkQ/FTN0+JpCuOTWBQ1hxfKORUdk7EqxBNuxU6CjqqmN3sonqQIlZ9EjIkrRgOk3Xt9dfsJBkcnRAlDzY87M734IhkcSooVJGL4059pH0cOcALulSjZq57T7xFo2qiqW35R5qmNIlRaXqIikRFDyZSojDJ+oCkLcA3TPc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d36U9OqE; arc=none smtp.client-ip=209.85.210.199
+	 To:Cc:Content-Type; b=AFQl3UStvlLz5wU1v8ZYqB9Ilaplabb1di/AgSNeL2RdIqcPxlB8/BEMS60QEvdYan6PeqctZTLiTIYaNtDXXLYBIY7iycFbaNE7tk5YkiqHImZNQGR+zsykv0935OxBZVhzDBIFLoVNlRB6S12LKNNdonVC1Z8i7HZmMAOhing=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TQ4SqJXN; arc=none smtp.client-ip=209.85.210.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d36U9OqE"
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-869b8d63e28so4399872b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 07:07:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TQ4SqJXN"
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-86b4048367cso4051954b3a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 07:07:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789999644; x=1790604444; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1789999649; x=1790604449; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=H7kVfEuUUuG5RNBx6vZsXAqf4DhBGNyoOU9tZbLc/gs=;
-        b=d36U9OqEy5t1YSBG3G0wsA04D9U97Fvp344kSMe9WPaXa1qeOiup1nBk7QMtYIe4my
-         59Duy4/P+j6qra4KJQypPXj4jtrzjJndcbwzKxZ5f5HNDOJ+TCuNgwJvIuIVIlijEEHx
-         uviGmzzRcXLKLrFEMe4WBSXUqrUDwzq1qNjDHFsEF9ycwor9ix5OLAaqZW/Yca9Spqkf
-         COzdtAMyYKn5XGwJkOBe2mOPOzLs77snnJWUD4fZs6ltlvL8Esmfj3D5WU0jOLaLlukh
-         L7kP0lYBS7N7rXvfXAzazoyPk2yfRyQ3ceN+ET5zG8s1GQPp0KO1MgoSJVjBKi/O630R
-         BVbg==
+        bh=GyNDJX3fIEdqZwMfzP/6YwVAKyII5CaZgMpV7trI7WI=;
+        b=TQ4SqJXNZoYFTtg9QNA15/JLKCoTbgABf63jL5uoYH+coE2aLf9qpvWn07T7ry7RQT
+         iIDlv3UpTzZ4HgKY3MtPKud7F2Y3nxWkddAuDNWq9Hlt0xQeq6KV6b738ZqnTdFMEQVF
+         prFtRYKUNut+TDqUa3AIo7/7pqNBTbbSeGJyPsvAf+EaZtJtkuqwUq9DMCKytaJNn+Dk
+         sqG9bp7XV60KZ0zOz7950Dzr1gGIz1ZzBaqKg4oaaYSv60hQI9VB4EWMvBHmckYl3t3E
+         pR7nbZYnQAzhDir2wQxcLJJPxJxlvORHdZE6bSS6wxqpMRAn93wWSK34yR6BnEeaPZQS
+         UsCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789999644; x=1790604444;
+        d=1e100.net; s=20260707; t=1789999649; x=1790604449;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=H7kVfEuUUuG5RNBx6vZsXAqf4DhBGNyoOU9tZbLc/gs=;
-        b=Bcpsp9H0LKYjz0DWgBQY690i3AlnBgB2ilVd3oHES4vNIrLpd557xQuQ34Zg9FRy/S
-         H36jobz9I69C7AQMrShQqiz1HsyXAMAE9FIq4W8A65vZ+9QlnOqAAmiLyMa/+rNCyhET
-         Ker4IPJmMjGAiDHbrcSh+5i8BTpd87b244mqoMk8A5e5bN8x7TtlOYdrdOqo7grGuXod
-         f6UfQWmgwuazFWcQW1Xv7KYzkjBDTgimhK2nuR4V67bBuD4oohcyHJdGwnQ1JJJOdKVc
-         XUsR4kUtSKJBSn/6d11xgfsnnTh5g627NJT27CYvMBrEsDZ1fdjYFfnb+YAisMGSMTW6
-         PU+A==
-X-Forwarded-Encrypted: i=1; AKwUvByFprHDMa/FJ04ByurPNMkD2Tq/siswQapeDioef1MHwKr7g23nc0hCeCHByKygP2L1f+WnOl4ss8NxpRTCi2c=@vger.kernel.org
-X-Gm-Message-State: AFuF++mwUCXefmS6OzRrGZFemQcxuZ+7T5bzpbgCYbZU1/tQVHRSUijH
-	XL8wStQn+dAZQWlEa04Pw/KclBzN/R2zVyB46icc48V69icgkL2tBbPufCKaHwcAXAAbdoU0r0n
-	aX7NpNQ==
-X-Received: from pfst21.prod.google.com ([2002:aa7:8f95:0:b0:87b:300f:fd01])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:aa7:8883:0:b0:84e:d5e6:a085
- with SMTP id d2e1a72fcca58-874d84a92bemr15148212b3a.0.1789999643931; Mon, 21
- Sep 2026 07:07:23 -0700 (PDT)
-Date: Mon, 21 Sep 2026 07:05:32 -0700
-In-Reply-To: <20260811050029.530698-1-gokul02k@gmail.com>
+        bh=GyNDJX3fIEdqZwMfzP/6YwVAKyII5CaZgMpV7trI7WI=;
+        b=qJOlmqhLlGdUyi+5Tk+F4HnhxfWuWhcFOzU6eWnAktuViVFh+al1keiPm+Mld6NK8L
+         UfbToOMlAgOhwCv/2kDR/OzCP+BVGYq7Weu9mNDLEv4xcyxsc6h6/KJotfgksbTtncmK
+         TwkhBIAp/ICmInNH55C6KoykHvcRcDzex4ZsVatdAGQuLRzDfk2RsBMOdRcw3QU30BwF
+         28V65i6u51pMCE5872FM5EAs8TW7R3btbpqXI8KK6yj0RVhMRMQRTwL5DzUnFWS0qyLS
+         Vbghb1V//AQ56kAJ97sBoOVyov+ksFqi86qnVtDwfy34l8ueF/BDC5/ezhXjQK3NiJkq
+         KHug==
+X-Forwarded-Encrypted: i=1; AKwUvBxz1n6V+zSH72mZaAEv24pWINJeMKa4HNM77M2uU6yypyqGc98/WR6FJ2zB78dJl75oqmVb7OHsBpAj1nfSRm4=@vger.kernel.org
+X-Gm-Message-State: AFuF++k5lGx1C0PKdC+U6k/NVAFguMO4DeH68cqyxoKiUo46T0393oHb
+	E3e2tDmTXaKX4ZSkG3Oivw/MKUyeiTAFMhIdeQV9X8SbxIH7AG1uIwNNH4VmABb+Q75qfyJR8LA
+	R9cavQw==
+X-Received: from pfw9.prod.google.com ([2002:a05:6a00:a269:b0:87b:6530:9518])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1c8b:b0:878:34d7:6977
+ with SMTP id d2e1a72fcca58-87834d76c96mr7399999b3a.37.1789999648656; Mon, 21
+ Sep 2026 07:07:28 -0700 (PDT)
+Date: Mon, 21 Sep 2026 07:05:34 -0700
+In-Reply-To: <20260803170825.925561-4-hisamshar@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260811050029.530698-1-gokul02k@gmail.com>
+References: <20260803170825.925561-4-hisamshar@gmail.com>
 X-Mailer: git-send-email 2.55.0.1082.g2b9226bbc0-goog
-Message-ID: <178999927029.754512.6741483404933166279.b4-ty@google.com>
-Subject: Re: [PATCH v2 0/2] KVM: selftests: Fix two VMs leaked on early returns
+Message-ID: <178999928264.755166.909574492736686331.b4-ty@google.com>
+Subject: Re: [PATCH v2] KVM: selftests: Replace ulong with unsigned long
 From: Sean Christopherson <seanjc@google.com>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Gokul K <gokul02k@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+To: Sean Christopherson <seanjc@google.com>, pbonzini@redhat.com, 
+	Hisam Mehboob <hisamshar@gmail.com>
+Cc: maz@kernel.org, oupton@kernel.org, joey.gouly@arm.com, 
+	seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
+	shuah@kernel.org, aqibaf@amazon.com, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Fuad Tabba <fuad.tabba@linux.dev>
 Content-Type: text/plain; charset="utf-8"
 
-On Tue, 11 Aug 2026 10:30:27 +0530, Gokul K wrote:
-> Two x86 selftests create a VM and then take an early return that skips the
-> kvm_vm_free() at the end of the function.  Both now jump to that existing
-> cleanup instead.
+On Mon, 03 Aug 2026 22:08:28 +0500, Hisam Mehboob wrote:
+> KVM selftests use the non-standard ulong alias in several files. glibc
+> exposes the alias transitively through its headers, whereas musl does not,
+> causing musl builds to fail with ulong undeclared.
 > 
-> Patch 1 is the plain-SEV path of sev_smoke_test(), which returns straight
-> out of the UCALL_DONE case instead of leaving the loop.  The SEV-ES path
-> next to it breaks out and frees correctly.
+> Use unsigned long directly instead of depending on a libc-specific typedef.
+> This also avoids adding a duplicate typedef to a shared tools header.
 > 
 > [...]
 
 Applied to kvm-x86 selftests, thanks!
 
-[1/2] KVM: selftests: Free the VM when the SEV smoke test's guest completes
-      https://github.com/kvm-x86/linux/commit/434c50e703c5
-[2/2] KVM: selftests: Free the VM when NX hugepage disabling is denied
-      https://github.com/kvm-x86/linux/commit/ebb702707896
+[1/1] KVM: selftests: Replace ulong with unsigned long
+      https://github.com/kvm-x86/linux/commit/5be2d20f9818
 
 --
 https://github.com/kvm-x86/linux/tree/next
