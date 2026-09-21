@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C0746C82A;
-	Mon, 21 Sep 2026 10:26:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B7723BBA0D;
+	Mon, 21 Sep 2026 10:28:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789986391; cv=none; b=AAicBNpAEyCQMmh3nkY4SQddld1NJGs+AYXMG2PtRkq0leC1CJLEtUZ8e/4J6mztcANbU/RTWfXqbCxFithKmt9TV0mXVAs50Q10NRcJDRFuRcDzCkr5u5Pv+A6aAb343h93pO50j1Cq2iCRPZ6GmCioqA694d7iT8kUYVxdVZ4=
+	t=1789986537; cv=none; b=jGVMOGkR3zUB1n5gKAnLU2edgph9fGY8mcLd8dLpwnVSeytXl0gNCY3NMCftwBh+RZ53LBP/foyR7kctQ5njuRPtJfibR3qrDU4MYYdV2z875z+/gOJg3nn0FlFerCao1rozV+yE3nhQaU1Q7ijwG91GOSj/9I1dXrqtKoYdIQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789986391; c=relaxed/simple;
-	bh=4MYvMzW+eBCxyNeCV7pzyo8zAwP9qndGkWxb2VWBKoo=;
+	s=arc-20240116; t=1789986537; c=relaxed/simple;
+	bh=6/O9g7UE/uP/fLGmzwVn1D5obJaGNxitbFrwT8zagoc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rrsTRx12gMqA0amFI5THmdiEPiwo0CWzHPC6t6Q3OctSBCdxWlF43Jx565ayOOpV55SP7NkmC/7I6X34+wzfEdK8889L6+5Z55xXLhv902uBGXfANOCDbEahF+eYVCMxTrJIc0aXt2Ztn9jyg2q6P32IMh2g0sgeHlXBtkjGsdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RaUbCJOk; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=Ofp3yeQms+ROEdaasbPy+a9qgrAQLuUiZVO7eD1G6rqU3xlffnq3KzeJavpyRL4hIt11r6J5FK54nK80oCmefpLH1xY30KMO9muFUZjItU7ncrjESL2IMWiKednw1vOb34KmE+HNgtRvXwumyvSLsfcTWSLzPKPdquE7P4RQ4FE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NHjCcWDp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RaUbCJOk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6DE91F000FF;
-	Mon, 21 Sep 2026 10:26:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NHjCcWDp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 984941F000FF;
+	Mon, 21 Sep 2026 10:28:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789986389;
-	bh=nTyZyJijpdRj0X6CZpg9ECIQcR7z9LYrkbviRiCY0G4=;
+	s=k20260515; t=1789986536;
+	bh=PlSPagAiZTiQz4p1UDMuSA1ZHbZ+Mis1oRiT6ujoT9c=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=RaUbCJOkKLo4tajvGYl2aCqTQCY3jQWxoBsKIHV2ITHnHSBXC2/woloaFdCGmW1Mj
-	 dcqnBR/najbVBm0Qg+R1N7LTD78OeguoK+oRClpNLcd+DIrl2iwnxlSklyjNAgyFw7
-	 gyuQC7+WGA1FINXKOPRe7Z+J+rDNKexGnH/P62NTzygOtx0pF6lSf4Ou+0XADS1yuW
-	 CzTKi2rbMtTAQA7A64cF8mH/lnqIafIc2ZW/90Kuap8DxOePcQ3xYLkNQwwpt2acel
-	 HcpCSO93IhzDUtVvz4c0RiHvmXgVOTXNL8A8fSFTEdugmmj+Q6Zejcq7dDwz70vPJ9
-	 PmNoxsSt8U59g==
-Message-ID: <b51234d8-467b-47c4-9d94-82e589643859@kernel.org>
-Date: Mon, 21 Sep 2026 12:26:20 +0200
+	b=NHjCcWDpZe59HM++m7X4aNR69YVOC1Z+RtPkRp+i94WQaXfwcRi7zXYuU8hc8WbyO
+	 LZFtc+fCpBArY8l/DeUW6tBGsZcCCO5+7DoDMAfG+wYavc47bWqAmedj3vhYc4jewU
+	 Wk3jCMNtdDsvX5FY7E3ki2Ya8NzgHs1KH+ykl0dpROlMayIZx/vWk8RV/D0FApB3BG
+	 0WdC9PCKTwgLuKFMOa4psJWR39shP0te6x673fzoJS/aUQFx0Be4EE3rJmsneIs1bJ
+	 /Er4O0DPZC6odkW+Es/edHvjScV3Yd6S+c6YuWM3OgU8RYYuYTCacj/kqCcWgkFGfm
+	 k2Uww+ro0suEg==
+Message-ID: <244ce64d-b7df-4a76-bcf9-effb0c53073d@kernel.org>
+Date: Mon, 21 Sep 2026 12:28:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,7 +35,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 1/2] mm/gup_test: Track long-term pins per open file
+Subject: Re: [RFC PATCH 2/2] selftests/mm: Test per-open gup_test pin
+ ownership
 To: Richard Cheng <icheng@nvidia.com>, akpm@linux-foundation.org
 Cc: jgg@ziepe.ca, jhubbard@nvidia.com, peterx@redhat.com, linux-mm@kvack.org,
  linux-kernel@vger.kernel.org, ljs@kernel.org, liam@infradead.org,
@@ -43,7 +44,7 @@ Cc: jgg@ziepe.ca, jhubbard@nvidia.com, peterx@redhat.com, linux-mm@kvack.org,
  shuah@kernel.org, linux-kselftest@vger.kernel.org, kobak@nvidia.com,
  kaihengf@nvidia.com, newtonl@nvidia.com, kristinc@nvidia.com
 References: <20260921094243.64698-1-icheng@nvidia.com>
- <20260921094243.64698-2-icheng@nvidia.com>
+ <20260921094243.64698-3-icheng@nvidia.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -90,44 +91,40 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260921094243.64698-2-icheng@nvidia.com>
+In-Reply-To: <20260921094243.64698-3-icheng@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 9/21/26 11:42, Richard Cheng wrote:
-> Long-term pin state is currently global, allowing one gup_test file
-> descriptor to block, stop, or release pins owned by another client.
+> Long-term pin state should be isolated between independently opened
+> gup_test file descriptions, while descriptors created with dup() should
+> continue to share the state associated with their struct file.
 > 
-> Allocate the pin state for each open file and store it in
-> file->private_data. Serialize START, READ, and STOP with the per-open
-> mutex, and release only the pages owned by that file.
+> Add tests using 2 independently opened gup_test descriptors. Verify that
+> stopping or closing the second descriptor doesn't disturb the first
+> descriptor's pin, that another START on the same descriptor fails with
+> EINVAL, and that READ fails with EINVAL after STOP.
 > 
-> Descriptors duplicated through dup() or fork() continue sharing state
-> because they reference the same struct file. Keep the ioctl ABI and
-> same-file duplicate START behavior unchanged.
+> Close the descriptor used by the existing test matrix before running the
+> ownership tests. Record whether gup_test was initially available so that
+> a later open failure is reported as a failure instead of being hidden as
+> a skip.
+> 
+> Also exercise the shared-file-description case: start a pin through the
+> original descriptor, verify that START through a duplicate fails with
+> EINVAL, close the original descriptor, and use the duplicate to READ and
+> STOP the pin
 > 
 > Reviewed-by: Koba Ko <kobak@nvidia.com>
 > Signed-off-by: Richard Cheng <icheng@nvidia.com>
+> ---
+>  tools/testing/selftests/mm/gup_longterm.c | 258 +++++++++++++++++++++-
+>  1 file changed, 256 insertions(+), 2 deletions(-)
 
-commit 534b19bbb67717eea2272573bc0ff7ba4ba109c1
-Author: David Hildenbrand (Arm) <david@kernel.org>
-Date:   Mon Aug 10 13:31:14 2026 +0200
+Sorry, we won't be adding tests for gup_test interface functionality. This is a
+testing interface.
 
-    mm/gup_test: keep longterm pin state per file
-
-    The pin longterm test currently stores its data globally, shared among
-    multiple concurrent users of the interface (multiple open file descriptors
-    -> multiple "struct file"'s).  That makes the gup_test interface
-    problematic to use concurrently: two users, such as concurrent selftest
-    runs, can interfere with the same longterm pin state.
-
-    While this has not been observed as a problem so far in practice, let's
-    just handle it cleanly.  There could be a way to trigger selftest failures
-    by e.g., running the cow.c and gup_longerm.c selftests concurrently, but
-    we usually run them sequentially.  Let's add a "Fixes" tag to be safe, but
-    not need to CC stable.
-
-Which is already upstream.
+(I'd be quite surprised if no LLM was inovolved in writing this patch :) )
 
 -- 
 Cheers,
