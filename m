@@ -1,234 +1,1144 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C0C4A0EF0;
-	Mon, 21 Sep 2026 15:52:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790005970; cv=fail; b=k4ZMIV/UKz4QG51GzMmkoz6xLICovr2cNX3qKX+cYPqYVKAZjcGLSFVDOKbItVsYD1vINRSV5F6VGcLAdYt9wd01ancq7a3JkIrgi/C42ApWFtjr9HPAfnplWcZKdZDs0TSIFk68KRd4KhBfhmA7+hppwTaY9GeouNTVeIisQjs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790005970; c=relaxed/simple;
-	bh=q+4Rw5q4YnTBgDXQ0u96sN4t3OJTVrlmUy0Sk6w/X+g=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Un+xn8XqmVOMjqLmyEJVE9BM50sAE0kKe5MUfLSJZvLyob1kBqHpgfpokOkUD1rdUAlqj816Hx04NiGnWWrV8TE9mghZ92uLXlqXXM5wS7jO2o8N2/sEOedyvBqI7/eH9oNfSloCHxxFf723D0Cbem2lwx9Nm3j5yfxsVewcCWg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=iwVSHt0Q; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=oj1FsEx+; arc=fail smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8A94D488A;
+	Mon, 21 Sep 2026 16:27:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790008074; cv=none; b=LioE9V5iRseWr+iZlpVMHn923U6KzGtUWOwNB4WgePy3eKRZM5rFxXeVPrLw2r+zHHv8nqkOjnOjkZvAJ5PwkJVMpPIGI9oFB34KD5us9sxqyrXeBabZI74gsqtFF32HqMDQM3uPANYqvbiBdpVfpKNlihfzhWrykgq4MJetTJA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790008074; c=relaxed/simple;
+	bh=LE2/Jw/dzFq6HsH2rAJcP0GhY7EwC23AEzqsjsSOQj4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bNNDmazYZpdICCqm4VmLhv4tfcCBHGmCLpZ7+1UiaF2BDDEOLKZEs5xk6UtLyVerT0pys6mn0QqXTDo4UvTeOlY99cJ0vbAyfQFd9F+r06jDA21Lhh9j/7bFoTfNz36u/LuKi0I0aVq5SiNX2lKGYx0nT24UwGmSkEAY0mmRM5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=C4wQ9Dc+; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="iwVSHt0Q";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="oj1FsEx+"
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68LDtkJx1832020;
-	Mon, 21 Sep 2026 15:52:27 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="C4wQ9Dc+"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68LDtlAv1635004;
+	Mon, 21 Sep 2026 16:27:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-id:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=q+4Rw5q4YnTBgDXQ0u96sN4t3OJTVrlmUy0Sk6w/X+g=; b=
-	iwVSHt0QlzZZsWvpxbBKnvaasDardIqS9ei7zrOwTKJdEmSMtc42fNYCaWOrvNl2
-	gOjNCpd3PVeaudWOQzuKncvma45gtx7cFFhPTauX+OR6iA8eVZpSjUyvu/Ic9k83
-	8CJOZDK+H6qIE5SyZ32l7+4KDDzR4iYphVPHSvu16WVa08wYwgrfqcEoZXxJ9H7t
-	MLab84lUl6kP9hT6dlBqKIWIg/s6i1WtoOP8n1f1Q3cFhet/qw2cPgKbZdxmFWEm
-	UP25M+l857fNGYk164mnYhrJhuh6RxBQEwErIyo9JgDgc+rW0/0GPQyyCnp7FyfZ
-	adL3oM476TkGea58l9/zSQ==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gsk2d2hu0-1
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=wx3JI7y5SQuIVmLpBPmrwTMBLXOxe1VE8gBskFNlCgw=; b=
+	C4wQ9Dc+zt542XTn4K09smA8OzrhTKvsqOJ0ethspTB75X4ISjSPQ7Cfhp7bOhrv
+	g+04KnVDtQQO/eApV+f3Ve4dHeuhfoaM11kcBLCMz/jCPRNSYLXhSGUoZYUw43Y/
+	wHH2sPbLV3u0ArCQxq20p6xp2lclIc6vZagg8BC7mhwEa0cSHzmkaGFxhJXBw99r
+	nwO1OvcZxhBL6yZjLCwOKI5TWdZEcr8G/BayuvS1tYyMO9zVNdyQtNFsquhNzewe
+	2ZrKn9YGL1mUA8I/Q7tbOSPATAQ6DXyZndU5ypMbBJsl1uFp67LAERjKrkZdU9iW
+	woR/lawvEQRKMSz0/HULNQ==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gsk1ganmf-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 21 Sep 2026 15:52:27 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68LFo6kU007013;
-	Mon, 21 Sep 2026 15:52:26 GMT
-Received: from cy7pr03cu001.outbound.protection.outlook.com (mail-westcentralusazon11010063.outbound.protection.outlook.com [40.93.198.63])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4gtehyu1s1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 21 Sep 2026 15:52:26 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ULxInXOKzB1ziGaoDNOiwEHL4H0DDaUQ3TSyDJ4wgCAz7qhMN5+cFv//ag30Fe7r/DX3VY3HvSngy7TzyKvBJh7CiNRCOTLSUPJzzSLZfL35cdnNsCyuYVTwD2N37ADmR1HZBqQ6255cwoaW6xKRxzsFOUWCxeNys+gb2hvOqwbmzYc9OfT/QH4ZSR5V2wE88pyKwsZxj/QhDYMkdn+ky3/3H3zeERb2eE+kLA6s87mX/QT8C6fbODAe0oLpab/SML0rkihhdH461Ht3KiN9nPo/ayoXMxg2GlXPDi6lhfmVCSpk5D9Jdcyk2gDdj5TEh5IFMwl7ZOwpZIXs6FPL0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q+4Rw5q4YnTBgDXQ0u96sN4t3OJTVrlmUy0Sk6w/X+g=;
- b=HBjmJUtNPSI/Hv9+DHpJIxBcOkh/F7zBiPtemZlIywYBSEGcbP/jYx4v3C19eSMIH43wYaUwk9MwGbePXDplwnIQS1rjyMcER48VvN648jevtDTVgFaznWsFI0cMndtDv3LjJISc2ulGpI9P13WYvKc/RgBIsgbmzNmTe4ZyhOe3vHAJgtOdXAL0LalAxRKB4L2TaB9HGDPl71m3PH7shgjXUTtg8Yhd0QrcnZ416oNRvN1jBGw4pxDz5la+Sar+7EUKVu3YF3VLRy8HWDj9M8iDgsSzeoxEjy5cnHwkznwyqTsYYWEWPkfTEiu3zf1ESLtCZOTA7c06+GaAXt9OjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q+4Rw5q4YnTBgDXQ0u96sN4t3OJTVrlmUy0Sk6w/X+g=;
- b=oj1FsEx++W0jgKGv02rrlkLp57yT2uVWiVqe1Waofe10E1UZZxUub5gtYQa/TB1E0Pw8NyI0sxTcT327oi/2Lni+R2NXVDegYOc8Bl2CncK4IKuV2tfqvI5PQYnRA5gh4LP7tb4x2nAabFEEMhlCovnSSk/yYJiq7okwnmVgoIY=
-Received: from PH7SPRMB0087.namprd10.prod.outlook.com (2603:10b6:510:2b1::12)
- by CY8PR10MB6515.namprd10.prod.outlook.com (2603:10b6:930:5d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.13; Mon, 21 Sep
- 2026 15:52:23 +0000
-Received: from PH7SPRMB0087.namprd10.prod.outlook.com
- ([fe80::527f:36ac:6913:b2ae]) by PH7SPRMB0087.namprd10.prod.outlook.com
- ([fe80::527f:36ac:6913:b2ae%6]) with mapi id 15.21.0451.012; Mon, 21 Sep 2026
- 15:52:22 +0000
-From: Haakon Bugge <haakon.bugge@oracle.com>
-To: David Laight <david.laight.linux@gmail.com>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Peter
- Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon
-	<will@kernel.org>, Boqun Feng <boqun@kernel.org>,
-        Waiman Long
-	<longman@redhat.com>,
+	Mon, 21 Sep 2026 16:27:39 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68LGP95b019791;
+	Mon, 21 Sep 2026 16:27:38 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4gtegjen1b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 21 Sep 2026 16:27:38 +0000 (GMT)
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 68LGRUVt026549;
+	Mon, 21 Sep 2026 16:27:37 GMT
+Received: from lab61.no.oracle.com (lab61.no.oracle.com [10.172.144.82])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4gtegjemsy-2;
+	Mon, 21 Sep 2026 16:27:37 +0000 (GMT)
+From: =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>
+To: linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan
-	<shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>,
-        John Stultz <jstultz@google.com>
-Subject: Re: [PATCH 1/1] kernel/locking: Add mutual exclusion self-test
-Thread-Topic: [PATCH 1/1] kernel/locking: Add mutual exclusion self-test
-Thread-Index: AQHdLkjXOr5CvJFeb06L+v9F7yCyjLbN/EOAgAAxYACAAFDCgIAASG6AgAqe74A=
-Date: Mon, 21 Sep 2026 15:52:22 +0000
-Message-ID: <CD410360-BF19-4736-B12A-6BF4C0F012EA@oracle.com>
-References: <20260817130239.343594-1-haakon.bugge@oracle.com>
- <20260817130239.343594-2-haakon.bugge@oracle.com>
- <20260914103545.3db6eb45@pumpkin>
- <6546A220-4B85-4780-8B45-F8B35D24139C@oracle.com>
- <A1E4F810-7A75-4AF8-9DE4-11BBA101F5E5@oracle.com>
- <20260914224045.5fdfac58@pumpkin>
-In-Reply-To: <20260914224045.5fdfac58@pumpkin>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-mailer: Apple Mail (2.3864.700.51.1.1)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7SPRMB0087:EE_|CY8PR10MB6515:EE_
-x-ms-office365-filtering-correlation-id: 5224a5a6-cdca-434c-e9a8-08df17f85327
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|23010399003|1800799024|7416014|376014|10067099003|56012099006|6133799003|3023799007|18002099003|22082099003|4143699003|38070700021;
-x-microsoft-antispam-message-info:
- O8hywFodfZ/vLH67DnfdNKBYIkZR6u2chHlE8C7RsCAFJUCQZAk0F7Wt9U+X8c+bZA3roiBQDiVF95Kciuq1NlhjJql2IgGmfTL8O0RRa2Y//AMwd683Nz8qESAF0WVrpizF5LBpfYjrOndb0p6uiZyOo1G7JmsB7yuaHFi9TO3F241atr+Tg8mKi+BBLjACBw3Idn/NYZ7So3Fp+TnL6+Lql/hQyuxIQDn35hutZYJogCy/6zS5cgKWqBchrBcd8VEs9AVHawL8S9alZ5FpL8bBnzusnhpf4Yta0bGjV2OMyb/7HVe88dilkK77RHQGatUSjzkEf/FSAUebaUY6ogIZYCJPBnUFuaGb35KInefUWoCtbhVGY9EMDeOf3b66S+gvDwkA3DXCuUH3493avBAkcaYmKv36aTBC7Hs6n/SGyBSH8BF3lUasraMXwXvNzRqFUNLFRAu3hlqge6RdVR9f8BEtrrxM1K38V1jFtaZ8VrM0g2DQJB/EPkmaRStnL4GSfzJH6rICwT6QxGudgjU/Ie3Lc8sEHLdq4raD20+UGy/pXNsenl+AYToIx47VX24TcFiLIy63A/gBfnRnx4zXaMcJCpOuF31CqDsGoiw8CibVm4JOMemVGavOLNOkI8SbyyhU/KY2pRyDAnMrSmPzrq1G8iM5Gim3/ODdaRWVNGoudh9T1n/76AdPKjCK42lrJ6dEg1BaMVmTgoyLGXO+6aHaEzSTH2dIg9+TnPg=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7SPRMB0087.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(1800799024)(7416014)(376014)(10067099003)(56012099006)(6133799003)(3023799007)(18002099003)(22082099003)(4143699003)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?c2ROaHJtZGNvdkZqdU9lUGwrRm9QY2hrczFsVlVONXVMNjdNMlpVNFRkUjBp?=
- =?utf-8?B?RHZrYWtQcFdIamJuQS9SK1ZkM0cveHJHU0UrQlV2L1JER01HNVpBMHpIKzlB?=
- =?utf-8?B?S1A1dzQ5RUJaUXFNNk95bDlmNWxpZG5HS3NSeU5DYjhsNktiVEdoMjlKUHZy?=
- =?utf-8?B?WXI4L09SM0l6WkFXUC9oS2dPd25QdXhDaDdROGZoL3crcEx0V0JGSmpQeXNJ?=
- =?utf-8?B?azNLSXQvQjFEdUJvYmhoYWljQWd6RnA2bkdSUzlGWXJFMWF6WnNPZlk2Tzdk?=
- =?utf-8?B?Zk5YWDZwVmVFNlIrbCtuMVlsYTNKRVJrYnZDamJIVmtvQks4ek1OYkpSV0ZK?=
- =?utf-8?B?NGtsSHpXSzNybVhQaEdDYWo1dzNtekVOdGNBVjN0K0Y0UTVLb001NTJSSTBF?=
- =?utf-8?B?dUtRR3hYSnRXdjBmaXNzZUJFUmQzNllIR05vUUFDQnFWNTdQQUEyN29KcG9H?=
- =?utf-8?B?V0JHMzJpclYxZGlSOWhweTBxR0ZDQTNYdlA5clk3NVNiUmlITUlBQkJLaXNa?=
- =?utf-8?B?dnRtcFZJSVl6TTF4eTlTdUl0QnA4QUNFUWdSdXNQV3YrN1dhOSsxWG1kMytU?=
- =?utf-8?B?bmxOQ0h0L0wrcHBlZks3NjhIVFZQK0FaWE00TFpiRmpFYWk5MFRQQzI4TXps?=
- =?utf-8?B?VDg2KzhkR3RKWXd4aFgvb2IvTmRVNUtKVU1GYkFhdzU3eEhUam5pZWJPQXp2?=
- =?utf-8?B?UFRaak11dlRDQ0ZCanN4VlpZWjYweUcxVmRzaHNkNkZ5N1RjOW42NFpzMm04?=
- =?utf-8?B?bE41WlM1UTkyZjY0V2k0blhCeWhBTS9VNHZSYWYrYlZod3V4QndrUUJJL2Zu?=
- =?utf-8?B?VEU2SUE5YnQzR0V6NTJyL1JrYldOZFd2d3pGU2ExaCt1bXVmV1lkMjZGc1A3?=
- =?utf-8?B?RndheEhMOWxxb1pMMUdGdWJJQlROS0xXMFU3eXBXRGJrNjV3RjJsUnB6R1Zy?=
- =?utf-8?B?c3gzaU16TzBpUFZ0NzYvQUQycWJwWkJFY3ljekpySCt2UVhxVWV1MEpudGlj?=
- =?utf-8?B?OFdHb091ZlgyQnVSOTNMQTdFR2NMc2NmRmFJNUhJdzVmZG1aS3E5TUYyYzR3?=
- =?utf-8?B?cHJpYnI1T2d1Y3RKaWlwYXc0aVNQWlpNc25qKzJTYXNKUmo5U29VQUlvS3dh?=
- =?utf-8?B?RTFVb2FJUFEyWFhsRjJjK21yY3Zyb3JRWUZWU3ZMcDRBYmlabkR2NkJueGVQ?=
- =?utf-8?B?S2tmelJtbDVNcC9ZUmdQNlZJdlhDbHR5Y0dCWDlqYWpIMVNMcU1abVZCa09C?=
- =?utf-8?B?UHNLWk1OOEpESVRsZGtlOGc3OHlyVGxYa3NYQldKamtSYXlIdnNwcWdCdUVY?=
- =?utf-8?B?aE1VdlhBbU90bnBvWElzYTlyV0xxWnN1WW5Pc2JPOG9rZFg4R0FFOVJFaXhj?=
- =?utf-8?B?L2FNdnkwdWVjMkppV1I2d28rVFcyOEF2WjVWWFNucFFObkFlUzA0YnhXTlJ2?=
- =?utf-8?B?OGdNTk1UdzJQaW5EWk5DdUYrRnNHZVJ3L0VKYVVyZi9IMlU0dkVuMXFZeklh?=
- =?utf-8?B?bUd2ZkMzT1prdThMblhoTVdwOFd4ZXBsa2JrMnFrbjl3a0diS0ljbUpWcDUr?=
- =?utf-8?B?MDR4a1g0SUVoR2NpUTNMWm5vNEhtbEhqbEtTZVRDNmloU2R0TmNlN1NkZWti?=
- =?utf-8?B?ajZYVTEyZm5Qc1QzbkVkUWRuWHRpajBTZjA0SlFWR05ybUc2MlBjVGJWQkYr?=
- =?utf-8?B?ZnhmMTcvMkRxcEVJKzFKT0RXeTlSeWRHc1RIdkF3M0dmazkzdVJ2eStEWFVu?=
- =?utf-8?B?SHc1d2wwVFZTMmVBSEczcWR1T3hkMzVRUXdhY2t5Zi9JeGZuejF2ai9FRmRU?=
- =?utf-8?B?ODNqV2Z2OTYyeFYwb0lOZi9naytMYVpaOFVmM2ZOTE1aY2M0Y3o2Umd2bCtD?=
- =?utf-8?B?Vi92a05Pa05CeFc2UkRiWnJtUHM5VWdMU0J0NVVQOGlVK2h0d0ovM0U1Zldt?=
- =?utf-8?B?M3lLNGNFRE9TN1NIUHJENFFvaHhMRTRvV2ZwU1lxR3d6eStmbzh5d0srb3BE?=
- =?utf-8?B?Y3VFUUZPS3VCU3l4SktTTkxYbDk4aGxuY3diOGJNUEk1NFpaZldSOVMxTE8r?=
- =?utf-8?B?a0RqUjR1aUY5M2FIb1l4VWJvdkMyZk1ickNRQzl0b2g3angwYlB0alZNT2lY?=
- =?utf-8?B?RnNXeXl4eUVtK2E1WldtY0VYdjFiRGtjOUltcDVtSXFmd1BZR2Y5eTBKUytB?=
- =?utf-8?B?ZGNCY3hIbkxqWFcvS3ZVeU5jeGt5SVBEcStnWXArWnpDSGlEMW5QdDFJSUtL?=
- =?utf-8?B?eVZpMGpZU2dnSjUrb2hMQ0lDUkdiV3dDVENmQWxNYms0ajVGV1padmFXT0NT?=
- =?utf-8?B?cXkxeVJCeWVTbjh3cFowRWJpd2JEamxwSVFOQnp5b2k2YmxPL1orTWZmM2pB?=
- =?utf-8?Q?3LHVR38QnevpWW3w=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <74F53FDF64C4454894D379138C699AF4@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Shuah Khan <shuah@kernel.org>
+Cc: John Stultz <jstultz@google.com>,
+        =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 1/1] kernel/locking: Add mutual exclusion self-test
+Date: Mon, 21 Sep 2026 18:27:20 +0200
+Message-ID: <20260921162722.212610-2-haakon.bugge@oracle.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20260921162722.212610-1-haakon.bugge@oracle.com>
+References: <20260921162722.212610-1-haakon.bugge@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked:
-	4RFyXC1ZqC2qTB9KeTnlZaZxQbnYuR8Nfh9B2qA+DHXhoMTqxnrgIXsJPTnNuzL+Wo7mzVqym/NVvWroa63GgRTLF6WjNsohnbfzjnSripcDKlresDnOTBPVcdqsbAyh/f6MtmBQ8qG/tC01spK/z1AOAjYUCLNPuol61WvYjdprlhDKRjv+CXuMYNZ7IV6daMVLM9TZTVh3kFtVtnoL334mZvJofFvPlzbzrhAgQPSETgc2GsTtFmgPTRYEaPnTHoRxV09CQX/MvosjXRlYSMDZ+j+URgKbTmtsgeEtGmRzX36K/eeSTknLQ2JFFSujTsGKVISQ/VUJm+1VhDPiCw==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	YEN63ah3xAoxCZTpM2zaxdTMH86LUe1fDqtlTXPE8F1bvVhm6Ft5reXZi4z46V0COs+XUhvFgAYLN9Rzy+CRUx8fGMXd5h2YTFUzFMSsjpd1S0hgA6W17jLUgqY1ZEm8zj6kOfdvDwgVbuTDvtyqN6lUSmgyzv4+TXABUMVigrMy8djjDo3vrAmiTojrX/rfTHHM1FqwY6Uhw5TWTJK/WveFWGKG5vgLtF/3+tYwPZg1tYEIJ4iqLgFn9tRHMJk08Ej36r6yFWuJy1suXjFsqUDPzI11WncW6O7GNNvpRbtDizenLPpqHAwpXxvsNwUDwBH7+hQyImEX119fNexYJJslI/2k3xIO07hN1fXWC1KW1m1hE6DOn3p67LPwYdhr1cogyfEKGt51A9aVP/Xdflibya3BPCYiCMECkZFRXfdsxdxYH/zCMWQH1V0l6/zttZLe3oh44IEVVYqms42ewpOp/OA+BA7MHMBYXPdVqfE0GRnNNjwZZc24lo3cdlgPwtIrQgClwD4FT2vxBEhH6gzE57AO+y1Ow9EE6ymVwBHkKvaNwjA365/C+CZJkukDc4WoyxSmIpC1mL/wcFf4ZbCj5uD3QXUhzvwiCyPmbz8=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7SPRMB0087.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5224a5a6-cdca-434c-e9a8-08df17f85327
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Sep 2026 15:52:22.3929
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /m8uH8l9whBLDlES+8V4SzegmYGN7B0fAIdULh/Ypr8T13LX+JnzkIoQrlYXmSUf1S/1JM/QZEolFyaFjDAAqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR10MB6515
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-09-21_05,2026-09-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 mlxlogscore=999
- adultscore=0 suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2609040000 definitions=main-2609210231
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTIxMDIzMSBTYWx0ZWRfX8aJtTkNOpXXt
- rUA3P9wht+6jDGxNTjk4K1hXs3379FbOZdcAVSuS/JG+lb/wqlCGWPhRELl+z6JWMWlPuBl/jlu
- SW1jgFBrBZ+yzhcNywC4LYy34h7uAxHsltSl0/qgFFRd3SP1s1xqtUILnzOdOHY/ZV/+Ja8WbOb
- mbh4R+zhxMtNDsixqRushTKPbC1U1nUAxvJqnriIPdk7QPxEN52bHFGSV4pAHdyrf3zIaVUyL6v
- g+eYU/WKR1cGp+KAABVUDlMfBL6Vm/j7m7D/P01R219d8kUB7q991tVK43HIfaJvKg09RvpAYvP
- Yv5d6kyajM+tRcIks/UM7TWabS836qJA5KsTkvprauuYm4wguqxYGmJBM3rEcnZ4s2kaye1WV0H
- NJ5mjbVX/wYrUdctu1w+QaNyk8QEzFNhIkLOjwDBNoNHUrFmL/B6/druShsNiUJCNwlfAAtCNd7
- bA7meF54WLqd5vv0yHg==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTIxMDIzMSBTYWx0ZWRfX9xASsVvx5ESZ
- 0QdHlXvMcnngPooDcBjK/RQfMQjWFAyDsUMa5ijccnQcuPANNn/Uo4e4Pb/Xv9xk/NZ8JlAVfKO
- o8yXNFFx+6PdC4DTym2MPBibhzuAcWvalfiBKqdxQo1ww3r6lgs3
-X-Proofpoint-ORIG-GUID: Jv4CEyqTBvUjCsDlw1G8wjIFFcjY28ZJ
-X-Authority-Analysis: v=2.4 cv=f+Ddl+yM c=1 sm=1 tr=0 ts=6ab152bb b=1 cx=c_pps
- a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
- a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
- a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=GoEa3M9JfhUA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22 a=EIcjfB9IiI4px24ztqRk:22
- a=pGLkceISAAAA:8 a=fKRiGPEwzoD32-9nciQA:9 a=QEXdDO2ut3YA:10
- a=WmVTiCyuxqgg3mnwYu6p:22
-X-Proofpoint-GUID: Jv4CEyqTBvUjCsDlw1G8wjIFFcjY28ZJ
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ mlxlogscore=999 lowpriorityscore=0 spamscore=0 mlxscore=0 suspectscore=0
+ phishscore=0 adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2609040000 definitions=main-2609210239
+X-Proofpoint-GUID: nm5KKrQDt8Dhv425Y6wlhjDzGW8kw4uV
+X-Authority-Analysis: v=2.4 cv=T6sZ3PKQ c=1 sm=1 tr=0 ts=6ab15afb cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=M51BFTxLslgA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22 a=x4eqshVgHu-cdnggieHk:22
+ a=yPCof4ZbAAAA:8 a=YHNDNSdmkXTikWg6I18A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTIxMDI0MCBTYWx0ZWRfX6yGoKmOTqOJW
+ r5v7S/K8weIIIcFEtwV1CeoZ3SwZdXrFLllstDyesaHfQrORoC3Vb9l4+ljqxhONXvx7WT0Mw3I
+ gnqxSnhvq2EPw+AegTW5SqhlBlswOnnIoeKATZv9vTDWuKsDxeFJ
+X-Proofpoint-ORIG-GUID: nm5KKrQDt8Dhv425Y6wlhjDzGW8kw4uV
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTIxMDI0MCBTYWx0ZWRfX0RH0OxlfR0KT
+ IKSyNLD66tss64yoaXtLW9yJB84IelCgDZQP7mwGSa5VaXNmZPYIfIFHeiJyHkCMPvXhEXwpmZI
+ S6zGhDTfTSkE1FWcI7tgkPkiDrPBd1KmikUSxqmnnSYVnP3PEQesBEg2Yi+ZhbgIrFNA+MY5rfk
+ LaSX10USuC2onu6Y+FQFe6VpDbWEEWbppmxkE4wi33yy+Wko4C70gbc4vJcHkaSt9oYKtOuqgli
+ sPbV2Fm/9Kzd5xitE+KOhCixBrcuFj8W65g05J0d0krqinD1zmuz8N86Kh0BjQxj03UXhGPyq2m
+ h44nqQW4K6P1qbKYg5ULOgk0zGa0HJHtE9L7wQhevXDXdPPywOEaOZKJf4hQO8V/08mDg5pUJ/m
+ 4+akmxTUEmHVXaDNEJT2B/XpJbKYWOitOKtYstKMTx+L3wTvsDUR/oDrjCQxii6S/k3xbKjRFHD
+ knDTXvUnJTBW6iUiA/Q==
 
-DQoNCj4gT24gMTQgU2VwIDIwMjYsIGF0IDIzOjQwLCBEYXZpZCBMYWlnaHQgPGRhdmlkLmxhaWdo
-dC5saW51eEBnbWFpbC5jb20+IHdyb3RlOg0KDQpbc25pcF0NCg0KPiBJZiB5b3Ugc3BsaXQgdGhl
-ICdsb25nIGNvdW50ZXInIGludG8gYSBzZXBhcmF0ZSBhcnJheSB0aGVuIGl0IHdvbid0DQo+IGJl
-IGluIHRoZSBzYW1lIGNhY2hlIGxpbmUgYXMgdGhlIGFzc29jaWF0ZWQgbG9jay4NCj4gVGhhdCBz
-aG91bGQgbWVhbiB0aGUgYWxpZ25tZW50IGNoYW5nZXMgYXJlbid0IG5lZWRlZC4NCg0KWWVzLiBJ
-IHRlc3RlZCB0aGF0LCBhbmQgdGhlIG1vZHVsZSBmaW5kcyB0aGUgc2FtZSAiZXJyb3JzIi4gQSBn
-b29kDQpzaW1wbGlmaWNhdGlvbi4NCg0KPiANCj4gV2hlbiBJIG1lbnRpb25lZCBhIGRlbGF5IGlu
-IHRoZSBSTVcgZm9yIHh4eC0+Y291bnRlcisrIEkgd2FzIHRoaW5raW5nDQo+IG9mIGEgZmV3IGNs
-b2NrcywgcGVyaGFwcyBzb21ldGhpbmcgbGlrZToNCj4gYyA9IHh4eC0+Y291bnRlcjsNCj4gZm9y
-IChhdXRvIGkgPSBjICsgMTA7IGkgIT0gYzsgaS0tKQ0KPiAJT1BUSU1JWkVSX0hJREVfVkFSKGkp
-Ow0KPiBPUFRJTUlaRVJfSElERV9WQVIoaSk7DQo+IHh4eC0+Y291bnRlciA9IGkgKyBkZWx0YTsN
-Cg0KRm9yIHRoZSBsb2NrLWZ1bGwgY2FzZXMsIHRoZXJlIGFyZSBhbHJlYWR5IHNvbWUgaW5zdHJ1
-Y3Rpb25zIHRvIGJlDQpleGVjdXRlZCwgdGhlIHJldHVybiBmcm9tIG14X2FjcXVpcmUoKSwgdGhl
-IGNhbGwgdG8gbXhfYWRkKCksIGFuZA0KdGhlIGJlZ2lubmluZyBvZiBteF9yZWxlYXNlKCkuICBT
-bywgSSBhbSByZWx1Y3RhbnQgdG8gYWRkIGZ1cnRoZXINCmRlbGF5cywgdW5sZXNzIGl0IGNhbiBi
-ZSBwcm92ZW4gdXNlZnVsIGZvciBiZXR0ZXIgZXJyb3IgZGV0ZWN0aW9uLg0KDQpJIGFsc28gbG9v
-a2VkIGludG8geW91ciBzdGF0ZW1lbnQgdGhhdCB0aGUgZGVmYXVsdCBudW1iZXIgb2YNCmxvY2tz
-L2NvdW50ZXJzIHdhcyB0b28gaGlnaC4gSSBjb21waWxlZCB0aGUgdGFibGUgYmVsb3cgZnJvbSBl
-bXBpcmljYWwNCnRlc3Rpbmcgb24gYSAxNjAtQ1BVIEFybSBiYXJlLW1ldGFsIHN5c3RlbS4NCg0K
-Rm9yIGVhY2ggZWxlbWVudCBjb3VudCwgSSByYW4gdGhlIHRlc3QgMTAwIHRpbWVzLCB3aXRoIGVh
-Y2ggcnVuDQpsYXN0aW5nIG9uZSBzZWNvbmQuIEkgdXNlZCB0aGUgIm9zcV9sb2NrX2J1c3RlZCIg
-dGVzdCB3aGljaCBpcyANCnRoZSBmYWlsaW5nIHRlc3QgdGhhdCBpcyBsZWFzdCBsaWtlbHkgdG8g
-ZmFpbC4NCg0KICAgI2VsZW1lbnRzICAgICAgICBwZXJjZW50IGZhaWx1cmVzDQogPT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT0NCiAgICAgICAgMTAyNCAgICAgICAgICAgICAgOTAN
-CiAgICAgICAgMjA0OCAgICAgICAgICAgICAgOTUNCiAgICAgICAgNDA5NiAgICAgICAgICAgICAg
-OTINCiAgICAgICAgODE5MiAgICAgICAgICAgICAgOTQNCiAgICAgICAxNjM4NCAgICAgICAgICAg
-ICAgODUNCiAgICAgICAzMjc2OCAgICAgICAgICAgICAgNzkNCiAgICAgICA2NTUzNiAgICAgICAg
-ICAgICAgNjYNCg0KSGVuY2UsIEkgeWFua2VkIHRoZSBkZWZhdWx0ICp1cCogdG8gMjA0OC4NCg0K
-DQpUaHhzLCBIw6Vrb24NCg0K
+Add a stress test for locking and atomic synchronization primitives.
+
+The test maintains an array of elements containing counters
+initialized to zero. It creates four worker threads per online CPU. On
+each iteration, a worker chooses two elements at random, increments
+the first counter, and decrements the second. Each completed pair of
+updates therefore preserves the sum of all counters.
+
+The harness supports variants that protect the counters with an
+explicit locking primitive and variants that use allegedly lock-free
+primitives. A common operations interface allows the same workload to
+exercise different primitives.
+
+The module accepts the following parameters:
+
+    mx_nmbr_elems:
+        Number of elements in the array. The default is 2048.
+
+    mx_test:
+        Test variant to run. Supported variants include spin_lock,
+        spin_lock_irq, spin_lock_irqsave, and write_lock. Specifying an
+        unknown variant causes the module to print the complete list of
+        supported variants. The default is osq_lock.
+
+    mx_scnds_per_test:
+        Duration of each test run, in seconds. The default is 1.
+
+After all workers have stopped, the test sums the counters and reports
+a failure if the result is nonzero. Such a result indicates that the
+expected invariant was violated. Because this is a stress test, a zero
+result means only that no failure was observed during that run.
+
+The test can expose ordering regressions in atomic bit operations. For
+example, reverting commit 415d83249709 ("locking/atomic: Make
+test_and_*_bit() ordered on failure") causes the
+"test_and_clear_bit_innov" and "test_and_set_bit_innov" variants to
+fail on weakly ordered Arm systems. These variants rely on a failing
+test_and_*_bit() operation to enforce visibility of updates to other
+processors, rather than using smp_mb__before_atomic(). They therefore
+provide regression coverage for commit 415d83249709.
+
+The harness also includes variants that reproduce known incorrect uses
+of these primitives. Before commit 1422f28826d2 ("rds: introduce
+acquire/release ordering in acquire/release_in_xmit()"), RDS used them
+without the required acquire/release ordering. The "rds_busted"
+variant models that bug and fails on Arm systems.
+
+The "osq_lock_busted" locking type fails when the Optimistic Spin
+Queue (OSQ) helpers are treated as providing mutual exclusion: under
+the tested conditions, they do not. Whether the helpers should provide
+that guarantee remains under discussion.
+
+Regardless of the intended semantics, this test documents the behavior
+observed in v7.3-rc4. If the helpers are changed to guarantee mutual
+exclusion, the test can then serve as regression coverage for that
+change.
+
+The patch also adds a shell script for the CI kselftest framework. The
+script first runs the "busted" variant, which performs the updates
+without synchronization and is expected to fail. If that variant does
+not fail, the script skips the remaining tests because the run did not
+expose even the intentional race, making successful results from the
+other variants inconclusive.
+
+The script then loads the module with an unsupported mx_test value to
+obtain the list of available variants from the kernel log. It parses
+that list and runs every variant whose name does not contain "busted".
+
+For interactive use, the script accepts "-e low", "-e medium", or
+"-e high" to select the test effort.
+
+Signed-off-by: Håkon Bugge <haakon.bugge@oracle.com>
+
+---
+
+v1 -> v2:
+   * Added "osq_lock_busted" as locking primitive. It is "busted"
+     because the osq_lock helpers do not provide mutual exclusion.
+   * Added "atomic_xchg" locking type, in order to mimic the sequence
+     atomic_xchg() in osq_lock() and corresponding
+     atomic_try_cmpxchg_release() in osq_unlock()
+   * Refactored the big union to simplify mx_add
+   * Added "atomic64_add" lockless test type
+   * Having the counters, when needed, as a separate array, which
+     removes the need for the padding logic
+   * Rebased on v7.3-rc4
+---
+ kernel/locking/Makefile                    |   1 +
+ kernel/locking/mx_test.c                   | 723 +++++++++++++++++++++
+ lib/Kconfig.debug                          |  10 +
+ tools/testing/selftests/locking/Makefile   |   2 +-
+ tools/testing/selftests/locking/mx_test.sh | 171 +++++
+ 5 files changed, 906 insertions(+), 1 deletion(-)
+ create mode 100644 kernel/locking/mx_test.c
+ create mode 100755 tools/testing/selftests/locking/mx_test.sh
+
+diff --git a/kernel/locking/Makefile b/kernel/locking/Makefile
+index cee1901d4cff8..240084b4abbb7 100644
+--- a/kernel/locking/Makefile
++++ b/kernel/locking/Makefile
+@@ -38,3 +38,4 @@ obj-$(CONFIG_QUEUED_RWLOCKS) += qrwlock.o
+ obj-$(CONFIG_LOCK_TORTURE_TEST) += locktorture.o
+ obj-$(CONFIG_WW_MUTEX_SELFTEST) += test-ww_mutex.o
+ obj-$(CONFIG_LOCK_EVENT_COUNTS) += lock_events.o
++obj-$(CONFIG_MX_TEST) += mx_test.o
+diff --git a/kernel/locking/mx_test.c b/kernel/locking/mx_test.c
+new file mode 100644
+index 0000000000000..6a2dd23cdbf4c
+--- /dev/null
++++ b/kernel/locking/mx_test.c
+@@ -0,0 +1,723 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/completion.h>
++#include <linux/errno.h>
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#ifdef CONFIG_LOCK_SPIN_ON_OWNER
++#include <linux/osq_lock.h>
++#endif
++#include <linux/random.h>
++#include <linux/rwlock.h>
++#include <linux/slab.h>
++#include <linux/smp.h>
++#include <linux/spinlock.h>
++#include <linux/vmalloc.h>
++#include <linux/workqueue.h>
++#include <linux/ww_mutex.h>
++
++#if IS_MODULE(CONFIG_MX_TEST) && defined(CONFIG_LOCK_SPIN_ON_OWNER)
++#include "osq_lock.c"
++#endif
++
++/*
++ * The default here is derived from an empirical test, where
++ * "osq_lock_busted" was run 100 times of one second, varying the
++ * number of elements. This was run on a 160 CPU Arm BM system. The
++ * percentage failures were:
++ *    #elements	      percent failures
++ * ===================================
++ *	   1024		     90
++ *	   2048		     95
++ *	   4096		     92
++ *	   8192		     94
++ *	  16384		     85
++ *	  32768		     79
++ *	  65536		     66
++ */
++static unsigned int mx_nmbr_elems = 2048;
++static unsigned long mx_scnds_per_test = 1;
++static char *mx_test = "spin_lock";
++
++module_param(mx_nmbr_elems, uint, 0444);
++MODULE_PARM_DESC(mx_nmbr_elems, "Number of elements (default 2048)");
++
++module_param(mx_scnds_per_test, ulong, 0444);
++MODULE_PARM_DESC(mx_scnds_per_test, "Number of seconds to run for each test iteration (default is 1)");
++
++module_param(mx_test, charp, 0444);
++MODULE_PARM_DESC(mx_test,
++		 "Mutual exclusion method or lock-free method (spin_lock, spin_lock_irq, spin_lock_irqsave, write_lock, ...)");
++
++#define MX_RDS_IN_XMIT 2
++#define MX_SOME_BIT 13
++static DEFINE_WD_CLASS(wd_class);
++static DEFINE_WW_CLASS(ww_class);
++
++enum mx_test {
++	MX_ILLEGAL,
++	MX_BUSTED,
++	MX_SPIN_LOCK,
++	MX_SPIN_LOCK_IRQ,
++	MX_SPIN_LOCK_IRQSAVE,
++	MX_RW_LOCK_W,
++	MX_RW_LOCK_W_BH,
++	MX_RW_LOCK_TRW,
++	MX_RW_LOCK_TRW_BH,
++	MX_MUTEX,
++	MX_ATOMIC_ADD,
++	MX_ATOMIC64_ADD,
++	MX_CMPXCHG,
++	MX_RDS_BUSTED,
++	MX_TEST_AND_SET_BIT_LOCK,
++	MX_TEST_AND_SET_BIT_INNOV,
++	MX_TEST_AND_SET_BIT_PLAIN,
++	MX_TEST_AND_CLEAR_BIT_INNOV,
++	MX_TEST_AND_CLEAR_BIT_PLAIN,
++	MX_SINGLE_WW_MUTEX_WW,	/* Wound-Wait */
++	MX_SINGLE_WW_MUTEX_WD,	/* Wait-Die */
++#ifdef CONFIG_LOCK_SPIN_ON_OWNER
++	MX_OSQ_LOCK_BUSTED,
++#endif
++	MX_ATOMIC_XCHG,
++};
++
++struct mx_locks {
++	/* This union contains locks and lock-free data types */
++	union {
++		/* Protecting the counter below */
++		spinlock_t spinlock;
++		rwlock_t rwlock;
++		/* Protecting the counter below */
++		struct mutex mutex;
++		atomic_t atomic_lock;
++		atomic_t atomic_counter;
++		atomic64_t atomic64_counter;
++		long cmpxchg_counter;
++		unsigned long bits;
++		struct ww_mutex ww_mutex;
++#ifdef CONFIG_LOCK_SPIN_ON_OWNER
++		struct optimistic_spin_queue osq_lock;
++#endif
++	};
++};
++
++struct mx_inc_dec_params {
++	struct work_struct work;
++	struct mx_locks *locks;
++	long *counters;
++	unsigned int nelems;
++	unsigned long timeout;
++	enum mx_test mx_type;
++	u64 iter;
++	struct completion completion;
++};
++
++static bool mx_lockless_test(enum mx_test typ)
++{
++	return
++		(typ == MX_ATOMIC_ADD)  ||
++		(typ == MX_ATOMIC64_ADD)  ||
++		(typ == MX_CMPXCHG);
++}
++
++static inline unsigned int mx_rand(unsigned int *seed)
++{
++	*seed = *seed * 69069 + 111;
++	return *seed;
++}
++
++static inline void mx_acquire(struct mx_locks *locks, enum mx_test typ, unsigned long *flags_ptr)
++{
++	int ret;
++
++	switch (typ) {
++	case MX_BUSTED:
++		break;
++	case MX_SPIN_LOCK:
++		spin_lock(&locks->spinlock);
++		break;
++	case MX_SPIN_LOCK_IRQ:
++		spin_lock_irq(&locks->spinlock);
++		break;
++	case MX_SPIN_LOCK_IRQSAVE:
++		spin_lock_irqsave(&locks->spinlock, *flags_ptr);
++		break;
++	case MX_RW_LOCK_W:
++		write_lock(&locks->rwlock);
++		break;
++	case MX_RW_LOCK_W_BH:
++		write_lock_bh(&locks->rwlock);
++		break;
++	case MX_RW_LOCK_TRW:
++		while (!read_trylock(&locks->rwlock))
++			;
++		read_unlock(&locks->rwlock);
++		write_lock(&locks->rwlock);
++		break;
++	case MX_RW_LOCK_TRW_BH:
++		while (!read_trylock(&locks->rwlock))
++			;
++		read_unlock(&locks->rwlock);
++		write_lock_bh(&locks->rwlock);
++		break;
++	case MX_MUTEX:
++		mutex_lock(&locks->mutex);
++		break;
++	case MX_ATOMIC_ADD:
++	case MX_ATOMIC64_ADD:
++	case MX_CMPXCHG:
++		break;
++	case MX_RDS_BUSTED:
++		while (test_and_set_bit(MX_RDS_IN_XMIT, &locks->bits))
++			;
++		break;
++	case MX_TEST_AND_SET_BIT_LOCK:
++		while (test_and_set_bit_lock(MX_RDS_IN_XMIT, &locks->bits))
++			;
++		break;
++	case MX_TEST_AND_SET_BIT_INNOV:
++	case MX_TEST_AND_SET_BIT_PLAIN:
++		while (test_and_set_bit(MX_SOME_BIT, &locks->bits))
++			;
++		break;
++	case MX_TEST_AND_CLEAR_BIT_INNOV:
++	case MX_TEST_AND_CLEAR_BIT_PLAIN:
++		while (!test_and_clear_bit(MX_SOME_BIT, &locks->bits))
++			;
++		break;
++	case MX_SINGLE_WW_MUTEX_WW:
++	case MX_SINGLE_WW_MUTEX_WD:
++		ret = ww_mutex_lock(&locks->ww_mutex, NULL);
++		WARN_ONCE(ret, "ww_mutex_lock returned %d for the single w/w mutex case\n", ret);
++		break;
++#ifdef CONFIG_LOCK_SPIN_ON_OWNER
++	case MX_OSQ_LOCK_BUSTED:
++		preempt_disable();
++		while (!osq_lock(&locks->osq_lock)) {
++			preempt_enable();
++			cond_resched();
++			preempt_disable();
++		}
++		break;
++#endif
++	case MX_ATOMIC_XCHG:
++		while (atomic_xchg_acquire(&locks->atomic_lock, 1) != 0)
++			cpu_relax();
++		break;
++	default:
++		WARN_ON_ONCE(true);
++	}
++}
++
++static inline void mx_release(struct mx_locks *locks, enum mx_test typ, unsigned long *flags_ptr)
++{
++	switch (typ) {
++	case MX_BUSTED:
++		break;
++	case MX_SPIN_LOCK:
++		spin_unlock(&locks->spinlock);
++		break;
++	case MX_SPIN_LOCK_IRQ:
++		spin_unlock_irq(&locks->spinlock);
++		break;
++	case MX_SPIN_LOCK_IRQSAVE:
++		spin_unlock_irqrestore(&locks->spinlock, *flags_ptr);
++		break;
++	case MX_RW_LOCK_W:
++	case MX_RW_LOCK_TRW:
++		write_unlock(&locks->rwlock);
++		break;
++	case MX_RW_LOCK_W_BH:
++	case MX_RW_LOCK_TRW_BH:
++		write_unlock_bh(&locks->rwlock);
++		break;
++	case MX_MUTEX:
++		mutex_unlock(&locks->mutex);
++		break;
++	case MX_ATOMIC_ADD:
++	case MX_ATOMIC64_ADD:
++	case MX_CMPXCHG:
++		break;
++	case MX_RDS_BUSTED:
++		clear_bit(MX_RDS_IN_XMIT, &locks->bits);
++		/* Deliberately outside the critical region, as RDS did prior to 1422f288 */
++		smp_mb__after_atomic();
++		break;
++	case MX_TEST_AND_SET_BIT_LOCK:
++		clear_bit_unlock(MX_RDS_IN_XMIT, &locks->bits);
++		break;
++	case MX_TEST_AND_SET_BIT_INNOV:
++		/*
++		 * Ensuring global visibility on other processors by
++		 * means of a failing test_and_set_bit()
++		 */
++		(void)test_and_set_bit(MX_SOME_BIT, &locks->bits);
++		clear_bit(MX_SOME_BIT, &locks->bits);
++		break;
++	case MX_TEST_AND_SET_BIT_PLAIN:
++		/* Ensure the counter gets global visiblity before releasing the lock*/
++		smp_mb__before_atomic();
++		clear_bit(MX_SOME_BIT, &locks->bits);
++		break;
++	case MX_TEST_AND_CLEAR_BIT_INNOV:
++		/*
++		 * Ensuring global visibility on other processors by
++		 * means of a failing test_and_clear_bit()
++		 */
++		(void)test_and_clear_bit(MX_SOME_BIT, &locks->bits);
++		set_bit(MX_SOME_BIT, &locks->bits);
++		break;
++	case MX_TEST_AND_CLEAR_BIT_PLAIN:
++		/* Ensure the counter gets global visiblity before releasing the lock*/
++		smp_mb__before_atomic();
++		set_bit(MX_SOME_BIT, &locks->bits);
++		break;
++	case MX_SINGLE_WW_MUTEX_WW:
++	case MX_SINGLE_WW_MUTEX_WD:
++		ww_mutex_unlock(&locks->ww_mutex);
++		break;
++#ifdef CONFIG_LOCK_SPIN_ON_OWNER
++	case MX_OSQ_LOCK_BUSTED:
++		osq_unlock(&locks->osq_lock);
++		preempt_enable();
++		break;
++#endif
++	case MX_ATOMIC_XCHG:
++		atomic_set_release(&locks->atomic_lock, 0);
++		break;
++	default:
++		WARN_ON_ONCE(true);
++	}
++}
++
++static inline void mx_add(struct mx_locks *locks, long *counters, enum mx_test typ, long addend)
++{
++	long old;
++
++	switch (typ) {
++	case MX_BUSTED:
++	case MX_SPIN_LOCK:
++	case MX_SPIN_LOCK_IRQ:
++	case MX_SPIN_LOCK_IRQSAVE:
++	case MX_RW_LOCK_W:
++	case MX_RW_LOCK_W_BH:
++	case MX_RW_LOCK_TRW:
++	case MX_RW_LOCK_TRW_BH:
++	case MX_MUTEX:
++	case MX_RDS_BUSTED:
++	case MX_TEST_AND_SET_BIT_LOCK:
++	case MX_TEST_AND_SET_BIT_INNOV:
++	case MX_TEST_AND_SET_BIT_PLAIN:
++	case MX_TEST_AND_CLEAR_BIT_INNOV:
++	case MX_TEST_AND_CLEAR_BIT_PLAIN:
++	case MX_SINGLE_WW_MUTEX_WW:
++	case MX_SINGLE_WW_MUTEX_WD:
++#ifdef CONFIG_LOCK_SPIN_ON_OWNER
++	case MX_OSQ_LOCK_BUSTED:
++#endif
++	case MX_ATOMIC_XCHG:
++		*counters += addend;
++		break;
++	case MX_ATOMIC_ADD:
++		atomic_add(addend, &locks->atomic_counter);
++		break;
++	case MX_ATOMIC64_ADD:
++		atomic64_add(addend, &locks->atomic64_counter);
++		break;
++	case MX_CMPXCHG:
++		do {
++			old = READ_ONCE(locks->cmpxchg_counter);
++		} while (cmpxchg(&locks->cmpxchg_counter, old, old + addend) != old);
++		break;
++	default:
++		WARN_ON_ONCE(true);
++	}
++}
++
++static inline long mx_read(struct mx_locks *locks, long *counters, enum mx_test typ)
++{
++	switch (typ) {
++	case MX_BUSTED:
++	case MX_SPIN_LOCK:
++	case MX_SPIN_LOCK_IRQ:
++	case MX_SPIN_LOCK_IRQSAVE:
++	case MX_RW_LOCK_W:
++	case MX_RW_LOCK_W_BH:
++	case MX_RW_LOCK_TRW:
++	case MX_RW_LOCK_TRW_BH:
++	case MX_MUTEX:
++	case MX_RDS_BUSTED:
++	case MX_TEST_AND_SET_BIT_LOCK:
++	case MX_TEST_AND_SET_BIT_INNOV:
++	case MX_TEST_AND_SET_BIT_PLAIN:
++	case MX_TEST_AND_CLEAR_BIT_INNOV:
++	case MX_TEST_AND_CLEAR_BIT_PLAIN:
++	case MX_SINGLE_WW_MUTEX_WW:
++	case MX_SINGLE_WW_MUTEX_WD:
++#ifdef CONFIG_LOCK_SPIN_ON_OWNER
++	case MX_OSQ_LOCK_BUSTED:
++#endif
++	case MX_ATOMIC_XCHG:
++		return *counters;
++	case MX_ATOMIC_ADD:
++		return atomic_read(&locks->atomic_counter);
++	case MX_ATOMIC64_ADD:
++		return atomic64_read(&locks->atomic64_counter);
++	case MX_CMPXCHG:
++		return locks->cmpxchg_counter;
++	default:
++		WARN_ON_ONCE(true);
++	}
++	return 0;
++}
++
++static inline void mx_init(struct mx_locks *locks, enum mx_test typ)
++{
++	switch (typ) {
++	case MX_SPIN_LOCK:
++	case MX_SPIN_LOCK_IRQ:
++	case MX_SPIN_LOCK_IRQSAVE:
++		spin_lock_init(&locks->spinlock);
++		break;
++	case MX_RW_LOCK_W:
++	case MX_RW_LOCK_W_BH:
++	case MX_RW_LOCK_TRW:
++	case MX_RW_LOCK_TRW_BH:
++		rwlock_init(&locks->rwlock);
++		break;
++	case MX_MUTEX:
++		mutex_init(&locks->mutex);
++		break;
++	case MX_TEST_AND_CLEAR_BIT_INNOV:
++	case MX_TEST_AND_CLEAR_BIT_PLAIN:
++		set_bit(MX_SOME_BIT, &locks->bits);
++		break;
++	/* The following relies on the vzalloc below */
++	case MX_BUSTED:
++	case MX_ATOMIC_ADD:
++	case MX_ATOMIC64_ADD:
++	case MX_CMPXCHG:
++	case MX_RDS_BUSTED:
++	case MX_TEST_AND_SET_BIT_LOCK:
++	case MX_TEST_AND_SET_BIT_INNOV:
++	case MX_TEST_AND_SET_BIT_PLAIN:
++	case MX_ATOMIC_XCHG:
++		break;
++	case MX_SINGLE_WW_MUTEX_WW:
++		ww_mutex_init(&locks->ww_mutex, &ww_class);
++		break;
++	case MX_SINGLE_WW_MUTEX_WD:
++		ww_mutex_init(&locks->ww_mutex, &wd_class);
++		break;
++#ifdef CONFIG_LOCK_SPIN_ON_OWNER
++	case MX_OSQ_LOCK_BUSTED:
++		osq_lock_init(&locks->osq_lock);
++		break;
++#endif
++	default:
++		WARN_ON_ONCE(true);
++	}
++}
++
++static inline void mx_fini(struct mx_locks *locks, enum mx_test typ)
++{
++	switch (typ) {
++	case MX_SPIN_LOCK:
++	case MX_SPIN_LOCK_IRQ:
++	case MX_SPIN_LOCK_IRQSAVE:
++	case MX_RW_LOCK_W:
++	case MX_RW_LOCK_W_BH:
++	case MX_RW_LOCK_TRW:
++	case MX_RW_LOCK_TRW_BH:
++	case MX_TEST_AND_CLEAR_BIT_INNOV:
++	case MX_TEST_AND_CLEAR_BIT_PLAIN:
++	case MX_BUSTED:
++	case MX_ATOMIC_ADD:
++	case MX_ATOMIC64_ADD:
++	case MX_CMPXCHG:
++	case MX_RDS_BUSTED:
++	case MX_TEST_AND_SET_BIT_LOCK:
++	case MX_TEST_AND_SET_BIT_INNOV:
++	case MX_TEST_AND_SET_BIT_PLAIN:
++#ifdef CONFIG_LOCK_SPIN_ON_OWNER
++	case MX_OSQ_LOCK_BUSTED:
++#endif
++	case MX_ATOMIC_XCHG:
++		break;
++	case MX_MUTEX:
++		mutex_destroy(&locks->mutex);
++		break;
++	case MX_SINGLE_WW_MUTEX_WW:
++	case MX_SINGLE_WW_MUTEX_WD:
++		ww_mutex_destroy(&locks->ww_mutex);
++		break;
++	default:
++		WARN_ON_ONCE(true);
++	}
++}
++
++static void mx_inc_dec(struct work_struct *_work)
++{
++	struct mx_inc_dec_params *params;
++	unsigned long flags;
++	struct mx_locks *locks;
++	unsigned int seed;
++	u64 iter = 0;
++
++	params = container_of(_work, struct mx_inc_dec_params, work);
++	locks = params->locks;
++
++	get_random_bytes(&seed, sizeof(seed));
++	do {
++		unsigned int inx1 = mx_rand(&seed) % params->nelems;
++		unsigned int inx2 = mx_rand(&seed) % params->nelems;
++		struct mx_locks *rnd_el1 = locks + inx1;
++		struct mx_locks *rnd_el2 = locks + inx2;
++
++		++iter;
++
++		mx_acquire(rnd_el1, params->mx_type, &flags);
++		mx_add(rnd_el1, params->counters + inx1, params->mx_type, 1);
++		mx_release(rnd_el1, params->mx_type, &flags);
++
++		mx_acquire(rnd_el2, params->mx_type, &flags);
++		mx_add(rnd_el2, params->counters + inx2, params->mx_type, -1);
++		mx_release(rnd_el2, params->mx_type, &flags);
++	} while (time_before(jiffies, params->timeout));
++
++	params->iter = iter;
++	complete(&params->completion);
++}
++
++#define pr_notice_or_err(err, fmt, ...)				\
++	do {							\
++		if (err)					\
++			pr_err(fmt, ##__VA_ARGS__);		\
++		else						\
++			pr_notice(fmt, ##__VA_ARGS__);		\
++	} while (0)
++
++static int run_test(const enum mx_test test, const char *mnemonic, const int threads)
++{
++	struct mx_inc_dec_params *params = kzalloc_objs(*params, threads);
++	unsigned long start_jf = jiffies;
++	u64 total_iters = 0;
++	struct mx_locks *locks;
++	long *counters = NULL;
++	unsigned long ms;
++	long sum = 0;
++	int ret = 0;
++	int i;
++
++	locks = kvmalloc_array(mx_nmbr_elems, sizeof(*locks), GFP_KERNEL | __GFP_ZERO);
++
++	if (!mx_lockless_test(test)) {
++		counters = kvmalloc_array(mx_nmbr_elems, sizeof(*counters),
++					  GFP_KERNEL | __GFP_ZERO);
++		if (!counters) {
++			ret = -ENOMEM;
++			goto exit_free;
++		}
++	}
++
++	if (!locks || !params) {
++		ret = -ENOMEM;
++		goto exit_free;
++	}
++
++	for (i = 0; i < mx_nmbr_elems; ++i)
++		mx_init(locks + i, test);
++
++	for (i = 0; i < threads; ++i) {
++		struct mx_inc_dec_params *p = params + i;
++
++		p->locks = locks;
++		p->counters = counters;
++		p->nelems = mx_nmbr_elems;
++		p->timeout = jiffies + mx_scnds_per_test * HZ;
++		p->mx_type = test;
++		init_completion(&p->completion);
++
++		INIT_WORK(&p->work, mx_inc_dec);
++		queue_work(system_dfl_wq, &p->work);
++	}
++
++	for (i = 0; i < threads; ++i) {
++		struct mx_inc_dec_params *p = params + i;
++
++		wait_for_completion(&p->completion);
++		total_iters += p->iter;
++	}
++
++	for (i = 0; i < mx_nmbr_elems; ++i)
++		mx_fini(locks + i, test);
++
++	if (total_iters > LONG_MAX)
++		pr_warn_once("mx_test: Total number of iterations %llu exceeds LONG_MAX; consider reducing mx_scnds_per_test\n",
++			     total_iters);
++
++	for (i = 0; i < mx_nmbr_elems; ++i)
++		sum += mx_read(locks + i, counters + i, test);
++
++	ms = jiffies_to_msecs(jiffies - start_jf);
++
++	pr_notice_or_err(sum,
++			 "mx_test: %-27s result: %s sum: %ld elements: %7d elapsed: %lu.%03lu seconds\n",
++			 mnemonic, !sum ? "SUCCESS" : "FAILURE", sum, mx_nmbr_elems,
++			 ms / 1000, ms % 1000);
++	if (sum)
++		ret = -EFAULT;
++
++exit_free:
++	kvfree(counters);
++	kvfree(locks);
++	kfree(params);
++	return ret;
++}
++
++static int __init mx_test_init(void)
++{
++	unsigned int threads = 4 * num_online_cpus();
++	enum mx_test test = MX_ILLEGAL;
++	char *mnemonic;
++	unsigned int i;
++	int sts;
++	struct {
++		enum mx_test test;
++		char *mnemonic;
++	} mx_test_types[] = {
++		{
++			.test = MX_BUSTED,
++			.mnemonic = "busted",
++		},
++		{
++			.test = MX_SPIN_LOCK,
++			.mnemonic = "spin_lock",
++		},
++		{
++			.test = MX_SPIN_LOCK_IRQ,
++			.mnemonic = "spin_lock_irq",
++		},
++		{
++			.test = MX_SPIN_LOCK_IRQSAVE,
++			.mnemonic = "spin_lock_irqsave",
++		},
++		{
++			.test = MX_RW_LOCK_W,
++			.mnemonic = "write_lock",
++		},
++		{
++			.test = MX_RW_LOCK_W_BH,
++			.mnemonic = "write_lock_bh",
++		},
++		{
++			.test = MX_RW_LOCK_TRW,
++			.mnemonic = "read_trylock_write_lock",
++		},
++		{
++			.test = MX_RW_LOCK_TRW_BH,
++			.mnemonic = "read_trylock_write_lock_bh",
++		},
++		{
++			.test = MX_MUTEX,
++			.mnemonic = "mutex",
++		},
++		{
++			.test = MX_ATOMIC_ADD,
++			.mnemonic = "atomic_add",
++		},
++		{
++			.test = MX_ATOMIC64_ADD,
++			.mnemonic = "atomic64_add",
++		},
++		{
++			.test = MX_CMPXCHG,
++			.mnemonic = "cmpxchg",
++		},
++		{
++			.test = MX_RDS_BUSTED,
++			.mnemonic = "rds_busted",
++		},
++		{
++			.test = MX_TEST_AND_SET_BIT_LOCK,
++			.mnemonic = "test_and_set_bit_lock",
++		},
++		{
++			.test = MX_TEST_AND_SET_BIT_INNOV,
++			.mnemonic = "test_and_set_bit_innov",
++		},
++		{
++			.test = MX_TEST_AND_SET_BIT_PLAIN,
++			.mnemonic = "test_and_set_bit_plain",
++		},
++		{
++			.test = MX_TEST_AND_CLEAR_BIT_INNOV,
++			.mnemonic = "test_and_clear_bit_innov",
++		},
++		{
++			.test = MX_TEST_AND_CLEAR_BIT_PLAIN,
++			.mnemonic = "test_and_clear_bit_plain",
++		},
++		{
++			.test = MX_SINGLE_WW_MUTEX_WW,
++			.mnemonic = "single_ww_mutex_wound_wait",
++		},
++		{
++			.test = MX_SINGLE_WW_MUTEX_WD,
++			.mnemonic = "single_ww_mutex_wait_die",
++		},
++#ifdef CONFIG_LOCK_SPIN_ON_OWNER
++		{
++			.test = MX_OSQ_LOCK_BUSTED,
++			.mnemonic = "osq_lock_busted",
++		},
++#endif
++		{
++		  .test = MX_ATOMIC_XCHG,
++			.mnemonic = "atomic_xchg",
++		},
++	};
++
++	/* Select the test type */
++	for (i = 0; i < ARRAY_SIZE(mx_test_types); ++i)
++		if (!strcmp(mx_test, mx_test_types[i].mnemonic)) {
++			test = mx_test_types[i].test;
++			mnemonic = mx_test_types[i].mnemonic;
++			break;
++		}
++
++	if (test == MX_ILLEGAL) {
++		pr_err("mx_test: unknown test type %s\n", mx_test);
++		pr_notice("mx_test: legitimate test types:\n");
++		for (i = 0; i < ARRAY_SIZE(mx_test_types); ++i)
++			pr_notice("mx_test_types:	 %s\n", mx_test_types[i].mnemonic);
++		return -ENOPROTOOPT;
++	}
++
++	if (mx_nmbr_elems < 1) {
++		pr_err("Number of elements must be greater than equal to one\n");
++		return -EINVAL;
++	}
++
++	if (mx_scnds_per_test > MAX_JIFFY_OFFSET / HZ) {
++		pr_err("mx_scnds_per_test too large\n");
++		return -EINVAL;
++	}
++
++	sts = run_test(test, mnemonic, threads);
++
++	return sts;
++}
++
++static void __exit mx_test_exit(void)
++{
++}
++
++module_init(mx_test_init);
++module_exit(mx_test_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Håkon Bugge <Haakon.Bugge@oracle.com>");
++MODULE_DESCRIPTION("mutual exclusion tests");
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 134b15a44625e..6b60c66e92627 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1691,6 +1691,16 @@ config CSD_LOCK_WAIT_DEBUG_DEFAULT
+ 	  This option causes the csdlock_debug= kernel boot parameter to
+ 	  default to 1 (basic debugging) instead of 0 (no debugging).
+ 
++config MX_TEST
++	tristate "miscellaneous lock-full and lock-less selftests"
++	help
++	  This option provides a kernel module that runs tests using
++	  different locking primitives and lockless operations.
++
++	  Say M if you want these self tests to build as a module.
++	  Say N if you are unsure.
++
++
+ endmenu # lock debugging
+ 
+ config TRACE_IRQFLAGS
+diff --git a/tools/testing/selftests/locking/Makefile b/tools/testing/selftests/locking/Makefile
+index 6e7761ab35360..d9cfb0e565275 100644
+--- a/tools/testing/selftests/locking/Makefile
++++ b/tools/testing/selftests/locking/Makefile
+@@ -5,6 +5,6 @@
+ # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
+ all:
+ 
+-TEST_PROGS := ww_mutex.sh
++TEST_PROGS := ww_mutex.sh mx_test.sh
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/locking/mx_test.sh b/tools/testing/selftests/locking/mx_test.sh
+new file mode 100755
+index 0000000000000..6db2caafd4629
+--- /dev/null
++++ b/tools/testing/selftests/locking/mx_test.sh
+@@ -0,0 +1,171 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++declare mx_min_log2_elems=11
++declare mx_max_log2_elems=11
++declare mx_inc_log2_elems=1
++declare mx_seconds=1
++
++# Kselftest framework requirement - SKIP code is 4.
++declare ksft_skip=4
++
++set_low_params() {
++	mx_min_log2_elems=11
++	mx_max_log2_elems=11
++	mx_inc_log2_elems=1
++	mx_seconds=1
++}
++
++set_med_params() {
++	mx_min_log2_elems=6
++	mx_max_log2_elems=14
++	mx_inc_log2_elems=2
++	mx_seconds=2
++}
++
++set_high_params() {
++	mx_min_log2_elems=1
++	mx_max_log2_elems=23
++	mx_inc_log2_elems=2
++	mx_seconds=5
++}
++
++usage() {
++	printf "Usage: %s [-e low|medium|high] [-h]\n" "$(basename "$0")"
++}
++
++unload_module_exit_on_error() {
++	local str="$1"
++	local sts
++
++	if [ -d /sys/module/mx_test ]; then
++		/sbin/modprobe -q -r mx_test
++		sts=$?
++		if (( sts != 0 )); then
++			echo "mx_test: $str Exit status: $sts"
++			exit 1
++		fi
++	fi
++}
++
++run_test() {
++	local test=$1
++	local log2_elems
++	local sts
++
++	# Paranoia check. Unload if loaded.
++	unload_module_exit_on_error "Failed to unload preloaded mx_test module."
++
++	for log2_elems in $(seq $mx_min_log2_elems $mx_inc_log2_elems $mx_max_log2_elems); do
++		/sbin/modprobe -q mx_test mx_test="$test" \
++			       mx_nmbr_elems=$((1 << log2_elems)) \
++			       mx_scnds_per_test="$mx_seconds"
++		sts=$?
++
++		if (( sts == 0 )); then
++			unload_module_exit_on_error "Failed to unload module after test \"$test\"."
++		else
++			return $sts
++		fi
++	done
++
++	return 0
++}
++
++find_eligible_tests() {
++	local test
++
++	# Note, the following modprobe will fail and module is not loaded afterwards
++	/sbin/modprobe -q mx_test mx_test=non_existing_test
++
++	# Skip "busted" and any "foo_busted"
++	for test in $(dmesg -t | \
++			      grep mx_test_types: | \
++			      awk '{ print $2; }' | \
++			      sort -u | \
++			      grep -v busted); do
++		echo $test
++	done
++}
++
++# Run kernel selftests for lock-full and lock-less mutual exclusion tests.
++# First, check module availability.
++if ! /sbin/modprobe -q -n mx_test; then
++	echo "mx_test: module mx_test is not found [SKIP]"
++	exit $ksft_skip
++fi
++
++# Parse arguments
++while getopts :e:h arg; do
++	case $arg in
++		e)
++			case $OPTARG in
++				low)
++					set_low_params
++					;;
++				medium)
++					set_med_params
++					;;
++				high)
++					set_high_params
++					;;
++				*)
++					echo "mx_test: Invalid effort level: $OPTARG"
++					usage
++					exit 1
++					;;
++			esac
++			;;
++		h)
++			usage
++			exit 0
++			;;
++		:)
++			echo "mx_test: Option -$OPTARG requires an argument"
++			usage
++			exit 1
++			;;
++		\?)
++			echo "mx_test: Unknown option -$OPTARG"
++			usage
++			exit 1
++			;;
++	esac
++done
++
++shift "$((OPTIND - 1))"
++
++if (($# != 0)); then
++	echo "mx_test: Unexpected argument: $1"
++	usage
++	exit 1
++fi
++
++# First, run "busted" to verify the test environment. If this test
++# doesn't fail, there is no point in performing more tests in this
++# environment.
++run_test "busted"
++sts=$?
++if (( sts == 0 )); then
++	echo mx_test: The test \"busted\" did not fail. Probable cause: UP kernel or too few CPUs online.
++	echo mx_test: Hence, skipping the rest of the tests.
++	exit $ksft_skip
++fi
++
++eligible_test="$(find_eligible_tests)"
++if [ -z "$eligible_test" ]; then
++	echo mx_test: No tests found. Skipping.
++	exit $ksft_skip
++fi
++
++for test in $eligible_test; do
++	run_test "$test"
++	sts=$?
++	if (( sts != 0 )); then
++		echo mx_test: Test \"$test\" failed
++		exit 1
++	fi
++done
++
++echo mx_test: All tests passed
++exit 0
+-- 
+2.43.5
+
