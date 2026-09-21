@@ -1,140 +1,79 @@
-Received: from mta0.migadu.com (out-105.mta0.migadu.com [91.218.175.105])
+Received: from mta0.migadu.com (out-141.mta0.migadu.com [91.218.175.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC32375F88
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 07:09:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DE33AE1BD
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 07:11:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789974543; cv=none; b=Dr9JKgcQ50nXTUFQuWSXP8RnM/y1SpLSKe7oiTtMLIHopOnay83hRkmJ16dOH7M5uQDtgcdGpWuh7z2ybXHIHJeAGuv8R0HjUbOczKWw+bsePwUi3se6lj6nirtXFZl9luOy6IVW18KU29AGIC8pGjBr+M4u6CaSQFTn8hvrGX0=
+	t=1789974665; cv=none; b=DQbBQ4jnL0ctybhmCgahg/ageMZAYHh8x932iQ0qvL4KTePS3+nJQRbxf6D19V59iYM3XnrfQICBiqlyCEMvqzpEmaQ8+++e1U4hYy5dHIk+0+X1k/vDQvMFCa9cqoR9fm1DforPoRasQNtmP+Aj9Euj0qXNH3nQcI0IWEhaFmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789974543; c=relaxed/simple;
-	bh=fP06fUHtBpp2cGAnDwmJQ/nY6+PkTalsUPKOuD9WtKM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rI9oGWhl3riI60L593PDeu+l9wEcHwQQN+9mDejXQ1EmpCjL0VTbElNriRAux/V8OagIzVCfE5wS12f4oeKrwahsCG2XrQtBVA967GBSDmsIPEAwM1wjRrw9Lx6XSmmJE9jkH5xwz8SQm3M//I/hCWd2XqZnKfDFke10/dIaLVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xhrRP/zv; arc=none smtp.client-ip=91.218.175.105
+	s=arc-20240116; t=1789974665; c=relaxed/simple;
+	bh=Eux8pfzDoKUAWcecKGVOzPBlEfy59s1p123uGcIZ0h4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MXay749g3P4k7+tqq2UPZ1hwUyLcq1Xd4t/RDTJblk2mD8nojLqblPDm3X/PSBg1A0qMfmFCEfOsRxF5YQ8wpVwhL2pU0dkhIgcji4tfVzBUgQe/KtvcI6+aXbChkwpc/CBGofKov7dnWptHuBXb+4oO4Wg+/LfWU2RhvMMPF5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r71lbY6X; arc=none smtp.client-ip=91.218.175.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xhrRP/zv"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r71lbY6X"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=fP06fUHtBpp2cGAnDwmJQ/nY6+PkTalsUPKOuD9WtKM=;
+DKIM-Signature: a=rsa-sha256; bh=Eux8pfzDoKUAWcecKGVOzPBlEfy59s1p123uGcIZ0h4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789974539; v=1; x=1790579339;
- b=xhrRP/zvxJyI/kzGlCRME/x2ufvzsIa6m5R16CX43gNscJV+T5eTFhoi2WljrN4AbN3QjqWv
- O01wsimJUSY9+mbf6AsEQgsi3FsXWAzlUfIwUQi9nSHvYWIGZd+ZomSbqxkJSYwqGN6LSA9bt8n
- oxKeCXE22h7tEe5lz8OZsI8s=
+ t=1789974662; v=1; x=1790579462;
+ b=r71lbY6XSvQn6RbC0czrmQ2R2SUPDEsIfWzGpZzYVA9BOxmWvOIL7uWuIHmqLEAI4fJHGbbY
+ SaDfbTk2uLpHzB62Q9/lRLQIRoPNzM3P/4Dz/Sc7kOPXr3p9RAyaNzMROVLeLM+YbnO0g9txlxq
+ +10A9vqMVSXd6CnecKgl1Sls=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id a688a47092d9ca8d;
-	Mon, 21 Sep 2026 07:08:59 +0000
-X-Mizu-Trace-ID: a688a47092d9ca8d
+Received: by smtp.migadu.com with ESMTPS id d8378753b5471857;
+	Mon, 21 Sep 2026 07:11:01 +0000
+X-Mizu-Trace-ID: d8378753b5471857
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <a00dbaaa-99f1-4172-b337-911ff45ae71e@linux.dev>
-Date: Mon, 21 Sep 2026 15:08:55 +0800
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5b5e5aaf7deso5963e87.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 00:11:00 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBxVgzzkFnd4U/h5GkFZLIfYOrhm/Hf7cce/Bm8xRjLER9zfK1XIFdzLrkF985XsarFvd1N0Cj6sQ8VEnHXDglA=@vger.kernel.org
+X-Gm-Message-State: AFuF++nJXlib1rdXZTcyvGKQKqzhtmqEoOAkPK4kvhdcBkDbYodddnV/
+	oWN8syhjL9xw2R0+U1hgxoX0tZbnxAUoH4Bc+yIAeMGGHYBPrIAa/iCKeK3Sgct9fyK8XjF0xvD
+	YDC8MyXXRabXIGNQhrEvA6Ptyd5PPPNBqE2vCinXC
+X-Received: by 2002:a05:6512:2216:b0:5b8:d049:c45f with SMTP id
+ 2adb3069b0e04-5b8d049c61amr15291e87.14.1789974660051; Mon, 21 Sep 2026
+ 00:11:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] cgroup/cpuset: return PERR_NOCPUS in
- remote_partition_enable()
-To: Hui Peng <benquike@gmail.com>, Guopeng Zhang <guopeng.zhang@linux.dev>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- Waiman Long <longman@redhat.com>
-Cc: Michal Koutny <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
- cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <aa90bb73-c2af-4d13-8f2a-0435aa528058@linux.dev>
- <20260920181449.3122336-1-benquike@gmail.com>
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <20260920181449.3122336-1-benquike@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260902134118.2718200-1-fuad.tabba@linux.dev>
+In-Reply-To: <20260902134118.2718200-1-fuad.tabba@linux.dev>
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Mon, 21 Sep 2026 08:10:23 +0100
+X-Gmail-Original-Message-ID: <CA+EHjTyHJjN28zXYJUF9otZvyWP5-3Ln0fy=xJ_EE-bOdvMmHQ@mail.gmail.com>
+X-Gm-Features: AcwNN1Xk01oNkxJ7UZIT8ZwQcfv1F3nhRMlj7kGCMC3JqdaEoVZDyc6bymlUU9I
+Message-ID: <CA+EHjTyHJjN28zXYJUF9otZvyWP5-3Ln0fy=xJ_EE-bOdvMmHQ@mail.gmail.com>
+Subject: Re: [PATCH] KVM: selftests: Fix arm64 sysreg header dependencies
+To: Oliver Upton <oupton@kernel.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Will Deacon <will@kernel.org>, kvmarm@lists.linux.dev, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Sean Christopherson <seanjc@google.com>, 
+	Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Oliver,
 
+On Wed, 2 Sep 2026 14:41:18 +0100, Fuad Tabba <fuad.tabba@linux.dev> wrote:
+> The rule generating the arm64 sysreg header targets the generated
+> directory, and its only prerequisites are tools/arch/arm64/tools/*,
+> which is the inner Makefile. An existing directory looks up to date,
+> so an incremental build never regenerates sysreg-defs.h. A selftest
+> referencing a register added to the table since then fails with
+> undeclared SYS_* identifiers. Clean builds are unaffected.
 
-On 9/21/2026 2:14 AM, Hui Peng wrote:
-> Commit 6da580ec656a ("cgroup/cpuset: Don't allow creation of local
-> partition over a remote one") updated update_prstate() to prevent creating
-> a top-level local partition whose exclusive CPUs conflict with an existing
-> remote partition.
-> 
-> However, if a top-level local partition A1 is created on CPUs 1-3, has a
-> non-partition member child A1/A2 with cpuset.cpus.exclusive = 1-3, and a
-> grandchild A1/A2/A3 is then enabled as a partition root on 1-3,
-> update_prstate() sees !is_partition_valid(parent) (since A1/A2 is a member)
-> and calls remote_partition_enable(). Because remote_partition_enable() does
-> not check whether tmp->new_cpus intersects subpartitions_cpus, A1/A2/A3 is
-> enabled as a remote partition on CPUs already owned by A1, triggering:
-> 
->    WARNING: kernel/cgroup/cpuset.c:1594 at update_prstate+0xbef/0xd70
-> 
-> Return PERR_NOCPUS in remote_partition_enable() when tmp->new_cpus
-> intersects subpartitions_cpus, matching the error code used by
-> remote_cpus_update() for subpartitions_cpus conflicts, and add a
-> corresponding regression test case to
-> tools/testing/selftests/cgroup/test_cpuset_prs.sh.
-> 
-> Tested in QEMU on Linux 7.3.0-rc3 using
-> tools/testing/selftests/cgroup/test_cpuset_prs.sh.
-> 
-> Fixes: 6da580ec656a ("cgroup/cpuset: Don't allow creation of local partition over a remote one")
-> Suggested-by: Guopeng Zhang <guopeng.zhang@linux.dev>
-> Cc: stable@vger.kernel.org
-> Assisted-by: LLM
-> Signed-off-by: Hui Peng <benquike@gmail.com>
-> ---
-> Changes in v3:
-> - Split the series into 3 patches (one per logical change and Fixes: tag).
-> 
+[...]
 
-What is going on here?
+Gentle ping on this one. It's arm64-only (the Makefile.kvm rule that
+generates sysreg-defs.h), so I think it'd go through kvmarm rather
+than Paolo's tree. Could you take a look when you get a chance?
 
-Please do not reply with a new series. And I think the changes should be listed 
-in the cover letter. Otherwise, it will get very confusing.
-
-
->   kernel/cgroup/cpuset.c                        | 4 +++-
->   tools/testing/selftests/cgroup/test_cpuset_prs.sh | 2 ++
->   2 files changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index c8ab89cfbe3d..7381fa8502e7 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1678,8 +1678,10 @@ static int remote_partition_enable(struct cpuset *cs, int new_prs,
->   	 * Callers must have validated that effective_xcpus is not empty.
->   	 */
->   	spin_lock_irq(&callback_lock);
-> -	if (cpumask_subset(top_cpuset.effective_cpus, tmp->new_cpus)) {
-> +	if (cpumask_intersects(tmp->new_cpus, subpartitions_cpus) ||
-> +	    cpumask_subset(top_cpuset.effective_cpus, tmp->new_cpus)) {
->   		spin_unlock_irq(&callback_lock);
-> +		if (cpumask_intersects(tmp->new_cpus, subpartitions_cpus))
-> +			return PERR_NOCPUS;
->   		return PERR_HKEEPING;
->   	}
->   
-
-I cannot apply this patch. It seems quite different from v2.
-
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index a1f42ef64bc1..b732078bf319 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -298,6 +298,8 @@ TEST_MATRIX=(
->   	" C0-4:X2-4 C1-4:X2-4:P2 C2-4:X4:P1 \
->   				   .      .      .      X1      .    0 A1:0-1|A2:2-4|A3:2-4 \
->   								       A1:P0|A2:P2|A3:P-1 2-4"
-> +	" CX1-3:P1 CX1-3  CX1-3    .      .      .      P1     .     0 A1:1-3|A2:1-3|A3:1-3 \
-> +								       A1:P1|A2:P0|A3:P-1"
->   
->   	# Remote partition offline tests
->   	"   C0-3    C1-3  C2-3     .    X2-3   X2-3 X2-3:P2:O2=0 .   0 A1:0-1|A2:1|A3:3 A1:P0|A3:P2 2-3"
-
--- 
-Best regards
-Ridong
-
+Cheers,
+/fuad
