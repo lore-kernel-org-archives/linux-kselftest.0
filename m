@@ -1,68 +1,76 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A48142E435;
-	Mon, 21 Sep 2026 20:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24487420469;
+	Mon, 21 Sep 2026 20:20:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790021954; cv=none; b=jbFDfCR+ehScMG0o7xYJudwo+Hvp2Yr+IZnEPE7vF2eeO02i/6CG/gNJBE7sBCOcz1dnxoaatHjE79G9J3PRGBu2CgZrDkvJ1cOcl23Tm/OZf+e4HYWaWada2SNnO14lvLMBcFPFh/QzTNe4cPvpF+UiQvCgyY+ZFuOi9oImS2k=
+	t=1790022023; cv=none; b=l64vji35iovNHyL1up+2EzFIwFkk9eWUJyLGtSX0n5fUjA+zAD6bHgKUX5B7Wg/ibjnxmlpmeVLu6RRRfC2YoAOrnPuC9p2eR7erJhIjCb9QT2wQkejODq7DDIoi7vNtIbjbdap1zcUEaAWNMoVKHzTRyJezA0AlsepCPE1QLoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790021954; c=relaxed/simple;
-	bh=Y96/BXlhark1Z+9l1d8uyQvtzAw2CoHis/DRZZSti9s=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EfIBhZ1KcevGQCghWHWpENrcp6sZZxIi9PSa66T3AMhqbTPIupFtl8TThL5hV8oqiFEkaLtpfwgOwv8BbEk5YGji26yMISsAbMPJuJPyb16z/ONPEeDU9vEphBu8LHicl1ZNgDOPstbxRVSMd/NtwkO8By7RiZ9FyULlZJ5s3tQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=inC0rgbH; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790022023; c=relaxed/simple;
+	bh=JtykKgqo+f211SbFKgghZZ2s4s0O43HbHIIra7rXxb4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NhhzrOXndqOkEFz2razQROZrIbCYniVCCzI/fvvIZ2V9szF5TtiIRG9N9tU3OrJPVWP22GQ0NV7YUNnAw+veuu6hY/YBaVQPsKms1MWZZYNzM4cKyQ9ydMmoJdV2p/ZeHmoNGy9P/wuu1aef9Ujbxr/m1DFGyvUgVtwb547VN+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EpKzmRij; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="inC0rgbH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC1441F000FF;
-	Mon, 21 Sep 2026 20:19:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EpKzmRij"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89FD01F000FF;
+	Mon, 21 Sep 2026 20:20:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790021952;
-	bh=cNXdQdZRudtnqxBAb72I5voOVN5GsT81p76+NrhRJ8A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=inC0rgbHTlZZta0tfzysd01IRrwJwj5OkkqxF0M0hGhwHyA4PGIpZGE1KOwrVCpiB
-	 ahUbYtbqX1skiTPo+4ZkqlRo13tWiM15c2b0+MVteEMkR1X9QWHhp0ua/L/KM85sdR
-	 bZ3WVQyMCPZuTehc2sILYmIVoFQ4QRx4/YhIDeiAqjyb3HkpYPk8HCkQg5LAVuHQ0/
-	 22SXASh6J102RtipKDPpKNjuNOZgZOKPS6E+hG40t+1PosEZbmX/PXjT2HWWXANDm/
-	 Ph8tjWrMPz3BNP9YKqymMZ3E4KBe+gijjHxPk5soihlW/i/gmDr08IAGt4AdiH8x0O
-	 453iV1rHDIgbg==
-Date: Mon, 21 Sep 2026 13:19:11 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Konstantin Sinyuk <ksinyuk@kernel.org>
-Cc: dri-devel@lists.freedesktop.org, Maarten Lankhorst
- <maarten.lankhorst@linux.intel.com>, Francois Dugast
- <francois.dugast@intel.com>, David Airlie <airlied@gmail.com>, Simona
- Vetter <simona@ffwll.ch>, Maxime Ripard <mripard@kernel.org>, Thomas
- Zimmermann <tzimmermann@suse.de>, Jonathan Corbet <corbet@lwn.net>, Shuah
- Khan <skhan@linuxfoundation.org>, Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Ilia Levi <ilia.levi@intel.com>, Rodrigo Vivi
- <rodrigo.vivi@intel.com>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/12] drm/fabric: vendor-neutral topology
- infrastructure for scale-up accelerator interconnects
-Message-ID: <20260921131911.532d81f4@kernel.org>
-In-Reply-To: <cover.1787552412.git.ksinyuk@kernel.org>
-References: <cover.1787552412.git.ksinyuk@kernel.org>
+	s=k20260515; t=1790022021;
+	bh=DSZiEtwE1uacP7iFOeCfIa6zqRHcapIJW8XH08Z+dxA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=EpKzmRijiEzN+ngovxGMDwJKFJeQ2p8zxUZ2ELAUP5ZX3aH5mmjdKcjB23Xcui26Y
+	 DNzSM9QbDJB7kM2T0dotHeN1jiMXolgz2FFl2OUYT4PeyaTwoB9sYdLCSMRkvCEZ7t
+	 4O8pKUsfzFYRe4KTTxjK4vBTmINcmgeMEVRFLtFqWm/UldS7ydThDSex+ews5gnEQ8
+	 hfjWhD7bTQTmP2Sf52eg9Iy6SurqA7TF9pEZUh+GZlmEWh1IL07rn5VhKoQT6e7Sgn
+	 Fujl6SkeU74eLu7uqVpSXPAkkEgMHYUyCrecvCLfoORp2JRQTDmohMZXp+fUeCt8X7
+	 oG1sP4TJ4aRRQ==
+Date: Mon, 21 Sep 2026 13:20:20 -0700
+From: Oliver Upton <oupton@kernel.org>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>,
+	Fuad Tabba <tabba@google.com>, kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: Fix arm64 sysreg header dependencies
+Message-ID: <arGRhHgP_izSwW4T@kernel.org>
+References: <20260902134118.2718200-1-fuad.tabba@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260902134118.2718200-1-fuad.tabba@linux.dev>
 
-On Mon, 24 Aug 2026 11:09:28 +0300 Konstantin Sinyuk wrote:
->   2. Are the Generic Netlink semantics, including dump consistency,
->      notifications and optional port statistics, aligned with YNL
->      expectations?
+Hey Fuad,
 
-> 39 files changed, 13189 insertions(+)
+Thanks for the fix here.
 
-Networking is absolutely flooded with AI generated patches.
-Including long term contributors excreting huge unreviewed
-code dumps :/ We have absolutely no time to help other subsystems.
-Please do not use Netlink going forward, sorry.
+On Wed, Sep 02, 2026 at 02:41:18PM +0100, Fuad Tabba wrote:
+> ---
+> Unlike the two existing sysreg-defs.h rules, this one's recipe is a recursive
+> make, so its prerequisites are not the recipe's arguments. They only decide
+> whether to recurse, which is a question tools/arch/arm64/tools/Makefile already
+> answers. An alternative is therefore to drop the two explicit inputs in favour
+> of:
+> 
+> 	$(GEN_SYSREG_DEFS): FORCE
+> 
+> leaving that Makefile as the only place naming the generator's inputs. Both
+> forms regenerate the header and rebuild the dependents in the same invocation,
+> and neither rebuilds anything when nothing changed. I kept the explicit
+> prerequisites so that the recursion stays conditional, but I am happy to respin
+> with FORCE if you would rather.
+
+This might be the better approach at this point. In the unlikely event
+that new dependencies get added to the kernel side of this, I'll give it
+approximately a 0% chance that the author will update this rule :)
+
+Thanks,
+Oliver
