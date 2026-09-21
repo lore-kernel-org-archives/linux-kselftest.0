@@ -1,63 +1,103 @@
-Received: from mta1.migadu.com (out-242.mta1.migadu.com [95.215.58.242])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1522BE02C
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 03:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.242
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F895306744
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 03:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789960165; cv=none; b=D/K8P1G36zlZzGC19l2qXDdYa//ZYEBPz1KpyGIHjaQ1pdjj0rCI9EaGQD5TJRCsbbqu7jQRfCmgFbRGQ4Mdr1MYBVFx0DeuZh02Inc9IgSAsQMSauixA96pqRJKrV9rjQlfdnuhJAd6XJnEGQUJlPLxsG6BQxifMJmnB2L5Bd8=
+	t=1789960396; cv=none; b=NtypYL0y1C8MucqXxefUQlAIRyBUZn/pZJaIXRucGIN1ZvLmQYVlmRO+wb2mZB23lN1myBR3dTA0zf/zH02RLaXHG9QiPLAH4X0J4woEHSA/vKUYCq8nhfosCwTlYwet49FuwEicVBIidMAIk7eKKr4rh+9IKXfnOwpT8ROqxKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789960165; c=relaxed/simple;
-	bh=Pr36zQGGDXb1592EAcgXlxtVmVxsnSiLjuYzQo3Q1fw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gmoD+LU1f1LnEW3xk/xF4Qf5cgB07L49PLbBzRXYju+LIbwWW+5PR9YIHDUfQJhHo/UmxlQXzG++EkVfe59kdHt4+izHJ+nEijEnJ5DZrnmao3xWB26X++QgxXH6buujel05bomy41IJQxJ5eA6r2BMBxGalTXhGjvyT7BvVMCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kEiHRa+q; arc=none smtp.client-ip=95.215.58.242
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789960396; c=relaxed/simple;
+	bh=BqleptVklrKDlBDiMIxc39mrkLR5WeFDG+U5RgU5tt4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Br5I1YDMKhrQO5ldKpSKFiflWLB3feZE/TlmqCi2zkKRcM23QF/2Fmrjy1Zu3l97C0mP9MoUI6rtYehYA8mJ+1tzbdYMnq6UXI8qAjuZQ8B7BAnTV6n9ueYzsid8iSOoh1Nn7vKhbSIj/wHRCUbAPElZkAqOxq943OGJTXXaFaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ApjFuxfg; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kEiHRa+q"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Pr36zQGGDXb1592EAcgXlxtVmVxsnSiLjuYzQo3Q1fw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789960160; v=1; x=1790564960;
- b=kEiHRa+qoL98GI3nIEwcIfue06kr2PGmVv1FnhhNYcSh8vFWgkpFD9S/O+J6O8a/+drDPVD6
- nUI7X2NJQXISXebWcprF4XdC/wgmNbpmRw7uczi0lXu9P0GJsRmKIxseBTv2bWETJIsNMLbMcxd
- 3bUaQ+k/bpTWfUgbaDx6ff2Y=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 33f18758b0cca24e;
-	Mon, 21 Sep 2026 03:09:19 +0000
-X-Mizu-Trace-ID: 33f18758b0cca24e
-X-Migadu-Flow: FLOW_OUT
-From: Hui Zhu <hui.zhu@linux.dev>
-To: Roman Gushchin <roman.gushchin@linux.dev>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ApjFuxfg"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-398b1e63c49so2603856a91.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 20 Sep 2026 20:13:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789960394; x=1790565194; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=BqleptVklrKDlBDiMIxc39mrkLR5WeFDG+U5RgU5tt4=;
+        b=ApjFuxfgeXDvSmKLCAKv3zcFRV4ItAt4okFUanpI9poC2FwbaRda8HYUlqPdWDHE6m
+         q551rDo4oeWfwxzTERi7j6T4fGLHR9Y/gQ9yXUHYD2xsuHwORdhQVpLJUtFTPu4fzFUq
+         PJjBjC9ER/v92mk6F7KiyAmxgbGnJ5kGgh3YynPwDr7r1B4OVzNEfuvfWfmYx5awhuPK
+         jn2TtFXoYlw2cDg+BXkdzBBKmmm1DCVh58Z+LJ9XQ9oFUX6TvHIJmNEPif5VmM1oC751
+         53nVF+E1RLqQp+cHxz5l2eW94e8UVHVFJMEM69z4CK4H+xcPcK8mjBDnA6yNDib/LFhp
+         afow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789960394; x=1790565194;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=BqleptVklrKDlBDiMIxc39mrkLR5WeFDG+U5RgU5tt4=;
+        b=QwJTtrSXOouw1R0seD3xamyIyzLRkvbL3ULaeJQGzQT6js+mtCO2gucyUL3UqDRCjA
+         UjNGN96qLse1Ihbm7+T7GuwFza3pegHRIR2JuOGgywHiKVcFG0pu9//nCgwzakrrmmbH
+         jkTh1agLhDrTGq3/CuYZkfpuHBp4QLwAySaJs9MnQFXEtXTWUK1p4SzmRIv/wBovmMm4
+         HbCTDgRVWKmJRP1hhj+HrU31cRBXUYLK4FOlo1P4DJhixCE6v+mefcQUNxEUmIiO/Hyp
+         OFXSe2xz4l4dwBkw2IcxbXTxR2n418eQaUG+Ydbrt/c0itEtK/S5gIywMafRxaiNofpl
+         VWyQ==
+X-Forwarded-Encrypted: i=1; AKwUvBysbYp16npLotUH7lJIuDHzPqNakVBG+4hv5Uw8s1bY/VJEpjIUqdZEbrd/Xn9lK8hY7bi6q05cdAByXwIFhuo=@vger.kernel.org
+X-Gm-Message-State: AFuF++nGm8GXUmyQHjYAr3S4OcunN1dRfndCYod3Nb3oaqPG9ZSbllsg
+	/TkAAJJzPCcLJpi8dhrctGfZvxxMPNR8i/AvO2Y+lIXgzNJZMzqQ7ZMk
+X-Gm-Gg: AYBFou3e4+Jovy6QQy9TtG6CEpjX9XMSzy/xZQPED3uvGUvugiJ613i4wwxzQxqkgVb
+	B+c8P9/tsm7/usZZpc97qa+A5tARu4eH5wXAuttD8ATPpfO5b+lUreRna/2LSUJvUf/sm3g7SBG
+	yx9w5kyHgkEOq9JOebRGbTUu1WT7LuEIXRLYDdPtWn5dqYr1qLtYl8s5FfK/ls2AGt3Pjxn1Azq
+	GuQRyzj0dp89cGzN0nbXerl1cWOI40cGn7Apwis3MlDmbiRe7qJYX+axmwyPADJej53NTgnxSW7
+	1cjSkWdsd2nzmh95V/zJ3IhBm/dyliIusou6RJZJJSG7e527tLs0zsAv4rd9qmRCKFa2lAdz7B7
+	CCAV8UZaid0sCCglq5C8DN4y21oS6PH+N/iV/oM3gAgRklBs5y+eikQcoBBxuEU6EVBiyqDFmua
+	WtMh1Fxg0O3LAU4pLIY+VJ7/mxX5mzkU68APizZdS9ulZO6UzVz77DWJChSl5MA0Q=
+X-Received: by 2002:a17:90b:3a4b:b0:3a0:25f0:d898 with SMTP id 98e67ed59e1d1-3a025f0dd9emr5480440a91.47.1789960394342;
+        Sun, 20 Sep 2026 20:13:14 -0700 (PDT)
+Received: from ubuntu.. ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33c3313d907sm14845766eec.11.2026.09.20.20.13.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Sep 2026 20:13:13 -0700 (PDT)
+From: Jing Wu <realwujing@gmail.com>
+To: Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun@kernel.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Tejun Heo <tj@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
 	Shuah Khan <shuah@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	Barry Song <baohua@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>
+Cc: Jing Wu <realwujing@gmail.com>,
+	Waiman Long <longman@redhat.com>,
 	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Cc: Hui Zhu <zhuhui@kylinos.cn>,
-	JP Kobryn <jp.kobryn@linux.dev>
-Subject: [PATCH v13] mm/bpf: Add bpf_proactive_reclaim kfunc
-Date: Mon, 21 Sep 2026 11:08:54 +0800
-Message-ID: <20260921030854.17858-1-hui.zhu@linux.dev>
+	rcu@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Qiliang Yuan <yuanql9@chinatelecom.cn>
+Subject: Re: [PATCH v4 00/11] Dynamic Housekeeping Management (DHM) via CPUSets
+Date: Mon, 21 Sep 2026 11:13:03 +0800
+Message-ID: <20260921031304.437934-1-realwujing@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260710-wujing-dhm-v4-0-2e912e5d9645@gmail.com>
+References: <20260710-wujing-dhm-v4-0-2e912e5d9645@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,272 +106,30 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Hui Zhu <zhuhui@kylinos.cn>
+Hi all,
 
-BPF programs can observe memory pressure on a cgroup, e.g. refault
-stats via bpf_mem_cgroup_page_state(), but cannot act on it:
-triggering reclaim requires writing to memory.reclaim, which BPF
-cannot do.
+Gentle ping on this series - it has been quiet for a couple of months
+since v4 went out, so checking whether it is stuck in a review queue
+or just hasn't been picked up yet.
 
-Add bpf_proactive_reclaim(), a sleepable kfunc performing one
-proactive reclaim pass on a memcg, like a write to memory.reclaim
-but without retrying until the target is reached, so that when and
-how hard to reclaim is BPF policy rather than hard-coded thresholds.
-The reclaim target of a single call is capped at MEMCG_CHARGE_BATCH,
-as high_work_func() does for memory.high; reclaiming more is left to
-the program, which can call the kfunc once per bpf_wq callback and
-stop at any point. It is limited to BPF_PROG_TYPE_SYSCALL, because
-other sleepable programs may run with filesystem locks held, on
-which the reclaim path could deadlock via filesystem shrinkers.
+For context, v4 rebuilds the series around the CPU-by-CPU hotplug
+cycling approach that Thomas suggested during v3 review, replacing the
+RCU-swap-mask/callback mechanism from earlier versions. Patches 1-9
+cover sched/isolation, tick/nohz, context_tracking, watchdog and the
+cpuset driver logic; 10-11 are docs and selftests.
 
-Convert MIN_SWAPPINESS, MAX_SWAPPINESS and SWAPPINESS_ANON_ONLY from
-macros to an enum so that they are emitted into BTF and usable from
-BPF programs via vmlinux.h.
+One thing worth flagging: v4 deliberately does not touch RCU/nocb
+offload state. That piece is still being worked out in a separate,
+ongoing discussion on Waiman's nohz_full/managed_irq series [1], where
+the open question is how to change the nocb mask without paying a
+stop_machine latency spike. We scoped it out of v4 so review of this
+series would not need to wait on that RCU decision - happy to fold in
+RCU/nocb support as a follow-up once that discussion converges.
 
-Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
-Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
-Reviewed-by: JP Kobryn <jp.kobryn@linux.dev>
-Reviewed-by: Barry Song <baohua@kernel.org>
----
-Changelog:
-v13:
-According to the comment of Shakeel, send this patch alone.
-According to the comment of JP, document
-@swappiness as [MIN_SWAPPINESS, MAX_SWAPPINESS] with -1 and
-SWAPPINESS_ANON_ONLY as special modes; validate -1 and
-SWAPPINESS_ANON_ONLY as special values instead of range endpoints, so
-the check no longer depends on the enum layout. No change in accepted
-values.
-v12:
-Redo performance tests and update performance data.
-According to the comments of Barry, fix comments issue.
-Based on the AI review and my re-examination of selftests, updated the
-contents below.
-Express RECLAIM_SIZE in bytes so it is right on non-4K page kernels.
-Drop the local PAGE_SIZE macro, RECLAIM_SIZE is now a byte count.
-Remove the unused bpf_helpers.h, bpf_tracing.h and bpf_core_read.h.
-Rename CLOCK_MONOTONIC_ID to CLOCK_MONOTONIC to match the kernel.
-Drop the CSS_DYING test, it is never set on a cgroup's own css.
-Document that the lookup fails inside rmdir(), not at last put.
-Count bpf_timer_start() failures so a stalled loop is visible.
-Record the kfunc errno so failure is not read as an idle cgroup.
-Note that an idle tick discards the refault delta.
-Reject tmpfs for /tmp and the working dir, else the workload OOMs.
-Pass the mkstemp() fds to the children so no stale path is reopened.
-Read the timing file with lseek() and read() on the shared fd.
-Write the timing with snprintf() and write(), checking truncation.
-Close the data and time fds on every cleanup path.
-Remove fcntl.h, nothing calls open() any more.
-Factor disable_swap() out of the two cgroup setups.
-Recreate the cgroups between bench runs so both start cold.
-Guard the speedup calculation against a zero baseline.
-Drop the non-bench timing printf, it was noise on passing runs.
-Assert only TARGET_GONE, the outcome rmdir() actually guarantees.
-End the wait loop only on target_gone so later events are seen.
-Compare reclaimed_bytes against 0, a check that can now fail.
-Poll the keepalive reader with WNOHANG and report its exit code.
-Clear reader_pid after reaping so cleanup cannot kill a new PID.
-Rename the ring_buffer__poll() result to n, it counts events.
-Print timer_failures and last_reclaim_err when an assert fails.
-Explain why bench_printf() needs the stdout fallback and no # prefix.
-v11:
-According to the comments of Kumar, fix reclaim_cgroup() to not treat
-a negative bpf_proactive_reclaim() return as reclaimed bytes.
-According to the comments of Shakeel, shorten the commit message.
-v10:
-According to the comments of JP, drop redundant swap.h include, turn
-swappiness macros into a BTF-visible enum, and clarify the -1 swappiness
-semantics in docs and code in code patch.
-report each reclaim outcome via ringbuf and wait for events with timeout
-instead of sleep-polling, log workload timings instead of failing on
-them, drop a debug printf, and add a TEST_MEMCG_ASYNC_RECLAIM_BENCH
-baseline-comparison mode in the selftests patch.
-Include the benchmark numbers in the cover letter.
-v9:
-According to the comments of JP, copy the motivation from the cover
-letter to the commit message, restructure the kfunc documentation
-to separate the direct and asynchronous calling contexts, fold the
-fs-lock warning into the SYSCALL-only rationale, soften the "bounded
-unit of work" wording (only the reclaim target is capped), and drop
-the redundant comment above the reclaim kfunc set registration.
-v8:
-According to the comments of Andrew, Kumar and Shakeel, drop the
-bpf_in_reclaim_context() check because the SYSCALL-only restriction
-already rules out reentrancy.
-According to the comments of Kumar, Add the swappiness argument to
-bpf_proactive_reclaim().
-v7:
-According to the comments of JP, clamp the reclaim target of one
-bpf_proactive_reclaim() call to MEMCG_CHARGE_BATCH so each call is
-a bounded unit of work, and document the batching policy in the kfunc.
-selftest: check the target cgroup for dying state before reclaiming
-from it, and add the memcg_async_reclaim_dying test covering target
-removal while reclaim is running.
-v6:
-According to the comments of Kumar and Shakeel, Restrict
-bpf_proactive_reclaim() to BPF_PROG_TYPE_SYSCALL by moving it
-to a dedicated kfunc set registered for that program type only, and
-document the clean-process-context requirement in its kerneldoc.
-v5:
-According to the comments of Andrii, Kumar and Shakeel, remove
-bpf_proactive_reclaim_swappiness.
-v4:
-According to the comments of bot+bpf-ci and sashiko, also check
-current->reclaim_state to close the fentry-on-trace-iter recursion
-window in bpf_in_reclaim_context.
-Return bytes instead of pages ( nr * PAGE_SIZE ) in
-bpf_proactive_reclaim_pages and bpf_proactive_reclaim_swappiness.
-Return (unsigned long)-1 on out-of-range swappiness (was 0).
-Kdoc of both kfuncs: updated Return descriptions; added FS-lock deadlock
-warning to bpf_proactive_reclaim.
-Fix potential child process leak in selftests.
-Use _exit() instead of exit() in forked children in selftests.
-Rename reclaimed_pages to reclaimed_bytes in selftests.
-Fix comments issues in selftests.
-v3:
-According to the comments of bot+bpf-ci, add a shared helper
-bpf_proactive_reclaim_pages() that is called by bpf_proactive_reclaim
-and bpf_proactive_reclaim_swappiness.
-According to the comments of sashiko and bot+bpf-ci, fix the issues of
-selftests.
-v2:
-According to the comments of Shakeel Butt, replace
-bpf_try_to_free_mem_cgroup_pages() with
-bpf_proactive_reclaim(memcg, size) and
-bpf_proactive_reclaim_swappiness(memcg, size, swappiness).
-According to the comments of Kumar Kartikeya Dwivedi, drop patch 2
-and patch 3.
-Remove bpf_thread_wq code in patch 4.
-According to the comments of sashiko-bot, fix the issues of selftests.
+Any review, even partial (a single patch or a design-level concern),
+would be very helpful at this point.
 
- mm/bpf_memcontrol.c | 65 ++++++++++++++++++++++++++++++++++++++++++++-
- mm/internal.h       | 10 ++++---
- 2 files changed, 70 insertions(+), 5 deletions(-)
+[1] https://lore.kernel.org/r/20260709023221.634684-1-realwujing@gmail.com
 
-diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
-index 716df49d7647..d8f579c28560 100644
---- a/mm/bpf_memcontrol.c
-+++ b/mm/bpf_memcontrol.c
-@@ -8,6 +8,8 @@
- #include <linux/memcontrol.h>
- #include <linux/bpf.h>
- 
-+#include "internal.h"
-+
- __bpf_kfunc_start_defs();
- 
- /**
-@@ -159,6 +161,51 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
- 	mem_cgroup_flush_stats(memcg);
- }
- 
-+/**
-+ * bpf_proactive_reclaim - proactively reclaim memory from a memory cgroup
-+ * @memcg: the target memory cgroup to reclaim from.
-+ * @size: the amount of memory to reclaim, in bytes, clamped to
-+ *        MEMCG_CHARGE_BATCH.
-+ * @swappiness: the reclaim swappiness, in the range [MIN_SWAPPINESS,
-+ *              MAX_SWAPPINESS], or one of the special modes: -1 to use
-+ *              the memcg's own swappiness, or SWAPPINESS_ANON_ONLY to
-+ *              reclaim only anon folios.
-+ *
-+ * Performs one proactive reclaim pass on @memcg, like a write to
-+ * memory.reclaim but without retrying until @size is reached. Call it
-+ * repeatedly to reclaim more than one batch.
-+ *
-+ * Only available to BPF_PROG_TYPE_SYSCALL, because other sleepable programs
-+ * may run with filesystem locks held, which the reclaim path can deadlock
-+ * on via filesystem shrinkers.
-+ *
-+ * Return: The amount of memory reclaimed, in bytes, or a negative error.
-+ */
-+__bpf_kfunc long bpf_proactive_reclaim(struct mem_cgroup *memcg,
-+				       unsigned long size,
-+				       int swappiness)
-+{
-+	unsigned long nr_reclaimed;
-+	unsigned long nr_pages;
-+
-+	if (swappiness != -1 && swappiness != SWAPPINESS_ANON_ONLY) {
-+		if (swappiness < MIN_SWAPPINESS || swappiness > MAX_SWAPPINESS)
-+			return -EINVAL;
-+	}
-+
-+	if (size < PAGE_SIZE)
-+		return -EINVAL;
-+
-+	nr_pages = min(size / PAGE_SIZE, (unsigned long)MEMCG_CHARGE_BATCH);
-+
-+	nr_reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages, GFP_KERNEL,
-+						    MEMCG_RECLAIM_MAY_SWAP |
-+						    MEMCG_RECLAIM_PROACTIVE,
-+						    swappiness == -1 ? NULL : &swappiness);
-+
-+	return nr_reclaimed * PAGE_SIZE;
-+}
-+
- __bpf_kfunc_end_defs();
- 
- BTF_KFUNCS_START(bpf_memcontrol_kfuncs)
-@@ -174,19 +221,35 @@ BTF_ID_FLAGS(func, bpf_mem_cgroup_flush_stats, KF_SLEEPABLE)
- 
- BTF_KFUNCS_END(bpf_memcontrol_kfuncs)
- 
-+BTF_KFUNCS_START(bpf_memcontrol_reclaim_kfuncs)
-+BTF_ID_FLAGS(func, bpf_proactive_reclaim, KF_SLEEPABLE)
-+BTF_KFUNCS_END(bpf_memcontrol_reclaim_kfuncs)
-+
- static const struct btf_kfunc_id_set bpf_memcontrol_kfunc_set = {
- 	.owner          = THIS_MODULE,
- 	.set            = &bpf_memcontrol_kfuncs,
- };
- 
-+static const struct btf_kfunc_id_set bpf_memcontrol_reclaim_kfunc_set = {
-+	.owner          = THIS_MODULE,
-+	.set            = &bpf_memcontrol_reclaim_kfuncs,
-+};
-+
- static int __init bpf_memcontrol_init(void)
- {
- 	int err;
- 
- 	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
- 					&bpf_memcontrol_kfunc_set);
--	if (err)
-+	if (err) {
- 		pr_warn("error while registering bpf memcontrol kfuncs: %d", err);
-+		return err;
-+	}
-+
-+	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
-+					&bpf_memcontrol_reclaim_kfunc_set);
-+	if (err)
-+		pr_warn("error registering bpf reclaim kfuncs: %d\n", err);
- 
- 	return err;
- }
-diff --git a/mm/internal.h b/mm/internal.h
-index 7c326965a94f..9e3be236f18c 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -77,11 +77,13 @@ unsigned long lruvec_lru_size(struct lruvec *lruvec, enum lru_list lru,
- 
- #define MEMCG_RECLAIM_MAY_SWAP (1 << 1)
- #define MEMCG_RECLAIM_PROACTIVE (1 << 2)
--#define MIN_SWAPPINESS 0
--#define MAX_SWAPPINESS 200
-+enum {
-+	MIN_SWAPPINESS = 0,
-+	MAX_SWAPPINESS = 200,
- 
--/* Just reclaim from anon folios in proactive memory reclaim */
--#define SWAPPINESS_ANON_ONLY (MAX_SWAPPINESS + 1)
-+	/* Just reclaim from anon folios in proactive memory reclaim */
-+	SWAPPINESS_ANON_ONLY = MAX_SWAPPINESS + 1,
-+};
- 
- unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
- 					   unsigned long nr_pages,
--- 
-2.43.0
-
+Thanks,
+Jing Wu
