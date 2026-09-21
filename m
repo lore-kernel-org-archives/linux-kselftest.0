@@ -1,245 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-162.mta1.migadu.com [95.215.58.162])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5CD311967;
-	Mon, 21 Sep 2026 18:39:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C794FD279
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 18:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.162
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790015957; cv=none; b=qLnMLlxmnulSxhAft+/Ls50yblqh9nd5ZHmis95aEfYO491ze0On4KFJ9S08ezRtFNggaUIolyam8xd9G/YcG4cPAQNjQ16KQkDffAmww4/fbz2yzy/9gnuQmoqwJYKwx19JMcOWGjwgmckZRi5lQelBZwsnal3Yqhe23MvV3r8=
+	t=1790016269; cv=none; b=auDfoBC4cSwxqFtw9ccVENkrjwvY24JqjjYBjWVaW9g/qgXMAxSp/XotCuNiTubR6AUQkiY4zuTuWzFxxDbouRzkBbXHZp1ea8XfAyk3kX8E6JBJRlD0VmSfLYwklGkGdQT9Wn1O3ke2Bt/r9YkT8HfqQaL+EZ1jLTMwN+tMHdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790015957; c=relaxed/simple;
-	bh=8048W0Qstxb4u3tk/L4QUyhCusDPnUgH/De2pFrlyKo=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uzyZy1u0uBvvgCpL6/Tqwu8SsVoDGDtGTcYi/7sRjDttHHGXbvvDpSX6WeVF+NYv7RMuGg1T9s1Wnbgj11pk4g2rrqLeidSD61CdwwiGqMRN8E3EUd/ehlKufE6gxRQsoTUDxviXoe/7xtw10ySaSGGyA8Y7DzQ0e3mu6i/31Tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VrJy2ugp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790016269; c=relaxed/simple;
+	bh=4whLlJ5HdZQmQogZNAqZXk4GU1IkwKwJWSrRgBfhUrc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r4eud6F4SwSccMm+5+OvVFiVoH/ZsVKilWqAc2UbM1v4QpR1b6x6QbdW6BLNkstX9plndf+lZaDc4154Q+vav+QT7GSSYs7gZ5rM2owIPWv7YY98545iLHybpmgPHbUq0FQWiQZak9RAOCajnzxy2KnGnhExFrFwnG5KFIe2sgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=w1qNfZPx; arc=none smtp.client-ip=95.215.58.162
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VrJy2ugp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0535C1F00898;
-	Mon, 21 Sep 2026 18:39:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790015955;
-	bh=UeDScPBNmOh9XYy9jBfRdxGXrrZgiZJlCCknSYaZGCc=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=VrJy2ugpYA+6Tz1lBz+byaiIjhJVmevATI7bypr66T8XbNKJRIiFhsHtouH0DO6g7
-	 9y+ockqbzD9RTjMZ04jBZB/Yo1IrnwKf1CP/MExuhpjIIIWGVEuVEM66Eq+eI2D5FV
-	 s97W5b9l2g44Km9quUipnN8UZGEnKKffqDNhIOvPhhSOzvdJh3zj8hWzAVlJz6gPVI
-	 1XO+C9eFb8Sz9IwVrNlQ1X8ctx1zhMapZ0jKL3OFOlxC/iiifXnhx67jdPpQHG25lL
-	 /bTRlc7Q2ABQ36eXl6uqi0vVbO4Oc5oie3cYNjvFsuJHcFFJ7BVSwwBZqw3eF/F8w+
-	 5lYM4kJLnrJsw==
-Subject: Re: [PATCH net-next 4/4] selftests: mptcp: cover IP_RECVERR sockopt
- propagation
-From: netdev-bot+sashiko@kernel.org
-To: matttbe@kernel.org
-Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- netdev@vger.kernel.org, mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
- devnexen@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org
-Date: Mon, 21 Sep 2026 18:39:14 +0000
-Message-ID: <179001595456.2160803.1891677059727765271@kernel.org>
-In-Reply-To:
- <20260918-net-next-mptcp-msg_errqueue-v1-4-dd77e1738248@kernel.org>
-References:
- <20260918-net-next-mptcp-msg_errqueue-v1-4-dd77e1738248@kernel.org>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="w1qNfZPx"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=4whLlJ5HdZQmQogZNAqZXk4GU1IkwKwJWSrRgBfhUrc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790016265; v=1; x=1790621065;
+ b=w1qNfZPxwwUUWhfwhnUMoSWUAe/xr4J6zMgZN0ZTB9JcYHdEJ5wOrsIeG7AYGJTcPiL6LBul
+ C1Ymh/SrgJDqopLDS8xpfJyoX3Caye+0XNiYDXgq6R2LLHG7rLCBaZqQyP9rUdzcAO7dG6l/KTE
+ gB3Y2gjSNZkHYnJoK6b2Y+EA=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 581e5963eac9bec4;
+	Mon, 21 Sep 2026 18:44:24 +0000
+X-Mizu-Trace-ID: 581e5963eac9bec4
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <2b813393-f754-4047-b792-6878adcaf3cb@linux.dev>
+Date: Mon, 21 Sep 2026 11:44:19 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 01/13] bpf: move linked-scalar flags out of
+ bpf_reg_state->id [NFC]
+To: Eduard Zingerman <eddyz87@gmail.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+ <20260910164635.459558-2-vineet.gupta@linux.dev>
+ <DLDKB6BTHVXE.PFK87O3QY1J5@gmail.com>
+ <f575fe19-a5a0-4f43-b1bd-cdec2c6e9830@linux.dev>
+ <6289e47f004b8b0d5ce55143fb1d55f7306856c0.camel@gmail.com>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <6289e47f004b8b0d5ce55143fb1d55f7306856c0.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+On 9/18/26 4:13 PM, Eduard Zingerman wrote:
+> On Mon, 2026-09-14 at 18:17 -0700, Vineet Gupta wrote:
+>
+> ...
+>
+>>>    static bool regs_exact(const struct bpf_reg_state *rold,
+>>>                   const struct bpf_reg_state *rcur,
+>>>                   struct bpf_idmap *idmap)
+>>>    {
+>>>        return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
+>>>               check_ids(rold->id, rcur->id, idmap) &&
+>>>               check_ids(rold->parent_id, rcur->parent_id, idmap);
+>>>    }
+>>> Also even after above change to check_scalar_ids() the check_scalar_ids() is still
+>>> no equivalent to check_ids() that regs_exact() is doing.
+>> ... Right: reverting back to what we had before.
+>> FWIW Eduard had suggested to use regs_exact; I'm not sure if he had
+>> something else in mind which we might be overlooking.
+> I missed the check_scalar_ids() vs check_ids() difference, sorry.
+> Also, yes, let's squash with patch #2.
+>
+> ...
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Yep, will do.
 
-- [Medium] The commit subject claims the patch covers "IP_RECVERR sockopt
-  propagation", but the new selftest `test_ip_recverr_sockopt()`…
-- [Low] The "empty-errqueue EAGAIN contract" assertion added at
-  tools/testing/selftests/net/mptcp/mptcp_sockopt.c:823-826 (`r =…
-
---
-
-selftests: mptcp: cover IP_RECVERR sockopt propagation
-
-This adds test_ip_recverr_sockopt() to the mptcp_sockopt selftest, which
-sets and reads back IP_RECVERR / IPV6_RECVERR on the MPTCP parent socket
-and checks that recvmsg() with MSG_ERRQUEUE|MSG_DONTWAIT on an empty
-error queue returns EAGAIN.
-
-> diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.c b/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
-> index b6e58d936ebe..d68515b7903b 100644
-> --- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
-> +++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
-
-[ ... ]
-
-> @@ -769,6 +776,68 @@ static void test_ip_tos_sockopt(int fd)
->  		xerror("expect socklen_t == -1");
->  }
->  
-> +static void test_ip_recverr_sockopt(int fd)
-> +{
-
-[Severity: Medium]
-The subject says "cover IP_RECVERR sockopt propagation", but does this
-test observe any propagation?  Everything here operates on the parent fd
-only, and no subflow state is ever queried.
-
-The MPTCP-specific work happens in mptcp_setsockopt_recverr() ->
-mptcp_setsockopt_all_sf(), including the skip for IPv6 options on v4
-subflows:
-
-net/mptcp/sockopt.c:mptcp_setsockopt_all_sf() {
-	...
-	if (level == SOL_IPV6 && ssk->sk_family != AF_INET6)
-		continue;
-	...
-}
-
-and in sync_socket_options() for subflows that join later:
-
-net/mptcp/sockopt.c:sync_socket_options() {
-	...
-	src = READ_ONCE(inet_sk(sk)->inet_flags);
-	if (ssk->sk_family != AF_INET6)
-		mask &= ~(BIT(INET_FLAGS_RECVERR6) |
-			BIT(INET_FLAGS_RECVERR6_RFC4884));
-	...
-}
-
-The read-back path, however, only reports the parent msk's own flag bit:
-
-net/mptcp/sockopt.c:mptcp_getsockopt_v4() {
-	...
-	case IP_RECVERR:
-		return mptcp_put_int_option(msk, optval, optlen,
-				inet_test_bit(RECVERR, sk));
-	...
-}
-
-with mptcp_getsockopt_v6() doing the same for inet6_test_bit(RECVERR6, sk).
-
-So if the subflow forwarding step and the sync-on-join masking were both
-deleted, would this test still pass?  Would it be more accurate to say the
-test covers the parent-socket set/get round trip, and to note that subflow
-propagation is not asserted?  IP_RECVERR_RFC4884 / IPV6_RECVERR_RFC4884 go
-through the same kernel paths and are also not touched here.
-
-> +	struct iovec iov = {
-> +		.iov_base = &(char){ 0 },
-> +		.iov_len = 1,
-> +	};
-> +	struct msghdr msg = {
-> +		.msg_iov = &iov,
-> +		.msg_iovlen = 1,
-> +	};
-> +	int one = 1, zero = 0, val = -1;
-> +	socklen_t s = sizeof(val);
-> +	int level, optname, r;
-> +
-> +	switch (pf) {
-> +	case AF_INET:
-> +		level = SOL_IP;
-> +		optname = IP_RECVERR;
-> +		break;
-> +	case AF_INET6:
-> +		level = SOL_IPV6;
-> +		optname = IPV6_RECVERR;
-> +		break;
-> +	default:
-> +		xerror("Unknown pf %d\n", pf);
-> +	}
-> +
-> +	r = setsockopt(fd, level, optname, &one, sizeof(one));
-> +	if (r) {
-> +		/* For older kernels not supporting IP(V6)_RECVERR yet */
-> +		if (errno == EOPNOTSUPP && !expect_all_features()) {
-> +			fprintf(stderr, "IP(V6)_RECVERR not supported, SKIP\n");
-> +			return;
-> +		}
-> +
-> +		die_perror("setsockopt IP(V6)_RECVERR on");
-> +	}
-> +
-> +	r = getsockopt(fd, level, optname, &val, &s);
-> +	if (r)
-> +		die_perror("getsockopt IP(V6)_RECVERR on");
-> +	if (s != sizeof(val) || val != one)
-> +		xerror("IP(V6)_RECVERR on mismatch val=%d len=%u", val, s);
-> +
-> +	r = recvmsg(fd, &msg, MSG_ERRQUEUE | MSG_DONTWAIT);
-> +	if (r != -1 || errno != EAGAIN)
-> +		xerror("expected empty errqueue to return EAGAIN, r=%d err=%d",
-> +		       r, errno);
-
-[Severity: Low]
-Can this check tell the errqueue path apart from the ordinary non-blocking
-empty receive queue path?
-
-The branch it aims at is:
-
-net/mptcp/protocol.c:mptcp_recvmsg() {
-	...
-	if (unlikely(flags & MSG_ERRQUEUE))
-		return inet_recv_error(sk, msg, len);
-	...
-}
-
-If that branch were gone, the normal receive loop in the same function
-would still return -EAGAIN for a connected socket with nothing queued:
-
-net/mptcp/protocol.c:mptcp_recvmsg() {
-	...
-		if (!timeo) {
-			copied = -EAGAIN;
-			break;
-		}
-	...
-}
-
-Since test_ip_recverr_sockopt() runs before connect_one_server() moves any
-payload, the data queue is empty by construction and MSG_DONTWAIT is set,
-so both paths return -1/EAGAIN.  Would something like checking that a
-queued TX timestamp is actually returned, or that the one byte data buffer
-is not consumed, make the assertion discriminating?
-
-> +
-> +	r = setsockopt(fd, level, optname, &zero, sizeof(zero));
-> +	if (r)
-> +		die_perror("setsockopt IP(V6)_RECVERR off");
-> +
-> +	val = -1;
-> +	s = sizeof(val);
-> +	r = getsockopt(fd, level, optname, &val, &s);
-> +	if (r)
-> +		die_perror("getsockopt IP(V6)_RECVERR off");
-> +	if (s != sizeof(val) || val != zero)
-> +		xerror("IP(V6)_RECVERR off mismatch val=%d len=%u", val, s);
-> +}
-> +
->  static int client(int pipefd)
->  {
->  	int fd = -1;
-> @@ -787,6 +856,7 @@ static int client(int pipefd)
->  	}
->  
->  	test_ip_tos_sockopt(fd);
-> +	test_ip_recverr_sockopt(fd);
->  
->  	connect_one_server(fd, pipefd);
-
-Since the option is switched back off here before connect_one_server()
-runs, no later part of the test can observe the option state on subflows
-either.  Was leaving RECVERR enabled for the rest of the run considered?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260918-net-next-mptcp-msg_errqueue-v1-0-dd77e1738248%40kernel.org
+Thx,
+-Vineet
