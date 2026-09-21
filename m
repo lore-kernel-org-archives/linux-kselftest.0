@@ -1,118 +1,211 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F037E4F7CC3;
-	Mon, 21 Sep 2026 18:38:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4AF84F7CC4;
+	Mon, 21 Sep 2026 18:39:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790015934; cv=none; b=D2O9xQRQgFKWcE9YJOgq97A/CaI6tdZKCVS0ZlMz7bZmi3/Jfya9DthnkCbYZclV11RsbD7KcpM1u2hIgpviS66WBqhnuxbmHRTZD2/9SY9B9HVGhz/fw7MoFONbdHWxYsVs6aOIiOCIFhvOq6Vgq/h5xvEr3x7xDleoSS0cU0A=
+	t=1790015956; cv=none; b=GNrfrBqxoM1ipdaiObxrjX2ATezpdBxVP6OhTaCiiRRAjYSiO7hvl+FunDxDT0s4BttKibHOOtm7PhsNoNl0C/6+BtOb257h9JfohiW9RLpDPu+EtHrW8A0tlpYKcpN5yedaqiRKH+ot4ybITq9mRPR5xyfUIjFpFvwRBaWawwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790015934; c=relaxed/simple;
-	bh=Noyd0EEusqu/CDY+RbelqvDQP/JFOUXCXQES3sWWJRo=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=EsIFfKBXVcffaUeZFsac+QA7uiV1QNTWYL0uT3LbWq02CtixtZzZgA/ubhlHecBkEsDDb/QoItpsbIucj8EKP5LoW9WzI6PU8u0SJgCXmh4iuBfoRrWjsFFEbsW8I2uG/JjzhsBxZofgBn4R9QiG7ch4l8GT58QJX+c3+Scz4f8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cEVufFPp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790015956; c=relaxed/simple;
+	bh=olsD80mMDlFuGYVeYchcMqcZveypPBx6KFTLIMfnjFI=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=EvkedZ+fCUGvsSGg2RhT1QbnPFf5/hyIuTvN7I+3y3d4ovSKIA4w7qSl7tEoGaHkefn5GwpB5kwt+98FnZ8XEy4seo0ncNwhuDSxYt70rsnR945h6G8qvrSVUmn8aYtDEjbrmG0v8U2FeCI09gcZTwYu8p4wO55g0TPnszPKI+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aKMS/rgL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cEVufFPp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 627D61F00893;
-	Mon, 21 Sep 2026 18:38:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aKMS/rgL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CFC61F000FF;
+	Mon, 21 Sep 2026 18:39:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790015932;
-	bh=LUWbowlO4gNIdL6pMhwXxrI74zwlVy2nH6gzhML1bVY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=cEVufFPphb7+oazOn5cIrLCU2rikqFCHwFGWySQB/MY0opTlmppEv8LvYt4hBT/Mb
-	 KqmLSBdOGankhEsgUbmXlEznxo1Ec+u6qdfvqaTVwLXGvfRFNQxHyesMR9er1n3ltk
-	 hT0HX2HGDzWO4ULn++1t3TSdDuk7U/mulPEKYxLN0Yhdtt1BJOCUOOsQN+me2umvKZ
-	 tG3K1xk5liym9lDg5yBkVevL8AcCk5vmhFUoSzRiQmLWp5wjZK92DEIM0UfEfWNONv
-	 Hrf2lHihzglE6XA9VXX06VF56Hq/z7Nw5gdTSTj8x5qXECL6UkgEtXp5FSWojxE6a8
-	 x7F+/9XsQJ8Dw==
-Content-Type: multipart/mixed; boundary="===============8806451118917275112=="
+	s=k20260515; t=1790015952;
+	bh=hmFoNOaYgnKI62IvYdNCaoJ9gU/3laqa9xZtEOHnT5Q=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=aKMS/rgLxGm5ThY4AIVMJokRbpuU/3jknVvjqsOFiz1uxZV6cYjx0vSqYmVC4/gNb
+	 GbmD0OKCefLz+HPb34xWKsofV9wwPuQ5+2DihSEcvz3WtnyGxy++vr1MoFgt0Brm4q
+	 0uV7gWkcifoiQbf+nPDLTRRMUoYe8wY0/aW19OfkJI4N5jEvUYEg39/9jX95FlTvG2
+	 noeOVI+Tj0h0L/tEHX6c0BlUBGy11e9ngI5kLEHQoy9J1Ageq0h7zQM251YgeYWGlp
+	 zW7+Iq9WC0MLiwqUTpqFObuFIr5WqUW7l8go6D4AXwNPGa6uFxlJuy2qrjLzKwdUST
+	 iIJikNwEiSmFw==
+Subject:
+ Re: [PATCH net-next 1/4] mptcp: support MSG_ERRQUEUE on the parent socket
+From: netdev-bot+sashiko@kernel.org
+To: matttbe@kernel.org
+Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ netdev@vger.kernel.org, mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+ devnexen@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org
+Date: Mon, 21 Sep 2026 18:39:11 +0000
+Message-ID: <179001595171.2160803.3670624686905872378@kernel.org>
+In-Reply-To:
+ <20260918-net-next-mptcp-msg_errqueue-v1-1-dd77e1738248@kernel.org>
+References:
+ <20260918-net-next-mptcp-msg_errqueue-v1-1-dd77e1738248@kernel.org>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5864c45ca5b86f0009ccba65489985cbff9e7e210bf9822aa4875fc027aec12a@mail.kernel.org>
-In-Reply-To: <20260921173910.90847-3-bestswngs@gmail.com>
-References: <20260921173910.90847-3-bestswngs@gmail.com>
-Subject: Re: [PATCH v4 2/2] selftests/bpf: cover stale CB after LWT IP encapsulation
-From: bot+bpf-ci@kernel.org
-To: bestswngs@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,shuah@kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org,xmei5@asu.edu,bestswngs@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 21 Sep 2026 18:38:49 +0000 (UTC)
 
---===============8806451118917275112==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-> index 5c5560d45c5b4..ef90dd8d4b87c 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
+Critical: 0 · High: 0 · Medium: 2 · Low: 0
+
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] The new error-queue splice is dead code for MPTCP-native data:
+  its only accepted input (SO_EE_ORIGIN_TIMESTAMPING skbs on a subflow…
+- [Medium] Forwarded TX timestamps expose per-subflow identifiers instead
+  of parent-socket byte-stream identifiers, breaking the…
+
+--
+
+mptcp: support MSG_ERRQUEUE on the parent socket
+
+This moves pending error skbs from each subflow's error queue onto the
+parent msk error queue at error-report time, keeping only
+SO_EE_ORIGIN_TIMESTAMPING events and dropping subflow ICMP errors.  It
+also makes mptcp_poll() report EPOLLERR when the parent error queue is
+non-empty, and drops the stale comment in front of the MSG_ERRQUEUE
+branch of mptcp_recvmsg().
+
+> diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+> index e89a69ab927c..15ae270ee6fd 100644
+> --- a/net/mptcp/protocol.c
+> +++ b/net/mptcp/protocol.c
 
 [ ... ]
 
-> @@ -739,3 +739,48 @@ void test_lwt_ip_encap_vxlan_ipv6(void)
->  {
->  	lwt_ip_encap_vxlan(IPV6_ENCAP);
+> @@ -919,21 +920,52 @@ static bool __mptcp_ofo_queue(struct mptcp_sock *msk)
+>  	return moved;
 >  }
-> +
-> +void test_lwt_ip_encap_stale_cb(void)
+>  
+> +static bool mptcp_errqueue_skb_forwardable(const struct sk_buff *skb)
 > +{
-
-[ ... ]
-
-> +	SYS_NOFAIL("ip netns exec %s ping -q -R -c 1 -W 1 -I veth1 %s >/dev/null 2>&1",
-> +		   ns1, IP4_ADDR_DST);
-> +	ASSERT_TRUE(skel->bss->stale_cb_seen, "stale_cb_seen");
-> +	ASSERT_TRUE(skel->bss->stale_cb_cleared, "stale_cb_cleared");
-
-Could the test confirm that the probe packet actually carries an IP option?
-
-Looking at ip_rcv_core() in net/ipv4/ip_input.c, IPCB(skb) is zeroed
-unconditionally on receive:
-
-  memset(IPCB(skb), 0, sizeof(struct inet_skb_parm));
-
-The opt.optlen and opt.rr fields are only written by ip_rcv_options(),
-which ip_rcv_finish_core() calls only when the IP header has options:
-
-  if (iph->ihl > 5) {
-      drop_reason = ip_rcv_options(skb, dev);
-
-If ping -R does not place a Record Route option on the wire (a ping
-implementation that accepts but ignores -R, an option stripped en route,
-or a non-iputils ping), the inner header has ihl == 5, IPCB(skb)->opt
-stays all-zero through the LWT run, and the fentry hook records
-stale_cb_cleared = true whether or not bpf_lwt_reset_cb() exists.
-
-The stale_cb_seen flag still becomes true, because the ICMP_TIME_EXCEEDED
-is produced by the TTL-one outer header the BPF program prepends and does
-not depend on options at all, so neither assertion catches the missing
-precondition and the test silently stops guarding the fix.
-
-Could a pre-encapsulation check record whether opt.optlen was non-zero,
-so the test fails loudly when the probe packet is not what it expects?
-For example, an fentry or fexit on bpf_lwt_push_ip_encap that reads
-IPCB(skb)->opt.optlen before the reset, then asserts that value was
-non-zero.
-
-> +
-> +out:
-> +	test_lwt_ip_encap__destroy(skel);
-> +	SYS_NOFAIL("ip netns del %s", ns1);
-> +	SYS_NOFAIL("ip netns del %s", ns2);
-> +	SYS_NOFAIL("ip netns del %s", ns3);
+> +	/* Subflow-level ICMP errors are dropped: the legacy RECVERR ABI
+> +	 * cannot convey their per-subflow peer identity.
+> +	 */
+> +	return SKB_EXT_ERR(skb)->ee.ee_origin == SO_EE_ORIGIN_TIMESTAMPING;
 > +}
+> +
+> +static bool __mptcp_subflow_splice_errqueue(struct sock *sk, struct sock *ssk)
+> +{
+> +	struct sk_buff *skb;
+> +	bool moved = false;
+> +
+> +	while ((skb = skb_dequeue(&ssk->sk_error_queue))) {
+
+[Severity: Medium]
+Is there anything today that can put a SO_EE_ORIGIN_TIMESTAMPING skb on a
+subflow's sk_error_queue?
+
+mptcp_errqueue_skb_forwardable() accepts only ee_origin ==
+SO_EE_ORIGIN_TIMESTAMPING, and the producers of those events
+(skb_tx_timestamp() in drivers, the SKBTX_SCHED_TSTAMP check in
+__dev_queue_xmit(), and tcp_ack_tstamp() -> __skb_tstamp_tx()) all key off
+per-skb state: skb_shinfo(skb)->tx_flags, skb_shinfo(skb)->tskey and
+TCP_SKB_CB(skb)->txstamp_ack.
+
+Those bits are set by tcp_tx_timestamp(), which is only reached from
+tcp_sendmsg_locked().  mptcp_sendmsg_frag() builds the subflow skbs itself:
+
+	skb = mptcp_alloc_tx_skb(sk, ssk, info->data_lock_held);
+	...
+	TCP_SKB_CB(skb)->end_seq += copy;
+
+so it never goes through tcp_sendmsg_locked() and never arms timestamping.
+The fastopen path is not an exception either, since
+mptcp_sendmsg_fastopen() calls tcp_sendmsg_fastopen() directly.  A
+"git grep -E 'tx_timestamp|tskey|txstamp_ack|tsflags' net/mptcp/" finds no
+arming site.
+
+If that reading is right, then __mptcp_subflow_splice_errqueue() always
+returns false for real traffic, and the commit message statement
+
+  "so poll() and recvmsg(MSG_ERRQUEUE) on the parent socket observe TX
+   timestamps through the standard inet ABI"
+
+does not hold yet: recvmsg(MSG_ERRQUEUE) on the parent still returns
+-EAGAIN.  Note that mptcp_setsockopt_sol_socket_timestamping() in
+net/mptcp/sockopt.c does accept SO_TIMESTAMPING_OLD/NEW and replicates it
+to every subflow via sock_set_timestamping(), so the configuration side
+advertises something the transmit side does not implement.
+
+The last patch in this series ("selftests: mptcp: cover IP_RECVERR sockopt
+propagation") acknowledges this, saying end-to-end errqueue delivery
+depends on subflow-side producers that are out of scope for the series.
+Could this commit message be reworded the same way, so it describes the
+plumbing rather than claiming the observable behaviour?
+
+> +		/* sock_queue_err_skb() re-homes skb->sk onto the parent and
+> +		 * charges sk_rmem_alloc, bounding the queue by sk_rcvbuf.
+> +		 */
+> +		if (!mptcp_errqueue_skb_forwardable(skb) ||
+> +		    sock_queue_err_skb(sk, skb)) {
+
+[Severity: Medium]
+Once producers do exist, will the forwarded ee_data still mean anything on
+the parent socket?
+
+__skb_complete_tx_timestamp() fills the identifier from the originating
+socket's counters:
+
+	if (READ_ONCE(sk->sk_tsflags) & SOF_TIMESTAMPING_OPT_ID) {
+		serr->ee.ee_data = skb_shinfo(skb)->tskey;
+		if (sk_is_tcp(sk))
+			serr->ee.ee_data -= atomic_read(&sk->sk_tskey);
+	}
+
+so ee_data is relative to the subflow's sk_tskey and TCP sequence space.
+mptcp_setsockopt_sol_socket_timestamping() enables timestamping on the msk
+and on each subflow separately, giving every subflow its own baseline.
+
+__mptcp_subflow_splice_errqueue() re-homes the skb without translating
+ee_data into the msk write_seq space.  With two or more subflows, does
+userspace reading MSG_ERRQUEUE on the parent then see duplicate or
+unrelated identifiers for one socket?  Documentation/networking/
+timestamping.rst describes SOF_TIMESTAMPING_OPT_ID as unique among
+outstanding timestamp requests for that socket, and byte-incrementing for
+stream sockets.
+
+Even with a single subflow the value is relative to the subflow's TCP
+sequence space rather than msk->write_seq.  Would remapping ee_data here
+require replacing the plain re-home rather than extending it later?
+
+> +			kfree_skb(skb);
+> +			continue;
+> +		}
+> +		moved = true;
+> +	}
+> +
+> +	return moved;
+> +}
+> +
 
 [ ... ]
 
+> @@ -4523,7 +4559,8 @@ static __poll_t mptcp_poll(struct file *file, struct socket *sock,
+>  
+>  	/* This barrier is coupled with smp_wmb() in __mptcp_error_report() */
+>  	smp_rmb();
+> -	if (READ_ONCE(sk->sk_err))
+> +	if (READ_ONCE(sk->sk_err) ||
+> +	    !skb_queue_empty_lockless(&sk->sk_error_queue))
+>  		mask |= EPOLLERR;
+>  
+>  	return mask;
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+With the splice unable to fire for MPTCP-native data, can this new
+sk_error_queue term ever become true through the path described in the
+commit message?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35634260486
---===============8806451118917275112==--
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260918-net-next-mptcp-msg_errqueue-v1-0-dd77e1738248%40kernel.org
