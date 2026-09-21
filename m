@@ -1,101 +1,135 @@
-Received: from mta1.migadu.com (out-9.mta1.migadu.com [95.215.58.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143BE472558
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 10:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C0746C82A;
+	Mon, 21 Sep 2026 10:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789985445; cv=none; b=bqxkhEsMEmddmyPtCEOXiOrU3B9S6QNwTO5yho+q7ih0TTqN52elWLTEFXStv6+8TumYE+Oc0t/2C0oo0Mm851Yz803UhOMbE23I3QCe9GkOocW5ycuRCJVd+9PLct6npz15yHuCSSx745E13bqWwjqBoV1jJLZFynqoaUpKfsU=
+	t=1789986391; cv=none; b=AAicBNpAEyCQMmh3nkY4SQddld1NJGs+AYXMG2PtRkq0leC1CJLEtUZ8e/4J6mztcANbU/RTWfXqbCxFithKmt9TV0mXVAs50Q10NRcJDRFuRcDzCkr5u5Pv+A6aAb343h93pO50j1Cq2iCRPZ6GmCioqA694d7iT8kUYVxdVZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789985445; c=relaxed/simple;
-	bh=0WEUwWA13h6lSIRRHugW7N81xLfWs7SnLHtINewqeBo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Mp9cNkPI6NhQtp6osUZ1KxCu0p5zIFoW8X96IjNqO29bfUJOOI6IutAC9qPIe75Bp3pymSBAXpXaWCmDzTqsBKiCpt6JD0HdRAnN6y1uo3y5bGpeVIkTTIGwhC7t6M9/IhjQsirZeNrWB5MviunNBNBqu6gk2A19ecZwV+q7Mwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hdhewLO8; arc=none smtp.client-ip=95.215.58.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789986391; c=relaxed/simple;
+	bh=4MYvMzW+eBCxyNeCV7pzyo8zAwP9qndGkWxb2VWBKoo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rrsTRx12gMqA0amFI5THmdiEPiwo0CWzHPC6t6Q3OctSBCdxWlF43Jx565ayOOpV55SP7NkmC/7I6X34+wzfEdK8889L6+5Z55xXLhv902uBGXfANOCDbEahF+eYVCMxTrJIc0aXt2Ztn9jyg2q6P32IMh2g0sgeHlXBtkjGsdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RaUbCJOk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hdhewLO8"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=0WEUwWA13h6lSIRRHugW7N81xLfWs7SnLHtINewqeBo=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789985441; v=1; x=1790590241;
- b=hdhewLO8IRIHObIEz8+0C9kBmser7+1cdmUfPOwOB3HAz7dt73431HNwews1PbNLVfusSj/B
- xJIlGH5fuZFXHpzzpNlAoBNQkkJL8cHKbcHXy0rZlTvnOn4f9tQAu1ILq5UAwn6aCb01ipY+GRW
- Ip5FJF01O2pwmFCFQmnhNlhc=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id cf336d2bb085442c;
-	Mon, 21 Sep 2026 10:10:41 +0000
-X-Mizu-Trace-ID: cf336d2bb085442c
-X-Migadu-Flow: FLOW_OUT
-From: Fuad Tabba <fuad.tabba@linux.dev>
-To: Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	kvmarm@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Vincent Donnefort <vdonnefort@google.com>,
-	Quentin Perret <qperret@google.com>,
-	Sebastian Ene <sebastianene@google.com>,
-	Hyunwoo Kim <imv4bel@gmail.com>,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	Fuad Tabba <tabba@google.com>
-Subject: [PATCH v2 2/2] KVM: arm64: selftests: Check SError is not pending after delivery
-Date: Mon, 21 Sep 2026 11:10:30 +0100
-Message-Id: <20260921101030.1231605-3-fuad.tabba@linux.dev>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20260921101030.1231605-1-fuad.tabba@linux.dev>
-References: <20260921101030.1231605-1-fuad.tabba@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RaUbCJOk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6DE91F000FF;
+	Mon, 21 Sep 2026 10:26:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789986389;
+	bh=nTyZyJijpdRj0X6CZpg9ECIQcR7z9LYrkbviRiCY0G4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=RaUbCJOkKLo4tajvGYl2aCqTQCY3jQWxoBsKIHV2ITHnHSBXC2/woloaFdCGmW1Mj
+	 dcqnBR/najbVBm0Qg+R1N7LTD78OeguoK+oRClpNLcd+DIrl2iwnxlSklyjNAgyFw7
+	 gyuQC7+WGA1FINXKOPRe7Z+J+rDNKexGnH/P62NTzygOtx0pF6lSf4Ou+0XADS1yuW
+	 CzTKi2rbMtTAQA7A64cF8mH/lnqIafIc2ZW/90Kuap8DxOePcQ3xYLkNQwwpt2acel
+	 HcpCSO93IhzDUtVvz4c0RiHvmXgVOTXNL8A8fSFTEdugmmj+Q6Zejcq7dDwz70vPJ9
+	 PmNoxsSt8U59g==
+Message-ID: <b51234d8-467b-47c4-9d94-82e589643859@kernel.org>
+Date: Mon, 21 Sep 2026 12:26:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 1/2] mm/gup_test: Track long-term pins per open file
+To: Richard Cheng <icheng@nvidia.com>, akpm@linux-foundation.org
+Cc: jgg@ziepe.ca, jhubbard@nvidia.com, peterx@redhat.com, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, ljs@kernel.org, liam@infradead.org,
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, kobak@nvidia.com,
+ kaihengf@nvidia.com, newtonl@nvidia.com, kristinc@nvidia.com
+References: <20260921094243.64698-1-icheng@nvidia.com>
+ <20260921094243.64698-2-icheng@nvidia.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260921094243.64698-2-icheng@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-test_serror() never looks at the vCPU after the SError is delivered, so
-a stale pending SError goes unnoticed. Read the vCPU events back and
-check the SError is no longer pending.
+On 9/21/26 11:42, Richard Cheng wrote:
+> Long-term pin state is currently global, allowing one gup_test file
+> descriptor to block, stop, or release pins owned by another client.
+> 
+> Allocate the pin state for each open file and store it in
+> file->private_data. Serialize START, READ, and STOP with the per-open
+> mutex, and release only the pages owned by that file.
+> 
+> Descriptors duplicated through dup() or fork() continue sharing state
+> because they reference the same struct file. Keep the ioctl ABI and
+> same-file duplicate START behavior unchanged.
+> 
+> Reviewed-by: Koba Ko <kobak@nvidia.com>
+> Signed-off-by: Richard Cheng <icheng@nvidia.com>
 
-Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
----
- tools/testing/selftests/kvm/arm64/external_aborts.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+commit 534b19bbb67717eea2272573bc0ff7ba4ba109c1
+Author: David Hildenbrand (Arm) <david@kernel.org>
+Date:   Mon Aug 10 13:31:14 2026 +0200
 
-diff --git a/tools/testing/selftests/kvm/arm64/external_aborts.c b/tools/testing/selftests/kvm/arm64/external_aborts.c
-index d8fe17a6cc592..b276a4998a92c 100644
---- a/tools/testing/selftests/kvm/arm64/external_aborts.c
-+++ b/tools/testing/selftests/kvm/arm64/external_aborts.c
-@@ -239,6 +239,7 @@ static void test_serror_guest(void)
- 
- static void test_serror(void)
- {
-+	struct kvm_vcpu_events events;
- 	struct kvm_vcpu *vcpu;
- 	struct kvm_vm *vm = vm_create_with_dabt_handler(&vcpu, test_serror_guest,
- 							unexpected_dabt_handler);
-@@ -247,6 +248,11 @@ static void test_serror(void)
- 
- 	vcpu_inject_serror(vcpu);
- 	vcpu_run_expect_done(vcpu);
-+
-+	vcpu_events_get(vcpu, &events);
-+	TEST_ASSERT(!events.exception.serror_pending,
-+		    "SError still pending after the guest took it");
-+
- 	kvm_vm_free(vm);
- }
- 
+    mm/gup_test: keep longterm pin state per file
+
+    The pin longterm test currently stores its data globally, shared among
+    multiple concurrent users of the interface (multiple open file descriptors
+    -> multiple "struct file"'s).  That makes the gup_test interface
+    problematic to use concurrently: two users, such as concurrent selftest
+    runs, can interfere with the same longterm pin state.
+
+    While this has not been observed as a problem so far in practice, let's
+    just handle it cleanly.  There could be a way to trigger selftest failures
+    by e.g., running the cow.c and gup_longerm.c selftests concurrently, but
+    we usually run them sequentially.  Let's add a "Fixes" tag to be safe, but
+    not need to CC stable.
+
+Which is already upstream.
+
 -- 
-2.39.5
+Cheers,
 
+David
