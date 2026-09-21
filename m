@@ -1,64 +1,64 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-pj2-f19.google.com (mail-pj2-f19.google.com [74.125.227.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A07EC48F855
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 11:17:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E75E48BD26
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 11:18:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789989460; cv=none; b=a4VJNDl78oUVj0DYZeChoyStboNrietuEjcLByu4GfQUz2va/LcX6RtQquCZ3NPPoMtG+8UTTYtp3Wiwf9e5aiCDKuu5+j1dgDUt7SM45kSWy4wwplOoXtJQX082eM0PFv/HasT+p7foWTpcQRj0z/x8z4L0O1MvuzVug8QXuxA=
+	t=1789989482; cv=none; b=XmAf5tWHu8+wtDdVnT/g3KI9n0Sf6eE92/Ubpo1qrAg018Ehol0N0ZDbkzmLRQMgDhcZXNrGyqYx1nj0xMdPpthvrOvZuhpbNrhMTM2dotkTeodf9KN5nCmeheGc5E3e5HcxVdt0a3Iwj1z8QruJhmiROMuosQjHgO4vu7z4aqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789989460; c=relaxed/simple;
-	bh=hOV/NyTnPxdCBe6XO/1GKFUexB1rAl0f0lQQCm4ePvE=;
+	s=arc-20240116; t=1789989482; c=relaxed/simple;
+	bh=l9cbhsR6oIcRYl+I2g1jCIa/WhsXA/dARjMt3kDigl0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sGaR3uqsoNl/BQfC4+mj3xFUuO8PR0gPxInEDY+aNLVkNladk061F6KZgHqN+eH6N/6YTjfG6WAnPZGGpbrP+d1UU0uETld7wr/NlSF01Xd5haKl0rtiWNhuGZxVn29rfFBvZJmgLz806buThuk1t/+lX1pTWucPYH4dDyOYBHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=YtarrOsx; arc=none smtp.client-ip=74.125.227.141
+	 MIME-Version; b=N5wHJJOrk7UvEFhHDyiWklWYOC6SpnnDmbf9T7gu5vCcpF+vS1WZdmcAn6WwOBtulqNix6AZJwLj7u3E4NS5STU/K/tpywYQizwxE6Iar48FfPMRCL7W88owyA+GtNxPvkno3CNs4BEzivT38XlWj3V+JMvhprpjOj0wXuN96ao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=jenZNvHq; arc=none smtp.client-ip=74.125.227.147
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="YtarrOsx"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d90ba1d807so34014855ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 04:17:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="jenZNvHq"
+Received: by mail-pj2-f19.google.com with SMTP id d9443c01a7336-2db18fe433fso24493195ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 04:18:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1789989458; x=1790594258; darn=vger.kernel.org;
+        d=bytedance.com; s=google; t=1789989480; x=1790594280; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=s0eHZBxWOds1UYdEnuOhccIJeDRWzv84kT8tp0myDIA=;
-        b=YtarrOsx3K+S90zlvSL7PpvSj9CEc5Sqm4snKBOiCNTFS5AzbPaGp4ZP/jVS8pd87s
-         UHXLz77rt0KEsrZpj54kYRm0kzLfZcmzJOEteryslGkPBaW+nmuUPYHZlCVBDsFX3DHm
-         jzwwDEW1NLcDUCXxHm2w+2xynUZUP9eqZkmnSHacsOT9gzr00cjrOFR8NbqWnQH6Me45
-         nMwzMLuqKj/KwAjRCmAuT2PLY3CxRN/1WaQe27ocl5kzSx39e4IeEnBdWnJTmRYHpUYR
-         VIZOKD5EpWmbXzunlK/y/jiS2zHVqy9irr2dlN8vw+CANSQ2NS446mHolOqQ+0ANaB9R
-         +tFw==
+        bh=jS32Dx5IynGZ/Y/2aGGAGztAdcoBdPlUNApcd4RXZUY=;
+        b=jenZNvHqVOq7BaieRqOS48emO4JyrhHQYVA7mvNKIVsRb9xdgaFAuGWgOJ0jtPM/fz
+         CDWx2AzGibPiBkf061LwHxisZe3a5er5mhYD5O/SkFdRSrTQqb+AlSC1MeXgsrudt8tZ
+         l6WDHrPlKNKPQs2rOrrbq26ULBR5NrniVkaLoyCqASd3DcQlJnmQzTJUtK1irRf9uykt
+         yFJhseZWPbkOgJEc9Wk+LIi18irvlwcoDUgo+bYys+cXGDemJseATnaJzPjN5slYCA4b
+         zG6l/cBs/OoyR3mN0q3LhlPWvP8uN29mfufGnxdQQYjEM3qnt1eaKONzCK26SMzNZ6IR
+         xHkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789989458; x=1790594258;
+        d=1e100.net; s=20260707; t=1789989480; x=1790594280;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=s0eHZBxWOds1UYdEnuOhccIJeDRWzv84kT8tp0myDIA=;
-        b=g/Roi1o2vP4rG2Z1zndySNwmv+zh1CR/KQ6ERzjUDiTfO2kukB4RWoZmkwZYQFiqib
-         11a/QFhYmhIu2dE1jA8hb+eeOxSy1T3STOTCge8rbD8q5RLDUv89JMelQaV+28vi+KA7
-         jn/EsDRuBUh6J4+poAH+I/0/y3mh1AMm9289qGA44BIVRYjENSE8zg0CfEPpaH1Sea94
-         6UQCKDI4dDYDKqGZnxqCsCgeMWAJIEENoBHhhbrolwuZFo3QujGmI+tWf8nm8jUmB/Mz
-         4dmTpg3ZmKQrnoBDpO8Mc7nQLAMuV1vnx7YRKrR2A/PP2Mr5eiAzctwPwt9C/0cQJmzT
-         t3YQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzDkGV6Pg971912EQ4wshiecA4uTGU3PrSScunOqR15xPK22Sqty+mYN7TEdfBP51bVYTN2YglfEUsWw0GpgnU=@vger.kernel.org
-X-Gm-Message-State: AFuF++kUHkFW7eRUj5aJpGjTinpz2B+qDf0tGgbJUUAnXoAYO9kgZ+Jh
-	DQTq1tej/BCStrHs0tFNUMuZl764RlTqEA14C2xhPD1zjieX3btfulARb5Xv76iLTjI=
-X-Gm-Gg: AYBFou3I7H3e/RKTofA7sxXM+d8o6dRhzmYby2Ky6a/pTwiDvcMYYVKZv8Se2P949lD
-	DElx7drp9lnefUxyyX+my2JXTKqbeloc6zPC4ljGNCVD+X+HxReJpIfdToaRlvWAq6tOiAQKCaL
-	IfkekGatEmDQG3GhmX3e2ytwEU2o3i39iU4hgESW0ZF7AU2MQ7yz/HM+7EKL9MZ8lmKNKB75JBF
-	DJPmIEu2i0sdTJx9lLwCDzFriyuqH+ghGLCiLmKca03j28ve/1eGCCaEJiYwFVa6hcWDsG42tkU
-	Fw0TzfhObxP8ANVdEXktOf260Mn5yQfgRDEhFl4u9LoH0azga+ARb7ib4GhiISjIx+Z+HO9h7O6
-	iZfVhbuQ+R6M6dnzBdG5w4pWXcjn9kBms+e/k9wkDIUg1riSC2dIBWBXsN1Sd6qBRKSj3eR/6b5
-	K1guJtKL4UYqY+IRhMBSNw8cRp7XQ8OWyjrxps4y2dOe+RqFP9qdGELUMLPxEXi0RW3eFBW7Sly
-	dvHwfXYSui9YO+siNFNmynR04tjpwjcsGJy
-X-Received: by 2002:a17:903:2349:b0:2dd:c100:a5de with SMTP id d9443c01a7336-2ddc100a706mr90374885ad.50.1789989457717;
-        Mon, 21 Sep 2026 04:17:37 -0700 (PDT)
+        bh=jS32Dx5IynGZ/Y/2aGGAGztAdcoBdPlUNApcd4RXZUY=;
+        b=VOYPemUEhAUoirXuFq7jlxBqFoJQIHDuZ407A6xpFdbYUw3kEH3MRmxgMeeT7nh+Lr
+         w0YXNIhz4ksNZDMD9MqHMD6Q1v39YtNBJONCce7guVCISiVcXfoeFGJUZfWIqsZ5piSZ
+         AVqFazBpM/jS9NO2ma2+XwB4w3cmaCAc+X51CfYIp8dBgXTPiWJi0MDIFH0vmJYraF4W
+         ZHHOj5zwCdXoYqU4CPFTKE9mqN1S92lyTtU0neiwKuXC3lVapzifV+9wPv7fgOXkbzZt
+         OslGyqFQjmY9Nio1juRRKU16nVMhYhwqz9lEG0ayQGWmPHYWkwg8o6XnsXS50UqYnGYr
+         HL+g==
+X-Forwarded-Encrypted: i=1; AKwUvBwnxjgcIpSi5F0RvxDrTFjJ0bDTwVIZ1lzCBdTSNolhIi2iZmUyriX67MUtsvoHVVe1WK709eFRbb9CYEWNJEM=@vger.kernel.org
+X-Gm-Message-State: AFuF++nWZ04f2RL6V37g0QzNePpKleKeJVLJGWR/vcpkWkDuE7KH62hv
+	PHjtOXnr1kd32GRTspuBrjSRdil+n5Hvi79cUXiWNUX3DNnL0i/tnzQ3IXW7tnO3Zwo=
+X-Gm-Gg: AYBFou2/nT07LRwt51lrO8l4vQh/GEuy8zmsVm0eKCfz1zqXLwi75eXF4h8gXP3Me0t
+	EyP+HpSJ8szeo1q1XVgNuQKsb0Ct5e7Fd9glXHr5resOlo5yXEjLXwhBv9BHt7hUZCHk74eKp5Q
+	rlvbjkqZZc/PiTFG3cQPycZp4bPyu0eR+Qi7tzbx4RRRBXV1b14Iyk2QRPdihE8WMNMSZMDs+uT
+	0+T6wOL/tGqFlz5sMSSKI/m9I+71GmTEnB98X+mREYnmYzAACA9mqNo5vFWedh+SkKYlj0gBqDo
+	RaCMt+pHBk2jlDyWHUdZ+uXWIylyueO+PMjfPY8fPtBq/CzyVMs61xedrMSEGq1aM29mbyRU9b5
+	0VCfaJEubH3lD8el9mRpnqOeiSWTPW2sX5rPpTwQf3ZT72OffrPuFSbScjmqW7lZkbHGp190bJ+
+	CE0fcGPTu1PBp6jDh+AdkTZd1YAjTnmFJ0c9poe6tTAk41X81SJVwPLSZASCgZYXLq3ppfEvIcU
+	oPYqIztKSMWStGueVUuhrw7iRcy2SNjQOE=
+X-Received: by 2002:a17:903:1112:b0:2dd:c053:c20a with SMTP id d9443c01a7336-2ddc053c2a1mr103690755ad.38.1789989479599;
+        Mon, 21 Sep 2026 04:17:59 -0700 (PDT)
 Received: from FJ7FR2JRQ3.bytedance.net ([240e:694:e20:401::8])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ddc17ba651sm31831125ad.53.2026.09.21.04.17.15
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ddc17ba651sm31831125ad.53.2026.09.21.04.17.38
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 21 Sep 2026 04:17:37 -0700 (PDT)
+        Mon, 21 Sep 2026 04:17:59 -0700 (PDT)
 From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
 To: Paul Walmsley <pjw@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
@@ -96,9 +96,9 @@ Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
-Subject: [PATCH v10 RESEND 5/9] riscv: mm: avoid enabling interrupts for nofault page faults
-Date: Mon, 21 Sep 2026 19:15:02 +0800
-Message-ID: <4bc18f96053a7859a3ff33747479b05a9e42a706.1789974241.git.zhangzhanpeng.jasper@bytedance.com>
+Subject: [PATCH v10 RESEND 6/9] perf: RISC-V: support callchains with SSE delivery
+Date: Mon, 21 Sep 2026 19:15:03 +0800
+Message-ID: <270f3bcd3a9933c8be59492ae4d7c6ff2414d7d7.1789974241.git.zhangzhanpeng.jasper@bytedance.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <cover.1789974241.git.zhangzhanpeng.jasper@bytedance.com>
 References: <cover.1789974241.git.zhangzhanpeng.jasper@bytedance.com>
@@ -110,54 +110,240 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-RISC-V enables interrupts in handle_page_fault() before checking whether
-the fault occurred with fault handling disabled. A nofault access from an
-atomic context can therefore run tracepoints and open an interrupt window
-before reaching the exception-table fixup.
+PMU overflow delivery through SSE enters Linux with a synthetic supervisor
+context on a dedicated event stack. The perf unwinder must use the context
+interrupted by the overflow rather than treating the SSE handler frame as
+the sampled frame.
 
-Handle an exception-table entry before entering the generic fault path when
-fault handling is disabled. Also keep interrupts disabled until such a
-fault has been resolved.
+Use the interrupted pt_regs published by the RISC-V SSE entry path. Walk a
+kernel callchain only when the interrupted PC, SP, and frame pointer are
+consistent with the current task stack. For sensitive entry windows and
+IRQ stacks whose bounds cannot be proven, retain the interrupted PC without
+following an unsafe frame chain.
 
-This makes RISC-V consistent with the expectation that an in-atomic
-nofault access does not enter the normal fault-handling path. It also
-removes one source of re-entry when perf sampling is delivered through an
-SBI Supervisor Software Event (SSE).
+User callchains continue through the existing nofault RISC-V user unwinder.
+If hstatus.SPV says the interrupted context was a guest, do not interpret
+the guest stack through the host address space.
 
+DWARF callchains additionally copy a raw user stack. The generic
+arch_perf_out_copy_user() implementation can take an exception-table
+handled fault when a source page is not resident. Repeated nested faults
+from the SSE handler can corrupt the interrupted kernel context under load.
+
+Provide an SSE-specific RISC-V copy path. Verify that the active page table
+belongs to current, use fast-only GUP to acquire each resident source page
+without falling back to a faulting slow path, and copy through the kernel
+mapping while holding the page reference. Stop at the first unavailable
+page and preserve perf's existing truncated-user-stack semantics. Keep the
+generic in-atomic user copy unchanged outside an SSE handler.
+
+Susheng Yang reported this failure with perf callchain workloads.
+
+Reported-by: Susheng Yang <yang.susheng@zte.com.cn>
 Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
 ---
- arch/riscv/mm/fault.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ arch/riscv/include/asm/perf_event.h |  10 ++
+ arch/riscv/kernel/perf_callchain.c  | 142 ++++++++++++++++++++++++++++
+ 2 files changed, 152 insertions(+)
 
-diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-index 04ed6f8acae4..520495420462 100644
---- a/arch/riscv/mm/fault.c
-+++ b/arch/riscv/mm/fault.c
-@@ -294,6 +294,13 @@ void handle_page_fault(struct pt_regs *regs)
- 	if (kprobe_page_fault(regs, cause))
- 		return;
- 
-+	/*
-+	 * Nofault accesses must be resolved through the exception table before
-+	 * entering the generic fault path or enabling interrupts.
-+	 */
-+	if (unlikely(faulthandler_disabled()) && fixup_exception(regs))
-+		return;
+diff --git a/arch/riscv/include/asm/perf_event.h b/arch/riscv/include/asm/perf_event.h
+index bcc928fd3785..ddc404794751 100644
+--- a/arch/riscv/include/asm/perf_event.h
++++ b/arch/riscv/include/asm/perf_event.h
+@@ -18,6 +18,16 @@
+ 	(regs)->sp = current_stack_pointer; \
+ 	(regs)->status = SR_PP; \
+ }
 +
- 	if (user_mode(regs))
- 		trace_page_fault_user(addr, regs, cause);
- 	else
-@@ -314,8 +321,8 @@ void handle_page_fault(struct pt_regs *regs)
++#ifdef CONFIG_RISCV_SBI_SSE
++/*
++ * Raw user-stack sampling can run in the NMI-like SSE context. Route it
++ * through an implementation that does not fault on a non-resident page.
++ */
++unsigned long riscv_perf_out_copy_user(void *dst, const void *src,
++				       unsigned long n);
++#define arch_perf_out_copy_user riscv_perf_out_copy_user
++#endif
+ #endif
+ 
+ #endif /* _ASM_RISCV_PERF_EVENT_H */
+diff --git a/arch/riscv/kernel/perf_callchain.c b/arch/riscv/kernel/perf_callchain.c
+index b465bc9eb870..ec75689c7aec 100644
+--- a/arch/riscv/kernel/perf_callchain.c
++++ b/arch/riscv/kernel/perf_callchain.c
+@@ -1,9 +1,15 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (C) 2019 Hangzhou C-SKY Microsystems co.,ltd. */
+ 
++#include <linux/kallsyms.h>
++#include <linux/mm.h>
+ #include <linux/perf_event.h>
++#include <linux/sched/task_stack.h>
++#include <linux/thread_info.h>
+ #include <linux/uaccess.h>
+ 
++#include <asm/csr.h>
++#include <asm/sse.h>
+ #include <asm/stacktrace.h>
+ 
+ static bool fill_callchain(void *entry, unsigned long pc)
+@@ -11,6 +17,128 @@ static bool fill_callchain(void *entry, unsigned long pc)
+ 	return perf_callchain_store(entry, pc) == 0;
+ }
+ 
++#ifdef CONFIG_RISCV_SBI_SSE
++static bool sse_addr_on_task_stack(unsigned long addr, unsigned long size)
++{
++	unsigned long end = addr + size;
++	unsigned long stack;
++
++	if (end < addr)
++		return false;
++
++	stack = (unsigned long)task_stack_page(current);
++	if (addr >= stack && end <= stack + THREAD_SIZE)
++		return true;
++
++	return false;
++}
++
++static bool sse_kernel_regs_safe(struct pt_regs *regs)
++{
++	unsigned long fp = frame_pointer(regs);
++	unsigned long pc = instruction_pointer(regs);
++	unsigned long sp = user_stack_pointer(regs);
++
++	if (!__kernel_text_address(pc))
++		return false;
++	if (!sse_addr_on_task_stack(sp, sizeof(unsigned long)))
++		return false;
++	if (fp < sizeof(struct stackframe))
++		return false;
++
++	return sse_addr_on_task_stack(fp - sizeof(struct stackframe),
++				      sizeof(struct stackframe));
++}
++
++static bool sse_callchain_is_guest(const struct riscv_sse_interrupted_context *context)
++{
++	return context && (context->hstatus & HSTATUS_SPV);
++}
++
++static bool sse_callchain_kernel(struct perf_callchain_entry_ctx *entry,
++				 struct pt_regs *regs)
++{
++	const struct riscv_sse_interrupted_context *context;
++	unsigned long pc;
++
++	context = riscv_sse_get_interrupted_context();
++	if (!context || context->regs != regs)
++		return false;
++
++	/* A guest stack cannot be walked using the host kernel address space. */
++	if (sse_callchain_is_guest(context))
++		return true;
++
++	if (user_mode(regs))
++		return true;
++
++	if (sse_kernel_regs_safe(regs)) {
++		walk_stackframe(NULL, regs, fill_callchain, entry);
++		return true;
++	}
++
++	/*
++	 * Keep the sample useful for sensitive entry paths and IRQ stacks. The
++	 * generic walker does not take explicit IRQ stack bounds, and its
++	 * THREAD_SIZE alignment assumption fails for non-vmapped IRQ stacks.
++	 * Conservatively avoid walking IRQ stacks in every configuration.
++	 */
++	pc = instruction_pointer(regs);
++	if (__kernel_text_address(pc))
++		perf_callchain_store(entry, pc);
++
++	return true;
++}
++
++unsigned long riscv_perf_out_copy_user(void *dst, const void *src,
++				       unsigned long n)
++{
++	unsigned long addr = (unsigned long)src;
++	unsigned long copied = 0;
++
++	/* Keep the generic fast path unchanged outside an SSE handler. */
++	if (!riscv_sse_get_interrupted_context()) {
++		unsigned long ret;
++
++		pagefault_disable();
++		ret = __copy_from_user_inatomic(dst, src, n);
++		pagefault_enable();
++		return ret;
++	}
++
++	if (!access_ok(src, n))
++		return n;
++
++	/* Do not sample user memory through an unrelated active page table. */
++	if (!current->mm ||
++	    (csr_read(CSR_SATP) & SATP_PPN) != virt_to_pfn(current->mm->pgd))
++		return n;
++
++	while (copied < n) {
++		unsigned long offset = offset_in_page(addr);
++		unsigned long chunk = min(n - copied, PAGE_SIZE - offset);
++		struct page *page;
++
++		/*
++		 * Fast-only GUP cannot fault. This follows perf_virt_to_phys():
++		 * local interrupts remain disabled throughout SSE processing, so a
++		 * concurrent unmap cannot complete its TLB teardown before this
++		 * temporary reference is put.
++		 */
++		if (!get_user_page_fast_only(addr, 0, &page))
++			break;
++
++		memcpy((char *)dst + copied,
++		       (char *)page_address(page) + offset, chunk);
++		put_page(page);
++		addr += chunk;
++		copied += chunk;
++	}
++
++	return n - copied;
++}
++#endif
++
+ /*
+  * This will be called when the target is in user mode
+  * This function will only be called when we use
+@@ -28,6 +156,15 @@ static bool fill_callchain(void *entry, unsigned long pc)
+ void perf_callchain_user(struct perf_callchain_entry_ctx *entry,
+ 			 struct pt_regs *regs)
+ {
++#ifdef CONFIG_RISCV_SBI_SSE
++	const struct riscv_sse_interrupted_context *context;
++
++	context = riscv_sse_get_interrupted_context();
++	/* A guest stack cannot be walked using the host address space. */
++	if (sse_callchain_is_guest(context))
++		return;
++#endif
++
+ 	if (perf_guest_state()) {
+ 		/* TODO: We don't support guest os callchain now */
  		return;
- 	}
- 
--	/* Enable interrupts if they were enabled in the parent context. */
--	if (!regs_irqs_disabled(regs))
-+	/* Do not open an interrupt window before a nofault fixup completes. */
-+	if (!regs_irqs_disabled(regs) && !faulthandler_disabled())
- 		local_irq_enable();
- 
- 	/*
+@@ -39,6 +176,11 @@ void perf_callchain_user(struct perf_callchain_entry_ctx *entry,
+ void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry,
+ 			   struct pt_regs *regs)
+ {
++#ifdef CONFIG_RISCV_SBI_SSE
++	if (sse_callchain_kernel(entry, regs))
++		return;
++#endif
++
+ 	if (perf_guest_state()) {
+ 		/* TODO: We don't support guest os callchain now */
+ 		return;
 -- 
 2.50.1 (Apple Git-155)
 
