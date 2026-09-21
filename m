@@ -1,188 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx1.secunet.com (mx1.secunet.com [62.96.220.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8563038B7DD;
-	Mon, 21 Sep 2026 20:43:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F784503EB;
+	Mon, 21 Sep 2026 20:44:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.96.220.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790023414; cv=none; b=bdoR5jGNU4PXBEhdDq00JuoJP6X1b85EW8xk2Mkhf2ui2kH2y5iyscl/zQY9FzOhrH2wZ47lKlvC49JNcTesJqGGO1HHJ7iCo0UByrRmMgEtwHAZcKgtCsNsrnqZ97JttZIMbbhdN8kYbSgxEfnFQd6Ps3RcQo6GbczxgPpvn44=
+	t=1790023457; cv=none; b=BygQmGDi/L7qICNW53DNcmfsi39OIJDbG8iH6JogWcn40Yx2vSjieutwUzvZy3dZIjtsLLfwgDIb2v2cP4pV7NwNwXpA2hv903KgmVdI2N9nxc4nsaGTXihjsTiTKigl4LL3E4340OJ+RAbo5WMn2z6atjGtWpS2h85HkK0h57g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790023414; c=relaxed/simple;
-	bh=3fFQQN6o6m4HWxTZ2sl8r4/MT/MqmNk8A/zyOMOiB5o=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NgplpgmOyUn7dUTpTBwNEuYpUOPoY6uza3IT9ulJDDnbVzBIhCR4TeWN/kNjwmxJAMffVultNhcULlc2aDZvICzEyCAT7aPqKCvjmo8ksSDjjSxi3p0Iz6OMxpZioNtg2WTfVfhf5Gk2r8cr9fG15YqgliTYDFIbFO6qtBWByp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q6haGyOa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790023457; c=relaxed/simple;
+	bh=HEo+Lcv75KIs4rA/NDwUKYr9VPacFbG3F8xAMXmGR9M=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cLoLQlupRTRgGCG0TowRr2MKCsT/Fz7NOe5yYjKkMeGVZdQ/bptL3/5/Br2UTKZkJV9Y/YrXkRcpqQe5/K5nEKTEiUIdCwYtJlaRaCXdGIMAvPBQADghlR6IPzhxVmr93bfIOEGJ27LZvt8yXZIvjh/ew0tYg0t1ha+5FGsAsYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=secunet.com; spf=pass smtp.mailfrom=secunet.com; dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b=IQfRiSxB; arc=none smtp.client-ip=62.96.220.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=secunet.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=secunet.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q6haGyOa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A88FD1F00898;
-	Mon, 21 Sep 2026 20:43:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790023411;
-	bh=pS99QdqXM9fD9Yde8MA8sDCriuJMW4gQvlk5TvA48Sw=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Q6haGyOarywvUNL+X7Y2ad6c8G9kW20U93aNKiaYp++rcs/pFd2LoLq1Z1UJrpzei
-	 FEpWjQWxA1Ww83RkP0YZ9RE4/WE6F5qgi69lXNbb2RqwlKpoVH6SqqpT3ExFwc2oTe
-	 KZl2YuPLK2qTJt+2olg2Tee0MT3JVaxdbFzS/jjxbMDWFfzM2tt8C//kxSyWLcBYSK
-	 OHb3UUkQWySquZtitIGzMEQfk6CSTnZ5K4TMSWu/w1pNfyVh9m/jMbGp8LKaV3Q+x6
-	 1V7c+fTOpzj2wAvz9Fb66lf+Cpangwh2wHTvHxlZf0qw9umhPFncfqeoXT+O06Qjmx
-	 wNlkRQwJNlasg==
-Subject: Re: [PATCH net-next v6 3/3] net/sched: pie: correct tc_pie_xstats
- field documentation
-From: netdev-bot+sashiko@kernel.org
-To: hemendranaik@gmail.com
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, jiri@resnulli.us,
- jhs@mojatatu.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, vishy0777@gmail.com, tahiliani@nitk.edu.in
-Date: Mon, 21 Sep 2026 20:43:30 +0000
-Message-ID: <179002341024.2160803.17066887333412185241@kernel.org>
-In-Reply-To: <20260917204225.275251-4-hemendranaik@gmail.com>
-References: <20260917204225.275251-4-hemendranaik@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b="IQfRiSxB"
+Received: from localhost (localhost [127.0.0.1])
+	by mx1.secunet.com (Postfix) with ESMTP id D70912067A;
+	Mon, 21 Sep 2026 22:44:11 +0200 (CEST)
+X-Virus-Scanned: by secunet
+X-Amavis-Alert: BAD HEADER SECTION, Improper use of control character (char 0D
+ hex): Subject: ...exact mark/mask match for control-plane [...]
+Received: from mx1.secunet.com ([127.0.0.1])
+ by localhost (mx1.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WX-B62JvpzLq; Mon, 21 Sep 2026 22:44:11 +0200 (CEST)
+Received: from EXCH-02.secunet.de (rl2.secunet.de [10.32.0.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.secunet.com (Postfix) with ESMTPS id F2469201CC;
+	Mon, 21 Sep 2026 22:44:10 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.secunet.com F2469201CC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=secunet.com;
+	s=202301; t=1790023451;
+	bh=Lgo7aP4gB1qvCNznUU83/hkY0FDuJeUCL/p6FBp+QuE=;
+	h=From:To:CC:Subject:Date:From;
+	b=IQfRiSxBdnyJyn27OINdld9BsWVSfDrSBNuspMNYiMtznmaP9DU4eFTaKxVVYRo58
+	 uLJd2g1SIwbScNPASzD1CtQTCOhC4oh2QsJKoDV8pXElY0K90OuOUgL6sra9lHVnZo
+	 aPwuXGYkFXEtb6h4nIZJuBsxy0nvtBE8mIHvkxfHTpV0IOHHh/GXM1e5BSIdOrKYVr
+	 LqVkIk1ICpl8enmFsP7dIDkgpONhmG47Sgb24xk1Ix8u7QoIodSix7a5aJfxbzup7z
+	 3F59osW3Lk8GLSyT/t/AAt+5dIQOUmwzbrg92Z9Po9WEp7EEqDNZaxMhVd1m6PGNMl
+	 Yh+xLHcvb3bqQ==
+Received: from moon.secunet.de (172.18.149.1) by EXCH-02.secunet.de
+ (10.32.0.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Mon, 21 Sep
+ 2026 22:44:09 +0200
+From: Antony Antony <antony.antony@secunet.com>
+To: Antony Antony <antony.antony@secunet.com>, Steffen Klassert
+	<steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>, Jamal Hadi Salim
+	<hadi@cyberus.ca>, Shuah Khan <shuah@kernel.org>
+CC: Sabrina Dubroca <sd@queasysnail.net>, <netdev@vger.kernel.org>, Yan Yan
+	<evitayan@google.com>, Tobias Brunner <tobias@strongswan.org>, Florian
+ Westphal <fw@strlen.de>, <linux-kselftest@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, Sashiko <sashiko-bot@kernel.org>
+Subject: [PATCH ipsec v3 0/6] xfrm: state: exact mark/mask match for control-plane SA lookups
+Date: Mon, 21 Sep 2026 22:43:59 +0200
+Message-ID: <migrate-state-fixes-v3-0-836125bb53dd@secunet.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: migrate-state-fixes-063ee0342611
+X-Mailer: b4 0.16-dev
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: EXCH-04.secunet.de (10.32.0.184) To EXCH-02.secunet.de
+ (10.32.0.172)
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+While looking into a XFRM_MSG_MIGRATE_STATE issue reported by Sashiko,
+we found the underlying problem generalizes: xfrm allows multiple SAs
+to coexist for the same (SPI, daddr, proto) differing only in mark,
+and every netlink method that resolves "which SA" - xfrm get_sa(),
+del_sa(), update, get_ae, new_ae, expire, migrate - uses the same
+wildcard mark match the data path needs. A broader-mask SA can
+silently shadow a more specific one:
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 1
+  # ip xfrm state add ... spi 0x1000 mark 1 mask 1 (SA_target)
+  # ip xfrm state add ... spi 0x1000 mark 0 mask 0
+    (SA_decoy, catch-all, added after -> bucket head)
+  # ip xfrm state delete dst ... proto esp spi 0x1000 mark 1 mask 1
+    -> deletes SA_decoy; SA_target survives, untouched
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+xfrm policy had the same bug, fixed in commit 4f47e8ab6ab7
+("xfrm: policy: match with both mark and mask on user interfaces").
 
-- [Medium] The patch now documents tc_pie_xstats.avg_dq_rate
-  unconditionally as "bytes/second", but pie_dump_stats()…
-- [Medium] The patch now documents tc_pie_xstats.delay as "current delay
-  in microseconds" with no range caveat, but pie_dump_stats()…
-- [Low] Missing `Fixes:` tag.
+Netlink lookups use an exact mark/mask match except for UPDSA; the
+wildcard match stays for the data path and state_add only.
+This series applies that fix across every affected method,
+not just XFRM_MSG_MIGRATE_STATE.
 
---
+This series is not fixing likely isusses PF_KEY. As it
+is no more receiving non critical fixes.
 
-net/sched: pie: correct tc_pie_xstats field documentation
+---
+v2->v3: mark match use only values and no mask in exact lookup, fix typo
 
-This updates the comments on struct tc_pie_xstats so the documented units
-for the delay and avg_dq_rate fields match what pie_dump_stats() actually
-exports.  It is described as documentation-only, touching
-include/uapi/linux/pkt_sched.h alone.
+- Link to v2: https://lore.kernel.org/all/migrate-state-fixes-v2-0-c3e2767f0d96@secunet.com/
+v1->v2: few more wildcard mark check reported by sashiko and Yan
+      - keep wildcard match in xfrm_state_update() (UPDSA)
 
-A few questions about the newly documented contract below.
+- Link to v1: https://patch.msgid.link/migrate-state-fixes-v0-8-a69e8637ba3b@secunet.com
 
-> diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
-> index 9c0c9787f0c32..969fa30efae7f 100644
-> --- a/include/uapi/linux/pkt_sched.h
-> +++ b/include/uapi/linux/pkt_sched.h
-> @@ -920,9 +920,9 @@ enum {
->  
->  struct tc_pie_xstats {
->  	__u64 prob;			/* current probability */
-> -	__u32 delay;			/* current delay in ms */
-> +	__u32 delay;			/* current delay in microseconds */
+---
+Antony Antony (6):
+      xfrm: state: exact mark/mask match for SPI-keyed control-plane SA lookups
+      xfrm: fix use-after-free of migrated state in xfrm_do_migrate_state()
+      xfrm: fix hw offload state leak on xfrm_do_migrate_state() error path
+      xfrm: include mark in MIGRATE_STATE SA collision check
+      xfrm: pass extack through to xfrm_init_replay() from xfrm_init_state()
+      docs: xfrm: include mark in XFRM_MSG_MIGRATE_STATE EEXIST tuple
 
-[Severity: Medium]
-Is the microsecond description accurate for all values the kernel can
-report here?  pie_dump_stats() in net/sched/sch_pie.c truncates the
-nanosecond value to u32 before dividing:
+ .../networking/xfrm/xfrm_migrate_state.rst         | 23 +++--
+ include/net/xfrm.h                                 |  7 ++
+ net/xfrm/xfrm_state.c                              | 98 ++++++++++++++++++----
+ net/xfrm/xfrm_user.c                               | 51 ++++++-----
+ 4 files changed, 134 insertions(+), 45 deletions(-)
+---
+base-commit: c9151088f1674fd29ff26a20f5fc687acf53a2f0
+change-id: migrate-state-fixes-063ee0342611
 
-net/sched/sch_pie.c:pie_dump_stats() {
-	struct tc_pie_xstats st = {
-		.prob		= READ_ONCE(q->vars.prob) << BITS_PER_BYTE,
-		.delay		= ((u32)PSCHED_TICKS2NS(READ_ONCE(q->vars.qdelay))) /
-				   NSEC_PER_USEC,
-	...
-}
+Best regards,
+--  
+Antony Antony <antony.antony@secunet.com>
 
-PSCHED_TICKS2NS() in include/net/pkt_sched.h is:
-
-#define PSCHED_TICKS2NS(x)		((s64)(x) << PSCHED_SHIFT)
-
-so the (u32) cast discards the high bits, and a qdelay above roughly
-4.295 s wraps modulo 2^32 ns.  A 5 s sojourn time would be reported as
-(5e9 mod 2^32) / 1000 = 705032 us rather than 5000000 us, even though the
-__u32 field can hold up to about 4294 s.  Delays in that range look
-reachable with a large user-settable TCA_PIE_LIMIT or in ECN mode on a
-low-rate link.
-
-The peer producer of the identically documented field does the division on
-the full 64-bit value:
-
-net/sched/sch_fq_pie.c:fq_pie_dump_class_stats() {
-	...
-		xstats.class_stats.delay =
-			div_u64(PSCHED_TICKS2NS(READ_ONCE(flow->vars.qdelay)),
-				NSEC_PER_USEC);
-	...
-}
-
-The preceding patch in this series, "net/sched: sch_fq_pie: add per-flow
-statistics via class ops", calls out this same truncation ("which wrapped
-for sojourn times above ~4.295 s") and fixes it only in sch_fq_pie.c.
-
-Would it make sense to convert sch_pie.c to div_u64() in the same series so
-the two ABI producers agree with the comment being added here?
-
->  	__u32 avg_dq_rate;		/* current average dq_rate in
-> -					 * bits/pie_time
-> +					 * bytes/second
->  					 */
-
-[Severity: Medium]
-Does the bytes/second wording hold on 32-bit kernels?  pie_dump_stats()
-does the scaling without widening:
-
-net/sched/sch_pie.c:pie_dump_stats() {
-	...
-	/* unscale and return dq_rate in bytes per sec */
-	if (st.dq_rate_estimating)
-		st.avg_dq_rate = READ_ONCE(q->vars.avg_dq_rate) *
-				 (PSCHED_TICKS_PER_SEC) >> PIE_SCALE;
-	...
-}
-
-q->vars.avg_dq_rate is u32 (include/net/pie.h) and PSCHED_TICKS_PER_SEC is
-
-#define PSCHED_TICKS_PER_SEC		PSCHED_NS2TICKS(NSEC_PER_SEC)
-
-which is 15625000 of type long.  On ILP32 both operands stay 32-bit, so the
-product wraps once avg_dq_rate exceeds 4294967295 / 15625000, about 274,
-i.e. a real drain rate above roughly 16.8 MB/s.  With an internal
-avg_dq_rate of 512 the expected export is 512 * 15625000 >> 8 = 31250000
-bytes/s, which fits __u32, but the value actually dumped is
-(512 * 15625000 mod 2^32) >> 8 = 14472784.
-
-sch_fq_pie.c widens before scaling:
-
-net/sched/sch_fq_pie.c:fq_pie_dump_class_stats() {
-	...
-			xstats.class_stats.avg_dq_rate =
-				((u64)READ_ONCE(flow->vars.avg_dq_rate)
-				* PSCHED_TICKS_PER_SEC) >> PIE_SCALE;
-	...
-}
-
-The earlier patch in this series states it "widen[s] avg_dq_rate to u64
-before scaling it by PSCHED_TICKS_PER_SEC", but that widening is still
-missing in sch_pie.c while this patch asserts the bytes/second contract for
-it.  Could the same (u64) cast be added to pie_dump_stats()?
-
-[Severity: Low]
-This isn't a bug, but should this carry a Fixes: tag?  The wrong units in
-struct tc_pie_xstats date back to the original PIE submission: commit
-d4b36210c2e6 ("net: pkt_sched: PIE AQM scheme") added both the header
-comments claiming ms and bits/pie_time and the pie_dump_stats() code that
-already exported microseconds and "dq_rate in bytes per sec".  A
-
-Fixes: d4b36210c2e6 ("net: pkt_sched: PIE AQM scheme")
-
-line would record where the user-facing units first went wrong.
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260917204225.275251-1-hemendranaik%40gmail.com
