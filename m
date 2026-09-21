@@ -1,251 +1,107 @@
-Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F574E9C2F
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 17:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA914D7955
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 18:20:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790012402; cv=none; b=SkgiEZH5ll6rC1MR/vcrJZtv8FPr4/Ee5nQhryh+nTKCuXVwPAsoxIiuZXgwVddbwqx9MU5E7YjtiTGTmEiZVN576mOL0hJ8T0wPlFoIC5dbNo4P23sAQ/nidMejSl1hSHGTDQZJBwEU3528K5zxSbNsHFE4P2ltZEm6AD2XXwI=
+	t=1790014846; cv=none; b=DaEC3lJJc82oFWqJw3mnAfabhHxwWNxBZkmHix5Dfrzi6Qf8sJmkDaN+Vl4GoaayNOF8oIbB7XN0jmTBKO3fWogKO1M54mwmG61dUO1F7ippEEstRkXZ/lIE2vfKxwVm9v4Zl1UWjyeZisIpbzU3drRdYXRKbwAmCr2nxn/n1C0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790012402; c=relaxed/simple;
-	bh=G6MYpOzFS9oaQMkxPkHjP9bTWZdWzUL4Wm5DCp+oCjw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G3k2JYZUvqT6/P5xcDBUjav8K+6aVfAVB09OhcE10JjOxbMIMdRjSHNaM8x3J99JT13bj985zd9cSq1KrfjJ98osWX6xFq1cjjWYwctS4pluB3909vWxZGNjzG3aLNpIOHhP0eIeBLBEoR7F7TO5nBiZHwU5bFFrhq/9wWybFqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kZaRz6wc; arc=none smtp.client-ip=74.125.228.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790014846; c=relaxed/simple;
+	bh=ifh18PFLwUc4WCVqv2bBQrWNPjGyex+455kxpBAX05w=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=OiHX3+mkzKM/D+9ru2nwUf9LcRPa5FbGg7eGk5Dmes7jjHU0jQIX0HFhSo4K1reVDm9MpcUtXxcQd5ff++qIAFZUW04mxoKYQVTIBx9HdVNWIKJXjhaYR4Vj5O0BcCzNX+Vuy9MfXkz4AZXJFbdsT2LkjLf9FwKei3iwY1ssFZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lroddLYu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kZaRz6wc"
-Received: by mail-pz2-f40.google.com with SMTP id d2e1a72fcca58-87ac7657a24so527410b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 10:40:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790012400; x=1790617200; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=9eJ58EFzv+KbS2BjBvEgqqhI69SkKi+v+DcklYWB+/8=;
-        b=kZaRz6wcdpyS4w1YAvdChMzOmhQ6BOMMlkGfeeFkipwbEuEhKnVR2aEPoYIrYzlx0g
-         mzkqgWiZXKVpvSl6eUw0EW7g6dDx6yIWonhhmC6Vk1YmQiHh2my84aIFh4D1MifC4Xcs
-         W3nppw7NJdFhSXQNN/LrLFXC8k1D3KLBUg+ktJHlUr9eXRJ8hFaXTfXEM/KYNXquFR4J
-         bcngKiI8NURVLWoQbZpRl8dgxP2yxbkp77tJT1n263lRZZ4wlwhgxc5ziz0BZuSXnuyV
-         C0JaeCc9m7Yxc88r+u5UJlriKGO6qDk+YR24LWCq37h64z4aq3KzT69jRxvqKh1A015O
-         1vcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790012400; x=1790617200;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9eJ58EFzv+KbS2BjBvEgqqhI69SkKi+v+DcklYWB+/8=;
-        b=hqSw3Tshs2y28u+O6dMT/n7IdILtAC6H4FgoI6hSQ5jstIVHZIZ7K8FGfw6w7Th4IN
-         NxUO3UTLnRr4rhkS6IoZ4tfQoq1uQNXxBjw8VtgbeckHqNTrhvTk4jrIfU0sEZ9wKKSs
-         uP2AMjdgJrvg8v4ge0t0mZFXAYqEgd484h/JYmHg0KZkWyriU1ZaRrCsYI5UPud6gQSW
-         zHCo03vwiYgB0KK6+MstI4Ea87SEmYyMDu/UuRCov76AvE4lTibONMXZaOGKULay5DJu
-         Gc8NuWxQ5Yhdr16OAfebvWa3Islg+sQy+0JUzhfplETgUUAqchHQjyjo8ZtfVUuRb61B
-         8XdQ==
-X-Forwarded-Encrypted: i=1; AKwUvBy7zDr6O3uXb24Y1EeJd1HQ28TMHaI4Xcz4hVJ/sq+3Tt6VXGVLjITIxiHXzoShnYsq1NSpBT1fE6ufLoKngJM=@vger.kernel.org
-X-Gm-Message-State: AFuF++lrqYWDNQwqCyHtWOJIJMWeZ/d97laZBhOKqKf+RgK5sHGoIcnl
-	ug7N5xR2xo2lSkkGSFQSRMHk16yZFSlWTUb4RpBFdwXLQaiqC2OBWzR0
-X-Gm-Gg: AYBFou0Y2OECqhqHOhsyCA8egtrLPpk9eC4htLzK3o+DLIjjTEki44iw4qNb93r6QwG
-	NI/K20pQLgHWtS3kGhz8OxhERTaGlUrnqyBaFQhWYoQ4QiZDHu5kBp7l61b5kllrmr5XqlpmHa6
-	ZHORsikt6JzcpeOKh0w97Lt/ULvXLuSv+s0c12ZNizJrPK1yl9MgeIu2VUfPyBcmUcW/ZHKG9mW
-	qoMe3+enINPp2Y31w0Xy0by4qyZDq0LiZYvndBbHk8g4G76VMZi/KiaCPgbyN+W4He11OL+5wlt
-	eIRcxRgHU9awrZB6kmOmNDohd1QWavdPbDCAEsfDmpbDZiJIrzHjvcfqZqR9XN7/2hw+uDcLCuc
-	ub77HbveM/6ZL6d/in+6lML5dzqEhWsryk1r2LAl8ystevpzdu//TdWhE4qPzvgvhmoxTRciohz
-	T6GKo1EIdX3y0CMTNPjfZ+2WhUJFDAbf7uoVAz6VjE/eCr83t3n2A4uExm2jVawtn+3MCrHO6YC
-	98BkK7NgQ2Ejo2A6CTa1lJn9tTK54l7
-X-Received: by 2002:a05:6a20:439f:b0:3d1:af47:5f80 with SMTP id adf61e73a8af0-3dd8c405d09mr19804538637.11.1790012399706;
-        Mon, 21 Sep 2026 10:39:59 -0700 (PDT)
-Received: from 192.168.50.3 ([198.176.50.208])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc72af0955esm3986985a12.32.2026.09.21.10.39.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 10:39:59 -0700 (PDT)
-From: Weiming Shi <bestswngs@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Xiang Mei <xmei5@asu.edu>,
-	Weiming Shi <bestswngs@gmail.com>
-Subject: [PATCH v4 2/2] selftests/bpf: cover stale CB after LWT IP encapsulation
-Date: Tue, 22 Sep 2026 01:39:10 +0800
-Message-ID: <20260921173910.90847-3-bestswngs@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260921173910.90847-1-bestswngs@gmail.com>
-References: <20260921173910.90847-1-bestswngs@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lroddLYu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6138D1F000FF;
+	Mon, 21 Sep 2026 18:20:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790014844;
+	bh=N0Tv6GtH2poAXrq2dIuS3JYXFBy+lolP4AzgrJRISDw=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=lroddLYucoDSkSHjPVrg8A7BG4sD+XAjet1Py2MB6kzG830oTg+mVMGjhBkB2P/ah
+	 q6TZid1x19ub82H0bVOdua5GhsjsLjAceGq8nIO+AVxsXydnVshOy7YRN03VGMNnGn
+	 RqG7QmeEO4GM5QrgX0G0yXL8o+zQh/pNQWFBLTFdDV+3bjpx4DzOjizYGmaImipsvU
+	 KWBPEtXuWfcGabMqaRet5T5D72MsqXYCBOlWNVYT8lfhOIHgWix4rlUMaO5Ox/pi+m
+	 zM8seh5+8m1a+5B9UATXe1D1yjkLJD7D0OTEgPnUgbQvV6ol2RGvoZdDx1xbdpJHBk
+	 ZL45y+tEh4vgg==
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 6D26BF4006A;
+	Mon, 21 Sep 2026 14:20:43 -0400 (EDT)
+Received: from phl-imap-15 ([10.202.2.104])
+  by phl-compute-10.internal (MEProxy); Mon, 21 Sep 2026 14:20:43 -0400
+X-ME-Sender: <xms:e3WxaiVteI8Brz-90pXijnDlZi5r1GzzrrA3wLDtYP43uM_ifyI7oA>
+    <xme:e3WxapaKANhexH-YsWSPhkc67c0TrKBtQDHl4G0M13Pqg97_RIPLjfYrw723f6AYQ
+    qOTqk6KRBV9fqrr2wBMocnYKf9Nj5gGMmwXfrXEy0QN6TMxO27hiJQ>
+X-ME-Proxy-Cause: dmFkZTGw5IEz9ggBveE4LY+gshD7KmdQ9CNoGOIiAKUXwQdPUcbM2DfqLEN4kMN2ftK/3K
+    ITJ2vDxLVOVTzhDlQ1NOzhzqdJiRFu9/zIaBAMhqhI3pzJWClerUy92+Lu3dKeEsPbQVpD
+    cigEtx//snUetUjF2Z4fYwLPGJB+wbCKwNFDGZsJ47KbIMNgQA7uvi7xQrlgFG6rJbd4HE
+    uX5jlWyCZr/D3uCxOmkLUiqKU0Bfm6BrzGiKnGj9N9qGdWdHSOWfgfNLMtYy+0l+k1yWI7
+    WXpNCwJyOREMa39gvhr+qWdtLAdnTLv07WVQK2DsBKj+pGcF9Hzm3b5mep9OU5sbCqiunw
+    q5h84pmgBUySL8KNwxuj0b0jEz5ndWjl9mkhyABQWjtulwxNstRe8dvXuYNQBxdOVgnfZZ
+    LXrs7uWf+FQWUevVsoVS2mHI47zmxhiNMeN1PVwfuIXKVY+qW3dD9/qRH3lD4UrNrHkM2Z
+    OlqhyD3DfNbJgILYZ+sC7kn2HqzPXffDRE8Fyg1aQXYqWXY3PrC8thwYdeo5aeWYFyE7NT
+    tNqG9Yg8ntwuaJR8HwVYBJ5ZSWowTMX36RhFVh430xHhhi4dlWzN3yieFBpNzbyJnmS7ge
+    bNZkIykOrt0/XX4NTIC/ZMrws1g8WhxFjPQGjx16jJTd13ZhV5L8mrX4tGJQ
+X-ME-Proxy: <xmx:e3WxatXZdaR4PO0JrKtf_WGvOtmU7Yy5FQW-W7FCdL4JDXswufXrJw>
+    <xmx:e3WxaqIEC-bS5lhJhwnKbwgJcxcR4t5oyV1EYJBqQ2FrvEoUCpvZxA>
+    <xmx:e3Wxat292A2buvQesPqWbfpV47wP_4XOCfi9p81JMMZqBpnvs33zJA>
+    <xmx:e3WxanJmDn7mWfQ7EK3Aek35XHLctu6XF7cx-TrOQhk3Ats-zohrSQ>
+    <xmx:e3WxaojiYUWHXk-DAQjqTpQohexXwLXyHkwWuXImohcgkYurygU7MbtJ>
+Feedback-ID: ifa6e4810:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 4A898780075; Mon, 21 Sep 2026 14:20:43 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: AYcrnN9msr83
+Date: Mon, 21 Sep 2026 14:20:14 -0400
+From: "Chuck Lever" <cel@kernel.org>
+To: "Jeff Layton" <jlayton@kernel.org>
+Cc: NeilBrown <neil@brown.name>, "Olga Kornievskaia" <okorniev@redhat.com>,
+ "Dai Ngo" <Dai.Ngo@oracle.com>, "Tom Talpey" <tom@talpey.com>,
+ "Shuah Khan" <shuah@kernel.org>, linux-nfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Message-Id: <bc472084-1e3e-40bb-aade-6fd7aefaed4b@slotpi15m67>
+In-Reply-To: <20260921-nfsd-per-net-mutex-v1-8-4a7287f6504c@kernel.org>
+References: <20260921-nfsd-per-net-mutex-v1-0-4a7287f6504c@kernel.org>
+ <20260921-nfsd-per-net-mutex-v1-8-4a7287f6504c@kernel.org>
+Subject: Re: [PATCH 8/8] selftests/nfsd: add a cross-namespace control-plane soak
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Add compact regression coverage to the existing LWT IP encapsulation
-test. Send an IPv4 ping with a Record Route option through an ingress LWT
-program which prepends a TTL-one IPv4 header, then observe __icmp_send()
-with fentry and verify that the restored protocol control block no longer
-contains the inner header's cached option offsets.
+On Mon, Sep 21, 2026, Jeff Layton wrote:
+> ---
+>  tools/testing/selftests/nfsd/Makefile             |   1 +
+>  tools/testing/selftests/nfsd/config               |   6 +
+>  tools/testing/selftests/nfsd/nfsd_netns_isolation | Bin 0 -> 49192 bytes
+>  tools/testing/selftests/nfsd/nfsd_netns_stress    | Bin 0 -> 39232 bytes
+>  tools/testing/selftests/nfsd/nfsd_netns_stress.c  | 572 ++++++++++++++++++++++
+>  tools/testing/selftests/nfsd/settings             |   2 +-
+>  6 files changed, 580 insertions(+), 1 deletion(-)
 
-Read ctx->cb[0] in the LWT program so the test exercises
-bpf_prog_run_save_cb()'s save/restore path before the post-run check.
+Hi Jeff,
 
-Link: https://lore.kernel.org/bpf/DLKB3UXOH0IS.1UL8NV9HSJFXG@gmail.com/
-Signed-off-by: Weiming Shi <bestswngs@gmail.com>
----
- .../selftests/bpf/prog_tests/lwt_ip_encap.c   | 45 ++++++++++++++++++
- .../selftests/bpf/progs/test_lwt_ip_encap.c   | 47 +++++++++++++++++++
- 2 files changed, 92 insertions(+)
+Did you intend to commit the nfsd_netns_isolation and nfsd_netns_stress
+binaries?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-index 39e8a3b8b6af..14ba33eaeb96 100644
---- a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-+++ b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-@@ -686,3 +686,48 @@ void test_lwt_ip_encap_vxlan_ipv6(void)
- {
- 	lwt_ip_encap_vxlan(IPV6_ENCAP);
- }
-+
-+void test_lwt_ip_encap_stale_cb(void)
-+{
-+	char ns1[NETNS_NAME_SIZE] = NETNS_BASE "-1-";
-+	char ns2[NETNS_NAME_SIZE] = NETNS_BASE "-2-";
-+	char ns3[NETNS_NAME_SIZE] = NETNS_BASE "-3-";
-+	struct test_lwt_ip_encap *skel = NULL;
-+
-+	if (!ASSERT_OK(create_ns(ns1, NETNS_NAME_SIZE), "create ns1"))
-+		goto out;
-+	if (!ASSERT_OK(create_ns(ns2, NETNS_NAME_SIZE), "create ns2"))
-+		goto out;
-+	if (!ASSERT_OK(create_ns(ns3, NETNS_NAME_SIZE), "create ns3"))
-+		goto out;
-+	if (!ASSERT_OK(setup_network(ns1, ns2, ns3, ""), "setup network"))
-+		goto out;
-+
-+	skel = test_lwt_ip_encap__open();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		goto out;
-+	bpf_program__set_autoload(skel->progs.bpf_lwt_encap_gre, false);
-+	bpf_program__set_autoload(skel->progs.bpf_lwt_encap_gre6, false);
-+	bpf_program__set_autoload(skel->progs.bpf_lwt_encap_vxlan, false);
-+	bpf_program__set_autoload(skel->progs.bpf_lwt_encap_vxlan6, false);
-+	bpf_program__set_autoload(skel->progs.bpf_lwt_encap_stale, false);
-+	if (!ASSERT_OK(test_lwt_ip_encap__load(skel), "load"))
-+		goto out;
-+	if (!ASSERT_OK(test_lwt_ip_encap__attach(skel), "attach"))
-+		goto out;
-+
-+	SYS(out, "ip -n %s route replace %s/32 encap bpf in obj %s sec encap_stale dev veth3",
-+	    ns2, IP4_ADDR_DST, BPF_FILE);
-+	skel->bss->stale_cb_seen = false;
-+	skel->bss->stale_cb_cleared = false;
-+	SYS_NOFAIL("ip netns exec %s ping -q -R -c 1 -W 1 -I veth1 %s >/dev/null 2>&1",
-+		   ns1, IP4_ADDR_DST);
-+	ASSERT_TRUE(skel->bss->stale_cb_seen, "stale_cb_seen");
-+	ASSERT_TRUE(skel->bss->stale_cb_cleared, "stale_cb_cleared");
-+
-+out:
-+	test_lwt_ip_encap__destroy(skel);
-+	SYS_NOFAIL("ip netns del %s", ns1);
-+	SYS_NOFAIL("ip netns del %s", ns2);
-+	SYS_NOFAIL("ip netns del %s", ns3);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c b/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-index 4a934fccf8f5..8b57c7fb7fa8 100644
---- a/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-+++ b/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "vmlinux.h"
- #include <string.h>
-+#include <bpf/bpf_core_read.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
- #include <bpf/bpf_tracing.h>
-@@ -10,6 +11,8 @@ struct grehdr {
- 	__be16 protocol;
- };
- 
-+#define ICMP_TIME_EXCEEDED 11
-+
- SEC("encap_gre")
- int bpf_lwt_encap_gre(struct __sk_buff *skb)
- {
-@@ -80,6 +83,29 @@ int bpf_lwt_encap_gre6(struct __sk_buff *skb)
- 	return BPF_LWT_REROUTE;
- }
- 
-+SEC("encap_stale")
-+int bpf_lwt_encap_stale(struct __sk_buff *skb)
-+{
-+	struct iphdr iph = {};
-+
-+	/* Exercise CB restore before post-run invalidation. */
-+	if (skb->cb[0])
-+		return BPF_DROP;
-+
-+	iph.version = 4;
-+	iph.ihl = 5;
-+	iph.ttl = 1;
-+	iph.protocol = IPPROTO_IPIP;
-+	iph.tot_len = bpf_htons(skb->len + sizeof(iph));
-+	iph.saddr = bpf_htonl(0xac100264); /* 172.16.2.100 */
-+	iph.daddr = bpf_htonl(0xac100464); /* 172.16.4.100 */
-+
-+	if (bpf_lwt_push_encap(skb, BPF_LWT_ENCAP_IP, &iph, sizeof(iph)))
-+		return BPF_DROP;
-+
-+	return BPF_OK;
-+}
-+
- #define VXLAN_PORT  4789
- #define VXLAN_FLAGS 0x08000000
- #define VXLAN_VNI   1
-@@ -194,6 +220,27 @@ volatile const int tgt_ip_version;
- __u16 transport_hdr = 0;
- __u16 network_hdr = 0;
- bool fexit_triggered = false;
-+bool stale_cb_cleared = false;
-+bool stale_cb_seen = false;
-+
-+SEC("fentry/__icmp_send")
-+int BPF_PROG(fentry_icmp_send, struct sk_buff *skb, int type, int code,
-+	     __be32 info, const struct inet_skb_parm *parm)
-+{
-+	struct iphdr *iph;
-+
-+	if (type != ICMP_TIME_EXCEEDED)
-+		return 0;
-+
-+	iph = (void *)BPF_CORE_READ(skb, head) + BPF_CORE_READ(skb, network_header);
-+	if (BPF_CORE_READ(iph, daddr) != bpf_htonl(0xac100464))
-+		return 0;
-+
-+	stale_cb_seen = true;
-+	stale_cb_cleared = !BPF_CORE_READ(parm, opt.optlen) &&
-+			   !BPF_CORE_READ(parm, opt.rr);
-+	return 0;
-+}
- 
- SEC("?fexit/bpf_lwt_push_ip_encap")
- int BPF_PROG(fexit_lwt_push_ip_encap, struct sk_buff *skb, void *hdr, u32 len, bool ingress,
+
+> diff --git a/tools/testing/selftests/nfsd/Makefile b/tools/testing/selftests/nfsd/Makefile
+> index 2b7c44c3fb00..b29bf642c0ad 100644
+> --- a/tools/testing/selftests/nfsd/Makefile
+> +++ b/tools/testing/selftests/nfsd/Makefile
+> @@ -3,5 +3,6 @@ CFLAGS += $(KHDR_INCLUDES) -Wall
+>
+>  TEST_GEN_PROGS := nfsd_netlink_listener
+>  TEST_GEN_PROGS += nfsd_netns_isolation
+> +TEST_GEN_PROGS += nfsd_netns_stress
+>
+>  include ../lib.mk
+
 -- 
-2.55.0
-
+Chuck Lever (Come to NFS bake-a-thon! https://nfsv4bat.org)
