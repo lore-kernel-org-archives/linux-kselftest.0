@@ -1,47 +1,47 @@
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012038.outbound.protection.outlook.com [52.101.48.38])
+Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012018.outbound.protection.outlook.com [52.101.48.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3302B46EF75;
-	Mon, 21 Sep 2026 09:43:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50CA4749C1;
+	Mon, 21 Sep 2026 09:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789983782; cv=fail; b=ldUJAK0cbx/u38crksE986Z3FaohoK7DV1/m0Xwow/bgo+qn5JSuVh3PLXgzVIXmyWLdpRFQkh8PMrBA4ta0hR03tTGN3UUE7pAbyVb08SwEIT+ee31PZs3ymiV66p9HSlAhFeIUnl80NdHGHhIbHchmDScsRfdeUw5NX18ePAQ=
+	t=1789983789; cv=fail; b=CBiMqM83knTpK3UTDOCiKDBN920AU8NFqMpFkSOj4ZEzhGI5ke8xTGB7t+3sEt3uM2RDADKokW5zB82OF/8xrNKt+29szpj8aAtRUXW5sD9lyRU+r5CpJzDBRWl324gEA8JQQT5m70vhhWGt+/lafkJYfCRW97VIBRbtGqsSqRU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789983782; c=relaxed/simple;
-	bh=SHIIZIaxbxffiPRh9YHTS2IoR6vbgvShVuwkakjg3nA=;
+	s=arc-20240116; t=1789983789; c=relaxed/simple;
+	bh=gVq2xsAAxozScnPNFvv2jK2LsBAwUmf5ogNU3XkXm4Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KhJh1H8+/H9wNrtwkpvqqHpd2Vjkc7Ut5IMQLTtGZLAJD560B+bS+VabtN5RM9nW4m2Gnk6houWtr+gQqxbPpHSPUvTXQj1FPA1QnX3EINSuFIZ7QtYkmTBvXXgJm9Y6Gxdfkv2+z8qmWgQ13TFjERlJhgovqPzC0TLI3netDRk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=NU4DlasR; arc=fail smtp.client-ip=52.101.48.38
+	 Content-Type:MIME-Version; b=b+MgpZfycT7AeIUslr+6CZnR8ifoFnDXHz9Q+2WUN961fKdcX8q1R11UansTTtXA+BC/DNhsDCKy4v/d7NYxor3Z7j8E/b6rK+k/hxovivVBEc+K0H5TRwR6N8kbY4017/ctv5SI9dykvXW/kuNL3R/Jr4p9V2FmETuHhlrd/qI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=baPHJOHA; arc=fail smtp.client-ip=52.101.48.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="NU4DlasR"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="baPHJOHA"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=omJHQjpZPe3VIGqbjMTA7WrokK8nwW0sI9ltsgEo0yNeg2aWRVn40F/alSwT1y7hAqzKCmLwcRwTu10uBR3MWkjPmKxeRuaEJn7TOijV41Vekmc/YuArZE7iT9E5I7S4pcEfsNJtIrpcjPUh9xCDHahVpCaHiJaL5ssQQPpUGyaO9Kxsg8oa4S1R0cG6NFDK95htOFyh5/TTNOr/5bfu+7dgp+Sdsx5cRldHzGItkdRBF/9Tgs16dC9MOLwlu1/XtIDyZFw2G11Xe2hAY1bq1ONQeHOHu7BkHoy9dPeOS5e+T7o726d8wVbHUB4X2htoLcFeL9vXpOwhp7hnrYhUJw==
+ b=yeJ3CP60lVByTm8V778E7jZ86mY8UdTAieHX+iYzBWRbooL6e3IYcxdM3pHAkh7CkACeeULYEGktdTZc/LmN/5owEKhYspcPvxFD/aiHaSDtAtHXUFRit23+y/KViXir4T2sp8KIrqZIHxI6Vayv6us/5Xf2RxnCLYo6QIOw8wirhVrAfBFsrb2Kz45JwWdhIYOf+SC7vDrsrxlnQ+HMGn7D4uy6xUk8t2MAvjEYKEVAbRVeMqfbVIygrVRaWT5JNSusTtBmXTov4UBW7+YdCu0D9xA9gQa1rv5sf0766bkrSHJh4skOUKiZZJ8KQPb/WTTv5bq2pFYgsm/0a/eSrQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8bP4dyaFq/MBjFyeK1+sF4xLpS8TtuO2apA2hhInUEE=;
- b=TLgcIBblq5ydNgnIU5Kq77DbHtTYLcXq6jskjrrM3gGKDNYmC0CxVV/xz6roRXXsiL5jipsYZT8ANEXlRb9zRhGoLbNWKLgWqbHOqZ9kDsAnLvBvO7DhSohABfXVJYIbdkZeIMbqSXPYQ7E0DOnvITcO9fpfJI7zMERUVRAFx7XW689YNkTavteTTqFWhSTngKDRusMvuwz+920fGiid0rZNG5wsgfAnbDNq4tvJCmdtlGGU0eA+aedndcmFPEccqlDABckeFs70gIP53W+ezjQafiEDQrzf00GKc2obbXXCJQYSZAd7yQwU9OqpQWMTyw/kqONOSJGtK+zOTh5Rjg==
+ bh=gzog+LdhapcQveRFy1QBrMu2kmoHFsmD/qD/SmugWqM=;
+ b=QfrvsIFqx+cY0P1OGIzcZBDeTRm8kRRhlxO+9K+9h+R1b8OOhirGz88RIN3njACm1YHbmjggi3fOJu2fHLw4AJ4Atl8SKkdCcZm+CoeSPKe7FZCJtoVXSHyAeyspi9PM8pohy/TQZattxQEm4/wsPdhHUfr+DA2DGLt3ZYtYnW/asAdu72o59luK88la7crvRpvcb9Ni7Jf9HUFLvUsNbJeYHYy6EWx7Jzwk1FiXJpdzTv3kgaJN5XhPXSNeEa8CEtyxWpPKf41bnADfzU2Cgm5gfXPlLUVmuV3tBHHxXvH1r0Aj9VhYEkHVTG8Ep3aSuyOyV6mPwKdIHOTOpT6NRQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8bP4dyaFq/MBjFyeK1+sF4xLpS8TtuO2apA2hhInUEE=;
- b=NU4DlasRDOuJvrOKutMPXhNXfWLhVH7aQ5rNbLj85pVaPqepZoLiZQFe88LCSIc0p5kEZeE/KYxFIX2O2n8+NozZ+9vN7+UvkMjh2ZTYjgkes2/F72hDywZ9MNYIsQX5By/kQWobI7FMvI0Czc6/PhwG9fMR2IwrSfxhFNDbcm/CIxiwXwuzEm0+FjrGDKkvLBV/GeCyvWWWyCkXAPuNwrYC6f8xU4pwxuxh+k+75wqMabKKDz6pIa8xJsYTq57LtxoqTvdty1+cEtLwH0kklnknBoTgvHQ6xPEAMsWEIeArZRN5zTSFFh8V0GITpI97EXJt3fPTvv8ntTQD8vgL7w==
+ bh=gzog+LdhapcQveRFy1QBrMu2kmoHFsmD/qD/SmugWqM=;
+ b=baPHJOHAoznGTpJcGtpXsMM+UVZSfl5YGVZ50LlMU+JSdtfVt/Kd9iMtrnxln9OSa8FptvGHb1klH08sfOFvtTAKI3gJ3xrIMgZC9tpUIR09Cl3qmwUsikgBaXk1L6IrK1r1U/jY6ZAM6K95zvXN2rXtdhQvX0v8VAa2OuvfzsZ5i4OQe99CjjI2P4oPHyo5R7RUteYpFk0uuI5yo4JSSiAHqmqu/TgQnyREUzNQsy1H4gAPxYTwWRrWl2o/uARLft8TTjARM2wc++368baW8z41eEiYaC2WlIbO7yihb/YMZ84I+KTdx8OSQnB7f5lhrZd8vlEftelkS1IsayKdcA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
  by SA5PPF8DEAB7A29.namprd12.prod.outlook.com (2603:10b6:80f:fc04::8d4) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.16; Mon, 21 Sep
- 2026 09:42:58 +0000
+ 2026 09:43:03 +0000
 Received: from BL0PR12MB2370.namprd12.prod.outlook.com
  ([fe80::86cf:c3ec:2cf5:74c8]) by BL0PR12MB2370.namprd12.prod.outlook.com
  ([fe80::86cf:c3ec:2cf5:74c8%7]) with mapi id 15.21.0428.014; Mon, 21 Sep 2026
- 09:42:58 +0000
+ 09:43:03 +0000
 From: Richard Cheng <icheng@nvidia.com>
 To: akpm@linux-foundation.org,
 	david@kernel.org
@@ -63,16 +63,17 @@ Cc: jgg@ziepe.ca,
 	newtonl@nvidia.com,
 	kristinc@nvidia.com,
 	Richard Cheng <icheng@nvidia.com>
-Subject: [RFC PATCH 1/2] mm/gup_test: Track long-term pins per open file
-Date: Mon, 21 Sep 2026 17:42:42 +0800
-Message-ID: <20260921094243.64698-2-icheng@nvidia.com>
+Subject: [RFC PATCH 2/2] selftests/mm: Test per-open gup_test pin ownership
+Date: Mon, 21 Sep 2026 17:42:43 +0800
+Message-ID: <20260921094243.64698-3-icheng@nvidia.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260921094243.64698-1-icheng@nvidia.com>
 References: <20260921094243.64698-1-icheng@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: TP0P295CA0006.TWNP295.PROD.OUTLOOK.COM (2603:1096:910:2::6)
- To BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
+X-ClientProxiedBy: TP0P295CA0011.TWNP295.PROD.OUTLOOK.COM
+ (2603:1096:910:2::17) To BL0PR12MB2370.namprd12.prod.outlook.com
+ (2603:10b6:207:47::27)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,256 +82,378 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BL0PR12MB2370:EE_|SA5PPF8DEAB7A29:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d455c18-5d21-4c7f-503b-08df17c4b808
+X-MS-Office365-Filtering-Correlation-Id: 9f411f77-e24a-45c7-8f86-08df17c4bb34
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|1800799024|7416014|376014|366016|56012099006|11063799006|10067099003|18002099003|22082099003;
+	BCL:0;ARA:13230040|23010399003|1800799024|7416014|376014|366016|56012099006|11063799006|6133799003|10067099003|5023799004|18002099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	TXjS6Kx834XHkMUBiA6GSfWBjpDyVM5WmDMGoxAzcLZ4327m7mhwGtIhX3ISEWF03F64Ch+CNBsVpuDnRIN9ShTXRFGylGQrmYhZeFve+RVd03SiKaKfSQGe++lXe7mm6FqEscQRINQqbVhlXPsCv5X5yhCTVkRBPvzrz3Z6poH2+NT4X9LYofZeeUv6j7cIt7nPxSdwNApuWg1sUBzkMjaTWSWYrrASxDUAMFi2glDKPiI1fHtHuuK3v1asm6mGs5x+5QDEPoK81AB606d7F8fk3CszPbBGfuhbXbQ+5XHs798TyfpYnYSKHXvTirsiqztwt011pWAlyDlWsvsM36j7NiE0/4oaq/X3nElsA9blztXcCiKn8nAcjFMOo5cEupGQOhoyAI1I+eIYwI/pnW0eKxcUj5+vBSul+nAL8VW4EOvtvDoAAmyPDhR1vOwOgUmpMmlktp65RsUXId7JeXJ78MG6mzb+sGz4eXn6KgJ5bPJPMoJDQeyn2qi4RApm1mk54+8PhxFTMzZaIEDIy2ogPEffR83NbcmhID/JpWfKNTwFttNNXHwBoof0NBNceTo7VvQIkqaAZl/peUdO6GbvOb9HoBxenlikOn+S5SXsEGpBKy1RxmtKgFgwiB5ZhMfO3wSjbRjQiFiFtEPkscaQa4Fv4PnqubG4N51lOu4=
+	hCq6fOt2D84Mih0C/+OW4K2z14pgoRUcYVf3YVCm3jECJXeywdyRXksRqwSibJkdPewY5NdDrCCWBp6wU28Mm2cqmsmMzPDxeeQsoIVmO30XmmS1kszlwfxw7myugs3iE+COEuvsc3j5PhnBb66/iwwFVNWHPBDGQhmSGtRbirenIOoFZkPU/nIiGNT4zGGIyzKC5DN8RjlaH27S6RcGV2Of8pqM720FdtR5nnf4Lt1GYOVy0fuEGuQACLYX7n3GloKtpXdyxwr4ZOFtPxr7WZudhv7BbOkCS34m4wEZ8TgtN1iCLKngVs42qIl0L+/JmK9YaKFa113mC90vWuD9NE0wTwh56VMTVQBcAUnL9kp4xxS4aG+/ZgVvPpBePvmWTxz0Gw98yhDzZBoesAtCapQfTZGOVvAHcZ01TZ+zr33zzaa0uxncH9qRg/fwai7PfNAo3dhGiGNQSW9SozErL+b/QWdEBZr6k/NGsdkEqQhQEEXHpniemp/02XYFzrEStcW16o421y/bwDfzUVBdOJcIFJtymPBIdJLV8SO4z6WyDnkCZUbFT/8XO+Y5ecdeoEzw7I1lvKDOc4B3QgwleQmF6qDmHBu/2wbXvvT0Y7AAugfRffMYhIFUahLpxUuXRG8uUjB8rRBWCySuada20+SDydGu6wHjVF9TKJsSiGM=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(7416014)(376014)(366016)(56012099006)(11063799006)(10067099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(7416014)(376014)(366016)(56012099006)(11063799006)(6133799003)(10067099003)(5023799004)(18002099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?69u1okdOX4xtc4N+040HOn+GVbuBYM2SFI8beEKJQvK0HSmn4lCXe5Iis5Rf?=
- =?us-ascii?Q?Bq2ubGda0jNZMr4WQP8G7nSFu2m+4KF8K2L5Dn4QNKc3dp8vyMEzVyEt8557?=
- =?us-ascii?Q?6OSkcLXe7/Jdt8VnYsYFuv9m9THcUFSr3L88mkynufZHaHPhFuwWqVeukK+T?=
- =?us-ascii?Q?KBirr3zvI8ZfpreE7NmNb4izzr/7iWMPLKAmkzGU8vmpoVq/CYpvoUP7/aHl?=
- =?us-ascii?Q?vJaIfWdDsvW5A3shQzsKNR/XlgJHRf5p+J3AP8f+KNjNeTZaarG/uiDGdnea?=
- =?us-ascii?Q?GPkQvTpKLlcYj1c9Zzynhq9SSmwK/JJN9pfYqw32WhEdDSCfNlceo8WIF+qD?=
- =?us-ascii?Q?ljB5yNRnuuhoQcnKpW2jbpk63tGrpHIi22Ikh5dOhSVDHJKzMzo7+RJ/VTDG?=
- =?us-ascii?Q?EGcYc04avQE1BG3l+j6/WyHvbi2WKntQ9gNypAWeD1vh9nTTqoBB7ABXug3L?=
- =?us-ascii?Q?xe8T6JYejHdSiJqGg6Jde9m3KWdcjboN1RUGrPibGHtrWtnIqZqWUKv71jC5?=
- =?us-ascii?Q?NSx6pxf9imeH0gtJh/muCyW2TSu6w4WedpywZRbWtDt70cL9BHoopy6Y7r8s?=
- =?us-ascii?Q?4jcvEL2LAJfjn9nHlKX+UHmRE/ZrUl84HrIA/DRgz7aGcFJba9u2czg5GCOL?=
- =?us-ascii?Q?6DIV1IJfwFzUFJTsLElysdn1HR7TXw/31oDvkP78kh9GgxeCMzm1lwHaR2zM?=
- =?us-ascii?Q?FFVx4dtoV8kdjsfCZCNmE2eSp8XCBQZLR1ACwq/389Xb10BuQPlTRjnjaFIe?=
- =?us-ascii?Q?lCWHUZe9VoSyKt9FZ3bh6ZWtQWtbjNjD/W+aXb3L54hqnv3ORGyhwiOuTTbe?=
- =?us-ascii?Q?Dh1AdZdG5EpxK56myUmoniqrhnq+AztWn8wEptQFsp4+pTZhDHi08GzHhbIV?=
- =?us-ascii?Q?LCWKJFYFli27KAZGqbK8xnyoz9OFRDikVdattU/3w80GL1yVqZlkD/mHwkEq?=
- =?us-ascii?Q?B2krbUVHFEvVamn3GvnEr51pcmCKBiCH+Rfz8BUmW3OhiqIRRoXq/2FwRZi/?=
- =?us-ascii?Q?fBeBhZgQ+fStnRcewun0lAdFmJ/eYKZd6K+P/VVNkyee5n/Pq53bQ1fUroY6?=
- =?us-ascii?Q?7puGYUcVPIPmhON4vszcIXlo3QgS3uUcrnqPaIwaRbX5kLuvg5SJ1daFtmk0?=
- =?us-ascii?Q?VE7QV6e7Oy10WxApwVv5iWqdryvDFmHyZIKOijRXW2UcZk8k9ejI8KN7b0Ax?=
- =?us-ascii?Q?5bcsAuy67/EWfNqIijJ4LlHRYzA/4XnEcGmW8bIThL5blle94Niaso+yIyQb?=
- =?us-ascii?Q?IlCgg0LKy+NTgK28z+pPYrevgKZzQ+G1E04IpxS/kKtIoafVF4pD1LF3YtoV?=
- =?us-ascii?Q?RagbVoLOCHj1qBig2LDnQ9VKFNlXSobRah35+ZTXSLJgPrmnZ1loy2F+k6Pl?=
- =?us-ascii?Q?qrvc9xri3f5QPtfNmJafnW4bGvO9Pnl1w73kMH+EMi4p80m6hyVcSa1QjaF0?=
- =?us-ascii?Q?nYMqLRdw3XEvMbJjZkor7mVH7ez8L5APc0lM6Hff/eBaWxob5ZHxYz4z8Dc2?=
- =?us-ascii?Q?+s3Tv21/+WgZBFnkV6WiM9rUXeTFGzJRCjYNa/CGx7bUxk4CAt7vvOwl4Wvd?=
- =?us-ascii?Q?G6ssuQw90y0n+fVx49wZpHglbV/cKre8Np5xMBp4SHh5UiMCTKRxqV5M6mhh?=
- =?us-ascii?Q?BVVPL1QFvHBa+6VDeuZJNhBc3vnGq1+pRvBurC4xRyjvRPexTCBFAd94jZR6?=
- =?us-ascii?Q?4Vpky8Kvr2R0s78jyFwJSzXP4BJfzJR8VvGh909XOt1yRunQ0yTQgCHz0nlN?=
- =?us-ascii?Q?F4euutiVvw=3D=3D?=
+	=?us-ascii?Q?fpUeRcE34oyLJe7p0mBXe1sXNIjt6c5piRKMD5e0w9LtewecIUoXGCBIfdyV?=
+ =?us-ascii?Q?ZGPhBaA4PY4YN6nLiPCOlfvgmm+U6l9vLK3K2DM+nRjlZ+9q3MVLUoFlrNWm?=
+ =?us-ascii?Q?dh4UpuvQR7wZJohbdbHPxT+Ffh5GySjxKcDZYcq29iz33NycLtyGtMA/+VnP?=
+ =?us-ascii?Q?+EzVjk4715g/1v4xRPoqNi8cbbFxeN6JOY2TvUI80cG7XAoiItZ/FSPN2F2p?=
+ =?us-ascii?Q?yk3znsy3fr1Q1g7A5ArfQuzEUf+Doc6rTXR1u4cuG0USm+QXdYG/cMMCE/e9?=
+ =?us-ascii?Q?rzGJ4aU2YLcOghhgN3z8d28iS6jLaVjVTUKmzIJJ95zGnKeJ7C09mQQXVlRI?=
+ =?us-ascii?Q?fET86ZFI11GZMvIuf0e5MGkNrRp+0yavq2YprPB3kCEqfYkaywaGoRNGVFWd?=
+ =?us-ascii?Q?YQC5rehf20r/XNmG2RWwvFvC3mU4kgfpd2v4SNg0Rm+9VhgJ/or9uMOtfuMD?=
+ =?us-ascii?Q?OTykT5vffPsq2uS/taUAUYj7FX19UkWmsU0+oliTJJxD/RMp1DvsiWJZxMMp?=
+ =?us-ascii?Q?RFcJJJ9hbXMM5eLLzbd3PWkBIqav7GHY+XsmrSvGxlvpt9NtlPCHCoayH+34?=
+ =?us-ascii?Q?KSfSb4MFwV6/iG4OQyCrA8De89OnxtMqQvMdKyMvd+fqZLW/y7LuABjHqCG9?=
+ =?us-ascii?Q?/isyXIEPIc3W9xY3yGCbm346Vm/ED1VSjnNmp09YcZTY+GsCqKh//F+2CiSj?=
+ =?us-ascii?Q?EhZE+QSHpHnmpwcxQRhqaXoXHkPFwG4peLHTberZ4fId/CuJCsxNGDJvyseo?=
+ =?us-ascii?Q?yoxsOaFXtvdVYFPf9/VMJaaxUhcqLuvwLTi5Suoj9uU09BZgZMhTWjpXXCBc?=
+ =?us-ascii?Q?UJmKVrwiMUh5BURD4IdB81zsPNhjf1VylsUFYI8Sxza5ZL+a9NY5Z63hMQcY?=
+ =?us-ascii?Q?Dj5qpi/l053guCyfLhcMxK5vLJakh3imJQkyrh6Wmfxa35TWCT607PAMV3zu?=
+ =?us-ascii?Q?PaoVnOlyUEXDONeZQ/O46RdFTlXW2AVHY5FHqEn3lS+e96fa4teeTtvbvL08?=
+ =?us-ascii?Q?SZgQLGOlA0XLshZLCnVAMO9qa6F2FTrReN6xgB65EDEKFqW6RoOLKVZffD4+?=
+ =?us-ascii?Q?3EjoMqZJFmlJUq/kssuqeHZ2AbvKQ/hOITCFWt6IIIko5q0uB9GD41DB8nFu?=
+ =?us-ascii?Q?2oiVp3IAZlvo4xNDMw2/uu8w3w3spWkl78Vkg7owNyQ3baH59MweH++rFnxT?=
+ =?us-ascii?Q?gFY+n7tlDE5tNd9nMcNa/X1Wn6ZprYvsbQjaOKYgg+7bLc6a2O/KBFYqQtwv?=
+ =?us-ascii?Q?FxHqneuVZhYT4eMPnlrV6lffDW9kON/IOpRzBsADBuk7CyGF9+tBFR9q4wMz?=
+ =?us-ascii?Q?gJlSUSS+DHZPaxyBuHa1lQQPOnP3bzNO/3rcylTBtpi88matnPLrNcDkC9WY?=
+ =?us-ascii?Q?6P9JZfygA+X6Lh4kCa+O6DSd2ldt5eVap0ptvZDnuhFQg+8OfxtuoekivGRK?=
+ =?us-ascii?Q?/snJF6ykB5fbWS6/07qrDBx8H7i7D5YZMTxxAMZHVSBmK4NpZF5mH1YZTcWb?=
+ =?us-ascii?Q?1l0UTWcehePkq/mDIWpQRbQhnI5z64jL+7zNU5n2r0CLVeYsaje9ehPTUIBw?=
+ =?us-ascii?Q?Rjw5wVodVgIQQpmmiYhFK8APIIAesq8ht94Gf6SHUE0fQyxdh47Ue1WS70fq?=
+ =?us-ascii?Q?IgTMHBhe3Zqhin2o1DDFB4R1x1GkqVwPREBgCqu6YrIaHfU41DOCjV+JMFnm?=
+ =?us-ascii?Q?RMvv03Hfk0XjxtVqTm031QNmRj32pRfb4BUU7U4GHUv7hh7W87JhWlimoCO7?=
+ =?us-ascii?Q?67sR1MsKMw=3D=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d455c18-5d21-4c7f-503b-08df17c4b808
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f411f77-e24a-45c7-8f86-08df17c4bb34
 X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB2370.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2026 09:42:58.1239
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2026 09:43:03.4658
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pFngicvnrwn0+N9oio1xPthXKnEWtBKbq2DnZnRqLnfgfCucoErv5uzz3EYRKy8rWn710rKpfK3R+K/fGH041w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: c+Tiu5evpaDLm4PHxVVASVP7vu3/Mhx+O0tXKiPW6WUj9nhuqEHRVhuAOrF3KUd2x+Q0FkNJb+gXSNSkcCnk0g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA5PPF8DEAB7A29
 
-Long-term pin state is currently global, allowing one gup_test file
-descriptor to block, stop, or release pins owned by another client.
+Long-term pin state should be isolated between independently opened
+gup_test file descriptions, while descriptors created with dup() should
+continue to share the state associated with their struct file.
 
-Allocate the pin state for each open file and store it in
-file->private_data. Serialize START, READ, and STOP with the per-open
-mutex, and release only the pages owned by that file.
+Add tests using 2 independently opened gup_test descriptors. Verify that
+stopping or closing the second descriptor doesn't disturb the first
+descriptor's pin, that another START on the same descriptor fails with
+EINVAL, and that READ fails with EINVAL after STOP.
 
-Descriptors duplicated through dup() or fork() continue sharing state
-because they reference the same struct file. Keep the ioctl ABI and
-same-file duplicate START behavior unchanged.
+Close the descriptor used by the existing test matrix before running the
+ownership tests. Record whether gup_test was initially available so that
+a later open failure is reported as a failure instead of being hidden as
+a skip.
+
+Also exercise the shared-file-description case: start a pin through the
+original descriptor, verify that START through a duplicate fails with
+EINVAL, close the original descriptor, and use the duplicate to READ and
+STOP the pin
 
 Reviewed-by: Koba Ko <kobak@nvidia.com>
 Signed-off-by: Richard Cheng <icheng@nvidia.com>
 ---
- mm/gup_test.c | 88 +++++++++++++++++++++++++++++++++------------------
- 1 file changed, 57 insertions(+), 31 deletions(-)
+ tools/testing/selftests/mm/gup_longterm.c | 258 +++++++++++++++++++++-
+ 1 file changed, 256 insertions(+), 2 deletions(-)
 
-diff --git a/mm/gup_test.c b/mm/gup_test.c
-index eb4c9cda16ed..d0bd84b66624 100644
---- a/mm/gup_test.c
-+++ b/mm/gup_test.c
-@@ -208,23 +208,25 @@ static int __gup_test_ioctl(unsigned int cmd,
- 	return ret;
- }
+diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+index c03b4f8910c0..ecae71ecedd3 100644
+--- a/tools/testing/selftests/mm/gup_longterm.c
++++ b/tools/testing/selftests/mm/gup_longterm.c
+@@ -36,6 +36,9 @@ static int nr_hugetlbsizes;
+ static unsigned long hugetlbsizes[10];
+ static int gup_fd;
  
--static DEFINE_MUTEX(pin_longterm_test_mutex);
--static struct page **pin_longterm_test_pages;
--static unsigned long pin_longterm_test_nr_pages;
-+struct pin_longterm_test_state {
-+	struct mutex mutex;
-+	struct page **pages;
-+	unsigned long nr_pages;
-+};
- 
--static inline void pin_longterm_test_stop(void)
-+static inline void pin_longterm_test_stop(struct pin_longterm_test_state *state)
++#define GUP_TEST_FILE	"/sys/kernel/debug/gup_test"
++#define NR_FD_OWNERSHIP_TESTS	3
++
+ static __fsword_t get_fs_type(int fd)
  {
--	if (pin_longterm_test_pages) {
--		if (pin_longterm_test_nr_pages)
--			unpin_user_pages(pin_longterm_test_pages,
--					 pin_longterm_test_nr_pages);
--		kvfree(pin_longterm_test_pages);
--		pin_longterm_test_pages = NULL;
--		pin_longterm_test_nr_pages = 0;
-+	if (state->pages) {
-+		if (state->nr_pages)
-+			unpin_user_pages(state->pages, state->nr_pages);
-+		kvfree(state->pages);
-+		state->pages = NULL;
-+		state->nr_pages = 0;
- 	}
+ 	struct statfs fs;
+@@ -500,6 +503,246 @@ static void run_test_case(struct test_case const *test_case)
+ 				       hugetlbsizes[i]);
  }
  
--static inline int pin_longterm_test_start(unsigned long arg)
-+static inline int pin_longterm_test_start(struct pin_longterm_test_state *state,
-+					  unsigned long arg)
- {
- 	long nr_pages, cur_pages, addr, remaining_pages;
- 	int gup_flags = FOLL_LONGTERM;
-@@ -233,7 +235,7 @@ static inline int pin_longterm_test_start(unsigned long arg)
- 	int ret = 0;
- 	bool fast;
- 
--	if (pin_longterm_test_pages)
-+	if (state->pages)
- 		return -EINVAL;
- 
- 	if (copy_from_user(&args, (void __user *)arg, sizeof(args)))
-@@ -263,12 +265,12 @@ static inline int pin_longterm_test_start(unsigned long arg)
- 		return -EINTR;
- 	}
- 
--	pin_longterm_test_pages = pages;
--	pin_longterm_test_nr_pages = 0;
-+	state->pages = pages;
-+	state->nr_pages = 0;
- 
--	while (nr_pages - pin_longterm_test_nr_pages) {
--		remaining_pages = nr_pages - pin_longterm_test_nr_pages;
--		addr = args.addr + pin_longterm_test_nr_pages * PAGE_SIZE;
-+	while (nr_pages - state->nr_pages) {
-+		remaining_pages = nr_pages - state->nr_pages;
-+		addr = args.addr + state->nr_pages * PAGE_SIZE;
- 
- 		if (fast)
- 			cur_pages = pin_user_pages_fast(addr, remaining_pages,
-@@ -277,11 +279,11 @@ static inline int pin_longterm_test_start(unsigned long arg)
- 			cur_pages = pin_user_pages(addr, remaining_pages,
- 						   gup_flags, pages);
- 		if (cur_pages < 0) {
--			pin_longterm_test_stop();
-+			pin_longterm_test_stop(state);
- 			ret = cur_pages;
- 			break;
- 		}
--		pin_longterm_test_nr_pages += cur_pages;
-+		state->nr_pages += cur_pages;
- 		pages += cur_pages;
- 	}
- 
-@@ -290,19 +292,20 @@ static inline int pin_longterm_test_start(unsigned long arg)
- 	return ret;
- }
- 
--static inline int pin_longterm_test_read(unsigned long arg)
-+static inline int pin_longterm_test_read(struct pin_longterm_test_state *state,
-+					 unsigned long arg)
- {
- 	__u64 user_addr;
- 	unsigned long i;
- 
--	if (!pin_longterm_test_pages)
-+	if (!state->pages)
- 		return -EINVAL;
- 
- 	if (copy_from_user(&user_addr, (void __user *)arg, sizeof(user_addr)))
- 		return -EFAULT;
- 
--	for (i = 0; i < pin_longterm_test_nr_pages; i++) {
--		void *addr = kmap_local_page(pin_longterm_test_pages[i]);
-+	for (i = 0; i < state->nr_pages; i++) {
-+		void *addr = kmap_local_page(state->pages[i]);
- 		unsigned long ret;
- 
- 		ret = copy_to_user((void __user *)(unsigned long)user_addr, addr,
-@@ -318,25 +321,26 @@ static inline int pin_longterm_test_read(unsigned long arg)
- static long pin_longterm_test_ioctl(struct file *filep, unsigned int cmd,
- 				    unsigned long arg)
- {
-+	struct pin_longterm_test_state *state = filep->private_data;
- 	int ret = -EINVAL;
- 
--	if (mutex_lock_killable(&pin_longterm_test_mutex))
-+	if (mutex_lock_killable(&state->mutex))
- 		return -EINTR;
- 
- 	switch (cmd) {
- 	case PIN_LONGTERM_TEST_START:
--		ret = pin_longterm_test_start(arg);
-+		ret = pin_longterm_test_start(state, arg);
- 		break;
- 	case PIN_LONGTERM_TEST_STOP:
--		pin_longterm_test_stop();
-+		pin_longterm_test_stop(state);
- 		ret = 0;
- 		break;
- 	case PIN_LONGTERM_TEST_READ:
--		ret = pin_longterm_test_read(arg);
-+		ret = pin_longterm_test_read(state, arg);
- 		break;
- 	}
- 
--	mutex_unlock(&pin_longterm_test_mutex);
-+	mutex_unlock(&state->mutex);
- 	return ret;
- }
- 
-@@ -375,15 +379,37 @@ static long gup_test_ioctl(struct file *filep, unsigned int cmd,
- 	return 0;
- }
- 
-+static int gup_test_open(struct inode *inode, struct file *file)
++static void test_fd_isolation(bool stop_fd2, bool gup_test_was_available)
 +{
-+	struct pin_longterm_test_state *state;
-+	int ret;
++	struct pin_longterm_test args = {
++		.size = pagesize,
++	};
++	char *mem1 = MAP_FAILED, *mem2 = MAP_FAILED;
++	char *read_buf = MAP_FAILED;
++	bool pin1 = false, pin2 = false;
++	__u64 read_addr;
++	int fd1 = -1, fd2 = -1;
++	int result = KSFT_FAIL;
 +
-+	ret = nonseekable_open(inode, file);
-+	if (ret)
-+		return ret;
++	log_test_start("Longterm GUP pin is isolated from fd2 %s",
++		       stop_fd2 ? "STOP" : "close");
 +
-+	state = kzalloc_obj(*state, GFP_KERNEL);
-+	if (!state)
-+		return -ENOMEM;
++	fd1 = open(GUP_TEST_FILE, O_RDWR);
++	if (fd1 < 0) {
++		ksft_print_msg("gup_test not available (%s)\n",
++			       strerror(errno));
++		result = gup_test_was_available ? KSFT_FAIL : KSFT_SKIP;
++		goto report;
++	}
 +
-+	mutex_init(&state->mutex);
-+	file->private_data = state;
++	fd2 = open(GUP_TEST_FILE, O_RDWR);
++	if (fd2 < 0) {
++		ksft_print_msg("second gup_test open failed (%s)\n",
++			       strerror(errno));
++		goto report;
++	}
 +
-+	return 0;
++	mem1 = mmap(NULL, pagesize, PROT_READ | PROT_WRITE,
++		    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	mem2 = mmap(NULL, pagesize, PROT_READ | PROT_WRITE,
++		    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	read_buf = mmap(NULL, pagesize, PROT_READ | PROT_WRITE,
++			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	if (mem1 == MAP_FAILED || mem2 == MAP_FAILED ||
++	    read_buf == MAP_FAILED) {
++		ksft_print_msg("mmap() failed (%s)\n", strerror(errno));
++		goto report;
++	}
++
++	memset(mem1, 0x11, pagesize);
++	memset(mem2, 0x22, pagesize);
++
++	args.addr = (__u64)(uintptr_t)mem1;
++	if (ioctl(fd1, PIN_LONGTERM_TEST_START, &args)) {
++		ksft_print_msg("fd1 PIN_LONGTERM_TEST_START failed (%s)\n",
++			       strerror(errno));
++		goto report;
++	}
++	pin1 = true;
++
++	args.addr = (__u64)(uintptr_t)mem2;
++	if (ioctl(fd2, PIN_LONGTERM_TEST_START, &args)) {
++		ksft_print_msg("fd2 PIN_LONGTERM_TEST_START failed (%s)\n",
++			       strerror(errno));
++		goto report;
++	}
++	pin2 = true;
++
++	args.addr = (__u64)(uintptr_t)mem1;
++	if (ioctl(fd1, PIN_LONGTERM_TEST_START, &args) != -1 ||
++	    errno != EINVAL) {
++		ksft_print_msg("second START on fd1 was not rejected with EINVAL\n");
++		goto report;
++	}
++
++	if (stop_fd2) {
++		if (ioctl(fd2, PIN_LONGTERM_TEST_STOP)) {
++			ksft_print_msg("fd2 PIN_LONGTERM_TEST_STOP failed (%s)\n",
++				       strerror(errno));
++			goto report;
++		}
++		pin2 = false;
++
++		read_addr = (__u64)(uintptr_t)read_buf;
++		errno = 0;
++		if (ioctl(fd2, PIN_LONGTERM_TEST_READ, &read_addr) != -1 ||
++		    errno != EINVAL) {
++			ksft_print_msg("fd2 READ after STOP was not rejected with EINVAL\n");
++			goto report;
++		}
++	} else {
++		if (close(fd2)) {
++			ksft_print_msg("close(fd2) failed (%s)\n",
++				       strerror(errno));
++			fd2 = -1;
++			pin2 = false;
++			goto report;
++		}
++		fd2 = -1;
++		pin2 = false;
++	}
++
++	read_addr = (__u64)(uintptr_t)read_buf;
++	if (ioctl(fd1, PIN_LONGTERM_TEST_READ, &read_addr)) {
++		ksft_print_msg("fd1 PIN_LONGTERM_TEST_READ failed (%s)\n",
++			       strerror(errno));
++		goto report;
++	}
++	if (memcmp(mem1, read_buf, pagesize)) {
++		ksft_print_msg("fd1 PIN_LONGTERM_TEST_READ data mismatch\n");
++		goto report;
++	}
++
++	result = KSFT_PASS;
++
++report:
++	if (pin2 && ioctl(fd2, PIN_LONGTERM_TEST_STOP)) {
++		ksft_print_msg("fd2 cleanup STOP failed (%s)\n",
++			       strerror(errno));
++		result = KSFT_FAIL;
++	}
++	if (pin1 && ioctl(fd1, PIN_LONGTERM_TEST_STOP)) {
++		ksft_print_msg("fd1 cleanup STOP failed (%s)\n",
++			       strerror(errno));
++		result = KSFT_FAIL;
++	}
++	if (read_buf != MAP_FAILED)
++		munmap(read_buf, pagesize);
++	if (mem2 != MAP_FAILED)
++		munmap(mem2, pagesize);
++	if (mem1 != MAP_FAILED)
++		munmap(mem1, pagesize);
++	if (fd2 >= 0)
++		close(fd2);
++	if (fd1 >= 0)
++		close(fd1);
++	log_test_result(result);
 +}
 +
- static int gup_test_release(struct inode *inode, struct file *file)
- {
--	pin_longterm_test_stop();
-+	struct pin_longterm_test_state *state = file->private_data;
++static void test_dup_fd_shared_state(bool gup_test_was_available)
++{
++	struct pin_longterm_test args = {
++		.size = pagesize,
++	};
++	char *mem = MAP_FAILED, *read_buf = MAP_FAILED;
++	bool pin = false;
++	__u64 read_addr;
++	int fd = -1, dup_fd = -1;
++	int cleanup_fd;
++	int result = KSFT_FAIL;
 +
-+	pin_longterm_test_stop(state);
-+	kfree(state);
++	log_test_start("Longterm GUP pin state is shared by dup() descriptors");
++
++	fd = open(GUP_TEST_FILE, O_RDWR);
++	if (fd < 0) {
++		ksft_print_msg("gup_test not available (%s)\n",
++			       strerror(errno));
++		result = gup_test_was_available ? KSFT_FAIL : KSFT_SKIP;
++		goto report;
++	}
++
++	dup_fd = dup(fd);
++	if (dup_fd < 0) {
++		ksft_print_msg("dup() failed (%s)\n", strerror(errno));
++		goto report;
++	}
++
++	mem = mmap(NULL, pagesize, PROT_READ | PROT_WRITE,
++		   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	read_buf = mmap(NULL, pagesize, PROT_READ | PROT_WRITE,
++			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	if (mem == MAP_FAILED || read_buf == MAP_FAILED) {
++		ksft_print_msg("mmap() failed (%s)\n", strerror(errno));
++		goto report;
++	}
++
++	memset(mem, 0x33, pagesize);
++
++	args.addr = (__u64)(uintptr_t)mem;
++	if (ioctl(fd, PIN_LONGTERM_TEST_START, &args)) {
++		ksft_print_msg("PIN_LONGTERM_TEST_START failed (%s)\n",
++			       strerror(errno));
++		goto report;
++	}
++	pin = true;
++
++	errno = 0;
++	if (ioctl(dup_fd, PIN_LONGTERM_TEST_START, &args) != -1 ||
++	    errno != EINVAL) {
++		ksft_print_msg("START through dup fd was not rejected with EINVAL\n");
++		goto report;
++	}
++
++	if (close(fd)) {
++		ksft_print_msg("close(original fd) failed (%s)\n",
++			       strerror(errno));
++		fd = -1;
++		goto report;
++	}
++	fd = -1;
++
++	read_addr = (__u64)(uintptr_t)read_buf;
++	if (ioctl(dup_fd, PIN_LONGTERM_TEST_READ, &read_addr)) {
++		ksft_print_msg("READ through dup fd failed (%s)\n",
++			       strerror(errno));
++		goto report;
++	}
++	if (memcmp(mem, read_buf, pagesize)) {
++		ksft_print_msg("READ through dup fd data mismatch\n");
++		goto report;
++	}
++
++	if (ioctl(dup_fd, PIN_LONGTERM_TEST_STOP)) {
++		ksft_print_msg("STOP through dup fd failed (%s)\n",
++			       strerror(errno));
++		goto report;
++	}
++	pin = false;
++
++	read_addr = (__u64)(uintptr_t)read_buf;
++	errno = 0;
++	if (ioctl(dup_fd, PIN_LONGTERM_TEST_READ, &read_addr) != -1 ||
++	    errno != EINVAL) {
++		ksft_print_msg("READ after STOP through dup fd was not rejected with EINVAL\n");
++		goto report;
++	}
++
++	result = KSFT_PASS;
++
++report:
++	cleanup_fd = dup_fd >= 0 ? dup_fd : fd;
++	if (pin && cleanup_fd >= 0 &&
++	    ioctl(cleanup_fd, PIN_LONGTERM_TEST_STOP)) {
++		ksft_print_msg("cleanup STOP failed (%s)\n", strerror(errno));
++		result = KSFT_FAIL;
++	}
++	if (read_buf != MAP_FAILED)
++		munmap(read_buf, pagesize);
++	if (mem != MAP_FAILED)
++		munmap(mem, pagesize);
++	if (dup_fd >= 0)
++		close(dup_fd);
++	if (fd >= 0)
++		close(fd);
++	log_test_result(result);
++}
++
+ static int tests_per_test_case(void)
+ {
+ 	return 3 + nr_hugetlbsizes;
+@@ -507,6 +750,7 @@ static int tests_per_test_case(void)
  
- 	return 0;
+ int main(int argc, char **argv)
+ {
++	bool gup_test_was_available;
+ 	int i;
+ 
+ 	pagesize = getpagesize();
+@@ -514,12 +758,22 @@ int main(int argc, char **argv)
+ 						    ARRAY_SIZE(hugetlbsizes));
+ 
+ 	ksft_print_header();
+-	ksft_set_plan(ARRAY_SIZE(test_cases) * tests_per_test_case());
++	ksft_set_plan(ARRAY_SIZE(test_cases) * tests_per_test_case() +
++		      NR_FD_OWNERSHIP_TESTS);
+ 
+-	gup_fd = open("/sys/kernel/debug/gup_test", O_RDWR);
++	gup_fd = open(GUP_TEST_FILE, O_RDWR);
++	gup_test_was_available = gup_fd >= 0;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(test_cases); i++)
+ 		run_test_case(&test_cases[i]);
+ 
++	if (gup_fd >= 0)
++		close(gup_fd);
++	gup_fd = -1;
++
++	test_fd_isolation(true, gup_test_was_available);
++	test_fd_isolation(false, gup_test_was_available);
++	test_dup_fd_shared_state(gup_test_was_available);
++
+ 	ksft_finished();
  }
- 
- static const struct file_operations gup_test_fops = {
--	.open = nonseekable_open,
-+	.open = gup_test_open,
- 	.unlocked_ioctl = gup_test_ioctl,
- 	.compat_ioctl = compat_ptr_ioctl,
- 	.release = gup_test_release,
 -- 
 2.43.0
 
