@@ -1,159 +1,118 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF72449BD6B;
-	Mon, 21 Sep 2026 13:16:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEA4049E5D1;
+	Mon, 21 Sep 2026 13:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789996608; cv=none; b=kAUhQgS6Eb5bXbOszZrXmgd5er+20SqYM3tZU080Kqm8tPlJPuji+x784Qbc225Os9OHBJHQl3KSXUan6JByqwzt9XGEoht5IHcpeX0xlH9VirJVuU2GUa+kJEUQDgQaQ0GsjehxvKAH9t1FOXVFp5NFnGb4PBVhddcdeVg2qcg=
+	t=1789997300; cv=none; b=c7zzfiso0I1zsdaPuMoGn11oFnSJbg+O3f5Bln4tjf9UXWeW6u8LDSPLDrJdiEJjHod9k/1FEY97zVymzlJXbk24dBchn+Op6svYAsalTf5dG3nOeT4jbKOGk13oMNjxk7YlcvoBX3GAUhqRgXRl1OxCaxZPD1Na05nAdOVPN8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789996608; c=relaxed/simple;
-	bh=alMkwpLLq8o/W5ksx/Aslq+G/hhCkBzj+g1lvIR3Qj0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ema3s7r75O3TIN7fl2bX5yZhFqJoQ64PLFxWWl/559W3RfPZnk8oOpKHeyO9yvGMB8yJf8BliBlqj9ddB9DWnkfwqDWNisfx9TDdg2v8ETpaIifVf93vGU+GOh0+GAGp+czeqB2ZLVQtKr1ozUzymCzBvwvtK6cRakBkCTQOsew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: a8bc8a8ab5be11f19a56ed5b684f684d-20260921
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NAME, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
-	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:2e4e5417-57c3-4e8f-a228-bea0547a69f9,IP:10,
-	URL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:-15
-X-CID-INFO: VERSION:1.3.19,REQID:2e4e5417-57c3-4e8f-a228-bea0547a69f9,IP:10,UR
-	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-15
-X-CID-META: VersionHash:7db8b62,CLOUDID:5facdd19d369d6921df06601d3987007,BulkI
-	D:2609212116331NOFBL1S,BulkQuantity:0,SF:10|66|78|81|82|102|127|865|898,TC
-	:nil,Content:0|15|50|99,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil
-	,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: a8bc8a8ab5be11f19a56ed5b684f684d-20260921
-X-User: sunshaojie@kylinos.cn
-Received: from sunshaojie-pc [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <sunshaojie@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1807090; Mon, 21 Sep 2026 21:16:30 +0800
-From: Shaojie Sun <sunshaojie@kylinos.cn>
-To: Tejun Heo <tj@kernel.org>,
-	cgroups@vger.kernel.org
-Cc: Johannes Weiner <hannes@cmpxchg.org>,
-	mkoutny@suse.com,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Li Wang <li.wang@linux.dev>,
-	Hongfu Li <lihongfu@kylinos.cn>,
-	Shakeel Butt <shakeel.butt@linux.dev>
-Subject: [PATCH 1/2] selftests/cgroup: read the entire file in read_text()
-Date: Mon, 21 Sep 2026 21:15:55 +0800
-Message-ID: <20260921131556.444661-2-sunshaojie@kylinos.cn>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260921131556.444661-1-sunshaojie@kylinos.cn>
-References: <20260921131556.444661-1-sunshaojie@kylinos.cn>
+	s=arc-20240116; t=1789997300; c=relaxed/simple;
+	bh=RW1YGZxqMA3BxKR446eKkO2tWZu1/Rk80FrvOSqtuwI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sQhf2oQTBfP9j/dkxYVF1giE6nN9dkIysVypFu4zPVM12MgwK1IKVAqBle09niLVqr2Fim3Priela0KhtKjt90voAlZD+VaLZ0GPBCRd1xHIx+aq6r6v8RqkZL0Br/cyEFg8cDnYNhsyNdg5jQl4Ycw+EwQwjK+KBBQTf5epH8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=MTw/8iKc; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=uPs8+tiq; arc=none smtp.client-ip=202.12.124.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="MTw/8iKc";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="uPs8+tiq"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 71E0F7A0096;
+	Mon, 21 Sep 2026 09:28:15 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Mon, 21 Sep 2026 09:28:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1789997295; x=
+	1790083695; bh=8zCf3uv1kJ23BTMvsNoYWXAI30eiZ3fDTG960OnbLqM=; b=M
+	Tw/8iKcZxC8dUon+ZEGCiMLBOrpAwOXuYxFuSNzq7d6X0JEmi3Dnm0/IUXjUbRa+
+	D8mS6wO7fLj67pjy9G+ciagL7BAI2OSNJC4a8tJEpGQS1cJ34m959UeOZQwGQd3Q
+	3W+EkBWFCnLXPJYEjuWFGkigdsyC4kXv1RF/wFhDSwrp7llCuuVN3TlKkk84GQcE
+	375IpUpYW3t5/CEaYpcFH6XeWmnkooT7qqzMIBFZJvH6Q4b8/Zl0Ynms+3Fey5s/
+	yJr6iWGg+TdTDJN3tQ0imeaXaPB6hLOmLhT5JN5Z8JEcwN0qXNYrH1RThPVnKedf
+	rqdfSQRfNAXF8hGsaqt/g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1789997295; x=1790083695; bh=8zCf3uv1kJ23BTMvsNoYWXAI30eiZ3fDTG9
+	60OnbLqM=; b=uPs8+tiqvfYIQiqAJjQxADq5jt9/mCuMTGuNs70LUpLQ6oEicox
+	R9wmK5Kg0gQsJVM63ASIxBjJgOYEsr6pr0W2AchyA1jAH8Ek+mscncGrYcnhfRC+
+	QqEVlCwF/nAQbuxvwtf5Sz8LS8Kf3ISXFWQLbydI5+Ere2V8JZcfMaIzs8CqeUqG
+	TSCv7ZBE8cFCpAd3VBGsJA8RpwOOproHVVqcbp4hdUBc4UWWH6KMIfLUTdX5oI9o
+	Adft36v+eX+ewDfOKtc2CLJuXgj0BDmFr0b2fXK6iZs7zsxBWIzTPsUZYN3LLSmE
+	pNPHKn2R0P28opKA4ysRXWiEpGwB96n2a3Q==
+X-ME-Sender: <xms:7TCxakGnnyR868M28J0Q8yDknP0MJBSGQoTQVjkVV1h2DBlgpCaNYw>
+    <xme:7TCxapRbb9-ErT-jwPItv1UXeUQD2fm66bVh-efol-IGqtjVY0sY1CkQt0pRZn-cu
+    9BJLlNcqysHAIaPcYCW6gNdl5TiFhD5qm1uss6JG0FalnnISUT9blNc>
+X-ME-Received: <xmr:7TCxakSSAraQKK5v_HyjS9SypoLFf5CoJYjtxHv_hdohrKZhuj9Yu4ulfOSO>
+X-ME-Proxy-Cause: dmFkZTFJi6X8EXtz6VuhlJYgHc0myd9tNUnMA08kKDryRyNf1uHvqKyJi3Um+fcoVX+75J
+    /Cp0sZB9NL40w+Ke2Qu0F1HY5SYioNVZXF2t/S+8eQfjeJlEm0RvS1IEGwfE7JvITfUbY8
+    l4XH+zHLnLGvlMO6GvTbptotkuz/lxIytYj4iaW7Dw0eAq0JLxk1l3HMBl1NBKj6bkl8RZ
+    13FDI+XgzKLOVpMAJCF3+Rj2VGzaW26t4guX5tlMt1IxsB/E2gSpIPJhjqmg5Hkz2Bw3ob
+    +1r0/Igp/z6EetmtURRnvjQHACTqQ+ysSdaYgSjzB1G/tRs1BmNC44MFZcHsLvzPhb/WNP
+    +c6EsaxdIAwunDBAIDWwUdBG5c9VRGwDbZg8qgehuYD9AOCXSa4G/9uCHPnOG0CdG3KH1e
+    aQ9x+O1xKpRYo3iIEpxJSyr5bPkSIPuPz04RKTt0kkpZQvnn9EJhnC1deb4KrHR3gNVkGC
+    116eBKfpa7FkO/qG0mD8Z2kNyxfIl2VtSZ8biDPBfb6G6in6d5RLOLBsgg7xg4M/vEVQje
+    SSFvH+6awbX0rc5+AHBgGimkC7oZTXBOb6Y4RHF2ROi+5EtO5VaU3g1fZDCL3FGSjdTR2C
+    3s5ZS4K934v9o0CfBTX1zmeUbSRU5PIhG8Zrdaqpo1vE35KrleyNsKFy/JIw
+X-ME-Proxy: <xmx:7TCxasc317_wRhp3LeS3gnpj-RlPNvjrcAAixdyJoK0cVmL9muNxZQ>
+    <xmx:7TCxaoc88xRcLy3kBDrDUksGJGOUi8mkpOKc4HEwBFqlGWB25pfFEA>
+    <xmx:7TCxai-rju-xkhWqP5W2U30TTQBpex5GAw_RHoQ8Dd21lmcVf79DnA>
+    <xmx:7TCxaoM8fgldCcLLyrXxDesV6_APuAD2AGPuv58q22G9I-RnJILfKQ>
+    <xmx:7zCxaumV56FVrtN9ib1bLqTyoj518VHDBnIT2F1OmzzhSzrbHMklrc8w>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Sep 2026 09:28:12 -0400 (EDT)
+Date: Mon, 21 Sep 2026 15:28:10 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antony Antony <antony.antony@secunet.com>
+Cc: Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
+	Jamal Hadi Salim <hadi@cyberus.ca>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, Yan Yan <evitayan@google.com>,
+	Tobias Brunner <tobias@strongswan.org>,
+	Florian Westphal <fw@strlen.de>, linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH ipsec v2 1/6] xfrm: state: exact mark/mask match for
+ SPI-keyed control-plane SA lookups
+Message-ID: <arEw6qLcr_YEI8Wl@krikkit>
+References: <migrate-state-fixes-v2-0-c3e2767f0d96@secunet.com>
+ <migrate-state-fixes-v2-1-c3e2767f0d96@secunet.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <migrate-state-fixes-v2-1-c3e2767f0d96@secunet.com>
 
-read_text() issues a single read(2) and returns whatever it got, so a
-caller that asks for a whole file silently gets a prefix of it instead.
-For a seq_file larger than one page it never gets more than that prefix:
-seq_read_iter() copies out at most one internal PAGE_SIZE buffer per call
-and leaves the rest for the next read(2), no matter how much room the
-caller's buffer has.
+2026-09-08, 08:48:45 +0200, Antony Antony wrote:
+> Add __xfrm_state_lookup_exact(); wire it into DELSA/GETSA
 
-/proc/self/mounts is one of those files, so cg_find_root() only ever sees
-the first 4K of the mount table.  On a machine with ~80 mounts the cgroup2
-entry already sits past that limit: the file is 7177 bytes, the single
-read(2) into the 40K buffer in cg_find_root() returns 4035 bytes, and the
-cgroup2 line starts at offset 4953.  cg_find_root() then fails, and every
-test that calls cg_find_unified_root() -- test_core, test_cpu, test_cpuset,
-test_freezer, test_hugetlb_memcg, test_kill, test_kmem, test_memcontrol,
-test_pids and test_zswap -- exits with SKIP "cgroup v2 isn't mounted"
-without running a single test.
+On the "other proto" branch of xfrm_user_state_lookup(), we call
+xfrm_state_lookup_byaddr() -> __xfrm_state_lookup_byaddr(), which
+still does a "loose" mark match:
 
-proc_mount_contains() searches only that same prefix, so a mount option
-listed later in /proc/mounts is reported as absent, which is what the
-probes in test_memcontrol and test_hugetlb_memcg are based on.
+		if ((mark & x->mark.m) != x->mark.v)
+			continue;
 
-Read until the buffer is full or EOF instead.  A partial read is still
-possible when max_len is too small, so callers that deliberately read a
-prefix, such as cg_read_strcmp(), keep working.
+Is that ok?
+That's the only thing I've noticed in the series.
 
-Signed-off-by: Shaojie Sun <sunshaojie@kylinos.cn>
----
- .../selftests/cgroup/lib/cgroup_util.c        | 35 +++++++++++++++----
- 1 file changed, 29 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/cgroup/lib/cgroup_util.c b/tools/testing/selftests/cgroup/lib/cgroup_util.c
-index 2596c12cd864..65cd85c467bb 100644
---- a/tools/testing/selftests/cgroup/lib/cgroup_util.c
-+++ b/tools/testing/selftests/cgroup/lib/cgroup_util.c
-@@ -24,20 +24,43 @@ bool cg_test_v1_named;
- /* Returns read len on success, or -errno on failure. */
- ssize_t read_text(const char *path, char *buf, size_t max_len)
- {
--	ssize_t len;
-+	size_t total = 0;
-+	ssize_t len, ret;
- 	int fd;
- 
- 	fd = open(path, O_RDONLY);
- 	if (fd < 0)
- 		return -errno;
- 
--	len = read(fd, buf, max_len - 1);
--
--	if (len >= 0)
--		buf[len] = 0;
-+	/*
-+	 * A single read() is not enough.  procfs and sysfs are backed by
-+	 * seq_file, and seq_read_iter() copies out at most one internal
-+	 * buffer (PAGE_SIZE) per call, leaving the rest for the next read().
-+	 * Reading only once therefore silently drops everything past the
-+	 * first page, no matter how big the caller's buffer is.
-+	 *
-+	 * Loop until the buffer is full or EOF.  A full buffer still means
-+	 * the file may be longer than max_len, but that is now limited by
-+	 * the caller's buffer rather than by a page of seq_file output.
-+	 */
-+	while (total < max_len - 1) {
-+		len = read(fd, buf + total, max_len - 1 - total);
-+		if (len < 0) {
-+			if (errno == EINTR)
-+				continue;
-+			ret = -errno;
-+			goto out;
-+		}
-+		if (!len)
-+			break;
-+		total += len;
-+	}
- 
-+	buf[total] = 0;
-+	ret = total;
-+out:
- 	close(fd);
--	return len < 0 ? -errno : len;
-+	return ret;
- }
- 
- /* Returns written len on success, or -errno on failure. */
+I guess someone could claim that this patch changes behavior, but if a
+user somewhere notices it, I think that would mean they were relying
+on insertion order to delete/etc the right SA.
+
 -- 
-2.50.1
-
+Sabrina
