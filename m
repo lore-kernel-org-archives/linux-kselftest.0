@@ -1,161 +1,142 @@
-Received: from mail-pj2-f16.google.com (mail-pj2-f16.google.com [74.125.227.144])
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C334C8FFE
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 17:28:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E6E4E4C2B
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 17:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790011736; cv=none; b=BuGruaPRwbRHfaQ57rdq661fzKZ5eibhHTAoiO09uyyfrbW/mhqKidJ5nQONIokNzuAbDAaE2cCKJqzaNoWg7I++eVg3DBJazi5kRzhkZ46IYRogFIVBPQuzwBmDqtsfdZoaZIlNM4bPwhyGCbfQphdsUk0/tf1acip40zdG8Y8=
+	t=1790012373; cv=none; b=PdC3eZhlgHU5j3uZ7Ak5KylvYw+zqnZGkVfSeuPxvFsmYMJxSAa3pb39cAewBNfDjb24C6Q5mdikFgwshSTfdsxaOhkt/Pcr3H74y4I6PE78y+tsVIfeR8cEDDVRQnjCLvkEcKH5g0bhub3WjmUc/oQrv8/hZgmG3d2WkiUzxw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790011736; c=relaxed/simple;
-	bh=rKs1PU/5QOsLafJXwPqxenRp7To/56/uq9dt0Za38oE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NNsSuJ6bI+Gz1qbKQQYJ/+WrUmOXc/Zua/l6M7HrBMh1rzNSxZNi5HenNxZVjs0dXa2fnDpXRGeeW/0hzUBeaNdvpq1rDKplQLEGru+iF1aPpsxII+q3xU9qNn3Kd2Au3cptiNEaIIrK6oF/bkFVihT9sqYv8i6qBrZRFQ0oSvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q6MAVgun; arc=none smtp.client-ip=74.125.227.144
+	s=arc-20240116; t=1790012373; c=relaxed/simple;
+	bh=HhFClUICP7LmPKOCpv+tBSAjahEijfSps+4cVHoIynM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EDQXN8Zu8zCimyfVzBz+AqIZBoR+Sh10G2sF5LoaHe9LtL9eUlQSSWKBt3pHPrIkYIk4KPEi/GyuaBIqhVGdyiGNv35nfhFDvvr/vzv5bJd5FXhotk2JrBIrD+FRbMN0e6JL2CyybHIBbSb91I+pGSRp/ZaBI3/h5ZIcje8jlug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X3a2Ts0G; arc=none smtp.client-ip=74.125.228.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q6MAVgun"
-Received: by mail-pj2-f16.google.com with SMTP id 98e67ed59e1d1-396ccd78e6eso1258736a91.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 10:28:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X3a2Ts0G"
+Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-85469d249c6so2830750b3a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 10:39:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790011734; x=1790616534; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=HIyz24hYf1UON6o/FWpN0/OOApAPHNljwo6ieAFOIdE=;
-        b=q6MAVgunCEvkKtuho/gH767WK4Mj6JuRA1loT1Whs+xBhjPiwGDPI27AOyigYcb01A
-         s73i6Qfjl8mqi7fTaaprZjuW95yX0gEi+VZqEPdaQxcyRpV7z/bp5u8WGDxQxQ15Vghu
-         6wB/YGZdFrJ6+u3LTn+anp6xM30HTxFsZ0ur+vpR8umGGZ9j/iqsEVzhARMvcqvKNgFd
-         +jBbSbeRAXBCW7BhA52/9/UJzYhGUoHa8WHc01Vl4fX3PKqijTJu2RHNPN5qJua2/HNn
-         G4CehG3ujussfnqzVg0CttI3tFuZAWdiD2sEGHsZ/P5qdAz7TzO4CBNmcaBP1TFx9PLQ
-         oJeQ==
+        d=gmail.com; s=20251104; t=1790012371; x=1790617171; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jINDts3UuKVPqaZDvWUfm35N/OrGGobyZ1ICHQzvtsU=;
+        b=X3a2Ts0Gi+7GKV1OXyIntTqUVYfXrGSdqu84S5KrQLDGJeStjfvQkEiRxK+zNVAF0g
+         DkK6mlCcuKPPMAYKGeOtwxE91PBUe7uzQjRCe7TgW5uUA2ryKZcUJHmsJCK8ONM5Idiz
+         KdXAOOK+5xWy8NAq9WsHvgMkc2byBuFoyAFHvG/Jds8V9PLiHxuCaXzR/SaCl0kdA0IL
+         IdbMmZYUEiCvsHrCQ/ZxuNrK3oXg1XEtjzSrz3uQsYvI4rL8yHmSCkqs6czvInxksdUF
+         4Y/8gNnbX5k/vFJRSufQqbNJCZBPn5/HmWxm2lUdArJwPSgVYEbzHO0hC9D6tdWxmr+u
+         WlDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790011734; x=1790616534;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HIyz24hYf1UON6o/FWpN0/OOApAPHNljwo6ieAFOIdE=;
-        b=hbbYmHiGYXo6vmdGxIuE26MoWRN9Ya84W9tzW4bFRE/U0N8VDa/xkwHxBWIEBf4DJU
-         ZC4EQwzRG5G7MJaFOvUdbMdmS/iVgdsO7O38bsMEc9Fpdzr5r0nASl+VzwhNlVAmimxL
-         8FGX/zUWJaO+MWOQqvceFJGw5QrtNoc63xSNHfwQXYfTwcOqn4yuCBicvd5x++Juvg+P
-         Bo5wzMcR52ypOZAnCvvYVPggRPfP5T7rRopr+HgPQz6v3imJ3EQJKf83HObhcKuySgT0
-         Gb0VdB9jGc/Z4kELzJ/E5i1CocMOKDFjLXtUY+7P/e0PigfdDo5ypNXtwsX1xNjy6Mrf
-         SSJg==
-X-Forwarded-Encrypted: i=1; AKwUvBwg2uKdP8s170tyedj5EItwJNQy3lS37s9SeabEgSnulhHm77E3QXLhh4d7knhDgC6Uq7Da2u4p5O0WOzKlvOE=@vger.kernel.org
-X-Gm-Message-State: AFuF++mbOZaS3misyKe5xcFeOVuRAXNS35W+kp5OCXYrkUTPVRhUgWk6
-	aDodbOT9eHqVyjxbGZm1YZoaRi8+K3n69+i1FXyBP22PZYB+5X9HP/By
-X-Gm-Gg: AYBFou0X8eTwBFgZBu0Thz6X0kNx7e+0Kn0GpofS8jv37PlI1jwDFKBBfMNSsk4W8wb
-	H7ftLthNIGMsy2GjZJOOJ9B/8Wjk+AcDew/13xFnqK0ax5mOhBDG2faaJQJdYyUMYO6br7Rpdx/
-	f80viZj/iiB2qlC6gO5SjldL2dejQPvloVpyVO2I3IpXaSRua9CAvSC0H6nIKIQQ1ff6Ii28k7b
-	Rop6T41ajZOG7zodpukux2V171tEoyeZUUqEdN5yO/IFa97iFenwkMXu5plRTLSJprDV9qwR8qX
-	r7GGfXs84mDM2DMSc9jJSiO9k32sfVAALaB5bZ/ALVCxBBdSVxSVYyNrLqHagIqd8KzTxHv/C3c
-	QjP1f6iWtD/EZvwzlkY/q/8auT+XK/+SBYmkMTGjs0dsohbvBTMG1ivxPZ7VGNck3YiIp3g8T6L
-	SglPax5D7NP5hBgg1ZEwJPNqSOel7aQ95q8T2RIIj/hkNSKrhndC/DMIb6wg1gCsZ9q3WTcpx5H
-	4uDzfPR6fvAUyMUmawFrtp326jGuJhR7L+HxHlsg3tNCOHdMP7pmWW9PA==
-X-Received: by 2002:a17:90b:314c:b0:39e:6c68:fd92 with SMTP id 98e67ed59e1d1-3a066b94a2cmr204240a91.39.1790011734071;
-        Mon, 21 Sep 2026 10:28:54 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:431d:4670:d5b5:343a? ([2620:10d:c090:500::4:1bba])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a067021ca6sm355722a91.2.2026.09.21.10.28.51
+        d=1e100.net; s=20260707; t=1790012371; x=1790617171;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jINDts3UuKVPqaZDvWUfm35N/OrGGobyZ1ICHQzvtsU=;
+        b=aPbB8tG89W4du5phBRt1SMxzGn7gQiv77cy11mHWK7DAStEZ2W5qgR6b858+KXIDw3
+         JwB5kRpeTd9bNeFov6uWs/JU2Kj8BCRD2wr76Srocffm5ouX63g6QQ+ZDz391GfcBuOo
+         PYLj2IqjHGJK5TyGaFnTQjDGN3m+dWBIXJ2h5Uj1zoDsxVIqtF0Tlrfih7o2NvUYLDBN
+         kXYS3V5ewvkzeUvh33pmvSdQILld870TK1dpGqspkwk1gN5fa/tkshNLYsKBiAl21pMk
+         Nn+IEkuqpQwOy3jvT5fH0e5ROwBvBF2pCrEl5B7JqXIQ++tcl38KrEC3SYaYMJVOV9Bf
+         eKhA==
+X-Forwarded-Encrypted: i=1; AKwUvBxOi0wL0CecXjs1zVN147WNZOKrWnF/EiDnTkWFIiwzuoeFMatM5ZP2rhY7WjuvJiwp9Td/PoYPuat/yBpBTVI=@vger.kernel.org
+X-Gm-Message-State: AFuF++k8hdrvCTVq9JkCgia1kJDjFuYYoDEQnJ/8//wvipPt9Qg/kJlG
+	HvV65/J91WPSiKd4LpXfNhLS4ICew4EXtpN5unOWQmJNOW5e2v8mBIXD
+X-Gm-Gg: AYBFou2dYiTYj8JaxoRlgJuJHCRB3w8SjlQzF7KpN/LGEAA5Sy1m1fZaxtueLldpPPM
+	FvVhw16HM0E+5eSkW0w1Q11KN/tcR/lAOd2yBwDT9qT/ut9qaECfFNDe1cZHMMGJv1m1EZ94Ffk
+	K5WxuESaPsNrZa6Fu84J2A4/v2GnfhDmnfn1/m6cVgkHJEp2C95sd2N9q9AcutWfMGCiU/GRjOh
+	hXg53EAP27AKIMmcokFQFNzJPWgohsEBDu5sItJO1dr45mAor656nrrKf8F3P+vNdqRSKGFBpvh
+	XzlGuAN7xO32MG/X9SUwcTkrdAxwMEpwwwtMNJng3MTumUayvaVekswvRcp2V703TOj8YdZFFHU
+	axwOn36NIUgWAGOfO6HXRJPyy3WCbHiMF0C+dvyx6T3ddW3g/q53AMJSBjyK/NNPPtbqvLvYWRS
+	USFF66/IIJCUvxf42yZPNxBfFvnz51x9VfCBwmZmt69vLPZKQx6vaXuE3je8k6W/QutQraL+PQw
+	lbX/xTM06bQFX8lJHCyopFY5bJ+5jgV8nw10V+8/KU=
+X-Received: by 2002:a05:6a20:4304:b0:3d0:d1f1:6ec5 with SMTP id adf61e73a8af0-3dd8c2dd73fmr18840357637.4.1790012370973;
+        Mon, 21 Sep 2026 10:39:30 -0700 (PDT)
+Received: from 192.168.50.3 ([198.176.50.208])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc72af0955esm3986985a12.32.2026.09.21.10.39.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 10:28:53 -0700 (PDT)
-Message-ID: <ff18ccb77a554000a030199e8c1fbb7d8d298e18.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
- across zero-extending movs
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Vineet Gupta
-	 <vineet.gupta@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, John
- Fastabend	 <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf	
- <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, "open
- list:KERNEL SELFTEST FRAMEWORK"	 <linux-kselftest@vger.kernel.org>
-Date: Mon, 21 Sep 2026 10:28:50 -0700
-In-Reply-To: <CAADnVQ+Si9Au8J_j2nt+ZzFq6WPaz8hpmh0n=_dFysZmSOeipA@mail.gmail.com>
-References: <20260910164635.459558-1-vineet.gupta@linux.dev>
-	 <20260910164635.459558-4-vineet.gupta@linux.dev>
-	 <DLDKI0ZXYI7H.1XQZZE2RCU7IF@gmail.com>
-	 <4ab75099-0e95-4fee-81da-6f4198e3e6a0@linux.dev>
-	 <CAADnVQ+N9tzBJ0Bbvp8_8QvR+QcCP4ej5CgV_kRHt=iw4BANSQ@mail.gmail.com>
-	 <202c45e2-58ba-4ad5-a234-c90703031f91@linux.dev>
-	 <CAADnVQ+Si9Au8J_j2nt+ZzFq6WPaz8hpmh0n=_dFysZmSOeipA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+        Mon, 21 Sep 2026 10:39:30 -0700 (PDT)
+From: Weiming Shi <bestswngs@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Xiang Mei <xmei5@asu.edu>,
+	Weiming Shi <bestswngs@gmail.com>
+Subject: [PATCH v4 0/2] bpf: clear stale IPv4 options after LWT encapsulation
+Date: Tue, 22 Sep 2026 01:39:08 +0800
+Message-ID: <20260921173910.90847-1-bestswngs@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2026-09-16 at 17:30 -0700, Alexei Starovoitov wrote:
-> On Wed, Sep 16, 2026 at 5:08=E2=80=AFPM Vineet Gupta <vineet.gupta@linux.=
-dev> wrote:
-> >=20
-> > It ended up with full testsuite run parity - after 4 incremental patche=
-s.
-> > But the pattern of all those patches was adding some predicate /
-> > special-casing to reg->add_const
-> >=20
-> > hunk 1
-> >=20
-> > -       if (src_reg->add_const)
-> > +       if (src_reg->add_const && src_reg->delta)
->=20
-> why? It should not.
-> My point is that zero is not special.
-> It should be handled within the current framework.
-> All these extra hunks are not correct.
-> ADD_CONST_32 logic should work for delta =3D=3D 0 just like
-> it works for delta =3D=3D 1.
+bpf_lwt_push_ip_encap() rebases the network header after prepending an
+outer IP header, but can leave IPCB(skb)->opt describing the inner IPv4
+header. An ingress LWT route can then make an ICMP error consume stale
+option offsets.
 
-After thinking about it some more, I agree that having an orthogonal
-encoding would be nice. However, it appears that the split should be
-somewhat different:
+Patch 1 marks completed LWT IP encapsulation and clears the stale metadata
+after bpf_prog_run_save_cb() has restored the protocol control block. For
+same-family IPv4 encapsulation it clears only IPCB(skb)->opt. For a family
+change it resets the new family's control block following
+seg6_do_srh_encap(). Patch 2 adds compact coverage to the existing LWT IP
+encapsulation selftest.
 
-  struct bpf_reg_state {
-    ...
-    s32 delta;
-    u32 id;
-    enum id_link_kind { full, zext, sext } link_kind;
-    ...
-  }
+Changes:
 
-Where:
-- id =3D=3D 0 =3D> no id link
-- full =3D> all 64-bits of the register are identical to
-          all 64-bits of a scalar value `id' (let's call it X).
-          =E2=88=80 rA{.id =3D=3D X, .link =3D=3D full}, rB{X,full} =3D> rA=
- =3D=3D rB
-- zext =3D> lower 32-bits of the register are identical to
-          lower 32-bits of a scalar value X,
-          upper 32-bits of the register are null.
-          =E2=88=80 rA{.id =3D=3D X, .link =3D=3D ?}, rB{X,zext} =3D> rA % =
-32 =3D=3D rB % 32
-- sext =3D> lower 32-bits of the register are identical to
-          lower 32-bits of a scalar value X,
-          upper 32-bits of the register are either 0 or 1,
-          depending on the bit 31 value.
-          =E2=88=80 rA{.id =3D=3D X, .link =3D=3D ?}, rB{X,sext} =3D> sext(=
-rA % 32) =3D=3D sext(rB % 32)
+v4:
+- Follow Alexei Starovoitov's suggestion to drop the independent freplace
+  patch and keep cb_access as one bit.
+- Clear only IPv4 options when the family is unchanged; use skb->protocol
+  and the SEG6 precedent when it changes.
+- Rebase on bpf-next and replace the standalone selftest with compact
+  coverage in the existing LWT IP encapsulation test.
 
-The reason for such subdivision is that:
+v3: https://lore.kernel.org/bpf/20260920163211.795547-1-bestswngs@gmail.com/
+- Follow Daniel Borkmann's suggestion to reset the CB after
+  bpf_prog_run_save_cb() restores it, avoiding an extra CB copy.
+- Split out freplace handling and selftests, and cover CB access, VRF,
+  nested runs, and already-encapsulated packets.
 
-  (X + delta) % 32 =3D=3D X % 32 + delta % 32 =3D=3D X % 32 + delta iff del=
-ta < 2^32
+v2: https://lore.kernel.org/bpf/20260916170406.1280954-2-bestswngs@gmail.com/
+- Preserve the protocol CB for programs without ctx->cb[] access and restore
+  the proper layout for the final packet consumer.
 
-Meaning that a non-zero delta can still be used to infer the state of
-the lower 32-bits, e.g.:
-- if  r1 =3D (X + delta) % 32
-- and r2 =3D X
-- and there is a comparison `if r1 < 42 goto ...`
+v1: https://lore.kernel.org/bpf/20260915170147.3943392-2-bestswngs@gmail.com/
 
-This comparison adds constraints on lower bits of r1,
-and it is correct to transfer these constraints to lower bits of r2
-by subtracting delta from r1 and using lower bits of the result.
+Weiming Shi (2):
+  bpf: clear stale IPv4 options after LWT encapsulation
+  selftests/bpf: cover stale CB after LWT IP encapsulation
+
+ include/linux/filter.h                        |  1 +
+ net/core/lwt_bpf.c                            | 30 ++++++++++++
+ .../selftests/bpf/prog_tests/lwt_ip_encap.c   | 45 ++++++++++++++++++
+ .../selftests/bpf/progs/test_lwt_ip_encap.c   | 47 +++++++++++++++++++
+ 4 files changed, 123 insertions(+)
+
+-- 
+2.55.0
