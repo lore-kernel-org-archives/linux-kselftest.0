@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 601E93CE4A3;
-	Mon, 21 Sep 2026 15:31:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B08478E20;
+	Mon, 21 Sep 2026 15:32:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790004714; cv=none; b=mgjrRC7bFmjEBRDVHUzN9mSyVZ7OP/ugiMhBcKVvyvcsT+8ctqW5oF7KEhn0qUE43ildkoaDmuW+rqV81XUNLRLBPCGtOAEs7r/FhpGti2JTUCvxdw+vwvHh/4nyUgWeNUa1ws+rR0cYJ0/i7dqwEisSdgtDV7Brh9jxuq9SlsU=
+	t=1790004723; cv=none; b=cNKJPFScA6hXkpMveakptVD6XAz/7ZCpD/9ECQKV/Ed4AO2socbxcp2UyzQvUqvqEo2Yy0vMt75CYOUeajn9aB0hH/ObvvkRtniUV9tPYFrbk6hukF/bNYZjD9tv8jfkPeubvGLwIkJDtb7EKoRT+4Izk1k9jG4gYIL6XU0vmkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790004714; c=relaxed/simple;
-	bh=aXZYJv/ooOZjiyuBUuVQyCuXJ4z/Q/tn78di5BXOlDQ=;
+	s=arc-20240116; t=1790004723; c=relaxed/simple;
+	bh=SSncLsRAxodsddhmI7G71rX9b5MchZSdW271GIfMBfE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rZL8k9/3C27ZsOnUPKxWdVxzvcJ5KNlBt33AqcuJAVXvOCUIJ/9J5KlT2MupgYb6iSgpoG8pXGYDCbPJfhks8iF313exX6awfidYIxwf8wOvIqnV95ha0Q/eAwWTmoW8iirgTU1Lo+PhsDun974Xs7Ub0mfCwIad8S4SwN/zvxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DoYlUaGs; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=IHpxKcX7VmgnvjDa02+XppEK5OJY6zHSV2SyoWLDplu3hvS0GRYLtUhcBbt1sY+6XM+55Jm/nNGjiwXOqJ/8/oUeQ/jF1WRbNe+2bJAbNqyLSoufKWFvEqUPXx0e279AIzUJmt/4thR7IHGAlWqvElxSAr/IxMtA8cFfVz5IYIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PBMnD//m; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DoYlUaGs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91E301F0089A;
-	Mon, 21 Sep 2026 15:31:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PBMnD//m"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC211F000FF;
+	Mon, 21 Sep 2026 15:31:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790004713;
-	bh=HHp1Y73hUq5B5utgvxhoXXSaTrrz/7rdxoOs5y+VuXA=;
+	s=k20260515; t=1790004722;
+	bh=+Xkowsa2yFq1oP2Gf4FeRryPZ9BRFkiL4/i+iNDUq40=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=DoYlUaGsRjbuMIATX6w7VdNpQ2kCFEctbChQZ1OrjLUB7G7WWRpDdz+G46Xu7WoBo
-	 3B3rgW72KEEYe2KH/o21b8zAHLwDdRlhCWCHG6//luNfl5SWvlrHk4mWOuqEPHP0g7
-	 Ug2WmhDVUR5AYqagNEiLogi2BCcjGYO6TBPfJ4A+8mi7+uktSfX+koJsbMxnt9EM3J
-	 bBV3+lt5Y63dyKunlnM+dVjdpokLil2KCmxHPPlY29J75QDB8O6/sazjhaGvLuuKjI
-	 tToMo1ot64rbcEF0abYjY3glR9c+QWGhZ7E/tH5HFAb4zuIifEsv/osbfyTfKA4hUi
-	 vbKkOzWg7RaWg==
-Message-ID: <019c8f87-2e83-4078-8ecf-cd4eb4e73abb@kernel.org>
-Date: Mon, 21 Sep 2026 17:31:35 +0200
+	b=PBMnD//mWpAl56A6hSWB95/JUorzxJ7Jc+oWq0Np0UthWaZnzOC+qkKHg6SEC7KZ5
+	 xDNfMdcXdDRwVhUpE8cwtCjMPEVNdEOepf9mklyufIb39JCHSBxvZqRhAwDVJgZor7
+	 uMixfzhkspgi+NnDN0frJeWczG7EO97cHicFqJr1uM7DI8wvu2R0UjifzFPVB/5nbV
+	 Pt20htIhGkyZyIgHps/qACpv8z+yHFLjoL3ZyICPRkd7NIG3JaQUqIxJZ+ps0QA/1d
+	 W737KK51AGzPicSLYgxsKDv69yNNsQYfyQZHn9it/O3DMLxfc+Cjl/TX/Udk78/O6B
+	 CZfJsvZMILu+g==
+Message-ID: <8b1e9356-527e-446d-afd8-0ad3c4edfcaa@kernel.org>
+Date: Mon, 21 Sep 2026 17:31:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/3] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT
- macro
+Subject: Re: [PATCH v4 3/3] kselftest: mm: introduce size_to_shift() helper
 To: Yeoreum Yun <yeoreum.yun@arm.com>, Lorenzo Stoakes <ljs@kernel.org>,
  "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
  Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
@@ -52,7 +51,7 @@ Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
  Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
  Sarthak Sharma <sarthak.sharma@arm.com>
 References: <20260921-fix_hpage_macro-v4-0-cdea4fc6ce3f@arm.com>
- <20260921-fix_hpage_macro-v4-2-cdea4fc6ce3f@arm.com>
+ <20260921-fix_hpage_macro-v4-3-cdea4fc6ce3f@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -99,55 +98,16 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260921-fix_hpage_macro-v4-2-cdea4fc6ce3f@arm.com>
+In-Reply-To: <20260921-fix_hpage_macro-v4-3-cdea4fc6ce3f@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 9/21/26 12:36, Yeoreum Yun wrote:
-> HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
-> When this macro is used in some test, test result would be strange in
-> the system where PAGE_SIZE is more then 4KB.
+> Introduce size_to_shift() for future users that need to
+> obtain shift of a huge-page which is other than pmd_psize().
 > 
-> Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
-> 
->   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
->     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
->     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     ...
->   ok 1 Completed
-> 
-> Remove the HPAGE_SIZE and HPAGE_SHIFT macro and introduce pmd_pshift()
-> helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-existing
-> helper, pmd_psize().
-> 
-> Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
-> which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
-> and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
-> PMD-sized units, the test may fail with the previous size of 100 MiB,
-> which is not a multiple of the PMD size when the base page size is
-> 16 KiB or 64 KiB.
-> 
-> After this patch, output of transhuge-stress:
-> 
->   transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
->     2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s	2585 succeed, 1232 failed, 2585 different pages
->     2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s	2585 succeed, 1232 failed, 2585 different pages
->     2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s	2585 succeed, 1232 failed, 2585 different pages
->     2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s	2616 succeed, 1201 failed, 2616 different pages
->     2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s	2627 succeed, 1190 failed, 2627 different pages
->     2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s	2628 succeed, 1189 failed, 2628 different pages
->     2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s	2630 succeed, 1187 failed, 2630 different pages
->     2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s	2631 succeed, 1186 failed, 2631 different pages
->     ...
->   ok 1 Completed
-> 
-> Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> Reviewed-by: Zi Yan <ziy@nvidia.com>
+> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+> Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 > ---
 
