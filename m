@@ -1,197 +1,330 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A4A479867
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 19:44:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E788C40B102
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 20:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790019880; cv=none; b=DjgfTjOqIAfjaB44z7evq1kLUUPvVy5QGoR+fNZ+AkILdengi+rW6pZvzRWyFfZlOYYtdSyUUHYZhZKdIVavrHT822DXebcXsTNm44DE1N61NNrW0KMORwlSHsVlu5M4N6jB8pWaRZIc80Ln/NWeNalfcbDaV5r+MsgMtjzLPdc=
+	t=1790021540; cv=none; b=g/WN7TE9zKwlJ4P9li6Bcu9vIvBMf+aSRVa05CGNeN4d+tyk4pN2l34WPIWegoRaVTG9ITwFxzC+2dbktz6e/yLgNIEbVgA9A3UXi+M2Ij6RHh7lBRTMVvqEoYbCgePzpJJ5IWOgehm7D+fmdjXPejrXop6tPoKbW34MQ4iAcU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790019880; c=relaxed/simple;
-	bh=97s/8iT6zoeWzj5BFrEjbnzOOXlWZdXh//bjwqi4OXk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=g6zS9OjFdLhHJ+xuvyuy2TsC4iB2LBgsGeQ9woXFWMBNF49C3GHoAuETIdJLGIl6Zsn0H6utluQreEk1l0c93+cs3tmYSawAD8/qJrUUd6FwWz8qJCIRe5NKnnKehRV5YjsGr9ZnDpgpbprYex6Sv0+TcfBtRq+PObDvZdEy8rc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pNjUD6Wb; arc=none smtp.client-ip=74.125.227.141
+	s=arc-20240116; t=1790021540; c=relaxed/simple;
+	bh=5T4lbni0PCLYd4q7QXK+iCi30F7GifM33dUtGAiz8DI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GEgR2K7GqTPj1vMFghgTV/kifdsXeAbOMHLtoWfCwGMsWDbnRdt1E6tSkcuAVAHAv1BDKUXpG/NoxNXc0W6Rgy81xPGi1ZEZxgKtu1utgrq0uxZ1HpqJm3fHahrq6kY3qoeWcI8QiftGbwCU8gRMbPDtR8E2YUcK/5KNEz/UmZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b4nXtMe8; arc=none smtp.client-ip=74.125.228.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pNjUD6Wb"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d747f01363so27757525ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 12:44:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b4nXtMe8"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc1cea34ef3so3005564a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 13:12:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790019878; x=1790624678; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=7EWfsQUamIev2TGG4Ye/VRFYZNi1syArJoSYx9L81TM=;
-        b=pNjUD6WbURdMR1fZMclQZgtrt94TDEAOLFI7lzTW/a8PfejEZgaOqczn5ROLbxm64e
-         7Wzg+dATmgk0mxrdJj60ldJJsPCzAcwt5j6IqkqwhB05vOdRJyrEO536CpfgKmlY5csG
-         PWcGmzldT/W97HuHJKV1yX3h8dr6E/r6obifnxWwVFWMWSVTp35AIvj2VRXRjzpGt3+c
-         g1JXFWKjuDTItGGMnIjpyHk2ztRuGfMlolIW7q4Ya/YyksOUfzNmeYWSxx/3gwCYKZJS
-         YKxKxYOFK/cntQgzywYL/XPwhNpQwmRPQyKINfzQytEpFKDK5m+W4y4+8+RvE91yz9O0
-         scHg==
+        d=gmail.com; s=20251104; t=1790021538; x=1790626338; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=pO39sZ0nSfGxxtiUdD70gv53e2K+kwH/We90AH1SI04=;
+        b=b4nXtMe8IDvMXSNRRjRSodAqZ+72bpPQpdXmcp2mFGlnzKRHzTHLcUHUF3uidu67Oz
+         3U6i66jvvk0C9dqwF3DDkajwz+kVomKCorWmYyClkfcCKIBZrv6xtoR+vML2knovqy/T
+         nQoTQVizEe3fQEIdfdrn0wuiZSmVI+WQzziyrXt3UxnAolJhHtRqxT2jvO0FjNwu7Hxc
+         BwN53+VrsGAGXcRGLlkDOkDvDvYqWGc/lDuMP7XQ7oGUviEJni61kqK6a/43Hgdt22C4
+         ViSc+C0TbJN3Vgy7mHv2/WmIAlFNveHLypZKLFneM8NvO7CKInT6l5f+tGByHEZus5ht
+         JhWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790019878; x=1790624678;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7EWfsQUamIev2TGG4Ye/VRFYZNi1syArJoSYx9L81TM=;
-        b=aBqREd+a7nAO65LOD/R+48Uu4DwnWPKSK+PAHaChzLwoTGC6sj7B2onPyANFFwiM3C
-         TIWtODHd7CDcJHu+l/CmhEHwNE3bwFWLgeuMPnfDZVw4gF8gq2QBLy4OeX0PnMwe/kHo
-         /1jzAF29EJCjbNyiZmO3fKyKUdN7Zq84Kb+P/anXTF9Zszmiu7KeuxO9kHTD6Y3/zwgt
-         iyRT7Bz1kB0c91pRgugP4T5Un/LqZErdBZycy86C/M4d4V5iMUQ3mMdYLI5z08IYne/a
-         JrWliLeBLE7xqcQ4CKeECzC3Y+u0U3cBtpuUVKaQoH72CXIFi3r/EAzjVuh8P1KQdMV5
-         UFSg==
-X-Forwarded-Encrypted: i=1; AKwUvBzJcXDgpStqjLpQkg1kAynXjnfvTohLOcYB13M8XOYzZhGFR+5PDmwBHfqEOsR9r4zzZ+kv3mxHF3j5t8b25h4=@vger.kernel.org
-X-Gm-Message-State: AFuF++ker8WiA0eiecMf1EFGBpG0HG7jD5NJka8LV9L4OKWrytDaFJrt
-	rj26WNC+ACAQ5WJYDMSvHbIbW9AJwuVFBEiYZBohr1feVP2AunxoP7Yc
-X-Gm-Gg: AYBFou21IJr1HjUyKpEC42Iu/a3GQ4ssyK9+zSaZ8wIhwpYupX5qXO0e6u3ax4ZLFgu
-	ans1bvA0xdObwXNtQyTeBmeCn82d1WwhcUJmglW89/yAJfv/GGDfr+2m6dJtdACAz7XOuOae4fX
-	HYLY8kwL159KH+avArxxF+aC/zi6C2aQaYpojrgsCrB5ZNhX9htGEIluAzBzyoFFE+cH02R/JGi
-	wfipW3k4iThZQIj+qu6TBlbNbZ70s0e2weBtXfxKBy6EopZeG9LteMeKV3sVgzlO+L+4yE/SUWT
-	6gYpy5DwdOueonvuE2C63uf58ILiw3ObvtNyuIsR+uqa9pSY82qeIgnusMHAgUabP7JPiIu/MAC
-	/W43/wCYt1pwcbR/w7bNjka2cY06CGx9K0jx0xg7LZ+HBOCqZMj+zUOInQXxw+y/D2MQ5fptVzc
-	eGbGVs3EZqqs++3MvAZACircnYP2+bresvINWyL+6V9aD5xBI2DhPfLxcqKCMOYGg1ROsWp9Ror
-	kd9jRDUtnIY+mjMEOqjBWDthMIIndIh4SbQZZXkRu2iL6aWbt79NcHflTmHUXSPbIq2
-X-Received: by 2002:a17:903:1448:b0:2dd:c100:943f with SMTP id d9443c01a7336-2ddc1009c5fmr105596185ad.61.1790019877522;
-        Mon, 21 Sep 2026 12:44:37 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:9de9:26b9:a969:69d7? ([2620:10d:c090:500::5:f95e])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33e5eabe0b5sm261383eec.1.2026.09.21.12.44.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 12:44:37 -0700 (PDT)
-Message-ID: <951923920747d8dcba3d56ca8858e106d9c7ba4e.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
- across zero-extending movs
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Vineet Gupta
-	 <vineet.gupta@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, John
- Fastabend	 <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf	
- <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, "open
- list:KERNEL SELFTEST FRAMEWORK"	 <linux-kselftest@vger.kernel.org>
-Date: Mon, 21 Sep 2026 12:44:34 -0700
-In-Reply-To: <DLL8Q69N7BUD.1HI0MKU2M2UGE@gmail.com>
-References: <20260910164635.459558-1-vineet.gupta@linux.dev>
-	 <20260910164635.459558-4-vineet.gupta@linux.dev>
-	 <DLDKI0ZXYI7H.1XQZZE2RCU7IF@gmail.com>
-	 <4ab75099-0e95-4fee-81da-6f4198e3e6a0@linux.dev>
-	 <CAADnVQ+N9tzBJ0Bbvp8_8QvR+QcCP4ej5CgV_kRHt=iw4BANSQ@mail.gmail.com>
-	 <202c45e2-58ba-4ad5-a234-c90703031f91@linux.dev>
-	 <CAADnVQ+Si9Au8J_j2nt+ZzFq6WPaz8hpmh0n=_dFysZmSOeipA@mail.gmail.com>
-	 <ff18ccb77a554000a030199e8c1fbb7d8d298e18.camel@gmail.com>
-	 <DLL84IMPTRQF.3DOQQTN2KCAEW@gmail.com>
-	 <e9aad352ba82dadd97a17867108b5db1865fa38d.camel@gmail.com>
-	 <DLL8Q69N7BUD.1HI0MKU2M2UGE@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+        d=1e100.net; s=20260707; t=1790021538; x=1790626338;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=pO39sZ0nSfGxxtiUdD70gv53e2K+kwH/We90AH1SI04=;
+        b=qxk0hTCg9hYbI5OSpqIzaVkiGk6ptZg+DSXW1q6YwONQ2Vnls/zLx7vfc1zrYyR9YS
+         i7lqqc2ZLJ1jP69YjPq/T8luYcHzeSZVDC727dN9BasNwMZWtcVPMDf4HAfOs7vDHVay
+         pZVX2aJLyWocCEel/U3L6y3XiuCo+753IUkh9TgL8ADGi6Jg8v8UBi2Z6x8NFO01FyML
+         5JfZJydn0blxYbzFXWgYu2ve+6HvTbXhR8EoghAZLTq5XWDh/xO6cydibAZonl2tw5Rq
+         c/TfLv+z8EL11K2HvB6HG3ZKXKlAhqe+h7gAgbMOphlrrzeCAh/WC7NaIBZ7brVYshpY
+         9MyQ==
+X-Gm-Message-State: AFuF++kZGEiVHa/tz/mGO1PF+xOkDNSCe257hOTpRDZyOAFyDOsRpuuH
+	8LKuOeNQ1bKfcIq36+AfV4HNcrohR5LsP5wePA5bSu+RfsCqYEmtjGNg
+X-Gm-Gg: AYBFou0+b+kP34c8NsRkOH8LEczzE1bZvZX+MPCrKIzJEfovDI4VP+v4qf3/gEmlB7D
+	katYQIG7rSIuPGMkxau8doVJoSnX2e4Hg9usVgK6acEb1O3LC54A52j466s7o6mPrahUwijLTsV
+	atgsDh+uT4HfI5+oJIA51eRy9ndAKgK+hhFYrqA0UfOXkoO/WuBd2N+1awMJ/LNERvdD0psK8Wc
+	C/HhjBy/wtTnKdRAHdyoQuOlxYMY1m/y9gGDrtIMzT+Ap0HzkvzAbdStu2vOX93Vl5+njObwXXV
+	sfzKMrpnLUkGwixFG3uh6DmTNpFBnj+6sLXtzgQZo993aP5qwayUT4z4R30bmkFWWFEwqNWcfyF
+	pa1L6RpcKu46bZS3ZKfjB3zOpDKJUxevcmN1PReUVr4QyrRbiHRDW5DvRuzOs3T7SVf1uTbHdTV
+	9uSiqmSyNM6gBkSiFcgJnvIfwPhZeHCAFeq0kvlSuC5jUqtfvo8HvB1zr7c/cTSCLjNqjIOj1nl
+	QiV2r+O8rCsKiuxlEAUqPkWJLsrqaMQyDLM
+X-Received: by 2002:a05:6a20:748f:b0:3dd:85aa:452d with SMTP id adf61e73a8af0-3dd8c59d659mr17356044637.31.1790021538200;
+        Mon, 21 Sep 2026 13:12:18 -0700 (PDT)
+Received: from narcisav-mac.thefacebook.com ([2620:10d:c090:400::5:a2c])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33e5ec60d1fsm297025eec.28.2026.09.21.13.12.16
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 21 Sep 2026 13:12:17 -0700 (PDT)
+From: Narcisa Vasile <narcisav.kernel@gmail.com>
+To: netdev@vger.kernel.org,
+	kuba@kernel.org,
+	daniel.zahka@gmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Petr Vorel <pvorel@suse.cz>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	narcisav.kernel@gmail.com
+Subject: [PATCH net-next] selftests: drv-net: add BIG TCP coverage to TSO test
+Date: Mon, 21 Sep 2026 13:11:45 -0700
+Message-ID: <20260921201145.49875-1-narcisav.kernel@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2026-09-21 at 19:27 +0000, Alexei Starovoitov wrote:
-> On Mon Sep 21, 2026 at 7:10 PM UTC, Eduard Zingerman wrote:
-> > On Mon, 2026-09-21 at 18:59 +0000, Alexei Starovoitov wrote:
-> > > On Mon Sep 21, 2026 at 5:28 PM UTC, Eduard Zingerman wrote:
-> > > > On Wed, 2026-09-16 at 17:30 -0700, Alexei Starovoitov wrote:
-> > > > > On Wed, Sep 16, 2026 at 5:08=E2=80=AFPM Vineet Gupta <vineet.gupt=
-a@linux.dev> wrote:
-> > > > > >=20
-> > > > > > It ended up with full testsuite run parity - after 4 incrementa=
-l patches.
-> > > > > > But the pattern of all those patches was adding some predicate =
-/
-> > > > > > special-casing to reg->add_const
-> > > > > >=20
-> > > > > > hunk 1
-> > > > > >=20
-> > > > > > -       if (src_reg->add_const)
-> > > > > > +       if (src_reg->add_const && src_reg->delta)
-> > > > >=20
-> > > > > why? It should not.
-> > > > > My point is that zero is not special.
-> > > > > It should be handled within the current framework.
-> > > > > All these extra hunks are not correct.
-> > > > > ADD_CONST_32 logic should work for delta =3D=3D 0 just like
-> > > > > it works for delta =3D=3D 1.
-> > > >=20
-> > > > After thinking about it some more, I agree that having an orthogona=
-l
-> > > > encoding would be nice. However, it appears that the split should b=
-e
-> > > > somewhat different:
-> > > >=20
-> > > >   struct bpf_reg_state {
-> > > >     ...
-> > > >     s32 delta;
-> > > >     u32 id;
-> > > >     enum id_link_kind { full, zext, sext } link_kind;
-> > > >     ...
-> > > >   }
-> > > >=20
-> > > > Where:
-> > > > - id =3D=3D 0 =3D> no id link
-> > > > - full =3D> all 64-bits of the register are identical to
-> > > >           all 64-bits of a scalar value `id' (let's call it X).
-> > > >           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D full}, rB{X,full}=
- =3D> rA =3D=3D rB
-> > > > - zext =3D> lower 32-bits of the register are identical to
-> > > >           lower 32-bits of a scalar value X,
-> > > >           upper 32-bits of the register are null.
-> > > >           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D ?}, rB{X,zext} =
-=3D> rA % 32 =3D=3D rB % 32
-> > > > - sext =3D> lower 32-bits of the register are identical to
-> > > >           lower 32-bits of a scalar value X,
-> > > >           upper 32-bits of the register are either 0 or 1,
-> > > >           depending on the bit 31 value.
-> > > >           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D ?}, rB{X,sext} =
-=3D> sext(rA % 32) =3D=3D sext(rB % 32)
-> > >=20
-> > > hmm.
-> > > there is also 32-bit link with delta, right?
-> >=20
-> > My point is that delta is independent of 32-bit/64-bit property.
-> > `delta' can be used to propagate in both directions:
-> > - full 64 bit -> 32 bit sign/zero-extened
-> > - 32 bit sign/zero-extened -> full 64-bit
->=20
-> both? how ?
-> I was under impression that in 32-bit domain delta is one way.
-> rX =3D ...
-> wY =3D wX
-> wY +=3D 5
->=20
-> if wY =3D=3D 10
-> We cannot do -5 to rX
+Add IPv4 and IPv6 test cases that exercise GSO packets under BIG TCP
+size limits.
 
-Why?
-It is still valid to transfer r32 and tnum_subreg knowledge from wY to rX.
+1..2
+ok 1 tso.big_tcp_ipv4
+ok 2 tso.big_tcp_ipv6
 
-  wY + 5 =3D=3D rX % 32 + 5 =3D> hence rX % 32 knowledge can be recovered.
+Both of them run the existing tx-tcp-segmentation
+and tx-tcp6-segmentation tests at the increased TSO maximum.
 
-If rX itself had some delta, e.g.:
+Additionally, reserve a hugepage and transmit its content using
+MSG_ZEROCOPY to produce skb fragments larger than 65536.
+Check that the number of retransmissions represents a small
+percentage of the total packets sent. Record the number of drops
+before and after the send to catch issues with large frag
+handling during segmentation.
 
-  rX =3D ...
-  rX +=3D 7
-  wY =3D wX
-  wY +=3D 5
+Signed-off-by: Narcisa Vasile <narcisav.kernel@gmail.com>
+---
+ tools/testing/selftests/drivers/net/hw/tso.py | 161 ++++++++++++++++++
+ 1 file changed, 161 insertions(+)
 
-Then it would still be possible:
+diff --git a/tools/testing/selftests/drivers/net/hw/tso.py b/tools/testing/selftests/drivers/net/hw/tso.py
+index 67f6c9ca9a64..176ddf97fabb 100755
+--- a/tools/testing/selftests/drivers/net/hw/tso.py
++++ b/tools/testing/selftests/drivers/net/hw/tso.py
+@@ -4,6 +4,7 @@
+ """A simple test for TSO."""
+ 
+ import fcntl
++import mmap
+ import socket
+ import struct
+ import termios
+@@ -15,6 +16,87 @@ from lib.py import EthtoolFamily, NetdevFamily, NetDrvEpEnv
+ from lib.py import bkg, cmd, defer, ethtool, ip, rand_port, wait_port_listen
+ 
+ 
++MAP_HUGETLB = getattr(mmap, "MAP_HUGETLB", 0x40000)
++MSG_ZEROCOPY = getattr(socket, "MSG_ZEROCOPY", 0x4000000)
++SO_ZEROCOPY = getattr(socket, "SO_ZEROCOPY", 60)
++
++GSO_LEGACY_MAX_SIZE = 65536
++
++# Pool of the default hugepage size, the one /proc/meminfo reports on.
++NR_HUGEPAGES = "/proc/sys/vm/nr_hugepages"
++
++
++def default_huge_page_size():
++    """Return the hugepage size in bytes"""
++    try:
++        with open("/proc/meminfo", encoding="utf-8") as meminfo:
++            for line in meminfo:
++                if line.startswith("Hugepagesize:"):
++                    return int(line.split()[1]) * 1024
++    except OSError:
++        pass
++
++    return 2 * 1024 * 1024
++
++
++def hugepages_free():
++    """Return the number of unused hugepages of the default size."""
++    try:
++        with open("/proc/meminfo", encoding="utf-8") as meminfo:
++            for line in meminfo:
++                if line.startswith("HugePages_Free:"):
++                    return int(line.split()[1])
++    except OSError:
++        pass
++    return 0
++
++
++def set_nr_hugepages(count):
++    with open(NR_HUGEPAGES, "w", encoding="utf-8") as sysctl:
++        sysctl.write(f"{count}\n")
++
++
++def tx_dropped(ifname):
++    with open(f"/sys/class/net/{ifname}/statistics/tx_dropped",
++              encoding="utf-8") as counter:
++        return int(counter.read())
++
++
++def setup_hugepage():
++    """Reserve one hugepage, and put the pool back afterwards."""
++    if hugepages_free() >= 1:
++        return
++
++    try:
++        with open(NR_HUGEPAGES, encoding="utf-8") as sysctl:
++            old_count = int(sysctl.read())
++        set_nr_hugepages(old_count + 1)
++    except OSError as error:
++        raise KsftSkipEx(f"Unable to reserve a hugepage: {error}") from error
++
++    defer(set_nr_hugepages, old_count)
++
++    if hugepages_free() < 1:
++        raise KsftSkipEx("Unable to reserve a hugepage")
++
++
++def mmap_large_buffer():
++    """Allocate a buffer backed by one huge page."""
++    size = default_huge_page_size()
++
++    setup_hugepage()
++
++    try:
++        return mmap.mmap(-1, size,
++                         flags=mmap.MAP_PRIVATE |
++                               mmap.MAP_ANONYMOUS |
++                               MAP_HUGETLB,
++                         prot=mmap.PROT_READ)
++    except OSError as e:
++        raise KsftSkipEx(f"Unable to allocate a {size >> 20}MB hugepage "
++                         f"buffer: {e}") from e
++
++
+ def sock_wait_drain(sock, max_wait=1000):
+     """Wait for all pending write data on the socket to get ACKed."""
+     for _ in range(max_wait):
+@@ -33,6 +115,32 @@ def tcp_sock_get_retrans(sock):
+     return struct.unpack("I", info[100:104])[0]
+ 
+ 
++def setup_big_tcp(cfg):
++    """Lift the GSO ceiling to what the device advertises for TSO."""
++    if cfg.dev["tso_max_size"] <= GSO_LEGACY_MAX_SIZE:
++        raise KsftSkipEx("Device does not support BIG TCP")
++
++    ip(f"link set dev {cfg.ifname} "
++       f"gso_max_size {cfg.dev['tso_max_size']} "
++       f"gso_ipv4_max_size {cfg.dev['tso_max_size']}")
++
++    defer(ip, f"link set dev {cfg.ifname} "
++              f"gso_max_size {cfg.dev['gso_max_size']} "
++              f"gso_ipv4_max_size {cfg.dev['gso_ipv4_max_size']}")
++
++
++def sock_send_zerocopy(sock):
++    """Send with MSG_ZEROCOPY, return the bytes queued."""
++    try:
++        sock.setsockopt(socket.SOL_SOCKET, SO_ZEROCOPY, 1)
++    except OSError as e:
++        raise KsftSkipEx(f"SO_ZEROCOPY not supported: {e}") from e
++
++    with mmap_large_buffer() as tx_buf:
++        sock.sendall(tx_buf, MSG_ZEROCOPY)
++        return len(tx_buf)
++
++
+ def run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso):
+     cfg.require_cmd("socat", local=False, remote=True)
+ 
+@@ -96,6 +204,46 @@ def run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso):
+                         500, comment="Number of LSO wire-packets with LSO disabled")
+ 
+ 
++def run_big_tcp_stream(cfg, ipver, remote_v4, remote_v6):
++    """Send with MSG_ZEROCOPY out of a huge page, so the frags exceed 64kB."""
++    cfg.require_cmd("socat", local=False, remote=True)
++
++    # No clamping, as it would keep the frags under 64kB
++    port = rand_port()
++    listen_opts = f"{port},reuseport"
++    listen_cmd = f"socat -{ipver} -t 2 -u TCP-LISTEN:{listen_opts} /dev/null,ignoreeof"
++
++    with bkg(listen_cmd, host=cfg.remote, exit_wait=True):
++        wait_port_listen(port, host=cfg.remote)
++
++        if ipver == "4":
++            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
++            sock.connect((remote_v4, port))
++        else:
++            sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
++            sock.connect((remote_v6, port))
++
++        # Small send to make sure the connection is working.
++        sock.send("ping".encode())
++        sock_wait_drain(sock)
++
++        retrans_old = tcp_sock_get_retrans(sock)
++        drops_old = tx_dropped(cfg.ifname)
++
++        sent = sock_send_zerocopy(sock)
++        sock_wait_drain(sock)
++
++        drops = tx_dropped(cfg.ifname) - drops_old
++        retrans = tcp_sock_get_retrans(sock) - retrans_old
++        sock.close()
++
++        ksft_eq(drops, 0, comment="Driver TX drops during BIG TCP send")
++
++        # Same best effort bound as the plain stream.
++        total_lso_wire = sent * 0.90 // cfg.dev["mtu"]
++        ksft_lt(retrans, total_lso_wire / 16)
++
++
+ def build_tunnel(cfg, outer_ipver, tun_info):
+     local_v4  = NetDrvEpEnv.nsim_v4_pfx + "1"
+     local_v6  = NetDrvEpEnv.nsim_v6_pfx + "1"
+@@ -147,6 +295,11 @@ def test_builder(name, cfg, outer_ipver, feature, tun=None, inner_ipver=None):
+         if feature not in cfg.hw_features:
+             raise KsftSkipEx(f"Device does not support {feature}")
+ 
++        # Run non-tunnel test cases under the BIG TCP limits too.
++        big_tcp = "big_tcp" in name
++        if big_tcp:
++            setup_big_tcp(cfg)
++
+         ipver = outer_ipver
+         if tun:
+             remote_v4, remote_v6 = build_tunnel(cfg, ipver, tun)
+@@ -159,6 +312,9 @@ def test_builder(name, cfg, outer_ipver, feature, tun=None, inner_ipver=None):
+         ethtool(f"-K {cfg.ifname} {feature} off")
+         run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso=False)
+ 
++        if big_tcp:
++            run_big_tcp_stream(cfg, ipver, remote_v4, remote_v6)
++
+         ethtool(f"-K {cfg.ifname} tx-gso-partial off")
+         ethtool(f"-K {cfg.ifname} tx-tcp-mangleid-segmentation off")
+         if feature in cfg.partial_features:
+@@ -171,6 +327,9 @@ def test_builder(name, cfg, outer_ipver, feature, tun=None, inner_ipver=None):
+         ethtool(f"-K {cfg.ifname} {feature} on")
+         run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso=True)
+ 
++        if big_tcp:
++            run_big_tcp_stream(cfg, ipver, remote_v4, remote_v6)
++
+     f.__name__ = name + ((outer_ipver + "_") if tun else "") + "ipv" + inner_ipver
+     return f
+ 
+@@ -230,6 +389,8 @@ def main() -> None:
+             # name,       v4/v6  ethtool_feature               tun:(type, args, inner ip versions)
+             ("",           "4", "tx-tcp-segmentation",         None),
+             ("",           "6", "tx-tcp6-segmentation",        None),
++            ("big_tcp_",   "4", "tx-tcp-segmentation",         None),
++            ("big_tcp_",   "6", "tx-tcp6-segmentation",        None),
+             ("vxlan",      "4", "tx-udp_tnl-segmentation",     ("vxlan", "id 100 dstport 4789 noudpcsum", ("4", "6"))),
+             ("vxlan",      "6", "tx-udp_tnl-segmentation",     ("vxlan", "id 100 dstport 4789 udp6zerocsumtx udp6zerocsumrx", ("4", "6"))),
+             ("vxlan_csum", "", "tx-udp_tnl-csum-segmentation", ("vxlan", "id 100 dstport 4789 udpcsum", ("4", "6"))),
+-- 
+2.53.0-Meta
 
-  wY + 5 =3D=3D (rX - 7) % 32 + 5 =3D rX % 32 - 2.
-
-Again, in case of this direction, only lower 32-bits of the 'full'
-register can be inferred.
-
-> and we cannot use your above 'full' encoding for wY +=3D 5.
-> Currently we use BPF_ADD_CONST32 for wY +=3D 5
-> I don't see how 'full' can work.
