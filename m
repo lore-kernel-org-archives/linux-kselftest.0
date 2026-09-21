@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD8F43C047;
-	Mon, 21 Sep 2026 20:43:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 552873C1967;
+	Mon, 21 Sep 2026 20:43:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790023412; cv=none; b=WIbDo3mSM8UwsmknemiIqD3cMR1xuL2nPxjS0IGFh9XgSGztio/y5eqtfi+5c86pG1VwGtxiLNFd6GsHuIImGiJ/jPeKJbLbJAfAEPcPwOPNpbZ0p7ZXnFpz7eJNt684wJO+dNOJSlCarDkcBF7OanxZq1wbv4lLRMo0hcKPeZw=
+	t=1790023413; cv=none; b=b6d0KRSPAOR0awuTtCq7F0S3mVIzBS/ydWbpn+xLMupkkABTlzKV1Un+Au1MYypYmadP6HHtWmmU6XsYcn49COAboWk7Lo3P72fGt79C2in7looKs7T3rXcehNmLToaboa5KmsVvgOhN5nyqd0Np1xH6z7FSN1zKhO94CKcbXyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790023412; c=relaxed/simple;
-	bh=gBxi2T/vMKU+BiSo+Ui+FI+d4NVmYjCst2Kn/5uJ2NQ=;
+	s=arc-20240116; t=1790023413; c=relaxed/simple;
+	bh=PtDJQ4qTzhL2hl0tUBqghTborQg+00b80OGFua8w2uo=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SLLos8V5ZoszwT0EWloZ/csOLU6Pil6UcOpPZMxNXv8gDsSxZU8vucxwsm1E+rM2ZPjvc9i0Wk8RCOcBwM7VFOeLhDJgVRO5rwYyYU/aWhj4gkWxdsxFCcrh3q4wP3WGdTv9J/hoHNeDw01P/3qTxY2Tq2sMC73L5SJ0fQXEWY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F8eVZ6V4; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=LD6D/T0BEPGMKODHAOIrGKu9WqYnsTTjQgfooVaZtsJDHaqW90gRRubLZLLjnoDSCatRaEkg+2CVyhGEN2xV6yim5cP3oTsxFoVopTE6R1kLD1V+aj7Ek/42fM15efxwOMXobi16VoeyoRQB7O58pg5HBiLHmNIBAWPnaBDiIek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PLUqLVKM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F8eVZ6V4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 034B51F000FF;
-	Mon, 21 Sep 2026 20:43:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PLUqLVKM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E49C1F00893;
+	Mon, 21 Sep 2026 20:43:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790023408;
-	bh=OkORoPydzjHLVUfBfNGOGfURmMERuXsqtjYqBb6oYHc=;
+	s=k20260515; t=1790023410;
+	bh=vThV3B5RW3xuq/XRwp9LBocCqV9eQUHRyH4p1ym1KMc=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=F8eVZ6V4LCAhCEXk+vOIZb9SC7Aew0oYHe4HnKqeguKIj6NF7NktUMTfcSAUsoSJw
-	 Os+L/YMo2h86s0xj11SW9hQSuBwUu0GlRA42tlU0GW/I54mbaQR5602gr45rja24Wr
-	 q08y+Sn7ZsaW2Be4rLjRcAlPmMmVWMbsaXwaEdNKh1j2VOrcmNrgrWfJrB0mn+MoNN
-	 +DyFU6+4KlOwRKlZIRJklWKZwbvU4XWzIB4QRiLBogi9mszimv1uq+GvGnHBjnewB2
-	 VBEJyoou2UwCZiQ63Uzxwz+SgKdIDBs5UaEq+yW1FCordJBZkaxL/BvB8Np6kVM74N
-	 s68AW/p3JEyow==
-Subject: Re: [PATCH net-next v6 1/3] net/sched: sch_fq_pie: add per-flow
- statistics via class ops
+	b=PLUqLVKMdOgb+vhAbxpJo4JhdmlFbtCN3oZ3rNDQ7aACQToXqtTypWH5WLAqLi5U8
+	 OIa3Fr+a2Sb88wp6R+AP9hfpwi+iPuKEcILx7S5xYWVhmawJNY2zRGatyv2kbMxqay
+	 71byO96j3/P6CSJ2daTcQG1UC/pqrrLNqvDfDpuZMaanPMOh6KL3QeQu4j88YzJ8/c
+	 AxTla5veD5E7LKDAsGlFu3psk5s1fLLHH7OA+EFceAa8igS6evfgEqwxqwNRmTW4CJ
+	 uuuDpoVB/jqt7b+EcI8t7ZfAUjuGM2aNh0Wxe1T9I4BE4kxvcZBCm7NP1rOu1etGp0
+	 u2tPTUHcbEgeQ==
+Subject: Re: [PATCH net-next v6 2/3] selftests: tc-testing: add fq_pie
+ per-flow class stats test
 From: netdev-bot+sashiko@kernel.org
 To: hemendranaik@gmail.com
 Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
  kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, jiri@resnulli.us,
  jhs@mojatatu.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, vishy0777@gmail.com, tahiliani@nitk.edu.in
-Date: Mon, 21 Sep 2026 20:43:27 +0000
-Message-ID: <179002340755.2160803.3742716999091408861@kernel.org>
-In-Reply-To: <20260917204225.275251-2-hemendranaik@gmail.com>
-References: <20260917204225.275251-2-hemendranaik@gmail.com>
-X-sashiko-severity: Medium
+Date: Mon, 21 Sep 2026 20:43:28 +0000
+Message-ID: <179002340887.2160803.8030592378545876774@kernel.org>
+In-Reply-To: <20260917204225.275251-3-hemendranaik@gmail.com>
+References: <20260917204225.275251-3-hemendranaik@gmail.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -48,10 +48,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 6 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 4 (1)
+Critical: 0 · High: 1 · Medium: 1 · Low: 1
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -59,337 +59,148 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] The fourth paragraph of the commit message is written as a bug
-  fix ("Derive delay with div_u64() ... rather than truncating to u32…
-- [Medium] net/sched: UAPI backward compatibility broken for
-  tc_fq_pie_xstats size
-- [Low] The new ABI field `tc_fq_pie_cl_stats.avg_dq_rate` is `__u32`
-  documented as bytes/second, but fq_pie_dump_class_stats() computes the…
-- [Low] The new class enumeration numbers flows 1..flows_cnt and encodes
-  the number into the 16-bit minor field of tcm_handle.
-- [Low] fq_pie_dump_class_stats() exports the per-flow probability as
-  `READ_ONCE(flow->vars.prob) << BITS_PER_BYTE` with no bound check.
-- [Low] Claim: fq_pie_dump_class_stats() samples per-flow PIE state
-  (flow->vars.prob, flow->vars.qdelay, flow->vars.avg_dq_rate,…
-
-Pre-existing issues:
-- [Low] fq_pie_class_ops omits .tcf_block/.bind_tcf/.unbind_tcf while
-  sch_fq_pie.c still allocates a tcf_block in fq_pie_init()…
+- [High] New tdc case 83c0 in tools/testing/selftests/tc-testing/tc-
+  tests/qdiscs/fq_pie.json asserts `matchPattern` = "class fq_pie…
+- [Medium] Case 83c0's assertion depends on fq_pie having a backlogged
+  flow at the exact instant the dump runs, because fq_pie_walk()…
+- [Low] Case 83c0 claims to cover the new per-flow fq_pie statistics but
+  only checks that the literal label words "prob", "delay" and "deficit"…
 
 --
 
-net/sched: sch_fq_pie: add per-flow statistics via class ops
+Verified against the tree. Report follows.
 
-This adds a Qdisc_class_ops table to sch_fq_pie with walk, dump and
-dump_stats so that per-flow PIE state can be read with 'tc -s class show'.
-It extends tc_fq_pie_xstats with a type discriminator plus an embedded
-tc_fq_pie_cl_stats, growing the structure from 36 to 64 bytes.
+selftests: tc-testing: add fq_pie per-flow class stats test
 
-A few questions below.
+This adds tdc case 83c0, which builds a TBF plus fq_pie hierarchy on
+$DUMMY, drives traffic through it with ping, and then greps the output of
+'tc -s class show' for an fq_pie class line carrying per-flow counters.
 
-First, about the last paragraph of the changelog:
+> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
+> index 229fe1bf4a906..15b2667285eb4 100644
+> --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
+> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
 
-    Derive delay with div_u64() from the full 64-bit nanosecond value rather
-    than truncating to u32 before dividing, which wrapped for sojourn times
-    above ~4.295 s, and widen avg_dq_rate to u64 before scaling it by
-    PSCHED_TICKS_PER_SEC.
+[ ... ]
+
+> @@ -40,5 +40,32 @@
+> +        "setup": [
+> +            "$IP link set dev $DUMMY up || true",
+> +            "$IP addr add 10.10.11.10/24 dev $DUMMY || true",
+> +            "$TC qdisc add dev $DUMMY root handle 1: tbf rate 8bit burst 100b latency 100ms",
+> +            "$TC qdisc add dev $DUMMY parent 1:1 handle 2: fq_pie limit 100 flows 1",
+> +            "ping -c 50 -i 0.001 -W 0.01 -s 56 10.10.11.11 -I $DUMMY > /dev/null 2>&1 || true"
+> +        ],
 
 [Severity: Medium]
-Is this paragraph describing a change made by this patch?  The diff is
-purely additive and net/sched/sch_fq_pie.c had no delay or avg_dq_rate
-conversion before it, so the new fq_pie_dump_class_stats() is not replacing
-any truncating computation.
+Can this case fail intermittently depending on the host environment?  The
+assertion needs a backlogged flow at the instant the dump runs, because
+fq_pie_walk() in net/sched/sch_fq_pie.c skips every flow whose flowchain is
+empty:
 
-The code that actually contains both of the described defects is
-pie_dump_stats() in net/sched/sch_pie.c, which this patch does not touch and
-does not mention, and there is no Fixes: tag:
-
-net/sched/sch_pie.c:pie_dump_stats() {
-	...
-	.delay		= ((u32)PSCHED_TICKS2NS(READ_ONCE(q->vars.qdelay))) /
-			   NSEC_PER_USEC,
-	...
-	if (st.dq_rate_estimating)
-		st.avg_dq_rate = READ_ONCE(q->vars.avg_dq_rate) *
-				 (PSCHED_TICKS_PER_SEC) >> PIE_SCALE;
-	...
-}
-
-Could the paragraph either be reworded as a deliberate difference from the
-pie qdisc, or the series extended to fix pie_dump_stats() as well?  The
-later patch in the series that re-documents tc_pie_xstats.delay as
-microseconds leaves the wrapping conversion in place.
-
-> diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
-> index 490efd2885267..9c0c9787f0c32 100644
-> --- a/include/uapi/linux/pkt_sched.h
-> +++ b/include/uapi/linux/pkt_sched.h
-> @@ -953,6 +953,20 @@ enum {
->  };
->  #define TCA_FQ_PIE_MAX   (__TCA_FQ_PIE_MAX - 1)
->  
-> +enum {
-> +	TCA_FQ_PIE_XSTATS_QDISC,
-> +	TCA_FQ_PIE_XSTATS_CLASS,
-> +};
-> +
-> +struct tc_fq_pie_cl_stats {
-> +	__u64 prob;			/* current probability */
-> +	__u32 delay;			/* current delay in microseconds */
-> +	__s32 deficit;			/* number of remaining byte credits */
-> +	__u32 avg_dq_rate;		/* current average dq_rate in
-> +					 * bytes/second
-> +					 */
-
-[Severity: Low]
-Since this is a new ABI field, is __u32 wide enough for avg_dq_rate?
-fq_pie_dump_class_stats() computes the value in u64 and then stores it into
-this 32-bit member with no saturation:
-
-	xstats.class_stats.avg_dq_rate =
-		((u64)READ_ONCE(flow->vars.avg_dq_rate)
-		* PSCHED_TICKS_PER_SEC) >> PIE_SCALE;
-
-With PSCHED_TICKS_PER_SEC == 15625000 and PIE_SCALE == 8 the internal
-estimator value is scaled by 61035.15625, so a per-flow rate above
-U32_MAX bytes/second (about 34.36 Gbit/s) wraps: an internal avg_dq_rate of
-81920 (5,000,000,000 B/s) is reported as 705,032,704.
-
-Widening the member to __u64 or clamping with min_t() is still possible
-before the layout is frozen.  It does mirror the existing
-tc_pie_xstats.avg_dq_rate width, so if matching that is intentional it
-would be worth saying so.
-
-> +	__u32 dq_rate_estimating;	/* is avg_dq_rate being calculated? */
-> +};
-
-[ ... ]
-
-> diff --git a/net/sched/sch_fq_pie.c b/net/sched/sch_fq_pie.c
-> index 5982847df8f85..3a3ef83f328b2 100644
-> --- a/net/sched/sch_fq_pie.c
-> +++ b/net/sched/sch_fq_pie.c
-
-[ ... ]
-
-> @@ -563,7 +565,89 @@ static void fq_pie_destroy(struct Qdisc *sch)
->  	kvfree(q->flows);
->  }
->  
-
-[ ... ]
-
-> +static int fq_pie_dump_class(struct Qdisc *sch, unsigned long cl,
-> +			     struct sk_buff *skb, struct tcmsg *tcm)
-> +{
-> +	tcm->tcm_handle |= TC_H_MIN(cl);
-> +	return 0;
-> +}
-
-[Severity: Low]
-Can the class id for the last flow collide with the qdisc handle when
-flows_cnt is at its maximum?  fq_pie_change() accepts 65536 flows:
-
-net/sched/sch_fq_pie.c:fq_pie_change() {
-	...
-	if (!q->flows_cnt || q->flows_cnt > 65536) {
-		NL_SET_ERR_MSG_MOD(extack,
-				   "Number of flows must range in [1..65536]");
-	...
-}
-
-and fq_pie_walk() numbers classes one-based with tc_qdisc_stats_dump(sch,
-i + 1, arg), so the last bucket arrives here as cl == 0x10000.  TC_H_MIN
-masks with 0xffff, so minor becomes 0 and the RTM_NEWTCLASS message keeps
-the tcm_handle that tc_fill_tclass() already set from the qdisc, i.e. X:0.
-
-That handle cannot be used to address the flow afterwards: fq_pie_find()
-always returns 0 and fq_pie_classify() only honours minors in
-[1, flows_cnt]:
-
-	if (TC_H_MAJ(skb->priority) == sch->handle &&
-	    TC_H_MIN(skb->priority) > 0 &&
-	    TC_H_MIN(skb->priority) <= q->flows_cnt)
-
-The same encoding exists in net/sched/sch_fq_codel.c with the same 65536
-limit, so this is a faithful copy of existing behaviour, but capping the
-emitted ids at 65535 would avoid it here.
-
-> +
-> +static int fq_pie_dump_class_stats(struct Qdisc *sch, unsigned long cl,
-> +				   struct gnet_dump *d)
-> +{
-> +	struct fq_pie_sched_data *q = qdisc_priv(sch);
-> +	struct gnet_stats_queue qs = { 0 };
-> +	struct tc_fq_pie_xstats xstats;
-> +	u32 idx = cl - 1;
-> +
-> +	if (idx < q->flows_cnt) {
-> +		const struct fq_pie_flow *flow = &q->flows[idx];
-> +
-> +		memset(&xstats, 0, sizeof(xstats));
-> +		xstats.type = TCA_FQ_PIE_XSTATS_CLASS;
-> +		xstats.class_stats.prob =
-> +			READ_ONCE(flow->vars.prob) << BITS_PER_BYTE;
-
-[Severity: Low]
-Can this shift discard the high bits of prob?  pie_calculate_probability()
-in net/sched/sch_pie.c does not clamp vars->prob to MAX_PROB
-(U64_MAX >> 8) on the increase path; its only guard is the full u64 wrap:
-
-net/sched/sch_pie.c:pie_calculate_probability() {
-	...
-	WRITE_ONCE(vars->prob, vars->prob + delta);
-
-	if (delta > 0) {
-		/* prevent overflow */
-		if (vars->prob < oldprob) {
-			WRITE_ONCE(vars->prob, MAX_PROB);
-	...
-}
-
-Sustained congestion can add up to roughly 4% of MAX_PROB per tupdate
-(the 2% cap plus MAX_PROB/50 when qdelay exceeds 250 ms), so vars.prob can
-grow past MAX_PROB.  The shift by 8 then drops the top bits and a flow that
-pie_drop_early() is dropping unconditionally is reported with a near-zero
-probability.
-
-Would min_t(u64, READ_ONCE(flow->vars.prob), MAX_PROB) before scaling be
-reasonable?  The same expression already exists in pie_dump_stats(), so
-fixing both would keep them consistent.
-
-> +		xstats.class_stats.delay =
-> +			div_u64(PSCHED_TICKS2NS(READ_ONCE(flow->vars.qdelay)),
-> +				NSEC_PER_USEC);
-> +		xstats.class_stats.deficit = READ_ONCE(flow->deficit);
-
-[Severity: Low]
-This isn't a bug, but a note for anyone reading the sampling here: the
-64-bit flow->vars.prob and flow->vars.qdelay are read without the qdisc
-lock, since tc_fill_tclass() passes NULL as the lock to
-gnet_stats_start_copy_compat(), so the snapshot is not internally
-consistent and can tear on 32-bit kernels.
-
-That matches the direction set by commit 5154561d9b119f ("net/sched:
-sch_pie: annotate data-races in pie_dump_stats()") and commit
-6d4106e8df94c0, and fq_codel_dump_class_stats() samples flow->cvars.* and
-flow->deficit the same way, so no change seems needed.
-
-> +		xstats.class_stats.dq_rate_estimating =
-> +			READ_ONCE(q->p_params.dq_rate_estimator);
-> +
-> +		if (xstats.class_stats.dq_rate_estimating) {
-> +			xstats.class_stats.avg_dq_rate =
-> +				((u64)READ_ONCE(flow->vars.avg_dq_rate)
-> +				* PSCHED_TICKS_PER_SEC) >> PIE_SCALE;
-> +		}
-> +
-> +		qs.qlen    = READ_ONCE(flow->qlen);
-> +		qs.backlog = READ_ONCE(flow->backlog);
-> +	}
-> +	if (gnet_stats_copy_queue(d, NULL, &qs, qs.qlen) < 0)
-> +		return -1;
-> +	if (idx < q->flows_cnt)
-> +		return gnet_stats_copy_app(d, &xstats, sizeof(xstats));
-> +	return 0;
-> +}
-> +
-> +static void fq_pie_walk(struct Qdisc *sch, struct qdisc_walker *arg)
-> +{
-> +	struct fq_pie_sched_data *q = qdisc_priv(sch);
-> +	unsigned int i;
-> +
-> +	if (arg->stop)
-> +		return;
-> +
-> +	for (i = 0; i < q->flows_cnt; i++) {
-> +		if (list_empty(&q->flows[i].flowchain)) {
-> +			arg->count++;
-> +			continue;
-> +		}
-> +		if (!tc_qdisc_stats_dump(sch, i + 1, arg))
-> +			break;
-> +	}
-> +}
-> +
-> +static const struct Qdisc_class_ops fq_pie_class_ops = {
-> +	.leaf		=	fq_pie_leaf,
-> +	.find		=	fq_pie_find,
-> +	.dump		=	fq_pie_dump_class,
-> +	.dump_stats	=	fq_pie_dump_class_stats,
-> +	.walk		=	fq_pie_walk,
-> +};
-
-[Severity: Low]
-This is a pre-existing gap and is not introduced by this patch, but since
-the new ops table is the natural place to address it: sch_fq_pie.c still
-allocates a block in fq_pie_init() with
-tcf_block_get(&q->block, &q->filter_list, sch, extack) and classifies every
-packet through q->filter_list in fq_pie_classify(), yet no filter can ever
-be attached.
-
-net/sched/cls_api.c:__tcf_qdisc_find() {
-	...
-	if (!cops->tcf_block) {
-		NL_SET_ERR_MSG(extack, "Class doesn't support blocks");
-		err = -EOPNOTSUPP;
-		goto errout_qdisc;
+	for (i = 0; i < q->flows_cnt; i++) {
+		if (list_empty(&q->flows[i].flowchain)) {
+			arg->count++;
+			continue;
+		}
+		if (!tc_qdisc_stats_dump(sch, i + 1, arg))
+			break;
 	}
+
+The only step that creates that backlog is the ping line, and its exit
+status is discarded with '|| true'.  If ping is not installed, or the
+installed iputils rejects the fractional -i 0.001 / -W 0.01 arguments, the
+fq_pie queue stays empty and 'tc -s class show' prints no fq_pie class at
+all.  tdc.py then takes this branch:
+
+	elif int(tidx["matchCount"]) != 0:
+	    res.set_result(ResultState.fail)
+	    res.set_failmsg('No output generated by verify command.')
+
+which reports 'No output generated by verify command' rather than pointing
+at the missing traffic precondition.
+
+There is also a timing aspect in the passing case: TBF is configured with
+'rate 8bit burst 100b', so the bucket starts full and the first frame (an
+~42-byte ARP request or a ~98-byte ICMP echo) is dequeued right away.  A run
+where only one frame gets enqueued leaves the flow list empty at dump time
+even though ping itself "succeeded".  Would it be better to check the ping
+result, or to enqueue traffic in a way that does not depend on neighbour
+solicitation timing?
+
+[Severity: Low]
+This isn't a bug, but with 'flows 1' there is exactly one flow, so the
+class-id to flow-index contract between fq_pie_walk() and
+fq_pie_dump_class_stats() is not really exercised:
+
+net/sched/sch_fq_pie.c:fq_pie_walk() {
+	...
+		if (!tc_qdisc_stats_dump(sch, i + 1, arg))
 	...
 }
 
-So rcu_dereference_bh(q->filter_list) in fq_pie_classify() is always NULL
-and the "optional external classifier" path stays dead code.  Would it make
-sense to either wire up a root-only .tcf_block plus .bind_tcf/.unbind_tcf
-the way fq_codel_class_ops does, or drop the unused block and filter_list?
+net/sched/sch_fq_pie.c:fq_pie_dump_class_stats() {
+	u32 idx = cl - 1;
+	...
+}
 
-> +
->  static struct Qdisc_ops fq_pie_qdisc_ops __read_mostly = {
-> +	.cl_ops		= &fq_pie_class_ops,
->  	.id		= "fq_pie",
+A kernel that attributed statistics to the wrong flow would still satisfy
+the pattern.  Two of the five fields in struct tc_fq_pie_cl_stats,
+avg_dq_rate and dq_rate_estimating, are not referenced by the test at all,
+and none of the unit conversions (probability scaling, PSCHED ticks to
+microseconds, byte credits, avg_dq_rate scaling) are checked.  Would using
+more than one flow plus matchJSON on 'tc -s -j class show' with numeric
+assertions cover the kernel side more directly?
 
-[ ... ]
+> +        "cmdUnderTest": "$TC -s class show dev $DUMMY",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC -s class show dev $DUMMY",
+> +        "matchPattern": "class fq_pie 2:[0-9]+ .*prob .*delay .*deficit",
+> +        "matchCount": "1",
 
-> @@ -963,6 +977,8 @@ struct tc_fq_pie_xstats {
->  	__u32 new_flows_len;	/* count of flows in new list */
->  	__u32 old_flows_len;	/* count of flows in old list */
->  	__u32 memory_usage;	/* total memory across all queues */
-> +	__u32 type;
-> +	struct tc_fq_pie_cl_stats class_stats;
->  };
->  
->  /* CBS */
+[Severity: High]
+Can this case ever pass with a released iproute2?  The kernel exports the
+per-flow counters only as a binary TCA_STATS_APP payload:
 
-[Severity: Medium]
-Growing struct tc_fq_pie_xstats from 36 to 64 bytes is visible to
-userspace in both directions, and the changelog only argues the one
-direction - that the nine existing __u32 counters keep their offsets, so
-an old tc still parses a new kernel's payload.  The other direction is a
-new tc on an old kernel: iproute2's fq_pie_print_xstats() rejects the
-attribute outright if RTA_PAYLOAD(xstats) is smaller than
-sizeof(struct tc_fq_pie_xstats), so a tc rebuilt against this header
-(sizeof == 64) silently stops printing anything for 'tc -s qdisc show
-dev ... fq_pie' on every kernel that still emits the 36-byte payload
-from fq_pie_dump_stats().
+net/sched/sch_fq_pie.c:fq_pie_dump_class_stats() {
+	...
+	if (idx < q->flows_cnt)
+		return gnet_stats_copy_app(d, &xstats, sizeof(xstats));
+	...
+}
 
-That is not a kernel regression as such, but it does mean a distro tc
-update loses fq_pie statistics on older kernels, so it would be good to
-have it spelled out.  Does the accompanying iproute2 change parse
-defensively, e.g. copying min(RTA_PAYLOAD(xstats), sizeof(st)) bytes
-into a zeroed local struct rather than bailing out?  The enum values
-help here: TCA_FQ_PIE_XSTATS_QDISC is 0, so a short read that is
-zero-filled still resolves to the qdisc variant, and a length-tolerant
-parse needs no extra magic.  Could that reasoning be added to the
-changelog?
+Turning that blob into the literal tokens "prob", "delay" and "deficit"
+requires the companion iproute2 change mentioned in the commit message,
+"tc: fq_pie: add support for printing per-flow PIE statistics", which is not
+merged.  Shipped tc prints only the qdisc-level names (pkts_in, overlimit,
+dropped, ecn_mark and friends), so re.findall() returns zero hits and
+tdc.py fails the case:
 
-The alternative would be to leave tc_fq_pie_xstats at 36 bytes
-entirely and emit a separate struct (just tc_fq_pie_cl_stats, with its
-own discriminator if one is needed) from fq_pie_dump_class_stats(), so
-the qdisc path's payload length never changes.  fq_codel could put the
-type first and union the two variants in tc_fq_codel_xstats because the
-discriminator was there from day one; fq_pie cannot do that without
-moving offsets, which is exactly why appending here perturbs the qdisc
-path as well.  Was that option considered and rejected?
+	if len(match_index) != int(tidx["matchCount"]):
+	    res.set_result(ResultState.fail)
+	    res.set_failmsg('Could not match regex pattern. Verify command output:\n{}'.format(procout))
+
+So the test appears to land in the tree permanently red on every tc-testing
+run.  tdc has a probe mechanism for exactly this situation:
+
+	if 'dependsOn' in tidx:
+	    ...
+	    if (p.returncode != 0):
+	        res.set_result(ResultState.skip)
+	        res.set_errormsg('probe command: test skipped.')
+
+Would it make sense to add a 'dependsOn' probe so the case skips when the
+userspace support is absent, or to assert only what current tc prints?
+
+A related question: the pattern hard-codes the exact label text and ordering
+of the not-yet-reviewed userspace formatter.  If the iproute2 side lands with
+different wording or field order (say "drop_prob", or JSON-only output), does
+this kernel selftest then break while the kernel itself is unchanged?
+
+The commit message says the counters "are printed only after the companion
+iproute2 change", but the case has no fallback pattern and no skip
+condition, so that dependency reads as an aside rather than as the reason the
+test cannot pass today.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260917204225.275251-1-hemendranaik%40gmail.com
