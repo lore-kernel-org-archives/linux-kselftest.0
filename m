@@ -1,75 +1,102 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B38444C648;
-	Mon, 21 Sep 2026 07:56:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0B5276050;
+	Mon, 21 Sep 2026 08:34:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789977420; cv=none; b=UHdk4tfC2LTox+T4Xl+OhHpkXBDbXmUV0mDq3IBXjTmnBxmeMGEQVznoWUM4Nujqg4czivFEU4LPToFNl7MjwNGP0yqpgTrrwQEkc+wC/xcoFrYlcB1KMZUWeERmTJnR78+jdLVOy6cQRhwJBN30ZuQCQoyF78dlRq+zQd/YYAU=
+	t=1789979653; cv=none; b=YTM7cVQDkO7GwXZfItFeOkUlMCrcRVvIaFFsXhHE5xd15RsExVtw0L9VHGuhNAfaHQKrPwH3ROTmGyD2nPoUahJuZnBq/5crsvTn8JTRuiLnv021KTx++bgMa27h76JNauyJmwfnVhA8oW4f0vkcbOjyElq5hcK1ud2nCTjXdNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789977420; c=relaxed/simple;
-	bh=+HPwIhCiQbj0dKT5ajgWHxcYNc7fLjO50GeE6cFQ3Us=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=geGmm/dnMCD1qalxfpnoi1sE+fcgw9HZyoghn072ZZZZL3453crEmNFynwh0USSAdq/HiaeqNw8rYMuZSTWnzP3tsEpC+IwVDjigLmaWyI0BEeR2ib/9RQ/VsW7tI4NjddC46c4ohRVNQhBaz7Ex2qu6GyWfI426EG4QTDTVIak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 5BB1D1EAC3D; Mon, 21 Sep 2026 15:56:56 +0800 (AWST)
-X-Spam-Level: 
-Received: from [IPV6:2001:8003:8802:7000::41b] (unknown [IPv6:2001:8003:8802:7000::41b])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 1B67F1EAC30;
-	Mon, 21 Sep 2026 15:56:54 +0800 (AWST)
-Message-ID: <daa639e5-a5d8-47c5-9739-69d721052366@davidgow.net>
-Date: Mon, 21 Sep 2026 15:56:51 +0800
+	s=arc-20240116; t=1789979653; c=relaxed/simple;
+	bh=BJB5YjnPkcweXsnQDBv6q/1S+2TwSbJHb1CDmMRH2+Y=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=jECQiUfoBpoq621Im18ckHYrcSNSyi/qOS+jYY3nCp4Brw028h13N24Gb4kw+AGrWPK4zlBxtb18j9QR12maCc2xOVkw+Vi4aHIWlZN5TsAsZkoip+SzA4zE9qD28To4w+U+sYg0eJDyIHOm1aBAke8MMl+NMolcfdEOZi6nSnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GNDa6LOM; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GNDa6LOM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B48BB1F000FF;
+	Mon, 21 Sep 2026 08:34:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789979651;
+	bh=Q6Nq+2uf6v4Q9W25BC/CBfPrAcVMinAMeS39+vHdmFE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=GNDa6LOMJwhSyLJaB5gZ3k54KVl9uxM+Sl8FBD5TtYHH9RX+AWl9TqkMB+kzFolrc
+	 9Mgx5U89MAeEO3jjdslo1zP1iio7fJFIGdjfh4O8wq2dIHTCsr9UadwONOoWEzQHkw
+	 aVfVv7bPkiA//ByCr4RRQ/HHMzIALNiYK2AkrxunLcMyqnuIXDQyCVuqx+irkpiXue
+	 MAs5NItNxNONC6qK9rlabVLOnYP/6Z4z3mmWkuxmBXnegU0jXeUDCAQXd4AxE+IDv1
+	 4idVVSajLwRAmDte3yBVcdN9fjFCXgthgGzX1TlinLI8Y8pXyTdZDGu9Gb+jCcpCeZ
+	 m/9ik/XAQcaIg==
+Content-Type: multipart/mixed; boundary="===============4734919722786265112=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] net: microchip: vcap: Stop selecting DEBUG_FS for
- KUnit tests
-To: Karl Mehltretter <kmehltretter@gmail.com>,
- Steen Hegelund <Steen.Hegelund@microchip.com>,
- Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org
-References: <20260917064736.77354-1-kmehltretter@gmail.com>
-Content-Language: en-US
-From: David Gow <david@davidgow.net>
-In-Reply-To: <20260917064736.77354-1-kmehltretter@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Message-Id: <07cc03481993aa986fbaf7c95f59c54eb287975225e04fef488bde60e5a3ad64@mail.kernel.org>
+In-Reply-To: <20260921073556.99421-2-hi@tychen.cc>
+References: <20260921073556.99421-2-hi@tychen.cc>
+Subject: Re: [PATCH bpf-next v5 1/2] bpftool: Read ring buffer maps with event_pipe
+From: bot+bpf-ci@kernel.org
+To: hi@tychen.cc,bpf@vger.kernel.org
+Cc: qmo@kernel.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 21 Sep 2026 08:34:09 +0000 (UTC)
 
-Le 17/09/2026 à 14:47, Karl Mehltretter a écrit :
-> VCAP_KUNIT_TEST enables DEBUG_FS even when the kernel configuration
-> leaves it disabled. Remove the selection, following the dependency rule
-> in Documentation/dev-tools/kunit/style.rst.
-> 
-> The debugfs implementation and its tests are already built only with
-> DEBUG_FS. The other VCAP tests can run without it.
-> 
-> Fixes: 552b7d131aa0 ("net: microchip: sparx5: Add VCAP debugfs KUNIT test")
-> Assisted-by: LLM
-> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
-> ---
-> Validation on net c9151088f167: x86_64 LLVM builds and QEMU runs
-> with DEBUG_FS disabled and enabled. The other VCAP suites pass in both
-> configurations. The debugfs suite is present only with DEBUG_FS=y and
-> all four cases pass.
-> 
+--===============4734919722786265112==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Acked-by: David Gow <david@davidgow.net>
+> diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
+> index 75cbcb512ebae..c9e8761e4ef2a 100644
+> --- a/tools/bpf/bpftool/bash-completion/bpftool
+> +++ b/tools/bpf/bpftool/bash-completion/bpftool
 
-Cheers,
--- David
+[ ... ]
+
+> @@ -50,12 +50,19 @@ _bpftool_get_map_ids()
+>          command sed -n 's/.*"id": \(.*\),$/\1/p' )" -- "$cur" ) )
+>  }
+>
+> -# Takes map type and adds matching map ids to the list of suggestions.
+> -_bpftool_get_map_ids_for_type()
+> +# Takes map types and prints a pattern matching their JSON type fields.
+> +_bpftool_build_type_pattern()
+>  {
+> -    local type="$1"
+> +    local IFS='|'
+> +    printf '"type": "(%s)"\n' "$*"
+> +}
+> +
+> +# Takes map types and adds matching map ids to the list of suggestions.
+> +_bpftool_get_map_ids_for_types()
+> +{
+> +    local types=$(_bpftool_build_type_pattern "$@")
+>      COMPREPLY+=( $( compgen -W "$( bpftool -jp map  2>&1 | \
+> -        command grep -C2 "$type" | \
+> +        command grep -C2 -E "$types" | \
+>          command sed -n 's/.*"id": \(.*\),$/\1/p' )" -- "$cur" ) )
+>  }
+
+This isn't a bug, but the switch from a bare substring grep to an
+anchored '"type": "..."' match also tightens the existing
+stack/queue/struct_ops completions. For example, 'bpftool map peek id'
+previously matched "type": "stack_trace" because it contained the
+substring 'stack', so stack_trace map IDs were suggested; they no longer
+are. Maps whose name contained 'stack' or 'queue' were likewise picked
+up via the -C2 window and no longer are.
+
+The tightening is well motivated for the new ringbuf call (it keeps
+user_ringbuf out of the event_pipe suggestions), and every type string
+used is an exact libbpf map_type_name[] entry, so nothing is wrongly
+excluded. Would it be worth a line in the changelog about this behavior
+change to unrelated completions, or splitting the anchoring out from the
+ringbuf support?
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35575071830
+--===============4734919722786265112==--
