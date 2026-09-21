@@ -1,79 +1,92 @@
-Received: from mta0.migadu.com (out-141.mta0.migadu.com [91.218.175.141])
+Received: from out-zbxj-a91.jellyfish.systems (out-zbxj-a91.jellyfish.systems [198.54.127.91])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DE33AE1BD
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 07:11:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7673B41B8F9
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 07:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789974665; cv=none; b=DQbBQ4jnL0ctybhmCgahg/ageMZAYHh8x932iQ0qvL4KTePS3+nJQRbxf6D19V59iYM3XnrfQICBiqlyCEMvqzpEmaQ8+++e1U4hYy5dHIk+0+X1k/vDQvMFCa9cqoR9fm1DforPoRasQNtmP+Aj9Euj0qXNH3nQcI0IWEhaFmw=
+	t=1789976192; cv=none; b=sr5sF1ucUEtVFBa+cUtNyeGemVfqyvaUhVQISXQlLeGqORZNAakusvf3E4X2GXEGQPsCIHsqnfbF7u9hQTZaygbsp+eZYvu+yj9vOMe54sKmAWvyRxGGdEaRFPVHDiV47nzqQbmI7hETKr4vNoTa75Nd3Nd8s93fasdUEcq8CQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789974665; c=relaxed/simple;
-	bh=Eux8pfzDoKUAWcecKGVOzPBlEfy59s1p123uGcIZ0h4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MXay749g3P4k7+tqq2UPZ1hwUyLcq1Xd4t/RDTJblk2mD8nojLqblPDm3X/PSBg1A0qMfmFCEfOsRxF5YQ8wpVwhL2pU0dkhIgcji4tfVzBUgQe/KtvcI6+aXbChkwpc/CBGofKov7dnWptHuBXb+4oO4Wg+/LfWU2RhvMMPF5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r71lbY6X; arc=none smtp.client-ip=91.218.175.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789976192; c=relaxed/simple;
+	bh=lBk5cEgSKUwfgd1f1BPMPtWh6xj1Jp85fT8tgnBqHuE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qKuxkd3NajkK6Zulkz8wrZPiJj076GkjrtFsx4xj5SaYZH8qiBW5dzaXACS4uRTUybAOKUF0wIzTKKRgFDivV6bCTk8uOFW/f6KHUMKmo9IXzuVLEdaxiD20L68OEHN6v7QBiBXBn6HtBy7UhLwXJjFRMtWfCCYSm3gQPNBnjog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=ifRqYZLS; arc=none smtp.client-ip=198.54.127.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r71lbY6X"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Eux8pfzDoKUAWcecKGVOzPBlEfy59s1p123uGcIZ0h4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789974662; v=1; x=1790579462;
- b=r71lbY6XSvQn6RbC0czrmQ2R2SUPDEsIfWzGpZzYVA9BOxmWvOIL7uWuIHmqLEAI4fJHGbbY
- SaDfbTk2uLpHzB62Q9/lRLQIRoPNzM3P/4Dz/Sc7kOPXr3p9RAyaNzMROVLeLM+YbnO0g9txlxq
- +10A9vqMVSXd6CnecKgl1Sls=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d8378753b5471857;
-	Mon, 21 Sep 2026 07:11:01 +0000
-X-Mizu-Trace-ID: d8378753b5471857
-X-Migadu-Flow: FLOW_OUT
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5b5e5aaf7deso5963e87.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 00:11:00 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBxVgzzkFnd4U/h5GkFZLIfYOrhm/Hf7cce/Bm8xRjLER9zfK1XIFdzLrkF985XsarFvd1N0Cj6sQ8VEnHXDglA=@vger.kernel.org
-X-Gm-Message-State: AFuF++nJXlib1rdXZTcyvGKQKqzhtmqEoOAkPK4kvhdcBkDbYodddnV/
-	oWN8syhjL9xw2R0+U1hgxoX0tZbnxAUoH4Bc+yIAeMGGHYBPrIAa/iCKeK3Sgct9fyK8XjF0xvD
-	YDC8MyXXRabXIGNQhrEvA6Ptyd5PPPNBqE2vCinXC
-X-Received: by 2002:a05:6512:2216:b0:5b8:d049:c45f with SMTP id
- 2adb3069b0e04-5b8d049c61amr15291e87.14.1789974660051; Mon, 21 Sep 2026
- 00:11:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="ifRqYZLS"
+Received: from fedora (unknown [117.136.111.114])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hpFQW1vxrz8sYP;
+	Mon, 21 Sep 2026 07:36:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1789976165;
+	bh=x0ylWZptud494IW/g9Rj9XK6VykW/vNQo0wTx8WL8Wk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ifRqYZLSuYj4+AoR56pEBdO3Mo6+iHQuSXzujd7dyrwwqGc9Hoj9D7xFowO+mZAKP
+	 lW7o40PkY8WNty1kVVC5dQLQbDWpTmHLTJ2xihbF3B4BR1JESE6eaMdFp0C7YX50MU
+	 d48YrHFCIirgIF4grCIRa+hIZ3GDD0yt+rSIjMyD0KReUX6CDOoDf8X8y/n+qXDYLa
+	 guitb5Qw3+338863xjNlfkzVis+FcWJk9iDNbU7JYec0NMlI1Li8gF4DbLc1ilFl5C
+	 76ayyVKtF9YTZuCIom/L6aOFlJd8uxi9RtytTd8gmUQozMQfeOB73k5cXL/M1QQZQV
+	 DcV8Pp/ayae3w==
+From: Tianyi Chen <hi@tychen.cc>
+To: bpf@vger.kernel.org
+Cc: qmo@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v5 0/2] bpftool: Consume ring buffer maps with event_pipe
+Date: Mon, 21 Sep 2026 16:35:54 +0900
+Message-ID: <20260921073556.99421-1-hi@tychen.cc>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260902134118.2718200-1-fuad.tabba@linux.dev>
-In-Reply-To: <20260902134118.2718200-1-fuad.tabba@linux.dev>
-From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Mon, 21 Sep 2026 08:10:23 +0100
-X-Gmail-Original-Message-ID: <CA+EHjTyHJjN28zXYJUF9otZvyWP5-3Ln0fy=xJ_EE-bOdvMmHQ@mail.gmail.com>
-X-Gm-Features: AcwNN1Xk01oNkxJ7UZIT8ZwQcfv1F3nhRMlj7kGCMC3JqdaEoVZDyc6bymlUU9I
-Message-ID: <CA+EHjTyHJjN28zXYJUF9otZvyWP5-3Ln0fy=xJ_EE-bOdvMmHQ@mail.gmail.com>
-Subject: Re: [PATCH] KVM: selftests: Fix arm64 sysreg header dependencies
-To: Oliver Upton <oupton@kernel.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Will Deacon <will@kernel.org>, kvmarm@lists.linux.dev, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Sean Christopherson <seanjc@google.com>, 
-	Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Envelope-From: hi@tychen.cc
 
-Hi Oliver,
+Extend map event_pipe to consume BPF ring buffer records, with plain and
+JSON output and focused tests for records, shutdown and invalid arguments.
 
-On Wed, 2 Sep 2026 14:41:18 +0100, Fuad Tabba <fuad.tabba@linux.dev> wrote:
-> The rule generating the arm64 sysreg header targets the generated
-> directory, and its only prerequisites are tools/arch/arm64/tools/*,
-> which is the inner Makefile. An existing directory looks up to date,
-> so an incremental build never regenerates sysreg-defs.h. A selftest
-> referencing a register added to the table since then fails with
-> undeclared SYS_* identifiers. Clean builds are unaffected.
+Changes in v5:
+- Suppress cpu/index completion after selecting a ring buffer map by id,
+  name or pinned path, using _bpftool_map_guess_map_type(). Keep the
+  existing suggestions for perf event arrays and unresolved map types.
+- Rebase onto current bpf-next. No other changes from v4.
 
-[...]
+This addresses the v4 review:
+https://lore.kernel.org/r/a89e2e325b87c215e0fb6e4a24284922d7656cfc0e2a247f0c8c1cd823764c23@mail.kernel.org
 
-Gentle ping on this one. It's arm64-only (the Makefile.kvm rule that
-generates sysreg-defs.h), so I think it'd go through kvmarm rather
-than Paolo's tree. Could you take a look when you get a chance?
+Built bpftool and reran all 18 ringbuf subtests against it in an x86-64
+VM; all passed. Also checked completion against live ringbuf and
+perf_event_array maps by id, name and pinned path, plus unresolved maps
+and already-specified selectors with mocked output.
 
-Cheers,
-/fuad
+v4: https://lore.kernel.org/r/20260919110721.1230756-1-hi@tychen.cc
+
+Tianyi Chen (2):
+  bpftool: Read ring buffer maps with event_pipe
+  selftests/bpf: Cover bpftool ring buffer event_pipe
+
+ .../bpf/bpftool/Documentation/bpftool-map.rst |  14 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |  59 +--
+ tools/bpf/bpftool/map_perf_ring.c             |  87 +++-
+ tools/testing/selftests/bpf/bpftool_helpers.c |   2 +-
+ tools/testing/selftests/bpf/bpftool_helpers.h |   1 +
+ .../bpf/prog_tests/bpftool_ringbuf.c          | 417 ++++++++++++++++++
+ .../selftests/bpf/progs/bpftool_ringbuf.c     |  47 ++
+ 7 files changed, 578 insertions(+), 49 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpftool_ringbuf.c
+
+
+base-commit: 48ea1ba704aa3a9975e917411ee05bbe67d65744
+-- 
+2.55.0
+
