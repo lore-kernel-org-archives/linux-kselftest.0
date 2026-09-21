@@ -1,428 +1,245 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911724B826B;
-	Mon, 21 Sep 2026 15:46:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457203BED79;
+	Mon, 21 Sep 2026 15:47:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790005574; cv=none; b=loIwnf6uEwpjAmRYjbKpKQaGiZjTAGfruXhL/FFKd+xb6n1i9XzNBtl+sSQLv+4u4pdrMO87gVSH30Dkfw84stkWVtvK1iXqu4keDhk1qraluX/SiZQdIkp0vxya3ziBg3HA7f4dsQP5e7Fo3mrESPT0bQ7Fy/max21yGEMgL48=
+	t=1790005663; cv=none; b=mFbuUpKtB22hEeRo0KDgeECa/N6xI8lXh/cDvubaMMo20TZDk1w6IFm0vLPhpnm+VNB8Y8DGGD8mwg3xOQ4TXiePDWC/nj2MFhmU3vQ0lrzhZegUVUU6jnxnKwKIFMTJ2SkMiJJe9AtGZUKCJAiqCm3GPiJskK5i37+3jYqlAcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790005574; c=relaxed/simple;
-	bh=vvEVlNIRxe4I/j6HWAWHsTefAaiWU28bX8sgOwmfkqk=;
+	s=arc-20240116; t=1790005663; c=relaxed/simple;
+	bh=MLZ3apyjYItLX3IqltdP51BK44oiADhmzSxVVeJAUfM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kpNBVrBeTbGtfWGoQS0VyrXf9aQ/B+KR0Lq46ZJSh0P0dpjDz5NxIw6KjPvSemKl16A9hnvw+FfB10E4ul2N6+GLIFHiSawusTx0E2SIbuvkq4WBqUzTeGvQsbmQzD3SfiSQ32W+fqUqT6aNWrlfhh6ougogLZNizMkCxVoLook=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XiblYOTM; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=rqGfuvdLYSv2L66jlfQfkcHy8hW0fwvoL4ajQ4xe1vHHRd/lfz/jZ8egJmY1C/TgHUECavN/GnhE00H75zLiP9XhiOAOs56bFJRekL0ezdS6gTJta80+no/pTckZsnZiwLk8diZRePWEfq4OmJrsMLhBMiObNJOiE9ZytYmbcek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iNLZtwqq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XiblYOTM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F18D91F000FF;
-	Mon, 21 Sep 2026 15:46:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iNLZtwqq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56BEE1F000FF;
+	Mon, 21 Sep 2026 15:47:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790005572;
-	bh=yNluKekEB1tRhyIxiZ2WBAAqPM2JTk9rDjD5J+rTB8k=;
+	s=k20260515; t=1790005661;
+	bh=xt/v9cPkBOq2fPAKYQmZiznySUYlaobjHi7Tql7AMps=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=XiblYOTMQNJ+xvyELy2URpDZn8C5rcXJhGN037cvYG4oT4xjF7/F3JAf97luq1Qn4
-	 vvsshirJ7mlVTUMYG3zNaMJQiMDXZJEZF02WgkeyuVWFqXDgTcMum6emdabhPFa6oY
-	 rCi5xK71nTkYhITxxx+nyF0XMxf2uWKAicIeanF3iarR3CCE0W+HivLToolFjO+I8l
-	 R1fRZk73XHPnzrhOheWfGdaNfYIwXZZSS4tQ4J3pdzm2bmzSjgfCDq2ibrqd+7kfbZ
-	 jVckz7KEge+0U4w8xKsRHQtZn6KJNXTqsk9zU6uOEEVRTt1yY4XzKQ+ioK1GeaXlY9
-	 EPGl2cTI1guNA==
-Date: Mon, 21 Sep 2026 16:46:05 +0100
+	b=iNLZtwqqu4XESWw915pxWASPi2s5Je91G5+Mc7sftgwG1U9PiDAboIINWM6oYe8/X
+	 EB2WueoTzy0T7U53fp4NQjWShbXlhgcnuGC6ll5Pf6hKWzkHrx/4u0SpS/VzuGumgo
+	 uzXqzDIgq3Ag5wUfNl06Xfi+VrNStO5ZRXGAXxgWZ9MzCtm7AiI+Oee+vVY1KI6I8k
+	 +4MLvZhyzkIZbDfBc77JiTReV0zWCIA90WO+lh7VNiFzMYfs8C78/O0zHug2cyMAjw
+	 xVmsPoOQ5y24TbkKj5axWSvD45emrO9XpRnd11im7Agj0Sb4AO60D/+kW824l64ZHX
+	 QTCj/kPwe8z6A==
+Date: Mon, 21 Sep 2026 16:47:36 +0100
 From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
 To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: "Liam R. Howlett" <liam@infradead.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Peter Xu <peterx@redhat.com>, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Leon Romanovsky <leon@kernel.org>, Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: Re: [PATCH v4 2/3] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT
- macro
-Message-ID: <arFRFUHVY4yNxyM9@gremlin>
-References: <20260921-fix_hpage_macro-v4-0-cdea4fc6ce3f@arm.com>
- <20260921-fix_hpage_macro-v4-2-cdea4fc6ce3f@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>, 
+	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
+	Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 3/3] kselftest: mm: remove check_huge_shmem()
+Message-ID: <arFRjU2_g0tYVghn@gremlin>
+References: <20260921-fix_split-v7-0-d25ec991159f@arm.com>
+ <20260921-fix_split-v7-3-d25ec991159f@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260921-fix_hpage_macro-v4-2-cdea4fc6ce3f@arm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260921-fix_split-v7-3-d25ec991159f@arm.com>
 
-On Mon, Sep 21, 2026 at 11:36:39AM +0100, Yeoreum Yun wrote:
-> HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
-> When this macro is used in some test, test result would be strange in
-> the system where PAGE_SIZE is more then 4KB.
+On Mon, Sep 21, 2026 at 11:40:09AM +0100, Yeoreum Yun wrote:
+> check_huge_shmem() was required to distinguish shmem huge pages because
+> /proc/self/smaps reports them using a dedicated “ShmemPmdMapped” entry,
+> as opposed to “FilePmdMapped” for file-backed huge pages.
 >
-> Here is the example with transhuge-stress test with 16KB PAGE_SIZE:
+> Now that /proc/self/smaps is no longer used to detect huge pages and
+> /proc/kpageflags is used instead, it is sufficient to distinguish
+> between file-backed and anonymous pages since the ShmemPmdMapped is also
+> kind of file-backed.
 >
->   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
->     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
->     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
->     ...
->   ok 1 Completed
+> Therefore, remove check_huge_shmem() and use check_huge_file() instead
+> and cleanup khugepaged's check_huge operation in mem_ops.
 >
-> Remove the HPAGE_SIZE and HPAGE_SHIFT macro and introduce pmd_pshift()
-> helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-existing
-> helper, pmd_psize().
->
-> Also, run the KSM_MERGE_TIME_HUGE_PAGES test with a size of 512 MiB,
-> which is the least common multiple of the PMD sizes for 4 KiB, 16 KiB,
-> and 64 KiB base pages. Since allocate_transhuge() allocates mappings in
-> PMD-sized units, the test may fail with the previous size of 100 MiB,
-> which is not a multiple of the PMD size when the base page size is
-> 16 KiB or 64 KiB.
->
-> After this patch, output of transhuge-stress:
->
->   transhuge-stress: allocate 3817 transhuge pages, using 122146 MiB virtual memory and 119 MiB of ram
->     2.558 s/loop, 0.670 ms/page,  47755.759 MiB/s	2585 succeed, 1232 failed, 2585 different pages
->     2.640 s/loop, 0.692 ms/page,  46268.432 MiB/s	2585 succeed, 1232 failed, 2585 different pages
->     2.635 s/loop, 0.690 ms/page,  46360.298 MiB/s	2585 succeed, 1232 failed, 2585 different pages
->     2.782 s/loop, 0.729 ms/page,  43899.795 MiB/s	2616 succeed, 1201 failed, 2616 different pages
->     2.692 s/loop, 0.705 ms/page,  45380.876 MiB/s	2627 succeed, 1190 failed, 2627 different pages
->     2.612 s/loop, 0.684 ms/page,  46765.812 MiB/s	2628 succeed, 1189 failed, 2628 different pages
->     2.683 s/loop, 0.703 ms/page,  45520.990 MiB/s	2630 succeed, 1187 failed, 2630 different pages
->     2.727 s/loop, 0.714 ms/page,  44789.321 MiB/s	2631 succeed, 1186 failed, 2631 different pages
->     ...
->   ok 1 Completed
->
-> Suggested-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> Reviewed-by: Zi Yan <ziy@nvidia.com>
+> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
 > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-
-Thanks for fixing this!
 
 LGTM so:
 
-Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
 > ---
->  tools/testing/selftests/mm/guard-regions.c    | 11 ++++++--
->  tools/testing/selftests/mm/ksm_tests.c        | 16 ++++++-----
->  tools/testing/selftests/mm/run_vmtests.sh     |  4 +--
->  tools/testing/selftests/mm/transhuge-stress.c | 25 +++++++++++-------
->  tools/testing/selftests/mm/vm_util.c          | 38 +++++++++++++++++++++++----
->  tools/testing/selftests/mm/vm_util.h          |  9 +++----
->  6 files changed, 72 insertions(+), 31 deletions(-)
+>  tools/testing/selftests/mm/folio_split_race_test.c |  2 +-
+>  tools/testing/selftests/mm/khugepaged.c            | 38 ++++------------------
+>  tools/testing/selftests/mm/uffd-common.c           |  4 +--
+>  tools/testing/selftests/mm/vm_util.c               |  5 ---
+>  tools/testing/selftests/mm/vm_util.h               |  1 -
+>  5 files changed, 9 insertions(+), 41 deletions(-)
 >
-> diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
-> index b724d62d2b755..eee29ef88cb20 100644
-> --- a/tools/testing/selftests/mm/guard-regions.c
-> +++ b/tools/testing/selftests/mm/guard-regions.c
-> @@ -2195,14 +2195,21 @@ TEST_F(guard_regions, pagemap_scan)
->  TEST_F(guard_regions, collapse)
->  {
->  	const unsigned long page_size = self->page_size;
-> -	const unsigned long size = 2 * HPAGE_SIZE;
-> -	const unsigned long num_pages = size / page_size;
-> +	const uint64_t hpage_size = pmd_psize();
-> +	unsigned long size;
-> +	unsigned long num_pages;
->  	char *ptr;
->  	int i;
+> diff --git a/tools/testing/selftests/mm/folio_split_race_test.c b/tools/testing/selftests/mm/folio_split_race_test.c
+> index 1960635a953eb..4c0d3b6a411b8 100644
+> --- a/tools/testing/selftests/mm/folio_split_race_test.c
+> +++ b/tools/testing/selftests/mm/folio_split_race_test.c
+> @@ -182,7 +182,7 @@ static uint64_t run_iteration(void)
+>  	for (i = 0; i < TOTAL_PAGES; i++)
+>  		fill_page(mmap_base, i);
 >
->  	if (!thp_available())
->  		SKIP(return, "Transparent Hugepages not available\n");
+> -	if (!check_huge_shmem(mmap_base, FILE_SIZE, NR_PMD_PAGE, pmd_pagesize))
+> +	if (!check_huge_file(mmap_base, FILE_SIZE, NR_PMD_PAGE, pmd_pagesize))
+>  		ksft_exit_fail_msg("No shmem THP is allocated\n");
 >
-> +	if (!hpage_size)
-> +		ksft_exit_fail_msg("reading hpage_size failed\n");
-> +
-> +	size = 2 * hpage_size;
-> +	num_pages = size / page_size;
-> +
->  	/* Need file to be correct size for tests for non-anon. */
->  	if (variant->backing != ANON_BACKED)
->  		ASSERT_EQ(ftruncate(self->fd, size), 0);
-> diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selftests/mm/ksm_tests.c
-> index 5fd7792a0d479..617e31138af06 100644
-> --- a/tools/testing/selftests/mm/ksm_tests.c
-> +++ b/tools/testing/selftests/mm/ksm_tests.c
-> @@ -521,19 +521,23 @@ static int ksm_merge_hugepages_time(int merge_type, int mapping, int prot,
->  	struct timespec start_time, end_time;
->  	unsigned long scan_time_ns;
->  	int pagemap_fd, n_normal_pages, n_huge_pages;
-> +	const uint64_t hpage_size = pmd_psize();
+>  	if (pthread_barrier_init(&ctl.barrier, NULL, NUM_READER_THREADS + 1) != 0)
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index f82673f5f6b47..f448278823678 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -53,7 +53,7 @@ struct mem_ops {
+>  	void *(*setup_area)(int nr_hpages);
+>  	void (*cleanup_area)(void *p, unsigned long size);
+>  	void (*fault)(void *p, unsigned long start, unsigned long end);
+> -	bool (*check_huge)(void *addr, size_t len, int nr_hpages, unsigned long hpage_size);
+> +	bool (*check_huge)(void *addr, size_t len, int nr_hpages, uint64_t hpage_size);
+>  	const char *name;
+>  };
 >
->  	if (!thp_is_enabled()) {
->  		ksft_print_msg("Transparent Hugepages not available\n");
->  		return KSFT_SKIP;
->  	}
->
-> +	if (!hpage_size)
-> +		ksft_exit_fail_msg("reading hpage_size failed\n");
-> +
->  	map_size *= MB;
->  	size_t len = map_size;
->
-> -	len -= len % HPAGE_SIZE;
-> -	map_ptr_orig = mmap(NULL, len + HPAGE_SIZE, PROT_READ | PROT_WRITE,
-> +	len -= len % hpage_size;
-> +	map_ptr_orig = mmap(NULL, len + hpage_size, PROT_READ | PROT_WRITE,
->  			MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE, -1, 0);
-> -	map_ptr = map_ptr_orig + HPAGE_SIZE - (uintptr_t)map_ptr_orig % HPAGE_SIZE;
-> +	map_ptr = map_ptr_orig + hpage_size - (uintptr_t)map_ptr_orig % hpage_size;
->
->  	if (map_ptr_orig == MAP_FAILED)
->  		err(2, "initial mmap");
-> @@ -547,7 +551,7 @@ static int ksm_merge_hugepages_time(int merge_type, int mapping, int prot,
->
->  	n_normal_pages = 0;
->  	n_huge_pages = 0;
-> -	for (void *p = map_ptr; p < map_ptr + len; p += HPAGE_SIZE) {
-> +	for (void *p = map_ptr; p < map_ptr + len; p += hpage_size) {
->  		if (allocate_transhuge(p, pagemap_fd) < 0)
->  			n_normal_pages++;
->  		else
-> @@ -578,11 +582,11 @@ static int ksm_merge_hugepages_time(int merge_type, int mapping, int prot,
->  	ksft_print_msg("Average speed:  %.3f MiB/s\n", (map_size / MB) /
->  					       ((double)scan_time_ns / NSEC_PER_SEC));
->
-> -	munmap(map_ptr_orig, len + HPAGE_SIZE);
-> +	munmap(map_ptr_orig, len + hpage_size);
->  	return KSFT_PASS;
->
->  err_out:
-> -	munmap(map_ptr_orig, len + HPAGE_SIZE);
-> +	munmap(map_ptr_orig, len + hpage_size);
->  	return KSFT_FAIL;
+> @@ -314,12 +314,6 @@ static void anon_fault(void *p, unsigned long start, unsigned long end)
+>  	fill_memory(p, start, end);
 >  }
 >
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> index 19755fb4edb94..345d1a79f07ef 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -378,8 +378,8 @@ fi
->  CATEGORY="memfd_secret" run_test ./memfd_secret
->  fi
+> -static bool anon_check_huge(void *addr, size_t len, int nr_hpages,
+> -		unsigned long hpage_size)
+> -{
+> -	return check_huge_anon(addr, len, nr_hpages, hpage_size);
+> -}
+> -
+>  static void *file_setup_area_common(int nr_hpages, enum file_setup_ops setup)
+>  {
+>  	const int open_opt = setup == FILE_SETUP_READ_ONLY_FS ? O_RDONLY : O_RDWR;
+> @@ -411,20 +405,6 @@ static void file_fault_write(void *p, unsigned long start, unsigned long end)
+>  		ksft_exit_fail_perror("madvise(MADV_POPULATE_WRITE)");
+>  }
 >
-> -# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 100
-> -CATEGORY="ksm" run_test ./ksm_tests -H -s 100
-> +# KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 512
-> +CATEGORY="ksm" run_test ./ksm_tests -H -s 512
->  # KSM KSM_MERGE_TIME test with size of 100
->  CATEGORY="ksm" run_test ./ksm_tests -P -s 100
->  # KSM MADV_MERGEABLE test with 10 identical pages
-> diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
-> index 8eb0c5630e7e3..40ca224a61f49 100644
-> --- a/tools/testing/selftests/mm/transhuge-stress.c
-> +++ b/tools/testing/selftests/mm/transhuge-stress.c
-> @@ -35,12 +35,17 @@ int main(int argc, char **argv)
->  	size_t map_len;
->  	int pagemap_fd;
->  	int duration = 0;
-> +	const uint64_t hpage_size = pmd_psize();
-> +	const uint64_t hpage_shift = pmd_pshift();
+> -static bool file_check_huge(void *addr, size_t len, int nr_hpages,
+> -		unsigned long hpage_size)
+> -{
+> -	switch (finfo.type) {
+> -	case VMA_FILE:
+> -		return check_huge_file(addr, len, nr_hpages, hpage_size);
+> -	case VMA_SHMEM:
+> -		return check_huge_shmem(addr, len, nr_hpages, hpage_size);
+> -	default:
+> -		ksft_exit_fail_msg("Unknown VMA type\n");
+> -		return false;
+> -	}
+> -}
+> -
+>  static void *shmem_setup_area(int nr_hpages)
+>  {
+>  	void *p;
+> @@ -448,17 +428,11 @@ static void shmem_cleanup_area(void *p, unsigned long size)
+>  	close(finfo.fd);
+>  }
 >
->  	ksft_print_header();
+> -static bool shmem_check_huge(void *addr, size_t len, int nr_hpages,
+> -		unsigned long hpage_size)
+> -{
+> -	return check_huge_shmem(addr, len, nr_hpages, hpage_size);
+> -}
+> -
+>  static struct mem_ops __anon_ops = {
+>  	.setup_area = &anon_setup_area,
+>  	.cleanup_area = &anon_cleanup_area,
+>  	.fault = &anon_fault,
+> -	.check_huge = &anon_check_huge,
+> +	.check_huge = &check_huge_anon,
+>  	.name = "anon",
+>  };
 >
->  	if (!thp_is_enabled())
->  		ksft_exit_skip("Transparent Hugepages not available\n");
+> @@ -466,7 +440,7 @@ static struct mem_ops __read_only_file_ops = {
+>  	.setup_area = &file_setup_read_only_area,
+>  	.cleanup_area = &file_cleanup_area,
+>  	.fault = &file_fault_read,
+> -	.check_huge = &file_check_huge,
+> +	.check_huge = &check_huge_file,
+>  	.name = "file",
+>  };
 >
-> +	if (!hpage_size || !hpage_shift)
-> +		ksft_exit_fail_msg("reading hpage_size failed\n");
-> +
->  	ram = sysconf(_SC_PHYS_PAGES);
->  	if (ram > SIZE_MAX / psize() / 4)
->  		ram = SIZE_MAX / 4;
-> @@ -70,23 +75,23 @@ int main(int argc, char **argv)
->  	}
+> @@ -474,7 +448,7 @@ static struct mem_ops __read_write_file_read_ops = {
+>  	.setup_area = &file_setup_read_write_fs_read_area,
+>  	.cleanup_area = &file_cleanup_area,
+>  	.fault = &file_fault_read_and_flush,
+> -	.check_huge = &file_check_huge,
+> +	.check_huge = &check_huge_file,
+>  	.name = "file",
+>  };
 >
->  	warnx("allocate %zd transhuge pages, using %zd MiB virtual memory"
-> -	      " and %zd MiB of ram", len >> HPAGE_SHIFT, len >> 20,
-> -	      ram >> (20 + HPAGE_SHIFT - pshift() - 1));
-> +	      " and %zd MiB of ram", len >> hpage_shift, len >> 20,
-> +	      ram >> (20 + hpage_shift - pshift() - 1));
+> @@ -482,7 +456,7 @@ static struct mem_ops __read_write_file_write_ops = {
+>  	.setup_area = &file_setup_read_write_fs_write_area,
+>  	.cleanup_area = &file_cleanup_area,
+>  	.fault = &file_fault_write,
+> -	.check_huge = &file_check_huge,
+> +	.check_huge = &check_huge_file,
+>  	.name = "file",
+>  };
 >
->  	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
->  	if (pagemap_fd < 0)
->  		ksft_exit_fail_msg("open pagemap\n");
+> @@ -490,7 +464,7 @@ static struct mem_ops __shmem_ops = {
+>  	.setup_area = &shmem_setup_area,
+>  	.cleanup_area = &shmem_cleanup_area,
+>  	.fault = &anon_fault,
+> -	.check_huge = &shmem_check_huge,
+> +	.check_huge = &check_huge_file,
+>  	.name = "shmem",
+>  };
 >
-> -	len -= len % HPAGE_SIZE;
-> -	ptr = mmap(NULL, len + HPAGE_SIZE, PROT_RW, mmap_flags, backing_fd, 0);
-> +	len -= len % hpage_size;
-> +	ptr = mmap(NULL, len + hpage_size, PROT_RW, mmap_flags, backing_fd, 0);
->  	if (ptr == MAP_FAILED)
->  		ksft_exit_fail_msg("initial mmap");
-> -	ptr += HPAGE_SIZE - (uintptr_t)ptr % HPAGE_SIZE;
-> +	ptr += hpage_size - (uintptr_t)ptr % hpage_size;
+> diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+> index 1fb967ef49854..a76851aced4d0 100644
+> --- a/tools/testing/selftests/mm/uffd-common.c
+> +++ b/tools/testing/selftests/mm/uffd-common.c
+> @@ -196,8 +196,8 @@ static void shmem_check_pmd_mapping(uffd_global_test_opts_t *gopts, void *p, int
+>  {
+>  	size_t len = expect_nr_hpages * read_pmd_pagesize();
 >
->  	if (madvise(ptr, len, MADV_HUGEPAGE))
->  		ksft_exit_fail_msg("MADV_HUGEPAGE");
->
-> -	map_len = ram >> (HPAGE_SHIFT - 1);
-> +	map_len = ram >> (hpage_shift - 1);
->  	map = malloc(map_len);
->  	if (!map)
->  		ksft_exit_fail_msg("map malloc\n");
-> @@ -99,7 +104,7 @@ int main(int argc, char **argv)
->  		memset(map, 0, map_len);
->
->  		clock_gettime(CLOCK_MONOTONIC, &a);
-> -		for (p = ptr; p < ptr + len; p += HPAGE_SIZE) {
-> +		for (p = ptr; p < ptr + len; p += hpage_size) {
->  			int64_t pfn;
->
->  			pfn = allocate_transhuge(p, pagemap_fd);
-> @@ -107,7 +112,7 @@ int main(int argc, char **argv)
->  			if (pfn < 0) {
->  				nr_failed++;
->  			} else {
-> -				size_t idx = pfn >> (HPAGE_SHIFT - pshift());
-> +				size_t idx = pfn >> (hpage_shift - pshift());
->
->  				nr_succeed++;
->  				if (idx >= map_len) {
-> @@ -123,7 +128,7 @@ int main(int argc, char **argv)
->  			}
->
->  			/* split transhuge page, keep last page */
-> -			if (madvise(p, HPAGE_SIZE - psize(), MADV_DONTNEED))
-> +			if (madvise(p, hpage_size - psize(), MADV_DONTNEED))
->  				ksft_exit_fail_msg("MADV_DONTNEED");
->  		}
->  		clock_gettime(CLOCK_MONOTONIC, &b);
-> @@ -131,7 +136,7 @@ int main(int argc, char **argv)
->
->  		ksft_print_msg("%.3f s/loop, %.3f ms/page, %10.3f MiB/s\t"
->  			       "%4d succeed, %4d failed, %4d different pages\n",
-> -			       s, s * 1000 / (len >> HPAGE_SHIFT), len / s / (1 << 20),
-> +			       s, s * 1000 / (len >> hpage_shift), len / s / (1 << 20),
->  			       nr_succeed, nr_failed, nr_pages);
->
->  		if (duration > 0 && b.tv_sec - start.tv_sec >= duration) {
+> -	if (!check_huge_shmem(gopts->area_dst_alias, len, expect_nr_hpages,
+> -			      read_pmd_pagesize()))
+> +	if (!check_huge_file(gopts->area_dst_alias, len, expect_nr_hpages,
+> +			     read_pmd_pagesize()))
+>  		err("Did not find expected %d number of hugepages",
+>  		    expect_nr_hpages);
+>  }
 > diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index e712a980851c8..8f80e73dc22a5 100644
+> index a7c5caf6925e0..e31e88d5af76d 100644
 > --- a/tools/testing/selftests/mm/vm_util.c
 > +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -21,6 +21,8 @@
->
->  unsigned int __page_size;
->  unsigned int __page_shift;
-> +uint64_t __pmd_psize = -1ull;
-> +uint64_t __pmd_pshift = -1ull;
->
->  uint64_t pagemap_get_entry(int fd, char *start)
->  {
-> @@ -161,19 +163,40 @@ uint64_t pmd_psize(void)
->  	char buf[20];
->  	ssize_t num_read;
->
-> +	if (__pmd_psize != -1ull)
-> +		return __pmd_psize;
-> +
->  	fd = open(PMD_SIZE_FILE_PATH, O_RDONLY);
-> -	if (fd == -1)
-> +	if (fd == -1) {
-> +		__pmd_psize = 0;
->  		return 0;
-> +	}
->
->  	num_read = read(fd, buf, 19);
->  	if (num_read < 1) {
-> +		__pmd_psize = 0;
->  		close(fd);
->  		return 0;
->  	}
->  	buf[num_read] = '\0';
->  	close(fd);
->
-> -	return strtoul(buf, NULL, 10);
-> +	__pmd_psize = strtoul(buf, NULL, 10);
-> +
-> +	return __pmd_psize;
-> +}
-> +
-> +uint64_t pmd_pshift(void)
-> +{
-> +	if (__pmd_pshift != -1ull)
-> +		return __pmd_pshift;
-> +
-> +	if (__pmd_psize != -1ull)
-> +		__pmd_psize = pmd_psize();
-> +
-> +	__pmd_pshift = (__pmd_psize > 0) ? ffsl(__pmd_psize) - 1 : 0;
-> +
-> +	return __pmd_pshift;
+> @@ -475,11 +475,6 @@ bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+>  	return __check_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_FILE);
 >  }
 >
->  unsigned long rss_anon(void)
-> @@ -452,14 +475,19 @@ bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size
+> -bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> -{
+> -	return __check_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_FILE);
+> -}
+> -
 >  int64_t allocate_transhuge(void *ptr, int pagemap_fd)
 >  {
 >  	uint64_t ent[2];
-> +	const uint64_t hpage_size = pmd_psize();
-> +	const uint64_t hpage_shift = pmd_pshift();
-> +
-> +	if (!hpage_size || !hpage_shift)
-> +		return -1;
->
->  	/* drop pmd */
-> -	if (mmap(ptr, HPAGE_SIZE, PROT_READ | PROT_WRITE,
-> +	if (mmap(ptr, hpage_size, PROT_READ | PROT_WRITE,
->  		 MAP_FIXED | MAP_ANONYMOUS |
->  		 MAP_NORESERVE | MAP_PRIVATE, -1, 0) != ptr)
->  		ksft_exit_fail_msg("mmap transhuge\n");
->
-> -	if (madvise(ptr, HPAGE_SIZE, MADV_HUGEPAGE))
-> +	if (madvise(ptr, hpage_size, MADV_HUGEPAGE))
->  		ksft_exit_fail_msg("MADV_HUGEPAGE\n");
->
->  	/* allocate transparent huge page */
-> @@ -471,7 +499,7 @@ int64_t allocate_transhuge(void *ptr, int pagemap_fd)
->
->  	if (PAGEMAP_PRESENT(ent[0]) && PAGEMAP_PRESENT(ent[1]) &&
->  	    PAGEMAP_PFN(ent[0]) + 1 == PAGEMAP_PFN(ent[1]) &&
-> -	    !(PAGEMAP_PFN(ent[0]) & ((1 << (HPAGE_SHIFT - pshift())) - 1)))
-> +	    !(PAGEMAP_PFN(ent[0]) & ((1 << (hpage_shift - pshift())) - 1)))
->  		return PAGEMAP_PFN(ent[0]);
->
->  	return -1;
 > diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-> index a40e40c820ef7..71af4804f8f24 100644
+> index 9a49af88702e4..fc9c93235f6fa 100644
 > --- a/tools/testing/selftests/mm/vm_util.h
 > +++ b/tools/testing/selftests/mm/vm_util.h
-> @@ -31,6 +31,8 @@
->
->  extern unsigned int __page_size;
->  extern unsigned int __page_shift;
-> +extern uint64_t __pmd_psize;
-> +extern uint64_t __pmd_pshift;
->
->  /*
->   * Represents an open fd and PROCMAP_QUERY state for binary (via ioctl)
-> @@ -89,6 +91,7 @@ unsigned long pagemap_get_pfn(int fd, char *start);
->  void clear_softdirty(void);
->  bool check_for_pattern(FILE *fp, const char *pattern, char *buf, size_t len);
->  uint64_t pmd_psize(void);
-> +uint64_t pmd_pshift(void);
+> @@ -92,7 +92,6 @@ uint64_t read_pmd_pagesize(void);
 >  unsigned long rss_anon(void);
 >  bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size);
 >  bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size);
-> @@ -157,12 +160,6 @@ int ksm_stop(void);
->  int get_hardware_corrupted_size(unsigned long *val);
->  int unpoison_memory(unsigned long pfn);
->
-> -/*
-> - * On ppc64 this will only work with radix 2M hugepage size
-> - */
-> -#define HPAGE_SHIFT 21
-> -#define HPAGE_SIZE (1 << HPAGE_SHIFT)
-> -
->  #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
->  #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
->
+> -bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size);
+>  int64_t allocate_transhuge(void *ptr, int pagemap_fd);
+>  int pageflags_get(unsigned long pfn, int kpageflags_fd, uint64_t *flags);
+>  int gather_folio_orders(char *vaddr_start, size_t len,
 >
 > --
 > 2.43.0
