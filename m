@@ -1,175 +1,82 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BEFF395D9F
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 19:27:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463C53A6B9C
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 19:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790018859; cv=none; b=k0nwRWphFWFtRc3bPV37JpDuzPJ0BgQVbzq/hKn5A50vy7XXR11Qc4VDnDDMHLXwCYNOtU9SN/7Wc8g9RSMf5bDezJxAZ7CKrUYh5BKWCKFUhK06Rt4Nfu2J6PRXFubGZl4aViythvlWPL2b/fqZV9Z8Xv9VyxnHNu/Mmk2KzAg=
+	t=1790019096; cv=none; b=QrjPfkWGaPAKLckJ/Mb+V5LNdheT8P6Py5BAkyqbN4fRPV56RFHdR9nxct0pCOLFYiBQL1uyjjSGkm1BFTraox+3Lrhs0drFnx6WGCCWpLtS2ZSFj4CYZ++C/CzClpfrmwtdFWcNMjvoPUFCk6gCbOT2OMguxI80owfxEjvepqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790018859; c=relaxed/simple;
-	bh=4on2XQCCKq79/vtxCsDoimfudfbqBXEbuHawU+G11pc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=LpV5Bft04fKLGkU+h/1xBIvEF4BfXjHh37c9bFiyCVzsXoxd2HDx9la6e6OGluDIgKQdxGQLxCZ/0CO+nkO+D7mXOoyWrCnpo62jGqIwey1tEqhP8jkv0e4Ux+Uf+QaS3qu7Uks8avBKt5IsVj/4BcHkAOpItNoPtyM7214K71E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZPE4PbSz; arc=none smtp.client-ip=74.125.228.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790019096; c=relaxed/simple;
+	bh=L9t9LVARten1iwmjL739azvMH1M9ooRrH0gtIrmYCWk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iM+gXULc8bSQImU+5hWwQUwJO1NcJEAd95734a3y0tQBIUEdmr9kGP1E7+0oNsxgEmC1rYactn45O2WWGbkUsNfLm9ZkWhxmCkC/+W3mD5gSmXctpmNiuIRY65H9SnlzPKaiz7EEmuaog/mx+yP/jyhux2/tCRt7DiysOUewv+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=me/lfJYe; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZPE4PbSz"
-Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469b2e1d5so3471269b3a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 12:27:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790018857; x=1790623657; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=+BuFRYJQioQsFKMrRoqK+vwHlNR8DMCln0kaU+pU5wk=;
-        b=ZPE4PbSzVro93qo/gQkB40ESIYppDzFxJ9Cw5xxWAKZM0D1yeCeDAqezL5ns6dBxjy
-         uZWUuijflIdYXihjLrA+VYfPfEXMnUwYj8fIDZ8qvH/WjdJoD9tLcCppsvKnV0CUCpEQ
-         ciadN17WT/ntmg2CaPXiZ8cIS6RQHs2LJiAVXgFlmBciSDmjvY77pMMpHjAOYufxYGIx
-         FcOfp+msRxwYIuMfIKT+RnEBVkpn16wA9WxH6uuWy9HLAsZHtSW8Vxe4ohdtKzASxu+z
-         hQiE/wqhlPJKCMM7POOcwe5F/iXkigSuunZk3b+2KYmzsYsWXC0jMvXQCVrX/QAE4s9K
-         Ns2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790018857; x=1790623657;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+BuFRYJQioQsFKMrRoqK+vwHlNR8DMCln0kaU+pU5wk=;
-        b=DWDjkzTXqWGZolf2eB+28vnzSGU8O0EaR0FILeY1KpIlTRDyLmf/H2ybLf5Tz2OngB
-         aS+m3wQopHnTRqp2PzUXQ93tMeG+KpXDN4kElUxEVWMy9KMfm7sHYZPDaJGO1HYBEV6F
-         iC4QqcsSUm+kw3HLaytzNEfOAfM1o05fHHRusRJrFt1k0VDKguJuSjtWDxaJx18QnurD
-         Emi7pceGcLJURjvSpz8i+TrKSX5iztvy/kM1hqRL26nj071UJkDR+BRuB6EzC5qlCN/b
-         b2TKBScNt2PBVUYfiAPBuuKuK1aGpJbs+1td1sOQ6bOgv8+1KJAHYs3kI8U0+H8WOcxL
-         DmQQ==
-X-Forwarded-Encrypted: i=1; AKwUvBykvIZRFY7slKT1hHM42IR2g+97lrz6Go4B9OABuJD7Dn11SiSi3jxOVVFqhgeOg2UylLaLjuSvIDEAcRR8HXM=@vger.kernel.org
-X-Gm-Message-State: AFuF++kswoySg8xK0actx9LVI+zOjwfmAywJiezQWcO3YoV7/AjiyMTh
-	xKooxXaSli3DO9qTxbpHFOX7LaQ2ihFYXNwD/pDD6bI9WkImMqUlgsYc
-X-Gm-Gg: AYBFou3BLKlc/b0Q4A/+CzwRkE8k0IRiG4fZcOLoMbCPDETZzb7FSitMkbMWV95URJ/
-	cakMk4+gf9E3ysi+AZm8nE6ucMnSrUFFnygtBX1KLUnQPfBAkgA0xCSRNK70qh7nvakWbP/3Qw2
-	1W2wc66lKVCipYyzFmM1k5CISDoCyDQVsLH0XBXB25FIjJn3GEzHuTK+njPZ13iRPW2YXmq+/oA
-	RCUqOhqCAvJm9+rg0by0icf998HQac6C4g6Hp9GZEnIL5QlB8i5ZCipdYCTLQaf4fVmn0/WfAYl
-	L0VmHW0LRd25ZTk2nxXi8iyU/zF1cbFPGoCad825UbL1WNzXvxoPwSiPjJLGC9cW85w92v8/J/e
-	4CNkrgQtYEy0xQ4Oeen9FxkwdF0mKHL6QgRZk9Q1rGwIynWijamBYcTLZRJAy+AzYYJO58gWkj2
-	MqSne3yS6D5Sg1yMxs5RehTzNP43QogAo5nM2V1S8WTjnpq8ztw+qByIcCCSm/A3UKc7K2lFfXo
-	NKi2vCdfExn9aNsDhg4pZOknZTcEMoOJwj1PfqlaA99/VZGYmzBs5e/tmAoH9SwgFFAl1DSmb7I
-	8Vs=
-X-Received: by 2002:a05:6a00:4655:b0:874:705d:f651 with SMTP id d2e1a72fcca58-874de60e6c9mr16128267b3a.31.1790018857181;
-        Mon, 21 Sep 2026 12:27:37 -0700 (PDT)
-Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87bf7eb8574sm1309b3a.43.2026.09.21.12.27.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Sep 2026 12:27:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="me/lfJYe"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id BDB804E40769;
+	Mon, 21 Sep 2026 19:31:31 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 91EFF5FFB2;
+	Mon, 21 Sep 2026 19:31:31 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4848010328D5D;
+	Mon, 21 Sep 2026 21:31:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1790019090; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=rUmp8OZq8/U25SwVy/z19uf2fjfI5fsBRo+TQXAZzXs=;
+	b=me/lfJYe3P+2EiTVLF+COgR2X/91o5ueMK9M4jxJK1tD/WdpP5wxJX4/bgZTCFHQ6FE+6F
+	J8pxBTmISfBVM6LjPamWEoyxQcr9Q92WeKuhHWwupGbgirMThjplCHbtlkryqikQrVQxn1
+	ZnS0m/VjSanuhCmrTlQxF9XLmFN1Keh8906jpXKfy/rylMokOZ1mauU8ZwXwiJZsMciEqo
+	FxKXMB5FP+xCI44N6xZ8xR3/R/kJ1cOprk/a8M4W+3ieFGXyEe537QP5aW5iFcqP3lruzj
+	qDclryikaos5d5GuxmRjgcJ0bXuOGiVsH5Yn/VjyCejOp+YCKQ3txlqMoLvjJw==
+Date: Mon, 21 Sep 2026 21:31:29 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Wake Liu <wakel@google.com>
+Cc: Shuah Khan <shuah@kernel.org>, linux-rtc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: rtc: Support harness test filtering and
+ arguments
+Message-ID: <2026092119312953871857@mail.local>
+References: <20260910034821.2935214-1-wakel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 21 Sep 2026 19:27:36 +0000
-Message-Id: <DLL8Q69N7BUD.1HI0MKU2M2UGE@gmail.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, "Vineet Gupta"
- <vineet.gupta@linux.dev>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>,
- "Shuah Khan" <shuah@kernel.org>, "bpf" <bpf@vger.kernel.org>, "LKML"
- <linux-kernel@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
- across zero-extending movs
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc 0.17.0
-References: <20260910164635.459558-1-vineet.gupta@linux.dev>
- <20260910164635.459558-4-vineet.gupta@linux.dev>
- <DLDKI0ZXYI7H.1XQZZE2RCU7IF@gmail.com>
- <4ab75099-0e95-4fee-81da-6f4198e3e6a0@linux.dev>
- <CAADnVQ+N9tzBJ0Bbvp8_8QvR+QcCP4ej5CgV_kRHt=iw4BANSQ@mail.gmail.com>
- <202c45e2-58ba-4ad5-a234-c90703031f91@linux.dev>
- <CAADnVQ+Si9Au8J_j2nt+ZzFq6WPaz8hpmh0n=_dFysZmSOeipA@mail.gmail.com>
- <ff18ccb77a554000a030199e8c1fbb7d8d298e18.camel@gmail.com>
- <DLL84IMPTRQF.3DOQQTN2KCAEW@gmail.com>
- <e9aad352ba82dadd97a17867108b5db1865fa38d.camel@gmail.com>
-In-Reply-To: <e9aad352ba82dadd97a17867108b5db1865fa38d.camel@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260910034821.2935214-1-wakel@google.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon Sep 21, 2026 at 7:10 PM UTC, Eduard Zingerman wrote:
-> On Mon, 2026-09-21 at 18:59 +0000, Alexei Starovoitov wrote:
-> > On Mon Sep 21, 2026 at 5:28 PM UTC, Eduard Zingerman wrote:
-> > > On Wed, 2026-09-16 at 17:30 -0700, Alexei Starovoitov wrote:
-> > > > On Wed, Sep 16, 2026 at 5:08=E2=80=AFPM Vineet Gupta <vineet.gupta@=
-linux.dev> wrote:
-> > > > >=20
-> > > > > It ended up with full testsuite run parity - after 4 incremental =
-patches.
-> > > > > But the pattern of all those patches was adding some predicate /
-> > > > > special-casing to reg->add_const
-> > > > >=20
-> > > > > hunk 1
-> > > > >=20
-> > > > > -       if (src_reg->add_const)
-> > > > > +       if (src_reg->add_const && src_reg->delta)
-> > > >=20
-> > > > why? It should not.
-> > > > My point is that zero is not special.
-> > > > It should be handled within the current framework.
-> > > > All these extra hunks are not correct.
-> > > > ADD_CONST_32 logic should work for delta =3D=3D 0 just like
-> > > > it works for delta =3D=3D 1.
-> > >=20
-> > > After thinking about it some more, I agree that having an orthogonal
-> > > encoding would be nice. However, it appears that the split should be
-> > > somewhat different:
-> > >=20
-> > >   struct bpf_reg_state {
-> > >     ...
-> > >     s32 delta;
-> > >     u32 id;
-> > >     enum id_link_kind { full, zext, sext } link_kind;
-> > >     ...
-> > >   }
-> > >=20
-> > > Where:
-> > > - id =3D=3D 0 =3D> no id link
-> > > - full =3D> all 64-bits of the register are identical to
-> > >           all 64-bits of a scalar value `id' (let's call it X).
-> > >           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D full}, rB{X,full} =
-=3D> rA =3D=3D rB
-> > > - zext =3D> lower 32-bits of the register are identical to
-> > >           lower 32-bits of a scalar value X,
-> > >           upper 32-bits of the register are null.
-> > >           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D ?}, rB{X,zext} =3D>=
- rA % 32 =3D=3D rB % 32
-> > > - sext =3D> lower 32-bits of the register are identical to
-> > >           lower 32-bits of a scalar value X,
-> > >           upper 32-bits of the register are either 0 or 1,
-> > >           depending on the bit 31 value.
-> > >           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D ?}, rB{X,sext} =3D>=
- sext(rA % 32) =3D=3D sext(rB % 32)
-> >=20
-> > hmm.
-> > there is also 32-bit link with delta, right?
->
-> My point is that delta is independent of 32-bit/64-bit property.
-> `delta' can be used to propagate in both directions:
-> - full 64 bit -> 32 bit sign/zero-extened
-> - 32 bit sign/zero-extened -> full 64-bit
+On 10/09/2026 03:48:21+0000, Wake Liu wrote:
+> rtctest implements its own main() function with a rigid switch (argc)
+> check that only accepts an optional single argument for the RTC device
+> node path. This prevents kselftest_harness standard arguments from
+> working properly:
+> 
+> 1. Passing filter options like -t <name> or -T <name> triggers a usage
+>    error because argc is greater than 2.
+> 2. Passing -l or -h causes rtctest to treat "-l" or "-h" as the device
+>    node path and fail with access() errors before ever reaching the
+>    harness argument checker.
+> 
+> Parse command line arguments with getopt() to pass all kselftest harness
+> options (such as -t, -T, -v, -V, -f, -F, -r, -d, -h, and -l) through to
+> test_harness_run(), while preserving the ability to specify an optional
+> RTC device node path as a non-option argument. Also ensure optind is
+> reset before invoking test_harness_run() so the harness can inspect the
+> options, and bypass device accessibility checks when help or test
+> listing is requested.
+> 
+> Signed-off-by: Wake Liu <wakel@google.com>
 
-both? how ?
-I was under impression that in 32-bit domain delta is one way.
-rX =3D ...
-wY =3D wX
-wY +=3D 5
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-if wY =3D=3D 10
-We cannot do -5 to rX
-and we cannot use your above 'full' encoding for wY +=3D 5.
-Currently we use BPF_ADD_CONST32 for wY +=3D 5
-I don't see how 'full' can work.
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
