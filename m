@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-253.mta1.migadu.com [95.215.58.253])
+Received: from mta1.migadu.com (out-9.mta1.migadu.com [95.215.58.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EE93E451B
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 10:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.253
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143BE472558
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 10:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789985441; cv=none; b=f2v2zSHC97RTBFFs+iH5eMDLW3VA5IoQZ4kiFfI9es2DGPfiN9xr9x6aLJ3VV0dyPVI6AYayXELo/lLbua31JTTUcuBuQf2xUC0e9sonDiFcLBwahCTyzXAEHkwWbycy8BHjpcFXpEqtTse37J9S3VuzlDWkGRzZhJnjNT4hCUs=
+	t=1789985445; cv=none; b=bqxkhEsMEmddmyPtCEOXiOrU3B9S6QNwTO5yho+q7ih0TTqN52elWLTEFXStv6+8TumYE+Oc0t/2C0oo0Mm851Yz803UhOMbE23I3QCe9GkOocW5ycuRCJVd+9PLct6npz15yHuCSSx745E13bqWwjqBoV1jJLZFynqoaUpKfsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789985441; c=relaxed/simple;
-	bh=0wCiBy6TA7ljCdnc/O5BU8FZQMg+0QDVGtb0Tw4ehTY=;
+	s=arc-20240116; t=1789985445; c=relaxed/simple;
+	bh=0WEUwWA13h6lSIRRHugW7N81xLfWs7SnLHtINewqeBo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JAtC7Pk+7KlqPlNcVKJIWFGO7souG0MV2Ejc3tRxcGphs7k9iKxuKJelU1hi7SWd29gOmkL/UUN51Mccr6Ke2+ADkAu9fu2RAJsXuOQirQFTnJBk/a+K7V7E067kh+bLgzWCP3fjZkJUZJ/s/jEyUa2HPvTFgg0239BtA2afyVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=krvkOpOO; arc=none smtp.client-ip=95.215.58.253
+	 MIME-Version; b=Mp9cNkPI6NhQtp6osUZ1KxCu0p5zIFoW8X96IjNqO29bfUJOOI6IutAC9qPIe75Bp3pymSBAXpXaWCmDzTqsBKiCpt6JD0HdRAnN6y1uo3y5bGpeVIkTTIGwhC7t6M9/IhjQsirZeNrWB5MviunNBNBqu6gk2A19ecZwV+q7Mwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hdhewLO8; arc=none smtp.client-ip=95.215.58.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="krvkOpOO"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hdhewLO8"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=0wCiBy6TA7ljCdnc/O5BU8FZQMg+0QDVGtb0Tw4ehTY=;
+DKIM-Signature: a=rsa-sha256; bh=0WEUwWA13h6lSIRRHugW7N81xLfWs7SnLHtINewqeBo=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789985436; v=1; x=1790590236;
- b=krvkOpOOg5Dih9DSA+TzV4al2eT4hzotQwWf6/3EEffKy0lmE8Ynlm+lxRZbS3UhwafT+86Y
- II57njlEek+KraNmC6EULSM1MrXzXUAQ9859RZKzB32I7VGAe32jDI+e+pOTiBn5KaJoaSHex48
- 8J5MAXRtFhDMZaIzIEgmCwcs=
+ t=1789985441; v=1; x=1790590241;
+ b=hdhewLO8IRIHObIEz8+0C9kBmser7+1cdmUfPOwOB3HAz7dt73431HNwews1PbNLVfusSj/B
+ xJIlGH5fuZFXHpzzpNlAoBNQkkJL8cHKbcHXy0rZlTvnOn4f9tQAu1ILq5UAwn6aCb01ipY+GRW
+ Ip5FJF01O2pwmFCFQmnhNlhc=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ded491277fcd8d98;
-	Mon, 21 Sep 2026 10:10:36 +0000
-X-Mizu-Trace-ID: ded491277fcd8d98
+Received: by smtp.migadu.com with ESMTPS id cf336d2bb085442c;
+	Mon, 21 Sep 2026 10:10:41 +0000
+X-Mizu-Trace-ID: cf336d2bb085442c
 X-Migadu-Flow: FLOW_OUT
 From: Fuad Tabba <fuad.tabba@linux.dev>
 To: Marc Zyngier <maz@kernel.org>,
@@ -49,9 +49,9 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	linux-kselftest@vger.kernel.org,
 	Shuah Khan <shuah@kernel.org>,
 	Fuad Tabba <tabba@google.com>
-Subject: [PATCH v2 1/2] KVM: arm64: Sync HCR_EL2.VSE back to the host vCPU under pKVM
-Date: Mon, 21 Sep 2026 11:10:29 +0100
-Message-Id: <20260921101030.1231605-2-fuad.tabba@linux.dev>
+Subject: [PATCH v2 2/2] KVM: arm64: selftests: Check SError is not pending after delivery
+Date: Mon, 21 Sep 2026 11:10:30 +0100
+Message-Id: <20260921101030.1231605-3-fuad.tabba@linux.dev>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260921101030.1231605-1-fuad.tabba@linux.dev>
 References: <20260921101030.1231605-1-fuad.tabba@linux.dev>
@@ -63,35 +63,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-flush_hyp_vcpu() copies HCR_EL2.VSE from the host vCPU into the hyp
-vCPU on every entry, and nothing copies it back. Once the guest takes
-the vSError the hyp vCPU's copy clears with the hardware bit while the
-host's stays set, so the next entry pends the same SError again,
-KVM_GET_VCPU_EVENTS keeps reporting it, and kvm_arch_vcpu_runnable()
-never lets the vCPU block in WFI.
+test_serror() never looks at the vCPU after the SError is delivered, so
+a stale pending SError goes unnoticed. Read the vCPU events back and
+check the SError is no longer pending.
 
-Reflect VSE back on every exit, which the flush-side comment already
-promises.
-
-Fixes: 734dc8c01c838 ("KVM: arm64: Implement lazy vCPU state sync for non-protected guests")
 Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
 ---
- arch/arm64/kvm/hyp/nvhe/hyp-main.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/kvm/arm64/external_aborts.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-main.c b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
-index 9a3b92e626adb..b6bfe502bcd04 100644
---- a/arch/arm64/kvm/hyp/nvhe/hyp-main.c
-+++ b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
-@@ -276,6 +276,10 @@ static void sync_hyp_vcpu(struct pkvm_hyp_vcpu *hyp_vcpu)
+diff --git a/tools/testing/selftests/kvm/arm64/external_aborts.c b/tools/testing/selftests/kvm/arm64/external_aborts.c
+index d8fe17a6cc592..b276a4998a92c 100644
+--- a/tools/testing/selftests/kvm/arm64/external_aborts.c
++++ b/tools/testing/selftests/kvm/arm64/external_aborts.c
+@@ -239,6 +239,7 @@ static void test_serror_guest(void)
  
- 	host_vcpu->arch.iflags		= hyp_vcpu->vcpu.arch.iflags;
+ static void test_serror(void)
+ {
++	struct kvm_vcpu_events events;
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm = vm_create_with_dabt_handler(&vcpu, test_serror_guest,
+ 							unexpected_dabt_handler);
+@@ -247,6 +248,11 @@ static void test_serror(void)
  
-+	/* Cleared by hardware once the guest takes the vSError. */
-+	host_vcpu->arch.hcr_el2 &= ~HCR_VSE;
-+	host_vcpu->arch.hcr_el2 |= hyp_vcpu->vcpu.arch.hcr_el2 & HCR_VSE;
+ 	vcpu_inject_serror(vcpu);
+ 	vcpu_run_expect_done(vcpu);
 +
- 	sync_hyp_vgic_state(hyp_vcpu);
++	vcpu_events_get(vcpu, &events);
++	TEST_ASSERT(!events.exception.serror_pending,
++		    "SError still pending after the guest took it");
++
+ 	kvm_vm_free(vm);
  }
  
 -- 
