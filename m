@@ -1,27 +1,27 @@
 Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE753B42CC;
-	Mon, 21 Sep 2026 07:56:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B38444C648;
+	Mon, 21 Sep 2026 07:56:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789977417; cv=none; b=E1NNKk3CZY9fHI6+KRBV3SuWftPV0jBY/XBhXbZi6EsdD3NTa8rWPcVaPd+eRWp9gP6AYaOgRTdvewrmfg1esRjtoHhP7PYnTBj96iEsA/hYQVfbM46U0AKy7Ou5oFXMgaYI4gGOAQ4xdHBZf5qW8/f+Ykb7ISU7YQ9d6R7txUA=
+	t=1789977420; cv=none; b=UHdk4tfC2LTox+T4Xl+OhHpkXBDbXmUV0mDq3IBXjTmnBxmeMGEQVznoWUM4Nujqg4czivFEU4LPToFNl7MjwNGP0yqpgTrrwQEkc+wC/xcoFrYlcB1KMZUWeERmTJnR78+jdLVOy6cQRhwJBN30ZuQCQoyF78dlRq+zQd/YYAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789977417; c=relaxed/simple;
-	bh=igIVzTr1x3ub8IbEXOwWcGrbS8zbtyw8OmiSKZIxvvk=;
+	s=arc-20240116; t=1789977420; c=relaxed/simple;
+	bh=+HPwIhCiQbj0dKT5ajgWHxcYNc7fLjO50GeE6cFQ3Us=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kfRsKKu0n1J8zrdd+vNuHMlDs5Qa1kZKy4cUXBsUaZLw+oADJoPUizK82igpNR4T4qyvYW1ryVCL94Rj0ZMPlReEKKfj/qykmwPIOG3NgNigaxxC4mwHlR717NFw2Q7VhGvTTeUuxeuQ/r6pxFkS4YZPELUdzU1c/t6p08BnxA0=
+	 In-Reply-To:Content-Type; b=geGmm/dnMCD1qalxfpnoi1sE+fcgw9HZyoghn072ZZZZL3453crEmNFynwh0USSAdq/HiaeqNw8rYMuZSTWnzP3tsEpC+IwVDjigLmaWyI0BEeR2ib/9RQ/VsW7tI4NjddC46c4ohRVNQhBaz7Ex2qu6GyWfI426EG4QTDTVIak=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 9134C1EABD9; Mon, 21 Sep 2026 15:56:46 +0800 (AWST)
+	id 5BB1D1EAC3D; Mon, 21 Sep 2026 15:56:56 +0800 (AWST)
 X-Spam-Level: 
 Received: from [IPV6:2001:8003:8802:7000::41b] (unknown [IPv6:2001:8003:8802:7000::41b])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 7A2521EABB1;
-	Mon, 21 Sep 2026 15:56:43 +0800 (AWST)
-Message-ID: <c48b2403-92e1-4b7b-8bbe-aacf5c005cd1@davidgow.net>
-Date: Mon, 21 Sep 2026 15:56:41 +0800
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id 1B67F1EAC30;
+	Mon, 21 Sep 2026 15:56:54 +0800 (AWST)
+Message-ID: <daa639e5-a5d8-47c5-9739-69d721052366@davidgow.net>
+Date: Mon, 21 Sep 2026 15:56:51 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -29,45 +29,47 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] lib/842: depend on the decompressor for KUnit tests
+Subject: Re: [PATCH net] net: microchip: vcap: Stop selecting DEBUG_FS for
+ KUnit tests
 To: Karl Mehltretter <kmehltretter@gmail.com>,
- Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Haren Myneni <haren@us.ibm.com>, Dan Streetman <ddstreet@ieee.org>,
- Andrew Morton <akpm@linux-foundation.org>, linux-crypto@vger.kernel.org,
+ Steen Hegelund <Steen.Hegelund@microchip.com>,
+ Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
  Geert Uytterhoeven <geert@linux-m68k.org>,
  Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
  linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
  linux-kernel@vger.kernel.org
-References: <20260917055645.26780-1-kmehltretter@gmail.com>
+References: <20260917064736.77354-1-kmehltretter@gmail.com>
 Content-Language: en-US
 From: David Gow <david@davidgow.net>
-In-Reply-To: <20260917055645.26780-1-kmehltretter@gmail.com>
+In-Reply-To: <20260917064736.77354-1-kmehltretter@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Le 17/09/2026 à 13:56, Karl Mehltretter a écrit :
-> 842_DECOMPRESS_KUNIT_TEST selects the decompressor even when no other
-> option needs it, including through KUNIT_ALL_TESTS.
+Le 17/09/2026 à 14:47, Karl Mehltretter a écrit :
+> VCAP_KUNIT_TEST enables DEBUG_FS even when the kernel configuration
+> leaves it disabled. Remove the selection, following the dependency rule
+> in Documentation/dev-tools/kunit/style.rst.
 > 
-> Depend on 842_DECOMPRESS as required by
-> Documentation/dev-tools/kunit/style.rst. This also prevents the test from
-> promoting a modular decompressor to built-in.
+> The debugfs implementation and its tests are already built only with
+> DEBUG_FS. The other VCAP tests can run without it.
 > 
-> Fixes: cca072cb1423 ("lib/842: add KUnit tests for the decompressor")
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Closes: https://lore.kernel.org/r/CAMuHMdVcZ5cV4-HrjLYfFKh6UshiVxq5eXCNyp0Z1k_SMAvF5g@mail.gmail.com/
+> Fixes: 552b7d131aa0 ("net: microchip: sparx5: Add VCAP debugfs KUNIT test")
 > Assisted-by: LLM
 > Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 > ---
-> Follow-up to the accepted commit, based on cryptodev-2.6/master.
+> Validation on net c9151088f167: x86_64 LLVM builds and QEMU runs
+> with DEBUG_FS disabled and enabled. The other VCAP suites pass in both
+> configurations. The debugfs suite is present only with DEBUG_FS=y and
+> all four cases pass.
 > 
-> Testing: Checked Kconfig dependency resolution for eight x86_64
-> configurations before and after the change, including KUNIT_ALL_TESTS
-> and modular/built-in combinations.
->
-
-Thanks!
 
 Acked-by: David Gow <david@davidgow.net>
 
+Cheers,
 -- David
+
+
