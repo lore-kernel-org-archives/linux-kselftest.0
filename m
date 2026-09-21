@@ -1,223 +1,223 @@
-Received: from mail-qk2-f42.google.com (mail-qk2-f42.google.com [74.125.230.234])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012033.outbound.protection.outlook.com [40.107.209.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CCC51EDE5
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 22:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.234
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790029583; cv=none; b=UbqVKc7xGYuDC6UAnEi/rKNB4/Lz3FaGVePDkqpFru4cn8FOhRD4W+UNR3CSKZiEC1CTysFdySBSBUQJqcwq/18R8N+BiynqSqtsbferi/sLKeIclOqlZmTJ6I6xuWBpQ+ft+3r+p6Oo8sWsqWGnLKy5j2F4DFhsPM9ugqmhCaE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790029583; c=relaxed/simple;
-	bh=GRZdBlRm1lvsE5c25wt8yPbTEBC5cBBDDLkQAdXfpWc=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF7D51A135;
+	Mon, 21 Sep 2026 22:36:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.33
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790030162; cv=fail; b=OyhsHmKH9fqs6UKWaM6w78F2onMO2AcY3FatS8yzeMjzT3QrZiNMIqQUsVzN0RpiN7Q644lj63CciC8gOgS8pf1lTtbVCnszbEUeRn/gBJSZT/LOxtTXCvQMrHGIBJ7sLCIFpn8h7vtG9h2SFZdmPZ6tp817b5SxhppsGNyqGDE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790030162; c=relaxed/simple;
+	bh=/w+ngRnd1kH+SxFgZw2c2bZ/bFKePf8Urop53h8Au7s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VCS19Yl1wZROwENNjNYL/jelxnf1qA7YLpDdwE4+1OzKgIUP4NbingBWXS0LCNNQkniSU/4RuhYl+m2sHBH87nB1TKS/jeX1w8dSq+4Mv1dPASlGx3DbSXlJyFcjfBYgonn7mBCyEmqK8yk5C/A7E0UHQN7M65JI+Vi3+Gq7pwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com; spf=pass smtp.mailfrom=openai.com; dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b=RRpMlZw4; arc=none smtp.client-ip=74.125.230.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openai.com
+	 Content-Type:MIME-Version; b=bta9sXhLHoN9TnutnhfCMJYQ7psz6pLdP4V0odVmzu+gkGMiERmJNic2ox0uue+ZKSCC4hKrJiwJaQw2Vf/3j6dj/IQ2OpLyi2l2+36rNv+HNeX4djC3H8LktDBc//Yp/fVVH8aPmZT4lPyqhRFlYOpV8XAeZeLHpZSCN0b/7ns=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=NkPMZ6cp; arc=fail smtp.client-ip=40.107.209.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b="RRpMlZw4"
-Received: by mail-qk2-f42.google.com with SMTP id d75a77b69052e-530c602630bso42679211cf.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 15:26:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openai.com; s=google; t=1790029581; x=1790634381; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=bneTXx7VbqxcZhk0NJHAAHTOdPB67K7M73RJR6TLrG4=;
-        b=RRpMlZw4UOONWwAuGZcnkNdfUcmgdnlcyXc2JKBIIqeqOjMFTl2SEq7U7ONsos3TQo
-         9o8ZENhwv+J/3VHbTewH3xZ0j8Hm1EkROYutruQdX9wD0CFFBW0j7kbvqp2pyw80i+dZ
-         b20hRxhBjlRzto1gMQljF0Q5wk/MLJbE++8ZY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790029581; x=1790634381;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=bneTXx7VbqxcZhk0NJHAAHTOdPB67K7M73RJR6TLrG4=;
-        b=ppuo/n3jUaQFmTnK0GYt/ElSqa9MB6EUMFeLwfoQ2FEojcYxWEC/quhyKXDBsbvpNd
-         G4oRAGKn4knj8bm+/YGVSUAI1eyxZGfFN1nZ48nXFG3neCBjG4mt0N6n6z+2hhyAy4yk
-         ukCffwlZr1Tym//aXGeNBmJpY0twZ/wmhFj06osf0hX5BEirppblnJfRbHMa2Oof/yME
-         DuWTaphE1vblqhvCvWPQHrX3eTmW3/9jGHcRxxvc9wII5YSCA9NAZa50wFIRJZD5iqAz
-         N2g/CXb8wW9YMwuGvTSAZFOhgWA9IiVKo78qXCZ4RCCl/LNZ9jUNYawngX3MnWiw0/ZA
-         WMyg==
-X-Forwarded-Encrypted: i=1; AKwUvBww85q5KKSCCsV0PgDEy/CHRXmU8gE6jePe8I7wS17M4CAfdvDzS39wkBlQNqqLbHGf9zrYUaX3GCo4AY38dyk=@vger.kernel.org
-X-Gm-Message-State: AFuF++kUml3YoqaUtABOSqrMiBO5vuAj37UUXJZbvL7d6xwmIIKpIxgV
-	9Uy3KbEBqln/aB5j3W8G0tdRwdoUXuCOs7s+5SyZddXt5ds/8aFIK2DzZfeCz/DvwJo=
-X-Gm-Gg: AYBFou3cG81851EApblzSEnVaDpo5eMoffUizQCNPcHm638AZDU8p5Jq793P6UJYoMJ
-	8yJNxawueWrv5s5MSbH/zRBFVDee0Qmz3MJ7ROeyL6gKLiAgDXv5pNuDlMILN3ww3f51HBbL908
-	X2fKGWGQJVThexu1A/SBasFbL8FIrKwA4k15lDRyOKaixu8+TeN6F6FLwdCW9tfiE/ErCiAy4zk
-	uboD/mDp1VoFONNfWFDJBbJRQtCYk8VJrSH5/XY/rgEG1OBFWUZZI2D+NJyHuf0l0lIUpP9h4t3
-	+lZqxzCP3rn4CeeQQthYIKeGBMqboGh+XFmcphFxQMq0x9m2hSqxVCNpq8VLu4ma3n8JuuSo3bp
-	kkfUAuYCm9NRF49UtK2Vz5i8Z5lqfxC1ep3aZkowJz14PegVynlaw2x2KST+LYbc0VIsGDz4Gzl
-	WXEmsHxZilmUNG2HK5kXlP0+4cjdwaYmGU4w8cJCmyKOfG7PuqbYgYdI6lEtip3jXmUbmLu/neh
-	IptxgNNvPu2vo8EGg5XhAgvc8G0ziLUUwKjEAnvpU01Iu65ntD2lksRTramg3uoisyddSjtzE4=
-X-Received: by 2002:a05:620a:29cb:b0:939:f522:b2f7 with SMTP id af79cd13be357-93c198e8416mr63207985a.33.1790029580644;
-        Mon, 21 Sep 2026 15:26:20 -0700 (PDT)
-Received: from com-94485.corp.openai.org ([199.47.143.14])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93c19bc6f4bsm30675085a.44.2026.09.21.15.26.18
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 21 Sep 2026 15:26:20 -0700 (PDT)
-From: Jeff Jo <jeffjo@openai.com>
-To: netdev@vger.kernel.org
-Cc: edumazet@google.com,
-	ncardwell@google.com,
-	kuniyu@google.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net 2/2] selftests: net: check timestamp echo after an old ACK
-Date: Mon, 21 Sep 2026 15:26:12 -0700
-Message-ID: <20260921222609.50824-6-jeffjo@openai.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260921222609.50824-4-jeffjo@openai.com>
-References: <20260921222609.50824-4-jeffjo@openai.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="NkPMZ6cp"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ciVvnL+8tTElKhlx5ysbOtKYO9H5Xi+qD/ZEG8XMjPMPfabjL1pn5h56zf5Yt4vSfjmQX5Mb3vVhUsTDSeIcduZk9j88PVPN7pyO5G2MeJ6S4r5b6Xg+NuBAd3NPUbYFYfm2K9DfGo7uka3NjyFMuMi9+/HV7nSd4JRyTdudQCPqY3i6chWr6ywudOUrxUxMntlZr/mZbobUIB/O+VxWSvnA3YnEUHyMKh1hlAfsVmBvW4e+LP9sQfm0Mv5bjPkcSBRr/GeY4FIyuj9l4BcVqsDwZP6lZvq679/EoxALoVF6BNgQt7lgS1slDlNAkNmzbNP61m+NJki66nLF4/HlJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Jfe01UndmrkEcZk8OgwaUlUkfvz8EN6XhxiCIShyxKs=;
+ b=MfJ1lSXkrj28B4LvnQfI+3PgNddMyzSknrRvmyErxpcdY/0rC5/U85V8sx2bUzP+9z58Ls0TAVQbNavQcqK1V0qvG+yEUA7Qvyw1Aa6AG7Ve2MyDC0stJumaCkvmAEJTlNwCxyB53yhZbWT4MhzrpaB70Ly5nHHzcClKSHoAf7Fy8Nu2rTpuRTU391LHXs4Edm3zcHJfepdN8o4upFcZMgEDWhilcY47LWpHbsZ4bENLR8gXf7G3wbsBvTWKQYuLAo4ih6vYsi5Nx4Uug7qKTxXOvQYX1UU06jTr6xkf37kfoXr+gQ0n+FKxGQFLMW/APMA6JhKreJAtKrUaVmxgmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Jfe01UndmrkEcZk8OgwaUlUkfvz8EN6XhxiCIShyxKs=;
+ b=NkPMZ6cpZV4wY42BsoqSEkeXowvwqX3Laj6xOgG0+kGgJNtDB5n26wJA104r8rbNRNy/wcqsOyaDpSG+mBfXw7XBiJaehQvlbPSKcvzQ9NPxYLuenZTa7+HCZiEiBmN7AHYhgcpED2hB3hytq06W62o2KlPoy1AjQWcWJdBeh+FpFoOUgt2TwkpiLFco2AOhTnMJHCkn1cXXeStqlpLqyazSsEWuCa9o4+wO+EoRPwRWWG2qNvX7YY7kUZF3z/nQpNEPfWcM4JazH6JKBnr7FXCKxAhiwNwK+BstFljEvYvIWNKJdAcHMt57V33irv3bXj+IHiH8tYqopL/mrRWZoQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CHBPR12MB731189.namprd12.prod.outlook.com
+ (2603:10b6:610:33d::12) by LV3PR12MB9144.namprd12.prod.outlook.com
+ (2603:10b6:408:19d::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.16; Mon, 21 Sep
+ 2026 22:35:52 +0000
+Received: from CHBPR12MB731189.namprd12.prod.outlook.com
+ ([fe80::b0e5:123d:fe06:e10d]) by CHBPR12MB731189.namprd12.prod.outlook.com
+ ([fe80::b0e5:123d:fe06:e10d%6]) with mapi id 15.21.0428.015; Mon, 21 Sep 2026
+ 22:35:52 +0000
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alex Williamson <alex@shazbot.org>,
+	David Matlack <dmatlack@google.com>,
+	Fuad Tabba <fuad.tabba@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	kvm@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	Leon Romanovsky <leon@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	Marc Zyngier <maz@kernel.org>,
+	Mark Bloch <mbloch@nvidia.com>,
+	netdev@vger.kernel.org,
+	Oliver Upton <oupton@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Zenghui Yu <yuzenghui@huawei.com>
+Cc: patches@lists.linux.dev
+Subject: [PATCH v7 01/10] net/mlx5: Add IFC structures for CQE and WQE
+Date: Mon, 21 Sep 2026 19:35:41 -0300
+Message-ID: <1-v7-c6d30e8ce1e4+3dfa6-mlx5st_jgg@nvidia.com>
+In-Reply-To: <0-v7-c6d30e8ce1e4+3dfa6-mlx5st_jgg@nvidia.com>
+References:
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: DSSP220CA0009.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:8:3d3::17) To CHBPR12MB731189.namprd12.prod.outlook.com
+ (2603:10b6:610:33d::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CHBPR12MB731189:EE_|LV3PR12MB9144:EE_
+X-MS-Office365-Filtering-Correlation-Id: 959c8d67-4769-4ade-43b1-08df1830b128
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|376014|366016|1800799024|7416014|921020|56012099006|10067099003|11063799006|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	6lPCpVEq+A+tP+g28E8hBx/4VZTk3D/nXPP9Ot3pkT1Lb7T96lxyub2opqJnTFRjro/tKDWpJaMrVBkzgRbrY+jnYtYESUXd9miKZGFepTQKK0vdKphO4Hvef0a1iCzZBwKwh2RuQ2rrZIaHUxPrv4o40iEjyHUV4T7eE+KRpuuadmqwPS+CEjkWXwlEyY+PL418kulFLOtnEYVfoUL1vpu2LGeeIOjMXy4BOa8+DqqaVjuJsGeEUav9XemROnebEeSS0C1HBaWqoqDYLyBVnm4MB4/eFXcIkLplDukzR9RBgFXP/LwpvBJrnDW0t5EaaxRQ9dxuKVADODxqY5YqFtoF/U9bSAyaS98JOtfUnNlkB6tlG1N4THytfBkIBqr1D9Whg6piRv4f1rCU3NL7j3h+Ep5u7YzgMPbjIXXk+3OweCz1lhzonN17Y8Fvu1pnAMpMtDqSxyewZW3xLSuIca0jVPK0Tx89XOipLyM+yyFS8WbHvhw/rZoFFDUUC9bNVAwX43/gQdk59WCI+1pWiTJojKZk5A3jklVpZ61qeAHho33xysOJ6xwrxWAzvryxI+1hQ9A/OcCTvYVTYqQdfA9X0OSI5z6Y7dms2ATvePt725ZJPB/l1TbnIeUdpl0Ge0ImnO8ShWQd8/OqjfhgR157tPtLz6XxSv9XipS2GfiGIeqE3MhYfOk3o9R9xc4YowkKYq06dM8kqxWfbKE/nA==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CHBPR12MB731189.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(366016)(1800799024)(7416014)(921020)(56012099006)(10067099003)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?xt283Z5jAcY9t3pbl6iOgWgsexsrTIsM7p/9yebkk0VhZP66aORaN+705P0M?=
+ =?us-ascii?Q?Nt1h9td7SHH0uK5nFwUTOiHMU16OrYu+7K0UcvrupAim/PWAAaf/5kxkzF+x?=
+ =?us-ascii?Q?J/QWEMTo4xyu3V6vxrY0ZNteOYmoCQd9GOtC68aUoXpb9QgVAJ1JBz0t/PKJ?=
+ =?us-ascii?Q?pZpworZ9CsdjjWjH3/HG5hdDMHl0vhoo7vu91t+lN20QnN2NnTpVHUu+W7D9?=
+ =?us-ascii?Q?zmz5M1Bd+9CSt1ehQFlciPsBPyd5JZ13NJGCsHNEElA4leEZdrsxgEoNpilb?=
+ =?us-ascii?Q?yFbTngsv09OBaBfTDLmUMrDJYOq2i87U5OFf/LZfQ5ErAN/KIMOIFvW172dl?=
+ =?us-ascii?Q?pqZou66MFDrGugwe9M9sG80+XvAd8vNUnSLIADWQPni8Qeolbcm1vQ78GgZM?=
+ =?us-ascii?Q?kYP+WoAaQKBUgum+rfkAwr+J30wVmZsjAfodz3UJGE81mSsZ+sWXpDUDY4Zg?=
+ =?us-ascii?Q?J6sDADBveHZhP84n/DYG92PShL3rpL7wnVkeGvWUJSYzicobUwyEvz+CdkoA?=
+ =?us-ascii?Q?vgb1vDJSkXEH2laFfqq5wB42jM9Oq5xlC/Mis390xEVZHRlU8GRSTXYUrtxC?=
+ =?us-ascii?Q?OoPBKxBe6GKudBBf4aF0hsyd+915Or3fZ1zx7dGDsxsn7LqlKxZmp9sYB78j?=
+ =?us-ascii?Q?1tfaJ0vzGr6AKJabeIZvyzFcSfRVBhhUHbctgMq+tO3nuxSdtVCXJNR6YvKF?=
+ =?us-ascii?Q?HxgSOxmdldsEKJbct+Upk/UJ1cg1ZCS8aMZ/9dTNCWon8Kj4QNx67Ngjeuga?=
+ =?us-ascii?Q?8bfCVQxaHRhWHRYT2FZg2QAMKadSHpQPJmYVzzl/9DW9AiwUS2eJnWTE2k+G?=
+ =?us-ascii?Q?wokqn+QedP+g3PRf14BvKBzohkETUt5G2iBOD1GsUV8EjPiJuCfWFXA8jdk4?=
+ =?us-ascii?Q?B74E1WZM82ogIP7WtJKN+niiwcUcvShPVMb5GlwKLolE7M3lwL2aw9vAPEVw?=
+ =?us-ascii?Q?baR/qBchBOUv5Mya5tmDfOXCGbJmCpsSplJGOBIzVdqdCEcJ6hclQ04QYKss?=
+ =?us-ascii?Q?GZ0oY3ERiOz6saTCHweAks7JDFHgt0vvQ+WHBFx1NYRvItNurHCoL96l9aqs?=
+ =?us-ascii?Q?Oc6Li80CMENWO3MZ2EePeSZUh9iMMHeTAToraB39j0L5rIhFL6TsGPDNh2E8?=
+ =?us-ascii?Q?UcHZEfoNmdfnt+qO0p+CORygVh7dd+oZzsksuYlsy0CyjXL6OG7NDMC2EpPF?=
+ =?us-ascii?Q?dGfHKE257PRB9qpn4ugHJg6nuEw70csZ5EHau/SA7VOZdNudPP+7ib8jfirD?=
+ =?us-ascii?Q?P4lk2YnAMhOkm7xdYa241jpM9NJmgdhjyDdEmlAzVvixEH+YMjxosXpAPtq3?=
+ =?us-ascii?Q?rRU+8SDQnQuPtKiEF3EKAdbxA8FCjACHKIvx/KIPGfU7HbSf1B+pINOdaANW?=
+ =?us-ascii?Q?DBxNbndNAz3Y5duSnns7FdDDWLK9NEnDKKwRLTnIYhCvBRxUhE2XMLAVmNkr?=
+ =?us-ascii?Q?02n5ieh+mtkrrWYPtZnVMbfPCgus0qqoq74UrD1inEpf6CFrZcoJb538qtB1?=
+ =?us-ascii?Q?q6slJrk8RZRGJIeuBDYyS3Opws40jGP/17ytm24oY5Ay0ECISGDJtS2Ri2ki?=
+ =?us-ascii?Q?4OGN+tfDk93QXPlE6usTRUlN1pq7CcIo3vRsF+8TaMPWa4OdzOBgQThi7REN?=
+ =?us-ascii?Q?ttqfXBuyfNHOVeEk7iZ59v6m1qi70XUL3/htDruSpOxWA1obiLYDfQX5EK9G?=
+ =?us-ascii?Q?4AJZmyiHNt034KAfAayjYWb6Rpi3gm2pThR8B5bIEAJm0mfw?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 959c8d67-4769-4ade-43b1-08df1830b128
+X-MS-Exchange-CrossTenant-AuthSource: CHBPR12MB731189.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2026 22:35:52.0834
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: O1pjLqgfxJJzC+U+hHAWK7+g58G9Xt/zu5n7guHudXbZR0T68DFBo/67htydR9Ij
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9144
 
-Add a regression test for a gap-filling packet whose acknowledgment has
-become old. Linux first sends data to the peer. Deliver two peer data
-packets out of order: the later packet acknowledges Linux's data, while
-the delayed packet still carries the earlier acknowledgment. Require
-the final reply to echo the delayed packet's timestamp.
+Building the WQE and CQE using the IFC system is easier than with a
+C layout struct. Add definitions for their layout. Structs for:
 
-Use a large jump in peer timestamps to represent the idle interval.
-The test checks the echo directly, without waiting for that interval
-and without packet loss or retransmission.
+  - wqe_ctrl_seg_bits (16B): WQE control segment
+  - wqe_raddr_seg_bits (16B): RDMA remote address segment
+  - wqe_data_seg_bits (16B): data segment
+  - cqe64_bits (64B): 64-byte CQE with error syndrome union
 
-Packetdrill does not currently compare the timestamp-echo field (TSecr),
-so the packet script alone can pass on a broken kernel. Add a shell
-wrapper to check all four outgoing timestamp echoes in packetdrill's
-output. Register the wrapper as the runnable test and keep the packet
-script as a supporting file.
+The VFIO mlx5 selftest will use these.
 
-Run the test in a separate network namespace for each of IPv4, IPv6
-and IPv4-mapped IPv6.
-
-Assisted-by: LLM
-Signed-off-by: Jeff Jo <jeffjo@openai.com>
+Assisted-by: Claude:claude-opus-4.6
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- .../selftests/net/packetdrill/Makefile        |  5 +-
- .../net/packetdrill/tcp_old_ack_ts.pkt        | 23 ++++++++
- .../net/packetdrill/tcp_old_ack_ts.sh         | 57 +++++++++++++++++++
- 3 files changed, 84 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_old_ack_ts.pkt
- create mode 100755 tools/testing/selftests/net/packetdrill/tcp_old_ack_ts.sh
+ include/linux/mlx5/mlx5_ifc.h | 55 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/tools/testing/selftests/net/packetdrill/Makefile b/tools/testing/selftests/net/packetdrill/Makefile
-index ff54641493e9..4695d8258aa1 100644
---- a/tools/testing/selftests/net/packetdrill/Makefile
-+++ b/tools/testing/selftests/net/packetdrill/Makefile
-@@ -7,6 +7,9 @@ TEST_INCLUDES := \
- 	../../kselftest/ktap_helpers.sh \
- # end of TEST_INCLUDES
+diff --git a/include/linux/mlx5/mlx5_ifc.h b/include/linux/mlx5/mlx5_ifc.h
+index 12b9a81e562146..a3edc5ba1cd4f1 100644
+--- a/include/linux/mlx5/mlx5_ifc.h
++++ b/include/linux/mlx5/mlx5_ifc.h
+@@ -5979,6 +5979,61 @@ struct mlx5_ifc_cqe_error_syndrome_bits {
+ 	u8         syndrome[0x8];
+ };
  
--TEST_PROGS := $(wildcard *.pkt)
-+# This fixture requires its wrapper to validate outbound timestamp echoes.
-+TEST_PROGS := $(filter-out tcp_old_ack_ts.pkt,$(wildcard *.pkt))
-+TEST_PROGS += tcp_old_ack_ts.sh
-+TEST_FILES := tcp_old_ack_ts.pkt
++struct mlx5_ifc_wqe_ctrl_seg_bits {
++	u8         opmod[0x8];
++	u8         wqe_index[0x10];
++	u8         opcode[0x8];
++
++	u8         qp_or_sq[0x18];
++	u8         reserved_at_38[0x2];
++	u8         ds[0x6];
++
++	u8         signature[0x8];
++	u8         reserved_at_48[0x10];
++	u8         fm[0x3];
++	u8         reserved_at_5b[0x1];
++	u8         ce[0x2];
++	u8         se[0x1];
++	u8         reserved_at_5f[0x1];
++
++	u8         imm[0x20];
++};
++
++struct mlx5_ifc_wqe_raddr_seg_bits {
++	u8         raddr[0x40];
++
++	u8         rkey[0x20];
++	u8         reserved_at_60[0x20];
++};
++
++struct mlx5_ifc_wqe_data_seg_bits {
++	u8         reserved_at_0[0x1];
++	u8         byte_count[0x1f];
++
++	u8         lkey[0x20];
++
++	u8         addr[0x40];
++};
++
++struct mlx5_ifc_cqe64_bits {
++	u8         reserved_at_0[0x1a0];
++
++	union {
++		u8         reserved_at_1a0[0x20];
++		struct mlx5_ifc_cqe_error_syndrome_bits error_syndrome;
++	};
++
++	u8         send_wqe_opcode[0x8];
++	u8         qpn_or_dctn_or_flow_tag[0x18];
++
++	u8         wqe_counter[0x10];
++	u8         signature[0x8];
++	u8         opcode[0x4];
++	u8         cqe_format[0x2];
++	u8         se[0x1];
++	u8         owner[0x1];
++};
++
+ struct mlx5_ifc_qp_context_extension_bits {
+ 	u8         reserved_at_0[0x60];
  
- include ../../lib.mk
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_old_ack_ts.pkt b/tools/testing/selftests/net/packetdrill/tcp_old_ack_ts.pkt
-new file mode 100644
-index 000000000000..d13f5ea4ac12
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_old_ack_ts.pkt
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Run through tcp_old_ack_ts.sh: packetdrill alone does not check TSecr.
-+// An out-of-order segment advances SND.UNA. The gap filler still carries
-+// its original, older ACK; accepting its data must refresh TS.Recent.
-+--tcp_ts_tick_usecs=1000
-+
-+`./defaults.sh`
-+
-+0.000 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-++0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-++0 bind(3, ..., ...) = 0
-++0 listen(3, 1) = 0
-+0.100 < S 0:0(0) win 20000 <mss 1000,sackOK,TS val 900 ecr 0>
-++0 > S. 0:0(0) ack 1 <mss 1460,sackOK,TS val 100 ecr 900>
-+0.200 < . 1:1(0) ack 1 win 20000 <nop,nop,TS val 1000 ecr 100>
-++0 accept(3, ..., ...) = 4
-+0.300 write(4, ..., 17) = 17
-++0 > P. 1:18(17) ack 1 <nop,nop,TS val 300 ecr 1000>
-+0.310 < P. 18:35(17) ack 18 win 20000 <nop,nop,TS val 301001 ecr 300>
-++0 > . 18:18(0) ack 1 <nop,nop,TS val 310 ecr 1000,nop,nop,sack 18:35>
-+0.320 < P. 1:18(17) ack 1 win 20000 <nop,nop,TS val 301000 ecr 100>
-++0 > . 18:18(0) ack 35 <nop,nop,TS val 320 ecr 301000>
-++0 read(4, ..., 34) = 34
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_old_ack_ts.sh b/tools/testing/selftests/net/packetdrill/tcp_old_ack_ts.sh
-new file mode 100755
-index 000000000000..4c4534a81e78
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_old_ack_ts.sh
-@@ -0,0 +1,57 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+cd "$(dirname "$(realpath "$0")")" || exit 1
-+source ../../kselftest/ktap_helpers.sh
-+
-+if ! command -v packetdrill >/dev/null; then
-+	ktap_skip_all "packetdrill not found in PATH"
-+	exit "$KSFT_SKIP"
-+fi
-+
-+log=$(mktemp) || exit "$KSFT_FAIL"
-+trap 'rm -f "$log"' EXIT
-+optargs=()
-+if [[ -n "${KSFT_MACHINE_SLOW}" ]]; then
-+	optargs+=(--tolerance_usecs=14000)
-+fi
-+
-+ktap_print_header
-+ktap_set_plan 3
-+
-+for family in ipv4 ipv6 ipv4-mapped-ipv6; do
-+	mtu=1500
-+	[[ "$family" == ipv6 ]] && mtu=1520
-+	if ! unshare -n packetdrill --verbose --ip_version="$family" \
-+		--mtu="$mtu" "${optargs[@]}" tcp_old_ack_ts.pkt >"$log" 2>&1; then
-+		sed 's/^/# /' "$log"
-+		ktap_test_fail "$family: packetdrill"
-+		continue
-+	fi
-+
-+	# Packetdrill checks packet structure and timing but ignores outbound
-+	# TSecr. Require all four observed echoes, including the gap-filling ACK.
-+	if awk '
-+	/outbound sniffed packet:/ {
-+		count++
-+		if (!match($0, /ecr [0-9]+/)) {
-+			bad = 1
-+			next
-+		}
-+		echoes = echoes (count == 1 ? "" : ",") \
-+			substr($0, RSTART + 4, RLENGTH - 4)
-+	}
-+	END {
-+		if (bad || count != 4 || echoes != "900,1000,1000,301000") {
-+			print "# unexpected timestamp echoes: " echoes
-+			exit 1
-+		}
-+	}' "$log"; then
-+		ktap_test_pass "$family"
-+	else
-+		sed 's/^/# /' "$log"
-+		ktap_test_fail "$family: timestamp echo"
-+	fi
-+done
-+
-+ktap_finished
 -- 
-2.55.0
+2.43.0
 
