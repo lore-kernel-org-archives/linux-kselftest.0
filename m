@@ -1,345 +1,175 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3D0C4F85DA;
-	Mon, 21 Sep 2026 18:48:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38864F473D
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 18:59:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790016491; cv=none; b=V5EGZ+237FwMeuBbwVyfsLFlHkHUDKaENPE+QGjfnUKRksHF/PfYG5cUevvYC52HyfHaAmLQasa3JNbChJh6vTcpIDp8bkXlF/O36sbEVWZ8Xk0Yt1R1Mrsh24C/n+Il705v8oruEIFEON1gFDGin0XdyGo0gFOXobAx1G3SDjk=
+	t=1790017162; cv=none; b=N5izzUEyZ0u3SdStYqmoZ2f3ZdnhcONHAhaj3lJ9vePp4y7iUiUiVNvpeSElXN9cZDKkmCQykBHhTFaYpJL0QQglUnKaJMBEIPZktx79ZyXkF8g/wgDC7+JGplyqU72p6rJFOchRJmICPhEPK086nOSSvshHdeVqwGnV8evPWiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790016491; c=relaxed/simple;
-	bh=YM+1/gq/RepS0kNvZW6wyJeC+DF4kRB26NAW1AqaE/Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vp1vne9HhBP362eHDRZgPQrn125QI5ch2RRfkWkcueMXmL65y96SjyCTYvmoYoyV1gzJP21t0guwbCLkJZ7gMXSWNKGtqykpIHavsnhgt0dLHHjQi30DiXnEEhjUMRQ2DTU9VeSPs8NsExr+7/2yJdMFO8tDHEmlFN50loy/6nA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=oBY+bShy; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1790017162; c=relaxed/simple;
+	bh=YnyvAjF56sMlW0OrPQrd2ZaEK0kUPzuONswa+SYLl8g=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=NzONO5LLr5BLfwhQDp6grBqg6DGfMiso3PxZKoNawCD/vb9tmjYIVXjCSiCFPcCbpd4LkI3DBis2KyfXFqNrAUTX0P7yyeNJGEUSAaOu2ekkZYLQSKM+ZROILNF+KXvFeD9WsKu8yddtb0WirWH9Fni3VfygjWCBJcOKkWmX7uk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aiKaX7GO; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="oBY+bShy"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A0CA19F6;
-	Mon, 21 Sep 2026 11:48:03 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9D60F3F632;
-	Mon, 21 Sep 2026 11:48:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1790016486; bh=YM+1/gq/RepS0kNvZW6wyJeC+DF4kRB26NAW1AqaE/Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oBY+bShyQ0bNQXjP9gdX3fGwrvgGQUATU3gQFGVgJL8mqL/TR5oDrVz6XFqEM6e5M
-	 e8gi6bfUu5XP2aG42ZazcEmUx29v5KoYyD5jHSzMeCvBe6UIFVP6wh1J8cmptFQGYD
-	 lVo6z5RIXnADfgqudL07n/iGDMQ1W7KVwSECXDHM=
-Date: Mon, 21 Sep 2026 19:48:01 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 2/3] kselftest: mm: replace usage of /proc/self/smaps
- for check_huge_xxx() helper
-Message-ID: <arF74QGjx6oCIBnR@e129823.arm.com>
-References: <20260921-fix_split-v7-0-d25ec991159f@arm.com>
- <20260921-fix_split-v7-2-d25ec991159f@arm.com>
- <36465f31-59e2-43a5-8cd8-f8bb1844da3c@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aiKaX7GO"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747f01363so27455225ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 11:59:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790017160; x=1790621960; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=UerVz0NFlQQ3lB7m/y4z+RXJf80VJxp8tkbVGLZEVEo=;
+        b=aiKaX7GO7H30r+xmDq0tFH8ytRtwJHm0Erkx5xvHYGUEVQwUgtOKBhF34jowuBLuWs
+         RpyZShBYg/9EKZ+NG/5+MRfqMTwWNsTAkeb+ul2oKmKY5zpoDCq1hZEnbean4C2bV4ZN
+         ENRtktK2qKpOQbtQE0Wn9TUA45D8WzDztjE6NQsn+ruxGnx3ncoorHb63R2oSjE0mZOf
+         ewOJIyVZb6L/Q0xm8fUvpE044m2XyYjo8YEAPv0TYd2hlNd9tlD4XMnDa/YzdMl2OB3P
+         q6zOPAnyBjDRiJ/FcFAQ9jDXhvi5qhJ0gVzRBOOl4mjeAbjBYMsk9SuaRWg2REB4EVx2
+         VsEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790017160; x=1790621960;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=UerVz0NFlQQ3lB7m/y4z+RXJf80VJxp8tkbVGLZEVEo=;
+        b=EfyO+aumg+84ya7b80eczMAwcXQfvC8ozkR62sLS0ceclGc/vMfQS2WLkxjw+1cujC
+         ZMQQBUeFiaNVTJgW2ZHMOKR7VszZP++ZSxdINqDbpp0Khd+1wSHdiCNRvvgqt2XKiE26
+         IOib63SZwSzBkEJlgHfxDlViJYfJFEqc2YYBiyzKMRrqc0yqaux7i3z/JOJiSFO+OZal
+         iSa850V8XA23/XxrHqT3j8mHqSefhafkR8g9I986M2tRkY7z592Zbibk40vSa1hWmF6j
+         hzrpHoCZyGWnYNFSXYcnKRMR2ExVZ6dA/mDMl1F9f3dL3q9HQgAIo8ZSTAEdr2yYGIpD
+         SWiA==
+X-Forwarded-Encrypted: i=1; AKwUvBz6Uk0FQ1Ni6pFmb4QrN7fdq29hP3d9Lx2p/onH/hIUXRdGp4wPcFswTcKAlQlHz4RLFcx214k4fAcncqTQnUI=@vger.kernel.org
+X-Gm-Message-State: AFuF++nY4G2P+eEwx1SYTkpMLwFvooc8d/UM+Go4VhU6uOb5fXmQk6pB
+	RmIvbFyD9ChgBGmplJ6J8Ep0OXkYxEM2wKlS9myEP5jpTpihWg1+fd65
+X-Gm-Gg: AYBFou2JS4mgl4ijLQWSkArRwqznSKQ5o78hOC2uhsKCF+7M82W62wbFOkkKSml9Zkx
+	Bu87O3SLSdyYBA1T4za+0H9CgYWWySb46vnoiYHy9Fb63TPYy47yfMx8rb/CAZXxEJL/e7RVCmR
+	YNdWoUTSwgIFqiENqGCinFoU1vWGyaWCVjdQ5psGp+uLWbZFK/cHBdeErqO0D2AlxKCwEjrOxNP
+	luXgQYBJBOl2/YeiSfOO1L+BDKJNlbXjFZqeJQC7CWpR8IydhNhYJ1xTLCyFXvUJJRvK/K32JkA
+	9/rh/9cciPMEGK0Zr5MmqRcXtzLw5kD4P1WfJ+FU5SQW1f0X+yeQ2DYKNkDN6kLvnHkuWtiqK/V
+	0f5pwthUYBT7KTsWc+YdyAOzd+Bf+NgNYGa9WdDpshOaVJATNJ1EuLODdwxngvxGsHMvKuKpdRk
+	Xi50Gadp2qg0NaJME0yhjAsuDVTSyCZv4K6OzJn1b8D7pw5XvvJDziqbsEESitRbxv+tsl97y3h
+	wPm8bf46/M0ikBVleXhnzqfWKNxSftXSXHv2xXgjur66F6NJ3+5Ec2salq60wQSai09oqxOa2v8
+	5v0=
+X-Received: by 2002:a17:903:1b08:b0:2dd:c100:9440 with SMTP id d9443c01a7336-2ddc1009c6bmr112993325ad.62.1790017160092;
+        Mon, 21 Sep 2026 11:59:20 -0700 (PDT)
+Received: from localhost ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df3c2acf1csm28063935ad.32.2026.09.21.11.59.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Sep 2026 11:59:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <36465f31-59e2-43a5-8cd8-f8bb1844da3c@kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 21 Sep 2026 18:59:19 +0000
+Message-Id: <DLL84IMPTRQF.3DOQQTN2KCAEW@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Shuah Khan" <shuah@kernel.org>, "bpf" <bpf@vger.kernel.org>, "LKML"
+ <linux-kernel@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
+ across zero-extending movs
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, "Vineet Gupta"
+ <vineet.gupta@linux.dev>
+X-Mailer: aerc 0.17.0
+References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+ <20260910164635.459558-4-vineet.gupta@linux.dev>
+ <DLDKI0ZXYI7H.1XQZZE2RCU7IF@gmail.com>
+ <4ab75099-0e95-4fee-81da-6f4198e3e6a0@linux.dev>
+ <CAADnVQ+N9tzBJ0Bbvp8_8QvR+QcCP4ej5CgV_kRHt=iw4BANSQ@mail.gmail.com>
+ <202c45e2-58ba-4ad5-a234-c90703031f91@linux.dev>
+ <CAADnVQ+Si9Au8J_j2nt+ZzFq6WPaz8hpmh0n=_dFysZmSOeipA@mail.gmail.com>
+ <ff18ccb77a554000a030199e8c1fbb7d8d298e18.camel@gmail.com>
+In-Reply-To: <ff18ccb77a554000a030199e8c1fbb7d8d298e18.camel@gmail.com>
 
-Hi,
+On Mon Sep 21, 2026 at 5:28 PM UTC, Eduard Zingerman wrote:
+> On Wed, 2026-09-16 at 17:30 -0700, Alexei Starovoitov wrote:
+> > On Wed, Sep 16, 2026 at 5:08=E2=80=AFPM Vineet Gupta <vineet.gupta@linu=
+x.dev> wrote:
+> > >=20
+> > > It ended up with full testsuite run parity - after 4 incremental patc=
+hes.
+> > > But the pattern of all those patches was adding some predicate /
+> > > special-casing to reg->add_const
+> > >=20
+> > > hunk 1
+> > >=20
+> > > -       if (src_reg->add_const)
+> > > +       if (src_reg->add_const && src_reg->delta)
+> >=20
+> > why? It should not.
+> > My point is that zero is not special.
+> > It should be handled within the current framework.
+> > All these extra hunks are not correct.
+> > ADD_CONST_32 logic should work for delta =3D=3D 0 just like
+> > it works for delta =3D=3D 1.
+>
+> After thinking about it some more, I agree that having an orthogonal
+> encoding would be nice. However, it appears that the split should be
+> somewhat different:
+>
+>   struct bpf_reg_state {
+>     ...
+>     s32 delta;
+>     u32 id;
+>     enum id_link_kind { full, zext, sext } link_kind;
+>     ...
+>   }
+>
+> Where:
+> - id =3D=3D 0 =3D> no id link
+> - full =3D> all 64-bits of the register are identical to
+>           all 64-bits of a scalar value `id' (let's call it X).
+>           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D full}, rB{X,full} =3D> =
+rA =3D=3D rB
+> - zext =3D> lower 32-bits of the register are identical to
+>           lower 32-bits of a scalar value X,
+>           upper 32-bits of the register are null.
+>           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D ?}, rB{X,zext} =3D> rA =
+% 32 =3D=3D rB % 32
+> - sext =3D> lower 32-bits of the register are identical to
+>           lower 32-bits of a scalar value X,
+>           upper 32-bits of the register are either 0 or 1,
+>           depending on the bit 31 value.
+>           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D ?}, rB{X,sext} =3D> sex=
+t(rA % 32) =3D=3D sext(rB % 32)
 
-> On 9/21/26 12:40, Yeoreum Yun wrote:
-> > Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-> > glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-> > made by memalign().
-> > 
-> > The underlying VMA may start at a different address from the aligned
-> > address returned by memalign(). Furthermore, a subsequent
-> > madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
-> > already set.
-> > 
-> > This causes split_huge_page_test to fail because the check_huge_xxx()
-> > helpers incorrectly require the address returned by memalign() to
-> > match the VMA start address reported in /proc/self/smaps.
-> > 
-> > Instead of relying on /proc/self/smaps, use /proc/self/pagemap and
-> > /proc/kpageflags to detect huge-page mappings and large folios:
-> > 
-> >   1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of
-> >      using check_large_folios(), since only the mapping type matters.
-> >      This identifies PMD-mapped huge pages.
-> >   2. Otherwise, use check_large_folios() to detect large folios. This
-> >      covers mTHP cases.
-> >   3. Check the folio flags according to the type of huge page.
-> > 
-> > Since shmem pages are also file-backed, simply check whether the page
-> > is file-backed.
-> > 
-> > Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-> > Suggested-by: Zi Yan <ziy@nvidia.com>
-> 
-> Do we need a Fixes: tag?
+hmm.
+there is also 32-bit link with delta, right?
 
-Since this change is required for the chaning of behavior of glibc,
-I don't think we don't need to add Fixes tag in here?
+> The reason for such subdivision is that:
+>
+>   (X + delta) % 32 =3D=3D X % 32 + delta % 32 =3D=3D X % 32 + delta iff d=
+elta < 2^32
+>
+> Meaning that a non-zero delta can still be used to infer the state of
+> the lower 32-bits, e.g.:
+> - if  r1 =3D (X + delta) % 32
+> - and r2 =3D X
+> - and there is a comparison `if r1 < 42 goto ...`
+>
+> This comparison adds constraints on lower bits of r1,
+> and it is correct to transfer these constraints to lower bits of r2
+> by subtracting delta from r1 and using lower bits of the result.
 
-> 
-> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> > ---
-> >  tools/testing/selftests/mm/vm_util.c | 137 +++++++++++++++++++++--------------
-> >  1 file changed, 84 insertions(+), 53 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> > index 4821a35630363..a7c5caf6925e0 100644
-> > --- a/tools/testing/selftests/mm/vm_util.c
-> > +++ b/tools/testing/selftests/mm/vm_util.c
-> > @@ -351,31 +351,13 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
-> >  	return entry;
-> >  }
-> >  
-> > -static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
-> > -		  uint64_t hpage_size)
-> > -{
-> > -	char buffer[MAX_LINE_LENGTH];
-> > -	uint64_t thp = -1;
-> > -	char *entry;
-> > -
-> > -	entry = __get_smap_entry(addr, pattern, buffer, sizeof(buffer));
-> > -	if (!entry)
-> > -		goto err_out;
-> > -
-> > -	if (sscanf(entry, "%9" SCNu64 " kB", &thp) != 1)
-> > -		ksft_exit_fail_msg("Reading smap error\n");
-> > -
-> > -err_out:
-> > -	return thp == (nr_hpages * (hpage_size >> 10));
-> > -}
-> > -
-> > -static bool check_large_folios(void *addr, size_t len, int nr_hpages,
-> > -		uint64_t hpage_size)
-> > +static bool check_large_folios(int pagemap_fd, int kpageflags_fd,
-> > +			       void *addr, size_t len, int nr_hpages,
-> > +			       uint64_t hpage_size)
-> 
-> The function used two tab indent for a reason ;)
-> 
-> Use two tabs also in the functions you change below.
+Not sure what you're arguing about.
+My only point is that 32-bit link with delta makes special
+handling of zext unnecessary.
+I still don't hear a strong reason why it needs to be handled
+outside of 32-bit-link-with-delta.
 
-Okay.
-
-> 
-> >  
-> > -bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> > +static bool __check_huge(void *addr, size_t len, int nr_hpages,
-> > +			 uint64_t hpage_size, enum check_huge_type type)
-> 
-> 
-> >  {
-> > -	uint64_t pmd_pagesize = read_pmd_pagesize();
-> > +	bool ret = false;
-> > +	int pagemap_fd, kpageflags_fd;
-> > +	int nr_pmd_mappings = 0;
-> > +	uint64_t pmd_pagesize, scan_mapping_size;
-> > +	uint64_t categories, kpf;
-> > +	unsigned long pfn;
-> > +	bool check_pmd_mapping, allow_nonpresent;
-> > +	char *start = addr;
-> > +	char *end = start + len;
-> >  
-> > +	pmd_pagesize = read_pmd_pagesize();
-> >  	if (!pmd_pagesize)
-> >  		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-> >  
-> > -	if (hpage_size == pmd_pagesize)
-> > -		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
-> > +	check_pmd_mapping = (hpage_size == pmd_pagesize);
-> 
-> No need for ()
-
-I see.
-
-> 
-> > +	scan_mapping_size = (nr_hpages > 0) ? hpage_size : psize();
-> > +	/* Some mTHP tests check a partially populated PMD-sized range. */
-> > +	allow_nonpresent = (uint64_t)nr_hpages * hpage_size < len;
-> >  
-> > -	return check_large_folios(addr, len, nr_hpages, hpage_size);
-> > +	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-> > +	if (pagemap_fd < 0)
-> > +		ksft_exit_fail_msg("open pagemap fail\n");
-> > +
-> > +	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
-> > +	if (kpageflags_fd < 0)
-> > +		ksft_exit_fail_msg("open kpageflags fail\n");
-> > +
-> > +	if (!check_pmd_mapping &&
-> > +	    !check_large_folios(pagemap_fd, kpageflags_fd,
-> > +				addr, len, nr_hpages, hpage_size))
-> > +		goto out;
-> > +
-> > +	for (; start < end; start += scan_mapping_size) {
-> > +		categories = pagemap_scan_get_categories(pagemap_fd, start);
-> > +		pfn = pagemap_get_pfn(pagemap_fd, start);
-> > +		if (pfn == -1UL) {
-> > +			if (!allow_nonpresent)
-> > +				goto out;
-> > +			else
-> > +				continue;
-> > +		}
-> > +		if (pageflags_get(pfn, kpageflags_fd, &kpf))
-> > +			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
-> > +		if (check_pmd_mapping && (categories & PAGE_IS_HUGE))
-> > +			nr_pmd_mappings++;
-> > +		if (kpf & KPF_COMPOUND_TAIL)
-> > +			continue;
-> > +		if (!check_huge_type(categories, kpf, type))
-> > +			goto out;
-> > +	}
-> > +
-> > +	if (check_pmd_mapping && (nr_pmd_mappings != nr_hpages))
-> > +		goto out;
-> 
-> 
-> There is way too much happening here, which makes this rather hard to review.
-> 
-> Why can't we just focus on the smaps change for now?
-
-Yeap. I think we can simplify as your suggestion with a little bit
-change. I'll spin again.
-
-Thanks.
-
-> 
-> I.e., something like the following (untested)
-> 
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index 4821a35630363..5d348d6985026 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -351,24 +351,6 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
->  	return entry;
->  }
->  
-> -static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
-> -		  uint64_t hpage_size)
-> -{
-> -	char buffer[MAX_LINE_LENGTH];
-> -	uint64_t thp = -1;
-> -	char *entry;
-> -
-> -	entry = __get_smap_entry(addr, pattern, buffer, sizeof(buffer));
-> -	if (!entry)
-> -		goto err_out;
-> -
-> -	if (sscanf(entry, "%9" SCNu64 " kB", &thp) != 1)
-> -		ksft_exit_fail_msg("Reading smap error\n");
-> -
-> -err_out:
-> -	return thp == (nr_hpages * (hpage_size >> 10));
-> -}
-> -
->  static bool check_large_folios(void *addr, size_t len, int nr_hpages,
->  		uint64_t hpage_size)
->  {
-> @@ -410,20 +392,34 @@ static bool check_large_folios(void *addr, size_t len, int nr_hpages,
->  	return ret;
->  }
->  
-> -bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> +static bool __check_pmds(void *start, size_t len, int expected_file_pmds,
-> +		int expected_anon_pmds, uint64_t pmd_pagesize)
->  {
-> -	uint64_t pmd_pagesize = read_pmd_pagesize();
-> +	int found_anon_pmds = 0, found_file_pmds = 0;
-> +	int pagemap_fd;
-> +	void *addr;
->  
-> -	if (!pmd_pagesize)
-> -		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-> +	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-> +	if (pagemap_fd < 0)
-> +		ksft_exit_fail_msg("open pagemap fail\n");
->  
-> -	if (hpage_size == pmd_pagesize)
-> -		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
-> +	for (addr = start; addr < start + len; addr += pmd_pagesize) {
-> +		const uint64_t categories = pagemap_scan_get_categories(pagemap_fd, addr);
->  
-> -	return check_large_folios(addr, len, nr_hpages, hpage_size);
-> +		if (!(categories & PAGE_IS_HUGE))
-> +			continue;
-> +		if (categories & PAGE_IS_FILE)
-> +			found_file_pmds++;
-> +		else
-> +			found_anon_pmds++;
-> +	}
-> +
-> +	close(pagemap_fd);
-> +	return found_anon_pmds == expected_anon_pmds &&
-> +	       found_file_pmds == expected_file_pmds;
->  }
->  
-> -bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> +bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
->  {
->  	uint64_t pmd_pagesize = read_pmd_pagesize();
->  
-> @@ -431,12 +427,12 @@ bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
->  		ksft_exit_fail_msg("reading PMD pagesize failed\n");
->  
->  	if (hpage_size == pmd_pagesize)
-> -		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
-> +		return __check_pmds(addr, len, 0, nr_hpages, pmd_pagesize);
->  
->  	return check_large_folios(addr, len, nr_hpages, hpage_size);
->  }
->  
-> -bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> +bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
->  {
->  	uint64_t pmd_pagesize = read_pmd_pagesize();
->  
-> @@ -444,11 +440,16 @@ bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size
->  		ksft_exit_fail_msg("reading PMD pagesize failed\n");
->  
->  	if (hpage_size == pmd_pagesize)
-> -		return __check_pmd_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
-> +		return __check_pmds(addr, len, nr_hpages, 0, pmd_pagesize);
->  
->  	return check_large_folios(addr, len, nr_hpages, hpage_size);
->  }
->  
-> +bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> +{
-> +	return check_huge_file(addr, len, nr_hpages, hpage_size);
-> +}
-> +
->  int64_t allocate_transhuge(void *ptr, int pagemap_fd)
->  {
->  	uint64_t ent[2];
-> -- 
-> 2.43.0
-> -- 
-> Cheers,
-> 
-> David
-> 
-
--- 
-Sincerely,
-Yeoreum Yun
