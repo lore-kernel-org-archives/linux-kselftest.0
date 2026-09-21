@@ -1,287 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-129.mta1.migadu.com [95.215.58.129])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9DA749EC74;
-	Mon, 21 Sep 2026 13:42:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BDC2DA759
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 14:04:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789998140; cv=none; b=TKDULMX4Pgj8YvcVmx7WB2WXgfwV29/SluAscs4f2bfamAKjsfIiTOT5G8s0sh5t8V/ACps4PeqpJ9oH0yiJeIU6xnhU2icg0EUEjHTOTYpdLavhc7ug1Xp5dyOukmJNzvzgFxnlEKf4djj2z4DtRwYDe1xJ6z0tOKA70p8QnUM=
+	t=1789999473; cv=none; b=M2RbSYc4ytuO1ieA5L2oHSJE+nEytnmmPkC0HYbyjkzaTj1XAWN2lHGFrJZegA1YZ+xsS0Mazi3AGLzZIcB2Mn5OgjCadrQ6555SdZpgWuDb5bIbfn0iMozI9CXxgxGUpsBJtA9Sh//dWrjOCoBMnF+ovq0SpkX/OehjmHAI/uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789998140; c=relaxed/simple;
-	bh=7G9UEBLZgbrN9P4Cfw5Muu4RseL/ECoPsopwRmszSCU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I7s1F05zwAfv34TgB451PYQct+5ibtrya/aQZMEQ0qdcrmlcaFVHcwH98wnQHtBCK/3IBNAXFVdTmnpy6926hep0ZomQInYAuyPJnglYfkS8AdajKR7JP9oAZdhqNJOM4VwWvCYAcVZcETx6bJa32MeYAr2qlzeMHtpSCBygpU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WlkpR2nE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789999473; c=relaxed/simple;
+	bh=kGLTqSDqNKduog1GOtZuGMpqVSeUXQY7T0QuU7Ou3ok=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jnSkzDwfkorc/zXCXHcyBJ6Jq/QsMaQVLUtT9X01lKWRf3RIvzC+4XtuR3EiUzJ3GO+LY8JxVA5Ujw24eQAxNHAK6o5778dDl+W/iYlQ+OfsO9PBS3Sli43ydi01UW0jWeey08YeJ7GHpbccfNeQkbpzzerWZCzbsgVxdh1fOaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=m84gf694; arc=none smtp.client-ip=95.215.58.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WlkpR2nE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1A8C1F000FF;
-	Mon, 21 Sep 2026 13:42:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789998137;
-	bh=Gq0vTj/q+xiEShcvzmhfh6dP6o4g9VLSysSl8QLb3j8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=WlkpR2nE17QOZ6zGUzSrJYVr8Kw3DFKfWXsMDeXpbY+q0KIooRx7jZ/crujoKwIwp
-	 m63RatM18OEByBGSwPX2q+FotJNoCQPBNvXvPB/Fmcj+5qXrfio/133IaZEmn/P972
-	 yqtxRCVFdNAN5Hcybu9jTEvMHsNOfP1GV/VT6SWGnDNPUhpHw6Pu2wi4zRY8FzWmaF
-	 R03773xsMgXlHXexWISvTUm7XdEjDyHqX3tz4CqvTd14uy3haNipAJtfOt2Dgv57kq
-	 nHBV/U6bSEc+kbXmd5dDsQ2B9kMKuJDbi5GNoGz2DB1AOJvrkTmfbnTXqQkM0NvaIB
-	 xak/UDyaYsmUA==
-Message-ID: <15ea6ca1-e891-4929-bd58-c0e561b1cf6b@kernel.org>
-Date: Mon, 21 Sep 2026 14:42:13 +0100
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m84gf694"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=kGLTqSDqNKduog1GOtZuGMpqVSeUXQY7T0QuU7Ou3ok=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789999469; v=1; x=1790604269;
+ b=m84gf6949J/twwPJ0E+UKYO/7oeugphoJlkbeXcQdW4hXy86TmR0OJ3+NxeSqf0vBD5ZOMOx
+ 74SSHIDqz1ybKEWbIIGVt2bs29z2MM7q/hz/utnPaiwgY6EBEy1MfiE++8hTJJON5i22pCRfuuf
+ VU/0gbErvR2ah/6DQ6PdO9Sk=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 295205c3151231b2;
+	Mon, 21 Sep 2026 14:04:29 +0000
+X-Mizu-Trace-ID: 295205c3151231b2
+X-Migadu-Flow: FLOW_OUT
+From: Fuad Tabba <fuad.tabba@linux.dev>
+To: Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@kernel.org>
+Cc: Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Zenghui Yu <zenghui.yu@linux.dev>,
+	Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+	Will Deacon <will@kernel.org>,
+	Fuad Tabba <tabba@google.com>,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/3] KVM: arm64: timers: Program CVAL from the current count when the hardware won't apply the offset
+Date: Mon, 21 Sep 2026 15:04:24 +0100
+Message-Id: <20260921140427.2211373-1-fuad.tabba@linux.dev>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 3/3] bpftool: Add support for BPF_F_PREORDER
- cgroup attach flag
-To: Hui Su <sh_def@163.com>, bpf@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260919094400.600585-1-sh_def@163.com>
- <20260919094400.600585-4-sh_def@163.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260919094400.600585-4-sh_def@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-2026-09-19 18:44 UTC+0900 ~ Hui Su <sh_def@163.com>
-> Commit 4b82b181a26c ("bpf: Allow pre-ordering for bpf cgroup progs")
-> introduced BPF_F_PREORDER to request pre-order execution across the
-> cgroup hierarchy. Furthermore, attachments legitimately use combinations
-> such as BPF_F_ALLOW_MULTI | BPF_F_PREORDER or
-> BPF_F_ALLOW_OVERRIDE | BPF_F_PREORDER.
-> 
-> With BPF_PROG_QUERY reporting the per-program BPF_F_PREORDER attribute,
-> bpftool's exact-match formatter falls back to "unknown(40)" when
-> BPF_F_PREORDER is present alone, or "unknown(41)" / "unknown(42)" when
-> combined with BPF_F_ALLOW_OVERRIDE or BPF_F_ALLOW_MULTI. Additionally,
-> do_attach() only accepts "multi" and "override", rejecting "preorder" with
-> "unknown option".
-> 
-> Before:
->   $ bpftool cgroup show <cg>
->   1234  cgroup_inet_ingress  unknown(42)  test_prog
->   $ bpftool cgroup attach <cg> cgroup_inet_ingress id 5678 multi preorder
->   Error: unknown option: preorder
-> 
-> After:
->   $ bpftool cgroup show <cg>
->   1234  cgroup_inet_ingress  multi,preorder  test_prog
->   $ bpftool cgroup attach <cg> cgroup_inet_ingress id 5678 multi preorder
->   (attaches successfully)
-> 
-> Refactor the attach flags formatter into a bitmask formatter that outputs
-> comma-separated flag names while preserving unrecognized bits as
-> "unknown(...)". Accept "preorder" in do_attach(), update the cgroup
-> documentation and synopsis to express valid flag combinations, and teach
-> bash completion about them ("multi" or "override" optionally combined with
-> "preorder").
-> 
-> Signed-off-by: Hui Su <sh_def@163.com>
+Hi folks,
 
+A guest timer can fail to fire, or fire early, once the guest's counter
+is far enough from the host's. Where the hardware won't apply the
+offset itself (the physical timer without CNTPOFF_EL2, a CNTPOFF_EL2
+host while TGE is set, the virtual timer on x1e), KVM adds it to CVAL
+and lets the hardware compare the sum against the raw counter. The
+timer condition is an unsigned compare, and adding the offset to both
+sides of it preserves it only while both sums wrap or neither does: a
+guest whose counter is ahead of the host's by more than CVAL has an
+expired timer that never fires, and one behind it can have a far-future
+timer fire at once.
 
-Thank you, please find some comments inline below:
+Patch 1 computes the programmed value from the current count instead,
+and returns a guest hypervisor's own physical CVAL from memory where it
+used to subtract the offset from the hardware value. Patch 2 does the
+same for the virtual CVAL read on x1e, which has returned CVAL + offset
+since the workaround landed. Patch 3 adds the second case, a guest
+behind the host with a far-future timer, to arch_timer_edge_cases.
 
+So far it has only shown up in the selftest, which moves the guest
+counter half its range away from the host's. On a VHE host without
+CNTPOFF_EL2 arch_timer_edge_cases hangs in its physical cval = 0 cases
+until the vCPU is next loaded, which is what Zenghui saw on a
+Kunpeng920 [1]. On a CNTPOFF_EL2 host (QEMU, here) the same cases
+livelock instead. Both go away with patch 1. The arithmetic is wrong
+for any offset once one sum wraps and the other doesn't, and the fix
+for the selftest's case should be the fix for all of them.
 
-> ---
->  .../bpftool/Documentation/bpftool-cgroup.rst  | 25 ++++++---
->  tools/bpf/bpftool/bash-completion/bpftool     |  4 +-
->  tools/bpf/bpftool/cgroup.c                    | 55 +++++++++++++------
->  3 files changed, 56 insertions(+), 28 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-> index e8185596a759..f8408ed44d74 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-> @@ -45,7 +45,7 @@ CGROUP COMMANDS
->  |     **cgroup_unix_recvmsg** | **cgroup_sysctl** |
->  |     **cgroup_getsockopt** | **cgroup_setsockopt** |
->  |     **cgroup_inet_sock_release** }
-> -| *ATTACH_FLAGS* := { **multi** | **override** }
-> +| *ATTACH_FLAGS* := { **multi** [ **preorder** ] | **override** [ **preorder** ] | **preorder** }
+Tested with arch_timer_edge_cases on QEMU with [2] applied, under VHE,
+nVHE and pKVM, and under VHE with CNTPOFF_EL2 removed by
+id_aa64mmfr0.ecv=1, the host class Zenghui hit. Under VHE with patch 1
+reverted the new case fails. QEMU's TCG has a separate bug with the
+same offsets, which [2] fixes. Without it the test stalls under nVHE
+and pKVM as well, where KVM emulates the physical timer and patch 1
+changes nothing. Not exercised here: patch 1's x1e paths in
+timer_save_state() and timer_restore_state() and all of patch 2, since
+nothing here runs on an x1e, and patch 1's CNTP_CVAL_EL0 read in
+kvm_hyp_handle_timer(), which only a guest hypervisor with a physical
+offset on a host without CNTPOFF_EL2 reaches.
 
+Patch 1 carries Cc: stable for the hang and the livelock.
 
-This looks more complex than it should, I think this should work just as
-well:
+Based on Linux 7.3-rc3 (fd73f4a665989).
 
-    *ATTACH_FLAGS* := { [ **multi** | **override** ] [ **preorder** ] }
+Cheers,
+/fuad
 
-(and same for HELP_SPEC_ATTACH_FLAGS in cgroup.c)
+[1] https://lore.kernel.org/r/460258be-0102-e922-c342-4e87cd94b9e5@huawei.com
+[2] https://lore.kernel.org/qemu-devel/20260921074451.3158645-1-fuad.tabba@linux.dev/
 
+Fuad Tabba (3):
+  KVM: arm64: timers: Compute an offset-applied CVAL from the current
+    count
+  KVM: arm64: nv: Read a guest hypervisor's CNTV_CVAL_EL0 from memory on
+    x1e
+  KVM: arm64: selftests: Test a timer set past the counter's wrap
 
->  
->  DESCRIPTION
->  ===========
-> @@ -75,20 +75,27 @@ bpftool cgroup attach *CGROUP* *ATTACH_TYPE* *PROG* [*ATTACH_FLAGS*]
->      Attach program *PROG* to the cgroup *CGROUP* with attach type *ATTACH_TYPE*
->      and optional *ATTACH_FLAGS*.
->  
-> -    *ATTACH_FLAGS* can be one of: **override** if a sub-cgroup installs some
-> +    *ATTACH_FLAGS* can include: **override** if a sub-cgroup installs some
->      bpf program, the program in this cgroup yields to sub-cgroup program;
->      **multi** if a sub-cgroup installs some bpf program, that cgroup program
-> -    gets run in addition to the program in this cgroup.
-> +    gets run in addition to the program in this cgroup;
-> +    **preorder** requests that this program executes in ancestor-to-descendant
-> +    order before non-preorder descendants-to-ancestors programs during evaluation
-> +    across the cgroup hierarchy. Note that **preorder** alone does not enable
-> +    multi-program attachment; specify **multi** together with **preorder** to
-> +    attach multiple programs.
->  
-> -    Only one program is allowed to be attached to a cgroup with no attach flags
-> -    or the **override** flag. Attaching another program will release old
-> -    program and attach the new one.
-> +    Only one program is allowed to be attached to a cgroup unless the
-> +    **multi** flag is specified. Without **multi**, attaching another program
-> +    replaces the existing program, provided the **override** setting matches.
->  
->      Multiple programs are allowed to be attached to a cgroup with **multi**.
-> -    They are executed in FIFO order (those that were attached first, run
-> -    first).
-> +    Programs marked with **preorder** are placed before non-preorder programs
-> +    in the effective program array. Within each ordering class at the same
-> +    cgroup level, attachment order is preserved.
->  
-> -    Non-default *ATTACH_FLAGS* are supported by kernel version 4.14 and later.
-> +    **multi** and **override** are supported by kernel version 4.14 and later.
-> +    **preorder** was introduced upstream in Linux 6.15.
->  
->      *ATTACH_TYPE* can be one of:
->  
-> diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-> index 75cbcb512eba..a51c68029e16 100644
-> --- a/tools/bpf/bpftool/bash-completion/bpftool
-> +++ b/tools/bpf/bpftool/bash-completion/bpftool
-> @@ -1057,7 +1057,6 @@ _bpftool()
->                  attach|detach)
->                      local BPFTOOL_CGROUP_ATTACH_TYPES="$(bpftool feature list_builtins attach_types 2>/dev/null | \
->                          grep '^cgroup_')"
-> -                    local ATTACH_FLAGS='multi override'
->                      # Check for $prev = $command first
->                      if [ $prev = $command ]; then
->                          _filedir
-> @@ -1087,7 +1086,8 @@ _bpftool()
->                                  # "id|pinned|tag|name" (we already checked for
->                                  # that). This should only leave the case when
->                                  # we need attach flags for "attach" commamnd.
-> -                                _bpftool_one_of_list "$ATTACH_FLAGS"
-> +                                _bpftool_one_of_list 'multi override'
-> +                                _bpftool_once_attr 'preorder'
->                              fi
->                              return 0
->                              ;;
-> diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
-> index ce69d1e5468e..6ea0492ea532 100644
-> --- a/tools/bpf/bpftool/cgroup.c
-> +++ b/tools/bpf/bpftool/cgroup.c
-> @@ -56,7 +56,7 @@ static const int cgroup_attach_types[] = {
->  };
->  
->  #define HELP_SPEC_ATTACH_FLAGS						\
-> -	"ATTACH_FLAGS := { multi | override }"
-> +	"ATTACH_FLAGS := { multi [ preorder ] | override [ preorder ] | preorder }"
->  
->  #define HELP_SPEC_ATTACH_TYPES						\
->  	"       ATTACH_TYPE := { cgroup_inet_ingress | cgroup_inet_egress |\n" \
-> @@ -269,6 +269,39 @@ static int show_effective_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
->  	return 0;
->  }
->  
-> +static const char *format_attach_flags(__u32 attach_flags, char *buf, size_t sz)
-> +{
-> +	static const struct {
-> +		__u32 flag;
-> +		const char *name;
-> +	} flags[] = {
-> +		{ BPF_F_ALLOW_MULTI, "multi" },
-> +		{ BPF_F_ALLOW_OVERRIDE, "override" },
-> +		{ BPF_F_PREORDER, "preorder" },
-> +	};
-> +	size_t len = 0;
-> +	size_t i;
-> +	int n;
-> +
-> +	buf[0] = '\0';
-> +	for (i = 0; i < ARRAY_SIZE(flags); i++) {
-> +		if (attach_flags & flags[i].flag) {
-> +			n = snprintf(buf + len, sz - len, "%s%s",
-> +				     len ? "," : "", flags[i].name);
-> +			if (n < 0 || (size_t)n >= sz - len)
-> +				return buf;
-> +			len += n;
-> +			attach_flags &= ~flags[i].flag;
-> +		}
-> +	}
+ arch/arm64/kvm/arch_timer.c                   | 27 +++++++++----------
+ arch/arm64/kvm/hyp/vhe/switch.c               | 21 +++++++++------
+ include/kvm/arm_arch_timer.h                  | 15 +++++++++++
+ .../kvm/arm64/arch_timer_edge_cases.c         | 25 +++++++++++++++++
+ 4 files changed, 65 insertions(+), 23 deletions(-)
 
-
-I'm fine with that for bpftool's plain output. For JSON, given that we
-introduce a change here already (output will be "multi,preorder" when
-BPF_F_PREORDER is set, instead of "multi" previously), we should maybe
-take that chance to print an array instead? Like this:
-
-    "attach_flags": [ "multi", "preorder" ]
-
-
-> +
-> +	if (attach_flags)
-> +		snprintf(buf + len, sz - len, "%sunknown(%x)",
-> +			 len ? "," : "", attach_flags);
-> +
-> +	return buf;
-> +}
-> +
->  static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
->  				   int level)
->  {
-> @@ -276,7 +309,7 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
->  	__u32 prog_attach_flags[1024] = {0};
->  	const char *attach_flags_str;
->  	__u32 prog_ids[1024] = {0};
-> -	char buf[32];
-> +	char buf[64];
->  	__u32 iter;
->  	int ret;
->  
-> @@ -296,21 +329,7 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
->  		__u32 attach_flags;
->  
->  		attach_flags = prog_attach_flags[iter] ?: p.attach_flags;
-> -
-> -		switch (attach_flags) {
-> -		case BPF_F_ALLOW_MULTI:
-> -			attach_flags_str = "multi";
-> -			break;
-> -		case BPF_F_ALLOW_OVERRIDE:
-> -			attach_flags_str = "override";
-> -			break;
-> -		case 0:
-> -			attach_flags_str = "";
-> -			break;
-> -		default:
-> -			snprintf(buf, sizeof(buf), "unknown(%x)", attach_flags);
-> -			attach_flags_str = buf;
-> -		}
-> +		attach_flags_str = format_attach_flags(attach_flags, buf, sizeof(buf));
->  
->  		show_bpf_prog(prog_ids[iter], type,
->  			      attach_flags_str, level);
-> @@ -593,6 +612,8 @@ static int do_attach(int argc, char **argv)
->  			attach_flags |= BPF_F_ALLOW_MULTI;
->  		} else if (is_prefix(argv[i], "override")) {
->  			attach_flags |= BPF_F_ALLOW_OVERRIDE;
-> +		} else if (is_prefix(argv[i], "preorder")) {
-> +			attach_flags |= BPF_F_PREORDER;
->  		} else {
->  			p_err("unknown option: %s", argv[i]);
->  			goto exit_cgroup;
+-- 
+2.39.5
 
