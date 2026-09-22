@@ -1,36 +1,49 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CCB91A681C;
-	Tue, 22 Sep 2026 20:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5084AB1B2
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 20:21:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790107607; cv=none; b=YAlII7svyIawxcLLIUAFPcckunkoHEHXIUzS5IaYObKvtxXwEnc+5s31Ugia8jlar/gaL7lPsDpUHiEl2KbECFZt5KPnMNZS0Q6lH4htRbwv3/ny8vKrb3aSvGl7MppoAHVSEmkxtmjR/FTjZpjXLVXyUgKzOekfhqFSpDktCKA=
+	t=1790108517; cv=none; b=qnp9U7i21RVX6dKyQ5Qt10rCzUiAqY3owmfmgg8oEvF89bCrT4xMUYeC235lF1DirV/WPR5TQ0j5mPj3rRWNsPHzjGhFcwOyln/EH+9ddqsxFudaVh5p1yagWr+bZLyZ0PVMjcNkT3GBWnqXHcbsP5b3VNc5fXcd47peKZY3tq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790107607; c=relaxed/simple;
-	bh=D4UxEF6/pvKbyoQO1fYCbIVR5As5fVqIzlmZXh/IHcI=;
+	s=arc-20240116; t=1790108517; c=relaxed/simple;
+	bh=qf7Jhvlpto+YQaPLd8xjFzZPBrjOJul/qhE2Z1fkH1w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AItqIcd1rJplnFwC9YbnKllYWjPwIFvDzknDg2p499Ob6anHQfmSIy2Asv5IdaavtpN57RfB55PnwfSfWB04ceJiohksJDP6gRvtshF654tsVvQcLUZNaJ7BrcG8/t90uRFZlcQpl9GYUNWEm8GkZiYDg4z36nCO7xDbnruO1i0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=ZQB8SOEX; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	 In-Reply-To:Content-Type; b=E37fX3jyJ5i8rRZkDpLBwYAQ/8zAO/AfeiIyqNvGgONElosW8njnwRcfTCLp6UeFXCwB1B4iYbhD8NO+eHnskGUQnJdnXxKlbSCKi57CUwxI7GT9WZtFCbmXlWlMg4unqGDSDIYuXChjZAmAGPl4Pj4teXJnEqPBxpvH7YJZhQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RZdTFgVp; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="ZQB8SOEX"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:From:Cc:To:Subject:
-	MIME-Version:Date:Message-ID:From:Reply-To;
-	bh=07RPrSeFJye88nWliAW6Te99gLBcKf4wUCeJdoVqqoI=; b=ZQB8SOEXHuP49ApyZd/V7138CN
-	IZCM07ptKitEHInoRWMVMOfCWnHU1e9KhJoQqRj2z9lMK1H4ZtA+yogxevPjeIgqLqWp9cDFUpogX
-	up4fGViAn58WZECsfmZE1cYBWZFNPoGJk2MPLTf8VlSJVtNY2y3FU1gM6elLisC/GVEl06EW43Zmq
-	BTt1Kpl1Cmk1QOdZ36//1jgnWgNjr7wbTq58F8JjRSHfx3m6/uaLj1NjBDHo+5aBGODVIHY4HqGMW
-	yBAqBcrLOF9vHLcQCLeRcUQsMJicZj5m3j/J/2uM6KDb3tQqYvGjf/LVfBXPq7Tu2ro6ig9aifczN
-	iqWfIn6Q==;
-Received: from [177.172.123.214] (helo=[192.168.15.100])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1x96kr-005nuS-8g; Tue, 22 Sep 2026 22:06:17 +0200
-Message-ID: <dfb3afb2-cec0-42e0-8e5d-25e89f54215b@igalia.com>
-Date: Tue, 22 Sep 2026 17:06:17 -0300
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RZdTFgVp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790108502;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lmFVZilOMn/yRZfsmK1Eg1J9bzLw2lur3L0aHYwLcTo=;
+	b=RZdTFgVpHcuCz2DvcVLoK7WNRssk+VUCMMAz7u9gnXflR5ybIXFreW8D+GE94bt72tebhq
+	KmNWWaDGB1jGly03VrQOX5Qtkt8LouDHtPLKJOVKDr7g8JjqegxdAGLRfyGZnHZaEK3TBM
+	Zc9FMmv2KroYEM+1xkoeMil7f+xNZ7w=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-623-r7jBYWoeMJKo6n2PqoYroA-1; Tue,
+ 22 Sep 2026 16:21:36 -0400
+X-MC-Unique: r7jBYWoeMJKo6n2PqoYroA-1
+X-Mimecast-MFC-AGG-ID: r7jBYWoeMJKo6n2PqoYroA_1790108494
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 552B119772F3;
+	Tue, 22 Sep 2026 20:21:34 +0000 (UTC)
+Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 35FA1300106D;
+	Tue, 22 Sep 2026 20:21:32 +0000 (UTC)
+Message-ID: <d95e0c38-87f4-4ff7-bdb9-e76da31547b8@redhat.com>
+Date: Tue, 22 Sep 2026 16:21:31 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,27 +51,97 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: kselftest: Fix debug message formatting
-To: ZhuangZhuang Wang <wzz_123123@163.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260916190423.1892-1-wzz_123123@163.com>
+Subject: Re: [PATCH v3 2/3] cgroup/cpuset: prevent activating local partition
+ over remote one
+To: Hui Peng <benquike@gmail.com>, Guopeng Zhang <guopeng.zhang@linux.dev>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ Ridong Chen <ridong.chen@linux.dev>
+Cc: Michal Koutny <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
+ cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <aa90bb73-c2af-4d13-8f2a-0435aa528058@linux.dev>
+ <20260920181449.3122336-1-benquike@gmail.com>
+ <20260920181449.3122336-2-benquike@gmail.com>
 Content-Language: en-US
-From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <20260916190423.1892-1-wzz_123123@163.com>
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <20260920181449.3122336-2-benquike@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Em 16/09/2026 16:04, ZhuangZhuang Wang escreveu:
-> ksft_print_dbg_msg() passes a va_list to ksft_print_msg() as a regular
-> variadic argument. As a result, format specifiers consume the va_list
-> representation instead of the caller's arguments and print garbage.
-> 
-> Add a va_list-based helper and use it from both message printing
-> functions. Also annotate ksft_print_dbg_msg() so the compiler can check
-> its format arguments.
-> 
-> Fixes: f2662ec26b26 ("selftests: kselftest: Create ksft_print_dbg_msg()")
-> Signed-off-by: ZhuangZhuang Wang <wzz_123123@163.com>
+On 9/20/26 2:14 PM, Hui Peng wrote:
+> Commit 6da580ec656a ("cgroup/cpuset: Don't allow creation of local
+> partition over a remote one") added a check in update_prstate() to reject
+> creating a top-level local partition whose cs->exclusive_cpus intersects
+> subpartitions_cpus.
+>
+> However, if a top-level cgroup A1 is first set to "root" with all CPUs
+> (CX0-7:P1, becoming "root invalid" because no CPUs would remain in
+> top_cpuset), has a child A1/A2 enabled as a remote partition on a subset
+> of those exclusive CPUs (CX2-3:P2), and A1 is then updated to a valid CPU
+> subset (CX1-3), update_exclusive_cpumask() / update_cpumask() calls
+> validate_partition() without going through update_prstate(). Because
+> validate_partition() does not check trialcs->exclusive_cpus against
+> subpartitions_cpus, A1 transitions from "root invalid" to a valid local
+> partition over the existing remote partition A1/A2 and triggers:
+>
+>    WARNING: kernel/cgroup/cpuset.c:1943 at update_parent_effective_cpumask+0x189b/0x1fd0
+>
+> Check trialcs->exclusive_cpus against subpartitions_cpus in
+> validate_partition() when !is_partition_valid(cs), and add a regression
+> test case to tools/testing/selftests/cgroup/test_cpuset_prs.sh.
+>
+> Tested in QEMU on Linux 7.3.0-rc3 using
+> tools/testing/selftests/cgroup/test_cpuset_prs.sh.
+>
+> Fixes: 6da580ec656a ("cgroup/cpuset: Don't allow creation of local partition over a remote one")
+> Cc: stable@vger.kernel.org
+> Assisted-by: LLM
+> Signed-off-by: Hui Peng <benquike@gmail.com>
+> ---
+> Changes in v3:
+> - Split the validate_partition() fix (Fixes: 6da580ec656a) and the
+>    cpus_excl_conflict() fix (Fixes: 2a3602030d80) into separate patches.
+>
+>   kernel/cgroup/cpuset.c                        | 4 ++++
+>   tools/testing/selftests/cgroup/test_cpuset_prs.sh | 2 ++
+>   2 files changed, 6 insertions(+)
+>
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 7381fa8502e7..7c5b4a8f1f3a 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -2415,6 +2415,10 @@ static enum prs_errcode validate_partition(struct cpuset *cs, struct cpuset *tri
+>   	if (cpumask_empty(trialcs->effective_xcpus))
+>   		return PERR_INVCPUS;
+>   
+> +	if ((parent == &top_cpuset) && !is_partition_valid(cs) &&
+> +	    cpumask_intersects(trialcs->exclusive_cpus, subpartitions_cpus))
+> +		return PERR_REMOTE;
+> +
+This additional check looks good.
+>   	if (prstate_housekeeping_conflict(trialcs->partition_root_state,
+>   					  trialcs->effective_xcpus))
+>   		return PERR_HKEEPING;
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index b732078bf319..f4d1822d4e21 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -321,6 +321,8 @@ TEST_MATRIX=(
+>   	" C1-3:P2  X4:P2    .      .      .    X3:P2    .      .     0 A1:1-2|XA1:1-3|A2:3:XA2:3 A1:P2|A2:P2 1-3"
+>   	" C0-3:P2    .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:5-6 A1:P2|B1:P0"
+>   	" C0-3:P2    .      .    C4-6 C0-4:C0-3  .      .      .     0 A1:0-3|B1:4-6 A1:P2|B1:P0 0-3"
+> +	" CX0-7:P1 CX2-3:P2 .      .    CX1-3    .      .      .     0 A1:1|A2:2-3|XA2:2-3 \
+> +								       A1:P-1|A2:P2 2-3"
 
-Reviewed-by: André Almeida <andrealmeid@igalia.com>
+This test will not work because you are assuming the test system only 
+have 8 CPUs. That may not be the case and 2 local partitions may be 
+created instead.
+
+Cheers,
+Longman
+
+>   
+>   	# Local partition invalidation tests
+>   	" C0-3:X1-3:P2 C1-3:X2-3:P2 C2-3:X3:P2 \
+
