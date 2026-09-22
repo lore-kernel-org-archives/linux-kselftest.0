@@ -1,214 +1,194 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDA54F391B;
-	Tue, 22 Sep 2026 14:27:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B8BA35C1AD;
+	Tue, 22 Sep 2026 15:05:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790087229; cv=none; b=kLof6iSdoCVHxlEpwpdjrd6uG+jfEj8GZDM82Pj67vb3/K9idDHmuhKHAVWwthk50VX1JLSUgeuIF/x+FZt7udn/bI8sjE5mth84anz6UcXA67A0IWJuZ1lJr/sVm7n9rNKEK+ZBWeTnFe16gZ/20hkaY4BU1jTHZbgDJGLiCT8=
+	t=1790089512; cv=none; b=AoNprcsG3p1E+z+RNyw2Gebw6djhapyeUJzeZJx0v8NPzAoxHnMofCMIunRq0RpEm2MTxTP0jxv/o0VaIFFPyfq3wRJOVt370byEuXq1cBLQ6K7x4BtyQxg1dI39dADaflfE4ZfZBToppdg6E0oZQetlQjvuGXoSseCY8nGJxgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790087229; c=relaxed/simple;
-	bh=oW1pJRQnRgSl6wxKhscSM9KdCKWSZpH9pzzrsXbdVhQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YGtF63SIqbuyWiwyYcIEMv5ePA/CDbMsjnqsY1+NcBYCd3BNGXInFtd7+uXjaBQuDbrf9VDuhxv4p9E+clwvvDG2GU3ynGtEVyoQy67VwJuAFaXNKDzLQg3h56itoXwxkg768do21pxhJXuA/UzRqZgzfagKRmaDonXnsJtnlIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rsdna0yX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790089512; c=relaxed/simple;
+	bh=vZKtwmqX5JGTI1FcPLHLyAMq16Kqkv/lA6S6Anss64s=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=CAGqmPG7wk0tklHX3j4ikCGvZuwRBEKcgtJIbUqTom5L/u0ACROmNrSBsXNteCXp9PlNFnKnU98HvRtl0qHaiLMXicfjcHMvcdCNyzMAB+3xbdCtgWcqu2pPpMMuZSVyL43oF5X65RzMq5mkFtySuXamIZlCQe8fiESwiXoyVYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hekZjgEx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rsdna0yX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DEE21F000FF;
-	Tue, 22 Sep 2026 14:27:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hekZjgEx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD801F000FF;
+	Tue, 22 Sep 2026 15:05:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790087227;
-	bh=XJEL2Hm1vrdb6vMcqZseArACQHb75K/NoVu74tGPz+g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Rsdna0yXsjKvBSzuthMoCSnDu2jjoQf+l1qOm4qgITDB6a2BUcBKPtwC+70FFu+20
-	 uwhXwuWgh742TWvlJe+ml677jWpT20vg969DYMFWuG+hzKFutgD0Hup3AsIlzCrFfw
-	 PoeFR6LbBVTOIZpSm6+Q/om6pqsczH3bkLkVKuwvg01eJQcR3r+B1BeznFtoIYQ5xj
-	 w9T8SXPGv7SKjq1hXkoZCf5XX/IlPr8kaLdv3/FkctDtjJFEqSdwyAG9N6WtNdrLib
-	 qncToIC8KGgXQm27vIOgF57ncJx8MR9bfogklv6cJ1/3a0zmS/sQ6NDblPNSJT+EFZ
-	 Ctyb1MY0Trv2g==
-Date: Tue, 22 Sep 2026 15:26:58 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Fuad Tabba <tabba@google.com>, Joey Gouly <joey.gouly@arm.com>, 
-	Steffen Eiden <seiden@linux.ibm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Jack Thomson <jackabt@amazon.com>, Jack Thomson <jackabt.amazon@gmail.com>, 
-	Alexandru Elisei <alexandru.elisei@arm.com>, Vincent Donnefort <vdonnefort@google.com>, 
-	Sean Christopherson <seanjc@google.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
-	Leo Soares Passos <Leo.Bras@arm.com>
-Subject: Re: [PATCH v2 00/13] KVM: arm64: Add KVM_PRE_FAULT_MEMORY support
-Message-ID: <arKPnPBZFqvFQlTO@gremlin>
-References: <20260914-kvm-arm-prefault-v2-0-26fb47f74b73@kernel.org>
- <yq5abj9p38vq.fsf@kernel.org>
- <arJ1BDEzY5CANjjB@gremlin>
- <yq5a8q4t305j.fsf@kernel.org>
- <arKB2imOcg4MhXMF@gremlin>
- <yq5a5wzx2wny.fsf@kernel.org>
+	s=k20260515; t=1790089510;
+	bh=TCzshrRO1ZIki5NMcVenkUxrTYuUZop6YN9zEA0sSn4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=hekZjgExvPV6O2kgjyujuDe+5YcV3f+peRPg5Ds0j9XiT4C9gGds0zOyk+eI8hiNq
+	 ailXnWizcynDcgRol4HLhxm3yBnh3baNQMAx8nxlhrnHD+dm0fshC+Z5J7aUvgnPSb
+	 /WqczJueR+BPgopDZUTVtSV9QYxVHXNKj+kWTC40LKY237/CA9qgsUib3vKOEpDlwt
+	 phwnob+fqNmOgs6c2F+SM338bq3R7jvcqvuJ9dS4Dgt/VJzf9fzBEsuYAIvg+0zL8t
+	 xSIL3GICXFsv81omdFlbhOlB/9ayH00HhCkuBQn4KMDO7u9yft9PMqC+Pk+teRcjlL
+	 P63ypAcDM39iA==
+Subject: Re: [PATCH net-next v5 1/2] selftests/net/openvswitch: add SCTP flow
+ key test over IPv6
+From: netdev-bot+sashiko@kernel.org
+To: houminxi@gmail.com
+Cc: netdev@vger.kernel.org, aconole@redhat.com, echaudro@redhat.com,
+ i.maximets@ovn.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, dev@openvswitch.org,
+ linux-kselftest@vger.kernel.org
+Date: Tue, 22 Sep 2026 15:05:09 +0000
+Message-ID: <179008950943.2160803.15856491533624064435@kernel.org>
+In-Reply-To: <20260918144647.2024095-2-houminxi@gmail.com>
+References: <20260918144647.2024095-2-houminxi@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yq5a5wzx2wny.fsf@kernel.org>
 
-On Tue, Sep 22, 2026 at 07:52:25PM +0530, Aneesh Kumar K.V wrote:
-> "Lorenzo Stoakes (ARM)" <ljs@kernel.org> writes:
->
-> > On Tue, Sep 22, 2026 at 06:37:04PM +0530, Aneesh Kumar K.V wrote:
-> >> "Lorenzo Stoakes (ARM)" <ljs@kernel.org> writes:
-> >>
-> >> > On Tue, Sep 22, 2026 at 03:28:33PM +0530, Aneesh Kumar K.V wrote:
-> >> >> > This is because pKVM instantiates vCPUs upon run,
-> >> >> >
-> >> >>
-> >> >> Can pKVM instantiate the hyp vCPU during pre-faulting ?
-> >> >
-> >> > It would be an unusual and unexpected thing to do - suddenly a pre-fault
-> >> > operation is initialising a vCPU explicitly for pKVM.
-> >> >
-> >> > A caller is not going to reasonably expect this and might treat a failure to
-> >> > pre-alloc as fine to carry on whereas in fact it was a failure to initailised a
-> >> > pKVM vCPU.
-> >> >
-> >> > It'd also require significant changes to how pKVM is set up, right now it's
-> >> > hardcoded to be done unconditionally at run via kvm_arch_vcpu_run_pid_change()
-> >> > -> pkvm_create_hyp_vcpu(), so all that would have to change and be checked and
-> >> > tested and... that'd be really out of scope I think :)
-> >> >
-> >> > And pre-faulting really makes most sense BEFORE you run a VM. It doesn't make so
-> >> > much sense mid-run.
-> >> >
-> >> > But more fundamentally, the stage 2 page tables, as I understand it, are owned
-> >> > by pKVM and so aren't really available to be pre-faulted.
-> >> >
-> >> > Maybe unprotected-under-pKVM VMs but then it's questionable as to how useful
-> >> > that would be given that it would be confusing to users vs. how it works for
-> >> > other VMs.
-> >> >
-> >> > So in general, no I don't think it's a good idea.
-> >> >
-> >> > And even if we wanted to pursue some version of this, it's _definitely_ out
-> >> > of scope for the initial pre-faulting bring-up series.
-> >> >
-> >> >>
-> >> >>
-> >> >> > but pre-faulting is  typically performed before a vCPU is run.  It would be confusing and
-> >> >> > inconsistent to error out on non-running vCPUs but to pre-fault running
-> >> >> > ones.
-> >> >>
-> >> >>
-> >> >> I use KVM pre-faulting when transitioning pages from shared to private
-> >> >
-> >> > You mean you'd prefer to use? Or you are using it on another arch?
-> >> >
-> >> >> with CoCo guest. This ensures that a trusted device can DMA to private
-> >> >> memory before the guest accesses it.
-> >> >
-> >> > Hm what do you mean by private memory?
-> >> >
-> >> > I see:
-> >> >
-> >> > #ifndef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
-> >> > static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
-> >> > {
-> >> > 	return false;
-> >> > }
-> >> > #endif
-> >> >
-> >> > And only x86 selects KVM_GENERIC_MEMORY_ATTRIBUTES?
-> >> >
-> >> > Do you mean something else?
-> >> >
-> >>
-> >> I am using this with ARM CCA-DA, based on the patch series from Jack Thomson <jackabt.amazon@gmail.com>.
-> >>
-> >> https://gitlab.arm.com/linux-arm/kvmtool-cca/-/commit/80e7aad61c5639de2f0cb4a5525dad0c96156428
-> >>
-> >> We do this while the VM is running.
-> >
-> > Right, that's a non-mainline kernel I guess? Which presumably implements private memory.
-> >
-> > Jack himself experienced a panic with his pKVM code, so the code you're using is
-> > not upstreamable, unfortunately. And he'd already shelved pKVM support AFAICT.
-> >
-> > And reviewers pointed out actually implementing the pKVM stuff properly would be
-> > quite involved, even if you wanted to do that (hence follow-up).
-> >
-> > Also you end up stuck with the same problems as I mentioned above - you can't
-> > sanely bring the vCPU pre-run, so now you have extremely weird behaviour - only
-> > pre-faults if vCPU initialised, running, and unprotected pKVM.
-> >
->
-> IIUC, pkvm_pgtable_stage2_map() only uses the hyp vCPU's pKVM memcache
-> (&vcpu->vcpu.arch.pkvm_memcache). I agree that this does not need to be
-> addressed in this series. However, there is also a desire to keep the CCA
-> and pKVM code paths similar by using helpers such as kvm_vm_is_protected().
-> Since an RMM can create a stage-2 mapping without a REC (vCPU), rejecting
-> pre-faulting for all protected VM configurations may be incorrect. I can
-> handle this in my series though.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-Ack, understood. Feel free to cc- me on that when you send it out!
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
->
-> I also want to point out that there are use cases for pre-faulting while
-> the VM is running.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Ack yeah understood! And it does support that fine :)
-
-I added further reasoning about pKVM in the cover/commit msg in the respin
-([0]) so hopefully that helps clarify from that sid eof things.
-
-
->
-> >
-> > Protected pKVM support is a whole other layer of complexity and it's not obvious
-> > that you're really achieving what pre-fault is supposed to.
-> >
-> > In any case Oliver literally just asked me to _simplify_ weird edge cases for
-> > this series :) so I am not sure something like that is going to be accepted.
-> >
-> > Are you sure you're actually running in pKVM mode btw? CCA doesn't AFAICT? In
-> > which case this series _should_ work fine for you.
-> >
->
->
-> It is not pKVM; it runs in Realm mode.
-
-Ack yeah, then the series should hopefully work for you.
-
-If you could test it and report any issues I'd be grateful! Thanks :)
-
->
-> >
-> > Anyway, if we really do need to add something for pKVM it needs to be a follow
-> > up. Let's get the basics working first :)
-> >
->
-> sure.
-
-Thanks!
-
->
-> > (Note that kvmtool will need to be updated to retry pre-fault on -EAGAIN, -EINTR
-> >  as this series can, albeit unlikely, return -EAGAIN.)
-> >
->
-> I will check this when I rebase my kernel onto this series.
-
-OK cool, let me know if you hit any issues.
-
->
-> -aneesh
+- [Medium] The promised skip when IPv6 is unavailable is incomplete in
+  test_sctp_connect_v6().
 
 --
-Cheers, Lorenzo
 
-[0]: https://lore.kernel.org/kvmarm/20260922-kvm-arm-prefault-v3-0-787bd3bc7e3f@kernel.org/T/#t
+selftests/net/openvswitch: add SCTP flow key test over IPv6
+
+This adds test_sctp_connect_v6 to the openvswitch selftest, mirroring the
+existing IPv4 SCTP test: icmpv6() flows forward neighbour discovery while
+ipv6(proto=132),sctp(dst=4443)/sctp(src=4443) flows gate an SCTP
+association across the datapath, with a keyless ipv6(proto=132) install
+expected to be refused with EINVAL.
+
+> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+> index a31f7fb6882d..aa84fafc3201 100755
+> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
+> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+
+[ ... ]
+
+> @@ -700,6 +701,114 @@ test_sctp_connect_v4() {
+>  	return 0
+>  }
+>  
+> +# sctp_connect_v6 test
+> +# - sctp(dst=4443) matches client-to-server INIT
+> +# - sctp(src=4443) matches server-to-client INIT-ACK
+> +# - icmpv6 NS/NA flows forward neighbour discovery
+> +# - remove flows and verify connection fails, reinstall and recover
+> +test_sctp_connect_v6() {
+> +	local t="test_sctp_connect_v6"
+> +	local v6="eth_type(0x86dd),ipv6(proto=132)"
+> +	local payload="SCTP6_DATA_OK"
+> +	local rxfile="${ovs_base}/${t}/sctp-rx.txt"
+> +
+> +	modprobe -q sctp 2>/dev/null || return "$ksft_skip"
+> +	socat -V 2>&1 | grep -q "define WITH_SCTP" || return "$ksft_skip"
+> +	socat -V 2>&1 | grep -q "define WITH_IP6" || return "$ksft_skip"
+> +	[ -e /proc/sys/net/ipv6 ] || return "$ksft_skip"
+
+[Severity: Medium]
+
+Is this gate enough to cover the case the changelog describes as "IPv6 is
+unavailable"?  /proc/sys/net/ipv6 only tells us inet6_init() ran.  Only
+ipv6.disable=1 short-circuits it:
+
+net/ipv6/af_inet6.c:inet6_init() {
+	...
+	if (disable_ipv6_mod) {
+		pr_info("Loaded, but administratively disabled, reboot required to enable\n");
+		goto out;
+	}
+	...
+}
+
+With ipv6.disable_ipv6=1 instead, initialization completes and the sysctl
+tree exists, so this check passes, but the module default is copied into
+every new netns:
+
+net/ipv6/addrconf.c:addrconf_init_net() {
+	...
+	/* these will be inherited by all namespaces */
+	dflt->autoconf = ipv6_defaults.autoconf;
+	dflt->disable_ipv6 = ipv6_defaults.disable_ipv6;
+	...
+}
+
+so the veths created for the client and server namespaces come up with
+cnf.disable_ipv6 set, and address assignment is rejected:
+
+net/ipv6/addrconf.c:ipv6_add_addr() {
+	...
+	if (idev->cnf.disable_ipv6) {
+		NL_SET_ERR_MSG_MOD(extack, "IPv6 is disabled on this device");
+		err = -EACCES;
+		goto out;
+	}
+	...
+}
+
+Would testing something that reflects usability, for example whether an
+address can actually be added in a test namespace, match the promised skip
+better?
+
+> +
+> +	sbx_add "$t" || return $?
+> +	ovs_add_dp "$t" sctp6 || return 1
+> +
+> +	info "create namespaces"
+> +	for ns in client server; do
+> +		ovs_add_netns_and_veths "$t" "sctp6" "$ns" \
+> +		    "${ns:0:1}0" "${ns:0:1}1" || return 1
+> +	done
+> +
+> +	ip netns exec client ip addr add fd00::1/64 dev c1 nodad
+> +	ip netns exec client ip link set c1 up
+> +	ip netns exec server ip addr add fd00::2/64 dev s1 nodad
+> +	ip netns exec server ip link set s1 up
+
+[Severity: Medium]
+
+These four setup commands in test_sctp_connect_v6() discard their exit
+status, unlike the surrounding calls which all use "|| return 1".  If the
+ip addr add calls fail with EACCES because disable_ipv6 was inherited by
+the new namespaces, does the test keep going with no IPv6 addresses
+configured and then report a failure at the association check below?
+
+Would checking these with "|| return $ksft_skip" (or at least
+"|| return 1" with an info message naming the failed step) make the
+outcome match the cause?
+
+[ ... ]
+
+> +	info "verify SCTP association with port-keyed flows"
+> +	ovs_sbx "$t" ip netns exec client \
+> +	    timeout 3 socat -u STDIN "SCTP6-CONNECT:[fd00::2]:4443" </dev/null \
+> +	    || return 1
+
+[Severity: Medium]
+
+This is the point where an unusable IPv6 setup surfaces.  With
+ipv6.disable_ipv6=1 the connect cannot succeed, so run_test() reports FAIL,
+while the changelog says:
+
+    Skips when the sctp module is missing, socat lacks SCTP or IPv6
+    support, or IPv6 is unavailable
+
+Should this configuration end up as a skip rather than a failure, or should
+the changelog be narrowed to say the skip only covers IPv6 not being
+initialized at all?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260918144647.2024095-1-houminxi%40gmail.com
