@@ -1,233 +1,164 @@
-Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C0D3905EC
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 03:16:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.225.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF59D3E315E
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 03:59:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.177
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790046993; cv=pass; b=HE7rjlaQVTuJXtNE4JK/2xws0MywuenevoLMiRnitTmbFrbZREUA2S76l31CnwTx9kBRH+k/V2a+UbxAHZ15WqrJRB6CJjJJNMqUxWEZ0PMeT/OSBXEO2PuAHvwCL+wK2jdHsH2pWkmzQvL/eqOluD4bCKd2MOZtwdg8STqgU7I=
+	t=1790049587; cv=pass; b=jk/JSdYRk+R8YaLOh8dwyJ+5HA8YL6iEdyXHEzfE33EePi+f7AdcDv7ukAQEYSS99yNfSI7zxBjJxfhZp8Mwn4o9druPnXz/klkzbwEArbRRbcHEa6suwH17P1Z+l6HYXe0srtq+ENG5uzbSdEx+hOFgv/QKYvCUUl2Z1fIjuRs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790046993; c=relaxed/simple;
-	bh=nxcBcIIu8q5gjVlpoqJK0T82KS5DXH91pbYJkPqLAyI=;
+	s=arc-20240116; t=1790049587; c=relaxed/simple;
+	bh=kuDUMkXv3afPL+EnBob0k3BsBJPNiUTO2RsSrSswm60=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r6kL85MWPzlBR42lH+eRwDihvSK66T+giru22Z3mHx7wCJFsfEop7pydXvGqlPWcGTqWOKPi12USBeYF+4tL6Pf2oNRbYUOxT4FoYjJ9ESHFYsg8CLKbT+uXSiLrkzbmbgs2ENEpEjXnVPeqoUltkjcZgFqMfqesw8YQJtSlz2c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OttL4iFp; arc=pass smtp.client-ip=74.125.225.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=uFCLb7KSH2vf38ra3Z/vOnCdkuozoXXnYr4f0FHwW9hZqCe6/6mY4V/10AGevmIwc9eMgZf9Ak089V82LRovHaAx+DqUAeQNJzBLplaU70GLdE1QJYpfKkY4GyzUDsth6FEkg9P8QqDNnlg8Vg3Pl6zF+qg12va2vVe7GWUx7KE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eXawhaXk; arc=pass smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OttL4iFp"
-Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e71cdb22bso26913855e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 20:16:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790046989; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eXawhaXk"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-530e8c6fb80so91781cf.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 20:59:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790049585; cv=none;
         d=google.com; s=arc-20260327;
-        b=aagEoRPQQ7ypjAoHb+5o4GiqFBRJXdGa0y1CNeL03UNmjwaKJZLkiSnlCj+8jMXHVK
-         VT9/yTN34nBxEQzAbl7QjordXi0kx1DeSWv8+RkN/Evow7O3perPhvFchj7cGdNBm4QJ
-         Yg5A67tjE2q8+KYu5YnknP7paof4/ADysJ3+BFgbDxMrfUD7agIopuT+ihisMoVgUWRd
-         g9EFujq4LYDKYd8BNKWJv9L9kPzXCD+abeuCPSe0L7HTrr8pEV6+lFz+qacbmkxvmJUL
-         mk1hmTUeYeTNUDdu4Heg+QaNbH0aIkGXbcLPn90AGPIjzfD8JHd/wUTz5dz8IOWdl33s
-         spyw==
+        b=JrWth8fHHFGradIxR73lV9+bt356GtRfoLVWmrkxEhMPRmp0NdZ9Jz2730YjS3vOJ3
+         9laJfLqZijBuYmLM+7o4HryV4EBKdTw023IfSrmagzy59ulGnKpx6AYx5Ymxdxn9qrNn
+         4j3THQh1lhloWmJSUgsqLq0V3gCvc9GZGEdzQ439iupxv+FyhTth62UGMxaef+LMQ8PY
+         vA5u+M9EmgFh8LyGP5iGwwi1PZly0tjZVHjda86Eg7XgQYOeZdeBi4c9FEE2gtGAjh9m
+         czbo0VbTK+cSKU9owdIFOXpmhcT913SY5KqJuQ1qL/NuAQIWsd5etI/SCfBzkI3Xgpoq
+         baOA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=T0hVWGyySlLly+28D7LGfZKDh0uXJmKT1sB0yr2I6gM=;
-        fh=ltlvu1gksLtG8/T9kA+2XtTG0Llef8D61h3nDLcTosg=;
-        b=AKhi+jNWMsb1BgUGSZ0Pq//c3Qp2tfXebbz2OhkFC6yA9ePPgktK1crh2wep8jszwI
-         pdGgEjKdW7uWTXXmuNQAaBRvetYTgyVfVqO50R3MJxeGM2zjinhDX5JeTuoKdYMdaFC6
-         rEgoVdHH6c4fEKGB223tpN3Ns6p3ZPFrvawXV8M7Gc+CgJcsoTDle8p343Yw4Z8w306W
-         wuILlMTkNFONgi9fhSY4OhC1ue9xTyQJ+jTDbai3Sw8WT0rFNaHHiOiebbKKttG4B6wT
-         xnheUgI2HKtx17vX3QZCJb2IVvnKy5IlRC+T/szJZ4pAnOpjbMK+hpOrV57fkznFKCuV
-         z84w==;
+        bh=kuDUMkXv3afPL+EnBob0k3BsBJPNiUTO2RsSrSswm60=;
+        fh=RFZ2QibQymKZDWnpSSXIY3N4wwZYeE+g+y5+1xRowdM=;
+        b=XZ97yKQAndvAeKfTy9/3FXMBhFXRYGXxmq7GmuvudBT4sgGJZ3y2I/DwSYnPwWuMJK
+         FdQu8miEofT+97yi54JklaIRQYwqBiZWBdEFiSwZXDPbvTRm1up99fVTsz441uAxT74f
+         PZxwGZSKqpZ0Kt7fKB+lZ4CHKzFBWv7xPBqVV9BnllBIcygGRNr+u4vhywYMbuZa3y8t
+         QOOWKcsE3koTvsNIygPwjp0GnfEXIirsEpWt+ds+MaKhrpttrXxzHlop3a3rwUx6Mste
+         OtqC6hihY2eTy3TuWK04Ma96tHKKt621hYXtU4VCUR44TFRmtivjiiwmUfj4bkNuPt8P
+         nVfg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790046989; x=1790651789; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1790049585; x=1790654385; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=T0hVWGyySlLly+28D7LGfZKDh0uXJmKT1sB0yr2I6gM=;
-        b=OttL4iFp1xOGLN3gQnlMB1tq0xJngLmH/krKaax6xy5z4RxYekCTxh9Pp5E7snJIS8
-         ZobS1E0MjajLMNyvFy7990rcYKr++EK/BWqlFO10y85xevVnAspMQkzcxXzPTMmBUn16
-         O0G3myRMed/g5rzaHBAU3uWu/wfB21Dcma6GjYJPOPLx7aR9vC0WtB94c3WyUTdrpnoa
-         H4qtZJ+iHtgMcAK09zQLOy0AZ4jCix0Ts7e+HOLW6ZGtcTJ0I4WtsWreqCdP5gC4ZD2G
-         UAIvrnTEZ2sjIyjTwWzRwKmDL02BxsXALzX3e57Rz67SZ57uoZZTMabSsbMu01Fj6Hhi
-         yRGw==
+        bh=kuDUMkXv3afPL+EnBob0k3BsBJPNiUTO2RsSrSswm60=;
+        b=eXawhaXk94aSjo+ppLPm32o8evkbAmy13dVMyBOjTVK9AsgAgjaflgwUCgXDRYsPXH
+         dUMashcU+nj/z3qHaEGcwYJVpOnEPcGRT4rQwsoKAQkJCbWjYqqiQcZVS8uIQa2b8aJk
+         MFsnzlJ8/u/cKjDZOKJ+29P+IOBrHCqeR+U4TqaW9LeE3k3kGbyenYgt1AGbBGu26co9
+         ORNG0Duq8LY45IJtvSuhxmSK968MKNAA/cm2pqR0KA9ZS+YFqxHk14gLa0yBwJOelSUq
+         9nUk8Ze+JOvJz+NraEvklRSyZ4awNDE0hNCFJ7Dzp1BES9TsvzL56rg2tgWk/3XE4B4N
+         Fy9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790046989; x=1790651789;
+        d=1e100.net; s=20260707; t=1790049585; x=1790654385;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=T0hVWGyySlLly+28D7LGfZKDh0uXJmKT1sB0yr2I6gM=;
-        b=PPwOMCS8yW+fhMe9KjAc7UW6dZRnObNG62mbqLl3ooiMubDqFnov0zneCPxgFDf5By
-         nxLZOBN0ew01uQjnwgo6bUpnGcLN1tsDWiho9x8pVTXglm02mXZbl9jc2VXb8W3KT+gd
-         XVOm0FGAtqRvVgzv6AEPt5WczI9P+KQcrph8QpS0BhicfgWGkQJIPibHmfiRoMCIOnN4
-         vMptDtjpEvLvsZ9RIER79Vf8LTfl1jdgZmD027UjrD2xHs8fi+79NzqeJgfuNKLG5aA5
-         6Ey7y+Z7EMZ4zAUB0r6a3YmLALbSVmDjgIaWosCezj0l5FqL2lD+sGhMfBCkDp2N1ZWK
-         mKeQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzH9lHRKyaK88KdoUoIs1xBNY4RcedvXCxMAMUzhd54z9qbqsCKsDFjjcQg2TjlgNN/Fnhdmo8eqw04Re24I9A=@vger.kernel.org
-X-Gm-Message-State: AFuF++k+QqcrvqqpCRnBsEFg35YTKc89seMH4fUCjmO24KnZg1twAt5D
-	ImT/5COYVw0Uwj17zR4BTSZkglJuw5qrIXjELosB4wzCCS+3zY4gItVD02E746I8FOMaVIve9Eu
-	CmwrlqFJWc1PtpnRi5fdjvBSlNkjmo9M=
-X-Gm-Gg: AYBFou3b/2rKq3KiyqnhmHHBIn4sEIHz7vl4QgCrtQVsdVpbMizRf0P5C5Ld8HHkGIg
-	MGtf9yH2IoT1fDvndTeQEAwFK9nyLzCSBeMC7GXHaMvsHTyb1LIQ/2ACZeIFppBHz7/e+HUMW5X
-	k37wAtZHqlFDM5OneK18FL0k1R4mB2PMF/af40iquPvoXTS9f6mPldDAmpqvUxjWLXdXVLNXHa0
-	FLHOGVFjPFe0ri0groAN/DgGLCzj5mNUhYSnDEib/YFMQpvDxQxieE/5x4HwHHdyySRUijeuHBx
-	hMbjqJaTHQEuYlOL5HwFeL7wU72UcUK1Ba2as6kBVHqYu0rxSH5oDg8o9gbHonFeCBKQXJs7rA0
-	5//A+btrvZbYXpA==
-X-Received: by 2002:a05:600c:46cc:b0:493:f5bf:4dc6 with SMTP id
- 5b1f17b1804b1-49fc566951dmr171043015e9.7.1790046989155; Mon, 21 Sep 2026
- 20:16:29 -0700 (PDT)
+        bh=kuDUMkXv3afPL+EnBob0k3BsBJPNiUTO2RsSrSswm60=;
+        b=uYWk9i75xKPccafnonFd7aTqVbGM1e0kaOzgAJDJHAlh8WVfdfWItUpfZJ8j6cwGnN
+         r2+XVP6wQzSsTb6qBCoctNH3nTj/Hm2iAu2WJPnH4NDwoT93mYYqgMgOiXU6fFkOIlez
+         BU0oZJ67IZZkiYoMBYYCbFZCNzIsLwA7eYG7Ff/aBSjlPqgEVj3t4jKq7wnGLUOkFwZu
+         3mm2atk2Z9ZCV+kU9bnXGkXqZeZEHqUmW8NHnymo6BmCFVpoITEmFqSyfW52auOZ6ezq
+         OcE7UuRGam9btv6zPMsHzlGY249TX7rnQ8y9lcguo/mr13/97siJLWfF8N0fzdQeZ2k2
+         3WIg==
+X-Forwarded-Encrypted: i=1; AKwUvBzEw6hcg+cnFxjVIkGNsfwza5A9s+XMwjRnGqJe5cN63/F42BDPyb8b787O153bahMcLlXTmWbo2ZLf9DNpnd0=@vger.kernel.org
+X-Gm-Message-State: AFuF++kjWar/jo1U0WslwEMpIXhLiQJN6bJnW/O2hUwJozhqTN+LOx0g
+	PpE/8rdX4QtCFkKx7MaUAZy0mMN9FI2QtxdlanHBuaKCU81uVc+/3ByLndH7qGG7iuNw/Dzr6t3
+	TMV0CWdzsMwkeKPjSxhUOKxmwqXgTundiOedu7BGY
+X-Gm-Gg: AYBFou0bAblrtUqHdFv1kdSwAzMjUUzXbzAeOkVnlWw66F2RFkyCYckFr6X/royQHjc
+	N27d5egT1BErQ6XgfmSq8HfsVpM9bb5c3grGCPvfoBSrKBn5TCyeLTY47x5hnIDzqTwGTaNT/09
+	bf9e4sl8fNOruaCHocopD6yHk8PrpjrDGTkS/IjlT/vPABH97pxrsklHVNqU0ne0GRZd5NuJ6bN
+	puLJRttveseNUGyNPmtWS+EE3c6qvQohspGEYf2z74nrXXJ8xXcbz9TRstpZa27AIAAb0OIAJtQ
+	V5dSwamNi/BRwtcruuy4cSGC++Ka6yEPw0pi/v5CzeAdrN45uu6CglozC90+TMt8ktOHOLQpnbq
+	+WnHyGdMcLO9MGYCdUZrSyKizOOqdrg4IeIEGcBs=
+X-Received: by 2002:a05:622a:418a:b0:532:a17b:9581 with SMTP id
+ d75a77b69052e-532ddceafadmr7173951cf.3.1790049584159; Mon, 21 Sep 2026
+ 20:59:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260920211920.928306-1-dwmw2@infradead.org>
-In-Reply-To: <20260920211920.928306-1-dwmw2@infradead.org>
-From: KunWu Chan <kunwu.chan@gmail.com>
-Date: Tue, 22 Sep 2026 11:16:17 +0800
-X-Gm-Features: AcwNN1WrYNyWGp1bGXe-bJN9POYZPs3FjeCDYohf8fnVdXEdiDT26MiduZxqtjc
-Message-ID: <CAN_Opa9YWJZxr=YEjnkS-Khm=83P-xqGVZ6tq2nVQzMNOiThbg@mail.gmail.com>
-Subject: Re: [PATCH 00/17] KVM: Use atomic SRCU for gfn-to-pfn cache,
- reinstate guest mode for x86 nesting
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, rcu@vger.kernel.org, 
-	linux-rt-devel@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, Paul Durrant <paul@xen.org>, 
-	Vitaly Kuznetsov <vkuznets@redhat.com>, Fred Griffoul <fgriffo@amazon.co.uk>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Kunwu Chan <kunwu.chan@linux.dev>, 
-	Zqiang <qiang.zhang@linux.dev>, Boqun Feng <boqun.feng@gmail.com>, 
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes <joelagnelf@nvidia.com>, 
-	Lai Jiangshan <jiangshanlai@gmail.com>, Josh Triplett <josh@joshtriplett.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Clark Williams <clrkwllms@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Jason Gunthorpe <jgg@ziepe.ca>, Michal Hocko <mhocko@suse.com>, 
-	Nikita Kalyazin <kalyazin@amazon.com>, Keir Fraser <keirf@google.com>, 
-	David Matlack <dmatlack@google.com>, nh-open-source@amazon.com
+References: <20260918040919.3402577-1-tweek@google.com> <CAEf4BzaeKXEC-gBbxo36wdAGwwZxqkL6pV=oo0dke4S2BmuRmg@mail.gmail.com>
+In-Reply-To: <CAEf4BzaeKXEC-gBbxo36wdAGwwZxqkL6pV=oo0dke4S2BmuRmg@mail.gmail.com>
+From: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
+Date: Tue, 22 Sep 2026 13:59:26 +1000
+X-Gm-Features: AcwNN1VCSRgYVTkcKQ-igQWPuOPvyTYm8XckPrpz2jX0eeLC27k52LUPgeuDr5M
+Message-ID: <CA+zpnLdaqv77PT=azFEzHvnwLzxYLXMkpRy0CcsKKKMgJjxayQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] bpftool: Skip non-autoload programs when
+ generating light skeletons
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	KP Singh <kpsingh@kernel.org>, Leon Hwang <leon.hwang@linux.dev>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi David,
+On Tue, Sep 22, 2026 at 7:30=E2=80=AFAM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Thu, Sep 17, 2026 at 9:09=E2=80=AFPM Thi=C3=A9baud Weksteen <tweek@goo=
+gle.com> wrote:
+> >
+> > When generating a light skeleton (bpftool gen skeleton -L),
+> > bpf_object__load() skips loading programs marked as non-autoload (e.g.
+> > SEC("?...")), so the generated loader program only records and populate=
+s
+> > file descriptors for autoloaded programs.
+> >
+> > Previously, bpftool emitted struct bpf_prog_desc fields, link fields,
+> > and attach/detach/destroy functions for all programs in the BPF object,
+> > causing the loader program to store subsequent program FDs into
+> > incorrect skeleton struct fields when non-autoload programs were
+> > present.
+> >
+> > Furthermore, bpf_object__load() can update a program's autoload status
+> > during preparation (e.g. for struct_ops programs when resolving kernel
+> > BTF members or adjusting autoload based on map autocreate settings).
+> > Move bpf_object__gen_loader() and bpf_object__load() out of gen_trace()
+> > into do_skeleton() before counting programs and emitting struct fields =
+so
+> > that struct field declarations and attach/detach/destroy functions all
+> > observe the final post-load autoload state.
+> >
+> > Skip programs with !bpf_program__autoload(prog) when counting programs
+> > and generating progs/links struct fields as well as attach, detach, and
+> > destroy functions for light skeletons.
+>
+> This seems like error prone behavior to me. Wouldn't it be better to
+> hard fail if the BPF object has non-autoloaded BPF programs instead,
+> as clearly it's not meant to be used with a light skeleton that
+> doesn't support such programs? So why not emit a meaningful error and
+> exit?
 
-Thanks for the series. I noticed the testing results, but didn't see
-a performance comparison for the SRCU change itself.
+Thanks for the feedback. This was my first approach [1]. I think it
+also makes sense. I can send an updated version that addresses
+Quentin's feedback ("goto out") if that is the overall preference.
 
-Do you happen to have any numbers comparing the GPC invalidation
-latency with regular SRCU vs. `synchronize_srcu_atomic()`? If there
-are also numbers with the reader-free fastpath, that would be useful
-for understanding its impact as well.
+[1] https://lore.kernel.org/bpf/20260904031912.2133476-2-tweek@google.com/
 
-No need to run anything specifically if you don't already have the
-numbers.
+>
+> Or I don't know, let's teach light skeleton how to support
+> non-loadable programs maybe, not sure what that would take, but worth
+> considering to bridge the gap?
 
-Thanks,
-Kunwu
+This is technically possible, but I'm not sure this is what we want:
+it could be implemented by adding a field to struct bpf_prog_desc and
+change the behaviour of the loader depending on that field. The issue
+is that, for signed light skeleton, we probably want to ignore this
+field (for the same reason we are already ignoring initial_value; to
+keep the attested blob authoritative). In that case, we end up
+silently skipping any non-autoloaded program within a signed light
+skeleton. I prefer the hard fail option discussed above, or silently
+skipping for all kinds of light skeletons (this patch).
 
-On Mon, Sep 21, 2026 at 5:19=E2=80=AFAM David Woodhouse <dwmw2@infradead.or=
-g> wrote:
->
-> Now that Paul et al have so kindly provided atomic SRCU for us, it would
-> be churlish not to use it.
->
-> Based on the merge of kvm/next (d4b7fb647204) with Paul's dev.2026.09.17a=
-=C2=B9
-> as posted last week=C2=B2, this series:
->
->  =E2=80=A2 Converts the GPC to use atomic SRCU, ditching the rwlock which=
- was a
->    scaling and latency problem, and which PREEMPT_RT hated because it
->    turned the rwlock into a sleeping lock.
->
->  =E2=80=A2 Cleans up the intentional lack of dirty-tracking of Xen shinfo=
- and
->    vcpu_info pages (Sean).
->
->  =E2=80=A2 Converts steal-time / preempted status to use gfn_to_pfn_cache=
-. (Carsten)
->
->  =E2=80=A2 Reinstates guest-mode pinning: replacing the old GUEST_USES_PF=
-N mode,
->    letting nested state pages be cached and pinned while in guest context=
-.
->
->  =E2=80=A2 nVMX: Uses GPC for the L1 MSR bitmap, and guest mode for APIC =
-access
->    and vAPIC pages. (Fred)
->
->  =E2=80=A2 nSVM: Uses GPC for vmcb12 / MSR-permissions / IO-permissions p=
-ages. This
->    cuts the vmcb12 transition cost measurably (selftest included).
->
->  =E2=80=A2 Returns -EAGAIN from cache lookups which race with memslot upd=
-ates,
->    and re-posts KVM_REQ_GET_NESTED_STATE_PAGES on memslot generation
->    bumps so pinned caches are revalidated lazily.
->
-> Tested: rcutorture atomic-SRCU (srcud, reader_flavor=3D0x10) on three
-> hosts; KVM selftests including new invalidation and transition tests;
-> >1 week soak of VM lifecycle + invalidation reproducers on 128-way
-> RT+KASAN+lockdep, 192-way RT and 192-way PREEMPT_DYNAMIC hosts. And
-> booted an actual Xen guest in QEMU a few times...
->
-> =C2=B9 https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.=
-git dev.2026.09.17a
-> =C2=B2 https://lore.kernel.org/rcu/20260919003521.3134552-1-paulmck@kerne=
-l.org/
->
-> There have been previous series which attempt to deal with various parts
-> of GPC locking, and the steal time one has definitely been posted before
-> a few times, but let's just call this v1:
-> https://git.infradead.org/?p=3Dusers/dwmw2/linux.git;a=3Dshortlog;h=3Dref=
-s/heads/gpc-srcu
->
-> Carsten Stollmaier (1):
->       KVM: x86: Use gfn_to_pfn_cache for steal time / preempted status
->
-> David Woodhouse (10):
->       KVM: pfncache: Use atomic SRCU for readers instead of a rwlock
->       KVM: x86: Request the guest TLB flush from record_steal_time()
->       KVM: pfncache: Add guest-mode pinning (GUEST_USES_PFN successor)
->       KVM: pfncache: Return -EAGAIN for a lookup which hits an invalid me=
-mslot
->       KVM: x86: Post KVM_REQ_GET_NESTED_STATE_PAGES on memslot updates
->       KVM: x86: Move nested GPC lock helpers to x86.h as kvm_gpc_lock_pag=
-e()
->       KVM: nSVM: Use a gfn_to_pfn_cache for the vmcb12 page
->       KVM: nSVM: Cache L1's MSR permissions map pages
->       KVM: nSVM: Cache L1's IO permissions map pages
->       KVM: selftests: Add nested transition benchmark
->
-> Fred Griffoul (3):
->       KVM: nVMX: Implement cache for L1 MSR bitmap
->       KVM: nVMX: Use pinned pfncache for L1 APIC virtualization pages
->       KVM: selftests: Add nested VMX APIC cache invalidation test
->
-> Sean Christopherson (3):
->       KVM: x86/xen: Extract delivery of event to vCPU into a separate hel=
-per
->       KVM: x86/xen: Explicitly tag "shared info" page as never being dirt=
-y tracked
->       KVM: x86/xen: Don't dirty track "vCPU info" page
->
->
->  arch/x86/include/asm/kvm_host.h                    |   2 +-
->  arch/x86/kvm/msrs.c                                |   7 +-
->  arch/x86/kvm/svm/nested.c                          | 112 +++-
->  arch/x86/kvm/svm/svm.h                             |  16 +
->  arch/x86/kvm/vmx/nested.c                          | 356 ++++++++++--
->  arch/x86/kvm/vmx/vmx.c                             |  11 +-
->  arch/x86/kvm/vmx/vmx.h                             |  16 +-
->  arch/x86/kvm/x86.c                                 | 181 ++++---
->  arch/x86/kvm/x86.h                                 |  33 ++
->  arch/x86/kvm/xen.c                                 | 279 +++++-----
->  include/linux/kvm_host.h                           |  86 ++-
->  include/linux/kvm_types.h                          |  52 +-
->  include/linux/srcu.h                               |   7 +
->  tools/testing/selftests/kvm/Makefile.kvm           |   2 +
->  .../selftests/kvm/x86/nested_transition_bench.c    | 204 +++++++
->  .../selftests/kvm/x86/vmx_apic_update_test.c       | 299 +++++++++++
->  virt/kvm/kvm_main.c                                |   9 +
->  virt/kvm/pfncache.c                                | 596 +++++++++++++++=
-++----
->  18 files changed, 1876 insertions(+), 392 deletions(-)
+Thanks
