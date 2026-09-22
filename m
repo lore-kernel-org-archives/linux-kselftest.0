@@ -1,142 +1,163 @@
-Received: from mail-oo2-f37.google.com (mail-oo2-f37.google.com [74.125.231.165])
+Received: from mail-dy2-f12.google.com (mail-dy2-f12.google.com [74.125.229.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81FD442396
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 20:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.165
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790110790; cv=pass; b=LjGhksvp/8qFdRKlVPBDHby1WkdcZ97D9RX9KM4G2gAPCRXpzMVO0PGQZEEQGk5RB+PElKClL6Gd7yLAwLxxXMUddrdNkG/hlGr0tvfPC7O/stTUoVUFvUJKW3wTYfYW5f8GjmGzy9neHa2OFlYypqsDsC8Bg8FW9Mg8wXZbhYM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790110790; c=relaxed/simple;
-	bh=wIRXXuVsUSpgf3xCZFrSJzI8xByKVKMD+dC+JD/lknA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C87lueZ9HMros+BOfGnaKnYGt1zaYc6dRfzjj207T6s2j9nB53zd3tvN/eGREj1Ko/q+kCHJf2ohtT2cI2dVdjtEZz5dxJLQaACBkSCzKwuQspFWiRqYVuj9ZJWV/AiMVeGpZ5gixtq7apVzEYKKLAN0TXAM+QEULTdkRnJ4sxA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XQ957hYx; arc=pass smtp.client-ip=74.125.231.165
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02605498904
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 20:59:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790110801; cv=none; b=b+EkF8fUNe0qjfeyge7r1dWU+DrfhyHchcybHYBvQgWMFtVSqE/ihdqJtPQOam0AuXCkMhci+HZuwAmkOlF4IdZQyLsWm6NRvL/ciTMNV7wM+zx8d18r5K0mAi0MW5gS/lXvo1+mQgpJzaghk8pMU3UbS1IvJ76YJsdMbfUJAxg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790110801; c=relaxed/simple;
+	bh=HfhN83NVgtaQE2H+GN2G/xzYp+SaFQJOfO1TroVBmEY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PuwSbzwdOAyWcAqelbnceC4BCDZGrcZZswUf6IiA3MVe3xCfGwawVjUC8+3W/mANqXcPYK6RAdPtmz6qEFPE1udJce5mQCl1vKiP+SrrMx+6l/8EV8xggkhY+pbW5W+DzR1XqmzcLPOeMTbiTp1QPJy3qX4//+Olq6kGfKSZtxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IHvncLLV; arc=none smtp.client-ip=74.125.229.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XQ957hYx"
-Received: by mail-oo2-f37.google.com with SMTP id 006d021491bc7-6b1ae721872so154138eaf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 13:59:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790110774; cv=none;
-        d=google.com; s=arc-20260327;
-        b=UHtOnpbUCmmLbs9YmOxadMGv8i6MNqZrvALe7IYS1dabApToc6ZWU8B0EzTyaNAPF/
-         Kz8ImThSxdzvLqIN46z7DUuj7k2V9UWSFGnMfV3hG7n/1YvP90Juf3MhAgLiXgTzDRd3
-         t7CDwCwa6DSPx1CLEsauvUNYORyLrvROm+scC1S05hYtll0swHREYbwRn+svM/8fm6lR
-         rhTq9HJSpEfLf1Piawj+hI9LW6VzDCrVTi8ict1N2qMh3+Gwe4DBa/Ws2okymU9pgsY1
-         tUJTASJXvs9wfm+wOx2AmP59TyeJHui+jQtkDcxBiYF07x9YeHt6u/CAF9DK1F0xm/sI
-         ZWuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=btBRPiBOdcnMWIsPdftA9/JWuQ65VWOKgdruB6cHU6E=;
-        fh=ydatAUfTENckUb4HE20q4leHzwsX4qWJdw4TJTxmqcM=;
-        b=hexRtoTj6mVD2BRv4yu28kVmgn35CcbufVREmhbAX3At7bWX11JwsCNipzJq8zmC8M
-         LifG/7ZUiwocKwf8Q4w/6HBZ9ytXs/zo4copWoqLVDOnSODdhgKpgnTOW+zyOfyA40qy
-         9XcBoJP4kQqR+jL6mXVQasQXBj1fNBo3JNexXbiXk5XhXA2gF3mKWw7Yfwx3qndfurvm
-         r4mRVf25RZ7yczXJpWOB6+EVtLBXsC0/SLRUSZTNhgKPH3+xWBy5ULVlFw/m+/VqO1Z0
-         6kzPTzVVYH1/0r3Dr0G1cdg/WO4xaW5K4TPxyEVMc8u25uHOlgqQvrFfe43XduWX2NcH
-         p4YQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IHvncLLV"
+Received: by mail-dy2-f12.google.com with SMTP id 5a478bee46e88-328664e050bso297359eec.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 13:59:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790110774; x=1790715574; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=btBRPiBOdcnMWIsPdftA9/JWuQ65VWOKgdruB6cHU6E=;
-        b=XQ957hYxO0xTPlSDJ03IKx+MxcfN9kAIo219ZRQnIdxUHeHjn60pEZfNyWpmDD1Qoo
-         2SOyxkkyc8URH3VVGoabUl79PMYw3AW2OgD7gGK2gD3Ov9T90wgi/0AgqSvQ+kFeOC65
-         H9BaC0QWkuyu+iaCcafG39ntqttCf8NkDsXsvDHs55OM9MRz75ZjJpPJl2TFeDZMPZ1Z
-         k3y4f7P+61kq6pn0Cy/RGnhx/PSkJHCaRBg/bR8T+xWUJb6N/Yy1oqoeoFnFdcONj2Fo
-         NKnqtBfMJrTmWao4y45iz/7DPlaK2bIQJKrtXExH+N+9yElj39tE9nMNfCsgvWmBQ47W
-         jfuw==
+        d=gmail.com; s=20251104; t=1790110781; x=1790715581; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=wTN5dzyC0qAZsQ7BP1bHS2J+PZt0xUjiC71KhGCNYoo=;
+        b=IHvncLLVucaZnRmuRLzXTVKWzMSIKuRGKlflIOKnX3kswaMl03R4SA/9S+KMCtrBSX
+         +osGhlUpVV0MMAa8c5wA/3ty7350ud2VAgnAXC2CH3aadQ6aDP25Wu+yPLhAcyWL9Q+l
+         H2ofhmy12CBwtYCORFcnJUXh2fcZSZO9gq10H7YSht21cde6MzO8c3UGJ7ZtXk+YdBON
+         3+OUV9yRHZcDPcvUVFDxAuD/ldObr5cIV+NyuyvSqaT+WGorNoLtjklaHgurQYJvVZfV
+         BBLJoVlv8215HnZ2hf6gS1AMAksBmyGl6aJDCiqhm+rSJo90Pz/z+/g/X0iOGM3CI7Xv
+         yvHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790110774; x=1790715574;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=btBRPiBOdcnMWIsPdftA9/JWuQ65VWOKgdruB6cHU6E=;
-        b=j2vQhzRowvG+Ltm+++3LTyRV691wQsQn1NRRCfgnzdN0AGYGM8hOE/lu1gKDr7sBQS
-         HSrQD/ahSumRSDVHWlSOr9WUp3IRqKWyaIylFESTeam71LbxpznHPPpYQ1WoUxixJ+Z3
-         F6LhvcZ+qEsRItbC9WR4TL5l+rwHVFkFNJeuIQW3Gtm6vRoUUmJ6SGlrQ1kFmVQMT2q3
-         7Mz1tDsjPX+EjWjjzAB9HeMB+180ok28sRuRFc0+7LvwGQvRaRZtslMcHCHwhhAIlOPE
-         93rsy1Y6n6i5yUNeWu3ChV67V6yXTge9R2sjmb2z+VN78pVXMoYQGHrARhSfoC8y1hFG
-         8dpg==
-X-Forwarded-Encrypted: i=1; AKwUvBzyTMR3nS1tUJJj5nxs6tWn9+bQh3wlaeyYWWyGTKju4AMCZM03eP8z5Xb9wJ36oQvFbq+VyYIw6QyBW6VDYu4=@vger.kernel.org
-X-Gm-Message-State: AFuF++mXpqb5u9cIumb6e+LLpNKXw9sQ1vj4y88DZ0WzwEL/Fq7zXPc4
-	9fs0LIh/hru48fjidMUXrY0JXcEUKmSsCZWJprFJoIfimUxZKnE1dd6dNJoLuxy2QZpl0SZG2g8
-	HEi4er9r9ptH0ZaHi8fqWuqHQ7UU1eCQ=
-X-Gm-Gg: AYBFou1OoTTAskLAAeFDUG6fzNClLo32OeHBsmPI6Ln+Ma5obkuWviMSUzCzCKZ+zN1
-	/p4heBjjECWK9bbWPdjIu1n3KHcSsgCvPzdoeQoHNxifQJj2RBPYrgbo6/Jxf07fvrdHS7R+Mnh
-	9H24ptVAdhWL7+0fHTxxVcxFsRnW+qBsVnLiU5WX/ROaV8RX1IGB9AHgQj8ivJe0Icn9BI/2tOJ
-	51e/xIXOsBJ7Y7Z6MNPlymPL5Sv4XaXbTXAzSHa0oXIHYVPWllrvIjXEvBDsgrQeRXmov/zxJTv
-	1OY2914NFYWZK+jlIIQs3SDvoDahq1/MgSLc7MoyiayU5SoCdUtGOxReYrlCm1gTgRIVK5OK0oS
-	c8UkX/wIGeg==
-X-Received: by 2002:a4a:e911:0:b0:6b4:5cfd:f381 with SMTP id
- 006d021491bc7-6d2d0836a4cmr577159eaf.25.1790110774153; Tue, 22 Sep 2026
- 13:59:34 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790110781; x=1790715581;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=wTN5dzyC0qAZsQ7BP1bHS2J+PZt0xUjiC71KhGCNYoo=;
+        b=eKsnltCbmeKVPtb/Xnu7htJYaxKPHRdnRqRp+34K0hWiA4huHEtX+q0TQgkM5avlGB
+         CqHa7TnKWgdjB6zdKvnIMRMAyEm+yOOzQJavjDI2VoY6scDIbwpnpm7tNd8vYT/18Bd3
+         aZKe2wSaN1Nt4oTDNKnAK6SMGGhBYktcV2upluzYYB6pBTmfY49DXmMVFeUXlh+PRJig
+         88SrF/S8b9He8oljjMQInqdu6QD+oh5txigdiuMus4LkCNXo9m9TD8g8XXiQjHCkJ+O1
+         vJtnKi8pTcCFJF14LyVR5+ro2j20yEw1lKZ58HCnOeYdueREGR0fwyo7ensjZKlyvqqp
+         oykg==
+X-Forwarded-Encrypted: i=1; AKwUvBwF7RdixvWnMqG6hOk84jPIfijK2BXnMkl5MQ3ATBu3tXT8z9JDNjqYmTf5JClKkr9linaZqvnkDPg4Se6m9r8=@vger.kernel.org
+X-Gm-Message-State: AFuF++m7H0A1+t3PUjvLPqm0ykYzN1QIT6n5Rsa2gnKeHmMHCkdLzf2h
+	osVX8ViKVmN9rI3ozWBA27wyIBGNDVMprc7YGxOk0F3KMCaONE/S/dfG
+X-Gm-Gg: AYBFou3qNVTM7/BFEUbe5RjVK6ZLWKpng6ED0ZC6zWrK++r0G+SUPb9B/Vs0efHAdOR
+	NQCa2BoyfQLmcig4kOriRZHFc4/E2oIk2NRgj0+CyBmWhGFYNoI3MBlcJDKrVXzw10wJS5lqABM
+	w63XkG3zC91dV9MOEYuJbL68QjKL3m8rQTVwXipuBySgOJoxBtx/LcpOvoVNX+c84UoW3c9+a3O
+	4GDwGJU7r/HUdKKb4OySqdJan9ntAc+czxdqSJw1XD7ruwt3xarL5rhviV7FTnHMVs7AjWoRTDg
+	hxF8KXl91o+Wpk890aCb6RxiWWtQErdIru1Ofn85VsJne62ScjUillNgr17R0NGLJyImlEzkxkE
+	cmjCwUJSBa1cWrfTGiMF0+QpU6DJbWArk/3nhbLr48//Fa08x7SVjvu8fYg2Gi68q3c5yQgUPUF
+	Dq9iamb3zzdm1MR0uxAf1zUzwVejVgfDPDflrQIt9L2sXSbktkbaGSIieZsVGMxCmMbbd8yxynX
+	lzDNHjqYHEO4y3dNPKooU3tnytA9cKrhdBkt9wUk01EGgadWSXHWtWlEqRmm1lCiNS3vlzuVuNe
+	u2m/xkY/F5YXPrJdv5TQ
+X-Received: by 2002:a05:7300:4628:b0:33b:dfe3:250d with SMTP id 5a478bee46e88-33e8dbc4687mr514090eec.23.1790110781046;
+        Tue, 22 Sep 2026 13:59:41 -0700 (PDT)
+Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:f16e:2102:25ad:9cdb])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33e96d497e1sm760952eec.25.2026.09.22.13.59.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 13:59:40 -0700 (PDT)
+From: "Hemendra M. Naik" <hemendranaik@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	jiri@resnulli.us,
+	jhs@mojatatu.com,
+	shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	vishy0777@gmail.com,
+	tahiliani@nitk.edu.in,
+	"Hemendra M. Naik" <hemendranaik@gmail.com>
+Subject: [PATCH net-next v8 0/3] net/sched: sch_fq_pie: add per-flow class statistics
+Date: Wed, 23 Sep 2026 02:29:21 +0530
+Message-Id: <20260922205924.32173-1-hemendranaik@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260918-net-next-mptcp-msg_errqueue-v1-1-dd77e1738248@kernel.org>
- <179001595171.2160803.3670624686905872378@kernel.org> <d6cdbc83-86a6-4c2a-ad99-29cdb83566dd@redhat.com>
-In-Reply-To: <d6cdbc83-86a6-4c2a-ad99-29cdb83566dd@redhat.com>
-From: David CARLIER <devnexen@gmail.com>
-Date: Tue, 22 Sep 2026 21:59:22 +0100
-X-Gm-Features: AcwNN1VUII6uOcsfxfr-62vUKq7jiIrNoNXoOzhNQ-DW9bOGJNbIJXNMHXPivns
-Message-ID: <CA+XhMqyGNBrd=Kt71gk2M+PC3bZxfPt7ujswBGe3pRAFiuz0PA@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/4] mptcp: support MSG_ERRQUEUE on the parent socket
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev-bot+sashiko@kernel.org, matttbe@kernel.org, martineau@kernel.org, 
-	geliang@kernel.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	horms@kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, 22 Sept 2026 at 14:30, Paolo Abeni <pabeni@redhat.com> wrote:
->
-> On 9/21/26 20:39, netdev-bot+sashiko@kernel.org wrote:
-> > Thank you for your contribution! Sashiko AI review found 2 potential
-> > issue(s) to consider.
-> >
-> > Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 2 =C2=B7 Low: 0
-> >
-> > If you believe none of the issues are legitimate, please reply to each
-> > issue of Medium severity or higher and explain why the AI is wrong.
-> > If any of them are legitimate and you plan to respin, please let patchw=
-ork
-> > know by including "pw-bot: cr" as a separate line at the end of your re=
-ply
-> > (one such reply per series is enough).
-> >
-> > - [Medium] The new error-queue splice is dead code for MPTCP-native dat=
-a:
-> >    its only accepted input (SO_EE_ORIGIN_TIMESTAMPING skbs on a subflow=
-=E2=80=A6
-> > - [Medium] Forwarded TX timestamps expose per-subflow identifiers inste=
-ad
-> >    of parent-socket byte-stream identifiers, breaking the=E2=80=A6
-> Sashiko comments look relevant to me. Basically this work makes sense
-> if proper support for mptcp-level tx timestamping is enabled and the
-> and sk_tskey is resolved at the msk level.
->
-> I underlook at the above during reviews on the mptcp ML.
->
-> IDK if someone is currently working on the missing work/bits.
->
-> /P
->
+FQ-PIE runs an independent PIE controller per flow but exposes no
+per-flow statistics. This series wires up fq_pie_class_ops to expose
+per-flow AQM state (prob, delay, deficit, avg_dq_rate) via
+'tc -s class show', following a similar pattern as FQ-CoDel.
 
-Agreed, nothing arms tx timestamps on the msk today. Let's drop the
-series for now.
+This patch series is accompanied by a companion iproute2 patch series that
+will be posted on net-next as well.
 
-I can look into it.
+Both the kernel and iproute2 patches can also be found in GitHub:
+- https://github.com/H-N41K/linux-net-next/tree/fq_pie_class_stats/
+- https://github.com/H-N41K/iproute2-next/tree/fq_pie_class_stats
 
-pw-bot: cr
+---
+Changelog:
+v8:
+- No code changes since v7.
+- Reword commit message to reflect usage of div_u64().
+
+v7: https://lore.kernel.org/netdev/20260919060125.38063-1-hemendranaik@gmail.com/
+- No code changes since v6.
+- Rebased over the latest net-next tree and re-submitted patch.
+
+v6: https://lore.kernel.org/netdev/20260917204225.275251-1-hemendranaik@gmail.com/
+- Address Sashiko review comments:
+  - Revert the fq_pie flows range to [1..65536]. 
+  - Also drop the accompanying selftest 83be change.
+  - Compute the per-flow delay with div_u64() on the full 64-bit
+    nanosecond value.
+  - Widen avg_dq_rate to u64 before scaling it by PSCHED_TICKS_PER_SEC.
+  - Document the 36 to 64 byte xstats growth in the patch 1 commit message.
+  - Fix selftest 83c0. The ping payload exceeded the TBF burst so no
+    packet ever reached fq_pie, and the missing -W left the run waiting
+    out ping's default timeout.
+
+v5: https://lore.kernel.org/netdev/20260902035231.81866-1-hemendranaik@gmail.com/
+- Addressed Sashiko review comments:
+ - Omitted .tcf_block / .bind_tcf / .unbind_tcf from cl_ops (statistics
+   only being exported; filter attach to fq_pie is now disabled).
+ - Dropped empty tc_fq_pie_xqd_stats placeholder; class_stats is a direct
+   struct member.
+ - Limited flows to [1..65535] so per-flow class handles fit in a 16-bit
+   TC minor.
+ - Rewrote selftest 83c0 with TBF + fq_pie, ping traffic, and
+   matchCount 1 on per-flow stats output.
+ - Updated selftest 83be for the new flows limit.
+ - Dropped the tools/include UAPI mirror changes from patch 3/3.
+
+v4: https://lore.kernel.org/netdev/20260727164056.106203-1-hemendranaik@gmail.com/
+- Fixed unaligned commit message; moved typo fixes to another patch.
+
+v3: https://lore.kernel.org/netdev/20260630183702.170798-1-hemendranaik@gmail.com/
+- No changes since v2.
+- Resent after the previous submission was deferred due to the
+  net-next tree closing during review.
+- Updated corresponding iproute2 patch in response to review comments;
+  kernel patches unchanged.
+
+v2: https://lore.kernel.org/netdev/20260614125000.6058-1-hemendranaik@gmail.com/
+- Addressed ABI backward compatibility issue for tc_fq_pie_xstats.
+
+v1: https://lore.kernel.org/netdev/20260531125314.22492-1-hemendranaik@gmail.com/
+- Initial submission
+
+Hemendra M. Naik (3):
+  net/sched: sch_fq_pie: add per-flow statistics via class ops
+  selftests: tc-testing: add fq_pie per-flow class stats test
+  net/sched: pie: correct tc_pie_xstats field documentation
+
+ include/uapi/linux/pkt_sched.h                | 20 ++++-
+ net/sched/sch_fq_pie.c                        | 86 ++++++++++++++++++-
+ .../tc-testing/tc-tests/qdiscs/fq_pie.json    | 27 ++++++
+ 3 files changed, 130 insertions(+), 3 deletions(-)
+
+-- 
+2.34.1
+
