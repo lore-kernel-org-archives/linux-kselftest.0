@@ -1,146 +1,114 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-99.mta1.migadu.com [95.215.58.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B91D440658
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 08:51:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ADE943DEA0
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 08:54:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790067070; cv=none; b=F59lz2uE0FCYt5XibcvCaP3IZRrv/cloGevjyJoe2W9UAWa75heFm0HFYxNXzHqf0exp+rQ5fa1SR07v5xWvqkdBmSBTrbcoNus514MJA5reMUtXdZCM1JFRs/fGuWqviYYAT0vc4roXuTaaB1OjVfTGbQgPYvsnEOWtBAdvzRM=
+	t=1790067302; cv=none; b=YGyh3W7dWNX6lTOCXLSPVjLzlmGd8dhxQvWHmX1K9AEGCDSKT5hFNTBRxYZeOkWBuusPUhWF4oqLn3g9RKOKUpCk0RVTElA6WaQrNeVR1sotWlygLNWfjm9ImBrtsdtLOKDPBjlAYU28Tl6PlCFFIjcXRm8EGVtI+BfvhUobfQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790067070; c=relaxed/simple;
-	bh=zvI+8GSETn7LNlbozl86U4Ok7dRLxjq4JpmI16q0F54=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XNVLfxeIbNJ1bJyeAqoHejVfuFCNLekOwi5nt888/hnibCelxSYQJl5T5C31u3fWtE/9hd5aLruKRUI1kNsyYG8RFCCU5fBTbIIo9NEAptXGe6wunO6BBMemO1YVWEa51yRtq79hKSuQC153c2ol5wPvSR+U8Qcrn5/UjYVAHaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=GYGFi7Cf; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	s=arc-20240116; t=1790067302; c=relaxed/simple;
+	bh=988pi3oTdtsnoS5j0ActZjzPjSaiob3jbZgYYhq8UUM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=I/Y0KVDusHeVXmJiw3iCwgXbX+uQW0GI7IfuQSMECkH7MPwWrjxs9R49o5HN1UFJHAS5wZqDgo6mCFwwhK4Y4sF2hCCgIqH2bz2t5YLNyqBIMh4+88k6k8UQkQOXyR05TzedEst6R2KR0EUnLDeBGLXMTwj+BPo/XAEUCZeUqT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jjWOtt7W; arc=none smtp.client-ip=95.215.58.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="GYGFi7Cf"
-Received: from [133.11.54.183] (h183.csg.ci.i.u-tokyo.ac.jp [133.11.54.183])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 68M8p4AY014493
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Tue, 22 Sep 2026 17:51:04 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=aSkso6VTuE1j2eIC6Omi4Exf0hrumTUhbwJQCS8v0Jk=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-ID:To:Subject:Date;
-        s=rs20250326; t=1790067065; v=1;
-        b=GYGFi7CfxySCHkGNYbviQhaWOIu1Icg3BpQNl8WTUTnxz6bpbIpzI/2GnR3wN+5C
-         /+NmBvMA6MgnGbzs3tydcuW8Joxi4k8evpn9t9aeX+GsspiZG8s3KAyzq4wQWZ9p
-         4pi4AkOg+S0lMC8DVWBSyu03KE3H6d+fhYpu3/ovlHVKtNzFYHIbX242v6ARhL4P
-         nuajrFOV+CvPgjNvzkEDCsQfQgY+Oj61G8zWDMJGWmdzCfp/7HzoNBELyQsAyDMY
-         I/W6QKkNfvvgU2nVb90KvmRugT+HS7wpKpX1ex1jGX3DymUno/Fcx7STsKXcXHms
-         tMDWY7Hnfy1e/O7ACYz74w==
-Message-ID: <67b1a5dd-372e-4548-a44d-ea77f38ea07f@rsg.ci.i.u-tokyo.ac.jp>
-Date: Tue, 22 Sep 2026 17:51:03 +0900
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jjWOtt7W"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=988pi3oTdtsnoS5j0ActZjzPjSaiob3jbZgYYhq8UUM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790067298; v=1; x=1790672098;
+ b=jjWOtt7Wwdw+7deOVWe+RlTVKbG2ojFs0jRO4hUj4FwYNbp1rijsngDUmTPOVUyiqdzZB9dq
+ J++McUz8Pd2MjTFvJFVh/GlaD6rYK0aGiR4HPGDmRzMzOu4jX384ORR+R1aKgAzHeEYkoY6S2lg
+ M8VxuachIl5ZyWQuVcP06js4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 7a67b773cacf3de3;
+	Tue, 22 Sep 2026 08:54:58 +0000
+X-Mizu-Trace-ID: 7a67b773cacf3de3
+X-Migadu-Flow: FLOW_OUT
+From: Hangbin Liu <hangbin.liu@linux.dev>
+Date: Tue, 22 Sep 2026 16:54:43 +0800
+Subject: [PATCH net-next 1/5] seg6: split final End process out of flavor
+ processing
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 09/21] KVM: arm64: PMU: Recreate events after MDCR_EL2
- changes
-To: Oliver Upton <oupton@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu
- <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Steffen Eiden <seiden@linux.ibm.com>,
-        Andrew Jones <andrew.jones@oss.qualcomm.com>,
-        Fuad Tabba <fuad.tabba@linux.dev>, Mark Rutland <mark.rutland@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Shannon Zhao <shannon.zhao@linaro.org>,
-        Randy Dunlap
- <rdunlap@infradead.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20260920-hybrid-v11-0-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
- <20260920-hybrid-v11-9-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
- <arImQ6SG7s1k9uJk@kernel.org>
-Content-Language: en-US
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <arImQ6SG7s1k9uJk@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260922-srv6_flavors_endx-v1-1-4d01c05c47b7@kylinos.cn>
+References: <20260922-srv6_flavors_endx-v1-0-4d01c05c47b7@kylinos.cn>
+In-Reply-To: <20260922-srv6_flavors_endx-v1-0-4d01c05c47b7@kylinos.cn>
+To: Andrea Mayer <andrea.mayer@uniroma2.it>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Hangbin Liu <liuhangbin@kylinos.cn>
+X-Mailer: b4 0.14.3
 
-On 2026/09/22 15:54, Oliver Upton wrote:
-> On Sun, Sep 20, 2026 at 08:15:50PM +0900, Akihiko Odaki wrote:
->> +void kvm_pmu_apply_mdcr(struct kvm_vcpu *vcpu, u64 old, u64 val)
->> +{
->> +	u64 changed = old ^ val;
->> +
->> +	/*
->> +	 * HPMN determines which counters HPMD and HLP apply to. Changes to
->> +	 * these fields require new perf event filters and sample periods.
->> +	 */
->> +	if (changed & (MDCR_EL2_HPMN | MDCR_EL2_HPMD | MDCR_EL2_HLP))
->> +		kvm_pmu_request_recreate(vcpu);
->> +	else if (changed & MDCR_EL2_HPME)
->> +		kvm_make_request(KVM_REQ_RELOAD_PMU, vcpu);
->> +}
->> +
-> 
-> Urgh... I'm not a fan of this. Can you just modify kvm_vcpu_reload_pmu()
-> to discard all backing perf events and recompute them only for enabled
-> PMCs? We set KVM_REQ_RELOAD_PMU pretty rarely.
-> 
->>   	__vcpu_rmw_sys_reg(vcpu, PMOVSSET_EL0, &=, mask);
->>   	__vcpu_rmw_sys_reg(vcpu, PMINTENSET_EL1, &=, mask);
->> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
->> index 75624725adf1..7dd2cafce247 100644
->> --- a/arch/arm64/kvm/sys_regs.c
->> +++ b/arch/arm64/kvm/sys_regs.c
->> @@ -3114,17 +3114,22 @@ static bool access_mdcr(struct kvm_vcpu *vcpu,
->>   	}
->>   
->>   	__vcpu_assign_sys_reg(vcpu, MDCR_EL2, val);
->> -
->> -	/*
->> -	 * Request a reload of the PMU to enable/disable the counters
->> -	 * affected by HPME.
->> -	 */
->> -	if ((old ^ val) & MDCR_EL2_HPME)
->> -		kvm_make_request(KVM_REQ_RELOAD_PMU, vcpu);
->> +	kvm_pmu_apply_mdcr(vcpu, old, val);
->>   
->>   	return true;
->>   }
-> 
->> +static int set_mdcr(struct kvm_vcpu *vcpu, const struct sys_reg_desc *rd,
->> +		    u64 val)
->> +{
->> +	u64 old = __vcpu_sys_reg(vcpu, MDCR_EL2);
->> +
->> +	__vcpu_assign_sys_reg(vcpu, MDCR_EL2, val);
->> +	kvm_pmu_apply_mdcr(vcpu, old, val);
->> +
->> +	return 0;
->> +}
->> +
-> 
-> Just keep the old ^ new test inline for access_mdcr() and set the
-> request unconditionally from set_mdcr(). In the usual case
-> KVM_REQ_RELOAD_PMU is already set on a vCPU that userspace is restoring.
+From: Hangbin Liu <liuhangbin@kylinos.cn>
 
-Hi Oliver,
+Move the final End forwarding step out of end_flv8986_core() and return
+success to the caller instead.
 
-Thanks for the feedback. I'll make both changes for v2.
+Currently end_flv8986_core() performs both RFC8986 flavor processing and
+final End forwarding by calling input_action_end_finish(). That couples
+flavor handling with the End-specific forwarding path, which makes it
+hard to reuse the same flavor logic for other End variants.
 
-I originally tried to preserve existing behavior and keep things 
-consistent, but I agree that simplicity is much better here given how 
-rarely KVM_REQ_RELOAD_PMU is set.
+Split the two steps so input_action_end() does:
+  1) end_flv8986_core() for flavor processing
+  2) input_action_end_finish() for final forwarding
 
-Regards,
-Akihiko Odaki
+This keeps end_flv8986_core() focused on RFC8986/PSP flavor semantics
+and makes it easier to plug the same flavor core into End.X/T later.
+
+Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+---
+ net/ipv6/seg6_local.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+index d1070aec7b72..584e6aca3893 100644
+--- a/net/ipv6/seg6_local.c
++++ b/net/ipv6/seg6_local.c
+@@ -804,7 +804,7 @@ static int end_flv8986_core(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+ 		goto drop;
+ 	}
+ 
+-	return input_action_end_finish(skb, slwt);
++	return 0;
+ 
+ drop:
+ 	kfree_skb(skb);
+@@ -816,6 +816,7 @@ static int input_action_end(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+ {
+ 	const struct seg6_flavors_info *finfo = &slwt->flv_info;
+ 	__u32 fops = finfo->flv_ops;
++	int ret;
+ 
+ 	if (!fops)
+ 		return input_action_end_core(skb, slwt);
+@@ -829,7 +830,10 @@ static int input_action_end(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+ 	 * information extracted from the packet, e.g. presence/absence of SRH,
+ 	 * Segment Left = 0, etc.
+ 	 */
+-	return end_flv8986_core(skb, slwt);
++	ret = end_flv8986_core(skb, slwt);
++	if (ret)
++		return ret;
++	return input_action_end_finish(skb, slwt);
+ }
+ 
+ /* regular endpoint, and forward to specified nexthop */
+
+-- 
+2.55.0
+
