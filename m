@@ -1,126 +1,301 @@
-Received: from mail-dl2-f42.google.com (mail-dl2-f42.google.com [74.125.229.170])
+Received: from mail-qk2-f43.google.com (mail-qk2-f43.google.com [74.125.230.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC0074BEE5E
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 21:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC321544D5C
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 22:05:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790110826; cv=none; b=pkfYSkEca7CCGfEOxYv9S9KEuKmndP+d/MMCAsbzkqnS19KH41lcIxgW3x4qxLB2390ezjwzh5mwpdclDIzvcWQIVRtmbcopMnHacwmqMgBSAw1O9+5VhqeIgtA0iVF/J556LWsmpyH1Twt1pm0WExJqevJdxJlsfgkU41tGIDI=
+	t=1790114714; cv=none; b=SyNlXiSFmCcJRaDM2cceg8y2fMTdKYtq0V0Z7oujNlJSlh5PX2PanaNaLhEuZJWr2xGafcRL1XUmI1kjnPMeahbFR8PTvdby3eVl+bp/Oj9ww+8rHVSS6PIvsAKrODpXfLnavC2IZHFW7yXcL6JWXrmp/bQVCxlmXmLBP5WW/IM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790110826; c=relaxed/simple;
-	bh=3sf9YuBAZ2zv9t1g2dgGBjeM9ZfIN0Yd/tz3mo8MbxA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=hVhwG9of8Y54EWGGPlU2WzeXEGz8saEC9UB3uh6XE0jEdJ8lSdcbt/kBqyUN/+tRk0FEHsRgLk77Wcqw3dyCm9JkU9W8o6LSDbmnkeDNUR1UYy53jiYmZ6HRxAkiv9CLAzVw/m7aDa4IigCSwFOeXS/IXebcTLjhtuN9ld0MvNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q2nQsdrv; arc=none smtp.client-ip=74.125.229.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790114714; c=relaxed/simple;
+	bh=RRH1Vy+Zp/3SPkBGo9aHf3zXVNOp+j6j9mQwfJznZmI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sk/cinIXiBtAu8oPNFOUrXSOn5Ha3Mwl3dNCOf1HzgTu9V9bVQtP1zRjLegvYdoyPrNPKBNhHOhBQ+JuL+eAIbB9IUaHpXVyCJSnml0AkD/6wuIsX6x/mBUOZH1ARH64zpsz16L0nkUZbWsrobVyaumZ1vii3LrB1GIp+eBbwQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=qyAeO4Im; arc=none smtp.client-ip=74.125.230.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q2nQsdrv"
-Received: by mail-dl2-f42.google.com with SMTP id a92af1059eb24-144efd1ea76so237506c88.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 14:00:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="qyAeO4Im"
+Received: by mail-qk2-f43.google.com with SMTP id af79cd13be357-939109f067cso27088785a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 15:05:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790110809; x=1790715609; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=9ia2nV/eyt+q8ysG7SMAINIwAk3HmajymljLtHeWJQM=;
-        b=Q2nQsdrvQlQpovCf1UpLwwn/Jy+a9y3Ay65lhysurWe5sGeHPBvz+ceXmmYHdNeFIz
-         B5OJ/R7NeI8uFDPhayhQJkdvkTDFGmJPguQspWGP+TSXZj1bf48rMxzkIP7aiVovtqcK
-         qDyK2cFZMEOal4k1L7t/dZnCtMWtLdoo3/Bi0KxF4phyGRK75SbImNT4a6H3OK+FRCIz
-         dUxu6nSzZsLEGuCToXObsVnoFBVW0j7199S5zO+SCqFn5RA8wDGb3DhCHMvt+YxE4kFf
-         xtU70QbnCX4ShALAuBvD1riHnrqUIZcsEYppCiYejJeiDgumjpFB0l5qEO/nxuIP1/jo
-         wVhQ==
+        d=gourry.net; s=google; t=1790114700; x=1790719500; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=anrpgiCeXWmBr1az5PEHzf4nylW2QouLqia/wBZNbT4=;
+        b=qyAeO4ImlxQWHWrY3rOI+d0jNqWFqqyELQ56tlRiHnq25pIvKuTEJrR3OrKTFcd4FP
+         IBWytxk9SOvSacV53yQXEJxrCz7JFBDHXXmbeZzXj0EB/0NOWsfpSVn6yoXESESrC7en
+         dWDirDwk2QkTXluyyhV/DpGjnVcz/j2jc1v8BpLdtDbcf5sjhv0PBXWkeMqUn2k3Taqh
+         Br/RM3e48CnC2TjK95UIB1Un9r7oOaUxLLkos8lL9ixrdl11BIKHZKIuPajT92vSGr1Q
+         qIAPWwqVvLVWxLDUlYny2dsxjQOz/CXVwD1OBKCicazpUsOUeEuMWOX7N+ZjO7LVxQvN
+         v/GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790110809; x=1790715609;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9ia2nV/eyt+q8ysG7SMAINIwAk3HmajymljLtHeWJQM=;
-        b=EeeUPASHj4i/EHIZjkRtQSpW+kFIFoLOFnyal0Nbd3viUwGWPec/Oo4fYvshChLckB
-         hez3847A1XdA3paRONn3Rp1LhcPhpXIHe2kR6CahfVjEU6bxFMBNncQ9tRZ3ycXlCCJm
-         kfljpwUT40K72RhPm8QYIQoM0oSyzswFQaOzcx47vtOqLN6Db1HmN5oXgPFGEqzPTl8A
-         DcHaYmOcaxTduonqlgZzUrhX+N0kTq710NGDgpFNZlhgdTdsgHz/bTwIQLBL0fyO+xCd
-         z0orf/RndqH67qu6Ce3JG5XkZdPe4/XPoUP9rfQ6VC8rhYlPWBJcjpUYICVG/SAm4Pyf
-         vksg==
-X-Forwarded-Encrypted: i=1; AKwUvBxW8IIRo5qTnJHlmNBBf943+zF5s66r1FBNjwxiHdh9kjhfw10F7wugX6d7waCuvWr3tN5mq7cSytYVNdsXeTE=@vger.kernel.org
-X-Gm-Message-State: AFuF++n6Yi3kIyEMHm+lXqr+fJrzXGUdp8VFOuj+ffEOmJgtBwl/tG9a
-	6FG1GEm+8jpQPaibTI1A6WcePfkDLTAE7O7qSw5oBCgiFo75T6HD1qWCtRdDkYHH
-X-Gm-Gg: AYBFou3ZpDXLdCbcGExjJ7DuYVx62azlyDjx4AuVaEW6yD6uAAtm11/OkHqXT0JauwB
-	QxvRCUVZGsDOk3Srwqph9zHeRI8SzEuctkqoEXlolbJruwBfJDg583thS9q5Y3QT0Rm81BsBRYX
-	3SVlD8Upwyt6u7e/yxIEe7aknT9vHZcL/iPe6RJDc7/XlwzlhM2n7lZmENyPFjqck8wyC0JkYbD
-	xTZXv9PPeibPh3ns/c93y2B0tT39vE5fylJTK0EUoAikmNWye7fACnpcZ/RvuRZ48IAlKW1zBkM
-	5UbTETl5neM8/xGaKXLOStvkacGB8wV+LXWuCPWI8OfXWvsGwaaKpFeT8Ct0VmFQMFlj5aaw5xt
-	ajg8upecPys2+Zqd0JY0aRXmVhCzKapF9RcTZDTJRDIp9AXlTTTXfZjF/WKYfpiG/p20uS5jhv3
-	aA4OBuil7i5BjmESsa7LE6tjQBCvfo2YN2UQQrsHfv/nHmvR2A+4I31LQX2suX647LgpY0ki9zc
-	Y8MO0Ekh1mz+hmK6K59DUvbLjX3QycpV//1pJKLuk1WAF6dvzCNrIbd2GnXKq5zFS/bmH8oHi4=
-X-Received: by 2002:a05:7022:e20:b0:143:2973:323f with SMTP id a92af1059eb24-144f9154f12mr1009905c88.28.1790110808584;
-        Tue, 22 Sep 2026 14:00:08 -0700 (PDT)
-Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:f16e:2102:25ad:9cdb])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33e96d497e1sm760952eec.25.2026.09.22.14.00.03
+        d=1e100.net; s=20260707; t=1790114700; x=1790719500;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=anrpgiCeXWmBr1az5PEHzf4nylW2QouLqia/wBZNbT4=;
+        b=LTe0+uqzD14Umk8bgIrxc/ncltgP4CRK628iV2enQ3WAxoseVhPagEOrHeBHYpFftf
+         U5his/B/4C8N69JF60ZXnzv3MYmElwJyIL7ObMqj6wCpvRfia1ww5bOfYmbXfu6lXAE9
+         youy8zLOkwxwVfSsdLvxH4vC2yCHO4Rrwz+i+mRRRmiLwQ8MfvkJ/0nr3u3j27LG3wcH
+         inx7wGAs4TweuqOKqQVdRjMm2FYreCmGF7GNrO0srtBWXg81WIJReyg9ZDfmH2YTwgoA
+         F2vGPBkewf/f4fqyw3twqZ/uN/TLbUUuH6piM9/snt74IEiDJzGcLTxrSTrCEs7Xayo2
+         Zm4Q==
+X-Forwarded-Encrypted: i=1; AKwUvByW/E7105912EOA7ksI/rJuq5e+/R0VzfJZi1lG+jrYWRJ7jNzQL4XgcnRtJR56Bo77BY2xjAahjo7mUte9w4s=@vger.kernel.org
+X-Gm-Message-State: AFuF++lOhZKcOyiGc4s7oA+bNU52T06MtYdYCiTAf1l7U1pllr2G65+X
+	or034cZELG9LYbCFYyRdmJYjQHuFi3n0r6AFOGKEO28F6JuPqfrsTjhGdO1HHZBBYaQ=
+X-Gm-Gg: AYBFou3QsjUPPmjvNJEU6yIyKuIj8Ie5OyK1E6fJMa2Hkq8vZxrK9nFxWNp6lJ3vxh1
+	H2mNilvvGodBiqYHLvqKln4ma5VUxBLdBOO/IEdMT4u5Ti3qMuQLF8yd68GimXEZubVeUB2A+Iz
+	bixxXCJAkt5I9T8OC3wtNIO5Pv0hsVOZcC+hMgHHftS3wInMqosF0E3qgoBlbX/6jXPrhOoTB03
+	x/OSiXmllIbbIw7QERZJapdhZF/z+lOSjQY7e0Mg/Q+6ODh8CteGPod3LdXZSfH69EwAyXxwdXt
+	AC+lFYQ+HmlENI0CCCJVWQCHJtOCtt+C/TvXDx/RFkwyxus07BLW7LR1fJKco4XTY4O7LCWPegA
+	qUwGluo59L/emQYGqiqk3KF42XddkmbEwcT9vMK1XX8S1tKiBoGK42MGipeGi8jRiFJOJ2IMjSk
+	LwWnS4te3TvIN9BR7JbBYV8itaLtQYRMfQsfeYchltCe6sw9zUw/ugUIl54d7cNpoS/KyTul9oz
+	T1uJ35mSHZXMR6HFXalnkBRHjNdoReOoqhGfvPExTuVPhYcLj+Uuxs=
+X-Received: by 2002:a05:620a:4890:b0:939:a1cc:f234 with SMTP id af79cd13be357-93c2509dec2mr122764985a.5.1790114700080;
+        Tue, 22 Sep 2026 15:05:00 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93c284a1cd9sm4296985a.39.2026.09.22.15.04.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 14:00:08 -0700 (PDT)
-From: "Hemendra M. Naik" <hemendranaik@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	jiri@resnulli.us,
-	jhs@mojatatu.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	vishy0777@gmail.com,
-	tahiliani@nitk.edu.in,
-	"Hemendra M. Naik" <hemendranaik@gmail.com>
-Subject: [PATCH net-next v8 3/3] net/sched: pie: correct tc_pie_xstats field documentation
-Date: Wed, 23 Sep 2026 02:29:24 +0530
-Message-Id: <20260922205924.32173-4-hemendranaik@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260922205924.32173-1-hemendranaik@gmail.com>
-References: <20260922205924.32173-1-hemendranaik@gmail.com>
+        Tue, 22 Sep 2026 15:04:59 -0700 (PDT)
+Date: Tue, 22 Sep 2026 18:04:56 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Arun George/Arun George <arun.george@samsung.com>
+Cc: linux-mm@kvack.org, Zhigang.Luo@amd.com, balbirs@nvidia.com, 
+	brendan.jackman@linux.dev, yuzenghui@huawei.com, apopple@nvidia.com, alucerop@amd.com, 
+	matthew.brost@intel.com, akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+	liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
+	mhocko@suse.com, corbet@lwn.net, skhan@linuxfoundation.org, 
+	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, djbw@kernel.org, 
+	vishal.l.verma@intel.com, dave.jiang@intel.com, alison.schofield@intel.com, 
+	osandov@osandov.com, jannh@google.com, pfalcato@suse.de, jackmanb@google.com, 
+	hannes@cmpxchg.org, ziy@nvidia.com, pbonzini@redhat.com, osalvador@suse.de, 
+	joshua.hahnjy@gmail.com, rakie.kim@sk.com, byungchul@sk.com, ying.huang@linux.alibaba.com, 
+	kasong@tencent.com, qi.zheng@linux.dev, shakeel.butt@linux.dev, baohua@kernel.org, 
+	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, yury.norov@gmail.com, 
+	linux@rasmusvillemoes.dk, longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org, 
+	mkoutny@suse.com, sj@kernel.org, jgg@ziepe.ca, jhubbard@nvidia.com, 
+	peterx@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
+	ryan.roberts@arm.com, dev.jain@arm.com, lance.yang@linux.dev, usama.arif@linux.dev, 
+	xu.xin16@zte.com.cn, chengming.zhou@linux.dev, roman.gushchin@linux.dev, 
+	muchun.song@linux.dev, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	driver-core@lists.linux.dev, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
+	linux-debuggers@vger.kernel.org, linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
+	cgroups@vger.kernel.org, damon@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	kernel-team@meta.com, hokyoon.lee@samsung.com, wj28.lee@samsung.com, 
+	gost.dev@samsung.com, vikash.k5@samsung.com, d.bueso@samsung.com
+Subject: Re: [PATCH v5 00/36] Private Memory NUMA Nodes
+Message-ID: <arL2eTRaDeR3DCQx@gourry-fedora-PF4VCD3F>
+References: <CGME20260720193443epcas5p167fa7d8490edfb4d8c0aa6a259db058f@epcas5p1.samsung.com>
+ <20260720193431.3841992-1-gourry@gourry.net>
+ <963815509.21784796303385.JavaMail.epsvc@epcpadp1new>
+ <amJGUuBZ2857QjDB@gourry-fedora-PF4VCD3F>
+ <360067785.01790071202608.JavaMail.epsvc@epcpadp1new>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <360067785.01790071202608.JavaMail.epsvc@epcpadp1new>
 
-The comments describing struct tc_pie_xstats do not match the values
-exported by the kernel.
+On Tue, Sep 22, 2026 at 03:27:44PM +0530, Arun George/Arun George wrote:
+> Hi Gregory,
+> 
+> Thanks for sharing the working branch.
+> 
+> Some of us at Samsung are testing the series (both v4 & v5) on a 
+> compression capable CXL expander and are observing encouraging results.
+>
 
-Update the delay field comment to microseconds (PSCHED_TICKS2NS() /
-NSEC_PER_USEC). Update avg_dq_rate to bytes/second (avg_dq_rate *
-PSCHED_TICKS_PER_SEC >> PIE_SCALE).
+This is really cool, thank you so much for spending the cycles to test.
 
-Documentation-only; no UAPI layout or runtime change. Touch
-include/uapi/linux/pkt_sched.h only
+I'm working on getting a v6 out soon.  Glad to see the progress!
 
-Signed-off-by: Hemendra M. Naik <hemendranaik@gmail.com>
-Signed-off-by: Vishal Kamath <vishy0777@gmail.com>
-Signed-off-by: Mohit P. Tahiliani <tahiliani@nitk.edu.in>
----
- include/uapi/linux/pkt_sched.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Good things first! We feel that the isolation using private nodes and 
+> the capability selection using NODE_PRIVATE_CAP_* work functionally well 
+> for the compressed memory use cases.
+> 
+> On improvement points, we observed much higher 'page_faults', 
+> 'allocation_stalls' etc. which contributed to the higher tail latencies 
+> in some tests. I hope these are already part of the optimization plans. 
+> The higher latencies might have resulted from the write_protection 
+> applied to the private node, I believe.
+> 
 
-diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
-index 9c0c9787f0c3..969fa30efae7 100644
---- a/include/uapi/linux/pkt_sched.h
-+++ b/include/uapi/linux/pkt_sched.h
-@@ -920,9 +920,9 @@ enum {
- 
- struct tc_pie_xstats {
- 	__u64 prob;			/* current probability */
--	__u32 delay;			/* current delay in ms */
-+	__u32 delay;			/* current delay in microseconds */
- 	__u32 avg_dq_rate;		/* current average dq_rate in
--					 * bits/pie_time
-+					 * bytes/second
- 					 */
- 	__u32 dq_rate_estimating;	/* is avg_dq_rate being calculated? */
- 	__u32 packets_in;		/* total number of packets enqueued */
--- 
-2.34.1
+Yes, this is expected, and I think there are questions about how it
+should be optimized both in a provisioning sense and a software sense.
 
+For example, exposing a full memory expander as 100% compressible may
+not make sense - given that this could many a lot of memory.  I have
+some data that shows it may make more sense to split a memory expander
+into two regions to better fit the compressible region to meet the
+actual capacity the cold-tail is capable of consuming.
+
+On the software side there may be some ability to adjust this at
+runtime with hotplug instead of requiring a reboot, but I think that
+needs to be experimented with.
+
+> On the tools side, we used MLC and Taobench for the tests.
+> 
+
+Great! I also have some TaoBench and fio results i'm looking to share,
+glad to have some additional peer review using Tao.
+
+> Note that our intention for this phase of experiments was to test only 
+> the 'private node' layer based isolation, and not the cram and below 
+> layers for the compressed memory. Therefore we did not enable/utilize 
+> the compression capability in the hardware for these set of experiments 
+> (enabling compression would require the cram level ballooning/memory 
+> shrinking and cxl level interfacing driver to the compression device). 
+> That would be different set of experiments where we would be testing the 
+> cram balloon shrinkers and our alternate algorithms (upstream targeted). 
+> So cram and below layers were used only for enumeration of private node 
+> regions for these tests and not for the run-time memory shrinkers.
+> 
+
+Agreed, i'm looking forward to getting past the isolation bits and get
+more focused on the compression implementation details.
+
+> ======= Test Methodology ==============
+> 
+> We explored these 3 cases:
+> 
+>     1) (Baseline – existing CXL infra):  DRAM 16GB + CXL 32GB. Here we 
+> used the existing CXL driver infra to enable the device. No private node 
+> is involved. And compression is disabled on device.
+> 
+>     2) (private node in default write protected path): DRAM 16GB + CXL 
+> Private Node 32GB. Here private node infra is used to enable the device. 
+> And compression is disabled on device.
+> 
+>     3) (private node with no write protection): DRAM 16GB + CXL Private 
+> Node 32GB. Here private node infra is used to enable the device without 
+> the write protection/fencing enabled. Compression is disabled on device. 
+> We could not complete these runs as they resulted in kernel panics. 
+> Guess the code path is not stable yet for this (We had hoped that case 1 
+> and case 3 results would be similar). We also observed some unmovable 
+> page warnings logs in 'dmesg' before crash (might be related to the 
+> panic). Adding the log snippets at the end.
+> 
+
+Very similar to my test setup, seems like good signal we are of similar
+mind on the use case.  (For readers: there was no coordination here).
+
+I personally did not test private-node without write protection,
+although it makes sense to test the throughput of a demotion-only
+node as a baseline.  Smart.
+
+My guess is there was probably a reclaim throughput issue, or there may
+have been a bug in the v4/v5 code.  I will look at adding some pressure
+tests to my suite that test demotion-only explicitly.
+
+> ========= Results summary ===================
+> 
+> Private (CRAM) node performance is lower compared to a normal CXL memory 
+> allocation path. VM stats shows more page_faults and allocation_stalls 
+> on the private node case. Could it be the allocator waits for migration 
+> path to demote pages to private node? Or the actual hot pages in dram 
+> got demoted to private node to make space during overwrites? We will try 
+> further analysis on this.
+> 
+
+- allocator waits for migration?
+  
+  Yes.  And worse, once the node is full, migration will fail and you'll
+  swap directly from the top tier and reduce your reclaim behavior on
+  the lower node.  It becomes very important to push proactive reclaim
+  on a demotion-only tier to ensure there is sufficient headroom to
+  receive demotions in the future, since direct-reclaim basically never
+  targets a lower-tier on the first pass.
+
+  There's a big discussion about whether tiered systems need to invert
+  their reclaim behavior (reclaim from the lowest node first to find
+  progress there, then do demotion - rather than the other way around).
+
+- Hot pages in dram 
+
+  Also yes.  The comparison to make isn't only against a raw CXL node,
+  but also against Zswap or Zram or Swap.  How does the workload fair
+  on a system with 16GB RAM and 32GB Zswap/Swap?
+
+  This is important context.
+
+> ========== MLC Experiments ====================
+> 
+> CMD:
+>    $./mlc --loaded_latency -j0 -c0 -b1g -k1-15 -W5 -r
+> 
+> Experiment Results:
+> 
+> 1. (Baseline) DRAM 16GB + CXL 32GB
+> 
+> Inject  Latency Bandwidth
+> Delay   (ns)    MB/sec
+> ================
+>   00000  686.18   40137.5
+>   00002  686.69   40124.0
+>   00008  709.74   40362.7
+...
+> 2. (private node in default write protected path)
+>      DRAM 16GB + CXL Private Node(Uncompressed) 32GB
+> 
+> Inject  Latency Bandwidth
+> Delay   (ns)    MB/sec
+> ================
+>   00000  320.09   12186.2
+>   00002  543.42   22726.1
+>   00008  482.11   28385.2
+...
+> Takeaway: Our MLC tests show a trade-off between the two configurations. 
+> During low inject delay, the private Node is faster. But when inject 
+> delay goes high, the baseline shows better latency. Could it be the TLB 
+> cache effects?
+> 
+
+These latency results suggest to me that the memory being tested was
+always DRAM, though the initial memory fault would have been CXL.
+
+i.e. even if the memory was faulted directly onto the node via
+mempolicy, the very first write to it would have caused promotion.
+
+If you dropped the write protection you'd probably see it equals the
+baseline.
+
+The bandwidth numbers support this.  Higher stall, but faster latency
+means the migration was more beneficial for latency than letting the
+memory sit on CXL.
+
+Neat.  I'm not sure these results are particularly useful in describing
+how a workload would react.
+
+> --------------------------------------------------------------------
+> Case 3 dmesg log snippet:
+> 
+> [   82.525741] page: refcount:1 mapcount:0 mapping:0000000000000000 
+> index:0x0 pfn:0x5f5800
+> [   82.525753] flags: 
+> 0x17ffffc0002000(reserved|node=0|zone=2|lastcpupid=0x1fffff)
+> [   82.525762] raw: 0017ffffc0002000 ffefc85717d60008 ffefc85717d60008 
+> 0000000000000000
+> [   82.525764] raw: 0000000000000000 0000000000000000 00000001ffffffff 
+> 0000000000000000
+> [   82.525766] page dumped because: unmovable page
+> ..............
+> 
+
+Was this memory hotplugged via cram.c or did you replicate the code and
+hotplug it another way?  If so, did you hotplug it as ZONE_NORMAL or
+ZONE_MOVABLE?
+
+For a compressed tier, it must always be hotplugged as ZONE_MOVABLE,
+without exception, because otherwise it can allow a GUP pin or kernel
+allocation that would eventually become permanently stuck there - and by
+definition of a compression tier must be 100% movable memory.
+
+~Gregory
