@@ -1,92 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AEB45678E9;
-	Tue, 22 Sep 2026 17:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A9B49363D
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 17:36:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790098307; cv=none; b=joBvT4Na35XoxG1yPcKhiVlVJlc4j+ZE93jYsmV3m00pv82XFExvAGoU8sANRL2nMkBD0YznX8vi6YiU7BaGTuO8ki4el9aqA/tZiECgfwUmHioSlBfRNGRLG/3+O0jgSumbVRaKqwD39iGheGI2VZHlueMD76GOKtWxtLM6LPM=
+	t=1790098612; cv=none; b=GPMQHtGoTm6MuEQmn8YI5lUBQ2NhTXwyMUNgHzoZLfovcNEjw1aIbhifcgiokyKruiqqyLLcK76JqbmEEmiNotbNzxzC25wC9iee9/OpEO2+yR1SF31Yh3wxJNZPu6OPgikV+92uHqVg89lXTSLi5vUahcRY+CBTWWA8nf79YJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790098307; c=relaxed/simple;
-	bh=DBGZQMQHw71fFKuufWjC788bXvFI2Rc4VkJqrwQ3xbo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KEJ5yk4JjaiPam3iLTF29S7u44kD27DxEdGyKaXy6fspabgUPu2El5tsHgG10gaK7FMw8xWogAHN9kDFmM7PFB3MtdSVn6LYi8XIgNryFW5IrhDOv+COp05WWSWx2QkDPK9nI1uby6EF8rutEBUGdYDSUh9IPKNNG1NbfRtatrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e3bN9/Il; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790098612; c=relaxed/simple;
+	bh=pqfxOYdbk3G5uQ189p1pwNugqSafNpPZSMqnl+pMNDk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=DrMCweQi6mxwyz/wsmeYq2FnMMr1DjKe0jHzo7cJ0zt0UZo1Opq7cgfNGysG2u25U+GaW+iY9x+vPxnRj7e73TxB4bbsaZLM5H8R/25BQ1Gab16ShAwpSx6Mj71lgZuGA5wGq6fD1uN8ihdsPv91ZSeb1rZ78K96ncVp2W/K5go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oM1ZLTAy; arc=none smtp.client-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e3bN9/Il"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C24721F000FF;
-	Tue, 22 Sep 2026 17:31:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790098302;
-	bh=pU5MDTrWcIPn0f9bdi37/3G3L8QSWUVNbMpQbtysNeQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=e3bN9/IlMT809Q8HNhWzBbshsNy89YNRI7T0pc1ajitGhILxYyiV98IR/ZSzJM8lp
-	 CZI38mav8zQha53451wcKYvERML7esM1Yxop/8fbqA6r7r5aZW+qerhlbuDm/BZDfZ
-	 /7TgtU8BOaElRXDXXaoO0piTUuQjVhQIEgdtbJRDfcBaQ0+ss2CrbTTT3l2xXmVNVO
-	 v0UHqAr+pPOon07E45yUbrlCPQzXGTanAqhi9FcceO6ADqo9AxTCnbJqXX/d6SLyjp
-	 2NP6u7BByvQ7WsFllI7WWRHl9pQM8jd4l/neE6SD31Y02FHkvV3ryeiz9e+xmUdHh0
-	 nnl2rOwNAtBxw==
-Date: Tue, 22 Sep 2026 18:31:33 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Oliver Upton <oupton@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Steffen Eiden <seiden@linux.ibm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Mark Rutland <mark.rutland@arm.com>, 
-	Fuad Tabba <fuad.tabba@linux.dev>, Randy Dunlap <rdunlap@infradead.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, 
-	kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Jack Thomson <jackabt@amazon.com>, Jack Thomson <jackabt.amazon@gmail.com>, 
-	Alexandru Elisei <alexandru.elisei@arm.com>, Vincent Donnefort <vdonnefort@google.com>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Sean Christopherson <seanjc@google.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Leo Soares Passos <Leo.Bras@arm.com>, 
-	Wei-Lin Chang <weilin.chang@arm.com>
-Subject: Re: [PATCH v3 01/14] KVM: Allow architectures to disallow pre-fault
-Message-ID: <arK7auq5X5TzViWO@gremlin>
-References: <20260922-kvm-arm-prefault-v3-0-787bd3bc7e3f@kernel.org>
- <20260922-kvm-arm-prefault-v3-1-787bd3bc7e3f@kernel.org>
- <arKxjsxuO1F5ExrY@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oM1ZLTAy"
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2dc92350888so1217765ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 10:36:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1790098611; x=1790703411; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gMBUcj03qoQAyG1GKCyEGFSnmBsF37yewOw9nu3IXkc=;
+        b=oM1ZLTAyP/iuDIrEN/1s/ssMc/qjOS4GrxyBzqHMVVERK2b3yj7f1Tyqc9F3udzJ/S
+         h7JBV0Z+qXLBd9KMzr0uhXevBPRDNSTDckL9Af+u99518jNLE3RsiuP9HN9twCvckg3y
+         /qlNsySx2Cm64UCewyIdM93WDi3UsNzXw0RHuGdgb+kvdzh0d5AtZq55ohB6Rqix/Bb7
+         qOf1EPwQNagvNnKVog9RgJrnzuyVJJ88V2vRLsznimq70j6+OHs62jP9kyp+bHiQNFJ/
+         PDWwIg3KSqj7aKgpHg2c/DEG9FZnF2wGnq5q5trQjcUc4t8XqEJAtajrmbuGfLkd8cRp
+         I/zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790098611; x=1790703411;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=gMBUcj03qoQAyG1GKCyEGFSnmBsF37yewOw9nu3IXkc=;
+        b=LZJfPpiiglWlyxR4Pe7f6syQg0NL250yRWEG5D571eMEwUiFeju0KXc6JN1oxYUsMf
+         ZO+QkTTMt/qTdBrQn23TXrlzfeIrFiho+04gUTdoefWEmhzZv6ubgEPdHdaAamuz0OTg
+         z6Dw3WxhdfZ4GT5fqxI4aFggQOHMdR5X46RQXdTRLiFonws+uIRhSFWQhvHe5zvQXNUs
+         YYAbMR9uyOthqSLsDr8MPjzcuA4yLIuSgm1HPYLHzznVrwbfEY112kTn24+qY392LLOv
+         RvxhVlndxRl4rXmKh/X4e7RKKqWpJeXKilN5ZaOUyKhcBmESuQ6PsbnJr02wI7dfO8M6
+         5GfA==
+X-Forwarded-Encrypted: i=1; AKwUvByOLBAVxhUyEu+8wD4We1Gl7ewDINEpw6LA2K6a5o3n/BkJsMUbxTgheboQeHYGURMkLsEDhv0d+2FGE1XqE6A=@vger.kernel.org
+X-Gm-Message-State: AFuF++kTW+RER2XWA/Qn0j+u/G8/FsfCvFRuImrOONGnVrAxPtJp9dam
+	s/PPGgtozpzI3I38FV21qx1pyfAqXAQKIR10sHDPaHWavmmoEgzr384ZtLUml3szI6Jch7GFkcj
+	2cFu+Fg==
+X-Received: from plhz10.prod.google.com ([2002:a17:902:d9ca:b0:2df:4a0d:5ac])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:4b27:b0:2dd:c100:a5d9
+ with SMTP id d9443c01a7336-2df69df7453mr924125ad.45.1790098610429; Tue, 22
+ Sep 2026 10:36:50 -0700 (PDT)
+Date: Tue, 22 Sep 2026 10:36:49 -0700
+In-Reply-To: <arK5ynpRi7VbY7Ek@gremlin>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <arKxjsxuO1F5ExrY@kernel.org>
+Mime-Version: 1.0
+References: <20260922-kvm-arm-prefault-v3-0-787bd3bc7e3f@kernel.org>
+ <20260922-kvm-arm-prefault-v3-1-787bd3bc7e3f@kernel.org> <arKxjsxuO1F5ExrY@kernel.org>
+ <arK5n9HrbZMCOHOt@google.com> <arK5ynpRi7VbY7Ek@gremlin>
+Message-ID: <arK8seJVT9wYgVCP@google.com>
+Subject: Re: [PATCH v3 01/14] KVM: Allow architectures to disallow pre-fault
+From: Sean Christopherson <seanjc@google.com>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Oliver Upton <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Steffen Eiden <seiden@linux.ibm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Mark Rutland <mark.rutland@arm.com>, Fuad Tabba <fuad.tabba@linux.dev>, 
+	Randy Dunlap <rdunlap@infradead.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Jack Thomson <jackabt@amazon.com>, Jack Thomson <jackabt.amazon@gmail.com>, 
+	Alexandru Elisei <alexandru.elisei@arm.com>, Vincent Donnefort <vdonnefort@google.com>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+	Leo Soares Passos <Leo.Bras@arm.com>, Wei-Lin Chang <weilin.chang@arm.com>
+Content-Type: text/plain; charset="us-ascii"
 
-On Tue, Sep 22, 2026 at 09:49:18AM -0700, Oliver Upton wrote:
-> Hi Lorenzo,
->
-> On Tue, Sep 22, 2026 at 03:17:55PM +0100, Lorenzo Stoakes (ARM) wrote:
-> > +bool __weak kvm_arch_vcpu_allow_pre_fault_memory(struct kvm_vcpu *vcpu)
-> > +{
-> > +	return true;
-> > +}
-> > +
-> >  void kvm_vcpu_on_spin(struct kvm_vcpu *me, bool yield_to_kernel_mode)
-> >  {
-> >  	int nr_vcpus, start, i, idx, yielded;
-> > @@ -4365,6 +4370,9 @@ static int kvm_vcpu_pre_fault_memory(struct kvm_vcpu *vcpu,
-> >  	    range->gpa + range->size <= range->gpa)
-> >  		return -EINVAL;
-> >
-> > +	if (!kvm_arch_vcpu_allow_pre_fault_memory(vcpu))
-> > +		return -ENOEXEC;
-> > +
->
-> nit: it'd be better to let the arch hook return an error of its choosing
-> but in reality this is only going to be used by arm64.
->
-> Not worth a respin on its own though.
+On Tue, Sep 22, 2026, Lorenzo Stoakes (ARM) wrote:
+> On Tue, Sep 22, 2026 at 10:23:43AM -0700, Sean Christopherson wrote:
+> > Rather than have kvm_arch_vcpu_allow_pre_fault_memory(), what if we add a more
+> > generic kvm_is_vcpu_loadable()?  That way we don't need to worry as much about
+> > the return value, the connection to vcpu_load() is obvious, and we don't need to
+> > add another pre-check if future (or cleaned-up existing?) ioctls want to do
+> > vcpu_load() in common code.
+> 
+> ...this is exactly what I started out with.
+> 
+> But then you are in a pickle, because _really_ you need to do that check in
+> vcpu_load(). Which is a void function. Which is called by every single
+> architecture all over the place.
+> 
+> So you'd have actually no way of signalling the error back.
+> 
+> Of course those places are arch code and you could say 'arches should know
+> better and if they call it it's fine not to call the arch 'can you load'
+> function.
 
-Ack will fix up if there's a respin for something else!
+Yes, that's my vote.  It'd be easy enough to clarify that "rule" with a comment
+in linux/kvm_host.h.
 
->
-> Thanks,
-> Oliver
+> But you're still stuck with the problem of where exactly you put this check.
+> 
+> So then do you put that check in a wrapper around it?
+> 
+> Instead you can make the predicate 'don't prefault on a not-yet-initialised
+> vCPU' which is pretty sensible I think, have a specific place to put it and
+> all's well with the world.
 
---
-Cheers, Lorenzo
+But look at it from an x86 perspective.  Pretty much everyone will look at this
+and expect:
+
+  bool kvm_arch_vcpu_allow_pre_fault_memory(struct kvm_vcpu *vcpu)
+  {
+	return vcpu->kvm->arch.pre_fault_allowed;
+  }
+
+> > I'd also be tempted to say it can be a macro, not a __weak function.  E.g.
+> 
+> Yeah it can be many things but why would you want a macro if you could possibly
+> avoid it? :)
+
+Because it allows arch code to dererefence "struct kvm_vcpu" in kvm_host.h,
+i.e. allows "inlining" the check.
