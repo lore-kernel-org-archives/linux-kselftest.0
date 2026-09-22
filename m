@@ -1,206 +1,131 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7DE1545DB8;
-	Tue, 22 Sep 2026 12:48:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C072E8DEC;
+	Tue, 22 Sep 2026 12:52:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790081291; cv=none; b=DnBG3yXZTSjyF+8TE5TVFK1XlTy1ryk0U8F7er5A8zrRC4A4WwBMwT8qZJz0Xuk17OCK2I/796HeDcpvvfsWJYLDChdH9GUtLohKbKNPNs7pJ/2MTbFJ14JHqLazk7JBJt1jTYgJp3gC6kV32RmL5RGe4WD72IAKx1vf2MVvASk=
+	t=1790081538; cv=none; b=g328Iw13v5aLX9z/Wr2c2cdSZsW2i7XosqPpNf9/d0MaTt0mEjwOnEglqFtbuVKERKEmx0Q+CAYI/0kiJY1c2Ijh3XftYaRPFfeZ4wKFn41vCQazmYIWtqb5zln0tXzvG1Q6tjOATrBL77ooTGdMtbbXf5hTTl9N9t5U1Kgt0N8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790081291; c=relaxed/simple;
-	bh=Ki+wzMOd7XKBTD8hRP7BQu1HaNe7n80jfs5kZy6rBz4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=tvvt7HZSpqA3GsGoLRLgHO+wFZPYPqu+t0jTjsPpqe/PP7uU+uh6eoAE/SWpzbdfOiQK4Kl3zKq5iewIm2b4BCtJc25JnKC6TZnZbpDudv7zLku3EbvnA1Q95gncbW/BgD6tkwG07CwEXK/XS1fOjGuq+exzZkxu1Hz2meQiUUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AxRcrfCK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790081538; c=relaxed/simple;
+	bh=dKFwer8asIo2ww6qdmBz5IYEoRE1svuaIGly3239UFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QQsujB7Kr6ooA0U7/EL6pMgNvWZE5KPZIh9TZ5r5SUOnyuI9uqOF3PkCud+qTstDcLTRiJ2RQymPU6MlK7QiBtZ3NoRFIumCVOGZRYaur6vL28LdQB/RHMojtqvAQTUrFf3094fiWUo1uirdD7vwMLpje7Zvi+vIqaBVsnoXWnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ScPnuTaA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AxRcrfCK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CC61F000FF;
-	Tue, 22 Sep 2026 12:48:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ScPnuTaA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C7401F000FF;
+	Tue, 22 Sep 2026 12:52:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790081288;
-	bh=r4eH9hr+yvfFnvbbCrIYejYZnIdTOc3jXJLWRBe+BYc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=AxRcrfCKj4TeX6ZLNGmys0EohkLSWdZA4WpCoVu2s2m54mvKPCy6liQKcGrQ8XbgI
-	 SQupz29e6y7f+7JP+FdhlC3s1z2X8i7JkPdbM3Y976b8njRgJrKLRElYxFR9JEM0BM
-	 8TCcoyrcCXV565sfkLcc6LcmZjQmjecePjY6QHJrrJkVK8K8VbGFL91PeILG+FoFl9
-	 1THEXtqQfFgXse9S65S+IyHqHuKjKQQgT8FUJXtwclVIR9dTtE3pMYo8uBe0eAvsYc
-	 VeRU/FuqXgJPqY0qchNGgBdyeHHurNFz2kQGrv3nsl9hWhSY6PVrVOyB3nSxSAKtfk
-	 9k3gXyOmIuBAg==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: George Guo <dongtai.guo@linux.dev>
-Cc: rppt@kernel.org,  pasha.tatashin@soleen.com,  pratyush@kernel.org,
-  chenhuacai@kernel.org,  ardb@kernel.org,  shuah@kernel.org,
-  ilias.apalodimas@linaro.org,  akpm@linux-foundation.org,
-  baoquan.he@linux.dev,  ruirui.yang@linux.dev,  guodongtai@kylinos.cn,
-  kernel@xen0n.name,  graf@amazon.com,  liukexin@kylinos.cn,
-  loongarch@lists.linux.dev,  linux-kernel@vger.kernel.org,
-  kexec@lists.infradead.org,  linux-mm@kvack.org,
-  linux-kselftest@vger.kernel.org,  linux-efi@vger.kernel.org
-Subject: Re: [PATCH v5 2/5] liveupdate: synchronize EFI KHO channel at
- execution
-In-Reply-To: <20260904100852.26006-3-dongtai.guo@linux.dev> (George Guo's
-	message of "Fri, 4 Sep 2026 18:08:49 +0800")
-References: <20260904100852.26006-1-dongtai.guo@linux.dev>
-	<20260904100852.26006-3-dongtai.guo@linux.dev>
-Date: Tue, 22 Sep 2026 14:48:03 +0200
-Message-ID: <2vxz1pal5u64.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=k20260515; t=1790081536;
+	bh=zwXB7IJjlaB8/LFgWGY2W9SyVRX56trli9CAewYqEk0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ScPnuTaAx+eHTBSVHGS81l0qJF871mpilRUw6iIOhoIedfp2tpP2WU8Dh5G37I61R
+	 XAz51OaoK7pxeDsk48QlwqEDREYfvLbwKcyFXf4YyE9n1tNZNiNyTq29RD+skOcX5y
+	 GHmYmvcfgUPm9Dp2mwY4PUGp+inda2N5/bJoBgZ2fKH7CoF+Kh46/NFwQCGYNkz1kv
+	 9zRitwCSfYrfMsfvybQRxZOYESPsv3ev+RfpqEutx8cppFTaMFohlNIiuBsERqKJ8o
+	 Ui/vSKE1Ia74snqxS7sBefQi9n+pE89jtO4VfAo86yH0XD6Ehb2Qpx239KVoVNcSQ3
+	 mgN3kKjvYDm3g==
+Date: Tue, 22 Sep 2026 13:52:07 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Fuad Tabba <tabba@google.com>, Joey Gouly <joey.gouly@arm.com>, 
+	Steffen Eiden <seiden@linux.ibm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Jack Thomson <jackabt@amazon.com>, Jack Thomson <jackabt.amazon@gmail.com>, 
+	Alexandru Elisei <alexandru.elisei@arm.com>, Vincent Donnefort <vdonnefort@google.com>, 
+	Sean Christopherson <seanjc@google.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+	Leo Soares Passos <Leo.Bras@arm.com>
+Subject: Re: [PATCH v2 00/13] KVM: arm64: Add KVM_PRE_FAULT_MEMORY support
+Message-ID: <arJ1BDEzY5CANjjB@gremlin>
+References: <20260914-kvm-arm-prefault-v2-0-26fb47f74b73@kernel.org>
+ <yq5abj9p38vq.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yq5abj9p38vq.fsf@kernel.org>
 
-On Fri, Sep 04 2026, George Guo wrote:
-
-> From: George Guo <guodongtai@kylinos.cn>
+On Tue, Sep 22, 2026 at 03:28:33PM +0530, Aneesh Kumar K.V wrote:
+> > This is because pKVM instantiates vCPUs upon run,
+> >
 >
-> The EFI KHO configuration table is a global channel. Updating it while
-> a candidate kexec image is still being loaded can leave the channel
-> pointing at the failed candidate even though the previous image remains
-> installed. Synchronize it instead from the image selected for execution.
+> Can pKVM instantiate the hyp vCPU during pre-faulting ?
 
-Huh? Sorry, I don't understand this is supposed to mean at all. What
-failed candidate?
+It would be an unusual and unexpected thing to do - suddenly a pre-fault
+operation is initialising a vCPU explicitly for pKVM.
+
+A caller is not going to reasonably expect this and might treat a failure to
+pre-alloc as fine to carry on whereas in fact it was a failure to initailised a
+pKVM vCPU.
+
+It'd also require significant changes to how pKVM is set up, right now it's
+hardcoded to be done unconditionally at run via kvm_arch_vcpu_run_pid_change()
+-> pkvm_create_hyp_vcpu(), so all that would have to change and be checked and
+tested and... that'd be really out of scope I think :)
+
+And pre-faulting really makes most sense BEFORE you run a VM. It doesn't make so
+much sense mid-run.
+
+But more fundamentally, the stage 2 page tables, as I understand it, are owned
+by pKVM and so aren't really available to be pre-faulted.
+
+Maybe unprotected-under-pKVM VMs but then it's questionable as to how useful
+that would be given that it would be confusing to users vs. how it works for
+other VMs.
+
+So in general, no I don't think it's a good idea.
+
+And even if we wanted to pursue some version of this, it's _definitely_ out
+of scope for the initial pre-faulting bring-up series.
 
 >
-> Use the actual scratch payload size rather than its page-aligned segment
-> size, and propagate update failures before live-update serialization.
-> Keep clearing the channel for cold and crash images best-effort.
+>
+> > but pre-faulting is  typically performed before a vCPU is run.  It would be confusing and
+> > inconsistent to error out on non-running vCPUs but to pre-fault running
+> > ones.
+>
+>
+> I use KVM pre-faulting when transitioning pages from shared to private
 
-Huh? This is word soup and I don't understand what any of this is
-supposed to mean.
+You mean you'd prefer to use? Or you are using it on another arch?
 
-If you are using a LLM to generate this, please _read_ what the output
-is and see if it even is readable to someone else.
+> with CoCo guest. This ensures that a trusted device can DMA to private
+> memory before the guest accesses it.
 
-And if you are writing this by hand, then take a step back, and consider
-if patch reviews can even understand what you are saying.
+Hm what do you mean by private memory?
+
+I see:
+
+#ifndef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
+{
+	return false;
+}
+#endif
+
+And only x86 selects KVM_GENERIC_MEMORY_ATTRIBUTES?
+
+Do you mean something else?
+
+Or are you saying we should match x86? I don't think we have the same
+semantics as them, I don't think there's an equivalent for us, and of
+course no private memory in the sense of the predicate above.
+
+In any case I think anything wanting to add additional functionality to
+pre-faulting would have to be a follow-up anyway.
 
 >
-> Signed-off-by: George Guo <guodongtai@kylinos.cn>
-> ---
->  kernel/crash_core.c                |  7 +++++++
->  kernel/kexec_core.c                |  5 +++++
->  kernel/kexec_internal.h            |  3 +++
->  kernel/liveupdate/kexec_handover.c | 33 ++++++++++++++++++++++++++++++
->  4 files changed, 48 insertions(+)
->
-> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-> index 2b36aa9fade0..6166ce4203d3 100644
-> --- a/kernel/crash_core.c
-> +++ b/kernel/crash_core.c
-> @@ -138,6 +138,13 @@ void __noclone __crash_kexec(struct pt_regs *regs)
->  		if (kexec_crash_image) {
->  			struct pt_regs fixed_regs;
->  
-> +			/*
-> +			 * A crash image carries no KHO state: clear the
-> +			 * transport so the crash kernel boots cold instead
-> +			 * of reviving from stale state.
-> +			 */
-> +			(void)kho_sync_channel(kexec_crash_image);
-> +
->  			crash_setup_regs(&fixed_regs, regs);
->  			crash_save_vmcoreinfo();
->  			machine_crash_shutdown(&fixed_regs);
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index dc770b9a6d05..147f5b5b23d4 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -1146,6 +1146,11 @@ int kernel_kexec(void)
->  		goto Unlock;
->  	}
->  
-> +	/* Synchronize the handover transport with the image being executed. */
-> +	error = kho_sync_channel(kexec_image);
-> +	if (error)
-> +		goto Unlock;
-> +
+> -aneesh
 
-Why are you setting this at kexec time? Why not set it at load time like
-every other architecture?
-
-Also what's this "sync channel"? Use simpler words that _actually
-describe_ what they do.
-
->  	if (!kexec_image->preserve_context) {
->  		error = liveupdate_reboot();
->  		if (error)
-> diff --git a/kernel/kexec_internal.h b/kernel/kexec_internal.h
-> index 228bb88c018b..4d4c2290e85c 100644
-> --- a/kernel/kexec_internal.h
-> +++ b/kernel/kexec_internal.h
-> @@ -46,6 +46,7 @@ struct kexec_buf;
->  int kho_locate_mem_hole(struct kexec_buf *kbuf,
->  			int (*func)(struct resource *, void *));
->  int kho_fill_kimage(struct kimage *image);
-> +int kho_sync_channel(struct kimage *image);
->  #else
->  static inline int kho_locate_mem_hole(struct kexec_buf *kbuf,
->  				      int (*func)(struct resource *, void *))
-> @@ -54,5 +55,7 @@ static inline int kho_locate_mem_hole(struct kexec_buf *kbuf,
->  }
->  
->  static inline int kho_fill_kimage(struct kimage *image) { return 0; }
-> +
-> +static inline int kho_sync_channel(struct kimage *image) { return 0; }
->  #endif /* CONFIG_KEXEC_HANDOVER */
->  #endif /* LINUX_KEXEC_INTERNAL_H */
-> diff --git a/kernel/liveupdate/kexec_handover.c b/kernel/liveupdate/kexec_handover.c
-> index 39f489a258d9..3aa5c66dfc6d 100644
-> --- a/kernel/liveupdate/kexec_handover.c
-> +++ b/kernel/liveupdate/kexec_handover.c
-> @@ -14,6 +14,7 @@
->  #include <linux/cma.h>
->  #include <linux/kmemleak.h>
->  #include <linux/count_zeros.h>
-> +#include <linux/efi.h>
->  #include <linux/kasan.h>
->  #include <linux/kexec.h>
->  #include <linux/kexec_handover.h>
-> @@ -2074,6 +2075,38 @@ int kho_fill_kimage(struct kimage *image)
->  	return 0;
->  }
->  
-> +/*
-> + * Synchronize the handover transport with the image that is about to be
-> + * executed.  The EFI config table channel is global, while kexec keeps
-> + * separate images for a normal reboot and for crash.  Write the state of the
-> + * selected image immediately before it is executed, rather than while a
-> + * candidate image is being loaded, so a failed replacement cannot leave the
-> + * channel pointing at that failed image.
-> + *
-> + * An image loaded through the legacy kexec_load() syscall, a crash image, or
-> + * an image loaded while KHO is disabled carries no handover state.  Clear the
-> + * channel for those images so the next kernel boots cold instead of reviving
-> + * from stale state.  Clearing is best-effort because an absent channel cannot
-> + * affect a cold boot.
-> + */
-> +int kho_sync_channel(struct kimage *image)
-> +{
-> +	int err;
-> +
-> +	if (!image->kho.fdt || !image->kho.scratch) {
-> +		efi_kho_update(0, 0, 0, 0);
-> +		return 0;
-> +	}
-> +
-> +	err = efi_kho_update(image->kho.fdt, PAGE_SIZE,
-> +			     image->kho.scratch->mem,
-> +			     image->kho.scratch->bufsz);
-> +	if (err)
-> +		pr_warn("failed to update EFI config table: %d\n", err);
-> +
-> +	return err;
-> +}
-> +
->  static int kho_walk_scratch(struct kexec_buf *kbuf,
->  			    int (*func)(struct resource *, void *))
->  {
-
--- 
-Regards,
-Pratyush Yadav
+--
+Cheers, Lorenzo
