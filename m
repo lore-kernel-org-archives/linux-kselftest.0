@@ -1,64 +1,65 @@
-Received: from mail-dl2-f32.google.com (mail-dl2-f32.google.com [74.125.229.160])
+Received: from mail-yx2-f13.google.com (mail-yx2-f13.google.com [74.125.224.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9753C108B
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 20:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.160
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7964B3F106E
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 20:28:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790108801; cv=none; b=STUihTQxoMPtOfhiJzMFQ62xPmkGj3DDa/PeLvddSiQhJChb4U/yPgXl5c1IUGXfMjHV/1fPfhdBY2zYUGc0RLaKarUABwGUzquoztcsO1Ea65Y9CVWsoVcysfc0LLj3d2bMbkwK9M1j2E/0GAqw4PCVx5AiEkDJhcE3JyLoHKE=
+	t=1790108908; cv=none; b=bDySNPv5dNl7q71DBFjW2E2i+ed0SOdMZmsdrmeCXENBBvfpwZsRdSpxm/hz4LCr0q0ATS4q0UwUaeymZi9xp6u7kw1+froKFAOEck3Pf2DGUrjuRgM74URv2rtsypgRcMlHiaQzzQ47tlwCTytG7J5L42lQTLa19xIOE22HIAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790108801; c=relaxed/simple;
-	bh=b7yiiiVzjNolnX+5vmFrNaqT8CYZKoWM7E7gNxa2Uq8=;
+	s=arc-20240116; t=1790108908; c=relaxed/simple;
+	bh=NfI/Dm5EYDMnMTAl3fxv1BGBbGtmkx+otpGuTeOYlsM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=roo2uVQZI9kS0aStoDqR5X9DYkVG83XqZQVmKfzQVZw23p2iffKK5qNxK2Fz+7uPM2nDzYzA4gOa4uvnFBiH6xYtowPahtftLhf+ugHqTLeW9HuXYvhdvfSr2t3fg0ds7WiOiGNLRrWKMHvkQEREDM66oCYVsWdQs8acsYYP7D8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QM+/jddd; arc=none smtp.client-ip=74.125.229.160
+	 MIME-Version; b=jPOaDToJeCxJLE9hl43enu1rF2F0klrBmLnzDwdyz/FkuWHzVKI7FgcF6N2B2qQWoSqcq5M3OotJKfVugjvA2kKYAvjLh1ki4+PkZyc57YfNiW2utcH/h3a2MAMR43ZttMH3sxPWRqwrklMhJao2C1meryqsohqfByD8aBjYVhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iLoKu9Pi; arc=none smtp.client-ip=74.125.224.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QM+/jddd"
-Received: by mail-dl2-f32.google.com with SMTP id a92af1059eb24-1437b77c274so132617c88.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 13:26:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iLoKu9Pi"
+Received: by mail-yx2-f13.google.com with SMTP id 00721157ae682-85d43db0c29so5607067b3.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 13:28:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790108787; x=1790713587; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790108890; x=1790713690; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DmZHmFTN/GI+Q0CTZwWa92OwQr166WO/bCQuEomtguQ=;
-        b=QM+/jddd7ZJk5RM42t2RB4Q4/3g6jjfUe9fIxR75XvaQBVmBg5snPw20a6GAfP8SCO
-         3GdK0mh/2IWbIk6S8F/ldDJkkJBY8T08twPnuvbX3zMe/6aiqjnBRP3C4RGbczdKKoEr
-         A19FwjX1fNFlQ2gtF76j/KtIQHTFuD05M0oYP3qQvl5XA6uAiBlYqIsa3/5QsvRa3LHi
-         1MwUY7/XAqScJ2s0uinK03fn/Tm0L3eO2fPsrC71dwzYs5dKFUZ2rV7qK5Ks8lii5tk7
-         Mbhel+wCtN2TvPYLEoU5KZtxWu2VRXc0H77msMdKV8wrV2gb2XknQsSswB9wcgShx4gk
-         PuQw==
+        bh=NfI/Dm5EYDMnMTAl3fxv1BGBbGtmkx+otpGuTeOYlsM=;
+        b=iLoKu9PibrjdE+0KXt2I5NdT/KxaARyi/cT91yQ0X7v1DBZScbUJh82s+ktxskfEIb
+         a78mg2AOtdVPxtOolm7BsvMWfgQCouiJ0bsVRSLHmcZ+z1yGl0KNZWLBFnFa0Tu51iKZ
+         vnF/3BWV99qMzLHNyHuIWYK0v37tnXdhzDdnXRAjPr6ryyZulmWf8/Hk5uZdd1F3koNs
+         /K+lOfaMAr7+9Lh0aNL4INlBbayYGvLvmJL79mnzMPSV4Zs4M2yUlbJBC62q3L9Q0E3G
+         y+HNhfCFmZ9DEFK5zmDKFc1dn0MRS9tN61Ib0GzTFt1OZRXF4er88UzNKTmDgZB6x+zS
+         UDAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790108787; x=1790713587;
+        d=1e100.net; s=20260707; t=1790108890; x=1790713690;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DmZHmFTN/GI+Q0CTZwWa92OwQr166WO/bCQuEomtguQ=;
-        b=1RQ62G4m8Ols5Q9ub6MuTvAqW8wRmRNq3+F4NjcIdagsUseY8mhkFdgw+1dfVUpQUx
-         2H7nMmvqKTuLW323b1cnj68rl6NUW/9DUwRC4LOBuUF9NOt+pE4nSq8qxpQKjVRelo7x
-         NnsrvDmTdp47p8CmwjcU4CtBNOcW5yHTnvSqlkHgTDcl71N9Q7U/WEUh/Fc8TgXFCsw/
-         g/9XuUa3Vs/IophnGEXMVQ2dNpuJsN900NtVhwZwfAt7hbfzWnN60rwWO+pVsRgzgrq8
-         YacwkaFyEjAEaVXceVx0HFwOzaTtrgFSkivagjpmyULOfwCQuaYa4xPutpu0+keI/4M4
-         PMnQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx3USNkotxa6bVBjBh2CvLTaJzEe/w77c4Fwe2Y8DaDTc/iwjFdjLYhs6eFtNjtwdr88MGc7w7IatWQHc/orD0=@vger.kernel.org
-X-Gm-Message-State: AFuF++npH0ChxaADgfL5g94awXVZYuG9Q3KXTUgwKeqO/eYASJGObq89
-	zJJS6zn1IVCdyoHQ7D0LsvlZf2xQnnnN6zz+KK3OBFDFYAHqSPeIlJ6N
-X-Gm-Gg: AYBFou3lBfNyOLm256Regz2Cyz0KPTtqzLxcic9SNNpczzewloipPBk2HT7SfNe4be9
-	/k7LN5shJU7/XcFsYZULwbBYR0XLT5vargWrB16NzEMOJXL81q9gmSe/5FdnlARRIECS+o1NLu6
-	IEqjzMZEM8Ota9inME0w9mgRS5mSt84p/SuoBz+cdq+mQyhUofwnU9SdlfcSo1MXweB1aIpnmoY
-	Kmtom5HcgpGj87Pah3e/q+dcjWM2XR86A+Qtt5T2zx361W1j8LYhR3ueawkmxcQ9iD1egJ1+dyR
-	0ewQbz7FkJtSdkD/7i5/NV5d9v/0XnkhU+JJDggOkoW59RFc6/d9sUZpkosJEGCYRVWU0QpwaKe
-	qBt19fL/NvOrjwCTGkw6skHfSyJ6KJglLB9wyWncMy+1UqDeEURfWb84MO4gbAAb9Gv/N5muB4w
-	aNqJQGKweP9T2u4Db68G5LYrsRgZBan6ZEaueUXZ0AEdgBEMWOr0WA0xXu/x0AUpz/Iz5LKRzZE
-	DwE2fLpXKGzJwbZvN3IlLZMdB9lhd2C5aEz8qoe1ssqVtxXAQKgsznxsZC08/JICRZzJohl3EI=
-X-Received: by 2002:a05:701b:4546:10b0:143:298b:ba79 with SMTP id a92af1059eb24-144f91ed3eemr496551c88.40.1790108786209;
-        Tue, 22 Sep 2026 13:26:26 -0700 (PDT)
+        bh=NfI/Dm5EYDMnMTAl3fxv1BGBbGtmkx+otpGuTeOYlsM=;
+        b=RuAVB5DaJPfxmFHeql3zkJyd23hRW+Dw9j0jhgKS+hOAJ76dV1bpbZYTWmr3B4dAnw
+         jKR1R0BU6mF2S1r3uGDP3OTwJN+tP09Ee23HxXnHaZ9s4tJkV/URc6nsOXxi8NyZ36xD
+         aX+dGFrF/bdpnH7Djz1s+rgyz+wyk4hsHBA4RQUZEK4uMGI4sBW5sdNPn8z+DMe7g5m/
+         GVbKxdiKjQjgqaPDmES0+xHYIWMbINtjq4+wbyUR/QmgjqKsoQ4Jfy+oGf8oaaTCLdlG
+         OfLtCQ+fCjOvn6Sa60e+WAagC/nPll6HS+adOBKcscOVsOyiBrlakUsDQObT5ocBOGXv
+         inzg==
+X-Forwarded-Encrypted: i=1; AKwUvBzQ4y3iotdbgg3PB858cD6mQxZ9u4og+dM2FOBsgLfu5jln5eMwcrHPSXF4SYEAQidMIr8V4BY6fNHHrpMCO6M=@vger.kernel.org
+X-Gm-Message-State: AFuF++nT4sP2Rrl/1oG0XUS/l6fMimaxGQ5n8dSWdVVeBzgvDF47osYf
+	gyOu4pdBKbt0MLpP/Oz8dV9Fe4s75ydltDS1+vUfinqaceiqyrrNC9Ey+fqWYRIJ
+X-Gm-Gg: AYBFou1LXdM+SIAQSE4wckOxnf+HQUCxnQADqNHhtXk4u3+mBjMhLfAUrS7KDlNv2tX
+	qz4cXiz2q8TgbPxjn5QQV50/OnjY5I9NpP99+W0cgxSx0XJekwJoRfu4sKTptXrQcC63LeCvJf+
+	KMfpLiivikzyAxN5TqPshMfhvqN88JObElIET3vFuZtVu5NPdUmvaiUKFBHUyu9ImP4I58aaeXu
+	NWP5p6wzxQ7ZpObnNBov6NPt84migfVvQPmzSSzNy2pNRVSMEMkDFGKT/9pfg+t37GlEXkKEP8H
+	GO4lNXITINVZ5DBLZb4OraGQYmVDSRkSajtfqZdy9NXprqWuSUHK3kcZPkBK/HWOa2wh4PxMLSG
+	KdnOaXpx7qOx2vOI3vXtnjsi1FdDisgHcM5XNspGe5xp2u2YGgBmIS1U1hdW7/QSxgRzEe9QEmt
+	YKqAULaRW2ua4Ip4BUuLp/0BUB950sZrJymNoSBZmojXPcnV+DEl/fQZ/zoC2OOKwpxN+RWCIzm
+	cPa9N562ANVR8JyO8ENq0y8EYSJ/RRh9h+h3UQfbVb8kYk1ZL1PQDIv/MHujUPa/BI12JBlrfuq
+	RaxNSBtMgQ==
+X-Received: by 2002:a05:701b:455a:20b0:141:4951:f150 with SMTP id a92af1059eb24-144f90adb56mr519266c88.18.1790108422631;
+        Tue, 22 Sep 2026 13:20:22 -0700 (PDT)
 Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:f16e:2102:25ad:9cdb])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-144f983d73fsm1149953c88.6.2026.09.22.13.26.21
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-144f9820ca5sm716854c88.3.2026.09.22.13.20.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 13:26:25 -0700 (PDT)
+        Tue, 22 Sep 2026 13:20:22 -0700 (PDT)
 From: "Hemendra M. Naik" <hemendranaik@gmail.com>
 To: netdev-bot+sashiko@kernel.org
 Cc: davem@davemloft.net,
@@ -75,12 +76,12 @@ Cc: davem@davemloft.net,
 	shuah@kernel.org,
 	tahiliani@nitk.edu.in,
 	vishy0777@gmail.com
-Subject: Re: [PATCH net-next v6 2/3] selftests: tc-testing: add fq_pie per-flow class stats test
-Date: Wed, 23 Sep 2026 01:56:18 +0530
-Message-Id: <20260922202618.25970-1-hemendranaik@gmail.com>
+Subject: Re: [PATCH net-next v6 1/3] net/sched: sch_fq_pie: add per-flow statistics via class ops
+Date: Wed, 23 Sep 2026 01:50:13 +0530
+Message-Id: <20260922202013.25126-1-hemendranaik@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <179002340887.2160803.8030592378545876774@kernel.org>
-References: <179002340887.2160803.8030592378545876774@kernel.org>
+In-Reply-To: <179002340755.2160803.3742716999091408861@kernel.org>
+References: <179002340755.2160803.3742716999091408861@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,46 +92,63 @@ Content-Transfer-Encoding: 8bit
 
 Thank you for the review. Replies are inline below.
 
-> Can this case ever pass with a released iproute2? [...] Turning that
-> blob into the literal tokens "prob", "delay" and "deficit" requires the
-> companion iproute2 change [...] which is not merged. [...] Would it make
-> sense to add a 'dependsOn' probe so the case skips when the userspace
-> support is absent, or to assert only what current tc prints?
+> Is this paragraph describing a change made by this patch? The diff is
+> purely additive and net/sched/sch_fq_pie.c had no delay or avg_dq_rate
+> conversion before it, so the new fq_pie_dump_class_stats() is not
+> replacing any truncating computation.
 >
-> A related question: the pattern hard-codes the exact label text and
-> ordering of the not-yet-reviewed userspace formatter. If the iproute2
-> side lands with different wording or field order [...] does this
-> kernel selftest then break while the kernel itself is unchanged?
+> The code that actually contains both of the described defects is
+> pie_dump_stats() in net/sched/sch_pie.c, which this patch does not touch
+> and does not mention, and there is no Fixes: tag.
+>
+> Could the paragraph either be reworded as a deliberate difference from
+> the pie qdisc, or the series extended to fix pie_dump_stats() as well?
 
-We'd like to keep the check as it is, without a dependsOn probe.
-There are several cases that were written against, and still assume, 
-newer tc wording with no dependsOn guard at all, e.g.:
-  - tc-tests/qdiscs/fq.json (commit 3007d8712c9b, "adjust fq test to
-    latest iproute2")
-  - tc-tests/infra/qdiscs.json (commit 56acc7f51974, "Adapt test's
-    output to HFSC's iproute2 printing changes")
-  - tc-tests/actions/police.json (commit b7df2e7eaef7, "Adapt tc
-    police action tests for Gb rounding changes")
-  - tc-tests/actions/bpf.json (commit ac2944abe4d7, "Be compatible
-    with newer tc output")
+As you noted, the diff here is purely additive, so this paragraph isn't
+describing a fix to existing code in this file - there's nothing in this
+patch's history to carry a Fixes: tag for. It's explaining why the new
+code uses div_u64() and a widened u64 intermediate: to avoid a known
+overflow pattern, not to describe a prior bug in this file.
 
-We're doing the same thing here: this test is paired with the
-companion iproute2 patch, same as those cases were paired with the tc
-versions they were written for.
+The bug you found in pie_dump_stats() is real, but it's independent,
+pre-existing (net/sched/sch_pie.c, ~2014), and unrelated to whether this
+new ABI addition is correct. We'd rather not fold a fix for that into a
+series about adding per-flow statistics - it deserves its own patch,
+separately from this series.
 
-> Can this case fail intermittently depending on the host environment?
-> The assertion needs a backlogged flow at the instant the dump runs
-> [...] its exit status is discarded with '|| true'. If ping is not
-> installed, or the installed iputils rejects the fractional -i 0.001 /
-> -W 0.01 arguments, the fq_pie queue stays empty [...] Would it be
-> better to check the ping result, or to enqueue traffic in a way that
-> does not depend on neighbour solicitation timing?
+We can make the paragraph read as a comparison rather than a claim about
+this file - e.g. "which can wrap" instead of "which wrapped" - a
+wording-only change, no scope change.
 
-We'd like to keep the ping command as it is. The same pattern
-('-W 0.01 -i 0.001 ... || true') is already used, unguarded, elsewhere
-in this test suite - for example in case a4c3 in
-tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json. So this
-isn't a new risk, it's existing practice..
+> Growing struct tc_fq_pie_xstats from 36 to 64 bytes is visible to
+> userspace in both directions [...] Does the accompanying iproute2
+> change parse defensively, e.g. copying min(RTA_PAYLOAD(xstats),
+> sizeof(st)) bytes into a zeroed local struct rather than bailing out?
+> [...] Could that reasoning be added to the changelog?
+>
+> The alternative would be to leave tc_fq_pie_xstats at 36 bytes entirely
+> and emit a separate struct [...] Was that option considered and
+> rejected?
+
+Yes to both. iproute2's fq_pie_print_xstats() already does exactly this:
+it copies into a zeroed local struct and memcpy()s only RTA_PAYLOAD()
+bytes when the reply is short, so a short/zero-filled read still
+resolves to TCA_FQ_PIE_XSTATS_QDISC (0) and prints normally. This
+reasoning is already in the changelog - it's there now, not something
+we're planning to add.
+
+We did consider a separate struct and rejected it. fq_codel can put its
+discriminator first only because it was designed in from day one;
+tc_fq_pie_xstats already has nine fixed-offset __u32 counters that
+predate this patch, so a discriminator can only be appended here, not
+prepended, without moving those offsets. A new, separate struct would
+still need its own attribute and its own print callback wired up in tc,
+splitting one qdisc's stats across two code paths for no added
+compatibility benefit. Extending the existing struct was thus better.
+
+
+
+pw-bot: cr
 
 
 
