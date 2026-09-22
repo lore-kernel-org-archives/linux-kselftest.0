@@ -1,128 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEBF2EC081;
-	Tue, 22 Sep 2026 06:55:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC4554E535A;
+	Tue, 22 Sep 2026 07:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790060107; cv=none; b=pB+FQYvEijyJq04kS2dENg53k1DuO2UuuDS1w55t5/SssyMRjHJZ7PUDc34CSCe+/qH/IRlyuuiPMchZ1nUzammghO1Zkq4vRDdnOCHuh26N1zvRWYb/jmDpKaxTVnhBUcwKLvEwAxdNdrEDaEUgWIcwvgvRwAvkUo02GuNPois=
+	t=1790060424; cv=none; b=mSY2kQA73f/LVtbCp2nbqzab0Ux6Beg84kiSBffoiq0LnnN0jwkPFhcGSJcQEirlqfkYSXE2h8PM6Ogqf8LyqPA7lzpMySjDKncVYzo430KU9Ckq++5veZDB2oaQmQjVyudut+7tcLB7DhRiI4+wKZNjCAApPip/wqf4VF+n6qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790060107; c=relaxed/simple;
-	bh=UD/Wey0mlBHk4woxCvw/WFilxzvjerSV6mWFxQdTJFw=;
+	s=arc-20240116; t=1790060424; c=relaxed/simple;
+	bh=6Kp8giQhkkbgExJsxASyiXv/PoBHskz4VQuIIjYhF+g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ea+4ZNv0lrcdUrE4hF8cIXpA+Y7cxEmVPk3465i/YSlDjjrLSFIiVd/QyA2WH8CyPlYCGZ8gdKEtBIo8z/e+HL4Rhqe4ioko1+bp9/F7y/hEbAAnnP8rcQcUcWQrjGVFABrG5j60IN2RP7UmeCE/8whoGBR9EtytwlISF3cO7Ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y+XhOINw; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=eHT/RSF1YdNUpwKzvMUxq1aPjdAl7g8+zFiDjh72qn/09uiDdXXCFhUDT+hBdXzDQ1Uf1bs2FD4AgpusN79zwR/Sv0VBNQ4PLo1KgrX/Joaq3f/5o2lsQsBwaTRpkMJDqcoUp8EO96y+ReNTZO+LjtNBu85XmK9gzVnfNjMlvXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=cn1d6rou; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y+XhOINw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D001F000FF;
-	Tue, 22 Sep 2026 06:55:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790060100;
-	bh=wLtGitIi2OiQg65dHRRJxop72DcmDI+o2e1E/zKQ5w4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Y+XhOINwZrcWlKpSEiXQdt3+zD3L2auPC/GvaE9XFlhSeO55CilXFon618dPN5Bdv
-	 uxufpsWcq93lGy2ApXIVLgqzT4PjyICZ1lbQpGF0GOaBTqi6nWl6MQ3RkEIcLDiE2U
-	 1ckswNCmhQBlLRHZCgtcbzXOGstotD8lln9xpOUS9r9QXeAGj/Cm0nBiV9oCKAxQFl
-	 eQYTiy4mTW3KSjJdc6ebQ7N+m3pkfwVFX4ENoNkHpVEfIwmu2f0wj+6X8n/yRhXl4c
-	 TPqME9qdENyh0vk1zkBEOzJMe9tLlQXGXnxJ2lbdnHBmDNjtmshkXm0g8gZfz0evXa
-	 ErmpPYPKqeVTQ==
-Date: Mon, 21 Sep 2026 23:54:59 -0700
-From: Oliver Upton <oupton@kernel.org>
-To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Andrew Jones <andrew.jones@oss.qualcomm.com>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shannon Zhao <shannon.zhao@linaro.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v11 09/21] KVM: arm64: PMU: Recreate events after
- MDCR_EL2 changes
-Message-ID: <arImQ6SG7s1k9uJk@kernel.org>
-References: <20260920-hybrid-v11-0-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
- <20260920-hybrid-v11-9-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="cn1d6rou"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 314B51476;
+	Tue, 22 Sep 2026 00:00:18 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B8C963F632;
+	Tue, 22 Sep 2026 00:00:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1790060421; bh=6Kp8giQhkkbgExJsxASyiXv/PoBHskz4VQuIIjYhF+g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cn1d6rou9SdrLcLfFzTuxUb6pl1re6Vl/j9CK3MrVwxozTBiOaC3aP6OhuUrGUmam
+	 skiCDbeXynMb9eADcw0zp5cJdtit++8JeQSxlhwXyWgUPdHy5LA847YK/6wjhqaOPY
+	 HQ6cRNZ7G3NjJfAbADxcb2WyGxrIKlc5sanNVSuY=
+Date: Tue, 22 Sep 2026 08:00:16 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Nico Pache <nico.pache@linux.dev>,
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+	Usama Arif <usama.arif@linux.dev>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/3] kselftest: mm: replace usage of /proc/self/smaps
+ for check_huge_xxx() helper
+Message-ID: <arIngE4f82b4Jj_v@e129823.arm.com>
+References: <20260921-fix_split-v7-0-d25ec991159f@arm.com>
+ <20260921-fix_split-v7-2-d25ec991159f@arm.com>
+ <36465f31-59e2-43a5-8cd8-f8bb1844da3c@kernel.org>
+ <arF74QGjx6oCIBnR@e129823.arm.com>
+ <f3cd3778-7423-4241-8dd5-05eb63886e65@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260920-hybrid-v11-9-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f3cd3778-7423-4241-8dd5-05eb63886e65@kernel.org>
 
-On Sun, Sep 20, 2026 at 08:15:50PM +0900, Akihiko Odaki wrote:
-> +void kvm_pmu_apply_mdcr(struct kvm_vcpu *vcpu, u64 old, u64 val)
-> +{
-> +	u64 changed = old ^ val;
-> +
-> +	/*
-> +	 * HPMN determines which counters HPMD and HLP apply to. Changes to
-> +	 * these fields require new perf event filters and sample periods.
-> +	 */
-> +	if (changed & (MDCR_EL2_HPMN | MDCR_EL2_HPMD | MDCR_EL2_HLP))
-> +		kvm_pmu_request_recreate(vcpu);
-> +	else if (changed & MDCR_EL2_HPME)
-> +		kvm_make_request(KVM_REQ_RELOAD_PMU, vcpu);
-> +}
-> +
+On Mon, Sep 21, 2026 at 11:05:15PM +0200, David Hildenbrand (Arm) wrote:
+> On 9/21/26 20:48, Yeoreum Yun wrote:
+> > Hi,
+> > 
+> >> On 9/21/26 12:40, Yeoreum Yun wrote:
+> >>> Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
+> >>> glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
+> >>> made by memalign().
+> >>>
+> >>> The underlying VMA may start at a different address from the aligned
+> >>> address returned by memalign(). Furthermore, a subsequent
+> >>> madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
+> >>> already set.
+> >>>
+> >>> This causes split_huge_page_test to fail because the check_huge_xxx()
+> >>> helpers incorrectly require the address returned by memalign() to
+> >>> match the VMA start address reported in /proc/self/smaps.
+> >>>
+> >>> Instead of relying on /proc/self/smaps, use /proc/self/pagemap and
+> >>> /proc/kpageflags to detect huge-page mappings and large folios:
+> >>>
+> >>>   1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of
+> >>>      using check_large_folios(), since only the mapping type matters.
+> >>>      This identifies PMD-mapped huge pages.
+> >>>   2. Otherwise, use check_large_folios() to detect large folios. This
+> >>>      covers mTHP cases.
+> >>>   3. Check the folio flags according to the type of huge page.
+> >>>
+> >>> Since shmem pages are also file-backed, simply check whether the page
+> >>> is file-backed.
+> >>>
+> >>> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+> >>> Suggested-by: Zi Yan <ziy@nvidia.com>
+> >>
+> >> Do we need a Fixes: tag?
+> > 
+> > Since this change is required for the chaning of behavior of glibc,
+> > I don't think we don't need to add Fixes tag in here?
+> > 
+> Our test made wrong assumptions on the underlying behavior of the user space
+> allocator (no VMA merging would happen). So I'd argue that we should add a
+> Fixes: for the test.
 
-Urgh... I'm not a fan of this. Can you just modify kvm_vcpu_reload_pmu()
-to discard all backing perf events and recompute them only for enabled
-PMCs? We set KVM_REQ_RELOAD_PMU pretty rarely.
+Okay. while I do
+  - add intermediate patch before this as you suggeeted.
+  - on the intermediate patch, add fix tag.
+  - based the patch, rebase this patch to add anon/file check for
+    other check_large_folios() type.
 
->  	__vcpu_rmw_sys_reg(vcpu, PMOVSSET_EL0, &=, mask);
->  	__vcpu_rmw_sys_reg(vcpu, PMINTENSET_EL1, &=, mask);
-> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-> index 75624725adf1..7dd2cafce247 100644
-> --- a/arch/arm64/kvm/sys_regs.c
-> +++ b/arch/arm64/kvm/sys_regs.c
-> @@ -3114,17 +3114,22 @@ static bool access_mdcr(struct kvm_vcpu *vcpu,
->  	}
->  
->  	__vcpu_assign_sys_reg(vcpu, MDCR_EL2, val);
-> -
-> -	/*
-> -	 * Request a reload of the PMU to enable/disable the counters
-> -	 * affected by HPME.
-> -	 */
-> -	if ((old ^ val) & MDCR_EL2_HPME)
-> -		kvm_make_request(KVM_REQ_RELOAD_PMU, vcpu);
-> +	kvm_pmu_apply_mdcr(vcpu, old, val);
->  
->  	return true;
->  }
+Thanks.
 
-> +static int set_mdcr(struct kvm_vcpu *vcpu, const struct sys_reg_desc *rd,
-> +		    u64 val)
-> +{
-> +	u64 old = __vcpu_sys_reg(vcpu, MDCR_EL2);
-> +
-> +	__vcpu_assign_sys_reg(vcpu, MDCR_EL2, val);
-> +	kvm_pmu_apply_mdcr(vcpu, old, val);
-> +
-> +	return 0;
-> +}
-> +
+> 
+> -- 
+> Cheers,
+> 
+> David
 
-Just keep the old ^ new test inline for access_mdcr() and set the
-request unconditionally from set_mdcr(). In the usual case
-KVM_REQ_RELOAD_PMU is already set on a vCPU that userspace is restoring.
-
-Thanks,
-Oliver
+-- 
+Sincerely,
+Yeoreum Yun
