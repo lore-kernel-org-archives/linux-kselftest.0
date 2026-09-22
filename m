@@ -1,155 +1,136 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53ECC33F589;
-	Tue, 22 Sep 2026 13:38:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA0F545DBA
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 13:44:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790084289; cv=none; b=fzBjIh7z2HIBHvTfR0Kkai4am8RYbC2K3LSn0aMxV7smFGBRydoWaQo7czXm2RB8KWIf9f24KP9o/vVBxbMBZKLADQDqk+aM9eujdF0cWlo4ER0maJrhfvklFotfvoMVtyd0ZeFW+qyPaWpMDG7VQiPCfzvq0QmbsW6zK29axkY=
+	t=1790084685; cv=none; b=sM5ETTpROVANGmRVsnnazhbP/hj9BfdSKNa8aWx3H9l0RFdYKVTwBvOz+lUuSsywoU4xjTa6ANteD4fHeoDeAw0ku9MPQpgOoCQhfMJ3SpqywCePyIGB5XgMhFsqeikop02tYnmr7hK/i+YdDvhh8+AaXWOaX8+IWd9v4JDQhE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790084289; c=relaxed/simple;
-	bh=vzKXn52gzPiSbL9aKBRGky2EPnqDAZQXTTcivc9DBmU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hFtKzobtnzqKyAw4eeWigziVyHC45uXeRp5bx81BzwTdgAwO2JSSuKfgrrbY/Dqsz3HjZ2+ZhIHzripn1hCSmOIxsRUPfPnrp063+3brQ8W8FjnxK0pQrMHUXs/PlwZi2mJkYY7XBNidsEg+8S4F1eYzLzQygbA1cS3k+LHlwDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=AfdvberL; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1790084685; c=relaxed/simple;
+	bh=0SFlIh2a1t3j3rT/bk6IJh8ffwrgGJ66xEj1bDplnm8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qCGpzc+Ey5gfnEKrz+iAr06dMJWv75MJVvLCxvW9hrXdqMu1HdYrpVbjAHMpLZyapIP4f9IcWGkXnsvbOyKSFiED5sfW0tYmVhBypQ04oaOWCkHg7iymXQXk5CfZU6dUFSHXMFJM6oSHyxK57MAbsEp4igmBDdeVas0tOdkwc5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FG4fpRXF; arc=none smtp.client-ip=74.125.225.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="AfdvberL"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=Wey2u8ECVmYuJdyX3X/6El7ljMefeSe0UP5NCdFkwpA=; b=AfdvberLcLr1ktRNs5JIgU8vVO
-	M02bVAm6E1DYttZA+M/XDAwaSiL6rBg2502g930js4v99Aqj2hN27JySe9tdE1sBbrGk2fBZ9yqL1
-	Q95Jy9LhBpKSR7XP9Y7IjJHJ6p6tC58Q8dRdSB0q8DAbXCKKJ3L7Dt+A85PWzuw6UQF2TSRA+4z48
-	a0/JqHwIxsLflTZ86YIz0tMDEzxQstiWn1vQYbi5yvpL+zYVykNh/TDSPIBjC0Eky5OkuKSjVPMjv
-	+x3e9nHn3ikCf0RAmc1u9BhctEveujNKk4GM+JMmDS0buSzIV65Zwv1hkro83OOkCYVQPkk+nGGn9
-	8Linzcfg==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1x90h1-000BqC-2z;
-	Tue, 22 Sep 2026 15:37:56 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1x90h0-000MOG-1k;
-	Tue, 22 Sep 2026 15:37:54 +0200
-Message-ID: <ed33494b-24c2-4587-8830-16951d74dd6e@iogearbox.net>
-Date: Tue, 22 Sep 2026 15:37:53 +0200
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FG4fpRXF"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e7bcb94d3so28753575e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 06:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1790084681; x=1790689481; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=4EtP8Gib+oGUfFDioYcMAZLGT/7xIaokAymk9C8xEMA=;
+        b=FG4fpRXFBPatSwHxsYfQSy0pnlWABIGE7/vTfeI5uP7FQoa6mxknWHjLYgdRO058e1
+         fcgqXSB7kMUphrk21mipLbo8VZryb36WwtcH1zQKj0AMCcMUJFiV2dzC2w3yb1ODJ4hb
+         kgT+cW6LvXNvOfDcofgnG2kSQpkX5XSHb9Pjxq2gCUMm0YMwuFy/QqzxDe3OHjKEZiuQ
+         5fo6yOe30L2MUqtG7fjjCJtUx3oekSWTDubtoPEFnprtEIc7k/ktYBjhlwAIy956C50P
+         Tks9iJsFgXFrU9SiF7t8ClxvP0wqEjeoZxv+SYAPxARsnji2dvghLBR9LHhnnT2uWNdl
+         54ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790084681; x=1790689481;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4EtP8Gib+oGUfFDioYcMAZLGT/7xIaokAymk9C8xEMA=;
+        b=SVh2X7cIKTWfZd+LZvCRzria26DfUkXi+atJhH66PQsnYanG+sAb4vsEJYKMB5ZsUP
+         e4WrTeMIEoefdcoMgklh4V+egaVzi/DpD/eyAwDRSdDu/BUE2YNBr9pti6jXLzC+FCuJ
+         jrDQiOcWQ2nrEc5IFh5ZWEOEfx6fAjZMTjKjbkhsi7dWVpWl/QrJcJIHhjyyLrekQ5id
+         d0CW6IEkVCXj+k/EQK+8N5BiZbZxdzjhDgqlzaEILnP6rulfNXz8zb2hthYNnE/91q5V
+         d76JOivwqU7/J+x/ASi1rNNsMPoSkXrZJSqqKLnDTnk/UejUaNl+MOys3DRLQIw22Z8l
+         9rPA==
+X-Forwarded-Encrypted: i=1; AKwUvByv+x7whg4sO2qNVX9jHsb2yY6StJHKMvLK7GsSVq6NrXUnFlIpSwWI64AfqhXW0d3sTGK19v6iU/Y/3Fdzdp8=@vger.kernel.org
+X-Gm-Message-State: AFuF++lT9bGiXAVlLa0hj8DiaQfVxctxI/5ciqFLfRSledPEMFOgR6sR
+	7+vnImepnUAL5L4UWs/KurIQg+sfOQKoYsnZJ2WELGfgxtzc+9JUzK9faWbcA0Tsk5s=
+X-Gm-Gg: AYBFou0ZbSnPAiB7oSGfrFXzpPpJ1Pdb7g8APBmO+22Caz7am+cFgzN6QsNKzqqXktl
+	EESiLzpk2r0QZF6LepS/QF1o+LTlfGXYNLoda9qXAFVohpOiMiOK+RDKjPNDrHVZlH/DUVrW8Xz
+	f8+zHP0nfoLWtBUsxvBNdbld2Y7fJp8mA6eWcp9CrYSyXwB04PDsl7oiHzL0UeKJvNrFQxd/0XA
+	W4Fq6DQlUNyHVNQZD4YN1ofe6LHl4DUhW4dxruPcX9g9ClnIrtPdCTMpNB2lurK7p+CckarvFkn
+	GNnP5Os7+PiQ5tBAX/zry+OCXtKv9+zvk4ckN3EqRh4f+ghmzSirQ2LYIwgwWkCnlKZnk1aZvqV
+	RM+8nP8/LhKjv1xXemXoGGktzZGQCXTfxTNCHpi45g+gA1kdxCnAms0mhRFVY0IZNS+q7HsY5Ij
+	j145S+m6CyVVlfxFtCU/MpiqJFk4CQX3K23DnLD60LZcxyIdfzFDhpWXmEWMKZZjA4yZJ+DDKXx
+	g==
+X-Received: by 2002:a05:600c:474e:b0:49e:7cff:f8ca with SMTP id 5b1f17b1804b1-49fc5743c69mr189508785e9.29.1790084681055;
+        Tue, 22 Sep 2026 06:44:41 -0700 (PDT)
+Received: from localhost.localdomain ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fdad2a3e0sm72269425e9.5.2026.09.22.06.44.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 06:44:40 -0700 (PDT)
+Date: Tue, 22 Sep 2026 15:44:38 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	James Houghton <jthoughton@google.com>, Will Deacon <will@kernel.org>, Fuad Tabba <tabba@google.com>, 
+	kvm@vger.kernel.org, kvmarm@lists.linux.dev, cgroups@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] selftests/cgroup: Make the object directory an
+ order-only prerequisite
+Message-ID: <arKFe3JRF3n2h-26@localhost.localdomain>
+References: <20260922071945.693714-1-fuad.tabba@linux.dev>
+ <20260922071945.693714-3-fuad.tabba@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] selftests/bpf: cover stale CB after LWT IP
- encapsulation
-To: Weiming Shi <bestswngs@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Xiang Mei <xmei5@asu.edu>
-References: <20260921173910.90847-1-bestswngs@gmail.com>
- <20260921173910.90847-3-bestswngs@gmail.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260921173910.90847-3-bestswngs@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28131/Tue Sep 22 08:27:06 2026)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wz67vp63rqm7k2iu"
+Content-Disposition: inline
+In-Reply-To: <20260922071945.693714-3-fuad.tabba@linux.dev>
 
-On 9/21/26 7:39 PM, Weiming Shi wrote:
-> Add compact regression coverage to the existing LWT IP encapsulation
-> test. Send an IPv4 ping with a Record Route option through an ingress LWT
-> program which prepends a TTL-one IPv4 header, then observe __icmp_send()
-> with fentry and verify that the restored protocol control block no longer
-> contains the inner header's cached option offsets.
-> 
-> Read ctx->cb[0] in the LWT program so the test exercises
-> bpf_prog_run_save_cb()'s save/restore path before the post-run check.
-> 
-> Link: https://lore.kernel.org/bpf/DLKB3UXOH0IS.1UL8NV9HSJFXG@gmail.com/
-> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
-Did you /actually/ try to run the test you submitted?
 
-BPF CI :
+--wz67vp63rqm7k2iu
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 2/2] selftests/cgroup: Make the object directory an
+ order-only prerequisite
+MIME-Version: 1.0
 
-     [...]
-     lwt_ip_encap_vxlan:PASS:setup network 0 nsec
-     setup_vxlan_routes:PASS:open ns3 for vxlan 0 nsec
-     setup_vxlan_routes:PASS:ip    a add 172.16.17.100/32  dev veth8 0 nsec
-     setup_vxlan_routes:PASS:ip -6 a add fb11::1/128 dev veth8 0 nsec
-     setup_vxlan_routes:PASS:ip link add vxlan4 type vxlan id 1 dstport 4789 local 172.16.17.100 dev veth8 nolearning noudpcsum 0 nsec
-     setup_vxlan_routes:PASS:ip link set vxlan4 up 0 nsec
-     setup_vxlan_routes:PASS:ip link add vxlan6 type vxlan id 1 dstport 4789 local fb11::1 dev veth8 nolearning udp6zerocsumrx 0 nsec
-     setup_vxlan_routes:PASS:ip link set vxlan6 up 0 nsec
-     setup_vxlan_routes:PASS:ip -n ns-lwt-ip-encap-1-0000128    route add 172.16.17.100/32  dev veth5 via 172.16.6.100 0 nsec
-     setup_vxlan_routes:PASS:ip -n ns-lwt-ip-encap-2-0000128    route add 172.16.17.100/32  dev veth7 via 172.16.8.100 0 nsec
-     setup_vxlan_routes:PASS:ip -n ns-lwt-ip-encap-1-0000128 -6 route add fb11::1/128 dev veth5 via fb06::1 0 nsec
-     setup_vxlan_routes:PASS:ip -n ns-lwt-ip-encap-2-0000128 -6 route add fb11::1/128 dev veth7 via fb08::1 0 nsec
-     lwt_ip_encap_vxlan:PASS:setup vxlan routes 0 nsec
-     lwt_ip_encap_vxlan:PASS:test_lwt_ip_encap__open 0 nsec
-     libbpf: prog 'bpf_lwt_encap_stale': missing BPF prog type, check ELF section name 'encap_stale'
-     libbpf: prog 'bpf_lwt_encap_stale': failed to load: -EINVAL
-     libbpf: failed to load object 'test_lwt_ip_encap'
-     libbpf: failed to load BPF skeleton 'test_lwt_ip_encap': -EINVAL
-     lwt_ip_encap_vxlan:FAIL:test_lwt_ip_encap__load unexpected error: -22 (errno 22)
+On Tue, Sep 22, 2026 at 08:19:45AM +0100, Fuad Tabba <fuad.tabba@linux.dev>=
+ wrote:
+> libcgroup.mk names $(LIBCGROUP_O_DIRS) as a regular prerequisite of
+> cgroup_util.o. The directory's mtime moves whenever an object is
+> created or replaced in it, so an incremental KVM selftests build that
+> rebuilt anything in lib/ recompiles cgroup_util.o and relinks every
+> test on the following run.
+
+I'd expect the other test would recompile stuff in lib/ but not in
+cgroup/lib/, however that distinction is likely lost when $(OUTPUT) is
+expanded from the included *.mk file.
+
+> Make the directory order-only, as libvfio.mk does.
+
+Sensible approach given that vfio.
+
+>=20
+> Fixes: 2c754a84ff16a ("cgroup: selftests: Move cgroup_util into its own l=
+ibrary")
+> Assisted-by: LLM
+> Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
+> ---
+>  tools/testing/selftests/cgroup/lib/libcgroup.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Acked-by: Michal Koutn=FD <mkoutny@suse.com>
+
+--wz67vp63rqm7k2iu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCarKGQhsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+Ah2DgEA8Xdl3JGOJIGtK6hwQh4u
+Jb+PcelMIF9Zbpm+LvcVQysA/2EdCxDp5Lq6779UZxftUj9At2iFIuFnLA5vHe4p
+ZbcI
+=BJVd
+-----END PGP SIGNATURE-----
+
+--wz67vp63rqm7k2iu--
