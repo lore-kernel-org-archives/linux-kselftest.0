@@ -1,189 +1,126 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B0D4E13E8
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 07:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F57525A69
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 08:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790061658; cv=none; b=Cg7E2YbgOanviIa4wuLAnJDPawzyKg8RBr2YdKE79FswDMtyZmJnNBPUvY/3AdgDjKG/iK/CTHC4pqxrzdYMGOYuL0taLSxry/icckJqDrJmCHO/jWQDLuw90BL0x4aDYap/9DIB2jUvmh/B2OwqYfxrKZe2/Vrn7eFsQK7Tabg=
+	t=1790064071; cv=none; b=C7Q966FiwO0rUmqXD1KUf952d9/ZUt2SADT+yx9WzFillNjXPYRbhQIQGL2cK7j803AyGaXC4ULU0VBpkGxznTGdwf0R+lbc5ysYzyPHsyGsEWZzu95SYeTtkGPibLzmDQReuPAYr2EWLfulpZig5U3YEv5nSNuwDm2P+KmhGKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790061658; c=relaxed/simple;
-	bh=10RDo6pI6/kJp7qD1fMiEoFTLh9Au6iPRGUYSIZyAiM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Uub1oS7cglZC2PVg9y9jr0EkxYNDDoCogbiXfxBvK3W0JBKKh1NbypeUsB5vtLIHDfxNNkg1bymRHlP3z3OcCqFBBTKnZ7VW5FPxs0gjty4T2lZ4fpFN0qC48R9A42D3uwzowD1ngnJ5imU8X5SAjJctEBWLF+MPZU1tBGS/HMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=eaHZl6Uh; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
+	s=arc-20240116; t=1790064071; c=relaxed/simple;
+	bh=Kz0+Gm3KFWWMIgbjBI3C3yS7MzZWyY5UKhB8HQObcAw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lHwe/hMW+57WljXe4+TN8xlX6fgTExIQHzmZbyIgbtidzTtKNV8R/sCBYSBzjuJp6bmdmtQ+mSjhSuwdoyGOMTqpFnJ+PefcsrGW4KFL5DjPuZdU5ZASGQytN+G4DO0i/IxIEuoOBG/87fNQwj4L4EfK56aUDU6quw/IEXLbzsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WhdPOZ6N; arc=none smtp.client-ip=74.125.228.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="eaHZl6Uh"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49e6af07e08so635175e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 00:20:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WhdPOZ6N"
+Received: by mail-pz2-f40.google.com with SMTP id d2e1a72fcca58-87ac7657a24so830447b3a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 01:00:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=6wind.com; s=google; t=1790061649; x=1790666449; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :content-language:from:references:cc:to:subject:reply-to:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=g4C2uf6Qrn8VOGWC8Z+vk/tqYQhzm5UvtTABxtwlWxY=;
-        b=eaHZl6Uhql5Y1aCN3EK6WTcTrus4Gkf5XnH2xUCXmduRQk1ppyfFwv+dRgtJUkYdOv
-         IBdedv96JmzScNiWeWcsxToQrrFwVL8FaqgiDF9iKZJW0sKdaV+oAyDutXUHOROQfNDI
-         NNjl4k/YHdTkBO9y0sNvevsS6NngBF9YjiPvs2REwa3QQvxME0ZcZ0tMsr+VwGdVk/Hh
-         mUjpMQ1SZuex0D96+zf+IQ9msAksEz6IOXbkYLRSsX8+a7y6IRPyKnsxkQscm8slcP3h
-         rYpiHQGTjhNTZ0ZKsibU2HJBlMbDxwUGwqEUATRqZK0uG3BJai9lgK6hypmt+q8wyZ5K
-         NrqA==
+        d=gmail.com; s=20251104; t=1790064057; x=1790668857; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jjOpUlt+UjJ6VV4ZayWYwJ5pQEbpQ8Gjw+EW35MyDL8=;
+        b=WhdPOZ6NhZ7nD8bHQQqKf6PAEIH3DtQMCFp4FLChYekJ4Cud/5MZFUe0RymNlhZ4z1
+         FpIMq8eWR19hCsKxSygMVN9ODy80/KJN4/BL8XV9tTQ/q0uyFQIJIedzt4QNzLL0KQQe
+         O2DKPnOXXXIqII3h6vA/eoWh/pjiI/Lb4zWRT/wnaD4pryKIWcfAQCbNcXIqS0QDNFs2
+         htNxsN2EepS6YTtbj0Hh9qOydKgZ1f8Krwt/OQXpIGWrSHhlzgcr5vq++zVkTDWl5vJL
+         dMA+zYd1MQj/SByVe2raNQwd8AyaHK5CV68uZxhjgVbIJtTT4BZlJ28/Vbg7P0uUMGRh
+         zYoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790061649; x=1790666449;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :content-language:from:references:cc:to:subject:reply-to:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=g4C2uf6Qrn8VOGWC8Z+vk/tqYQhzm5UvtTABxtwlWxY=;
-        b=Ch3MfgYQftiHXTgMkxmewxMwucw7/A0NwUS4wbzQp15leqi4WVz7atQ7t95VMyR/jD
-         d1qZtxt9XpDnqWTT1VNBqD1C/doLe5SFhOuDroUaEAUxzYyFArfDabUFag6L96FlYLDC
-         cd+FaQjIikyyp4veEXQTQMnExRJG05+iG4VMldtf4gnWf/ft+R6QFn3wRlfGbMs9lmNm
-         TqpGwhZuUSi6+qi/Wq4b2ejnyhC8ojgO96nyPqNgWgFNC00Rd/VjTqMY8dNCfduuNr7A
-         8IVNrDmu6WVqpKHu6WHuvSGPxNEn2szQmCMK6rG2BaQSa9Pv5RcJs2hKWj9J5QZ63/ew
-         h5ow==
-X-Forwarded-Encrypted: i=1; AKwUvBylzBODXz35vhdug0vyrE+RZ3PD83MXq1Qh4tAkJrJkcAMO0wdgqQbQjMl+cYpHdqz5nMZ5Ay51O7YbO2bY968=@vger.kernel.org
-X-Gm-Message-State: AFuF++mJSFWwl/XvejSXJN07gzEdBcr/Uidvxpbfc1PhIK1xKQ4f7vwM
-	RpqJaU3CBr+EoIzU5ifvEnM/C8XD8MqgluUA+4JOVuyBNylemmJK/6Z+wweX0HpEF5c=
-X-Gm-Gg: AYBFou2HrT52CnnWGNcOfytKTAhbavrF/5Ma3HFlw3By7KCNz032hqFIfxASzMgV4w1
-	mDO7+R5V8efAMOktWLgz33Ob7QM4M7FETlrhO0SECzbFwpbwRwPfFvp36j1zIChfdzVLuQDFsG5
-	8asrINP51I8npA4VCLc6PQNRl+mp1VA5MBOtJDGUGS85dbE/cbaOc5T/Jf25giZaSkSJ56Nw1O3
-	die/50y63tuttpqaQlZmkym7jzW0axnZ42TcLf4D57j952rNZhymWcofwPYtuafYBPfEv9myBKl
-	FEe4MNzvQH3RvLEXfS7aTOSvb3vooRAhlviFXU5CETywMdN2ZquTDuzGWvwBWlSoka9uLFt+eBU
-	ONF6HPq4efsqLwtwf+WXAgxX4vTHICngPWzq8WmY5ejm8nxhFoiz9KRFrgdNmQx9/qDU5vCwq4l
-	ECxBVA76+1d0sHaDcsCpnlxd7riC4c4ouLXmA9EVKgbOEYMj3C1jPHxxuqWCrdZeFh6KixuinuU
-	wh5qar3A7GiVhaKlDfwGV1Q/m2Hg9//sA+xdux/MWg3c+74cZE=
-X-Received: by 2002:a05:6000:4010:b0:487:981:4e07 with SMTP id ffacd0b85a97d-4871fa86624mr17596483f8f.4.1790061649512;
-        Tue, 22 Sep 2026 00:20:49 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:ab7:2110:6a1d:efff:fe52:1959? ([2a01:e0a:ab7:2110:6a1d:efff:fe52:1959])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-488627314d2sm2901458f8f.2.2026.09.22.00.20.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Sep 2026 00:20:49 -0700 (PDT)
-Message-ID: <adc2bc61-d832-4e9d-818b-e5d03fed0fca@6wind.com>
-Date: Tue, 22 Sep 2026 09:20:48 +0200
+        d=1e100.net; s=20260707; t=1790064057; x=1790668857;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jjOpUlt+UjJ6VV4ZayWYwJ5pQEbpQ8Gjw+EW35MyDL8=;
+        b=I31TUEM59prPnunITquCQ0RUqhhD3uI/vqg9ATyzBb4j1HSkC5/cYeWypz8mbR6awM
+         ccubF9QZE2aCXiGn9LAgg7iHr4kNgV5dSo2vdtYdcqNyzLl4cAI3i/ikXc6zRbXuUE5/
+         KNO8iH0T7orHyQaPss+3/jVUX85ggWCmspyFJUG5U89Uy0yBT52lDQwf4wifYBFnmkVx
+         wjFvkLPKzGvvBuP1MZ7fU09oXl9JlY6HAB3hblLmk3X+E1tW9NtTgOl81F2V6AS4CFlM
+         HhtmaUDJu4xEb3CLl3GfbJM1LIvTiYvkhQRpOsx7EjmKJOphx9bKyv36y+AicQX0OqG5
+         J4cA==
+X-Forwarded-Encrypted: i=1; AKwUvBwP2E6OQptmGKiDl5mo0ykgInth0BowwHbFySrUy5vH6QicMh5iNqB45EZPohgHD0gd7Y1MyhUnJxN57g7+FuU=@vger.kernel.org
+X-Gm-Message-State: AFuF++l6TYr3ESfExjA/IhSahhQD9bcAiu8ropoBRedP/bSEm/uZeLQd
+	6USwlxZm9yGSa2lbmnqII/qWEUh/bDv2JbywTHV5+AIHE8GnZaTcywv5
+X-Gm-Gg: AYBFou11ekqa/Oc0kxkkKlaQviq4Z+nA0jpMnzceWRKUqxp9sQS7D4XhwlXXxnGTbQ+
+	NMlC+rsXNYWt/AGdz129/79w93fajBGjZu4stON09gd0i4IG2EV7oXqo+YfgVjPjcD7ozkBKr8q
+	4MzDP50ouw1LJ6dls0SQKF49YUVnqHSKeLhW8fdiAoMfxARrS+jb3DifSqzqfDGBfYROxfTO81j
+	ZigDwLFZXqPZnlioNNpx34ym1197HSKjuM/LFtRW4xufXnh/35JtpQm4HxDAjtRRKqS3AlZeJ/7
+	EncwXq8Bpdpthf4dc5O9pzbAr8fF3l4SCWBkuljGqidXT/ZbdwwqHTandtvLgJVplkbslVlw38O
+	DKOYwQZ3evTG82IO+oVp+Qug1aIaWsAa1Ni9Lhtm9xg6RLdbTnYgMu9isIrkIyUW1O/izx+Pb7T
+	3tklmB0epcpeZTYeTTh0YPhDxR/H1qKJV5DYzoVZahw+yDm45bHvaUryt51gCqMQlxE62P1fusR
+	nA93fYSHVtruuH2G7DP4fzcaiA1KVudYyjkW6yOIaYSoyiRg9D0ysmWUgk9Zul2H6a0toMg0Dmx
+	0whwEJj+ag==
+X-Received: by 2002:a05:6a20:6a1c:b0:3dd:85a9:55a2 with SMTP id adf61e73a8af0-3ddec7aef29mr380694637.36.1790064056935;
+        Tue, 22 Sep 2026 01:00:56 -0700 (PDT)
+Received: from phui-2.c.googlers.com.com (67.51.127.34.bc.googleusercontent.com. [34.127.51.67])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc756b4239fsm494006a12.19.2026.09.22.01.00.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 01:00:56 -0700 (PDT)
+From: Hui Peng <benquike@gmail.com>
+To: Ridong Chen <ridong.chen@linux.dev>
+Cc: Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Waiman Long <longman@redhat.com>,
+	Guopeng Zhang <guopeng.zhang@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org,
+	Hui Peng <benquike@gmail.com>
+Subject: Re: [PATCH v3 1/3] cgroup/cpuset: return PERR_NOCPUS in remote_partition_enable()
+Date: Tue, 22 Sep 2026 08:00:54 +0000
+Message-ID: <20260922080054.3895080-1-benquike@gmail.com>
+X-Mailer: git-send-email 2.55.0.1082.g2b9226bbc0-goog
+In-Reply-To: <a00dbaaa-99f1-4172-b337-911ff45ae71e@linux.dev>
+References: <a00dbaaa-99f1-4172-b337-911ff45ae71e@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: nicolas.dichtel@6wind.com
-Subject: Re: [PATCH net-next v6 2/4] net: add AF_PACKET multicast dumps
-To: Yuyang Huang <sigefriedhyy@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>,
- Ido Schimmel <idosch@nvidia.com>, Jacob Keller <jacob.e.keller@intel.com>,
- Jakub Kicinski <kuba@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
- Nikolaos Gkarlis <nickgarlis@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
- Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>,
- Simon Horman <horms@kernel.org>, Stanislav Fomichev <sdf.kernel@gmail.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org
-References: <20260921235951.3214-1-sigefriedhyy@gmail.com>
- <20260921235951.3214-3-sigefriedhyy@gmail.com>
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Content-Language: en-US
-Organization: 6WIND
-In-Reply-To: <20260921235951.3214-3-sigefriedhyy@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Le 22/09/2026 à 01:59, Yuyang Huang a écrit :
-> RTM_GETMULTICAST dumps IPv4 and IPv6 multicast group memberships, but
-> the device multicast list (dev->mc) is only available through
-> /proc/net/dev_mcast, so "ip maddr show" still has to parse procfs for
-> its link-layer entries.
-> 
-> Handle RTM_GETMULTICAST dumps with ifa_family set to AF_PACKET next to
-> the dev->mc helpers in dev_addr_lists.c and report every entry of
-> dev->mc in the existing ifaddrmsg format:
-> 
->   - IFA_MULTICAST carries the raw link-layer address
->   - IFA_MC_USERS carries the entry reference count
->   - IFA_F_GLOBAL in IFA_FLAGS reports netdev_hw_addr::global_use, set
->     by dev_mc_add_global() (SIOCADDMULTI) and dev_mc_add_excl()
->     ("bridge fdb add ... self"), i.e. entries added explicitly rather
->     than by a protocol join. This is the static column of
->     /proc/net/dev_mcast
->   - ifa_scope is RT_SCOPE_LINK
-> 
-> This covers every column of /proc/net/dev_mcast. AF_PACKET is the
-> family iproute2 already uses for link-layer addresses ("ip -0").
-> 
-> The default FDB dump also walks dev->mc, but only for Ethernet devices
-> without an ndo_fdb_dump of their own, so bridge, vxlan or macvlan
-> devices never show their multicast filter there, and it has no users
-> count or global_use bit. Extending it would change "bridge fdb show"
-> output and add NDA_* attributes.
-> 
-> Requests are always validated, there are no legacy users: prefixlen,
-> flags and scope must be zero, ifa_index selects one device and
-> IFA_TARGET_NETNSID is the only attribute accepted. The dump runs under
-> RCU and netif_addr_lock_bh() without RTNL, and stamps cb->seq from
-> dev_base_seq so a device added or removed between dump rounds sets
-> NLM_F_DUMP_INTR.
-> 
-> Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
-> Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-> ---
-[snip]
+On Mon, Sep 21, 2026 at 03:08:55PM +0800, Ridong Chen wrote:
+> What is going on here?
+>
+> Please do not reply with a new series. And I think the changes should be listed
+> in the cover letter. Otherwise, it will get very confusing.
+>
+> ...
+>
+> I cannot apply this patch. It seems quite different from v2.
 
-> +static int dev_mc_dump_dev(struct net_device *dev, struct sk_buff *skb,
-> +			   struct netlink_callback *cb, int *s_addr_idx,
-> +			   unsigned int flags, int netnsid)
-> +{
-> +	struct netdev_hw_addr *ha;
-> +	int addr_idx = 0;
-> +	int err = 0;
-> +
-> +	netif_addr_lock_bh(dev);
-> +	netdev_for_each_mc_addr(ha, dev) {
-> +		if (addr_idx < *s_addr_idx) {
-> +			addr_idx++;
-> +			continue;
-> +		}
-> +		err = dev_mc_fill_addr(skb, dev, ha, NETLINK_CB(cb->skb).portid,
-> +				       cb->nlh->nlmsg_seq, flags, netnsid);
-> +		if (err < 0)
-> +			break;
-> +		nl_dump_check_consistent(cb, nlmsg_hdr(skb));
-> +		addr_idx++;
-> +	}
-> +	netif_addr_unlock_bh(dev);
-> +
-> +	*s_addr_idx = err < 0 ? addr_idx : 0;
-> +
-> +	return err;
-> +}
-[snip]
+Hi Ridong,
 
-> +int dev_mc_dump(struct sk_buff *skb, struct netlink_callback *cb)
-> +{
-> +	struct dev_mc_dump_filter filter = {
-> +		.tgt_net = sock_net(skb->sk),
-> +		.netnsid = -1,
-> +	};
-> +	unsigned int flags = NLM_F_MULTI;
-> +	struct {
-> +		unsigned long ifindex;
-> +		int addr_idx;
-> +	} *ctx = (void *)cb->ctx;
-> +	unsigned long s_ifindex;
-> +	struct net_device *dev;
-> +	int err;
-> +
-> +	err = dev_mc_valid_dump_req(cb->nlh, skb->sk, &filter, cb->extack);
-> +	if (err < 0)
-> +		return err;
-> +
-> +	cb->seq = READ_ONCE(filter.tgt_net->dev_base_seq);
-dev_base_seq only indicates whether the netdevice list has changed, not whether
-the addr list has changed. It's only a partial consistency check.
-See inet_base_seq()/inet6_base_seq().
+Sorry for the confusion and the noise. Two mistakes happened when I
+prepared v3 after splitting patch 2/2 per Guopeng's feedback:
 
-I don't see an equivalent of dev_addr_genid for the L2 mcaddr list; it should
-probably be added.
+1. I mistakenly passed --in-reply-to pointing to the v2 thread and
+   omitted the 0/3 cover letter.
+2. Patch 1/3 was accidentally overwritten with a broken diff instead of
+   the remote_partition_enable() hunk from v2 1/2:
+
+@@ -1591,10 +1591,11 @@ static int remote_partition_enable(struct cpuset *cs, int new_prs,
+ 	 * above it or remote partition root underneath it is not allowed.
+ 	 */
+ 	compute_excpus(cs, tmp->new_cpus);
+-	WARN_ON_ONCE(cpumask_intersects(tmp->new_cpus, subpartitions_cpus));
+ 	if (!cpumask_intersects(tmp->new_cpus, cpu_active_mask) ||
+ 	    cpumask_subset(top_cpuset.effective_cpus, tmp->new_cpus))
+ 		return PERR_INVCPUS;
++	if (cpumask_intersects(tmp->new_cpus, subpartitions_cpus))
++		return PERR_NOCPUS;
+
+Would it be OK if I post a clean, standalone [PATCH v4 0/3..3/3] series
+(as a new thread with a 0/3 cover letter listing the changelog and with
+the v2 1/2 diff restored in patch 1/3)?
+
+Best regards,
+Hui
