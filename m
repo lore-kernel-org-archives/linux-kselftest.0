@@ -1,78 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk2-f13.google.com (mail-qk2-f13.google.com [74.125.230.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 612243B47D0;
-	Tue, 22 Sep 2026 04:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11A23B47D0
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 04:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790051529; cv=none; b=gy2A1jb4CRRAVPdB+8FybVNuMvutCiYCpk/bvCVMnUZwnKtstiO8q03nf7w1dUAmbuEzpv5K35/FTQz+dmh4l+ID3Mnfuz0vTfq4Ivis4kT3imHZx0ZNLmvShS7492R7yEPdRjZYVpvqKJc5yiayxMNt+1meIptDcJRr1SZ9G9s=
+	t=1790051589; cv=none; b=HJHoZOCT5UO7ZKVqq6JDqqOfmac8PFV0XUInDCWK3K8+gxOvyQgPHEa9fyyb0arnKPIbrlgWPyReRYWxJwe2fqEh12TDW6bnJfjLSU+dmnPlffWjA3KQm2r0RP/EOaUcQdWtYhcdDhcDJKRlEAq894tMhPJRsX4d8bcxNFBeu3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790051529; c=relaxed/simple;
-	bh=DjHw8hZU7vSzTR3L6D6wwac1WPZ2EGWKP+/hY1vRd44=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WiP8l4PI3PVxHj5T0SPqeyMcmgho92xyQRD1vca+9dJQd01RFXNgu3CC9utfmlhHLvb1+r1LIGSXLzTHn29b8V/BPUX32sE9uLyCRbMJzpWhIW3kmULH/uV55atH4U5ymWeQIsRgf4rjJaEk9C26wVsouaRq0lxkhIQPgBwGtj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eBglCDyg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790051589; c=relaxed/simple;
+	bh=jOsq6u4GxP4+4otPjCoyuUQDELVcpp12xkpbUnN0QYI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f7CaCC3/YpC4EUhudzf9Tc/RABK8FJ9KqaeWBcEydPcG/kjjZm5hfJNb4Pf+l7e/MovsG/1p66DebGCXeCx7i6tyQi6OEd0QTJTAeFIEoBZOQrqq+JO/dscB3RCqdMpGAaA3EQIXzlCaQCJLMBKMh4+PxbC5SddvT5ebj76syoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com; spf=pass smtp.mailfrom=openai.com; dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b=SwwFKotn; arc=none smtp.client-ip=74.125.230.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openai.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eBglCDyg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F7B1F000FF;
-	Tue, 22 Sep 2026 04:32:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790051528;
-	bh=fDQadVyU+9FKqB10K9OxyyKBHbc9CGmeSJopJlqgsnI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=eBglCDyg4gkQVPFAyNM81VdJqTRLTLE8iN48uyogSDpsom0cuwTHSVWy9rj1S/yVE
-	 DM/2czpqNjQJ0YKETKPJ+intI1QrtHpw2EDIzCoFvESJQOUFKLx8Ra/cYHD6Z8qWoc
-	 hfdWdB9F1c2umG4pYoJC4VEuCT/HYDDtPlNPqNzfmiD3Dc1WaRQTKpxfrE4tple9Qq
-	 j6o7yBDLjdaaHXfR3N4GqVO/Xv1qHKIA++NbPov/QdYaKQEUfjX+gzMjUWTaf7Ndc+
-	 IWxRckCWPCDK9Xyjd97KteLcBxnXoYfoJRpisQw3TvbIi8L3tFThA7CnlGyHC73Xjj
-	 rearcam+Lcy2A==
-From: Kees Cook <kees@kernel.org>
-To: Hui Peng <benquike@gmail.com>
-Cc: Kees Cook <kees@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Bradley Morgan <brads@mainlining.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v5] seccomp: restore knotif->state when SECCOMP_ADDFD_FLAG_SEND is interrupted
-Date: Mon, 21 Sep 2026 21:31:43 -0700
-Message-Id: <179005150120.2593645.9527324861942717309.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260922023204.2504832-1-benquike@gmail.com>
-References: <20260922023204.2504832-1-benquike@gmail.com>
+	dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b="SwwFKotn"
+Received: by mail-qk2-f13.google.com with SMTP id af79cd13be357-93a0299c787so278348185a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 21:33:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openai.com; s=google; t=1790051586; x=1790656386; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=jOsq6u4GxP4+4otPjCoyuUQDELVcpp12xkpbUnN0QYI=;
+        b=SwwFKotnPBXyAbiOip6KsvyrvaAEbPUrIfT80hNkZjo47vt2S7zb46+DsrO824Kju8
+         puzQblb2Wd8o/O/NwysSgAn5MJOykWDfo/D4/aXt2o756MdsFmrk6Nu/TEZqUeAYjumz
+         MzUTkori8hd3yjHDVyWBCSicVhkOnCraKpaS8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790051586; x=1790656386;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jOsq6u4GxP4+4otPjCoyuUQDELVcpp12xkpbUnN0QYI=;
+        b=phpYfAbDKXd78CBTUo3UJnC2EOYvPvNioih0lQ2XJcX/l4rhRlSXGDnGMaT9zG9lMM
+         7HS4kQ/TB+3OlpeEOJNF9huuArzAARu6FSYB1+YFkYP/Se2UEO9Uray8A4sk/nOyBdts
+         M2/B6eZL9ytf9jN/8QI3JUIZt5vtU53GBLxmyusEzTzM+mKyi82ApuqxKhmoJ8K5tCPY
+         4IjWdbdUYf1gQzMPW7NE7+LvvF3sIqUPt/LT2yWXSGWPznwTiL8m/ouAN/CGkKSK3zsJ
+         wVTnxg9/ylaX2G57LIEgBoGiKMG5LTU+Nv1JhLosumwSVajj/2P03EKRPA+foBk+MNzz
+         V+aA==
+X-Forwarded-Encrypted: i=1; AKwUvBwq0pJ7J0mpY9PxOj6+RDibWHypZgxuz/gX7QIM/BmGX4iLu/Hz+Brm0DYE4h3QQgAUXrGpWKe/WRC5mQuuUSU=@vger.kernel.org
+X-Gm-Message-State: AFuF++lTR5j8ZqpR0g7L2UuEf0us+UiBdh91ppkAaV/R91bK3lOCA5tJ
+	lzNxwJwEuTPdfZlYzsPZv1ax4Xp5LV7bH2ZTmAfCQ8XxL15yUM6jQpH7d4cDvZoplCs=
+X-Gm-Gg: AYBFou2VAebKCUivI5egORLDEqma01TCP3ODUFWkZl6fVj2eyEON03WKd6xClVCEm9h
+	ev0/vSdHYxIjJMNwlS3hsiKWML4mRrXB7ocTz8BthnMINRM4gtqsVN/QKJ3iae0XuDr0f6ReP5e
+	EMfwkY3nJ3IhmT+5fP/Py3n4BkwbhjKG2oWu6BTDW8FIrKWLM6Srtf/fAVL7Cy6h2Wi8v+IWcCJ
+	KmQWFLMTVTi6qyOw+DrgrEcXmzbiDmgDekj0EB5CJKmSBI3L+civnb0tIwX3DlWXz5Mc9po+Xtd
+	lSAYaU8VA2G0eSM9JgXRf1JkmQAbU8GjUgQrwtIn03NjiCPvlS1vEBBIhEN+31D/Nv32uwOp8xi
+	qBlbt698sOsdo1HZ88ybrw7KSaB9f+RIbBTF01sk/mNmGmV+P9/uCm7Vwvsu8Ajlyk1iwWonNLD
+	lPYOf+q2tQK99h4I0yJXGp2bVwwKTg1ehSTOv7xOzWyBwBluEJpuYRLrjpZGRs9/ivdpq9WO5Sx
+	6jKvL+J4mq0w1j4iVbJyxbqvqCdnveSAc9tS51pb/+de6WIsWfZbA==
+X-Received: by 2002:a05:620a:44ca:b0:93a:10b8:4c3b with SMTP id af79cd13be357-93c15d583a0mr373213285a.2.1790051586610;
+        Mon, 21 Sep 2026 21:33:06 -0700 (PDT)
+Received: from com-94485 ([199.47.143.14])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93c1cf0e6bbsm45125785a.1.2026.09.21.21.33.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Sep 2026 21:33:06 -0700 (PDT)
+Date: Mon, 21 Sep 2026 21:33:02 -0700
+From: Jeff Jo <jeffjo@openai.com>
+To: Eric Dumazet <edumazet@google.com>
+Cc: netdev@vger.kernel.org, ncardwell@google.com, kuniyu@google.com,
+	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 2/2] selftests: net: check timestamp echo after an
+ old ACK
+Message-ID: <arIE_i8Ysz5nOI2W@com-94485>
+References: <20260921222609.50824-4-jeffjo@openai.com>
+ <20260921222609.50824-6-jeffjo@openai.com>
+ <CANn89iK00zXGA8sdpH9Y1CkFK3n=uKG9Bci3+=69fGV0UDQ80w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANn89iK00zXGA8sdpH9Y1CkFK3n=uKG9Bci3+=69fGV0UDQ80w@mail.gmail.com>
 
-On Tue, 22 Sep 2026 02:32:04 +0000, Hui Peng wrote:
-> In seccomp_notify_addfd(), when SECCOMP_ADDFD_FLAG_SEND is set in
-> addfd.flags, knotif->state is optimistically transitioned from
-> SECCOMP_NOTIFY_SENT to SECCOMP_NOTIFY_REPLIED before waking the tracee
-> and waiting on kaddfd.completion:
-> 
-> 	if (addfd.flags & SECCOMP_ADDFD_FLAG_SEND) {
-> 		knotif->state = SECCOMP_NOTIFY_REPLIED;
-> 		...
-> 	}
-> 
-> [...]
+On Tue, Sep 22, 2026 at 02:08:47AM +0200, Eric Dumazet wrote:
+> Note: Even with existing packetdrill binaries in the wild that don't
+> check TS ecr,
+> tp->rx_opt.ts_recent is still directly testable in pure .pkt via PAWS
+> (tcp_paws_discard()),
+> the same way tcp_ts_recent_invalid_ack.pkt works:
 
-I renamed the empty signal handler and added a comment, but otherwise,
-applied to for-next/seccomp, thanks!
+Thanks for the feedback. I'll send a v2 series tomorrow removing the
+redundant SYN_RECV check and replacing the test with a plain .pkt test
+that uses PAWS for the assertion. I've verified that the revised test
+detects the bug with unmodified packetdrill and passes with the
+simplified kernel fix.
 
-[1/1] seccomp: restore knotif->state when SECCOMP_ADDFD_FLAG_SEND is interrupted
-      https://git.kernel.org/kees/c/832b9b176be0
+For the PAWS probe, I used TSval 300998 rather than 300999, since
+Linux's one-tick PAWS tolerance allows the latter through.
 
-Take care,
-
--- 
-Kees Cook
-
+I'll follow up with a separate packetdrill fix. How does that sound?
