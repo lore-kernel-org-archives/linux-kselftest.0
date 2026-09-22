@@ -1,125 +1,115 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC4554E535A;
-	Tue, 22 Sep 2026 07:00:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3603F329F
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 07:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790060424; cv=none; b=mSY2kQA73f/LVtbCp2nbqzab0Ux6Beg84kiSBffoiq0LnnN0jwkPFhcGSJcQEirlqfkYSXE2h8PM6Ogqf8LyqPA7lzpMySjDKncVYzo430KU9Ckq++5veZDB2oaQmQjVyudut+7tcLB7DhRiI4+wKZNjCAApPip/wqf4VF+n6qs=
+	t=1790060714; cv=none; b=iuMacJQKxsOuiyYtMLk4OOukDdUnOaELphWVE18V/g6TcRqWiF8Evoy7tPfBTUBmaOcfqLjCgSOfb75xjgBBLg2lOFig7JCemhCKTRLlfeUrG6UHIfPUuT7xo76j0AfsR03eSlsvhJgAaleNgUudB3DrhOmvuFdaUe/Zrxzz4Lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790060424; c=relaxed/simple;
-	bh=6Kp8giQhkkbgExJsxASyiXv/PoBHskz4VQuIIjYhF+g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eHT/RSF1YdNUpwKzvMUxq1aPjdAl7g8+zFiDjh72qn/09uiDdXXCFhUDT+hBdXzDQ1Uf1bs2FD4AgpusN79zwR/Sv0VBNQ4PLo1KgrX/Joaq3f/5o2lsQsBwaTRpkMJDqcoUp8EO96y+ReNTZO+LjtNBu85XmK9gzVnfNjMlvXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=cn1d6rou; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1790060714; c=relaxed/simple;
+	bh=7NV2/dPlabk4dE/ISiIN6mRrLG4mHifu6XdIsUTFFVM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lUR0UTz86oRLB8Qt+QLgQTsblcK8qmlZo9OeMOszSZbZwkuJdQfC5qi0V0qwrNEEcwpJNdRMG/yCz/BXIZtlNL9vu1RzUWpS2WJ0x12QxqpXCWxAeRoQchYUkil/2+uBL89jiw6hu0E2LE6lEYkTJQg+/ILpC7RKlQC63ZZ9RuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=PIX6HpEs; arc=none smtp.client-ip=49.212.243.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="cn1d6rou"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 314B51476;
-	Tue, 22 Sep 2026 00:00:18 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B8C963F632;
-	Tue, 22 Sep 2026 00:00:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1790060421; bh=6Kp8giQhkkbgExJsxASyiXv/PoBHskz4VQuIIjYhF+g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cn1d6rou9SdrLcLfFzTuxUb6pl1re6Vl/j9CK3MrVwxozTBiOaC3aP6OhuUrGUmam
-	 skiCDbeXynMb9eADcw0zp5cJdtit++8JeQSxlhwXyWgUPdHy5LA847YK/6wjhqaOPY
-	 HQ6cRNZ7G3NjJfAbADxcb2WyGxrIKlc5sanNVSuY=
-Date: Tue, 22 Sep 2026 08:00:16 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 2/3] kselftest: mm: replace usage of /proc/self/smaps
- for check_huge_xxx() helper
-Message-ID: <arIngE4f82b4Jj_v@e129823.arm.com>
-References: <20260921-fix_split-v7-0-d25ec991159f@arm.com>
- <20260921-fix_split-v7-2-d25ec991159f@arm.com>
- <36465f31-59e2-43a5-8cd8-f8bb1844da3c@kernel.org>
- <arF74QGjx6oCIBnR@e129823.arm.com>
- <f3cd3778-7423-4241-8dd5-05eb63886e65@kernel.org>
+	dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="PIX6HpEs"
+Received: from [133.11.54.183] (h183.csg.ci.i.u-tokyo.ac.jp [133.11.54.183])
+	(authenticated bits=0)
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 68M758Hb079658
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Tue, 22 Sep 2026 16:05:08 +0900 (JST)
+	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
+DKIM-Signature: a=rsa-sha256; bh=T90uQyrwOkRtULqcM/E6YsXMU8ThCL+v0Olp5Ari6hs=;
+        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
+        h=From:Message-ID:To:Subject:Date;
+        s=rs20250326; t=1790060708; v=1;
+        b=PIX6HpEsycuGjgwF+yYJEKbW2YxRThaU7EHQIZGK5L/lQ22qD4JgBSnRVBDQshf3
+         Q3mYoWJmW61Zd5jCJ807XJD2ckYUsNMMIXCSMfO3rjw3vVrifWt7ncSg/BcZLQee
+         vauZt/VF/clNeVik7NWRPYJayqFARm8MwM5cGkxhQxUiIbeZXzoUmlqIS4wwB/Z1
+         L9juduXuRjjajH+awmMnM4mU2p2Wc8O5mzkj7ZBN8yYxCqEsBehxz/Zx/ZmpXuRn
+         E65YvkFWnuPiZxTFsySrYR4F8I5XKjB/kakCvhD6gHlnvsKt28tJjrobhpK/KeGG
+         whouyOtt7HDBh8h9zxg5/g==
+Message-ID: <fe6ddd43-7de2-4715-819b-952296456fca@rsg.ci.i.u-tokyo.ac.jp>
+Date: Tue, 22 Sep 2026 16:05:06 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f3cd3778-7423-4241-8dd5-05eb63886e65@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 08/21] Revert "KVM: arm64: PMU: Reload when resetting"
+To: Oliver Upton <oupton@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu
+ <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Steffen Eiden <seiden@linux.ibm.com>,
+        Andrew Jones <andrew.jones@oss.qualcomm.com>,
+        Fuad Tabba <fuad.tabba@linux.dev>, Mark Rutland <mark.rutland@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Shannon Zhao <shannon.zhao@linaro.org>,
+        Randy Dunlap
+ <rdunlap@infradead.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20260920-hybrid-v11-0-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
+ <20260920-hybrid-v11-8-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
+ <arIjhlqqzt4AKTOr@kernel.org>
+Content-Language: en-US
+From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+In-Reply-To: <arIjhlqqzt4AKTOr@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 21, 2026 at 11:05:15PM +0200, David Hildenbrand (Arm) wrote:
-> On 9/21/26 20:48, Yeoreum Yun wrote:
-> > Hi,
-> > 
-> >> On 9/21/26 12:40, Yeoreum Yun wrote:
-> >>> Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-> >>> glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-> >>> made by memalign().
-> >>>
-> >>> The underlying VMA may start at a different address from the aligned
-> >>> address returned by memalign(). Furthermore, a subsequent
-> >>> madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
-> >>> already set.
-> >>>
-> >>> This causes split_huge_page_test to fail because the check_huge_xxx()
-> >>> helpers incorrectly require the address returned by memalign() to
-> >>> match the VMA start address reported in /proc/self/smaps.
-> >>>
-> >>> Instead of relying on /proc/self/smaps, use /proc/self/pagemap and
-> >>> /proc/kpageflags to detect huge-page mappings and large folios:
-> >>>
-> >>>   1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of
-> >>>      using check_large_folios(), since only the mapping type matters.
-> >>>      This identifies PMD-mapped huge pages.
-> >>>   2. Otherwise, use check_large_folios() to detect large folios. This
-> >>>      covers mTHP cases.
-> >>>   3. Check the folio flags according to the type of huge page.
-> >>>
-> >>> Since shmem pages are also file-backed, simply check whether the page
-> >>> is file-backed.
-> >>>
-> >>> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-> >>> Suggested-by: Zi Yan <ziy@nvidia.com>
-> >>
-> >> Do we need a Fixes: tag?
-> > 
-> > Since this change is required for the chaning of behavior of glibc,
-> > I don't think we don't need to add Fixes tag in here?
-> > 
-> Our test made wrong assumptions on the underlying behavior of the user space
-> allocator (no VMA merging would happen). So I'd argue that we should add a
-> Fixes: for the test.
-
-Okay. while I do
-  - add intermediate patch before this as you suggeeted.
-  - on the intermediate patch, add fix tag.
-  - based the patch, rebase this patch to add anon/file check for
-    other check_large_folios() type.
-
-Thanks.
-
+On 2026/09/22 15:43, Oliver Upton wrote:
+> Hi Akihiko,
 > 
-> -- 
-> Cheers,
+> On Sun, Sep 20, 2026 at 08:15:49PM +0900, Akihiko Odaki wrote:
+>> This reverts commit fe53538069bb4f625bc8734103ba044a83138fea.
+>>
+>> Restore PMU event teardown before system-register reset so existing
+>> perf events cannot retain configuration from the previous run. All
+>> counters are disabled by the reset PMCR_EL0 and MDCR_EL2 values, so
+>> reset does not need to request a PMU reload.
 > 
-> David
+> Sorry, I'm not following the intent here. KVM_REQ_RELOAD_PMU should
+> already be discarding + recomputing perf events based on the state of
+> the vPMU. What's the problem?
 
--- 
-Sincerely,
-Yeoreum Yun
+Hi Oliver,
+
+A plain KVM_REQ_RELOAD_PMU does not discard existing perf events. 
+kvm_pmu_reprogram_counter_mask() enables or disables them, and 
+kvm_pmc_enable_perf_event() only creates an event if none exists.
+
+For example, an existing cycle-counter event may exclude EL0 counting. 
+Reset sets PMCCFILTR_EL0 to zero, but the subsequent reload only 
+disables that event. If the guest then enables cycle counting without 
+rewriting the filter or counter, the old event is enabled again and 
+still excludes EL0, despite PMCCFILTR_EL0 reading as zero.
+
+The earlier "Recreate events after reset" patch addressed this by 
+setting events_need_recreate. Sashiko then pointed out that stopping the 
+old events after resetting the registers adds their accumulated counts 
+to the reset counter values:
+
+https://sashiko.dev/#/message/20260914-hybrid-v10-7-92788053a691%40rsg.ci.i.u-tokyo.ac.jp
+
+The revert restores teardown before system-register reset and fixes the 
+stale configuration.
+
+Regards,
+Akihiko Odaki
