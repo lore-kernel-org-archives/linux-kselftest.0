@@ -1,66 +1,175 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f43.google.com (mail-oo2-f43.google.com [74.125.231.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36D6348C7C;
-	Tue, 22 Sep 2026 00:45:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2400E36A017
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 01:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790037933; cv=none; b=qG5MNLVUlklF6UJG8mPhj4uCxcJNxbt3e7gk155xMiboP1ArrQcVGvwk6eH71hPzdYA5+ZJ1YZqDHm6zy8sJrRVeeOESTfHXTT+mhBzNHstuLxZv8y0V0iWUqXbFKSYIUtMNlC8eAZ23cXNcZ9rkLqCksz6NymIVFp+5nlEiSjI=
+	t=1790039901; cv=none; b=epLd3XXHwWl9Fkvl9dusyo1o27xFPPRdcnQPnEEgxpHgypJRpIdrwMhOt9F3krbDlX+7gw+e7pJM1Eybq93oI0AEwG9SVrQCRfqruOrzx7Z0g7BCT2xuWzDGoeNnAY3iGkna8DDqUeRUd+4M8pPCRFQbGe2cm/u4KTBHpBHKRD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790037933; c=relaxed/simple;
-	bh=IeG5bo43O2qmr0hxjbFyfZYjX1u5+SC023GZByEl9kg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ukk+SiXrikBhW4C3xEHk02uo2ykXpbcOdSMgmmYfgFgBDMDV9v6rtaO+pJRIYxJhwsJ1Buzap56fdwg6ZNhqScDm+K5xveC88+IBcP0WrLBQHqOcn/0dccFcEIYVx4EuGxpip2S92cLs3Gbku2O7giBTBzObwLTvjbb16jvHt5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZvKz5DO2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790039901; c=relaxed/simple;
+	bh=Acv7MgHBh1jAwi3D+fsQ8X/DzGRU/jGDl+ydMkOn+HM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=WKjSrizRC9a+H/qC40XzW/IV2whHObuLZpf2Ou/xtGlBLW/VVGgTfMde9BfbR17teZoK/osdZEzg7JC1poydessvjhHLQPGmZkGUqmVow9mhlqtbQ8esLFxZQeZcMGhH1gqUGIQ6p6Np3U1k074p7kh9u2/ikYxkTRarMjb6g/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kuxwre/6; arc=none smtp.client-ip=74.125.231.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZvKz5DO2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 392A91F000FF;
-	Tue, 22 Sep 2026 00:45:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790037930;
-	bh=V4ZxAsF1Yx8w6WrpnfvJK/rnJJBlJSiMY2AZh/6DT6w=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=ZvKz5DO26opZxwvrnjAF/6D60kK2PMISk/pDJrR3o5752ABk60C39ocUDevkfCkb7
-	 g6Y0MArLzSK5lFEAMF39IzlBZsxEclf7VQRqNPyboe+ajtGwVOGunuyEjT5XN6q58k
-	 a8p9N4n2BaszphgE0QlgkUVcwTCQMfDzn7VISLzzd6x2l3jNRh4Q/w1IiU2RdUcfSq
-	 lAsVZPaIi+/WmIHB0YprHzdE9ZoKhcBKDLvfAFzUodJwRy89JbuoIRLNnyT7nxhecT
-	 pXdWypIGcBHngmwmAruUZoanAjb4DLMjOtk2oe7l7EslqHGNgXo1BVIJZCmZNcQiDl
-	 Y2HlB/eHOowpw==
-Date: Mon, 21 Sep 2026 17:45:29 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Gabriel Goller <g.goller@proxmox.com>
-Cc: Andrea Mayer <andrea.mayer@uniroma2.it>, "David S . Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan
- <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 2/2] selftests: seg6: check extack messages on
- SRv6 lwtunnel setup
-Message-ID: <20260921174529.045f0d65@kernel.org>
-In-Reply-To: <arD-5t6LiBiPXAAa@luna.proxmox.com>
-References: <20260918153544.1178884-1-g.goller@proxmox.com>
-	<20260918153544.1178884-3-g.goller@proxmox.com>
-	<20260918150256.1a1ca82e@kernel.org>
-	<arD-5t6LiBiPXAAa@luna.proxmox.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kuxwre/6"
+Received: by mail-oo2-f43.google.com with SMTP id 006d021491bc7-6bd42f1c01cso2158189eaf.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2026 18:18:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790039898; x=1790644698; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=Nc+AzR6lB3hdwq2cJ+qgIdPQ8/tOa9E8y0imH8XTesg=;
+        b=kuxwre/6JCi3a99wDJx6nPkm2c0DntMKfDJ23Xd04QXsrvUU+PcRVTbwkASbCxAZW9
+         A5MBT37vz/rmONfovmbIq38oCug4mfZh9efOsIfySu8HZ7w6QZY1eSTgxm1Ch92amJ7x
+         CHviWr/dw8NjXIxWS6XcdZd4Of6gcj2E7fwXxuTTxWOtLi/0lDBPZRkpdoxo8TjVKpoM
+         qScCTZAeTy6O9+jJDqsBy8niVTdHQ8UeF226L9TR1ZxlNdp1oNP3S1tzceoSnJ7+Bslt
+         bL4CbWmtfwnF3Rjq9UyQKVFzW9cbBVqKfiBHHl1Jkl3jFfx96ACv90xP82Crmv7aTgMv
+         Am7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790039898; x=1790644698;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Nc+AzR6lB3hdwq2cJ+qgIdPQ8/tOa9E8y0imH8XTesg=;
+        b=EVIS9f2ahALv2rK5gMGCOSm2THqM/Q+NaKFPYelZomPiXPuLFj1ONZLiSqIZdI98us
+         RnVdknm0/KRyyKSWlVFMNVY5eMNJ2waGN0KVnIMt4lV6GmI74rjC2DaNPW1de+qtmUwg
+         U0bioHVb8sIcYdZb4uTxHxFDG1rzz/pSGUN9Sn7PjW6CdlwUY3yjMSC60L9PpdN4XqFY
+         rb2XdsoOQhV1MLAgEFKIhjDTx6qM/BAatcDCpNJDt33wA8BcGKAZ8rTC/j9XoxtehzhA
+         vNikofVy95IV+waX/EyvkBP4wmI1bs4AexBb9+3V/zQXjjnbZdqFg9zMKvZZ4Se0TBTV
+         +1lQ==
+X-Forwarded-Encrypted: i=1; AKwUvBw7r7JVyqUCUQLObKVzywUQTkyaB5qfDLKp/ysVacADHFFH9Hwen4X8q8RmWb68OrhVjMeNQVRx+g9pKJZ5rFM=@vger.kernel.org
+X-Gm-Message-State: AFuF++lV2jzYel21x1OLjrNKVRNWdVucbhDurNXYP0KQSXOHKIXfwHwq
+	TTpeaUv7atR+RtdpHLBreWIp8ucb4S76N2Akf7Qg8FV8Gz72NYRumBPY
+X-Gm-Gg: AYBFou2zAUcxaZ//aTKpxXIoyj0x9QDQ+OcEEI6J9QZGovjM1g0JZVe/NRrg9VzjQtm
+	Gg+htiGSxS0k8z7iuOj6ESKrAn9yykvE2Eh8vNfDOdKZFNR3MuL9HXcgp1kQWWsCFl5aZHTaHJT
+	faxurH1jV87Vfj8jNL7S3jxzDg01qOm/m2YaJ+gsfuyx+KQiWU8zz1bnKjZ/Q/DXucuaWmSFtRp
+	V9LMa/wrati3Rp+YKlmrMJrpPV/zTDudvYgJ5ASbEpQfi6eib8dq4v22/LtHpCrIeNwVW8/xhLb
+	sDOxLhrq3K/MUoUJ4QdmPQkFt3K2fXOm9GeosJM3p6LutIa9xGg6ilEyes988wEHhwPJFtHxXpr
+	7X7Fm86swIe963mUKKGumRgLb8vFDVqNwmQe6qvtj6BvR/+FcQjO2vMjlM8VLYbD6Gf3KTXRiQJ
+	QBDs9vEMkGxovmGoCdtxuDZWd9EKUp3OTeeGLGkjyw0z0GlJnmWTi7pLois8RM/oEB/bs=
+X-Received: by 2002:a05:6820:61b:b0:6b7:83c5:fe00 with SMTP id 006d021491bc7-6ca9d147147mr11628526eaf.65.1790039897801;
+        Mon, 21 Sep 2026 18:18:17 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:5d::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6d1dbd52475sm117155eaf.1.2026.09.21.18.18.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Sep 2026 18:18:17 -0700 (PDT)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Subject: [PATCH net-next v2 0/6] vsock: assign the guest vsock device to a
+ network namespace
+Date: Mon, 21 Sep 2026 18:18:03 -0700
+Message-Id: <20260921-vsock-guest-ns-v2-0-693bd78fde9e@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEzXsWoC/13NQQqDMBBA0auEWTslidUaV71HcZHqqKGYlEwaL
+ OLdC1l2/eH9A5iiI4ZeHBApO3bBQy90JWBcrV8I3QS9AC11K7taYeYwvnD5ECf0jJNs7Xxt1GT
+ bG1QC3pFmtxfwAZ4SetoTDJWA1XEK8VtOWZVeUCP1P5oVSjTGNHVXk7Hd875RspcxbDCc5/kDv
+ f1HJLUAAAA=
+X-Change-ID: 20260831-vsock-guest-ns-d06af451da67
+To: Stefano Garzarella <sgarzare@redhat.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Stefan Hajnoczi <stefanha@redhat.com>, 
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowangio@gmail.com>, 
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+ =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
+ Donald Hunter <donald.hunter@gmail.com>
+Cc: virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, sargun@sargun.me, 
+ jlinbox@meta.com, Stanislav Fomichev <sdf.kernel@gmail.com>, 
+ Bobby Eshleman <bobbyeshleman@meta.com>
+X-Mailer: b4 0.14.3
 
-On Mon, 21 Sep 2026 11:55:27 +0200 Gabriel Goller wrote:
-> On 18.09.2026 15:02, Jakub Kicinski wrote:
-> > On Fri, 18 Sep 2026 17:35:16 +0200 Gabriel Goller wrote:  
-> > > Add a ksft/ynl test that shoves invalid RTA_ENCAP payloads to
-> > > RTM_NEWROUTE and asserts both the errno and the extack message are
-> > > correct.  
-> > 
-> > Please be judicious when adding tests.  
-> 
-> Got it. We can either drop the whole second patch or I can simplify it and only
-> add test cases for a few error messages.
+vsock network namespaces let a host put each VM in a namespace of its
+own. A guest has no equivalent yet. It has a single G2H device that
+cannot be assigned to a network namespace.
 
-drop, please
+This series lets a guest move that device into a network namespace. A
+new generic netlink family, "vsock", supports the command
+VSOCK_CMD_DEV_NETNS_SET which assigns the device to the namespace the
+request was sent from. The namespace's existing ns_mode then decides who
+may use it: a "global" namespace shares the device with every other
+global namespace, and a "local" namespace keeps the host connection to
+itself. The device starts out in the initial namespace, so until the
+command is issued nothing has moved and no mode has changed. There is no
+explicit unassign as assigning the device back to the initial namespace
+is equivalent.
+
+The command requires CAP_NET_ADMIN in the initial user namespace, so
+that an unprivileged user namespace cannot claim the device.
+
+Connections that can no longer reach the device after a move are reset,
+so that a namespace which has lost access cannot keep using a socket it
+opened while it still had access. Following netdevs, the device returns
+to the initial namespace when the namespace it was moved to is deleted.
+
+Transports opt in through a new netns_assign_allow flag. Only
+virtio-vsock sets it here, because it is the only guest transport
+that I am able to test against.
+
+Based off of Stefano's original series:
+https://lore.kernel.org/all/20200116172428.311437-1-sgarzare@redhat.com/
+
+Suggested-by: Stefano Garzarella <sgarzare@redhat.com>
+Link: https://lore.kernel.org/all/20200427142518.uwssa6dtasrp3bfc@steredhat/
+
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+---
+Changes in v2:
+- Replace the IOCTL_VM_SOCKETS_ASSIGN_G2H_NETNS ioctl with the "vsock"
+  genl family and VSOCK_CMD_DEV_NETNS_SET
+- RST the peer from the reset sweep, v1 only set TCP_CLOSE locally, so
+  the peer waited on a connection the guest had abandoned (Stefano)
+- Drop the vsock_assign_g2h_netns helper patch, the tests use ynl cli.py
+- Note why only virtio-vsock opts in (Stefano)
+- Add a getter to the uAPI
+- Various fixes (see individual patch change list for more details)
+- Link to v1: https://lore.kernel.org/r/20260902-vsock-guest-ns-v1-0-9995383e9a8b@meta.com
+
+---
+Bobby Eshleman (6):
+      vsock: constify the transport in vsock_for_each_connected_socket()
+      vsock: rename the vsock pernet operations
+      vsock: add a netlink command to assign the g2h device to a netns
+      vsock/virtio: support guest device network namespace
+      selftests/vsock: test the guest vsock device network namespace
+      selftests/vsock: test the netns assign privilege checks
+
+ Documentation/admin-guide/sysctl/net.rst |  23 ++
+ Documentation/netlink/specs/vsock.yaml   |  68 +++++
+ MAINTAINERS                              |   2 +
+ drivers/vhost/vsock.c                    |   6 +-
+ include/linux/virtio_vsock.h             |   3 +
+ include/net/af_vsock.h                   |  19 +-
+ include/uapi/linux/vsock.h               |  28 ++
+ net/vmw_vsock/Makefile                   |   2 +-
+ net/vmw_vsock/af_vsock.c                 | 374 ++++++++++++++++++++++--
+ net/vmw_vsock/virtio_transport.c         |  24 +-
+ net/vmw_vsock/virtio_transport_common.c  |  27 +-
+ net/vmw_vsock/vsock_nl_gen.c             |  36 +++
+ net/vmw_vsock/vsock_nl_gen.h             |  20 ++
+ tools/net/ynl/Makefile.deps              |   1 +
+ tools/testing/selftests/vsock/config     |   1 +
+ tools/testing/selftests/vsock/vmtest.sh  | 473 ++++++++++++++++++++++++++++++-
+ 16 files changed, 1060 insertions(+), 47 deletions(-)
+---
+base-commit: 8830e65ed46de41f849eefb8ba227d4852c460f6
+change-id: 20260831-vsock-guest-ns-d06af451da67
+
+Best regards,
+-- 
+Bobby Eshleman <bobbyeshleman@meta.com>
+
