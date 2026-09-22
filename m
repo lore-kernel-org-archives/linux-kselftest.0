@@ -1,147 +1,137 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl2-f32.google.com (mail-dl2-f32.google.com [74.125.229.160])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5084AB1B2
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 20:21:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9753C108B
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 20:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.160
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790108517; cv=none; b=qnp9U7i21RVX6dKyQ5Qt10rCzUiAqY3owmfmgg8oEvF89bCrT4xMUYeC235lF1DirV/WPR5TQ0j5mPj3rRWNsPHzjGhFcwOyln/EH+9ddqsxFudaVh5p1yagWr+bZLyZ0PVMjcNkT3GBWnqXHcbsP5b3VNc5fXcd47peKZY3tq4=
+	t=1790108801; cv=none; b=STUihTQxoMPtOfhiJzMFQ62xPmkGj3DDa/PeLvddSiQhJChb4U/yPgXl5c1IUGXfMjHV/1fPfhdBY2zYUGc0RLaKarUABwGUzquoztcsO1Ea65Y9CVWsoVcysfc0LLj3d2bMbkwK9M1j2E/0GAqw4PCVx5AiEkDJhcE3JyLoHKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790108517; c=relaxed/simple;
-	bh=qf7Jhvlpto+YQaPLd8xjFzZPBrjOJul/qhE2Z1fkH1w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E37fX3jyJ5i8rRZkDpLBwYAQ/8zAO/AfeiIyqNvGgONElosW8njnwRcfTCLp6UeFXCwB1B4iYbhD8NO+eHnskGUQnJdnXxKlbSCKi57CUwxI7GT9WZtFCbmXlWlMg4unqGDSDIYuXChjZAmAGPl4Pj4teXJnEqPBxpvH7YJZhQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RZdTFgVp; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1790108801; c=relaxed/simple;
+	bh=b7yiiiVzjNolnX+5vmFrNaqT8CYZKoWM7E7gNxa2Uq8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=roo2uVQZI9kS0aStoDqR5X9DYkVG83XqZQVmKfzQVZw23p2iffKK5qNxK2Fz+7uPM2nDzYzA4gOa4uvnFBiH6xYtowPahtftLhf+ugHqTLeW9HuXYvhdvfSr2t3fg0ds7WiOiGNLRrWKMHvkQEREDM66oCYVsWdQs8acsYYP7D8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QM+/jddd; arc=none smtp.client-ip=74.125.229.160
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RZdTFgVp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790108502;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lmFVZilOMn/yRZfsmK1Eg1J9bzLw2lur3L0aHYwLcTo=;
-	b=RZdTFgVpHcuCz2DvcVLoK7WNRssk+VUCMMAz7u9gnXflR5ybIXFreW8D+GE94bt72tebhq
-	KmNWWaDGB1jGly03VrQOX5Qtkt8LouDHtPLKJOVKDr7g8JjqegxdAGLRfyGZnHZaEK3TBM
-	Zc9FMmv2KroYEM+1xkoeMil7f+xNZ7w=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-623-r7jBYWoeMJKo6n2PqoYroA-1; Tue,
- 22 Sep 2026 16:21:36 -0400
-X-MC-Unique: r7jBYWoeMJKo6n2PqoYroA-1
-X-Mimecast-MFC-AGG-ID: r7jBYWoeMJKo6n2PqoYroA_1790108494
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 552B119772F3;
-	Tue, 22 Sep 2026 20:21:34 +0000 (UTC)
-Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 35FA1300106D;
-	Tue, 22 Sep 2026 20:21:32 +0000 (UTC)
-Message-ID: <d95e0c38-87f4-4ff7-bdb9-e76da31547b8@redhat.com>
-Date: Tue, 22 Sep 2026 16:21:31 -0400
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QM+/jddd"
+Received: by mail-dl2-f32.google.com with SMTP id a92af1059eb24-1437b77c274so132617c88.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 13:26:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790108787; x=1790713587; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=DmZHmFTN/GI+Q0CTZwWa92OwQr166WO/bCQuEomtguQ=;
+        b=QM+/jddd7ZJk5RM42t2RB4Q4/3g6jjfUe9fIxR75XvaQBVmBg5snPw20a6GAfP8SCO
+         3GdK0mh/2IWbIk6S8F/ldDJkkJBY8T08twPnuvbX3zMe/6aiqjnBRP3C4RGbczdKKoEr
+         A19FwjX1fNFlQ2gtF76j/KtIQHTFuD05M0oYP3qQvl5XA6uAiBlYqIsa3/5QsvRa3LHi
+         1MwUY7/XAqScJ2s0uinK03fn/Tm0L3eO2fPsrC71dwzYs5dKFUZ2rV7qK5Ks8lii5tk7
+         Mbhel+wCtN2TvPYLEoU5KZtxWu2VRXc0H77msMdKV8wrV2gb2XknQsSswB9wcgShx4gk
+         PuQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790108787; x=1790713587;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=DmZHmFTN/GI+Q0CTZwWa92OwQr166WO/bCQuEomtguQ=;
+        b=1RQ62G4m8Ols5Q9ub6MuTvAqW8wRmRNq3+F4NjcIdagsUseY8mhkFdgw+1dfVUpQUx
+         2H7nMmvqKTuLW323b1cnj68rl6NUW/9DUwRC4LOBuUF9NOt+pE4nSq8qxpQKjVRelo7x
+         NnsrvDmTdp47p8CmwjcU4CtBNOcW5yHTnvSqlkHgTDcl71N9Q7U/WEUh/Fc8TgXFCsw/
+         g/9XuUa3Vs/IophnGEXMVQ2dNpuJsN900NtVhwZwfAt7hbfzWnN60rwWO+pVsRgzgrq8
+         YacwkaFyEjAEaVXceVx0HFwOzaTtrgFSkivagjpmyULOfwCQuaYa4xPutpu0+keI/4M4
+         PMnQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx3USNkotxa6bVBjBh2CvLTaJzEe/w77c4Fwe2Y8DaDTc/iwjFdjLYhs6eFtNjtwdr88MGc7w7IatWQHc/orD0=@vger.kernel.org
+X-Gm-Message-State: AFuF++npH0ChxaADgfL5g94awXVZYuG9Q3KXTUgwKeqO/eYASJGObq89
+	zJJS6zn1IVCdyoHQ7D0LsvlZf2xQnnnN6zz+KK3OBFDFYAHqSPeIlJ6N
+X-Gm-Gg: AYBFou3lBfNyOLm256Regz2Cyz0KPTtqzLxcic9SNNpczzewloipPBk2HT7SfNe4be9
+	/k7LN5shJU7/XcFsYZULwbBYR0XLT5vargWrB16NzEMOJXL81q9gmSe/5FdnlARRIECS+o1NLu6
+	IEqjzMZEM8Ota9inME0w9mgRS5mSt84p/SuoBz+cdq+mQyhUofwnU9SdlfcSo1MXweB1aIpnmoY
+	Kmtom5HcgpGj87Pah3e/q+dcjWM2XR86A+Qtt5T2zx361W1j8LYhR3ueawkmxcQ9iD1egJ1+dyR
+	0ewQbz7FkJtSdkD/7i5/NV5d9v/0XnkhU+JJDggOkoW59RFc6/d9sUZpkosJEGCYRVWU0QpwaKe
+	qBt19fL/NvOrjwCTGkw6skHfSyJ6KJglLB9wyWncMy+1UqDeEURfWb84MO4gbAAb9Gv/N5muB4w
+	aNqJQGKweP9T2u4Db68G5LYrsRgZBan6ZEaueUXZ0AEdgBEMWOr0WA0xXu/x0AUpz/Iz5LKRzZE
+	DwE2fLpXKGzJwbZvN3IlLZMdB9lhd2C5aEz8qoe1ssqVtxXAQKgsznxsZC08/JICRZzJohl3EI=
+X-Received: by 2002:a05:701b:4546:10b0:143:298b:ba79 with SMTP id a92af1059eb24-144f91ed3eemr496551c88.40.1790108786209;
+        Tue, 22 Sep 2026 13:26:26 -0700 (PDT)
+Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:f16e:2102:25ad:9cdb])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-144f983d73fsm1149953c88.6.2026.09.22.13.26.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 13:26:25 -0700 (PDT)
+From: "Hemendra M. Naik" <hemendranaik@gmail.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	hemendranaik@gmail.com,
+	horms@kernel.org,
+	jhs@mojatatu.com,
+	jiri@resnulli.us,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	tahiliani@nitk.edu.in,
+	vishy0777@gmail.com
+Subject: Re: [PATCH net-next v6 2/3] selftests: tc-testing: add fq_pie per-flow class stats test
+Date: Wed, 23 Sep 2026 01:56:18 +0530
+Message-Id: <20260922202618.25970-1-hemendranaik@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <179002340887.2160803.8030592378545876774@kernel.org>
+References: <179002340887.2160803.8030592378545876774@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] cgroup/cpuset: prevent activating local partition
- over remote one
-To: Hui Peng <benquike@gmail.com>, Guopeng Zhang <guopeng.zhang@linux.dev>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- Ridong Chen <ridong.chen@linux.dev>
-Cc: Michal Koutny <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
- cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <aa90bb73-c2af-4d13-8f2a-0435aa528058@linux.dev>
- <20260920181449.3122336-1-benquike@gmail.com>
- <20260920181449.3122336-2-benquike@gmail.com>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <20260920181449.3122336-2-benquike@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Transfer-Encoding: 8bit
 
-On 9/20/26 2:14 PM, Hui Peng wrote:
-> Commit 6da580ec656a ("cgroup/cpuset: Don't allow creation of local
-> partition over a remote one") added a check in update_prstate() to reject
-> creating a top-level local partition whose cs->exclusive_cpus intersects
-> subpartitions_cpus.
->
-> However, if a top-level cgroup A1 is first set to "root" with all CPUs
-> (CX0-7:P1, becoming "root invalid" because no CPUs would remain in
-> top_cpuset), has a child A1/A2 enabled as a remote partition on a subset
-> of those exclusive CPUs (CX2-3:P2), and A1 is then updated to a valid CPU
-> subset (CX1-3), update_exclusive_cpumask() / update_cpumask() calls
-> validate_partition() without going through update_prstate(). Because
-> validate_partition() does not check trialcs->exclusive_cpus against
-> subpartitions_cpus, A1 transitions from "root invalid" to a valid local
-> partition over the existing remote partition A1/A2 and triggers:
->
->    WARNING: kernel/cgroup/cpuset.c:1943 at update_parent_effective_cpumask+0x189b/0x1fd0
->
-> Check trialcs->exclusive_cpus against subpartitions_cpus in
-> validate_partition() when !is_partition_valid(cs), and add a regression
-> test case to tools/testing/selftests/cgroup/test_cpuset_prs.sh.
->
-> Tested in QEMU on Linux 7.3.0-rc3 using
-> tools/testing/selftests/cgroup/test_cpuset_prs.sh.
->
-> Fixes: 6da580ec656a ("cgroup/cpuset: Don't allow creation of local partition over a remote one")
-> Cc: stable@vger.kernel.org
-> Assisted-by: LLM
-> Signed-off-by: Hui Peng <benquike@gmail.com>
-> ---
-> Changes in v3:
-> - Split the validate_partition() fix (Fixes: 6da580ec656a) and the
->    cpus_excl_conflict() fix (Fixes: 2a3602030d80) into separate patches.
->
->   kernel/cgroup/cpuset.c                        | 4 ++++
->   tools/testing/selftests/cgroup/test_cpuset_prs.sh | 2 ++
->   2 files changed, 6 insertions(+)
->
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 7381fa8502e7..7c5b4a8f1f3a 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -2415,6 +2415,10 @@ static enum prs_errcode validate_partition(struct cpuset *cs, struct cpuset *tri
->   	if (cpumask_empty(trialcs->effective_xcpus))
->   		return PERR_INVCPUS;
->   
-> +	if ((parent == &top_cpuset) && !is_partition_valid(cs) &&
-> +	    cpumask_intersects(trialcs->exclusive_cpus, subpartitions_cpus))
-> +		return PERR_REMOTE;
-> +
-This additional check looks good.
->   	if (prstate_housekeeping_conflict(trialcs->partition_root_state,
->   					  trialcs->effective_xcpus))
->   		return PERR_HKEEPING;
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index b732078bf319..f4d1822d4e21 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -321,6 +321,8 @@ TEST_MATRIX=(
->   	" C1-3:P2  X4:P2    .      .      .    X3:P2    .      .     0 A1:1-2|XA1:1-3|A2:3:XA2:3 A1:P2|A2:P2 1-3"
->   	" C0-3:P2    .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:5-6 A1:P2|B1:P0"
->   	" C0-3:P2    .      .    C4-6 C0-4:C0-3  .      .      .     0 A1:0-3|B1:4-6 A1:P2|B1:P0 0-3"
-> +	" CX0-7:P1 CX2-3:P2 .      .    CX1-3    .      .      .     0 A1:1|A2:2-3|XA2:2-3 \
-> +								       A1:P-1|A2:P2 2-3"
+Thank you for the review. Replies are inline below.
 
-This test will not work because you are assuming the test system only 
-have 8 CPUs. That may not be the case and 2 local partitions may be 
-created instead.
+> Can this case ever pass with a released iproute2? [...] Turning that
+> blob into the literal tokens "prob", "delay" and "deficit" requires the
+> companion iproute2 change [...] which is not merged. [...] Would it make
+> sense to add a 'dependsOn' probe so the case skips when the userspace
+> support is absent, or to assert only what current tc prints?
+>
+> A related question: the pattern hard-codes the exact label text and
+> ordering of the not-yet-reviewed userspace formatter. If the iproute2
+> side lands with different wording or field order [...] does this
+> kernel selftest then break while the kernel itself is unchanged?
 
-Cheers,
-Longman
+We'd like to keep the check as it is, without a dependsOn probe.
+There are several cases that were written against, and still assume, 
+newer tc wording with no dependsOn guard at all, e.g.:
+  - tc-tests/qdiscs/fq.json (commit 3007d8712c9b, "adjust fq test to
+    latest iproute2")
+  - tc-tests/infra/qdiscs.json (commit 56acc7f51974, "Adapt test's
+    output to HFSC's iproute2 printing changes")
+  - tc-tests/actions/police.json (commit b7df2e7eaef7, "Adapt tc
+    police action tests for Gb rounding changes")
+  - tc-tests/actions/bpf.json (commit ac2944abe4d7, "Be compatible
+    with newer tc output")
 
->   
->   	# Local partition invalidation tests
->   	" C0-3:X1-3:P2 C1-3:X2-3:P2 C2-3:X3:P2 \
+We're doing the same thing here: this test is paired with the
+companion iproute2 patch, same as those cases were paired with the tc
+versions they were written for.
+
+> Can this case fail intermittently depending on the host environment?
+> The assertion needs a backlogged flow at the instant the dump runs
+> [...] its exit status is discarded with '|| true'. If ping is not
+> installed, or the installed iputils rejects the fractional -i 0.001 /
+> -W 0.01 arguments, the fq_pie queue stays empty [...] Would it be
+> better to check the ping result, or to enqueue traffic in a way that
+> does not depend on neighbour solicitation timing?
+
+We'd like to keep the ping command as it is. The same pattern
+('-W 0.01 -i 0.001 ... || true') is already used, unguarded, elsewhere
+in this test suite - for example in case a4c3 in
+tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json. So this
+isn't a new risk, it's existing practice..
+
+
+
 
