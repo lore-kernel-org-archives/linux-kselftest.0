@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-107.mta0.migadu.com [91.218.175.107])
+Received: from mta1.migadu.com (out-191.mta1.migadu.com [95.215.58.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 713F0483BC8
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 07:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD89518138
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 07:20:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790061610; cv=none; b=m+b5n/mfyL5hr+X5B946nbK5kajyffkdzEefVpDS1MESU1nv8Ab8zEmQNK1ahEtVF0OJ8Aeak8FNzy/h5T+WBi8kwCfcGRqDdzWRSLwFk6kixOwMpC7M+KmOOmKrngtWhFG9nxWQbmB571vyEzKXp1X5lLJEr9Ra/dilI24JzA0=
+	t=1790061611; cv=none; b=TkHoCJvuVuJRrsaFjJnyT2HIHdzuoc+yfSwE/bOSQCb7n5q/N7/QSx7KebaqClSvdtIJjYtKZn/Ae2+ml7hebMBW3lVI1V9KowGvlZ3tQKxie/zemN1U+QQQIXJEKGmXT7Cf7qhXW8KnftGoRFUmAvh4XXH/wOfs6RUgKJGofOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790061610; c=relaxed/simple;
-	bh=EZ/YCaSPuiIHq9yuX+NfV7x2DltaVEKpXi2O9ZD9ZuQ=;
+	s=arc-20240116; t=1790061611; c=relaxed/simple;
+	bh=kR0qtsMATaQ3CTKql6oPYnCVuYWEZQdIrWQeZfXHpe0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=iQT5h29WU/EyWa9Q6i4v+oU199myWMoLzpoda7xcVz4taq2kQY3Ic0UisZq8/qOtsYVrfPjNe1dZENPcHBKqOwDBBGYAwDMWYVWZiJouCfnu3tMsn1RXUKndenP6tUO3S+QjVLk0y1X/f/zvlRnzf2WGBtd+QHMXWFk6pPCd5FE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kIRggEQD; arc=none smtp.client-ip=91.218.175.107
+	 MIME-Version; b=GDGHCgAfDu94bqh5abnpBB2MtEC3NgvgZF8e4Tw5dyNdYNKPgNkFp/eVhQruiDbHQiAURJftlpVntqbGgnK8FtSrmRB2qy+nMgY3hPcF2pLHDAZ1Pa47/fZumGajPCzlWohcukFPj7S2bvs3S52PbhW77OD2P27ryobm8RqtChU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CgIgzGcA; arc=none smtp.client-ip=95.215.58.191
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kIRggEQD"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CgIgzGcA"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=EZ/YCaSPuiIHq9yuX+NfV7x2DltaVEKpXi2O9ZD9ZuQ=;
+DKIM-Signature: a=rsa-sha256; bh=kR0qtsMATaQ3CTKql6oPYnCVuYWEZQdIrWQeZfXHpe0=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790061599; v=1; x=1790666399;
- b=kIRggEQDcs1UC/Cst/jynYBg/HQMkeKOgE0EOwKHH6ZUUcFyaflCKjkGRCstO5kArabqfFF2
- RTL5cCH1iwL/pWn/sWuFMwVo2CcWYd6yJWw/qRhEFvWU5yCAn77kd+C8QNSA2bZ+khnQSTpI2LS
- 4iabQyLuUpPa0ZZxpDxeeRYk=
+ t=1790061595; v=1; x=1790666395;
+ b=CgIgzGcAJ/cAjgNmOs2CCn38VWMIwpFwf7N3E6hvNF4KCmFPJL4wEow4eogQ0/oddPu5N5GN
+ VvGYk/RKWczhyWcE756O2PUSFV3uctZ0ulxQzOE+LZhTJj5jFrjen3swuM4DCldPzVo4g4GZ9xi
+ oPTWEZY46+f2zfRRUGO3srN8=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 3a52787b001092ab;
-	Tue, 22 Sep 2026 07:19:59 +0000
-X-Mizu-Trace-ID: 3a52787b001092ab
+Received: by smtp.migadu.com with ESMTPS id 6931c0f0a84286ba;
+	Tue, 22 Sep 2026 07:19:54 +0000
+X-Mizu-Trace-ID: 6931c0f0a84286ba
 X-Migadu-Flow: FLOW_OUT
 From: Fuad Tabba <fuad.tabba@linux.dev>
 To: Paolo Bonzini <pbonzini@redhat.com>,
@@ -45,9 +45,9 @@ Cc: Tejun Heo <tj@kernel.org>,
 	cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] selftests/cgroup: Make the object directory an order-only prerequisite
-Date: Tue, 22 Sep 2026 08:19:45 +0100
-Message-Id: <20260922071945.693714-3-fuad.tabba@linux.dev>
+Subject: [PATCH v2 1/2] KVM: selftests: Fix arm64 sysreg header dependencies
+Date: Tue, 22 Sep 2026 08:19:44 +0100
+Message-Id: <20260922071945.693714-2-fuad.tabba@linux.dev>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260922071945.693714-1-fuad.tabba@linux.dev>
 References: <20260922071945.693714-1-fuad.tabba@linux.dev>
@@ -59,33 +59,75 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-libcgroup.mk names $(LIBCGROUP_O_DIRS) as a regular prerequisite of
-cgroup_util.o. The directory's mtime moves whenever an object is
-created or replaced in it, so an incremental KVM selftests build that
-rebuilt anything in lib/ recompiles cgroup_util.o and relinks every
-test on the following run. Make the directory order-only, as
-libvfio.mk does.
+The rule generating the arm64 sysreg header targets the generated
+directory, and its only prerequisite is tools/arch/arm64/tools/*,
+which expands to the inner Makefile. An existing directory looks up
+to date, so an incremental build never regenerates sysreg-defs.h for
+a change to the sysreg table. A selftest referencing a register added
+to the table since then fails with undeclared SYS_* identifiers. Clean
+builds are unaffected.
 
-Fixes: 2c754a84ff16a ("cgroup: selftests: Move cgroup_util into its own library")
+Always recurse into tools/arch/arm64/tools, whose Makefile already
+tracks the generator's inputs, and target the header rather than its
+directory. The recursion leaves the header untouched when nothing
+changed, so the dependents rebuild only when the header does.
+
+Fixes: 70c7b704ca725 ("KVM: selftests: Avoid using forced target for generating arm64 headers")
+Link: https://lore.kernel.org/r/arGRhHgP_izSwW4T@kernel.org
 Assisted-by: LLM
 Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
 ---
- tools/testing/selftests/cgroup/lib/libcgroup.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/kvm/Makefile.kvm | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/cgroup/lib/libcgroup.mk b/tools/testing/selftests/cgroup/lib/libcgroup.mk
-index 7a73007204c39..bcf6fe2516223 100644
---- a/tools/testing/selftests/cgroup/lib/libcgroup.mk
-+++ b/tools/testing/selftests/cgroup/lib/libcgroup.mk
-@@ -13,7 +13,7 @@ EXTRA_HDRS := $(selfdir)/clone3/clone3_selftests.h
- $(LIBCGROUP_O_DIRS):
- 	mkdir -p $@
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 96bab7002d39e..81dca3dbc16b4 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -303,10 +303,16 @@ arm64_hdr_outdir := $(tools_dir)/
+ endif
  
--$(LIBCGROUP_O): $(OUTPUT)/%.o : $(CGROUP_DIR)/%.c $(EXTRA_HDRS) $(LIBCGROUP_O_DIRS)
-+$(LIBCGROUP_O): $(OUTPUT)/%.o : $(CGROUP_DIR)/%.c $(EXTRA_HDRS) | $(LIBCGROUP_O_DIRS)
+ GEN_HDRS := $(arm64_hdr_outdir)arch/arm64/include/generated/
++GEN_SYSREG_DEFS := $(GEN_HDRS)asm/sysreg-defs.h
+ CFLAGS += -I$(GEN_HDRS)
+ 
+-$(GEN_HDRS): $(wildcard $(arm64_tools_dir)/*)
++# The inner Makefile tracks the generator's inputs and leaves the header
++# untouched when nothing changed, so dependents rebuild only when it does.
++$(GEN_SYSREG_DEFS): FORCE
+ 	$(MAKE) -C $(arm64_tools_dir) OUTPUT=$(arm64_hdr_outdir)
++
++FORCE:
++.PHONY: FORCE
+ endif
+ 
+ no-pie-option := $(call try-run, echo 'int main(void) { return 0; }' | \
+@@ -359,10 +365,10 @@ EXTRA_CLEAN += $(GEN_HDRS) \
+ 	       $(TEST_GEN_OBJ) \
+ 	       cscope.*
+ 
+-$(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c $(GEN_HDRS)
++$(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c $(GEN_SYSREG_DEFS)
  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
  
- EXTRA_CLEAN += $(LIBCGROUP_O)
+-$(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(GEN_HDRS)
++$(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(GEN_SYSREG_DEFS)
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+ 
+ # Compile the string overrides as freestanding to prevent the compiler from
+@@ -372,10 +378,10 @@ $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
+ 
+ $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
+-$(SPLIT_TEST_GEN_OBJ): $(GEN_HDRS)
++$(SPLIT_TEST_GEN_OBJ): $(GEN_SYSREG_DEFS)
+ $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
+ $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
+-$(TEST_GEN_OBJ): $(GEN_HDRS)
++$(TEST_GEN_OBJ): $(GEN_SYSREG_DEFS)
+ 
+ cscope: include_paths = $(LINUX_TOOL_INCLUDE) $(LINUX_HDR_PATH) include lib ..
+ cscope:
 -- 
 2.39.5
 
