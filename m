@@ -1,230 +1,295 @@
-Received: from mta1.migadu.com (out-132.mta1.migadu.com [95.215.58.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89903528447
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 08:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0D94189BA
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 09:13:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790067345; cv=none; b=lBcuQMCWL+7yR0sNN3ghUHMx2DX5x4Ss7EKrPGGcKn/Ey4tQHeCEuRAVVXQikZ505SHMR8fBLXSzhvOqjRHLiq/RLHUtxSbS9eiXl9+kG/ziZdV5moW6+uoTZG9A9znEmixqsitgEec0ReNVplV3W1Prod4FHnYQLy9fCzc1Wds=
+	t=1790068411; cv=none; b=B+6rRZT6XKSjNkvnjGiU0zUdXav9jQM+Oo3fjdS0yKJmoP8cwAG0UmWwOi1iLn2nlipvQlg2DznshTix1gTzbaPGHwMXOZO7qHkoaLQPrzkmdm7ZZLu8h5ym5STeOIpgHmy9giH26MAkhUWQNIQ3ICy+IXeKlmlDsXI1gdos2d8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790067345; c=relaxed/simple;
-	bh=9S/WJv5Rt2cdity4AXgyXkjGtrAC7glb1fuugeDEndY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bNpKAK6l8OJVkm89WxcE+/89fOEUAUqt1AByIAVZQppX0UUULfC9QQxdwiV3lA5ULHNJppslivGLUvHRujontj8dRB55ZsBW44BJOkyX7kp1hiV0Dg+tFm/A4PwjgVa7orCmyaxqFxNgqj/SjHmJu5upxuUAhIRV8cg1z/5aBK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=O3Tow/d1; arc=none smtp.client-ip=95.215.58.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790068411; c=relaxed/simple;
+	bh=eEC+vMrtdNvqtTE2iVXtcrgWXjMqf0Mo+dgesmgS96o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AZlzwIQAoRZOIdAuSJSNUsPH9NQEpD4QiEpAmKVBWDyxczBg2aX2u1SiJ8NtSZc8qUtUFtOYKrbn2PYG8BAIG+GCHqls5D32ZZmENPmjAO+zQInGwDFnwMrQC4xotMjxk0AFECbspfTr4x5BUYqVzdGAnwT1n8jpcI3qicrbU+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=r18MYRiH; arc=none smtp.client-ip=49.212.243.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="O3Tow/d1"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9S/WJv5Rt2cdity4AXgyXkjGtrAC7glb1fuugeDEndY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790067341; v=1; x=1790672141;
- b=O3Tow/d1XCGCBR2TdjQ/H58iqMxdOun/VDcu/C2TdZOha/udM8n7sYKGKczJv1E6FWGuuSTw
- Tnu6N8oaBNrWp5+CkS1OnF42E+o00rS1Lm/3i7E/HUs7HLehfwBXPNnYVKk/uJuIKPUy71LTAN/
- yQ1fKP2Oq59AH5Vd7mDTtuEY=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ef8445d551e51785;
-	Tue, 22 Sep 2026 08:55:41 +0000
-X-Mizu-Trace-ID: ef8445d551e51785
-X-Migadu-Flow: FLOW_OUT
-From: Hangbin Liu <hangbin.liu@linux.dev>
-Date: Tue, 22 Sep 2026 16:54:47 +0800
-Subject: [PATCH net-next 5/5] selftests: seg6: add End.X PSP selftest
+	dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="r18MYRiH"
+Received: from [133.11.54.183] (h183.csg.ci.i.u-tokyo.ac.jp [133.11.54.183])
+	(authenticated bits=0)
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 68M9DR7H021356
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Tue, 22 Sep 2026 18:13:27 +0900 (JST)
+	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
+DKIM-Signature: a=rsa-sha256; bh=qWdukw8Lwo5D178NeO++XInMp2aCtmIcsueteb32N9I=;
+        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
+        h=From:Message-ID:To:Subject:Date;
+        s=rs20250326; t=1790068407; v=1;
+        b=r18MYRiHmKiGcRo1ZPIgYuDx5mT4Drk6ugS5wVEuTfrZQkbGInaUGH+XIPh/w69U
+         EaZH2vvrBWmoDHnWpbISp25FtvQA2v0gjQ5yon66dc1n3QEib6WWio7l4+4L7FEv
+         DXKAd/bZ53zq5YqBBzHqZPhMypM/YuZpMZLe69B9n87ojxufmhNquUSW+GtAzRUz
+         DVeO5038q+phoXydYDcRNPXK/KEmg7rhveGLZ0Xx6uV7GcRz/ZsMTG11Vibs+A9D
+         L/owohAYoUw2rEZrcuw9ml3lcEy++eoq9besVkLLO/rmSspTSt1Kt7GqlRbzLvo+
+         C/E2ZOEmuixnNMsre8OiWw==
+Message-ID: <b9c1b996-2c01-4889-8f93-154ceb58c529@rsg.ci.i.u-tokyo.ac.jp>
+Date: Tue, 22 Sep 2026 18:13:26 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 20/21] KVM: arm64: PMU: Introduce FIXED_COUNTERS_ONLY
+To: Oliver Upton <oupton@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu
+ <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Steffen Eiden <seiden@linux.ibm.com>,
+        Andrew Jones <andrew.jones@oss.qualcomm.com>,
+        Fuad Tabba <fuad.tabba@linux.dev>, Mark Rutland <mark.rutland@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Shannon Zhao <shannon.zhao@linaro.org>,
+        Randy Dunlap
+ <rdunlap@infradead.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20260920-hybrid-v11-0-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
+ <20260920-hybrid-v11-20-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
+ <arIqMO-f8X0gCzjA@kernel.org>
+Content-Language: en-US
+From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+In-Reply-To: <arIqMO-f8X0gCzjA@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260922-srv6_flavors_endx-v1-5-4d01c05c47b7@kylinos.cn>
-References: <20260922-srv6_flavors_endx-v1-0-4d01c05c47b7@kylinos.cn>
-In-Reply-To: <20260922-srv6_flavors_endx-v1-0-4d01c05c47b7@kylinos.cn>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Hangbin Liu <liuhangbin@kylinos.cn>
-X-Mailer: b4 0.14.3
 
-From: Hangbin Liu <liuhangbin@kylinos.cn>
+On 2026/09/22 16:11, Oliver Upton wrote:
+> On Sun, Sep 20, 2026 at 08:16:01PM +0900, Akihiko Odaki wrote:
+>> Introduce the KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY attribute to
+>> create a "fixed-counters-only" PMU.
+>>
+>> Much like KVM_ARM_VCPU_PMU_V3_IRQ and other read-write attributes, this
+>> attribute provides a getter that facilitates kernel and userspace
+>> debugging/testing.
+>>
+>> Allow strict PMUv3 vCPUs to initialize the PMU after selecting
+>> fixed-counters-only mode, without selecting a VM-wide hardware PMU.
+>>
+>> Assisted-by: Codex:gpt-5.6-sol
+>> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+>> ---
+>>   Documentation/virt/kvm/api.rst          |  8 +++++--
+>>   Documentation/virt/kvm/devices/vcpu.rst | 42 ++++++++++++++++++++++++++-------
+>>   arch/arm64/include/uapi/asm/kvm.h       |  1 +
+>>   arch/arm64/kvm/pmu-emul.c               | 34 ++++++++++++++++++++++----
+>>   tools/arch/arm64/include/uapi/asm/kvm.h |  1 +
+>>   5 files changed, 71 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+>> index 1a90598901c5..a6aef405ef87 100644
+>> --- a/Documentation/virt/kvm/api.rst
+>> +++ b/Documentation/virt/kvm/api.rst
+>> @@ -3531,9 +3531,13 @@ Possible features:
+>>   
+>>   	    * Userspace must explicitly select a PMU implementation before
+>>   	      initializing the PMU or configuring a PMU event filter
+>> +	      (KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY also satisfies the
+>> +	      initialization requirement; event filtering remains unavailable
+>> +	      in that mode)
+>>   
+>> -	    * If the PMU implements FEAT_PMUv3p4, PMMIR_EL1.SLOTS provides the
+>> -	      hardware value of the underlying implementation
+>> +	    * If a hardware PMU is selected and implements FEAT_PMUv3p4,
+>> +	      PMMIR_EL1.SLOTS provides its hardware value. In fixed-counters-only
+>> +	      mode, PMMIR_EL1 reads as zero
+>>   
+>>   	    * Writes to PMCR_EL0.N via KVM_SET_ONE_REG are ignored
+>>   
+>> diff --git a/Documentation/virt/kvm/devices/vcpu.rst b/Documentation/virt/kvm/devices/vcpu.rst
+>> index a3f20a4ee4b1..41f6d708ff43 100644
+>> --- a/Documentation/virt/kvm/devices/vcpu.rst
+>> +++ b/Documentation/virt/kvm/devices/vcpu.rst
+>> @@ -53,9 +53,9 @@ Returns:
+>>   	 =======  ======================================================
+>>   	 -EEXIST  Interrupt number already used
+>>   	 -ENODEV  PMUv3 not supported or GIC not initialized
+>> -	 -ENXIO   PMUv3 not supported, missing VCPU feature, missing
+>> -                  hardware PMU, or interrupt number not set (non-GICv5
+>> -                  guests, only)
+>> +	 -ENXIO   PMUv3 not supported, missing VCPU feature,
+>> +		  neither hardware PMU nor FIXED_COUNTERS_ONLY selected,
+>> +		  or interrupt number not set (non-GICv5 guests only)
+>>   	 -EBUSY   PMUv3 already initialized
+>>   	 =======  ======================================================
+>>   
+>> @@ -64,7 +64,8 @@ virtual GIC implementation, this must be done after initializing the in-kernel
+>>   irqchip.
+>>   
+>>   When the KVM_ARM_VCPU_PMU_V3_STRICT vCPU feature is enabled this must be done
+>> -after selecting a hardware PMU.
+>> +after selecting a hardware PMU or enabling
+>> +KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY.
+>>   
+>>   1.3 ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_FILTER
+>>   -----------------------------------------
+>> @@ -78,7 +79,8 @@ after selecting a hardware PMU.
+>>   	 -ENODEV  PMUv3 not supported or GIC not initialized
+>>   	 -ENXIO   PMUv3 not properly configured or in-kernel irqchip not
+>>   	 	  configured as required prior to calling this attribute
+>> -	 -EBUSY   PMUv3 already initialized or a VCPU has already run
+>> +	 -EBUSY   PMUv3 already initialized, a VCPU has already run or
+>> +		  FIXED_COUNTERS_ONLY has already been set
+>>   	 -EINVAL  Invalid filter range
+>>   	 =======  ======================================================
+>>   
+>> @@ -123,14 +125,14 @@ after selecting a hardware PMU.
+>>   
+>>   :Returns:
+>>   
+>> -	 =======  ====================================================
+>> +	 =======  ===========================================================
+>>   	 -EBUSY   PMUv3 already initialized, a VCPU has already run or
+>> -                  an event filter has already been set
+>> +                  an event filter or FIXED_COUNTERS_ONLY has already been set
+>>   	 -EFAULT  Error accessing the PMU identifier
+>>   	 -ENXIO   PMU not found
+>>   	 -ENODEV  PMUv3 not supported or GIC not initialized
+>>   	 -ENOMEM  Could not allocate memory
+>> -	 =======  ====================================================
+>> +	 =======  ===========================================================
+>>   
+>>   Request that the VCPU uses the specified hardware PMU when creating guest events
+>>   for the purpose of PMU emulation. The PMU identifier can be read from the "type"
+>> @@ -172,6 +174,30 @@ explicitly selected, or the number of counters is out of range for the
+>>   selected PMU. Selecting a new PMU cancels the effect of setting this
+>>   attribute.
+>>   
+>> +1.6 ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
+>> +------------------------------------------------------
+>> +
+>> +:Parameters: no additional parameter in kvm_device_attr.addr
+>> +
+>> +:Returns:
+>> +
+>> +	 =======  ==================================================
+>> +	 -EBUSY   PMUv3 already initialized, a VCPU has already run,
+>> +		  an event filter has already been set or
+>> +		  a hardware PMU has already been specified
+>> +	 -ENXIO   Attempted to get before setting
+>> +	 -ENODEV  Attempted to set while PMUv3 not supported
+>> +	 =======  ==================================================
+>> +
+>> +If set, KVM emulates PMUv3 without programmable event counters.
+>> +
+>> +With KVM_ARM_VCPU_PMU_V3_STRICT, enabling this attribute satisfies the
+>> +PMU selection requirement for KVM_ARM_VCPU_PMU_V3_INIT.
+>> +
+>> +When this attribute is enabled, the vCPU can run on any physical CPU
+>> +that has a PMU, regardless of the underlying implementation. This
+>> +attribute is VM-scoped.
+>> +
+>>   2. GROUP: KVM_ARM_VCPU_TIMER_CTRL
+>>   =================================
+>>   
+>> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+>> index 65ee09bd1463..7a6a0af14f5a 100644
+>> --- a/arch/arm64/include/uapi/asm/kvm.h
+>> +++ b/arch/arm64/include/uapi/asm/kvm.h
+>> @@ -453,6 +453,7 @@ struct kvm_vgic_v5_ist {
+>>   #define   KVM_ARM_VCPU_PMU_V3_FILTER		2
+>>   #define   KVM_ARM_VCPU_PMU_V3_SET_PMU		3
+>>   #define   KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS	4
+>> +#define   KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY	5
+>>   #define KVM_ARM_VCPU_TIMER_CTRL		1
+>>   #define   KVM_ARM_VCPU_TIMER_IRQ_VTIMER		0
+>>   #define   KVM_ARM_VCPU_TIMER_IRQ_PTIMER		1
+>> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
+>> index 9c1e2f3e41db..ebb648eabdc6 100644
+>> --- a/arch/arm64/kvm/pmu-emul.c
+>> +++ b/arch/arm64/kvm/pmu-emul.c
+>> @@ -1017,8 +1017,8 @@ int kvm_arm_pmu_v3_enable(struct kvm_vcpu *vcpu)
+>>   
+>>   static int kvm_arm_pmu_v3_init(struct kvm_vcpu *vcpu)
+>>   {
+>> -	/* Only possible when using KVM_ARM_VCPU_PMU_V3_STRICT */
+>> -	if (!vcpu->kvm->arch.arm_pmu)
+>> +	/* Strict PMUv3 requires a hardware PMU or fixed-counters-only mode. */
+>> +	if (!vcpu->kvm->arch.arm_pmu && !kvm_pmu_fixed_counters_only(vcpu->kvm))
+>>   		return -ENXIO;
+>>   
+>>   	if (irqchip_in_kernel(vcpu->kvm)) {
+>> @@ -1153,8 +1153,8 @@ int kvm_arm_set_default_pmu(struct kvm *kvm)
+>>   	 * affines the VMM to a particular cluster of cores.
+>>   	 *
+>>   	 * In any case, userspace should just do the sane thing and use the UAPI
+>> -	 * to select a PMU type directly. But, be wary of the baggage being
+>> -	 * carried here.
+>> +	 * to select a PMU type directly, or request fixed-counters-only
+>> +	 * emulation. But, be wary of the baggage being carried here.
+>>   	 */
+>>   	struct arm_pmu *arm_pmu = kvm_pmu_probe_armpmu(raw_smp_processor_id());
+>>   
+>> @@ -1179,11 +1179,13 @@ static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
+>>   		arm_pmu = entry->arm_pmu;
+>>   		if (arm_pmu->pmu.type == pmu_id) {
+>>   			if (kvm_vm_has_ran_once(kvm) ||
+>> +			    kvm_pmu_fixed_counters_only(kvm) ||
+>>   			    (kvm->arch.pmu_filter && kvm->arch.arm_pmu != arm_pmu)) {
+>>   				ret = -EBUSY;
+>>   				break;
+>>   			}
+>>   
+>> +			set_bit(KVM_ARCH_FLAG_PMU_V3_EXPLICIT, &kvm->arch.flags);
+>>   			kvm_arm_set_pmu(kvm, arm_pmu);
+>>   			cpumask_copy(kvm->arch.supported_cpus, &arm_pmu->supported_cpus);
+>>   
+>> @@ -1205,6 +1207,22 @@ static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
+>>   	return ret;
+>>   }
+>>   
+>> +static int kvm_arm_pmu_v3_set_pmu_fixed_counters_only(struct kvm_vcpu *vcpu)
+>> +{
+>> +	struct kvm *kvm = vcpu->kvm;
+>> +
+>> +	lockdep_assert_held(&kvm->arch.config_lock);
+>> +
+>> +	if (kvm_vm_has_ran_once(kvm) || kvm->arch.pmu_filter ||
+>> +	    test_bit(KVM_ARCH_FLAG_PMU_V3_EXPLICIT, &kvm->arch.flags))
+>> +		return -EBUSY;
+>> +
+>> +	set_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY, &kvm->arch.flags);
+>> +	kvm->arch.nr_pmu_counters = 0;
+>> +
+>> +	return 0;
+>> +}
+>> +
+> 
+> I'd rather that FIXED_COUNTERS_ONLY depend on the KVM_ARM_VCPU_PMU_V3_STRICT
+> feature flag. The expectation of that flag is that userspace specifies a
+> backing PMU implementation; your FIXED_COUNTERS_ONLY could just be seen
+> as one such PMU implementation.
 
-The current selftest only exercises End with PSP. Add a new test that
-uses End.X on the PSP path so the kernel's End.X flavor handling is
-validated end to end.
+Hi Oliver,
 
-Extend __setup_rt_policy() to parse End.X action field from the
-router description, allowing entries like:
-  4:psp:End.X,4,2
-  3:psp:End.X,3,1
+Agreed. That will make the kernel code simpler by removing the need to 
+track explicit hardware PMU selection separately with 
+KVM_ARCH_FLAG_PMU_V3_EXPLICIT, since STRICT does not select a default 
+PMU. Hopefully, it will also make maintaining the code a bit easier by 
+reducing possible configuration combinations and encourage userspace to 
+use STRICT.
 
-Since SETUP_ERR is not set in one setup function, and the middle test may
-set ret to 1, we also need to check ret before setting the result as SKIP.
+I'll make this change for v2.
 
-Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
----
- .../testing/selftests/net/srv6_end_flavors_test.sh | 83 ++++++++++++++++++++--
- 1 file changed, 78 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/net/srv6_end_flavors_test.sh b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-index 52731983b4cc..e130d0d71b3d 100755
---- a/tools/testing/selftests/net/srv6_end_flavors_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-@@ -194,8 +194,8 @@
- # after the IPv6 header. At this point, the packet with IPv6 DA=cafe::1 is sent
- # to the destination, i.e. hs-1.
- 
--# Kselftest framework requirement - SKIP code is 4.
--readonly ksft_skip=4
-+# shellcheck source=lib.sh
-+source lib.sh
- 
- readonly RDMSUFF="$(mktemp -u XXXXXXXX)"
- readonly DUMMY_DEVNAME="dum0"
-@@ -345,7 +345,7 @@ cleanup()
- 	# check whether the setup phase was completed successfully or not. In
- 	# case of an error during the setup phase of the testing environment,
- 	# the selftest is considered as "skipped".
--	if [ "${SETUP_ERR}" -ne 0 ]; then
-+	if [ "${SETUP_ERR}" -ne 0 ] && [ "$ret" -ne "$ksft_fail" ]; then
- 		echo "SKIP: Setting up the testing environment failed"
- 		exit "${ksft_skip}"
- 	fi
-@@ -414,6 +414,36 @@ __get_srv6_rtcfg_op()
- 		xargs | sed 's/ /,/g'
- }
- 
-+# Given the description of a router <id:op:act> as an input, the function
-+# returns the <act> token which represents the action (e.g. End, End.X,
-+# End.T behavior with or without route table, out interface) configured
-+# for the node.
-+#
-+# Support End, End.X at present. When omit, return default End behavior.
-+# i.e. input: "1:psp:End.X,1,3"
-+#      output: "End.X nh6 fcf0:0:1:3::3 oif veth-rt-1-3"
-+__get_srv6_rtcfg_act()
-+{
-+	local element="$1"
-+	local net_prefix
-+	local acts
-+	local out
-+
-+	acts="$(echo "${element}" | cut -d':' -f3)"
-+	act="$(echo "${acts}" | cut -d',' -f1)"
-+	act="${act:-"End"}"
-+
-+	rt="$(echo "${acts}" | cut -d',' -f2)"
-+	neigh="$(echo "${acts}" | cut -d',' -f3)"
-+
-+	if [ "$act" == "End" ]; then
-+		echo "End"
-+	elif [ "$act" == "End.X" ]; then
-+		net_prefix="$(get_network_prefix "${rt}" "${neigh}")"
-+		echo "End.X nh6 ${net_prefix}::${neigh} oif veth-rt-${rt}-${neigh}"
-+	fi
-+}
-+
- # Setup the basic networking for the routers
- setup_rt_networking()
- {
-@@ -514,6 +544,7 @@ __setup_rt_policy()
- 	local function
- 	local fullsid
- 	local op_type
-+	local action
- 	local node
- 	local n
- 
-@@ -522,19 +553,20 @@ __setup_rt_policy()
- 	for n in ${policy_rts}; do
- 		node="$(__get_srv6_rtcfg_id "${n}")"
- 		op_type="$(__get_srv6_rtcfg_op "${n}")"
-+		action="$(__get_srv6_rtcfg_act "${n}")"
- 		rt_nsname="$(get_rtname "${node}")"
- 
- 		case "${op_type}" in
- 		"noflv")
- 			policy="${policy}${LOCATOR_SERVICE}:${node}::${END_FUNC},"
- 			function="${END_FUNC}"
--			behavior_cfg="End"
-+			behavior_cfg="${action}"
- 			;;
- 
- 		"psp")
- 			policy="${policy}${LOCATOR_SERVICE}:${node}::${END_PSP_FUNC},"
- 			function="${END_PSP_FUNC}"
--			behavior_cfg="End flavors psp"
-+			behavior_cfg="${action} flavors psp"
- 			;;
- 
- 		*)
-@@ -729,6 +761,30 @@ cleanup_end_flv_psp()
- 	cleanup_rt_policy_ipv6 1 2 "1:psp"
- }
- 
-+setup_endx_flv_psp()
-+{
-+	# Direction hs-1 -> hs-2 (End.X PSP flavor)
-+	# SID List=fcff:3::e,fcff:4::ef1,cafe::2
-+	#  - rt-1 (SRv6 H.Insert policy)
-+	#  - rt-3 (SRv6 End behavior)
-+	#  - rt-4 (SRv6 End.X flavor PSP with SL=1)
-+	#  - rt-2 (Route to hs-2 via nh and oif)
-+	#
-+	# Direction hs-2 -> hs-1 (End.X PSP flavor)
-+	# SID List=fcff:3::ef1,cafe::1
-+	#  - rt-2 (SRv6 H.Insert policy)
-+	#  - rt-3 (SRv6 End.X flavor PSP with SL=1)
-+	#  - rt-1 (Route to hs-1 via nh and oif)
-+	setup_rt_policy_ipv6 2 1 "3:noflv:End 4:psp:End.X,4,2"
-+	setup_rt_policy_ipv6 1 2 "3:psp:End.X,3,1"
-+}
-+
-+cleanup_endx_flv_psp()
-+{
-+	cleanup_rt_policy_ipv6 2 1 "3:noflv 4:psp"
-+	cleanup_rt_policy_ipv6 1 2 "3:psp"
-+}
-+
- check_rt_connectivity()
- {
- 	local rtsrc="$1"
-@@ -835,6 +891,22 @@ host_srv6_end_flv_psp_tests()
- 	cleanup_end_flv_psp
- }
- 
-+host_srv6_endx_flv_psp_tests()
-+{
-+	set -e
-+	SETUP_ERR=1
-+	setup_endx_flv_psp
-+	SETUP_ERR=0
-+	set +e
-+
-+	log_section "SRv6 connectivity test hosts (h1 <-> h2, End.X flavor PSP)"
-+
-+	check_and_log_hs_connectivity 1 2
-+	check_and_log_hs_connectivity 2 1
-+
-+	cleanup_endx_flv_psp
-+}
-+
- test_iproute2_supp_or_ksft_skip()
- {
- 	local flavor="$1"
-@@ -936,5 +1008,6 @@ set +e
- router_tests
- host2gateway_tests
- host_srv6_end_flv_psp_tests
-+host_srv6_endx_flv_psp_tests
- 
- print_log_test_results
-
--- 
-2.55.0
-
+Regards,
+Akihiko Odaki
