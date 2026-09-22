@@ -1,162 +1,169 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF3C53D0D4;
-	Tue, 22 Sep 2026 11:41:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E574E0B63;
+	Tue, 22 Sep 2026 12:01:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790077270; cv=none; b=O+p/P/9plWTyFz/b0z8oZOJDkgIDvd3TSoIolJ24LseJPmcVDs0L3yYgAmqRAM81NvIfAsVVTgPNWLGNi3Lr4ukeGh0xK103etjW4RaKhaXSos3eOZfZIU97MB/GMfiyaF4Z3bneEFCy6zdR+YEpB7GyKSkl/p1FhZYall7Vyug=
+	t=1790078512; cv=none; b=XeIfqE3YHnvo6XxlomWQWG7Zit+rJAMXExrn7/2zR5FCNXPQFE9u03hoPD297B+e3LkfKL9LOB17Zk3XGOcupU8ZAY44ZDs16SxFq8tKPtWApFCQ9EDjm+LU5HA2VHJvuLJHmjfiNhaqikMtR3xHO6Bc6vNaNGl8ZxLZsxEtogc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790077270; c=relaxed/simple;
-	bh=jxO2tbCn05NkUfkav108Q3sl+zdNebjag0oxiZ6oa7k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cQ6pB5Ifk8ftASWZtctNsRALANn1cC0zUfwh+TX0Hb0vnXJocuSqgqc5a3GxgQ2ZI5H3k6KqTT0wXHqcUKiAJFVqbxOLO+IEgtxWDDBzUyprWCltph27sr/+We2tXCfM+sE+RmAmFzZkHEeuaX6A2qL06gbMaqsrr1vQH9y+VGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MdR85bzh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790078512; c=relaxed/simple;
+	bh=95S3V5+vI0rbCT6+PAtnrR4unwZRVWia0i/Kr5LSaQ0=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eok0aO7s6GgqQx4f58nBw8JW45E8Pukws67nMAfuw5p1EeRw68KnzzJ+sSIZRzhZXKaxoRA+A1ElOQv9I5jDFNSHV720gmaGqSu0uw8mgmLGrl3dIku1jzGCu/8mZqpEwVJBLwMkeEi2m6Aj6NRAn5lgsfQz/unCQH+9tQ1zZ2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dk6F/vEV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MdR85bzh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 757891F00898;
-	Tue, 22 Sep 2026 11:40:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dk6F/vEV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 603071F00898;
+	Tue, 22 Sep 2026 12:01:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790077258;
-	bh=F+/XiWey5CLZx+RgVIraKLoSGfEXc6kJ7NpnMFbxg/g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=MdR85bzh1RoqepA7zsF3/V8Pl3ctZkZaPAwXAkpWebSOYwMiIbBg3nw2cdV5909Er
-	 Uedjv/1PNvNeBmzZVpxsppAHst/XgeDExrGvWwvfJAnxrHh4tAkKsOPgQm6wtCkQfF
-	 6iiKaW9kUgyR0zBRpZOv3kT37aMB6ZltRGaudFj4ZeHkg0ZrOYTxubjYHGxFjhAUDR
-	 ZNZPm7Pp828QoHwc6rw+JMG5FdJKk7qkk51QeZdkB8WLdt7TyuAuCd1jWyFrppvasK
-	 ctEmDZ+yTGQRmAQOCEs7HRUudU4TKL1rsVIklBs9ms2+yTi5bCf+8tCq8DpcgD6HH8
-	 RnGkReCInrnWg==
-Message-ID: <49208ed6-6c20-49a9-9c0d-0e1cffe1898f@kernel.org>
-Date: Tue, 22 Sep 2026 13:40:51 +0200
+	s=k20260515; t=1790078511;
+	bh=Kds8JbMZPWooK0BCcIhbxnKHotJjxiX6A56WabKUx5g=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=dk6F/vEVdxQAf2/Rje3VhT6eOMWMsGD4i7E4Hlk2ms0P229iCw+DvW6jrGxENlbf/
+	 984+YRPN5JG4LLKVfUwgNZWk7LLcMOKD7k7vrwYtPNoU616EzEYEv96zPMTuGMZUlz
+	 LLPUPKF7B7murPMu+W4mXMY2A4PBf/Sttz413CMca6hl9dSqJ50OSEc15VK09I6pZu
+	 mk4xjNQuYX8A1pYt8fYSOTGp6W2d5G6Gd3GZJgc2IH+hEWro9m1cbtX3pIXYuVodqw
+	 RxGrw3K/k7tk8HpcHm4v/C5T2l4mV3nZWUeLUvGNSIuWlZQmyZEacHbz/bxR1Dcb1C
+	 zdjuo+PinagMQ==
+Subject: Re: [PATCH net-next v2 2/3] selftests: drv-net: Check the features
+ set by set_ethtool_feat()
+From: netdev-bot+sashiko@kernel.org
+To: ovidiu.panait.rb@renesas.com
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, nb@tipi-net.de,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Date: Tue, 22 Sep 2026 12:01:49 +0000
+Message-ID: <179007850985.2160803.6821263866052929617@kernel.org>
+In-Reply-To: <20260918112529.96039-3-ovidiu.panait.rb@renesas.com>
+References: <20260918112529.96039-3-ovidiu.panait.rb@renesas.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] userfaultfd: clear the inherited uffd bit in
- move_swap_pte()
-To: Donggeun Yoo <donggeunyoo.kernel@gmail.com>, akpm@linux-foundation.org,
- rppt@kernel.org
-Cc: peterx@redhat.com, surenb@google.com, aarcange@redhat.com,
- ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, mhocko@suse.com,
- shuah@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20260919004630.1159895-1-donggeunyoo.kernel@gmail.com>
- <20260919004630.1159895-2-donggeunyoo.kernel@gmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260919004630.1159895-2-donggeunyoo.kernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 9/19/26 02:46, Donggeun Yoo wrote:
-> UFFDIO_MOVE on a swapped-out page installs the source PTE at the
-> destination unchanged, so a uffd bit set on the source lands in a
-> destination VMA that was never registered for write protection.  It is
-> then permanent: the bit is dropped only by change_protection() under
-> MM_CP_UFFD_{WP,RWP}_RESOLVE, which uffd_wp_range(), mrwprotect_range()
-> and userfaultfd_clear_vma() issue only for a VMA registered in that
-> mode.  pagemap reports the page as uffd-tracked, and MADV_COLLAPSE
-> refuses the range while the bit is set, because collapse_scan_pmd() is
-> strict about uffd on swap entries.
-> 
-> move_present_ptes() and move_zeropage_pte() build the destination PTE
-> from dst_vma->vm_page_prot and arm RWP only when dst_vma asks for it, so
-> the destination's own registration decides the result.  move_swap_pte()
-> copies the source PTE instead and only ever sets the bit, never clears
-> it, so one UFFDIO_MOVE behaves differently depending on whether the page
-> happened to be resident.
-> 
-> Clear the uffd bit on the moved swap entry unless the destination is
-> RWP-registered, as copy_nonpresent_pte() does where it installs a PTE
-> into a destination that may not be armed.  A WP-registered destination
-> stops inheriting the bit as well, which is already what it gets when the
-> moved page is resident.
-> 
-> Fixes: adef440691ba ("userfaultfd: UFFDIO_MOVE uABI")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
-> ---
->  mm/userfaultfd.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> index 74f04c323c50..6495666c596b 100644
-> --- a/mm/userfaultfd.c
-> +++ b/mm/userfaultfd.c
-> @@ -1452,6 +1452,8 @@ static int move_swap_pte(struct mm_struct *mm, struct vm_area_struct *dst_vma,
->  	/* Re-arm RWP on the moved swap entry if dst_vma is RWP-registered. */
->  	if (userfaultfd_rwp(dst_vma))
->  		orig_src_pte = pte_swp_mkuffd(orig_src_pte);
-> +	else
-> +		orig_src_pte = pte_swp_clear_uffd(orig_src_pte);
->  	set_pte_at(mm, dst_addr, dst_pte, orig_src_pte);
->  	double_pt_unlock(dst_ptl, src_ptl);
->  
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-In move_present_ptes() we don't run into that issue as we create a new PTE from
-scratch
+Critical: 0 · High: 0 · Medium: 2 · Low: 0
 
-	orig_dst_pte = folio_mk_pte(src_folio, dst_vma->vm_page_prot);
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
+- [Medium] In gro_lib._setup() the "hw" mode passes check=False to
+  set_ethtool_feat(), which disables the newly added read-back for the…
+- [Medium] The read-back verification added to the shared helper
+  set_ethtool_feat() (drivers/net/lib/py/feat.py:40-43) is not mirrored…
 
-Staring at the
+--
 
-	if (userfaultfd_rwp(dst_vma))
+selftests: drv-net: Check the features set by set_ethtool_feat()
 
-I do wonder why we don't have to take similar care about wp ... I'm sure the is
-a good reason.
+This adds a read-back of the device features after running ethtool -K in
+set_ethtool_feat(), raising KsftXfailEx when the requested state was not
+applied.  A new check parameter allows callers to skip the verification, and
+the GRO "hw" setup mode in gro_lib.py uses it.
 
-Code change itself LGTM.
+> diff --git a/tools/testing/selftests/drivers/net/gro_lib.py b/tools/testing/selftests/drivers/net/gro_lib.py
+> index 7856ebdd49d3..875a715b2ae1 100644
+> --- a/tools/testing/selftests/drivers/net/gro_lib.py
+> +++ b/tools/testing/selftests/drivers/net/gro_lib.py
+> @@ -263,7 +263,8 @@ def _setup(cfg, mode, test_name):
+>          set_ethtool_feat(cfg.ifname, cfg.feat,
+>                           {"generic-receive-offload": False,
+>                            "rx-gro-hw": True,
+> -                          "large-receive-offload": False})
+> +                          "large-receive-offload": False},
+> +                          check=False)
 
+[Severity: Medium]
+The commit message justifies skipping the check only for rx-gro-hw ("the
+GRO "hw" mode handles the case where HW GRO is cleared by the driver"), but
+check=False disables verification for all three features in this request.
+
+The follow-up read-back in _setup() only looks at rx-gro-hw:
+
+        feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
+        if not feat["rx-gro-hw"]["active"]:
+            ksft_pr("Driver clears HW GRO and SW GRO is cleared, using generic XDP workaround")
+
+so generic-receive-offload is never verified in this path.  If a driver
+accepts rx-gro-hw but leaves SW GRO active, the XDP generic workaround
+branch is not taken (it only runs when rx-gro-hw is inactive) and the
+gro_hw.py tests then run with SW GRO enabled, which can coalesce in
+software and pass even when the hardware offload does nothing.  Isn't that
+the same "test could run with a different configuration than the requested
+one" case the patch is meant to catch?
+
+Note that for the third feature the kernel does enforce the requested
+state, netdev_fix_features() drops LRO when HW GRO is requested:
+
+	if ((features & NETIF_F_GRO_HW) && (features & NETIF_F_LRO)) {
+		netdev_dbg(dev, "Dropping LRO feature since HW-GRO is requested.\n");
+		features &= ~NETIF_F_LRO;
+
+but there is no equivalent rule tying generic GRO to HW GRO.  Would a
+per-feature exemption (skip verification of rx-gro-hw only) instead of the
+all-or-nothing boolean work here?
+
+> diff --git a/tools/testing/selftests/drivers/net/lib/py/feat.py b/tools/testing/selftests/drivers/net/lib/py/feat.py
+> index b94a24214e59..f0630844f023 100644
+> --- a/tools/testing/selftests/drivers/net/lib/py/feat.py
+> +++ b/tools/testing/selftests/drivers/net/lib/py/feat.py
+> @@ -33,3 +33,11 @@ def set_ethtool_feat(dev, current, feats, host=None):
+>      # If ethtool printed something kernel must have modified some features
+>      if eth_cmd.stdout:
+>          ksft_pr(eth_cmd)
+> +
+> +    if not check:
+> +        return
+> +
+> +    current = ethtool(f"-k {dev}", json=True, host=host)[0]
+> +    for name, state in feats.items():
+> +        if current[name]["active"] != state:
+> +            raise KsftXfailEx(f"{name} was not set to {s2n[state]}")
+
+[Severity: Medium]
+Should the private copy of this helper in
+tools/testing/selftests/drivers/net/hw/gro_stats.py be converted as well?
+
+After this series the tree carries two copies of the same ethtool -K helper
+with different semantics.  _set_ethtool_feat() in gro_stats.py still ends
+with no read-back:
+
+    eth_cmd = ethtool(" ".join(new))
+    defer(ethtool, " ".join(old))
+
+    # If ethtool printed something kernel must have modified some features
+    if eth_cmd.stdout:
+        ksft_pr(eth_cmd)
+
+and it raises KsftSkipEx for fixed features where the shared helper raises
+KsftXfailEx.
+
+_setup_hw_gro() in gro_stats.py repeats the gro_lib.py "hw" logic including
+the XDP generic workaround, and its final request is unverified:
+
+        _set_ethtool_feat(cfg, feat,
+                          {"generic-receive-offload": True,
+                           "rx-gro-hw": True,
+                           "large-receive-offload": False})
+
+so the HW GRO qstats assertions that follow can run with rx-gro-hw
+inactive, and the resulting delta mismatch gives no hint about the real
+cause.  drivers/net/hw/lib/py/__init__.py already imports and re-exports
+the shared set_ethtool_feat, so is there a reason the consolidation done in
+the earlier "selftests: drv-net: Move _set_ethtool_feat() into lib" patch
+stops short of this file?
 
 -- 
-Cheers,
-
-David
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260918112529.96039-1-ovidiu.panait.rb%40renesas.com
