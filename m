@@ -1,39 +1,33 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3603F329F
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 07:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064EB4F7CA4;
+	Tue, 22 Sep 2026 07:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790060714; cv=none; b=iuMacJQKxsOuiyYtMLk4OOukDdUnOaELphWVE18V/g6TcRqWiF8Evoy7tPfBTUBmaOcfqLjCgSOfb75xjgBBLg2lOFig7JCemhCKTRLlfeUrG6UHIfPUuT7xo76j0AfsR03eSlsvhJgAaleNgUudB3DrhOmvuFdaUe/Zrxzz4Lg=
+	t=1790060971; cv=none; b=lnVlL8MjYF1p45C8deSw6sHp0GFJDjColPwzxw84q/yeMpOE4Pdcm8haqDj5Mos1XhhcOXJAMIvAnAXqI7DZ1ldQJVaGVCvAZjyu0oSl4sMkObWropDm+5AiUU8NpccUHbj4m1fsbLaTK8S+9Kpz8xy3A5gAoWj4Ra4GnlrjmoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790060714; c=relaxed/simple;
-	bh=7NV2/dPlabk4dE/ISiIN6mRrLG4mHifu6XdIsUTFFVM=;
+	s=arc-20240116; t=1790060971; c=relaxed/simple;
+	bh=X2elJjOWX+I6p0hkyb//O2VmgJU8aZwYp3GER8YVCRQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lUR0UTz86oRLB8Qt+QLgQTsblcK8qmlZo9OeMOszSZbZwkuJdQfC5qi0V0qwrNEEcwpJNdRMG/yCz/BXIZtlNL9vu1RzUWpS2WJ0x12QxqpXCWxAeRoQchYUkil/2+uBL89jiw6hu0E2LE6lEYkTJQg+/ILpC7RKlQC63ZZ9RuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=PIX6HpEs; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	 In-Reply-To:Content-Type; b=NI/ZMZNy9Nn7YejpKLFqotcT6puyQpBBOXTa3TYOTLUAr8GiJgcCSvYnyq5ku1clLsegRM36DCpx0aLDzfOuIrvoNSy/H3TQqbThMBnS13M1OZjhp6Vp71jCO+Qt1kJ+lKXfOfX45G1Vw/DICaF9Z9O50gKCwazSTaTw/veuUWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=FtxLmGoW; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="PIX6HpEs"
-Received: from [133.11.54.183] (h183.csg.ci.i.u-tokyo.ac.jp [133.11.54.183])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 68M758Hb079658
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Tue, 22 Sep 2026 16:05:08 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=T90uQyrwOkRtULqcM/E6YsXMU8ThCL+v0Olp5Ari6hs=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-ID:To:Subject:Date;
-        s=rs20250326; t=1790060708; v=1;
-        b=PIX6HpEsycuGjgwF+yYJEKbW2YxRThaU7EHQIZGK5L/lQ22qD4JgBSnRVBDQshf3
-         Q3mYoWJmW61Zd5jCJ807XJD2ckYUsNMMIXCSMfO3rjw3vVrifWt7ncSg/BcZLQee
-         vauZt/VF/clNeVik7NWRPYJayqFARm8MwM5cGkxhQxUiIbeZXzoUmlqIS4wwB/Z1
-         L9juduXuRjjajH+awmMnM4mU2p2Wc8O5mzkj7ZBN8yYxCqEsBehxz/Zx/ZmpXuRn
-         E65YvkFWnuPiZxTFsySrYR4F8I5XKjB/kakCvhD6gHlnvsKt28tJjrobhpK/KeGG
-         whouyOtt7HDBh8h9zxg5/g==
-Message-ID: <fe6ddd43-7de2-4715-819b-952296456fca@rsg.ci.i.u-tokyo.ac.jp>
-Date: Tue, 22 Sep 2026 16:05:06 +0900
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="FtxLmGoW"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4FE1D1476;
+	Tue, 22 Sep 2026 00:09:25 -0700 (PDT)
+Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E57CE3F528;
+	Tue, 22 Sep 2026 00:09:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1790060968; bh=X2elJjOWX+I6p0hkyb//O2VmgJU8aZwYp3GER8YVCRQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FtxLmGoWO8aL//MyFM2NR6VNOmEyr2TmdtJY8DnZSFG0+8YvHYjUp35bg/UOxlhK9
+	 JFpg4usURYN6gUMNLnUjxV32IdrKQLjslmdts2//QkfNANa4WIlue6KyW4G14mkAC3
+	 vMlXXzh4ouDVIMQNNNipuDWCpX4HibahJYp8rWpY=
+Message-ID: <2e0a8157-a529-4355-bd7e-11ef0234b825@arm.com>
+Date: Tue, 22 Sep 2026 12:39:24 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,75 +35,48 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 08/21] Revert "KVM: arm64: PMU: Reload when resetting"
-To: Oliver Upton <oupton@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu
- <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Steffen Eiden <seiden@linux.ibm.com>,
-        Andrew Jones <andrew.jones@oss.qualcomm.com>,
-        Fuad Tabba <fuad.tabba@linux.dev>, Mark Rutland <mark.rutland@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Shannon Zhao <shannon.zhao@linaro.org>,
-        Randy Dunlap
- <rdunlap@infradead.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20260920-hybrid-v11-0-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
- <20260920-hybrid-v11-8-03618771b0e1@rsg.ci.i.u-tokyo.ac.jp>
- <arIjhlqqzt4AKTOr@kernel.org>
+Subject: Re: [PATCH] selftests/mm: mremap_test: handle ENOSYS for userfaultfd
+ and add missing newlines
+To: Park Tae-sun <ts930@dgu.ac.kr>, Andrew Morton
+ <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260922065143.118702-1-ts930@dgu.ac.kr>
 Content-Language: en-US
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <arIjhlqqzt4AKTOr@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+In-Reply-To: <20260922065143.118702-1-ts930@dgu.ac.kr>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 2026/09/22 15:43, Oliver Upton wrote:
-> Hi Akihiko,
+Hi Park Tae-sun!
+
+On 9/22/26 12:21 PM, Park Tae-sun wrote:
+> When running mremap_test on a kernel built without CONFIG_USERFAULTFD,
+> test 26 fails:
 > 
-> On Sun, Sep 20, 2026 at 08:15:49PM +0900, Akihiko Odaki wrote:
->> This reverts commit fe53538069bb4f625bc8734103ba044a83138fea.
->>
->> Restore PMU event teardown before system-register reset so existing
->> perf events cannot retain configuration from the previous run. All
->> counters are disabled by the reset PMCR_EL0 and MDCR_EL2 values, so
->> reset does not need to request a PMU reload.
+>     userfaultfd: Function not implemented
+>     not ok 26 mremap move multiple invalid vmas
 > 
-> Sorry, I'm not following the intent here. KVM_REQ_RELOAD_PMU should
-> already be discarding + recomputing perf events based on the state of
-> the vPMU. What's the problem?
+> This happens because mremap_move_multi_invalid_vmas() only checks for
+> EPERM, so ENOSYS is treated as an unexpected failure instead of being
+> skipped.
+> 
+> In addition, ksft_test_result_skip() in both
+> mremap_move_multi_invalid_vmas() and its fallback stub is missing a
+> trailing newline, which causes the subsequent TAP summary count to get
+> stuck on the same line:
+> 
+>     ok 26 # SKIP ... - missing uffd# 1 skipped test(s) detected...
+> 
+> Fix this following the switch pattern in guard-regions.c (lines 1498-1506):
+> check for EPERM (advising running as root) and ENOSYS (missing uffd), move
+> perror() to default so expected skips don't print noise to stderr, and add
+> the missing '\n' to both skip strings.
 
-Hi Oliver,
+Thanks for the fix, but I have posted a series of patches already [1]
+which include skipping incase of ENOSYS and fixing the newline issue in
+ksft_test_result_skip(). If it is okay with you, can we go ahead with my
+patches since it solves some other issues as well?
 
-A plain KVM_REQ_RELOAD_PMU does not discard existing perf events. 
-kvm_pmu_reprogram_counter_mask() enables or disables them, and 
-kvm_pmc_enable_perf_event() only creates an event if none exists.
-
-For example, an existing cycle-counter event may exclude EL0 counting. 
-Reset sets PMCCFILTR_EL0 to zero, but the subsequent reload only 
-disables that event. If the guest then enables cycle counting without 
-rewriting the filter or counter, the old event is enabled again and 
-still excludes EL0, despite PMCCFILTR_EL0 reading as zero.
-
-The earlier "Recreate events after reset" patch addressed this by 
-setting events_need_recreate. Sashiko then pointed out that stopping the 
-old events after resetting the registers adds their accumulated counts 
-to the reset counter values:
-
-https://sashiko.dev/#/message/20260914-hybrid-v10-7-92788053a691%40rsg.ci.i.u-tokyo.ac.jp
-
-The revert restores teardown before system-register reset and fixes the 
-stale configuration.
-
-Regards,
-Akihiko Odaki
+[1]
+https://lore.kernel.org/all/20260917111951.188266-1-sarthak.sharma@arm.com/
