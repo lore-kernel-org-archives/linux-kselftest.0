@@ -1,301 +1,182 @@
-Received: from mail-qk2-f43.google.com (mail-qk2-f43.google.com [74.125.230.235])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC321544D5C
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 22:05:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.235
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060EF522EE0;
+	Tue, 22 Sep 2026 22:38:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790114714; cv=none; b=SyNlXiSFmCcJRaDM2cceg8y2fMTdKYtq0V0Z7oujNlJSlh5PX2PanaNaLhEuZJWr2xGafcRL1XUmI1kjnPMeahbFR8PTvdby3eVl+bp/Oj9ww+8rHVSS6PIvsAKrODpXfLnavC2IZHFW7yXcL6JWXrmp/bQVCxlmXmLBP5WW/IM=
+	t=1790116692; cv=none; b=cK8O6qypjLXM5ooAhFxdIalOb1k81cdS5d4NJAvYFL63ShHOXO7NomvuSdFWR649AGiV+2C082swGds+gJf7zvCC4JY9MAnGVSgyOpNBgLAnRZNqQL3Q/rKormSL45PmJWLSWOGnZDm6VxbXris7Hiu8ONwjTeHXS8J3iNRgNkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790114714; c=relaxed/simple;
-	bh=RRH1Vy+Zp/3SPkBGo9aHf3zXVNOp+j6j9mQwfJznZmI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sk/cinIXiBtAu8oPNFOUrXSOn5Ha3Mwl3dNCOf1HzgTu9V9bVQtP1zRjLegvYdoyPrNPKBNhHOhBQ+JuL+eAIbB9IUaHpXVyCJSnml0AkD/6wuIsX6x/mBUOZH1ARH64zpsz16L0nkUZbWsrobVyaumZ1vii3LrB1GIp+eBbwQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=qyAeO4Im; arc=none smtp.client-ip=74.125.230.235
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1790116692; c=relaxed/simple;
+	bh=Kd2xmQx1B6Fhb4HfCOjX/bzyprZqy3oVCjhs0bkA+kQ=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=DAOJsxXk+WijQr8ElA8o0DnXBwaR5xnCLiy2LDDtOOObk6XVz/J/CBsy8yUbmZMiHgLLGWcIEZ6qB0qEtJx2/CJKNAm9ikUB0hGPzrAieQx6GNnnGly6AC5g6LfVNLFVYcWZbQ40S9f6keWrMX1SOrxoLcCrCpLaAN/7B5jKUhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ayic1V3i; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="qyAeO4Im"
-Received: by mail-qk2-f43.google.com with SMTP id af79cd13be357-939109f067cso27088785a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 15:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1790114700; x=1790719500; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=anrpgiCeXWmBr1az5PEHzf4nylW2QouLqia/wBZNbT4=;
-        b=qyAeO4ImlxQWHWrY3rOI+d0jNqWFqqyELQ56tlRiHnq25pIvKuTEJrR3OrKTFcd4FP
-         IBWytxk9SOvSacV53yQXEJxrCz7JFBDHXXmbeZzXj0EB/0NOWsfpSVn6yoXESESrC7en
-         dWDirDwk2QkTXluyyhV/DpGjnVcz/j2jc1v8BpLdtDbcf5sjhv0PBXWkeMqUn2k3Taqh
-         Br/RM3e48CnC2TjK95UIB1Un9r7oOaUxLLkos8lL9ixrdl11BIKHZKIuPajT92vSGr1Q
-         qIAPWwqVvLVWxLDUlYny2dsxjQOz/CXVwD1OBKCicazpUsOUeEuMWOX7N+ZjO7LVxQvN
-         v/GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790114700; x=1790719500;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=anrpgiCeXWmBr1az5PEHzf4nylW2QouLqia/wBZNbT4=;
-        b=LTe0+uqzD14Umk8bgIrxc/ncltgP4CRK628iV2enQ3WAxoseVhPagEOrHeBHYpFftf
-         U5his/B/4C8N69JF60ZXnzv3MYmElwJyIL7ObMqj6wCpvRfia1ww5bOfYmbXfu6lXAE9
-         youy8zLOkwxwVfSsdLvxH4vC2yCHO4Rrwz+i+mRRRmiLwQ8MfvkJ/0nr3u3j27LG3wcH
-         inx7wGAs4TweuqOKqQVdRjMm2FYreCmGF7GNrO0srtBWXg81WIJReyg9ZDfmH2YTwgoA
-         F2vGPBkewf/f4fqyw3twqZ/uN/TLbUUuH6piM9/snt74IEiDJzGcLTxrSTrCEs7Xayo2
-         Zm4Q==
-X-Forwarded-Encrypted: i=1; AKwUvByW/E7105912EOA7ksI/rJuq5e+/R0VzfJZi1lG+jrYWRJ7jNzQL4XgcnRtJR56Bo77BY2xjAahjo7mUte9w4s=@vger.kernel.org
-X-Gm-Message-State: AFuF++lOhZKcOyiGc4s7oA+bNU52T06MtYdYCiTAf1l7U1pllr2G65+X
-	or034cZELG9LYbCFYyRdmJYjQHuFi3n0r6AFOGKEO28F6JuPqfrsTjhGdO1HHZBBYaQ=
-X-Gm-Gg: AYBFou3QsjUPPmjvNJEU6yIyKuIj8Ie5OyK1E6fJMa2Hkq8vZxrK9nFxWNp6lJ3vxh1
-	H2mNilvvGodBiqYHLvqKln4ma5VUxBLdBOO/IEdMT4u5Ti3qMuQLF8yd68GimXEZubVeUB2A+Iz
-	bixxXCJAkt5I9T8OC3wtNIO5Pv0hsVOZcC+hMgHHftS3wInMqosF0E3qgoBlbX/6jXPrhOoTB03
-	x/OSiXmllIbbIw7QERZJapdhZF/z+lOSjQY7e0Mg/Q+6ODh8CteGPod3LdXZSfH69EwAyXxwdXt
-	AC+lFYQ+HmlENI0CCCJVWQCHJtOCtt+C/TvXDx/RFkwyxus07BLW7LR1fJKco4XTY4O7LCWPegA
-	qUwGluo59L/emQYGqiqk3KF42XddkmbEwcT9vMK1XX8S1tKiBoGK42MGipeGi8jRiFJOJ2IMjSk
-	LwWnS4te3TvIN9BR7JbBYV8itaLtQYRMfQsfeYchltCe6sw9zUw/ugUIl54d7cNpoS/KyTul9oz
-	T1uJ35mSHZXMR6HFXalnkBRHjNdoReOoqhGfvPExTuVPhYcLj+Uuxs=
-X-Received: by 2002:a05:620a:4890:b0:939:a1cc:f234 with SMTP id af79cd13be357-93c2509dec2mr122764985a.5.1790114700080;
-        Tue, 22 Sep 2026 15:05:00 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93c284a1cd9sm4296985a.39.2026.09.22.15.04.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 15:04:59 -0700 (PDT)
-Date: Tue, 22 Sep 2026 18:04:56 -0400
-From: Gregory Price <gourry@gourry.net>
-To: Arun George/Arun George <arun.george@samsung.com>
-Cc: linux-mm@kvack.org, Zhigang.Luo@amd.com, balbirs@nvidia.com, 
-	brendan.jackman@linux.dev, yuzenghui@huawei.com, apopple@nvidia.com, alucerop@amd.com, 
-	matthew.brost@intel.com, akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com, corbet@lwn.net, skhan@linuxfoundation.org, 
-	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, djbw@kernel.org, 
-	vishal.l.verma@intel.com, dave.jiang@intel.com, alison.schofield@intel.com, 
-	osandov@osandov.com, jannh@google.com, pfalcato@suse.de, jackmanb@google.com, 
-	hannes@cmpxchg.org, ziy@nvidia.com, pbonzini@redhat.com, osalvador@suse.de, 
-	joshua.hahnjy@gmail.com, rakie.kim@sk.com, byungchul@sk.com, ying.huang@linux.alibaba.com, 
-	kasong@tencent.com, qi.zheng@linux.dev, shakeel.butt@linux.dev, baohua@kernel.org, 
-	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, yury.norov@gmail.com, 
-	linux@rasmusvillemoes.dk, longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org, 
-	mkoutny@suse.com, sj@kernel.org, jgg@ziepe.ca, jhubbard@nvidia.com, 
-	peterx@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
-	ryan.roberts@arm.com, dev.jain@arm.com, lance.yang@linux.dev, usama.arif@linux.dev, 
-	xu.xin16@zte.com.cn, chengming.zhou@linux.dev, roman.gushchin@linux.dev, 
-	muchun.song@linux.dev, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	driver-core@lists.linux.dev, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
-	linux-debuggers@vger.kernel.org, linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
-	cgroups@vger.kernel.org, damon@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	kernel-team@meta.com, hokyoon.lee@samsung.com, wj28.lee@samsung.com, 
-	gost.dev@samsung.com, vikash.k5@samsung.com, d.bueso@samsung.com
-Subject: Re: [PATCH v5 00/36] Private Memory NUMA Nodes
-Message-ID: <arL2eTRaDeR3DCQx@gourry-fedora-PF4VCD3F>
-References: <CGME20260720193443epcas5p167fa7d8490edfb4d8c0aa6a259db058f@epcas5p1.samsung.com>
- <20260720193431.3841992-1-gourry@gourry.net>
- <963815509.21784796303385.JavaMail.epsvc@epcpadp1new>
- <amJGUuBZ2857QjDB@gourry-fedora-PF4VCD3F>
- <360067785.01790071202608.JavaMail.epsvc@epcpadp1new>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ayic1V3i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22F921F000FF;
+	Tue, 22 Sep 2026 22:37:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790116680;
+	bh=M3PZkslH3h5r4cxJsjU2sMMqI/7Ln2Gz9rJUcgdRE+s=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=Ayic1V3iVReHA16nFgKA3/s0vUtr8IAAyVraemrj+8WZVKAX1iCW/8ITY6RW+XD+X
+	 6gg48CZb+4Tux5vwGmlYHDmNI3Romi11Bb3ONeKT0Q12DGeQG0Jq8xEvXkotVouhoc
+	 HT1Du5eoPJIvEd1tghdEmfs3Dn/r/HRN5gL+vTZgz92aCCS/Be6+iGbM8fsEUvATIk
+	 zw2kJoj3ym8sOyyTgH727RMheMPZT1tUoLwBSd9U3PzMrmLbFZeIo4rju9coUbHThi
+	 l295RWRdnc43wxdZRjZjADgi2Kyc+oHy/FBRhnIIhg2/mzQearv2pdxjgz8Fcs1Nc0
+	 Oc8jEq0sgTb4w==
+Subject: Re: [PATCH net-next v3 1/2] ipv6: update NUD_FAILED neighbors from NA
+ messages
+From: netdev-bot+sashiko@kernel.org
+To: lfqlee314@gmail.com
+Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ rdunlap@infradead.org, netdev@vger.kernel.org, aajith@arista.com,
+ roopa@nvidia.com, jhpark1013@gmail.com, corbet@lwn.net,
+ skhan@linuxfoundation.org, shuah@kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Tue, 22 Sep 2026 22:37:58 +0000
+Message-ID: <179011667864.2160803.5487538537038042784@kernel.org>
+In-Reply-To:
+ <e5b7a4f8cbd7c436b463b3751bf283ce861fcfaa.1789734885.git.lfqlee314@gmail.com>
+References:
+ <e5b7a4f8cbd7c436b463b3751bf283ce861fcfaa.1789734885.git.lfqlee314@gmail.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <360067785.01790071202608.JavaMail.epsvc@epcpadp1new>
 
-On Tue, Sep 22, 2026 at 03:27:44PM +0530, Arun George/Arun George wrote:
-> Hi Gregory,
-> 
-> Thanks for sharing the working branch.
-> 
-> Some of us at Samsung are testing the series (both v4 & v5) on a 
-> compression capable CXL expander and are observing encouraging results.
->
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-This is really cool, thank you so much for spending the cycles to test.
+Low priority / nit picks for your consideration:
 
-I'm working on getting a v6 out soon.  Glad to see the progress!
+- [Low] Claimed missing selftest coverage for the newly documented
+  FAILED->STALE behaviour of accept_untracked_na: the in-tree tests…
 
-> Good things first! We feel that the isolation using private nodes and 
-> the capability selection using NODE_PRIVATE_CAP_* work functionally well 
-> for the compressed memory use cases.
-> 
-> On improvement points, we observed much higher 'page_faults', 
-> 'allocation_stalls' etc. which contributed to the higher tail latencies 
-> in some tests. I hope these are already part of the optimization plans. 
-> The higher latencies might have resulted from the write_protection 
-> applied to the private node, I believe.
-> 
+--
 
-Yes, this is expected, and I think there are questions about how it
-should be optimized both in a provisioning sense and a software sense.
+ipv6: update NUD_FAILED neighbors from NA messages
 
-For example, exposing a full memory expander as 100% compressible may
-not make sense - given that this could many a lot of memory.  I have
-some data that shows it may make more sense to split a memory expander
-into two regions to better fit the compressible region to meet the
-actual capacity the cold-tail is capable of consuming.
+This changes ndisc_recv_na() so that a neighbor entry in NUD_FAILED is
+treated like an absent entry and moved to STALE when accept_untracked_na
+is enabled and forwarding is on. The ip-sysctl documentation for
+accept_untracked_na is updated to describe the new FAILED handling.
 
-On the software side there may be some ability to adjust this at
-runtime with hotplug instead of requiring a reboot, but I think that
-needs to be experimented with.
+Link: https://lore.kernel.org/r/20260813233344.445265-1-lfqlee314@gmail.com
 
-> On the tools side, we used MLC and Taobench for the tests.
-> 
+> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+> index f7af0286341c..685c84cf543d 100644
+> --- a/Documentation/networking/ip-sysctl.rst
+> +++ b/Documentation/networking/ip-sysctl.rst
+> @@ -3225,18 +3225,19 @@ drop_unsolicited_na - BOOLEAN
+>  	Default: 0 (disabled).
+>  
+>  accept_untracked_na - INTEGER
+> -	Define behavior for accepting neighbor advertisements from devices that
+> -	are absent in the neighbor cache:
+> +	Define behavior for accepting neighbor advertisements for IPv6 addresses
+> +	that are absent from the neighbor cache or whose entries are in FAILED
+> +	state:
+>  
+> -	- 0 - (default) Do not accept unsolicited and untracked neighbor
+> -	  advertisements.
+> +	- 0 - (default) Do not create new neighbor cache entries or update
+> +	  FAILED entries from neighbor advertisements.
+>  
+> -	- 1 - Add a new neighbor cache entry in STALE state for routers on
+> -	  receiving a neighbor advertisement (either solicited or unsolicited)
+> -	  with target link-layer address option specified if no neighbor entry
+> -	  is already present for the advertised IPv6 address. Without this knob,
+> -	  NAs received for untracked addresses (absent in neighbor cache) are
+> -	  silently ignored.
+> +	- 1 - For routers, add a new neighbor cache entry or update an existing
+> +	  FAILED entry to STALE upon receiving a neighbor advertisement (either
+> +	  solicited or unsolicited) with the target link-layer address option
+> +	  specified. Without this knob, NAs received for untracked addresses
+> +	  (absent from the neighbor cache or in FAILED state) are silently
+> +	  ignored.
+>  
+>  	  This is as per router-side behavior documented in RFC9131.
+>  
+> @@ -3251,9 +3252,10 @@ accept_untracked_na - INTEGER
+>  	  used in conjunction with the ndisc_notify setting on the host to
+>  	  satisfy this prerequisite.
+>  
+> -	- 2 - Extend option (1) to add a new neighbor cache entry only if the
+> -	  source IP address is in the same subnet as an address configured on
+> -	  the interface that received the neighbor advertisement.
+> +	- 2 - Extend option (1) to add a new neighbor cache entry or update a
+> +	  FAILED entry only if the source IP address is in the same subnet as
+> +	  an address configured on the interface that received the neighbor
+> +	  advertisement.
 
-Great! I also have some TaoBench and fio results i'm looking to share,
-glad to have some additional peer review using Tao.
+[ ... ]
 
-> Note that our intention for this phase of experiments was to test only 
-> the 'private node' layer based isolation, and not the cram and below 
-> layers for the compressed memory. Therefore we did not enable/utilize 
-> the compression capability in the hardware for these set of experiments 
-> (enabling compression would require the cram level ballooning/memory 
-> shrinking and cxl level interfacing driver to the compression device). 
-> That would be different set of experiments where we would be testing the 
-> cram balloon shrinkers and our alternate algorithms (upstream targeted). 
-> So cram and below layers were used only for enumeration of private node 
-> regions for these tests and not for the run-time memory shrinkers.
-> 
+> diff --git a/net/ipv6/ndisc.c b/net/ipv6/ndisc.c
+> index 90cd5d852569..12d85d7f8234 100644
+> --- a/net/ipv6/ndisc.c
+> +++ b/net/ipv6/ndisc.c
 
-Agreed, i'm looking forward to getting past the isolation bits and get
-more focused on the compression implementation details.
+[ ... ]
 
-> ======= Test Methodology ==============
-> 
-> We explored these 3 cases:
-> 
->     1) (Baseline – existing CXL infra):  DRAM 16GB + CXL 32GB. Here we 
-> used the existing CXL driver infra to enable the device. No private node 
-> is involved. And compression is disabled on device.
-> 
->     2) (private node in default write protected path): DRAM 16GB + CXL 
-> Private Node 32GB. Here private node infra is used to enable the device. 
-> And compression is disabled on device.
-> 
->     3) (private node with no write protection): DRAM 16GB + CXL Private 
-> Node 32GB. Here private node infra is used to enable the device without 
-> the write protection/fencing enabled. Compression is disabled on device. 
-> We could not complete these runs as they resulted in kernel panics. 
-> Guess the code path is not stable yet for this (We had hoped that case 1 
-> and case 3 results would be similar). We also observed some unmovable 
-> page warnings logs in 'dmesg' before crash (might be related to the 
-> panic). Adding the log snippets at the end.
-> 
+> @@ -1067,34 +1067,39 @@ static enum skb_drop_reason ndisc_recv_na(struct sk_buff *skb)
+>  	new_state = msg->icmph.icmp6_solicited ? NUD_REACHABLE : NUD_STALE;
+> -	if (!neigh && lladdr && idev && READ_ONCE(idev->cnf.forwarding)) {
+> -		if (accept_untracked_na(idev, saddr)) {
+> -			neigh = neigh_create(tbl, &msg->target, dev);
+> -			new_state = NUD_STALE;
+> +	if (!neigh || (READ_ONCE(neigh->nud_state) & NUD_FAILED)) {
+> +		if (!lladdr || !idev || !READ_ONCE(idev->cnf.forwarding) ||
+> +		    !accept_untracked_na(idev, saddr)) {
+> +			if (neigh)
+> +				neigh_release(neigh);
+> +			return reason;
+>  		}
+> +		if (!neigh)
+> +			neigh = neigh_create(tbl, &msg->target, dev);
+> +		new_state = NUD_STALE;
+>  	}
 
-Very similar to my test setup, seems like good signal we are of similar
-mind on the use case.  (For readers: there was no coordination here).
+[Severity: Low]
+This isn't a bug, but a note on test coverage for the new FAILED branch in
+ndisc_recv_na().
 
-I personally did not test private-node without write protection,
-although it makes sense to test the throughput of a demotion-only
-node as a baseline.  Smart.
+At the time this patch is applied on its own, the in-tree selftests only
+walk the "absent entry" rows of the matrix: the matrix comment in
+tools/testing/selftests/net/ndisc_unsolicited_na_test.sh and verify_ndisc()
+start from an empty neighbor cache, and arp_ndisc_untracked_subnets.sh does
+the same for the accept=2 subnet rule. That leaves the new
 
-My guess is there was probably a reclaim throughput issue, or there may
-have been a bug in the v4/v5 code.  I will look at adding some pressure
-tests to my suite that test demotion-only explicitly.
+	if (!neigh || (READ_ONCE(neigh->nud_state) & NUD_FAILED)) {
 
-> ========= Results summary ===================
-> 
-> Private (CRAM) node performance is lower compared to a normal CXL memory 
-> allocation path. VM stats shows more page_faults and allocation_stalls 
-> on the private node case. Could it be the allocator waits for migration 
-> path to demote pages to private node? Or the actual hot pages in dram 
-> got demoted to private node to make space during overwrites? We will try 
-> further analysis on this.
-> 
+path, and the FAILED rows now documented for accept_untracked_na, without a
+test.
 
-- allocator waits for migration?
-  
-  Yes.  And worse, once the node is full, migration will fail and you'll
-  swap directly from the top tier and reduce your reclaim behavior on
-  the lower node.  It becomes very important to push proactive reclaim
-  on a demotion-only tier to ensure there is sufficient headroom to
-  receive demotions in the future, since direct-reclaim basically never
-  targets a lower-tier on the first pass.
+This is addressed later in the same series by "selftests: net: test
+untracked NA recovery of FAILED neighbors", which extends the matrix
+comment in ndisc_unsolicited_na_test.sh with the six "failed" rows, adds
+initial_state/same_subnet parameters to verify_ndisc() and
+test_unsolicited_na_common() that seed the entry with
 
-  There's a big discussion about whether tiered systems need to invert
-  their reclaim behavior (reclaim from the lowest node first to find
-  progress there, then do demotion - rather than the other way around).
+	ip neigh replace ${HOST_ADDR} dev ${ROUTER_INTF} nud failed extern_learn
 
-- Hot pages in dram 
+and then adds cases for accept=1, accept=0, forwarding=0, drop=1 and both
+in-prefix and out-of-prefix accept=2, checking that the lladdr is learned
+for the STALE rows and absent for the rows that must stay FAILED. So the
+gap exists only for this commit in isolation, not for the final state of
+the series.
 
-  Also yes.  The comparison to make isn't only against a raw CXL node,
-  but also against Zswap or Zram or Swap.  How does the workload fair
-  on a system with 16GB RAM and 32GB Zswap/Swap?
+Would it be worth mentioning the follow-up selftest patch in this commit
+message so the coverage relationship is visible when this commit is read
+alone?
 
-  This is important context.
-
-> ========== MLC Experiments ====================
-> 
-> CMD:
->    $./mlc --loaded_latency -j0 -c0 -b1g -k1-15 -W5 -r
-> 
-> Experiment Results:
-> 
-> 1. (Baseline) DRAM 16GB + CXL 32GB
-> 
-> Inject  Latency Bandwidth
-> Delay   (ns)    MB/sec
-> ================
->   00000  686.18   40137.5
->   00002  686.69   40124.0
->   00008  709.74   40362.7
-...
-> 2. (private node in default write protected path)
->      DRAM 16GB + CXL Private Node(Uncompressed) 32GB
-> 
-> Inject  Latency Bandwidth
-> Delay   (ns)    MB/sec
-> ================
->   00000  320.09   12186.2
->   00002  543.42   22726.1
->   00008  482.11   28385.2
-...
-> Takeaway: Our MLC tests show a trade-off between the two configurations. 
-> During low inject delay, the private Node is faster. But when inject 
-> delay goes high, the baseline shows better latency. Could it be the TLB 
-> cache effects?
-> 
-
-These latency results suggest to me that the memory being tested was
-always DRAM, though the initial memory fault would have been CXL.
-
-i.e. even if the memory was faulted directly onto the node via
-mempolicy, the very first write to it would have caused promotion.
-
-If you dropped the write protection you'd probably see it equals the
-baseline.
-
-The bandwidth numbers support this.  Higher stall, but faster latency
-means the migration was more beneficial for latency than letting the
-memory sit on CXL.
-
-Neat.  I'm not sure these results are particularly useful in describing
-how a workload would react.
-
-> --------------------------------------------------------------------
-> Case 3 dmesg log snippet:
-> 
-> [   82.525741] page: refcount:1 mapcount:0 mapping:0000000000000000 
-> index:0x0 pfn:0x5f5800
-> [   82.525753] flags: 
-> 0x17ffffc0002000(reserved|node=0|zone=2|lastcpupid=0x1fffff)
-> [   82.525762] raw: 0017ffffc0002000 ffefc85717d60008 ffefc85717d60008 
-> 0000000000000000
-> [   82.525764] raw: 0000000000000000 0000000000000000 00000001ffffffff 
-> 0000000000000000
-> [   82.525766] page dumped because: unmovable page
-> ..............
-> 
-
-Was this memory hotplugged via cram.c or did you replicate the code and
-hotplug it another way?  If so, did you hotplug it as ZONE_NORMAL or
-ZONE_MOVABLE?
-
-For a compressed tier, it must always be hotplugged as ZONE_MOVABLE,
-without exception, because otherwise it can allow a GUP pin or kernel
-allocation that would eventually become permanently stuck there - and by
-definition of a compression tier must be 100% movable memory.
-
-~Gregory
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/cover.1789734885.git.lfqlee314%40gmail.com
