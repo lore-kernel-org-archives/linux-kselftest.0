@@ -1,88 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010046.outbound.protection.outlook.com [52.101.85.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 332B743FD18;
-	Tue, 22 Sep 2026 15:50:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790092245; cv=none; b=rUznNUR2Fee0+wq/N8uJmeEOwfaYdb7JioA3U0QCLjzI0MkWw9DFNd6Or1EZ+G5SXs3/mROZtkbVQDwR0rqyHeOtx+FeDLqn5OOuFPpbgPtIIXnNi5vXuKnkoNRPAZaKJ+TeXDaDn9TPFo08FRGI17JfoA95i/mNRBuldTuFN/o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790092245; c=relaxed/simple;
-	bh=f+Imo4b1lwgAyODO1NhF2C/2oPWOE6s4hRbPghNP2oc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Z2vTJo4dzrwXy8XK8HVSCmbygBBr5G25iG9rzJXOPxr+RqgVDKQYOtwYxlguI9bLzlfi6ObixwSiBDK5zhHD6nAmg90EQ53RacgKnS8ztyNVX30maohl+CpZ7fI40jeNHXrTAGrKKZT/GB+5Djy0pqO/I7B5b2otAuqR6jML1qY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f13Ggwt1; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 763C1566C5C;
+	Tue, 22 Sep 2026 16:24:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790094255; cv=fail; b=G8Y3mWEblZk2br3kfvz3x8I1yDkcNKJwpOhxRNUGjK30DNFkSooccxSwPA8Ki2g6gjJ2m23WW9ejEEkw+1h5h8WC4E9x2fHCAZwQTr2FPny3Z4E/5ECTL/bfGmEmnhkaRvvRFQ9F1++jv6xe6C4P8ZyJX2lBjh/UlNsNOgyExZY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790094255; c=relaxed/simple;
+	bh=BnKJbI/PnktWZrztTDPrGX0aCU8ZDlX7I72D2oPkFhk=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=LzA6cIuBdd2t779Ow8rPIC5oYwhTEJRUHZJKEnAowVACFSiL6uRTscFgXfQP4DvdZotfERou6yYs6Kwfjj8ggQsU6NnPEQqT0BnEp6QJ7JfAI1OSWQCodeCsK6Q0FDtkpvrgEHqhdj+MP7Ruu5MgTqRc0ZqXtK39gHAFh4tVwfs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=frDPelkB; arc=fail smtp.client-ip=52.101.85.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f13Ggwt1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E7BF1F0089A;
-	Tue, 22 Sep 2026 15:50:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790092243;
-	bh=mFC/KqKwts/3O7F2OeiAqUhvzsqgNKQHaS0taMQl8Xg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=f13Ggwt1EiAxovPb/vbiXzDRe7OOxnOFjk6okTx1J8mrkGBK/FWMKeGKPuS0L6gav
-	 eW+J73MXDNgCtz7wMPiLFLeqJIR1Z7rFjKT+HZT+TCFRRpnXWtXWxUt0uEXeRHkYOa
-	 GIyJ2KPlbFswbvZ36zn8RJ7VmAtg0PmBj7Ck0gLsleVpUxNlqcIBQdSWklI5PcuhQy
-	 PRhtkANZOOyjg7LkYukVFxiBB8r0o9+RnLIX9s0F9VXpRUMMGOlEnpCciMEwPImGXR
-	 TAZ0JqoJBI8u4tva87sioWIOG8AVdupBp+9+eycDB/VgrqxWb3nMivQCETX9x8IiHV
-	 C5foc49ra0K8Q==
-From: Chuck Lever <cel@kernel.org>
-To: NeilBrown <neil@brown.name>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>,
-	Tom Talpey <tom@talpey.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>
-Cc: linux-nfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/8] nfsd: reduce the scope of the nfsd_mutex
-Date: Tue, 22 Sep 2026 11:50:36 -0400
-Message-ID: <179009210791.3799844.13806982251385485248.b4-ty@b4>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260922-nfsd-per-net-mutex-v2-0-4a5da8243a73@kernel.org>
-References: <20260922-nfsd-per-net-mutex-v2-0-4a5da8243a73@kernel.org>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="frDPelkB"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oJ5zaHcGWH+5lcAqeic+9r+RPTeevSxIv36pX16bucpunLgegBTNDf0O/pd48njFXlkZrHHQas4vvCda4voSrM9XPEyttf0COW6bd6L9Om9CAQ1JrnSb6Iqv0EMkf8EmxuLcB0O3llWnP+0TqcNe7fiJ7WeVzvDSxrJu2EnP6ICfh38eVfjtyHPl1sX4TVmqNcqU15RHIhAE+05pVHb0Ns0CdrHLvpEDw9qRCGA/o4d1yyYlfsJ43KH6WGo8HZBkKGk2sEcDAhdbs8yWKhQBHqbVEC/4a0YapvOO9DHZxZZaIZcM+q2tS6xx+qyfbkAkkeT7hbmEV+CHhcqP/D2PrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BnKJbI/PnktWZrztTDPrGX0aCU8ZDlX7I72D2oPkFhk=;
+ b=m6BHDE3zYsuODBW+3IDhYMolW0Tmxtn4VXxytnvLz6m1z2okD0NRTP/l+DCloe+B+aoV97JTNkalprKCE7AEx+evXtKdckmw5QcT2egeoY4b2e/f2m7Re3ImBXf/NMgVVYK9duJImO3p1rnamsM4NALrEX7T8NNKuP1EM2R+knxLdA5G8CoxNuHkyrgfL9w7Syw3zypDy8yZR4Yf2drnzndK0AzOtQn4gZKfqw/6ie4yZUqosq/vUZfXUtoBP8NCH158swTLwykFu+BlF+QBLlsLu1DUMpotBiiDA0NRXBSaskENdhtop0YVIAEF9D4lrmbiN0Ujuj569K+LW7Ik5w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BnKJbI/PnktWZrztTDPrGX0aCU8ZDlX7I72D2oPkFhk=;
+ b=frDPelkBmpFXwSQOb3XLdJ15UUxY6d+avX72Llnf6z7HGMfid5kFulB7vs0z2TW5sgb89HgEfW/6UjF3dHHPUHlLfPENsNFdgZtaKbs1XY5K34Nl2iJV+QwqCkMYBGdGs6fmfH2N6Qjw4OJz1j+F2SNFl0ptkCmfQBuRexv7Wwo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB4283.namprd12.prod.outlook.com (2603:10b6:5:211::21)
+ by IA1PR12MB6329.namprd12.prod.outlook.com (2603:10b6:208:3e5::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.14; Tue, 22 Sep
+ 2026 16:24:10 +0000
+Received: from DM6PR12MB4283.namprd12.prod.outlook.com
+ ([fe80::9eab:812b:ad20:6087]) by DM6PR12MB4283.namprd12.prod.outlook.com
+ ([fe80::9eab:812b:ad20:6087%6]) with mapi id 15.21.0428.011; Tue, 22 Sep 2026
+ 16:24:09 +0000
+Message-ID: <21f4b63b-1aed-47ca-a766-dcce8fe55203@amd.com>
+Date: Tue, 22 Sep 2026 17:24:01 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 0/12] drm/fabric: vendor-neutral topology
+ infrastructure for scale-up accelerator interconnects
+To: Konstantin Sinyuk <ksinyuk@kernel.org>, dri-devel@lists.freedesktop.org
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Francois Dugast <francois.dugast@intel.com>, David Airlie
+ <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Ilia Levi <ilia.levi@intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ pieter.jansen-van-vuuren@amd.com,
+ "Lucero Palau, Alejandro" <alejandro.lucero-palau@amd.com>
+References: <cover.1787552412.git.ksinyuk@kernel.org>
+Content-Language: en-GB
+From: "Austin, Alex (DCCG)" <alex.austin@amd.com>
+In-Reply-To: <cover.1787552412.git.ksinyuk@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PR1P264CA0157.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:102:347::8) To DM6PR12MB4283.namprd12.prod.outlook.com
+ (2603:10b6:5:211::21)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4283:EE_|IA1PR12MB6329:EE_
+X-MS-Office365-Filtering-Correlation-Id: 062269ec-3635-437b-d5e1-08df18c5ee0d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|23010399003|18002099003|22082099003|11063799006|10067099003|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	E8iCCzEPg6ifgDam/EKIlOo8XMq52CbHkJyrojEUlC6fSPZlBGqZ+BG3YDE3M7yRju8+YZ1okU2Kr8jBZNFwDazChbAj1ZlOv77xLwZwqRvXrtiEWz57fLDeMehNbAjKX7u5jBBEgW1nsis6Z8rrZufDoKva0rTq6oSBWT0uh18kREdLL8IUJ4K1fO4Rt+c1PKmRpyhMzXy0j5vxp7kjY91cZddJRMAJSyogozB8Oeh+vVVd5pWfuRPI3i3AD8MibptO06nTdkhzUtWFGPYDpYCZz4ND9YKWZNmc0s5NbuznY28xwSBnJuy28i9BnF3zXWlEbv2J0hIHI/+bN9MBP29Tcc0klGlwIPRQ62pQeRBiQ4ZLWWI/GC/j3mC8tdq45e8QtR0YB+G6Uv0ALdZthvo50ac7XPGEw39QZu/OVpgEEia7fGzev6LYZ65Zowdkq/M5Xiz18d4f1fyfZdBi2Qhw5iAb5NI/BMFgn7ETR5jk4QH+KhKth5vyzOgveAuKhLAZ4uq7D7PH3iqlYYr9KHY6L6hotc/JGOpWwYw95rKIMq0QYZxMT8XtQLocAsmUgTdv4dImuvNpYYc6rNCP6wacFSBlZlbdVkCj5yhLPyu5A6papPVSLkgcYQ9MbT5HisUamKznf6pUrlXBprGh0kGdysJdysfBEld18NS9SP0=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4283.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(23010399003)(18002099003)(22082099003)(11063799006)(10067099003)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?WlplRkc0NWllQXNYVFJRaFFZYkV6NXVkV3JiL0llUC9JZWE3Nm9MSEpId1o5?=
+ =?utf-8?B?cjJ0Ky9hNklGK3IydmI0UXJvMnFTYjRHbHRIek9iUURVTm01ZmIybi9jVUx2?=
+ =?utf-8?B?RnVrWHVSQ21XSVlyMmtTUEhMTUJ6QmdaYlZoZlNvemhWTFN6RzVYNTZQTEZK?=
+ =?utf-8?B?RnQ3cHV2NnB3clBKM25ERnpHaGMwT1V1K2RUU0lqMTcrQTdvcVlDNExFYTB1?=
+ =?utf-8?B?UldMbUxEM2tKSHc5Z01vRDF2NEZNaFAyS2d0NDZubXBvSzZzVHpJeTRjWU1u?=
+ =?utf-8?B?OS80Zlltd2pSS2RYcXBYYmM0VFdnQ1dQb2xrdk9Yb1JHRjFpZFBmUDdCeVha?=
+ =?utf-8?B?OXZDaHo3OGhZWXowc0JNRm93OTMzN0xTUW1LMDZXdDVTS3NoSWtuNG5na21C?=
+ =?utf-8?B?K2dMWXE4cjFJcVlscG1aamIwaDZHR01QK3FqLzdncDVKWDFVUVN5aHgxc1VS?=
+ =?utf-8?B?NXdGUjk1TzI1cXQyU3JEZnVmTmttaHVlbmxreEdwWDR4QjFock1pRjNPNjNm?=
+ =?utf-8?B?T0lsT2tlQ25sOEVHQkFjWXF1cVdQVXRBM2QwbE5GemZtY2pMRHE1ZG5RUnNO?=
+ =?utf-8?B?TzAxcElTbnJ1Y2RPRTVXSzRzNlk1bFlkMHpFNVlTUnVyRk04T3Q3TjY1UVJ1?=
+ =?utf-8?B?alBjOGpJSXB3ZWUzYmFGZG1NWFdhY2pxTEJrQzdybVR5cEt6YTN1SkQ0MnlJ?=
+ =?utf-8?B?d3V0SjZBYWNqbEpubTJhVk9vMHo5clA3eXlZRzBFVG0yR3FXM3RrcG5zMkZ2?=
+ =?utf-8?B?Qk5aUXFVaFprK0htMTArZ2YzcmhMWU1CVGxCckJkdmszbUN6RGlqK2NRQmdL?=
+ =?utf-8?B?TlVxazh4YVJJcDRtdkU1TGZ5SG9DMmVmUVpLZzk1MkhQbmxvSkZSbDBRL2hT?=
+ =?utf-8?B?R000dUhnUGRQWDVkb1NuTGZqVDFnbXF1TEE1UCtRYzQrK3BXbXNMZElSUDdL?=
+ =?utf-8?B?UDM5L0dsZ2F2bU9rY3hONUE5cEYwb3Y1KzVha25DK1lLVDd5QlBYWU1EM3FQ?=
+ =?utf-8?B?M1RwRlFlWVBPZHY4djdMejlyTHZZYTFOR0tvVnZIYmR3WWVmTlRyYnN1U1Vx?=
+ =?utf-8?B?S2VlSVh0UGV1SS91aHNpTzQ0VDFzeVVWQzRJK3V4Y2FXMG5mYnAvMlN2cjhw?=
+ =?utf-8?B?ZVJFTUpmSGRPa0RYZWU1NkQ4VHZYMi9SNnlteHhYMWNDSFBGaGpJbXVqOHpy?=
+ =?utf-8?B?b29HM3VHN2pjOTJjQmhnYXkvU1R5OXRPZCtuU3ZxRTRPemlEUHBOZDFVM0hl?=
+ =?utf-8?B?cWo0TXExbysxVUhKd2tNL0JZNnU3dytGZEl0ak15UElsZGs4RXR5RTEyNitU?=
+ =?utf-8?B?ejFFc1RsRnFPNnowREI3bFBIUm5zQ2NWMXBwbzN6a29id2M2ZGJxbm1nYno1?=
+ =?utf-8?B?ZEVpbUZoMklvR1BjRjVlZm4vTS9qVnRXUXJ0czJPMXpUV3UxK3FjaUptL2dN?=
+ =?utf-8?B?Sk4xR2xQcmNQbTAyVldDTUhxN3F5UE05aW9wU0RRZjVsbGNJSDVab3Z0TmdZ?=
+ =?utf-8?B?dmdpTHdsYzIzWWRvV0JUQWFGSG55bWMzZFFjeCtkWEU4SWNmOUxDZlF5TlY2?=
+ =?utf-8?B?OWNuM25vbi80Skl2M2ZydTBvd0p6NmdJTXByV09qNGlqd3I2TkxVWStteEZQ?=
+ =?utf-8?B?ZnZYWmcxSEVtN3NZY1lnSDRpaXlaOHg1T2lxY3hDRmFRc01ERlVMUjR5RFZU?=
+ =?utf-8?B?UnM5amIyOTlFTzUrNFdOQW5HbWhZRnUvOGRhTDZzY1lhTmxHOGZ5VE1FWGRi?=
+ =?utf-8?B?elNXN2dMaGJwRDJPZ2owdFBUWHlTSnBKMTQxT1BLbklFallndDkzUXRRQWVt?=
+ =?utf-8?B?TTZlUXhGSDJ4OHNSeHJRRkxEeUNxZVA0Y3JjU2JxbE4rU0VpYzdsdkNNWStz?=
+ =?utf-8?B?KzFLblkxTlgrT21zbXNGMU00MnJ2M1drNGVUVVlYZDZYYk5WMkZObVllVERF?=
+ =?utf-8?B?aUEvVVVDa0xpNkZRdTI5ZDFKcXlQcGlacUt0THM2YnJWbEJsOXNoVENlamgx?=
+ =?utf-8?B?QnZscEVYN0Z6V3plVWdEa2J3cGdFNUgzWjRCTmlCVjNMZ253UVUxd1FueE9W?=
+ =?utf-8?B?dDBMc2prVGRYc01DQWI4WVBxcVo3bkNpSUZ1N2tncWU0WFpTVmN5d0c4cnE2?=
+ =?utf-8?B?RVZVWGcrQ3pvcTI2bHdMNUJCWXZ5U1p2RVN1dVVxZksvL2xWRjJOekhzOW83?=
+ =?utf-8?B?VHpGT01PWHErUi8yMk1TK3dVTklHSFpZVlBSUXZjYzBaSFpqNnBBZDhKUEhN?=
+ =?utf-8?B?ZU5UL2ZWTkRtNm5GVG5tbHc2WGNhQVp4bnFOTFdBOHlNREFKYTZZbHFUWXFO?=
+ =?utf-8?B?cG8wZFpsR1ptRFFBSGZNWmtBbEFTMDl2NXZDRUR4azhnSVQwRkRsQT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 062269ec-3635-437b-d5e1-08df18c5ee0d
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4283.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2026 16:24:09.2560
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9e3R/pNYzjKGUAGYvegow+shhYeiWIe5iZK2qRALGd7aRBFb0Laa8399bnyP1SxEQAQX6T7kr8DTyAi758ttXw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6329
 
-On Tue, 22 Sep 2026 07:34:01 -0400, Jeff Layton wrote:
-> Currently much of nfsd's administration is serialized under the global
-> nfsd_mutex, even though most of the objects managed under it are
-> segregated by net namespace.
-> 
-> This patchset does a couple of small cleanups and then adds a new
-> per-net mutex and moves all of the appropriate per-net data structures
-> to be protected by it instead of the global mutex. The filecache is
-> given its own mutex, and the global mutex is renamed and left for
-> managing just the few remaning global objects.
-> 
-> [...]
+> Modern GPUs and AI accelerators are increasingly connected through scale-up
+> fabrics such as AMD xGMI today and emerging UALink systems [4]. Linux lacks
+> common, vendor-neutral infrastructure for reporting which accelerators are
+> directly connected, through which ports, and in what state.
 
-Applied to nfsd-testing, thanks!
 
-[1/8] nfsd: clear NFSD_NET_UP before dropping the generic resource reference
-      commit: 77881893d52fc4ac737bd55727eca54cb95d6002
-[2/8] nfsd: make max_blksize a per-namespace setting
-      commit: 4a29b69535eb2778255634b795ad9c026269a95f
-[3/8] nfsd: move the control plane to a per-namespace mutex
-      commit: 88815584b68611c3eeb6f536b8dc1f4a2274c129
-[4/8] nfsd: rename nfsd_mutex to nfsd_global_mutex
-      commit: 828e48566b8145969f93df212628349e4d2849d0
-[5/8] nfsd: give the open file cache its own mutex
-      commit: 4ad8170fd7287fbf7adc493c785a284fe213065f
-[6/8] selftests/nfsd: factor the netlink plumbing into a shared header
-      commit: e99f6a7157acd18cda500c2bcbb17761ecfede3f
-[7/8] selftests/nfsd: add cross-namespace isolation tests
-      commit: 20801469b68a678a06b51592a1f90cb018983cf9
-[8/8] selftests/nfsd: add a cross-namespace control-plane soak
-      commit: a55e35036b7e984e601264565c767a23582c2175
+Sorry for jumping in late to this discussion. We have hardware that uses
+UALoE (https://www.amd.com/en/products/rackscale-solutions/helios.html).
+The suggestion from Jason is sensible: a new subsystem for fabrics and
+reuse ethernet stuff from networking subsystem where possible. We would
+like to continue discussing this -  Alejandro and I will be attending
+Plumbers virtually.
 
---
-Chuck Lever
+Thanks,
+
+Alex
 
