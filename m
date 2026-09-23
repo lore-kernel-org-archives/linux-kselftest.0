@@ -1,92 +1,137 @@
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0E547F2E7
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 22:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88B0E414DDB;
+	Wed, 23 Sep 2026 22:53:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790203375; cv=none; b=miepHgob+vuBwJtFmavnS0FZZ34tZZ/XVDP2Gy4mpRs7+xwBey+EmH/dFbFxeLQ+9EuIJl07T7Er3ZE8HQJSmUUT8gxBdq1EE9pNupDGDuRHSUBNeCFAWtY239V5DkUbXeC89PWCyP/blggCeo0QGhMTG7yLktpKrcixOtrqNyE=
+	t=1790204022; cv=none; b=LH+Y4xcmW+y2Yw0bpVln596s3+WuPJe20pvPjRRZ5aaf6NByRcMvsa+axMApsc1sahI/tCM5sm36p22dwCX5fItbAdK6N9/Tb1sCVbPQGmk+gj+yF2K2wnZ8vDrU/gTwHTsUZoTfLn6Si7lHmUecHYCP+peLKZpb9XoZ7m+Vbyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790203375; c=relaxed/simple;
-	bh=XC0GtZzu0BD86oQ6ghzNMhSkH0mMeg+u7BsmzLp0cIw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=RCRkKYSxa7obrBNOTeU0qOrgUToameLOMW2SztlA2YD7CvG5SmtinKprW0XoFSkcbsCj85NaNd/1MKAsnLkTO+XjtghUKx7zJvHjb7rYgeXm4ZBe2ynidehGX2P7zCXCeG5S0tgidliI1a+N/eYWAx8BVPiQafvoLFTNxFjaANM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Efy9i6Tq; arc=none smtp.client-ip=209.85.216.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1790204022; c=relaxed/simple;
+	bh=fwZSaqpmByB20i96UeW2mqdIG75USPYigGVMnEnWY2g=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=OzSZqg27PtUb7A3AptNI8YPe+kHIl+BjSCt3uN2/1v8nQivHoLCQXYpMxJf7JvSxm5y2BI/a2PMlELB7I6TeSwVQD+/5q8PLZ0DJrR1iWgXbNyXaHFuZeYNM0tXTWLqGUFoSMOwRw5ykBfGgHpjlDue3S+P9Ayv6TY8GCpwa/yU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=scGfOW6F; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Efy9i6Tq"
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-3965ba1ba3eso1128984a91.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 15:42:53 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="scGfOW6F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D461F000FF;
+	Wed, 23 Sep 2026 22:53:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790203372; x=1790808172; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=c4ROB5gmPay6sdQJPjpG61DXTR2zRREmvWIvdqy7Ui4=;
-        b=Efy9i6TqcDJ8YqaJzlDjuCyPwIaLyKS2O9ovCaahkcOfUfw6fBjKXjGsZJxgmIYvfL
-         +ry2BkIWgBmHvvLFso3ZATjr5Ub2nz4RniCbWEwvHx7gtSvqfz0RQqoaSLyHHKr+7cAg
-         fCPynqUX7Bb9fgSAVlw6iIJs08XGw2zX4LQGjdLwkYCaH1slKctwv43/dxQJ5fwr5qlK
-         3wguolRgh/3ajD/pELswggZC07wCJZ7S8jOUJ/klp/L0Z8QNORQ5nW1tC+43G/7752xM
-         VvPWetDskQ2Td3ZeLBr3OoSizfwykLv7LPxq3KRZhYRIyiLC+bPUnb5JoFg/+gxFbPSe
-         2rPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790203372; x=1790808172;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=c4ROB5gmPay6sdQJPjpG61DXTR2zRREmvWIvdqy7Ui4=;
-        b=xnYLrBrOJfUzmRUcW3TsKk/o43TZTnFyX62xWmvXbxNYeFpGyPKqjcbfvNvpqhynoQ
-         wqUF/xlNdN/hqx5NLZTR5pUNH3gc7TH7Nnw02X2IJPzjTXSBzb1UNUCOWvHybGCvi+ru
-         C77dU6rad5nAN5N1Y01WiBnQcjJbQ0Rw1gtRPVHavq9H+HS8XrhSzTdqCMKk0Vx/5uZR
-         kLm2ymAYszeTn1HDaryy/NxqOzBuFnuTVcU1pOdEMKNbE85qRifNIQrqQoemS/rFsXEE
-         fKysBRtpYH7iCKXFdBmQWV6gFaZbR5rIUvYYSmZw9IBmopO5C4RLAH8m+J+Z2pc1T0Cy
-         zbng==
-X-Forwarded-Encrypted: i=1; AKwUvByqktKVbiUbngwtsAK0leTGBJj95QoXi1Uj+dTyLgGm7trSz14YfnZ+oXU0xLsywvYV6iPdp0LtYh7xPV7/yHw=@vger.kernel.org
-X-Gm-Message-State: AFuF++l9ZmOHC5uH41SPow06j67xWj6n3Obaf8XYeDBNF7JYHQLrd5T4
-	sL1qleBwsZVilwUK/Qzi8DfyITxRmc6YazKpXHYgYpD1iMW8mIFyZGt1SzFylA2w0bnCOg+hU4s
-	H10Haxg==
-X-Received: from pjbbh7.prod.google.com ([2002:a17:90b:487:b0:3a0:8315:fa7b])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3f87:b0:398:a486:81ec
- with SMTP id 98e67ed59e1d1-3a0985b8f01mr435176a91.11.1790203372353; Wed, 23
- Sep 2026 15:42:52 -0700 (PDT)
-Date: Wed, 23 Sep 2026 15:42:51 -0700
-In-Reply-To: <6-v7-c6d30e8ce1e4+3dfa6-mlx5st_jgg@nvidia.com>
+	d=linux-foundation.org; s=korg; t=1790204021;
+	bh=ep7wns9wPyTqnmGHhjmbGEV+muuH/iLwEmgevdLFK+Y=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=scGfOW6FNrNiqxjD54xQajwaC+4WYqC6RG/88f1T+E4tqhorzFVBYXL1q9XvKZq/L
+	 EBTL5TAFO+L4muscbIneqi/sYK9xm73Aa56lde4wfrllpbydBzL/wWnM9xNyKrubd9
+	 sbmpz652ub/EEGRm8Lp6Vjcgd5QxMI1CtuS4ssq4=
+Date: Wed, 23 Sep 2026 15:53:39 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Jim Cromie <jim.cromie@gmail.com>
+Cc: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, Maarten
+ Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+ <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
+ <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Arnd Bergmann
+ <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu
+ <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Jonathan
+ Corbet <corbet@net.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel
+ Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Petr Mladek <pmladek@suse.com>, Steven Rostedt
+ <rostedt@goodmis.org>, John Ogness <john.ogness@linutronix.de>, Sergey
+ Senozhatsky <senozhatsky@chromium.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-pm@vger.kernel.org, Louis Chauvet <louis.chauvet@bootlin.com>,
+ Philipp Hahn <phahn-oss@avm.de>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v11 00/38] dyndbg: Fix classmaps API for subsystems,
+ query extensions, selftests
+Message-Id: <20260923155339.bdc677e8e688611bcf190ad9@linux-foundation.org>
+In-Reply-To: <20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com>
+References: <20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <0-v7-c6d30e8ce1e4+3dfa6-mlx5st_jgg@nvidia.com> <6-v7-c6d30e8ce1e4+3dfa6-mlx5st_jgg@nvidia.com>
-Message-ID: <arRV6y-d1rkRV2Fa@google.com>
-Subject: Re: [PATCH v7 06/10] vfio: selftests: Allow drivers to specify
- required region size
-From: Sean Christopherson <seanjc@google.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>, 
-	Fuad Tabba <fuad.tabba@linux.dev>, Joey Gouly <joey.gouly@arm.com>, kvm@vger.kernel.org, 
-	kvmarm@lists.linux.dev, Leon Romanovsky <leon@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, Marc Zyngier <maz@kernel.org>, Mark Bloch <mbloch@nvidia.com>, 
-	netdev@vger.kernel.org, Oliver Upton <oupton@kernel.org>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Steffen Eiden <seiden@linux.ibm.com>, Shuah Khan <shuah@kernel.org>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Tariq Toukan <tariqt@nvidia.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, patches@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 21, 2026, Jason Gunthorpe wrote:
-> Add a region_size field to struct vfio_pci_driver_ops so drivers can
-> declare how much DMA-mapped region they need. The mlx5 driver will need
-> ~18MB for firmware pages. Existing drivers pass in the sizeof their state
-> struct. Since drivers all use only their declared state we can use the
-> value directly and remove the SZ_2M hard coding.
+On Wed, 23 Sep 2026 16:34:24 -0600 Jim Cromie <jim.cromie@gmail.com> wrote:
+
+> The drm subsystem has *lots* of debug statements, in 11 categories:
 > 
-> Assisted-by: Claude:claude-opus-4.6
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-> ---
+>  $> git grep '\w*_dbg' drivers/gpu/drm/ | wc
+>    5663   30159  542864
 
-The KVM test still runs, and in David I trust:
+Methinks this regexp was overly promiscuous, but point taken.
 
-Acked-by: Sean Christopherson <seanjc@google.com>
+>  $> git grep 'DRM_DEBUG\w*' drivers/gpu/drm/ | wc
+>    2206   12834  202332
+> 
+> All of these are bit-tests on __drm_debug, exposed to users as
+> /sys/module/drm/parameters/debug. Many of these are done often;
+> vblank is done ~100/sec for some displays. Over the uptime of many
+> boxes, this is a lot of cpu cycles on bits that are almost always off.
+
+A __test_bit (or |) every 10ms sounds quite negligible?
+
+Especially if __drm_debug is __read_mostly.  Which it isn't, afaict. 
+Um, low-hanging fruit?
+
+> Dynamic-debug excels at replacing such tests with NOOPs (via static
+> keys). Classmaps was devised to bring that 0-off-cost to drm's
+> categories.
+> 
+> Classmaps-v1 went into the kernel in Sept 2022, in 2 chunks:
+>   b7b4eebdba7b..6ea3bf466ac6    # core dyndbg changes
+>   0406faf25fb1..ee7d633f2dfb    # drm adoption
+> 
+> Sadly DRM-CI found a regression during init with drm.debug=<initval>;
+> the static-keys underneath the drm-dbgs in drm.ko got enabled, but
+> those in drivers & helpers did not.
+> 
+> So in Feb 2023, it got pulled:
+> commit bb2ff6c27bc9 ("drm: Disable dynamic debug as broken")
+> 
+> Root Problem:
+> 
+> DECLARE_DYNDBG_CLASSMAP defined the classmap, but its repeated use in
+> both core and drivers violated a K&R rule "define once, refer
+> afterwards". This flaw resulted in a regression; with drm.debug=0xFF
+> boot arg, drm-core got enabled, but drivers/helpers did not.
+> 
+> This patchset replaces DECLARE_DYNDBG_CLASSMAP with:
+> - DYNAMIC_DEBUG_CLASSMAP_DEFINE (invoked once in the exporting module)
+> - DYNAMIC_DEBUG_CLASSMAP_USE (invoked repeatedly in drivers & helpers)
+> 
+> _DEFINE exports the classmap it creates (in drm.ko), and other modules
+> _USE the classmap. The _USE adds a record referencing the _DEFINEd (&
+> exported) classmap in a 2nd __dyndbg_class_users section.
+> 
+> At modprobe, dyndbg scans the new section after __dyndbg_class_maps,
+> follows the linkage to the _DEFINEr module, finds the (optional)
+> kernel-param controlling the classmap, examines its drm.debug=<initval>,
+> and applies it to the module being initialized.
+> 
+> To recapitulate the multi-module problem wo DRM involvement, we add:
+> 
+> - tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh:
+>   Alters pr_debugs in builtins and test modules,
+>   checks results against checksums of expected results
+> 
+> - lib/test_dynamic_debug.c & test_dynamic_debug_submod.c:
+>   Builds parent & _submod modules with _DEFINE and _USE inside #if/#else
+>   blocks, reproducing the 2-module scenario under selftests.
+
+So what I'm understanding is that this series presently has no effect
+upon DRM?
+
+What subsystems *does* it affect?
+
+Sashiko had quite a bit to say.  It hasn't quite completed at present.
+	https://sashiko.dev/#/patchset/20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com
