@@ -1,65 +1,65 @@
-Received: from mail-dl2-f42.google.com (mail-dl2-f42.google.com [74.125.229.170])
+Received: from mail-dy2-f15.google.com (mail-dy2-f15.google.com [74.125.229.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A66531AE3
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 14:07:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1CF4DEC16
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 14:07:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790172461; cv=none; b=rWI2u+B4bO1an05SeCnrcocJmHJd0xfs72oMUFgAVgPHQ81WrSwbg2VdT51icLw0mio9O6ZaoRhwHgIEk9S3mhjUpIU7e3TroJUv1xhAcSTjKD55PqevrzSNlXaiM/atTGpmRScYz9ek2EHW7EB6HYG10JuX3ifmofzA5wF4NX4=
+	t=1790172470; cv=none; b=kYJstq7sNEbDRjjLdvIZOGLXG83MfI/RzEF2Wh7xd2GH5yAiCHQhdXLuSrsU6GBODwBh3BERkvfv1jIz7TB7l+vITuauz3t5m2BPLWvPXFxWRhDJa1WwDNH0a57sMfcK9K/dXfluiZH/GW8wVsMIW+QgZTH1e1b06av+gqVq2qo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790172461; c=relaxed/simple;
-	bh=qVO2aOXV8qOfQW3a+N4ntdYpNIUu+AmmtXveRqFp7Jg=;
+	s=arc-20240116; t=1790172470; c=relaxed/simple;
+	bh=hjsojklkWTvCL4jJhphhchqci2dixHgONZ4YVxk4b8s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A6o79M8mziDdCiRTF3BaaFpy+6Xh/YMCdNDB9qsa7gTRxFXbk0S14gqvqUYIBl9x8z4q39Q3/adbkqZ4MhXaHnuCIojnmROT1oqUwuXerNcYiuKDDA3C+ktrlOT3Ukvcj1PTkNgE7rIYNOhi55I4JLeQh+eTCQrUM1GvMKGF46Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rw4mQ1IY; arc=none smtp.client-ip=74.125.229.170
+	 MIME-Version:Content-Type; b=saByMVAfkdbFe78L1EKmavU5/jCVZUw2R5hOPqLAfZilMkBPHvJosijwsWMJZ7hNM3YFzLmeewDPwQqMo+r/+5pxste8clHDIWTmHdWZnKFAGWqUdXW5Z1z2jtYMyg6m2WwiP0/JuKoGsfw180JaJljJ5yGDksFqjWtZopVxubQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q+iJldaw; arc=none smtp.client-ip=74.125.229.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rw4mQ1IY"
-Received: by mail-dl2-f42.google.com with SMTP id a92af1059eb24-144e32aaa1cso580985c88.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 07:07:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q+iJldaw"
+Received: by mail-dy2-f15.google.com with SMTP id 5a478bee46e88-32dec843c37so1648329eec.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 07:07:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790172459; x=1790777259; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790172467; x=1790777267; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=qVO2aOXV8qOfQW3a+N4ntdYpNIUu+AmmtXveRqFp7Jg=;
-        b=rw4mQ1IYH04c7P4ES+naih2nAvwVNQdj3JRVjzQhlyu/21Y4OHl5g32oP8o1/ygBFU
-         TP+h1U5bp2x8BnD/X//2xjxYuMz9guFAhR8A1/vangMfE3GQJVIlHJLeqUwYmVsrEZ4v
-         O+5/bOCvpsjBd/T2qn7zM+N6dtOw4wR0dQvyzh5vsfdVZNHBPyWVInJPtxv3axQTLA0/
-         OdSvOsegkoiyRl8/ysRFQAMCTCvbkzsDoYm1fvwoGbQTvC/l+cm9J7/8An41dS+JiSp9
-         pzp43L7AbcvaD/jlAly5AKkR8Y5Nlny3JXH0T1yCGsb4YL8eUFZf5CXaYB8IR7pP0LbQ
-         6RnQ==
+        bh=hjsojklkWTvCL4jJhphhchqci2dixHgONZ4YVxk4b8s=;
+        b=Q+iJldawQPFhc5TWRq+eTJfl00BtBuWULXo7MNMUBSdEQAXphtveDQ5vWeiNTloO56
+         RFhwJkn9mIH+8Fz3kEMPh+77Yp6UBalrxWL9LHtUS6tPzKuCKSkxJyHDq9ckZdAWPrcB
+         kvixQWoVW+z17QcF0CFTXg1dfD2OG6oF3n83Wz0+yOQA6uxvHfVIRt6vaG8nfoAWcYLD
+         9cQaI8pUwzxmeudqNGbSoFGkpc39F6KTqQbQ8R6pRMiPP8F4vMkhVRJYUdBClCHwkXLN
+         MLPKT05Rs+42n80Hw483RUdlRvZT8r75hVA+vWBAbg0B6QcLbBbEXq/N+Nsu6Qt2DLu+
+         xdqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790172459; x=1790777259;
+        d=1e100.net; s=20260707; t=1790172467; x=1790777267;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=qVO2aOXV8qOfQW3a+N4ntdYpNIUu+AmmtXveRqFp7Jg=;
-        b=GBGFeFlqJVLt8BPJEfa97TgSWahd5RlD6QCjlNaJAxjs3+mjK5mBHF9Xkn6E/1m/DE
-         n1mZ0nRoh+2ApRWJ268dLlm5FX/rQAy3fysxesLz0am7Atv5IHHhdTGubwwvgnX503HK
-         NnJ7ls8lvFlScifFUt/wFa7Kcdy2rzZSN6NI0WaitGWqmY3qKjOsMOc/eqfOLA4JWv9U
-         xr89WBdaMTvbDXRFNRDcsxdPfm42rLbmAVIdXxXx7dnSD123Qoxz8VP0taS/fbW9su4+
-         0jPoQnpcBK036yH14wtVYESZSHwBWfbsC05V2dv6iaT5VeiRENPys+A4APa7wgY/bY3Z
-         pJAQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx/ylufgmrN5rELMQvzSiNNDOTtwmOOPV3a/SrIzOh+n9d2TvbJogP6poObyKt3pCfwG52mDowRcdWoGd5kT2g=@vger.kernel.org
-X-Gm-Message-State: AFuF++muLqv1oddoaw76+A/dhsws45RNe0pjedORePskZl2aCOdk6ICl
-	XSRTysrhUcsHcRL00ehgdeXQDkoLNP8O+qqQ2QR7Y93w97/YgaJor2n4
-X-Gm-Gg: AYBFou2DSUE/H4ZlNagsN54KpO5IMioUHx959H4NwDJv2ytfDegzXLY0aRKezZEOaMV
-	tZIgrHwYkHSyKoJwf1DdzC75r4F6IUhYQJL5QzpXOlJQAT8TFpEA7NhUpgpNee8euFWReNOKFqi
-	goggzpMtxNVi+k1iTjdO3AydKa/6RDYFf9q9dfNWZnOPrM/JfuuhpiMUH1e3hlU6A4+fD9W1LZg
-	6J6aoHRPXYVaSWeFTfKPFRsnIHddGZXyi7wUvC87OJzpMKE/mjnvlXyqOko6SS7isNp90y0nkcX
-	WrvWGkdnvAtMPfXtN9FqRlbVP1Ux67jvio2QTToeI86suhnCPi7Cw6m73/ZV2bpv6gBrUCZeFb3
-	f4IOmgKk4nrThl5gA3Nwm36LQwTpd7oMMZbogEX87n1a7EcREkC8iyP7NgmKM5pSBzJdrrly9yh
-	NFuVRbzdcEJS4IW0T1oTHG4/nC64ewlyzRy9jlz2Bd0R6zWXnvqPqY/gFq3prfmVFy/h76LaB8F
-	rgc
-X-Received: by 2002:a05:7022:3c07:b0:144:f8a3:2eb8 with SMTP id a92af1059eb24-144f9086e0cmr2903706c88.9.1790172457980;
-        Wed, 23 Sep 2026 07:07:37 -0700 (PDT)
+        bh=hjsojklkWTvCL4jJhphhchqci2dixHgONZ4YVxk4b8s=;
+        b=Hvv6jn+OabXwB55yBSVUy19AvrhNuMBXZKVkYWqR/QDgZdFOYXCdP7oJJBEXnB8fJN
+         8zHxgiHYIm+Zx2pPa49p+VVs4YTBqgzMCXz26IEdUb2iuBYg7SAQJl/+IAcqFa4Mq6OH
+         AdOFckitWspL9ud7/fb6cFAQK3S/e6W6jeGW94Bdw538xA5XYvAezfqOmRyOlDak88Qo
+         5XqQRIar08z2ef3YngH41J6oPn970YALW+nE1s23GbZyR98d4ZgbrsFHz7HZaaFzP7GG
+         QX0RcT/+y24a3x2bz6rCfq50+h/B49ikN5h9O5bIb9dGP9lEAgXutcG3/tZGWQaH6Of0
+         RtMQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwj3LtJ2BSHDaXBX1+SbexMYBH6sqsN/Cl59zD1LcDXK0OHZlw2EMADc6ij0IM1aZbgFSg9vBaFQKOVtLQfFmM=@vger.kernel.org
+X-Gm-Message-State: AFuF++nadfG+4Vj68GHCiAX4+8kBLFWPv9fFfdyQglz4RCCvnrVDsR3x
+	ATF8SZe3yq84+90/tY+h+Az94wrf/IfnSPWZ68piKm7wEC6jK1eqZVHp
+X-Gm-Gg: AYBFou04Tlxvb0T7T4YoCo+oA3EmsH4H0Sfwk1ZK5e8Hz5S4avC1sQv9iS6/4DYfh46
+	gcF48C0UqmfnvSzrul8HTgVYtzwwKJHq8pbmbUuROdVSUuGdibTgHf+NVNm7A4QdUvcr7HGT3QL
+	fWpAzSvR8w+FTFGC9C7HHmdv8MFhVmDcjflT3emSwLm8u3ykqpBQGOdIc41Hzprl07zfZF3yxo3
+	2B847J0X10PR1kiHG7sw/LIbLXGvWJMcTWe/J6vIGrKsN30H/mNdzmyZjSHwzvP2ACAb/gZguDX
+	zJ5Fy/y5m6r8OWPx9n62SRkJBwgRQy+b2SfgcQp1YF9M5P9PpV5oWWRDvxo9mCRGnqdnxIp1Tzd
+	guDekQQkk0wk6y32NSQzZhmiFFDLENwmeUyOtubkkdKnCFPWAocG2h8hDGPn0thDYgcNlWOFKcM
+	tX4kspgBDfMh4FplNz8O+mn8VfXAtENnLytkZj2PF6SRCcFlHLLW/ZZG/RrQ2yJO3y4dWTB9kA9
+	/kn
+X-Received: by 2002:a05:7301:1803:b0:33c:2611:1a14 with SMTP id 5a478bee46e88-33e8dec76e4mr2749737eec.29.1790172467269;
+        Wed, 23 Sep 2026 07:07:47 -0700 (PDT)
 Received: from houminxi ([61.170.225.122])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33e96846f85sm6391689eec.20.2026.09.23.07.07.32
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33e9684ed70sm6100527eec.19.2026.09.23.07.07.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 07:07:37 -0700 (PDT)
+        Wed, 23 Sep 2026 07:07:46 -0700 (PDT)
 From: Minxi Hou <houminxi@gmail.com>
 To: netdev-bot+sashiko@kernel.org
 Cc: netdev@vger.kernel.org,
@@ -74,12 +74,12 @@ Cc: netdev@vger.kernel.org,
 	Shuah Khan <shuah@kernel.org>,
 	dev@openvswitch.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v5 1/2] selftests/net/openvswitch: add SCTP flow key test over IPv6
-Date: Wed, 23 Sep 2026 10:07:29 -0400
-Message-ID: <20260923140729.1044989-1-houminxi@gmail.com>
+Subject: Re: [PATCH net-next v5 2/2] selftests/net/openvswitch: add SCTP flow key test across conntrack NAT
+Date: Wed, 23 Sep 2026 10:07:38 -0400
+Message-ID: <20260923140738.1045071-1-houminxi@gmail.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <179008950943.2160803.15856491533624064435@kernel.org>
-References: <20260918144647.2024095-1-houminxi@gmail.com> <20260918144647.2024095-2-houminxi@gmail.com> <179008950943.2160803.15856491533624064435@kernel.org>
+In-Reply-To: <179008951086.2160803.550424027687672394@kernel.org>
+References: <20260918144647.2024095-1-houminxi@gmail.com> <20260918144647.2024095-3-houminxi@gmail.com> <179008951086.2160803.550424027687672394@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,19 +89,15 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Tue, 22 Sep 2026 15:05:09 +0000, netdev-bot+sashiko@kernel.org wrote:
-> [Medium] The promised skip when IPv6 is unavailable is incomplete in
-> test_sctp_connect_v6().
+On Tue, 22 Sep 2026 15:05:10 +0000, netdev-bot+sashiko@kernel.org wrote:
+> [Low] test_sctp_nat_connect_v4()
+> can a forked socat child outlive teardown here?
 
-The /proc/sys/net/ipv6 check only sees ipv6.disable=1. ipv6.disable_ipv6=1
-still leaves the sysctl tree, and a new netns inherits it, so the address
-add fails and this test would FAIL.
-
-test_icmpv6() in the same file does not check disable_ipv6 either, and
-its ip addr add calls also ignore the exit status. Aaron already said
-this is not something we special-case in one test. A real usability check
-belongs in one helper used by every IPv6 test in the file, not in this
-series.
+Same pattern as test_sctp_connect_v4() and test_sctp_connect_v6():
+fork on the listener, SIGTERM only the pid that ovs_netns_spawn_daemon()
+recorded. A process-group kill inside that helper would change every
+caller. Aaron already called that overkill. I am leaving the existing
+convention.
 
 No respin for this comment.
 
