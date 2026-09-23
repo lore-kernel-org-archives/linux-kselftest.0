@@ -1,70 +1,70 @@
-Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
+Received: from mail-oo2-f40.google.com (mail-oo2-f40.google.com [74.125.231.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A1D58494B
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 22:36:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A598C59B69E
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 22:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790202968; cv=none; b=XgH1jJl+BSLo2qoqK/Xipm1oZQkTFgHxc0zSG1fbqKWEfw+HhruBrucSIvJ98BmdOHQP+rP7/zWXQwdux73lb4f6BrLIunoDuTVSexbHds6zwUdu3GPWHEdyzjwGLRMx2U54l7bQr4Oi+Yz2DzL2K0Nhx2TjdmIgIZYFBXmWNck=
+	t=1790202972; cv=none; b=IeILbamzXCrePgzxQbesYBjZDmomkXBs6mmEacuENactEeTUtU/J0DDa2krmLrqisgmLXB3lMlI4SJHJ3Pbh2MOew7kImGbIlc+qy/mr9DUUuZFirQtZTSS92FrAeRzGkJrulLUHLte74V+tUfwNnBAMgwQQm5b9Kb6w3g5XVGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790202968; c=relaxed/simple;
-	bh=dVCVMamiUaB96gu4NX1kujuPDVFnoxAGuPP2zSXDqA4=;
+	s=arc-20240116; t=1790202972; c=relaxed/simple;
+	bh=ATqajf/gbOgVHOHG+dtgeX5M5jVEAjDksP/Pl6A4CSs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RJibMD/SOwT+vyXJuXQIgmkb4KSvt2mY8Sehf3NwHXxgzW23XG+c2U0+w6KM/0o3bSA2A/sV/eao8n050WNO/AXdrYHAhhhTWpkJxdW8UjDGtj/aMhTdEENzKNs0JGiGpEJ0CEbzcw+OWYybcmIDrv0bzyY8DzxrGfXnB+tWOb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=la/DfI6Q; arc=none smtp.client-ip=74.125.231.76
+	 In-Reply-To:To:Cc; b=B/p44tG4hxnRVoBN9yeZiNN2ayB+YPQDsaWk80yAwZ7r41Pt6BY6EsgZYN9g+5HS4sY/5SsKqJeMNAuToUeHk5H3npgUMusLef9MqJnt6nejGIM3c+yOpZ/8YuzN3d8agPRd9gWPizxANFzW25eei4h1WB6za9lhN39uPhY7tbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=He9UO6i3; arc=none smtp.client-ip=74.125.231.168
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="la/DfI6Q"
-Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-469fdb78b1cso826097fac.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 15:36:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="He9UO6i3"
+Received: by mail-oo2-f40.google.com with SMTP id 006d021491bc7-6c2613d80fbso880374eaf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 15:36:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790202961; x=1790807761; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790202966; x=1790807766; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=anf0fctja+VnMMprL/dVwONTSp+dELUQq5LW/V5rUuo=;
-        b=la/DfI6QTd1+YOGuL+x1fIC7Dgmsg/bE2W10m+JNaRhlluQESJ62SUM2g8/ZtswlVS
-         jbU9PrNEqmve437AfB11EyE3pDakQRMtUgE9aT5EXdgqh/d/4fxV5wEG87Y3MpMOjEEQ
-         PbFemXLDbiAInawrxLg2QIrm7FrQH4+sC1IvsyhjQEGuNlQkAa18vcbhkIUg4CPEhhKg
-         3yJigbhiOuv/OLpMPWkhZdJrkGkgRb5+t0dcH42LFr56OE10bW80kFaNjLlsB7B4L6ND
-         llm+NTVRKe/nIfzE3J6GbdBprMjc64WrCQwznzfu5+9OqiakRmf9Ui8OqDjDHadvqWfO
-         /5Ew==
+        bh=nK6gBgZb148t7QUaccdLW5Z1TVwXqhGj+TWUBMmkbJM=;
+        b=He9UO6i3I/LzHDFkvF/3gecqrO0Viyu5QzgBbJTN8DMLtxzjY8Jh1msstmxIZv2j2p
+         6LAzhACGkXkH40WdFXrfHYCKlv2NzKs/GUY+g+yaDHdLPL9xxrUdSn/S5dQbMejtGfmR
+         MYQEtG+BDHVYbS5BqANO9imsmRW0mP6gtPZe+x5xe3jV/lU5+75fHFFtW7qZG6lCSXza
+         a20VYyO4INQppf4XDgNBS7lG9IFIZziNcz6vhOfKCrAojjLAbW945+HBLFwU6/a9azNG
+         ilxkGy86TH7i8AaulnFBjcGQ8Yc4m2N3QSiSSUNLPhBFZ6cIGtv2aqy8c2yd/nnn0I+M
+         hzJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790202961; x=1790807761;
+        d=1e100.net; s=20260707; t=1790202966; x=1790807766;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=anf0fctja+VnMMprL/dVwONTSp+dELUQq5LW/V5rUuo=;
-        b=lAwNzWgIeg6b1Q/QhlNkaSes51/1Ijsgv0pKgqnq/Run0e2X1j5gZ02AgGGna66Fo0
-         aLfGOcGzyzkBfwLM8yEbK0CPJRirNezkuDBAB+p9bA6C8XZA64ucRZhJFX57cUndE4UQ
-         LAd6mixAHn5SivE+iWqj287OKP8C4fDRTYBSS7cIlrLdkeOAgqTT6WtSGa/mr8eNuWpA
-         GRa6TbQuSlBTQbWN54TbeHCtlWPIzBRmVbrhdVlKJfCeNaRyJHLcB9u2sR2xVoyhZfUx
-         YkLIyWLyBe5cp3mbRnCDR/hUCfWnzO53w3sgjt7pAmJGlYlC5yGJ08cQUOpA+A0/A8j6
-         1SuQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwV7/PS2FsVfVuwVTfO99j6RGla187AvcLfRbZtnkP2iWQ0iHURA3x0JOipEX/isyey7zgVWIy1y8M8GHi7UNc=@vger.kernel.org
-X-Gm-Message-State: AFuF++mXrx6SGh7TOFuSFHydUiMOUY3FDfp7Am7P2RKmBfeMPx8AlLfA
-	8fGPcf1YOgYTktqPasXXvgCB2oCkrAwdUEyrxezB1491NhthK5DtEc7p
-X-Gm-Gg: AYBFou3th1VX0D5JBnlVezirM2av0IsjoAlHdBpg3w7K2CuM1BPoQ+KMwauUUsy2wfd
-	38xRcB5zvwJawVMBuVS3VaCNagI/k7zGDv0SPTiH/bh2KKr8GVYHPCcaAXBxvHH/cDn7G1UabQP
-	kNlC1xDWKJmf85bdk7u2ItCIsp8fTEToW7eW27t3+d5NgyE/F/xLUoFoyWy/lb7AHyeKgpEUy5a
-	OciIiFNk5iVRgpEsVPEbcNhyNjQmdF4S5gTU77YZZnaHHnoIch1wTzr4OtSGX6ZZMf55EQAiUe5
-	yZErDxzwQfslB3fthYBty3zWc4hGyVQAznG6DpbDPZjkxByE2qJ+RSZfuP/tqqdeL+PraiSVaot
-	N2n0z1Jj1qQgiI3Jy49xaHldc5M9j10hZb7AjFNzOS5nL0IBtVVFerF17JGswl5CJLhNaesgWUe
-	tQ+xFySUVBaSfwV4v4re9bb275D0P0j3ROAk0AJcTsfmQLe8jrGnXRP5GT1d3O/BOZMO+FeVYqc
-	UtQvGEN0pS6rgnltjoQ+OxayoSUY552oWkDb4c6ZUouv9FNMzoPWkh5/cXX83AaEnGJFi8DD8yv
-	sySI/zuZ+X6fTCNQx0Ci
-X-Received: by 2002:a05:6870:3912:b0:491:2ed8:3505 with SMTP id 586e51a60fabf-491e2441c2dmr772232fac.0.1790202961310;
-        Wed, 23 Sep 2026 15:36:01 -0700 (PDT)
+        bh=nK6gBgZb148t7QUaccdLW5Z1TVwXqhGj+TWUBMmkbJM=;
+        b=m276GA5CjGxX4i4qmHbRpIvkzFiaCc+KKJaDbDUBEkqIZ6zqiVPgVS5Uxltet5ACKA
+         BgCqCKqbU/Rc1Dj1WucWxXg6pbEmkfCxkK7OHHXrA4EuSw2jCCgNHcZORAZeU68Z7vz+
+         4h2x87+mOMd2N/sFRSntRpnLRFMlWdG2a8zNbfshaB5bYpE4uEVGAXLPO+cuIeDAWR0O
+         h3fsGYaxWlnl048qTy/7K1CiDHa3acQWGy7s4GmpvOsw/zEKlfNhsmZJS3frQIobqFID
+         ps8l8UL3elBu5rdTcl++AzpGGG1XmpzNA8S8Zl7LRS5n+t9wtiik5AmoxKCzth4uyDzz
+         5xQg==
+X-Forwarded-Encrypted: i=1; AKwUvBx1hKMjBOop+fZtWqG4RWVcMgFggPf9GFxf1F4gGBoyU2JlEuNGHzM9FotcU9Y8kIR/A0mVTxxoa6KouYFFdAI=@vger.kernel.org
+X-Gm-Message-State: AFuF++kMDhXMJ5wNuK76Y4vFtjpPK7JzXTpf6a54YN6nw8qEUfjAvMyV
+	+Y5GbuQemwG3nuA80KTdDT6acQwAJTtemfRvF93+HsHXOamKcb07yy3i
+X-Gm-Gg: AYBFou186qirTDpzlWrDFa+oFNsqkLo5afCDw7xxCcAaoUkLwI+BS0o764qVYZxQlaW
+	QoW6TMTSh1ukQ1eP6O4Iwj1Fpstjqz5LCw8V37OX+f0CEu9HOtBlU5YSoN+srXQDINXe3fvFu2m
+	AfA1eLYqxq/Dn7cEbJlm/Wjd10qRkIyi5lCyN1aaBO6pdtwBKFcc0bsqtNHDYt1Dr6UoiOyKlrN
+	ljwrqwqV18L/rIprEIfNbmF0ObA0SmZu5JVpZFkwhTzw/0Aq9ALKxboPStcS/FZiTy1oTzKzZeo
+	0ivyk7uhgKpKo71foex95E9OceZ8iuKhD7OOFrbekCz+mB/DK7h1ULG/m7lzbxfDWWBCBbl9dn6
+	hDs/Ilp3v9LIJnj7pzGXlWKfBZ6hizxhyNES/14IqmFW0YLSwkgUQWxkSw0HNK22kv825ywdD2u
+	hsztYMLyOdD+Y7LI4FjngL7vUJ6Gna6Zew+EOgo2QiBs/45vaglJNht3FE6UF1TUtPphqIqfcTw
+	zKd5rHN00MfOh0ydLcYtJlnJu4qdGp+AW2GJaD8NKzuMrmA1kmYuuxnDn4aBu8FAEOzV5OEECAW
+	hHM3g/E2Vz+GefjBHtqeSIuA2xOp2Q==
+X-Received: by 2002:a05:6820:f06:b0:6ce:7f39:7c2d with SMTP id 006d021491bc7-6d441995854mr659245eaf.81.1790202966437;
+        Wed, 23 Sep 2026 15:36:06 -0700 (PDT)
 Received: from [100.82.231.29] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 586e51a60fabf-491ee1ac486sm559401fac.16.2026.09.23.15.35.59
+        by smtp.googlemail.com with ESMTPSA id 586e51a60fabf-491ee1ac486sm559401fac.16.2026.09.23.15.36.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 15:36:00 -0700 (PDT)
+        Wed, 23 Sep 2026 15:36:05 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Wed, 23 Sep 2026 16:35:00 -0600
-Subject: [PATCH v11 36/38] dyndbg: add epilogue to dynamic_debug/control
- file
+Date: Wed, 23 Sep 2026 16:35:02 -0600
+Subject: [PATCH v11 38/38] dyndbg: add DEBUG-biased fallback stubs for
+ _dynamic_func_call_cls
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,7 +73,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260923-dd-cmap-part2-clean-v11-36-9b6c217fdf2f@gmail.com>
+Message-Id: <20260923-dd-cmap-part2-clean-v11-38-9b6c217fdf2f@gmail.com>
 References: <20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com>
 In-Reply-To: <20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com>
 To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
@@ -98,90 +98,73 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
  linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
- Jim Cromie <jim.cromie@gmail.com>
+ Jim Cromie <jim.cromie@gmail.com>, kernel test robot <lkp@intel.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790202874; l=2252;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790202874; l=2698;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=dVCVMamiUaB96gu4NX1kujuPDVFnoxAGuPP2zSXDqA4=;
- b=xv600zdesEVIz3KiAGz67sw1u76JqgY26LqYwDj3pdMjhveZMs8ss+XJ/RmWb/HveYQerfo24
- I624GaaLxTQDvfT/Qvyw8uAGdpUY3zCzVd1BxwZnYRc7XkVEOPjCSdX
+ bh=ATqajf/gbOgVHOHG+dtgeX5M5jVEAjDksP/Pl6A4CSs=;
+ b=txBmlIpJKZ3sIAFazKAMFYgulL3i/ZCu8HE6q8J8RnlArxGJutYMSYxdMbkYxGs5PglmSgT73
+ lKUC42nhgPMAz+S/DRsl2roh66CQA86RbVYjeWEEbt8mfIoVrvaDPAc
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-Add an epilogue to the control-file, to allow display of statistics
-etc, without disturbing the header.
+When the dynamic debug core is enabled (CONFIG_DYNAMIC_DEBUG_CORE=y) but
+the global CONFIG_DYNAMIC_DEBUG is disabled, subsystems can opt-in to
+dynamic debug by defining DYNAMIC_DEBUG_MODULE.
 
-NB: epilogue lines should start with "#: " to distinguish them from
-lines describing pr_debugs (and from the header line).  No new lines
-are added here, only the place to do so.
+However, for built-in code (like DRM core) where DYNAMIC_DEBUG_MODULE
+is not defined, the macros fall back to the disabled #else block in
+include/linux/dynamic_debug.h.
 
+In this block, the family of _dynamic_func_call_cls macros were
+completely undefined. This caused build failures (implicit declarations)
+in subsystems (like DRM) that attempt to use these macros to wrap their
+own debug functions even when dynamic debug is disabled.
+
+Add stub definitions that mirror the enabled behavior and respect the
+DEBUG macro, similar to pr_debug. If DEBUG is defined, they inject NULL
+as the first argument (to satisfy the expected descriptor pointer) and
+pass the arguments through, allowing the wrapped function's own slow-path
+fallback logic to execute. If DEBUG is not defined, they use an if (0)
+statement-expression to compile out the call while returning 0, achieving
+zero overhead while maintaining compile-time argument checking.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202605201408.x1sHT6fx-lkp@intel.com/
+Assisted-by: Gemini-CLI:gemini-2.5-pro
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
-v9:
-. update ddebug_proc_start() to return EPILOGUE_TOKEN when seeking directly to epilogue.
----
- lib/dynamic_debug.c | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+ include/linux/dynamic_debug.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 098fd2639cb6..88440c1f6abb 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -1186,6 +1186,9 @@ static struct _ddebug *ddebug_iter_next(struct ddebug_iter *iter)
-  * read() call from userspace.  Takes the ddebug_lock and
-  * seeks the seq_file's iterator to the given position.
-  */
-+static char ddebug_epilogue_token;
-+#define EPILOGUE_TOKEN (&ddebug_epilogue_token)
-+
- static void *ddebug_proc_start(struct seq_file *m, loff_t *pos)
- {
- 	struct ddebug_iter *iter = m->private;
-@@ -1201,7 +1204,9 @@ static void *ddebug_proc_start(struct seq_file *m, loff_t *pos)
- 	dp = ddebug_iter_first(iter);
- 	while (dp != NULL && --n > 0)
- 		dp = ddebug_iter_next(iter);
--	return dp;
-+	if (dp)
-+		return dp;
-+	return n <= 1 ? EPILOGUE_TOKEN : NULL;
- }
+diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+index 04620b869832..5e69cf6f37fd 100644
+--- a/include/linux/dynamic_debug.h
++++ b/include/linux/dynamic_debug.h
+@@ -542,6 +542,23 @@ void ddebug_increment_call_count(void);
+ #define DYNAMIC_DEBUG_BRANCH(descriptor) false
+ #define DECLARE_DYNDBG_CLASSMAP(...)
  
- /*
-@@ -1214,12 +1219,20 @@ static void *ddebug_proc_next(struct seq_file *m, void *p, loff_t *pos)
- 	struct ddebug_iter *iter = m->private;
- 	struct _ddebug *dp;
- 
-+	(*pos)++;
++#if defined(DEBUG)
++#define _dynamic_func_call_cls(cls, fmt, func, ...)		\
++	do { func(NULL, ##__VA_ARGS__); } while (0)
++#define _dynamic_func_call_cls_no_desc(cls, fmt, func, ...)	\
++	do { func(__VA_ARGS__); } while (0)
++#else
++#define _dynamic_func_call_cls(cls, fmt, func, ...)		\
++	do { if (0) func(NULL, ##__VA_ARGS__); } while (0)
++#define _dynamic_func_call_cls_no_desc(cls, fmt, func, ...)	\
++	do { if (0) func(__VA_ARGS__); } while (0)
++#endif
 +
-+	if (p == EPILOGUE_TOKEN)
-+		return NULL;
++#define _dynamic_func_call(fmt, func, ...)			\
++	_dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
++#define _dynamic_func_call_no_desc(fmt, func, ...)		\
++	_dynamic_func_call_cls_no_desc(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
 +
- 	if (p == SEQ_START_TOKEN)
- 		dp = ddebug_iter_first(iter);
- 	else
- 		dp = ddebug_iter_next(iter);
--	++*pos;
--	return dp;
-+
-+	if (dp)
-+		return dp;
-+
-+	return EPILOGUE_TOKEN;
- }
- 
- static bool ddebug_class_map_in_range(const int class_id, const struct ddebug_class_map *map)
-@@ -1271,6 +1284,10 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
- 			 "# filename:lineno [module]function flags format\n");
- 		return 0;
- 	}
-+	if (p == EPILOGUE_TOKEN) {
-+		/* use this soon */
-+		return 0;
-+	}
- 
- 	seq_printf(m, "%s:%u [%s]%s =%s \"",
- 		   trim_prefix(dp->filename), dp->lineno,
+ #define dynamic_pr_debug(fmt, ...)					\
+ 	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+ #define dynamic_dev_dbg(dev, fmt, ...)					\
 
 -- 
 2.55.0
