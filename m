@@ -1,165 +1,122 @@
-Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
+Received: from mail-yx2-f42.google.com (mail-yx2-f42.google.com [74.125.224.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BF23E40F3
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 21:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6AC476CC4
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 21:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790198850; cv=none; b=K0BzhjB880f1RpRam1pSMErRtr41acx5m2Cqcnw8EEpKlS8VYAHHJ6zuspadqXXUgOTCsvJCFUhidBzy4R1SdmWyCLgoXEqeP0CTxsyqxVqPnTHKNB1tNFGs5hyf1DsUCT2H8SAYGwkupPFgOsnU3YKn4daulVlvVbw0kVs0928=
+	t=1790199126; cv=none; b=N2Dqgt7oknOuHxF2DM6Ms01SQw7kY/iH4BArSE4uWMp9RVX6gDVVJj/Pfr5acse+eVTL2bozyoJ6Eg8KB4tkZan7kvyp1ZtejIlDZwGewP6R8U8qlYxOebqnihaLkbbq0TUZJFmXlvXJUQMqxsaIKCFJPdpISmi8JJ9KuPI+Qjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790198850; c=relaxed/simple;
-	bh=mkllFitehUiHcmTvhleoFTAEeeQDf9V9+bo50ETCWgE=;
+	s=arc-20240116; t=1790199126; c=relaxed/simple;
+	bh=yqwWpK4N9YeYAJC00jfG/KN04unxyF4L4b45axRv0cE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UGG4GHdiIiX7bhZsVmJ5Jzbu9aJsrHsak1Lbnybra+44FO3fA2Te+M9om0bXDAYWME4DY2SDGcjZWIEiBsKS8exqlp9WvGt7WvmrUaVjCu90kjyfl3z3IFDotl/KGc+HYK9s9dYZBT7wLNGh53LNFwjp/BAGfD7kzAJPIzvJtBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=QAl4XaJL; arc=none smtp.client-ip=74.125.230.204
+	 Content-Type:Content-Disposition:In-Reply-To; b=YeDDvOr4iYV75i8HKShY1l8j+UY4ZzyHtVVHbZmPYRyWTgvchn4kOn5TqX1CVyjvxvVt9u27jEMnsnm/tklIJ7NcvoX0qst/qOZpNuHi0xNmXnCgvPJcorrVxdxl5KvuOIxW8V6Y7zLj8wgqQkwjccs2GHpNBfepqWqs0UvmU24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=rS/+wDoP; arc=none smtp.client-ip=74.125.224.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="QAl4XaJL"
-Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-52fb766bfd6so12756331cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 14:27:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="rS/+wDoP"
+Received: by mail-yx2-f42.google.com with SMTP id 00721157ae682-8a45b788a71so15232247b3.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 14:32:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1790198845; x=1790803645; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=PcUop+HZQcR1eSCakcCGo/nA+544kosGhnj83z0mc1s=;
-        b=QAl4XaJLfWTcEjCbmFDZyfxjxbSRRonMFfCcpp9GApt2uEFHHYod3l2E1g1CUgtIdF
-         FvT5NmNsnrdK73UYC1FkazeeoKD3gevv+zHL9F65S6nQJl3wuqF8sVRETdELJcanwnYN
-         UQQf5zhU07/4JVVpY1q6KDHhfiFXD11Uv+AaG5DFvCZggQ94ax1uJiSxQJvBxBVT2SMy
-         thhagTV36EMRj32iYmQXJG0HHR2dofZerwBYKuUcyxADJGXGxcRjzqDGhOfx07NHNINf
-         ZxOMPJOfNDs/7N++75TDagDSy2vYcVznpqA8dMlpeAQGflrRfiuJDrg+M3Y50Q8oTOAV
-         89+Q==
+        d=gourry.net; s=google; t=1790199120; x=1790803920; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=YDp63aNNvlo+CbPC5AYf50weUXwD55oicYAOt2YPLqw=;
+        b=rS/+wDoPYolig2FICJsL6XwXIlKtMB5Lunw4Hx6BWlj0fmGdUF4Rr3dj09iX2IZRL3
+         J0rKAB930jc6NPDnpFIUKCYXIOn5kzKwi2wpSBWcmGa8iTGY9zmvjD6+YueUktxbZDHI
+         usbT+MDVDJfJdWVkh3ZK94GqQ/odGH+G2D2/gskt1sEGc0ByD1Pl0hmlBqUZLVJ8YElt
+         gf6nmO9n8C5eTdkTjiZd2jVd9i1XdAMVXX3pt0dO65R58xp1VndkhjaYJj3/txSaMgYf
+         07hu5Bv2nmoX8gyTinaqcUecDDJ4ulYErQxFrUyp20KI7IKUk8mNscb2ftmfByaYLNPS
+         yhrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790198845; x=1790803645;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PcUop+HZQcR1eSCakcCGo/nA+544kosGhnj83z0mc1s=;
-        b=x1OZD2eOUexGvDGNYUVrr1A/cLGTR3pIXBZyM5RDnso8qYv/W2Myz5z67NBy9FmqDz
-         70LKfKuaSbZmp8h6RvRElnmJHeW4PbMd/LQRtHxRqdErAQrdzRIyg94jnMZVMzrpixXB
-         7dGmbTSjhMRGHWI+HE1/ds1BPQ4Hpbf0XBpl9mcXv0siUM/4BuFn84NGmh8Ac1l0zwih
-         FyxPyDKaCRuWBNJsDTomxrQ5bB8d9YWvdlxSv3+MicKdJ8OyMYIhKcuIT2O/oOBJ1j0b
-         6omR0Y6bpxiDF4ISBWhEWUhr/yz4vzUyLzNnETkHo2NQna1nOM4zTQIUSdFAMSdDHL/5
-         CGOg==
-X-Forwarded-Encrypted: i=1; AKwUvBwnOvT7nL+gK6ch+6nbs6VHGMQZCcONZF/DIPfirYI+ztAyB87poluADwmxpmEWY7wRGcauTGI2QWB+bYVkQ0Y=@vger.kernel.org
-X-Gm-Message-State: AFuF++lrGKKyMoUKu1LV0vJq2xxQgFJrvXAkOKJH4KjPv7R4XwrRL3h1
-	mQWClyoBN5aQQ4QMSD8kywtHP+cg0D3C3AG++itD4S+60jjjGvV/CvrmkMoLzP1qqVA=
-X-Gm-Gg: AYBFou1Fe+Y+gvtRIZp31/Jj9+g6kn/KH89hpUUyYP8dWKjszguDfTFg6htTlDNSgMt
-	wNkWyj9inY3L0CtRQdJ6FzkmRPLSOzu0L6Zx8vQLgmNe+K2it0n/iMXiaFOivhgZv/L6kdj+wpn
-	Ba/RJqBqUdKTvz9EnksvSltUAw+zD6+VZDJvziNQ19wD6UtoPdLskIM3RnUoL549soO0t1Oc5I9
-	N8VW8AfTUOoRdQY6tXJldA25d5B8GNZO68mSg7Si7lkqLBekhj3QQfm8bu0E0tepAB3flZbXt9S
-	/uaCZzHHGnnu3aeCnoRj4dbxNAxVRvAzUKTsbjNiufqNCyi/hSSqvYcDsuatcr3hds+eOqs05IF
-	1dpIhEk4HOwzGbPVDx2HLW7y7YXE76gXfkmYrn7cofv4JMYx70bLrfA3BT4rzb8NmPvlF+sBuIv
-	9fnXj/fzqnOTQDXv3tStR3uAbXDc6cHReYY3VaK73N3WRIF6tv/gxWumnejzqJ27Qq+ZX3QBlS2
-	C9pY1YhitPGpekRSQHE70dKlUMuJCRmJpgAmfwylNtTzrh1AN7BDN+Q
-X-Received: by 2002:a05:620a:1724:b0:939:9b1c:ea4c with SMTP id af79cd13be357-93c3470cfd4mr78173685a.28.1790198843910;
-        Wed, 23 Sep 2026 14:27:23 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790199120; x=1790803920;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=YDp63aNNvlo+CbPC5AYf50weUXwD55oicYAOt2YPLqw=;
+        b=kBJCiBym1xpvtV5kYeyu7yduw31Y3qaHy0ABcPhndRsi0aKRoBuYGy6Sr7s4kG1RQ1
+         gaosV1RCyjFT/mbFlcfT+ovCd7jH7EQx3GREoc3N45/VwX46zQDX6RNrBQItJQZDPCBd
+         hWqHbWc+kZzW7FFywqJvda82ajZLbczgP0oW8XcR5d8WfgqJoHIzvGSm9+KGZQk1xztN
+         QKXfi+I7oWNiM+a62uOt7ELa5CaX9z3Rdpz0Lb4SKmssYRroDZpRhKZFSsS2PP14tXPP
+         BocNBCWOwo1ZQ9TxQRJeGFh+09jaeF+zn5rmGpc6SPc0kvKD/x0ZTVQhj/4xv8wVxa4X
+         9a2g==
+X-Forwarded-Encrypted: i=1; AKwUvBwTMFqAsTaKgHgcJ+hxpGk6sliOhciGCkrxnsU0izoVKMy8GMmg67FTswKO+OTsk8CPWgQ+RvR7cSnfoFw9fiw=@vger.kernel.org
+X-Gm-Message-State: AFuF++mGRLAyFpxiCDjqgXXTTCQg3A8efMaotw/DDnzSkfLAX5bnTt8x
+	aqrrwYliK5ecKOrk+lEFJRevc7WO+dgyOQi31y+oQbBB/4GLX7VRJDcQK+hksI6TYzE=
+X-Gm-Gg: AYBFou333lFRa47T2+mZoVSz51cV8jHoZtKKEO8I3QW/oZHImrSn0gALToMHOVshhhJ
+	/tAIkdGGk/rllIpDNE9NMZsotH/qXcZIOxy50h/zhU/QRMzZLMdqdlBLN6EFTXlXB1vicEzArrO
+	1U19erSzKH5ZsyggWstgDXZR/BQmkaETTbqIZEwR7B2iCpIY6B5TSmMkaP7X3Kc3cf4P58e3/Dh
+	Hm3nYqqu0058Rto0xkOY4vlnX98yvzirRaYbf1zc6hvWuGaONcWSjh76CRA4Td8yi50dcXxW9im
+	2rOIXqoN2RwcWHG29THwqKEn+dqSdpkPLKCq4dalBlwtrtedlDCO2cfhhz25DTzQ52xAzN/DA8a
+	851oBTjh6WQL8bk5b5SU/YTQXz4qN3MVUiYKUgHgv+vlPkf9kvlpRRKvSQiLAQwz/Dqb26RoKEP
+	N+04n0op4pKTx+tHaN8zFtw5cWmBM6/0HsmHou8QzIPK0cZitnjvessw9yD4E1Yaq24ULWlf8ba
+	P9DZe3SEuvGqfxOpA7FbHJWxhwcvcoM//ZfdopNM/84w/wCuVgEt30ilPO/AxQxDA==
+X-Received: by 2002:a05:690c:c507:b0:87f:c20c:67a5 with SMTP id 00721157ae682-8a649d6750bmr4124377b3.29.1790199120690;
+        Wed, 23 Sep 2026 14:32:00 -0700 (PDT)
 Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-9141e27b5c3sm3228816d6.30.2026.09.23.14.27.23
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93c2474fbb3sm319077785a.6.2026.09.23.14.31.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 14:27:23 -0700 (PDT)
-Date: Wed, 23 Sep 2026 17:27:21 -0400
+        Wed, 23 Sep 2026 14:32:00 -0700 (PDT)
+Date: Wed, 23 Sep 2026 17:31:58 -0400
 From: Gregory Price <gourry@gourry.net>
-To: Park Tae-sun <ts930@dgu.ac.kr>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Brendan Jackman <brendan.jackman@linux.dev>, Muhammad Usama Anjum <usama.anjum@arm.com>, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: fix mlock2 errno handling and false PASS
- on ENOSYS
-Message-ID: <arRD62HaBCs4Svcz@gourry-fedora-PF4VCD3F>
-References: <20260923-selftests-mm-mlock2-fix-v1-1-750b627854c6@dgu.ac.kr>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	"Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v3 1/2] kselftest: mm: return fail when child test result
+ is fail in khugepaged
+Message-ID: <arRFEKD8hmzTKFNC@gourry-fedora-PF4VCD3F>
+References: <20260923-fix_khugepagd_fail-v3-0-b387e92fe1a9@arm.com>
+ <20260923-fix_khugepagd_fail-v3-1-b387e92fe1a9@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260923-selftests-mm-mlock2-fix-v1-1-750b627854c6@dgu.ac.kr>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260923-fix_khugepagd_fail-v3-1-b387e92fe1a9@arm.com>
 
-On Wed, Sep 23, 2026 at 06:26:48PM +0900, Park Tae-sun wrote:
-> While inspecting selftests/mm syscall wrappers, I noticed that mlock2_()
-> in mlock2.h handles the syscall return value differently from other
-> wrappers:
+On Wed, Sep 23, 2026 at 04:29:51PM +0100, Yeoreum Yun wrote:
+> Although the child process in collapse_fork*() or collapse_max_ptes_shared()
+> reports `KSFT_FAIL`, the result is ignored because the test only checks
+> whether the parent’s page was collapsed into a huge page.
 > 
->     int ret = syscall(__NR_mlock2, start, len, flags);
->     if (ret) {
->         errno = ret;
->         return -1;
->     }
+> As a result, the test is considered successful whenever the parent’s page
+> is a huge page, even if the child test fails, as shown below:
 > 
-> Commit 1ddae9d67ee1 ("selftests/mm/mlock: print error on failure")
-> introduced this intending to make mlock2_() behave like libc by setting
-> errno and returning -1. However, glibc syscall(2) already returns -1 on
-> failure and sets positive errno. Assigning "errno = ret;" overwrites
-> errno with -1.
+>   #
+>   # Run test: collapse_max_ptes_shared (khugepaged:anon)
+>   # Allocate huge page... OK
+>   # Share huge page over fork()... OK
+>   # Trigger CoW on page 1023 of 2048... OK
+>   # Maybe collapse with max_ptes_shared exceeded.... OK
+>   # Trigger CoW on page 1024 of 2048... Fail
+>   Bail out! Unexpected huge page
+>   # Planned tests != run tests (26 != 23)
+>   # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0  // child failed.
+>   # Check if parent still has huge page... OK              // parent hpage success
+>   ok 24 collapse_max_ptes_shared                           // considered as success
+>   ...
+>   # Totals: pass:26 fail:0 xfail:0 xpass:0 skip:0 error:0
 > 
-> To verify this, mlock2 was disabled in the kernel (via sys_ni_syscall) to
-> return -ENOSYS. Testing revealed two interrelated defects:
+> To address this, propagate the child’s failure and skip the subsequent
+> check in the parent.
 > 
-> 1. In the unmodified test, mlock2_() clobbered errno to -1. The check
->    "if (ret && errno == ENOSYS)" in main() was bypassed, resulting in an
->    immediate crash in the first test:
-> 
->        ~ # ./mlock2-tests
->        TAP version 13
->        1..15
->        Bail out! mlock2(0): Unknown error -1
->        # Planned tests != run tests (15 != 0)
->        # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
->        (exit code: 1 - FAIL)
-> 
-> 2. After restoring mlock2_() to directly return syscall(), errno correctly
->    retained ENOSYS (38), entering the ENOSYS check in main(). However, it
->    then called ksft_finished():
-> 
->        ~ # ./mlock2-tests
->        TAP version 13
->        # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
->        ~ # echo $?
->        0
-> 
->    Because ksft_set_plan() had not been called yet (ksft_plan == 0) and
->    zero tests ran (ksft_pass == 0), ksft_finished() evaluated 0 == 0 as
->    success and exited with KSFT_PASS (code 0) without any TAP skip header.
-> 
-> Fix both issues by:
-> 1. Returning the syscall() result directly in mlock2_() so that errno is
->    preserved.
-> 2. Calling ksft_exit_skip() on ENOSYS so unsupported kernels report a TAP
->    skip ("1..0 # SKIP ...") and exit with KSFT_SKIP (code 4).
-> 
-> Verification on the mlock2-disabled kernel:
-> 
->     ~ # ./mlock2-tests
->     TAP version 13
->     1..0 # SKIP mlock2() syscall is not supported
->     ~ # echo $?
->     4
-> 
-> Re-enabling mlock2 in the kernel confirmed all 15 tests pass cleanly:
-> 
->     ~ # ./mlock2-tests
->     TAP version 13
->     1..15
->     ok 1 test_mlock_lock: Locked
->     ...
->     ok 15 test_mlockall_future_droppable: droppable memory not locked
->     # Totals: pass:15 fail:0 xfail:0 xpass:0 skip:0 error:0
->     ~ # echo $?
->     0
-> 
-> Fixes: 1ddae9d67ee1 ("selftests/mm/mlock: print error on failure")
-> Fixes: 65c89684896d ("selftests/mm: mlock2-tests: conform test to TAP format output")
-> Signed-off-by: Park Tae-sun <ts930@dgu.ac.kr>
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 
-
-Reviewed-by: Gregory Price <gourry@gourry.net>
+Reviewed-by: Gregory Price (Meta) <gourry@gourry.net>
 
