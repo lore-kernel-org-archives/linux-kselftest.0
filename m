@@ -1,151 +1,1920 @@
-Received: from out28-169.mail.aliyun.com (out28-169.mail.aliyun.com [115.124.28.169])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8490E53B356;
-	Wed, 23 Sep 2026 14:08:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF655524B19;
+	Wed, 23 Sep 2026 14:26:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790172509; cv=none; b=BVkvlG4tzcdn/92KdUsfFX3JUMvJbDUIw19JmNLj14PuLW3eXoFxp1/zn/TMT8KVMO3awX3QSk7n1Hy14vGfj9wyTk103XdRG+R8h7uY1I3eTPuHvuHQUWx/HmA37kyUebLIkDOg6nH7GFunkxHGShlucUZdvwqG4SFNiP1ifpQ=
+	t=1790173576; cv=none; b=lrOmuiQEXVOcA58NlGoOHNpJljHi/+GInYF6/5WY3uRFCX+JN2uGThYJh+IZIaD6Xvd1HJYuW6MIHClGIzRzQ2Oy0XEmzdMMN1ziepQSRuE/QbmGzLsK2317OP+jC9ZSqO8TsR0XMAHUBTFDejkYqioxzY/oWv8XvPTjDGYbyns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790172509; c=relaxed/simple;
-	bh=5O1iNvD5LZz4Frajx2z4XVm4msCGXyHH9y70xf0mB50=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VGGUiX7ZDnv2uVEvsR9GAZXCyV95U/bm2mR4NrHAvf77YB0m+iSufnEeuaYLZvwlZe9kNYxHL797BlfPCJ7Iz1jimDvFU8gO7ZqLcu0JSd/KHRTqD3mDkP+iCmnvSuOLu1zdHquu0UL8JI5Qw1MdEVVk3KChtRU7WEa4aM3PnQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.0743634|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00315548-0.000215038-0.99663;FP=16636718210716602107|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033037021217;MF=zhang_wei@open-hieco.net;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.jL9oygM_1790172174;
-Received: from localhost.localdomain(mailfrom:zhang_wei@open-hieco.net fp:SMTPD_---.jL9oygM_1790172174 cluster:ay29)
-          by smtp.aliyun-inc.com;
-          Wed, 23 Sep 2026 22:02:54 +0800
-From: Tina Zhang <zhang_wei@open-hieco.net>
-To: Sean Christopherson <seanjc@google.com>,
-	Jim Mattson <jmattson@google.com>,
-	kvm@vger.kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	zhouyanjing@hygon.cn,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v8 3/8] KVM: nSVM: Track valid hardware DecodeAssist bytes
-Date: Wed, 23 Sep 2026 22:02:28 +0800
-Message-ID: <b29804794cc8802017b9e97c8132b46e2a64c572.1790171702.git.zhang_wei@open-hieco.net>
-X-Mailer: git-send-email 2.43.7
-In-Reply-To: <cover.1790171702.git.zhang_wei@open-hieco.net>
-References: <cover.1790171702.git.zhang_wei@open-hieco.net>
+	s=arc-20240116; t=1790173576; c=relaxed/simple;
+	bh=mNoZDtfa6ucFaLe4R1yTBT57RytCna0q2wpd7Hxa1WI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rkkCjUnIuWoG56s7Sowme1Hs2O83bdn9IabTM13U2M4UeqT8E5YE5qdRPQ4Te58GIxRxRFuaNq5TB22I8yJmYFRXKRVbAdmoFwmucQUNIu7nTDcZGCEmYKqXGzmReaR6i76ce0qqNWCCHaJG7lRDBH9Ki7NufK+jK2psBx/t4R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hXVJrT0H; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hXVJrT0H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51C981F000FF;
+	Wed, 23 Sep 2026 14:26:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790173572;
+	bh=7bfQKGBVRp+Kvg//l3oRWHMHkGwpoO6mCLlsey6WE+I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=hXVJrT0HJfuqUrb65DzbVQzRBaJaFuZIHrxRlciBc2RfN/XiXdKHV+q0SObKF8IZ7
+	 x3mJMLwvH1smwpMGUQPRD172uwdSyfe6zosJlpG3gf+b+UL44vuxyQyhSXAFqrYDVp
+	 DuCCIlsNTJggzKFGmLNOb0oEIWF3peWl35W4rjN7vdrJ0o+LTmMHrggxTKrITzE7hK
+	 8oYKBiRpbug6wfCutu8q6gAiHkNwhaNoLooislXRNHyTqwIaJ/6ZfS7ZTzf4P44BKp
+	 ZAKffJqfrrEp2EnxJ7hLrFs9Su4EHgbaLP9JhIA3rGd4f7gBZwyQoe0RfZGQDn3B0+
+	 TU8EG7pQxXMLw==
+Date: Wed, 23 Sep 2026 15:26:05 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Gregory Price <gourry@gourry.net>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kernel-team@meta.com, akpm@linux-foundation.org, 
+	liam@infradead.org, david@kernel.org, vbabka@kernel.org, jannh@google.com, 
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org
+Subject: Re: [PATCH 01/10] selftests/mm: exercise MADV_COLD and MADV_PAGEOUT
+Message-ID: <arPgwegm8XgbEUrO@gremlin>
+References: <20260922235830.2350770-1-gourry@gourry.net>
+ <20260922235830.2350770-2-gourry@gourry.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260922235830.2350770-2-gourry@gourry.net>
 
-VMCB02 instruction bytes are valid only for the hardware VM-Exit that
-populated them.  Track whether VMCB02 contains instruction bytes for the
-data #PF or #NPF currently being reflected to L1 so that stale bytes are
-not copied to VMCB12.
+On Tue, Sep 22, 2026 at 07:58:21PM -0400, Gregory Price wrote:
+> MADV_COLD and MADV_PAGEOUT share a page-table walker covering ordinary
+> PTEs, PTE-mapped large folios and huge PMDs. Existing selftests provide
+> little coverage of its range, folio-state and permission decisions.
+>
+> Add 28 cases ahead of a planned walker refactor. All cases check syscall
+> results and mapping contents, but they deliberately have different review
+> contracts.
 
-Invalidate VMCB02's instruction-byte state when preparing VMCB02,
-normally in response to an emulated VMRUN.  Mark the bytes as valid only
-when the current VMCB02 exit is a data #PF or #NPF.  Opcode exits and
-instruction-fetch faults are excluded by inspecting the exit state.
+Yikes that's a lot! :)
 
-A subsequent change will use this state when propagating hardware
-DecodeAssist instruction bytes to VMCB12.
+>
+> This commit was originally 28 individual commits, but was squashed for
+> the initial RFC to limit noise during initial review. The question is
+> what set of self-tests should retain.
+>
+> The eight user-visible contract tests verify:
+>
+>   - MADV_COLD does not populate a PTE hole;
+>   - COLD and PAGEOUT reject a locked VMA;
+>   - full-range PAGEOUT swaps a PMD-mapped THP without corrupting it;
+>   - MADV_COLD does not fault in a swapped PTE;
+>   - PAGEOUT preserves an unevictable base page;
+>   - authorized file PAGEOUT evicts a clean file page;
+>   - unauthorized shared-file PAGEOUT leaves the page resident; and
+>   - private-file PAGEOUT reclaims a COW page but preserves a file page.
+>
+> The eighteen implementation-detail tests record the current folio and
+> page-table behavior:
+>
+>   - full and partial MADV_COLD on a PTE-mapped THP;
+>   - full, repeated and partial MADV_COLD on PMD-mapped THPs;
+>   - MADV_COLD on the shared zero page and huge zero page;
+>   - partial MADV_COLD on a shared PMD-mapped THP;
+>   - partial MADV_COLD on pinned PMD- and PTE-mapped THPs;
+>   - parallel partial MADV_COLD split attempts;
+>   - PAGEOUT on an unevictable THP;
+>   - MADV_COLD on active base-page and huge-PMD folios;
+>   - partial PAGEOUT on PMD- and PTE-mapped THPs;
+>   - partial and full MADV_COLD on shared PTE-mapped THPs; and
+>   - PAGEOUT filtering of a PMD-sized protected file folio.
+>
+> These tests intentionally assert splitting, PMD/PTE mapping shape, folio
+> flags or folio sharing. They may need adjustment after a valid kernel
+> implementation change. Their purpose here is to detect unintended changes
+> during the refactor.
+>
+> Two additional stress tests use implementation-specific setup while keeping
+> contract-level assertions:
+>
+>   - MADV_COLD on a folio still queued in another CPU's LRU batch
+>   - MADV_PAGEOUT during NUMA migration of unevictable shmem THPs.
+>
+> The stress tests require only successful calls and preserved contents.
+> They do not assert which internal path won. Tests requiring root, swap,
+> THP allocation, multiple CPUs or NUMA nodes report a skip when their
+> prerequisites are unavailable.
 
-Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
-Reviewed-by: Jim Mattson <jmattson@google.com>
----
- arch/x86/kvm/svm/nested.c | 38 +++++++++++++++++++++++++++++++++++++-
- arch/x86/kvm/svm/svm.h    |  3 +++
- 2 files changed, 40 insertions(+), 1 deletion(-)
+I think in general we want to avoid putting stress tests as part of the
+selftests in general? Or at least if they might take a long time to run or
+excessive memory usage, etc.
 
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index 82c49a24dd75..a87b88d8eeac 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -35,6 +35,35 @@
- 
- #define CC KVM_NESTED_VMENTER_CONSISTENCY_CHECK
- 
-+static void nested_svm_invalidate_insn_bytes(struct vmcb *vmcb)
-+{
-+	vmcb->control.insn_len = 0;
-+}
-+
-+static bool nested_svm_vmexit_supports_insn_bytes(const struct vmcb *vmcb)
-+{
-+	u64 exit_code = vmcb->control.exit_code;
-+
-+	if (exit_code != SVM_EXIT_NPF &&
-+	    exit_code != SVM_EXIT_EXCP_BASE + PF_VECTOR)
-+		return false;
-+
-+	return !(vmcb->control.exit_info_1 & PFERR_FETCH_MASK);
-+}
-+
-+static void nested_svm_set_vmcb02_insn_bytes_valid(struct vcpu_svm *svm)
-+{
-+	svm->nested.vmcb02_insn_bytes_valid =
-+		cpu_feature_enabled(X86_FEATURE_DECODEASSISTS) &&
-+		nested_svm_vmexit_supports_insn_bytes(svm->nested.vmcb02.ptr);
-+}
-+
-+static void nested_svm_invalidate_vmcb02_insn_bytes(struct vcpu_svm *svm)
-+{
-+	nested_svm_invalidate_insn_bytes(svm->nested.vmcb02.ptr);
-+	svm->nested.vmcb02_insn_bytes_valid = false;
-+}
-+
- static void nested_svm_inject_npf_exit(struct kvm_vcpu *vcpu,
- 				       struct x86_exception *fault,
- 				       bool from_hardware)
-@@ -68,6 +97,10 @@ static void nested_svm_inject_npf_exit(struct kvm_vcpu *vcpu,
- 				    (fault->error_code & ~PFERR_GUEST_FAULT_STAGE_MASK);
- 	vmcb->control.exit_info_2 = fault->address;
- 
-+	if (from_hardware)
-+		nested_svm_set_vmcb02_insn_bytes_valid(svm);
-+	else
-+		nested_svm_invalidate_vmcb02_insn_bytes(svm);
- 	nested_svm_vmexit(svm);
- }
- 
-@@ -873,6 +906,7 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
- 	 * Filled at exit: exit_code, exit_info_1, exit_info_2, exit_int_info,
- 	 * exit_int_info_err, next_rip, insn_len, insn_bytes.
- 	 */
-+	nested_svm_invalidate_vmcb02_insn_bytes(svm);
- 
- 	if (guest_cpu_cap_has(vcpu, X86_FEATURE_VGIF) &&
- 	    (vmcb12_ctrl->int_ctl & V_GIF_ENABLE_MASK))
-@@ -1653,8 +1687,10 @@ int nested_svm_exit_handled(struct vcpu_svm *svm)
- 
- 	vmexit = nested_svm_intercept(svm);
- 
--	if (vmexit == NESTED_EXIT_DONE)
-+	if (vmexit == NESTED_EXIT_DONE) {
-+		nested_svm_set_vmcb02_insn_bytes_valid(svm);
- 		nested_svm_vmexit(svm);
-+	}
- 
- 	return vmexit;
- }
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index e958943b8162..1e12ef1105c0 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -243,6 +243,9 @@ struct svm_nested_state {
- 	 * on its side.
- 	 */
- 	bool force_msr_bitmap_recalc;
-+
-+	/* True if VMCB02 has instruction bytes for the current nested exit. */
-+	bool vmcb02_insn_bytes_valid;
- };
- 
- struct vcpu_sev_es_state {
--- 
-2.43.7
+Though that might be benchmarks, as we have the THP stress tests so maybe it's
+OK?
 
+>
+> Assisted-by: LLM
+> Signed-off-by: Gregory Price (Meta) <gourry@gourry.net>
+
+In any case I really do think this should be split out into smaller parts, this
+is a _gigantic_ change :)
+
+Since you list a whole bunch of different test areas and you're exercising
+different things you should be able to split this out logically across those I
+think?
+
+I like the idea of establishing some sort of invariants first before
+implementing changes though in general.
+
+> ---
+>  tools/testing/selftests/mm/Makefile        |    2 +
+>  tools/testing/selftests/mm/ksft_madvise.sh |    4 +
+>  tools/testing/selftests/mm/madvise.c       | 1673 ++++++++++++++++++++
+>  tools/testing/selftests/mm/run_vmtests.sh  |    5 +
+>  tools/testing/selftests/mm/vm_util.c       |    4 +-
+>  tools/testing/selftests/mm/vm_util.h       |    6 +
+>  6 files changed, 1692 insertions(+), 2 deletions(-)
+>  create mode 100755 tools/testing/selftests/mm/ksft_madvise.sh
+>  create mode 100644 tools/testing/selftests/mm/madvise.c
+>
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> index beacc0f873049..8912aa85ca273 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -69,6 +69,7 @@ TEST_GEN_FILES += hugetlb-shm
+>  TEST_GEN_FILES += hugetlb-soft-offline
+>  TEST_GEN_FILES += khugepaged
+>  TEST_GEN_FILES += madv_populate
+> +TEST_GEN_FILES += madvise
+>  TEST_GEN_FILES += map_fixed_noreplace
+>  TEST_GEN_FILES += map_populate
+>  ifneq (,$(filter $(ARCH),arm64 riscv riscv64 x86 x86_64 loongarch32 loongarch64))
+> @@ -155,6 +156,7 @@ TEST_PROGS += ksft_kmemleak_dedup.sh
+>  TEST_PROGS += ksft_ksm.sh
+>  TEST_PROGS += ksft_ksm_numa.sh
+>  TEST_PROGS += ksft_madv_guard.sh
+> +TEST_PROGS += ksft_madvise.sh
+>  TEST_PROGS += ksft_madv_populate.sh
+>  TEST_PROGS += ksft_memfd_secret.sh
+>  TEST_PROGS += ksft_memory_failure.sh
+> diff --git a/tools/testing/selftests/mm/ksft_madvise.sh b/tools/testing/selftests/mm/ksft_madvise.sh
+> new file mode 100755
+> index 0000000000000..29cbbca800f2c
+> --- /dev/null
+> +++ b/tools/testing/selftests/mm/ksft_madvise.sh
+> @@ -0,0 +1,4 @@
+> +#!/bin/sh -e
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +./run_vmtests.sh -t madvise
+> diff --git a/tools/testing/selftests/mm/madvise.c b/tools/testing/selftests/mm/madvise.c
+> new file mode 100644
+> index 0000000000000..abde0b1c8a42e
+> --- /dev/null
+> +++ b/tools/testing/selftests/mm/madvise.c
+> @@ -0,0 +1,1673 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#define _GNU_SOURCE
+> +
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <pthread.h>
+> +#include <sched.h>
+> +#include <stdbool.h>
+> +#include <stdatomic.h>
+> +#include <stdint.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <linux/mman.h>
+> +#include <linux/mempolicy.h>
+> +#include <sys/ipc.h>
+> +#include <sys/mman.h>
+> +#include <sys/shm.h>
+> +#include <sys/stat.h>
+> +#include <sys/syscall.h>
+> +#include <sys/uio.h>
+> +#include <sys/wait.h>
+> +#include <unistd.h>
+> +
+> +#include "kselftest.h"
+> +#include "vm_util.h"
+> +
+> +#ifndef MADV_COLLAPSE
+> +#define MADV_COLLAPSE 25
+> +#endif
+> +
+> +#define NR_CONCURRENT_THREADS 8
+> +#define NR_CONCURRENT_THPS 8
+> +#define NR_CONCURRENT_ROUNDS 400
+> +#define NR_MIGRATION_RACE_THPS 16
+> +#define NR_MIGRATION_RACE_ROUNDS 20
+> +#define NUMA_MASK_BITS 1024
+> +#define NUMA_MASK_LONGS (NUMA_MASK_BITS / (8 * sizeof(unsigned long)))
+> +
+> +static pthread_barrier_t concurrent_start_barrier;
+> +static pthread_barrier_t concurrent_done_barrier;
+> +static atomic_int concurrent_worker_errno;
+> +static char *concurrent_area;
+> +static size_t pmd_size;
+> +
+> +#if defined(SYS_get_mempolicy) && defined(SYS_mbind) && \
+> +	defined(SYS_migrate_pages)
+> +struct migration_pageout_data {
+> +	pthread_barrier_t start_barrier;
+> +	atomic_bool stop;
+> +	atomic_int calls;
+> +	atomic_int error;
+> +	char *mapping;
+> +	size_t size;
+> +};
+> +
+> +static bool find_two_memory_nodes(unsigned long *mask, int *node1, int *node2)
+> +{
+> +	int node;
+> +
+> +	if (syscall(SYS_get_mempolicy, NULL, mask, NUMA_MASK_BITS + 1, NULL,
+> +		    MPOL_F_MEMS_ALLOWED))
+> +		return false;
+> +
+> +	*node1 = *node2 = -1;
+> +	for (node = 0; node < NUMA_MASK_BITS; node++) {
+> +		if (!(mask[node / (8 * sizeof(*mask))] &
+> +		      (1UL << (node % (8 * sizeof(*mask))))))
+> +			continue;
+> +		if (*node1 < 0) {
+> +			*node1 = node;
+> +		} else {
+> +			*node2 = node;
+> +			return true;
+> +		}
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +static void numa_mask_set(unsigned long *mask, int node)
+> +{
+> +	mask[node / (8 * sizeof(*mask))] |=
+> +		1UL << (node % (8 * sizeof(*mask)));
+> +}
+> +
+> +static void *madvise_pageout_worker(void *arg)
+> +{
+> +	struct migration_pageout_data *data = arg;
+> +
+> +	pthread_barrier_wait(&data->start_barrier);
+> +	while (!atomic_load_explicit(&data->stop, memory_order_relaxed)) {
+> +		if (madvise(data->mapping, data->size, MADV_PAGEOUT) &&
+> +		    errno != EAGAIN) {
+> +			atomic_store(&data->error, errno);
+> +			break;
+> +		}
+> +		atomic_fetch_add(&data->calls, 1);
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static int migrate_between_nodes(unsigned long *old_nodes,
+> +				 unsigned long *new_nodes)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < NR_MIGRATION_RACE_ROUNDS; i++) {
+> +		unsigned long *tmp;
+> +
+> +		if (syscall(SYS_migrate_pages, 0, NUMA_MASK_BITS + 1,
+> +			    old_nodes, new_nodes) < 0)
+> +			return errno;
+> +		tmp = old_nodes;
+> +		old_nodes = new_nodes;
+> +		new_nodes = tmp;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int race_pageout_with_migration(char *mapping, size_t size,
+> +				       unsigned long *mask1,
+> +				       unsigned long *mask2)
+> +{
+> +	struct migration_pageout_data data = {
+> +		.mapping = mapping,
+> +		.size = size,
+> +	};
+> +	pthread_t thread;
+> +	int ret;
+> +
+> +	ret = pthread_barrier_init(&data.start_barrier, NULL, 2);
+> +	if (ret)
+> +		return ret;
+> +	ret = pthread_create(&thread, NULL, madvise_pageout_worker, &data);
+> +	if (ret) {
+> +		pthread_barrier_destroy(&data.start_barrier);
+> +		return ret;
+> +	}
+> +	pthread_barrier_wait(&data.start_barrier);
+> +
+> +	ret = migrate_between_nodes(mask1, mask2);
+> +	atomic_store(&data.stop, true);
+> +	pthread_join(thread, NULL);
+> +	pthread_barrier_destroy(&data.start_barrier);
+> +
+> +	if (ret)
+> +		return ret;
+> +	if (atomic_load(&data.error))
+> +		return atomic_load(&data.error);
+> +	return atomic_load(&data.calls) ? 0 : EIO;
+> +}
+> +#endif
+> +
+> +static char *map_aligned_pages(size_t size)
+> +{
+> +	char *mapping, *aligned;
+> +
+> +	mapping = mmap(NULL, size + pmd_size, PROT_READ | PROT_WRITE,
+> +		       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	if (mapping == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+> +
+> +	aligned = (char *)(((uintptr_t)mapping + pmd_size - 1) &
+> +			   ~(pmd_size - 1));
+> +	if (aligned != mapping)
+> +		munmap(mapping, aligned - mapping);
+> +	if (aligned + size < mapping + size + pmd_size)
+> +		munmap(aligned + size,
+> +		       mapping + size + pmd_size - (aligned + size));
+> +
+> +	memset(aligned, 1, size);
+> +	return aligned;
+> +}
+> +
+> +/* MADV_COLLAPSE may fail transiently with EAGAIN. */
+> +static bool collapse_all(char *mapping, size_t size, int nr_hpages)
+> +{
+> +	int ret, retry;
+> +
+> +	for (retry = 0; retry < 10; retry++) {
+> +		ret = madvise(mapping, size, MADV_COLLAPSE);
+> +		if (!ret) {
+> +			if (check_huge_anon(mapping, size, nr_hpages, pmd_size))
+> +				return true;
+> +		} else if (errno != EAGAIN) {
+> +			return false;
+> +		}
+> +		usleep(10000);
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +static bool collapse_shmem(char *mapping, size_t size, int nr_hpages)
+> +{
+> +	int ret, retry;
+> +
+> +	for (retry = 0; retry < 10; retry++) {
+> +		ret = madvise(mapping, size, MADV_COLLAPSE);
+> +		if (!ret) {
+> +			if (check_huge_shmem(mapping, size, nr_hpages, pmd_size))
+> +				return true;
+> +		} else if (errno != EAGAIN) {
+> +			return false;
+> +		}
+> +		usleep(10000);
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +static char *map_unevictable_shmem(size_t size, int *shmid)
+> +{
+> +	char *reservation, *mapping, *aligned;
+> +
+> +	reservation = mmap(NULL, size + pmd_size, PROT_NONE,
+> +			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	if (reservation == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap reservation");
+> +	aligned = (char *)(((uintptr_t)reservation + pmd_size - 1) &
+> +			   ~(pmd_size - 1));
+> +	munmap(reservation, size + pmd_size);
+> +
+> +	*shmid = shmget(IPC_PRIVATE, size, IPC_CREAT | 0600);
+> +	if (*shmid < 0)
+> +		ksft_exit_fail_perror("shmget");
+> +	if (shmctl(*shmid, SHM_LOCK, NULL)) {
+> +		shmctl(*shmid, IPC_RMID, NULL);
+> +		ksft_test_result_skip("could not lock a shmem segment\n");
+> +		return MAP_FAILED;
+> +	}
+> +	mapping = shmat(*shmid, aligned, 0);
+> +	if (mapping == (void *)-1)
+> +		ksft_exit_fail_perror("shmat");
+> +	if (mapping != aligned)
+> +		ksft_exit_fail_msg("shmat did not honor the aligned address\n");
+> +
+> +	return mapping;
+> +}
+> +
+> +static void unmap_unevictable_shmem(char *mapping, int shmid)
+> +{
+> +	shmctl(shmid, SHM_UNLOCK, NULL);
+> +	shmdt(mapping);
+> +	shmctl(shmid, IPC_RMID, NULL);
+> +}
+> +
+> +static char *map_aligned_file(int fd, size_t size, int flags)
+> +{
+> +	char *mapping, *aligned;
+> +
+> +	mapping = mmap(NULL, size + pmd_size, PROT_NONE,
+> +		       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	if (mapping == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap reservation");
+> +	aligned = (char *)(((uintptr_t)mapping + pmd_size - 1) &
+> +			   ~(pmd_size - 1));
+> +	if (mmap(aligned, size, PROT_READ | PROT_WRITE, flags | MAP_FIXED,
+> +		 fd, 0) == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap file");
+> +	if (aligned != mapping)
+> +		munmap(mapping, aligned - mapping);
+> +	if (aligned + size < mapping + size + pmd_size)
+> +		munmap(aligned + size,
+> +		       mapping + size + pmd_size - (aligned + size));
+> +
+> +	return aligned;
+> +}
+> +
+> +static void split_pmd_mapping(char *mapping)
+> +{
+> +	const size_t page_size = getpagesize();
+> +
+> +	if (mprotect(mapping + page_size, page_size, PROT_READ) ||
+> +	    mprotect(mapping + page_size, page_size, PROT_READ | PROT_WRITE))
+> +		ksft_exit_fail_perror("mprotect");
+> +	if (!check_large_folios(mapping, pmd_size, 1, pmd_size))
+> +		ksft_exit_fail_msg("mprotect split the physical THP\n");
+> +}
+> +
+> +static void check_memory(char *mapping, size_t size)
+> +{
+> +	size_t offset;
+> +
+> +	for (offset = 0; offset < size; offset += getpagesize())
+> +		if (mapping[offset] != 1)
+> +			ksft_exit_fail_msg("memory changed at offset %zu\n", offset);
+> +}
+> +
+> +/*
+> + * MADV_COLD on a full PTE-mapped THP must preserve the folio, while an
+> + * operation on only half of it must split the folio. Neither operation may
+> + * alter the mapping contents.
+> + */
+> +static void test_pte_mapped_madvise_cold(void)
+> +{
+> +	char *mapping = map_aligned_pages(pmd_size);
+> +
+> +	if (!collapse_all(mapping, pmd_size, 1)) {
+> +		munmap(mapping, pmd_size);
+> +		ksft_test_result_skip("could not allocate a PMD-sized THP\n");
+> +		return;
+> +	}
+> +
+> +	split_pmd_mapping(mapping);
+> +	if (madvise(mapping, pmd_size, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (!check_large_folios(mapping, pmd_size, 1, pmd_size))
+> +		ksft_exit_fail_msg("full MADV_COLD split a large folio\n");
+> +
+> +	if (madvise(mapping, pmd_size / 2, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (!check_large_folios(mapping, pmd_size, 0, pmd_size))
+> +		ksft_exit_fail_msg("partial MADV_COLD left a large folio\n");
+> +	check_memory(mapping, pmd_size);
+> +
+> +	munmap(mapping, pmd_size);
+> +	ksft_test_result_pass("MADV_COLD handles a PTE-mapped THP\n");
+> +}
+> +
+> +/*
+> + * A PTE walk must skip holes without populating them or overlooking the
+> + * present pages on either side.
+> + */
+> +static void test_madvise_cold_pte_hole(void)
+> +{
+> +	const size_t page_size = getpagesize();
+> +	const size_t size = 3 * page_size;
+> +	char *mapping;
+> +	int pagemap_fd;
+> +
+> +	mapping = mmap(NULL, size, PROT_READ | PROT_WRITE,
+> +		       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	if (mapping == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+> +	mapping[0] = 1;
+> +	mapping[2 * page_size] = 1;
+> +
+> +	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_perror("open pagemap");
+> +	if (pagemap_is_populated(pagemap_fd, mapping + page_size))
+> +		ksft_exit_fail_msg("PTE hole was populated before MADV_COLD\n");
+> +
+> +	if (madvise(mapping, size, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (mapping[0] != 1 || mapping[2 * page_size] != 1)
+> +		ksft_exit_fail_msg("MADV_COLD changed populated pages\n");
+> +	if (pagemap_is_populated(pagemap_fd, mapping + page_size))
+> +		ksft_exit_fail_msg("MADV_COLD populated a PTE hole\n");
+> +
+> +	close(pagemap_fd);
+> +	munmap(mapping, size);
+> +	ksft_test_result_pass("MADV_COLD skips PTE holes\n");
+> +}
+> +
+> +/*
+> + * A read fault on private anonymous memory may install the shared zero page.
+> + * MADV_COLD must ignore that special PTE without replacing it or changing the
+> + * mapping contents.
+> + */
+> +static void test_madvise_cold_zero_page(void)
+> +{
+> +	const size_t page_size = getpagesize();
+> +	char *mapping;
+> +	int pagemap_fd;
+> +
+> +	mapping = mmap(NULL, page_size, PROT_READ,
+> +		       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	if (mapping == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+> +	if (mapping[0])
+> +		ksft_exit_fail_msg("anonymous mapping is not zero-filled\n");
+> +
+> +	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_perror("open pagemap");
+> +	if (!pagemap_is_populated(pagemap_fd, mapping))
+> +		ksft_exit_fail_msg("zero page is not populated\n");
+> +
+> +	if (madvise(mapping, page_size, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (mapping[0] || !pagemap_is_populated(pagemap_fd, mapping))
+> +		ksft_exit_fail_msg("MADV_COLD changed the zero-page mapping\n");
+> +
+> +	close(pagemap_fd);
+> +	munmap(mapping, page_size);
+> +	ksft_test_result_pass("MADV_COLD skips the shared zero page\n");
+> +}
+> +
+> +/*
+> + * A read fault may map the shared huge zero page with a PMD. MADV_COLD must
+> + * ignore that special PMD without replacing it or changing the mapping.
+> + */
+> +static void test_madvise_cold_huge_zero_page(void)
+> +{
+> +	char *reservation, *mapping;
+> +	unsigned long pfn;
+> +	uint64_t flags;
+> +	int pagemap_fd, kpageflags_fd;
+> +
+> +	if (geteuid()) {
+> +		ksft_test_result_skip("requires root to read page flags\n");
+> +		return;
+> +	}
+> +	reservation = mmap(NULL, 2 * pmd_size, PROT_NONE,
+> +			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	if (reservation == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap reservation");
+> +	mapping = (char *)(((uintptr_t)reservation + pmd_size - 1) &
+> +			   ~(pmd_size - 1));
+> +	if (mmap(mapping, pmd_size, PROT_READ,
+> +		 MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED, -1, 0) == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap huge zero page");
+> +	if (mapping != reservation)
+> +		munmap(reservation, mapping - reservation);
+> +	if (mapping + pmd_size < reservation + 2 * pmd_size)
+> +		munmap(mapping + pmd_size,
+> +		       reservation + 2 * pmd_size - (mapping + pmd_size));
+> +	if (madvise(mapping, pmd_size, MADV_HUGEPAGE))
+> +		ksft_exit_fail_perror("MADV_HUGEPAGE");
+> +	if (mapping[0])
+> +		ksft_exit_fail_msg("anonymous mapping is not zero-filled\n");
+> +
+> +	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> +	kpageflags_fd = open("/proc/kpageflags", O_RDONLY);
+> +	if (pagemap_fd < 0 || kpageflags_fd < 0)
+> +		ksft_exit_fail_perror("open page flags");
+> +	pfn = pagemap_get_pfn(pagemap_fd, mapping);
+> +	if (pfn == -1ul || pageflags_get(pfn, kpageflags_fd, &flags) ||
+> +	    !(flags & KPF_ZERO_PAGE)) {
+> +		close(kpageflags_fd);
+> +		close(pagemap_fd);
+> +		munmap(mapping, pmd_size);
+> +		ksft_test_result_skip("huge zero page is not available\n");
+> +		return;
+> +	}
+> +
+> +	if (madvise(mapping, pmd_size, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (mapping[0] || pagemap_get_pfn(pagemap_fd, mapping) != pfn)
+> +		ksft_exit_fail_msg("MADV_COLD changed the huge-zero-page mapping\n");
+> +
+> +	close(kpageflags_fd);
+> +	close(pagemap_fd);
+> +	munmap(mapping, pmd_size);
+> +	ksft_test_result_pass("MADV_COLD skips the huge zero page\n");
+> +}
+> +
+> +/*
+> + * Neither hint is valid for a locked VMA: reclaiming it would violate the
+> + * mlock contract, and merely aging it would serve no purpose.
+> + */
+> +static void test_madvise_lru_locked_vma(void)
+> +{
+> +	const size_t page_size = getpagesize();
+> +	char *mapping;
+> +
+> +	mapping = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
+> +		       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	if (mapping == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+> +	mapping[0] = 1;
+> +	if (mlock(mapping, page_size)) {
+> +		munmap(mapping, page_size);
+> +		ksft_test_result_skip("could not lock a page\n");
+> +		return;
+> +	}
+> +
+> +	errno = 0;
+> +	if (!madvise(mapping, page_size, MADV_COLD) || errno != EINVAL)
+> +		ksft_exit_fail_msg("MADV_COLD accepted a locked VMA\n");
+> +	errno = 0;
+> +	if (!madvise(mapping, page_size, MADV_PAGEOUT) || errno != EINVAL)
+> +		ksft_exit_fail_msg("MADV_PAGEOUT accepted a locked VMA\n");
+> +	if (mapping[0] != 1)
+> +		ksft_exit_fail_msg("madvise changed locked memory\n");
+> +
+> +	munlock(mapping, page_size);
+> +	munmap(mapping, page_size);
+> +	ksft_test_result_pass("COLD and PAGEOUT reject a locked VMA\n");
+> +}
+> +
+> +/*
+> + * A full-range MADV_COLD operates directly on a huge PMD. Assert that aging
+> + * the mapping preserves both the physical THP and its contents.
+> + */
+> +static void test_full_pmd_madvise_cold(void)
+> +{
+> +	char *mapping = map_aligned_pages(pmd_size);
+> +
+> +	if (!collapse_all(mapping, pmd_size, 1)) {
+> +		munmap(mapping, pmd_size);
+> +		ksft_test_result_skip("could not allocate a PMD-sized THP\n");
+> +		return;
+> +	}
+> +	if (madvise(mapping, pmd_size, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (!check_large_folios(mapping, pmd_size, 1, pmd_size))
+> +		ksft_exit_fail_msg("full MADV_COLD split a PMD-mapped THP\n");
+> +	check_memory(mapping, pmd_size);
+> +
+> +	munmap(mapping, pmd_size);
+> +	ksft_test_result_pass("full MADV_COLD preserves a PMD-mapped THP\n");
+> +}
+> +
+> +/*
+> + * MADV_COLD is idempotent. A second request must handle an already-old huge
+> + * PMD without splitting the THP or changing its contents.
+> + */
+> +static void test_repeated_pmd_madvise_cold(void)
+> +{
+> +	char *mapping = map_aligned_pages(pmd_size);
+> +
+> +	if (!collapse_all(mapping, pmd_size, 1)) {
+> +		munmap(mapping, pmd_size);
+> +		ksft_test_result_skip("could not allocate a PMD-sized THP\n");
+> +		return;
+> +	}
+> +	if (madvise(mapping, pmd_size, MADV_COLD) ||
+> +	    madvise(mapping, pmd_size, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (!check_large_folios(mapping, pmd_size, 1, pmd_size))
+> +		ksft_exit_fail_msg("repeated MADV_COLD split a PMD-mapped THP\n");
+> +	check_memory(mapping, pmd_size);
+> +
+> +	munmap(mapping, pmd_size);
+> +	ksft_test_result_pass("repeated MADV_COLD preserves a PMD-mapped THP\n");
+> +}
+> +
+> +/*
+> + * MADV_COLD on half of a PMD-mapped THP must split the folio so the
+> + * unadvised half is not aged as part of the THP.
+> + */
+> +static void test_partial_pmd_madvise_cold(void)
+> +{
+> +	char *mapping = map_aligned_pages(pmd_size);
+> +
+> +	if (!collapse_all(mapping, pmd_size, 1)) {
+> +		munmap(mapping, pmd_size);
+> +		ksft_test_result_skip("could not allocate a PMD-sized THP\n");
+> +		return;
+> +	}
+> +	if (madvise(mapping, pmd_size / 2, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (!check_large_folios(mapping, pmd_size, 0, pmd_size))
+> +		ksft_exit_fail_msg("partial MADV_COLD left a PMD-mapped THP\n");
+> +	check_memory(mapping, pmd_size);
+> +
+> +	munmap(mapping, pmd_size);
+> +	ksft_test_result_pass("partial MADV_COLD splits a PMD-mapped THP\n");
+> +}
+> +
+> +static void pageout_half_thp(char *mapping)
+> +{
+> +	if (madvise(mapping, pmd_size / 2, MADV_PAGEOUT))
+> +		ksft_exit_fail_perror("MADV_PAGEOUT");
+> +	if (!check_large_folios(mapping, pmd_size, 0, pmd_size))
+> +		ksft_exit_fail_msg("partial MADV_PAGEOUT left a large folio\n");
+> +	check_memory(mapping, pmd_size);
+> +}
+> +
+> +/*
+> + * Full-range MADV_PAGEOUT can reclaim a PMD-mapped THP directly. Assert that
+> + * the mapping is swapped without corrupting the folio contents.
+> + */
+> +static void test_full_pmd_madvise_pageout(void)
+> +{
+> +	char *mapping = map_aligned_pages(pmd_size);
+> +	int pagemap_fd, retry;
+> +	bool swapped = false;
+> +
+> +	if (!collapse_all(mapping, pmd_size, 1)) {
+> +		munmap(mapping, pmd_size);
+> +		ksft_test_result_skip("could not allocate a PMD-sized THP\n");
+> +		return;
+> +	}
+> +	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_perror("open pagemap");
+> +
+> +	for (retry = 0; retry < 100; retry++) {
+> +		if (madvise(mapping, pmd_size, MADV_PAGEOUT))
+> +			ksft_exit_fail_perror("MADV_PAGEOUT");
+> +		if (pagemap_is_swapped(pagemap_fd, mapping)) {
+> +			swapped = true;
+> +			break;
+> +		}
+> +		usleep(10000);
+> +	}
+> +	if (swapped)
+> +		check_memory(mapping, pmd_size);
+> +
+> +	close(pagemap_fd);
+> +	munmap(mapping, pmd_size);
+> +	if (!swapped) {
+> +		ksft_test_result_skip("MADV_PAGEOUT did not swap the THP\n");
+> +		return;
+> +	}
+> +	ksft_test_result_pass("full MADV_PAGEOUT swaps a PMD-mapped THP\n");
+> +}
+> +
+> +/*
+> + * A swapped PTE is non-present but not empty. MADV_COLD must skip the entry
+> + * without faulting the page back in or changing its contents.
+> + */
+> +static void test_madvise_cold_swapped_pte(void)
+> +{
+> +	const size_t page_size = getpagesize();
+> +	char *mapping = map_aligned_pages(page_size);
+> +	int pagemap_fd, retry;
+> +	bool swapped = false;
+> +
+> +	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_perror("open pagemap");
+> +	for (retry = 0; retry < 100; retry++) {
+> +		if (madvise(mapping, page_size, MADV_PAGEOUT))
+> +			ksft_exit_fail_perror("MADV_PAGEOUT");
+> +		if (pagemap_is_swapped(pagemap_fd, mapping)) {
+> +			swapped = true;
+> +			break;
+> +		}
+> +		usleep(10000);
+> +	}
+> +	if (!swapped) {
+> +		close(pagemap_fd);
+> +		munmap(mapping, page_size);
+> +		ksft_test_result_skip("MADV_PAGEOUT did not swap the page\n");
+> +		return;
+> +	}
+> +
+> +	if (madvise(mapping, page_size, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (!pagemap_is_swapped(pagemap_fd, mapping))
+> +		ksft_exit_fail_msg("MADV_COLD faulted in a swapped PTE\n");
+> +	if (mapping[0] != 1)
+> +		ksft_exit_fail_msg("swapped page contents changed\n");
+> +
+> +	close(pagemap_fd);
+> +	munmap(mapping, page_size);
+> +	ksft_test_result_pass("MADV_COLD skips a swapped PTE\n");
+> +}
+> +
+> +/*
+> + * vmsplice() retains a reference to a THP in a pipe, preventing a partial
+> + * MADV_COLD from splitting it. The advice must leave the folio intact while
+> + * pinned, then split it normally after the pipe releases the reference.
+> + */
+> +static void test_partial_pinned_madvise_cold(bool pte_mapped)
+> +{
+> +	const size_t page_size = getpagesize();
+> +	char *mapping = map_aligned_pages(pmd_size);
+> +	struct iovec iov = {
+> +		.iov_base = mapping,
+> +		.iov_len = page_size,
+> +	};
+> +	char *buffer;
+> +	int pipefd[2];
+> +	int retry;
+> +
+> +	if (!collapse_all(mapping, pmd_size, 1)) {
+> +		munmap(mapping, pmd_size);
+> +		ksft_test_result_skip("could not allocate a PMD-sized THP\n");
+> +		return;
+> +	}
+> +	if (pte_mapped)
+> +		split_pmd_mapping(mapping);
+> +	if (pipe(pipefd))
+> +		ksft_exit_fail_perror("pipe");
+> +	if (vmsplice(pipefd[1], &iov, 1, SPLICE_F_GIFT) != page_size) {
+> +		close(pipefd[0]);
+> +		close(pipefd[1]);
+> +		munmap(mapping, pmd_size);
+> +		ksft_test_result_skip("vmsplice could not retain a THP page\n");
+> +		return;
+> +	}
+> +
+> +	if (madvise(mapping, pmd_size / 2, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (!check_large_folios(mapping, pmd_size, 1, pmd_size))
+> +		ksft_exit_fail_msg("MADV_COLD split a pinned THP\n");
+> +
+> +	buffer = malloc(page_size);
+> +	if (!buffer)
+> +		ksft_exit_fail_perror("malloc");
+> +	if (read(pipefd[0], buffer, page_size) != page_size)
+> +		ksft_exit_fail_perror("read pipe");
+> +	free(buffer);
+> +	close(pipefd[0]);
+> +	close(pipefd[1]);
+> +
+> +	for (retry = 0; retry < 10; retry++) {
+> +		if (madvise(mapping, pmd_size / 2, MADV_COLD))
+> +			ksft_exit_fail_perror("MADV_COLD");
+> +		if (check_large_folios(mapping, pmd_size, 0, pmd_size))
+> +			break;
+> +		usleep(10000);
+> +	}
+> +	if (retry == 10)
+> +		ksft_exit_fail_msg("MADV_COLD did not split an unpinned THP\n");
+> +	check_memory(mapping, pmd_size);
+> +
+> +	munmap(mapping, pmd_size);
+> +	ksft_test_result_pass("partial MADV_COLD skips a pinned %s THP\n",
+> +			      pte_mapped ? "PTE-mapped" : "PMD-mapped");
+> +}
+> +
+> +static void test_partial_pinned_pmd_madvise_cold(void)
+> +{
+> +	test_partial_pinned_madvise_cold(false);
+> +}
+> +
+> +/*
+> + * Pinning a PTE-mapped THP also prevents a partial MADV_COLD from splitting
+> + * it. Once the pipe releases the reference, a serial retry must split it.
+> + */
+> +static void test_partial_pinned_pte_madvise_cold(void)
+> +{
+> +	test_partial_pinned_madvise_cold(true);
+> +}
+> +
+> +static void *madvise_cold_worker(void *unused)
+> +{
+> +	int round, i;
+> +
+> +	(void)unused;
+> +	for (round = 0; round < NR_CONCURRENT_ROUNDS; round++) {
+> +		pthread_barrier_wait(&concurrent_start_barrier);
+> +		for (i = 0; i < NR_CONCURRENT_THPS; i++) {
+> +			if (madvise(concurrent_area + i * pmd_size,
+> +				    pmd_size / 2, MADV_COLD))
+> +				atomic_store(&concurrent_worker_errno, errno);
+> +		}
+> +		pthread_barrier_wait(&concurrent_done_barrier);
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +/*
+> + * Concurrent partial MADV_COLD calls deliberately contend for each THP lock.
+> + * Alternate PMD- and PTE-mapped rounds to exercise both split paths. A caller
+> + * that loses the trylock race may skip that folio, so retry serially before
+> + * asserting the stable interface: all calls succeed, the THPs remain
+> + * splittable, and their contents are unchanged.
+> + */
+> +static void test_concurrent_partial_madvise_cold(void)
+> +{
+> +	const size_t size = NR_CONCURRENT_THPS * pmd_size;
+> +	pthread_t threads[NR_CONCURRENT_THREADS];
+> +	int round, i;
+> +
+> +	concurrent_area = map_aligned_pages(size);
+> +	if (!collapse_all(concurrent_area, size, NR_CONCURRENT_THPS)) {
+> +		munmap(concurrent_area, size);
+> +		ksft_test_result_skip("could not allocate PMD-sized THPs\n");
+> +		return;
+> +	}
+> +	if (pthread_barrier_init(&concurrent_start_barrier, NULL,
+> +				 NR_CONCURRENT_THREADS + 1) ||
+> +	    pthread_barrier_init(&concurrent_done_barrier, NULL,
+> +				 NR_CONCURRENT_THREADS + 1))
+> +		ksft_exit_fail_msg("pthread_barrier_init failed\n");
+> +	for (i = 0; i < NR_CONCURRENT_THREADS; i++)
+> +		if (pthread_create(&threads[i], NULL, madvise_cold_worker, NULL))
+> +			ksft_exit_fail_msg("pthread_create failed\n");
+> +
+> +	for (round = 0; round < NR_CONCURRENT_ROUNDS; round++) {
+> +		if (!collapse_all(concurrent_area, size, NR_CONCURRENT_THPS))
+> +			ksft_exit_fail_msg("round %d: failed to form PMD THPs\n",
+> +					   round);
+> +		if (round & 1)
+> +			for (i = 0; i < NR_CONCURRENT_THPS; i++)
+> +				split_pmd_mapping(concurrent_area + i * pmd_size);
+> +		pthread_barrier_wait(&concurrent_start_barrier);
+> +		pthread_barrier_wait(&concurrent_done_barrier);
+> +
+> +		if (atomic_load(&concurrent_worker_errno)) {
+> +			errno = atomic_load(&concurrent_worker_errno);
+> +			ksft_exit_fail_perror("MADV_COLD");
+> +		}
+> +		for (i = 0; i < NR_CONCURRENT_THPS; i++) {
+> +			if (madvise(concurrent_area + i * pmd_size,
+> +				    pmd_size / 2, MADV_COLD))
+> +				ksft_exit_fail_perror("MADV_COLD retry");
+> +		}
+> +		if (!check_large_folios(concurrent_area, size, 0, pmd_size))
+> +			ksft_exit_fail_msg("round %d: PMD THP remained\n", round);
+> +	}
+> +	check_memory(concurrent_area, size);
+> +
+> +	for (i = 0; i < NR_CONCURRENT_THREADS; i++)
+> +		pthread_join(threads[i], NULL);
+> +	pthread_barrier_destroy(&concurrent_done_barrier);
+> +	pthread_barrier_destroy(&concurrent_start_barrier);
+> +	munmap(concurrent_area, size);
+> +	ksft_test_result_pass("concurrent partial MADV_COLD preserves memory\n");
+> +}
+> +
+> +/*
+> + * SHM_LOCK makes a shmem folio unevictable without setting VM_LOCKED on this
+> + * VMA. MADV_PAGEOUT must put an isolated folio back on its LRU rather than
+> + * reclaiming it.
+> + */
+> +static void test_madvise_pageout_unevictable(void)
+> +{
+> +	const size_t page_size = getpagesize();
+> +	unsigned long pfn;
+> +	uint64_t flags;
+> +	char *mapping;
+> +	int pagemap_fd, kpageflags_fd;
+> +	int shmid;
+> +
+> +	if (geteuid()) {
+> +		ksft_test_result_skip("requires root to read page flags\n");
+> +		return;
+> +	}
+> +	shmid = shmget(IPC_PRIVATE, page_size, IPC_CREAT | 0600);
+> +	if (shmid < 0)
+> +		ksft_exit_fail_perror("shmget");
+> +	if (shmctl(shmid, SHM_LOCK, NULL)) {
+> +		shmctl(shmid, IPC_RMID, NULL);
+> +		ksft_test_result_skip("could not lock a shmem segment\n");
+> +		return;
+> +	}
+> +	mapping = shmat(shmid, NULL, 0);
+> +	if (mapping == (void *)-1)
+> +		ksft_exit_fail_perror("shmat");
+> +	mapping[0] = 1;
+> +
+> +	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> +	kpageflags_fd = open("/proc/kpageflags", O_RDONLY);
+> +	if (pagemap_fd < 0 || kpageflags_fd < 0)
+> +		ksft_exit_fail_perror("open page flags");
+> +
+> +	/* Drain the LRU add batch so the locked mapping becomes unevictable. */
+> +	if (madvise(mapping, page_size, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	pfn = pagemap_get_pfn(pagemap_fd, mapping);
+> +	if (pfn == -1ul || pageflags_get(pfn, kpageflags_fd, &flags) ||
+> +	    !(flags & KPF_UNEVICTABLE))
+> +		ksft_exit_fail_msg("SHM_LOCK page is not unevictable\n");
+> +
+> +	if (madvise(mapping, page_size, MADV_PAGEOUT))
+> +		ksft_exit_fail_perror("MADV_PAGEOUT");
+> +	if (!pagemap_is_populated(pagemap_fd, mapping) || mapping[0] != 1)
+> +		ksft_exit_fail_msg("MADV_PAGEOUT reclaimed an unevictable page\n");
+> +
+> +	close(kpageflags_fd);
+> +	close(pagemap_fd);
+> +	shmctl(shmid, SHM_UNLOCK, NULL);
+> +	shmdt(mapping);
+> +	shmctl(shmid, IPC_RMID, NULL);
+> +	ksft_test_result_pass("MADV_PAGEOUT preserves an unevictable page\n");
+> +}
+> +
+> +/*
+> + * Exercise the unevictable PAGEOUT path at PMD granularity. SHM_LOCK keeps
+> + * the shmem THP resident without marking its VMA VM_LOCKED.
+> + */
+> +static void test_madvise_pageout_unevictable_thp(void)
+> +{
+> +	char *mapping;
+> +	int pagemap_fd, shmid;
+> +
+> +	if (geteuid()) {
+> +		ksft_test_result_skip("requires root to lock a shmem segment\n");
+> +		return;
+> +	}
+> +	mapping = map_unevictable_shmem(pmd_size, &shmid);
+> +	if (mapping == MAP_FAILED)
+> +		return;
+> +	memset(mapping, 1, pmd_size);
+> +	if (!collapse_shmem(mapping, pmd_size, 1)) {
+> +		unmap_unevictable_shmem(mapping, shmid);
+> +		ksft_test_result_skip("could not allocate an unevictable THP\n");
+> +		return;
+> +	}
+> +	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_perror("open pagemap");
+> +
+> +	if (madvise(mapping, pmd_size, MADV_PAGEOUT))
+> +		ksft_exit_fail_perror("MADV_PAGEOUT");
+> +	if (!pagemap_is_populated(pagemap_fd, mapping) ||
+> +	    !check_huge_shmem(mapping, pmd_size, 1, pmd_size))
+> +		ksft_exit_fail_msg("MADV_PAGEOUT reclaimed an unevictable THP\n");
+> +	check_memory(mapping, pmd_size);
+> +
+> +	close(pagemap_fd);
+> +	unmap_unevictable_shmem(mapping, shmid);
+> +	ksft_test_result_pass("MADV_PAGEOUT preserves an unevictable THP\n");
+> +}
+> +
+> +/*
+> + * migrate_pages() isolates folios from the LRU before replacing their page
+> + * table entries. Race that interval against MADV_PAGEOUT on PMD-mapped THPs.
+> + * Either operation may skip a folio owned by the other, but repeated calls
+> + * must not report an error or corrupt the mapping.
+> + */
+> +static void test_madvise_pageout_migration(void)
+> +{
+> +#if defined(SYS_get_mempolicy) && defined(SYS_mbind) && \
+> +	defined(SYS_migrate_pages)
+> +	unsigned long allowed[NUMA_MASK_LONGS] = {};
+> +	unsigned long mask1[NUMA_MASK_LONGS] = {};
+> +	unsigned long mask2[NUMA_MASK_LONGS] = {};
+> +	const size_t size = NR_MIGRATION_RACE_THPS * pmd_size;
+> +	char *mapping;
+> +	int node1, node2;
+> +	int error;
+> +	int shmid;
+> +
+> +	if (geteuid()) {
+> +		ksft_test_result_skip("requires root to lock a shmem segment\n");
+> +		return;
+> +	}
+> +	if (!find_two_memory_nodes(allowed, &node1, &node2)) {
+> +		ksft_test_result_skip("requires two allowed NUMA memory nodes\n");
+> +		return;
+> +	}
+> +
+> +	numa_mask_set(mask1, node1);
+> +	numa_mask_set(mask2, node2);
+> +	mapping = map_unevictable_shmem(size, &shmid);
+> +	if (mapping == MAP_FAILED)
+> +		return;
+> +	if (syscall(SYS_mbind, mapping, size, MPOL_BIND, mask1,
+> +		    NUMA_MASK_BITS + 1, 0)) {
+> +		unmap_unevictable_shmem(mapping, shmid);
+> +		ksft_test_result_skip("could not bind shmem to a NUMA node\n");
+> +		return;
+> +	}
+> +	memset(mapping, 1, size);
+> +	if (!collapse_shmem(mapping, size, NR_MIGRATION_RACE_THPS)) {
+> +		unmap_unevictable_shmem(mapping, shmid);
+> +		ksft_test_result_skip("could not allocate unevictable shmem THPs\n");
+> +		return;
+> +	}
+> +
+> +	error = race_pageout_with_migration(mapping, size, mask1, mask2);
+> +	if (error == ENOSYS) {
+> +		unmap_unevictable_shmem(mapping, shmid);
+> +		ksft_test_result_skip("NUMA migration is unavailable\n");
+> +		return;
+> +	}
+> +	if (error) {
+> +		errno = error;
+> +		ksft_exit_fail_perror("MADV_PAGEOUT/migrate_pages race");
+> +	}
+> +	check_memory(mapping, size);
+> +
+> +	unmap_unevictable_shmem(mapping, shmid);
+> +	ksft_test_result_pass("MADV_PAGEOUT races NUMA migration safely\n");
+> +#else
+> +	ksft_test_result_skip("NUMA migration system calls are unavailable\n");
+> +#endif
+> +}
+> +
+> +static bool activate_folio(char *mapping, char *drain, unsigned long pfn,
+> +			   int kpageflags_fd)
+> +{
+> +	struct iovec local = { .iov_base = drain, .iov_len = 1 };
+> +	struct iovec remote = { .iov_base = mapping, .iov_len = 1 };
+> +	uint64_t flags;
+> +	int retry;
+> +
+> +	for (retry = 0; retry < 10; retry++) {
+> +		if (process_vm_readv(getpid(), &local, 1, &remote, 1, 0) != 1)
+> +			ksft_exit_fail_perror("process_vm_readv");
+> +		/* Drain the activation batch without advising the target folio. */
+> +		if (madvise(drain, getpagesize(), MADV_COLD))
+> +			ksft_exit_fail_perror("MADV_COLD");
+> +		if (pageflags_get(pfn, kpageflags_fd, &flags))
+> +			ksft_exit_fail_perror("read kpageflags");
+> +		if (flags & KPF_ACTIVE)
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +/*
+> + * Repeated GUP accesses promote an inactive folio on the traditional LRU.
+> + * MADV_COLD must deactivate that folio while preserving its contents.
+> + */
+> +static void test_madvise_cold_active_folio(void)
+> +{
+> +	const size_t page_size = getpagesize();
+> +	char *mapping = map_aligned_pages(page_size);
+> +	char *drain = map_aligned_pages(page_size);
+> +	cpu_set_t old_mask, mask;
+> +	int pagemap_fd, kpageflags_fd;
+> +	unsigned long pfn;
+> +	uint64_t flags;
+> +	int cpu;
+> +
+> +	if (geteuid()) {
+> +		munmap(drain, page_size);
+> +		munmap(mapping, page_size);
+> +		ksft_test_result_skip("requires root to read page flags\n");
+> +		return;
+> +	}
+> +	if (sched_getaffinity(0, sizeof(old_mask), &old_mask))
+> +		ksft_exit_fail_perror("sched_getaffinity");
+> +	cpu = sched_getcpu();
+> +	if (cpu < 0)
+> +		ksft_exit_fail_perror("sched_getcpu");
+> +	CPU_ZERO(&mask);
+> +	CPU_SET(cpu, &mask);
+> +	if (sched_setaffinity(0, sizeof(mask), &mask))
+> +		ksft_exit_fail_perror("sched_setaffinity");
+> +
+> +	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> +	kpageflags_fd = open("/proc/kpageflags", O_RDONLY);
+> +	if (pagemap_fd < 0 || kpageflags_fd < 0)
+> +		ksft_exit_fail_perror("open page flags");
+> +	pfn = pagemap_get_pfn(pagemap_fd, mapping);
+> +	if (pfn == -1ul)
+> +		ksft_exit_fail_msg("could not read page PFN\n");
+> +
+> +	if (!activate_folio(mapping, drain, pfn, kpageflags_fd)) {
+> +		close(kpageflags_fd);
+> +		close(pagemap_fd);
+> +		sched_setaffinity(0, sizeof(old_mask), &old_mask);
+> +		munmap(drain, page_size);
+> +		munmap(mapping, page_size);
+> +		ksft_test_result_skip("could not activate a folio\n");
+> +		return;
+> +	}
+> +
+> +	if (madvise(mapping, page_size, MADV_COLD) ||
+> +	    madvise(drain, page_size, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (pageflags_get(pfn, kpageflags_fd, &flags))
+> +		ksft_exit_fail_perror("read kpageflags");
+> +	if ((flags & KPF_ACTIVE) || mapping[0] != 1)
+> +		ksft_exit_fail_msg("MADV_COLD did not deactivate the folio\n");
+> +
+> +	close(kpageflags_fd);
+> +	close(pagemap_fd);
+> +	if (sched_setaffinity(0, sizeof(old_mask), &old_mask))
+> +		ksft_exit_fail_perror("restore affinity");
+> +	munmap(drain, page_size);
+> +	munmap(mapping, page_size);
+> +	ksft_test_result_pass("MADV_COLD deactivates an active folio\n");
+> +}
+> +
+> +struct remote_fault_data {
+> +	char *mapping;
+> +	pthread_barrier_t barrier;
+> +	int cpu;
+> +	int error;
+> +};
+> +
+> +static void *remote_fault_worker(void *arg)
+> +{
+> +	struct remote_fault_data *data = arg;
+> +	cpu_set_t mask;
+> +
+> +	CPU_ZERO(&mask);
+> +	CPU_SET(data->cpu, &mask);
+> +	if (sched_setaffinity(0, sizeof(mask), &mask))
+> +		data->error = errno;
+> +	else
+> +		data->mapping[0] = 1;
+> +	pthread_barrier_wait(&data->barrier);
+> +	pthread_barrier_wait(&data->barrier);
+> +	return NULL;
+> +}
+> +
+> +/*
+> + * A folio faulted on another CPU can remain in that CPU's pending LRU batch.
+> + * MADV_COLD drains only the calling CPU and must safely skip the non-LRU
+> + * folio without changing the mapping.
+> + */
+> +static void test_madvise_cold_remote_lru_batch(void)
+> +{
+> +	const size_t page_size = getpagesize();
+> +	struct remote_fault_data data = { .cpu = -1 };
+> +	char *mapping;
+> +	cpu_set_t old_mask, mask;
+> +	pthread_t thread;
+> +	unsigned long pfn;
+> +	uint64_t flags;
+> +	int pagemap_fd, kpageflags_fd;
+> +	int cpu, main_cpu = -1;
+> +
+> +	if (geteuid()) {
+> +		ksft_test_result_skip("requires root to read page flags\n");
+> +		return;
+> +	}
+> +	if (sched_getaffinity(0, sizeof(old_mask), &old_mask))
+> +		ksft_exit_fail_perror("sched_getaffinity");
+> +	for (cpu = 0; cpu < CPU_SETSIZE; cpu++) {
+> +		if (!CPU_ISSET(cpu, &old_mask))
+> +			continue;
+> +		if (main_cpu < 0) {
+> +			main_cpu = cpu;
+> +		} else {
+> +			data.cpu = cpu;
+> +			break;
+> +		}
+> +	}
+> +	if (main_cpu < 0 || data.cpu < 0) {
+> +		ksft_test_result_skip("requires two CPUs\n");
+> +		return;
+> +	}
+> +	CPU_ZERO(&mask);
+> +	CPU_SET(main_cpu, &mask);
+> +	if (sched_setaffinity(0, sizeof(mask), &mask))
+> +		ksft_exit_fail_perror("sched_setaffinity");
+> +
+> +	mapping = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
+> +		       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	if (mapping == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+> +	data.mapping = mapping;
+> +	if (pthread_barrier_init(&data.barrier, NULL, 2) ||
+> +	    pthread_create(&thread, NULL, remote_fault_worker, &data))
+> +		ksft_exit_fail_msg("could not start fault worker\n");
+> +	pthread_barrier_wait(&data.barrier);
+> +	if (data.error) {
+> +		errno = data.error;
+> +		ksft_exit_fail_perror("worker sched_setaffinity");
+> +	}
+> +
+> +	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> +	kpageflags_fd = open("/proc/kpageflags", O_RDONLY);
+> +	if (pagemap_fd < 0 || kpageflags_fd < 0)
+> +		ksft_exit_fail_perror("open page flags");
+> +	pfn = pagemap_get_pfn(pagemap_fd, mapping);
+> +	if (pfn == -1ul || pageflags_get(pfn, kpageflags_fd, &flags))
+> +		ksft_exit_fail_msg("could not read page flags\n");
+> +	if (flags & KPF_LRU) {
+> +		pthread_barrier_wait(&data.barrier);
+> +		pthread_join(thread, NULL);
+> +		pthread_barrier_destroy(&data.barrier);
+> +		close(kpageflags_fd);
+> +		close(pagemap_fd);
+> +		sched_setaffinity(0, sizeof(old_mask), &old_mask);
+> +		munmap(mapping, page_size);
+> +		ksft_test_result_skip("remote LRU batch was already drained\n");
+> +		return;
+> +	}
+> +
+> +	if (madvise(mapping, page_size, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (mapping[0] != 1 || !pagemap_is_populated(pagemap_fd, mapping))
+> +		ksft_exit_fail_msg("MADV_COLD changed a pending-LRU page\n");
+> +
+> +	pthread_barrier_wait(&data.barrier);
+> +	pthread_join(thread, NULL);
+> +	pthread_barrier_destroy(&data.barrier);
+> +	close(kpageflags_fd);
+> +	close(pagemap_fd);
+> +	if (sched_setaffinity(0, sizeof(old_mask), &old_mask))
+> +		ksft_exit_fail_perror("restore affinity");
+> +	munmap(mapping, page_size);
+> +	ksft_test_result_pass("MADV_COLD skips a remote pending-LRU page\n");
+> +}
+> +
+> +/*
+> + * Exercise the same active-folio transition through a huge PMD, where the
+> + * page-table aging operation differs from the PTE implementation.
+> + */
+> +static void test_pmd_madvise_cold_active_folio(void)
+> +{
+> +	const size_t page_size = getpagesize();
+> +	char *mapping;
+> +	char *drain = map_aligned_pages(page_size);
+> +	cpu_set_t old_mask, mask;
+> +	int pagemap_fd, kpageflags_fd;
+> +	unsigned long pfn;
+> +	uint64_t flags;
+> +	int cpu, fd, retry;
+> +	bool active = false;
+> +
+> +	if (geteuid()) {
+> +		munmap(drain, page_size);
+> +		ksft_test_result_skip("requires root to read page flags\n");
+> +		return;
+> +	}
+> +	fd = memfd_create("madvise-active-thp", 0);
+> +	if (fd < 0)
+> +		ksft_exit_fail_perror("memfd_create");
+> +	if (ftruncate(fd, pmd_size))
+> +		ksft_exit_fail_perror("ftruncate");
+> +	mapping = map_aligned_file(fd, pmd_size, MAP_SHARED);
+> +	memset(mapping, 1, pmd_size);
+> +	if (msync(mapping, pmd_size, MS_SYNC) ||
+> +	    !collapse_shmem(mapping, pmd_size, 1)) {
+> +		munmap(drain, page_size);
+> +		munmap(mapping, pmd_size);
+> +		close(fd);
+> +		ksft_test_result_skip("could not allocate a PMD-sized shmem THP\n");
+> +		return;
+> +	}
+> +	if (sched_getaffinity(0, sizeof(old_mask), &old_mask))
+> +		ksft_exit_fail_perror("sched_getaffinity");
+> +	cpu = sched_getcpu();
+> +	if (cpu < 0)
+> +		ksft_exit_fail_perror("sched_getcpu");
+> +	CPU_ZERO(&mask);
+> +	CPU_SET(cpu, &mask);
+> +	if (sched_setaffinity(0, sizeof(mask), &mask))
+> +		ksft_exit_fail_perror("sched_setaffinity");
+> +
+> +	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> +	kpageflags_fd = open("/proc/kpageflags", O_RDONLY);
+> +	if (pagemap_fd < 0 || kpageflags_fd < 0)
+> +		ksft_exit_fail_perror("open page flags");
+> +	pfn = pagemap_get_pfn(pagemap_fd, mapping);
+> +	if (pfn == -1ul)
+> +		ksft_exit_fail_msg("could not read THP PFN\n");
+> +
+> +	for (retry = 0; retry < 10; retry++) {
+> +		if (pread(fd, drain, 1, 0) != 1)
+> +			ksft_exit_fail_perror("pread");
+> +		if (madvise(drain, page_size, MADV_COLD))
+> +			ksft_exit_fail_perror("MADV_COLD");
+> +		if (pageflags_get(pfn, kpageflags_fd, &flags))
+> +			ksft_exit_fail_perror("read kpageflags");
+> +		if (flags & KPF_ACTIVE) {
+> +			active = true;
+> +			break;
+> +		}
+> +	}
+> +	if (!active) {
+> +		close(kpageflags_fd);
+> +		close(pagemap_fd);
+> +		sched_setaffinity(0, sizeof(old_mask), &old_mask);
+> +		munmap(drain, page_size);
+> +		munmap(mapping, pmd_size);
+> +		close(fd);
+> +		ksft_test_result_skip("could not activate a THP\n");
+> +		return;
+> +	}
+> +
+> +	if (madvise(mapping, pmd_size, MADV_COLD) ||
+> +	    madvise(drain, page_size, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (pageflags_get(pfn, kpageflags_fd, &flags))
+> +		ksft_exit_fail_perror("read kpageflags");
+> +	if (flags & KPF_ACTIVE)
+> +		ksft_exit_fail_msg("MADV_COLD did not deactivate the THP\n");
+> +	if (!check_huge_shmem(mapping, pmd_size, 1, pmd_size))
+> +		ksft_exit_fail_msg("MADV_COLD split an active THP\n");
+> +	check_memory(mapping, pmd_size);
+> +
+> +	close(kpageflags_fd);
+> +	close(pagemap_fd);
+> +	if (sched_setaffinity(0, sizeof(old_mask), &old_mask))
+> +		ksft_exit_fail_perror("restore affinity");
+> +	munmap(drain, page_size);
+> +	munmap(mapping, pmd_size);
+> +	close(fd);
+> +	ksft_test_result_pass("MADV_COLD deactivates an active THP\n");
+> +}
+> +
+> +/*
+> + * MADV_PAGEOUT on half of a PMD-mapped THP must split the folio before
+> + * reclaim so the unadvised half is not reclaimed as part of the THP.
+> + */
+> +static void test_partial_pmd_madvise_pageout(void)
+> +{
+> +	char *mapping = map_aligned_pages(pmd_size);
+> +
+> +	if (!collapse_all(mapping, pmd_size, 1)) {
+> +		munmap(mapping, pmd_size);
+> +		ksft_test_result_skip("could not allocate a PMD-sized THP\n");
+> +		return;
+> +	}
+> +	pageout_half_thp(mapping);
+> +
+> +	munmap(mapping, pmd_size);
+> +	ksft_test_result_pass("partial MADV_PAGEOUT splits a PMD-mapped THP\n");
+> +}
+> +
+> +/*
+> + * mprotect() replaces the huge PMD with PTEs without splitting the physical
+> + * THP. MADV_PAGEOUT on half of that PTE-mapped THP must split the folio.
+> + */
+> +static void test_partial_pte_madvise_pageout(void)
+> +{
+> +	char *mapping = map_aligned_pages(pmd_size);
+> +
+> +	if (!collapse_all(mapping, pmd_size, 1)) {
+> +		munmap(mapping, pmd_size);
+> +		ksft_test_result_skip("could not allocate a PMD-sized THP\n");
+> +		return;
+> +	}
+> +	split_pmd_mapping(mapping);
+> +	pageout_half_thp(mapping);
+> +
+> +	munmap(mapping, pmd_size);
+> +	ksft_test_result_pass("partial MADV_PAGEOUT splits a PTE-mapped THP\n");
+> +}
+> +
+> +static pid_t fork_waiting_child(int pipefd[2])
+> +{
+> +	pid_t pid;
+> +
+> +	if (pipe(pipefd))
+> +		ksft_exit_fail_perror("pipe");
+> +	pid = fork();
+> +	if (pid < 0)
+> +		ksft_exit_fail_perror("fork");
+> +	if (!pid) {
+> +		char byte;
+> +
+> +		close(pipefd[1]);
+> +		while (read(pipefd[0], &byte, 1) < 0 && errno == EINTR)
+> +			;
+> +		_exit(0);
+> +	}
+> +	close(pipefd[0]);
+> +	return pid;
+> +}
+> +
+> +/*
+> + * fork() gives the THP another mapping, then mprotect() PTE-maps it in the
+> + * parent. Assert that partial MADV_COLD leaves the shared physical THP and
+> + * its contents intact.
+> + */
+> +static void test_shared_pte_mapped_madvise_cold(void)
+> +{
+> +	char *mapping = map_aligned_pages(pmd_size);
+> +	int pipefd[2], status;
+> +	pid_t pid;
+> +
+> +	if (!collapse_all(mapping, pmd_size, 1)) {
+> +		munmap(mapping, pmd_size);
+> +		ksft_test_result_skip("could not allocate a PMD-sized THP\n");
+> +		return;
+> +	}
+> +	pid = fork_waiting_child(pipefd);
+> +
+> +	split_pmd_mapping(mapping);
+> +	if (madvise(mapping, pmd_size / 2, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (!check_large_folios(mapping, pmd_size, 1, pmd_size))
+> +		ksft_exit_fail_msg("MADV_COLD split a shared large folio\n");
+> +	check_memory(mapping, pmd_size);
+> +
+> +	close(pipefd[1]);
+> +	if (waitpid(pid, &status, 0) != pid || !WIFEXITED(status) ||
+> +	    WEXITSTATUS(status))
+> +		ksft_exit_fail_msg("child process failed\n");
+> +	munmap(mapping, pmd_size);
+> +	ksft_test_result_pass("MADV_COLD skips a shared PTE-mapped THP\n");
+> +}
+> +
+> +/*
+> + * A full-range PTE walk reaches the mapcount check rather than the partial
+> + * folio split check. A second mapping must still prevent MADV_COLD from
+> + * operating on the shared physical THP.
+> + */
+> +static void test_full_shared_pte_mapped_madvise_cold(void)
+> +{
+> +	char *mapping = map_aligned_pages(pmd_size);
+> +	int pipefd[2], status;
+> +	pid_t pid;
+> +
+> +	if (!collapse_all(mapping, pmd_size, 1)) {
+> +		munmap(mapping, pmd_size);
+> +		ksft_test_result_skip("could not allocate a PMD-sized THP\n");
+> +		return;
+> +	}
+> +	pid = fork_waiting_child(pipefd);
+> +
+> +	split_pmd_mapping(mapping);
+> +	if (madvise(mapping, pmd_size, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (!check_large_folios(mapping, pmd_size, 1, pmd_size))
+> +		ksft_exit_fail_msg("MADV_COLD split a shared large folio\n");
+> +	check_memory(mapping, pmd_size);
+> +
+> +	close(pipefd[1]);
+> +	if (waitpid(pid, &status, 0) != pid || !WIFEXITED(status) ||
+> +	    WEXITSTATUS(status))
+> +		ksft_exit_fail_msg("child process failed\n");
+> +	munmap(mapping, pmd_size);
+> +	ksft_test_result_pass("full MADV_COLD skips a shared PTE-mapped THP\n");
+> +}
+> +
+> +/*
+> + * fork() gives a PMD-mapped THP another mapping. Assert that partial
+> + * MADV_COLD leaves the shared physical THP and its contents intact.
+> + */
+> +static void test_shared_pmd_madvise_cold(void)
+> +{
+> +	char *mapping = map_aligned_pages(pmd_size);
+> +	int pipefd[2], status;
+> +	pid_t pid;
+> +
+> +	if (!collapse_all(mapping, pmd_size, 1)) {
+> +		munmap(mapping, pmd_size);
+> +		ksft_test_result_skip("could not allocate a PMD-sized THP\n");
+> +		return;
+> +	}
+> +	pid = fork_waiting_child(pipefd);
+> +
+> +	if (madvise(mapping, pmd_size / 2, MADV_COLD))
+> +		ksft_exit_fail_perror("MADV_COLD");
+> +	if (!check_large_folios(mapping, pmd_size, 1, pmd_size))
+> +		ksft_exit_fail_msg("MADV_COLD split a shared PMD-mapped THP\n");
+> +	check_memory(mapping, pmd_size);
+> +
+> +	close(pipefd[1]);
+> +	if (waitpid(pid, &status, 0) != pid || !WIFEXITED(status) ||
+> +	    WEXITSTATUS(status))
+> +		ksft_exit_fail_msg("child process failed\n");
+> +	munmap(mapping, pmd_size);
+> +	ksft_test_result_pass("MADV_COLD skips a shared PMD-mapped THP\n");
+> +}
+> +
+> +static char *map_readonly_file(size_t size, int flags, int *fd)
+> +{
+> +	char template[] = "/tmp/madvise-pageout-XXXXXX";
+> +	char *mapping;
+> +
+> +	*fd = mkstemp(template);
+> +	if (*fd < 0)
+> +		ksft_exit_fail_perror("mkstemp");
+> +	if (unlink(template) || ftruncate(*fd, size) || fchmod(*fd, 0400))
+> +		ksft_exit_fail_perror("prepare file");
+> +	mapping = mmap(NULL, size, PROT_READ | PROT_WRITE, flags, *fd, 0);
+> +	if (mapping == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+> +
+> +	return mapping;
+> +}
+> +
+> +static bool pageout_until_evicted(char *mapping, size_t size, int pagemap_fd)
+> +{
+> +	int retry;
+> +
+> +	for (retry = 0; retry < 100; retry++) {
+> +		if (madvise(mapping, size, MADV_PAGEOUT))
+> +			ksft_exit_fail_perror("MADV_PAGEOUT");
+> +		if (!pagemap_is_populated(pagemap_fd, mapping))
+> +			return true;
+> +		usleep(10000);
+> +	}
+> +	return false;
+> +}
+> +
+> +/*
+> + * The owner of a file may page out its clean page-cache pages. Assert that
+> + * MADV_PAGEOUT removes the populated PTE and preserves the file contents.
+> + */
+> +static void test_pageout_file(void)
+> +{
+> +	const size_t page_size = getpagesize();
+> +	char *mapping;
+> +	int pagemap_fd;
+> +	bool evicted;
+> +	int fd;
+> +
+> +	mapping = map_readonly_file(page_size, MAP_PRIVATE, &fd);
+> +	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_perror("open pagemap");
+> +	if (mapping[0])
+> +		ksft_exit_fail_msg("new file is not zero-filled\n");
+> +
+> +	evicted = pageout_until_evicted(mapping, page_size, pagemap_fd);
+> +	if (mapping[0])
+> +		ksft_exit_fail_msg("file mapping contents changed\n");
+> +
+> +	close(pagemap_fd);
+> +	munmap(mapping, page_size);
+> +	close(fd);
+> +	if (!evicted) {
+> +		ksft_test_result_skip("MADV_PAGEOUT did not evict the file page\n");
+> +		return;
+> +	}
+> +	ksft_test_result_pass("MADV_PAGEOUT evicts an authorized file page\n");
+> +}
+> +
+> +static int pageout_shared_file_without_permission(char *mapping,
+> +						  size_t page_size)
+> +{
+> +	int pagemap_fd;
+> +
+> +	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		return KSFT_FAIL;
+> +	if (setgid(65534) || setuid(65534))
+> +		return KSFT_FAIL;
+> +	if (mapping[0] || !pagemap_is_populated(pagemap_fd, mapping))
+> +		return KSFT_FAIL;
+> +	if (madvise(mapping, page_size, MADV_PAGEOUT))
+> +		return KSFT_FAIL;
+> +	if (!pagemap_is_populated(pagemap_fd, mapping) || mapping[0])
+> +		return KSFT_FAIL;
+> +	return KSFT_PASS;
+> +}
+> +
+> +/*
+> + * A caller without file write permission may not page out a shared file
+> + * mapping. Assert that MADV_PAGEOUT succeeds without evicting its file page.
+> + */
+> +static void test_pageout_unauthorized_shared_file(void)
+> +{
+> +	const size_t page_size = getpagesize();
+> +	char *mapping;
+> +	int fd, status;
+> +	pid_t pid;
+> +
+> +	if (geteuid()) {
+> +		ksft_test_result_skip("requires root to change credentials\n");
+> +		return;
+> +	}
+> +
+> +	mapping = map_readonly_file(page_size, MAP_SHARED, &fd);
+> +
+> +	pid = fork();
+> +	if (pid < 0)
+> +		ksft_exit_fail_perror("fork");
+> +	if (!pid)
+> +		_exit(pageout_shared_file_without_permission(mapping, page_size));
+> +
+> +	if (waitpid(pid, &status, 0) != pid || !WIFEXITED(status) ||
+> +	    WEXITSTATUS(status) != KSFT_PASS)
+> +		ksft_exit_fail_msg("unauthorized child evicted a shared file page\n");
+> +	munmap(mapping, page_size);
+> +	close(fd);
+> +	ksft_test_result_pass("MADV_PAGEOUT skips an unauthorized shared file\n");
+> +}
+> +
+> +/*
+> + * An unauthorized private mapping may page out anonymous COW pages, but not
+> + * its file folios. Assert that partial MADV_PAGEOUT filters a large shmem
+> + * folio before attempting to split or reclaim it.
+> + */
+> +static void test_pageout_anon_only_large_folio(void)
+> +{
+> +	char *mapping, *shared;
+> +	gid_t old_egid;
+> +	int fd;
+> +
+> +	if (geteuid()) {
+> +		ksft_test_result_skip("requires root to change credentials\n");
+> +		return;
+> +	}
+> +	fd = memfd_create("madvise-pageout-large", 0);
+> +	if (fd < 0)
+> +		ksft_exit_fail_perror("memfd_create");
+> +	if (ftruncate(fd, pmd_size))
+> +		ksft_exit_fail_perror("ftruncate");
+> +	shared = map_aligned_file(fd, pmd_size, MAP_SHARED);
+> +	memset(shared, 1, pmd_size);
+> +	if (msync(shared, pmd_size, MS_SYNC))
+> +		ksft_exit_fail_perror("msync");
+> +	munmap(shared, pmd_size);
+> +
+> +	mapping = map_aligned_file(fd, pmd_size, MAP_PRIVATE);
+> +	if (!collapse_shmem(mapping, pmd_size, 1)) {
+> +		munmap(mapping, pmd_size);
+> +		close(fd);
+> +		ksft_test_result_skip("could not allocate a PMD-sized shmem THP\n");
+> +		return;
+> +	}
+> +	if (fchmod(fd, 0400))
+> +		ksft_exit_fail_perror("fchmod");
+> +
+> +	/* Retain saved uid 0 so this process can restore its credentials. */
+> +	old_egid = getegid();
+> +	if (setegid(65534) || seteuid(65534))
+> +		ksft_exit_fail_perror("drop privileges");
+> +	if (madvise(mapping, pmd_size / 2, MADV_PAGEOUT))
+> +		ksft_exit_fail_perror("MADV_PAGEOUT");
+> +	if (seteuid(0) || setegid(old_egid))
+> +		ksft_exit_fail_perror("restore privileges");
+> +
+> +	if (!check_huge_shmem(mapping, pmd_size, 1, pmd_size) ||
+> +	    mapping[0] != 1 || mapping[pmd_size - 1] != 1)
+> +		ksft_exit_fail_msg("MADV_PAGEOUT changed a protected large folio\n");
+> +	munmap(mapping, pmd_size);
+> +	close(fd);
+> +	ksft_test_result_pass("MADV_PAGEOUT filters a protected large folio\n");
+> +}
+> +
+> +/*
+> + * A private file mapping can contain both anonymous COW and file-backed
+> + * pages. As a caller without file write permission, assert that PAGEOUT swaps
+> + * the COW page but leaves the file-backed page resident.
+> + */
+> +static void test_pageout_anon_only(void)
+> +{
+> +	const size_t page_size = getpagesize();
+> +	char *mapping;
+> +	int pagemap_fd;
+> +	bool swapped;
+> +	int fd;
+> +
+> +	if (geteuid()) {
+> +		ksft_test_result_skip("requires root to change credentials\n");
+> +		return;
+> +	}
+> +
+> +	mapping = map_readonly_file(2 * page_size, MAP_PRIVATE, &fd);
+> +	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_perror("open pagemap");
+> +
+> +	if (setgid(65534) || setuid(65534))
+> +		ksft_exit_fail_perror("drop privileges");
+> +	if (mapping[0] || mapping[page_size])
+> +		ksft_exit_fail_msg("new file is not zero-filled\n");
+> +	mapping[0] = 1;
+> +	if (madvise(mapping, 2 * page_size, MADV_PAGEOUT))
+> +		ksft_exit_fail_perror("MADV_PAGEOUT");
+> +	if (!pagemap_is_populated(pagemap_fd, mapping + page_size))
+> +		ksft_exit_fail_msg("MADV_PAGEOUT evicted a protected file page\n");
+> +	swapped = pagemap_is_swapped(pagemap_fd, mapping);
+> +	if (mapping[0] != 1 || mapping[page_size])
+> +		ksft_exit_fail_msg("private file mapping contents changed\n");
+> +
+> +	close(pagemap_fd);
+> +	munmap(mapping, 2 * page_size);
+> +	close(fd);
+> +	if (!swapped) {
+> +		ksft_test_result_skip("MADV_PAGEOUT did not swap the COW page\n");
+> +		return;
+> +	}
+> +	ksft_test_result_pass("MADV_PAGEOUT filters private file pages\n");
+> +}
+> +
+> +int main(void)
+> +{
+> +	pmd_size = read_pmd_pagesize();
+> +
+> +	ksft_print_header();
+> +	ksft_set_plan(28);
+> +	if (!pmd_size)
+> +		ksft_exit_skip("PMD-sized THPs are not supported\n");
+> +
+> +	test_full_pmd_madvise_cold();
+> +	test_repeated_pmd_madvise_cold();
+> +	test_partial_pmd_madvise_cold();
+> +	test_pte_mapped_madvise_cold();
+> +	test_madvise_cold_pte_hole();
+> +	test_madvise_cold_zero_page();
+> +	test_madvise_cold_huge_zero_page();
+> +	test_madvise_lru_locked_vma();
+> +	test_shared_pmd_madvise_cold();
+> +	test_full_pmd_madvise_pageout();
+> +	test_madvise_cold_swapped_pte();
+> +	test_partial_pinned_pmd_madvise_cold();
+> +	test_partial_pinned_pte_madvise_cold();
+> +	test_concurrent_partial_madvise_cold();
+> +	test_madvise_pageout_unevictable();
+> +	test_madvise_pageout_unevictable_thp();
+> +	test_madvise_pageout_migration();
+> +	test_madvise_cold_active_folio();
+> +	test_madvise_cold_remote_lru_batch();
+> +	test_pmd_madvise_cold_active_folio();
+> +	test_partial_pmd_madvise_pageout();
+> +	test_partial_pte_madvise_pageout();
+> +	test_shared_pte_mapped_madvise_cold();
+> +	test_full_shared_pte_mapped_madvise_cold();
+> +	test_pageout_file();
+> +	test_pageout_unauthorized_shared_file();
+> +	test_pageout_anon_only_large_folio();
+> +	test_pageout_anon_only();
+> +	ksft_finished();
+> +}
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> index 6990485b1a9da..bc136ead10f91 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -51,6 +51,8 @@ separated by spaces:
+>  	hmm smoke tests
+>  - madv_guard
+>  	test madvise(2) MADV_GUARD_INSTALL and MADV_GUARD_REMOVE options
+> +- madvise
+> +	test MADV_COLD and MADV_PAGEOUT
+>  - madv_populate
+>  	test memadvise(2) MADV_POPULATE_{READ,WRITE} options
+>  - memfd_secret
+> @@ -327,6 +329,9 @@ CATEGORY="hmm" run_test bash ./test_hmm.sh smoke
+>  # MADV_GUARD_INSTALL and MADV_GUARD_REMOVE tests
+>  CATEGORY="madv_guard" run_test ./guard-regions
+>
+> +# MADV_COLD and MADV_PAGEOUT tests
+> +CATEGORY="madvise" run_test ./madvise
+> +
+>  # MADV_POPULATE_READ and MADV_POPULATE_WRITE tests
+>  CATEGORY="madv_populate" run_test ./madv_populate
+>
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index 31d331c1c4521..af0a7f65bfd9f 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -373,8 +373,8 @@ static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
+>  	return thp == (nr_hpages * (hpage_size >> 10));
+>  }
+>
+> -static bool check_large_folios(void *addr, size_t len, int nr_hpages,
+> -		uint64_t hpage_size)
+> +bool check_large_folios(void *addr, size_t len, int nr_hpages,
+> +			uint64_t hpage_size)
+>  {
+>  	int order = 0, pagesize = getpagesize();
+>  	unsigned int nr_pages = hpage_size / pagesize;
+> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+> index 072a6c756c517..33ae68d721df9 100644
+> --- a/tools/testing/selftests/mm/vm_util.h
+> +++ b/tools/testing/selftests/mm/vm_util.h
+> @@ -22,10 +22,14 @@
+>  #define PM_SWAP                       BIT_ULL(62)
+>  #define PM_PRESENT                    BIT_ULL(63)
+>
+> +#define KPF_LRU                       BIT_ULL(5)
+> +#define KPF_ACTIVE                    BIT_ULL(6)
+>  #define KPF_COMPOUND_HEAD             BIT_ULL(15)
+>  #define KPF_COMPOUND_TAIL             BIT_ULL(16)
+> +#define KPF_UNEVICTABLE               BIT_ULL(18)
+>  #define KPF_HWPOISON                  BIT_ULL(19)
+>  #define KPF_THP                       BIT_ULL(22)
+> +#define KPF_ZERO_PAGE                 BIT_ULL(24)
+>  /*
+>   * Ignore the checkpatch warning, we must read from x but don't want to do
+>   * anything with it in order to trigger a read page fault. We therefore must use
+> @@ -97,6 +101,8 @@ unsigned long rss_anon(void);
+>  bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size);
+>  bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size);
+>  bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size);
+> +bool check_large_folios(void *addr, size_t len, int nr_hpages,
+> +			uint64_t hpage_size);
+>  int64_t allocate_transhuge(void *ptr, int pagemap_fd);
+>  int pageflags_get(unsigned long pfn, int kpageflags_fd, uint64_t *flags);
+>  int gather_folio_orders(char *vaddr_start, size_t len,
+> --
+> 2.53.0-Meta
+>
+
+--
+Cheers, Lorenzo
