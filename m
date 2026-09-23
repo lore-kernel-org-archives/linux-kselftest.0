@@ -1,111 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A880C1DED42;
-	Wed, 23 Sep 2026 15:27:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70E4F560AA6;
+	Wed, 23 Sep 2026 15:29:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790177256; cv=none; b=OYAv4YjFZxm2E9+VS7Ux/CrBEHJT4Jxa/XFgs6O6f2YpyB4HTdp2b/jEuCt3oTUzE6ewkYkFtb/fYSs3EL4Vs6BoOQ37YoJYdCk9NhA0AdWqFIB+2y8PNi1nJXwRSJGj0kMg35FKIXUtGFcmE9VEfqqgqhxEelZTK93ww/KnXvY=
+	t=1790177406; cv=none; b=Jp/V3q4KGek1cnrRfUn+giN4Wf3QXCGgiPwb3xKNzR1JDG72g056xJjE8/TkzLx8ClcWk/R3AgrDmSFpUjoU2PDa2ePkN+ioV+9mK/mdhIsGaV+uoYELobtyMKmRyMIq2ZqanT5eCfa9QHjOuRV1b7B1uptBRojDXeoVR7hAwkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790177256; c=relaxed/simple;
-	bh=ZmeWKlO1uWXNiNx33YICOyZm9UbJ6iEopwmUDEtFAN0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jiKUBBZluNM2PYF99XyWqD+ZqfNsj24rBbG1NAxCQzohXd4t/Ta7samPSgjw2/m9R6KvOHchX1d3Pfr6lIP3IU+4k9t7m5QsAYmkqz8xPVRbd2PhAJbOzzDA7+QtKNXuzIa78WwXaLCC4Bd+74pXdwh5Z8lkeePls/GX8oi0Tj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jD6dvp/C; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790177406; c=relaxed/simple;
+	bh=bweJ08cI1wxdWcAWpqQUT1byxmSO3PWzKNswFgARuKM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=e9ZEwz5soWBIMrj4JLLO9u7Md/cZ/Tjgr3wVxFbrN8twA2Rm3fsgC3pyVYCfbG83dt5TRnvpXNYl8oWHMwSvG11XvpLBJpqUlHjGcXW/7wiBQ7fbFlLlXffoqAO3eVXkv3Xd5TgfZtofAKymyTsdYQ1Qe4FdDQjPdTVUVwfdA2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=AfsLGFjr; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jD6dvp/C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C0101F000FF;
-	Wed, 23 Sep 2026 15:27:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790177249;
-	bh=gKsiXERWQlR6rp9onnZUafQe9FGJ1g3zTuAUGmAFbnw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=jD6dvp/C6uPldzGalEI3E4WS2qhrxlqI6O4ZPYpP+Cu1fEJIXwq2aVH56QlV/0Jme
-	 7sVMJfV7GmC0UaYErRA3Ug9AttKuZvYvlsQY17faNDwX/lkhou7dZb9WozungbiWDz
-	 c6Ln4RVr1ZImU4ftMon4mL0cu2+sNuR5+WGrZbDxIne8ftEPl0rWNQNoESD17gNn5x
-	 rSw6+gklNudhQnayOR555AQLV/CIXpkwV80n5Da0lFN8nG6/pGbnsGF9ypbaLyW4TI
-	 mrNmts/WGWeqxESg7mwl57+hGxfZtUaYc/zmkVJBi7RGZE8+FW8Fy4YO1YhhcAoiO8
-	 BkxGgyOWPBHSQ==
-Date: Wed, 23 Sep 2026 17:27:26 +0200
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Jing Wu <realwujing@gmail.com>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Tejun Heo <tj@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org,
-	rcu@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Qiliang Yuan <yuanql9@chinatelecom.cn>
-Subject: Re: [PATCH v4 00/11] Dynamic Housekeeping Management (DHM) via
- CPUSets
-Message-ID: <arPv3qvVi6ioCNe3@localhost.localdomain>
-References: <20260710-wujing-dhm-v4-0-2e912e5d9645@gmail.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="AfsLGFjr"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B905F1570;
+	Wed, 23 Sep 2026 08:29:54 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A0863F86F;
+	Wed, 23 Sep 2026 08:29:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1790177398; bh=bweJ08cI1wxdWcAWpqQUT1byxmSO3PWzKNswFgARuKM=;
+	h=From:Subject:Date:To:Cc:From;
+	b=AfsLGFjr9cSIlAfAIMfUc+9MJWm2/Ef0ef1X4C/kNVuAvMMJ1vEQglVmtpK6yXljA
+	 kvMxGTuy2JI7Y46CExkGjM0wTXnvQMXo1BdDwijyzF4kwdh+BBd4HyrlKIvOVlaorZ
+	 048/CMADAO1WF8lx4Gr/+jm0ZyJioNWVqVRtIN6E=
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [PATCH v3 0/2] kselftest: mm: fix intermittent failure khugepaged
+ test
+Date: Wed, 23 Sep 2026 16:29:50 +0100
+Message-Id: <20260923-fix_khugepagd_fail-v3-0-b387e92fe1a9@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260710-wujing-dhm-v4-0-2e912e5d9645@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAG/ws2oC/x2MWwqAIBAArxL7nWAr2eMqESK52lJUKEUQ3T3pc
+ 2BmHkgUmRL0xQORLk68bxlUWcA02y2QYJcZUKKWHSrh+TbLfAY6bHDGW15F1aDS6OvWVQ3k8Ii
+ UrX86jO/7ARHQjxtkAAAA
+To: Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>, 
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
+ Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, 
+ Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Yeoreum Yun <yeoreum.yun@arm.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3121; i=yeoreum.yun@arm.com;
+ h=from:subject:message-id; bh=bweJ08cI1wxdWcAWpqQUT1byxmSO3PWzKNswFgARuKM=;
+ b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBqs/BxkwlkaZg1jFRE9j9tMvyCcftG7cu/ywr9T
+ AE1rxBtk0uJAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCarPwcQAKCRBt1cPRWsUx
+ M67fC/9xYpqodOUkH1uLZ32IFXS3OPOOhVDYcdB02dRNRXhpojFIS5M7G+4C+MoLpVQeIMjNZgo
+ Y/h7iMze3lbooJQYhZqEchwZUsl3+FqXA3hTObs3eQxB+cfEJJmJqyKcuE+8o6elnKegAscWB7Z
+ zvLvZoQdlfvbTzxZG2M2gWixMZH2/Jy4F3cQbocc8T1rtjjyLWAo1l7WWqy7sBcU+zmRXriV+eF
+ kQzCWw7eaXWKMGHIZ6jOmxPFaTwcTL4FmboU+cBY3AQr/4SxSWa5jhLmZKWSLFm61aZsofOmV6k
+ lS5hyCXc9WXEFyTwQO8IulIWkr5Fp0qBesJy89iXX8gunMFRb4JLzgx27KIr6U8JpdGCE3+U/II
+ BIX3M6ACwK3ZZVZ3ejAFLATj8uV/qZ+Bs7oVzboWYqTAX7cbiVj91XRaicrtUXwrZQmVeJKGK2U
+ clppKr2wVkTN+xekeW5wqpdC9gJPdgg22tIoiY2jYF2bt9WxcLXusgEm5P4SPSVXQYu1k=
+X-Developer-Key: i=yeoreum.yun@arm.com; a=openpgp;
+ fpr=2D83E092DD0533B85875A49D6DD5C3D15AC53133
 
-Le Fri, Jul 10, 2026 at 11:28:11AM +0800, Jing Wu a écrit :
-> This series introduces Dynamic Housekeeping Management (DHM) to the Linux
-> kernel, enabling runtime reconfiguration of kernel-noise housekeeping
-> (nohz_full tick suppression, RCU NOCB offloading, and managed IRQ
-> migration) through the existing cgroup v2 cpuset isolated partition
-> mechanism — no new kernel ABI required.
-> 
-> When a cpuset partition is set to isolated mode, DHM cycles each CPU in
-> that partition offline, reconfigures the housekeeping masks (removing the
-> CPU from HK_TYPE_KERNEL_NOISE and related types), and brings it back
-> online.  The subsystems (tick/nohz, RCU NOCB, genirq) pick up the new
-> masks through their existing CPU hotplug callbacks.  Destroying the
-> partition reverses the cycle: each CPU is taken offline, restored to all
-> housekeeping masks, and brought back online.
-> 
-> Housekeeping cpumask pointers are RCU-protected to allow lock-free readers
-> during updates.  A global dhm_cycling_cpus mask suppresses transient
-> cpuset partition invalidation while CPUs are being cycled.
-> 
-> This work is related to Waiman Long's [PATCH-next 00/23] series
-> (20260421030351.281436-1-longman@redhat.com), which also targets runtime
-> cpuset housekeeping control.  DHM's distinguishing feature is zero-boot-
-> parameter activation: nohz_full+nocb isolation can be achieved at runtime
-> without any boot-time nohz_full= or rcu_nocbs= parameters.
-> 
-> Signed-off-by: Jing Wu <realwujing@gmail.com>
-> Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
+There are intermittent failures in collapse_max_ptes_swap() and
+collapse_max_ptes_shared() when using the khugepaged_context:
 
-Sorry for the delay, I'm finally on it.
+  # Run test: collapse_max_ptes_shared (khugepaged:anon)
+  # Allocate huge page... OK
+  # Share huge page over fork()... OK
+  # Trigger CoW on page 1023 of 2048... OK
+  # Maybe collapse with max_ptes_shared exceeded.... OK
+  # Trigger CoW on page 1024 of 2048... Fail
+  Bail out! Unexpected huge page
+  # Planned tests != run tests (26 != 23)
+  # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0
 
-One thing I would like to have is to make HK_TYPE_KERNEL_NOISE to always
-be a superset of HK_TYPE_DOMAIN. Ie: Cpuset's nohz_full should imply
-isolated domain partition. Or to put it another way: a nohz_full CPU should
-always run on isolated domains. If I could do it again, I would enforce
-the boot nohz_full= to always be a subset of isolcpus=domain. But we
-didn't know the possible usecase of it at the time.
+  # Run test: collapse_max_ptes_swap (khugepaged:anon)
+  # Swapout 257 of 2048 pages... OK
+  # Maybe collapse with max_ptes_swap exceeded.... OK
+  # Swapout 256 of 2048 pages... OK
+  Bail out! Unexpected huge page
+  # Planned tests != run tests (26 != 17)
+  # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:0 error:0
 
-Thanks.
+This happens because khugepaged may collapse the pages before wait_for_scan()
+is called, causing a sanity check that expects uncollapsed pages to fail.
 
+For example, in collapse_max_ptes_swap(), after faulting the pages back in
+and paging out up to max_ptes_swap pages, khugepaged may collapse them again
+before c->collapse() is called.
+
+To prevent this, mark the VMA with MADV_NOHUGEPAGE after it has been
+collapsed by wait_for_scan() for anon. This prevents khugepaged from
+collapsing it again before c->collapse() is called.
+
+Also, fix false-positive results when a child process fails in tests
+such as collapse_fork*() or collapse_max_ptes_shared():
+
+  # -------------------------
+  # running ./khugepaged -s 2
+  # -------------------------
+  #
+  # Run test: collapse_max_ptes_shared (khugepaged:anon)
+  # Allocate huge page... OK
+  # Share huge page over fork()... OK
+  # Trigger CoW on page 1023 of 2048... OK
+  # Maybe collapse with max_ptes_shared exceeded.... OK
+  # Trigger CoW on page 1024 of 2048... Fail
+  Bail out! Unexpected huge page
+  # Planned tests != run tests (26 != 23)
+  # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0  // child failed.
+  # Check if parent still has huge page... OK              // parent hpage success
+  ok 24 collapse_max_ptes_shared                           // considered as success
+  ...
+  # Totals: pass:26 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+This failure was observed on NVIDIA Spark with 16KB page.
+
+---
+Changes in v3:
+- using is_anon() instead of comparing name of mem_ops
+- add r-b tag.
+- Link to v2: https://lore.kernel.org/all/20260921-fix_khugepagd_fail-v2-0-3c2877beef61@arm.com/
+
+Changes in v2:
+- remove temporary enabled setup.
+- Link to v1: https://lore.kernel.org/r/20260915-fix_khugepagd_fail-v1-0-bb6f04c8759f@arm.com
+
+---
+Yeoreum Yun (2):
+      kselftest: mm: return fail when child test result is fail in khugepaged
+      kselftest: mm: fix intermittent failure khugepaged test
+
+ tools/testing/selftests/mm/khugepaged.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+---
+base-commit: 685086170033a6ab334f0068cd25dae90fd1bb4e
+change-id: 20260923-fix_khugepagd_fail-172362f58d17
+
+Best regards,
 -- 
-Frederic Weisbecker
-SUSE Labs
+Sincerely,
+Yeoreum Yun
+
