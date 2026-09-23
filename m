@@ -1,405 +1,165 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11020142.outbound.protection.outlook.com [52.101.201.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E71579836
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 20:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790196637; cv=none; b=YDcOqLNukTvj6PToLn+Y/5FHyCoTex2MlicsOMC5MCYfE56VWwWHAWtisiZCek6h/1+z/ktp04/W17PtTKBin5dgHseVG1ZlRhM4ttqt1kTTpJVqJxCt+xuM3r9ZPjLEkCW/vp+hmKtPrfMq1HNIXl1TRMKVvteq7HjsDBSF/C4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790196637; c=relaxed/simple;
-	bh=IR+cFhBQfWRSdMGVpfuBcQw5kzuKhkM3dI8xg87PPUs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C/OkqvIExg4wqj6kZgZphnSU/r3RBSfhEloZMOPyg0hrf0+dypKR2KT3fHlxoNBJWGchTqvirfzBrGVyApP0s7+kzPgLT+2uOJ7rrAXnIGUxb4uNO6GyVLpoXGPQn6QQIfxru5zvQX/H2aVDivstMdevvzisecpd+k0JZ8Aiyt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oKYQz8kK; arc=none smtp.client-ip=74.125.228.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E6C356E067;
+	Wed, 23 Sep 2026 20:51:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.142
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790196667; cv=fail; b=KjxE35GqzAmOyLKObmVioyF99RSjJ7nCPhzhUXaF+dolfmXlY4VH8mFaivfCD9i8Lxv96zLbTHH/5Y+6Dc8GqfnedT+CVCVqqrPPJBfZBqgUQGdwnUFGlg8NGRJTZdZZNox4VFxt/NjOifve2CkjB0R0yieOOZWFcRhvU+0K2vo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790196667; c=relaxed/simple;
+	bh=irM/a+9wZBPefeUtGt2BTB6HzQuwD+vPCBzxOoU2YDs=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=X4kFqBtgNnbS1Hfm3BKtCAU2wOhiv6VqsN0Fc/huyASpLMQ8ObQVc8wARGsaSlBZDy0LptyAFMCYAF1IvFicw+VhpIZ1aTcQNGLFtRoRTUGixSnGGc0jc+rkSdmHOhHKR3zgyGdoZQVgu2rhSpy6jvrrX31nzEKRQ6jQQozLL68=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rambus.com; spf=fail smtp.mailfrom=rambus.com; dkim=pass (2048-bit key) header.d=rambus.com header.i=@rambus.com header.b=R0UyrwZ3; arc=fail smtp.client-ip=52.101.201.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rambus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=rambus.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oKYQz8kK"
-Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc1ceb47d53so334467a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 13:50:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790196635; x=1790801435; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=snlXyVmosKNHZDEUpSvbDeW3MROgMKqCzOa9/2l2FR4=;
-        b=oKYQz8kKag1QgtYGyD6ZP3CuaOLu0JGt11zJ+jD7YhhoUqa575/j7yzioGf775veeJ
-         7wnmcfOae+N1tfGnNGDAEbL402F95za51JW2vSuqiGjmzcnoNSnaZslO4EhL1xWtNSmC
-         UKyMhdDProoLT4twgiLewq6FmgELJd8FzkW87o74XdYBZQQvt+zl3booWB116BUGuh5+
-         F6YpSHuUk62Et7Z/jaEV69/St96jzqX/dO3QFKHhM8SXjvtcg1ULBLP02guCs8yUzsOL
-         Q3ecHnw32s55Ey9P3N96ne0WDluIZgh+ObiO88Zz2yuxolNPL/Y83cPzX0uRgKse/PTA
-         5Gaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790196635; x=1790801435;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=snlXyVmosKNHZDEUpSvbDeW3MROgMKqCzOa9/2l2FR4=;
-        b=tn5dcBy3iKk+cbh7X4tplhZiXEVyhSaz5OqOJUIJVEW00jLRNOozYWdhy0bezYpxlI
-         dVKzg4JoAdFMNi4zYbNEWP0eZGG+T6bg5rGLmVavFxzhH8dVVr+t2hQxsVGKuOYJbHkr
-         sjLWF0eWxds+wtSNsRXr6BrPDKxwJcaAMkdBwc/gK7kf1Fl8to5ZxPnllsHcX7TQH7qP
-         o2KhebCoiE8LVTVpa2zpSK0toKZH3AdTcrXLSWTRZuLNfymP8xFAU60qdobHQQHub+Zt
-         elip+qkMWqW7Maci3yGKeD2NDeY9y7x6YLDTb+GkFhjEZKTdSAEO/f37F2Ij2vampP/v
-         Yu/Q==
-X-Forwarded-Encrypted: i=1; AKwUvBx6WIs7EAzITifvjWVExGDuEOMyXWmulEdEKqFPSalq7j/rVPMz6inYRKqweVZg8XaltPuOV0MECKjUmM7y8dM=@vger.kernel.org
-X-Gm-Message-State: AFuF++nAISl9YMUPZkp/crFFui5LKFe59YzMaUZJUeHNe0diqSGu3u7D
-	e8YwdPTLJtawWvC4ZM3FxuQd47ZAr0tGDKu0uaYYitQ8JUphFeA2p+7O
-X-Gm-Gg: AYBFou0jx1L+1/oXyE76onbbHDNA4bbPklOGQcJAb1ERZu2MNGilE7NnAQKQWI4mUB0
-	1atc16j5BA1+bmrFlFHeErphn03CTNlg4PK1PwRLamx5UcAIfQYMvZMLGK+auc6lEfTBSsHQiVn
-	CqWSd8sVrCWUgeL4hQm1guVgmX8aSPfMNyScTIuWF8zKJrgieuIw3dpj0L6YNc7q4pBd1zrm6ft
-	z5cCf7AEdKx85j6nI6Hl/armfrBKOUEZ9e56ttk+5fF7mZp7enkynHa7ym7bn+qSgd1wehgAgwu
-	01sIhT0aj1N15rF+KlzadXtJ9GA8NV820q89vTSrwIr8xrF6QdEtHdoKrxO42F2z+zNpHea9jp3
-	Af5QN/GM6lfecQJO0Buh+oYbStgTF6e8qY2rqcqmfdl6DjCsedB7IiS/AB+hvAakHO4M9xtYQsN
-	CMM9kxb5UprJ8CUpmdi2ZrVlx5sIbvgCYNyfbuci3bUV6/XKOz7m9s0AeTccMQG4xr635Z
-X-Received: by 2002:a17:90b:3f4d:b0:39e:1bfa:c5f0 with SMTP id 98e67ed59e1d1-3a09860b2b7mr189257a91.5.1790196634676;
-        Wed, 23 Sep 2026 13:50:34 -0700 (PDT)
-Received: from kir-tp1.lan ([67.185.120.12])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a096b8753csm896038a91.0.2026.09.23.13.50.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 13:50:34 -0700 (PDT)
-From: Kir Kolyshkin <kolyshkin@gmail.com>
-To: Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Aleksa Sarai <cyphar@cyphar.com>
-Cc: Kir Kolyshkin <kolyshkin@gmail.com>,
-	Jan Kara <jack@suse.cz>,
-	Jeff Layton <jlayton@kernel.org>,
-	"Eric W . Biederman" <ebiederm@xmission.com>,
-	David Howells <dhowells@redhat.com>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Andrei Vagin <avagin@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Giuseppe Scrivano <giuseppe@scrivano.org>,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	containers@lists.linux.dev
-Subject: [RFC PATCH] mount: add OPEN_TREE_SKIP_MNTNS
-Date: Wed, 23 Sep 2026 13:50:25 -0700
-Message-ID: <20260923205028.711077-1-kolyshkin@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=rambus.com header.i=@rambus.com header.b="R0UyrwZ3"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=CL4Nepd+qLhBtqbr8PcKSeH8QQ7db+kQbM3xzN4wVZM+rPd1oKgXH3cC7MzFuNrFEWUeOqsLgCfeNolulPrjk3F8fNksfhtl24AEjJ/YQA7aDBR0kguGJvAUiEWEdqH4UM+si/TC+7BVF3nZo+Urs0xQseddcSYH640pluxUAOakyzI3M7g5JqyewFuUazhrVq0wgKXoHQ3NsgyuXpsHtEwvCr/2EXhXhjlJPFhyHELO0inTfzsh211QYQo7iwXqbbtliPCukhJYYEH/M0fijhHmedb+SWTy6AQi6Lz+eddoINJ8kr2Uz06/7HiusKl6lvdM2g+bc0OFcucGJ/qW9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RbYlQhT4Aq9TWP2c6LFyxCybJnqxPnaUrNzfPZdEuPc=;
+ b=GW7JCHOLdLUnL7pBW+MNjZgsObZSGPuEYgMj0N6ptmoSQkz5TyNSDEPPbkr42cFW7vzTy8al7mc4NKTuDeFh9nGMXd1UfUfCRM5vE5eX9nyh1rrRkzMaMeA0yf3Fc3QSw6uReAaQbeoInc74Rjkv+R2b8reYRAemUYz2eLjZBb8qZJXt4SCq7oVkTnu6bDKSZR0XuV+KyVoW3lZ+mySPA3jRc8auusuBYdM5I/rwhoGzd8MV1k1y4vDiFyQ/3+IDZKXVJ61bakOj3plx8qu+yue1YVLawrAQC9eZ0vvgCxkFgN8PfNlTZK2ISWB3i8o2bISODL6qBrFjHx3J1oaIsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=rambus.com; dmarc=pass action=none header.from=rambus.com;
+ dkim=pass header.d=rambus.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rambus.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RbYlQhT4Aq9TWP2c6LFyxCybJnqxPnaUrNzfPZdEuPc=;
+ b=R0UyrwZ3DXDke70gm/cAcKAOu/5JoSXw/jKwQB1peleaf+ZeK5P2dy60LGMgoPR1p4aOHO+0qMbVGZJ9inRhqTwdgL73RHqy5ocG7/cZmWINCUgYiEuRsHXNlmhT/s6U4deybvuc8qYp7HzO4L12loac9fXhZBQWi8BAcan6NvID9vLhsAZ5026zEgR10AXqKdWqshm3iPMFA930COfZvbFA57hjGzB9d8yEAhvz4KbYI+ljNf+7A/YRGKC+SEdZm0RrWfv/EkKX6q3q/fSyZjEw2+F75bVekyga7N8TyICQkhF3Fiapgkj2+8QgeQLRbj4uDnS8gLgdPy7UeqjNTQ==
+Received: from LV8PR04MB9006.namprd04.prod.outlook.com (2603:10b6:408:186::11)
+ by LV8PR04MB9241.namprd04.prod.outlook.com (2603:10b6:408:259::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.14; Wed, 23 Sep
+ 2026 20:50:55 +0000
+Received: from LV8PR04MB9006.namprd04.prod.outlook.com
+ ([fe80::3e2f:2514:159c:85b2]) by LV8PR04MB9006.namprd04.prod.outlook.com
+ ([fe80::3e2f:2514:159c:85b2%3]) with mapi id 15.21.0451.014; Wed, 23 Sep 2026
+ 20:50:55 +0000
+From: "Ousherovitch, Alex" <aousherovitch@rambus.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+CC: Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor+dt@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>, Jonathan Corbet <corbet@lwn.net>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Palmer Dabbelt
+	<palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>, Rob Herring
+	<robh@kernel.org>, "Krishnamoorthy, Saravanakrishnan"
+	<skrishnamoorthy@rambus.com>, Shuah Khan <shuah@kernel.org>, Alexandre Ghiti
+	<alex@ghiti.fr>, "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"Wittenauer, Joel" <Joel.Wittenauer@cryptography.com>,
+	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, Shuah
+ Khan <skhan@linuxfoundation.org>, "Nguyen, Thi" <thin@rambus.com>
+Subject: RE: [PATCH v5 04/19] crypto: cmh - add SHA-2/SHA-3/SHAKE ahash
+Thread-Topic: [PATCH v5 04/19] crypto: cmh - add SHA-2/SHA-3/SHAKE ahash
+Thread-Index: AQHdRvg30t1+45dAjEm+KmT5OENVbLbbsCeAgAD8JwA=
+Date: Wed, 23 Sep 2026 20:50:55 +0000
+Message-ID:
+ <LV8PR04MB9006374FD8621EBF3C7E7F6CD7822@LV8PR04MB9006.namprd04.prod.outlook.com>
+References: <20260917225929.2494111-1-aousherovitch@rambus.com>
+ <20260917225929.2494111-5-aousherovitch@rambus.com>
+ <arNn_fjy4jamSitO@gondor.apana.org.au>
+In-Reply-To: <arNn_fjy4jamSitO@gondor.apana.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=rambus.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: LV8PR04MB9006:EE_|LV8PR04MB9241:EE_
+x-ms-office365-filtering-correlation-id: 3f8a87bf-f1d1-4ecd-2227-08df19b45d1f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|23010399003|7416014|376014|1800799024|38070700021|11063799006|56012099006|4143699003|10067099003|18002099003|22082099003;
+x-microsoft-antispam-message-info:
+ hEJ2pw3lF5CpG9i9AXhEm8k6qFDlTehmxpCb7OUxnHjUyBwZmuyRywaZIOlt30BP8iAwXPNaxluzsPMra5qvW21p+Hp/NolPU00gF4QNuRWBTeweOCQ8UbikEWL92lWF3CfUh9w6kq2EefQZeiw6exjtRU7GlGchWo9UUCPoGTGx2LGNKp6hXEK80LlNSh2Xc0Jepa9L6jSKilRMZOLkjZIRXG1u2vxCVB4Q5gRyVKc5DNbnE9Kk2kVCZF5pNfOnJp6hERrXvwaHTV1X6xBSADDXyvLJrBR4KgdY6onkQliBKH+qCxONvGnCjKABlCHumKTQOrjp46XOCNaTKChtNIRw4RG0FDOUNNQXSMN3a5+qPvkWGUzGOOJNv4pOkSS+HBUD0+VVUqsEmZmBGb6Q3H0vRyixeoAPj6woL7f96DxLhlz25TLAlWXVQksM55nL9E60Gtm0g+R7yfM0r0Bu0pjolDPVK+8IUudZSvoni8CVxpsTVlAUuytRkmUR3qCmE5qo/kRUDrxiHkcyEsBt2L+uKmKh5P5AhCd7ht6luN+Ers7pyLOFv7oQFJ4poZVxYxW29Es7NVp8CIgyBf/MVueBazBhIu8+g+U8fS1QwbiXroQrYxo9m4FPABfbNTS+gufDLvPn1dxHyDiwsYyOkWEKhyL8m//cgIoqCjw2l1gGFvIUBRTNGRLXEsk9vpby6q2O26uIRjahdJ1sRSEEZznjAV3EYdNifvyzhVAVa5g=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR04MB9006.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(7416014)(376014)(1800799024)(38070700021)(11063799006)(56012099006)(4143699003)(10067099003)(18002099003)(22082099003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?JOkNtSddroB9sKuxWMQXu6MySCvAQ2aDINDQDIoNVt5DcDV16vfYYNHtAKhV?=
+ =?us-ascii?Q?1yYCkHbF3sAvU/Po8kZA+dgkyjpwJLu4Dtun4mQpmTbUI7A3cgo1ogtRvtMd?=
+ =?us-ascii?Q?qrp1H/jaftF4OBL9vCnfGz2luwmqCaOmnQE9i0lnUcK0x8ehF5C6Yvk5d4ni?=
+ =?us-ascii?Q?8iYtaaEOQlvTFui4H1aYNUVYRnLalckiYVC4q6xFqypBLyUriCu8kmb0HasQ?=
+ =?us-ascii?Q?2VOI+NSbfZJ9Q0J3NjmeV6D6UvkWTGxJ61cbWTrC8N12AXqcCAdc8Tj/UHFj?=
+ =?us-ascii?Q?zcu338yNU+YoRI/g+itg7IIAh7Xw6MaVNeHsAeemjaVOLKBI3hEQlV3S+1F/?=
+ =?us-ascii?Q?0DdrcgHynEsWT/U0Z5noUBTrl3MwJNLg/VkWWyXs6vQefiWH9G6Nmh3bw+SO?=
+ =?us-ascii?Q?WbeUCoDtBDmVXcTOvIRJSs/gBma6c9znkIqsiXIns8LrYhVa8cuewbb2gLjX?=
+ =?us-ascii?Q?LiF6INCP/nksKWY4NjaHSTWw+8NGtYQ7c71lbJU5wlhjsokECWIp6J3220Kj?=
+ =?us-ascii?Q?pn96ab2Ut4epcpPeFQ1zdAxcq1WH4/xV+h2LZ+LN+uCmFen+2Pz73YjwB9Tg?=
+ =?us-ascii?Q?izCLEc9/7NOVBPqiQ61MXtlTPPoiOqTHsrYA9dBuRvC9yQ6rFvkcpddaJbyi?=
+ =?us-ascii?Q?MZWIgdwPwW0RC9zDQQY31IlS1qA/EbWvldMwJMrifTMPDVLuwvrLkFsSpWfc?=
+ =?us-ascii?Q?UiHWBehiJm2HHEC16lm88LHAsLBp3i1ddrHRLUVzqJpDyvWYbVpjN51HbxZM?=
+ =?us-ascii?Q?3Uyi7kmCTC/D5GKbKxbjDmQMeutVKk2cL39mO1bQPYGsolVMO+zweQHlIsVd?=
+ =?us-ascii?Q?0neijWscnECtmm/g5Cu930URsBO/ogrbOTjlNWFVS1lxqh/3gOnVkYBhmo/g?=
+ =?us-ascii?Q?Ca4jSdnYKUB+tXbLBg7VrgipZBA2KRUSDI/VNl8ReVq1qkrC0ZhTUYB7V+x/?=
+ =?us-ascii?Q?PPTA48GiKA46dJhRNY94IfW2Zt7g4Oo1+oK78AncYuZak3Uw849AMjUJ9kr+?=
+ =?us-ascii?Q?i1SY8lNqKKygPKfKW5uNalmvTBTSiMWBNP/koQAVjoLs6mv5iRdC09pcJfm4?=
+ =?us-ascii?Q?h3TPIRRs7s5i3gjYOwG0kiQatYmarGi5erkLP1HW2ZbWSNzFm8O3u2ZePtgG?=
+ =?us-ascii?Q?4kg5888CjxI0NL/r5XT7jHjx+8C31hFVoGMNrs8nXlpxjnRy1oufeqIs+5ll?=
+ =?us-ascii?Q?PDl1mjK4uRcEQDa77P1g0tFw4dCW39WEpv9qBeiCpYxBlO+sByyY8HCHICDi?=
+ =?us-ascii?Q?DAvZT2KFPjMSsqXoI0v0HQcPICFmMILL/Eas6Y8SAs1v7gtlYqDy8d4uJCLD?=
+ =?us-ascii?Q?MfzUFo8B6vIwZ/V3YfnREx8V6jpUrtye7riZiFSAuzWNBbZjtZUsSXmYefdD?=
+ =?us-ascii?Q?MnXIIRJvy1/+g+l3v86dbKcRHZ3YfelWD1nCGAeS8xNxxdNzq7pwwF7UXNqH?=
+ =?us-ascii?Q?Gd8u2Xl0gCe5x0QkG6pKLAh3b3c0p6jM4OQWbw/T7EKfBCooVU4+0cbSfK4H?=
+ =?us-ascii?Q?vsV405Ixw380fpzLL+vK7d/CxFRxoJ4SYvI1gFjF7+Vrxo1jPeC0c+xxQycU?=
+ =?us-ascii?Q?huaWXCEbQEzqYD9gfCyDkMeBE3yGbWM+BCoC7+S2bI6P8gyF1N8aPuU9YT6y?=
+ =?us-ascii?Q?0q6z757jzSroXd7swG0U9rNsN/4qAfSWhQAHzIwXNx1hdRYcIsyi+1LB3abw?=
+ =?us-ascii?Q?2BCD+hPlCITPF3V18Ei6B3r2mA4/L3chD9Mzf3EtkL8cxg53MKDV5DyNBA1s?=
+ =?us-ascii?Q?z3i9Z8fjQQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: rambus.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR04MB9006.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f8a87bf-f1d1-4ecd-2227-08df19b45d1f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2026 20:50:55.6655
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: bd0ba799-c2b9-413c-9c56-5d1731c4827c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: EBPMC5B0wd+HyIGhH4S694BMr424WdIYZvJqDfPtsDRugB/joEzQBxj4NzCXWBEBNUJRmeFqznZV/3nR8FrMxo6FRdI7xOqUydnVO4/IY4Q=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR04MB9241
 
-crun, a container runtime, recently started using OPEN_TREE_NAMESPACE to
-set up the container's mount namespace, and open_tree(OPEN_TREE_CLONE)
-for the sources of its bind mounts.  This turns out not to work on hosts
-that have a mount namespace pinned anywhere below such a source: the
-recursive clone picks the pinned namespace up, and move_mount(2) then
-refuses to attach the tree with ELOOP from check_for_nsfs_mounts().
-This was reported to crun in [1].
+On Wed, Sep 23, 2026 at 03:47:41PM +1000, Herbert Xu wrote:
+> Why did you set the NO_FALLBACK flag? This is only meant to be used
+> by very specific cases such as s390.
 
-The rule behind that goes back to commit 8823c079ba71 ("vfs: Add setns
-support for the mount namespace"), which requires "all bind mounts be of
-a younger mount namespace into an older mount namespace" so that mount
-namespace reference loops cannot form.  OPEN_TREE_NAMESPACE ends up on
-the wrong side of it by construction: the namespace it creates is younger
-than everything else on the system, so from inside it every pinned
-namespace is older.
+Being async, these algs get NEED_FALLBACK forced by ahash_prepare_alg()
+unless NO_FALLBACK is set, so crypto_ahash_init_tfm() tries to allocate a
+same-name synchronous REQ_VIRT provider -- which doesn't work here:
 
-By the time this fails there is nothing userspace can do.  setns() has
-already run, so the host tree is unreachable by path; it is unreachable
-through a fd saved beforehand as well, since mount(2) requires the source
-to live in the current mount namespace; and the offending mounts cannot
-be dropped from the detached copy first, because umount(2) requires
-check_mnt().  So a runtime cannot fall back to the pivot_root() path at
-that point -- it has to predict the situation before setns(), which is
-what crun now does, at the cost of the optimization on every such host.
+- shake128/256, cshake, kmac and poly1305 have no matching provider
+  registered in this tree, so the allocation fails and the transform can't
+  be created at all. NO_FALLBACK is required to instantiate them.
 
-Every other path that crosses a mount namespace boundary already leaves
-these mounts behind: copy_mnt_ns() passes CL_COPY_UNBINDABLE | CL_EXPIRE,
-and create_new_namespace() passes no CL_COPY_MNT_NS_FILE either -- the
-latter deliberately, per the comment added in commit 9b8a0ba68246
-("mount: add OPEN_TREE_NAMESPACE"): "When creating a new mount namespace
-we don't want to copy over mounts of mount namespaces to avoid the risk
-of cycles".  Only get_detached_copy() asks for them, inherited from the
-unconditional CL_COPY_MNT_NS_FILE that predates that exception.
+- sha2, sha3 and sm3 do have a software provider, so the transform loads,
+  but the auto-fallback can't stand in for the hardware on the streaming
+  path: our exported state is the opaque HW save/restore checkpoint, not
+  the canonical state, so a multi-part export/import round-trip through the
+  fallback misinterprets it (and for SHA-2/SHA-3 the statesize exceeds
+  HASH_MAX_STATESIZE, so ahash_do_req_chain() returns -ENOSYS). A one-shot
+  digest could still use the software provider, but a fallback that only
+  covers one-shot and corrupts streaming isn't usable.
 
-Add a flag so a caller can ask for a clone without them, as suggested by
-Aleksa when the exception was introduced [2]:
+Same flag as s390, same underlying reason -- no generic transform can stand
+in for the hardware -- though the obstruction differs: protected keys
+there, opaque (and for SHA-2/SHA-3 oversized) HW state here.
 
-    I kind of think this is a somewhat theoretical issue but I don't
-    think we'll be bitten by it. My gut feeling is that I'd prefer this
-    to be an OPEN_TREE_* flag that you have to set (so we can support
-    this in the future) but that's kinda ugly too...
-
-Keep it opt-in rather than changing the default.  A clone attached in the
-caller's own namespace, or in an older one, keeps such mounts usable, and
-open_tree(OPEN_TREE_CLONE) plus move_mount(2) is what mount --rbind is
-through a file descriptor, so dropping them by default would make
-mount --rbind / /mnt silently lose /run/snapd/ns/*.mnt on a live system.
-Only a caller heading into a younger namespace, where the tree is refused
-anyway, has reason to ask for this.
-
-With OPEN_TREE_NAMESPACE, which never copies these mounts, the flag is
-accepted and has no effect, so a runtime can pass it unconditionally.
-Locked nsfs mounts are skipped the same way copy_mnt_ns() already skips
-them, so this exposes nothing new.
-
-Link: https://github.com/containers/crun/issues/2262 [1]
-Link: https://lore.kernel.org/all/2026-01-07-oldest-grim-captions-spills-ywC2O3@cyphar.com/ [2]
-Assisted-by: Claude:claude-opus-5
-Signed-off-by: Kir Kolyshkin <kolyshkin@gmail.com>
----
- fs/namespace.c                                |  14 +-
- include/uapi/linux/mount.h                    |   1 +
- .../open_tree_ns/open_tree_ns_test.c          | 183 ++++++++++++++++++
- 3 files changed, 196 insertions(+), 2 deletions(-)
-
-diff --git a/fs/namespace.c b/fs/namespace.c
-index ae5dc64f8b45..165750b3d666 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -3062,7 +3062,8 @@ static struct mnt_namespace *get_detached_copy(const struct path *path, unsigned
- 			ns->seq_origin = src_mnt_ns->ns.ns_id;
- 	}
- 
--	mnt = __do_loopback(path, (flags & AT_RECURSIVE), CL_COPY_MNT_NS_FILE);
-+	mnt = __do_loopback(path, (flags & AT_RECURSIVE),
-+			    (flags & OPEN_TREE_SKIP_MNTNS) ? 0 : CL_COPY_MNT_NS_FILE);
- 	if (IS_ERR(mnt)) {
- 		emptied_ns = ns;
- 		return ERR_CAST(mnt);
-@@ -3204,7 +3205,16 @@ static struct file *vfs_open_tree(int dfd, const char __user *filename, unsigned
- 
- 	if (flags & ~(AT_EMPTY_PATH | AT_NO_AUTOMOUNT | AT_RECURSIVE |
- 		      AT_SYMLINK_NOFOLLOW | OPEN_TREE_CLONE |
--		      OPEN_TREE_CLOEXEC | OPEN_TREE_NAMESPACE))
-+		      OPEN_TREE_CLOEXEC | OPEN_TREE_NAMESPACE |
-+		      OPEN_TREE_SKIP_MNTNS))
-+		return ERR_PTR(-EINVAL);
-+
-+	/*
-+	 * Only meaningful when a tree is copied.  OPEN_TREE_NAMESPACE never
-+	 * copies pinned mount namespaces, so there the flag is a no-op.
-+	 */
-+	if ((flags & OPEN_TREE_SKIP_MNTNS) &&
-+	    !(flags & (OPEN_TREE_CLONE | OPEN_TREE_NAMESPACE)))
- 		return ERR_PTR(-EINVAL);
- 
- 	if ((flags & (AT_RECURSIVE | OPEN_TREE_CLONE | OPEN_TREE_NAMESPACE)) ==
-diff --git a/include/uapi/linux/mount.h b/include/uapi/linux/mount.h
-index 2204708dbf7a..86082344fc0e 100644
---- a/include/uapi/linux/mount.h
-+++ b/include/uapi/linux/mount.h
-@@ -63,6 +63,7 @@
-  */
- #define OPEN_TREE_CLONE		(1 << 0)	/* Clone the target tree and attach the clone */
- #define OPEN_TREE_NAMESPACE	(1 << 1)	/* Clone the target tree into a new mount namespace */
-+#define OPEN_TREE_SKIP_MNTNS	(1 << 2)	/* Omit pinned mount namespaces from the clone */
- #define OPEN_TREE_CLOEXEC	O_CLOEXEC	/* Close the file on execve() */
- 
- /*
-diff --git a/tools/testing/selftests/filesystems/open_tree_ns/open_tree_ns_test.c b/tools/testing/selftests/filesystems/open_tree_ns/open_tree_ns_test.c
-index 82f3c8c02c9a..5b95180a4582 100644
---- a/tools/testing/selftests/filesystems/open_tree_ns/open_tree_ns_test.c
-+++ b/tools/testing/selftests/filesystems/open_tree_ns/open_tree_ns_test.c
-@@ -14,6 +14,7 @@
- #include <limits.h>
- #include <linux/nsfs.h>
- #include <sched.h>
-+#include <signal.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-@@ -28,6 +29,10 @@
- #include "../utils.h"
- #include "../../kselftest_harness.h"
- 
-+#ifndef OPEN_TREE_SKIP_MNTNS
-+#define OPEN_TREE_SKIP_MNTNS (1 << 2)
-+#endif
-+
- #ifndef OPEN_TREE_NAMESPACE
- #define OPEN_TREE_NAMESPACE	(1 << 1)
- #endif
-@@ -1004,4 +1009,182 @@ TEST_F(open_tree_ns_unbindable, recursive_skips_on_unbindable)
- 	close(fd);
- }
- 
-+/*
-+ * Pin a mount namespace at @where, the way snapd does under /run/snapd/ns.
-+ * The namespace has to be younger than ours, so a child unshares and the
-+ * parent binds the child's namespace file: binding one's own namespace is
-+ * refused by the very check this test is about.
-+ */
-+static int pin_mount_namespace(const char *where)
-+{
-+	int pipefd[2], status, ret = -1;
-+	char path[PATH_MAX];
-+	pid_t pid;
-+	char c;
-+
-+	if (pipe(pipefd))
-+		return -1;
-+
-+	pid = fork();
-+	if (pid < 0)
-+		goto out;
-+	if (pid == 0) {
-+		close(pipefd[0]);
-+		if (unshare(CLONE_NEWNS))
-+			_exit(1);
-+		/* Tell the parent the namespace exists, then hold it open. */
-+		if (write(pipefd[1], "x", 1) != 1)
-+			_exit(1);
-+		pause();
-+		_exit(0);
-+	}
-+
-+	close(pipefd[1]);
-+	pipefd[1] = -1;
-+	if (read(pipefd[0], &c, 1) != 1)
-+		goto out_kill;
-+
-+	snprintf(path, sizeof(path), "/proc/%d/ns/mnt", pid);
-+	if (mount(path, where, NULL, MS_BIND, NULL))
-+		goto out_kill;
-+
-+	ret = 0;
-+
-+out_kill:
-+	kill(pid, SIGKILL);
-+	waitpid(pid, &status, 0);
-+out:
-+	close(pipefd[0]);
-+	if (pipefd[1] >= 0)
-+		close(pipefd[1]);
-+	return ret;
-+}
-+
-+FIXTURE(open_tree_ns_skip_mntns)
-+{
-+	char dir[64];
-+	char pin[PATH_MAX];
-+	bool mounted;
-+};
-+
-+FIXTURE_SETUP(open_tree_ns_skip_mntns)
-+{
-+	int fd, ret;
-+
-+	self->mounted = false;
-+	snprintf(self->dir, sizeof(self->dir), "/tmp/open_tree_ns_skip_mntns.XXXXXX");
-+
-+	ret = sys_open_tree(-1, NULL, 0);
-+	if (ret == -1 && errno == ENOSYS)
-+		SKIP(return, "open_tree() syscall not supported");
-+
-+	/*
-+	 * Work in a private mount namespace, so whatever is mounted here,
-+	 * the pinned namespace included, goes away with the test process.
-+	 */
-+	if (unshare(CLONE_NEWNS))
-+		SKIP(return, "unshare(CLONE_NEWNS) failed: %s", strerror(errno));
-+	ASSERT_EQ(mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL), 0);
-+
-+	ASSERT_NE(mkdtemp(self->dir), NULL);
-+	if (mount("tmpfs", self->dir, "tmpfs", 0, NULL))
-+		SKIP(return, "Failed to mount tmpfs");
-+	self->mounted = true;
-+
-+	fd = sys_open_tree(AT_FDCWD, self->dir,
-+			   OPEN_TREE_CLONE | OPEN_TREE_SKIP_MNTNS |
-+			   OPEN_TREE_CLOEXEC);
-+	if (fd < 0 && errno == EINVAL)
-+		SKIP(return, "OPEN_TREE_SKIP_MNTNS not supported");
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+
-+	snprintf(self->pin, sizeof(self->pin), "%s/ns", self->dir);
-+	fd = open(self->pin, O_CREAT | O_RDONLY | O_CLOEXEC, 0600);
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+	ASSERT_EQ(pin_mount_namespace(self->pin), 0);
-+}
-+
-+FIXTURE_TEARDOWN(open_tree_ns_skip_mntns)
-+{
-+	if (self->mounted)
-+		umount2(self->dir, MNT_DETACH);
-+	rmdir(self->dir);
-+}
-+
-+/* Attach @clone_fd at "/" inside the namespace @ns_fd; returns errno. */
-+static int move_into_namespace(int clone_fd, int ns_fd)
-+{
-+	pid_t pid;
-+	int status;
-+
-+	pid = fork();
-+	if (pid < 0)
-+		return -1;
-+	if (pid == 0) {
-+		int target;
-+
-+		if (setns(ns_fd, CLONE_NEWNS))
-+			_exit(255);
-+		target = open("/", O_PATH | O_DIRECTORY | O_CLOEXEC);
-+		if (target < 0)
-+			_exit(255);
-+		if (sys_move_mount(clone_fd, "", target, "",
-+				   MOVE_MOUNT_F_EMPTY_PATH | MOVE_MOUNT_T_EMPTY_PATH))
-+			_exit(errno);
-+		_exit(0);
-+	}
-+	if (waitpid(pid, &status, 0) != pid || !WIFEXITED(status))
-+		return -1;
-+	return WEXITSTATUS(status);
-+}
-+
-+TEST_F(open_tree_ns_skip_mntns, move_into_younger_namespace)
-+{
-+	int clone_fd, ns_fd;
-+
-+	ns_fd = sys_open_tree(AT_FDCWD, self->dir,
-+			      OPEN_TREE_NAMESPACE | OPEN_TREE_CLOEXEC);
-+	ASSERT_GE(ns_fd, 0);
-+
-+	/*
-+	 * Without the flag the clone carries the pinned namespace along,
-+	 * and move_mount() refuses it from inside a younger namespace.
-+	 */
-+	clone_fd = sys_open_tree(AT_FDCWD, self->dir,
-+				 OPEN_TREE_CLONE | AT_RECURSIVE | OPEN_TREE_CLOEXEC);
-+	ASSERT_GE(clone_fd, 0);
-+	EXPECT_EQ(move_into_namespace(clone_fd, ns_fd), ELOOP);
-+	close(clone_fd);
-+
-+	/* With the flag the pinned namespace is left out. */
-+	clone_fd = sys_open_tree(AT_FDCWD, self->dir,
-+				 OPEN_TREE_CLONE | OPEN_TREE_SKIP_MNTNS |
-+				 AT_RECURSIVE | OPEN_TREE_CLOEXEC);
-+	ASSERT_GE(clone_fd, 0);
-+	EXPECT_EQ(move_into_namespace(clone_fd, ns_fd), 0);
-+	close(clone_fd);
-+
-+	close(ns_fd);
-+}
-+
-+TEST_F(open_tree_ns_skip_mntns, flag_combinations)
-+{
-+	int fd;
-+
-+	/* Nothing is copied, so there is nothing to skip. */
-+	EXPECT_LT(sys_open_tree(AT_FDCWD, self->dir,
-+				OPEN_TREE_SKIP_MNTNS | OPEN_TREE_CLOEXEC), 0);
-+	EXPECT_EQ(errno, EINVAL);
-+
-+	/* OPEN_TREE_NAMESPACE never copies them; the flag is a no-op there. */
-+	fd = sys_open_tree(AT_FDCWD, self->dir,
-+			   OPEN_TREE_NAMESPACE | OPEN_TREE_SKIP_MNTNS |
-+			   AT_RECURSIVE | OPEN_TREE_CLOEXEC);
-+	EXPECT_GE(fd, 0);
-+	if (fd >= 0)
-+		close(fd);
-+}
-+
- TEST_HARNESS_MAIN
--- 
-2.55.0
-
+Thanks,
+Alex
