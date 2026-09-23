@@ -1,68 +1,69 @@
 Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F7C2F25E4
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 00:37:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738AF309EE2
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 00:37:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790123825; cv=none; b=im6aSCcZPv3Zl94tQeDwfNDg5qREmUYNp2d0L4Tjj/iBtNSAnTn6QHfQuNrKX3W5jh3STQSILlFQaXmuP5phAWJhFs7GnfTUvSAC7F6TOh6Nr/GOgqLxujj+6n5XGvCqw9s9pjz4I73k+xg3H0blMXT9wgDIXPh32xXMdFhvna4=
+	t=1790123827; cv=none; b=UUkmssZ0In3NslrBF/JAZ/iSx3Ww8PtByliWmLi8fo4VsnNRJqMOkU1xvq/Z+jm4bNXRh0thS3qt+sXrvgsoN9BcDl6nJFQ6v5M/Scnxs0YwolitFih02RKl74gEnilAItLcHmKn7MglHVUcUMLqIqAGNs3EsEMQ0DYwasNxAto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790123825; c=relaxed/simple;
-	bh=ZzM+CCCQqrBBbllRZD9oibWkuHbAMqZCqBVIxEMPmh8=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TPS7h9PKBM7tWdvg5+hKnOboBdo5qE4hyNxaO837gQT86SEi0n+uPY+CIGMgacuk4K2yDbsgErZNjD75Y5ZX3HNEJ7rME8W+bgxHAIF3juIQpSoKgk2337MMdmpF9Mn70ToWC943WWvmSPNu3NmdGjewVpdxeDgeNN60VT3zdVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RhN5iqRn; arc=none smtp.client-ip=74.125.228.12
+	s=arc-20240116; t=1790123827; c=relaxed/simple;
+	bh=4GmpNfU3LQJSJpqQsR6/KFUehJWyBgCDEINSJI93IoU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=M8l4oC14gbfVYCjezrxIn+Pw+1yy6gJEWbdFGHSZ7bRWe2dCWtTw6RlNCXlFcby6idNzVZ5jnkHuVZHYb4R4Zy7eDdzsqr1MSseBLE9T5SDwUHbvdV+ls0IbNSujHlD23eohQHKH6efICAwQa2MBZ5emEOYKiQG73nmOO7VXFTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aJveOrB0; arc=none smtp.client-ip=74.125.228.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RhN5iqRn"
-Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-8692a8568e9so230964b3a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 17:37:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aJveOrB0"
+Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469b2e1d5so276461b3a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 17:37:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790123822; x=1790728622; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=CZBn+eDayIvlQNT7notJ1Nrx/JVsU458mj9MKMefVpw=;
-        b=RhN5iqRn+PPr4+HkDgBJSL7gYcyQTpk4rmYkvRuH7Q9rV2zrGB6Ji4Rv6QXd71nJ1h
-         Lfrfz/eQP1X479wY64SOB/fU5TvlvEB2+CRvDIxj6VJMinymZTJh0bAmVd0E60UsajTd
-         2EaURTJ9SoQ239bZwFuZ/RdVL9LwEZefzsZT2f0ISF6Kff1145D0q4YIdPBPFl6w8LwT
-         ZqMCOTMNz6Ug2oSpOyss129xe+RqIeuWO029MTzM+vovqqfF37G+OItap2qrgifsGR3N
-         7fOQ2bwZtBba2C2Q4t7a/NBguISLLLakjaHq5naDGEMkPS9IajQCB9oavMYTToGbEmaf
-         c15g==
+        d=gmail.com; s=20251104; t=1790123826; x=1790728626; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=hr/q+PFpOYwfdPGF3n4BjUmiJpuCV+tZ3wvtyOR+SaI=;
+        b=aJveOrB0Mra2DE7rRtm4jSoFHGhSRfwfiHF6IAzvI2+qiUMe2/TqHK1wzPcnGROmDN
+         Yjm4CnDbH9yxAfX87R/bjReLg3lEr09B4M8P7xXt84uGQPvBfAh0CCN+ipdRc5ZPLLIq
+         ahzs0Y69rFMW9b8QpF0GmLKCbhoXoxkkUHZD6J45ncLHYO/rN2Rn5F41pRu4ShJJri9u
+         EafLif2Czzfa4/5OacdWbZMmvrweSQqYazisfeoNVPNcHKK03PfQ4YWBxaFB4OrULJdX
+         Dz0Q8w8MvzRfWNdPMumLqrWaWtfSR4F8ZcA/1RlHAZa/EF2xSly7i2GPbpvAPZIt166n
+         bsNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790123822; x=1790728622;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=CZBn+eDayIvlQNT7notJ1Nrx/JVsU458mj9MKMefVpw=;
-        b=A1nVBHWr4Yw/pexoKns8u8eUExfXljczdIWwdZKx4aPKg770Ou7A9Cc8Pitf7qQGsS
-         XO5WpznIS+QXOzfTypme4Yn1CdlU16xghr8VeFNCkJkBEwqkVcLN3oMhemIUb0NfRrba
-         U29Nxyq6bNshVSgTlHULIEAZn7E2mPSll6yfiMiAbdM8A/Ad3Jcb8YFgHVoHwS1PqjtI
-         t01/GzcPSVQWyd4Gtn0I7M97MbLOwYg1xjtiKTlT6vttLe86l4NIL4pxCSJZbpXvoMAq
-         8f+hF25mafl2KYdAzDWCuuwr94HP+vJ503rSGinRcopy6j+xTKA6v0UG9XgwZv++RLey
-         QaNw==
-X-Forwarded-Encrypted: i=1; AKwUvBwNGiGianDM/3hHlrewChUiTtjrfTppazI6FaFQIImRZJ1ReqLxr4GjET5qRzdjqUjb0EDq8oaYRmhL6k3+m5I=@vger.kernel.org
-X-Gm-Message-State: AFuF++muCZJThKXJvw1bH5waayjuc4CDKfHHZET0cMeOaRUJCOvTZX6U
-	W4QqaJql9cFP+OVO4CdrNhK01xUXy6rJX/B41NLn+O2daxRQUJ9X1tnH
-X-Gm-Gg: AYBFou3iZ/BGm/DoqPXnlW6A/iTISGesfdi45SJjR89o8gkD3VICk2rjv8G5TyTvd7c
-	bNcbH1VRXo+hgREkR+9WL/hBcCbcBBbYbU2F4Zztp/EjqRAnIaFfAg1sQpSXK/ypvrbQ0YGe9AN
-	rB9YaFv5MiaDuUQTUqGU0iPLEPw3RDZOooaO8r0bVrhuDQI630DFIXk0vsys5kuCmPy4kj3hpBT
-	VdVWZKDntuVW/c/MnH6+p+Kp1CyN2ZivIpHX0wL6W7jk87TaT2+DxUGCdU0Zm/kQ1VYLnmzT8Z9
-	hJ7ay3jTIFMt4OhvcPhbanbcoremBCBTZMhq2X0aufms81IAp4QFpU5rDZaLVWt+UcUNmaDXegZ
-	A1Wma1WwZ+w3CUps20JCpoaZQXSXDcAMXBOtzPCkCMKja7QZct8lFa5w4pZq5kMyO6FGbJd0j/1
-	ENHJCMzzkVTZl8cjJpNTqf30B9hy9ZyK742SHeJHZ5Vf5DaOyZxgD1yiNyOlbMhoJuuw4afDtTy
-	hhNGa+AzgRR+IFh/9yE
-X-Received: by 2002:a05:6a00:1749:b0:878:3830:a48b with SMTP id d2e1a72fcca58-87d1c5ba947mr1135793b3a.59.1790123822185;
-        Tue, 22 Sep 2026 17:37:02 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790123826; x=1790728626;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hr/q+PFpOYwfdPGF3n4BjUmiJpuCV+tZ3wvtyOR+SaI=;
+        b=PNJAc+xHx8ndrGRpyRLZq+I65hG5B15QRayPzdv1vvIVyAnmun88U7CKjFJlh7WsP5
+         VB0EBFTCM+eCI5+XigwQPe3CZM+ulcMYYGyZoTMMAvp0XGQRAKy+QVM7A2DnZGwhBdQy
+         7zT6tRjVEj2IRXPmy3/og83VFazJ6krrgtF/2uLSe7TLTAuVFo3Eg/jOHkuS/kyKECwX
+         JNmFV1peMFcNsXvk6OFAkAhZu3SU04Mb01yRIznbWKuaxD2hFrn4Tq5sBAa+PqRMHJON
+         D7OIuVNyjk/tbfQYmX9zIQmmla9lfKH35li/6bO0r/EY9NF+DS4TuVHrt/U1It4XnAjd
+         xHkw==
+X-Forwarded-Encrypted: i=1; AKwUvBw4Sn+PkwtHG7PD3J0Jy0Bs/HuGJVuYY6fbcEaCki+INADr3RiN5fnuk0i1VGUgmVMoWl4goF/BY9gAYJ/rHMk=@vger.kernel.org
+X-Gm-Message-State: AFuF++m7sFgsLvvumWfFRUqEAzULyS6+ObkvIBYZnE+nNNFNuN5DmWq1
+	tHE+MbQ5NbZQCVtPnYsF2HCH7+SaKL4BDj9mSj9+/rEyMIlPwdfeb1ra
+X-Gm-Gg: AYBFou2KfgVmpkxzLzI4F+RhSzJwtWz5bsam09o5T/ApF1fTtk62SD9ew63JvHmjuCz
+	RnlpYUFhmNa8XW1KL/jYlrmF+X1KnFirJCP9K6rTzT5FsemoWbqyuIkksntTcoU3HIYFsGq1vA+
+	wv6M5f1Q3ZIONC7kZBAjgWDk9YcoQKUq6DQta5+QTvov0yi5zsdp8nKIhqk9FyjhkrVE8vcuGTF
+	If09PD6kpx4N4dofY0q6WGN3Zf2c1b3jP1HsDqYPE1mHrBJXGeEDStGAbibMck2ooz/5twHYnHz
+	cVinYDXa0KrLLZ5XvNbtPzMnw6Y656QTVSX9VIFJm2QsPeXGhyLt675SJPrx4U8jloxJFSGr8it
+	+QPqWeORo9p0SKfOLRQzTeeWfCHCtiv/OEQApGizMx/xctFRv2or21zcKvIqm9wda1vEgwcCrGA
+	tLvR9QhHVrUJJ77idryIokwBql33El+iTM9ZSQPoph6awiez6jy0izKf8N2GJAYsvBZrwJ4Fkv6
+	g7RFz82pQ==
+X-Received: by 2002:a05:6a21:8209:b0:3cd:61d5:f342 with SMTP id adf61e73a8af0-3ddf7caaa23mr1367384637.9.1790123825606;
+        Tue, 22 Sep 2026 17:37:05 -0700 (PDT)
 Received: from [163.43.103.131] ([163.43.103.131])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1dff9778sm427895b3a.49.2026.09.22.17.36.58
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1dff9778sm427895b3a.49.2026.09.22.17.37.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 17:37:01 -0700 (PDT)
+        Tue, 22 Sep 2026 17:37:05 -0700 (PDT)
 From: Yuya Kusakabe <yuya.kusakabe@gmail.com>
-Subject: [PATCH net 0/4] net: lwtunnel: accept encap attributes without
+Date: Wed, 23 Sep 2026 09:36:56 +0900
+Subject: [PATCH net 1/4] net: lwtunnel: accept RTA_ENCAP without
  NLA_F_NESTED
-Date: Wed, 23 Sep 2026 09:36:55 +0900
-Message-Id: <20260923-lwt-encap-noflag-v1-0-8de7ab6c86e9@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,10 +72,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIACcfs2oC/yWMQQqDMBAAvyJ77kJM0dZ+pXhY043dIqsk0Qri3
- 03rcQZmNogchCM8ig0CLxJl1AzlpQD3Ju0Z5ZUZrLG1aco7Dt+ErI4m1NEP1CPxranIX01XWcj
- ZFNjL+l8+QTlBe8o4dx926TeDfT8AgJR5GXkAAAA=
-X-Change-ID: 20260918-lwt-encap-noflag-ae795af30b52
+Message-Id: <20260923-lwt-encap-noflag-v1-1-8de7ab6c86e9@gmail.com>
+References: <20260923-lwt-encap-noflag-v1-0-8de7ab6c86e9@gmail.com>
+In-Reply-To: <20260923-lwt-encap-noflag-v1-0-8de7ab6c86e9@gmail.com>
 To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -89,75 +89,141 @@ To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Yuya Kusakabe <yuya.kusakabe@gmail.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2608;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4481;
  i=yuya.kusakabe@gmail.com; h=from:subject:message-id;
- bh=ZzM+CCCQqrBBbllRZD9oibWkuHbAMqZCqBVIxEMPmh8=;
- b=owEBbQKS/ZANAwAIASrX0XUqXRtNAcsmYgBqsx8pEqF5NV94MtMGYigX0r6FVebRw/ek6cZ+c
- ZDAAJBL4HWJAjMEAAEIAB0WIQTaB7usAfxNKMeqa6Yq19F1Kl0bTQUCarMfKQAKCRAq19F1Kl0b
- TabtEADK21qqwY+zxEap8CxTUPOMXvvY5Z2WT5fsC41gOfVWdYzjTTVxGKMffF8zeJWcKhpRK9n
- UQfM4/8/hSisIorrmyK+YLKr3r9+paZ95647p2YpL1hHlhIa6DzoZe9yufEqN7fCtz8mud2yimg
- Y+FpHJT0tHcqwNgbVg1M1SNRN6+oZ5QhQ2Vggc85JcEw7r12hMy5Spuf7FiTzztl6iS3REDOfka
- XwNKXSV1Ua0rpDaxKdC7DTgfzcO37H8Clq/bDgz4kx/sV7sl0w9lCJvNWat5EBJDivLcEOGdPhH
- /fOlXeEXkCCIrEdYhzbYESZ61Y75O3RZEkPAnSXBBlYucSQ5t5TNHRYU6uJAiNhUG1Tm24t7CYq
- LoTUCacZAcw+TOhhfZz9HtexR1gTU01zfLsqBee9kgjPIxCrNczUEWZBmRRP0UxPkUhnWPLGmBJ
- iv2MzySiAaUbxOjAUzPgzWwybYgFLGbiMhj48NjY/WxQTcnL0WMCIoNSsP5Q96kM9940OosRzgD
- 74Yjr1X7faMiFasvKDPF/H1AZtS3HJvDbyMXRrZ8fpFvP5fq4eEdi/1GlOP4NXb27AZzgqINy6k
- DSON0talx13U/+OlVfhMqmTdzHMwuV+SpBWqgxULeVjIyzvEm4ZzbMsJMoQO5zvBNvx6SqNUY95
- 1cXmOQPMgxtA7Jw==
+ bh=4GmpNfU3LQJSJpqQsR6/KFUehJWyBgCDEINSJI93IoU=;
+ b=owEBbQKS/ZANAwAIASrX0XUqXRtNAcsmYgBqsx8pyJmi0jAqYRMcjxJXjhNdLthCsldl2TNYY
+ eoZwTVjneuJAjMEAAEIAB0WIQTaB7usAfxNKMeqa6Yq19F1Kl0bTQUCarMfKQAKCRAq19F1Kl0b
+ TblhEACVx9cyL9CTQZ3/LW7LeTj/pABjToLaFkHgZfuwSHVlBzTS3yu2+krdGau9EL0CJLVq188
+ r59Ar1A4fN6ev/mtkMZTb9m4UFSvhfuQrsbbQ9Zd0LGFxxkkWuJ170XfUk55jGj9oRDhwwSBp7a
+ iuLADGLOepwwxQK8MKiJrvr7lGnEq6Q9C0dia8k8T+eKEhaPKiQsUnXsCZY9MJq3pLZjNhcdNw5
+ 10rk+G6Hl4EHEYcBhJxVyntwoGR2ef6ADM5ih30/hCbD85BnpUkawKwFUgHkwkgy9JHYHQBQRNJ
+ STemUUjI372w6gVbvk3c4sjuxyGn0rOujU09KGmhYa7wJVctO8SX4Ry0lmeXH687Un/dzUdu0Q+
+ 438+cRsJ3+IPhbkdFjdx0bJuig9BFP75GU0naBgDbpPbi1vCJL9OKz6yGUJN2M6YXnrOQiuyqll
+ eAYAsp5rr9u4yEQmWMbCLjiA0rs6awRsRbGu0jpM04Dvz2grecEaGjWpba3JliD0QFjXzOwexGr
+ v0L3BDfh1TPlLJh1E9aghLCjpGZzg4Hk1N6y5VDou+ZyJeWhwuirNZwA/bI/I7FOqRErShqf+OP
+ 4xIHAxSaMT1DqeWZxWWnvi4HR8Zy5sW2vGYbOZ7SikZV6jM2OeAAXF1KHdZPnOqwH8JLWhp1SoQ
+ ETkdu7NZ992w6Zw==
 X-Developer-Key: i=yuya.kusakabe@gmail.com; a=openpgp;
  fpr=DA07BBAC01FC4D28C7AA6BA62AD7D1752A5D1B4D
 
-"ip route save" stores a route dump and "ip route restore" sends it
-back to the kernel unchanged.  The kernel dumps RTA_ENCAP, and some of
-the attributes nested in it, without NLA_F_NESTED, but rpl, ioam6,
-xfrm and the geneve, vxlan and erspan options of the ip and ip6 encaps
-require the flag when parsing them.  Restoring such a route fails with
-"NLA_F_NESTED is missing", and none of them has been restorable in any
-release.
+lwtunnel_fill_encap() dumps RTA_ENCAP without NLA_F_NESTED, and
+"ip route restore" sends the routes saved by "ip route save" back to
+the kernel unchanged.  rpl and ioam6 break on the same path:
+lwtunnel_build_state() hands the restored RTA_ENCAP to their
+build_state callbacks, which parse it with nla_parse_nested() and so
+require the flag.  Restoring an rpl route fails as below, and an ioam6
+route fails with the same error:
 
-Setting the flag in the dumps would change the UAPI: userspace that
-does not mask it off the attribute type, such as parse_rtattr() in
-iproute2, would no longer find RTA_ENCAP, and dumps that have already
-been saved would still fail.  The series therefore only makes the
-parsers accept what the kernel itself dumps.  The dumps, and the
-attributes accepted with the flag set, stay as they are.
+  # ip -6 route add 2001:db8:1::/64 encap rpl segs 2001:db8::2 dev dummy0
+  # ip -6 route save 2001:db8:1::/64 > route.bin
+  # ip -6 route del 2001:db8:1::/64
+  # ip -6 route restore < route.bin
+  Error: NLA_F_NESTED is missing.
 
-Patch 1 adds lwtunnel_nla_parse() to the lwtunnel core, so that the
-missing flag is documented once next to the build_state callback
-instead of being worked around in each lwtunnel.  It is
-nla_parse_nested() without the flag check: the nested attributes are
-still validated strictly, which nla_parse_nested_deprecated(), used by
-the older lwtunnels, would not do.  Patch 1 uses it in rpl and ioam6,
-and patch 2 in xfrm.
+Setting the flag in the dump is not an option: userspace that does not
+mask it off the attribute type, such as parse_rtattr() in iproute2,
+would no longer find RTA_ENCAP.
 
-Patch 3 does the same for the ip and ip6 encaps, whose geneve, vxlan
-and erspan options are nested one level further down: the level shared
-by all options is validated through lwtunnel_nla_validate(), the
-counterpart of lwtunnel_nla_parse() for nla_validate().  Nothing but
-the NLA_F_NESTED check is relaxed.
+Add lwtunnel_nla_parse(), which validates the nested attributes
+strictly but does not require the flag on RTA_ENCAP itself, and use it
+in rpl and ioam6.  Switching them to nla_parse_nested_deprecated()
+instead would also make them accept unknown attributes, which they have
+rejected since they were added.
 
-Patch 4 adds a selftest that saves and restores a route of each kind.
-
+Fixes: a7a29f9c361f ("net: ipv6: add rpl sr tunnel")
+Fixes: 3edede08ff37 ("ipv6: ioam: Support for IOAM injection with lwtunnels")
+Assisted-by: LLM
+Signed-off-by: Yuya Kusakabe <yuya.kusakabe@gmail.com>
 ---
-Yuya Kusakabe (4):
-      net: lwtunnel: accept RTA_ENCAP without NLA_F_NESTED
-      xfrm: lwtunnel: accept RTA_ENCAP without NLA_F_NESTED
-      net: ip_tunnel: accept tunnel options without NLA_F_NESTED
-      selftests: net: add lwtunnel route save and restore test
+ include/net/lwtunnel.h    | 27 +++++++++++++++++++++++++++
+ net/ipv6/ioam6_iptunnel.c |  4 ++--
+ net/ipv6/rpl_iptunnel.c   |  4 ++--
+ 3 files changed, 31 insertions(+), 4 deletions(-)
 
- include/net/lwtunnel.h                          |  49 ++++++++++
- net/ipv4/ip_tunnel_core.c                       |  24 +++--
- net/ipv6/ioam6_iptunnel.c                       |   4 +-
- net/ipv6/rpl_iptunnel.c                         |   4 +-
- net/xfrm/xfrm_interface_core.c                  |   3 +-
- tools/testing/selftests/net/Makefile            |   1 +
- tools/testing/selftests/net/lwt_save_restore.sh | 116 ++++++++++++++++++++++++
- 7 files changed, 186 insertions(+), 15 deletions(-)
----
-base-commit: 17741334d00bf5ebd37f8c1c36bc9c146a351deb
-change-id: 20260918-lwt-encap-noflag-ae795af30b52
+diff --git a/include/net/lwtunnel.h b/include/net/lwtunnel.h
+index 26232f603e33..046978d6224c 100644
+--- a/include/net/lwtunnel.h
++++ b/include/net/lwtunnel.h
+@@ -6,6 +6,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/skbuff.h>
+ #include <linux/types.h>
++#include <net/netlink.h>
+ #include <net/route.h>
+ 
+ #define LWTUNNEL_HASH_BITS   7
+@@ -37,6 +38,7 @@ struct lwtunnel_state {
+ };
+ 
+ struct lwtunnel_encap_ops {
++	/* encap may lack NLA_F_NESTED, parse it with lwtunnel_nla_parse() */
+ 	int (*build_state)(struct net *net, struct nlattr *encap,
+ 			   unsigned int family, const void *cfg,
+ 			   struct lwtunnel_state **ts,
+@@ -53,6 +55,31 @@ struct lwtunnel_encap_ops {
+ 	struct module *owner;
+ };
+ 
++/**
++ * lwtunnel_nla_parse - parse the attributes nested in an lwtunnel encap
++ * @tb: destination array with maxtype+1 elements
++ * @maxtype: maximum attribute type to be expected
++ * @nla: encap attribute passed to &lwtunnel_encap_ops.build_state, or an
++ *	attribute nested in it
++ * @policy: validation policy
++ * @extack: extended ACK report struct
++ *
++ * The encap attribute, and some of the attributes nested in it, have always
++ * been dumped without NLA_F_NESTED, and userspace such as "ip route restore"
++ * sends a dump back unchanged, so the flag cannot be required on @nla.
++ * The attributes nested in @nla are still validated strictly.
++ *
++ * Return: 0 on success or a negative error code.
++ */
++static inline int lwtunnel_nla_parse(struct nlattr *tb[], int maxtype,
++				     const struct nlattr *nla,
++				     const struct nla_policy *policy,
++				     struct netlink_ext_ack *extack)
++{
++	return nla_parse(tb, maxtype, nla_data(nla), nla_len(nla), policy,
++			 extack);
++}
++
+ #ifdef CONFIG_LWTUNNEL
+ 
+ DECLARE_STATIC_KEY_FALSE(nf_hooks_lwtunnel_enabled);
+diff --git a/net/ipv6/ioam6_iptunnel.c b/net/ipv6/ioam6_iptunnel.c
+index cfb2c41634a0..946c360ff214 100644
+--- a/net/ipv6/ioam6_iptunnel.c
++++ b/net/ipv6/ioam6_iptunnel.c
+@@ -113,8 +113,8 @@ static int ioam6_build_state(struct net *net, struct nlattr *nla,
+ 	if (family != AF_INET6)
+ 		return -EINVAL;
+ 
+-	err = nla_parse_nested(tb, IOAM6_IPTUNNEL_MAX, nla,
+-			       ioam6_iptunnel_policy, extack);
++	err = lwtunnel_nla_parse(tb, IOAM6_IPTUNNEL_MAX, nla,
++				 ioam6_iptunnel_policy, extack);
+ 	if (err < 0)
+ 		return err;
+ 
+diff --git a/net/ipv6/rpl_iptunnel.c b/net/ipv6/rpl_iptunnel.c
+index 4e10adcd70e8..1861af408bbc 100644
+--- a/net/ipv6/rpl_iptunnel.c
++++ b/net/ipv6/rpl_iptunnel.c
+@@ -78,8 +78,8 @@ static int rpl_build_state(struct net *net, struct nlattr *nla,
+ 	if (family != AF_INET6)
+ 		return -EINVAL;
+ 
+-	err = nla_parse_nested(tb, RPL_IPTUNNEL_MAX, nla,
+-			       rpl_iptunnel_policy, extack);
++	err = lwtunnel_nla_parse(tb, RPL_IPTUNNEL_MAX, nla,
++				 rpl_iptunnel_policy, extack);
+ 	if (err < 0)
+ 		return err;
+ 
 
-Best regards,
---  
-Yuya Kusakabe <yuya.kusakabe@gmail.com>
+-- 
+2.50.1
 
