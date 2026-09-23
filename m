@@ -1,69 +1,70 @@
-Received: from mail-oa2-f13.google.com (mail-oa2-f13.google.com [74.125.231.77])
+Received: from mail-oo2-f41.google.com (mail-oo2-f41.google.com [74.125.231.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12CAD480321
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 22:35:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25FD558597A
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 22:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790202914; cv=none; b=XNkBcLG+dxRl2YqdARkh+UaJJI+wv5/5Ag8KLGl35/vWj9CWBWgjex+uCYrzpDiOkiqcWdPC+i00UQC0nWEuHXmbiWAMxf2NjIWi452OJ2YOhDJ4CTpJbvEAVTWjideNrdAiuwntNtehX8vQu1N47QCLO1AyVw3CfBCucVdYVoQ=
+	t=1790202916; cv=none; b=h5dxiw61+lHavXsIpiz/3K4dudu6Dd2HixbcXQ36p/2LhrYkwhpsnwUXBBrkL5uHUFFInOkQdB80JcqkRatI2YWTH5cOeQ+NOGcZBhoE+CUWWGtjeBaPxYEu7hPc9Z2nwnQmNRbruq2FBBznNo8o2fA0AeZwVpvxjnrhvtG9fzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790202914; c=relaxed/simple;
-	bh=ml40cmjzxtrf3Bvbi3lIAJ2QHYRkkDLZZIaCKIgr/es=;
+	s=arc-20240116; t=1790202916; c=relaxed/simple;
+	bh=PHoWIplF+5KumvZl2vjWPwHFDGEYzydpXULFGLWX+GU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=I562lyaBSQukHVqlApbjKzgwqXKPtlpyxe6QqW6sVAnUVgKY7RI/fnmqMLdvJHKhFi1SfqcG5rGCgWyXKiat85vcc4m8H7OhhoRxoI0mlgNU7bckX73j6RqGws1btxjfNQXgytUzCQ5yKm8VY1NHuu6/J8fAICbf0/aheAQwvK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TslpXBeF; arc=none smtp.client-ip=74.125.231.77
+	 In-Reply-To:To:Cc; b=ic3LrJeldXOYi0/06jCe4WGAxcRkRoO5vFhURISpYDrlZMCOQGeZ7KdJYfHQNJHx10nyYk0zJr1LqYsMeZ/0Y9MGZD3QQz3aFco5V6CoVGSpnPzxujNAh7DIjybyY1YDnig5oXWaYJ0hezJMTiTXRjnEIKqOkuG3NRYL7dnmnVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e3NilJ3x; arc=none smtp.client-ip=74.125.231.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TslpXBeF"
-Received: by mail-oa2-f13.google.com with SMTP id 586e51a60fabf-466ccdd7695so552753fac.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 15:35:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e3NilJ3x"
+Received: by mail-oo2-f41.google.com with SMTP id 006d021491bc7-6b1ae7166ebso944276eaf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 15:35:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790202908; x=1790807708; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790202911; x=1790807711; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=tyjwdfVrmPgp6hGCYII9VT8nDqkKsW9B1PNZk9gEMUU=;
-        b=TslpXBeFvkMzJQoiVSz+OU8cFkVXvlABGsQU2cWbbpjmZ9t3EJ6xiAz9yHDmkcvQKC
-         oWukLjBzvHUz9/eAKO6+9w9uchpYCjPm/n40n97iNCiQvHYhKg+wO4/jC2RInotUBLgc
-         PXNVELF5oObvbUs3pKPmdFAmYWuIbnBk1e32oKDJDT2U65aLsBkXC306LRfrhdrWtYVw
-         GWMH52z0LyLK17YsvAF6GliYfFGNvtxlF++oR6w/hqDgXmajxovuaFS2zKkkIXLGX1uN
-         e7gv3oL8En6vUroCkb7QExHCHCgcs0ku0RLH4aM9W4n/jZEQ1BSjyWDs4xryp2yOZ7ka
-         /2xg==
+        bh=iEU8DzU4LKP6MP5zfWJjBY2eD90eHdHMK7FISxZUBG0=;
+        b=e3NilJ3xbyb/PEwpfWk1K8V4GMCtU9iHuarvkMD6BSq/xw1CLuL7Sa0PecrlaubRcV
+         gEH84jgCsdlC6fm1K3bPIznqCGdxDUakwJOacvUO+npr2oTeN5X6lc9Bh5hwLNLas0zh
+         WHzi3ODd9BSfuRBkGJGrlDa/RJJ12meP0WNSAL53QGZN7qXvS/Srb/baVrCPeUJf8m3r
+         5odELXXEIInNTIRNLmi2FN5nN0foQbHYHpTeu21R8wFLEgaS28dgjugPq6wPmJTPmshk
+         Xq/kqKZxUV/nVlyJxd365bQqMgF0/hnfCfMwhtkQzjaSyDxCLmpC3VxVXgReccwm5tby
+         7BwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790202908; x=1790807708;
+        d=1e100.net; s=20260707; t=1790202911; x=1790807711;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=tyjwdfVrmPgp6hGCYII9VT8nDqkKsW9B1PNZk9gEMUU=;
-        b=w6ZZ8M1Qj0MqnIjiTgqoBxEelsir36LMWYH+ePlpklkm4U5eQyr7Kh+MtplUWg0J+h
-         WRG9USrhDoviCVM+pEEsQRxjJx65BOqnGPRYghA7aYcl4y6YfifFktO+5x0eWQDEZTkP
-         wTkDNNGowXRj0EXqZvqW39sWe7H7+GhxueB/MDPWpeXpAK+iprW0omyt66Qh2Aox6Ql7
-         UemV4n2qGdX3TdURc8c20KyT/7hUUz23/g3iYUHj931Cbk1rptDJrTmrPpMAX+rCc40G
-         XvqGI6H8rGofirk17RXJhvCjz05C7VTeDLepbKuucGgaPIorAaRRlW71PUUhFnAowVPP
-         +zwQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwBC1Ov7pq4d5G2LDm62OwqbPvJH2vB6u5tGfNtTgUtTOYCEjfqRkueYnahfUtUtPAjnfz9v8m8nB0Ih6gDbAo=@vger.kernel.org
-X-Gm-Message-State: AFuF++lKW0qR95I6v5JpFaz4jxgZ/Rf/gULUGYSjRxW0tAwqrRVNHSKK
-	NctZ9pCM7+KDBtG16molTM0pfQIrGOidLKgb0PEsOspxrswyQYPypC9Y
-X-Gm-Gg: AYBFou0Dof5Mi2sZy6/JWbjTOabpQb68wPNPYtb8Klpi04niY3SlpKjj4cMjEOOCUER
-	8MPDHmOEDh/2raBw5W1r9h+tgt7nKQg6j6ktSbxMQveaUlfHud93rLVOLSujFs/wHxSKjTrnkqa
-	+IYkX/u4DFp+oLL5M/FnTEls5idQReZbYL2niLr7RD67brNiUlZzVqZyJ2PJJN8fnE9PYtTIfI4
-	SyL+rE7oxLsYz+6oS9h6ILyPhDgUrECafzDfutFjq/07QpcUDqXBfXT7pgOa7S9mYlrZ47xzimE
-	sEb3qM1aYZDTjAReY8p3cFFp/BlXjDa90V7WzXjFG7QdsbrjLNnD7lbII3bBtoNSas2WSDM4lk2
-	5l/D7BU+DiSQJdApxfaYe+4SPpH3tqN+h/apXDb3VgTVUsWFetmcTub1G0mbKEJwmfXk8EmjgHb
-	ytMedjUtyg7aN2h55CmmlZJcbY9IL4KBsXRfTDEiIU4bniIQbH5l9fBZq2ejKhWZ/ZNv0L9gF/j
-	bR83YnDdYSeBhr1vxaqxs7DXPElZJ2jCn7+l+S3V2km03vmdSEHSqzb4PDR1oKsXdMBg+C7Ekkn
-	nyARBgbfTfBM3SJNzLk=
-X-Received: by 2002:a05:6871:385e:b0:46b:b3f:dea6 with SMTP id 586e51a60fabf-491e52958demr665978fac.7.1790202908085;
-        Wed, 23 Sep 2026 15:35:08 -0700 (PDT)
+        bh=iEU8DzU4LKP6MP5zfWJjBY2eD90eHdHMK7FISxZUBG0=;
+        b=tRpMRqkTfMx1FRmZEcb0iAg64vMGEqnxQMB++lKkoO3aOFEXzFMYfweGNxEujqtzlI
+         jHXz/rTHJFz5gPcdBHFa7OposWQakzFMOH2G+Ezbj70s/oEK8qL9m6iRyf2A5DdZewPD
+         8AZZNM9xJB8v4MYbjYUADzHtwxIy4RxjGNG6G1souU8stvcYOoUIkvvN/rGCOhqR/iPY
+         9fDES1CIZzaCYd3osPF6wNRr0tN/krxxW9K/1O0hHlA+gi4FHOsWN0K4BAxzq0UmC1qZ
+         My0z4QpO2YrS4O7CJim4fhY6EuJug2tTl67QRZX3Ft/t2inQ+/UhvijrOvWvHrKmC8ix
+         ZHdg==
+X-Forwarded-Encrypted: i=1; AKwUvBwfLJ/2LVWed8rPsUyRpaXKibbWAAFjZKoBPx1moV+1qPrECnOFogoEuN7ZlcZonwtdKsfo8EMbWNYMW2X8TUs=@vger.kernel.org
+X-Gm-Message-State: AFuF++lIrfmGCYOEs0OdDrWhjPYTqWo2/pFJBEMf+BRG3gJuLgw3SZi3
+	KVXjqG8NuNSkNRjJL5Lndbf9r6/eJRH2iYH894Pp4u5veVIAsUlL4j4+
+X-Gm-Gg: AYBFou1MZIqi4/PF0an0Ktyyvj7LDgAltd3ptwHMpMwFvAwwLmH7d05zTdfFyHXzHco
+	DD8wej3Q47G4sz/af2k9+/vV0COGTyvimjgmWSVa86+Ii3Y9S9buv8fDq1e1gnhB0tD8PPcJDqU
+	BcQ6dQE3XqZqJ/1nm7YteACqhpjJqHFpHGr/4IArvNagqXuXKLCBIDP2YlW62f+vmIEkqqhMBcg
+	kg3mHRniXTPZnkx1BMmdjlAjI+gMvnYgUl1aGtRWWVzMTVfdDh7l5UJ6zO+mPhp1I62X9PkvsgI
+	HTBSdWS91tme+K9McuvOySVYBO+/YfdNWIXq3WEnNwY8cwf5TMaNC8ureG/jvy7WOuUzu4yAhjG
+	p4nVZNY7JDL2VgSfMlFqCTrausUa3pN4bOGkwJAHo/mNsOqhTesLV2kvUKmc1KUiCWshr6hfWfw
+	EFEzvVe7Cb8YnqGzWQu+KjrnpCyonwys8h+HCvgT5z4UF0kwzrkZDNPlfboC4zPf1jjjJ9CSrHn
+	ikVKw8Ci/X1LR3kbuHKkqWkTy+q7rPPoJQ2Jlf2ipbCnWkyElQQlu81M8uHTbCmjjhD6qZWKfx8
+	P2ezQOiLD0/fM0JU+dA=
+X-Received: by 2002:a05:6820:1f11:b0:6be:4eb3:e1be with SMTP id 006d021491bc7-6d43fe7221bmr682739eaf.39.1790202910732;
+        Wed, 23 Sep 2026 15:35:10 -0700 (PDT)
 Received: from [100.82.231.29] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 586e51a60fabf-491ee1ac486sm559401fac.16.2026.09.23.15.35.05
+        by smtp.googlemail.com with ESMTPSA id 586e51a60fabf-491ee1ac486sm559401fac.16.2026.09.23.15.35.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 15:35:07 -0700 (PDT)
+        Wed, 23 Sep 2026 15:35:09 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Wed, 23 Sep 2026 16:34:37 -0600
-Subject: [PATCH v11 13/38] dyndbg: reduce verbose/debug clutter
+Date: Wed, 23 Sep 2026 16:34:38 -0600
+Subject: [PATCH v11 14/38] dyndbg: Bind callsites and classmaps to
+ DDEBUG_MODNAME
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,7 +73,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260923-dd-cmap-part2-clean-v11-13-9b6c217fdf2f@gmail.com>
+Message-Id: <20260923-dd-cmap-part2-clean-v11-14-9b6c217fdf2f@gmail.com>
 References: <20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com>
 In-Reply-To: <20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com>
 To: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, 
@@ -97,299 +98,144 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
  linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-kbuild@vger.kernel.org, linux-pm@vger.kernel.org, 
- Jim Cromie <jim.cromie@gmail.com>, 
- Louis Chauvet <louis.chauvet@bootlin.com>
+ Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790202874; l=12932;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790202874; l=5456;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=ml40cmjzxtrf3Bvbi3lIAJ2QHYRkkDLZZIaCKIgr/es=;
- b=FhqZfiHcjr4v2FdMRPTHtgX6vUxhn8e+wVgVAU7voI1qOrio6hR2WdBkJEaUWlYgYMekDAL8N
- AnzsWAIJFOiD9d/IYHtmh5q4ktcpHWyKQpU4UTEc945oVF5S4tKagk6
+ bh=PHoWIplF+5KumvZl2vjWPwHFDGEYzydpXULFGLWX+GU=;
+ b=LjYzw8LB+6ZB21y1mMCWFEMn/XAOgL43i4lFx863vkE7v0z325lnonpCcasvD71zJJpFrS42U
+ AX9WB85DgD+DgWvAaQU7P6zjMY5/w4G0hoNtK1VONpxpL4pCJa4wwW5
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-currently, for verbose=3, these are logged (blank lines for clarity):
+Currently, dyndbg binds KBUILD_MODNAME directly into callsite and
+classmap declarator macros.
 
- dyndbg: query 0: "class DRM_UT_CORE +p" mod:*
- dyndbg: split into words: "class" "DRM_UT_CORE" "+p"
+For built-ins, KBUILD_MODNAME defaults to the basename of the source
+file. For many subsystems, this fragments what should be a single
+module into separate file basenames: kernel/power/ produces "main",
+"suspend", "hibernate", "snapshot", and "swap" when all should be
+"power". Conversely, multiple unrelated built-in files across the tree
+(init/main.c, kernel/power/main.c) all collide under "main".
 
- dyndbg: op='+'
- dyndbg: flags=0x1
- dyndbg: *flagsp=0x1 *maskp=0xffffffff
+While consolidating these fragments into unified subsystem names is
+desirable for query targeting and classmaps, attempting a bulk heuristic
+renaming across Kbuild introduces broad churn and disrupts control file
+output across the kernel. Module naming should remain under explicit
+maintainer control instead.
 
- dyndbg: parsed: func="" file="" module="" format="" lineno=0-0 class=...
- dyndbg: no matches for query
- dyndbg: no-match: func="" file="" module="" format="" lineno=0-0 class=...
- dyndbg: processed 1 queries, with 0 matches, 0 errs
+Define DDEBUG_MODNAME in include/linux/dynamic_debug.h guarded with
+#ifndef, defaulting cleanly to KBUILD_MODNAME. Bind DDEBUG_MODNAME into
+callsite and classmap declarator macros instead of hardcoding
+KBUILD_MODNAME.
 
-That is excessive, so this patch:
- - shrinks 3 lines of 2nd stanza to single line
- - drops 1st 2 lines of 3rd stanza
-   3rd line is like 1st, with result, not procedure.
-   2nd line is just status, retold in 4th, with more info.
+This establishes an opt-in hook allowing subsystem maintainers to
+consolidate their module fragments if desired (e.g. via
+ccflags-y += -DDDEBUG_MODNAME='"power"' in a subsystem Makefile)
+while preserving existing module-name invariants by default.
 
-New output:
-
- dyndbg: query 0: "class DRM_UT_CORE +p"
- dyndbg: split into words: "class" "DRM_UT_CORE" "+p"
- dyndbg: op='+' flags=0x1 maskp=0xffffffff
- dyndbg: processed 1 queries, with 0 matches, 0 errs
-
-Also drop several verbose=3 messages in ddebug_add_module.  When
-modprobing a module, dyndbg currently logs/says "add-module", and then
-"skipping" if the module has no prdbgs.  Instead just check 1st and
-return quietly.
-
-Unmatched query diagnostics are intentionally restricted to verbose
-level 3 (v3pr_info_dq) to reduce dmesg output clutter on standard
-verbose levels (verbose=1 and verbose=2), aligning with the overall
-de-cluttering of dynamic debug logging.
+What's Unchanged:
+- Default module names remain strictly identical to KBUILD_MODNAME.
+- Zero callsite memory overhead or layout changes in struct _ddebug.
+- dynamic_debug/control output remains unchanged across the tree.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
-v7: update fingerprints of grammar-errs changed here
-v4: rename vpr_dq_info to v3pr_dq_info to tell its active logging level
-    adjust some vX levels per doc'd intentions
-v2: RvB after SoB
+ include/linux/dynamic_debug.h                      | 12 +++++++--
+ .../selftests/dynamic_debug/dyndbg_selftest.sh     | 29 +++++++++++-----------
+ 2 files changed, 25 insertions(+), 16 deletions(-)
 
-trivial change to verbose-debug output line to output the actual
-"module" keyword rather than "mod:", and do so only when the module is
-constrained by the callchain (ie as part of a modprobe).
-
- was:   query X: "(keyword value)* [+-=]flags" mod:*
- now:   query X: "(keyword value)* [+-=]flags"
-   or   query X: module FOO "keyword value)* [+-=]flags"
-
-IOW, adjust output to reflect the input grammar more closely.
----
- lib/dynamic_debug.c                                |  24 ++---
- .../selftests/dynamic_debug/dyndbg_selftest.sh     | 120 ++++++++++-----------
- 2 files changed, 70 insertions(+), 74 deletions(-)
-
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index a0723343e2a7..d0e793a05655 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -128,7 +128,7 @@ do {								\
- #define v3pr_info(fmt, ...)	vnpr_info(3, fmt, ##__VA_ARGS__)
- #define v4pr_info(fmt, ...)	vnpr_info(4, fmt, ##__VA_ARGS__)
+diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+index baf5c0853f45..85863e24ad13 100644
+--- a/include/linux/dynamic_debug.h
++++ b/include/linux/dynamic_debug.h
+@@ -10,6 +10,14 @@
  
--static void vpr_info_dq(const struct ddebug_query *query, const char *msg)
-+static void v3pr_info_dq(const struct ddebug_query *query, const char *msg)
- {
- 	/* trim any trailing newlines */
- 	int fmtlen = 0;
-@@ -284,9 +284,6 @@ static int ddebug_change(const struct ddebug_query *query,
- 	}
- 	mutex_unlock(&ddebug_lock);
+ #define __DDEBUG_ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
  
--	if (!nfound && verbose)
--		pr_info("no matches for query\n");
--
- 	return nfound;
- }
- 
-@@ -495,7 +492,6 @@ static int ddebug_parse_query(char *words[], int nwords,
- 		 */
- 		query->module = modname;
- 
--	vpr_info_dq(query, "parsed");
- 	return 0;
- }
- 
-@@ -519,7 +515,6 @@ static int ddebug_parse_flags(const char *str, struct flag_settings *modifiers)
- 		pr_err("bad flag-op %c, at start of %s\n", *str, str);
- 		return -EINVAL;
- 	}
--	v3pr_info("op='%c'\n", op);
- 
- 	for (; *str ; ++str) {
- 		for (i = ARRAY_SIZE(opt_array) - 1; i >= 0; i--) {
-@@ -533,7 +528,6 @@ static int ddebug_parse_flags(const char *str, struct flag_settings *modifiers)
- 			return -EINVAL;
- 		}
- 	}
--	v3pr_info("flags=0x%x\n", modifiers->flags);
- 
- 	/* calculate final flags, mask based upon op */
- 	switch (op) {
-@@ -549,7 +543,7 @@ static int ddebug_parse_flags(const char *str, struct flag_settings *modifiers)
- 		modifiers->flags = 0;
- 		break;
- 	}
--	v3pr_info("*flagsp=0x%x *maskp=0x%x\n", modifiers->flags, modifiers->mask);
-+	v3pr_info("op='%c' flags=0x%x maskp=0x%x\n", op, modifiers->flags, modifiers->mask);
- 
- 	return 0;
- }
-@@ -578,7 +572,7 @@ static int ddebug_exec_query(char *query_string, const char *modname)
- 	}
- 	/* actually go and implement the change */
- 	nfound = ddebug_change(&query, &modifiers);
--	vpr_info_dq(&query, nfound ? "applied" : "no-match");
-+	v3pr_info_dq(&query, nfound ? "applied" : "no-match");
- 
- 	return nfound;
- }
-@@ -601,7 +595,10 @@ static int ddebug_exec_queries(char *query, const char *modname)
- 		if (!query || !*query || *query == '#')
- 			continue;
- 
--		vpr_info("query %d: \"%s\" mod:%s\n", i, query, modname ?: "*");
-+		if (modname)
-+			v2pr_info("query %d: module %s \"%s\"\n", i, modname, query);
-+		else
-+			v2pr_info("query %d: \"%s\"\n", i, query);
- 
- 		rc = ddebug_exec_query(query, modname);
- 		if (rc < 0) {
-@@ -1168,11 +1165,10 @@ static int ddebug_add_module(struct _ddebug_info *di, const char *modname)
- {
- 	struct ddebug_table *dt;
- 
--	v3pr_info("add-module: %s.%d sites\n", modname, di->num_descs);
--	if (!di->num_descs) {
--		v3pr_info(" skip %s\n", modname);
-+	if (!di->num_descs)
- 		return 0;
--	}
++/*
++ * DDEBUG_MODNAME: Subsystem/module name hook for callsites and classmaps.
++ * Defaults to KBUILD_MODNAME.
++ */
++#ifndef DDEBUG_MODNAME
++#define DDEBUG_MODNAME KBUILD_MODNAME
++#endif
 +
-+	v3pr_info("add-module: %s %d sites\n", modname, di->num_descs);
- 
- 	dt = kzalloc_obj(*dt);
- 	if (dt == NULL) {
+ /*
+  * An instance of this structure is created in a special
+  * ELF section at every dynamic debug callsite.  At runtime,
+@@ -121,7 +129,7 @@ struct ddebug_class_param {
+ 	static struct ddebug_class_map __aligned(8) __used		\
+ 		__section("__dyndbg_classes") _var = {			\
+ 		.mod = THIS_MODULE,					\
+-		.mod_name = KBUILD_MODNAME,				\
++		.mod_name = DDEBUG_MODNAME,				\
+ 		.base = _base,						\
+ 		.map_type = _maptype,					\
+ 		.class_names = _var##_classnames,			\
+@@ -160,7 +168,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)	\
+ 	static struct _ddebug  __aligned(8)			\
+ 	__section("__dyndbg") name = {				\
+-		.modname = KBUILD_MODNAME,			\
++		.modname = DDEBUG_MODNAME,			\
+ 		.function = __func__,				\
+ 		.filename = __FILE__,				\
+ 		.format = (fmt),				\
 diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-index 50916583cb2b..a7a554bffebf 100755
+index a7a554bffebf..c279c795867b 100755
 --- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
 +++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-@@ -315,66 +315,66 @@ modular_tests=(
- # ==============================================================================
- function GOLDEN_RECORDS {
-     cat << 'EOF' | {
--#K= b938440930e5f1297d524e6c0c1ec85c FT_grammar_errs.1
--#K= b9a397e807148d13ba07da7db7e69817 FT_grammar_errs.2
--#K= 5abefa504937a329f974504f1896e368 FT_grammar_errs.3
--#K= 1d94d0f239bf40bf51280caeab499de0 FT_grammar_errs.4
--#K= 9a5e1c1856f1ebbe57a4afdfc4c9703a FT_grammar_errs.5
--#K= b3809a6f9f643f049f1ef30827d4b001 FT_grammar_errs.6
--#K= 5d400aad1a7d71f548b6b81274d00a55 FT_grammar_errs.7
--#K= 61cd359b10f9051862d3745eda07a295 FT_grammar_errs.8
--#K= 567379f4f4d099f00f37d1469d9370bd FT_grammar_errs.9
--#K= 31a026d10f85e8f4c9f8cf3e1cef3c61 FT_grammar_errs.10
--#K= ba62952b671a553d4b14e344a61926f7 FT_grammar_errs.11
--#K= 49aec6c2e99cc70a1e4137f86e94f6f4 FT_grammar_errs.12
--#K= cc02cccf15988a98dfd5b1df1e492e31 FT_grammar_errs.13
--#K= 2bbf3fac2b77b88b6cebe459ff9631d3 FT_grammar_errs.14
--#K= 93b67411c254875a6bae5c01c0239729 FT_grammar_errs.15
--#K= b22f2efe54a1637156b9521b2794806e FT_grammar_errs.16
--#K= de410dba40d8b097524f91da8ae2b1c5 FT_grammar_errs.17
--#K= 6c922048c21f6198720dfd68ae16fdad FT_grammar_errs.18
--#K= 4ddd57e9cbc3da2613ac59eb285ad8c1 FT_grammar_errs.19
--#K= ba65062f6be00a1d04907dd176d26c19 FT_grammar_errs.20
--#K= 94cdf3b32afa4f12a00a704208aa2e53 FT_grammar_errs.21
--#K= 1f6fedfe222af475211b3bfc6d08bc63 FT_grammar_errs.22
--#K= c67dfeca97697b707acdd70672816dff FT_grammar_errs.23
--#K= 9574dbfdac063409b41a44e6251fbcd9 FT_grammar_errs.24
--#K= 3c694a0ee2cf3a1d39f2ca8a9f3b9094 FT_grammar_errs.25
--#K= c23be05426c8727be833ff055944aa96 FT_grammar_errs.26
--#K= cdddf4ffd7fde3c12eb0c73770b872bf FT_grammar_errs.27
--#K= cdf7a2e2740ec007efbd29feda478420 FT_grammar_errs.28
--#K= f6650d69963cef433c50e1f2acb899fc FT_grammar_errs.29
--#K= e150a96693eb561a20eebebfd637e667 FT_grammar_errs.30
--#K= b63514cf73a93962311d098284d7b491 FT_grammar_errs.31
--#K= b253cde723889c42d2c944c1b14f5a45 FT_grammar_errs.32
--#K= 7ad3dfb73e82f4d75b0770179e6dc264 FT_grammar_errs.33
--#K= f4d905e4f72dbd535bb80d7fe9df84b0 FT_grammar_errs.34
--#K= 5bf50b198d8e5fe300541adfce92e073 FT_grammar_errs.35
--#K= 7c4d73d42cff377cd84a7683b0c3e0b9 FT_grammar_errs.36
--#K= 19f1aa8d33d71888be74b19a3143938f FT_grammar_errs.37
--#K= 84309c1322631ae74ecf2c729b6aa210 FT_grammar_errs.38
--#K= 8cfe48871f91a90e6eaaef9123892394 FT_grammar_errs.39
--#K= 8aaa5fdd50ead5cd429fbba4123b215c FT_grammar_errs.40
--#K= 94cdf3b32afa4f12a00a704208aa2e53 FT_grammar_errs.41
--#K= 1a402ada248d0d50cec13a1af150ea33 FT_grammar_errs.42
--#K= 5b46a8eb0d74009462f74cf7553e3228 FT_grammar_errs.43
--#K= 546e440044828d86135dd63f1eb9ed17 FT_grammar_errs.44
--#K= 3c694a0ee2cf3a1d39f2ca8a9f3b9094 FT_grammar_errs.45
--#K= 37b7ab754e579683a28ce086c470cdc9 FT_grammar_errs.46
--#K= 3e3acfb800cfb1bcb0cc07f33b75830a FT_grammar_errs.47
--#K= 42dc6cb4fe938bb82b64c82924ef28d8 FT_grammar_errs.48
--#K= cf9320d2188f5b48d508d610d95298b2 FT_grammar_errs.49
--#K= 1f33fb1fd2365e77c3cfbd61d1ae2a7c FT_grammar_errs.50
--#K= 67588c71f92f319c6224d5917456ecd2 FT_grammar_errs.51
--#K= 22e7795f7dbeb6dc2fce5e113312781c FT_grammar_errs.52
--#K= 66d253407728c1f8a850519eadd66880 FT_grammar_errs.53
--#K= 27e8345aaeed85c1de5516871e0bbd0c FT_grammar_errs.54
--#K= 43cc8a154f28f1a668ab409a1af4e77a FT_grammar_errs.55
--#K= eda21551fcdd76ef2f192e1d9950a05f FT_grammar_errs.56
--#K= 0a8a986b5610630cb75c0568deff8315 FT_grammar_errs.57
--#K= 29bfae73351c3157a5fe409febcef276 FT_grammar_errs.58
--#K= 73a9e53428d1fb1a9813e3eab7d0ea18 FT_grammar_errs.59
--#K= 800951095b297532e25785ab101a2ba9 FT_grammar_errs.60
-+#K= 26fd1565f209b383d9f2fbf0b54cd5fc FT_grammar_errs.1
-+#K= 200c01632c52a63f6d186da1c6460740 FT_grammar_errs.2
-+#K= 7d7141900ce6e32f15c99202309c63a4 FT_grammar_errs.3
-+#K= 1bb798a5831d0119789d424ef6cb55c4 FT_grammar_errs.4
-+#K= 5edd66e308b2792d5694df86c07a3eaf FT_grammar_errs.5
-+#K= 6f87d92ffe0812550f43287127c6f2b9 FT_grammar_errs.6
-+#K= c0eb05b58a008c722e091e1ae74440ec FT_grammar_errs.7
-+#K= 911929ec0e2ffc1f13822b479dec6805 FT_grammar_errs.8
-+#K= 1ac52ce8ba553ec23eb70faa3ffa1197 FT_grammar_errs.9
-+#K= c1407512376369d2e591a4b25a4b607a FT_grammar_errs.10
-+#K= ea94add1d76d17dbb69c1b86f3aa42b2 FT_grammar_errs.11
-+#K= 2046abda72725ea06fe339d5f364f1c9 FT_grammar_errs.12
-+#K= b72f7fccf76f8a5bee47a05d7bb545fb FT_grammar_errs.13
-+#K= 98e2bd3e4f3da58536496a38ec3e6238 FT_grammar_errs.14
-+#K= b371c6ba52503d037dbc43da788af8be FT_grammar_errs.15
-+#K= cb8288d607b0c5282125852f3ab05107 FT_grammar_errs.16
-+#K= c2a8d0401e4cf85ccebedf61c5d0ff4b FT_grammar_errs.17
-+#K= cb8288d607b0c5282125852f3ab05107 FT_grammar_errs.18
-+#K= b371c6ba52503d037dbc43da788af8be FT_grammar_errs.19
-+#K= 98e2bd3e4f3da58536496a38ec3e6238 FT_grammar_errs.20
-+#K= 02b210b2646aceb68f3d6d2876a3d57a FT_grammar_errs.21
-+#K= 51030cd01ed601a68dd48356902954b1 FT_grammar_errs.22
-+#K= af8818de076407d4e7f4e384ba110ac5 FT_grammar_errs.23
-+#K= 023ba04ffced833b4776fb4fcaae7755 FT_grammar_errs.24
-+#K= 0a082bb9d50f9a6257c3be5938758150 FT_grammar_errs.25
-+#K= 3b956344b2338de9dd0625391b41ed35 FT_grammar_errs.26
-+#K= 97779a5b22bb43912268caca0dc391d8 FT_grammar_errs.27
-+#K= c02a669a8b76e15f0dcced9c4aacc5da FT_grammar_errs.28
-+#K= 89822eac51e11b55c50c4e72a1203452 FT_grammar_errs.29
-+#K= 56a65b28955c743f18001d1b423356fb FT_grammar_errs.30
-+#K= ff1186fdf1ffe20c89fe38db596e75c2 FT_grammar_errs.31
-+#K= 10945c0e8920342903ffeeb0d601babd FT_grammar_errs.32
-+#K= 6a333eb2cfbb2c347b8fdfb06a979aa9 FT_grammar_errs.33
-+#K= 55dba10e65775dfd1e229ddf0eb2608e FT_grammar_errs.34
-+#K= dfa3b6908ea9f4b23005925d95dedd8e FT_grammar_errs.35
-+#K= 3cfcc96931e76ce6396da3e27c61a6ef FT_grammar_errs.36
-+#K= 04e37fe069eed91515c6a24301378548 FT_grammar_errs.37
-+#K= 130bf64b92a5e34d1c4cce98899084e1 FT_grammar_errs.38
-+#K= 9681a05658f1a50e3434aa991b5ce992 FT_grammar_errs.39
-+#K= 38506317363a188fbb7a417ff50457a9 FT_grammar_errs.40
-+#K= 02b210b2646aceb68f3d6d2876a3d57a FT_grammar_errs.41
-+#K= 8c08a8b5cacbf885d022360ed856e7a1 FT_grammar_errs.42
-+#K= f0f4d894a49bd2c1856cf4f013f83e54 FT_grammar_errs.43
-+#K= 25b92d52cb299fa8d84c5584e490bd97 FT_grammar_errs.44
-+#K= 0a082bb9d50f9a6257c3be5938758150 FT_grammar_errs.45
-+#K= 2a41940f70efa80e39cb3356931e49af FT_grammar_errs.46
-+#K= a3cbfcf5e452fb11994fdf41254c6775 FT_grammar_errs.47
-+#K= d47387d5885927ac4d33f0675a721963 FT_grammar_errs.48
-+#K= 37d2984315284521b084e62feb889527 FT_grammar_errs.49
-+#K= 99b7d60f3afb7ab9fb8e14340c30df02 FT_grammar_errs.50
-+#K= a16f404c515c40418f43ea1d4d8e6a7b FT_grammar_errs.51
-+#K= 424841345d03bcfad704e9cdfce29794 FT_grammar_errs.52
-+#K= de2bf9687e8374f566db45d45274c313 FT_grammar_errs.53
-+#K= 6d923562c9fc7aaf1ac1c393aa7b55f9 FT_grammar_errs.54
-+#K= 704bfc82d4cf8fee52552d33bacfc7df FT_grammar_errs.55
-+#K= 426bf966b975ade7ec8c6ccf40463583 FT_grammar_errs.56
-+#K= 59a11ff06013a43e7bb6a21f8f55e7b7 FT_grammar_errs.57
-+#K= d6fde9bf3500a509fbd9cbf69fedb04f FT_grammar_errs.58
-+#K= c6a1064235d93bc17a623216b3817cb8 FT_grammar_errs.59
-+#K= 4042bdb2ea75ed254c429324b20c82b8 FT_grammar_errs.60
- #K= 6e8599556a312200fb6d484565b6c52f FT_basic_queries.1
- #K= db17180b59444e5e34a8fc20c40e4530 FT_basic_queries.2
- #K= f7bd56bd407ff255ef2e3b5fb093ae6a FT_basic_queries.3
+@@ -260,34 +260,35 @@ function FT_grammar_errs {
+     ddcmd =_
+ }
+ 
+-# these queries run against the builtin module: params, and change
+-# flags.  The control file state-of-interest is found by path,
+-# kernel/params.c, to avoid module keyword entirely
++# these queries run against the builtin file: kernel/params.c, and change
++# flags.  The control file state-of-interest is found by path $f,
++# perfectly binding the stimulus scope to the observation slice.
+ function FT_basic_queries {
+     v_echo "${GREEN}# BASIC_TESTS ${NC}"
+     if [ $LACK_DD_BUILTIN -eq 1 ]; then
+-	echo "SKIP - test requires params, which is a builtin module"
++	echo "SKIP - test requires dynamic_debug built into kernel"
+ 	return
+     fi
++    local f='kernel/params.c'
+     ddcmd =_ # zero everything
+ 
+-    ddcmd "module params +mf" 'kernel/params.c'
+-    ddcmd "module params +l"  'kernel/params.c'
+-    ddcmd "module params -m"  'kernel/params.c'
+-    ddcmd "module params =_"  'kernel/params.c'
++    ddcmd "file $f +mf" "$f"
++    ddcmd "file $f +l"  "$f"
++    ddcmd "file $f -m"  "$f"
++    ddcmd "file $f =_"  "$f"
+ 
+     # multi-query commands split on ; on a single line
+-    ddcmd "module params +mf ; module params func parse_args +sl"  'kernel/params.c'
++    ddcmd "file $f +mf ; file $f func parse_args +sl" "$f"
+ 
+     # verify multi-cmd input, newline separated, with embedded comments
+     ddcmd =_ # reset before multiline query to capture full transition
+-    ddcmd "module params =_		# clear params
+-      module params +ml			# set flags
+-      module params func parse_args +fs # set other flags" \
+-	  'kernel/params.c'
++    ddcmd "file $f =_		# clear params
++      file $f +ml		# set flags
++      file $f func parse_args +fs # set other flags" \
++	  "$f"
+ 
+     # clear flags and verify
+-    ddcmd "module params =_"  'kernel/params.c'
++    ddcmd "file $f =_" "$f"
+ }
+ 
+ # Built-in Feature Tests (Can run on any CONFIG_DYNAMIC_DEBUG kernel, modular or monolithic)
 
 -- 
 2.55.0
