@@ -1,32 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91642D592C;
-	Wed, 23 Sep 2026 00:19:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69162DF13F;
+	Wed, 23 Sep 2026 00:19:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790122753; cv=none; b=XENIcipavSdaQrMXZalItrx3vXUBB9zoPGf8jbB2bkxPl0ErYM6E3r1fiNWTJE4wCp4L21e3lQvjZbTC3Jv64kzFWsx3oBF/Oy6qXH1jO+5Syab49SZgSXBxpHRYakaQlFyvmVG1pGVCAi15yeixEsxApjMTajGdsa/n5RCoqE4=
+	t=1790122755; cv=none; b=buSlokXAeNUBpGjt/s2OpcJ9YzjYS2wY4uAzbbmWPh7R32iFP9yu8n3phcopFX8tWOEhzMjg/l+4vKAqIBYmdcIuegvVjvZPKEj4VNAsqSTot2TJmFQ2XXwCK/Snck0INoM4gsAbzIsvfXJarnnVRAA87gORoQ9gttOcUpASz4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790122753; c=relaxed/simple;
-	bh=TROaLcEnt6IP8M6dfs8FzdIHRulbOj0BqY6zDTM6Z60=;
+	s=arc-20240116; t=1790122755; c=relaxed/simple;
+	bh=CGtjxCX0qbM44FqbhEIENCuMLk53KZEZen+jRshi17o=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VN0GHcyFAu2keFYTpZVr4zk10T2HusseST8ObEMVbsHcHxSVLk3DnGDfk9anlJJK3CeXlXqBMwJ8+d1lLXfHPXwvd6na4Wr7YlfybjU/2Ct3CDF3bqpK7QAZXFS2xAuwrmNzJCAI4TbOxF1yivrV+sKNQZF1PMNoLyJrSPB5R+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X2cGT+Tu; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=PNhi2Ok8V7M5AvEOxkjSNIekKrPYyRFd3r/R6PX5mYa1dy/9/UoVzHorE4DoDsCA7L0GMEczLDh2wlbT1DU23Jjv/ewo5KeEDSNlhqNBkaId1P4f6s6uTl7pTG5P2+0aX+RsbHCfYUOCBNo/cNoHN8gFhaoOacF2dar16qhWFEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ct6R0efG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X2cGT+Tu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9567B1F00893;
-	Wed, 23 Sep 2026 00:19:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ct6R0efG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B601F000FF;
+	Wed, 23 Sep 2026 00:19:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790122751;
-	bh=1Zpa2vfOKVwL+CTe4hc/tD12/KKGPFOKFOexwGKucpk=;
+	s=k20260515; t=1790122753;
+	bh=QX4aWXGyyRTFuOU9wd7z1HhmhDSg11bESRI3/PwP3bg=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=X2cGT+TuGjJpGeC3RHxUN5/7gs/zBT9XL6iZMRmJxmuY7YreWdkT5Oxn5zgmUrR4c
-	 6dK9gSqotxf4cr5U2mcT9OyQsCqryAPLDc6GCXZnvVWDqJ/qOWyOZrpKs7i47y2wcR
-	 2bSN0inBqx/nmA66dXATt5Xl9cjbrQPJFGpnIBqBx10ZPePT758ZiOMVAdRbjLDZ7u
-	 SGOV0lEne7wI+YoNmryNXalgMNaTA9JxSdvRz9gBV886LOq26R5MBHZM25Bcxs+EZi
-	 mCqATldQWjf9pdQjFEoLPjjVMSrumD+eJNv0QQS7s7PdBOGCFoKX0dgoR4HpRg1Uae
-	 fW18efWW6ccVg==
-Subject: Re: [PATCH net-next v6 2/4] net: add AF_PACKET multicast dumps
+	b=Ct6R0efGlYiadlUWrinBje2+WcmsvHEJ5OqzmDzEn1MPrMZIeKc/N+alNsxLiLhaM
+	 bY5Im9PAg5ybydwdmaByrJhEO+GC/iOhOAUDvLYqEVBhSUw47QsffTgbuaz/W0c9zu
+	 dqT6zWWnYDOFoZgYlm/3TpCtZMmWVz5EmjSzOk5mzghnC1uoPvPf9uiX04eMQpTYLZ
+	 OEM2meuz6zVNtY2evSgNW9vrr/0T8Wob7GpfvTR2GY1PqscCC2h2Eq6t5sKg9sV3Fv
+	 FzqgbVab8gIcDydsakRTPMjO3Mp0KhHsOxHFRJvZXqPZmF062hm1emm1ykerm3lYyr
+	 FU0bIbYoiEalw==
+Subject:
+ Re: [PATCH net-next v6 4/4] selftests: net: test AF_PACKET multicast dumps
 From: netdev-bot+sashiko@kernel.org
 To: sigefriedhyy@gmail.com
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, dsahern@kernel.org,
@@ -36,11 +37,11 @@ Cc: andrew+netdev@lunn.ch, davem@davemloft.net, dsahern@kernel.org,
  sd@queasysnail.net, shuah@kernel.org, horms@kernel.org, sdf.kernel@gmail.com,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  netdev@vger.kernel.org
-Date: Wed, 23 Sep 2026 00:19:10 +0000
-Message-ID: <179012275019.2160803.2891956767256297440@kernel.org>
-In-Reply-To: <20260921235951.3214-3-sigefriedhyy@gmail.com>
-References: <20260921235951.3214-3-sigefriedhyy@gmail.com>
-X-sashiko-severity: Medium
+Date: Wed, 23 Sep 2026 00:19:11 +0000
+Message-ID: <179012275175.2160803.16091441325063775173@kernel.org>
+In-Reply-To: <20260921235951.3214-5-sigefriedhyy@gmail.com>
+References: <20260921235951.3214-5-sigefriedhyy@gmail.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -53,7 +54,7 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 2 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Critical: 0 · High: 1 · Medium: 1 · Low: 0
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -61,144 +62,189 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] dev_mc_dump()/dev_mc_dump_dev() resume a paused dump with a
-  bare positional index into dev->mc (ctx->addr_idx / *s_addr_idx) and…
-- [Low] uAPI vs netlink YAML spec out of sync: the patch adds
-  IFA_F_GLOBAL (0x1000), emits IFA_FLAGS/IFA_TARGET_NETNSID in…
+- [High] dev_mc_fill_addr() (net/core/dev_addr_lists.c:1210) emits
+  IFA_MULTICAST with `nla_put(skb, IFA_MULTICAST, dev->addr_len,…
+- [Medium] dump_mcaddr_l2_check()
+  (tools/testing/selftests/net/rtnetlink.py:113) issues the new…
 
 --
 
-net: add AF_PACKET multicast dumps
+selftests: net: test AF_PACKET multicast dumps
 
-This adds an RTM_GETMULTICAST dump handler for ifa_family AF_PACKET that
-reports every entry of dev->mc in the ifaddrmsg format, with the raw
-link-layer address in IFA_MULTICAST, the reference count in IFA_MC_USERS
-and a new IFA_F_GLOBAL bit mirroring netdev_hw_addr::global_use.  The
-dump runs under RCU and netif_addr_lock_bh() without RTNL.
+Adds dump_mcaddr_l2_check() to tools/testing/selftests/net/rtnetlink.py,
+which dumps the link-layer multicast addresses of dummy devices over
+AF_PACKET RTM_GETMULTICAST and checks the ifa-index filter, the global
+flag, mc-users and target-netnsid handling.
 
-> diff --git a/include/uapi/linux/if_addr.h b/include/uapi/linux/if_addr.h
-> index 7fb630b7fe311..0a1ad9ebb47be 100644
-> --- a/include/uapi/linux/if_addr.h
-> +++ b/include/uapi/linux/if_addr.h
-> @@ -57,6 +57,7 @@ enum {
->  #define IFA_F_NOPREFIXROUTE	0x200
->  #define IFA_F_MCAUTOJOIN	0x400
->  #define IFA_F_STABLE_PRIVACY	0x800
-> +#define IFA_F_GLOBAL		0x1000
-
-[Severity: Low]
-This isn't a bug, just an observation about the intermediate state of the
-series: this commit adds the new bit 12 and starts emitting IFA_FLAGS and
-IFA_TARGET_NETNSID for AF_PACKET RTM_GETMULTICAST, but
-Documentation/netlink/specs/rt-addr.yaml is not touched here.  At this
-commit the ifa-flags enum still ends at stable-privacy, the getmulticast
-dump request lists no attributes, the reply set is {multicast, mc-users,
-cacheinfo} and the op doc mentions IPv4/IPv6 only, so a spec driven
-decoder such as ynl would see bit 12 as unknown and would not describe
-target-netnsid or flags.
-
-The next patch in the series, "netlink: specs: rt-addr: document AF_PACKET
-multicast dumps", adds "- name: global" to ifa-flags, adds target-netnsid
-to the dump request, adds flags and target-netnsid to the shared
-mcaddr-attrs reply set and updates the doc, so the gap is closed within
-the series.  Would it be worth folding the spec update into this commit so
-that no bisect point emits attributes the spec does not describe?
-
-> diff --git a/net/core/dev_addr_lists.c b/net/core/dev_addr_lists.c
-> index 08528ca0a8b31..b69565f8ff05b 100644
-> --- a/net/core/dev_addr_lists.c
-> +++ b/net/core/dev_addr_lists.c
+> diff --git a/tools/testing/selftests/net/rtnetlink.py b/tools/testing/selftests/net/rtnetlink.py
+> index dc8c77db48974..5534ade056a5c 100755
+> --- a/tools/testing/selftests/net/rtnetlink.py
+> +++ b/tools/testing/selftests/net/rtnetlink.py
 
 [ ... ]
 
-> @@ -1180,6 +1184,179 @@ void dev_mc_init(struct net_device *dev)
-
-[ ... ]
-
-> +static int dev_mc_dump_dev(struct net_device *dev, struct sk_buff *skb,
-> +			   struct netlink_callback *cb, int *s_addr_idx,
-> +			   unsigned int flags, int netnsid)
-> +{
-> +	struct netdev_hw_addr *ha;
-> +	int addr_idx = 0;
-> +	int err = 0;
+> @@ -105,6 +110,69 @@ def dump_mcaddr6_check() -> None:
+>                  s2.close()
+>  
+>  
+> +def dump_mcaddr_l2_check() -> None:
+> +    """
+> +    Verify link-layer multicast addresses in an AF_PACKET RTM_GETMULTICAST
+> +    dump: the ifa-index filter, mc-users, the global flag and
+> +    target-netnsid.
+> +    """
 > +
-> +	netif_addr_lock_bh(dev);
-> +	netdev_for_each_mc_addr(ha, dev) {
-> +		if (addr_idx < *s_addr_idx) {
-> +			addr_idx++;
-> +			continue;
-> +		}
-> +		err = dev_mc_fill_addr(skb, dev, ha, NETLINK_CB(cb->skb).portid,
-> +				       cb->nlh->nlmsg_seq, flags, netnsid);
-> +		if (err < 0)
-> +			break;
-> +		nl_dump_check_consistent(cb, nlmsg_hdr(skb));
-> +		addr_idx++;
-> +	}
-> +	netif_addr_unlock_bh(dev);
+> +    with NetNS() as ns, NetNSEnter(str(ns)):
+> +        for ifname in ("dummy1", "dummy2"):
+> +            ip(f"link add name {ifname} type dummy")
+> +            ip(f"link set {ifname} up")
+> +        dev_idx = socket.if_nametoindex("dummy1")
+> +        ip(f"maddr add {ETH_TEST_MULTICAST_STR} dev dummy1")
 > +
-> +	*s_addr_idx = err < 0 ? addr_idx : 0;
-> +
-> +	return err;
-> +}
+> +        rtnl = RtnlAddrFamily()
+> +        defer(rtnl.close)
+> +        addresses = rtnl.getmulticast(
+> +            {"ifa-family": socket.AF_PACKET, "ifa-index": dev_idx},
+> +            dump=True)
 
 [Severity: Medium]
-Can this dump silently skip or repeat a dev->mc entry without setting
-NLM_F_DUMP_INTR?
+Should this dump be guarded so that an older kernel produces a skip
+instead of a failure?
 
-The resume cursor here is a bare ordinal into dev->mc, and
-netif_addr_lock_bh(dev) is dropped before returning, so the lock is not
-held across a dump round boundary:
+On a kernel without the PF_PACKET RTM_GETMULTICAST registration,
+rtnetlink_rcv_msg() looks up the handler for the requested family, then
+retries with PF_UNSPEC:
 
-	*s_addr_idx = err < 0 ? addr_idx : 0;
+net/core/rtnetlink.c:rtnetlink_rcv_msg() {
+	...
+	link = rtnl_get_link(family, type);
+	if (!link || !link->dumpit) {
+		family = PF_UNSPEC;
+		link = rtnl_get_link(family, type);
+		if (!link || !link->dumpit)
+			goto err_unlock;
+	...
+}
 
-If round N stops at ordinal k+1 and an entry before k is removed while the
-dump is paused, every later entry shifts down by one and round N+1 starts
-at k+1, so the entry that moved from k+1 to k is never reported.  An
-insertion before the cursor reports one entry twice.
+There is no PF_UNSPEC RTM_GETMULTICAST dumpit (only PF_INET in
+net/ipv4/devinet.c and PF_INET6 in net/ipv6/addrconf.c, plus the
+PF_PACKET entry added by this series), so err stays at its -EOPNOTSUPP
+initialisation and an error ack comes back. ynl then turns that into an
+exception:
 
-The only consistency stamp is dev_base_seq:
+tools/net/ynl/pyynl/lib/ynl.py:YnlFamily._op() {
+	...
+                if nl_msg.error:
+                    raise NlError(nl_msg)
+	...
+}
 
-> +	cb->seq = READ_ONCE(filter.tgt_net->dev_base_seq);
+which ksft_run() reports as "not ok" plus a traceback.
 
-and dev_base_seq_inc() is called only from list_netdevice() and
-unlist_netdevice() in net/core/dev.c, so it tracks device register and
-unregister, not dev->mc mutations.  nl_dump_check_consistent() therefore
-cannot raise NLM_F_DUMP_INTR for the mutation that breaks the resume
-index, and user space sees what looks like a complete, consistent dump.
+The two neighbouring tests in this same file take the other route:
+_users_for() returns None when mc-users is absent, and
+dump_mcaddr_check()/dump_mcaddr6_check() convert that into
+raise KsftSkipEx("kernel does not expose IFA_MC_USERS"). Would wrapping
+the first getmulticast() call and raising KsftSkipEx on NlError keep this
+new case consistent with the rest of the file when the selftest tree is
+newer than the kernel under test?
 
-The writers are reachable without any privilege, for instance
-IP_DROP_MEMBERSHIP: __ip_mc_dec_group()->ip_mc_filter_del()->dev_mc_del(),
-or IP_ADD_MEMBERSHIP: ip_mc_inc_group()->dev_mc_add(), and multiple dump
-rounds happen as soon as the reply does not fit in one skb.
+> +
+> +        # dummy2 has entries as well, only dummy1 may be listed
+> +        ksft_eq({addr['ifa-index'] for addr in addresses}, {dev_idx},
+> +                "AF_PACKET multicast dump ignored ifa-index filter")
+> +
+> +        entries = {addr['multicast']: addr for addr in addresses}
 
-> diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-> index e3444fd240615..204dc9040e3cc 100644
-> --- a/net/core/rtnetlink.c
-> +++ b/net/core/rtnetlink.c
-> @@ -7278,6 +7278,8 @@ static const struct rtnl_msg_handler rtnetlink_rtnl_msg_handlers[] __initconst =
->  	{.msgtype = RTM_SETSTATS, .doit = rtnl_stats_set},
->  	{.msgtype = RTM_NEWLINKPROP, .doit = rtnl_newlinkprop},
->  	{.msgtype = RTM_DELLINKPROP, .doit = rtnl_dellinkprop},
-> +	{.protocol = PF_PACKET, .msgtype = RTM_GETMULTICAST,
-> +	 .dumpit = dev_mc_dump, .flags = RTNL_FLAG_DUMP_UNLOCKED},
+[Severity: High]
+The IFA_MULTICAST payload consumed here is emitted by dev_mc_fill_addr()
+in net/core/dev_addr_lists.c, added by this series, using the device's
+current addr_len for every entry of dev->mc:
 
-Since RTNL_FLAG_DUMP_UNLOCKED is used, even the dev->mc writers that do
-hold RTNL (SIOCADDMULTI via dev_mc_add_global(), "bridge fdb add ... self"
-via dev_mc_add_excl(), dev_mc_flush()) are free to run between two rounds
-of this dump.  Would a generation counter bumped on dev->mc changes, and
-folded into cb->seq, be needed here, or could the resume point be keyed on
-the address itself rather than on its position in the list?
+net/core/dev_addr_lists.c:dev_mc_fill_addr() {
+	...
+	    nla_put(skb, IFA_MULTICAST, dev->addr_len, ha->addr) ||
+	...
+}
 
-The commit message says:
+Each entry was created with an unzeroed allocation where only addr_len
+bytes were written:
 
-    stamps cb->seq from dev_base_seq so a device added or removed between
-    dump rounds sets NLM_F_DUMP_INTR
+net/core/dev_addr_lists.c:__hw_addr_create() {
+	...
+	ha = kmalloc(alloc_size, GFP_ATOMIC);
+	if (!ha)
+		return NULL;
+	memcpy(ha->addr, addr, addr_len);
+	...
+}
 
-That statement is accurate for device add and remove, but should it also
-note that changes to the dumped objects themselves, the dev->mc entries,
-are not covered by that counter?
+ha->addr is MAX_ADDR_LEN (32) bytes, so bytes addr_len..31 hold stale
+slab contents. Can this dump then copy uninitialised heap bytes to user
+space if dev->addr_len grows after the entry was inserted?
+
+The sequence I end up with is:
+
+  1. create a tap device (ARPHRD_ETHER, addr_len 6; tun_net_mclist is
+     provided as .ndo_set_rx_mode, which SIOCADDMULTI requires per
+     net/core/dev_ioctl.c)
+  2. ip maddr add 01:00:5e:01:01:01 dev tap0, so __hw_addr_create()
+     copies 6 bytes
+  3. with the device down, TUNSETLINK to ARPHRD_TUNNEL6:
+
+drivers/net/tun.c:__tun_chr_ioctl() {
+	...
+			tun->dev->type = (int) arg;
+			tun->dev->addr_len = tun_get_addr_len(tun->dev->type);
+	...
+}
+
+     addr_len becomes sizeof(struct in6_addr), and dev->mc is not
+     flushed; the NETDEV_PRE_TYPE_CHANGE handlers only drop the
+     protocol-joined mappings via ip_mc_unmap()/ipv6_mc_unmap(), not
+     global_use entries
+  4. an AF_PACKET RTM_GETMULTICAST dump (RTNL_KIND_GET, no capability
+     required) now returns 16 bytes for that entry, 10 of which were
+     never initialised
+
+The pre-existing dev->mc dump path does not reach this because it is
+gated on the device type:
+
+net/core/rtnetlink.c:ndo_dflt_fdb_dump() {
+	...
+	if (dev->type != ARPHRD_ETHER)
+		return -EINVAL;
+	...
+}
+
+The new dump has no such restriction. Would bounding the copy by what was
+actually initialised - recording or clamping a per-entry length, or
+zeroing ha->addr in __hw_addr_create() - be preferable to trusting
+dev->addr_len here?
+
+For the record, the bonding path is not a trigger: bond_enslave() calls
+dev_uc_flush()/dev_mc_flush() immediately before bond_setup_by_slave()
+changes addr_len, so only the tun/tap TUNSETLINK path above applies.
+
+> +
+> +        # Bringing an Ethernet device up joins 224.0.0.1, which maps
+> +        # to 01:00:5e:00:00:01 in the device multicast list.
+> +        all_hosts = entries.get(ETH_ALL_HOSTS_MULTICAST)
+> +        ksft_not_none(all_hosts,
+> +                      "dummy1 does not have the all-hosts link-layer address")
+> +        if all_hosts is not None:
+> +            ksft_not_in('global', all_hosts['flags'],
+> +                        "protocol entry is global")
+> +
+> +        static = entries.get(ETH_TEST_MULTICAST)
+> +        ksft_not_none(static, "dummy1 does not have the SIOCADDMULTI address")
+> +        if static is not None:
+> +            ksft_eq(static['mc-users'], 1,
+> +                    "unexpected mc-users for the SIOCADDMULTI address")
+> +            ksft_in('global', static['flags'],
+> +                    "SIOCADDMULTI entry is not global")
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260921235951.3214-1-sigefriedhyy%40gmail.com
