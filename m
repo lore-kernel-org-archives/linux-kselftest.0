@@ -1,308 +1,198 @@
-Received: from mail-yx2-f10.google.com (mail-yx2-f10.google.com [74.125.224.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABC44446FC
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 16:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E3D05540A9;
+	Wed, 23 Sep 2026 16:44:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790181392; cv=none; b=PImCVx7SvkHipCrpsvVEIeDR1wYXv3+WAMDDM9GdlY7l5Xa5R0ZKG2vI+S22NwXFFcRJOQrRzMxdh0BB9Lj+iSFLci11yJtiTvfE7zWM6ebdZoC6uPyrKy0DaSVNyuY8qnRrnCfEHEhy49DKDT1G5JLjUN3/2FE6QkWsqfNAKqg=
+	t=1790181861; cv=none; b=PKyRQ0PUP7UHFsu6KVnDEDmSnVG+f40W8S/4WPtMK8QCVk/GqxildwWGh3E5uWeD4UrfEU3O0xJB2Eee6hFCpM3KEER1xoNHFlZ8YItDhrAWE/BhJQDQGuRC149ivz+4mIoCGO1IJQvtQ1rAmy0v9P5yIstlrIlpufrOxzMNo8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790181392; c=relaxed/simple;
-	bh=cqDDPS3cYLtnwCkJsHXJQJBfCWV8CGvTznOW39lWS4M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gtN5xS4yVJFPkPD9X8dcbTwn8MCMqms4EPpCWTIeQPmVgAW5pQGuo0ZFrU/F3FBJFvNsXkE/jEJnrPjhLEdmBFZqN5mX+IQ0vpadqbL8WT5uJ0PUp1ofXUxU4QB9nECtUSsopImzHowKonwk06gTO0Mm50OorSQbmqj4aQk7TfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=northecho.dev; spf=none smtp.mailfrom=northecho.dev; dkim=pass (2048-bit key) header.d=northecho-dev.20251104.gappssmtp.com header.i=@northecho-dev.20251104.gappssmtp.com header.b=iw6I35BX; arc=none smtp.client-ip=74.125.224.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=northecho.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=northecho.dev
+	s=arc-20240116; t=1790181861; c=relaxed/simple;
+	bh=Nuf0x5Che1kW9MXRNKV1O0+PL473KETLCmpr2hKdS4g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k/MJeKpEheH8xxdNpZqDSAGaPipXlC8s6K/1hH6DrbedsLyNhvvZ0j7tWWXBWcXzLRQG5YLtvAsQVOKLsKAdMZQ+/f3DYsjlFQuELF/PES//lCO/iNod+zKF/mhMkFVeEHuGeP0+KP88tX1F6u4NExi76LbbizYCHsmkbZgnSlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aVfroUQH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=northecho-dev.20251104.gappssmtp.com header.i=@northecho-dev.20251104.gappssmtp.com header.b="iw6I35BX"
-Received: by mail-yx2-f10.google.com with SMTP id 00721157ae682-87e24235202so88657b3.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 09:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=northecho-dev.20251104.gappssmtp.com; s=20251104; t=1790181380; x=1790786180; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=lgMfR/OpPXnvvBLqscXmXIgkpM0twhM7DvthfQZhSoo=;
-        b=iw6I35BXyur708fjk3Q2KlD0EgHBfBbC2vJtlut7CxCThPCv7ppeRzyQ2AOafljU5f
-         eMRMJJE9Y7ECYrgYiv1P3kWHsv96LnK7qUFBIjq3NESW7FaWjOR+vHexS/ukJbSTnB4M
-         Gxs9OC1FzNDpxfyxgy+UxqhJ6UQq1bmQFG4WcRYiZZMirbxbOQXF76uruvAEn/Lbx5IQ
-         LBF/ymflYLO8MstC/oUyqsi7sqZnTIEqwY6Nz9EIY+c4XURCBFa9XGGZHIDZ1ZOwqO5C
-         dJlZzfncgzjVnrdMVKZUTJp3ZmFCqGpJYFZWv9BSANXWvSal+bwGhOdQOVmoPV/TAhFM
-         ULRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790181380; x=1790786180;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=lgMfR/OpPXnvvBLqscXmXIgkpM0twhM7DvthfQZhSoo=;
-        b=iFIJRpW9w5DIUwa16TXl4DWTy8jLLaqGwTSS6SgFzfnx1CAJzToRDbiL+dadd+mXOZ
-         96cW4iSHjIMFni6dcuJO0wxdlpAK+A53jVomHtjCs70xpQekIeBYe3zWBvfGi6pqR2jm
-         6HdbXdZoCMd8hyD/h0eaDIAat6zpzOtMpdb5En/ZMI5E6M6r6/UdWigUUmowimGXe2pL
-         FCOuJI21Urba8Ky2dcZjn0OFwWNa/isD16zcrrLmYRp9ag6+hBmrlmySaR9hlqUd3jI3
-         m9PHX5bWS3/gNb5nPE37LbqwE9OOmO64hvoXaCLKujfhft7BeGgjTqKUzsjuqIiajNXI
-         JFlQ==
-X-Forwarded-Encrypted: i=1; AKwUvBy4BivKGigL/vdvLwb0YyqUadIX/LRn0Og6MVAO1ifc2Jus5TPMA4gvdOBPSK4dLmR3ZKDouAppGBURlrk0xsw=@vger.kernel.org
-X-Gm-Message-State: AFuF++lFY6BDmr4vu4bxZKoyiVHBI1d34rEMf94x7KCOBkb/T2V4nlGy
-	xpO+CAjdx1hv3HpLEJxwIyn4ompvdxunxLAdmQVCZZyVs/t0A1MaGggRVcRumRMTb1C721AdaaZ
-	XEm1swrVRmHc+EoJF
-X-Gm-Gg: AYBFou2gYf9pAq7HcvAHQ9psTeq7qSO29NzyZnke5gtKkbC49tpmRshHLK2zvDA7MG3
-	ATJEzbC5zizMST4PxYgxUONvI0OImqRcudEWKt0QXDHstrSeSHT6A4MKMMUWbhFYTPs6fZq9qvq
-	WBR1VdGACamhy1tbaQzn6taRofpvbPbiCJPo+S61NUERt/1RJIJ3fAupz/rh8Iq1VrDKldqXAkX
-	aDfORf9vN7P3JT9BYwW+m2QaJCuIS75KEGNi2dhcdWU74EqcoLpe9+sP1UhTCoohf0WdCAAaICZ
-	mna3dqhwbnpoId2KlZt25PJIoL3L6QiOL1XlHNiEUoR27HtnD5ShsLMYelPvYmRKGYzzGAwiKal
-	e6Y075azxCgUNT+JnQQMk2ojF15JqEhgTtQMvvaQrKM7ESbHLWx5+I7WVm5zek55DoxjwOpONaX
-	caNR06GeUCDDt32BmN2CEvtLEou8qF4OOPhLASDJwbi7LF/EJSSqlVvb+VvOCC6WZ1JHXc4IWzE
-	GQyzZosmvEDWv9sxXDUaF/RF7nHVoLuWf+DQ1U=
-X-Received: by 2002:a05:690c:6112:b0:853:bc96:d834 with SMTP id 00721157ae682-8a45aeac201mr36854287b3.2.1790181380453;
-        Wed, 23 Sep 2026 09:36:20 -0700 (PDT)
-Received: from kelso (99-10-92-174.lightspeed.rlghnc.sbcglobal.net. [99.10.92.174])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8a4658c9778sm12709257b3.8.2026.09.23.09.36.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 09:36:19 -0700 (PDT)
-From: Christopher Lusk <clusk@northecho.dev>
-To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	linux-security-module@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] selftests/landlock: cover TTY signal scoping
-Date: Wed, 23 Sep 2026 12:33:21 -0400
-Message-ID: <20260923163321.79770-3-clusk@northecho.dev>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260923163321.79770-1-clusk@northecho.dev>
-References: <20260923163321.79770-1-clusk@northecho.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aVfroUQH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98B491F000FF;
+	Wed, 23 Sep 2026 16:44:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790181846;
+	bh=OoOOTxuoQ6EZdspGU37DbBh74bllbiSJrPb5SoDh0CQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=aVfroUQHOic+0dG0LtM4us94aUGmqKHasYKAZgcYJrcxPjPbj5PP5puWmbXv5Lm42
+	 bS+BGz9yKlGjxIJm0id71spz1+rpkhp+PxPuCNaCeDAgzf87xT/KSjJJVcSfAE/pUI
+	 HjV76sMIkOY63g05fjx/v73QViQR19pqGlwq981+F+TLl4u7fuB/C0Vw5Nt7oH1Ase
+	 GPvWMA44C1MyxkRN3nfJs3XI6FKVEErJZ3j+029Wf68CH3vAWVIxFQwos99gUm5fHi
+	 xf/StU/KeKQnZWOAwI0SycRR/t4do0Umk9NjI775dI42NX7pgIw6wG/i5hPFMhcqIq
+	 d2mGoCF1AbkZA==
+Date: Wed, 23 Sep 2026 17:43:59 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Gregory Price <gourry@gourry.net>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kernel-team@meta.com, akpm@linux-foundation.org, 
+	liam@infradead.org, david@kernel.org, vbabka@kernel.org, jannh@google.com, 
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org
+Subject: Re: [PATCH 05/10] mm/madvise: factor huge-PMD folio processing
+Message-ID: <arP4Igew3iL9qVKW@gremlin>
+References: <20260922235830.2350770-1-gourry@gourry.net>
+ <20260922235830.2350770-6-gourry@gourry.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260922235830.2350770-6-gourry@gourry.net>
 
-LANDLOCK_SCOPE_SIGNAL blocks signaling an arbitrary out-of-domain process,
-but a PTY master retains signal delivery to its terminal foreground process
-group.
+On Tue, Sep 22, 2026 at 07:58:25PM -0400, Gregory Price wrote:
+> The huge-PMD branch combines PMD validation and lock ownership with folio
+> filtering, splitting, aging and isolation.
+>
+> Move the folio-specific work into a helper called with the PMD lock held.
+> Return a locked and referenced folio only when the caller must drop the PMD
+> lock and split it.
+>
+> No functional change intended.
+>
+> Assisted-by: LLM
+> Signed-off-by: Gregory Price (Meta) <gourry@gourry.net>
+> ---
+>  mm/madvise.c | 70 ++++++++++++++++++++++++++++++++++------------------
+>  1 file changed, 46 insertions(+), 24 deletions(-)
+>
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index b31b877c2c130..6b518f7f73651 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -394,6 +394,49 @@ static bool madvise_lru_folio_is_filtered(struct folio *folio,
+>  	       (pageout_anon_only && !folio_test_anon(folio));
+>  }
+>
+> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> +static void madvise_cold_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+> +		pmd_t *pmd, unsigned long addr, pmd_t orig_pmd)
+> +{
+> +	if (!pmd_young(orig_pmd))
+> +		return;
+> +
+> +	pmdp_invalidate(vma, addr, pmd);
+> +	orig_pmd = pmd_mkold(orig_pmd);
+> +	set_pmd_at(tlb->mm, addr, pmd, orig_pmd);
+> +	tlb_remove_pmd_tlb_entry(tlb, pmd, addr);
+> +}
+> +
+> +/* Return a locked, referenced folio only when it must be split. */
 
-Add a test that enters a signal-scoped domain, checks that kill(SIGUSR1)
-is denied with EPERM, and checks that TIOCSIG(SIGTSTP) succeeds and reaches
-the target's signal handler.
+I find it really weird that when it:
 
-Tested the focused case in three QEMU boots and ran the complete Landlock
-selftest suite (12 programs, no failures).  Built all Landlock selftests
-with W=1.
+a. succeeds
+b. mapped folio is missing/invalid/filtered
 
-Link: https://lore.kernel.org/r/20260916152336.1589383-1-clusk@northecho.dev
-Suggested-by: Günther Noack <gnoack@google.com>
-Suggested-by: Mickaël Salaün <mic@digikod.net>
-Assisted-by: Codex:gpt-5.6-sol
-Signed-off-by: Christopher Lusk <clusk@northecho.dev>
----
- .../selftests/landlock/scoped_signal_test.c   | 175 ++++++++++++++++++
- 1 file changed, 175 insertions(+)
+In both cases it returns NULL.
 
-diff --git a/tools/testing/selftests/landlock/scoped_signal_test.c b/tools/testing/selftests/landlock/scoped_signal_test.c
-index 259cdcc8aa5c..9a50817f33eb 100644
---- a/tools/testing/selftests/landlock/scoped_signal_test.c
-+++ b/tools/testing/selftests/landlock/scoped_signal_test.c
-@@ -9,9 +9,12 @@
- #include <errno.h>
- #include <fcntl.h>
- #include <linux/landlock.h>
-+#include <poll.h>
- #include <pthread.h>
- #include <sched.h>
- #include <signal.h>
-+#include <stdio.h>
-+#include <sys/ioctl.h>
- #include <sys/mount.h>
- #include <sys/prctl.h>
- #include <sys/types.h>
-@@ -767,6 +770,178 @@ TEST(sigio_to_pgid_self)
- 	EXPECT_EQ(0, close(trigger[1]));
- }
- 
-+struct tiocsig_result {
-+	int kill_ret;
-+	int kill_errno;
-+	int ioctl_ret;
-+	int ioctl_errno;
-+};
-+
-+static int tty_effect_fd = -1;
-+
-+static void handle_tty_signal(int sig)
-+{
-+	const char effect = sig;
-+
-+	if (tty_effect_fd >= 0)
-+		(void)write(tty_effect_fd, &effect, sizeof(effect));
-+}
-+
-+static int setup_tty_signal_handler(int sig)
-+{
-+	struct sigaction action = {
-+		.sa_handler = handle_tty_signal,
-+		.sa_flags = SA_RESTART,
-+	};
-+
-+	if (sigemptyset(&action.sa_mask))
-+		return -1;
-+	return sigaction(sig, &action, NULL);
-+}
-+
-+static int create_pty_master(char *const slave_path,
-+			     const size_t slave_path_size)
-+{
-+	int master_fd, pty_number, unlock = 0;
-+
-+	master_fd = open("/dev/ptmx", O_RDWR | O_NOCTTY | O_CLOEXEC);
-+	if (master_fd < 0)
-+		return -1;
-+	if (ioctl(master_fd, TIOCSPTLCK, &unlock) < 0 ||
-+	    ioctl(master_fd, TIOCGPTN, &pty_number) < 0) {
-+		const int saved_errno = errno;
-+
-+		close(master_fd);
-+		errno = saved_errno;
-+		return -1;
-+	}
-+	if (snprintf(slave_path, slave_path_size, "/dev/pts/%d", pty_number) >=
-+	    (int)slave_path_size) {
-+		close(master_fd);
-+		errno = ENAMETOOLONG;
-+		return -1;
-+	}
-+	return master_fd;
-+}
-+
-+/*
-+ * A PTY master grants control over its attached terminal, including signal
-+ * delivery to the foreground process group.  LANDLOCK_SCOPE_SIGNAL blocks
-+ * arbitrary signal targets, but it does not restrict this terminal capability.
-+ */
-+TEST(tiocsig_to_foreground_pgrp)
-+{
-+	struct tiocsig_result result = {};
-+	struct pollfd poll_fd = {
-+		.events = POLLIN,
-+	};
-+	char slave_path[64], byte, effect_signal = 0;
-+	int ready[2], release[2], effect[2], report[2];
-+	int master_fd, poll_ret, status;
-+	ssize_t report_size;
-+	pid_t attacker, target;
-+
-+	drop_caps(_metadata);
-+	master_fd = create_pty_master(slave_path, sizeof(slave_path));
-+	if (master_fd < 0 && errno == ENOENT)
-+		SKIP(return, "Unix98 PTY not available");
-+	ASSERT_LE(0, master_fd);
-+	ASSERT_EQ(0, pipe2(ready, O_CLOEXEC));
-+	ASSERT_EQ(0, pipe2(release, O_CLOEXEC));
-+	ASSERT_EQ(0, pipe2(effect, O_CLOEXEC));
-+	ASSERT_EQ(0, pipe2(report, O_CLOEXEC));
-+
-+	target = fork();
-+	ASSERT_LE(0, target);
-+	if (target == 0) {
-+		int slave_fd;
-+
-+		EXPECT_EQ(0, close(master_fd));
-+		EXPECT_EQ(0, close(ready[0]));
-+		EXPECT_EQ(0, close(release[1]));
-+		EXPECT_EQ(0, close(effect[0]));
-+		EXPECT_EQ(0, close(report[0]));
-+		EXPECT_EQ(0, close(report[1]));
-+		ASSERT_LE(0, setsid());
-+		slave_fd = open(slave_path, O_RDWR | O_CLOEXEC);
-+		ASSERT_LE(0, slave_fd);
-+		ASSERT_NE(SIG_ERR, signal(SIGTTOU, SIG_IGN));
-+		tty_effect_fd = effect[1];
-+		ASSERT_EQ(0, setup_tty_signal_handler(SIGUSR1));
-+		ASSERT_EQ(0, setup_tty_signal_handler(SIGTSTP));
-+		ASSERT_EQ(0, tcsetpgrp(slave_fd, getpgrp()));
-+		ASSERT_EQ(1, write(ready[1], ".", 1));
-+		ASSERT_EQ(1, read(release[0], &byte, 1));
-+		EXPECT_EQ(0, close(slave_fd));
-+		EXPECT_EQ(0, close(effect[1]));
-+		_exit(_metadata->exit_code);
-+		return;
-+	}
-+	EXPECT_EQ(0, close(ready[1]));
-+	EXPECT_EQ(0, close(release[0]));
-+	EXPECT_EQ(0, close(effect[1]));
-+	ASSERT_EQ(1, read(ready[0], &byte, 1));
-+
-+	attacker = fork();
-+	ASSERT_LE(0, attacker);
-+	if (attacker == 0) {
-+		EXPECT_EQ(0, close(ready[0]));
-+		EXPECT_EQ(0, close(release[1]));
-+		EXPECT_EQ(0, close(effect[0]));
-+		EXPECT_EQ(0, close(report[0]));
-+		create_scoped_domain(_metadata, LANDLOCK_SCOPE_SIGNAL);
-+
-+		errno = 0;
-+		result.kill_ret = kill(target, SIGUSR1);
-+		result.kill_errno = errno;
-+		errno = 0;
-+		result.ioctl_ret = ioctl(master_fd, TIOCSIG, SIGTSTP);
-+		result.ioctl_errno = errno;
-+		ASSERT_EQ((ssize_t)sizeof(result),
-+			  write(report[1], &result, sizeof(result)));
-+		EXPECT_EQ(0, close(report[1]));
-+		EXPECT_EQ(0, close(master_fd));
-+		_exit(_metadata->exit_code);
-+		return;
-+	}
-+	EXPECT_EQ(0, close(report[1]));
-+	report_size = read(report[0], &result, sizeof(result));
-+	EXPECT_EQ((ssize_t)sizeof(result), report_size);
-+	EXPECT_EQ(0, close(report[0]));
-+	EXPECT_EQ(attacker, waitpid(attacker, &status, 0));
-+	EXPECT_TRUE(WIFEXITED(status));
-+	if (WIFEXITED(status))
-+		EXPECT_EQ(0, WEXITSTATUS(status));
-+
-+	EXPECT_EQ(-1, result.kill_ret);
-+	EXPECT_EQ(EPERM, result.kill_errno);
-+	EXPECT_EQ(0, result.ioctl_ret);
-+	EXPECT_EQ(0, result.ioctl_errno);
-+
-+	poll_fd.fd = effect[0];
-+	poll_ret = poll(&poll_fd, 1, 1000);
-+	EXPECT_EQ(1, poll_ret);
-+	if (poll_ret == 1 && (poll_fd.revents & POLLIN)) {
-+		EXPECT_EQ((ssize_t)sizeof(effect_signal),
-+			  read(effect[0], &effect_signal,
-+			       sizeof(effect_signal)));
-+		EXPECT_EQ(SIGTSTP, effect_signal);
-+	} else {
-+		EXPECT_TRUE(poll_ret == 1 && (poll_fd.revents & POLLIN));
-+	}
-+
-+	ASSERT_EQ(1, write(release[1], ".", 1));
-+	EXPECT_EQ(target, waitpid(target, &status, 0));
-+	EXPECT_TRUE(WIFEXITED(status));
-+	if (WIFEXITED(status))
-+		EXPECT_EQ(0, WEXITSTATUS(status));
-+
-+	EXPECT_EQ(0, close(ready[0]));
-+	EXPECT_EQ(0, close(release[1]));
-+	EXPECT_EQ(0, close(effect[0]));
-+	EXPECT_EQ(0, close(master_fd));
-+}
-+
- /* Trace tests */
- 
- /* clang-format off */
--- 
-2.55.0
+And it's also weirdly returning a folio in a kind of failure case, or it's
+more like a defer-to-the-rest-of-the-code case I suppose.
 
+I wonder if the split could be done as part of the function?
+
+Then maybe have it return bool and document that true means it's fully
+processed (invalid folio cases, success case), false means that it's been
+split and the rest of the code should continue.
+
+Awkward one actually.
+
+> +static struct folio *
+> +madvise_lru_huge_pmd_locked(pmd_t *pmd, pmd_t orig_pmd,
+> +		unsigned long addr, unsigned long next, struct mm_walk *walk,
+> +		struct list_head *folio_list, bool pageout_anon_only)
+> +{
+> +	const struct madvise_walk_private *private = walk->private;
+> +	struct vm_area_struct *vma = walk->vma;
+> +	struct folio *folio;
+> +
+> +	folio = vm_normal_folio_pmd(vma, addr, orig_pmd);
+> +	if (!folio || folio_is_zone_device(folio))
+> +		return NULL;
+> +	if (madvise_lru_folio_is_filtered(folio, pageout_anon_only))
+> +		return NULL;
+> +
+> +	if (next - addr != HPAGE_PMD_SIZE) {
+
+NIT: Maybe could define above as:
+
+	const bool spans_pmd = next - addr == HPAGE_PMD_SIZE;
+
+And then make this:
+
+	if (!spans_pmd)
+
+?
+
+> +		if (!folio_trylock(folio))
+> +			return NULL;
+> +		folio_get(folio);
+> +		return folio;
+> +	}
+> +
+> +	if (!private->pageout)
+> +		madvise_cold_pmd(private->tlb, vma, pmd, addr, orig_pmd);
+> +	madvise_lru_folio(folio, private->pageout, folio_list);
+> +	return NULL;
+> +}
+> +#endif
+> +
+>  static int madvise_lru_pmd_entry(pmd_t *pmd, unsigned long addr,
+>  		unsigned long end, struct mm_walk *walk)
+>  {
+> @@ -431,22 +474,11 @@ static int madvise_lru_pmd_entry(pmd_t *pmd, unsigned long addr,
+>  			goto huge_unlock;
+>  		}
+>
+> -		folio = vm_normal_folio_pmd(vma, addr, orig_pmd);
+> -		if (!folio)
+> -			goto huge_unlock;
+> -
+> -		if (folio_is_zone_device(folio))
+> -			goto huge_unlock;
+> -
+> -		if (madvise_lru_folio_is_filtered(folio, pageout_anon_only))
+> -			goto huge_unlock;
+> -
+> -		if (next - addr != HPAGE_PMD_SIZE) {
+> +		folio = madvise_lru_huge_pmd_locked(pmd, orig_pmd, addr, next,
+> +				walk, &folio_list, pageout_anon_only);
+> +		if (folio) {
+>  			int err;
+>
+> -			if (!folio_trylock(folio))
+> -				goto huge_unlock;
+> -			folio_get(folio);
+>  			spin_unlock(ptl);
+>  			err = split_folio(folio);
+>  			folio_unlock(folio);
+> @@ -455,16 +487,6 @@ static int madvise_lru_pmd_entry(pmd_t *pmd, unsigned long addr,
+>  				goto regular_folio;
+>  			return 0;
+>  		}
+> -
+> -		if (!pageout && pmd_young(orig_pmd)) {
+> -			pmdp_invalidate(vma, addr, pmd);
+> -			orig_pmd = pmd_mkold(orig_pmd);
+> -
+> -			set_pmd_at(mm, addr, pmd, orig_pmd);
+> -			tlb_remove_pmd_tlb_entry(tlb, pmd, addr);
+> -		}
+> -
+> -		madvise_lru_folio(folio, pageout, &folio_list);
+>  huge_unlock:
+>  		spin_unlock(ptl);
+>  		if (pageout)
+> --
+> 2.53.0-Meta
+>
+
+--
+Cheers, Lorenzo
