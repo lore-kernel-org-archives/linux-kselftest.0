@@ -1,135 +1,206 @@
-Received: from mail-ed2-f34.google.com (mail-ed2-f34.google.com [74.125.228.98])
+Received: from mail-pj2-f2.google.com (mail-pj2-f2.google.com [74.125.227.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51F14399CC
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 09:15:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F0613BFACE
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 09:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790154919; cv=none; b=EvVHc8F5ckVwh1ZFhfy74FjtuZ7tCW2tEOdOd6vedmwaaGnhlKylHcr8wl9aY07iBjw75ap9pQrqWDAmvqZRa0iPPs885hVeCspJsKnaxKOwO93lnn9rTGXxfltj2poo656IPzKsf5PTMd4n96SVb/V2ClPd/ilY8IEplldPp/8=
+	t=1790155614; cv=none; b=TiZ47Y1iB4cpI0X0/g/z5BWSwAm2H+e+yiGU9Wa3YBYp3Z8WdgVPoH07K4YaoP+RCiGCjELF3qwK4eSA8cHiJV+u8WXSFhvJlxmOl2Q9Sz7RfqgLOCiKi7ZmL9mSW33vatew8qUQ2IrKhBEXIyzC3wTj2bmbLO0Xd6NIC5L+HhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790154919; c=relaxed/simple;
-	bh=6D/QwhHbhAw48PLOUD1e/RlhNasr0vbYm/dASxiUKII=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gMCph3wysFHf2FZp5M0nTZB1y1tL64G2wEBo/7sb0Y0XN8R7yOPd67tA/bf6gH8pzMFq59HvjuTH+jsO9ZxjmX/8hLddBr99BIXrem5fj2Uq6KD88wy7k70XIZeEq+TdLcTusf+YTts8q2SqDi9BXdVqY7Gv9W5simuBbPInA50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BlkRxNGo; arc=none smtp.client-ip=74.125.228.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1790155614; c=relaxed/simple;
+	bh=s75KvWE24ACqU/D0lXSq4RnV/kms7EYfzgTwBY4+qTY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=G2o/cx1unYpuYGxy7Kc49JXl7BYeH4MYULovGwJrdd6PDXvhLRx+gf8EVAkhCBSKarWHzDjxArNVC9Xb6vMGV6z4LIQq3bNeV4ThcqKVQeTKRuVozd/se6izn8qG22x45WKsN0thLJ0K9F1JuLsbOx5lVwB720b2h3yOA3CAD1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dgu.ac.kr; spf=pass smtp.mailfrom=dgu.ac.kr; dkim=pass (2048-bit key) header.d=dgu-ac-kr.20251104.gappssmtp.com header.i=@dgu-ac-kr.20251104.gappssmtp.com header.b=dJjyaU9H; arc=none smtp.client-ip=74.125.227.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dgu.ac.kr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dgu.ac.kr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BlkRxNGo"
-Received: by mail-ed2-f34.google.com with SMTP id 4fb4d7f45d1cf-6aab5dae09fso579403a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 02:15:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dgu-ac-kr.20251104.gappssmtp.com header.i=@dgu-ac-kr.20251104.gappssmtp.com header.b="dJjyaU9H"
+Received: by mail-pj2-f2.google.com with SMTP id d9443c01a7336-2db39df9c51so2412615ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 02:26:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1790154916; x=1790759716; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=eWPNdBRci+ilO56uoSaBVlNcIj5sRExNLvAX8TWjSSA=;
-        b=BlkRxNGocPuvqXvgYW7acyFfDofjkraqMVpNErOzSs2TfPF8qig9oDgqx9aB94vQjP
-         tdzZCIcHLGz1GGSzAPoj4MveHwe7REKAJ9YAn47eek+GbWwjNkF6q4oIkj/vGYpe9Kuz
-         98xxjcsw0JyHWAZhWzipkTggBCy/BsdaSfewmYPwlYodyku6l9FpNWdk/YyYcoXvGYTQ
-         PfuMq8R0AtqLpfm3WSb/F7fCUvA+YHjV9mNXRsNdbBcJnlTePfRCALY468vpd+Cv85w8
-         xlj41NCld/QeV9EaPFsdquhL77Z1Y9TKDj7o63+EmgolHWvAHwR7qyf2WDEYOAyk+GO1
-         KVHg==
+        d=dgu-ac-kr.20251104.gappssmtp.com; s=20251104; t=1790155612; x=1790760412; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=kbAvaMWrcoRy0leTu4ezLZwt2MJV9tZljW/jEJUkEkc=;
+        b=dJjyaU9Hz0efuh7f1rxVUPWbwxwAA/tk7TSoeoWr9L/naOys9DKSLkwBp1g3PWqjMA
+         zEzi19OxN245IuEO3nWbwA2J/xI2a5HTQyjOZ+9GROEduSDBlAX10k7IvsHyCxFLVrxB
+         gwoz1BIqE8L61/zxZ85vc+Ei8I7oH3wJC6sZT4pmoS836jXO6PdA+OQwVy0zVp0K3OU+
+         mbLK6JHGgyYxtKGViJvM0cQ7utgj5Yb5tcR07KNmVMEL+mkc2YVsQRezrp4c69VM47Gh
+         0NDrND5V76wqQDvi83t0etKuJSbosnPKtSN96iXe6cgaWPh/5JxmLdcGxKsiKgh7a9Cu
+         MpgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790154916; x=1790759716;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=eWPNdBRci+ilO56uoSaBVlNcIj5sRExNLvAX8TWjSSA=;
-        b=Szv9kWnB5pZoHjaYgf33lTyS0q7PIHYlqaavJDeH1o9l64IbmdKGQqdshICkf/1xjX
-         gymCoW1DdcPftLOJoFpeClwxtV9ZZpfxs0x1h7pUfpHNEGdr1pyorCK5popUjwb+iK5S
-         XvJKXIcgtc09BfkS0eXulRtGf0jqIvprVuYoM15OJvIcfAbngAr0lvJL9CiytkU18ddi
-         b5Bp5MnUwjkVQ6kUyQ1sjvtDzZH3X8bBb/ndaf+jIzY9yNnOIsWh93nEcQU3JVlC9tru
-         ibWxL4T+Ma9RbdOXo4Po9o3h5SS5kHdumLLBzYd8hvFU00iLClpn1VmSW5J2iydHCDfc
-         cezw==
-X-Forwarded-Encrypted: i=1; AKwUvBx3jvGkOv/rxLb0S6GTa/Bt+BiR3fukaA3JdhiQnCLnjfOFykWNC+HbHUtZNGkbo4jlGrKqnOJXs3nnhee6jGM=@vger.kernel.org
-X-Gm-Message-State: AFuF++kdkgCZFxEu5xaB2QmQUbPL1872ZEJMxZ+wKzPz5mBp5wzGx99g
-	l+7TLx447pjO+naavIjmDk3K77pLQJ+9S6KzitwCxwSS/JIn5j+k9SYaUozALEqA2o8=
-X-Gm-Gg: AYBFou2FM8gFaUoT3BknanRJAJgHQqeidhsLOn6+ddv7trt+1P4Ej+EkPhWHaWmTV08
-	3opCXt/LCXwpS0g+KBraBcrSskrIWNBc9ey7dBhsEuospudk0cHTB2QSnM07A9IPOFHkHv8HP7T
-	hMEvIB3XGP28nPc5vOED2610VDCIp7hFREL4d9SJC/eA0pxDh9/7nr6Z3xJs1d+pgRzHA2NqGr3
-	oaAqC6JQy6keeIfd/jlJNdl94s0b6DIPrezSTf3MWEVqHQ/0aqKEol/vP9sqYt+V+zezlkQpCLj
-	QqT8Ip/3wiWWUHaSwDs+ZuFQSYg3dLR3GYFJyhR20K2pmQYEEF5aCkmMydpwJQdnhvcA+UfDhRo
-	snYqWq80ytoEhU0sjOZS530xsI8gjkT9Q8LKm8rWlL2KHZxzRLrjF4de7ub8EZin5WIjsFhgT0G
-	O9lF1WjAIKTkJIrfDsyVhBuTIzx0QU5NIdvmXL2YWom+L3WMmjxMX3BK9Tsd+oggfQ/oz5d627l
-	I8=
-X-Received: by 2002:a05:6402:4516:b0:6aa:734a:a082 with SMTP id 4fb4d7f45d1cf-6aab3b98705mr1736439a12.25.1790154916043;
-        Wed, 23 Sep 2026 02:15:16 -0700 (PDT)
-Received: from [192.168.1.3] ([37.18.141.193])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6aab37478c9sm1181333a12.0.2026.09.23.02.15.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Sep 2026 02:15:15 -0700 (PDT)
-Message-ID: <dfa8362e-0dad-4f23-9d2e-dde03cb5facc@linaro.org>
-Date: Wed, 23 Sep 2026 10:15:13 +0100
+        d=1e100.net; s=20260707; t=1790155612; x=1790760412;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=kbAvaMWrcoRy0leTu4ezLZwt2MJV9tZljW/jEJUkEkc=;
+        b=AV2LG+r2xg3psHKEUP7Y5ecFBgCCxjJBa1dq5F7U3JyfHgllaEjsND+PDplcYmz0P6
+         2f8e910X8bMauJ6mDdaNn73/4AuB1zU24gkGaRLgzjo5Tze4SF5fVe+5xI6qxYTpQIgH
+         gZ4+Vw650B55wQKbTRogPBDEGvfZIfP8Y/dGebgRjde/4IcFmSFHb2VpWq1Y3upk4u1L
+         BDSgwXV96r99AhRmL0vTqqtzwREnFWJtTCICyEBr03F0iL9VsOBVmIGhEgkgv8e+cr9V
+         ASvF+j//y6nN6C5NJu43d+3ZPHtvvVghzBjGDcbpQoHuAsWoeADBgtOpzdfYFhamihRX
+         1AvA==
+X-Forwarded-Encrypted: i=1; AKwUvBxrOquVtPTvJ0yGUBGxYmPxgkCN0sc/vkS/eZUM7JfbI1qQwzvc19pM6kEhiVM1Zr3vZsn/I6rxB+WsegjEeBc=@vger.kernel.org
+X-Gm-Message-State: AFuF++myKz7X36HZ+ViMJrcB/iVRPgwPkQAcg4xiqWx2nB9Lmw175kWE
+	pCHDZjgpNzjzJs2g3GoUH/4UYlEi1PRN6AOE7prtcaa4gxzuxDkVTHIbkHmTJJgX9e8=
+X-Gm-Gg: AYBFou001evsotT5iLAA8hNh7XCnuL9dyl3m5n8Ns8bsxix21sbIGQJVtvpPYnKPZFr
+	6Q1N5qysODK38hHrZJItSK3E+NaFqd7rGII/XdiXtAbqj/jlv7PVjWNTwLwe50B6vblCZw1dxfG
+	FxsTD3wvhLcKiocO9cfoujdrkGDwr5EkpIUEpUGNsVoz+lMFyEYz84bf+BhtQwWx0m7APQpkCRA
+	Yb7lznhlZ3rx6z/TZgN2wH4V6ESBHjyFohw6YcCDFpSWam66MOqjk1wv5raoAn13RUsYRpWzqrb
+	GfECHmfyyHCkMrA1yZVrRcpQptlM24vdO29bO77uWXu7JFkV5Qj+4ap4Thc8DcBValsU9tSJeaD
+	PAnxM8iu8wW0qbU2V1E3AJi5d3m3uqErQwR3T8njOWDnACCxNChLnfW4FkNZSUwPf1ug9/FtHKv
+	5UKZ5F2MOZRJRGha6cpCd8dp76gbnmXHEZ1Zcl5f9aW1UqigI+0stBwhw=
+X-Received: by 2002:a17:903:1b04:b0:2dd:ad74:ac32 with SMTP id d9443c01a7336-2df69d664c1mr17892785ad.27.1790155612220;
+        Wed, 23 Sep 2026 02:26:52 -0700 (PDT)
+Received: from PC2. ([175.193.106.181])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a60c741sm7677995ad.80.2026.09.23.02.26.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2026 02:26:51 -0700 (PDT)
+From: Park Tae-sun <ts930@dgu.ac.kr>
+Date: Wed, 23 Sep 2026 18:26:48 +0900
+Subject: [PATCH] selftests/mm: fix mlock2 errno handling and false PASS on
+ ENOSYS
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/3] arm64: Add BRBE support for
- bpf_get_branch_snapshot()
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
- Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
- Puranjay Mohan <puranjay12@gmail.com>
-Cc: bpf@vger.kernel.org, Anshuman Khandual <anshuman.khandual@arm.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>,
- Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>,
- Stephane Eranian <eranian@google.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif
- <usama.arif@linux.dev>, linux-arm-kernel@lists.infradead.org,
- linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-team@meta.com
-References: <20260810164622.1829843-1-puranjay@kernel.org>
- <CANk7y0ixo5a3Vfzj_HVhVHRNce2Rsit4pP27GCtXd4jHHzmiKg@mail.gmail.com>
- <CAEf4BzapC=7YM2QLMyKKfyOWGgBTfEJmPPN8e9Jf5xT9SutBTQ@mail.gmail.com>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <CAEf4BzapC=7YM2QLMyKKfyOWGgBTfEJmPPN8e9Jf5xT9SutBTQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260923-selftests-mm-mlock2-fix-v1-1-750b627854c6@dgu.ac.kr>
+X-B4-Tracking: v=1; b=H4sIAFebs2oC/x2MzQqDMBAGX0X27IJZtWBfpXjw54tdarRkQymI7
+ 27wOAMzBxmiwuhZHBTxU9N9y+DKgqb3sC1gnTOTVPKoOqnZsPoES8YhcFj36SPs9c8eaLu5dqO
+ ThnL9jcj6Pr/687wATq34PWkAAAA=
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+ Brendan Jackman <brendan.jackman@linux.dev>, 
+ Muhammad Usama Anjum <usama.anjum@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Park Tae-sun <ts930@dgu.ac.kr>
+X-Mailer: b4 0.13.0
 
+While inspecting selftests/mm syscall wrappers, I noticed that mlock2_()
+in mlock2.h handles the syscall return value differently from other
+wrappers:
 
+    int ret = syscall(__NR_mlock2, start, len, flags);
+    if (ret) {
+        errno = ret;
+        return -1;
+    }
 
-On 22/09/2026 21:40, Andrii Nakryiko wrote:
-> On Tue, Sep 1, 2026 at 6:45 AM Puranjay Mohan <puranjay12@gmail.com> wrote:
->>
->> Hi James,
->>
->> Can you review this version of the patchset? It is implementing what
->> we discussed in the thread on the last version.
->>
-> 
-> James, do you mind reviewing the patches again, seems like Puranjay
-> went with the implementation you suggested, would be nice to review
-> and ack, if it looks good to you.
-> 
-> Mark, Will, you guys seems to be designated as maintainers for
-> drivers/perf/arm_brbe.c, can you please take a look and give your
-> feedback as well? This is important and useful feature for newer arm64
-> CPUs, it would be great to get access to this functionality that we
-> had on x86-64 side for a long while now. Please help get this upstream
-> or, if it's not in the right shape, guide Puranjay towards a better
-> implementation. Thank you!
-> 
+Commit 1ddae9d67ee1 ("selftests/mm/mlock: print error on failure")
+introduced this intending to make mlock2_() behave like libc by setting
+errno and returning -1. However, glibc syscall(2) already returns -1 on
+failure and sets positive errno. Assigning "errno = ret;" overwrites
+errno with -1.
 
-LGTM, and the Sashiko review is good too. It does conflict with the 
-FEAT_NMI patches on the list, and you'd have to disable NMIs but as it 
-stands right now it's ok.
+To verify this, mlock2 was disabled in the kernel (via sys_ni_syscall) to
+return -ENOSYS. Testing revealed two interrelated defects:
 
-Reviewed-by: James Clark <james.clark@linaro.org>
+1. In the unmodified test, mlock2_() clobbered errno to -1. The check
+   "if (ret && errno == ENOSYS)" in main() was bypassed, resulting in an
+   immediate crash in the first test:
 
+       ~ # ./mlock2-tests
+       TAP version 13
+       1..15
+       Bail out! mlock2(0): Unknown error -1
+       # Planned tests != run tests (15 != 0)
+       # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+       (exit code: 1 - FAIL)
 
+2. After restoring mlock2_() to directly return syscall(), errno correctly
+   retained ENOSYS (38), entering the ENOSYS check in main(). However, it
+   then called ksft_finished():
+
+       ~ # ./mlock2-tests
+       TAP version 13
+       # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+       ~ # echo $?
+       0
+
+   Because ksft_set_plan() had not been called yet (ksft_plan == 0) and
+   zero tests ran (ksft_pass == 0), ksft_finished() evaluated 0 == 0 as
+   success and exited with KSFT_PASS (code 0) without any TAP skip header.
+
+Fix both issues by:
+1. Returning the syscall() result directly in mlock2_() so that errno is
+   preserved.
+2. Calling ksft_exit_skip() on ENOSYS so unsupported kernels report a TAP
+   skip ("1..0 # SKIP ...") and exit with KSFT_SKIP (code 4).
+
+Verification on the mlock2-disabled kernel:
+
+    ~ # ./mlock2-tests
+    TAP version 13
+    1..0 # SKIP mlock2() syscall is not supported
+    ~ # echo $?
+    4
+
+Re-enabling mlock2 in the kernel confirmed all 15 tests pass cleanly:
+
+    ~ # ./mlock2-tests
+    TAP version 13
+    1..15
+    ok 1 test_mlock_lock: Locked
+    ...
+    ok 15 test_mlockall_future_droppable: droppable memory not locked
+    # Totals: pass:15 fail:0 xfail:0 xpass:0 skip:0 error:0
+    ~ # echo $?
+    0
+
+Fixes: 1ddae9d67ee1 ("selftests/mm/mlock: print error on failure")
+Fixes: 65c89684896d ("selftests/mm: mlock2-tests: conform test to TAP format output")
+Signed-off-by: Park Tae-sun <ts930@dgu.ac.kr>
+---
+ tools/testing/selftests/mm/mlock2-tests.c | 2 +-
+ tools/testing/selftests/mm/mlock2.h       | 8 +-------
+ 2 files changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/mlock2-tests.c b/tools/testing/selftests/mm/mlock2-tests.c
+index e16e288cc7c1..144b550813a6 100644
+--- a/tools/testing/selftests/mm/mlock2-tests.c
++++ b/tools/testing/selftests/mm/mlock2-tests.c
+@@ -502,7 +502,7 @@ int main(int argc, char **argv)
+ 
+ 	ret = mlock2_(map, size, MLOCK_ONFAULT);
+ 	if (ret && errno == ENOSYS)
+-		ksft_finished();
++		ksft_exit_skip("mlock2() syscall is not supported\n");
+ 
+ 	munmap(map, size);
+ 
+diff --git a/tools/testing/selftests/mm/mlock2.h b/tools/testing/selftests/mm/mlock2.h
+index 81e77fa41901..4417eaa5cfb7 100644
+--- a/tools/testing/selftests/mm/mlock2.h
++++ b/tools/testing/selftests/mm/mlock2.h
+@@ -6,13 +6,7 @@
+ 
+ static int mlock2_(void *start, size_t len, int flags)
+ {
+-	int ret = syscall(__NR_mlock2, start, len, flags);
+-
+-	if (ret) {
+-		errno = ret;
+-		return -1;
+-	}
+-	return 0;
++	return syscall(__NR_mlock2, start, len, flags);
+ }
+ 
+ static FILE *seek_to_smaps_entry(unsigned long addr)
+
+---
+base-commit: 518e5b794c06c0f0eb40df3e202274a66202c137
+change-id: 20260923-selftests-mm-mlock2-fix-fee59d31b124
+
+Best regards,
+-- 
+Park Tae-sun <ts930@dgu.ac.kr>
 
