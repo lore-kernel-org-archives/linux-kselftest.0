@@ -1,121 +1,98 @@
-Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-198.mta1.migadu.com [95.215.58.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE91E45C6E0
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 10:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CB842E40F
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 10:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790157834; cv=none; b=i1iXU5E0zAanyUMcK33B6qbFIHIV5MBIn+ztZ+XIJCkasuQ8i9ySu4teZw6G8/aJ/nPaWf+XXTO89mDNv2ar9Emh0jm6wc05iAV4O0esmbCj/Gq0riy3iejg/fkQr5BRjG/GV2ApD/FeqzkXYprstFEpbLAlSX8dqTWoUE95wuA=
+	t=1790157840; cv=none; b=L+oewjRbHpAbinSKzh80JTwiAERkNM/KFOx/er2v8MWrs863cf/S6LUlHkXUKymFAqcvTLNnQc8SgbSW9IT/5Am/YJ4il77KvGjkgl+I14H+i4Z48HuUb9MV0sl2vf7DDMGpPLb9Lm/z4y0TO4yvvKgJL16GDs7p5ijHQL+XqLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790157834; c=relaxed/simple;
-	bh=PVOIsDn6pcFMAnCEhiCYpLCKy7D9K3ZTe6HdGtIuI10=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=npJjYzzIM7iVsNqhOcJOOh9muH7Oc5Yfyi2vcNc6eUnFns8x7dda6CkfdBat3REUEIUmN/VTHSIW4vbL0OiArA8IZRvWIH7CCRI9fKXwNO0zAiXpkMszv+IpvdEKDGxjXpI8bHNCc1COeHHXHeXi6ovycMQxjMyFKpIHzT+ePKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=ly8X49xa; arc=none smtp.client-ip=45.157.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1790157840; c=relaxed/simple;
+	bh=xyyxgX6Z2IBzQdllFbMd3l1KS0QkIUQEnt09r+FTDSw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=q6VJw0aCjkZTmJXc1T34WtcjVIZrsYTahoX1HoW0V7AfyS9NNjzO7Y+19ddaW6K6x9Sm/567TSpAYBub0RtbCvXV+LeepPIRdqnamh7cXJhDCwxgAV0LIH4wYYuKd+rIxXetAKEgi8KYFmQv/4tKpm9WqG+FyVurQf92D3HcnNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=w1XL8vr4; arc=none smtp.client-ip=95.215.58.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="ly8X49xa"
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4hqXbz6wvDzVFw;
-	Wed, 23 Sep 2026 12:03:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1790157823;
-	bh=jo5BAFeQ+LQMNxWpXBTUI1R+keGwdWmCoZUbkfVBPP0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ly8X49xaBN00w1Yusa2OTlLmc1kPySCRdt+LFYEYasvgHYTjOB5ZFecuPP7M1L7/v
-	 isFSZo6xT4odfBnqvkysYLoITYDBqhMOAxlDwEGc2c7XbeARMxpUL9xKJdBgLuoA8R
-	 9+cR6+wgyVsUx+FE3DMyMV1eRfF0Q0nGDMIklb2s=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4hqXby4P0Hzxfk;
-	Wed, 23 Sep 2026 12:03:42 +0200 (CEST)
-Date: Wed, 23 Sep 2026 12:03:38 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Christopher Lusk <clusk@northecho.dev>
-Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Oleg Nesterov <oleg@redhat.com>, 
-	Jiri Slaby <jirislaby@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Tahera Fahimi <fahimitahera@gmail.com>, Paul Moore <paul@paul-moore.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, John Johansen <john.johansen@canonical.com>, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] Landlock signal scope and TIOCSIG
-Message-ID: <20260923.eehieph7UaX1@digikod.net>
-References: <20260913221958.839429-1-clusk@northecho.dev>
- <20260914.b8a029f9abb8@gnoack.org>
- <20260914134013.1457130-1-clusk@northecho.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="w1XL8vr4"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=xyyxgX6Z2IBzQdllFbMd3l1KS0QkIUQEnt09r+FTDSw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790157836; v=1; x=1790762636;
+ b=w1XL8vr4DX/F/SVohxkQna2KJfhkjuYXt02fDxrQxujKZBQh7jRuRg6mVjku4LNVJ5N6DXDz
+ ig5jXYnE1ZiQ8xM4OO3vNLCdLqALQGFKi5mtDl1AQt5ycaToPGNqU/t7Tq1FXv89ruqjGuCurlf
+ dT1vfOG7BNoo6G6zSGPEkun4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 2abdc29687e91d12;
+	Wed, 23 Sep 2026 10:03:56 +0000
+X-Mizu-Trace-ID: 2abdc29687e91d12
+X-Migadu-Flow: FLOW_OUT
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5b5e5aaf7deso4715e87.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 03:03:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBz8X/uo/Gwr6YdGrQqJIQig3eCh6Y7gejdS5k4m4McHJFnjhlQfXQeyTE0K1+2771TraFF+JrzgkUMT1SGASKE=@vger.kernel.org
+X-Gm-Message-State: AFuF++kOUFl4NadjsgADYWS6RsBrrS/zRDmg/6GNahUc7hKi59JTYZzQ
+	DNU+RHH0rHAIt+bC+daXk/EfO/LLrTCwU2C2jlRZNreOossbhfbKc3DFZNG1aHVFOA4XhgU4lWB
+	ZMKSxia9o/DaaEWRNI31TolCjmYI7QZ3XZoXyrqyR
+X-Received: by 2002:a05:6512:ba8:b0:5b6:bcb:26c4 with SMTP id
+ 2adb3069b0e04-5b8d885c755mr142676e87.16.1790157835308; Wed, 23 Sep 2026
+ 03:03:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260914134013.1457130-1-clusk@northecho.dev>
-X-Infomaniak-Routing: alpha
+References: <20260922-kvm-arm-prefault-v3-0-787bd3bc7e3f@kernel.org>
+In-Reply-To: <20260922-kvm-arm-prefault-v3-0-787bd3bc7e3f@kernel.org>
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Wed, 23 Sep 2026 11:03:19 +0100
+X-Gmail-Original-Message-ID: <CA+EHjTzpYRu2xq5VdoxodyDqLTJrcoaSrfGq=DXh283TYPJ-OQ@mail.gmail.com>
+X-Gm-Features: AcwNN1Uc3FNAcNduJiv3v9IEKpsaLZzqL8bqap-uQ6FOvMoC3rZk-evpRR8tlZg
+Message-ID: <CA+EHjTzpYRu2xq5VdoxodyDqLTJrcoaSrfGq=DXh283TYPJ-OQ@mail.gmail.com>
+Subject: Re: [PATCH v3 00/14] KVM: arm64: Add KVM_PRE_FAULT_MEMORY support
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Steffen Eiden <seiden@linux.ibm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Mark Rutland <mark.rutland@arm.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Jack Thomson <jackabt@amazon.com>, Jack Thomson <jackabt.amazon@gmail.com>, 
+	Alexandru Elisei <alexandru.elisei@arm.com>, Vincent Donnefort <vdonnefort@google.com>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Sean Christopherson <seanjc@google.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Leo Soares Passos <Leo.Bras@arm.com>, 
+	Wei-Lin Chang <weilin.chang@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Christopher,
+Hi Lorenzo,
 
-I agree with Günther and I'd like to bring, from my point of view, the
-most important thing about TTY master FDs: they are mean to send
-arbitrary data/signals to TTY slaves, and in most cases this mean inject
-keys and then commands.  So TTY master FDs should be seen as a
-(legitimate) way to control another process, even if that might not
-always be the case.
+On Tue, 22 Sep 2026 15:17:54 +0100, "Lorenzo Stoakes (ARM)"
+<ljs@kernel.org> wrote:
+> This series implements the KVM stage 2 page table pre-faulting feature for
+> arm64.
 
-A case in point would be an SSH or sudo/su command attached to a slave
-TTY.  The process able to write on the related master TTY FD should be
-considered as privileged as the slave command.  This illustrates why
-human-computer interfaces (including TTYs, desktop interfaces...) are so
-critical.
+There's likely going to be a respin for the arch hook, but FWIW,
+tested as follows:
 
-Also, just adding these LSM hook changes would break exisiting LSM's
-security policies.
+QEMU/arm64 -cpu max:
+- guests boot on VHE, nVHE and protected-mode hosts, protected guests included
+- pre_fault_memory_test (all guest modes, anonymous, THP, hugetlb and
+shmem backing) and nv_pre_fault_memory_test pass
+- pre-faulting an uninitialised vCPU returns -ENOEXEC
+- dirty_log_test, demand_paging_test, mmu_stress_test and
+stage2_block_transitions also pass
 
-Updating the Landlock doc with this rationale is defenitely a good idea.
+Apple M4 (nVHE, 4K and 16K pages):
+- pre_fault_memory_test passes on the five guest modes available
+there, with the same backings
+- in protected mode (4K pages), the cap isn't advertised, the ioctl
+returns -EOPNOTSUPP, and guests boot
 
-Testing this invariant is also valiable, so it would be nice to tweak a
-bit your test and include it with the doc update.
+Tested-by: Fuad Tabba <fuad.tabba@linux.dev>
 
-Regards,
- Mickaël
-
-
-On Mon, Sep 14, 2026 at 09:40:13AM -0400, Christopher Lusk wrote:
-> Hello Günther,
-> 
-> Thanks for digging into this so carefully, and for the clear write-up.
-> 
-> Your capability framing convinces me.  Controlling who may attach to (or
-> open a master for) the PTY is the right layer, and the master FD is best
-> thought of as the capability, the same way socketpair() is.
-> 
-> You are also right that the series is incomplete as a fix: the same three
-> signals arrive through the n_tty control-character path (Ctrl-C / Ctrl-\ /
-> Ctrl-Z) that my patch does not touch, and PTYs additionally raise SIGWINCH,
-> SIGHUP and SIGCONT.  That reinforces your point rather than mine.  Chasing
-> individual signal-delivery paths inside the TTY layer is the wrong layer,
-> and a per-ioctl hook would only paper over one entry into a mechanism that
-> is working as designed.
-> 
-> One question, mostly so I have the line right in my own notes rather than
-> to relitigate: how do you see this relative to the SIGIO/fowner path that
-> 4b80320ca7ed brought under SCOPE_SIGNAL?  My read of the distinction is
-> that in the SIGIO case the sandboxed process unilaterally selects the target
-> by arming the owner, whereas here the recipients have voluntarily attached
-> to the terminal and the TTY driver delivers job-control signals over that
-> attachment.  If that is the intended boundary, it is a clean one, and I am
-> happy to treat TTY-driven signals as outside the guarantee.
-> 
-> If it is useful, I would be glad to send a small documentation patch making
-> that explicit: a note in the SCOPE_SIGNAL / IPC-scoping section of
-> landlock.rst that TTY-driver signal delivery (TIOCSIG and the
-> control-character path) is not mediated by SCOPE_SIGNAL, with the practical
-> guidance to control PTY attachment instead.  I will drop the task_kill
-> approach.
-> 
-> Thanks again for the thorough look.
-> 
-> Christopher
-> 
+Cheers,
+/fuad
