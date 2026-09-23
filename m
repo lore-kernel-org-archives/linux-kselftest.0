@@ -1,141 +1,171 @@
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0712F1FC7
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 00:49:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790124589; cv=pass; b=hJXEV615deV6Qg+sDiworzwPyYMWXLkbsRpiktglTPsY2gLLmEL2FBeCWRDFtO1NAQ6yA3JPU0FG5+SJpl7s5IM0KuxVdW3i3uLkbAdllYMI9PP+639jTQOA8wM9OI8ga2oYSTDzLHSQpp180mr6uZ9jB2+pZTCQOJ3tm5FSTfc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790124589; c=relaxed/simple;
-	bh=z4nEtmW/B7eogzGruiprSjDTAnPPo0KNEGcrLZetKgE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JdtgzDdhtBbJ2CUC4uRUUvn1fpWwXw27ixU8OdPzTPPY5W+KHgl3tDgRmDmcvj3DPolFWCahBt+YNu1TuUzU6d5Q1vz6i/1NY8KwpmgYePjEXKTMIppfGjozmBTW5j1Eprpfu+KLhjWZYxNX1t5fJH6cUsTQoGajXUhDwiVfk4U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kPmhPf6G; arc=pass smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DDD7318EFF;
+	Wed, 23 Sep 2026 00:56:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790124982; cv=none; b=SSK24WImCLaYkX79RLCcgkbRB1t1/In2IU2xpBNEtTxOW+blEGNSExyDcWYW3eKtApsi3YbAVOB+iJUhZR6RnJjO7jfs61Fy8UtJo0rgiJcrKoY+5CDxoDF/XY0JGz2qia/9Zvhgo3L2mNiTsYA57+Fq7QFNIy7vNk9JuQxfprk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790124982; c=relaxed/simple;
+	bh=RCu65nTkQnj76zhgyrdUviMiADSeaid5QCzfmZbNP38=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=LlsXUedMb1uWvKJBFe+0DAW/n9DnImyzvCbrwBXfegJo9oHTISrXQaFD0QGhS+G9Q9LDiZopRp4SmilCcjmth8gO5J0zQVFYfD+ssXBAlcLIObFb+Ne7pXDxvI+qPpPcU7JK12YRB/K59zUa8E6wwo98j9HCGOWGFFPZzgWcK2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TQZdeG8A; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kPmhPf6G"
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-3a20f06cce6so4415101fa.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 17:49:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790124586; cv=none;
-        d=google.com; s=arc-20260327;
-        b=lO0rpfLhaBM3r2orTOZY6ozCgvKyjxNBQdS1Y/+48RSex93N3+UPYhJWOWuf8QLl0m
-         DQ5HTILHflmcESkTZGipTv1x42UOMeafIBfEfGpElcVc5kwd6Zb3XUi4JPr3FA6Wk4SN
-         eHBfG3wM7Mx0i+VpLmpEHhvXYUyukVsqH+8CH3T8dsn6lMwliWFlLhtQHl/kWW9YFV/b
-         DjTzU2+SE9TF0Rb4Hwy0CF+fsiLlZSZNIiY+zy9ofqTFHWFpCsBISDNRD0WVEYmEbQP3
-         28sCKOVHb7vXhgssX1EcaI6RXyq4xJw3QGZ38kolu6oaL+uewLTPfDr4e5yDNgOrW+I/
-         upVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=L/jUfJT4ttFuk5nJaSR/zxk67u0WSF3uD0qyCWP34DU=;
-        fh=EOZtzzsbbh5in8YNwapdi3w5slmm4KTpsGvT3CpDsuo=;
-        b=eazTZWeXnCtfWdhxphth2u33ZvI8/OhxUcHQElCRru68IMSDU2VzcfFvI1Dssy/WGR
-         ibEcOOx7j1EtV11Z10hciNMLekYTUYCkhIWB1jl4F4Y/MspdBgZofSV2yhGeymgM7SJ4
-         SAWCBjzwIXgVrm6m92rPCO893tP1HpDc6mHNVYweFg0xBLNnf/MXwlB2e9kFtnlUtrLE
-         Sb97GQ96RRex4wou34eUvpxjVXj6YiWho4PqKh7kEvL+KqbcLtu3ho837RDmdhI4tGyP
-         etUT1/omJwRNCmKBhilzeBq3JSbdShJsiqISQMXJJd1YiiIyJ0y/zltHKhhHjZ4LOqcG
-         FVxQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790124586; x=1790729386; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=L/jUfJT4ttFuk5nJaSR/zxk67u0WSF3uD0qyCWP34DU=;
-        b=kPmhPf6GKAPw3LS7y85s3PjBNg3bk61omaCv6WTEwcjvDNy9YxJhCPIUaWNV2jBJho
-         F6YH+aTw47peFBTEkDE5L6r777tVK6YHwSC5eUC2zwDvRegrhrecbsOHUNEsVooVScY/
-         aEhPC734NOpIAn3lthxA679K/o8az2HWx94umWqHXiC6AEsQFTaGlcUaF96r2Xa8dhkR
-         UDfgDVjp+83EcLBOGAS8PuDY+4tocoD4G9WJ3w5eGZ0OcOVvwxxVW+AqIYgY1SRJoxHI
-         /E2O6wI/9Y4hewo8yTZ9iNgQDdidffqsp7SwXR5godqEWQHM/01S7wgxKJHncQJxk1Cc
-         EmGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790124586; x=1790729386;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=L/jUfJT4ttFuk5nJaSR/zxk67u0WSF3uD0qyCWP34DU=;
-        b=Yg+kFFlqQ1WvTuFHD4WgjvnedlA6oAZj2AU4r6LLaY8FrNFJDEWK4UKIihSVZlgPru
-         3ajLgbUZArQJNmXs1rn8pQGAbD93+Thns/50JLPtsHVoHaOYUUcWd3WXRBYoaRzOhzTN
-         WlJBXmSrMM/3orKpx4d3XyPeGmc17Ba8Wn5BopB1ALe1UZ/ggilS+k32ZrrGamt6dFnR
-         3GdwhjsUFY/LHEGmQBIT1nYCPB2umyEuwXSRYi+eTQ3a3u+Ybu86TpucPTjLpqOupspD
-         NyW7Kb0lFbwvWLhU35DpP6ZFt6WtxEbvj2amvhEC2pJVISLxdQM1grMMoM/6BKs+/aWU
-         om3Q==
-X-Forwarded-Encrypted: i=1; AKwUvByTmZeZllNOMyozox4dwIDzUUhMOgcGppYbV4l6m1/GdnZfq7/QXLsRh0KqdYZp0e3wlniUevJ7VJNTcDIY8Gw=@vger.kernel.org
-X-Gm-Message-State: AFuF++kqQdjklIFivKIbwl1/AxEPPK7NgDUPxbcYs4jU57MiPpeUd31p
-	BKZHrrr+AjfVLcJoNaiC3aaRDp22tfF6+A+k4Sz94udjdu0LozHTJNvVriWMtoP4GiVhV41GceR
-	DuYasuN8vB4MXu4Ac1i2Bb8Izz0uwbxU=
-X-Gm-Gg: AYBFou2EERg0Tqp8c2tKnJVAm2vFpyZZJ6xHbNKHWKx68IO0ud1i/BM2OgGL3hbmIqZ
-	mJFzn7o2DimDyCZ5fMi02uOMWXW7YnHqNSU8ZTQMfKg/nn/AdNwCE7c+SLH0KcjcudHgqLEvla4
-	pARl879evFjTZeWP+cAXd3igmIIv+DYVELMSk2Q+m2PwXozx79NG9kiutQuRXcUvfbv4YB1kt5f
-	uF4e346tSFlWI5bBOH9rquDZua4C8h0kZSqLsFjTSks6Lf0QUeqY6omn24/wortSbQ1/1kWhOlK
-	yUNzJhxkJRYEff9grN5Z0ODl2C/6DEznWzjoJO+EFDOV6nYIaligU1Y/nok4Ilz8+OeTRQW+bYy
-	zjM3cYa3E2W/F/yR4ph4pDWGbO739vILOBIzdjVNa9OpYsLS7RbBf74I=
-X-Received: by 2002:a05:651c:a189:b0:3a5:eacf:9811 with SMTP id
- 38308e7fff4ca-3a624d70958mr9639501fa.14.1790124585416; Tue, 22 Sep 2026
- 17:49:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TQZdeG8A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C301F000FF;
+	Wed, 23 Sep 2026 00:56:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790124980;
+	bh=xVe6eZVsM2VaZORoW6oADEFcC35xw7e3lHiorJq7vJs=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=TQZdeG8ACsA2HZWQZNe957zHdNRBCDH8LEI8lX7RxKdGPPtg3HjuE7AeSjOm2blkU
+	 TPMcFSwPCPqVjB1OU28DaJot9R0LYFOyHhzOFbCM5CbxCWw8TCh/I6Sf7InEYDWiuI
+	 CVXWotfC7p0yGFcKKBb9e30ax3lAIM+8BjsgriwrYeEZdVrJHXcsk45ZoMp41PianS
+	 mOwGCsozufI9DgzrTbRER6BVfa22T0SJTyg5kmtX8cfxiuwgR/PC4yUawfJHz77seR
+	 9vLl3mkW61VgOWu8iirFZGBiS0UTqrTOTewttfB6KTN75LlRJ+QZPrmdC4pDT1MwtV
+	 34D9oLXKDzw6A==
+Content-Type: multipart/mixed; boundary="===============8622471367442830940=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260921235951.3214-2-sigefriedhyy@gmail.com> <179012274833.2160803.6278526272510624940@kernel.org>
-In-Reply-To: <179012274833.2160803.6278526272510624940@kernel.org>
-From: Yuyang Huang <sigefriedhyy@gmail.com>
-Date: Wed, 23 Sep 2026 09:49:34 +0900
-X-Gm-Features: AcwNN1XrOYM44dDQqYS22hhW-LuVc39KJdo7O2ULglxGQeLxCAP5lFJTK_NObdY
-Message-ID: <CA+7S2vJ_Wq+_BrZ31qWnDFMowZdo2wR0THrZ-qkgFD1dMQoH-g@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 1/4] netlink: specs: rt-addr: fix the type of target-netnsid
-To: netdev-bot+sashiko@kernel.org
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, dsahern@kernel.org, 
-	donald.hunter@gmail.com, edumazet@google.com, idosch@nvidia.com, 
-	jacob.e.keller@intel.com, kuba@kernel.org, kuniyu@google.com, 
-	nicolas.dichtel@6wind.com, nickgarlis@gmail.com, pabeni@redhat.com, 
-	sd@queasysnail.net, shuah@kernel.org, horms@kernel.org, sdf.kernel@gmail.com, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <3d31f180b472adb3b215571fa73ba38641cc93a33ea2e8e82413f37957c2d99a@mail.kernel.org>
+In-Reply-To: <20260923000801.1764758-3-donggeunyoo.kernel@gmail.com>
+References: <20260923000801.1764758-3-donggeunyoo.kernel@gmail.com>
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Test per-cpu initialization of a BPF_F_CPU created element
+From: bot+bpf-ci@kernel.org
+To: donggeunyoo.kernel@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,leon.hwang@linux.dev,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,donggeunyoo.kernel@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 23 Sep 2026 00:56:18 +0000 (UTC)
 
-On Wed, Sep 23, 2026 at 9:19=E2=80=AFAM <netdev-bot+sashiko@kernel.org> wro=
-te:
-> [Severity: Low]
-> This isn't a bug in the change itself, but should this carry a Fixes: tag=
-?
->
-> The spec has been shipped with the wrong type, and the generated ynl code=
- and
-> the Python decoder have been treating the netns ID as an opaque byte blob=
-,
-> with the request path rejecting an integer for a binary attribute.  The
-> kernel side has always declared it signed 32-bit:
->
-> net/ipv4/devinet.c:ifa_ipv4_policy:
->         [IFA_TARGET_NETNSID]    =3D { .type =3D NLA_S32 },
->
-> with nla_put_s32() on the emit side and nla_get_s32() on the parse side i=
-n
-> net/ipv6/addrconf.c.
->
-> git blame on the pre-patch tree attributes the type: binary line in
-> Documentation/netlink/specs/rt-addr.yaml to:
->
->   dfb0f7d9d97956 ("doc/netlink: Add spec for rt addr messages")
->
-> so would adding
->
->   Fixes: dfb0f7d9d979 ("doc/netlink: Add spec for rt addr messages")
->
-> help backport tooling and users identify which releases carry the wrong
-> type?
->
-> --
-> Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
-set/20260921235951.3214-1-sigefriedhyy%40gmail.com
+--===============8622471367442830940==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This issue has been discussed in a previous review comment before, we
-want to keep this patch target net-next without the Fixes tag.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
+> index a72ae0b29f6e..f853f97bb882 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
+
+[ ... ]
+
+> @@ -350,6 +350,80 @@ static void test_lru_percpu_hash_cpu_flag(void)
+>  	test_percpu_map_cpu_flag(BPF_MAP_TYPE_LRU_PERCPU_HASH);
+>  }
+>
+> +/*
+> + * A BPF_F_CPU update that creates an element must zero the value on the other
+> + * cpus, rather than leave them holding whatever the recycled element last
+> + * contained. max_entries is 1 so the second key can only reuse the element
+> + * the first one released.
+> + */
+> +static void test_percpu_map_cpu_flag_create(enum bpf_map_type map_type, __u32 map_flags)
+> +{
+> +	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = map_flags);
+> +	const u32 stale = 0xDEADC0DE, fresh = 0xC0FFEE;
+> +	int nr_cpus, cpu, map_fd, err, key;
+> +	u32 value;
+> +	u64 flags;
+> +
+> +	nr_cpus = libbpf_num_possible_cpus();
+> +	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
+> +		return;
+> +
+> +	if (nr_cpus < 2) {
+> +		test__skip();
+> +		return;
+> +	}
+> +
+> +	map_fd = bpf_map_create(map_type, "cpu_flag_create", sizeof(key), sizeof(value), 1, &opts);
+> +	if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
+> +		return;
+> +
+> +	key = 1;
+> +	value = stale;
+> +	err = bpf_map_update_elem(map_fd, &key, &value, BPF_F_ALL_CPUS);
+> +	if (!ASSERT_OK(err, "bpf_map_update_elem all_cpus"))
+> +		goto out;
+> +
+> +	err = bpf_map_delete_elem(map_fd, &key);
+> +	if (!ASSERT_OK(err, "bpf_map_delete_elem"))
+> +		goto out;
+> +
+> +	key = 2;
+> +	value = fresh;
+> +	flags = BPF_F_CPU;
+> +	err = bpf_map_update_elem(map_fd, &key, &value, flags);
+> +	if (!ASSERT_OK(err, "bpf_map_update_elem specified cpu"))
+> +		goto out;
+> +
+> +	for (cpu = 0; cpu < nr_cpus; cpu++) {
+> +		value = 0;
+> +		flags = (u64)cpu << 32 | BPF_F_CPU;
+> +		err = bpf_map_lookup_elem_flags(map_fd, &key, &value, flags);
+> +		if (!ASSERT_OK(err, "bpf_map_lookup_elem_flags specified cpu"))
+> +			goto out;
+> +		if (!ASSERT_EQ(value, cpu ? 0 : fresh, "value on specified cpu"))
+> +			goto out;
+> +	}
+> +
+> +out:
+> +	close(map_fd);
+> +}
+> +
+> +static void test_percpu_hash_cpu_flag_create(void)
+> +{
+> +	test_percpu_map_cpu_flag_create(BPF_MAP_TYPE_PERCPU_HASH, 0);
+> +}
+> +
+> +static void test_percpu_hash_cpu_flag_create_malloc(void)
+> +{
+> +	test_percpu_map_cpu_flag_create(BPF_MAP_TYPE_PERCPU_HASH, BPF_F_NO_PREALLOC);
+> +}
+
+Can this test give false negatives on the BPF_F_NO_PREALLOC variant?
+
+For preallocated maps, the comment's reasoning holds: max_entries 1 means
+there's a single struct htab_elem whose per-cpu area is allocated once and
+never freed. When the test deletes key 1, the element goes back to the
+freelist with stale 0xDEADC0DE still in its per-cpu area. Creating key 2
+gets that same element back, so if pcpu_init_value() is broken, cpu 0 will
+see 0xC0FFEE but other CPUs will still see 0xDEADC0DE.
+
+With BPF_F_NO_PREALLOC, the per-cpu area uses bpf_mem_alloc:
+
+kernel/bpf/hashtab.c:htab_elem_free()
+    bpf_mem_cache_free(&htab->pcpu_ma, l->ptr_to_pptr)
+
+which does unit_free() and pushes to the *current* CPU's free list. The
+subsequent create calls bpf_mem_cache_alloc(), which does unit_alloc() and
+pops from whatever CPU the second syscall runs on.
+
+If the thread migrated between the delete and the create, unit_alloc() gets
+a prefilled zero object from __alloc_percpu_gfp() rather than the
+just-freed stale one, so the test passes even on a broken kernel. Only when
+both syscalls run on the same CPU does the LIFO allocator return the stale
+object and trigger the assertion.
+
+Should this arm either pin the thread with sched_setaffinity() around the
+delete/create pair, or loop over all CPUs to make the result deterministic?
+
+> +
+> +static void test_lru_percpu_hash_cpu_flag_create(void)
+> +{
+> +	/* lru without prealloc is -ENOTSUPP, so there is no malloc variant */
+> +	test_percpu_map_cpu_flag_create(BPF_MAP_TYPE_LRU_PERCPU_HASH, 0);
+> +}
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35801690900
+--===============8622471367442830940==--
