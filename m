@@ -1,246 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6343569F1F;
-	Wed, 23 Sep 2026 19:21:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790191271; cv=none; b=Ti3f9hU6vR0mLIP56rworNxhnbVr9WWiRd985R77ZTOebTCMhO/3Gj6QA2DewxOK++7hPkmyLivmH+Utf2zZgUmT7eAiqmbvI4fkNyx2vnb3tM/503HB3to5MXvJVzL0eVbBLdJk38fNpPCvrQqCYDFI7Q9yEKIy8hydlrj9sGM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790191271; c=relaxed/simple;
-	bh=JyB88lU8D8plLkT8atp1POiJmxbZ97970p8UnhC5dIY=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=e3K+pUhI3if/QL7Kfsrh9cO+PcJ9NEdwulD7tpJZ/nvISA55TigSR5d1rKM5m6EFeuCdlT6Gz8X8I3XmrVhVq+XxgUct+bD79WY39vzkfdMQZ17ZYlUmALcaA1mUgrbvOhJNp3glFS62d3KQu1n83b2tZM9VAoIcViFxnkyvjxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XODkItKQ; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF644503EC
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 19:49:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790192990; cv=pass; b=U4VlV95sXlsRWETR/4dAqzi7hddaa3H/3aYHhf6yjq1di+4B4HfjEh5lnE9BQlLMgvxoF59jgJF2OUiEQhn1xOXnVWQcT1bA0oZLPjcvIwFQjV+bxxxpvmsp8XPyUHDtLB3jhfhgnRvgIqsPA9t5Z0aG+ITuXDlZRJq3bqm+hJk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790192990; c=relaxed/simple;
+	bh=RksxLKnB3yS+nYXEiKhMFhIcCH6JcEIqRI8Y/4IK6Kw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=G3AoXhgvOgO/l57di00FCIb1n/ArvjEBey3hK9RNk69/sKGwgGgSfo30GWKoNh+3mvWVsqNMPVuF8cldyG9CoDvy/Gia5Rdm/ShnJMORKK0F7PITA0xn6B77hl+CmL32aBQA049G+83yyPUqi+7YEdKlSNZD0WCTa3lcQlergig=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LaEh9T+V; arc=pass smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XODkItKQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CFA21F00893;
-	Wed, 23 Sep 2026 19:21:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790191269;
-	bh=MvAguG7XJjS5iXlWWMhU76RJL95W7uHcHbawUFlVNyE=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=XODkItKQaAOYarTSRjvSHqTRRZDng4evF9SQnTCxxfKxvXVwlGXwlNvA2xO+PZvMA
-	 9rg234UN9nnIZV6CT+cpxITrLHKJApSUMzE1pdNzCMnHr7jx8JZcJ90fozg9LKEnAV
-	 O1bppkT07sCdBQ/GCEdQa4GcGMRkoiHrwVaCO1uW2x8AtCPa/yGMr/hCzeXyVKIvW9
-	 ULlSzSErYp7xykehvOJzQEtDjc79zbWmVioe6qxQ7S2SQ1t7F15olxROeaqEVSstIq
-	 rsYOu9VbkP6/uX95VJjQFiFZwG7ouOrBrzObnBzQiGsDsKHspgORIsz2MqWWxxmx7N
-	 l3D/qPPmKcPIw==
-Subject: Re: [PATCH net-next v2 6/6] selftests/vsock: test the netns assign
- privilege checks
-From: netdev-bot+sashiko@kernel.org
-To: bobbyeshleman@gmail.com
-Cc: sgarzare@redhat.com, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, corbet@lwn.net,
- skhan@linuxfoundation.org, stefanha@redhat.com, mst@redhat.com,
- jasowangio@gmail.com, xuanzhuo@linux.alibaba.com, eperezma@redhat.com,
- shuah@kernel.org, rdunlap@infradead.org, donald.hunter@gmail.com,
- virtualization@lists.linux.dev, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, sargun@sargun.me, jlinbox@meta.com,
- sdf.kernel@gmail.com, bobbyeshleman@meta.com
-Date: Wed, 23 Sep 2026 19:21:07 +0000
-Message-ID: <179019126776.2160803.16648507383433583043@kernel.org>
-In-Reply-To: <20260921-vsock-guest-ns-v2-6-693bd78fde9e@meta.com>
-References: <20260921-vsock-guest-ns-v2-6-693bd78fde9e@meta.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LaEh9T+V"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6a9d74e8292so287a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 12:49:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790192986; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ErtdM/EnXQc6MWZOn/Mynozf0ooHS8FWXEV2x63z2xMNkxfTeQUnt9T42/tJbRc4r4
+         YtjR9Og4L8wkn6YBaSxk9+zDcUI8Utx9lVa6MPR1dLERGDKIox3KIxQn4FKQ0AJ3dl/L
+         qqIvc/5c5CKpAyFEP5iCODvLlPWYHaStnIOlkzxmwGqPxi8rveCk3fE5MYDLNON3knDX
+         7f2XxT4Yd/ihtS/EdL4AKIy2pGQtwBIs42YoDfIDChvptYEIuw/sM1AkHAHEamWfOktH
+         oHvwsCaq61n+3VB2TBUxMPcK08hhc9dhTFCqn7tPleB2h5jlCPA+e3b4F19ugkOoZqCD
+         mJTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Zg+TRF2hlMBWlKMGW490ituj1VT149iHCF+fbR91AZY=;
+        fh=DqhhQ+U64cKefUoX4nVc86vRV8WpkLnMOOLA48/CK0g=;
+        b=UH0hBp30Ufym5zuLwcpzteA4F1EeGRojNWa3pgyCAqZg4TtdEB0WZeFsZaCB1reAjZ
+         27f5uVoOmrfG577QwUlMxj8rllB+jEVOEkfWDp+UryWkbFHGy4Q8WWeHhNjsOuBzp9IO
+         EVPu25cV7701HHHC3OeYRp2JxBDmdkYKIFii+Ixv9ML8xAGQXKiAHT1zA+rIJx0d4qqT
+         j6x475HLm2ku7M1EoFyuHRnw6NRJ2UFFnUmlQZvUPd662BemiRJ14JNPilgUDkCUeU5s
+         FpT8VtgQMclJuEq01YSYKPsKuay9/uMRTxcGd8xh7M6xg/r00WtJkBtEsRzPW6/0HpX7
+         LdHw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1790192986; x=1790797786; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Zg+TRF2hlMBWlKMGW490ituj1VT149iHCF+fbR91AZY=;
+        b=LaEh9T+VhpbtNX3w/zEMWVHTzQaNgN2gquOOZCGIATw0zL58ufmqhUvrJALMVBT2dI
+         5M9C6MHdaknAoJUBO8gJa59Hd7+Gbp321zW9hwkUUZI4DxbdjLsnmdFG94knMYDYzlgi
+         UaoEF1dgi1mXvTpU+nfoE/dIsBxjSbA76K8nOxHTXmwauJ7yOB9b2OuONgns9v6NJOL8
+         DTWLoO/EIIDhWLzQp7RRj5uP0tl4iLYfR+SBKXYD13HC1iYWVSsQKeN/1cGKADA1W2y/
+         LwIWmo7Nf/FqVmEC/MHG43lZIvmiRlyF88vV7h//Pkhx4J8IyBvGFFc729mJjUCNYQ0X
+         BqhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790192986; x=1790797786;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Zg+TRF2hlMBWlKMGW490ituj1VT149iHCF+fbR91AZY=;
+        b=wwZdRIxXT5rFaSRJcNdAdYAFh/BGFa0DX6KJDlL6Ovx/K27R0ivwKdZvp6shdXqPkV
+         sPqLOPxfSOdl1Z553O7rTw9UAt3Tz1eiTnvAOqDK+8pfoW66UzMC8FTcBjStESUMSChN
+         GugH4Qe/DMYGFq4ZK6eqsgomhLWNP+1sRpUroPxQPebQmR23wogMIMA162Zm1jJL3Ihx
+         kU0100G5FCAFAhaEuI+RYKZ6CYHP64rvT1l2K5qshkeHj9wP5GXsTodr6Wd/zY96Bhge
+         hUfRGQhan19y++O2EChby2Etf1pQCh9PfUfg+5CNYRF8w8ISf6+29JQCjrM6JdhozQGr
+         pXFA==
+X-Forwarded-Encrypted: i=1; AKwUvByT1Czj7m5ZJ/+cL4J5iL6ZYdBaffejoibNTVU6MPzY6Ankd0iKUYEBQhoxbsiE5Ez0vAZAzXDr/AQzznSj/Pc=@vger.kernel.org
+X-Gm-Message-State: AFuF++ldUV5o/mMG/uc5Y94FpVo15ZMkKebPU7L897wdTGN/XdBpCTTs
+	yIC4nh+lcV1XANxq1HAg3LDdjssN0kUSwYJBT2/Q6nlRWJJFNNIQxWm9q0oEe/srkEsCspBIho2
+	TOD0Dtc8WPyO7VyV/PIeovvFo5fZOLd9l70vrMaPS
+X-Gm-Gg: AYBFou3HP3tL8iG1e9+WkBEg6yt7Fi9uzpO8CaffTZdbU3AmE40McS9exuGXddafpYn
+	PJ1UySMeFZGDWwquMz0lKL38rE4JFKMDeOJARbrsxTuHFNDphFj+VtMpjJndj3CtDCMlhTsP+WK
+	+wSOEUtPgJFVq0mdmxJZeB89MltIyQcS+zUxNOUAELEnsZPjFdLCfq9NZq9BAWxi03a+yX8l9Wl
+	yAm6RU2LzzWEaBf/XXfmZAP9WFo6ZdaBtWWQf0kGpIbSaqrGIX5O2Lf+y/uRphrSmUl58GPqP8t
+	/j9njsxScIWIgG/5hGVk3bIXg0Nr9oQ9v9xeiM7NTRT6BNAhzMnSOIg=
+X-Received: by 2002:a05:6402:1c0f:b0:69a:f1cf:4849 with SMTP id
+ 4fb4d7f45d1cf-6aac7c0a102mr17386a12.2.1790192985525; Wed, 23 Sep 2026
+ 12:49:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <cover.1790171702.git.zhang_wei@open-hieco.net> <ece0aca2e99edc2cc626e0a8e61ccace80a28d74.1790171702.git.zhang_wei@open-hieco.net>
+In-Reply-To: <ece0aca2e99edc2cc626e0a8e61ccace80a28d74.1790171702.git.zhang_wei@open-hieco.net>
+From: Jim Mattson <jmattson@google.com>
+Date: Wed, 23 Sep 2026 12:49:33 -0700
+X-Gm-Features: AclHuK9wDS3j_kFU_z29aQCAAxsQCqLzUICOjyr0No49JpSQevHnMBu9QJNROds
+Message-ID: <CALMp9eTyC5fhWnhbf1_npF30NuQzoAmuTbJe5mkG5Kv3_P3a=g@mail.gmail.com>
+Subject: Re: [PATCH v8 1/8] KVM: x86: Provide INVLPG linear address to
+ intercept handlers
+To: Tina Zhang <zhang_wei@open-hieco.net>
+Cc: Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, zhouyanjing@hygon.cn, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
-
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
-
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] Both new selftests
-  (`test_ns_guest_assign_g2h_netns_no_cap_net_admin_fails`,…
-- [Low] The two new shared-VM tests omit the `vm_reset_g2h()` cleanup
-  that every other ns_guest_assign_g2h_netns_* test in USE_SHARED_VM…
-
---
-
-selftests/vsock: test the netns assign privilege checks
-
-Adds two vmtest.sh cases that attempt VSOCK_CMD_DEV_NETNS_SET without
-CAP_NET_ADMIN and from an unprivileged user namespace, and enables
-CONFIG_USER_NS in the vsock selftest config.
-
-> diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
-> index e94cc2fd90ccd..4f42bcdac3f6c 100755
-> --- a/tools/testing/selftests/vsock/vmtest.sh
-> +++ b/tools/testing/selftests/vsock/vmtest.sh
-
-[ ... ]
-
-> @@ -187,6 +195,8 @@ readonly TEST_DESCS=(
->  	ns_guest_assign_g2h_netns_host_connect_ok
->  	ns_guest_assign_g2h_netns_reset_on_ns_delete_ok
->  	ns_guest_assign_g2h_netns_old_conn_send_fails
-> +	ns_guest_assign_g2h_netns_no_cap_net_admin_fails
-> +	ns_guest_assign_g2h_netns_unpriv_user_ns_fails
->  )
->  readonly NS_MODES=("local" "global")
-
-[Severity: Low]
-Both new tests are added to USE_SHARED_VM but neither calls
-vm_reset_g2h() on any exit path, unlike every other
-ns_guest_assign_g2h_netns_* test in that list.
-
-Should these follow the sibling pattern?  If the privilege check under
-test is broken, the assign succeeds and the guest's single g2h device is
-left owned by the transient namespace created by unshare, while the
-harness moves on to the next test in the same VM.
-
-The kernel does restore this by itself once that namespace is reaped:
-
-net/vmw_vsock/af_vsock.c:vsock_g2h_net_reset() {
-	if (likely(rcu_access_pointer(vsock_g2h_net) != net))
-		return;
-
-	mutex_lock(&vsock_register_mutex);
-	if (rcu_access_pointer(vsock_g2h_net) == net)
-		rcu_assign_pointer(vsock_g2h_net, &init_net);
-	...
-}
-
-registered as .pre_exit in vsock_pernet_ops, and the next test's
-vm_ns_assign_g2h() overwrites the pointer anyway.  The residual window is
-the asynchronous teardown that ..._reset_on_ns_delete_ok already documents
-("the namespace itself is dismantled from a workqueue, so the device does
-not come back the same instant").  Since the new tests are appended last
-in TEST_NAMES and USE_SHARED_VM, a default run is unaffected; this only
-shows up with selective or reordered invocation.
-
-[ ... ]
-
-> @@ -1832,6 +1842,48 @@ test_ns_guest_assign_g2h_netns_reset_on_ns_delete_ok() {
->  	return "${KSFT_PASS}"
->  }
->  
-> +test_ns_guest_assign_g2h_netns_no_cap_net_admin_fails() {
-> +	local cmd="unshare -n setpriv --bounding-set=-net_admin"
-> +	local rc
-> +
-> +	vm_ssh "init_ns" -- "${cmd}" python3 /root/ynl/cli.py --no-schema \
-> +		--spec /root/ynl/vsock.yaml --do dev-netns-set &>/dev/null
-> +	rc=$?
-> +
-> +	if [[ "${rc}" -eq 0 ]]; then
-> +		log_host "assign unexpectedly succeeded without CAP_NET_ADMIN"
-> +		return "${KSFT_FAIL}"
-> +	fi
-> +
-> +	return "${KSFT_PASS}"
-> +}
-
-[Severity: Medium]
-Can this test pass without the capability check ever being reached?  The
-only assertion is rc -eq 0 => FAIL, output is discarded with &>/dev/null,
-and there is no positive control, so any nonzero status reads as
-KSFT_PASS.
-
-A few concrete sources of a nonzero status that are not -EPERM:
-
-net/vmw_vsock/af_vsock.c:vsock_nl_dev_netns_set_doit() {
-	int err = vsock_g2h_net_assign(genl_info_net(info));
-
-	if (err == -ENODEV)
-		NL_SET_ERR_MSG(info->extack,
-			       "no guest-to-host transport is loaded");
-	else if (err == -EOPNOTSUPP)
-	...
-}
-
-and cli.py collapses all of those to the same status as -EPERM:
-
-tools/net/ynl/pyynl/cli.py:main() {
-    except NlError as e:
-        print(e)
-        sys.exit(1)
-}
-
-vm_ssh() also returns ssh's own status, so a transport failure (255) or a
-remote shell failure (127, e.g. an installed util-linux that does not
-accept setpriv --bounding-set=-net_admin) is indistinguishable from the
-expected refusal.  A python-side failure such as a missing
-/root/ynl/vsock.yaml exits 1 too.
-
-Would it be worth asserting the privileged case succeeds first?  The file
-already has the helper the sibling tests use as a precondition:
-
-vm_ns_assign_g2h() {
-	local ns=$1
-	local nspid=$2
-
-	vm_ns_exec "${ns}" "${nspid}" "python3 /root/ynl/cli.py --no-schema \
-		--spec /root/ynl/vsock.yaml --do dev-netns-set"
-}
-
-On the changelog note "ynl's cli.py does not report the errno": is that
-accurate?  NlError.__str__() in tools/net/ynl/pyynl/lib/ynl.py does:
-
-        msg += os.strerror(self.error)
-
-so the error string is printed and the test could match "Operation not
-permitted" instead of sending everything to /dev/null.
-
-> +
-> +test_ns_guest_assign_g2h_netns_unpriv_user_ns_fails() {
-> +	local unpriv_uid=65534
-> +	local unpriv
-> +	local rc
-> +
-> +	unpriv="setpriv --reuid=${unpriv_uid} --regid=${unpriv_uid}"
-> +	unpriv="${unpriv} --clear-groups"
-> +
-> +	if ! vm_ssh "init_ns" -- "${unpriv} unshare -U true"; then
-> +		log_host "unprivileged user namespaces unavailable, skipping"
-> +		return "${KSFT_SKIP}"
-> +	fi
-> +
-> +	vm_ssh "init_ns" -- "${unpriv} unshare -Urn" \
-> +		python3 /root/ynl/cli.py --no-schema \
-> +		--spec /root/ynl/vsock.yaml --do dev-netns-set &>/dev/null
-> +	rc=$?
-> +
-> +	if [[ "${rc}" -eq 0 ]]; then
-> +		log_host "assign unexpectedly succeeded for unprivileged user"
-> +		return "${KSFT_FAIL}"
-> +	fi
-> +
-> +	return "${KSFT_PASS}"
-> +}
-
-[Severity: Medium]
-Same rc != 0 => KSFT_PASS inference here, plus the availability probe is
-not the command being measured:
-
-	probe:    ${unpriv} unshare -U true
-	measured: ${unpriv} unshare -Urn python3 /root/ynl/cli.py ...
-
-If the extra -r/-n setup or the python startup under uid 65534 fails, the
-result is KSFT_PASS rather than KSFT_SKIP or KSFT_FAIL, and the child user
-namespace never actually holds CAP_NET_ADMIN, which is the condition the
-commit message says is being tested:
-
-    the other confirms that CAP_NET_ADMIN in an unprivileged user ns
-    alone is insufficient.
-
-Would checking the reported error string, or asserting the privileged
-assign works in the same test, make these two cases fail if
-GENL_ADMIN_PERM is ever dropped from VSOCK_CMD_DEV_NETNS_SET?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260921-vsock-guest-ns-v2-0-693bd78fde9e%40meta.com
+On Wed, Sep 23, 2026 at 7:02=E2=80=AFAM Tina Zhang <zhang_wei@open-hieco.ne=
+t> wrote:
+>
+> INVLPG's memory operand is decoded with NoAccess, and thus src_val does
+> not contain the operand address.  Intercept handlers therefore cannot
+> construct exit state that reports the linear address from the existing
+> x86_instruction_info fields.
+>
+> Add get_invlpg_linear_addr() to compute the address through __linearize()=
+,
+> using the same flags as em_invlpg(), and pass the result through
+> x86_instruction_info.
+>
+> Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
+Reviewed-by: Jim Mattson <jmattson@google.com>
