@@ -1,90 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C49F3A7593;
-	Wed, 23 Sep 2026 16:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF04739A7FD;
+	Wed, 23 Sep 2026 16:03:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790179343; cv=none; b=ijCGIM58ngdjIoO9TeU1Cq8TUKpq8Fdn57hzdh9CTjFtuHDtBnitZl9RYUs27WNROvbYBxJA/4JBC7UwUDXVyc1+LALNEe4zqC5ygxdlslB1E3dER9UhECzEZk+o5ykQcoUnQTliTZkHrKPTx8PEC+f+q2EjjeEJzTSwAvm7BcM=
+	t=1790179400; cv=none; b=u9ZPhvInkMPPHK+GJYvDqXA5nlfi3lMhEKbM5Sl8IFMYqFYi8xC08xGa+Br/BISzADuxW9VLwjqSeE48pYervu/h4EchfGgd+EnP44NdrJi9G6yZlvCdcyZeGCfegb8DVpVACKMwJoaWPQnVmmj+muJD0mLwyl38nLFatTdY2Wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790179343; c=relaxed/simple;
-	bh=1l5zG/LFyrLc3Fuiwq6dV5vVH2kbho3X7OvJ0lxCmoE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kGH2RIqApXSQ1CCqnloo/xMwX4WR5KcKUF8u2ELZ22fS/4+nOwbT0gI+MWZpszM11ANJGwz751OVeSPd8+DpHOl0xRsMKdHqkQfp4rKaA1QvekYdjPM0RyQUIEw9AV45ObqsN8WEGPn/jLemzAKnZOezMe8rEXKkiPUNM4fXS0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a7AZCEg9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790179400; c=relaxed/simple;
+	bh=FJA3eK3OkY9/WQjNlgCBfG4zZp5EDPpH+stPBygR6rg=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=ovptcTGqVTsNGG8mqIgYTiI3IcgIS3amxOwLOd3L/yT5XmcPRp7bmIv0k/jcUWb6CZb+japANw+zMM6aGqE84nAbwimnn6i2QKnAEAMyZwR7T83N2thXtkxgJTxKHeMo1kVjP8H/XH53sAJ4uyThtwwS5R8lLzAMip85qVRVNJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ERVJwWt3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a7AZCEg9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0BD61F000FF;
-	Wed, 23 Sep 2026 16:02:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ERVJwWt3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B8A1F000FF;
+	Wed, 23 Sep 2026 16:03:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790179342;
-	bh=M79vYD/0NuECTzxyn7/SZqwo9o47/DciXWmBgqiAck0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=a7AZCEg9mOmHObnvA6Cd0w4EdnEq+L4JOd8/1X2w6uLUJmT/gz12kXC0xstpbdArm
-	 kGeuthW09HYW/H6Fdrt9wc4dFYLNa9e0wu22KaoBM7BA2oHqxgvQoTj8GovlqUgqMm
-	 quuGaVBMDYG7nHhIZ8Ahha/OkYJ/Os5nVsocdQX4uzHzJf9s6U118rGXeSreVB7uPt
-	 I8yS+8MAJETkVczEa/DFshgYSeWE6MU4It0nCjcZhRm+cLNQrxS7dhrx/saoTEOp3D
-	 MTCzBghnbZHkGSFIbJfBbk/HRte3LPwdrJ1cAlNx5E0t1sfqbXaMQfBu1oSzcjiLBp
-	 itLnd8vHyFtAA==
-Date: Wed, 23 Sep 2026 17:02:16 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Gregory Price <gourry@gourry.net>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-team@meta.com, akpm@linux-foundation.org, 
-	liam@infradead.org, david@kernel.org, vbabka@kernel.org, jannh@google.com, 
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org
-Subject: Re: [PATCH 04/10] mm/madvise: use the PMD softleaf validity helper
-Message-ID: <arP3wI7qe7-eA7J1@gremlin>
-References: <20260922235830.2350770-1-gourry@gourry.net>
- <20260922235830.2350770-5-gourry@gourry.net>
+	s=k20260515; t=1790179399;
+	bh=Az2LBN6HVlrTIkNjXAxXv771joWtuOlu+vrOSCIUTww=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References;
+	b=ERVJwWt3KIOq/DLgUZltP63Vw2ZtaIujbs8YyHph1I5UsVSGU+DNtH9GajKFpDiZ4
+	 Kk7UY3b/nv+c8zldUX8yDhhmHE7sNaZcD1JUtlTszPb4tmxVAEDVUznUTBJvE0avVo
+	 /EwwelAr639dGI/dxhEitVwUeYaQ0YjzyFQ90J5+R9Sgzb6hwNwHelOgSZGsaYQVXG
+	 malzOzO/0eO6Z8Vb1kQW+ABZv0x9zEvnVczn63dLiscK71EMxhNHa2pv113awi/l/y
+	 Evn/ETlrBS1jVHQ8QWc64O14F8mQRU3w5xe7pIlbgf9oPF3KXTlJ9CSlHHJs6wiQvl
+	 XfxHOnhEHuxFw==
+Date: Wed, 23 Sep 2026 18:03:16 +0200 (CEST)
+From: Jiri Kosina <jikos@kernel.org>
+To: Benjamin Tissoires <bentiss@kernel.org>
+cc: Shuah Khan <shuah@kernel.org>, linux-input@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] HID: bpf: cast size to ssize_t when checking
+ hid_bpf_hw_request
+In-Reply-To: <20260915-wip-bpf-signed_size-v1-1-6bc8f3d09f5b@kernel.org>
+Message-ID: <319r6712-1741-746s-s588-349446281qro@xreary.bet>
+References: <20260915-wip-bpf-signed_size-v1-0-6bc8f3d09f5b@kernel.org> <20260915-wip-bpf-signed_size-v1-1-6bc8f3d09f5b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260922235830.2350770-5-gourry@gourry.net>
+Content-Type: text/plain; charset=US-ASCII
 
-On Tue, Sep 22, 2026 at 07:58:24PM -0400, Gregory Price wrote:
-> A non-present huge PMD must contain a software leaf type supported at
-> PMD level. The open-coded check names the currently supported migration
-> and device-private entries instead of expressing that invariant.
->
-> Use pmd_is_valid_softleaf() so the validation follows the central
-> definition of valid PMD softleaf entries.
->
-> No functional change intended.
->
-> Assisted-by: LLM
-> Signed-off-by: Gregory Price (Meta) <gourry@gourry.net>
+On Tue, 15 Sep 2026, Benjamin Tissoires wrote:
 
-LGTM and I like the use of softlaf obviously :)
+> As reported by Sashiko:
+> If a transport driver encounters a hardware error and returns a negative
+> error code such as -EPIPE, ret is implicitly promoted to size_t when
+> compared against size. This causes the negative error code to evaluate
+> as a large positive number, making the (ret > size) condition true.
+> 
+> This silently converts the hardware error into a success return value
+> and copies the unmodified buffer back, which could leave BPF programs
+> operating on uninitialized or stale data.
+> 
+> Fix this by casting size into ssize_t to return the actual negative
+> error code.
+> 
+> Link: https://lore.kernel.org/all/20260904130354.A79471F00A3D@smtp.kernel.org/
+> Fixes: 2b658c1c442e ("HID: bpf: prevent buffer overflow in hid_hw_request")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
-Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+Acked-by: Jiri Kosina <jkosina@suse.com>
 
-> ---
->  mm/madvise.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/mm/madvise.c b/mm/madvise.c
-> index c345fef23f15d..b31b877c2c130 100644
-> --- a/mm/madvise.c
-> +++ b/mm/madvise.c
-> @@ -427,8 +427,7 @@ static int madvise_lru_pmd_entry(pmd_t *pmd, unsigned long addr,
->
->  		orig_pmd = *pmd;
->  		if (unlikely(!pmd_present(orig_pmd))) {
-> -			VM_WARN_ON_ONCE(!pmd_is_migration_entry(orig_pmd) &&
-> -					!pmd_is_device_private_entry(orig_pmd));
-> +			VM_WARN_ON_ONCE(!pmd_is_valid_softleaf(orig_pmd));
->  			goto huge_unlock;
->  		}
->
-> --
-> 2.53.0-Meta
->
+-- 
+Jiri Kosina
+SUSE Labs
 
---
-Cheers, Lorenzo
