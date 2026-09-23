@@ -1,116 +1,265 @@
-Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7934A9D58
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 11:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D903243DEDB
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 12:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790164773; cv=none; b=i4DnL3cFMvNpCwYa0R+h8893oqic+mBL6o9iK3tZWVOrnahIAGlpKMWksSyu/XHkmibnVLfFhoCTOO2ylmxMDXTxDq2cG8ZZ6/Y/tmbEkRhMnDm979kXQC6p3qirfoau12heOLGZYHzqwpvaVdyfZhNHNKI38lWBy3BSdv9yepI=
+	t=1790166707; cv=none; b=cv7M5Y9J5rJKilyvfHv1B+55oYP1hWAQWCrJXbJc4dYRu5q2JNnnCxiHJhCbHGH6U++xvFeDCKl30F1IUru1FQ8QovneFCmo1JGZnzhKPzMXwBocKU3BHSvog+jgZjb44vUBwNCvW9c8db+Gvut7+23ZkjM9iwhXb7naa6xUcTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790164773; c=relaxed/simple;
-	bh=lyThp7bIz6kj168zSwcpYX6Pcr2CQbMqDAwt8ob+z70=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IevIcO5NMpjW6LcokevJvYfb3vsFLHxTVrHtdpDPCySUHPOIsGN1Y4dm5SoBecytWRp298kzJAhrr1Y2xodD+qcAqOQp6N8A+P20LftXEQH77LoScWHrvDAZaE/oU1XP3STZaWTNWZEdr2oLnJ9fPDDfh2bPyi6dd2vKF0jzlj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DBXnmgxe; arc=none smtp.client-ip=74.125.228.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790166707; c=relaxed/simple;
+	bh=8x/UT7yNCTBqE0gUbAyrfvJfTd1tBx2IpOQcX0TQguA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=klMUUCVbGX+JACGwM3YB3W83tnlk+13a/DqlazqEn0WO5YSD0knQkCQLiATe+aDQ39WxiuJIeZNvjrq7j49Ui0WerkIoHbQYhq1wya152cuCkrFpX2ue1g5eWPUAYFvFrzzmtUA3w+DWlJNA4cpUFRXGLW/SWZgKHv74DDfFDAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=I3Z1dajA; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=F79zTtP/; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DBXnmgxe"
-Received: by mail-pz2-f40.google.com with SMTP id 41be03b00d2f7-cc7641d03a5so91753a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 04:59:28 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I3Z1dajA";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="F79zTtP/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790166699;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Iy4LAVksYVGANuIsEoVI9Hlhk9VjhocmxupJMIEdc3A=;
+	b=I3Z1dajAXntSF8JdkDSgAO+hE0GWqcAQB0xQSvo5MVokXMSfW7SFQRHrPZAj419cFQL4/5
+	JMy5C96a6xq6Wmd65Gy/vRjFfjs3RmlNHKrw1bkw37Dto/eDBwhTW2ik0bVSWd5Q1XULMI
+	vxN0mu4uB+sGj0ECuuSXd6AOCIr5laQ=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-356-CAr5eZR4P1WV1IqUpvDePw-1; Wed, 23 Sep 2026 08:31:37 -0400
+X-MC-Unique: CAr5eZR4P1WV1IqUpvDePw-1
+X-Mimecast-MFC-AGG-ID: CAr5eZR4P1WV1IqUpvDePw_1790166696
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-49e6c17ec1dso10506695e9.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 05:31:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790164767; x=1790769567; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=BrzXSXvlSZQsoju04uUevcVwnOSzbxdAq6pl8JZzW5k=;
-        b=DBXnmgxegbZBUmOsq3ltZ7SoonG/vyLROHa14W3bPLY0yEqB1VWFo7NC0gPqLMMy/K
-         zj/ZBWFLkXNK8uDFTkFYUjWgOGvceYykGRnILOhe9wtj2T564r+wCaDHyGEzOkyX3sQX
-         lvnSNeaEHXbtWqhkMleUt0NePUoJjQ/exLHhmx0BGBMEZVMd05F45669JGghJWgvLcYQ
-         tusInSmiEsXb/dpfKyzy45GxPaM5YyJnEZ/y8+IuSacGQW4T+SPAK7VaL60wmcrN//L3
-         hbzcGzpnlEzriwWqAp312asfccBF1q9rs2k2Eu//HzgJOTcT/89FUG8otdn05cIkCo0J
-         Blhw==
+        d=redhat.com; s=google; t=1790166696; x=1790771496; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:user-agent
+         :message-id:date:references:in-reply-to:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=Iy4LAVksYVGANuIsEoVI9Hlhk9VjhocmxupJMIEdc3A=;
+        b=F79zTtP/hh7NXSoV0hgTs0XnfR0n4jFilo5p8MnmpgqprgRUuqcW5/J9C9TUXONxYi
+         jaaCIecJqR3X24e5JHGHiCV7pGhzBPVz69Een4oCwzkHvoLu/xiNZ/BqbJdjk4Fwb/2X
+         /aIoFXxyZdTulerNfORiCaEOkfcZvxawhWDgZVaTFs+8tRRq1czNE4teKZo9Uf2/TtYl
+         W5n1b+bPCAUOOdlJDsNBqBwR5DDfwvxpfAcCdBIEG6P8Fb9ltN/gonqqee/gr0au9Ace
+         +WCb3wPFurTmNgf83Mlh3mmQS7jZkWCmmmaWTp1nSJjsVcNmyhohjS0c1uvyIvldYDtF
+         qaWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790164767; x=1790769567;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BrzXSXvlSZQsoju04uUevcVwnOSzbxdAq6pl8JZzW5k=;
-        b=hfkQbs+Q85Ooc02JLwE3JgV9KL660KQh5ZNYaUzfpvBwC+5Jnl0QaueExyUJHD/agY
-         UaOeCh+MdVSYOKXmHtcAKJbA0iPnmNWs93sUpGMvvD1pYrUjLzlt0lVi7wNWSwF/lA9i
-         6ypX+BWwS8uOrAUVexuGiBPXtqPdx6ukPXpw+TID/ipDM5TbGS9+AfQbNaBU8/rKATIK
-         jTrae2QfG+Y9NRp1mDxuDOTXxbw3gbkoxFg7Eh4gHzwtNCV1/12rqU9jDHWvHxt3eNSJ
-         cJzshGDUJCtOPX3Hg+iqamx3jV3KOXBsesRFqkgnAGuN30y0efp1ENXNI5grqviy3Ebo
-         xejw==
-X-Forwarded-Encrypted: i=1; AKwUvBytvdJ3eMqbW7+TPjvSbdnrRGZ8vfWKumPA4/0YlSSSC1UGRJ3J/3bsEBxvPYFqJhONNrJ/BKJtdqG9ACKodws=@vger.kernel.org
-X-Gm-Message-State: AFuF++mLMgx89ZcP/LwwEqkrJbzn3wYcqYjEnfwxLz1L2pGrMGFFCPo6
-	yHK1T7DmashFvFp1jWbX4NV1xY/N/3lpuRDho46i/Mwere+p/0rutAIo
-X-Gm-Gg: AYBFou0JWw5/OW+P7zsgz0b67DJur65S3WE4iCcfudns+iZySqU2T7ZRN17d14GaRZM
-	1u4FDx9EfHzl1e2io+aZE5etEvodfSWL1SRSoPLcudFadNMwC/aJ9qkdLGXqKGlAahmNTb0l+I0
-	ZBSL4gvyBZ4LN1XHIuR7xpKX61ZwR6ru9tuUCzYRnlcEH7g7i1V/xyJ2Pt54LAJQgZ2ctMjBYmn
-	6XxTlnnNo1tqE3iSiTmFs5c7AqQs/WiYhRh1WGqE9yW5M52vDQOpNzbra3qIk8L0Cuor2ykBzzy
-	Gz8byq7AFPZZ4i+c5EFWXSELiizbyqY6e7pm3rbq4wAwujX75Z2V+AKkLJK93jXPaSMwbxjqhY7
-	0X27yy8nyaY00/u1twpZXMNi4e4UEWGw7tKIbTjm6/7acT6da/rLG1kdJF4Qr0QiF/NibAF29mx
-	vtswAdFVBLfEEQtLWJuyTVV1Hyy8m8PsemyoXP9/akwPBbwNA2VwYEmS9DCtYnD2M=
-X-Received: by 2002:a17:90b:4a45:b0:39e:2530:2102 with SMTP id 98e67ed59e1d1-3a07e56552cmr2048640a91.11.1790164766974;
-        Wed, 23 Sep 2026 04:59:26 -0700 (PDT)
-Received: from dev ([163.43.103.131])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a07ddae66asm5970635a91.3.2026.09.23.04.59.24
+        d=1e100.net; s=20260707; t=1790166696; x=1790771496;
+        h=content-transfer-encoding:content-type:mime-version:user-agent
+         :message-id:date:references:in-reply-to:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Iy4LAVksYVGANuIsEoVI9Hlhk9VjhocmxupJMIEdc3A=;
+        b=IiaSNw0F5o6ZBO+j9mdmE/lm+3vnS2Q924cNI9Sut4/aX9t3VPjXJdcNMHXQt97TC4
+         uPbSs2mNd3kNviPMkWQN/iLdS2kUGkdzM3oBJuCLSoRFrJDeXwkq4gYX7kvvxM2Y8i7L
+         XWLn2+mpdnrA8dZf0cKxlmwrJ8Wh8RWnGtOXKuR1kvBChFQd/nYXOarmHi4NZ9Uysozb
+         fnUu76Nn77VUgsdr7MlC/NIOfHWWMgAfdvIpm0Ef7DDJ1/3GKnQ33pQYJwEMGj2I23T2
+         IV3/jFV56uhvaE0m8GFQSAJ0u3086zKrOMqVEzK4REJEOMv7JFIql5lBqya3pW8yalOr
+         /7Fg==
+X-Forwarded-Encrypted: i=1; AKwUvBxjVr7CpPBuMV7xt/tRRymx4hEJ/qU5Q00UsLjEzUZsBfI2kKvAv3YkvG949k6G2Gg1bXf71r86e8Y595KScxI=@vger.kernel.org
+X-Gm-Message-State: AFuF++nGPvUJrlVtoyGzF/4KBkct3dvsYh7gQ5ax3piLDgOsuoaYNvVO
+	lgXWusofDqzfG9Yho9PH2ZD4CZLXYDucREWlum9hAgpwbCHo0GuSD6FCRExyKV9lgRkYbif49U7
+	X9cIvDFWum2d7x8y4Uv1TPVrib3yMhEy497yRqskkrhV4aEu2PnrFc1LyBE+toqtE7v+TKSM7fP
+	GbBwtJhcLY34Iv/2YeVP5LMuwUwVtrZxcDzk2gEKhsS4L5JcAzBKvjciw=
+X-Gm-Gg: AYBFou2v5U6iq17v8IWyvXY5e+yzSR2jgOp0SdzpCJ+Ha/JRhg1JfD/WiflVu5uVMXq
+	KXV1kD3qRSt32nzW7j0Ueubezb2mHSBUqTMhLj84N4tzewE9ZqIQQ/N4Qqiw3Uobt+btI1oQtyI
+	pq3QfcYmoxFX+NMtstBVRKZzA57EnwuogfIPFqMjV66vsvVhfie7/vt521kNygHmP1zFhuLo5gO
+	fnkP5N6luUAxDTkcO3v8Wj0h+xlg+DqHJiWQb7ptzjh9P5ku3OjeLy22k/5AqJb1qafBlIJs/TB
+	va+VFvkaWD1EslgKHvGZXW8nAmqKJ6Knh1geqt7doSnJV3CU3HDd8oenMCWVCm+kOzs3lnqIeXl
+	xkEREPdQu7PRjCWUbM3H1D2DWCaCW
+X-Received: by 2002:a05:6000:4023:b0:487:10b5:a88a with SMTP id ffacd0b85a97d-4886705fb90mr4236763f8f.9.1790166696320;
+        Wed, 23 Sep 2026 05:31:36 -0700 (PDT)
+X-Received: by 2002:a05:6000:4023:b0:487:10b5:a88a with SMTP id ffacd0b85a97d-4886705fb90mr4236704f8f.9.1790166695767;
+        Wed, 23 Sep 2026 05:31:35 -0700 (PDT)
+Received: from aconole-thinkpadt14gen4.rmtusnh.csb ([216.212.25.12])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886877a19bsm7197338f8f.25.2026.09.23.05.31.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 04:59:26 -0700 (PDT)
-From: Yuya Kusakabe <yuya.kusakabe@gmail.com>
-To: idosch@nvidia.com
-Cc: dsahern@kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	justin.iurman@gmail.com,
-	alex.aring@gmail.com,
-	steffen.klassert@secunet.com,
-	herbert@gondor.apana.org.au,
-	razor@blackwall.org,
-	eyal.birger@gmail.com,
-	nicolas.dichtel@6wind.com,
-	lucien.xin@gmail.com,
-	shuah@kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 0/4] net: lwtunnel: accept encap attributes without NLA_F_NESTED
-Date: Wed, 23 Sep 2026 20:59:14 +0900
-Message-ID: <20260923115914.70760-1-yuya.kusakabe@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260923112917.GA2749166@shredder>
-References: <20260923-lwt-encap-noflag-v1-0-8de7ab6c86e9@gmail.com> <20260923112917.GA2749166@shredder>
+        Wed, 23 Sep 2026 05:31:34 -0700 (PDT)
+From: Aaron Conole <aconole@redhat.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: houminxi@gmail.com,  netdev@vger.kernel.org,  echaudro@redhat.com,
+  i.maximets@ovn.org,  davem@davemloft.net,  edumazet@google.com,
+  kuba@kernel.org,  pabeni@redhat.com,  horms@kernel.org,
+  shuah@kernel.org,  dev@openvswitch.org,  linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v5 1/2] selftests/net/openvswitch: add SCTP
+ flow key test over IPv6
+In-Reply-To: <179008950943.2160803.15856491533624064435@kernel.org>
+	(netdev-bot's message of "Tue, 22 Sep 2026 15:05:09 +0000")
+References: <20260918144647.2024095-2-houminxi@gmail.com>
+	<179008950943.2160803.15856491533624064435@kernel.org>
+Date: Wed, 23 Sep 2026 08:31:31 -0400
+Message-ID: <f7tpky49mjg.fsf@aconole-thinkpadt14gen4.rmtusnh.csb>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 23, 2026 at 02:29:17PM +0300, Ido Schimmel wrote:
-> If this never worked, then why target these patches at net and blaming
-> up to 7 years old commits? I try to follow [1] when deciding between net
-> and net-next.
-You are right, it is not a regression.  If there is a v2 it will go to
-net-next without the Fixes tags.
+netdev-bot+sashiko@kernel.org writes:
 
-> Also, did you hit this in practice or was this flagged by AI? If nobody
-> is using save/restore and hitting this in practice, then maybe it's not
-> worth to loosen the validation performed by the kernel.
-It was flagged by an AI review of a new encap I am working on (SRv6
-Mobile User Plane, still RFC).  I reproduced it there, and checking the
-existing encaps showed rpl, ioam6, xfrm and the ip tunnel options behave
-the same.  I have no report from their users.
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider.
+>
+> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 1 =C2=B7 Low: 0
+>
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+>
+> - [Medium] The promised skip when IPv6 is unavailable is incomplete in
+>   test_sctp_connect_v6().
+>
+> --
+>
+> selftests/net/openvswitch: add SCTP flow key test over IPv6
+>
+> This adds test_sctp_connect_v6 to the openvswitch selftest, mirroring the
+> existing IPv4 SCTP test: icmpv6() flows forward neighbour discovery while
+> ipv6(proto=3D132),sctp(dst=3D4443)/sctp(src=3D4443) flows gate an SCTP
+> association across the datapath, with a keyless ipv6(proto=3D132) install
+> expected to be refused with EINVAL.
+>
+>> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh
+>> b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+>> index a31f7fb6882d..aa84fafc3201 100755
+>> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
+>> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+>
+> [ ... ]
+>
+>> @@ -700,6 +701,114 @@ test_sctp_connect_v4() {
+>>  	return 0
+>>  }
+>>=20=20
+>> +# sctp_connect_v6 test
+>> +# - sctp(dst=3D4443) matches client-to-server INIT
+>> +# - sctp(src=3D4443) matches server-to-client INIT-ACK
+>> +# - icmpv6 NS/NA flows forward neighbour discovery
+>> +# - remove flows and verify connection fails, reinstall and recover
+>> +test_sctp_connect_v6() {
+>> +	local t=3D"test_sctp_connect_v6"
+>> +	local v6=3D"eth_type(0x86dd),ipv6(proto=3D132)"
+>> +	local payload=3D"SCTP6_DATA_OK"
+>> +	local rxfile=3D"${ovs_base}/${t}/sctp-rx.txt"
+>> +
+>> +	modprobe -q sctp 2>/dev/null || return "$ksft_skip"
+>> +	socat -V 2>&1 | grep -q "define WITH_SCTP" || return "$ksft_skip"
+>> +	socat -V 2>&1 | grep -q "define WITH_IP6" || return "$ksft_skip"
+>> +	[ -e /proc/sys/net/ipv6 ] || return "$ksft_skip"
+>
+> [Severity: Medium]
+>
+> Is this gate enough to cover the case the changelog describes as "IPv6 is
+> unavailable"?  /proc/sys/net/ipv6 only tells us inet6_init() ran.  Only
+> ipv6.disable=3D1 short-circuits it:
 
-My motivation was that a feature which exists should not silently fail,
-and the series only drops the flag check on the container; everything
-nested inside is still validated strictly.  But if nobody relies on
-save/restore for these encaps, I am fine dropping the series, and the
-new encap will keep nla_parse_nested() like rpl, ioam6 and xfrm.
+We don't do much to check that ipv6 is available.  The ICMPv6 test
+doesn't do any additional safeguards.
 
-Thanks
+> net/ipv6/af_inet6.c:inet6_init() {
+> 	...
+> 	if (disable_ipv6_mod) {
+> 		pr_info("Loaded, but administratively disabled, reboot required to enab=
+le\n");
+> 		goto out;
+> 	}
+> 	...
+> }
+>
+> With ipv6.disable_ipv6=3D1 instead, initialization completes and the sysc=
+tl
+> tree exists, so this check passes, but the module default is copied into
+> every new netns:
+>
+> net/ipv6/addrconf.c:addrconf_init_net() {
+> 	...
+> 	/* these will be inherited by all namespaces */
+> 	dflt->autoconf =3D ipv6_defaults.autoconf;
+> 	dflt->disable_ipv6 =3D ipv6_defaults.disable_ipv6;
+> 	...
+> }
+>
+> so the veths created for the client and server namespaces come up with
+> cnf.disable_ipv6 set, and address assignment is rejected:
+>
+> net/ipv6/addrconf.c:ipv6_add_addr() {
+> 	...
+> 	if (idev->cnf.disable_ipv6) {
+> 		NL_SET_ERR_MSG_MOD(extack, "IPv6 is disabled on this device");
+> 		err =3D -EACCES;
+> 		goto out;
+> 	}
+> 	...
+> }
+>
+> Would testing something that reflects usability, for example whether an
+> address can actually be added in a test namespace, match the promised skip
+> better?
+
+We don't generally have a check for this.  Maybe it makes sense, but
+that could be a separate cleanup if it really is needed.
+
+>> +
+>> +	sbx_add "$t" || return $?
+>> +	ovs_add_dp "$t" sctp6 || return 1
+>> +
+>> +	info "create namespaces"
+>> +	for ns in client server; do
+>> +		ovs_add_netns_and_veths "$t" "sctp6" "$ns" \
+>> +		    "${ns:0:1}0" "${ns:0:1}1" || return 1
+>> +	done
+>> +
+>> +	ip netns exec client ip addr add fd00::1/64 dev c1 nodad
+>> +	ip netns exec client ip link set c1 up
+>> +	ip netns exec server ip addr add fd00::2/64 dev s1 nodad
+>> +	ip netns exec server ip link set s1 up
+>
+> [Severity: Medium]
+>
+> These four setup commands in test_sctp_connect_v6() discard their exit
+> status, unlike the surrounding calls which all use "|| return 1".  If the
+> ip addr add calls fail with EACCES because disable_ipv6 was inherited by
+> the new namespaces, does the test keep going with no IPv6 addresses
+> configured and then report a failure at the association check below?
+>
+> Would checking these with "|| return $ksft_skip" (or at least
+> "|| return 1" with an info message naming the failed step) make the
+> outcome match the cause?
+
+See above - same answer.
+
+> [ ... ]
+>
+>> +	info "verify SCTP association with port-keyed flows"
+>> +	ovs_sbx "$t" ip netns exec client \
+>> +	    timeout 3 socat -u STDIN "SCTP6-CONNECT:[fd00::2]:4443" </dev/null=
+ \
+>> +	    || return 1
+>
+> [Severity: Medium]
+>
+> This is the point where an unusable IPv6 setup surfaces.  With
+> ipv6.disable_ipv6=3D1 the connect cannot succeed, so run_test() reports F=
+AIL,
+> while the changelog says:
+>
+>     Skips when the sctp module is missing, socat lacks SCTP or IPv6
+>     support, or IPv6 is unavailable
+>
+> Should this configuration end up as a skip rather than a failure, or shou=
+ld
+> the changelog be narrowed to say the skip only covers IPv6 not being
+> initialized at all?
+
+I don't think either is needed for this series.
+
