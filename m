@@ -1,152 +1,114 @@
-Received: from smtp.uniroma2.it (smtp-2015.uniroma2.it [160.80.4.37])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C62E33ACA40;
-	Wed, 23 Sep 2026 16:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.37
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4C439A7FD;
+	Wed, 23 Sep 2026 16:07:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790179557; cv=none; b=sdqpbE+7SxKO2XtxXgIaQJCoK219EIg3MO+rz0vAOJGmx+mTVmjFoz8qXBuVAdN4VwoaMfjHz/R5SZdgGEYVrjlj1KWlv2MW9xM7YFqVvO40bYWHpB5EDqY8m1SojDZjZLOy+dASwaX3KpUksPdL0/DEQKCnrTuaYzLkqAZpSUs=
+	t=1790179674; cv=none; b=kd6cMsYWxSBDkQKW6OVNBFIB8tgDRYtXqekMUsdOjl4k8FgcXCG/MIuuhfG/sBX2YjDK2X3f1WofRmpksBYYOBZdL6DBFOkTA4fb3zxDWGeOv5j16H5J9kYGCrxMxwJaK/cFdyzLqHQiepg84dR7R6xDg9y8zRJ87VYte4iylRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790179557; c=relaxed/simple;
-	bh=0enoxHy8o9j9aEe7NsVFhPcnA3cVT0jAt1dK+rrlFXk=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=PoCGgpsdFnroIVSXARHT2ihyqQBvBrKt+pVTicqAHpTdbpppZB8ICCqE0xgIwyLWETyTC8DapcJd+pLbimFF+zpCNlGSNkR7SmKa97qvdo/QA6ax8OshGthCDtljJ2HuIVUk3YD1G88W4BBSFWFDBmv6kIrgVEzyH8L7l6Vu0Pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=YMvn66hh; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=JpyRE1nu; arc=none smtp.client-ip=160.80.4.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
+	s=arc-20240116; t=1790179674; c=relaxed/simple;
+	bh=euLSbnq+m/aBAj4e1zXIld0AwlOk9H+SofHbW8ygS3Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c2IogYQwQQAcXhyX28CiOiTM8y2StkM+BvS9RHOgXUaLhaN/bo3Ne1S1cmv24GFntkWyTdOeY8z5/57Xvn820W4KT6fWuvR46JiDObRsFAmEftx/p1MCAHxNCESweyoaXTfaOBsoqVUX34FyTCU8I5NxoWn/T0t01fL8lqZPYmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZSrSEvAs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="YMvn66hh";
-	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="JpyRE1nu"
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
-	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 68NG50bF006583;
-	Wed, 23 Sep 2026 18:05:07 +0200
-Received: from lubuntu-18.04 (host-95-239-0-205.retail.telecomitalia.it [95.239.0.205])
-	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 278931227F6;
-	Wed, 23 Sep 2026 18:05:07 +0200 (CEST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-	s=ed201904; t=1790179507; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RjbIKJLjCQTNwB9P7bcr0CnfwHpD056vx8od9Lztz3U=;
-	b=YMvn66hhdYL1o6yyezFZh4FKeZwNGG9ulYG6kjtPkPRPkgzTYERzwEFIUi5lz/Qw5dct1I
-	rHcKmmkNXzsvlxAg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-	t=1790179507; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RjbIKJLjCQTNwB9P7bcr0CnfwHpD056vx8od9Lztz3U=;
-	b=JpyRE1nuh+R69khyCDbWfXZYRX0MYQFtJukLbcP6eZhf7tCBKE1Ej2d2VYO8PZY8l3W9UE
-	Q4ibgUNq7ndx3YuKQ64/kFcjC6MJbO8lyN39c8xpfmOEjgPtNT94M+lhZD6wYaM9WAsmjR
-	iaVubCebs6vtjf73QlaIOxyDx7WB0snDwLjwx4N6GcfKk+bJEqWw16tqbElieHh6rxZnwF
-	bqVHY1BmeewwqmKShvmMAOj8yZ8Sdcm3YhJ5T8+tKMK5MxMP2fq/maRzvNZSsIh0agvI1g
-	C9rlnFbaxfsDwK2BUpJwZ6T/fWcfz58ssRSDYJ5iBZ/HVTepglpCHbxNFfrh2A==
-Date: Wed, 23 Sep 2026 18:05:06 +0200
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
-To: Hangbin Liu <hangbin.liu@linux.dev>
-Cc: "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Shuah Khan
- <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Hangbin Liu <liuhangbin@kylinos.cn>, stefano.salsano@uniroma2.it,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [PATCH net-next 2/5] seg6: add RFC8986 flavor support for End.X
-Message-Id: <20260923180506.4350920e5bf32d4910a192d3@uniroma2.it>
-In-Reply-To: <20260922-srv6_flavors_endx-v1-2-4d01c05c47b7@kylinos.cn>
-References: <20260922-srv6_flavors_endx-v1-0-4d01c05c47b7@kylinos.cn>
-	<20260922-srv6_flavors_endx-v1-2-4d01c05c47b7@kylinos.cn>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZSrSEvAs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D9131F000FF;
+	Wed, 23 Sep 2026 16:07:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790179673;
+	bh=s8h+i8TI8RVhGqbKMBXf4PsT3ZH7LCuWakUEtizm3gM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ZSrSEvAs1VbM0BqeBHEqAEdLWNVfD0BuLnotK0z5Ovaj60GTCWoW5Hx4Wv+S8P5iP
+	 mNrIo6x13zNHEDXVSj6hfpXENUcoDbORVrLs3kgu+4McEsxgfQ8K9IJZdXDPsneGSX
+	 WWT2+p4Kk8MwXJTnoa01U8sHJhJ3uL032AcQURPwbv6ltV1nlvdQ+ELR/jisUZOftG
+	 GQZI+wuQq7fuI+Bfn/XfxEcwzp1cl97Gcac3/5L2nYHdghEtnjMLWvTy+aZ1OHq53s
+	 z6qd7rzEk52+k+klpJNq7t6Cy8Fg59QiUtaBF6jKc4XN/Ktcl5EHBRrPwh4GNEfb8Y
+	 S49aGzAJdoDSQ==
+Date: Wed, 23 Sep 2026 18:07:50 +0200
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Jing Wu <realwujing@gmail.com>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Tejun Heo <tj@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org,
+	rcu@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Qiliang Yuan <yuanql9@chinatelecom.cn>
+Subject: Re: [PATCH v4 07/11] tick/nohz: add runtime tick_nohz_full_mask
+ update for CPU isolation
+Message-ID: <arP5VgdUIUykJRik@localhost.localdomain>
+References: <20260710-wujing-dhm-v4-0-2e912e5d9645@gmail.com>
+ <20260710-wujing-dhm-v4-7-2e912e5d9645@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260710-wujing-dhm-v4-7-2e912e5d9645@gmail.com>
 
-On Tue, 22 Sep 2026 16:54:44 +0800
-Hangbin Liu <hangbin.liu@linux.dev> wrote:
-
-Hi Hangbin,
-please see below.
-
-> From: Hangbin Liu <liuhangbin@kylinos.cn>
+Le Fri, Jul 10, 2026 at 11:28:18AM +0800, Jing Wu a écrit :
+> When kernel-noise isolation is requested for a CPU at runtime via a
+> cpuset isolated partition, tick suppression must be activated on the
+> affected CPU without requiring nohz_full= at boot.
 > 
-> Previously End.X only supported NEXT-C-SID, with a plain fallback to
-> input_action_end_x_core(). Add PSP End.X processing by reusing
-> end_flv8986_core().
+> tick_nohz_full_mask and tick_nohz_full_running are currently set only
+> during boot by tick_nohz_full_setup(). There is no runtime path to add
+> or remove CPUs from the full-dynticks set.
 > 
-> Add SEG6_LOCAL_FLV8986_SUPP_OPS to SEG6_LOCAL_END_X_FLV_SUPP_OPS so
-> End.X advertises PSP flavor support.
+> Add tick_nohz_cpu_isolate() and tick_nohz_cpu_deisolate(), both called
+> with the target CPU offline (between remove_cpu and add_cpu in the
+> hotplug cycling path):
 > 
-> Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+>   tick_nohz_cpu_isolate(cpu) - lazily allocates tick_nohz_full_mask
+>     if it was never set up at boot, sets the CPU's bit in the mask,
+>     sets tick_nohz_full_running, and calls ct_cpu_track_user() to
+>     activate per-CPU context tracking so kernel/user transitions
+>     suppress the scheduler tick.
+> 
+>   tick_nohz_cpu_deisolate(cpu) - reverses the above: deactivates
+>     context tracking via ct_cpu_untrack_user(), clears the CPU's bit,
+>     and clears tick_nohz_full_running when the mask becomes empty.
+> 
+> A per-function mutex guards the lazy allocation and running flag
+> updates against concurrent isolation requests.
+> 
+> Co-developed-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
+> Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
+> Signed-off-by: Jing Wu <realwujing@gmail.com>
 > ---
->  net/ipv6/seg6_local.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-> index 584e6aca3893..7462da1da362 100644
-> --- a/net/ipv6/seg6_local.c
-> +++ b/net/ipv6/seg6_local.c
-> @@ -121,7 +121,8 @@ struct bpf_lwt_prog {
->  
->  #define SEG6_LOCAL_END_FLV_SUPP_OPS	(SEG6_F_LOCAL_FLV_NEXT_CSID | \
->  					 SEG6_LOCAL_FLV8986_SUPP_OPS)
-> -#define SEG6_LOCAL_END_X_FLV_SUPP_OPS	SEG6_F_LOCAL_FLV_NEXT_CSID
-> +#define SEG6_LOCAL_END_X_FLV_SUPP_OPS	(SEG6_F_LOCAL_FLV_NEXT_CSID | \
-> +					 SEG6_LOCAL_FLV8986_SUPP_OPS)
-> 
+>  include/linux/tick.h     |  4 ++++
+>  kernel/time/tick-sched.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
 
-This adds PSP to a mask that already had NEXT-C-SID. PSP alone then
-works through end_flv8986_core().
- 
->  struct seg6_flavors_info {
->  	/* Flavor operations */
-> @@ -841,12 +842,19 @@ static int input_action_end_x(struct sk_buff *skb, struct seg6_local_lwt *slwt)
->  {
->  	const struct seg6_flavors_info *finfo = &slwt->flv_info;
->  	__u32 fops = finfo->flv_ops;
-> +	int ret;
-> +
-> +	if (!fops)
-> +		return input_action_end_x_core(skb, slwt);
->  
->  	/* check for the presence of NEXT-C-SID since it applies first */
->  	if (seg6_next_csid_enabled(fops))
->  		return end_x_next_csid_core(skb, slwt);
->  
-> -	return input_action_end_x_core(skb, slwt);
-> +	ret = end_flv8986_core(skb, slwt);
-> +	if (ret)
-> +		return ret;
-> +	return input_action_end_x_finish(skb, slwt);
->  }
->
-  
-The problem is the combination with NEXT-C-SID: the NEXT-C-SID early
-return above is still taken, and neither branch of
-end_x_next_csid_core() applies PSP. So "End.X flavors next-csid,psp"
-becomes configurable and PSP is never applied.
+tick_nohz_full_running is essentially a duplicate of
+~housekeeping_cpumask(HK_TYPE_KERNEL_NOISE) and tick_nohz_full_running a
+duplicate of housekeeping_enabled(HK_TYPE_KERNEL_NOISE).
 
-The same mask and the same early return are already in End, where the
-combination is accepted and PSP is not applied either. I will send a
-fix for that to net.
+Perhaps those two variables should be removed?
 
-For this patch I would handle the combination.
+Thanks.
 
-On the selftest side, the combination of next-csid and psp is not
-covered yet. I am going to add coverage for it in any case with the
-End fix, and I would be glad to do it with you if you are interested:
-the same coverage would serve End.X too, if you decide to handle the
-combination there.
-
-Thanks,
-Andrea
+-- 
+Frederic Weisbecker
+SUSE Labs
