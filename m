@@ -1,559 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A040576EDE;
-	Wed, 23 Sep 2026 15:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790177500; cv=none; b=RHfJN29I2biWabcMbDRUWjDx4jAexmPjtiZ1/7M8MUFkgL5892WeBbJC8sk2EGbE1JeZNJNfPlAp+uM6+L13oGhyeBhx3ljzTuUDYSnYgpRuVpwFWNUbu5pyaB1L0y2Xj8i7MVGiQ8oD6R5i8O5xx/a3Ep7PiEI8A0gz+zBPUc4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790177500; c=relaxed/simple;
-	bh=VWrZKKlwBUQnZ9QTX6wG4EJJIKYHXgKdXCFAHPb3pXQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tqNJKSliIfGSfa/JOXJsKtq/SOlK45Jpk1eqPmO4ytTENcWtdP9BLW0d3rzEGWC8hVzOm7Tg1DtlGxc371Uv7lg3vQYnZYeZQPByFpjCkMRTma/LiIOfgzFQ7oMlv1f6c1rVq6m4Nnj34UvYTfKsgQ8CG0IDX17DpAaCuiVXjxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hou00lb0; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB6E484254
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 15:38:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.205
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790177910; cv=pass; b=KQb+/ZCCHBFj8R8PeLLkWAhV8vetF5olVGZMfHnDYOYSv0wldbBBtw/dhkYRy4GDRysI/kgoiFO2WhSwe8u+tX1/Y3Z9x30hvcgXntDAv39Z9/z1TEgy0o1OhcxbR9y4B7Z+U24adKHJ4gl/cANKpmqMxyDRU5h18/6GJo3V9tw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790177910; c=relaxed/simple;
+	bh=gEeSEkSOfRu+0wU1/5d2sKj9+XsQVOzf6RYN8jzfDRo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gWd9xgZmEXtbHvZXNust9AnemnaoVUt7R1r28CckfsHWqj7rKkOoXBinULml4AhEo3cJedxDxXi5FSnH8vtoQZx2YO6C4szbfvSif8IFOxV+cHHf5Ki/kWry17H0cYR7UgnJdSqrfWJ9RNDG+k+OtVhxHLiCHjElEfjCAWPd5So=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R1rfZCpV; arc=pass smtp.client-ip=74.125.231.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hou00lb0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D68091F00893;
-	Wed, 23 Sep 2026 15:31:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790177490;
-	bh=zTc3lm1AYN+GTVbO1s1iJUzBIv8AvfRJtePi+33sr5A=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=hou00lb0ahBxcJcY/0NLse9G5JvPyO8mw1wpSq9fN9ZwY7QH3q3lq+POhnDR1YFFm
-	 fOej6kK2+E9A8Jc+cl1WfZjDrd4vTROItkUvmaxEQ2Ks+jX+fgWOkXtLLujtoiHB96
-	 1iHR9f0rITjWJsxvdHXXcSkP2iDQgjL3xPxpno1GY0NV8hsHHMkSs52CKLyg77gpx2
-	 PABlbOionCD0FlM1bG+Y2WCm8fKZ5MTzZuXAElewzjdtG0TUEYcRdeAjx467SPC+Pv
-	 h+Hy0VIMW77P6HsXC8rVGBNIEbVrtTmx/18gJ/j5fWewgtGqcwY3waYy0kGBA+1QCM
-	 wqCY1eKj67sxQ==
-From: Jeff Layton <jlayton@kernel.org>
-Date: Wed, 23 Sep 2026 11:30:51 -0400
-Subject: [PATCH v2 2/2] selftests/nfsd: add lockd netlink configuration
- tests
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R1rfZCpV"
+Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4c556f35e70so167900b6e.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 08:38:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790177906; cv=none;
+        d=google.com; s=arc-20260327;
+        b=jXlVY/qw9liqMnUJB89BjLMQA7hI4+LBVbrGCUvj6wrYyA6fv8b49PnwAZzLbcTGSK
+         UfE8d4UxzGZUO2LebK37ecdiNt7u2JhEK4xWCIU9bds1JTE8IMsMDeVlQKH2sgPz6Him
+         +eT4HECVP5KrWSWJPPgQvN001iSXS8Y6KCrZ4oStt+WngCKc5DZg3YtR7c1SDsIPkjsk
+         Gg7m9T2aYoScgrcwTlo+2cyAR6ULmDYVoaQhoRfE/pq4Hdb0fVnuS31GMVuUBAHFGvOj
+         8eU5IvKYIlklS1e6GjO0g6v3/tc80gzgmZ1gvY+B0wFt7W98qrH9i0cLSSoHT5VV+h4r
+         Bl1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=gEeSEkSOfRu+0wU1/5d2sKj9+XsQVOzf6RYN8jzfDRo=;
+        fh=ApezTUya+qFL+HCu29UzhaD1bbB3Q1zyVbdoyxk+YVk=;
+        b=ZG2GRZUEJiCXDU4Rn2mYQBBSD0In5GJb2BTtwKtpdZ6xVNs0SUnp7+r4dCrZ7AxrGF
+         Ccb58jB8DyfqznnFBzGtLINLj/jXMXoRY3KMoBWpu48dNGV+l0FFpDsM+J7ksLOU3SJF
+         MCYUSD0DlWgncWXa2sXuAdi/P1bWJWis8Lz/Q+nZiSAbyrqTtnrmJgBv1KZDupcMrlkO
+         3Ys5cy+awcJAR6/waLbPjPFOCLqobU4kDq7ZMtB/Hv8zCE5XpQfQQvC31zYIzwSC4VpA
+         6Sky8rT0nqzwRaZzGvduO0J9evRVCIer03boV3ScsWTQyEQ29RTtShicDR/tUjl7KSAL
+         K9Mg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790177906; x=1790782706; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gEeSEkSOfRu+0wU1/5d2sKj9+XsQVOzf6RYN8jzfDRo=;
+        b=R1rfZCpVaoeS1I2e9V3K7gFOBN4qX9lpx2qWsDz6TSFzILf9pqdosDuJZkprYzJUqy
+         mPSNCdaCsCRHbpk6WVGCjxaAALCpoiyA30X/TtQbkLIz1p4ceuY6XUPBKEdEBXv4EE9S
+         2fnqvMF+M+RxE6Kgwj8mBgt12nP7s+GU9YdFI7tJbg+4wH3JmHZwJNGEVvwPJVaBrIo2
+         VbHltlbqfqRtmHgK6nkQyVs7NwGN4y/3T/7N7X0qCtJvrBZ5D8pCB62U4Vz/hOvHUKi4
+         seRU0faKnD9B/KzQxPXca3DwxLerTBl0nDK9kHyaN+DvX+i5ebUXe7rwbaDdIJmBDZuH
+         CJlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790177906; x=1790782706;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gEeSEkSOfRu+0wU1/5d2sKj9+XsQVOzf6RYN8jzfDRo=;
+        b=USlsR1S3Pj9f3r4Lovn+QhFrvkm9PIPoV8rsVzWS/gnZCaWQOwZlgorS9TQoPLUgDI
+         Qjk9zKNOa+Bq0F7s7N042NTDZ70FYzNiqcaHZVv7yjf4dBN1If2zVjlG9uWifAsJbTqS
+         pj537+8A5A+v/yGq6lnTYZahSJT2z24YP2TSc+j5SMMKTv17nEOXwU5Gv7F3PtZ0T6lB
+         C6W3ighCPZJFsu5QjdjhDGCF+oP98EKT8snD+K8uHgqTcHdWw56Wd4nUtXpTXS/lQTiW
+         +OEiNsFUPcCS3bIUJnN481agyRneARJi9unY3hNBJ1mATzctv5dIuJhKIvfYsRGvYdSl
+         RLAg==
+X-Forwarded-Encrypted: i=1; AKwUvByjSFyylBn+PbUul+PFye+89l25CleN2EUxbPxpoIujZAdoAjNitFGZyx2n1lhjBG4+RESNImU8tdqXkhrxATU=@vger.kernel.org
+X-Gm-Message-State: AFuF++kQ7CwFvo6DpwffbBRF3bXSOMzV7xUXLJE3OjyXW4qvzthmH3IA
+	algXEoCOMRqDxl8tlt4ICT0+L9yVjMjYRz8LtiLJmXPERZ/q3KgSXKSyvWyMmlZStTtl+mSXlB/
+	IJDLTKWPLJU2q98qWKI8VqvDEoo0g/Qc=
+X-Gm-Gg: AYBFou0EJONEwVm6uvr8dRN9RIORrZVy2iCEaxVOzYqV101xCKOFO0u1RVHGIFgVHO5
+	uxLSdEe5hfFQgZHW03za70tE8xNZhLyG4gbTDhWIIgKB7/1MObfBLlPRzKpa1m62vUVfa0aMpk3
+	xHPm1lRLWiVofM9ZmjNnTmeiSPOWTMBdfqT4QYgVsDOt6RFVg3PZrW/jDvNQXGOZYyh5BPC9tqp
+	BMoErvy04GWjQ0bkqHQ33Cfrb9kxqAA+ZNH4M35CE65/p+S6jeikqvuYLEarhsmVmi5cWs8JwPe
+	UnlTEgBpS998sTlkcslC0HDFOIyc0QC9oyHEnFDfWw/T8e6CnCaOLDjQAvjh14tU9/+EA5E=
+X-Received: by 2002:a05:6808:ed0:b0:4b3:9985:1734 with SMTP id
+ 5614622812f47-4d5ba3c4acbmr3726514b6e.4.1790177906420; Wed, 23 Sep 2026
+ 08:38:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260923-nfsd-testing-v2-2-bfba431122c8@kernel.org>
-References: <20260923-nfsd-testing-v2-0-bfba431122c8@kernel.org>
-In-Reply-To: <20260923-nfsd-testing-v2-0-bfba431122c8@kernel.org>
-To: Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
- Chuck Lever <cel@kernel.org>, NeilBrown <neil@brown.name>, 
- Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, 
- Tom Talpey <tom@talpey.com>, Shuah Khan <shuah@kernel.org>
-Cc: Scott Mayhew <smayhew@redhat.com>, linux-nfs@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Jeff Layton <jlayton@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=15919; i=jlayton@kernel.org;
- h=from:subject:message-id; bh=VWrZKKlwBUQnZ9QTX6wG4EJJIKYHXgKdXCFAHPb3pXQ=;
- b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBqs/DPkTQM8pIj+kcC+0gVkT1aomt8q6c09ikAF
- y6GNh6m6BOJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCarPwzwAKCRAADmhBGVaC
- FZ75D/9BS5RU8pzEx6EUqMA5QqipZlIhiFZJMBBUP7TQhrfCvWOZrHiyhf63kbMaXNGzmWeWA8F
- XjxBL3qBmVqllhBR8ViLM0oBwTzInQDXc9vsozeDe+jUDVf6KTqZc6edGl26fh0qA4vE5LjmghX
- d91i9Tmi25iaFQBGXnjP0MjV+9LoDfHiaZCprbvNyROqK/hdXahNRiE13Hguwd8nE2bPXaX91/c
- jByUVMGZaQKyh2SL3YpWvhO1guJ1vQziY8YZ0UqfjpSxdROqtf5ArxLZJU83nfKdKouzpYoXZJh
- 5yxVAfub4FguBG1KEj/0FnWDGVhlHaWIbwD4de4eKJeFQMl7YKDzCbkpqbUT60Ukpa4E85VwcbP
- uALAvziKbG3jN8YQNVxf5ceXh5tOHAhY92pf4dv35lRsuu4p8239LQorWnuiLc+rNL5UuwoZt7g
- uqWQRt5fLq7rGgDeSnCjbCcoidHk4zCIzx2TS813KnGr9EUvqy3v8hMlovt6bwoUowSkrW/xhlC
- kvYeEVW7+abKD/Mr4+yBoEOOzsferB0iHxQNKjCxIfLwf2fgqEXFPxPKFXu1NiLp6BVLCKofhO3
- RnlrbscnganXbn4vSwpXSEKjsLQ0hrefI/cxXzmbXB4TlVSnWKQ2GWoRr5ZSi8hszIvUPAB+u6O
- 9HcJ3unk1kpgOTw==
-X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
- fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
+References: <20260914-netcons_ratelimit-v3-0-8e81b789ab37@debian.org> <20260914-netcons_ratelimit-v3-1-8e81b789ab37@debian.org>
+In-Reply-To: <20260914-netcons_ratelimit-v3-1-8e81b789ab37@debian.org>
+From: Gustavo Luiz Duarte <gustavold@gmail.com>
+Date: Wed, 23 Sep 2026 16:38:14 +0100
+X-Gm-Features: AclHuK-2YGSrpzgft7by3_dFRSTPGzkf9KPty-TIWRA5mQOXoN0qwCVvVkFO1d8
+Message-ID: <CAGSyskXex-Pu1n1wp+YfpVgbZnCRrd3CmGcLR9XWxenVNnk6NQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 1/5] netconsole: send the oops when oops_only
+ is set
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, paulmck@kernel.org, asantostc@gmail.com, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Cover LOCKD_CMD_SERVER_SET / SERVER_GET, in particular that each of the
-three attributes can be set on its own. Without the preceding fix, four
-of the eight tests fail with EINVAL -- every one that omits the grace
-time, which is what nfsdctl sends for a [lockd] port with no
-grace-time.
+On Mon, Sep 14, 2026 at 1:10=E2=80=AFPM Breno Leitao <leitao@debian.org> wr=
+ote:
+>
+> A target running with oops_only=3D1 receives nothing when the kernel
+> oopses, which is the one thing the option exists for. Only a panic
+> still gets through.
+>
+> netconsole_write() bails out unless oops_in_progress is set, and that
+> flag is already gone by the time netconsole runs. netconsole is
+> CON_NBCON_ATOMIC_UNSAFE, so console_is_usable() keeps it out of the
+> emergency flush an oops prints in, and the records only leave the box
+> once the printer thread runs.
+>
+> die() wakes that thread from oops_exit(), by which point
+> bust_spinlocks(0) has cleared oops_in_progress again. TAINT_DIE is set
+> in between, so test that as well, behind a helper.
+>
+> With oops_only=3D1 on a netdevsim target, an lkdtm EXCEPTION produces 44
+> lines of oops. The receiver gets none of them before this change and
+> all of them after it, while ordinary messages stay suppressed.
+>
+> The taint never clears, so from the first oops on, an oops_only target
+> sends everything instead of going quiet again. Sending the aftermath of
+> a crash beats sending nothing.
+>
+> Fixes: 7eab73b18630 ("netconsole: convert to NBCON console infrastructure=
+")
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 
-Also pinned down here:
-- an empty SERVER_SET is a no-op, not an error
-- a gracetime over nlm_grace_period_max is still rejected, and the
-  rejected request applies none of the ports it came with
-- the settings are per-netns
-
-Everything runs under unshare(CLONE_NEWNET): the values are per-netns,
-and a SERVER_SET in init_net would overwrite the host's module-wide
-nlm_grace_period/nlm_tcpport/nlm_udpport.
-
-nfsd_netlink.h grows genl_resolve() and *_to() request helpers that take
-a family id, so the plumbing can drive the lockd family too;
-genl_resolve_nfsd() and the existing helpers are thin wrappers and the
-other tests are unchanged.
-
-Assisted-by: LLM
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- tools/testing/selftests/nfsd/.gitignore           |   1 +
- tools/testing/selftests/nfsd/Makefile             |   1 +
- tools/testing/selftests/nfsd/nfsd_lockd_netlink.c | 268 ++++++++++++++++++++++
- tools/testing/selftests/nfsd/nfsd_netlink.h       |  90 ++++++--
- 4 files changed, 345 insertions(+), 15 deletions(-)
-
-diff --git a/tools/testing/selftests/nfsd/.gitignore b/tools/testing/selftests/nfsd/.gitignore
-index 2347491c634d..7ac844d0fd57 100644
---- a/tools/testing/selftests/nfsd/.gitignore
-+++ b/tools/testing/selftests/nfsd/.gitignore
-@@ -1,3 +1,4 @@
-+nfsd_lockd_netlink
- nfsd_netlink_listener
- nfsd_netns_isolation
- nfsd_netns_stress
-diff --git a/tools/testing/selftests/nfsd/Makefile b/tools/testing/selftests/nfsd/Makefile
-index b29bf642c0ad..e74bb3424d45 100644
---- a/tools/testing/selftests/nfsd/Makefile
-+++ b/tools/testing/selftests/nfsd/Makefile
-@@ -2,6 +2,7 @@
- CFLAGS += $(KHDR_INCLUDES) -Wall
- 
- TEST_GEN_PROGS := nfsd_netlink_listener
-+TEST_GEN_PROGS += nfsd_lockd_netlink
- TEST_GEN_PROGS += nfsd_netns_isolation
- TEST_GEN_PROGS += nfsd_netns_stress
- 
-diff --git a/tools/testing/selftests/nfsd/nfsd_lockd_netlink.c b/tools/testing/selftests/nfsd/nfsd_lockd_netlink.c
-new file mode 100644
-index 000000000000..47a1dee5a1f5
---- /dev/null
-+++ b/tools/testing/selftests/nfsd/nfsd_lockd_netlink.c
-@@ -0,0 +1,268 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Regression tests for lockd's generic-netlink configuration interface
-+ * (LOCKD_CMD_SERVER_SET / LOCKD_CMD_SERVER_GET).
-+ *
-+ * All three attributes are optional in the spec and each is applied on its
-+ * own by the kernel, but SERVER_SET used to demand a grace time and reject
-+ * anything else with -EINVAL. That made the tcp and udp ports unsettable by
-+ * themselves, which is exactly what nfsdctl asks for when /etc/nfs.conf has
-+ * a [lockd] port but no grace-time -- "nfsdctl autostart" then failed before
-+ * it had configured anything.
-+ *
-+ * Every test runs in a private network namespace. The settings are per-netns,
-+ * and a SERVER_SET in init_net would also overwrite the host's module-wide
-+ * nlm_grace_period/nlm_tcpport/nlm_udpport.
-+ */
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <sched.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <linux/lockd_netlink.h>
-+
-+#include "../kselftest_harness.h"
-+#include "nfsd_netlink.h"
-+
-+/* fs/lockd/svc.c: nlm_grace_period_max */
-+#define GRACE_MAX		240
-+
-+#define TEST_TCP_PORT		32531
-+#define TEST_UDP_PORT		32532
-+
-+struct lockd_cfg {
-+	uint32_t gracetime;
-+	uint16_t tcp_port;
-+	uint16_t udp_port;
-+};
-+
-+static int lockd_family = -1;
-+
-+static int lockd_set(const char *attrs, int len)
-+{
-+	return genl_request_to(lockd_family, LOCKD_CMD_SERVER_SET, attrs, len);
-+}
-+
-+static int lockd_get(struct lockd_cfg *cfg)
-+{
-+	const struct nlattr *grace, *tcp, *udp;
-+	char rbuf[4096];
-+	int n;
-+
-+	n = genl_request_reply_attrs_to(lockd_family, LOCKD_CMD_SERVER_GET,
-+					NULL, 0, rbuf, sizeof(rbuf));
-+	if (n < 0)
-+		return n;
-+
-+	grace = genl_find_attr(rbuf, n, LOCKD_A_SERVER_GRACETIME);
-+	tcp = genl_find_attr(rbuf, n, LOCKD_A_SERVER_TCP_PORT);
-+	udp = genl_find_attr(rbuf, n, LOCKD_A_SERVER_UDP_PORT);
-+	if (!grace || !tcp || !udp)
-+		return -ENOENT;
-+
-+	cfg->gracetime = nla_u32(grace);
-+	cfg->tcp_port = nla_u16(tcp);
-+	cfg->udp_port = nla_u16(udp);
-+	return 0;
-+}
-+
-+/* ------------------- SERVER_SET request builders ------------------- */
-+
-+static int put_gracetime(char *buf, int off, uint32_t grace)
-+{
-+	return put_attr(buf, off, LOCKD_A_SERVER_GRACETIME, &grace,
-+			sizeof(grace));
-+}
-+
-+static int put_tcp_port(char *buf, int off, uint16_t tcp)
-+{
-+	return put_attr(buf, off, LOCKD_A_SERVER_TCP_PORT, &tcp, sizeof(tcp));
-+}
-+
-+static int put_udp_port(char *buf, int off, uint16_t udp)
-+{
-+	return put_attr(buf, off, LOCKD_A_SERVER_UDP_PORT, &udp, sizeof(udp));
-+}
-+
-+static int put_ports(char *buf, int off, uint16_t tcp, uint16_t udp)
-+{
-+	off = put_tcp_port(buf, off, tcp);
-+	return put_udp_port(buf, off, udp);
-+}
-+
-+FIXTURE(lockd_netlink) {
-+};
-+
-+FIXTURE_SETUP(lockd_netlink)
-+{
-+	if (geteuid() != 0)
-+		SKIP(return, "must be run as root");
-+	if (unshare(CLONE_NEWNET) < 0)
-+		SKIP(return, "unshare(NEWNET): %s", strerror(errno));
-+
-+	lockd_family = genl_resolve(LOCKD_FAMILY_NAME, sizeof(LOCKD_FAMILY_NAME));
-+	if (lockd_family < 0)
-+		SKIP(return, "lockd netlink family not registered");
-+}
-+
-+FIXTURE_TEARDOWN(lockd_netlink)
-+{
-+	/* Nothing to undo: the settings die with the namespace. */
-+}
-+
-+/* A fresh namespace starts out with everything at zero. */
-+TEST_F(lockd_netlink, defaults_are_zero)
-+{
-+	struct lockd_cfg cfg;
-+
-+	ASSERT_EQ(0, lockd_get(&cfg));
-+	EXPECT_EQ(0, cfg.gracetime);
-+	EXPECT_EQ(0, cfg.tcp_port);
-+	EXPECT_EQ(0, cfg.udp_port);
-+}
-+
-+/*
-+ * The regression: ports on their own, no grace time. This is the request
-+ * nfsdctl builds from a [lockd] section that only sets the ports.
-+ */
-+TEST_F(lockd_netlink, set_ports_without_gracetime)
-+{
-+	struct lockd_cfg cfg;
-+	char attrs[64];
-+	int off;
-+
-+	off = put_ports(attrs, 0, TEST_TCP_PORT, TEST_UDP_PORT);
-+
-+	ASSERT_EQ(0, lockd_set(attrs, off))
-+		TH_LOG("SERVER_SET rejected a request with no gracetime");
-+
-+	ASSERT_EQ(0, lockd_get(&cfg));
-+	EXPECT_EQ(TEST_TCP_PORT, cfg.tcp_port);
-+	EXPECT_EQ(TEST_UDP_PORT, cfg.udp_port);
-+	EXPECT_EQ(0, cfg.gracetime);
-+}
-+
-+/* The mirror image: a grace time with no ports. */
-+TEST_F(lockd_netlink, set_gracetime_without_ports)
-+{
-+	struct lockd_cfg cfg;
-+	char attrs[64];
-+	int off;
-+
-+	off = put_gracetime(attrs, 0, 90);
-+
-+	ASSERT_EQ(0, lockd_set(attrs, off));
-+
-+	ASSERT_EQ(0, lockd_get(&cfg));
-+	EXPECT_EQ(90, cfg.gracetime);
-+	EXPECT_EQ(0, cfg.tcp_port);
-+	EXPECT_EQ(0, cfg.udp_port);
-+}
-+
-+/* One attribute at a time leaves the others alone. */
-+TEST_F(lockd_netlink, attributes_are_set_independently)
-+{
-+	struct lockd_cfg cfg;
-+	char attrs[64];
-+	int off;
-+
-+	off = put_tcp_port(attrs, 0, TEST_TCP_PORT);
-+	ASSERT_EQ(0, lockd_set(attrs, off));
-+
-+	off = put_udp_port(attrs, 0, TEST_UDP_PORT);
-+	ASSERT_EQ(0, lockd_set(attrs, off))
-+		TH_LOG("SERVER_SET rejected a UDP-only request");
-+
-+	off = put_gracetime(attrs, 0, 30);
-+	ASSERT_EQ(0, lockd_set(attrs, off));
-+
-+	ASSERT_EQ(0, lockd_get(&cfg));
-+	EXPECT_EQ(30, cfg.gracetime);
-+	EXPECT_EQ(TEST_TCP_PORT, cfg.tcp_port)
-+		TH_LOG("a later SET clobbered the tcp port");
-+	EXPECT_EQ(TEST_UDP_PORT, cfg.udp_port)
-+		TH_LOG("a gracetime-only SET clobbered the udp port");
-+}
-+
-+TEST_F(lockd_netlink, set_all_three)
-+{
-+	struct lockd_cfg cfg;
-+	char attrs[64];
-+	int off;
-+
-+	off = put_gracetime(attrs, 0, GRACE_MAX);
-+	off = put_ports(attrs, off, TEST_TCP_PORT, TEST_UDP_PORT);
-+
-+	ASSERT_EQ(0, lockd_set(attrs, off));
-+
-+	ASSERT_EQ(0, lockd_get(&cfg));
-+	EXPECT_EQ(GRACE_MAX, cfg.gracetime);
-+	EXPECT_EQ(TEST_TCP_PORT, cfg.tcp_port);
-+	EXPECT_EQ(TEST_UDP_PORT, cfg.udp_port);
-+}
-+
-+/* An empty SERVER_SET has nothing to do, but is not an error. */
-+TEST_F(lockd_netlink, empty_set_is_a_noop)
-+{
-+	struct lockd_cfg cfg;
-+	char attrs[64];
-+	int off;
-+
-+	off = put_gracetime(attrs, 0, 30);
-+	off = put_ports(attrs, off, TEST_TCP_PORT, TEST_UDP_PORT);
-+	ASSERT_EQ(0, lockd_set(attrs, off));
-+
-+	ASSERT_EQ(0, lockd_set(NULL, 0));
-+
-+	ASSERT_EQ(0, lockd_get(&cfg));
-+	EXPECT_EQ(30, cfg.gracetime);
-+	EXPECT_EQ(TEST_TCP_PORT, cfg.tcp_port);
-+	EXPECT_EQ(TEST_UDP_PORT, cfg.udp_port);
-+}
-+
-+/*
-+ * The grace time is still range-checked, and the check runs before anything
-+ * is stored: a rejected request must not apply the ports it came with.
-+ */
-+TEST_F(lockd_netlink, gracetime_above_max_rejected)
-+{
-+	struct lockd_cfg cfg;
-+	char attrs[64];
-+	int off;
-+
-+	off = put_gracetime(attrs, 0, GRACE_MAX + 1);
-+	off = put_ports(attrs, off, TEST_TCP_PORT, TEST_UDP_PORT);
-+
-+	EXPECT_EQ(-EINVAL, lockd_set(attrs, off));
-+
-+	ASSERT_EQ(0, lockd_get(&cfg));
-+	EXPECT_EQ(0, cfg.gracetime);
-+	EXPECT_EQ(0, cfg.tcp_port)
-+		TH_LOG("a rejected SERVER_SET applied the tcp port anyway");
-+	EXPECT_EQ(0, cfg.udp_port);
-+}
-+
-+/* Settings belong to the namespace that made them. */
-+TEST_F(lockd_netlink, settings_are_per_netns)
-+{
-+	struct lockd_cfg cfg;
-+	char attrs[64];
-+	int off;
-+
-+	off = put_gracetime(attrs, 0, 30);
-+	off = put_ports(attrs, off, TEST_TCP_PORT, TEST_UDP_PORT);
-+	ASSERT_EQ(0, lockd_set(attrs, off));
-+
-+	if (unshare(CLONE_NEWNET) < 0)
-+		SKIP(return, "second unshare(NEWNET): %s", strerror(errno));
-+
-+	ASSERT_EQ(0, lockd_get(&cfg));
-+	EXPECT_EQ(0, cfg.gracetime)
-+		TH_LOG("grace time leaked out of the namespace that set it");
-+	EXPECT_EQ(0, cfg.tcp_port)
-+		TH_LOG("tcp port leaked out of the namespace that set it");
-+	EXPECT_EQ(0, cfg.udp_port);
-+}
-+
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/nfsd/nfsd_netlink.h b/tools/testing/selftests/nfsd/nfsd_netlink.h
-index c66a980bfc01..bb9327109e8f 100644
---- a/tools/testing/selftests/nfsd/nfsd_netlink.h
-+++ b/tools/testing/selftests/nfsd/nfsd_netlink.h
-@@ -4,7 +4,9 @@
-  *
-  * Header-only: every helper is static inline, so each test binary gets its
-  * own copy and there is nothing extra to link. nfsd_family must be set by
-- * calling genl_resolve_nfsd() before any of the request helpers are used.
-+ * calling genl_resolve_nfsd() before any of the request helpers are used;
-+ * the *_to() variants take a family id instead, for the other families in
-+ * the NFS server stack.
-  */
- #ifndef __SELFTESTS_NFSD_NETLINK_H__
- #define __SELFTESTS_NFSD_NETLINK_H__
-@@ -100,6 +102,45 @@ static inline int put_attr(char *buf, int off, uint16_t type,
- 	return off + NLA_ALIGN4(NLA_HDRLEN + len);
- }
- 
-+/* Payload accessors; the payload is only 4-byte aligned, so no direct load. */
-+static inline uint32_t nla_u32(const struct nlattr *na)
-+{
-+	uint32_t v;
-+
-+	memcpy(&v, (const char *)na + NLA_HDRLEN, sizeof(v));
-+	return v;
-+}
-+
-+static inline uint16_t nla_u16(const struct nlattr *na)
-+{
-+	uint16_t v;
-+
-+	memcpy(&v, (const char *)na + NLA_HDRLEN, sizeof(v));
-+	return v;
-+}
-+
-+/* Find top-level attribute @type in a genl reply of @len bytes; NULL if absent. */
-+static inline const struct nlattr *genl_find_attr(const char *rbuf, int len,
-+						  uint16_t type)
-+{
-+	const struct nlmsghdr *nlh = (const void *)rbuf;
-+	const struct nlattr *na;
-+	int left;
-+
-+	if (len < (int)(NLMSG_HDRLEN + GENL_HDRLEN))
-+		return NULL;
-+	na = (const void *)(rbuf + NLMSG_HDRLEN + GENL_HDRLEN);
-+	left = nlh->nlmsg_len - NLMSG_HDRLEN - GENL_HDRLEN;
-+
-+	while (left >= (int)NLA_HDRLEN) {
-+		if ((na->nla_type & NLA_TYPE_MASK) == type)
-+			return na;
-+		left -= NLA_ALIGN4(na->nla_len);
-+		na = (const void *)((const char *)na + NLA_ALIGN4(na->nla_len));
-+	}
-+	return NULL;
-+}
-+
- /* Build a genl message header into @buf; return the offset past it. */
- static inline int genl_hdr(char *buf, uint16_t type, uint16_t flags, uint8_t cmd)
- {
-@@ -115,15 +156,16 @@ static inline int genl_hdr(char *buf, uint16_t type, uint16_t flags, uint8_t cmd
- 	return NLMSG_HDRLEN + GENL_HDRLEN;
- }
- 
--/* Send an nfsd command with an ACK; return the ACK errno (<= 0). */
--static inline int genl_request(uint8_t cmd, const char *attrs, int attrs_len)
-+/* Send a command to @family with an ACK; return the ACK errno (<= 0). */
-+static inline int genl_request_to(uint16_t family, uint8_t cmd,
-+				  const char *attrs, int attrs_len)
- {
- 	char buf[1 << 20], rbuf[4096];
- 	struct nlmsghdr *nlh = (void *)buf;
- 	int fd = genl_open();
- 	int off, n, ret;
- 
--	off = genl_hdr(buf, nfsd_family, NLM_F_REQUEST | NLM_F_ACK, cmd);
-+	off = genl_hdr(buf, family, NLM_F_REQUEST | NLM_F_ACK, cmd);
- 	if (attrs_len) {
- 		memcpy(buf + off, attrs, attrs_len);
- 		off += attrs_len;
-@@ -147,21 +189,27 @@ static inline int genl_request(uint8_t cmd, const char *attrs, int attrs_len)
- 	return ret;
- }
- 
-+static inline int genl_request(uint8_t cmd, const char *attrs, int attrs_len)
-+{
-+	return genl_request_to(nfsd_family, cmd, attrs, attrs_len);
-+}
-+
- /*
-- * Send a command with attributes and return the full reply message; -errno
-- * on failure. NLM_F_ACK is left off: the kernel reports an error either way,
-- * so the first message back is the reply whenever there is one.
-+ * Send a command to @family with attributes and return the full reply
-+ * message; -errno on failure. NLM_F_ACK is left off: the kernel reports an
-+ * error either way, so the first message back is the reply whenever there
-+ * is one.
-  */
--static inline int genl_request_reply_attrs(uint8_t cmd, const char *attrs,
--					   int attrs_len, char *rbuf,
--					   size_t rlen)
-+static inline int genl_request_reply_attrs_to(uint16_t family, uint8_t cmd,
-+					      const char *attrs, int attrs_len,
-+					      char *rbuf, size_t rlen)
- {
- 	char buf[1 << 20];
- 	struct nlmsghdr *nlh = (void *)buf;
- 	int fd = genl_open();
- 	int off, n, ret;
- 
--	off = genl_hdr(buf, nfsd_family, NLM_F_REQUEST, cmd);
-+	off = genl_hdr(buf, family, NLM_F_REQUEST, cmd);
- 	if (attrs_len) {
- 		memcpy(buf + off, attrs, attrs_len);
- 		off += attrs_len;
-@@ -182,13 +230,21 @@ static inline int genl_request_reply_attrs(uint8_t cmd, const char *attrs,
- 	return ret;
- }
- 
-+static inline int genl_request_reply_attrs(uint8_t cmd, const char *attrs,
-+					   int attrs_len, char *rbuf,
-+					   size_t rlen)
-+{
-+	return genl_request_reply_attrs_to(nfsd_family, cmd, attrs, attrs_len,
-+					   rbuf, rlen);
-+}
-+
- static inline int genl_request_reply(uint8_t cmd, char *rbuf, size_t rlen)
- {
- 	return genl_request_reply_attrs(cmd, NULL, 0, rbuf, rlen);
- }
- 
--/* Resolve the "nfsd" genl family id; -1 if not registered. */
--static inline int genl_resolve_nfsd(void)
-+/* Resolve a genl family id by name; -1 if not registered. */
-+static inline int genl_resolve(const char *name, size_t namelen)
- {
- 	char buf[1024], rbuf[4096];
- 	struct nlmsghdr *nlh = (void *)buf;
-@@ -198,8 +254,7 @@ static inline int genl_resolve_nfsd(void)
- 
- 	fd = genl_open();
- 	off = genl_hdr(buf, GENL_ID_CTRL, NLM_F_REQUEST, CTRL_CMD_GETFAMILY);
--	off = put_attr(buf, off, CTRL_ATTR_FAMILY_NAME,
--		       NFSD_FAMILY_NAME, sizeof(NFSD_FAMILY_NAME));
-+	off = put_attr(buf, off, CTRL_ATTR_FAMILY_NAME, name, namelen);
- 	nlh->nlmsg_len = off;
- 
- 	if (send(fd, buf, off, 0) < 0)
-@@ -224,6 +279,11 @@ static inline int genl_resolve_nfsd(void)
- 	return id;
- }
- 
-+static inline int genl_resolve_nfsd(void)
-+{
-+	return genl_resolve(NFSD_FAMILY_NAME, sizeof(NFSD_FAMILY_NAME));
-+}
-+
- /* ------------------- listener request builders ------------------- */
- 
- /* Fine-grained control for negative tests: any field can be omitted/malformed. */
-
--- 
-2.55.0
-
+Reviewed-by: Gustavo Luiz Duarte <gustavold@gmail.com>
