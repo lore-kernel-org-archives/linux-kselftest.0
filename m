@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24322455635;
-	Wed, 23 Sep 2026 13:54:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1EF377EBF;
+	Wed, 23 Sep 2026 13:54:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790171686; cv=none; b=Z2TGgZBZzSj+qr0eVxrV1dxubMfsc1rvTlyZCfG9ShklhdjhATU+TIBpNiyV6RQC3nkhqadJUw/FRGK3BsHkauW4ag534ghZ3mqytQFhkZTOSB0HE19NuZ2Z7IaXrN0K36zAcweKJD9EbahPDhN3oAruL8xa5Mq2w6MAdBvtjS8=
+	t=1790171700; cv=none; b=oWAXQpTmEnDAnhbG4OGnN+keFhUGmtovqO42PeM4bBO3arSqQOhYC1wOpjqDfdyB7DvefULpiYUV+IGcYUBzjdVK8EmcOdpfDrejjBclACumn4wD1FbewV/gQCERhw/pnhSXa0e9nW3Zq01qR8QOX62f10memnjoWB7eSY5O6LQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790171686; c=relaxed/simple;
-	bh=3xdu8TqqojNI1/L2WgyqebV/A4o3RGXP8uDvwc+LGRA=;
+	s=arc-20240116; t=1790171700; c=relaxed/simple;
+	bh=aT0jx2Enz+IOYUuA7N8ge/OBM1RkRl7Mh36SHDDD7f8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=af+VwNKTLvuGC7ccU0cjj/8l/Eqg1IEtVT7b9Iqn+OoO3PrGJAvyoZzjpi8NKeidGxB5IWj0Muflh8xYYF9ENleFtNGYuVRO0UD5EfS4glSLByrqQC3G9Qw01cciLhigB9H46TG89/1/p8CcrHuvoF8I9x7cgV/iTHrJh7a1Sj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nYvHCK00; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=X5E0RHeRdwFtKIpsasT5VrWDd6EtGQzUoDVk1VUkNxCcEpB/wtaWjTqC+XXGNVAyxhoNiPgGxMG1z2gzUSp0eK73z8nWunhcROiDoPboZxz1nBPoDqNVJJIrRSLTnKwmfi9KGEvkEVFoXP1HQVV9drbpgEqrXGly8idZKzRAviY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FM5j2lqH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nYvHCK00"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F5D41F000FF;
-	Wed, 23 Sep 2026 13:54:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FM5j2lqH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85DF01F000FF;
+	Wed, 23 Sep 2026 13:54:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790171684;
-	bh=lV+u7ZikXuhz6S/aX/agfwlx8ZCGacyG0jw47bgroto=;
+	s=k20260515; t=1790171699;
+	bh=3pRdOBL+cijWfZO9/7sYlQGKCgeKIlKJlS6CU60AIms=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=nYvHCK00gse9lc8Gx/Mov2CNFiG+zwZQHvXDTyOyRVnDEZ7e/j+dBt4VaW492ZGkp
-	 hpxR+G1QWZhj0OCGcyUJe3NS+dPfIOz58dyG8LtXFDK+CVfY1Ab9PrVbLAfE0A3Si9
-	 muH/fQOeqkwXuhVgU+lv4cmT03OdPxLxwo8H6Cqb+/WGhsMFI3fPbi5/wG5OjrK/np
-	 Gy5y45GHFTQJneDnyD3kQM9yg8Dez91ESmEcAYXsc92m5ei+9Y79Q6cQfeItsn3lud
-	 18hXNzMMc068k6FgYejJd6kei3cViLgDhMmavBGFCShROmYqJ8Ih/IOgqRUkaahO+d
-	 1NG6zA4/bxbqw==
-Message-ID: <cf3aede5-62d4-4f93-b415-7498f84a20c2@kernel.org>
-Date: Wed, 23 Sep 2026 15:54:34 +0200
+	b=FM5j2lqHF5oBA4kkvgz0PCwgEZsqnHHisgMdkAAnmRuvvwHVyhV2luZJK6Y4xkemL
+	 qAPC3fd7iEJsbd4xQDTAQ7q11ZqPOPy+xvE8OlQX9ae0LVkWeQlJEePNYwymIgC31g
+	 I9T+XAYUIU07RhGDOcqX7yEpg+RocTvGQgi62YrIsf5DnIuzwxvAiPX55mz+k2pO4M
+	 4Deia8UBXt97VtZtydrpwjRzcDk+ZM3EmHeK+hJImCzrcdHCdIs2GTD/OP6eqCm/1C
+	 SG+CNlFlvz1KiGyOFaPQFsi+mA5+jTYIZln8Cdpcxvx61fAaAp1iIP0xnhZnSSI3ki
+	 J9iQD2s3T/VGw==
+Message-ID: <0241581e-3823-43ec-9c6d-2346433f8f87@kernel.org>
+Date: Wed, 23 Sep 2026 15:54:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,24 +35,16 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] kselftest: mm: fix intermittent failure khugepaged
- test
-To: Yeoreum Yun <yeoreum.yun@arm.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: Zi Yan <ziy@nvidia.com>, "Liam R. Howlett" <liam@infradead.org>,
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Shuah Khan <shuah@kernel.org>
-References: <20260921-fix_khugepagd_fail-v2-0-3c2877beef61@arm.com>
- <20260921-fix_khugepagd_fail-v2-2-3c2877beef61@arm.com>
- <6cc12fe6-4f2f-47b6-b821-8a507eb80b46@linux.alibaba.com>
- <arOv_EFOPg0HwBk5@e129823.arm.com>
+Subject: Re: [PATCH] kselftest: mm: use helper to identify anon_ops in
+ khugepaged test
+To: Yeoreum Yun <yeoreum.yun@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: akpm@linux-foundation.org, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+ liam@infradead.org, nico.pache@linux.dev, ryan.roberts@arm.com,
+ dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev,
+ usama.arif@linux.dev, kas@kernel.org, ljs@kernel.org, vbabka@kernel.org,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org
+References: <20260923110133.429745-1-yeoreum.yun@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -99,76 +91,38 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <arOv_EFOPg0HwBk5@e129823.arm.com>
+In-Reply-To: <20260923110133.429745-1-yeoreum.yun@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/23/26 12:54, Yeoreum Yun wrote:
->>
->>
->> On 9/21/26 6:35 PM, Yeoreum Yun wrote:
->>> There are intermittent failures in collapse_max_ptes_swap() and
->>> collapse_max_ptes_shared() when using the khugepaged_context:
->>>
->>>    // while running ./khugepaged -s 2
->>>
->>>    # Run test: collapse_max_ptes_shared (khugepaged:anon)
->>>    # Allocate huge page... OK
->>>    # Share huge page over fork()... OK
->>>    # Trigger CoW on page 1023 of 2048... OK
->>>    # Maybe collapse with max_ptes_shared exceeded.... OK
->>>    # Trigger CoW on page 1024 of 2048... Fail
->>>    Bail out! Unexpected huge page
->>>    # Planned tests != run tests (26 != 23)
->>>    # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0
->>>
->>>    # Run test: collapse_max_ptes_swap (khugepaged:anon)
->>>    # Swapout 257 of 2048 pages... OK
->>>    # Maybe collapse with max_ptes_swap exceeded.... OK
->>>    # Swapout 256 of 2048 pages... OK
->>>    Bail out! Unexpected huge page
->>>    # Planned tests != run tests (26 != 17)
->>>    # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:0 error:0
->>>
->>> This happens because khugepaged may collapse the pages before wait_for_scan()
->>> is called, causing a sanity check that expects uncollapsed pages to fail.
->>>
->>> For example, in collapse_max_ptes_swap(), after faulting the pages back in
->>> and paging out up to max_ptes_swap pages, khugepaged may collapse them again
->>> before c->collapse() is called.
->>>
->>> To prevent this, mark the VMA with MADV_NOHUGEPAGE after it has been
->>> collapsed by wait_for_scan() for anon. This prevents khugepaged from
->>> collapsing it again before c->collapse() is called.
->>>
->>> This failure was observed on NVIDIA Spark with 16KB page.
->>>
->>> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
->>> ---
->>>   tools/testing/selftests/mm/khugepaged.c | 3 +++
->>>   1 file changed, 3 insertions(+)
->>>
->>> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
->>> index c32244b565658..1aad4bb427ece 100644
->>> --- a/tools/testing/selftests/mm/khugepaged.c
->>> +++ b/tools/testing/selftests/mm/khugepaged.c
->>> @@ -578,6 +578,9 @@ static bool wait_for_scan(const char *msg, char *p, size_t len,
->>>   		usleep(TICK);
->>>   	}
->>> +	if (!strncmp(ops->name, "anon", 4))
->>
->> We usually use the 'if (ops == &__anon_ops)' check in this file to identify
->> anonymous test cases.
->>
->> With that, LGTM.
->> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+On 9/23/26 13:01, Yeoreum Yun wrote:
+> Instead of comparing mem_ops->name to determine whether mem_ops is
+> anon_ops, use the is_anon() helper.
 > 
-> I think this is merged at mm/mm-unstable already So, I'll send
-> another patch to change it with is_anon().
+> Suggested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> ---
+> NOTE:
+>   This patch is based on mm/mm-unstable.
+> ---
+>  tools/testing/selftests/mm/khugepaged.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index bdc0c7c117d9..b0cb02bf1a73 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -618,7 +618,7 @@ static bool wait_for_scan(const char *msg, char *p, size_t len,
+>  		usleep(TICK);
+>  	}
+>  
+> -	if (!strncmp(ops->name, "anon", 4))
+> +	if (is_anon(ops))
+>  		madvise(p, len, MADV_NOHUGEPAGE);
+>  
+>  	return timeout == -1;
 
-Unless it is in mm-stable we can reasonably squash stuff or resend. This
-shouldn't be an independent patch.
+This should be squashed in the other patch under review.
 
 -- 
 Cheers,
