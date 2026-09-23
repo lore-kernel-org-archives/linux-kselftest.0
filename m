@@ -1,205 +1,384 @@
-Received: from pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.83.148.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A572857F72F;
-	Wed, 23 Sep 2026 20:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.83.148.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2FF3F58E8;
+	Wed, 23 Sep 2026 20:23:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790194484; cv=none; b=bKkDhxKNOGpgwbfb+Ioub7INBqeYJo0FpI4WYdnPuMd4zt/J0IJNU6fUj0AllEBzs5T3/H6vXo2Lumg/+TtlGRJWL84zMJXglz8DZze+nAXD3XWgk0P/g6jc/igj69YRV6yj1L+8ihDDqOJGHNvdSiuBYtnQG1fMHCE2B6BqogY=
+	t=1790195017; cv=none; b=rJyo7h1eJh9HMnKxXl4QJkG7QhSnUsKr2b19uUAlAtKueM8/PFZXxirR1CPWXqulXoK/mKTDnit7m06Yg2s1Ew2BpK7H3MBua8GH5AYscMpQKcJsAGwzyJXsVHQZFwrfbgNWLxIDhCkWDyvTZsz34bnIr8tAplZHo8q0avCeR00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790194484; c=relaxed/simple;
-	bh=+S/Wc0yXzz8W9wCKS2L++ti3L6KNlbHouXDNHIr9vjU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YqNDGKk8sDzrMqbixMHGspLnNJAWQgDc6BYSodJVi6Cr1QU0ukG+S9o917XDZ3z9EMTMEvJV9ivyG+JpwKMPXZPdOFnepOTsXH6zSY/3HSCy2V1KhUYtk0kGqgu9TuyjTjS4AASCtb0SNb8YpkZUKZIkyh0O2diZmlrXuHTqlAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=hYIsLxU/; arc=none smtp.client-ip=35.83.148.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
+	s=arc-20240116; t=1790195017; c=relaxed/simple;
+	bh=N3ZtQzKMoF3t3mjzucPKwU7WpmStxEm6lmVi7hsw5pk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hiDnEjg8vffraSPcv5+yHAmhOGhH5ZkLAd2tjSmzBv/MpHn1Eda8gLBbZrreNVBeZZOkkuyRO++iw4mjfPH2/F6jC3t8vilzYc1TsjEiWHJ36TcGCd9j8CKTYw9ljoeiYXw75nOIhQA1kt1NTopHn5INFkF6Cdkmg0k83dusImg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=vKgZQ+68; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=3sEAlWav; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=z6E9OOdj; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=SLDbMTC1; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="hYIsLxU/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
-  t=1790194476; x=1821730476;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ze4gHmgKx05i3sSwVzV05lhzTvt568JlRyE3XDEGIBE=;
-  b=hYIsLxU/xgTQB8ngrZAEtKPMI/cdiuoFaDzvVxZlJmJYQHGmQImRYdXf
-   PkW/o1PZV4GwKTfixhJ2X5Px248f84g00JXNfBiPjNryyK6PzdT8wAdzF
-   D6MUGlFXdMeBmQuGXd0jsfCKF3/exh9vxC4ujjYbkjjOZrlrvUWr56voa
-   4+XU0FnK5A4MaqNyI7FqOq+x/abqpHCbecAwGupzfCNcrXHAChLH7slsK
-   6YCE0F6pNI9aBmYJxJr6V5Ehtyq6DOAuPGhsGMu9bjrIolTZcrw745GHc
-   zJa0OkEOc1mHhYhUi5xX6pT9Ubnb1CwlvRYGWt+SMarJjdwcBgDSq9i9M
-   A==;
-X-CSE-ConnectionGUID: p+Lkz8WTQLug8XRnF7we4g==
-X-CSE-MsgGUID: TpxDwrnWRq6jk/XfZCoDaQ==
-X-IronPort-AV: E=Sophos;i="6.27,119,1787011200"; 
-   d="scan'208";a="29266322"
-Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
-  by internal-pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2026 20:14:27 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.48:27656]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.53.187:2525] with esmtp (Farcaster)
- id 62e1523c-c3bd-4a19-9995-206e9f80ad6a; Wed, 23 Sep 2026 20:14:27 +0000 (UTC)
-X-Farcaster-Flow-ID: 62e1523c-c3bd-4a19-9995-206e9f80ad6a
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Wed, 23 Sep 2026 20:14:27 +0000
-Received: from dev-dsk-doebel-1a-7b355d76.us-east-1.amazon.com (10.169.119.5)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Wed, 23 Sep 2026 20:14:25 +0000
-From: Bjoern Doebel <doebel@amazon.de>
-To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
-	<x86@kernel.org>
-CC: Peter Zijlstra <peterz@infradead.org>, "H . Peter Anvin" <hpa@zytor.com>,
-	Shuah Khan <shuah@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<doebel@amazon.de>, <stable@vger.kernel.org>
-Subject: [PATCH] selftests/x86: Skip fsgsbase segment setup when int $0x80 is unavailable
-Date: Wed, 23 Sep 2026 20:14:09 +0000
-Message-ID: <20260923201409.2187200-1-doebel@amazon.de>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="vKgZQ+68";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="3sEAlWav";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="z6E9OOdj";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="SLDbMTC1"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id DC3FB1FFA4;
+	Wed, 23 Sep 2026 20:23:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1790195001;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3txnbGXjnEMcg6Tno2syRovR7ra61zaqYc6U6PNPcNQ=;
+	b=vKgZQ+68d+onAg5VOUJixIXtms4eXf+hza8Qn3xv/AvsNgyCtxmQp18M6XHL3Z9JY8m7xM
+	8SNJ13ig30VoYFWMk0wy0bUfxrVD8Rac3m936gOPjIo3YKcJ8bH397E3qdFYtRAfQPwYu0
+	TTqYIA+6kmZltcISt5Lf5s+3uBgats0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1790195001;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3txnbGXjnEMcg6Tno2syRovR7ra61zaqYc6U6PNPcNQ=;
+	b=3sEAlWavfBWdcIItajuaFaync5u0jBk+q3AKoXwL2HfwRu/iNbi1c7+QFRj3T7GB9CmYLq
+	4LPbJu3/2n6/iBAw==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1790194996;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3txnbGXjnEMcg6Tno2syRovR7ra61zaqYc6U6PNPcNQ=;
+	b=z6E9OOdjcpH2C2T8Rpt182pYh6dsDlwjw7HApaUSh+V21JuNeWiTu+a5xZuGFEN3U2BYLu
+	tj+69PiplLD4eGKBo1hcXPsnVVwY/M94HJKLYr3A8LvI0JREzQZqhzJZ3vErkv/r65rtJZ
+	AaZvmYa5lbBo8VBGel3UmLsNGcN8x7k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1790194996;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3txnbGXjnEMcg6Tno2syRovR7ra61zaqYc6U6PNPcNQ=;
+	b=SLDbMTC1RdHneptx0VcM/nsqdHn4285bwd15Wonz6ZaaUMeo1Lrs3UUbANafD7dollNxsB
+	v9aTOBc6qjs8OADQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 088FC13354;
+	Wed, 23 Sep 2026 20:23:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ZHICMjM1tGpMYwAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Wed, 23 Sep 2026 20:23:15 +0000
+Date: Wed, 23 Sep 2026 22:23:14 +0200
+From: Petr Vorel <pvorel@suse.cz>
+To: Narcisa Vasile <narcisav.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, kuba@kernel.org, daniel.zahka@gmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	"Ricardo B. Marliere" <rbm@suse.com>,
+	Sebastian Chlad <sebastian.chlad@suse.com>
+Subject: Re: [PATCH net-next] selftests: drv-net: add BIG TCP coverage to TSO
+ test
+Message-ID: <20260923202314.GA177730@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20260921201145.49875-1-narcisav.kernel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D040UWA001.ant.amazon.com (10.13.139.22) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260921201145.49875-1-narcisav.kernel@gmail.com>
+X-Spam-Level: 
+X-Spam-Score: -2.00
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-2.00 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	HAS_REPLYTO(0.30)[pvorel@suse.cz];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,gmail.com,lunn.ch,davemloft.net,google.com,redhat.com,broadcom.com,suse.com];
+	MISSING_XM_UA(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TAGGED_RCPT(0.00)[netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lib.py:url,imap1.dmz-prg2.suse.org:helo,suse.cz:email,suse.cz:replyto];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	REPLYTO_EQ_FROM(0.00)[]
 
-The fsgsbase test's load_gs() helper needs a nonzero-based FS/GS
-segment, i.e. a selector whose hidden base differs from the kernel's
-saved thread base, to exercise the selector/base state tracking.
-64-bit userspace can only create such a segment via modify_ldt() or,
-failing that, via the 32-bit set_thread_area syscall over int $0x80.
+Hi Narcisa,
 
-On kernels built with CONFIG_MODIFY_LDT_SYSCALL=n, modify_ldt() fails
-and the test falls back to int $0x80. If the kernel is also built
-with CONFIG_IA32_EMULATION=n, no IDT gate is installed for vector
-0x80, so executing int $0x80 raises a #GP fault and the test dies
-with SIGSEGV instead of reporting results:
+[ Cc Ricardo and Sebastian ]
 
-  traps: fsgsbase_64[5460] general protection fault ip:4012a1
-  sp:7f38eb124de0 error:402 in fsgsbase_64[12a1,400000+2000]
+> Add IPv4 and IPv6 test cases that exercise GSO packets under BIG TCP
+> size limits.
 
-With both options disabled, pure 64-bit userspace cannot install a
-nonzero-based FS/GS segment at all, so this scenario is untestable.
-Probe for a working int $0x80 at startup and skip the affected
-subtests when neither mechanism is available instead of crashing.
+> 1..2
+> ok 1 tso.big_tcp_ipv4
+> ok 2 tso.big_tcp_ipv6
 
-While at it, replace the magic syscall numbers in the int $0x80
-inline asm with named __NR_ia32_getpid / __NR_ia32_set_thread_area
-constants. These deliberately use the ia32 syscall table numbering,
-which differs from the x86-64 numbering exported by <sys/syscall.h>
-on 64-bit builds.
+> Both of them run the existing tx-tcp-segmentation
+> and tx-tcp6-segmentation tests at the increased TSO maximum.
 
-Fixes: 0051202f6ad5f ("selftests/x86: Test the FSBASE/GSBASE API and context switching")
-Signed-off-by: Bjoern Doebel <doebel@amazon.de>
-Assisted-by: opencode:kimi-k3
-Cc: stable@vger.kernel.org
----
- tools/testing/selftests/x86/fsgsbase.c | 51 +++++++++++++++++++++++++-
- 1 file changed, 49 insertions(+), 2 deletions(-)
+> Additionally, reserve a hugepage and transmit its content using
+> MSG_ZEROCOPY to produce skb fragments larger than 65536.
+> Check that the number of retransmissions represents a small
+> percentage of the total packets sent. Record the number of drops
+> before and after the send to catch issues with large frag
+> handling during segmentation.
 
-diff --git a/tools/testing/selftests/x86/fsgsbase.c b/tools/testing/selftests/x86/fsgsbase.c
-index 0a75252d31b6a..8538ceb6c5785 100644
---- a/tools/testing/selftests/x86/fsgsbase.c
-+++ b/tools/testing/selftests/x86/fsgsbase.c
-@@ -218,6 +218,40 @@ static void do_remote_base()
- 
- static __thread int set_thread_area_entry_number = -1;
- 
-+/*
-+ * int $0x80 dispatches through the ia32 syscall table, whose numbers
-+ * differ from the x86-64 table exposed by <sys/syscall.h> on an
-+ * x86_64 build. Define the ia32 numbers we need explicitly.
-+ */
-+#define __NR_ia32_getpid		20
-+#define __NR_ia32_set_thread_area	243
-+
-+static bool have_int80;
-+
-+static void sigsegv_int80(int sig, siginfo_t *si, void *ctx_void)
-+{
-+	siglongjmp(jmpbuf, 1);
-+}
-+
-+static bool probe_int80(void)
-+{
-+	/*
-+	 * Check whether int $0x80 is available.  Kernels built without
-+	 * CONFIG_IA32_EMULATION do not install an IDT entry for vector
-+	 * 0x80, so executing int $0x80 causes a #GP fault.
-+	 */
-+	sethandler(SIGSEGV, sigsegv_int80, 0);
-+	if (sigsetjmp(jmpbuf, 1) == 0) {
-+		long ret;
-+		/* getpid -- harmless if it works */
-+		asm volatile ("int $0x80" : "=a" (ret) : "a" (__NR_ia32_getpid));
-+		clearhandler(SIGSEGV);
-+		return true;
-+	}
-+	clearhandler(SIGSEGV);
-+	return false;
-+}
-+
- static unsigned short load_gs(void)
- {
- 	/*
-@@ -245,7 +279,7 @@ static unsigned short load_gs(void)
- 		printf("\tusing LDT slot 0\n");
- 		asm volatile ("mov %0, %%gs" : : "rm" ((unsigned short)0x7));
- 		return 0x7;
--	} else {
-+	} else if (have_int80) {
- 		/* No modify_ldt for us (configured out, perhaps) */
- 
- 		struct user_desc *low_desc = mmap(
-@@ -260,7 +294,7 @@ static unsigned short load_gs(void)
- 		long ret;
- 		asm volatile ("int $0x80"
- 			      : "=a" (ret), "+m" (*low_desc)
--			      : "a" (243), "b" (low_desc)
-+			      : "a" (__NR_ia32_set_thread_area), "b" (low_desc)
- 			      : "r8", "r9", "r10", "r11");
- 		memcpy(&desc, low_desc, sizeof(desc));
- 		munmap(low_desc, sizeof(desc));
-@@ -275,6 +309,9 @@ static unsigned short load_gs(void)
- 		unsigned short gs = (unsigned short)((desc.entry_number << 3) | 0x3);
- 		asm volatile ("mov %0, %%gs" : : "rm" (gs));
- 		return gs;
-+	} else {
-+		printf("[NOTE]\tno way to create a nonzero-based segment\n");
-+		return 0;
- 	}
- }
- 
-@@ -516,6 +553,11 @@ static void test_ptrace_write_gsbase(void)
- 
- 		gs = ptrace(PTRACE_PEEKUSER, child, gs_offset, NULL);
- 
-+		if (*shared_scratch == 0) {
-+			printf("[SKIP]\tCould not create a nonzero GS selector\n");
-+			goto END;
-+		}
-+
- 		if (gs != *shared_scratch) {
- 			nerrs++;
- 			printf("[FAIL]\tGS is not prepared with nonzero\n");
-@@ -587,6 +629,11 @@ int main()
- 	}
- 	clearhandler(SIGILL);
- 
-+	/* Probe int $0x80 (32-bit syscall entry) */
-+	have_int80 = probe_int80();
-+	if (!have_int80)
-+		printf("\tint $0x80 is unavailable (CONFIG_IA32_EMULATION=n?)\n");
-+
- 	sethandler(SIGSEGV, sigsegv, 0);
- 
- 	check_gs_value(0);
--- 
-2.50.1
+> Signed-off-by: Narcisa Vasile <narcisav.kernel@gmail.com>
 
+LGTM, but I'm not really an expert on network drivers testing.
+
+Acked-by: Petr Vorel <pvorel@suse.cz>
+
+Kind regards,
+Petr
+
+> ---
+>  tools/testing/selftests/drivers/net/hw/tso.py | 161 ++++++++++++++++++
+>  1 file changed, 161 insertions(+)
+
+> diff --git a/tools/testing/selftests/drivers/net/hw/tso.py b/tools/testing/selftests/drivers/net/hw/tso.py
+> index 67f6c9ca9a64..176ddf97fabb 100755
+> --- a/tools/testing/selftests/drivers/net/hw/tso.py
+> +++ b/tools/testing/selftests/drivers/net/hw/tso.py
+> @@ -4,6 +4,7 @@
+>  """A simple test for TSO."""
+
+>  import fcntl
+> +import mmap
+>  import socket
+>  import struct
+>  import termios
+> @@ -15,6 +16,87 @@ from lib.py import EthtoolFamily, NetdevFamily, NetDrvEpEnv
+>  from lib.py import bkg, cmd, defer, ethtool, ip, rand_port, wait_port_listen
+
+
+> +MAP_HUGETLB = getattr(mmap, "MAP_HUGETLB", 0x40000)
+> +MSG_ZEROCOPY = getattr(socket, "MSG_ZEROCOPY", 0x4000000)
+> +SO_ZEROCOPY = getattr(socket, "SO_ZEROCOPY", 60)
+> +
+> +GSO_LEGACY_MAX_SIZE = 65536
+> +
+> +# Pool of the default hugepage size, the one /proc/meminfo reports on.
+> +NR_HUGEPAGES = "/proc/sys/vm/nr_hugepages"
+> +
+> +
+> +def default_huge_page_size():
+> +    """Return the hugepage size in bytes"""
+> +    try:
+> +        with open("/proc/meminfo", encoding="utf-8") as meminfo:
+> +            for line in meminfo:
+> +                if line.startswith("Hugepagesize:"):
+> +                    return int(line.split()[1]) * 1024
+> +    except OSError:
+> +        pass
+> +
+> +    return 2 * 1024 * 1024
+> +
+> +
+> +def hugepages_free():
+> +    """Return the number of unused hugepages of the default size."""
+> +    try:
+> +        with open("/proc/meminfo", encoding="utf-8") as meminfo:
+> +            for line in meminfo:
+> +                if line.startswith("HugePages_Free:"):
+> +                    return int(line.split()[1])
+> +    except OSError:
+> +        pass
+> +    return 0
+> +
+> +
+> +def set_nr_hugepages(count):
+> +    with open(NR_HUGEPAGES, "w", encoding="utf-8") as sysctl:
+> +        sysctl.write(f"{count}\n")
+> +
+> +
+> +def tx_dropped(ifname):
+> +    with open(f"/sys/class/net/{ifname}/statistics/tx_dropped",
+> +              encoding="utf-8") as counter:
+> +        return int(counter.read())
+> +
+> +
+> +def setup_hugepage():
+> +    """Reserve one hugepage, and put the pool back afterwards."""
+> +    if hugepages_free() >= 1:
+> +        return
+> +
+> +    try:
+> +        with open(NR_HUGEPAGES, encoding="utf-8") as sysctl:
+> +            old_count = int(sysctl.read())
+> +        set_nr_hugepages(old_count + 1)
+> +    except OSError as error:
+> +        raise KsftSkipEx(f"Unable to reserve a hugepage: {error}") from error
+> +
+> +    defer(set_nr_hugepages, old_count)
+> +
+> +    if hugepages_free() < 1:
+> +        raise KsftSkipEx("Unable to reserve a hugepage")
+> +
+> +
+> +def mmap_large_buffer():
+> +    """Allocate a buffer backed by one huge page."""
+> +    size = default_huge_page_size()
+> +
+> +    setup_hugepage()
+> +
+> +    try:
+> +        return mmap.mmap(-1, size,
+> +                         flags=mmap.MAP_PRIVATE |
+> +                               mmap.MAP_ANONYMOUS |
+> +                               MAP_HUGETLB,
+> +                         prot=mmap.PROT_READ)
+> +    except OSError as e:
+> +        raise KsftSkipEx(f"Unable to allocate a {size >> 20}MB hugepage "
+> +                         f"buffer: {e}") from e
+> +
+> +
+>  def sock_wait_drain(sock, max_wait=1000):
+>      """Wait for all pending write data on the socket to get ACKed."""
+>      for _ in range(max_wait):
+> @@ -33,6 +115,32 @@ def tcp_sock_get_retrans(sock):
+>      return struct.unpack("I", info[100:104])[0]
+
+
+> +def setup_big_tcp(cfg):
+> +    """Lift the GSO ceiling to what the device advertises for TSO."""
+> +    if cfg.dev["tso_max_size"] <= GSO_LEGACY_MAX_SIZE:
+> +        raise KsftSkipEx("Device does not support BIG TCP")
+> +
+> +    ip(f"link set dev {cfg.ifname} "
+> +       f"gso_max_size {cfg.dev['tso_max_size']} "
+> +       f"gso_ipv4_max_size {cfg.dev['tso_max_size']}")
+> +
+> +    defer(ip, f"link set dev {cfg.ifname} "
+> +              f"gso_max_size {cfg.dev['gso_max_size']} "
+> +              f"gso_ipv4_max_size {cfg.dev['gso_ipv4_max_size']}")
+> +
+> +
+> +def sock_send_zerocopy(sock):
+> +    """Send with MSG_ZEROCOPY, return the bytes queued."""
+> +    try:
+> +        sock.setsockopt(socket.SOL_SOCKET, SO_ZEROCOPY, 1)
+> +    except OSError as e:
+> +        raise KsftSkipEx(f"SO_ZEROCOPY not supported: {e}") from e
+> +
+> +    with mmap_large_buffer() as tx_buf:
+> +        sock.sendall(tx_buf, MSG_ZEROCOPY)
+> +        return len(tx_buf)
+> +
+> +
+>  def run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso):
+>      cfg.require_cmd("socat", local=False, remote=True)
+
+> @@ -96,6 +204,46 @@ def run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso):
+>                          500, comment="Number of LSO wire-packets with LSO disabled")
+
+
+> +def run_big_tcp_stream(cfg, ipver, remote_v4, remote_v6):
+> +    """Send with MSG_ZEROCOPY out of a huge page, so the frags exceed 64kB."""
+> +    cfg.require_cmd("socat", local=False, remote=True)
+> +
+> +    # No clamping, as it would keep the frags under 64kB
+> +    port = rand_port()
+> +    listen_opts = f"{port},reuseport"
+> +    listen_cmd = f"socat -{ipver} -t 2 -u TCP-LISTEN:{listen_opts} /dev/null,ignoreeof"
+> +
+> +    with bkg(listen_cmd, host=cfg.remote, exit_wait=True):
+> +        wait_port_listen(port, host=cfg.remote)
+> +
+> +        if ipver == "4":
+> +            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+> +            sock.connect((remote_v4, port))
+> +        else:
+> +            sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+> +            sock.connect((remote_v6, port))
+> +
+> +        # Small send to make sure the connection is working.
+> +        sock.send("ping".encode())
+> +        sock_wait_drain(sock)
+> +
+> +        retrans_old = tcp_sock_get_retrans(sock)
+> +        drops_old = tx_dropped(cfg.ifname)
+> +
+> +        sent = sock_send_zerocopy(sock)
+> +        sock_wait_drain(sock)
+> +
+> +        drops = tx_dropped(cfg.ifname) - drops_old
+> +        retrans = tcp_sock_get_retrans(sock) - retrans_old
+> +        sock.close()
+> +
+> +        ksft_eq(drops, 0, comment="Driver TX drops during BIG TCP send")
+> +
+> +        # Same best effort bound as the plain stream.
+> +        total_lso_wire = sent * 0.90 // cfg.dev["mtu"]
+> +        ksft_lt(retrans, total_lso_wire / 16)
+> +
+> +
+>  def build_tunnel(cfg, outer_ipver, tun_info):
+>      local_v4  = NetDrvEpEnv.nsim_v4_pfx + "1"
+>      local_v6  = NetDrvEpEnv.nsim_v6_pfx + "1"
+> @@ -147,6 +295,11 @@ def test_builder(name, cfg, outer_ipver, feature, tun=None, inner_ipver=None):
+>          if feature not in cfg.hw_features:
+>              raise KsftSkipEx(f"Device does not support {feature}")
+
+> +        # Run non-tunnel test cases under the BIG TCP limits too.
+> +        big_tcp = "big_tcp" in name
+> +        if big_tcp:
+> +            setup_big_tcp(cfg)
+> +
+>          ipver = outer_ipver
+>          if tun:
+>              remote_v4, remote_v6 = build_tunnel(cfg, ipver, tun)
+> @@ -159,6 +312,9 @@ def test_builder(name, cfg, outer_ipver, feature, tun=None, inner_ipver=None):
+>          ethtool(f"-K {cfg.ifname} {feature} off")
+>          run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso=False)
+
+> +        if big_tcp:
+> +            run_big_tcp_stream(cfg, ipver, remote_v4, remote_v6)
+> +
+>          ethtool(f"-K {cfg.ifname} tx-gso-partial off")
+>          ethtool(f"-K {cfg.ifname} tx-tcp-mangleid-segmentation off")
+>          if feature in cfg.partial_features:
+> @@ -171,6 +327,9 @@ def test_builder(name, cfg, outer_ipver, feature, tun=None, inner_ipver=None):
+>          ethtool(f"-K {cfg.ifname} {feature} on")
+>          run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso=True)
+
+> +        if big_tcp:
+> +            run_big_tcp_stream(cfg, ipver, remote_v4, remote_v6)
+> +
+>      f.__name__ = name + ((outer_ipver + "_") if tun else "") + "ipv" + inner_ipver
+>      return f
+
+> @@ -230,6 +389,8 @@ def main() -> None:
+>              # name,       v4/v6  ethtool_feature               tun:(type, args, inner ip versions)
+>              ("",           "4", "tx-tcp-segmentation",         None),
+>              ("",           "6", "tx-tcp6-segmentation",        None),
+> +            ("big_tcp_",   "4", "tx-tcp-segmentation",         None),
+> +            ("big_tcp_",   "6", "tx-tcp6-segmentation",        None),
+>              ("vxlan",      "4", "tx-udp_tnl-segmentation",     ("vxlan", "id 100 dstport 4789 noudpcsum", ("4", "6"))),
+>              ("vxlan",      "6", "tx-udp_tnl-segmentation",     ("vxlan", "id 100 dstport 4789 udp6zerocsumtx udp6zerocsumrx", ("4", "6"))),
+>              ("vxlan_csum", "", "tx-udp_tnl-csum-segmentation", ("vxlan", "id 100 dstport 4789 udpcsum", ("4", "6"))),
