@@ -1,130 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1EF377EBF;
-	Wed, 23 Sep 2026 13:54:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8240522F0F
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 13:59:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790171700; cv=none; b=oWAXQpTmEnDAnhbG4OGnN+keFhUGmtovqO42PeM4bBO3arSqQOhYC1wOpjqDfdyB7DvefULpiYUV+IGcYUBzjdVK8EmcOdpfDrejjBclACumn4wD1FbewV/gQCERhw/pnhSXa0e9nW3Zq01qR8QOX62f10memnjoWB7eSY5O6LQ=
+	t=1790171997; cv=none; b=FnaF+n/vHD3ECbhySfUB2O3P5yN6WtNxOnjScpU016tfVOE4YkBEKlnGkCy+Uf4Go0XtZcEbXZdegWx8TGSwgK26AFBoT9rLkc0J0rzYkwm62TyPcRuAUUNEziOWlbx7jfh+bfAcuLLcsJgDZxfumjwOR5IoFdy+E9zjToi1HKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790171700; c=relaxed/simple;
-	bh=aT0jx2Enz+IOYUuA7N8ge/OBM1RkRl7Mh36SHDDD7f8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X5E0RHeRdwFtKIpsasT5VrWDd6EtGQzUoDVk1VUkNxCcEpB/wtaWjTqC+XXGNVAyxhoNiPgGxMG1z2gzUSp0eK73z8nWunhcROiDoPboZxz1nBPoDqNVJJIrRSLTnKwmfi9KGEvkEVFoXP1HQVV9drbpgEqrXGly8idZKzRAviY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FM5j2lqH; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790171997; c=relaxed/simple;
+	bh=ORDYVlR/Qy0ZfFGqomuhjW+hYsFx4wMHVsrhfN3U3Ww=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PXKNZ+gRylnp4XxYXilYs/krrPs+pnrtAYPDXVr1FWDRaPqE2faRToVo2GexkGLKjngQBzEX5O6P1ZkkbgehDZIB1LUx+utNSPBKy4qIsUyBZlcJp/QQGENoWtc3SlDcWsFOczw+9qzDcSkHKxjceXku4c4DsFXdbXTfBAN9Y1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d+h9Kt43; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FM5j2lqH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85DF01F000FF;
-	Wed, 23 Sep 2026 13:54:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d+h9Kt43"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 814B31F00899
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 13:59:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790171699;
-	bh=3pRdOBL+cijWfZO9/7sYlQGKCgeKIlKJlS6CU60AIms=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=FM5j2lqHF5oBA4kkvgz0PCwgEZsqnHHisgMdkAAnmRuvvwHVyhV2luZJK6Y4xkemL
-	 qAPC3fd7iEJsbd4xQDTAQ7q11ZqPOPy+xvE8OlQX9ae0LVkWeQlJEePNYwymIgC31g
-	 I9T+XAYUIU07RhGDOcqX7yEpg+RocTvGQgi62YrIsf5DnIuzwxvAiPX55mz+k2pO4M
-	 4Deia8UBXt97VtZtydrpwjRzcDk+ZM3EmHeK+hJImCzrcdHCdIs2GTD/OP6eqCm/1C
-	 SG+CNlFlvz1KiGyOFaPQFsi+mA5+jTYIZln8Cdpcxvx61fAaAp1iIP0xnhZnSSI3ki
-	 J9iQD2s3T/VGw==
-Message-ID: <0241581e-3823-43ec-9c6d-2346433f8f87@kernel.org>
-Date: Wed, 23 Sep 2026 15:54:48 +0200
+	s=k20260515; t=1790171995;
+	bh=ORDYVlR/Qy0ZfFGqomuhjW+hYsFx4wMHVsrhfN3U3Ww=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=d+h9Kt43alQacQrtz9+Jmcssg+K5LpT7mnXfQMF1Y6Lw0VUJdYHwFvly1Lo52NUnk
+	 BZODSApNH/E5k2d4QkN+QY5Cg/E38UGVyAVX+oYkGjl6v2bBr4pLNnVHFkJQ2wbB1D
+	 +vZqEsi3tMnOnm+IYBh8Gs5eQqH0cTlTH3E9eYbzY1UTAKq65AU8N8EcfLDnPr9ix8
+	 ZMivvWP7ryi7Ij0Ct3XCEHKsvWo1nGr1VHOaguo1ivuymDZ4MUn9MGHmB6aW+EFjLk
+	 8wvpeterBxJ1E//VYKSRobgOl+IhgUOVjDduZk7W9G0XRZaEAb2tfH7+yOZC++Ws/1
+	 SuW5lg3oYZGpg==
+Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b5e4f1801fso938840e87.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 06:59:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBwWkCgKjjeo2WRO7C2Fwj8jXHHupnkflYGRPKqGI7Dq2ndk4dabkbaQyVeJacJDoaA7qHJcPLWdCmKTM4c8vOM=@vger.kernel.org
+X-Gm-Message-State: AFuF++nGtRgwZzivbEgdrDOfTyC+qMc3wgyBLkPqeVhvst593NnckuO3
+	+c2pEyBMuDUjS92fvSUbjjstdhfTmEaUYqiw5JqCj51RT2CKCr9f1XpOTwj5FtYYbnUNy0YPrWc
+	GftA9XO79oO1I4NlKt9nPnw6hXuXrUoE=
+X-Received: by 2002:a05:6512:3186:b0:5b8:babd:dc2c with SMTP id
+ 2adb3069b0e04-5b8d89b7fa1mr1143692e87.37.1790171993702; Wed, 23 Sep 2026
+ 06:59:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kselftest: mm: use helper to identify anon_ops in
- khugepaged test
-To: Yeoreum Yun <yeoreum.yun@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: akpm@linux-foundation.org, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
- liam@infradead.org, nico.pache@linux.dev, ryan.roberts@arm.com,
- dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev,
- usama.arif@linux.dev, kas@kernel.org, ljs@kernel.org, vbabka@kernel.org,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org
-References: <20260923110133.429745-1-yeoreum.yun@arm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260923110133.429745-1-yeoreum.yun@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260806110159.69690-1-daniel.lezcano@oss.qualcomm.com>
+ <ef124b64-e7d2-4c9c-9890-00685e34f314@oss.qualcomm.com> <350caba2-4a95-4945-91dd-0be89b2d3e22@arm.com>
+ <71932f61-5721-4363-b163-427432fedab4@oss.qualcomm.com> <f1019e70-f3f7-429d-90e5-c74234dc5cde@oss.qualcomm.com>
+In-Reply-To: <f1019e70-f3f7-429d-90e5-c74234dc5cde@oss.qualcomm.com>
+From: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
+Date: Wed, 23 Sep 2026 15:58:18 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hcqkeGzuhar7e1zdcAEKO6Q3btuSjF9tM=rXv5f5xZZg@mail.gmail.com>
+X-Gm-Features: AclHuK9IMbjDBZL9qhHmGxHNCZcvnVAMA9EgXW1lDHAWKL-Tx9uwcfEswnbNHWw
+Message-ID: <CAJZ5v0hcqkeGzuhar7e1zdcAEKO6Q3btuSjF9tM=rXv5f5xZZg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] powercap: Introduce generic hierarchy helpers and selftests
+To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org, shuah@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	manaf.pallikunhi@oss.qualcomm.com, Lukasz Luba <lukasz.luba@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/23/26 13:01, Yeoreum Yun wrote:
-> Instead of comparing mem_ops->name to determine whether mem_ops is
-> anon_ops, use the is_anon() helper.
-> 
-> Suggested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> ---
-> NOTE:
->   This patch is based on mm/mm-unstable.
-> ---
->  tools/testing/selftests/mm/khugepaged.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-> index bdc0c7c117d9..b0cb02bf1a73 100644
-> --- a/tools/testing/selftests/mm/khugepaged.c
-> +++ b/tools/testing/selftests/mm/khugepaged.c
-> @@ -618,7 +618,7 @@ static bool wait_for_scan(const char *msg, char *p, size_t len,
->  		usleep(TICK);
->  	}
->  
-> -	if (!strncmp(ops->name, "anon", 4))
-> +	if (is_anon(ops))
->  		madvise(p, len, MADV_NOHUGEPAGE);
->  
->  	return timeout == -1;
+Hi Daniel,
 
-This should be squashed in the other patch under review.
+On Wed, Sep 23, 2026 at 3:47=E2=80=AFPM Daniel Lezcano
+<daniel.lezcano@oss.qualcomm.com> wrote:
+>
+>
+> Hi,
+>
+> On 9/15/26 12:54, Daniel Lezcano wrote:
+>
+> [ ... ]
+>
+> >> I can see some potential improvements there.
+> > This patch is a blocker for more changes: DTPM, powercap cooling device
+> > and SPEL drivers from Manaf.
+> >
+> > It has been tested and there is a selftest with. Is it possible to
+> > consider these two patches for merging.
+> >
+> > Given it is not a fast path, improvements can be proposed later.
+>
+>
+> Given that there has been no feedback so far, would it be possible to
+> consider merging these two patches? They are currently blocking further
+> work.
+>
+> There is also a selftest covering this functionality, so future changes
+> can be made with regression testing in place.
 
--- 
-Cheers,
+I'd prefer to handle this along with
 
-David
+https://lore.kernel.org/linux-pm/20260819165605.1398880-1-daniel.lezcano@os=
+s.qualcomm.com/
+
+which appears to be the only user of it.
+
+I thought that Lukasz would send comments on those, but in the absence
+of his comments, it would help if you combined those two patch series
+into one and resend.
+
+Thanks!
