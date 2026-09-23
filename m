@@ -1,161 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BCC3CA4A3
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 04:25:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C24236B054;
+	Wed, 23 Sep 2026 05:47:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790137536; cv=none; b=Orykz7kvxSjcRDnydousJOnD+U0VqJhRGn57caqJ1lSMDeNUovdzRDwjxywW8FqP4Ea/Qp7+Zfl9CEA0KYYFIGHuGRIpaoVEw6i3avRSND5H+K9/p+soAL3uqsOm4AAuNxGOUtnqvP+aTI3gRrlHp0EffCQw1xopbaTRORBm+hU=
+	t=1790142479; cv=none; b=HSP59hzpRoJ2Z4iKn0hjRtzuAZmRczHMfb3pEKbHj1kG8xNnpVVTg5zpH5xyCXGpqv7Dx800MeMw0hXuuC0jAzgK45egoV4shtjSWZ8u11arJwYglzbzNsNRqJlbUx/2wbMjymj0yfC0DGdcsxzPMmUTm0ElV67ywdI9ZzAdsh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790137536; c=relaxed/simple;
-	bh=nDIffy8Ui7Ukkiv/ZMLwEc0YmNmvoSTvU/vOMCTpJuQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LUenXDnS7J0wmvQRVfU9M7/z683fnbe6R6V6Tq9V29eB3Y5OtwY99Kpxkt5bt2nMegWREwTl5ZlV9m61Gk9E2JJjvPOXGPbfISIiHrMFyTOlYzqIGc7CbC9+IpoAnvzwfjyXDd1MpPlQ4NqDv4JTAP/S4pxxgZQ63ptscv5nSWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bj93yS6z; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790142479; c=relaxed/simple;
+	bh=TNIUVnMy2x3vQX/5pT7Dhx0BP310NZcgzcsOZKT9mkA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y7SQPkOxSNcdWrmh2amUXU0iJy6J/hc52+frRE58kEZbTQXsp9r7v8VbFSq0Ax9tYNuw4I8Afgbu7cfBnkF7wSGxbaa/OSLhwRlXiEskZSE83zt7xqs0ioatWL4VOBq/c9FlNYaz4RSspCLQ6k8kor/Ztm66fbs9KjhRgO0hfJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b=fQjpyr+B; arc=none smtp.client-ip=180.181.231.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bj93yS6z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEF1F1F00898
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 04:25:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790137535;
-	bh=Vdpf3PCZFlhl4pkSGtgF1HJjNWl2NcPykL1HMPHL2Wo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=Bj93yS6zZuQznlcBxkUfgSIso3pb0Vh9g6Ow8iZEBlHfQEAm4570P9dSvVA+4SHgC
-	 VYQY3J4M0YPZzp4oJJ3ADMPaAnH/LHZJ3em35gvUvE8tBqXdxJRqo9e1wtTtL8SgfP
-	 AaHOZn73Lh3JSo3G9eqy7ThwDtrumHUE9tTI+KBx2OpyXM0SCLkjXppMfWURKkBxRT
-	 aRc9ua9VaAsPJasuxnGOPFZQA2vKxObJW58hBOBy2uT2fWMChhILF3fa79GA6TMKIX
-	 0LcIl5cnYJ8qF5U32rbU4GvTBlAkEQesTNEhR3uGQgmPnUTmxZs1jNBopuTXTthGv2
-	 UGlCSWYCbnhbw==
-Received: by mail-ed2-f30.google.com with SMTP id 4fb4d7f45d1cf-6aa06e51bc3so824199a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 21:25:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvByZpjVp/7usN+iZ7mahwkY4ZBAXdWXrm+FW+eK7Vy1a2rH+HLJ1ZaD8b+sMVqDYwj1p8XuMuZdkXqkEvdwu7hE=@vger.kernel.org
-X-Gm-Message-State: AFuF++nXwylCG3qGmPQ3AA/xv4kDSIAYf1/amGLfKZB9qYS9eV8dkEOB
-	poy7VIff/Q0CKflc9U4ULzNHt/L3YN/QF+wVF+PqFdEKx30l45xcwXIA+8Gk8etODa04ZjDED1M
-	UcK2GkhpmBDQCfP5Q2QFrX1mE7QXjrZ4=
-X-Received: by 2002:a05:6402:11c8:b0:6a9:bc61:7f80 with SMTP id
- 4fb4d7f45d1cf-6aab3b4b9fdmr980413a12.27.1790137533480; Tue, 22 Sep 2026
- 21:25:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b="fQjpyr+B"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=gondor.apana.org.au; s=h01; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:cc:to:subject:message-id:date:
+	from:content-type:reply-to; bh=vjVcIyF3kkMlZyzd56bm3scXTaq3Opyr7xmaB4B2Hds=; 
+	b=fQjpyr+BmwmCnb2wn8FgspFTB/fV2AOUx20SW/K0WXbOBgwzSIj6itpncVmckPhInMgMVrr7M2Y
+	idhFzE1gbqvR4s0K1kfiHjNxejXYmpWDMTDjp2guUwP0AswDMavepSRkC0kKniYvmFiHbfqQYXjYZ
+	zysKaGXEUQeDeEcqMZLbV+XDYX759yDIymCal4GriDKMmbSNGKTVbA5UPkmw0SbHRNKnOjtdoSSQn
+	WYU6T/U0IRE7+l2AttIExnjPqqcXbBh0gTcqg4a1xnbj/eq1kQSBxy0QW6x24hezQRi7P9z/fRoZA
+	GqxrBxZ2vh7BTJHu51gD5fDTHNg5Alc/omkA==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.98.2 #2 (Debian))
+	id 1x9FpV-0000000Gupv-0dgl;
+	Wed, 23 Sep 2026 13:47:42 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 23 Sep 2026 15:47:41 +1000
+Date: Wed, 23 Sep 2026 15:47:41 +1000
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Alex Ousherovitch <aousherovitch@rambus.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor+dt@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>,
+	Shuah Khan <shuah@kernel.org>, Alexandre Ghiti <alex@ghiti.fr>,
+	devicetree@vger.kernel.org,
+	Joel Wittenauer <Joel.Wittenauer@cryptography.com>,
+	linux-api@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Thi Nguyen <thin@rambus.com>
+Subject: Re: [PATCH v5 04/19] crypto: cmh - add SHA-2/SHA-3/SHAKE ahash
+Message-ID: <arNn_fjy4jamSitO@gondor.apana.org.au>
+References: <20260917225929.2494111-1-aousherovitch@rambus.com>
+ <20260917225929.2494111-5-aousherovitch@rambus.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260923012356.1058379-1-maobibo@loongson.cn>
-In-Reply-To: <20260923012356.1058379-1-maobibo@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 23 Sep 2026 12:25:21 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4AvjyfmjPiUBxBsWjRNFpP5c4sWK0+ZH-e1gjtrxBhMg@mail.gmail.com>
-X-Gm-Features: AcwNN1XAxUjeFmeUumiR-_MQxzHbJq692GVJ7naocC1NZSnNV46eKHaXQPViLcA
-Message-ID: <CAAhV-H4AvjyfmjPiUBxBsWjRNFpP5c4sWK0+ZH-e1gjtrxBhMg@mail.gmail.com>
-Subject: Re: [PATCH] KVM: LoongArch: selftests: Enable HW PTW by auto
- detection method
-To: Bibo Mao <maobibo@loongson.cn>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260917225929.2494111-5-aousherovitch@rambus.com>
 
-Hi, Bibo,
+On Thu, Sep 17, 2026 at 03:59:13PM -0700, Alex Ousherovitch wrote:
+>
+> +		alg->halg.base.cra_flags       = CRYPTO_ALG_KERN_DRIVER_ONLY |
+> +						 CRYPTO_ALG_NO_FALLBACK |
+> +						 CRYPTO_ALG_ASYNC |
+> +						 CRYPTO_AHASH_ALG_BLOCK_ONLY;
 
-On Wed, Sep 23, 2026 at 9:31=E2=80=AFAM Bibo Mao <maobibo@loongson.cn> wrot=
-e:
->
-> Add HW PTW feature when VM is created. This feature is detected firstly,
-> enable it if it is available on host machine. With HW PTW feature enabled=
-,
-> refill exception will not happen and it is not necessary to set refill
-> exception entry.
->
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> ---
->  .../selftests/kvm/include/loongarch/processor.h  |  3 +++
->  .../selftests/kvm/lib/loongarch/processor.c      | 16 ++++++++++++++--
->  2 files changed, 17 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/include/loongarch/processor.h b/=
-tools/testing/selftests/kvm/include/loongarch/processor.h
-> index 0e59daa8024e..8d9fabdc89e3 100644
-> --- a/tools/testing/selftests/kvm/include/loongarch/processor.h
-> +++ b/tools/testing/selftests/kvm/include/loongarch/processor.h
-> @@ -79,6 +79,7 @@
->  #define  CPUCFG2_LASX                  BIT(7)
->  #define  CPUCFG2_LLFTP                 BIT(14)
->  #define  CPUCFG2_LLFTPREV              GENMASK(17, 15)
-> +#define  CPUCFG2_PTW                   BIT(24)
->
->  /* LoongArch Basic CSR registers */
->  #define LOONGARCH_CSR_CRMD             0x0 /* Current mode info */
-> @@ -128,6 +129,8 @@
->  #define LOONGARCH_CSR_PGD              0x1b
->  #define LOONGARCH_CSR_PWCTL0           0x1c
->  #define LOONGARCH_CSR_PWCTL1           0x1d
-> +#define  CSR_PWCTL1_PTW_SHIFT          24
-> +#define  CSR_PWCTL1_PTW                        BIT_ULL(CSR_PWCTL1_PTW_SH=
-IFT)
->  #define LOONGARCH_CSR_STLBPGSIZE       0x1e
->  #define LOONGARCH_CSR_CPUID            0x20
->  #define LOONGARCH_CSR_KS0              0x30
-> diff --git a/tools/testing/selftests/kvm/lib/loongarch/processor.c b/tool=
-s/testing/selftests/kvm/lib/loongarch/processor.c
-> index 47bbde3e205a..35e35c62759f 100644
-> --- a/tools/testing/selftests/kvm/lib/loongarch/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/loongarch/processor.c
-> @@ -282,6 +282,7 @@ void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
->         unsigned int cfg;
->         unsigned long val;
->         struct kvm_vm *vm =3D vcpu->vm;
-> +       bool has_ptw =3D false;
->
->         switch (vm->mode) {
->         case VM_MODE_P36V47_16K:
-> @@ -300,6 +301,12 @@ void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
->         ret =3D __kvm_has_device_attr(vm->fd, KVM_LOONGARCH_VM_FEAT_CTRL,=
- KVM_LOONGARCH_VM_FEAT_LASX);
->         if (!ret)
->                 cfg |=3D CPUCFG2_LASX;
-> +       ret =3D __kvm_has_device_attr(vm->fd, KVM_LOONGARCH_VM_FEAT_CTRL,=
- KVM_LOONGARCH_VM_FEAT_PTW);
-> +       if (!ret) {
-> +               cfg |=3D CPUCFG2_PTW;
-> +               has_ptw =3D true;
-> +       }
-> +
->         loongarch_set_cpucfg(vcpu, LOONGARCH_CPUCFG2, cfg);
->         cfg =3D read_cpucfg(LOONGARCH_CPUCFG6);
->         loongarch_set_cpucfg(vcpu, LOONGARCH_CPUCFG6, cfg);
-> @@ -338,6 +345,9 @@ void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
->
->         /* PGD page shift and width */
->         val =3D (vm->page_shift + width * (vm->mmu.pgtable_levels - 1)) |=
- width << 6;
-> +       if (has_ptw)
-> +               val |=3D CSR_PWCTL1_PTW;
-> +
->         loongarch_set_csr(vcpu, LOONGARCH_CSR_PWCTL1, val);
->         loongarch_set_csr(vcpu, LOONGARCH_CSR_PGDL, vm->mmu.pgd);
->
-> @@ -345,8 +355,10 @@ void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
->          * Refill exception runs on real mode
->          * Entry address should be physical address
->          */
-> -       val =3D addr_gva2gpa(vm, (unsigned long)handle_tlb_refill);
-> -       loongarch_set_csr(vcpu, LOONGARCH_CSR_TLBRENTRY, val);
-> +       if (!has_ptw) {
-Why not just check CPUCFG2_PTW in cfg? In this way we can drop has_ptw.
+Why did you set the NO_FALLBACK flag? This is only meant to be used
+by very specific cases such as s390.
 
-Huacai
-
-> +               val =3D addr_gva2gpa(vm, (unsigned long)handle_tlb_refill=
-);
-> +               loongarch_set_csr(vcpu, LOONGARCH_CSR_TLBRENTRY, val);
-> +       }
->
->         /*
->          * General exception runs on page-enabled mode
->
-> base-commit: 93f51579e7df248780214094418f205253383cc5
-> --
-> 2.39.3
->
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
