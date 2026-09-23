@@ -1,250 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69162DF13F;
-	Wed, 23 Sep 2026 00:19:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F7C2F25E4
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 00:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790122755; cv=none; b=buSlokXAeNUBpGjt/s2OpcJ9YzjYS2wY4uAzbbmWPh7R32iFP9yu8n3phcopFX8tWOEhzMjg/l+4vKAqIBYmdcIuegvVjvZPKEj4VNAsqSTot2TJmFQ2XXwCK/Snck0INoM4gsAbzIsvfXJarnnVRAA87gORoQ9gttOcUpASz4Y=
+	t=1790123825; cv=none; b=im6aSCcZPv3Zl94tQeDwfNDg5qREmUYNp2d0L4Tjj/iBtNSAnTn6QHfQuNrKX3W5jh3STQSILlFQaXmuP5phAWJhFs7GnfTUvSAC7F6TOh6Nr/GOgqLxujj+6n5XGvCqw9s9pjz4I73k+xg3H0blMXT9wgDIXPh32xXMdFhvna4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790122755; c=relaxed/simple;
-	bh=CGtjxCX0qbM44FqbhEIENCuMLk53KZEZen+jRshi17o=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PNhi2Ok8V7M5AvEOxkjSNIekKrPYyRFd3r/R6PX5mYa1dy/9/UoVzHorE4DoDsCA7L0GMEczLDh2wlbT1DU23Jjv/ewo5KeEDSNlhqNBkaId1P4f6s6uTl7pTG5P2+0aX+RsbHCfYUOCBNo/cNoHN8gFhaoOacF2dar16qhWFEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ct6R0efG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790123825; c=relaxed/simple;
+	bh=ZzM+CCCQqrBBbllRZD9oibWkuHbAMqZCqBVIxEMPmh8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TPS7h9PKBM7tWdvg5+hKnOboBdo5qE4hyNxaO837gQT86SEi0n+uPY+CIGMgacuk4K2yDbsgErZNjD75Y5ZX3HNEJ7rME8W+bgxHAIF3juIQpSoKgk2337MMdmpF9Mn70ToWC943WWvmSPNu3NmdGjewVpdxeDgeNN60VT3zdVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RhN5iqRn; arc=none smtp.client-ip=74.125.228.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ct6R0efG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B601F000FF;
-	Wed, 23 Sep 2026 00:19:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790122753;
-	bh=QX4aWXGyyRTFuOU9wd7z1HhmhDSg11bESRI3/PwP3bg=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Ct6R0efGlYiadlUWrinBje2+WcmsvHEJ5OqzmDzEn1MPrMZIeKc/N+alNsxLiLhaM
-	 bY5Im9PAg5ybydwdmaByrJhEO+GC/iOhOAUDvLYqEVBhSUw47QsffTgbuaz/W0c9zu
-	 dqT6zWWnYDOFoZgYlm/3TpCtZMmWVz5EmjSzOk5mzghnC1uoPvPf9uiX04eMQpTYLZ
-	 OEM2meuz6zVNtY2evSgNW9vrr/0T8Wob7GpfvTR2GY1PqscCC2h2Eq6t5sKg9sV3Fv
-	 FzqgbVab8gIcDydsakRTPMjO3Mp0KhHsOxHFRJvZXqPZmF062hm1emm1ykerm3lYyr
-	 FU0bIbYoiEalw==
-Subject:
- Re: [PATCH net-next v6 4/4] selftests: net: test AF_PACKET multicast dumps
-From: netdev-bot+sashiko@kernel.org
-To: sigefriedhyy@gmail.com
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, dsahern@kernel.org,
- donald.hunter@gmail.com, edumazet@google.com, idosch@nvidia.com,
- jacob.e.keller@intel.com, kuba@kernel.org, kuniyu@google.com,
- nicolas.dichtel@6wind.com, nickgarlis@gmail.com, pabeni@redhat.com,
- sd@queasysnail.net, shuah@kernel.org, horms@kernel.org, sdf.kernel@gmail.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org
-Date: Wed, 23 Sep 2026 00:19:11 +0000
-Message-ID: <179012275175.2160803.16091441325063775173@kernel.org>
-In-Reply-To: <20260921235951.3214-5-sigefriedhyy@gmail.com>
-References: <20260921235951.3214-5-sigefriedhyy@gmail.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RhN5iqRn"
+Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-8692a8568e9so230964b3a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2026 17:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790123822; x=1790728622; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=CZBn+eDayIvlQNT7notJ1Nrx/JVsU458mj9MKMefVpw=;
+        b=RhN5iqRn+PPr4+HkDgBJSL7gYcyQTpk4rmYkvRuH7Q9rV2zrGB6Ji4Rv6QXd71nJ1h
+         Lfrfz/eQP1X479wY64SOB/fU5TvlvEB2+CRvDIxj6VJMinymZTJh0bAmVd0E60UsajTd
+         2EaURTJ9SoQ239bZwFuZ/RdVL9LwEZefzsZT2f0ISF6Kff1145D0q4YIdPBPFl6w8LwT
+         ZqMCOTMNz6Ug2oSpOyss129xe+RqIeuWO029MTzM+vovqqfF37G+OItap2qrgifsGR3N
+         7fOQ2bwZtBba2C2Q4t7a/NBguISLLLakjaHq5naDGEMkPS9IajQCB9oavMYTToGbEmaf
+         c15g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790123822; x=1790728622;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=CZBn+eDayIvlQNT7notJ1Nrx/JVsU458mj9MKMefVpw=;
+        b=A1nVBHWr4Yw/pexoKns8u8eUExfXljczdIWwdZKx4aPKg770Ou7A9Cc8Pitf7qQGsS
+         XO5WpznIS+QXOzfTypme4Yn1CdlU16xghr8VeFNCkJkBEwqkVcLN3oMhemIUb0NfRrba
+         U29Nxyq6bNshVSgTlHULIEAZn7E2mPSll6yfiMiAbdM8A/Ad3Jcb8YFgHVoHwS1PqjtI
+         t01/GzcPSVQWyd4Gtn0I7M97MbLOwYg1xjtiKTlT6vttLe86l4NIL4pxCSJZbpXvoMAq
+         8f+hF25mafl2KYdAzDWCuuwr94HP+vJ503rSGinRcopy6j+xTKA6v0UG9XgwZv++RLey
+         QaNw==
+X-Forwarded-Encrypted: i=1; AKwUvBwNGiGianDM/3hHlrewChUiTtjrfTppazI6FaFQIImRZJ1ReqLxr4GjET5qRzdjqUjb0EDq8oaYRmhL6k3+m5I=@vger.kernel.org
+X-Gm-Message-State: AFuF++muCZJThKXJvw1bH5waayjuc4CDKfHHZET0cMeOaRUJCOvTZX6U
+	W4QqaJql9cFP+OVO4CdrNhK01xUXy6rJX/B41NLn+O2daxRQUJ9X1tnH
+X-Gm-Gg: AYBFou3iZ/BGm/DoqPXnlW6A/iTISGesfdi45SJjR89o8gkD3VICk2rjv8G5TyTvd7c
+	bNcbH1VRXo+hgREkR+9WL/hBcCbcBBbYbU2F4Zztp/EjqRAnIaFfAg1sQpSXK/ypvrbQ0YGe9AN
+	rB9YaFv5MiaDuUQTUqGU0iPLEPw3RDZOooaO8r0bVrhuDQI630DFIXk0vsys5kuCmPy4kj3hpBT
+	VdVWZKDntuVW/c/MnH6+p+Kp1CyN2ZivIpHX0wL6W7jk87TaT2+DxUGCdU0Zm/kQ1VYLnmzT8Z9
+	hJ7ay3jTIFMt4OhvcPhbanbcoremBCBTZMhq2X0aufms81IAp4QFpU5rDZaLVWt+UcUNmaDXegZ
+	A1Wma1WwZ+w3CUps20JCpoaZQXSXDcAMXBOtzPCkCMKja7QZct8lFa5w4pZq5kMyO6FGbJd0j/1
+	ENHJCMzzkVTZl8cjJpNTqf30B9hy9ZyK742SHeJHZ5Vf5DaOyZxgD1yiNyOlbMhoJuuw4afDtTy
+	hhNGa+AzgRR+IFh/9yE
+X-Received: by 2002:a05:6a00:1749:b0:878:3830:a48b with SMTP id d2e1a72fcca58-87d1c5ba947mr1135793b3a.59.1790123822185;
+        Tue, 22 Sep 2026 17:37:02 -0700 (PDT)
+Received: from [163.43.103.131] ([163.43.103.131])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1dff9778sm427895b3a.49.2026.09.22.17.36.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 17:37:01 -0700 (PDT)
+From: Yuya Kusakabe <yuya.kusakabe@gmail.com>
+Subject: [PATCH net 0/4] net: lwtunnel: accept encap attributes without
+ NLA_F_NESTED
+Date: Wed, 23 Sep 2026 09:36:55 +0900
+Message-Id: <20260923-lwt-encap-noflag-v1-0-8de7ab6c86e9@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACcfs2oC/yWMQQqDMBAAvyJ77kJM0dZ+pXhY043dIqsk0Qri3
+ 03rcQZmNogchCM8ig0CLxJl1AzlpQD3Ju0Z5ZUZrLG1aco7Dt+ErI4m1NEP1CPxranIX01XWcj
+ ZFNjL+l8+QTlBe8o4dx926TeDfT8AgJR5GXkAAAA=
+X-Change-ID: 20260918-lwt-encap-noflag-ae795af30b52
+To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Justin Iurman <justin.iurman@gmail.com>, 
+ Alexander Aring <alex.aring@gmail.com>, 
+ Steffen Klassert <steffen.klassert@secunet.com>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ Nikolay Aleksandrov <razor@blackwall.org>, 
+ Eyal Birger <eyal.birger@gmail.com>, 
+ Nicolas Dichtel <nicolas.dichtel@6wind.com>, 
+ Xin Long <lucien.xin@gmail.com>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Yuya Kusakabe <yuya.kusakabe@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2608;
+ i=yuya.kusakabe@gmail.com; h=from:subject:message-id;
+ bh=ZzM+CCCQqrBBbllRZD9oibWkuHbAMqZCqBVIxEMPmh8=;
+ b=owEBbQKS/ZANAwAIASrX0XUqXRtNAcsmYgBqsx8pEqF5NV94MtMGYigX0r6FVebRw/ek6cZ+c
+ ZDAAJBL4HWJAjMEAAEIAB0WIQTaB7usAfxNKMeqa6Yq19F1Kl0bTQUCarMfKQAKCRAq19F1Kl0b
+ TabtEADK21qqwY+zxEap8CxTUPOMXvvY5Z2WT5fsC41gOfVWdYzjTTVxGKMffF8zeJWcKhpRK9n
+ UQfM4/8/hSisIorrmyK+YLKr3r9+paZ95647p2YpL1hHlhIa6DzoZe9yufEqN7fCtz8mud2yimg
+ Y+FpHJT0tHcqwNgbVg1M1SNRN6+oZ5QhQ2Vggc85JcEw7r12hMy5Spuf7FiTzztl6iS3REDOfka
+ XwNKXSV1Ua0rpDaxKdC7DTgfzcO37H8Clq/bDgz4kx/sV7sl0w9lCJvNWat5EBJDivLcEOGdPhH
+ /fOlXeEXkCCIrEdYhzbYESZ61Y75O3RZEkPAnSXBBlYucSQ5t5TNHRYU6uJAiNhUG1Tm24t7CYq
+ LoTUCacZAcw+TOhhfZz9HtexR1gTU01zfLsqBee9kgjPIxCrNczUEWZBmRRP0UxPkUhnWPLGmBJ
+ iv2MzySiAaUbxOjAUzPgzWwybYgFLGbiMhj48NjY/WxQTcnL0WMCIoNSsP5Q96kM9940OosRzgD
+ 74Yjr1X7faMiFasvKDPF/H1AZtS3HJvDbyMXRrZ8fpFvP5fq4eEdi/1GlOP4NXb27AZzgqINy6k
+ DSON0talx13U/+OlVfhMqmTdzHMwuV+SpBWqgxULeVjIyzvEm4ZzbMsJMoQO5zvBNvx6SqNUY95
+ 1cXmOQPMgxtA7Jw==
+X-Developer-Key: i=yuya.kusakabe@gmail.com; a=openpgp;
+ fpr=DA07BBAC01FC4D28C7AA6BA62AD7D1752A5D1B4D
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+"ip route save" stores a route dump and "ip route restore" sends it
+back to the kernel unchanged.  The kernel dumps RTA_ENCAP, and some of
+the attributes nested in it, without NLA_F_NESTED, but rpl, ioam6,
+xfrm and the geneve, vxlan and erspan options of the ip and ip6 encaps
+require the flag when parsing them.  Restoring such a route fails with
+"NLA_F_NESTED is missing", and none of them has been restorable in any
+release.
 
-Critical: 0 · High: 1 · Medium: 1 · Low: 0
+Setting the flag in the dumps would change the UAPI: userspace that
+does not mask it off the attribute type, such as parse_rtattr() in
+iproute2, would no longer find RTA_ENCAP, and dumps that have already
+been saved would still fail.  The series therefore only makes the
+parsers accept what the kernel itself dumps.  The dumps, and the
+attributes accepted with the flag set, stay as they are.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Patch 1 adds lwtunnel_nla_parse() to the lwtunnel core, so that the
+missing flag is documented once next to the build_state callback
+instead of being worked around in each lwtunnel.  It is
+nla_parse_nested() without the flag check: the nested attributes are
+still validated strictly, which nla_parse_nested_deprecated(), used by
+the older lwtunnels, would not do.  Patch 1 uses it in rpl and ioam6,
+and patch 2 in xfrm.
 
-- [High] dev_mc_fill_addr() (net/core/dev_addr_lists.c:1210) emits
-  IFA_MULTICAST with `nla_put(skb, IFA_MULTICAST, dev->addr_len,…
-- [Medium] dump_mcaddr_l2_check()
-  (tools/testing/selftests/net/rtnetlink.py:113) issues the new…
+Patch 3 does the same for the ip and ip6 encaps, whose geneve, vxlan
+and erspan options are nested one level further down: the level shared
+by all options is validated through lwtunnel_nla_validate(), the
+counterpart of lwtunnel_nla_parse() for nla_validate().  Nothing but
+the NLA_F_NESTED check is relaxed.
 
---
+Patch 4 adds a selftest that saves and restores a route of each kind.
 
-selftests: net: test AF_PACKET multicast dumps
+---
+Yuya Kusakabe (4):
+      net: lwtunnel: accept RTA_ENCAP without NLA_F_NESTED
+      xfrm: lwtunnel: accept RTA_ENCAP without NLA_F_NESTED
+      net: ip_tunnel: accept tunnel options without NLA_F_NESTED
+      selftests: net: add lwtunnel route save and restore test
 
-Adds dump_mcaddr_l2_check() to tools/testing/selftests/net/rtnetlink.py,
-which dumps the link-layer multicast addresses of dummy devices over
-AF_PACKET RTM_GETMULTICAST and checks the ifa-index filter, the global
-flag, mc-users and target-netnsid handling.
+ include/net/lwtunnel.h                          |  49 ++++++++++
+ net/ipv4/ip_tunnel_core.c                       |  24 +++--
+ net/ipv6/ioam6_iptunnel.c                       |   4 +-
+ net/ipv6/rpl_iptunnel.c                         |   4 +-
+ net/xfrm/xfrm_interface_core.c                  |   3 +-
+ tools/testing/selftests/net/Makefile            |   1 +
+ tools/testing/selftests/net/lwt_save_restore.sh | 116 ++++++++++++++++++++++++
+ 7 files changed, 186 insertions(+), 15 deletions(-)
+---
+base-commit: 17741334d00bf5ebd37f8c1c36bc9c146a351deb
+change-id: 20260918-lwt-encap-noflag-ae795af30b52
 
-> diff --git a/tools/testing/selftests/net/rtnetlink.py b/tools/testing/selftests/net/rtnetlink.py
-> index dc8c77db48974..5534ade056a5c 100755
-> --- a/tools/testing/selftests/net/rtnetlink.py
-> +++ b/tools/testing/selftests/net/rtnetlink.py
+Best regards,
+--  
+Yuya Kusakabe <yuya.kusakabe@gmail.com>
 
-[ ... ]
-
-> @@ -105,6 +110,69 @@ def dump_mcaddr6_check() -> None:
->                  s2.close()
->  
->  
-> +def dump_mcaddr_l2_check() -> None:
-> +    """
-> +    Verify link-layer multicast addresses in an AF_PACKET RTM_GETMULTICAST
-> +    dump: the ifa-index filter, mc-users, the global flag and
-> +    target-netnsid.
-> +    """
-> +
-> +    with NetNS() as ns, NetNSEnter(str(ns)):
-> +        for ifname in ("dummy1", "dummy2"):
-> +            ip(f"link add name {ifname} type dummy")
-> +            ip(f"link set {ifname} up")
-> +        dev_idx = socket.if_nametoindex("dummy1")
-> +        ip(f"maddr add {ETH_TEST_MULTICAST_STR} dev dummy1")
-> +
-> +        rtnl = RtnlAddrFamily()
-> +        defer(rtnl.close)
-> +        addresses = rtnl.getmulticast(
-> +            {"ifa-family": socket.AF_PACKET, "ifa-index": dev_idx},
-> +            dump=True)
-
-[Severity: Medium]
-Should this dump be guarded so that an older kernel produces a skip
-instead of a failure?
-
-On a kernel without the PF_PACKET RTM_GETMULTICAST registration,
-rtnetlink_rcv_msg() looks up the handler for the requested family, then
-retries with PF_UNSPEC:
-
-net/core/rtnetlink.c:rtnetlink_rcv_msg() {
-	...
-	link = rtnl_get_link(family, type);
-	if (!link || !link->dumpit) {
-		family = PF_UNSPEC;
-		link = rtnl_get_link(family, type);
-		if (!link || !link->dumpit)
-			goto err_unlock;
-	...
-}
-
-There is no PF_UNSPEC RTM_GETMULTICAST dumpit (only PF_INET in
-net/ipv4/devinet.c and PF_INET6 in net/ipv6/addrconf.c, plus the
-PF_PACKET entry added by this series), so err stays at its -EOPNOTSUPP
-initialisation and an error ack comes back. ynl then turns that into an
-exception:
-
-tools/net/ynl/pyynl/lib/ynl.py:YnlFamily._op() {
-	...
-                if nl_msg.error:
-                    raise NlError(nl_msg)
-	...
-}
-
-which ksft_run() reports as "not ok" plus a traceback.
-
-The two neighbouring tests in this same file take the other route:
-_users_for() returns None when mc-users is absent, and
-dump_mcaddr_check()/dump_mcaddr6_check() convert that into
-raise KsftSkipEx("kernel does not expose IFA_MC_USERS"). Would wrapping
-the first getmulticast() call and raising KsftSkipEx on NlError keep this
-new case consistent with the rest of the file when the selftest tree is
-newer than the kernel under test?
-
-> +
-> +        # dummy2 has entries as well, only dummy1 may be listed
-> +        ksft_eq({addr['ifa-index'] for addr in addresses}, {dev_idx},
-> +                "AF_PACKET multicast dump ignored ifa-index filter")
-> +
-> +        entries = {addr['multicast']: addr for addr in addresses}
-
-[Severity: High]
-The IFA_MULTICAST payload consumed here is emitted by dev_mc_fill_addr()
-in net/core/dev_addr_lists.c, added by this series, using the device's
-current addr_len for every entry of dev->mc:
-
-net/core/dev_addr_lists.c:dev_mc_fill_addr() {
-	...
-	    nla_put(skb, IFA_MULTICAST, dev->addr_len, ha->addr) ||
-	...
-}
-
-Each entry was created with an unzeroed allocation where only addr_len
-bytes were written:
-
-net/core/dev_addr_lists.c:__hw_addr_create() {
-	...
-	ha = kmalloc(alloc_size, GFP_ATOMIC);
-	if (!ha)
-		return NULL;
-	memcpy(ha->addr, addr, addr_len);
-	...
-}
-
-ha->addr is MAX_ADDR_LEN (32) bytes, so bytes addr_len..31 hold stale
-slab contents. Can this dump then copy uninitialised heap bytes to user
-space if dev->addr_len grows after the entry was inserted?
-
-The sequence I end up with is:
-
-  1. create a tap device (ARPHRD_ETHER, addr_len 6; tun_net_mclist is
-     provided as .ndo_set_rx_mode, which SIOCADDMULTI requires per
-     net/core/dev_ioctl.c)
-  2. ip maddr add 01:00:5e:01:01:01 dev tap0, so __hw_addr_create()
-     copies 6 bytes
-  3. with the device down, TUNSETLINK to ARPHRD_TUNNEL6:
-
-drivers/net/tun.c:__tun_chr_ioctl() {
-	...
-			tun->dev->type = (int) arg;
-			tun->dev->addr_len = tun_get_addr_len(tun->dev->type);
-	...
-}
-
-     addr_len becomes sizeof(struct in6_addr), and dev->mc is not
-     flushed; the NETDEV_PRE_TYPE_CHANGE handlers only drop the
-     protocol-joined mappings via ip_mc_unmap()/ipv6_mc_unmap(), not
-     global_use entries
-  4. an AF_PACKET RTM_GETMULTICAST dump (RTNL_KIND_GET, no capability
-     required) now returns 16 bytes for that entry, 10 of which were
-     never initialised
-
-The pre-existing dev->mc dump path does not reach this because it is
-gated on the device type:
-
-net/core/rtnetlink.c:ndo_dflt_fdb_dump() {
-	...
-	if (dev->type != ARPHRD_ETHER)
-		return -EINVAL;
-	...
-}
-
-The new dump has no such restriction. Would bounding the copy by what was
-actually initialised - recording or clamping a per-entry length, or
-zeroing ha->addr in __hw_addr_create() - be preferable to trusting
-dev->addr_len here?
-
-For the record, the bonding path is not a trigger: bond_enslave() calls
-dev_uc_flush()/dev_mc_flush() immediately before bond_setup_by_slave()
-changes addr_len, so only the tun/tap TUNSETLINK path above applies.
-
-> +
-> +        # Bringing an Ethernet device up joins 224.0.0.1, which maps
-> +        # to 01:00:5e:00:00:01 in the device multicast list.
-> +        all_hosts = entries.get(ETH_ALL_HOSTS_MULTICAST)
-> +        ksft_not_none(all_hosts,
-> +                      "dummy1 does not have the all-hosts link-layer address")
-> +        if all_hosts is not None:
-> +            ksft_not_in('global', all_hosts['flags'],
-> +                        "protocol entry is global")
-> +
-> +        static = entries.get(ETH_TEST_MULTICAST)
-> +        ksft_not_none(static, "dummy1 does not have the SIOCADDMULTI address")
-> +        if static is not None:
-> +            ksft_eq(static['mc-users'], 1,
-> +                    "unexpected mc-users for the SIOCADDMULTI address")
-> +            ksft_in('global', static['flags'],
-> +                    "SIOCADDMULTI entry is not global")
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260921235951.3214-1-sigefriedhyy%40gmail.com
