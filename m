@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF7C34D382;
-	Wed, 23 Sep 2026 02:11:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6FBC54788;
+	Wed, 23 Sep 2026 02:21:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790129478; cv=none; b=i8JHbEH3zwd4UFr5D/IdPmrPO7UERcQMr9mkdcV80XBqQRKyTnyKxFZ22pikVuGyzX8THB3grGkIOhkiiQc5Dl1L4nr2EP6+XwoaUdlSgXEGgAFMA82liX2zVWTT0hj+L6QdtIgDzbbALs3kuOj817XYmk2LW9pnxyMwM4wXWIw=
+	t=1790130075; cv=none; b=nfIDYr0e9nh14o8pjcKHGQlrFS1ew6XAzrUxw3El92tpB07kgV5WIQaC2Qwlk9l0R0S3dSqpnYFB2/H30dDmz13k7Kzn/8I/Sfo2tGotPFgNvYWZy75U0/n56vZ62v7vGN03dSuSE4mJmbDryOnKvaNjD+GUvTb7dmmAEUiEdMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790129478; c=relaxed/simple;
-	bh=idgMeQkolLxrBKlHTfh0UDxVONy509qU1OR0hdN1pNw=;
+	s=arc-20240116; t=1790130075; c=relaxed/simple;
+	bh=JlcDx+90faiWzvsk2tJ/fkffK2A+Mb/XOMT4rI9UbBM=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=CEKqlD/VdMZzrQJiZpqsMKTNhN70ehgsujEFhxBqPWhQDMRSG9iE+4sHu5nwOpUfuQo3YXCRlzDrX5FqO4pGqGfUBilLpwoBjyrF6T/Dc0ZKK61pqgmRR9Of3H/CcqOALZJORTerKRkuAKOfgr+l+aVHpKrdkAqIeQG0zSXx2gQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cVLP4OIj; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=h7MW7xmHT3DP1T9p2rpa5nlh126EXvaejsybJ4DnZSTVJwZiLVYRPxV5/ieW+ugGNny4SVXiFX9kdNeyEoW79DDoIpbA6gCE4Izz7pH2W/nfLEJdTlT+MjsnazPrjbEgYtjzBbXyc9yGfaGV+NFLnBdBRD55FFqTNQumdTI17Po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PEIIkXDR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cVLP4OIj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F2A1F000FF;
-	Wed, 23 Sep 2026 02:11:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PEIIkXDR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49B701F000FF;
+	Wed, 23 Sep 2026 02:21:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790129476;
-	bh=72o8XdeHOO0nvYEC27EwUle5PwfmgPHOTqUbse1xuP8=;
+	s=k20260515; t=1790130074;
+	bh=Ji7+MiaFmb72MV99NdoFp+cfoihFAO/nWtWdpd1qMPY=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=cVLP4OIjcQtBEQk4Kd7+/s85av0NOiwTscc85yH5tqVX7K142j5D8jaR0MXKkNq4a
-	 bwoYZYF7dmvafW82Uycjl3ljoT1WBIHz/mSyzY/qPwHSjy99EB4w4ycF1UTR0NP7Xi
-	 0TaqE4VaywsWORTsYkAJo1FugkE1Dw+f3espJKC0f+1Q48bIFmLAqW7P3Ujtfn/9az
-	 gy3wRPtlQN37Oi923oZrlOUk6c+z+zymweTSXAlmgwr+pqW6VmHrQBhNC88m1ULN22
-	 P30hTLlstZwRkWum1IRuMuzRR8iu9EXSHFE2fWPecCNYits1qR6qFAvy9szm4k1AAB
-	 O7HpRJvnPtHWg==
+	b=PEIIkXDRA41qx3Xx4Wy3TusrbvPMfFSRc/kqhesaMP3RWx2reHeirUxgc0jix3mmg
+	 dXOQdDa0/G3vIGbXPpYFxVxg5fe86aTJDA5ztJbUcG788ojFLBcrVjnOUjGsanCUsg
+	 cHlJ7HxXOya8lLs2mmn6jonTVZbE/T4qwFSJhpYQ5n5gPtdznVkEHdiYFSlHD9R/1Z
+	 QJbuTZXEBqJpbfMMZWpdsEnrv8Kzd+Ha5cupV0hajAH/sHm7IUPbeSsICkyPS0WTd9
+	 k7U4grJO1NHrBn0b528j9GcqAJoT0o3wi0jEwR84qu6PdpXHDFTWWNlvcyPtnYUtkt
+	 vmPdyv/vI7S7g==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A343924472;
-	Wed, 23 Sep 2026 02:10:08 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 19A983924472;
+	Wed, 23 Sep 2026 02:20:06 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -37,47 +37,48 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v9 0/3] bpf: arena: handle memory.max on fault-in
- with reclaim
+Subject: Re: [PATCH bpf v2 RESEND 1/2] bpf: reject dev-bound-only programs on
+ other devices
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179012940739.177114.1298290865811499101.git-patchwork-notify@kernel.org>
-Date: Wed, 23 Sep 2026 02:10:07 +0000
-References: <20260922101831.192102-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260922101831.192102-1-jiayuan.chen@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+ <179013000490.180033.16817680789297827753.git-patchwork-notify@kernel.org>
+Date: Wed, 23 Sep 2026 02:20:04 +0000
+References: <20260920132303.4109240-3-bestswngs@gmail.com>
+In-Reply-To: <20260920132303.4109240-3-bestswngs@gmail.com>
+To: Weiming Shi <bestswngs@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, davem@davemloft.net, kuba@kernel.org,
+ hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ edumazet@google.com, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, co+ac0a8c41de69121d@bugs.sh, xmei5@asu.edu,
+ stable@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This series was applied to bpf/bpf.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue, 22 Sep 2026 18:17:32 +0800 you wrote:
-> Since commit e66fe1bc6d25 ("bpf: arena: Reintroduce memcg accounting"),
-> arena pages are charged to the memcg of the process that created the arena.
-> That exposes a problem in the arena user page fault path: the fault-in
-> allocation runs under arena->spinlock, so it can only use the non-blocking
-> allocator, which never reclaims. Once memory.current is at memory.max the
-> allocation simply fails, even when the memcg is full of page cache that
-> could be dropped right away. Reaching memory.max is completely normal for a
-> healthy application - e.g. reading a large file fills memory.current with
-> page cache - and the process then gets SIGSEGV on a perfectly valid arena
-> address.
+On Sun, 20 Sep 2026 21:23:04 +0800 you wrote:
+> __bpf_offload_dev_match() falls back to comparing offdev pointers after an
+> exact netdev mismatch. Bound-only programs normally have NULL offdevs, so
+> unrelated netdevs compare equal. A bound-only program on an
+> offload-registered netdev can instead inherit a real offdev and match a
+> sibling port. With CAP_BPF and CAP_NET_ADMIN, a caller can use
+> bpf(BPF_LINK_CREATE) with a different target ifindex to run metadata kfuncs
+> specialized for the bound driver on the target driver's xdp_buff. Running a
+> veth-bound program on tun reads beyond tun's bare stack xdp_buff as a
+> veth_xdp_buff.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v9,1/3] bpf: arena: allocate the fault-in page outside the lock
-    https://git.kernel.org/bpf/bpf-next/c/c7cd8be3d72f
-  - [bpf-next,v9,2/3] selftests/bpf: Add read_cgroup_file() to cgroup_helpers
-    https://git.kernel.org/bpf/bpf-next/c/a781db31b484
-  - [bpf-next,v9,3/3] selftests/bpf: Add a test for arena fault-in under memory.max
-    https://git.kernel.org/bpf/bpf-next/c/1fe5a5cd01e4
+  - [bpf,v2,RESEND,1/2] bpf: reject dev-bound-only programs on other devices
+    https://git.kernel.org/bpf/bpf/c/6db1ce73e985
+  - [bpf,v2,RESEND,2/2] selftests: net: test cross-device XDP dev-bound attachment
+    (no matching commit)
 
 You are awesome, thank you!
 -- 
