@@ -1,384 +1,405 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2FF3F58E8;
-	Wed, 23 Sep 2026 20:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E71579836
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 20:50:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790195017; cv=none; b=rJyo7h1eJh9HMnKxXl4QJkG7QhSnUsKr2b19uUAlAtKueM8/PFZXxirR1CPWXqulXoK/mKTDnit7m06Yg2s1Ew2BpK7H3MBua8GH5AYscMpQKcJsAGwzyJXsVHQZFwrfbgNWLxIDhCkWDyvTZsz34bnIr8tAplZHo8q0avCeR00=
+	t=1790196637; cv=none; b=YDcOqLNukTvj6PToLn+Y/5FHyCoTex2MlicsOMC5MCYfE56VWwWHAWtisiZCek6h/1+z/ktp04/W17PtTKBin5dgHseVG1ZlRhM4ttqt1kTTpJVqJxCt+xuM3r9ZPjLEkCW/vp+hmKtPrfMq1HNIXl1TRMKVvteq7HjsDBSF/C4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790195017; c=relaxed/simple;
-	bh=N3ZtQzKMoF3t3mjzucPKwU7WpmStxEm6lmVi7hsw5pk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hiDnEjg8vffraSPcv5+yHAmhOGhH5ZkLAd2tjSmzBv/MpHn1Eda8gLBbZrreNVBeZZOkkuyRO++iw4mjfPH2/F6jC3t8vilzYc1TsjEiWHJ36TcGCd9j8CKTYw9ljoeiYXw75nOIhQA1kt1NTopHn5INFkF6Cdkmg0k83dusImg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=vKgZQ+68; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=3sEAlWav; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=z6E9OOdj; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=SLDbMTC1; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1790196637; c=relaxed/simple;
+	bh=IR+cFhBQfWRSdMGVpfuBcQw5kzuKhkM3dI8xg87PPUs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C/OkqvIExg4wqj6kZgZphnSU/r3RBSfhEloZMOPyg0hrf0+dypKR2KT3fHlxoNBJWGchTqvirfzBrGVyApP0s7+kzPgLT+2uOJ7rrAXnIGUxb4uNO6GyVLpoXGPQn6QQIfxru5zvQX/H2aVDivstMdevvzisecpd+k0JZ8Aiyt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oKYQz8kK; arc=none smtp.client-ip=74.125.228.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="vKgZQ+68";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="3sEAlWav";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="z6E9OOdj";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="SLDbMTC1"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id DC3FB1FFA4;
-	Wed, 23 Sep 2026 20:23:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1790195001;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3txnbGXjnEMcg6Tno2syRovR7ra61zaqYc6U6PNPcNQ=;
-	b=vKgZQ+68d+onAg5VOUJixIXtms4eXf+hza8Qn3xv/AvsNgyCtxmQp18M6XHL3Z9JY8m7xM
-	8SNJ13ig30VoYFWMk0wy0bUfxrVD8Rac3m936gOPjIo3YKcJ8bH397E3qdFYtRAfQPwYu0
-	TTqYIA+6kmZltcISt5Lf5s+3uBgats0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1790195001;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3txnbGXjnEMcg6Tno2syRovR7ra61zaqYc6U6PNPcNQ=;
-	b=3sEAlWavfBWdcIItajuaFaync5u0jBk+q3AKoXwL2HfwRu/iNbi1c7+QFRj3T7GB9CmYLq
-	4LPbJu3/2n6/iBAw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1790194996;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3txnbGXjnEMcg6Tno2syRovR7ra61zaqYc6U6PNPcNQ=;
-	b=z6E9OOdjcpH2C2T8Rpt182pYh6dsDlwjw7HApaUSh+V21JuNeWiTu+a5xZuGFEN3U2BYLu
-	tj+69PiplLD4eGKBo1hcXPsnVVwY/M94HJKLYr3A8LvI0JREzQZqhzJZ3vErkv/r65rtJZ
-	AaZvmYa5lbBo8VBGel3UmLsNGcN8x7k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1790194996;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3txnbGXjnEMcg6Tno2syRovR7ra61zaqYc6U6PNPcNQ=;
-	b=SLDbMTC1RdHneptx0VcM/nsqdHn4285bwd15Wonz6ZaaUMeo1Lrs3UUbANafD7dollNxsB
-	v9aTOBc6qjs8OADQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 088FC13354;
-	Wed, 23 Sep 2026 20:23:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ZHICMjM1tGpMYwAAD6G6ig
-	(envelope-from <pvorel@suse.cz>); Wed, 23 Sep 2026 20:23:15 +0000
-Date: Wed, 23 Sep 2026 22:23:14 +0200
-From: Petr Vorel <pvorel@suse.cz>
-To: Narcisa Vasile <narcisav.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, kuba@kernel.org, daniel.zahka@gmail.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oKYQz8kK"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc1ceb47d53so334467a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 13:50:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790196635; x=1790801435; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=snlXyVmosKNHZDEUpSvbDeW3MROgMKqCzOa9/2l2FR4=;
+        b=oKYQz8kKag1QgtYGyD6ZP3CuaOLu0JGt11zJ+jD7YhhoUqa575/j7yzioGf775veeJ
+         7wnmcfOae+N1tfGnNGDAEbL402F95za51JW2vSuqiGjmzcnoNSnaZslO4EhL1xWtNSmC
+         UKyMhdDProoLT4twgiLewq6FmgELJd8FzkW87o74XdYBZQQvt+zl3booWB116BUGuh5+
+         F6YpSHuUk62Et7Z/jaEV69/St96jzqX/dO3QFKHhM8SXjvtcg1ULBLP02guCs8yUzsOL
+         Q3ecHnw32s55Ey9P3N96ne0WDluIZgh+ObiO88Zz2yuxolNPL/Y83cPzX0uRgKse/PTA
+         5Gaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790196635; x=1790801435;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=snlXyVmosKNHZDEUpSvbDeW3MROgMKqCzOa9/2l2FR4=;
+        b=tn5dcBy3iKk+cbh7X4tplhZiXEVyhSaz5OqOJUIJVEW00jLRNOozYWdhy0bezYpxlI
+         dVKzg4JoAdFMNi4zYbNEWP0eZGG+T6bg5rGLmVavFxzhH8dVVr+t2hQxsVGKuOYJbHkr
+         sjLWF0eWxds+wtSNsRXr6BrPDKxwJcaAMkdBwc/gK7kf1Fl8to5ZxPnllsHcX7TQH7qP
+         o2KhebCoiE8LVTVpa2zpSK0toKZH3AdTcrXLSWTRZuLNfymP8xFAU60qdobHQQHub+Zt
+         elip+qkMWqW7Maci3yGKeD2NDeY9y7x6YLDTb+GkFhjEZKTdSAEO/f37F2Ij2vampP/v
+         Yu/Q==
+X-Forwarded-Encrypted: i=1; AKwUvBx6WIs7EAzITifvjWVExGDuEOMyXWmulEdEKqFPSalq7j/rVPMz6inYRKqweVZg8XaltPuOV0MECKjUmM7y8dM=@vger.kernel.org
+X-Gm-Message-State: AFuF++nAISl9YMUPZkp/crFFui5LKFe59YzMaUZJUeHNe0diqSGu3u7D
+	e8YwdPTLJtawWvC4ZM3FxuQd47ZAr0tGDKu0uaYYitQ8JUphFeA2p+7O
+X-Gm-Gg: AYBFou0jx1L+1/oXyE76onbbHDNA4bbPklOGQcJAb1ERZu2MNGilE7NnAQKQWI4mUB0
+	1atc16j5BA1+bmrFlFHeErphn03CTNlg4PK1PwRLamx5UcAIfQYMvZMLGK+auc6lEfTBSsHQiVn
+	CqWSd8sVrCWUgeL4hQm1guVgmX8aSPfMNyScTIuWF8zKJrgieuIw3dpj0L6YNc7q4pBd1zrm6ft
+	z5cCf7AEdKx85j6nI6Hl/armfrBKOUEZ9e56ttk+5fF7mZp7enkynHa7ym7bn+qSgd1wehgAgwu
+	01sIhT0aj1N15rF+KlzadXtJ9GA8NV820q89vTSrwIr8xrF6QdEtHdoKrxO42F2z+zNpHea9jp3
+	Af5QN/GM6lfecQJO0Buh+oYbStgTF6e8qY2rqcqmfdl6DjCsedB7IiS/AB+hvAakHO4M9xtYQsN
+	CMM9kxb5UprJ8CUpmdi2ZrVlx5sIbvgCYNyfbuci3bUV6/XKOz7m9s0AeTccMQG4xr635Z
+X-Received: by 2002:a17:90b:3f4d:b0:39e:1bfa:c5f0 with SMTP id 98e67ed59e1d1-3a09860b2b7mr189257a91.5.1790196634676;
+        Wed, 23 Sep 2026 13:50:34 -0700 (PDT)
+Received: from kir-tp1.lan ([67.185.120.12])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a096b8753csm896038a91.0.2026.09.23.13.50.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2026 13:50:34 -0700 (PDT)
+From: Kir Kolyshkin <kolyshkin@gmail.com>
+To: Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Aleksa Sarai <cyphar@cyphar.com>
+Cc: Kir Kolyshkin <kolyshkin@gmail.com>,
+	Jan Kara <jack@suse.cz>,
+	Jeff Layton <jlayton@kernel.org>,
+	"Eric W . Biederman" <ebiederm@xmission.com>,
+	David Howells <dhowells@redhat.com>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Andrei Vagin <avagin@google.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"Ricardo B. Marliere" <rbm@suse.com>,
-	Sebastian Chlad <sebastian.chlad@suse.com>
-Subject: Re: [PATCH net-next] selftests: drv-net: add BIG TCP coverage to TSO
- test
-Message-ID: <20260923202314.GA177730@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20260921201145.49875-1-narcisav.kernel@gmail.com>
+	Giuseppe Scrivano <giuseppe@scrivano.org>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	containers@lists.linux.dev
+Subject: [RFC PATCH] mount: add OPEN_TREE_SKIP_MNTNS
+Date: Wed, 23 Sep 2026 13:50:25 -0700
+Message-ID: <20260923205028.711077-1-kolyshkin@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260921201145.49875-1-narcisav.kernel@gmail.com>
-X-Spam-Level: 
-X-Spam-Score: -2.00
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-2.00 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	HAS_REPLYTO(0.30)[pvorel@suse.cz];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,gmail.com,lunn.ch,davemloft.net,google.com,redhat.com,broadcom.com,suse.com];
-	MISSING_XM_UA(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TAGGED_RCPT(0.00)[netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lib.py:url,imap1.dmz-prg2.suse.org:helo,suse.cz:email,suse.cz:replyto];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	REPLYTO_EQ_FROM(0.00)[]
+Content-Transfer-Encoding: 8bit
 
-Hi Narcisa,
+crun, a container runtime, recently started using OPEN_TREE_NAMESPACE to
+set up the container's mount namespace, and open_tree(OPEN_TREE_CLONE)
+for the sources of its bind mounts.  This turns out not to work on hosts
+that have a mount namespace pinned anywhere below such a source: the
+recursive clone picks the pinned namespace up, and move_mount(2) then
+refuses to attach the tree with ELOOP from check_for_nsfs_mounts().
+This was reported to crun in [1].
 
-[ Cc Ricardo and Sebastian ]
+The rule behind that goes back to commit 8823c079ba71 ("vfs: Add setns
+support for the mount namespace"), which requires "all bind mounts be of
+a younger mount namespace into an older mount namespace" so that mount
+namespace reference loops cannot form.  OPEN_TREE_NAMESPACE ends up on
+the wrong side of it by construction: the namespace it creates is younger
+than everything else on the system, so from inside it every pinned
+namespace is older.
 
-> Add IPv4 and IPv6 test cases that exercise GSO packets under BIG TCP
-> size limits.
+By the time this fails there is nothing userspace can do.  setns() has
+already run, so the host tree is unreachable by path; it is unreachable
+through a fd saved beforehand as well, since mount(2) requires the source
+to live in the current mount namespace; and the offending mounts cannot
+be dropped from the detached copy first, because umount(2) requires
+check_mnt().  So a runtime cannot fall back to the pivot_root() path at
+that point -- it has to predict the situation before setns(), which is
+what crun now does, at the cost of the optimization on every such host.
 
-> 1..2
-> ok 1 tso.big_tcp_ipv4
-> ok 2 tso.big_tcp_ipv6
+Every other path that crosses a mount namespace boundary already leaves
+these mounts behind: copy_mnt_ns() passes CL_COPY_UNBINDABLE | CL_EXPIRE,
+and create_new_namespace() passes no CL_COPY_MNT_NS_FILE either -- the
+latter deliberately, per the comment added in commit 9b8a0ba68246
+("mount: add OPEN_TREE_NAMESPACE"): "When creating a new mount namespace
+we don't want to copy over mounts of mount namespaces to avoid the risk
+of cycles".  Only get_detached_copy() asks for them, inherited from the
+unconditional CL_COPY_MNT_NS_FILE that predates that exception.
 
-> Both of them run the existing tx-tcp-segmentation
-> and tx-tcp6-segmentation tests at the increased TSO maximum.
+Add a flag so a caller can ask for a clone without them, as suggested by
+Aleksa when the exception was introduced [2]:
 
-> Additionally, reserve a hugepage and transmit its content using
-> MSG_ZEROCOPY to produce skb fragments larger than 65536.
-> Check that the number of retransmissions represents a small
-> percentage of the total packets sent. Record the number of drops
-> before and after the send to catch issues with large frag
-> handling during segmentation.
+    I kind of think this is a somewhat theoretical issue but I don't
+    think we'll be bitten by it. My gut feeling is that I'd prefer this
+    to be an OPEN_TREE_* flag that you have to set (so we can support
+    this in the future) but that's kinda ugly too...
 
-> Signed-off-by: Narcisa Vasile <narcisav.kernel@gmail.com>
+Keep it opt-in rather than changing the default.  A clone attached in the
+caller's own namespace, or in an older one, keeps such mounts usable, and
+open_tree(OPEN_TREE_CLONE) plus move_mount(2) is what mount --rbind is
+through a file descriptor, so dropping them by default would make
+mount --rbind / /mnt silently lose /run/snapd/ns/*.mnt on a live system.
+Only a caller heading into a younger namespace, where the tree is refused
+anyway, has reason to ask for this.
 
-LGTM, but I'm not really an expert on network drivers testing.
+With OPEN_TREE_NAMESPACE, which never copies these mounts, the flag is
+accepted and has no effect, so a runtime can pass it unconditionally.
+Locked nsfs mounts are skipped the same way copy_mnt_ns() already skips
+them, so this exposes nothing new.
 
-Acked-by: Petr Vorel <pvorel@suse.cz>
+Link: https://github.com/containers/crun/issues/2262 [1]
+Link: https://lore.kernel.org/all/2026-01-07-oldest-grim-captions-spills-ywC2O3@cyphar.com/ [2]
+Assisted-by: Claude:claude-opus-5
+Signed-off-by: Kir Kolyshkin <kolyshkin@gmail.com>
+---
+ fs/namespace.c                                |  14 +-
+ include/uapi/linux/mount.h                    |   1 +
+ .../open_tree_ns/open_tree_ns_test.c          | 183 ++++++++++++++++++
+ 3 files changed, 196 insertions(+), 2 deletions(-)
 
-Kind regards,
-Petr
+diff --git a/fs/namespace.c b/fs/namespace.c
+index ae5dc64f8b45..165750b3d666 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -3062,7 +3062,8 @@ static struct mnt_namespace *get_detached_copy(const struct path *path, unsigned
+ 			ns->seq_origin = src_mnt_ns->ns.ns_id;
+ 	}
+ 
+-	mnt = __do_loopback(path, (flags & AT_RECURSIVE), CL_COPY_MNT_NS_FILE);
++	mnt = __do_loopback(path, (flags & AT_RECURSIVE),
++			    (flags & OPEN_TREE_SKIP_MNTNS) ? 0 : CL_COPY_MNT_NS_FILE);
+ 	if (IS_ERR(mnt)) {
+ 		emptied_ns = ns;
+ 		return ERR_CAST(mnt);
+@@ -3204,7 +3205,16 @@ static struct file *vfs_open_tree(int dfd, const char __user *filename, unsigned
+ 
+ 	if (flags & ~(AT_EMPTY_PATH | AT_NO_AUTOMOUNT | AT_RECURSIVE |
+ 		      AT_SYMLINK_NOFOLLOW | OPEN_TREE_CLONE |
+-		      OPEN_TREE_CLOEXEC | OPEN_TREE_NAMESPACE))
++		      OPEN_TREE_CLOEXEC | OPEN_TREE_NAMESPACE |
++		      OPEN_TREE_SKIP_MNTNS))
++		return ERR_PTR(-EINVAL);
++
++	/*
++	 * Only meaningful when a tree is copied.  OPEN_TREE_NAMESPACE never
++	 * copies pinned mount namespaces, so there the flag is a no-op.
++	 */
++	if ((flags & OPEN_TREE_SKIP_MNTNS) &&
++	    !(flags & (OPEN_TREE_CLONE | OPEN_TREE_NAMESPACE)))
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	if ((flags & (AT_RECURSIVE | OPEN_TREE_CLONE | OPEN_TREE_NAMESPACE)) ==
+diff --git a/include/uapi/linux/mount.h b/include/uapi/linux/mount.h
+index 2204708dbf7a..86082344fc0e 100644
+--- a/include/uapi/linux/mount.h
++++ b/include/uapi/linux/mount.h
+@@ -63,6 +63,7 @@
+  */
+ #define OPEN_TREE_CLONE		(1 << 0)	/* Clone the target tree and attach the clone */
+ #define OPEN_TREE_NAMESPACE	(1 << 1)	/* Clone the target tree into a new mount namespace */
++#define OPEN_TREE_SKIP_MNTNS	(1 << 2)	/* Omit pinned mount namespaces from the clone */
+ #define OPEN_TREE_CLOEXEC	O_CLOEXEC	/* Close the file on execve() */
+ 
+ /*
+diff --git a/tools/testing/selftests/filesystems/open_tree_ns/open_tree_ns_test.c b/tools/testing/selftests/filesystems/open_tree_ns/open_tree_ns_test.c
+index 82f3c8c02c9a..5b95180a4582 100644
+--- a/tools/testing/selftests/filesystems/open_tree_ns/open_tree_ns_test.c
++++ b/tools/testing/selftests/filesystems/open_tree_ns/open_tree_ns_test.c
+@@ -14,6 +14,7 @@
+ #include <limits.h>
+ #include <linux/nsfs.h>
+ #include <sched.h>
++#include <signal.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -28,6 +29,10 @@
+ #include "../utils.h"
+ #include "../../kselftest_harness.h"
+ 
++#ifndef OPEN_TREE_SKIP_MNTNS
++#define OPEN_TREE_SKIP_MNTNS (1 << 2)
++#endif
++
+ #ifndef OPEN_TREE_NAMESPACE
+ #define OPEN_TREE_NAMESPACE	(1 << 1)
+ #endif
+@@ -1004,4 +1009,182 @@ TEST_F(open_tree_ns_unbindable, recursive_skips_on_unbindable)
+ 	close(fd);
+ }
+ 
++/*
++ * Pin a mount namespace at @where, the way snapd does under /run/snapd/ns.
++ * The namespace has to be younger than ours, so a child unshares and the
++ * parent binds the child's namespace file: binding one's own namespace is
++ * refused by the very check this test is about.
++ */
++static int pin_mount_namespace(const char *where)
++{
++	int pipefd[2], status, ret = -1;
++	char path[PATH_MAX];
++	pid_t pid;
++	char c;
++
++	if (pipe(pipefd))
++		return -1;
++
++	pid = fork();
++	if (pid < 0)
++		goto out;
++	if (pid == 0) {
++		close(pipefd[0]);
++		if (unshare(CLONE_NEWNS))
++			_exit(1);
++		/* Tell the parent the namespace exists, then hold it open. */
++		if (write(pipefd[1], "x", 1) != 1)
++			_exit(1);
++		pause();
++		_exit(0);
++	}
++
++	close(pipefd[1]);
++	pipefd[1] = -1;
++	if (read(pipefd[0], &c, 1) != 1)
++		goto out_kill;
++
++	snprintf(path, sizeof(path), "/proc/%d/ns/mnt", pid);
++	if (mount(path, where, NULL, MS_BIND, NULL))
++		goto out_kill;
++
++	ret = 0;
++
++out_kill:
++	kill(pid, SIGKILL);
++	waitpid(pid, &status, 0);
++out:
++	close(pipefd[0]);
++	if (pipefd[1] >= 0)
++		close(pipefd[1]);
++	return ret;
++}
++
++FIXTURE(open_tree_ns_skip_mntns)
++{
++	char dir[64];
++	char pin[PATH_MAX];
++	bool mounted;
++};
++
++FIXTURE_SETUP(open_tree_ns_skip_mntns)
++{
++	int fd, ret;
++
++	self->mounted = false;
++	snprintf(self->dir, sizeof(self->dir), "/tmp/open_tree_ns_skip_mntns.XXXXXX");
++
++	ret = sys_open_tree(-1, NULL, 0);
++	if (ret == -1 && errno == ENOSYS)
++		SKIP(return, "open_tree() syscall not supported");
++
++	/*
++	 * Work in a private mount namespace, so whatever is mounted here,
++	 * the pinned namespace included, goes away with the test process.
++	 */
++	if (unshare(CLONE_NEWNS))
++		SKIP(return, "unshare(CLONE_NEWNS) failed: %s", strerror(errno));
++	ASSERT_EQ(mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL), 0);
++
++	ASSERT_NE(mkdtemp(self->dir), NULL);
++	if (mount("tmpfs", self->dir, "tmpfs", 0, NULL))
++		SKIP(return, "Failed to mount tmpfs");
++	self->mounted = true;
++
++	fd = sys_open_tree(AT_FDCWD, self->dir,
++			   OPEN_TREE_CLONE | OPEN_TREE_SKIP_MNTNS |
++			   OPEN_TREE_CLOEXEC);
++	if (fd < 0 && errno == EINVAL)
++		SKIP(return, "OPEN_TREE_SKIP_MNTNS not supported");
++	ASSERT_GE(fd, 0);
++	close(fd);
++
++	snprintf(self->pin, sizeof(self->pin), "%s/ns", self->dir);
++	fd = open(self->pin, O_CREAT | O_RDONLY | O_CLOEXEC, 0600);
++	ASSERT_GE(fd, 0);
++	close(fd);
++	ASSERT_EQ(pin_mount_namespace(self->pin), 0);
++}
++
++FIXTURE_TEARDOWN(open_tree_ns_skip_mntns)
++{
++	if (self->mounted)
++		umount2(self->dir, MNT_DETACH);
++	rmdir(self->dir);
++}
++
++/* Attach @clone_fd at "/" inside the namespace @ns_fd; returns errno. */
++static int move_into_namespace(int clone_fd, int ns_fd)
++{
++	pid_t pid;
++	int status;
++
++	pid = fork();
++	if (pid < 0)
++		return -1;
++	if (pid == 0) {
++		int target;
++
++		if (setns(ns_fd, CLONE_NEWNS))
++			_exit(255);
++		target = open("/", O_PATH | O_DIRECTORY | O_CLOEXEC);
++		if (target < 0)
++			_exit(255);
++		if (sys_move_mount(clone_fd, "", target, "",
++				   MOVE_MOUNT_F_EMPTY_PATH | MOVE_MOUNT_T_EMPTY_PATH))
++			_exit(errno);
++		_exit(0);
++	}
++	if (waitpid(pid, &status, 0) != pid || !WIFEXITED(status))
++		return -1;
++	return WEXITSTATUS(status);
++}
++
++TEST_F(open_tree_ns_skip_mntns, move_into_younger_namespace)
++{
++	int clone_fd, ns_fd;
++
++	ns_fd = sys_open_tree(AT_FDCWD, self->dir,
++			      OPEN_TREE_NAMESPACE | OPEN_TREE_CLOEXEC);
++	ASSERT_GE(ns_fd, 0);
++
++	/*
++	 * Without the flag the clone carries the pinned namespace along,
++	 * and move_mount() refuses it from inside a younger namespace.
++	 */
++	clone_fd = sys_open_tree(AT_FDCWD, self->dir,
++				 OPEN_TREE_CLONE | AT_RECURSIVE | OPEN_TREE_CLOEXEC);
++	ASSERT_GE(clone_fd, 0);
++	EXPECT_EQ(move_into_namespace(clone_fd, ns_fd), ELOOP);
++	close(clone_fd);
++
++	/* With the flag the pinned namespace is left out. */
++	clone_fd = sys_open_tree(AT_FDCWD, self->dir,
++				 OPEN_TREE_CLONE | OPEN_TREE_SKIP_MNTNS |
++				 AT_RECURSIVE | OPEN_TREE_CLOEXEC);
++	ASSERT_GE(clone_fd, 0);
++	EXPECT_EQ(move_into_namespace(clone_fd, ns_fd), 0);
++	close(clone_fd);
++
++	close(ns_fd);
++}
++
++TEST_F(open_tree_ns_skip_mntns, flag_combinations)
++{
++	int fd;
++
++	/* Nothing is copied, so there is nothing to skip. */
++	EXPECT_LT(sys_open_tree(AT_FDCWD, self->dir,
++				OPEN_TREE_SKIP_MNTNS | OPEN_TREE_CLOEXEC), 0);
++	EXPECT_EQ(errno, EINVAL);
++
++	/* OPEN_TREE_NAMESPACE never copies them; the flag is a no-op there. */
++	fd = sys_open_tree(AT_FDCWD, self->dir,
++			   OPEN_TREE_NAMESPACE | OPEN_TREE_SKIP_MNTNS |
++			   AT_RECURSIVE | OPEN_TREE_CLOEXEC);
++	EXPECT_GE(fd, 0);
++	if (fd >= 0)
++		close(fd);
++}
++
+ TEST_HARNESS_MAIN
+-- 
+2.55.0
 
-> ---
->  tools/testing/selftests/drivers/net/hw/tso.py | 161 ++++++++++++++++++
->  1 file changed, 161 insertions(+)
-
-> diff --git a/tools/testing/selftests/drivers/net/hw/tso.py b/tools/testing/selftests/drivers/net/hw/tso.py
-> index 67f6c9ca9a64..176ddf97fabb 100755
-> --- a/tools/testing/selftests/drivers/net/hw/tso.py
-> +++ b/tools/testing/selftests/drivers/net/hw/tso.py
-> @@ -4,6 +4,7 @@
->  """A simple test for TSO."""
-
->  import fcntl
-> +import mmap
->  import socket
->  import struct
->  import termios
-> @@ -15,6 +16,87 @@ from lib.py import EthtoolFamily, NetdevFamily, NetDrvEpEnv
->  from lib.py import bkg, cmd, defer, ethtool, ip, rand_port, wait_port_listen
-
-
-> +MAP_HUGETLB = getattr(mmap, "MAP_HUGETLB", 0x40000)
-> +MSG_ZEROCOPY = getattr(socket, "MSG_ZEROCOPY", 0x4000000)
-> +SO_ZEROCOPY = getattr(socket, "SO_ZEROCOPY", 60)
-> +
-> +GSO_LEGACY_MAX_SIZE = 65536
-> +
-> +# Pool of the default hugepage size, the one /proc/meminfo reports on.
-> +NR_HUGEPAGES = "/proc/sys/vm/nr_hugepages"
-> +
-> +
-> +def default_huge_page_size():
-> +    """Return the hugepage size in bytes"""
-> +    try:
-> +        with open("/proc/meminfo", encoding="utf-8") as meminfo:
-> +            for line in meminfo:
-> +                if line.startswith("Hugepagesize:"):
-> +                    return int(line.split()[1]) * 1024
-> +    except OSError:
-> +        pass
-> +
-> +    return 2 * 1024 * 1024
-> +
-> +
-> +def hugepages_free():
-> +    """Return the number of unused hugepages of the default size."""
-> +    try:
-> +        with open("/proc/meminfo", encoding="utf-8") as meminfo:
-> +            for line in meminfo:
-> +                if line.startswith("HugePages_Free:"):
-> +                    return int(line.split()[1])
-> +    except OSError:
-> +        pass
-> +    return 0
-> +
-> +
-> +def set_nr_hugepages(count):
-> +    with open(NR_HUGEPAGES, "w", encoding="utf-8") as sysctl:
-> +        sysctl.write(f"{count}\n")
-> +
-> +
-> +def tx_dropped(ifname):
-> +    with open(f"/sys/class/net/{ifname}/statistics/tx_dropped",
-> +              encoding="utf-8") as counter:
-> +        return int(counter.read())
-> +
-> +
-> +def setup_hugepage():
-> +    """Reserve one hugepage, and put the pool back afterwards."""
-> +    if hugepages_free() >= 1:
-> +        return
-> +
-> +    try:
-> +        with open(NR_HUGEPAGES, encoding="utf-8") as sysctl:
-> +            old_count = int(sysctl.read())
-> +        set_nr_hugepages(old_count + 1)
-> +    except OSError as error:
-> +        raise KsftSkipEx(f"Unable to reserve a hugepage: {error}") from error
-> +
-> +    defer(set_nr_hugepages, old_count)
-> +
-> +    if hugepages_free() < 1:
-> +        raise KsftSkipEx("Unable to reserve a hugepage")
-> +
-> +
-> +def mmap_large_buffer():
-> +    """Allocate a buffer backed by one huge page."""
-> +    size = default_huge_page_size()
-> +
-> +    setup_hugepage()
-> +
-> +    try:
-> +        return mmap.mmap(-1, size,
-> +                         flags=mmap.MAP_PRIVATE |
-> +                               mmap.MAP_ANONYMOUS |
-> +                               MAP_HUGETLB,
-> +                         prot=mmap.PROT_READ)
-> +    except OSError as e:
-> +        raise KsftSkipEx(f"Unable to allocate a {size >> 20}MB hugepage "
-> +                         f"buffer: {e}") from e
-> +
-> +
->  def sock_wait_drain(sock, max_wait=1000):
->      """Wait for all pending write data on the socket to get ACKed."""
->      for _ in range(max_wait):
-> @@ -33,6 +115,32 @@ def tcp_sock_get_retrans(sock):
->      return struct.unpack("I", info[100:104])[0]
-
-
-> +def setup_big_tcp(cfg):
-> +    """Lift the GSO ceiling to what the device advertises for TSO."""
-> +    if cfg.dev["tso_max_size"] <= GSO_LEGACY_MAX_SIZE:
-> +        raise KsftSkipEx("Device does not support BIG TCP")
-> +
-> +    ip(f"link set dev {cfg.ifname} "
-> +       f"gso_max_size {cfg.dev['tso_max_size']} "
-> +       f"gso_ipv4_max_size {cfg.dev['tso_max_size']}")
-> +
-> +    defer(ip, f"link set dev {cfg.ifname} "
-> +              f"gso_max_size {cfg.dev['gso_max_size']} "
-> +              f"gso_ipv4_max_size {cfg.dev['gso_ipv4_max_size']}")
-> +
-> +
-> +def sock_send_zerocopy(sock):
-> +    """Send with MSG_ZEROCOPY, return the bytes queued."""
-> +    try:
-> +        sock.setsockopt(socket.SOL_SOCKET, SO_ZEROCOPY, 1)
-> +    except OSError as e:
-> +        raise KsftSkipEx(f"SO_ZEROCOPY not supported: {e}") from e
-> +
-> +    with mmap_large_buffer() as tx_buf:
-> +        sock.sendall(tx_buf, MSG_ZEROCOPY)
-> +        return len(tx_buf)
-> +
-> +
->  def run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso):
->      cfg.require_cmd("socat", local=False, remote=True)
-
-> @@ -96,6 +204,46 @@ def run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso):
->                          500, comment="Number of LSO wire-packets with LSO disabled")
-
-
-> +def run_big_tcp_stream(cfg, ipver, remote_v4, remote_v6):
-> +    """Send with MSG_ZEROCOPY out of a huge page, so the frags exceed 64kB."""
-> +    cfg.require_cmd("socat", local=False, remote=True)
-> +
-> +    # No clamping, as it would keep the frags under 64kB
-> +    port = rand_port()
-> +    listen_opts = f"{port},reuseport"
-> +    listen_cmd = f"socat -{ipver} -t 2 -u TCP-LISTEN:{listen_opts} /dev/null,ignoreeof"
-> +
-> +    with bkg(listen_cmd, host=cfg.remote, exit_wait=True):
-> +        wait_port_listen(port, host=cfg.remote)
-> +
-> +        if ipver == "4":
-> +            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-> +            sock.connect((remote_v4, port))
-> +        else:
-> +            sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
-> +            sock.connect((remote_v6, port))
-> +
-> +        # Small send to make sure the connection is working.
-> +        sock.send("ping".encode())
-> +        sock_wait_drain(sock)
-> +
-> +        retrans_old = tcp_sock_get_retrans(sock)
-> +        drops_old = tx_dropped(cfg.ifname)
-> +
-> +        sent = sock_send_zerocopy(sock)
-> +        sock_wait_drain(sock)
-> +
-> +        drops = tx_dropped(cfg.ifname) - drops_old
-> +        retrans = tcp_sock_get_retrans(sock) - retrans_old
-> +        sock.close()
-> +
-> +        ksft_eq(drops, 0, comment="Driver TX drops during BIG TCP send")
-> +
-> +        # Same best effort bound as the plain stream.
-> +        total_lso_wire = sent * 0.90 // cfg.dev["mtu"]
-> +        ksft_lt(retrans, total_lso_wire / 16)
-> +
-> +
->  def build_tunnel(cfg, outer_ipver, tun_info):
->      local_v4  = NetDrvEpEnv.nsim_v4_pfx + "1"
->      local_v6  = NetDrvEpEnv.nsim_v6_pfx + "1"
-> @@ -147,6 +295,11 @@ def test_builder(name, cfg, outer_ipver, feature, tun=None, inner_ipver=None):
->          if feature not in cfg.hw_features:
->              raise KsftSkipEx(f"Device does not support {feature}")
-
-> +        # Run non-tunnel test cases under the BIG TCP limits too.
-> +        big_tcp = "big_tcp" in name
-> +        if big_tcp:
-> +            setup_big_tcp(cfg)
-> +
->          ipver = outer_ipver
->          if tun:
->              remote_v4, remote_v6 = build_tunnel(cfg, ipver, tun)
-> @@ -159,6 +312,9 @@ def test_builder(name, cfg, outer_ipver, feature, tun=None, inner_ipver=None):
->          ethtool(f"-K {cfg.ifname} {feature} off")
->          run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso=False)
-
-> +        if big_tcp:
-> +            run_big_tcp_stream(cfg, ipver, remote_v4, remote_v6)
-> +
->          ethtool(f"-K {cfg.ifname} tx-gso-partial off")
->          ethtool(f"-K {cfg.ifname} tx-tcp-mangleid-segmentation off")
->          if feature in cfg.partial_features:
-> @@ -171,6 +327,9 @@ def test_builder(name, cfg, outer_ipver, feature, tun=None, inner_ipver=None):
->          ethtool(f"-K {cfg.ifname} {feature} on")
->          run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso=True)
-
-> +        if big_tcp:
-> +            run_big_tcp_stream(cfg, ipver, remote_v4, remote_v6)
-> +
->      f.__name__ = name + ((outer_ipver + "_") if tun else "") + "ipv" + inner_ipver
->      return f
-
-> @@ -230,6 +389,8 @@ def main() -> None:
->              # name,       v4/v6  ethtool_feature               tun:(type, args, inner ip versions)
->              ("",           "4", "tx-tcp-segmentation",         None),
->              ("",           "6", "tx-tcp6-segmentation",        None),
-> +            ("big_tcp_",   "4", "tx-tcp-segmentation",         None),
-> +            ("big_tcp_",   "6", "tx-tcp6-segmentation",        None),
->              ("vxlan",      "4", "tx-udp_tnl-segmentation",     ("vxlan", "id 100 dstport 4789 noudpcsum", ("4", "6"))),
->              ("vxlan",      "6", "tx-udp_tnl-segmentation",     ("vxlan", "id 100 dstport 4789 udp6zerocsumtx udp6zerocsumrx", ("4", "6"))),
->              ("vxlan_csum", "", "tx-udp_tnl-csum-segmentation", ("vxlan", "id 100 dstport 4789 udpcsum", ("4", "6"))),
