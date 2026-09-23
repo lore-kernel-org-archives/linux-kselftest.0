@@ -1,125 +1,156 @@
-Received: from mail-oi2-f43.google.com (mail-oi2-f43.google.com [74.125.231.235])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4601253163A
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 15:40:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.235
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790178019; cv=pass; b=KwOLGpxSqOGXkMUiXg8pD2wluQwUN56Z0GNb69D9PsYfro3uIPsXyPMuY+UVppegD16+9F/fRyLdEbOn6LPaBXUJO+E0Y636vhuC4nnpsAhch2sBIQ6J0NsdqLpZS0bOpPTlET3oWSnIz7hyZkDd4ia/B2haGztNBfLNoUM8Gq0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790178019; c=relaxed/simple;
-	bh=plBphVis8sYLOOrAsqWWkAJL0HO8LEBNGCFMlGRTMVw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u0WlAnxu+hZkxQJqXHGkd9TNeQKAp043Y0kwGNghvO40QWLkCWWY6zgebHbj7M0BtKzGXTJqvvsAMI/PdWYb4+IhiuKsgp+A9I50fKOMTh4LmFwhuKKoyEW1DmJYpQ7oBeHD6t2NJxlycYBqDRYW70LY16tTRtZdahjo5wJj+wQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cm2INPB/; arc=pass smtp.client-ip=74.125.231.235
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4701737473A;
+	Wed, 23 Sep 2026 15:53:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790178800; cv=none; b=AL5r304Rcjcj/dVsJXFNjnr4urWLHaHV0l44JiKuHl4jzZRyGHDIyt3Ig+YBCp8hTkAGFRIy2/CjZ+OeNV13I533CmJmJ2Y5hVNDn4KkKw2FPumeTRMzDGsro6hZvZOaydU3UlUXjMMjd4y1gfvZEgNxDMVcjKqkk3QZG0CjsC0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790178800; c=relaxed/simple;
+	bh=eZ+DRFR4+QQmwG2XpE1K7HF1i3IxQWs1kB/CpyOqqYM=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=jDPMC6PGVuuP03q+BBNX8kIjVtSqFm1jxKRAKRixT5Ao3IvVFJ2XljSuGFMPz6C/XaplVTunybN/YmeSlqpQyrAzuIMD69YjG5CGnaU8c5EDeroJEyrkg0cR7vor96PgQuHzNXUokzXKo8tYx/IjAq3EWVIRHmgaEDk2UbP015M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=EDAIzBrD; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=/5JA2y2b; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cm2INPB/"
-Received: by mail-oi2-f43.google.com with SMTP id 46e09a7af769-7f4ea978572so158422a34.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 08:40:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790178016; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Ujyk+UEzO11kJwY/a+Xsm+w8GssqovBFDhe57zKJ8IK+aQGSs1LeJufWDItTuZmjIe
-         uIMillLl4TO522SmgXxSUJkkJswYmGwdC80INBRYTtAXCbzm87Z41oXjl7KGZaKnu5A8
-         CV1qJCRVxMLYpildV42ZrZ+0xaP/rGIbvoxwGL+r/09uGy7+Ohvt9WR9QMIKMCZpDrPX
-         Us2xtlLK9CmFluX0zTx0HAZIPpQ980Rq7MjzUryGBwnXW1nzFZ098SEEnqfpDoUT3a9x
-         F7BKl7H4RtkGM2OZOjqFFgoUIo+Y/UsRP0LN4MDEsAmXHRz7UKP0Vc4SGYGGP1CxJaj5
-         8f1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=plBphVis8sYLOOrAsqWWkAJL0HO8LEBNGCFMlGRTMVw=;
-        fh=kRb1aZ00DrZaXOkzYkGtUY3jCZpjKaE3N38nZ/HQo3Q=;
-        b=pfutO8SCtHfqrKJQN45p4vhZSncZ9LX0b/jv/g8j7pcnJ7zz7vDZQ/7Z/k2tqCXRMK
-         JiRlfkr7Aj4yeFPdiTZTVmWO3z17BHUNj6YlKz/ObJuCd3O6Z2hFXsZpnn7BCm+9HARc
-         a6J2sUvUfxFEY0bsL9jbBbUlGbSPY7LVc5bXFQFxAwCAesu+ViznN8FTrL4D+BIcY0eU
-         apCDbLZ8HXKbLvWRFxPG5/rUhPhlwoGkdfXrEf+OGNvzDdttubwNU9OzZruqSu1HChGQ
-         DFGN+5IwPgnDNdye81keg1zDwkXabqgLvKHTTf2epsN1kbDtKThsInNsKp+gnAwU0ici
-         t6tA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790178016; x=1790782816; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=plBphVis8sYLOOrAsqWWkAJL0HO8LEBNGCFMlGRTMVw=;
-        b=cm2INPB/9rCqjGjznTx5zKWjrWfIWpnXs1FvzTdYqkVb88o7r5PsQtPn0uiuVPmnXC
-         MX+tQKC46Md0kIf/xSfql3JI8jk8bZGaudWm+a8OI+3n0x80ECOAUxLnbh7p4BymQ+1z
-         gGDM8DX+WamDE9uhQ13GCKBtV37b5dIVJh68fA7G1hIyak8/GH30PUmpcg8N8qzSuaJF
-         Hlsw4VRBcntF8kMTGrBbWpCl+d4UbAkmLzRdn3qJUIDIqH/nulpMI2ezM8OoUKZ4540a
-         w0l36sjehhvgGfijL8ne78bQImuJ3/DR1UVURKu1a0NYNGWDsySW8zpg1XkCX7ZPohuY
-         X0lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790178016; x=1790782816;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=plBphVis8sYLOOrAsqWWkAJL0HO8LEBNGCFMlGRTMVw=;
-        b=jAetsnRGvYGAo2VRuLfEecBt3PjRByzwBQo2/nfkBa79bSDLXelUXvQD3TUnenKiGF
-         XCLxZ6KYX7k61IfMltr0nVwA2V0hxmXlVbyL9MOKLzspVs/tzZxK2w6qTfB7D0woeegb
-         DqZNA7ZHPMTPQgmx/pUCXw1BH0YA2bWkviy28QlO6ihJCCKxptj6RKSAF1TCN95qnv4M
-         q1+/7TBbZp2JuItB4R51Re0r31wpECRSTEFD+H66xoq5rmxG17tyRPFmArAaGxY0IBkp
-         sfeAWDh21KPdm5jLF27Jc1QngvorCLwfSj7Ioy1lBBByzkdCkm20O57GPjkM/wOk9/0N
-         1u9Q==
-X-Forwarded-Encrypted: i=1; AKwUvBwDMwR23ayIYAmFyAa8Uj7X9/0kKwx78+rdGgtmTf2/Qtp7Jul+hJ/3ZqKS/sdW6WcHbW86Ir6IS6G1R/Rdc4k=@vger.kernel.org
-X-Gm-Message-State: AFuF++kE0qdYCY6A7jp2y5RnC/71RGqkBVx9Tf8ns81fNB5ZMavHMUY9
-	7ur1YDeYxLxTxCagtM3cxZTxlEoW731V+mPVaXklQGrtGXG8ufqv2/qfW/MX2DLrLLMtbPZ/BzI
-	VuNaHB4AlOiLrap4sNySyCHNbxXPI4HE=
-X-Gm-Gg: AYBFou0EI+ciRZDwY2GjO/ffhm+d93aLP84cCcEIys1UcmdS28/HPd2R7s9a92TR96s
-	oak2t/cudLt6zB95FnR1MYF4YBblwYDhGnTKdjLTfTnTpL2RqEZAbqFCrGWU0pJ0/o0T1JqTX7i
-	2us3HKt4rM1igbLgQemKGNtVeQ1rEfeKUvBt9faGYrkEjHM5mrXDIPJOkwAXi9EHQKAIEqkSLoi
-	Qg6ViT62MxZOyL1lFbe/6gs0eHOrfvG4MHiiNlDj/Gk2jNgwsOZCEwUVLqvqJ+EXYXtrrZkQXDK
-	i7wRd9MSQgHmRLm/xWCAgCbxUxjulw3ruhjMdnVgejdmewEQYOxomPOKLTES5Kp8aUDei7P5RTg
-	G4B695g==
-X-Received: by 2002:a05:6808:1a1b:b0:4c3:ef94:830e with SMTP id
- 5614622812f47-4d5b9f9412bmr3726243b6e.3.1790178016141; Wed, 23 Sep 2026
- 08:40:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="EDAIzBrD";
+	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="/5JA2y2b"
+DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
+	h=Message-ID:Subject:To:From:Date; t=1790178791; bh=7uATFQ3SDdrSTEgsmPEjXsx
+	GKwyJvF4idkR5OZUQcZM=; b=EDAIzBrDSidGfFOIqfvEQgIQORYOnK79HpmMnSSoCE7cx+A5xr
+	2svc5pXsxO/nMnBw//HoS7QSZlieb7diU8cU8A+3iWJ+wqCXThe0cL4bTUDVi9QzCQQc9OFXUoh
+	Ma9KAaQaoEOA52r1DxoaT7c5PYX+4wZSrfIP93lS4JWQ+iJzgGWFMyNqE9mckQ2JRZ2GE0ghEn9
+	AsQ7FNBK95KRwD6iyxZId9GCuedhZ1i8yxtR6PBbXYQCRV7eXIsA91Ve+R2nY7st0/2lablH7Jv
+	u1D+Wivm/iY2eiuLi5iEvirUX7ynn7s7mYrny6P0RdMThMf4R5stp17TvzfsuacpK8A==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
+	h=Message-ID:Subject:To:From:Date; t=1790178791; bh=7uATFQ3SDdrSTEgsmPEjXsx
+	GKwyJvF4idkR5OZUQcZM=; b=/5JA2y2bGsIzwFqtCu3SCl9szb0LqfR6Ri4nKNLvXaFjg6lhtJ
+	YzHpal5lhe9mW0v9uYeGSKVShGy8c2AusMCA==;
+Date: Wed, 23 Sep 2026 16:53:11 +0100
+From: Bradley Morgan <brads@mainlining.org>
+To: Zhan Xusheng <zhanxusheng1024@gmail.com>,
+ Joel Granados <joel.granados@kernel.org>
+CC: Zhan Xusheng <zhanxusheng@xiaomi.com>, Kees Cook <kees@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_1/2=5D_sysctl=3A_Add_jiffies_?=
+ =?US-ASCII?Q?converter_entries_to_the_test_module?=
+In-Reply-To: <20260923144940.3712965-2-zhanxusheng@xiaomi.com>
+References: <20260923144940.3712965-1-zhanxusheng@xiaomi.com> <20260923144940.3712965-2-zhanxusheng@xiaomi.com>
+Message-ID: <6A9B6ACC-6BFD-4F76-B721-8C1309115907@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260914-netcons_ratelimit-v3-0-8e81b789ab37@debian.org> <20260914-netcons_ratelimit-v3-5-8e81b789ab37@debian.org>
-In-Reply-To: <20260914-netcons_ratelimit-v3-5-8e81b789ab37@debian.org>
-From: Gustavo Luiz Duarte <gustavold@gmail.com>
-Date: Wed, 23 Sep 2026 16:40:02 +0100
-X-Gm-Features: AclHuK-eiR2fNKubYazj5gcFmudoFI1w_j91DvZRl7oxVpCmicGBPNhjY_7h0xQ
-Message-ID: <CAGSyskW+HsE6Bp=95EMF5rWqKtoUAFp6CjH8sAFs0gYywuALvA@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 5/5] docs: netconsole: document rate limit feature
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, paulmck@kernel.org, asantostc@gmail.com, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 14, 2026 at 1:11=E2=80=AFPM Breno Leitao <leitao@debian.org> wr=
-ote:
+On 23 September 2026 15:49:36 BST, Zhan Xusheng <zhanxusheng1024@gmail.com>
+wrote:
+>lib/test_sysctl.c covers proc_dointvec(), proc_douintvec(),
+>proc_dostring(), proc_do_large_bitmap() and proc_dou8vec_minmax(), but
+>none of the jiffies converters.  Their int paths report the sign
+>separately from the magnitude, which is a shape the existing entries do
+>not exercise at all.
 >
-> Describe the per-target token bucket and the two configfs files that
-> drive it: ratelimit_interval_ms and ratelimit_burst.
->
-> Spell out the two properties that are not obvious from the file names.
-> The limit is accounted per message rather than per packet, so a message
-> split into several ncfrag packets is never truncated by the bucket
-> running dry halfway through.
->
-> List both files in the target parameter table too, and qualify the rule
-> underneath it. Only a disabled target can have its parameters updated,
-> these two aside.
->
-> Note in the message ID section that a message the bucket discards never
-> reaches the counter, so those drops leave no gap in the IDs.
->
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+>Add one entry per affected int converter: proc_dointvec_jiffies(),
+>proc_dointvec_ms_jiffies() and proc_dointvec_userhz_jiffies().  Each is
+>seeded with HZ jiffies, which is one second in every converter's own
+>unit, so the three read back as 1, 1000 and 100 respectively.
 
-Reviewed-by: Gustavo Luiz Duarte <gustavold@gmail.com>
+LGTM, thanks (and I reviewed this properly)
+
+Reviewed-by: Bradley Morgan <brads@mainlining.org>
+
+All tests pass with your patch applied on my PowerPC box:
+
+Tested-by: Bradley Morgan <brads@mainlining.org> # POWER10
+
+
+>
+>Signed-off-by: Zhan Xusheng <zhanxusheng@xiaomi.com>
+>---
+> lib/test_sysctl.c | 31 +++++++++++++++++++++++++++++++
+> 1 file changed, 31 insertions(+)
+>
+>diff --git a/lib/test_sysctl.c b/lib/test_sysctl.c
+>index 909cfcf76dbf..7718cf4ffd47 100644
+>--- a/lib/test_sysctl.c
+>+++ b/lib/test_sysctl.c
+>@@ -15,6 +15,7 @@
+> #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> 
+> #include <linux/init.h>
+>+#include <linux/jiffies.h>
+> #include <linux/list.h>
+> #include <linux/module.h>
+> #include <linux/printk.h>
+>@@ -48,6 +49,10 @@ struct test_sysctl_data {
+> 
+> 	int boot_int;
+> 
+>+	int int_jiffies;
+>+	int int_ms_jiffies;
+>+	int int_userhz_jiffies;
+>+
+> 	unsigned int uint_0001;
+> 
+> 	char string_0001[65];
+>@@ -67,6 +72,11 @@ static struct test_sysctl_data test_data = {
+> 
+> 	.boot_int = 0,
+> 
+>+	/* One second in each converter's unit; all three store HZ jiffies. */
+
+Nice comment!
+
+>+	.int_jiffies = HZ,
+>+	.int_ms_jiffies = HZ,
+>+	.int_userhz_jiffies = HZ,
+>+
+> 	.uint_0001 = 314,
+> 
+> 	.string_0001 = "(none)",
+>@@ -113,6 +123,27 @@ static const struct ctl_table test_table[] = {
+> 		.extra1		= SYSCTL_ZERO,
+> 		.extra2         = SYSCTL_ONE,
+> 	},
+>+	{
+>+		.procname	= "int_jiffies",
+>+		.data		= &test_data.int_jiffies,
+>+		.maxlen		= sizeof(int),
+>+		.mode		= 0644,
+>+		.proc_handler	= proc_dointvec_jiffies,
+>+	},
+>+	{
+>+		.procname	= "int_ms_jiffies",
+>+		.data		= &test_data.int_ms_jiffies,
+>+		.maxlen		= sizeof(int),
+>+		.mode		= 0644,
+>+		.proc_handler	= proc_dointvec_ms_jiffies,
+>+	},
+>+	{
+>+		.procname	= "int_userhz_jiffies",
+>+		.data		= &test_data.int_userhz_jiffies,
+>+		.maxlen		= sizeof(int),
+>+		.mode		= 0644,
+>+		.proc_handler	= proc_dointvec_userhz_jiffies,
+>+	},
+
+This looks correct to me.
+
+
+> 	{
+> 		.procname	= "uint_0001",
+> 		.data		= &test_data.uint_0001,
+>
+
+
+--- Thanks!
+"I'm not a very positive person" - Linus torvalds
