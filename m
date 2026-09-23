@@ -1,66 +1,66 @@
-Received: from mail-yx2-f42.google.com (mail-yx2-f42.google.com [74.125.224.170])
+Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6AC476CC4
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 21:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2A64734C7
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 21:33:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.204
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790199126; cv=none; b=N2Dqgt7oknOuHxF2DM6Ms01SQw7kY/iH4BArSE4uWMp9RVX6gDVVJj/Pfr5acse+eVTL2bozyoJ6Eg8KB4tkZan7kvyp1ZtejIlDZwGewP6R8U8qlYxOebqnihaLkbbq0TUZJFmXlvXJUQMqxsaIKCFJPdpISmi8JJ9KuPI+Qjs=
+	t=1790199239; cv=none; b=CTS1lcUdxV5Rn8B+30g4zzpvpzA80l3WMtBBglZVasG30H5tKXI5lj7UvQNonZQwSWqofZqf/PohSWWn1AMLK42Ua9M5z3DoWgsKS0gtsZKD6VM7OmyUV+zyIOeTrOGnQCEWWAM5tCsNBeKRMDThPF1xJlQgSXkfaTOsbcd9dAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790199126; c=relaxed/simple;
-	bh=yqwWpK4N9YeYAJC00jfG/KN04unxyF4L4b45axRv0cE=;
+	s=arc-20240116; t=1790199239; c=relaxed/simple;
+	bh=Yik2wdS6lGzEWkbUHPjcKpXsUOxZLFjaelNXe4MMfVY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YeDDvOr4iYV75i8HKShY1l8j+UY4ZzyHtVVHbZmPYRyWTgvchn4kOn5TqX1CVyjvxvVt9u27jEMnsnm/tklIJ7NcvoX0qst/qOZpNuHi0xNmXnCgvPJcorrVxdxl5KvuOIxW8V6Y7zLj8wgqQkwjccs2GHpNBfepqWqs0UvmU24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=rS/+wDoP; arc=none smtp.client-ip=74.125.224.170
+	 Content-Type:Content-Disposition:In-Reply-To; b=q66Srw0Kw5N9MCVRsUp721jSq9ecBBg/WDXYsA9KGG0yJHIsUc5QiVL0hF7cUUS077ukgaCbmYS05oxll86ONnZdHauKr09P/jX08rJsHhtutWeYWknlEy0Nkx+abcjA86weje706yGsrMiKkwylwZhsRLEbgz3+b+WsnQ5Z3mA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=IJCb8CA7; arc=none smtp.client-ip=74.125.230.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="rS/+wDoP"
-Received: by mail-yx2-f42.google.com with SMTP id 00721157ae682-8a45b788a71so15232247b3.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 14:32:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="IJCb8CA7"
+Received: by mail-qk2-f12.google.com with SMTP id af79cd13be357-93910c9ff1fso141517285a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 14:33:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1790199120; x=1790803920; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YDp63aNNvlo+CbPC5AYf50weUXwD55oicYAOt2YPLqw=;
-        b=rS/+wDoPYolig2FICJsL6XwXIlKtMB5Lunw4Hx6BWlj0fmGdUF4Rr3dj09iX2IZRL3
-         J0rKAB930jc6NPDnpFIUKCYXIOn5kzKwi2wpSBWcmGa8iTGY9zmvjD6+YueUktxbZDHI
-         usbT+MDVDJfJdWVkh3ZK94GqQ/odGH+G2D2/gskt1sEGc0ByD1Pl0hmlBqUZLVJ8YElt
-         gf6nmO9n8C5eTdkTjiZd2jVd9i1XdAMVXX3pt0dO65R58xp1VndkhjaYJj3/txSaMgYf
-         07hu5Bv2nmoX8gyTinaqcUecDDJ4ulYErQxFrUyp20KI7IKUk8mNscb2ftmfByaYLNPS
-         yhrw==
+        d=gourry.net; s=google; t=1790199236; x=1790804036; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=pqsGonkxLuJTixdtNLZefAY+K0pHqSZLan+XJO0/Hac=;
+        b=IJCb8CA79PcnEbBHfL0mKJls6L7Vmj4pWlNClCu5HCc1qed/6l75rRwt9w1vvoun1T
+         r2idCVe90TQTfQpet5TRGLYlEuNZeRMPVA4jOxun9cbXmN2SoE5uyRfGrJW3ddDONYeR
+         d8DpmpdvFxTuy2nL90H3ghZBPSbgG8WBzeIbgYUEQ7WyehwgRj6h3jVmG3UeIr7NEUW7
+         JF7BzSEdKJnY83VDbg4BldGWa5KFMk7KmnA2ePTloyjyrqO6m/YJ8yX4pSt0E+HTIMIk
+         9ZdBb7tLAP5+QquEirky0p2EfiOvpQE+UcAo53juO176O/eibGUH2dI7N8B1wgh1+Z6l
+         pe2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790199120; x=1790803920;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=YDp63aNNvlo+CbPC5AYf50weUXwD55oicYAOt2YPLqw=;
-        b=kBJCiBym1xpvtV5kYeyu7yduw31Y3qaHy0ABcPhndRsi0aKRoBuYGy6Sr7s4kG1RQ1
-         gaosV1RCyjFT/mbFlcfT+ovCd7jH7EQx3GREoc3N45/VwX46zQDX6RNrBQItJQZDPCBd
-         hWqHbWc+kZzW7FFywqJvda82ajZLbczgP0oW8XcR5d8WfgqJoHIzvGSm9+KGZQk1xztN
-         QKXfi+I7oWNiM+a62uOt7ELa5CaX9z3Rdpz0Lb4SKmssYRroDZpRhKZFSsS2PP14tXPP
-         BocNBCWOwo1ZQ9TxQRJeGFh+09jaeF+zn5rmGpc6SPc0kvKD/x0ZTVQhj/4xv8wVxa4X
-         9a2g==
-X-Forwarded-Encrypted: i=1; AKwUvBwTMFqAsTaKgHgcJ+hxpGk6sliOhciGCkrxnsU0izoVKMy8GMmg67FTswKO+OTsk8CPWgQ+RvR7cSnfoFw9fiw=@vger.kernel.org
-X-Gm-Message-State: AFuF++mGRLAyFpxiCDjqgXXTTCQg3A8efMaotw/DDnzSkfLAX5bnTt8x
-	aqrrwYliK5ecKOrk+lEFJRevc7WO+dgyOQi31y+oQbBB/4GLX7VRJDcQK+hksI6TYzE=
-X-Gm-Gg: AYBFou333lFRa47T2+mZoVSz51cV8jHoZtKKEO8I3QW/oZHImrSn0gALToMHOVshhhJ
-	/tAIkdGGk/rllIpDNE9NMZsotH/qXcZIOxy50h/zhU/QRMzZLMdqdlBLN6EFTXlXB1vicEzArrO
-	1U19erSzKH5ZsyggWstgDXZR/BQmkaETTbqIZEwR7B2iCpIY6B5TSmMkaP7X3Kc3cf4P58e3/Dh
-	Hm3nYqqu0058Rto0xkOY4vlnX98yvzirRaYbf1zc6hvWuGaONcWSjh76CRA4Td8yi50dcXxW9im
-	2rOIXqoN2RwcWHG29THwqKEn+dqSdpkPLKCq4dalBlwtrtedlDCO2cfhhz25DTzQ52xAzN/DA8a
-	851oBTjh6WQL8bk5b5SU/YTQXz4qN3MVUiYKUgHgv+vlPkf9kvlpRRKvSQiLAQwz/Dqb26RoKEP
-	N+04n0op4pKTx+tHaN8zFtw5cWmBM6/0HsmHou8QzIPK0cZitnjvessw9yD4E1Yaq24ULWlf8ba
-	P9DZe3SEuvGqfxOpA7FbHJWxhwcvcoM//ZfdopNM/84w/wCuVgEt30ilPO/AxQxDA==
-X-Received: by 2002:a05:690c:c507:b0:87f:c20c:67a5 with SMTP id 00721157ae682-8a649d6750bmr4124377b3.29.1790199120690;
-        Wed, 23 Sep 2026 14:32:00 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790199236; x=1790804036;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=pqsGonkxLuJTixdtNLZefAY+K0pHqSZLan+XJO0/Hac=;
+        b=CGM32nMCq0Km35t2kv9jHwarGHCLbJz5KC2ESwgI9mvDdWdYF9RL84rqkxVLHCIbwE
+         YzpiBXW87n25hJOfcBE+Qp3Kq6s3LscJs6dd/9PabwO/ymha6JQxlXaeZUIBzxLiinId
+         fWhkLeZbS6S7Te5u5SfFGmbkl7rHNdiUmP2zvko3DF2NBIoch/BAaGfxBfKcfo38TmuE
+         jOeRCS1rfgZocCi4htD0X3mAmhCOOQzLWZJb9OYwnYI/PM4xzueQSuPLIAcO4zigfQL3
+         nsmME9ZGgNtcrUrzQ08lZdLXBBGvQHbvpglxFCh8e28k/kMVGfxvReCfmkWB3OzmcJQM
+         lAwA==
+X-Forwarded-Encrypted: i=1; AKwUvBzyLMU7ras4xtxx8dksbxWItlSJ7DO1tEV72uohoWMZSoPIwmygiXJ/tftW8TRGL7Lbt8Vz6w2cFD0LXzDq80o=@vger.kernel.org
+X-Gm-Message-State: AFuF++mrue4kY5O176bsuvzd6ajduFs0q9aqqt5u824OtngyQzuIUQER
+	ZmV6B9LiOfxv/Mn2DrvDMf8fYFjJhK71cw4cJoFlHtFkF2r8+7G/eJTcSC+GGmK+zLA=
+X-Gm-Gg: AYBFou1/VjDqqmHEBgP94uoxSy3GazGjSVNRi6EaW+dL6AdPWgJgisr3yl/rpQdknk3
+	b5W2Gg7SP8I9B435tNjaFlGsMpGrna1ZJM3/BMfD1VvqD1XLxPE6Y0+2GRj1HfwIyU2ZSA29uD9
+	RdtVEgmWPwxqTNr6tNAAqO+U/e0T/5S4rhLvXqJn0N7T6veE1kvXrylnipKZBNSNL0sbv3sd/sJ
+	kCa9cKbmFXOO5mU9CqMF6rF5CGYnWB32G1xDsapN7RKaU8XVl+MhLVeOIXYgHn0AN6tHT6nvJ1x
+	3NCaEB1pXspiSRbrneLNdq9zo5yp8Kf3IbY3Q7x4MrVhcWUfX1CZg4aRQ2yPzg6DCOPAR5HmSQy
+	+pGI5Mb0Wll76VNjPzZwh1GZ6yKKRpMUVJwbQ1KimkdfvpTnoXecbZvOfrlqPo2EJ01ly3c8L1C
+	7Pkqh+hVt07h3F44gto6FShA6nixEXv4Zq5eOAfJBf7AaMElIFTG18jlsTIla9Xz+h6xIY+xhuB
+	3OZrB0xABz31pVZso4GxMQ4DS6ztaaArZ5tnI55wV9eepvT44NJcZlnDrvEBpHZdg==
+X-Received: by 2002:a05:620a:4150:b0:93a:1048:7d2f with SMTP id af79cd13be357-93c345b615cmr75748385a.41.1790199236442;
+        Wed, 23 Sep 2026 14:33:56 -0700 (PDT)
 Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93c2474fbb3sm319077785a.6.2026.09.23.14.31.59
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93c248e22f7sm310457085a.47.2026.09.23.14.33.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 14:32:00 -0700 (PDT)
-Date: Wed, 23 Sep 2026 17:31:58 -0400
+        Wed, 23 Sep 2026 14:33:56 -0700 (PDT)
+Date: Wed, 23 Sep 2026 17:33:53 -0400
 From: Gregory Price <gourry@gourry.net>
 To: Yeoreum Yun <yeoreum.yun@arm.com>
 Cc: Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
@@ -73,31 +73,27 @@ Cc: Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
 	Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v3 1/2] kselftest: mm: return fail when child test result
- is fail in khugepaged
-Message-ID: <arRFEKD8hmzTKFNC@gourry-fedora-PF4VCD3F>
+Subject: Re: [PATCH v3 2/2] kselftest: mm: fix intermittent failure
+ khugepaged test
+Message-ID: <arRFsYK6rzmax-4n@gourry-fedora-PF4VCD3F>
 References: <20260923-fix_khugepagd_fail-v3-0-b387e92fe1a9@arm.com>
- <20260923-fix_khugepagd_fail-v3-1-b387e92fe1a9@arm.com>
+ <20260923-fix_khugepagd_fail-v3-2-b387e92fe1a9@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260923-fix_khugepagd_fail-v3-1-b387e92fe1a9@arm.com>
+In-Reply-To: <20260923-fix_khugepagd_fail-v3-2-b387e92fe1a9@arm.com>
 
-On Wed, Sep 23, 2026 at 04:29:51PM +0100, Yeoreum Yun wrote:
-> Although the child process in collapse_fork*() or collapse_max_ptes_shared()
-> reports `KSFT_FAIL`, the result is ignored because the test only checks
-> whether the parent’s page was collapsed into a huge page.
+On Wed, Sep 23, 2026 at 04:29:52PM +0100, Yeoreum Yun wrote:
+> There are intermittent failures in collapse_max_ptes_swap() and
+> collapse_max_ptes_shared() when using the khugepaged_context:
 > 
-> As a result, the test is considered successful whenever the parent’s page
-> is a huge page, even if the child test fails, as shown below:
+>   // while running ./khugepaged -s 2
 > 
->   #
 >   # Run test: collapse_max_ptes_shared (khugepaged:anon)
 >   # Allocate huge page... OK
 >   # Share huge page over fork()... OK
@@ -106,17 +102,31 @@ On Wed, Sep 23, 2026 at 04:29:51PM +0100, Yeoreum Yun wrote:
 >   # Trigger CoW on page 1024 of 2048... Fail
 >   Bail out! Unexpected huge page
 >   # Planned tests != run tests (26 != 23)
->   # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0  // child failed.
->   # Check if parent still has huge page... OK              // parent hpage success
->   ok 24 collapse_max_ptes_shared                           // considered as success
->   ...
->   # Totals: pass:26 fail:0 xfail:0 xpass:0 skip:0 error:0
+>   # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0
 > 
-> To address this, propagate the child’s failure and skip the subsequent
-> check in the parent.
+>   # Run test: collapse_max_ptes_swap (khugepaged:anon)
+>   # Swapout 257 of 2048 pages... OK
+>   # Maybe collapse with max_ptes_swap exceeded.... OK
+>   # Swapout 256 of 2048 pages... OK
+>   Bail out! Unexpected huge page
+>   # Planned tests != run tests (26 != 17)
+>   # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> This happens because khugepaged may collapse the pages before wait_for_scan()
+> is called, causing a sanity check that expects uncollapsed pages to fail.
+> 
+> For example, in collapse_max_ptes_swap(), after faulting the pages back in
+> and paging out up to max_ptes_swap pages, khugepaged may collapse them again
+> before c->collapse() is called.
+> 
+> To prevent this, mark the VMA with MADV_NOHUGEPAGE after it has been
+> collapsed by wait_for_scan() for anon. This prevents khugepaged from
+> collapsing it again before c->collapse() is called.
+> 
+> This failure was observed on NVIDIA Spark with 16KB page.
 > 
 > Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 
 Reviewed-by: Gregory Price (Meta) <gourry@gourry.net>
-
