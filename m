@@ -1,98 +1,98 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D903243DEDB
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 12:31:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE1F4E2F0B
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 12:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790166707; cv=none; b=cv7M5Y9J5rJKilyvfHv1B+55oYP1hWAQWCrJXbJc4dYRu5q2JNnnCxiHJhCbHGH6U++xvFeDCKl30F1IUru1FQ8QovneFCmo1JGZnzhKPzMXwBocKU3BHSvog+jgZjb44vUBwNCvW9c8db+Gvut7+23ZkjM9iwhXb7naa6xUcTg=
+	t=1790166816; cv=none; b=KBA711WZSJ/dZCRMhd49tjrUblUfOcfhZ+MxrtWDOm1U6gaw0nGofjLY2ZUQiBr9NCrUTOw9UUjpTsJLsQ6PEVeifisdxKk7CC0TYv7E+KoWg+58NRsCWtDiKbovrDKV5Rorn3yTX189x6+8dkDGMEIPnxPDAGx4+BlAlFW7pU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790166707; c=relaxed/simple;
-	bh=8x/UT7yNCTBqE0gUbAyrfvJfTd1tBx2IpOQcX0TQguA=;
+	s=arc-20240116; t=1790166816; c=relaxed/simple;
+	bh=/OUDr07pdEd0NYS0E7/cneE0Ly1bG2H/NogSv0LJEcs=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=klMUUCVbGX+JACGwM3YB3W83tnlk+13a/DqlazqEn0WO5YSD0knQkCQLiATe+aDQ39WxiuJIeZNvjrq7j49Ui0WerkIoHbQYhq1wya152cuCkrFpX2ue1g5eWPUAYFvFrzzmtUA3w+DWlJNA4cpUFRXGLW/SWZgKHv74DDfFDAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=I3Z1dajA; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=F79zTtP/; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-Type; b=Ebvdesr5pH8O4GDbZYOWpmQ0K4oU2MGJ5AOsgLxJfJJQBqT/WDtBTtR7yNmzkfFCpbVlCSumbQNXslxRr8EvJdyQFpcoGCw+M2ME7Y1svhLFJ3MJbPEcTCA2fmIv1E1GqgGLAXZfJ5ptYV/Wd6xL+NZknJ6cUqogSGfC2JJLHMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B4XjJfYI; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=LurzGr1E; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I3Z1dajA";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="F79zTtP/"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B4XjJfYI";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="LurzGr1E"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790166699;
+	s=mimecast20190719; t=1790166809;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Iy4LAVksYVGANuIsEoVI9Hlhk9VjhocmxupJMIEdc3A=;
-	b=I3Z1dajAXntSF8JdkDSgAO+hE0GWqcAQB0xQSvo5MVokXMSfW7SFQRHrPZAj419cFQL4/5
-	JMy5C96a6xq6Wmd65Gy/vRjFfjs3RmlNHKrw1bkw37Dto/eDBwhTW2ik0bVSWd5Q1XULMI
-	vxN0mu4uB+sGj0ECuuSXd6AOCIr5laQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=Tnbv02KrxTWfgFsEC5I3/8nKspLCXZGQ6bITX7EXkKQ=;
+	b=B4XjJfYINa1Oc5ql31xfvQXHwo7KqFH5P70yw5Z8czp2dpNt56FvAbEdFQYGk2r4XCHtS2
+	LZq86eTycZHS1oPdO5KwF6D5DZTG/CWN8jkVK2Yd/i8B6KvkeWfovlMTBOX56T+FUfOH/A
+	u85fQTtb6Q2tVNAhMJg7JEcpELSZGKc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-356-CAr5eZR4P1WV1IqUpvDePw-1; Wed, 23 Sep 2026 08:31:37 -0400
-X-MC-Unique: CAr5eZR4P1WV1IqUpvDePw-1
-X-Mimecast-MFC-AGG-ID: CAr5eZR4P1WV1IqUpvDePw_1790166696
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-49e6c17ec1dso10506695e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 05:31:37 -0700 (PDT)
+ us-mta-681-HznbebWBMj-Mh4rJtha-Qw-1; Wed, 23 Sep 2026 08:33:28 -0400
+X-MC-Unique: HznbebWBMj-Mh4rJtha-Qw-1
+X-Mimecast-MFC-AGG-ID: HznbebWBMj-Mh4rJtha-Qw_1790166807
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-49fcc575709so8396115e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 05:33:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1790166696; x=1790771496; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1790166807; x=1790771607; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:user-agent
          :message-id:date:references:in-reply-to:subject:cc:to:from:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=Iy4LAVksYVGANuIsEoVI9Hlhk9VjhocmxupJMIEdc3A=;
-        b=F79zTtP/hh7NXSoV0hgTs0XnfR0n4jFilo5p8MnmpgqprgRUuqcW5/J9C9TUXONxYi
-         jaaCIecJqR3X24e5JHGHiCV7pGhzBPVz69Een4oCwzkHvoLu/xiNZ/BqbJdjk4Fwb/2X
-         /aIoFXxyZdTulerNfORiCaEOkfcZvxawhWDgZVaTFs+8tRRq1czNE4teKZo9Uf2/TtYl
-         W5n1b+bPCAUOOdlJDsNBqBwR5DDfwvxpfAcCdBIEG6P8Fb9ltN/gonqqee/gr0au9Ace
-         +WCb3wPFurTmNgf83Mlh3mmQS7jZkWCmmmaWTp1nSJjsVcNmyhohjS0c1uvyIvldYDtF
-         qaWw==
+        bh=Tnbv02KrxTWfgFsEC5I3/8nKspLCXZGQ6bITX7EXkKQ=;
+        b=LurzGr1EkRXLdaJrpJXXGqLY+q4CiyFpJ7YlpwwCCUsnUwXe3XcmEXFljvnZVNQiUF
+         iTEwXaX342pPK9ed/PWMZMfr8k8nfyW1h1DZaHTxdBjU64RPyB/mw859oDbTqQxd5qnj
+         kqzgVkF/Nf7DVQhNkt37elZ8Zw+Yg9X97XC94Z+4lN+UtXiXpU5nl3W9n6iAe4uwTTgh
+         AoIJj2lXSQiwwqWRneraV50b9Gd8JE96u/OAy6PaODRqXzvq9bC8FUlrKltOW0x3V9Fy
+         3IkkgCn2fII9wb4y6Lr1WVPqSm7KoR0wVagaGTH44p92ETyl4mfE2HXj4Msbafy+znP/
+         JvWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790166696; x=1790771496;
+        d=1e100.net; s=20260707; t=1790166807; x=1790771607;
         h=content-transfer-encoding:content-type:mime-version:user-agent
          :message-id:date:references:in-reply-to:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Iy4LAVksYVGANuIsEoVI9Hlhk9VjhocmxupJMIEdc3A=;
-        b=IiaSNw0F5o6ZBO+j9mdmE/lm+3vnS2Q924cNI9Sut4/aX9t3VPjXJdcNMHXQt97TC4
-         uPbSs2mNd3kNviPMkWQN/iLdS2kUGkdzM3oBJuCLSoRFrJDeXwkq4gYX7kvvxM2Y8i7L
-         XWLn2+mpdnrA8dZf0cKxlmwrJ8Wh8RWnGtOXKuR1kvBChFQd/nYXOarmHi4NZ9Uysozb
-         fnUu76Nn77VUgsdr7MlC/NIOfHWWMgAfdvIpm0Ef7DDJ1/3GKnQ33pQYJwEMGj2I23T2
-         IV3/jFV56uhvaE0m8GFQSAJ0u3086zKrOMqVEzK4REJEOMv7JFIql5lBqya3pW8yalOr
-         /7Fg==
-X-Forwarded-Encrypted: i=1; AKwUvBxjVr7CpPBuMV7xt/tRRymx4hEJ/qU5Q00UsLjEzUZsBfI2kKvAv3YkvG949k6G2Gg1bXf71r86e8Y595KScxI=@vger.kernel.org
-X-Gm-Message-State: AFuF++nGPvUJrlVtoyGzF/4KBkct3dvsYh7gQ5ax3piLDgOsuoaYNvVO
-	lgXWusofDqzfG9Yho9PH2ZD4CZLXYDucREWlum9hAgpwbCHo0GuSD6FCRExyKV9lgRkYbif49U7
-	X9cIvDFWum2d7x8y4Uv1TPVrib3yMhEy497yRqskkrhV4aEu2PnrFc1LyBE+toqtE7v+TKSM7fP
-	GbBwtJhcLY34Iv/2YeVP5LMuwUwVtrZxcDzk2gEKhsS4L5JcAzBKvjciw=
-X-Gm-Gg: AYBFou2v5U6iq17v8IWyvXY5e+yzSR2jgOp0SdzpCJ+Ha/JRhg1JfD/WiflVu5uVMXq
-	KXV1kD3qRSt32nzW7j0Ueubezb2mHSBUqTMhLj84N4tzewE9ZqIQQ/N4Qqiw3Uobt+btI1oQtyI
-	pq3QfcYmoxFX+NMtstBVRKZzA57EnwuogfIPFqMjV66vsvVhfie7/vt521kNygHmP1zFhuLo5gO
-	fnkP5N6luUAxDTkcO3v8Wj0h+xlg+DqHJiWQb7ptzjh9P5ku3OjeLy22k/5AqJb1qafBlIJs/TB
-	va+VFvkaWD1EslgKHvGZXW8nAmqKJ6Knh1geqt7doSnJV3CU3HDd8oenMCWVCm+kOzs3lnqIeXl
-	xkEREPdQu7PRjCWUbM3H1D2DWCaCW
-X-Received: by 2002:a05:6000:4023:b0:487:10b5:a88a with SMTP id ffacd0b85a97d-4886705fb90mr4236763f8f.9.1790166696320;
-        Wed, 23 Sep 2026 05:31:36 -0700 (PDT)
-X-Received: by 2002:a05:6000:4023:b0:487:10b5:a88a with SMTP id ffacd0b85a97d-4886705fb90mr4236704f8f.9.1790166695767;
-        Wed, 23 Sep 2026 05:31:35 -0700 (PDT)
+        bh=Tnbv02KrxTWfgFsEC5I3/8nKspLCXZGQ6bITX7EXkKQ=;
+        b=e9DAQSp41ddtMyYOkg51QXsUpd3bL255jmL3sl3YXo91+MzrnNOOLASyfq7yaXZOhC
+         Q7QFF/UmkEB1sJAIfqFwoQ0jxGO7en1MGx9EhNiQogtUs9/YlP9z5tD4OKLRb/o3C/1+
+         R7d2gdqV8IZy2RX75AXm8lLLoffcXCm866TRjZJlXXpuWxX+M/BbM7dnNKD1RJc4gS9y
+         XudhV4EeSUztf+LvbeISal/TI9iTfNSu1AfjfeChnUqoVSgIV8HDFer28+bwBKWLouzF
+         21mJ1JOtxzIwIkClbrP5RuwbpVRJZDQo4rDLevW/gauOdQ3vss/haCamjwxmOY7oBRrN
+         gFYQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxkYsokyJ6eFRcBxgVMYHKg3osoNGw1ZvpK1X/U+izKUArOCt8Aw2f54IaX7Q69w+F0bDfuFIunjhNTVBn7B3w=@vger.kernel.org
+X-Gm-Message-State: AFuF++lZMjMztAhkXd1BANJ/b/pDMd0JS2v9qSjLDeTIC3KIW7hkCFAH
+	/Vx7fOzRnfYG5uEsgcSsBQyShFLtu/ztFBAd2PEq/1sjuvewFVl1n+CBShTZ5VX/xzP9p6XQ2Yk
+	DswHpnJtpEkFSYgAaPrdDVJWZmpH19LuqNAKjWLa3qBM+GV5Kck9hFIYMR6VQSFwfzzzThJ9U9l
+	INyJ8Uwd7p0/ukrGi2zT+z+aOh40qXIQcPtqZOp2JAKiOnF/P0ybPKfLA=
+X-Gm-Gg: AYBFou1BGOOg+R1z8gtNuua1PyXbBJwfO1ZEm1pkG1c0OdUNG7J3lyyb9q73lSYtA9v
+	WeTk3nEDx5A2x4/WsX8KEMHJ29Gy7hlZpaUZH/24E3+tK4lwCuwO082GnUxPWvRGXCrRLyPGII8
+	dYf/ylaSYy/negt3IEJh6zkpNuD9TGYEwAEQ1ijvAOAxAgHUfAmNI36Kq/As5YS5RbXGowUrHIx
+	K6fQYCqSf4TWbsmL4BRJWwNCKhGnlWbLxdlWjpJ+q+sZJ7rSRBEfEm7tiUouYu1i6tqhFgkrqND
+	br8aJvdp9Wr5hNG9oafSnf8DbG02GrZnK4GyXmnxdts8jefpGdWEl8a2bc4SVc4ur9CjZbXNmlq
+	0nl9HgxOGObN8n/tQV5xnil8WgiHN
+X-Received: by 2002:a05:600c:4e0b:b0:49e:84bf:6136 with SMTP id 5b1f17b1804b1-49fdeffdfc0mr42605665e9.11.1790166807146;
+        Wed, 23 Sep 2026 05:33:27 -0700 (PDT)
+X-Received: by 2002:a05:600c:4e0b:b0:49e:84bf:6136 with SMTP id 5b1f17b1804b1-49fdeffdfc0mr42605055e9.11.1790166806754;
+        Wed, 23 Sep 2026 05:33:26 -0700 (PDT)
 Received: from aconole-thinkpadt14gen4.rmtusnh.csb ([216.212.25.12])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886877a19bsm7197338f8f.25.2026.09.23.05.31.33
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe23d4288sm43706055e9.12.2026.09.23.05.33.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 05:31:34 -0700 (PDT)
+        Wed, 23 Sep 2026 05:33:24 -0700 (PDT)
 From: Aaron Conole <aconole@redhat.com>
 To: netdev-bot+sashiko@kernel.org
 Cc: houminxi@gmail.com,  netdev@vger.kernel.org,  echaudro@redhat.com,
   i.maximets@ovn.org,  davem@davemloft.net,  edumazet@google.com,
   kuba@kernel.org,  pabeni@redhat.com,  horms@kernel.org,
   shuah@kernel.org,  dev@openvswitch.org,  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v5 1/2] selftests/net/openvswitch: add SCTP
- flow key test over IPv6
-In-Reply-To: <179008950943.2160803.15856491533624064435@kernel.org>
-	(netdev-bot's message of "Tue, 22 Sep 2026 15:05:09 +0000")
-References: <20260918144647.2024095-2-houminxi@gmail.com>
-	<179008950943.2160803.15856491533624064435@kernel.org>
-Date: Wed, 23 Sep 2026 08:31:31 -0400
-Message-ID: <f7tpky49mjg.fsf@aconole-thinkpadt14gen4.rmtusnh.csb>
+Subject: Re: [PATCH net-next v5 2/2] selftests/net/openvswitch: add SCTP
+ flow key test across conntrack NAT
+In-Reply-To: <179008951086.2160803.550424027687672394@kernel.org>
+	(netdev-bot's message of "Tue, 22 Sep 2026 15:05:10 +0000")
+References: <20260918144647.2024095-3-houminxi@gmail.com>
+	<179008951086.2160803.550424027687672394@kernel.org>
+Date: Wed, 23 Sep 2026 08:33:22 -0400
+Message-ID: <f7tld8s9mgd.fsf@aconole-thinkpadt14gen4.rmtusnh.csb>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -105,161 +105,114 @@ Content-Transfer-Encoding: quoted-printable
 
 netdev-bot+sashiko@kernel.org writes:
 
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider.
+> Thank you for your contribution! Sashiko AI review found more severe
+> issue(s) in other patches of this series. This mail is only an FYI, in ca=
+se
+> you want to address the nit picks below when you respin.
 >
-> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 1 =C2=B7 Low: 0
+> Low priority / nit picks for your consideration:
 >
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
->
-> - [Medium] The promised skip when IPv6 is unavailable is incomplete in
->   test_sctp_connect_v6().
+> - [Low] test_sctp_nat_connect_v4()
+>   (tools/testing/selftests/net/openvswitch/openvswitch.sh, new lines=E2=
+=80=A6
 >
 > --
 >
-> selftests/net/openvswitch: add SCTP flow key test over IPv6
+> selftests/net/openvswitch: add SCTP flow key test across conntrack NAT
 >
-> This adds test_sctp_connect_v6 to the openvswitch selftest, mirroring the
-> existing IPv4 SCTP test: icmpv6() flows forward neighbour discovery while
-> ipv6(proto=3D132),sctp(dst=3D4443)/sctp(src=3D4443) flows gate an SCTP
-> association across the datapath, with a keyless ipv6(proto=3D132) install
-> expected to be refused with EINVAL.
+> This adds test_sctp_nat_connect_v4, which drives an SCTP association
+> through ct(commit,nat(dst=3D172.31.110.20:5555)),recirc and matches the
+> translated tuple after recirculation, so the SCTP branch of
+> ovs_nat_update_key() is actually exercised. The config fragment gains
+> CONFIG_NETFILTER_ADVANCED, CONFIG_NF_CT_PROTO_SCTP and CONFIG_NF_NAT.
+>
+> One question below about listener teardown.
 >
 >> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh
 >> b/tools/testing/selftests/net/openvswitch/openvswitch.sh
->> index a31f7fb6882d..aa84fafc3201 100755
+>> index aa84fafc3201..21444657a040 100755
 >> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
 >> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
 >
 > [ ... ]
 >
->> @@ -700,6 +701,114 @@ test_sctp_connect_v4() {
+>> @@ -1200,6 +1201,98 @@ test_nat_connect_v4 () {
 >>  	return 0
 >>  }
 >>=20=20
->> +# sctp_connect_v6 test
->> +# - sctp(dst=3D4443) matches client-to-server INIT
->> +# - sctp(src=3D4443) matches server-to-client INIT-ACK
->> +# - icmpv6 NS/NA flows forward neighbour discovery
->> +# - remove flows and verify connection fails, reinstall and recover
->> +test_sctp_connect_v6() {
->> +	local t=3D"test_sctp_connect_v6"
->> +	local v6=3D"eth_type(0x86dd),ipv6(proto=3D132)"
->> +	local payload=3D"SCTP6_DATA_OK"
+>> +# sctp_nat_connect_v4 test
+>> +#  - SCTP association crosses a ct(commit,nat(dst=3Dip:port)) DNAT
+>> +#  - post-recirc flows match the translated address and port, so the
+>> +#    SCTP branch of the post-NAT flow key update is load-bearing
+>> +test_sctp_nat_connect_v4 () {
+>> +	local t=3D"test_sctp_nat_connect_v4"
+>> +	local payload=3D"SCTP_NAT_DATA_OK"
 >> +	local rxfile=3D"${ovs_base}/${t}/sctp-rx.txt"
->> +
->> +	modprobe -q sctp 2>/dev/null || return "$ksft_skip"
->> +	socat -V 2>&1 | grep -q "define WITH_SCTP" || return "$ksft_skip"
->> +	socat -V 2>&1 | grep -q "define WITH_IP6" || return "$ksft_skip"
->> +	[ -e /proc/sys/net/ipv6 ] || return "$ksft_skip"
 >
-> [Severity: Medium]
->
-> Is this gate enough to cover the case the changelog describes as "IPv6 is
-> unavailable"?  /proc/sys/net/ipv6 only tells us inet6_init() ran.  Only
-> ipv6.disable=3D1 short-circuits it:
-
-We don't do much to check that ipv6 is available.  The ICMPv6 test
-doesn't do any additional safeguards.
-
-> net/ipv6/af_inet6.c:inet6_init() {
-> 	...
-> 	if (disable_ipv6_mod) {
-> 		pr_info("Loaded, but administratively disabled, reboot required to enab=
-le\n");
-> 		goto out;
-> 	}
-> 	...
-> }
->
-> With ipv6.disable_ipv6=3D1 instead, initialization completes and the sysc=
-tl
-> tree exists, so this check passes, but the module default is copied into
-> every new netns:
->
-> net/ipv6/addrconf.c:addrconf_init_net() {
-> 	...
-> 	/* these will be inherited by all namespaces */
-> 	dflt->autoconf =3D ipv6_defaults.autoconf;
-> 	dflt->disable_ipv6 =3D ipv6_defaults.disable_ipv6;
-> 	...
-> }
->
-> so the veths created for the client and server namespaces come up with
-> cnf.disable_ipv6 set, and address assignment is rejected:
->
-> net/ipv6/addrconf.c:ipv6_add_addr() {
-> 	...
-> 	if (idev->cnf.disable_ipv6) {
-> 		NL_SET_ERR_MSG_MOD(extack, "IPv6 is disabled on this device");
-> 		err =3D -EACCES;
-> 		goto out;
-> 	}
-> 	...
-> }
->
-> Would testing something that reflects usability, for example whether an
-> address can actually be added in a test namespace, match the promised skip
-> better?
-
-We don't generally have a check for this.  Maybe it makes sense, but
-that could be a separate cleanup if it really is needed.
-
->> +
->> +	sbx_add "$t" || return $?
->> +	ovs_add_dp "$t" sctp6 || return 1
->> +
->> +	info "create namespaces"
->> +	for ns in client server; do
->> +		ovs_add_netns_and_veths "$t" "sctp6" "$ns" \
->> +		    "${ns:0:1}0" "${ns:0:1}1" || return 1
->> +	done
->> +
->> +	ip netns exec client ip addr add fd00::1/64 dev c1 nodad
->> +	ip netns exec client ip link set c1 up
->> +	ip netns exec server ip addr add fd00::2/64 dev s1 nodad
->> +	ip netns exec server ip link set s1 up
->
-> [Severity: Medium]
->
-> These four setup commands in test_sctp_connect_v6() discard their exit
-> status, unlike the surrounding calls which all use "|| return 1".  If the
-> ip addr add calls fail with EACCES because disable_ipv6 was inherited by
-> the new namespaces, does the test keep going with no IPv6 addresses
-> configured and then report a failure at the association check below?
->
-> Would checking these with "|| return $ksft_skip" (or at least
-> "|| return 1" with an info message naming the failed step) make the
-> outcome match the cause?
-
-See above - same answer.
-
 > [ ... ]
 >
->> +	info "verify SCTP association with port-keyed flows"
->> +	ovs_sbx "$t" ip netns exec client \
->> +	    timeout 3 socat -u STDIN "SCTP6-CONNECT:[fd00::2]:4443" </dev/null=
- \
->> +	    || return 1
+>> +	ovs_netns_spawn_daemon "test_sctp_nat_connect_v4" "server" \
+>> +		socat -u -t 1 SCTP4-LISTEN:5555,fork \
+>> +		OPEN:"$rxfile",creat,append
+>> +	ovs_wait sctp_eps_has server 5555 || return 1
+>> +
+>> +	info "verify SCTP association across NAT"
+>> +	ovs_sbx "test_sctp_nat_connect_v4" ip netns exec client \
+>> +	    timeout 3 socat -u STDIN "SCTP4-CONNECT:192.168.0.20:4443" \
+>> +	    </dev/null || return 1
 >
-> [Severity: Medium]
+> [Severity: Low]
+> This isn't a bug, but can a forked socat child outlive teardown here?
 >
-> This is the point where an unusable IPv6 setup surfaces.  With
-> ipv6.disable_ipv6=3D1 the connect cannot succeed, so run_test() reports F=
-AIL,
-> while the changelog says:
+> The listener in test_sctp_nat_connect_v4() is started with the fork
+> option, so socat forks one child per accepted association, while
+> ovs_netns_spawn_daemon() only records the pid of the backgrounded
+> ip netns exec:
 >
->     Skips when the sctp module is missing, socat lacks SCTP or IPv6
->     support, or IPv6 is unavailable
+> tools/testing/selftests/net/openvswitch/openvswitch.sh:ovs_netns_spawn_da=
+emon() {
+> 	...
+> 		ip netns exec $netns $*  >> $ovs_dir/stdout  2>> $ovs_dir/stderr &
+> 	fi
+> 	pid=3D$!
+> 	ovs_sbx "$sbx" on_exit "kill -TERM $pid 2>/dev/null"
+> }
 >
-> Should this configuration end up as a skip rather than a failure, or shou=
-ld
-> the changelog be narrowed to say the skip only covers IPv6 not being
-> initialized at all?
+> There is no process group kill and no wait, so a child still blocked
+> reading its SCTP socket is not signalled or reaped. run_test() then runs
+> ovs_exit_sig() followed immediately by rm -rf "$ovs_dir", and the
+> registered on_exit actions do ip netns del server, so such a child would
+> keep a reference on the server netns and an open descriptor on the
+> unlinked sctp-rx.txt until the association's retransmit/heartbeat timers
+> give up. The -t 1 option bounds the linger after EOF is seen, not the
+> wait for EOF itself.
+>
+> This would show up when the client is killed by timeout 3, or when a
+> post-recirc flow is missing so the peer's SHUTDOWN/ABORT is dropped. On
+> the passing path the client closes stdin right away (</dev/null and the
+> here-string), so the child sees EOF and exits.
+>
+> The same forking-listener plus single-pid SIGTERM pattern is already used
+> by test_sctp_connect_v4() and test_sctp_connect_v6() in this file, so
+> this may simply be the convention here. Would it be worth killing the
+> process group and waiting for the listener in ovs_netns_spawn_daemon()
+> instead, which would cover all three tests?
 
-I don't think either is needed for this series.
+A separate process group would be over kill.  This is already
+convention.
+
+>> +
+>> +	info "verify SCTP DATA chunk crosses NAT"
+>> +	ovs_sbx "test_sctp_nat_connect_v4" ip netns exec client \
+>> +	    timeout 3 socat -u STDIN "SCTP4-CONNECT:192.168.0.20:4443" \
+>> +	    <<< "$payload" || return 1
+>> +	ovs_wait grep -q "$payload" "$rxfile" \
+>> +	    || { info "server did not receive SCTP DATA payload"
+>> +	         return 1; }
+>> +
+>> +	info "done..."
+>> +	return 0
+>> +}
+>
+> [ ... ]
 
