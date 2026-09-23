@@ -1,66 +1,66 @@
-Received: from mail-pj2-f31.google.com (mail-pj2-f31.google.com [74.125.227.159])
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6515218A6
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 18:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB1E569F11
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 18:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790187976; cv=none; b=obsZEunNWMNpi0Nn59MFzj4l46xovueQTfuyoEEscnaf/qVsQYG6vh5PWrPwrRBH9vJzU5CFdNb/scbuxWTVc5ZOrUir8Q8PdozLIzC6w9cGk6Sdw/6oJWdn37IewGUGTkaUNL+ijV2QNgDQ167zAy+bu9nDLHcvj8lFPsBT/g8=
+	t=1790188259; cv=none; b=YIH/B57CsXi2yOCUiRm1OtepKw5vO/VTcF9316ZG0of+6anlplWNt1CdufJBYJkg5DZjjcCRImDinhUgUMS2qN051ILPmX84WgKcNJZMM2ByDHzq5u8AV6zwy2hyDCM6wAKCfyzyJCmJTCu7Gt9E1FVkFJjP+8xyBm1/ZJ82JKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790187976; c=relaxed/simple;
-	bh=LhiPso6phLQM0wA+k6tjmIhIVqDrjbY4C0VTVIyFW7k=;
+	s=arc-20240116; t=1790188259; c=relaxed/simple;
+	bh=lWag3oM9sYGpdHyGnDE7rA3iXeVqrktsZhX6pT4UGs4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qrW44SD2W/Ees9hqM87HBmg/jtWnu0a33UjFrGhHh8Y97qjcy+EVMMhqYgCqycg3hnO3hFOfuiqvHruTAZNzPnhlwnOChvbXTiljJYiV/DdOKCgMU7Bi8YdBtRG3PKedpT/eJsn66cEKxJBvxC74OOxtKQji3xgQ+9bf6u2g0dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cb3d6YzW; arc=none smtp.client-ip=74.125.227.159
+	 Content-Type:Content-Disposition:In-Reply-To; b=WbnlQ5xEl6IchC6SU2dKekpti+VvTMWLYAI+cauk6l0oXRE9lNceidKbpIB9QaEM8DIIUoNjVvaeJlb3En0DPUXxVyuluU3RY3qNon0R3UsCmeerTPuHb76SmhyydPnDSHen20cVX2Vd4D9B9ecZZo6vpIylZVid6+y6TrlO6Uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E1wvptqi; arc=none smtp.client-ip=74.125.228.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cb3d6YzW"
-Received: by mail-pj2-f31.google.com with SMTP id d9443c01a7336-2dd53691be5so8626465ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 11:26:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E1wvptqi"
+Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-8623e5d435cso442281b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 11:30:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790187972; x=1790792772; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1790188252; x=1790793052; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=LNon7FG4gNvQZ8cTIn7dGZggjcYoEo+V3D2k9W/8Sxo=;
-        b=cb3d6YzW6nrGuRRS6oSU6xIv3mfNSvAfD4J+NhlQOOwGhtfYHTTWnAIK8qaVqc1gkc
-         r0EMkPHPvvuRU99MGAgbwLazKtATFcwxTWwuJdRVO4+8BXBh8alzfX+EQfop05AIYzub
-         06zcGdrRIZeWntKW7Z/GsG8cDvxIw95aqKmtrB4GUybxBPseaSwjRFdzyNfnsxZG72WS
-         i5rhwkf9o7Wlgs9oHqgmGnk8IXv+DAZEyXpVj2V0OHPL8M1QD/gqAlmwtAmJhqAp/zhs
-         SElDmw4UvXWAAA0OKEDvJioloFPEYLJAT8X61OdhF18NghTfdBl6cuVTC59eTKPNsS4b
-         LLKg==
+        bh=qQbES28pq+4+5SdsOxa0hPCoAfkWzPeIh6+fD64KIF8=;
+        b=E1wvptqiw+pIqCzP22ej2RYU8FRDFz1Ld9ldOvcLSSSbCnlwJ9BWSWcZFvnURIrw9x
+         2qEFsmL20+6/NsbnqZm+1xvcge0Z8/LQQ8hGm0llzFxLjWZHaGD8nC4BgmlMNjZREm6h
+         DcPAP3z/Pgg3vX5zvXXDYFNlHXWywJNjtmq2cYaD8/6gfN6g6Zyd6CdRR0F6PUpZXVeM
+         kTF2ZcXZJ3Qg4jp8jLug45LdXJcUFui7Zr5p5r4s/ZUy9y1lllH077Qs+D5E2JUnK6pT
+         TqYHZsj1RjKaxL38Tqonf6cVfu6CvZfKXck2ZRd4jqFXFf0zd92U0hapejdiROEeLKGZ
+         nzfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790187972; x=1790792772;
+        d=1e100.net; s=20260707; t=1790188252; x=1790793052;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=LNon7FG4gNvQZ8cTIn7dGZggjcYoEo+V3D2k9W/8Sxo=;
-        b=YNgWubufXslAE8qd2DwB2Jvznc6IJPz5rDAXH4rVyZ/gNH4gNuatBc1C0fIK5a0g8U
-         WPUfP21B3zs+/dmrEVtukbmGV/YFD848Y1VPyj4NUeZfujdr54JZXi8XoriuGYR5AkFL
-         wLym0tBXsnXFLH4K+VtNj62FxlIFRAgfblyjv3jFDM34q74xMFpxWwbBELsmn1hT7hK3
-         uoUzJ488PIHbd71c34dRaXVXol7VoF6C+b445lmvOw/OTdJwVSkOikeZOb54DLWuD5C0
-         fMLHgIQwElGioxUmjIxCN/IKR0mlwgkhjGI/upan/NqoC79zZReXZwmbP/Mu1Gnt7gBu
-         uJ4Q==
-X-Forwarded-Encrypted: i=1; AKwUvByDGmujNnJBHTx/JuG/PmfDK+27LN5M41FZ9B3Mtj2SklcUG1UnE1zhP9Cok2DeWKufnRFiB8dhr7dVZif6QnM=@vger.kernel.org
-X-Gm-Message-State: AFuF++nbXBYCR6ga2IIl4o/LEOFj3hUQrPBxLL7qchkxH5YX74GWPWRa
-	07c6CUv2X6jmy+I77wxO8OS+qoDVjRzh4gp+c2XOs9A+PfbCVOIf5GTOAi2o/LLb4g==
-X-Gm-Gg: AYBFou0IbnKSzo3zbcEZDsATVck4gpesV0R1na14+I18tYxU//jxfrFPbUWJFqeAHAW
-	ACqdDliuvLebaunkN9Y+lSZNx6r9g1InXT7dzhgBlTHWc0fKXnOBqFNDifl4VfdKkz5HuAsq4pX
-	NlYfgPA30SkzQbwe9eXr3gOr59yLvNfSAEqlDV5tflGllpOg2MDs9kfxkH5qeDWEAOgCm4TP8ia
-	ZjlwSVlCTkUrtD7USc0gK68sM2KOPzmUU/kJ8bTxxeX3BlJ/g58qnoBXVuHN/O/FmWe4mP0DPuk
-	B7ZejHC2SkftH/liovaWVNZUh8AMJ9sUJ6YzjF+YaXzYY3DAkRKwL7wZ64fUZt2lxd0G8937tIV
-	leELuiBsfPGMLb7a+20df8JQ4efBp4zvw8Y1nWpPDrIeNXi5g7nAFhwzYROF+cfu3Qv/jsGuop3
-	n1D7XjHJYTo1AI7qJ0heVWpWuk13j/tUArcpREWkA5YIHFNLKtGZ8ux+xu+/Z4Q5r4G8Z9922MQ
-	PlI7PMvaGhXxykUGVdLV+csHDQStxloTztGbvR/RbtRXnqHyVk=
-X-Received: by 2002:a17:902:ef52:b0:2df:3b09:664 with SMTP id d9443c01a7336-2df69dcdbf3mr30657015ad.32.1790187971787;
-        Wed, 23 Sep 2026 11:26:11 -0700 (PDT)
+        bh=qQbES28pq+4+5SdsOxa0hPCoAfkWzPeIh6+fD64KIF8=;
+        b=ZVPkWDvrbg/3qA4QhY8d9sjCB0rfVANaRBz+y16Ct16LMYG+8lmde7KNOKFLeFNCDo
+         cs5gaJVJN+Q2jW1Tv2PT35rIIYHzzzs+PHDoHuu6zS4WXJ1ZiaKhkX+lrhfJ0q1Sxx52
+         YO/mGnBgB79ai6B4mNMK0UlQAWYameZ4d4LaCg8d8RSRkvsesZI9KHwjCGt4NPkb3/v7
+         NFzGobJUfec9HLljWmvZh0n6vgozgkXniVeQsPP4xpETqp29SKMoFPAAgV9qPvuMahtN
+         Gk9WtAHnLJIrDW6iqmKa6sjRF78ZQD+wJANcwOi6n8Og6UO5D8tYD7gn7sLwvAIpRYcD
+         kmbA==
+X-Forwarded-Encrypted: i=1; AKwUvBwDkI3Cy0Digou5DrNLW2zw2kRORJqHpj0OuXDVl7OvQsN/o6Nd36KTa748zSsK4J/ex85M+KA/OspM9hbxaGk=@vger.kernel.org
+X-Gm-Message-State: AFuF++l8XFMpWACFx0LoP9x9/Mwttb/EvnXY6cZJgB19wDSBIUPGN+4M
+	/cCjHCDb1kBdSWNqpPg7dO0O3FYr5wrVodz0M564Iyty02oRobtUjUlQAb+vj1xlIw==
+X-Gm-Gg: AYBFou2AEQkD1vv2Y9sY29BfxkdPKecabXrf9QOoMDwZ11DB6DZU2u+ay485aAR0UzB
+	jmlT69Oi6uFL7vTe8lkF/5IoyRhMX1j9laqGz2Mu9Ne5laFDZOoWn9vMYp//Cc9m6gX1ET0FSYY
+	+bOYwIsUrsya8CU2KZlVQJ0R/cGMAso237LC+sRd2FpCuP0ppW2N59+F5QNz4RvG8vpgfI/HUO6
+	hg60tXIo1NkEnPYJH5TcXGPZjl+sJtK8j7W7Z8yqIMtfqgw4xBX3O8/94D4hmh4GpaWIUTNhq3G
+	/myae1zWF18ryDG6S5isXK54p0xDpTbAL+8Tla+MYwuAw7W5ZTHgD+6lnNbHfGKh6h1Ytri0wxm
+	WlSbfh7zuLHA7QPBr0yMXisJ0XHXPbQoiNNU/irvbgWX67mQ9wNZdVYetn32FXioND6aZAh6uDU
+	/k08DNoKN+/df8SoTMsVnB7PWAzRP+5kSl0624TjtlTYo4a5ORvLcoy7KLXyyF+r01apYzEPFzd
+	t2OGbe2joztkIhQAUMJa8Vc9ez/Vx4XwdEP3tXPUKEPfmPYIC8=
+X-Received: by 2002:a05:6a20:7290:b0:3db:131b:8d8 with SMTP id adf61e73a8af0-3de0e7300c0mr45910637.14.1790188251251;
+        Wed, 23 Sep 2026 11:30:51 -0700 (PDT)
 Received: from google.com (132.200.185.35.bc.googleusercontent.com. [35.185.200.132])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a5eea15sm15475075ad.64.2026.09.23.11.26.10
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1d5c12besm1736810b3a.29.2026.09.23.11.30.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 11:26:10 -0700 (PDT)
-Date: Wed, 23 Sep 2026 18:26:06 +0000
+        Wed, 23 Sep 2026 11:30:50 -0700 (PDT)
+Date: Wed, 23 Sep 2026 18:30:46 +0000
 From: David Matlack <dmatlack@google.com>
 To: Jason Gunthorpe <jgg@nvidia.com>
 Cc: Alex Williamson <alex@shazbot.org>, Fuad Tabba <fuad.tabba@linux.dev>,
@@ -77,11 +77,9 @@ Cc: Alex Williamson <alex@shazbot.org>, Fuad Tabba <fuad.tabba@linux.dev>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>,
 	Tariq Toukan <tariqt@nvidia.com>, Zenghui Yu <yuzenghui@huawei.com>,
 	patches@lists.linux.dev
-Subject: Re: [PATCH v7 06/10] vfio: selftests: Allow drivers to specify
- required region size
-Message-ID: <arQZvkNtgq-NlUkh@google.com>
+Subject: Re: [PATCH v7 00/10] mlx5 support for VFIO self test
+Message-ID: <arQa1khEHzKOfkCK@google.com>
 References: <0-v7-c6d30e8ce1e4+3dfa6-mlx5st_jgg@nvidia.com>
- <6-v7-c6d30e8ce1e4+3dfa6-mlx5st_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,16 +88,34 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6-v7-c6d30e8ce1e4+3dfa6-mlx5st_jgg@nvidia.com>
+In-Reply-To: <0-v7-c6d30e8ce1e4+3dfa6-mlx5st_jgg@nvidia.com>
 
 On 2026-09-21 07:35 PM, Jason Gunthorpe wrote:
-> Add a region_size field to struct vfio_pci_driver_ops so drivers can
-> declare how much DMA-mapped region they need. The mlx5 driver will need
-> ~18MB for firmware pages. Existing drivers pass in the sizeof their state
-> struct. Since drivers all use only their declared state we can use the
-> value directly and remove the SZ_2M hard coding.
-> 
-> Assisted-by: Claude:claude-opus-4.6
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> Add an mlx5 driver to VFIO self test. This is largely a remix of the
+> existing VFIO mlx5 driver in rdma-core. It uses an RDMA loopback QP
+> to issue RDMA WRITE operations which effectively perform memory
+> copies using DMA. Since mlx5 has a stable programming ABI this
+> should work on devices from CX5 to current HW. The device FW must
+> support the QP loopback configuration.
 
-Reviewed-by: David Matlack <dmatlack@google.com>
+> v7:
+>  - Fix some compilation problems, kvm and the igb
+
+> Jason Gunthorpe (10):
+>   net/mlx5: Add IFC structures for CQE and WQE
+>   net/mlx5: Move HW constant groups from device.h/cq.h to mlx5_ifc.h
+>   net/mlx5: Extract MLX5_SET/GET macros into mlx5_ifc_macros.h
+>   net/mlx5: Add ONCE and MMIO accessor variants to mlx5_ifc_macros.h
+>   selftests: Add additional kernel functions to tools/include/
+>   vfio: selftests: Allow drivers to specify required region size
+>   vfio: selftests: Add dev_dbg
+>   vfio: selftests: Add mlx5 driver - HW init and command interface
+>   vfio: selftests: Add mlx5 driver - data path and memcpy ops
+>   vfio: selftests: mlx5 driver - add send_msi support
+
+>  .../selftests/kvm/include/arm64/processor.h   |    4 +-
+>  tools/testing/selftests/kvm/irq_test.c        |    2 -
+
+Sean and Marc/Oliver, can you take a look at the changes Jason made to
+KVM selftests as part of this series before we merge this into the VFIO
+tree?
