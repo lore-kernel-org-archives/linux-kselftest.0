@@ -1,94 +1,95 @@
-Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
+Received: from mail-oo2-f43.google.com (mail-oo2-f43.google.com [74.125.231.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5DB53D9CA
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 15:38:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06ADE531AFF
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 15:39:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.171
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790177937; cv=pass; b=qyPxIdDKvHviVegLNa0FApdsRHVvWBD3DsJVu7QNYR3wuy11Hxuefydwo0GT0ssLvwNj4pAdIQFRuuX8ZXxvT7K5EB0ny+d43ohfhmwAoWY9ABMqYrmN7+RO9sCZDn2nhci+Yu4xMN1Y385GqnM0V4YPJj/ZH52Ak3xVSyKT3T0=
+	t=1790177960; cv=pass; b=LXsvGrfuT18IyL85GXekITd81dAGJNjBJ/qjIhQVEwK5DAwvLNFQRR75riX2QXiz2JoNhJlWuOIXsY8/JiIIGOtXmqzrGeMzEdpis7fIaIKKgMpDSq/QEWrOunp4j2HGg+kV5aiFdhFhzZkUCPUsW8c0XcpOhAcoeyB64XlCy6w=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790177937; c=relaxed/simple;
-	bh=471+xwzsHhix7zeMBIIU+C2QTB25AzHe0qndhZvonm0=;
+	s=arc-20240116; t=1790177960; c=relaxed/simple;
+	bh=J0naHPaOnpDg2ShJmNsHR0YYIzm7VxWMF7m7wt3/EMw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p/r0dpUcZ9Lten4k57/x6tUix/Cv49bSjhXp2HV/QwyNZql2vpJTH9ZukTNi9qTUapUFSZCuCo103IWz9oWTIfGh+ppA6RTo4BDi8zFt07IZaU/qwXb+1WSUYIduMZ/cQ0hXfGT60qS8eqEJCzR0W/1Qx+knTinQSGH9QcXMELU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lgc6ZLjx; arc=pass smtp.client-ip=74.125.231.205
+	 To:Cc:Content-Type; b=aEcCBExNVn2puM3ujZx1S6MXm3sqUUrZKaK616VPn7KEP73YyqA5LyKZcUZKxSmzVB/PUPO2BzFwHH282UhKcdgJMQ2lkWPSOcg6YCFB7t/gA7Ha7hPG6K+Etnk2J+qRmUvANOVlDGQkI+/p4djk1QNZu5LZVvcmgLG4A0T1qw4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NupUiLUv; arc=pass smtp.client-ip=74.125.231.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lgc6ZLjx"
-Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4b34ee88df5so139596b6e.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 08:38:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790177935; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NupUiLUv"
+Received: by mail-oo2-f43.google.com with SMTP id 006d021491bc7-6b1b92a6a18so59686eaf.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 08:39:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790177957; cv=none;
         d=google.com; s=arc-20260327;
-        b=Lk5+ROljEKarJAMKL6q2L+uxTlq0V4EPSfReKHLkEg4n0Eq48p9LdXyOi1qxHKEC9R
-         nyoyuUf8F301qV2kp09DDQocFkctoBw4c27CQk/WVCMaBE8OoKcM7aZx6HYHkqSo4USI
-         903xfHSGtGYTTO+aqAfLrAGZW2tz9xskddTLJv4BkRKd4GPXnJ+C8i9fKhg+AF5IsnOX
-         GkMA73uXUdSjaCzkE5Z7gaQ9x79fRKRaPjKaZta6gcpddHNmXSAD6v6DnWep4Ht70QK2
-         zWRewMDuOuSn8GkT/bCqda3VxV747c1PX0E0I569AaCOAC2D96d9jt66Ish5yPmhu8bl
-         UPnA==
+        b=OmpXjtq/wTaanuoP5TzkQKgOSAKdma/gqpy/yOC8sGAFgqI8VMOcerwu1WTO/ir4je
+         dtoGX/5ybfXhC/FE1g5yUD8IbVXjTUrGq0gJrVYszRDw2MDgyvo4It76yV617yPdghUV
+         r3BNyYjEbb3BsFK61KTXCoKjPtwDpjEYLKdlNWvnvphSaXVmT3i3oqgQcHauBq4c8Xvy
+         yKhDjdYfii6QlKmrRTjZEVI0EVH/uO/rXvea0C7qQaYcy5XvERj92q8U9DLHq9fFrj2A
+         kdunCU4XR4HXeeEfZ/dCh33qLKHfxUMzoLixPAbCvkywNYyBnfG/FwKHhCHXLEG0X7yf
+         3JSw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=471+xwzsHhix7zeMBIIU+C2QTB25AzHe0qndhZvonm0=;
-        fh=vFHkvPwkrkRCe935aNMUxiUo1QeAhA3qaLngmVNzn50=;
-        b=BeYkCBAEdmIM5QzP5Vj6H2alIl8q7p1jeUWyCFfOhfWpP16mqlfpDlAlx7VGCpJoB+
-         +IFT5AVFVmUMXeWpOTy6NGPPdMBXj04p7JBBuUz/HZ0PpWb1JKYX/oRVk5JGIajxjbb1
-         YPwEA9rfW7Xe9ckYZzFE9IlUoPvWsobg2zLcMEFwcCReLF0q+ZORxZo72xxXWAr1Wv4h
-         DoXOlhJXV8VzosDUTy+x6Q8Plzi99rdOhwSLreustReFX2VDCpRKKNV9J02fxUFKfreo
-         NRXnkppbXW+FGppB6rp01oQUkgxE1r6Nsl1oU06lEVj2Qpysenlbc1XH697R5BWsrZnd
-         fvTA==;
+        bh=J0naHPaOnpDg2ShJmNsHR0YYIzm7VxWMF7m7wt3/EMw=;
+        fh=ZAhlKRsPUZpnzQJlljZxJrJ1oNoVXJmlESYcEJ0O1T8=;
+        b=qiy5fLjWHOZTx4Tih/UYuHHwNUgGLRXRYB0RKfrM7FKSfoIBOCLZIundOosszKDlo6
+         1BTIKhJq28Z68HyChMy+Xzb2IG6+vzzpjbk15WtcP+Tp+8vv6EA2gUcjSQBD1JzOiuud
+         Xg7rNBb/fh8Yw7scYY3POEyLmE1KAa+AbEJeq4ODqUnoQ3LzbKIuWpw768vKLQDoRJUX
+         gE4oW7c23+JaxKCstXTeHzw+O+dlcR78cqj5Nt59sZCMxF6L0uxWnnw3o96o32dkTtoG
+         /pM7CE8dswkVyEnysfWX5tK1mBADEiUjINw5L8oZxhH2uLn2M+wRLTbTtfzWRWn44BDu
+         Nu9g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790177935; x=1790782735; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790177957; x=1790782757; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=471+xwzsHhix7zeMBIIU+C2QTB25AzHe0qndhZvonm0=;
-        b=Lgc6ZLjxJeusXyd3EEeus6/sE1JDLDujyZs57woMUdQtc2Kjio2LZn53PlqdWY8WXT
-         PtgkzzQP0ToxpHa1URnU5QbndZxyzO+oZnEWwQiIH7zzmPej8xSjBY5aySX0ud77uqtt
-         k9rmz/ElydeS5nBSjOulsFVjWPNvLgjX1Cpj4tv5z5AvUTjibJznUimFF6bGEt/JYnND
-         b01MckU/15AP/p7Ymcf/t4FYQM12Q30GgWluxCKw1MRqCAsPtHZfc8WLKpFviDNUoyWO
-         QacCIOol8e1qIYJ7gxQyiOX1TsL3hqvUcuzvxk+OPAhBo+QpHXjDLjn6JRZO+PlIBCsR
-         vWiw==
+        bh=J0naHPaOnpDg2ShJmNsHR0YYIzm7VxWMF7m7wt3/EMw=;
+        b=NupUiLUvsu7Z/KU+xCkZqtmp0YGwaKf2vFfzWTI3psJf+nZDndqj7oKzKwel6Oa+zn
+         UJnv7kzrnHUMDBFcZSybsFOqNIFZbuPULSud2P3bNbP/TALLyXdEQxCjhi8JbJgP8k+2
+         YC5fk/IwAQBmq+SFsJudjKD33Kg50M9NDqoEDaU30/Vpdd4gB0U0DccQIwLc1o8fw+t9
+         jN/Ap6YtFAWbLyHE+zKF1cJV0/uempDWumF/e3nc0NkOXXjaZ4vXjFpMKXr3trUQPMxK
+         DLGghUoUHdjiq0G4j3EItTz2pEWVSX0f9eijA75om7V7I09HT7QJ2c/+eHUEFrsWxwRE
+         rq9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790177935; x=1790782735;
+        d=1e100.net; s=20260707; t=1790177957; x=1790782757;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=471+xwzsHhix7zeMBIIU+C2QTB25AzHe0qndhZvonm0=;
-        b=dVi/Nkpn4RwoLFCsqMUTmtJ4ZGqofpPsmoyUT1dheaOMGskizMEu9yf+K0zlVixVMG
-         Q/GhnFcaFVz5b8VEee1tf6pfRLeg7a93XrqwnFyovZuXbiRFPLYm5XS1Bw3N7JEvpmS8
-         XMi/Ff8Q7KrpX1HQP15LZ4BrfVxHYhx9CBIuDrCd/4baz+ND7WvmE+9VWqUGsPI+psgo
-         PepZYq8qpuii9VV4Oqq2eTmT9E6kcwntBx1jCZ7AvPz5P6WZ3bSwAYHdlxdoaxBWAe8k
-         W+xFhBtmLwYsG8u0xY9vo+lLlxXSchItyu1057nAN0tmj5z/c1p5ycUFC03zdXoKynJ/
-         WYKg==
-X-Forwarded-Encrypted: i=1; AKwUvBwn3JyTGgoFGiCejjp6f26kzl/ols1/SOIrn+ybZMPgFqxUBieMLifvtoBKp/Ers01kaI32qhK/797+lOKV/FM=@vger.kernel.org
-X-Gm-Message-State: AFuF++l2Rr7aZ2jdRhEX+MdH4OlgeNhVQLp6GCEg4RAmbYIuu6wdSt6B
-	vAYyXpsTo1SxAlTKPo1rlyqGiuptNhPHfybgrwEIEQo7uSTInOTCwOAmDbFUSDfzrsZYyzk8J3W
-	74Y+XgacGRh0A2D68CTJcxZuRuaMMpgE=
-X-Gm-Gg: AYBFou3ijnUtM+80Q/aQHVW6y/hTvNtrP75RHuNhB/CnBVR2w/3RxrbmttWLCqnM8m4
-	tJeRNxeLOFGX5ckM0SKt63FDThltRs1qsaGxPoNMz2RZHFIRm7wwOBfFfz7AmrregSa5R6sVoZk
-	61KONOMwrbq8EZC3GvuAiFkdY51AL+vyrXw3TKzlAwlKgvzdxXJRBeroXp3TL3+erSplQyefHeT
-	Ih6oxaNA4Z4rPmb+t00Y1qJcmC8HbMyuTSVqmTGaW+22XbJ6V/2WgMWSWcGyvnUoHfq2rAmQBZp
-	1DLKRBmafH7Y554Qo414rK4FX+SYcLLW/QupzFWqwjxPn78Vexxd0URL0kKu0Tg6gkwpbow=
-X-Received: by 2002:a05:6808:148a:b0:496:9bf:c837 with SMTP id
- 5614622812f47-4d5b3bf7584mr4092874b6e.0.1790177934516; Wed, 23 Sep 2026
- 08:38:54 -0700 (PDT)
+        bh=J0naHPaOnpDg2ShJmNsHR0YYIzm7VxWMF7m7wt3/EMw=;
+        b=II1gVu0uMM9hIb7lQelbXUUAjEocrkD6WSfLMaRdYZzhS/EEdNpAyetyoUYm4Vwzhu
+         KOiDcnG4/zhpSXd8cBbVnetBZZQZoKbuz6/sYR3VWjSz+Ytj6Lt4ziTNsyoIFZaDBtsT
+         Te0EbW+vHTK+uDPuqf2yEKw6IaxKTSYJJozj6QA7Z4iGZsf/ixW2JH5/4WTp/Ezr2MJN
+         bVnmoQXJyreY9qs83ZR+SBZU7m00GEf65ENe0H2DFJ42tMaiLKdH9BrP91MpHO0enUWM
+         f71sqLFmyASjF86qFulUgPE0lV7EogZsy9gqhz/p4F2QuJi44t16EIenO9WGIKaf9Rqc
+         Gk2w==
+X-Forwarded-Encrypted: i=1; AKwUvBzmB808aBs7d4oLihyjK+5/Hm6CQiNpSmmHR9UNZlwE1JoMpP6BwF/v+qcMf0RPG0sWQ/OnKKmA/em3hMMm9uk=@vger.kernel.org
+X-Gm-Message-State: AFuF++kpjfSp6g4I1slbdsg5iLLHqQzvz+0OCNKCz9hSlJlfQzmdP37S
+	6l8hQThhH4unPnXbGhpxrLcCnH14+30R/9C0jA5DEo6ICm0SqzqhvK9ATqx6mnOjTGM57pG0/1E
+	5xUZM0esDnXl7Ap/DmHF91X8JX2WB1QI=
+X-Gm-Gg: AYBFou2cR371ZVsJvQlrqiDW2xvcLy6Bmy4qy7MAKP1HfGHgfTLTnr6gZqcRYokZDEj
+	nFUZX6z5cJufuXeVzu+JMj2RGuvnVobBHgskIIxin1PkJES6NcDzjl404xjmT/sRWwWAtP5Im/r
+	cNligaWEdQoL68sWZ2mL6m1bjX3C5JHmb/8dkHmr9LYY/LZ463+dlpsbyqdrvrn0X/W2hi7xe79
+	vhPGcd5cd9vRNB2ORBFA+H5CGVODJDD1B+qpSOXg6/qhKRpuXiuORomNHuaaq5EJZi/ib4mHHxS
+	o0jnMLX/jodp0XBapB60lFMQpeki5pPNTHurUELtmX9tGtcg5pFZS1fG/7jIqH7b3M8jOms=
+X-Received: by 2002:a05:6808:1582:b0:4c5:6b14:a2d2 with SMTP id
+ 5614622812f47-4d5b89c0affmr3913291b6e.3.1790177956718; Wed, 23 Sep 2026
+ 08:39:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260914-netcons_ratelimit-v3-0-8e81b789ab37@debian.org> <20260914-netcons_ratelimit-v3-2-8e81b789ab37@debian.org>
-In-Reply-To: <20260914-netcons_ratelimit-v3-2-8e81b789ab37@debian.org>
+References: <20260914-netcons_ratelimit-v3-0-8e81b789ab37@debian.org> <20260914-netcons_ratelimit-v3-3-8e81b789ab37@debian.org>
+In-Reply-To: <20260914-netcons_ratelimit-v3-3-8e81b789ab37@debian.org>
 From: Gustavo Luiz Duarte <gustavold@gmail.com>
-Date: Wed, 23 Sep 2026 16:38:43 +0100
-X-Gm-Features: AclHuK_jZZFxO2Dh2JWJerZTiWPe1oDb0kLQ1Sj5dw4U8L9ub-MiIvvivGhqr7E
-Message-ID: <CAGSyskWZFfuCvvg8y+Re3VKhHWZiWrAxRkXXoFp9pgCrqxi=1g@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 2/5] netconsole: add a per-target message rate limit
+Date: Wed, 23 Sep 2026 16:39:05 +0100
+X-Gm-Features: AclHuK-QgcIqftUxh16QhJeV_h-FMaPzu0_1xOVp5f_OWxqLY_Kv1c8tOFDe05M
+Message-ID: <CAGSyskW1M6ZMrSK6hTOinHOZkHH1H15Niq2-GU13EdL2BtELGg@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 3/5] netconsole: allow configuring the rate
+ limit interval through configfs
 To: Breno Leitao <leitao@debian.org>
 Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
 	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -104,23 +105,22 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Sep 14, 2026 at 1:10=E2=80=AFPM Breno Leitao <leitao@debian.org> wr=
 ote:
 >
-> Give each target a token bucket and consult it once per message in
-> netconsole_write().
+> The per-target token bucket has no interface, so every target is still
+> unlimited.
 >
-> The bucket is created with a zero interval, which struct ratelimit_state
-> treats as unlimited, and nothing can set a nonzero one yet, so no target
-> changes behaviour.
+> Expose the interval as ratelimit_interval_ms through configfs. It
+> defaults to zero, so a target stays unlimited until an administrator
+> sets one.
 >
-> Skip the bucket while the kernel is dying, reusing the helper the
-> oops_only fix added, so a limit configured for steady-state logging
-> never truncates an oops, BUG() or panic().
+> The write restarts the interval instead of only publishing the new
+> value. A target is configured while it floods, by which point the
+> bucket is empty, and ___ratelimit() only refills it once the interval
+> it was set with has elapsed.
 >
-> The configfs files that expose it come next.
->
-> ___ratelimit() only trylocks its own raw spinlock, so it is safe with
-> target_list_lock held and interrupts disabled, and safe from NMI. Set
-> RATELIMIT_MSG_ON_RELEASE so it does not report the suppressed count
-> itself, which would printk() from inside the console being serviced.
+> Reject more than INT_MAX milliseconds. msecs_to_jiffies() saturates at
+> MAX_JIFFY_OFFSET, which is below INT_MAX on 32-bit, so checking only
+> the jiffies value would take a write there that a 64-bit kernel turns
+> down.
 >
 > Signed-off-by: Breno Leitao <leitao@debian.org>
 
