@@ -1,128 +1,373 @@
-Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1573EDE60;
-	Thu, 24 Sep 2026 10:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7054746AD;
+	Thu, 24 Sep 2026 11:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790247432; cv=none; b=HHkn8P+WDUxZYQunFMLpmf+/GohtHMq1GxQhhLlqLa4onXbvloYoFlLuMni3aNML9YS5CxUAeQ5TYoX7F+CHqAQF5TaF1zrwoeFpTQgyhHGOVbXGAmXbt+MMNHWLVBSYOXiztx32QK3ZzDnsv0ohlXsJMXc9c+nxa8HyAfh2ysk=
+	t=1790248339; cv=none; b=aXeq7hRpn7vAiMxQrPyJ0dSeOpFf5w/YeUqLIYRth81FXyrEC4lxPFo+CvhY972y7v/RsSgVwjSZ69ozlc5mD/FJwQsK5VCI32ctWMfpmV2RNT6jg3T6j4BczZlDSWhmuqmxfJUonXZ0a+zIDTH+bDHUILlySsBQHD6H5Kq9tjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790247432; c=relaxed/simple;
-	bh=m0aO0fGkkWz1N/O2gSuqRquq65tZ+MKWr80p9mSF2l4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uT0nlLb3aXIawzqvoyxyBI9zGOGAYAm14sV6ZsMtJVCwVKyNxITvRL7yJBk4EXQ73IAWPKr68/HnjaMvaQw9bMmaVBMS3+dNSqPrCEEI+lmpvMjFV/crqRdhACvqmWvnHfAU522Mj9MCecgjXDM+TkNh5NfxsEqDddqNfL7fnPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=CWzkPeOz; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=QIgt1jnX; arc=none smtp.client-ip=202.12.124.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1790248339; c=relaxed/simple;
+	bh=7CEdV4xJxBycFQAIl+cB8WXuXeXfUfzd0dSjQy0nLHk=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AOLocqVSDajUtRd35ToZpmo7bRZFv6Lj8fd3cLbJFRkHRDiCTqVwWHqIUF7+JRqi/l1taVwArwBD8vPoOB7oc1Y2UbZNkEMNLk3ZAbMa2C6Z7cdBbBvKL0fz94dqQABKYB2kMh0axRmWTcRm/AQvNCIKGX7rx9wDfIGg+ukl7bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jy8NrXLl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="CWzkPeOz";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="QIgt1jnX"
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 49E967A013A;
-	Thu, 24 Sep 2026 06:57:09 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-10.internal (MEProxy); Thu, 24 Sep 2026 06:57:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1790247429; x=
-	1790333829; bh=F/wv8rlVvhXlNpAodROvwX1rTgpBcpHfGOH8x4asVFw=; b=C
-	WzkPeOzB4u7z+o/GDN/kiYvIiOFu9KHBi7n5KNgavPAtt9sYpwxHNumY6dLxehsV
-	tt9sauHMzTVnUy3bR0rjR1MVpcso0YVHwful9+GBjGPWOlnaVxf2L9iC0CfnHjX4
-	lrAlQmKTfPO23ZMxCidNx59mOoFDruJpZBUqYDRGh5+sIRdVOmyflU18TLPFiXNa
-	dSquSwVoAUJ3+IFh42jgvbp4VnTcF7NgKrFlTT5tIYMAUiP4X6YbhuOxZkXKvLJp
-	/zQ2FZyagssVR5C05KH98SnpROV6y8bTUgG3NrMHpj260M01jeX7ohxwq7PQQ6bf
-	O/ydnUEMQnrQTqr7fGL5g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1790247429; x=1790333829; bh=F/wv8rlVvhXlNpAodROvwX1rTgpBcpHfGOH
-	8x4asVFw=; b=QIgt1jnXMDhwTClLc7LSSSyxwqVyrzf+Qlx2sVyhvfzwhXNd5hB
-	QfRzjVMzvlOv3RU3oXEGBrGNUgxKhVkcYp26VV8Wwpp708nsF9I7AL/Q7y8G3mfF
-	aQPI8xbbCMmxQsvfZQFUo9iYRsOEp7ZDco33E5bHZZXlnWrLR0/GEuP4HAiwLq3t
-	abKeP4FT81o96QA9cR1nCKwNmVfg6PEoxD7AliwDxHF4tSt7Bl8+B+sDgJKt/jdU
-	7CUWI3fyeZRkW+ue7RUF+pEkg6fw/2/BDsttTOnjN8qK8/12qb2hNNWLqJTdviZt
-	HmR0ihAMtqbIeg6LnkmQmIVVFceetyC0ZBw==
-X-ME-Sender: <xms:BAK1ahKyJsTBVTs0PzQ3tL0vBRzAo17PAoBABFS3BTs9SEN78MsHyw>
-    <xme:BAK1ahG9xKjgICE_uPLNZGiQcBQjHzU5wQVAnLIKaDL71AAl2tHdYf6kTrdeZ9OUm
-    VwMchlIMb_Jhvx8gCEY_PfU7-vYm6YDt2FxmANYtkgnoGmjIuyiwg3l>
-X-ME-Received: <xmr:BAK1auR8RKv8MzsXoiAQONAo8A8qgQTDezF1SBafdaIH6Z0NnPowao2tXIfI>
-X-ME-Proxy-Cause: dmFkZTFwrd1kfiEN7ECeGw3OT9gcWrgsjA49dB13G33AsgODJR3JiyYKur7uUr0X1nn3Nn
-    kNJP34HYMDHxbV5dSs1fzsez71JzR5MCy6eVQXLJP05ouSb96qUjzEcXSvD2H1Kw/U9PqW
-    sYHpl0ICLHG0wRIBi2As4hBwig7M9Elx/N54vreI0LLeffzqcsod+f30BFGJ4/DPuh7Q/9
-    umPklK+9+izRBGb18Yf2ywZ1WtRLpA0MfT6kGq17R5fFXtzMWfT/nR9rHARSBqadiOe2rY
-    g0fJHKr/lTXc6PS6XC+IVk0JQJK1rdTePBXdGk4KAXae7TF/vFZj6oiRYpkKv/v7/GllQT
-    SKGS2XQopMx13GRm32NrZDFAiXboSmaR9TbmNr9kDYKH04WC7tsyikyjfv/CsJ9hQ2QBFk
-    igEluFPaoADgmb9RccqX1HeEfBFikJ+UWXs7fYA7t/4aVslIGht/CJtH8SGHJ4mCel0M8w
-    ywvdUKSO31WPcJcIdxpmVhWMf2boANHRLzMAst4VHvGFYX67MDR6mfXRQSDR6oElT5pLdp
-    DllJKKuK9GXzNjjve9H76ngjP6UFpfvJVgVK5z05KN/cc5hPpPVCguxlOKVskzTAq1O6dA
-    fh703rr5cdiBaBzyzZFusjAze9s3/waPfYRUrzPmvBSyc9MLiC1AQieOQxLA
-X-ME-Proxy: <xmx:BAK1aqUONGT-INsdvb5qpJvXrvIZroJFrRa3lMFpgLlEHjNp7saHeg>
-    <xmx:BAK1atjXURo9zmVh243MrhWmzEdreAXogQkN46JDhcbWEyp-Jun_Hw>
-    <xmx:BAK1ajdJ1Lm4alGEgH0HjiZ33fWwEpz0_0DqbzJFUlLRL8s_vZ0u-Q>
-    <xmx:BAK1aofOlC7Vds3WrIyGgrLjFd6M1cDUNBiLaYfCFYOQw64HqYNWJQ>
-    <xmx:BQK1aumE0ZvnPhoX5vLCcJGiiPobU3o7mbf3huqQeNAhGKs-P4L8xVdR>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 24 Sep 2026 06:57:08 -0400 (EDT)
-Date: Thu, 24 Sep 2026 12:57:05 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Antony Antony <antony.antony@secunet.com>
-Cc: Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
-	Jamal Hadi Salim <hadi@cyberus.ca>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, Yan Yan <evitayan@google.com>,
-	Tobias Brunner <tobias@strongswan.org>,
-	Florian Westphal <fw@strlen.de>, linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org, Sashiko <sashiko-bot@kernel.org>
-Subject: Re: [PATCH ipsec v3 0/6] xfrm: state: exact mark/mask match for
- control-plane SA lookups
-Message-ID: <arUCAefkfEw-Jl_z@krikkit>
-References: <migrate-state-fixes-v3-0-836125bb53dd@secunet.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jy8NrXLl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EAA81F000FF;
+	Thu, 24 Sep 2026 11:12:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790248338;
+	bh=gtVtBDeZopRdm+Os/+sPdloL64YT17QzD2qYpHX5M6w=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=jy8NrXLl99fj+eqLvANFQzPeixUvbGmIJPrZtxHm8mmmgGV0RuPfZXZ0XjRBja1Th
+	 JnIdy2+qrqoNj0mRlw3zA/YRI9r+m3TurzikT055A0v9O55MjdWc00eKJbOzzLFBdY
+	 o0vah80c3lO4VAv3pLznaYPC0rmvlo12x3IoR8U5vYHpPliL6O7bfQgSXTpP+iAVd5
+	 AH2MlYGilZGQP4IwF19qDhMWqOf9vt6Qk5tjr2FemGLOkGpx7lq24NU62ShGDthn/L
+	 KYZeRGUZ1DjN/pcxH+D7zbxqC9HgkoPClb0flzrF8LZ4TrJu4OOSU4HQkbN77DIkDc
+	 EFAy/OLXhDOXw==
+Subject:
+ Re: [PATCH net-next] selftests: drv-net: add BIG TCP coverage to TSO test
+From: netdev-bot+sashiko@kernel.org
+To: narcisav.kernel@gmail.com
+Cc: netdev@vger.kernel.org, kuba@kernel.org, daniel.zahka@gmail.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, shuah@kernel.org, pvorel@suse.cz,
+ pavan.chebbi@broadcom.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Thu, 24 Sep 2026 11:12:16 +0000
+Message-ID: <179024833698.2160803.15870095496520127538@kernel.org>
+In-Reply-To: <20260921201145.49875-1-narcisav.kernel@gmail.com>
+References: <20260921201145.49875-1-narcisav.kernel@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <migrate-state-fixes-v3-0-836125bb53dd@secunet.com>
 
-2026-09-21, 22:43:59 +0200, Antony Antony wrote:
-> While looking into a XFRM_MSG_MIGRATE_STATE issue reported by Sashiko,
-> we found the underlying problem generalizes: xfrm allows multiple SAs
-> to coexist for the same (SPI, daddr, proto) differing only in mark,
-> and every netlink method that resolves "which SA" - xfrm get_sa(),
-> del_sa(), update, get_ae, new_ae, expire, migrate - uses the same
-> wildcard mark match the data path needs. A broader-mask SA can
-> silently shadow a more specific one:
-> 
->   # ip xfrm state add ... spi 0x1000 mark 1 mask 1 (SA_target)
->   # ip xfrm state add ... spi 0x1000 mark 0 mask 0
->     (SA_decoy, catch-all, added after -> bucket head)
->   # ip xfrm state delete dst ... proto esp spi 0x1000 mark 1 mask 1
->     -> deletes SA_decoy; SA_target survives, untouched
-> 
-> xfrm policy had the same bug, fixed in commit 4f47e8ab6ab7
-> ("xfrm: policy: match with both mark and mask on user interfaces").
-> 
-> Netlink lookups use an exact mark/mask match except for UPDSA; the
-> wildcard match stays for the data path and state_add only.
-> This series applies that fix across every affected method,
-> not just XFRM_MSG_MIGRATE_STATE.
-> 
-> This series is not fixing likely isusses PF_KEY. As it
-> is no more receiving non critical fixes.
+Thank you for your contribution! Sashiko AI review found 5 potential
+issue(s) to consider.
 
-The series looks good, but why did you remove the selftests you had in v1?
-https://lore.kernel.org/all/migrate-state-fixes-v0-3-a69e8637ba3b@secunet.com/
+Critical: 0 · High: 0 · Medium: 2 · Low: 3
+
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] Late skip decisions in the new BIG TCP cases convert already-
+  recorded failures into a SKIP and silently drop the remaining test…
+- [Medium] `run_big_tcp_stream()` (tso.py:207-244) claims (test name
+  `big_tcp_*`, docstring "so the frags exceed 64kB", commit message…
+- [Low] The new module-level constants hardcode architecture-specific
+  UAPI values as fallbacks: `MAP_HUGETLB = getattr(mmap, "MAP_HUGETLB",…
+- [Low] `setup_hugepage()` (tso.py:65-80) performs an unsynchronized
+  read-modify-write of the system-wide `/proc/sys/vm/nr_hugepages` (read…
+- [Low] `sock_send_zerocopy()` (tso.py:139-141) unmaps the hugepage
+  buffer on exit of the `with mmap_large_buffer() as tx_buf:` block and…
+
+--
+
+selftests: drv-net: add BIG TCP coverage to TSO test
+
+Adds two new tso.py cases (big_tcp_ipv4, big_tcp_ipv6) that raise
+gso_max_size/gso_ipv4_max_size to the device's tso_max_size and then run
+the existing stream tests, plus an extra MSG_ZEROCOPY send out of a
+hugepage-backed buffer. A few questions on the new helpers below.
+
+> diff --git a/tools/testing/selftests/drivers/net/hw/tso.py b/tools/testing/selftests/drivers/net/hw/tso.py
+> index 67f6c9ca9a647..176ddf97fabb9 100755
+> --- a/tools/testing/selftests/drivers/net/hw/tso.py
+> +++ b/tools/testing/selftests/drivers/net/hw/tso.py
+> @@ -4,6 +4,7 @@
+>  """A simple test for TSO."""
+>  
+>  import fcntl
+> +import mmap
+>  import socket
+>  import struct
+>  import termios
+> @@ -15,6 +16,87 @@ from lib.py import EthtoolFamily, NetdevFamily, NetDrvEpEnv
+>  from lib.py import bkg, cmd, defer, ethtool, ip, rand_port, wait_port_listen
+>  
+>  
+> +MAP_HUGETLB = getattr(mmap, "MAP_HUGETLB", 0x40000)
+> +MSG_ZEROCOPY = getattr(socket, "MSG_ZEROCOPY", 0x4000000)
+> +SO_ZEROCOPY = getattr(socket, "SO_ZEROCOPY", 60)
+
+[Severity: Low]
+Are these numeric fallbacks architecture independent? CPython's mmap
+module does not export MAP_HUGETLB, so the fallback is the normal path
+rather than an exception, and the two values are not the same everywhere:
+
+arch/mips/include/uapi/asm/mman.h:
+    #define MAP_STACK       0x40000
+    #define MAP_HUGETLB     0x80000
+
+arch/alpha/include/uapi/asm/mman.h:
+    #define MAP_HUGETLB     0x100000        /* create a huge page mapping */
+
+So on mips 0x40000 is MAP_STACK, which mmap() accepts and ignores, and the
+mapping in mmap_large_buffer() silently succeeds without any hugepage, so
+no skip is raised and no large frag can be produced.
+
+Same question for SO_ZEROCOPY:
+
+arch/sparc/include/uapi/asm/socket.h:
+    #define SO_ZEROCOPY             0x003e
+
+arch/parisc/include/uapi/asm/socket.h:
+    #define SO_ZEROCOPY             0x4035
+
+setsockopt(SOL_SOCKET, 60, 1) would then set some other option, and the
+send would quietly fall back to copying. Would requiring the attribute and
+raising KsftSkipEx when it is missing be more robust than guessing a value?
+
+> +
+> +GSO_LEGACY_MAX_SIZE = 65536
+
+[ ... ]
+
+> +def setup_hugepage():
+> +    """Reserve one hugepage, and put the pool back afterwards."""
+> +    if hugepages_free() >= 1:
+> +        return
+> +
+> +    try:
+> +        with open(NR_HUGEPAGES, encoding="utf-8") as sysctl:
+> +            old_count = int(sysctl.read())
+> +        set_nr_hugepages(old_count + 1)
+> +    except OSError as error:
+> +        raise KsftSkipEx(f"Unable to reserve a hugepage: {error}") from error
+> +
+> +    defer(set_nr_hugepages, old_count)
+> +
+> +    if hugepages_free() < 1:
+> +        raise KsftSkipEx("Unable to reserve a hugepage")
+
+[Severity: Low]
+Can this clobber the global hugepage pool of another user? The read of
+old_count and the write of old_count + 1 on /proc/sys/vm/nr_hugepages are
+not atomic, and the deferred restore writes an absolute value.
+
+If something else grows the pool between the read here and the deferred
+set_nr_hugepages(old_count), the restore shrinks the pool back below what
+the other writer asked for. Two concurrent instances of this test both
+reading N and both writing N + 1 also end up adding a single page, so one
+of them skips.
+
+The early return path makes no reservation at all, so the free page
+observed by hugepages_free() can be consumed by anyone before
+mmap_large_buffer() issues the MAP_HUGETLB mmap, which shows up as a skip
+rather than as lost coverage. Would a private hugetlbfs mount, a flock, or
+a cgroup reservation be a better fit here?
+
+> +
+> +
+> +def mmap_large_buffer():
+> +    """Allocate a buffer backed by one huge page."""
+> +    size = default_huge_page_size()
+> +
+> +    setup_hugepage()
+> +
+> +    try:
+> +        return mmap.mmap(-1, size,
+> +                         flags=mmap.MAP_PRIVATE |
+> +                               mmap.MAP_ANONYMOUS |
+> +                               MAP_HUGETLB,
+> +                         prot=mmap.PROT_READ)
+> +    except OSError as e:
+> +        raise KsftSkipEx(f"Unable to allocate a {size >> 20}MB hugepage "
+> +                         f"buffer: {e}") from e
+> +
+> +
+>  def sock_wait_drain(sock, max_wait=1000):
+>      """Wait for all pending write data on the socket to get ACKed."""
+>      for _ in range(max_wait):
+> @@ -33,6 +115,32 @@ def tcp_sock_get_retrans(sock):
+>      return struct.unpack("I", info[100:104])[0]
+>  
+>  
+> +def setup_big_tcp(cfg):
+> +    """Lift the GSO ceiling to what the device advertises for TSO."""
+> +    if cfg.dev["tso_max_size"] <= GSO_LEGACY_MAX_SIZE:
+> +        raise KsftSkipEx("Device does not support BIG TCP")
+> +
+> +    ip(f"link set dev {cfg.ifname} "
+> +       f"gso_max_size {cfg.dev['tso_max_size']} "
+> +       f"gso_ipv4_max_size {cfg.dev['tso_max_size']}")
+> +
+> +    defer(ip, f"link set dev {cfg.ifname} "
+> +              f"gso_max_size {cfg.dev['gso_max_size']} "
+> +              f"gso_ipv4_max_size {cfg.dev['gso_ipv4_max_size']}")
+> +
+> +
+> +def sock_send_zerocopy(sock):
+> +    """Send with MSG_ZEROCOPY, return the bytes queued."""
+> +    try:
+> +        sock.setsockopt(socket.SOL_SOCKET, SO_ZEROCOPY, 1)
+> +    except OSError as e:
+> +        raise KsftSkipEx(f"SO_ZEROCOPY not supported: {e}") from e
+> +
+> +    with mmap_large_buffer() as tx_buf:
+> +        sock.sendall(tx_buf, MSG_ZEROCOPY)
+> +        return len(tx_buf)
+
+[Severity: Low]
+Should the MSG_ERRQUEUE completions be drained before the with block
+unmaps tx_buf and the caller closes the socket?
+
+MSG_ZEROCOPY can be turned into a copying send without any error from
+sendall():
+
+net/ipv4/tcp.c:tcp_sendmsg_locked() {
+    ...
+            if (sk->sk_route_caps & NETIF_F_SG)
+                    zc = MSG_ZEROCOPY;
+            else
+                    uarg_to_msgzc(uarg)->zerocopy = 0;
+    ...
+}
+
+The only user-visible indicator of that fallback is
+SO_EE_CODE_ZEROCOPY_COPIED on the error queue, which this test never
+reads, so a copying send is indistinguishable from a real zerocopy send
+here.
+
+Note the hugepage pinning itself does not look like a problem: the queued
+skbs keep the pages referenced across munmap, and the deferred pool shrink
+is absorbed by hugetlb surplus accounting.
+
+> +
+> +
+>  def run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso):
+>      cfg.require_cmd("socat", local=False, remote=True)
+>  
+> @@ -96,6 +204,46 @@ def run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso):
+>                          500, comment="Number of LSO wire-packets with LSO disabled")
+>  
+>  
+> +def run_big_tcp_stream(cfg, ipver, remote_v4, remote_v6):
+> +    """Send with MSG_ZEROCOPY out of a huge page, so the frags exceed 64kB."""
+> +    cfg.require_cmd("socat", local=False, remote=True)
+> +
+> +    # No clamping, as it would keep the frags under 64kB
+> +    port = rand_port()
+> +    listen_opts = f"{port},reuseport"
+> +    listen_cmd = f"socat -{ipver} -t 2 -u TCP-LISTEN:{listen_opts} /dev/null,ignoreeof"
+
+[ ... ]
+
+> +        sent = sock_send_zerocopy(sock)
+> +        sock_wait_drain(sock)
+> +
+> +        drops = tx_dropped(cfg.ifname) - drops_old
+> +        retrans = tcp_sock_get_retrans(sock) - retrans_old
+> +        sock.close()
+> +
+> +        ksft_eq(drops, 0, comment="Driver TX drops during BIG TCP send")
+> +
+> +        # Same best effort bound as the plain stream.
+> +        total_lso_wire = sent * 0.90 // cfg.dev["mtu"]
+> +        ksft_lt(retrans, total_lso_wire / 16)
+
+[Severity: Medium]
+Can these two checks pass without any frag larger than 64kB ever being
+built? The docstring says "so the frags exceed 64kB" and the commit
+message says the send is there "to produce skb fragments larger than
+65536", but nothing here observes the frag size, the GSO counters, or the
+zerocopy completions.
+
+setup_big_tcp() only lifts the GSO ceiling and gates on tso_max_size, while
+the per-skb size is bounded further:
+
+net/ipv4/tcp.c:tcp_xmit_size_goal() {
+    ...
+        new_size_goal = tcp_bound_to_half_wnd(tp, sk->sk_gso_max_size);
+    ...
+            tp->gso_segs = min_t(u16, new_size_goal / mss_now,
+                                 sk->sk_gso_max_segs);
+    ...
+}
+
+So a device with tso_max_size above 65536 but a modest tso_max_segs (say
+32 * 1448, roughly 46kB), or a peer advertising a small window, keeps every
+frag below 64kB and both cases still report ok. Should setup_big_tcp() also
+look at tso_max_segs, and should the peer window be arranged given the
+comment says the clamp was dropped on purpose?
+
+Unlike run_one_stream(), this path also samples no qstats
+(tx-hw-gso-packets / tx-hw-gso-wire-packets), so the two invocations of
+run_big_tcp_stream() cannot tell the software-GSO phase from the
+hardware-TSO phase. The payload is a PROT_READ zero mapping sent to
+socat ... /dev/null, so there is no content check either.
+
+> +
+> +
+>  def build_tunnel(cfg, outer_ipver, tun_info):
+>      local_v4  = NetDrvEpEnv.nsim_v4_pfx + "1"
+>      local_v6  = NetDrvEpEnv.nsim_v6_pfx + "1"
+> @@ -147,6 +295,11 @@ def test_builder(name, cfg, outer_ipver, feature, tun=None, inner_ipver=None):
+>          if feature not in cfg.hw_features:
+>              raise KsftSkipEx(f"Device does not support {feature}")
+>  
+> +        # Run non-tunnel test cases under the BIG TCP limits too.
+> +        big_tcp = "big_tcp" in name
+> +        if big_tcp:
+> +            setup_big_tcp(cfg)
+> +
+
+[Severity: Medium]
+Should the hugepage and SO_ZEROCOPY preconditions be probed here, next to
+setup_big_tcp(), rather than in the middle of the test?
+
+As written, the order inside f() is setup_big_tcp() -> ethtool -K feature
+off -> run_one_stream(should_lso=False) -> run_big_tcp_stream(). The
+remaining preconditions are only evaluated once run_big_tcp_stream() is
+reached, and each raises KsftSkipEx:
+
+  sock_send_zerocopy()  -> "SO_ZEROCOPY not supported"
+  mmap_large_buffer()   -> "Unable to allocate a ...MB hugepage buffer"
+  setup_hugepage()      -> "Unable to reserve a hugepage"
+
+By then run_one_stream() has already recorded results, and ksft_run()
+buckets the case as a skip regardless:
+
+tools/testing/selftests/net/lib/py/ksft.py:ksft_run() {
+    ...
+        except KsftSkipEx as e:
+            comment = "SKIP " + str(e)
+            cnt_key = 'skip'
+    ...
+        if not cnt_key:
+            cnt_key = 'pass' if KSFT_RESULT else 'fail'
+    ...
+}
+
+Since cnt_key is already set, a case whose earlier phase set KSFT_RESULT
+to False is reported with "# SKIP" and counted under skip. The LSO-enabled
+half (ethtool -K feature on, run_one_stream(should_lso=True) and the second
+run_big_tcp_stream()) is also never run, yet the case looks like a clean
+skip. A host with no writable or growable hugepage pool hits this on every
+run.
+
+>          ipver = outer_ipver
+>          if tun:
+>              remote_v4, remote_v6 = build_tunnel(cfg, ipver, tun)
+> @@ -159,6 +312,9 @@ def test_builder(name, cfg, outer_ipver, feature, tun=None, inner_ipver=None):
+>          ethtool(f"-K {cfg.ifname} {feature} off")
+>          run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso=False)
+>  
+> +        if big_tcp:
+> +            run_big_tcp_stream(cfg, ipver, remote_v4, remote_v6)
+> +
+
+[ ... ]
 
 -- 
-Sabrina
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260921201145.49875-1-narcisav.kernel%40gmail.com
