@@ -1,65 +1,65 @@
 Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96E73CFF5A
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 04:27:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006A6409623
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 04:27:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790224055; cv=none; b=X5szEHxL2TseiZHBcOSl2vApUwt+mAZiLOIGpZBoYgUS3xw3jjXuCJZfxq7gAdYK85A4C8jXlm/zZi2lQVKh3OmoNHhokRORSjo+7yVSAjcqlsMpTO9Qlhe/mJ+f5yq56+ADvf4+U8nA4lJOzWcG13NlLud01N81L8wt5agvt9U=
+	t=1790224055; cv=none; b=dg6dK1uFwQkkztLwOv7MlwBFz3K23oLheiKQ3BhMRSXkH5UmwAiD0w5u/YnedMNFyP8zmYRWyPo3KfL3EVyRyMusmp2EW+8s5k1yBsryE65tQnW74zsbZGsMTZLrTUv3bEDxoCQqpph8demT8VKL1vXD1dyPe71OOlC3LTa1S38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790224055; c=relaxed/simple;
-	bh=u+ZdoPgS2w70wn1h+xA3nUtkpIPy4KipWT98fYKgD8U=;
+	bh=SlPzGPDevJ712yV3K8dLA8Akc44d66oXNW6JLxeKPxg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nLPABDCHUlVOcwqmi5xZ6guPhiRtbeRLEnj/pUq5olUR0s0CdeZ413NSkTuMlL+fqaXqBx4GPOislTp6f0rsWtZMPucvB7/5mIBRAcn+86Dhwqem97htf3L4kgdaRChMyUL26QrxeNpVolX4jvlO2sq6s0iubzHWrQIss+o0XYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eE1zSZm0; arc=none smtp.client-ip=74.125.227.140
+	 MIME-Version; b=gSRs4H26qXHpIVznEHD6fJBdM3Owxm48441e8Cjzfvu3uK8lV4cvsr6pifXi2vYvUmH1wmPsdJhIoTR9irF3zU5GwOzjANNgApDhva8rTO+kkhuMlQ+CHS3WOGPW3DXooVPnV71+sz2N85Iu31pL04H7SNZ+s6jiXTmh+5ziO1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MR2PlY+h; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eE1zSZm0"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d91c22d27dso6400245ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 21:27:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MR2PlY+h"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747ec6188so7852045ad.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 21:27:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790224052; x=1790828852; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790224053; x=1790828853; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8Qbj8scDayv1KTbBmuI3ZgNqnI9QLykgXWbif/mQ/Os=;
-        b=eE1zSZm095/N3AtbApl472pBykxsgEKQa6zYGoFM4WNwMqF3b6bo0BD+yFbANGS6z6
-         g8vJKUwFDUDgUJGXTbWa/Sh1b9Yvmz647hPAR8OXedtg4KIVP6/ZVG+eM4V+ii60Yii9
-         0cT4IIzxm7Owm8kTsuNs99XjaxZgaIt82zaaxvQlE7TfkhXONZ+vRlO5miQpetGI6LOm
-         qJxZ2A/En/bhIFrjwdUy62dbrZOUtNxFtztbS3vhbsAjlXw1CJ0ET8fBx2BcxR/yPB4B
-         t0yJqI/YZmvSCLMZXiNSKjNkvFD7p5ViqAwjrACtviq0R0jflpOwdW0DwSZh6ccKf1NT
-         ZWIQ==
+        bh=dF6lxsisMCHm/KxhSC1onb0PhKT95yZ7vVRGieeLH5c=;
+        b=MR2PlY+haYYzIFjabcl3HIPSmBOFopJfZpkMUrd5tIrFmuoOdT/QKNp5mPzvpVfNgZ
+         ck4DOOH8HhQ+l50epqiUcqMmggFbcU2RAQnXCWeqf1YOu2M12EdZW3sDv+voJm3/yXa1
+         lHGCXBtcyT9Ttwcs25vJFpYdUBzd7QFEHLh3Gr+liLau8VxDgmPI+RK+SfExHiYHGzh1
+         pvG6Enk5ggT+xdlYAuR0foDzCPqzhmWAFioOCaKMWOy6EZN20X4epoSRroQw6jwAZd3/
+         kpv1tPoPSry5nXA2Chcfn39m+k655KPVFoHXq88a2QSCAIyeWpZoLsjZXHt9OnRhPtAU
+         zPyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790224052; x=1790828852;
+        d=1e100.net; s=20260707; t=1790224053; x=1790828853;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8Qbj8scDayv1KTbBmuI3ZgNqnI9QLykgXWbif/mQ/Os=;
-        b=EvE+lTGG8J0zYK2Fknxy/BAnOjpdg0eJF69hjpN8YdP1iQv/aFKyvbbgWHEbp8Zaxs
-         J8Wb5AJZewyCZ74Xam0RW5w+4SFUoxIdsgZYl/D+Fv3ziU5yEwbUclpjRjn3Ngrdd/kx
-         rHx8otHOx+HWBTCZn5QeJqaEWDlOC108kmVyt8Ix8MNAaeHHTIW17OHBf/uJ/1t1DSj/
-         mSBxe4sjCRLBP4d0TGQFdj6i23ZiBhg1kOGBNDZIcSrG5RvuaOQt1ZXgnDkWKaM15ufH
-         298ZzCkyNAlEyz4md4b4BGmlo7rSdVjx9tuq9gSFZMVQXT1UdbcdlI6IE2ASA/ANhMV/
-         TNWA==
-X-Forwarded-Encrypted: i=1; AKwUvByV8D7BBni1wSinjnB0MpVRv+MhbvvpugnO59AwKPOXh4Ed5sfEQ5Wr2o1GT1Gm2BY56K223fO4h9jkWNs98yY=@vger.kernel.org
-X-Gm-Message-State: AFuF++mM4rKbqxRDYiwkzpdOpz0Cy/0fice3kQK7PyZiaS5mzjIXNoCr
-	QnL/jly+PpfNNqu0fHCdgBrJ6O85ULH7X6dQlXFiOMz81j7/tle5FClV
-X-Gm-Gg: AYBFou3zSsLSq4l/S+J6eTKa3z+GcrX+X/kBpQ/ArQR3ptxAZxeERNZ7j/KbRSWvR5h
-	YpNQfXwagLbHpjOJ7xWaY80Wc/8faBrxWOVucWNI4amvPvz/G2RX5v94LTPokl2llY5Mz+GqhHL
-	SBivqh5GKLjtf9yRXHVdyjKzM1yq62h6E7tud5A1SDsjknz7TOQtb3FJOBbnJB+YzsReNjZynBy
-	DhtE57HBKSR2HSi99FRCn/LpfjCPH6ISUhPXK2Id0Uu0ZKrKPe06ZwuCGPN+oKfTZULiPZZAOiK
-	rJL5H7v0+rogS8HmUwldJX5keAK4FnsP3hKN99zHhTEuu+ghiog4yl1cjI7X74Dtl+KohxMYe3v
-	fx2SQrOO/X/rwnj6OJC28yQ0a0USbZM/VZly2imTavGa/zZgR35bJg0l3fsvnS8yUMaNsXBUYKj
-	yIdWmjQ9uLS+xXIwIlln+gtCwf+zcUhNYjxcVi+bfWFz/e7WN9NIRizwEypfpsjFmEYcK6O7L1I
-	MUtMlLY26UYb2LjmA2m6Ihl2z/FUVH52tNmIls9uqUyY2F9cv40athXzwohBZuyomt2HDgt8RVd
-	+44Mk/rffQ==
-X-Received: by 2002:a17:903:1103:b0:2dd:c100:4b77 with SMTP id d9443c01a7336-2df7dc5a6b3mr10889045ad.46.1790224052075;
-        Wed, 23 Sep 2026 21:27:32 -0700 (PDT)
+        bh=dF6lxsisMCHm/KxhSC1onb0PhKT95yZ7vVRGieeLH5c=;
+        b=dMgC2y8HI+Hg1OsquHExy3oxpfwoaawh9bH/nffngx5K4FgcYKQXBJbfJHpXB2TJR+
+         uj1xiC5uK2xHoKhKmLQavyMyDkFjHchTF8FeZ4ThXyT3JugfmqXpvuwU6WVrQAspOSx6
+         FLX62cr29EOrvSj/XF6qtSg2D/rLyp2a/W0Pz5i+iivcvQ9WbDb77a7DcQO6st6Der6c
+         nO4zbvR+hHqhFdY/iCD8BHUALeqJvnyF9KbHQUl1IhcPGIJZUkihXQxhgWctGbP84cEr
+         QCqQMMlO1Wd+E/jiKdlFOTjpmQm+nxN9XCNUN/TP7h/BPDrTt6wMhypXRTggjDOiWsT3
+         9iHw==
+X-Forwarded-Encrypted: i=1; AKwUvBzxcvcSxCEAy6EMRPSPdgkhPi9mBzHrGtDkJRgdchVSbugLzXQptTJhtjysgWnWVp81URqsx4bASTeIqFfAzP8=@vger.kernel.org
+X-Gm-Message-State: AFuF++mfTWQJR+TxV5tNHQqU2qJGZ2BFkCCwrfQA8zAkHWl0EmTP0mjN
+	vkjQ+xD/G0FRG7eVaZ1G3NpKUhW83bAeKpaj9Kkgd4gGsf9YY0oJ8WAK
+X-Gm-Gg: AYBFou2D1XKdADsAQeASV2Edh/sA21Uzl+qJyFZQIXgSFL6TSOVOZaFkNg8tiaYdZSp
+	3H/4TanUbWX7prkfmfPMe5StrZxvPD7yfCeWoy18KWPxpm6AjfUcsa2YhOMz1B3CQOShJ1wK98R
+	8qWEB4lnMUtTgklRLq2EjPDTENyem6nkSWVrDpK2rGPbLI74pVkbzi9kYZAcpiED2VAjb46SRc3
+	hQsg0UKxdr7Kyhfpx6p7BWZAW+8irXRNe+FgTs/IllFZRYGagPz7AU3HQwAsnS3tPtIYoIyy0sd
+	EwALghMVl9pNH9mYwv3ENKbs1kBNerVCbWg4qbpncChx30qxiOKDCFa25Qqk24pJnJZYWfRQRr8
+	yU0kPzWLTXe5m55uILlNWLCIvK7yQ8DrFrPsKFcNyPq3AnwX20+a/RvwpY38/M9gKdawXY5IPD0
+	FiQVynlXqkTNpUarhSilo+oz9xv0oAtMF2wZ2vWOXaG6EOHqjYgtPhWolTvOP7zcy33eYi1n/G5
+	6Dgb2VBJf1ClSbMpW/9rKFZO3y1a547z91mvq7xNnjFpBc7mgM7hpHLx2g2U47ZmKA4PlDUtOru
+	d6HNKQO/Eg==
+X-Received: by 2002:a17:902:d481:b0:2dd:b83b:fe1e with SMTP id d9443c01a7336-2df7de9309fmr10196965ad.22.1790224053300;
+        Wed, 23 Sep 2026 21:27:33 -0700 (PDT)
 Received: from phui-2.c.googlers.com.com (67.51.127.34.bc.googleusercontent.com. [34.127.51.67])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a5a4997sm19710685ad.27.2026.09.23.21.27.31
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a5a4997sm19710685ad.27.2026.09.23.21.27.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 21:27:31 -0700 (PDT)
+        Wed, 23 Sep 2026 21:27:33 -0700 (PDT)
 From: Hui Peng <benquike@gmail.com>
 To: Waiman Long <longman@redhat.com>,
 	Ridong Chen <ridong.chen@linux.dev>,
@@ -74,9 +74,9 @@ Cc: Shuah Khan <shuah@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	Hui Peng <benquike@gmail.com>,
 	stable@vger.kernel.org
-Subject: [PATCH v4 1/3] cgroup/cpuset: return PERR_NOCPUS in remote_partition_enable() on subpartitions_cpus conflict
-Date: Thu, 24 Sep 2026 04:27:27 +0000
-Message-ID: <20260924042729.1908863-2-benquike@gmail.com>
+Subject: [PATCH v4 3/3] cgroup/cpuset: check sibling effective_xcpus in cpus_excl_conflict()
+Date: Thu, 24 Sep 2026 04:27:29 +0000
+Message-ID: <20260924042729.1908863-4-benquike@gmail.com>
 X-Mailer: git-send-email 2.56.0.rc1.310.g51773c2048-goog
 In-Reply-To: <20260924042729.1908863-1-benquike@gmail.com>
 References: <20260924042729.1908863-1-benquike@gmail.com>
@@ -88,95 +88,56 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When a remote partition is created underneath an existing local partition
-via a non-partition (PRS_MEMBER) intermediate cgroup, update_prstate() sees
-parent->partition_root_state == PRS_MEMBER and calls
-remote_partition_enable().
+In cpus_excl_conflict(), when a valid local partition A1 uses implicit
+exclusive CPUs (cpuset.cpus set without cpuset.cpus.exclusive, so
+sibling->exclusive_cpus is empty while sibling->effective_xcpus is
+populated), a sibling cgroup B1 can still set cpuset.cpus.exclusive on
+the same CPUs because cpus_excl_conflict() only checks
+sibling->exclusive_cpus.
 
-Commit 86888c7bd117 ("cgroup/cpuset: Add warnings to catch inconsistency
-in exclusive CPUs") replaced the cpumask_intersects(tmp->new_cpus,
-subpartitions_cpus) error check in remote_partition_enable() with
-WARN_ON_ONCE(). As a result, remote_partition_enable() emits a warning
-and proceeds to enable the remote partition on CPUs that are already
-owned by the ancestor local partition in subpartitions_cpus.
-
-This can be reproduced on Linux 7.3.0-rc3 with:
-
-  mkdir -p /tmp/cg1
-  mount -t cgroup2 none /tmp/cg1
-  echo "+cpuset" > /tmp/cg1/cgroup.subtree_control
-
-  mkdir /tmp/cg1/A
-  echo 1 > /tmp/cg1/A/cpuset.cpus
-  echo 1 > /tmp/cg1/A/cpuset.cpus.exclusive
-  echo root > /tmp/cg1/A/cpuset.cpus.partition
-  echo "+cpuset" > /tmp/cg1/A/cgroup.subtree_control
-
-  mkdir /tmp/cg1/A/B
-  echo 1 > /tmp/cg1/A/B/cpuset.cpus
-  echo 1 > /tmp/cg1/A/B/cpuset.cpus.exclusive
-  echo "+cpuset" > /tmp/cg1/A/B/cgroup.subtree_control
-
-  mkdir /tmp/cg1/A/B/D
-  echo 1 > /tmp/cg1/A/B/D/cpuset.cpus
-  echo 1 > /tmp/cg1/A/B/D/cpuset.cpus.exclusive
-  echo root > /tmp/cg1/A/B/D/cpuset.cpus.partition
-
-which triggers:
-
-  WARNING: kernel/cgroup/cpuset.c:1594 at remote_partition_enable+0x1c1/0x300
-
-and leaves both /tmp/cg1/A and /tmp/cg1/A/B/D as active root partitions
-claiming exclusive CPU 1.
-
-Fix this by returning PERR_NOCPUS when tmp->new_cpus intersects
-subpartitions_cpus in remote_partition_enable(), matching the error code
-used by remote_cpus_update() for the same subpartitions_cpus conflict, and
-add a regression test case to
+Fall back to sibling->effective_xcpus in cpus_excl_conflict() when
+sibling->exclusive_cpus is empty, and add a regression test case to
 tools/testing/selftests/cgroup/test_cpuset_prs.sh.
 
-Tested in QEMU on Linux 7.3.0-rc3 using the reproducer above and
+Tested in QEMU on Linux 7.3.0-rc3 using
 tools/testing/selftests/cgroup/test_cpuset_prs.sh.
 
-Fixes: 86888c7bd117 ("cgroup/cpuset: Add warnings to catch inconsistency in exclusive CPUs")
-Suggested-by: Guopeng Zhang <guopeng.zhang@linux.dev>
+Fixes: 2a3602030d80 ("cgroup/cpuset: Don't invalidate sibling partitions on cpuset.cpus conflict")
 Cc: stable@vger.kernel.org
 Assisted-by: LLM
 Signed-off-by: Hui Peng <benquike@gmail.com>
 ---
- kernel/cgroup/cpuset.c                            | 3 ++-
- tools/testing/selftests/cgroup/test_cpuset_prs.sh | 2 ++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ kernel/cgroup/cpuset.c                            | 5 ++++-
+ tools/testing/selftests/cgroup/test_cpuset_prs.sh | 1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 2538faac9aba..7381fa8502e7 100644
+index 7c5b4a8f1f3a..f46a51f07938 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -1591,10 +1591,11 @@ static int remote_partition_enable(struct cpuset *cs, int new_prs,
- 	 * above it or remote partition root underneath it is not allowed.
- 	 */
- 	compute_excpus(cs, tmp->new_cpus);
--	WARN_ON_ONCE(cpumask_intersects(tmp->new_cpus, subpartitions_cpus));
- 	if (!cpumask_intersects(tmp->new_cpus, cpu_active_mask) ||
- 	    cpumask_subset(top_cpuset.effective_cpus, tmp->new_cpus))
- 		return PERR_INVCPUS;
-+	if (cpumask_intersects(tmp->new_cpus, subpartitions_cpus))
-+		return PERR_NOCPUS;
- 	if (((new_prs == PRS_ISOLATED) &&
- 	     !isolated_cpus_can_update(tmp->new_cpus, NULL)) ||
- 	    prstate_housekeeping_conflict(new_prs, tmp->new_cpus))
+@@ -713,7 +713,10 @@ static inline bool cpus_excl_conflict(struct cpuset *trial, struct cpuset *sibli
+ 		return true;
+ 
+ 	/* Exclusive_cpus cannot intersect */
+-	return cpumask_intersects(trial->exclusive_cpus, sibling->exclusive_cpus);
++	return cpumask_intersects(trial->exclusive_cpus,
++				  cpumask_empty(sibling->exclusive_cpus)
++				  ? sibling->effective_xcpus
++				  : sibling->exclusive_cpus);
+ }
+ 
+ static inline bool mems_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
 diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index 3f7e81709365..b732078bf319 100755
+index f4d1822d4e21..f62155cf6162 100755
 --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
 +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -298,6 +298,8 @@ TEST_MATRIX=(
- 	" C0-4:X2-4 C1-4:X2-4:P2 C2-4:X4:P1 \
- 				   .      .      .      X1      .    0 A1:0-1|A2:2-4|A3:2-4 \
- 								       A1:P0|A2:P2|A3:P-1 2-4"
-+	" CX1-3:P1 CX1-3  CX1-3    .      .      .      P1      .    0 A1:1-3|A2:1-3|A3:1-3 \
-+								       A1:P1|A2:P0|A3:P-1"
+@@ -445,6 +445,7 @@ TEST_MATRIX=(
  
- 	# Remote partition offline tests
- 	"   C0-3    C1-3  C2-3     .    X2-3   X2-3 X2-3:P2:O2=0 .   0 A1:0-1|A2:1|A3:3 A1:P0|A3:P2 2-3"
+ 	# Changes to cpuset.cpus.exclusive that violate exclusivity rule is rejected
+ 	"   C0-3     .      .    C4-5   X0-3     .      .     X3-5   1 A1:0-3|B1:4-5"
++	"  C0-3:P1   .      .    C4-5     .      .      .     X3-5   1 A1:0-3|B1:4-5 A1:P1|B1:P0"
+ 
+ 	# cpuset.cpus.exclusive cannot be set to a superset of sibling's cpuset.cpus
+ 	"   C0-3     .      .    C4-5   X3-5     .      .      .     1 A1:0-3|B1:4-5"
 -- 
 2.49.0
