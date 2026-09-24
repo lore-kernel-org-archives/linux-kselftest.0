@@ -1,84 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BC83D79F1;
-	Thu, 24 Sep 2026 15:13:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A264A205F;
+	Thu, 24 Sep 2026 15:31:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790262837; cv=none; b=EBNg/BqiPuRBlwk5nCyB8q2jc6dlM+iq2jppQ1Xp4HXHzUKsRaLXV9igCAJJ0TCrVKaAHDdvWylAsUjJ5Nl5q3ZwiZaHpqVZW7EvOh/j5+cihZAAvmZcyFwLOUZR5QaRcybLZbW2AskHNGninF4fCIEK7IJL+8tntkx1YFa6qqA=
+	t=1790263880; cv=none; b=cyEACduPY8fL3UKr4PL7rmNx2/29iQjs6Wh0iUOBR2N6f1Z3DjgXMzVJSZWckM/R+hwZMFZV2gXp4pNGAqRkiotXh9VwJB1xOkQFsPkiK6eh8KIKn0pTKRNoIoCtEX+giaAwfIb1ZUBGt1I3vsUNti2MNUtjl43BetGGCL9HOu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790262837; c=relaxed/simple;
-	bh=6XkQK9w80p7dJTAMNACNwmZnVEtZV81AxqvERRb6Lr4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DDGsN+wHlpp3Rrdc+xARa/iw0dPilk+WgWgM2q4h9QejS/a9V05KE31Yt5kmFSpEOQoWH1sWLZG7TMHiowN9VDrXW3kWaPd2OptNKH87pavE8LIRQTwAHU9Yo9Jgtc9iGYcncvhhEp2X8kOLsnZiXPNB9nUR8LyYhXe3LZOcIu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dmMcxdAf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790263880; c=relaxed/simple;
+	bh=Sr/ZvADe3rhNSqxByBkFHLvSZQ0+5vZeIf08zA21Y1w=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=A/wF5lk9/8DrTKUTx8q6pTSoqo46eybmrg55aBaQ0q6gz9TiYOV08pkU8801tYLcJ1HurMhl13nbhcyaogBgU4hii594u5eM7QLnNwwDunTKoku/bh+PpM8TygF6t9iy3YyPC+qLSbpmsPualrea+mcqq3vb/P2X0WNr3ZYYpKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ls7ZITwN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dmMcxdAf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA351F000FF;
-	Thu, 24 Sep 2026 15:13:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ls7ZITwN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF7CE1F000FF;
+	Thu, 24 Sep 2026 15:31:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790262835;
-	bh=6XkQK9w80p7dJTAMNACNwmZnVEtZV81AxqvERRb6Lr4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=dmMcxdAfk3hCOVw72ZOki+I/EUA1r+5HKEAZw5YrznQPKgJ3YgKf7FBtrpSI1Xl9P
-	 gtfbPlwRHjmAMfqRccA/Dfq4XhmAzzI2KKCBrjg8VV2RvdgrEgSQedzrL24KibclsU
-	 ga/EqDXFBhx94iSW0UOeZctcz6SZOwFnB2lTglUIBzZf+dZQJeRRMc+H0BuJSlWmb4
-	 d/pUrqb+pRekewHkZrHhZDAG6VT7o05irx0BLmqoY8rkjmPoDzAM+3yajfmMLx8uag
-	 1Wtw2zbAuKEQS7TGEjyqaoXotUXY1kKyCs9QtjhOd7OAdJPtow9wjRqL7FjCKOMZb/
-	 s2mf2X1s9M0wg==
-Date: Thu, 24 Sep 2026 08:13:54 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Victor Nogueira <victor@mojatatu.com>
-Cc: "Hemendra M. Naik" <hemendranaik@gmail.com>, davem@davemloft.net,
- edumazet@google.com, horms@kernel.org, jhs@mojatatu.com, jiri@resnulli.us,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org,
- tahiliani@nitk.edu.in, vishy0777@gmail.com
-Subject: Re: [PATCH net-next v6 0/3] net/sched: sch_fq_pie: add per-flow
- class statistics
-Message-ID: <20260924081354.4d3c8e01@kernel.org>
-In-Reply-To: <CA+NMeC9CWgt9=0=_HjNH=Fsg7igmFqDS=VnqWh6tZBr98ZkPgQ@mail.gmail.com>
-References: <20260922180458.5c54ebb8@kernel.org>
-	<20260923040136.13432-1-hemendranaik@gmail.com>
-	<20260923195323.5413f128@kernel.org>
-	<CA+NMeC9CWgt9=0=_HjNH=Fsg7igmFqDS=VnqWh6tZBr98ZkPgQ@mail.gmail.com>
+	s=k20260515; t=1790263878;
+	bh=G+YIn0jWatEzyBxbKACE4zuL7jmhIjynHuzRFkmS27U=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=ls7ZITwNp2G2ig/Sb7J0ofwUqlqkcUqSY8kpFZGWraQcd1tPhUcTb8Grqg2eFdQtF
+	 LsaKu+YgDjl95fOL32Dc8fdcG69JEWvhf+u5hqJlCYueU0gSnkP4KHdfq5rbi+MiHH
+	 1/Suq0ZsCoWnhiGfbW6kBBIheEv4ZAXBkL+xnEHxnYXPuVP7H2X1+hZIrO6xXpCjwv
+	 gmAZAO4+23QK5T/dCpNNhzV258Rm0grRnIBbcCuuyFLOKZnjVaVGZyM+1dy+ddifVv
+	 as9NvuI49Sgrd9ZfQX0v7XstcM9Cf0DcZav2Zm+9Fv+uupZ64mLHC76ejIODRFXPge
+	 /XGwfNqvUCSNA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198833A566C5;
+	Thu, 24 Sep 2026 15:30:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 0/3] selftests: drv-net: Add VLAN test
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179026380790.1607156.9912751120912034978.git-patchwork-notify@kernel.org>
+Date: Thu, 24 Sep 2026 15:30:07 +0000
+References: <20260918112529.96039-1-ovidiu.panait.rb@renesas.com>
+In-Reply-To: <20260918112529.96039-1-ovidiu.panait.rb@renesas.com>
+To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, nb@tipi-net.de,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-On Thu, 24 Sep 2026 08:35:34 -0300 Victor Nogueira wrote:
-> On Wed, Sep 23, 2026 at 11:53=E2=80=AFPM Jakub Kicinski <kuba@kernel.org>=
- wrote:
-> >
-> > On Wed, 23 Sep 2026 09:31:36 +0530 Hemendra M. Naik wrote: =20
-> > > Hi Jakub,
-> > >
-> > > We have vendored the temporary UAPI header changes into the GitHub
-> > > development branch (https://github.com/H-N41K/iproute2-next/tree/fq_p=
-ie_class_stats/)
-> > > as requested, so it should now build standalone in your CI pipeline.
-> > >
-> > > Please note that this header sync commit is not present in the offici=
-al
-> > > iproute2 patch submitted to the mailing list
-> > > (https://lore.kernel.org/netdev/20260922211139.38570-1-hemendranaik@g=
-mail.com/).
-> > > It was added to the GitHub branch strictly for validation and testing=
- purposes. =20
-> >
-> > Thanks!
-> >
-> > Victor, could you pull this into tdc as well? =20
->=20
-> Done, it's in tdc.
+Hello:
 
-Thanks!
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-https://lore.kernel.org/all/20260922205924.32173-3-hemendranaik@gmail.com/
+On Fri, 18 Sep 2026 11:25:26 +0000 you wrote:
+> This series adds a selftest that pings over 802.1q, 802.1ad and
+> QinQ VLAN interfaces with RX VLAN stripping offloads enabled
+> and disabled.
+> 
+> This series contains only the selftest part of [1].
+> 
+> [1] https://lore.kernel.org/all/20260908164309.59282-1-ovidiu.panait.rb@renesas.com/
+> 
+> [...]
 
-will return in net-next-2026-09-24--18-00=20
+Here is the summary with links:
+  - [net-next,v2,1/3] selftests: drv-net: Move _set_ethtool_feat() into lib
+    https://git.kernel.org/netdev/net-next/c/d3630df401a8
+  - [net-next,v2,2/3] selftests: drv-net: Check the features set by set_ethtool_feat()
+    https://git.kernel.org/netdev/net-next/c/a57ddd899004
+  - [net-next,v2,3/3] selftests: drv-net: Add VLAN test
+    https://git.kernel.org/netdev/net-next/c/efc7f4646c1d
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
