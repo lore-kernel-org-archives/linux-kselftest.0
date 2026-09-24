@@ -1,139 +1,126 @@
-Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-150.mta0.migadu.com [91.218.175.150])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C2D47FAE8;
-	Thu, 24 Sep 2026 10:44:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C3C46D547
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 10:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790246686; cv=none; b=WuhFT37WcLB/TMMK+EBV3rycnrvQXQ4cuSQJmX6yWFii5koScbpcrpEsc4sBg5+xOksRtSk/h67nv8x/tr5dml3nN71YZRSlM6Gk4IErz1CG6WRhYFdYEPGtWy+mLWnRYUL5xNbVn/1ShBDwkepd9fNjDE5UHFqbK3C6X9LPxww=
+	t=1790247372; cv=none; b=PRWSnb4bpgYDR4cKySLTm+fz8BJXNCHAkfo3YsVf2tkOdhM3BuTB5JZM5XyQKnVpBf/sd4wa8shRUSXRJiBl9wiKl3G+yh5KJjtdL3z+tYenJ9oGq+xcTX7ZDTJmdY8A+PNIYCTpFPcr9QB7SzjJY74vlrXsdYWe1mEQp1c/JeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790246686; c=relaxed/simple;
-	bh=CQvwkh5BoBqOptC3jmeHHr75AY7Ra5g3ZWNC1CyfAPQ=;
+	s=arc-20240116; t=1790247372; c=relaxed/simple;
+	bh=dcK5al5HmV/jTPApENYaewuu3+KgbwSXT1ai4hOuv5c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rNIdm++/3uSvrVSx88p4ILQ+SLsLeUlFSnGpo7VSpGx6RgDmerwog9Vkgc7+vxvs6FMuPvFwbj4t4NT5HOZFzjWcPUV/vAAgg8KQk7Ph0XBlCPEiW3IwSXxobdeWLwIRjIpjXPYBg0ZSw+KctSL7otBkWQ8Yx2EUgmqk7PFLp8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=dle3YnZ+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=D3fAX2wf; arc=none smtp.client-ip=202.12.124.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=drUfUHOaPsxVOTEkZzk4brjKWRsirXfR0aO6tBdMRTvvv+AQ0z96WGyJqnoS50SMWfCH+QVZ2Rx+dLpbCl1MXCD5lXRft90KncRWKBrDAiTGA9FdkjnJufnn1zt7RhnyEqo/Go5iSolz1l3e+ulVhoAbmQXphC8EkkcxDDKq0Rs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nwPT0YDg; arc=none smtp.client-ip=91.218.175.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="dle3YnZ+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="D3fAX2wf"
-Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 2A7357A00AD;
-	Thu, 24 Sep 2026 06:44:42 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-08.internal (MEProxy); Thu, 24 Sep 2026 06:44:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1790246682; x=
-	1790333082; bh=2pYdRHz16MeVkko3MZGz6tzvnD2/4VNwL82lLyG4YqY=; b=d
-	le3YnZ+RjDgnJMmSgj6mQJD33q+GZMF6YnLVrMCRuFpnGnGD+HhvkB7xTt1/RHId
-	6wYFYAiJr4NST8Qt8bfok0JnG3teovdHL35fyg/ZCGd06ytmL3ik8c/CU7XOFUNU
-	vxJCJQu2+ainCTEPInBekBX0tiHvkJcYROlDTgZumoPksYDMEKfgoJ9NoeKWYbil
-	0xbT0MTjhf3Os6vZ4Q9D+cokV+tfy6/v+3pvQ4jLNb1l4fMutOQvuu4CM6d/efzm
-	n1niAruNnZ84R90rZzqraNBPBWv77VRXwJqi4kMCEVGUSPmKNFZ/GHjjLKbUb6sS
-	W9JLTvN4T1EY1mveSLenA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1790246682; x=1790333082; bh=2pYdRHz16MeVkko3MZGz6tzvnD2/4VNwL82
-	lLyG4YqY=; b=D3fAX2wfMVGIPKQIL79/QGbDv4q5KG82YDhSAw9+Wok/VHf6v7e
-	irWil+KhRiEccnB7AF+2lEab+W5JNGmL5BR61s1Xl4Ao+0liDTbudL/+eHFEPDFZ
-	wwmhaGjpFGjyTd0AUDxVP9a2AWGMOkkVXYreu0N3f6gQm4ZFMsMc9h2seWJf/wVd
-	38YB0uEXgSGtAJtYWxKHSUhsFdFegetzeNtIgnd1SoPxPqc++ftKlVzpbCFm3Ifz
-	4HZYCpNDiaOBXtGYlJXKaoLMI66wFC8N1kRRyVb+Jqq5KO9TutaH375jy/wDT+9K
-	1E0bLG/wo4Hs7u85VFnShQlMwVhpsg+bNjA==
-X-ME-Sender: <xms:GP-0anR3IgnZGmF7SBC4-vnZwju-GFg8loFUNg6DfGf26dDq1Romrg>
-    <xme:GP-0akvTM9stM5qvprPjxarLjm16-9G4_fvpDQbdCBsDvcWy9aoLsaIhp4cD98Co3
-    BDmyFSdf8lV_T8HtqTMG3PgmPB-SLCWxoMufi8IUM9uwwTv1EJVeRom>
-X-ME-Received: <xmr:GP-0ai_163r4KNfrBPwoLaWMfEERLL0eZ1WRx2cAFMfus1mp0pOrJiJ58tbD>
-X-ME-Proxy-Cause: dmFkZTGJMECWZhmiH3U0xi2HTX13DSCC2vekGqn1EXXXdBRS9zoHf3nJFjAr4qzg933TeX
-    ReNQueoOdiZFep1TXS6JC+dNuykmciug+Zsi7xUl0RyAwWv57uh/yQRUKiQTONsBIik00O
-    0CRz5slM/U7uMWOEQEd530APzHAPynAwfuKRwugds5+oZl1RTEKDQebSJ933W/ey6HFkvu
-    RUJ1fcspTYSEA5aZ94x0pisGJlBYoKAWDWgVhzh5krjleFkiKWZs/aKXhl0X6LkxGEGxoa
-    9ZW/aPKqkSp9QcCXqyAB59VRAieDxcNQ/dEtBWjXZBjDRAVzj4zJP6OSTZCeTDD1TB5kaf
-    lqjbbIVdupI9uGajAu/LhvanwZ7XX3UuNQKLvRFbDx6G9Gxa+z404xty/ZxAd1d2gYILyc
-    y60hcRnSylKmx71R0vosbkm7w1EwCnnvgUrmFE+kI9qeSVw8hOCCTGJnZkeB6s/S4txWkh
-    sieNraLhrOC+dgQRnPEh1TsElx7cVh7NCki6LttofyEgWzmlrnLnZb5G2crwoPfPV8rXfg
-    yPIGCBuqCCOJkhjsAO4ymdKevsQvluHYrGnyja9xxRE7Bi3Zta9AK0dqRW/TqdPX06DGhW
-    MLjbajFadZ5jYYpTz46rXoHVj+o1URS4hL5Jf13x6u+rqVBZpDjnmcNrRBtQ
-X-ME-Proxy: <xmx:GP-0atZ3uUBNZlh_eEnGWwI-p_pVOSIioq8i1k00NcGSeUzemFkIkw>
-    <xmx:GP-0aur8qUqAglKpNMlhnjCOyZPGvu3_M0RQye6injjCzBiWawqvAQ>
-    <xmx:GP-0alaHezSp6M7P3EkC-N0R1eb4Z7DV_uRew-2Bdy_LYkAJgpgk-Q>
-    <xmx:GP-0ah4DF_a5CO5AkPE1yjn-9PcuIb4jSLLhYYE8YueALIQAbBNOFQ>
-    <xmx:Gv-0ahgNGTIL4ejuZXuSQDd0pwYZMDzNGqzgQIxvUk-NW6wAiT8cDM3j>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 24 Sep 2026 06:44:39 -0400 (EDT)
-Date: Thu, 24 Sep 2026 12:44:38 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Antony Antony <antony.antony@secunet.com>
-Cc: Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nwPT0YDg"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=dcK5al5HmV/jTPApENYaewuu3+KgbwSXT1ai4hOuv5c=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790247352; v=1; x=1790852152;
+ b=nwPT0YDgn8qD9E6fCABJUzBGLytUm2+Cw3sd3Dsr8TXI2Sy3ylhwY2GQF9S7gNERrgkc2Ctu
+ CeVJij6yLN+Ro614OIgXDOpss02VcqGNJQ4OZa0YCxAfc82Ydy00hdklcOMvBCC2auBlL533pH/
+ NgI9By1F9oS1aWWe68FWLcW4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 05a7b6ee68ec50a5;
+	Thu, 24 Sep 2026 10:55:52 +0000
+X-Mizu-Trace-ID: 05a7b6ee68ec50a5
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 24 Sep 2026 18:55:43 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: "David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
-	Jamal Hadi Salim <hadi@cyberus.ca>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, Yan Yan <evitayan@google.com>,
-	Tobias Brunner <tobias@strongswan.org>,
-	Florian Westphal <fw@strlen.de>, linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH ipsec v2 1/6] xfrm: state: exact mark/mask match for
- SPI-keyed control-plane SA lookups
-Message-ID: <arTzfowpbZXFIBGx@krikkit>
-References: <migrate-state-fixes-v2-0-c3e2767f0d96@secunet.com>
- <migrate-state-fixes-v2-1-c3e2767f0d96@secunet.com>
- <arEw6qLcr_YEI8Wl@krikkit>
- <arGTH94PM_oswTpF@bern>
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@kylinos.cn>, stefano.salsano@uniroma2.it
+Subject: Re: [PATCH net-next 2/5] seg6: add RFC8986 flavor support for End.X
+Message-ID: <arUBr6L0qtgr8WoH@fedora>
+References: <20260922-srv6_flavors_endx-v1-0-4d01c05c47b7@kylinos.cn>
+ <20260922-srv6_flavors_endx-v1-2-4d01c05c47b7@kylinos.cn>
+ <20260923180506.4350920e5bf32d4910a192d3@uniroma2.it>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <arGTH94PM_oswTpF@bern>
+In-Reply-To: <20260923180506.4350920e5bf32d4910a192d3@uniroma2.it>
 
-(sorry, this got caught by my mail provider's spam filter so I only
-saw it today)
-
-2026-09-21, 22:27:11 +0200, root wrote:
-> On Mon, Sep 21, 2026 at 03:28:10PM +0200, Sabrina Dubroca wrote:
-> > 2026-09-08, 08:48:45 +0200, Antony Antony wrote:
-> > > Add __xfrm_state_lookup_exact(); wire it into DELSA/GETSA
+Hi Andrea,
+On Wed, Sep 23, 2026 at 06:05:06PM +0200, Andrea Mayer wrote:
+> > diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+> > index 584e6aca3893..7462da1da362 100644
+> > --- a/net/ipv6/seg6_local.c
+> > +++ b/net/ipv6/seg6_local.c
+> > @@ -121,7 +121,8 @@ struct bpf_lwt_prog {
+> >  
+> >  #define SEG6_LOCAL_END_FLV_SUPP_OPS	(SEG6_F_LOCAL_FLV_NEXT_CSID | \
+> >  					 SEG6_LOCAL_FLV8986_SUPP_OPS)
+> > -#define SEG6_LOCAL_END_X_FLV_SUPP_OPS	SEG6_F_LOCAL_FLV_NEXT_CSID
+> > +#define SEG6_LOCAL_END_X_FLV_SUPP_OPS	(SEG6_F_LOCAL_FLV_NEXT_CSID | \
+> > +					 SEG6_LOCAL_FLV8986_SUPP_OPS)
 > > 
-> > On the "other proto" branch of xfrm_user_state_lookup(), we call
-> > xfrm_state_lookup_byaddr() -> __xfrm_state_lookup_byaddr(), which
-> > still does a "loose" mark match:
-> > 
-> > 		if ((mark & x->mark.m) != x->mark.v)
-> > 			continue;
-> > 
-> > Is that ok?
 > 
-> I think so. I felt byaddr is not used and aslo since there is no unique spi
-> if touch it dragons may wake up:) most used cases with SPI.
+> This adds PSP to a mask that already had NEXT-C-SID. PSP alone then
+> works through end_flv8986_core().
+>  
+> >  struct seg6_flavors_info {
+> >  	/* Flavor operations */
+> > @@ -841,12 +842,19 @@ static int input_action_end_x(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+> >  {
+> >  	const struct seg6_flavors_info *finfo = &slwt->flv_info;
+> >  	__u32 fops = finfo->flv_ops;
+> > +	int ret;
+> > +
+> > +	if (!fops)
+> > +		return input_action_end_x_core(skb, slwt);
+> >  
+> >  	/* check for the presence of NEXT-C-SID since it applies first */
+> >  	if (seg6_next_csid_enabled(fops))
+> >  		return end_x_next_csid_core(skb, slwt);
+> >  
+> > -	return input_action_end_x_core(skb, slwt);
+> > +	ret = end_flv8986_core(skb, slwt);
+> > +	if (ret)
+> > +		return ret;
+> > +	return input_action_end_x_finish(skb, slwt);
+> >  }
+> >
+>   
+> The problem is the combination with NEXT-C-SID: the NEXT-C-SID early
+> return above is still taken, and neither branch of
+> end_x_next_csid_core() applies PSP. So "End.X flavors next-csid,psp"
+> becomes configurable and PSP is never applied.
 
-Ok.
+Ah, right. The NEXT-C-SID could combine with other flavors.
 
-> > That's the only thing I've noticed in the series.
-> > 
-> > 
-> > I guess someone could claim that this patch changes behavior, but if a
-> > user somewhere notices it, I think that would mean they were relying
-> > on insertion order to delete/etc the right SA.
 > 
-> yes that is a risk. I tried find use cases and got nowhere. 
-> And concluded it was an oversight. Also note the
-> cover letter, "policy" had similar change a while ago.
-> No one complained yet?
+> The same mask and the same early return are already in End, where the
+> combination is accepted and PSP is not applied either. I will send a
+> fix for that to net.
 
-Yeah, I agree. Just maybe worth mentioning briefly in the commit
-message, and adding a reference the policy patch.
+OK
+> 
+> For this patch I would handle the combination.
 
--- 
-Sabrina
+Thanks
+> 
+> On the selftest side, the combination of next-csid and psp is not
+> covered yet. I am going to add coverage for it in any case with the
+> End fix, and I would be glad to do it with you if you are interested:
+> the same coverage would serve End.X too, if you decide to handle the
+> combination there.
+
+Yes, I will add support for the End.X combination (and End.T in follow-up
+patch) once you add the next-csid/psp selftest.
+
+Thanks
+Hangbin
