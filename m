@@ -1,159 +1,133 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905A94E780A
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 21:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA073BFE3B;
+	Thu, 24 Sep 2026 22:29:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790287157; cv=none; b=STwxofIR7Ll7Vhmr+KG2n/uFwGmi6+clhtDrJZHNbTXegOTEt0L9ZQOmSOwOPF8insguOsypw+GjPXlw9FB3iylh8FcRTdErrN+bPOqV5mQI+pOROUlQRlD55gh0bSvr1vARZGysdAInuRWKnyijKuxvAJLSf00mDst8wm6+dzc=
+	t=1790288963; cv=none; b=I0rgtNxh6yuznoWL0wiT8qQQAl4ZZ7fsivIG7TEjmdfCkSmhUbI9gs0ozMCXu4DjmKqIHLe1fGSap2nRuAFU6G14c6+aRXHPXoSUyd0x9wWO0iEYTcFwmuEBRNeUn2ZhkTsBtx+5aMiZSA+vHzuPewyw/5wLzGKm/bgHBsXXa+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790287157; c=relaxed/simple;
-	bh=jdOnvM7WMqeUpU7l2mytGEp4oxIHLj8qtVUlj6NmVsE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g0XQHieqlySGW3ewV1p7l4SLwhq4eSkXShm0airvAP70eJzRSf2JPHxnJYXtvYQ0UYHIVxbPOOV5eO+7KbK1Fi8erM1rN7yM6ikL7EeZxze0wzK1iklfjXytzwrbwdiERCeaQaVsZAMKxglppMLMA2yANNj35zp4JRnzJqJfKQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=vPEiD9ry; arc=none smtp.client-ip=74.125.228.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	s=arc-20240116; t=1790288963; c=relaxed/simple;
+	bh=G0VbTNBezTrnJ+kACz3WLvngr1Xlvbi/75cjXrI/Buc=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XH31PcodDpgClG5jqNI5AQPsbRkcEzSJWDWVRYVyA9nZ2MqwmU8iBeBNSwNcjHmu1DNwtBoyGcgLCK10i3FBMm7fbT0Csu1ZTqbEvmC445LXlv/PEWES8MYsh8FUzJn/uHIg1ihaLZl+a2pVDrWTpFnmraweEFr0O35/HFNHDKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cm9MLLdM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="vPEiD9ry"
-Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc4d04d740cso84976a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 14:59:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1790287154; x=1790891954; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=bbmWMvcZGPaQES2g8FHXYoBiPxQtaNORw16tr7nwuuw=;
-        b=vPEiD9ryapYVAbcs8kdk/aarwnWZDJyTINZAS9v17BANQiOuYq1oHVyJBCxjEAkD7W
-         OctHq3duc79f++pDhRki9fmBx8iaZqo7WTEO3/KRGGQo6+bxo/NBJz7x9mDaDx9yeSkm
-         H+ok/Eqr1G1IAHpAGCOJjW0tBbSC6GZQ4faR6VgM1LIofN1MXaQ2GrHLhpxb84L3erPF
-         MKZKqlLcvnbE9KVPFO5CWFiC3ortqSZHI1Hj3EY76mwz0EQDeYKZlJcdkfMa+9Tj7hHN
-         d8re22ksBgofM9DHjvonMZM1H/MckT642VKR5gjzZ82kbtpL4sunMCl1BfUBlHuqr/JA
-         83ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790287154; x=1790891954;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=bbmWMvcZGPaQES2g8FHXYoBiPxQtaNORw16tr7nwuuw=;
-        b=M7vhE019yL7VqqBT09V+ABALy6MNuEIz+TCG4ZgnGzg8LLtnoFYBHSgAstXiP/1+ZE
-         vWFcatmu+Pz3AYkCTdwbvzY/XVoW9aCCHKpIWjBQkIVVgfgNSTNZbmjo9VBKpcEphgMR
-         16wDzfghKxBBpI/AVmGZN1j83s3yWA2JQYA6sq3XL4lXwn9MXaM5kBFUUVkG7KZKcRtw
-         OpuVERGw+s1INAogzkKQR7wqqnxeduh2aNYkQ1zj7rtKQpWE2tb67xBrWCA2yQQVkl6L
-         CxxYPRjdsNgXedm0zhpJ6GBqiYgWR1BNdOiIYPzF2MI5TvWUz4p7ORzvXupuuGenCrjr
-         8TxQ==
-X-Forwarded-Encrypted: i=1; AKwUvByxmVtZEJeVIL1p3KiSdfv7mZUmY2wq54V8VoJax5ABnu67LTeNFQNPdc5MLynW4hEVPQ1PfAoNDTdrRDJzOKE=@vger.kernel.org
-X-Gm-Message-State: AFuF++lUQh+EOGvU2/jZ0m/fM8KHXmqgdFg5duSZ0569r0dW0HDxMm+p
-	XluV5wzMr82mgl8jFea3VFwavJciFQHZgqrBKEqXiAPEjNZF4vEubWrhYQn05Bo5DWk=
-X-Gm-Gg: AYBFou3WXJs5e93F/KEvrWQstL+WDzZLV4Bhf6F9BqYXnw4OlL+E9BaOKCZm1cWhvV0
-	1Bgaeyks5ajZoZJAwIstumQRjT0IqIJQM1xyiBlV6yGn8DRXvWMPx7tv+i4iSRLIk4Ih5dBkeyF
-	y0gPI6Ujd4Z0BX7QjnwpFp+Wjmv0DkXaiEx0WfPOX/yutRoakZd1lCnSGxfm6zi4rMOiw56lEHq
-	wqUui/X1nKb8qJ31q5LSK1U78GOiGIepqqcGP87CSlsZlAjwrsVt7lOoqQelZvY82FaG4SJFbD/
-	J5nnULBvXWkr/uSRu4JDq7g2arHFRhErJGtGHSWLuLuTgr4YFSkJ2xfjVQU2PYF6a3JV9qSQCjs
-	Q4gB2wFr8eoOhEOe3Sn2hHsv63YH8A/gQ6RJTtJSVqcTRwQx5DF48p+uQUdoVen/6t+8Nvr9zjW
-	xjzPPEcZNplEQ1KrtN+3mQaLh9NlqZl0hOftxiVSWHI0kK75anck4olTredVl7o+uR4Ckz3hcOJ
-	Z2VJVM0U6G4U8/4qHu8oaU=
-X-Received: by 2002:a17:90b:35c3:b0:3a0:bcc8:1546 with SMTP id 98e67ed59e1d1-3a0bcc815f2mr76894a91.64.1790287153608;
-        Thu, 24 Sep 2026 14:59:13 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:59::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0b9481e17sm582065a91.8.2026.09.24.14.59.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 14:59:13 -0700 (PDT)
-Date: Thu, 24 Sep 2026 14:59:12 -0700
-From: Joe Damato <joe@dama.to>
-To: hengyul@cs.unc.edu
-Cc: brauner@kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz,
-	jirislaby@kernel.org, sdf@fomichev.me, edumazet@google.com,
-	kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
-	horms@kernel.org, shuah@kernel.org, linux-fsdevel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] eventpoll: return -ENOIOCTLCMD for unknown ioctl commands
-Message-ID: <arWdMDek0iv0obDy@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>, hengyul@cs.unc.edu,
-	brauner@kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz,
-	jirislaby@kernel.org, sdf@fomichev.me, edumazet@google.com,
-	kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
-	horms@kernel.org, shuah@kernel.org, linux-fsdevel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-References: <20260924185747.2166326-1-hengyul@cs.unc.edu>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cm9MLLdM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0B1A1F000FF;
+	Thu, 24 Sep 2026 22:29:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790288961;
+	bh=9lTk9HKkaCEZkNbTtcdgRDBlqeemuAp3XPisqKa2/VE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=Cm9MLLdMqefLdn0f4fB3SmLd0hLcSZ+vRIzYltU3WJeSP2uQBClxrlvCK52bKVzNH
+	 RZxyrR5yNE2ldL3BfleuXHv4Eu3pJ5ywTr+S/+WBO3VYKtA2rTvgIkvPQ0M5ASmEeA
+	 Js0blZ9LHCZGaFn0ec4UZ7aBSm9u1HVOMN56H87T/HDohCipgfL2pLWzS2gr1lpV3N
+	 uhItfsNx0GBvwlGsmeeulP+Fzq2oMAxxPQDFNheAIpVyA/QcFnLpUA1+/Lybe/N3iK
+	 bH30foLXBEjjJwX669zgjgrjONlko3Ynd9Z2ECo9yJDyEZTAMPOScqprzEzFKvibL5
+	 aqFowxSQz1EWA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1x9rwN-0000000DEyP-27Eo;
+	Thu, 24 Sep 2026 22:29:19 +0000
+Date: Thu, 24 Sep 2026 23:29:18 +0100
+Message-ID: <86h5je4729.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Fuad Tabba <fuad.tabba@linux.dev>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	David Hildenbrand <david@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Jack Thomson <jackabt@amazon.com>,
+	Jack Thomson <jackabt.amazon@gmail.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Vincent Donnefort <vdonnefort@google.com>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	Leo Soares Passos <Leo.Bras@arm.com>,
+	Wei-Lin Chang <weilin.chang@arm.com>,
+	linux-s390@vger.kernel.org
+Subject: Re: [PATCH v4 01/14] KVM: Allow architectures to disallow pre-fault
+In-Reply-To: <arTdxHgk_3gGySOO@gremlin>
+References: <20260923-kvm-arm-prefault-v4-0-d4b0b4dfa8c3@kernel.org>
+	<20260923-kvm-arm-prefault-v4-1-d4b0b4dfa8c3@kernel.org>
+	<CA+EHjTzDYSuBVEc+SMdDa41sq-ET=m_oWW0gL9dYf+AumPYPUg@mail.gmail.com>
+	<arTdxHgk_3gGySOO@gremlin>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260924185747.2166326-1-hengyul@cs.unc.edu>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: ljs@kernel.org, fuad.tabba@linux.dev, catalin.marinas@arm.com, will@kernel.org, oupton@kernel.org, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, corbet@lwn.net, mark.rutland@arm.com, rdunlap@infradead.org, borntraeger@linux.ibm.com, frankja@linux.ibm.com, david@kernel.org, hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com, svens@linux.ibm.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, skhan@linuxfoundation.org, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, jackabt@amazon.com, jackabt.amazon@gmail.com, alexandru.elisei@arm.com, vdonnefort@google.com, aneesh.kumar@kernel.org, seanjc@google.com, imbrenda@linux.ibm.com, Leo.Bras@arm.com, weilin.chang@arm.com, linux-s390@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Thu, Sep 24, 2026 at 02:57:47PM -0400, hengyul@cs.unc.edu wrote:
-> From: Hengyu Liang <hengyul@cs.unc.edu>
+On Thu, 24 Sep 2026 09:22:47 +0100,
+"Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
 > 
-> Before commit 18e2bf0edf4d ("eventpoll: Add epoll ioctl for
-> epoll_params"), epoll files had no ioctl handler, so ioctl() on an epoll
-> file descriptor failed with ENOTTY. That commit introduced the
-> EPIOCSPARAMS and EPIOCGPARAMS commands, but ep_eventpoll_ioctl() returns
-> -EINVAL for any other command, so since v6.9 every other ioctl() on an
-> epoll file descriptor fails with EINVAL instead of ENOTTY.
+> On Wed, Sep 23, 2026 at 07:52:27PM +0100, Fuad Tabba wrote:
+> > Hi Lorenzo,
+> >
+> > On Wed, 23 Sep 2026 16:15:44 +0100, "Lorenzo Stoakes (ARM)"
+> > <ljs@kernel.org> wrote:
+> > [...]
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > [...]
+> > > +int kvm_arch_pre_fault_allowed(struct kvm_vcpu *vcpu)
+> > > +{
+> > > +        if (!vcpu->kvm->arch.pre_fault_allowed)
+> > > +                return -EOPNOTSUPP;
+> > > +
+> > > +        return 0;
+> > > +}
+> >
+> > nit: the comment above the smp_rmb() in tdx_sept_map_leaf_spte() still
+> > says pre_fault_allowed is read by kvm_arch_vcpu_pre_fault_memory(),
+> > but after this patch it's read here.
 > 
-> Documentation/driver-api/ioctl.rst says that an ioctl handler must
-> return -ENOTTY or -ENOIOCTLCMD for an unknown command, and that
-> returning -EINVAL there is wrong. Returning -ENOIOCTLCMD was also the
-> intent of the original series, whose changelog since v3 [1] says "when
-> an unknown ioctl is received, -ENOIOCTLCMD is returned instead of
-> -EINVAL as the ioctl documentation requires", and ep_eventpoll_bp_ioctl()
-> does return -ENOIOCTLCMD for unknown commands. However,
-> ep_eventpoll_ioctl() only passes EPIOCSPARAMS and EPIOCGPARAMS to it and
-> handles all other commands in its own default case, which returns
-> -EINVAL, so that path is never reached.
-> 
-> This is visible to userspace. For example, isatty(), ttyname() and
-> tcgetattr() on an epoll file descriptor set errno to EINVAL, while they
-> set ENOTTY for any other file descriptor that does not refer to a
-> terminal, as they also did for epoll file descriptors before v6.9.
-> 
-> Return -ENOIOCTLCMD from the default case, which the VFS turns into
-> -ENOTTY, and update the epoll_busy_poll selftest, which expected EINVAL
-> for an unknown command.
-> 
-> [1] https://lore.kernel.org/r/20240125225704.12781-1-jdamato@fastly.com
-> 
-> Fixes: 18e2bf0edf4d ("eventpoll: Add epoll ioctl for epoll_params")
-> Signed-off-by: Hengyu Liang <hengyul@cs.unc.edu>
-> ---
->  fs/eventpoll.c                                | 2 +-
->  tools/testing/selftests/net/epoll_busy_poll.c | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-> index e0c4bf88a838..adf30b720b13 100644
-> --- a/fs/eventpoll.c
-> +++ b/fs/eventpoll.c
-> @@ -1264,7 +1264,7 @@ static long ep_eventpoll_ioctl(struct file *file, unsigned int cmd,
->  		ret = ep_eventpoll_bp_ioctl(file, cmd, arg);
->  		break;
->  	default:
-> -		ret = -EINVAL;
-> +		ret = -ENOIOCTLCMD;
->  		break;
->  	}
+> Ack can fix up I need to respin!
 
-I think based on the documentation this is probably right, but I am now
-wondering why both ep_eventpoll_ioctl and ep_eventpoll_bp_ioctl need to
-exist.
+I've updated the comment locally.
 
-Maybe when I first implemented this I thought it made sense to factor
-out the busy poll ioctls into their own function, but in retrospect maybe it's
-cleaner to just collapse the ioctl function into a single one instead of
-having two layers?
+	M.
 
-In other words, maybe:
-  - delete ep_eventpoll_ioctl
-  - add the is_file_epoll check to ep_eventpoll_bp_ioctl
-  - rename ep_eventpoll_bp_ioctl to ep_eventpoll_ioctl
-  - fix the test (as you did in this version of the patch)
-
-Would result in a cleaner fewer helpers / cleaner code ?
+-- 
+Without deviation from the norm, progress is not possible.
