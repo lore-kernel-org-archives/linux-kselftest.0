@@ -1,90 +1,112 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A17B428495
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 07:11:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2862826C385
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 07:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790233876; cv=none; b=A8i4m93nzfwAxYkTgpfKqanQ4ilxlY/m6Ns3EnZysCYYpWHynCDQtSluWBa5zpJ0qdvPkemMWR2jM8NiTQCZcrsci13elVxnX7p/BOti59SxSXh7C0liWofqzOEA9cCCPYmf9uhOWs/mzaVtCBcQV3YP3fGVyC2hHIS0lFl8IMA=
+	t=1790234316; cv=none; b=optw/BbM8nXbzMr8qRIeJLN7aPBR7FzbrKBfnbi3GFNXWUKkyv/W4Ex7uFruuByyYPapnUTHfEwERbR8v8CjuY8viA6yjh3tnpMatY8gC4WsWbh5O+kzS4ccXneAzxduTqoH/cdPO3hm3sfCOvlC7gObgDBTlS952JhqxTzFzQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790233876; c=relaxed/simple;
-	bh=ZuEmG6wBl2efC/945xSQ8zaEHszttX3U0I2BPYqa8Dk=;
+	s=arc-20240116; t=1790234316; c=relaxed/simple;
+	bh=tiND65YWQ7WExP2YCttwYf58Qou97Hr6bJr+s79BFD8=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jWuHMRkkPn8HcH/uKov8k+s0mt99ADP7TDfriwQhpKc67UDZ8YkLefgnGrMBQZ4seeSUGdbaoU8BQ8zvgkr+28HH4Ak3XobHwbxxuCWouncsFhJfn7Pd26tPGqHaqWiCXwvic6zcGXqGLQhVOLHPrFG2iiAZozByda1E4ueTCXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rbZVe+Gb; arc=none smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:MIME-Version; b=u7LB2x4QNMQMHeV85QB0S+WBwI2GIVJ8H/FuSZlvo/Na76lT5jBGqOmbVieVtMGQQwxvV4i4NhZhU//Jiy5cOS0SCMitFZ8sfDjkLEfn3QVo3POAW2OlOI7f7viOGssjEkZqMsgWIFbznPp/svBqDT4bqWSf/3Bv2oP+6xpdMCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Rxkzlr1g; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=fcz8hB9o; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rbZVe+Gb"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d747f01363so10143925ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 00:11:07 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Rxkzlr1g";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="fcz8hB9o"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790234309;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=O/BKFWAq09c/drTlywLMZ5/iT4zh8IsXGlRsLaDd0Bg=;
+	b=Rxkzlr1gerfi4rfbdqWK8VZLvHRIBbGSHUVF5zS9wnpCWiDdLuIe6xd6dbBWi+X8GyKcYD
+	IzPUqKw1X9ylZbtmveDp/nGddtGTzzOv5BvptKBd/oWEd9ar0YBFc7wXfLaEtAZx1Wrjmj
+	OyEjvoiowEdgby3/k5i1tt2tbnbyYeM=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-437-jd3hCED3Nt68vwFJy7-TXA-1; Thu, 24 Sep 2026 03:18:28 -0400
+X-MC-Unique: jd3hCED3Nt68vwFJy7-TXA-1
+X-Mimecast-MFC-AGG-ID: jd3hCED3Nt68vwFJy7-TXA_1790234307
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-487038bc9b8so905478f8f.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 00:18:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790233866; x=1790838666; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1790234307; x=1790839107; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=ZuEmG6wBl2efC/945xSQ8zaEHszttX3U0I2BPYqa8Dk=;
-        b=rbZVe+Gbn5WFoJNWmttbn9T/hrYcccuJLmz6b3bzQl6q2MqGIUboFWOOmhhTch1bzg
-         YdebHXD2Lo8i4NywcmFbsCrZl92FnGBmPT0h2iB0adZsv3S4peYyAaH2ipwstoBOR9xm
-         /YFPMuytnpUVsmCs0cJOG+iIOsWtcF4csBQhcGK4CorslU+0A7hh68DlIxalJgEks4L0
-         XJEhblVZbug6X33LZNCMGEstqXkZ3q0aw5zIFXacMZylwMpoosVSmvtBeG/LB7PgidN+
-         y7a84aLPMi/yfqx5QWIcxPSjvB3/RNrLzQY2bTYN3EAk5ibazlHpRFx1sUpnTj6uhU0W
-         +yuw==
+         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=O/BKFWAq09c/drTlywLMZ5/iT4zh8IsXGlRsLaDd0Bg=;
+        b=fcz8hB9oX0RwftFfCJk4jHxOOsXfCYSgP0H7GDBsPj72J5R+xJmt9xNuun0vvTdCLa
+         wabxJQLq422a28lBpLcYEHok58t4U2XDSPMVpImf3miu+4LEm3LxNOFKQdhP2noB5/L5
+         en6BtOWt2eFjSJ4DLJIIxwsNqYOOXEPYx8WryN/z3oEqqYCGJtzD9m6jQq1hLk9e/xms
+         rwkJCzHlrfyZodNwszFtuxwPwyaA5HFXxO3KsvlO15daNIv3BPNlbqOh0Qi8MM6k3ylu
+         uUOXjSxSVkgpTtqFpQLJeNKYPk78nUHcjTncYiDyZg59auaS+xS2wh7ZDRsMRhfIozwH
+         GbPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790233866; x=1790838666;
+        d=1e100.net; s=20260707; t=1790234307; x=1790839107;
         h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ZuEmG6wBl2efC/945xSQ8zaEHszttX3U0I2BPYqa8Dk=;
-        b=t0Hqm3lUGyHlt8z3TBgpr0Qqmut5RZYeWkN7wOecN6O063d+Uth1OIehe/AcExNy/S
-         Z5xJYSXZdBHUrrxQ7oOU9fkE564MsV0IpHlqgxD7YOpYXH+vgMeqDKEtSoH3bLsU7lJz
-         fkI3f5EQfYd42BJ/DIOP2tty2SdCrVMFT3yza3TQS8r2bZsT64gZr9odJhjZlPxxCtB1
-         VJg7IGXRyZVNr0k5DQ60jPdjoyoItfnRTB0luXKi+EfFdIy02zU3/Xgmd2bkFL9m2MQk
-         RPLenIDp0X0WybmyGD44L1oAl6W0TC6miN+3n41js6EkoRs1KQ4+1jQQcaFYggc0wRFl
-         TH/Q==
-X-Forwarded-Encrypted: i=1; AKwUvBy3qSHnTnXgsCOEIcfgkdzyGwovw2duPywe6Cy/KRE/nYiNGGTiO1K0oEMsII4P6NMx2AlSz0CjtGLoLPka5KU=@vger.kernel.org
-X-Gm-Message-State: AFuF++lakfrYGdtjJWB6qAb77TrORmTywM92KLH+BfsXLKWdnOU/dHRq
-	4Ivt/p1Ju/rEeEb2aQLs7Ragi51Q0ht7U2OB9TKomFYoabfjCGmpO4fD
-X-Gm-Gg: AYBFou1oEplb4g/CaCTX5q73Nb9RpHiVjEQYJmPFq1+EL6JOixRLe67KmLJzgcUnveW
-	Hj/57OJrOUt3AGYFVynFquWV5Kyob8FyJTEH113lvJYQpuTI0hjfbo1AOZc9KXBBn2NBw5Zw/5y
-	HTBw5XanxEMnh6nMSq3g60VRl2BuBPgTQftG/Zve7+xoJpyxvsBjYbxZUyi9hsuDz8AZcUPa1BI
-	H3E9RSakOqpGkuA1/gQS638juWNUWsM0cmbMMHSYL7Cd6lECRUgFC9j2a9Mfjs7+O4FPQhv4qr9
-	hPPObJn/z2V2pP3nyVd9gue1ihj+Z34ZIW5tXzr3fl+nQIwsJLKAA+HgSkGDA5juTLR0XWIPEsC
-	EAXIHljbRqErwmKJ27eQtYCmZvXI5tGLRjl//R/USNNdUbYLc3sfsQ0wW24IxVBjU7Bi2oZsh4l
-	7h7haEr8Xc0bFZb/rBgJsfBCpmIu5wKgmjOTCe+U6Zk/oIs7r/c9USxerlpKwpcnVLnY7n9DEDg
-	v+yIgWaxjBolSvtmpptN61Ov+s=
-X-Received: by 2002:a17:90a:1090:b0:3a0:a515:c480 with SMTP id 98e67ed59e1d1-3a0a515c8cfmr85375a91.29.1790233865909;
-        Thu, 24 Sep 2026 00:11:05 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a09738f2absm3113496a91.14.2026.09.24.00.11.05
+         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=O/BKFWAq09c/drTlywLMZ5/iT4zh8IsXGlRsLaDd0Bg=;
+        b=AmD1Q5Bkorp2buLybFHW6X6TN5NxOngcgeX0/n+oaSFcO2Q+t1dGBGTvIuOQNMcWhr
+         bajv10ePnXsf2B7liRj8XYo6GnBvvgeJiaxuq4RlUxT/Jbv2fBLtRTpLrZ6h0KV40Pep
+         czRYOJMTeg4BsUTSjnjSSti1Z9m8W09+0FLX7kjxZafXHZq/bXN2wyqZNyPHjGzopiAF
+         71PdYpFDx1D1hWxehtCk1e7qHcjwMHh/7EwXheRWgSdbbEnv6BKijGOF2JyxdGSNISAl
+         A9HoNzXddVpk6f0I5iG59DhshbzfiMMqStdpCZw2XN30zKcP63w3vuoFBvGAfe0iRLKU
+         t/Jw==
+X-Forwarded-Encrypted: i=1; AKwUvByoPWUHTYwaBTUqkuOyiiIAgOSGliWh9uIPwdJmFOMbo9WQg1ZhRDy3Qd30sOZ4wJxFvuUZYCk5fZRlvK1YKJE=@vger.kernel.org
+X-Gm-Message-State: AFuF++nSwZTE7xO2Ie0XK6+LyNJcMffLGgdooXgcy41S1TbLYcnYZB0Y
+	ildnmagoDO+RbPJyNBPlh+Y56SUzY/Yt0a8i6HjIk658Liyxhx81CPrjZoftdMZn5Yta6kWUHS6
+	nMkZDSLMK7CFQui5l/Dawb7rEktuKqzv3Rk3PQNj3zW2aVhm3s4dEhJVlwHfAU5b2Qegy6wBxFc
+	t1Xg==
+X-Gm-Gg: AYBFou1bS28U/HeFDZ81DX/6hPG/KLXRlvFpauQGIMFZWXprMI/4rqCme3/d0t0ey65
+	Nhus6SvketRmI/7pM5DNzZRc7XU4OF+TSe/lvkgKimPF7S/a//brjVyL2w7DJWl5aoRXanweu74
+	V5D8I+Qf2ymHLIE2snZnpfRPUHrnu3hwwy8Bj/kGRWODCIgZWDoVAimoUp014lAP+KlkLt1xPXU
+	bqYiGDD/ihJN4L4KvbrgCM32vKHRk6AFK5PZQ0y8pjgxik/PnEkWQ0bnHlcgsmVNflZc1sd9T1d
+	FAJqTRP9xhVzWpBFtQHBQDeatPtp0tboWpzQTxoXypdAMtJYCKtigd40HHfEWs9BnW7j+V8fHPP
+	ah+aXcAKL7lhal4TI8o08Rk7rCMxh4CWakIg5Xms=
+X-Received: by 2002:a5d:5849:0:b0:488:5535:415e with SMTP id ffacd0b85a97d-48871728c76mr2575377f8f.25.1790234306876;
+        Thu, 24 Sep 2026 00:18:26 -0700 (PDT)
+X-Received: by 2002:a5d:5849:0:b0:488:5535:415e with SMTP id ffacd0b85a97d-48871728c76mr2575344f8f.25.1790234306488;
+        Thu, 24 Sep 2026 00:18:26 -0700 (PDT)
+Received: from gmonaco-thinkpadt14gen3.rmtit.csb ([195.174.135.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-488684862a3sm11499823f8f.7.2026.09.24.00.18.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 00:11:05 -0700 (PDT)
-Message-ID: <1eb267761bd627b63e5c78bdf76215c019aa3fa0.camel@gmail.com>
-Subject: Re: [PATCH 0/3] selftests/bpf: Fixes for out-of-tree builds
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: "Nico Pache (Red Hat)" <nico.pache@linux.dev>, "Ricardo B."
- =?ISO-8859-1?Q?Marli=E8re?= "(SUSE)"	 <ricardo@marliere.net>,
- ihor.solodrai@linux.dev, nickolay.lysenko@gmail.com
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, Emil Tsalapatis
-	 <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>, Yonghong Song
-	 <yonghong.song@linux.dev>, Song Liu <song@kernel.org>, Andrii Nakryiko
-	 <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Alexei Starovoitov
-	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
-	 <martin.lau@linux.dev>
-Date: Thu, 24 Sep 2026 00:11:02 -0700
-In-Reply-To: <e4761ef3-4385-4ec2-ada8-70f293c14331@linux.dev>
-References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
-	 <6f95ec90-194a-4304-9673-c7bb50065223@linux.dev>
-	 <d3a251acf5131bea732e23bbd135a5fdebec9ad6.camel@gmail.com>
-	 <9e055710-d607-4a4c-95c8-eb3a0b4aa1a1@linux.dev>
-	 <2a1875a99b173fec18d214419efbe876dcd95ad1.camel@gmail.com>
-	 <e4761ef3-4385-4ec2-ada8-70f293c14331@linux.dev>
+        Thu, 24 Sep 2026 00:18:26 -0700 (PDT)
+Message-ID: <c8bf231a39b5303bb283b12648a9e23b5c4bd07e.camel@redhat.com>
+Subject: Re: [PATCH v2 3/3] rv: collect per-edge dwell time for per-cpu
+ DA/HA monitors
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: Tobias Schaffner <tobias.schaffner@siemens.com>, Steven Rostedt
+	 <rostedt@goodmis.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>,  Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ rpm@xenomai.org, 	jan.kiszka@siemens.com
+Date: Thu, 24 Sep 2026 09:18:24 +0200
+In-Reply-To: <20260911123439.463052-4-tobias.schaffner@siemens.com>
+References: <20260911123439.463052-1-tobias.schaffner@siemens.com>
+	 <20260911123439.463052-4-tobias.schaffner@siemens.com>
+Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
+ keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
+ 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0BrZXJuZWwub3JnPoiZBBMWCgBBFiEEysoR+AuB3R
+ Zwp6j270psSVh4TfIFAmjKX2MCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ Q70psSVh4TfIQuAD+JulczTN6l7oJjyroySU55Fbjdvo52xiYYlMjPG7dCTsBAMFI7dSL5zg98I+8
+ cXY1J7kyNsY6/dcipqBM4RMaxXsOtCRHYWJyaWVsZSBNb25hY28gPGdtb25hY29AcmVkaGF0LmNvb
+ T6InAQTFgoARAIbAwUJBaOagAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgBYhBMrKEfgLgd0WcK
+ eo9u9KbElYeE3yBQJoymCyAhkBAAoJEO9KbElYeE3yjX4BAJ/ETNnlHn8OjZPT77xGmal9kbT1bC1
+ 7DfrYVISWV2Y1AP9HdAMhWNAvtCtN2S1beYjNybuK6IzWYcFfeOV+OBWRDQ==
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,71 +114,55 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Wed, 2026-09-23 at 14:06 -0600, Nico Pache (Red Hat) wrote:
+On Fri, 2026-09-11 at 14:34 +0200, Tobias Schaffner wrote:
+> With the core facility in place, hook it into the DA/HA layer so that any
+> per-CPU automaton monitor also reports how long it lingers in each state.
 >=20
-> On 9/21/26 3:42 PM, Eduard Zingerman wrote:
-> > On Mon, 2026-09-21 at 15:15 -0600, Nico Pache (Red Hat) wrote:
-> > >=20
-> > > On 9/21/26 3:04 PM, Eduard Zingerman wrote:
-> > > > On Mon, 2026-09-21 at 14:40 -0600, Nico Pache (Red Hat) wrote:
-> > > >=20
-> > > > ...
-> > > >=20
-> > > > > Given your series was defferred, and there is a "rewrite" coming,=
- what would
-> > > > > be the best approach to working together (between us three) to ge=
-t these
-> > > > > fixes in that series too.=20
-> > > >=20
-> > > > The, "rewrite", as you call it, had landed today.
-> > >=20
-> > > oh thats great news. I checked on Friday and didnt see it. Thanks for=
- the update :)
-> > >=20
-> > > > So the series in question can be re-spun.
-> > > > Regarding your patch on top of it, it appears you can just post is =
-separately.
-> > > > However, I am inclined to be confrontational towards changes like t=
-his one.
-> > > > The purpose of the selftests makefile is to run selftests as approp=
-riate
-> > > > for current tip of the kernel tree using a very specific kernel con=
-figuration.
-> > > > Main users of this makefile are BPF developers and BPF CI.
-> > >=20
-> > > Yeah we are trying to reincorporate BPF as part of our CI. It has bit=
- rotted in
-> > > the Fedora env, and our large amount of build variant is where things=
- are
-> > > starting to go wrong. We need to build selftests for multiple variant=
-s, and be
-> > > able to specify which variant we are building for. Hence the out-of-t=
-ree build
-> > > with specific vmlinux.
-> >=20
-> > Why can't you build the kernel and the selftests in the same out of tre=
-e location?
-> > The change you are proposing is contained, but it's a death by thousand=
- cuts,
-> > the selftests makefile is quite a Frankenstein's monster already.
+> Pack the automaton state and its entry timestamp into one word so the
+> transition cmpxchg updates both atomically. This prevents nested events
+> from attributing dwell time to the wrong edge and requires a native
+> 64-bit cmpxchg.
 >=20
-> Due to incremental builds, and tool building in different env's
-
-Can you copy vmlinux to the output directory?
-
-> >=20
-> > > Is there any other approach you'd suggest? I personally dont work on =
-BPF, but am
-> > > trying to cleanup/fix our selftests builds for Upstream/Fedora CI.
-> >=20
-> > How many Fedora-specific kernel patches do you carry already?
+> Account a transition as soon as its state change is committed. An HA
+> constraint that rejects the transition can therefore reset the monitor
+> without leaving an accounting window for nested events.
 >=20
-> So far its just the series Im replying to here, and the commit I appended=
-.
+> Add a selftest that enables a per-CPU monitor, checks the stats file
+> appears and is populated under load, and skips cleanly otherwise.
+>=20
+> Signed-off-by: Tobias Schaffner <tobias.schaffner@siemens.com>
+> ---
 
-Okay, I was under impression that distros bear a ton of custom patches
-and that adding another one adjusting random makefiles won't make a
-difference.
+Sorry for taking that long, I could just have a quick look at your patches,=
+ the
+approach looks fine but I'm going to need more time to check them carefully=
+,
+likely after the LPC conference.
 
-If that is not the case, then I'm being unreasonable and the change is smal=
-l.
+I'm not too fond of how you split into patches. What's the reason for split=
+ting
+1/3 and 2/3 ? It seems they both add the new functionality, one step at a t=
+ime.
+
+...
+> +/* Edge statistics pack the state and its entry timestamp into one word.=
+ */
+> +#ifdef CONFIG_RV_EDGE_STAT
+> +#define da_state_t	unsigned long
+> +#else
+> +#define da_state_t	unsigned int
+> +#endif
+
+Also try to define things in order, da_state_t is used in 2/3 but not defin=
+ed
+until 3/3. This doesn't break builds (the header is unused until 3/3) but i=
+s
+just harder to review.
+
+I find it more natural to split it into 1 add new functionality, 2 wire it,=
+ 3
+test it. What do you think?
+
+Thanks,
+Gabriele
+
