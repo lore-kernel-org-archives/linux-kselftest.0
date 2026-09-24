@@ -1,86 +1,80 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-54.mta0.migadu.com [91.218.175.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA094A2E00;
-	Thu, 24 Sep 2026 17:33:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7564AAC5F
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 18:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790271194; cv=none; b=Hoxsfdhx4x2PjaQV9TgGevRxZGB3b5Af73NUnkx7rfJXuUfPBonCw2EsP8HCeFQyLViaf8dKIRw78d2oW4HOYLU/2ItVj6dJJkHdR9nEvQhS5896RP9943UgnVmSafSb2eY1YM7hu3TII28PSe/9zQoO24cmMIRSVeHZEKgsaws=
+	t=1790273968; cv=none; b=QKPt/4WwDJ38eYlkY42N0thx54BmcivSd5YG8+Awm4Pn4qTRAAypQqR+nm44Y4EE4v8T9kUDoR05lrcE4oy60uB68QPN5jXpT8upyuovhWkAuVOEr2l4wKkdSmgHHnICE5ZtZBbKVAVoJh6uyX0dJqTt0J1/9naDFnGR7+oXiKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790271194; c=relaxed/simple;
-	bh=obbJKP/A+7IPNb418as8NRAGQ4lw7cpNNtgP+Jlxpvw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NtRgbHt/GPcMYhZGOKn3CERqe3b7nw6bkXm9nQZja1dxE/eV4KoP8lMjwBZSsYtPgttJVD2ENXa7o8kZx/pTOvmx6YYDCJu7peFoZq4D4hgy7yGOEHJlutkn+4eK+V70nHxCE/qVQknjqb6DW2A5cMwMf6g8Lzb/NzA1/dD4PmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bzdjiYnU; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ABkkPgKM; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1790273968; c=relaxed/simple;
+	bh=IvUR2431T4OLwHWTHJUJSLYNuzeAJuOHiFRGzJguyA8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MBaddg0ZQTYAQB5d1D6NIlNsM/Ly4aUn9MvKk53ixHuPGanS9+f7OnYjSWqT8yIYfSl6sjQCh2kGgXFzC14VqqPf2iKoKUFMaj84iyRmz5JCWHkss5DSA/IFb87gNIKgwwC4lfFo5fbtfGvFN/mAgoAPmfvlCDMxw4YRrl+yJsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kjsKCtRX; arc=none smtp.client-ip=91.218.175.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bzdjiYnU";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ABkkPgKM"
-Date: Thu, 24 Sep 2026 19:33:07 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1790271189;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CppBDAJ4f/mYAuFO/9BiWz8GeSlq5uEp3U+JHtkF4No=;
-	b=bzdjiYnU422dbBO17UvO3Sy9Mse+Fz4j6qtQga0TvFu3RJe81DDpC6cAtYL+jXoVEHRpWt
-	8/uBibsO1Ybx8msaKY6jcjrEZJcsk5l98NoGcNFYBJrCeQ8ES6WWYtvU8rjWif6lRSMYHr
-	Mrmec37ubCTiI5qvMErR4SqDtMLmTmdI17+TG+9ey9NuLUT8WVE3fAhtkiJCbaLi3OXcE+
-	ICrecUaANatg0rWL27dQzli4+ISAL0quAocBmyQ+wAA5xnSkwE6xGvT3yI5p4yBUZBAv1s
-	13Za0sxqlQLJSSir6JxirwK8XQiRFUqZSiV1NcSKH+vpdjULtMAIJ4gXhB5cyg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1790271189;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CppBDAJ4f/mYAuFO/9BiWz8GeSlq5uEp3U+JHtkF4No=;
-	b=ABkkPgKMmdnwTQxPHsLI9A1VPdTLc51R5aLbDd5gVKmoy4/d+Whx3AqgWbhmXaMfbq9tTC
-	fckMpMaJREdfmwAw==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v3 bpf-next] selftests/bpf: Replace %pK output with 0
-Message-ID: <20260924173307.FQgZQfVP@linutronix.de>
-References: <20260924153153.tlErkAb5@linutronix.de>
- <DLNO7GO4QMNE.23673O3BC9B7@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kjsKCtRX"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=IvUR2431T4OLwHWTHJUJSLYNuzeAJuOHiFRGzJguyA8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790273964; v=1; x=1790878764;
+ b=kjsKCtRXIqG4QH2wQZyEg+X8YJPcg9dCxfnIUJWKoL9rsxzPjHSaS08FE+DrlB39h5bS15Sc
+ hvtqmsaXbWLsVjQyqyhgSg+a7l4wrew8htzHcpxR1PmDTc98s088Ndcl8B/RGT7YCwqPrtB0XMg
+ cYs9Ek/fE5o/BKn+N9oQAeVo=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 8c8f96667115ae10;
+	Thu, 24 Sep 2026 18:19:24 +0000
+X-Mizu-Trace-ID: 8c8f96667115ae10
+X-Migadu-Flow: FLOW_OUT
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5b83c1421ecso969e87.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 11:19:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBw97qXlkGU0JM5gpPXl9/8khw1/dE/+KbyOyH0nQApGqOBCkwQRU+D6OXKCjdpZkCUxB/YCVdibJj0PqQpWZ00=@vger.kernel.org
+X-Gm-Message-State: AFuF++mrGUj0yQz09DP9KWuq5ervEV1ZlSAYW6IbaIoSBIwH/SPS01QS
+	+FUSz3csODXfCrP368op0pZntiWVHrV7tHgt27qNj1lHZEx/PbhJBYkDpQDD90a04FeqGzJx2RG
+	lVtJDNF5vRW9bXWssu0p5LhjUa3sOlX7fOGyMzJf2
+X-Received: by 2002:a05:6512:3ca9:b0:5b8:e262:d32e with SMTP id
+ 2adb3069b0e04-5b8e57821dcmr16882e87.1.1790273959309; Thu, 24 Sep 2026
+ 11:19:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <DLNO7GO4QMNE.23673O3BC9B7@gmail.com>
+References: <20260922071945.693714-1-fuad.tabba@linux.dev> <20260922071945.693714-2-fuad.tabba@linux.dev>
+ <arVQutV75u2gGVr4@google.com>
+In-Reply-To: <arVQutV75u2gGVr4@google.com>
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Thu, 24 Sep 2026 19:18:43 +0100
+X-Gmail-Original-Message-ID: <CA+EHjTz=n2Tnq73amL3cok0=_vn-cigesdd1r-emt=+__Xatog@mail.gmail.com>
+X-Gm-Features: AclHuK8gQuMnh5G0uSWpcfUI1aukInqrdbq0WmB1N5HLh0hWNnycc7FfERA0vUQ
+Message-ID: <CA+EHjTz=n2Tnq73amL3cok0=_vn-cigesdd1r-emt=+__Xatog@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] KVM: selftests: Fix arm64 sysreg header dependencies
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	James Houghton <jthoughton@google.com>, Will Deacon <will@kernel.org>, kvm@vger.kernel.org, 
+	kvmarm@lists.linux.dev, cgroups@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 2026-09-24 16:00:47 [+0000], Alexei Starovoitov wrote:
-> On Thu, Sep 24, 2026 at 05:31 PM Sebastian Andrzej Siewior <bigeasy@linut=
-ronix.de> wrote:
-> > v2=E2=80=A6v3: https://lore.kernel.org/all/20260918102610.gxA3km8_@linu=
-tronix.de/
-> >   - correct the subject line
-> >   - correct grammar error in the commit description
-> >   - Pickup a reviewed-by tag from Emil which was sent for v1
->=20
-> v2 was applied to bpf-next two days ago.
-> See commit 79dc258c9392 ("selftests/bpf: Replace %pK output with 0").
-> The code in v3 is the same. Nothing to apply.
+Hi Sean,
 
-Oh, thank you. I haven't seen a mail from the bot and the patch tracker
-said had "changes requested".
+On Thu, 24 Sep 2026 17:32:58 +0100, Sean Christopherson
+<seanjc@google.com> wrote:
+[...]
+> Definitely doesn't have to be now, but at some point should we split out some of
+> this arch-specific sub-Makefiles?  It's nice not having to hunt around to figure
+> out which tests are supported by which arch, but the amount of arch specific goo
+> we're accruing is getting unwieldy.
 
-Sebastian
+I think so. I'd keep the test lists where they are and move the
+per-arch build logic (the ifeq ($(ARCH),...) blocks) into arch-specific
+sub-Makefiles. I could send that as a follow-up once this patch lands.
+
+Cheers,
+/fuad
