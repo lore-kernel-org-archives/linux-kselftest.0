@@ -1,107 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy2-f41.google.com (mail-dy2-f41.google.com [74.125.229.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A104CDA0A;
-	Thu, 24 Sep 2026 20:28:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03568411A1C
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 20:42:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790281699; cv=none; b=iBnx2V2pu3xGmYxnK8ipQFelU2QiBn+78qtWWYcwYY/Gg5AzT4mUGhriZ6cTi2UYTkgdLCSwZY9k385J6mlPiJ22uECn2HOgKnHPuFXkke0OycJXLTP3pFU1dyxXiTUE9a0loJmaE5/Yv30lCF186F1uIJYw07F++52Pj9cdWIQ=
+	t=1790282541; cv=none; b=uplfQdMl8TD4qksKhl9YBcl+uuByRSrGjZzL2N8LeVwx+mSrcgJ48Jv2Yb8dkMFZDW+TJrOLbRJNQrzUL9l9pQMP71ZYU3ewIC0+inGe4l8y/9RLBBwsXpftY0Zn7Yc3JxXcK2Y0692AmHmLpR8USIpJM5dVl8uK789d957Nr4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790281699; c=relaxed/simple;
-	bh=w97EWjZesGb+3hb/Zx7HCgr5mgb4O8SmEQJDS8VlRqw=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=RzLBaRsCoQhH+NpBdz+ciYGFyJ09YjfwaHmKQIBLaLzBIReDEjORWWJ7Lzx1kmZxcDWKq6ks+7/B4sQiV4zzANns1CVdhvICKG40HUZmDl0JH1CJ8bygwBf60l1T3guWITyFUdQNE2Y2/DGJG6Px43bhv2G4MWyarrX0Ov9vJ+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cq9hMZrf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790282541; c=relaxed/simple;
+	bh=bBi9t3/XNj2fxZ4GFxBaUZi+HB2ny2QNyH+RsLcMXqs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WU1u5ejxnP7DqWiOXHXPbwPvB0V+PWO4N27M3rND597q8SQ/EUlD2EyZOwbnvWoHopBsn9WIcDTVF6+4v4HAK6HC49OTYSpDpvpyMua3QGAMbwtbgIcZtb5tHdxh8BrMU3wAvJgnEVi5A57s2xni9HLoYfoj/CRWOy2lXinybiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KKyfQYUq; arc=none smtp.client-ip=74.125.229.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cq9hMZrf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21DD91F000FF;
-	Thu, 24 Sep 2026 20:28:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790281691;
-	bh=avFjG5EZmFqrwm1p4+gM+ZFckK2JwdC+scZyps23rJs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Cq9hMZrf00s1b6AqZjdi0M+xphvplpO9MfOok1IlGnSwLbZV9ayIds8xD6DUZyNhK
-	 ihG3/PzW1VIcrv2SrmJGjylEQZGb5RT8Bn9ZG/E2YWntUfWR1x48dpWb6WKNhcwm78
-	 Mt5krRorJPuciXv7L7H9pOUwm/5VqLS37cMpgcD43pK2jNIp4lNqXKpPLK70jy6RSw
-	 J5YcktwTTPtFPkjnZrORVx2wzI/krFj7O5JKL/pCzE+5nOaTuBF6jZAO2A8/HkZq4s
-	 2mlpsLV3yZqlU05yjHOS68T+DHUwV143/0ez2Sgb7ddfEgajnPjCfBBBsoXYyXv4zf
-	 jyF/qq3tPWPJw==
-Date: Thu, 24 Sep 2026 10:28:10 -1000
-Message-ID: <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: Johannes Weiner <hannes@cmpxchg.org>,
- Peter Zijlstra <peterz@infradead.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- Ingo Molnar <mingo@redhat.com>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>,
- Valentin Schneider <vschneid@redhat.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>,
- Suren Baghdasaryan <surenb@google.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- David Dai <david.dai@linux.dev>,
- JP Kobryn <jp.kobryn@linux.dev>,
- Frederic Weisbecker <frederic@kernel.org>,
- Aaron Lu <ziqianlu@bytedance.com>,
- Daniel Jordan <daniel.m.jordan@oracle.com>,
- Hao Lee <haolee.swjtu@gmail.com>,
- kernel-team@meta.com,
- cgroups@vger.kernel.org,
- bpf@vger.kernel.org,
- linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/7] cgroup: charge kernel work to the cgroup it
- is done for
-In-Reply-To: <20260924184714.912181-1-shakeel.butt@linux.dev>
-References: <20260924184714.912181-1-shakeel.butt@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KKyfQYUq"
+Received: by mail-dy2-f41.google.com with SMTP id 5a478bee46e88-33c0d931083so61644eec.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 13:42:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790282532; x=1790887332; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Quf+BJxgePyIzaM/U+UOmAKPgAdi1GCD5xdWybO6rFI=;
+        b=KKyfQYUq27vw2IMBkBhWY6gQ56fu6eoVeoWpmuzsLB3KTG9v1+7/LpUZC/t+tpSe1s
+         3IRWzR27WvyFyrVJD7Op8kqMkjpsuPPxhyNfRtWKP9R+FB3Oi5Ai/aHclCBHmvMbeGUS
+         Y0tts3OujfRoP98FUXek2VcLzR8DGb1ff06ZwlYFPncRmZD4c1lljGDD/vT+dwN6LufW
+         y5irk3THLuzvuFKR2tOBKbjpMwvAXn1iALxlq8BqTz4Urrp5d7QM1lUpEsYVO0j0LPA6
+         gQraca6Vb29uALaArMixJMGa2vT4bOb57vFXlbXnmDC6fP2aiNwSSr+FfJbmvBQW1hWS
+         q9/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790282532; x=1790887332;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Quf+BJxgePyIzaM/U+UOmAKPgAdi1GCD5xdWybO6rFI=;
+        b=m2NMhuyfVPaJ8vDTnmYBoY+EGhyX8mABFOasipayFl5kSlg7sG9kkfKVsrneGOd34W
+         vRxkYJyHyy+zewPLyd/BWecKhwIB9Yqb+JSdwmXJaWZjqtBpi81Qas06AWaLTOxhAYWG
+         SXSVdRJoDKYY+Flxtcd1+tIF4nUsYsymaSMeJkBThLWWT5S5hSxdXSiWEDEsm/oXQrDw
+         M/i/ESgfUkwniVXcjrmrAmDzVDw13kF1X6YYVl9CHbuRKkibrnbLXPtSn1tIF81x754Q
+         ZMVEDtPzdeNqruPUN9deTjqM6KLCUyQ5/zdwvJ/EDX8x1L9u3gOTosA0vaM0WRrwkX6b
+         dKnw==
+X-Forwarded-Encrypted: i=1; AKwUvBycaVx6OuXbuan+/NwPWOJesJ9f+c5agVtPI5Oz/xa2GQ1aBBZW6o9WgTsph3et+2m1MhyiQxeTwIDWAL9ORoY=@vger.kernel.org
+X-Gm-Message-State: AFuF++mCRUnvpeaW2mLU9hAu26HCeNluS8bcMRMIHBkg2tJgu2YkjR06
+	cp4Eff0QCrYQYrx2V7xj2bjJu6KJPI2RQHDTQczwuG2hGhOb9DIllZNv
+X-Gm-Gg: AYBFou1jaOipV0c3d4iB2JcWS5oQBK49aFKUzM/rPsAOpaIea5MYghnN0zhGZnOpHDj
+	r0RvMNj/kyRC+IsThDfopu8PvubC+vkbxNS6smmBjEjOcYwCTXeotvnJ0MdaaOeDKGpCGVvwhes
+	mpHHFethKgVtdQrUo8Vf6P75ndsiM/cs1JAoKcjt3WL1Ahwie0C3HeP/sKdKWqZep2qiVOA+uhO
+	WNCHiMR4GSLxKt7j0EWQjNqZGQP2eZC6sF7r2bhzWZPpF6nfxqIwXaYfzXOj4voNRitcbnGdHpi
+	B5F2s7CcUmt36BHYeGPdohZZog/YaPjy7JectCBvqYuSwBBofH8IdLxkJXDDXQKMQPcvVng/zGS
+	T+MFsa+dWuqRIDou/plqNBSISYRMvrtHCt5LHq6RSDHEnmkLAysMZq/a9/f1vyktGfJIeNb1R8w
+	xZ1u+QtYzm1LA1MjzBjmWQrRIJRtE+k9JOosAkuzEQ5wmtuJ9ts1LyLejxCJPgXWvMWSHT+TVcw
+	z2esbE+gq47ImQeBSXakTfV5wc9SjPmmlRO8CjQEA==
+X-Received: by 2002:a05:7301:e0f:b0:33c:29d8:bc21 with SMTP id 5a478bee46e88-34004a89af2mr2406330eec.10.1790282531857;
+        Thu, 24 Sep 2026 13:42:11 -0700 (PDT)
+Received: from pop-os.scu.edu ([129.210.115.107])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34141d2fe4bsm1073470eec.4.2026.09.24.13.42.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2026 13:42:11 -0700 (PDT)
+From: Cong Wang <xiyou.wangcong@gmail.com>
+To: Kees Cook <kees@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	Will Drewry <wad@chromium.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/3] seccomp: opt in to restarting notifications before receipt
+Date: Thu, 24 Sep 2026 13:42:06 -0700
+Message-ID: <20260924204209.477694-1-xiyou.wangcong@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hello, Shakeel.
+From: Cong Wang <cwang@multikernel.io>
 
-On Thu, Sep 24, 2026 at 11:47:04AM -0700, Shakeel Butt wrote:
-> This series lets a kernel thread say which cgroup it is working for.
-> That cgroup then sees the CPU time in its cpu.stat and the stalls in
-> its memory.pressure, and the CPU time comes out of its cpu.max quota.
-> The first user is the memcg reclaim that runs from high_work.
+Sandlock is an unprivileged Linux process sandbox that uses Landlock and
+seccomp to confine untrusted programs.
 
-This doesn't translate to net rx, which is another major source of
-displaced CPU usage. Switching membership on each packet isn't going to
-work there. Attribution can't happen that way. We'd much rather count
-per-cgroup received packets and prorate the CPU consumption. If at all
-possible, I think it'd be better to adopt an approach which can cover
-both use cases.
+While using seccomp user notifications to enforce process limits,
+sandlock encountered intermittent shell pipeline failures: SIGCHLD can
+interrupt a pending fork notification and make fork return EINTR before
+it executes [1]. The same pre-execution interruption can leave an
+intercepted close returning EINTR with its descriptor still open.
 
->  - The debt is capped at one period's quota, so one long piece of
->    work cannot starve the cgroup for long. Time over the cap still
->    shows up in cpu.stat. Writing cpu.max or cpu.max.burst clears the
->    debt.
+Receiving notifications eagerly only narrows the race, and
+WAIT_KILLABLE_RECV protects the task only after receipt. This series
+adds SECCOMP_FILTER_FLAG_RESTART_BEFORE_RECV so applications can opt in
+to restarting these unexecuted syscalls after the signal handler
+returns. Existing signal-driven cancellation remains unchanged unless
+the flag is enabled. The series includes regression tests and
+documentation.
 
-I don't like the debt capping. Having debt doesn't have to mean that
-the cgroup doesn't get any bandwidth at all. The cgroup just needs to
-be slowed down enough that the generation of new work is throttled and
-the whole thing doesn't go out of control. IO control already does
-this: when IO debt is accumulated, userspace is heavily throttled, but
-not completely stalled, until the whole cgroup's consumption comes
-under control. I don't see why the debts would need to be forgiven
-unconditionally. The cgroup can keep paying them while running at a
-minimal rate to avoid triggering stall failures, and if the situation
-doesn't resolve quickly, that will most likely trigger pressure based
-kills in any reasonable setup anyway.
+[1] https://github.com/multikernel/sandlock/issues/235
 
-Thanks.
+Cong Wang (3):
+  seccomp: allow restarting interrupted unreceived notifications
+  selftests/seccomp: cover restart of unreceived notifications
+  docs/seccomp: describe the SECCOMP_FILTER_FLAG_RESTART_BEFORE_RECV
+    flag
 
---
-tejun
+ .../userspace-api/seccomp_filter.rst          |  29 ++
+ include/linux/seccomp.h                       |   3 +-
+ include/uapi/linux/seccomp.h                  |   1 +
+ kernel/seccomp.c                              |  16 +-
+ tools/include/uapi/linux/seccomp.h            |   1 +
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 354 ++++++++++++++++++
+ 6 files changed, 399 insertions(+), 5 deletions(-)
+
+
+base-commit: f2c53ea949c5048f96b3dbb5a5ee7131ce4ff2de
+-- 
+2.43.0
+
