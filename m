@@ -1,146 +1,203 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35DD43DEAC
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 21:26:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18AF0483BC6
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 21:53:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790285196; cv=none; b=IQZQuW5+0x9rCJS467byIjSgU6Ft9aM07V1uIadc7xFKmHBcheWxVJEXTKxHuYlZViSBO76XEk72UwacEkU0SSvyufMSqTu7c1kEkbHpNveNzY0HMvaIWfcmA/MQ1/Fr+WWU3FLZ/KfMoEWnlOxv6/jPHqdHn4z22ri+zawckGg=
+	t=1790286788; cv=none; b=PYq+sZp0qYqmqblk/qTYSzSJJIbiRrhq5NwkzUicGuEdLp1lwHLLcklzHrXkvr/nslKxCpwJRoUbJp5qbdFI5TJh+tpz1DEBjFx929HfoCq91UIJZ80u6u4B8BQC+N7Kqj/gMeYEitc/lpxTJ90CvWLC+AsZEt2vn4cUm3sibKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790285196; c=relaxed/simple;
-	bh=EBIyTvT/RiFCeBd6RBr3SBgwznC0sMq6W15H95Y1pnM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BPWhj2Xy7Eq3bZr0K0R+pkckgtOCZkhwNHIsQ84wGY5MnMj9pUOpphK3Gl/K0SRy68n9sFZw+ZpAm980cdO2G7Quo4FXKgnsx1J3Ufxu+Vh1gMJnxKnopbeR0WS5RZmZ3GCWKoF73EqDn/H0vc9YEQbXRaXgpFHwGGTMXuqQQ5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IACNgUPR; arc=none smtp.client-ip=74.125.225.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790286788; c=relaxed/simple;
+	bh=d9PT2GdoWFZBMlVJHZrFv1etxubcAqj+sYkXP3zDxNc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=tTm+A57IcMaTv6Rbd3gukAQyxTQdhhnDO8ysQC7nOPU4XYkf1txgDsvZfLiu9QBy3nH19MegAb2TiOZqf25+CY8EE21mfodZNolUCS7zKLROjKifWxWRlQ6g+yiOGaxf1y6jDIp3d/rfZoH5FAigTjpzMxStMRSMSySiUSqw+7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sasaO8LV; arc=none smtp.client-ip=209.85.215.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IACNgUPR"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4843971bdd0so32041f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 14:26:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sasaO8LV"
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cc73895c7d5so239100a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 14:53:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790285189; x=1790889989; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1790286786; x=1790891586; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=B1QGMODZqbbQ8GRF8jTWE3PN7/2ZBuLQYZ3QAea8zzo=;
-        b=IACNgUPRIRohPFF7DeTLJt2thlkeWVKRLA+DxL/7+Yuo36W6pdHRJxyAJCDf106hx0
-         U2BC7di0Eaho2k9lSAhA1oEzaHSlgguqqHY/Ljrgou15n5wa1UEoWGhO2tlUkDBFjzV8
-         BO0CuEloKyuDhe0I+yARwHUuMdIzWg+jq1Zp8u5AkfRYNMemzscooJlx3UoLhs8O2+bw
-         EqggZRDauPCYn3OFuuGAQHyE77JuNBBtwkHMqJLy3/mUnBItC4jr5R6w2S7G8Czj+HK6
-         CFogRfR+FtxCKy1I1L2jOgVaB/Fht+22nezx+32lYXZnbn2bOgPUvarRs4HEU9TXASJz
-         nHeA==
+        bh=96howwJpIzasaCW/3Q0EcsFpl6itohsELojaGu9d8N0=;
+        b=sasaO8LV2aC+eJ22ZSls5e76IWjl5wQbLHC58f+m7GBcqu6ME6MAUYipxXJY5CV1+m
+         tCdY1yvxX5ZBUf+M+OL2cu3tgYoCtz8+vNYuxLbay2kHBOCUUn8H0EY2WCgMPFj+OSFT
+         w+RrM4+Gqdy6L0dSmEGiKwEctOQHKydA+DGIcxnb7snyQiQ+zeAxvIueBKhR+zEZBesn
+         npWdmNiKooIcSPNt7tzTFAjlMAgB9CDDhgPbcG87n1luyzYd+rSNCR26jeq1XGgx0ydP
+         6xPeGQukJU+tB1MRM1M66d5C6w2fIAZ3RbgreRTVSqDUsc3vBZcaO9IPd1S85g/zGWvJ
+         /AUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790285189; x=1790889989;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1790286786; x=1790891586;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=B1QGMODZqbbQ8GRF8jTWE3PN7/2ZBuLQYZ3QAea8zzo=;
-        b=TqH1whXblZrF37mFUnKYKZXVNPzPfWSKfPAkwTFAydhsGM5pRDXgnTGFuLPrtdiKnR
-         hwr2RgU1vaYZZ3eFOYL1izjLc7NPRjyBh8FhRqd+0Wf5KvYjxQDtLWOXOFz3yR8WliG9
-         iH+Dzu9+IpgOlTotuxqUwNMkT5E4entVn279JXWOrRvIUO0X7Rp+xYefQnofRgn8woZb
-         RhGTE767ALNTrfhdaG0QtKKNHIzEnx1rRQGCkBs3lXusLV1bDZ/FuZjLzv/ONTIAYWWd
-         6OAUFhPrG9kJbttBfYv7SOr4QbTO/MsSK7J1wSz7bVJVZW7Nl2aDZKo6vvOMY7tl+v3u
-         w8ww==
-X-Forwarded-Encrypted: i=1; AKwUvBydBFCBVzX8KBCDiAb04Qe07Fomj3suMEAcgEeb54BoJFKCaiHi+9kRnoKupbKuc5udE84E+bL/H5F5qVLNzLA=@vger.kernel.org
-X-Gm-Message-State: AFuF++nn7anhGdxUDTjh/wYrLoIIUnsS764mDNjOQufUUIg/b6lF/+Rh
-	PouEBsMWUJvvC93JFhfiaGu5PoQ9jhUlx+YuJrP7h6mQDXq8C+NdgscS
-X-Gm-Gg: AYBFou3tzeRDV1Tm122DGEzUEv21J+wcg150ZkC0e9ClD7d0v4OMOdWHMN3NdyWMxlp
-	DPbLk4+/kPdagoPKXHjxD7x4R0V/S0ffaLh2kI02LJjiyV55s+ejIeuxEkj7dCSvQCqFs94Jm/S
-	MdBtodxsNT4mpxqHN+p5hdRqY/z4uaiBCmR4toHxxgPQFZ0q9T5FA3LZRY7dku3T1TGO0iagY31
-	cYCd3WJvcPUE+0m8Vjqoavc/PAwIGNC0VVTZ4SqhcdghYbKyN8YXO5yLlzKkEXMPY7xG4Pg2nAH
-	Uo1jebQk6RAkCYdJysBr2vIfBKGTmb4I46DY6DyNhXBSc7fjG54AGs+BSVHF0oPs+H4aaskwTSF
-	qnfa3lipJO2Vv9kNsKhvhC990q3AsmHJ+bJ9XfFWWQus6fYu4tExjVzyD0NcHFnwSG/9+AE7wxT
-	aqGo4LXxqmm4V3Dbu7MGnmPn4VxsFrDWPhjDvHraD7xLHiDFv/varEUsfApHWgsIzAHi9ab2Ziw
-	4F4ih+Ql0lJbaV62M5KrK0WWXbuqe/iEWX+k+4RPUX8QyBY3QNxcPniLUO7407xZ6+aBmxz48F+
-	qRY5Ayi2FiG5yAsBpXO1mBwx+9E7UUWCIRel6eDFsT+7aEsi8yxfa8WgV+Rn7vGp23/3nNEl/NA
-	+Pa2vgs3B5eLFGpN+q9ex
-X-Received: by 2002:a05:6000:2083:b0:487:a7a:72cd with SMTP id ffacd0b85a97d-488716f4ab8mr6194383f8f.5.1790285188563;
-        Thu, 24 Sep 2026 14:26:28 -0700 (PDT)
-Received: from ?IPV6:2a02:3100:610f:ecfc:4dfb:2ac9:70ba:48bd? (dynamic-2a02-3100-610f-ecfc-4dfb-2ac9-70ba-48bd.310.pool.telefonica.de. [2a02:3100:610f:ecfc:4dfb:2ac9:70ba:48bd])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a354c47sm1861179f8f.15.2026.09.24.14.26.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Sep 2026 14:26:28 -0700 (PDT)
-Message-ID: <2cf54664-c07d-471f-af6d-4b70e09626b4@gmail.com>
-Date: Thu, 24 Sep 2026 23:26:27 +0200
+        bh=96howwJpIzasaCW/3Q0EcsFpl6itohsELojaGu9d8N0=;
+        b=d+evSFThJpGLl8FbXh2XxcJrgGGKft8yfKDeboGnSfCvqeKF032Pi7Wd6eek4fZ/DQ
+         jchuAD+e+aSoi6p1nH1lCawYBwG1WJk/Zy/+IEO3oVSsmCG2nrTWyv0JUXoK3wWLflIU
+         r4m7gG/79FyyNJvx8YhJuA2xszVZ1rQjUaGeHOAoA1MiADbHzE1PmGICXDKKti++44bZ
+         jn2UiHiTqJHbkD/Q6i9lEtP8Tg0wNyh2sRV5iMRVR8C0c8kMNchheiqq1jVkrdOr0U36
+         ra8EFKLRtXTmQ/K7/nWdXMnqDU760J5EZRGneGLQ2hLVHaJk5UABVBeAMzj/X/uEDl4q
+         FWyQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwGzuKY9foFz5X77uCK0BIUvQ1JLZ+fbK3+PQMdA0NKrzhtWqQxsXpE2Ua0FcEKv17Y54faiIxiacB6Cw+iLA4=@vger.kernel.org
+X-Gm-Message-State: AFuF++lmmcJKwz83MLKTkKjoiwAhnA0sFSvDIzqq2PxZRlNDAmAullAq
+	CugjWAIf6jmtMt5HEvdG4QLuown1SsAgNLQK0AgOPT8oNDCTqClvO8Ck0/uwsjxx2kGl30ysxK8
+	VGkEe4A==
+X-Received: from pgbcw5.prod.google.com ([2002:a05:6a02:4285:b0:cc7:513b:37d9])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:439e:b0:3d3:ae50:97ce
+ with SMTP id adf61e73a8af0-3de0e755869mr3534504637.27.1790286786082; Thu, 24
+ Sep 2026 14:53:06 -0700 (PDT)
+Date: Thu, 24 Sep 2026 14:51:49 -0700
+In-Reply-To: <20260910-gmem-inplace-conversion-v13-0-dd6fbf94f4e1@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] net: hsr: unfold GSO super-packets at the forward
- entry
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, andrew+netdev@lunn.ch,
- shuah@kernel.org, kees@kernel.org, petr.wozniak@gmail.com,
- qingfang.deng@linux.dev, fmaurer@redhat.com, luka.gejak@linux.dev,
- xiaoliang.yang_1@nxp.com, skhawaja@google.com, liuhangbin@gmail.com,
- stable@vger.kernel.org, sdf.kernel@gmail.com
-References: <20260809121455.1745-1-xiexinet@gmail.com>
- <20260809121455.1745-4-xiexinet@gmail.com>
- <20260923104346.ur63K3h2@linutronix.de>
-Content-Language: en-GB
-From: Xin Xie <xiexinet@gmail.com>
-Autocrypt: addr=xiexinet@gmail.com; keydata=
- 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
- sNySbH3veZ/55EtlXA==
-In-Reply-To: <20260923104346.ur63K3h2@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20260910-gmem-inplace-conversion-v13-0-dd6fbf94f4e1@google.com>
+X-Mailer: git-send-email 2.56.0.rc1.315.gc6ed9934b7-goog
+Message-ID: <179028368162.2007072.12117327378679658047.b4-ty@b4>
+Subject: Re: [PATCH v13 00/44] guest_memfd: In-place conversion support
+From: Sean Christopherson <seanjc@google.com>
+To: Sean Christopherson <seanjc@google.com>, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	david@kernel.org, jmattson@google.com, jthoughton@google.com, 
+	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	shivankg@amd.com, steven.price@arm.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Randy Dunlap <rdunlap@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Fuad Tabba <fuad.tabba@linux.dev>, 
+	Ackerley Tng <ackerleytng@google.com>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev, Xiaoyao Li <xiaoyao.li@intel.com>
+Content-Type: text/plain; charset="utf-8"
 
-On 23/09/2026 12:43, Sebastian Andrzej Siewior wrote:
-> Wouldn't it be simpler to not allow such packets? 
+On Thu, 10 Sep 2026 16:55:26 -0700, Ackerley Tng wrote:
+> Here's v13. Thanks everyone for the comments and fast responses!
+> We're now at ~3 weeks to soft-close at 7.3-rc5.
+> 
+> v13 is based on 7.3-rc2 and:
+> 
+> + Hugh's patch to export lru_cache_drain_for_folio()
+> + Another series [1], which makes kvm_gmem_get_pfn() NOT return a
+>   refcounted page to KVM.
+> 
+> [...]
 
-For master TX, yes: removing GSO features lets the core segment before
-ndo_start_xmit(), as patch 3 already does.
+Applied to kvm-x86 coco.  A *huge* thanks to everyone who helped with this!
 
-The interlink RX path is different. With GRO/GRO_HW disabled, it can
-still receive skbs that were already GSO at the sender. I reproduced
-this with ordinary TCP traffic over veth in a VM. Rejecting these skbs
-would drop valid traffic.
+[01/44] KVM: guest_memfd: Optimize away conversion overheads via dead-code elimination
+        https://github.com/kvm-x86/linux/commit/54623a16bbdc
+[02/44] KVM: guest_memfd: Use kvm_mem_is_private() when populating guest_memfd memory
+        https://github.com/kvm-x86/linux/commit/fa7b8b1bb5d0
+[03/44] KVM: guest_memfd: Introduce per-gmem attributes, use to guard user mappings
+        https://github.com/kvm-x86/linux/commit/1ae5be958ff7
+[04/44] KVM: Rename KVM_GENERIC_MEMORY_ATTRIBUTES to KVM_VM_MEMORY_ATTRIBUTES
+        https://github.com/kvm-x86/linux/commit/44e17d0a3663
+[05/44] KVM: Enumerate support for PRIVATE memory iff kvm_arch_has_private_mem is defined
+        https://github.com/kvm-x86/linux/commit/c2ae2bc1a311
+[06/44] KVM: Rename memory attribute APIs to prepare for in-place gmem conversion
+        https://github.com/kvm-x86/linux/commit/a84ef89cbf91
+[07/44] KVM: Rename kvm_mem_is_private() to kvm_is_private_gfn()
+        https://github.com/kvm-x86/linux/commit/98fd6e30bd14
+[08/44] KVM: Provide generic interface for checking memory private/shared status
+        https://github.com/kvm-x86/linux/commit/8ab5719fbcdc
+[09/44] KVM: guest_memfd: Stub in ability to enable in-place shared<=>private conversion
+        https://github.com/kvm-x86/linux/commit/ee1168fb7313
+[10/44] KVM: Consolidate private memory and guest_memfd ifdeffery in kvm_host.h
+        https://github.com/kvm-x86/linux/commit/bcc640eabbb2
+[11/44] KVM: guest_memfd: Invalidate both SHARED and PRIVATE mappings for in-place conversions
+        https://github.com/kvm-x86/linux/commit/e088c7f86bef
+[12/44] KVM: guest_memfd: Always fault from guest_memfd if in-place conversion is enabled
+        https://github.com/kvm-x86/linux/commit/2e646bcfcf90
+[13/44] KVM: guest_memfd: Pass mapping type filter to invalidation helper
+        https://github.com/kvm-x86/linux/commit/2f7f4e102880
+[14/44] KVM: guest_memfd: Add base support for KVM_SET_MEMORY_ATTRIBUTES2
+        https://github.com/kvm-x86/linux/commit/799c9fadc639
+[15/44] KVM: guest_memfd: Ensure pages are not in use before conversion
+        https://github.com/kvm-x86/linux/commit/dcde2f853ff4
+[16/44] KVM: guest_memfd: Call arch make_shared callback for to-shared conversion
+        https://github.com/kvm-x86/linux/commit/6fa1dab756fd
+[17/44] KVM: guest_memfd: Return early if range already has requested attributes
+        https://github.com/kvm-x86/linux/commit/856852ef2108
+[18/44] KVM: guest_memfd: Zero page while getting pfn
+        https://github.com/kvm-x86/linux/commit/cb0544296a33
+[19/44] KVM: SEV: Make 'uaddr' parameter optional for KVM_SEV_SNP_LAUNCH_UPDATE
+        https://github.com/kvm-x86/linux/commit/edcc3f42981e
+[20/44] KVM: TDX: Make source page optional for KVM_TDX_INIT_MEM_REGION
+        https://github.com/kvm-x86/linux/commit/af602a96f401
+[21/44] KVM: Move KVM_VM_MEMORY_ATTRIBUTES config definition to x86
+        https://github.com/kvm-x86/linux/commit/31670c382efc
+[22/44] KVM: Let userspace disable per-VM mem attributes, enable per-gmem attributes
+        https://github.com/kvm-x86/linux/commit/537ec2b15fdd
+[23/44] KVM: guest_memfd: Enable INIT_SHARED on guest_memfd for x86 Coco VMs
+        https://github.com/kvm-x86/linux/commit/b5ed1ee2a7a0
+[24/44] KVM: selftests: Create gmem fd before "regular" fd when adding memslot
+        https://github.com/kvm-x86/linux/commit/b312cab4e48c
+[25/44] KVM: selftests: Rename guest_memfd{,_offset} to gmem_{fd,offset}
+        https://github.com/kvm-x86/linux/commit/8d5f49000f8b
+[26/44] KVM: selftests: Add support for mmap() on guest_memfd in core library
+        https://github.com/kvm-x86/linux/commit/ee455183c92b
+[27/44] KVM: selftests: Add selftests global for guest memory attributes capability
+        https://github.com/kvm-x86/linux/commit/c3e48c166e35
+[28/44] KVM: selftests: Add helpers for calling ioctls on guest_memfd
+        https://github.com/kvm-x86/linux/commit/0bbbd2b02bf0
+[29/44] KVM: selftests: Test basic single-page conversion flow
+        https://github.com/kvm-x86/linux/commit/eaef4ed5fabc
+[30/44] KVM: selftests: Test conversion flow when INIT_SHARED
+        https://github.com/kvm-x86/linux/commit/e5fa04dc920e
+[31/44] KVM: selftests: Test conversion precision in guest_memfd
+        https://github.com/kvm-x86/linux/commit/492080a3d4e5
+[32/44] KVM: selftests: Test conversion before allocation
+        https://github.com/kvm-x86/linux/commit/97137c140360
+[33/44] KVM: selftests: Convert with allocated folios in different layouts
+        https://github.com/kvm-x86/linux/commit/5362c5fb88f6
+[34/44] KVM: selftests: Test that truncation does not change shared/private status
+        https://github.com/kvm-x86/linux/commit/bfb9b5a286ea
+[35/44] KVM: selftests: Test that shared/private status is consistent across processes
+        https://github.com/kvm-x86/linux/commit/8b72eaa766b6
+[36/44] KVM: selftests: Add helpers to pin pages with CONFIG_GUP_TEST
+        https://github.com/kvm-x86/linux/commit/e8a40b9a604e
+[37/44] KVM: selftests: Test conversion with elevated page refcount
+        https://github.com/kvm-x86/linux/commit/0db3f14f40c4
+[38/44] KVM: selftests: Reset shared memory after hole-punching
+        https://github.com/kvm-x86/linux/commit/c235250e8bc1
+[39/44] KVM: selftests: Provide function to look up guest_memfd details from gpa
+        https://github.com/kvm-x86/linux/commit/ee6f4c381903
+[40/44] KVM: selftests: Provide common function to set memory attributes
+        https://github.com/kvm-x86/linux/commit/f49dd8ba330e
+[41/44] KVM: selftests: Make TEST_EXPECT_SIGBUS thread-safe
+        https://github.com/kvm-x86/linux/commit/ef72e71da099
+[42/44] KVM: selftests: Set up page size and alignment independently for guest_memfd
+        https://github.com/kvm-x86/linux/commit/710169986d9b
+[43/44] KVM: selftests: Update private_mem_conversions_test for in-place conversions
+        https://github.com/kvm-x86/linux/commit/e24e534ff850
+[44/44] KVM: selftests: Update private memory exits test to work with per-gmem attributes
+        https://github.com/kvm-x86/linux/commit/37e0791600e5
 
-I'll retain segmentation for valid interlink GSO in the ordered
-consumer described in my patch 2 reply, before per-frame sequence
-allocation and HSR tag/PRP RCT construction. Each aggregate would finish
-before the next input, without holding an HSR lock across segmentation
-or transmission.
-
--- 
-Xin
+--
+https://github.com/kvm-x86/linux/tree/next
