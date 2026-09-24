@@ -1,64 +1,64 @@
-Received: from mail-lr2-f40.google.com (mail-lr2-f40.google.com [74.125.230.104])
+Received: from mail-lf2-f13.google.com (mail-lf2-f13.google.com [74.125.229.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD874A4997
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 16:08:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.104
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E04249F118
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 16:08:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790266084; cv=none; b=Zl22VQbpEu8XXkAJzgHawTY3Ge8Adice8OgQFnNGfV4XNiPnn/yfGPd+7jta867nFJwiEZSEGYv9XjGmEvcl3qXJiqFKDDuxqdnijAwXkAUmBLUcAeUvfXMDWVJ8pZJH2gCIfQmai47Pd0D5A1gIuw0Ewjl9bMlVD/6L3d2OXQY=
+	t=1790266098; cv=none; b=DJ7LsMRgHfxPvD3Uf7kuypm0exIE/pBFmvMTs6BLcE8dmK4dC4npDag6waHPCaLpZ+I/JD2dHf55Lm771zdMHpajtdCG4l/wzI1xMvNI4oCaZ8HXBBg7nbXeeX0bWoPs36zlj7L1v3owcibVQKgjL8koIJhogPdGVGokMyVFTHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790266084; c=relaxed/simple;
-	bh=sziXoGyA6UGJllRA/Ie85NjFCXBSTo1NKVZeW6Yq6WA=;
+	s=arc-20240116; t=1790266098; c=relaxed/simple;
+	bh=suH0PgmQAXJi4LDV2AjeW8fVjLOcWMDeGLpNuEQJlkQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JYgPsZvfuPY2nlfXqcWD69WrfdZ9xDcvNlv4j2o6DgvAjdYv+sRA5zTxL9OEXdG+G5mh4q26iCCocuJES9C3E3H9B1jAKeMy3Tq4rJz7siF1MsEAEIW3aMobIPkilZzHI38CuRSUdXg28Dw7lRbSu7PnCFpRmeIQM6yNBeCDf0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lT4fEbL2; arc=none smtp.client-ip=74.125.230.104
+	 MIME-Version; b=ecCx+Z2hnrgGS5/5xzFBbCJ8wcUuNOcm3wzkytEz9bWcQfvtmvGNNaXdvtAONGaXF97dVKFG0eIDiKyC0fpmraciBje9QLaqL64Q3HQ7UQxQqKD5Co1B94+87iQ7/aCOhBxgpWTRXuTHv4Tr6N4aUSfURUMaUFndyUNCegZB9QM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z6Fk3hBy; arc=none smtp.client-ip=74.125.229.205
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lT4fEbL2"
-Received: by mail-lr2-f40.google.com with SMTP id 38308e7fff4ca-3a5da7416f9so17878121fa.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 09:08:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z6Fk3hBy"
+Received: by mail-lf2-f13.google.com with SMTP id 2adb3069b0e04-5b5e4f16f15so2123567e87.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 09:08:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790266081; x=1790870881; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790266095; x=1790870895; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=BbdAxPRSQudHFXkDFge6mH3yayN/WLn49JJ5+xvwtOU=;
-        b=lT4fEbL22CGyCHvGFSSvoEKjqq4AqF8drmgYRaihdyIwhFIUVRv3mQSXI1b9BBD29/
-         2M/KndTzINr/FZKCKZH5KgwyqKvbrFsX2kWrkFHCcP7BfBx3k3cm7UWDquwrzi9jb/i2
-         1gkhVKOcHn7QroIruOfTAd39Fs2bEibNt/KjI0HOJg1tyyDvmFDEwpr1OQG7JmwmUSZY
-         Tw4fbqDT3Nu11K8y85os/lVPVpKhmYpIjvw0lIlVtci8b9AsupZyU8Wc49FIMLW3sIY8
-         v30g+GI19izvSyTxPX2yVsY1sZOziZuitIvyl6TpBiHqCGq8Xqk3zs7TmfhhPJFDPHWq
-         urkw==
+        bh=qPE2YfikAlPbMH22TxLuuTd1aiRFp/hIpk9z8ifigMo=;
+        b=Z6Fk3hByGUKyH7oKbRW5352IRumFElYzKtMGGJJBC6CkpZ8+0i6K2jM9k1iBcUdXWW
+         ue8+BidDHOV48eujulKR1YRka36dH+xFXH38XwA81dTPP9n6//FMqyaswx8Wbl+Im8+K
+         2AkicKqsdID/o8Q3oa7UypCNNv8oWJJDpE7MJY/3QE5QpwSY8XzolQt664ijNbqCHgpt
+         ZDcrFzTiqF5H2rOzAwftfYMcYXLaKI7wMLlEgt8XMhFNkOQW8+FcFL9VC7MnIg1rxCR+
+         yxWByDDG0XZIVKS02EUKFX4lXSxC3g61/RSXYM1zpgmeqdbSoDQIIZrSlnbPg+JOSz9E
+         50Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790266081; x=1790870881;
+        d=1e100.net; s=20260707; t=1790266095; x=1790870895;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BbdAxPRSQudHFXkDFge6mH3yayN/WLn49JJ5+xvwtOU=;
-        b=o5Bq8u3huG6H/9icd/RwfieYBc0epPDgHN+g5UjYYEUmJ1DHMLqJu+IJCseklmeegq
-         FImAxgtPQPg/ztpqOSjdG118bpDvUwLRcLueK8Ib4JLyS2GI1FT1luo/75r1NX+lMFZm
-         VzGygfyoIUEB1QyFqWhhzv9ETTZEQ/p94Ejgx6LThKDErbDkP+KNAJETOEKfD1AYQghY
-         ajNqqYDlYJd2bAkovEJaqsrVPycOmJEKG+na3O4B5Z/SWBGd/mikZMm6mj1qxTFL0PBL
-         wTa1ZGBLFnE72GntRmodypoly+U+wZPkvmICHZBOMP+GymoRzQECC2BA/Pn7KE6jbQYB
-         hPGg==
-X-Forwarded-Encrypted: i=1; AKwUvBwUoSSIYLGnZZGgWir+6dEcXqNvyYOiWXrQCwigApKj/fiaiMyB+mRaa5ISWkYZXwQs4HmkkTSXwAytNLqBrFQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++lMErHE2cEp4EUx176dHMiGABiLAd8ycihvio/NIVr8UJvSDXVX
-	xU3JqSNzzi+nKcvWLhNuzShI+kpGwKaoXO2rs6rnNhm55+y038Bcp4mb+AbNdXhJNIGGhA==
-X-Gm-Gg: AYBFou0Y3kAF0sb8YEEMT3qOwBzY0oWJMMw71hU8TGQH30s/Pbf/K1XNnMiVsHPT2Kz
-	tfPft1T59U1+JNTw692+Wu5T5tlqkfuRWtTV7V4aec6B8B8o/RLk9uqrKUIM3HAey/2u2W+hsQM
-	03llEQSh9mm4Xas2+KuwQqYf6WW325hJURbpOkkFxg/uAcD6zuXS51i672d4yWZdCtggiPTr/+/
-	j8yXspPQ2LL5hk1EH2IL0bZLAgWAggSmrsoRUOk+KtXBSkpP1q8rPZ3xYsQ7CHuB9bkLRIS07Bp
-	apxZOxrL8wE264fvBQ0KX9O70kOXjUa7c1k0lxWFZjWhxpUcKSOFimqbeMHXttXcWyWx2Kv85WI
-	O5J+JFflGCI3pdpddEJM2JMCNTcpUyfEmpLn44BkLnnWEBUkG7r4gK/XyAc4RLDC2a/UurMyJwB
-	onS1m4GwhZ+/VDGSgKc5FTEBP+1bontHNN4R+dhGhTUYpR84q12mGyITycrx5JcC7gZ2r7bgbqt
-	qqsr4rnsSRu8TQ=
-X-Received: by 2002:ac2:4c50:0:b0:5b8:bc5e:b583 with SMTP id 2adb3069b0e04-5b8df2129bdmr1107032e87.59.1790266080489;
-        Thu, 24 Sep 2026 09:08:00 -0700 (PDT)
+        bh=qPE2YfikAlPbMH22TxLuuTd1aiRFp/hIpk9z8ifigMo=;
+        b=1jEDtlseUYtHyHqopRZ8+IDn9rV0hirqRjtNsCeLSDQ5LN8F4m7Yl3XQsmP+Zk9ol/
+         MXhGNwbLKAkDXj9M8obeP6wlDnpZuEWjvmmmdspJMhj8GwKES0UgzUNCfxwd63Jc5i1e
+         NRN+l8Aw+Eo1rlkmO1xff60P1/TXmdOWb8sJfvSQeC1V0OfefpUxt2ijbR9QmuHsbT9Y
+         RgJ/HZ2Ma231GDY6V1WsPBB+k8SLq9jksi3pwT41+lV/Cz4MIGKEWet6JLgZZRUUslM1
+         992BeyR9dkdujBmKCYR+/K79Qf+cNPt3Fk0XybVFuV9kDg5YDWmlx7/XWYOFCLYAVYfK
+         FLZw==
+X-Forwarded-Encrypted: i=1; AKwUvBz6gYMZ3yeHzi2bTeGV4hrpK3sc4ojMz46/Y2efwB3oOdsO/NxQeDWH6pGxMKt1kAk3dKvUIlVGEirJHrfvZ28=@vger.kernel.org
+X-Gm-Message-State: AFuF++lxo3CNkyMDFZO3z63V1h35wFUvyOSFHi31QOJlM+ZnipftvUkG
+	lx2cC9v3tyDqCNmhCZwRU9PhRk+h3IzakWlNb1VbOSntnjW/k0V2PrvE
+X-Gm-Gg: AYBFou1Ca9ENIoSdBp9HSh3IE4NWbmtMcA5+J6kPdhsWHZD9LaCuw3zhlh/pCsiaZcT
+	5Xn/vwU/b4Y95+itFloUvUlNALkYjHrC52coUPTfpq/HQVq25HIGJ5LnEV473ArnehEeg1LjWsu
+	V1WdaS2/9AY6zRMiC/sL3SHEMwuhamvVo+kWB3WKosl7DFO/qkOi3c3AHx3vVjgl7lKZPdufFfr
+	kX4+w59K+92wxUhLX3UhWFOR370heq1bhZfpuk06XTt5DAOFb7qMY5Ue4qtnkWQCHM0XElzwvst
+	6Zh3HKdRMGeWMYuWgoLjtKDwIYdZJpCDGsGtbtJq/EPoIansvrokISTEpxAZ7hDLOCntRJ2etzT
+	gRYgWl9CF/dObGWUBctora0FyTTdNCPmfPURIkGuq2ojM8hY07r+TGG3Gb16g+MlPRX0tOoGS/7
+	cdQxR0MoMYdbL+/dniuk5Z9T4AE6DWlQrBmPv+CS3HCZwE5e5L9ytwxoFeF/UtKBcCRy+cuepQo
+	j/Qk+iyE9vuBvA=
+X-Received: by 2002:a05:6512:61ce:20b0:5b8:9eed:8963 with SMTP id 2adb3069b0e04-5b8df0742dbmr870502e87.20.1790266094511;
+        Thu, 24 Sep 2026 09:08:14 -0700 (PDT)
 Received: from localhost.localdomain ([80.66.93.93])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b8d8552fd4sm1563292e87.2.2026.09.24.09.07.55
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b8d8552fd4sm1563292e87.2.2026.09.24.09.08.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 09:07:59 -0700 (PDT)
+        Thu, 24 Sep 2026 09:08:14 -0700 (PDT)
 From: Maxim Skokov <skokovmaksimevg@gmail.com>
 To: bpf@vger.kernel.org
 Cc: qmo@kernel.org,
@@ -75,9 +75,9 @@ Cc: qmo@kernel.org,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Maxim Skokov <skokovmaksimevg@gmail.com>
-Subject: [PATCH bpf-next 1/2] bpftool: Don't report an empty map when key iteration fails
-Date: Thu, 24 Sep 2026 19:07:19 +0300
-Message-ID: <20260924160732.485650-2-skokovmaksimevg@gmail.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Check that bpftool reports a map it can't dump
+Date: Thu, 24 Sep 2026 19:07:20 +0300
+Message-ID: <20260924160732.485650-3-skokovmaksimevg@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260924160732.485650-1-skokovmaksimevg@gmail.com>
 References: <20260924160732.485650-1-skokovmaksimevg@gmail.com>
@@ -89,70 +89,100 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-map_dump() walks the map with bpf_map_get_next_key() and treats ENOENT
-as the end of the map. Any other error ends the walk as well, but
-silently: bpftool prints an empty dump, "[]" with BTF or "Found 0
-elements" without, and only the exit status tells that the map was not
-read at all.
+Socket storage can't be iterated from user space, so "bpftool map dump"
+used to print an empty map and exit with an error status, without saying
+why. Create a BPF_MAP_TYPE_SK_STORAGE map, attach storage to a socket,
+pin it, and check that both JSON and plain dumps fail with a message.
 
-This is what every local storage map (sk, inode, task and cgrp storage)
-gets, since their map_get_next_key returns -ENOTSUPP. On a
-BPF_MAP_TYPE_SK_STORAGE map holding storage for five TCP sockets:
-
-  # bpftool map dump pinned /sys/fs/bpf/tc/globals/cilium_lb4_reverse_sk_v2
-  []
-  # echo $?
-  244
-
-"bpftool map getnext" on the same map already reports the failure.
-Report it the same way from map dump, with a hint when the map type
-does not support iteration, and print the element count only after the
-whole map was walked:
-
-  # bpftool map dump pinned /sys/fs/bpf/tc/globals/cilium_lb4_reverse_sk_v2
-  []
-  Error: can't get next key: Unknown error 524 -- map type does not support iteration
-
-In JSON mode the error is emitted as an {"error": ...} object, as for
-the other bpftool commands.
-
-Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
 Signed-off-by: Maxim Skokov <skokovmaksimevg@gmail.com>
 Assisted-by: LLM
 ---
- tools/bpf/bpftool/map.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ .../bpf/prog_tests/bpftool_map_dump.c         | 76 +++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
 
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 20d59eab09..00e49ae05c 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -883,8 +883,15 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
- 	while (true) {
- 		err = bpf_map_get_next_key(fd, prev_key, key);
- 		if (err) {
--			if (errno == ENOENT)
-+			int saved_errno = errno;
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
+new file mode 100644
+index 0000000000..56283e3f1e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
+@@ -0,0 +1,76 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <sys/socket.h>
++#include <unistd.h>
++#include <bpf/btf.h>
++#include <test_progs.h>
++#include "bpftool_helpers.h"
 +
-+			if (saved_errno == ENOENT) {
- 				err = 0;
-+				break;
-+			}
-+			p_err("can't get next key: %s%s", strerror(saved_errno),
-+			      saved_errno == 524 /* ENOTSUPP */ ?
-+			      " -- map type does not support iteration" : "");
- 			break;
- 		}
- 		if (!dump_map_elem(fd, key, value, info, btf, wtr,
-@@ -897,7 +904,7 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
- 		jsonw_end_array(wtr);	/* elements */
- 		if (show_header)
- 			jsonw_end_object(wtr);	/* map object */
--	} else {
-+	} else if (!err) {
- 		printf("Found %u element%s\n", num_elems,
- 		       num_elems != 1 ? "s" : "");
- 	}
++#define PIN_PATH	"/sys/fs/bpf/test_bpftool_map_dump_sk_storage"
++
++/* A socket storage map with a single element, keyed on a socket we own. */
++static int create_sk_storage_map(void)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		    .map_flags = BPF_F_NO_PREALLOC);
++	struct btf *btf;
++	int int_id, fd = -1;
++
++	btf = btf__new_empty();
++	if (!ASSERT_OK_PTR(btf, "btf__new_empty"))
++		return -1;
++
++	int_id = btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
++	if (!ASSERT_GT(int_id, 0, "btf__add_int"))
++		goto out;
++	if (!ASSERT_OK(btf__load_into_kernel(btf), "btf__load_into_kernel"))
++		goto out;
++
++	opts.btf_fd = btf__fd(btf);
++	opts.btf_key_type_id = int_id;
++	opts.btf_value_type_id = int_id;
++	fd = bpf_map_create(BPF_MAP_TYPE_SK_STORAGE, "sk_storage", sizeof(int),
++			    sizeof(int), 0, &opts);
++	ASSERT_OK_FD(fd, "bpf_map_create");
++out:
++	btf__free(btf);
++	return fd;
++}
++
++void test_bpftool_map_dump(void)
++{
++	int map_fd, sk_fd = -1, value = 42, ret;
++	char output[1024];
++
++	map_fd = create_sk_storage_map();
++	if (map_fd < 0)
++		return;
++
++	sk_fd = socket(AF_INET, SOCK_STREAM, 0);
++	if (!ASSERT_OK_FD(sk_fd, "socket"))
++		goto out;
++	if (!ASSERT_OK(bpf_map_update_elem(map_fd, &sk_fd, &value, BPF_NOEXIST),
++		       "add socket storage"))
++		goto out;
++	if (!ASSERT_OK(bpf_obj_pin(map_fd, PIN_PATH), "pin map"))
++		goto out;
++
++	/* Socket storage can not be iterated, so the dump must fail loudly
++	 * rather than print an empty map that holds an element.
++	 */
++	ret = get_bpftool_command_output("-j map dump pinned " PIN_PATH,
++					 output, sizeof(output));
++	ASSERT_NEQ(ret, 0, "json dump fails");
++	ASSERT_HAS_SUBSTR(output, "\"error\":", "json dump reports an error");
++
++	ret = get_bpftool_command_output("map dump pinned " PIN_PATH " 2>&1",
++					 output, sizeof(output));
++	ASSERT_NEQ(ret, 0, "plain dump fails");
++	ASSERT_HAS_SUBSTR(output, "does not support iteration",
++			  "plain dump explains why");
++
++	unlink(PIN_PATH);
++out:
++	if (sk_fd >= 0)
++		close(sk_fd);
++	close(map_fd);
++}
 -- 
 2.47.3
 
