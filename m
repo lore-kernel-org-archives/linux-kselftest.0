@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92807477E58;
-	Thu, 24 Sep 2026 11:57:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2DE8472079;
+	Thu, 24 Sep 2026 11:57:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790251079; cv=none; b=kbhmL3ZQjKH2lfMJvWula6tJL6EhvWUAfP+JOg7D46m0ImrFWOVIZnoSBj5kLknLeIxy2UuOvSZJ3+liOPh4xHwqoMynxi83X+J4gJzkat76YpzUxUPypA1ocHAQ2T35WeB3TNTLzmmlRZ3pHoNWIdlBY4vNhnqIYs1eJWVTem8=
+	t=1790251081; cv=none; b=Kgm4eDH8xzb1GLDvT1xVDUU+j6c/VeivGWA6W+cAldnB2j5V+6jd4PEz0yJCm7sQAocfuXDqbrOdlBxE3eH4+aiacYDwGXB0k/k5841ul8t54lV9/P3z8VUVJcbZn5Yq06GPXp5p6/QV1heCIGekTk5q8NDbMTTdf/z5UunjlGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790251079; c=relaxed/simple;
-	bh=Or7U1ecL2d7a6aMkmD4rrEkujiKM/69I1zTt3O5G61I=;
+	s=arc-20240116; t=1790251081; c=relaxed/simple;
+	bh=WYRdwmjOE4EdofXjyjYssWNA404SQFqhrdLjsrijNdc=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BgF0FQkuWVzyXUA98cySdDnbC82gv2+f1+TMtjU0LXmXV3fCe4GWtC26vVmE8cmywMW3mKKK4szMz379yM0HT7uyv4DZAe03hAYX9uZLzfb47gBJ4ofbkng9sxzmbN9CRX/3N+iK4R6v8184cYCvFoz3ASx5kPtVwFfCSMoumUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UgGP5TE+; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=Cs7FEz20+NdY8mA7mvr5aisxCxPPb1wrAtPZLLwMiTnPMSI1W5K7OL8vXLgjXIiIgBnLdgOvRtky23H4zhZDdPVdz7tycfzZrT+OgahDwFEWBv4DAVjDA1GrAZIKUg5VxCrkAt7l0Uxm9zveQGwtUbovAG/d1EsF2+LMtSDSCP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OY/OiSF8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UgGP5TE+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6496E1F000FF;
-	Thu, 24 Sep 2026 11:57:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OY/OiSF8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C4B1F00898;
+	Thu, 24 Sep 2026 11:57:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790251078;
-	bh=kNu4XJueWuDKeh7CaWaDpiBA/ch7qbIWFLl8bWVRa/0=;
+	s=k20260515; t=1790251079;
+	bh=duuiQ04qyD34i7KB1Tb8+L5FCvvWnLuj6fBo5yAyNm8=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=UgGP5TE+1+d1zDlRHFBNX9tYlLxL8yNrqawa1ak0uBTalurUakGcMT9aoBNWgN7Gi
-	 0WOwBYCE9kTCXa9xvMdmc4ZyS3ED1EqeqA+ByEuBwKN9M3PE80yWuk2iCqoOUPu/Uc
-	 LWOXzrEQj1pPYD2sVjI/wlNAdEmaDptcUq5kX8YglvH/nJ0bURazxzZYJiWpPADvF0
-	 5cG7dNou6WSfLfP1LKRShGXxLhaAYozSrKeFzU7XWnkstxJl0jWV+fZHzEYE7L0Uuc
-	 hRjcNnU+jAqwXuyY79ZxsbGKJKi9lNYO7vIbmtM2+/dCkPvEOsPYMUftfGIJXtTQam
-	 6Aq9j99KaOQTg==
-Subject: Re: [PATCH net-next 2/5] seg6: add RFC8986 flavor support for End.X
+	b=OY/OiSF8/lp8/o8T+q0MeFjEBgMUQvpoBNkdKGKAmk6rnZw78ajl7UymIGyt7RSgI
+	 G/96VCYSqbrkvT2lOhZ7jUldbiDXXkHx+cNTlMxwalCDKTZ3URWkJZotMhG+OSG64h
+	 E8aJj+W7IfM8WcSg6aIvBvtL+PPY0oJmS4U3SRgg/BfLbleCWYCR7DOJGrb4XKKvcF
+	 CkQdCwlF2y/795dmTPlioxaL61J7RfhjfijZiDfIVE6YH3ze99RcrzD42KrWGPZazb
+	 RLVXK2VmqkuN01fiyQlfv61RSVOQFpza4rnFlIXIN1Hh4Joz16zGQzgZq6D+u3UO09
+	 gflY4D33SSodw==
+Subject: Re: [PATCH net-next 3/5] selftests: seg6: move SRv6 End PSP setup
+ into its own helper
 From: netdev-bot+sashiko@kernel.org
 To: hangbin.liu@linux.dev
 Cc: andrea.mayer@uniroma2.it, davem@davemloft.net, edumazet@google.com,
  kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
  netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, liuhangbin@kylinos.cn
-Date: Thu, 24 Sep 2026 11:57:56 +0000
-Message-ID: <179025107692.2160803.16596847240332091038@kernel.org>
-In-Reply-To: <20260922-srv6_flavors_endx-v1-2-4d01c05c47b7@kylinos.cn>
-References: <20260922-srv6_flavors_endx-v1-2-4d01c05c47b7@kylinos.cn>
-X-sashiko-severity: Medium
+Date: Thu, 24 Sep 2026 11:57:58 +0000
+Message-ID: <179025107823.2160803.7801303260933899523@kernel.org>
+In-Reply-To: <20260922-srv6_flavors_endx-v1-3-4d01c05c47b7@kylinos.cn>
+References: <20260922-srv6_flavors_endx-v1-3-4d01c05c47b7@kylinos.cn>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -47,121 +48,129 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] net/ipv6/seg6_local.c: the patch widens
-  SEG6_LOCAL_END_X_FLV_SUPP_OPS to (SEG6_F_LOCAL_FLV_NEXT_CSID |…
-- [Low] net/ipv6/seg6_local.c:759-761 — the kerneldoc-style comment on
-  end_flv8986_core() still says the helper processes the packet "on the…
+- [Low] Mid-run re-arming of the SETUP_ERR latch converts already-
+  recorded test FAILures into an overall SKIP.
+- [Low] setup_end_flv_psp()
+  (tools/testing/selftests/net/srv6_end_flavors_test.sh:651-670) is…
 
 --
 
-seg6: add RFC8986 flavor support for End.X
+selftests: seg6: move SRv6 End PSP setup into its own helper
 
-This adds PSP processing to the SRv6 End.X behavior by reusing
-end_flv8986_core(), and widens SEG6_LOCAL_END_X_FLV_SUPP_OPS so End.X
-advertises PSP flavor support alongside NEXT-C-SID.
+This moves the End PSP policy installation out of setup() into a new
+setup_end_flv_psp() helper, and calls that helper from
+host_srv6_end_flv_psp_tests() with errexit enabled around it. The intent
+is to decouple the base topology setup from the flavor-specific test case.
 
-> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-> index 584e6aca38930..7462da1da3629 100644
-> --- a/net/ipv6/seg6_local.c
-> +++ b/net/ipv6/seg6_local.c
-> @@ -121,7 +121,8 @@ struct bpf_lwt_prog {
+> diff --git a/tools/testing/selftests/net/srv6_end_flavors_test.sh b/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> index 318487eda671b..56a1c5f865a77 100755
+> --- a/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> +++ b/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> @@ -645,6 +645,12 @@ setup()
+>  	setup_rt_local_sids 3 "1 2 4"
+>  	setup_rt_local_sids 4 "1 2 3"
 >  
->  #define SEG6_LOCAL_END_FLV_SUPP_OPS	(SEG6_F_LOCAL_FLV_NEXT_CSID | \
->  					 SEG6_LOCAL_FLV8986_SUPP_OPS)
-> -#define SEG6_LOCAL_END_X_FLV_SUPP_OPS	SEG6_F_LOCAL_FLV_NEXT_CSID
-> +#define SEG6_LOCAL_END_X_FLV_SUPP_OPS	(SEG6_F_LOCAL_FLV_NEXT_CSID | \
-> +					 SEG6_LOCAL_FLV8986_SUPP_OPS)
-
-[Severity: Medium]
-With this mask widened, does parse_nla_flavors() now accept the
-combination next-csid plus psp for an End.X instance?
-
-parse_nla_flavors() only rejects bits outside the per-action mask:
-
-	rc = seg6_flv_supp_ops_by_action(action, &supp_fops);
-	if (rc < 0 || (fops & ~supp_fops)) {
-		NL_SET_ERR_MSG(extack, "Unsupported Flavor operation(s)");
-		return -EOPNOTSUPP;
-	}
-
-	finfo->flv_ops = fops;
-
-and seg6_flv_supp_ops_by_action() returns SEG6_LOCAL_END_X_FLV_SUPP_OPS for
-SEG6_LOCAL_ACTION_END_X, so "ip route ... action End.X nh6 <addr> oif <dev>
-flavors next-csid,psp" would be installed, and put_nla_flavors() echoes the
-stored mask including PSP back to user space.
-
-Is PSP actually executed in that configuration?  In the new
-input_action_end_x() below, the NEXT-C-SID test returns before
-end_flv8986_core() is reached, and the arg-zero sub-case of
-end_x_next_csid_core() goes to input_action_end_x_core():
-
-	if (seg6_next_csid_is_arg_zero(daddr, finfo))
-		return input_action_end_x_core(skb, slwt);
-
-input_action_end_x_core() only does advance_nextseg() and then
-input_action_end_x_finish(), so seg6_pop_srh() is never called and the SRH
-stays on the packet even though PSP was accepted and is reported as
-configured.  The comment above seg6_flv_supp_ops_by_action() states that
-unsupported combinations make the kernel refuse to instantiate the tunnel.
-
-Would it be better to reject next-csid together with psp for End.X in
-parse_nla_flavors(), or to route the NEXT-C-SID arg-exhausted path into
-end_flv8986_core()?
-
-For reference, the same shape already exists for the End action via
-SEG6_LOCAL_END_FLV_SUPP_OPS and input_action_end()/end_next_csid_core(),
-but for End.X the combination only becomes configurable with this change.
-At the end of the series the mask and input_action_end_x() are unchanged,
-and the added selftest only installs psp on its own, so the combination
-stays accepted but unimplemented.
-
->  
->  struct seg6_flavors_info {
->  	/* Flavor operations */
-> @@ -841,12 +842,19 @@ static int input_action_end_x(struct sk_buff *skb, struct seg6_local_lwt *slwt)
->  {
->  	const struct seg6_flavors_info *finfo = &slwt->flv_info;
->  	__u32 fops = finfo->flv_ops;
-> +	int ret;
+> +	# testing environment was set up successfully
+> +	SETUP_ERR=0
+> +}
 > +
-> +	if (!fops)
-> +		return input_action_end_x_core(skb, slwt);
->  
->  	/* check for the presence of NEXT-C-SID since it applies first */
->  	if (seg6_next_csid_enabled(fops))
->  		return end_x_next_csid_core(skb, slwt);
->  
-> -	return input_action_end_x_core(skb, slwt);
-> +	ret = end_flv8986_core(skb, slwt);
-> +	if (ret)
-> +		return ret;
-> +	return input_action_end_x_finish(skb, slwt);
+> +setup_end_flv_psp()
+> +{
+>  	# set up SRv6 policies
+>  	# create a connection between hosts hs-1 and hs-2.
+>  	# The path between hs-1 and hs-2 traverses SRv6 aware routers.
+
+[ ... ]
+
+>  	#  - rt-1 (SRv6 End flavor PSP with SL=1)
+>  	setup_rt_policy_ipv6 2 1 "3:noflv 4:psp 2:psp"
+>  	setup_rt_policy_ipv6 1 2 "1:psp"
+> -
+> -	# testing environment was set up successfully
+> -	SETUP_ERR=0
 >  }
 
 [Severity: Low]
-This isn't a bug, but the comment above end_flv8986_core() still reads:
+The commit message says the split lets "each PSP test case can setup and
+later cleanup independently", but this commit only adds the setup half.
+setup_end_flv_psp() installs the localsid seg6local routes, the cafe::<dst>
+H.Insert route and the proxy NDP entries through __setup_rt_policy(), and
+nothing releases them except the global EXIT trap cleanup(), which just
+does:
 
-	/* process the packet on the basis of the RFC8986 flavors set for the given
-	 * SRv6 End behavior instance.
-	 */
+	for i in ${ROUTERS}; do
+		nsname="$(get_rtname "${i}")"
+		ip netns del "${nsname}" &>/dev/null || true
+	done
 
-With this new call site the helper also serves End.X, whose post-processing
-differs (input_action_end_x_finish() forwards to slwt->nh6/slwt->oif rather
-than doing a DA-based lookup).  Could the comment say "End* behavior", which
-is the wording already used above seg6_flv_supp_ops_by_action() and in the
-SEG6_F_LOCAL_FLAVORS comment?
+Would it make sense to mention in the commit message that the matching
+cleanup_end_flv_psp() arrives in the following patch ("selftest: seg6: add
+explicit cleanup for SRv6 End PSP test")? As it stands the description
+promises a teardown path that does not exist yet at this commit. There is no
+functional problem here, since the two PSP policies are the only flavor
+state installed and netns deletion reclaims everything.
+
+>  
+>  check_rt_connectivity()
+> @@ -758,7 +761,13 @@ host2gateway_tests()
+>  
+>  host_srv6_end_flv_psp_tests()
+>  {
+> -	log_section "SRv6 connectivity test hosts (h1 <-> h2, PSP flavor)"
+> +	set -e
+> +	SETUP_ERR=1
+> +	setup_end_flv_psp
+> +	SETUP_ERR=0
+> +	set +e
+
+[Severity: Low]
+Can re-arming SETUP_ERR here turn already-recorded failures into a skip?
+
+By the time host_srv6_end_flv_psp_tests() runs, router_tests() and
+host2gateway_tests() have already executed and may have set ret=1 and
+incremented nfail:
+
+	setup
+	set +e
+
+	router_tests
+	host2gateway_tests
+	host_srv6_end_flv_psp_tests
+
+	print_log_test_results
+
+If any ip command inside setup_end_flv_psp() fails, for example the
+"encap seg6local action End flavors psp" route add, errexit aborts the
+script while SETUP_ERR is still 1, and the EXIT trap takes this path in
+cleanup():
+
+	if [ "${SETUP_ERR}" -ne 0 ]; then
+		echo "SKIP: Setting up the testing environment failed"
+		exit "${ksft_skip}"
+	fi
+
+	exit "${ret}"
+
+so the script exits 4 (skip) instead of reaching exit ${ret} with ret=1, and
+print_log_test_results is never reached, meaning the tests passed/failed
+summary is lost too.
+
+The final patch of this series ("selftests: seg6: add End.X PSP selftest")
+changes the guard to also require [ "$ret" -ne "$ksft_fail" ], which removes
+the fail-to-skip masking. Could that guard change be moved earlier in the
+series, so the intermediate commits do not carry the masking behaviour?
+
+> +
+> +	log_section "SRv6 connectivity test hosts (h1 <-> h2, End flavor PSP)"
+>  
+>  	check_and_log_hs_connectivity 1 2
+>  	check_and_log_hs_connectivity 2 1
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260922-srv6_flavors_endx-v1-0-4d01c05c47b7%40kylinos.cn
