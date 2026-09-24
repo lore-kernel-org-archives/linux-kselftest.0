@@ -1,121 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-157.mta0.migadu.com [91.218.175.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2BCD2E2665;
-	Thu, 24 Sep 2026 21:08:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198944DA9A6
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 21:11:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790284122; cv=none; b=DUqQeEWLAjLGQ34ZD+Q4FIeT1KfJe/df6wUVMdckdR36Zgq+nsHh4AvGYyfeXPzSQ6zjAdTHhmqWFZAry3WGAlWQsaK5tCjojNokYhFn/pbEuQPL6dCeM5xsK/bmV7E9xAd3QiUCLk/NQe5BeUvmoCQR9/09pYJ+ehqHUkum/+4=
+	t=1790284266; cv=none; b=QTAuaerdydgKgLNnfrbcTkpXx9t4siwp0yRz9z9EtvZWfiX4J4oJimAYOnCtU2uCwnz7/hWeIWMyH3xlgndO/3PJkudHXSq/HSIz2HEO0c8sQG7YhD9stq6nESagbphy6cm5mzL6Z8+q2E5qJRXCt9xjzxe3xU8CSG6Nyi0HCGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790284122; c=relaxed/simple;
-	bh=CTZNrzaiHq4+D9comlWpgF9FN65qqS3Ma/UtJGyZOLQ=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Kc2STTnXDKGPiDEGcQ62Yn0Rfsq24Yx4V+kgoeXibT642BNw+3VhhKNmpDkuzW2kkdyofVYTEAT3nUfxjkChGB4rnXQ0PLtLej7WIWd0pSJZ4+J7nSzmkmLHBgcRgifRU6kaKGQO0zyrro38PFEOfkqT7jav/kFx0V53Bdi63rw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ihMtzZyi; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790284266; c=relaxed/simple;
+	bh=geWEgMSYQDaXHL8PI+SwL20O2XP2TtLwPQS9ZQiVmS0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ESu2FwCKGW2b40bbs5w6MDVj8X0p9q/8qBHlBZqecO8LO6OeSykwJo0o6XCdv5Vj97anVnWOq+5rUtargBrlG2MFAvUMIrO7sr50s6lYNBhuZVG1hsIDe3OQoK3ckW+scqrRBdRqJqh8z/zT+PXcB4/EhCT3tjsja3zreX1ptbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Eeh4tDSK; arc=none smtp.client-ip=91.218.175.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ihMtzZyi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C4BE1F000FF;
-	Thu, 24 Sep 2026 21:08:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790284120;
-	bh=HkVEzWtseZWBE3FClRQnO6Cvne4j5KocU23SBL5nUkk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=ihMtzZyi2dmK8nhIGn6LsTbD2LHCNT8JUypnsDz7rMaJH+rE1/A6wmtXiYdBCMimk
-	 NfmvpBOvISN1QUtW/SDhpBkAFFbZntelm22yYM72gW5qOb3EuRWFANr7Gu9MDxULa0
-	 p3pdxbIns5b0eN2Sdtpfx8wIvOQE0bD5hlqyviMSlsD0bq7g/Eu4CQ+bhUKdDiKbxk
-	 ieRBOYz0MloN7SoGSVB04qaLglrux4Me32s6Qf91uODh+9LXzW1h/WhYVvwhNLSzu5
-	 EvYKWVhZOWSUEzxwWfqGCMbf5FmjRt3fdAGM24wC9T0cISthCzvEL/xJQTAdQIjwDt
-	 tnA7r0hZxVAdw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1x9qgI-0000000DDhs-01l8;
-	Thu, 24 Sep 2026 21:08:38 +0000
-Date: Thu, 24 Sep 2026 22:08:37 +0100
-Message-ID: <86ik3u4asq.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	David Hildenbrand <david@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Jack Thomson <jackabt@amazon.com>,
-	Jack Thomson <jackabt.amazon@gmail.com>,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	Vincent Donnefort <vdonnefort@google.com>,
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Leo Soares Passos <Leo.Bras@arm.com>,
-	Wei-Lin Chang <weilin.chang@arm.com>,
-	linux-s390@vger.kernel.org
-Subject: Re: [PATCH v4 00/14] KVM: arm64: Add KVM_PRE_FAULT_MEMORY support
-In-Reply-To: <20260923-kvm-arm-prefault-v4-0-d4b0b4dfa8c3@kernel.org>
-References: <20260923-kvm-arm-prefault-v4-0-d4b0b4dfa8c3@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Eeh4tDSK"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=geWEgMSYQDaXHL8PI+SwL20O2XP2TtLwPQS9ZQiVmS0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790284262; v=1; x=1790889062;
+ b=Eeh4tDSK23G+TbvqhrDIDogpAxLZ6xsTOdlLHlKDetZUvHYMlAb3Ik1/Ut9G4V0OpLuS3y0m
+ tmLn0/6MzpnzE+zUdW0zakrd9SIewOskKFysWTXFiUgIYljj4C4UMB51spUhO9DV8AYOc1SNMmb
+ p165Nm7nJOoKWTlpRoaGar18=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id de8f8ffe1b04012f;
+	Thu, 24 Sep 2026 21:11:01 +0000
+X-Mizu-Trace-ID: de8f8ffe1b04012f
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 24 Sep 2026 14:11:00 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Tejun Heo <tj@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	David Dai <david.dai@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>, 
+	Frederic Weisbecker <frederic@kernel.org>, Aaron Lu <ziqianlu@bytedance.com>, 
+	Daniel Jordan <daniel.m.jordan@oracle.com>, Hao Lee <haolee.swjtu@gmail.com>, kernel-team@meta.com, 
+	cgroups@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/7] cgroup: charge kernel work to the cgroup it is
+ done for
+Message-ID: <arWLq4p488JPhuZ1@linux.dev>
+References: <20260924184714.912181-1-shakeel.butt@linux.dev>
+ <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: ljs@kernel.org, catalin.marinas@arm.com, will@kernel.org, oupton@kernel.org, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, corbet@lwn.net, mark.rutland@arm.com, fuad.tabba@linux.dev, rdunlap@infradead.org, borntraeger@linux.ibm.com, frankja@linux.ibm.com, david@kernel.org, hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com, svens@linux.ibm.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, skhan@linuxfoundation.org, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, jackabt@amazon.com, jackabt.amazon@gmail.com, alexandru.elisei@arm.com, vdonnefort@google.com, aneesh.kumar@kernel.org, seanjc@google.com, imbrenda@linux.ibm.com, Leo.Bras@arm.com, weilin.chang@arm.com, linux-s390@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
 
-On Wed, 23 Sep 2026 16:15:43 +0100,
-"Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
+On Thu, Sep 24, 2026 at 10:28:10AM -1000, Tejun Heo wrote:
+> Hello, Shakeel.
 > 
-> This series implements the KVM stage 2 page table pre-faulting feature for
-> arm64.
+> On Thu, Sep 24, 2026 at 11:47:04AM -0700, Shakeel Butt wrote:
+> > This series lets a kernel thread say which cgroup it is working for.
+> > That cgroup then sees the CPU time in its cpu.stat and the stalls in
+> > its memory.pressure, and the CPU time comes out of its cpu.max quota.
+> > The first user is the memcg reclaim that runs from high_work.
+> 
+> This doesn't translate to net rx, which is another major source of
+> displaced CPU usage. Switching membership on each packet isn't going to
+> work there. Attribution can't happen that way. We'd much rather count
+> per-cgroup received packets and prorate the CPU consumption. If at all
+> possible, I think it'd be better to adopt an approach which can cover
+> both use cases.
 
-[...]
+Very good point. I think we need to think for net rx for two scenarios. First,
+the modern NICs with rx steering support and second, old NIC with shared queues.
 
-> base-commit: 23ddf997ab16b5f4aa9f948f5a68f5b35e4e398f
+On the modern NICs where the workloads get their own rx queues, I think the
+proposed mechanism can help to do the accurate accounting (I have to extend this
+to softirqs as it is limited to kthreads atm) very easily.
 
-In the future, please don't do this. I've just nuked this commit from
-kvmarm/next as I rebuilt it, and using such a random commit is
-counter-productive. Just stick to an -rc tag from Linus' tree, and
-that's it. I'm perfectly happy to deal with the outcome (conflicts and
-other funny things).
+The challenge you mentioned is for the old NICs where we get to know the cgroup
+assosiation of the rx packets very late (or deep) in the stack. Also CPU spent
+on each packet is not necessarily uniform (due to out-of-order or drops or
+checksum errors or window shrinking) but for simplicity we can assume uniform
+CPU. Maybe the right place to charge for such scenario might be at application
+receiving those packets into the memory. I feel like we might need a very
+special way to account for this case (maybe through BPF or something). At
+the moment to me it seems very hard to have a universal solution which helps
+this case and the reclaim case I am targetted.
 
-Thanks,
+If you don't mind, I think having solution for modern NICs i.e. dedicated rx
+queues, should suffice for now (unless you want the solution for old NICs as
+well). Let me know what you think.
 
-	M.
+> 
+> >  - The debt is capped at one period's quota, so one long piece of
+> >    work cannot starve the cgroup for long. Time over the cap still
+> >    shows up in cpu.stat. Writing cpu.max or cpu.max.burst clears the
+> >    debt.
+> 
+> I don't like the debt capping. Having debt doesn't have to mean that
+> the cgroup doesn't get any bandwidth at all. The cgroup just needs to
+> be slowed down enough that the generation of new work is throttled and
+> the whole thing doesn't go out of control. IO control already does
+> this: when IO debt is accumulated, userspace is heavily throttled, but
+> not completely stalled, until the whole cgroup's consumption comes
+> under control. I don't see why the debts would need to be forgiven
+> unconditionally. The cgroup can keep paying them while running at a
+> minimal rate to avoid triggering stall failures, and if the situation
+> doesn't resolve quickly, that will most likely trigger pressure based
+> kills in any reasonable setup anyway.
 
--- 
-Without deviation from the norm, progress is not possible.
+Sounds good, I will remove this capping in the next version.
+
+Thanks for taking a look.
