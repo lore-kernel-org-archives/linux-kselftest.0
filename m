@@ -1,73 +1,118 @@
-Received: from mta0.migadu.com (out-100.mta0.migadu.com [91.218.175.100])
+Received: from mta0.migadu.com (out-47.mta0.migadu.com [91.218.175.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D752E737D
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 03:16:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8D437F75B
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 04:04:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790219784; cv=none; b=MVrqARNbrmSlKe2MRvdRtDwuOrS7O2pCOnt6NCjTh/jCHhmzemYe7FvVpCXdUjX9d4sIcRHsH9Znb4hmd6E9LZw9PSZptPG2n27+i+9YEvB5QmoQtRXlmz45Guf9WEvgrQdEl3MeNqeyU45vmPfuI1qvDREZAJB5IMzsVxdfp2k=
+	t=1790222696; cv=none; b=FDd4waAtGMpRCdbzp9edeq4JCMX1qfwesYw72qPCCwGgAJRulJ4UzTtZDaC0yIO2dQhdgnQjcuFXK0iM5htGW+SxzJk2IhEVMCgDqEbcWWcnxRJkR/YTSI+1jtpyYzvIZCrfZ4vdYnpbXSwb5vbbFsI2MWzT6VrHnhMOmKFSD9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790219784; c=relaxed/simple;
-	bh=Sz/uMVvtvi3NFxxQ6n0vt/kFme+lA9TCV7g89jS3C4M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TVEjoCIwjcIy+Yk7HL4sMEzaW0uI1wkQl7qdDM69+KkuSuwT2J1zmb7K7DyKZKEaIATjiCyYt4FvivFMWO/LDZpr068iAtGWOwjf6diEVhlWTrfsQL/HAg2XxOZwJAsiH5wRynfVzaDC7hkmNLEoEONcmMgRfR3nCSJfJpnYE5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qGvhKsu0; arc=none smtp.client-ip=91.218.175.100
+	s=arc-20240116; t=1790222696; c=relaxed/simple;
+	bh=EZyImxcigBOaI3Lh03J91/GKsa2Gh4enEbwmZ8MnhwA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EN0GJ2y2h4Hvq6sz5pVg6KyxAQMCUTh73EImb/IG/x1NFJnMbh/pKfPDVoVOdWlIBb0rmSG67X9p2k1zTbR95MeRN2nH2P3AHRvci9tlk+rtYkG0ooe89SPimAL4A3nTfOJJv7vGwlF35LTb4P1MhNc82D1m9/mFknVS0mFhZ0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tEnr57V5; arc=none smtp.client-ip=91.218.175.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qGvhKsu0"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tEnr57V5"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Sz/uMVvtvi3NFxxQ6n0vt/kFme+lA9TCV7g89jS3C4M=;
+DKIM-Signature: a=rsa-sha256; bh=EZyImxcigBOaI3Lh03J91/GKsa2Gh4enEbwmZ8MnhwA=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790219778; v=1; x=1790824578;
- b=qGvhKsu0wrkzZGyT6ZwvFh+OJshy56ZEOjoC0fVWMYd0VG3y+agyP6hemWKiafPamAScej9T
- lkATVpIX34zjOpi8Q0IhJqee6fZHRbhme/o7CNFYtI3O8HFMjoXQVJd7UpdMv5ot2bxhONE3hnw
- LcIEg1yXT2v2Je4NBtYE1EQI=
+ t=1790222691; v=1; x=1790827491;
+ b=tEnr57V5/cXCI7HFITG5I+4K4yZBm74dKG0omFoTyFbw/0uK+R2pZC4+P5gfoBZWFTZWcWqD
+ ecuoRSAgpBBxcCM0WGJQOGj7fVqSFJ6QKXa8QXQ9aR0Qj5s9ZX/Rh/YxRDN3fAQl2R35tJduvPK
+ tjIn18cBTX2DrgheCvU30WyE=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id e26be85f0c4105d4;
-	Thu, 24 Sep 2026 03:16:18 +0000
-X-Mizu-Trace-ID: e26be85f0c4105d4
+Received: by mta10.migadu.com with ESMTPS id b65a1ef1592237cd;
+	Thu, 24 Sep 2026 04:04:51 +0000
+X-Mizu-Trace-ID: b65a1ef1592237cd
 X-Migadu-Flow: FLOW_OUT
-Date: Thu, 24 Sep 2026 11:16:12 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: netdev-bot+sashiko@kernel.org
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-	dsahern@kernel.org, idosch@nvidia.com, andrea.mayer@uniroma2.it,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, liuhangbin@kylinos.cn
-Subject: Re: [PATCH net-next v4] selftests: net: move log_test to lib file
- and remove duplicate code
-Message-ID: <arSV_FCIC21S138L@fedora>
-References: <20260922-self_log_test-v4-1-4c656801f8dc@kylinos.cn>
- <179021041767.2160803.17788389754543951970@kernel.org>
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Roman Gushchin <roman.gushchin@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next 0/2] selftests and sample for bpf_proactive_reclaim
+Date: Thu, 24 Sep 2026 12:04:31 +0800
+Message-ID: <cover.1790222105.git.zhuhui@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <179021041767.2160803.17788389754543951970@kernel.org>
 
-On Thu, Sep 24, 2026 at 12:40:17AM +0000, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider.
-> 
-> Critical: 0 · High: 0 · Medium: 1 · Low: 0
-> 
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
-> 
-> - [Medium] Loop-variable corruption in fcnal-test.sh via bash dynamic
->   scoping: the new shared helper `log_test_expected()` in…
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-Thanks, I will add "local a" in the new helper.
+This series follows the bpf_proactive_reclaim() kfunc patch (v14, acked
+by Shakeel Butt, reviewed by JP Kobryn and Barry Song). Review feedback
+on that series was that ~1200 lines of selftest for a ~20 line kfunc is
+overkill, so the test material is split in two:
 
-pw-bot: cr
+1/2 is the minimal selftest. It mirrors the memory.reclaim selftest:
+charge a cgroup, call the kfunc once, and check the single bounded pass
+semantics (one call reclaims at most MEMCG_CHARGE_BATCH pages and, unlike
+a write to memory.reclaim, does not retry until the goal is reached).
+
+2/2 moves the complex asynchronous scenario out of the selftests and into
+samples/bpf, where it belongs: a BPF program watches the workingset
+refaults of a pressured cgroup and, when they grow, reclaims a target
+cgroup from a bpf_wq callback through bpf_proactive_reclaim(). It runs
+in two modes: bench recreates the high/low priority benchmark of the old
+selftest, and watch keeps reclaiming for user-specified cgroups as a
+simple proactive-reclaim daemon. Besides exercising the kfunc end to
+end, the sample is meant as a design reference for anyone building their
+own BPF-driven reclaim policy on bpf_proactive_reclaim(), bpf_wq and the
+memcg kfuncs.
+
+Hui Zhu (2):
+  selftests/bpf: Add bpf_proactive_reclaim test
+  samples/bpf: Add memcg async reclaim example
+
+ samples/bpf/.gitignore                        |    1 +
+ samples/bpf/Makefile                          |   10 +-
+ samples/bpf/memcg_async_reclaim.bpf.c         |  349 +++++
+ samples/bpf/memcg_async_reclaim.h             |   39 +
+ samples/bpf/memcg_async_reclaim_user.c        | 1141 +++++++++++++++++
+ tools/testing/selftests/bpf/config            |    1 +
+ .../bpf/prog_tests/memcg_proactive_reclaim.c  |  124 ++
+ .../bpf/progs/memcg_proactive_reclaim.c       |   34 +
+ 8 files changed, 1698 insertions(+), 1 deletion(-)
+ create mode 100644 samples/bpf/memcg_async_reclaim.bpf.c
+ create mode 100644 samples/bpf/memcg_async_reclaim.h
+ create mode 100644 samples/bpf/memcg_async_reclaim_user.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_proactive_reclaim.c
+
+-- 
+2.43.0
+
