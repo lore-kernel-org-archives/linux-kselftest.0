@@ -1,56 +1,56 @@
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B11C4BB286
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 17:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF20A41D20C
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 17:29:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790270998; cv=none; b=dIVVYHuHkTRVavTjWecDGmytwnBh8dVkXIy8MO+82lUl65SnQo4p0K98Ejl8SzuRudbVVjoD5Lsvxb4nrZk01OW/6mAxXZPPA8xTqravSPKnlCGyz3bFf8bFC5EWDS9p99emNEzDzedsPkHl/oGNyFXALxvZDse1SPzZfPeAGBw=
+	t=1790271000; cv=none; b=uZKa5D4VWK5es0hnHWAuqBh/3aL8FUbXvbJI7gZEW/ZEo/WCgStgfcwx7+B9snbSN+0vZVhf2BQj3e7ILkjNBR3EIb97uQq3xn1J4O0djNOtANh7jNrbpuf0J3M5RPOcIjensN4w2idDIOLGHA7BE0cngff6LU02w1DD2GAI+84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790270998; c=relaxed/simple;
-	bh=dPoD2KWcJdBMoqLmCayL0dkgGb1iTFvhuDn+uK1Rbmg=;
+	s=arc-20240116; t=1790271000; c=relaxed/simple;
+	bh=IN31WrfS1s8qFktZQMlnwARlViS4koxlqeS4XeefkuQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=N6QdccY1hFN8g5SvYTKIRjosaeKGSwiPoSLZPQOOZWbIFWsTaKdGnjHHGzvT3+dxEhLytV4cTf57eS+kv6Gus/FSGdXvNapvIZ3j3Qq7UAbzdqcyA2BSXNXIhXLNV7fhpTuFxaWaK/Jz+0JSkE2EQLD1jjCQCm7q9ddOlDTG7Lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kZiwh/yS; arc=none smtp.client-ip=209.85.210.72
+	 To:Cc:Content-Type; b=GW0MLLctAv3UO6K964QVbPRvvYDE0y4+OHwLjXbzuwEu2n976S4nuWmpbVs5x+1+qV5MsewjitQ0Ihfddyt1B1rGR/FZ3/+huZrUsLxc8gtKTjlmWlayrWZShd2k5lOb1U6RzFF193FKyEkfiOV0oblY9yxtxKXaR8E+Bs4q5Po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oqBMrg9X; arc=none smtp.client-ip=209.85.167.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kZiwh/yS"
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-81482599b3cso22565a34.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 10:29:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oqBMrg9X"
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-4c5a1a0b54eso244953b6e.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 10:29:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790270993; x=1790875793; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1790270994; x=1790875794; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=5UB2VMD+EAaxdax2pXXlz1H3xk/sziSl+ovTL17nQcA=;
-        b=kZiwh/ySSQrU6W/bNKo1lPMZb6KoSzwMT61prSIxuoaKDXHTAVQxLok9xs6hHrxSI5
-         1kUPOaeM9jp2ovuLdszGGpkuTUERqFJHvkepjHSA0KibxDX7BXeoJLSypMbQMVwybPbx
-         RsfT3NETtj5EzkgmvhUOlaMLb9RhWU/LtzQhwHs6mSxcSH7Cc2xlfkXaZVayvfIFWddA
-         FH9PLxPvXBF12BqsW7jQvz4LGE5qpPNQzXsyLXVwDNHAUotF3r3UFgbEe/XjmRqpPl+A
-         8/x62kRyA59J3MxlL1XKs/PHb/EPG2J0LU73sOfWOOUglWe58Nv7mqhDnQnb5edyr3XR
-         fu7w==
+        bh=ly1RhTg1DzFLFPcD4bZskzHIIlqyteQE9EzO1zay/Fc=;
+        b=oqBMrg9XrCsqJqn3PcCj9pfde5PRmv5sWBdpZVfDUUmEqErryEFKGUrHJQzBSQ5cOG
+         6zv0JWE6ObwwqjhHPqVuN5sXilJmomZkLfMAwN7NlrDWfCcKWqefUswd7ZxK4ah3Qk1c
+         KeG98O7vxRS1GHCWy4K2mgxbKsP2PZWIwU/GujBI6wtWph29US9OeedQy6Ne1oM+e16l
+         Z8K2aXLDcE7VvYcu/LYWJR+eEsOH0iqklZLmoIQJ9+bzhnU0XQzfbqfSW1+yMC/k2gOP
+         I/IX/sCa/cQ3Zwfmxs8bj5u7K7r+f+FwtIw4MIcre44zZPcxhTUruqjPr4KGrPAPXaJ/
+         i+Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790270993; x=1790875793;
+        d=1e100.net; s=20260707; t=1790270994; x=1790875794;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=5UB2VMD+EAaxdax2pXXlz1H3xk/sziSl+ovTL17nQcA=;
-        b=nxeK1IANo62MZNrzgWBT2WxjjHCecLhikE5dfqoCnTuwnGDvR3UyQedkF9KcPDllXz
-         M5cHspdVrsqrDmHffC7dpYY/TlBWWA33aRY9WqWpCoH1d317Cj4uZNvTCw5jEOm9kAO4
-         9e+yGX8v67L6qoVe25bHAaojl/br5MHE35aO5ngxxLCwyBj22qyGWflHMer07e163+Jr
-         59rOEPiFSxSpccvLAM2kh2F4e72a6hMM7xbC5dGLFo/qu7jJxe5GzoGekpZsvHp4vCIC
-         QZItGKkdtJCSLPZigID5dcfW5BmjCN9Io1vJpxNDPimBQ3XkqGNbYfZr19XaMSNdnjac
-         GrQQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwcXBu/CO0Z/VrOvamnY9WeI4QJcPbChkzx6uYpH8bNptU4snVlgDs28i3SfrMrQ61iIEkVd9vSLSKEjJqKCy4=@vger.kernel.org
-X-Gm-Message-State: AFuF++ldEgaXKC3NICp7bi5/YmRevDp31Ycctmp0zYoUBCJm+KxKrUmo
-	eP0eweUvbvA710EDntgOkoJjjPwdIzECpSZdlmqqdEVbUr3XCGLYqbGSSf7qmEcwtDID7bOu5ct
-	kA4cmbzeY0lU08Jf6wvnTICl9Rw==
-X-Received: from ilbel26-n2.prod.google.com ([2002:a05:6e02:501a:20b0:50b:1d1a:8453])
+        bh=ly1RhTg1DzFLFPcD4bZskzHIIlqyteQE9EzO1zay/Fc=;
+        b=VdzvLgHiwhRBXQ6igWgsn+4JYAhD9Qajw07ztnqU/kHpKQbA1wS2rekKqm0e9rjYkR
+         SpkRb2cZQtzllBA6JwQWdQJ6z8Upw4v7eOYjNC7i2WC4qXkUfe3+g+PQWvcUQenDMFvu
+         5BHsZeZhQH5sUnNDZiXqbYNb3aJOiJCXZyvzk++W6b8c4IS9iTRngDaM1UYDNOpwYhJj
+         CDVfHQ1phnLceyTx/d4zrm7c5Uk1Do7XdnBzG+4CE8YWZbimXkR8dSL8VURbxb4kmdtL
+         l8FrjAvCbWUjG9BwBMYeomFNgkAHPolmJ52IrcbVq2S8PN23pMbCZfMhKS+ydcfxfrQ+
+         SnIg==
+X-Forwarded-Encrypted: i=1; AKwUvBzbQA0/jkE2Q6701q7CMMn03/IhHZ+dSZ7+Mk4elYgxTK9aegr7WZfLje42rsyTqu94/Leu/qiK4jBXoDxRHlY=@vger.kernel.org
+X-Gm-Message-State: AFuF++nfNHFy/6d+RZy2Q2IZgRFcbjf/hwiGj/fZEskMFSo8cTgybUi0
+	Cr1BFFoEYb5V3p2vELMLPcDHjvynGTHtFwNYqv6aWpHw4/ckbJ2EMgtYck2vipG+nxN+mB5aiNS
+	eeXv2cYY4xZUbXM+rAXIhX7gQbw==
+X-Received: from iofj3.prod.google.com ([2002:a05:6602:7083:b0:9af:289c:476c])
  (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6808:199d:b0:4d6:90f4:48af with SMTP id 5614622812f47-4d72e966ec8mr3960018b6e.49.1790270993044;
- Thu, 24 Sep 2026 10:29:53 -0700 (PDT)
-Date: Thu, 24 Sep 2026 17:29:21 +0000
+ 2002:a05:6808:80b1:b0:4b9:e65b:8c2b with SMTP id 5614622812f47-4d72931dd72mr3225441b6e.25.1790270994011;
+ Thu, 24 Sep 2026 10:29:54 -0700 (PDT)
+Date: Thu, 24 Sep 2026 17:29:22 +0000
 In-Reply-To: <20260924172928.2110956-1-coltonlewis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -60,9 +60,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260924172928.2110956-1-coltonlewis@google.com>
 X-Mailer: git-send-email 2.56.0.rc1.315.gc6ed9934b7-goog
-Message-ID: <20260924172928.2110956-16-coltonlewis@google.com>
-Subject: [PATCH v9 15/22] KVM: arm64: Allow kvm_vcpu_pmu_resync_el0() to
- resync filters in process context
+Message-ID: <20260924172928.2110956-17-coltonlewis@google.com>
+Subject: [PATCH v9 16/22] KVM: arm64: Apply dynamic guest counter reservations
 From: Colton Lewis <coltonlewis@google.com>
 To: kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
 	linux-arm-kernel@lists.infradead.org
@@ -82,47 +81,158 @@ Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
 	Colton Lewis <coltonlewis@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Previously, kvm_vcpu_pmu_resync_el0() only scheduled
-KVM_REQ_RESYNC_PMU_EL0 when called from interrupt context (such as an
-IPI reprogramming host perf events). When perf_pmu_resched_update() is
-invoked synchronously from process context during vCPU load/put to
-reschedule host events around guest-reserved counters,
-armv8pmu_enable_event() calls kvm_set_pmu_events() and
-kvm_vcpu_pmu_resync_el0() in process context.
+Reserve and release guest PMU counters dynamically during vCPU load and
+put rather than statically at VM creation.
 
-Update kvm_vcpu_pmu_resync_el0() to call kvm_vcpu_pmu_restore_guest()
-directly when not in interrupt context so that newly rescheduled host
-perf events have their EL0 exclusion filters applied immediately.
+Add kvm_pmu_set_guest_counters() in arch/arm64/kvm/pmu-direct.c, called
+from kvm_pmu_load() and kvm_pmu_put(). When the requested guest counter
+mask collides with active host events in cpuc->used_mask (or when
+releasing counters after squeezing a host event), invoke
+perf_pmu_resched_update() with kvm_pmu_update_mask() to update the
+per-CPU cpuc->cntr_mask between scheduling host events out and back in;
+otherwise update cpuc->cntr_mask directly with interrupts disabled.
 
 Signed-off-by: Colton Lewis <coltonlewis@google.com>
 ---
- arch/arm64/kvm/pmu.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ arch/arm64/kvm/pmu-direct.c  | 77 ++++++++++++++++++++++++++++++++++++
+ include/linux/perf/arm_pmu.h |  1 +
+ 2 files changed, 78 insertions(+)
 
-diff --git a/arch/arm64/kvm/pmu.c b/arch/arm64/kvm/pmu.c
-index 6f60f86fad387..a8214ab52fcb5 100644
---- a/arch/arm64/kvm/pmu.c
-+++ b/arch/arm64/kvm/pmu.c
-@@ -213,14 +213,17 @@ void kvm_vcpu_pmu_resync_el0(void)
- {
- 	struct kvm_vcpu *vcpu;
- 
--	if (!has_vhe() || !in_interrupt())
-+	if (!has_vhe())
- 		return;
- 
- 	vcpu = kvm_get_running_vcpu();
- 	if (!vcpu)
- 		return;
- 
--	kvm_make_request(KVM_REQ_RESYNC_PMU_EL0, vcpu);
-+	if (in_interrupt())
-+		kvm_make_request(KVM_REQ_RESYNC_PMU_EL0, vcpu);
-+	else
-+		kvm_vcpu_pmu_restore_guest(vcpu);
+diff --git a/arch/arm64/kvm/pmu-direct.c b/arch/arm64/kvm/pmu-direct.c
+index a22c9258c2452..31d5afc44f36e 100644
+--- a/arch/arm64/kvm/pmu-direct.c
++++ b/arch/arm64/kvm/pmu-direct.c
+@@ -115,6 +115,77 @@ u64 kvm_pmu_direct_pmcr_read(struct kvm_vcpu *vcpu)
+ 		ARMV8_PMU_PMCR_N);
  }
  
- void kvm_host_pmu_init(struct arm_pmu *pmu)
++/* Callback to update counter mask between perf scheduling */
++static void kvm_pmu_update_mask(struct pmu *pmu, void *data)
++{
++	struct arm_pmu *arm_pmu = to_arm_pmu(pmu);
++	struct pmu_hw_events *cpuc = this_cpu_ptr(arm_pmu->hw_events);
++	unsigned long *new_mask = data;
++
++	bitmap_copy(cpuc->cntr_mask, new_mask, ARMPMU_MAX_HWEVENTS);
++}
++
++/**
++ * kvm_pmu_set_guest_counters() - Handle dynamic counter reservations
++ * @cpu_pmu: struct arm_pmu to potentially modify
++ * @guest_mask: new guest mask for the pmu
++ *
++ * Check if guest counters will interfere with current host events and
++ * call into perf_pmu_resched_update if a reschedule is required.
++ */
++static void kvm_pmu_set_guest_counters(struct arm_pmu *cpu_pmu, u64 guest_mask)
++{
++	struct pmu_hw_events *cpuc = this_cpu_ptr(cpu_pmu->hw_events);
++	DECLARE_BITMAP(guest_bitmap, ARMPMU_MAX_HWEVENTS);
++	DECLARE_BITMAP(new_mask, ARMPMU_MAX_HWEVENTS);
++	unsigned long flags;
++	bool need_resched = false;
++
++	bitmap_from_arr64(guest_bitmap, &guest_mask, ARMPMU_MAX_HWEVENTS);
++	bitmap_copy(new_mask, cpu_pmu->cntr_mask, ARMPMU_MAX_HWEVENTS);
++
++	local_irq_save(flags);
++	if (guest_mask) {
++		/* Subtract guest counters from available host mask */
++		bitmap_andnot(new_mask, new_mask, guest_bitmap, ARMPMU_MAX_HWEVENTS);
++
++		/* Did we collide with an active host event? */
++		if (bitmap_intersects(cpuc->used_mask, guest_bitmap, ARMPMU_MAX_HWEVENTS)) {
++			int idx;
++
++			need_resched = true;
++			cpuc->host_squeezed = true;
++
++			/* Look for pinned events that are about to be preempted */
++			for_each_set_bit(idx, guest_bitmap, ARMPMU_MAX_HWEVENTS) {
++				if (test_bit(idx, cpuc->used_mask) && cpuc->events[idx] &&
++				    cpuc->events[idx]->attr.pinned) {
++					pr_warn_once("perf: Pinned host event squeezed out by KVM guest PMU partition\n");
++					break;
++				}
++			}
++		}
++	} else {
++		/*
++		 * Restoring to full mask.
++		 * Only resched if we previously squeezed an event.
++		 */
++		if (cpuc->host_squeezed) {
++			need_resched = true;
++			cpuc->host_squeezed = false;
++		}
++	}
++	if (!need_resched)
++		/* Host was never using guest counters anyway */
++		bitmap_copy(cpuc->cntr_mask, new_mask, ARMPMU_MAX_HWEVENTS);
++	local_irq_restore(flags);
++
++	if (need_resched) {
++		/* Collision: run full perf reschedule */
++		perf_pmu_resched_update(&cpu_pmu->pmu, kvm_pmu_update_mask, new_mask);
++	}
++}
++
+ /**
+  * kvm_pmu_host_counter_mask() - Compute bitmask of host-reserved counters
+  *
+@@ -255,6 +326,7 @@ static void kvm_pmu_apply_event_filter(struct kvm_vcpu *vcpu)
+  */
+ void kvm_pmu_load(struct kvm_vcpu *vcpu)
+ {
++	struct arm_pmu *pmu;
+ 	unsigned long guest_counters;
+ 	u64 mask;
+ 	u8 i;
+@@ -269,7 +341,9 @@ void kvm_pmu_load(struct kvm_vcpu *vcpu)
+ 
+ 	preempt_disable();
+ 
++	pmu = vcpu->kvm->arch.arm_pmu;
+ 	guest_counters = kvm_vcpu_pmu_guest_counter_mask(vcpu);
++	kvm_pmu_set_guest_counters(pmu, guest_counters);
+ 	kvm_pmu_apply_event_filter(vcpu);
+ 
+ 	for_each_set_bit(i, &guest_counters, ARMPMU_MAX_HWEVENTS) {
+@@ -329,6 +403,7 @@ void kvm_pmu_load(struct kvm_vcpu *vcpu)
+  */
+ void kvm_pmu_put(struct kvm_vcpu *vcpu)
+ {
++	struct arm_pmu *pmu;
+ 	unsigned long guest_counters;
+ 	unsigned long flags;
+ 	u64 mask;
+@@ -345,6 +420,7 @@ void kvm_pmu_put(struct kvm_vcpu *vcpu)
+ 
+ 	preempt_disable();
+ 
++	pmu = vcpu->kvm->arch.arm_pmu;
+ 	guest_counters = kvm_vcpu_pmu_guest_counter_mask(vcpu);
+ 	mask = guest_counters;
+ 
+@@ -395,5 +471,6 @@ void kvm_pmu_put(struct kvm_vcpu *vcpu)
+ 	write_sysreg(val & mask, pmovsclr_el0);
+ 	local_irq_restore(flags);
+ 
++	kvm_pmu_set_guest_counters(pmu, 0);
+ 	preempt_enable();
+ }
+diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
+index be1e345e99a77..45658273ffa86 100644
+--- a/include/linux/perf/arm_pmu.h
++++ b/include/linux/perf/arm_pmu.h
+@@ -76,6 +76,7 @@ struct pmu_hw_events {
+ 
+ 	/* Active events requesting branch records */
+ 	unsigned int		branch_users;
++	bool host_squeezed;
+ };
+ 
+ enum armpmu_attr_groups {
 -- 
 2.56.0.rc1.310.g51773c2048-goog
 
