@@ -1,131 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB9154825B9;
-	Thu, 24 Sep 2026 13:00:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2EF388392
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 14:01:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790254850; cv=none; b=s40Q2zq/9qNT4pqQmDEr+eLLOpKYTGVvpvtY01mt2FfZY7WWy35/1bsdZ6LJhsWAodIIWDna3yvfJD1Q9wsrhPYFuE19KJ7s438ThNjX5GRAXw/azdLDZch/J0nTQuRF0UOFqQGk4oVNnhhskBnp056sl5E2G0EZbjlXr2uECt0=
+	t=1790258506; cv=none; b=c1PaOcbfW4zF5FUKfaxDf6QvkDcB+K91rtzTfvBG5TlHKuz5NpDKmvjrPvtyX667aySDJ73w7WQ009J5LltTyO3rL/YKXpnfdw/kupKYwE7bv4D8BDByxFZcdOLrbdoCP9rcbpjZN9glQI34HaEboNB/IJtQ/2S3n+XtU+QjCXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790254850; c=relaxed/simple;
-	bh=Dp12ffDQvZe2JNuqrIWDdlcnmCileR+T4ECkbmUDTTo=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IjG2UxnG6DFlK8r7tUG8gASiIfoeC57FSwdByt41Nf/CGtLr6StslNEP7NKbX5nR36wsuLOzvjj3W5EfQazLEPf93f1ia0ZATBLmpuRCdcfkgU317aRiEeUMRFzX/HFVX/IFbQC8fjzKtxKZEDSG9QEvlYwYO7SdOH72T4di+PM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fTzpeJsv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1790258506; c=relaxed/simple;
+	bh=E9JLwgOzTTYUp//gOVT2Yw38SwLKuhS7cNx4LwO6IoY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Injbx/73r/ZQ8VC0kRSqcMqDrJikIGRYzVaezS/SkI/VvPjZJvXvdwc4uMp1+aZFH77GwOwBEzprPOPGSdA+ijtHb1H/8IAxlTl8dRIDB8NFGebt9eMuXUzyP4tZG2QcqerMR1IMq8wfaOjAjN2SlYYKZcfUPoBDvJrtswkha8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=Vd1I4utP; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fTzpeJsv"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D6B6C2BCB3;
-	Thu, 24 Sep 2026 13:00:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1790254850;
-	bh=Dp12ffDQvZe2JNuqrIWDdlcnmCileR+T4ECkbmUDTTo=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=fTzpeJsvR7DH8skp9bvkueOY8S3D1cha2EHM9djHUzPZuTGWMiJTNmge3rzNk2hDV
-	 JFcN7mwT9A9CJEkioalGbkzZDUh1tjIhqRgOoiWqLdS8O94WbS6/K/zShUsrcCMszb
-	 P8zGCm9CdC1rlAmEJ0+cSQN3Rshti7oR/LwHEXpwA0stRcPdEmU7kJLy2b9eABQn7B
-	 V33xBwH/wt2/0yza4IDdTBZRQdyOR0iRtYfEc0mr7mfmamTM7T39kAm5BJunw6sT14
-	 Yf/Jt6b9nFEA06JPp2ColUFsEDHCI8Nmufxx2N2/BIvkmnW4k9p0yU0aX67wk0qIyq
-	 RGu3OdOeFBGeg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48177C98317;
-	Thu, 24 Sep 2026 13:00:50 +0000 (UTC)
-From: Alireza Asgari via B4 Relay <devnull+alireza.asgari.net@kernel.org>
-Subject: [PATCH net 0/2] Fix UDP splice checksum alignment across fragments
-Date: Thu, 24 Sep 2026 13:00:23 +0000
-Message-Id: <20260924-fix-udp-splice-checksum-v1-0-fe61d65447a8@asgari.net>
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="Vd1I4utP"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912e2406so10529315e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 07:01:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1790258502; x=1790863302; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=EVHqdIp5mN/SlCXCBlhMf/YG37Cfm8kONNXB9WYe688=;
+        b=Vd1I4utPRpO5MQoYJd3BImbAbRTCvbofJtrjc4WaGK+9FanDKYNU3Ioi+4GgF0D6W2
+         Wphfxr0MdpNjLvoJfKs6P7eLeLt3pUh6UUDEFkhePlIQgI0r6dEnuNdXWTila0ss56ys
+         GNYppMAhsKa9oxQih0hAf62lPXxUbOzqpxjXvckFUMn5uOjbpxCt+GbsrXR+DrK1857M
+         ZX4IkqmRGgWeJcZbquD8b9qVG6rqHn4KQhBALdVwWSgCuIzu9D1QkPcgUcIuGGi+4zHg
+         FKs4on01N97sWB3Lffah38b9kvRGHGg10rIYtslH4mQntdasFEISpVdVwiYc41c4LYmL
+         E3jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790258502; x=1790863302;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EVHqdIp5mN/SlCXCBlhMf/YG37Cfm8kONNXB9WYe688=;
+        b=ZQgWv3Eg6P5IzLWNGoXfrODlLhj6BD/zJGjikBv9ijnC9rHUqQK0pstpsGhPfWsGd6
+         YFuT1+T4nxkrTE9qPFC4YYjqIA+jUHTwn7QALunBMj/6XLQoZa4anNofjEKIaR+VuJtt
+         ksq/K7iZ5ICzUp/jZv1mKgWrsnKASh/eSSZ05riCRknSDFUxpZ/K6tSAUfraVEt8dd5x
+         ALBhjfYP0NqiuHzoUeeNgnyjUYnO2VwaqOSdqVXYNO8/humWHyKO5++neEYdggvuU2FV
+         tP65TiwU3AUI+WOcvD7QhyLOecuUKyJ3bqxHQs8iuix0xNmG7bMCnyFk7S+h/q0+rLkQ
+         SREg==
+X-Forwarded-Encrypted: i=1; AKwUvBwcMyPrOojulKyFiqJAotaVpItBL0aePeXf4/kV6SlL+MF1IWPaS9XSAzMLCaBOh2/XWVDoJ8y98IrIQFzPgpw=@vger.kernel.org
+X-Gm-Message-State: AFuF++k3oYqbAnnEicmQ4ysXl0ixe5cvHthHFKpClE7sAu4LYwXIbHH/
+	/xH8Er3H3+X+jOnkyIH+n73hPHG/BxWK/bBsQKzK4Cb+Lmb6sP1iP552IIDvQ/nDhSg=
+X-Gm-Gg: AYBFou2ol16AZn6DdvpGIV5KX1qOImKpuGzypGMxqTY5YfnfhNdcqt6LbDPws7mffv5
+	R/lC4tD+D3AbTQrqzeYNfOL9eUzhjjxFIkqwPPZDSzWEe3AMeGUyHn5wyAb5loED+7aYp5spo5M
+	f0knonrJBosB4xLriYIuILZn1qBxFEJqYb2QFjWm5miB7RcQfWLJM9sNJf0AGKu4AiMI8p1ILwA
+	azJSxjDinA0ucbb/binA03mgDEusc9A51e3B0PfccON9lpRDdV0zazksyn4g8v2w8Sz3ctJAaTC
+	FOxH1U12om7zz69hQNIbVeNTMY5adb4VnWtmEaYzlW89C/AQC8dc9jjmkQKd89fDv+nuDGx19sD
+	vpasIcnFkhFFC2R6EuAjIhDq4Bnklkp5SrzC8/SNaNJlChqB8+qF/lLQrantO6FxKM+8hItwo8Z
+	+PG+OaOq7svyk9CgmmvGb78js6pixYV0ZpSlWLJwa+uPuORPLe5OitVHqinevKyjSKD3u/klv9D
+	RrLToLtJMOQimZ6Ml3ykQ0+vHHNEy1tCgRDRaI/napHI2aSRt8gn5cfI8bDkocwg6XZv3Q1lAdK
+X-Received: by 2002:a05:600c:4e8f:b0:49e:7c8c:bc77 with SMTP id 5b1f17b1804b1-49fe66d062bmr44815485e9.7.1790258501429;
+        Thu, 24 Sep 2026 07:01:41 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49febb20146sm2518575e9.2.2026.09.24.07.01.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2026 07:01:40 -0700 (PDT)
+Date: Thu, 24 Sep 2026 10:01:35 -0400
+From: Gregory Price <gourry@gourry.net>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com, 
+	akpm@linux-foundation.org, liam@infradead.org, vbabka@kernel.org, jannh@google.com, 
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org
+Subject: Re: [PATCH 01/10] selftests/mm: exercise MADV_COLD and MADV_PAGEOUT
+Message-ID: <arUsvfwbYjdcUp3Y@gourry-fedora-PF4VCD3F>
+References: <20260922235830.2350770-1-gourry@gourry.net>
+ <20260922235830.2350770-2-gourry@gourry.net>
+ <arPgwegm8XgbEUrO@gremlin>
+ <arPjwPwVxdvdR5S0@gourry-fedora-PF4VCD3F>
+ <arPl6UhNDbwds4uR@gremlin>
+ <e459d3c9-ad60-47bb-8b02-bed3819e8067@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAOcetWoC/02MSw4CIRBErzLptZ0gflCvYlxAT4/ghyH0YEwmc
- 3dBNy6r6tWbQTgHFjh1M2R+BQljrGG96oC8jVfG0NcMWum9OuotDuGNpU8o6RGIkTzTXcoTzWD
- cbmP0gRRDfafMFf2azxB5gsuvlOJuTFNzNsxZYXTZRvKt+jO3BZblA5XUjOeiAAAA
-X-Change-ID: 20260924-fix-udp-splice-checksum-7f7b53728c0e
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- David Howells <dhowells@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Alireza Asgari <alireza@asgari.net>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790254849; l=3414;
- i=alireza@asgari.net; s=alireza-kernel; h=from:subject:message-id;
- bh=Dp12ffDQvZe2JNuqrIWDdlcnmCileR+T4ECkbmUDTTo=;
- b=tA6tvWeFe6XaDsVtaPWEplgDShCKNTRQbLNJ+PUHQig/yXCuke4r8Ju9YUr+Wy4X/zUiMuFw1
- 9+4g54CkjMqDVR85dONGMklYBvP9vLP1tFjw+1Ckq+PsLIIe6Li41fw
-X-Developer-Key: i=alireza@asgari.net; a=ed25519;
- pk=wuQ0/M69FqoVnrCMUJ13EQCwrCwVjCrtz75k15vW8tw=
-X-Endpoint-Received: by B4 Relay for alireza@asgari.net/alireza-kernel with
- auth_id=1055
-X-Original-From: Alireza Asgari <alireza@asgari.net>
-Reply-To: alireza@asgari.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e459d3c9-ad60-47bb-8b02-bed3819e8067@kernel.org>
 
-When skb_splice_from_iter() appends several pipe fragments, it updates
-skb->len only after the loop. The software-checksum helper nevertheless
-uses that unchanged length as the checksum position for each fragment.
-An odd number of bytes already appended during the call therefore gives
-later fragments the wrong checksum alignment.
+On Thu, Sep 24, 2026 at 01:32:25PM +0200, David Hildenbrand (Arm) wrote:
+> On 9/23/26 16:46, Lorenzo Stoakes (ARM) wrote:
+> >>
+> >> I'm working on a solution.  Need better hosting.
+> > 
+> > Thanks! But yeah damn indeed you do! :)
+> > 
+> > Though larger series can scare people off so maybe better to send the tests
+> > separately?
+> 
+> In any case, we have to break this down into reviewable pieces. We neglected
+> selftests for too long.
+> 
+> ... and there are some schlopped tests in there that we really shouldn't have as
+> they are way too special and hard to maintain.
+> 
+> Like this monstrosity:
+> 
+> +/*
+> + * A folio faulted on another CPU can remain in that CPU's pending LRU batch.
+> + * MADV_COLD drains only the calling CPU and must safely skip the non-LRU
+> + * folio without changing the mapping.
+> + */
+> +static void test_madvise_cold_remote_lru_batch(void)
+> +{
+>
 
-A standalone reproducer primes a UDP socket with sendto(MSG_MORE), splices
-distinct pipe buffers, then uncorks the datagram. The send succeeds, but
-the receiver drops the packet and increments its checksum-error counter.
+Yeah the intent of these particular tests was to ensure I capture ever
+weird branch in the code before i went refactoring it so I ensured there
+was no loss of fidelity.
 
-Patch 1 passes the actual cumulative offset to the checksum helper without
-changing the final length update or partial-progress handling. Patch 2
-adds a loopback selftest covering IPv4, IPv6, IPv4-mapped destinations,
-connected and unconnected sockets, prefixes and fragment boundaries.
+I think we can reasonably delete ~15-20 of these tests.  That said, the
+code itself is not schlopp, but I believe in showing the work.
 
-Based on net/main at e47a1958e12abc3a17b5231a4f21c8f1bf662e08.
-Validation on x86-64 with GCC 11.4.0:
-
-  - Unmodified net kernel: 12 passes, 42 failures; 28 IPv4 and 14 IPv6
-    checksum errors. Patched kernel: all 54 pass, zero checksum errors.
-  - Ubuntu 6.8.0-138-generic reproduces the same failures. The host's
-    5.15.0-187-generic kernel passes all cases.
-  - Patched kernel with restricted pipe growth: 42 passes, 12 expected
-    skips, no failures or checksum errors.
-  - Complete small runtime kernels built and boot-tested before and after
-    the fix. net/core/skbuff.o built under allmodconfig and allyesconfig.
-  - Full x86-64 allmodconfig build and link completed with W=1 and
-    CONFIG_WERROR disabled. The initial strict builds encountered unrelated
-    warnings also reproduced on the unpatched base. No warning was emitted
-    for the changed kernel object.
-  - The full allyesconfig build was interrupted and I chose not to complete
-    it because of the additional build time. Only the changed object has
-    completed that configuration; no full allyesconfig pass is claimed.
-  - Standalone and kernel-Makefile selftest builds pass. Checkpatch finds
-    only the generic new-file MAINTAINERS warning for the selftest;
-    existing networking/selftest ownership covers it.
-  - After converting the selftest to kselftest result helpers, rebuilt it
-    separately and repeated the host and before/after VM runs using the
-    existing kernels, with unchanged case outcomes. Also checked mixed
-    pass/skip and all-skipped runs in isolated network namespaces; the
-    latter reports exactly 54 skips and exits with status 4.
-
-AI assistance: Codex and Astra were used during investigation,
-implementation, selftest development, validation, and preparation of the
-submission text. I reviewed the resulting changes and take responsibility
-for the submission.
-
----
-Alireza Asgari (2):
-      net: fix checksum offsets in skb_splice_from_iter()
-      selftests: net: cover UDP splice checksum fragment alignment
-
- net/core/skbuff.c                                 |   8 +-
- tools/testing/selftests/net/.gitignore            |   1 +
- tools/testing/selftests/net/Makefile              |   1 +
- tools/testing/selftests/net/udp_splice_checksum.c | 378 ++++++++++++++++++++++
- 4 files changed, 385 insertions(+), 3 deletions(-)
----
-base-commit: e47a1958e12abc3a17b5231a4f21c8f1bf662e08
-change-id: 20260924-fix-udp-splice-checksum-7f7b53728c0e
-
-Best regards,
---  
-Alireza Asgari <alireza@asgari.net>
-
-
+~Gregory
