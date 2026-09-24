@@ -1,120 +1,81 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C9F4A5EC8
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2026 15:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ACC449C4A3;
+	Tue,  6 Oct 2026 15:57:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791301703; cv=none; b=fKQ+nvgG9Ezq1iTFLQkIDmi54QR61yCA9bTtEpZGhRry+Pt4hPuKimFj17W/HL1oK8sVhy6tk9YbGQQDyDuPo2SKWIDw4ipx6qc6P30I/mE64VqHWymSFlBWYjlOOwlW8mYR0fEqQiJCwrREoYzE7Rlu/Fsk8rwQzda9VgEgpHE=
+	t=1791302271; cv=none; b=RzkCwFFjDGZiMUFCpq/jPcsRoC/m6cHEXqPsybC7mRmiKUTSnmsU1Ql7HFxbNLI9nISnvzDeeYRtre72sBtd4YfJW7MetL69mHTofdPRHGxuWlEfJR4mLzMcnJz+0oro5Vbj1ej35QdZ7Sj4VtDipYnkVcuPRP+h4NcYhbUzR18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791301703; c=relaxed/simple;
-	bh=lKOZUGjZ+uHNLlR0+eB7FY20wqtu7JNyVUkRRBkeBoI=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=ML1wAzagV8QziRecd1vr5n/+c76UuoOfFpAbYEofbe1HmyAu6a5vjPsWxMYuJNu56V6LhwRD5TO5kGRpu9GKXC/KVE69I84qVR7SZc1nSQgtBZ+1egMFbCDeyy0Y+JqU82Ha6lsEY3Vfr+A2IhF2FPJM8gvaJK8P4wlH7oxHhAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DIyzY3+m; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791302271; c=relaxed/simple;
+	bh=Pf8EPNhq9IaFtueugyD5BlO9dMOI/Pc1XaecLXQ+tQA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BLVEy1JYQRqJdkpRayY8E7Bv7jfyQcVNm0Vx5jD3fUPVqkr2HZxfrzPOknq3/XXMpAZ5pYeCZWPvkgZovCiQKd9m/0bcqBc0OY7fvuKTc34xwrUWt4/Kcz89X/mUEDyaX5JwCQTWDC8aqBdRxeRmVVIXZ2v8+6Ze19OIm/jyUDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.arm.com; spf=pass smtp.mailfrom=foss.arm.com; dkim=pass (1024-bit key) header.d=foss.arm.com header.i=@foss.arm.com header.b=OfTYXDfm; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DIyzY3+m"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E551F0089D;
-	Tue,  6 Oct 2026 15:47:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791301673;
-	bh=kVowoP7VZnQDX9PgysE1dWoJq42lh4xpwwB8buJwczQ=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=DIyzY3+mvykTt6d7/nXA7uNGH0fzJdxAeIl8CukXjDPFOJGtj3DRmir5UVlKqBttM
-	 jLHQEEuUGymp/pVzyv82IaUb3rdClbU86gKxc1as6sVVlMiWdUqgyFmoV925hMOzn/
-	 jDUkhDOEg7n1Zbr8mAKWhBTG/JEtRdxjbHMhMdqq9/y8Gmjo6o0+pfDe7z6Pxd9dLk
-	 joiuCva6s5eM0bAnLUZwVI/WhXUaAtolUnU4b7XNWuHh8YO7QXrJ+RTOiTQcfRdVW1
-	 SefF07dBSPEmqdrWvObityNOu2C8BNomIA1ICeSubJqcgzu6ZCdYdjwP7EeKzxVltq
-	 WkRavjnlrd6Hw==
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id D5004F40068;
-	Tue,  6 Oct 2026 11:47:52 -0400 (EDT)
-Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Tue, 06 Oct 2026 11:47:52 -0400
-X-ME-Sender: <xms:KBjFaivcYKIyvZonqdC4LTC3DRDFFj7HaF-ei2szWjNv_qfhJueJlg>
-    <xme:KBjFaiQ0P0aYiOVhadPbEfd__WqyI42UvWSgWfDeTiRt_kOv1_NNG7FaN1faMyBtF
-    Ktn2_XT4q6mSIOa-7u68lGsj80IAiJRItW06yZ031HQM4IQ_vh4_ZM>
-X-ME-Proxy-Cause: dmFkZTEcVlZu+6LBrAeQVkXnyusqZshRr2dagiKOUaI1LNxig6tvrdh9TxLCeQz34hmv6J
-    Y7DEX3AQgBypM/5uzuGrAilJDzXx0DUMEfuPDgWNqpq6bLu0m29fS/MoCaKJwQWmTWZBWQ
-    4oLqbh0s6c2TLfwRNcZqA7Z2jZePUeNifHxnR9kdyOQoAZzO5MyMC6+lU8OrKVXDcF4JeB
-    ceZlghUlszVYL2ba4bEa7Rh/tdAdREC9gBc986ivAgIf6bpaj5wLae3avf6w6QxavWgOk/
-    ReL9XLOXcZPh+JB1ucR21MMcXPfO5drhdW/DRRDMmDJgMBs3CMMsSPY1QzlgO76vAvykCN
-    zQtEDA5zML2dqQsit8zA+nwKHvmjj8l16f+a5I4TkjhK1rzQYzZLnKHTk19oQHaTrQGkcv
-    T183oePUOpjP0eqcJ+TE6AftnhuIuTe5UAnSI5xhb4rTGVNELv16Q6rxsgvxOTG/QLOCLn
-    w9Ru3Bq8yObHqbHUYEmL6kPISQt52Lp5/1my2ahp59iGe9vkroJSecXL+2b5lJconPIwQT
-    IhOorTgn31JGH6ZVNOTiquj9TsW/973dpZhI7xcrnrobdtu+mm9m2ExMkxC0TsBZwxGriX
-    +ksMd+jHMeubs0yiKOvWzgN2atr3pKgIo53UXU6RheYYOJjSM6fQ5b3JnY9w
-X-ME-Proxy: <xmx:KBjFaqjNBWzmAHQCqoJ2ZeXdqd28q7Kk6Mm2fNd67BoWWwo_-5JtdQ>
-    <xmx:KBjFanvMx4myNpD4sVeZJ7ptOf9VJZ-IgV90Yr1K_Affc71XPUKWpQ>
-    <xmx:KBjFal91GtF1kXONPzq_f-Oc8ZIxbz3QvKTrWIbeV73mKMm6Sr-Baw>
-    <xmx:KBjFatZGEQHVcxbL28UFChVb81G64NTdwNkw3E5kYgVX7jUWMM4Dog>
-    <xmx:KBjFarq6vqIcWc47MeWCDj19WuoeyxPHu6udnCDpO_gYn1PdEStI-TWk>
-Feedback-ID: ifa6e4810:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id B3AB8780075; Tue,  6 Oct 2026 11:47:52 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (1024-bit key) header.d=foss.arm.com header.i=@foss.arm.com header.b="OfTYXDfm"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E58C143D;
+	Tue,  6 Oct 2026 08:57:46 -0700 (PDT)
+Received: from [10.211.55.7] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 49FB73F763;
+	Tue,  6 Oct 2026 08:57:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=foss.arm.com; s=main;
+	t=1791302269; bh=Pf8EPNhq9IaFtueugyD5BlO9dMOI/Pc1XaecLXQ+tQA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=OfTYXDfmzBiGrhfZhBz5ssW0iPG9mWbR1eLtqv7qX8rqBIlDxgSv4FtiebdjSuMbP
+	 S/USuq7SI9SmGJiB5G05+vtV08D5otClWwBakLiB4zlhLaan2cpXO4N7EZO8x8P+7W
+	 4ExllblFVwsIuHyb0gMfWd81yVsoom4Xp5jK7aTY=
+Message-ID: <8c425dac-11f0-4267-8745-d23d6391a6b1@foss.arm.com>
+Date: Thu, 24 Sep 2026 15:49:14 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AXy3qBfHjxQs
-Date: Tue, 06 Oct 2026 11:47:32 -0400
-From: "Chuck Lever" <cel@kernel.org>
-To: netdev-bot+sashiko@kernel.org
-Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
- davem@davemloft.net, pabeni@redhat.com, horms@kernel.org, davejwatson@fb.com,
- shuah@kernel.org, qingfang.deng@linux.dev, edumazet@kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Message-Id: <578d77f7-7d4d-412f-964d-e6e94180221a@slotpi15m67>
-In-Reply-To: <179124254665.434549.12245680127262431659@kernel.org>
-References: <20261001-tls-follow-on-v2-5-2dd1947bb642@kernel.org>
- <179124254665.434549.12245680127262431659@kernel.org>
-Subject: Re: [PATCH net-next v2 5/8] tls: consume empty data records in
- tls_sw_recvmsg()
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] arm64: gcs: Return -EPERM when changes are prevented
+ by locking
+To: Mark Brown <broonie@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260910-arm64-gcs-lock-eperm-v1-0-d88e51855c9f@kernel.org>
+ <asUIWgHk3hdaLEu5@arm.com> <asUQdaTtMF1X_Hsa@sirena.org.uk>
+Content-Language: en-US
+From: Bill Roberts <bill.roberts@foss.arm.com>
+In-Reply-To: <asUQdaTtMF1X_Hsa@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 05, 2026, netdev-bot+sashiko@kernel.org wrote:
-> > +		if (!chunk && control == TLS_RECORD_TYPE_DATA) {
-> > +			if (!darg.zc)
-> > +				consume_skb(darg.skb);
-> > +
-> > +			/* An empty record still marks a boundary. */
-> > +			msg->msg_flags |= MSG_EOR;
-> > +			continue;
-> > +		}
+
+On 10/6/26 10:15 AM, Mark Brown wrote:
+> On Tue, Oct 06, 2026 at 03:40:26PM +0100, Catalin Marinas wrote:
+>> On Thu, Sep 10, 2026 at 08:00:39PM +0100, Mark Brown wrote:
+>>> When we refuse to change the GCS configuraiton due to locking we
+>>> currently return -EBUSY which is an odd choice.  The only userspace I
+>>> found that relies on this value at present is the kselftest and other
+>>> architectures are using the more obvious -EPERM here let's switch.
+>> IIUC, riscv is returning -EINVAL. Should we get an overall consistent
+>> value? Personally I find -EBUSY quite descriptive but I don't mind
+>> aligning the architectures (before user space starts making use of the
+>> return value).
+> Yes, it's using -EINVAL though it differs in that it's interface for
+> locking only allows locking a single enable bit in the enabled state
+> rather than letting you lock unknown bits, or locking things off, so we
+> need some changes there too.  I guess we could also go with -EPERM which
+> would also distinguish the "I don't understand" from "This is blocked",
+> but nobody uses that yet.
 >
-> [Severity: High]
-> This keeps empty records off rx_list. Does the receive loop still fail to
-> make progress on them, though?
-
-It does, and this patch does not change that. Before it, every arm
-of the loop reached "decrypted += chunk" and "len -= chunk" with
-chunk == 0 and went around again. The patch stops the peek and
-async arms from queueing those records on rx_list and leaves the
-loop's bounds alone.
-
-The patch description cites the loop to explain why rx_list grows,
-and I can see it reads as a claim that the patch bounds the loop.
-I'll reword it in v3.
-
-
-> In-kernel MSG_DONTWAIT callers never receive a signal, so they cannot use
-> this exit. One example is svc_tcp_sock_recvmsg() in net/sunrpc/svcsock.c:
-
-True, and also true before this series.
-
-
-> should the empty-record branch break out once decrypted + copied >= target?
-
-Returning bytes already copied instead of waiting out a run of
-empty records is reasonable, and I'll look at it for v3. With
-nothing copied, a blocking reader has no return value that is not
-EOF or an error, so that case keeps looping until a record with
-data, a signal, or the end of the run.
-
-
--- 
-Chuck Lever (Come to NFS bake-a-thon! https://nfsv4bat.org)
+> I was intending to do something soon to pull more of this code out into
+> some shared place since especially for RISC-V and arm64 where they're
+> using the prctl() rather than arch_prctl() interface so there's less
+> reason for things to be duplicated.
+Bear in mind that I do have patches out there, for x86 that enable prctl
+for them as well. I looked into doing the lock check in the prctl call 
+path before
+it gets dispatched to the arch specific backend, it does require a 
+common interface
+into the threads feature bits that each arch would need to, trivially, 
+implement.
