@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2DE8472079;
-	Thu, 24 Sep 2026 11:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148C447CC83;
+	Thu, 24 Sep 2026 11:58:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790251081; cv=none; b=Kgm4eDH8xzb1GLDvT1xVDUU+j6c/VeivGWA6W+cAldnB2j5V+6jd4PEz0yJCm7sQAocfuXDqbrOdlBxE3eH4+aiacYDwGXB0k/k5841ul8t54lV9/P3z8VUVJcbZn5Yq06GPXp5p6/QV1heCIGekTk5q8NDbMTTdf/z5UunjlGY=
+	t=1790251082; cv=none; b=KVW3e2h6khb08WeuCNSxzJxKeZO1PLl2hoS4dn6/wPTQFuJhKC7RHNb9dmtTR7N1SfOaaa1bA4pZhvRHm1Sz6kx3UCHj70PaXn2aDgfcdoVgs3mTBo2qxrW4A1rIZv7/y055DDFNHTMIqy/aKnJmEoLn4w/kjbFHPZHvJAUfubw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790251081; c=relaxed/simple;
-	bh=WYRdwmjOE4EdofXjyjYssWNA404SQFqhrdLjsrijNdc=;
+	s=arc-20240116; t=1790251082; c=relaxed/simple;
+	bh=ScgIrxCe6j/L+28SuYnMce5awaTYVLXcVBy00RK+B8s=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Cs7FEz20+NdY8mA7mvr5aisxCxPPb1wrAtPZLLwMiTnPMSI1W5K7OL8vXLgjXIiIgBnLdgOvRtky23H4zhZDdPVdz7tycfzZrT+OgahDwFEWBv4DAVjDA1GrAZIKUg5VxCrkAt7l0Uxm9zveQGwtUbovAG/d1EsF2+LMtSDSCP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OY/OiSF8; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=EZN4KcTotW7nsDEbzw4drEhhULxTAAB8tDfZ8jJVF08QgpBQvAGd9vR1edJgxyQlyRZLjHR+qxjBDaZudO+wkKt4XwBhn9jxUiFfBKcT2DfTX3D/q+KcMJrBIOlniltLl/T3fCRfoifou8harmHID/Sgwuyi8xMi1w1a5i+IOz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nmG0L20P; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OY/OiSF8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C4B1F00898;
-	Thu, 24 Sep 2026 11:57:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nmG0L20P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E38231F000FF;
+	Thu, 24 Sep 2026 11:57:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790251079;
-	bh=duuiQ04qyD34i7KB1Tb8+L5FCvvWnLuj6fBo5yAyNm8=;
+	s=k20260515; t=1790251080;
+	bh=JHAPev61XeocIRAnkuRq98uYBIqvyXYH4mOe/6evYs8=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=OY/OiSF8/lp8/o8T+q0MeFjEBgMUQvpoBNkdKGKAmk6rnZw78ajl7UymIGyt7RSgI
-	 G/96VCYSqbrkvT2lOhZ7jUldbiDXXkHx+cNTlMxwalCDKTZ3URWkJZotMhG+OSG64h
-	 E8aJj+W7IfM8WcSg6aIvBvtL+PPY0oJmS4U3SRgg/BfLbleCWYCR7DOJGrb4XKKvcF
-	 CkQdCwlF2y/795dmTPlioxaL61J7RfhjfijZiDfIVE6YH3ze99RcrzD42KrWGPZazb
-	 RLVXK2VmqkuN01fiyQlfv61RSVOQFpza4rnFlIXIN1Hh4Joz16zGQzgZq6D+u3UO09
-	 gflY4D33SSodw==
-Subject: Re: [PATCH net-next 3/5] selftests: seg6: move SRv6 End PSP setup
- into its own helper
+	b=nmG0L20Pmoshlf9X6P9DWDTq5fgylTWPMU3Up5K65aBjVj/mHjP0/8T4Hgi0ZKtjm
+	 kcl2lsT9r3iAcnCfqVJ5sk6LLumIz/OWT6pOVZnuwyP15ocPL8t/buYHe0XyCWrkuo
+	 0Xu0C2MBL+tDLuWdp20XL4WGdT/GYZ/YbfFybHNz4ICEwiQ4RA26Svhl4SYdHeVZi2
+	 yoEawnJtjQ0XwpaGRJwzLDWxn27pimVtvLQBCaSqD7I0YdTuXp16UqALTZ356+Q7N8
+	 IR9QM4TxirG71f5R4spfUM0EwRX5ofj3+OJDVq+i/+rCtGfwl/opCHUDswqoiGHmBp
+	 jM96lA6CrGYcg==
+Subject: Re: [PATCH net-next 4/5] selftest: seg6: add explicit cleanup for
+ SRv6 End PSP test
 From: netdev-bot+sashiko@kernel.org
 To: hangbin.liu@linux.dev
 Cc: andrea.mayer@uniroma2.it, davem@davemloft.net, edumazet@google.com,
  kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
  netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, liuhangbin@kylinos.cn
-Date: Thu, 24 Sep 2026 11:57:58 +0000
-Message-ID: <179025107823.2160803.7801303260933899523@kernel.org>
-In-Reply-To: <20260922-srv6_flavors_endx-v1-3-4d01c05c47b7@kylinos.cn>
-References: <20260922-srv6_flavors_endx-v1-3-4d01c05c47b7@kylinos.cn>
-X-sashiko-severity: Low
+Date: Thu, 24 Sep 2026 11:57:59 +0000
+Message-ID: <179025107951.2160803.7004145160447009717@kernel.org>
+In-Reply-To: <20260922-srv6_flavors_endx-v1-4-4d01c05c47b7@kylinos.cn>
+References: <20260922-srv6_flavors_endx-v1-4-4d01c05c47b7@kylinos.cn>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -48,129 +48,154 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-- [Low] Mid-run re-arming of the SETUP_ERR latch converts already-
-  recorded test FAILures into an overall SKIP.
-- [Low] setup_end_flv_psp()
-  (tools/testing/selftests/net/srv6_end_flavors_test.sh:651-670) is…
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] Asymmetric teardown: `cleanup_rt_policy_ipv6()` deletes
+  localsid routes it never created.
 
 --
 
-selftests: seg6: move SRv6 End PSP setup into its own helper
+selftest: seg6: add explicit cleanup for SRv6 End PSP test
 
-This moves the End PSP policy installation out of setup() into a new
-setup_end_flv_psp() helper, and calls that helper from
-host_srv6_end_flv_psp_tests() with errexit enabled around it. The intent
-is to decouple the base topology setup from the flavor-specific test case.
+This adds cleanup_rt_policy_ipv6() and cleanup_end_flv_psp(), called at the
+end of host_srv6_end_flv_psp_tests(), to tear down the policy and localsid
+state installed for the PSP test.  It also moves the host neighbour proxy
+entries from __setup_rt_policy() into the common setup().
 
 > diff --git a/tools/testing/selftests/net/srv6_end_flavors_test.sh b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-> index 318487eda671b..56a1c5f865a77 100755
+> index 56a1c5f865a77..52731983b4cc9 100755
 > --- a/tools/testing/selftests/net/srv6_end_flavors_test.sh
 > +++ b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-> @@ -645,6 +645,12 @@ setup()
->  	setup_rt_local_sids 3 "1 2 4"
->  	setup_rt_local_sids 4 "1 2 3"
->  
-> +	# testing environment was set up successfully
-> +	SETUP_ERR=0
-> +}
-> +
-> +setup_end_flv_psp()
-> +{
->  	# set up SRv6 policies
->  	# create a connection between hosts hs-1 and hs-2.
->  	# The path between hs-1 and hs-2 traverses SRv6 aware routers.
 
 [ ... ]
 
->  	#  - rt-1 (SRv6 End flavor PSP with SL=1)
->  	setup_rt_policy_ipv6 2 1 "3:noflv 4:psp 2:psp"
->  	setup_rt_policy_ipv6 1 2 "1:psp"
-> -
-> -	# testing environment was set up successfully
-> -	SETUP_ERR=0
+> @@ -576,6 +572,56 @@ setup_rt_policy_ipv6()
+>  	__setup_rt_policy "$1" "$2" "$3"
 >  }
-
-[Severity: Low]
-The commit message says the split lets "each PSP test case can setup and
-later cleanup independently", but this commit only adds the setup half.
-setup_end_flv_psp() installs the localsid seg6local routes, the cafe::<dst>
-H.Insert route and the proxy NDP entries through __setup_rt_policy(), and
-nothing releases them except the global EXIT trap cleanup(), which just
-does:
-
-	for i in ${ROUTERS}; do
-		nsname="$(get_rtname "${i}")"
-		ip netns del "${nsname}" &>/dev/null || true
-	done
-
-Would it make sense to mention in the commit message that the matching
-cleanup_end_flv_psp() arrives in the following patch ("selftest: seg6: add
-explicit cleanup for SRv6 End PSP test")? As it stands the description
-promises a teardown path that does not exist yet at this commit. There is no
-functional problem here, since the two PSP policies are the only flavor
-state installed and netns deletion reclaims everything.
-
 >  
->  check_rt_connectivity()
-> @@ -758,7 +761,13 @@ host2gateway_tests()
->  
->  host_srv6_end_flv_psp_tests()
->  {
-> -	log_section "SRv6 connectivity test hosts (h1 <-> h2, PSP flavor)"
-> +	set -e
-> +	SETUP_ERR=1
-> +	setup_end_flv_psp
-> +	SETUP_ERR=0
-> +	set +e
+> +cleanup_rt_policy_ipv6()
+> +{
+[ ... ]
+> +	for n in ${policy_rts}; do
+> +		node="$(__get_srv6_rtcfg_id "${n}")"
+> +		op_type="$(__get_srv6_rtcfg_op "${n}")"
+> +		rt_nsname="$(get_rtname "${node}")"
+> +
+> +		case "${op_type}" in
+> +		"noflv")
+> +			function="${END_FUNC}"
+> +			;;
 
-[Severity: Low]
-Can re-arming SETUP_ERR here turn already-recorded failures into a skip?
+[Severity: Medium]
+Does the "noflv" case here delete a SID that the policy helper never
+created?
 
-By the time host_srv6_end_flv_psp_tests() runs, router_tests() and
-host2gateway_tests() have already executed and may have set ret=1 and
-incremented nfail:
+On the add side, __setup_rt_policy() only installs the SID if it is not
+already present:
 
-	setup
-	set +e
+	fullsid="${LOCATOR_SERVICE}:${node}::${function}"
 
-	router_tests
-	host2gateway_tests
-	host_srv6_end_flv_psp_tests
+	# add SRv6 Endpoint behavior to the selected router
+	if ! ip -netns "${rt_nsname}" -6 route get "${fullsid}" \
+		&>/dev/null; then
+		ip -netns "${rt_nsname}" -6 route \
+			add "${fullsid}" \
+	...
 
-	print_log_test_results
+For "noflv" that guard is always taken, because setup_rt_local_sids()
+already installed fcff:<rt>::${END_FUNC} for every router during the
+common setup():
 
-If any ip command inside setup_end_flv_psp() fails, for example the
-"encap seg6local action End flavors psp" route add, errexit aborts the
-script while SETUP_ERR is still 1, and the EXIT trap takes this path in
-cleanup():
-
-	if [ "${SETUP_ERR}" -ne 0 ]; then
-		echo "SKIP: Setting up the testing environment failed"
-		exit "${ksft_skip}"
-	fi
-
-	exit "${ret}"
-
-so the script exits 4 (skip) instead of reaching exit ${ret} with ret=1, and
-print_log_test_results is never reached, meaning the tests passed/failed
-summary is lost too.
-
-The final patch of this series ("selftests: seg6: add End.X PSP selftest")
-changes the guard to also require [ "$ret" -ne "$ksft_fail" ], which removes
-the fail-to-skip masking. Could that guard change be moved earlier in the
-series, so the intermediate commits do not carry the masking behaviour?
+	# Local End behavior (note that "dev" is a dummy interface chosen for
+	# the sake of simplicity).
+	ip -netns "${nsname}" -6 route \
+		add "${LOCATOR_SERVICE}:${rt}::${END_FUNC}" \
+		table "${LOCALSID_TABLE_ID}" \
+		encap seg6local action End dev "${DUMMY_DEVNAME}"
 
 > +
-> +	log_section "SRv6 connectivity test hosts (h1 <-> h2, End flavor PSP)"
+> +		fullsid="${LOCATOR_SERVICE}:${node}::${function}"
+> +
+> +		# Remove SRv6 Endpoint behavior for the selected router
+> +		if ip -netns "${rt_nsname}" -6 route get "${fullsid}" &>/dev/null; then
+> +			ip -netns "${rt_nsname}" -6 route \
+> +				del "${fullsid}" \
+> +				table "${LOCALSID_TABLE_ID}" \
+> +				dev "${DUMMY_DEVNAME}"
+> +		fi
+> +	done
+
+Since the delete is gated on the route existing rather than on whether
+this helper created it, the condition succeeds precisely for the
+setup()-owned End SID, and it is removed.
+
+[ ... ]
+
+> @@ -669,6 +723,12 @@ setup_end_flv_psp()
+>  	setup_rt_policy_ipv6 1 2 "1:psp"
+>  }
+>  
+> +cleanup_end_flv_psp()
+> +{
+> +	cleanup_rt_policy_ipv6 2 1 "3:noflv 4:psp 2:psp"
+> +	cleanup_rt_policy_ipv6 1 2 "1:psp"
+> +}
+> +
+
+With the "3:noflv" entry above, every normal run ends with
+fcff:3::${END_FUNC} deleted from rt-3's localsid table, so the
+environment no longer matches what setup() built.  After the deletion a
+lookup of fcff:3::000e in rt-3 falls through the
+
+	to fcff::/16 lookup localsid
+
+rule down to the "unreachable default" route that setup_rt_local_sids()
+installed.  Should the teardown mirror the guarded add and only remove
+the flavor SIDs plus the encap route it actually created?
+
+This matters for exactly the case the commit message mentions, "when
+later tests are added to the same script": a later test that depends on
+the default End SIDs would fail or take a different path unless it
+happens to call __setup_rt_policy() with a noflv entry, which silently
+re-creates the SID.  In this series the End.X PSP test added later does
+re-add fcff:3::000e via setup_endx_flv_psp(), so the asymmetry is
+currently masked and the behaviour becomes order dependent.  The
+cleanup_rt_policy_ipv6() and cleanup_end_flv_psp() helpers are unchanged
+at the end of the series, still passing "3:noflv".
+
+The commit message describes the change as tearing down flavor-specific
+state the PSP test installed:
+
+  "The PSP test installs policy and route state, but relies on global
+   cleanup to tear it down. That can leave flavor-specific state around
+   when later tests are added to the same script."
+
+Could it also mention that shared state created by setup() is removed?
+
+>  check_rt_connectivity()
+>  {
+>  	local rtsrc="$1"
+> @@ -771,6 +831,8 @@ host_srv6_end_flv_psp_tests()
 >  
 >  	check_and_log_hs_connectivity 1 2
 >  	check_and_log_hs_connectivity 2 1
+> +
+> +	cleanup_end_flv_psp
+>  }
+
+One more question on the call site: host_srv6_end_flv_psp_tests() runs
+after "set +e", so a failing or over-reaching "ip route del" in
+cleanup_end_flv_psp() produces no test failure.  Would it be worth
+checking the return values here so teardown errors are visible?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260922-srv6_flavors_endx-v1-0-4d01c05c47b7%40kylinos.cn
