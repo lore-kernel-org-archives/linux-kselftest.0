@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-159.mta0.migadu.com [91.218.175.159])
+Received: from mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C344499A4
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 18:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6574BB5B7
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 18:48:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790275681; cv=none; b=dAWB/f7gQL/PNWTJfZREsaB8ts7fVOMGGoxOelE1hJB6p1FT3cG1jJwt0tK6qLCOKH+7VbslWUhfFp/xp72Z+PWUhf89rf6+secD7CkNbTlffazbpz9knmaV1PWPTgwve64RekbVJ64Z0kNf5NXaceG1RJ7FLgduFBQSP/cgjiM=
+	t=1790275688; cv=none; b=C74zfwCn4jYWND4O/MknDKKN8u4P8CkH9sWB2+Zr7aEoXK3VsrcCFKcrPSTDn8ZTRSNcTfSS8chnuUcJehCEl44YGeez7l3eIh2hO6iEi/0VDVggdQRrH2BcrDbpYkbWgUTLhap/i8veBJ2oRnk7/DO6mAUlwIjgh0Yy86Lv5qU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790275681; c=relaxed/simple;
-	bh=bvsZVhH3fXVvwRMjzbTh1Q0bqUQyRzPT8xCixvm+AS8=;
+	s=arc-20240116; t=1790275688; c=relaxed/simple;
+	bh=vhv2GOBN4FsPRGu+ZsZgfVd3kVqXyiVymVSJNtKa9ts=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BM/FL8ditkja11TisdO9LOleV4zMxCmtP6Wg1iNoWlhvDV5HD5g1wQjyUip3laAWgI28Q+OARlX6jRe6IjysFH+mIDqxWbXUjkHtNrcZ9jH5DR8fmUST8vXewjH7J5vHGZxqoELjyc2pFcKO4UxCmXFcCvGJM25Qe081TCZ1Cw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AIwnS3bu; arc=none smtp.client-ip=91.218.175.159
+	 MIME-Version; b=VBrYxQnFBtBRJzpU5Om1BL/wQjrYgCB0gbK9XMGe9jvnIBWuuYV0I5+2exJyjBAfJriFDo+2on2wXsYm4OHcuQAcDJdFDmNfHsOaILKEgDL9+7uoRh0oZznvyXR7HU/Vual4u/fAqUKDX6vGLql8YS/EO8AfZRdyisQLJGc04S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hAD3XP6R; arc=none smtp.client-ip=91.218.175.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AIwnS3bu"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hAD3XP6R"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=bvsZVhH3fXVvwRMjzbTh1Q0bqUQyRzPT8xCixvm+AS8=;
+DKIM-Signature: a=rsa-sha256; bh=vhv2GOBN4FsPRGu+ZsZgfVd3kVqXyiVymVSJNtKa9ts=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790275670; v=1; x=1790880470;
- b=AIwnS3bu82n/6i8h81+UuybcqZEvxDzN7ZVnE6jw/vZ85Yfr99LPq3lcClGmhALWsbZyGqVF
- C2z4WFkDopIheipluEuhSDyU0G2o5iiX9cqpVOuB79wTUUBWy+vMkyFSdOqDmj2T+M3Hs2OSD2B
- nVkJSwtECuvECqKlE6NS/W/8=
+ t=1790275681; v=1; x=1790880481;
+ b=hAD3XP6R9aGJHbBjel4SliVEZcMmOYmFPVeqheIfk61X6C9KBVu4XThcsfqnyJlMIG2ZFEX9
+ aDJl9pxnpOwbXl/I+ZtGK3bajDqSoSSRrqXncelufYFwCDezVY75FqacEmQR5bNYGQsRNCTVoVP
+ RSRvVn/dR3AJshcwNK3lsVC8=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 687bc44cdcacb26c;
-	Thu, 24 Sep 2026 18:47:49 +0000
-X-Mizu-Trace-ID: 687bc44cdcacb26c
+Received: by smtp.migadu.com with ESMTPS id 57a02f3e5119bc77;
+	Thu, 24 Sep 2026 18:48:01 +0000
+X-Mizu-Trace-ID: 57a02f3e5119bc77
 X-Migadu-Flow: FLOW_OUT
 From: Shakeel Butt <shakeel.butt@linux.dev>
 To: Tejun Heo <tj@kernel.org>,
@@ -61,9 +61,9 @@ Cc: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 4/7] sched/fair: add cfs_bandwidth_charge() for kernel work done for a cgroup
-Date: Thu, 24 Sep 2026 11:47:08 -0700
-Message-ID: <20260924184714.912181-5-shakeel.butt@linux.dev>
+Subject: [RFC PATCH 6/7] memcg: charge high_work reclaim to the memcg
+Date: Thu, 24 Sep 2026 11:47:10 -0700
+Message-ID: <20260924184714.912181-7-shakeel.butt@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260924184714.912181-1-shakeel.butt@linux.dev>
 References: <20260924184714.912181-1-shakeel.butt@linux.dev>
@@ -75,128 +75,39 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-set_active_cgroup() charges a kernel thread's CPU time to the cgroup it
-works for, but only in cpu.stat. The work still does not count against
-that cgroup's cpu.max.
+When a charge from IRQ context puts a memcg over memory.high, the
+reclaim runs later from high_work on a kworker. The kworker is in the
+root cgroup, so the reclaim does not show up in the memcg's cpu.stat
+or memory.pressure, and does not count against its cpu.max.
 
-Add cfs_bandwidth_charge(). It takes the time out of the cpu.max pool of
-the cgroup's task group and of each limited ancestor, the same way the
-group's own run time is taken. The work itself is never throttled: it
-has already run. Instead the group's own tasks get less time afterwards.
-
-What the pool cannot cover now becomes debt, paid out of the next
-refills. The debt is capped at one period's quota, so a burst of work
-cannot starve the group for long. Changing cpu.max clears it.
+Run the reclaim under set_active_cgroup(). Its CPU time and memory
+stalls are then charged to the memcg's cgroup, and its CPU time comes
+out of that cgroup's cpu.max quota.
 
 Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
 ---
- kernel/sched/core.c  |  1 +
- kernel/sched/fair.c  | 43 +++++++++++++++++++++++++++++++++++++++++++
- kernel/sched/sched.h |  8 ++++++++
- 3 files changed, 52 insertions(+)
+ mm/memcontrol.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index b9e288b76da9..a487da494795 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -9809,6 +9809,7 @@ static int tg_set_cfs_bandwidth(struct task_group *tg,
- 		cfs_b->period = ns_to_ktime(period);
- 		cfs_b->quota = quota;
- 		cfs_b->burst = burst;
-+		cfs_b->debt = 0;
- 
- 		__refill_cfs_bandwidth_runtime(cfs_b);
- 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 69145dda0df5..84250bd5caa2 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6626,6 +6626,7 @@ static inline u64 sched_cfs_bandwidth_slice(void)
- void __refill_cfs_bandwidth_runtime(struct cfs_bandwidth *cfs_b)
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 4d00748c8a5b..f1d0ba8b48cb 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2456,9 +2456,14 @@ static unsigned long reclaim_high(struct mem_cgroup *memcg,
+ static void high_work_func(struct work_struct *work)
  {
- 	s64 runtime;
-+	u64 pay;
+ 	struct mem_cgroup *memcg;
++	struct cgroup *old;
  
- 	if (unlikely(cfs_b->quota == RUNTIME_INF))
- 		return;
-@@ -6638,9 +6639,51 @@ void __refill_cfs_bandwidth_runtime(struct cfs_bandwidth *cfs_b)
- 	}
- 
- 	cfs_b->runtime = min(cfs_b->runtime, cfs_b->quota + cfs_b->burst);
+ 	memcg = container_of(work, struct mem_cgroup, high_work);
 +
-+	/* Pay back the kernel work charged by cfs_bandwidth_charge(). */
-+	pay = min(cfs_b->runtime, cfs_b->debt);
-+	cfs_b->runtime -= pay;
-+	cfs_b->debt -= pay;
-+
- 	cfs_b->runtime_snap = cfs_b->runtime;
++	/* Charge the reclaim to the memcg's cgroup, not to the root. */
++	old = set_active_cgroup(memcg->css.cgroup);
+ 	reclaim_high(memcg, MEMCG_CHARGE_BATCH, GFP_KERNEL);
++	set_active_cgroup(old);
  }
  
-+/*
-+ * Kernel work used @delta of CPU time for @cgrp, see set_active_cgroup().
-+ * Take it out of the quota of @cgrp's task group and of each ancestor with
-+ * a limit, the same way the group's own run time is taken. What the pool
-+ * cannot cover now becomes debt, paid out of the next refills. The debt is
-+ * capped at one period's quota, so the work cannot starve the group for
-+ * long.
-+ */
-+void cfs_bandwidth_charge(struct cgroup *cgrp, u64 delta)
-+{
-+	struct task_group *tg;
-+
-+	if (!cfs_bandwidth_used())
-+		return;
-+
-+	guard(rcu)();
-+	tg = css_tg(cgroup_e_css(cgrp, &cpu_cgrp_subsys));
-+
-+	/* No limit here or above. */
-+	if (READ_ONCE(tg->cfs_bandwidth.hierarchical_quota) == RUNTIME_INF)
-+		return;
-+
-+	for (; tg; tg = tg->parent) {
-+		struct cfs_bandwidth *cfs_b = &tg->cfs_bandwidth;
-+		u64 take;
-+
-+		guard(raw_spinlock_irqsave)(&cfs_b->lock);
-+		if (cfs_b->quota == RUNTIME_INF)
-+			continue;
-+
-+		take = min(delta, cfs_b->runtime);
-+		cfs_b->runtime -= take;
-+		cfs_b->debt = min(cfs_b->debt + delta - take, cfs_b->quota);
-+	}
-+}
-+
- static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
- {
- 	return &tg->cfs_bandwidth;
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 6c3ad70e58b8..2d1adfd7ad37 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -456,6 +456,8 @@ struct cfs_bandwidth {
- 	u64			runtime;
- 	u64			burst;
- 	u64			runtime_snap;
-+	/* Kernel work charged by cfs_bandwidth_charge(), not paid yet: */
-+	u64			debt;
- 	s64			hierarchical_quota;
- 
- 	u8			idle;
-@@ -618,6 +620,12 @@ static inline bool cfs_task_bw_constrained(struct task_struct *p) { return false
- 
- #endif /* !CONFIG_CGROUP_SCHED */
- 
-+#ifdef CONFIG_CFS_BANDWIDTH
-+void cfs_bandwidth_charge(struct cgroup *cgrp, u64 delta);
-+#else
-+static inline void cfs_bandwidth_charge(struct cgroup *cgrp, u64 delta) { }
-+#endif
-+
- /*
-  * A weight of 0 or 1 can cause arithmetics problems.
-  * A weight of a cfs_rq is the sum of weights of which entities
+ static void high_irq_work_func(struct irq_work *work)
 -- 
 2.53.0-Meta
 
