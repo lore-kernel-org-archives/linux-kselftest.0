@@ -1,130 +1,151 @@
-Received: from mail-yx2-f42.google.com (mail-yx2-f42.google.com [74.125.224.170])
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF39740EB9D
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 16:24:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B434F4A7C83
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 16:33:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790267096; cv=none; b=K99OxOoaHOlPQpS/0AQrmQLBVq9R0bzug5yB/3bGj041b9bEytn11KbvWhhTF4wswsuepMFIy3dWkuzNewHC41LhRqsHyHOY98WvEzRz5SBkNKqM0+7uZxDo6+bBEbdQxWXY7Uf+LQuHLp/1vKPBkxQY7u09GGYoAt3LIVTZrfA=
+	t=1790267582; cv=none; b=I0eI7TFAshbaAv9dnD+/bzpGZgpx/JIOXvV1RskAtApJ83jr/JzgKGh9fmHqd9Ucp3c228un/DOR/z14viydvwcCaz1fQ2F53zCpdMKvvMmvICg2k+QdQEJ+MZ4XISifBfJMcdK7Cglp7Ri/Kr3qA1urBJNkJakHwG30FH9oNRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790267096; c=relaxed/simple;
-	bh=440h9dFKjB/gL6Kt8Wwp2sOdSQZbYHU2D2i/qlxYifE=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=aqiOHLTVtSfm2BEhn+PI/wzppbv9874ypgx8qZDMlIcHjIGRRzbZMPWDnNlbo7BXkYa84kdNvBAe0A9aCviG7iVXLgpygEvkASKDkgCt0THIMeHZg/dwjPgZiYhCf+bv/bdQWmLUnu45EjrRq/w8VzBLY7XU/ciabWxLnRLyl2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=amgVEXlD; arc=none smtp.client-ip=74.125.224.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790267582; c=relaxed/simple;
+	bh=6jk4WNq35FvtRPXwxvwFFQkIMdTLJNaw0ZthxIMDruE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=BQmInMTPULyIXXB/0g28XbsTW98ZN+JB6KEJABBFWx0JLYZcwZW53uuEt4rpswrOPWnc7XjFgvP6m56vG4ylYjlDR8hbwIEyu4yK7X1dWkBUxEpOLfI5SP3QqWZlC9bEF5Y+l3InQOF/Vyq9Hla9TSmoTnMk31yZj7PYvQ3fML8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Liz9XyzJ; arc=none smtp.client-ip=209.85.215.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="amgVEXlD"
-Received: by mail-yx2-f42.google.com with SMTP id 00721157ae682-89666ee9b3bso63037b3.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 09:24:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Liz9XyzJ"
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cc73ab90ae7so1938203a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 09:33:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790267093; x=1790871893; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=4EdeJyFvDx7/h+uSzbqlt1nBcvAWTDwgRsH1W939sSc=;
-        b=amgVEXlDw3WXRKkw5jFf6JpviEeeFfSBTxlJqyFOUZQQcq75eahVQc4AgIH9Y+x964
-         LXSA+pPeDYsb4frucnXxAQClFs52vbiIi/rdKjiGB3NVsxadrU/FetTvPESDGytbSQ+d
-         EzIRWq6/pPGSJu4kKHNl/ElAI4NORTdY+jsRLTgMkeJAk/u/KrxIdJGEr5m4Kp8+EoAO
-         6MOOCfrZgcGU8dL//sUrhvpl9d+f6uDvbA4sTnrILiSLJcF2L5qfXfO5/gZDkGJHyxCd
-         dR+jpg0YePr46Zy+3kZBxFB0xJYtKcErl89nkXDiveIYLHiDkIVnD5jSoVtBpi2WjZ/C
-         c11g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790267093; x=1790871893;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1790267580; x=1790872380; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=4EdeJyFvDx7/h+uSzbqlt1nBcvAWTDwgRsH1W939sSc=;
-        b=dkcg3ra+otKYH/0H7l0kM/aQ7rk1Z+8wiM3+M8X/t8XfuCsNluGA/aU6WrMgEmWXOD
-         JAaPjzL9G1LQVQt8JlZcSGYAgIM2HSkyWPZh5KabpFK/b9Bl5s9400rj0Mm9IPydxMMm
-         3VJb26bcRR7fTzwUZ0hvdBwFHuY0AW65hIDRJuutYxYHKAaTsodCddx7DeOfFaYsQja2
-         dyfn0SzSXkitOHlMDFKXvIeaKKMd9/rPuI5VBhQAMyXgUBMzwi3EVnP+z7olyYJ0Fljo
-         8trF2I6+bEsz0WH6PpwLAYAU83YMFmlSrOxc0Xt23Kc4YNFZG1MaD+pTA/5Aa/3M3ahT
-         yFHQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzUOoYzawVA05pVJWrBt9T3CrYe8yp/wHd81HdpiNMzIYsDG9VTSvJnNiogQkoWplEEHgVLmP62JzIZGEc+EbI=@vger.kernel.org
-X-Gm-Message-State: AFuF++mT2WrKXX2u8rsebEFrxZGGNnFCoN0FBFimHYilMPmnvG/EGGlt
-	290sSG8JDoVJ+A9posPi6FfOMCFaRCV3Kai0cT4hL4ve5ReHIrxpOKAQtSnklA==
-X-Gm-Gg: AYBFou2KyAO1En0sxw1QJP9Gta5GFBvflyWgSQvsXvEPxTNBokZSiOktTMJYLPlyYE7
-	2tR3CEEUEdvPWEO/mLVXTCh8SXwTRo7ovcod+S9nWTsnUQG3TtXnJn8VgEhe2X5lPE96ls/OGwS
-	Rrb59Rvmjg8u70b5XsEkI3H+xheuhGlDWAqlX2vfgWFWdYFgHxa3IouiDMdCzZmp8bnnVjJYyAa
-	w0j59B1hZKf66Lgq4fw36I72Kbr1eDbTk62zb4jSNnGXmyh/Vlw5sszKs60beT++HkvH5BxRTWL
-	S51jtBkGzY+ZeOsk6fPjhuKeMe1dNBKNpkLcyXsXQaG/ecX0F0DGoE+bli6+leHDSgJz/+TBfe7
-	5W8PPSnB1eujTHq9y91rOOSm76N38hKjkr6hb7PZDZQa7bxJUaTRpCsEsCTTHFWVGrBHqV5ISM5
-	I+WV17Ad6m+q6756DTCT++hyIWrTMKtHMn7m+4cD3+Aduc0rrL5OsDJC6+0WRcSD7Yf4NRcn4rb
-	K28lHnS/+guxMmXToZOeJpPSljNwZcAnDVA475nBoLurLsSlSQ/wYj3EtWtPgrg/dk+hv+WcQKe
-	QA8=
-X-Received: by 2002:a05:690c:39b:b0:89a:63da:cbe1 with SMTP id 00721157ae682-8a649f614eamr21784567b3.39.1790267093494;
-        Thu, 24 Sep 2026 09:24:53 -0700 (PDT)
-Received: from localhost ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8a652715b65sm10602237b3.40.2026.09.24.09.24.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Sep 2026 09:24:52 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Sep 2026 16:24:50 +0000
-Message-Id: <DLNOPVM33JL0.4IW7LA889QQ2@gmail.com>
-Cc: <qmo@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <memxor@gmail.com>, <martin.lau@linux.dev>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
- <kuba@kernel.org>, <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 1/2] bpftool: Don't report an empty map when
- key iteration fails
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Maxim Skokov" <skokovmaksimevg@gmail.com>, <bpf@vger.kernel.org>
-In-Reply-To: <20260924160732.485650-2-skokovmaksimevg@gmail.com>
-References: <20260924160732.485650-1-skokovmaksimevg@gmail.com> <20260924160732.485650-2-skokovmaksimevg@gmail.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+        bh=4FrL8f+6ILVgPFeXZ79NGmNXRfQTnNh/rpX573POM54=;
+        b=Liz9XyzJXHDZLtyzO+Ji1OVq/7HSs0ajW1gz5T6luK7zemEnHnhchgrDr6ZzxcSePt
+         4qmTTUFQuQmy4/tX/7B3kCzQucc85DWhXjlj3XAJ5A+mMoOJZgrF0c2xl6N99gtwIMtZ
+         6w7xdUdJvrCY0eBzNbGoGknJLOw1w0yuMIPrW7zhcxGX31zja3ofXdwzzX1kwKC8NsYg
+         ELqfBmHK+uL2xCFxgrnPL1e6rto9WptOqJ4jSLSwhus5kus4NqtjrUt9uZ8/Dd451Lk4
+         LzKIf+XxmieZ5GkffQrZ9hxBAD754W2rnWMqN7LZzkffZHvYa/9DrX9jGqWqe74RogEA
+         L1SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790267580; x=1790872380;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=4FrL8f+6ILVgPFeXZ79NGmNXRfQTnNh/rpX573POM54=;
+        b=fqhmfWeLxJ+xeqFqx8PCUgRIzYupOhMu/61m0NNv05MZeMsw5c5B7GN6pBaP+mSvAX
+         SK2T8mL4y+C+ZTiCU7SQ3T14NGrIhc7s4w6cbaifU7BibSR2cbXFxnEc2xzYlcIiegHU
+         dla6s1CQ/hyrEG/TtVLw04t68tvOhyVS5QTi1xClVe8tWU6TSSNBkjMgJf4eiUL9sJKv
+         ZAau+3CHejuC16dKu3qyXSHTruPkf7x7gPlJ479vT9lF4cvZ4dQqa0H2CULhaDx0XUgu
+         UarAPvEBXIwDJiLHSQL+p4jVVxiAjaSMUZAjRqd85pJvJmJwE9Ib3THjwtGeMdhP1RkV
+         ERFw==
+X-Forwarded-Encrypted: i=1; AKwUvBx7C32nRUTa58AV75P8IuV/qWlCXvTqmfQVEGj+V6KQ8Mvkvh5WaDJBBXzcj9prbr+tqKxUWdqVfz828bdm0Ys=@vger.kernel.org
+X-Gm-Message-State: AFuF++kziTsZYePiVtbYywBRbBgNGQcqvbd/lyzHgSrhnXdCFK6JoY0H
+	52Z5QS8DYnF8aZuBRDQgtmp5Vkiz0/Dn2YghnppVvyFpKN/fNx14zyURdaCRcvxJkC/1nH/fnMW
+	x34r3mQ==
+X-Received: from pgdu19.prod.google.com ([2002:a05:6a02:2f53:b0:cc7:5e81:4448])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2250:b0:39e:4c7f:8b1b
+ with SMTP id 98e67ed59e1d1-3a098e37392mr2572091a91.32.1790267579477; Thu, 24
+ Sep 2026 09:32:59 -0700 (PDT)
+Date: Thu, 24 Sep 2026 09:32:58 -0700
+In-Reply-To: <20260922071945.693714-2-fuad.tabba@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20260922071945.693714-1-fuad.tabba@linux.dev> <20260922071945.693714-2-fuad.tabba@linux.dev>
+Message-ID: <arVQutV75u2gGVr4@google.com>
+Subject: Re: [PATCH v2 1/2] KVM: selftests: Fix arm64 sysreg header dependencies
+From: Sean Christopherson <seanjc@google.com>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	"Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>, James Houghton <jthoughton@google.com>, Will Deacon <will@kernel.org>, 
+	Fuad Tabba <tabba@google.com>, kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
+	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Thu, Sep 24, 2026 at 07:07 PM Maxim Skokov <skokovmaksimevg@gmail.com> wrote:
-> This is what every local storage map (sk, inode, task and cgrp storage)
-> gets, since their map_get_next_key returns -ENOTSUPP. On a
-> BPF_MAP_TYPE_SK_STORAGE map holding storage for five TCP sockets:
->
->   # bpftool map dump pinned /sys/fs/bpf/tc/globals/cilium_lb4_reverse_sk_v2
->   []
->   # echo $?
->   244
+On Tue, Sep 22, 2026, Fuad Tabba wrote:
+> The rule generating the arm64 sysreg header targets the generated
+> directory, and its only prerequisite is tools/arch/arm64/tools/*,
+> which expands to the inner Makefile. An existing directory looks up
+> to date, so an incremental build never regenerates sysreg-defs.h for
+> a change to the sysreg table. A selftest referencing a register added
+> to the table since then fails with undeclared SYS_* identifiers. Clean
+> builds are unaffected.
+> 
+> Always recurse into tools/arch/arm64/tools, whose Makefile already
+> tracks the generator's inputs, and target the header rather than its
+> directory. The recursion leaves the header untouched when nothing
+> changed, so the dependents rebuild only when the header does.
+> 
+> Fixes: 70c7b704ca725 ("KVM: selftests: Avoid using forced target for generating arm64 headers")
+> Link: https://lore.kernel.org/r/arGRhHgP_izSwW4T@kernel.org
+> Assisted-by: LLM
+> Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
+> ---
+>  tools/testing/selftests/kvm/Makefile.kvm | 16 +++++++++++-----
+>  1 file changed, 11 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+> index 96bab7002d39e..81dca3dbc16b4 100644
+> --- a/tools/testing/selftests/kvm/Makefile.kvm
+> +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> @@ -303,10 +303,16 @@ arm64_hdr_outdir := $(tools_dir)/
+>  endif
+>  
+>  GEN_HDRS := $(arm64_hdr_outdir)arch/arm64/include/generated/
+> +GEN_SYSREG_DEFS := $(GEN_HDRS)asm/sysreg-defs.h
+>  CFLAGS += -I$(GEN_HDRS)
+>  
+> -$(GEN_HDRS): $(wildcard $(arm64_tools_dir)/*)
+> +# The inner Makefile tracks the generator's inputs and leaves the header
+> +# untouched when nothing changed, so dependents rebuild only when it does.
+> +$(GEN_SYSREG_DEFS): FORCE
+>  	$(MAKE) -C $(arm64_tools_dir) OUTPUT=$(arm64_hdr_outdir)
+> +
+> +FORCE:
+> +.PHONY: FORCE
+>  endif
 
-cilium_lb4_reverse_sk is an LRU hash in cilium. It's not sk_storage
-and bpftool dumps it just fine.
-So where did this output come from?
+Definitely doesn't have to be now, but at some point should we split out some of
+this arch-specific sub-Makefiles?  It's nice not having to hunt around to figure
+out which tests are supported by which arch, but the amount of arch specific goo
+we're accruing is getting unwieldy.
 
-[...]
-
-> Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
-
-That's not a fix. The exit status was non-zero before and it's the
-same after. Drop the Fixes tag.
-
-[...]
-
-> +			p_err("can't get next key: %s%s", strerror(saved_errno),
-> +			      saved_errno == 524 /* ENOTSUPP */ ?
-> +			      " -- map type does not support iteration" : "");
-
-Local storage and ringbuf return ENOTSUPP.
-Bloom filter and arena return EOPNOTSUPP. Queue and stack return EINVAL.
-None of them can be iterated. The hint is printed for the first two only.
-
-[...]
-
-> -	} else {
-> +	} else if (!err) {
->  		printf("Found %u element%s\n", num_elems,
->  		       num_elems != 1 ? "s" : "");
-
-The subject says "Don't report an empty map", but when the map has BTF
-the elements array is opened before the loop and closed after it,
-so stdout is still "[]". Only the line on stderr is new.
-With -j the error object is printed inside that array:
-[{"error":"can't get next key: ..."}]
-
-pw-bot: cr
+>  no-pie-option := $(call try-run, echo 'int main(void) { return 0; }' | \
+> @@ -359,10 +365,10 @@ EXTRA_CLEAN += $(GEN_HDRS) \
+>  	       $(TEST_GEN_OBJ) \
+>  	       cscope.*
+>  
+> -$(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c $(GEN_HDRS)
+> +$(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c $(GEN_SYSREG_DEFS)
+>  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+>  
+> -$(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(GEN_HDRS)
+> +$(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(GEN_SYSREG_DEFS)
+>  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+>  
+>  # Compile the string overrides as freestanding to prevent the compiler from
+> @@ -372,10 +378,10 @@ $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
+>  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
+>  
+>  $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
+> -$(SPLIT_TEST_GEN_OBJ): $(GEN_HDRS)
+> +$(SPLIT_TEST_GEN_OBJ): $(GEN_SYSREG_DEFS)
+>  $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
+>  $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
+> -$(TEST_GEN_OBJ): $(GEN_HDRS)
+> +$(TEST_GEN_OBJ): $(GEN_SYSREG_DEFS)
+>  
+>  cscope: include_paths = $(LINUX_TOOL_INCLUDE) $(LINUX_HDR_PATH) include lib ..
+>  cscope:
+> -- 
+> 2.39.5
+> 
