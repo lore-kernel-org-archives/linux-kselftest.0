@@ -1,173 +1,147 @@
-Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f32.google.com (mail-pj2-f32.google.com [74.125.227.160])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6CFF381E92;
-	Thu, 24 Sep 2026 04:11:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7494636F434
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 04:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.160
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790223103; cv=none; b=YQJH9xz17upeZr3x8On8pBrvqGB501dSP8OENQQtHHFCzcCJFjAR5QaQIAZU9LLrPDAa0AOMPh9I2JIfVeuvTi9mpQRHF1kZB+fw2o77ytT08gYJ8UoHWohJmzaIi4Q0Wxk7Cxl7ItMCYoFHEE18zKp8VKjKgmJ2qO7QzafX7P8=
+	t=1790224053; cv=none; b=XutqqaNTuIG5hdKS90WZxPI3UKhfz9nXtaAz77vbSPO+bKgdL0+IHcN0i1kNUsoFbXXKrO5UKzakDhkDk7eUokoo5a3+6vfY2fgdGtokTWU6gN3DTKmitOAynVroYyTx9vu4lia9l7ndNje/I9OiRAQQbOfHOPDERkH/L1/92wI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790223103; c=relaxed/simple;
-	bh=29U8SrS6AdO6lFFos4hTHxTPuzEqeGJOKIbIIOI38mc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=KE62rUqYFna8I4lLMao06xMeNEDBKyGTzAH8PUP5SmrmHPjqK3pRZZVInCx/0g4DTpD/rC4A+KEXgAdZjJf3p50SyD4+JnbCb1mw/lt/sg8CxFkouFQawCP+rVS/lyRwkAyrF4AxO648eB8rMfbC8qlDlJ56xPgVng7oHybEP3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=OzxKUUwZ; arc=none smtp.client-ip=113.46.200.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1790224053; c=relaxed/simple;
+	bh=6FDbxZi9t7QTATEj4+pYmjibp3MxGo1+bcWEQGMBuOw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q02zDcNhTY+ijmrt0ykodLa5SPvEE4+kNDlhUh586EICS8nHDBm81Szrepzji6Dipb2OVMn01bKpf+fGPhtT6bh8pC/I+9bJYq3hjyPoK+BvYqO91bnaUVhaS5jlEjOPYFGCjo/npothxT8uDzAtZ0KrTOFqb0B35pSv9fZ4+zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ur4fK/9A; arc=none smtp.client-ip=74.125.227.160
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="OzxKUUwZ"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=ZRQ0VxqpuNoSza6zOLG1gwykGEw7zwH/fbhRzlWY/Lc=;
-	b=OzxKUUwZYTuTrykXXNDe9n63OFnXxUP++ZLONoERb3YuLUzDD9i/1X+acua3ZB0ygehiv+eB4
-	Ca2QoSb4sbF6lfkJvaGgSUJp0QiJV+KR8CD9CGAMtq4xueFC11/v+HxiBlPz6WHm5vSky1Ra14s
-	EL3oup3ikADUirUxoh+Z2pw=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4hr0TC39yJz12LFc;
-	Thu, 24 Sep 2026 11:59:27 +0800 (CST)
-Received: from kwepemk200008.china.huawei.com (unknown [7.202.194.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 238AB40561;
-	Thu, 24 Sep 2026 12:11:33 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- kwepemk200008.china.huawei.com (7.202.194.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Thu, 24 Sep 2026 12:11:31 +0800
-Message-ID: <bbd65e4d-8096-4939-8308-f0f54c5cb3bc@huawei.com>
-Date: Thu, 24 Sep 2026 12:11:31 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ur4fK/9A"
+Received: by mail-pj2-f32.google.com with SMTP id d9443c01a7336-2d747f05ffdso7571785ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 21:27:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790224052; x=1790828852; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=gCxWPEOezuSLO7Xuzn89hCOd/GEmzudfz/jg7i8ODxQ=;
+        b=Ur4fK/9A0Me/To2XdxkZL6rgJr6kihqaeqANIJG2Vl9kfvBBZUocrCJODQtu0b2eWz
+         NSqlWOmh8ISH4uDurHqFu3WIjN1EX8+S2BqGFURFB3YsX1k1HldwuFebftpu8lw6sGr1
+         kb6eHyWhHHnDHMHkC6ezFvpwu9SNxt9wWRF2GuT9lnWNCFHeydHkyDwUrTCCrGiZc9E8
+         fcIK4GFCIG7/9Sx08nq0V3FL/cKGTxdeU3/JGowQqC5LyinodaJ4dgmT9A7qFyvxn34y
+         XGZlFPc5fAsSRHDJms+DodW/5OvO6SrNt/3UYRSU1tVU61IXDlB5bi/0W89/LzOYnqNL
+         Z1Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790224052; x=1790828852;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=gCxWPEOezuSLO7Xuzn89hCOd/GEmzudfz/jg7i8ODxQ=;
+        b=uTRG/HKBmM4HKlBLGK30OajY/DiHs0mnVViOBKko3z88l3gh64Ysrth8NJAQRA9+zm
+         KPPSljKdc7Mj2Xggqu1XU0g9dD1wRmSe6N4hX+oJcwDs5sx6AFiYqqmQ/UA/POZ6R33O
+         cVsMhpbAvAWX6gl8UpcqfdzftvCn5e60fdR2tJjkfTbwMpRjjB8LzsdBw1WD2dTeHnzY
+         Eiy6IKIBqGqU039Shhs8ebHXmolsqvWrUYiq+B9DUkqBo2P8OLYPA1Xl09HF9QroNiZ0
+         8ZxcAV+XcvzLdiaE4gx0830Y/pKwa4UOTicSnTCO+Bp0IO/u7wtQIZLNnI2w5UqIFOHb
+         Vuwg==
+X-Forwarded-Encrypted: i=1; AKwUvBwOM8gUcrVfYzLG8QYZkFHwQfN9OlPYwDI9/qIHTcJ32PoJmjYvfzOG5nlfMtzxDEv8O0MTrl5fP0YM0N9VQbk=@vger.kernel.org
+X-Gm-Message-State: AFuF++mBjmvCz/ZNxqARnTaBwZQVm58Atn1pzrlEVnl+A/6gJ866Fw6a
+	WAbxNA9qtbk01R+obDbXtG5BCcdER6/aEIRdEBiG0g7fvJozZPNRfh8JCkxMX/1w
+X-Gm-Gg: AYBFou3IlGrTDFBh45rDAPfI/B/0OMk1SzQtl5PWjLhcPiwr8OHNcBNFMWSsH8PgdS8
+	PjOJ4S/yKu/rncE1JNO35+jHJMattq+9CPEO/nD1SXpClNuquWOj75pfFwAnOw2KAzICPSoFsln
+	5rCYO6F15NKIpoN2+gi/f+zvXh7A2VwmftgeI1F4OuSEhN032HS1FyngIO238Q8rnvwC73T3mpz
+	vIGVmIlgrpYs6nu5McXX9z/XDMUcQh5N9EKJ50j4RzP1EiR6QAPthihZWFqnXZW4eMEOHFSHnnU
+	zfWeS1faufjWuSLpV2w8wRFZWnK4vFqeDe3sEQuNVcsytkW93BRrlIUu/bZU+2piGAX8Vn6p9Qi
+	2xsnTnuZ0x35e+R7UhXjoFcoAzQPWEI3GK5xN6Sz8qH2H5FApG2sxYeuWfFFm/+wkmiz2vXJTC8
+	+XB8P9Ed+WTdkghe/6WmbqaPTsXfArr78OtKc9L9XJUXV80Agyilu2WcetskwhwLWDsNDKAoPev
+	j9PNwN2tVwbknkPiYEOrxHErrNEUVTOPYGd0KxL1g6+7YojM+gvYgUzAGbtTybsg7ua/dHD3gBH
+	jWcHEZsPTg==
+X-Received: by 2002:a17:903:120d:b0:2df:81d0:7c40 with SMTP id d9443c01a7336-2df81d07e31mr4850705ad.55.1790224051565;
+        Wed, 23 Sep 2026 21:27:31 -0700 (PDT)
+Received: from phui-2.c.googlers.com.com (67.51.127.34.bc.googleusercontent.com. [34.127.51.67])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a5a4997sm19710685ad.27.2026.09.23.21.27.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2026 21:27:31 -0700 (PDT)
+From: Hui Peng <benquike@gmail.com>
+To: Waiman Long <longman@redhat.com>,
+	Ridong Chen <ridong.chen@linux.dev>,
+	Guopeng Zhang <guopeng.zhang@linux.dev>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Chen Ridong <chenridong@huawei.com>,
+	cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hui Peng <benquike@gmail.com>
+Subject: [PATCH v4 0/3] cgroup/cpuset: fix exclusive CPU conflict checks for local and remote partitions
+Date: Thu, 24 Sep 2026 04:27:26 +0000
+Message-ID: <20260924042729.1908863-1-benquike@gmail.com>
+X-Mailer: git-send-email 2.56.0.rc1.310.g51773c2048-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/ptrace: Add PTRACE_SYSEMU_SINGLESTEP
- syscall-exit-stop test
-To: Kees Cook <kees@kernel.org>
-CC: <catalin.marinas@arm.com>, <will@kernel.org>, <mark.rutland@arm.com>,
-	<oleg@redhat.com>, <luto@amacapital.net>, <wad@chromium.org>,
-	<peterz@infradead.org>, <ada.coupriediaz@arm.com>, <linusw@kernel.org>,
-	<yeoreum.yun@arm.com>, <kevin.brodsky@arm.com>, <anshuman.khandual@arm.com>,
-	<james.morse@arm.com>, <thuth@redhat.com>, <vladimir.murzin@arm.com>,
-	<tglx@kernel.org>, <broonie@kernel.org>, <liqiang01@kylinos.cn>,
-	<ryan.roberts@arm.com>, <pengcan@kylinos.cn>, <kmehltretter@gmail.com>,
-	<linux-arm-kernel@lists.infradead.org>, Shuah Khan <shuah@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-hardening@vger.kernel.org>
-References: <20260922195719.i.211-kees@kernel.org>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <20260922195719.i.211-kees@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemk200008.china.huawei.com (7.202.194.74)
 
+This series fixes three exclusive CPU validation gaps across local and
+remote partitions in kernel/cgroup/cpuset.c and adds corresponding
+regression tests to tools/testing/selftests/cgroup/test_cpuset_prs.sh:
 
+1. Patch 1/3 ("cgroup/cpuset: return PERR_NOCPUS in
+   remote_partition_enable() on subpartitions_cpus conflict"):
+   Restores the subpartitions_cpus conflict error check in
+   remote_partition_enable() (returning PERR_NOCPUS to match
+   remote_cpus_update()) so a remote partition cannot be enabled
+   underneath an ancestor local partition via a non-partition
+   intermediate cgroup.
 
-在 2026/9/23 3:57, Kees Cook 写道:
-> ptrace(2) states that no syscall-exit-stop occurs when a tracee is
-> continued with PTRACE_SYSEMU or PTRACE_SYSEMU_SINGLESTEP. arm64 gated
-> its syscall-exit report on
-> 
-> 	flags & (_TIF_SYSCALL_TRACE | _TIF_SINGLESTEP)
+2. Patch 2/3 ("cgroup/cpuset: prevent activating local partition over
+   remote one"):
+   Checks trialcs->exclusive_cpus against subpartitions_cpus in
+   validate_partition() when !is_partition_valid(cs) so an initially
+   invalid top-level partition cannot later transition to a valid local
+   partition over an active remote partition via cpuset.cpus /
+   cpuset.cpus.exclusive updates.
 
-Hi Kees,
+3. Patch 3/3 ("cgroup/cpuset: check sibling effective_xcpus in
+   cpus_excl_conflict()"):
+   Falls back to sibling->effective_xcpus in cpus_excl_conflict() when
+   sibling->exclusive_cpus is empty so a sibling cgroup cannot claim
+   cpuset.cpus.exclusive over a valid local partition's implicit
+   exclusive CPUs.
 
-The original fix description is a bit off: on arm64 there is no extra
-syscall-exit-stop; instead, there's an additional pseudo single-step
-injection.
+Changes in v4:
+- Send as a standalone series with a cover letter (0/3) instead of
+  replying in-thread to the previous version, as requested by Ridong
+  Chen and Waiman Long.
+- Restore the exact v2 diff and commit description for patch 1/3
+  (which was accidentally corrupted when splitting v2 into 3 patches in
+  v3), fixing git apply against mainline.
+- Make the test_cpuset_prs.sh test case in patch 2/3 independent of the
+  system CPU count (using X2-3 / CX2-3:P2 / P1:CX1-3 instead of
+  CX0-7:P1), as pointed out by Waiman Long.
 
-As sashiko pointed out, as commit ac2081cdc4d9 ("arm64: ptrace:
-Consistently use pseudo-singlestep exceptions") described, for
-PTRACE_SYSEMU_SINGLESTEP, arm64 still needs the pseudo single-step
-because its hardware single-step state machine is fast-forwarded over
-the SVC instruction.
+Changes in v3:
+- Split patch 2/2 from v2 into patch 2/3 (validate_partition(),
+  Fixes: 6da580ec656a) and patch 3/3 (cpus_excl_conflict(),
+  Fixes: 2a3602030d80), as pointed out by Guopeng Zhang.
+- Add Assisted-by: LLM tag.
 
-static void report_syscall_exit(struct pt_regs *regs)
-{
-   ...
-   if (test_thread_flag(TIF_SINGLESTEP)) {
-       /*
-        * Signal a pseudo-step exception since we are stepping but
-        * tracer modifications to the registers may have rewound the
-        * state machine.
-        */
-       ptrace_report_syscall_exit(regs, 1);
-          -> user_single_step_report(regs);
-    }
-}
+Changes in v2:
+- Split the remote_partition_enable() fix into patch 1/2 and return
+  PERR_NOCPUS instead of PERR_INVCPUS to match remote_cpus_update(), as
+  suggested by Guopeng Zhang.
+- Add step-by-step reproducer and test_cpuset_prs.sh regression tests,
+  as requested by Ridong Chen.
 
-https://sashiko.dev/#/patchset/20260922035510.1090299-1-ruanjinjie%40huawei.com
+Hui Peng (3):
+  cgroup/cpuset: return PERR_NOCPUS in remote_partition_enable() on subpartitions_cpus conflict
+  cgroup/cpuset: prevent activating local partition over remote one
+  cgroup/cpuset: check sibling effective_xcpus in cpus_excl_conflict()
 
-> 
-> and ptrace_resume() clears SYSCALL_TRACE for both SYSEMU requests while
-> PTRACE_SYSEMU_SINGLESTEP additionally sets TIF_SINGLESTEP, so the
-> single-step bit alone produced a stop that must not exist. Nothing in
-> tools/testing/selftests covered this.
-> 
-> Detecting the extra stop is less direct than it looks. The report is
-> emitted with step=1, so ptrace_report_syscall_exit() dispatches to
-> user_single_step_report() rather than ptrace_report_syscall(), and it
-> arrives as a plain SIGTRAP indistinguishable by signal from the
-> legitimate single-step trap: neither PTRACE_O_TRACESYSGOOD nor
-> PTRACE_GET_SYSCALL_INFO separates the two. What does separate them is
-> the PC. The redundant report fires before the tracee has moved past the
-> syscall instruction, so it lands on the PC of the syscall-entry stop:
-> 
-> 	[0] sig=133 SYSCALL-STOP  pc=0x41ec28
-> 	[1] sig=5   trap          pc=0x41ec28   <-- must not exist
-> 	[2] sig=5   trap          pc=0x41ec2c
-> 
-> A fixed kernel reports pc=0x41ec2c already at stop [1]. The test
-> therefore asserts that the first stop after the syscall-entry stop is at
-> a different PC, which tests the consequence rather than the mechanism
-> and does not depend on how many pseudo-step traps follow.
-> 
-> PTRACE_SYSEMU is used to reach the syscall-entry stop, as single-
-> stepping there costs one stop per instruction and takes roughly 200000
-> stops. Architectures without a PC accessor here, or without SYSEMU
-> support, skip rather than fail.
-> 
-> Build tested ARCH=arm64 with GCC aarch64-linux-gnu 16.1.0, ARCH=arm
-> with GCC arm-linux-gnueabihf 16.1.0, and ARCH=x86_64 with GCC 16.2.0.
-> 
-> Tests passing on ARCH=arm64 under qemu-system-aarch64, and the same
-> test fails as expected on v7.3-rc2 without the fix[1]:
-> 
-> 	# entry stop pc=0x41ec28, next stop sig=5 pc=0x41ec28
-> 	# Expected next_pc (4320296) != entry_pc (4320296)
-> 	not ok 1 sysemu.no_syscall_exit_stop
-> 
-> An AArch32 build of the same test on an arm64 kernel reproduces the
-> failure identically, covering the is_compat_task() path. It also passes
-> on x86_64, which already uses generic entry, so the test does not report
-> a false positive against a correct implementation.
-> 
-> Link: https://lore.kernel.org/all/20260922035510.1090299-2-ruanjinjie@huawei.com/ [1]
-> Assisted-by: LLM
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
->  tools/testing/selftests/ptrace/Makefile       |   3 +-
->  .../selftests/ptrace/sysemu_singlestep.c      | 176 ++++++++++++++++++
->  tools/testing/selftests/ptrace/.gitignore     |   1 +
->  3 files changed, 179 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/ptrace/sysemu_singlestep.c
-
-[...]
-
-> +TEST_HARNESS_MAIN
-> diff --git a/tools/testing/selftests/ptrace/.gitignore b/tools/testing/selftests/ptrace/.gitignore
-> index f6be8efd57ea..792c81f804c0 100644
-> --- a/tools/testing/selftests/ptrace/.gitignore
-> +++ b/tools/testing/selftests/ptrace/.gitignore
-> @@ -4,3 +4,4 @@ get_set_sud
->  peeksiginfo
->  vmaccess
->  set_syscall_info
-> +sysemu_singlestep
+ kernel/cgroup/cpuset.c                            | 12 ++++++++++--
+ tools/testing/selftests/cgroup/test_cpuset_prs.sh |  5 +++++
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
 -- 
-Best regards,
-Jinjie
-
+2.49.0
