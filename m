@@ -1,158 +1,172 @@
-Received: from mail-qk2-f13.google.com (mail-qk2-f13.google.com [74.125.230.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B858D305E3B
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 18:58:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.205
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84C0B4B7172;
+	Thu, 24 Sep 2026 19:11:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790276295; cv=none; b=tuN8cIDuB7Zw15Cnjnq0Fid1a4dqI5XPhuiJ0khhFCSZP6YIayWOOHQxaSe2vJgvlZI86KOL8s6rUkEABQwCoqem07wdCW+fApZUt8/U+HQgYvmdnOOOB2eWtl55IFvYbtexqx3TDeDNViQFVIFuNXk7euQDBbqKqwUQ7p0kRfI=
+	t=1790277093; cv=none; b=ms1kk0qjFtF3qvv/GjsicAdV0D3Qn+amRhb8lTkclHXRwAbrfPpTZO3uIZhXnOlrKQOoCzkWpe1GDVI2qCAX84rBbwg9mJNzw7AqdTUBeXWq2XMr/BPWlDh82caCsLgHxv1uaw8Ff3atKlr18MR7wqlTIAzDdauWz26ukRANCbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790276295; c=relaxed/simple;
-	bh=GKThMWTwWxTeH93wYlWHaH7u/FUIOBf+Ga6s/V6t7oc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aQ457k5ybM47Jw3KTiOIP5UORkqMV4T7RnO/A9sdMiMBflT5QQNcncXW2ocF2mzIJSf/PcRHLT0lTnx3soDPTPQdi5K81zcJLSGK2DH2T16wLFyWN37IegPU6ob6ofo3CzzyqT5m6fAMQXBDTH7F/Mls/bYf9vP74roUFVAf7To=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu; spf=pass smtp.mailfrom=cs.unc.edu; dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.b=YqTY3/uH; arc=none smtp.client-ip=74.125.230.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.unc.edu
+	s=arc-20240116; t=1790277093; c=relaxed/simple;
+	bh=MuRaI8x6GXzrvwzPsbKH9WYnwNTgr9phZb/ghgk7nkI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UCQzqkjCr6BB4Z2M4bvvKca/pJX3s52kJXQqZtHtWV3ddtMZwaMhNlVPguEks2PLO/X+XyAEM1TSh2FOS5AAi4XNRLHpNyk/6sxOVikdF6rJUjVnLgSI9wcKl2BK1yXGhwemSCKUbnhvfIUfUfLMaLQL305u9/A/f9vPwAofwWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=UC/myava; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.b="YqTY3/uH"
-Received: by mail-qk2-f13.google.com with SMTP id d75a77b69052e-530de452c33so1624881cf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 11:58:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs.unc.edu; s=google; t=1790276288; x=1790881088; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=/w5+KtuCRMHj/pwYDlYF9rdD54o6xbJzMayckXvPZxY=;
-        b=YqTY3/uH3fVv7C8OBYcFeU57m6O0KZETJbW7JOAgUOCS5f8M9iBFevKaA/9nB9P4tQ
-         6oA5cDVm9h7NU6dPEJwJbOf1q8pa7mjveXFP0NpPw+wzKLc+z0MoI0qyX52oueO3UXR0
-         nltjpFiW5OG+eA8hTBYUpb1s0IC8nQOs4B4csgDGYtXbnJV3y8DpNvqAWahjKYeH0PDa
-         kUpp2j49hstd6Y5K3i7qVklhUand7yrP6epreon4etsSiHeBnVztB3LIpaAe1VdbRJ9I
-         QjdrLnfjVZDq3G55d4iXW8gQ5BST/aW+Ci16/aIt5Bi8Qf67GmKNx58bM2/RvtkYimtM
-         qybw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790276288; x=1790881088;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/w5+KtuCRMHj/pwYDlYF9rdD54o6xbJzMayckXvPZxY=;
-        b=aZ/DUigrj48yDjqQHexiS0PiTnMDUpffphhCbXmv2q++Yrx4t6v5bYB8kyv+8tOduM
-         ZX7rI/ytb78jTNbR6rNFNMxzgnz2kS3rVr4YFHzlZR/Q4kLh8KVZY7bnf/wA2gPJtbJ0
-         OZJxB1n2l3fkTwstZyTwn4Narbmx9EUW4WBYXYbqHd88u2lsI/QfKSQqhBAWExIrIo5g
-         7GeZDPwxl7SJKOw2BQ+yhVjfc74lrmHnqMKlAKU1XoeiLSc6VjpB0zMew3xgCeKGd9qQ
-         q+HQvFS2JOO3VfhJJ1jLBSE9s1UiZCNy6nfMqgqc6pXHE7/eX9OwFEW3+vZb/IemTuKP
-         6PuQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzCOVW/qhHh2tDEw8K0pSW+fWZ6Xg1EGCksewNjfI8vX6/0ScdzaBwRNn/+21FNsDfDKoYW5Kw0ZAkh4MAPvXo=@vger.kernel.org
-X-Gm-Message-State: AFuF++lZFXrjPyBABpd3iN04hxq63llU/86mTwY/dS6P3jkilxXU0bpu
-	SYO/BCKpkHzDugpbZIVYsBMogEM04/tIH9dhcOdibIUsDTJMzq6pDC2aERW5J4ld2A==
-X-Gm-Gg: AYBFou0XGRWH477yfCo8fewUWKI+LRaZ29GbixrPeYKtcANbmyy0U8Lq8BsF5q33p51
-	XQRDR+EKjjoXJq4bZJ5oVKADZZQOM/EN/BaSoVRgPauV7TEYEYC81eR5M8BXBKUKLIj98CZlwpF
-	RAVDy8nTghr+ayLTVoeg3mDv+cygCF6GKc1KSzE4aaZrHIBuTLx7UR1tKvFOQotgaP3n24wx6jw
-	/JHKKi8zfM7KYUsx5JL6808MQyJ/5HZraeD5sCx075+vcAs0Jtm497aQagGZWmi8OXIEn1whgbN
-	unhVhWO6w6KzaXY6GUq+UFIZvzNBPQn+KC+dw53Or46la69J251yOoBsMMf/c2V+jrFXoqJQ9aw
-	9vf9U+dlKFquNTvNVEAVj9ov6loXRxRbhrPxF7ZuevLwM8S8QZtsZFiw0SUevq19Rkaxm/5UcDv
-	iiZYD1GbOwABFqdBt4Z01bR6TCPp6akPa3LrK76h5uTlBrgEOXsTNXLa6qQwISm+hsfM7iVYehp
-	NPy5KUT4QceJoeNrRzStQ==
-X-Received: by 2002:ac8:5f13:0:b0:532:c2f5:85b8 with SMTP id d75a77b69052e-5330b5be39cmr3736111cf.19.1790276287595;
-        Thu, 24 Sep 2026 11:58:07 -0700 (PDT)
-Received: from cobra01.cs.unc.edu (cobra01.cs.unc.edu. [152.2.130.143])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-9142ff8d51asm633036d6.0.2026.09.24.11.58.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 11:58:07 -0700 (PDT)
-From: hengyul@cs.unc.edu
-To: brauner@kernel.org,
-	viro@zeniv.linux.org.uk
-Cc: jack@suse.cz,
-	joe@dama.to,
-	jirislaby@kernel.org,
-	sdf@fomichev.me,
-	edumazet@google.com,
-	kuba@kernel.org,
-	davem@davemloft.net,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hengyu Liang <hengyul@cs.unc.edu>
-Subject: [PATCH] eventpoll: return -ENOIOCTLCMD for unknown ioctl commands
-Date: Thu, 24 Sep 2026 14:57:47 -0400
-Message-ID: <20260924185747.2166326-1-hengyul@cs.unc.edu>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="UC/myava"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0DCDF1E5E;
+	Thu, 24 Sep 2026 12:11:26 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 377863F86F;
+	Thu, 24 Sep 2026 12:11:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1790277089; bh=MuRaI8x6GXzrvwzPsbKH9WYnwNTgr9phZb/ghgk7nkI=;
+	h=From:Subject:Date:To:Cc:From;
+	b=UC/myavav/0wDURi/e5uj2wHJrDw+VEwwctECMjrr5anj2mKS+Cp+xTXTVJB2nCIX
+	 3B0zs4MYI65fHMkSpfEnoIhHBpmXNcWjB+5mC30jeDF+PJVWlfd3xmoX3RzB+757Ma
+	 DD7B0O4vG2wzemfy3Pr9Etn//5k5NFWuqiWEQvBc=
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [PATCH v8 0/4] kselftest: mm: fix some failure of
+ split_huge_page_test
+Date: Thu, 24 Sep 2026 20:11:15 +0100
+Message-Id: <20260924-fix_split-v8-0-cba7359d882a@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIANN1tWoC/23QTWrDMBAF4KsErasyGo3+suo9SimWLDeCJg5SM
+ C3Bd6+cTcelyzea7zHoLlquJTdxPNxFzUtpZb704J8OIp2Gy0eWZexZIKAFjyCn8vXerp/lJie
+ ioENORNGLvn+tuT8+ul7fej6Vdpvr96N6Udv0v5ZFSZBDJA3J+OTS9DLU83Oaz2LrWDR3njvdn
+ XYEiMbbgeLe0a8LgNxRd95MoAOYyUW1d4Y7x53ZHGL0Csj4mPbOMqeIO9udsnl0CrUH+HOnYw4
+ Vd667EU1OIShlAvuXdV1/ALSH+g+4AQAA
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>, 
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
+ Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+ Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Yeoreum Yun <yeoreum.yun@arm.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4292; i=yeoreum.yun@arm.com;
+ h=from:subject:message-id; bh=MuRaI8x6GXzrvwzPsbKH9WYnwNTgr9phZb/ghgk7nkI=;
+ b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBqtXXaIiT9BwKaFmYL+IRymkn1pS2cgMwCN8AJR
+ jX5E9q/5yKJAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCarV12gAKCRBt1cPRWsUx
+ M9CCC/4uKyIQhnU8tD0YMdkYRstxqpebMFuqAgDJCdJplKeWGziBfSV2btEkq3l6IaJ7C3bVHnb
+ 3pDEFPHgL2O0ZT7QVQfq1qgfFJ+mf6/TiHidHnFWNwr+S77h7ltwAi3V8qzxk/x1mD2shDGGbsv
+ anYESYv4f82duEtnyksxxPfYr3596oLcHCJXnSt6tUJsOcxpuOx3Vz+4HVbw03hNErKtMFZaAJu
+ SQyqC338rRMCsFE1Evz/UI2geKUtW+V0UeednqsNO32cH0B7O0a6Q0Dw6tayJoMDRkrDKwUaHk7
+ 2TcYBZqJ4Cr5jDyWUpfhgtU2vRigVuZtxfjomXTgTsMBogNAz4AQsDj385YN7FJOBjODTovX3AE
+ WnAZ5UlSSdVRQuI8RuIDkrJeYD2xTmpmNehRhJNaFI+fFa6/7y+nyCM9BhcvlpBWrzqwlBmwLnd
+ i12uy3RllTdMYX57SEYZAR1OyuxUu39IpgcEiiqjSJtqf4BOzdFYMkKQa/RRb2kmiU1Sw=
+X-Developer-Key: i=yeoreum.yun@arm.com; a=openpgp;
+ fpr=2D83E092DD0533B85875A49D6DD5C3D15AC53133
 
-From: Hengyu Liang <hengyul@cs.unc.edu>
+split_huge_page_test can fail for the following reasons:
 
-Before commit 18e2bf0edf4d ("eventpoll: Add epoll ioctl for
-epoll_params"), epoll files had no ioctl handler, so ioctl() on an epoll
-file descriptor failed with ENOTTY. That commit introduced the
-EPIOCSPARAMS and EPIOCGPARAMS commands, but ep_eventpoll_ioctl() returns
--EINVAL for any other command, so since v6.9 every other ioctl() on an
-epoll file descriptor fails with EINVAL instead of ENOTTY.
+  1. During the test, khugepaged may collapse previously split pages again,
+     causing intermittent failures.
 
-Documentation/driver-api/ioctl.rst says that an ioctl handler must
-return -ENOTTY or -ENOIOCTLCMD for an unknown command, and that
-returning -EINVAL there is wrong. Returning -ENOIOCTLCMD was also the
-intent of the original series, whose changelog since v3 [1] says "when
-an unknown ioctl is received, -ENOIOCTLCMD is returned instead of
--EINVAL as the ioctl documentation requires", and ep_eventpoll_bp_ioctl()
-does return -ENOIOCTLCMD for unknown commands. However,
-ep_eventpoll_ioctl() only passes EPIOCSPARAMS and EPIOCGPARAMS to it and
-handles all other commands in its own default case, which returns
--EINVAL, so that path is never reached.
+  2. Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
+     glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
+     made by memalign(). The underlying VMA may start at a different address
+     from the aligned address returned by memalign(). Moreover, a subsequent
+     madvise(MADV_HUGEPAGE) call does not split the VMA because it already
+     has the same advice.
 
-This is visible to userspace. For example, isatty(), ttyname() and
-tcgetattr() on an epoll file descriptor set errno to EINVAL, while they
-set ENOTTY for any other file descriptor that does not refer to a
-terminal, as they also did for epoll file descriptors before v6.9.
+     This causes the test to fail because the check_huge_xxx() helpers
+     incorrectly require the address returned by memalign() to match the
+     VMA start address reported in /proc/self/smaps.
 
-Return -ENOIOCTLCMD from the default case, which the VFS turns into
--ENOTTY, and update the epoll_busy_poll selftest, which expected EINVAL
-for an unknown command.
+Address these issues by applying MADV_NOHUGEPAGE after faulting in the
+huge page, preventing khugepaged from collapsing it again, and instead of
+relying on /proc/self/smaps, use /proc/self/pagemap and
+/proc/kpageflags to detect huge-page mappings and large folios:
 
-[1] https://lore.kernel.org/r/20240125225704.12781-1-jdamato@fastly.com
+  1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of
+     using check_large_folios(), since only the mapping type matters.
+     This identifies PMD-mapped huge pages.
+  2. Otherwise, use check_large_folios() to detect large folios. This
+     covers mTHP cases.
+  3. Check the folio flags according to the type of huge page.
 
-Fixes: 18e2bf0edf4d ("eventpoll: Add epoll ioctl for epoll_params")
-Signed-off-by: Hengyu Liang <hengyul@cs.unc.edu>
+Since check_huge_shmem() was required to distinguish shmem huge pages
+because /proc/self/smaps reports them using a dedicated “ShmemPmdMapped”
+entry, as opposed to “FilePmdMapped” for file-backed huge pages.
+
+Now that /proc/self/smaps is no longer used to detect huge pages and
+/proc/kpageflags is used instead, it is sufficient to distinguish
+ between file-backed and anonymous pages since the ShmemPmdMapped is also
+kind of file-backed.
+
+Therefore, remove check_huge_shmem() and use check_huge_file() instead.
+
+This patch based on mm-unstable
+
 ---
- fs/eventpoll.c                                | 2 +-
- tools/testing/selftests/net/epoll_busy_poll.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Changes in v8:
+  - add intermediate patch for __check_pmd_huge().
+  - add r-b, a-b tags.
+  - Link to v7: https://lore.kernel.org/r/20260921-fix_split-v7-0-d25ec991159f@arm.com
 
-diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-index e0c4bf88a838..adf30b720b13 100644
---- a/fs/eventpoll.c
-+++ b/fs/eventpoll.c
-@@ -1264,7 +1264,7 @@ static long ep_eventpoll_ioctl(struct file *file, unsigned int cmd,
- 		ret = ep_eventpoll_bp_ioctl(file, cmd, arg);
- 		break;
- 	default:
--		ret = -EINVAL;
-+		ret = -ENOIOCTLCMD;
- 		break;
- 	}
- 
-diff --git a/tools/testing/selftests/net/epoll_busy_poll.c b/tools/testing/selftests/net/epoll_busy_poll.c
-index adf8dd0b5e0b..6b0b3213ffad 100644
---- a/tools/testing/selftests/net/epoll_busy_poll.c
-+++ b/tools/testing/selftests/net/epoll_busy_poll.c
-@@ -313,8 +313,8 @@ TEST_F(epoll_busy_poll, test_invalid_ioctl)
- 	EXPECT_EQ(-1, ret)
- 		TH_LOG("invalid ioctl should return error");
- 
--	EXPECT_EQ(EINVAL, errno)
--		TH_LOG("invalid ioctl should set errno to EINVAL");
-+	EXPECT_EQ(ENOTTY, errno)
-+		TH_LOG("invalid ioctl should set errno to ENOTTY");
- }
- 
- TEST_HARNESS_MAIN
+Changes in v7:
+  - change khugepaged's check_huge() callback.
+  - Link to v6: https://lore.kernel.org/r/20260914-fix_split-v6-0-16ed7123800b@arm.com
+
+Changes in v6:
+  - drop alloc_isolated_mem() patch.
+  - remove check_huge_shmem().
+  - Link to v5: https://lore.kernel.org/r/20260907-fix_split-v5-0-822b810458bc@arm.com
+
+Changes in v5:
+  - rename madv_nohuge() to disable_khugepaged().
+  - Link to v4: https://lore.kernel.org/r/20260902-fix_split-v4-0-85f03905f7b1@arm.com
+
+Changes in v4:
+  - reparse commit message.
+  - introduce alloc_isolated_mem().
+  - make madv_nohuge() helper according to suggestion.
+  - Link to v3: https://lore.kernel.org/r/20260828-fix_split-v3-0-374022586a4b@arm.com
+
+Changes in v3:
+  - change  message in case of failure of madvise() with MADV_NOHUGEPAGE.
+  - fix collapse_single_mthp (mthp_khugepaged:anon) test case failure.
+  - Link to v2: https://lore.kernel.org/all/20260826-fix_split-v2-0-71153c7f579a@arm.com/
+
+Changes in v2:
+  - rebase to mm-unstable.
+  - add message in case of failure of madvise() with MADV_NOHUGEPAGE.
+  - fix wrong setup expected_huge in check_huge_shmem().
+  - Link to v1: https://lore.kernel.org/r/20260820-fix_split-v1-0-ab430c58c7cf@arm.com
+
+---
+Yeoreum Yun (4):
+      kselftest: mm: prevent random failure of huge page split for khugepaged
+      kselftest: mm: replace usage of /proc/self/smaps for __check_pmd_huge()
+      kselftest: mm: integrate huge page checks
+      kselftest: mm: remove check_huge_shmem()
+
+ tools/testing/selftests/mm/folio_split_race_test.c |   2 +-
+ tools/testing/selftests/mm/khugepaged.c            |  38 +-----
+ tools/testing/selftests/mm/split_huge_page_test.c  |  19 +++
+ tools/testing/selftests/mm/uffd-common.c           |   4 +-
+ tools/testing/selftests/mm/vm_util.c               | 127 ++++++++++++---------
+ tools/testing/selftests/mm/vm_util.h               |   1 -
+ 6 files changed, 102 insertions(+), 89 deletions(-)
+---
+base-commit: fff9c87241bb46aa09ed3a91d6002cba966d7776
+change-id: 20260820-fix_split-f44939ec44b8
+
+Best regards,
 -- 
-2.53.0
+Sincerely,
+Yeoreum Yun
 
