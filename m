@@ -1,137 +1,294 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa2-f24.google.com (mail-oa2-f24.google.com [74.125.231.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88B0E414DDB;
-	Wed, 23 Sep 2026 22:53:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF3C22A80D
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 00:24:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790204022; cv=none; b=LH+Y4xcmW+y2Yw0bpVln596s3+WuPJe20pvPjRRZ5aaf6NByRcMvsa+axMApsc1sahI/tCM5sm36p22dwCX5fItbAdK6N9/Tb1sCVbPQGmk+gj+yF2K2wnZ8vDrU/gTwHTsUZoTfLn6Si7lHmUecHYCP+peLKZpb9XoZ7m+Vbyo=
+	t=1790209470; cv=none; b=lqi3TDJUS6YlJKBJu0buCc8c5dntmnqX3xGeO8EE7kl1otmW+0XUF9Y4qTR+tXy3ScMfwo1/JrrooN4f9t7muM0rx8RVskMCo1h3e43t3Z0eoH+8a/ncU/Obd+8KnDXOQGyG69vJAU2/xpIQ98g0gLJizxa6bmdt/iAGFmnUb/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790204022; c=relaxed/simple;
-	bh=fwZSaqpmByB20i96UeW2mqdIG75USPYigGVMnEnWY2g=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=OzSZqg27PtUb7A3AptNI8YPe+kHIl+BjSCt3uN2/1v8nQivHoLCQXYpMxJf7JvSxm5y2BI/a2PMlELB7I6TeSwVQD+/5q8PLZ0DJrR1iWgXbNyXaHFuZeYNM0tXTWLqGUFoSMOwRw5ykBfGgHpjlDue3S+P9Ayv6TY8GCpwa/yU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=scGfOW6F; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790209470; c=relaxed/simple;
+	bh=O1qzz4udeaHiCBtWLNhPqgQhh0np6y2v1Qblzap4ubo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u8oxIrgQ9C8yMEzWQnXnAH7LO5HszFf9B9UD17dxmyAxQDY6Zh12c7Bc8zPpRTmQ8vOiIrsBvdq0dVyAtJk9mlH1H+j3lzEmmYNK/4eb5cYUCKYRC7uK2KsWdmeSMOM61k7qRZWJB4su1KbNcZotsGsSdvXe5qwA+T9vSXeXapg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tLKAduNk; arc=none smtp.client-ip=74.125.231.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="scGfOW6F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D461F000FF;
-	Wed, 23 Sep 2026 22:53:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tLKAduNk"
+Received: by mail-oa2-f24.google.com with SMTP id 586e51a60fabf-482620dc91bso1078941fac.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 17:24:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1790204021;
-	bh=ep7wns9wPyTqnmGHhjmbGEV+muuH/iLwEmgevdLFK+Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=scGfOW6FNrNiqxjD54xQajwaC+4WYqC6RG/88f1T+E4tqhorzFVBYXL1q9XvKZq/L
-	 EBTL5TAFO+L4muscbIneqi/sYK9xm73Aa56lde4wfrllpbydBzL/wWnM9xNyKrubd9
-	 sbmpz652ub/EEGRm8Lp6Vjcgd5QxMI1CtuS4ssq4=
-Date: Wed, 23 Sep 2026 15:53:39 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Jim Cromie <jim.cromie@gmail.com>
-Cc: Jason Baron <jbaron@akamai.com>, Shuah Khan <shuah@kernel.org>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
- <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
- <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Arnd Bergmann
- <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu
- <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Jonathan
- Corbet <corbet@net.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel
- Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Petr Mladek <pmladek@suse.com>, Steven Rostedt
- <rostedt@goodmis.org>, John Ogness <john.ogness@linutronix.de>, Sergey
- Senozhatsky <senozhatsky@chromium.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-pm@vger.kernel.org, Louis Chauvet <louis.chauvet@bootlin.com>,
- Philipp Hahn <phahn-oss@avm.de>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v11 00/38] dyndbg: Fix classmaps API for subsystems,
- query extensions, selftests
-Message-Id: <20260923155339.bdc677e8e688611bcf190ad9@linux-foundation.org>
-In-Reply-To: <20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com>
-References: <20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        d=gmail.com; s=20251104; t=1790209467; x=1790814267; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=VaNhGxWDXoFu7JrvArFM0xuuSaYLknf+AiNAGeHpOlc=;
+        b=tLKAduNk74m4FZjjhHyzJ7fyOjIvZHucIau8VQ5rD/nN4RbPwE2KwfNNPDW9tAwSF8
+         DFyZUHBaAS3+7eJL6drUNF+dTQAKK32oP3dSuSFObyw9kyP8ETaDSPr2Qn9rjc9LNN7I
+         k09EwSLr72mZSIqxmv3/OI4v5K0k7hDz7aNhxwUf6lKAspHuzzuYkoW9M1FFKOYsN/Ih
+         BIk3pf2N/phxsZlKSXQrvj4scX7TZRrfaE5lbSvf9mH/DeKwh0Z/IKG/hz8c4IzdbE9Q
+         bCUbvaODcmTGNAiAOdOrXtD5IIbaNtv9u/WlOn5X7q+Ngs17BSusJ2QLjhHOFEPerAW3
+         qi0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790209467; x=1790814267;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=VaNhGxWDXoFu7JrvArFM0xuuSaYLknf+AiNAGeHpOlc=;
+        b=0pT75J/UGV8qROQJJvYKLeZ+/vjC8RjumXTvUPjzq3jgnyla9wSI/2DPn5j/Lym5hj
+         MdF+RRNV/t21SSiNGw+0nkO1UZ9JTqJw0ZXP0eNHVJ1MPx1JfCVqIxrQLJ1931ZwDsUI
+         +5XTBiLBmp//UTsIKHtsCZubmD0fQAyORfzEIsvLwsevIY2XBWMeKysRenQwaKCf1q3e
+         PKqeYgFrzwO+ccNxx5ZmknYCMBvKRH4Q9UTbE5gErGZYmCOqpHKTjnRKtozR/1WIP+Ul
+         yCcJl2QWusLARWxhHylbJBcGkn2irtA4wKJfuVTplFUn4GM36dZxFxirpTSZjRzeXvVo
+         neOQ==
+X-Forwarded-Encrypted: i=1; AKwUvBz07v33WaXWnAeNU91Xdf9HtCiBRq+SZK5RGUW0xOOyfVNnyju0S0rMI3iicaMo0lsyaROpH1KhyFcOjaADwfE=@vger.kernel.org
+X-Gm-Message-State: AFuF++mXC119jYOQBHz8uAMfvGj0iU0Y646OKP/OkBeUEfnzUL6iZLR7
+	eZyyUlXXOPjvSiLlqPssI4KlFWMNPz0Q6K9VlMyzKCmoBbYleJHboH8X
+X-Gm-Gg: AYBFou0SoAh1TVb08I9yHZovf9kcTkj6PM3uQP4SQtUImZqmEUnHV9WEoLOkJhlqGeV
+	h6f6KwunZUVuFV9XPcBRSovxPmofetn2vcEu764T9j2vpdI0Tn1JpIONdmfw1WI5pS+p3rh0cYW
+	kZAaQnX4n8PBMbSRhyF6HDUtbWVTfF9bCbfkt+8PWWGU8ubki5fYpuGXjaPWf8osj4e6pbtewo1
+	HYtIO/CXN58UyAXY0LwKCHylaXIJxzH7gDAGiKMrkV1QNIfzxz7UNNvf03Dp6RJxJ9Et8mLJ/73
+	Tah/ixrCWVKFBv1JIwxtLLDSLYg1DEq3yckJNbj7JaursAX9EYQf3RG7IwJ/5Lxg0HBbjr2eAqw
+	qYvaCpdghNIWcvAVQdWzTvIm3+mjRnJage6QmS2IaRgnW5osYD9m+06uvob597wkmCIB7m9R8UR
+	dFQJi8NkEwcXlDHx5XYNCMuVlshyDXdkk1S4Me3eqcL+0+8klxS9dVZN2lVwQp3LlVNo1WgYp9+
+	KtgrONq7hsCA3C79YA=
+X-Received: by 2002:a05:6808:1994:b0:4d6:9355:7543 with SMTP id 5614622812f47-4d731545ff8mr956682b6e.62.1790209466617;
+        Wed, 23 Sep 2026 17:24:26 -0700 (PDT)
+Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:f::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4d5c1b305b8sm3689133b6e.1.2026.09.23.17.24.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2026 17:24:25 -0700 (PDT)
+Date: Wed, 23 Sep 2026 17:24:21 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: sgarzare@redhat.com, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+	corbet@lwn.net, skhan@linuxfoundation.org, stefanha@redhat.com,
+	mst@redhat.com, jasowangio@gmail.com, xuanzhuo@linux.alibaba.com,
+	eperezma@redhat.com, shuah@kernel.org, rdunlap@infradead.org,
+	donald.hunter@gmail.com, virtualization@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, sargun@sargun.me, jlinbox@meta.com,
+	sdf.kernel@gmail.com, bobbyeshleman@meta.com
+Subject: Re: [PATCH net-next v2 6/6] selftests/vsock: test the netns assign
+ privilege checks
+Message-ID: <arRttf9k4yKahe4R@devvm29614.prn0.facebook.com>
+References: <20260921-vsock-guest-ns-v2-6-693bd78fde9e@meta.com>
+ <179019126776.2160803.16648507383433583043@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179019126776.2160803.16648507383433583043@kernel.org>
 
-On Wed, 23 Sep 2026 16:34:24 -0600 Jim Cromie <jim.cromie@gmail.com> wrote:
+On Wed, Sep 23, 2026 at 07:21:07PM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 0 · Medium: 1 · Low: 1
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Medium] Both new selftests
+>   (`test_ns_guest_assign_g2h_netns_no_cap_net_admin_fails`,…
+> - [Low] The two new shared-VM tests omit the `vm_reset_g2h()` cleanup
+>   that every other ns_guest_assign_g2h_netns_* test in USE_SHARED_VM…
+> 
+> --
+> 
+> selftests/vsock: test the netns assign privilege checks
+> 
+> Adds two vmtest.sh cases that attempt VSOCK_CMD_DEV_NETNS_SET without
+> CAP_NET_ADMIN and from an unprivileged user namespace, and enables
+> CONFIG_USER_NS in the vsock selftest config.
+> 
+> > diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
+> > index e94cc2fd90ccd..4f42bcdac3f6c 100755
+> > --- a/tools/testing/selftests/vsock/vmtest.sh
+> > +++ b/tools/testing/selftests/vsock/vmtest.sh
+> 
+> [ ... ]
+> 
+> > @@ -187,6 +195,8 @@ readonly TEST_DESCS=(
+> >  	ns_guest_assign_g2h_netns_host_connect_ok
+> >  	ns_guest_assign_g2h_netns_reset_on_ns_delete_ok
+> >  	ns_guest_assign_g2h_netns_old_conn_send_fails
+> > +	ns_guest_assign_g2h_netns_no_cap_net_admin_fails
+> > +	ns_guest_assign_g2h_netns_unpriv_user_ns_fails
+> >  )
+> >  readonly NS_MODES=("local" "global")
+> 
+> [Severity: Low]
+> Both new tests are added to USE_SHARED_VM but neither calls
+> vm_reset_g2h() on any exit path, unlike every other
+> ns_guest_assign_g2h_netns_* test in that list.
+> 
+> Should these follow the sibling pattern?  If the privilege check under
+> test is broken, the assign succeeds and the guest's single g2h device is
+> left owned by the transient namespace created by unshare, while the
+> harness moves on to the next test in the same VM.
+> 
+> The kernel does restore this by itself once that namespace is reaped:
+> 
+> net/vmw_vsock/af_vsock.c:vsock_g2h_net_reset() {
+> 	if (likely(rcu_access_pointer(vsock_g2h_net) != net))
+> 		return;
+> 
+> 	mutex_lock(&vsock_register_mutex);
+> 	if (rcu_access_pointer(vsock_g2h_net) == net)
+> 		rcu_assign_pointer(vsock_g2h_net, &init_net);
+> 	...
+> }
+> 
+> registered as .pre_exit in vsock_pernet_ops, and the next test's
+> vm_ns_assign_g2h() overwrites the pointer anyway.  The residual window is
+> the asynchronous teardown that ..._reset_on_ns_delete_ok already documents
+> ("the namespace itself is dismantled from a workqueue, so the device does
+> not come back the same instant").  Since the new tests are appended last
+> in TEST_NAMES and USE_SHARED_VM, a default run is unaffected; this only
+> shows up with selective or reordered invocation.
 
-> The drm subsystem has *lots* of debug statements, in 11 categories:
-> 
->  $> git grep '\w*_dbg' drivers/gpu/drm/ | wc
->    5663   30159  542864
+Yes, these tests should call it regardless. Relying on cleanup makes the
+pass/fail race-y.
 
-Methinks this regexp was overly promiscuous, but point taken.
+> 
+> [ ... ]
+> 
+> > @@ -1832,6 +1842,48 @@ test_ns_guest_assign_g2h_netns_reset_on_ns_delete_ok() {
+> >  	return "${KSFT_PASS}"
+> >  }
+> >  
+> > +test_ns_guest_assign_g2h_netns_no_cap_net_admin_fails() {
+> > +	local cmd="unshare -n setpriv --bounding-set=-net_admin"
+> > +	local rc
+> > +
+> > +	vm_ssh "init_ns" -- "${cmd}" python3 /root/ynl/cli.py --no-schema \
+> > +		--spec /root/ynl/vsock.yaml --do dev-netns-set &>/dev/null
+> > +	rc=$?
+> > +
+> > +	if [[ "${rc}" -eq 0 ]]; then
+> > +		log_host "assign unexpectedly succeeded without CAP_NET_ADMIN"
+> > +		return "${KSFT_FAIL}"
+> > +	fi
+> > +
+> > +	return "${KSFT_PASS}"
+> > +}
+> 
+> [Severity: Medium]
+> Can this test pass without the capability check ever being reached?  The
+> only assertion is rc -eq 0 => FAIL, output is discarded with &>/dev/null,
+> and there is no positive control, so any nonzero status reads as
+> KSFT_PASS.
+> 
+> A few concrete sources of a nonzero status that are not -EPERM:
+> 
+> net/vmw_vsock/af_vsock.c:vsock_nl_dev_netns_set_doit() {
+> 	int err = vsock_g2h_net_assign(genl_info_net(info));
+> 
+> 	if (err == -ENODEV)
+> 		NL_SET_ERR_MSG(info->extack,
+> 			       "no guest-to-host transport is loaded");
+> 	else if (err == -EOPNOTSUPP)
+> 	...
+> }
+> 
+> and cli.py collapses all of those to the same status as -EPERM:
+> 
+> tools/net/ynl/pyynl/cli.py:main() {
+>     except NlError as e:
+>         print(e)
+>         sys.exit(1)
+> }
+> 
+> vm_ssh() also returns ssh's own status, so a transport failure (255) or a
+> remote shell failure (127, e.g. an installed util-linux that does not
+> accept setpriv --bounding-set=-net_admin) is indistinguishable from the
+> expected refusal.  A python-side failure such as a missing
+> /root/ynl/vsock.yaml exits 1 too.
+> 
+> Would it be worth asserting the privileged case succeeds first?  The file
+> already has the helper the sibling tests use as a precondition:
+> 
+> vm_ns_assign_g2h() {
+> 	local ns=$1
+> 	local nspid=$2
+> 
+> 	vm_ns_exec "${ns}" "${nspid}" "python3 /root/ynl/cli.py --no-schema \
+> 		--spec /root/ynl/vsock.yaml --do dev-netns-set"
+> }
+> 
+> On the changelog note "ynl's cli.py does not report the errno": is that
+> accurate?  NlError.__str__() in tools/net/ynl/pyynl/lib/ynl.py does:
+> 
+>         msg += os.strerror(self.error)
+> 
+> so the error string is printed and the test could match "Operation not
+> permitted" instead of sending everything to /dev/null.
 
->  $> git grep 'DRM_DEBUG\w*' drivers/gpu/drm/ | wc
->    2206   12834  202332
-> 
-> All of these are bit-tests on __drm_debug, exposed to users as
-> /sys/module/drm/parameters/debug. Many of these are done often;
-> vblank is done ~100/sec for some displays. Over the uptime of many
-> boxes, this is a lot of cpu cycles on bits that are almost always off.
+I considered this but felt like grepping stderr/stdout is somewhat
+unnatural. My plan was to later propose that cli.py returns the err via
+exit code, and then update these tests.
 
-A __test_bit (or |) every 10ms sounds quite negligible?
+First checking the privileged assign sounds like a reasonable middle
+ground to rule out the other error states.
 
-Especially if __drm_debug is __read_mostly.  Which it isn't, afaict. 
-Um, low-hanging fruit?
+> 
+> > +
+> > +test_ns_guest_assign_g2h_netns_unpriv_user_ns_fails() {
+> > +	local unpriv_uid=65534
+> > +	local unpriv
+> > +	local rc
+> > +
+> > +	unpriv="setpriv --reuid=${unpriv_uid} --regid=${unpriv_uid}"
+> > +	unpriv="${unpriv} --clear-groups"
+> > +
+> > +	if ! vm_ssh "init_ns" -- "${unpriv} unshare -U true"; then
+> > +		log_host "unprivileged user namespaces unavailable, skipping"
+> > +		return "${KSFT_SKIP}"
+> > +	fi
+> > +
+> > +	vm_ssh "init_ns" -- "${unpriv} unshare -Urn" \
+> > +		python3 /root/ynl/cli.py --no-schema \
+> > +		--spec /root/ynl/vsock.yaml --do dev-netns-set &>/dev/null
+> > +	rc=$?
+> > +
+> > +	if [[ "${rc}" -eq 0 ]]; then
+> > +		log_host "assign unexpectedly succeeded for unprivileged user"
+> > +		return "${KSFT_FAIL}"
+> > +	fi
+> > +
+> > +	return "${KSFT_PASS}"
+> > +}
+> 
+> [Severity: Medium]
+> Same rc != 0 => KSFT_PASS inference here, plus the availability probe is
+> not the command being measured:
+> 
+> 	probe:    ${unpriv} unshare -U true
+> 	measured: ${unpriv} unshare -Urn python3 /root/ynl/cli.py ...
+> 
+> If the extra -r/-n setup or the python startup under uid 65534 fails, the
+> result is KSFT_PASS rather than KSFT_SKIP or KSFT_FAIL, and the child user
+> namespace never actually holds CAP_NET_ADMIN, which is the condition the
+> commit message says is being tested:
+> 
+>     the other confirms that CAP_NET_ADMIN in an unprivileged user ns
+>     alone is insufficient.
+> 
+> Would checking the reported error string, or asserting the privileged
+> assign works in the same test, make these two cases fail if
+> GENL_ADMIN_PERM is ever dropped from VSOCK_CMD_DEV_NETNS_SET?
 
-> Dynamic-debug excels at replacing such tests with NOOPs (via static
-> keys). Classmaps was devised to bring that 0-off-cost to drm's
-> categories.
-> 
-> Classmaps-v1 went into the kernel in Sept 2022, in 2 chunks:
->   b7b4eebdba7b..6ea3bf466ac6    # core dyndbg changes
->   0406faf25fb1..ee7d633f2dfb    # drm adoption
-> 
-> Sadly DRM-CI found a regression during init with drm.debug=<initval>;
-> the static-keys underneath the drm-dbgs in drm.ko got enabled, but
-> those in drivers & helpers did not.
-> 
-> So in Feb 2023, it got pulled:
-> commit bb2ff6c27bc9 ("drm: Disable dynamic debug as broken")
-> 
-> Root Problem:
-> 
-> DECLARE_DYNDBG_CLASSMAP defined the classmap, but its repeated use in
-> both core and drivers violated a K&R rule "define once, refer
-> afterwards". This flaw resulted in a regression; with drm.debug=0xFF
-> boot arg, drm-core got enabled, but drivers/helpers did not.
-> 
-> This patchset replaces DECLARE_DYNDBG_CLASSMAP with:
-> - DYNAMIC_DEBUG_CLASSMAP_DEFINE (invoked once in the exporting module)
-> - DYNAMIC_DEBUG_CLASSMAP_USE (invoked repeatedly in drivers & helpers)
-> 
-> _DEFINE exports the classmap it creates (in drm.ko), and other modules
-> _USE the classmap. The _USE adds a record referencing the _DEFINEd (&
-> exported) classmap in a 2nd __dyndbg_class_users section.
-> 
-> At modprobe, dyndbg scans the new section after __dyndbg_class_maps,
-> follows the linkage to the _DEFINEr module, finds the (optional)
-> kernel-param controlling the classmap, examines its drm.debug=<initval>,
-> and applies it to the module being initialized.
-> 
-> To recapitulate the multi-module problem wo DRM involvement, we add:
-> 
-> - tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh:
->   Alters pr_debugs in builtins and test modules,
->   checks results against checksums of expected results
-> 
-> - lib/test_dynamic_debug.c & test_dynamic_debug_submod.c:
->   Builds parent & _submod modules with _DEFINE and _USE inside #if/#else
->   blocks, reproducing the 2-module scenario under selftests.
-
-So what I'm understanding is that this series presently has no effect
-upon DRM?
-
-What subsystems *does* it affect?
-
-Sashiko had quite a bit to say.  It hasn't quite completed at present.
-	https://sashiko.dev/#/patchset/20260923-dd-cmap-part2-clean-v11-0-9b6c217fdf2f@gmail.com
+Yep, can follow the same approach as above.
