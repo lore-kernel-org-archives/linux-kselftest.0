@@ -1,210 +1,218 @@
-Received: from mail-qk2-f42.google.com (mail-qk2-f42.google.com [74.125.230.234])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2547D40B0FE
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 09:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.234
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790243780; cv=pass; b=rSgE+WE9wI5+aOtZXfkVNp/GyNixwRF7dMnCCeFE0VCdn8cFzMMQRAXgAy9a5Scw5yryFvRTtdrnLnbX+crNWO27rXyPnIb27BDT0HSMM0XXT2oEA0SL9eL3zdLf9AEOHL0m7TTQ5gPuu2UGrwhSDc+H4ZnrlzFw515oJ+sJWwI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790243780; c=relaxed/simple;
-	bh=LBZZcNSVeHHRIpD1xuzWESX6CCgFGvOZ+4ZFnY2ewKU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dy0KvZeyGUKx+cJdoxw5aDIsFkneZZboGz0thN5Zd//ZUrDXSdJX44DfHfq+Du1mxfIdEC59M97RW/tNgkkaTXv1RzNvdjtxJFHw/8wXgXhX6nUG7FwXxvtSxfpP0JOObpdFByGx6fIVgMWTDEDnKny8Ac6NZy441DQ+VFxEbes=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JODW4//u; arc=pass smtp.client-ip=74.125.230.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3674A4749DD;
+	Thu, 24 Sep 2026 10:22:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790245349; cv=none; b=DmeXEwj3u/j4FypJ4BwhAhL87kP4KOb/CHtfOpwvVm4CvjZEpXSvBZIMQVgJNQ1GtHJcoif3i/2cULEEG1GKVgeNHl7cz4TdhrCe8xY2nQoVhwBcBxIweVFI+6jyfLs89aErGewtoV/6V/y7GWr5zNeFbrP34R/XSinAcs4m2os=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790245349; c=relaxed/simple;
+	bh=JD32s8eD5JSHh277X1R2SZ0l+uvehg9HATseGnbtzJs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sryAPB1rELBDZA5+S9wmG7TvgJiQHXGa3AgvB1rmh82t09jDr1Dz5BuC2+sqz1TLkBolWDB7bJ7CUjUnvKskUnb8YLZT79crZeRrrHfbgGBKxq3hlcLhusvnkPisVRjUzuKDZiRidNFK2p6lLpbIiCn9ud/fOdOuCtzNdc0ZWrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=xrjONZAS; arc=none smtp.client-ip=113.46.200.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JODW4//u"
-Received: by mail-qk2-f42.google.com with SMTP id d75a77b69052e-52fb769ca17so14593501cf.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 02:56:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790243763; cv=none;
-        d=google.com; s=arc-20260327;
-        b=LP1rLpLS/3s8JNd9NBfFat0D96RpoDIfsXVdJBf8tFK85ITBKEfrWv04Lw8ZuujmrB
-         i94CarE7xMfTwqksQokO79Tnm+1B/1uYElKqCQKDw3YYo43O5eeBsHyBMfUAGlu5wVme
-         uDiN+FfYsFwiQCXcEvTX2tBOakMWvMnrGxuYR+mjeGtT70BDU4Y5/PMB694il8CCFUJD
-         ZgtTfySIVEQZVw9sqCShK/bixfFwgg4Bm+L5HLCUKoEkc6+koTsG0Ramuzucqexa8Bze
-         1oSKw3PwEh9NZX9to2TF5GWiOI6DIro3RypEmQG5+XId7sedmcstwkzdWQvPwwL1XQEu
-         U0JA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=rM8Pnb3OaTJqlPgDl5Nu230H8PB3TRPyBVd+A2AcpH4=;
-        fh=zuQOUbWQUeinWy3SevSlEUD3OkkQJQqGjdYAM/ksIbY=;
-        b=oM/pMHNBpyUgAs89ldr5cd2MOz3sfBLc5/NIXTC4PXOC+1/cj/eJLPgscfYP6Qu7l9
-         aQczc85bYgxHFgKXMa/xKusgnZAjduelgediPwQ7roTGtE0fXKPQGdHnrOAD6mdKgf3r
-         Kvbu6Ijs+URna5LVyBp9gmqx09ZwG7mHm3LHUyVKnOaSDHCI8SzOn2AILPJV0JftQMsH
-         4f22G+DEg0BsOFeIoRj0B/eqBkuvSElx3uoNTw81b8QyefJT4dqg1FKJFnfCEdWFfu5g
-         5mI0/5Y6Kw7TCct5zzWCwKy+1WZ+8KIz7fDt3VeoFSoSPWMyC9jCQFxzs+I59DTK6ABa
-         Xwdw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790243763; x=1790848563; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=rM8Pnb3OaTJqlPgDl5Nu230H8PB3TRPyBVd+A2AcpH4=;
-        b=JODW4//u3KjtFnoafHckYjbn/WXha6Zo9QUiqtgARpc7DjBG0mhE0WWH+hSp6QxsNm
-         RfYVeBrlMNaoigggDW6bLYZkB/uWJilNXDFvbdrL36dL+fm5HmpCEUZ60jPpRQYZCPAw
-         C/PM4Ypr9TRp0aRT/iAXkY+ck9MM5VKEqtGOKkZwp7Pe0cuc2nCPFuoFVFFfi7IGy3Kt
-         k5Fv+L7nfpY1z6MkPu1vtql9PBXlqQ8A130evougp8/k8OVH0GzSToEOXITzEzSv0+0O
-         hCpLEC4ltGH4PCVCEyb0S5OvP3NAzgIqZsERBJifrjKchVfuLn2YBZKdazPT5ztVnquF
-         CRlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790243763; x=1790848563;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=rM8Pnb3OaTJqlPgDl5Nu230H8PB3TRPyBVd+A2AcpH4=;
-        b=wOFfP90oE1EYqTobpmzRUfE4QtaUM8NrC/+DjkP127rya+CHiPazfWzNwan/gQ/TAr
-         PvG/YSbXI6KB9KOaJPUzcao1uqK8sApLg6DCWgapNyy9mzzd39lTKCKw7kVT0cQj6W/L
-         jJ4nMBXB0PXGBcEYs4gDKieAZQktpkgQhj6y8NgSOtX5q9OK2VLEcC4BddrIkU2oTHPA
-         hxqvYr0PW+Gc6rMLUyy5p4adTvoIWtP+uwzjVYP2dL6n0sruAshBhIOg4Q3KKrvqeC3C
-         Ige0dh/O1e66JjdbW+p8iKiBFFX4amd1lFVyjRrCA2sauSSJ7ibxNIB89vTP9rgUEPtq
-         wKsg==
-X-Forwarded-Encrypted: i=1; AKwUvBzSrqA1JPK1LXfIuZ04YmQw/uep00+bC9xI7MlC5KXbn7tNiVi5qrCiK0BQoPx2l122tokqH23iTtOsjPUYI7U=@vger.kernel.org
-X-Gm-Message-State: AFuF++m2+27xOLyh1AJkAtPDC6r1fBzd0c4hxqclOTtvCiC8dRwy7P0T
-	Hqy+RbnqsUEADuhJhh2QmuyJqtI7d8CJvvQkXFuL89g+wDjIDm4iECW+ZSvqqIsqHD7tKPJEu/m
-	cFBkXxjDCDpU0sXJhPFnGkIIP8pmd7ZOwBDVIXlkk
-X-Gm-Gg: AYBFou1Ze3T+zxIlhkl5daahHSYXjbVnarSPZkYUARbxn0q9Ru6zt/4/5yLyQ5JQpLl
-	BhHvoSb/LEscI9iYdxYT2smZPWf73cEClquGwav3BtWkpd6PyutrxsQyNRbYR9pHgCxqOx7WPX6
-	uhQYKM3T+L3Sj3myyhOLTe698S1a5jHfCn/+SSBaKHWiHKx3GkblgckxZFd+EdMVIHra97XJCRJ
-	sX+6Q0iJYLzxoCFnK8kYCwibjs9x+T0ccOjL6dKt73eEZEbpqOyp7bmwHZpSmLMZmlh7jGcbMSR
-	yyHhCZyk2t7a+mRScdyMvbztYPJNXRDnlCZSb1FFKgAg4lKOY5BOTreRu1hJ8wq14v8Ur9dW6B7
-	NlOc7VuQGLRz0CYrFdFOTGGoxIbY0+YzkI6w84atR2/HMZso+fMn2+m2Dlt2LbIUxkEkV
-X-Received: by 2002:a05:622a:5a0f:b0:532:8f15:2744 with SMTP id
- d75a77b69052e-532fea4d150mr14339051cf.20.1790243762050; Thu, 24 Sep 2026
- 02:56:02 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="xrjONZAS"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=yg/c5dnmZTi6xyPOZ86hk74blfRQhWYpuq7fF3Kbs7A=;
+	b=xrjONZASgZH2dB4W12aPwAUjOwKHhuoT3i4U1FLpQsZw+cPLUW1gCi4qySKYwWAnY/2fa/nMH
+	2Ic97JDw8b/I36cpUZTVgECBEPpkkhCD2kgT43L9L8RjG93PnEkKKNXn8tuIFP5pJjIu1GAV6CL
+	P/HreNo6hafJvlYVPC1YGdY=
+Received: from mail.maildlp.com (unknown [172.19.163.15])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hr8j419d9znTVd;
+	Thu, 24 Sep 2026 18:10:16 +0800 (CST)
+Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
+	by mail.maildlp.com (Postfix) with ESMTPS id EA04D40578;
+	Thu, 24 Sep 2026 18:22:19 +0800 (CST)
+Received: from octopus.huawei.com (10.67.174.191) by
+ whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Thu, 24 Sep 2026 18:22:15 +0800
+From: Cai Xinchen <caixinchen1@huawei.com>
+To: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
+	<jmorris@namei.org>, <serge@hallyn.com>, <corbet@lwn.net>,
+	<skhan@linuxfoundation.org>
+CC: <rdunlap@infradead.org>, <gregkh@linuxfoundation.org>,
+	<rafael@kernel.org>, <dakr@kernel.org>, <dlemoal@kernel.org>, <hch@lst.de>,
+	<axboe@kernel.dk>, <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
+	<jack@suse.cz>, <dhowells@redhat.com>, <code@tyhicks.com>,
+	<linkinjeon@kernel.org>, <sj1557.seo@samsung.com>, <yuezhang.mo@sony.com>,
+	<hirofumi@mail.parknet.co.jp>, <cel@kernel.org>, <jlayton@kernel.org>,
+	<neil@brown.name>, <okorniev@redhat.com>, <Dai.Ngo@oracle.com>,
+	<tom@talpey.com>, <miklos@szeredi.hu>, <amir73il@gmail.com>,
+	<senozhatsky@chromium.org>, <chenxiaosong@chenxiaosong.com>,
+	<zohar@linux.ibm.com>, <roberto.sassu@huawei.com>,
+	<dmitry.kasatkin@gmail.com>, <eric.snowberg@oracle.com>,
+	<stephen.smalley.work@gmail.com>, <omosnacek@gmail.com>,
+	<casey@schaufler-ca.com>, <nanx95726@gmail.com>, <djwong@kernel.org>,
+	<daniel@iogearbox.net>, <linux-security-module@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<driver-core@lists.linux.dev>, <linux-block@vger.kernel.org>,
+	<linux-fsdevel@vger.kernel.org>, <netfs@lists.linux.dev>,
+	<ecryptfs@vger.kernel.org>, <exfat@lists.linux.dev>,
+	<linux-nfs@vger.kernel.org>, <linux-unionfs@vger.kernel.org>,
+	<linux-cifs@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+	<selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<xiujianfeng@huawei.com>, <caixinchen1@huawei.com>, <lujialin4@huawei.com>
+Subject: [PATCH RFC -next 00/12] landlock: Add READ_METADATA and WRITE_METADATA access rights
+Date: Thu, 24 Sep 2026 18:48:19 +0800
+Message-ID: <20260924104831.1081137-1-caixinchen1@huawei.com>
+X-Mailer: git-send-email 2.18.0.huawei.25
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260924080219.1036588-1-caixinchen1@huawei.com>
- <CANn89iJVGmYwQerOixGurH6vw-GtvSAQq6u6zSNZoyZrcEx6Jw@mail.gmail.com> <d8c12b4e-4ff2-4c62-a40d-d67bb4680a0d@huawei.com>
-In-Reply-To: <d8c12b4e-4ff2-4c62-a40d-d67bb4680a0d@huawei.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 24 Sep 2026 11:55:50 +0200
-X-Gm-Features: AclHuK_LOWvzBhJczhAfbtW30YiVgV1gD1vN5_bi3qPOiAKB6UaaHqyDAfOb9kg
-Message-ID: <CANn89iLA55e6evpx__7AUQF45uYAbUHxRtz4rVT=vsKpqBRWkA@mail.gmail.com>
-Subject: Re: [PATCH RFC -next 0/5] net: charge socket memory budget to memcg upfront
-To: Cai Xinchen <caixinchen1@huawei.com>
-Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, corbet@lwn.net, 
-	skhan@linuxfoundation.org, rdunlap@infradead.org, kuniyu@google.com, 
-	pabeni@redhat.com, willemb@google.com, davem@davemloft.net, kuba@kernel.org, 
-	horms@kernel.org, ncardwell@google.com, matttbe@kernel.org, 
-	martineau@kernel.org, geliang@kernel.org, mhocko@kernel.org, 
-	roman.gushchin@linux.dev, shakeel.butt@linux.dev, muchun.song@linux.dev, 
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, lujialin4@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ whupemk100010.china.huawei.com (7.152.184.41)
 
-On Thu, Sep 24, 2026 at 11:25=E2=80=AFAM Cai Xinchen <caixinchen1@huawei.co=
-m> wrote:
->
-> Hi,
->
-> Thank you for the review.
->
-> We found that sk_forward_alloc is a plain int updated by a non-atomic
-> RMW (sk_forward_alloc_add(), where even the read side is not
-> READ_ONCE), and its writers span three unrelated lock domains:
->
->    - socket lock, process context: SO_RESERVE_MEM and TX grants
->       (__sk_mem_schedule(), sk_forced_mem_schedule());
->
->    - receive-queue lock, softirq: UDP RX charges and the
->       udp_rmem_release() fold;
->
->    - no lock at all: sk_mem_charge()/sk_mem_uncharge() from
->       skb_set_owner_r() and skb destructors, and the sk_mem_reclaim()
->       fold itself.
->
-> Any cross-domain pair loses an update.  A lost charge is still
-> returned in full by the matching skb free, so it resurfaces as a
-> phantom surplus in sk_forward_alloc, and the next fold hands it back
-> to the memcg via __sk_mem_reduce_allocated() ->
-> mem_cgroup_sk_uncharge() - an uncharge with no matching charge.
->
-> We first tried to fix it with locks, and hit three walls:
->
->    - the socket lock cannot be used: its holders free skbs (e.g.
->       tcp_recvmsg()), and the destructor's sk_mem_uncharge() would
->       need to re-acquire it - recursion.  That is why these helpers
->       are lockless in the first place;
->
->    - a new per-socket spinlock serializes the RMWs but not the bug:
->       __sk_mem_schedule() publishes the grant before the memcg charge,
->       and the charge may sleep (GFP_KERNEL, memcg reclaim/OOM), so no
->       spinlock can cover both steps; a fold in that window can still
->       refund pages whose charge afterwards fails;
->
->    - such a lock would also sit on the per-packet charge/uncharge
->       paths, exactly the hot path the cacheline layout around
->       sk_forward_alloc was tuned to keep cheap.
->
-> Are there any good solutions to solve this problem?
+This series adds two new Landlock filesystem access rights,
+LANDLOCK_ACCESS_FS_READ_METADATA and LANDLOCK_ACCESS_FS_WRITE_METADATA,
+which control access to file and directory metadata such as inode
+attributes (mode, ownership, timestamps), extended attributes and POSIX
+ACLs.  It picks up the work from the "landlock: add chmod and chown
+support" series [1] and follows the coarse-grained grouping discussed in
+that thread [2]: instead of separate chmod/chown rights, metadata
+operations are grouped into one read and one write right.
 
-Perfect, you now gave us what we need.
+Landlock evaluates access rights on a per-path basis, but the metadata
+related LSM hooks (inode_getattr, inode_setattr, inode_setxattr,
+inode_getxattr, inode_listxattr, inode_removexattr, inode_set_acl,
+inode_get_acl, inode_remove_acl) only receive the dentry of the accessed
+object.  Patches 1-7 therefore first pass struct path instead of dentry
+through the metadata-related VFS helpers and LSM hooks.  This is a pure
+refactoring with no behavior change, split so that every patch builds
+and works on its own:
 
-UDP is broken, it should be easy to fix without breaking TCP.
+  1: notify_change() and its callers
+  2: inode_setsecctx hook (must come before 3: the SELinux and Smack
+     implementations call __vfs_setxattr_locked internally)
+  3: xattr helpers, which also drops a redundant EVM xattr size sanity
+     check whose vfs_getxattr() call only has a dentry and therefore
+     cannot be migrated to the new path-based signature
+  4: POSIX ACL helpers
+  5: inode_setattr hook
+  6: inode xattr hooks
+  7: inode POSIX ACL hooks
 
-I am surprised your LLM went to a completelly broken path.
+Two deliberate scoping decisions for this refactor:
 
-sk_forward_alloc is never supposed to be updated locklessly across
-multiple lock domains:
+- The hooks consistently take struct path rather than struct file.  The
+  VFS call sites involved (chmod(2), chown(2), utimensat(2), xattr(2)
+  and ACL syscalls) operate on paths, and several of them (lstat(2),
+  lchown(2), llistxattr(2), ...) have no struct file to begin with.
 
-- For TCP, sk_forward_alloc is strictly serialized by the socket lock
-  (lock_sock / bh_lock_sock). TCP does not use sock_rfree() as an skb
-  destructor (sk_mem_uncharge() is called under the socket lock in
-  tcp_eat_recv_skb() and sk_wmem_free_skb(), while TX destructors
-  sock_wfree() / tcp_wfree() only touch sk_wmem_alloc).
+- struct inode_operations->setattr still receives (idmap, dentry, attr).
+  Only the VFS boundary (notify_change()) and the LSM hook layer see the
+  path, which keeps the refactor contained to fs/attr.c and the LSM
+  infrastructure instead of touching every filesystem.
 
-- For UDP, sk_forward_alloc is serialized by sk->sk_receive_queue.lock
-  (in __udp_enqueue_schedule_skb() and udp_rmem_release()).
+Patches 8-12 then implement the new rights, their tests, the sandboxer
+sample and the documentation.  Semantics:
 
-Your reproducer and analysis point to two specific places that violate
-these locking rules:
+- READ_METADATA covers stat(2) and friends, getxattr(2) and friends,
+  listxattr(2) and friends, and POSIX ACL reads.
+- WRITE_METADATA covers chmod(2), chown(2), utimensat(2), setxattr(2),
+  removexattr(2) and friends, and POSIX ACL set and remove.
+- Only explicit metadata changes requested by user space are restricted.
+  Implicit changes performed by the kernel (e.g. timestamp updates on
+  write(2), size changes on truncate(2)) are not, and neither are
+  chmod(2)/chown(2) calls that change nothing (e.g. chown(2) with
+  (-1, -1), which never reaches the hook), matching the SELinux
+  inode_setattr behavior.
+- Kernel-internal accesses performed with override_creds() (e.g.
+  overlayfs, cachefiles) and kernel threads without a Landlock domain
+  (e.g. nfsd, ksmbd) are not restricted.
 
-1. SO_RESERVE_MEM on UDP sockets:
-   SO_RESERVE_MEM (commit 2bb2f5fb21b0, "net: add new socket option
-   SO_RESERVE_MEM") was designed for TCP, where sk_forward_alloc is
-   protected by lock_sock(sk) and sk_mem_reclaim() checks
-   sk_unused_reserved_mem(sk).
+The Landlock ABI version is incremented from 11 to 12.
 
-   However, sock_reserve_memory() only checks sk_has_account(sk), which
-   also matches UDP. UDP does not support SO_RESERVE_MEM:
-   udp_rmem_release() does not check sk_unused_reserved_mem(sk) (so the
-   first recv() reclaims the reserved pages from sk_forward_alloc), and
-   setsockopt(SO_RESERVE_MEM) only holds lock_sock(sk) instead of
-   sk->sk_receive_queue.lock, racing with __udp_enqueue_schedule_skb()
-   and udp_rmem_release().
+The series is based on linux-next commit 5c4d4169604b ("Add linux-next
+specific files for 20260921").
 
-   We can fix this directly in sock_reserve_memory():
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 1d5927cd49a1..763c2017d9ef 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1034,7 +1034,7 @@ static int sock_reserve_memory(struct sock *sk, int b=
-ytes)
-  bool charged;
-  int pages;
+Testing: each patch has been built for aarch64 (gcc, -Werror) and the
+landlock selftests (445 tests, including the new ones) pass in QEMU on
+aarch64; base_test reports ABI v12.
 
-- if (!mem_cgroup_sk_enabled(sk) || !sk_has_account(sk))
-+ if (!mem_cgroup_sk_enabled(sk) || !sk_is_tcp(sk))
-  return -EOPNOTSUPP;
+[1] https://lore.kernel.org/all/20220827111215.131442-1-xiujianfeng@huawei.com/
+[2] https://lore.kernel.org/all/abc960a1-e66e-792e-6869-cfd201c29dbe@digikod.net/
 
-2. BPF sockmap (net/core/skmsg.c):
-   As you noted in the reproducer comments, sk_psock_skb_ingress() and
-   sk_psock_skb_ingress_self() call sk_rmem_schedule() and
-   skb_set_owner_r() (which installs sock_rfree() as skb->destructor)
-   from sk_psock_backlog() or after dropping sk_receive_queue.lock in
-   udp_read_skb(). Calling skb_set_owner_r() / sock_rfree() without the
-   socket lock (or sk_receive_queue.lock for UDP) on protocols with
-   sk_has_account(sk) is a bug in net/core/skmsg.c and should be fixed
-   there.
+Assisted-by: opencode: glm-5.3
+
+Cai Xinchen (12):
+  fs: pass struct path to notify_change()
+  LSM: pass struct path to the inode_setsecctx hook
+  fs: pass struct path to xattr helpers
+  fs: pass struct path to POSIX ACL helpers
+  LSM: pass struct path to the inode_setattr hook
+  LSM: pass struct path to the inode xattr hooks
+  LSM: pass struct path to the inode posix acl hooks
+  landlock: Add READ_METADATA and WRITE_METADATA access rights
+  landlock: Implement metadata access hooks
+  selftests/landlock: Add tests for metadata access rights
+  samples/landlock: Add metadata rights to sandboxer
+  Documentation: Update landlock doc for metadata rights
+
+ Documentation/userspace-api/landlock.rst     |  11 +-
+ drivers/base/devtmpfs.c                      |   6 +-
+ drivers/block/zloop.c                        |   4 +-
+ fs/attr.c                                    |  20 +-
+ fs/cachefiles/interface.c                    |   6 +-
+ fs/cachefiles/xattr.c                        |  32 +-
+ fs/coredump.c                                |   2 +-
+ fs/ecryptfs/inode.c                          |  34 +-
+ fs/exfat/file.c                              |   3 +-
+ fs/fat/file.c                                |   3 +-
+ fs/inode.c                                   |   7 +-
+ fs/internal.h                                |  17 +-
+ fs/namei.c                                   |   7 +-
+ fs/nfsd/nfs4ctl.h                            |   4 +-
+ fs/nfsd/nfs4state.c                          |  14 +-
+ fs/nfsd/nfs4xdr.c                            |   2 +-
+ fs/nfsd/state.h                              |   2 +-
+ fs/nfsd/vfs.c                                |  73 +++--
+ fs/open.c                                    |  18 +-
+ fs/overlayfs/copy_up.c                       |   4 +-
+ fs/overlayfs/inode.c                         |   4 +-
+ fs/overlayfs/overlayfs.h                     |  39 ++-
+ fs/overlayfs/xattrs.c                        |  13 +-
+ fs/posix_acl.c                               |  46 +--
+ fs/smb/server/smb2pdu.c                      |  77 ++---
+ fs/smb/server/smb_common.c                   |   2 -
+ fs/smb/server/smbacl.c                       |  21 +-
+ fs/smb/server/tests/smbacl_kunit.c           |   6 +-
+ fs/smb/server/vfs.c                          | 111 +++----
+ fs/smb/server/vfs.h                          |  39 +--
+ fs/smb/server/vfs_cache.c                    |   3 +-
+ fs/utimes.c                                  |   3 +-
+ fs/xattr.c                                   |  96 +++---
+ include/linux/fs.h                           |   6 +-
+ include/linux/landlock.h                     |   4 +-
+ include/linux/lsm_hook_defs.h                |  29 +-
+ include/linux/posix_acl.h                    |  21 +-
+ include/linux/security.h                     |  65 ++--
+ include/linux/xattr.h                        |  22 +-
+ include/uapi/linux/landlock.h                |  26 +-
+ samples/landlock/sandboxer.c                 |  17 +-
+ security/commoncap.c                         |  22 +-
+ security/integrity/evm/evm_crypto.c          |   8 +-
+ security/integrity/evm/evm_main.c            |  36 ++-
+ security/integrity/ima/ima_appraise.c        |  17 +-
+ security/landlock/fs.c                       |  86 ++++++
+ security/landlock/limits.h                   |   2 +-
+ security/landlock/syscalls.c                 |   2 +-
+ security/security.c                          |  99 +++---
+ security/selinux/hooks.c                     |  49 +--
+ security/smack/smack_lsm.c                   |  62 ++--
+ tools/testing/selftests/landlock/base_test.c |   2 +-
+ tools/testing/selftests/landlock/fs_test.c   | 309 ++++++++++++++++++-
+ 53 files changed, 999 insertions(+), 614 deletions(-)
+
+-- 
+2.18.0.huawei.25
+
