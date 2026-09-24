@@ -1,273 +1,214 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31F3B39DBCB;
-	Thu, 24 Sep 2026 05:01:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D937235B65D;
+	Thu, 24 Sep 2026 05:02:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790226071; cv=none; b=cgQSuiS7OPLop6z1I2f0NR0e2Tv5dvZLfm+aTqQ1DMpCcT7LD2RmMbGygLuUBaMST1iV7/UlvA/r6ZCKDzjtPS2Yn35WB72q+ugGKmwLewZ8vkOKj/cVq5ZDgpv182LAfOea/3utVP5gL4lRk9IP71L7HYI3KwdKQj9iEprl24Q=
+	t=1790226141; cv=none; b=ga2ZUkpUXp1wbjfzhAcV1vnzoA1EvV3BF+CvTaMD/Sau98Hqa9YquGi9Gb1mGP3wbcFMsukqfxhAlM0fNmGb1lg9g9IUALHxu3vVW/V/r4huKtla6l9eRgjkQttn3T77BaeLW6CKqPED7P+vYcUcxp+Y/h4YpFNDHI4V0M71Qbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790226071; c=relaxed/simple;
-	bh=W0Ngv2ll7TrUzP/N5jQ6K1WGV1ebWdj2UDxJ7GFJJf0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rdje3WfvRqAXGpnBm9CZ3vOv7q/CVy78DSrqB1J4iqpTHOyMOtfPXWWGbMmiOQQcCYXvvajyjbrNc9EsDKUMjzNcd7fPFL50+FZg9hfcbXqWpQMUf+7SibNcwE/Ui5e27tvK1RUxILdv1g/fD2/YsTmbA1+loQFnBesxX/xIGpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ldEN6qM/; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1790226141; c=relaxed/simple;
+	bh=K1hcWWB0zjvRZpRPrDgIq6rMyz19jNWik4SrurUft+A=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=AiV8N0AUKAJRrY/4HRVQLdkyRYojsHvsx81kaauqpjpP/PoYij1aQg8D+nC0B+o+3hOicqXQKTAtVSi9ETpCVhIdXvEtoPjLUH98RBNi2PJ1UPXZNhk0ICVy2zla0BxKsL3WVhD43otfpramDI7bmWf3qLqeudbva1TNxQD68R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kiI1am/1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ldEN6qM/"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7EDB61650;
-	Wed, 23 Sep 2026 22:01:04 -0700 (PDT)
-Received: from a081061.blr.arm.com (a081061.arm.com [10.164.19.84])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6E2F53F86C;
-	Wed, 23 Sep 2026 22:01:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1790226068; bh=W0Ngv2ll7TrUzP/N5jQ6K1WGV1ebWdj2UDxJ7GFJJf0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ldEN6qM/TEuJ+Ne6s9cE+AFLwyVgBplZwRpdhzAZH1uLLAvIIhItmnSTg/j4gUiNF
-	 IPwQzKMFnISlFzH0BsbH6VthJMwJh7efL/3aSAijSxXuPYlbKOq+CwIYHSRP7sRF+z
-	 sy9325g6rY2yhR6r8b5hoIVmEU0zJGdff7OdxGU0=
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Park Tae-sun <ts930@dgu.ac.kr>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: [PATCH RESEND 9/9] selftests/mm: mremap_test: strengthen multi VMA validation
-Date: Thu, 24 Sep 2026 10:30:09 +0530
-Message-ID: <20260924050009.19974-10-sarthak.sharma@arm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260924050009.19974-1-sarthak.sharma@arm.com>
-References: <20260924050009.19974-1-sarthak.sharma@arm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kiI1am/1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A19541F000FF;
+	Thu, 24 Sep 2026 05:02:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790226139;
+	bh=lXNEueqMCRREz5N5CQfkfW8XWDi10Z7xuAbrRSHchSQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=kiI1am/1zZpTnT6AGoHTLhMiXC9JBLSCbNvSU5M7JPO8QoiKdxRBHH9YblcEcPN5j
+	 56TaAjcDpskHwyVNwfaSHxwsxMHxoRvSgjFKAs0dheI7GyjamX7uMKE2Swzx9c6b35
+	 +pePpMV4ml5Pc7sJfMUExEFkuiQTjdQory2R8r2U0miBbitqNf9w2joN7AwPzc6ot/
+	 v8V0SGQhBg5ljmk3BKRFu1JMFzkfS2+ZjhQ+hX8RKYslPiymizgIHX0GhPyNuY2ZU+
+	 N8ay4u5jKbWI5Cbq/O8Rr7f1VoBMgc30zH0KuGIjKZ0lcO9N2CAaY69AtsaeL6GC/4
+	 Q2C75UwjOrJNA==
+Content-Type: multipart/mixed; boundary="===============5311084438262854122=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <99204600993999e8ff4929b758720dafe0a6c2b4c2d5c1e03ede485e9d2e9747@mail.kernel.org>
+In-Reply-To: <de7adb6bafa3b808e29c0630f7ed9a2003e5e447.1790222105.git.zhuhui@kylinos.cn>
+References: <de7adb6bafa3b808e29c0630f7ed9a2003e5e447.1790222105.git.zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next 2/2] samples/bpf: Add memcg async reclaim example
+From: bot+bpf-ci@kernel.org
+To: hui.zhu@linux.dev,roman.gushchin@linux.dev,inwardvessel@gmail.com,shakeel.butt@linux.dev,akpm@linux-foundation.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,david@kernel.org,baohua@kernel.org,geliang@kernel.org,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-mm@kvack.org,linux-kselftest@vger.kernel.org,netdev@vger.kernel.org
+Cc: zhuhui@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 24 Sep 2026 05:02:15 +0000 (UTC)
 
-Tests in mremap_test.c where a multi VMA range is involved only
-check if the data remains consistent across mapped pages after
-remap. They do not verify the mapping state of gaps in the
-remapped range.
+--===============5311084438262854122==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Add helpers to check whether a range is mapped with the
-expected permissions using /proc/self/maps. Use them to
-verify that gaps remain unmapped after regular remaps and
-retain PROT_NONE permissions when remapping over an
-existing mapping with PROT_NONE permissions.
+> diff --git a/samples/bpf/memcg_async_reclaim.h b/samples/bpf/memcg_async_reclaim.h
+> new file mode 100644
+> index 000000000000..96fe03d12912
+> --- /dev/null
+> +++ b/samples/bpf/memcg_async_reclaim.h
+> @@ -0,0 +1,39 @@
 
-Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
+[ ... ]
+
+> +struct reclaim_cfg {
+> +	/* Cgroup whose refaults are watched, i.e. the one under pressure. */
+> +	__u64 monitor_cgroup_id;
+> +	/* Cgroup that gets reclaimed from when the monitor refaults. */
+> +	__u64 target_cgroup_id;
+> +	/* Refault delta per tick that starts a reclaim round. */
+> +	__u64 refault_threshold;
+> +	/* Monitor tick period, in nanoseconds. */
+> +	__u64 interval_ns;
+> +	/* Bytes requested per bpf_wq callback. */
+> +	__u64 batch_bytes;
+> +	/* Callbacks per reclaim round. */
+> +	__u64 max_batches;
+                ^^^^
+
+Does this comment accurately describe max_batches? The BPF side does not
+count callbacks. It uses max_batches only to size a byte budget and keeps
+requeueing until that budget is spent:
+
+samples/bpf/memcg_async_reclaim.bpf.c:reclaim_work_fn() {
+    elem->remaining = elem->max_batches * elem->batch_bytes;
+    ...
+    if (nr >= elem->remaining)
+        elem->remaining = 0;
+    else
+        elem->remaining -= nr;
+    if (elem->remaining)
+        bpf_wq_start(&elem->work, 0);
+}
+
+bpf_proactive_reclaim() limits each pass to MEMCG_CHARGE_BATCH (64 pages),
+which is 256 KiB with 4K pages.
+
+With --batch 1M --max-batches 32 each callback reclaims at most about 256
+KiB, so the round runs at least 128 callbacks, not 32. A partial reclaim
+also adds callbacks. An overshoot, or a zero return that ends the round,
+gives fewer.
+
+Two other comments in the same patch describe it correctly: the .bpf.c
+comment says "a clamped batch only means a round needs more callbacks,
+because remaining is decremented by the bytes actually reclaimed", and the
+loader says "One round budgets max_batches * batch_bytes". The header,
+which documents the BPF/userspace interface, contradicts both.
+
+The same wording is in the --max-batches help text in
+memcg_async_reclaim_user.c.
+
+Suggested wording: "Round budget, in units of batch_bytes."
+
+> diff --git a/samples/bpf/memcg_async_reclaim_user.c b/samples/bpf/memcg_async_reclaim_user.c
+> new file mode 100644
+> index 000000000000..d5296fd0fab1
+> --- /dev/null
+> +++ b/samples/bpf/memcg_async_reclaim_user.c
+> @@ -0,0 +1,1141 @@
+
+[ ... ]
+
+> +static void session_stop(struct session *s)
+> +{
+> +	unsigned long long failures, last_err;
+> +
+> +	if (!s->skel)
+> +		return;
+> +
+> +	ring_buffer__free(s->rb);
+> +	s->rb = NULL;
+                ^^^^
+
+In bench mode the reclaim_events ring buffer is never consumed, so the
+event counters and --verbose output do not work there. s->called,
+s->skipped_dying and s->target_gone are only updated from
+on_reclaim_event(), and that callback only runs from ring_buffer__poll().
+
+The only caller of ring_buffer__poll() is session_poll(), and the only
+caller of session_poll() is do_watch().
+
+do_bench() goes session_start() -> run_workload() -> session_stop(), and
+session_stop() calls ring_buffer__free(s->rb) without a final
+ring_buffer__consume().
+
+So every bench run prints "events: called=0 skipped_dying=0 target_gone=0"
+even when the "total:" line read from .bss shows calls=N > 0.
+
+> +	failures = s->skel->bss->timer_failures;
+> +	last_err = s->skel->bss->last_reclaim_err;
+> +
+> +	printf("\nran for %.1fs\n", now_sec() - s->start);
+> +	print_counters(s, "total:");
+> +	printf("events: called=%llu skipped_dying=%llu target_gone=%llu\n",
+> +	       s->called, s->skipped_dying, s->target_gone);
+> +	if (failures)
+> +		printf("WARNING: monitor timer rearm failed %llu time(s), reclaim stopped early\n",
+> +		       failures);
+> +	if (last_err)
+> +		printf("WARNING: bpf_proactive_reclaim() last failed with -%llu\n",
+> +		       last_err);
+
+The -v option, which usage() lists under "Common options" as "print every
+reclaim event", prints nothing in bench mode.
+
+The same missing final drain also drops any watch-mode events that arrive
+between the last session_poll() and session_stop().
+
+Should do_bench() poll or consume the ring buffer while the workload runs,
+or should session_stop() call ring_buffer__consume(s->rb) before freeing
+it?
+
+[ ... ]
+
+> +static int do_watch(struct options *o)
+> +{
+> +	struct session s = {};
+> +	__u64 monitor_id, target_id;
+> +	double next_stats, deadline = 0;
+> +	int ret = 1;
+
+[ ... ]
+
+> +	while (!READ_ONCE(exiting)) {
+> +		double now = now_sec();
+> +		int wait_ms;
+> +
+> +		if (deadline && now >= deadline)
+> +			break;
+> +
+> +		wait_ms = (int)((next_stats - now) * 1000);
+> +		if (wait_ms < 0)
+> +			wait_ms = 0;
+> +
+> +		if (session_poll(&s, wait_ms)) {
+                    ^^^^
+
+The --duration option is only checked once per statistics interval, so
+watch mode can run well past the requested time.
+
+wait_ms is computed only from next_stats and is never clamped to the
+deadline. session_poll() keeps calling ring_buffer__poll() in 200 ms
+slices until the whole wait_ms is used up, and it only returns early on a
+signal or an error.
+
+For example, with the default --stats 10 and --duration 3, nothing is
+checked until about 10 s have passed on an idle system, so the program runs
+for about 10 s instead of 3 s. With -s 60 -D 5 it runs for about 60 s.
+
+usage() says "-D, --duration SEC    stop after SEC seconds".
+
+Should wait_ms be limited to min(next_stats, deadline) - now?
+
+
 ---
- tools/testing/selftests/mm/mremap_test.c | 91 +++++++++++++++++++-----
- 1 file changed, 72 insertions(+), 19 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-index 77e952556be1..1d9934b9a60b 100644
---- a/tools/testing/selftests/mm/mremap_test.c
-+++ b/tools/testing/selftests/mm/mremap_test.c
-@@ -124,13 +124,15 @@ static unsigned long long get_mmap_min_addr(void)
- }
- 
- /*
-- * Using /proc/self/maps, assert that the specified address range is contained
-- * within a single mapping.
-+ * Using /proc/self/maps, check whether the specified address range is contained
-+ * within a single mapping with the expected permissions, if supplied.
-  */
--static bool is_range_mapped(FILE *maps_fp, unsigned long start,
--			    unsigned long end)
-+static bool is_range_mapped_with_perms(FILE *maps_fp, unsigned long start,
-+				       unsigned long end,
-+				       const char *expected_perms)
- {
- 	char *line = NULL;
-+	char perms[5];
- 	size_t len = 0;
- 	bool success = false;
- 	unsigned long first_val, second_val;
-@@ -138,12 +140,13 @@ static bool is_range_mapped(FILE *maps_fp, unsigned long start,
- 	rewind(maps_fp);
- 
- 	while (getline(&line, &len, maps_fp) != -1) {
--		if (sscanf(line, "%lx-%lx", &first_val, &second_val) != 2) {
-+		if (sscanf(line, "%lx-%lx %4s", &first_val, &second_val, perms) != 3) {
- 			ksft_exit_fail_msg("cannot parse /proc/self/maps\n");
- 			break;
- 		}
- 
--		if (first_val <= start && second_val >= end) {
-+		if (first_val <= start && second_val >= end &&
-+		    (!expected_perms || !strcmp(perms, expected_perms))) {
- 			success = true;
- 			fflush(maps_fp);
- 			break;
-@@ -154,6 +157,12 @@ static bool is_range_mapped(FILE *maps_fp, unsigned long start,
- 	return success;
- }
- 
-+static bool is_range_mapped(FILE *maps_fp, unsigned long start,
-+			    unsigned long end)
-+{
-+	return is_range_mapped_with_perms(maps_fp, start, end, NULL);
-+}
-+
- /* Check if [ptr, ptr + size) mapped in /proc/self/maps. */
- static bool is_ptr_mapped(FILE *maps_fp, void *ptr, unsigned long size)
- {
-@@ -163,6 +172,20 @@ static bool is_ptr_mapped(FILE *maps_fp, void *ptr, unsigned long size)
- 	return is_range_mapped(maps_fp, start, end);
- }
- 
-+/*
-+ * Check if [ptr, ptr + size) is mapped with the required permissions in
-+ * /proc/self/maps.
-+ */
-+static bool is_ptr_mapped_with_perms(FILE *maps_fp, void *ptr,
-+				     unsigned long size,
-+				     const char *expected_perms)
-+{
-+	unsigned long start = (unsigned long)ptr;
-+	unsigned long end = start + size;
-+
-+	return is_range_mapped_with_perms(maps_fp, start, end, expected_perms);
-+}
-+
- /*
-  * Returns the start address of the mapping on success, else returns
-  * NULL on failure.
-@@ -351,16 +374,37 @@ static void mremap_move_within_range(void)
- 	ksft_test_result(success, "%s\n", test_name);
- }
- 
--static bool is_multiple_vma_range_ok(char *ptr, unsigned long page_size)
-+static bool is_multiple_vma_range_ok(FILE *maps_fp, char *ptr,
-+				     unsigned long page_size, bool expect_gaps_mapped)
- {
- 	int i;
- 
--	for (i = 0; i <= 10; i += 2) {
-+	for (i = 0; i <= 10; i++) {
- 		size_t size = i == 4 ? 3 * page_size : page_size;
- 
--		if (i == 6)
-+		/* Pages 4, 5 and 6 are part of the same VMA. */
-+		if (i == 5 || i == 6)
- 			continue;
- 
-+		/* Odd pages correspond to gaps between the source VMAs. */
-+		if (i & 1) {
-+			if (expect_gaps_mapped) {
-+				if (!is_ptr_mapped_with_perms(maps_fp,
-+							      ptr + i * page_size,
-+							      page_size, "---p")) {
-+					ksft_print_msg("Page %d PROT_NONE mapping overwritten\n",
-+						       i);
-+					return false;
-+				}
-+			} else if (is_ptr_mapped(maps_fp, ptr + i * page_size,
-+						 page_size)) {
-+				ksft_print_msg("Page %d is unexpectedly mapped\n", i);
-+				return false;
-+			}
-+
-+			continue;
-+		}
-+
- 		if (memcmp(ptr + i * page_size, (char *)pattern + i * page_size,
- 			   size)) {
- 			ksft_print_msg("Data in VMA starting at page %d got corrupted\n",
-@@ -371,7 +415,8 @@ static bool is_multiple_vma_range_ok(char *ptr, unsigned long page_size)
- 	return true;
- }
- 
--static void mremap_move_multiple_vmas(unsigned long page_size, bool dont_unmap)
-+static void mremap_move_multiple_vmas(FILE *maps_fp, unsigned long page_size,
-+				      bool dont_unmap)
- {
- 	int mremap_flags = MREMAP_FIXED | MREMAP_MAYMOVE;
- 	char *test_name = "mremap move multiple vmas";
-@@ -432,7 +477,7 @@ static void mremap_move_multiple_vmas(unsigned long page_size, bool dont_unmap)
- 		goto out_unmap;
- 	}
- 	/* Check move was ok. */
--	if (!is_multiple_vma_range_ok(tgt_ptr, page_size)) {
-+	if (!is_multiple_vma_range_ok(maps_fp, tgt_ptr, page_size, false)) {
- 		success = false;
- 		goto out_unmap;
- 	}
-@@ -445,7 +490,7 @@ static void mremap_move_multiple_vmas(unsigned long page_size, bool dont_unmap)
- 		goto out_unmap;
- 	}
- 	/* Check that the move is ok. */
--	if (!is_multiple_vma_range_ok(&tgt_ptr[size], page_size)) {
-+	if (!is_multiple_vma_range_ok(maps_fp, &tgt_ptr[size], page_size, false)) {
- 		success = false;
- 		goto out_unmap;
- 	}
-@@ -465,7 +510,7 @@ static void mremap_move_multiple_vmas(unsigned long page_size, bool dont_unmap)
- 		goto out_unmap;
- 	}
- 	/* Check that the move is ok. */
--	if (!is_multiple_vma_range_ok(tgt_ptr, page_size)) {
-+	if (!is_multiple_vma_range_ok(maps_fp, tgt_ptr, page_size, true)) {
- 		success = false;
- 		goto out_unmap;
- 	}
-@@ -554,7 +599,8 @@ static void mremap_shrink_multiple_vmas(unsigned long page_size,
- 	ksft_test_result(success, "%s%s\n", test_name, inplace ? " [inplace]" : "");
- }
- 
--static void mremap_move_multiple_vmas_split(unsigned long page_size,
-+static void mremap_move_multiple_vmas_split(FILE *maps_fp,
-+					    unsigned long page_size,
- 					    bool dont_unmap)
- {
- 	char *test_name = "mremap move multiple vmas split";
-@@ -629,8 +675,15 @@ static void mremap_move_multiple_vmas_split(unsigned long page_size,
- 
- 	/* Check pattern. */
- 	for (i = 0; i < 7; i++) {
--		if (i == 3)
-+		if (i == 3) {
-+			if (is_ptr_mapped(maps_fp, tgt_ptr + i * page_size,
-+					  page_size)) {
-+				ksft_print_msg("Page %d is unexpectedly mapped\n", i);
-+				success = false;
-+				goto out_unmap;
-+			}
- 			continue;
-+		}
- 
- 		if (memcmp(tgt_ptr + i * page_size,
- 			   (char *)pattern + (i + 2) * page_size, page_size)) {
-@@ -1177,10 +1230,10 @@ int main(void)
- 	mremap_move_1mb_from_start();
- 	mremap_shrink_multiple_vmas(page_size, /* inplace= */true);
- 	mremap_shrink_multiple_vmas(page_size, /* inplace= */false);
--	mremap_move_multiple_vmas(page_size, /* dontunmap= */ false);
--	mremap_move_multiple_vmas(page_size, /* dontunmap= */ true);
--	mremap_move_multiple_vmas_split(page_size, /* dontunmap= */ false);
--	mremap_move_multiple_vmas_split(page_size, /* dontunmap= */ true);
-+	mremap_move_multiple_vmas(maps_fp, page_size, /* dontunmap= */ false);
-+	mremap_move_multiple_vmas(maps_fp, page_size, /* dontunmap= */ true);
-+	mremap_move_multiple_vmas_split(maps_fp, page_size, /* dontunmap= */ false);
-+	mremap_move_multiple_vmas_split(maps_fp, page_size, /* dontunmap= */ true);
- 	mremap_move_multi_invalid_vmas(maps_fp, page_size);
- 
- 	fclose(maps_fp);
--- 
-2.53.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35955613591
+--===============5311084438262854122==--
