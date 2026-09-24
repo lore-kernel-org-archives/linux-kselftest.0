@@ -1,294 +1,227 @@
-Received: from mail-oa2-f24.google.com (mail-oa2-f24.google.com [74.125.231.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF3C22A80D
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 00:24:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052782F7F00;
+	Thu, 24 Sep 2026 00:40:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790209470; cv=none; b=lqi3TDJUS6YlJKBJu0buCc8c5dntmnqX3xGeO8EE7kl1otmW+0XUF9Y4qTR+tXy3ScMfwo1/JrrooN4f9t7muM0rx8RVskMCo1h3e43t3Z0eoH+8a/ncU/Obd+8KnDXOQGyG69vJAU2/xpIQ98g0gLJizxa6bmdt/iAGFmnUb/c=
+	t=1790210420; cv=none; b=T9H09g/2Lqv2bcO3WimSDgjEEX1y+XRGepDtg8ThBFt1hUxK+ABy6GtVCAEb4wASre4qaDIp8LAbrLWUrhRG3KKIE2290zw2QzsqoXVwXAJYkW1H8Nn7u22LBaY+7/gnW+30PSW9NrM0Vwf1wk1gY5fC4XmhbyqyiowfNIzIi8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790209470; c=relaxed/simple;
-	bh=O1qzz4udeaHiCBtWLNhPqgQhh0np6y2v1Qblzap4ubo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u8oxIrgQ9C8yMEzWQnXnAH7LO5HszFf9B9UD17dxmyAxQDY6Zh12c7Bc8zPpRTmQ8vOiIrsBvdq0dVyAtJk9mlH1H+j3lzEmmYNK/4eb5cYUCKYRC7uK2KsWdmeSMOM61k7qRZWJB4su1KbNcZotsGsSdvXe5qwA+T9vSXeXapg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tLKAduNk; arc=none smtp.client-ip=74.125.231.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790210420; c=relaxed/simple;
+	bh=PCgXYv1pH2IoUq1fV221m4MwCZ45Q68sFCoZOWrcf9k=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=FwcRJ1y+jsxw6Kdsh/lBtwMELRQrjG8Fh8mbg9iWWXW8/tnwtvQsQHr7gQbhMBtgLBCkpg7fQbUs2dGbjMr+0LkJ5KprIZT1lraWjTURCGzWuCwIvpGGN5otWy5eYc0k/heeXNg/zpb6I66QsK4i9cBjOlU+t28k2+pe3bBCciQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U3E0oBpG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tLKAduNk"
-Received: by mail-oa2-f24.google.com with SMTP id 586e51a60fabf-482620dc91bso1078941fac.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 17:24:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790209467; x=1790814267; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VaNhGxWDXoFu7JrvArFM0xuuSaYLknf+AiNAGeHpOlc=;
-        b=tLKAduNk74m4FZjjhHyzJ7fyOjIvZHucIau8VQ5rD/nN4RbPwE2KwfNNPDW9tAwSF8
-         DFyZUHBaAS3+7eJL6drUNF+dTQAKK32oP3dSuSFObyw9kyP8ETaDSPr2Qn9rjc9LNN7I
-         k09EwSLr72mZSIqxmv3/OI4v5K0k7hDz7aNhxwUf6lKAspHuzzuYkoW9M1FFKOYsN/Ih
-         BIk3pf2N/phxsZlKSXQrvj4scX7TZRrfaE5lbSvf9mH/DeKwh0Z/IKG/hz8c4IzdbE9Q
-         bCUbvaODcmTGNAiAOdOrXtD5IIbaNtv9u/WlOn5X7q+Ngs17BSusJ2QLjhHOFEPerAW3
-         qi0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790209467; x=1790814267;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=VaNhGxWDXoFu7JrvArFM0xuuSaYLknf+AiNAGeHpOlc=;
-        b=0pT75J/UGV8qROQJJvYKLeZ+/vjC8RjumXTvUPjzq3jgnyla9wSI/2DPn5j/Lym5hj
-         MdF+RRNV/t21SSiNGw+0nkO1UZ9JTqJw0ZXP0eNHVJ1MPx1JfCVqIxrQLJ1931ZwDsUI
-         +5XTBiLBmp//UTsIKHtsCZubmD0fQAyORfzEIsvLwsevIY2XBWMeKysRenQwaKCf1q3e
-         PKqeYgFrzwO+ccNxx5ZmknYCMBvKRH4Q9UTbE5gErGZYmCOqpHKTjnRKtozR/1WIP+Ul
-         yCcJl2QWusLARWxhHylbJBcGkn2irtA4wKJfuVTplFUn4GM36dZxFxirpTSZjRzeXvVo
-         neOQ==
-X-Forwarded-Encrypted: i=1; AKwUvBz07v33WaXWnAeNU91Xdf9HtCiBRq+SZK5RGUW0xOOyfVNnyju0S0rMI3iicaMo0lsyaROpH1KhyFcOjaADwfE=@vger.kernel.org
-X-Gm-Message-State: AFuF++mXC119jYOQBHz8uAMfvGj0iU0Y646OKP/OkBeUEfnzUL6iZLR7
-	eZyyUlXXOPjvSiLlqPssI4KlFWMNPz0Q6K9VlMyzKCmoBbYleJHboH8X
-X-Gm-Gg: AYBFou0SoAh1TVb08I9yHZovf9kcTkj6PM3uQP4SQtUImZqmEUnHV9WEoLOkJhlqGeV
-	h6f6KwunZUVuFV9XPcBRSovxPmofetn2vcEu764T9j2vpdI0Tn1JpIONdmfw1WI5pS+p3rh0cYW
-	kZAaQnX4n8PBMbSRhyF6HDUtbWVTfF9bCbfkt+8PWWGU8ubki5fYpuGXjaPWf8osj4e6pbtewo1
-	HYtIO/CXN58UyAXY0LwKCHylaXIJxzH7gDAGiKMrkV1QNIfzxz7UNNvf03Dp6RJxJ9Et8mLJ/73
-	Tah/ixrCWVKFBv1JIwxtLLDSLYg1DEq3yckJNbj7JaursAX9EYQf3RG7IwJ/5Lxg0HBbjr2eAqw
-	qYvaCpdghNIWcvAVQdWzTvIm3+mjRnJage6QmS2IaRgnW5osYD9m+06uvob597wkmCIB7m9R8UR
-	dFQJi8NkEwcXlDHx5XYNCMuVlshyDXdkk1S4Me3eqcL+0+8klxS9dVZN2lVwQp3LlVNo1WgYp9+
-	KtgrONq7hsCA3C79YA=
-X-Received: by 2002:a05:6808:1994:b0:4d6:9355:7543 with SMTP id 5614622812f47-4d731545ff8mr956682b6e.62.1790209466617;
-        Wed, 23 Sep 2026 17:24:26 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:f::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4d5c1b305b8sm3689133b6e.1.2026.09.23.17.24.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 17:24:25 -0700 (PDT)
-Date: Wed, 23 Sep 2026 17:24:21 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: netdev-bot+sashiko@kernel.org
-Cc: sgarzare@redhat.com, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
-	corbet@lwn.net, skhan@linuxfoundation.org, stefanha@redhat.com,
-	mst@redhat.com, jasowangio@gmail.com, xuanzhuo@linux.alibaba.com,
-	eperezma@redhat.com, shuah@kernel.org, rdunlap@infradead.org,
-	donald.hunter@gmail.com, virtualization@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, sargun@sargun.me, jlinbox@meta.com,
-	sdf.kernel@gmail.com, bobbyeshleman@meta.com
-Subject: Re: [PATCH net-next v2 6/6] selftests/vsock: test the netns assign
- privilege checks
-Message-ID: <arRttf9k4yKahe4R@devvm29614.prn0.facebook.com>
-References: <20260921-vsock-guest-ns-v2-6-693bd78fde9e@meta.com>
- <179019126776.2160803.16648507383433583043@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U3E0oBpG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28E241F000FF;
+	Thu, 24 Sep 2026 00:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790210418;
+	bh=iWeJIz6tY4qxHuxh3VhllSj2/KgSAcS6kffc8QbZogg=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=U3E0oBpGaFb/q1tz964I0HqQfOOBXbHFr27IrpydDU/FM5y8jlL0vDqtUJOV0wvcX
+	 mYijrPPKa+/ZrSNUW0fLo6fBmz6zF5vxmK4hGHf9HWEHLKZ6wX8DN3G9BqY5AGnab7
+	 HXDKXHSOLCG4ZE/bdYaHy15RvOWm7I4IdFEoX2BpHlJ7UmdeUDH6/HqzNLrrLksjX1
+	 2keVFdP0+i/YD9fb1Bx9qojwGANM256oO/yIw7XffxZtrY988h5/bYDy4RPguvArmS
+	 L00hQ7YP/PhQvk5XjAF7UGLlxBgEONzn3TrcSA0AXL3RFkXE+JGLl9Kgl0XXH+Bmvf
+	 XhU+4H1BgnMaA==
+Subject: Re: [PATCH net-next v4] selftests: net: move log_test to lib file and
+ remove duplicate code
+From: netdev-bot+sashiko@kernel.org
+To: hangbin.liu@linux.dev
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, dsahern@kernel.org,
+ idosch@nvidia.com, andrea.mayer@uniroma2.it, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ liuhangbin@kylinos.cn
+Date: Thu, 24 Sep 2026 00:40:17 +0000
+Message-ID: <179021041767.2160803.17788389754543951970@kernel.org>
+In-Reply-To: <20260922-self_log_test-v4-1-4c656801f8dc@kylinos.cn>
+References: <20260922-self_log_test-v4-1-4c656801f8dc@kylinos.cn>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <179019126776.2160803.16648507383433583043@kernel.org>
 
-On Wed, Sep 23, 2026 at 07:21:07PM +0000, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issue(s) to consider.
-> 
-> Critical: 0 · High: 0 · Medium: 1 · Low: 1
-> 
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
-> 
-> - [Medium] Both new selftests
->   (`test_ns_guest_assign_g2h_netns_no_cap_net_admin_fails`,…
-> - [Low] The two new shared-VM tests omit the `vm_reset_g2h()` cleanup
->   that every other ns_guest_assign_g2h_netns_* test in USE_SHARED_VM…
-> 
-> --
-> 
-> selftests/vsock: test the netns assign privilege checks
-> 
-> Adds two vmtest.sh cases that attempt VSOCK_CMD_DEV_NETNS_SET without
-> CAP_NET_ADMIN and from an unprivileged user namespace, and enables
-> CONFIG_USER_NS in the vsock selftest config.
-> 
-> > diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
-> > index e94cc2fd90ccd..4f42bcdac3f6c 100755
-> > --- a/tools/testing/selftests/vsock/vmtest.sh
-> > +++ b/tools/testing/selftests/vsock/vmtest.sh
-> 
-> [ ... ]
-> 
-> > @@ -187,6 +195,8 @@ readonly TEST_DESCS=(
-> >  	ns_guest_assign_g2h_netns_host_connect_ok
-> >  	ns_guest_assign_g2h_netns_reset_on_ns_delete_ok
-> >  	ns_guest_assign_g2h_netns_old_conn_send_fails
-> > +	ns_guest_assign_g2h_netns_no_cap_net_admin_fails
-> > +	ns_guest_assign_g2h_netns_unpriv_user_ns_fails
-> >  )
-> >  readonly NS_MODES=("local" "global")
-> 
-> [Severity: Low]
-> Both new tests are added to USE_SHARED_VM but neither calls
-> vm_reset_g2h() on any exit path, unlike every other
-> ns_guest_assign_g2h_netns_* test in that list.
-> 
-> Should these follow the sibling pattern?  If the privilege check under
-> test is broken, the assign succeeds and the guest's single g2h device is
-> left owned by the transient namespace created by unshare, while the
-> harness moves on to the next test in the same VM.
-> 
-> The kernel does restore this by itself once that namespace is reaped:
-> 
-> net/vmw_vsock/af_vsock.c:vsock_g2h_net_reset() {
-> 	if (likely(rcu_access_pointer(vsock_g2h_net) != net))
-> 		return;
-> 
-> 	mutex_lock(&vsock_register_mutex);
-> 	if (rcu_access_pointer(vsock_g2h_net) == net)
-> 		rcu_assign_pointer(vsock_g2h_net, &init_net);
-> 	...
-> }
-> 
-> registered as .pre_exit in vsock_pernet_ops, and the next test's
-> vm_ns_assign_g2h() overwrites the pointer anyway.  The residual window is
-> the asynchronous teardown that ..._reset_on_ns_delete_ok already documents
-> ("the namespace itself is dismantled from a workqueue, so the device does
-> not come back the same instant").  Since the new tests are appended last
-> in TEST_NAMES and USE_SHARED_VM, a default run is unaffected; this only
-> shows up with selective or reordered invocation.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-Yes, these tests should call it regardless. Relying on cleanup makes the
-pass/fail race-y.
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-> 
-> [ ... ]
-> 
-> > @@ -1832,6 +1842,48 @@ test_ns_guest_assign_g2h_netns_reset_on_ns_delete_ok() {
-> >  	return "${KSFT_PASS}"
-> >  }
-> >  
-> > +test_ns_guest_assign_g2h_netns_no_cap_net_admin_fails() {
-> > +	local cmd="unshare -n setpriv --bounding-set=-net_admin"
-> > +	local rc
-> > +
-> > +	vm_ssh "init_ns" -- "${cmd}" python3 /root/ynl/cli.py --no-schema \
-> > +		--spec /root/ynl/vsock.yaml --do dev-netns-set &>/dev/null
-> > +	rc=$?
-> > +
-> > +	if [[ "${rc}" -eq 0 ]]; then
-> > +		log_host "assign unexpectedly succeeded without CAP_NET_ADMIN"
-> > +		return "${KSFT_FAIL}"
-> > +	fi
-> > +
-> > +	return "${KSFT_PASS}"
-> > +}
-> 
-> [Severity: Medium]
-> Can this test pass without the capability check ever being reached?  The
-> only assertion is rc -eq 0 => FAIL, output is discarded with &>/dev/null,
-> and there is no positive control, so any nonzero status reads as
-> KSFT_PASS.
-> 
-> A few concrete sources of a nonzero status that are not -EPERM:
-> 
-> net/vmw_vsock/af_vsock.c:vsock_nl_dev_netns_set_doit() {
-> 	int err = vsock_g2h_net_assign(genl_info_net(info));
-> 
-> 	if (err == -ENODEV)
-> 		NL_SET_ERR_MSG(info->extack,
-> 			       "no guest-to-host transport is loaded");
-> 	else if (err == -EOPNOTSUPP)
-> 	...
-> }
-> 
-> and cli.py collapses all of those to the same status as -EPERM:
-> 
-> tools/net/ynl/pyynl/cli.py:main() {
->     except NlError as e:
->         print(e)
->         sys.exit(1)
-> }
-> 
-> vm_ssh() also returns ssh's own status, so a transport failure (255) or a
-> remote shell failure (127, e.g. an installed util-linux that does not
-> accept setpriv --bounding-set=-net_admin) is indistinguishable from the
-> expected refusal.  A python-side failure such as a missing
-> /root/ynl/vsock.yaml exits 1 too.
-> 
-> Would it be worth asserting the privileged case succeeds first?  The file
-> already has the helper the sibling tests use as a precondition:
-> 
-> vm_ns_assign_g2h() {
-> 	local ns=$1
-> 	local nspid=$2
-> 
-> 	vm_ns_exec "${ns}" "${nspid}" "python3 /root/ynl/cli.py --no-schema \
-> 		--spec /root/ynl/vsock.yaml --do dev-netns-set"
-> }
-> 
-> On the changelog note "ynl's cli.py does not report the errno": is that
-> accurate?  NlError.__str__() in tools/net/ynl/pyynl/lib/ynl.py does:
-> 
->         msg += os.strerror(self.error)
-> 
-> so the error string is printed and the test could match "Operation not
-> permitted" instead of sending everything to /dev/null.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-I considered this but felt like grepping stderr/stdout is somewhat
-unnatural. My plan was to later propose that cli.py returns the err via
-exit code, and then update these tests.
+- [Medium] Loop-variable corruption in fcnal-test.sh via bash dynamic
+  scoping: the new shared helper `log_test_expected()` in…
 
-First checking the privileged assign sounds like a reasonable middle
-ground to rule out the other error states.
+--
 
-> 
-> > +
-> > +test_ns_guest_assign_g2h_netns_unpriv_user_ns_fails() {
-> > +	local unpriv_uid=65534
-> > +	local unpriv
-> > +	local rc
-> > +
-> > +	unpriv="setpriv --reuid=${unpriv_uid} --regid=${unpriv_uid}"
-> > +	unpriv="${unpriv} --clear-groups"
-> > +
-> > +	if ! vm_ssh "init_ns" -- "${unpriv} unshare -U true"; then
-> > +		log_host "unprivileged user namespaces unavailable, skipping"
-> > +		return "${KSFT_SKIP}"
-> > +	fi
-> > +
-> > +	vm_ssh "init_ns" -- "${unpriv} unshare -Urn" \
-> > +		python3 /root/ynl/cli.py --no-schema \
-> > +		--spec /root/ynl/vsock.yaml --do dev-netns-set &>/dev/null
-> > +	rc=$?
-> > +
-> > +	if [[ "${rc}" -eq 0 ]]; then
-> > +		log_host "assign unexpectedly succeeded for unprivileged user"
-> > +		return "${KSFT_FAIL}"
-> > +	fi
-> > +
-> > +	return "${KSFT_PASS}"
-> > +}
-> 
-> [Severity: Medium]
-> Same rc != 0 => KSFT_PASS inference here, plus the availability probe is
-> not the command being measured:
-> 
-> 	probe:    ${unpriv} unshare -U true
-> 	measured: ${unpriv} unshare -Urn python3 /root/ynl/cli.py ...
-> 
-> If the extra -r/-n setup or the python startup under uid 65534 fails, the
-> result is KSFT_PASS rather than KSFT_SKIP or KSFT_FAIL, and the child user
-> namespace never actually holds CAP_NET_ADMIN, which is the condition the
-> commit message says is being tested:
-> 
->     the other confirms that CAP_NET_ADMIN in an unprivileged user ns
->     alone is insufficient.
-> 
-> Would checking the reported error string, or asserting the privileged
-> assign works in the same test, make these two cases fail if
-> GENL_ADMIN_PERM is ever dropped from VSOCK_CMD_DEV_NETNS_SET?
+selftests: net: move log_test to lib file and remove duplicate code
 
-Yep, can follow the same approach as above.
+This adds a shared log_test_expected() helper to
+tools/testing/selftests/net/lib.sh and replaces the near-identical
+per-script log_test() implementations in 31 net selftests with a call
+into it.  The new helper also gains PAUSE_ON_FAIL and PAUSE handling for
+scripts that previously had none.
+
+Link: https://lore.kernel.org/r/20260915-self_log_test-v3-1-a17728176334@kylinos.cn
+Link: https://lore.kernel.org/r/20260831-self_log_test-v2-1-eda2e8490cf9@kylinos.cn
+Link: https://lore.kernel.org/r/20260813-self_log_test-v1-1-f88b1107842e@kylinos.cn
+
+> diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+> index 890c3f8e51bb8..a50609535fedc 100755
+> --- a/tools/testing/selftests/net/fcnal-test.sh
+> +++ b/tools/testing/selftests/net/fcnal-test.sh
+> @@ -97,34 +97,7 @@ fi
+>
+>  log_test()
+>  {
+> -	local rc=$1
+> -	local expected=$2
+> -	local msg="$3"
+> -	local ans
+> -
+> -	[ "${VERBOSE}" = "1" ] && echo
+> -
+> -	if [ ${rc} -eq ${expected} ]; then
+> -		nsuccess=$((nsuccess+1))
+> -		printf "TEST: %-70s  [ OK ]\n" "${msg}"
+> -	else
+> -		nfail=$((nfail+1))
+> -		printf "TEST: %-70s  [FAIL]\n" "${msg}"
+> -		echo "    expected rc $expected; actual rc $rc"
+> -		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
+> -			echo
+> -			echo "hit enter to continue, 'q' to quit"
+> -			read ans
+> -			[ "$ans" = "q" ] && exit 1
+> -		fi
+> -	fi
+> -
+> -	if [ "${PAUSE}" = "yes" ]; then
+> -		echo
+> -		echo "hit enter to continue, 'q' to quit"
+> -		read ans
+> -		[ "$ans" = "q" ] && exit 1
+> -	fi
+> +	log_test_expected "$1" "$2" "$3"
+>
+>  	kill_procs
+>  }
+
+[Severity: Medium]
+The old fcnal-test.sh log_test() declared "local ans" and used "read ans"
+in both pause branches.  Was that deliberate?  Many fcnal-test.sh test
+functions use "a" as their address loop variable, for example
+ipv4_ping_novrf():
+
+	local a
+	...
+	for a in ${NSB_IP} ${NSB_LO_IP}
+	do
+		log_start
+		run_cmd ping -c1 -w1 ${a}
+		log_test_addr ${a} $? 0 "ping out"
+
+		log_start
+		run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a}
+		log_test_addr ${a} $? 0 "ping out, device bind"
+
+The new shared helper in lib.sh reads into an undeclared "a" instead, and
+bash dynamic scoping makes that assignment land in the caller's "local a".
+The call chain is:
+
+	ipv4_ping_novrf() -> log_test_addr() -> log_test() ->
+		log_test_expected() -> read -r a
+	ipv4_ping_novrf() -> log_test_addr() -> log_test() ->
+		log_test_expected() -> pause_on_fail() -> read a
+
+Neither log_test_addr(), log_test(), log_test_expected() nor
+pause_on_fail() declares "local a".  With "-p" (PAUSE_ON_FAIL=yes) or "-P"
+(PAUSE=yes) from the fcnal-test.sh getopts handling, does pressing plain
+enter set a="" and leave the remaining subtests in the same loop iteration
+pinging no destination and logging an empty address?
+
+> diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
+> index d46d2cec89e45..f6f8b100a70c7 100644
+> --- a/tools/testing/selftests/net/lib.sh
+> +++ b/tools/testing/selftests/net/lib.sh
+> @@ -454,6 +454,39 @@ log_test_xfail()
+>  	RET=$ksft_xfail retmsg= log_test "$@"
+>  }
+>
+> +# Log test result with expected return value
+> +log_test_expected()
+> +{
+> +	local rc=$1
+> +	local expected=$2
+> +	local msg="$3"
+> +
+> +	if [ "${rc}" -eq "${expected}" ]; then
+> +		nsuccess=$((nsuccess+1))
+> +		printf "    TEST: %-60s  [ OK ]\n" "${msg}"
+> +	else
+> +		ret="$ksft_fail"
+> +		nfail=$((nfail+1))
+> +		printf "    TEST: %-60s  [FAIL]\n" "${msg}"
+> +		if [ "$VERBOSE" = "1" ]; then
+> +			echo "    rc=$rc, expected $expected"
+> +		fi
+> +
+> +		pause_on_fail
+
+[Severity: Medium]
+pause_on_fail() in lib.sh also reads without declaring the variable:
+
+	pause_on_fail()
+	{
+		if [[ $PAUSE_ON_FAIL == yes ]]; then
+			echo "Hit enter to continue, 'q' to quit"
+			read a
+			[[ $a == q ]] && exit 1
+		fi
+	}
+
+Would adding "local a" to log_test_expected() (and to pause_on_fail())
+keep the caller's "a" intact?
+
+> +	fi
+> +
+> +	if [ "${PAUSE}" = "yes" ]; then
+> +		echo
+> +		echo "hit enter to continue, 'q' to quit"
+> +		read -r a
+                     ^^^^^^^^^
+
+[Severity: Medium]
+This is the PAUSE=yes path that fcnal-test.sh reaches with "-P".  Since
+the pause fires after every test there, does every fcnal-test.sh function
+that declares "local a" lose its loop value here, including
+ipv4_ping_vrf(), the ipv4_tcp_* and ipv6_* helpers, and the netfilter_*
+helpers?
+
+> +		[ "$a" = "q" ] && exit 1
+> +	fi
+> +
+> +	[ "$VERBOSE" = "1" ] && echo
+> +
+> +	return 0
+> +}
+> +
+>  log_info()
+>  {
+>  	local msg=$1
+
+[ ... remaining per-script log_test() conversions snipped ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260922-self_log_test-v4-1-4c656801f8dc%40kylinos.cn
