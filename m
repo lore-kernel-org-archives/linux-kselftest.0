@@ -1,114 +1,90 @@
-Received: from mta1.migadu.com (out-202.mta1.migadu.com [95.215.58.202])
+Received: from mta1.migadu.com (out-239.mta1.migadu.com [95.215.58.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D9473FBB46
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 05:46:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9936B3932D9
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 06:09:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790228792; cv=none; b=iysVHQDIyoLcq6w6dP6LS3lHfqBiXJyW1viQ+qjujuwCquznZ8O26R6RBEJ0zNmSf5x3hCwIMW5anGhKAJ/7gFTG1F8Etn5wcjGkbNIpmNO/NCNNYYNyRvqRVC/Ko8VwesqKZzE5BwuVBg1f6Xp651pwE70ys0OqY/7+1KRMv90=
+	t=1790230152; cv=none; b=KS6Y29VAJwi+fOZC86XK/O2iK2nLrcHwD3Ot+fs1DQ3xbGuYogzXFARwTM7/eHRq4SXzbNQbqpnbyx2ui2qCI6yFgr2lhZT+eBs4uWbdG/sTINSnKVZtFPgE5WX0QC+BP7+agoqGiqpOsu8lI+afQ+L2B1qRCWQCr+ikgp/EP+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790228792; c=relaxed/simple;
-	bh=gq5YaNX1tq+qtMZoYlZYtZqfDgp0LgXDTh2kYD4sEXA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bPjXmmzlIVHNzBqnVIGXTOXq897wrA7lYA8SXqkLbbtzi0FajBZgo3hkFPjlf1v9wjxEF63/wuQ8tHQkYKNh+9foAUIrQl9UougrrclIjv7Bl2wkBtwtmMNjWjuILN4D5PVIxpxxx1JJUD6AT+a/ObB1Nt96ffo0eeHoMKkSTjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WGsxiJMd; arc=none smtp.client-ip=95.215.58.202
+	s=arc-20240116; t=1790230152; c=relaxed/simple;
+	bh=XHpWqj04QFUErnLgPhyPwQH0c/whsMd8F/Sj8yIguRU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SM317WKPE0D04G1j4lgBbU8hduHNp9TkYctT8OF169YYQM/O/tydhgsJpFAgH5xf8Pc5EpBNfqae2Y4OhyWPMutjbhTdCgliEW4VM2XbVxuoFHj6nfqxMGxVXUfsNTJ5oW3qy998gCS+h1e+KqE1SVbXNjZ2EnXi7I0LwCHC3mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jrbBVUTr; arc=none smtp.client-ip=95.215.58.239
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WGsxiJMd"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jrbBVUTr"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=gq5YaNX1tq+qtMZoYlZYtZqfDgp0LgXDTh2kYD4sEXA=;
+DKIM-Signature: a=rsa-sha256; bh=XHpWqj04QFUErnLgPhyPwQH0c/whsMd8F/Sj8yIguRU=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790228787; v=1; x=1790833587;
- b=WGsxiJMdZ6QjlZ0hegC3GJ1huPIpq9/xhC3m50cDR1vzGLBvHHgpzedSrQVd6xkhzFBtsEut
- jeqhKubPrIOqGf3WeZDvXz3DkO6lmiNm1aE5R3LnpsKhctKFJaN6T6RbgFmaRleaityXCdcEsIj
- w/Er8thaBzxfsus71VownKU8=
+ t=1790230148; v=1; x=1790834948;
+ b=jrbBVUTrnyx4B7Q1uZ/B/xMaYim+VacyJWZZ/pgdEbjKN2BX1Al+j2xQuJzwD4noLWYflPmj
+ 3IuNZV9f2somZk9NekfjJy8r1uYk3MG03pI71fGs1V24WxNzAvENU/Fth+1TepwINjrI53yil7A
+ Xc8l1h+UaLIdBZrinrjXhW54=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 1003cfcb96295a8f;
-	Thu, 24 Sep 2026 05:46:27 +0000
-X-Mizu-Trace-ID: 1003cfcb96295a8f
+Received: by smtp.migadu.com with ESMTPS id e922c302350ba43c;
+	Thu, 24 Sep 2026 06:09:08 +0000
+X-Mizu-Trace-ID: e922c302350ba43c
 X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org,
-	josef@toxicopanda.com,
-	axboe@kernel.dk
-Cc: cgroups@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	linux-kselftest@vger.kernel.org,
-	cui.tao@linux.dev,
-	cuitao@kylinos.cn,
-	ameryhung@gmail.com,
-	alexei.starovoitov@gmail.com
-Subject: [RFC PATCH v7 4/4] docs: cgroup-v2: document the iocost BPF cost model attachment
-Date: Thu, 24 Sep 2026 13:45:49 +0800
-Message-ID: <20260924054549.2271705-5-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260924054549.2271705-1-cui.tao@linux.dev>
-References: <20260924054549.2271705-1-cui.tao@linux.dev>
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5b778bdb5b8so3491e87.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2026 23:09:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBx4o572ZWvx4vq47o+hp1OtDEs4BZicZ4iKxIXWwZ7+ZvBO95tNygKZD49PWIZkobj69J8/hW3WHZC1Kt1LRYU=@vger.kernel.org
+X-Gm-Message-State: AFuF++kpbtpiTsJbgAmkYxC93eBAsJgBdhKs0jywssa3gdRWDjtgdaMB
+	/Q639Pr6kAw/rQO2y19OxKwYvkCsvl9nCBGDpfMh/bTb5Y65WxVw68CjwVSjFy6Rd6MrXZ+Kpgv
+	TIvKN8/iLxvBWEFi1eIUetCmAq2wkoqFnSH91DP6s
+X-Received: by 2002:a05:6512:2395:b0:5b8:b502:9a76 with SMTP id
+ 2adb3069b0e04-5b8de5cbe34mr121752e87.13.1790230147200; Wed, 23 Sep 2026
+ 23:09:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260923-kvm-arm-prefault-v4-0-d4b0b4dfa8c3@kernel.org> <20260923-kvm-arm-prefault-v4-11-d4b0b4dfa8c3@kernel.org>
+In-Reply-To: <20260923-kvm-arm-prefault-v4-11-d4b0b4dfa8c3@kernel.org>
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Thu, 24 Sep 2026 07:08:31 +0100
+X-Gmail-Original-Message-ID: <CA+EHjTyPsMQ-p4uRpHEd5sabKZPV0nuQv0VdoPWy7PpLtUe93Q@mail.gmail.com>
+X-Gm-Features: AclHuK_F7RRmcZYBgSNF-QK5bg4WxE50rqT6HjF75xbDwVFCBghG7Y9qfeVwzCs
+Message-ID: <CA+EHjTyPsMQ-p4uRpHEd5sabKZPV0nuQv0VdoPWy7PpLtUe93Q@mail.gmail.com>
+Subject: Re: [PATCH v4 11/14] Documentation: KVM: document arm64 KVM_PRE_FAULT_MEMORY
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Steffen Eiden <seiden@linux.ibm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Mark Rutland <mark.rutland@arm.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Janosch Frank <frankja@linux.ibm.com>, David Hildenbrand <david@kernel.org>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Jack Thomson <jackabt@amazon.com>, 
+	Jack Thomson <jackabt.amazon@gmail.com>, Alexandru Elisei <alexandru.elisei@arm.com>, 
+	Vincent Donnefort <vdonnefort@google.com>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
+	Sean Christopherson <seanjc@google.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+	Leo Soares Passos <Leo.Bras@arm.com>, Wei-Lin Chang <weilin.chang@arm.com>, linux-s390@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: Tao Cui <cuitao@kylinos.cn>
+On Wed, 23 Sept 2026 at 16:18, Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
+>
+> Update the KVM API documentation to reflect the fact that arm64 now
+> supports this functionality.
+>
+> Also document error values and arm64-specific behaviour.
+>
+> Reviewed-by: Oliver Upton <oupton@kernel.org>
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-Document the BPF cost model attachment in the io.cost.model section
-of the cgroup v2 documentation: attaching an iocost_model_ops
-struct_ops to a device by its major:minor, the model=bpf readback
-while attached (ctrl keeps describing the coefficients), that
-detaching restores the builtin model, and that writes never select
-a model.
+Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
 
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
----
- Documentation/admin-guide/cgroup-v2.rst | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 8d2603751c51..306cc929c88d 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2117,8 +2117,30 @@ IO Interface Files
- 	  =====		================================
- 	  ctrl		"auto" or "user"
- 	  model		The cost model in use - "linear"
-+			or "bpf" while a BPF model is
-+			attached
- 	  =====		================================
- 
-+	When CONFIG_BLK_CGROUP_IOCOST_BPF is enabled, a BPF cost model
-+	can be attached to a device by loading an "iocost_model_ops"
-+	struct_ops with the whole disk's major:minor in its "dev" member
-+	(a partition's major:minor is rejected);
-+	attaching switches the device's pricing to the model, detaching
-+	the struct_ops restores the builtin linear model.  While a model
-+	is attached, "model" reads back "bpf"; "ctrl" keeps describing
-+	the builtin coefficients, which are inert while the model is
-+	attached: coefficient writes are stored and take effect again
-+	after the struct_ops is detached, and the automatic profile
-+	stepping does not switch profiles.  Writing "ctrl=bpf" or
-+	"model=bpf" is accepted as a no-op so a saved configuration
-+	still parses, but re-attaching the model requires loading the
-+	struct_ops again, not writing to this file.  Attaching
-+	implicitly enables the controller if needed (disabling wbt
-+	like io.cost.qos does); detaching does not disable it again,
-+	and writing "enable=0" to io.cost.qos suspends the model's
-+	pricing until the controller is re-enabled, while it stays
-+	attached.
-+
- 	When "ctrl" is "auto", the kernel may change all parameters
- 	dynamically.  When "ctrl" is set to "user" or any other
- 	parameters are written to, "ctrl" become "user" and the
--- 
-2.43.0
-
+Cheers,
+/fuad
