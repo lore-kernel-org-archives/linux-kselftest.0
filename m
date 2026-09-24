@@ -1,98 +1,87 @@
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87E42207A20
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 22:47:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70B92C027C;
+	Thu, 24 Sep 2026 23:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790290068; cv=none; b=RJsg3aSGy/47Tu0JymV8BOAW5ebyBvyEuFY0D21CYZN4kaw3j9Pmr1mOhYGPHC6sxIcD+PalanPEYr6HgfyzOEXMm0QnMdf2lsNSbDtcJ2ximtEt9nEK6XptruBZ8pQ1hAgClzcPzc6Rms0V2C7hlppGEBU5JakWObe15AnO3ok=
+	t=1790294202; cv=none; b=t74qKUgWqvWNWMss0bd2uYE/qqt8RF9LowyCcBAt0thay0/QIlrKMfEopyA2xMwZnDLmdULU8Y4q0xvD6T8XpUtWSCO/kuMeccn3Wga6ng4WAdxM3HOore9KctC/BPla4NjxYs4VTvg88QcdiJj60ezTycZlkN1XkNvSKIsKo24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790290068; c=relaxed/simple;
-	bh=7SCEEkuBWLZ4T8qu3VgLTnKuBPOEuVnxK68IIqaxVZw=;
+	s=arc-20240116; t=1790294202; c=relaxed/simple;
+	bh=tM0DuN3n8msF0/tfYTxALsC4nwPop0gAbLpk09sxOO0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pr2igbFYHVU7Oa6J7wbvM/p0tC7MExlB0oBFOBtV/0Dw01gIN5LQqZKv2XJ2HymxQw0K6Fedch8p1Vami8+qJwhs+2Pb9uK7me/KUq16L2P4bVLwzCyvO3LKseZil/aqdIhH4mMyrSJRon0UZaokmE6G3pyO5+jfINP6M6tRtMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com; spf=pass smtp.mailfrom=openai.com; dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b=FQSuiEs8; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openai.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=hz5REKtYlICfXL/sATKPKIkG3z1OTBQ2AHxVm3Tp7CDSWJbO510eEcc+v0c5B3pcTHlteElGZ6E0zBIjuPd235+wX6bUQ6UNhc1gYyfmYLqFg5nImgUjuBvl0o5bXLZefD7L+FZmvMpT/0a1SyBc4HE71TBhKOB496UdTxjFXvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ToswNape; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b="FQSuiEs8"
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-93a40a9a01aso124731385a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 15:47:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openai.com; s=google; t=1790290066; x=1790894866; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=L9YuvIHbEaXAjwyRmrBnPzvZ0AzYrFC0d+yhFwM5Vvc=;
-        b=FQSuiEs8yk20C3cgH+Uol14ljRLfcc7POmRtMmQZigymu8xU/aemuc/PLEretOlkpr
-         pRJcISTV6fatfEXxbRj5EwUW2CSYIbR7U30nml9yd5Hmtyrt0gLSHctneWWoMVuTN7jt
-         fkGk8QayFLortbs8rK2nrh5dD208Q/7VroKIs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790290066; x=1790894866;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=L9YuvIHbEaXAjwyRmrBnPzvZ0AzYrFC0d+yhFwM5Vvc=;
-        b=qNDp5cxmVLFyuTXVEknYPMmibIXPQAdrRpgRnItZVIfSkGSlkocQx6SoUPAOq+qTNR
-         sXO8h9H7mkZj/HbaWM1B7+IDwBcNyNwuQsu5TAyrW50emxD+SVOGET4zAeLf23GyRg8W
-         fkFbZRLkgddqxje8LLuqyuOSldvMGJ1BZsvLcocbWNGl3i7DZPHuHGl8T7eBOZ7021pa
-         CmRsbbNj65m5mL82kqMGjG785ryqNjxXmsGWnV1dZjMy6AYeWi+z0V2u9wxtZ+/BWAqi
-         MySWAkI62Q1GYFfm9N/8NHi6BSE+hcsjcEUStxGpm4IAhcEYqu79ApzIlbiENftChYNG
-         bqDg==
-X-Forwarded-Encrypted: i=1; AKwUvBzNv5Tq1cUMJ+MsZc9zsWctk7H1RYLAYZMvtYmW6+LsPrxHac6dcg77Wt40ERt6mu0J/zodt6Pw4WablgSSaKE=@vger.kernel.org
-X-Gm-Message-State: AFuF++nVwb3qqTrdKMmZnPZBUqpSlPujeKz31BJNVSYDSWzJcnM6M0mo
-	WRCHH/2WjULzz1got/SOcSq+uTdX03HdraXK//LTfs6bu4Wiy8cih4EjbFKpbXCNKPU=
-X-Gm-Gg: AYBFou3pAQQSL4UaEs3Ghqi1xAgCqrHRrqnzfrLukaaSgnCBbOWwu5h9m4FFjPbCaWa
-	3n3jOcsBCGWzITBuYt0YXx7CZGvTyHp12OGxOiY7vBMNWTmeLuZD3in2kGZ1YMyZ2F5Yji6vwRO
-	dn+cScJMccLQ8YgGY0t4sY5FWePVO3GgOUT1t8oOtfXnmyIVdndp9qkmA5+QwLjjwrjkj46Lcej
-	IfK28bix9kf6q4ov5Dh43M6j0NuL7SEQ9rpdZfv9S6Zlfkd1xzfhXot7Szrd7b1GNBwAA4rkjhF
-	xyQBBVyLkkYhyTxTtMIfRyXkGvwg5zP88x28QHV+Mp4ftnnl+EwW7aFbfq7qi6QbBl1hOH3XJkA
-	wZhndSyNVNWEIbb3HhI0MucMtG5x/Nzay+bYpJ38P2qZ8Thg652fcIv7VBlznB2Ii7hfNclU7F8
-	D+nWlQozc5ejEBLFwnn9ZNZZ5agpA78IxuvUumqXL9T+uRGttEOf9IZrds9JvC/xUuc2GHiaC/4
-	Oc48791iu8Kqicn+o+mzYKXDVz7L6+lcmXakEU5p4eqBwdVKmDBwg==
-X-Received: by 2002:a05:620a:271d:b0:939:b783:1748 with SMTP id af79cd13be357-93c43be8e87mr134440885a.7.1790290066467;
-        Thu, 24 Sep 2026 15:47:46 -0700 (PDT)
-Received: from com-94485 ([199.47.143.14])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91430dd2858sm3966786d6.21.2026.09.24.15.47.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 15:47:46 -0700 (PDT)
-Date: Thu, 24 Sep 2026 15:47:42 -0700
-From: Jeff Jo <jeffjo@openai.com>
-To: Neal Cardwell <ncardwell@google.com>
-Cc: Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-	kuniyu@google.com, davem@davemloft.net, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 2/2] selftests: net: check timestamp echo after an
- old ACK
-Message-ID: <arWojplQqr0nRjcY@com-94485>
-References: <20260921222609.50824-4-jeffjo@openai.com>
- <20260921222609.50824-6-jeffjo@openai.com>
- <CANn89iK00zXGA8sdpH9Y1CkFK3n=uKG9Bci3+=69fGV0UDQ80w@mail.gmail.com>
- <arIE_i8Ysz5nOI2W@com-94485>
- <CANn89i+nY499TfuGMvMq3P=Pxw6vBxe+uYH1zioK=bhU--GXYw@mail.gmail.com>
- <arK0UmX8qJy3O-rS@com-94485>
- <CADVnQym70oFVCvcsGsf1PRcKX4cPK5N60uW3Masf9nNV3c+yrA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ToswNape"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 686591F000FF;
+	Thu, 24 Sep 2026 23:56:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790294201;
+	bh=JSwuAGPzX8RoJMccYGVKtdfyo6odqNj35F2Uzl7Q2qA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ToswNapex2IFgKhaY1s/8FdlMabI62hEDEpKUTy1dJMd0Rv5/09AWVjiYrc4Pyo/y
+	 Sd8Wra9/4mCWlbBt9+69kDdw3zrDwK6FCVbaDi/BeY7rzjlVfatdKntHdqBLW+/zcg
+	 7X1fcOH76ng9qOOnN9LC2FkxAc157ysF26o4JGHt5pmAObQ8QjsEeVKjmXXfIZYCPH
+	 YahCxN1lXj7cZf99dwEmnaiONZlVDatYaroDN7e1ZRRAXk1OdImMOQyGxvJ+tm9b4M
+	 J/v8Gsu3DSLFOr96KxPPOx5u6e9I5TS7sk/v+B9Xvb7M9iorBkU7PxtCcLJo/kBN60
+	 bPjBi0UYUhwkA==
+Date: Thu, 24 Sep 2026 16:56:41 -0700
+From: Kees Cook <kees@kernel.org>
+To: Jinjie Ruan <ruanjinjie@huawei.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
+	oleg@redhat.com, luto@amacapital.net, wad@chromium.org,
+	peterz@infradead.org, ada.coupriediaz@arm.com, linusw@kernel.org,
+	yeoreum.yun@arm.com, kevin.brodsky@arm.com,
+	anshuman.khandual@arm.com, james.morse@arm.com, thuth@redhat.com,
+	vladimir.murzin@arm.com, tglx@kernel.org, broonie@kernel.org,
+	liqiang01@kylinos.cn, ryan.roberts@arm.com, pengcan@kylinos.cn,
+	kmehltretter@gmail.com, linux-arm-kernel@lists.infradead.org,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] selftests/ptrace: Add PTRACE_SYSEMU_SINGLESTEP
+ syscall-exit-stop test
+Message-ID: <202609241654.F545D3A88@keescook>
+References: <20260922195719.i.211-kees@kernel.org>
+ <bbd65e4d-8096-4939-8308-f0f54c5cb3bc@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CADVnQym70oFVCvcsGsf1PRcKX4cPK5N60uW3Masf9nNV3c+yrA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bbd65e4d-8096-4939-8308-f0f54c5cb3bc@huawei.com>
 
-> Jeff, if you could revise your tests, re-run both your tests and the
-> existing packetdrill tests, ensure they pass, and then re-mail the
-> patches to the list, I'd appreciate it.
+On Thu, Sep 24, 2026 at 12:11:31PM +0800, Jinjie Ruan wrote:
 > 
-> Thanks,
-> neal
+> 
+> 在 2026/9/23 3:57, Kees Cook 写道:
+> > ptrace(2) states that no syscall-exit-stop occurs when a tracee is
+> > continued with PTRACE_SYSEMU or PTRACE_SYSEMU_SINGLESTEP. arm64 gated
+> > its syscall-exit report on
+> > 
+> > 	flags & (_TIF_SYSCALL_TRACE | _TIF_SINGLESTEP)
+> 
+> Hi Kees,
+> 
+> The original fix description is a bit off: on arm64 there is no extra
+> syscall-exit-stop; instead, there's an additional pseudo single-step
+> injection.
+> 
+> As sashiko pointed out, as commit ac2081cdc4d9 ("arm64: ptrace:
+> Consistently use pseudo-singlestep exceptions") described, for
+> PTRACE_SYSEMU_SINGLESTEP, arm64 still needs the pseudo single-step
+> because its hardware single-step state machine is fast-forwarded over
+> the SVC instruction.
 
-I've resubmitted the patch with the proposed changes here
-https://lore.kernel.org/netdev/20260924224456.55690-4-jeffjo@openai.com/T/#t.
-Thanks for all your help!
+Ah! Okay. So this test should be tweaked to deal with that? Feel free to
+snag/update this test for the series. We didn't have anything testing
+syscall exit stops, so it seemed reasonable to get it written.
 
-Jeff
+-Kees
+
+-- 
+Kees Cook
