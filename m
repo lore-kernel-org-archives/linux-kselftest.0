@@ -1,121 +1,144 @@
-Received: from mta0.migadu.com (out-157.mta0.migadu.com [91.218.175.157])
+Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198944DA9A6
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 21:11:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A73643F0BF
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 21:16:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790284266; cv=none; b=QTAuaerdydgKgLNnfrbcTkpXx9t4siwp0yRz9z9EtvZWfiX4J4oJimAYOnCtU2uCwnz7/hWeIWMyH3xlgndO/3PJkudHXSq/HSIz2HEO0c8sQG7YhD9stq6nESagbphy6cm5mzL6Z8+q2E5qJRXCt9xjzxe3xU8CSG6Nyi0HCGk=
+	t=1790284603; cv=none; b=H+r9QD1WOcrg2H0zGHG4Lj/kExaT6J1qBpfokwjOmV/yVGYL0CzjLKAkeKzSaYhcW3D81N2MV9CE+c25G0Z83DHN8qANTPx3nzW4Qd92mGDbyqkhwEXsdnh7ahQYs4mp5rX+Nh8kVt0wh+u4qgPomi6CTwK8KE2eqihsC0JwcWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790284266; c=relaxed/simple;
-	bh=geWEgMSYQDaXHL8PI+SwL20O2XP2TtLwPQS9ZQiVmS0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ESu2FwCKGW2b40bbs5w6MDVj8X0p9q/8qBHlBZqecO8LO6OeSykwJo0o6XCdv5Vj97anVnWOq+5rUtargBrlG2MFAvUMIrO7sr50s6lYNBhuZVG1hsIDe3OQoK3ckW+scqrRBdRqJqh8z/zT+PXcB4/EhCT3tjsja3zreX1ptbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Eeh4tDSK; arc=none smtp.client-ip=91.218.175.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790284603; c=relaxed/simple;
+	bh=GSpi19COajyBmeu00h0HL0wMdy2XKh2WLArdLFA54KQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WDVgACJLU4/irxXplYpNE8Zn3J0AVT1zq7cyxaPOjpxmH83R6lT+Hy8PVKH4tDYMzSCKFeOcEbkm9hoDPxNBRGLdxChEB8bcF3JHFdyNEt49AYBoot3K0JTKedYK8DfE/GuX/L6R2c8mtlaqfoj33qEH9Yf2XbdCdoZzck95osY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a6Pp+Ngg; arc=none smtp.client-ip=74.125.225.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Eeh4tDSK"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=geWEgMSYQDaXHL8PI+SwL20O2XP2TtLwPQS9ZQiVmS0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790284262; v=1; x=1790889062;
- b=Eeh4tDSK23G+TbvqhrDIDogpAxLZ6xsTOdlLHlKDetZUvHYMlAb3Ik1/Ut9G4V0OpLuS3y0m
- tmLn0/6MzpnzE+zUdW0zakrd9SIewOskKFysWTXFiUgIYljj4C4UMB51spUhO9DV8AYOc1SNMmb
- p165Nm7nJOoKWTlpRoaGar18=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id de8f8ffe1b04012f;
-	Thu, 24 Sep 2026 21:11:01 +0000
-X-Mizu-Trace-ID: de8f8ffe1b04012f
-X-Migadu-Flow: FLOW_OUT
-Date: Thu, 24 Sep 2026 14:11:00 -0700
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Tejun Heo <tj@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	David Dai <david.dai@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>, 
-	Frederic Weisbecker <frederic@kernel.org>, Aaron Lu <ziqianlu@bytedance.com>, 
-	Daniel Jordan <daniel.m.jordan@oracle.com>, Hao Lee <haolee.swjtu@gmail.com>, kernel-team@meta.com, 
-	cgroups@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/7] cgroup: charge kernel work to the cgroup it is
- done for
-Message-ID: <arWLq4p488JPhuZ1@linux.dev>
-References: <20260924184714.912181-1-shakeel.butt@linux.dev>
- <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a6Pp+Ngg"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4843971bdd0so30831f8f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 14:16:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790284595; x=1790889395; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=KfGvfwNr/tckeUTW0rQax9csKD8upwKYtURB0NTilpk=;
+        b=a6Pp+Ngguqb1Ow+2ob0ojGblJ4rb3uzRhiqmBB2FAMIP8jsC/nHzn0UqIeCIb2i1oU
+         br1hFZ1QhozdoyGXU45NOW1asGFp/3dWmqKwXeCIVYP2T7hyi7+EcLpJ+tqNVtKuDZhP
+         QoXv/iGQ7ziov9uM1OZ6CqLRrzdcyQBZBHrYYFyD0yowcWO/lT3fvQlgaSahBaphC/2h
+         4CA85hF0JVXZgv6mpA9+GqRszu6UEldvwCCHz3WYyd3FONPvnw5CXwZOLL7z/JaIaJFi
+         kO4izjCaFNKaMCbufrhN49MelKfhCa40w0gA/XMiCIISiXgAa8bITJucqTWBVcEPxjh6
+         CCag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790284595; x=1790889395;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=KfGvfwNr/tckeUTW0rQax9csKD8upwKYtURB0NTilpk=;
+        b=U27r2NXM6urYAaHuotENV0LddkW3snbB+Zc9C0f9dD28jBfd/06WRhdPM6DYuDRBzF
+         Ox9apVmG06bN9Rpw1Tx1urrVLatf0OO8OtnHycDKxd5pAmfdAWltb4AUCW362m3DiWIv
+         j36ufpIVMQokGK/SlxF2u/mOcFG+FdymWH+Oh0XlIDQNed5uqRbUR9fQ+Q3aWwxxe++L
+         XsxOuMAU9dlN8ob+3ZX68jYf2O49JD4ZmsVgBrnUozTxzMIoz+R+V41tbAJe+boSFpvv
+         GBA2diOrycPN8dCPAMG8/rf7DLhMmjN+jxZDpUXUfWoj0cQz7o/fKCBc9xNu7SN6FuRi
+         +0oQ==
+X-Forwarded-Encrypted: i=1; AKwUvByMbWw/aFNYdQgSASBfvJT2jL3YIFTn7ALiI0Wehx4M+V64wZheYm0/BYfnCwlXNM9z4jkQ/RwrPILGXTHFC4U=@vger.kernel.org
+X-Gm-Message-State: AFuF++lU/SIs6JnojKsas/Hl+agNPKF7V6J4S8/tPwQSeaVnSojTFP9X
+	YhnUKLWbNZFHU/f6CHpw1sEeseVPt+NvOxesNu3fRJ8jZZ4kvCsTO5OT
+X-Gm-Gg: AYBFou1H5p0Tr/fkDWKrByWDc209KaCcIXhkF6+6yYSZoRbZG8Yn8y4uL/Xwmw3Wuyr
+	Sly4w0u7PwSowl3VgXML3NO1g3tRURYXo/bS8oaUJ1JfkOhEEvgWTJZtqgpwbV94XUvY0Xc9LNY
+	i/b0Uo/xSCYSvT/sCuKrYljHYhj9rOtopzsdYGvtoHxNoq2Fsao0rbRfiGYOPMYncCYDdc9w19I
+	M7zmO5BPpM5Zo2WubQOWJQWMf/guZyAESB1vUBb+OgYJok+QRHF7/pC6jh4jZQdDMqz0R0egG/k
+	FWq+2xNP0WKxdXFZmD+wTmFmH3mdMpZakMuwgovV9pCRe7nng9xPU3o2nIbfd/h9s3sGlrYLcTN
+	P+uMxcPTqqKVuu/NVO4R5oa0qPXWvVUd5VO3KlEDlQR6x7hcTRKtF84X/Hc5qhjUKOepXi2n8OI
+	9WMLLtxgsi2onvgzs1lolq+9uGSIndfNkvr+oRh5a8+v3u0gxFncsnwEQVy+xm3D+14wxsnHhkl
+	fuDfiZ+IJqSzO7hMXq/YLqhcbkJ2bGiJTfOtoeojytMnIlFWM9TGPMNXfqdy8rb5Wp4osisLYqC
+	nTGZwV0KJEAlDAzkIu2roNo2jLBJunpgm4QJK95ZSuOH2kfCnPeY0J85LWd6b6h2gazT1JcB0i6
+	MLnvUwEcYKtXv991SZbAi
+X-Received: by 2002:a05:600c:8b4c:b0:49f:c432:885 with SMTP id 5b1f17b1804b1-49fe6702398mr60249845e9.2.1790284594803;
+        Thu, 24 Sep 2026 14:16:34 -0700 (PDT)
+Received: from ?IPV6:2a02:3100:610f:ecfc:4dfb:2ac9:70ba:48bd? (dynamic-2a02-3100-610f-ecfc-4dfb-2ac9-70ba-48bd.310.pool.telefonica.de. [2a02:3100:610f:ecfc:4dfb:2ac9:70ba:48bd])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5ce4941sm92677785e9.6.2026.09.24.14.16.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Sep 2026 14:16:34 -0700 (PDT)
+Message-ID: <4cd6377a-e0a5-4058-bc72-40bb32b2d26a@gmail.com>
+Date: Thu, 24 Sep 2026 23:16:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] net: hsr: fix packet drops caused by GRO superpackets
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org, kees@kernel.org,
+ petr.wozniak@gmail.com, qingfang.deng@linux.dev, fmaurer@redhat.com,
+ luka.gejak@linux.dev, xiaoliang.yang_1@nxp.com, skhawaja@google.com,
+ liuhangbin@gmail.com, stable@vger.kernel.org, sdf.kernel@gmail.com
+References: <20260809121455.1745-1-xiexinet@gmail.com>
+ <20260809121455.1745-2-xiexinet@gmail.com>
+ <20260813182111.088aee3d@kernel.org>
+ <7c09a44a-19d9-43f5-a852-12f5b6579641@gmail.com>
+ <20260923103238.cg3tr_40@linutronix.de>
+Content-Language: en-GB
+From: Xin Xie <xiexinet@gmail.com>
+Autocrypt: addr=xiexinet@gmail.com; keydata=
+ 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
+ sNySbH3veZ/55EtlXA==
+In-Reply-To: <20260923103238.cg3tr_40@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 24, 2026 at 10:28:10AM -1000, Tejun Heo wrote:
-> Hello, Shakeel.
+On 23/09/2026 12:32, Sebastian Andrzej Siewior wrote:
+> Would adding a NETIF_F_HSR_SLAVE flag to slave device(s) and then filter
+> invalid flags in netdev_fix_features() fix this? This should help
+> against enabling and add a warning if a flag can not be removed.
 > 
-> On Thu, Sep 24, 2026 at 11:47:04AM -0700, Shakeel Butt wrote:
-> > This series lets a kernel thread say which cgroup it is working for.
-> > That cgroup then sees the CPU time in its cpu.stat and the stalls in
-> > its memory.pressure, and the CPU time comes out of its cpu.max quota.
-> > The first user is the memcg reclaim that runs from high_work.
+> A netdev_change_features() might do the job then.
 > 
-> This doesn't translate to net rx, which is another major source of
-> displaced CPU usage. Switching membership on each packet isn't going to
-> work there. Attribution can't happen that way. We'd much rather count
-> per-cgroup received packets and prorate the CPU consumption. If at all
-> possible, I think it'd be better to adopt an approach which can cover
-> both use cases.
+> Sebastian
 
-Very good point. I think we need to think for net rx for two scenarios. First,
-the modern NICs with rx steering support and second, old NIC with shared queues.
+Yes. I'll use a port constraint in netdev_fix_features() to keep GRO,
+and GRO_HW (when configurable) disabled, while the device is an
+HSR/PRP port, incl. the interlink port. And call netdev_change_features() 
+on attachment and detachment, preserving the GRO settings.
 
-On the modern NICs where the workloads get their own rx queues, I think the
-proposed mechanism can help to do the accurate accounting (I have to extend this
-to softirqs as it is limited to kthreads atm) very easily.
-
-The challenge you mentioned is for the old NICs where we get to know the cgroup
-assosiation of the rx packets very late (or deep) in the stack. Also CPU spent
-on each packet is not necessarily uniform (due to out-of-order or drops or
-checksum errors or window shrinking) but for simplicity we can assume uniform
-CPU. Maybe the right place to charge for such scenario might be at application
-receiving those packets into the memory. I feel like we might need a very
-special way to account for this case (maybe through BPF or something). At
-the moment to me it seems very hard to have a universal solution which helps
-this case and the reclaim case I am targetted.
-
-If you don't mind, I think having solution for modern NICs i.e. dedicated rx
-queues, should suffice for now (unless you want the solution for old NICs as
-well). Let me know what you think.
-
-> 
-> >  - The debt is capped at one period's quota, so one long piece of
-> >    work cannot starve the cgroup for long. Time over the cap still
-> >    shows up in cpu.stat. Writing cpu.max or cpu.max.burst clears the
-> >    debt.
-> 
-> I don't like the debt capping. Having debt doesn't have to mean that
-> the cgroup doesn't get any bandwidth at all. The cgroup just needs to
-> be slowed down enough that the generation of new work is throttled and
-> the whole thing doesn't go out of control. IO control already does
-> this: when IO debt is accumulated, userspace is heavily throttled, but
-> not completely stalled, until the whole cgroup's consumption comes
-> under control. I don't see why the debts would need to be forgiven
-> unconditionally. The cgroup can keep paying them while running at a
-> minimal rate to avoid triggering stall failures, and if the situation
-> doesn't resolve quickly, that will most likely trigger pressure based
-> kills in any reasonable setup anyway.
-
-Sounds good, I will remove this capping in the next version.
-
-Thanks for taking a look.
+-- 
+Xin
