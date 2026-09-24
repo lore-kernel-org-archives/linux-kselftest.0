@@ -1,64 +1,64 @@
-Received: from mail-lf2-f13.google.com (mail-lf2-f13.google.com [74.125.229.205])
+Received: from mail-lr2-f12.google.com (mail-lr2-f12.google.com [74.125.230.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B9BD3EFFD1
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 19:19:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65AA8406270
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 19:20:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790277599; cv=none; b=daPDVHAu94wqimorQpDs3a+oW8hGoygbb8Yi20mde33Spdu8JVWFYd0LWN6mtQ0TW6aMe9IsFhskXNDXuCCa/WB2CKPERoI6o9SyE/DabtbJSY2wsKjH+EbLmEm26XAHrcuDbSghFB+OgCB1SiHlBC1m0/iMy9EOnHymC2HAQ60=
+	t=1790277623; cv=none; b=NMqub4MvRwUGMxOv+YcEskyVehYX5nts9jJX7Srlx0Nw8XW45MELcahG2nDzgWRKzxlho9ON+NyRYK+lnzn/XP8yiG0NiBvhP8+YXWC48RfKpLuJjyBzqLu9rO9UEadHcxRYYNOphV0zlCn6gUSpFLN4Eh20N8Xd6mEM+BGMs7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790277599; c=relaxed/simple;
-	bh=FXaVo11Gus9Sx6sFSQ364XFB72gAx1VxL2xi76KwxYw=;
+	s=arc-20240116; t=1790277623; c=relaxed/simple;
+	bh=SujIPjokdXDiNF7iEM351TKsQW6gCVrs+hRReWJEk0k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YuHKRDrmXQ6t3G1sMdKp7I+Tj/dmNv0ZjXroCvDWfDwEt0MUIneYVIDJ39AGg1CpuI6BxfZGd09LuM6+Gv5SBSp4EA+7f+o9wRN8o9wQmAZclHbYHWwGHzeJsM0CkrJkfZJd9jg/f4FNNSDkSiixr8Ockr74jJJqBmIFvaoQuCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P5bDW8Pu; arc=none smtp.client-ip=74.125.229.205
+	 MIME-Version; b=CYiJ440kk9P43e3RQVvnCdLAKNtBpApEISQHhbCl+e0oP36xrrVQaYxs7mkhed39j4iyE+7l8Dl7qmEvUx7fnaJlm8Qxm+ecrdairbMv9DHdQh54lxK+mW3ZWZKFe8fdTdia+E4TZTGBFLHIIVgw8wll0nIUzLskM4jU/ESRvgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FYh6RgKH; arc=none smtp.client-ip=74.125.230.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P5bDW8Pu"
-Received: by mail-lf2-f13.google.com with SMTP id 2adb3069b0e04-5b8b402f4e3so183607e87.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 12:19:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FYh6RgKH"
+Received: by mail-lr2-f12.google.com with SMTP id 38308e7fff4ca-3a2ff148dfdso885201fa.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 12:20:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790277595; x=1790882395; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790277618; x=1790882418; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=FXaVo11Gus9Sx6sFSQ364XFB72gAx1VxL2xi76KwxYw=;
-        b=P5bDW8PuGU4I6matgNRQqLrpv0vhCR9zBq7Cyp1TKabu693zeHL1+wrOHwqxo5ilg6
-         lDzQmWOSJ+wLh+ujC4MmqoA/DA2U+8kR1HhZk3vZD7W6ghqKCS1MDJlAmMu3ozxpsrQ7
-         Q2VddRJTUirYiePyO1HkrWpsFKqapNXvQNQZ4dtXyNuXsHs5p1IvT+TKqwnmFP8RLxpl
-         Ww4FFs6NNuHL0yiMsSNtPeKdeeWSaRic1EfkOVqz7ch+PznTKc1PmflERymEoCLcy7og
-         hT9ZAmvSQInagUMYOZVfx2DcviPLFhDmV2tiYcS1lTw5Q+kPtao9FXrEP72BIp/0mZcQ
-         Q/tw==
+        bh=SujIPjokdXDiNF7iEM351TKsQW6gCVrs+hRReWJEk0k=;
+        b=FYh6RgKHRCP15zfoZVa0b7SiyhDeFpcHRB1iNsuivruZnzUCyZQbqMtC0O5ID4ftjr
+         1CF5jHsEVhRwzLeRA63r7BExT654RY6/xXVmAIdWbVXPur1+8rJcm/pkldyfSIDOsopt
+         f+gR8LccoXNrr1bm3Oa+d+7E/su4bStFiyRvJR7ZKee4oyZRqE02a74WKKPBQkmm3E+H
+         4kPq+16gfEoCOpbN+4huDO7/Xu0AkNqsQD4zf8UCjDrzUDFwQZLEjcwv17Sc48ggLKVZ
+         qyGJUIM3piWFQFh3US8CV2XEGZDUF+M2feKh045GHlAsppc2nrhEigZGPoykSySN189D
+         XP/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790277595; x=1790882395;
+        d=1e100.net; s=20260707; t=1790277618; x=1790882418;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=FXaVo11Gus9Sx6sFSQ364XFB72gAx1VxL2xi76KwxYw=;
-        b=YgxSnw4jGrbF8l9J2HoQ8tSNJLe6D3aD/pyfEfRUGiVSD7HWAFle42CsaDIOBH2HsG
-         KKIV8vT5U0njgJ8Jm6rCzl73hNLeXCWrAFmypU3XQpOUSIgvci4MOka8y85OOZcIgHyS
-         r77uR2Nnk2YeYSwItIXUWrL8h5LVDdH3o6Ia+kBRCsdbwkw/4VMUN3kfLFvgZy9z4w0j
-         JbMZNLTa5iiUyO7pc1YTaUXGvw5BBc6yf6g3+K0NNg7Dw9ckab7VDgs/I0kH52piVJ4H
-         QMeARKGCATzNeieyQnfkJTUUR7ri6Z5zP4mfNgN/y/r1758KuEQS3n+ygvWsIEBVzLtp
-         1aRw==
-X-Forwarded-Encrypted: i=1; AKwUvBx6rrlbysmw5Me4zTMOIaaJHKiu9p6F3S2OPLpL5iQLxphXbx/UkwveiX5OqTbGv6qBlLlciOMQXR2YGPF1/B0=@vger.kernel.org
-X-Gm-Message-State: AFuF++nxHzyi+xQVN/cjuWK3jjlkIYOkcnNWk/0a41ZBIlzXXjSYH3qf
-	geBmGYJLf3G5XYjtQdrq8QL/KL16OQQHfBpELrhEQuO72UZfFiZ/lf3D
-X-Gm-Gg: AYBFou26C3sULeuNKNQnIIraAmFKK5yC34uJClrRzNpHDIwaKTk2zkJC+mQT8hi1rq3
-	iRXOQ5QlV+pu0hshwenTSq27AAw/U6kX4Zs7P5aei5hfKgMnhpQ3NHKIeVgPaVw6VkU/6INozsy
-	L5SU4pLmNF9jeJyyyXR7LzV4Pg61iseODp9I4xa0tYf7cC/e0PTp+jhpXoobq5FBekzsnWAaf5z
-	RY5wdboCA4w1+RirTWUK5L9xjeDJkfAfxcPpirYVri3GlkrJkyWl0o/+TjQs5x5EIqM7jcLzEmA
-	SMz0e7rzL7OQim2+LkhS1aC+MmvC16aW05k7gBRm4ssm2VDWzFiXHiqsEezhi9jFoVYjNVlj9O2
-	fOCRhSTCQu5RH93iWeWLayxpxJ6QgS4FTyvrWy4cIj4cDLQkMhxKYAdiX6Osn63eM4n+JtIbl3b
-	ieJUUloo9gRlChnoAI9VKY3tsCLCrFJu2V2X/tCfz741cX/Wa6FUV3OUg41b19hu/eZplqOAb1w
-	eA4nldEAA9CZH/a
-X-Received: by 2002:a05:6512:613:20b0:5b8:bc5e:d116 with SMTP id 2adb3069b0e04-5b8df0b5871mr989865e87.64.1790277595016;
-        Thu, 24 Sep 2026 12:19:55 -0700 (PDT)
+        bh=SujIPjokdXDiNF7iEM351TKsQW6gCVrs+hRReWJEk0k=;
+        b=d7RjbdWo0M9Qpn17vOQg2AkrIzH40FJkD/xxfQLXPWP059/2oEIWKM9DSqC0DHHpPs
+         RuBJta5lwClXNQcbPsKR1XqN0eKI1YHtTVPAj70ZtH51tmDiLLhD+0H2Jx4e4jUNPQhF
+         SLgpPg7sERaPcQMwgmXtbxUnOrcyhkAFY/v31XF7yUVoaGEjU/sxy8EVsf21BDpX2/2T
+         rAeQBd883ItWLfn5qXSuvhVCHqc/rAs90Gc1+y3QHiA47jn6DkpwyYDSS/QDrW0Q++T/
+         IgzTiktHXySUidfkNMBHGNsk71cQBwxBODjVn8yMM7KgIKUXqyA70zSRNQ54eeIe6lhe
+         gXmA==
+X-Forwarded-Encrypted: i=1; AKwUvBz4/F/Gt5wT0LleuEGBT7SUlviz4lvcwpYRijJhAvIN/B1N0KDIOIekVb8aWuJ2RJdUpmFN8+20o8xDp3BUTfU=@vger.kernel.org
+X-Gm-Message-State: AFuF++nz/meJMwU/H3RoTi+xl4cWREEdzBJoS/mYXy/2Rot03VpIQLjM
+	xg7z8VnDmRHzsJYYbQK1ivIOrhBQNy/I+9KurwdNIeeKGa9ePyOLH1rX
+X-Gm-Gg: AYBFou19X3/pt1muDZSdSdPUxKFpDSY3dHDHKnXV4M0Ggsrf4j680FegVX++PTUc1+g
+	jj/fGdlvkRlEEMgT2BP+s+EZQUYeGRTXRYTPDE52SYaGd+frfKXy1YAaGgALrVZ07gJwG771fLI
+	f9mFZTUxX6km5HZx7ORqgcqvGau7GsTKkDKD+k4ivtqh8xd7BmFdNbfgJzUnWGU5V2NMau2rIvh
+	IgvfQK1pDK5LXVR3cG6ysiRJxlxbiivEQOL2s+qGwoY3OPmMZ7qcWkeQavpyeFY1iPCf8yVd9ZP
+	1cfmd7ZVfLuzaSuzf/B8T6Mr0RtGQrasymRwhOA4TZC+6xUYY/1wEBeQ2IvXZRQoE+cYLhBicv4
+	PZunO6XN95DVqWqYYu84xvwG8zADFvk4D0oX1woLXc6sfyyDkdU12cM2xPWsSgFur6kMG1hgBnM
+	pmy44fmcgncScxrnTssgUg0RqWdfUgr4EHdCA/NkBt4UJTm8S5SRXkattmaoyuDfSc4ZHZm4LTk
+	1NXa8uZp4i6c4Gj
+X-Received: by 2002:a05:651c:198d:b0:3a3:37fb:27b0 with SMTP id 38308e7fff4ca-3a64c36f2d0mr15401fa.0.1790277617579;
+        Thu, 24 Sep 2026 12:20:17 -0700 (PDT)
 Received: from localhost.localdomain ([80.66.93.131])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b8e68eec94sm13911e87.69.2026.09.24.12.19.51
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b8e68e5433sm14426e87.55.2026.09.24.12.20.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 12:19:54 -0700 (PDT)
+        Thu, 24 Sep 2026 12:20:17 -0700 (PDT)
 From: Maxim Skokov <skokovmaksimevg@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Maxim Skokov <skokovmaksimevg@gmail.com>,
@@ -75,12 +75,12 @@ Cc: Maxim Skokov <skokovmaksimevg@gmail.com>,
 	kuba@kernel.org,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Check that bpftool reports a map it can't dump
-Date: Thu, 24 Sep 2026 22:19:35 +0300
-Message-ID: <20260924191944.548447-1-skokovmaksimevg@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpftool: Don't report an empty map when key iteration fails
+Date: Thu, 24 Sep 2026 22:19:55 +0300
+Message-ID: <20260924192007.548470-1-skokovmaksimevg@gmail.com>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <b5fb457e16a434d457a136a5d9286b1163fccaac99804e0f88a370a1a3b06805@mail.kernel.org>
-References: <20260924160732.485650-1-skokovmaksimevg@gmail.com> <20260924160732.485650-3-skokovmaksimevg@gmail.com> <b5fb457e16a434d457a136a5d9286b1163fccaac99804e0f88a370a1a3b06805@mail.kernel.org>
+In-Reply-To: <e6dac20d7badce84d1b4601f9551fca3235417ab3026173d4e9bd9e3348d42ed@mail.kernel.org>
+References: <20260924160732.485650-1-skokovmaksimevg@gmail.com> <20260924160732.485650-2-skokovmaksimevg@gmail.com> <e6dac20d7badce84d1b4601f9551fca3235417ab3026173d4e9bd9e3348d42ed@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,8 +89,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-> Does this multi-line comment follow the BPF subsystem style?
+These are the points from Alexei's review, answered here:
+https://lore.kernel.org/bpf/20260924163536.507053-1-skokovmaksimevg@gmail.com/
 
-Fixed in v2: the opening /* is on its own line in both new multi-line
-comments, the one in bpftool's map.c included. "can not" went away with
-the reworded comment.
+All four are addressed in v2, which goes out once 24 hours have passed
+since v1.
