@@ -1,162 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63BC3EC82B;
-	Thu, 24 Sep 2026 21:00:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2BCD2E2665;
+	Thu, 24 Sep 2026 21:08:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790283644; cv=none; b=Q1Cj1+mZ8I3ibp0gRV+unVN4ywV4Oh+Ov2cbKEFsU7EoSwbI6SgeDH7YkaAU8Vl8AfqOxzBe6v9FfxRqG/Mg/JZxLRV4SjX4zArcyIWn8auf5fPuZ3Aa3IKmsBshmo1WXpsb7c/PJVYCyYwF0yv0L1mT0VN74zhWGCe7cV2MCSQ=
+	t=1790284122; cv=none; b=DUqQeEWLAjLGQ34ZD+Q4FIeT1KfJe/df6wUVMdckdR36Zgq+nsHh4AvGYyfeXPzSQ6zjAdTHhmqWFZAry3WGAlWQsaK5tCjojNokYhFn/pbEuQPL6dCeM5xsK/bmV7E9xAd3QiUCLk/NQe5BeUvmoCQR9/09pYJ+ehqHUkum/+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790283644; c=relaxed/simple;
-	bh=i8070O7XztGS7j/b872Lao+v2gS2ei8JpD5VuekwO5s=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=S9xD3/BbYCuFi8mkiKMSLlUdPoQ1ZJPJdJKfd/6ub10ud5/KVd0iYoiA1+QhQ774ksO2x850JLM3oeOj2y5rUHsWo6EFGKJcW9IhEQ0ETQ723r1lF7zfqXt4Gs8m4gZNNwJ3XffnY/lJMsso2dzX4e+4mi219yp5mar+D5Fd/rw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B3a03UAz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790284122; c=relaxed/simple;
+	bh=CTZNrzaiHq4+D9comlWpgF9FN65qqS3Ma/UtJGyZOLQ=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Kc2STTnXDKGPiDEGcQ62Yn0Rfsq24Yx4V+kgoeXibT642BNw+3VhhKNmpDkuzW2kkdyofVYTEAT3nUfxjkChGB4rnXQ0PLtLej7WIWd0pSJZ4+J7nSzmkmLHBgcRgifRU6kaKGQO0zyrro38PFEOfkqT7jav/kFx0V53Bdi63rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ihMtzZyi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B3a03UAz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5FF41F00893;
-	Thu, 24 Sep 2026 21:00:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ihMtzZyi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C4BE1F000FF;
+	Thu, 24 Sep 2026 21:08:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790283642;
-	bh=cRqwqrfyKpbqsyM6+nhQOH24b5t2JHrFyoiMbEwUJuA=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=B3a03UAzoRSwbBr3NlHhCZk9JvTrbjhHxn1mabVZFMgT/yuu5P44QAxtQYVg1TfMT
-	 d29bvSwrpHVJQPB19WUMYcOXzG+RNpy0JjBOANyApx80v6RMtnIoIcw/b7k+4fu4+b
-	 0ietmxQRD8Mr50oLpqE8gD6a0c1fIqg6WUBQ42JSEZMf32jvy8AO45L47Ym+hGegpD
-	 F0SG3VcCZKj98qiUfPsxVAZVxGFjSrb6gq/8WIEtBf0Xw3OvBP4Pj1EKSltFLlEiqZ
-	 x8XfChfUb9OaDW/cx1ZO28uBUjghDWWGRG2P590Su6OkleEMjTqB0cxaXoCl48cq5e
-	 1w6AK+SAR9Tug==
-Subject: Re: [PATCH net-next v8 2/3] selftests: tc-testing: add fq_pie
- per-flow class stats test
-From: netdev-bot+sashiko@kernel.org
-To: hemendranaik@gmail.com
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, jiri@resnulli.us,
- jhs@mojatatu.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, vishy0777@gmail.com, tahiliani@nitk.edu.in
-Date: Thu, 24 Sep 2026 21:00:41 +0000
-Message-ID: <179028364138.2160803.8521628163584007831@kernel.org>
-In-Reply-To: <20260922205924.32173-3-hemendranaik@gmail.com>
-References: <20260922205924.32173-3-hemendranaik@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1790284120;
+	bh=HkVEzWtseZWBE3FClRQnO6Cvne4j5KocU23SBL5nUkk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=ihMtzZyi2dmK8nhIGn6LsTbD2LHCNT8JUypnsDz7rMaJH+rE1/A6wmtXiYdBCMimk
+	 NfmvpBOvISN1QUtW/SDhpBkAFFbZntelm22yYM72gW5qOb3EuRWFANr7Gu9MDxULa0
+	 p3pdxbIns5b0eN2Sdtpfx8wIvOQE0bD5hlqyviMSlsD0bq7g/Eu4CQ+bhUKdDiKbxk
+	 ieRBOYz0MloN7SoGSVB04qaLglrux4Me32s6Qf91uODh+9LXzW1h/WhYVvwhNLSzu5
+	 EvYKWVhZOWSUEzxwWfqGCMbf5FmjRt3fdAGM24wC9T0cISthCzvEL/xJQTAdQIjwDt
+	 tnA7r0hZxVAdw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1x9qgI-0000000DDhs-01l8;
+	Thu, 24 Sep 2026 21:08:38 +0000
+Date: Thu, 24 Sep 2026 22:08:37 +0100
+Message-ID: <86ik3u4asq.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Fuad Tabba <fuad.tabba@linux.dev>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	David Hildenbrand <david@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Jack Thomson <jackabt@amazon.com>,
+	Jack Thomson <jackabt.amazon@gmail.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Vincent Donnefort <vdonnefort@google.com>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	Leo Soares Passos <Leo.Bras@arm.com>,
+	Wei-Lin Chang <weilin.chang@arm.com>,
+	linux-s390@vger.kernel.org
+Subject: Re: [PATCH v4 00/14] KVM: arm64: Add KVM_PRE_FAULT_MEMORY support
+In-Reply-To: <20260923-kvm-arm-prefault-v4-0-d4b0b4dfa8c3@kernel.org>
+References: <20260923-kvm-arm-prefault-v4-0-d4b0b4dfa8c3@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: ljs@kernel.org, catalin.marinas@arm.com, will@kernel.org, oupton@kernel.org, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, corbet@lwn.net, mark.rutland@arm.com, fuad.tabba@linux.dev, rdunlap@infradead.org, borntraeger@linux.ibm.com, frankja@linux.ibm.com, david@kernel.org, hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com, svens@linux.ibm.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, skhan@linuxfoundation.org, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, jackabt@amazon.com, jackabt.amazon@gmail.com, alexandru.elisei@arm.com, vdonnefort@google.com, aneesh.kumar@kernel.org, seanjc@google.com, imbrenda@linux.ibm.com, Leo.Bras@arm.com, weilin.chang@arm.com, linux-s390@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On Wed, 23 Sep 2026 16:15:43 +0100,
+"Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
+> 
+> This series implements the KVM stage 2 page table pre-faulting feature for
+> arm64.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+[...]
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+> base-commit: 23ddf997ab16b5f4aa9f948f5a68f5b35e4e398f
 
-- [Medium] Test 83c0 in tools/testing/selftests/tc-testing/tc-
-  tests/qdiscs/fq_pie.json depends on an iproute2 change that has not…
-- [Low] Test 83c0 relies on a ping step, `ping -c 50 -i 0.001 -W 0.01 -s
-  56 10.10.11.11 -I $DUMMY > /dev/null 2>&1 || true`, to put packets…
+In the future, please don't do this. I've just nuked this commit from
+kvmarm/next as I rebuilt it, and using such a random commit is
+counter-productive. Just stick to an -rc tag from Linus' tree, and
+that's it. I'm perfectly happy to deal with the outcome (conflicts and
+other funny things).
 
---
+Thanks,
 
-selftests: tc-testing: add fq_pie per-flow class stats test
-
-This adds tc-testing case 83c0. It builds a tbf + fq_pie hierarchy on
-$DUMMY, pushes traffic through it with ping, and checks the output of
-"tc -s class show" for an fq_pie class. The commit message says the
-per-flow counters are printed by a companion iproute2 change.
-
-> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-> index 229fe1bf4a906..15b2667285eb4 100644
-> --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-
-[ ... ]
-
-> +        "setup": [
-> +            "$IP link set dev $DUMMY up || true",
-> +            "$IP addr add 10.10.11.10/24 dev $DUMMY || true",
-> +            "$TC qdisc add dev $DUMMY root handle 1: tbf rate 8bit burst 100b latency 100ms",
-> +            "$TC qdisc add dev $DUMMY parent 1:1 handle 2: fq_pie limit 100 flows 1",
-> +            "ping -c 50 -i 0.001 -W 0.01 -s 56 10.10.11.11 -I $DUMMY > /dev/null 2>&1 || true"
-
-[Severity: Low]
-This is a robustness point, not a bug. fq_pie_walk() in
-net/sched/sch_fq_pie.c only dumps flows that have a non-empty flowchain:
-
-    if (list_empty(&q->flows[i].flowchain)) {
-        arg->count++;
-        continue;
-    }
-
-That makes this ping the only thing that gets class 2:1 into the output.
-
-In the standard tdc setup this works. nsPlugin runs the command inside
-the namespace, dummy is NOARP, and the 98-byte frame fits under tbf's
-max_size of 100.
-
-If ping is missing, or doesn't accept -i 0.001 / -W 0.01, the "|| true"
-and the redirect hide the error. The test then fails as a regex mismatch
-in the verify stage, not as a setup error.
-
-Should this step be allowed to fail visibly? The same pattern is already
-used elsewhere in tc-testing (infra/qdiscs.json), so it may be fine as is.
-
-> +        ],
-> +        "cmdUnderTest": "$TC -s class show dev $DUMMY",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC -s class show dev $DUMMY",
-> +        "matchPattern": "class fq_pie 2:[0-9]+ .*prob .*delay .*deficit",
-
-[Severity: Medium]
-Will this test fail with any iproute2 release available today?
-
-The kernel side, fq_pie_dump_class_stats(), only sends a binary struct
-tc_fq_pie_xstats with type TCA_FQ_PIE_XSTATS_CLASS:
-
-    xstats.type = TCA_FQ_PIE_XSTATS_CLASS;
-    ...
-    return gnet_stats_copy_app(d, &xstats, sizeof(xstats));
-
-The words "prob", "delay" and "deficit" only appear if tc formats that
-struct. According to the commit message, only the pending iproute2 patch
-does that.
-
-With a stock tc, re.findall() in run_one_test() in tdc.py finds 0
-matches against a matchCount of 1. tdc then marks the test as failed,
-even on a kernel where the fq_pie class stats work correctly.
-
-tdc already has a way to skip in this case: the dependsOn key handled in
-run_one_test(). Other tests use it to gate on newer iproute2 features.
-For example, in actions/mirred.json:
-
-    "dependsOn": "$TC actions add action mirred help 2>&1 | grep -q blockid",
-
-Could 83c0 get a similar dependsOn probe, so that it skips instead of
-failing when the tc in use can't print the per-flow stats?
-
-The commit message also describes the test more narrowly than it
-behaves:
-
-    verify that 'tc -s class show' reports an fq_pie class.
-
-The pattern needs the per-flow counters too, not just an fq_pie class.
-Could the description say that the test depends on the iproute2 change?
-
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP addr del 10.10.11.10/24 dev $DUMMY || true"
-> +        ]
->      }
->  ]
+	M.
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260922205924.32173-1-hemendranaik%40gmail.com
+Without deviation from the norm, progress is not possible.
