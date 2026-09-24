@@ -1,155 +1,113 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl2-f12.google.com (mail-dl2-f12.google.com [74.125.229.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BDE042BE93;
-	Thu, 24 Sep 2026 19:47:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790279265; cv=none; b=OWm8N5ELEBdCLgdU0Eltm/Kcr41D7LfX9ZBswU60FdCv8xNZKC980bHxPYR5eVH+1zrnft44f2OJXOlQYUHupUwXc2k8iRH0GNEtXRkvRD+n+6AxuPC3SkhJVqwr8rh3QFtXPbPRVScVkFwJe4B5hxKXJJ4m+w/SWxi2Edl3g5Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790279265; c=relaxed/simple;
-	bh=beyJJJsWmWM86F2GdMm3eZu/rCJvtCIDJyIWyk2ZqUQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iNzv8dciojlF6vB5+3i7kRnMoGyrejTiQsI78mpw5tyYBK1VR/64Bc3ISE7vwf11TK+HcWVuWSedZDEu7ZGqwwrvPZJ3c76eaqA0VoqNXWDZsNGk3ifL6I9uKwXn5t8T7PCG85vxcXRYzPoZ/SPsY1eGoVjE67xXLNPLX7bbHF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=BXGxpwFc; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249823EA942
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 20:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.229.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790280580; cv=pass; b=b/rOex1ZTlltMT63QCeMLmfF+fwZcG1lZxLmFs1gemf7ho2++DWWlXg0bhDSC7rcFQ8gJP6oCvevwGCrH7uS8IHJ/zV8lhVcxQmbrJzPCYrbKyEfJYJ1PvRlMBjd+QrX8OulxxmubEO4FabjC7gB298oZrgr8vFtgKDNyxBbvls=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790280580; c=relaxed/simple;
+	bh=Yz7JoaE6iquvpn6Unqqgb8gnd/A0MQ5SqMi49sUK7Zg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FXRCKVy1A8dY57zlYF5Y+IYJ/GS+u70Jwm2Qz2L44deP6VlyxovYQ8tIgyep8SSt6p8UqmelaD5jxVBLP779Ct5+WPi7zlpvJ7+G6E4JrReDF3rvhNOpaGHzX7DkfbKzWVVjEhDsGZKh0SunCkv0WDPuOwmjTd0PlCRvKnWNiFo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=CsmGZND0; arc=pass smtp.client-ip=74.125.229.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="BXGxpwFc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1790279260;
-	bh=beyJJJsWmWM86F2GdMm3eZu/rCJvtCIDJyIWyk2ZqUQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BXGxpwFcCnviEkO8n1AbQ27PCIgGRYlJmi6TB/vwpJtcwwLu2Y9fKBU3HGiQYC7lX
-	 JdbWK2L33rkItfJTHMgSu7ULqpewwTy+EAZN1XGNpT5pg0PGCYbFKW/OO601Lv3gkj
-	 muLeq9fzfa2XPQl/yJ9+/GnhpDgP3DyBjNOWxiPE=
-Date: Thu, 24 Sep 2026 21:47:39 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Danish Khateeb <danishkhateeb03@gmail.com>
-Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
-	Sven Schnelle <svens@linux.ibm.com>, Benjamin Berg <benjamin.berg@intel.com>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] selftests/nolibc: test the FD_* macros and select()
- on a high fd
-Message-ID: <e293126f-abad-4242-b427-be831159ecdc@t-8ch.de>
-References: <20260924015222.31693-1-danishkhateeb03@gmail.com>
- <20260924015222.31693-4-danishkhateeb03@gmail.com>
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="CsmGZND0"
+Received: by mail-dl2-f12.google.com with SMTP id a92af1059eb24-142dd046b87so174398c88.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 13:09:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790280569; cv=none;
+        d=google.com; s=arc-20260327;
+        b=IBxNWzbnyms4dXWyccUxLcpcYaf6C/R29bjb1D+c/AOREqlpqoRpz7feuo2Ag3B8sS
+         ebkbak7ZmT+i7mizqF0T+rrB/6OcvopfmlJbMYAMCjmXPz+kj2QhaS1opCWyEbeuHO1F
+         K9kI/dtjbOq5frKUpAoNmmRUSRhoaKYMUmIWRiHgwcaiz0vGQI8XRMxnETESvgcnvFQ6
+         QczNDJwb/rzaKwzjZSVnUh5XN8xqKsy3L5vlBQOGq98a0VJioJZLgyWenK3plNhB/Rwh
+         JZVb3NZxBhmapuq/kdmu3nQrIq5p87wnSLEPH6AipFMhbai0q0bcQUNgpY6Ey0XHKCfs
+         2Iwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Yz7JoaE6iquvpn6Unqqgb8gnd/A0MQ5SqMi49sUK7Zg=;
+        fh=JV2uUlkPozzaZy4dGC3N9Hmn4qZBEi2Y+Wlg2PvNt9A=;
+        b=a/eSQg1fM3SrdGNYce4cSsFN2iYQwLnyCiB9mLpwYfpz4Uu/LTgs51PDMyzrNn4XQT
+         fov5ybkq2/wKhjhGcQgz7juzXYQWKt2HcgbopLruwP+F5IA484gdfrfaSKFjY0xCCf5N
+         wHa8tV6iOr+kJjp328NIxtenNA95dbEOfVh3kd5/GKf/9M0ea6s0o3RKOr6zU8JkSs6d
+         +gsTa8zydJT65rvZsg77knbSMhH7dWNXlQtbmVbo6rLatutARLoBs81YODLEdDtaWBCR
+         KBsI34NEhjV4sR8CqcR77bQ8rNk/7nqDRwLGiIlLvhqiFIsvIkOrN3Bsza2+EX6XbSTA
+         ayvw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu.com; s=google; t=1790280569; x=1790885369; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Yz7JoaE6iquvpn6Unqqgb8gnd/A0MQ5SqMi49sUK7Zg=;
+        b=CsmGZND0PTP1Jx3EJ4ZBqzwG+Jsi3/5sVOUyjApydhdJekVPYnAM241dyHZiTzN1ul
+         HBYls6tPNKlbrLwRuj2JX0jueuLlzMh74X2rTlXjsEP/IsuwLR8XWrkL6x6TqIwf0Emz
+         8oaNvdZhYlnzsVo8RTPCwHss9/49IV+aMhGiU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790280569; x=1790885369;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Yz7JoaE6iquvpn6Unqqgb8gnd/A0MQ5SqMi49sUK7Zg=;
+        b=NfOnZhOnjzln4UHAbZGCA8zzYRiHIjcYSkbgZWHrggaaI3hy4iwC7YK2x77xIW30xv
+         8kABcy/+04+JXBd7hEC1t86MDYTMpXAjHV5gwliFwFE6EObfJ1kmcz1fSOpMNNEbGPbP
+         w5RMCEbuOsdhXuL5soV25PPFifdTO9p6IxE6/hLJcYyuJXLy6Lav++LOyOvcWxe2vivD
+         oLcKoVqM0NdPU5w+Zdk2SVJk1MhiFkEAzSCm2kftIH0DYonapYRANF799ntNYcNF/f0p
+         68ESRaSsxDsreFB8exAydJ8Fnt5viQOup7b4rhA1KgHXCgCg5meB2OqoDDjDcvVID3OQ
+         +Lyg==
+X-Forwarded-Encrypted: i=1; AKwUvBwITWjJCq2ANnBoP7TYH9MrgVw5igHGT9K1wTr2+zg+NeI/3ti4rAC8DuhHUaLO5llQ4pGubeeDNTqgtdtm620=@vger.kernel.org
+X-Gm-Message-State: AFuF++mvtZGXnHK7AxMfEgL3ylMd53lFOt/8iWYs1RedMPEoSDE+NZVa
+	nEvo/t8LqrisViKrbRQ1Vc+diz6ngNxVF5+i+NntV2PCcj03idl0CqP20dWMyUGOjLYgY5S3K+H
+	ew9UOR/brYQOh+p3H241EVrpMX4/G3TVVXVl1IopXh0du3CzF4oXwLg==
+X-Gm-Gg: AYBFou2zhkcpv7LIsjun9TjS6EI0dNfq2Y5tjLEcXqVI6+0LLCPkIFRdXWWcktvll30
+	VJ4IVmdSAmdzKdRyZBpb6y3ryPtJVOBEqkrwbrSLZWTBao34Asp1OYsLden3oZygqG5et7fHO0A
+	Hr415d64NrCVOp1koNWZHuJUQEUK1Nkp/0uO+mZRhlEo5O6aOawPhU0je2cUez/B1sJEkeTuAdK
+	02Dn5J//Vrc7CN/zzV63D37shKWMFvN5gonfpxeybVopy7VA1xBZVGLaN8IMKvvfdV7N42vj1y4
+	3f7dooHYM1de6/Alng42xvclDD8AGuiIckoK6rS8xqbd0Al+ptU9y39eoS0qIHqtt71XVQNmYnz
+	O0JlRvbltc/TmNYDxAdGqA5P7TR753U5hFKyq5MwjGomruzeM1E3qmvN3SS9OVOgjYQ/243irgO
+	iK+4lWp3nP9VBMOyhmoLPS20YacVambA==
+X-Received: by 2002:a05:701b:21c8:b0:143:5c2a:e488 with SMTP id
+ a92af1059eb24-14503f6e17amr2557112c88.0.1790280568819; Thu, 24 Sep 2026
+ 13:09:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260924015222.31693-4-danishkhateeb03@gmail.com>
+References: <QDISC-K1TH.v1.20260922072206@mojatatu.com.2> <20260924103222.239e3d45@kernel.org>
+In-Reply-To: <20260924103222.239e3d45@kernel.org>
+From: Jamal Hadi Salim <hadi@mojatatu.com>
+Date: Thu, 24 Sep 2026 16:09:16 -0400
+X-Gm-Features: AclHuK8ging8rJ9iMqohghr3xW3SMPxgAhfGgpncxPI1dVhA27YT_H20sVXYQKs
+Message-ID: <CAAFAkD8goF-B2qP41roK8OipD7TRzZfVEdFDPxHddB5Tm6VhCQ@mail.gmail.com>
+Subject: Re: [PATCH net 2/2] selftests: tc-testing: add duplicate action
+ delete batch test
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>, netdev@vger.kernel.org, Jiri Pirko <jiri@resnulli.us>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org, Victor Nogueira <victor@mojatatu.com>, 
+	hybris <hybris@mojatatu.ai>, sashiko-bot@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-09-23 20:52:22-0500, Danish Khateeb wrote:
-> The only select() test that passes an fd_set uses fd 1, so nothing
-> noticed that the FD_* macros used the wrong bits for fds 31-63 of each
-> word on 64-bit architectures.
-> 
-> Add a test that FD_SET() and FD_CLR() change exactly one fd, for every
-> fd below FD_SETSIZE, and one that select() reports a readable pipe
-> duplicated to fd 40, which also checks that the macros agree with the
-> kernel on the layout of the set.
-> 
-> Assisted-by: LLM
-> Signed-off-by: Danish Khateeb <danishkhateeb03@gmail.com>
-> ---
->  tools/testing/selftests/nolibc/nolibc-test.c | 54 ++++++++++++++++++++
->  1 file changed, 54 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> index f62183a46205..d9a8bfd4b21b 100644
-> --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> @@ -1369,6 +1369,58 @@ int test_pipe(void)
->  	return !!memcmp(buf, msg, len);
->  }
->  
-> +int test_fd_set(void)
-> +{
-> +	fd_set fds;
-> +	int fd, i;
-> +
-> +	for (fd = 0; fd < FD_SETSIZE; fd++) {
-> +		/* FD_SET() must set this fd and no other */
-> +		FD_ZERO(&fds);
-> +		FD_SET(fd, &fds);
-> +		for (i = 0; i < FD_SETSIZE; i++)
-> +			if (!!FD_ISSET(i, &fds) != (i == fd))
-> +				return 1;
-> +
-> +		/* FD_CLR() must clear this fd and no other */
-> +		for (i = 0; i < FD_SETSIZE; i++)
-> +			FD_SET(i, &fds);
-> +		FD_CLR(fd, &fds);
-> +		for (i = 0; i < FD_SETSIZE; i++)
-> +			if (!!FD_ISSET(i, &fds) != (i != fd))
-> +				return 1;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +int test_select_high_fd(void)
-> +{
-> +	struct timeval tv = { 0 };
-> +	int pipefd[2], fd, ret = 1;
-> +	fd_set fds;
-> +
-> +	if (pipe(pipefd) == -1)
-> +		return 1;
-> +
-> +	/* fd 40 is in the upper half of a 64-bit fd_set word */
-> +	fd = dup2(pipefd[0], 40);
-> +	if (fd == -1)
-> +		goto out;
-> +
-> +	write(pipefd[1], "x", 1);
-> +	FD_ZERO(&fds);
-> +	FD_SET(fd, &fds);
-> +	if (select(fd + 1, &fds, NULL, NULL, &tv) == 1 && FD_ISSET(fd, &fds))
-> +		ret = 0;
-> +
-> +	close(fd);
-> +out:
-> +	close(pipefd[0]);
-> +	close(pipefd[1]);
-> +	return ret;
+On Thu, Sep 24, 2026 at 1:32=E2=80=AFPM 'Jakub Kicinski' via Hyper-Yielding
+Back-end Review & Insight System <hybris@mojatatu.com> wrote:
+>
+> On Tue, 22 Sep 2026 12:33:59 -0400 Jamal Hadi Salim wrote:
+> > Subject: [PATCH net 2/2] selftests: tc-testing: add duplicate action de=
+lete batch test
+>
+> ah, here's the 2/2 patch. Patchwork did not figure it out either :(
 
-I am not conviced this testcase provides much value.
-If we really want to keep it, it should be easier to dup2(STDOUT_FILENO)
-and select() for it to be writable instead of doing the dance with the
-pipe.
+repost? (2/2 was stuck on some ether).
 
-> +}
-> +
->  int test_rlimit(void)
->  {
->  	struct rlimit rlim = {
-> @@ -1711,6 +1763,7 @@ int run_syscall(int min, int max)
->  		CASE_TEST(execve_root);       EXPECT_SYSER(1, execve("/", (char*[]){ [0] = (char []){"/"}, [1] = NULL }, NULL), -1, EACCES); break;
->  		CASE_TEST(fchdir_stdin);      EXPECT_SYSER(1, fchdir(STDIN_FILENO), -1, ENOTDIR); break;
->  		CASE_TEST(fchdir_badfd);      EXPECT_SYSER(1, fchdir(-1), -1, EBADF); break;
-> +		CASE_TEST(fd_set);            EXPECT_ZR(1, test_fd_set()); break;
-
-This is not really a syscall test, could you move it to the stdlib
-tests? Also the test functions should have the same order as the
-testcases which are calling them.
-
->  		CASE_TEST(fdopendir_notdir);  EXPECT_SYSER(1, (uintptr_t)fdopendir(STDIN_FILENO), (uintptr_t)NULL, ENOTDIR); break;
->  		CASE_TEST(file_stream);       EXPECT_SYSZR(1, test_file_stream()); break;
->  		CASE_TEST(file_stream_wsr);   EXPECT_SYSZR(1, test_file_stream_wsr()); break;
-> @@ -1753,6 +1806,7 @@ int run_syscall(int min, int max)
->  		CASE_TEST(select_null);       EXPECT_SYSZR(1, ({ struct timeval tv = { 0 }; select(0, NULL, NULL, NULL, &tv); })); break;
->  		CASE_TEST(select_stdout);     EXPECT_SYSNE(1, ({ fd_set fds; FD_ZERO(&fds); FD_SET(1, &fds); select(2, NULL, &fds, NULL, NULL); }), -1); break;
->  		CASE_TEST(select_fault);      EXPECT_SYSER(1, select(1, (void *)1, NULL, NULL, 0), -1, EFAULT); break;
-> +		CASE_TEST(select_high_fd);    EXPECT_SYSZR(1, test_select_high_fd()); break;
->  		CASE_TEST(sendfile);          EXPECT_SYSZR(1, test_sendfile()); break;
->  		CASE_TEST(stat_blah);         EXPECT_SYSER(1, stat("/proc/self/blah", &stat_buf), -1, ENOENT); break;
->  		CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat(NULL, &stat_buf), -1, EFAULT); break;
-> -- 
-> 2.55.0
-> 
+cheers,
+jamal
