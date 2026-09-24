@@ -1,231 +1,502 @@
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E14381E96;
-	Thu, 24 Sep 2026 12:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7FE4825B2;
+	Thu, 24 Sep 2026 13:00:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790254613; cv=none; b=GnX8DZeoa3LvCxlbOG2/nHQ/Iot7kq1lBxzCHPeuZzEsmPkSxeT75GnGkBYglueM6Fp3gLR6+LK17XKRpU1FfQr3PEwrLDXa3ynd/tUNsVo5GT7c3bg8HM2t/Ex8gdpujkcPSJdB0fJjY19HHVNMftnmgWeZlQxPeJmR/X6sF+I=
+	t=1790254850; cv=none; b=f585hiFPGA87mWofPbtbzfc09NLkSUpro+P+QUUEtRG/5t1tkawlIB2JZMQ0B7sl7nhJbSLT93l5J9ehmgYDAnbk5rpWo9Fo6UU8toJJhvlnk3LmyA/GUQI5B38bs8iXDe8VK0NIjfv5VR76NPpi3HR+NMY12/rxs+O6hy5cZf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790254613; c=relaxed/simple;
-	bh=9KFP333nBL3cE3MWpAffOS+SZ2NE4xEC9rmyuPBFGBs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fDxoHGukgIgvBTNTbIwOV8GiSgYlI6DKA53Lg0rHLa37EVGsTwoQiEbD+gcj14Cv2md43tOBLSrhFCS1xiKnnRNqi1nvLrYEdNv+4kg1KxteCywHRvs/QrjxAG9A7T4vApt4VVze7Qap2odvuVRpIDlGbn/C+i6WcgtHv4n6uCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=SfDv2A2m; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hPDQhnza; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	s=arc-20240116; t=1790254850; c=relaxed/simple;
+	bh=W7ku94C0L9H7926tC+FcQoetrTVE9QSRIy7tGlf1dj0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=pjv1uvh11Ey050ooLM6LBo/WW4qSzEc0cMMpSDeiQbAnERtG0xIazuXHUnoR6TScTXIxGD2tWpsKGFmBWYDAA4J3G1IIU8ggN0gsJp727IXWSO+WUmIg67kWf4OPkytQoySiCkt8yeWiQvYZNsdmzXVo1YZP4Bx+NoexJ8MfpLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CLe0DHw5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="SfDv2A2m";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hPDQhnza"
-Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailfout.phl.internal (Postfix) with ESMTP id 8A2C1EC006C;
-	Thu, 24 Sep 2026 08:56:49 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Thu, 24 Sep 2026 08:56:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1790254609;
-	 x=1790341009; bh=nh5lY07F/XdtpzZWisBcou4EdetqWlxWEhSWH7F4qoU=; b=
-	SfDv2A2mrCaoAZJYIg+Gdd5VA7VdxBZbvuu2ggT9DdEBxG9zdV7rTuHSEkdp2muC
-	RrKs1Ca7dVpiS45RImV8oYv+FoCsLmwQD3kkyb+4+C2iNKThGf9SWJoIu2b6PgYv
-	vZcIM/pQOrPURQUUMWcywq/mJv9M4Spdmnm5RAAc41f0uhx81mNomQAjmA2nDhxU
-	+8LlYteXhm/Pc5N2bEAm1UeTQ8PsFO2uox+rLk1WibktQi656HxEJ62wXfUGdKdk
-	WWgGVzAQbQxDrbUjTkHDEoJ3QDP8hcpdgbfVbUWumn5d2XbwRUz6GiB5EYFMuKPQ
-	brbE8PDidMo+hX1w+fZA/w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1790254609; x=
-	1790341009; bh=nh5lY07F/XdtpzZWisBcou4EdetqWlxWEhSWH7F4qoU=; b=h
-	PDQhnza67R40uz4KVjCagCuK/1ooUwva9Er/NXECJ0FHEjMoMBoke2aHuIF2ssXJ
-	QsG6/RCqtJNK/IZzLbY0mngXIEhP7YJdFnZEgu44m0ROGyqO4yEL8LA0oeg6hdiv
-	g+4BV8T2xgDx+1+sH6oOz7vY0K9damZ4tMI7KMy/1EJCGdwDy7HOLikaDy+JfnLX
-	6ceMFdyezhDzCrzOLqL6xFG+ahmA+HuwZgt1Quxl3FtMB7QbzKyIolhlTc3W51ft
-	1HO6VkDpAhH89/pvPW98PePu5IgoTQb8T4nDUYoG+ICHwCQxGQCVMj+gRn/fkw6q
-	oDCYZqON4IQ53LirsjKSQ==
-X-ME-Sender: <xms:EB61ag6hannoEnoGHm6M8Td2p4HPwBZaXj4x4b9wNZ05UmtIGoWlIg>
-    <xme:EB61ajnCXa8dcuv_zjPzBiXZBLBc6SilmBzOljFoB43fww6ABJ517VLYOPGLIdCA0
-    EfKyxUGve3geURx3lvzvz7lryK1DCOfJ2dyFr_G9eIdujkUFOKC8vA>
-X-ME-Received: <xmr:EB61ai6Z9V5eFqttc2Xvt_ymbI2pa28pxkVrhI-YoRi6duOZ1uWRfDQBgIn8MA>
-X-ME-Proxy-Cause: dmFkZTF32quzzh7iukCEspo2//2/EETePHBVgKSDjotfiMLGFMKMi36qp1G2l6m0603LrJ
-    etTQuK4n5psitazgA7NI8ZNAj7Boz3Iz2PTvtSHc4YlI+thZ+g9AxqEWr6smXP4eTxr12L
-    j4iqpnH1GtJD2uV9oEuEdNTFWS+cbDLo5wkX85Q/VxLJ3pJBv3fDm5p4L0ICSGL2DRf+46
-    Zml5juxNyzXgitBUARzy5Q+nGWTe5JIDB908ZQufVLIQOoOBXqBBTkAU9StkEDBWH3HPm1
-    ntYntvDmBSd8joOmDn8RlxUIhT6RE2mlz7OAGRk1ORprL1NHSpdJ4EtNFWlP7TEPEI2LL+
-    pYpBOVi8BAwOPzs8KcdsKkIryA6tKwcjIx9YbxHEmrYndho1FvpUUtTEwlPkk7X/dQD9Ri
-    ojMeInjDm3Qf5JrK4MBzkNA7Dt3NJ6cqbP3mXwlxY66VM1OQkoplQn+y8dqGjimJQChM0H
-    X/OWXCexHTyaKnsGcaXBBz4P6OIry6aIZOK+2kHFAjj6C2QgTN1cKSnEM8fuIS6PcDd0+W
-    qERUKkVymlRMm2x+LmGNo26NcGSU5Ypn9oOO6KRxrdQT6g4w9CrjoWNMiED9/ya8srtUMd
-    ZvrlCrWUre43Cm5+vQfUS0dE4wk7Jh2khI5DPdNo3cIJyUXSXDtSlgOb28sw
-X-ME-Proxy: <xmx:EB61ak-CCIp6-CYCczNih1SN9_54-HNNmAHQY0ICnnl0s8AO4EmszA>
-    <xmx:EB61aqjS8hEqWBBS_8_EGr-7wJVSDCuh5GhtYl6xKl0pHw9uD66TrA>
-    <xmx:EB61aq4gadEPI3rZSlrTz5wkDYHf32dqAFu2Lg2_LiD0KyoCtx3ypw>
-    <xmx:EB61avZEX_jEZucgTShjdxZtDWzWj6mznxYhBi5hg5Z0SqiIAAABXg>
-    <xmx:ER61aii1kJ3fAXJc8Rp40Kh9XAv9uxpj6Ga3ZpCPvgjzzFsOuVxOhPuQ>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 24 Sep 2026 08:56:45 -0400 (EDT)
-Date: Thu, 24 Sep 2026 06:56:42 -0600
-From: Alex Williamson <alex@shazbot.org>
-To: Leon Romanovsky <leon@kernel.org>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, David Matlack <dmatlack@google.com>,
- Fuad Tabba <fuad.tabba@linux.dev>, Joey Gouly <joey.gouly@arm.com>,
- kvm@vger.kernel.org, kvmarm@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org,
- linux-rdma@vger.kernel.org, Marc Zyngier <maz@kernel.org>, Mark Bloch
- <mbloch@nvidia.com>, netdev@vger.kernel.org, Oliver Upton
- <oupton@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Saeed Mahameed
- <saeedm@nvidia.com>, Sean Christopherson <seanjc@google.com>, Steffen Eiden
- <seiden@linux.ibm.com>, Shuah Khan <shuah@kernel.org>, Suzuki K Poulose
- <suzuki.poulose@arm.com>, Tariq Toukan <tariqt@nvidia.com>, Zenghui Yu
- <yuzenghui@huawei.com>, patches@lists.linux.dev, alex@shazbot.org
-Subject: Re: [PATCH v7 00/10] mlx5 support for VFIO self test
-Message-ID: <20260924065642.125986a4@shazbot.org>
-In-Reply-To: <0-v7-c6d30e8ce1e4+3dfa6-mlx5st_jgg@nvidia.com>
-References: <0-v7-c6d30e8ce1e4+3dfa6-mlx5st_jgg@nvidia.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CLe0DHw5"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 83D29C2BCFB;
+	Thu, 24 Sep 2026 13:00:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1790254850;
+	bh=W7ku94C0L9H7926tC+FcQoetrTVE9QSRIy7tGlf1dj0=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=CLe0DHw5h0Hv7Ab+IRTo1TEb44NAePlISvJ+M+Wv55v0YfbLWxO/sXK4SIo8AeONX
+	 ElDpgn1p7almT7obTJirhHGZ6RxrUX5ceEuhqRSDoTiM+Cknf45hhs5FRsBES1Iym+
+	 wt+TOotQTz8XlmPuHyMXle5cVul0Wdl9k/fIRFX7SkqSJc1iQrdlM/TWYn9YCFEAi1
+	 Py+ReBXuyrCou6UF62Vc4PV+6RcGSn4DVRH+at3PnuYeFbv2AvynRssIUXpbELYx+l
+	 jvo3fOldcrip4bYcWnLOF/h4Em8gNPoNUr0emG6cs/YUHtv6Hs0AyL0XhYIeAaxicq
+	 EGt/XEuqFhL2w==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65907C9830E;
+	Thu, 24 Sep 2026 13:00:50 +0000 (UTC)
+From: Alireza Asgari via B4 Relay <devnull+alireza.asgari.net@kernel.org>
+Date: Thu, 24 Sep 2026 13:00:25 +0000
+Subject: [PATCH net 2/2] selftests: net: cover UDP splice checksum fragment
+ alignment
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260924-fix-udp-splice-checksum-v1-2-fe61d65447a8@asgari.net>
+References: <20260924-fix-udp-splice-checksum-v1-0-fe61d65447a8@asgari.net>
+In-Reply-To: <20260924-fix-udp-splice-checksum-v1-0-fe61d65447a8@asgari.net>
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ David Howells <dhowells@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Alireza Asgari <alireza@asgari.net>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790254849; l=12806;
+ i=alireza@asgari.net; s=alireza-kernel; h=from:subject:message-id;
+ bh=3WgZtjdGhpyGxXoJGzwfMeILWbCWZIJDIha+kdwRhbE=;
+ b=eDUmMk6UCV4/tnQd/Og/OPP2nF/rl22EyU60LP0jIrTIJ6OC9+8tstvkRGhUZC5uSrU/308TU
+ XCz5mvZGheaD8WgDq8MNqkhvfUSSYuO2QlNAQ3/aHKH2m2UqVodI0rp
+X-Developer-Key: i=alireza@asgari.net; a=ed25519;
+ pk=wuQ0/M69FqoVnrCMUJ13EQCwrCwVjCrtz75k15vW8tw=
+X-Endpoint-Received: by B4 Relay for alireza@asgari.net/alireza-kernel with
+ auth_id=1055
+X-Original-From: Alireza Asgari <alireza@asgari.net>
+Reply-To: alireza@asgari.net
 
+From: Alireza Asgari <alireza@asgari.net>
 
-Leon, can we get your ack on 1-4?  I'll publish an rc1-based branch for
-any conflict management.  Thanks,
+Exercise software UDP checksums when splice() transfers multiple pipe
+fragments into a corked datagram. Use separate source pipes so short writes
+cannot merge, and use odd fragment lengths to expose checksum-position
+errors between fragments.
 
-Alex
+Cover IPv4, IPv6 and IPv4-mapped destinations, connected and unconnected
+sockets, resident prefixes, even and odd fragment lengths, and a fragment
+starting near a page boundary. Ordinary sends provide a control. Check the
+complete payload and reject extra datagrams after a successful send.
 
-On Mon, 21 Sep 2026 19:35:40 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+Keep receive waits bounded and skip unavailable address families or pipe
+capacities. The test uses only loopback sockets with ephemeral ports and
+has no dependency on the application that exposed the regression.
 
-> Add an mlx5 driver to VFIO self test. This is largely a remix of the
-> existing VFIO mlx5 driver in rdma-core. It uses an RDMA loopback QP
-> to issue RDMA WRITE operations which effectively perform memory
-> copies using DMA. Since mlx5 has a stable programming ABI this
-> should work on devices from CX5 to current HW. The device FW must
-> support the QP loopback configuration.
-> 
-> Also support send_msi by arming completion events of the RDMA WRITE
-> to trigger MSI delivery.
-> 
-> mlx5 device startup is very complex and most of this code is just
-> booting the device, with a smaller amount for operating the QP.
-> 
-> This entire series was coded by Claude Code in about 4 days. It
-> used about 4.5M output tokens, 30 individual sessions and 5600 lines
-> of AI-generated .md files. I spent an annoying amount of time
-> de-slopping and cleaning its work product to make it presentable.
-> However, previous VFIO drivers have taken on the order of 1-2
-> months to write, so getting one in a week is pretty remarkable.
-> 
-> For those interested, the flow I used was broadly a prompt sequence
-> sort of like:
-> 
->  - Hey Claude, go look at the falcon series, VFIO self test, the
->    mlx5 driver, rdma-core and some PDF documentation and make a
->    plan to put mlx5 under the selftest.
->  - Write an rdma-core application using the built-in VFIO provider
->    that can do the required memcpy operations that vfio selftests
->    wants.
->    (This resulted in a 1k loc C file that compiled and ran the
->     first time but had a few bugs related to device programming
->     that the AI resolved.)
->  - Replace the rdma-core components with open-coded versions to
->    create a fully stand-alone program that does the DMA memcpy.
->  - Review and audit the thing.
->  [Pause and de-slop it]
->  - Make it work on a PF too (this is surprisingly hard!).
->  [Move to a kernel tree and copy all the .md files and .c program
->   it made]
->  - Hey Claude, look at all this stuff and make a broad plan to
->    actually build a VFIO self test.
->  - Here is my 1 sentence advice on what each patch should look
->    like, make a detailed plan to make a patch for every one.
->  [Pause and polish the patch plans]
->  - Execute plan X then commit it [pause and de-slop each patch,
->    repeat].
->  [Review and final polish]
-> 
-> v7:
->  - Fix some compilation problems, kvm and the igb
-> v6: https://patch.msgid.link/r/0-v6-8af36cf7b73f+e2-mlx5st_jgg@nvidia.com
->  - Rebase on v7.3-rc3
->  - Correct some minor sashiko remarks
-> v5: https://patch.msgid.link/r/0-v5-4cacb99249f6+1b4-mlx5st_jgg@nvidia.com
->  - Rebase on v7.3-rc1
->  - Adjust how region_size is computed to min it to getpagesize()
-> v4: https://patch.msgid.link/r/0-v4-021df3fb5a3f+98e-mlx5st_jgg@nvidia.com
->  - Rebase on vfio next, update igb and falcon
->  - Move rounding to iova_allocator_alloc()
->  - Remove arm barrier changes
-> v3: https://patch.msgid.link/r/0-v3-76f117ad04f1+28a90-mlx5st_jgg@nvidia.com
->  - Move max into vfio_pci_driver_probe()
->  - Rebase on v7.2-rc3
-> v2: https://patch.msgid.link/r/0-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com
->  - Rebase on v7.1-rc3, drop falcon patches
->  - dev_dbg checks the format string even in non debug builds
->  - Sort includes
->  - Adjust comments/commit messageas
->  - Use linux/pci_ids.h
->  - Compute the driver.max_memcpy_size the same as mlx5 kernel driver, it
->    should be GBs now on most devices
->  - Put region_size into all drivers instead of allowing 0
-> v1: https://patch.msgid.link/r/0-v1-dc5fa250ca1d+3213-mlx5st_jgg@nvidia.com
-> 
-> Jason Gunthorpe (10):
->   net/mlx5: Add IFC structures for CQE and WQE
->   net/mlx5: Move HW constant groups from device.h/cq.h to mlx5_ifc.h
->   net/mlx5: Extract MLX5_SET/GET macros into mlx5_ifc_macros.h
->   net/mlx5: Add ONCE and MMIO accessor variants to mlx5_ifc_macros.h
->   selftests: Add additional kernel functions to tools/include/
->   vfio: selftests: Allow drivers to specify required region size
->   vfio: selftests: Add dev_dbg
->   vfio: selftests: Add mlx5 driver - HW init and command interface
->   vfio: selftests: Add mlx5 driver - data path and memcpy ops
->   vfio: selftests: mlx5 driver - add send_msi support
-> 
->  include/linux/mlx5/cq.h                       |   10 -
->  include/linux/mlx5/device.h                   |  231 +-
->  include/linux/mlx5/mlx5_ifc.h                 |  178 ++
->  include/linux/mlx5/mlx5_ifc_macros.h          |  185 ++
->  tools/arch/arm64/include/asm/barrier.h        |    4 +
->  tools/arch/x86/include/asm/barrier.h          |    5 +
->  tools/include/asm-generic/io.h                |   28 +
->  tools/include/asm/barrier.h                   |    8 +
->  tools/include/linux/stddef.h                  |   10 +
->  .../selftests/kvm/include/arm64/processor.h   |    4 +-
->  tools/testing/selftests/kvm/irq_test.c        |    2 -
->  .../selftests/vfio/lib/drivers/dsa/dsa.c      |    1 +
->  .../selftests/vfio/lib/drivers/igb/igb.c      |    1 +
->  .../selftests/vfio/lib/drivers/ioat/ioat.c    |    1 +
->  .../selftests/vfio/lib/drivers/mlx5/mlx5.c    | 1928 +++++++++++++++++
->  .../selftests/vfio/lib/drivers/mlx5/mlx5_hw.h |  114 +
->  .../vfio/lib/drivers/mlx5/mlx5_ifc.h          |    1 +
->  .../vfio/lib/drivers/mlx5/mlx5_ifc_fpga.h     |    1 +
->  .../vfio/lib/drivers/mlx5/mlx5_ifc_macros.h   |    1 +
->  .../vfio/lib/drivers/nv_falcon/nv_falcon.c    |    1 +
->  .../lib/include/libvfio/vfio_pci_device.h     |   11 +
->  .../lib/include/libvfio/vfio_pci_driver.h     |    6 +
->  .../selftests/vfio/lib/iova_allocator.c       |    7 +-
->  tools/testing/selftests/vfio/lib/libvfio.mk   |    1 +
->  .../selftests/vfio/lib/vfio_pci_driver.c      |    6 +
->  .../selftests/vfio/vfio_pci_driver_test.c     |    3 +-
->  26 files changed, 2502 insertions(+), 246 deletions(-)
->  create mode 100644 include/linux/mlx5/mlx5_ifc_macros.h
->  create mode 100644 tools/include/linux/stddef.h
->  create mode 100644 tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5.c
->  create mode 100644 tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h
->  create mode 120000 tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_ifc.h
->  create mode 120000 tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_ifc_fpga.h
->  create mode 120000 tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_ifc_macros.h
-> 
-> 
-> base-commit: fd73f4a6659897191fa0d40695fe370925dd3780
+Assisted-by: LLM
+Signed-off-by: Alireza Asgari <alireza@asgari.net>
+---
+ tools/testing/selftests/net/.gitignore            |   1 +
+ tools/testing/selftests/net/Makefile              |   1 +
+ tools/testing/selftests/net/udp_splice_checksum.c | 378 ++++++++++++++++++++++
+ 3 files changed, 380 insertions(+)
+
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index c9f46031ac..dacd36ed84 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -55,6 +55,7 @@ tools
+ tun
+ txring_overwrite
+ txtimestamp
++udp_splice_checksum
+ udpgso
+ udpgso_bench_rx
+ udpgso_bench_tx
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 3ee3378f8b..590b33e16d 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -199,6 +199,7 @@ TEST_GEN_PROGS := \
+ 	tap \
+ 	tcp_port_share \
+ 	tls \
++	udp_splice_checksum \
+ # end of TEST_GEN_PROGS
+ 
+ TEST_FILES := \
+diff --git a/tools/testing/selftests/net/udp_splice_checksum.c b/tools/testing/selftests/net/udp_splice_checksum.c
+new file mode 100644
+index 0000000000..dc61444e64
+--- /dev/null
++++ b/tools/testing/selftests/net/udp_splice_checksum.c
+@@ -0,0 +1,378 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Exercise UDP software checksums over multiple spliced pipe fragments.
++ * All traffic stays on loopback; no privileges or external services are needed.
++ * Exit status: 0 = pass, 1 = failure, 4 = all cases skipped.
++ */
++#define _GNU_SOURCE
++
++#include <arpa/inet.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <poll.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/socket.h>
++#include <time.h>
++#include <unistd.h>
++
++#include "kselftest.h"
++
++#define TIMEOUT_MS 200
++
++struct test_case {
++	const char *name;
++	const char *body;
++	const char *prefix;
++	size_t fragments[3];
++	bool ordinary;
++	bool page_tail;
++};
++
++static const struct test_case cases[] = {
++	{ "ordinary-control", "abcDEFGH", "", { 3, 5 }, true, false },
++	{ "uniform-odd-fragments", "BBBBBBBB", "", { 3, 5 }, false, false },
++	{ "even-fragments", "abcdEFGH", "", { 4, 4 }, false, false },
++	{ "odd-fragments", "abcDEFGH", "", { 3, 5 }, false, false },
++	{ "odd-prefix-odd-fragments", "abcDEFGH", "P", { 3, 5 }, false, false },
++	{ "even-prefix-odd-fragments", "abcDEFGH", "PQ", { 3, 5 }, false, false },
++	{ "page-tail-odd-fragments", "abcDEFGH", "", { 3, 5 }, false, true },
++	{ "three-fragments", "abcDEFGhijkl", "", { 3, 4, 5 }, false, false },
++	{ "odd-prefix-three-fragments",
++	  "abcDEFGhijkl",
++	  "P",
++	  { 3, 4, 5 },
++	  false,
++	  false },
++};
++
++static const char *const families[] = { "IPv4", "IPv6", "IPv4-mapped" };
++
++static int error(const char *what)
++{
++	ksft_perror(what);
++	return 1;
++}
++
++static bool unavailable(void)
++{
++	return errno == EAFNOSUPPORT || errno == EPROTONOSUPPORT ||
++	       errno == EADDRNOTAVAIL;
++}
++
++static long long now_ms(void)
++{
++	struct timespec ts;
++
++	if (clock_gettime(CLOCK_MONOTONIC, &ts))
++		ksft_exit_fail_perror("clock_gettime");
++	return (long long)ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
++}
++
++static int receive_one(int fd, const char *expected, size_t length)
++{
++	struct pollfd pfd = { .fd = fd, .events = POLLIN };
++	long long deadline = now_ms() + TIMEOUT_MS;
++	int remaining, ret;
++	char received[64];
++	ssize_t count;
++
++	for (;;) {
++		remaining = deadline - now_ms();
++		if (remaining < 0)
++			remaining = 0;
++		ret = poll(&pfd, 1, remaining);
++		if (ret < 0) {
++			if (errno == EINTR)
++				continue;
++			return error("poll");
++		}
++		if (!ret) {
++			ksft_print_msg("no datagram within %d ms after send\n",
++				       TIMEOUT_MS);
++			return 1;
++		}
++		count = recv(fd, received, sizeof(received),
++			     MSG_DONTWAIT | MSG_TRUNC);
++		if (count < 0) {
++			if (errno == EINTR || errno == EAGAIN)
++				continue;
++			return error("recv");
++		}
++		break;
++	}
++	if (count != (ssize_t)length || memcmp(received, expected, length)) {
++		ksft_print_msg("received %zd bytes; expected %zu matching\n",
++			       count, length);
++		return 1;
++	}
++	count = recv(fd, received, sizeof(received), MSG_DONTWAIT | MSG_TRUNC);
++	if (count >= 0) {
++		ksft_print_msg("unexpected extra datagram (%zd bytes)\n",
++			       count);
++		return 1;
++	}
++	if (errno != EAGAIN)
++		return error("extra-datagram check");
++	return 0;
++}
++
++/* Separate source pipes prevent adjacent small writes merging into one buffer. */
++static int append_fragment(int dest, const char *data, size_t length)
++{
++	int source[2], ret = 1;
++
++	if (pipe2(source, O_NONBLOCK | O_CLOEXEC))
++		return error("source pipe");
++	if (write(source[1], data, length) != (ssize_t)length) {
++		error("source write");
++		goto out;
++	}
++	if (splice(source[0], NULL, dest, NULL, length, SPLICE_F_NONBLOCK) !=
++	    (ssize_t)length) {
++		error("pipe-to-pipe splice");
++		goto out;
++	}
++	ret = 0;
++out:
++	close(source[0]);
++	close(source[1]);
++	return ret;
++}
++
++static int pipe_capacity(int fd, unsigned int slots, const char **skip_reason)
++{
++	long required = slots * sysconf(_SC_PAGESIZE);
++	int capacity = fcntl(fd, F_GETPIPE_SZ);
++
++	if (capacity < 0)
++		return error("query pipe capacity");
++	if (capacity >= required ||
++	    fcntl(fd, F_SETPIPE_SZ, required) >= required)
++		return 0;
++	ksft_print_msg("cannot reserve %u pipe slots: %s\n", slots,
++		       strerror(errno));
++	*skip_reason = "required pipe capacity unavailable";
++	return KSFT_SKIP;
++}
++
++/* Leave three bytes at a page's end, followed by five bytes on the next page. */
++static int append_page_tail(int dest, const char *body,
++			    const char **skip_reason)
++{
++	long page = sysconf(_SC_PAGESIZE);
++	int source[2], ret = 1;
++	char *data;
++
++	if (page < 8) {
++		ksft_print_msg("invalid page size %ld\n", page);
++		return 1;
++	}
++	data = malloc(page + 5);
++	if (!data)
++		return error("malloc");
++	memset(data, 'x', page - 3);
++	memcpy(data + page - 3, body, 8);
++	if (pipe2(source, O_NONBLOCK | O_CLOEXEC)) {
++		error("page-tail source pipe");
++		goto free_data;
++	}
++	ret = pipe_capacity(source[1], 2, skip_reason);
++	if (ret)
++		goto out;
++	ret = 1;
++	if (write(source[1], data, page + 5) != page + 5) {
++		error("page-tail write");
++		goto out;
++	}
++	if (read(source[0], data, page - 3) != page - 3) {
++		error("page-tail discard");
++		goto out;
++	}
++	if (splice(source[0], NULL, dest, NULL, 8, SPLICE_F_NONBLOCK) != 8) {
++		error("page-tail pipe-to-pipe splice");
++		goto out;
++	}
++	ret = 0;
++out:
++	close(source[0]);
++	close(source[1]);
++free_data:
++	free(data);
++	return ret;
++}
++
++static int run_case(unsigned int family, bool connected,
++		    const struct test_case *test, const char **skip_reason)
++{
++	size_t body_length = strlen(test->body), offset = 0;
++	int tx_family = family == 0 ? AF_INET : AF_INET6;
++	int rx_family = family == 1 ? AF_INET6 : AF_INET;
++	int rx = -1, tx = -1, pipefd[2] = { -1, -1 };
++	size_t prefix_length = strlen(test->prefix);
++	struct sockaddr_storage address = { 0 };
++	socklen_t address_length;
++	struct sockaddr_in6 *v6;
++	struct sockaddr_in *v4;
++	int ret = 1, zero = 0;
++	char expected[64];
++	unsigned int i;
++	ssize_t count;
++
++	v4 = (struct sockaddr_in *)&address;
++	v6 = (struct sockaddr_in6 *)&address;
++	*skip_reason = "address family unavailable";
++	memcpy(expected, test->prefix, prefix_length);
++	memcpy(expected + prefix_length, test->body, body_length);
++	rx = socket(rx_family, SOCK_DGRAM | SOCK_CLOEXEC, 0);
++	if (rx < 0) {
++		ret = unavailable() ? KSFT_SKIP : error("receive socket");
++		goto out;
++	}
++	if (rx_family == AF_INET) {
++		v4->sin_family = AF_INET;
++		v4->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
++		address_length = sizeof(*v4);
++	} else {
++		v6->sin6_family = AF_INET6;
++		v6->sin6_addr = in6addr_loopback;
++		address_length = sizeof(*v6);
++	}
++	if (bind(rx, (struct sockaddr *)&address, address_length)) {
++		ret = unavailable() ? KSFT_SKIP : error("bind loopback");
++		goto out;
++	}
++	if (getsockname(rx, (struct sockaddr *)&address, &address_length)) {
++		error("getsockname");
++		goto out;
++	}
++	if (family == 2) {
++		unsigned short port = v4->sin_port;
++
++		memset(&address, 0, sizeof(address));
++		v6->sin6_family = AF_INET6;
++		v6->sin6_port = port;
++		inet_pton(AF_INET6, "::ffff:127.0.0.1", &v6->sin6_addr);
++		address_length = sizeof(*v6);
++	}
++	tx = socket(tx_family, SOCK_DGRAM | SOCK_CLOEXEC, 0);
++	if (tx < 0) {
++		ret = unavailable() ? KSFT_SKIP : error("send socket");
++		goto out;
++	}
++	if (family == 2 &&
++	    setsockopt(tx, IPPROTO_IPV6, IPV6_V6ONLY, &zero, sizeof(zero))) {
++		error("disable IPV6_V6ONLY");
++		goto out;
++	}
++	if (connected &&
++	    connect(tx, (struct sockaddr *)&address, address_length)) {
++		error("connect");
++		goto out;
++	}
++	if (test->ordinary) {
++		count = sendto(tx, expected, prefix_length + body_length, 0,
++			       (struct sockaddr *)&address, address_length);
++		if (count != (ssize_t)(prefix_length + body_length)) {
++			error("ordinary sendto");
++			goto out;
++		}
++	} else {
++		if (pipe2(pipefd, O_NONBLOCK | O_CLOEXEC)) {
++			error("assembled pipe");
++			goto out;
++		}
++		ret = pipe_capacity(pipefd[1], test->fragments[2] ? 3 : 2,
++				    skip_reason);
++		if (ret)
++			goto out;
++		ret = 1;
++		if (test->page_tail) {
++			ret = append_page_tail(pipefd[1], test->body,
++					       skip_reason);
++			if (ret)
++				goto out;
++			ret = 1;
++		} else {
++			for (i = 0; i < ARRAY_SIZE(test->fragments); i++) {
++				if (!test->fragments[i])
++					break;
++				if (append_fragment(pipefd[1],
++						    test->body + offset,
++						    test->fragments[i]))
++					goto out;
++				offset += test->fragments[i];
++			}
++		}
++		/* Even an empty prefix establishes the destination and UDP cork. */
++		count = sendto(tx, test->prefix, prefix_length, MSG_MORE,
++			       (struct sockaddr *)&address, address_length);
++		if (count != (ssize_t)prefix_length) {
++			error("prime sendto(MSG_MORE)");
++			goto out;
++		}
++		count = splice(pipefd[0], NULL, tx, NULL, body_length,
++			       SPLICE_F_NONBLOCK | SPLICE_F_MORE);
++		if (count != (ssize_t)body_length) {
++			ksft_print_msg("socket splice: %zd, expected %zu: %s\n",
++				       count, body_length,
++				       count < 0 ? strerror(errno) :
++						   "short transfer");
++			goto out;
++		}
++		if (sendto(tx, "", 0, 0, (struct sockaddr *)&address,
++			   address_length)) {
++			error("commit sendto");
++			goto out;
++		}
++	}
++	ret = receive_one(rx, expected, prefix_length + body_length);
++out:
++	if (pipefd[0] >= 0) {
++		close(pipefd[0]);
++		close(pipefd[1]);
++	}
++	if (tx >= 0)
++		close(tx);
++	if (rx >= 0)
++		close(rx);
++	return ret;
++}
++
++int main(void)
++{
++	unsigned int family, connected, i;
++	const char *connection, *skip;
++	int ret;
++
++	ksft_print_header();
++	ksft_set_plan(ARRAY_SIZE(families) * 2 * ARRAY_SIZE(cases));
++	for (family = 0; family < ARRAY_SIZE(families); family++) {
++		for (connected = 0; connected < 2; connected++) {
++			connection = connected ? "connected" : "unconnected";
++			for (i = 0; i < ARRAY_SIZE(cases); i++) {
++				ret = run_case(family, connected, &cases[i],
++					       &skip);
++				if (ret == KSFT_SKIP)
++					ksft_test_result_skip("%s %s %s: %s\n",
++							      families[family],
++							      connection,
++							      cases[i].name,
++							      skip);
++				else
++					ksft_test_result(!ret, "%s %s %s\n",
++							 families[family],
++							 connection,
++							 cases[i].name);
++			}
++		}
++	}
++	if (!ksft_get_pass_cnt() && !ksft_get_fail_cnt()) {
++		/* ksft_exit_skip() would add a result beyond the plan. */
++		ksft_print_cnts();
++		return KSFT_SKIP;
++	}
++	ksft_finished();
++}
+
+-- 
+2.34.1
+
 
