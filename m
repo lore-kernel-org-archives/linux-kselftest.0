@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93883101C8;
-	Fri, 25 Sep 2026 07:36:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC3533C18B;
+	Fri, 25 Sep 2026 07:41:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790321794; cv=none; b=nbWMF1r7t0/nuiI439kW/Z0gImTVScF578h/ameJePFkwPM4ugKKbahDkv+JaSfwQeUpipfJ4MoTRXZ/CGe+mLT0gVfbCn+TYxwv86N4wCzg/G4sp6RFdWOjz5lBlBXCujseDD6vs246RDd8mroYPb3ciy9pC2Q4vzS4knJzO8U=
+	t=1790322092; cv=none; b=ZMn862S0PBIMoxIPPWS6/eu4Vt7nE1Q0Frfbjlm2O4puR7Etowjgn8AZN3sP2Xj4RLYgT1CdkpZrMpfwldB3HJ1LCqYWkAeYctLEOrCbyTyoBj82eo88moO1mlJE6czq7icwIavx+nnb+Zo45UHNuNPYJ0GSKP0B7weUbFXt6kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790321794; c=relaxed/simple;
-	bh=OrWtnPHY0v2jFfTbnfAEgTflOnAKuPxoisotn6z/Wfs=;
+	s=arc-20240116; t=1790322092; c=relaxed/simple;
+	bh=TtF3YUgRmhYqp/HGXQw7dNOjKsNcVFgn8XFttRU/b8c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c1GMlszJBorxOOWH0VHdJ2jp8qTNdoKGUEiDhB9FmrYkgl+pfEe0cjvWABBOTZP2RWO3hNR7cxXD7GStZMazde7B1RbacNKxqvSFds/0nC82Ttj98ufILLam4+RLZdl1T7c5XwR5PJK09GXyuQB6PWpQUCCeU8PpGkyiNDDnc5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZONf+4+l; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=SuwowDZIuK6mcLLTzLkompXAoDcrRwevVaDeKX9XvKdYdSHn0MD0E/SLO5pJ35EOnHzk2A3eUXHLmxne9NjYrX2rWWzC6MlGUxMCBRnAUk8F804gDmdFDva/cSNrFK4ABVtMmn1QVmWn1/yxqyymRlBu+7ExvmY7ZZMl1zHYcaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mojc1X2e; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZONf+4+l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A5FF1F000FF;
-	Fri, 25 Sep 2026 07:36:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mojc1X2e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F0BC1F000FF;
+	Fri, 25 Sep 2026 07:41:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790321793;
-	bh=qnxQU7d+frKyB9oowMrXZhHl7CNs0iZ4Cr6Z7V6k8J4=;
+	s=k20260515; t=1790322091;
+	bh=sSXXHcoKeJGdNHQgFKs26HgxQNSGO9LllOG334GweVs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=ZONf+4+lZGaelMcILIEmfAnw3woDfcDmGEp0gD0f/5Fh/YeEpzOaMzpIN0HuM+sf2
-	 B1fbntNHdm8ZxST2a1XJUZGECinTv07+BuFeAXo1bD/hn8iy7KABuQXE9MQEke60JR
-	 5KcJaYCJduwYSUBIwArYuJMnt3T4tRYuxtBHM8wgY+PnI+yOwpoDeR+WQBCacWG5a8
-	 zFpyjqJXugUVyiCr2/tr2DUsTuFDxyKUNHPbL1/0KDWg5Ze7Ta+l+qYyYXpUjBCVBm
-	 +cyegaaOmT+oQL+thPXZ3VtlNZGzYMEu+mvz7YzEdQSJWZdJ+H9N/YRDge+0hb9XLH
-	 oOiu0egcXuyyg==
-Message-ID: <8f60eae1-31ba-4ff4-adf9-951240561f13@kernel.org>
-Date: Fri, 25 Sep 2026 09:36:26 +0200
+	b=Mojc1X2e2BKYS5x6as8pQ1NzXmlundxvuGcBb5WPkaE7dvY7/dEEGUKy/DPS9i95v
+	 UIJesHTcAlIJTjtw/Oyk9SMcyAu9quYuxtqUg2e3bcSRFPkxa27VTOGMKge/ni2P5V
+	 jWFk9wmBeHYwcu4pjSffNF+67ayFWIYsEAcg9aL1Vll9RW+5laPjhtGkphDbsYoxWQ
+	 HLefio5ZpWeUHpBqFDJanj6jK9AY1G4+Ci4BwjEgiVLquuoFoGn/D9l9dMMXnW8pKk
+	 na+ra7w5ODe3CkjBBXKvkCNQm11V8ndON9dKEZzD5YFdhlUDCUsAVgRuUMkgEHyO3Q
+	 blAaGAUvPdDng==
+Message-ID: <226ec797-ff8c-4465-a682-21c684a25021@kernel.org>
+Date: Fri, 25 Sep 2026 09:41:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,18 +35,16 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] userfaultfd: clear the inherited uffd bit in
- move_swap_pte()
-To: Andrew Morton <akpm@linux-foundation.org>,
- Donggeun Yoo <donggeunyoo.kernel@gmail.com>
-Cc: rppt@kernel.org, peterx@redhat.com, surenb@google.com,
- aarcange@redhat.com, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
- mhocko@suse.com, shuah@kernel.org, kirill@shutemov.name, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] selftests/mm: add a test for UFFDIO_MOVE of a
+ write-protected swap entry
+To: Donggeun Yoo <donggeunyoo.kernel@gmail.com>, akpm@linux-foundation.org,
+ rppt@kernel.org
+Cc: peterx@redhat.com, surenb@google.com, aarcange@redhat.com,
+ ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, mhocko@suse.com,
+ shuah@kernel.org, kirill@shutemov.name, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20260925042907.2330519-1-donggeunyoo.kernel@gmail.com>
- <20260925042907.2330519-2-donggeunyoo.kernel@gmail.com>
- <20260924214811.19ef8af417d37071ed8338c4@linux-foundation.org>
+ <20260925042907.2330519-3-donggeunyoo.kernel@gmail.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -93,40 +91,108 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260924214811.19ef8af417d37071ed8338c4@linux-foundation.org>
+In-Reply-To: <20260925042907.2330519-3-donggeunyoo.kernel@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/25/26 06:48, Andrew Morton wrote:
-> On Fri, 25 Sep 2026 13:29:06 +0900 Donggeun Yoo <donggeunyoo.kernel@gmail.com> wrote:
+On 9/25/26 06:29, Donggeun Yoo wrote:
+> Move a swapped-out page out of a write-protected area into a destination
+> registered for missing faults only, and read pagemap bit 57 at the
+> destination.  The destination was never write-protected, so the bit must
+> be clear.
 > 
->> UFFDIO_MOVE on a swapped-out page installs the source PTE at the
->> destination unchanged, so a uffd bit set on the source lands in a
->> destination VMA that was never registered for write protection.  It
->> can't be unset there, and THP collapse can't happen either, because a
->> swap entry with the uffd bit set makes the scan bail.
->>
->> I don't think it's intentional because for an unswapped page the bit
->> doesn't come along, and I don't see why being swapped out should change
->> that.
->>
->> Clear the uffd bit on the moved swap entry unless the destination is
->> RWP-registered.
+> Assisted-by: LLM
+> Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+> ---
+>  tools/testing/selftests/mm/uffd-unit-tests.c | 61 ++++++++++++++++++++
+>  1 file changed, 61 insertions(+)
 > 
-> Thanks, but...
-> 
-> When fixing a bug, please always fully describe the userspace-visible
-> effects of that bug.
+> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+> index ef9b3956bdcfd..ae8b718f0a278 100644
+> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
+> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+> @@ -2037,6 +2037,59 @@ static void uffd_move_pmd_split_test(uffd_global_test_opts_t *gopts, uffd_test_a
+>  			      uffd_move_pmd_handle_fault);
+>  }
+>  
+> +/*
+> + * Moving a swapped-out page out of a write-protected area must not carry the
+> + * uffd-wp bit into a destination that is not write-protect registered: such a
+> + * bit is never cleared afterwards, so pagemap keeps reporting the page as
+> + * uffd-tracked.
+> + *
+> + * Needs a swap device; skipped if MADV_PAGEOUT cannot evict the page.
+> + */
+> +static void uffd_move_swap_wp_test(uffd_global_test_opts_t *gopts,
+> +				   uffd_test_args_t *targs)
+> +{
+> +	unsigned long page_size = gopts->page_size;
+> +	struct uffdio_move move = { };
+> +	int pagemap_fd, i;
+> +
+> +	if (uffd_register(gopts->uffd, gopts->area_src, page_size,
+> +			  false, true, false))
+> +		err("register src failure");
+> +	if (uffd_register(gopts->uffd, gopts->area_dst, page_size,
+> +			  true, false, false))
 
-It would also be helpful to describe if this was actually hit in practice so
-far. IOW, how relevant is this in practice.
+Side note: this binary encoding of features is horrible.
 
-Will this trigger a kernel splat later?
+> +		err("register dst failure");
+> +
+> +	wp_range(gopts->uffd, (unsigned long)gopts->area_src, page_size, true);
+> +
+> +	pagemap_fd = pagemap_open();
+> +	for (i = 0; i < 100; i++) {
+> +		if (madvise(gopts->area_src, page_size, MADV_PAGEOUT))
+> +			err("MADV_PAGEOUT");
+> +		if (pagemap_is_swapped(pagemap_fd, gopts->area_src))
+> +			break;
+> +		usleep(10000);
+> +	}
 
-Someone would have to use UFFD_WP/UFFD_RWP with UFFDIO_MOVE, and have
-UFFD_WP/UFFD_RWP disabled on the destination vma ... and then work on a swap entry.
+Is this loop really required? I thought the page should just be unmapped from
+the page table. It might still be in the swapcache and under writeback, but
+that's irrelevant.
 
-Code itself LGTM
+> +	if (!pagemap_is_swapped(pagemap_fd, gopts->area_src)) {
+> +		uffd_test_skip("MADV_PAGEOUT did not swap the page; is swap enabled?");
+> +		goto out;
+> +	}
+> +
+> +	move.dst = (unsigned long)gopts->area_dst;
+> +	move.src = (unsigned long)gopts->area_src;
+> +	move.len = page_size;
+> +	if (ioctl(gopts->uffd, UFFDIO_MOVE, &move))
+> +		err("UFFDIO_MOVE");
+> +
+> +	if (pagemap_get_entry(pagemap_fd, gopts->area_dst) & PM_UFFD_WP)
+> +		uffd_test_fail("uffd-wp bit moved into an area that is not write-protected");
+> +	else
+> +		uffd_test_pass();
+> +out:
+> +	close(pagemap_fd);
+> +	uffd_unregister(gopts->uffd, gopts->area_src, page_size);
+> +	uffd_unregister(gopts->uffd, gopts->area_dst, page_size);
+> +}
+> +
+>  static bool
+>  uffdio_verify_results(const char *name, int ret, int error, long result)
+>  {
+> @@ -2359,6 +2412,14 @@ uffd_test_case_t uffd_tests[] = {
+>  		.uffd_feature_required = UFFD_FEATURE_MOVE,
+>  		.test_case_ops = &uffd_move_test_pmd_case_ops,
+>  	},
+> +	{
+> +		.name = "move-swap-wp",
+> +		.uffd_fn = uffd_move_swap_wp_test,
+> +		.mem_targets = MEM_ANON,
+> +		.uffd_feature_required = UFFD_FEATURE_MOVE |
+> +		UFFD_FEATURE_PAGEFAULT_FLAG_WP,
+> +		.test_case_ops = &uffd_move_test_case_ops,
+> +	},
+Do we also want to check wrp? I'd assume it suffers from the same problem (did
+not check carefully though)
 
 -- 
 Cheers,
