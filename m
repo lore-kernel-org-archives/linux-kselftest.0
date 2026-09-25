@@ -1,46 +1,44 @@
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8534A1DF6;
-	Fri, 25 Sep 2026 13:31:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A9D346E58;
+	Fri, 25 Sep 2026 13:32:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790343113; cv=none; b=mrBVUWuOE/e3fQFAwXPc2RWvL8aIqBCKVUN/bRYZOErt5s0ytpzY3MX8gGNYp5U1R/EhGpYvyX5wNUnkkCQt12h/byZwYtqAY47YwnZQrc6GcHI9f89bYoegbk0lzihON1NfP7nqG91moc5ObDMNMaNm3SzfTQsF6mX2yjMM3kI=
+	t=1790343124; cv=none; b=QhdFKXoVJDeY3xV87+m5g03I5+AsMX2EjVfIx9dIe/nyPBPAqw/0aCTX36hvziIyaiR8dTgSyXYsizLAbHYZhu4Uc92A1UWsNTwTpijBZi+6eLUDKE3qOf8RVhom7jd+tCvDek1mllCtBRNrCUvbmE2j0wpc/hL/gRwHGMhTnlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790343113; c=relaxed/simple;
-	bh=1PZmj32CRTBPqeXsEu/4paBeqkMGtbVNIlBpO3t1akw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kJXqTj7ADZdRgXSYku3vaWtb3u02lt/B9rB7Sf3FFpKQZmhRKqnnUb08QhfvAQLQY9IxfoLI3lVeTjSYN+YDJq7aSIAmQaVGYylERG3LRXQbKeDA/n4tnDVht7mg1CqGQMjq+lYXYNQQPHW/IFCYlsx/rmVAVp8oaxkhnjp4KrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=JBAOeDIc; arc=none smtp.client-ip=130.117.225.111
+	s=arc-20240116; t=1790343124; c=relaxed/simple;
+	bh=pfHHJN9mx7iaqPzkJ7OKmCMLSFn2Ivdn3IqFyfscjNQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rxtCl1ZUO3Rgy9QlF/kWF3X2TmGTMecqIpmvy4h2S9OAGFabuRt93dgTrDVqkbWogBKo3+1mWBVooQw9vbHV1DElZxNFTIRVmZbHmMmRYK0f4CaOfZwxBtB51XoSGH/s4vnVyC6wbz1xukRSuuOc+vRqwVSiClsmmnEq0kHJE74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=u8KirY2H; arc=none smtp.client-ip=130.117.225.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="JBAOeDIc"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="u8KirY2H"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=Q4/9ic0XNq6fQcZmyLRi1JoQNXeypJEroEwy7jfonHY=; b=JBAOeDIck5ah
-	VfgkoiiGEovtouCDdjOs7p6Kp9K1xONJ35y/GoIwhj8QSqAMN5lumXzoGFsCii9FCkmHygCSo0nT3
-	V1SCBDQOSppdkGFwM2o957+l9gq5nLz/hNXJ5bsG/Y1WcyTrjlWcFYg8wgetSMwYHJ1bTF/tTDE59
-	7eznKo1248cbUx/ez1ZYvnSbLNVBSswdX24Q3mNLmhJwXqxFGnKPmNpmjT0INcU3qe9rvZxA71e8j
-	2cBFOuUPXVW1YY9x9KYs68o/VEYQOna22XC+GtCWFpTQn3aFb5+27xK4IE2sZjlSE8V62n9VFDnSE
-	B/vKlpr8Zyx9qSDvL8ZW8g==;
+	Content-Type; bh=6HAHGu4uIEli4DDfuSdZRC62h38knRyenkn6Pc+DmxQ=; b=u8KirY2H+1W3
+	xabV403OYV99Cm9GP61rgfZ3ii1fGAGZ0vfGR9SHmB0Vnf+c9Ehgafm6/3XKxsUowLot8h+7P6aMh
+	Gkk4UfxAUuIXxddOp7Rf48hwcjGlFPrPiCgZkTAd7gXb+65gOi0E62V2us+pzVmqGoKI1lmGT0pdb
+	2W8EMBpnAQ8ISrM+LYJQA9ZSHmfs4pzTswIz2/ES9hYmxCSdNvm/Yetwidf81Q7VO5foOE464tVjO
+	JNPH+m4T7NwhyOOObuIgYOM8CyCoHQs2PhJXWeUqB0GSFh/5PEyAZFlpe5Baa+W2vpNEmRPJ48Raz
+	wScepjNbLpAKUMLjEe0Ubw==;
 Received: from ch-vpn.virtuozzo.com ([130.117.225.6] helo=LekKit-T14)
 	by relay.virtuozzo.com with esmtp (Exim 4.96)
 	(envelope-from <eva.kurchatova@virtuozzo.com>)
-	id 1xA5yn-008Orv-1u;
-	Fri, 25 Sep 2026 15:31:45 +0200
+	id 1xA5wa-008MTh-34;
+	Fri, 25 Sep 2026 15:29:29 +0200
 From: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
-To: Manivannan Sadhasivam <mani@kernel.org>,
-	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Frank Li <Frank.Li@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
+To: Shuah Khan <shuah@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Tony Luck <tony.luck@intel.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>
 Cc: linux-kernel@vger.kernel.org,
 	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	linux-pci@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests: pci_endpoint: skip when the test device is absent
-Date: Fri, 25 Sep 2026 16:31:32 +0300
-Message-ID: <20260925133141.3634476-1-eva.kurchatova@virtuozzo.com>
+Subject: [PATCH 1/2] selftests: pstore: skip when no backend is registered
+Date: Fri, 25 Sep 2026 16:29:05 +0300
+Message-ID: <20260925132914.3633554-1-eva.kurchatova@virtuozzo.com>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -50,50 +48,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Every fixture opens /dev/pci-endpoint-test.0 and asserts on the result,
-so on a machine that has no PCI endpoint test device all 17 cases fail
-in fixture setup rather than reporting that the hardware is not there.
+An unregistered pstore backend reads back "(null)", and every later
+check fails. This also contradicts the pstore_crash_test documentation.
 
-Check for the device once before handing over to the harness. Doing it
-there rather than in each of the four fixtures keeps it to a single skip,
-and leaves the fixtures to fail as before on an open that goes wrong for
-any other reason, which is not something to skip over.
+pstore_crash_test has carried the comment
 
-The harness parses its own arguments inside test_harness_run(), so only
-the plain invocation, the one kselftest makes, turns into a skip, -l and
--h keep working on a machine without the device.
+  # exit if pstore backend is not registered
+
+Fix by skipping an unregistered backend in common_tests.
 
 Signed-off-by: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
 ---
- .../selftests/pci_endpoint/pci_endpoint_test.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ tools/testing/selftests/pstore/common_tests     | 17 ++++++++++++-----
+ .../selftests/pstore/pstore_post_reboot_tests   |  3 ---
+ 2 files changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-index 588d75c97ad1..efec4a84aa15 100644
---- a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-+++ b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-@@ -286,4 +286,20 @@ TEST_F(pcie_ep_doorbell, DOORBELL_TEST)
- 		SKIP(return, "Doorbell test is not supported");
- 	EXPECT_FALSE(ret) TH_LOG("Test failed for Doorbell\n");
- }
--TEST_HARNESS_MAIN
-+
-+static bool test_device_available(void)
-+{
-+	return access(test_device, F_OK) == 0;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	/*
-+	 * Only the plain invocation, which is the one kselftest uses, turns
-+	 * into a skip, so that -l and -h keep working without the hardware.
-+	 */
-+	if (argc == 1 && !test_device_available())
-+		ksft_exit_skip("no PCI endpoint test device %s\n", test_device);
-+
-+	return test_harness_run(argc, argv);
-+}
+diff --git a/tools/testing/selftests/pstore/common_tests b/tools/testing/selftests/pstore/common_tests
+index 4509f0cc9c91..8f140fa572af 100755
+--- a/tools/testing/selftests/pstore/common_tests
++++ b/tools/testing/selftests/pstore/common_tests
+@@ -55,6 +55,8 @@ operate_files() { # tested value, files, operation
+ 
+ # Parameters
+ TEST_STRING_PATTERN="Testing pstore: uuid="
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
+ UUID=`cat /proc/sys/kernel/random/uuid`
+ TOP_DIR=`absdir $0`
+ LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`_${UUID}/
+@@ -74,10 +76,15 @@ prlog "=== Pstore unit tests (`basename $0`) ==="
+ prlog "UUID="$UUID
+ 
+ prlog -n "Checking pstore backend is registered ... "
+-backend=`cat /sys/module/pstore/parameters/backend`
+-show_result $?
++# No file at all where pstore is not loaded, "(null)" where none registered
++backend=`cat /sys/module/pstore/parameters/backend 2>/dev/null`
++if [ -z "$backend" ] || [ "$backend" = "(null)" ]; then
++    prlog "SKIP"
++    prlog -e "\tbackend=${backend:-<none>}"
++    prlog -e "\tcmdline=`cat /proc/cmdline`"
++    prlog "pstore backend is not registered, skipping"
++    exit $ksft_skip
++fi
++prlog "ok"
+ prlog -e "\tbackend=${backend}"
+ prlog -e "\tcmdline=`cat /proc/cmdline`"
+-if [ $rc -ne 0 ]; then
+-    exit 1
+-fi
+diff --git a/tools/testing/selftests/pstore/pstore_post_reboot_tests b/tools/testing/selftests/pstore/pstore_post_reboot_tests
+index d6da5e86efbf..2edd48a87dda 100755
+--- a/tools/testing/selftests/pstore/pstore_post_reboot_tests
++++ b/tools/testing/selftests/pstore/pstore_post_reboot_tests
+@@ -7,9 +7,6 @@
+ #  Written by Hiraku Toyooka <hiraku.toyooka.gu@hitachi.com>
+ #
+ 
+-# Kselftest framework requirement - SKIP code is 4.
+-ksft_skip=4
+-
+ . ./common_tests
+ 
+ if [ -e $REBOOT_FLAG  ]; then
 -- 
 2.55.0
 
