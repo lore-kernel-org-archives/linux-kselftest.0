@@ -1,138 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBDF314A619;
-	Fri, 25 Sep 2026 19:48:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1076401486
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 19:51:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790365703; cv=none; b=ZkC8OQ/hkf64/E0UbOYLLMyseqbEPl4EF4F0ZasDQ5acMFiDemBmEbq9MaJ1r3yUDzA8maam9Jm72phVE6bNFPluqOGBkU1PIl71jxu2yrNRHKUJqeEERgmgorMiSbdhYIUGLFOllE0LrhrXSUnL+eedvkaU+aah5CjI8pGm5mo=
+	t=1790365865; cv=none; b=HLDc2sQwfIOV0l+b0KrkqEYBkywt+PtUSut9R5ymoiGNPCdOjnL3xXrXA2ifmtmf8HdQDkjv4iwoBcolaRmpJ9gLpd+4d77ZJzJuUl/JZjBr6VKVLNI1dLx0xPlgJzD0frcDv9VWfLvbndkFJDVFAtFlz2b4cF0OZgG1SprkxkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790365703; c=relaxed/simple;
-	bh=TciHMdDlrdsa9ERMoFTjGhAHbHf8M+vgHxNh6dXT4go=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WLcUNnghaIbupEISqHXqvF/gZtU56kKb/NN7fizPNxnd5xi+0IQ7g6Qz8gp9dM6P/Tr1dF20ywAhV2pKNOyjmIJ1BXC11TM/QcIrrjLp+jB7J1SmGJnjTMPv8Qb+jPgz3GXLMVbG2ysEfBF7OeXT6q4BoJnF87uKuJ6eVYhF/HM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aiVZjVmE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790365865; c=relaxed/simple;
+	bh=2TQZFwirqOWes4En7HI9aoy8gROqVgMcdHaWnUUX8Kc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=fbp3/ZWGerfv9ko1JT3nNu6jmBU3+iMmMJHDktX98/6lU4bY2zlNX8v7DzRCtom902N5e/aDetXKGuu0YMI20ySqKOwWKS87fLnvRwY7NYzJBkQkU7IAysC9nE8ZGH+Sme30rcK/vt8cHbODQiNQX17vcipo5+WV2BOS4hNB3tE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tM1J7WUC; arc=none smtp.client-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aiVZjVmE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DDF91F000FF;
-	Fri, 25 Sep 2026 19:48:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790365701;
-	bh=iihkM/7KvK/mt1x0eZrWDrnWJRfMoQnZsgo9hNqe2G8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=aiVZjVmEy1ThNnYtiCN1cN+s5ZqCNT+FP/swQUZVuNiJ7kWC5BDeOeCFutI34nVGg
-	 0LmSxyMmeP4LR6IkdRtS1PgHj7BOOsVIFqSAcmDRbbVl3OR6nELyLXXoQXeZMtZnya
-	 LRxoZRnnfLul7IArKgbVPoCGVm2OUfn3az67oNC3dNhjHhBkPBF+DWAVDY7lDtXs1M
-	 j8rUW8SnEeQydrHCrUGimqDN1e/LZAMlUrBS2RTTE8/V1uMt30mpk3s2yLtwonRJof
-	 qTMGhtCJ9ZH8Pjg2pML5wI+IpiO9QdcvOHn2S/qup/K655+EVWVOB4ee8O6G80lb/v
-	 gFFDHLdg3Ec9A==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1xABu6-0000000Daim-3CXI;
-	Fri, 25 Sep 2026 19:48:18 +0000
-Date: Fri, 25 Sep 2026 20:48:18 +0100
-Message-ID: <86eceh3yf1.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	David Hildenbrand <david@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tM1J7WUC"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-3115c4451c8so1012639eec.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 12:51:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790365863; x=1790970663; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=HyiruoU89fBmLALvorzSciHBi6mzhh5Mz13gcRYwmgo=;
+        b=tM1J7WUCH4/D9J45ykBfF/Mk2GnVwPa1U2PN/gSHFK+jziuI27lIy3y3voI6A/wiai
+         4vbr6P2TEu+MrWqmy+Xu/gGIvEdDY0NSOTmTCcoRE2EyqTMuhwUNOQMDPQ8RsUD8s8m1
+         L9qq00/mmR67VHprGBeXS0EJAytCfyfkXVQhpqgN76lMSQonVvF/vGM7fRS4nj0gy7pV
+         Z9ymNOkA2ElRU/Z9Za65OFU+mK4+FbRUFLH56XsAXa1H7Ym/bWFcD/HNYhVzJ3/vlQ8K
+         bmuSaF0AEs1NCA2S5Z/mUrv/7WkoJM/UhaxvXV/1g4z0H8nzmAKe2mgrZLhkeAVBi027
+         o1PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790365863; x=1790970663;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=HyiruoU89fBmLALvorzSciHBi6mzhh5Mz13gcRYwmgo=;
+        b=1XhFENLSMU7xg1siiOwELkPDWup1KD9uquHaR85m6lXq5l4Xv8Z+XKFkMZsmZr1o0c
+         UgYyXpsWJih/wipvCukLejwmZ9nMT9CuBh0zosPEInIB/pKd5fhTWFLtzmoZ1L7gDE6P
+         16uhG02FDAjAP6Gc4RHLDXF/sdET2L+GG2XLNR4PtuXvWkbHiM+u41mtVm+PwoaBZDSZ
+         FWSgjFqlQoh/qUdkVmOtU9EpVfEPAgAsxRUblILAIXFJcJs9oubQaFTXQk8ygGpATBLh
+         jESGqntYHG80HqkEGxOu260+1A/1s1p2O0LzYB45c/kYdrEroJjSla4snKI0JARDAjS6
+         1/Rw==
+X-Forwarded-Encrypted: i=1; AKwUvBz7oeo6oOZWIq9o2rxm4LWFw64dM+n6Fl0J4ndxNGP757VJ1sC0doHKnD/mQU/jYYgBd4CLjBjAiJLZ1xQpgRQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++nuy0CyVUPmDIf4NTsR7i1BhmLj+aJ+g5evxLUUVg2aylyDG7tB
+	miDBbDiJVajguadRCDXktGytnixS59tGBsTc32CuDRdM1LwEw3BPkilj
+X-Gm-Gg: AYBFou2BDmJTtQA+XXeNdjXB4YwzehvOINmu0za/1rr0ihvkB72Im1SufSCPRnBaYih
+	AQYGXK64vyJzQDUAryjg513IGOzmr0U1LkhLqVgr6fINZbyIvNC/u/qNiv5TaZtJsdAPUcuWv+i
+	65Py1pAfxcyvTPeEVKy/O7q6uxg+gKdTfqD3IDh1vSr18P8lGU1PktEQV+d+OGQ30eanPUXZTBl
+	LoOwRZa89Is5yuJ+TlFHY2U0wTM8Ev+oxwlEhucYUe9LO01xuv54MZVCEFi1yudnWGYn4zIzEMG
+	RtCVrjaiQMqUk1wv2w5TkHPv/qEO+3cstUuqUV6k4qfRy7tXA4nkPuIc3Opm7/OnFVZoE7XSuJO
+	sE4RcCK9+JCG2K6RAjsgtzByUks9daAg8o0dhPo4eOULFtnztkiysKDzmUV+gGeET8YnwPiIEaL
+	O7L4GWoYbVgqzHKLQlXdnFrAjMZJhQr+klWGmpgywcclqzgjr6REMFyGyql5YkBsuqKm6tna8EF
+	yQrptj1FILPSTGYP6P1EC+HaYQRhls6PW3WqUfkVoxeEOo9r0RYdnko4mPNOz8xhOTML+71gS0=
+X-Received: by 2002:a05:7301:dd96:b0:32e:3b62:6951 with SMTP id 5a478bee46e88-3426cde4ef0mr1005752eec.0.1790365862642;
+        Fri, 25 Sep 2026 12:51:02 -0700 (PDT)
+Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:afc1:567c:4083:c0c4])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-341447576b9sm9020399eec.15.2026.09.25.12.50.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2026 12:51:02 -0700 (PDT)
+From: "Hemendra M. Naik" <hemendranaik@gmail.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	hemendranaik@gmail.com,
+	horms@kernel.org,
+	jhs@mojatatu.com,
+	jiri@resnulli.us,
+	kuba@kernel.org,
 	linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Jack Thomson <jackabt@amazon.com>,
-	Jack Thomson <jackabt.amazon@gmail.com>,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	Vincent Donnefort <vdonnefort@google.com>,
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Leo Soares Passos <Leo.Bras@arm.com>,
-	Wei-Lin Chang <weilin.chang@arm.com>,
-	linux-s390@vger.kernel.org
-Subject: Re: [PATCH v4 00/14] KVM: arm64: Add KVM_PRE_FAULT_MEMORY support
-In-Reply-To: <arY1uKfUBXRpauaN@gremlin>
-References: <20260923-kvm-arm-prefault-v4-0-d4b0b4dfa8c3@kernel.org>
-	<86ik3u4asq.wl-maz@kernel.org>
-	<arY1uKfUBXRpauaN@gremlin>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	tahiliani@nitk.edu.in,
+	vishy0777@gmail.com
+Subject: Re: [PATCH net-next v8 2/3] selftests: tc-testing: add fq_pie per-flow class stats test
+Date: Sat, 26 Sep 2026 01:20:54 +0530
+Message-Id: <20260925195054.9009-1-hemendranaik@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <179028364138.2160803.8521628163584007831@kernel.org>
+References: <179028364138.2160803.8521628163584007831@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: ljs@kernel.org, catalin.marinas@arm.com, will@kernel.org, oupton@kernel.org, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, corbet@lwn.net, mark.rutland@arm.com, fuad.tabba@linux.dev, rdunlap@infradead.org, borntraeger@linux.ibm.com, frankja@linux.ibm.com, david@kernel.org, hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com, svens@linux.ibm.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, skhan@linuxfoundation.org, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, jackabt@amazon.com, jackabt.amazon@gmail.com, alexandru.elisei@arm.com, vdonnefort@google.com, aneesh.kumar@kernel.org, seanjc@google.com, imbrenda@linux.ibm.com, Leo.Bras@arm.com, weilin.chang@arm.com, linux-s390@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 25 Sep 2026 09:51:41 +0100,
-"Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
-> 
-> On Thu, Sep 24, 2026 at 10:08:37PM +0100, Marc Zyngier wrote:
-> > On Wed, 23 Sep 2026 16:15:43 +0100,
-> > "Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
-> > >
-> > > This series implements the KVM stage 2 page table pre-faulting feature for
-> > > arm64.
-> >
-> > [...]
-> >
-> > > base-commit: 23ddf997ab16b5f4aa9f948f5a68f5b35e4e398f
-> >
-> > In the future, please don't do this. I've just nuked this commit from
-> > kvmarm/next as I rebuilt it, and using such a random commit is
-> > counter-productive. Just stick to an -rc tag from Linus' tree, and
-> > that's it. I'm perfectly happy to deal with the outcome (conflicts and
-> > other funny things).
-> 
-> Ack! No problem, will do.
-> 
-> Do you prefer that people stick to the same -rc base from the start or OK to
-> roll it over to latest Linus's tree?
+Thank you for the review. Replies are inline below. No code changes are
+planned for this test; we'd like to keep it as posted.
 
-We generally pick -rc3 as the merge base for all topic branches, so
-something -rc{1,2,3} are ideal. If you depend on something that is in
-a further -rc, we can manage. But keep in mind that around -rc6, the
-tree is closed to new features and becomes fixes only. So if you find
-yourself basing something on -rc5, you're already playing with fire.
+> [Severity: Medium]
+> Will this test fail with any iproute2 release available today?
+>
+> The kernel side, fq_pie_dump_class_stats(), only sends a binary struct
+> tc_fq_pie_xstats with type TCA_FQ_PIE_XSTATS_CLASS:
+>
+>     xstats.type = TCA_FQ_PIE_XSTATS_CLASS;
+>     ...
+>     return gnet_stats_copy_app(d, &xstats, sizeof(xstats));
+>
+> The words "prob", "delay" and "deficit" only appear if tc formats that
+> struct. According to the commit message, only the pending iproute2 patch
+> does that.
+>
+> With a stock tc, re.findall() in run_one_test() in tdc.py finds 0
+> matches against a matchCount of 1. tdc then marks the test as failed,
+> even on a kernel where the fq_pie class stats work correctly.
+>
+> tdc already has a way to skip in this case: the dependsOn key handled in
+> run_one_test(). Other tests use it to gate on newer iproute2 features.
+> For example, in actions/mirred.json:
+>
+>     "dependsOn": "$TC actions add action mirred help 2>&1 | grep -q blockid",
+>
+> Could 83c0 get a similar dependsOn probe, so that it skips instead of
+> failing when the tc in use can't print the per-flow stats?
+>
+> The commit message also describes the test more narrowly than it
+> behaves:
+>
+>     verify that 'tc -s class show' reports an fq_pie class.
+>
+> The pattern needs the per-flow counters too, not just an fq_pie class.
+> Could the description say that the test depends on the iproute2 change?
 
-Thanks,
+We'd like to keep the check as it is, without a dependsOn probe. There
+are several cases already in this suite that were written against, and
+still assume, newer tc wording with no dependsOn guard at all, e.g.:
+  - tc-tests/qdiscs/fq.json (commit 3007d8712c9b, "adjust fq test to
+    latest iproute2")
+  - tc-tests/infra/qdiscs.json (commit 56acc7f51974, "Adapt test's
+    output to HFSC's iproute2 printing changes")
+  - tc-tests/actions/police.json (commit b7df2e7eaef7, "Adapt tc
+    police action tests for Gb rounding changes")
+  - tc-tests/actions/bpf.json (commit ac2944abe4d7, "Be compatible
+    with newer tc output")
 
-	M.
+We're doing the same thing here: this test is paired with the
+companion iproute2 patch, the same as those cases were paired with the
+tc versions they were written for.
 
--- 
-Without deviation from the norm, progress is not possible.
+The commit message already says the per-flow counters are printed by
+the companion iproute2 change; we don't think it needs to be repeated
+in the test's own one-line description as well.
+
