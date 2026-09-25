@@ -1,149 +1,106 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1076401486
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 19:51:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C3C30EF6C
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 20:08:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790365865; cv=none; b=HLDc2sQwfIOV0l+b0KrkqEYBkywt+PtUSut9R5ymoiGNPCdOjnL3xXrXA2ifmtmf8HdQDkjv4iwoBcolaRmpJ9gLpd+4d77ZJzJuUl/JZjBr6VKVLNI1dLx0xPlgJzD0frcDv9VWfLvbndkFJDVFAtFlz2b4cF0OZgG1SprkxkU=
+	t=1790366883; cv=none; b=j2bw4bTL6ouMU/l/5WGtL56Qlf3CwXM7Z7HveRZQ/cIM2IaSLa1k+Dnk/1gy5zbjmOQJRbwySqhpkUflokB5cfUfRpqRfVMhnWchIoV2aPXPIM7f0ZKCZ4vcjuQCCnpbTdocyyp4oBPlAH73B++++6ndDt5NSeNKKQbhF+FFfY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790365865; c=relaxed/simple;
-	bh=2TQZFwirqOWes4En7HI9aoy8gROqVgMcdHaWnUUX8Kc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fbp3/ZWGerfv9ko1JT3nNu6jmBU3+iMmMJHDktX98/6lU4bY2zlNX8v7DzRCtom902N5e/aDetXKGuu0YMI20ySqKOwWKS87fLnvRwY7NYzJBkQkU7IAysC9nE8ZGH+Sme30rcK/vt8cHbODQiNQX17vcipo5+WV2BOS4hNB3tE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tM1J7WUC; arc=none smtp.client-ip=74.125.82.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790366883; c=relaxed/simple;
+	bh=MkCbV2C/+Z4zSk4k/R/6Wh6vMD0Jf/jg3bhgXczLsLc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qnfYwP/kmjYZusOleTnHOUasOgBYqFLCi5q+h7k0zLOsvOrc0VUnE2fUPCqpsu6oFfwaJfpFHWtNM9lsU+vGczzusyRNa83qPz60TXV9loeXxn/TrAtvKzbvmpCsuKt1CUbWXnSobQY0ZBRZp7F25PBn89f4E7flNMXJZOjP7z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gnjCrU1g; arc=none smtp.client-ip=74.125.225.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tM1J7WUC"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-3115c4451c8so1012639eec.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 12:51:03 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gnjCrU1g"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e6b885ef8so7656645e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 13:08:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790365863; x=1790970663; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=HyiruoU89fBmLALvorzSciHBi6mzhh5Mz13gcRYwmgo=;
-        b=tM1J7WUCH4/D9J45ykBfF/Mk2GnVwPa1U2PN/gSHFK+jziuI27lIy3y3voI6A/wiai
-         4vbr6P2TEu+MrWqmy+Xu/gGIvEdDY0NSOTmTCcoRE2EyqTMuhwUNOQMDPQ8RsUD8s8m1
-         L9qq00/mmR67VHprGBeXS0EJAytCfyfkXVQhpqgN76lMSQonVvF/vGM7fRS4nj0gy7pV
-         Z9ymNOkA2ElRU/Z9Za65OFU+mK4+FbRUFLH56XsAXa1H7Ym/bWFcD/HNYhVzJ3/vlQ8K
-         bmuSaF0AEs1NCA2S5Z/mUrv/7WkoJM/UhaxvXV/1g4z0H8nzmAKe2mgrZLhkeAVBi027
-         o1PQ==
+        d=linuxfoundation.org; s=google; t=1790366879; x=1790971679; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mYKp+bFSterpr+lY2+5QJKDt27P8MnJ6X1EK8+K6uLs=;
+        b=gnjCrU1gtBzNm1n5C9GbEiQHuPxlS0eMEHUi52vM1m+1wLK5p1LvWJ4O/QUFKqITXd
+         Qa6Qv9KNc7SJ2GC3E+DdYBiZ2LpyU6B/TMbgkHc2cjTgU+gTFvrmHawEtb/GaGElYP5k
+         8zRibF0HaDBIXo7bvJHbg6b1ZEQ/37Lt1eWQ0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790365863; x=1790970663;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HyiruoU89fBmLALvorzSciHBi6mzhh5Mz13gcRYwmgo=;
-        b=1XhFENLSMU7xg1siiOwELkPDWup1KD9uquHaR85m6lXq5l4Xv8Z+XKFkMZsmZr1o0c
-         UgYyXpsWJih/wipvCukLejwmZ9nMT9CuBh0zosPEInIB/pKd5fhTWFLtzmoZ1L7gDE6P
-         16uhG02FDAjAP6Gc4RHLDXF/sdET2L+GG2XLNR4PtuXvWkbHiM+u41mtVm+PwoaBZDSZ
-         FWSgjFqlQoh/qUdkVmOtU9EpVfEPAgAsxRUblILAIXFJcJs9oubQaFTXQk8ygGpATBLh
-         jESGqntYHG80HqkEGxOu260+1A/1s1p2O0LzYB45c/kYdrEroJjSla4snKI0JARDAjS6
-         1/Rw==
-X-Forwarded-Encrypted: i=1; AKwUvBz7oeo6oOZWIq9o2rxm4LWFw64dM+n6Fl0J4ndxNGP757VJ1sC0doHKnD/mQU/jYYgBd4CLjBjAiJLZ1xQpgRQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++nuy0CyVUPmDIf4NTsR7i1BhmLj+aJ+g5evxLUUVg2aylyDG7tB
-	miDBbDiJVajguadRCDXktGytnixS59tGBsTc32CuDRdM1LwEw3BPkilj
-X-Gm-Gg: AYBFou2BDmJTtQA+XXeNdjXB4YwzehvOINmu0za/1rr0ihvkB72Im1SufSCPRnBaYih
-	AQYGXK64vyJzQDUAryjg513IGOzmr0U1LkhLqVgr6fINZbyIvNC/u/qNiv5TaZtJsdAPUcuWv+i
-	65Py1pAfxcyvTPeEVKy/O7q6uxg+gKdTfqD3IDh1vSr18P8lGU1PktEQV+d+OGQ30eanPUXZTBl
-	LoOwRZa89Is5yuJ+TlFHY2U0wTM8Ev+oxwlEhucYUe9LO01xuv54MZVCEFi1yudnWGYn4zIzEMG
-	RtCVrjaiQMqUk1wv2w5TkHPv/qEO+3cstUuqUV6k4qfRy7tXA4nkPuIc3Opm7/OnFVZoE7XSuJO
-	sE4RcCK9+JCG2K6RAjsgtzByUks9daAg8o0dhPo4eOULFtnztkiysKDzmUV+gGeET8YnwPiIEaL
-	O7L4GWoYbVgqzHKLQlXdnFrAjMZJhQr+klWGmpgywcclqzgjr6REMFyGyql5YkBsuqKm6tna8EF
-	yQrptj1FILPSTGYP6P1EC+HaYQRhls6PW3WqUfkVoxeEOo9r0RYdnko4mPNOz8xhOTML+71gS0=
-X-Received: by 2002:a05:7301:dd96:b0:32e:3b62:6951 with SMTP id 5a478bee46e88-3426cde4ef0mr1005752eec.0.1790365862642;
-        Fri, 25 Sep 2026 12:51:02 -0700 (PDT)
-Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:afc1:567c:4083:c0c4])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-341447576b9sm9020399eec.15.2026.09.25.12.50.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 12:51:02 -0700 (PDT)
-From: "Hemendra M. Naik" <hemendranaik@gmail.com>
-To: netdev-bot+sashiko@kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	hemendranaik@gmail.com,
-	horms@kernel.org,
-	jhs@mojatatu.com,
-	jiri@resnulli.us,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	tahiliani@nitk.edu.in,
-	vishy0777@gmail.com
-Subject: Re: [PATCH net-next v8 2/3] selftests: tc-testing: add fq_pie per-flow class stats test
-Date: Sat, 26 Sep 2026 01:20:54 +0530
-Message-Id: <20260925195054.9009-1-hemendranaik@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <179028364138.2160803.8521628163584007831@kernel.org>
-References: <179028364138.2160803.8521628163584007831@kernel.org>
+        d=1e100.net; s=20260707; t=1790366879; x=1790971679;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=mYKp+bFSterpr+lY2+5QJKDt27P8MnJ6X1EK8+K6uLs=;
+        b=EkD+RnfQYVPfxiTNJSwvvr7g7eeg0lXxkCbyVig9qvwKQtG0rI0QWwCBu0DJGr7n2k
+         oqNClCDxhKViAJ4xL3pkCq8u4n6EaLxxhT04A5qtbN1rk2aP6lVTAZ6TSSOqbmY1n8Q4
+         p221tYRqc39YjhCapXapA629oKzOJUdMuPsI1Rz4Mpq4EmT9ScYZ5+87iKQo2vjFfnle
+         Fj9QbgGC0z8jspMamv+QIT/18BJpX3rtaFOqeJWgX2S1CnpoHJdJlRBnLBTOm4UgPJpp
+         MTqLdyfXxoVrtbbjcUez9K0+TV9smsAlLcB0wcdX5KQ+xdNau50ZThbnjpNvAinmKW1u
+         ZkoA==
+X-Forwarded-Encrypted: i=1; AKwUvBz7oP/SRdg7Y6KWBmdgJa8KYFwd86T3HPQ+UGA8EQzA9M9OulW12jLjROtz0QGVaeo54HW66hzRPt9QTg1drDA=@vger.kernel.org
+X-Gm-Message-State: AFuF++kzfgCMe1lb8UUOvFBXGBPN7rVB2Xk3miHxn0Hmcm3umyaihhe+
+	bQ+nyfNwePCGJp2fypW+ybVZabPLFPx4LrdTklKLNMdzx0tZxSH2IYFy8DOuDT6A5+M=
+X-Gm-Gg: AYBFou1ZFdN/6mp6iNCGzcC7SmsjsHSg2IRq8FK1Cn3W2OtLY23ZYZpMmQnzwG5qOPe
+	a18Ted5t8AfeUVrQuTWDbJYfjYPCgzgFGbhuu/pEvgVJ3ngxXhb4yv8gqHybWeBvvLuOl/wf9pL
+	2Mvp/GhLFIWY/mfI8uRW7A09LgNzv7GdoZRAyMZbMzO61czoTnC6KmoE3cumN99ueVQL0FsvLCM
+	IIEw86dIoV0nBXl/2s8v6tEokXwBLOHcLKlgvoYNN97Cs1fPBDezBs2wn3ov7p0hli1DcvHTJer
+	wr2i/HLb0617s59M2JoUMFbz9bDKKbtNcXLMRY6ABFxlzXx4m2+6oErz31RnzYUhftYAqPK2V35
+	kkAsEbdYoozKxYo8XZ8LgY8TimXPXYAQs0e34VvqXbcGReEiKoBh6AXdsoBGueHq0i+ALRkZO73
+	fevVGh3nnaJBrfqZkgHLK0uObLODib7wi+//PW03ZPqYwVpqH4CIK/Bs66//ZMyYkIssGzrKQkQ
+	RVTW+R8jD2PYV3eD+YlfAPSy98OwVBggzxjgEXqtczlxMV/d0KmPLU/5VM6Dg==
+X-Received: by 2002:a05:600d:8653:10b0:49f:e701:51c8 with SMTP id 5b1f17b1804b1-49fe70151ebmr89606855e9.9.1790366879427;
+        Fri, 25 Sep 2026 13:07:59 -0700 (PDT)
+Received: from [10.188.175.252] (cust-west-par-46-193-46-178.cust.wifirst.net. [46.193.46.178])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5cd4271sm251705165e9.5.2026.09.25.13.07.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Sep 2026 13:07:58 -0700 (PDT)
+Message-ID: <78508c04-c9f9-403e-b13f-220a3d74e956@linuxfoundation.org>
+Date: Fri, 25 Sep 2026 14:07:57 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: resctrl selftest patches ready for kselftest "next"
+To: Reinette Chatre <reinette.chatre@intel.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <92c35a79-1c8c-4543-8fa0-0ab78b05faae@intel.com>
+ <CAKRRn-d+72is6hNnyTvxUWg0mRWm_BDBcqHZY0+ahdzoNJV=bA@mail.gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <CAKRRn-d+72is6hNnyTvxUWg0mRWm_BDBcqHZY0+ahdzoNJV=bA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Thank you for the review. Replies are inline below. No code changes are
-planned for this test; we'd like to keep it as posted.
+On 9/25/26 01:56, Shuah Khan wrote:
+> 
+> Hi Reinette,
+> 
+> On Thu, Sep 24, 2026, 11:54 PM Reinette Chatre <reinette.chatre@intel.com <mailto:reinette.chatre@intel.com>> wrote:
+> 
+>     Hi Shuah,
+> 
+>     There are a couple of resctrl selftest patches that are ready for inclusion:
+> 
+>     "selftests/resctrl: Skip L3_CAT when no exclusive cache portion exists"
+>     https://lore.kernel.org/lkml/20260821003908.12977-1-icheng@nvidia.com/ <https://lore.kernel.org/lkml/20260821003908.12977-1-icheng@nvidia.com/>
 
-> [Severity: Medium]
-> Will this test fail with any iproute2 release available today?
->
-> The kernel side, fq_pie_dump_class_stats(), only sends a binary struct
-> tc_fq_pie_xstats with type TCA_FQ_PIE_XSTATS_CLASS:
->
->     xstats.type = TCA_FQ_PIE_XSTATS_CLASS;
->     ...
->     return gnet_stats_copy_app(d, &xstats, sizeof(xstats));
->
-> The words "prob", "delay" and "deficit" only appear if tc formats that
-> struct. According to the commit message, only the pending iproute2 patch
-> does that.
->
-> With a stock tc, re.findall() in run_one_test() in tdc.py finds 0
-> matches against a matchCount of 1. tdc then marks the test as failed,
-> even on a kernel where the fq_pie class stats work correctly.
->
-> tdc already has a way to skip in this case: the dependsOn key handled in
-> run_one_test(). Other tests use it to gate on newer iproute2 features.
-> For example, in actions/mirred.json:
->
->     "dependsOn": "$TC actions add action mirred help 2>&1 | grep -q blockid",
->
-> Could 83c0 get a similar dependsOn probe, so that it skips instead of
-> failing when the tc in use can't print the per-flow stats?
->
-> The commit message also describes the test more narrowly than it
-> behaves:
->
->     verify that 'tc -s class show' reports an fq_pie class.
->
-> The pattern needs the per-flow counters too, not just an fq_pie class.
-> Could the description say that the test depends on the iproute2 change?
+Applied this to kselftest next branch.
 
-We'd like to keep the check as it is, without a dependsOn probe. There
-are several cases already in this suite that were written against, and
-still assume, newer tc wording with no dependsOn guard at all, e.g.:
-  - tc-tests/qdiscs/fq.json (commit 3007d8712c9b, "adjust fq test to
-    latest iproute2")
-  - tc-tests/infra/qdiscs.json (commit 56acc7f51974, "Adapt test's
-    output to HFSC's iproute2 printing changes")
-  - tc-tests/actions/police.json (commit b7df2e7eaef7, "Adapt tc
-    police action tests for Gb rounding changes")
-  - tc-tests/actions/bpf.json (commit ac2944abe4d7, "Be compatible
-    with newer tc output")
+> 
+>     "selftests/resctrl: Add dynamic linked list management for IMC counters"
+>     https://lore.kernel.org/lkml/20260801092429.533956-1-wuyifan50@huawei.com/ <https://lore.kernel.org/lkml/20260801092429.533956-1-wuyifan50@huawei.com/>
 
-We're doing the same thing here: this test is paired with the
-companion iproute2 patch, the same as those cases were paired with the
-tc versions they were written for.
+This didn't apply. I am guessing picking this patch depends on others in this
+series?
 
-The commit message already says the per-flow counters are printed by
-the companion iproute2 change; we don't think it needs to be repeated
-in the test's own one-line description as well.
-
+thanks,
+-- Shuah
