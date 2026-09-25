@@ -1,62 +1,64 @@
-Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
+Received: from mail-oa2-f17.google.com (mail-oa2-f17.google.com [74.125.231.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249513BFE34
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 21:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E444F93AA
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 21:16:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790370965; cv=none; b=uE7SA5R8oQ+b+f0aVU8zuwadmdcke3RCbTp9jJ4YspwDc5h89pDPqSwANFmf+SC4oqXPjLxDYf5uc3/Rul5DYzH5m/W9vWkKI2D2GvWuwfFjDWOfM+ABklkTfCbGNrVv60cEd35ThUsAKV6gNuDX4prN+Xl3KyaSUPE3/+vQhOI=
+	t=1790370967; cv=none; b=VIYu5/x3q/bswLSBBL+xtFGClHDoiPu4JakJcK7jJx2uCsshXN9VsuXQ62DXY22Lpth7NiUIMY5Seavr/quJR2eXtlvAZk47/6vb2DE96aI0VdlSK8Mi3WpeQ9ecUb3nj2Y+ARj5ekPpjPRpE7Ccgm4kztH2IWlVGI7AVvTM9qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790370965; c=relaxed/simple;
-	bh=pK9CkBADurJ3TQk2304lFhjwAUkCFus38zK6seCIVM4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CRT3HhzPnPBCbn8ng33tdhEAFBpM3tiDc/s+/Af5DQLVzMqgmQiA8CTU27v2njwwiiXOw6gOJVvNmpwnQvB4UgWEyXiarfu50dBft38psZz5cuPZem8qOpBw8iXR0nbtG8yfWqAA2T/llg0BPKG4LJnYBYylRhVQSicfaqLuWBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aEcRZr6i; arc=none smtp.client-ip=74.125.231.76
+	s=arc-20240116; t=1790370967; c=relaxed/simple;
+	bh=y1PFaRBlTn/ZCYwF7xOFcCPi53rXVK3rGbNoLiZI0A0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=oGidjusSXNk19u/WqrvzsqxqbJ/tZ7Sz+TtgS0G23NoArB/WFQERCO8JsPiMt4+QNFXZjHtVSZOUoJez6nDBYKeqqaYM2Tnz6k0yfmAP4NJg/RJI2XK+dJwMic+ELGKIzQMzLAQfNrU3NktxhomSZZ0rNf9NRA1WoUxeLVkepPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aBzXGLKn; arc=none smtp.client-ip=74.125.231.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aEcRZr6i"
-Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-466ccbd4773so544870fac.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 14:16:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aBzXGLKn"
+Received: by mail-oa2-f17.google.com with SMTP id 586e51a60fabf-466cc88a0d7so1092692fac.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 14:16:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790370963; x=1790975763; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cnh6yaJJMgo3tk2iOj4ZCEcBu2G6mNxaVghRd0egq9Q=;
-        b=aEcRZr6iZW96FidiJY3RjAgV4NdcmjSrVZFE3jJC3GtnMjcfIuTqeDiDGxoxPNjW2W
-         Lbu6zT3zGA0P7RkhMVDjIk+vgtHwBwrNpnZFMj0Psc4cxWjwpTMGtTnrly5fqBQgXtqD
-         /3vMZuK+Uy3BkGgz46xKi0jJ7qCZHwPfsP19ofdsOW5XLebEQjfxN2X26TkLgeOM//O9
-         1/YnyFBEut/OwddfC3PEKIBSo7orjrQRYvb2e3fJoBz8hI3T9Nj9rJIBOBb0Tkrtryt1
-         /twd1lH5KcdKLDOpanJ8+Ehch1BqrEWGX9hBmWEaXsRun81lI/jM9O8U4ZtOxrWHzC5z
-         numw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790370963; x=1790975763;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1790370964; x=1790975764; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=cnh6yaJJMgo3tk2iOj4ZCEcBu2G6mNxaVghRd0egq9Q=;
-        b=GR+CFBrtVWaE+leHwffYf7BlG0+C0eYUpTutcNhVXKyK5Gj6E5hYSARXs4evwJvMDx
-         cJUHplT+c7lG3OBM/aUzxXp2yNI6enBacDBndKE4FEbVYG1sUP5CbHnnulGbC3mFDUxL
-         qVHiA6yVpA3xaki94tHOzKTuDbwroDo3D4yU+jCBoPqBA6m08BcJHxzOw+0XI9/PFvqo
-         4EUuODtFN5sgaCFpHfYJsCY20lZkn1TT2xwXn94OxEEPRaUPE0ybQT9Ilk8loIAHzq4o
-         TlhrLH0d2L8icDvm0rrEt4UMbv7A0ehpAuV3kXLZjmIbJBPYnN8YZO7LFFa0ksMcB8KD
-         vvJw==
-X-Forwarded-Encrypted: i=1; AKwUvBy5Qz0FY8rm4UdwgrTWhVTI1bs+UDumZUszwamcXKTtoq7vPYUz0W7JSRL2rAC5nJptWWfDODLMMz50cMrnndM=@vger.kernel.org
-X-Gm-Message-State: AFuF++l8qmx+PjHr9zvEx6ABfFZNrAOpTPDj2BL6wrwxkXFIeE4YGhF5
-	s9TccH+Q2lprXc6dPmlSwea6qfoLabm6ITIjJMRvrm/RXdQ5skfWEJlW
-X-Gm-Gg: AYBFou0d2cY/9Gyxug0YWsIC5NL7wuRUTfn8gY5F1XnMZ+zdnPiHM5oKhvOXqYPqkDo
-	t9bG/mtp2wMMV9fxX3hbnB/D6xmTExWVrmt6BgxMIyJQpEe9bZtjRZLfcbJEs91pAwDNiMNAmi4
-	OJkf8BDKsxeQ25SOz/KP1ZNQ9Hn1gRY5c+lNECGEX+wxt29dRK1Q4aN2DDsr0kzxXegnjVug324
-	12SZOpnm9X3uwaRchO4kmEicSBQwW5EWjyWenbepmRkAPlBvLIcqpFeMhxFXO2Qn/f5fl5Q7BMG
-	753/AVfeyW9rSmQnGEKMzVu8Ex2P7Lp1aARpDVvvwUc8YdQVNHKnJywSCqoad3qos4MXeTQsZlB
-	YqIJLW/rhChFmkGqaKUyIK+OurUcdx/8qv1ObDaUZBukWzVMP+jdk+wi8xIG6K/oFFc4B4CJNS6
-	pHd5Ibe0o3ieviJqwe1pGcFyS6AdoCkhfsmiVR33or3xKNgaytU5xVO6aN7gkyPLTBbzu5OmDEb
-	aK2uWVz3G+rGIxw8yhzcUa1P8/acbSOYQG4Yhor
-X-Received: by 2002:a05:6808:1920:b0:4ce:a4fc:a848 with SMTP id 5614622812f47-4dc57e294d3mr4141411b6e.6.1790370962713;
-        Fri, 25 Sep 2026 14:16:02 -0700 (PDT)
+        bh=J+r3w/xqNCPChfm05nwGvpKJ2QthikR2lv0/GbZ7Ook=;
+        b=aBzXGLKn76hfIPhFOkP03k3iecovKLEBx1zYF1+HJvX0aWmUTZ7ftFdSOB4o4h6mhp
+         2hm6PVutDy/xD/6EYBUaeUJyr9fUI/3kE+o6BOSeT8Dr5yPrJVLxvwC7gFH6lHHrMVL3
+         L3avvMMjOC9PHTWAxboyZg5O4/QCp3dKYceRAm75qaaRp89CIrWxmOI9yZlk65GRjZqA
+         OrMh/etZpFmuqSTqIarUY5Ur9y3/KNLAAYuvS/pAwscyqEvy1o3E04Cfn13MDfOl9M39
+         E+Oy5fKvvhf0CzuWNB2XstITwNCZmwvjQq/10PFpwwProaccLL7lqDszcgH2kwQZgwo/
+         JJtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790370964; x=1790975764;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=J+r3w/xqNCPChfm05nwGvpKJ2QthikR2lv0/GbZ7Ook=;
+        b=KgucfKJ8wwDoJAz1F+oRhyCpw5yzrN+kIbf89vqdOVb7QhWkhZXSbu/UC01uGa+NQP
+         fjlQFLo/WfEhV27j0wtLG53h95U6g3m51Z8599Keum6cuirhwDa4Sp5QzJfSLEcz8Azv
+         pb/PAxACIeHkaG8RFIpNlVZJxegoIH63vK9tPbYZNHxBqyrOn9KOKSFk5FqJAWm3vkaI
+         7TEnbRg7B6Am+x8Zn5qW5bW9V3apFirDNsYvTzZ6W994cPe7PIHnh1ul9gdH0M2Ze5SO
+         UD/bYQfVYHWbYAUJVV+z87xUlEc2Ih8FIWPed5Vcd9S5a5JjyxfuqRotpIy+8VECwsUr
+         3Bnw==
+X-Forwarded-Encrypted: i=1; AKwUvBz/q9HR3gGDN2C3Sa+aBFaj09CtqpvD3TbkLo4ALZ4viTSGQEn/cSnX87bVVSjILKvccJq50iljpgpWs7/QZA8=@vger.kernel.org
+X-Gm-Message-State: AFuF++li7OfIiWJCcpmkXDNfGQehLB1gYtf0X1c/5vHn1kZhN8ELHWtY
+	N4RooKQwgzGqpWEvxihsiYTkOIebqXAbFcqO0BpxXi2LGNwYl7CDE9VD
+X-Gm-Gg: AYBFou0B0lI2maCdzsyJcrzf7YCod1XaxYmJfNubJJi8lDLvY4MbLb9Cua4kK2Z79c1
+	JTm9EDMHUgNtSqtOjyDoCDN5o5jEs3E/fmoo9fwLWto5r/6X/VXtHPlS2MPmbeKya1l0E2Ra1tt
+	vkFbLS7LOdsi5FZhaQG4I1iUSrUmHraU+vgg690gR7d/ng3DbGoPXITjGkO3g6g2K5N4HySGNJy
+	trAyqXpY687Dy5t5lLPGQe/wZ9Xl/KEmu8XztUQ5ZHK1lBCcP0ztVByfq9p5tFhYMlB0JOUEhQr
+	L2TH3i6dSjx+FidrieRIkgg9OyuuaNVhmXE1bmhhjNmLTJIg1qoMQDbwz8RY67ENYnGWYnUQho2
+	j7W26Gj9CJVAK+0tv2/2dQO+xm3OXBMqCSrzTT3rKro41TrvCP5Kvf9zxkmW0Bcq3pHM4dISJHF
+	utF0IT9NjNa9sqHqxWrcaGU/qaQcAAtmkQfi4HJHul6V9zD+cw/5/M0yJ7/FRXbhnlV31c+oJOf
+	GVO+ZgO2h3UmJLoOuhH0PxYgR9cmqOr6+HZlJzJyFiFjMHLqxI=
+X-Received: by 2002:a05:6808:4f07:b0:4b3:7b31:8df7 with SMTP id 5614622812f47-4d72c042ed5mr7304247b6e.14.1790370964520;
+        Fri, 25 Sep 2026 14:16:04 -0700 (PDT)
 Received: from archlinux.lan ([136.34.156.120])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4dbf3d72057sm3066734b6e.6.2026.09.25.14.16.00
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4dbf3d72057sm3066734b6e.6.2026.09.25.14.16.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 14:16:02 -0700 (PDT)
+        Fri, 25 Sep 2026 14:16:04 -0700 (PDT)
 From: Danish Khateeb <danishkhateeb03@gmail.com>
 To: Willy Tarreau <w@1wt.eu>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
@@ -66,10 +68,12 @@ Cc: Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Danish Khateeb <danishkhateeb03@gmail.com>
-Subject: [PATCH v2 0/3] tools/nolibc: fix readdir_r() and the FD_* macros on 64-bit
-Date: Fri, 25 Sep 2026 16:15:57 -0500
-Message-ID: <20260925211600.119116-1-danishkhateeb03@gmail.com>
+Subject: [PATCH v2 1/3] tools/nolibc: fix readdir_r() with 64-bit directory offsets
+Date: Fri, 25 Sep 2026 16:15:58 -0500
+Message-ID: <20260925211600.119116-2-danishkhateeb03@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260925211600.119116-1-danishkhateeb03@gmail.com>
+References: <20260925211600.119116-1-danishkhateeb03@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,66 +82,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Two bugs that only show up on 64-bit architectures:
+readdir_r() stores the result of _sys_lseek() in an int. Directory
+offsets are opaque cookies which can use all 64 bits: ext4, for
+instance, gives 64-bit processes 63-bit hashes, and
+0x7fffffffffffffff as the offset after the last entry. Truncated to an
+int, such an offset is negative about half the time, and readdir_r()
+takes it for an error.
 
-- readdir_r() truncates the directory offset to an int. On ext4 it
-  fails within the first few entries of almost every directory (since
-  v6.19), or returns the next-to-last entry twice and never the last
-  one (v6.15 to v6.18). Patch 1.
+Since commit 4ada5679f18d ("tools/nolibc/dirent: avoid errno in
+readdir_r"), readdir_r() fails at the first entry whose offset has
+bit 31 set, which on ext4 is usually one of the first few, and returns
+the truncated offset as the error number. Before that, only -1 counted
+as an error, which the last entry always hits: readdir_r() then
+returned errno, usually 0, without filling in the entry, so the caller
+got the previous entry a second time and never saw the last one.
 
-- FD_SET(), FD_CLR() and FD_ISSET() build their masks from an int, so
-  they use the wrong bits for fds 31-63 of each 64-bit word, and
-  select() on fd 40 fails with EBADF. Patch 2, with a test in patch 3.
+32-bit processes get 31-bit hashes from ext4 and are not affected.
 
-There is no selftest for patch 1: it needs a directory with large
-offsets, and nolibc-test only lists /proc/self, whose offsets are
-small. I tested it with a small program that lists a directory with
-readdir_r() instead.
+Keep the offset in an off_t.
 
-Changes in v2:
-- Dropped Cc: stable from patches 1 and 2, which are otherwise
-  unchanged.
-- Patch 3: dropped the select() test, and moved the FD_* test to the
-  stdlib tests, with its helper in the same order as the test cases
-  (Thomas). It is also shorter: FD_CLR() is now checked on a set
-  filled with memset().
-- Rebased on nolibc/for-next 6f114ae7b600.
+Fixes: 665fa8dea90d ("tools/nolibc: add support for directory access")
+Assisted-by: LLM
+Signed-off-by: Danish Khateeb <danishkhateeb03@gmail.com>
+---
 
-v1: https://lore.kernel.org/all/20260924015222.31693-1-danishkhateeb03@gmail.com/
+Notes:
+    v2: No changes except dropping Cc: stable.
+    
+    v1: https://lore.kernel.org/all/20260924015222.31693-2-danishkhateeb03@gmail.com/
 
-Testing, with GCC 16.2, on x86_64 and i386 natively and on arm, arm64
-and sparc64 under qemu-user:
+ tools/include/nolibc/dirent.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-- nolibc-test, all tests: no failures before or after the series. The
-  only difference is the new fd_set test, which passes, also with clang
-  on x86_64 and against glibc (make libc-test).
-
-- Without patch 2, fd_set fails on the 64-bit architectures: with the
-  default UBSan flags the run stops at fd_set on the sanitizer trap,
-  and without them the test reports [FAIL] (checked on x86_64 and
-  arm64). It passes on i386 and arm, which are not affected.
-
-- The readdir_r() program, on ext4, on x86_64, arm64 and sparc64:
-  before, it fails on /etc after 4 of 215 entries, /usr/include after
-  1 of 1467 and /usr/lib after 2 of 6229. After, it lists as many
-  entries as glibc. A native i386 build was already correct.
-
-- Built for x86_64 against nolibc from before commit 4ada5679f18d, the
-  same program lists a directory holding "..", "code" and "." as "..",
-  "code", "code".
-
-Danish Khateeb (3):
-  tools/nolibc: fix readdir_r() with 64-bit directory offsets
-  tools/nolibc: fix FD_SET(), FD_CLR() and FD_ISSET() on 64-bit
-  selftests/nolibc: test the FD_* macros
-
- tools/include/nolibc/dirent.h                |  7 ++++---
- tools/include/nolibc/sys/select.h            |  6 +++---
- tools/testing/selftests/nolibc/nolibc-test.c | 21 ++++++++++++++++++++
- 3 files changed, 28 insertions(+), 6 deletions(-)
-
-
-base-commit: 6f114ae7b6006ca7cf72e3e3348d263bbfec4525
+diff --git a/tools/include/nolibc/dirent.h b/tools/include/nolibc/dirent.h
+index 2dbf4052b85a..19857369de2a 100644
+--- a/tools/include/nolibc/dirent.h
++++ b/tools/include/nolibc/dirent.h
+@@ -81,6 +81,7 @@ int readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result)
+ 	struct linux_dirent64 *ldir = (void *)buf;
+ 	intptr_t i = (intptr_t)dirp;
+ 	int fd, ret;
++	off_t off;
+ 
+ 	if (i >= 0)
+ 		return EBADF;
+@@ -100,9 +101,9 @@ int readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result)
+ 	 * readdir() can only return one entry at a time.
+ 	 * Make sure the non-returned ones are not skipped.
+ 	 */
+-	ret = _sys_lseek(fd, ldir->d_off, SEEK_SET);
+-	if (ret < 0)
+-		return -ret;
++	off = _sys_lseek(fd, ldir->d_off, SEEK_SET);
++	if (off < 0)
++		return -off;
+ 
+ 	entry->d_ino = ldir->d_ino;
+ 	/* the destination should always be big enough */
 -- 
 2.55.0
 
