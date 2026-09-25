@@ -1,64 +1,64 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9674E8DF6
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 16:12:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1853C4EA397
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 16:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790352730; cv=none; b=VKNz15kQHwI+mTh4y3liuap+dZ7hoaorys4JpH3km9y3Z2EeVNQWsqKIYdh/uUIXHd2s0SsWCEw6hhoCyvXul/yZWKV/EhYV+YcgytlndcDLE19Apo0+ap6RNZYCpSq6bMVHIaNrEpsylxZrJeLrhfobghgsW43tR8MaF3DbWRw=
+	t=1790352732; cv=none; b=ro4y92rUBh/T/ftjHSByGf3LL3UoGhEiACX1wjxajxr+XghwsWP4JSr4c2O5mFSizb1D+4MJNvKEiyoQpvrq+aaFDAW7t3LNT2yyrp/EMOPjztpvDiFN6ou1btO7faOxhTbNFCYylj6O/x9X8BMRrgtBvvzzkFGHgXcsAXd6dXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790352730; c=relaxed/simple;
-	bh=HUOnEjhv9fKfLJ0A1Oqzk39EMDsr2o/axxVNv8d3j7s=;
+	s=arc-20240116; t=1790352732; c=relaxed/simple;
+	bh=3zBndnPbmFeoFqTjACZnEMiREdKYWlO2VdcYcm001/k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U56q3w5V/ajuyhexM0677S0dFHu89ISaaB2iVH+BJEEtHhw9ZrQUHzRuy1Kbpfz49JHmxoj4VBORfGc31zU05n0UsqWYWm6bgGq8ShkYdMGjnDOIeX2t5xeoezhu0Muwt+2WGENRn3Tu+jTeVj73BRTSwNz0QMznKE+6/sFnQ0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UViyKs86; arc=none smtp.client-ip=74.125.225.76
+	 MIME-Version; b=F10L5s7tkbHt1GZ0BMemuhGhJCgSZM/khMl+aKH3cNKt8HJ1nkuw04Aq/lzmbx7J82oByVX+EuDLCoHyvm9MyLTNPWVruffsfmmbgdaf+4XMg0sWzStBr2oh6uJr8r69St1egHms0WEae3/C82nMywGTeBJWHzdr3+vI8ey1gSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bgbIt4f7; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UViyKs86"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-486e1a044c5so870231f8f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 09:12:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bgbIt4f7"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d391aso7870485e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 09:12:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790352726; x=1790957526; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790352728; x=1790957528; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=CwRzATKx4Uz1l0MN7TD0eqrZoKpNRRbzLuIcmEq8eCI=;
-        b=UViyKs86byAvX3X8cvTrCondGaaXUiI4M7tEgiAVTJxv60WiikuyjxRyhO2p9rc2i/
-         6qprZ7GqPwTr3PuIJ6Wa4HyRQaMcHNWR5M4MHq3UiXE8rB0IXj6yUV7Kx09yNoVI0BRx
-         tzOQE6fcWtlxgjdGqW17/5r6M4N3+izQslkCoiSdEZ1BjZUyj/LXfHfuIs3kxu77/lhY
-         1jvu4v/34P7qoOyX/GkncXOKFBGi80NZ9R1zM8BUezgjvg86p+t6DIBKiHyEQUhs4qO4
-         M1s/UGqzpCj+EZW+xajUKgkqTltCFdLSYqZjA76gmYNedicJ9z3RZZTIIaOiiE9mM7UP
-         1TOg==
+        bh=qJjIAQ7/2x2XhBZs9VmF+j8AOgJ6YIg+9lR4a75uO7A=;
+        b=bgbIt4f7m6bv8Gg47Q8smGyae6B5rlhc0iaYDmiuur8mVPi1GTVVUtkb7m11C7M01T
+         1Ziuqb3dwTn7k7BAkxOa9O1YZwQS3tMaZL0+XKhadvUBzdgGfj2I+UjhldXot2C3RamX
+         6ybQ7pSVGdt+/lhSeDNwvD/RryIA80modmJwYSsm5EeODmUKRpnPFkNwx2SPuLYjjZq1
+         4BeNFoVZDhxVm6iFTdk9VblcxNXRh6UykZg3T58i8Y4eglDnylp32TLljietBfpHN/zA
+         VfxjH1cmCnbIAxQYFti3IbAb9C1ftntH4YNC7o1JZ/GwXF/mEaLFBBvbyW/fF0Ti9C69
+         oQkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790352726; x=1790957526;
+        d=1e100.net; s=20260707; t=1790352728; x=1790957528;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CwRzATKx4Uz1l0MN7TD0eqrZoKpNRRbzLuIcmEq8eCI=;
-        b=wmpZIxML4Q7H+nYt3W9bSGkbdKers+IaoyLxgVI9IRhCOAfiVnAC7b7KV23IaoMY0G
-         IuQL2fTtCXkeXz6ybbailfKWi3NsFiPBbKx+qOLMqE/UmWmPf/Uu/5ov7j/+RHziAO7Z
-         E2bx1p8YrO9fYRx7y2XyI/RzobHCp1obaG8G7hMNJTNzMI9xV9CtMkBq9BgJ4sD6pIln
-         cJ6DC+WstXO8Z7tHKS+KSdC7lT5oRkQmDoKdT5pEHcs9xq0PA3d534zcWIhHMeuvqS0P
-         0s3G/DAlOMFhzmuI44PsfquVPYcDmf6bnkkqnExSU+VKhtsp0cVrCMbwj/spNGXUdvSw
-         dFQQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwh+944s/DyYpVVi5vZrgYTXIr93j3KwsjtaPSJvABrPBxr+mH7rOse1B0JLJlQtbozwBAtGZfUUxhG0FPMht0=@vger.kernel.org
-X-Gm-Message-State: AFuF++nKaxExg6Cf5LVZ7eFTVvWfqp1nertIgFGt+dIhdwSgvSDnvIjP
-	bDoITko1UEhLxDWrICOQZHL2buO/rH+LOizXEvWNAtrsQGgdba47lNsm
-X-Gm-Gg: AYBFou1k1OTUJG3bLJ9Th49G22tovi48PyAetZPogOthwu63hdzImEy3LkH0a2IRhk8
-	QgHuZZ+ka/XZOU3lZyrzJzofF5jdgd7DBjryp0T3MkTcgPD/HG/UlC0Mc+6RnRz3E5RdA/Cv3bx
-	ezPooMGi4dIo93sIQgSCyW/Su5l5kT8Sx2qCTtNNmdQUVKxP+omVWGddlrEGnTVlL9gTlHkufR2
-	FuLRruTNY2beKxW8w/KGOaKwTI6WbeTQTEzD2NftmGMPE3DxpsDYVRZG8TvTZflGCw2Ml/8L5wk
-	M/wzt9B0jshgMlqVofQ0J1p0+jHakC9rive1pbtTxbsMbC4w013ODBeIImiMLs+TH5RaZkXdHex
-	pmKI1W+VCNB8MZ2QWgh+PPiak/6okXQ93mbjuIhKm5lO4qZFalrsAZQ/Tv8YX+ekj8E/NeezZQz
-	czc3JuF45oKT8AfWnG/kp2LA2yGBX8J2z2MMClvwwSKpcqmd9V1Fxa6/Bxs5xNwtE4XT78nI6ze
-	eyTk3BDG/HzE0ik4KQiekY6/aLw+4xCXUEUNTlxCDFK
-X-Received: by 2002:a05:600c:4f12:b0:49f:e194:a062 with SMTP id 5b1f17b1804b1-49fe66fc6b7mr130556485e9.32.1790352725963;
-        Fri, 25 Sep 2026 09:12:05 -0700 (PDT)
+        bh=qJjIAQ7/2x2XhBZs9VmF+j8AOgJ6YIg+9lR4a75uO7A=;
+        b=xd0VhrrP4CcvowvGI7l0fbKOpIKhZJovGgkr0sfwHUgO8vAFJ2GWS4Lylr4MH5pEZo
+         TUPL+X+xn1lN62J/LGP666XQrHh9ezwWloRXGmukjnlhRc91Jmbv/eqs/1yvWbnZPfYi
+         AYCJXJTuF2DQlj7tXHra/AudliZP4oYbxRzXOF4MqgmX/XfJEZmO3pJ+OU9q+ELuUTkk
+         yOSorXMLEGrEo+UJrmMu82aVnmEMR5doC6M82KMf6sNj2L/4q5MyD/cIJNOyyyvu5AqV
+         XtvryLLE4VKO3MRjuOjDjLn10n+XoOMDox3/Xhhw0DPSKWq8MgL1rrz6e2pANql3vcGM
+         baJw==
+X-Forwarded-Encrypted: i=1; AKwUvBzv/sbWhmMkfRJF8s2PXlq9zlAjy5E4SvtVfEneIu2Loij0C00Egoa5Wpk0AW+A1sccFgCJPj+rVBJ7dxLcRtc=@vger.kernel.org
+X-Gm-Message-State: AFuF++meP5/oUKqE47TrHyGPUuRtPME5nCPso/f5gFuaaM9hH6Vj91ge
+	i1P/9YpHmLtLRVkXlNSL4s8ipc6TTR1bpJ7ESKpD4Wbk28UFbEPz1GrA
+X-Gm-Gg: AYBFou0O0HGoCQExA6HSkX5eeRtx9jr07f+Z15cy0if17kJcWoNhe4Yqqx25bWzKnTA
+	NFzj+6p2Uz9uIoieiN4cWm+GIPaYVX5+3Z2k6UMN03mfGjsAXfGAFHVgI4OX6PwoVXnaTiJ9mGH
+	6wWzr/+oyaqIbF1chMAqy4xlVvmkZkOa2eXxu1APP+eP5ZvxhRaJMGwt4ardvrzK03JI0LUOS4r
+	1EWcK736ULWrBC4Q5cJV8B/TH5U0bH7HSHrL4RMqWRfnIx4NWFyNosarJd8G27qzu50Apre5dgU
+	HRvkFn7SZTPAe6Qxqg4oPhe3cu+EAxKk4UIRk5V1tMAke+radoKs5Dx7kiN9ewG9Om1GXmelRqB
+	9lP95no4hAW+gXcJyXXBnCPywlx1u6ooG7+vFrSZlORN9Q3uGkA3IrpA8lk3smc81tqKvCtSv+t
+	kxgyfb6mhMl8B5j/4x6survgjC373aCvPMZNcTcRNbv2lO88VNpsNEElieAr64NM+5I2cUG38sP
+	/7DaPnh/7ZbPSsm3uqA4O3RLB2vjhATGs47iuJO+eAi
+X-Received: by 2002:a05:600d:d:b0:49f:e772:6ddf with SMTP id 5b1f17b1804b1-49fe7726ee3mr94636635e9.32.1790352727934;
+        Fri, 25 Sep 2026 09:12:07 -0700 (PDT)
 Received: from andreayoga.wind3.hub ([31.189.116.68])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ff0658747sm81238665e9.1.2026.09.25.09.12.04
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ff0658747sm81238665e9.1.2026.09.25.09.12.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 09:12:05 -0700 (PDT)
+        Fri, 25 Sep 2026 09:12:07 -0700 (PDT)
 From: Andrea Parri <parri.andrea@gmail.com>
 To: Jason Gunthorpe <jgg@ziepe.ca>,
 	Kevin Tian <kevin.tian@intel.com>
@@ -72,11 +72,10 @@ Cc: Andrea Parri <parri.andrea@gmail.com>,
 	Yishai Hadas <yishaih@nvidia.com>,
 	iommu@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH 3/4] iommufd: Reject a zero-length dirty bitmap request
-Date: Fri, 25 Sep 2026 18:11:39 +0200
-Message-ID: <20260925161142.189813-4-parri.andrea@gmail.com>
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 4/4] iommufd/selftest: Test a zero-length dirty bitmap request
+Date: Fri, 25 Sep 2026 18:11:40 +0200
+Message-ID: <20260925161142.189813-5-parri.andrea@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260925161142.189813-1-parri.andrea@gmail.com>
 References: <20260925161142.189813-1-parri.andrea@gmail.com>
@@ -88,38 +87,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-iommufd_check_iova_range() subtracts one from bitmap->length before it
-checks the length, so a zero-length request wraps to SIZE_MAX.  With
-iova = 0 the wrapped value passes the overflow and alignment checks, and
-the request reaches iova_bitmap_alloc() with length 0.
+Add a GET_DIRTY_BITMAP case that passes iova = 0 with a zero length and
+expects -EINVAL. iova = 0 is the value that lets the zero length wrap
+into an accepted range; without the previous patch the request is
+accepted and returns success.
 
-iova_bitmap_alloc() then sizes the bitmap from a length - 1 of SIZE_MAX,
-so mapped_total_index is effectively unbounded.  The scan uses
-last_iova = ULONG_MAX, which spans the whole IOAS when an area is mapped
-at IOVA 0.  Reject a zero length before the subtraction.
+The case runs on every variant of the dirty-tracking fixture. Tested on
+x86-64 under virtme-ng with CONFIG_IOMMUFD_TEST=y.
 
-Fixes: b9a60d6f850e ("iommufd: Add IOMMU_HWPT_GET_DIRTY_BITMAP")
-Cc: stable@vger.kernel.org
 Assisted-by: LLM
 Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
 ---
- drivers/iommu/iommufd/io_pagetable.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/iommu/iommufd.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/drivers/iommu/iommufd/io_pagetable.c b/drivers/iommu/iommufd/io_pagetable.c
-index 4e447ce74cf6c..283ab372e8da8 100644
---- a/drivers/iommu/iommufd/io_pagetable.c
-+++ b/drivers/iommu/iommufd/io_pagetable.c
-@@ -605,6 +605,9 @@ int iommufd_check_iova_range(struct io_pagetable *iopt,
- 	size_t iommu_pgsize = iopt->iova_alignment;
- 	u64 last_iova;
+diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
+index 47d861b3bdd7b..2b3c9e9c69ca7 100644
+--- a/tools/testing/selftests/iommu/iommufd.c
++++ b/tools/testing/selftests/iommu/iommufd.c
+@@ -2472,6 +2472,25 @@ TEST_F(iommufd_dirty_tracking, get_dirty_bitmap_overrun)
+ 	test_ioctl_destroy(hwpt_id);
+ }
  
-+	if (!bitmap->length)
-+		return -EINVAL;
++TEST_F(iommufd_dirty_tracking, get_dirty_bitmap_zero_length)
++{
++	uint32_t ioas_id = self->ioas_id;
++	uint32_t hwpt_id;
 +
- 	if (check_add_overflow(bitmap->iova, bitmap->length - 1, &last_iova))
- 		return -EOVERFLOW;
++	test_cmd_hwpt_alloc_iommupt(self->idev_id, ioas_id,
++				    IOMMU_HWPT_ALLOC_DIRTY_TRACKING,
++				    MOCK_IOMMUPT_DEFAULT, &hwpt_id);
++	test_cmd_set_dirty_tracking(hwpt_id, true);
++
++	/* Only iova 0 wraps the zero length into an accepted range. */
++	EXPECT_ERRNO(EINVAL,
++		     _test_cmd_get_dirty_bitmap(self->fd, hwpt_id, 0, 0,
++						self->page_size, self->bitmap,
++						0));
++
++	test_ioctl_destroy(hwpt_id);
++}
++
+ /* VFIO compatibility IOCTLs */
  
+ TEST_F(iommufd, simple_ioctls)
 -- 
 2.53.0
 
