@@ -1,194 +1,130 @@
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4749C2BB13
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 01:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD0331578E
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 04:29:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790299874; cv=none; b=iO6G0zMB3dbEGa+7wdiRbMizBdzNHtJzonRciLpghSJzhIdKCTULExXEFIKjjZhpyH+MCofhqjOA6vjY+ju30GHPuGE83g0TxFPAG7qUDZCdxGX+YLkNnralnhC6pS/c71PZY6Ibc1fZFEIEuQXpz8rrWGxKvxapBKH3wmhiTwA=
+	t=1790310556; cv=none; b=rXnsuveMAiY7jJ1pfa5kc52lykubcQ+bRpd7kWFJ4+5evPChh5A2XPhQnU1jSpUuuqbs+Ky9skJgtsZUr0DTz+OLkw+z0WLTL5URg6PBanm8sJatONa93DhInaW6zcomMs79ChWBXjRu4ZMFgSVU0lB+GVU3AHw43nZH8lmVkHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790299874; c=relaxed/simple;
-	bh=wQKRtKLqGJCDEPvz/iqrGK9BVlTgRu7XZjqe2Rl0nXs=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=MTwTrvere9DHC9/MLCGdBjWtL+qKWlQALtZpazL4Yfc7QbGM5XI08wfGBuks6JEva7YcjcPZx7y4b72UFjjo4uCrCtiPAuubzZ2v0gxuwodozKDEPhziz+rkTFB4KZZLtVS8BNRkYGLeivFCUiDlLznnv/eK89kgiH0/ZgtmR5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--skhawaja.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EyJ9Gtl4; arc=none smtp.client-ip=209.85.214.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--skhawaja.bounces.google.com
+	s=arc-20240116; t=1790310556; c=relaxed/simple;
+	bh=fQ0lGh5nE5x7WDibbiBqKf1lP6tmpG1zFRinGo82sGU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OfWyTwQ6E6avcfpRSPGpqWeQoUnGGkN0GxMk2HNMRMDdOWzAWoditPE/yieb1pZALJDz5PRQq6flkzjLMe3TkjI4yfuxum/5N+IkY91A6JjO5KO72OvOYXdxZvcfz1fjQu/y3o0eEyFLDdBgJeJh5lwQc7dUVDNdwpD7JTTfrWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R8AbLEkU; arc=none smtp.client-ip=74.125.227.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EyJ9Gtl4"
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2df94898a4dso2688675ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 18:31:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R8AbLEkU"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2dd4b43b20bso1626345ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 21:29:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790299871; x=1790904671; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=RweWv4r3+tfjVI8UGCUJFPVFEYFdP24TgU4ruOZ3H6U=;
-        b=EyJ9Gtl4rCV5Xuw2Q4c1sZaWwL0EL2DjMgQHWhhHqWvRf+5tdVER+ZN7iB929AOWrf
-         K7rtVKUuHHEmBLdzFXvXR5BVg+V6XkxwmbD1pm5GuTT42DM7GbYtYM+EklNDs15vvkYQ
-         YCkgWKeX5GK3SNX7TUf//zqn8CUsY5WV4KMAxZQH6xlHiN0Lp3HG6DN6gS8u5k2XW/pn
-         d49NBzDUqXonjjmIqd1Uqw319FBOkNIsZUdjYB0OP0MnPeJN/SlE96kUxhimCwCSM9G9
-         f9Bc/kcScxvAyTbA0t6LjqOPONN+IM2wwluvxGOZYDwbrdz/TJo24w/sYSmJjpU3FR/E
-         //Xw==
+        d=gmail.com; s=20251104; t=1790310555; x=1790915355; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Yf3h+E5l7lZ9xnH7vca0oSG6Rr+EZJjVtHwLxzVwIUM=;
+        b=R8AbLEkUR4IpEkG6xRYfoNLoTuHU5cV9lvDxspLCQ1PxN+CdCGs1V3DpXKL73SVEuL
+         sM242vXt/qMaCZqEoEO1rVX1+WDDnUmAyGjObq1XfpKjHTjeY8vboh8jzBCoSrVJN8um
+         OUmqUm7zeLtFoRoR++/jKx3ap/QdwJJRLcWsdaxzNZxboSUTlsCIlpcfJMpU9EEHTBNC
+         sgIH/fd/NNxkpUxo4qBz8CpOqFlhxbi2iS2BrL3jugVJ2/oKlgxL9BL3ZNAUv3/z7m+e
+         5RjbvH9bv6BZsOcvCx6W+feaSdfduOYi68ZrlXfrt0+FKKcObDIWp7CqDZJpVSBAiGSa
+         9tPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790299871; x=1790904671;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=RweWv4r3+tfjVI8UGCUJFPVFEYFdP24TgU4ruOZ3H6U=;
-        b=a+46gGHaUnNhlu1XK0X1JGWRxCCfvgxhq6JkMYWp8Ae8gdz3fuT7AZ6cLre212RxWm
-         ZrL48as8yI44L3U9KTo6SONHxeBlnKP4/8Ab7WAm0z+5ieyksKsf3cn4tJ8u2QXokwYz
-         0VEzA4fJjuMFLuG2XMCk5S514Y4aCg5vvI80+cPLmhACPEneaDXT+hZMKmFbIGbVDzFg
-         3sQDAqCA0V+F7806uwLWMOPuJ1nYuMwEG6hGIOsjLFlLJ8vLujZDpAJpUDgttSndi/oK
-         ACavvVBWvOYRPg3JMPvsnWcRfPMNs1UwJ3OIwztud35ei+5FL56WlOm5IYUpi/mvJoQt
-         ufgg==
-X-Forwarded-Encrypted: i=1; AKwUvBxVOLAMV7l/NAUqA/CnDQRBvQLyevcfVZSGpgfH3ylLwGDG3XNCDQKkieuNa9wOnSv/K/wpyoVomxDWudj/2xQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++mljlvSxJUy9GPROZzzqa+nYT3wP5dpa0iOgU8HQish2UcvQP1F
-	3busHaRQu0GbBr9sLZisLB6GGkqEQJzZSnYHeN+rnJGGKP3/7FDWSbFl9kjLIOaly/mu3JAGJhg
-	KL9IwmT3yBfS0pg==
-X-Received: from plmo2.prod.google.com ([2002:a17:903:18c2:b0:2df:7a17:a791])
- (user=skhawaja job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:d4c8:b0:2dd:ad73:c938 with SMTP id d9443c01a7336-2df7daa9ba8mr31900875ad.25.1790299871207;
- Thu, 24 Sep 2026 18:31:11 -0700 (PDT)
-Date: Fri, 25 Sep 2026 01:30:55 +0000
+        d=1e100.net; s=20260707; t=1790310555; x=1790915355;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Yf3h+E5l7lZ9xnH7vca0oSG6Rr+EZJjVtHwLxzVwIUM=;
+        b=RZ/YKe1n0LLAS7Wv+f1QwZiDISwjZw35NiMDZ159vYBB3hDpo4ubXkJCsSZIgfwrMs
+         /OqVpiYes2fkXkf5g7fgjZZtEbTxMXK/SGadKsvr0+llGkyqyYZ+t1VJWqR+mgfmvALH
+         tVRkenYRAzz67XqVoc1pESZQBmuYU5yzK7RZqXT/jzym50o3fiB5k3ub+CPeddzh4riw
+         3M4jI4W8JivL6Dquh2jKht0C8aKFTh8nlYW9CjT3iKRlXAqbl+nMzc+ocNuy53+vvyb4
+         zH8cB2gJDRwtQZ8pOjRI5SepsNx8sbP1uPBFZYTq2vGD+KZnfGRpjY8x+Y/RWD1//+g1
+         tyMg==
+X-Forwarded-Encrypted: i=1; AKwUvBzcXQK3seoaE19fJHW6nkyhp9bVtAvMnTwQBPnSMlIcf+OH+zvKjb2AcFokt9OJjKwOvDT7jpz1aykWWMtsI5I=@vger.kernel.org
+X-Gm-Message-State: AFuF++kEQVgJ1iTnmHnkbs7mCaI1UWser64wzMYPWfmvg9TIb2XJ2MMB
+	dgvI5UsI0EJmrxf8FyI0Qm/E4SWc452i/hieOVf4v1UwU33ytnh/q7Y=
+X-Gm-Gg: AYBFou2GageBtlm+Z8/JIQTJZAYA36GZeRGcikJ8uR361dGAYAeBPNGm5dkLPB7y4Yc
+	oaiLxk0WH/ryO6jkFCopn7nWSSiyQkxWtZr/bvAdcXXrWfXB+NvdaKOp9oKzFiLhyAonnUyPcoj
+	YHY06SAL0FjtfKmjMgNlcz5teIqPSRVjcvbWYlkSa9v1jgblQRwoF2Y1HsnFS072trNee/shUqM
+	je8mUM64+mkn2VvTt81P4QiB7PekFsDthK7luBof4kX7XAHz7VP6AHqH2FV+D5GrWSDwSaqqgTV
+	OtTcrSXRjnWfdVdVcFLPQRsxq2AZiaaJn7AeRw0Kre9Iu+Qp2ZzkWitWzhdppJkeziYcKRrQh0f
+	dNZao7q7374mzvrpgXv5f/qdb8ZPlaJE3L88IBToRnKf4rStjDoO5Xu03AfgfVDcMoT4mRR7mo3
+	Zk7Srx+eDiN0YLUepDH1BFAR9KUffL6I1anPjy4pDg72+IySfXRyJ5bOEJV3CT7il+mFG5eI3lc
+	tOoehXuEryZ4XQtKr6rzcLKt2M83cCQe2A=
+X-Received: by 2002:a17:902:f549:b0:2dd:c100:424c with SMTP id d9443c01a7336-2df7e247b6fmr40036125ad.48.1790310553531;
+        Thu, 24 Sep 2026 21:29:13 -0700 (PDT)
+Received: from ydg-Zenbook-14-UM3406GA ([211.230.25.193])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df9525cd53sm2499125ad.38.2026.09.24.21.29.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2026 21:29:12 -0700 (PDT)
+From: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+To: akpm@linux-foundation.org,
+	rppt@kernel.org
+Cc: peterx@redhat.com,
+	surenb@google.com,
+	aarcange@redhat.com,
+	david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	kirill@shutemov.name,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	donggeunyoo.kernel@gmail.com
+Subject: [PATCH v2 0/2] userfaultfd: clear the inherited uffd bit in move_swap_pte()
+Date: Fri, 25 Sep 2026 13:29:05 +0900
+Message-ID: <20260925042907.2330519-1-donggeunyoo.kernel@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.56.0.rc1.315.gc6ed9934b7-goog
-Message-ID: <20260925013110.3447626-1-skhawaja@google.com>
-Subject: [PATCH] vfio: selftests: Remove libuuid dependency
-From: Samiullah Khawaja <skhawaja@google.com>
-To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>
-Cc: Samiullah Khawaja <skhawaja@google.com>, Raghavendra Rao Ananta <rananta@google.com>, 
-	Alex Mastro <amastro@fb.com>, Sean Christopherson <seanjc@google.com>, Rubin Du <rubind@nvidia.com>, 
-	Josh Hilke <jrhilke@google.com>, Vipin Sharma <vipinsh@google.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Libvfio depends on an external dependency libuuid for parsing vf_tokens.
-Building it in cross compilation environments gives the following error,
+UFFDIO_MOVE on a swapped-out page installs the source PTE at the
+destination unchanged, so a uffd bit set on the source lands in a
+destination VMA that was never registered for write protection, and
+nothing clears it afterwards.  Patch 1 clears the bit unless the
+destination is RWP-registered, which is what the present-page and
+zeropage move paths already do.  Patch 2 adds the test that catches it.
 
- ld: cannot find -luuid: No such file or directory
+v1: https://lore.kernel.org/all/20260919004630.1159895-1-donggeunyoo.kernel@gmail.com/
 
-As it is only used for parsing vf_tokens, remove the dependency by open
-coding the parser where it is required.
+Changes in v2:
+ - patch 1: clear the bit unconditionally (Kiryl Shutsemau)
+ - patch 1: rewrite the changelog for readability (Mike Rapoport)
+ - add Assisted-by: LLM (Mike Rapoport)
 
-Tested by running vfio_pci_sriov_uapi_test selftest.
+x86_64 defconfig plus USERFAULTFD, TRANSPARENT_HUGEPAGE, GUP_TEST and a
+swap device, under QEMU, base 17e7b8eacf4c:
 
-Assisted-by: Claude:claude-opus-5
-Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
----
- tools/testing/selftests/vfio/lib/libvfio.mk   |  2 -
- .../selftests/vfio/lib/vfio_pci_device.c      | 57 ++++++++++++++++---
- 2 files changed, 50 insertions(+), 9 deletions(-)
+  uffd-unit-tests                    before   after
+  move-swap-wp on anon               not ok   ok
+  the other 114 unit tests           ok       ok
+  uffd-wp-mremap, 38 tests           ok       ok
 
-diff --git a/tools/testing/selftests/vfio/lib/libvfio.mk b/tools/testing/selftests/vfio/lib/libvfio.mk
-index bcfa74ae040e..7d6916ca3940 100644
---- a/tools/testing/selftests/vfio/lib/libvfio.mk
-+++ b/tools/testing/selftests/vfio/lib/libvfio.mk
-@@ -29,8 +29,6 @@ $(LIBVFIO_O_DIRS):
- 
- CFLAGS += -I$(LIBVFIO_SRCDIR)/include
- 
--LDLIBS += -luuid
--
- $(LIBVFIO_O): $(LIBVFIO_OUTPUT)/%.o : $(LIBVFIO_SRCDIR)/%.c | $(LIBVFIO_O_DIRS)
- 	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
- 
-diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-index 4063a0e2b3df..774d1e90ec0e 100644
---- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-+++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-@@ -23,11 +23,54 @@
- #include <linux/types.h>
- #include <linux/vfio.h>
- 
--#include <uuid/uuid.h>
--
- #include "kselftest.h"
- #include <libvfio.h>
- 
-+/*
-+ * Minimal replacement for libuuid's uuid_parse(). libuuid is part of
-+ * util-linux and is routinely absent from cross-compilation sysroots, which
-+ * makes the vfio selftests unbuildable for non-native architectures. The only
-+ * thing needed from it is parsing a VF token, so open-code that instead.
-+ */
-+#define VFIO_UUID_LEN		16
-+#define VFIO_UUID_STR_LEN	36
-+
-+static int vfio_uuid_hexval(char c)
-+{
-+	if (c >= '0' && c <= '9')
-+		return c - '0';
-+	if (c >= 'a' && c <= 'f')
-+		return c - 'a' + 10;
-+	if (c >= 'A' && c <= 'F')
-+		return c - 'A' + 10;
-+	return -1;
-+}
-+
-+static int vfio_uuid_parse(const char *in, unsigned char uu[VFIO_UUID_LEN])
-+{
-+	const char *p = in;
-+	int i, hi, lo;
-+
-+	if (strlen(in) != VFIO_UUID_STR_LEN)
-+		return -1;
-+
-+	for (i = 0; i < VFIO_UUID_LEN; i++) {
-+		if (i == 4 || i == 6 || i == 8 || i == 10) {
-+			if (*p++ != '-')
-+				return -1;
-+		}
-+
-+		hi = vfio_uuid_hexval(*p++);
-+		lo = vfio_uuid_hexval(*p++);
-+		if (hi < 0 || lo < 0)
-+			return -1;
-+
-+		uu[i] = (hi << 4) | lo;
-+	}
-+
-+	return 0;
-+}
-+
- static void vfio_pci_irq_set(struct vfio_pci_device *device,
- 			     u32 index, u32 vector, u32 count, int *fds)
- {
-@@ -167,13 +210,13 @@ static void vfio_device_feature_set(int fd, u16 feature, void *data, size_t data
- 
- void vfio_device_set_vf_token(int fd, const char *vf_token)
- {
--	uuid_t token_uuid = {0};
-+	unsigned char token_uuid[VFIO_UUID_LEN] = {0};
- 
- 	VFIO_ASSERT_NOT_NULL(vf_token, "vf_token is NULL");
--	VFIO_ASSERT_EQ(uuid_parse(vf_token, token_uuid), 0);
-+	VFIO_ASSERT_EQ(vfio_uuid_parse(vf_token, token_uuid), 0);
- 
- 	vfio_device_feature_set(fd, VFIO_DEVICE_FEATURE_PCI_VF_TOKEN,
--				token_uuid, sizeof(uuid_t));
-+				token_uuid, sizeof(token_uuid));
- }
- 
- static void vfio_pci_region_get(struct vfio_pci_device *device, int index,
-@@ -415,10 +458,10 @@ int __vfio_device_bind_iommufd(int device_fd, int iommufd, const char *vf_token)
- 		.argsz = sizeof(args),
- 		.iommufd = iommufd,
- 	};
--	uuid_t token_uuid;
-+	unsigned char token_uuid[VFIO_UUID_LEN];
- 
- 	if (vf_token) {
--		VFIO_ASSERT_EQ(uuid_parse(vf_token, token_uuid), 0);
-+		VFIO_ASSERT_EQ(vfio_uuid_parse(vf_token, token_uuid), 0);
- 		args.flags |= VFIO_DEVICE_BIND_FLAG_TOKEN;
- 		args.token_uuid_ptr = (u64)token_uuid;
- 	}
+  pagemap bit 57 at the destination  before   after
+  swapped page, dst not armed        set      clear
+  swapped page, dst WP-armed         set      clear
+  swapped page, dst RWP-armed        set      set
+  resident page, dst WP-armed        clear    clear
 
-base-commit: 3d7783543c2646af69ad65825e810060494bea21
+  MADV_COLLAPSE over 2 MB at dst     EINVAL   0
+
+Donggeun Yoo (2):
+  userfaultfd: clear the inherited uffd bit in move_swap_pte()
+  selftests/mm: add a test for UFFDIO_MOVE of a write-protected swap
+    entry
+
+ mm/userfaultfd.c                             |  1 +
+ tools/testing/selftests/mm/uffd-unit-tests.c | 61 ++++++++++++++++++++
+ 2 files changed, 62 insertions(+)
+
 -- 
-2.56.0.rc1.315.gc6ed9934b7-goog
+2.53.0
 
