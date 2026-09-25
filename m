@@ -1,274 +1,82 @@
-Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
+Received: from out-2uec-a123.jellyfish.systems (out-2uec-a123.jellyfish.systems [63.250.43.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA6DF4CDA2E
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 18:03:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 199684C6536
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 18:06:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.250.43.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790359421; cv=none; b=C3WuigmtTX7hlvM7rLtvOmTb5tt8NC3RzBBGS0vf0L26BHWu+gs67Vl0vNCsTxIWUTN2tuiDqUU43W9v24CvEXl1ClfcQ2bjVkcu0cbpHnQtsIa0InhpVpUYCr6geyZbCn0aWPpJDaaHhTOduqJZNW8ubKtJtvV40orrkSevaJE=
+	t=1790359609; cv=none; b=jsR/oHh9L1EArmgdZNbGl8RjbVQAZXBpUoBARLSda9q40eC6rI0lP7yCTn3cAbg1LntUB0p90zyB+xOzSiDVoOWB1sRRbk7A6oA75uGJaBJnzpJRa42J5N570dSGVSxNv2XeNkvR6RSXQJnojnKZuQ7zutyqXnTmUx5EUUQXWA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790359421; c=relaxed/simple;
-	bh=9WMHF+OHSITVcxou8oXsCNs7bqvndQmUaAq4mexKulc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j6qSX5GBjtHk4Aht6IfuFW5pWjseLT/oVSk70VGVPHzJ3HkVMAjyY6dk3hLID7z9o7vLlF3W1IBM4JJT6U7Rx7p8srrAS82k333asjD7lm2iEVOKMaKzyXvfTbdBVKKyaFW+mn5OeZzrJEDe2iwQowbJgYmJLl8vFQfMcJaYWYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IYdRQgvf; arc=none smtp.client-ip=74.125.224.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790359609; c=relaxed/simple;
+	bh=ymgShMe8JjE49tDt3/53i+PPVMEinp17pSyo2+BnjRQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mcEWmopXeJr5jp7qltdGEM3HMFbho5bPglHgJQjvVe6H3qWELWbRTbFKbcFmVJQL/oFgQlomlBWpUoKhM2qUSVnS/8Acr+2tDwaqZP97Yw7M2KTApmRRrBKqIwO7IxnBr6qMh7fv0QzXJ30pt/OgaWUwTp95tWavG/66uxAeztU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=E5qgvoZL; arc=none smtp.client-ip=63.250.43.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IYdRQgvf"
-Received: by mail-yx2-f12.google.com with SMTP id 00721157ae682-85d46e4cdcdso11027837b3.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 11:03:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790359417; x=1790964217; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jQMqDoXS5hmMS94pm40dP6RGo8yiKpCUOJDdJtjp2gs=;
-        b=IYdRQgvfuMeOmvrkILgOhtEo6bJ4/rNTSPyK2vFOFc+eWWD20PR/TxxHTIMAgFjqZ5
-         ZswjzX8qhzMQ9dqrYHN7aWth4+pVDOF0inBoV9wO5pXUsNph5NLHgW9MVVONT+PfMmVR
-         qP7AbGgH9kFISF/uqhCeicA9DSDBrkJZBztEZhoambxx5GMT8tPkPSli+AHJFgR5mh/n
-         rWHa7ys7w2biFz0DRcMahrpaJ6uUMCHJaKo68fmXy8nuA6/jBjawu/zESfEo8AznwC8Y
-         x94hCmJKvqhUQawNt8MHWKikOeGO6n9fa61x+LfMC4xoFiQ5G4Zirmy6agu/rJJLjTjA
-         cMOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790359417; x=1790964217;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jQMqDoXS5hmMS94pm40dP6RGo8yiKpCUOJDdJtjp2gs=;
-        b=YpIJedQ+6BIMYSh80iV/SbMUn++9fo+nNeyc2/+NMcUHTQA11G0iIWQ/xZArNDvYyU
-         e3eNBdodopCp1i+jE55nhO+6w2QMrCNCnzu0zvHbPbASioRWGfQvS1m2OHEBRYXksGd8
-         MXU/vgp0DLIUn6cwsrijNq7gG0TN3eevVOzt/Z2RLUa3II5UPC9yHKC868k+iLskAy2G
-         TEsSbEGWgknYTo2dJ833u1axuqMM84pQy+biWqZ2GJZnTcaHQiCvAbgE8VFqqR/lJZCc
-         bA/AZ6AUCETxAnUxbCaYhwsJ+do+qoRCeQlBMtfs0so9Ak6kH4iXXuNK2FO/AcnvUMAL
-         bCNQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwIh34r1XIctYld/Vd2CpduFFMZSuu8vrX357I4cRNGtoBzxZ+6QoMA9D42nGh+RO9tXsZPs6lsYr9s2NePWYY=@vger.kernel.org
-X-Gm-Message-State: AFuF++nX+ZvvorE1sAgwxXFlcvlOic6rQN8JaO7Fh4vwKA/p4VRsrKHo
-	NMPocXp7pYXRwl7/cLcdOPylftZsE5tloJNWqIRhk+qq4fB74oTYUvDr
-X-Gm-Gg: AYBFou2da6Flv/0B0xSf2e5bZOCyDQJBtEFZAe222nrKtFtEtg2tzxNV27Xy6XKgpsR
-	CUnOaglzVuzRJzh3NOqaJH4QWe39SGv8cb7WUZpH50f5ITQoyEFVUA3caKIIgS+Q6QN8XFse6sT
-	ppxUYa2iWS44oCVMQbAJec4NM9Q7PAIFFPHPapcxG/tHariCLUMQbaOILpOGsMFsgd+7IcqT9SI
-	cmn3aKh+ZePiKFhefkM/2xcX6LI5En4FSwTQrFXLCzE3dRlABgfE09XHUTT8y6Hc+rIEUf0mYsT
-	HVDILrb4SMLcisDDHi6U3AXzJvYeioNYmJYFW0d5/gOkUYs+hEVJeVJ/rGNaRcsL9rVvUhYkr+C
-	m1J6L+GHbH7NRFoVNHmI2aTUVBTxvpHPoz4ytCJ3YDN8IHw/yryQ/mHcl56tGZY8gEShvS26VTD
-	bR5l+7OUquCqV5fnZTiPjvMHe0rgNkOi84VLk9e8tz9KU1COCxuwQe02Sxkpwz7qw06qROhkS79
-	Yo=
-X-Received: by 2002:a05:690e:b4b:b0:672:a678:da59 with SMTP id 956f58d0204a3-6740c2a76c3mr1631246d50.108.1790359416590;
-        Fri, 25 Sep 2026 11:03:36 -0700 (PDT)
-Received: from suesslenovo ([71.132.185.69])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6740efb13fasm1359157d50.18.2026.09.25.11.03.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 11:03:36 -0700 (PDT)
-Date: Fri, 25 Sep 2026 14:03:05 -0400
-From: Justin Suess <utilityemal77@gmail.com>
-To: Cai Xinchen <caixinchen1@huawei.com>
-Cc: mic@digikod.net, gnoack@google.com, paul@paul-moore.com, 
-	jmorris@namei.org, serge@hallyn.com, corbet@lwn.net, skhan@linuxfoundation.org, 
-	rdunlap@infradead.org, gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, 
-	dlemoal@kernel.org, hch@lst.de, axboe@kernel.dk, viro@zeniv.linux.org.uk, 
-	brauner@kernel.org, jack@suse.cz, dhowells@redhat.com, code@tyhicks.com, 
-	linkinjeon@kernel.org, sj1557.seo@samsung.com, yuezhang.mo@sony.com, 
-	hirofumi@mail.parknet.co.jp, cel@kernel.org, jlayton@kernel.org, neil@brown.name, 
-	okorniev@redhat.com, Dai.Ngo@oracle.com, tom@talpey.com, miklos@szeredi.hu, 
-	amir73il@gmail.com, senozhatsky@chromium.org, chenxiaosong@chenxiaosong.com, 
-	zohar@linux.ibm.com, roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, 
-	eric.snowberg@oracle.com, stephen.smalley.work@gmail.com, omosnacek@gmail.com, 
-	casey@schaufler-ca.com, nanx95726@gmail.com, djwong@kernel.org, daniel@iogearbox.net, 
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	driver-core@lists.linux.dev, linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	netfs@lists.linux.dev, ecryptfs@vger.kernel.org, exfat@lists.linux.dev, 
-	linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	xiujianfeng@huawei.com, lujialin4@huawei.com
-Subject: Re: [PATCH RFC -next 00/12] landlock: Add READ_METADATA and
- WRITE_METADATA access rights
-Message-ID: <araxO4ze0KZBz756@suesslenovo>
-References: <20260924104831.1081137-1-caixinchen1@huawei.com>
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="E5qgvoZL"
+Received: from 192.168.50.46 (unknown [114.92.81.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hrymT6X6Dz2xDd;
+	Fri, 25 Sep 2026 17:46:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1790358363;
+	bh=ymgShMe8JjE49tDt3/53i+PPVMEinp17pSyo2+BnjRQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=E5qgvoZLwc4ltJMaQGlmPRSfztoc4kWz2mAFMUczm0hdSzPFx4KqBrp3JusQZKGgJ
+	 10Yjvg64tvjAzfueZvq4TpefqZSPfyIMJW/1a9pY4brPaIG6hcE73Np2H74dTKkrVx
+	 MW3kprjVsRM2OfJK4ioriJsqjQDlhiPwNpYINFMn0fPPihlDGzpWreq3Um38nE8q7l
+	 o2jEgZGjnHsX2XmE9JyySq3ohuzmO1mESIM9nKIIOWAisOyOrGz3w7k0JdiZw6Z2BO
+	 mcDmfM9LJUFliFKrvS/5vaSEYzwYfjGKyvN7CWqW+uJLp3ufX4JHqq2rdgVJGrE2O0
+	 Bt6FDcwacXxag==
+From: Tianyi Chen <hi@tychen.cc>
+To: Quentin Monnet <qmo@kernel.org>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v7 1/2] bpftool: Add recursive map dumping
+Date: Sat, 26 Sep 2026 02:46:00 +0900
+Message-ID: <179035836017.2029588.7852183060719250433@tychen.cc>
+In-Reply-To: <6ed88738-4e3b-407c-90c2-bf7717f3e653@kernel.org>
+References: <20260924161434.95116-1-hi@tychen.cc>
+ <20260924161434.95116-2-hi@tychen.cc>
+ <6ed88738-4e3b-407c-90c2-bf7717f3e653@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260924104831.1081137-1-caixinchen1@huawei.com>
+X-Envelope-From: hi@tychen.cc
 
-On Thu, Sep 24, 2026 at 06:48:19PM +0800, Cai Xinchen wrote:
-> This series adds two new Landlock filesystem access rights,
-> LANDLOCK_ACCESS_FS_READ_METADATA and LANDLOCK_ACCESS_FS_WRITE_METADATA,
-> which control access to file and directory metadata such as inode
-> attributes (mode, ownership, timestamps), extended attributes and POSIX
-> ACLs.  It picks up the work from the "landlock: add chmod and chown
-> support" series [1] and follows the coarse-grained grouping discussed in
-> that thread [2]: instead of separate chmod/chown rights, metadata
-> operations are grouped into one read and one write right.
-> 
-> Landlock evaluates access rights on a per-path basis, but the metadata
-> related LSM hooks (inode_getattr, inode_setattr, inode_setxattr,
-> inode_getxattr, inode_listxattr, inode_removexattr, inode_set_acl,
-> inode_get_acl, inode_remove_acl) only receive the dentry of the accessed
-> object.  Patches 1-7 therefore first pass struct path instead of dentry
-> through the metadata-related VFS helpers and LSM hooks.  This is a pure
-> refactoring with no behavior change, split so that every patch builds
-> and works on its own:
->
-I like these patches, but is the ability to read metadata already
-sorta controlled by LANDLOCK_ACCESS_FS_READ_DIR on the parent
-directory?
+Hi Quentin,
 
-The one case I see this being different is:
+> Can we align it with what most other subcommands in bpftool do, please?
 
-1. if you wanted to grant read access to the file, but not metadata
-read access, but I can't think of any usecase for being able to read
-the contents of a file, but not the metadata. (see below)
+Done in v8: REQ_ARGS() and map_parse_fds() now handle MAP first, followed
+by a loop over the remaining keywords. Misplacing recursive now reports
+the MAP parser's error, and repeated recursive keywords are accepted.
+Trailing-argument errors go through exit_close to release the selected
+map FDs before freeing the array.
 
-2. If you had the absolute path already and didn't need READ_DIR.
+All 13 subtests pass, including the revised argument checks. A syscall
+trace also confirms that both FDs selected by name are closed on error.
 
-I see introducing this READ_METADATA as causing potential
-hard-to-diagnose issues.
+v8 is a new thread:
+https://lore.kernel.org/r/20260925174402.2028649-1-hi@tychen.cc
 
-Say you handle READ_METADATA and READ_FILE, but only grant READ_FILE.
+I also checked v7's CI failure: it is test_verifier's invalid call insn1
+on s390x (expected R0 !read_ok, got JIT doesn't support callx). The
+for-next_test run has the same failure, while all 13 recursive-dump
+subtests passed on s390x:
+https://github.com/kernel-patches/bpf/actions/runs/36028683139/job/1077369230=
+87
+https://github.com/kernel-patches/bpf/actions/runs/36029092386/job/1077370328=
+90
 
-The program can technically open the file with the READ_FILE permission,
-but it may error out because the stat() on it beforehand failed.
-It's pretty common for programs to do that kind of thing (stat before
-open), like for checking for config files (strace bash and you see it
-stat .profile, /etc/profile)
-
-There may be other bugs, because being able to set permissions to read
-a file *but not read it's metadata* isn't possible currently in posix
-acl and userspace may not work well if that assumption no longer holds.
-
-So maybe WRITE_METADATA is good enough?
-
-Interested in your thoughts,
-Justin
->   1: notify_change() and its callers
->   2: inode_setsecctx hook (must come before 3: the SELinux and Smack
->      implementations call __vfs_setxattr_locked internally)
->   3: xattr helpers, which also drops a redundant EVM xattr size sanity
->      check whose vfs_getxattr() call only has a dentry and therefore
->      cannot be migrated to the new path-based signature
->   4: POSIX ACL helpers
->   5: inode_setattr hook
->   6: inode xattr hooks
->   7: inode POSIX ACL hooks
-> 
-> Two deliberate scoping decisions for this refactor:
-> 
-> - The hooks consistently take struct path rather than struct file.  The
->   VFS call sites involved (chmod(2), chown(2), utimensat(2), xattr(2)
->   and ACL syscalls) operate on paths, and several of them (lstat(2),
->   lchown(2), llistxattr(2), ...) have no struct file to begin with.
-> 
-> - struct inode_operations->setattr still receives (idmap, dentry, attr).
->   Only the VFS boundary (notify_change()) and the LSM hook layer see the
->   path, which keeps the refactor contained to fs/attr.c and the LSM
->   infrastructure instead of touching every filesystem.
-> 
-> Patches 8-12 then implement the new rights, their tests, the sandboxer
-> sample and the documentation.  Semantics:
-> 
-> - READ_METADATA covers stat(2) and friends, getxattr(2) and friends,
->   listxattr(2) and friends, and POSIX ACL reads.
-> - WRITE_METADATA covers chmod(2), chown(2), utimensat(2), setxattr(2),
->   removexattr(2) and friends, and POSIX ACL set and remove.
-> - Only explicit metadata changes requested by user space are restricted.
->   Implicit changes performed by the kernel (e.g. timestamp updates on
->   write(2), size changes on truncate(2)) are not, and neither are
->   chmod(2)/chown(2) calls that change nothing (e.g. chown(2) with
->   (-1, -1), which never reaches the hook), matching the SELinux
->   inode_setattr behavior.
-> - Kernel-internal accesses performed with override_creds() (e.g.
->   overlayfs, cachefiles) and kernel threads without a Landlock domain
->   (e.g. nfsd, ksmbd) are not restricted.
-> 
-> The Landlock ABI version is incremented from 11 to 12.
-> 
-> The series is based on linux-next commit 5c4d4169604b ("Add linux-next
-> specific files for 20260921").
-> 
-> Testing: each patch has been built for aarch64 (gcc, -Werror) and the
-> landlock selftests (445 tests, including the new ones) pass in QEMU on
-> aarch64; base_test reports ABI v12.
-> 
-> [1] https://lore.kernel.org/all/20220827111215.131442-1-xiujianfeng@huawei.com/
-> [2] https://lore.kernel.org/all/abc960a1-e66e-792e-6869-cfd201c29dbe@digikod.net/
-> 
-> Assisted-by: opencode: glm-5.3
-> 
-> Cai Xinchen (12):
->   fs: pass struct path to notify_change()
->   LSM: pass struct path to the inode_setsecctx hook
->   fs: pass struct path to xattr helpers
->   fs: pass struct path to POSIX ACL helpers
->   LSM: pass struct path to the inode_setattr hook
->   LSM: pass struct path to the inode xattr hooks
->   LSM: pass struct path to the inode posix acl hooks
->   landlock: Add READ_METADATA and WRITE_METADATA access rights
->   landlock: Implement metadata access hooks
->   selftests/landlock: Add tests for metadata access rights
->   samples/landlock: Add metadata rights to sandboxer
->   Documentation: Update landlock doc for metadata rights
-> 
->  Documentation/userspace-api/landlock.rst     |  11 +-
->  drivers/base/devtmpfs.c                      |   6 +-
->  drivers/block/zloop.c                        |   4 +-
->  fs/attr.c                                    |  20 +-
->  fs/cachefiles/interface.c                    |   6 +-
->  fs/cachefiles/xattr.c                        |  32 +-
->  fs/coredump.c                                |   2 +-
->  fs/ecryptfs/inode.c                          |  34 +-
->  fs/exfat/file.c                              |   3 +-
->  fs/fat/file.c                                |   3 +-
->  fs/inode.c                                   |   7 +-
->  fs/internal.h                                |  17 +-
->  fs/namei.c                                   |   7 +-
->  fs/nfsd/nfs4ctl.h                            |   4 +-
->  fs/nfsd/nfs4state.c                          |  14 +-
->  fs/nfsd/nfs4xdr.c                            |   2 +-
->  fs/nfsd/state.h                              |   2 +-
->  fs/nfsd/vfs.c                                |  73 +++--
->  fs/open.c                                    |  18 +-
->  fs/overlayfs/copy_up.c                       |   4 +-
->  fs/overlayfs/inode.c                         |   4 +-
->  fs/overlayfs/overlayfs.h                     |  39 ++-
->  fs/overlayfs/xattrs.c                        |  13 +-
->  fs/posix_acl.c                               |  46 +--
->  fs/smb/server/smb2pdu.c                      |  77 ++---
->  fs/smb/server/smb_common.c                   |   2 -
->  fs/smb/server/smbacl.c                       |  21 +-
->  fs/smb/server/tests/smbacl_kunit.c           |   6 +-
->  fs/smb/server/vfs.c                          | 111 +++----
->  fs/smb/server/vfs.h                          |  39 +--
->  fs/smb/server/vfs_cache.c                    |   3 +-
->  fs/utimes.c                                  |   3 +-
->  fs/xattr.c                                   |  96 +++---
->  include/linux/fs.h                           |   6 +-
->  include/linux/landlock.h                     |   4 +-
->  include/linux/lsm_hook_defs.h                |  29 +-
->  include/linux/posix_acl.h                    |  21 +-
->  include/linux/security.h                     |  65 ++--
->  include/linux/xattr.h                        |  22 +-
->  include/uapi/linux/landlock.h                |  26 +-
->  samples/landlock/sandboxer.c                 |  17 +-
->  security/commoncap.c                         |  22 +-
->  security/integrity/evm/evm_crypto.c          |   8 +-
->  security/integrity/evm/evm_main.c            |  36 ++-
->  security/integrity/ima/ima_appraise.c        |  17 +-
->  security/landlock/fs.c                       |  86 ++++++
->  security/landlock/limits.h                   |   2 +-
->  security/landlock/syscalls.c                 |   2 +-
->  security/security.c                          |  99 +++---
->  security/selinux/hooks.c                     |  49 +--
->  security/smack/smack_lsm.c                   |  62 ++--
->  tools/testing/selftests/landlock/base_test.c |   2 +-
->  tools/testing/selftests/landlock/fs_test.c   | 309 ++++++++++++++++++-
->  53 files changed, 999 insertions(+), 614 deletions(-)
-> 
-> -- 
-> 2.18.0.huawei.25
-> 
-> 
+Thanks,
+Tianyi
