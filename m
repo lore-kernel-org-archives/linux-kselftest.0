@@ -1,150 +1,296 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk2-f43.google.com (mail-qk2-f43.google.com [74.125.230.235])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27664766A5;
-	Fri, 25 Sep 2026 22:47:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD63A4FECFD
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 23:03:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790376436; cv=none; b=X8qzs0aWSbdoaw7ZPCQo7KMeRtwcCb2B0ne3RJJw1HEEZ8MFj2teusQHV4p2BY0iuTvT8UYm6E3P2saIbI51OQx59MDgxPvq04f8kZ9r4RRH0ZKJcrzYSeSxL8fJ2hR9y3QaqnT3K6nmJ473v5z3PSACQrQRL43fAZ9mQWwx3vU=
+	t=1790377386; cv=none; b=Hh/NMs27zXq8SblBUtX4qGnlTfyc3Bwz37dJwFL+qUfyWbB2hfceqO2qZpSEw25GE/QuXN6EyEtDfrdHbuoI7k4hrmIoDKr9NgcB+kr1SRCzNts/IZ4DgcmUioMw0oClYKgRvKeO4o/RDUCYN2Qdp5HsF1XIZ3+jWZyB30c/bi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790376436; c=relaxed/simple;
-	bh=JqEcmoDDWblFAh0Nxq2yq/H40ZTIt44qB8BOo44Q6H8=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=G+rBLz/ASqZLqjB1rPdB+A+fB7t+csE4xJmEosAw0ATCFLWuomlJ6SjgFa5Z46eVkmej+JCcXwPVo39okJYGQhTwd+en5224obIq259BssEzmVcMGn3qiOfJUBUUFdQ2C84+/f8xQQJT8EWq/fxB2+L1lZHp3Ua0S6X99sn3FzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QOoorRDw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790377386; c=relaxed/simple;
+	bh=jandskfkITyjC7rvkXLAEoCYbYIdJkGLy5tzhgU6M4A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z/CTLjLUhWvlpyUbu58zMTlbTbxE8vsxiiWIisIJMltUxiUO72uQvGeTHLW3LCCEoBc5/p9eTyIAmJFtyg/zsWet8xUxkbD+FBgn7+trInvwwmCUC8MrD1NHfCuJBzOMmoeJA2640Y/qDMpI2euxiP+Bnv9ZcajR9cGC9EtqQlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=A94lZouv; arc=none smtp.client-ip=74.125.230.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QOoorRDw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 982911F000FF;
-	Fri, 25 Sep 2026 22:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790376435;
-	bh=HG1xmjc9muedxWRreV/dfHrFYuUNJrN4Sktg41zjz+0=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=QOoorRDwiu0o6dE7nQTAlNfujFNM+C7Cjwef9qOnpB3I7zwF70uwIY53WaxgX8Z1X
-	 qNCuv1bCv7DgbqTSg2Rew1+3bVYvCLtxu6QcE43hyMNfa/C+HM3MTNqlEo+8KdnjU4
-	 7odbBOf/wXm7Lt26NTFKYAYTF24g+t+FKDkrKhU118I5gIYCdfc0BCd6MvJzfQv9LE
-	 zsxGkwC3J70C/tni9Vj6lfC0pX2EpVoBHXy4CromeL8PphvekON1L2PZgRQWj9LOHi
-	 K7RK65hjnEra0Dd/MEli90/bFZJE5ecMhPVdPXJouKO8qKwWLLKTtdQ+PPjVzrBL/g
-	 zSmR/4v+wx97w==
-Subject:
- Re: [PATCH net v2 2/2] selftests: net: check timestamp echo after an old ACK
-From: netdev-bot+sashiko@kernel.org
-To: jeffjo@openai.com
-Cc: netdev@vger.kernel.org, edumazet@google.com, ncardwell@google.com,
- kuniyu@google.com, davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Date: Fri, 25 Sep 2026 22:47:14 +0000
-Message-ID: <179037643415.2160803.14897657788666510697@kernel.org>
-In-Reply-To: <20260924224456.55690-6-jeffjo@openai.com>
-References: <20260924224456.55690-6-jeffjo@openai.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="A94lZouv"
+Received: by mail-qk2-f43.google.com with SMTP id af79cd13be357-93a2a8c29c4so143742685a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 16:03:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1790377383; x=1790982183; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=PiEVC1BfM3JbJHmz6IrQSpeOS1QFhfgMFnl3j26Htjk=;
+        b=A94lZouvKAzEKsqSL/a6UzMxCA9GzIsQbusgbX18VD/4DwKuWyDb6CLr8AdemoenTW
+         617YC8IOvzTvhVbOpq/AGAEAVnxLR1trNp2nuOZ/gQBf0n9rM6+fp0sRgPpsvGPcpU14
+         Us49emjjkXz5t8Ymv5sPiXC+LvBbNpDFTRl0f6Qt5SJepfum1T4JRhrSTH28n/2XHWkL
+         vyz8ZZaHH/XKcZ9yTKCQOZrjW/5wXNTizOddw0dBQfLNqN+LKKjdHZ11eGj3uy6l4U6a
+         i8Ca67ZUXj09625YduPLfKVCsBCTuVPUvbAoNa63euPMbiJmP4dYz6vSluHidDJcvTQL
+         5XCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790377383; x=1790982183;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=PiEVC1BfM3JbJHmz6IrQSpeOS1QFhfgMFnl3j26Htjk=;
+        b=sWBBwgkQPA0RbudwA7k6XxJisgFz5L2YMx/sLwyfDWrHGNtsrGakcE8HahIoAYdANg
+         1VZhnk71bx2dMwJ6KPJ3WOpso7X8qf/ZEB5hS/Kmn0D9yTykDjrlH/KPx7vNLpvGxTpE
+         3XLON7XJvHbp5TJcKRiUN+cK37KjCuo2siOYtoRh+SWCbKyDypPaE/a1UYHayt0m4hy5
+         k8jbGVIY5BUP0zzUWkX2HMktSEOVgD+/hurXjP5I7clQFsWBxQRrQxgxezWhpt4PeoaF
+         osWV6U3BIpOk2KbGdtTigGI7V0FwrB36e4QTd3mTtkgu1gVPI6IdH1VC663JX5+jtf5X
+         VcpA==
+X-Forwarded-Encrypted: i=1; AKwUvBw23N9ky+mXN6lSUmQ7mH+l19ZERLOW8oQ7ZXgtNd7V5lOnjbUa9wWlk4ATNZ9XF+6sE1WM+vdJ5RZLo65LRmU=@vger.kernel.org
+X-Gm-Message-State: AFuF++kJzBCxQaz4Yfh9Uia+fMmc+OZf6+VYsGVuUSm+0Wga+ah6tub7
+	aS4+OJDIXlBqDzFyeAHniVlrOoEaTFTxNq6JxI3Y0RXiTv7x5X0LTw3ZNIlqRpYd8RM=
+X-Gm-Gg: AYBFou01S/KzRNl+OtfplPAoFarilKrEU2mMLKxey16VjNekjCEmHbVchMtDk5Gmhsk
+	h3DSzfEcHftWpOJZ07gvQZfxQod3vYTr8KBE59YcFJKL6dkHsFBowA/csnZp89rJu9+PtiUNG7a
+	UzydJ7cZAP0Xz1Dt+r7R3l2BftJ2vB84hrTXqo0/X4hG2MKeTPQILaLrxIZY81iIqEiIZz/qPID
+	dBkRY3JZJCwTJJb0PcIpU0br5rjZI2iyZRcmmzr0GdpAbxr1AdEST4jK/DsdigrEielQhkAhgVN
+	3Bq1Gg90nn52igzm6Uo4XPuFMK1umWrA4dLjxpOfJyOdFh8LAjyzuZtPeiUICc2ZrznyaYl1Lwk
+	VuT2Sy1vsLZFlD7wX9aVcsV4dvuRNxgZk1T8+6QxWtNJP4xb7ec1QpHbdrk+kwxY23NobFvkLY8
+	Gd4zBZfa9Z0EebD0ji59M8sz443fxJZDQczTuIUahksJLrOpcWEWwPbdQf/xk000pG6z0oUl0wj
+	BCQDLPKSrmhsHUC2GnCYyVOyNKeKiBjD6jYrpN98US3vIQ0ortaXPM=
+X-Received: by 2002:a05:620a:2614:b0:93a:2bdc:cd57 with SMTP id af79cd13be357-93c43b7f72amr755724385a.2.1790377382584;
+        Fri, 25 Sep 2026 16:03:02 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93c4493af29sm290317085a.28.2026.09.25.16.03.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2026 16:03:02 -0700 (PDT)
+Date: Fri, 25 Sep 2026 19:02:59 -0400
+From: Gregory Price <gourry@gourry.net>
+To: linux-mm@kvack.org
+Cc: Zhigang.Luo@amd.com, arun.george@samsung.com, balbirs@nvidia.com, 
+	brendan.jackman@linux.dev, yuzenghui@huawei.com, apopple@nvidia.com, alucerop@amd.com, 
+	matthew.brost@intel.com, akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+	liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
+	mhocko@suse.com, corbet@lwn.net, skhan@linuxfoundation.org, 
+	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, djbw@kernel.org, 
+	vishal.l.verma@intel.com, dave.jiang@intel.com, alison.schofield@intel.com, 
+	osandov@osandov.com, jannh@google.com, pfalcato@suse.de, jackmanb@google.com, 
+	hannes@cmpxchg.org, ziy@nvidia.com, pbonzini@redhat.com, osalvador@suse.de, 
+	joshua.hahnjy@gmail.com, rakie.kim@sk.com, byungchul@sk.com, ying.huang@linux.alibaba.com, 
+	kasong@tencent.com, qi.zheng@linux.dev, shakeel.butt@linux.dev, baohua@kernel.org, 
+	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, yury.norov@gmail.com, 
+	linux@rasmusvillemoes.dk, longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org, 
+	mkoutny@suse.com, sj@kernel.org, jgg@ziepe.ca, jhubbard@nvidia.com, 
+	peterx@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
+	ryan.roberts@arm.com, dev.jain@arm.com, lance.yang@linux.dev, usama.arif@linux.dev, 
+	xu.xin16@zte.com.cn, chengming.zhou@linux.dev, roman.gushchin@linux.dev, 
+	muchun.song@linux.dev, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	driver-core@lists.linux.dev, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
+	linux-debuggers@vger.kernel.org, linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
+	cgroups@vger.kernel.org, damon@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH v5 00/36] Private Memory NUMA Nodes
+Message-ID: <arb0mV23QmRVDtB3@gourry-fedora-PF4VCD3F>
+References: <20260720193431.3841992-1-gourry@gourry.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260720193431.3841992-1-gourry@gourry.net>
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+On Mon, Jul 20, 2026 at 03:33:54PM -0400, Gregory Price wrote:
+> This series introduces the concept of "Private Memory Nodes", which
+> are opted into two basic functionalities by default:
+>   - page allocation (mm/page_alloc.c)
+>   - OOM killing
+> 
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+All, I wanted to preface v6 with an update, I probably won't be sending
+it out on-list before LPC (i've been a bit noisey as it is, I'll give
+it a rest).
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
 
-- [Medium] The new selftest
-  tools/testing/selftests/net/packetdrill/tcp_old_ack_ts.pkt checks for…
+But I would like to give you the highlights for those interested.
 
---
+The latest working branch can be found here:
+https://github.com/gourryinverse/linux/tree/scratch/gourry/managed_nodes/rfc6-nonuma
 
-selftests: net: check timestamp echo after an old ACK
+You will find the following:
 
-This adds a packetdrill regression test for a gap-filling segment that
-carries an old ACK. Two peer data segments arrive out of order. The test
-then requires the ACK that closes the gap to echo the delayed segment's
-timestamp (301000) and not the stale saved value (1000).
+- There is no depedency on exported alloc_flags (willy, i found a way),
+  but there is a need for `folio_alloc_private()` to explicitly ask
+  for the ALLOC_ZONELIST_PRIVATE.
 
-Link: https://github.com/google/packetdrill/commit/83f72d3f9085d0e26eb4d206fe4d7cfab5b6d872
+- feature bits have been converted to node_state[] bits
 
-> diff --git a/tools/testing/selftests/net/packetdrill/tcp_old_ack_ts.pkt b/tools/testing/selftests/net/packetdrill/tcp_old_ack_ts.pkt
-> new file mode 100644
-> index 0000000000000..f072e5e4c4494
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/packetdrill/tcp_old_ack_ts.pkt
-> @@ -0,0 +1,22 @@
+- N_MEMORY_COMMON was added to mean "common memory" - i.e. the existing
+  N_MEMORY set.  A private node is now defined as !N_MEMORY_COMMON.
 
-[ ... ]
+- opt-out sites no longer check for !N_MEMORY_PRIVATE, they instead
+  iterate over node_state[N_MEMORY_COMMON].  This is *much* cleaner.
 
-> +0.300 write(4, ..., 17) = 17
-> ++0 > P. 1:18(17) ack 1 <nop,nop,TS val 300 ecr 1000>
-> +0.310 < P. 18:35(17) ack 18 win 20000 <nop,nop,TS val 301001 ecr 300>
-> ++0 > . 18:18(0) ack 1 <nop,nop,TS val 310 ecr 1000,nop,nop,sack 18:35>
-> +0.320 < P. 1:18(17) ack 1 win 20000 <nop,nop,TS val 301000 ecr 100>
-> ++0 > . 18:18(0) ack 35 <nop,nop,TS val 320 ecr 301000>
-                                                  ^^^^^^^^^^^
+- opt-in sites get to define bits in terms of their own service, e.g.
 
-[Severity: Medium]
-Can this test report PASS on a kernel that doesn't have the fix?
+  /* for each reclaimable node */
+  for_each_node_mask_state(..., N_MEMORY_RECLAIM) {
+     ...
+  }
 
-The commit message says packetdrill versions older than 83f72d3f9085 do
-not check the outgoing TSecr:
+  Or maybe even:
 
-  older tools incorrectly pass on an unfixed kernel
+  for_each_reclaimable_node()    :)
 
-This ecr 301000 check is the only line in the script that depends on the
-fix. The seq, ack and SACK checks give the same result with or without
-it, and so does the read() of 34 bytes below.
 
-The runner only checks that some packetdrill is in PATH. It then reports
-PASS whenever packetdrill exits 0:
+- There are only 2 node features in the base set:
 
-tools/testing/selftests/net/packetdrill/ksft_runner.sh:
-    if [ -z "$(which packetdrill)" ]; then
-    	ktap_skip_all "packetdrill not found in PATH"
-    	exit "$KSFT_SKIP"
-    fi
-    ...
-    	unshare -n packetdrill ${ip_args[$ip_version]} ${optargs[@]} $script > /dev/null \
-    		&& ktap_test_pass $ip_version || $failfunc $ip_version
+  N_MEMORY_RECLAIM    -  generic reclaim runs on the node
+  N_MEMORY_COMPACTION -  compaction will run on the node
 
-On a kernel without the fix, tcp_ack() sends the gap filler down the
-old_ack path, since ack 1 is before snd_una 18. That kernel does not have
-this update:
+  You'll notice there's no userland numa control support, more on this
+  in a moment.
 
-net/ipv4/tcp_input.c:tcp_ack() {
-    ...
-old_ack:
-	...
-	if (flag & FLAG_UPDATE_TS_RECENT)
-		tcp_replace_ts_recent(tp, TCP_SKB_CB(skb)->seq);
-    ...
-}
+  This is all you need to have functional device-private coherent
+  memory that uses the page allocator.
 
-As a result, ts_recent stays at 1000. With an older packetdrill, such as
-a distro package, wouldn't ipv4, ipv6 and ipv4-mapped-ipv6 all still pass?
+  Disabling N_MEMORY_RECLAIM does not necessarily mean you're prevented
+  from using vmscan.c and the LRU - it just means we'd need to expose an
+  interface for a !N_MEMORY_RECLAIM node to explicitly ask for reclaim
+  to operate on it.
 
-Could the script add a check that doesn't rely on packetdrill's TSecr
-handling? For example, after the gap-closing ACK, inject:
+  Tiering (Demotion) *to* a node is not supported.  We can probably
+  debate whether this should mean tiering *from* a node should be
+  supported or not as well.  This is easy to change.
 
-  < P. 35:36(1) ack 18 win 20000 <nop,nop,TS val 2000 ecr 320>
 
-With the fix, ts_recent is 301000, so the PAWS check in
-tcp_validate_incoming() drops the segment. The segment carries data, so
-tcp_oow_rate_limited() does not suppress the dup-ACK, and the reply is
-ack 35.
+- The working branch also includes a minimal compressed-ram service
+  that only supports anonymous memory.
 
-Without the fix, ts_recent is 1000. The segment is accepted and the reply
-is ack 36. That difference would show up whichever packetdrill version is
-used.
+  Supporting file-backed memory (and shmem) is a whole different can
+  of worms that deserves its own discussion.
 
-> ++0 read(4, ..., 34) = 34
+  I will post this as a separate RFC from the base set, but it is
+  available to play with on my working branch.
 
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260924224456.55690-4-jeffjo%40openai.com
+
+- I ship a basic dax driver for the base series, `anondax` which allows
+  existing devices to online a private node with both compaction and
+  reclaim support for testing.  This enables this use case:
+
+  fd = open(/dev/my_device, ..., O_DIRECT);
+  buf = mmap(fd, ..., MAP_SHARED)
+  my_file = open(myfile, ...);
+  read(buf, myfile); /* fault directly onto device memory */
+
+  With swap (and no tiering), this gives you a private over-commitable
+  node for which aspiring drivers can use to implement their own
+  mmu_notifier callback stream to manage device page tables and such.
+
+
+- The reason mempolicy (and user numa in general) is not supported is a
+  critical relationship between the OOM killer and page allocator.
+
+  In trivial scenarios, if a consumer of a private node overshoots and
+  causes an OOM - it will be the largest consumer and be chosen as the
+  victim.
+
+  If there are many consumers - what actually happens in practice is the
+  oom killer attempts to select a victim based on *task* policy... which
+  makes every task a candidate.  This leads to, among other things,
+  either an OOM storm and/or a full blown panic because a victim cannot
+  be located (depending on the constraints).
+
+  I've concluded that as-is, this is not tractable. But also, it is not
+  actually needed if the devices provide their own chardev to provide
+  a basic wrapper around folio_alloc_private().
+
+  This unfortunately means potential users like guest_memfd are unlikely
+  to be able to use the nodes without hard-coding the allocator
+  interface, as opposed to a mempolicy.
+
+  I think it's possible instead to *maybe* add N_MEMORY_USER_MIGRATION
+  and allow for explicit movement between nodes, but not full blown
+  mempolicies.
+
+  The relationship between page_alloc, cpuset, mempolicy, and the oom
+  killer is just too tight to allow allocations without the use of
+  __GFP_THISNODE - which the private allocation interface will enforce.
+
+
+As it stands, the series has been heavily minimized in both line count
+and patch number.
+
+The base series is ~22 commits with the scary diffstat below, but many
+of the core mm/ patches are similar to the patch below - with nearly
+all of the real complexity happening in reclaim and memory hotplug.
+
+despite the branch name, I intend to drop RFC from here-on, everything
+else required for the base series is in mm-new.
+
+
+See you at LPC
+~Gregory
+
+-------
+
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 7bdcdb57652f8..cd61566b44fa1 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -2266,7 +2266,7 @@ static int __add_folio_for_migration(struct folio *folio, int node,
+        if (is_zero_folio(folio) || is_huge_zero_folio(folio))
+                return -EFAULT;
+
+-       if (folio_is_zone_device(folio))
++       if (!folio_is_common_memory(folio))
+                return -ENOENT;
+
+        if (folio_nid(folio) == node)
+@@ -2390,7 +2390,7 @@ static int do_pages_move(struct mm_struct *mm, nodemask_t task_nodes,
+                err = -ENODEV;
+                if (node < 0 || node >= MAX_NUMNODES)
+                        goto out_flush;
+-               if (!node_state(node, N_MEMORY))
++               if (!node_state(node, N_MEMORY_COMMON))
+                        goto out_flush;
+
+                err = -EACCES;
+@@ -2475,7 +2475,7 @@ static void do_pages_stat_array(struct mm_struct *mm, unsigned long nr_pages,
+                if (folio) {
+                        if (is_zero_folio(folio) || is_huge_zero_folio(folio))
+                                err = -EFAULT;
+-                       else if (folio_is_zone_device(folio))
++                       else if (!folio_is_common_memory(folio))
+                                err = -ENOENT;
+                        else
+                                err = folio_nid(folio);
+
+
+ Documentation/ABI/stable/sysfs-devices-node |  21 +++++++++++++++++
+ Documentation/admin-guide/cgroup-v2.rst     |   7 ++++++
+ Documentation/mm/physical_memory.rst        |  15 ++++++++++++-
+ drivers/base/node.c                         |  67 +++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ drivers/dax/kmem.c                          |   2 +-
+ include/linux/gfp.h                         |   6 +++++
+ include/linux/memory_hotplug.h              |   2 +-
+ include/linux/mmzone.h                      |  45 +++++++++++++++++++++++++++++++++++++
+ include/linux/node.h                        |  12 ++++++++++
+ include/linux/nodemask.h                    |  53 ++++++++++++++++++++++++++++++++++++++++++-
+ kernel/cgroup/cpuset.c                      |  39 ++++++++++++++++++++++++++------
+ kernel/sched/fair.c                         |   6 ++---
+ mm/compaction.c                             |  21 +++++++++++------
+ mm/damon/ops-common.c                       |  15 ++++++++-----
+ mm/damon/vaddr.c                            |  20 +++++++++++++----
+ mm/huge_memory.c                            |   2 +-
+ mm/internal.h                               |  22 ++++++++++++++++++
+ mm/khugepaged.c                             |   9 ++++++--
+ mm/ksm.c                                    |   8 ++++---
+ mm/madvise.c                                |   6 ++---
+ mm/memory-tiers.c                           |  25 +++++++++++----------
+ mm/memory_hotplug.c                         | 109 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------------
+ mm/mempolicy.c                              |  51 +++++++++++++++++++++++++-----------------
+ mm/migrate.c                                |   6 ++---
+ mm/mm_init.c                                |  22 +++++++++---------
+ mm/page_alloc.c                             | 115 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------
+ mm/page_alloc.h                             |   5 +++++
+ mm/vmscan.c                                 |  31 +++++++++++++++-----------
+ 28 files changed, 585 insertions(+), 157 deletions(-)
