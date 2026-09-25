@@ -1,77 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC2AA2D73A0;
-	Fri, 25 Sep 2026 19:10:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA58F4E1C85
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 19:22:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790363417; cv=none; b=KAdJbr5GehY8YpAX4UFIUzmjMMvqqPQ3xFPspNAb8dUpmoHjvSxV6EvzRyhHDOnMbawibF3YmAWDK/D5shZDJDL1Eeuliotj8KwnDmHY/LETTIAPap+Qe8utgdetzyBioZz/xFVtb/qCbS2P4L6Z1DEptjDZnb+l/14+St+5dEM=
+	t=1790364167; cv=none; b=XtUiEz2IsHhOzTpomN1X4BbuvAlsjdm6pi0KCjmGZIBBJT3Gv5daRBlbViO+WYwPgA8oRwn10OEYze30NfkkjQwa5zEkpt4dtefegrY6mc0IEWtslk7GYXycsHt5qtJ1ihyDxSJaFtM4tvDG+icLk9O8PIFvKFL1eLD8Gjw+S2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790363417; c=relaxed/simple;
-	bh=zPE7Fpdceg+qVWrlR6SfURBbX130IhK2/zfJ968obXE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=T4+IEPSCYyVqYw/fuwHWQjWhSoG/4DnOUmmFIM6r0xMMODtAZprQ0sCtZddz35PtMPNjsBrJX0uWde7fFV/sz31CyQPCDJSWtAyx75ffPzQmzXEs3T6QRhZlNybJvIs036WcOtairOCGdlbw94toeu+niwmAuK6bW4ww6cQ3GrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lta26CTJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790364167; c=relaxed/simple;
+	bh=bQdHUqZ89Dat9b4twM81FEqBHQkZuZ38nbP+8euFmpw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UJsryJtrVhU7LwyUCbGGIrHUzhAtpUeg0CpPVxGvacLtuYgEl0mWvJEvERjvSkDSlSRFEJ0kwkd23oZm+9vVUHbd1exVHJO1qSFbm8R3stwfM5dDuu5ROSl6LQedg/jTm9L+3aVjw4X8miIB+hl0qc/iAW9dyFJEyafIxQLbuas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dxYu7UEa; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lta26CTJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C64E1F000FF;
-	Fri, 25 Sep 2026 19:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790363416;
-	bh=WIh5MF91TgNDRmG6Qisl3WLz2tFz4iMG+XOqdmL7CGE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=lta26CTJTzuqDDh5KI8mVWRhpEM81U1UcckDr7elT2XmDDv9u3Yu83P5Kh49UB1d7
-	 3RmumOK4R51exJOZZNWGrKtF5MQN87aNO+1fQdjMPzcQisfnSm1Sv3mQpPjr5nVKML
-	 ClXq0r1H+aVB7Wb5sxjDOFcwtAuh3SeOaFRNklbtdCY2DF5NQOUE8Q4alUJYQJ7BjU
-	 0WLKQ8Gl14aZLEKpS81xG/puqobi7SQ6pP3/HchhrBK1Sd4KV9rXlWut9JVd7yL2qs
-	 c3EtSA68/rbFVVNiAjBjoowFqz46o784ouT6Tas+VISMbCw56jRrP+LfDzqv2gbI6h
-	 4Y8PV2u15/CsQ==
-Date: Fri, 25 Sep 2026 12:10:15 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: Konstantin Sinyuk <ksinyuk@kernel.org>,
- <dri-devel@lists.freedesktop.org>, Maarten Lankhorst
- <maarten.lankhorst@linux.intel.com>, Francois Dugast
- <francois.dugast@intel.com>, David Airlie <airlied@gmail.com>, Simona
- Vetter <simona@ffwll.ch>, Maxime Ripard <mripard@kernel.org>, Thomas
- Zimmermann <tzimmermann@suse.de>, Jonathan Corbet <corbet@lwn.net>, Shuah
- Khan <skhan@linuxfoundation.org>, Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, "Paolo Abeni" <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Ilia Levi <ilia.levi@intel.com>,
- <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 0/12] drm/fabric: vendor-neutral topology
- infrastructure for scale-up accelerator interconnects
-Message-ID: <20260925121015.08b8cc15@kernel.org>
-In-Reply-To: <ara5iTl7bmgWbPW9@intel.com>
-References: <cover.1787552412.git.ksinyuk@kernel.org>
-	<20260921131911.532d81f4@kernel.org>
-	<ara5iTl7bmgWbPW9@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dxYu7UEa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790364161;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aWk4K3bjs72mNw+sBMqiIvaUwaOVCuWNNLV5F6PcuRc=;
+	b=dxYu7UEafVO0OqggvWdbEMYCLfP6+o3qyVqGVmbuWocHWTA/Vk8qj/m8baJNS+t5UFFN6n
+	Ab/v9xlZDmacrhzZtqJIeXU4rXHFXpLWVE9Fq4CBfc6aZcfib2g3NUyTFR1VI9c3KVknU8
+	Bb2X+TMtD9DmHdCM3pJM/rPkXeYPt3c=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-163-Ke7tYFS9MfOCqCl9BWIvpQ-1; Fri,
+ 25 Sep 2026 15:22:35 -0400
+X-MC-Unique: Ke7tYFS9MfOCqCl9BWIvpQ-1
+X-Mimecast-MFC-AGG-ID: Ke7tYFS9MfOCqCl9BWIvpQ_1790364153
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 76EE61911B23;
+	Fri, 25 Sep 2026 19:22:32 +0000 (UTC)
+Received: from [100.91.18.181] (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 38DF141D;
+	Fri, 25 Sep 2026 19:22:30 +0000 (UTC)
+Message-ID: <547bea01-880a-4a87-8cbc-a632f087f896@redhat.com>
+Date: Fri, 25 Sep 2026 15:22:29 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/3] cgroup/cpuset: return PERR_NOCPUS in
+ remote_partition_enable() on subpartitions_cpus conflict
+To: Hui Peng <benquike@gmail.com>, Ridong Chen <ridong.chen@linux.dev>,
+ Guopeng Zhang <guopeng.zhang@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>
+Cc: Shuah Khan <shuah@kernel.org>, Chen Ridong <chenridong@huawei.com>,
+ cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20260924042729.1908863-1-benquike@gmail.com>
+ <20260924042729.1908863-2-benquike@gmail.com>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <20260924042729.1908863-2-benquike@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-On Fri, 25 Sep 2026 14:12:25 -0400 Rodrigo Vivi wrote:
-> I do understand the feeling here :(
-> 
-> But I do hope that you reconsider your position here. We had such a great
-> experience with the drm-ras using the netlink and I was really hoping that
-> we could just reproduce the same experience here.
-> 
-> Netlink is such an incredible API.
-> 
-> Would it help if I take the maintainership of this drm-fabric netlink
-> along with the drm-ras one, ensuring the same consistent and clean usage?
+On 9/24/26 12:27 AM, Hui Peng wrote:
+> When a remote partition is created underneath an existing local partition
+> via a non-partition (PRS_MEMBER) intermediate cgroup, update_prstate() sees
+> parent->partition_root_state == PRS_MEMBER and calls
+> remote_partition_enable().
+>
+> Commit 86888c7bd117 ("cgroup/cpuset: Add warnings to catch inconsistency
+> in exclusive CPUs") replaced the cpumask_intersects(tmp->new_cpus,
+> subpartitions_cpus) error check in remote_partition_enable() with
+> WARN_ON_ONCE(). As a result, remote_partition_enable() emits a warning
+> and proceeds to enable the remote partition on CPUs that are already
+> owned by the ancestor local partition in subpartitions_cpus.
+>
+> This can be reproduced on Linux 7.3.0-rc3 with:
+>
+>    mkdir -p /tmp/cg1
+>    mount -t cgroup2 none /tmp/cg1
+>    echo "+cpuset" > /tmp/cg1/cgroup.subtree_control
+>
+>    mkdir /tmp/cg1/A
+>    echo 1 > /tmp/cg1/A/cpuset.cpus
+>    echo 1 > /tmp/cg1/A/cpuset.cpus.exclusive
+>    echo root > /tmp/cg1/A/cpuset.cpus.partition
+>    echo "+cpuset" > /tmp/cg1/A/cgroup.subtree_control
+>
+>    mkdir /tmp/cg1/A/B
+>    echo 1 > /tmp/cg1/A/B/cpuset.cpus
+>    echo 1 > /tmp/cg1/A/B/cpuset.cpus.exclusive
+>    echo "+cpuset" > /tmp/cg1/A/B/cgroup.subtree_control
+>
+>    mkdir /tmp/cg1/A/B/D
+>    echo 1 > /tmp/cg1/A/B/D/cpuset.cpus
+>    echo 1 > /tmp/cg1/A/B/D/cpuset.cpus.exclusive
+>    echo root > /tmp/cg1/A/B/D/cpuset.cpus.partition
+>
+> which triggers:
+>
+>    WARNING: kernel/cgroup/cpuset.c:1594 at remote_partition_enable+0x1c1/0x300
+>
+> and leaves both /tmp/cg1/A and /tmp/cg1/A/B/D as active root partitions
+> claiming exclusive CPU 1.
+>
+> Fix this by returning PERR_NOCPUS when tmp->new_cpus intersects
+> subpartitions_cpus in remote_partition_enable(), matching the error code
+> used by remote_cpus_update() for the same subpartitions_cpus conflict, and
+> add a regression test case to
+> tools/testing/selftests/cgroup/test_cpuset_prs.sh.
+>
+> Tested in QEMU on Linux 7.3.0-rc3 using the reproducer above and
+> tools/testing/selftests/cgroup/test_cpuset_prs.sh.
+>
+> Fixes: 86888c7bd117 ("cgroup/cpuset: Add warnings to catch inconsistency in exclusive CPUs"
 
-Hard call, I have nothing to complain about with the drm-ras work.
-Purely worried about the time :( Well, that, and DRMs general love
-of Rust which seems to be about 10x less development efficient for us..
+Technically, this commit isn't  wrong as it does not expect that a 
+remote partition can be created under a local partition. I will put the 
+commit to be fixed as 181c8e091aae ("cgroup/cpuset: Introduce remote 
+partition").
 
-Let's start by feeding this + the spec into your LLM
-https://github.com/masoncl/review-prompts/blob/main/kernel/subsystem/netlink.md
+Other than that, it looks good to me.
+
+Reviewed-by: Waiman Long <longman@redhat.com>
+
+> Suggested-by: Guopeng Zhang <guopeng.zhang@linux.dev>
+> Cc: stable@vger.kernel.org
+> Assisted-by: LLM
+> Signed-off-by: Hui Peng <benquike@gmail.com>
+> ---
+>   kernel/cgroup/cpuset.c                            | 3 ++-
+>   tools/testing/selftests/cgroup/test_cpuset_prs.sh | 2 ++
+>   2 files changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 2538faac9aba..7381fa8502e7 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1591,10 +1591,11 @@ static int remote_partition_enable(struct cpuset *cs, int new_prs,
+>   	 * above it or remote partition root underneath it is not allowed.
+>   	 */
+>   	compute_excpus(cs, tmp->new_cpus);
+> -	WARN_ON_ONCE(cpumask_intersects(tmp->new_cpus, subpartitions_cpus));
+>   	if (!cpumask_intersects(tmp->new_cpus, cpu_active_mask) ||
+>   	    cpumask_subset(top_cpuset.effective_cpus, tmp->new_cpus))
+>   		return PERR_INVCPUS;
+> +	if (cpumask_intersects(tmp->new_cpus, subpartitions_cpus))
+> +		return PERR_NOCPUS;
+>   	if (((new_prs == PRS_ISOLATED) &&
+>   	     !isolated_cpus_can_update(tmp->new_cpus, NULL)) ||
+>   	    prstate_housekeeping_conflict(new_prs, tmp->new_cpus))
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 3f7e81709365..b732078bf319 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -298,6 +298,8 @@ TEST_MATRIX=(
+>   	" C0-4:X2-4 C1-4:X2-4:P2 C2-4:X4:P1 \
+>   				   .      .      .      X1      .    0 A1:0-1|A2:2-4|A3:2-4 \
+>   								       A1:P0|A2:P2|A3:P-1 2-4"
+> +	" CX1-3:P1 CX1-3  CX1-3    .      .      .      P1      .    0 A1:1-3|A2:1-3|A3:1-3 \
+> +								       A1:P1|A2:P0|A3:P-1"
+>   
+>   	# Remote partition offline tests
+>   	"   C0-3    C1-3  C2-3     .    X2-3   X2-3 X2-3:P2:O2=0 .   0 A1:0-1|A2:1|A3:3 A1:P0|A3:P2 2-3"
+
