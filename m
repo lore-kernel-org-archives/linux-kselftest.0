@@ -1,125 +1,229 @@
-Received: from mail-oo2-f42.google.com (mail-oo2-f42.google.com [74.125.231.170])
+Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6E94F55AE
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 20:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F733E00B4
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 20:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790369708; cv=none; b=cw3RL1dMn3iDPOL+0jqMUa8HNaWcxDfz1Yn2a0JIQFiWDyE/Jh00QAeb7ZlLYPwjf0z73eilfFGKw4ctguk3KE4RgDa8TXtKrC3AmNKIYAkZkzLKbT+HpmfOASEAuB0xBIOOLqbIhtu90xJvPTqWvWxzpk7iFkZl5G63t37xJac=
+	t=1790369723; cv=none; b=cBOWdvrLGSf9fCdLNQNQ6uGz4oqJ1TH3rY8J2YlXaH+BlsqJ1u0oPiJrZtdrwjWQ1NElP5RWZakUMIKzFkPU+xfecdBzGbbkOHZJUCSKB3SxNd9Iq5splY0m1X863N1POoprioKNQ7Vy3ChwuJ/TB+U//BGDAyoIjHae4pExfQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790369708; c=relaxed/simple;
-	bh=b3FYJR2ie2Yh+fvliYbwgtIZejyG6PAXcYAhpQNpCW4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qlm7P9lhTFTrWHbSehAaht34IOpHTkz1cEgYLA+yEOXcKKoR/iFHSJlnQz9CUmhv5XA2ANtQ6PI1OEQCzizG+bP0ahHo83HxpnU8kVy45R+dH61KGy54bCAd5e0mu4FU81pOcCLYZBBw3L1OCu5i3hQ24JWv1cReVYnPGrKz0ws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MMiZCj4D; arc=none smtp.client-ip=74.125.231.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790369723; c=relaxed/simple;
+	bh=24yjjZnXY1DYpKHmlWT+MX+eqe42maAyhosiwvUV4Vc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iadiu/IXswAPapWMgUANcWVvbqDmNZbycp0qeszxRp0VFK8LZqdRGqCyZBvA6l08Nan3W1iDo0tGmrE1aFZdfJ0r6lsoSQNI+jhVWivn9djb4LtH7OmGWf8o6EwrFmTYsVEUS9MTQWgxhN/UUDnCzmXex4UUxaF1A1PcNdic9ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i/c/VDNV; arc=none smtp.client-ip=74.125.227.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MMiZCj4D"
-Received: by mail-oo2-f42.google.com with SMTP id 006d021491bc7-6bda350b708so482301eaf.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 13:55:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i/c/VDNV"
+Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-3a0b0fa2055so797454a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 13:55:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790369706; x=1790974506; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=uVkDm7b8tGoVPxZCZvIvITNn9vMbTScXbMyBf75jcE8=;
-        b=MMiZCj4DnZXv1jqGT8uxvcgvqjdxJ3VoatG4nyw4pHlctlUuFDWna1VVu1W0V00HDg
-         KI9jQoYk5QFum9YXtcW0KYMIR5jGNCpT2qqiEfQbnTGIjRQAvyvjFRGEkPOGZcUzfOuo
-         lE+lO0aVaHrM8Cc9brqDMm4F34Ul+MTW7EoVCb9+HWMFxiVfqqomR666DL0ymALGy4dO
-         dYM+tEGLxgXJZDp90eOaeT2Aa5RjBgxRRVjqE6jwEqGfYiRDf8WR8NIjTE6PiuskK12U
-         47sssX8V+5D3uzL9Ey4cxdXZjMJk+cTaxPg8Bbnr5KQTDBQKTw8eZJiiWQPS8rNQxmy8
-         Ir9Q==
+        d=google.com; s=20251104; t=1790369721; x=1790974521; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=IBZGc7Te6ndEEpx/gGdvka8Znd6f8zDQu/S2hFPgZOI=;
+        b=i/c/VDNVHCPWl97WQJskVHZAtqvnrn7g4eSpFAaI3IJdWU35ZK0KntL4ozB8baPFqa
+         wjyEn4QmYcGrqFhbRxDNPAkGx15DHOG6hG+M5NfrQiyv/5VXILvu4uiD93F8VLw3UUpU
+         vj3TAbTHgNJSlhztLvPUu/EKh+gYPVIfGQ81tpkak1Q4+KqI+iVHeZbW7v6EZhYPXgju
+         sd6MI5Yi4tPPkjtviY10AEP/WoFOvsQjGw4sX6/nhdBWYqmax30IdYQksPvaIXhdGMsD
+         nK5H8QiFwMxFql1mZGirnW3vgSDR+BqyCSDYGFARLUwyFSEXeE14EIMawf+EGL2o9eZ9
+         Bt1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790369706; x=1790974506;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=uVkDm7b8tGoVPxZCZvIvITNn9vMbTScXbMyBf75jcE8=;
-        b=wcs7q45M17CoqHCbnAVY0EMaZuZyPUKuxusnTFpdeBagLCvqr00MC/SMyIPaJ/Qh8f
-         PzPMHMjj92mJHNW4HB3LZ2MycJ5RaLIaur7sfA6o1mRzdqr+gJZAXRSN4QM0FWUlZFgM
-         YL9FZbfRV06EbYgliEgLLfPeTfUWHctZ5ztmsCzxcGHA/Vr6eYP1VeJMlfSzi7azxNuY
-         sKIczt3fG2cp7Ig3JIXscf0Z7fUwEhnKTjrVEm8yGJ9h0LlWBqj3jtckTiyOkKA4VWlz
-         A4HRNDJ9Qfvh2gPEW+Jm2kYC3XuloeJsU3DiuOBzLTm8NTG6vg9fvCYWaiSrUSJqFkvY
-         /8mA==
-X-Forwarded-Encrypted: i=1; AKwUvBxLCvdNffLnuj+JiAB+fYONJDhlWYFRoy50wKVnaJZXbsRTXGdA5CucmuzOruPu2mCSOfukR5CqXjy01KoOSVc=@vger.kernel.org
-X-Gm-Message-State: AFuF++nKotIRw/g6eZkChntq/cxHdH/jFFuOYbxl/5ah5uEOfDgFMdbZ
-	xvO6QidVBaOle7v9i0VBqQzh1iEzqELPBupsDYs/G1bJUysus33rW629
-X-Gm-Gg: AYBFou3hVsgP8zWtrVgOtUEejQfKN8rhS+UFuHIOLE0kerMCnARvelddjr7g+YIs566
-	hfMFuWGgmDhY5D/Ek1InWCpJIoszMUO5tWIHGaGzrlTzmJmS6y7erZDcHTG3hzjs66UAg3C6Nre
-	HUBTt1dS+CYmY0ijiB/uppOiLtyEpIlzviuig1K+V1DUAt2LQA85TbaQF1HLIiHcWAK1LLQA0yF
-	JMaf/zxJTBTcqZ3I6peJDeDEsrn6MwV0C4xuWkYRbvns5m+Dy+UXBph/farWvW7c0XePdVMTas5
-	bchuvz1KxwcZtrrZUejT8uMUVtGWfp9dfU7S861RevC+uuyCNqq0CRR0Axc5+hNb6zFkpIkCIXl
-	1oyixU+bkMHhRuioQ2O9Fm2aMXbPIXk/soOrDpIpBQM+QwfCt0wkdEanwDMSaTSmEtdE8c9WZ/G
-	kOwuo3dqLiJPU9eOA8QaOZ8EHSNHrTEZz1h2f6ft5OoQNISsEj5UtkcM8sm9rLFEVFkq0TJHrec
-	ArloWSiZNTPEIZbelU2R6he94DLSDDx6RXL5F0l
-X-Received: by 2002:a05:6820:179b:b0:6c9:e0a0:af1b with SMTP id 006d021491bc7-6d5b869be64mr3111117eaf.27.1790369705603;
-        Fri, 25 Sep 2026 13:55:05 -0700 (PDT)
-Received: from archlinux.lan ([136.34.156.120])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-493367b617fsm3034952fac.18.2026.09.25.13.55.02
+        d=1e100.net; s=20260707; t=1790369721; x=1790974521;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=IBZGc7Te6ndEEpx/gGdvka8Znd6f8zDQu/S2hFPgZOI=;
+        b=jszk2NGkdgPLBAJnQd58syiNWJ5g0iWrMxTAIFGNKOsIetnMVMXaxYfKOiWk0QcWMr
+         Nkf2W1wvPQOUe5aD6V5rDHCwNuwZnPF6f6yDg19QX+zbzERN2+qwtBGpeUUoUsHNlJoM
+         0pTv2Vy/wNBcoOyWTLiA8qYPBtkeMOeDtgaO2ac41P1FwxSMXBUwncjRe8xLSJl+/K1x
+         qnUtGR/9bA0pas0cW+I43KHjZjHXAR8ayS4hlnM+niG2UpGEmUJQzWIxVB+pbaCD7lgy
+         Yqx3UMbEdWePKEvFZ4n+PATkdXMbGvlBcMCfovC7cPm1P9u23CN6/AqbPvd1m6KHP552
+         lW9w==
+X-Forwarded-Encrypted: i=1; AKwUvByxub2c7rQ8g6i2u0K6Uc9vJYAlxfc9FkFcENqzISXNnfO3VMxF2w207RTahpCZOtYm2SWZY5v8ytaLoLD7A9o=@vger.kernel.org
+X-Gm-Message-State: AFuF++muEZsCmCfq3vfTKvLuYwF4KCF4wBCC7c5Kn1hJlhBvO6CG8UEx
+	9RkIO9dUaSqgJ5hPHFGDJETvnhHtIajAZP1EY+bRDOYcTcC14V78gpzxfMSIhhta9A==
+X-Gm-Gg: AYBFou1ZnfEnmvRuinDGHzgiSrd25SNrCdy10h61+MazPnwz7MbGSaSnTY6P92y04Or
+	ZTBw89f1M2s3RwpfRYP0rILQgP5OWjygMpxYCKNsrMwZ6THPbrVM5jE15zEvyNw7UGJvoOp7iK2
+	bbFpDdXrJkMGB5AhkXxv5UV+A0h0E5IucHZwtN6xAjTnfvnBmJTnPNudgEYtdc1U9dQmJhTEagp
+	hmpQIV1Pg3cieSu85uf4p+e1CrrW3G1H9J+w3HvvTQG6TSvPrPL8rRTHg28jP7WxZwhAT9TQBL6
+	lbYbSOAn5vrR0KRAIbXgo6+y77xAZJLxqjzcONvuzXuI//3vFgpIJIiwv2GGIT0opl6KYkJ8mDj
+	TbJEyKnjZgnzxbla0eTFhCrbwo13FXfaHTbneCkEL9BCeuDwjVt5/S2wVM7tlRCHIEU8SqLnvO1
+	dZaBVg1Q9K7iLDXAwLyw2mjGUR66LO2LD5oq2cumMDPJ2ErO/NqxxjO69bb4f4Pea9cNb6c3hq4
+	IemzmXSyrsxwzzMKqLT9+T4H7rsmupMjvzMjKZV
+X-Received: by 2002:a17:90b:224b:b0:39e:6a81:f34f with SMTP id 98e67ed59e1d1-3a098bb63femr5626684a91.41.1790369720447;
+        Fri, 25 Sep 2026 13:55:20 -0700 (PDT)
+Received: from google.com (192.150.203.35.bc.googleusercontent.com. [35.203.150.192])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0b99917besm6043758a91.14.2026.09.25.13.55.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 13:55:04 -0700 (PDT)
-From: Danish Khateeb <danishkhateeb03@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Danish Khateeb <danishkhateeb03@gmail.com>
-Subject: [PATCH] kselftest/filelock: plan for the five ofdlocks tests
-Date: Fri, 25 Sep 2026 15:55:02 -0500
-Message-ID: <20260925205502.115327-1-danishkhateeb03@gmail.com>
-X-Mailer: git-send-email 2.55.0
+        Fri, 25 Sep 2026 13:55:18 -0700 (PDT)
+Date: Fri, 25 Sep 2026 20:55:13 +0000
+From: David Matlack <dmatlack@google.com>
+To: Samiullah Khawaja <skhawaja@google.com>
+Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Alex Mastro <amastro@fb.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Rubin Du <rubind@nvidia.com>, Josh Hilke <jrhilke@google.com>,
+	Vipin Sharma <vipinsh@google.com>, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Hisam Mehboob <hisamshar@gmail.com>
+Subject: Re: [PATCH] vfio: selftests: Remove libuuid dependency
+Message-ID: <arbfsdQ72pIew9TB@google.com>
+References: <20260925013110.3447626-1-skhawaja@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260925013110.3447626-1-skhawaja@google.com>
 
-ofdlocks reports five results but plans for four, so even when they
-all pass it ends with
+On 2026-09-25 01:30 AM, Samiullah Khawaja wrote:
+> Libvfio depends on an external dependency libuuid for parsing vf_tokens.
+> Building it in cross compilation environments gives the following error,
+> 
+>  ld: cannot find -luuid: No such file or directory
 
-  # Planned tests != run tests (4 != 5)
+It also complicates compiling with glibc alternatives like musl. See
+https://lore.kernel.org/kvm/c2f7e904-2646-4b01-864d-d185221c7f56@gmail.com/
 
-and exits with KSFT_FAIL, which run_kselftest.sh reports as a failure.
+Please mention that as well for historical context.
 
-Fixes: 33d5b13098fb ("kselftest/filelock: report each test in oftlocks separately")
-Assisted-by: LLM
-Signed-off-by: Danish Khateeb <danishkhateeb03@gmail.com>
----
+> As it is only used for parsing vf_tokens, remove the dependency by open
+> coding the parser where it is required.
+> 
+> Tested by running vfio_pci_sriov_uapi_test selftest.
+> 
+> Assisted-by: Claude:claude-opus-5
+> Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
+> ---
+>  tools/testing/selftests/vfio/lib/libvfio.mk   |  2 -
+>  .../selftests/vfio/lib/vfio_pci_device.c      | 57 ++++++++++++++++---
+>  2 files changed, 50 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vfio/lib/libvfio.mk b/tools/testing/selftests/vfio/lib/libvfio.mk
+> index bcfa74ae040e..7d6916ca3940 100644
+> --- a/tools/testing/selftests/vfio/lib/libvfio.mk
+> +++ b/tools/testing/selftests/vfio/lib/libvfio.mk
+> @@ -29,8 +29,6 @@ $(LIBVFIO_O_DIRS):
+>  
+>  CFLAGS += -I$(LIBVFIO_SRCDIR)/include
+>  
+> -LDLIBS += -luuid
+> -
+>  $(LIBVFIO_O): $(LIBVFIO_OUTPUT)/%.o : $(LIBVFIO_SRCDIR)/%.c | $(LIBVFIO_O_DIRS)
+>  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+>  
+> diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> index 4063a0e2b3df..774d1e90ec0e 100644
+> --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> @@ -23,11 +23,54 @@
+>  #include <linux/types.h>
+>  #include <linux/vfio.h>
+>  
+> -#include <uuid/uuid.h>
+> -
+>  #include "kselftest.h"
+>  #include <libvfio.h>
+>  
+> +/*
+> + * Minimal replacement for libuuid's uuid_parse(). libuuid is part of
+> + * util-linux and is routinely absent from cross-compilation sysroots, which
+> + * makes the vfio selftests unbuildable for non-native architectures. The only
+> + * thing needed from it is parsing a VF token, so open-code that instead.
+> + */
+> +#define VFIO_UUID_LEN		16
+> +#define VFIO_UUID_STR_LEN	36
+> +
+> +static int vfio_uuid_hexval(char c)
+> +{
+> +	if (c >= '0' && c <= '9')
+> +		return c - '0';
+> +	if (c >= 'a' && c <= 'f')
+> +		return c - 'a' + 10;
+> +	if (c >= 'A' && c <= 'F')
+> +		return c - 'A' + 10;
+> +	return -1;
+> +}
+> +
+> +static int vfio_uuid_parse(const char *in, unsigned char uu[VFIO_UUID_LEN])
 
-Notes:
-    Tested on x86_64 with the kselftest build of ofdlocks:
-    
-    - Arch host (gcc 16.2, 7.2.6 kernel): before, all 5 pass but it exits 1
-      with "Planned tests != run tests (4 != 5)"; after, 5/5 and exit 0.
-    - Debian trixie guest (gcc 14.2, next-20260925): test 4 fails before and
-      after this patch, because it memcmp()s two struct flock whose padding
-      was never initialized (bytes 28-29 differ). Zhou Yuhang's "selftests:
-      filelock: Initialize the flock to zero" [1] fixes that, and with both
-      patches all 5 pass there too.
-    
-    [1] https://lore.kernel.org/all/?q=s%3A%22filelock%3A+Initialize+the+flock+to+zero%22
+Do we need the vfio_/VFIO_ prefixes now that we aren't linking libuuid?
 
- tools/testing/selftests/filelock/ofdlocks.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +{
+> +	const char *p = in;
+> +	int i, hi, lo;
+> +
+> +	if (strlen(in) != VFIO_UUID_STR_LEN)
+> +		return -1;
+> +
+> +	for (i = 0; i < VFIO_UUID_LEN; i++) {
+> +		if (i == 4 || i == 6 || i == 8 || i == 10) {
+> +			if (*p++ != '-')
+> +				return -1;
+> +		}
+> +
+> +		hi = vfio_uuid_hexval(*p++);
+> +		lo = vfio_uuid_hexval(*p++);
+> +		if (hi < 0 || lo < 0)
+> +			return -1;
+> +
+> +		uu[i] = (hi << 4) | lo;
+> +	}
+> +
+> +	return 0;
+> +}
 
-diff --git a/tools/testing/selftests/filelock/ofdlocks.c b/tools/testing/selftests/filelock/ofdlocks.c
-index 68bac28b234b..0ab484cb075b 100644
---- a/tools/testing/selftests/filelock/ofdlocks.c
-+++ b/tools/testing/selftests/filelock/ofdlocks.c
-@@ -40,7 +40,7 @@ int main(void)
- 	int fd2 = open("/tmp/aa", O_RDONLY);
- 
- 	ksft_print_header();
--	ksft_set_plan(4);
-+	ksft_set_plan(5);
- 
- 	unlink("/tmp/aa");
- 	assert(fd != -1);
+Please move the uuid changes into lib/uuid.c and
+lib/include/libvfio/uuid.h in case we want to use them elsewhere in the
+future.
 
-base-commit: aa98230e410f0ed212b6788c46b1e4d49e0ff7ca
--- 
-2.55.0
+> +
+>  static void vfio_pci_irq_set(struct vfio_pci_device *device,
+>  			     u32 index, u32 vector, u32 count, int *fds)
+>  {
+> @@ -167,13 +210,13 @@ static void vfio_device_feature_set(int fd, u16 feature, void *data, size_t data
+>  
+>  void vfio_device_set_vf_token(int fd, const char *vf_token)
+>  {
+> -	uuid_t token_uuid = {0};
+> +	unsigned char token_uuid[VFIO_UUID_LEN] = {0};
 
+Any reason not to define a uuid_t?
+
+>  
+>  	VFIO_ASSERT_NOT_NULL(vf_token, "vf_token is NULL");
+> -	VFIO_ASSERT_EQ(uuid_parse(vf_token, token_uuid), 0);
+> +	VFIO_ASSERT_EQ(vfio_uuid_parse(vf_token, token_uuid), 0);
+>  
+>  	vfio_device_feature_set(fd, VFIO_DEVICE_FEATURE_PCI_VF_TOKEN,
+> -				token_uuid, sizeof(uuid_t));
+> +				token_uuid, sizeof(token_uuid));
+>  }
+>  
+>  static void vfio_pci_region_get(struct vfio_pci_device *device, int index,
+> @@ -415,10 +458,10 @@ int __vfio_device_bind_iommufd(int device_fd, int iommufd, const char *vf_token)
+>  		.argsz = sizeof(args),
+>  		.iommufd = iommufd,
+>  	};
+> -	uuid_t token_uuid;
+> +	unsigned char token_uuid[VFIO_UUID_LEN];
+>  
+>  	if (vf_token) {
+> -		VFIO_ASSERT_EQ(uuid_parse(vf_token, token_uuid), 0);
+> +		VFIO_ASSERT_EQ(vfio_uuid_parse(vf_token, token_uuid), 0);
+>  		args.flags |= VFIO_DEVICE_BIND_FLAG_TOKEN;
+>  		args.token_uuid_ptr = (u64)token_uuid;
+>  	}
+> 
+> base-commit: 3d7783543c2646af69ad65825e810060494bea21
+> -- 
+> 2.56.0.rc1.315.gc6ed9934b7-goog
+> 
