@@ -1,87 +1,58 @@
-Received: from flow-b8-smtp.messagingengine.com (flow-b8-smtp.messagingengine.com [202.12.124.143])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C905360EF2;
-	Fri, 25 Sep 2026 08:47:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.143
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4683355057;
+	Fri, 25 Sep 2026 08:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790326071; cv=none; b=S8LuK0Y6wq8nPZdGkQLuU88qTflA0LOk1+3hwpw5y0kfpBhXinfXU64698n909s2R0kDoSpTQ9X5PURfhYdTQVeTC/gn0Vw3PjBwwKWCt9GoXEBmYkLktlMhBFb/5rjUmdKSSSDsZaS+8rC9Vlq9S296+f3cDKQ9R0eT98/6vhw=
+	t=1790326316; cv=none; b=l3kAav5DcH8EvbfWwdg7we4E0Z10Y9BSIWRR8oMENbEpZ0FaY7R0DZ5tQmlk4SxgH0zyZsmXrgObuLMG/QorOHZe8dFVj6122t3o2QA+5RwdWrs/bk2cYDOa6qdi6PTn1CWsYl5qTDi3mkQFdgfGsJAqjcwvAxqvunmUil0N9+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790326071; c=relaxed/simple;
-	bh=rMLqjiIwp6Rf3l7p9+AQhM2Z8mwzvWc66Gpf/0Rlh8M=;
+	s=arc-20240116; t=1790326316; c=relaxed/simple;
+	bh=ODydsWC4nVQ8JKTBG7GCQrD8PhiBWa5QNpx0W+Vs8hk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ro3melNk5ltkzb+NkEFZ8pXmvFd/Kq8EOOBTs7T30PUTXQaa5eC30Vefycp0VRq62YpJPmyPZVaQkXbXm8rUVZztU62Eirgh0cpt5z0QEUVpZz7r25AcVy9dlGtsAOMtc3gKmyXPjUPH/5USf3MOXSu3lKDlPQsNCwNTsA6vE1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=PbbXW9Ih; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=nIzolef2; arc=none smtp.client-ip=202.12.124.143
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	 Content-Type:Content-Disposition:In-Reply-To; b=jMnKVMJDCF+NbQG92d1OSVcvStR6H2UMVfqRAXsE88JtbQWVkaS6NDFGY9DLNKcbdooPKnK4tj59BwiWUlHW26w5DupBjzyfZTgOdROiLkbL9Obs1QbbOx6DnEuTSsHcOyWGaV+hQGcf9Tstca/CZhOfCmNWPpcFJdiRO34SvA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NwQ5+zEr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="PbbXW9Ih";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nIzolef2"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.stl.internal (Postfix) with ESMTP id F2B4E13010D1;
-	Fri, 25 Sep 2026 04:47:36 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Fri, 25 Sep 2026 04:47:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1790326056; x=
-	1790333256; bh=tCBr0UIM+ZOSlkOXM66AmLoOKnOh8wXT+x6TqU1msEQ=; b=P
-	bbXW9IhAXl2dv579QJm3Q65uwaUKl6JRdur6WuArNK7mw2GFamPQ2zTi8Wl8L3zj
-	/HVziA0Tqc6dBhO8tLa1iaQQSnfhCkWxaZQMClQMv6+Ve7vj6SmZt8DDHcH7xBqE
-	kc1g/8h7KeQVgr1pc3M8+BuisCxcJooKcRgF7BlLLZbN/4VXubYXf+i7AZLNe0ZU
-	f1GWnx2YZbTC/sqfcd8/vVPIXgLeXApDv7scOvN51dON+k0EO6svNqWgNQZ7bPrV
-	5npZnEkQKfmAVWxzOLwweOdfM0IK6privz7v7D6sqt0ku84yi4qIVFX3j/iUJHOv
-	DZ8tAVYQGpNfa0VR74D2w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1790326056; x=1790333256; bh=tCBr0UIM+ZOSlkOXM66AmLoOKnOh8wXT+x6
-	TqU1msEQ=; b=nIzolef2YYoegmGajku3bWR6RQPfleyIsgsLvEB48c1+OIuxUM/
-	DI7/7PXdb4lsyvyne2GphrUlW8HFJBbi1tDsnHNljBw1ccpL+axG1YZUNSzDYmcc
-	vzzAUj0FvBVsnY+BfQS5PqPkt5VZcrFS2BzcJ9tcsKqNComjMcqGrEQq324r1jB8
-	SASvwQhH6jQtEPMV5+LH8SqCAV5mg4HwUUIw7Qm+FhHmXG1CHvm5dZw68/90FJRS
-	/Fn7C6nV/7XRm2EcWVrchnmF+47cj/r8NsOmQkcBbJsPW+XEwG/t3LhzpBgnX5l6
-	6VtBZJ+FLkPdtKl/tszppnXmVdQtgeYIrwA==
-X-ME-Sender: <xms:KDW2auny5uRt6LjfjXmh92A95qmL8RdpmrgbKd9eJ-MBjY2Bpen9Nw>
-    <xme:KDW2aoJnWI4JSm0kuXBIYbkyputDbxvyIsag5zcxJ6wOkeAMVApX4DEc9v0bZ6ZM5
-    zk-1fpLhbDTDCWx_XPrcEu6vOREEgpArnmCqM80QCyVJDtV-iItqen0zg>
-X-ME-Received: <xmr:KDW2arU7Tk0LyQW4QjMuiPl08UW0IDQ3_Z6fNcL1qv8x4GhvvaNMc0qLeCM>
-X-ME-Proxy-Cause: dmFkZTE8kmhn51s93gEL4j5H/7PvaLCa+mnP6uN/rdMzANRhDhcdNNZL3sAjI1QoWaVkua
-    Bgg4YxoH/NrFlGs+IQPNyUzZRouZGayZskRSc0kDeB9PGdnVVbrJah4HJV23mSkK597Lnz
-    O5aIMe3MqpJpXd7nyNHwfgXLzGNm4aVKvH9aRpiVPiA5bMvrYKA3ej72/BqpcMcdHDwJqS
-    s7Zu2wQ9Nc5aOqx4Scfie5/eZK008o/dmXkjr66IXwfjsmPElYIOafuWx6XLTPM1YUsfA6
-    qCTl2GkfCbcpitCX7FkvDWmkeRF/qPgUbfWzWJAtdw6BtQX8kpcVtFrjby1KhaSKa11mHL
-    iexPnZOwy+iLCsMNmbV28vNK4rm0H/odzH9Qw8cUKIP4NdESfQ7EWgcqJ/KCcs+RimSaS9
-    FQdJSI3zvaIsYFuxrfjOm3NRw5Z88cOyD/yWvVikRFuBG2onu1uiwDMP4K9fTz8ZdUiegQ
-    5mQZr2SfNC2vc+KqUm0kGHex8rXkLWhfyWSgYJU0OnghDc5NqFj9N2ei3T8b/kC9wgOC0Q
-    WOEo5vOQ3Zq5AkckuyhuXBhl/sUiu4J54ClJXvbtRSjfSI8yXOaNOxfFstLPCBRqzguVrq
-    FUVC7rVlBqES7lZGboj0m0tbG4Ezg7K9r1CKqFuashA7l2btiDmQ35O4t/ng
-X-ME-Proxy: <xmx:KDW2avgf_a33O3TuMjXtVn6u4jydTeZ0D036Kde6cPwoMKeoDXGblA>
-    <xmx:KDW2aqeJsKUXmjbeZtjUdVp-VIJawYFq5pDmI1aFF0Msrx0lbse85A>
-    <xmx:KDW2ahtWmg-5FVBKMbGkyL3xs_r1l8H8YHahJfm7mqUAOCDlTFUF4g>
-    <xmx:KDW2ankBbCNWvbkpphtAXKHGYXzKozwMXvWRvxcwR6_mNAVFPNZEOw>
-    <xmx:KDW2aqjmKRE0-8Efa-WwFeJ6hL9TY27XA8hySSb49pUrgdzhLTWlM1TG>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 25 Sep 2026 04:47:35 -0400 (EDT)
-Date: Fri, 25 Sep 2026 09:47:34 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Donggeun Yoo <donggeunyoo.kernel@gmail.com>, akpm@linux-foundation.org, 
-	rppt@kernel.org, peterx@redhat.com, surenb@google.com, aarcange@redhat.com, 
-	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, mhocko@suse.com, 
-	shuah@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] userfaultfd: clear the inherited uffd bit in
- move_swap_pte()
-Message-ID: <arY0shOhxugdxT4E@thinkstation>
-References: <20260919004630.1159895-1-donggeunyoo.kernel@gmail.com>
- <20260919004630.1159895-2-donggeunyoo.kernel@gmail.com>
- <arO0a3CU_idyVsqQ@thinkstation>
- <90fc724a-08c4-4324-9420-89fab05d53d1@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NwQ5+zEr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 507691F000FF;
+	Fri, 25 Sep 2026 08:51:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790326314;
+	bh=S3rbnL0mTjXgUEK5/Bs8TjZebjmAkHUgwjp+YFQ5wF8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=NwQ5+zErr0eWfZ83cKssBNFBF9lNyuNXbkxYZzw+Ygnpp3iNHc26F7ogQgr/9Qx1b
+	 n8xQvXwdkE5hPJL27dROeQ0oDkgrFXCHzQT9ZkWqZCff+n2zTU743gNOI9RR8gOmUa
+	 QCsWVtTy/y1lmHedpO7xJpA/T+x0DgSp+e4I7tG7uirhV2Kpr5JPwtuIzPcvfGSTNW
+	 R5Rl63O7zHZbGYxIcvYUVcux840pW1V+3w+VdAoYPinPM4QAZsppT6/nbb271bUoRu
+	 qr7Eee0KEiLNoFrcisin1XR/oLcZTLvYRDPs/RQ1jpMPJNSdZuzL2kmJ9uOFji15TM
+	 kWMcobWgdQwdA==
+Date: Fri, 25 Sep 2026 09:51:41 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Joey Gouly <joey.gouly@arm.com>, Steffen Eiden <seiden@linux.ibm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Mark Rutland <mark.rutland@arm.com>, Fuad Tabba <fuad.tabba@linux.dev>, 
+	Randy Dunlap <rdunlap@infradead.org>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Janosch Frank <frankja@linux.ibm.com>, David Hildenbrand <david@kernel.org>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, 
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Jack Thomson <jackabt@amazon.com>, Jack Thomson <jackabt.amazon@gmail.com>, 
+	Alexandru Elisei <alexandru.elisei@arm.com>, Vincent Donnefort <vdonnefort@google.com>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Sean Christopherson <seanjc@google.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Leo Soares Passos <Leo.Bras@arm.com>, 
+	Wei-Lin Chang <weilin.chang@arm.com>, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v4 00/14] KVM: arm64: Add KVM_PRE_FAULT_MEMORY support
+Message-ID: <arY1uKfUBXRpauaN@gremlin>
+References: <20260923-kvm-arm-prefault-v4-0-d4b0b4dfa8c3@kernel.org>
+ <86ik3u4asq.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,68 +61,39 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <90fc724a-08c4-4324-9420-89fab05d53d1@kernel.org>
+In-Reply-To: <86ik3u4asq.wl-maz@kernel.org>
 
-On Fri, Sep 25, 2026 at 09:01:22AM +0200, David Hildenbrand (Arm) wrote:
-> On 9/23/26 13:18, Kiryl Shutsemau wrote:
-> > On Sat, Sep 19, 2026 at 09:46:29AM +0900, Donggeun Yoo wrote:
-> >> UFFDIO_MOVE on a swapped-out page installs the source PTE at the
-> >> destination unchanged, so a uffd bit set on the source lands in a
-> >> destination VMA that was never registered for write protection.  It is
-> >> then permanent: the bit is dropped only by change_protection() under
-> >> MM_CP_UFFD_{WP,RWP}_RESOLVE, which uffd_wp_range(), mrwprotect_range()
-> >> and userfaultfd_clear_vma() issue only for a VMA registered in that
-> >> mode.  pagemap reports the page as uffd-tracked, and MADV_COLLAPSE
-> >> refuses the range while the bit is set, because collapse_scan_pmd() is
-> >> strict about uffd on swap entries.
-> >>
-> >> move_present_ptes() and move_zeropage_pte() build the destination PTE
-> >> from dst_vma->vm_page_prot and arm RWP only when dst_vma asks for it, so
-> >> the destination's own registration decides the result.  move_swap_pte()
-> >> copies the source PTE instead and only ever sets the bit, never clears
-> >> it, so one UFFDIO_MOVE behaves differently depending on whether the page
-> >> happened to be resident.
-> >>
-> >> Clear the uffd bit on the moved swap entry unless the destination is
-> >> RWP-registered, as copy_nonpresent_pte() does where it installs a PTE
-> >> into a destination that may not be armed.  A WP-registered destination
-> >> stops inheriting the bit as well, which is already what it gets when the
-> >> moved page is resident.
-> >>
-> >> Fixes: adef440691ba ("userfaultfd: UFFDIO_MOVE uABI")
-> >> Cc: <stable@vger.kernel.org>
-> >> Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
-> >> ---
-> >>  mm/userfaultfd.c | 2 ++
-> >>  1 file changed, 2 insertions(+)
-> >>
-> >> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> >> index 74f04c323c50..6495666c596b 100644
-> >> --- a/mm/userfaultfd.c
-> >> +++ b/mm/userfaultfd.c
-> >> @@ -1452,6 +1452,8 @@ static int move_swap_pte(struct mm_struct *mm, struct vm_area_struct *dst_vma,
-> >>  	/* Re-arm RWP on the moved swap entry if dst_vma is RWP-registered. */
-> >>  	if (userfaultfd_rwp(dst_vma))
-> >>  		orig_src_pte = pte_swp_mkuffd(orig_src_pte);
-> >> +	else
-> >> +		orig_src_pte = pte_swp_clear_uffd(orig_src_pte);
-> > 
-> > Putting it in the 'else' is wrong. Clear uffd on the source
-> > unconditionally and re-arm based on the target VMA:
-> > 
-> > 	orig_src_pte = pte_swp_clear_uffd(orig_src_pte);
-> > 	/* Re-arm RWP on the moved swap entry if dst_vma is RWP-registered. */
-> > 	if (userfaultfd_rwp(dst_vma))
-> > 		orig_src_pte = pte_swp_mkuffd(orig_src_pte);
-> 
-> I'm confused why the original code proposed would be "wrong"?
-> 
-> I prefer your way of writing it as well, but I don't understand why it would be
-> "wrong"?
-> 
-> Maybe I need more coffee :)
+On Thu, Sep 24, 2026 at 10:08:37PM +0100, Marc Zyngier wrote:
+> On Wed, 23 Sep 2026 16:15:43 +0100,
+> "Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
+> >
+> > This series implements the KVM stage 2 page table pre-faulting feature for
+> > arm64.
+>
+> [...]
+>
+> > base-commit: 23ddf997ab16b5f4aa9f948f5a68f5b35e4e398f
+>
+> In the future, please don't do this. I've just nuked this commit from
+> kvmarm/next as I rebuilt it, and using such a random commit is
+> counter-productive. Just stick to an -rc tag from Linus' tree, and
+> that's it. I'm perfectly happy to deal with the outcome (conflicts and
+> other funny things).
 
-It gives the right result, but communicates wrong reasoning to the reader.
+Ack! No problem, will do.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Do you prefer that people stick to the same -rc base from the start or OK to
+roll it over to latest Linus's tree?
+
+Not that I imagine it makes any difference in most cases.
+
+>
+> Thanks,
+>
+> 	M.
+>
+> --
+> Without deviation from the norm, progress is not possible.
+
+--
+Cheers, Lorenzo
