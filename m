@@ -1,49 +1,33 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA58F4E1C85
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 19:22:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124A24CE668;
+	Fri, 25 Sep 2026 19:24:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790364167; cv=none; b=XtUiEz2IsHhOzTpomN1X4BbuvAlsjdm6pi0KCjmGZIBBJT3Gv5daRBlbViO+WYwPgA8oRwn10OEYze30NfkkjQwa5zEkpt4dtefegrY6mc0IEWtslk7GYXycsHt5qtJ1ihyDxSJaFtM4tvDG+icLk9O8PIFvKFL1eLD8Gjw+S2o=
+	t=1790364291; cv=none; b=a9FcPloOUhBqlpH+JTSTK8soHo3bOsxIOM8qs+AJ03qal7KTys9utreNVOcYsJcKRmXL4El4skeZ/vmCDq21DkughNjO1BpAMuuEp6SKgVDtFo6mHXcRRrCl2MBmZd5bawK05j0TSVovbx7TRspzK6pHFgmdChTFdEdU9FmSup4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790364167; c=relaxed/simple;
-	bh=bQdHUqZ89Dat9b4twM81FEqBHQkZuZ38nbP+8euFmpw=;
+	s=arc-20240116; t=1790364291; c=relaxed/simple;
+	bh=I2enzlvGYXQe6kyfRBqy5/8Z3Rnu2AyLzzPjOKipDm0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UJsryJtrVhU7LwyUCbGGIrHUzhAtpUeg0CpPVxGvacLtuYgEl0mWvJEvERjvSkDSlSRFEJ0kwkd23oZm+9vVUHbd1exVHJO1qSFbm8R3stwfM5dDuu5ROSl6LQedg/jTm9L+3aVjw4X8miIB+hl0qc/iAW9dyFJEyafIxQLbuas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dxYu7UEa; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 In-Reply-To:Content-Type; b=bguhto/EUZGq7BCRHx/tVYLAw/iDu35Lqkj76WmEDJGaCkmSKhtxJmEmy6VBgeuZIineBhnJLqjVvDIby2t2LVoh+G+ot4b5/l5AqFjTObYPIJBnvyD4i1lxAxjKpe9WfErqqAoIAEsPOkBS7VY0G0LIA544xz4ur0ER2cy45QU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iwIpgarw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dxYu7UEa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790364161;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aWk4K3bjs72mNw+sBMqiIvaUwaOVCuWNNLV5F6PcuRc=;
-	b=dxYu7UEafVO0OqggvWdbEMYCLfP6+o3qyVqGVmbuWocHWTA/Vk8qj/m8baJNS+t5UFFN6n
-	Ab/v9xlZDmacrhzZtqJIeXU4rXHFXpLWVE9Fq4CBfc6aZcfib2g3NUyTFR1VI9c3KVknU8
-	Bb2X+TMtD9DmHdCM3pJM/rPkXeYPt3c=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-163-Ke7tYFS9MfOCqCl9BWIvpQ-1; Fri,
- 25 Sep 2026 15:22:35 -0400
-X-MC-Unique: Ke7tYFS9MfOCqCl9BWIvpQ-1
-X-Mimecast-MFC-AGG-ID: Ke7tYFS9MfOCqCl9BWIvpQ_1790364153
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 76EE61911B23;
-	Fri, 25 Sep 2026 19:22:32 +0000 (UTC)
-Received: from [100.91.18.181] (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 38DF141D;
-	Fri, 25 Sep 2026 19:22:30 +0000 (UTC)
-Message-ID: <547bea01-880a-4a87-8cbc-a632f087f896@redhat.com>
-Date: Fri, 25 Sep 2026 15:22:29 -0400
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iwIpgarw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A9D91F00898;
+	Fri, 25 Sep 2026 19:24:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790364288;
+	bh=gL7KYzC6TKjrTTfyTNoqbbOm0pMEBvmjbknZne8m4es=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=iwIpgarwOLx9qK2A4Zkreez4K6HOXklUndPxV1MUhBh3YBxzKPFyRbdl67fQtOo68
+	 YprHdW6nh3tsY9PKvzU5gblrnQE0pcQCvmBvesa91zuBUCJh5WMKZ4ALC9WKwwZSjl
+	 1ktSZBy26q4YuHJHe4E5QDtHiFcmBxNa9BzNUltyK5alWf+WL128Ui/p/O/7Ckl8aC
+	 T8VIvth6gl3Q9idkuIO9mkMg6BVI2J88+7vTnWzphiFcU9N4mZsILCzBRWVHXG0Hky
+	 6+9WNGEt8GkTZ76XB182wgEvXKoaSjP6v8+8+FIYoljUVx19s4cAOs7xY+X6Qrke/b
+	 imL5wT59DDl7Q==
+Message-ID: <661699fb-456c-4e68-85df-94cb829b2204@kernel.org>
+Date: Fri, 25 Sep 2026 20:24:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,123 +35,123 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/3] cgroup/cpuset: return PERR_NOCPUS in
- remote_partition_enable() on subpartitions_cpus conflict
-To: Hui Peng <benquike@gmail.com>, Ridong Chen <ridong.chen@linux.dev>,
- Guopeng Zhang <guopeng.zhang@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>
-Cc: Shuah Khan <shuah@kernel.org>, Chen Ridong <chenridong@huawei.com>,
- cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20260924042729.1908863-1-benquike@gmail.com>
- <20260924042729.1908863-2-benquike@gmail.com>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <20260924042729.1908863-2-benquike@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+Subject: Re: [PATCH bpf-next v2 1/2] bpftool: Fail map dump for maps that
+ can't be iterated
+To: Maxim Skokov <skokovmaksimevg@gmail.com>, bpf@vger.kernel.org,
+ Tianyi Chen <hi@tychen.cc>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, kuba@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260925162031.27259-1-skokovmaksimevg@gmail.com>
+ <20260925162031.27259-2-skokovmaksimevg@gmail.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260925162031.27259-2-skokovmaksimevg@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 9/24/26 12:27 AM, Hui Peng wrote:
-> When a remote partition is created underneath an existing local partition
-> via a non-partition (PRS_MEMBER) intermediate cgroup, update_prstate() sees
-> parent->partition_root_state == PRS_MEMBER and calls
-> remote_partition_enable().
->
-> Commit 86888c7bd117 ("cgroup/cpuset: Add warnings to catch inconsistency
-> in exclusive CPUs") replaced the cpumask_intersects(tmp->new_cpus,
-> subpartitions_cpus) error check in remote_partition_enable() with
-> WARN_ON_ONCE(). As a result, remote_partition_enable() emits a warning
-> and proceeds to enable the remote partition on CPUs that are already
-> owned by the ancestor local partition in subpartitions_cpus.
->
-> This can be reproduced on Linux 7.3.0-rc3 with:
->
->    mkdir -p /tmp/cg1
->    mount -t cgroup2 none /tmp/cg1
->    echo "+cpuset" > /tmp/cg1/cgroup.subtree_control
->
->    mkdir /tmp/cg1/A
->    echo 1 > /tmp/cg1/A/cpuset.cpus
->    echo 1 > /tmp/cg1/A/cpuset.cpus.exclusive
->    echo root > /tmp/cg1/A/cpuset.cpus.partition
->    echo "+cpuset" > /tmp/cg1/A/cgroup.subtree_control
->
->    mkdir /tmp/cg1/A/B
->    echo 1 > /tmp/cg1/A/B/cpuset.cpus
->    echo 1 > /tmp/cg1/A/B/cpuset.cpus.exclusive
->    echo "+cpuset" > /tmp/cg1/A/B/cgroup.subtree_control
->
->    mkdir /tmp/cg1/A/B/D
->    echo 1 > /tmp/cg1/A/B/D/cpuset.cpus
->    echo 1 > /tmp/cg1/A/B/D/cpuset.cpus.exclusive
->    echo root > /tmp/cg1/A/B/D/cpuset.cpus.partition
->
-> which triggers:
->
->    WARNING: kernel/cgroup/cpuset.c:1594 at remote_partition_enable+0x1c1/0x300
->
-> and leaves both /tmp/cg1/A and /tmp/cg1/A/B/D as active root partitions
-> claiming exclusive CPU 1.
->
-> Fix this by returning PERR_NOCPUS when tmp->new_cpus intersects
-> subpartitions_cpus in remote_partition_enable(), matching the error code
-> used by remote_cpus_update() for the same subpartitions_cpus conflict, and
-> add a regression test case to
-> tools/testing/selftests/cgroup/test_cpuset_prs.sh.
->
-> Tested in QEMU on Linux 7.3.0-rc3 using the reproducer above and
-> tools/testing/selftests/cgroup/test_cpuset_prs.sh.
->
-> Fixes: 86888c7bd117 ("cgroup/cpuset: Add warnings to catch inconsistency in exclusive CPUs"
-
-Technically, this commit isn't  wrong as it does not expect that a 
-remote partition can be created under a local partition. I will put the 
-commit to be fixed as 181c8e091aae ("cgroup/cpuset: Introduce remote 
-partition").
-
-Other than that, it looks good to me.
-
-Reviewed-by: Waiman Long <longman@redhat.com>
-
-> Suggested-by: Guopeng Zhang <guopeng.zhang@linux.dev>
-> Cc: stable@vger.kernel.org
+2026-09-25 19:20 UTC+0300 ~ Maxim Skokov <skokovmaksimevg@gmail.com>
+> "bpftool map dump" walks the map with bpf_map_get_next_key() and treats
+> ENOENT as the end of the map. Map types that can't be iterated fail that
+> call on the very first key: local storage and ringbuf with ENOTSUPP,
+> bloom filter and arena with EOPNOTSUPP, queue and stack with EINVAL.
+> bpftool then ends the walk without a word and prints what it prints for
+> an empty map, "[]" with BTF or "Found 0 elements" without, and only the
+> exit status tells that the map was not read. On a socket storage map
+> that holds storage for a socket:
+> 
+>   # bpftool map dump pinned /sys/fs/bpf/sk_storage
+>   []
+> 
+> Ask for the first key before printing anything, and when that fails with
+> anything but ENOENT, fail with the map type and the error instead of a
+> dump:
+> 
+>   # bpftool map dump pinned /sys/fs/bpf/sk_storage
+>   Error: can't dump sk_storage map: Unknown error 524
+>   # bpftool -j map dump pinned /sys/fs/bpf/sk_storage
+>   {"error":"can't dump sk_storage map: Unknown error 524"}
+> 
+> An error later in the walk is now reported too, as "bpftool map getnext"
+> reports it, and the element count is printed only after a complete walk.
+> 
 > Assisted-by: LLM
-> Signed-off-by: Hui Peng <benquike@gmail.com>
+> Signed-off-by: Maxim Skokov <skokovmaksimevg@gmail.com>
 > ---
->   kernel/cgroup/cpuset.c                            | 3 ++-
->   tools/testing/selftests/cgroup/test_cpuset_prs.sh | 2 ++
->   2 files changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 2538faac9aba..7381fa8502e7 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1591,10 +1591,11 @@ static int remote_partition_enable(struct cpuset *cs, int new_prs,
->   	 * above it or remote partition root underneath it is not allowed.
->   	 */
->   	compute_excpus(cs, tmp->new_cpus);
-> -	WARN_ON_ONCE(cpumask_intersects(tmp->new_cpus, subpartitions_cpus));
->   	if (!cpumask_intersects(tmp->new_cpus, cpu_active_mask) ||
->   	    cpumask_subset(top_cpuset.effective_cpus, tmp->new_cpus))
->   		return PERR_INVCPUS;
-> +	if (cpumask_intersects(tmp->new_cpus, subpartitions_cpus))
-> +		return PERR_NOCPUS;
->   	if (((new_prs == PRS_ISOLATED) &&
->   	     !isolated_cpus_can_update(tmp->new_cpus, NULL)) ||
->   	    prstate_housekeeping_conflict(new_prs, tmp->new_cpus))
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index 3f7e81709365..b732078bf319 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -298,6 +298,8 @@ TEST_MATRIX=(
->   	" C0-4:X2-4 C1-4:X2-4:P2 C2-4:X4:P1 \
->   				   .      .      .      X1      .    0 A1:0-1|A2:2-4|A3:2-4 \
->   								       A1:P0|A2:P2|A3:P-1 2-4"
-> +	" CX1-3:P1 CX1-3  CX1-3    .      .      .      P1      .    0 A1:1-3|A2:1-3|A3:1-3 \
-> +								       A1:P1|A2:P0|A3:P-1"
->   
->   	# Remote partition offline tests
->   	"   C0-3    C1-3  C2-3     .    X2-3   X2-3 X2-3:P2:O2=0 .   0 A1:0-1|A2:1|A3:3 A1:P0|A3:P2 2-3"
+>  tools/bpf/bpftool/map.c | 26 ++++++++++++++++++++++++--
+>  1 file changed, 24 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+> index 20d59eab09..626882f207 100644
+> --- a/tools/bpf/bpftool/map.c
+> +++ b/tools/bpf/bpftool/map.c
+> @@ -856,6 +856,25 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+>  		}
+>  	}
+>  
+> +	/*
+> +	 * Map types that can't be iterated fail on the very first key. Say so
+> +	 * before printing anything, so that the output isn't an empty dump.
+> +	 */
+
+
+Or simply:
+
+  /* Fail early to avoid an empty dump if map type cannot be iterated */
+
+But that's a minor nit, the patch looks good to me, thank you!
+
+Acked-by: Quentin Monnet <qmo@kernel.org>
+
+Looks like you need to address Sashiko's findings on patch 2, though.
+
+
+> +	if (bpf_map_get_next_key(fd, NULL, key) && errno != ENOENT) {
+> +		const char *map_type_str;
+> +		int saved_errno = errno;
+> +
+> +		map_type_str = libbpf_bpf_map_type_str(info->type);
+> +		if (map_type_str)
+> +			p_err("can't dump %s map: %s", map_type_str,
+> +			      strerror(saved_errno));
+> +		else
+> +			p_err("can't dump map of type %u: %s", info->type,
+> +			      strerror(saved_errno));
+> +		err = -1;
+> +		goto exit_free;
+> +	}
+
+
+Tianyi, note that this conflicts with your series ("bpftool: Add
+recursive map dumping"), one of you will have to rebase.
+
+
+> +
+>  	if (wtr) {
+>  		err = get_map_kv_btf(info, &btf);
+>  		if (err) {
+> @@ -883,8 +902,11 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+>  	while (true) {
+>  		err = bpf_map_get_next_key(fd, prev_key, key);
+>  		if (err) {
+> -			if (errno == ENOENT)
+> +			if (errno == ENOENT) {
+>  				err = 0;
+> +				break;
+> +			}
+> +			p_err("can't get next key: %s", strerror(errno));
+>  			break;
+>  		}
+>  		if (!dump_map_elem(fd, key, value, info, btf, wtr,
+> @@ -897,7 +919,7 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+>  		jsonw_end_array(wtr);	/* elements */
+>  		if (show_header)
+>  			jsonw_end_object(wtr);	/* map object */
+> -	} else {
+> +	} else if (!err) {
+>  		printf("Found %u element%s\n", num_elems,
+>  		       num_elems != 1 ? "s" : "");
+>  	}
 
