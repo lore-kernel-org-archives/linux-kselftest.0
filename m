@@ -1,33 +1,34 @@
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A9D346E58;
-	Fri, 25 Sep 2026 13:32:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A0A125B091;
+	Fri, 25 Sep 2026 13:32:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790343124; cv=none; b=QhdFKXoVJDeY3xV87+m5g03I5+AsMX2EjVfIx9dIe/nyPBPAqw/0aCTX36hvziIyaiR8dTgSyXYsizLAbHYZhu4Uc92A1UWsNTwTpijBZi+6eLUDKE3qOf8RVhom7jd+tCvDek1mllCtBRNrCUvbmE2j0wpc/hL/gRwHGMhTnlY=
+	t=1790343129; cv=none; b=efgaWdanXooQojnWXYmT0O5ssb5y1PkODBKucckw5MW0aOBg+8HSR6NSCb0k7fnQCwBKmB1fcAtTrlqWY67zrVO7grAXqZ7LOzbGzRToepOAwZ7HF4VpafocUDycxkpYusyoAFKH8jn/VDC5KNq5JFMVez/FSk84oxLounHN0lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790343124; c=relaxed/simple;
-	bh=pfHHJN9mx7iaqPzkJ7OKmCMLSFn2Ivdn3IqFyfscjNQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rxtCl1ZUO3Rgy9QlF/kWF3X2TmGTMecqIpmvy4h2S9OAGFabuRt93dgTrDVqkbWogBKo3+1mWBVooQw9vbHV1DElZxNFTIRVmZbHmMmRYK0f4CaOfZwxBtB51XoSGH/s4vnVyC6wbz1xukRSuuOc+vRqwVSiClsmmnEq0kHJE74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=u8KirY2H; arc=none smtp.client-ip=130.117.225.111
+	s=arc-20240116; t=1790343129; c=relaxed/simple;
+	bh=CBR6+Jt57BFP86JgXwJd4YSe6HclyFGg9BQiulTvvWM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TO1/sCTnyUSMdUryE6E+FSB1kSwLwOZBu9taJ0ZIqJJZjuWtWDkKxQyyd+gzsB2yceBNXOGsDfBj13nRbXFVj2EFEjiDhyZW0PsjvtzPCV5DojvWl3GPLts6EXBP4wJ75DO5l12EqBqOS0jw/3lB0dOCOHPFms0R1CmPHEQqQwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=i/xZiryJ; arc=none smtp.client-ip=130.117.225.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="u8KirY2H"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="i/xZiryJ"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=6HAHGu4uIEli4DDfuSdZRC62h38knRyenkn6Pc+DmxQ=; b=u8KirY2H+1W3
-	xabV403OYV99Cm9GP61rgfZ3ii1fGAGZ0vfGR9SHmB0Vnf+c9Ehgafm6/3XKxsUowLot8h+7P6aMh
-	Gkk4UfxAUuIXxddOp7Rf48hwcjGlFPrPiCgZkTAd7gXb+65gOi0E62V2us+pzVmqGoKI1lmGT0pdb
-	2W8EMBpnAQ8ISrM+LYJQA9ZSHmfs4pzTswIz2/ES9hYmxCSdNvm/Yetwidf81Q7VO5foOE464tVjO
-	JNPH+m4T7NwhyOOObuIgYOM8CyCoHQs2PhJXWeUqB0GSFh/5PEyAZFlpe5Baa+W2vpNEmRPJ48Raz
-	wScepjNbLpAKUMLjEe0Ubw==;
+	Content-Type; bh=MhpEfgfXmtazN8wFvo8Yvv2VRSX7LXsFe4toP7UM+DQ=; b=i/xZiryJlein
+	e9DkyXoWRUKgTV2fLi/3St7x5Yx7xWuxt1TTdKfoFUaxoeZ8zBW/b7jW76n2tEh6HywQpyZy+P+z2
+	6npo0eij/FC6jAjgvsxyZ7LrO1Nrcp5ie+pT/PcpmxGgqBZAX7JRGiDgxM3P/WR4tl9CXkDXUL2wH
+	Q517TNEVtTc04hTwk/P8r3P6WvVgHP5qO6mChiJmDiGbOdaRftj2V0qSh/xvR4SJMsBhb/8ERjuBX
+	wKOtSxTQyxAViED3pt6kx/+4P18PLYBKCNbPlqtZvcE461eV1BsZCnRKwczqaj0aQOdTwVJtR7F0+
+	siXyo+OIJncj5gdiqpGISA==;
 Received: from ch-vpn.virtuozzo.com ([130.117.225.6] helo=LekKit-T14)
 	by relay.virtuozzo.com with esmtp (Exim 4.96)
 	(envelope-from <eva.kurchatova@virtuozzo.com>)
-	id 1xA5wa-008MTh-34;
-	Fri, 25 Sep 2026 15:29:29 +0200
+	id 1xA5wb-008MTh-2Y;
+	Fri, 25 Sep 2026 15:29:30 +0200
 From: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
 To: Shuah Khan <shuah@kernel.org>,
 	Kees Cook <kees@kernel.org>,
@@ -36,10 +37,12 @@ To: Shuah Khan <shuah@kernel.org>,
 Cc: linux-kernel@vger.kernel.org,
 	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 1/2] selftests: pstore: skip when no backend is registered
-Date: Fri, 25 Sep 2026 16:29:05 +0300
-Message-ID: <20260925132914.3633554-1-eva.kurchatova@virtuozzo.com>
+Subject: [PATCH 2/2] selftests: pstore: skip the frontends the kernel does not have
+Date: Fri, 25 Sep 2026 16:29:06 +0300
+Message-ID: <20260925132914.3633554-2-eva.kurchatova@virtuozzo.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260925132914.3633554-1-eva.kurchatova@virtuozzo.com>
+References: <20260925132914.3633554-1-eva.kurchatova@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,69 +51,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-An unregistered pstore backend reads back "(null)", and every later
-check fails. This also contradicts the pstore_crash_test documentation.
+The console and pmsg frontends are separate options from the backend:
+CONFIG_PSTORE_CONSOLE and CONFIG_PSTORE_PMSG can both be off on a kernel
+that registers one. pstore_tests checks for both regardless and fails
+where they are absent.
 
-pstore_crash_test has carried the comment
-
-  # exit if pstore backend is not registered
-
-Fix by skipping an unregistered backend in common_tests.
+Report them as skips instead.
 
 Signed-off-by: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
 ---
- tools/testing/selftests/pstore/common_tests     | 17 ++++++++++++-----
- .../selftests/pstore/pstore_post_reboot_tests   |  3 ---
- 2 files changed, 12 insertions(+), 8 deletions(-)
+ tools/testing/selftests/pstore/pstore_tests | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/pstore/common_tests b/tools/testing/selftests/pstore/common_tests
-index 4509f0cc9c91..8f140fa572af 100755
---- a/tools/testing/selftests/pstore/common_tests
-+++ b/tools/testing/selftests/pstore/common_tests
-@@ -55,6 +55,8 @@ operate_files() { # tested value, files, operation
+diff --git a/tools/testing/selftests/pstore/pstore_tests b/tools/testing/selftests/pstore/pstore_tests
+index 2aa9a3852a84..ac11988888a6 100755
+--- a/tools/testing/selftests/pstore/pstore_tests
++++ b/tools/testing/selftests/pstore/pstore_tests
+@@ -9,13 +9,20 @@
  
- # Parameters
- TEST_STRING_PATTERN="Testing pstore: uuid="
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
- UUID=`cat /proc/sys/kernel/random/uuid`
- TOP_DIR=`absdir $0`
- LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`_${UUID}/
-@@ -74,10 +76,15 @@ prlog "=== Pstore unit tests (`basename $0`) ==="
- prlog "UUID="$UUID
- 
- prlog -n "Checking pstore backend is registered ... "
--backend=`cat /sys/module/pstore/parameters/backend`
--show_result $?
-+# No file at all where pstore is not loaded, "(null)" where none registered
-+backend=`cat /sys/module/pstore/parameters/backend 2>/dev/null`
-+if [ -z "$backend" ] || [ "$backend" = "(null)" ]; then
-+    prlog "SKIP"
-+    prlog -e "\tbackend=${backend:-<none>}"
-+    prlog -e "\tcmdline=`cat /proc/cmdline`"
-+    prlog "pstore backend is not registered, skipping"
-+    exit $ksft_skip
-+fi
-+prlog "ok"
- prlog -e "\tbackend=${backend}"
- prlog -e "\tcmdline=`cat /proc/cmdline`"
--if [ $rc -ne 0 ]; then
--    exit 1
--fi
-diff --git a/tools/testing/selftests/pstore/pstore_post_reboot_tests b/tools/testing/selftests/pstore/pstore_post_reboot_tests
-index d6da5e86efbf..2edd48a87dda 100755
---- a/tools/testing/selftests/pstore/pstore_post_reboot_tests
-+++ b/tools/testing/selftests/pstore/pstore_post_reboot_tests
-@@ -7,9 +7,6 @@
- #  Written by Hiraku Toyooka <hiraku.toyooka.gu@hitachi.com>
- #
- 
--# Kselftest framework requirement - SKIP code is 4.
--ksft_skip=4
--
  . ./common_tests
  
- if [ -e $REBOOT_FLAG  ]; then
++# The frontends are separate options, a backend does not bring them in
+ prlog -n "Checking pstore console is registered ... "
+-dmesg | grep -Eq "console \[(pstore|${backend})"
+-show_result $?
++if dmesg | grep -Eq "console \[(pstore|${backend})"; then
++    show_result 0
++else
++    prlog "SKIP (no pstore console, needs CONFIG_PSTORE_CONSOLE)"
++fi
+ 
+ prlog -n "Checking /dev/pmsg0 exists ... "
+-test -e /dev/pmsg0
+-show_result $?
++if [ -e /dev/pmsg0 ]; then
++    show_result 0
++else
++    prlog "SKIP (no /dev/pmsg0, needs CONFIG_PSTORE_PMSG)"
++fi
+ 
+ prlog -n "Writing unique string to /dev/pmsg0 ... "
+ if [ -e "/dev/pmsg0" ]; then
+@@ -23,8 +30,7 @@ if [ -e "/dev/pmsg0" ]; then
+     show_result $?
+     echo "$UUID" > $TOP_DIR/uuid
+ else
+-    prlog "FAIL"
+-    rc=1
++    prlog "SKIP (no /dev/pmsg0)"
+ fi
+ 
+ exit $rc
 -- 
 2.55.0
 
