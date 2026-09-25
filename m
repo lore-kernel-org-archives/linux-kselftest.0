@@ -1,44 +1,45 @@
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79D2423E9E;
-	Fri, 25 Sep 2026 13:34:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96304332EBB;
+	Fri, 25 Sep 2026 13:36:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790343284; cv=none; b=Sl55cVy29bIu21UXPa6pqdTE4aZqQEiNY7JhuklbB0uSXXGQlpRnD6OkVKk1ykpHt2OdlI3xAaIK/950XaIPbQOzwVNXjkAn0Vr73U1PgupAVuKIAvNr5xTJ/ASo3RHfSFhA3AVZ9M144HdnY3ZBFpSmrWyQDKU95REO/ZiJZwM=
+	t=1790343369; cv=none; b=OstYSOC3rqb14zqYvqdGTcIwG8KYaUpeo3YYBMFgt1QqMaV3o3rmy58JMFdyPG01RCt6rBPn/94fHyTPm9X+/OnMhrbFQGO6Fd7/x0SWCrGoRSdBJ+NBZQ/IJJADftXX2s9Fao0a/ASsU/Md5T3gYGHipMEh3Ipy/liV+BEqlX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790343284; c=relaxed/simple;
-	bh=0vielYZed4HV7XfW82om9xTVqeGDlpkgGTZ1SIoqWNo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KXYIGAJ2As4r+Sy0FKXts9/yfrUcUR9Mw6vb0GdUQxZO0U8SFT7+dVOEVN4Gf4Qxzs3YBwOHdq126a8EWkZ0eJD2T6wT1D/FtewF6fPU7k+Ru4eIP0SycuHiuctgWiw45Yw/961XL7r1wvz6agfeGgYRQakFvg4BQ9H9Ge2X71Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=I4Yw7KLX; arc=none smtp.client-ip=130.117.225.111
+	s=arc-20240116; t=1790343369; c=relaxed/simple;
+	bh=/Buq5Yxd9oTyoi0yzaGhQAl28zMu9ChgTZ/Ifz/kZqE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hfOpxZikPC5/Eq2capz0FquuTEBL0uuwDmn+a3q3BMpatbApkwQYcABFOhfrdRDKkl6ea5nVibG+uXdvi/ZL5rez2jxmy73l3k4yBF9UDAX/AXmvTWSq8EgQzdD93q9Q3TeIsf7hd/6qbkqoDtufpcu+APqjWS+9hdM04ZsvoRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=aALP+iof; arc=none smtp.client-ip=130.117.225.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="I4Yw7KLX"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="aALP+iof"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=682gjvnHozUTQ/G+7ht1Fk/nN9QjqnhUXggkVz8k2/g=; b=I4Yw7KLX+JIR
-	9XiEqgZ6EHl+v6tAAviFE0n2F3p65dcGLP6Ptz0K0kg+BfqEZGQUoYzkIlA4CetaXm+Li/yqIRwfB
-	q62iyyp1OF/ahPrCqAx9YIFT/LJzoHAXPuEuBBd4dNd/KLWX5RInKbTT7drcz2CpwblBfJtF7YrtK
-	26+pkSITaWRYLgkqetyB4TZngfrSPTKvgiH8b2qp9GBO5Qe8gFW1C8K+o/CR3OAfwSy1alMlFTphv
-	GEHMUNpsWk2EeBjQJM/nyDuhlg4nTMIYQkxhPd5t05RMMaLb9aVHBDBVu+d6pADWxMU/71kV0X58Q
-	Fhd1c3w/hpbvoAB47v0FcA==;
+	Content-Type; bh=NUZFZugQcaUOtbGUptFU8+qpfI74flmUKE/bgA+blDc=; b=aALP+iofqqFy
+	/qvMa65VtnuZy31h7CcyVj3VnpgNKrG1aBbnAbpGFreE7cwClfokn3Oe86wxdtJEoMZ/9AOusxme2
+	rt77bN036G+KINxUs6gE7eiEhwJH/XEWz4nTfQaNVy65q7gBKQRJrEVJfoKr9QRVj7nhF77jzHTVB
+	mqbidsWf8n1iC26JUKQfK6qFu9FDyqH4eC7bim/sSz9uyZdYpThTd6S+PCboZQCOBAtZ6xe8zx3Um
+	JcvqvVWw8BXFlihdJUm8qtT5syJaPVAl7H7qRT8HtWiQ73X2CDh4NqiynZcriXtfa20Ow4D5ZQA08
+	mng77JIJgLyQItd4kmQu/g==;
 Received: from ch-vpn.virtuozzo.com ([130.117.225.6] helo=LekKit-T14)
 	by relay.virtuozzo.com with esmtp (Exim 4.96)
 	(envelope-from <eva.kurchatova@virtuozzo.com>)
-	id 1xA61W-008SRE-1i;
-	Fri, 25 Sep 2026 15:34:34 +0200
+	id 1xA62s-008UcG-0Z;
+	Fri, 25 Sep 2026 15:35:58 +0200
 From: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
-To: Shuah Khan <shuah@kernel.org>,
-	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org,
 	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: [PATCH] selftests: binderfs: skip the stress test without binderfs
-Date: Fri, 25 Sep 2026 16:34:07 +0300
-Message-ID: <20260925133435.3635453-1-eva.kurchatova@virtuozzo.com>
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/ftrace: skip gcov symbols when picking a function to probe
+Date: Fri, 25 Sep 2026 16:35:41 +0300
+Message-ID: <20260925133558.3636030-1-eva.kurchatova@virtuozzo.com>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -48,68 +49,45 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-binderfs_stress mounts binderfs and asserts on the first mount, so on
-a kernel without CONFIG_ANDROID_BINDERFS the case fails rather than
-reporting that the filesystem is not there.
+kprobe_eventname.tc takes the last kallsyms entry whose name ends in
+vfs_read and puts a probe on it. On a kernel built with
+CONFIG_GCOV_PROFILE_ALL=y the counter symbol gcc emits for the function
+sorts after it:
 
-Ask /proc/filesystems whether the kernel has it, the way
-supports_filesystem() in the landlock tests and check_resctrlfs_support()
-in the resctrl ones already do, and skip when it does not.
+  ffffffff819bd1e0 T vfs_read
+  ffffffff845013e0 t __gcov_.vfs_read
 
-Probing with a mount instead would not work here: the test is meant to
-run unprivileged, and path_mount() rejects an unprivileged caller in
-may_mount() before do_new_mount() ever looks the filesystem type up, so
-the probe would see EPERM whether binderfs is there or not. The child
-would then still reach the real mount inside its userns and fail.
+so the test picks __gcov_.vfs_read, which is not a function entry, and
+the write fails:
+
+  kprobe_eventname.tc: line 10: echo: write error: Invalid argument
+
+Leave those symbols out of the choice. The test then picks vfs_read and
+passes; without a coverage build nothing changes, as no such symbol
+exists there.
+
+This is the same class of problem as commit 23a4b108accc
+("tracing/selftests: Fix kprobe event name test for .isra. functions"),
+where a compiler-generated symbol was picked instead of a real function.
 
 Signed-off-by: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
 ---
- .../filesystems/binderfs/binderfs_test.c      | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ .../testing/selftests/ftrace/test.d/kprobe/kprobe_eventname.tc  | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-index a1a79a6fef17..70f0391136c4 100644
---- a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-+++ b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-@@ -36,6 +36,28 @@
- 		fd = -EBADF;        \
- 	}
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_eventname.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_eventname.tc
+index ba19b81cef39..0688a5c47d1e 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_eventname.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_eventname.tc
+@@ -5,7 +5,7 @@
  
-+static bool binderfs_supported(void)
-+{
-+	char line[128];
-+	bool ret = false;
-+	FILE *f;
-+
-+	f = fopen("/proc/filesystems", "r");
-+	if (!f)
-+		return true;	/* Cannot tell, let the test run and report. */
-+
-+	while (fgets(line, sizeof(line), f)) {
-+		/* binderfs has no backing device, hence the "nodev" prefix. */
-+		if (!strcmp(line, "nodev\tbinder\n")) {
-+			ret = true;
-+			break;
-+		}
-+	}
-+
-+	fclose(f);
-+	return ret;
-+}
-+
- static void change_mountns(struct __test_metadata *_metadata)
- {
- 	int ret;
-@@ -388,6 +410,9 @@ TEST(binderfs_stress)
- 	char binderfs_mntpt[] = P_tmpdir "/binderfs_XXXXXX",
- 		device_path[sizeof(P_tmpdir "/binderfs_XXXXXX/") + BINDERFS_MAX_NAME];
+ :;: "Add an event on function without name" ;:
  
-+	if (!binderfs_supported())
-+		SKIP(return, "The Android binderfs filesystem is not available");
-+
- 	ret = socketpair(PF_LOCAL, SOCK_STREAM | SOCK_CLOEXEC, 0, syncfds);
- 	ASSERT_EQ(ret, 0) {
- 		TH_LOG("%s - Failed to create socket pair", strerror(errno));
+-FUNC=`grep " [tT] .*vfs_read$" /proc/kallsyms | tail -n 1 | cut -f 3 -d " "`
++FUNC=`grep " [tT] .*vfs_read$" /proc/kallsyms | grep -v __gcov | tail -n 1 | cut -f 3 -d " "`
+ [ "x" != "x$FUNC" ] || exit_unresolved
+ echo "p $FUNC" > kprobe_events
+ PROBE_NAME=`echo $FUNC | tr ".:" "_"`
 -- 
 2.55.0
 
