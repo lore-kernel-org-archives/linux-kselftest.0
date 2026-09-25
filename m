@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC044478E57;
-	Fri, 25 Sep 2026 10:44:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B9449BD74;
+	Fri, 25 Sep 2026 10:44:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790333079; cv=none; b=m/eQZGAtlH+ETKQcCCyY+DZyzZbcIiC0unsHMomSnLjGH0OHwm8IgTc0yWGctxrdePPtm6F/G3FyiN+Uuxk1L08rXQDM/szH3ugab4S2EsQbNBndXn+IaYZoH6B3rcfa8k7Sx1c93t1mW0n+trw3yzgTqHfaFdQO2l+5Wq0MZxs=
+	t=1790333085; cv=none; b=tTIlyIoh2Ii6ahHnokEd5B9BZhaalJZ6wWl30JmCVuuecwykdSbS5zn3PqRD60SwAn3b1ref2YbTlyrAogg2qWga8e9Ch9N8iT8e/Mx7pT4QbEUWi/nknSwfY5DI3WNPlPkZvYYTn9UHDbsTNYvjKIqnphBGsuwNKVa5xB+Anfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790333079; c=relaxed/simple;
-	bh=ucAkxgh3DJzOzWNeLTYB05ZB9/DJrjFiLA8e/+cr4lk=;
+	s=arc-20240116; t=1790333085; c=relaxed/simple;
+	bh=iG9pj2skUPsyU6b7NBpL1pv7/4ug4kNEbH0MDRK1Pec=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GAOlaYdRUTGwCpVHPgizBQd7avPkWTdv4pYOea8qjJ8kvG1Rm33d+5on/ujrboqmFijdv3QDcqrAvTBQn8hyyzTBwnx77juVgOSq8w38zmWO2u4uWhm6XS53wCDdHb2cXoXTHXG9Zkjy0yptH8oF1zr7VGDnssiPUoo3igMAUY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ihFGON+5; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=Hva1g+YeiT8V3f5Tp9W5H5euxx9zsPsdN36aOfmyYFBuEoh5KcBeZEbWj341x2jbpE9Qxq7XyJ8WQ6y/2R8HD+Il4CLROj8aXAVcXEWnQL4a6gn9uP+O7G4iD5X7E0CqkghTh2rw9mHIDixVWbB4NnZPd3gurkOvi2Gegbyc/jA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OFuVSrvl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ihFGON+5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D7661F000FF;
-	Fri, 25 Sep 2026 10:44:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OFuVSrvl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 055E51F00898;
+	Fri, 25 Sep 2026 10:44:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790333077;
-	bh=rRf0/go5i3thyarbdT7//grfOcOQ/yWyuJboNkE1+pQ=;
+	s=k20260515; t=1790333082;
+	bh=iUyPXoJpUEDluulVmxI/gLZCd5rb6XTn+DDtS0T8Ssg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ihFGON+5QILd/bAbGhzNhmjYeaiGmudSe6Y8kJO+7ZBEqA67n5FQjgrpBIRFx97nc
-	 P9mCCDDsCX3hmJWIkPOuMYVTIYzCczHZpCKtqvIzb9AGJSPhA+oeF6d4qPqzj7G9J3
-	 eo6VnpVI1MSBuvzoRDjtZNQAeA5txnRty8243W/FPendptQg3YsnuKnI9COFoI7kCz
-	 F4UK1qRH35gcKV40gryEGwi+yos73fmV0QSgfoQSRcT75bDnuSp/K24TZa4037x3VG
-	 zmp3VLHj/IiAurFH3ZRQYtagqFw/v1KhRHPhsl9QJ9nwKrh+els+rprzEudcfXvwio
-	 Fu8RrF+aDpXTw==
+	b=OFuVSrvlfVrFxiuJC1+ImHrcJztJ5IhV9bbwMasEzBgXT/oDPzJ//zVlMhRBPY08w
+	 fWPYLsemB21s4DVqbnSqrVSkifpaM/8/Mc6Hss2hVxd95+wZn3g/yLBA4RRHs6qPiI
+	 oKs+uo/VdoYugbgo8bsmXifppU6Hj0brgRbIHIT1BfGo/HVRBC09Rb/WRpbinxb7Im
+	 zNZ+ZzOdHGHSx8S1LzcOdWcQNIlU5H5KrSOTcMg8DH2M9Rjs9/9+Za19hpMjKLmRJd
+	 QZqkcNvZ5Dmnpp5SjrJCkDK4YLjcHqfBMWJGQbeNznIimL8lU139xE9lyfQxgFi5aD
+	 Q+f4Cq9N9DrqA==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: Alexander Duyck <alexanderduyck@fb.com>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -53,9 +53,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Tao Cui <cuitao@kylinos.cn>,
 	Pavel Begunkov <asml.silence@gmail.com>,
 	David Wei <dw@davidwei.uk>
-Subject: [PATCH net-next v4 2/5] fbnic: Track BDQ device-page geometry per ring
-Date: Fri, 25 Sep 2026 12:44:09 +0200
-Message-ID: <20260925104417.2325213-3-bjorn@kernel.org>
+Subject: [PATCH net-next v4 3/5] net: Revalidate queue config for ringparam changes
+Date: Fri, 25 Sep 2026 12:44:10 +0200
+Message-ID: <20260925104417.2325213-4-bjorn@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260925104417.2325213-1-bjorn@kernel.org>
 References: <20260925104417.2325213-1-bjorn@kernel.org>
@@ -68,327 +68,342 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-fbnic derives the BDQ buffer layout from PAGE_SIZE. That decides at
-build time how a posted page is split into 4 KiB device pages, and
-uses the same completion decoding for HPQ and PPQ. That is wrong once
-the queues use different posted-page sizes; completions must be
-decoded with the geometry of the queue that produced them.
+Memory-provider queue configuration is validated when the provider is
+bound. A later ethtool ring change may invalidate it because drivers
+can size queue memory from both ring depth and RX page size. The fbnic
+consumer is added in the following patch.
 
-Keep PAGE_SIZE as the posted-page size for both queues in this change,
-so the descriptor format and runtime behavior stay unchanged.
+Keep configured RX ring depths in netdev_config and stage proposed
+values in cfg_pending. Validate every RX queue before calling the
+driver. Each check validates the device defaults, then any queue
+memory-provider override. Commit the values only after the driver
+accepts them.
+
+Drivers which consume stored ring depths through queue configuration
+must initialize every RX depth before registering the netdev. Stored
+values override callback defaults, including when zero.
+
+The callback receives a rendered configuration rather than a queue ID.
+Validation should depend on the configuration, not queue identity.
+Checking defaults also covers the case where every queue has a
+memory-provider override.
+
+Drivers may normalize ring depths when applying them. Require the
+validation callback to use the same normalization. Drivers must report
+the applied depths through the ethtool_ringparam argument so the core
+records the result.
+
+Use the same transaction for ioctl and netlink. Drivers without
+ndo_validate_qcfg skip the new validation.
+
+Link: https://lore.kernel.org/all/20250421222827.283737-14-kuba@kernel.org/
 
 Signed-off-by: Björn Töpel <bjorn@kernel.org>
-Reviewed-by: Breno Leitao <leitao@debian.org>
 ---
- drivers/net/ethernet/meta/fbnic/fbnic_csr.h   | 34 ++------
- .../net/ethernet/meta/fbnic/fbnic_debugfs.c   |  5 +-
- drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  | 83 ++++++++++++-------
- drivers/net/ethernet/meta/fbnic/fbnic_txrx.h  |  6 ++
- 4 files changed, 72 insertions(+), 56 deletions(-)
+ include/linux/ethtool.h     |  4 ++-
+ include/net/netdev_queues.h | 56 ++++++++++++++++++++++++++++++++-----
+ net/core/dev.h              |  2 ++
+ net/core/netdev_config.c    | 38 +++++++++++++++++++++++--
+ net/ethtool/common.c        |  8 ++++++
+ net/ethtool/common.h        |  2 ++
+ net/ethtool/ioctl.c         | 24 ++++++++++++++--
+ net/ethtool/rings.c         | 13 ++++++++-
+ 8 files changed, 133 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_csr.h b/drivers/net/ethernet/meta/fbnic/fbnic_csr.h
-index baba3471bf5a..cbb25d11638c 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_csr.h
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_csr.h
-@@ -109,34 +109,19 @@ enum {
+diff --git a/include/linux/ethtool.h b/include/linux/ethtool.h
+index c4c9ce038611..c3a41fbd5426 100644
+--- a/include/linux/ethtool.h
++++ b/include/linux/ethtool.h
+@@ -1025,7 +1025,9 @@ struct kernel_ethtool_ts_info {
+  *	types should be set in @supported_coalesce_params.
+  *	Returns a negative error code or zero.
+  * @get_ringparam: Report ring sizes
+- * @set_ringparam: Set ring sizes.  Returns a negative error code or zero.
++ * @set_ringparam: Set ring sizes. The &struct ethtool_ringparam argument is
++ *	also an output; drivers which normalize requested sizes must update it
++ *	with the applied sizes. Returns a negative error code or zero.
+  * @get_pause_stats: Report pause frame statistics. Drivers must not zero
+  *	statistics which they don't report. The stats structure is initialized
+  *	to ETHTOOL_STAT_NOT_SET indicating driver does not report statistics.
+diff --git a/include/net/netdev_queues.h b/include/net/netdev_queues.h
+index 70c9fe9e83cc..c5335e935b7d 100644
+--- a/include/net/netdev_queues.h
++++ b/include/net/netdev_queues.h
+@@ -4,18 +4,56 @@
  
- /* Rx Buffer Descriptor Format
-  *
-- * The layout of this can vary depending on the page size of the system.
-+ * Buffer descriptors describe 4 KiB device pages. A posted page larger than
-+ * 4 KiB is represented by consecutive device-page descriptors.
-  *
-- * If the page size is 4K then the layout will simply consist of ID for
-- * the 16 most significant bits, and the lower 46 are essentially the page
-- * address with the lowest 12 bits being reserved 0 due to the fact that
-- * a page will be aligned.
-- *
-- * If the page size is larger than 4K then the lower n bits of the ID and
-- * page address will be reserved for the fragment ID. This fragment will
-- * be 4K in size and will be used to index both the DMA address and the ID
-- * by the same amount.
-+ * The address field stores the 4 KiB-aligned DMA address. The ID field stores
-+ * the software page ID, with the low n bits used as the device-page ID when a
-+ * posted page spans multiple device pages. The driver increments both the
-+ * address and ID by one device page for each descriptor belonging to a posted
-+ * page.
+ #include <linux/netdevice.h>
+ 
++/**
++ * struct netdev_ring_config - accepted RX ring depth configuration
++ * @rx_pending:		Size of the regular RX ring.
++ * @rx_mini_pending:	Size of the RX mini ring.
++ * @rx_jumbo_pending:	Size of the RX jumbo ring.
++ *
++ * This stores only persistent configuration values. Capability fields,
++ * such as max ring sizes, are reported by drivers but are not part of the
++ * accepted configuration.
++ *
++ * These values are only used for queue-configuration validation today.
++ * Drivers which normalize ring sizes must update the struct ethtool_ringparam
++ * passed to set_ringparam() with the applied sizes.
++ */
++struct netdev_ring_config {
++	u32	rx_pending;
++	u32	rx_mini_pending;
++	u32	rx_jumbo_pending;
++};
++
+ /**
+  * struct netdev_config - queue-related configuration for a netdev
+  * @hds_thresh:		HDS Threshold value.
+  * @hds_config:		HDS value from userspace.
++ * @rings:		Accepted RX ring depths.
++ *
++ * Direct values, such as @hds_thresh and @rings, hold the accepted
++ * configuration and always override callback-provided defaults, including
++ * when zero. Drivers which use @rings for queue rendering must initialize
++ * every RX ring depth before registering the netdev.
   */
- #define FBNIC_BD_DESC_ADDR_MASK			DESC_GENMASK(45, 12)
- #define FBNIC_BD_DESC_ID_MASK			DESC_GENMASK(63, 48)
--#define FBNIC_BD_FRAG_SIZE \
-+#define FBNIC_BD_PAGE_SIZE \
- 	(FBNIC_BD_DESC_ADDR_MASK & ~(FBNIC_BD_DESC_ADDR_MASK - 1))
--#define FBNIC_BD_FRAG_COUNT \
--	(PAGE_SIZE / FBNIC_BD_FRAG_SIZE)
--#define FBNIC_BD_FRAG_ADDR_MASK \
--	(FBNIC_BD_DESC_ADDR_MASK & \
--	 ~(FBNIC_BD_DESC_ADDR_MASK * FBNIC_BD_FRAG_COUNT))
--#define FBNIC_BD_FRAG_ID_MASK \
--	(FBNIC_BD_DESC_ID_MASK & \
--	 ~(FBNIC_BD_DESC_ID_MASK * FBNIC_BD_FRAG_COUNT))
--#define FBNIC_BD_PAGE_ADDR_MASK \
--	(FBNIC_BD_DESC_ADDR_MASK & ~FBNIC_BD_FRAG_ADDR_MASK)
--#define FBNIC_BD_PAGE_ID_MASK \
--	(FBNIC_BD_DESC_ID_MASK & ~FBNIC_BD_FRAG_ID_MASK)
+ struct netdev_config {
+ 	u32	hds_thresh;
+ 	u8	hds_config;
++
++	struct netdev_ring_config rings;
+ };
  
- /* Rx Completion Queue Descriptors */
- #define FBNIC_RCD_TYPE_MASK			DESC_GENMASK(62, 61)
-@@ -151,9 +136,6 @@ enum {
++/**
++ * struct netdev_queue_config - rendered configuration for an RX queue
++ * @rx_page_size:	Size of one RX page-pool allocation.
++ * @rx_ring_size:	Configured size of the regular RX ring.
++ * @rx_mini_ring_size:	Configured size of the RX mini ring.
++ * @rx_jumbo_ring_size:	Configured size of the RX jumbo ring.
++ */
+ struct netdev_queue_config {
+ 	u32	rx_page_size;
++	u32	rx_ring_size;
++	u32	rx_mini_ring_size;
++	u32	rx_jumbo_ring_size;
+ };
  
- /* Address/Length Completion Descriptors */
- #define FBNIC_RCD_AL_BUFF_ID_MASK		DESC_GENMASK(15, 0)
--#define FBNIC_RCD_AL_BUFF_FRAG_MASK		(FBNIC_BD_FRAG_COUNT - 1)
--#define FBNIC_RCD_AL_BUFF_PAGE_MASK \
--	(FBNIC_RCD_AL_BUFF_ID_MASK & ~FBNIC_RCD_AL_BUFF_FRAG_MASK)
- #define FBNIC_RCD_AL_BUFF_LEN_MASK		DESC_GENMASK(28, 16)
- #define FBNIC_RCD_AL_BUFF_OFF_MASK		DESC_GENMASK(43, 32)
- #define FBNIC_RCD_AL_PAGE_FIN			DESC_BIT(60)
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_debugfs.c b/drivers/net/ethernet/meta/fbnic/fbnic_debugfs.c
-index 6edfa0aa69f1..f9e879be254d 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_debugfs.c
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_debugfs.c
-@@ -181,8 +181,8 @@ static int fbnic_dbg_tcq_desc_seq_show(struct seq_file *s, void *v)
- static int fbnic_dbg_bdq_desc_seq_show(struct seq_file *s, void *v)
- {
- 	struct fbnic_ring *ring = s->private;
-+	unsigned int i, desc_count;
- 	char hdr[80];
--	int i;
+ /* See the netdev.yaml spec for definition of each statistic */
+@@ -139,16 +177,20 @@ enum {
+  * @ndo_queue_get_dma_dev: Get dma device for zero-copy operations to be used
+  *			   for this queue. Return NULL on error.
+  *
+- * @ndo_default_qcfg:	(Optional) Populate queue config struct with defaults.
+- *			Queue config structs are passed to this helper before
+- *			the user-requested settings are applied.
++ * @ndo_default_qcfg:	(Optional) Populate queue config with defaults. Queue
++ *			config structs are passed to this helper before the
++ *			user-requested settings are applied. Ring depths from
++ *			dev->cfg override these defaults. Drivers which consume
++ *			them must initialize dev->cfg->rings before registering
++ *			the netdev.
+  *
+  * @ndo_validate_qcfg: (Optional) Check if queue config is supported.
+  *			Called when configuration affecting a queue may be
+- *			changing, either due to NIC-wide config, or config
+- *			scoped to the queue at a specified index.
+- *			When NIC-wide config is changed the callback will
+- *			be invoked for all queues.
++ *			changing. When NIC-wide config is changed the
++ *			callback will be invoked for the defaults and all
++ *			queue overrides. Drivers which normalize device-wide
++ *			values when applying them must use the same
++ *			normalization during validation.
+  *
+  * @ndo_queue_create:	Create a new RX queue on a virtual device that will
+  *			be paired with a physical device's queue via leasing.
+diff --git a/net/core/dev.h b/net/core/dev.h
+index 6d8dbf556269..985396cc833a 100644
+--- a/net/core/dev.h
++++ b/net/core/dev.h
+@@ -110,6 +110,8 @@ int netdev_reconfig_start(struct net_device *dev);
+ int netdev_queue_config_validate(struct net_device *dev, int rxq_idx,
+ 				 struct netdev_queue_config *qcfg,
+ 				 struct netlink_ext_ack *extack);
++int netdev_queue_config_revalidate(struct net_device *dev,
++				   struct netlink_ext_ack *extack);
  
- 	/* Generate header on first entry */
- 	fbnic_dbg_ring_show(s);
-@@ -197,7 +197,8 @@ static int fbnic_dbg_bdq_desc_seq_show(struct seq_file *s, void *v)
- 		return 0;
- 	}
- 
--	for (i = 0; i < (ring->size_mask + 1) * FBNIC_BD_FRAG_COUNT; i++) {
-+	desc_count = (ring->size_mask + 1) * fbnic_bd_page_count(ring);
-+	for (i = 0; i < desc_count; i++) {
- 		u64 bd = le64_to_cpu(ring->desc[i]);
- 
- 		seq_printf(s, "%04x %#04llx %#014llx\n", i,
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-index b41ff7c88a0a..6b24733dc606 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-@@ -896,19 +896,31 @@ static void fbnic_clean_bdq(struct fbnic_ring *ring, unsigned int hw_head,
- 	ring->head = head;
+ bool netif_rxq_has_mp(struct net_device *dev, unsigned int rxq_idx);
+ bool netif_rxq_is_leased(struct net_device *dev, unsigned int rxq_idx);
+diff --git a/net/core/netdev_config.c b/net/core/netdev_config.c
+index b101341e3251..1975de42a60d 100644
+--- a/net/core/netdev_config.c
++++ b/net/core/netdev_config.c
+@@ -50,6 +50,15 @@ static int netdev_nop_validate_qcfg(struct net_device *dev,
+ 	return 0;
  }
  
-+static u16 fbnic_rcd_bd_idx(const struct fbnic_ring *bdq, u64 rcd)
++static void netdev_qcfg_apply_dev(struct netdev_queue_config *qcfg,
++				  const struct netdev_config *cfg)
 +{
-+	return FIELD_GET(FBNIC_RCD_AL_BUFF_ID_MASK, rcd) >> bdq->bd_page_shift;
++	/* Device config overrides callback-provided fallbacks. */
++	qcfg->rx_ring_size = cfg->rings.rx_pending;
++	qcfg->rx_mini_ring_size = cfg->rings.rx_mini_pending;
++	qcfg->rx_jumbo_ring_size = cfg->rings.rx_jumbo_pending;
 +}
 +
-+static unsigned int fbnic_rcd_bd_page_offset(const struct fbnic_ring *bdq,
-+					     u64 rcd)
-+{
-+	u16 id = FIELD_GET(FBNIC_RCD_AL_BUFF_ID_MASK, rcd);
-+	u16 page_id = id & (fbnic_bd_page_count(bdq) - 1);
-+
-+	return page_id * FBNIC_BD_PAGE_SIZE;
-+}
-+
- static void fbnic_bd_prep(struct fbnic_ring *bdq, u16 id, netmem_ref netmem)
+ static int __netdev_queue_config(struct net_device *dev, int rxq_idx,
+ 				 struct netdev_queue_config *qcfg,
+ 				 struct netlink_ext_ack *extack,
+@@ -70,6 +79,7 @@ static int __netdev_queue_config(struct net_device *dev, int rxq_idx,
+ 	/* Get defaults from the driver, in case user config not set */
+ 	if (dev->queue_mgmt_ops->ndo_default_qcfg)
+ 		dev->queue_mgmt_ops->ndo_default_qcfg(dev, qcfg);
++	netdev_qcfg_apply_dev(qcfg, dev->cfg_pending);
+ 	err = validate_cb(dev, qcfg, extack);
+ 	if (err)
+ 		return err;
+@@ -91,9 +101,11 @@ static int __netdev_queue_config(struct net_device *dev, int rxq_idx,
+  * @rxq_idx:  index of the queue of interest
+  * @qcfg: queue configuration struct (output)
+  *
+- * Render the configuration for a given queue. This helper should be used
+- * by drivers which support queue configuration to retrieve config for
+- * a particular queue.
++ * Render the configuration for a given queue. During a configuration
++ * transaction this includes the proposed device-wide values in
++ * @dev->cfg_pending; otherwise @dev->cfg_pending points to the accepted
++ * configuration. This helper should be used by drivers which support queue
++ * configuration to retrieve config for a particular queue.
+  *
+  * @qcfg is an output parameter and is always fully initialized by this
+  * function. Some values may not be set by the user, drivers may either
+@@ -113,3 +125,23 @@ int netdev_queue_config_validate(struct net_device *dev, int rxq_idx,
  {
--	__le64 *bdq_desc = &bdq->desc[id * FBNIC_BD_FRAG_COUNT];
-+	__le64 *bdq_desc = &bdq->desc[id * fbnic_bd_page_count(bdq)];
- 	dma_addr_t dma = page_pool_get_dma_addr_netmem(netmem);
--	u64 bd, i = FBNIC_BD_FRAG_COUNT;
-+	u64 bd, i = fbnic_bd_page_count(bdq);
- 
--	bd = (FBNIC_BD_PAGE_ADDR_MASK & dma) |
--	     FIELD_PREP(FBNIC_BD_PAGE_ID_MASK, id);
-+	bd = (FBNIC_BD_DESC_ADDR_MASK & dma) |
-+	     FIELD_PREP(FBNIC_BD_DESC_ID_MASK, (u64)id << bdq->bd_page_shift);
- 
--	/* In the case that a page size is larger than 4K we will map a
--	 * single page to multiple fragments. The fragments will be
--	 * FBNIC_BD_FRAG_COUNT in size and the lower n bits will be use
--	 * to indicate the individual fragment IDs.
-+	/* Posted pages larger than 4 KiB use consecutive device-page IDs in
-+	 * the low bits of the software page ID.
- 	 */
- 	do {
- 		*bdq_desc = cpu_to_le64(bd);
-@@ -953,7 +965,7 @@ static void fbnic_fill_bdq(struct fbnic_ring *bdq)
- 		/* Force DMA writes to flush before writing to tail */
- 		dma_wmb();
- 
--		writel(i * FBNIC_BD_FRAG_COUNT, bdq->doorbell);
-+		writel(i * fbnic_bd_page_count(bdq), bdq->doorbell);
- 	}
+ 	return __netdev_queue_config(dev, rxq_idx, qcfg, extack, true);
+ }
++
++int netdev_queue_config_revalidate(struct net_device *dev,
++				   struct netlink_ext_ack *extack)
++{
++	const struct netdev_queue_mgmt_ops *qops = dev->queue_mgmt_ops;
++	struct netdev_queue_config qcfg;
++	unsigned int i;
++	int err;
++
++	if (!qops || !qops->ndo_validate_qcfg)
++		return 0;
++
++	for (i = 0; i < dev->real_num_rx_queues; i++) {
++		err = netdev_queue_config_validate(dev, i, &qcfg, extack);
++		if (err)
++			return err;
++	}
++
++	return 0;
++}
+diff --git a/net/ethtool/common.c b/net/ethtool/common.c
+index 23db40618fed..ed1df37090ce 100644
+--- a/net/ethtool/common.c
++++ b/net/ethtool/common.c
+@@ -956,6 +956,14 @@ void ethtool_ringparam_get_cfg(struct net_device *dev,
+ 	kparam->hds_thresh = dev->cfg->hds_thresh;
  }
  
-@@ -984,26 +996,27 @@ static void fbnic_pkt_prepare(struct fbnic_napi_vector *nv, u64 rcd,
- 			      struct fbnic_pkt_buff *pkt,
- 			      struct fbnic_q_triad *qt)
- {
--	unsigned int hdr_pg_idx = FIELD_GET(FBNIC_RCD_AL_BUFF_PAGE_MASK, rcd);
- 	unsigned int hdr_pg_off = FIELD_GET(FBNIC_RCD_AL_BUFF_OFF_MASK, rcd);
--	struct page *page = fbnic_page_pool_get_head(qt, hdr_pg_idx);
- 	unsigned int len = FIELD_GET(FBNIC_RCD_AL_BUFF_LEN_MASK, rcd);
-+	unsigned int hdr_pg_idx = fbnic_rcd_bd_idx(&qt->sub0, rcd);
- 	unsigned int frame_sz, hdr_pg_start, hdr_pg_end, headroom;
- 	unsigned char *hdr_start;
-+	struct page *page;
- 
- 	/* data_hard_start should always be NULL when this is called */
- 	WARN_ON_ONCE(pkt->buff.data_hard_start);
- 
-+	page = fbnic_page_pool_get_head(qt, hdr_pg_idx);
++void ethtool_ringparam_set_cfg(struct netdev_config *cfg,
++			       const struct ethtool_ringparam *param)
++{
++	cfg->rings.rx_pending = param->rx_pending;
++	cfg->rings.rx_mini_pending = param->rx_mini_pending;
++	cfg->rings.rx_jumbo_pending = param->rx_jumbo_pending;
++}
 +
- 	/* Short-cut the end calculation if we know page is fully consumed */
- 	hdr_pg_end = FIELD_GET(FBNIC_RCD_AL_PAGE_FIN, rcd) ?
--		     FBNIC_BD_FRAG_SIZE : fbnic_hdr_pg_end(hdr_pg_off, len);
-+		     FBNIC_BD_PAGE_SIZE : fbnic_hdr_pg_end(hdr_pg_off, len);
- 	hdr_pg_start = fbnic_hdr_pg_start(hdr_pg_off);
- 
- 	headroom = hdr_pg_off - hdr_pg_start + FBNIC_RX_PAD;
- 	frame_sz = hdr_pg_end - hdr_pg_start;
- 	xdp_init_buff(&pkt->buff, frame_sz, &qt->xdp_rxq);
--	hdr_pg_start += (FBNIC_RCD_AL_BUFF_FRAG_MASK & rcd) *
--			FBNIC_BD_FRAG_SIZE;
-+	hdr_pg_start += fbnic_rcd_bd_page_offset(&qt->sub0, rcd);
- 
- 	/* Sync DMA buffer */
- 	dma_sync_single_range_for_cpu(nv->dev, page_pool_get_dma_addr(page),
-@@ -1024,18 +1037,19 @@ static void fbnic_add_rx_frag(struct fbnic_napi_vector *nv, u64 rcd,
- 			      struct fbnic_pkt_buff *pkt,
- 			      struct fbnic_q_triad *qt)
+ static void ethtool_init_tsinfo(struct kernel_ethtool_ts_info *info)
  {
--	unsigned int pg_idx = FIELD_GET(FBNIC_RCD_AL_BUFF_PAGE_MASK, rcd);
- 	unsigned int pg_off = FIELD_GET(FBNIC_RCD_AL_BUFF_OFF_MASK, rcd);
- 	unsigned int len = FIELD_GET(FBNIC_RCD_AL_BUFF_LEN_MASK, rcd);
--	netmem_ref netmem = fbnic_page_pool_get_data(qt, pg_idx);
-+	unsigned int pg_idx = fbnic_rcd_bd_idx(&qt->sub1, rcd);
- 	unsigned int truesize;
-+	netmem_ref netmem;
- 	bool added;
+ 	memset(info, 0, sizeof(*info));
+diff --git a/net/ethtool/common.h b/net/ethtool/common.h
+index ae32e7fdb563..b062e99e89db 100644
+--- a/net/ethtool/common.h
++++ b/net/ethtool/common.h
+@@ -53,6 +53,8 @@ void ethtool_ringparam_get_cfg(struct net_device *dev,
+ 			       struct ethtool_ringparam *param,
+ 			       struct kernel_ethtool_ringparam *kparam,
+ 			       struct netlink_ext_ack *extack);
++void ethtool_ringparam_set_cfg(struct netdev_config *cfg,
++			       const struct ethtool_ringparam *param);
  
--	truesize = FIELD_GET(FBNIC_RCD_AL_PAGE_FIN, rcd) ?
--		   FBNIC_BD_FRAG_SIZE - pg_off : ALIGN(len, 128);
-+	netmem = fbnic_page_pool_get_data(qt, pg_idx);
+ int ethtool_get_rx_ring_count(struct net_device *dev);
  
--	pg_off += (FBNIC_RCD_AL_BUFF_FRAG_MASK & rcd) *
--		  FBNIC_BD_FRAG_SIZE;
-+	truesize = FIELD_GET(FBNIC_RCD_AL_PAGE_FIN, rcd) ?
-+		   FBNIC_BD_PAGE_SIZE - pg_off : ALIGN(len, 128);
+diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
+index 4b0bc503f930..dad5a5412f48 100644
+--- a/net/ethtool/ioctl.c
++++ b/net/ethtool/ioctl.c
+@@ -35,6 +35,7 @@
+ #include <net/netdev_queues.h>
+ 
+ #include "common.h"
++#include "../core/dev.h"
+ 
+ /* State held across locks and calls for commands which have devlink fallback */
+ struct ethtool_devlink_compat {
+@@ -2239,10 +2240,29 @@ static int ethtool_set_ringparam(struct net_device *dev, void __user *useraddr)
+ 	    ringparam.tx_pending > max.tx_max_pending)
+ 		return -EINVAL;
+ 
++	ret = netdev_reconfig_start(dev);
++	if (ret)
++		return ret;
 +
-+	pg_off += fbnic_rcd_bd_page_offset(&qt->sub1, rcd);
- 
- 	/* Sync DMA buffer */
- 	page_pool_dma_sync_netmem_for_cpu(qt->sub1.page_pool, netmem,
-@@ -1283,12 +1297,12 @@ static int fbnic_clean_rcq(struct fbnic_napi_vector *nv,
- 
- 		switch (FIELD_GET(FBNIC_RCD_TYPE_MASK, rcd)) {
- 		case FBNIC_RCD_TYPE_HDR_AL:
--			head0 = FIELD_GET(FBNIC_RCD_AL_BUFF_PAGE_MASK, rcd);
-+			head0 = fbnic_rcd_bd_idx(&qt->sub0, rcd);
- 			fbnic_pkt_prepare(nv, rcd, pkt, qt);
- 
- 			break;
- 		case FBNIC_RCD_TYPE_PAY_AL:
--			head1 = FIELD_GET(FBNIC_RCD_AL_BUFF_PAGE_MASK, rcd);
-+			head1 = fbnic_rcd_bd_idx(&qt->sub1, rcd);
- 			fbnic_add_rx_frag(nv, rcd, pkt, qt);
- 
- 			break;
-@@ -1629,6 +1643,16 @@ fbnic_alloc_qt_page_pools(struct fbnic_net *fbn, struct fbnic_q_triad *qt,
- 	return PTR_ERR(pp);
++	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);
++
++	ret = netdev_queue_config_revalidate(dev, NULL);
++	if (ret)
++		goto out_free_cfg;
++
+ 	ret = dev->ethtool_ops->set_ringparam(dev, &ringparam,
+ 					      &kernel_ringparam, NULL);
+-	if (!ret)
+-		ethtool_notify(dev, ETHTOOL_MSG_RINGS_NTF);
++	if (ret)
++		goto out_free_cfg;
++
++	/* Capture ring depth adjustments reported by the driver. */
++	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);
++	swap(dev->cfg, dev->cfg_pending);
++	ethtool_notify(dev, ETHTOOL_MSG_RINGS_NTF);
++
++out_free_cfg:
++	__netdev_free_config(dev->cfg_pending);
++	dev->cfg_pending = dev->cfg;
+ 	return ret;
  }
  
-+static u8 fbnic_bdq_page_shift(u32 page_size)
-+{
-+	return ilog2(page_size / FBNIC_BD_PAGE_SIZE);
-+}
+diff --git a/net/ethtool/rings.c b/net/ethtool/rings.c
+index 9054c89c5d7b..e3810c0320e3 100644
+--- a/net/ethtool/rings.c
++++ b/net/ethtool/rings.c
+@@ -4,6 +4,7 @@
+ 
+ #include "common.h"
+ #include "netlink.h"
++#include "../core/dev.h"
+ 
+ struct rings_req_info {
+ 	struct ethnl_req_info		base;
+@@ -299,10 +300,20 @@ ethnl_set_rings(struct ethnl_req_info *req_info, struct genl_info *info)
+ 
+ 	dev->cfg_pending->hds_config = kernel_ringparam.tcp_data_split;
+ 	dev->cfg_pending->hds_thresh = kernel_ringparam.hds_thresh;
++	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);
 +
-+static void fbnic_bdq_set_page_size(struct fbnic_ring *bdq, u32 page_size)
-+{
-+	bdq->bd_page_shift = fbnic_bdq_page_shift(page_size);
-+}
++	ret = netdev_queue_config_revalidate(dev, info->extack);
++	if (ret)
++		return ret;
+ 
+ 	ret = dev->ethtool_ops->set_ringparam(dev, &ringparam,
+ 					      &kernel_ringparam, info->extack);
+-	return ret < 0 ? ret : 1;
++	if (ret < 0)
++		return ret;
 +
- static void fbnic_ring_init(struct fbnic_ring *ring, u32 __iomem *doorbell,
- 			    int q_idx, u8 flags)
- {
-@@ -1636,6 +1660,7 @@ static void fbnic_ring_init(struct fbnic_ring *ring, u32 __iomem *doorbell,
- 	ring->doorbell = doorbell;
- 	ring->q_idx = q_idx;
- 	ring->flags = flags;
-+	fbnic_bdq_set_page_size(ring, PAGE_SIZE);
- 	ring->deferred_head = -1;
++	/* Capture ring depth adjustments reported by the driver. */
++	ethtool_ringparam_set_cfg(dev->cfg_pending, &ringparam);
++	return 1;
  }
  
-@@ -1920,12 +1945,12 @@ static int fbnic_alloc_rx_ring_desc(struct fbnic_net *fbn,
- 
- 	switch (rxr->doorbell - fbnic_ring_csr_base(rxr)) {
- 	case FBNIC_QUEUE_BDQ_HPQ_TAIL:
--		rxq_size = fbn->hpq_size / FBNIC_BD_FRAG_COUNT;
--		desc_size *= FBNIC_BD_FRAG_COUNT;
-+		rxq_size = fbn->hpq_size / fbnic_bd_page_count(rxr);
-+		desc_size *= fbnic_bd_page_count(rxr);
- 		break;
- 	case FBNIC_QUEUE_BDQ_PPQ_TAIL:
--		rxq_size = fbn->ppq_size / FBNIC_BD_FRAG_COUNT;
--		desc_size *= FBNIC_BD_FRAG_COUNT;
-+		rxq_size = fbn->ppq_size / fbnic_bd_page_count(rxr);
-+		desc_size *= fbnic_bd_page_count(rxr);
- 		break;
- 	case FBNIC_QUEUE_RCQ_HEAD:
- 		rxq_size = fbn->rcq_size;
-@@ -2592,7 +2617,7 @@ static void fbnic_enable_bdq(struct fbnic_ring *hpq, struct fbnic_ring *ppq)
- 	hpq->tail = 0;
- 	hpq->head = 0;
- 
--	log_size = fls(hpq->size_mask) + ilog2(FBNIC_BD_FRAG_COUNT);
-+	log_size = fls(hpq->size_mask) + hpq->bd_page_shift;
- 
- 	/* Store descriptor ring address and size */
- 	fbnic_ring_wr32(hpq, FBNIC_QUEUE_BDQ_HPQ_BAL, lower_32_bits(hpq->dma));
-@@ -2604,7 +2629,7 @@ static void fbnic_enable_bdq(struct fbnic_ring *hpq, struct fbnic_ring *ppq)
- 	if (!ppq->size_mask)
- 		goto write_ctl;
- 
--	log_size = fls(ppq->size_mask) + ilog2(FBNIC_BD_FRAG_COUNT);
-+	log_size = fls(ppq->size_mask) + ppq->bd_page_shift;
- 
- 	/* Add enabling of PPQ to BDQ control */
- 	bdq_ctl |= FBNIC_QUEUE_BDQ_CTL_PPQ_ENABLE;
-@@ -2908,8 +2933,10 @@ static int fbnic_queue_mem_alloc(struct net_device *dev,
- 
- 	fbnic_ring_init(&qt->sub0, real->sub0.doorbell, real->sub0.q_idx,
- 			real->sub0.flags);
-+	qt->sub0.bd_page_shift = real->sub0.bd_page_shift;
- 	fbnic_ring_init(&qt->sub1, real->sub1.doorbell, real->sub1.q_idx,
- 			real->sub1.flags);
-+	qt->sub1.bd_page_shift = real->sub1.bd_page_shift;
- 	fbnic_ring_init(&qt->cmpl, real->cmpl.doorbell, real->cmpl.q_idx,
- 			real->cmpl.flags);
- 
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
-index 66c287a5404a..4e1852f94696 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
-@@ -131,6 +131,7 @@ struct fbnic_ring {
- 	u16 size_mask;			/* Size of ring in descriptors - 1 */
- 	u8 q_idx;			/* Logical netdev ring index */
- 	u8 flags;			/* Ring flags (FBNIC_RING_F_*) */
-+	u8 bd_page_shift;		/* BDQ: ilog2(page_size / 4096) */
- 
- 	u32 head, tail;			/* Head/Tail of ring */
- 
-@@ -177,6 +178,11 @@ struct fbnic_napi_vector {
- 
- extern const struct netdev_queue_mgmt_ops fbnic_queue_mgmt_ops;
- 
-+static inline u16 fbnic_bd_page_count(const struct fbnic_ring *bdq)
-+{
-+	return 1U << bdq->bd_page_shift;
-+}
-+
- netdev_tx_t fbnic_xmit_frame(struct sk_buff *skb, struct net_device *dev);
- netdev_features_t
- fbnic_features_check(struct sk_buff *skb, struct net_device *dev,
+ const struct ethnl_request_ops ethnl_rings_request_ops = {
 -- 
 2.55.0
 
