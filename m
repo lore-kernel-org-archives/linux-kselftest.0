@@ -1,106 +1,138 @@
-Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+Received: from mail-oo2-f39.google.com (mail-oo2-f39.google.com [74.125.231.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C3C30EF6C
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 20:08:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C953B47FF
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 20:14:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790366883; cv=none; b=j2bw4bTL6ouMU/l/5WGtL56Qlf3CwXM7Z7HveRZQ/cIM2IaSLa1k+Dnk/1gy5zbjmOQJRbwySqhpkUflokB5cfUfRpqRfVMhnWchIoV2aPXPIM7f0ZKCZ4vcjuQCCnpbTdocyyp4oBPlAH73B++++6ndDt5NSeNKKQbhF+FFfY4=
+	t=1790367290; cv=none; b=uPCSTeJPy48lQSMo5EDyQKKoxlN42kqqmVfrdqVxZwGJGkaRfMh/pyDTQUtsVVfifLME+uRkNUlgCZWGlKE9HUcd1we/LF/Uz3J7+YKN4Wzw1pGlVjJgOa19Ny4xmmE219Lb20+tPHBmD7sArkuSQSsKt1+IdIicq99sz0+vZNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790366883; c=relaxed/simple;
-	bh=MkCbV2C/+Z4zSk4k/R/6Wh6vMD0Jf/jg3bhgXczLsLc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qnfYwP/kmjYZusOleTnHOUasOgBYqFLCi5q+h7k0zLOsvOrc0VUnE2fUPCqpsu6oFfwaJfpFHWtNM9lsU+vGczzusyRNa83qPz60TXV9loeXxn/TrAtvKzbvmpCsuKt1CUbWXnSobQY0ZBRZp7F25PBn89f4E7flNMXJZOjP7z0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gnjCrU1g; arc=none smtp.client-ip=74.125.225.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1790367290; c=relaxed/simple;
+	bh=2L3z2iwbktjeunSMNJJ/cSbzm8JcdNu8ItVkBCkBt84=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dbltM+o5nvJ3VuDBLgNx7bdZKLGE2e4lP2g8vpUcWSMro/rOCLhgzsTF3UjXFrJhXgHFBZRSjCWoUjBQ0NPB/xE1NyBpT7F35tOiJVJ7d/n7LKhr4DPPujzLhYHUwls/SSMbMbNXXXuusZbE0w4hNAwvDfrSGdtA60x9ii9h5G0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SeX4iK0w; arc=none smtp.client-ip=74.125.231.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gnjCrU1g"
-Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e6b885ef8so7656645e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 13:08:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SeX4iK0w"
+Received: by mail-oo2-f39.google.com with SMTP id 46e09a7af769-8144632e066so691779a34.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 13:14:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1790366879; x=1790971679; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mYKp+bFSterpr+lY2+5QJKDt27P8MnJ6X1EK8+K6uLs=;
-        b=gnjCrU1gtBzNm1n5C9GbEiQHuPxlS0eMEHUi52vM1m+1wLK5p1LvWJ4O/QUFKqITXd
-         Qa6Qv9KNc7SJ2GC3E+DdYBiZ2LpyU6B/TMbgkHc2cjTgU+gTFvrmHawEtb/GaGElYP5k
-         8zRibF0HaDBIXo7bvJHbg6b1ZEQ/37Lt1eWQ0=
+        d=gmail.com; s=20251104; t=1790367287; x=1790972087; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=3Z39CUYk8D/UpSMUlekifRPB45Knok0o/5OmW1Dizxc=;
+        b=SeX4iK0w+w3UZjAqUNVGOBKdyYp4TU6m9cP0YO//xiIbF1I93J2aTFnApOZMGE03J3
+         t4XAxJ5j8hLeUHMxH9ld0vMkigjdnScfXLFkm4PrQMLvax7etFHZRSvUlZafnAVQ5ksW
+         WO8vbAG/oRV6PxispuyDDGOBDfiC/7qA9llvsc85Lgdb4F9dm4/ZCDhCx5wYao/3uRNi
+         2dbk9rw+lOEI6ErKHZFvZNOW3a0eAyHCs1W14JG5+HCT8cj/9k8tspbYA0ItwukSWm/E
+         yY8bLO93S4QfjK/JBJw6OxLPWG1PH4XNK05HCe+hLErgzRU8i/L9/2A9mP6qUxMCB7Do
+         k+Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790366879; x=1790971679;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1790367287; x=1790972087;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=mYKp+bFSterpr+lY2+5QJKDt27P8MnJ6X1EK8+K6uLs=;
-        b=EkD+RnfQYVPfxiTNJSwvvr7g7eeg0lXxkCbyVig9qvwKQtG0rI0QWwCBu0DJGr7n2k
-         oqNClCDxhKViAJ4xL3pkCq8u4n6EaLxxhT04A5qtbN1rk2aP6lVTAZ6TSSOqbmY1n8Q4
-         p221tYRqc39YjhCapXapA629oKzOJUdMuPsI1Rz4Mpq4EmT9ScYZ5+87iKQo2vjFfnle
-         Fj9QbgGC0z8jspMamv+QIT/18BJpX3rtaFOqeJWgX2S1CnpoHJdJlRBnLBTOm4UgPJpp
-         MTqLdyfXxoVrtbbjcUez9K0+TV9smsAlLcB0wcdX5KQ+xdNau50ZThbnjpNvAinmKW1u
-         ZkoA==
-X-Forwarded-Encrypted: i=1; AKwUvBz7oP/SRdg7Y6KWBmdgJa8KYFwd86T3HPQ+UGA8EQzA9M9OulW12jLjROtz0QGVaeo54HW66hzRPt9QTg1drDA=@vger.kernel.org
-X-Gm-Message-State: AFuF++kzfgCMe1lb8UUOvFBXGBPN7rVB2Xk3miHxn0Hmcm3umyaihhe+
-	bQ+nyfNwePCGJp2fypW+ybVZabPLFPx4LrdTklKLNMdzx0tZxSH2IYFy8DOuDT6A5+M=
-X-Gm-Gg: AYBFou1ZFdN/6mp6iNCGzcC7SmsjsHSg2IRq8FK1Cn3W2OtLY23ZYZpMmQnzwG5qOPe
-	a18Ted5t8AfeUVrQuTWDbJYfjYPCgzgFGbhuu/pEvgVJ3ngxXhb4yv8gqHybWeBvvLuOl/wf9pL
-	2Mvp/GhLFIWY/mfI8uRW7A09LgNzv7GdoZRAyMZbMzO61czoTnC6KmoE3cumN99ueVQL0FsvLCM
-	IIEw86dIoV0nBXl/2s8v6tEokXwBLOHcLKlgvoYNN97Cs1fPBDezBs2wn3ov7p0hli1DcvHTJer
-	wr2i/HLb0617s59M2JoUMFbz9bDKKbtNcXLMRY6ABFxlzXx4m2+6oErz31RnzYUhftYAqPK2V35
-	kkAsEbdYoozKxYo8XZ8LgY8TimXPXYAQs0e34VvqXbcGReEiKoBh6AXdsoBGueHq0i+ALRkZO73
-	fevVGh3nnaJBrfqZkgHLK0uObLODib7wi+//PW03ZPqYwVpqH4CIK/Bs66//ZMyYkIssGzrKQkQ
-	RVTW+R8jD2PYV3eD+YlfAPSy98OwVBggzxjgEXqtczlxMV/d0KmPLU/5VM6Dg==
-X-Received: by 2002:a05:600d:8653:10b0:49f:e701:51c8 with SMTP id 5b1f17b1804b1-49fe70151ebmr89606855e9.9.1790366879427;
-        Fri, 25 Sep 2026 13:07:59 -0700 (PDT)
-Received: from [10.188.175.252] (cust-west-par-46-193-46-178.cust.wifirst.net. [46.193.46.178])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5cd4271sm251705165e9.5.2026.09.25.13.07.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Sep 2026 13:07:58 -0700 (PDT)
-Message-ID: <78508c04-c9f9-403e-b13f-220a3d74e956@linuxfoundation.org>
-Date: Fri, 25 Sep 2026 14:07:57 -0600
+        bh=3Z39CUYk8D/UpSMUlekifRPB45Knok0o/5OmW1Dizxc=;
+        b=isBOVEITeoORr7c7FWdKXulFc4jziVRtBXqeFVw4dCEhcaa/Dskf6SuARTp4hOv77i
+         ywHU+PKelt+7Zt3SsAW9wV9GNDctv2xHKp2BAxpNKs1Y1GF8erfFIxa6DIqqriIs9q0K
+         wL4JRtiQxdsz85M+pCQEkR9+nDihxH8BxyOeTZMXDgZ/1/VwCOVZd9WzeaoPp7XgPb5x
+         QJRNnATyy+bqj/OkJes3GSx67vW+/sdLMtywRGgQTm8dtxGRQUQYFTth0RzkiiMGvn+s
+         ge4as82mm9sUf2d1KPvTYxAoqPJrrs6YIXWccnaAdbI/tc/5QyzwrnhpLN9BfgVTOCHQ
+         1iiA==
+X-Forwarded-Encrypted: i=1; AKwUvBz9RsNTnvbISbwAGG/sPUZNR2xyRiK1MHzEsH70ga65ac/cpoBStPS6DRbEqxwiQJuHf9d7TNYEIFkLTAgyijc=@vger.kernel.org
+X-Gm-Message-State: AFuF++kIYj9k2OhWcyVfxPa1ODwMBY7WZiC5jRJ2IpFRPFEAUEGwWzm0
+	AJkzPdT6p6YzMhPKfldV2B11b429E9E3Oe9cH2e0sSotkIPkEj0hfZD9
+X-Gm-Gg: AYBFou1c919xeOuR4Mf8JOp1hyR+2rhFqfotjdTaI2l18Ysst4+/jOD2gqfPad0V/mQ
+	/STy94LGdLugllANW0OkdA8ErGSPzkycOQP8S0E2L0wmBQ6Sn3Ee2L0ZfR1HK7KGYfv2kH/rlkU
+	M9VoFduNeLceH21AAR9/BOIhHHVilBC7o0kTEyQahI7fXD1FwMVTE7IoY2gcWOPjxyoTzjOlzhN
+	kpKUKC8hQdfHGGCIIGdPRehnH93BQMbJLXUF/sO8J129DwUGXLl3ARoqWJlfAcXnQmK00Iu29m1
+	ry55EqoYRu1sxmlz9T5orKGy8pMFJFWo4i1AKCdzSCHrKfAQ+XBX4Zfgf9xCokiFy2pnvMCLUak
+	t3a8KelyExA1EFChtBURsztD8qmlT9raai+xfpU/7NnmJpyFll+0JZ/KEi0RtbaTRbV73M7ZVcb
+	AKw0+Dg6GlGnOBTM4A3uNZNWZZTterVT3gIqU7VypR/UFiYHOPpgAGkwelgJ8GTxDLiqfjtrQ8C
+	gi7qCx8RUDlgDQgDfIcI1gYcJIjo1HF2BCIg2/A
+X-Received: by 2002:a05:6820:4b01:b0:6bd:e592:2c66 with SMTP id 006d021491bc7-6d440df0d83mr6934697eaf.46.1790367286940;
+        Fri, 25 Sep 2026 13:14:46 -0700 (PDT)
+Received: from archlinux.lan ([136.34.156.120])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-49335c784a1sm2741335fac.10.2026.09.25.13.14.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2026 13:14:42 -0700 (PDT)
+From: Danish Khateeb <danishkhateeb03@gmail.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jan Kara <jack@suse.cz>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Danish Khateeb <danishkhateeb03@gmail.com>
+Subject: [PATCH] selftests/filesystems: own the idmapped_tmpfile directory by a mapped id
+Date: Fri, 25 Sep 2026 15:14:41 -0500
+Message-ID: <20260925201441.105313-1-danishkhateeb03@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: resctrl selftest patches ready for kselftest "next"
-To: Reinette Chatre <reinette.chatre@intel.com>
-Cc: Shuah Khan <shuah@kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <92c35a79-1c8c-4543-8fa0-0ab78b05faae@intel.com>
- <CAKRRn-d+72is6hNnyTvxUWg0mRWm_BDBcqHZY0+ahdzoNJV=bA@mail.gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CAKRRn-d+72is6hNnyTvxUWg0mRWm_BDBcqHZY0+ahdzoNJV=bA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 9/25/26 01:56, Shuah Khan wrote:
-> 
-> Hi Reinette,
-> 
-> On Thu, Sep 24, 2026, 11:54 PM Reinette Chatre <reinette.chatre@intel.com <mailto:reinette.chatre@intel.com>> wrote:
-> 
->     Hi Shuah,
-> 
->     There are a couple of resctrl selftest patches that are ready for inclusion:
-> 
->     "selftests/resctrl: Skip L3_CAT when no exclusive cache portion exists"
->     https://lore.kernel.org/lkml/20260821003908.12977-1-icheng@nvidia.com/ <https://lore.kernel.org/lkml/20260821003908.12977-1-icheng@nvidia.com/>
+The idmapped_tmpfile fixture creates the test directory as root and makes
+it world-writable, but the test mount only maps on-disk ids
+[10000, 20000), so the directory's owner has no mapping in it.
+inode_permission() refuses MAY_WRITE on such an inode with -EACCES
+(HAS_UNMAPPED_ID()), whatever its mode. So:
 
-Applied this to kselftest next branch.
+- mapped_caller_creates_and_links has failed since it was added:
 
-> 
->     "selftests/resctrl: Add dynamic linked list management for IMC counters"
->     https://lore.kernel.org/lkml/20260801092429.533956-1-wuyifan50@huawei.com/ <https://lore.kernel.org/lkml/20260801092429.533956-1-wuyifan50@huawei.com/>
+    idmapped_tmpfile.c:145:mapped_caller_creates_and_links:Expected fd (-1) >= 0 (0)
 
-This didn't apply. I am guessing picking this patch depends on others in this
-series?
+- unmapped_caller_is_refused doesn't test what it describes. Without the
+  fsuidgid_has_mapping() check in vfs_tmpfile(), the unmapped caller is
+  still refused, with -EACCES from inode_permission(), instead of getting
+  a tmpfile owned by (uid_t)-1. The test only fails on the errno.
 
-thanks,
--- Shuah
+Give the directory a mapped owner, so that both callers pass the
+permission check and only the idmapping decides.
+
+Fixes: d943e68edc5c ("selftests/filesystems: test O_TMPFILE creation on idmapped mounts")
+Assisted-by: LLM
+Signed-off-by: Danish Khateeb <danishkhateeb03@gmail.com>
+---
+
+Notes:
+    Tested in QEMU x86_64 (KASAN/lockdep debug config) on next-20260925,
+    whose copy of the test is identical to mainline (v7.3-rc4-446):
+    
+    - as is: unmapped_caller_is_refused passes,
+      mapped_caller_creates_and_links fails (openat() -> EACCES)
+    - with this patch: both pass
+    - with 539dce114465 ("fs: refuse O_TMPFILE creation with an unmapped
+      fsuid or fsgid") reverted: the original test fails only on the errno
+      (EACCES instead of EOVERFLOW), the patched one fails because the
+      unmapped caller gets a tmpfile
+
+ tools/testing/selftests/filesystems/idmapped_tmpfile.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/testing/selftests/filesystems/idmapped_tmpfile.c b/tools/testing/selftests/filesystems/idmapped_tmpfile.c
+index bc411ab8281e..5968ac1cd04e 100644
+--- a/tools/testing/selftests/filesystems/idmapped_tmpfile.c
++++ b/tools/testing/selftests/filesystems/idmapped_tmpfile.c
+@@ -91,6 +91,11 @@ FIXTURE_SETUP(idmapped_tmpfile)
+ 	ASSERT_EQ(mkdir(self->dir, 0777), 0);
+ 	/* World-writable so an unmapped caller still passes permission(). */
+ 	ASSERT_EQ(chmod(self->dir, 0777), 0);
++	/*
++	 * Owned by a mapped id, as inode_permission() refuses writes to an
++	 * inode whose owner has no mapping in the mount.
++	 */
++	ASSERT_EQ(chown(self->dir, MAP_HOST, MAP_HOST), 0);
+ }
+ 
+ FIXTURE_TEARDOWN(idmapped_tmpfile)
+
+base-commit: aa98230e410f0ed212b6788c46b1e4d49e0ff7ca
+-- 
+2.55.0
+
