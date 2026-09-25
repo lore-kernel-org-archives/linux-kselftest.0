@@ -1,146 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2349309EE9;
-	Fri, 25 Sep 2026 11:26:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 070AA45517B;
+	Fri, 25 Sep 2026 11:41:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790335602; cv=none; b=j830QPiX6CiLZe7yELi6DC+hQf0EHreJPSKhshwwu6na1mLJFWAhZInoOxHAPFmcDTQbuDbmsnQqUicxpev9oD8Kb22xitlrJ6gPecB5wHeJfBOEKBk3GPkuNsfZzNjGeuyt3ZjdoXkuRVvb/5f4Fs0rdPeH8xa4P4KT29eimPE=
+	t=1790336487; cv=none; b=sdlw83bgqzPrD/BfhCAD6yck9mMCxAj9xU7ryzHUjm1uFU5s29JCw8fsljG84OsXha0L/wJR2MnEfp98KHC/BrOYGeTdo3JYQlDYKP937dcLMOOqQUxICYDbeTYOx1q0NDB2gmtvASsxRgKY8zfZp2IlyTpxa1/jpa6DUYd6dWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790335602; c=relaxed/simple;
-	bh=D7Yvy4hNrY/p1Hhz1gzNBL+rTfVomawQy02wANoCHM8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hCzcRCh8WFqA1vjVpKFeHcN7X50bwBnUUW7VZViZIGlVj/F+puee4vO4sKLj6tg3VKsgii6pMg+LrwYdQeRwQnyKnnc7ZdQXF+wX/9WYk4/Gc8ZZ3UKtDS9Ml2pKULJibYJPFB/0/ayNPaJn6/TGn5xHcBLdvg/FoHX7/EoNl+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X1H/qz8J; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790336487; c=relaxed/simple;
+	bh=XiiPB+FbCJdM6oIqRAgsmD78MaPpFeEiT0pGn495v+U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GHsfEkNqc1Dnv6jKuQ5FQ0aIxBcpQAPK+VokLZKegqISlB/Gi1ltvrK7tSaNwn1XRa6D3XEWGxQMCL0IMqTjLqYVZbtpKTknnVNzFC0le0cinEtpS9LOK/Xb+moZRUqg6r9zS09kIExBlsh0MOpCK4SCQABnRBqm1KW1gPqg6hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EZ4qUNL6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X1H/qz8J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B271F000FF;
-	Fri, 25 Sep 2026 11:26:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EZ4qUNL6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 146CA1F000FF;
+	Fri, 25 Sep 2026 11:41:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790335600;
-	bh=hcMpStTWjEU8CeTeasF3QtRDkd+276WFSNQ1pxkbh/A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=X1H/qz8JlUwVh29IWCGEsrl57BgyoX6S4Ai5bARkRgwmjRk8xZw2UythD5y8pE7YJ
-	 QZHFr2PwS7NMdMsx0CXP2AtYAsjF/iBJwgjWnDErKZpIJXl8pm1LxawlwdHoZK2Ya/
-	 axusHLwH6xM4rJWx0NbOp6+MT6qTWgqTiGc7n2h6hhivXsrS7CGHYxqoR3D7fmLgou
-	 luoU0VURgHv3/y+fzWi3OQ7bEowsoSKabvQmikc8ivQsseYTbfSW0XFx0GvUNuL/Q7
-	 aXNap0L+cJzq+o9Ci/ulzg/leTnfI741K/jXf2vQVJap6+Dc35CdR7rfbsf1g80lFd
-	 Eqm1ha7Eb6SCA==
-Message-ID: <6ed88738-4e3b-407c-90c2-bf7717f3e653@kernel.org>
-Date: Fri, 25 Sep 2026 12:26:38 +0100
+	s=k20260515; t=1790336485;
+	bh=MxxmDYqVmsOWYXTK0qlwwWMA86kcPpzqofwslHtxAzo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=EZ4qUNL6FavEGgiD2xq0fX5KvMrG4f8RhjOsGojcxvXB1e817DV9eNyejN9ziTiMo
+	 AyAYUST23qRY6f8lU9YmTbpTCuG2gLO2kSc7Ukyc1YwuiyZjIJaeJztgazaHvLS9Fd
+	 houTACD4ysn3WSPPZnT+hW7v+5MTWqIlYO+6tM1kzqyoSjGSojSD7jNB7RsW9kaSSS
+	 XqUDQvfVqJrB0LEg2L1U0MFlDgrTl7lRslf1QIsWNVfYv14gXO38vU+j/sPQVIqzPU
+	 AYgnCs1M/OTgC02/UERYAF9AfvpIVClqUHflRZtwd/qUjK4rr40FLUNpXHvrLiPfci
+	 dx60ccYH8FENw==
+Date: Fri, 25 Sep 2026 13:41:03 +0200
+From: Joel Granados <joel.granados@kernel.org>
+To: Zhan Xusheng <zhanxusheng1024@gmail.com>
+Cc: Zhan Xusheng <zhanxusheng@xiaomi.com>, Kees Cook <kees@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Bradley Morgan <brads@mainlining.org>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 0/2] sysctl: Cover the jiffies converters in the selftests
+Message-ID: <47yicm235r42m7dq2xms4mpbj3duvv45rfvgu7od3vc5juw7tr@gefmt77hty6u>
+References: <20260923144940.3712965-1-zhanxusheng@xiaomi.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v7 1/2] bpftool: Add recursive map dumping
-To: Tianyi Chen <hi@tychen.cc>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- linux-kselftest@vger.kernel.org
-References: <20260924161434.95116-1-hi@tychen.cc>
- <20260924161434.95116-2-hi@tychen.cc>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260924161434.95116-2-hi@tychen.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-2026-09-25 01:14 UTC+0900 ~ Tianyi Chen <hi@tychen.cc>
-> Dumping a map-of-maps currently shows inner map IDs without their
-> contents. Add a recursive keyword to map dump to include referenced
-> inner maps, leaving the default output unchanged. Show selected maps
-> followed by distinct inner maps, preserving plain and BTF formatting
-> and using an array of map objects for JSON output.
-> 
-> Holding every discovered inner-map FD open would make descriptor use
-> grow with the number of maps and could exhaust RLIMIT_NOFILE. Keep the
-> selected map FDs open, queue distinct inner map IDs, and open, dump and
-> close each queued map in turn. This needs only one additional map FD.
-> The tradeoff is deferred ID resolution: concurrently removed inner
-> maps can disappear before they are opened, so the dump is not atomic.
-> 
-> Report failure when an inner map cannot be opened, retain per-entry
-> lookup errors, and close JSON containers before returning.
-> 
-> Link: https://github.com/libbpf/bpftool/issues/58
-> Assisted-by: LLM
-> Signed-off-by: Tianyi Chen <hi@tychen.cc>
-> ---
-
-> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> index 20d59eab09a1..ef47de7da200 100644
-> --- a/tools/bpf/bpftool/map.c
-> +++ b/tools/bpf/bpftool/map.c
-
-> @@ -907,21 +960,37 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
->  	free(value);
->  	free(cpu_ids);
->  	free_map_kv_btf(btf);
-> +	if (plain_btf_wtr)
-> +		jsonw_destroy(&plain_btf_wtr);
->  
->  	return err;
->  }
->  
->  static int do_dump(int argc, char **argv)
->  {
-> +	LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts,
-> +		    .open_flags = BPF_F_RDONLY,
-> +	);
->  	json_writer_t *wtr = NULL, *btf_wtr = NULL;
->  	struct bpf_map_info info = {};
-> +	struct map_dump_ctx ctx = {};
-> +	bool recursive_dump = false;
->  	int nb_fds, i = 0;
->  	__u32 len = sizeof(info);
->  	int *fds = NULL;
->  	int err = -1;
-> +	size_t j;
->  
-> -	if (argc != 2)
-> +	if (argc != 2 && argc != 3)
->  		usage();
-> +	if (argc == 3) {
-> +		if (!*argv[2] || !is_prefix(argv[2], "recursive")) {
-> +			p_err("expected 'recursive', got: '%s'", argv[2]);
-> +			return -1;
-> +		}
-> +		recursive_dump = true;
-> +		argc--;
-> +	}
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="rwkr3fnexotac6mi"
+Content-Disposition: inline
+In-Reply-To: <20260923144940.3712965-1-zhanxusheng@xiaomi.com>
 
 
-If we put the keyword first, we'll get a confusing message:
+--rwkr3fnexotac6mi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    # bpftool map dump recursive id 1337
-    Error: expected 'recursive', got: '1337'
+On Wed, Sep 23, 2026 at 10:49:35PM +0800, Zhan Xusheng wrote:
+> Joel asked for a test for the negative read path fixed by
+>=20
+> 	https://lore.kernel.org/r/20260922031229.2300283-2-zhanxusheng@xiaomi.com
+>=20
+> These apply on sysctl-next and depend on that fix; without it 2/2 fails,
+> which is the point.
+>=20
+> While writing the test I noticed that fix's changelog is incomplete: it
+> names proc_dointvec_jiffies() and proc_dointvec_ms_jiffies(), but
+> proc_dointvec_userhz_jiffies() goes through the same
+> proc_int_k2u_conv_kop() and is affected too.  Measured on
+> net/ipv4/neigh/default/retrans_time at CONFIG_HZ=3D250, unpatched:
+>=20
+>   # echo -1 > /proc/sys/net/ipv4/neigh/default/retrans_time
+>   # cat /proc/sys/net/ipv4/neigh/default/retrans_time
+>   -18446742229035144246
+>=20
+> I will correct that in the respin.
+This means that you will send the V2 of the fix (not the test). Right?
 
-Can we align it with what most other subcommands in bpftool do, please?
+>=20
+> Tested in qemu at CONFIG_HZ=3D250 with CONFIG_TEST_SYSCTL=3Dy, and built =
+as
+> =3Dm.  2/2 reports "not ok" without the fix and "ok" with it, and the
+> pass/fail counts of the other tests are unchanged either way.
+>=20
+> Zhan Xusheng (2):
+>   sysctl: Add jiffies converter entries to the test module
+>   selftests: sysctl: Check the sign of a negative jiffies read
 
-	if (!REQ_ARGS(2))
-		return -1;
+I just tested this in my env. Works like a charm. I even rebased the fix
+on top of these tests and saw that everything was fixed.
 
-	fds = malloc(sizeof(int));
-	if (!fds) {
-		p_err("mem alloc failed");
-		return -1;
-	}
-	nb_fds = map_parse_fds(&argc, &argv, &fds, BPF_F_RDONLY);
-	if (nb_fds < 1)
-		goto exit_free;
+Thx!!!!
 
-	while (argc > 0) {
-		if (is_prefix(*argv, "recursive")) {
-			NEXT_ARG();
-			recursive_dump = true;
-		} else {
-			p_err("expected 'recursive', got: '%s'", *argv);
-			goto exit_free;
-		}
-	}
+The testing code will get added to sysctl-next, but the fixes should go
+into the current release. Will wait for your V2 to forward them down.
 
-The rest looks good, thank you.
+Best
 
-Quentin
+--rwkr3fnexotac6mi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmq2XbkACgkQupfNUreW
+QU8fHwv/aNtuGJPW2fKgXw1uyQa+ZDSeoAyMXK0L7cKqmSdboBdvaVD31bzmD2ix
+l7p0CN2j1vFi9uSbaOU+NgNe5vTQmsBADhCtyO3FAM46SexyqznOHn7VN+Ixv0Lr
+rT3KsSn2ug/W2UjsNIn4yaGBTgSmPSjvlV3HeMP39lMzuTasEFwH/ngDvFnqjFUj
+5cwBBYyhBFeBRvA6xtmCNTamtuyBE/TBRQszGEY+sQAoKVNiCbX9g35HjmsFNMEh
+64DvzXMiRr/smEKjanOELXsRdzdIX5MhWc6RPpE9LThOw107+74y3eDTKVYWjO2Y
+cCZrrfK9RWly/WPpnXH6LtL+y8zXJMw1f5kWRxRcMw4feHxtHlrfbTkeSyvTVd4G
+lNf32YaqWiA+EYny/n7+vUUThW8j2IJkSNWqqCkotBCWSAHULh9iOkCw7aCf9yiK
+h+lENwH2DD2YiSAg2AsGmt3WybWDOjr8g8erZwYflnW+qDmYrjtUxsDbpeh+apa3
+HNzo6Yg+
+=VUV6
+-----END PGP SIGNATURE-----
+
+--rwkr3fnexotac6mi--
