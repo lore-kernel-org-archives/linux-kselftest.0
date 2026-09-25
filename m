@@ -1,125 +1,169 @@
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30844D6C28;
-	Fri, 25 Sep 2026 15:42:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7682D4C226C;
+	Fri, 25 Sep 2026 15:55:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790350932; cv=none; b=FcUK/QyaQo/pufaPvPSNZQqS6t86bj5gPIGGWSHFEwwqX3yniqgEd7E/90Z8EwyGKAoR8croc0LMYlc3I0dkbnMbghgzPmMgRih6/mr8S5OiNuly99Q9we5V0qTW3fBPA2w5cbBSCdTXy/I3qYTbm8sylCjsdDqB8vWBJqixA6s=
+	t=1790351757; cv=none; b=LOMOuaSxnufO+QXmE4Da3hdR2/XG0ea0pORg50/nxvsIW3sHGT6To+q2wdG8JZY6Lx4SLdjlIhewX4xJb0RpBraScw6PPHEvchG+1l49LJPAmg6huJdwuSNeXa4SHhSoBt84t3SlYO5HzdkxwoSAJ133spdA14GlyvG0g5uJG/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790350932; c=relaxed/simple;
-	bh=jlI4uFZ1+8me2NuVmZdJ+KaPtqDI/t29a76yy/AHuNA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qBG0DY2NHsDlSIk1GoiqqmNh3HY/Ct2Ts6W7VefzKo/Q4stf/IJuvIVamiCVWpx5wNo5UE1RPwkq+ffNG9YsCRDJ5wkmLDH2mFESGQCZ1LTmMNIzjh7WQHU6WsTg9v/HbbQENMw/XGTMPc4dXDMOirA19aQTx2ecdmIAlblhi3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=l3fVFBu/; arc=none smtp.client-ip=130.117.225.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	s=arc-20240116; t=1790351757; c=relaxed/simple;
+	bh=SfDTbJJw7dc2WROcCFWMWBfZVQrV8KomkidIc8Bsjqg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UNrVf+EBWJ4ruYsyD2TDwiD9gdEX2dMrgWbIT8tKKn/8jFKL6I4b9zbUNd9UBtDpz5TPR2c/6B8YOQXP0CwDoOptY5LpAS09E7hrHUFTxN9KQV0KB3oJNcEfuRCpKfFBjImn8WvIeecxdora4cpyzkXFkZ9HlyXX/8Yc/f/gonA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=hQQhUnme; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="l3fVFBu/"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=W4ii+hKohbIxnshLLq0LWJvtdAVeBF2GqIkooEFXTXc=; b=l3fVFBu/YgMK
-	zbD9ioig/bqttHLts3yA1Y+yl7rXCw1dHEoUM4jFyHwHjRouO6dFaNLyhGKUZFaEfHX9n8tB9USfD
-	Fl/gTwf1u/LzBiNhJExaxCOxERFw+rqIvH+wH/at8WQcfSjP4SX88bKXQoTJyYQ6ZWZ4Rc/OF49x6
-	yWDBase/+cHE7ltoF2JHaPyB7P7I4w5hLBPVUC5g3rCeGF0LUm3VC0zSGXzyB6nR6zufY93hiKVvE
-	m2JyXRE7BaiQ9inYT78VS+JL8dsDlLQlShlfNUJJEhi0giNmhpOhpNAE1UoDoUGzrEOtoBVqCalFJ
-	3eZoccYKJnHXW8/bQl1Y8g==;
-Received: from ch-vpn.virtuozzo.com ([130.117.225.6] helo=LekKit-T14)
-	by relay.virtuozzo.com with esmtp (Exim 4.96)
-	(envelope-from <eva.kurchatova@virtuozzo.com>)
-	id 1xA80d-00AsiD-1P;
-	Fri, 25 Sep 2026 17:41:47 +0200
-From: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Willem de Bruijn <willemb@google.com>
-Cc: linux-kernel@vger.kernel.org,
-	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/1] selftests: bpf: size the map in test_lru_sanity3 to whole refills
-Date: Fri, 25 Sep 2026 18:38:13 +0300
-Message-ID: <20260925154029.3673513-2-eva.kurchatova@virtuozzo.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260925154029.3673513-1-eva.kurchatova@virtuozzo.com>
-References: <20260925154029.3673513-1-eva.kurchatova@virtuozzo.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="hQQhUnme"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=LHhOcHajl/RCz3aKIy6XLbbprq7ug0zwcg6Z8E4tJtc=; b=hQQhUnmeVDDfIgpemwDWblcib9
+	93ltTzqmepbA7EphiU3aghEH6mCR+MEdoaaknU4j/ZRKggo4pUklzc1PJeGxnIlWj5PI8LJDgI+BD
+	mBKtJxCZ/lC3h570YWUroNSv78qFJtM9xgrmOSd2jo0Q18bnrBUFsZeJewa8CFFkjg881CN9rIE88
+	r+Pt5tAvxN21zdeQd65IOnHETM6GA48yAco1il9Gg4FDpTrtyxb9u1bewJ9lgE1SoiecvL2YIVyU7
+	JcYkF36vz3zPJE15XNiShv09KoYC+XqTWedcg32/GmyjifKaqkV8kpwp+UdamvmKTnnkfKbF6CXeU
+	oo6el0KA==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1xA8H3-005Pkx-25;
+	Fri, 25 Sep 2026 15:55:46 +0000
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next 0/6] ipv4,ipv6: convert the getsockopt switches to
+ sockopt_t
+Date: Fri, 25 Sep 2026 08:55:15 -0700
+Message-Id: <20260925-sockopt_expand_out_v2-v1-0-c3ef2e3bb5c0@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGSZtmoC/x3M4QrCIBgF0Ff5uL8nLJEiXyVCnLuVBCrqhjD27
+ kHnAc6BxhrZYOVA5R5bzAlWLpMgfHx6U8UVVqBnfZ3v2qiWwzeX7jiKT6vLW3e7VqRZwm3xJtB
+ jEpTKVxz/94HErhJHx/M8f/bxwtlxAAAA
+X-Change-ID: 20260924-sockopt_expand_out_v2-ee4bc7ba4cea
+To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ david.laight.linux@gmail.com, Breno Leitao <leitao@debian.org>, 
+ kernel-team@meta.com
+X-Mailer: b4 0.16-dev-f8e9d
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3739; i=leitao@debian.org;
+ h=from:subject:message-id; bh=SfDTbJJw7dc2WROcCFWMWBfZVQrV8KomkidIc8Bsjqg=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqtpl6fHlb65rB+lD0cDbiUFM4wKhokXaziy94Y
+ ILKTM8/foeJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaraZegAKCRA1o5Of/Hh3
+ bYi9D/9TMhMvycPHY1bo/l+NinvEGVY1oGi7i46LYpniXobAecmH7ZQ7Po8Hf1sKAdrj/4v81HF
+ 4zrX/UmX43ma1od+iWkfFs1kgWiW3bsPehORT2YhSA0CN3tWY1BbcAQx03ZnS1jpVzenlWOqyrV
+ 6KBrSFEYi4exfD23gadiOXhX6LsCcCywbWwCbL0cA6sGCy3YDq5rFlazbhqfrspwe7XgElAmSPY
+ rSYtK4bxOj1af/kY23XZbBpb9Ci/RmHkh+fzXKL6BuZoWbygJWKitF88my9WvjCXt2o4qb5NfWl
+ 1UjZ1V2XzLMUVeBjQb4bX8xE5OxOfEPDr4qzh4Q1TnhY77p+pzvDx4gwyxa1ddxsBTohJlL+CLk
+ OFTSZft0WBEFUAKGV0KkfXeM6KpydRZg9al45iNXqKCFXplvNr+3e3NGMh2r+Ft20KUALDFEg4n
+ XHfLkfFuEocTUmfAwJ5rtbYGlL+6GDfTCnWEX/muOdjf92jI3jnPsj1g9J9rAkPKYCPDo3IHIUv
+ pAJ3uDbIwqfrZrgXjzOB704KzIFBRbP9xQ1PD29W3B+hHxBYwRwKEiMtzLSD6Un3p2eH2yOFlCg
+ hBfvxQgSHx6cJg0CbYU2w+HUCYHvX/SUmn79TdhuOSv2T+FrJ49WFXQqIUev4o00WJkA6QbIpXX
+ ocRmejjQCL0N7GA==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-test_lru_sanity3 fills a map of tgt_free * 2 elements, and then reads
-back all but the last few. Whether that passes depends on the cpu
-count alone; on a machine with six it does not:
+This series continues the migration to sockopt_t, as described in [1].
+do_ip_getsockopt() and do_ipv6_getsockopt() are the last two switches
+still taking a sockptr_t pair, and everything they forward to now takes
+a sockopt_t, so convert them both.
 
-  test_lru_sanity3 (map_type:9 map_flags:0x0): test_lru_map.c:463:
-  test_lru_sanity3: Assertion `!bpf_map_lookup_elem_with_ref_bit(
-  lru_map_fd, key, value)' failed.
+Patch 1 first rejects a negative optlen on ipv6, which do_ip_getsockopt()
+already does. len is an int, but every consumer compares it unsigned, so
+-1 reads as a huge value and each site clamps to its own reply size. The
+conversion cannot carry that.
 
-The kernel hands elements out in refills of lru->target_free, which is
-clamp((size / nr_cpus) / 2, 1, LOCAL_FREE_TARGET), that is 128 / nr_cpus
-rounded down. A refill the global free list cannot satisfy in full
-calls __bpf_lru_list_shrink() for the remainder, and that evicts live
-elements. Filling the map therefore evicts nothing only when computed
-128 / nr_cpus is a power of two. Any other nr_cpus variation fails.
+MCAST_MSFILTER has to move before the switches above it. It is the last
+option with the quirk sockopt_expand_out() was added for [2]: optlen only
+covers the fixed part, and the real reply size comes from the gf_numsrc
+field inside it. Patches 2 and 3 convert it on both families.
 
-batch_size is already __tgt_size(tgt_free), the refill size of a map
-is __map_size(batch_size) elements, so size the map that way and the
-fill consumes whole refills. Start the keys of the last insert at
-map_size + 1, just past the new size.
+Patches 4 and 5 convert the switches themselves. Each wrapper keeps its
+__user prototype and builds the sockopt_t with sockopt_init_user(), so
+the proto layer is untouched. Patch 6 grows the selftest an ip and an
+ipv6 fixture, pinning the returned length and errno.
 
-Above 128 cpus __tgt_size(tgt_free) is 0 and there is no size to build
-on. Skip the test there.
+Link: https://lore.kernel.org/all/20260401-getsockopt-v2-0-611df6771aff@debian.org/ [1]
+Link: https://lore.kernel.org/all/20260914-getsockopt_phase6-v2-0-e48befc9602e@debian.org/ [2]
 
-Fixes: 5e9388f7984a ("selftests/bpf: adapt one more case in test_lru_map to the new target_free")
-Signed-off-by: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
+To: David Ahern <dsahern@kernel.org>
+To: Ido Schimmel <idosch@nvidia.com>
+To: David S. Miller <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Simon Horman <horms@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: John Fastabend <john.fastabend@gmail.com>
+To: Stanislav Fomichev <sdf@fomichev.me>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+To: Stanislav Fomichev <sdf@fomichev.me>
+Cc: david.laight.linux@gmail.com
+
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- tools/testing/selftests/bpf/test_lru_map.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+Breno Leitao (6):
+      ipv6: reject a negative optlen in do_ipv6_getsockopt()
+      ipv6: mcast: convert ip6_mc_msfget() to sockopt_t
+      ipv4: igmp: convert ip_mc_gsfget() to sockopt_t
+      ipv4: convert do_ip_getsockopt() to sockopt_t
+      ipv6: convert do_ipv6_getsockopt() to sockopt_t
+      selftests: net: getsockopt_iter: cover ip and ipv6
 
-diff --git a/tools/testing/selftests/bpf/test_lru_map.c b/tools/testing/selftests/bpf/test_lru_map.c
-index 0921939532c6..84e9a930471a 100644
---- a/tools/testing/selftests/bpf/test_lru_map.c
-+++ b/tools/testing/selftests/bpf/test_lru_map.c
-@@ -441,8 +441,15 @@ static void test_lru_sanity3(int map_type, int map_flags, unsigned int tgt_free)
- 	assert(sched_next_online(0, &next_cpu) != -1);
- 
- 	batch_size = __tgt_size(tgt_free);
-+	if (!batch_size) {
-+		/* More cpus than this tgt_free gives a refill for */
-+		printf("Skip\n");
-+		return;
-+	}
-+
-+	/* A partial refill shrinks the LRU and evicts live elements */
-+	map_size = __map_size(batch_size);
- 
--	map_size = tgt_free * 2;
- 	lru_map_fd = create_map(map_type, map_flags, map_size);
- 	assert(lru_map_fd != -1);
- 
-@@ -466,7 +473,7 @@ static void test_lru_sanity3(int map_type, int map_flags, unsigned int tgt_free)
- 	}
- 
- 	/* Insert new batch_size: replaces the non-referenced elements */
--	key = 2 * tgt_free + 1;
-+	key = 1 + map_size;
- 	end_key = key + batch_size;
- 	for (; key < end_key; key++) {
- 		assert(!bpf_map_update_elem(lru_map_fd, &key, value,
--- 
-2.55.0
+ include/linux/igmp.h                          |   2 +-
+ include/linux/mroute.h                        |   4 +-
+ include/linux/mroute6.h                       |   5 +-
+ include/net/ip.h                              |   3 +-
+ include/net/ipv6.h                            |   4 +-
+ net/core/filter.c                             |  36 ++-
+ net/ipv4/igmp.c                               |  23 +-
+ net/ipv4/ip_sockglue.c                        | 118 +++++-----
+ net/ipv4/ipmr.c                               |  11 +-
+ net/ipv6/ip6mr.c                              |  13 +-
+ net/ipv6/ipv6_sockglue.c                      | 111 +++++-----
+ net/ipv6/mcast.c                              |  19 +-
+ tools/testing/selftests/net/getsockopt_iter.c | 302 ++++++++++++++++++++++++++
+ 13 files changed, 494 insertions(+), 157 deletions(-)
+---
+base-commit: 42a9fb3382fc2573e92f41d203b095d9a372cfc9
+change-id: 20260924-sockopt_expand_out_v2-ee4bc7ba4cea
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
 
