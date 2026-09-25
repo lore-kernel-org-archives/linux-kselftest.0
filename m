@@ -1,281 +1,274 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9DE471CE4;
-	Fri, 25 Sep 2026 17:54:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA6DF4CDA2E
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 18:03:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790358857; cv=none; b=ukezOmobxbRZVYn4Y/vNvhQB/O1qgD3KoABBbR2dk3B/bqvsv1rzFB0+UwR/WQnXjZ883XI/5thDZvpeOL2QHcnlY7e40MxQiuPbnF46YGoF+/hU28GKq2kUiXk3iZqPQI6thmjMuTU4VKC9+42k4nOepa1lYZ5E7/Th8I11fy4=
+	t=1790359421; cv=none; b=C3WuigmtTX7hlvM7rLtvOmTb5tt8NC3RzBBGS0vf0L26BHWu+gs67Vl0vNCsTxIWUTN2tuiDqUU43W9v24CvEXl1ClfcQ2bjVkcu0cbpHnQtsIa0InhpVpUYCr6geyZbCn0aWPpJDaaHhTOduqJZNW8ubKtJtvV40orrkSevaJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790358857; c=relaxed/simple;
-	bh=K2lr70sYs/npcnS7pGdafbEQhcHnsABW3HDSNOQCRTc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UH8E+6finH5n+toY9/291mdcSP42fcWsXySaj2Q1qlyiFv9wpblE/FVNJ/Fos8a6mgn0du+tFacU8SS8qTNriE18JWElO3YrlB7x0fvoLddCUpDqghfjsmsCAiaYCOqOdFDNCQJcguoqu+9/Bw2da/wsY1d7MG028V0FRP48UxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=AtuGXUvD; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	s=arc-20240116; t=1790359421; c=relaxed/simple;
+	bh=9WMHF+OHSITVcxou8oXsCNs7bqvndQmUaAq4mexKulc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j6qSX5GBjtHk4Aht6IfuFW5pWjseLT/oVSk70VGVPHzJ3HkVMAjyY6dk3hLID7z9o7vLlF3W1IBM4JJT6U7Rx7p8srrAS82k333asjD7lm2iEVOKMaKzyXvfTbdBVKKyaFW+mn5OeZzrJEDe2iwQowbJgYmJLl8vFQfMcJaYWYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IYdRQgvf; arc=none smtp.client-ip=74.125.224.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="AtuGXUvD"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Cc:To:Message-Id:Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Subject:Date:From:From:Reply-To;
-	bh=O5Xrl3iWAvFr3TEsG/18XhDEllbT6d/xPRLLsP8onIM=; b=AtuGXUvDIqLyzG+V0Avp1HXl7t
-	XTAsm1H46iRKEqiglJ47S28t01BI7+YKQwW2XrwW1D4bLvAVFn+wFFLOwrNohuorL2kP7yX+Vn5ko
-	c7B0tACBM990YwEC0tLg/ZMVg61Son5Wg+b0XfsYvFzTXh5BZSaLL6nahoZpJhxXcTmzfez6L77aG
-	IpbG4/RgkY/15TD6qd5x5vW3xyZzMJ6/8lEBRjvfAbWY1CeNb1v7GbZGnpfW0JUSOSVXD8XUBybGw
-	IFCr3OvqmjJmu3XfG40AJaAzQ0QhN8qqQNXiBUlF5bez8I39+9ANoTbuSzk3T2pzjbojH4I/sS687
-	bR1kdHxA==;
-Received: from [177.172.123.214] (helo=[192.168.15.100])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1xAA7Y-007GQg-6U; Fri, 25 Sep 2026 19:54:04 +0200
-From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-Date: Fri, 25 Sep 2026 14:53:32 -0300
-Subject: [PATCH v7 09/10] selftests/futex: Expand for get_robust_list2()
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IYdRQgvf"
+Received: by mail-yx2-f12.google.com with SMTP id 00721157ae682-85d46e4cdcdso11027837b3.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 11:03:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790359417; x=1790964217; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=jQMqDoXS5hmMS94pm40dP6RGo8yiKpCUOJDdJtjp2gs=;
+        b=IYdRQgvfuMeOmvrkILgOhtEo6bJ4/rNTSPyK2vFOFc+eWWD20PR/TxxHTIMAgFjqZ5
+         ZswjzX8qhzMQ9dqrYHN7aWth4+pVDOF0inBoV9wO5pXUsNph5NLHgW9MVVONT+PfMmVR
+         qP7AbGgH9kFISF/uqhCeicA9DSDBrkJZBztEZhoambxx5GMT8tPkPSli+AHJFgR5mh/n
+         rWHa7ys7w2biFz0DRcMahrpaJ6uUMCHJaKo68fmXy8nuA6/jBjawu/zESfEo8AznwC8Y
+         x94hCmJKvqhUQawNt8MHWKikOeGO6n9fa61x+LfMC4xoFiQ5G4Zirmy6agu/rJJLjTjA
+         cMOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790359417; x=1790964217;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jQMqDoXS5hmMS94pm40dP6RGo8yiKpCUOJDdJtjp2gs=;
+        b=YpIJedQ+6BIMYSh80iV/SbMUn++9fo+nNeyc2/+NMcUHTQA11G0iIWQ/xZArNDvYyU
+         e3eNBdodopCp1i+jE55nhO+6w2QMrCNCnzu0zvHbPbASioRWGfQvS1m2OHEBRYXksGd8
+         MXU/vgp0DLIUn6cwsrijNq7gG0TN3eevVOzt/Z2RLUa3II5UPC9yHKC868k+iLskAy2G
+         TEsSbEGWgknYTo2dJ833u1axuqMM84pQy+biWqZ2GJZnTcaHQiCvAbgE8VFqqR/lJZCc
+         bA/AZ6AUCETxAnUxbCaYhwsJ+do+qoRCeQlBMtfs0so9Ak6kH4iXXuNK2FO/AcnvUMAL
+         bCNQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwIh34r1XIctYld/Vd2CpduFFMZSuu8vrX357I4cRNGtoBzxZ+6QoMA9D42nGh+RO9tXsZPs6lsYr9s2NePWYY=@vger.kernel.org
+X-Gm-Message-State: AFuF++nX+ZvvorE1sAgwxXFlcvlOic6rQN8JaO7Fh4vwKA/p4VRsrKHo
+	NMPocXp7pYXRwl7/cLcdOPylftZsE5tloJNWqIRhk+qq4fB74oTYUvDr
+X-Gm-Gg: AYBFou2da6Flv/0B0xSf2e5bZOCyDQJBtEFZAe222nrKtFtEtg2tzxNV27Xy6XKgpsR
+	CUnOaglzVuzRJzh3NOqaJH4QWe39SGv8cb7WUZpH50f5ITQoyEFVUA3caKIIgS+Q6QN8XFse6sT
+	ppxUYa2iWS44oCVMQbAJec4NM9Q7PAIFFPHPapcxG/tHariCLUMQbaOILpOGsMFsgd+7IcqT9SI
+	cmn3aKh+ZePiKFhefkM/2xcX6LI5En4FSwTQrFXLCzE3dRlABgfE09XHUTT8y6Hc+rIEUf0mYsT
+	HVDILrb4SMLcisDDHi6U3AXzJvYeioNYmJYFW0d5/gOkUYs+hEVJeVJ/rGNaRcsL9rVvUhYkr+C
+	m1J6L+GHbH7NRFoVNHmI2aTUVBTxvpHPoz4ytCJ3YDN8IHw/yryQ/mHcl56tGZY8gEShvS26VTD
+	bR5l+7OUquCqV5fnZTiPjvMHe0rgNkOi84VLk9e8tz9KU1COCxuwQe02Sxkpwz7qw06qROhkS79
+	Yo=
+X-Received: by 2002:a05:690e:b4b:b0:672:a678:da59 with SMTP id 956f58d0204a3-6740c2a76c3mr1631246d50.108.1790359416590;
+        Fri, 25 Sep 2026 11:03:36 -0700 (PDT)
+Received: from suesslenovo ([71.132.185.69])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6740efb13fasm1359157d50.18.2026.09.25.11.03.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2026 11:03:36 -0700 (PDT)
+Date: Fri, 25 Sep 2026 14:03:05 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: Cai Xinchen <caixinchen1@huawei.com>
+Cc: mic@digikod.net, gnoack@google.com, paul@paul-moore.com, 
+	jmorris@namei.org, serge@hallyn.com, corbet@lwn.net, skhan@linuxfoundation.org, 
+	rdunlap@infradead.org, gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, 
+	dlemoal@kernel.org, hch@lst.de, axboe@kernel.dk, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, jack@suse.cz, dhowells@redhat.com, code@tyhicks.com, 
+	linkinjeon@kernel.org, sj1557.seo@samsung.com, yuezhang.mo@sony.com, 
+	hirofumi@mail.parknet.co.jp, cel@kernel.org, jlayton@kernel.org, neil@brown.name, 
+	okorniev@redhat.com, Dai.Ngo@oracle.com, tom@talpey.com, miklos@szeredi.hu, 
+	amir73il@gmail.com, senozhatsky@chromium.org, chenxiaosong@chenxiaosong.com, 
+	zohar@linux.ibm.com, roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, 
+	eric.snowberg@oracle.com, stephen.smalley.work@gmail.com, omosnacek@gmail.com, 
+	casey@schaufler-ca.com, nanx95726@gmail.com, djwong@kernel.org, daniel@iogearbox.net, 
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	driver-core@lists.linux.dev, linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	netfs@lists.linux.dev, ecryptfs@vger.kernel.org, exfat@lists.linux.dev, 
+	linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	xiujianfeng@huawei.com, lujialin4@huawei.com
+Subject: Re: [PATCH RFC -next 00/12] landlock: Add READ_METADATA and
+ WRITE_METADATA access rights
+Message-ID: <araxO4ze0KZBz756@suesslenovo>
+References: <20260924104831.1081137-1-caixinchen1@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260925-tonyk-robust_futex-v7-9-d1095991152c@igalia.com>
-References: <20260925-tonyk-robust_futex-v7-0-d1095991152c@igalia.com>
-In-Reply-To: <20260925-tonyk-robust_futex-v7-0-d1095991152c@igalia.com>
-To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
- Arnd Bergmann <arnd@arndb.de>, 
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
- Waiman Long <longman@redhat.com>, Ryan Houdek <Sonicadvance1@gmail.com>, 
- Thomas Gleixner <tglx@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-api@vger.kernel.org, kernel-dev@igalia.com, 
- =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-X-Mailer: b4 0.15.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260924104831.1081137-1-caixinchen1@huawei.com>
 
-Reuse the same selftest for the original set_robust_list() syscall for
-the new set_robust_list2() syscall. Use kselftest variants feature to
-run the relevant tests for both interfaces. Create a new test case to
-get different lists from the same task.
+On Thu, Sep 24, 2026 at 06:48:19PM +0800, Cai Xinchen wrote:
+> This series adds two new Landlock filesystem access rights,
+> LANDLOCK_ACCESS_FS_READ_METADATA and LANDLOCK_ACCESS_FS_WRITE_METADATA,
+> which control access to file and directory metadata such as inode
+> attributes (mode, ownership, timestamps), extended attributes and POSIX
+> ACLs.  It picks up the work from the "landlock: add chmod and chown
+> support" series [1] and follows the coarse-grained grouping discussed in
+> that thread [2]: instead of separate chmod/chown rights, metadata
+> operations are grouped into one read and one write right.
+> 
+> Landlock evaluates access rights on a per-path basis, but the metadata
+> related LSM hooks (inode_getattr, inode_setattr, inode_setxattr,
+> inode_getxattr, inode_listxattr, inode_removexattr, inode_set_acl,
+> inode_get_acl, inode_remove_acl) only receive the dentry of the accessed
+> object.  Patches 1-7 therefore first pass struct path instead of dentry
+> through the metadata-related VFS helpers and LSM hooks.  This is a pure
+> refactoring with no behavior change, split so that every patch builds
+> and works on its own:
+>
+I like these patches, but is the ability to read metadata already
+sorta controlled by LANDLOCK_ACCESS_FS_READ_DIR on the parent
+directory?
 
-Signed-off-by: André Almeida <andrealmeid@igalia.com>
----
- .../selftests/futex/functional/robust_list.c       | 133 ++++++++++++++++++---
- 1 file changed, 117 insertions(+), 16 deletions(-)
+The one case I see this being different is:
 
-diff --git a/tools/testing/selftests/futex/functional/robust_list.c b/tools/testing/selftests/futex/functional/robust_list.c
-index f4dd600b3d1f..587fb529d6ca 100644
---- a/tools/testing/selftests/futex/functional/robust_list.c
-+++ b/tools/testing/selftests/futex/functional/robust_list.c
-@@ -51,6 +51,7 @@
- 
- #ifndef SYS_set_robust_list2
- # define SYS_set_robust_list2 473
-+# define SYS_get_robust_list2 474
- 
- enum robust_list_cmd {
- 	FUTEX_ROBUST_LIST_CMD_CREATE_64,
-@@ -102,6 +103,12 @@ static int set_robust_list2(struct robust_list_head *head, enum robust_list_cmd
- 	return syscall(SYS_set_robust_list2, head, cmd, index, flags, 0, 0);
- }
- 
-+static int get_robust_list2(int pid, struct robust_list_head **head,
-+			    unsigned int index, unsigned int flags)
-+{
-+	return syscall(SYS_get_robust_list2, pid, head, index, flags);
-+}
-+
- static bool robust_list2_support(void)
- {
- 	int ret = set_robust_list2(NULL, FUTEX_ROBUST_LIST_CMD_LIST_LIMIT, 0, 0);
-@@ -240,6 +247,23 @@ static int modify_list(struct robust_list_head *head, int index)
- 	return set_robust_list2(head, get_cmd_modify(), index, 0);
- }
- 
-+static int get_list(pid_t pid, struct robust_list_head **head, bool robust2, int index)
-+{
-+	int ret;
-+
-+	if (!robust2) {
-+		size_t len_ptr;
-+
-+		ret = get_robust_list(pid, head, &len_ptr);
-+		if (sizeof(**head) != len_ptr)
-+			return -EINVAL;
-+
-+		return ret;
-+	}
-+
-+	return get_robust_list2(pid, head, index, 0);
-+}
-+
- /*
-  * A basic (and incomplete) mutex lock function with robustness
-  */
-@@ -424,39 +448,44 @@ TEST(test_set_robust_list2_inval)
- /*
-  * Test get_robust_list with pid = 0, getting the list of the running thread
-  */
--TEST(test_get_robust_list_self)
-+TEST_F(robust_api, test_get_robust_list_self)
- {
- 	struct robust_list_head head, head2, *get_head;
--	size_t head_size = sizeof(head), len_ptr;
--	int ret;
-+	bool robust2 = variant->robust2;
-+	int ret, index = 0;
- 
--	ret = set_robust_list(&head, head_size);
-+	ret = set_list(&head, robust2, 0);
- 	ASSERT_EQ(ret, 0);
- 
--	ret = get_robust_list(0, &get_head, &len_ptr);
-+	ret = get_list(0, &get_head, robust2, 0);
- 	ASSERT_EQ(ret, 0);
- 	ASSERT_EQ(get_head, &head);
--	ASSERT_EQ(head_size, len_ptr);
- 
--	ret = set_robust_list(&head2, head_size);
--	ASSERT_EQ(ret, 0);
-+	ret = set_list(&head2, robust2, &index);
-+	ASSERT_GE(ret, 0);
- 
--	ret = get_robust_list(0, &get_head, &len_ptr);
-+	ret = get_list(0, &get_head, robust2, index);
- 	ASSERT_EQ(ret, 0);
- 	ASSERT_EQ(get_head, &head2);
--	ASSERT_EQ(head_size, len_ptr);
- }
- 
-+struct child_arg_struct {
-+	struct robust_list_head *head;
-+	bool robust2;
-+};
-+
- static int child_list(void *arg)
- {
- 	struct child_args *cargs = arg;
- 	struct __test_metadata *_metadata = cargs->_metadata;
--	struct robust_list_head *head = cargs->arg;
-+	struct child_arg_struct *child_arg = (struct child_arg_struct *) cargs->arg;
-+	struct robust_list_head *head = child_arg->head;
-+	bool robust2 = child_arg->robust2;
- 	int ret;
- 
- 	free(cargs);
- 
--	ret = set_robust_list(head, sizeof(*head));
-+	ret = set_list(head, robust2, 0);
- 	ASSERT_EQ(ret, 0)
- 		TH_LOG("set_robust_list error");
- 
-@@ -477,23 +506,26 @@ static int child_list(void *arg)
-  * parent
-  *   2) the child thread still alive when we try to get the list from it
-  */
--TEST(test_get_robust_list_child)
-+TEST_F(robust_api, test_get_robust_list_child)
- {
- 	struct robust_list_head head, *get_head;
-+	bool robust2 = variant->robust2;
-+	struct child_arg_struct child =
-+		{.robust2 = robust2, .head = &head};
- 	int ret, wstatus;
--	size_t len_ptr;
- 	pid_t tid;
- 
-+
- 	ret = pthread_barrier_init(&barrier, NULL, 2);
- 	ret = pthread_barrier_init(&barrier2, NULL, 2);
- 	ASSERT_EQ(ret, 0);
- 
--	tid = create_child(_metadata, &child_list, &head);
-+	tid = create_child(_metadata, &child_list, &child);
- 	ASSERT_NE(tid, -1);
- 
- 	pthread_barrier_wait(&barrier);
- 
--	ret = get_robust_list(tid, &get_head, &len_ptr);
-+	ret = get_list(tid, &get_head, robust2, 0);
- 	ASSERT_EQ(ret, 0);
- 	ASSERT_EQ(&head, get_head);
- 
-@@ -1171,4 +1203,73 @@ TEST(test_32bit_lists)
- 	munmap(locks, sizeof(*locks) * CHILD_NR);
- }
- 
-+/*
-+ * Test setting and getting mutiples head lists
-+ */
-+TEST(set_and_get_robust2)
-+{
-+	struct robust_list_head *head = NULL, *heads;
-+	int list_limit, ret, *index, i, j;
-+
-+	if (!robust_list2_support()) {
-+		SKIP(return, "robust_list2 not supported\n");
-+		return;
-+	}
-+
-+	list_limit = set_robust_list2(NULL, FUTEX_ROBUST_LIST_CMD_LIST_LIMIT, 0, 0);
-+	ASSERT_GT(list_limit, 1);
-+
-+	heads = malloc(list_limit * sizeof(*heads));
-+	ASSERT_NE(heads, NULL);
-+
-+	index = malloc(list_limit * sizeof(*index));
-+	ASSERT_NE(index, NULL);
-+
-+	/*
-+	 * Insert various elements into the lists
-+	 */
-+	for (i = 0; i < list_limit; i++) {
-+		ret = set_list(&heads[i], true, &index[i]);
-+		ASSERT_GE(ret, 0);
-+		ASSERT_EQ(i, index[i]);
-+	}
-+
-+	for (i = 0; i < list_limit; i++) {
-+		ret = get_list(0, &head, true, index[i]);
-+		ASSERT_EQ(ret, 0);
-+		ASSERT_EQ(head, &heads[i]);
-+	}
-+
-+	/*
-+	 * Modify the list, adding the elements in the other ordering
-+	 */
-+	for (i = 0, j = list_limit; i < list_limit; i++, j--) {
-+		ret = modify_list(&heads[j], index[i]);
-+		ASSERT_GE(ret, 0);
-+	}
-+
-+	for (i = 0, j = list_limit; i < list_limit; i++, j--) {
-+		ret = get_list(0, &head, true, index[i]);
-+		ASSERT_EQ(ret, 0);
-+		ASSERT_EQ(head, &heads[j]);
-+	}
-+
-+	/*
-+	 * Delete all elements
-+	 */
-+	for (i = 0; i < list_limit; i++) {
-+		ret = modify_list(NULL, index[i]);
-+		ASSERT_EQ(ret, 0);
-+	}
-+
-+	for (i = 0; i < list_limit; i++) {
-+		ret = get_list(0, &head, true, index[i]);
-+		ASSERT_EQ(ret, 0);
-+		ASSERT_EQ(head, NULL);
-+	}
-+
-+	free(heads);
-+	free(index);
-+}
-+
- TEST_HARNESS_MAIN
+1. if you wanted to grant read access to the file, but not metadata
+read access, but I can't think of any usecase for being able to read
+the contents of a file, but not the metadata. (see below)
 
--- 
-2.55.0
+2. If you had the absolute path already and didn't need READ_DIR.
 
+I see introducing this READ_METADATA as causing potential
+hard-to-diagnose issues.
+
+Say you handle READ_METADATA and READ_FILE, but only grant READ_FILE.
+
+The program can technically open the file with the READ_FILE permission,
+but it may error out because the stat() on it beforehand failed.
+It's pretty common for programs to do that kind of thing (stat before
+open), like for checking for config files (strace bash and you see it
+stat .profile, /etc/profile)
+
+There may be other bugs, because being able to set permissions to read
+a file *but not read it's metadata* isn't possible currently in posix
+acl and userspace may not work well if that assumption no longer holds.
+
+So maybe WRITE_METADATA is good enough?
+
+Interested in your thoughts,
+Justin
+>   1: notify_change() and its callers
+>   2: inode_setsecctx hook (must come before 3: the SELinux and Smack
+>      implementations call __vfs_setxattr_locked internally)
+>   3: xattr helpers, which also drops a redundant EVM xattr size sanity
+>      check whose vfs_getxattr() call only has a dentry and therefore
+>      cannot be migrated to the new path-based signature
+>   4: POSIX ACL helpers
+>   5: inode_setattr hook
+>   6: inode xattr hooks
+>   7: inode POSIX ACL hooks
+> 
+> Two deliberate scoping decisions for this refactor:
+> 
+> - The hooks consistently take struct path rather than struct file.  The
+>   VFS call sites involved (chmod(2), chown(2), utimensat(2), xattr(2)
+>   and ACL syscalls) operate on paths, and several of them (lstat(2),
+>   lchown(2), llistxattr(2), ...) have no struct file to begin with.
+> 
+> - struct inode_operations->setattr still receives (idmap, dentry, attr).
+>   Only the VFS boundary (notify_change()) and the LSM hook layer see the
+>   path, which keeps the refactor contained to fs/attr.c and the LSM
+>   infrastructure instead of touching every filesystem.
+> 
+> Patches 8-12 then implement the new rights, their tests, the sandboxer
+> sample and the documentation.  Semantics:
+> 
+> - READ_METADATA covers stat(2) and friends, getxattr(2) and friends,
+>   listxattr(2) and friends, and POSIX ACL reads.
+> - WRITE_METADATA covers chmod(2), chown(2), utimensat(2), setxattr(2),
+>   removexattr(2) and friends, and POSIX ACL set and remove.
+> - Only explicit metadata changes requested by user space are restricted.
+>   Implicit changes performed by the kernel (e.g. timestamp updates on
+>   write(2), size changes on truncate(2)) are not, and neither are
+>   chmod(2)/chown(2) calls that change nothing (e.g. chown(2) with
+>   (-1, -1), which never reaches the hook), matching the SELinux
+>   inode_setattr behavior.
+> - Kernel-internal accesses performed with override_creds() (e.g.
+>   overlayfs, cachefiles) and kernel threads without a Landlock domain
+>   (e.g. nfsd, ksmbd) are not restricted.
+> 
+> The Landlock ABI version is incremented from 11 to 12.
+> 
+> The series is based on linux-next commit 5c4d4169604b ("Add linux-next
+> specific files for 20260921").
+> 
+> Testing: each patch has been built for aarch64 (gcc, -Werror) and the
+> landlock selftests (445 tests, including the new ones) pass in QEMU on
+> aarch64; base_test reports ABI v12.
+> 
+> [1] https://lore.kernel.org/all/20220827111215.131442-1-xiujianfeng@huawei.com/
+> [2] https://lore.kernel.org/all/abc960a1-e66e-792e-6869-cfd201c29dbe@digikod.net/
+> 
+> Assisted-by: opencode: glm-5.3
+> 
+> Cai Xinchen (12):
+>   fs: pass struct path to notify_change()
+>   LSM: pass struct path to the inode_setsecctx hook
+>   fs: pass struct path to xattr helpers
+>   fs: pass struct path to POSIX ACL helpers
+>   LSM: pass struct path to the inode_setattr hook
+>   LSM: pass struct path to the inode xattr hooks
+>   LSM: pass struct path to the inode posix acl hooks
+>   landlock: Add READ_METADATA and WRITE_METADATA access rights
+>   landlock: Implement metadata access hooks
+>   selftests/landlock: Add tests for metadata access rights
+>   samples/landlock: Add metadata rights to sandboxer
+>   Documentation: Update landlock doc for metadata rights
+> 
+>  Documentation/userspace-api/landlock.rst     |  11 +-
+>  drivers/base/devtmpfs.c                      |   6 +-
+>  drivers/block/zloop.c                        |   4 +-
+>  fs/attr.c                                    |  20 +-
+>  fs/cachefiles/interface.c                    |   6 +-
+>  fs/cachefiles/xattr.c                        |  32 +-
+>  fs/coredump.c                                |   2 +-
+>  fs/ecryptfs/inode.c                          |  34 +-
+>  fs/exfat/file.c                              |   3 +-
+>  fs/fat/file.c                                |   3 +-
+>  fs/inode.c                                   |   7 +-
+>  fs/internal.h                                |  17 +-
+>  fs/namei.c                                   |   7 +-
+>  fs/nfsd/nfs4ctl.h                            |   4 +-
+>  fs/nfsd/nfs4state.c                          |  14 +-
+>  fs/nfsd/nfs4xdr.c                            |   2 +-
+>  fs/nfsd/state.h                              |   2 +-
+>  fs/nfsd/vfs.c                                |  73 +++--
+>  fs/open.c                                    |  18 +-
+>  fs/overlayfs/copy_up.c                       |   4 +-
+>  fs/overlayfs/inode.c                         |   4 +-
+>  fs/overlayfs/overlayfs.h                     |  39 ++-
+>  fs/overlayfs/xattrs.c                        |  13 +-
+>  fs/posix_acl.c                               |  46 +--
+>  fs/smb/server/smb2pdu.c                      |  77 ++---
+>  fs/smb/server/smb_common.c                   |   2 -
+>  fs/smb/server/smbacl.c                       |  21 +-
+>  fs/smb/server/tests/smbacl_kunit.c           |   6 +-
+>  fs/smb/server/vfs.c                          | 111 +++----
+>  fs/smb/server/vfs.h                          |  39 +--
+>  fs/smb/server/vfs_cache.c                    |   3 +-
+>  fs/utimes.c                                  |   3 +-
+>  fs/xattr.c                                   |  96 +++---
+>  include/linux/fs.h                           |   6 +-
+>  include/linux/landlock.h                     |   4 +-
+>  include/linux/lsm_hook_defs.h                |  29 +-
+>  include/linux/posix_acl.h                    |  21 +-
+>  include/linux/security.h                     |  65 ++--
+>  include/linux/xattr.h                        |  22 +-
+>  include/uapi/linux/landlock.h                |  26 +-
+>  samples/landlock/sandboxer.c                 |  17 +-
+>  security/commoncap.c                         |  22 +-
+>  security/integrity/evm/evm_crypto.c          |   8 +-
+>  security/integrity/evm/evm_main.c            |  36 ++-
+>  security/integrity/ima/ima_appraise.c        |  17 +-
+>  security/landlock/fs.c                       |  86 ++++++
+>  security/landlock/limits.h                   |   2 +-
+>  security/landlock/syscalls.c                 |   2 +-
+>  security/security.c                          |  99 +++---
+>  security/selinux/hooks.c                     |  49 +--
+>  security/smack/smack_lsm.c                   |  62 ++--
+>  tools/testing/selftests/landlock/base_test.c |   2 +-
+>  tools/testing/selftests/landlock/fs_test.c   | 309 ++++++++++++++++++-
+>  53 files changed, 999 insertions(+), 614 deletions(-)
+> 
+> -- 
+> 2.18.0.huawei.25
+> 
+> 
