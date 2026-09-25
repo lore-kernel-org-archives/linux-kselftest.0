@@ -1,84 +1,99 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 734762EC571;
-	Fri, 25 Sep 2026 12:56:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8534A1DF6;
+	Fri, 25 Sep 2026 13:31:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790340999; cv=none; b=PTfsADnFf2S/FHo8EECVY3y+db1GzxvyOUmXPOzwxKtswBmD8DReVb5H9tKnFFy4idBFsWP4Mw6n5TU8PRdhjNWAf+SWn5x85dOS/BkZ9DAAhyCcCnC/abDzdaHsDo4dy+o0oVAHHq38nNFiSeNPKFCBVTt04CIU0gMAF5WnHoU=
+	t=1790343113; cv=none; b=mrBVUWuOE/e3fQFAwXPc2RWvL8aIqBCKVUN/bRYZOErt5s0ytpzY3MX8gGNYp5U1R/EhGpYvyX5wNUnkkCQt12h/byZwYtqAY47YwnZQrc6GcHI9f89bYoegbk0lzihON1NfP7nqG91moc5ObDMNMaNm3SzfTQsF6mX2yjMM3kI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790340999; c=relaxed/simple;
-	bh=xm+mooZ0XkAGq6GKU7h4yi+KjgP6Je8ezgCLqOb4z6c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t1FpMAQfpd+65/EFyKmwOu2YrxbIfyEnicCsXJktiTVQor49SHaL13wNHhafgDsXhzlPpx2Lnz1ZDstAGterts9xroJ/wWlvOoO/MwbNLNaxBS4YRMUdlji+2wuLbI3LbNIcpzAWJh0vcE4B0ToFF+HDG6LkFo5Rcb2j44mAv2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=JQPp/4Pa; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1790343113; c=relaxed/simple;
+	bh=1PZmj32CRTBPqeXsEu/4paBeqkMGtbVNIlBpO3t1akw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kJXqTj7ADZdRgXSYku3vaWtb3u02lt/B9rB7Sf3FFpKQZmhRKqnnUb08QhfvAQLQY9IxfoLI3lVeTjSYN+YDJq7aSIAmQaVGYylERG3LRXQbKeDA/n4tnDVht7mg1CqGQMjq+lYXYNQQPHW/IFCYlsx/rmVAVp8oaxkhnjp4KrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=JBAOeDIc; arc=none smtp.client-ip=130.117.225.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="JQPp/4Pa"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 26934169C;
-	Fri, 25 Sep 2026 05:56:33 -0700 (PDT)
-Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A27B3F86C;
-	Fri, 25 Sep 2026 05:56:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1790340996; bh=xm+mooZ0XkAGq6GKU7h4yi+KjgP6Je8ezgCLqOb4z6c=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JQPp/4PadiQm3gluMM0otFqo8NCqzpexmW4TOx/2YJgBOhy9iBaZzg/USMbgG6i8G
-	 464Kwohpyq8Tb2u/dH+SbWe/zxdNlQkRc5bi07RReOMNdr0pxxsl2JAu2PC8Yl/rZY
-	 4d8OEjgeYrfLLTzrBon7MlH/RNJHRL4V6f2LIdAU=
-Message-ID: <ee423531-e2a0-4915-b089-905bba22d33a@arm.com>
-Date: Fri, 25 Sep 2026 18:26:28 +0530
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="JBAOeDIc"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
+	Content-Type; bh=Q4/9ic0XNq6fQcZmyLRi1JoQNXeypJEroEwy7jfonHY=; b=JBAOeDIck5ah
+	VfgkoiiGEovtouCDdjOs7p6Kp9K1xONJ35y/GoIwhj8QSqAMN5lumXzoGFsCii9FCkmHygCSo0nT3
+	V1SCBDQOSppdkGFwM2o957+l9gq5nLz/hNXJ5bsG/Y1WcyTrjlWcFYg8wgetSMwYHJ1bTF/tTDE59
+	7eznKo1248cbUx/ez1ZYvnSbLNVBSswdX24Q3mNLmhJwXqxFGnKPmNpmjT0INcU3qe9rvZxA71e8j
+	2cBFOuUPXVW1YY9x9KYs68o/VEYQOna22XC+GtCWFpTQn3aFb5+27xK4IE2sZjlSE8V62n9VFDnSE
+	B/vKlpr8Zyx9qSDvL8ZW8g==;
+Received: from ch-vpn.virtuozzo.com ([130.117.225.6] helo=LekKit-T14)
+	by relay.virtuozzo.com with esmtp (Exim 4.96)
+	(envelope-from <eva.kurchatova@virtuozzo.com>)
+	id 1xA5yn-008Orv-1u;
+	Fri, 25 Sep 2026 15:31:45 +0200
+From: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
+To: Manivannan Sadhasivam <mani@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Frank Li <Frank.Li@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
+	linux-pci@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests: pci_endpoint: skip when the test device is absent
+Date: Fri, 25 Sep 2026 16:31:32 +0300
+Message-ID: <20260925133141.3634476-1-eva.kurchatova@virtuozzo.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 4/4] kselftest: mm: remove check_huge_shmem()
-To: Yeoreum Yun <yeoreum.yun@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260924-fix_split-v8-0-cba7359d882a@arm.com>
- <20260924-fix_split-v8-4-cba7359d882a@arm.com>
-Content-Language: en-US
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-In-Reply-To: <20260924-fix_split-v8-4-cba7359d882a@arm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+Every fixture opens /dev/pci-endpoint-test.0 and asserts on the result,
+so on a machine that has no PCI endpoint test device all 17 cases fail
+in fixture setup rather than reporting that the hardware is not there.
 
+Check for the device once before handing over to the harness. Doing it
+there rather than in each of the four fixtures keeps it to a single skip,
+and leaves the fixtures to fail as before on an open that goes wrong for
+any other reason, which is not something to skip over.
 
-On 9/25/26 12:41 AM, Yeoreum Yun wrote:
-> check_huge_shmem() was required to distinguish shmem huge pages because
-> /proc/self/smaps reports them using a dedicated “ShmemPmdMapped” entry,
-> as opposed to “FilePmdMapped” for file-backed huge pages.
-> 
-> Now that /proc/self/smaps is no longer used to detect huge pages and
-> /proc/kpageflags is used instead, it is sufficient to distinguish
-> between file-backed and anonymous pages since the ShmemPmdMapped is also
-> kind of file-backed.
-> 
-> Therefore, remove check_huge_shmem() and use check_huge_file() instead
-> and cleanup khugepaged's check_huge operation in mem_ops.
-> 
-> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Acked-by: Zi Yan <ziy@nvidia.com>
-> Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> ---
-Looks good to me, so:
+The harness parses its own arguments inside test_harness_run(), so only
+the plain invocation, the one kselftest makes, turns into a skip, -l and
+-h keep working on a machine without the device.
 
-Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
+Signed-off-by: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
+---
+ .../selftests/pci_endpoint/pci_endpoint_test.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
+index 588d75c97ad1..efec4a84aa15 100644
+--- a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
++++ b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
+@@ -286,4 +286,20 @@ TEST_F(pcie_ep_doorbell, DOORBELL_TEST)
+ 		SKIP(return, "Doorbell test is not supported");
+ 	EXPECT_FALSE(ret) TH_LOG("Test failed for Doorbell\n");
+ }
+-TEST_HARNESS_MAIN
++
++static bool test_device_available(void)
++{
++	return access(test_device, F_OK) == 0;
++}
++
++int main(int argc, char **argv)
++{
++	/*
++	 * Only the plain invocation, which is the one kselftest uses, turns
++	 * into a skip, so that -l and -h keep working without the hardware.
++	 */
++	if (argc == 1 && !test_device_available())
++		ksft_exit_skip("no PCI endpoint test device %s\n", test_device);
++
++	return test_harness_run(argc, argv);
++}
+-- 
+2.55.0
+
