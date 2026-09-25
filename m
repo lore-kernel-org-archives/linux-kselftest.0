@@ -1,36 +1,37 @@
-Received: from out-2z4y-a131.jellyfish.systems (out-2z4y-a131.jellyfish.systems [198.54.127.131])
+Received: from out-zbxj-a76.jellyfish.systems (out-zbxj-a76.jellyfish.systems [198.54.127.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFB23B058E
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 17:44:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A614B0E5F
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 17:44:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790358284; cv=none; b=Pz7nl+IOzlcCPPYRz82m/U6ZozGIrHZ5pz+kHEIQxh7q3C1vLkCRr0iB0Hvqz4oejCEV9aqX+Og22RXToR4kI07/eiEChkLLJJKBh5CvYQcmN5AAbtryq9X0INRDWtkSi81VdxbFO0slZISqasfCSsb8cG3gnXJZSuYAOQbBfGs=
+	t=1790358291; cv=none; b=ajJiO9RcEKULOyR4LN0ZlyVPwrKeri4SJ5POF5Qjvm1enWBrJzXFYZRA3N/2s2iEmuaV5Uux9LLIGJuRS1FEU42AKDqJq9Zv4hVTd7vTgtSXYPYx9vabELJihzxnEeTmzB4egTnyhMXiPBXHxDnId8f+i3us3iEBpeYzr5RZ/Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790358284; c=relaxed/simple;
-	bh=KVAj4k93ORW6RC+ldpHWs55tRybLbBsjm8AW9LxDxCs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nrfVry/QGXsc4ouXRRiMWlkGT0ywJ32EW1U2wRoYpCajYQFCoLHVQZlodo/E0w/X8XfcotqPQSPFVmdf8L51scI6dtby7gcct0w1lVWQEYOP+PZlljIoEygnAFa8XI70yyvHZIm/KbgzfCkVE/XatTSFZrFvpQD/ndCkfgcBOMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=L4XhUQY3; arc=none smtp.client-ip=198.54.127.131
+	s=arc-20240116; t=1790358291; c=relaxed/simple;
+	bh=Mpe2+MnvynNvvXOGyTAnTjspIyfD/u8fOGC6+yCgdvE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jPMDNcbWzTJ8uviDPQwCI7suywGu/FPTJZSfO3lnkayr1jSpEsS6FRwLTkhocLjvvhQMbLueY96xCM8ThUD9+NWTyFiuotby0dLT7HQIaS9YUgMUdwz0qBdTM4Z8Xio6gXpU+A0MGU+bzcYn+q4+4rFX7HX6GxBpPu1Nj4HaVfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=c9zWya0v; arc=none smtp.client-ip=198.54.127.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="L4XhUQY3"
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="c9zWya0v"
 Received: from 192.168.50.46 (unknown [114.92.81.237])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hrykS584Yz2xFV;
-	Fri, 25 Sep 2026 17:44:16 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hrykW2VL4z2xFY;
+	Fri, 25 Sep 2026 17:44:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1790358258;
-	bh=BUtiPNuDGd0KorPsBmHSC/1rXyjnCvBAtMuJ1rgqdCo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=L4XhUQY393TMI7zo4z7p6WqpqCXkjF2+YTORi8ppW+D8bRNhDwe6cJmQALhZLHwiA
-	 MZDcYgHavryQLoydK1NKf00RySUmeVNzef6N9StHz0VnFf+H1uq2FVUsquvxPQAzFJ
-	 0rvGPLA6P++VYcsnQ37r8o79jlG0As7rrH9bhdNzSFgjHDg6QaBOfEizobWrlyb07v
-	 bvb8oUgvukrZ4MylDjhcdqk70FLEDRDH0ZCgklMSh/Kv89gu7mGZ/H4xbaqWAnCFJP
-	 5FK/nbLBUyQMAohCl9kwGN2VtA2oMRZMB9R3BJW1SdvEMgS2GoG89s31rS2wWw9Mkh
-	 5ZN2+3/zgLdDA==
+	s=spacemail; t=1790358263;
+	bh=XlyIijP6eelkujcES0j/mMHA4XzxLMpM+aS6x9+dyAg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=c9zWya0vzA2bcCtam6iNOXTTZ8z4Ryu5O9prV7smMR9HL6Ax7rgSZVtMCPu7l6LZ2
+	 jDo+csA5Pd8ndf2SvCYQ/jUqzk6MvBCST157K5wQ53jngw5YhiZAJalzP3LKEIbpd1
+	 dPQD/o1OmQLYuTtXFPFdNSPemVA7xRYEqrSX3+ek60smGdvdayIepuvxpc9WJPTWCI
+	 lEHQKEAAVP9wg0PY5qEVywtVVp3wZXGjYP4uZQSHapmfCkBXG5MBZ1zUiPYH4z+V9b
+	 qbBxGV4t1JuMErznvjchyDr4Y+BjQpiKFhfLDq5mgEBcGrT47X6e1YUZjPsQ5pm++Z
+	 GpDp9l0XCHv5g==
 From: Tianyi Chen <hi@tychen.cc>
 To: bpf@vger.kernel.org
 Cc: qmo@kernel.org,
@@ -38,10 +39,12 @@ Cc: qmo@kernel.org,
 	eddyz87@gmail.com,
 	ihor.solodrai@linux.dev,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v6 0/2] bpftool: Batch hash map dumps with bounded buffers
-Date: Sat, 26 Sep 2026 02:44:10 +0900
-Message-ID: <20260925174412.2028749-1-hi@tychen.cc>
+Subject: [PATCH bpf-next v6 1/2] bpftool: Use batch lookups for hash map dumps
+Date: Sat, 26 Sep 2026 02:44:11 +0900
+Message-ID: <20260925174412.2028749-2-hi@tychen.cc>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260925174412.2028749-1-hi@tychen.cc>
+References: <20260925174412.2028749-1-hi@tychen.cc>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,45 +54,203 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Envelope-From: hi@tychen.cc
 
-Use lookup batches for ordinary hash maps while preserving output and
-bounding the combined key/value batch buffers to 4 MiB.
+Use BPF_MAP_LOOKUP_BATCH when dumping ordinary hash maps to reduce BPF
+syscalls while preserving plain, JSON and BTF formatting.
 
-Changes in v6, addressing Quentin's review:
-- Extract a positive eligibility predicate and document the u32 HASH
-  bucket cursor. Keep ordinary HASH as the initial supported type.
-- Limit buffer growth rather than the map's maximum capacity. On ENOSPC
-  at the buffer cap, continue individual lookups from the last emitted key
-  instead of restarting from NULL. Keep existing non-atomic traversal
-  semantics and initial unsupported-operation fallback.
-- Add a sparse-map test with a maximum capacity above the buffer budget.
-- Rebase and refresh the performance measurements in patch 1.
+Compare against the unpatched base using a populated 100,000-entry hash
+map with 4-byte keys and values, with stdout redirected to /dev/null.
+In an x86-64 KVM guest running Linux 7.2.5, both builds use GCC 16.2.1
+and run on one vCPU. After two warm-ups per binary and output mode,
+alternate baseline and patched runs for 15 untraced samples each:
 
-Validation in an x86-64 VM:
-- All 12 bpftool_map_batch subtests pass.
-- Normal HASH, large sparse HASH and LRU_HASH fallback output matches the
-  baseline in plain and JSON modes.
-- Injected ENOSPC before and after output, including growth to the actual
-  4 MiB buffer cap: complete output matches the baseline without missing
-  or repeated entries. Initial unsupported-operation fallback also passes.
-- Injected EFAULT/EIO and late EINVAL remain fatal and leave valid partial
-  JSON, without processing invalid output buffers.
-- Matched-base /dev/null measurements show median elapsed-time reductions
-  of 37.2% (plain) and 40.7% (JSON); BPF syscalls remain 200,004 versus 395.
+                 baseline       batch       elapsed-time reduction
+  plain          87.043 ms      54.631 ms    37.2%
+  JSON           80.707 ms      47.844 ms    40.7%
 
-v5: https://lore.kernel.org/r/20260924163403.203491-1-hi@tychen.cc
-Review: https://lore.kernel.org/r/d5a5b5e7-4063-4511-acdc-46b2407565a7@kernel.org
+These are median wall times, including process startup and formatting.
+Separately, strace counts 200,004 versus 395 BPF syscalls for the plain
+dump. These results are specific to this fixture and guest.
 
-Tianyi Chen (2):
-  bpftool: Use batch lookups for hash map dumps
-  selftests/bpf: Check bpftool batch map dump contents
+Limit the combined key/value batch buffers to 4 MiB rather than limiting
+the map's maximum capacity. Start with up to 256 entries and grow on
+ENOSPC using the same input cursor. If a bucket cannot fit at the buffer
+limit, continue individual lookups from the last emitted key, or from
+the beginning if nothing was emitted. This retains the existing
+non-atomic traversal semantics without restarting completed output.
 
- tools/bpf/bpftool/map.c                       | 123 ++++++++++-
- .../bpf/prog_tests/bpftool_map_batch.c        | 191 ++++++++++++++++++
- 2 files changed, 306 insertions(+), 8 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
+Fall back from an unsupported initial batch operation as well. Process
+the final partial batch on ENOENT, but do not trust output buffers after
+other errors. Keep fatal diagnostics on stderr so JSON element arrays
+contain only map entries.
 
+Link: https://github.com/libbpf/bpftool/issues/63
 
-base-commit: 7af653d4ebf8e2e17e288715cd67ccf7845f4631
+Assisted-by: LLM
+Signed-off-by: Tianyi Chen <hi@tychen.cc>
+---
+ tools/bpf/bpftool/map.c | 123 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 115 insertions(+), 8 deletions(-)
+
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 20d59eab09a1..3147e3c4b8c6 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -741,15 +741,10 @@ static int do_show(int argc, char **argv)
+ 	return errno == ENOENT ? 0 : -1;
+ }
+ 
+-static int dump_map_elem(int fd, void *key, void *value,
+-			 struct bpf_map_info *map_info, struct btf *btf,
+-			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
++static void print_map_elem(void *key, void *value,
++			   struct bpf_map_info *map_info, struct btf *btf,
++			   json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
+ {
+-	if (bpf_map_lookup_elem(fd, key, value)) {
+-		print_entry_error(map_info, key, errno);
+-		return -1;
+-	}
+-
+ 	if (json_output) {
+ 		print_entry_json(map_info, key, value, btf, cpu_ids, cpu_cnt);
+ 	} else if (btf) {
+@@ -763,10 +758,113 @@ static int dump_map_elem(int fd, void *key, void *value,
+ 	} else {
+ 		print_entry_plain(map_info, key, value, cpu_ids, cpu_cnt);
+ 	}
++}
++
++static int dump_map_elem(int fd, void *key, void *value,
++			 struct bpf_map_info *map_info, struct btf *btf,
++			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
++{
++	if (bpf_map_lookup_elem(fd, key, value)) {
++		print_entry_error(map_info, key, errno);
++		return -1;
++	}
+ 
++	print_map_elem(key, value, map_info, btf, btf_wtr, cpu_ids, cpu_cnt);
+ 	return 0;
+ }
+ 
++#define MAP_DUMP_BATCH_FALLBACK 1
++#define MAP_DUMP_BATCH_SIZE 256U
++#define MAP_DUMP_BATCH_MAX_BYTES (4 * 1024 * 1024)
++
++static bool map_dump_can_batch(const struct bpf_map_info *info)
++{
++	return info->type == BPF_MAP_TYPE_HASH && info->max_entries &&
++	       (__u64)info->key_size + info->value_size <= MAP_DUMP_BATCH_MAX_BYTES;
++}
++
++/* Return MAP_DUMP_BATCH_FALLBACK to continue with individual lookups. */
++static int dump_map_batch(int fd, void *key, void *value,
++			  struct bpf_map_info *info, struct btf *btf,
++			  json_writer_t *wtr, unsigned int *num_elems)
++{
++	/* HASH batch cursors are u32 bucket indices, independent of key size. */
++	__u32 batch = 0, next_batch = 0;
++	__u32 capacity, max_capacity, count, i;
++	void *keys = NULL, *values = NULL, *buf;
++	bool first = true, can_restart = true;
++	int err;
++
++	max_capacity = MAP_DUMP_BATCH_MAX_BYTES / (info->key_size + info->value_size);
++	max_capacity = min(max_capacity, info->max_entries);
++	capacity = min(max_capacity, MAP_DUMP_BATCH_SIZE);
++resize:
++	buf = realloc(keys, (size_t)capacity * info->key_size);
++	if (!buf) {
++		err = ENOMEM;
++		goto error;
++	}
++	keys = buf;
++	buf = realloc(values, (size_t)capacity * info->value_size);
++	if (!buf) {
++		err = ENOMEM;
++		goto error;
++	}
++	values = buf;
++
++	while (true) {
++		count = capacity;
++		err = bpf_map_lookup_batch(fd, first ? NULL : &batch,
++					   &next_batch, keys, values, &count, NULL);
++		err = err ? errno : 0;
++		/*
++		 * Older kernels reject the command before updating count. Do not
++		 * inspect the buffers on these errors, or restart after progress.
++		 */
++		if (can_restart && (err == EINVAL || err == EOPNOTSUPP ||
++				     err == 524 /* ENOTSUPP */)) {
++			err = MAP_DUMP_BATCH_FALLBACK;
++			goto out;
++		}
++		can_restart = false;
++		if (err == ENOSPC) {
++			if (capacity == max_capacity) {
++				err = MAP_DUMP_BATCH_FALLBACK;
++				goto out;
++			}
++			capacity += min(capacity, max_capacity - capacity);
++			/* Preserve the input cursor: the oversized bucket was not read. */
++			goto resize;
++		}
++		/* In particular, EFAULT can leave count and the buffers invalid. */
++		if (err && err != ENOENT)
++			goto error;
++		for (i = 0; i < count; i++) {
++			/*
++			 * Keep the alignment provided by individual lookups, including
++			 * for BTF types whose map key/value size is not aligned.
++			 */
++			memcpy(key, keys + (size_t)i * info->key_size, info->key_size);
++			memcpy(value, values + (size_t)i * info->value_size, info->value_size);
++			print_map_elem(key, value, info, btf, wtr, NULL, 0);
++			(*num_elems)++;
++		}
++		if (err == ENOENT) {
++			err = 0;
++			goto out;
++		}
++		first = false;
++		batch = next_batch;
++	}
++error:
++	fprintf(stderr, "Error: can't lookup map batch: %s\n", strerror(err));
++	err = -1;
++out:
++	free(keys);
++	free(values);
++	return err;
++}
++
+ static int maps_have_btf(int *fds, int nb_fds)
+ {
+ 	struct bpf_map_info info = {};
+@@ -880,6 +978,14 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+ 		p_info("Warning: cannot read values from %s map with value_size != 8",
+ 		       map_type_str);
+ 	}
++	if (map_dump_can_batch(info)) {
++		err = dump_map_batch(fd, key, value, info, btf, wtr, &num_elems);
++		if (err != MAP_DUMP_BATCH_FALLBACK)
++			goto end_dump;
++		/* Continue after the last emitted key rather than restarting. */
++		if (num_elems)
++			prev_key = key;
++	}
+ 	while (true) {
+ 		err = bpf_map_get_next_key(fd, prev_key, key);
+ 		if (err) {
+@@ -893,6 +999,7 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+ 		prev_key = key;
+ 	}
+ 
++end_dump:
+ 	if (wtr) {
+ 		jsonw_end_array(wtr);	/* elements */
+ 		if (show_header)
 -- 
 2.55.0
 
