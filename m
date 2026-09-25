@@ -1,95 +1,96 @@
-Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
+Received: from mail-qk2-f13.google.com (mail-qk2-f13.google.com [74.125.230.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726BE3101C8
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 00:57:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715FF27E07E
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 00:58:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.205
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790297848; cv=pass; b=WlpXh0fj3zXf0z2NXXG/hhiLZ6MeMRudWpLGW2aDgAm0KfGw53yaLvn2Zze3wRz8XoU9BrJGjBe7ih2Agl4aJqKFxJfRrhVE2oyCIBGAbwYIUBna0h300QdGcwlROF14NYuPF/qdn3pq5omIMqjigdg20wFeuNpXFA8T0wgn/JA=
+	t=1790297938; cv=pass; b=L+Ckn30yz8Pe8NK8cU22Wjjsa8nYymIxs7u04T5cTKPZ6Icoo1UjeZ7i7Ecp3NdF8bSSQ0ir3+TwRbuWBO7J4s/Kh6gRysIVLaFYz0UictX9p5DKAV29BPQKiM+MeF5VHJfi10I9ny9vqf2vjQcXOUMWxu16obd49TfUz3Vrie8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790297848; c=relaxed/simple;
-	bh=lBKA7hzH9pjhlzdMFfbHz9SVC1DDES4LjTgOQh6PfRs=;
+	s=arc-20240116; t=1790297938; c=relaxed/simple;
+	bh=urAmayGrk2/YKnpNUBvPoUR9FlB5GJJ9+v5VQMZfNXg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FWLdtRBZjjYHrp/hdubN1+c2wlcxY4SZj2jIKvkJTvVePHFT8Tfejry8AfKaCgY09cAJ8+Asfij1gyBU7cJhsPjtpkQkZhSZ2NzyEE6aLwoZtQC8lTDfloGN9fBgap6svxqpu2bAoLxpRVdRmmu0ruYuLDl3VAfj7wiFxSPVGZw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tl5pBI9m; arc=pass smtp.client-ip=74.125.230.204
+	 To:Cc:Content-Type; b=fsPTD+xsS9s9CmVEE7or6b3R44tLp2ACwYCRZuPI6NTSDGFLDCySmOY6EtUJ00rgpmI8RibhM3Gt0JoNn8BTMxxoaittmXAYYzzT3pc7TeQkhZnqXVD4J+qjp9vvSemcUJRCnNW6hMGkGh1pF9CbrlWCAlpHj82iH38SFElL+3k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MezY1qMb; arc=pass smtp.client-ip=74.125.230.205
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tl5pBI9m"
-Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-52fb76ec395so3640731cf.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 17:57:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790297841; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MezY1qMb"
+Received: by mail-qk2-f13.google.com with SMTP id d75a77b69052e-52fb767d286so3791311cf.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 17:58:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790297936; cv=none;
         d=google.com; s=arc-20260327;
-        b=GOhYBeaFslaQ8wCJcCbBp95Q3y+w8qTvCNF+ZgIyJG38VbJeqCXfPmcqlSWx9NVBJ/
-         kY55tdTa0Zm5OaFnk4BUPDv0rNSy6UYYFSs1w+nQrWnebpuAWsasX331QvW45/GSNowH
-         wLpJbo3uv4Q6u7QYh/blasM56jkgz9LerlA1BeeRpaOMubYddgmoDt9HJ7ThD7G5KStP
-         BLOhALev8E19CqwN8cMPvMkVZLzbjx83d1+p1SRItMzYOY156Q/DZ76r/ViYQR1HWKuo
-         gM8HPWERUhJ05t2T+QKGmsQ1z0DVvTEYnmkhyOnuyNd8X12m+I/ByzMfnC4SDCwnXQ5X
-         wPCg==
+        b=SornerzsnjehU9khML0edPNbkm39uFNpcLtqSTAjmWSVscTxgJutKD42E7sYWIJdhe
+         xHeMjtProGDNbMBzQCd5cqUsKb342Z3cvGR4FLT8IgMA19EEx8ar72ZfBNQGEw+EXhlJ
+         SMF64DuKFiWHUeqwQAcp7TCe1Lx7x6oq+KqJQaDCrBiZY/8FITOxs6vREYj7mNPOZQJa
+         jbEuSFDfsHav7fbLWNNib51EgXqztqVePXbzDDeNXGUWXpfBCYrmYhlmGou3B+IGe8Sd
+         0WAbSTfWlTl2VlniZOvHeW9Nd9M2L4CNJ5ia7dhLNZE8twkwFHgnXFF23hyyvcIb9zHM
+         azyg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=3pyGHIFbtinRqwaj+Qg/alPqYKdXRt+R/3/nBOW/8Ig=;
-        fh=hTVEeQx2J68j8eRbLpGtJIbdiUAO4DjJyWSl86+Saz8=;
-        b=hssGxxTLxcSrXRU5E4ykYaei2OG6sqV67THMZV++ucRUD2nYEc/m8AqTqqk4ncIZ95
-         3PnRYpiMB1Uuhbkh4d7J5ozucDWdPaERlnhGokNx0hT22og/IikIRwWuD1Q+x37XqEcu
-         Pm5elpRLtrtwygQDKl1DV2as0QKH90tVSB7r8hHl7fif0imA+XVO7DMrEsxe5NQc3Uza
-         lBvEJaMi4MEq4MrxZ+IZrn09N7holHa0UapHZWJiO1rCiWD3AU442dlZaA3DeT3BOk9+
-         luXuN83NVQQtaw/R5PzM+alNMny7J2safLJjqyUPdrYhd+GXHbGK0KF7YESFWQnnYHkI
-         cDSg==;
+        bh=urAmayGrk2/YKnpNUBvPoUR9FlB5GJJ9+v5VQMZfNXg=;
+        fh=G0T6gnGsW90Vq2aZNNYpgGDNCc64MWEZ609LgRPa7Is=;
+        b=fKnFToG7RuXJWlF3+vLbLvbR3dou7k1OG9Q2SB7sfG++QsRLjB7Tw6N476ynhPgTNJ
+         vWzQIig8TRPP2vimOuCw9o0WeqWu+bvvJF3LwSrbMpgCrhgAZ66a/+4JnBZvyCzJMzsB
+         EFJ9raP+pDsm1UvidP8s4BTrhkW+VN/l2tIJEplkn1zO64XR7muFIjLyP18kMKzOqbZJ
+         1UsJ47zJo0y1MATsQWaRxJUOQobQKMUo3Jy8335maJ37S5PjkxPjGVf09hGKnaC0p7lz
+         AmrCBjYkzW1Xq8gr7jWr1SBprzoOPkgyRRun0zJZ4befTRYu3S2OL0Ix6ktjN0dN4ROd
+         GHSg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790297841; x=1790902641; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1790297936; x=1790902736; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=3pyGHIFbtinRqwaj+Qg/alPqYKdXRt+R/3/nBOW/8Ig=;
-        b=tl5pBI9myxJmXgJ3UpcupUmaHIvZ+JCD46NF0/GP/PkdSPuIx9h7SYiTJitKQtj6d/
-         vB6vCUVUmj4E6RljHfN5x44zbL+y1Gyn9138uvrK0yW5Rs7rDcZIOtK10CXKh7wdwmvl
-         GxGH5hLoPRk6PkecEj203vMAxFWIG5WV/RLoyVcDvPjRSEBl/Eiv2aCKrU0e+WBOWxlg
-         c71kx4LsHyRPm+a3RE/RY3WHtXk5gRQPEyEEKH6mF+sQVGkesdZ0hm9R22wF+g7zcymp
-         YQyyiS4m+BRyq09anP0UG2y0+1/eiYzxj/tDjOw8KgjR4/eISGMIJGxPv6BFtD3qUVaV
-         Q65w==
+        bh=urAmayGrk2/YKnpNUBvPoUR9FlB5GJJ9+v5VQMZfNXg=;
+        b=MezY1qMbvEI7v31/hFS2NYGgdGoMKE9LPO27An0Mmy+vH0VGgaBGfUGCccceGuQ8cJ
+         s3KZUEU4lqO3U5pgLTa1EprjzJFEg07sKnGep1+TaMbOgDC5dwnnFS7t4nrAK63/lU3n
+         Tb5rgQ+hbKfJQH6plZaAEUFjn7yajHRvArYipEkTkX3GuWMx1rehJr6L33TzNiKPcAj6
+         2kqhFaMCYMBBe/ZPW0d5kdOmikTJTdzveBfq0Z+Lki5qnb5bJt/y4kHwykbMQ3Trkihf
+         mSRAecWWbWTc7EVa9EgtsFJSCMhZSuFlAQlMt7veidDsW7Lib/Tm3v+wkFYHHZNp09HQ
+         gdZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790297841; x=1790902641;
+        d=1e100.net; s=20260707; t=1790297936; x=1790902736;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3pyGHIFbtinRqwaj+Qg/alPqYKdXRt+R/3/nBOW/8Ig=;
-        b=bL/uCdMURoKworViVji6ETJdz667jMu7eQhgNyXWPpLvBZ84ISeK4NMYCJDlrWGDUI
-         +f1dC8lHmOvX3t7tJtgZuXpkSr63qafcG+hfKrjOZ3AwDfTHgVhnYQ9/w++3eI4I+GI/
-         Kr4EEmWqhLmPL1sI/N+e2a4eKY/JFFVLiw0kad3Ej/PmU+1tdVOdPB8Pth58RGZA4Zk+
-         UlODFH8HzUNqiVPjafzHpkMjftRIdX4mJ0X/aGlSkiDCfHi2W7jok7nRp0T0JQIiXxTv
-         YmvC2mNQ7QaYsbLrVw1pliTihCr92wQw1CJtXAEhCx3/7oK3ejJeJHSuPx6wcd2czfO2
-         ML3g==
-X-Forwarded-Encrypted: i=1; AKwUvByYsMJk6E4M/4+8/Pvn06m8XjMDpCo5FLIIC5RPWe+UCCsFvt5PIUiF95XsIcEjZ35U1au3uXWVKH9hte855b0=@vger.kernel.org
-X-Gm-Message-State: AFuF++ndMwSRqqB0OZgo43bDJ2NBtVEtwAQjtYvavm3PN6aWxe/oTmCb
-	6Y8P5QhO4Q46HIgXPo0wZshHgKWOXhhLJlxb3E5auYcIDnmgX6bdWQc3/DHLJ0pbvy0FrQoOlDI
-	WQINpB6fw9Am12dCLBFi8yf+JwZA5mxwmIf9tcWHEPZkqsNdIWOD7ozi8
-X-Gm-Gg: AYBFou3LAy8hYdwPFPRgzLpa0nVsbcLCkCK8XLnV8WTa1F8M59BZWM0zUEbBjz9uCgS
-	FJnzrLXrpNSknCm03uzZodVD73TfaH+Fi4DVNmtS/HE0qZ3CzlOMXtqrsSQsz4BDI+PszfzDezN
-	4F10Dxq3XKkOE5qtGV+l4oWfIBLke/MGm3AU44wE8b7/1KGWnEte2WbD7BvwueDCeSt5kmgTAE8
-	vMWv/13yf7pjgBXR7baoxj2CKsQcpVVf/U2pa+3YbJWmmV/hDVGo4fQgUDv6y0kzRYGCt7X8xhK
-	KR5eDf66J8UQC3cTRsFENF8UU5STte6avTUY1iHZJHcq5jbHcsKXGeAYfdu7nRL8icVWj6aTWqh
-	zW3KA+OECf13xzPWaCEEeLN1l07s2JK6//38Rj4THWBs2cLEXR2bxH8i1t7qaTyhE78bD
-X-Received: by 2002:a05:622a:e318:20b0:533:1038:ad5c with SMTP id
- d75a77b69052e-5331038af84mr2905601cf.40.1790297840359; Thu, 24 Sep 2026
- 17:57:20 -0700 (PDT)
+        bh=urAmayGrk2/YKnpNUBvPoUR9FlB5GJJ9+v5VQMZfNXg=;
+        b=1ufvLB90Z1OlDZR4d9K16WsqmT+DrHcf/cNNKjtmAwKrrxUSDAkgJpZCBzZXCoJIIB
+         wMNcpPFQbn/+HznInYjUmSfd4MoD39Uarewubr20G8V/oU1n2xhsUM9MZJ1bKlf+yqJF
+         BRgYXUTg8ytUP9+5007lFmxN8rK1O0zwFCHLzwrU6OeVxbIlWc103zahFZ4WFBHzRi7l
+         46M7XjKfx1hspjD+1ueSc7scDas0iAaHBK2CEGNwpBrKM17kZqkRRU5ICZitTPHiIzLt
+         K3gdCzAXuDoWf3ndGUQ8yDPCD+cCF2f0zDRQXJTsa+Y0VQu4RHx8/1+ACBu+zjjRm/aC
+         DY1w==
+X-Forwarded-Encrypted: i=1; AKwUvBydw+d6Vvlc0J/pfs2z5dNQX4PUtZzjp4Rbit8RhiyMCbmCbHlh3c001aTYyf6GyT2/W1DICtx06SLGltwDQ4w=@vger.kernel.org
+X-Gm-Message-State: AFuF++mkVCOc+PjFuU2wiWqDplEVbNJxAXFGxX2Imsw5m0JSJ9NUH9NR
+	IMA0QRgcWu/IJgBuC7i41z//gMnIY/OyNnsndPgixgFi/2ItumpmQBY5EC3B+QGemkjNc4FrR0n
+	PQ1FG99SAKBpvLNjENG0atIKFI/+4MsJz7sKQBDcJ
+X-Gm-Gg: AYBFou3lIIZe9xiPmMvQaiQkaScb/sJdAwrbMWqmq/eJu+iTaG8qeaS1eq0K22G4Lle
+	5rNMy9AtyReHbeO3xwAJuOScFUjYc6pdtWbR4UMp2zhOBMuRwxWawcsSANMmxf3hKBOuMTiqUgO
+	VruErl6Sf/DnlPhMKd7BtOT3wbLRYGZ230+Wls+HeGGDWnRedw6ENXPOBQOqIgTjDDHbcGwxlmN
+	YCieUYKwMm/5q6rTqzxVRhDIbeItKYDatvxjSH7w0yzU5UluC5oJmMkjQp1S4X5Y5mr6U8B3ktY
+	RxzYgn853bJ4Mei/mKC5wB2h/ph+nsfHbacbeisvwiR/GFcCCCBNTY5fXJLNwHIAo7iobcc+yG7
+	/bgUsg9k+YQpT//1+nNnbcqm+g6QxDw5zL3XwHyXbgl++pFbSi5W30mIspo9ec2DsYsKG
+X-Received: by 2002:a05:622a:1908:b0:530:f3f7:ca19 with SMTP id
+ d75a77b69052e-5330b5dfbd0mr19703701cf.25.1790297935585; Thu, 24 Sep 2026
+ 17:58:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260924224456.55690-4-jeffjo@openai.com> <20260924224456.55690-5-jeffjo@openai.com>
-In-Reply-To: <20260924224456.55690-5-jeffjo@openai.com>
+References: <20260924224456.55690-4-jeffjo@openai.com> <20260924224456.55690-6-jeffjo@openai.com>
+In-Reply-To: <20260924224456.55690-6-jeffjo@openai.com>
 From: Eric Dumazet <edumazet@google.com>
-Date: Fri, 25 Sep 2026 02:57:09 +0200
-X-Gm-Features: AclHuK9i6M-UlXku212en58JsCz_7tBwqq3_4M6DEUdxB18bU5VlwiunFiLOeFk
-Message-ID: <CANn89iKF+MD9TDBGb7oXjR5Nk9HgwXF3kB6KV8_3Li=qLKZ5WA@mail.gmail.com>
-Subject: Re: [PATCH net v2 1/2] tcp: refresh TS.Recent for accepted old ACKs
+Date: Fri, 25 Sep 2026 02:58:44 +0200
+X-Gm-Features: AclHuK9sfmq7kaDYlZhIb51eTI_YTaqPKeo-GWlhfKE_S3RVg2Vy8HH2SQdgf3E
+Message-ID: <CANn89iJiOQNrxAOU_OuOZafaH00K6bHM9nS9NCWEpg8yKq8fgg@mail.gmail.com>
+Subject: Re: [PATCH net v2 2/2] selftests: net: check timestamp echo after an
+ old ACK
 To: Jeff Jo <jeffjo@openai.com>
 Cc: netdev@vger.kernel.org, ncardwell@google.com, kuniyu@google.com, 
 	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
@@ -100,50 +101,31 @@ Content-Transfer-Encoding: quoted-printable
 
 On Fri, Sep 25, 2026 at 12:45=E2=80=AFAM Jeff Jo <jeffjo@openai.com> wrote:
 >
-> A TCP packet can carry new data while acknowledging traffic in the
-> opposite direction. With overlapping traffic in both directions, a
-> delayed packet's acknowledgment can be older than one Linux has already
-> accepted, even when that packet fills a gap in the received data.
+> Add a regression test for a gap-filling packet whose acknowledgment has
+> become old. Linux first sends data to the peer. Deliver two peer data
+> packets out of order: the later packet acknowledges Linux's data, while
+> the delayed packet still carries the earlier acknowledgment.
 >
-> Linux accepts the data, but tcp_ack() takes the old_ack path and skips
-> updating TS.Recent, the timestamp saved for outgoing acknowledgments.
-> The reply therefore echoes an older timestamp. If the sender uses this
-> echo to measure round-trip time after a long idle period, its estimate
-> includes the idle time and can reduce its sending rate.
+> Require the ACK that closes the receive gap to echo the delayed packet's
+> timestamp, 301000. Without the fix, Linux accepts the data but still echo=
+es
+> the previously saved timestamp, 1000. Also check that the application can
+> read all 34 bytes.
 >
-> Update TS.Recent in old_ack using tcp_replace_ts_recent(), before SACK
-> processing can trigger a transmission. This reuses the existing timestamp
-> and sequence checks, including PAWS protection against old duplicate
-> packets. ACK validation already rejects old ACKs in SYN_RECV before this
-> path, so no additional state check is needed.
+> Use a large jump in peer timestamps to represent the idle interval, with
+> no real wait, loss or retransmission. The test directly checks the outgoi=
+ng
+> timestamp echo. It requires packetdrill's merged TSecr verification fix
+> (linked below); older tools incorrectly pass on an unfixed kernel.
 >
-> Echoing the timestamp of the packet that fills the receive gap follows
-> RFC 7323 section 4.3. In a socket reproduction with 300 seconds idle,
-> controlled reordering and retransmission to exercise timestamp-based RTT
-> sampling, the sender's smoothed round-trip time was 37.5 seconds without
-> the fix and 15.5 ms with it.
+> Use the existing packetdrill selftest runner for IPv4, IPv6 and
+> IPv4-mapped IPv6.
 >
-> Fixes: 12fb3dd9dc3c ("tcp: call tcp_replace_ts_recent() from tcp_ack()")
-> Assisted-by: LLM sparse
+> Link: https://github.com/google/packetdrill/commit/83f72d3f9085d0e26eb4d2=
+06fe4d7cfab5b6d872
+> Assisted-by: LLM
 > Signed-off-by: Jeff Jo <jeffjo@openai.com>
-> ---
->  net/ipv4/tcp_input.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> index 92bc60716f33..99baf14afdfd 100644
-> --- a/net/ipv4/tcp_input.c
-> +++ b/net/ipv4/tcp_input.c
-> @@ -4465,6 +4465,12 @@ static int tcp_ack(struct sock *sk, const struct s=
-k_buff *skb, int flag)
->         return 1;
->
->  old_ack:
-> +       /* An old ACK can carry new data. Update TS.Recent before SACK
-> +        * processing can trigger a retransmission.
-> +        */
-> +       if (flag & FLAG_UPDATE_TS_RECENT)
-> +               tcp_replace_ts_recent(tp, TCP_SKB_CB(skb)->seq);
-> +
 
 Reviewed-by: Eric Dumazet <edumazet@google.com>
+
+Thanks!
