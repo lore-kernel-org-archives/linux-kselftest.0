@@ -1,48 +1,45 @@
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A0A125B091;
-	Fri, 25 Sep 2026 13:32:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79D2423E9E;
+	Fri, 25 Sep 2026 13:34:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790343129; cv=none; b=efgaWdanXooQojnWXYmT0O5ssb5y1PkODBKucckw5MW0aOBg+8HSR6NSCb0k7fnQCwBKmB1fcAtTrlqWY67zrVO7grAXqZ7LOzbGzRToepOAwZ7HF4VpafocUDycxkpYusyoAFKH8jn/VDC5KNq5JFMVez/FSk84oxLounHN0lk=
+	t=1790343284; cv=none; b=Sl55cVy29bIu21UXPa6pqdTE4aZqQEiNY7JhuklbB0uSXXGQlpRnD6OkVKk1ykpHt2OdlI3xAaIK/950XaIPbQOzwVNXjkAn0Vr73U1PgupAVuKIAvNr5xTJ/ASo3RHfSFhA3AVZ9M144HdnY3ZBFpSmrWyQDKU95REO/ZiJZwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790343129; c=relaxed/simple;
-	bh=CBR6+Jt57BFP86JgXwJd4YSe6HclyFGg9BQiulTvvWM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TO1/sCTnyUSMdUryE6E+FSB1kSwLwOZBu9taJ0ZIqJJZjuWtWDkKxQyyd+gzsB2yceBNXOGsDfBj13nRbXFVj2EFEjiDhyZW0PsjvtzPCV5DojvWl3GPLts6EXBP4wJ75DO5l12EqBqOS0jw/3lB0dOCOHPFms0R1CmPHEQqQwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=i/xZiryJ; arc=none smtp.client-ip=130.117.225.111
+	s=arc-20240116; t=1790343284; c=relaxed/simple;
+	bh=0vielYZed4HV7XfW82om9xTVqeGDlpkgGTZ1SIoqWNo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KXYIGAJ2As4r+Sy0FKXts9/yfrUcUR9Mw6vb0GdUQxZO0U8SFT7+dVOEVN4Gf4Qxzs3YBwOHdq126a8EWkZ0eJD2T6wT1D/FtewF6fPU7k+Ru4eIP0SycuHiuctgWiw45Yw/961XL7r1wvz6agfeGgYRQakFvg4BQ9H9Ge2X71Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=I4Yw7KLX; arc=none smtp.client-ip=130.117.225.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="i/xZiryJ"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="I4Yw7KLX"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=MhpEfgfXmtazN8wFvo8Yvv2VRSX7LXsFe4toP7UM+DQ=; b=i/xZiryJlein
-	e9DkyXoWRUKgTV2fLi/3St7x5Yx7xWuxt1TTdKfoFUaxoeZ8zBW/b7jW76n2tEh6HywQpyZy+P+z2
-	6npo0eij/FC6jAjgvsxyZ7LrO1Nrcp5ie+pT/PcpmxGgqBZAX7JRGiDgxM3P/WR4tl9CXkDXUL2wH
-	Q517TNEVtTc04hTwk/P8r3P6WvVgHP5qO6mChiJmDiGbOdaRftj2V0qSh/xvR4SJMsBhb/8ERjuBX
-	wKOtSxTQyxAViED3pt6kx/+4P18PLYBKCNbPlqtZvcE461eV1BsZCnRKwczqaj0aQOdTwVJtR7F0+
-	siXyo+OIJncj5gdiqpGISA==;
+	Content-Type; bh=682gjvnHozUTQ/G+7ht1Fk/nN9QjqnhUXggkVz8k2/g=; b=I4Yw7KLX+JIR
+	9XiEqgZ6EHl+v6tAAviFE0n2F3p65dcGLP6Ptz0K0kg+BfqEZGQUoYzkIlA4CetaXm+Li/yqIRwfB
+	q62iyyp1OF/ahPrCqAx9YIFT/LJzoHAXPuEuBBd4dNd/KLWX5RInKbTT7drcz2CpwblBfJtF7YrtK
+	26+pkSITaWRYLgkqetyB4TZngfrSPTKvgiH8b2qp9GBO5Qe8gFW1C8K+o/CR3OAfwSy1alMlFTphv
+	GEHMUNpsWk2EeBjQJM/nyDuhlg4nTMIYQkxhPd5t05RMMaLb9aVHBDBVu+d6pADWxMU/71kV0X58Q
+	Fhd1c3w/hpbvoAB47v0FcA==;
 Received: from ch-vpn.virtuozzo.com ([130.117.225.6] helo=LekKit-T14)
 	by relay.virtuozzo.com with esmtp (Exim 4.96)
 	(envelope-from <eva.kurchatova@virtuozzo.com>)
-	id 1xA5wb-008MTh-2Y;
-	Fri, 25 Sep 2026 15:29:30 +0200
+	id 1xA61W-008SRE-1i;
+	Fri, 25 Sep 2026 15:34:34 +0200
 From: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
 To: Shuah Khan <shuah@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Tony Luck <tony.luck@intel.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>
+	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>
 Cc: linux-kernel@vger.kernel.org,
 	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 2/2] selftests: pstore: skip the frontends the kernel does not have
-Date: Fri, 25 Sep 2026 16:29:06 +0300
-Message-ID: <20260925132914.3633554-2-eva.kurchatova@virtuozzo.com>
+	linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH] selftests: binderfs: skip the stress test without binderfs
+Date: Fri, 25 Sep 2026 16:34:07 +0300
+Message-ID: <20260925133435.3635453-1-eva.kurchatova@virtuozzo.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260925132914.3633554-1-eva.kurchatova@virtuozzo.com>
-References: <20260925132914.3633554-1-eva.kurchatova@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,57 +48,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The console and pmsg frontends are separate options from the backend:
-CONFIG_PSTORE_CONSOLE and CONFIG_PSTORE_PMSG can both be off on a kernel
-that registers one. pstore_tests checks for both regardless and fails
-where they are absent.
+binderfs_stress mounts binderfs and asserts on the first mount, so on
+a kernel without CONFIG_ANDROID_BINDERFS the case fails rather than
+reporting that the filesystem is not there.
 
-Report them as skips instead.
+Ask /proc/filesystems whether the kernel has it, the way
+supports_filesystem() in the landlock tests and check_resctrlfs_support()
+in the resctrl ones already do, and skip when it does not.
+
+Probing with a mount instead would not work here: the test is meant to
+run unprivileged, and path_mount() rejects an unprivileged caller in
+may_mount() before do_new_mount() ever looks the filesystem type up, so
+the probe would see EPERM whether binderfs is there or not. The child
+would then still reach the real mount inside its userns and fail.
 
 Signed-off-by: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
 ---
- tools/testing/selftests/pstore/pstore_tests | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ .../filesystems/binderfs/binderfs_test.c      | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/tools/testing/selftests/pstore/pstore_tests b/tools/testing/selftests/pstore/pstore_tests
-index 2aa9a3852a84..ac11988888a6 100755
---- a/tools/testing/selftests/pstore/pstore_tests
-+++ b/tools/testing/selftests/pstore/pstore_tests
-@@ -9,13 +9,20 @@
+diff --git a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
+index a1a79a6fef17..70f0391136c4 100644
+--- a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
++++ b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
+@@ -36,6 +36,28 @@
+ 		fd = -EBADF;        \
+ 	}
  
- . ./common_tests
++static bool binderfs_supported(void)
++{
++	char line[128];
++	bool ret = false;
++	FILE *f;
++
++	f = fopen("/proc/filesystems", "r");
++	if (!f)
++		return true;	/* Cannot tell, let the test run and report. */
++
++	while (fgets(line, sizeof(line), f)) {
++		/* binderfs has no backing device, hence the "nodev" prefix. */
++		if (!strcmp(line, "nodev\tbinder\n")) {
++			ret = true;
++			break;
++		}
++	}
++
++	fclose(f);
++	return ret;
++}
++
+ static void change_mountns(struct __test_metadata *_metadata)
+ {
+ 	int ret;
+@@ -388,6 +410,9 @@ TEST(binderfs_stress)
+ 	char binderfs_mntpt[] = P_tmpdir "/binderfs_XXXXXX",
+ 		device_path[sizeof(P_tmpdir "/binderfs_XXXXXX/") + BINDERFS_MAX_NAME];
  
-+# The frontends are separate options, a backend does not bring them in
- prlog -n "Checking pstore console is registered ... "
--dmesg | grep -Eq "console \[(pstore|${backend})"
--show_result $?
-+if dmesg | grep -Eq "console \[(pstore|${backend})"; then
-+    show_result 0
-+else
-+    prlog "SKIP (no pstore console, needs CONFIG_PSTORE_CONSOLE)"
-+fi
- 
- prlog -n "Checking /dev/pmsg0 exists ... "
--test -e /dev/pmsg0
--show_result $?
-+if [ -e /dev/pmsg0 ]; then
-+    show_result 0
-+else
-+    prlog "SKIP (no /dev/pmsg0, needs CONFIG_PSTORE_PMSG)"
-+fi
- 
- prlog -n "Writing unique string to /dev/pmsg0 ... "
- if [ -e "/dev/pmsg0" ]; then
-@@ -23,8 +30,7 @@ if [ -e "/dev/pmsg0" ]; then
-     show_result $?
-     echo "$UUID" > $TOP_DIR/uuid
- else
--    prlog "FAIL"
--    rc=1
-+    prlog "SKIP (no /dev/pmsg0)"
- fi
- 
- exit $rc
++	if (!binderfs_supported())
++		SKIP(return, "The Android binderfs filesystem is not available");
++
+ 	ret = socketpair(PF_LOCAL, SOCK_STREAM | SOCK_CLOEXEC, 0, syncfds);
+ 	ASSERT_EQ(ret, 0) {
+ 		TH_LOG("%s - Failed to create socket pair", strerror(errno));
 -- 
 2.55.0
 
