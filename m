@@ -1,89 +1,157 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from flow-b8-smtp.messagingengine.com (flow-b8-smtp.messagingengine.com [202.12.124.143])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E41724746DD;
-	Fri, 25 Sep 2026 08:29:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C905360EF2;
+	Fri, 25 Sep 2026 08:47:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.143
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790324999; cv=none; b=QlODG85IrW2yJ/JUMR1TZAYctaC96ESKMh1YPCJqZk+0Imd+4os0mbjePRO6P86RnxtlZ+A3rfYosbocmPSvz7MbFguT1eMeyxRXf5wpFoh7T4NqhLqciJYDJqhOplnIQFEikZyY012XM7SI6YX61AQHstfAaCLpY1kjb4zV/wY=
+	t=1790326071; cv=none; b=S8LuK0Y6wq8nPZdGkQLuU88qTflA0LOk1+3hwpw5y0kfpBhXinfXU64698n909s2R0kDoSpTQ9X5PURfhYdTQVeTC/gn0Vw3PjBwwKWCt9GoXEBmYkLktlMhBFb/5rjUmdKSSSDsZaS+8rC9Vlq9S296+f3cDKQ9R0eT98/6vhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790324999; c=relaxed/simple;
-	bh=xq9pWfNOGhP0hNdpGCu4Qw9RyjihdGZ7mXFFKnZWM6I=;
+	s=arc-20240116; t=1790326071; c=relaxed/simple;
+	bh=rMLqjiIwp6Rf3l7p9+AQhM2Z8mwzvWc66Gpf/0Rlh8M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qLzypbAPZOJ78YIpWVz/0mcryR0PShss7eW12OLiODHCjvOKS80vVF76xctfJK0/p/ZC7Cvdbw1kxmCCNIy9vmvGkVy31zccLVEeWUJ8skgmEjibFMf2W7QfAHx3nS+B3W0MneFZUCyTm90L3Z50u1v3ojfgrh8/+QA+OiSHWdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=maN2HJ86; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qjgnarok; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ro3melNk5ltkzb+NkEFZ8pXmvFd/Kq8EOOBTs7T30PUTXQaa5eC30Vefycp0VRq62YpJPmyPZVaQkXbXm8rUVZztU62Eirgh0cpt5z0QEUVpZz7r25AcVy9dlGtsAOMtc3gKmyXPjUPH/5USf3MOXSu3lKDlPQsNCwNTsA6vE1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=PbbXW9Ih; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=nIzolef2; arc=none smtp.client-ip=202.12.124.143
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="maN2HJ86";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qjgnarok"
-Date: Fri, 25 Sep 2026 10:29:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1790324996;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1e7GlrEhluYlw0l6ZzgbtVSEad4G1/5+AKEppD83JLU=;
-	b=maN2HJ86G7H+9gFXGYsBcbPUEnWNWq7nvBX1J223J4r8KuI8m4E89f6XxH57qS0qVmQnhw
-	4v5aDtuUPwyoFXEpsNwp1o1ufFXr25KccIYsrnl4qr9/DUjdjUO7hVfX8gCUVdF7KAEkZh
-	h39YESuKU/DoYzoRy8vv9A4HEmjRANOr2Lqjdx6l90MmsR/0ThFBmiu8rP36Rw0jZEmmuH
-	PIzlEGphS/YM2AvZIac6Q3eZeGXfpeDUZfCQKH7HKTjRo1osijFDKAwlUQVspd7WZQAVJY
-	G371SWc/xA/INI5trwKGjq1Ouw/xHEK9lfwni9jRysnaADyTI4FFeJz8zCv1ng==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1790324996;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1e7GlrEhluYlw0l6ZzgbtVSEad4G1/5+AKEppD83JLU=;
-	b=qjgnarokQeQsM73Cxln1IifkLDHfeOKejgrxyETCNCDAfPcNLOzEe6OfoOKt7X61ydllTY
-	ctG/sn/SxTMBvaAA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Xin Xie <xiexinet@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
-	kees@kernel.org, petr.wozniak@gmail.com, qingfang.deng@linux.dev,
-	fmaurer@redhat.com, luka.gejak@linux.dev, xiaoliang.yang_1@nxp.com,
-	skhawaja@google.com, liuhangbin@gmail.com, stable@vger.kernel.org,
-	sdf.kernel@gmail.com
-Subject: Re: [PATCH 3/4] net: hsr: unfold GSO super-packets at the forward
- entry
-Message-ID: <20260925082954.MYDugnDU@linutronix.de>
-References: <20260809121455.1745-1-xiexinet@gmail.com>
- <20260809121455.1745-4-xiexinet@gmail.com>
- <20260923104346.ur63K3h2@linutronix.de>
- <2cf54664-c07d-471f-af6d-4b70e09626b4@gmail.com>
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="PbbXW9Ih";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nIzolef2"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.stl.internal (Postfix) with ESMTP id F2B4E13010D1;
+	Fri, 25 Sep 2026 04:47:36 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Fri, 25 Sep 2026 04:47:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1790326056; x=
+	1790333256; bh=tCBr0UIM+ZOSlkOXM66AmLoOKnOh8wXT+x6TqU1msEQ=; b=P
+	bbXW9IhAXl2dv579QJm3Q65uwaUKl6JRdur6WuArNK7mw2GFamPQ2zTi8Wl8L3zj
+	/HVziA0Tqc6dBhO8tLa1iaQQSnfhCkWxaZQMClQMv6+Ve7vj6SmZt8DDHcH7xBqE
+	kc1g/8h7KeQVgr1pc3M8+BuisCxcJooKcRgF7BlLLZbN/4VXubYXf+i7AZLNe0ZU
+	f1GWnx2YZbTC/sqfcd8/vVPIXgLeXApDv7scOvN51dON+k0EO6svNqWgNQZ7bPrV
+	5npZnEkQKfmAVWxzOLwweOdfM0IK6privz7v7D6sqt0ku84yi4qIVFX3j/iUJHOv
+	DZ8tAVYQGpNfa0VR74D2w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1790326056; x=1790333256; bh=tCBr0UIM+ZOSlkOXM66AmLoOKnOh8wXT+x6
+	TqU1msEQ=; b=nIzolef2YYoegmGajku3bWR6RQPfleyIsgsLvEB48c1+OIuxUM/
+	DI7/7PXdb4lsyvyne2GphrUlW8HFJBbi1tDsnHNljBw1ccpL+axG1YZUNSzDYmcc
+	vzzAUj0FvBVsnY+BfQS5PqPkt5VZcrFS2BzcJ9tcsKqNComjMcqGrEQq324r1jB8
+	SASvwQhH6jQtEPMV5+LH8SqCAV5mg4HwUUIw7Qm+FhHmXG1CHvm5dZw68/90FJRS
+	/Fn7C6nV/7XRm2EcWVrchnmF+47cj/r8NsOmQkcBbJsPW+XEwG/t3LhzpBgnX5l6
+	6VtBZJ+FLkPdtKl/tszppnXmVdQtgeYIrwA==
+X-ME-Sender: <xms:KDW2auny5uRt6LjfjXmh92A95qmL8RdpmrgbKd9eJ-MBjY2Bpen9Nw>
+    <xme:KDW2aoJnWI4JSm0kuXBIYbkyputDbxvyIsag5zcxJ6wOkeAMVApX4DEc9v0bZ6ZM5
+    zk-1fpLhbDTDCWx_XPrcEu6vOREEgpArnmCqM80QCyVJDtV-iItqen0zg>
+X-ME-Received: <xmr:KDW2arU7Tk0LyQW4QjMuiPl08UW0IDQ3_Z6fNcL1qv8x4GhvvaNMc0qLeCM>
+X-ME-Proxy-Cause: dmFkZTE8kmhn51s93gEL4j5H/7PvaLCa+mnP6uN/rdMzANRhDhcdNNZL3sAjI1QoWaVkua
+    Bgg4YxoH/NrFlGs+IQPNyUzZRouZGayZskRSc0kDeB9PGdnVVbrJah4HJV23mSkK597Lnz
+    O5aIMe3MqpJpXd7nyNHwfgXLzGNm4aVKvH9aRpiVPiA5bMvrYKA3ej72/BqpcMcdHDwJqS
+    s7Zu2wQ9Nc5aOqx4Scfie5/eZK008o/dmXkjr66IXwfjsmPElYIOafuWx6XLTPM1YUsfA6
+    qCTl2GkfCbcpitCX7FkvDWmkeRF/qPgUbfWzWJAtdw6BtQX8kpcVtFrjby1KhaSKa11mHL
+    iexPnZOwy+iLCsMNmbV28vNK4rm0H/odzH9Qw8cUKIP4NdESfQ7EWgcqJ/KCcs+RimSaS9
+    FQdJSI3zvaIsYFuxrfjOm3NRw5Z88cOyD/yWvVikRFuBG2onu1uiwDMP4K9fTz8ZdUiegQ
+    5mQZr2SfNC2vc+KqUm0kGHex8rXkLWhfyWSgYJU0OnghDc5NqFj9N2ei3T8b/kC9wgOC0Q
+    WOEo5vOQ3Zq5AkckuyhuXBhl/sUiu4J54ClJXvbtRSjfSI8yXOaNOxfFstLPCBRqzguVrq
+    FUVC7rVlBqES7lZGboj0m0tbG4Ezg7K9r1CKqFuashA7l2btiDmQ35O4t/ng
+X-ME-Proxy: <xmx:KDW2avgf_a33O3TuMjXtVn6u4jydTeZ0D036Kde6cPwoMKeoDXGblA>
+    <xmx:KDW2aqeJsKUXmjbeZtjUdVp-VIJawYFq5pDmI1aFF0Msrx0lbse85A>
+    <xmx:KDW2ahtWmg-5FVBKMbGkyL3xs_r1l8H8YHahJfm7mqUAOCDlTFUF4g>
+    <xmx:KDW2ankBbCNWvbkpphtAXKHGYXzKozwMXvWRvxcwR6_mNAVFPNZEOw>
+    <xmx:KDW2aqjmKRE0-8Efa-WwFeJ6hL9TY27XA8hySSb49pUrgdzhLTWlM1TG>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 25 Sep 2026 04:47:35 -0400 (EDT)
+Date: Fri, 25 Sep 2026 09:47:34 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Donggeun Yoo <donggeunyoo.kernel@gmail.com>, akpm@linux-foundation.org, 
+	rppt@kernel.org, peterx@redhat.com, surenb@google.com, aarcange@redhat.com, 
+	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, mhocko@suse.com, 
+	shuah@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] userfaultfd: clear the inherited uffd bit in
+ move_swap_pte()
+Message-ID: <arY0shOhxugdxT4E@thinkstation>
+References: <20260919004630.1159895-1-donggeunyoo.kernel@gmail.com>
+ <20260919004630.1159895-2-donggeunyoo.kernel@gmail.com>
+ <arO0a3CU_idyVsqQ@thinkstation>
+ <90fc724a-08c4-4324-9420-89fab05d53d1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2cf54664-c07d-471f-af6d-4b70e09626b4@gmail.com>
+In-Reply-To: <90fc724a-08c4-4324-9420-89fab05d53d1@kernel.org>
 
-On 2026-09-24 23:26:27 [+0200], Xin Xie wrote:
-> On 23/09/2026 12:43, Sebastian Andrzej Siewior wrote:
-> > Wouldn't it be simpler to not allow such packets? 
+On Fri, Sep 25, 2026 at 09:01:22AM +0200, David Hildenbrand (Arm) wrote:
+> On 9/23/26 13:18, Kiryl Shutsemau wrote:
+> > On Sat, Sep 19, 2026 at 09:46:29AM +0900, Donggeun Yoo wrote:
+> >> UFFDIO_MOVE on a swapped-out page installs the source PTE at the
+> >> destination unchanged, so a uffd bit set on the source lands in a
+> >> destination VMA that was never registered for write protection.  It is
+> >> then permanent: the bit is dropped only by change_protection() under
+> >> MM_CP_UFFD_{WP,RWP}_RESOLVE, which uffd_wp_range(), mrwprotect_range()
+> >> and userfaultfd_clear_vma() issue only for a VMA registered in that
+> >> mode.  pagemap reports the page as uffd-tracked, and MADV_COLLAPSE
+> >> refuses the range while the bit is set, because collapse_scan_pmd() is
+> >> strict about uffd on swap entries.
+> >>
+> >> move_present_ptes() and move_zeropage_pte() build the destination PTE
+> >> from dst_vma->vm_page_prot and arm RWP only when dst_vma asks for it, so
+> >> the destination's own registration decides the result.  move_swap_pte()
+> >> copies the source PTE instead and only ever sets the bit, never clears
+> >> it, so one UFFDIO_MOVE behaves differently depending on whether the page
+> >> happened to be resident.
+> >>
+> >> Clear the uffd bit on the moved swap entry unless the destination is
+> >> RWP-registered, as copy_nonpresent_pte() does where it installs a PTE
+> >> into a destination that may not be armed.  A WP-registered destination
+> >> stops inheriting the bit as well, which is already what it gets when the
+> >> moved page is resident.
+> >>
+> >> Fixes: adef440691ba ("userfaultfd: UFFDIO_MOVE uABI")
+> >> Cc: <stable@vger.kernel.org>
+> >> Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+> >> ---
+> >>  mm/userfaultfd.c | 2 ++
+> >>  1 file changed, 2 insertions(+)
+> >>
+> >> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> >> index 74f04c323c50..6495666c596b 100644
+> >> --- a/mm/userfaultfd.c
+> >> +++ b/mm/userfaultfd.c
+> >> @@ -1452,6 +1452,8 @@ static int move_swap_pte(struct mm_struct *mm, struct vm_area_struct *dst_vma,
+> >>  	/* Re-arm RWP on the moved swap entry if dst_vma is RWP-registered. */
+> >>  	if (userfaultfd_rwp(dst_vma))
+> >>  		orig_src_pte = pte_swp_mkuffd(orig_src_pte);
+> >> +	else
+> >> +		orig_src_pte = pte_swp_clear_uffd(orig_src_pte);
+> > 
+> > Putting it in the 'else' is wrong. Clear uffd on the source
+> > unconditionally and re-arm based on the target VMA:
+> > 
+> > 	orig_src_pte = pte_swp_clear_uffd(orig_src_pte);
+> > 	/* Re-arm RWP on the moved swap entry if dst_vma is RWP-registered. */
+> > 	if (userfaultfd_rwp(dst_vma))
+> > 		orig_src_pte = pte_swp_mkuffd(orig_src_pte);
 > 
-> For master TX, yes: removing GSO features lets the core segment before
-> ndo_start_xmit(), as patch 3 already does.
+> I'm confused why the original code proposed would be "wrong"?
 > 
-> The interlink RX path is different. With GRO/GRO_HW disabled, it can
-> still receive skbs that were already GSO at the sender. I reproduced
-> this with ordinary TCP traffic over veth in a VM. Rejecting these skbs
-> would drop valid traffic.
+> I prefer your way of writing it as well, but I don't understand why it would be
+> "wrong"?
+> 
+> Maybe I need more coffee :)
 
-So you disable GRO on the interlink port and still receive GRO packets?
-Or is this performance related where you want to keep GRO enabled on the
-interlink port?
+It gives the right result, but communicates wrong reasoning to the reader.
 
-> I'll retain segmentation for valid interlink GSO in the ordered
-> consumer described in my patch 2 reply, before per-frame sequence
-> allocation and HSR tag/PRP RCT construction. Each aggregate would finish
-> before the next input, without holding an HSR lock across segmentation
-> or transmission.
-
-Sebastian
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
