@@ -1,333 +1,482 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0022A261B9E
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 06:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 069663BADBD
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 06:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790318919; cv=pass; b=OVmKJ3m4yDzx2o2q/wJ9cDbi5PjG1jLJNvb/wOB5KhkDixiE+1b6LOUahiR1tppTT4O9mPAVWObAzmv0bHa4RCVpUN89R7ZkRGAZbBpH2s31Q57fo4rFEbCAIFOprMS0IFfsOHhsP7rceWdeXBBQ6VuKtN/tZB94MC0qMYYRi1A=
+	t=1790319404; cv=pass; b=FssXjdamRaWp2lXTgNzgG/GOwc+d/pWL+ks6aRzUlgV0cU7h/I6ovf5TaLBdogiIAwKC3SnbFLM9dAnlLrXDB84WBeomQXSEy02ykLaSO8hTZ8nfoKbQjcJA/8t1LMEhzxMrlQDsr5H7nCRlmC8cm3UbP+nthfLv5LrNu+6eaZc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790318919; c=relaxed/simple;
-	bh=xAXjRQzSicykP6sODBdAS9HNqAdxUb8mYWuh5UnzOcs=;
+	s=arc-20240116; t=1790319404; c=relaxed/simple;
+	bh=Yxg642/tgxXz9z0zhYxgkEY/BcDBUgzpcz5icK1lUIg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J5Cj7Av/4ubiNAIDFvKbUqaE58+DLSNLvGj8WlcUZHPUrzH6ZdmFze28gAMVi6U8HYME+Q8eMWmfTVZuU+zj7Vhly96toJunB6QdiptIwR9yyf/OvVM+eDlgWTqFMK+v84dZLUqpLSxzAS1B5mHPmFoFOKvULBKTSrw4RRsFxnA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uyCcq758; arc=pass smtp.client-ip=209.85.208.49
+	 To:Cc:Content-Type; b=berjap7SkRXTiAXgBwW3EdIsj+fCFZ90lZo5GCpcDQg2rA3SQhGx+1xEeTwUUyQVotC20UAPVnbz9zLpbHqikpVJVMvS8MgW2hsl4VLi8sFYPwoutUHYjr06gYhp3lZM5eGDr7b7rODkv+G1WU3Dtywe/O7WiLH6GN1dWR7qw6Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lmQ144tL; arc=pass smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uyCcq758"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6a9d74e8292so5006a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 23:48:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790318916; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lmQ144tL"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6aa13d8d9d0so6922a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 23:56:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790319400; cv=none;
         d=google.com; s=arc-20260327;
-        b=Ql6nTbucIVz4LvMjiCAWlz/hjGxj29AlC2VPcxhSsUDqyyogyDsx8YyfP5PjJh8V8X
-         zlMCbhee0zWmK03IbYWI8b5GvHSdDcX7Mg8kYKra21BeexmWhgHMRj7ST2cvtFgEYUMU
-         SkEg0EtqAIo6o7jsf7XBC4Z93+YmVjoJeenROnyG8DgTXiC+NY+OjKucn0wVWaKQjPkZ
-         Yjqk06dFWSEPBs93DjOD0ovrm+DJt5UAOgfGD0iw2YXY99zSNtPYEsvX/6WOKk6+yYTi
-         nisMW9hner9YWmB9Loc0vl0Tag1abueKaZKdpQgTE7Q1TMla63ncs7dMJkRqy1y9QxBA
-         mNBw==
+        b=HrH4OzyqNvwirIzcOe67InR5l6fsVBNn6lquQ+VOBX49gH/5+xF0Uns6EWqrvOZJEb
+         C1SMMah5UAc+P4bvrIOxzK1fhSBhRvm0HuFanm1d/qX7/RO2sEl97k2/ELLbLEar3cqE
+         H3vzEqy3ga/y8PJ8LCPtzse21fvb54rCk7J1wy1dFzd2fAACZtu14gDjSjgZkIbleWkV
+         cQNNNnesMYXhRRWamT0pFA691TTZPywlNnY9rfgVpiVHpTohP673hW6mt/GRFEQ0bUot
+         6U00cDpRsJ2/DOcbKazI8S9qy+Xe8ADPn8Xe9j9r3pD0MPfWhOK4snjJ+HohVVIwp5sl
+         VIMg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=gJi7LDqcEuc2sR14VwXJiEgiHRxzpWlfA/fAlwqMSdc=;
-        fh=pgwV0k1QT5kKSTuE3+Bbr38tS2jP98G6NU3OgfiTD90=;
-        b=GfHxJMYKTqWmNIBVHcfbLsTWP5Xacc91xIoYOVkH6PmhQJoS4w6fmrow0ZxOoWLFzG
-         wEaDNKgQtEX+LSd/ARjfvdBVRObbtPSUmPiifuy5XuOD9VJ6b2B5RynOzBfv1bd7ig7r
-         HdSR7d52lvGPrS5jYcdbNOd+5gAmC1ucJ3ZsgOMPntOQNYQ7qYVO7c+5DM74Ly38DJTx
-         bddej/0RCeSXSa/8PGxAycdOfhsDwW8BtXJbJRsonW22MxRJLKyBtykl80dZj5Xlcr9z
-         uvW+ErZDaZYEgwlRvBVp5bzezjDYAACMShtbSaDjm9YXuAN3aYpUrEdAnojhr2+044K5
-         Rm3A==;
+        bh=hMRCfhSqScqxBhP4aDfFnaxI/bmtFUNufAnnugoLKdU=;
+        fh=YzRN0OJ3DgwOBxRLoB1RcaA1qu1e4hmry3OfDUdXeMU=;
+        b=kI4iJKgFWVqqI8kHhZwYFPM9akruVpuyweht0mPVRnd+ND4hz2EIEG1iDdDF+4v1Bi
+         NivoqLPe1/2wYMsrDTlhWA0dbP/NtxslHHYViOv536prAXuuYzMVURDyAMwKbBoIQmk/
+         35AoXLI5pxf46GjMAaJrzvBP0y2sm6KtcN5+ISgJn87L1/R6QWimiATaNF8QgVh29uJl
+         9G9pdC6IbFzT8VnMSWZCfWYQuTD764o6jjFNjGGdzW0FuvopD+VwSxCMw3V+8gCaTmx9
+         5SOlpO+8Z7GAA5e7FczUbPfNUTxCQlu83p668wvih75addfht/raVbxPGHw1585gg3r0
+         qkkw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790318916; x=1790923716; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1790319400; x=1790924200; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=gJi7LDqcEuc2sR14VwXJiEgiHRxzpWlfA/fAlwqMSdc=;
-        b=uyCcq758ThIUTuTM2Mk6k0Lnf3P+HxTVWTMGOYbHEb1GgwBiH8nswkHJ9qNQAN9w0J
-         x2pQncGlfnIb5dvfkq1fuvRhGZ7b8SG/dnnbm6hZ69z7gqGMad35XqgLHuKgdsfSp7Js
-         /g/HioWH4cxAfHIJFFBfJFOlV0bDWejNVmEPodTx557TIxEowYPBNhZlC81UAsEBxofX
-         /7jRzELmNecyNMLDjEWP5jdZkJ1C1z2wSeCz9GloFUzM3rlRCwDQePhEsbwxSqIByJMa
-         Mk4f8kHohw3SbJ+lAKOgXFplP6SLub5LSebnSooZIgG4krSKenwWCn/VaOJScCn8Kxl/
-         shuA==
+        bh=hMRCfhSqScqxBhP4aDfFnaxI/bmtFUNufAnnugoLKdU=;
+        b=lmQ144tLY+UQxvqhAQhtPDsmvb90+S3XGtjxsQ7XNa13MF1r+mYR6JbaCy/b126SiV
+         j3LDsednueoLhowbgWxKfl/MJXwvYglXAcLf2PFwNup7tmB9dVojhBfjbSlpkbrOad8R
+         MUcHG2ZwqSP4UMJnGBFJtzZ4Ox3KBP81FPHeOyWQCoDZV+Bd9niMIOJAwyV98q+NFpU2
+         4+pg7oZpr6AK+KQWcChW4ma+9gLaU3ZwfSiwjR6+Lwxy/6zz8cu/zp6QvEABNEx8yqHs
+         sdEI5fS4XVocVdpP7GEtFmySSZ7ctvPnpcacI5DJT1KlfoyjQSKLBp2gdZxnfHv5K+th
+         wQ2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790318916; x=1790923716;
+        d=1e100.net; s=20260707; t=1790319400; x=1790924200;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gJi7LDqcEuc2sR14VwXJiEgiHRxzpWlfA/fAlwqMSdc=;
-        b=FFdc6ePzMfwEpHZjUWEM2FmkJXmlmxibu3zBMcAi1L9WGKYZSSc+jKrc/ViaSDkBeZ
-         LuO4viXQXQMzVOI+GD4Ty7+Wtw6u8TPswWaOIICn+A03+kDIm6DbBiZ86jLIDiSyZOU6
-         aOm5Cl8P9Fw0HPvMLxiUpvne30du2KiQT0x+k4ilVbgMsDWk3YvXWyBxALhHRpHNVlmd
-         gTbnbpYfKGOCxT3Rz28rcUm8uQOvRX3ohKXqg8PLQhy3SSrDWMxfIPY/PbPY8I2NVbY0
-         5RW6h83RIZ5k6LaAuHGNQrrJjFD2jWnZPhhzM+ewQRZ2iYYMbipdhh48h3sUHOOHe8ff
-         5ZHA==
-X-Forwarded-Encrypted: i=1; AKwUvBymBmUlMxiGlHbkiNk3NkRH9jU1QrvSiz1l2ljpRp5KY1cBkUOg7F5ApTES6e4hQHYmQd5XNmdbBh78didNX68=@vger.kernel.org
-X-Gm-Message-State: AFuF++nvkBW+HfMxEWxw0j1tTqqT9xd/6ZBCCkMSLmDIxHK6LZ27f8g4
-	cjUdpTbxOZe5Zo1Mt4smds8MFDmvqiNvjrPVfDY0depVNIy9feGJMCNNkIN3eOnLxt/TGfYwUYp
-	M0qN6llT1OCfrPI0E2G+glQhfNoK9Ged4UUHniY0HPmQ0x+IAuEg2DqsI
-X-Gm-Gg: AYBFou3SXmpinT8X06YSXfGaEtDADzwdm5kugV0d2m1/YSVsYiLG0UhYxHsQWklTWq1
-	cgjW2u6y5Ad8hEoOcSfSPKIB92x+xAYVglLXEdylwdGEwOTixjbWq7oM2sWR6wHnO2SqknBHU5s
-	AkqDwUBTvqd3IZVLSQMlacnhLPEdKxgJwhk+hsKCJRGS9JQFLq4tYSYpsWI84ZQz+1i0TKD9PQi
-	79dnsUAZ4u+qaaTh+mv9QWxZdz8xJq73t1is2Ruq4RRZ/gUIf9IG4NTLzEOTQx4KDxikC0HhMD5
-	NiaIrF5LR5sjzB39CSSLaLFEtSHWZbYP3IaSZOaLEFizul3x4NRZFQ==
-X-Received: by 2002:a05:6402:1393:b0:6a6:9d11:d843 with SMTP id
- 4fb4d7f45d1cf-6aae4a10dc9mr23362a12.16.1790318915527; Thu, 24 Sep 2026
- 23:48:35 -0700 (PDT)
+        bh=hMRCfhSqScqxBhP4aDfFnaxI/bmtFUNufAnnugoLKdU=;
+        b=oJLaQoIEX9mn/oEfu+xu1PcEOX55+IzHE5nECSNDCJPSGUiqkxypth5cMTBCpW7Lt3
+         jSDhAzKeMTx4I8aFYwtSghvhJdPvNPaWQ4Yh2V1pHquyAh4kRyGAYcxYFAXXRJGnQ7S2
+         /ZnykYwl562HI+a6kRwnkKhWDttK8disl+9+2jL57XanGpTOLLbEVSsI/UxYgyEeVK4M
+         L453P4L9KiFhbpbRBag8HMmysi7HU+NsN/j2f0RODJLbEUo9WKQpb4aObE/RtKqdDhHh
+         YDFg95QEee1BbVn2xi8FVZtk8c1p7iwppo2+L4jlfNj00PKKk9xjHnQ3dIxyUeQ4vsN0
+         HpQg==
+X-Forwarded-Encrypted: i=1; AKwUvBxwNueUC4o8bRJoW9DPuacZBkJcayc2kJu+GgqqJXVTarekIJ5KhIlJ2ultxdXiLOpAxRNlfW1YsSE9FrefWh0=@vger.kernel.org
+X-Gm-Message-State: AFuF++mgh4MpRAc869n2CO1DsBd/TJEWrYpuD8lOjCB/wqSzbVwqTZef
+	B3dBltYPxDRjXPEuebjCI9xnuLnIFMn7Vlm6OGDTx/+C42LYBYzNg59tKSOcBb9yS/X8dMsIa2K
+	uwp6LDS/iN1Fr4JImR2dbDj0eMIk4s5LnZyCiMY7I
+X-Gm-Gg: AYBFou0bF2cN2aCiesSzLrCb8Nkcp0IqnxsYlwE8uRcAYamZRuIz9KIPa553izX26l4
+	hUznCay6c9S8seK4JrgVXGXihHMwv0S4b37JQztuWbGnFWvsMSA/4FvEccf8y/eKM/AauHYaAYM
+	eNvxH7JSHzH3sK5gxB5CqvD3wnRZCOLsRolJgA+kQtsL2KhvT1u3DBt6ZkDORLScK5vAWpmjzwc
+	Qdko/KzE8vbDSZQVPC8GzsJgJx8LXIYJvJBVkaWL6l2wRyD2ZMt5PXGJqknHEIGnjyCxmLDC6h6
+	bvv+Gj4HvPmXcyX9eIClk9bRTVO15WSQDirnD42XZCZvhC1cwhAdAg==
+X-Received: by 2002:a05:6402:22fc:b0:6a6:967c:3186 with SMTP id
+ 4fb4d7f45d1cf-6aae4729c8fmr22579a12.2.1790319399533; Thu, 24 Sep 2026
+ 23:56:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260902040725.877155-1-cui.tao@linux.dev> <aphkAGKpg3dgFc6c@localhost.localdomain>
- <8c816b23-d394-4389-94ab-7fec889b1300@linux.dev> <CAJuCfpEFmV9hE4dT2B_KTEaZfPe-tfkwJmYhgRRRFm-LqiwUrQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpEFmV9hE4dT2B_KTEaZfPe-tfkwJmYhgRRRFm-LqiwUrQ@mail.gmail.com>
+References: <20260903073523.1055584-1-cui.tao@linux.dev>
+In-Reply-To: <20260903073523.1055584-1-cui.tao@linux.dev>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Thu, 24 Sep 2026 23:48:21 -0700
-X-Gm-Features: AclHuK96vZwQIjgONAkZmuEEJWbsreEVi2eh7jETXBKjDxgGfV57_j9mQyioUpU
-Message-ID: <CAJuCfpF3qhfDazeOBbRqdqEG6D5P3S3dhVEFHC_pB9ie6kSD9g@mail.gmail.com>
-Subject: Re: [PATCH v5] selftests/cgroup: add PSI pressure trigger and
+Date: Thu, 24 Sep 2026 23:56:24 -0700
+X-Gm-Features: AclHuK9BeyeLhIY8ZYCf_4qATP9Z8RSM3Vf5oNRgdLU1izjw_2AxqCipUULxLJo
+Message-ID: <CAJuCfpFevJweUFNEuKzZrVfs-xhhqhWGW2veNwGXWD2oBySS+g@mail.gmail.com>
+Subject: Re: [PATCH v6] selftests/cgroup: add PSI pressure trigger and
  validation tests
 To: Tao Cui <cui.tao@linux.dev>
-Cc: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>, 
-	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Ziyang Men <ziyang.meme@gmail.com>, 
-	Tao Cui <cuitao@kylinos.cn>
+Cc: Michal Koutny <mkoutny@suse.com>, Tejun Heo <tj@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Ziyang Men <ziyang.meme@gmail.com>, Tao Cui <cuitao@kylinos.cn>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 24, 2026 at 11:42=E2=80=AFPM Suren Baghdasaryan <surenb@google.=
-com> wrote:
+On Thu, Sep 3, 2026 at 12:35=E2=80=AFAM Tao Cui <cui.tao@linux.dev> wrote:
 >
-> On Thu, Sep 3, 2026 at 12:24=E2=80=AFAM Tao Cui <cui.tao@linux.dev> wrote=
-:
-> >
-> > Hello Michal, Suren,
-> >
-> > =E5=9C=A8 2026/9/3 02:47, Michal Koutn=C3=BD =E5=86=99=E9=81=93:
-> > > Hello Tao.
-> > >
-> > > On Wed, Sep 02, 2026 at 12:07:25PM +0800, Tao Cui <cui.tao@linux.dev>=
- wrote:
-> > >> +/* PSI triggers are written with a trailing NUL the kernel parser e=
-xpects. */
-> > >> +static ssize_t write_trigger(int fd, const char *trigger)
-> > >> +{
-> > >> +    return write(fd, trigger, strlen(trigger) + 1);
-> > >> +}
-> > >
-> > > Hyrum's law. It all works for me: NUL, \n or just write(2) the exact
-> > > length of the string.
-> > > For conventionality, I'd prefer the simple literals and plain strlen(=
-) +
-> > > 0. (I reckon cg_write() cannot be used because of FD access.)
-> > >
-> >
-> > Your Hyrum's law point made me look at the parser, and I'm glad it
-> > did, because the behavior is more subtle than "all of them work".
-> > psi_write() does
-> >
-> >         buf[buf_size - 1] =3D '\0';
-> >
-> > i.e. it overwrites the last byte of whatever was written. With a plain
-> > strlen()-sized write that eats the last digit: "some 150000 2000000"
-> > silently arms a 200000us window when privileged, and fails with EINVAL
-> > for unprivileged users (200000 is not a multiple of the 2s minimum). I
-> > reproduced both on 7.0.0-28 here. I suspect your runs succeeded
-> > because a truncated window still makes a valid trigger for root, so
-> > nothing looked off.
-> >
-> > I went with your \n variant instead: the newline gets clobbered, the
-> > payload stays intact, and it is the conventional procfile form. So the
-> > reliance on the undocumented NUL is gone, even though not quite via
-> > strlen()+0.
-> >
-> > Two follow-ups this suggests, if there is interest (I'm not pushing
-> > either within this series):
-> >
-> > - psi.rst says nothing about the terminator while sysfs documents its
-> >   (append, not clobber) behavior explicitly; a sentence in psi.rst
-> >   would at least make the convention discoverable.
-> > - kernfs and sysfs both append the NUL after the written data, so the
-> >   user bytes survive. psi_write() could do the same with
-> >   buf_size =3D min(nbytes, sizeof(buf) - 1) and buf[buf_size] =3D '\0'.
-> >   Terminator-terminated writes keep their exact meaning, and a bare
-> >   strlen() write would parse in full instead of losing its last digit.
-> >   That would be the more principled fix, but it is a behavior change
-> >   for unterminated writes, so it needs a call from the PSI maintainers.
+> From: Tao Cui <cuitao@kylinos.cn>
 >
-> Yeah, I was expecting a NUL-terminated string with the NUL included
-> when we write, like shown in the psi.rst code example:
+> The cgroup selftests have no PSI coverage. Add test_psi.c: per-resource
+> trigger smoke tests (one trigger per fd, IRQ full-only), a
+> cgroup.pressure hide/show toggle test, and two CPU-pressure trigger
+> tests using over-subscription: one expects the trigger to fire at a
+> tiny threshold, the other expects it not to fire at a whole-window
+> threshold. Skips when PSI is disabled or a resource is absent.
 >
-> write(fds.fd, trig, strlen(trig) + 1)
->
-> but I agree that this might be unconventional.
-> I guess we could check if buf[buf_size - 1] is already '\0' then do
-> nothing (keeps current users happy) and otherwise we append the NUL at
-> the end. That way both write(fds.fd, trig, strlen(trig) + 1) and
-> write(fds.fd, trig, strlen(trig) + 0) would work. Would you agree or
-> did I miss anything?
+> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
 
-Hmm. I'm looking into v6 version of your patch and you are adding '\n'
-at the end. So, my plan would not work for this case and I really
-don't want to handle these terminators as special cases...
+Thanks!
+
+Reviewed-by: Suren Baghdasaryan <surenb@google.com>
 
 >
-> >
-> > >> +
-> > >> +static int pressure_open(const char *resource)
-> > >> +{
-> > >> +    char path[PATH_MAX];
-> > >> +    int fd;
-> > >> +
-> > >> +    snprintf(path, sizeof(path), "/proc/pressure/%s", resource);
-> > >> +    fd =3D open(path, O_RDWR);
-> > >> +    if (fd < 0)
-> > >> +            ksft_perror(path);
-> > >
-> > > This outputs:
-> > > | # /proc/pressure/irq: No such file or directory (2)
-> > > | #      SKIP      /proc/pressure/irq unavailable
-> > >
-> > > I.e. similar message is printed twice.
-> > > Since strace is a companion of cgroup selftests, I'd keep this helper
-> > > silent.
-> > >
-> >
-> > Agreed, the helper is silent now. The duplicate was my own doing: I
-> > added the print in v5 on Suren's v4 request (it replaced a raw
-> > fprintf) without noticing the SKIP message right below it already
-> > carries the reason, so removing it satisfies both comments.
-> >
-> > >> +    return fd;
-> > >> +}
-> > >> +
-> > >> +FIXTURE(psi)
-> > >> +{
-> > >> +    char root[PATH_MAX];
-> > >> +    char *cg;
-> > >> +};
-> > >> +
-> > >> +FIXTURE_SETUP(psi)
-> > >> +{
-> > >> +    int psi_fd;
-> > >> +
-> > >> +    if (cg_find_unified_root(self->root, sizeof(self->root), NULL))
-> > >> +            SKIP(return, "cgroup v2 isn't mounted");
-> > >> +
-> > >> +    /* PSI must be enabled (CONFIG_PSI=3Dy, not disabled on the cmd=
-line). */
-> > >> +    psi_fd =3D open("/proc/pressure/memory", O_RDONLY);
-> > >> +    if (psi_fd < 0)
-> > >> +            SKIP(return, "PSI unavailable (CONFIG_PSI=3Dn or psi=3D=
-0)");
-> > >> +    close(psi_fd);
-> > >> +
-> > >> +    self->cg =3D cg_name(self->root, "psi_trigger_test");
-> > >> +    if (!self->cg)
-> > >> +            SKIP(return, "failed to allocate cgroup name");
-> > >> +    if (cg_create(self->cg))
-> > >> +            SKIP(return, "failed to create cgroup: %s", strerror(er=
-rno));
-> > >
-> > > Why are these two SKIPs (not failures)?
-> > >
-> >
-> > You're right, they are not environment problems. They are ASSERTs in
-> > FIXTURE_SETUP() now, so a run without privileges fails loudly instead
-> > of vanishing into skips.
-> >
-> > >> +TEST_F(psi, cgroup_trigger_fire)
-> > >> +{
-> > >> +    char *cpupress;
-> > >> +    struct pollfd pfd =3D { .events =3D POLLPRI };
-> > >> +    long ncpus;
-> > >> +    int fd;
-> > >> +    int i;
-> > >> +
-> > >> +    cpupress =3D cg_control(self->cg, "cpu.pressure");
-> > >> +    ASSERT_NE(NULL, cpupress);
-> > >> +    fd =3D open(cpupress, O_RDWR);
-> > >> +    free(cpupress);
-> > >> +    ASSERT_GE(fd, 0);
-> > >> +    pfd.fd =3D fd;
-> > >> +
-> > >> +    /*
-> > >> +     * 1usec threshold over a 2s window: any CPU stall fires it. Th=
-e 2s
-> > >> +     * window is the smallest unprivileged users are allowed to arm=
-.
-> > >> +     */
-> > >> +    ASSERT_GT(write_trigger(fd, "some 1 2000000"), 0);
-> > >
-> > > The selftest rarely can be run as unprivileged user (even test cgroup
-> > > creation needs privileges), so this comment is irrelevant. (But it's
-> > > fine to test with that value.)
-> > >
-> >
-> > Dropped.
-> >
-> > > On the more abstract level -- I was playing with this and thinking ab=
-out
-> > > a value that'd test both sides, i.e. false triggers as well as false
-> > > non-triggers. I'd find that to be the half of the window and the numb=
-er
-> > > of tasks should be then (3*ncpus + 1) / 2.
-> > > Or perhaps test two thresholds, one tiny like you did and one maximum
-> > > (whole window) with same amount tasks but expect trigger, no trigger
-> > > respectively.
-> > >
-> >
-> > I tried both of your variants before picking one. The half-window
-> > threshold with (3*ncpus+1)/2 hogs fired reliably, and the two-threshold
-> > variant also held up on the negative side: with the threshold equal to
-> > the whole window, ncpus+1 hogs never fired it (measured cpu.pressure
-> > "some" stays around 2-17% under that oversubscription, so the margin
-> > is comfortable rather than borderline). I kept the existing tiny-
-> > threshold test and added cgroup_trigger_no_fire for the whole-window
-> > side, which matches your second variant and keeps the hog setup shared.
-> >
-> > >
-> > >> +
-> > >> +    ncpus =3D sysconf(_SC_NPROCESSORS_ONLN);
-> > >> +    if (ncpus =3D=3D -1)
-> > >> +            TH_LOG("sysconf(_SC_NPROCESSORS_ONLN): %s", strerror(er=
-rno));
-> > >> +    ASSERT_NE(-1, ncpus);
-> > >
-> > > Same as messages from pressure_open() above. Simply assert.
-> > >
-> > >> +
-> > >> +    /* ncpus+1 hogs guarantee CPU contention inside the cgroup. */
-> > >> +    for (i =3D 0; i < ncpus + 1; i++)
-> > >> +            ASSERT_GE(cg_run_nowait(self->cg, hog_cpu, NULL), 0);
-> > >> +
-> > >> +    ASSERT_EQ(1, poll(&pfd, 1, PSI_POLL_TIMEOUT_MS));
-> > >> +    ASSERT_NE(0, pfd.revents & POLLPRI);
-> > >> +    close(fd);
-> > >> +}
-> > >> +
-> > >> +TEST_HARNESS_MAIN
-> > >
-> > > All in all, this looks so much better than the initial version, well
-> > > done. Just a few polishing touches.
-> > >
-> >
-> > All 7 tests pass on a 2-CPU and a 16-CPU machine.
-> >
-> > Thank you both, this series learned a lot from you: Suren walked me
-> > through the harness conversion and the reporting details, and you kept
-> > the semantics honest, which is what surfaced the parser behavior. The
-> > test is in a much better shape than what I started with, and the
-> > parser finding above came out of your push on both directions of the
-> > trigger.
-> >
-> > Thanks
-> > Tao
-> >
-> > > Michal
-> >
+> ---
+> Changes since v5 (Michal Koutny review):
+> - Terminate trigger writes with a newline instead of a NUL. The parser
+>   (psi_write()) overwrites the last byte of the write with a NUL, so a
+>   plain strlen()-sized write silently truncates the last digit for
+>   privileged users (e.g. a 2000000us window becomes 200000us) and
+>   fails with EINVAL for unprivileged ones. The newline keeps the
+>   payload intact and drops the reliance on the undocumented NUL
+>   convention.
+> - Keep pressure_open() silent: the SKIP message already reports why a
+>   resource is unavailable and strace accompanies these tests anyway.
+>   This replaces the ksft_perror() added on review of v4, which
+>   duplicated the SKIP reason.
+> - Treat a test cgroup creation failure in FIXTURE_SETUP() as a failure
+>   instead of a SKIP.
+> - Drop the unprivileged-minimum remark from the fire test comment and
+>   the duplicate sysconf() error report.
+> - Add cgroup_trigger_no_fire, the false-trigger side of the firing
+>   test: with the threshold equal to the whole window, ncpus+1 hogs must
+>   not fire it. Under this oversubscription the measured cpu.pressure
+>   "some" stays in the 2-17% range on 2- and 16-CPU machines, so the
+>   margin is comfortable.
+>
+> Changes since v4 (Suren Baghdasaryan review):
+> - Report pressure_open() errors with ksft_perror() instead of a raw
+>   fprintf.
+> - Create the test cgroup in FIXTURE_SETUP() so that setup and teardown
+>   are symmetric, and drop the per-test creation and the NULL guard in
+>   the teardown.
+> - Factor the identical bodies of proc_trigger_io/memory/cpu into
+>   test_psi_write(); the helper takes _metadata so that its ASSERTs
+>   attribute to the calling test, following the seccomp selftests
+>   precedent.
+> - Drop the now-unneeded NULL init of self->cg and the stale stdbool.h
+>   include left over from the restructuring.
+>
+> Changes since v3 (Suren Baghdasaryan review):
+> - Convert to the kselftest harness: each case is a TEST_F(psi, ...)
+>   with the cgroup root/PSI availability checks in FIXTURE_SETUP() and
+>   the teardown (kill hogs, destroy cgroup) in FIXTURE_TEARDOWN(),
+>   which also removes the "ret"/"created" bookkeeping.
+> - A trigger that does not fire within the poll timeout is now a FAIL
+>   instead of a SKIP: ncpus+1 hogs with a 1usec threshold must stall,
+>   so a timeout indicates a real problem.
+> - Treat a poll() timeout and a poll() error uniformly via ASSERT.
+> - Check sysconf(_SC_NPROCESSORS_ONLN) only for -1 and report
+>   strerror(errno); declare variables one per line; for(;;) {}.
+> - Make hog_cpu() die with the runner via PR_SET_PDEATHSIG so an
+>   interrupted run does not leave orphaned hogs pinning every CPU.
+>
+> Changes since v2 (Suren Baghdasaryan, Michal Koutny review):
+> - Restructure the trigger test into per-resource cases (io, memory, cpu,
+>   irq) so a failure points at the specific resource; irq is skipped when
+>   /proc/pressure/irq is absent.
+> - Spawn the CPU hogs with cg_run_nowait() instead of open-coding fork(),
+>   and arm the trigger with a 2s window so unprivileged users can set it.
+> - Address the remaining review comments on cleanup and robustness:
+>   guard teardown with a "created" flag, use cg_read_strcmp() instead of
+>   atoi(), report strerror() on errors, and fix the unused-parameter and
+>   sign-compare nits.
+>
+> Changes since v1 (Michal Koutny, sashiko review):
+> - Keep trigger tests smoke-level; switch the firing test from memory to
+>   CPU pressure; drop churn_memory().
+> - Keep the runner out of the cgroup; add PSI/IRQ skip-guards and a
+>   .gitignore entry.
+>
+> v1: https://lore.kernel.org/all/20260724025826.504586-1-cui.tao@linux.dev=
+/
+> v2: https://lore.kernel.org/all/20260728083742.2359320-1-cui.tao@linux.de=
+v/
+> v3: https://lore.kernel.org/all/20260813133723.1663605-1-cui.tao@linux.de=
+v/
+> v4: https://lore.kernel.org/all/20260824085913.546741-1-cui.tao@linux.dev=
+/
+> v5: https://lore.kernel.org/all/20260902040725.877155-1-cui.tao@linux.dev=
+/
+> ---
+>  tools/testing/selftests/cgroup/.gitignore |   1 +
+>  tools/testing/selftests/cgroup/Makefile   |   2 +
+>  tools/testing/selftests/cgroup/config     |   1 +
+>  tools/testing/selftests/cgroup/test_psi.c | 219 ++++++++++++++++++++++
+>  4 files changed, 223 insertions(+)
+>  create mode 100644 tools/testing/selftests/cgroup/test_psi.c
+>
+> diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/se=
+lftests/cgroup/.gitignore
+> index 952e4448bf070..ce2b907c57ea3 100644
+> --- a/tools/testing/selftests/cgroup/.gitignore
+> +++ b/tools/testing/selftests/cgroup/.gitignore
+> @@ -8,5 +8,6 @@ test_kill
+>  test_kmem
+>  test_memcontrol
+>  test_pids
+> +test_psi
+>  test_zswap
+>  wait_inotify
+> diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/self=
+tests/cgroup/Makefile
+> index e01584c2189ac..a8c69e37332a4 100644
+> --- a/tools/testing/selftests/cgroup/Makefile
+> +++ b/tools/testing/selftests/cgroup/Makefile
+> @@ -16,6 +16,7 @@ TEST_GEN_PROGS +=3D test_kill
+>  TEST_GEN_PROGS +=3D test_kmem
+>  TEST_GEN_PROGS +=3D test_memcontrol
+>  TEST_GEN_PROGS +=3D test_pids
+> +TEST_GEN_PROGS +=3D test_psi
+>  TEST_GEN_PROGS +=3D test_zswap
+>
+>  LOCAL_HDRS +=3D $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pi=
+dfd.h
+> @@ -32,4 +33,5 @@ $(OUTPUT)/test_kill: $(LIBCGROUP_O)
+>  $(OUTPUT)/test_kmem: $(LIBCGROUP_O)
+>  $(OUTPUT)/test_memcontrol: $(LIBCGROUP_O)
+>  $(OUTPUT)/test_pids: $(LIBCGROUP_O)
+> +$(OUTPUT)/test_psi: $(LIBCGROUP_O)
+>  $(OUTPUT)/test_zswap: $(LIBCGROUP_O)
+> diff --git a/tools/testing/selftests/cgroup/config b/tools/testing/selfte=
+sts/cgroup/config
+> index 39f979690dd3b..8a3ef479e83d3 100644
+> --- a/tools/testing/selftests/cgroup/config
+> +++ b/tools/testing/selftests/cgroup/config
+> @@ -4,3 +4,4 @@ CONFIG_CGROUP_FREEZER=3Dy
+>  CONFIG_CGROUP_SCHED=3Dy
+>  CONFIG_MEMCG=3Dy
+>  CONFIG_PAGE_COUNTER=3Dy
+> +CONFIG_PSI=3Dy
+> diff --git a/tools/testing/selftests/cgroup/test_psi.c b/tools/testing/se=
+lftests/cgroup/test_psi.c
+> new file mode 100644
+> index 0000000000000..95dcb8a9f1843
+> --- /dev/null
+> +++ b/tools/testing/selftests/cgroup/test_psi.c
+> @@ -0,0 +1,219 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#define _GNU_SOURCE
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <poll.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <unistd.h>
+> +#include <sys/prctl.h>
+> +#include <linux/limits.h>
+> +
+> +#include "../kselftest_harness.h"
+> +#include "cgroup_util.h"
+> +
+> +#define PSI_POLL_TIMEOUT_MS    5000
+> +
+> +/*
+> + * The kernel parser overwrites the last byte of a trigger write with a
+> + * NUL, so terminate with a newline to keep the payload intact.
+> + */
+> +static ssize_t write_trigger(int fd, const char *trigger)
+> +{
+> +       char buf[64];
+> +
+> +       snprintf(buf, sizeof(buf), "%s\n", trigger);
+> +
+> +       return write(fd, buf, strlen(buf));
+> +}
+> +
+> +static int pressure_open(const char *resource)
+> +{
+> +       char path[PATH_MAX];
+> +
+> +       snprintf(path, sizeof(path), "/proc/pressure/%s", resource);
+> +       return open(path, O_RDWR);
+> +}
+> +
+> +FIXTURE(psi)
+> +{
+> +       char root[PATH_MAX];
+> +       char *cg;
+> +};
+> +
+> +FIXTURE_SETUP(psi)
+> +{
+> +       int psi_fd;
+> +
+> +       if (cg_find_unified_root(self->root, sizeof(self->root), NULL))
+> +               SKIP(return, "cgroup v2 isn't mounted");
+> +
+> +       /* PSI must be enabled (CONFIG_PSI=3Dy, not disabled on the cmdli=
+ne). */
+> +       psi_fd =3D open("/proc/pressure/memory", O_RDONLY);
+> +       if (psi_fd < 0)
+> +               SKIP(return, "PSI unavailable (CONFIG_PSI=3Dn or psi=3D0)=
+");
+> +       close(psi_fd);
+> +
+> +       self->cg =3D cg_name(self->root, "psi_trigger_test");
+> +       ASSERT_NE(NULL, self->cg);
+> +       ASSERT_EQ(0, cg_create(self->cg));
+> +}
+> +
+> +FIXTURE_TEARDOWN(psi)
+> +{
+> +       cg_killall(self->cg);
+> +       cg_destroy(self->cg);
+> +       free(self->cg);
+> +}
+> +
+> +/*
+> + * /proc/pressure/<resource> accepts exactly one trigger per file
+> + * descriptor. Verify that a "some" trigger arms and that a second
+> + * trigger on the same fd is rejected with EBUSY.
+> + */
+> +static void test_psi_write(struct __test_metadata *_metadata,
+> +                          const char *filename)
+> +{
+> +       int fd;
+> +
+> +       fd =3D pressure_open(filename);
+> +       ASSERT_GE(fd, 0);
+> +       ASSERT_GT(write_trigger(fd, "some 150000 2000000"), 0);
+> +       ASSERT_EQ(-1, write_trigger(fd, "full 150000 2000000"));
+> +       ASSERT_EQ(EBUSY, errno);
+> +       close(fd);
+> +}
+> +
+> +TEST_F(psi, proc_trigger_io)
+> +{
+> +       test_psi_write(_metadata, "io");
+> +}
+> +
+> +TEST_F(psi, proc_trigger_memory)
+> +{
+> +       test_psi_write(_metadata, "memory");
+> +}
+> +
+> +TEST_F(psi, proc_trigger_cpu)
+> +{
+> +       test_psi_write(_metadata, "cpu");
+> +}
+> +
+> +/*
+> + * irq only tracks "full", so a "some" trigger must be rejected while a
+> + * "full" trigger arms. irq is optional -- it only exists with IRQ-time
+> + * accounting -- so a missing /proc/pressure/irq is SKIP, not FAIL.
+> + */
+> +TEST_F(psi, proc_trigger_irq)
+> +{
+> +       int fd;
+> +
+> +       fd =3D pressure_open("irq");
+> +       if (fd < 0)
+> +               SKIP(return, "/proc/pressure/irq unavailable");
+> +
+> +       ASSERT_EQ(-1, write_trigger(fd, "some 150000 2000000"));
+> +       ASSERT_GT(write_trigger(fd, "full 150000 2000000"), 0);
+> +       close(fd);
+> +}
+> +
+> +/*
+> + * cgroup.pressure gates visibility of the per-resource *.pressure files
+> + * inside a cgroup: writing 0 hides them, writing 1 shows them again.
+> + * Drive one hide/show cycle and check that memory.pressure appears and
+> + * disappears along with it.
+> + */
+> +TEST_F(psi, cgroup_pressure_toggle)
+> +{
+> +       char buf[BUF_SIZE];
+> +
+> +       ASSERT_EQ(0, cg_write(self->cg, "cgroup.pressure", "0"));
+> +       ASSERT_EQ(0, cg_read_strcmp(self->cg, "cgroup.pressure", "0\n"));
+> +       ASSERT_LT(cg_read(self->cg, "memory.pressure", buf, sizeof(buf)),=
+ 0);
+> +
+> +       ASSERT_EQ(0, cg_write(self->cg, "cgroup.pressure", "1"));
+> +       ASSERT_EQ(0, cg_read_strcmp(self->cg, "cgroup.pressure", "1\n"));
+> +       ASSERT_GE(cg_read(self->cg, "memory.pressure", buf, sizeof(buf)),=
+ 0);
+> +}
+> +
+> +/*
+> + * A child that burns CPU forever; stopped by cg_killall() on teardown.
+> + * It also dies with the runner, so an interrupted run (e.g. Ctrl-C
+> + * during poll()) does not leave orphaned hogs pinning every CPU.
+
+Did you mean to say "orphaned hogs spinning on every CPU"?
+
+> + */
+> +static int hog_cpu(const char *cgroup, void *arg)
+> +{
+> +       prctl(PR_SET_PDEATHSIG, SIGKILL);
+> +       for (;;) {}
+> +       return 0;
+> +}
+> +
+> +/*
+> + * Arm a "some" trigger on a cgroup's cpu.pressure, oversubscribe the
+> + * cgroup with more spinning hogs than there are CPUs, and check that th=
+e
+> + * trigger fires once the cgroup stalls on CPU.
+> + */
+> +TEST_F(psi, cgroup_trigger_fire)
+> +{
+> +       char *cpupress;
+> +       struct pollfd pfd =3D { .events =3D POLLPRI };
+> +       long ncpus;
+> +       int fd;
+> +       int i;
+> +
+> +       cpupress =3D cg_control(self->cg, "cpu.pressure");
+> +       ASSERT_NE(NULL, cpupress);
+> +       fd =3D open(cpupress, O_RDWR);
+> +       free(cpupress);
+> +       ASSERT_GE(fd, 0);
+> +       pfd.fd =3D fd;
+> +
+> +       /* 1usec threshold over a 2s window: any CPU stall fires it. */
+> +       ASSERT_GT(write_trigger(fd, "some 1 2000000"), 0);
+> +
+> +       ncpus =3D sysconf(_SC_NPROCESSORS_ONLN);
+> +       ASSERT_NE(-1, ncpus);
+> +
+> +       /* ncpus+1 hogs guarantee CPU contention inside the cgroup. */
+> +       for (i =3D 0; i < ncpus + 1; i++)
+> +               ASSERT_GE(cg_run_nowait(self->cg, hog_cpu, NULL), 0);
+> +
+> +       ASSERT_EQ(1, poll(&pfd, 1, PSI_POLL_TIMEOUT_MS));
+> +       ASSERT_NE(0, pfd.revents & POLLPRI);
+> +       close(fd);
+> +}
+> +
+> +/*
+> + * The flip side of cgroup_trigger_fire: with the threshold equal to the
+> + * whole window, even ncpus+1 hogs must not accumulate enough stall to
+> + * fire the trigger.
+> + */
+> +TEST_F(psi, cgroup_trigger_no_fire)
+> +{
+> +       char *cpupress;
+> +       struct pollfd pfd =3D { .events =3D POLLPRI };
+> +       long ncpus;
+> +       int fd;
+> +       int i;
+> +
+> +       cpupress =3D cg_control(self->cg, "cpu.pressure");
+> +       ASSERT_NE(NULL, cpupress);
+> +       fd =3D open(cpupress, O_RDWR);
+> +       free(cpupress);
+> +       ASSERT_GE(fd, 0);
+> +       pfd.fd =3D fd;
+> +
+> +       ASSERT_GT(write_trigger(fd, "some 2000000 2000000"), 0);
+> +
+> +       ncpus =3D sysconf(_SC_NPROCESSORS_ONLN);
+> +       ASSERT_NE(-1, ncpus);
+> +
+> +       for (i =3D 0; i < ncpus + 1; i++)
+> +               ASSERT_GE(cg_run_nowait(self->cg, hog_cpu, NULL), 0);
+> +
+> +       ASSERT_EQ(0, poll(&pfd, 1, PSI_POLL_TIMEOUT_MS));
+> +       close(fd);
+> +}
+> +
+> +TEST_HARNESS_MAIN
+> --
+> 2.43.0
+>
