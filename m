@@ -1,123 +1,105 @@
-Received: from mail-wr2-f32.google.com (mail-wr2-f32.google.com [74.125.225.96])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B891B448B9A
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 19:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.96
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 341AA4E1C92;
+	Fri, 25 Sep 2026 19:30:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790364320; cv=none; b=Qi6He0ELSrYOfpYOVIInUA8pmbDU+c7edelmCkxGCqBBNG/nB6KavuolICYWEyuMfrUlHS1veRxvDcKcaW9ZR1vDcGZq2ZN8m/B2kZhMqMf2DRwIuvIWfvA06cbdGugajBTUc1YQuP6qXzc3f0/+xRmw1KELyjVW8FKahd14vIs=
+	t=1790364616; cv=none; b=NV0e5orEEIEjxYavd2U1oW20FWf8jpmJIl8nUEK0uwKg8FOtmGAQX2MfIQqVLSZzACZuOk+njvqSTHNNUk76EF2MSkpkAM5AsvXFTxzrf9MRNxx+kR4Nx76LiuwlEgstCOmvVBs9058vNzC0OfFi9JFbEPZ1VmTwU29AfRJZzrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790364320; c=relaxed/simple;
-	bh=j5Njce1R2CzMDzpSrCt4D4C2yKngQ2KuqhBpl1pHhmE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=t3+4oyktkE4XVoWy4zU0tBDdVo5/rh8ksFQ9z9C2UAMj5miopatkMTdZ6XcscmO40PKTAXuiy17I2UD9IAYtgJzEPbcmmiGqUx9koADpv5W/1Pp0GwL/Z50z6PLZeISYUY5FSOml6E/nzd7Wa9Bv5okSSXWlXUT0zqoYMIKWkOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CZEVauiQ; arc=none smtp.client-ip=74.125.225.96
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790364616; c=relaxed/simple;
+	bh=zT252H2Ho87u3KEN3XgUGqqVJMLoiJ1cFQMrKMVc2VE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Y+lwRV7hgUKL7gqGGKUb60vrE/ONgqAsQmsGufVfn6nIwVBhNMC9IJlCw1TU/p/cPcGcY+bTPoXxgHIlyEGL8w78N4CVigLGODvUQuK1FX2BwpxzoYB2JYexwJgfHQUQ6Nkn8m5Doz9Tdwow1/5qUc1kiBuwH41Yt94pBwmHA5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RTC9Gu0M; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CZEVauiQ"
-Received: by mail-wr2-f32.google.com with SMTP id ffacd0b85a97d-482f6350f91so753184f8f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 12:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790364317; x=1790969117; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=G9E+sqsbctWeMKlnS+UkV61JpHdXQmDR0/Cg9hJ8tHo=;
-        b=CZEVauiQEUUSshI568NztLVATBws7TXi2Zw2Ovcz0GRj7cZIcOjkTw/jvIL0WGzWWj
-         xXqQ562xEWyLL9IB/V/wskVU3ZTAt40Ct/mbKk8IDciQB5KgRsspOo7hDmuyifpfzlMM
-         82SDqR+l/ZiUn0JtjFPjUBD9STlJQ9/04jpghtw5DVJ4r+meCYtstNRrelvNPluixHx2
-         O7WFyvaYq058kl33hPQ6czuFj7cnF3KmnEP/JpAqB9ialZPL0BMCXtYNPGv0JVYudldn
-         iGZxbUC/9kVbn+FcWS8Hun+DgiNDV7e7J9tuPjptgKynbzmfTBIeBskqMQ3YKWID4sjA
-         kzUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790364317; x=1790969117;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=G9E+sqsbctWeMKlnS+UkV61JpHdXQmDR0/Cg9hJ8tHo=;
-        b=x/AMpfNV0qeg/L6BHWRRvWdIKidVvSQzc7v44Wx0GwSZmUPNSCHW6Ybf0I1qD2bl3V
-         2aampr/cUqQGoq463zSrbmpn4+6XoXZPeX9CDWK0tyzwsEW9yia1DrHdPNs4FQAmrbAe
-         8vjMqJGSWAU16nrqOV3H1wh4V3SBbIVXiFaf17W6CAIPF/0lDIVNxr3iZA02RQi+AOMQ
-         TbjdlWPwfwhSa9knENwWAGsv3Q9knBD9VjAGhLYt0+WJvaqzMWKnaGva1+9xM+ZNHEkR
-         kenozYgigQBF3HKT6fOWYsTZp3g3fVkwjSV3xjJaGiaqxjlFy7Zeta/S7IpThpbfdDGp
-         7K/Q==
-X-Forwarded-Encrypted: i=1; AKwUvByqXFsm60LLSkSYeRecxbXo+XeSZE1vkGEzYTFUrV4ZxI+nSHH0Ghu5oU0gGuuVzTVjv0FfbfGfky57dFl9hq0=@vger.kernel.org
-X-Gm-Message-State: AFuF++nblDPzVXzEk+aPb/1LxKzfR66Cx4mNyv42QoNkjT5XCV3SSsQB
-	yAW/mFVApyH8QiPVo5YyWULS1/h6K9NGGxHpHjKxjMbNiIHkti0RizGg
-X-Gm-Gg: AYBFou0e63GA7nnG8WfQ4x0phDmHP27cpyIN6MPNV1zmqNMdFmFmG84f7so7m8L8naB
-	V0ITGTSlVleGEyLUjMpytFrtlnu/6c2yLM+Y7rxl6s5d41hOVDGmlawlEAZwwSQCpHg25k4pBTT
-	/9UM8o15rykYZIDC2bZQK2WdMHLQHIahgMdKycp4e0W1vR7DKEBGzaM67MN8Ft3qw4DwkgBBzms
-	Q5Ts0IKG4RgbInsiiW2V6I6eQdqB2MXZjFeoeHsvWi92OHq2Wp5nBDKzvjSu+1NWr8pjbOcDnQo
-	QW2RfncL6NXbsLK5O01reVjAJ6deO0a/gCbmLQ6jbx7Zlhrcgz8dcWE4EsPvUXsoWLp0I4zvKds
-	+QrNr9/v97WlpsSg3OUP6Lua3LZ9Xm/k4SB2bSiRncSb9oJMqVH4++3BOsS0tsmgROLwjYQRlBc
-	VB5/KiLJulAsThONL1kHaprGPXyAOcZhsO2i9fI9AIZGExn1c7StZc5mOlJ9sErPraWV6Kwn+A1
-	KpkH+BTGp/BXxBh9Lm7rjvTARSPmBFmiC4yB95pVYXZzjDZW8srNumMaGeBOMyE/J10tUVxxCdc
-	hLBlW+BoKudyNipV5iNpCRLr8rIOd9Q+xq7+WWbWWqXRO09TySnA1XIxhpvdRxCBBSbVTx2DHGQ
-	yayWmP6k=
-X-Received: by 2002:a05:6000:26d1:b0:487:8ec:1fc with SMTP id ffacd0b85a97d-4887d9fa635mr5543814f8f.12.1790364316713;
-        Fri, 25 Sep 2026 12:25:16 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-2a02-3100-adc6-9c01-89ae-b145-8960-cf19.310.pool.telefonica.de. [2a02:3100:adc6:9c01:89ae:b145:8960:cf19])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a35fb05sm10205982f8f.20.2026.09.25.12.25.15
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 25 Sep 2026 12:25:16 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Jeremy Kerr <jk@codeconstruct.com.au>,
-	Matt Johnston <matt@codeconstruct.com.au>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>,
-	Rae Moar <raemoar63@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] net: mctp: Stop selecting flow support for KUnit tests
-Date: Fri, 25 Sep 2026 21:25:10 +0200
-Message-Id: <20260925192510.93840-1-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RTC9Gu0M"
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 8A2181F000FF;
+	Fri, 25 Sep 2026 19:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790364615;
+	bh=N33tIU6kIygB4VaarKLSX0TT1aLAq6k2sUWPy0f726s=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=RTC9Gu0MrN5Xg87sZMqOE0Z3mbbvQY0/9wA0REwAIJQdcozHOCmPqrGXEfGInvMkC
+	 vX32v5/xhxgdPSfTFOrk2J3qPyMaNQeVq+OAkPbpleMRJoDbvyYP6ydAm/PpdaGU7Z
+	 +XBumrWmscx+B+WlAKKHaP59v/u27QXVv8qofSvwtYfNxNm+nMSshYlJ7lK2WlPZH4
+	 tJAaB0av7CXmY7daGxq4Js7rugJuxbwErPTYBAEOweudczvXFKeVJ3cwfXcHQc7utQ
+	 PevrKWCKXJ2MRmTV/pcalcQH/20TbgV1S0xbmp//M83zqQsULTTUMAkbOKDMlQln2h
+	 iaVcnYRKAVq1Q==
+From: Nicolas Schier <nsc@kernel.org>
+Date: Fri, 25 Sep 2026 21:29:30 +0200
+Subject: [PATCH v3 1/2] kbuild: Mark usr_gen_init_cpio as
+ no-dot-config-target
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260925-move-gen_init_cpio-to-scripts-v3-1-99c493f76722@kernel.org>
+References: <20260925-move-gen_init_cpio-to-scripts-v3-0-99c493f76722@kernel.org>
+In-Reply-To: <20260925-move-gen_init_cpio-to-scripts-v3-0-99c493f76722@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, 
+ Luis Augenstein <luis.augenstein@tngtech.com>, 
+ Maximilian Huber <maximilian.huber@tngtech.com>, 
+ Mike Rapoport <rppt@kernel.org>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
+ Pratyush Yadav <pratyush@kernel.org>, Alexander Graf <graf@amazon.com>, 
+ Willy Tarreau <w@1wt.eu>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Askar Safin <safinaskar@gmail.com>, linux-doc@vger.kernel.org, 
+ kexec@lists.infradead.org, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org
+X-Mailer: b4 0.17-dev-1f2f7
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1061; i=nsc@kernel.org;
+ s=20250924; h=from:subject:message-id;
+ bh=zT252H2Ho87u3KEN3XgUGqqVJMLoiJ1cFQMrKMVc2VE=;
+ b=owEBbQKS/ZANAwAKAQdSCnAWJhJpAcsmYgBqtsufsfYeYT1sBDoLauwLKFoPXwsN6+APpXnyU
+ o+A0B4KUOqJAjMEAAEKAB0WIQSHQTenhzckp4G+wsYHUgpwFiYSaQUCarbLnwAKCRAHUgpwFiYS
+ aYOvD/4ygVvWdPjef/U4fr0RFblazzSSsOqSdO+uo2M7hgRgpunel7QTDmY72T8zjdamYOj0Thc
+ 6h6zpfP5PJXV3NQY2CW+2iYMtEieWxmXjAYuC6TrZfUiIbtbDiia4da5fD9j5tH1UVpAzX3+CRe
+ BktrH22N6MU37cUWzryZ3AK1h2RM8WZWsaV8dotOtuak7tv0aR25fkOXyK+05O3ZLWA0croK5I+
+ syqnd5BB7nyb4J9Ru1KWd+DWIEXg7ZUZ6HOuWvDF/Y0JOpl33FZdo8iDHhmvcljfqVNqr4Mbm2B
+ Z5uU+gGmcluYOGdxsNZZI0y86+WPKfC7CVaxa3jtpFH/JQncKx7VGMlZpGEUh9PJszty+qe+d+S
+ zmPmUO8OQjkxNHKbf/S99ihrfMouqV5PgjvAkfuHQ6cUPUEYApm339iJzGqkI/nUAGPrn+rQzeY
+ zcXnYa+PBq94VZpo53cAFdl+P9U5cCLuCap7GfGDVdCVORjSPZNYAO/0OS8z+qz+L+Fu+BNjkHK
+ lBoAHwFGmpBMXvY9oSSpWKaU5rKzwNfckSVkJ+GkNq8ZobeFjQiG7xMHRy1efPx+7eFGb2APolg
+ tsKvJUd3i1eHI7PyZxr6P6ugoRT0r8ppOLfXU2rmh7dY3ZVdaqfMJPUGPTXs2sBqs+6Y1aSjxY6
+ bh31QprBv3oFASg==
+X-Developer-Key: i=nsc@kernel.org; a=openpgp;
+ fpr=18ED52DBE34F860EE9FBC82B7D97093255A0CE7F
 
-MCTP_TEST selects MCTP_FLOWS, which also enables SKB_EXTENSIONS when no
-transport requires them. Remove the selection to follow the dependency
-rule in Documentation/dev-tools/kunit/style.rst.
+Let usr/gen_init_cpio be built also if there is no kernel configuration.
 
-The two flow-specific tests already skip when MCTP_FLOWS is disabled.
-The remaining tests can run in either configuration.
+Askar Safin reported that gen_init_cpio may be of use before any kernel
+configuration is available.  Add usr_gen_init_cpio to list of targets
+that do not require a .config file.
 
-Fixes: 109a5331143d ("net: mctp: tests: Test that outgoing skbs have flow data populated")
-Assisted-by: LLM
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+Reported-by: Askar Safin <safinaskar@gmail.com>
+Closes: https://lore.kernel.org/all/20260220191150.244006-1-safinaskar@gmail.com
+Fixes: f8e05c10631e ("kbuild: Add top-level target for building gen_init_cpio")
+Signed-off-by: Nicolas Schier <nsc@kernel.org>
 ---
-Validation on net-next 42a9fb3382fc: x86_64 LLVM builds and QEMU runs
-with MCTP_FLOWS disabled and enabled. Both suites pass. With flow support
-disabled, only the two flow-specific cases skip. The enabled configuration
-uses the I2C transport to select MCTP_FLOWS.
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
- net/mctp/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+diff --git a/Makefile b/Makefile
+index 751a08643bf8..51fada9059d6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -298,6 +298,7 @@ no-dot-config-targets := $(clean-targets) \
+ 			 %asm-generic kernelversion %src-pkg dt_binding_check \
+ 			 dt_style_selftest \
+ 			 outputmakefile rustavailable rustfmt rustfmtcheck \
++			 usr_gen_init_cpio \
+ 			 run-command
+ no-sync-config-targets := $(no-dot-config-targets) %install modules_sign kernelrelease \
+ 			  image_name
 
-diff --git a/net/mctp/Kconfig b/net/mctp/Kconfig
-index d8d3413a37f7..3a5c0e70da77 100644
---- a/net/mctp/Kconfig
-+++ b/net/mctp/Kconfig
-@@ -14,7 +14,6 @@ menuconfig MCTP
- 
- config MCTP_TEST
-         bool "MCTP core tests" if !KUNIT_ALL_TESTS
--        select MCTP_FLOWS
-         depends on MCTP=y && KUNIT=y
-         default KUNIT_ALL_TESTS
- 
+-- 
+2.47.3
 
-base-commit: 42a9fb3382fc2573e92f41d203b095d9a372cfc9
