@@ -1,131 +1,194 @@
-Received: from mail-qk2-f13.google.com (mail-qk2-f13.google.com [74.125.230.205])
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715FF27E07E
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 00:58:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.205
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790297938; cv=pass; b=L+Ckn30yz8Pe8NK8cU22Wjjsa8nYymIxs7u04T5cTKPZ6Icoo1UjeZ7i7Ecp3NdF8bSSQ0ir3+TwRbuWBO7J4s/Kh6gRysIVLaFYz0UictX9p5DKAV29BPQKiM+MeF5VHJfi10I9ny9vqf2vjQcXOUMWxu16obd49TfUz3Vrie8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790297938; c=relaxed/simple;
-	bh=urAmayGrk2/YKnpNUBvPoUR9FlB5GJJ9+v5VQMZfNXg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fsPTD+xsS9s9CmVEE7or6b3R44tLp2ACwYCRZuPI6NTSDGFLDCySmOY6EtUJ00rgpmI8RibhM3Gt0JoNn8BTMxxoaittmXAYYzzT3pc7TeQkhZnqXVD4J+qjp9vvSemcUJRCnNW6hMGkGh1pF9CbrlWCAlpHj82iH38SFElL+3k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MezY1qMb; arc=pass smtp.client-ip=74.125.230.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4749C2BB13
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 01:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.199
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790299874; cv=none; b=iO6G0zMB3dbEGa+7wdiRbMizBdzNHtJzonRciLpghSJzhIdKCTULExXEFIKjjZhpyH+MCofhqjOA6vjY+ju30GHPuGE83g0TxFPAG7qUDZCdxGX+YLkNnralnhC6pS/c71PZY6Ibc1fZFEIEuQXpz8rrWGxKvxapBKH3wmhiTwA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790299874; c=relaxed/simple;
+	bh=wQKRtKLqGJCDEPvz/iqrGK9BVlTgRu7XZjqe2Rl0nXs=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=MTwTrvere9DHC9/MLCGdBjWtL+qKWlQALtZpazL4Yfc7QbGM5XI08wfGBuks6JEva7YcjcPZx7y4b72UFjjo4uCrCtiPAuubzZ2v0gxuwodozKDEPhziz+rkTFB4KZZLtVS8BNRkYGLeivFCUiDlLznnv/eK89kgiH0/ZgtmR5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--skhawaja.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EyJ9Gtl4; arc=none smtp.client-ip=209.85.214.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--skhawaja.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MezY1qMb"
-Received: by mail-qk2-f13.google.com with SMTP id d75a77b69052e-52fb767d286so3791311cf.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 17:58:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790297936; cv=none;
-        d=google.com; s=arc-20260327;
-        b=SornerzsnjehU9khML0edPNbkm39uFNpcLtqSTAjmWSVscTxgJutKD42E7sYWIJdhe
-         xHeMjtProGDNbMBzQCd5cqUsKb342Z3cvGR4FLT8IgMA19EEx8ar72ZfBNQGEw+EXhlJ
-         SMF64DuKFiWHUeqwQAcp7TCe1Lx7x6oq+KqJQaDCrBiZY/8FITOxs6vREYj7mNPOZQJa
-         jbEuSFDfsHav7fbLWNNib51EgXqztqVePXbzDDeNXGUWXpfBCYrmYhlmGou3B+IGe8Sd
-         0WAbSTfWlTl2VlniZOvHeW9Nd9M2L4CNJ5ia7dhLNZE8twkwFHgnXFF23hyyvcIb9zHM
-         azyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=urAmayGrk2/YKnpNUBvPoUR9FlB5GJJ9+v5VQMZfNXg=;
-        fh=G0T6gnGsW90Vq2aZNNYpgGDNCc64MWEZ609LgRPa7Is=;
-        b=fKnFToG7RuXJWlF3+vLbLvbR3dou7k1OG9Q2SB7sfG++QsRLjB7Tw6N476ynhPgTNJ
-         vWzQIig8TRPP2vimOuCw9o0WeqWu+bvvJF3LwSrbMpgCrhgAZ66a/+4JnBZvyCzJMzsB
-         EFJ9raP+pDsm1UvidP8s4BTrhkW+VN/l2tIJEplkn1zO64XR7muFIjLyP18kMKzOqbZJ
-         1UsJ47zJo0y1MATsQWaRxJUOQobQKMUo3Jy8335maJ37S5PjkxPjGVf09hGKnaC0p7lz
-         AmrCBjYkzW1Xq8gr7jWr1SBprzoOPkgyRRun0zJZ4befTRYu3S2OL0Ix6ktjN0dN4ROd
-         GHSg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EyJ9Gtl4"
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2df94898a4dso2688675ad.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Sep 2026 18:31:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790297936; x=1790902736; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=urAmayGrk2/YKnpNUBvPoUR9FlB5GJJ9+v5VQMZfNXg=;
-        b=MezY1qMbvEI7v31/hFS2NYGgdGoMKE9LPO27An0Mmy+vH0VGgaBGfUGCccceGuQ8cJ
-         s3KZUEU4lqO3U5pgLTa1EprjzJFEg07sKnGep1+TaMbOgDC5dwnnFS7t4nrAK63/lU3n
-         Tb5rgQ+hbKfJQH6plZaAEUFjn7yajHRvArYipEkTkX3GuWMx1rehJr6L33TzNiKPcAj6
-         2kqhFaMCYMBBe/ZPW0d5kdOmikTJTdzveBfq0Z+Lki5qnb5bJt/y4kHwykbMQ3Trkihf
-         mSRAecWWbWTc7EVa9EgtsFJSCMhZSuFlAQlMt7veidDsW7Lib/Tm3v+wkFYHHZNp09HQ
-         gdZQ==
+        d=google.com; s=20251104; t=1790299871; x=1790904671; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=RweWv4r3+tfjVI8UGCUJFPVFEYFdP24TgU4ruOZ3H6U=;
+        b=EyJ9Gtl4rCV5Xuw2Q4c1sZaWwL0EL2DjMgQHWhhHqWvRf+5tdVER+ZN7iB929AOWrf
+         K7rtVKUuHHEmBLdzFXvXR5BVg+V6XkxwmbD1pm5GuTT42DM7GbYtYM+EklNDs15vvkYQ
+         YCkgWKeX5GK3SNX7TUf//zqn8CUsY5WV4KMAxZQH6xlHiN0Lp3HG6DN6gS8u5k2XW/pn
+         d49NBzDUqXonjjmIqd1Uqw319FBOkNIsZUdjYB0OP0MnPeJN/SlE96kUxhimCwCSM9G9
+         f9Bc/kcScxvAyTbA0t6LjqOPONN+IM2wwluvxGOZYDwbrdz/TJo24w/sYSmJjpU3FR/E
+         //Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790297936; x=1790902736;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1790299871; x=1790904671;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=urAmayGrk2/YKnpNUBvPoUR9FlB5GJJ9+v5VQMZfNXg=;
-        b=1ufvLB90Z1OlDZR4d9K16WsqmT+DrHcf/cNNKjtmAwKrrxUSDAkgJpZCBzZXCoJIIB
-         wMNcpPFQbn/+HznInYjUmSfd4MoD39Uarewubr20G8V/oU1n2xhsUM9MZJ1bKlf+yqJF
-         BRgYXUTg8ytUP9+5007lFmxN8rK1O0zwFCHLzwrU6OeVxbIlWc103zahFZ4WFBHzRi7l
-         46M7XjKfx1hspjD+1ueSc7scDas0iAaHBK2CEGNwpBrKM17kZqkRRU5ICZitTPHiIzLt
-         K3gdCzAXuDoWf3ndGUQ8yDPCD+cCF2f0zDRQXJTsa+Y0VQu4RHx8/1+ACBu+zjjRm/aC
-         DY1w==
-X-Forwarded-Encrypted: i=1; AKwUvBydw+d6Vvlc0J/pfs2z5dNQX4PUtZzjp4Rbit8RhiyMCbmCbHlh3c001aTYyf6GyT2/W1DICtx06SLGltwDQ4w=@vger.kernel.org
-X-Gm-Message-State: AFuF++mkVCOc+PjFuU2wiWqDplEVbNJxAXFGxX2Imsw5m0JSJ9NUH9NR
-	IMA0QRgcWu/IJgBuC7i41z//gMnIY/OyNnsndPgixgFi/2ItumpmQBY5EC3B+QGemkjNc4FrR0n
-	PQ1FG99SAKBpvLNjENG0atIKFI/+4MsJz7sKQBDcJ
-X-Gm-Gg: AYBFou3lIIZe9xiPmMvQaiQkaScb/sJdAwrbMWqmq/eJu+iTaG8qeaS1eq0K22G4Lle
-	5rNMy9AtyReHbeO3xwAJuOScFUjYc6pdtWbR4UMp2zhOBMuRwxWawcsSANMmxf3hKBOuMTiqUgO
-	VruErl6Sf/DnlPhMKd7BtOT3wbLRYGZ230+Wls+HeGGDWnRedw6ENXPOBQOqIgTjDDHbcGwxlmN
-	YCieUYKwMm/5q6rTqzxVRhDIbeItKYDatvxjSH7w0yzU5UluC5oJmMkjQp1S4X5Y5mr6U8B3ktY
-	RxzYgn853bJ4Mei/mKC5wB2h/ph+nsfHbacbeisvwiR/GFcCCCBNTY5fXJLNwHIAo7iobcc+yG7
-	/bgUsg9k+YQpT//1+nNnbcqm+g6QxDw5zL3XwHyXbgl++pFbSi5W30mIspo9ec2DsYsKG
-X-Received: by 2002:a05:622a:1908:b0:530:f3f7:ca19 with SMTP id
- d75a77b69052e-5330b5dfbd0mr19703701cf.25.1790297935585; Thu, 24 Sep 2026
- 17:58:55 -0700 (PDT)
+        bh=RweWv4r3+tfjVI8UGCUJFPVFEYFdP24TgU4ruOZ3H6U=;
+        b=a+46gGHaUnNhlu1XK0X1JGWRxCCfvgxhq6JkMYWp8Ae8gdz3fuT7AZ6cLre212RxWm
+         ZrL48as8yI44L3U9KTo6SONHxeBlnKP4/8Ab7WAm0z+5ieyksKsf3cn4tJ8u2QXokwYz
+         0VEzA4fJjuMFLuG2XMCk5S514Y4aCg5vvI80+cPLmhACPEneaDXT+hZMKmFbIGbVDzFg
+         3sQDAqCA0V+F7806uwLWMOPuJ1nYuMwEG6hGIOsjLFlLJ8vLujZDpAJpUDgttSndi/oK
+         ACavvVBWvOYRPg3JMPvsnWcRfPMNs1UwJ3OIwztud35ei+5FL56WlOm5IYUpi/mvJoQt
+         ufgg==
+X-Forwarded-Encrypted: i=1; AKwUvBxVOLAMV7l/NAUqA/CnDQRBvQLyevcfVZSGpgfH3ylLwGDG3XNCDQKkieuNa9wOnSv/K/wpyoVomxDWudj/2xQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++mljlvSxJUy9GPROZzzqa+nYT3wP5dpa0iOgU8HQish2UcvQP1F
+	3busHaRQu0GbBr9sLZisLB6GGkqEQJzZSnYHeN+rnJGGKP3/7FDWSbFl9kjLIOaly/mu3JAGJhg
+	KL9IwmT3yBfS0pg==
+X-Received: from plmo2.prod.google.com ([2002:a17:903:18c2:b0:2df:7a17:a791])
+ (user=skhawaja job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:d4c8:b0:2dd:ad73:c938 with SMTP id d9443c01a7336-2df7daa9ba8mr31900875ad.25.1790299871207;
+ Thu, 24 Sep 2026 18:31:11 -0700 (PDT)
+Date: Fri, 25 Sep 2026 01:30:55 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260924224456.55690-4-jeffjo@openai.com> <20260924224456.55690-6-jeffjo@openai.com>
-In-Reply-To: <20260924224456.55690-6-jeffjo@openai.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Fri, 25 Sep 2026 02:58:44 +0200
-X-Gm-Features: AclHuK9sfmq7kaDYlZhIb51eTI_YTaqPKeo-GWlhfKE_S3RVg2Vy8HH2SQdgf3E
-Message-ID: <CANn89iJiOQNrxAOU_OuOZafaH00K6bHM9nS9NCWEpg8yKq8fgg@mail.gmail.com>
-Subject: Re: [PATCH net v2 2/2] selftests: net: check timestamp echo after an
- old ACK
-To: Jeff Jo <jeffjo@openai.com>
-Cc: netdev@vger.kernel.org, ncardwell@google.com, kuniyu@google.com, 
-	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	shuah@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.rc1.315.gc6ed9934b7-goog
+Message-ID: <20260925013110.3447626-1-skhawaja@google.com>
+Subject: [PATCH] vfio: selftests: Remove libuuid dependency
+From: Samiullah Khawaja <skhawaja@google.com>
+To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>
+Cc: Samiullah Khawaja <skhawaja@google.com>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Alex Mastro <amastro@fb.com>, Sean Christopherson <seanjc@google.com>, Rubin Du <rubind@nvidia.com>, 
+	Josh Hilke <jrhilke@google.com>, Vipin Sharma <vipinsh@google.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 25, 2026 at 12:45=E2=80=AFAM Jeff Jo <jeffjo@openai.com> wrote:
->
-> Add a regression test for a gap-filling packet whose acknowledgment has
-> become old. Linux first sends data to the peer. Deliver two peer data
-> packets out of order: the later packet acknowledges Linux's data, while
-> the delayed packet still carries the earlier acknowledgment.
->
-> Require the ACK that closes the receive gap to echo the delayed packet's
-> timestamp, 301000. Without the fix, Linux accepts the data but still echo=
-es
-> the previously saved timestamp, 1000. Also check that the application can
-> read all 34 bytes.
->
-> Use a large jump in peer timestamps to represent the idle interval, with
-> no real wait, loss or retransmission. The test directly checks the outgoi=
-ng
-> timestamp echo. It requires packetdrill's merged TSecr verification fix
-> (linked below); older tools incorrectly pass on an unfixed kernel.
->
-> Use the existing packetdrill selftest runner for IPv4, IPv6 and
-> IPv4-mapped IPv6.
->
-> Link: https://github.com/google/packetdrill/commit/83f72d3f9085d0e26eb4d2=
-06fe4d7cfab5b6d872
-> Assisted-by: LLM
-> Signed-off-by: Jeff Jo <jeffjo@openai.com>
+Libvfio depends on an external dependency libuuid for parsing vf_tokens.
+Building it in cross compilation environments gives the following error,
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+ ld: cannot find -luuid: No such file or directory
 
-Thanks!
+As it is only used for parsing vf_tokens, remove the dependency by open
+coding the parser where it is required.
+
+Tested by running vfio_pci_sriov_uapi_test selftest.
+
+Assisted-by: Claude:claude-opus-5
+Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
+---
+ tools/testing/selftests/vfio/lib/libvfio.mk   |  2 -
+ .../selftests/vfio/lib/vfio_pci_device.c      | 57 ++++++++++++++++---
+ 2 files changed, 50 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/vfio/lib/libvfio.mk b/tools/testing/selftests/vfio/lib/libvfio.mk
+index bcfa74ae040e..7d6916ca3940 100644
+--- a/tools/testing/selftests/vfio/lib/libvfio.mk
++++ b/tools/testing/selftests/vfio/lib/libvfio.mk
+@@ -29,8 +29,6 @@ $(LIBVFIO_O_DIRS):
+ 
+ CFLAGS += -I$(LIBVFIO_SRCDIR)/include
+ 
+-LDLIBS += -luuid
+-
+ $(LIBVFIO_O): $(LIBVFIO_OUTPUT)/%.o : $(LIBVFIO_SRCDIR)/%.c | $(LIBVFIO_O_DIRS)
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+ 
+diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+index 4063a0e2b3df..774d1e90ec0e 100644
+--- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
++++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+@@ -23,11 +23,54 @@
+ #include <linux/types.h>
+ #include <linux/vfio.h>
+ 
+-#include <uuid/uuid.h>
+-
+ #include "kselftest.h"
+ #include <libvfio.h>
+ 
++/*
++ * Minimal replacement for libuuid's uuid_parse(). libuuid is part of
++ * util-linux and is routinely absent from cross-compilation sysroots, which
++ * makes the vfio selftests unbuildable for non-native architectures. The only
++ * thing needed from it is parsing a VF token, so open-code that instead.
++ */
++#define VFIO_UUID_LEN		16
++#define VFIO_UUID_STR_LEN	36
++
++static int vfio_uuid_hexval(char c)
++{
++	if (c >= '0' && c <= '9')
++		return c - '0';
++	if (c >= 'a' && c <= 'f')
++		return c - 'a' + 10;
++	if (c >= 'A' && c <= 'F')
++		return c - 'A' + 10;
++	return -1;
++}
++
++static int vfio_uuid_parse(const char *in, unsigned char uu[VFIO_UUID_LEN])
++{
++	const char *p = in;
++	int i, hi, lo;
++
++	if (strlen(in) != VFIO_UUID_STR_LEN)
++		return -1;
++
++	for (i = 0; i < VFIO_UUID_LEN; i++) {
++		if (i == 4 || i == 6 || i == 8 || i == 10) {
++			if (*p++ != '-')
++				return -1;
++		}
++
++		hi = vfio_uuid_hexval(*p++);
++		lo = vfio_uuid_hexval(*p++);
++		if (hi < 0 || lo < 0)
++			return -1;
++
++		uu[i] = (hi << 4) | lo;
++	}
++
++	return 0;
++}
++
+ static void vfio_pci_irq_set(struct vfio_pci_device *device,
+ 			     u32 index, u32 vector, u32 count, int *fds)
+ {
+@@ -167,13 +210,13 @@ static void vfio_device_feature_set(int fd, u16 feature, void *data, size_t data
+ 
+ void vfio_device_set_vf_token(int fd, const char *vf_token)
+ {
+-	uuid_t token_uuid = {0};
++	unsigned char token_uuid[VFIO_UUID_LEN] = {0};
+ 
+ 	VFIO_ASSERT_NOT_NULL(vf_token, "vf_token is NULL");
+-	VFIO_ASSERT_EQ(uuid_parse(vf_token, token_uuid), 0);
++	VFIO_ASSERT_EQ(vfio_uuid_parse(vf_token, token_uuid), 0);
+ 
+ 	vfio_device_feature_set(fd, VFIO_DEVICE_FEATURE_PCI_VF_TOKEN,
+-				token_uuid, sizeof(uuid_t));
++				token_uuid, sizeof(token_uuid));
+ }
+ 
+ static void vfio_pci_region_get(struct vfio_pci_device *device, int index,
+@@ -415,10 +458,10 @@ int __vfio_device_bind_iommufd(int device_fd, int iommufd, const char *vf_token)
+ 		.argsz = sizeof(args),
+ 		.iommufd = iommufd,
+ 	};
+-	uuid_t token_uuid;
++	unsigned char token_uuid[VFIO_UUID_LEN];
+ 
+ 	if (vf_token) {
+-		VFIO_ASSERT_EQ(uuid_parse(vf_token, token_uuid), 0);
++		VFIO_ASSERT_EQ(vfio_uuid_parse(vf_token, token_uuid), 0);
+ 		args.flags |= VFIO_DEVICE_BIND_FLAG_TOKEN;
+ 		args.token_uuid_ptr = (u64)token_uuid;
+ 	}
+
+base-commit: 3d7783543c2646af69ad65825e810060494bea21
+-- 
+2.56.0.rc1.315.gc6ed9934b7-goog
+
