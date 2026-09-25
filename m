@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15DC7126C02;
-	Fri, 25 Sep 2026 07:01:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93883101C8;
+	Fri, 25 Sep 2026 07:36:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790319691; cv=none; b=Q/QlNGODmKiMf4vlcftpw+YA1cQJe9Cfvq4IWD4OCPuokryMrUGFO41yqGnsFbyAPe/MuWEmyOp0lb3WpTJ3tYDrnEPSsOF8vSRS+nOHAPldHZt4J8QztJgSrhfme7ec98mWuYnzPOxF33nLaLzLaqNiw0QcP0kD3OlXg2SPZXM=
+	t=1790321794; cv=none; b=nbWMF1r7t0/nuiI439kW/Z0gImTVScF578h/ameJePFkwPM4ugKKbahDkv+JaSfwQeUpipfJ4MoTRXZ/CGe+mLT0gVfbCn+TYxwv86N4wCzg/G4sp6RFdWOjz5lBlBXCujseDD6vs246RDd8mroYPb3ciy9pC2Q4vzS4knJzO8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790319691; c=relaxed/simple;
-	bh=ybrqyG5jd+0ZNmw6bxWvXnpAFn0qEQAc0SpEc+wlL/w=;
+	s=arc-20240116; t=1790321794; c=relaxed/simple;
+	bh=OrWtnPHY0v2jFfTbnfAEgTflOnAKuPxoisotn6z/Wfs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Md7KJNkrgpt6BVtwS+UQqzzaMYChUwCHpiynWc4hHFIcPtNcwrSWBq/C7b8Xhtq2PPEUyRMqkrqlq+AOQffB7TMR2207L+av3VxRrWBDKHeVjn5uN7miJqUvUR2fSn7sOuSJeeQP/bpAQ41qWOYk0tswahC78sOJyF/DaVH3FzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZsFUjKBg; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=c1GMlszJBorxOOWH0VHdJ2jp8qTNdoKGUEiDhB9FmrYkgl+pfEe0cjvWABBOTZP2RWO3hNR7cxXD7GStZMazde7B1RbacNKxqvSFds/0nC82Ttj98ufILLam4+RLZdl1T7c5XwR5PJK09GXyuQB6PWpQUCCeU8PpGkyiNDDnc5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZONf+4+l; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZsFUjKBg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCD041F000FF;
-	Fri, 25 Sep 2026 07:01:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZONf+4+l"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A5FF1F000FF;
+	Fri, 25 Sep 2026 07:36:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790319689;
-	bh=12GQTQF+CbA5YWBSY494mtmthnVLIa76obNaRDLDI/c=;
+	s=k20260515; t=1790321793;
+	bh=qnxQU7d+frKyB9oowMrXZhHl7CNs0iZ4Cr6Z7V6k8J4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=ZsFUjKBgrpHW8BPAYX+7NWH4Sgkrz1IewWel2Oqzog+gTBQMFg6F22pt+peCYKq3s
-	 0erWR043KfeVfU7c9hbkT5gFacZ2S2SVvoQRngbPCHTQliIyjgMrzNi4YpWpgKEHAW
-	 yc6BU1+ypEBxx3O9T0wnjWani0UonVjC9NA8sauVwF1q0j9wdcKY4Q5log9VP3jvPf
-	 F+DUFg4l1MOFJwRIOvefvcRyHtzzRgAXJe+34GgThhIulZ4Mz5sFTjAiSxqKyS2Twf
-	 vVZewlqy6kOIGqFtCPEeQ36qkpjc9DDEIjbR9E3JdGeHjCxr1BOsxbGFnkAgU9dfah
-	 6cfKfYb3HfnnQ==
-Message-ID: <90fc724a-08c4-4324-9420-89fab05d53d1@kernel.org>
-Date: Fri, 25 Sep 2026 09:01:22 +0200
+	b=ZONf+4+lZGaelMcILIEmfAnw3woDfcDmGEp0gD0f/5Fh/YeEpzOaMzpIN0HuM+sf2
+	 B1fbntNHdm8ZxST2a1XJUZGECinTv07+BuFeAXo1bD/hn8iy7KABuQXE9MQEke60JR
+	 5KcJaYCJduwYSUBIwArYuJMnt3T4tRYuxtBHM8wgY+PnI+yOwpoDeR+WQBCacWG5a8
+	 zFpyjqJXugUVyiCr2/tr2DUsTuFDxyKUNHPbL1/0KDWg5Ze7Ta+l+qYyYXpUjBCVBm
+	 +cyegaaOmT+oQL+thPXZ3VtlNZGzYMEu+mvz7YzEdQSJWZdJ+H9N/YRDge+0hb9XLH
+	 oOiu0egcXuyyg==
+Message-ID: <8f60eae1-31ba-4ff4-adf9-951240561f13@kernel.org>
+Date: Fri, 25 Sep 2026 09:36:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,18 +35,18 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] userfaultfd: clear the inherited uffd bit in
+Subject: Re: [PATCH v2 1/2] userfaultfd: clear the inherited uffd bit in
  move_swap_pte()
-To: Kiryl Shutsemau <kirill@shutemov.name>,
+To: Andrew Morton <akpm@linux-foundation.org>,
  Donggeun Yoo <donggeunyoo.kernel@gmail.com>
-Cc: akpm@linux-foundation.org, rppt@kernel.org, peterx@redhat.com,
- surenb@google.com, aarcange@redhat.com, ljs@kernel.org, liam@infradead.org,
- vbabka@kernel.org, mhocko@suse.com, shuah@kernel.org, linux-mm@kvack.org,
+Cc: rppt@kernel.org, peterx@redhat.com, surenb@google.com,
+ aarcange@redhat.com, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+ mhocko@suse.com, shuah@kernel.org, kirill@shutemov.name, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  stable@vger.kernel.org
-References: <20260919004630.1159895-1-donggeunyoo.kernel@gmail.com>
- <20260919004630.1159895-2-donggeunyoo.kernel@gmail.com>
- <arO0a3CU_idyVsqQ@thinkstation>
+References: <20260925042907.2330519-1-donggeunyoo.kernel@gmail.com>
+ <20260925042907.2330519-2-donggeunyoo.kernel@gmail.com>
+ <20260924214811.19ef8af417d37071ed8338c4@linux-foundation.org>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -93,67 +93,40 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <arO0a3CU_idyVsqQ@thinkstation>
+In-Reply-To: <20260924214811.19ef8af417d37071ed8338c4@linux-foundation.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/23/26 13:18, Kiryl Shutsemau wrote:
-> On Sat, Sep 19, 2026 at 09:46:29AM +0900, Donggeun Yoo wrote:
+On 9/25/26 06:48, Andrew Morton wrote:
+> On Fri, 25 Sep 2026 13:29:06 +0900 Donggeun Yoo <donggeunyoo.kernel@gmail.com> wrote:
+> 
 >> UFFDIO_MOVE on a swapped-out page installs the source PTE at the
 >> destination unchanged, so a uffd bit set on the source lands in a
->> destination VMA that was never registered for write protection.  It is
->> then permanent: the bit is dropped only by change_protection() under
->> MM_CP_UFFD_{WP,RWP}_RESOLVE, which uffd_wp_range(), mrwprotect_range()
->> and userfaultfd_clear_vma() issue only for a VMA registered in that
->> mode.  pagemap reports the page as uffd-tracked, and MADV_COLLAPSE
->> refuses the range while the bit is set, because collapse_scan_pmd() is
->> strict about uffd on swap entries.
+>> destination VMA that was never registered for write protection.  It
+>> can't be unset there, and THP collapse can't happen either, because a
+>> swap entry with the uffd bit set makes the scan bail.
 >>
->> move_present_ptes() and move_zeropage_pte() build the destination PTE
->> from dst_vma->vm_page_prot and arm RWP only when dst_vma asks for it, so
->> the destination's own registration decides the result.  move_swap_pte()
->> copies the source PTE instead and only ever sets the bit, never clears
->> it, so one UFFDIO_MOVE behaves differently depending on whether the page
->> happened to be resident.
+>> I don't think it's intentional because for an unswapped page the bit
+>> doesn't come along, and I don't see why being swapped out should change
+>> that.
 >>
 >> Clear the uffd bit on the moved swap entry unless the destination is
->> RWP-registered, as copy_nonpresent_pte() does where it installs a PTE
->> into a destination that may not be armed.  A WP-registered destination
->> stops inheriting the bit as well, which is already what it gets when the
->> moved page is resident.
->>
->> Fixes: adef440691ba ("userfaultfd: UFFDIO_MOVE uABI")
->> Cc: <stable@vger.kernel.org>
->> Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
->> ---
->>  mm/userfaultfd.c | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
->> index 74f04c323c50..6495666c596b 100644
->> --- a/mm/userfaultfd.c
->> +++ b/mm/userfaultfd.c
->> @@ -1452,6 +1452,8 @@ static int move_swap_pte(struct mm_struct *mm, struct vm_area_struct *dst_vma,
->>  	/* Re-arm RWP on the moved swap entry if dst_vma is RWP-registered. */
->>  	if (userfaultfd_rwp(dst_vma))
->>  		orig_src_pte = pte_swp_mkuffd(orig_src_pte);
->> +	else
->> +		orig_src_pte = pte_swp_clear_uffd(orig_src_pte);
+>> RWP-registered.
 > 
-> Putting it in the 'else' is wrong. Clear uffd on the source
-> unconditionally and re-arm based on the target VMA:
+> Thanks, but...
 > 
-> 	orig_src_pte = pte_swp_clear_uffd(orig_src_pte);
-> 	/* Re-arm RWP on the moved swap entry if dst_vma is RWP-registered. */
-> 	if (userfaultfd_rwp(dst_vma))
-> 		orig_src_pte = pte_swp_mkuffd(orig_src_pte);
+> When fixing a bug, please always fully describe the userspace-visible
+> effects of that bug.
 
-I'm confused why the original code proposed would be "wrong"?
+It would also be helpful to describe if this was actually hit in practice so
+far. IOW, how relevant is this in practice.
 
-I prefer your way of writing it as well, but I don't understand why it would be
-"wrong"?
+Will this trigger a kernel splat later?
 
-Maybe I need more coffee :)
+Someone would have to use UFFD_WP/UFFD_RWP with UFFDIO_MOVE, and have
+UFFD_WP/UFFD_RWP disabled on the destination vma ... and then work on a swap entry.
+
+Code itself LGTM
 
 -- 
 Cheers,
