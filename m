@@ -1,191 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f40.google.com (mail-pj2-f40.google.com [74.125.227.168])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE05041D65C;
-	Sat, 26 Sep 2026 10:41:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A48BE400DF0
+	for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 10:44:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790419319; cv=none; b=j64El3D2aRMGyo0TESd9iFbLHRsybxXvJNrChNxzlg2v3Wo3sJ8fP68ybd1sP8P2nUVo6ksKImgH0ZPA+/9Uto+S5wIV0kgIYM08T+p3hJENariwH0oa1iQTF8K9++F/5p/8hI0wjPY2Jisg6xR3B5ChN1zWOJB46wJDmK5Ou5Y=
+	t=1790419464; cv=none; b=T47yg8hRnVMNHrS+v/WH0TXHunLd4f5L7hM6HRfEEi9ap+I6u3SYXOztR0zRnAsp6IMOhD4Ial3ik+iNPnaB8uuescVes7iMvGZA2H4NCXesMnoYfnUKNVf4oLJz52jRaay9ZOTIzOXKc8MdIICz5TR7HJmSnD/gP73EJKcyk8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790419319; c=relaxed/simple;
-	bh=1leVrHr0vQD42BeUriV2AqaMbiNFdZlxKm+PRWQ0Ih0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nkZ9WvZAgDB2t2UR3JnMUzmh6AHw0T3zU7uGFBLLX7y7gwQdWrKVhjLaRfAybehn1nOXVarmRsdo7Ho60m4gWae7qygMOjYeVfUSfQO/ON59j5xH+63Cm6+YeuA+F9JjOhzEM/Vyl1TKHOuG0rEDP30o+q/Dvbfp7w1fwFRyX6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IgB7NcLq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790419464; c=relaxed/simple;
+	bh=6fpG91MXXQbhpol2AXqdF9dFywJtNWGjaLWU4oYG/WM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H4ZZYngbeORcnbWScssw4Rkh0fyRNJEwsbikKg1zvEkzyY5kouirRomGp2GDjhouFmiwGqHgQWE7E9maKWAni0JIIs0Ee19YEQIsl/lHOiCwXSzBRiBiYagDXC4mGhLSzyLhk5hlOeM/XTLfCb31x888bCCc+6nvDCCTFkr5Jts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gpPyjpE0; arc=none smtp.client-ip=74.125.227.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IgB7NcLq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 911E71F00898;
-	Sat, 26 Sep 2026 10:41:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790419311;
-	bh=KhsTvKQ2fnSXkbWyS/YqLnoRwyxqzmWUbttn/FRcKWI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=IgB7NcLqpIid5a7MCnUMmAaPtKTkayne8jLDSMRHZx1NqxEy28NQKIqqBrt0kwUsH
-	 b5E7ISJiho2wtth7t14TdP78Czhi0m2aaVU46ti3XZ2s9NiPIXuYIZqBI9IVeuFTAQ
-	 3B4P2xm6hgkmMtW2iPxKpO7XQPj0CPKepn2CxcLChKM8IfWc8/V43sabGia/2CONjN
-	 vXJmFU8Aa2uEMCUpSKmgh6j/AZY30D2+sEBUaGhTNIceeWCrK216ttRkZ+8Ahs2ssF
-	 T+WlcsrVxx9rA21TPxnmq+NDdoRaXN3nmOOgJMBEaNx73SJSFKP7jBJVqMVLoEWGGx
-	 dttV6cWAoZV7A==
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Sat, 26 Sep 2026 11:41:11 +0100
-Subject: [PATCH v3 6/6] tools/testing/selftests/mm: add
- MAP_PRIVATE-/dev/zero merge tests
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gpPyjpE0"
+Received: by mail-pj2-f40.google.com with SMTP id 98e67ed59e1d1-3a0dc47fee0so211278a91.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 03:44:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790419447; x=1791024247; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=4odAGIPcyvnNWb4sPZdqKZBZfrGmbPznm9W/871R/J8=;
+        b=gpPyjpE0W2/iAPPLe+T0ZBxcdXnLLgAw1ptx2Wd0eimx/Qx+jhrLJA/kIW5WXrtBpw
+         HJ3Z+MKM3PTMOHNdvsKT4CvHd5nsa2IB7/Ro1rtHcoi3CTaLE/JLu1xdTMx1p7lSaliZ
+         rs937LRjezREoomDOuciwdlR2SrefkeBkdyxWPH2GIF7jezpSc4oeL/FWTrpZYM6jwFI
+         jQ4jO2RNovidbMbmE9i9IU2M+E0TYlD6u33L11AjuooVU3IvBFI+WvMY6nhM+8dGq8pR
+         NhFpHgGxptetU7j+vay1tc3dau86ZnSuSoyCQCVH4gnC5zha+iEP2cI3GKO2huFyjAK8
+         K9Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790419447; x=1791024247;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=4odAGIPcyvnNWb4sPZdqKZBZfrGmbPznm9W/871R/J8=;
+        b=DMu/MHTVfVif1+GrJU7EmFUHMrBE4oUb9IrIKfbT+HofW6qZXqaaCLmfI+Qt4zuItD
+         OOXHcgeDuDulUnugg5yFQs627iDdi5t7gDenxUV+JOPFhaCgpxt6zNYFl46dqODvqm/D
+         ZbVEe/FwJB/ssZE5RDqnHFTUz4FDDjhmYgHA5tZR63wYlYqV5HRV5RvsMgUwHHY7Av4D
+         p/fqjs8YY93NGKPXcHSGOS8UfbLBumOdpjSgaUNcGkdZ36GHcyKEi5L6eyZFyoTPRg7A
+         2j03ZzoEco6K6GRJBAMKOveIry+YCF+R2SkaZa5zmJawZBGOffB5YDZhk9UW4hd0zYdU
+         DLDg==
+X-Forwarded-Encrypted: i=1; AKwUvBwRc/+ID5kxUiL4lOuJlAf6iQ2qCc4/YLB4AD76hzBcw2luTwIPF7XTRZwh+5h9PtyTSUTdGBwgBijKNwovjrg=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKPWIRSCIMMeS+QuO8glhEMAHkLL54wGbwRRJim3P8MomQOzZCQ
+	nYglErCwHRBUGrUl7JZbfHk/sctDizg3Akx5/au5T5nUxq1PZPHfv7qU
+X-Gm-Gg: AYBFou1whHWWAxrEJXq6Re7P/9dlTv4KoglFVKxBABkmD5mSTfHfQCGtajgvhcCjBVY
+	1WAnvLXarUr+6Ua+SNMVrbWgK577EPJvNyyHbuVTZLjqOQbbFjruoiYrGA1DAUgtxQNCXDfyoUh
+	y/MpxOwV+iPROY4jFnK3srf+w1SZInFN71pDhAl/1IlZe5hRyqCmCjjJ2PLjZm/7ZsShuLLBFHI
+	c9IxOcv92vCCSSUZNBivwD0hyNqUtyNZRyRdqf+94cmCXo+BYPbualPW6jt6fdDTwucBscqGlHI
+	ZH9FJbmviCq1fSkyXhNiTEsTPIGorqIZiC3bTRsNk4vr7Bh1iwz1ytzJYtBIuYa9VtMTR6nWKnS
+	CuG6oiIwEQJhD+jsXbjKcu+BDgmWrxC0yWmN5xQwozGLIJfCjDdv5Jm4GYjPqHGUlAEBABj9aau
+	ePv5qTTYDvfG+hKr3Ul/BvATcPJ6qaFZ3QuSbygq9EBEaMvuKKAfKlIkCeqO3wBsXfPw4rtiLDM
+	S7GVCp9O4p8d374xvhNkz3A3XfviE9kHQ==
+X-Received: by 2002:a17:90b:1f90:b0:39e:6c69:f47b with SMTP id 98e67ed59e1d1-3a098d4085dmr7176558a91.58.1790419446869;
+        Sat, 26 Sep 2026 03:44:06 -0700 (PDT)
+Received: from x1c ([2405:9800:b670:b64b:819f:6ccc:5ca5:5f73])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0974ec711sm15800578a91.6.2026.09.26.03.44.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Sep 2026 03:44:06 -0700 (PDT)
+From: Tharit Tangkijwanichakul <tharitt97@gmail.com>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev,
+	me@brighamcampbell.com,
+	jkoolstra@xs4all.nl,
+	Tharit Tangkijwanichakul <tharitt97@gmail.com>
+Subject: [PATCH] KVM: selftests: Verify KVM_MSR_EXIT_REASON_INVAL on reserved EFER write
+Date: Sat, 26 Sep 2026 17:43:55 +0700
+Message-ID: <20260926104355.13697-1-tharitt97@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260926-map-private-dev-zero-v3-6-d4781e84ccfc@kernel.org>
-References: <20260926-map-private-dev-zero-v3-0-d4781e84ccfc@kernel.org>
-In-Reply-To: <20260926-map-private-dev-zero-v3-0-d4781e84ccfc@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
- David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Hugh Dickins <hughd@google.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4165; i=ljs@kernel.org;
- h=from:subject:message-id; bh=1leVrHr0vQD42BeUriV2AqaMbiNFdZlxKm+PRWQ0Ih0=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLK2L/SREO95sLjfyzgrouFDrfeE3dqSro5pNZGzGZ9n+
- FT4iJp0lLIwiHExyIopsjz/Ir4/SCRsXucFfzeYOaxMIEMYuDgFYCKKuxkZOiYvr8vK8imSqFlU
- 8UpTYW9Zeu+KjWL9Qe51bNZezl6cjAyPA00aN+Xd1r+4LaIrQa/NWK/2fU96h8VzkaOvGUwSvRk B
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
+Content-Transfer-Encoding: 8bit
 
-Assert that MAP_PRIVATE-mapped /dev/zero mappings behave like they are
-anonymous.
+The msr_filter_deny test covers the FILTER and UNKNOWN MSR exit
+reasons, but nothing exercises KVM_MSR_EXIT_REASON_INVAL.
 
-Test both unfaulted and faulted/unfaulted merges with page offset 0 which
-would not merge if the mappings were treated as if they were file-backed.
+Have the guest set a reserved bit (bit 63) in EFER while preserving
+the other bits, and verify that the write exits to userspace with
+KVM_MSR_EXIT_REASON_INVAL along with the attempted value.
 
-With the recent change that makes them behave as pure anonymous mappings,
-the merges should succeed as their page offsets are equal to their
-anonymous page offsets.
-
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+Signed-off-by: Tharit Tangkijwanichakul <tharitt97@gmail.com>
 ---
- tools/testing/selftests/mm/merge.c | 95 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 95 insertions(+)
+Tested on Intel Core i5-10210U (VMX). Not tested on AMD.
+---
+ .../selftests/kvm/x86/userspace_msr_exit_test.c      | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mm/merge.c b/tools/testing/selftests/mm/merge.c
-index 52b8727b6628..7dd2933417c1 100644
---- a/tools/testing/selftests/mm/merge.c
-+++ b/tools/testing/selftests/mm/merge.c
-@@ -1362,6 +1362,101 @@ TEST_F(merge, anon_and_page_offset_mismatch_memfd)
- 	ASSERT_EQ(procmap->query.vma_end, (unsigned long)ptr + 5 * page_size);
+diff --git a/tools/testing/selftests/kvm/x86/userspace_msr_exit_test.c b/tools/testing/selftests/kvm/x86/userspace_msr_exit_test.c
+index 2808ce727e5f..7446e1404264 100644
+--- a/tools/testing/selftests/kvm/x86/userspace_msr_exit_test.c
++++ b/tools/testing/selftests/kvm/x86/userspace_msr_exit_test.c
+@@ -309,6 +309,9 @@ static void guest_msr_calls(bool trapped)
+ 	/* Invalid MSR, should always be handled by user space exit */
+ 	GUEST_ASSERT(rdmsr(0xdeadbeef) == 0xdeadbeef);
+ 	wrmsr(0xdeadbeef, 0x1234);
++
++	/* Setting a reserved EFER bit is rejected by KVM, exit with INVAL */
++	wrmsr(MSR_EFER, rdmsr(MSR_EFER) | BIT_ULL(63));
  }
  
-+TEST_F(merge, merge_map_private_dev_zero_unfaulted)
-+{
-+	struct procmap_fd *procmap = &self->procmap;
-+	unsigned int page_size = self->page_size;
-+	char *carveout = self->carveout;
-+	char *ptr, *ptr2;
-+	int fd_zero;
+ static void guest_code_filter_deny(void)
+@@ -627,6 +630,13 @@ static void handle_wrmsr(struct kvm_run *run)
+ 		TEST_ASSERT(run->msr.reason == KVM_MSR_EXIT_REASON_UNKNOWN,
+ 			    "deadbeef trap w/o inval fault");
+ 	}
 +
-+	if (access("/dev/zero", F_OK))
-+		SKIP(return, "No /dev/zero.");
-+	fd_zero = open("/dev/zero", O_RDWR);
-+	ASSERT_NE(fd_zero, -1);
-+
-+	/*
-+	 * Map two MAP_PRIVATE-/dev/zero VMAs next to one another with offset 0
-+	 * each.
-+	 *
-+	 * With these being made truly anonymous upon mapping, they will
-+	 * merge. If they were file-backed VMAs the page offsets would prevent
-+	 * the merge:
-+	 *
-+	 * |-----||------|    |-------------|
-+	 * | ptr || ptr2 | -> |     ptr     |
-+	 * |-----||------|    |-------------|
-+	 */
-+	ptr = mmap(carveout, 5 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_FIXED | MAP_PRIVATE, fd_zero, 0);
-+	ptr2 = mmap(&carveout[5 * page_size], 5 * page_size,
-+		   PROT_READ | PROT_WRITE, MAP_FIXED | MAP_PRIVATE, fd_zero, 0);
-+	close(fd_zero);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+	ASSERT_NE(ptr2, MAP_FAILED);
-+
-+	/* Assert that they merged. */
-+	ASSERT_TRUE(find_vma_procmap(procmap, ptr));
-+	ASSERT_EQ(procmap->query.vma_start, (unsigned long)ptr);
-+	ASSERT_EQ(procmap->query.vma_end, (unsigned long)ptr + 10 * page_size);
-+}
-+
-+TEST_F(merge, merge_map_private_dev_zero_faulted_unfaulted)
-+{
-+	struct procmap_fd *procmap = &self->procmap;
-+	unsigned int page_size = self->page_size;
-+	char *carveout = self->carveout;
-+	char *ptr, *ptr2;
-+	int fd_zero;
-+
-+	if (access("/dev/zero", F_OK))
-+		SKIP(return, "No /dev/zero.");
-+	fd_zero = open("/dev/zero", O_RDWR);
-+	ASSERT_NE(fd_zero, -1);
-+
-+	/*
-+	 * Map a MAP_PRIVATE mapping of /dev/zero with page offset 0, then fault
-+	 * it in:
-+	 *
-+	 * |-------------------------------|
-+	 * |           faulted             |
-+	 * |-------------------------------|
-+	 */
-+	ptr = mmap(carveout, 15 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_FIXED | MAP_PRIVATE, fd_zero, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+	memset(ptr, 'x', 15 * page_size);
-+
-+	/*
-+	 * Unmap the middle:
-+	 *
-+	 * |---------|           |---------|
-+	 * | faulted |           | faulted |
-+	 * |---------|           |---------|
-+	 */
-+	ASSERT_EQ(munmap(&ptr[5 * page_size], 5 * page_size), 0);
-+
-+	/*
-+	 * Map in a new unfaulted mapping in the middle with page offset 0 -
-+	 * this should merge and would not if it were treated as a file rather
-+	 * than pure anon:
-+	 *
-+	 * |---------|-----------|---------|
-+	 * | faulted | unfaulted | faulted |
-+	 * |---------|-----------|---------|
-+	 */
-+	ptr2 = mmap(&carveout[5 * page_size], 5 * page_size,
-+		    PROT_READ | PROT_WRITE, MAP_FIXED | MAP_PRIVATE,
-+		    fd_zero, 0);
-+	close(fd_zero);
-+	ASSERT_NE(ptr2, MAP_FAILED);
-+
-+	/* Assert that they merged. */
-+	ASSERT_TRUE(find_vma_procmap(procmap, ptr));
-+	ASSERT_EQ(procmap->query.vma_start, (unsigned long)ptr);
-+	ASSERT_EQ(procmap->query.vma_end, (unsigned long)ptr + 15 * page_size);
-+}
-+
- TEST_F(merge_with_fork, mremap_faulted_to_unfaulted_prev)
- {
- 	struct procmap_fd *procmap = &self->procmap;
-
++	if (run->msr.index == MSR_EFER) {
++		TEST_ASSERT(run->msr.data & BIT_ULL(63),
++			    "MSR_EFER data missing reserved bit");
++		TEST_ASSERT(run->msr.reason == KVM_MSR_EXIT_REASON_INVAL,
++			    "MSR_EFER trap w/o inval fault");
++	}
+ }
+ 
+ KVM_ONE_VCPU_TEST(user_msr, msr_filter_deny, guest_code_filter_deny)
+@@ -667,7 +677,7 @@ KVM_ONE_VCPU_TEST(user_msr, msr_filter_deny, guest_code_filter_deny)
+ 
+ done:
+ 	TEST_ASSERT(msr_reads == 4, "Handled 4 rdmsr in user space");
+-	TEST_ASSERT(msr_writes == 3, "Handled 3 wrmsr in user space");
++	TEST_ASSERT(msr_writes == 5, "Handled 5 wrmsr in user space");
+ }
+ 
+ KVM_ONE_VCPU_TEST(user_msr, msr_permission_bitmap, guest_code_permission_bitmap)
 -- 
-2.55.0
+2.53.0
 
