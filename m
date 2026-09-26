@@ -1,65 +1,65 @@
 Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5CE357CF1
-	for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 19:27:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F5236215D
+	for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 19:36:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790450879; cv=none; b=U25Cl8FDUtuEpXrzd4cACttn4ecqjK1tkdn37MAVNX+DxPMxL9hDfiPxN/Z//evLqX1D6H46GxjF5aiZYMNMaZO7mx10biBi8Rg4HkIWcZRBTQxHHNHEdNA0nvx62/D/uKYefcTw4rMEljhDK+2hUdY7Z+w30APYNoE6AS8fmSs=
+	t=1790451407; cv=none; b=B4Hhh4iDEDO0/XJyL40t3FGUV6phMEV7wVHUlx48YCt5A7+SyB/uzv3oZ/cLc8iW61ma8SR11w8ZRIXA6K/C7wrdOS63j0OllSf3Jaygrgf4z0W/sys33rr+V3lNaWdP/7qx0oNAT8bCOYpzsizn8TLczclac8xCYCYverEiV7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790450879; c=relaxed/simple;
-	bh=YpaQOC1WDkFRpQbpfg74M0L2LJg3c76FI9oNmLLjydY=;
+	s=arc-20240116; t=1790451407; c=relaxed/simple;
+	bh=HAyjnKtvi/9tfuObm2zkDHpp1QzzxsFwzp99BfFGLs0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RWjUgf4JY9TAnPCDagXM3L8/jgSjkr0bX1EnGqOIDfXfinBc6M8cjEQqebwB0BL1sx/RVzQS6jMKrDuYAOJzBYnx0mIoxuN1LxYGWDpZaGPe2arXdoz927EkaJ/BdrHtJpVmcaqdQQyYYLu7U1KBVVJ9M/JzWQO+k9HhYacRemc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gs0ZRnCM; arc=none smtp.client-ip=74.125.225.141
+	 In-Reply-To:Content-Type; b=q1+CfLBIIfM9KyNctzq+xMyvL7u4MtgM94P5bTAiUwtP7FVBwncqaADetUJShB5JzkR75CiE3wPY4akPTq9SNEW3aQq7KpafGDMNAgIwNsohnyMt3SyITJxAYAOIqy8GVfC0i1mhqZCwprYlVk8EivToxF/vN95R8WPB2UuwLSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QZHiZdQH; arc=none smtp.client-ip=74.125.225.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gs0ZRnCM"
-Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e721b5503so18059545e9.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 12:27:56 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QZHiZdQH"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e71cdb22bso13354455e9.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 12:36:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1790450875; x=1791055675; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1790451403; x=1791056203; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=1i/A0Q7vSMnTo4N9O4lpowhPB3CoGwq6o5i8iGE/Bqk=;
-        b=gs0ZRnCMx+XMi2CrOIaYsSBoH3Ba/g2KLA7BRI6Dy3a73c+3HMYEDuAQhsIXCF+pHa
-         aOVAk1dubbbEw22cESk6lOkAbOIkkcTfgGGDhkZkCCqaiCrAdYTxpIK+pWHY7U73TNTS
-         4RMdxpWdH99uVeyCLQTBTL1sAbWl0dR4jrf9Y=
+        bh=AuUxqGLkbBPBTQWeWWQI49TvssdiYbq+74DblXsLcuY=;
+        b=QZHiZdQHqp3eM07a2ytZIJSJg/2VVRp0HhrX7dC4jD+yBkCrDzDetGYs1GXEau1dUe
+         6Nbtn/lYwEhLWHl7WBJIs5YcteDlFu/MDUZlRlLL9GQdqERaKdHZva0TDFF1pI3GWV5I
+         s1z1UC5Ta/AZy7L/lp2QcYFifC/iV9tx4L/c8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790450875; x=1791055675;
+        d=1e100.net; s=20260707; t=1790451403; x=1791056203;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=1i/A0Q7vSMnTo4N9O4lpowhPB3CoGwq6o5i8iGE/Bqk=;
-        b=wYiIxOMyAc6vSx3Pz4yQaXI/biQ4ZuAPKNqYf+EjfiaFCyHO0aQsGFEHrT0Jf0ZgjG
-         QGlzhorqM7AP4mqRtfpBpm38kZ1GoiFGVMev3lzKfcrcAjB8Jp0nJxK3rbQnJAQR3gpf
-         nrU+IGrBhervVKILTkUNcXHHn8jMZgOd42oB3DEBVWnpyM1t/ORZoOqyhpLLAYjxols0
-         B4+z7PrBQXPsTqU+3jsKLLWDoJLUkvU4VGwIEGXP+a7eF3l8j6KfAgC0d/Tqbg/O5F9i
-         9Zp++BTr6wtzNw9OtxXD2Qz5CaYcRy5iowgcDJzmHDUmucdjdqdEjjiI+MFV8r45CpcE
-         mMHg==
-X-Forwarded-Encrypted: i=1; AKwUvBy/zTjLql4yv6+5xanmd88m/ozzjWwFppsxQzClbIZtsvholqG7CP0f4nHSPSQzowty09dPHbZr93ZsI7YEP5U=@vger.kernel.org
-X-Gm-Message-State: AFuF++nqlBbOyFvpeLYi+kNIjLCA7MLD5zuXsY6EMTr9AZzqHSae1nBY
-	YjnhR6AlmWgF/Mga1wpoZbFlBbdeEW1lG73ZxCmN9up1YOvteuFONMEEIs4Bq3prygE=
-X-Gm-Gg: AYBFou3ZL5VMO3VO9hbr4yS/ZGftMSs4EUErL93pKawMUejIEgrSPpQ7AyTLvaVBSco
-	9PzUTwVsPYqQerhKqtIpLbwcN7kbQeAucnv9tvyg+HXuwP4HQK/tLWNEQvFAWqVj+PJNrAcn4oW
-	xzJIVEevuesVdq6YoalUyU1aHQm8Ecv6NVTBlK+qemZuA5BRhb/34X5FjtybDox5svVV++lYHap
-	BeyuU651GYA6urFsDcA/OrGoHyeNzOVE5KZsYhIdToP8tVwjfL4hzEcKGeSXgvMSzdVMnDDWFFz
-	5as7T5jJIETvVx1uj3ZtWrkNnTnC+GyYoCD9EdRPinxgct2DefcMS6IR+rGg9drS3o/lrK6dG+b
-	wXS8eISP6ybyjTSRr21/JxNcW4gbC+gw8Bont5ikjRypj3PynkArR9lwacaikfHMCSKlOp0XN8s
-	gvb0EOXOtCoCugjCSuWd6aniw2dscwyxY/CFEY2MtBfckZfbge05CDXYT6DvHKd9VYFbD7F9RmF
-	QDQbs31ln4R26KKb7+mHnhTz1Y46JY4Pjiok9OGXWZ580C1sMQ6wqTpsR/+riBf6CtZ
-X-Received: by 2002:a05:600c:83c4:b0:49f:c331:39e4 with SMTP id 5b1f17b1804b1-49fe66ca101mr152199945e9.7.1790450874738;
-        Sat, 26 Sep 2026 12:27:54 -0700 (PDT)
+        bh=AuUxqGLkbBPBTQWeWWQI49TvssdiYbq+74DblXsLcuY=;
+        b=JYN/8wLRHLACbjzeN8mmXKDZyKDLLo8NiNI/dzZxSENmklToqcgiedbKGt2oV0doJS
+         d/5YCcT6b92Z8i0cexZ/bKr1d03RnVWupUu22koCaxiD1K3ITM2oA/Ft8nKXrQHPa7E/
+         /5ckrbtj7qe+2LMf4f011T2PW7yBnQ7gRn5b1NXucjp1gXN5pLOWx5KF4yQx0K4Qxmuy
+         yVTeYhMLXKGTCkWzFRdgHEX1dF1nFP7ajHPOHSyaIyyKgyFq7/xxD91dggFABHkYQr1G
+         hvg3jZ6FBxAylTF3KaMwNJhus4GTynD5bW6A7G0gxwX7NhMwtvFV1kcmsWYEcEGUhkdC
+         dQ3Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzh7Sc8NyR6MzjwCRNFpNCRurjsQ88/hc8hZ9algkfMp6+0znZFg5H0tExYv8PqEpGE1bRp04+DWGq+r5APYGk=@vger.kernel.org
+X-Gm-Message-State: AFuF++nbaEJAf+SbOUMpBPTC0SrRTnM9t8PTNXYz1g/vDbKANdCfZ0PX
+	AURnNNH//yuPmYvpKCety9MUVF/GZ1qKttRoMM+XEsWhkWu1XYp76HNqBSoKEA0IScE=
+X-Gm-Gg: AYBFou0O7q012cROdY+KCbuwlq+1TXhHGfTN4Yz3PeOMo7gmQKNsJ+rkcvTjQoqKYyB
+	6O8kSJawA5KGD7qENNExuXsOngQmWq+WnjQNu1V92BqfCgJ1PTV1G6fdgqbaWcneSOfzJWhjkyy
+	tNAzaFq5XIN3SdsabJfczuOQ24C7OTiHIbBs4eyculNUOrwIubEpK49QLAMli8V3A0hmdj6zwmW
+	+ZI3mfAQwJowPkoj71YlogJS4bqZLG6vb/0cmLflfK8E8lImg5dnLcr3awNAioj5XE8EgXhkYQr
+	/B2qACxJYNd4Fm7lss0N4jKUnMO+nSXjx4cR3vi49KHD8gNIJetUHFZWSNG6odheN4mu2i9FT4X
+	wkH6kVoHMzHvyYSQ0q7sBD5Hcn4MmZVI4iSS+YbaaLjOG1GPOuDFTNNGeTONv7YPD0+cCo+NKHi
+	jM4mSVSdpZS9JxbN+OQ6M+35bnRqGmt3/dDGXxmu8qH9uxAyTr+hIlk9is7M3pAsRmmkzWoQTGa
+	wdLqvTwUQDIihcAZJgnMaxfyLkmKvTPXud8HHXNRpLQvwMadDb4zo6HOg==
+X-Received: by 2002:a05:600c:468f:b0:49c:fa20:cc02 with SMTP id 5b1f17b1804b1-49fe66f4fc6mr149848925e9.25.1790451402874;
+        Sat, 26 Sep 2026 12:36:42 -0700 (PDT)
 Received: from [10.188.205.27] (cust-west-par-46-193-1-237.cust.wifirst.net. [46.193.1.237])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ff044406dsm179388075e9.1.2026.09.26.12.27.53
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ff06bdd11sm155186155e9.9.2026.09.26.12.36.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Sep 2026 12:27:53 -0700 (PDT)
-Message-ID: <d41f6f1b-b317-404d-b1f9-ed6f4170fa26@linuxfoundation.org>
-Date: Sat, 26 Sep 2026 13:27:51 -0600
+        Sat, 26 Sep 2026 12:36:41 -0700 (PDT)
+Message-ID: <c6427104-c510-41d0-8144-174c002d1dc9@linuxfoundation.org>
+Date: Sat, 26 Sep 2026 13:36:39 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,41 +67,61 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: kselftest: Fix debug message formatting
-To: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
- ZhuangZhuang Wang <wzz_123123@163.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+Subject: Re: [PATCH] selftests/ftrace: skip gcov symbols when picking a
+ function to probe
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+ Eva Kurchatova <eva.kurchatova@virtuozzo.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Shuah Khan <skhan@linuxfoundation.org>
-References: <20260916190423.1892-1-wzz_123123@163.com>
- <dfb3afb2-cec0-42e0-8e5d-25e89f54215b@igalia.com>
+References: <20260925133558.3636030-1-eva.kurchatova@virtuozzo.com>
+ <20260926213112.9f92e7958c2d12c946799a0f@kernel.org>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <dfb3afb2-cec0-42e0-8e5d-25e89f54215b@igalia.com>
+In-Reply-To: <20260926213112.9f92e7958c2d12c946799a0f@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 9/22/26 14:06, André Almeida wrote:
-> Em 16/09/2026 16:04, ZhuangZhuang Wang escreveu:
->> ksft_print_dbg_msg() passes a va_list to ksft_print_msg() as a regular
->> variadic argument. As a result, format specifiers consume the va_list
->> representation instead of the caller's arguments and print garbage.
->>
->> Add a va_list-based helper and use it from both message printing
->> functions. Also annotate ksft_print_dbg_msg() so the compiler can check
->> its format arguments.
->>
->> Fixes: f2662ec26b26 ("selftests: kselftest: Create ksft_print_dbg_msg()")
-
-Does it really fix this commit? I don't see that is the case. Please don't
-add fixes tag unless it fixes the problem in the commit.
-
->> Signed-off-by: ZhuangZhuang Wang <wzz_123123@163.com>
+On 9/26/26 06:31, Masami Hiramatsu (Google) wrote:
+> On Fri, 25 Sep 2026 16:35:41 +0300
+> Eva Kurchatova <eva.kurchatova@virtuozzo.com> wrote:
 > 
-> Reviewed-by: André Almeida <andrealmeid@igalia.com>
+>> kprobe_eventname.tc takes the last kallsyms entry whose name ends in
+>> vfs_read and puts a probe on it. On a kernel built with
+>> CONFIG_GCOV_PROFILE_ALL=y the counter symbol gcc emits for the function
+>> sorts after it:
+>>
+>>    ffffffff819bd1e0 T vfs_read
+>>    ffffffff845013e0 t __gcov_.vfs_read
+>>
+>> so the test picks __gcov_.vfs_read, which is not a function entry, and
+>> the write fails:
+>>
+>>    kprobe_eventname.tc: line 10: echo: write error: Invalid argument
+>>
+>> Leave those symbols out of the choice. The test then picks vfs_read and
+>> passes; without a coverage build nothing changes, as no such symbol
+>> exists there.
+>>
+>> This is the same class of problem as commit 23a4b108accc
+>> ("tracing/selftests: Fix kprobe event name test for .isra. functions"),
+>> where a compiler-generated symbol was picked instead of a real function.
+>>
+> 
+> Oops, good catch! This looks good to me.
+> 
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Shuah, can you pick this fix via your selftest tree? I think this is a
+> kind of selftest fix/improvement.
+> 
+> Thanks,
+> 
+>> Signed-off-by: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
 
-Also can you tell me how this problem was found and what;s the output
-before and after this change?
+Applied to linux-kselftest next branch for the next merge window.
 
 thanks,
 -- Shuah
