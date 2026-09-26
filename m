@@ -1,215 +1,119 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 631A8389455
-	for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 08:28:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9675725B091;
+	Sat, 26 Sep 2026 08:35:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790411287; cv=none; b=nRxqBEkktm27LQwoLMZND8VRq64LiGyobAXQXnHPmvKo3+FFxwL1RcWkfNRY7CID8jzqyuFK3ewbA7hbUHlzlW77YRWq9cVYiTWYKcaabqT958zhpBfCK4BMeJK6m+oAWzHfasXTMbHUzt+wzusiGyTlmzmo0zTiQwWgFkUZGFQ=
+	t=1790411702; cv=none; b=YVCAv4n5+1GvQMBZfFNZd6C+wDUz11M2xMbi4VRerAAbh66HMyl1y3NjOqq+PwpkkW9Dx0V3/QervxaGC9pQ6coqOGgKS/26QVAn17WoBRIghVRnU493IJKceH6laPRGNwr5YgB8HvPfmih6C4uoebpZpKT2MNp6CcGJshyq3bQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790411287; c=relaxed/simple;
-	bh=95Vs9hoaKg76Ufz/33WhtAeKWKx39eNDm61SF5fsyOE=;
+	s=arc-20240116; t=1790411702; c=relaxed/simple;
+	bh=NzEIaAozYlSXXvCSG8F3Q9Lfk3SbQy+S17/CybfVKd4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hi2ZxZw3qaXo2x0UNkjda71cw6MYi+7fRpMCh/KL89w0L+reV0qWfTCp9aLNVbX+zRyRfWIVEu/NhU0P1iDT7Au1BmFri9juTnuQaF8a/ijY3crNxsjsD+nKrIq6ppw6+bm4G2X2K6wHtJHDKIVoK2AZvNNc25KUP1NLfEJK1Ow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DniRPhJQ; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=X8ZLmI2lTv8RzENc7pHhVafTqtD9i6bGRy3vxI8/Rbs8jUP9439ydF7hwVkNBco/lTaYryFt4HL4vfn7dxnNjrbdFhWAqnQj0QziQx1hJyzisa8yPGE4IQapIjhu++/YH+sObBzPIY5PjmokhNpfdRotgqdSmB08PL7Bh0iaRFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EKI4YSoI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DniRPhJQ"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49e69b9e16aso17192375e9.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 01:28:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790411284; x=1791016084; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tPXUTB33yRiVb0ap+iiavNUW+iiPbvO+JMKJab+k0Zc=;
-        b=DniRPhJQplQ0wdwrhhLjitPE2tYLACalop1qkLYyutbqNFz1sWU0WfS0+AgbxsRGXr
-         AaX+j+rg2fV+8HV6eBhOVznOXhihs9BBOdBag9lJun+diTZys5pZ5wiK0UmedKjZvJM/
-         F4O13fvxOOIrZueKch3Extd1H049ZpHB/qdrah6b8Cj7effVItu+eEMCZh6icVrI0g2c
-         pS0DT8l6Za1wksdL2d3nmWgcTIxJX3q4I9bfcqSpz7A/CIKt/7Le7okC8mgVmhxU+Ix0
-         AJ+oAxsJJqPoDCY4Y7cDopY3hlREeHMYHQDyVEWlb3Wl7yMf6y/JE/7eVm42/W8RAe+u
-         eq7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790411284; x=1791016084;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=tPXUTB33yRiVb0ap+iiavNUW+iiPbvO+JMKJab+k0Zc=;
-        b=ExoYKfQ63ms1e/anIZMiCeu/41ET2mUvXyhhMDYnAccONnejfnhS+hfDwVMOuamnAi
-         xJeHl3KY7ETUN9z+N/x6fZ17nZ/iUGj55QPob6rCMWa3/yoGo4Nfu2vbZL+E9HINGeUa
-         S4pKV0sx1Bb8uBZyT0bnYDeiWObxKMP7+C1lkXNAf5ZhgI3KDeWcJGL4PSMKDnstsdb9
-         vx7PYTL3fHmPP22k3tlnuIkUWVDWABWBjZEam8jrUG9O6MpbvxZFFQlnmMnvHNCr9v80
-         md9w8kTADByy7k7NKY9LR4WZ71RzvWzcYCagO7rCTntVA5LfckNI2utivpPQ07ciNHmX
-         AwCA==
-X-Forwarded-Encrypted: i=1; AKwUvBw3R5iG//Y3/7cXS+X12q0WMVYgLDcx/Megr7hRQEt3VjMSU017E45Ye6jeS7sLdTeg9/K5Snt6mL2FkZ7wKNU=@vger.kernel.org
-X-Gm-Message-State: AFuF++krcQAnr0F3QwhSx2oyA2IxQ+hjC704q3nNZ8Oiq4rWZPIHAJT9
-	RcHOGU+TiCozqqAy1YD9taBD/sGfbVseBRgqgcxyHWWOSA3JNd828M0G
-X-Gm-Gg: AYBFou08nC9Xs6/ocQjpVu1/jo5tTEBUlBeSE8sDt6MgeSPMGXzllxvJnc8A1v5bd0J
-	5KiFlc7wwZRAP6YVIj4YxVxa8NSG8nBIRn59L+8kIky2YNVbuogff9L0YCfL5rf0Q6Hhncln3Dl
-	rfd7lGNQzYOlXKB8Du3afnsGF0v49ssEDLI1o8UfolY/RlSvGWk2sjdSnc7cpqroMOICWghpjQA
-	hWI3Fu56xJxrc1N1R9ssjic/XExPNyjat9i5SjGk07OA54BjtKiuTRV1oPK3sJmpO6NvGXgsMVy
-	eExEO9tazSTpWcvmjaDjDvd7HXlJGgHQPweq93ZvhnxuXkqmjYI46+mm7GtvOUGQCEVklG15YWB
-	xdOxv5nCUAPQ+SO//3RK3Q42ZQZSpGkGdOGUnZVv+eQiOoPyuL9bjamwnLh/25+7Ys8sSKIDB6j
-	jZXbUwJn89oroJ9UghmzTyYui2NwKR/W2cyMJAwwxRWKyxOamSKq/nO3dol4HVFoJ0Xrd3ixPz2
-	bT6baqJAHuZgGnSYBZO6DM=
-X-Received: by 2002:a05:600c:621a:b0:496:c1f3:e8f8 with SMTP id 5b1f17b1804b1-49fe7b52ed6mr138634065e9.7.1790411283366;
-        Sat, 26 Sep 2026 01:28:03 -0700 (PDT)
-Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a64f9bcsm12711265f8f.32.2026.09.26.01.28.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 01:28:02 -0700 (PDT)
-Date: Sat, 26 Sep 2026 10:27:57 +0200
-From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-To: Cai Xinchen <caixinchen1@huawei.com>
-Cc: mic@digikod.net, gnoack@google.com, paul@paul-moore.com,
-	jmorris@namei.org, serge@hallyn.com, corbet@lwn.net,
-	skhan@linuxfoundation.org, rdunlap@infradead.org,
-	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
-	dlemoal@kernel.org, hch@lst.de, axboe@kernel.dk,
-	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
-	dhowells@redhat.com, code@tyhicks.com, linkinjeon@kernel.org,
-	sj1557.seo@samsung.com, yuezhang.mo@sony.com,
-	hirofumi@mail.parknet.co.jp, cel@kernel.org, jlayton@kernel.org,
-	neil@brown.name, okorniev@redhat.com, Dai.Ngo@oracle.com,
-	tom@talpey.com, miklos@szeredi.hu, amir73il@gmail.com,
-	senozhatsky@chromium.org, chenxiaosong@chenxiaosong.com,
-	zohar@linux.ibm.com, roberto.sassu@huawei.com,
-	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
-	stephen.smalley.work@gmail.com, omosnacek@gmail.com,
-	casey@schaufler-ca.com, nanx95726@gmail.com, djwong@kernel.org,
-	daniel@iogearbox.net, linux-security-module@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-block@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, netfs@lists.linux.dev,
-	ecryptfs@vger.kernel.org, exfat@lists.linux.dev,
-	linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
-	linux-cifs@vger.kernel.org, linux-integrity@vger.kernel.org,
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	xiujianfeng@huawei.com, lujialin4@huawei.com, bpf@vger.kernel.org,
-	kpsingh@kernel.org, matt@bobrowski.net,
-	alexei.starovoitov@gmail.com
-Subject: Re: [PATCH RFC -next 00/12] landlock: Add READ_METADATA and
- WRITE_METADATA access rights
-Message-ID: <20260926.e0135fe7712f@gnoack.org>
-References: <20260924104831.1081137-1-caixinchen1@huawei.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EKI4YSoI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1282F1F000FF;
+	Sat, 26 Sep 2026 08:34:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790411701;
+	bh=/oS5cGci8QiKs9/+vr+9VzvkfNfCYGybORMZp8o7zYk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=EKI4YSoIet132l4ifkQSXpJ5S/HAo847RXSPWXlIA//sS1T6DGjDQTSrpmN9w+Kk8
+	 js4BixlSkmCw0FEiWLxPcvGxE+3BW6mUpaVXp7XnIRL7QdFfavBtgd1//5Iee5neNs
+	 RbienQhHQWLrliSen8LuKxiRtjLuTujrUWtILEs7n/v8uXZzy1skEP7wNx/NpddT7Z
+	 GKDAu4WaRdM8Gb/v3pq+XXSFKIL8eKYWfrSN8F+Oz6PgY1dZcpz94w2o4EId72TGE1
+	 eqRFZeQmkE1AufPSMNNHLAa7nmcdoN/3AKwfCX7m1232ogKRodq5xYHa7hRr5g9vD9
+	 B4sDgFN4Tljag==
+Date: Sat, 26 Sep 2026 11:34:51 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Nicolas Schier <nsc@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Luis Augenstein <luis.augenstein@tngtech.com>,
+	Maximilian Huber <maximilian.huber@tngtech.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Alexander Graf <graf@amazon.com>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Askar Safin <safinaskar@gmail.com>, linux-doc@vger.kernel.org,
+	kexec@lists.infradead.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Subject: Re: [PATCH v3 0/2] Move tool for generating initramfs cpio to
+ scripts/
+Message-ID: <areDq-1iFZUViDgS@kernel.org>
+References: <20260925-move-gen_init_cpio-to-scripts-v3-0-99c493f76722@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260924104831.1081137-1-caixinchen1@huawei.com>
+In-Reply-To: <20260925-move-gen_init_cpio-to-scripts-v3-0-99c493f76722@kernel.org>
 
-On Thu, Sep 24, 2026 at 06:48:19PM +0800, Cai Xinchen wrote:
-> This series adds two new Landlock filesystem access rights,
-> LANDLOCK_ACCESS_FS_READ_METADATA and LANDLOCK_ACCESS_FS_WRITE_METADATA,
-> which control access to file and directory metadata such as inode
-> attributes (mode, ownership, timestamps), extended attributes and POSIX
-> ACLs.  It picks up the work from the "landlock: add chmod and chown
-> support" series [1] and follows the coarse-grained grouping discussed in
-> that thread [2]: instead of separate chmod/chown rights, metadata
-> operations are grouped into one read and one write right.
-> 
-> Landlock evaluates access rights on a per-path basis, but the metadata
-> related LSM hooks (inode_getattr, inode_setattr, inode_setxattr,
-> inode_getxattr, inode_listxattr, inode_removexattr, inode_set_acl,
-> inode_get_acl, inode_remove_acl) only receive the dentry of the accessed
-> object.  Patches 1-7 therefore first pass struct path instead of dentry
-> through the metadata-related VFS helpers and LSM hooks.  This is a pure
-> refactoring with no behavior change, split so that every patch builds
-> and works on its own:
-> 
->   1: notify_change() and its callers
->   2: inode_setsecctx hook (must come before 3: the SELinux and Smack
->      implementations call __vfs_setxattr_locked internally)
->   3: xattr helpers, which also drops a redundant EVM xattr size sanity
->      check whose vfs_getxattr() call only has a dentry and therefore
->      cannot be migrated to the new path-based signature
->   4: POSIX ACL helpers
->   5: inode_setattr hook
->   6: inode xattr hooks
->   7: inode POSIX ACL hooks
-> 
-> Two deliberate scoping decisions for this refactor:
-> 
-> - The hooks consistently take struct path rather than struct file.  The
->   VFS call sites involved (chmod(2), chown(2), utimensat(2), xattr(2)
->   and ACL syscalls) operate on paths, and several of them (lstat(2),
->   lchown(2), llistxattr(2), ...) have no struct file to begin with.
-> 
-> - struct inode_operations->setattr still receives (idmap, dentry, attr).
->   Only the VFS boundary (notify_change()) and the LSM hook layer see the
->   path, which keeps the refactor contained to fs/attr.c and the LSM
->   infrastructure instead of touching every filesystem.
-> 
-> Patches 8-12 then implement the new rights, their tests, the sandboxer
-> sample and the documentation.  Semantics:
-> 
-> - READ_METADATA covers stat(2) and friends, getxattr(2) and friends,
->   listxattr(2) and friends, and POSIX ACL reads.
-> - WRITE_METADATA covers chmod(2), chown(2), utimensat(2), setxattr(2),
->   removexattr(2) and friends, and POSIX ACL set and remove.
-> - Only explicit metadata changes requested by user space are restricted.
->   Implicit changes performed by the kernel (e.g. timestamp updates on
->   write(2), size changes on truncate(2)) are not, and neither are
->   chmod(2)/chown(2) calls that change nothing (e.g. chown(2) with
->   (-1, -1), which never reaches the hook), matching the SELinux
->   inode_setattr behavior.
-> - Kernel-internal accesses performed with override_creds() (e.g.
->   overlayfs, cachefiles) and kernel threads without a Landlock domain
->   (e.g. nfsd, ksmbd) are not restricted.
-> 
-> The Landlock ABI version is incremented from 11 to 12.
-> 
-> The series is based on linux-next commit 5c4d4169604b ("Add linux-next
-> specific files for 20260921").
-> 
-> Testing: each patch has been built for aarch64 (gcc, -Werror) and the
-> landlock selftests (445 tests, including the new ones) pass in QEMU on
-> aarch64; base_test reports ABI v12.
-> 
-> [1] https://lore.kernel.org/all/20220827111215.131442-1-xiujianfeng@huawei.com/
-> [2] https://lore.kernel.org/all/abc960a1-e66e-792e-6869-cfd201c29dbe@digikod.net/
+Hi Nicolas,
 
-Thank you for sending this patch set!
+On Fri, Sep 25, 2026 at 09:29:29PM +0200, Nicolas Schier wrote:
+> initramfs cpio tools had been subject of several recent discussions on
+> linux-kbuild.  Let's get two minor steps forward by enabling a
+> top-level target for building gen_init_cpio w/o the need of a valid
+> kbuild configuration [1] and move the tools for generating the built-in
+> initramfs from usr/ to scripts/ [2].
+> 
+> Link: https://lore.kernel.org/all/20260220191150.244006-1-safinaskar@gmail.com # [1]
+> Link: https://lore.kernel.org/all/aSdrCFkUQup3qb-q@derry.ads.avm.de/ # [2]
+> ---
+> Changes in v3:
+>   * Update various remaining usr/gen_init* references treewide (Nathan)
+>   * Link to v2: https://patch.msgid.link/20260720-move-gen_init_cpio-to-scripts-v2-0-26b7e15c7133@kernel.org
+> 
+> Changes in v2:
+>   * Build gen_init_cpio only if CONFIG_BLK_DEV_INITRD (Thomas)
+>   * Keep underscore top-level target name (scripts_gen_init_cpio)
+>     (Thomas)
+>   * Link to v1: https://patch.msgid.link/20260309-move-gen_init_cpio-to-scripts-v1-0-0c5059b1ec5b@kernel.org
+> 
+> ---
+> Nicolas Schier (2):
+>       kbuild: Mark usr_gen_init_cpio as no-dot-config-target
+>       kbuild: Move gen_init_cpio and gen_initramfs.sh to scripts/
+> 
+>  .../early-userspace/early_userspace_support.rst          | 16 ++++++++--------
+>  Documentation/filesystems/ramfs-rootfs-initramfs.rst     | 10 +++++-----
+>  MAINTAINERS                                              |  1 +
+>  Makefile                                                 |  9 +++++----
+>  scripts/.gitignore                                       |  1 +
+>  scripts/Makefile                                         |  3 +++
+>  scripts/Makefile.package                                 |  2 +-
+>  {usr => scripts}/gen_init_cpio.c                         |  0
+>  {usr => scripts}/gen_initramfs.sh                        |  2 +-
+>  scripts/remove-stale-files                               |  2 ++
+>  scripts/sbom/tests/cmd_graph/test_savedcmd_parser.py     |  2 +-
+>  tools/testing/selftests/kho/vmtest.sh                    |  2 +-
 
-Some meta-remarks at the beginning:
+There's also tools/testing/selftests/liveupdate/vmtest.sh I know of, didn't
+check for other users in tools/testing
 
-* You might want to link the bugtracker feature request:
-  https://github.com/landlock-lsm/linux/issues/11
-* In the final version, I think it's preferred to merge patches 8
-  (adding the access right enums) and 9 (adding the LSM hooks that use
-  them).  Having the feature as an atomic commit makes it harder to
-  accidentally mess it up during a backport, because you can't patch 8
-  without 9.
-* As Paul alluded to, the changes to the LSM hook interface and to the
-  existing callers in VFS are likely the hardest part of this patch
-  set.  Alexei from the BPF subsystem has also reiterated recently
-  that he wants BPF to be looped into such changes.  BPF hooks do not
-  give the same backwards compatibility guarantees as the syscall
-  layer, but there are existing users of LSM hooks specifically
-  through the BPF LSM.
+>  tools/testing/selftests/nolibc/Makefile.nolibc           |  2 +-
+>  usr/.gitignore                                           |  4 +++-
+>  usr/Kconfig                                              |  2 +-
+>  usr/Makefile                                             |  4 +---
+>  16 files changed, 35 insertions(+), 27 deletions(-)
+> ---
+> base-commit: 93f51579e7df248780214094418f205253383cc5
+> change-id: 20260225-move-gen_init_cpio-to-scripts-9e89ef99e51a
+> 
+> Best regards,
+> --  
+> Nicolas
+> 
 
-* In https://github.com/landlock-lsm/linux/issues/18, we came across
-  statfs(), which returns file system meta-information based for the
-  file system that a given file belongs to.  I have weak confidence
-  that READ_METADATA would be the right access right to protect this
-  with, but it's a somewhat related operation.  Maybe you have some
-  thoughts on this?
-
-More concrete questions:
-
-* If a "inode" LSM hook gets a "path" argument now, should it be
-  renamed from "inode_..." to "path_..."?
-
-  (Maybe the BPF people can chime in about to what extent that would
-  cause additional churn for BPF users, in a situation where they
-  anyway already need to make a change due to the changing function
-  signature?)
-
-–Günther
+-- 
+Sincerely yours,
+Mike.
