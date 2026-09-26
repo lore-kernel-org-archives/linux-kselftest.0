@@ -1,74 +1,74 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690B1547063;
-	Sat, 26 Sep 2026 07:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD34B37BE6C;
+	Sat, 26 Sep 2026 07:53:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790408136; cv=none; b=gM+Q4t/WIfvG6Yllzi/JJk8bBvMEOypP2RigovXXNLNpQjYqxPdhr6pNO+0UDgG/AaGVFgZgpaew0GihLIH7hoUhve6W/jDPKqlZKcQJrDINvFC7nnJ9yes+QXJP3UPQK5sKBTaaZcL6dtwwjgLtgcJhUQuhGUnYCEdCCOdziVs=
+	t=1790409215; cv=none; b=YrGBPugeT/7xHPMRZJ7U1Zq7usoy5jbFyERUERyr/BZwtNX4EfCuEVzobC2HERLsdJLkBpLVkh9yH0Nyd7iw0/n3o9x/YxDT92wlNqAQCzuHGg9At6+8PcaC/pZMnU98zOjzxTKq8IMw12XAk8ht1BDLYh0Dvy5e2iZDQhU5oXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790408136; c=relaxed/simple;
-	bh=OHzHqRTu21BYYoyCvF3vAd+71SwW9M3ExArjCnqPCl8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rabN7c4AqAxUT6Vyj3FnrkzqsiCVC4RhvTwUnDgXuOq46g1tYKp4Y4f0mLBiDn7bqCjPjwonVLHMToRD59tF/42zbqNxr8zw3jxSK556DTnSn4FmhHFw3pAwnFsai74MCStu6S++iYzf/w+wVx5RflRyGIH01ztdsDetsEOkJKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=pXLVvox2; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1790409215; c=relaxed/simple;
+	bh=6jOziBGMvdjmexMKTM1VJWL/oqoFLfajuM7mGGX87ys=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=SIyEram8y4Jm6/lyEQ0B4SxKp5y1US9M0w4jPDvxQBouS6v1gfT+1Uf+8dYawaEswdCTxCVau8vLZ3QYuHD8UfBiDqERZo3PRLEdh3THoJgsDR3A2ju2iEDWx3jF2J9OyFsp9oOUtlZizKeB0mJIImsxZ4QGi6XT/szw07tBj0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=iUaBkx8j; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="pXLVvox2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1790408125;
-	bh=OHzHqRTu21BYYoyCvF3vAd+71SwW9M3ExArjCnqPCl8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pXLVvox2nygsb+Hwsy4Ar+HDjPfeJ8g1YGsahYDofuANCmujKB1vFaNl2k5v6Ejq4
-	 04ZnlipqzE6xjsBrQZJW/oPv4MtAcNgf+r+H3EHcGuRQw/A6OqK5FbNd11kDiqU/ab
-	 6l+uAsqp4Ufbo08assuYD1pXzSnkg7MCshMDKI0I=
-Date: Sat, 26 Sep 2026 09:35:25 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Danish Khateeb <danishkhateeb03@gmail.com>
-Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
-	Sven Schnelle <svens@linux.ibm.com>, Benjamin Berg <benjamin.berg@intel.com>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] tools/nolibc: fix readdir_r() and the FD_* macros
- on 64-bit
-Message-ID: <a06130a1-2b31-4f13-af24-a7f3e83135f1@t-8ch.de>
-References: <20260925211600.119116-1-danishkhateeb03@gmail.com>
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="iUaBkx8j"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1790409209;
+	bh=6jOziBGMvdjmexMKTM1VJWL/oqoFLfajuM7mGGX87ys=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=iUaBkx8jdetc5Q+N6Aywmph/y41WVd2Ndj+psVZE/ZPRbe2/0Zwb1tWmmgpwv3HTf
+	 y2wYSCbGYvqdm4MLAviAKqsSAMBb4bp725FVjlMmvfP+4MrJRFDQi+nhTfQ6qMR0AI
+	 rcNyoVOHg5MLdA+LaK5gjxJK9DQF+eUMb52sPmi5eaRsSDAFvZ3BQtb73dLrjzSZ5F
+	 tEPdFO5RN68SXE8cHSwX2pSZ/1ewSfmlM2CipO2HcmfjCKN6Snfe1P2nVvK3U60wY8
+	 d/0R5X/Gee20E9n8zoWnTXl8W7/YYd9tiuG27FiVqviFgtgYh4/pgY0aTxQnT2Tv+m
+	 HlRL/dPz+t8Dw==
+Received: from squeak.lan (unknown [159.196.93.152])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 52CFE6CE4F;
+	Sat, 26 Sep 2026 15:53:27 +0800 (AWST)
+Message-ID: <8edc4e71edceb124e2dca233cddb75e198b53a51.camel@codeconstruct.com.au>
+Subject: Re: [PATCH net-next] net: mctp: Stop selecting flow support for
+ KUnit tests
+From: Jeremy Kerr <jk@codeconstruct.com.au>
+To: Karl Mehltretter <kmehltretter@gmail.com>, Matt Johnston
+	 <matt@codeconstruct.com.au>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>,  Jakub Kicinski	 <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman	 <horms@kernel.org>,
+ netdev@vger.kernel.org, Geert Uytterhoeven	 <geert@linux-m68k.org>, Brendan
+ Higgins <brendan.higgins@linux.dev>, David Gow	 <david@davidgow.net>, Rae
+ Moar <raemoar63@gmail.com>, 	linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, 	linux-kernel@vger.kernel.org
+Date: Sat, 26 Sep 2026 15:53:28 +0800
+In-Reply-To: <20260925192510.93840-1-kmehltretter@gmail.com>
+References: <20260925192510.93840-1-kmehltretter@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-0+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260925211600.119116-1-danishkhateeb03@gmail.com>
 
-On 2026-09-25 16:15:57-0500, Danish Khateeb wrote:
-> Two bugs that only show up on 64-bit architectures:
-> 
-> - readdir_r() truncates the directory offset to an int. On ext4 it
->   fails within the first few entries of almost every directory (since
->   v6.19), or returns the next-to-last entry twice and never the last
->   one (v6.15 to v6.18). Patch 1.
-> 
-> - FD_SET(), FD_CLR() and FD_ISSET() build their masks from an int, so
->   they use the wrong bits for fds 31-63 of each 64-bit word, and
->   select() on fd 40 fails with EBADF. Patch 2, with a test in patch 3.
-> 
-> There is no selftest for patch 1: it needs a directory with large
-> offsets, and nolibc-test only lists /proc/self, whose offsets are
-> small. I tested it with a small program that lists a directory with
-> readdir_r() instead.
-> 
-> Changes in v2:
-> - Dropped Cc: stable from patches 1 and 2, which are otherwise
->   unchanged.
-> - Patch 3: dropped the select() test, and moved the FD_* test to the
->   stdlib tests, with its helper in the same order as the test cases
->   (Thomas). It is also shorter: FD_CLR() is now checked on a set
->   filled with memset().
-> - Rebased on nolibc/for-next 6f114ae7b600.
+Hi Karl,
 
-Applied, thanks!
+> MCTP_TEST selects MCTP_FLOWS, which also enables SKB_EXTENSIONS when no
+> transport requires them.
 
-(...)
+But we want to test the flows support, why disable this (and
+consequently skip the flow tests in the vast majority of test runs)?
+
+> Remove the selection to follow the dependency
+> rule in Documentation/dev-tools/kunit/style.rst.
+
+That suggests "depending on", rather than removing the coverage.
+
+Cheers,
+
+
+Jeremy
