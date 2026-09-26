@@ -1,280 +1,113 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5FA3A6B65
-	for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 08:38:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6161A267
+	for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 08:43:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790411910; cv=none; b=LQsLYo5b7m1HGZnO9LofVeH08fYDEhDlOt+zjEKe5GrnwqQY4GRSE8YrZaJ1NcnSvQH7FnoHyYLtmFpFzCZRCBiqIXThxbaLvPixg3tMn1KgQMf9G993Ekng4LgeH9vrC1d/yuxFWhVoNcKC3UEVmyfFHuwNcOSn1lGmlBjgzKw=
+	t=1790412221; cv=none; b=gD19zY9deBA0DOy5nF6rA772hBll5YhQUhkVmrocMn5RFB0ya5ZQXIfkaaOa0HsZ5cjI8zG8BDPEq738XwgEoovr1346bgCY0qqkxVBjRY6NOzODVqoVRW7kpIrVKDf0+BgCKxMcavQnr22YCtcZRHgRGDx46hYiwVDVSrXro10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790411910; c=relaxed/simple;
-	bh=dg1L5YWtdAyboMbKumSCH8z23MTRvvFyqARphfS6bXE=;
+	s=arc-20240116; t=1790412221; c=relaxed/simple;
+	bh=12EUdsbFiHBURzlJjrzAK8K4NZINHomEF0ijgoIRkOM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gny6jKk8ZP4W7MV/NTB4C3/CKvHXdzfycqGCj6Pl5P8OBaiqsNPuxbTwvNwW1Gonf+HqTXXBZTLvY8ScPL/xMxjPQPqqTXABDlfmz9dGhno1Zskg5+bDtaNNa8buruZV7D8OMl5jgmsv05Fl9HRsClfLv0UwT31xJfQSuhFs/LE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BKURZPTO; arc=none smtp.client-ip=74.125.225.140
+	 Content-Type:Content-Disposition:In-Reply-To; b=nxAyjUEmocoRk7y8mL+IwR9APKDpKT0/8hXJw7APK1NBfXjo2RYH2O4NS2PK5TDG+VYh20VjfFeGpLSXCbmJtr6G4Yf4Dvta16OhVULK76j6tPbWeDRH555oIpGIXP3wIGhnhig9voGGSt9JY53c+JWnoMgbuoYC4YkR6cJrffM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sQ9waO3B; arc=none smtp.client-ip=74.125.225.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BKURZPTO"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ff9621c5dso2769945e9.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 01:38:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sQ9waO3B"
+Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-48434392b02so1285845f8f.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 01:43:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790411906; x=1791016706; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=c9e9Ohjh62jjpKVoXb3eLlcbg9rHFeTPk+yn3uYWypA=;
-        b=BKURZPTOWxv3VmPPK29w/6Si+KDE00h4CnjQmN8AsVssqxOHoY+LFnD7548RMzRKlw
-         kC1H75pYwv88rBTYtz7U4GLaSTWr/UCfaqsmA35bA6JrHALtnz/rvSOQgIyS9am4tAI8
-         857YtNnRAjqSAAbTM5AnkwBw0DJgnHP5EN3xPZ+5t2Vml0NuBZOROu2f4KAMRNbVYRkt
-         dmA0jfdAhBGp3t02V20XibZQmtzAN3qDkqE+ekgZcwcNAhXeTHwFltNh3IRz+TyaTnHb
-         HNtz9S/Jcz8jgJFoei42ZnCLoJn7yAdYgDj2BMe/12b7qNoWAwa9whoLYDTxJHrGkEoH
-         OwVw==
+        d=gmail.com; s=20251104; t=1790412219; x=1791017019; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=QCwVdOxjrFD+KrFGvyZLlA0okXbQCYf9gkSOoPwm8f0=;
+        b=sQ9waO3BnTOzJMYOCXCLbcxZZobeBoAgwyUF4n0Itanw/bT0XnLu0IOpdVYUqDMUuY
+         CnYvDX+CzGQAPCE9CBJl/4b9zolIuYpJdWuzZZP/X1bfrfu3VV856s+xf3mp+oW4W5zs
+         c1u39oZiHrZBS0alTPpBNkqJ6VlGFu8rTRCMFgsBuJKJrxw+XN+ZLHC3z5fa5R635lLB
+         0eSu9NAao1vCpTbLcwWb9F3I1ThGBdLeIf2TNcjEXTMRYY5UHGZatJHphdTfjGaa4xyi
+         PayrediRnZ/8NO7cBojsw9lOfUsUjNUq/k/XM6+hAvdfDehzQlgpo/9tOOIwoqExXVjt
+         VKEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790411906; x=1791016706;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=c9e9Ohjh62jjpKVoXb3eLlcbg9rHFeTPk+yn3uYWypA=;
-        b=SRe66Hy5fMlwSKy3SEmUMkbFIAJOxYILX8hqn3zn/qitrR5rxUX2pCfY1KYr+WSSQG
-         rEpiYHsGuUCS/F08JbpLc0TKHHvo5lITOtNXAxPWm5LrErEBHuotmBnotzVGr+nJmwF6
-         H0LkmnfvyQ4BIvzHFbE0dbzkB0N/hBLYoDhIyKJX4ex11PJO+SZX1ulEiT6SOYeLv0Q/
-         WfYjs7bK7GOaxRPrGfXROOsOsAOqSMZy536jYLr56eS6+FNtuLWRgXyGDgPkvwnXrrKK
-         lT2sc4uybNYyoNdaE5mVMW/bOE2QAk/OQ931yeoR5GTxqO2AZhyLrKOoXpMU/Ns4MlNg
-         cmZQ==
-X-Forwarded-Encrypted: i=1; AKwUvByQUbD2yIOhv6vxCCBB0AQCF8ZVLPWOudHOBQ9FmYBaa2uvRqUqqJI7ZWSqG1JpWmnM2k2OFICXTGQNzQ9eQ3E=@vger.kernel.org
-X-Gm-Message-State: AFuF++k3cn/fmR1cLAKAgDVUOR5A+fWBdQeoFMuUgJtbQa0Vp6612ZMe
-	sJBXCiN78KNdl3KNo5keiNmaw/QHRJ/VpJ4cjAjwOTwX0fO3qOEdmCL6
-X-Gm-Gg: AYBFou0GH9R94ophtX/qpUruzBbqjgnsSCfpHYnbWd+/DjCVNg3G4zQjS0u4aDsGY+7
-	ezPJEl/JvSSwKCjjlBuz6Io/sEB4fEDuiCnHNY1gJgm3oclePGU4xB/Vm3Q2FMN183wVOl3sZye
-	hQGzUmsuHPZewPwNUYjw8TFXG89ZoKRbYq3dWeprmMTP5Q4CA6jvBh01BD/m/vFFelvCxzWZTu5
-	0/HTPIAwf5t/w0JEeQ+Q6DWQLHosDl9sFX/X2q2+646rgQYAiYovGesuei/MOrqqdcYfCpLb9HV
-	sx+qYWcwjdK0cg56NbJIJo2MFftGZaL/vBBLADs85JF4ATHapuqneWsba2RKybXvtcf7Y4XvHE7
-	y9SacJGRG2GjuKqzSTjRF7EQaPPLSjgBUZYuqisBqYuNM3dMFqP7nGw2VqTWQ0VBktXPNAI5fvn
-	UpU1cqnOzT1hfmnsWotnXjrAn3yuzQAcY/UtCqMQIEd9O2UihaVUCrxxFzZSO1sxMOOBCW7LRLf
-	5xcc+IjuglOyKUlte1sDQc=
-X-Received: by 2002:a05:600c:1d02:b0:49f:fd66:5fe0 with SMTP id 5b1f17b1804b1-49ffd6661a7mr12811255e9.9.1790411906263;
-        Sat, 26 Sep 2026 01:38:26 -0700 (PDT)
-Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5de4de4sm215396785e9.8.2026.09.26.01.38.25
+        d=1e100.net; s=20260707; t=1790412219; x=1791017019;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=QCwVdOxjrFD+KrFGvyZLlA0okXbQCYf9gkSOoPwm8f0=;
+        b=k3O5Yz+4hLtYKhuRQYBoeq15gI6kdqAV1HCd4u4WBxxZHQIL/IEt0bDUYuHqLRFpRV
+         Un8BXGyYIY90t1VZeWNrnYNCaU73L7uL38fwSJwxO0XifS/78W6pOFcAkP4ZfjjAuyfV
+         r80z7iF0JfIvrb3Figz3N3Gv2i5MMkmiB0YcnvmVjPkzcloffGeFks93PyoGL3BmLHHx
+         QoKwk6j1evmFJ2Kb+5ozkonjJrgbzI2LqA5zCV0crR2/j3epFOOrN0BTFlJF+GzgtoDX
+         CE1/A/A4AxW3NHKhgzjvVDXmaCXpZeUsTAXXZ4w6ctcl4lqzbcKYm2PM7u9EpZDCAQqU
+         0HKg==
+X-Forwarded-Encrypted: i=1; AKwUvBz1H/w+qGFIh1BC6s82aDMKGvxWEkAgePp17uINXDgkPgyiPB1PgYyax+6dVtS3xMFw/XHEibx0/Z6HUt1Ocq8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIYNe+z9sXTDso07QmiDLW8KoNWEf/SvJSjlHfr7dUbcfvBmfG4
+	kJ9r5/JOo4UDNk7DGGXBZ1sbhqqJCwSvfOuGBYieZ4yipogsrVZQZ/ku
+X-Gm-Gg: AYBFou0pxb8N8zixcn4fCl0THCyGnGSHq/PjZEA4d0kPswN4ZOFO+W4WiFKoFc+f967
+	e+PIZjCsQZ2+YZiRvF9snya+1cdtQTLLqcweoWRq7Dfo8S12gMZkworQDidDc0hML1wNHiZDSS8
+	Moj2wH2vhKl71psYQM0kF2IWw0rGIUFCFdOmirvoDk0wMTrRJAmYd+k7y6sxcmmY4rWt3RiP3I2
+	9jmm6jRW7Kcc3a23iilrowGjZtU/VMRDyR08W9Qq3UiYzQ1laeMw525iaVZi4PEJI3Lkq5BU7O+
+	rGx8OoXEs0+uJWjwnj1RYO97OlzJ+ibPMHTZOmGjzU4t7iwMpt62DCdd6gauCtYW5r3n+dacbMK
+	BpWSkD8hzUovonG0u6IkopwCmOoRkAj9CORJOpGJScEOm5eoWcPlIBtWryH9w6ndMJscaxn+Tq6
+	lsLChvlMEXI50S4x53JV6/ylKggy3EHxkFIb3P3gNMHdKIlDlMEOmJYUNPrNU2HgvaaJE92FaDG
+	zK3DsaM01/yIIcUvl3aRyCCAOr4tiYj1Agt+2Zb3Av1XtnOfAWw3lKJTVqRBZsdZso5+NYzSp24
+	ewX0qadcTZ2N84WQUEjWApgeoGcy3NuW2sSyJPYBrDgmRM1XoVeZAlKdHxshWExRUS9gdr1n9aw
+	oEXiYiNMCHwqhrKsD39lrYA==
+X-Received: by 2002:a05:6000:1a85:b0:487:ee4:b5e4 with SMTP id ffacd0b85a97d-488716b6cd7mr15679810f8f.8.1790412218418;
+        Sat, 26 Sep 2026 01:43:38 -0700 (PDT)
+Received: from MacBook-Pro-von-Karl.localdomain (dynamic-2a02-3100-b162-c701-4960-a998-3de8-2fce.310.pool.telefonica.de. [2a02:3100:b162:c701:4960:a998:3de8:2fce])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a30b1dfsm12979497f8f.4.2026.09.26.01.43.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 01:38:25 -0700 (PDT)
-Date: Sat, 26 Sep 2026 10:38:24 +0200
-From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-To: Cai Xinchen <caixinchen1@huawei.com>
-Cc: mic@digikod.net, gnoack@google.com, paul@paul-moore.com,
-	jmorris@namei.org, serge@hallyn.com, corbet@lwn.net,
-	skhan@linuxfoundation.org, rdunlap@infradead.org,
-	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
-	dlemoal@kernel.org, hch@lst.de, axboe@kernel.dk,
-	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
-	dhowells@redhat.com, code@tyhicks.com, linkinjeon@kernel.org,
-	sj1557.seo@samsung.com, yuezhang.mo@sony.com,
-	hirofumi@mail.parknet.co.jp, cel@kernel.org, jlayton@kernel.org,
-	neil@brown.name, okorniev@redhat.com, Dai.Ngo@oracle.com,
-	tom@talpey.com, miklos@szeredi.hu, amir73il@gmail.com,
-	senozhatsky@chromium.org, chenxiaosong@chenxiaosong.com,
-	zohar@linux.ibm.com, roberto.sassu@huawei.com,
-	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
-	stephen.smalley.work@gmail.com, omosnacek@gmail.com,
-	casey@schaufler-ca.com, nanx95726@gmail.com, djwong@kernel.org,
-	daniel@iogearbox.net, linux-security-module@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-block@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, netfs@lists.linux.dev,
-	ecryptfs@vger.kernel.org, exfat@lists.linux.dev,
-	linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
-	linux-cifs@vger.kernel.org, linux-integrity@vger.kernel.org,
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	xiujianfeng@huawei.com, lujialin4@huawei.com
-Subject: Re: [PATCH RFC -next 09/12] landlock: Implement metadata access hooks
-Message-ID: <20260926.a96402fcbd4b@gnoack.org>
-References: <20260924104831.1081137-1-caixinchen1@huawei.com>
- <20260924104831.1081137-10-caixinchen1@huawei.com>
+        Sat, 26 Sep 2026 01:43:37 -0700 (PDT)
+Date: Sat, 26 Sep 2026 10:43:35 +0200
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Jeremy Kerr <jk@codeconstruct.com.au>
+Cc: Matt Johnston <matt@codeconstruct.com.au>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	netdev@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] net: mctp: Stop selecting flow support for
+ KUnit tests
+Message-ID: <areFT_yfInT01o2r@gmail.com>
+References: <20260925192510.93840-1-kmehltretter@gmail.com>
+ <8edc4e71edceb124e2dca233cddb75e198b53a51.camel@codeconstruct.com.au>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260924104831.1081137-10-caixinchen1@huawei.com>
+In-Reply-To: <8edc4e71edceb124e2dca233cddb75e198b53a51.camel@codeconstruct.com.au>
 
-On Thu, Sep 24, 2026 at 06:48:28PM +0800, Cai Xinchen wrote:
-> Implement the LANDLOCK_ACCESS_FS_READ_METADATA and
-> LANDLOCK_ACCESS_FS_WRITE_METADATA access rights by hooking the
-> inode_getattr, inode_setattr, inode_setxattr, inode_getxattr,
-> inode_listxattr, inode_removexattr, inode_set_acl, inode_get_acl and
-> inode_remove_acl LSM hooks, which now receive a struct path thanks to
-> the preceding VFS and LSM refactoring.
+On Sat, Sep 26, 2026 at 03:53:28PM +0100, Jeremy Kerr wrote:
+> Hi Karl,
 > 
-> The following system calls are now controlled:
+> > MCTP_TEST selects MCTP_FLOWS, which also enables SKB_EXTENSIONS when no
+> > transport requires them.
 > 
-> - stat(2), fstat(2), lstat(2), newfstatat(2), getxattr(2) and
->   friends, listxattr(2) and friends, and POSIX ACL reads via
->   inode_getattr, inode_getxattr, inode_listxattr and inode_get_acl
->   (READ_METADATA)
-> - chmod(2), fchmod(2), fchmodat(2), fchmodat2(2), chown(2), fchown(2),
->   lchown(2), fchownat(2), chgrp(2), utimensat(2), futimens(2),
->   utime(2), setxattr(2) and friends, removexattr(2) and friends, and
->   POSIX ACL set and remove via inode_setattr, inode_setxattr,
->   inode_removexattr, inode_set_acl and inode_remove_acl
->   (WRITE_METADATA)
+> But we want to test the flows support, why disable this (and
+> consequently skip the flow tests in the vast majority of test runs)?
 > 
-> Both new rights are added to ACCESS_FILE as they apply to both files
-> and directories.
+> > Remove the selection to follow the dependency
+> > rule in Documentation/dev-tools/kunit/style.rst.
 > 
-> hook_inode_setattr only restricts explicit metadata changes, i.e. it
-> checks WRITE_METADATA only when the ia_valid mask contains
-> ATTR_MODE, ATTR_UID, ATTR_GID, ATTR_TIMES_SET or ATTR_TOUCH.
-> Metadata changes that the kernel performs implicitly, such as
-> timestamp updates on write(2) or size changes on truncate(2), are
-> therefore not restricted, and neither are chmod(2)/chown(2) calls
-> that do not change any attribute (e.g. chown(2) with -1/-1, which is
-> a no-op that never reaches the hook), matching the behavior of the
-> SELinux inode_setattr hook.
-> 
-> Kernel-internal accesses performed with override_creds() (e.g.
-> overlayfs and cachefiles) are not affected because Landlock domains
-> are attached to credentials, and kernel threads without a Landlock
-> domain (e.g. nfsd and ksmbd) are not restricted either.
-> 
-> Assisted-by: opencode: glm-5.3
-> Signed-off-by: Cai Xinchen <caixinchen1@huawei.com>
-> ---
->  security/landlock/fs.c | 86 ++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 86 insertions(+)
-> 
-> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-> index cab43892ec2f..e58b2aa0da65 100644
-> --- a/security/landlock/fs.c
-> +++ b/security/landlock/fs.c
-> @@ -318,6 +318,8 @@ static struct landlock_object *get_inode_object(struct inode *const inode)
->  	LANDLOCK_ACCESS_FS_EXECUTE | \
->  	LANDLOCK_ACCESS_FS_WRITE_FILE | \
->  	LANDLOCK_ACCESS_FS_READ_FILE | \
-> +	LANDLOCK_ACCESS_FS_READ_METADATA | \
-> +	LANDLOCK_ACCESS_FS_WRITE_METADATA | \
->  	LANDLOCK_ACCESS_FS_TRUNCATE | \
->  	LANDLOCK_ACCESS_FS_IOCTL_DEV | \
->  	LANDLOCK_ACCESS_FS_RESOLVE_UNIX)
-> @@ -1676,6 +1678,81 @@ static int hook_path_truncate(const struct path *const path)
->  	return current_check_access_path(path, LANDLOCK_ACCESS_FS_TRUNCATE);
->  }
->  
-> +static int hook_inode_getattr(const struct path *const path)
-> +{
-> +	return current_check_access_path(path,
-> +					LANDLOCK_ACCESS_FS_READ_METADATA);
-> +}
-> +
-> +static int hook_inode_setattr(const struct path *const path,
-> +			      struct iattr *const attr)
-> +{
-> +	/*
-> +	 * Explicit metadata changes (i.e. mode, ownership, and timestamps
-> +	 * set with utimes() and friends) require
-> +	 * LANDLOCK_ACCESS_FS_WRITE_METADATA.  Implicit timestamp updates
-> +	 * (e.g. ATTR_CTIME set for a write) and size changes (handled by
-> +	 * the truncate hooks) are not restricted.
-
-Nit: It feels like this comment about implicit timestamp updates
-(especially the size change) should go in the top-level documentation
-for the WRITE_METADATA right?  setattr() can not result in a size
-change, after all, AFAIK?
-
-Remark on the side, apart from truncation, normal writes into the file
-can of course also change its size ;-) and ATTR_ATIME and ATTR_MTIME
-also come to mind as implicit metadata changes.
-
-> +	 */
-> +	if (!(attr->ia_valid & (ATTR_MODE | ATTR_UID | ATTR_GID |
-> +				ATTR_TIMES_SET | ATTR_TOUCH)))
-> +		return 0;
-> +
-> +	return current_check_access_path(path,
-> +					LANDLOCK_ACCESS_FS_WRITE_METADATA);
-> +}
-> +
-> +static int hook_inode_setxattr(const struct path *const path,
-> +			       const char *const name,
-> +			       const void *const value, const size_t size,
-> +			       const int flags)
-> +{
-> +	return current_check_access_path(path,
-> +					LANDLOCK_ACCESS_FS_WRITE_METADATA);
-> +}
-> +
-> +static int hook_inode_getxattr(const struct path *const path,
-> +			       const char *const name)
-> +{
-> +	return current_check_access_path(path,
-> +					LANDLOCK_ACCESS_FS_READ_METADATA);
-> +}
-> +
-> +static int hook_inode_listxattr(const struct path *const path)
-> +{
-> +	return current_check_access_path(path,
-> +					LANDLOCK_ACCESS_FS_READ_METADATA);
-> +}
-> +
-> +static int hook_inode_removexattr(const struct path *const path,
-> +				  const char *const name)
-> +{
-> +	return current_check_access_path(path,
-> +					LANDLOCK_ACCESS_FS_WRITE_METADATA);
-> +}
-> +
-> +static int hook_inode_set_acl(const struct path *const path,
-> +			      const char *const acl_name,
-> +			      struct posix_acl *const kacl)
-> +{
-> +	return current_check_access_path(path,
-> +					LANDLOCK_ACCESS_FS_WRITE_METADATA);
-> +}
-> +
-> +static int hook_inode_get_acl(const struct path *const path,
-> +			      const char *const acl_name)
-> +{
-> +	return current_check_access_path(path,
-> +					LANDLOCK_ACCESS_FS_READ_METADATA);
-> +}
-> +
-> +static int hook_inode_remove_acl(const struct path *const path,
-> +				 const char *const acl_name)
-> +{
-> +	return current_check_access_path(path,
-> +					LANDLOCK_ACCESS_FS_WRITE_METADATA);
-> +}
-> +
->  /**
->   * unmask_scoped_access - Remove access right bits in @masks in all layers
->   *                        where @client and @server have the same domain
-> @@ -2100,6 +2177,15 @@ static struct security_hook_list landlock_hooks[] __ro_after_init = {
->  	LSM_HOOK_INIT(path_unlink, hook_path_unlink),
->  	LSM_HOOK_INIT(path_rmdir, hook_path_rmdir),
->  	LSM_HOOK_INIT(path_truncate, hook_path_truncate),
-> +	LSM_HOOK_INIT(inode_getattr, hook_inode_getattr),
-> +	LSM_HOOK_INIT(inode_setattr, hook_inode_setattr),
-> +	LSM_HOOK_INIT(inode_setxattr, hook_inode_setxattr),
-> +	LSM_HOOK_INIT(inode_getxattr, hook_inode_getxattr),
-> +	LSM_HOOK_INIT(inode_listxattr, hook_inode_listxattr),
-> +	LSM_HOOK_INIT(inode_removexattr, hook_inode_removexattr),
-> +	LSM_HOOK_INIT(inode_set_acl, hook_inode_set_acl),
-> +	LSM_HOOK_INIT(inode_get_acl, hook_inode_get_acl),
-> +	LSM_HOOK_INIT(inode_remove_acl, hook_inode_remove_acl),
->  	LSM_HOOK_INIT(unix_find, hook_unix_find),
->  
->  	LSM_HOOK_INIT(file_alloc_security, hook_file_alloc_security),
-> -- 
-> 2.18.0.huawei.25
+> That suggests "depending on", rather than removing the coverage.
 > 
 
-On the Landlock side, the implementation looks quite straightforward,
-without having double checked for missing hooks now.  This commit is
-probably fine as soon as we have agreement on the LSM hook changes.
+Hi Jeremy,
 
-–Günther
+Thanks for the review!
+
+OK, I can change that.
+
+I was confused by the existing !MCTP_FLOWS fallbacks, but now understand
+that you want the suite to retain full flow-test coverage.
+
+Karl
