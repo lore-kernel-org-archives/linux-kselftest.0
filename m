@@ -1,79 +1,125 @@
-Received: from mta1.formilux.org (mta1.formilux.org [51.159.59.229])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2119342538;
-	Sat, 26 Sep 2026 17:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.59.229
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4C7376A0D;
+	Sat, 26 Sep 2026 17:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790443420; cv=none; b=BEJaNrS+4wIsDihmhSM8AlBWFHo5Qk6rEcOFVg70VhJvrgQwvEybaU0dTmyVypmXEFOX4YYaVckYKlI6Kgb1VSyXMEygTCJmombAuWJHFlH+0rJG2XaJmIOGtiwqdQVtlngebBS4ZaweNW3CuyVZWvEuSdix0J8Ypi0ShRioFRw=
+	t=1790445085; cv=none; b=XQb4FBLIREtqEEMxphESzASqjiPpbrIq/JT0cnn/JAH2qTVPJmVVfUfAVR2pJgsGYO93D5LFMLkCWu3W0DlAyRhIrOecwCvakq7odE0+iBc6bR67z40Mka1rac8k9PQVa3SSaOyNd7ylmfBQZJOX8Zl4jSSJbNkAt3EybKeQiSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790443420; c=relaxed/simple;
-	bh=hRDyPq1CVvhOw9qrN3HGP9rtYUySEH4FnosZitYy5Bc=;
+	s=arc-20240116; t=1790445085; c=relaxed/simple;
+	bh=dJkwSRcEIBWdPO5DP6xDMu0eTRcPeYjoIpVQnE38tvA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U2Jeq/g9oBpsDtN7L/ZlEO4sv5oO5PhPuaKg2d3XkQKMPWygXy96axU8Gtkvd0Wp451OYGxVchNTEjJHwVPFyC2nxSLEdKJlq1EXkZfu2j3SMvLus1Neu800ioZn5KB3vQvWng2heHNlD5UpzUT5BbetsS9b30epWhsjrCxSkqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b=nzpmTYr2; arc=none smtp.client-ip=51.159.59.229
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+	 Content-Type:Content-Disposition:In-Reply-To; b=Co6raVDtdVFmdLMZNUNorzWcsgAV8jjK2urgazAX2IpbqH2w1XVHocFGHSOJFDk+jP0naOyyASY21kg7a+x5fG3+4oFstK0RSpNybAN4Vg4UNEQ7WkgUaR533MCXljdVgaKY96jUqnCQ9nnRBtd+X6XSgtOYhN+7C6eAkGUwoP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DD1lP/Qm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b="nzpmTYr2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1wt.eu; s=mail;
-	t=1790442861; bh=CmHOlFDk6UlCjro58JazdZXiCkRh1EGL0ccmJxXEbZA=;
-	h=From:Message-ID:From;
-	b=nzpmTYr2i+M/D8y8su33VkAlKGNyEiJ7fU4D+9eORRUu83ud2GLLo9nqU9qZjmKa3
-	 IbN86iRs4EWpEgxkdLIWmVXxSHW23TmZLItPmF6KrK8slxitpmaFL0PsdWcShPoVXs
-	 BifCqlwUtzzuUypebBEUkwuzts1mlhYzYuZs+q9U=
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by mta1.formilux.org (Postfix) with ESMTP id D4ADBC0023;
-	Sat, 26 Sep 2026 19:14:20 +0200 (CEST)
-Date: Sat, 26 Sep 2026 19:14:20 +0200
-From: Willy Tarreau <w@1wt.eu>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Danish Khateeb <danishkhateeb03@gmail.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] tools/nolibc: stop rounding malloc() sizes up to
- 4096 bytes
-Message-ID: <arf9bClKfvuztamr@1wt.eu>
-References: <20260926152414.251214-1-danishkhateeb03@gmail.com>
- <20260926152414.251214-2-danishkhateeb03@gmail.com>
- <d64fa7c0-e853-42ba-be3d-11a236c5182b@t-8ch.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DD1lP/Qm"
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 197DC1F000FF;
+	Sat, 26 Sep 2026 17:51:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790445083;
+	bh=+l/+xlFQ9oYX3AqDOoZ5UJ8jLQiMbyYFqszTxwXHlbY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=DD1lP/QmC7LYXQVPac1ZErbOX+o9gC185enlv/A+acy3P/pDC5ujo9X8rUfjkldPJ
+	 pHSHH1d+F9mBnfgX1o5XEdguQtswWEoO3h1vMpYyye82Pzp81Ofebc9rm0+H2/yEAj
+	 ZUmV1JJTvoVd3YYUEgqmzt2MnYZi+AqKPTZgSG0MNZ+f37aK6ZQ4DGXqbfndr5bsto
+	 d/BlkNHkO3ehaXRHohpz/SPENa/i18vrn2bs2CQiK8THJZPujfZ4zC2LJYm7dD3Qnq
+	 v75aEO7w1UjPmERPWOFujS6zGWAaO6BkF6QCOFcgPbGzKAKKMFZgqeLYHF87qLF4CM
+	 NF+O3+M9SQfjw==
+Date: Sat, 26 Sep 2026 19:48:16 +0200
+From: Nicolas Schier <nsc@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Luis Augenstein <luis.augenstein@tngtech.com>,
+	Maximilian Huber <maximilian.huber@tngtech.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Alexander Graf <graf@amazon.com>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Askar Safin <safinaskar@gmail.com>, linux-doc@vger.kernel.org,
+	kexec@lists.infradead.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Subject: Re: [PATCH v3 0/2] Move tool for generating initramfs cpio to
+ scripts/
+Message-ID: <argFYF12qS0REcAP@levanger>
+Mail-Followup-To: Mike Rapoport <rppt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Luis Augenstein <luis.augenstein@tngtech.com>,
+	Maximilian Huber <maximilian.huber@tngtech.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Alexander Graf <graf@amazon.com>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Askar Safin <safinaskar@gmail.com>, linux-doc@vger.kernel.org,
+	kexec@lists.infradead.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+References: <20260925-move-gen_init_cpio-to-scripts-v3-0-99c493f76722@kernel.org>
+ <areDq-1iFZUViDgS@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d64fa7c0-e853-42ba-be3d-11a236c5182b@t-8ch.de>
+In-Reply-To: <areDq-1iFZUViDgS@kernel.org>
 
-On Sat, Sep 26, 2026 at 05:50:28PM +0200, Thomas Weißschuh wrote:
-> On 2026-09-26 10:24:13-0500, Danish Khateeb wrote:
-> > malloc() rounds the size of each mapping up to a multiple of 4096,
-> > presumably to align it to a page boundary. But the page size is not 4096
-> > on all architectures, and mmap() and munmap() round the length up to the
-> > page size themselves.
+On Sat, Sep 26, 2026 at 11:34:51AM +0300, Mike Rapoport wrote:
+> Hi Nicolas,
+> 
+> On Fri, Sep 25, 2026 at 09:29:29PM +0200, Nicolas Schier wrote:
+> > initramfs cpio tools had been subject of several recent discussions on
+> > linux-kbuild.  Let's get two minor steps forward by enabling a
+> > top-level target for building gen_init_cpio w/o the need of a valid
+> > kbuild configuration [1] and move the tools for generating the built-in
+> > initramfs from usr/ to scripts/ [2].
 > > 
-> > Drop the rounding. As heap->len is no longer rounded up, growing a block
-> > with realloc() now always creates a new mapping.
+> > Link: https://lore.kernel.org/all/20260220191150.244006-1-safinaskar@gmail.com # [1]
+> > Link: https://lore.kernel.org/all/aSdrCFkUQup3qb-q@derry.ads.avm.de/ # [2]
+> > ---
+> > Changes in v3:
+> >   * Update various remaining usr/gen_init* references treewide (Nathan)
+> >   * Link to v2: https://patch.msgid.link/20260720-move-gen_init_cpio-to-scripts-v2-0-26b7e15c7133@kernel.org
+> > 
+> > Changes in v2:
+> >   * Build gen_init_cpio only if CONFIG_BLK_DEV_INITRD (Thomas)
+> >   * Keep underscore top-level target name (scripts_gen_init_cpio)
+> >     (Thomas)
+> >   * Link to v1: https://patch.msgid.link/20260309-move-gen_init_cpio-to-scripts-v1-0-0c5059b1ec5b@kernel.org
+> > 
+> > ---
+> > Nicolas Schier (2):
+> >       kbuild: Mark usr_gen_init_cpio as no-dot-config-target
+> >       kbuild: Move gen_init_cpio and gen_initramfs.sh to scripts/
+> > 
+> >  .../early-userspace/early_userspace_support.rst          | 16 ++++++++--------
+> >  Documentation/filesystems/ramfs-rootfs-initramfs.rst     | 10 +++++-----
+> >  MAINTAINERS                                              |  1 +
+> >  Makefile                                                 |  9 +++++----
+> >  scripts/.gitignore                                       |  1 +
+> >  scripts/Makefile                                         |  3 +++
+> >  scripts/Makefile.package                                 |  2 +-
+> >  {usr => scripts}/gen_init_cpio.c                         |  0
+> >  {usr => scripts}/gen_initramfs.sh                        |  2 +-
+> >  scripts/remove-stale-files                               |  2 ++
+> >  scripts/sbom/tests/cmd_graph/test_savedcmd_parser.py     |  2 +-
+> >  tools/testing/selftests/kho/vmtest.sh                    |  2 +-
 > 
-> The series looks good to me, but I want to hear from Willy before
-> applying it.
-
-Fine by me as well. I remembered there was something for mmap() that had
-to be rounded to PAGE_SIZE but it's not len, it's the offset, so we're
-fine here.
-
-Also I've checked when __builtin_add_overflow() was added, and it's gcc 5
-so we're fine here as well.
-
-> > Assisted-by: LLM
-> > Signed-off-by: Danish Khateeb <danishkhateeb03@gmail.com>
+> There's also tools/testing/selftests/liveupdate/vmtest.sh I know of, didn't
+> check for other users in tools/testing
 > 
-> I'll add a Suggested-by here when applying.
 
-For the series:
-  Reviewed-by: Willy Tarreau <w@1wt.eu>
+No idea how I missed that again; will be adjusted in v4.  Thanks a lot!
 
-Thanks!
-Willy
+-- 
+Nicolas
