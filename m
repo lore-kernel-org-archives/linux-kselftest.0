@@ -1,85 +1,82 @@
-Received: from mail-dl2-f36.google.com (mail-dl2-f36.google.com [74.125.229.164])
+Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF13390230
-	for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 04:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.164
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD431353A74
+	for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 05:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790398556; cv=none; b=CgQJyZ0/lmIBx56zfYM57hNlXm4SIx521+yo9LhwC4M8usD9uZSTTPHwjPnlCV0O9h7uwVf912+twETWESQfQuOJGmOaaz9BzQd02TawlAl44AeIxMNbRIdPFzjjPLKvSTyZ0S3P9o4j8FMCbh6FEw/MS2GL+s2FSJk2/JJvJiA=
+	t=1790401332; cv=none; b=KSe8drLVv5xB810RgX7/ZASeziHBK4KhcvbIT39rvMzmteR8N7ItvveZ+1jWJpf4ldCx5+8jKzEkPqWnjlD8M4t31gK//XzoIbtWvbjtl5EdsBqMvbTJbfDyhhCL0offCXuDtuE9iza+Qn6nd1OyYkePcPFuZm4VX92gS442Oc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790398556; c=relaxed/simple;
-	bh=FfXhQyNXodySdSp+NElob/BVBIWQybuJRr6zMGa4K4Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZlnnfuiOTvummLqmUN1PnvoH5uHe42MdGU/AfST+4FJBB6vRZJztkFaFObcQEZf2lr2buOFfLibkr2nYQ4CepVmkN0o3Yr1uPVo9NKMdZW32MZF1c1dAwWAFXscwZ/GgXOwwpYgyLnLNbVZD7tfOiy2lWrCNZ5wyvHinWJdeQ1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kVtUqfoK; arc=none smtp.client-ip=74.125.229.164
+	s=arc-20240116; t=1790401332; c=relaxed/simple;
+	bh=ihSErNzL28dopbbYtQk6sfe08O6dP4QtdIBtZVb4Srg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X/egzkj6cMoKqc6jsAPV+hGpmooti3pMsk3axh8QldIPVHFqryDVyzZ84vkfChNrshx8m+YxJZaVF+jab8VzJg94xH+v+nVf3qpy9YoS26Pht8gkoXpNR/e9JG3HUgyelzmaZLeMAUe9oD40e5+my3CXJi6NzSWLV2hNKUHWf3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p1tx3DnV; arc=none smtp.client-ip=74.125.225.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kVtUqfoK"
-Received: by mail-dl2-f36.google.com with SMTP id a92af1059eb24-14373bcc010so1373976c88.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 21:55:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p1tx3DnV"
+Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-4887840c529so530303f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2026 22:42:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790398552; x=1791003352; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=XUecpfSBrOk+7mAldclmse685XDqEY+Uz7+ijcEhEUA=;
-        b=kVtUqfoKYhHoXkUp32AdMsaXfDXPZhDdnnRXdUXd8n1X//SWRxXByI0w20d6SpKFzj
-         aYsMk3IE6AV0fRwRqvf/S1/jRtvu/Ynty16yrgYqpGOPmhkQL5c2sOBekXJX2+sBGmFF
-         8X8SeNXCIJ+3OkGbAZonT3hcjD0w9G+YqF2K2nNn75ABep8SkSlhlo1lWZzPPCX9eEkl
-         WJNUXHZrgOoJjDAB+jbWy8wx6MDdF8u06bHoU8Fn81PYgRSNnUoNlSnF5n1US7pV1PId
-         Mupx9R/a4BQb8IpkXCiO/QUCPItQzuhnMpkPRk4JRae2XrEveYR0dwpmjZTxrnGWi8s4
-         svKQ==
+        d=gmail.com; s=20251104; t=1790401329; x=1791006129; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=poMR+QoD4H3NHZQTFS1CZaPTIlu9qbIcYvmcDeHr1ig=;
+        b=p1tx3DnVVwWjOFwADRo6uLbq1ztMJJ4/vjhUmWOw5FWhkmnAnw8pKPuIaTROtM/6Fe
+         2z+LnIvYoACIncm62wZ4rqxahJ4YHayGVfRgcdfD8pbY//jl4G2NoRtDR3dtmv16OBBc
+         wqtr8F8w60WpxiIztu3q4nYUyWW47BOGTx8g0FVeZz6qQ4VHJKNktPaa6GBLaQ7cSuqX
+         k9XRG5wwzugG67nBG7QnLCvEM8UmY7HrsuhuTr/HvhtRnoUcZ99qpEwca6J+L2DuKEdV
+         LngO1WtQwZD1sqN/mECpXJXw8GL1q8Mj5waqBzuGturUJtxF0lgOXWZKK/BC+uTWEdjX
+         ESKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790398552; x=1791003352;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=XUecpfSBrOk+7mAldclmse685XDqEY+Uz7+ijcEhEUA=;
-        b=Tn+v5WEse6ER7C9UEgtTcnDzddgbR2LIA779rFsZoiNt6MqxVKptl8xaHh0sssvGQP
-         L4c8MkpIN6zud8afX7q0gKraqEk3Sww7C7zMvk0A2MxNBIGAlownFpDddRFCGs5+jqKE
-         5ghhnOVypPRALD2+dknobKKH961DqOW5O+68+bt350SOeFTDEKHnbatvR/klP7LB1dOm
-         w3kXYKSFUZ26Hft742hn5IgnMti3bIrfpbwIZeHVrQ/v8EtNV4Z6gsF8PM5kjfWnAdzF
-         ChAcf+SB1Vhh2rRXOXUyCuPVllp3IrrxuxvO5AmX09r3EvKh/8q7pKdVvEYbYwwfdS6c
-         ++Zg==
-X-Forwarded-Encrypted: i=1; AKwUvBxR7WlDA/RusLfuxy/7FBXYkL+vpWk4zjUcDlgsQrElOEqQoid7euL8Pr/fuXeBFeMDhp2IppmA7MU+dSCnmVo=@vger.kernel.org
-X-Gm-Message-State: AFuF++lSn8wr/7vRZRzI5VnIGD72RqFy/QqEVcdBZ0Ssnym2b/K36wOY
-	i9uaxnXIvsDwGfgJYR7yJPIPbhuhI3SGm8NvyLgredr0jJ0DCvaO3Trf
-X-Gm-Gg: AYBFou0AwWdoPD7iPLPe7gFuufQ4wBglHf5lF3hzJajRiAmDOoQeNRX1KkgfeipdgC3
-	9CHF6picS5ht8Me0Lf4W/RDeB3iLe7uzJGKP/1oMJpZveHKpq3b3lKqneuAHdH5q330werA8F8v
-	L2f3TaSw9XWIJfCfEbVQUdmiqGIRNi4rTYeg1RX3+ynfyP5urIA98Trjhe3dXCzF2DVmaBmAtO8
-	ueuPt+TerbTKjiS0qpB7laqbSS+BIZrRkS9dB0xOV++eFZ8mpI3zmoPYsuskK+rnBfboVulTW6v
-	P/mR8eht8UHFGV8MfFUdtQhLOOs50waIUg2Q41fDYt6cAtjxw3lpp2iFHxCDiPTF3NrYr0PO4yA
-	rFP/EHTUHnkb+mWj4iX+7v+Jz2EF+4SA2CmUYsp+/Elk6v6FuVYTlpGwylOkJ1QF2m+U2vrdxSu
-	8Wq8LTTSPuKLjATQYJf/SiJcwl9izd5QYAWE7GDEZl17pDeXl8FNvzmzFAR8GKZLr3Y1/Mn03FQ
-	LJk3UUdf0YFQs3Oj1NoW+HzFrYp0AZ40gA06dBL8Ox8iyzRYmaSpdYIGyqSVq814MwuMExAWYWt
-	jf9M//CE5E5jr8AFlFOWyKfCQe/M1R1MNHq0Ot2PmkZFOPo4uk3bnHygZ1X5OXAtuQ2O3Co=
-X-Received: by 2002:a05:7022:28c:b0:139:bf81:637f with SMTP id a92af1059eb24-146ce775f18mr2027803c88.16.1790398551939;
-        Fri, 25 Sep 2026 21:55:51 -0700 (PDT)
-Received: from spider.bream-herring.ts.net ([103.6.151.236])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-145adcc5b00sm9334211c88.15.2026.09.25.21.55.48
+        d=1e100.net; s=20260707; t=1790401329; x=1791006129;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=poMR+QoD4H3NHZQTFS1CZaPTIlu9qbIcYvmcDeHr1ig=;
+        b=mhtex7rS9MW8w/N+UtlP03RDgKDPpuLW9OO60xYUJwvQgH2OVVkbChANhECizPiIZM
+         g1o0TyY8POx+conSszUX4tgT2HDnvDCK/gB+YdmXvk6tZwR8o6A2xE5L5OlHfwLAGrRy
+         c6nn5cuu3dKs8EKyHIRp4BeapyuSIlGN4hzJPpIcSgXOOFG9TY1uFgz+yIVXjXW01wdN
+         JsNVBQTa1rGDhqdylMK/fmukbmXQsAnZs1ZOjYTrCjLT2dNm8ImhnHAt3xD08uOvEwyk
+         zgWvN1z0lzrFr+RJexienPWgWgVTNiwwgoaFhmgN8Dfp3zjj8Qn5hhPJepBh+UkOknML
+         BLIQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx4oZw8vyX/+ybLyweHUK/cMpuRNb2Vy4ZNPPPO3OQiKY/+Cw+wWBsHAO5Eeqa9IhskwKRdS4vZ09/L8yeIj/Y=@vger.kernel.org
+X-Gm-Message-State: AFuF++n/t0N8VuATOCdV27qgXyIHX8CHS1x9xzujKomZyNMCp2G0f+zl
+	OsxcTVGozqhVXPfpV/L9gkCXqhso50W+35mX7frYNMkw36LoQjy+40dt
+X-Gm-Gg: AYBFou2/AOvJELx+cvlG59wU6iwTjODE5kwy6fzwIctfAltOgkx0ju67sVPT1gOYfcj
+	xQueMh9jIxOt3fyIAsIXU0ht/8bF98ulr3k8AQX5PjH1wi8hmWzNulXX80DoTBFitEqQM6feMAe
+	z1LMljMpMmSt2Zx1vMVleA716iu4AvGbEJ57XLCqx8SEHCEAAWZ24QFd8XicD8N936CovJXrcOl
+	1U+QoIdlSImrP1DP9L3fwCfn6Qe76aBbj0uCWTwtF3Pt0bUUMhBoa4vBv8TiJ3TTPc0aQBLaAMP
+	jY9MeRBaWnCZ+5O5K7yCw1OWbJSlbeUX8y8ODuq5RCTucFSFzvf/6x3bMVzpxPkMC7CaDe4kpVC
+	XZKK+JSLazguuguzPE/KqY6hM4a3eYtDTxIrhg9wOjXdFggfDiV8mBabHFZoLBlObcUjcIfsEe0
+	4JHBz/zG6T8CYVca4mFyhqo0IFblvEZ7pBxGKipBD23QFPZ6wE2ao7/uiH4sWmtRbpE5JEU8Y2b
+	sb+3dOseH3W57lBaN0b98X3RzqOXs3Y8gkX4dnklL0T
+X-Received: by 2002:a05:600c:6986:b0:49f:c5aa:9ef4 with SMTP id 5b1f17b1804b1-49fe66d05d7mr126116765e9.8.1790401328777;
+        Fri, 25 Sep 2026 22:42:08 -0700 (PDT)
+Received: from localhost.suse.org ([37.109.167.253])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ff065873csm104782365e9.2.2026.09.25.22.42.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 21:55:51 -0700 (PDT)
-From: Matthias Goergens <matthias.goergens@gmail.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Matthias Goergens <matthias.goergens@gmail.com>,
-	Minchan Kim <minchan@kernel.org>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Chris Li <chrisl@kernel.org>,
-	Kairui Song <kasong@tencent.com>,
+        Fri, 25 Sep 2026 22:42:08 -0700 (PDT)
+From: Sebastian Chlad <sebastianchlad@gmail.com>
+X-Google-Original-From: Sebastian Chlad <sebastian.chlad@suse.com>
+To: Tejun Heo <tj@kernel.org>,
 	Johannes Weiner <hannes@cmpxchg.org>,
-	Yosry Ahmed <yosry@kernel.org>,
-	Nhat Pham <nphamcs@gmail.com>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Sebastian Chlad <sebastian.chlad@suse.com>,
+	"T . J . Mercier" <tjmercier@google.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	cgroups@vger.kernel.org,
 	linux-mm@kvack.org,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: [RFC PATCH v2 4/4] selftests: zram: cover retained offload-only entries
-Date: Sat, 26 Sep 2026 12:55:17 +0800
-Message-ID: <20260926045517.3458413-5-matthias.goergens@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260926045517.3458413-1-matthias.goergens@gmail.com>
-References: <20260926045517.3458413-1-matthias.goergens@gmail.com>
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: memcg: Don't hang in the inotify tests without IN_DELETE_SELF
+Date: Sat, 26 Sep 2026 07:42:03 +0200
+Message-ID: <20260926054205.28933-1-sebastian.chlad@suse.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,796 +85,101 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Faulting and dirtying one page of a swapped-out large folio can leave
-sibling PTEs referring to its existing offload-only swap allocation.
-Exercise this path with zram behind dm-delay: ordinary reclaim must not
-rewrite the allocation, while proactive reclaim must still be able to.
+test_memcg_inotify_delete_file() and test_memcg_inotify_delete_dir()
+wait for IN_DELETE_SELF with a blocking read() on the inotify fd. On a
+kernel that does not send IN_DELETE_SELF for kernfs files and
+directories, the read() never returns and test_memcontrol hangs until
+it is killed by the kselftest timeout. The remaining tests do not run
+and no result is reported for the inotify tests.
 
-Check backing-device writes, refusal counters and data integrity. Derive
-the folio and expected I/O sizes from the architecture's PMD huge-page
-size. Keep this test separate from basic routing coverage because it
-also requires transparent huge pages, MADV_COLLAPSE and dm-delay.
+Wait for the first event with poll() and a timeout. If IN_DELETE_SELF
+does not arrive in time, report it and fail the test instead of
+blocking, so that test_memcontrol completes and the remaining results
+are reported.
 
-Measure retained swap in the target VMA and lock ancillary mappings to
-keep them out of backing-device write counts.
-
-Signed-off-by: Matthias Goergens <matthias.goergens@gmail.com>
+Assisted-by: claude-opus-5-5
+Signed-off-by: Sebastian Chlad <sebastian.chlad@suse.com>
 ---
- tools/testing/selftests/zram/Makefile       |   2 +-
- tools/testing/selftests/zram/README         |   8 +-
- tools/testing/selftests/zram/config         |   4 +
- tools/testing/selftests/zram/settings       |   1 +
- tools/testing/selftests/zram/swap_offload.c | 205 ++++++++-
- tools/testing/selftests/zram/zram05.sh      | 447 ++++++++++++++++++++
- 6 files changed, 664 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/zram/settings
- create mode 100755 tools/testing/selftests/zram/zram05.sh
+ .../selftests/cgroup/test_memcontrol.c        | 27 ++++++++++++++++---
+ 1 file changed, 23 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/zram/Makefile b/tools/testing/selftests/zram/Makefile
-index 781d10a20e56..b83e6a1563b2 100644
---- a/tools/testing/selftests/zram/Makefile
-+++ b/tools/testing/selftests/zram/Makefile
-@@ -2,7 +2,7 @@
- all:
- 
- TEST_GEN_FILES := swap_offload workingset_offload
--TEST_PROGS := zram.sh zram03.sh zram04.sh
-+TEST_PROGS := zram.sh zram03.sh zram04.sh zram05.sh
- TEST_FILES := zram01.sh zram02.sh zram_lib.sh
- EXTRA_CLEAN := err.log
- 
-diff --git a/tools/testing/selftests/zram/README b/tools/testing/selftests/zram/README
-index cd7f389ed3c6..8c11d70d2a1f 100644
---- a/tools/testing/selftests/zram/README
-+++ b/tools/testing/selftests/zram/README
-@@ -28,6 +28,7 @@ zram02.sh: creates block device for swap
- Offload-only swap tests, registered separately:
- zram03.sh: checks proactive routing, pressure fallback and zswap bypass
- zram04.sh: checks file workingset activation with offload-only swap
-+zram05.sh: checks retained-entry write refusal, recovery and data integrity
- 
- Run these tests as root in an exclusive disposable VM with the offload-only
- swap policy and the options listed in config. They change global swap,
-@@ -35,7 +36,9 @@ zswap and reclaim settings. Use the initial cgroup namespace with an
- unrestricted cgroup v2 memory hierarchy mounted at /sys/fs/cgroup. A child's
- memory.zswap.writeback value does not reveal restrictions in its ancestors.
- 
--zram04 needs a disk-backed TMPDIR.
-+zram04 needs a disk-backed TMPDIR. zram05 additionally needs dm-delay,
-+transparent huge pages and enough locked-memory allowance for its fixture;
-+it skips when those prerequisites cannot be established.
- 
- Commands required for testing:
-  - bc
-@@ -46,6 +49,9 @@ Commands required for testing:
-  - swapon
-  - swapoff
-  - mkfs/ mkfs.ext4
-+ - dmsetup (zram05)
-+ - blockdev (zram05)
-+ - stat (zram04 and zram05)
- 
- For more information please refer:
- kernel-source-tree/Documentation/admin-guide/blockdev/zram.rst
-diff --git a/tools/testing/selftests/zram/config b/tools/testing/selftests/zram/config
-index c59b8c3806a5..018429d8f5ca 100644
---- a/tools/testing/selftests/zram/config
-+++ b/tools/testing/selftests/zram/config
-@@ -1,6 +1,10 @@
- CONFIG_CGROUPS=y
-+CONFIG_BLK_DEV_DM=y
-+CONFIG_DM_DELAY=y
- CONFIG_MEMCG=y
- CONFIG_SWAP=y
-+CONFIG_TRANSPARENT_HUGEPAGE=y
-+CONFIG_VM_EVENT_COUNTERS=y
- CONFIG_ZSMALLOC=y
- CONFIG_ZRAM=y
- CONFIG_ZSWAP=y
-diff --git a/tools/testing/selftests/zram/settings b/tools/testing/selftests/zram/settings
-new file mode 100644
-index 000000000000..6091b45d226b
---- /dev/null
-+++ b/tools/testing/selftests/zram/settings
-@@ -0,0 +1 @@
-+timeout=120
-diff --git a/tools/testing/selftests/zram/swap_offload.c b/tools/testing/selftests/zram/swap_offload.c
-index b2b94cd6ee3a..0c01c97d8476 100644
---- a/tools/testing/selftests/zram/swap_offload.c
-+++ b/tools/testing/selftests/zram/swap_offload.c
-@@ -3,6 +3,7 @@
- 
- #include <errno.h>
- #include <fcntl.h>
-+#include <limits.h>
- #include <sched.h>
- #include <signal.h>
- #include <stdio.h>
-@@ -17,6 +18,7 @@
- #define SWAP_FLAG_DISCARD_ONCE	0x20000
- #define SWAP_FLAG_DISCARD_PAGES	0x40000
- #define SWAP_FLAG_OFFLOAD_ONLY	0x80000
-+#define KSFT_SKIP	4
- 
- static int activate(const char *path, int priority, int discard_flags)
- {
-@@ -201,11 +203,210 @@ static int allocate(const char *size_arg, const char *procs,
- 		pause();
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 0ed82347044e..c00420acc9a1 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -11,6 +11,7 @@
+ #include <sys/types.h>
+ #include <unistd.h>
+ #include <sys/inotify.h>
++#include <poll.h>
+ #include <sys/socket.h>
+ #include <sys/wait.h>
+ #include <arpa/inet.h>
+@@ -1655,10 +1656,20 @@ static int test_memcg_oom_group_score_events(const char *root)
+ 	return ret;
  }
  
-+static int create_marker(const char *path, unsigned char *memory,
-+			 unsigned long size)
-+{
-+	char *temporary;
-+	int fd, ret = 1;
++#define INOTIFY_TIMEOUT_MS 5000
 +
-+	if (asprintf(&temporary, "%s.XXXXXX", path) < 0) {
-+		perror("asprintf marker path");
-+		return 1;
-+	}
-+	fd = mkstemp(temporary);
-+	if (fd < 0) {
-+		perror(path);
-+		goto out_free;
-+	}
-+	if (memory && dprintf(fd, "%d %08lx-%08lx\n", getpid(),
-+			      (unsigned long)memory,
-+			      (unsigned long)(memory + size)) < 0) {
-+		perror("write marker");
-+		close(fd);
-+		goto out_unlink;
-+	}
-+	if (close(fd)) {
-+		perror("close marker");
-+		goto out_unlink;
-+	}
-+	/* Publish only after the payload is complete for the shell reader. */
-+	if (rename(temporary, path)) {
-+		perror("publish marker");
-+		goto out_unlink;
-+	}
-+	ret = 0;
-+out_unlink:
-+	unlink(temporary);
-+out_free:
-+	free(temporary);
-+	return ret;
-+}
-+
-+static unsigned char retained_byte(unsigned long offset, long page_size,
-+				   int touched)
-+{
-+	unsigned char value = offset / page_size % 251 + 1;
-+
-+	if (touched && !offset)
-+		value ^= 0x5a;
-+	return value;
-+}
-+
-+static int verify_retained(unsigned char *memory, unsigned long size,
-+			   long page_size, int full)
-+{
-+	unsigned long limit = full ? size : 1;
-+
-+	for (unsigned long offset = 0; offset < limit; offset++) {
-+		unsigned char expected = retained_byte(offset, page_size, 1);
-+
-+		if (memory[offset] != expected) {
-+			fprintf(stderr,
-+				"retained data mismatch at %lu: got %u, expected %u\n",
-+				offset, memory[offset], expected);
-+			return 1;
-+		}
-+	}
-+	return 0;
-+}
-+
-+static int retained(const char *size_arg, const char *procs,
-+		    const char *ready, const char *touched,
-+		    const char *verified)
-+{
-+	unsigned long allocation_size, mapping_start, size;
-+	unsigned char *mapping, *memory;
-+	char *end;
-+	sigset_t signals;
-+	long page_size;
-+	int signal;
-+
-+	errno = 0;
-+	size = strtoul(size_arg, &end, 0);
-+	if (errno || *end || !size || (size & (size - 1))) {
-+		fprintf(stderr, "allocation size must be a power of two\n");
-+		return 1;
-+	}
-+	/*
-+	 * Keep existing runtime mappings out of the backing-write measurement.
-+	 * Enable future locking only after creating the unlocked target mapping.
-+	 */
-+	if (mlockall(MCL_CURRENT)) {
-+		int error = errno;
-+
-+		perror("mlockall ancillary mappings");
-+		if (error == EPERM || error == ENOMEM)
-+			return KSFT_SKIP;
-+		return 1;
-+	}
-+	if (join_cgroup(procs))
-+		return 1;
-+
-+	page_size = sysconf(_SC_PAGESIZE);
-+	if (page_size <= 0) {
-+		perror("sysconf _SC_PAGESIZE");
-+		return 1;
-+	}
-+	if (size < (unsigned long)page_size || size % page_size) {
-+		fprintf(stderr, "allocation size must contain whole pages\n");
-+		return 1;
-+	}
-+	if (size > ULONG_MAX / 2) {
-+		fprintf(stderr, "allocation size is too large\n");
-+		return 1;
-+	}
-+	allocation_size = size * 2;
-+	mapping = mmap(NULL, allocation_size, PROT_READ | PROT_WRITE,
-+		       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (mapping == MAP_FAILED) {
-+		int error = errno;
-+
-+		perror("mmap");
-+		if (error == EAGAIN || error == ENOMEM)
-+			return KSFT_SKIP;
-+		return 1;
-+	}
-+	mapping_start = (unsigned long)mapping;
-+	memory = (unsigned char *)((mapping_start + size - 1) & ~(size - 1));
-+	if ((unsigned long)memory != mapping_start)
-+		munmap((void *)mapping_start,
-+		       (unsigned long)memory - mapping_start);
-+	munmap(memory + size, allocation_size - size -
-+	       ((unsigned long)memory - mapping_start));
-+	if (mlockall(MCL_FUTURE)) {
-+		perror("mlockall future mappings");
-+		return 1;
-+	}
-+	if (madvise(memory, size, MADV_HUGEPAGE)) {
-+		perror("madvise MADV_HUGEPAGE");
-+		return 1;
-+	}
-+	for (unsigned long offset = 0; offset < size; offset += page_size)
-+		memset(memory + offset, retained_byte(offset, page_size, 0),
-+		       page_size);
-+#ifdef MADV_COLLAPSE
-+	if (madvise(memory, size, MADV_COLLAPSE)) {
-+		int error = errno;
-+
-+		perror("madvise MADV_COLLAPSE");
-+		if (error == EAGAIN || error == EINVAL || error == ENOMEM)
-+			return KSFT_SKIP;
-+		return 1;
-+	}
-+#else
-+	fprintf(stderr, "MADV_COLLAPSE is unavailable\n");
-+	return KSFT_SKIP;
-+#endif
-+
-+	sigemptyset(&signals);
-+	sigaddset(&signals, SIGUSR1);
-+	sigaddset(&signals, SIGUSR2);
-+	sigaddset(&signals, SIGALRM);
-+	if (sigprocmask(SIG_BLOCK, &signals, NULL)) {
-+		perror("sigprocmask");
-+		return 1;
-+	}
-+	if (create_marker(ready, memory, size))
-+		return 1;
-+
-+	for (;;) {
-+		errno = sigwait(&signals, &signal);
-+		if (errno) {
-+			perror("sigwait");
-+			return 1;
-+		}
-+		if (signal == SIGUSR1) {
-+			unsigned char value;
-+
-+			if (mprotect(memory, page_size, PROT_READ)) {
-+				perror("mprotect read");
-+				return 1;
-+			}
-+			value = memory[0];
-+			if (mprotect(memory, page_size, PROT_READ | PROT_WRITE)) {
-+				perror("mprotect write");
-+				return 1;
-+			}
-+			memory[0] = value ^ 0x5a;
-+			if (create_marker(touched, NULL, 0))
-+				return 1;
-+		} else {
-+			if (verify_retained(memory, size, page_size,
-+					    signal == SIGALRM))
-+				return 1;
-+			if (create_marker(verified, NULL, 0))
-+				return 1;
-+		}
-+	}
-+}
-+
- int main(int argc, char **argv)
+ static int read_event(int inotify_fd, int expected_event, int expected_wd)
  {
- 	if (argc == 4 && !strcmp(argv[1], "activate"))
- 		return activate(argv[2], atoi(argv[3]),
- 				SWAP_FLAG_DISCARD | SWAP_FLAG_DISCARD_ONCE);
-+	if (argc == 4 && !strcmp(argv[1], "activate-no-discard"))
-+		return activate(argv[2], atoi(argv[3]), 0);
- 	if (argc == 4 && !strcmp(argv[1], "reject-page-discard"))
- 		return reject_page_discard(argv[2], atoi(argv[3]));
- 	if (argc == 4 && !strcmp(argv[1], "accept-discard-once-pages"))
-@@ -214,9 +415,11 @@ int main(int argc, char **argv)
- 		return pin_to_one_cpu(argv[2]);
- 	if (argc == 6 && !strcmp(argv[1], "allocate"))
- 		return allocate(argv[2], argv[3], argv[4], argv[5]);
-+	if (argc == 7 && !strcmp(argv[1], "retained"))
-+		return retained(argv[2], argv[3], argv[4], argv[5], argv[6]);
++	struct pollfd pfd = { .fd = inotify_fd, .events = POLLIN };
+ 	struct inotify_event event;
+ 	ssize_t len = 0;
++	int ret;
++
++	ret = poll(&pfd, 1, INOTIFY_TIMEOUT_MS);
++	if (ret == 0)
++		return -ETIMEDOUT;
++	if (ret < 0)
++		return -1;
  
- 	fprintf(stderr,
--		"usage: %s activate DEVICE PRIORITY | reject-page-discard DEVICE PRIORITY | accept-discard-once-pages DEVICE PRIORITY | pin PID | allocate BYTES CGROUP.PROCS READY VERIFIED\n",
-+		"usage: %s activate|activate-no-discard DEVICE PRIORITY | reject-page-discard DEVICE PRIORITY | accept-discard-once-pages DEVICE PRIORITY | pin PID | allocate BYTES CGROUP.PROCS READY VERIFIED | retained BYTES CGROUP.PROCS READY TOUCHED VERIFIED\n",
- 		argv[0]);
- 	return 1;
- }
-diff --git a/tools/testing/selftests/zram/zram05.sh b/tools/testing/selftests/zram/zram05.sh
-new file mode 100755
-index 000000000000..c37f670e2824
---- /dev/null
-+++ b/tools/testing/selftests/zram/zram05.sh
-@@ -0,0 +1,447 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Test retained offload-only entries under ordinary and proactive reclaim.
-+
-+set -eu
-+
-+# shellcheck source=zram_lib.sh
-+. ./zram_lib.sh
-+
-+TCID="zram05"
-+cg="/sys/fs/cgroup/zram-retained-$$"
-+cg_created=0
-+cgroup_root="/sys/fs/cgroup"
-+tmp=""
-+ready=""
-+touched=""
-+verified=""
-+holder_pid=""
-+safe=""
-+safe_active=0
-+offload_backing=""
-+offload=""
-+offload_active=0
-+dm_name="zram-retained-$$"
-+dm_active=0
-+dm_node_created=0
-+zswap_enabled=""
-+thp_size=0
-+thp_kib=0
-+thp_sectors=0
-+page_kib=0
-+
-+fail()
-+{
-+	echo "$TCID: [FAIL] $*" >&2
-+	exit 1
-+}
-+
-+skip()
-+{
-+	echo "$TCID: [SKIP] $*" >&2
-+	exit "$ksft_skip"
-+}
-+
-+cleanup()
-+{
-+	local status=$?
-+	set +e
-+	if [ -n "$holder_pid" ]; then
-+		kill "$holder_pid"
-+		wait "$holder_pid"
-+	fi
-+	if [ "$offload_active" -eq 1 ] ||
-+	   { [ -n "$offload" ] &&
-+	     awk -v device="$offload" '$1 == device { found = 1 }
-+		END { exit !found }' /proc/swaps; }; then
-+		if swapoff "$offload"; then
-+			offload_active=0
-+		else
-+			status=1
-+		fi
-+	fi
-+	if [ "$safe_active" -eq 1 ]; then
-+		if swapoff "$safe"; then
-+			safe_active=0
-+			dev_swap_ids=""
-+		else
-+			status=1
-+		fi
-+	fi
-+	if [ "$dm_active" -eq 1 ]; then
-+		zram_wait_for_udev
-+		if dmsetup --noudevsync --noudevrules remove "$dm_name"; then
-+			dm_active=0
-+		else
-+			status=1
-+		fi
-+	fi
-+	if [ "$dm_node_created" -eq 1 ] && [ "$dm_active" -eq 0 ]; then
-+		rm -f "$offload" || status=1
-+	fi
-+	if [ -n "$tmp" ]; then
-+		rm -rf "$tmp" || status=1
-+	fi
-+	if [ "$cg_created" -eq 1 ]; then
-+		rmdir "$cg" || status=1
-+	fi
-+	cgroup_disable_memory_controller "$cgroup_root" || status=1
-+	if [ -n "$dev_ids" ]; then
-+		# A live dm mapping still needs its zram backing device.
-+		[ "$dm_active" -eq 0 ] || dev_ids=" $safe_id"
-+		zram_cleanup || status=1
-+	fi
-+	if [ -n "$zswap_enabled" ]; then
-+		echo "$zswap_enabled" > /sys/module/zswap/parameters/enabled || status=1
-+	fi
-+	exit "$status"
-+}
-+
-+wait_file()
-+{
-+	for _ in $(seq 1 400); do
-+		[ -e "$1" ] && return 0
-+		if [ -n "$holder_pid" ]; then
-+			holder_state=$(awk '{ print $3 }' \
-+				"/proc/$holder_pid/stat" 2>/dev/null || :)
-+		else
-+			holder_state=""
-+		fi
-+		if [ -n "$holder_pid" ] &&
-+		   { ! kill -0 "$holder_pid" 2>/dev/null ||
-+		     [ "$holder_state" = Z ]; }; then
-+			if wait "$holder_pid"; then
-+				helper_status=0
-+			else
-+				helper_status=$?
-+			fi
-+			holder_pid=""
-+			return 2
-+		fi
-+		sleep 0.05
-+	done
-+	return 1
-+}
-+
-+require_helper_file()
-+{
-+	if wait_file "$1"; then
-+		return 0
-+	else
-+		status=$?
-+	fi
-+	if [ "$status" -eq 2 ]; then
-+		[ "$helper_status" -eq "$ksft_skip" ] && skip "$2 is unavailable"
-+		fail "retained helper exited with status $helper_status while $2"
-+	fi
-+	fail "retained helper timed out while $2"
-+}
-+
-+written_sectors()
-+{
-+	awk '{ print $7 }' "/sys/block/${offload_backing##*/}/stat"
-+}
-+
-+vmstat_value()
-+{
-+	awk -v name="$1" '$1 == name { print $2 }' /proc/vmstat
-+}
-+
-+memcg_counter()
-+{
-+	awk -v name="$1" '$1 == name { print $2; found = 1; exit }
-+		END { if (!found) exit 1 }' "$cg/memory.stat"
-+}
-+
-+measure_thp_vma_swap()
-+{
-+	# Measure only the helper's target; process-wide VmSwap includes other
-+	# mappings. Before reclaim, require the entire unlocked target to be huge.
-+	awk -v want="$thp_vma_range" -v expected="$thp_kib" -v initial="$1" '
-+	function emit() {
-+		if (range == want) {
-+			matches++
-+			if (size != expected || swap < 0 || locked != 0 ||
-+			    (initial && (anon != expected || swap != 0)))
-+				invalid = 1
-+			matched_swap = swap
-+		}
-+	}
-+	/^[[:xdigit:]]+-[[:xdigit:]]+[[:space:]]/ {
-+		emit()
-+		range = $1
-+		size = anon = locked = swap = -1
-+		next
-+	}
-+	$1 == "Size:" { size = $2; next }
-+	$1 == "AnonHugePages:" { anon = $2; next }
-+	$1 == "Locked:" { locked = $2; next }
-+	$1 == "Swap:" { swap = $2; next }
-+	END {
-+		emit()
-+		if (matches != 1 || invalid)
-+			exit 1
-+		print matched_swap
-+	}' "/proc/$holder_pid/smaps" > "$tmp/thp-vma-swap"
-+}
-+
-+wait_offload_quiet()
-+{
-+	# A bio queued inside dm-delay is not yet visible in either the backing
-+	# device statistics or the mapped device's inflight counters.
-+	sleep 4
-+	previous=-1
-+	stable=0
-+	for _ in $(seq 1 240); do
-+		current=$(written_sectors)
-+		read -r reads writes < "$dm_inflight"
-+		if [ "$current" -eq "$previous" ] && \
-+		   [ "$reads" -eq 0 ] && [ "$writes" -eq 0 ]; then
-+			stable=$((stable + 1))
-+			[ "$stable" -ge 20 ] && return 0
-+		else
-+			stable=0
-+		fi
-+		previous=$current
-+		sleep 0.05
-+	done
-+	return 1
-+}
-+
-+check_prereqs
-+[ -x ./swap_offload ] || skip "swap_offload helper is unavailable"
-+command -v dmsetup >/dev/null 2>&1 || skip "dmsetup is unavailable"
-+command -v blockdev >/dev/null 2>&1 || skip "blockdev is unavailable"
-+command -v stat >/dev/null 2>&1 || skip "stat is unavailable"
-+[ -e /sys/fs/cgroup/cgroup.controllers ] ||
-+	skip "cgroup v2 controllers are unavailable"
-+grep -qw memory /sys/fs/cgroup/cgroup.controllers ||
-+	skip "memory controller is unavailable"
-+[ -d /sys/kernel/mm/transparent_hugepage ] ||
-+	skip "transparent huge pages are unavailable"
-+[ -r /sys/kernel/mm/transparent_hugepage/hpage_pmd_size ] ||
-+	skip "PMD huge-page size is unavailable"
-+grep -q '^swpout_offload_refused ' /proc/vmstat ||
-+	skip "offload refusal counters are unavailable"
-+
-+thp_size=$(cat /sys/kernel/mm/transparent_hugepage/hpage_pmd_size)
-+case "$thp_size" in
-+	''|*[!0-9]*) skip "invalid PMD huge-page size: $thp_size" ;;
-+esac
-+[ "$thp_size" -gt 0 ] || skip "PMD huge-page size is zero"
-+page_kib=$(awk '/KernelPageSize:/ { print $2; exit }' /proc/self/smaps)
-+[ "${page_kib:-0}" -gt 0 ] || skip "cannot determine the base page size"
-+page_size=$((page_kib * 1024))
-+[ "$page_size" -gt 0 ] || skip "base page size is zero"
-+[ $((thp_size % page_size)) -eq 0 ] ||
-+	skip "PMD huge-page size is not page aligned"
-+thp_kib=$((thp_size / 1024))
-+thp_sectors=$((thp_size / 512))
-+expected_retained_kib=$((thp_kib - page_kib))
-+expected_refused=$((thp_size / page_size))
-+
-+tmp_dir=$(mktemp -d "${TMPDIR:-/var/tmp}/zram-retained.XXXXXX") ||
-+	skip "cannot create temporary directory"
-+tmp=$tmp_dir
-+ready="$tmp/ready"
-+touched="$tmp/touched"
-+verified="$tmp/verified"
-+trap cleanup EXIT
-+trap 'exit 129' HUP
-+trap 'exit 130' INT
-+trap 'exit 143' TERM
-+if [ -e /sys/module/zswap/parameters/enabled ]; then
-+	zswap_enabled=$(cat /sys/module/zswap/parameters/enabled)
-+	echo N > /sys/module/zswap/parameters/enabled ||
-+		skip "cannot disable zswap"
-+fi
-+
-+# Swap priorities are global.  The ordinary zram device must be preferred to
-+# any pre-existing swap, while the delayed offload device remains first for
-+# eligible proactive reclaim.
-+max_prio=$(awk 'BEGIN { max = -1 } NR > 1 && $5 > max { max = $5 } END { print max }' /proc/swaps)
-+[ "$max_prio" -le 32765 ] ||
-+	skip "cannot outrank existing swap priority $max_prio"
-+safe_prio=$((max_prio + 1))
-+offload_prio=$((max_prio + 2))
-+
-+dev_num=2
-+zram_size=$((thp_size * 4))
-+[ "$zram_size" -ge 67108864 ] || zram_size=67108864
-+zram_sizes="$zram_size $zram_size"
-+zram_load
-+zram_set_disksizes
-+set -- $dev_ids
-+safe="/dev/zram${1}"
-+offload_backing="/dev/zram${2}"
-+safe_id=$1
-+
-+sectors=$(blockdev --getsz "$offload_backing") ||
-+	skip "cannot read offload backing size"
-+[ "$sectors" -gt 0 ] || skip "offload backing has zero size"
-+dm_table="0 $sectors delay $offload_backing 0 0 $offload_backing 0 3000"
-+dmsetup --noudevsync --noudevrules create "$dm_name" --table "$dm_table" ||
-+	skip "cannot create delayed offload device"
-+dm_active=1
-+dmsetup --noudevsync --noudevrules info --columns --noheadings \
-+	--separator ' ' -o major,minor "$dm_name" > "$tmp/dm-devno" ||
-+	skip "cannot identify delayed offload device"
-+read -r dm_major dm_minor < "$tmp/dm-devno"
-+offload="/dev/mapper/$dm_name"
-+if [ ! -e "$offload" ]; then
-+	mkdir -p /dev/mapper
-+	if mknod "$offload" b "$dm_major" "$dm_minor"; then
-+		dm_node_created=1
-+	fi
-+fi
-+[ -b "$offload" ] &&
-+	[ "$(stat -L -c '%t:%T' "$offload")" = \
-+	  "$(printf '%x:%x' "$dm_major" "$dm_minor")" ] ||
-+	skip "delayed offload device node is unavailable or has the wrong number"
-+dm_inflight="/sys/dev/block/$dm_major:$dm_minor/inflight"
-+[ -r "$dm_inflight" ] || skip "cannot observe delayed offload I/O"
-+
-+mkswap "$safe" >/dev/null || fail "cannot initialise safe swap"
-+mkswap "$offload" >/dev/null || fail "cannot initialise offload swap"
-+swapon -p "$safe_prio" "$safe" || fail "cannot activate safe swap"
-+dev_swap_ids=" $safe_id"
-+safe_active=1
-+./swap_offload activate-no-discard "$offload" "$offload_prio" ||
-+	fail "cannot activate offload-only swap"
-+offload_active=1
-+
-+cgroup_enable_memory_controller "$cgroup_root" ||
-+	skip "cannot enable the cgroup v2 memory controller"
-+mkdir "$cg" || skip "cannot create test cgroup"
-+cg_created=1
-+[ -e "$cg/memory.max" ] ||
-+	skip "cgroup v2 memory controller is unavailable"
-+echo max > "$cg/memory.swap.max"
-+
-+./swap_offload retained "$thp_size" "$cg/cgroup.procs" "$ready" \
-+	"$touched" "$verified" &
-+holder_pid=$!
-+require_helper_file "$ready" "creating a PMD-sized anonymous huge folio"
-+read -r reported_pid thp_vma_range < "$ready"
-+[ "$reported_pid" -eq "$holder_pid" ] ||
-+	fail "retained helper reported the wrong pid"
-+# On tmpfs, the helper's marker data is reclaimable and charged to its cgroup.
-+rm "$ready" || fail "cannot remove consumed readiness marker"
-+measure_thp_vma_swap 1 ||
-+	fail "target is not an unlocked PMD-sized huge VMA before reclaim"
-+echo "$TCID: thp_vma=$thp_vma_range"
-+ancillary_locked_kib=$(awk '/VmLck:/ { print $2 }' "/proc/$holder_pid/status")
-+[ "${ancillary_locked_kib:-0}" -gt 0 ] ||
-+	fail "ancillary helper mappings are not locked"
-+echo "$TCID: ancillary_locked_kib=$ancillary_locked_kib target_locked_kib=0"
-+
-+# This is the only reclaim before the retained entry is made dirty.  It puts
-+# the whole folio on offload-only swap so the later single-page fault leaves
-+# sibling swap PTEs referring to the existing slot.
-+setup_thp_before=$(memcg_counter thp_swpout) ||
-+	skip "large-folio swapout counter is unavailable"
-+setup_fallback_before=$(memcg_counter thp_swpout_fallback) ||
-+	skip "large-folio fallback counter is unavailable"
-+echo "$thp_size swappiness=max" > "$cg/memory.reclaim" ||
-+	echo "$TCID: setup reclaim was incomplete; checking resulting state" >&2
-+wait_offload_quiet || fail "offload device did not quiesce after setup"
-+setup_thp_after=$(memcg_counter thp_swpout) ||
-+	fail "large-folio swapout counter disappeared"
-+setup_fallback_after=$(memcg_counter thp_swpout_fallback) ||
-+	fail "large-folio fallback counter disappeared"
-+[ "$setup_thp_after" -ge "$setup_thp_before" ] &&
-+	[ "$setup_fallback_after" -ge "$setup_fallback_before" ] ||
-+	fail "large-folio counters went backwards"
-+if [ "$setup_thp_after" -eq "$setup_thp_before" ]; then
-+	[ "$setup_fallback_after" -gt "$setup_fallback_before" ] &&
-+		skip "PMD-sized folio fell back to base-page swapout"
-+	fail "setup did not swap out a PMD-sized folio"
-+fi
-+kill -0 "$holder_pid" || fail "retained helper died during setup reclaim"
-+kill -USR1 "$holder_pid" || fail "cannot request the dirty-page transition"
-+require_helper_file "$touched" "faulting and dirtying the retained entry"
-+measure_thp_vma_swap 0 ||
-+	fail "PMD-sized huge VMA was missing, split, merged, or changed size"
-+read -r retained_kib < "$tmp/thp-vma-swap" ||
-+	fail "cannot read PMD-sized huge VMA swap usage"
-+[ "${retained_kib:-0}" -eq "$expected_retained_kib" ] ||
-+	fail "retained $retained_kib KiB, expected $expected_retained_kib KiB"
-+echo "$TCID: retained_kib=$retained_kib"
-+
-+wait_offload_quiet || fail "offload device did not quiesce before pressure"
-+ordinary_before=$(written_sectors)
-+refused_before=$(vmstat_value swpout_offload_refused)
-+echo $((thp_size / 2)) > "$cg/memory.high" ||
-+	fail "ordinary pressure reclaim failed"
-+wait_offload_quiet || fail "offload device did not quiesce after pressure"
-+ordinary_after=$(written_sectors)
-+refused_after=$(vmstat_value swpout_offload_refused)
-+ordinary_writes=$((ordinary_after - ordinary_before))
-+refused_pages=$((refused_after - refused_before))
-+echo "$TCID: ordinary_sectors=$ordinary_writes refused_pages=$refused_pages"
-+[ "$ordinary_writes" -eq 0 ] ||
-+	fail "ordinary reclaim wrote $ordinary_writes offload sectors"
-+[ "$refused_pages" -ge "$expected_refused" ] ||
-+	fail "ordinary reclaim refused $refused_pages pages, expected at least $expected_refused"
-+kill -0 "$holder_pid" || fail "retained helper died after refused write"
-+rm -f "$verified"
-+kill -USR2 "$holder_pid" || fail "cannot request dirty-byte verification"
-+require_helper_file "$verified" "verifying the dirty retained byte"
-+
-+# Proactive reclaim must still be able to rewrite the retained PMD-sized slot.
-+# Repeated requests make the test insensitive to a short-lived writeback
-+# collision; the backing-sector delta still requires exactly one folio write.
-+wait_offload_quiet || fail "offload device did not quiesce before recovery"
-+recovery_before=$(written_sectors)
-+echo max > "$cg/memory.high"
-+for _ in $(seq 1 8); do
-+	echo "$thp_size swappiness=max" > "$cg/memory.reclaim" 2>/dev/null || :
-+done
-+wait_offload_quiet || fail "offload device did not quiesce after recovery"
-+recovery_after=$(written_sectors)
-+recovery_writes=$((recovery_after - recovery_before))
-+echo "$TCID: recovery_sectors=$recovery_writes"
-+[ "$recovery_writes" -eq "$thp_sectors" ] ||
-+	fail "proactive recovery wrote $recovery_writes sectors, expected $thp_sectors"
-+kill -0 "$holder_pid" || fail "retained helper died during recovery"
-+rm -f "$verified"
-+kill -ALRM "$holder_pid" || fail "cannot request full data verification"
-+require_helper_file "$verified" "verifying all retained data"
-+kill -0 "$holder_pid" || fail "retained helper failed full data verification"
-+
-+kill "$holder_pid" || fail "cannot stop retained helper"
-+if wait "$holder_pid"; then
-+	:
-+else
-+	status=$?
-+	[ "$status" -eq 143 ] || fail "retained helper exited with status $status"
-+fi
-+holder_pid=""
-+swapoff "$offload" || fail "cannot deactivate offload-only swap"
-+offload_active=0
-+swapoff "$safe" || fail "cannot deactivate safe swap"
-+safe_active=0
-+dev_swap_ids=""
-+dmsetup --noudevsync --noudevrules remove "$dm_name" ||
-+	fail "cannot remove delayed offload device"
-+dm_active=0
-+if [ "$dm_node_created" -eq 1 ]; then
-+	rm -f "$offload" || fail "cannot remove delayed offload device node"
-+	dm_node_created=0
-+fi
-+rmdir "$cg" || fail "cannot remove test cgroup"
-+cg=""
-+cg_created=0
-+cgroup_disable_memory_controller "$cgroup_root" ||
-+	fail "cannot restore the cgroup memory controller"
-+zram_cleanup || fail "cannot clean up zram devices"
-+dev_ids=""
-+if [ -n "$zswap_enabled" ]; then
-+	echo "$zswap_enabled" > /sys/module/zswap/parameters/enabled ||
-+		fail "cannot restore zswap"
-+	zswap_enabled=""
-+fi
-+rm -rf "$tmp" || fail "cannot remove temporary files"
-+tmp=""
-+
-+echo "$TCID: [PASS]"
+ 	len = read(inotify_fd, &event, sizeof(event));
+ 	if (len < (ssize_t)sizeof(event))
+@@ -1678,7 +1689,7 @@ static int test_memcg_inotify_delete_file(const char *root)
+ {
+ 	int ret = KSFT_FAIL;
+ 	char *memcg = NULL;
+-	int fd, wd;
++	int fd, wd, err;
+ 
+ 	memcg = cg_name(root, "memcg_test_0");
+ 
+@@ -1701,7 +1712,11 @@ static int test_memcg_inotify_delete_file(const char *root)
+ 	free(memcg);
+ 	memcg = NULL;
+ 
+-	if (read_event(fd, IN_DELETE_SELF, wd))
++	err = read_event(fd, IN_DELETE_SELF, wd);
++	if (err == -ETIMEDOUT)
++		fprintf(stderr, "no IN_DELETE_SELF event within %d ms\n",
++			INOTIFY_TIMEOUT_MS);
++	if (err)
+ 		goto cleanup;
+ 
+ 	if (read_event(fd, IN_IGNORED, wd))
+@@ -1723,7 +1738,7 @@ static int test_memcg_inotify_delete_dir(const char *root)
+ {
+ 	int ret = KSFT_FAIL;
+ 	char *memcg = NULL;
+-	int fd, wd;
++	int fd, wd, err;
+ 
+ 	memcg = cg_name(root, "memcg_test_0");
+ 
+@@ -1746,7 +1761,11 @@ static int test_memcg_inotify_delete_dir(const char *root)
+ 	free(memcg);
+ 	memcg = NULL;
+ 
+-	if (read_event(fd, IN_DELETE_SELF, wd))
++	err = read_event(fd, IN_DELETE_SELF, wd);
++	if (err == -ETIMEDOUT)
++		fprintf(stderr, "no IN_DELETE_SELF event within %d ms\n",
++			INOTIFY_TIMEOUT_MS);
++	if (err)
+ 		goto cleanup;
+ 
+ 	if (read_event(fd, IN_IGNORED, wd))
 -- 
-2.55.0
+2.51.0
 
