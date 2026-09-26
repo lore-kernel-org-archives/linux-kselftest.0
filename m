@@ -1,125 +1,100 @@
-Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C948D411F90
-	for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 15:24:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 313184534B7;
+	Sat, 26 Sep 2026 15:30:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790436264; cv=none; b=PnOtiTeP52r0OKBsCvILk1ZJ+jF2q1Gyc7oN1RTA5h8H2SGSO8QST4i+6frx3C8MCItQjRaMFXznbkIl8BGt6SwwuagD7j9EhCFlxysqW0ANzpmU7yYRxEaK0j7JPSkq0hDiK/BTx5X/3422hxlrxS6w1xgrX1ej5/25uwYvpnQ=
+	t=1790436652; cv=none; b=SzZqiCbx2zp341MSr6S4ByNqm9DsJqW1TePiVbuKTXLEGjHzy+QBj9fvNZYeYaxuw7MEL8yGo+SS8rzBab4PiQGadzjrh9akEXKngMPYT5Ui4Zhjx6fWv2K8j7mp4YFVW26h8SjxKCniMB1A3cBSJxBeCLjxEWUUR3dLixmK8ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790436264; c=relaxed/simple;
-	bh=XQutekWnaQmqlLgFPoRM5pMe9iMGs/qmVvTdEYXD+i0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=on2Mk5EStUq3cNY4mtP2IrcFa0E5NlJNyoK2HEfJJdSUZcxn7BzRXlTQQJm1/GIQXbnpkoaoE0zXHW45rQpj0VvN2Lk+i/OUWhlOb/fxR/2x9DbTV7McyfLXCxie73Ft1akYwzxNQcEVjhw76qle6fB5DVIthFYFqaQ15wy09uA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V/GJmCPy; arc=none smtp.client-ip=74.125.231.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790436652; c=relaxed/simple;
+	bh=AzWuY2z8U/vUkS+ryriyFb9noPXYkL42OJCQbpmmsRM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=r0FgZRKwH39fXE9NYgWxxQF24KIjiuOQ2GFxrIEy+68QtGeFi1oaAB7tYQYWx8Ek6Q1lX+OAD6XX7OneIDYHLtJqRg0WB7SBBjp4tr1KvHc6d+R2nW1lMVYEyMBqMTomedOQxSzSKesediR7wIN5tH5XYBkQ0Q8SBFwYWczOzYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gDOKsAOO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V/GJmCPy"
-Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4c4bf3dedf3so1186719b6e.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 08:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790436261; x=1791041061; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=3teFFwR9sWlJkV5co3BwWK7u5srE/2UYNflhxIXeO9M=;
-        b=V/GJmCPyjdgW2SPuBcMUFRjNWwdG9BLNPFzFVkP5HPkOloWyvIH3x0hOcUZCyG8nl/
-         Fct83ezEB6BqiDhIXeCW+hkxl921y8zO6g+Mbg+E0cO6YpOEPDDEUJqA9qTSU7jRxGHD
-         fsMJ0bldQSYGr0q8tUQWv3Wk4JNMDsAgtCwVso3jEC4P56FlIL49auYdpnJrVfq08kIU
-         S5LXqeI4/0j88FvKR1E2oubV1dqtlq9LPf0uXZ8SrA9MpnzQFusu8qk7KkABVTohDtDu
-         CLlPgIB+Hgo3gTou3fuUixqUF9C2vrhfcHx3rgNw4qMPfPW+gJ5kiNG5mE1SdGBEj0Ao
-         5Jkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790436261; x=1791041061;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3teFFwR9sWlJkV5co3BwWK7u5srE/2UYNflhxIXeO9M=;
-        b=mtSf2bHIHJ3RLrOKVy0amRVzbfr9fNLAbJO3xHVoNynOCbMZLpnUjIRSpw5X+HBtBb
-         kypkSkLTrm8cl5ws1Gi6K5pJn5Bu+H8mcRw3vHSxm0Gi0Mje1HrFmPwQLsqbN74PqIep
-         ZDhoJYXiepphAcCaqSIe4rSPXa7dWvZUzClsCAGM7YD1uE1mJGgk88jLzBfBKDjoOvbi
-         rGJZl7Cgc6C9XDtJaAMNWUIZZewuD9rk8EAYi8WyQg9Efm6kmtcCwkrQI0AI8H7FUCOL
-         qq9AtfFOV6vdGPJpnGGZCTIIlzm5G3kpB8xs8EGDteoq7R/AJABMioMQXKfhP7tU+eWS
-         dxOA==
-X-Forwarded-Encrypted: i=1; AKwUvByrZbylngXxDeDdHWuCof4qoMSQsxkVsyCEnkc1BvMTlHFXr3GedJUEkh/0ksty3BTR1I86HKCPp7ymHhaqwzQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++nGb9cWGY8Bo2qh1YHYubbG7CPgqUxeGu1kJqawUYpK7PFASkjG
-	WSASCnBoQfXMpGPk32IpRvFdhozV3qqCB4kN2YwYxyc/BGybl+380Xb2
-X-Gm-Gg: AYBFou0yTpsLtsOrTyW2eq2/yjcjzKhexDgyOu8jzBksjG6X4eoZqcDJEpgL6wYSXl1
-	wDLQxVZJJ0lsmku8smTSU19aoZ9zizVMLl5E6FdpgcnR1Q0hGKn4MJrGY+vmZHni6+8RrjD0lK8
-	ySG2ujdtLehXhpZhUoHE0HNQuo9HfHILTJNvLX6Ha7vREIzKLT837j2NCaxe9sx5yVOeWRqk3ns
-	Q5Z+SAO5KD7e87c3xLCX5QRgJHHeM9ZV6ui6hMrmL6Y51qT7hv0k0Hcz961NOsJyFXBRRvVcRgz
-	sbkOJ6OwvM4NZEqt5GcO4EFyyz9ABm64VuRmQexlQS4hZIz5QKcxW/vdOpQMnin59YS6oYcukT2
-	tPl+n3WSxRG0PK+eUbIN+th5QhmzkQpjcnzGp0vKO7tZqEiz36mLkA+nJxT4MagxfUDF+IWECK7
-	ID/4q+T63hg69f5EoCpFhSyFGXE6L9VuPB3+ZT/JU+Yeg/t4lk/+uiyfbiBlR11jiy/UH+cMeRi
-	IKfg1jBgPqdhY3vqNVUoPVQX1kZpcIP8Mbnw3tZ
-X-Received: by 2002:a05:6808:3c48:b0:4d6:93e2:5bc1 with SMTP id 5614622812f47-4d72f2476f0mr8388508b6e.66.1790436261676;
-        Sat, 26 Sep 2026 08:24:21 -0700 (PDT)
-Received: from archlinux.lan ([136.34.156.120])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4dbf6206942sm4653798b6e.9.2026.09.26.08.24.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 08:24:20 -0700 (PDT)
-From: Danish Khateeb <danishkhateeb03@gmail.com>
-To: Willy Tarreau <w@1wt.eu>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Danish Khateeb <danishkhateeb03@gmail.com>
-Subject: [PATCH v2 2/2] tools/nolibc: check for overflow in malloc()
-Date: Sat, 26 Sep 2026 10:24:14 -0500
-Message-ID: <20260926152414.251214-3-danishkhateeb03@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260926152414.251214-1-danishkhateeb03@gmail.com>
-References: <20260926152414.251214-1-danishkhateeb03@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gDOKsAOO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49DEB1F000FF;
+	Sat, 26 Sep 2026 15:30:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790436649;
+	bh=5jb3BDftf/ODffcy+muPOJTz2pJouvKTdOelPtX8WzM=;
+	h=From:Subject:Date:To:Cc;
+	b=gDOKsAOOGhlKivsrI26wSXM0rMpSe4IK/f3gFKDMS4ZGPdXVBhbq055FfoRZI5A/T
+	 2Q9gSZTlHm8kuHqRlziY5yYBvF/i3eEtKV3hpTMO2iVUD5uUm44PvErVC2OvYv4FY7
+	 PckJGrjatB1UedBwxzT9P8DJk896iJxTKCvBid9tajLAaDa1uDcs64dOJ1i7rn+LBb
+	 QjchE9NuVKob+zTgW6lkS42rjxX1QtkyJpm+aTjSJwdZZhcYCDewU8ZmBhv2AjPlzD
+	 J4vhhie+vAf+xHnlglZu6gcI4pQVUV+CpHZN3mv1PvD6vu37n9epEN1inq6Mtocp+s
+	 IHfaGWra/63og==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net-next 0/5] mptcp: misc improvements for v7.4
+Date: Sat, 26 Sep 2026 17:30:33 +0200
+Message-Id: <20260926-net-next-mptcp-misc-feat-7-4-v1-0-67af4ab37406@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/zWMQQrCQAxFr1KyNlAzU7VepbioMdUIHYeZKIXSu
+ 3esuPiLx+e9GbIklQznaoYkH836CgX2uwr40Ye7oN4KA9V0qFtqMIiVTYZjNI44amYcpDc8okd
+ HDYlvT+ych5KISQadtnwHfxMuvye/r09h+9ZhWVbQ+jwXigAAAA==
+X-Change-ID: 20260925-net-next-mptcp-misc-feat-7-4-3252e498c334
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Quanye Yang <quanyeyang@proton.me>, Hangbin Liu <liuhangbin@kylinos.cn>, 
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1522; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=AzWuY2z8U/vUkS+ryriyFb9noPXYkL42OJCQbpmmsRM=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLK2P1X+/93plBXvojVi876ltz/a3/7AbPPCI1wtEz+qL
+ Tzja3Fbp6OUhUGMi0FWTJFFui0yf+bzKt4SLz8LmDmsTCBDGLg4BWAinscZGdq+XlC0OrUrcle4
+ /KeTR7dNLChM53pf5Lfu1ttTL3mqm54yMvyfeX9ZXelG2YXvs1+aVU39u6FMSeNUT8QHaY+U9M0
+ fT3ABAA==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-malloc() adds the size of its header to the requested size without
-checking for overflow. For a size within the header size of SIZE_MAX,
-the sum wraps around to a few bytes, and malloc() returns a single page
-instead of NULL.
+Here are some unrelated improvements for MPTCP and its selftests:
 
-calloc() checks its multiplication for overflow, but then passes the
-product to malloc(), so calloc(SIZE_MAX, 1) returns a single page too.
-So does realloc(ptr, SIZE_MAX).
+- Patch 1: reduce struct mptcp_subflow_context size: no need to store
+  the truncated HMAC for the whole connection.
 
-Such a size is usually a bug in the caller, for instance a length of -1
-used as a size_t, and returning a page instead of NULL can turn it into
-a heap overflow.
+- Patches 2-3: shrink struct mptcp_options_received used to parse
+  incoming MPTCP options, from 136 to 72 bytes on x86_64.
 
-Fail with ENOMEM when adding the header overflows, as glibc does for
-sizes this large.
+- Patches 4-5: convert IPTables to NFTables in MPTCP selftests.
 
-Fixes: 0e0ff638400b ("tools/nolibc/stdlib: Implement `malloc()`, `calloc()`, `realloc()` and `free()`")
-Assisted-by: LLM
-Signed-off-by: Danish Khateeb <danishkhateeb03@gmail.com>
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/include/nolibc/stdlib.h | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Hangbin Liu (2):
+      selftests: mptcp: convert iptables to nftables for mptcp_sockopt.sh
+      selftests: mptcp: convert iptables to nftables for mptcp_join.sh
 
-diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
-index dc554faff22a..cea8290ac0b9 100644
---- a/tools/include/nolibc/stdlib.h
-+++ b/tools/include/nolibc/stdlib.h
-@@ -130,7 +130,11 @@ void *malloc(size_t len)
- {
- 	struct nolibc_heap *heap;
- 
--	len  = sizeof(*heap) + len;
-+	if (__builtin_expect(__builtin_add_overflow(len, sizeof(*heap), &len), 0)) {
-+		SET_ERRNO(ENOMEM);
-+		return NULL;
-+	}
-+
- 	heap = mmap(NULL, len, PROT_READ|PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE,
- 		    -1, 0);
- 	if (__builtin_expect(heap == MAP_FAILED, 0))
--- 
-2.55.0
+Matthieu Baerts (NGI0) (1):
+      mptcp: remove thmac from subflow ctx
+
+Quanye Yang (2):
+      mptcp: split FASTCLOSE key from rcvr_key
+      mptcp: shrink struct mptcp_options_received
+
+ net/mptcp/options.c                                |   6 +-
+ net/mptcp/protocol.h                               |  45 ++++---
+ net/mptcp/subflow.c                                |  18 +--
+ tools/testing/selftests/net/mptcp/config           |   4 +-
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    | 149 ++++++++-------------
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh     |   2 +-
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.sh |  58 ++++----
+ 7 files changed, 136 insertions(+), 146 deletions(-)
+---
+base-commit: 42a9fb3382fc2573e92f41d203b095d9a372cfc9
+change-id: 20260925-net-next-mptcp-misc-feat-7-4-3252e498c334
+
+Best regards,
+--  
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
