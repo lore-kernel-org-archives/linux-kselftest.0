@@ -1,125 +1,151 @@
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E703E40FE;
-	Sat, 26 Sep 2026 10:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90CAE3EC6B0;
+	Sat, 26 Sep 2026 10:41:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790419051; cv=none; b=dgUBe6EGGYFt1RD28W6PjJDvLoVHdRUwvjK2alFwOGweMNYnppaHKI1KC4kgoblBmsxdG+Wu2N5dTA9Jgw5AUcMhndt7YkmHCwiXi6z2KsUhD0sLhJXaODRM6WL9vJdDcSG5otXY0RGSFcDNR8pyWdmtrK3KaE30z3BN/L1T4c0=
+	t=1790419285; cv=none; b=f3DvGtLxaSumEM7q8GQZ8rGVlxCEdc3BS2swVauh+q9l9FF6sA6yHVaqtV+WpweZyA1Mzcc9WIdQ5CxAo7H1zkUJ78bjHDkkfWKUKUBbSEWwbWnNc2RNWufYZejCl3iYVo756B9gsCw/6LWR4yaY+i/LHob3C0gsQckP4CQNkFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790419051; c=relaxed/simple;
-	bh=BsDGVDEZSjuhu1wNUX4iNYuYBfY23zxzKR2rBx/mxOo=;
-	h=Date:From:To:CC:Subject:In-Reply-To:Message-ID:MIME-Version:
-	 Content-Type; b=TbQcATRc573KYyI7rdWmay60rORHekhf9OoHP414wlw+en4GPPBsJ7WRqVw1NrLOHHxaCCNK1KRA731KyN1V6kZHZoKpOGL0Ys92uR/zHr5gQCwOnkRtaNHt//QZyFIajoPeVhwyxP9kSyzkztDvfRzCV45XPbAwa76tUWYxNoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=oIFBsw/w; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=Vvr4vhpW; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+	s=arc-20240116; t=1790419285; c=relaxed/simple;
+	bh=fTo54dQ27lNlohXIePrTiYH+6/z9AkWMENqu+dTZcY4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rVMlzrc41hn2/c+8fEiuroi3jLLi7LBW98VhpcDZCXkIMdKg5TIzd0PbtNIMs1pi0TiJNqDb6u83be927HnE0e1BeZEMWg8RtQWxd9D/pkddiUvKwvpt9H5hXqUbPNM5Yp84s68pu8mTnA+wnAXufI0vGFbn3w2ILSBk95UKTII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ir0K3VQu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="oIFBsw/w";
-	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="Vvr4vhpW"
-DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1790419035; bh=qB8YO82ighs/+w1xBuYuRJG
-	hgPr1wHIB0u6dBJhEEYQ=; b=oIFBsw/wexO9q/uuLmIrOWOcwxXLfyJAeTpf7/N3EeJpQrpx9Q
-	w1pxbjIwp8gIRlc6dmbcVQmqf3xtX6K31BpQot8pLLZEAyzI3FvpAKbB4N/USrh58mpgQsrM/A0
-	jLGPWB/nCSJYaMY55aMpmewGbjqmmqadEurcf+phgCFs3+UDrfTieWb/RhGnDCdNTBcMUFSdhG4
-	F7YyGq/Lrp/L0Pl720qxwxnZ8WMlLxxPXYts254og+4OiJhUOLBdYDOZv7mPgs3DSNFDjLGN51L
-	ltT1pYIp3E0DRoiyCAX/ZDS1KMzbfzkW5W74WF8y7d7ZZ1/wnR3m2VcXuuFBB8I39oA==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1790419035; bh=qB8YO82ighs/+w1xBuYuRJG
-	hgPr1wHIB0u6dBJhEEYQ=; b=Vvr4vhpWGj83aYoajP9W6LFKV5bXd/DBPEcVP6QHZsfSIQvsjD
-	T00tzR9CailePm2KfVPKL7Urj+0Ou3Q6htBA==;
-Date: Sat, 26 Sep 2026 11:37:15 +0100
-From: Bradley Morgan <brads@mainlining.org>
-To: kmehltretter@gmail.com
-CC: akpm@linux-foundation.org, brendan.higgins@linux.dev, david@davidgow.net,
- geert@linux-m68k.org, huang.ying.caritas@gmail.com,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, raemoar63@gmail.com
-Subject: Re: [PATCH] resource, kunit: stop selecting GET_FREE_REGION
-In-Reply-To: <20260926002651.87267-1-kmehltretter@gmail.com>
-Message-ID: <40EFC2A1-D089-4E09-A804-CE0D42EACFAE@mainlining.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ir0K3VQu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39F2D1F000FF;
+	Sat, 26 Sep 2026 10:41:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790419281;
+	bh=TZRBqF2yMAgyYQEkKpNQPhn7mCO9yemFSVQUeDjssXc=;
+	h=From:Subject:Date:To:Cc;
+	b=Ir0K3VQu+rpNG9WmGygjpObvd2itOXxLZnKt/4/ihMoDOen7cunLzb3YqU3wiAe7a
+	 NjsUIHV2kY+lTNuqhxRJJ9TPCoVSFJed1k2aZBn3ibN6EBmXvg/e/E9CrXMcR/JPIt
+	 /DfsXmhxFujrwBxSNQYcMBfeCZFW5wl3Bc9SyxST7wNcKhsj0DO3+wIH6tRos3U6xA
+	 zm+faOQMvGv508ToWVBvQORwaOcNrA8XHO7SFRu9LzMb3OKm9cALiuAMQ0H6Rvo2Cr
+	 ST8hIML7rskENwCmSHvLCXsbxtwB/pR9VPggLxRTUEAm3++F3il61l1+u1Pw+tfL+c
+	 PamhigTv4GNMw==
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Subject: [PATCH v3 0/6] mm: make MAP_PRIVATE-/dev/zero mappings truly
+ anonymous
+Date: Sat, 26 Sep 2026 11:41:05 +0100
+Message-Id: <20260926-map-private-dev-zero-v3-0-d4781e84ccfc@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4XNQQ6CMBCF4auQrh1T2rRFV97DuChlgEalZEoal
+ XB3CytdGJf/S+abmUUkj5Edi5kRJh99GHLIXcFcb4cOwTe5meBC8wMXcLcjjOSTnRAaTPBCClB
+ bqRujrWhdxfLpSNj6x8aeL7l7H6dAz+1LKtf1D5hK4GCVqZyR3KEzpyvSgLd9oI6tYhKfSvVDE
+ avinKmVFkpy9aUsy/IGAqNskv8AAAA=
+X-Change-ID: 20260902-map-private-dev-zero-ba36d76a2fc8
+To: Arnd Bergmann <arnd@arndb.de>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+ David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+ Hugh Dickins <hughd@google.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+ linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3834; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=fTo54dQ27lNlohXIePrTiYH+6/z9AkWMENqu+dTZcY4=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLK2L/TUUN8nN/lnrX7ewTmPLvIYP9Cb4il+Y8aKqX+/8
+ u2fGr/vQEcpC4MYF4OsmCLL8y/i+4NEwuZ1XvB3g5nDygQyhIGLUwAmotnH8M+U+b1c+1O3038/
+ ilhoqYvNrdrbplbOKWPya9qtprlx5U8YGbrtdCJa50505TrzzVjlQe7v4PjpMv7C2nMPc2i0W+i
+ vZgcA
+X-Developer-Key: i=ljs@kernel.org; a=openpgp;
+ fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-On 26 September 2026 01:26:51 BST, Karl Mehltretter
-<kmehltretter@gmail.com> wrote:
->RESOURCE_KUNIT_TEST selects GET_FREE_REGION even when no other option
->needs it. Remove the selection to follow the dependency rule in
->Documentation/dev-tools/kunit/style.rst.
->
->Skip resource_test_region_intersects() when GET_FREE_REGION is disabled.
->GET_FREE_REGION has no prompt, so configurations without a production
->consumer cannot enable it. Most configurations will therefore skip this
->case; this is intentional. The union and intersection tests remain
->available.
->
->Since kunit_skip() does not return, the compiler drops the reference to
->the unavailable alloc_free_mem_region(), as in the CONFIG_OF_ADDRESS
->check in drivers/of/of_test.c.
->
->Fixes: 99185c10d5d9 ("resource, kunit: add test case for region_intersects()")
->Assisted-by: LLM
->Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
->---
->Validation:
->- Clang 22 and GCC 13 ARM builds pass with RESOURCE_KUNIT_TEST=y and =m
->  while GET_FREE_REGION=n. The built-in vmlinux images have no
->  alloc_free_mem_region symbol, and the modules have no undefined
->  reference to it.
->- Clang 22 x86_64 builds and QEMU 11.0.2 runs pass. GET_FREE_REGION=n
->  reports two passes and resource_test_region_intersects as SKIP;
->  DEVICE_PRIVATE=y enables GET_FREE_REGION and reports three passes.
->
-> kernel/resource_kunit.c | 3 +++
-> lib/Kconfig.debug       | 1 -
-> 2 files changed, 3 insertions(+), 1 deletion(-)
->
->diff --git a/kernel/resource_kunit.c b/kernel/resource_kunit.c
->index 42785796f1db..9eeb2b1a85c0 100644
->--- a/kernel/resource_kunit.c
->+++ b/kernel/resource_kunit.c
->@@ -225,6 +225,9 @@ static void resource_test_region_intersects(struct kunit *test)
-> 	struct resource *parent;
-> 	resource_size_t start;
-> 
->+	if (!IS_ENABLED(CONFIG_GET_FREE_REGION))
->+		kunit_skip(test, "CONFIG_GET_FREE_REGION is disabled");
+Historically anonymous memory was obtained in linux by MAP_PRIVATE-mapping
+/dev/zero.
 
-Interesting.
+The canonical way of doing these now is mmap() specifying MAP_PRIVATE |
+MAP_ANON, but we must continue to support the legacy means of obtaining these
+mappings.
 
-Reviewed-by: Bradley Morgan <brads@mainlining.org>
+As-is these mappings are an unusual edge-case - they satisfy
+vma_is_anonymous() but have non-NULL vma->vm_file, and their page offset is
+the offset into the /dev/zero file.
 
-Tested on Power10 (PowerPC), in courtesy of osuosl:
+Commit 93c0c8dc87f6 ("mm/rmap: use anon pgoff to track MAP_PRIVATE
+file-backed anon folios") causes all other anonymous folios to be tracked
+by their anon index (vma->vm_start >> PAGE_SHIFT at the point of first
+fault), leaving MAP_PRIVATE-/dev/zero as the outlier.
 
-Tested-by: Bradley Morgan <brads@mainlining.org> # Power10
+This series remedies the situation by making MAP_PRIVATE-/dev/zero mappings
+truly anonymous with !vma->vm_file and correct anonymous page offset.
 
+It starts by bringing the memory character driver into mm/ - this file
+implements /dev/zero, /dev/mem among other things and is already (as
+clearly indicated by its name) within the remit of memory management.
 
->+
-> 	/* Find an iomem_resource hole to hold test resources */
-> 	parent = alloc_free_mem_region(&iomem_resource, RES_TEST_TOTAL_SIZE, SZ_1M,
-> 				       "test resources");
->diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
->index 134b15a44625..e7c5d5b5870f 100644
->--- a/lib/Kconfig.debug
->+++ b/lib/Kconfig.debug
->@@ -2776,7 +2776,6 @@ config RESOURCE_KUNIT_TEST
-> 	tristate "KUnit test for resource API" if !KUNIT_ALL_TESTS
-> 	depends on KUNIT
-> 	default KUNIT_ALL_TESTS
->-	select GET_FREE_REGION
-> 	help
-> 	  This builds the resource API unit test.
-> 	  Tests the logic of API provided by resource.c and ioport.h.
->
->base-commit: aa98230e410f0ed212b6788c46b1e4d49e0ff7ca
->
+By doing this, the file_is_dev_zero() function can be provided, internal to
+mm, which allows for positive identification of these mappings.
 
---- Thanks!
-"I'm not a very positive person" - Linus torvalds
+Using this, first prevent any other mappings from mapping memory
+anonymously, then make these mappings truly anonymous and eliminate all
+code in the kernel that previously had to account for these strange beasts.
+
+Finally, it adds userland VMA tests to assert the behaviour and selftests
+to assert expected merge behaviour.
+
+v3:
+* Added tags (thanks David! :)
+* Moved the reworked mmap_prepare vm_ops comment to 3/6 where it is introduced
+  and fixed a typo in it, as per David.
+
+v2:
+* Added tags (thanks everybody!)
+* Reworked comment about mappings not setting themselves anon as per David.
+* Fixed up test typo as per David.
+* Fixed up test close() as per David.
+https://lore.kernel.org/r/20260908-map-private-dev-zero-v2-0-acc7b5625305@kernel.org
+
+v1:
+https://lore.kernel.org/r/20260902-map-private-dev-zero-v1-0-a578c730cec7@kernel.org
+
+Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+---
+Lorenzo Stoakes (ARM) (6):
+      mm: move drivers/char/mem.c to mm/char-mem.c
+      mm: implement file_is_dev_zero() to uniquely identify /dev/zero
+      mm/vma: only permit MAP_PRIVATE /dev/zero to be mapped anonymous
+      mm/vma: make MAP_PRIVATE-mapped /dev/zero mappings truly anonymous
+      tools/testing/vma: add test to assert MAP_PRIVATE-/dev/zero is anon
+      tools/testing/selftests/mm: add MAP_PRIVATE-/dev/zero merge tests
+
+ MAINTAINERS                                        |  4 +-
+ drivers/char/Makefile                              |  2 +-
+ include/linux/mm.h                                 | 10 +--
+ include/linux/pagemap.h                            |  3 +-
+ mm/Makefile                                        |  3 +-
+ drivers/char/mem.c => mm/char-mem.c                | 21 +++--
+ mm/internal.h                                      | 20 +++--
+ mm/shmem.c                                         |  2 +-
+ mm/vma.c                                           | 39 +++++++--
+ mm/vma.h                                           |  3 -
+ tools/testing/selftests/mm/merge.c                 | 95 ++++++++++++++++++++++
+ .../selftests/proc/proc-self-map-files-001.c       |  2 +-
+ .../selftests/proc/proc-self-map-files-002.c       |  2 +-
+ tools/testing/vma/include/dup.h                    | 10 ++-
+ tools/testing/vma/shared.c                         |  9 ++
+ tools/testing/vma/tests/mmap.c                     | 37 +++++++++
+ 16 files changed, 220 insertions(+), 42 deletions(-)
+---
+base-commit: e3b5239afe1b8f0194db7436b17c33e94c1988c4
+change-id: 20260902-map-private-dev-zero-ba36d76a2fc8
+
+Best regards,
+-- 
+Lorenzo Stoakes (ARM) <ljs@kernel.org>
+
