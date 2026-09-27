@@ -1,65 +1,65 @@
-Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE3812459C5
-	for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 00:24:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A72A24E4C6
+	for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 00:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790468698; cv=none; b=UUqLgvaLwQ/WIlN5meiCwCFsGOOIp73AepHom0eny4+YHoBc7X3DxyAPNb8jjubQ7LsUtCgTLQqYpp79sBqNy9JC3DIhQJwW8F79idVIBCJNgE5/sYJEds//LCXWq0ctKC4IEpamAAXnh/vcy8vNM6bPfPsGWMqHHW7MfkgAcMA=
+	t=1790468705; cv=none; b=tvCDjszswkUNoFnsHafd8fjcCkj+gUGhKo8iw74azYmHCjFv6zTv7sbyXEGdjyfEbMxLZUGasKKwF/oHf6PXGaGpiRcokl5pLy3ar/ITOw88EWZNs8BKKzotxqHnC7lrZ2/tweA8A/FLz7hKitRKlqR5GTSPSKNPWoatfGg/+Zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790468698; c=relaxed/simple;
-	bh=uIYCR949bmIVasLC/3K/hACHN1prTGKRkXxg+ZmBrnA=;
+	s=arc-20240116; t=1790468705; c=relaxed/simple;
+	bh=Mr2iYwae2YbJuVSuLFf3V5VWty0OdjocXKRTE/v0FHU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gF6D476W8Q3c2RhL3JJO/aA9pfk9HolvPjdpCtJeM1rTEJmQUmwgYxx/mRS07IEMntHQfU8v0rcbypn2JqiYTz452QGsrXDBfoUiLz6OJOl+1tFnAay0DBK8ox0vPto3fN2oXHsnsfQm8y3t3X+AhPKCXhPsv1/W38ujkTRVFyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rt+cVNqP; arc=none smtp.client-ip=74.125.228.41
+	 MIME-Version; b=sqcuVr8bqB9nu9dQAOuUzyXvY3XlXlGfIvT/xku33xef65ERaMxAWJoIGRcIiIlW8XiLa30wP8AX5ix7WCTNSdot4P9921KrO8p+RsXP0fydncWTweLdt9pJdzdBJtczyx1eNmSgd1hiUJWDuRjmVOFmgvZJ3fw/K0hXUNgyap8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bDlOJfC5; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rt+cVNqP"
-Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-85f0fc1fd8eso1004722b3a.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 17:24:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bDlOJfC5"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747eb79f7so8569345ad.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 17:25:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790468696; x=1791073496; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790468703; x=1791073503; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=LvN9VPqrOGUGshtYxdc+YFqVlRUz1wazj1d3gn6P2Xw=;
-        b=Rt+cVNqP3P0cQuY3rdr9NI8VlDQqTnfHczIj0GzZL5JajE1c2Thu7F3nitw2SQdJSm
-         UwwQo4196JECaAHqVHGHj8rfs/5ckBHBb+y2pL8LcJZn96t9jpoP7oD8Ea/C194X+IGc
-         dAUGHsgOdu9A7RMN2wiMrjIneeApKouvuCYwAkOWjOy3VhO2LfgDxxuXSO05ZbnXzORL
-         08+/iD6wT/rbJwMrqSaoyKWdOXXqbN0LL3ERS7fhpApfwv4zNriKgvM+rWNPyF0vUGrp
-         jKkRjp6f08Tus9oJbqD7ryU6uimNkSQfJrKp6l/L/xDDXUzA1tbZcgOqSGKzKV1G36MK
-         9Izw==
+        bh=jDIDFG3meGGFBtluabG+OKcVNCpGsoh32rMoPnN2PME=;
+        b=bDlOJfC5likzjq9DWZ/Mb/CRugjU6kS/K2vYL4U/JHO2+QL1UWwAHJnv3+ORSGBxmu
+         NW5lEBTlGqgwSbuuF+OlevCXSwtOa2GqsSdc5IIG30VCy2yhj0+01PG1AqZsnPe/RFeR
+         3mdcqNBH+ZiW4k9P/X1sLN4L3NaN6MMyqdo67tfpV238fNgPChquf82XH1L0gdR1imyC
+         SGinCMD5Iv2dJch24oK0uHTH9bRBoiTofnJBAtrmdMeWqg/VR80KYGDm1Fs7Z1uY57HA
+         /ZZ2AtOHVrEHhIT4jlfbQ4r6pp29ytEfr3dIpuaPfpUaYLlJvFJ2FHWw40NpqHpWmcQL
+         6aSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790468696; x=1791073496;
+        d=1e100.net; s=20260707; t=1790468703; x=1791073503;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=LvN9VPqrOGUGshtYxdc+YFqVlRUz1wazj1d3gn6P2Xw=;
-        b=vd0zNuZzImq/vLDdnx+SmeOksOHUWQYGpyvYC4Fjv84kK5jn0Rbby0aujUcB09QS7c
-         UFiubo8nWhzdBKd9aeRv9uJ39ekY2hoOjeKbAhh5FbhNr+YqtwoeMqdV896LrDhOafqp
-         QE3rkSe5SzjwpsTBkOh/aTBKXRsn/MGNZ0gQ91LRm2YwSUgeSuyjDJU96lBZGJxLLx8B
-         bpOnTLvqNE5eawf/+fnZ7q4L4oX1DmIqKz4HDr1vubycdCjIpeba3EDgg/CP8JPIKazS
-         19XhRybIsTVr/z0P2dzijr6fXtvD/3EbTexLIxKjLJp/SZJveNgopHTpSmhJlQ/FA25R
-         8D1Q==
-X-Forwarded-Encrypted: i=1; AKwUvBzvSrVlNKf16XCvek4vKo7pgCD+79xMYzZxccDZyoOkvTEX4jR9Ql903KKEppfhi2gY1kEXCaZEfUNg2GzwS4s=@vger.kernel.org
-X-Gm-Message-State: AFuF++lNrHaH1VQVRjWybVLVC+AmJoHRTAaoWL/pY2UBizlCp9wT+Nm9
-	FZS6jZ++aoA3FU5banpPlArid86V76VqlQN+iDJtxp3PiRWANPzlHx3z
-X-Gm-Gg: AYBFou398xX0HpV21SxdilLtfhX4SkR+7vuW9SpL/dw+Xq0lYP+5iZHTBg0wwjlYFfd
-	k99mSd+ToLzytMDicQ5itu9ixlsxJVSBTJGXkHTMg/mrGHDMlT4PMjGt7pCjP0jpxEjHhpv3/wY
-	wO23rAQaSzyqv+x4ncaIDWjAR3tKveJpQ+GAkrakVvFsAt4zZGoXJl9SpWaXgq/Hzic+Xi21xsj
-	oUuc8B4oi8raCbinrwNXouMwNDAq5+st6HPCiWjjOC/tLLVbOBBGS9PcwlGw4m1CxJsZVR7HXHh
-	rUt8y7Z+v3s5+ijCHH6w/S3TL13vhMg3E63/tGvPB98EbfYYPyEwwlmk+UXEu7ADSXBH4407YAk
-	1z6GrLDNvmNARs6XCzHWbstLFf6cc1mMLfHoe7CGxIC20o4p59mGdy1m8p+d0oF0Y4qfAzRIJvr
-	6SiwafOsIkQ+lieH8Ah1DTFVvQXTMOR+H0BWRffWSliq7nKWh8hoGiwBg2Y36jhmtkUzvSPbm1y
-	Q2l0Qc4SNQG/ZmhN59evwcDlaw/Jrp/C5VsWGKT7nlJl23+vrO/Pm7I1ZYv
-X-Received: by 2002:a05:6a20:2d08:b0:3dd:a197:7361 with SMTP id adf61e73a8af0-3de0e8967f4mr9327637637.58.1790468696226;
-        Sat, 26 Sep 2026 17:24:56 -0700 (PDT)
+        bh=jDIDFG3meGGFBtluabG+OKcVNCpGsoh32rMoPnN2PME=;
+        b=1i+1jIeHAt1M2n7sMqvNsy6p0RQVwd15imO3tr7gtwEC1DJ2FJfFQWXEln1R4fMPIv
+         mbR0Q3XONnnNjV9vNMd73lMLPs6fcc7ko3ZJ8VntUqk4ndD0D0UbZ4Bcr4t5Yknzfxqi
+         x/HM/Td+4Hl51L/bVDq7AXV3ABv9G+TTAuuzzBC+tvzn4rH3ivrfGjhQGkihcxdDe+Uf
+         Pg5t+NGlBSBV5FItxBpRKWPr834cbEPN/ZUdbV1grMjGH+wzXQmo7kus6dcxhETASh5m
+         klmAOqjofxx1tuHaEPjC3jGnRoDmeUCBcuSjAirmOkTr1tVMCi78zfJtAopAf3rCexoH
+         Udsg==
+X-Forwarded-Encrypted: i=1; AKwUvBzymNWoDasYITgxZ51KgJCIZ/gW5ZhAKK6Jm5LTaGbXd0ah0qRJEXnS8g8kvZGzwwZ5Ja6zDMrVNcrhFE7+DYQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++k5YBKIMB4zy3lB+JiA9ZSTyUUT37kPlw1j9fVI7/18+5NU3v/2
+	gBSeKdK4+fcQAMuizd0DzRSgVb9jp/SP2VlP70dC9TjG1xCbydiWOpYO
+X-Gm-Gg: AYBFou0etrQoD2eN4DK5ew7/fbTDBpzT4lIKSI6VByIT+MUueg7hx6lJag+4Sj6t4+l
+	lBMM1KobSVh+jWdlUjkRlj0XqW3ufw/cY1650clFO7Yhdm29XxuwNXaGL9RiBpTIc8rp+mUxXr+
+	Lsei45S06d1QHOfa2Qv+6meaUpiDZu+kSO6NS8OmoXTq7M+bBjFvIQggPtqGVFsrL+WM/mCLbIA
+	ZxqnFxre/f9HIpEcGhlKOP7h+6QlssdWKkzDd7QIm3BnT452wEootOLksGV+sc1ZJ6f9YxeluAD
+	bDUqelJUiHVAm1zdFjunYSgZpjfpQrBaZ9kdmADjNOPa99QofXz7ZNekq8hucdp4nY03Qd9A7iy
+	0Wdg8khjTGji3aXGOUCFw6o5iEZQLH0MM6jPcpnsa2dffIyzysZjd24qpwvn9PgSoMZeBXtKdFh
+	4Uzda+83RclC6giRHQ3RBvv+kIa7+3WBPdxsIPm9eY/mWPLJi6hAuK184jH2YpNJo9WXUiERNPD
+	k4Z0U0qmihmrIeWvKPGBVeKGe2nfV2oPkDkTbB30AGQqBUgx27l/cmFUeE+
+X-Received: by 2002:a05:6a21:a510:b0:3dd:a196:30ac with SMTP id adf61e73a8af0-3de0e9bc98dmr8141953637.92.1790468702754;
+        Sat, 26 Sep 2026 17:25:02 -0700 (PDT)
 Received: from m-upc-A520M-HDV.flets-east.jp ([2400:2410:3f60:500:78b6:7bf6:b1de:12ef])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc78791c680sm2698224a12.16.2026.09.26.17.24.49
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc78791c680sm2698224a12.16.2026.09.26.17.24.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 17:24:55 -0700 (PDT)
+        Sat, 26 Sep 2026 17:25:01 -0700 (PDT)
 Sender: Yuyang Huang <uyoko90@gmail.com>
 From: Yuyang Huang <sigefriedhyy@gmail.com>
 To: Yuyang Huang <sigefriedhyy@gmail.com>
@@ -84,9 +84,9 @@ Cc: Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH net-next v8 2/5] net: add a generation counter for dev->mc changes
-Date: Sun, 27 Sep 2026 09:24:24 +0900
-Message-ID: <20260927002427.4519-3-sigefriedhyy@gmail.com>
+Subject: [PATCH net-next v8 3/5] net: add AF_PACKET multicast dumps
+Date: Sun, 27 Sep 2026 09:24:25 +0900
+Message-ID: <20260927002427.4519-4-sigefriedhyy@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260927002427.4519-1-sigefriedhyy@gmail.com>
 References: <20260927002427.4519-1-sigefriedhyy@gmail.com>
@@ -98,214 +98,303 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A multi-part RTM_GETMULTICAST dump of dev->mc resumes by position, so
-entries added or removed between two dump rounds can be skipped or
-repeated. The IPv4 and IPv6 dumps report that with NLM_F_DUMP_INTR by
-stamping cb->seq from a per netns generation counter combined with
-dev_base_seq, see inet_base_seq().
+RTM_GETMULTICAST dumps IPv4 and IPv6 multicast group memberships, but
+the device multicast list (dev->mc) is only available through
+/proc/net/dev_mcast, so "ip maddr show" still has to parse procfs for
+its link-layer entries.
 
-Add the equivalent for the device multicast lists: a per netns counter
-bumped whenever an entry is added to or removed from any dev->mc. The
-list helpers do not know which device a list belongs to, so give
-netdev_hw_addr_list an owner, set for the lists of a device and NULL
-for snapshots and other standalone lists, and change list->count
-through helpers that bump the counter of dev_net(owner) when the list
-is dev->mc. That covers the dev_mc_* helpers, both lists of a sync,
-the hardware sync helpers drivers call from their rx mode callbacks or
-their own workers and the reconciliation after an asynchronous rx mode
-update. It is atomic since the writers only hold the address lock of
-their own device.
+Handle RTM_GETMULTICAST dumps with ifa_family set to AF_PACKET next to
+the dev->mc helpers in dev_addr_lists.c and report every entry of
+dev->mc in the existing ifaddrmsg format:
 
-Used by the following patch for the AF_PACKET multicast dump.
+  - IFA_MULTICAST carries the raw link-layer address
+  - IFA_MC_USERS carries the entry reference count
+  - IFA_F_GLOBAL in IFA_FLAGS reports netdev_hw_addr::global_use, set
+    by dev_mc_add_global() (SIOCADDMULTI) and dev_mc_add_excl()
+    ("bridge fdb add ... self"), i.e. entries added explicitly rather
+    than by a protocol join. This is the static column of
+    /proc/net/dev_mcast
+  - ifa_scope is RT_SCOPE_LINK
+
+This covers every column of /proc/net/dev_mcast. AF_PACKET is the
+family iproute2 already uses for link-layer addresses ("ip -0").
+
+The default FDB dump also walks dev->mc, but only for Ethernet devices
+without an ndo_fdb_dump of their own, so bridge, vxlan or macvlan
+devices never show their multicast filter there, and it has no users
+count or global_use bit. Extending it would change "bridge fdb show"
+output and add NDA_* attributes.
+
+Requests are always validated, there are no legacy users: prefixlen,
+flags and scope must be zero, ifa_index selects one device and
+IFA_TARGET_NETNSID is the only attribute accepted. The dump runs under
+RCU and netif_addr_lock_bh() without RTNL. cb->seq is sampled from the
+dev->mc generation counter and dev_base_seq under the address lock of
+each device and again when a round ends, so a change since the previous
+device or dump round sets NLM_F_DUMP_INTR, also when the last round
+dumps nothing because the device it stopped at is gone.
 
 Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
+Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
 ---
- include/linux/netdevice.h   |  5 ++++
- include/net/net_namespace.h |  1 +
- net/core/dev_addr_lists.c   | 52 +++++++++++++++++++++++++++++++------
- 3 files changed, 50 insertions(+), 8 deletions(-)
+ include/linux/netdevice.h    |   1 +
+ include/uapi/linux/if_addr.h |   1 +
+ net/core/dev_addr_lists.c    | 195 +++++++++++++++++++++++++++++++++++
+ net/core/rtnetlink.c         |   2 +
+ 4 files changed, 199 insertions(+)
 
 diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index d037faff7c44..69d1cde0a38a 100644
+index 69d1cde0a38a..75c94ecc1322 100644
 --- a/include/linux/netdevice.h
 +++ b/include/linux/netdevice.h
-@@ -256,6 +256,11 @@ struct netdev_hw_addr_list {
+@@ -5167,6 +5167,7 @@ int dev_mc_sync_multiple(struct net_device *to, struct net_device *from);
+ void dev_mc_unsync(struct net_device *to, struct net_device *from);
+ void dev_mc_flush(struct net_device *dev);
+ void dev_mc_init(struct net_device *dev);
++int dev_mc_dump(struct sk_buff *skb, struct netlink_callback *cb);
  
- 	/* Auxiliary tree for faster lookup on addition and deletion */
- 	struct rb_root		tree;
-+
-+	/* The device a list belongs to, NULL for snapshots and other
-+	 * standalone lists
-+	 */
-+	struct net_device	*owner;
- };
+ /**
+  *  __dev_mc_sync - Synchronize device's multicast list
+diff --git a/include/uapi/linux/if_addr.h b/include/uapi/linux/if_addr.h
+index 7fb630b7fe31..0a1ad9ebb47b 100644
+--- a/include/uapi/linux/if_addr.h
++++ b/include/uapi/linux/if_addr.h
+@@ -57,6 +57,7 @@ enum {
+ #define IFA_F_NOPREFIXROUTE	0x200
+ #define IFA_F_MCAUTOJOIN	0x400
+ #define IFA_F_STABLE_PRIVACY	0x800
++#define IFA_F_GLOBAL		0x1000
  
- #define netdev_hw_addr_list_count(l) ((l)->count)
-diff --git a/include/net/net_namespace.h b/include/net/net_namespace.h
-index 46b4c67e2966..d8c681ab5c74 100644
---- a/include/net/net_namespace.h
-+++ b/include/net/net_namespace.h
-@@ -71,6 +71,7 @@ struct net {
- 	spinlock_t		rules_mod_lock;
- 
- 	unsigned int		dev_base_seq;	/* protected by rtnl_mutex */
-+	atomic_t		dev_mc_genid;	/* bumped on dev->mc changes */
- 	u32			ifindex;
- 
- 	spinlock_t		nsid_lock;
+ struct ifa_cacheinfo {
+ 	__u32	ifa_prefered;
 diff --git a/net/core/dev_addr_lists.c b/net/core/dev_addr_lists.c
-index 08528ca0a8b3..c941c3ec1007 100644
+index c941c3ec1007..806a694a996d 100644
 --- a/net/core/dev_addr_lists.c
 +++ b/net/core/dev_addr_lists.c
-@@ -16,6 +16,37 @@
+@@ -10,8 +10,12 @@
+ #include <linux/netdevice.h>
+ #include <linux/rtnetlink.h>
+ #include <linux/export.h>
++#include <linux/if_addr.h>
+ #include <linux/list.h>
+ #include <linux/spinlock.h>
++#include <net/netlink.h>
++#include <net/rtnetlink.h>
++#include <net/sock.h>
+ #include <kunit/visibility.h>
  
  #include "dev.h"
- 
-+/* Only dev->mc is tracked, RTM_GETMULTICAST dumps use the netns generation
-+ * counter to detect changes between dump rounds.
-+ */
-+static void __hw_addr_changed(struct netdev_hw_addr_list *list)
-+{
-+	struct net_device *dev = list->owner;
-+
-+	if (dev && list == &dev->mc)
-+		atomic_inc(&dev_net(dev)->dev_mc_genid);
-+}
-+
-+static void __hw_addr_count_inc(struct netdev_hw_addr_list *list)
-+{
-+	list->count++;
-+	__hw_addr_changed(list);
-+}
-+
-+static void __hw_addr_count_dec(struct netdev_hw_addr_list *list)
-+{
-+	list->count--;
-+	__hw_addr_changed(list);
-+}
-+
-+static void __hw_addr_count_reset(struct netdev_hw_addr_list *list)
-+{
-+	if (!list->count)
-+		return;
-+	list->count = 0;
-+	__hw_addr_changed(list);
-+}
-+
- /*
-  * General list handling functions
-  */
-@@ -125,7 +156,7 @@ static int __hw_addr_add_ex(struct netdev_hw_addr_list *list,
- 	rb_insert_color(&ha->node, &list->tree);
- 
- 	list_add_tail_rcu(&ha->list, &list->list);
--	list->count++;
-+	__hw_addr_count_inc(list);
- 
- 	return 0;
- }
-@@ -161,7 +192,7 @@ static int __hw_addr_del_entry(struct netdev_hw_addr_list *list,
- 
- 	list_del_rcu(&ha->list);
- 	kfree_rcu(ha, rcu_head);
--	list->count--;
-+	__hw_addr_count_dec(list);
- 	return 0;
- }
- 
-@@ -492,7 +523,7 @@ void __hw_addr_flush(struct netdev_hw_addr_list *list)
- 		list_del_rcu(&ha->list);
- 		kfree_rcu(ha, rcu_head);
- 	}
--	list->count = 0;
-+	__hw_addr_count_reset(list);
- }
- EXPORT_SYMBOL_IF_KUNIT(__hw_addr_flush);
- 
-@@ -501,6 +532,7 @@ void __hw_addr_init(struct netdev_hw_addr_list *list)
- 	INIT_LIST_HEAD(&list->list);
- 	list->count = 0;
- 	list->tree = RB_ROOT;
-+	list->owner = NULL;
- }
- EXPORT_SYMBOL(__hw_addr_init);
- 
-@@ -536,7 +568,7 @@ int __hw_addr_list_snapshot(struct netdev_hw_addr_list *snap,
- 			entry = list_first_entry(&cache->list,
- 						 struct netdev_hw_addr, list);
- 			list_del(&entry->list);
--			cache->count--;
-+			__hw_addr_count_dec(cache);
- 			memcpy(entry->addr, ha->addr, addr_len);
- 			entry->type = ha->type;
- 			entry->global_use = false;
-@@ -554,7 +586,7 @@ int __hw_addr_list_snapshot(struct netdev_hw_addr_list *snap,
- 
- 		list_add_tail(&entry->list, &snap->list);
- 		__hw_addr_insert(snap, entry, addr_len);
--		snap->count++;
-+		__hw_addr_count_inc(snap);
- 	}
- 
- 	return 0;
-@@ -604,14 +636,14 @@ void __hw_addr_list_reconcile(struct netdev_hw_addr_list *real_list,
- 			if (delta > 0) {
- 				rb_erase(&ref_ha->node, &ref->tree);
- 				list_del(&ref_ha->list);
--				ref->count--;
-+				__hw_addr_count_dec(ref);
- 				ref_ha->sync_cnt = delta;
- 				ref_ha->refcount = delta;
- 				list_add_tail_rcu(&ref_ha->list,
- 						  &real_list->list);
- 				__hw_addr_insert(real_list, ref_ha,
- 						 addr_len);
--				real_list->count++;
-+				__hw_addr_count_inc(real_list);
- 			}
- 			continue;
- 		}
-@@ -622,7 +654,7 @@ void __hw_addr_list_reconcile(struct netdev_hw_addr_list *real_list,
- 			rb_erase(&real_ha->node, &real_list->tree);
- 			list_del_rcu(&real_ha->list);
- 			kfree_rcu(real_ha, rcu_head);
--			real_list->count--;
-+			__hw_addr_count_dec(real_list);
- 		}
- 	}
- 
-@@ -685,6 +717,7 @@ int dev_addr_init(struct net_device *dev)
- 	/* rtnl_mutex must be held here */
- 
- 	__hw_addr_init(&dev->dev_addrs);
-+	dev->dev_addrs.owner = dev;
- 	memset(addr, 0, sizeof(addr));
- 	err = __hw_addr_add(&dev->dev_addrs, addr, sizeof(addr),
- 			    NETDEV_HW_ADDR_T_LAN);
-@@ -962,6 +995,7 @@ EXPORT_SYMBOL(dev_uc_flush);
- void dev_uc_init(struct net_device *dev)
- {
- 	__hw_addr_init(&dev->uc);
-+	dev->uc.owner = dev;
- }
- EXPORT_SYMBOL(dev_uc_init);
- 
-@@ -1177,6 +1211,7 @@ EXPORT_SYMBOL(dev_mc_flush);
- void dev_mc_init(struct net_device *dev)
- {
- 	__hw_addr_init(&dev->mc);
-+	dev->mc.owner = dev;
+@@ -1215,6 +1219,197 @@ void dev_mc_init(struct net_device *dev)
  }
  EXPORT_SYMBOL(dev_mc_init);
  
-@@ -1348,6 +1383,7 @@ static void netif_rx_mode_retry(struct timer_list *t)
- void netif_rx_mode_init(struct net_device *dev)
- {
- 	__hw_addr_init(&dev->rx_mode_addr_cache);
-+	dev->rx_mode_addr_cache.owner = dev;
- 	timer_setup(&dev->rx_mode_retry_timer, netif_rx_mode_retry, 0);
- }
- 
++static int dev_mc_fill_addr(struct sk_buff *skb, const struct net_device *dev,
++			    const struct netdev_hw_addr *ha, u32 portid,
++			    u32 seq, unsigned int flags, int netnsid)
++{
++	u32 ifa_flags = ha->global_use ? IFA_F_GLOBAL : 0;
++	struct ifaddrmsg *ifm;
++	struct nlmsghdr *nlh;
++
++	nlh = nlmsg_put(skb, portid, seq, RTM_GETMULTICAST, sizeof(*ifm),
++			flags);
++	if (!nlh)
++		return -EMSGSIZE;
++
++	ifm = nlmsg_data(nlh);
++	ifm->ifa_family = AF_PACKET;
++	ifm->ifa_prefixlen = 0;
++	/* ifm->ifa_flags holds 8 bits, the full value is in IFA_FLAGS */
++	ifm->ifa_flags = (__u8)ifa_flags;
++	ifm->ifa_scope = RT_SCOPE_LINK;
++	ifm->ifa_index = dev->ifindex;
++
++	if ((netnsid >= 0 &&
++	     nla_put_s32(skb, IFA_TARGET_NETNSID, netnsid)) ||
++	    nla_put(skb, IFA_MULTICAST, dev->addr_len, ha->addr) ||
++	    nla_put_u32(skb, IFA_MC_USERS, ha->refcount) ||
++	    nla_put_u32(skb, IFA_FLAGS, ifa_flags)) {
++		nlmsg_cancel(skb, nlh);
++		return -EMSGSIZE;
++	}
++
++	nlmsg_end(skb, nlh);
++	return 0;
++}
++
++/* Combine dev_mc_genid and dev_base_seq to detect changes, like
++ * inet_base_seq().
++ */
++static u32 dev_mc_base_seq(const struct net *net)
++{
++	u32 res = atomic_read(&net->dev_mc_genid) +
++		  READ_ONCE(net->dev_base_seq);
++
++	/* Must not return 0 (see nl_dump_check_consistent()). */
++	if (!res)
++		res = 0x80000000;
++	return res;
++}
++
++static int dev_mc_dump_dev(struct net_device *dev, struct sk_buff *skb,
++			   struct netlink_callback *cb, int *s_addr_idx,
++			   unsigned int flags, int netnsid)
++{
++	struct netdev_hw_addr *ha;
++	int addr_idx = 0;
++	int err = 0;
++
++	netif_addr_lock_bh(dev);
++	/* Sampled under the lock, see nl_dump_check_consistent() */
++	cb->seq = dev_mc_base_seq(dev_net(dev));
++	netdev_for_each_mc_addr(ha, dev) {
++		if (addr_idx < *s_addr_idx) {
++			addr_idx++;
++			continue;
++		}
++		err = dev_mc_fill_addr(skb, dev, ha, NETLINK_CB(cb->skb).portid,
++				       cb->nlh->nlmsg_seq, flags, netnsid);
++		if (err < 0)
++			break;
++		nl_dump_check_consistent(cb, nlmsg_hdr(skb));
++		addr_idx++;
++	}
++	netif_addr_unlock_bh(dev);
++
++	*s_addr_idx = err < 0 ? addr_idx : 0;
++
++	return err;
++}
++
++struct dev_mc_dump_filter {
++	struct net *tgt_net;
++	netns_tracker ns_tracker;
++	int netnsid;
++	int ifindex;
++};
++
++static const struct nla_policy dev_mc_dump_policy[IFA_MAX + 1] = {
++	[IFA_TARGET_NETNSID]	= { .type = NLA_S32 },
++};
++
++static int dev_mc_valid_dump_req(const struct nlmsghdr *nlh, struct sock *sk,
++				 struct dev_mc_dump_filter *filter,
++				 struct netlink_ext_ack *extack)
++{
++	struct nlattr *tb[IFA_MAX + 1];
++	struct ifaddrmsg *ifm;
++	int err;
++
++	ifm = nlmsg_payload(nlh, sizeof(*ifm));
++	if (!ifm) {
++		NL_SET_ERR_MSG(extack,
++			       "Invalid header for multicast dump request");
++		return -EINVAL;
++	}
++
++	if (ifm->ifa_prefixlen || ifm->ifa_flags || ifm->ifa_scope) {
++		NL_SET_ERR_MSG(extack,
++			       "Invalid values in multicast dump header");
++		return -EINVAL;
++	}
++
++	err = nlmsg_parse(nlh, sizeof(*ifm), tb, IFA_MAX,
++			  dev_mc_dump_policy, extack);
++	if (err < 0)
++		return err;
++
++	if (tb[IFA_TARGET_NETNSID]) {
++		struct net *net;
++
++		filter->netnsid = nla_get_s32(tb[IFA_TARGET_NETNSID]);
++		net = rtnl_get_net_ns_capable(sk, filter->netnsid);
++		if (IS_ERR(net)) {
++			NL_SET_ERR_MSG(extack,
++				       "Invalid target network namespace id");
++			return PTR_ERR(net);
++		}
++		netns_tracker_alloc(net, &filter->ns_tracker, GFP_KERNEL);
++		filter->tgt_net = net;
++	}
++
++	filter->ifindex = ifm->ifa_index;
++
++	return 0;
++}
++
++int dev_mc_dump(struct sk_buff *skb, struct netlink_callback *cb)
++{
++	struct dev_mc_dump_filter filter = {
++		.tgt_net = sock_net(skb->sk),
++		.netnsid = -1,
++	};
++	unsigned int flags = NLM_F_MULTI;
++	struct {
++		unsigned long ifindex;
++		int addr_idx;
++	} *ctx = (void *)cb->ctx;
++	unsigned long s_ifindex;
++	struct net_device *dev;
++	int err;
++
++	err = dev_mc_valid_dump_req(cb->nlh, skb->sk, &filter, cb->extack);
++	if (err < 0)
++		return err;
++
++	rcu_read_lock();
++
++	if (filter.ifindex) {
++		cb->answer_flags |= NLM_F_DUMP_FILTERED;
++		flags |= NLM_F_DUMP_FILTERED;
++		dev = dev_get_by_index_rcu(filter.tgt_net, filter.ifindex);
++		if (!dev) {
++			err = -ENODEV;
++			goto out;
++		}
++		err = dev_mc_dump_dev(dev, skb, cb, &ctx->addr_idx, flags,
++				      filter.netnsid);
++		goto out;
++	}
++
++	s_ifindex = ctx->ifindex;
++	for_each_netdev_dump(filter.tgt_net, dev, ctx->ifindex) {
++		/* The device the dump stopped at is gone, do not skip
++		 * entries of the next one.
++		 */
++		if (dev->ifindex != s_ifindex)
++			ctx->addr_idx = 0;
++		err = dev_mc_dump_dev(dev, skb, cb, &ctx->addr_idx, flags,
++				      filter.netnsid);
++		if (err < 0)
++			break;
++	}
++out:
++	/* A round that dumps no device, e.g. the one it stopped at is gone,
++	 * still needs the NLMSG_DONE check to see the change.
++	 */
++	cb->seq = dev_mc_base_seq(filter.tgt_net);
++	rcu_read_unlock();
++	if (filter.netnsid >= 0)
++		put_net_track(filter.tgt_net, &filter.ns_tracker);
++	return err;
++}
++
+ static int netif_addr_lists_snapshot(struct net_device *dev,
+ 				     struct netdev_hw_addr_list *uc_snap,
+ 				     struct netdev_hw_addr_list *mc_snap,
+diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
+index e3444fd24061..204dc9040e3c 100644
+--- a/net/core/rtnetlink.c
++++ b/net/core/rtnetlink.c
+@@ -7278,6 +7278,8 @@ static const struct rtnl_msg_handler rtnetlink_rtnl_msg_handlers[] __initconst =
+ 	{.msgtype = RTM_SETSTATS, .doit = rtnl_stats_set},
+ 	{.msgtype = RTM_NEWLINKPROP, .doit = rtnl_newlinkprop},
+ 	{.msgtype = RTM_DELLINKPROP, .doit = rtnl_dellinkprop},
++	{.protocol = PF_PACKET, .msgtype = RTM_GETMULTICAST,
++	 .dumpit = dev_mc_dump, .flags = RTNL_FLAG_DUMP_UNLOCKED},
+ 	{.protocol = PF_BRIDGE, .msgtype = RTM_GETLINK,
+ 	 .dumpit = rtnl_bridge_getlink},
+ 	{.protocol = PF_BRIDGE, .msgtype = RTM_DELLINK,
 -- 
 2.43.0
 
