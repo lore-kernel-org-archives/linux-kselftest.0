@@ -1,41 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944403033EB
-	for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 23:32:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12E2547064
+	for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 00:03:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790465542; cv=none; b=Dyqzu3SYNbd1VeJxYj2S3hueROhCbfB4iACnX92Piyr2mybhC78Lq5Kd5CpbmYy/CRJ9rMEIMqlKiMfs3L8SL/1m623eHVXUHfRr9ufbx2jeiclOMRzZeSGyXucqyNOUmJ021Xkciw/8Knod+xLztgymao///IOUtwWGnKH0qHQ=
+	t=1790467408; cv=none; b=HQc4C+AcLCIIHaw5G6PXjIY0mAWaf9R/fgvhIwph0c1O0oh8gF/hWSl6t9HHCeLKqwRqkzYsd8qYcvrLiItDlPGgWI28uOlqlbGoK3nLF3m6rWKdKoxaQOvia1MMGFIEwSbEc61SyRVTsrbgIDH16mcUEPO5QvvpzlwNPKz3Kx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790465542; c=relaxed/simple;
-	bh=/4VC4x9PpIfi2jsGgmcRErzz+roJvLD2iHnoUCXfJK4=;
+	s=arc-20240116; t=1790467408; c=relaxed/simple;
+	bh=dM60/lQJZNJbWoteFqu6uPH785ljbJ4v68GljKAZeM0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q9bO838yUqFUBOAl1bVulvdcVw0xMBEJBxEGae21r2Dm3GcpsFSizduZry6to3kCF3vQp3lRsE8sdJW0Afz7XmmIUnHQV9+xbextEyD/qdseApv8vu9jGlZTdwoMgy1nCwZPFjGYfNloaYvBclHyuB3rVdqXkR6qbkeQRtKw9/U=
+	 To:Cc:Content-Type; b=DEwoGQODFAQ17mp1fbH/TVTj9y+X7GpuVA4iWflhc52TMifpnfkZaxawZ4b4lZ9W2N4xRz03LkMg3NCZAO21qu4NiJLw3DX4Nm98kwB3YKgeui2q/crsgcBdUADZ5uqGxGfZcHYmbf3LpeS8djCeEgGSr5loPbDJKyOG7I8d4S8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6737F1F00898
-	for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 23:32:21 +0000 (UTC)
-Received: by mail-ej2-f43.google.com with SMTP id a640c23a62f3a-c2af3701927so245515466b.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 16:32:21 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBxU5uE52Ism0CzlpNyW732943ULU9lnxC4UoC/jxpd60RYDZTAF6pfCp2xwQiuIdGL9keJ9W1RDUtYJN9Qi3cE=@vger.kernel.org
-X-Gm-Message-State: AFuF++mI4lunitLLaELCvNU5aEushraKZj9mi6FbgjWsCI+VUfsRN9ms
-	vdfQV79KM+a3mcR8NlqIi/Awh7IFgvBnkgmrkZTXmL5T2NDU/ACq/tbhgTfZl3f8zD1QiNkS93L
-	8lM9a4XV0Ro7dBHhY2NfU0e/1RRkSydrXNOLJQ9vH8Q==
-X-Received: by 2002:a17:907:962a:b0:c2d:ca32:2176 with SMTP id
- a640c23a62f3a-c2dca3235abmr54019966b.8.1790465537433; Sat, 26 Sep 2026
- 16:32:17 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E091F0089E
+	for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 00:03:27 +0000 (UTC)
+Received: by mail-ej2-f43.google.com with SMTP id a640c23a62f3a-c2af7721e4aso202769666b.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 26 Sep 2026 17:03:27 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBwTVwolEHPQuoE4Hh8kSFARvlClJyQEzlTkYtgmiWfsuAAM9Lm5bm1fBT0pgRKRM5W12RdWruxvxMjFGhkd7G4=@vger.kernel.org
+X-Gm-Message-State: AFuF++nO0uK7jD6ccP/Loq5wW5fVNsPE/fyVbnW6Juwaenf+UJxoXoRr
+	Fa3LlPUH7ZjoJWqViRTYS/mpuBWwwY9aq2t19KFlxAXWi37nyq7ha86HY/f0n+WmkeR/CuTevEr
+	bkPi8KujcIzmz9FchpMmgtd0iaC3XZSVgjME4K/XXFA==
+X-Received: by 2002:a17:907:970f:b0:c28:e01d:1d08 with SMTP id
+ a640c23a62f3a-c2ac268a3b6mr767904866b.49.1790467402757; Sat, 26 Sep 2026
+ 17:03:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260926045517.3458413-1-matthias.goergens@gmail.com>
-In-Reply-To: <20260926045517.3458413-1-matthias.goergens@gmail.com>
+References: <20260926045517.3458413-1-matthias.goergens@gmail.com> <CACePvbWPLegjMtF4jYN4+_1ZeoEuBHwZuwNyMpYwPZaA0edO5A@mail.gmail.com>
+In-Reply-To: <CACePvbWPLegjMtF4jYN4+_1ZeoEuBHwZuwNyMpYwPZaA0edO5A@mail.gmail.com>
 From: Chris Li <chrisl@kernel.org>
-Date: Sat, 26 Sep 2026 13:32:06 -1000
-X-Gmail-Original-Message-ID: <CACePvbWPLegjMtF4jYN4+_1ZeoEuBHwZuwNyMpYwPZaA0edO5A@mail.gmail.com>
-X-Gm-Features: AclHuK9AxoX5x-gecpb2ks2aU57CnhQ2g3FIIpOxpjBk-hgB0LOGfyaEJiKPKFM
-Message-ID: <CACePvbWPLegjMtF4jYN4+_1ZeoEuBHwZuwNyMpYwPZaA0edO5A@mail.gmail.com>
+Date: Sat, 26 Sep 2026 14:03:11 -1000
+X-Gmail-Original-Message-ID: <CACePvbU_6o_9fEFU6TJ9VaZ=4yBsDG5qXcxFkrGHBSD69m5ZXQ@mail.gmail.com>
+X-Gm-Features: AclHuK-ZyMX3KOF420HwXlAK4cpZeFQwMK0gQ_EG8K18s67LKRQ8CucrkEWbQU8
+Message-ID: <CACePvbU_6o_9fEFU6TJ9VaZ=4yBsDG5qXcxFkrGHBSD69m5ZXQ@mail.gmail.com>
 Subject: Re: [RFC PATCH v2 0/4] mm/swap: reserve swap areas for deliberate offload
 To: Matthias Goergens <matthias.goergens@gmail.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>, Kairui Song <kasong@tencent.com>, 
@@ -58,125 +58,28 @@ Cc: Andrew Morton <akpm@linux-foundation.org>, Kairui Song <kasong@tencent.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 25, 2026 at 6:55=E2=80=AFPM Matthias Goergens
-<matthias.goergens@gmail.com> wrote:
-> The series fixes zram selftest device tracking and error reporting, adds
-> the swap policy with DRM eligibility checks, and tests routing, workingse=
-t
-> activation and retained-entry write refusal. It is based on mm-new at
-> 995829088503.
+On Sat, Sep 26, 2026 at 1:32=E2=80=AFPM Chris Li <chrisl@kernel.org> wrote:
+>
+> On Fri, Sep 25, 2026 at 6:55=E2=80=AFPM Matthias Goergens
+> <matthias.goergens@gmail.com> wrote:
+> > The series fixes zram selftest device tracking and error reporting, add=
+s
+> > the swap policy with DRM eligibility checks, and tests routing, working=
+set
+> > activation and retained-entry write refusal. It is based on mm-new at
+> > 995829088503.
+>
+> Hi Matthias,
+>
+> I can't find mm-new 995829088503 anymore.
+>
+> Your patch does not apply cleanly to the current tip of mm-new
+> mm-unstable, or mm-stable branches.
+> Do you have a git repo with your patch applied?
 
-Hi Matthias,
+Never mind, I have the conflict resolved on mm-unstable.
 
-I can't find mm-new 995829088503 anymore.
-
-Your patch does not apply cleanly to the current tip of mm-new
-mm-unstable, or mm-stable branches.
-Do you have a git repo with your patch applied?
-
-mm-new is whatever Andrew can find on the mailing list, regardless of
-whether it has been reviewed. That mm-new branch is very unstable,
-even more so than mm-unstable, which should at least have some review
-already. Maybe consider using mm-stable or mm-unstable as base next
-time.
+Sorry I usually need to have the patch appliable to use my own review scrip=
+ts.
 
 Chris
-
->
-> Feedback is particularly welcome on:
->
-> - Activation-time eligibility versus backend placement or migration:
->   is retained-entry refusal, with possible reclaim churn or OOM,
->   acceptable without migration?
-> - Eligible-capacity accounting, including overcommit limits and OOM
->   scoring; cache recovery, cluster invalidation and workingset activation=
-.
-> - Persistent activation and visibility: current swap listings do not
->   expose the policy.
->
-> Validation includes x86 builds, affected arm64 MTE objects and builds
-> without swap or memory cgroups. QEMU tests covered routing, retained-entr=
-y
-> recovery, data integrity and cleanup, with negative controls for write
-> refusal and teardown failure.
->
-> I have also been using this policy on my own machine with experimental
-> bcachefs swap support, with no problems observed so far. Deliberate stres=
-s
-> testing is confined to VMs; I do not deliberately stress-test this machin=
-e.
->
-> Changes since v1, incorporating Sashiko's public review [7]:
->
-> - Improve selftest isolation, retained-swap measurement and memlock skips=
-.
-> - Track allocated zram devices, wait for udev probes and report cleanup
->   errors without deleting data through a mount that could not be released=
-.
-> - Clarify activation, capacity reporting and conventional fallback limits=
-.
->
-> [1] https://patchew.org/linux/20260825153238.2695446-1-nphamcs@gmail.com/
-> [2] https://patchew.org/linux/20260713025644.170839-1-youngjun.park@lge.c=
-om/
-> [3] https://openzfs.github.io/openzfs-docs/Project%20and%20Community/FAQ.=
-html#using-a-zvol-for-a-swap-device-on-linux
-> [4] https://engineering.fb.com/2022/06/20/data-infrastructure/transparent=
--memory-offloading-more-memory-at-a-fraction-of-the-cost-and-power/
-> [5] https://www.kernel.org/doc/html/latest/admin-guide/mm/damon/reclaim.h=
-tml
-> [6] https://www.kernel.org/doc/html/latest/admin-guide/mm/zswap.html
-> [7] https://sashiko.dev/#/patchset/20260914104501.3960616-1-matthias.goer=
-gens@gmail.com
-> [8] https://github.com/util-linux/util-linux/pull/4633
-> [9] https://lore.kernel.org/all/20260914105606.3997649-1-matthias.goergen=
-s@gmail.com/
->
-> v1: https://lore.kernel.org/all/20260914104501.3960616-1-matthias.goergen=
-s@gmail.com/
->
-> Matthias Goergens (4):
->   selftests: zram: track owned devices and report cleanup failures
->   mm: restrict offload-only swap to proactive reclaim
->   selftests: zram: cover offload-only swap policy
->   selftests: zram: cover retained offload-only entries
->
->  Documentation/mm/swap.rst                     | 105 ++++
->  drivers/gpu/drm/i915/gem/i915_gem_shrinker.c  |   2 +-
->  .../gpu/drm/i915/gem/selftests/huge_pages.c   |   6 +-
->  drivers/gpu/drm/msm/msm_gem_shrinker.c        |   2 +-
->  drivers/gpu/drm/panthor/panthor_gem.c         |   2 +-
->  drivers/gpu/drm/ttm/ttm_backup.c              |   2 +-
->  drivers/gpu/drm/xe/tests/xe_bo.c              |   2 +-
->  include/linux/swap.h                          |  29 +-
->  include/linux/vm_event_item.h                 |   1 +
->  mm/memcontrol.c                               |  20 +-
->  mm/page_io.c                                  |  24 +-
->  mm/swapfile.c                                 | 123 ++++-
->  mm/vmscan.c                                   |  31 +-
->  mm/vmstat.c                                   |   1 +
->  tools/testing/selftests/zram/.gitignore       |   2 +
->  tools/testing/selftests/zram/Makefile         |   4 +-
->  tools/testing/selftests/zram/README           |  20 +-
->  tools/testing/selftests/zram/config           |  10 +-
->  tools/testing/selftests/zram/settings         |   1 +
->  tools/testing/selftests/zram/swap_offload.c   | 425 +++++++++++++++++
->  .../selftests/zram/workingset_offload.c       | 207 ++++++++
->  tools/testing/selftests/zram/zram.sh          |   9 +
->  tools/testing/selftests/zram/zram01.sh        |   9 +-
->  tools/testing/selftests/zram/zram02.sh        |   9 +-
->  tools/testing/selftests/zram/zram03.sh        | 174 +++++++
->  tools/testing/selftests/zram/zram04.sh        | 164 +++++++
->  tools/testing/selftests/zram/zram05.sh        | 447 ++++++++++++++++++
->  tools/testing/selftests/zram/zram_lib.sh      | 189 ++++++--
->  28 files changed, 1926 insertions(+), 94 deletions(-)
->  create mode 100644 tools/testing/selftests/zram/settings
->  create mode 100644 tools/testing/selftests/zram/swap_offload.c
->  create mode 100644 tools/testing/selftests/zram/workingset_offload.c
->  create mode 100755 tools/testing/selftests/zram/zram03.sh
->  create mode 100755 tools/testing/selftests/zram/zram04.sh
->  create mode 100755 tools/testing/selftests/zram/zram05.sh
->
-> --
-> 2.55.0
->
