@@ -1,125 +1,142 @@
-Received: from mail-qk2-f38.google.com (mail-qk2-f38.google.com [74.125.230.230])
+Received: from mail-oo2-f37.google.com (mail-oo2-f37.google.com [74.125.231.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC57A3F926F
-	for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 17:10:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.230
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790529051; cv=pass; b=hESD2aNd/98ez9baUOPuNa3fqEDmwWvjiyWhOoWE0zlepKig5KUqCHGoIldN3UDLNa+zKyu74fY8/VvPzM9gqb5q/33e3pjRhi5hqBhl46asdxmob5I21DWAal8UIDobAwbILM5lefD15B/DnYRvxNirJVhGP9cdMiOECXr2Af0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790529051; c=relaxed/simple;
-	bh=ikTxL5JuCzeBWeGH3nGI6q2+sz2cBQtCh19A8s6v9IU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qeDprkUkXNxdAt0kJERdakcJINXL1iA//UMS9l8+vjkbcX0BTFaFOlK3NN1b5vSvm2ViumjRaMe/M8xwuVAHDiSiaSzRB+ruUjnHm3otzokyRu5iilGR2QJxotaRlEuLEvKqJevcB7LcPA5HmeHWIRqMaSKj+YVsMa6DsvFPBNo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mjYrV562; arc=pass smtp.client-ip=74.125.230.230
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31E13ABDA8
+	for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 17:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.165
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790530451; cv=none; b=i2A1Ivw4KMFT1olZOwsO2Ypr+w+JsdFdDBsh6c53I6Z2Ha7rxgzCOhBdEHr5FbXB3f8MywrCuFxfGcqChuXjAOHjvrSoa4k0Ou/8GKB/MRGyfDdV/OH3bNAHi8Rnrh5lZbU1GoQhggXiRPy9opIk+QpLozvTCS40FPWkc1hk1CQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790530451; c=relaxed/simple;
+	bh=j2J2wAxTXsNGTyd5388EcZwWhFZ3wYnSEUCo7yrCp9U=;
+	h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:References:
+	 Cc:In-Reply-To:To; b=DzWyq/6u5bwwvGmsZtysDKf99750qmEcSQ2FvsOQ11ccquvFXxZA1rUU7lZ7Nc1rS+S5Xf+ce3+jwYxv2SaXylGi5cuKEoMyuRTmNKMKKD258VXHelyEAViQsOqhtWR6nIKXbd73KySRyL/Eptz9gIOV2mH7qNHzExUrf5kQZTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net; spf=pass smtp.mailfrom=amacapital.net; dkim=pass (2048-bit key) header.d=amacapital-net.20251104.gappssmtp.com header.i=@amacapital-net.20251104.gappssmtp.com header.b=WmzQ6NYk; arc=none smtp.client-ip=74.125.231.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mjYrV562"
-Received: by mail-qk2-f38.google.com with SMTP id d75a77b69052e-53336049862so5932041cf.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 10:10:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790529049; cv=none;
-        d=google.com; s=arc-20260327;
-        b=k2PQeRJUaWceabS1NSWPQevxTKzziPIzKD7p6OVv/XM4KSKFrXlF1G3JV21mBel/qU
-         4g5BHqwM9x9GTAwgkLbUQY+BCRFMm+NV6qFLvTbeMND2vEeGSkSkQxZLTLEfBlYOqCWt
-         db7RoFBya/7fu0Z8m/+fEEYm1cC+aeOUClN9zMi4QyUVnd5mmoJairkGV7ByKVGG+CDX
-         ZeGrSJ6kcDrezvgT1KDgISk0V2szHqbkIFaUSkHnaYFQm/nbvpRmjPhidj3sA92CaH6q
-         ShKCbVnHNumJnQ/VSWjjj0n5yww+ZIt/b88j/QMfLAQ/vxorO4zj2uUiUUJvznYpnWNN
-         fpjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ikTxL5JuCzeBWeGH3nGI6q2+sz2cBQtCh19A8s6v9IU=;
-        fh=Yoh1j3CXpThQuq88Y+MHJdpFRsGRiKwZPaegIS9/U9s=;
-        b=KTo8oRYZK69Phza1PCb4Pf4rR6J9UTtp8DFjqh5Dg194W5OgyT7bk/F4IENOuRfIry
-         bxEwS+JrWewIttbChi56Bsm7Xqm/4jLIJJx2Jl7B4jkPxVCcg5qAqTwwPCcKjnJAeI6K
-         ZXkLPAcUuTtsFSACy27ZkSvSBJHZJNQ218Le6Q5pgK6twoK3+39I3Od41Ig0NQ/dHewW
-         2JM8RKapI2//tCY+JIkwMLjNXC23+uz8gPkOUELbuBIks7VSsbcZ/82uY548DinwdzqZ
-         Pa918JBDnnIALjfLtyzaI/sfOyYosRDwKA8YJkR6q1BcbaC0A4MuCGDNXcicW/bJMCBR
-         If+A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=amacapital-net.20251104.gappssmtp.com header.i=@amacapital-net.20251104.gappssmtp.com header.b="WmzQ6NYk"
+Received: by mail-oo2-f37.google.com with SMTP id 46e09a7af769-804f7045f3eso893441a34.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 10:34:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790529049; x=1791133849; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ikTxL5JuCzeBWeGH3nGI6q2+sz2cBQtCh19A8s6v9IU=;
-        b=mjYrV562TasJbRzRBYNqKC29SivwNhKDbxhj8AoHA2aSdNv6ISMmbfirO2kXhJKL7W
-         aGEwcRZjVs2DINpoalIM15LpsqiJUzRmZpd6ulR4TYWF0/i1Q/ORxuHe9aSGrmGq2y6j
-         +eznTl45kUfeKbiDC77TCXGz4rMAPmPj7a1aiFdteZQusu7fDZzskU1UBTr9CX2446P5
-         emkugc5TJRPHYB7VDj7sKxybbe5+pivYaeWaH8VRPXd5VGI1+E2OxFaQs9ocsEwGVee9
-         sw63SsjTbrp2VvrKiHftS7AofETr1d+kE9yWGCQhF73wbvnc9g14Q3T8D6KLATNqIovy
-         DbXw==
+        d=amacapital-net.20251104.gappssmtp.com; s=20251104; t=1790530448; x=1791135248; darn=vger.kernel.org;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=MuL0v1f3+J9yyQw0yqK0TvcdFgWSs593LTmvyHRza0g=;
+        b=WmzQ6NYkam5yMDW7bRj4CGT1ZrpCjEHZS1N8Clae2dDKbn75eRImj0Yo8kofaKpocK
+         Y6A55C7nNaTui67pr1OMJbIkgP5Uciihbem9jrIuF5HHoy7Qpc0m2TwtAJnjq3oK58Ph
+         BvbiaM8BHfGKPiXSoSra51LDFJCMKYXyHn1J9fLGHCG4cnS8MVzcYBl63CNlgRZWdZCK
+         MEaIrV5d5kJBiDkcpJmaCPGC0MLMYsYnl5JO6A82I6ED/MSVSMFBHDYF4Xk1pCDnGfpp
+         o4Mb9lKNn8CafXD56eM1x8xIrEN/nPb/aYO/fZ5EKB5mTSqZE00C3XeQ3ugRF8X6sBPN
+         egOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790529049; x=1791133849;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1790530448; x=1791135248;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ikTxL5JuCzeBWeGH3nGI6q2+sz2cBQtCh19A8s6v9IU=;
-        b=zb6xx9t0A6RyGZ54lAAHgIdP6COSA7gg/ybN8Btep7xed1OX08ISJglnAfImvyse/O
-         kQkymskeecZLkpfu9uDMZeIYlDcyPxx3qqj8hJbWQK+9+ocfnBWGG0vpMq5ZPUej6NdV
-         5iEuL4rmiCYWNGvXk+4sa1Af0GoGvByGp6cHFd0SREQlA9vLE8xhgOFLY8ujSjDzYfYS
-         NhzicSe88gCYwtcniFAtUtjSBNfpo01dS5104NfwuArtNkjknMTZHtMytJDImtwK7g11
-         eKNHXSyuXq0ZHi2oIYNmC9jbxWJSrearyLwDCUs3zxzUU1frcL7ROy0EQHeY8Q26n5Wu
-         emTQ==
-X-Forwarded-Encrypted: i=1; AKwUvByh2KsRY9Snq94uNYf2V2Hs0i4bJpL4hO2fXO4MoCCvzsanFhs7cBV3tLXrMi8jWGO+G3l7T1WKiuiOPBGaAmE=@vger.kernel.org
-X-Gm-Message-State: AFuF++k7QcpxFgAxRab/Xz99RHu5Ta9dZ/hL17UsHvanmPoAUUvmNi6o
-	gt1q0cHuQ0rdbLCO143zywSB3l5isJ6YbJICJ9JoRVIz8aDR+NMUgqk93TObW3tAWTqaSTj1pBP
-	C0rLCrdkTtjQx7/TqwUvSV9ZBqeHTqMMnvms6dHHn
-X-Gm-Gg: AYBFou1SnmpeL7aja7FO/xI8l9WOAQAZbqXzTWuMsymNjmfFTpGFnwheigQXdLoAjTt
-	x4VtSzchpUAxLMayrzAVfizQu5mcswqDlrqpefJaWjQg5A4qgKRbsb7FJzuPHHwV0cogIDzxa66
-	vY6y7as3SrSd2p08RUgfSJ2ZNMTOC8itjdE9n6sv8gY5ODYMLG+x/hciN/ASFBIGgMHvq51ERUB
-	3MIJJns0jpZ25PLixT4rb9xlVuVvxmi61QHL2ff25jM1OB9O7kLlNvh6fPP1MWb5RbMucHaUi5T
-	4AtRbjt1qI8xg1oyJ2aFbww03pRmp3ZASRKnD4FQA4dsBNbSQoaPsUgYn94mgejrP1S4cmgtn8i
-	j8K32Gogmnng/IVzzi5PjoeAc3N0chAwPza9Gmrhnp47a9ny58zRmmB32G23QpJwx+Tjc
-X-Received: by 2002:a05:622a:6f16:20b0:533:3868:1f6d with SMTP id
- d75a77b69052e-53338682227mr27382171cf.59.1790529048151; Sun, 27 Sep 2026
- 10:10:48 -0700 (PDT)
+        bh=MuL0v1f3+J9yyQw0yqK0TvcdFgWSs593LTmvyHRza0g=;
+        b=ah42R2V20ldfKUmfaDurdryTvjxk9cTk0dsUrwodS2tJ/2J8Z00mDsOZqRcxBlD7N+
+         4PmvmGRPEUWiFmagm6cDJ0a2tseBhgU+gOSPkuRl69O19oVr5+DvLy7YS3AqL8ZjbL1Z
+         eMyQkNUjreJZ8fCiYun9Zr29XFi81Fd9dMbV4+82yR8c231gGQEn7GD3eiafwsLYjlrU
+         WXo6tKfJKKVI6UoCbaptB4EutfPYVTiLmDlv6LI7I8sO5onnn7G+4LDbfcicrxKdON12
+         9XhboBYYrUHfY4KmjciRAQcWQwCV8JTH62hah6l4c8qeTrlom2EmySFoiYgTFzc5cDHb
+         yBAg==
+X-Forwarded-Encrypted: i=1; AKwUvBw0d5BDP7hPth23wJC2Mlpcv+eHcb683Uw4xI0ZxpzzcRlOqWwr95kE51WwPP+A0mTo5ouny4TZRhxamwCDF1g=@vger.kernel.org
+X-Gm-Message-State: AFuF++lgZ48JPWPz7m/ngYzk3eHzmLlGW3TH/WCQFR2A2GB4Q384fT2O
+	op452o5N9qv1ghImqAbIuQ+2MG0IsKPU9gZ5xSapq5SkudwvD+4W73r9+OpzxRo8rg==
+X-Gm-Gg: AYBFou0dohvCD33wHgd/LKgWGDinS3f3BIklKDXJLFZSrFkAFnL0Cgpojcd4bqxO80I
+	5I5WGTxlISjD6jLA/OtfMSb2VM2gfHgBSqaEswoNjsrdI0kWCuZnjoUawCfH2RojCVo69i5umIY
+	Ta8F7CcU/05AvuMnbHco4ZeMVyR54t37I5pg97h+M1DhR33EaulieekQOtdpKHjYqY5xzVFqb3k
+	7I27TMc6tMNarM4znkGBlTdR5Sww9BfLnAbTYBOhYbjtUcx9opXWgKgTJ2cqcMEFi8xSFH0OLa7
+	kFTKl8JMJqVtl88TndvignYidX7DC6xFZXhNJuNeHETAD6vwivw43NWLzqLbLsSsk9reWU7hKEi
+	2T2alhcUV8cVUi1iIpaGw20iTD0sCwF7gusIpP+BHyuHNOSGZrsgn1CatoU1u/sIz2J81WzNZsF
+	iyjZyyIcqwdHUvkWX42pIBDR4yOCWj3gcfJ+5iMGEoG0F5Oe3MuSH9Cuo7UVNRZrQEOsM8QbG+M
+	qL6wIueiz5upLP3CiLUnCKlldms6g==
+X-Received: by 2002:a05:6820:820:b0:6cd:3ffc:64d2 with SMTP id 006d021491bc7-6d5bac3e146mr7371645eaf.77.1790530448403;
+        Sun, 27 Sep 2026 10:34:08 -0700 (PDT)
+Received: from smtpclient.apple ([2600:381:5ba1:a8b2:19d5:7f67:de2b:c3a5])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6d883394af1sm2755239eaf.13.2026.09.27.10.34.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Sep 2026 10:34:06 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From: Andy Lutomirski <luto@amacapital.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260927163117.746432-2-bestswngs@gmail.com>
-In-Reply-To: <20260927163117.746432-2-bestswngs@gmail.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Sun, 27 Sep 2026 19:10:36 +0200
-X-Gm-Features: AclHuK-wtOUaURDTxb0s4NuF5eW9fAjvgRkV0CtGV9tL1ejWVBuFWcDjyUMkjB4
-Message-ID: <CANn89i+monpTo=bjqnHRhuGaCkfHe9BJNhJncjK+vUq0YKAAag@mail.gmail.com>
-Subject: Re: [PATCH 1/2] net: gso: validate TCP headers before segment length checks
-To: Weiming Shi <bestswngs@gmail.com>
-Cc: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>, Shuah Khan <shuah@kernel.org>, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Xiang Mei <xmei5@asu.edu>, co+1fe9b56e2c61be5e@bugs.sh, 
-	stable@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC PATCH v2 0/4] mm/swap: reserve swap areas for deliberate offload
+Date: Sun, 27 Sep 2026 10:33:53 -0700
+Message-Id: <3FDF3191-94A5-42B3-A33E-12021344D7BD@amacapital.net>
+References: <20260926045517.3458413-1-matthias.goergens@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>,
+ Johannes Weiner <hannes@cmpxchg.org>, David Hildenbrand <david@kernel.org>,
+ Michal Hocko <mhocko@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>,
+ Yosry Ahmed <yosry@kernel.org>, Youngjun Park <youngjun.park@lge.com>,
+ Baoquan He <baoquan.he@linux.dev>, Barry Song <baohua@kernel.org>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+ linux-api@vger.kernel.org, Alejandro Colomar <alx@kernel.org>,
+ linux-man@vger.kernel.org, Karel Zak <kzak@redhat.com>,
+ util-linux@vger.kernel.org, Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Vivi Rodrigo <rodrigo.vivi@intel.com>,
+ Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, Rafael J Wysocki <rafael@kernel.org>,
+ Pavel Machek <pavel@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org,
+ Matthias Goergens <matthias.goergens@gmail.com>
+In-Reply-To: <20260926045517.3458413-1-matthias.goergens@gmail.com>
+To: Matthias Goergens <matthias.goergens@gmail.com>
+X-Mailer: iPhone Mail (23G90)
 
-On Sun, Sep 27, 2026 at 6:31=E2=80=AFPM Weiming Shi <bestswngs@gmail.com> w=
-rote:
->
-> skb_gso_transport_seglen() derives the TCP header length with
-> tcp_hdrlen() or inner_tcp_hdrlen(). Both helpers dereference transport
-> header metadata without validating it first.
->
-> A TUN user can supply a TCP GSO packet without NEEDS_CSUM and with an
-> invalid IP header. The skb remains GSO while transport_header keeps the
-> unset sentinel. TBF and police can then reach the length validator and
-> read tcp->doff outside the skb head.
 
-Do you realize this leaves non-TCP GSO broken with unset transport_header ?
 
-Please fix tun instead of adding numerous workarounds in our fast paths.
+> On Sep 25, 2026, at 9:55=E2=80=AFPM, Matthias Goergens <matthias.goergens@=
+gmail.com> wrote:
+>=20
+> =EF=BB=BFThis RFC adds offload-only swap areas for deliberate cold-page of=
+fload to
+> backends unsuitable for pressure reclaim. ZFS zvol swap has documented
+> deadlocks under memory pressure [3]; compressed swap is another target
+> because writes may need memory despite free logical slots.
 
-__virtio_net_hdr_to_skb() needs hardening instead.
+This seems unnecessarily annoying to configure. It seems to me that you=E2=80=
+=99re creating a bizarrely named administrative flag that means, roughly, =E2=
+=80=9Cswapping to this location may allocate memory=E2=80=9D.  Why can=E2=80=
+=99t the kernel figure this out itself?
 
-virtio_net/tun/af_packet MUST not feed 'gso' packets without transport
-header being set,
-among other things.
 
-pw-bot: rejected
+For that matter, how well does this even work in practice?  If I configure t=
+wo swap devices, one =E2=80=9Coffload-only=E2=80=9D and one conventional, it=
+ seems like the relative fullness of the devices will be mostly an accident o=
+f what triggers swap as the system is running. If the conventional swap fill=
+s up, is there a means to proactively empty it?  Under OOM conditions, will a=
+nything preferentially kill tasks that reference memory in conventional swap=
+?
+
+Is the locking and recursion structure of the mm code such that we won=E2=80=
+=99t have deadlocks where cgroup triggers swap to an =E2=80=9Coffload-only=E2=
+=80=9D device, which allocates, which causes memory pressure, which then tri=
+es to swap more to conventional swap?  (Maybe this works fine.)
+
+For that matter, if the system is under overall memory pressure, why do you c=
+are what triggered the particular swap operation that is being processed?
+
+
+
+The remainder of the writeup is IMO somewhat incoherent.  To the extent that=
+ AI was used, can you read it and make sure it makes sense?
+
+And the first few hundred lines of patch I skimmed seem like incomprehensibl=
+e churn.  Adding =E2=80=9Celigible=E2=80=9D to a bunch of calls does nothing=
+ to explain what=E2=80=99s going on.
+
