@@ -1,62 +1,100 @@
-Received: from mta1.formilux.org (mta1.formilux.org [51.159.59.229])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C457C3A1D14;
-	Sun, 27 Sep 2026 09:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.59.229
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98D63E4C94;
+	Sun, 27 Sep 2026 12:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790500240; cv=none; b=WU71CxCmNJmvm0qsEXEk4D0hs79SifllJd/a6I/OD9Hrmv8Acz580rPpIytLFvCsUHLkvCTIhOhoaFyOBQYaDJK1/7wK6P1qeuu4li76l1EOG9H53qayCpM4i7ZiOmTbBb9IGjPLf69dGW33Plvn3PHNrIAczjIU9cfaGJLZmJ8=
+	t=1790510746; cv=none; b=uk4IjODY/JJe1Ga+CR6LQ0TT2JwBVyLOFGSX+fwuKVgx+yf/IG0juEymxUyVm3DmwmyMTWm0mJZYENb0RSawvzxmSve75SohCsfLw9t2DothW+ktaU8byyHPJgEZ8d6HyM0yAN2Rg6+yKY4DqzxUPgu7bhZYYgaf3pasDdpZ/i8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790500240; c=relaxed/simple;
-	bh=EIsirkzH/uyIsvHKJTedzwgxRJVZM1M4WxqOaYu2Rl8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W61XLgabZTVo06sczkJE1yv5qCr7Lvfpbb1HUw6tcoBe5O2zDXYe6LAQ9Cznw/vGpnymGnYcmXBmOEf838bfzLDTnCDCu/fAR4aV1d9THFHzYw6x/IH5dlmFP9cYBxX58ojVQzqZpWm1Ak0ylpqS5XAbgH9g2lC+mKApQasAHlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b=v4cawgK7; arc=none smtp.client-ip=51.159.59.229
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+	s=arc-20240116; t=1790510746; c=relaxed/simple;
+	bh=t2Ayh/V3yOhaCco/Ksb2VKM78F5vRUyfVCyVZgO+tDE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tZ/rTLS/E+tpGYEaPSCa974zFiQhlrSrp+bN97p6xejHmETEM4X31T5UjwQQ9RxSQTyFx7msVpB2OGEc5uzT6sxaJrN9NrvKZeeZ4rAxMnYXmIPs3M74mlQju308stjq/fSgPnxhqzt0DFJH/S3Mehhv4jIqkoKdA0njuMiEdHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e2qtEcqk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b="v4cawgK7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1wt.eu; s=mail;
-	t=1790500235; bh=VFyFds04w0iFAQ88feln+96tQcUJrO7miVjc8rF/bZE=;
-	h=From:Message-ID:From;
-	b=v4cawgK7TwlLnu4/Bw3BDeNiBb0mVn+6ZJytd4po9ktIQC9YKbaQCWasC0m2kCCVW
-	 yyCk4ZU8/r7DpgPOUup4JOuV56kJKucasPlWo6HRyynlsFGW0VT7vuyUkFfOJAF1qz
-	 VHqn7yC40Du6Pi7Nl0WKl3FrbtjeqQogxD9oSz30=
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by mta1.formilux.org (Postfix) with ESMTP id 5417FC08A8;
-	Sun, 27 Sep 2026 11:10:35 +0200 (CEST)
-Date: Sun, 27 Sep 2026 11:10:34 +0200
-From: Willy Tarreau <w@1wt.eu>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/5] tools/nolibc: pwrite() and pread() support
-Message-ID: <arjdio3bN6gWIKxt@1wt.eu>
-References: <20260927-nolibc-pread-v1-0-e9af6e47b37a@weissschuh.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e2qtEcqk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D2FE1F000FF;
+	Sun, 27 Sep 2026 12:05:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790510744;
+	bh=DtftUOhUj36KHzHH8SjyqQEupBI7pETe4V3hNrol9A4=;
+	h=From:To:Cc:Subject:Date;
+	b=e2qtEcqkmjVz8dCb2K5NGSGGje+z1wYZys269NNmJz+GX8OOSLHIb/gBF786OB+ou
+	 uB4Ay9iv28YlY/f/vngo3LVs4D6ZDDX7Jc5E7FaKlwMmBKMd1WyyhMIZ4GnpGvGcx1
+	 3Gxsp8fwjQYTs1GLfjs79kDdjcLSGrumVshL7ru3CS3i8KWOl1+DjpuoQr7R/WBNy+
+	 VLnh7HuMWmeh5D8otkf/iXa3esRr7CXIfK4Epa2Tx2YrkjSeyi4qI9nlKX+hRigzw8
+	 P7hnRcogkia6O0rfZB6TmRfr60HLdk+6iRckpaDyzyQgZ2XxsBE6psKs5dvvfpaISd
+	 bnTLXf+R94ORA==
+From: SJ Park <sj@kernel.org>
+To: 
+Cc: SJ Park <sj@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [RFC PATCH v4 0/7] snapshot_set_swap_area() unpins the previously selected swap device and
+Date: Sun, 27 Sep 2026 05:05:24 -0700
+Message-ID: <20260927120533.50484-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260927-nolibc-pread-v1-0-e9af6e47b37a@weissschuh.net>
 
-Hi Thomas,
+Add repin_hibernation_swap_type(), which looks up the new device, clears
+the old SWP_HIBERNATION flag and sets the new one under a single swap_lock
+acquisition.  The same-device case is short- circuited so userspace can
+re-select the same swap area without tripping WARN_ON_ONCE and -EBUSY. 
+Switch snapshot_set_swap_area() to the new helper.
 
-On Sun, Sep 27, 2026 at 10:49:11AM +0200, Thomas Weiﬂschuh wrote:
-> Some users are missing those.
-> 
-> Link: https://lore.kernel.org/lkml/20260923224408.3745689-7-pratyush@kernel.org/
-> 
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+A failed lookup now preserves the previous pin instead of dropping it, so
+a bad SNAPSHOT_SET_SWAP_AREA leaves the prior selection intact.  The open
+and release paths keep using pin_hibernation_swap_type() and
+unpin_hibernation_swap_type().
 
-Thanks for doing this. The whole series looks clean and makes sense to
-me. For the whole series:
+The race was identified during AI-assisted review of the SWP_HIBERNATION
+pinning series.
 
-  Reviewed-by: Willy Tarreau <w@1wt.eu>
+SJ Park (7):
+  mm/damon/core: introduce damos_quota_goal->complement
+  mm/damon/core: add complement argument to damos_new_quota_goal()
+  mm/damon/sysfs-schemes: support quota goal complement flag
+  mm/damon/tests/core-kunit: test quota_goal->complement commit
+  Docs/mm/damon/design: document damos quota goal complement flag
+  Docs/admin-guide/mm/damon/usage: update for quota goal complement file
+  Docs/ABI/damon: update for quota goal metric complement sysfs file
 
-Thanks!
-Willy
+ .../ABI/testing/sysfs-kernel-mm-damon         |  6 ++++
+ Documentation/admin-guide/mm/damon/usage.rst  | 15 +++++----
+ Documentation/mm/damon/design.rst             | 15 ++++++---
+ include/linux/damon.h                         |  4 ++-
+ mm/damon/core.c                               | 33 ++++++++++++++++---
+ mm/damon/lru_sort.c                           |  5 +--
+ mm/damon/reclaim.c                            |  5 +--
+ mm/damon/sysfs-schemes.c                      | 30 +++++++++++++++++
+ mm/damon/tests/core-kunit.h                   |  3 ++
+ samples/damon/mtier.c                         |  2 +-
+ 10 files changed, 97 insertions(+), 21 deletions(-)
+
+
+base-commit: 1c2b8d2725f84b43fabe3b3e9628c91db8ca6c65
+-- 
+2.47.3
