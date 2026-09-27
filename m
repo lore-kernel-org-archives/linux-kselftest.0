@@ -1,112 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8349218E025;
-	Sun, 27 Sep 2026 20:41:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12C33BE650;
+	Sun, 27 Sep 2026 20:54:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790541676; cv=none; b=mXeGiWUXp31Tg7Yp0QYZTFvS0an3PlYtXP64L5HfLOLTfi59iFIsToX8FyVL7enr/kGOzPcM4n1NTC2PxHeCBOqsfLXhnnoVDD8d1uPrtqc001dq/KstVUxjN2s9QJacHdU2gFhnnpIP+vjr+QzbHTIW0p95csoLr/2TvONOckY=
+	t=1790542482; cv=none; b=t6ceOdJz8RpVs+0O+WbY/xQCKZhqoBsuj4RBhnAQfend1Huj2OY0k0BCzEqU7YwsopYZBxlotiX4dLR+cLqF36+0/MkaAqtWys8xgNEkSgb+CI1MnpEc6M957x/LmIOZa2aIPCr55hKIJJL+OgGnCfUUYUR8WEHB/x6Gtx/Whds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790541676; c=relaxed/simple;
-	bh=IZx0c5YL4BHjcA0kGkmqaKl9y+gkwGc5SNdMF/976Po=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=NC2wWxcxtL8m8H9vqWQfj6RL714A4Bb9aL5VMrpvwrWp87G/SM9KG5agzdHNBvf2Ufm63MxjLRAreUZksZwt6HeClkuUALkx5uSqTnmnSQCGAaknLtDjXWK/oyhjSEdgkmDxRplK6gtlOxcm3uJ6zxDHjpE7PqrLeBEn90WsSQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TuTmdGnt reason="signature verification failed"; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790542482; c=relaxed/simple;
+	bh=U3EfVxxdtcPFUFIB5Q/ewTULVlR4LEoHRJwGIWgsTCs=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=kxiFKwmo2j+rGsDXO76tY4Gqeod6nATBEi8+tIe8yxkeidBGMMPSW1vLzljsCG5x0+41A22uFRIr7N7cRPSlwlD77ee2sgoo2wCKL6IhS+bvIhAIY8TpjGbIYxWb7w2d5vN1lFEaF2yLlEUnEHTsxXRhdD2yAcAeBWkiM7TR8Tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=i6dKcdAM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TuTmdGnt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C091F000FF;
-	Sun, 27 Sep 2026 20:41:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790541675;
-	bh=vLO37l59WyVXOc1GaSGyfri+C0pwbOWgxmIfm+nlpBs=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=TuTmdGnt2aTd7EYBIGzQPK6hgv2mwZj/e+iMLaZQhl+kbqjNk+Gn0JGXGu+zgmfyt
-	 x+Jeaumu4xurUfC51qiVkNk0aZqWfE6CifBVSz0/DVzlYQAmvmm3NBDuVE8n/xtFeN
-	 /T62KvCuyw7jcMax/bVpfRf7QBJnNqHjfoKjCz1UuB6bWyLjvMjJmDUFCT9aw1ttAd
-	 nReKDQGOh6/xSa+g0Xh/CaBwmnUWNv9LiHwGPUx39dhZZG3dK6Yzs4TcoD96N7bqud
-	 7Ar3WdLf7zr4A7TmUGMUZPzNmmmQZiAt4yLw5kf/7+H14P9PFbPxJ9MmSslmJB0L8d
-	 STXnJylkLfaIQ==
-Content-Type: multipart/mixed; boundary="===============7476743973010168723=="
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="i6dKcdAM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 112A81F000FF;
+	Sun, 27 Sep 2026 20:54:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1790542480;
+	bh=wezweqQqot1s/EhJa+Q8aOJlMWPiVKjcS+oT7p1UAYs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=i6dKcdAMiqAgmpOl0EbfWmlKPvQQ/8TRbP8UEKnJN4TGjxlCgajWk7053GgOcx/Fu
+	 IMdCKOG7soO6PIDFHc79lxiu0GVPJ8hlOBUzRUtQ8ArJu4Js62nF6CY+lxUQXQPGbs
+	 fbbAW0/NLNvVPW5GDG5BEkcqH+Djx8Ji/1m+Wwng=
+Date: Sun, 27 Sep 2026 13:54:39 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+Cc: rppt@kernel.org, peterx@redhat.com, surenb@google.com,
+ aarcange@redhat.com, david@kernel.org, ljs@kernel.org, liam@infradead.org,
+ vbabka@kernel.org, mhocko@suse.com, shuah@kernel.org, kirill@shutemov.name,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] userfaultfd: clear the inherited uffd bit in
+ move_swap_pte()
+Message-Id: <20260927135439.094d75bc42414879a6e21c79@linux-foundation.org>
+In-Reply-To: <20260926124145.2878520-2-donggeunyoo.kernel@gmail.com>
+References: <20260926124145.2878520-1-donggeunyoo.kernel@gmail.com>
+	<20260926124145.2878520-2-donggeunyoo.kernel@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <9d932a22ca908da9378ea281633ddb749453911ac6ae7a27a09e376f9ad02ff7@mail.kernel.org>
-In-Reply-To: <20260926135605.1217928-2-florent.revest@linux.dev>
-References: <20260926135605.1217928-2-florent.revest@linux.dev>
-Subject: Re: [PATCH bpf v5 1/3] bpf: Wait for an RCU tasks grace period before freeing trampoline progs
-From: bot+bpf-ci@kernel.org
-To: florent.revest@linux.dev,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: florent.revest@linux.dev,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,kpsingh@kernel.org,john.fastabend@gmail.com,leon.hwang@linux.dev,zirajs7@gmail.com,rhkrqnwk98@gmail.com,puranjay@kernel.org,xukuohai@huaweicloud.com,iii@linux.ibm.com,hbathini@linux.ibm.com,chleroy@kernel.org,naveen@kernel.org,bjorn@kernel.org,pulehui@huawei.com,yangtiezhu@loongson.cn,hengqi.chen@gmail.com,linux-kernel@vger.kernel.org,aou@eecs.berkeley.edu,agordeev@linux.ibm.com,alex@ghiti.fr,bp@alien8.de,catalin.marinas@arm.com,borntraeger@linux.ibm.com,dave.hansen@linux.intel.com,emil@etsalapatis.com,hca@linux.ibm.com,hpa@zytor.com,chenhuacai@kernel.org,ihor.solodrai@linux.dev,mingo@redhat.com,linux-arm-kernel@lists.infradead.org,linux-kselftest@vger.kernel.org,linuxppc-dev@lists.ozlabs.org,linux-riscv@lists.infradead.org,linux-s390@vger.kernel.org,loongarch@lists.linux.dev,maddy@linux.ibm.com,mark.rutland@arm.com,mpe@ellerman.id.au,npiggin@g
- mail.com,palmer@dabbelt.com,paulmck@kernel.org,pjw@kernel.org,ritesh.list@gmail.com,sshegde@linux.ibm.com,shuah@kernel.org,svens@linux.ibm.com,tglx@kernel.org,gor@linux.ibm.com,kernel@xen0n.name,will@kernel.org,x86@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 27 Sep 2026 20:41:12 +0000 (UTC)
-
---===============7476743973010168723==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-> bpf: Wait for an RCU tasks grace period before freeing trampoline progs
->
-> When a prog is detached from a trampoline, it is freed after an RCU
-> grace period, or an RCU tasks trace one if it is sleepable. This covers
-> the tasks that are running the prog, since the prog's enter helper takes
-> the matching read lock before the prog is called. On a preemptible
-> kernel, it doesn't cover a task that was preempted in the trampoline
-> just before the enter helper. That task holds no lock yet, and it calls
-> the prog after it was freed:
->
->   BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_enter_recur+0x3a5/0x3f0
->   Read of size 8 at addr ffffc90000055040 by task candidate/110
->   CPU: 1 UID: 0 PID: 110 Comm: candidate Not tainted 7.3.0-rc2-00014-g15071f2a1263-dirty #2 PREEMPT(full)
->   Call Trace:
->    <TASK>
->    __bpf_prog_enter_recur+0x3a5/0x3f0
->    bpf_trampoline_6442509193+0x37/0xf1
->    __x64_sys_futex+0x9/0x410
->    do_syscall_64+0xb0/0x530
->    ...
->
-> Wait for an RCU tasks grace period before the existing one when freeing
-> a prog that was linked to a trampoline. An RCU tasks grace period only
-> ends once the tasks that were preempted have run again, and
-> bpf_tramp_image_put() already relies on it to free the image. It doesn't
-> wait for tasks that sleep in the trampoline, the next commit takes care
-> of those.
->
-> Only progs that were linked to a trampoline can be called this way, so
-> bpf_trampoline_add_prog() marks them and other progs are still freed as
-> before.
->
-> Fixes: e21aa341785c ("bpf: Fix fexit trampoline.")
+On Sat, 26 Sep 2026 21:41:44 +0900 Donggeun Yoo <donggeunyoo.kernel@gmail.com> wrote:
 
-Is this the right Fixes: target?
+> UFFDIO_MOVE on a swapped-out page installs the source PTE at the
+> destination unchanged, so a uffd bit set on a write-protected or
+> RWP-protected source lands in a destination VMA that was never
+> registered for either.  Nothing clears it there, and userspace sees:
+> 
+>  - /proc/<pid>/pagemap reports the page as uffd-tracked (bit 57), both
+>    while it is swapped out and after it is faulted back in.
+>  - MADV_COLLAPSE fails with EINVAL on a range containing it, because the
+>    collapse scan bails on a swap entry with the uffd bit set.
+>  - With CONFIG_PAGE_TABLE_CHECK, faulting the page in warns.
+>    do_swap_page() carries the bit into the present PTE and, since the
+>    destination isn't WP-registered, also makes it writable:
+> 
+>    WARNING: mm/page_table_check.c:202 at __page_table_check_ptes_set+0x185/0x1e0
+>    Call Trace:
+>     set_ptes+0x67/0xc0
+>     do_swap_page+0x990/0xfe0
+>     __handle_mm_fault+0x7d0/0xeb0
+>     handle_mm_fault+0x9c/0x250
+>     do_user_addr_fault+0x207/0x650
+>     exc_page_fault+0x65/0x150
+>     asm_exc_page_fault+0x26/0x30
+> 
+> Reaching it takes UFFDIO_MOVE out of a WP- or RWP-protected area into
+> one that isn't, on a page that is swapped out at the time.  It hasn't
+> been seen in practice.
+> 
+> A resident page doesn't carry the bit, because move_present_ptes() builds
+> the destination PTE from dst_vma->vm_page_prot.  Clear it on the moved
+> swap entry as well, then re-arm it if the destination is RWP-registered.
+> 
+> The WP case has been there since v6.8, where UFFDIO_MOVE was added.
 
-The race being closed here (a task preempted inside the trampoline image
-before __bpf_prog_enter*() takes its RCU read lock, while the prog is freed
-after only a regular RCU or RCU tasks trace grace period) appears to predate
-e21aa341785c.
+Thanks.  This is triggerable by unprivileged userspace, so can
+reviewers please prioritize.
 
-In fec56f5890d9 ("bpf: Introduce BPF trampoline") bpf_trampoline_update()
-switched images with no tasks RCU wait, and __bpf_prog_put_noref() freed the
-prog with a plain call_rcu(&prog->aux->rcu, __bpf_prog_put_rcu).
+> Fixes: adef440691ba ("userfaultfd: UFFDIO_MOVE uABI")
+> Cc: <stable@vger.kernel.org>
 
-Just before e21aa341785c, the synchronize_rcu_mult(call_rcu_tasks,
-call_rcu_tasks_trace) in bpf_trampoline_update() ran before
-arch_prepare_bpf_trampoline() rather than after the new image was installed,
-and the total == 0 unregister_fentry() path had no wait at all, so a task
-preempted in the old image could already reach a freed prog.
+This should be whizzed into 7.3-rcX pretty promptly.
 
-Would Fixes: fec56f5890d9 ("bpf: Introduce BPF trampoline") be more
-accurate, so that stable trees without e21aa341785c also pick this up? The
-follow-up 49ca60187380 in this series uses the same tag.
+It's not really appropriate to give the selftest such treatment - I'm
+never really sure how to handle that.  I guess I'll keep things as you
+presented them - both for current -rc, [1/2] gets backported, [2/2]
+does not.
 
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36346518503
---===============7476743973010168723==--
+> --- a/mm/userfaultfd.c
+> +++ b/mm/userfaultfd.c
+> @@ -1449,6 +1449,7 @@ static int move_swap_pte(struct mm_struct *mm, struct vm_area_struct *dst_vma,
+>  	orig_src_pte = ptep_get_and_clear(mm, src_addr, src_pte);
+>  	if (pgtable_supports_soft_dirty())
+>  		orig_src_pte = pte_swp_mksoft_dirty(orig_src_pte);
+> +	orig_src_pte = pte_swp_clear_uffd(orig_src_pte);
+>  	/* Re-arm RWP on the moved swap entry if dst_vma is RWP-registered. */
+>  	if (userfaultfd_rwp(dst_vma))
+>  		orig_src_pte = pte_swp_mkuffd(orig_src_pte);
+> -- 
+> 2.53.0
