@@ -1,63 +1,64 @@
 Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55FF63CAE95
-	for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 21:53:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0BA3C8C52
+	for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 21:54:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790546042; cv=none; b=GsYRPn9abGqj+BJkDs+F2OJWbDTmGD6ImIFUj2YbiwCNUBVq0KS0TvpxLkpkqbI1CBkPC5EJG2eP7t1lKVLm43hQw2opX6OCHhSWIWXANTbVemFTSZFgzRMi3Ajb8T1KDU7ZzIuxSCfbMYnG2xQCJdiOsWZQvKCX9dwk21/79kE=
+	t=1790546044; cv=none; b=bQF5Ox/WPbf/fTCfE48PjlX1GDeNL3AZCE/Jko3XXpSul25PoMOFEeXPPCiOp5qSaVsBBSfc5+zX1nvsDef3z1IlPwwPPGJEtHxbEqEfHhieBw/yUkXTv0833EdRSdmWa8Hr3YZYPOJ0mhvZYJeGqZI4O2WIXASiKPhlz8qAUcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790546042; c=relaxed/simple;
-	bh=xrUo7eJDknue4jHQW8YLudmxiQL0GJSon9qQwPgr2M8=;
+	s=arc-20240116; t=1790546044; c=relaxed/simple;
+	bh=zBCIAG1MKLAtjIU+6hKDk2Wf5/IUNYQLmG3+Eth/4mU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HryXeeczN8WoYTII5bEu8DgPIzvEePNIWy+9hBOk8tefty6lsMsNinNxWNF5iWNIGnD85c4IP0pCmlOVarlJ+sSMuhi+Uf0Kae8Fs5C3C+qF+aDHQVaXpRXiYMWNe3kCKc3YeYx41G3A99iljCudz3suNEUtZZI5m4Nwx+rcVn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kHnx/r6Q; arc=none smtp.client-ip=74.125.225.140
+	 MIME-Version; b=I5TyhqveU18Mbuhu8NOW1yVWmV4FqRMn90kXPAqFtjnNEjS07PQuiTd31v9ZxQVX3jsQI5S0Wy3xA5rnemEo2zIQ1xNcjkfNm3PIAbUeY+S5VNLscC41/8SA7QoX+4TKGjzz2bSTAkBxdmHL3GAA3CC4RruFQV/hfcHfAuHrSzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VLU8YS8S; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kHnx/r6Q"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ffde3cec6so5075965e9.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 14:53:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VLU8YS8S"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ff9621c5dso8676465e9.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 14:54:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790546037; x=1791150837; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790546040; x=1791150840; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=hG1F4NjMgvfqDxejRjw93Y89wPHj58dXwI/MFbotKmk=;
-        b=kHnx/r6Q7dsuKgWipXPcd2R62dAeyGhDHmrMEIDWVE9n1d/Me2bb6OGQdobnb/ZA4z
-         Ng3zTbTwZN4rBxPbAM0/q8An/8nFwx4J5mL428uZMVqn6CF0Ia/eyteIk0ruzyxQyDPT
-         XPGsm0HsXFN82JJdAMjSVoPc7g7uifBjYds28ZnXK/h0xStY5I/tZW2+oBQPMWFKhwfs
-         ti6UdL4bRS8FsQn2cXKdosZy77bAP8gxRFddufNcSrXfcgYbtD9s55EImvp/CY46BEws
-         5rE/JLEEnMx/El7aWR6Cm57xeCZm7dDMCVvgFL6MADCCua0OVLeTRWqYPJAXZGsXGnMg
-         +1DA==
+        bh=Fdd6B5ClKk5POZ9//IjIW8bzEvh8NM84J0neA7j6Ya0=;
+        b=VLU8YS8SZMBDYal7actMobSW/3rB18Hn4fkQ+X9z/RYgNYk214sZ4rkUQicdiX6gaD
+         4eBjaRFU1JPbjVEQjinyVFl9taFGHYmO7RTaLQuHaz4bYNujtUbhNO4mhLbQ4GFtfnv+
+         KATUf+tnwq9rD8ODA6MYw0ZmFOal9V4hGo0WoPudOMTdvF75tYENhR6DCCKR/i0qPYFK
+         TQcxuCtZUYmmuss9GGAF3Om1DdUYbX4webi1aKyaS/hII/ctXHk41WzweHWJybzT/b3V
+         nX+Tj6LFrWjfshWMYdTh22J30X8RlRGGHgYC3WNzh0l95CmSo+1E4Ss9qVoARh7APoUh
+         sz+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790546037; x=1791150837;
+        d=1e100.net; s=20260707; t=1790546040; x=1791150840;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=hG1F4NjMgvfqDxejRjw93Y89wPHj58dXwI/MFbotKmk=;
-        b=fWyyv0TOGljJQsfSa5w5jT8cgYcugNbNCsQ/21AB6g42UyZv2eeNUmh6C/F5lxQJJ7
-         q8M/+Gjve3zW618mJf3tGMwPjz4djNRve2R6md2hwtiK7AcyxI2ArnIxknmzYcZTcogp
-         AbAZj8xoN77hQYGqDU+PDrwPmFW6TtkNG+DII2ZYdJAeD/9JGS3hgs5qjpwOQMSMz0Zl
-         0t3r0X08E9udq21jKHXaO+3S/zvm60Pf3DzlGKA24z65EwyxMI/r5FZyubtIKdiHwe8x
-         BEtJvDmrYpYkTK+lFxXSnr8IUid5CK3wMonOX4X3pn4VxcZLwvRbF3dlHG5tKEOqOoef
-         HFiQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxn70MeYiZFWY5xCgjyd/M/BG9dgTjrLEXShPf8kGBtwWXo9wfPhnhM6wdKAlLtX9lYdniYURwKX1fzr9PChwI=@vger.kernel.org
-X-Gm-Message-State: AFuF++kACHo0P7Wcb89khuYGYEZ1KuK+jesdr5RnUJL8oY772yOMOcXU
-	wvhDSm8YU9utx42FbtsCIBP8ATbDNhljjN7AWmp6kKUmFOMK9EpZk5US
-X-Gm-Gg: AYBFou20t0gaLge4fifM1526ov/h0TdXTPddJSHde0ZJ7mhLuXpKbHIaEE5BWpjSXJ3
-	V18dYNho3lzGpViC3MbBvDDO2fvZ3Q3tgUVgPQMEardTOlPfEhT4D1LhIL0JVUJuDWutNXlMawR
-	4m429JGbNFgUAlaUgLViWyEnM/gTph1azYO9o9mOrlRGfpBSJWF8sZD7kqPfQRACW8IlJE9B8Uk
-	Z3iDj0qVXqHM7aHWnnFKgLpV8SlRkidlWJTwC35wIXuGQYKs76yR8KZAk5dAzeMvXhFMBHxnujC
-	2rb7nduXXJBkJs69z2OqJFqDAyFBuwlhscUHZaxdjpwsYosCVzBQLhas7dwrsY5AKBWLfF5qSQK
-	99+moFnLD5z+OHBuedSW/OD36qjuD4JAEK6ShxMxWGLMHwNTjsXxvE/sv1RVsjbjXSXntCmM9D0
-	YGWMGBBJb7zFvY3JS+qeqSbc9YPDK70hpBQR9b4jfkE41o2QkeW/ap5tMM4pQq260=
-X-Received: by 2002:a05:600c:4ecf:b0:4a0:108:3b54 with SMTP id 5b1f17b1804b1-4a001e8c316mr34108535e9.32.1790546037536;
-        Sun, 27 Sep 2026 14:53:57 -0700 (PDT)
+        bh=Fdd6B5ClKk5POZ9//IjIW8bzEvh8NM84J0neA7j6Ya0=;
+        b=LVXGMFIAOhxs/phY14m+a6MjA+gAfa+TQy8MkOpS49XPpFumK947C1IuPxjSWfqwF7
+         0dkZc90pSx0dnD9HrLMZN1NjYcOR34AztqJJqfiUn4DnEW1A5G4IacZCRX+DLWKjzIq9
+         wgN2G1IzFfw0z3zqVzuMlDOgzrGenfUA1KnLwzkoU4qAWTWhjjKMoBZ2rrP3rzIXX09H
+         g/AVkSwirOqWK2my8C0D720vqOq/Qk/E8aJWTA7EtxRPQAAhcr8FdhopXzg7bNlPqwsq
+         zD8h9gvgKxFyvsUv8zWDdYuG1PFpuh+43L1r8Bk5o90w8a6HWplDMhPb7PALSE25UFEF
+         hWLw==
+X-Forwarded-Encrypted: i=1; AKwUvBwi4oRegFnh2OYip+IhS2l0Nind9ds1ZyonOCPcRdimN7s0lA8nmIuIXpriQZ2t2qxIFkWvW3wKyui8LZCzfqc=@vger.kernel.org
+X-Gm-Message-State: AFuF++ke+BM2+q3OBwNKp0FYzYZNKG1oS0PFbFPJnsFy4kYy/m530gqs
+	X+B6LgFnDr9nap89vveWQscE3UAjq4u4mH3JiMWQOkIGK7o4CcQG9iBv
+X-Gm-Gg: AYBFou0ve5LqH/WIErAYXHZli5uUxsvEr1vZMv3dBMJlu2O59D15dUMfmsp3p/zpFqC
+	waXMPzqNLZDLoe79Quq3S0BeB1d5dhCOiKHwucsQwVVCsJijL84Np/a23nzGjmypxdJEIpaAZVP
+	v1wHETey/kRNkyu+Eo826oORxjEtWlYUiGxzKp0k2WE2Svon3u12AkV228+8+R1r8vx9uYGw2Kq
+	9j3wUyL28CH8QIs4tDO3GhFklhXkYoaFVrD9MaM+qIdogT6c7Kmz9j5wAakgYe82KQDeUZNYo6M
+	/3+Guq7jZ9DCy1pCdgkF5ucu6veaekDi3IVkg+gFp8uTm6geVhjZn/bnwubgcznlobn3YsVCLLN
+	8R69zDlKrMiyzAHad/vl+eW5ABz0Pa479OYJs3JTMI+pZz7hzIKqsa3yAG34DqV/Q0ZD9LCEb0j
+	dKq8bG4g14wzzppFgOk5UhWiXlFwUxeI8MYfU5cQW1a8/QF4muzl871Xelv65CwL3wo2idUbLhe
+	Q==
+X-Received: by 2002:a05:600c:34c6:b0:49e:7cff:f8ca with SMTP id 5b1f17b1804b1-49fe66f4dc9mr236370295e9.29.1790546040233;
+        Sun, 27 Sep 2026 14:54:00 -0700 (PDT)
 Received: from kali ([169.224.126.44])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a001922102sm89556865e9.15.2026.09.27.14.53.54
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a001922102sm89556865e9.15.2026.09.27.14.53.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Sep 2026 14:53:57 -0700 (PDT)
+        Sun, 27 Sep 2026 14:53:59 -0700 (PDT)
 From: Ali Firas <alishmery18@gmail.com>
 To: netdev@vger.kernel.org,
 	idosch@nvidia.com
@@ -73,9 +74,9 @@ Cc: kuba@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Ali Firas <alishmery18@gmail.com>
-Subject: [PATCH net-next v3 2/6] vxlan: vnifilter: reject VNIs outside the 24-bit space
-Date: Mon, 28 Sep 2026 00:52:05 +0300
-Message-ID: <20260927215209.2581830-3-alishmery18@gmail.com>
+Subject: [PATCH net-next v3 3/6] vxlan: vnifilter: bound the number of VNIs one request may touch
+Date: Mon, 28 Sep 2026 00:52:06 +0300
+Message-ID: <20260927215209.2581830-4-alishmery18@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260927215209.2581830-1-alishmery18@gmail.com>
 References: <20260927215209.2581830-1-alishmery18@gmail.com>
@@ -87,82 +88,174 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-VXLAN_VNIFILTER_ENTRY_START and VXLAN_VNIFILTER_ENTRY_END are bare
-NLA_U32, so neither is bounded before vxlan_process_vni_filter() hands
-them to vxlan_vni_add_del():
+A single RTM_NEWTUNNEL or RTM_DELTUNNEL message can ask for the whole
+24-bit space in one range. vxlan_vni_add_del() then walks it one VNI at
+a time under rtnl_lock, holding the lock for the length of the walk.
+That walk is the cost being bounded, not the memory: an add allocates a
+VNI node and a per-CPU stats block per VNI, a delete creates neither,
+but both walk the same span and hold rtnl the same way, so both are
+bounded.
 
-	int v, err = 0;
-	...
-	for (v = start_vni; v <= end_vni; v++)
+The span of one VXLAN_VNIFILTER_ENTRY is not the quantity to bound. An
+entry carrying just START and END is 20 bytes on the wire and a message
+may carry many of them, vxlan_process_vni_filter() being called once per
+entry, so bounding each entry alone would still let one message ask for
+thousands of times the limit. Sum the spans of every entry and reject
+the message as a whole in vxlan_vnifilter_check_msg(), before the
+dispatch loop: entries are applied and notified one at a time, so a
+limit enforced during dispatch would return an error only after every
+preceding entry had been acted on. The range extraction is factored
+into vxlan_vni_filter_entry_range() so the count and the range later
+acted on cannot drift.
 
-v is int and end_vni is __u32, so the comparison is done unsigned. A
-request carrying only START=0xffffffff has vni_start == vni_end ==
-0xffffffff and looks like a single VNI; v is then -1, the comparison
-promotes it to 0xffffffff and passes, v++ makes v 0, and the loop walks
-the space upwards from there, creating a VNI node and a per-CPU stats
-block per iteration under rtnl_lock. Any range ending at 0xffffffff
-behaves the same way.
+The limit is 4096, following the usable VLAN ID space, since vnifilter
+is mainly used on bridged devices where the VNI is derived from the
+VLAN. It bounds one request, not how many VNIs a device may hold: the
+whole space can still be installed in more than one request, and a
+device holding it is still torn down in one step by
+vxlan_vnigroup_uninit(), which is device teardown, not a netlink
+message, and is not subject to this cap.
 
-Separately, a VNI at or above VXLAN_N_VID is accepted and stored even
-though the VXLAN header carries only 24 bits: vxlan_vni_field() shifts
-without masking, so such an entry keeps its own rhashtable slot while
-being truncated on the wire.
+This is a policy narrowing of what a single message may ask for, not a
+fix for a crash or corruption, and is not a backport candidate.
 
-Range-validate both attributes against the 24-bit space, as vxlan_mdb.c
-already does for its own VNI attributes. With the nest now linked to
-this policy, an out-of-range endpoint is rejected during netlink policy
-validation, before vxlan_process_vni_filter() runs and before anything
-is allocated. How many VNIs a single in-range request may span is a
-separate question, bounded by the next patch; that limit is not a policy
-check and does run in the handler.
-
-Make the loop counter u32 as well. With the range bounded it is no
-longer what keeps the loop finite, but it drops the undefined signed
-overflow past INT_MAX and matches the u32 vni that vxlan_vni_add() and
-vxlan_vni_del() already take.
-
+Suggested-by: Ido Schimmel <idosch@nvidia.com>
 Assisted-by: LLM
 Signed-off-by: Ali Firas <alishmery18@gmail.com>
 ---
 
 Notes:
-    v3: was 1/5. No code change; the changelog now says the out-of-range rejection lands at policy validation, which holds for a multi-entry message once patch 1 links the nest.
+    v3: was 2/5. Symmetric cap kept (bounds add and delete); changelog reframed around the rtnl walk, and the dump-range asymmetry moved to patch 4.
 
- drivers/net/vxlan/vxlan_vnifilter.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ drivers/net/vxlan/vxlan_vnifilter.c | 89 ++++++++++++++++++++++++++---
+ 1 file changed, 81 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/net/vxlan/vxlan_vnifilter.c b/drivers/net/vxlan/vxlan_vnifilter.c
-index d391ec579661..9cffaf4998a9 100644
+index 9cffaf4998a9..13f4e115701a 100644
 --- a/drivers/net/vxlan/vxlan_vnifilter.c
 +++ b/drivers/net/vxlan/vxlan_vnifilter.c
-@@ -459,9 +459,15 @@ static int vxlan_vnifilter_dump(struct sk_buff *skb, struct netlink_callback *cb
+@@ -17,6 +17,15 @@
+ 
+ #include "vxlan_private.h"
+ 
++/* Maximum number of VNIs one RTM_NEWTUNNEL or RTM_DELTUNNEL message may add or
++ * delete, summed over all of its VXLAN_VNIFILTER_ENTRY attributes. VNI
++ * filtering is mainly used on bridged VXLAN devices where the VNI is derived
++ * from the VLAN, so one request touching more VNIs than the VLAN ID space has
++ * no practical use, while an unbounded request walks the 24-bit space one VNI
++ * at a time under rtnl_lock.
++ */
++#define VXLAN_VNI_FILTER_MSG_MAX	4096
++
+ static inline int vxlan_vni_cmp(struct rhashtable_compare_arg *arg,
+ 				const void *ptr)
+ {
+@@ -846,12 +855,78 @@ static int vxlan_vni_add_del(struct vxlan_dev *vxlan, __u32 start_vni,
  	return err;
  }
  
-+static const struct netlink_range_validation vni_filter_vni_range = {
-+	.max = VXLAN_N_VID - 1,
-+};
++/* Derive the VNI range one VXLAN_VNIFILTER_ENTRY selects. Shared so that the
++ * count taken by vxlan_vnifilter_check_msg() cannot drift from the range
++ * vxlan_process_vni_filter() then acts on.
++ */
++static void vxlan_vni_filter_entry_range(struct nlattr **vattrs, u32 *vni_start,
++					 u32 *vni_end)
++{
++	*vni_start = 0;
++	*vni_end = 0;
 +
- static const struct nla_policy vni_filter_entry_policy[VXLAN_VNIFILTER_ENTRY_MAX + 1] = {
--	[VXLAN_VNIFILTER_ENTRY_START] = { .type = NLA_U32 },
--	[VXLAN_VNIFILTER_ENTRY_END] = { .type = NLA_U32 },
-+	[VXLAN_VNIFILTER_ENTRY_START] = NLA_POLICY_FULL_RANGE(NLA_U32,
-+							      &vni_filter_vni_range),
-+	[VXLAN_VNIFILTER_ENTRY_END] = NLA_POLICY_FULL_RANGE(NLA_U32,
-+							    &vni_filter_vni_range),
- 	[VXLAN_VNIFILTER_ENTRY_GROUP]	= NLA_POLICY_EXACT_LEN(sizeof_field(struct iphdr, daddr)),
- 	[VXLAN_VNIFILTER_ENTRY_GROUP6]	= NLA_POLICY_EXACT_LEN(sizeof(struct in6_addr)),
- };
-@@ -814,7 +820,8 @@ static int vxlan_vni_add_del(struct vxlan_dev *vxlan, __u32 start_vni,
- 			     int cmd, struct netlink_ext_ack *extack)
++	if (vattrs[VXLAN_VNIFILTER_ENTRY_START]) {
++		*vni_start = nla_get_u32(vattrs[VXLAN_VNIFILTER_ENTRY_START]);
++		*vni_end = *vni_start;
++	}
++
++	if (vattrs[VXLAN_VNIFILTER_ENTRY_END])
++		*vni_end = nla_get_u32(vattrs[VXLAN_VNIFILTER_ENTRY_END]);
++}
++
++/* Reject a request touching more than VXLAN_VNI_FILTER_MSG_MAX VNIs before any
++ * of its entries is acted on. Both add and delete walk the span one VNI at a
++ * time under rtnl_lock, so both are bounded. Entries are applied one at a time
++ * and each one notifies as it goes, so a limit checked inside the dispatch loop
++ * would leave the entries ahead of the offending one already applied.
++ */
++static int vxlan_vnifilter_check_msg(const struct nlmsghdr *nlh,
++				     struct netlink_ext_ack *extack)
++{
++	struct nlattr *vattrs[VXLAN_VNIFILTER_ENTRY_MAX + 1];
++	struct nlattr *attr;
++	u32 vnis = 0;
++	int err, rem;
++
++	nlmsg_for_each_attr_type(attr, VXLAN_VNIFILTER_ENTRY, nlh,
++				 sizeof(struct tunnel_msg), rem) {
++		u32 vni_start, vni_end;
++
++		err = nla_parse_nested(vattrs, VXLAN_VNIFILTER_ENTRY_MAX, attr,
++				       vni_filter_entry_policy, extack);
++		if (err)
++			return err;
++
++		vxlan_vni_filter_entry_range(vattrs, &vni_start, &vni_end);
++
++		/* A start above the end selects no VNI and costs nothing;
++		 * leave it behaving as it does today.
++		 */
++		if (vni_end < vni_start)
++			continue;
++
++		/* vni_filter_entry_policy has already bounded both endpoints
++		 * below VXLAN_N_VID, so one entry adds at most VXLAN_N_VID and
++		 * vnis cannot wrap before the test below rejects it.
++		 */
++		vnis += vni_end - vni_start + 1;
++		if (vnis > VXLAN_VNI_FILTER_MSG_MAX) {
++			NL_SET_ERR_MSG_ATTR_FMT(extack, attr,
++						"Request asks for more than %u VNIs",
++						VXLAN_VNI_FILTER_MSG_MAX);
++			return -EINVAL;
++		}
++	}
++
++	return 0;
++}
++
+ static int vxlan_process_vni_filter(struct vxlan_dev *vxlan,
+ 				    struct nlattr *nlvnifilter,
+ 				    int cmd, struct netlink_ext_ack *extack)
  {
- 	struct vxlan_vni_group *vg;
--	int v, err = 0;
-+	int err = 0;
-+	u32 v;
+ 	struct nlattr *vattrs[VXLAN_VNIFILTER_ENTRY_MAX + 1];
+-	u32 vni_start = 0, vni_end = 0;
++	u32 vni_start, vni_end;
+ 	union vxlan_addr group;
+ 	int err;
  
- 	vg = rtnl_dereference(vxlan->vnigrp);
+@@ -862,13 +937,7 @@ static int vxlan_process_vni_filter(struct vxlan_dev *vxlan,
+ 	if (err)
+ 		return err;
  
+-	if (vattrs[VXLAN_VNIFILTER_ENTRY_START]) {
+-		vni_start = nla_get_u32(vattrs[VXLAN_VNIFILTER_ENTRY_START]);
+-		vni_end = vni_start;
+-	}
+-
+-	if (vattrs[VXLAN_VNIFILTER_ENTRY_END])
+-		vni_end = nla_get_u32(vattrs[VXLAN_VNIFILTER_ENTRY_END]);
++	vxlan_vni_filter_entry_range(vattrs, &vni_start, &vni_end);
+ 
+ 	if (!vni_start && !vni_end) {
+ 		NL_SET_ERR_MSG_ATTR(extack, nlvnifilter,
+@@ -975,6 +1044,10 @@ static int vxlan_vnifilter_process(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 	if (!(vxlan->cfg.flags & VXLAN_F_VNIFILTER))
+ 		return -EOPNOTSUPP;
+ 
++	err = vxlan_vnifilter_check_msg(nlh, extack);
++	if (err)
++		return err;
++
+ 	nlmsg_for_each_attr_type(attr, VXLAN_VNIFILTER_ENTRY, nlh,
+ 				 sizeof(*tmsg), rem) {
+ 		err = vxlan_process_vni_filter(vxlan, attr, nlh->nlmsg_type,
 -- 
 2.53.0
 
