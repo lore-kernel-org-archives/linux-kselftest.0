@@ -1,148 +1,241 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAAC2200110
-	for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 01:45:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCA6821B192;
+	Sun, 27 Sep 2026 01:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790473524; cv=none; b=kh3nlcp435TJ4nbvSUKJ6GZdI0Y+zkH/vhaNmywI9vC7+wRtflSokRIu2S7tge09zI+Rm/43ZrtIndmokYm4cfroycFdZA4oZl+mKYFU8ZJHNxgEwYd2BWKcR30HZtMe74wyGn29TQkxql6ERsK4pEU3/vxe5uIdSnvLddEVOuo=
+	t=1790474359; cv=none; b=ZTClAK0cgEOYSahDMGjyLYIwt2I3piRCQPxHffeprSS91V94uK9ovga9SL2Z2HQCEBL+/ko54TIliqyGHzwxKVdoQl7li8jFc5DIRFFF4i+jyEbbRZP6SlFg4qSaITtO8ulxZ2eE6bAEBBwibCjDQORl+a0LfeF/P+FK1ofxV7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790473524; c=relaxed/simple;
-	bh=ZmshJRVNGhiDD241iabHMvHEahKSg7LVi7ZdIgOie5M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pabuFUz99iNaoOH0yKKW2hRfrOlgxfq5tdcdcKQem9zcPb1YCyqC4AnUCnQOtnMDjdJlq/50uSU+fsbp7hKdtrX91GWXzTl4N5kGGqusytNUBBNNULvciY5bukw8iJ22FKNJ+BACAMMop0ZthR470+gG2HacrATNtJNmPCAHjpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JyT/G+yg; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1790474359; c=relaxed/simple;
+	bh=Cj1yxOQ7NmiOhB54Fj2kvY8sqe96D//wtEYKIYBNRx8=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=osiKOwAD/npOO9fV3J5p3m9EhsrCx6ncgmrcuGVPI2PDsDrubw+aYklIII8Yuv8P+Bfx+JazlXUg+WtVjqJDoXbzTcxMJQQUCcOw2X3Qz6VLiyz3GwJyAvvd7KTMU9j3yz4knSC9+SSzzJs3SM4iMuOSo15cP196sxLrTqPe8zA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mfeeVtO7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JyT/G+yg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790473521;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XUoH5rgAH1n+by9vaKnGPJrkH26uAPsRf2XvFcpnSDw=;
-	b=JyT/G+ygjmMvriXMqoHDdM7ug3PCYDsbgFmzdN0z63R9BcdkyaAOEY8l3oNRL2bMHDERtb
-	IYYQac2dXK69wjX7bWjuaaKn8T6DKFwsIN1G2Lo5ViOkCzXvF+N/lP6171H7+n4aEPFLDh
-	Esqun7OoiwllCAiNjBw3pVi5qDqiwnU=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-277-tMlZC61VNVufI_UeeYlH9w-1; Sat,
- 26 Sep 2026 21:45:16 -0400
-X-MC-Unique: tMlZC61VNVufI_UeeYlH9w-1
-X-Mimecast-MFC-AGG-ID: tMlZC61VNVufI_UeeYlH9w_1790473515
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7A1CD1955F7A;
-	Sun, 27 Sep 2026 01:45:14 +0000 (UTC)
-Received: from [100.91.18.181] (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D528C180034F;
-	Sun, 27 Sep 2026 01:45:11 +0000 (UTC)
-Message-ID: <b5926447-1b52-4a8b-86d8-8adf40ca5f3f@redhat.com>
-Date: Sat, 26 Sep 2026 21:45:10 -0400
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mfeeVtO7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 755731F000FF;
+	Sun, 27 Sep 2026 01:59:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790474357;
+	bh=3mmxZtkXz6CMoG9+1fr08yaqLx0uIg8QGWPSaxHFEmQ=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=mfeeVtO745hvKy5JDKZe0mq5Xp+dIMbWv6FY2A0tsEQd31GtzIjTpocTbRTlg2fHN
+	 uEu0FUH78rCbqLm5qsmHL5CtJgpECrjNHHrVzrRkhrIjHRdFNcUzaFQlAPcmuxJSVd
+	 SQGHNt5qK2LuU06CvmLaHbaVeeLZwb5DOV1furGgtmT5mJHlJMIe9zXwm1HhdSNJDq
+	 PsRyXGw34SMszmma88JhTfs5SDYSFpK0SthmaqCtuxHBTI/uFtmEftGvMUWJGZNGum
+	 U5WQ+83ZswSKqmhJRoPSC4OGwXi16+kNULIi0ppuzr5YJPlvHY2NYUlmLJ09cxvCyH
+	 cCvcBryhCpAnQ==
+Subject: Re: [PATCH net-next v4 2/2] selftests: net: test untracked NA
+ recovery of FAILED neighbors
+From: netdev-bot+sashiko@kernel.org
+To: lfqlee314@gmail.com
+Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ rdunlap@infradead.org, netdev@vger.kernel.org, aajith@arista.com,
+ roopa@nvidia.com, jhpark1013@gmail.com, corbet@lwn.net,
+ skhan@linuxfoundation.org, shuah@kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Sun, 27 Sep 2026 01:59:16 +0000
+Message-ID: <179047435603.2160803.13373341999390974606@kernel.org>
+In-Reply-To:
+ <ce40008682ed26ab039168a5fcb515eff8d30c3a.1790127207.git.lfqlee314@gmail.com>
+References:
+ <ce40008682ed26ab039168a5fcb515eff8d30c3a.1790127207.git.lfqlee314@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/3] cgroup/cpuset: prevent activating local partition
- over remote one
-To: Hui Peng <benquike@gmail.com>, Ridong Chen <ridong.chen@linux.dev>,
- Guopeng Zhang <guopeng.zhang@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>
-Cc: Shuah Khan <shuah@kernel.org>, Chen Ridong <chenridong@huawei.com>,
- cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20260924042729.1908863-1-benquike@gmail.com>
- <20260924042729.1908863-3-benquike@gmail.com>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <20260924042729.1908863-3-benquike@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On 9/24/26 12:27 AM, Hui Peng wrote:
-> Commit 6da580ec656a ("cgroup/cpuset: Don't allow creation of local
-> partition over a remote one") added a check in update_prstate() to reject
-> creating a top-level local partition whose cs->exclusive_cpus intersects
-> subpartitions_cpus.
->
-> However, if a top-level cgroup A1 has a child A1/A2 enabled as a remote
-> partition on a subset of its exclusive CPUs (X2-3 on A1, CX2-3:P2 on
-> A1/A2), and A1 is then set to "root" (P1, becoming "root invalid" via
-> update_prstate() because its exclusive CPUs intersect subpartitions_cpus)
-> followed by expanding its CPUs to include additional non-remote CPUs
-> (CX1-3), update_cpumask() / update_exclusive_cpumask() calls
-> validate_partition() without going through update_prstate(). Because
-> validate_partition() does not check trialcs->exclusive_cpus against
-> subpartitions_cpus, A1 transitions from "root invalid" to a valid local
-> partition over the existing remote partition A1/A2 and triggers:
->
->    WARNING: kernel/cgroup/cpuset.c:1943 at update_parent_effective_cpumask+0x189b/0x1fd0
->
-> Check trialcs->exclusive_cpus against subpartitions_cpus in
-> validate_partition() when !is_partition_valid(cs), and add a regression
-> test case to tools/testing/selftests/cgroup/test_cpuset_prs.sh.
->
-> Tested in QEMU on Linux 7.3.0-rc3 using
-> tools/testing/selftests/cgroup/test_cpuset_prs.sh.
->
-> Fixes: 6da580ec656a ("cgroup/cpuset: Don't allow creation of local partition over a remote one")
-> Cc: stable@vger.kernel.org
-> Assisted-by: LLM
-> Signed-off-by: Hui Peng <benquike@gmail.com>
-> ---
->   kernel/cgroup/cpuset.c                            | 4 ++++
->   tools/testing/selftests/cgroup/test_cpuset_prs.sh | 2 ++
->   2 files changed, 6 insertions(+)
->
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 7381fa8502e7..7c5b4a8f1f3a 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -2415,6 +2415,10 @@ static enum prs_errcode validate_partition(struct cpuset *cs, struct cpuset *tri
->   	if (cpumask_empty(trialcs->effective_xcpus))
->   		return PERR_INVCPUS;
->   
-> +	if ((parent == &top_cpuset) && !is_partition_valid(cs) &&
-> +	    cpumask_intersects(trialcs->exclusive_cpus, subpartitions_cpus))
-> +		return PERR_REMOTE;
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
+
+Critical: 0 · High: 0 · Medium: 1 · Low: 1 (1)
+
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] The Fixes:-tagged bug fix is bundled with new tests that
+  depend on a new feature.
+- [Low] The commit message says the test verifies that "disabling each
+  gate keeps the entry in FAILED without a link-layer address".
+
+Pre-existing issues:
+- [Low] Some script exit paths skip cleanup().
+
+--
+
+selftests: net: test untracked NA recovery of FAILED neighbors
+
+This adds cases to ndisc_unsolicited_na_test.sh that seed a NUD_FAILED
+neighbor. Each case checks whether an unsolicited NA moves the entry to
+STALE, based on drop_unsolicited_na, accept_untracked_na and forwarding.
+
+It also runs tcpdump in the background and waits for it to exit. It keeps
+the return code in test_unsolicited_na_combination() so existing cases stop
+reporting false success.
+
+Link: https://lore.kernel.org/r/20260813233344.445265-1-lfqlee314@gmail.com
+
+> diff --git a/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh b/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
+> index 5db69dad0cfc0..ba9e670b51498 100755
+> --- a/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
+> +++ b/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
+
+[ ... ]
+
+> @@ -102,24 +115,39 @@ setup()
+>  }
+>  
+>  start_tcpdump() {
+> -	set -e
+> -	tcpdump_stdout=`mktemp`
+> -	tcpdump_stderr=`mktemp`
+> +	tcpdump_stdout=$(mktemp) || return 1
+> +	tcpdump_stderr=$(mktemp) || return 1
+>  	${IP_ROUTER_EXEC} timeout 15s \
+>                  tcpdump --immediate-mode -tpni ${ROUTER_INTF} -c 1 \
+>                  "icmp6 && icmp6[0] == 136 && src ${HOST_ADDR}" \
+> -                > ${tcpdump_stdout} 2> /dev/null
+> -	set +e
+> +                > "${tcpdump_stdout}" 2> "${tcpdump_stderr}" &
+> +	tcpdump_pid=$!
+
+[Severity: Low]
+This is a pre-existing issue, but some exit paths in this script never reach
+cleanup(). log_test() does this when the user quits under PAUSE_ON_FAIL or
+PAUSE:
+
+	[ "$a" = "q" ] && exit 1
+
+Also, setup() runs under set -e after setup_ns() has created the namespaces.
+
+Neither the script nor lib.sh installs an EXIT trap. On those paths the
+namespaces, the veth pair and the mktemp files are left behind.
+
+This patch adds one new case. tcpdump now runs in the background here. If
+start_tcpdump() or host_link_up() fails and the user answers 'q' in
+log_test(), is the tcpdump process orphaned? It still stops by itself
+because of timeout 15s.
+
+[ ... ]
+
+> @@ -129,58 +157,145 @@ cleanup()
+
+[ ... ]
+
+> +	if [ -n "${expected_state}" ]; then
+> +		neigh_show_output=$(${IP_ROUTER} neigh show \
+> +			to "${HOST_ADDR}" dev "${ROUTER_INTF}")
+> +		if [[ " ${neigh_show_output} " != \
+> +				*" ${expected_state} "* ]]; then
+> +			return 1
+> +		fi
+> +		if [ -n "${expected_lladdr}" ] &&
+> +				[[ " ${neigh_show_output} " != \
+> +				*" lladdr ${expected_lladdr} "* ]]; then
+> +			return 1
+> +		fi
+> +		if [[ "${expected_state}" == "FAILED" &&
+> +		      "${neigh_show_output}" == *"lladdr"* ]]; then
+> +			return 1
+> +		fi
+
+[Severity: Low]
+The commit message says:
+
+    Verify that disabling each gate keeps the entry in FAILED without a
+    link-layer address.
+
+Can this lladdr check in verify_ndisc() ever trigger? __neigh_fill_info()
+only emits NDA_LLADDR for NUD_VALID states:
+
+net/core/neighbour.c:__neigh_fill_info() {
+    ...
+	ndm->ndm_state	 = neigh->nud_state;
+	if (neigh->nud_state & NUD_VALID) {
+		char haddr[MAX_ADDR_LEN];
+
+		neigh_ha_snapshot(haddr, neigh, neigh->dev);
+		if (nla_put(skb, NDA_LLADDR, neigh->dev->addr_len, haddr) < 0)
+			goto nla_put_failure;
+	}
+    ...
+}
+
+NUD_VALID does not include NUD_FAILED, so ip neigh show never prints lladdr
+for a FAILED entry. Once the FAILED state match above succeeds, this check
+is always false. That means the "without a link-layer address" part is not
+actually tested.
+
+[ ... ]
+
+>  test_unsolicited_na_combination() {
+> -	test_unsolicited_na_common $1 $2 $3
+> +	local initial_state=${4:-absent}
+> +	local same_subnet=${5:-1}
+> +	local rc
 > +
->   	if (prstate_housekeeping_conflict(trialcs->partition_root_state,
->   					  trialcs->effective_xcpus))
->   		return PERR_HKEEPING;
-The code change looks good to me.
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index b732078bf319..4a451350ad84 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -321,6 +321,8 @@ TEST_MATRIX=(
->   	" C1-3:P2  X4:P2    .      .      .    X3:P2    .      .     0 A1:1-2|XA1:1-3|A2:3:XA2:3 A1:P2|A2:P2 1-3"
->   	" C0-3:P2    .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:5-6 A1:P2|B1:P0"
->   	" C0-3:P2    .      .    C4-6 C0-4:C0-3  .      .      .     0 A1:0-3|B1:4-6 A1:P2|B1:P0 0-3"
-> +	"   X2-3  CX2-3:P2  .      .  P1:CX1-3   .      .      .     0 A1:1|A2:2-3|XA2:2-3 \
-> +								       A1:P-1|A2:P2 2-3"
->   
+> +	test_unsolicited_na_common "$1" "$2" "$3" "${initial_state}" \
+> +		"${same_subnet}"
+> +	rc=$?
+>  	test_msg=("test_unsolicited_na: "
+>  		"drop_unsolicited_na=$1 "
+>  		"accept_untracked_na=$2 "
+>  		"forwarding=$3")
+> -	log_test $? 0 "${test_msg[*]}"
 
-This test case is problematic as it fails on my test system because of a 
-bug in the SCHED_DEADLINE task shrink test in validate_change() that can 
-be triggered if there are deadline tasks in the system which will fail 
-the test. I am going to post a patch to fix that bug. Can you take out 
-this test case from this patch as I don't want this test to be 
-backported to stable releases? You can send this out as a separate 
-testing patch if you want to.
+[ ... ]
 
-Cheers,
-Longman
+> @@ -193,6 +308,16 @@ test_unsolicited_na_combinations() {
+>  	test_unsolicited_na_combination 1 0 1
+>  	test_unsolicited_na_combination 1 1 0
+>  	test_unsolicited_na_combination 1 1 1
+> +
+> +	# Expect FAILED entry to become STALE
+> +	test_unsolicited_na_combination 0 1 1 failed
+> +	test_unsolicited_na_combination 0 2 1 failed 1
 
->   	# Local partition invalidation tests
->   	" C0-3:X1-3:P2 C1-3:X2-3:P2 C2-3:X3:P2 \
+[Severity: Medium]
+This commit carries a Fixes: tag for f9a2fb73318e. The only change that
+fixes that commit seems to be the rc=$? move in
+test_unsolicited_na_combination(), which now runs before the test_msg=(...)
+assignment.
 
+These two new cases expect a seeded NUD_FAILED entry to become STALE with
+lladdr 02:00:00:00:00:02 and to keep extern_learn. That behaviour comes from
+the preceding series commit "ipv6: update NUD_FAILED neighbors from NA
+messages", which has no Fixes: or stable tag.
+
+Without that commit, ndisc_recv_na() still skips FAILED entries:
+
+net/ipv6/ndisc.c:ndisc_recv_na() {
+    ...
+	if (neigh && !IS_ERR(neigh)) {
+		u8 old_flags = neigh->flags;
+
+		if (READ_ONCE(neigh->nud_state) & NUD_FAILED)
+			goto out;
+    ...
+}
+
+Suppose a stable tree takes this patch because of the Fixes: tag, but not
+the feature commit. With rc now preserved, won't these two cases report
+FAIL?
+
+Could the rc fix go in its own patch with the Fixes: tag, and the
+FAILED-recovery tests in a separate patch without it? If they stay
+together, could the commit message at least state the dependency?
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/cover.1790127207.git.lfqlee314%40gmail.com
