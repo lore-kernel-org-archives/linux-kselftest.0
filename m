@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16BA3BB57;
-	Sun, 27 Sep 2026 01:25:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76550283FC4;
+	Sun, 27 Sep 2026 01:25:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790472302; cv=none; b=SFSJH9CnHADVHEP81L7mFW/mHE760spNrXzCVClxfzUhGWgq1XmzOUqSAenkQkx+2j20HeDVHQQc2cDf+KKqrnaqm++IYnv8IJCdhf+2/qRCPd1WO/2Yf/j042Teg98UQlwnxO20HYxjZjlYfhsozO9YjQART63hvbS1fo42fZs=
+	t=1790472303; cv=none; b=OB9RzJPZvTD2JXYQ3XKMX4+QiyrO4jRTGGeCH2ZdNR9RAR2+5qLtidU60Dj6cpAx9UDCgo0OZ85+VMi9ndJ7AEucujiZKQbUUTflg/OsZXD1bDnLQ63Maub7LbOj51Op2d1QXmeownqNw8rAGp7XWxDUyYGXiBqAkaaGX8h+RYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790472302; c=relaxed/simple;
-	bh=pv+w9ij0G1ixmcHiK76DUpQYeLfN8Tg5uhG6E8P5QPs=;
+	s=arc-20240116; t=1790472303; c=relaxed/simple;
+	bh=Jg+i7tOLlFGLu87O0HOn84N5Zb752V/HNrcXNM2tO4I=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gvNRyOCoQiYM8YR+r6FTAfyf+JKepx+u6i7zAVauUTkRDM5OM4sPVKWWQWhu6DrsCIja5TXy6mo54CbmBZ5IUaDVYpLKhVYB9BTuxTjX0ytJtQ0uVFEFf7ZUuDYEkvOTJp91MbHmU3hMF5i1JPzO5bkvrvel7iTvN3u4GqwjJOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EP0fFBff; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=IMYPmLO6s0Df0c2zNUPJoVRejekRt/QQDPp3lGLnAXZa9eewWurG1tNZ4E94iUsnn+f5VydmJqkL0dPpDt6b7MfjLC4iO3SVgBDpiViEqIBqiiZDI2EXTvGcaPh1LslBzQNVYKbFHq4kV0H1vYaxxKKtFp10+Bzmn3JRsPWvSrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AtyR4iUo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EP0fFBff"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BA591F000FF;
-	Sun, 27 Sep 2026 01:24:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AtyR4iUo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1769C1F00893;
+	Sun, 27 Sep 2026 01:25:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790472300;
-	bh=M7LDpw+G4B1vu0bCA2ym0pEac+k56d/AFVNOHal+gtg=;
+	s=k20260515; t=1790472302;
+	bh=3cFJZKP//HXSd8HxiX9y+/cCBjrnliGpiniW1BiGwUI=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=EP0fFBffBMOsAYBUjl3CdP147nWYg2z6Du3G/gNDhuihDgSCvh1Jk1oHggZGqN3GQ
-	 /0IL9vVxEdYKJzyRVVHCBLreflD/ED3IONvy+NeQlAcYrvAG606g8/t2YMWtSndI/B
-	 Lg3JdKavo0G8JZgHwSzNRSGw6A/tvswCwdBJozU1gHlZfe8pK1d9ArtMJA6dtFX39W
-	 D6TiZq1klpxXbOv5m91gOfBR3P5cTiRQemGr/vLDWIaJsxFiMZuY02VX7pe33UGEW2
-	 kwONFj6SNs5nv2k8wyU5AMWXlFwbRE9pxvpplKe4poP/S2nljos2/qChvZxaT1RecS
-	 0iFxfUqERXKgw==
-Subject:
- Re: [PATCH net 1/4] net: lwtunnel: accept RTA_ENCAP without NLA_F_NESTED
+	b=AtyR4iUoP3wYsDADTBhC9+LC9cwsgnZ3sObJH2W2Dq6qUGvN0/LCfbkg5d9aVp6bf
+	 Cb9XxWC00j8al8VuDDf/VbGVl67SF0XktwGmb+CZ2VgDXPK4uo++iZGghwnIUAhJs0
+	 hxQUMYwET9XVy5sqaZBuZGhFoJv0dLFa7u/YOhBBkcbJ3Zvh5ucJZVRjPoc7Hcwyx9
+	 pab9T/cXN4XD28snz7IpZCZpM3PErJBaMwd/5qD82AKQdBt9TK6tscHlBPPFPGKVKy
+	 DyrmD9LLtmEJt7Geo1lzd+WH0X8470QNGHCiGfEUzDs1fJAubj70KfuQsDRNWLoUjm
+	 GFWxqitZythuw==
+Subject: Re: [PATCH net 3/4] net: ip_tunnel: accept tunnel options without
+ NLA_F_NESTED
 From: netdev-bot+sashiko@kernel.org
 To: yuya.kusakabe@gmail.com
 Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
@@ -37,11 +37,11 @@ Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
  nicolas.dichtel@6wind.com, lucien.xin@gmail.com, shuah@kernel.org,
  netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-Date: Sun, 27 Sep 2026 01:24:58 +0000
-Message-ID: <179047229879.2160803.8451334852998395120@kernel.org>
-In-Reply-To: <20260923-lwt-encap-noflag-v1-1-8de7ab6c86e9@gmail.com>
-References: <20260923-lwt-encap-noflag-v1-1-8de7ab6c86e9@gmail.com>
-X-sashiko-severity: Low
+Date: Sun, 27 Sep 2026 01:25:00 +0000
+Message-ID: <179047230067.2160803.12584347081635948798@kernel.org>
+In-Reply-To: <20260923-lwt-encap-noflag-v1-3-8de7ab6c86e9@gmail.com>
+References: <20260923-lwt-encap-noflag-v1-3-8de7ab6c86e9@gmail.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -51,145 +51,205 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 1 · Medium: 0 · Low: 1
 
-- [Low] Concern: the patch fixes rpl and ioam6 but leaves
-  xfrmi_build_state() (net/xfrm/xfrm_interface_core.c:83) on strict…
-- [Low] Concern: the IP/IP6 tunnel encap options (LWTUNNEL_IP_OPTS /
-  LWTUNNEL_IP6_OPTS and the GENEVE/VXLAN/ERSPAN entries) are dumped with…
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [High] Restoring a saved route that has two or more geneve options now
+  succeeds, but the kernel keeps only the last option.
+- [Low] The kernel-doc for the new shared helper lwtunnel_nla_validate()
+  (include/net/lwtunnel.h:91-92) says it is "Like nla_validate(), except…
 
 --
 
-net: lwtunnel: accept RTA_ENCAP without NLA_F_NESTED
+net: ip_tunnel: accept tunnel options without NLA_F_NESTED
 
-This adds lwtunnel_nla_parse(). It parses the attributes nested in an
-lwtunnel encap strictly, but does not require NLA_F_NESTED on the encap
-attribute itself. rpl and ioam6 now use it, so routes dumped by "ip route
-save" can be restored with "ip route restore".
+This patch makes the LWTUNNEL_IP_OPTS and LWTUNNEL_IP6_OPTS parsing
+accept attributes that lack NLA_F_NESTED, so that "ip route restore"
+can replay routes that the kernel dumped without the flag. It moves
+strict_start_type past the OPTS attribute and adds a helper,
+lwtunnel_nla_validate(), which validates with the nested check turned
+off. It also parses each option with lwtunnel_nla_parse().
 
 > diff --git a/include/net/lwtunnel.h b/include/net/lwtunnel.h
-> index 26232f603e33c..046978d6224c2 100644
+> index 046978d6224c2..59d7ec7b04f2d 100644
 > --- a/include/net/lwtunnel.h
 > +++ b/include/net/lwtunnel.h
-
-[ ... ]
-
-> @@ -37,6 +38,7 @@ struct lwtunnel_state {
->  };
->  
->  struct lwtunnel_encap_ops {
-> +	/* encap may lack NLA_F_NESTED, parse it with lwtunnel_nla_parse() */
->  	int (*build_state)(struct net *net, struct nlattr *encap,
->  			   unsigned int family, const void *cfg,
->  			   struct lwtunnel_state **ts,
-
-[Severity: Low]
-Do other build_state callbacks still break this contract after this
-patch? xfrmi_build_state() in net/xfrm/xfrm_interface_core.c still uses
-the strict parser:
-
-net/xfrm/xfrm_interface_core.c:xfrmi_build_state() {
-    ...
-	ret = nla_parse_nested(tb, LWT_XFRM_MAX, nla, xfrm_lwt_policy, extack);
-    ...
-}
-
-lwtunnel_fill_encap() emits RTA_ENCAP with the flag cleared:
-
-net/core/lwtunnel.c:lwtunnel_fill_encap() {
-    ...
-	nest = nla_nest_start_noflag(skb, encap_attr);
-    ...
-}
-
-Would "ip route save" followed by "ip route restore" of an "encap xfrm
-if_id N" route still fail with "NLA_F_NESTED is missing" at this point?
-
-A later patch in this series, "xfrm: lwtunnel: accept RTA_ENCAP without
-NLA_F_NESTED", switches xfrmi_build_state() to lwtunnel_nla_parse() and
-carries its own Fixes: tag. The series as a whole closes this gap, even
-though this patch does not.
-
-> @@ -53,6 +55,31 @@ struct lwtunnel_encap_ops {
->  	struct module *owner;
->  };
+> @@ -80,6 +80,28 @@ static inline int lwtunnel_nla_parse(struct nlattr *tb[], int maxtype,
+>  			 extack);
+>  }
 >  
 > +/**
-> + * lwtunnel_nla_parse - parse the attributes nested in an lwtunnel encap
-> + * @tb: destination array with maxtype+1 elements
-> + * @maxtype: maximum attribute type to be expected
+> + * lwtunnel_nla_validate - validate the attributes nested in an lwtunnel encap
 > + * @nla: encap attribute passed to &lwtunnel_encap_ops.build_state, or an
 > + *	attribute nested in it
+> + * @maxtype: maximum attribute type to be expected
 > + * @policy: validation policy
 > + * @extack: extended ACK report struct
 > + *
-> + * The encap attribute, and some of the attributes nested in it, have always
-> + * been dumped without NLA_F_NESTED, and userspace such as "ip route restore"
-> + * sends a dump back unchanged, so the flag cannot be required on @nla.
-> + * The attributes nested in @nla are still validated strictly.
+> + * Like nla_validate(), except that NLA_F_NESTED is not required on the
+> + * attributes nested in @nla, for the reason given for lwtunnel_nla_parse().
 > + *
 > + * Return: 0 on success or a negative error code.
 > + */
-> +static inline int lwtunnel_nla_parse(struct nlattr *tb[], int maxtype,
-> +				     const struct nlattr *nla,
-> +				     const struct nla_policy *policy,
-> +				     struct netlink_ext_ack *extack)
+> +static inline int lwtunnel_nla_validate(const struct nlattr *nla, int maxtype,
+> +					const struct nla_policy *policy,
+> +					struct netlink_ext_ack *extack)
 > +{
-> +	return nla_parse(tb, maxtype, nla_data(nla), nla_len(nla), policy,
-> +			 extack);
+> +	return __nla_validate(nla_data(nla), nla_len(nla), maxtype, policy,
+> +			      NL_VALIDATE_STRICT & ~NL_VALIDATE_NESTED,
+> +			      extack);
 > +}
 
 [Severity: Low]
-The kernel-doc says some attributes nested in the encap are also dumped
-without NLA_F_NESTED. Is the IP/IP6 tunnel options path still rejected on
-restore after this patch?
+This isn't a bug with the current caller, but does the kernel-doc match
+what the NL_VALIDATE_STRICT & ~NL_VALIDATE_NESTED mask does?
 
-In net/ipv4/ip_tunnel_core.c, ip_tun_fill_encap_opts() and the
-geneve/vxlan/erspan fill helpers emit the option nests without the flag:
+The mask differs from the doc in two ways.
 
-	nest = nla_nest_start_noflag(skb, type);
-	...
+First, NL_VALIDATE_NESTED also controls the check in the other
+direction. With it cleared, validate_nla() no longer rejects a
+non-nested attribute that carries NLA_F_NESTED, although nla_validate()
+would:
+
+lib/nlattr.c:validate_nla() {
+    ...
+	if (validate & NL_VALIDATE_NESTED) {
+		...
+		if (pt->type != NLA_NESTED && pt->type != NLA_NESTED_ARRAY &&
+		    pt->type != NLA_UNSPEC && (nla->nla_type & NLA_F_NESTED)) {
+			NL_SET_ERR_MSG_ATTR_POL(extack, nla, pt,
+						"NLA_F_NESTED not expected");
+			return -EINVAL;
+		}
+	}
+    ...
+}
+
+Second, a policy with strict_start_type turns the bit back on for
+attribute types at or above that value:
+
+lib/nlattr.c:validate_nla() {
+    ...
+	if (strict_start_type && type >= strict_start_type)
+		validate |= NL_VALIDATE_STRICT;
+    ...
+}
+
+For those types, NLA_F_NESTED is required again.
+
+The only caller, ip_tun_parse_opts() with ip_opts_policy, is not
+affected. That policy has only NLA_NESTED entries and no
+strict_start_type. However, the doc invites use on any attribute nested
+in a build_state encap attribute.
+
+Could the doc describe these two cases, so that future callers don't
+rely on semantics that differ from the implementation?
+
+[ ... ]
+
+> diff --git a/net/ipv4/ip_tunnel_core.c b/net/ipv4/ip_tunnel_core.c
+> index bab42b9e277f7..c87827ffc3475 100644
+> --- a/net/ipv4/ip_tunnel_core.c
+> +++ b/net/ipv4/ip_tunnel_core.c
+> @@ -466,7 +466,9 @@ int skb_tunnel_check_pmtu(struct sk_buff *skb, struct dst_entry *encap_dst,
+>  EXPORT_SYMBOL(skb_tunnel_check_pmtu);
+>  
+>  static const struct nla_policy ip_tun_policy[LWTUNNEL_IP_MAX + 1] = {
+> -	[LWTUNNEL_IP_UNSPEC]	= { .strict_start_type = LWTUNNEL_IP_OPTS },
+> +	[LWTUNNEL_IP_UNSPEC]	= {
+> +		.strict_start_type = LWTUNNEL_IP_OPTS + 1
+> +	},
+>  	[LWTUNNEL_IP_ID]	= { .type = NLA_U64 },
+>  	[LWTUNNEL_IP_DST]	= { .type = NLA_U32 },
+>  	[LWTUNNEL_IP_SRC]	= { .type = NLA_U32 },
+> @@ -509,8 +511,8 @@ static int ip_tun_parse_opts_geneve(struct nlattr *attr,
+>  	struct nlattr *tb[LWTUNNEL_IP_OPT_GENEVE_MAX + 1];
+>  	int data_len, err;
+>  
+> -	err = nla_parse_nested(tb, LWTUNNEL_IP_OPT_GENEVE_MAX, attr,
+> -			       geneve_opt_policy, extack);
+> +	err = lwtunnel_nla_parse(tb, LWTUNNEL_IP_OPT_GENEVE_MAX, attr,
+> +				 geneve_opt_policy, extack);
+>  	if (err)
+>  		return err;
+
+[Severity: High]
+Can restoring a saved route with more than one geneve option now succeed
+but keep only the last option?
+
+The dump side puts all geneve options into a single
+LWTUNNEL_IP_OPTS_GENEVE nest, as repeated CLASS/TYPE/DATA triples:
+
+net/ipv4/ip_tunnel_core.c:ip_tun_fill_encap_opts_geneve() {
+    ...
 	nest = nla_nest_start_noflag(skb, LWTUNNEL_IP_OPTS_GENEVE);
-
-The input side validates them strictly in three places.
-
-ip_tun_policy and ip6_tun_policy:
-
-	[LWTUNNEL_IP_UNSPEC]	= { .strict_start_type = LWTUNNEL_IP_OPTS },
-
-ip_tun_parse_opts():
-
-	err = nla_validate(nla_data(attr), nla_len(attr), LWTUNNEL_IP_OPTS_MAX,
 	...
+	while (tun_info->options_len > offset) {
+		opt = ip_tunnel_info_opts(tun_info) + offset;
+		if (nla_put_be16(skb, LWTUNNEL_IP_OPT_GENEVE_CLASS,
+				 opt->opt_class) ||
+		    nla_put_u8(skb, LWTUNNEL_IP_OPT_GENEVE_TYPE, opt->type) ||
+		    nla_put(skb, LWTUNNEL_IP_OPT_GENEVE_DATA, opt->length * 4,
+			    opt->opt_data)) {
+    ...
+}
 
-ip_tun_parse_opts_geneve(), and the same in the vxlan and erspan parsers:
+The parse side expects one LWTUNNEL_IP_OPTS_GENEVE attribute per
+option. ip_tun_parse_opts() calls ip_tun_parse_opts_geneve() once for
+each GENEVE attribute, and each call rebuilds exactly one option.
 
-	err = nla_parse_nested(tb, LWTUNNEL_IP_OPT_GENEVE_MAX, attr,
-	...
+When nla_parse() in ip_tun_parse_opts_geneve() sees repeated types,
+__nla_validate_parse() just overwrites tb[type] without an error, so
+only the last triple is kept. The function then returns
+sizeof(struct geneve_opt) + data_len for that single option. As a
+result, ip_tun_get_optlen() sizes the state for one option and
+ip_tun_set_opts() copies only that one.
 
-lwtunnel_nla_parse() calls nla_parse(), which uses NL_VALIDATE_STRICT. If
-a policy had NLA_NESTED children without the flag, it would reject them
-too. Could the kernel-doc sentence "The attributes nested in @nla are
-still validated strictly" mislead callers that expect unflagged nested
-children to be accepted?
+Before this patch, a restored message like this was rejected with
+"NLA_F_NESTED is missing". The rejection came from the strict_start_type
+check in ip_tun_policy/ip6_tun_policy, and from nla_validate() and
+nla_parse_nested(). With all three relaxed, the multi-option nest is
+accepted and truncated with no error:
 
-This restore failure for the tunnel options has existed since
-ed02551f58b9. This patch does not change it.
+  ip route add ... encap ip id 1 geneve_opts 0:0:12121212,1:2:12121212 ...
+  ip route save ...
+  ip route del ...
+  ip route restore
+    ip_tun_build_state()
+      ip_tun_get_optlen()
+        ip_tun_parse_opts()
+          lwtunnel_nla_validate()   <- no NLA_F_NESTED check any more
+          ip_tun_parse_opts_geneve()
+            nla_parse()             <- second triple overwrites the first
 
-A later patch in this series, "net: ip_tunnel: accept tunnel options
-without NLA_F_NESTED", makes three changes:
+The same applies to ip6_tun_build_state(), which goes through the same
+ip_tun_get_optlen()/ip_tun_set_opts() path.
 
-- It moves strict_start_type to LWTUNNEL_IP(6)_OPTS + 1.
-- It adds lwtunnel_nla_validate() and uses it in ip_tun_parse_opts().
-- It switches the geneve/vxlan/erspan parsers to lwtunnel_nla_parse().
+The commit message says this fixes "ip route restore" for routes with
+tunnel options saved by "ip route save", and lists 2f1d370b997a
+("lwtunnel: add support for multiple geneve opts") in Fixes. That
+commit created the mismatch between one nest on dump and one nest per
+option on parse, and the mismatch is still there after this patch.
 
-None of the policies passed to lwtunnel_nla_parse() in the series have
-NLA_NESTED entries. In practice, its strict mode never rejects an
-unflagged child.
+No later patch in the series appears to address this. The selftest
+added in "selftests: net: add lwtunnel route save and restore test"
+uses only a single geneve option (geneve_opts 0:0:12121212), so it
+would not catch it.
+
+Should ip_tun_parse_opts()/ip_tun_parse_opts_geneve() accept repeated
+CLASS/TYPE/DATA triples inside one LWTUNNEL_IP_OPTS_GENEVE nest, which
+is the layout the dump produces? If not, should restore keep rejecting
+this input rather than silently dropping options?
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260923-lwt-encap-noflag-v1-0-8de7ab6c86e9%40gmail.com
