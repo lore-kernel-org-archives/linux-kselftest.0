@@ -1,190 +1,345 @@
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012027.outbound.protection.outlook.com [52.101.43.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f35.google.com (mail-oo2-f35.google.com [74.125.231.163])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8EF412BFB;
-	Mon, 28 Sep 2026 16:24:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.27
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790612646; cv=fail; b=MxLzcRydGSEXoj09jDmrzyBTIP27/5JTbG93gU+2huTP5Pz3APjxwaUZpaQKWvrg3QjnF8/JVtRkYs6RnJXWlQdEdblo6n1znvnLejaKkxzAkN4IuoExpzssDVnggMz5+ypOU6yA8sAi//AG9PgOkZhb1VHRmtrpqvxVniyg03E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790612646; c=relaxed/simple;
-	bh=DW8H+C7SD1rTyp8gL6nz/xKMYGXlXKGnz3+6qiR3VM0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=MGdj9yPRUpbgXZ1Kopl9Z6IZTBjXAymYj0/0AZNp+aQ5qOQTAsB+R2RQqv05+E8bNBMnI/Okv9DhH01d/gAAdw7AW2nJIYl8ui5N8jAfKeKiTc9oAzsNF7FWFgASJifOnpw32ZYun00OPGb7202KjY/ChIevaVZGluA7BrCDWLw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=r6munUIC; arc=fail smtp.client-ip=52.101.43.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 119C243F09B
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 16:28:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.163
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790612905; cv=none; b=cRglWsPmy6xAtreSJvvi2Yt/RH7XhGKvUvkkQJDGFEwTn8nxMnoQVTfAizPTL/kzklKMvj1aMTYT+bqZsrC+wm7zSiaTML/w2iYumXDnPSrIRs886H7gnFIvY/QTQMYfe91zDGg6AYZhulIo9dRgMkqDqCueyEVI+O8n0bmArgI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790612905; c=relaxed/simple;
+	bh=QjKoa83vUscHPWixSENA/eeT5V7SaTdaNpttS74xevc=;
+	h=Content-Type:Mime-Version:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=X3Y3DTti2PVUtXy72tU/86hcsElYL1NmWxW7XQkO2Os+V+53vcANfmAH+eZtImgFtsP1GWApe8g4p+Ghjh/xIDeUVAyS3tT4HzIcEyyoD/JXlLL+bqQ95dP91eqvW8QjgZze5nDNpdfyLY9KAflJuTSbOJ60Kw2y7GNmN7o793U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=W7QyUuKU; arc=none smtp.client-ip=74.125.231.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="r6munUIC"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=acg5Nsibzc0ohMjHxtLue7YuOQFFpW1EB+iYWOEkvkzVlv/OFRABQeS3vhkhzYAbYtbg0/+7/QWUVUyEO32GTFKZ9DP+pjgaZrWNzm3uO4nQZjOLuS7pnkuC5KI5pRjHVzuGNMl6zCCVIp4YsEqxGt8DrYFzWNo8ioc4dK/29p4lQtA1SMB5q6xV8djeg0FZ0bXrotEwlCxXKUXKGEF03iAgE7/d0e78KLxzQNTq0GOooFU17wYZHNAmUCicuBn2YF/Zc4miuFBLqwYGqjzGfbjugzu6r1z1MujhS3ItWXsL0Gid87EC50xVXCKKvnpjd4UDl36d/eaWyngfb6Jurg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BTlnQnnG4HgBlKdhPchmD43LuitZpKAryl8HpxnxIlw=;
- b=sgPm7ISlDgGP1dVdYkxn04zDKCTmlBjprMbZcFv7tTNs1UQXl6vWbkl0SUpxUAoEOqLKAQjnQMAir9DDF+A23pJGckF811Z4C95ykyKkoFYSupprZxw+y3mvsRH5zJaE1N6IFQ83S900N/jJ1s3iWIG5BwSP8gFjrzdULY0Dy4kMfgTHy/sE4SBy6PZ7xLx4ZKct1nxejtpPICRgjuIOp6Bdyob6qPsbAQfXNgelxmW1u4qoEI2+6FiR/nyEuKizGzAt+DLtMACflKzhR5wj/aknipai21QRogEE+0JxyeV72+g4/8ANYSahSgRNbxWkDWsi9+70fd5ryto+7b5gGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BTlnQnnG4HgBlKdhPchmD43LuitZpKAryl8HpxnxIlw=;
- b=r6munUIClPZmUv+lOIWiBiF3b8McAfrzlEYbkU4TD6xNMBloaJXAJz5YxpXuX0sc6kfyUelYkDyjLIXCPpThJNDcYnAdVdzeqiHzxioltNeIktUjy0ksA0YEsbXqob0ytwSspGJf+uO1SGHbyo8GmWxSEUw7rovk2lPcAT3HTV0=
-Received: from SJ2P220CA0005.NAMP220.PROD.OUTLOOK.COM (2603:10b6:a03:5da::17)
- by SA1PR12MB5669.namprd12.prod.outlook.com (2603:10b6:806:237::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.18; Mon, 28 Sep
- 2026 16:23:57 +0000
-Received: from SJ1PEPF00001CEB.namprd03.prod.outlook.com
- (2603:10b6:a03:5da:cafe::9b) by SJ2P220CA0005.outlook.office365.com
- (2603:10b6:a03:5da::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.451.24 via Frontend Transport; Mon,
- 28 Sep 2026 16:23:56 +0000
-X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
- is 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- SJ1PEPF00001CEB.mail.protection.outlook.com (10.167.242.27) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.472.14 via Frontend Transport; Mon, 28 Sep 2026 16:23:56 +0000
-Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.49; Mon, 28 Sep
- 2026 11:23:41 -0500
-Received: from [192.168.0.103] (10.180.168.240) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.49 via Frontend
- Transport; Mon, 28 Sep 2026 11:23:37 -0500
-Message-ID: <3bd1195d-35fb-44b4-bc96-4ec32c70e3d1@amd.com>
-Date: Mon, 28 Sep 2026 21:53:36 +0530
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="W7QyUuKU"
+Received: by mail-oo2-f35.google.com with SMTP id 006d021491bc7-6d7a52c9d62so719433eaf.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 09:28:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790612903; x=1791217703;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :mime-version:content-type:dkim-signature:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=QjKoa83vUscHPWixSENA/eeT5V7SaTdaNpttS74xevc=;
+        b=xdD8zcEwDSVjQEN/OAPAs8PZDMLgWRLA1YMfGdcdizQXz0cubn9V65ArDJ4W+F0e52
+         mTSSnVZwE1TsUnW+AdftZteWKcpkXbjE/vMDNDmAy5hG6xDTTUPqk081kYj3Tl6rh4As
+         /OdGOhyl8iy+On+dJ9QCfFhoBR0hQIeXW5iGsVCRgR3WTyPMoTVmpnAmtBqMZb0pWGrT
+         FdCZ077nbU2OI6jck0tpwwFdcd25SzxykVsuWrhTTVpnKcMrM+PTcc9WovK4eh24rvgW
+         lxtpYlB5sDxD1WEse9gfcL3yXo3Sdj5ZDDOPu4Q+ySBDG0/c1UYBg7bFljhd9F8fXuKM
+         aTGQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwYrM4lys3Dg55g9IQsh2FJgJlZivSVmFALANEQnhLWh7xQcPdB13Watn+xiJlpwR8Gqw8RflRPmhIE4r1Rg6U=@vger.kernel.org
+X-Gm-Message-State: AFuF++mHj+j8fy+1fMMFFRB3w4S2KLnHpGEgJUpIv6bLwVyBE9KyTiqd
+	5SGo2o1EJK+FLcTAWll067jld090XOd9kNXILa+NylOm0MaZ1k+qPjxv9YdwGgllbK0=
+X-Gm-Gg: AYBFou0myxX1CARK3WD5MVAX3U/5TynrnCde8K3vuR/gcg8cDwRc2c45AQXVuIyrOhv
+	nKrkiCAGwlgbfIR1GdgRH4lUtAF0VhinIkh6ZHMC7dfU4wmC4WzHE5vmfjH1LMSxtSuVwE48tSK
+	52WcLJbYq6b6/P+opzM1xZYWq9JPcnGUjSqT0OErClmzaCTPmJJ6uWmIjhRag6s7+PqeIDwYwct
+	h+gWIeG0deFY6GHFBkdncD1GFRuvIEG9cT9xW4zMZmokchnRaWPCCiAblSUpuCM9/8Dm4ED7nvd
+	Q3KrMwqwCP4KAA1mn+IjssrDD75kTSgYOge4ZnNstU9a3ZfOr/Be2H/QjsggWCzsrMS9plcEq1k
+	fIZENxMvVFyqXRb2wlHaLlW6BsDVtTxZITNOmZHAJMeJJDTDQ2IRObJqUw9O9g8/L4+EKgVaclT
+	1X6yK0sjmcmV3/epWnx3Ddv+Qv1lHkipk89MqE1gWS7qq9MJuHJykvYyI+kgcjObcGR6xAWjWIs
+	w5NYOLHY6DJldEvSoqPcVwhKI8FiO9IAJCxPXi/LUrBv1oj3tVVPGDU2FELvV2d3OueYvy9zFZ9
+X-Received: by 2002:a05:6820:2005:b0:6d7:c2d2:3ba2 with SMTP id 006d021491bc7-6d7c2d23f2amr5439391eaf.52.1790612902703;
+        Mon, 28 Sep 2026 09:28:22 -0700 (PDT)
+Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6d88358bb8dsm5080742eaf.14.2026.09.28.09.28.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Sep 2026 09:28:21 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D95E0605C7;
+	Mon, 28 Sep 2026 16:28:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=dkim; t=1790612900;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=QjKoa83vUscHPWixSENA/eeT5V7SaTdaNpttS74xevc=;
+	b=W7QyUuKUM/oEr6k+yHmpkqBVWTvqxRzTI/9u7ep7QkjvbNEM7OJFdHGUtv1kkaFfIEK6Eo
+	4S9sQvWBV2Uu+MwaP/tK43Mdc9BAnIJtsnbjUrsqPaoC6Bw0oVM0WDzLII2AfUl5O4uAz1
+	dGVsrc+s2GZcNDaNm3Ik4Dz/c4Qgn2rP5h7Shrt/XnzvnhZlwcPTkykYYDpcJ/1rFx5mOR
+	mO3rOWeln5VT/jcRf3yb3ZhkTLAW/vtRtgWYiEnbJ2USgWVfHdbD6xYvRPm5webLKQie0s
+	doTXovgi2D6SYSW8rKxRBbbc/my8qj/aTaMSMLaA6zGMY0PjopkGdb4LNYFx1A==
+Content-Type: multipart/mixed;
+ boundary=cbac917a6c7b2d466c8c0622d204a998728c2ee28196d6565575a9d670f0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/5] selftests/resctrl: Add MBM and MBA test support
- for AMD
-To: <tony.luck@intel.com>, <reinette.chatre@intel.com>, <babu.moger@amd.com>,
-	<fenghua.yu@intel.com>, <shuah@kernel.org>
-CC: <Dave.Martin@arm.com>, <james.morse@arm.com>, <peternewman@google.com>,
-	<eranian@google.com>, <tan.shaopeng@fujitsu.com>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<x86@kernel.org>
-References: <20260810184806.1089507-1-swapnil.sapkal@amd.com>
-Content-Language: en-GB
-From: Swapnil Sapkal <swapnil.sapkal@amd.com>
-In-Reply-To: <20260810184806.1089507-1-swapnil.sapkal@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CEB:EE_|SA1PR12MB5669:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6f0e89da-f8d5-4a33-c331-08df1d7ce51d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|23010399003|376014|7416014|36860700016|82310400026|13003099007|260925021311599003|260925021911599003|6133799003|3023799007|10067099003|18002099003|22082099003|56012099006|11063799006|260925022911599003;
-X-Microsoft-Antispam-Message-Info:
-	bCwvAggiD7ceMpznGN4MOWeEAWcFs+yINflUT5vWeuTlXU7jlD5U/Mlh9eB2XBWdAwVVQKh55BEtddxoqUxy9En1F2yOE81gnf8I6P4I+ZnjFBfM0Ipdit0zzQXS9QNBoEOJlR4dnV6ySWitbDjTNba6M0XDDLQHLVvsRHXFtFDhxrkxNVN8L7xhdbvxBgKhxFcT0gNCRWhMmV8UIOx2M2uo1TiumfA7OQaeyWDYqAR1z8YlDPIE602oSG5guYE0HWz1JG2a33EdKBWSX/PD80t3nyxSxtm7mPTo6ORycfyU+mXwuB2bLsS3QNYHxAWbv+30I73rHELqyk0ZAtKVATxe+OfR68rVJT0xXXJqHvhMYHROBdZoQfIzUEgrYhc5ZzsGVNr3Bjz3Vl59WaTisR6H9U3q7YEB7PkEUQ6YrvSpKwgU0eCM7gwJAek566VtsrJMWofT7jHUdZ0izW1zDjoYi7U0JDuaB1c1o5y+xRPXsDu9NMdao7GwOh1RDpkJPOH5qhzqx4J0lxG+kg5peK0bHQGUs0VriEeDdSC5RQMkjXE4BypFqp1/bBjQRJqnF8cWU+ElnlTq+Vj9lhjjN7NHDOmxAqXm0uAGIkWUpqgEGz8nnT9XcHjF3fc7hFU5cEhYeLXAdlfJVcykY5VwqwZb5A0NFUiqa8ykeXFtS4Y=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(376014)(7416014)(36860700016)(82310400026)(13003099007)(260925021311599003)(260925021911599003)(6133799003)(3023799007)(10067099003)(18002099003)(22082099003)(56012099006)(11063799006)(260925022911599003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	qrZaajzFtWHluNZJLFiWvSlQa7BT3Wyqw2IjH8CccvpX7pYUGUXoKA2Rs5nJ/E9Ojb3ArZDZxav/Q+tJhOaNYc/Mk4FXMAVUHj4iwiU8uZnQObqH8sfXeVHi0g0GxOM4h4XXJBMP+34lgiN1mczAPiJre+3HtSsXoTXJPELmAZ/S++4sAFvRYdUmxcnJTcTygcJK+LQFuMgJMscY7mMpyQXY2UOsJnGuPnFQjHcxsCgbpWKokYEPh0UHmDtWIOHInEGRC3yBgObfRENaYzBeN9uTzvWtlIuliislHVaI9AxHub5XwlfEM26uWYDiTX6ahsYaUqWCowxPdkOOMezAFlIronE6+Y77t3ztNeKk1lBgzFzuqyVXSOLDJypLtXzVpF6+QION5reUr8q1nkYzSEa+kNgwaV2sOZpmFKi6xQCmmIeWdMpc4SyKjPKzBD04
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2026 16:23:56.6301
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f0e89da-f8d5-4a33-c331-08df1d7ce51d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00001CEB.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB5669
+Mime-Version: 1.0
+Date: Mon, 28 Sep 2026 13:28:15 -0300
+Message-Id: <DLR3AO5BKYRO.11LS3U6V04LII@marliere.net>
+Subject: Re: [PATCH 0/3] selftests/bpf: Fixes for out-of-tree builds
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>
+To: "Eduard Zingerman" <eddyz87@gmail.com>,
+ =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>,
+ "Nico Pache (Red Hat)" <nico.pache@linux.dev>, <ihor.solodrai@linux.dev>,
+ <nickolay.lysenko@gmail.com>
+From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?=
+ <ricardo@marliere.net>
+X-Mailer: aerc 0.22.0-16-ge144528849ba
+References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
+ <6f95ec90-194a-4304-9673-c7bb50065223@linux.dev>
+ <d3a251acf5131bea732e23bbd135a5fdebec9ad6.camel@gmail.com>
+ <DLM25PIKJTE5.1Q1IO5PAM6VBD@marliere.net>
+ <78e6ad2dc979983bd65514166fa0020729a4147d.camel@gmail.com>
+In-Reply-To: <78e6ad2dc979983bd65514166fa0020729a4147d.camel@gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Gentle Ping
+--cbac917a6c7b2d466c8c0622d204a998728c2ee28196d6565575a9d670f0
+Content-Type: multipart/alternative;
+ boundary=5d2767df3777ddd6c6e62542789a2836dc5c3b781deb8b1ccf57d5943538
 
-On 11-08-2026 00:18, Swapnil Sapkal wrote:
-> The MBM (Memory Bandwidth Monitoring) and MBA (Memory Bandwidth
-> Allocation) resctrl selftests validate the bandwidth numbers reported by
-> resctrl against the memory controller performance counters. Today this
-> only works on Intel, where the counters are the iMC (Integrated Memory
-> Controller) PMUs and the tests are gated behind an ARCH_INTEL vendor
-> check.
-> 
-> This series teaches the tests about the AMD UMC (Unified Memory
-> Controller) PMUs and enables MBM and MBA on AMD.
-> 
-> The work is done in a few steps:
-> 
->    1. Rename the Intel specific imc/IMC identifiers to the generic
->       mc/MC so the code can serve both vendors.
-> 
->    2. Detect the vendor and select the memory controller PMU sysfs name
->       accordingly, keeping the rest of the code generic.
-> 
->    3. Add the AMD UMC support. Unlike Intel, the UMC PMU does not expose
->       the CAS command events via sysfs, so the read event is programmed
->       directly (EventCode 0x0a, umask 0x1). All vendor detection is
->       contained in num_of_mem_controllers() and dispatched to per-vendor
->       routines. On AMD each UMC is a per-NUMA-node PMU, so only the UMCs
->       local to the benchmark CPU are opened; remote-node UMCs would
->       otherwise fail perf_event_open() with -ENODEV.
-> 
->    4. Sweep the AMD MBA schemata using absolute bandwidth values (4 GB/s
->       to 40 GB/s) instead of the Intel style percentages (10% to 100%).
-> 
->    5. Extend the vendor_specific gate of the tests to Intel and AMD so
->       they run on AMD as well. The gate is kept (rather than removed)
->       so vendors that num_of_mem_controllers() does not know about are
->       skipped instead of reported as a failure.
-> 
-> Testing
-> -------
-> Tested on AMD Zen4 and Zen5 (multi-NUMA) system
-> 
-> History
-> -------
-> This series continues the work Babu Moger started; v1-v3 were posted by
-> Babu. I have taken it over, rebased it onto v7.2-rc7, addressed
-> Reinette's review feedback and added the AMD MBA bandwidth-value patch.
-> 
-> v3: https://lore.kernel.org/all/cover.1718385426.git.babu.moger@amd.com/
-> 
-> Changes since v3 (per patch changelog is present in each patch):
-> - Rebased onto v7.2-rc7 and reworked for the upstream resctrl_val.c
->    refactor.
-> - Contained all vendor detection in num_of_mem_controllers() with a
->    shared helper for the common counter "type" read. (Reinette)
-> - Fixed remaining Intel specific naming and the ksft diagnostics.
->    (Reinette)
-> - Handled the AMD per-node UMC PMU topology (skip remote-node UMCs) to
->    fix perf_event_open() -ENODEV on multi-node systems.
-> - New patch: use absolute bandwidth values for the AMD MBA schemata,
->    with build-time checks that the sweep count matches the result arrays.
-> - Kept the vendor gate at Intel | AMD so unsupported vendors are skipped
->    rather than failed.
-> 
-> Babu Moger (4):
->    selftests/resctrl: Rename variables and functions to generic names
->    selftests/resctrl: Detect vendor to select memory controller sysfs
->      name
->    selftests/resctrl: Add support for MBM and MBA tests on AMD
->    selftests/resctrl: Enable MBM and MBA tests on AMD
-> 
-> Swapnil Sapkal (1):
->    selftests/resctrl: Use bandwidth values for AMD MBA schemata
-> 
->   tools/testing/selftests/resctrl/mba_test.c    | 105 +++--
->   tools/testing/selftests/resctrl/mbm_test.c    |  24 +-
->   tools/testing/selftests/resctrl/resctrl.h     |   4 +-
->   tools/testing/selftests/resctrl/resctrl_val.c | 366 +++++++++++-------
->   4 files changed, 320 insertions(+), 179 deletions(-)
-> 
+--5d2767df3777ddd6c6e62542789a2836dc5c3b781deb8b1ccf57d5943538
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 
+On Thu Sep 24, 2026 at 4:06 AM -03, Eduard Zingerman wrote:
+> On Tue, 2026-09-22 at 15:31 -0300, Ricardo B. Marli=C3=A8re (SUSE) wrote:
+>> On Mon Sep 21, 2026 at 6:04 PM -03, Eduard Zingerman wrote:
+>> > On Mon, 2026-09-21 at 14:40 -0600, Nico Pache (Red Hat) wrote:
+>> >=20
+>> > ...
+>> >=20
+>> > > Given your series was defferred, and there is a "rewrite" coming, wh=
+at would
+>> > > be the best approach to working together (between us three) to get t=
+hese
+>> > > fixes in that series too.=20
+>> >=20
+>> > The, "rewrite", as you call it, had landed today.
+>> > So the series in question can be re-spun.
+>> > Regarding your patch on top of it, it appears you can just post is sep=
+arately.
+>> > However, I am inclined to be confrontational towards changes like this=
+ one.
+>> > The purpose of the selftests makefile is to run selftests as appropria=
+te
+>> > for current tip of the kernel tree using a very specific kernel config=
+uration.
+>>=20
+>> Ideally, if a Kconfig symbol is needed and the kernel under test does no=
+t
+>> have it, tests are skipped. But with BPF they were simply not built,
+>> rendering the tests useless for anything other than in-tree vmlinux with
+>> tools/selftests/bpf/config*.
+>>=20
+>> > Main users of this makefile are BPF developers and BPF CI.
+>>=20
+>> But they shouldn't be the *only* ones, IMHO. Enabling distros to build a=
+nd
+>> run the tests is also valuable to catch regressions in their kernels, do=
+n't
+>> you think?
+>>=20
+>> > Support for distros customizing the makefile is a non-goal.
+>> > The "PERMISSIVE" change done enough damage already.
+>>=20
+>> It's ugly, I agree, but what damage has it caused? I see that it's going=
+ to
+>> be reverted anyway, but I would appreciate if you could elaborate.
+>
+> It's the first time I see a makefile that builds stuff not fully but
+> 90% of it and returns success. The damage is the need to maintain it
+> going forward that already cost some time.
+
+Sure, that's fair.
+
+>
+> Do you have a list of kernel configs you had issues with?
+
+So, for openSUSE Tumbleweed (x86_64) specifically these are the ones:
+
+- PACKET
+- NF_CONNTRACK
+- NF_NAT
+- NF_CONNTRACK_MARK
+- VXLAN
+- XFRM_USER
+
+I attached the details.
+
+Thanks!
+
+--5d2767df3777ddd6c6e62542789a2836dc5c3b781deb8b1ccf57d5943538--
+
+--cbac917a6c7b2d466c8c0622d204a998728c2ee28196d6565575a9d670f0
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=bpf-allnoconfig.sh
+Content-Type: application/x-shellscript; name=bpf-allnoconfig.sh
+
+IyEvYmluL2Jhc2gKCm1ha2UgYWxsbm9jb25maWcKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25m
+aWcgXAogICAgICAgICAgICAgICAtLWVuYWJsZSA2NEJJVCBcCiAgICAgICAgICAgICAgIC0tZW5h
+YmxlIEJQRl9KSVQgXAogICAgICAgICAgICAgICAtLWVuYWJsZSBCUEZfU1lTQ0FMTCBcCiAgICAg
+ICAgICAgICAgIC0tZW5hYmxlIERFQlVHX0lORk9fQlRGIFwKICAgICAgICAgICAgICAgLS1lbmFi
+bGUgREVCVUdfSU5GT19EV0FSRl9UT09MQ0hBSU5fREVGQVVMVCBcCiAgICAgICAgICAgICAgIC0t
+ZW5hYmxlIERFQlVHX0tFUk5FTCBcCiAgICAgICAgICAgICAgIC0tZW5hYmxlIE1PRFVMRVMKbWFr
+ZSBvbGRkZWZjb25maWcKCiMgdjcuMy1yYzUKbWFrZSAtagptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcv
+c2VsZnRlc3RzIFNLSVBfVEFSR0VUUz0gVEFSR0VUUz1icGYgRk9SQ0VfVEFSR0VUUz0xCgojICBD
+TE5HLUJQRiBbdGVzdF9wcm9nc10gYXJlbmFfa2Z1bmMuYnBmLm8KI3Byb2dzLy4uL3Rlc3Rfa21v
+ZHMvYnBmX3Rlc3Rtb2Rfa2Z1bmMuaDo4MDoxMjogZXJyb3I6IGludmFsaWQgYXBwbGljYXRpb24g
+b2YgJ3NpemVvZicgdG8gYW4KIyAgICAgIGluY29tcGxldGUgdHlwZSAnc3RydWN0IF9fa2VybmVs
+X3NvY2thZGRyX3N0b3JhZ2UnCnNjcmlwdHMvY29uZmlnIC0tZmlsZSAuY29uZmlnIC0tZW5hYmxl
+IE5FVAptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxm
+dGVzdHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkct
+QlBGIFt0ZXN0X3Byb2dzXSBicGZfY2NfY3ViaWMuYnBmLm8KI3Byb2dzL2JwZl9jY19jdWJpYy5j
+OjEyMjoxMTogZXJyb3I6IHVzZSBvZiB1bmRlY2xhcmVkIGlkZW50aWZpZXIgJ1RDUF9DQV9DV1In
+CnNjcmlwdHMvY29uZmlnIC0tZmlsZSAuY29uZmlnIC0tZW5hYmxlIElORVQKbWFrZSBvbGRkZWZj
+b25maWcKbWFrZSAtagptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzIFNLSVBfVEFSR0VU
+Uz0gVEFSR0VUUz1icGYgRk9SQ0VfVEFSR0VUUz0xCgojICBDTE5HLUJQRiBbdGVzdF9wcm9nc10g
+YnBmX2l0ZXJfc2V0c29ja29wdF91bml4LmJwZi5vCiNwcm9ncy9icGZfaXRlcl9zZXRzb2Nrb3B0
+X3VuaXguYzoyOToyNjogZXJyb3I6IGRlY2xhcmF0aW9uIG9mICdzdHJ1Y3QgYnBmX2l0ZXJfX3Vu
+aXgnIHdpbGwgbm90CiMgICAgICBiZSB2aXNpYmxlIG91dHNpZGUgb2YgdGhpcyBmdW5jdGlvbiBb
+LVdlcnJvciwtV3Zpc2liaWxpdHldCnNjcmlwdHMvY29uZmlnIC0tZmlsZSAuY29uZmlnIC0tZW5h
+YmxlIFVOSVgKbWFrZSBvbGRkZWZjb25maWcKbWFrZSAtagptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcv
+c2VsZnRlc3RzIFNLSVBfVEFSR0VUUz0gVEFSR0VUUz1icGYgRk9SQ0VfVEFSR0VUUz0xCgojICBD
+TE5HLUJQRiBbdGVzdF9wcm9nc10gYnBmX2l0ZXJfdGFza19idGYuYnBmLm8KI3Byb2dzL2JwZl9p
+dGVyX3Rhc2tfYnRmLmM6MjA6MjQ6IGVycm9yOiB2YXJpYWJsZSBoYXMgaW5jb21wbGV0ZSB0eXBl
+ICdzdHJ1Y3QgYnRmX3B0cicKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25maWcgLS1lbmFibGUg
+S1BST0JFUyAtLWVuYWJsZSBGVFJBQ0UgLS1lbmFibGUgS1BST0JFX0VWRU5UUwptYWtlIG9sZGRl
+ZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMgU0tJUF9UQVJH
+RVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkctQlBGIFt0ZXN0X3Byb2dz
+XSBicGZfcWRpc2NfZHlucHRyX3VzZV9hZnRlcl9pbnZhbGlkYXRlX2Nsb25lLmJwZi5vCiNwcm9n
+cy9icGZfcWRpc2NfZHlucHRyX3VzZV9hZnRlcl9pbnZhbGlkYXRlX2Nsb25lLmM6MjY6MzogZXJy
+b3I6IGNhbGwgdG8gdW5kZWNsYXJlZCBmdW5jdGlvbgojICAgICAgJ2JwZl9xZGlzY19za2JfZHJv
+cCcKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25maWcgLS1lbmFibGUgTkVUX1NDSEVECm1ha2Ug
+b2xkZGVmY29uZmlnCm1ha2UgLWoKbWFrZSAtQyB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cyBTS0lQ
+X1RBUkdFVFM9IFRBUkdFVFM9YnBmIEZPUkNFX1RBUkdFVFM9MQoKIyAgQ0xORy1CUEYgW3Rlc3Rf
+cHJvZ3NdIGJwZl9xZGlzY19keW5wdHJfdXNlX2FmdGVyX2ludmFsaWRhdGVfY2xvbmUuYnBmLm8K
+I3Byb2dzL2JwZl9xZGlzY19keW5wdHJfdXNlX2FmdGVyX2ludmFsaWRhdGVfY2xvbmUuYzoyNjoz
+OiBlcnJvcjogY2FsbCB0byB1bmRlY2xhcmVkIGZ1bmN0aW9uCiMgICAgICAnYnBmX3FkaXNjX3Nr
+Yl9kcm9wJwpzY3JpcHRzL2NvbmZpZyAtLWZpbGUgLmNvbmZpZyAtLWVuYWJsZSBORVRfU0NIX0JQ
+RgptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxmdGVz
+dHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkctQlBG
+IFt0ZXN0X3Byb2dzXSBidGZfdHlwZV90YWdfcGVyY3B1LmJwZi5vCiNwcm9ncy9idGZfdHlwZV90
+YWdfcGVyY3B1LmM6NTM6MTc6IGVycm9yOiBpbmNvbXBsZXRlIGRlZmluaXRpb24gb2YgdHlwZSAn
+c3RydWN0IGNncm91cCcKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25maWcgLS1lbmFibGUgQ0dS
+T1VQUwptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxm
+dGVzdHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkct
+QlBGIFt0ZXN0X3Byb2dzXSBjZ3JvdXBfaXRlcl9tZW1jZy5icGYubwojcHJvZ3MvY2dyb3VwX2l0
+ZXJfbWVtY2cuYzoyMzoxMDogZXJyb3I6IGNhbGwgdG8gdW5kZWNsYXJlZCBmdW5jdGlvbiAnYnBm
+X2dldF9tZW1fY2dyb3VwJwpzY3JpcHRzL2NvbmZpZyAtLWZpbGUgLmNvbmZpZyAtLWVuYWJsZSBN
+RU1DRwptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxm
+dGVzdHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkct
+QlBGIFt0ZXN0X3Byb2dzXSBjZ3JvdXBfbXByb2cuYnBmLm8KI3Byb2dzL2Nncm91cF9tcHJvZy5j
+Ojk6MjU6IGVycm9yOiBkZWNsYXJhdGlvbiBvZiAnc3RydWN0IGJwZl9zb2Nrb3B0JyB3aWxsIG5v
+dCBiZSB2aXNpYmxlCiMgICAgICBvdXRzaWRlIG9mIHRoaXMgZnVuY3Rpb24gWy1XZXJyb3IsLVd2
+aXNpYmlsaXR5XQpzY3JpcHRzL2NvbmZpZyAtLWZpbGUgLmNvbmZpZyAtLWVuYWJsZSBDR1JPVVBf
+QlBGCm1ha2Ugb2xkZGVmY29uZmlnCm1ha2UgLWoKbWFrZSAtQyB0b29scy90ZXN0aW5nL3NlbGZ0
+ZXN0cyBTS0lQX1RBUkdFVFM9IFRBUkdFVFM9YnBmIEZPUkNFX1RBUkdFVFM9MQoKIyAgQ0xORy1C
+UEYgW3Rlc3RfcHJvZ3NdIGNyeXB0b19iYXNpYy5icGYubwojcHJvZ3MvY3J5cHRvX2Jhc2ljLmM6
+MTU6Mjc6IGVycm9yOiB2YXJpYWJsZSBoYXMgaW5jb21wbGV0ZSB0eXBlICdzdHJ1Y3QgYnBmX2Ny
+eXB0b19wYXJhbXMnCnNjcmlwdHMvY29uZmlnIC0tZmlsZSAuY29uZmlnIC0tZW5hYmxlIENSWVBU
+TwptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxmdGVz
+dHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkctQlBG
+IFt0ZXN0X3Byb2dzXSBkbWFidWZfaXRlci5icGYubwojcHJvZ3MvZG1hYnVmX2l0ZXIuYzozMToy
+OTogZXJyb3I6IGRlY2xhcmF0aW9uIG9mICdzdHJ1Y3QgYnBmX2l0ZXJfX2RtYWJ1Zicgd2lsbCBu
+b3QgYmUgdmlzaWJsZQojICAgICAgb3V0c2lkZSBvZiB0aGlzIGZ1bmN0aW9uIFstV2Vycm9yLC1X
+dmlzaWJpbGl0eV0Kc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25maWcgLS1lbmFibGUgU1lOQ19G
+SUxFCm1ha2Ugb2xkZGVmY29uZmlnCm1ha2UgLWoKbWFrZSAtQyB0b29scy90ZXN0aW5nL3NlbGZ0
+ZXN0cyBTS0lQX1RBUkdFVFM9IFRBUkdFVFM9YnBmIEZPUkNFX1RBUkdFVFM9MQoKIyAgQ0xORy1C
+UEYgW3Rlc3RfcHJvZ3NdIGZpbGVfcmVhZGVyLmJwZi5vCiNwcm9ncy9maWxlX3JlYWRlci5jOjQ1
+Ojk6IGVycm9yOiBjYWxsIHRvIHVuZGVjbGFyZWQgZnVuY3Rpb24gJ2JwZl9nZXRfdGFza19leGVf
+ZmlsZScKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25maWcgLS1lbmFibGUgU0VDVVJJVFkgLS1l
+bmFibGUgQlBGX0xTTQptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVz
+dGluZy9zZWxmdGVzdHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEK
+CiMgIENMTkctQlBGIFt0ZXN0X3Byb2dzXSBsc21fY2dyb3VwLmJwZi5vCiNwcm9ncy9sc21fY2dy
+b3VwLmM6MTA3OjIxOiBlcnJvcjogdmFyaWFibGUgaGFzIGluY29tcGxldGUgdHlwZSAnc3RydWN0
+IHNvY2thZGRyX2xsJwpzY3JpcHRzL2NvbmZpZyAtLWZpbGUgLmNvbmZpZyAtLWVuYWJsZSBQQUNL
+RVQKbWFrZSBvbGRkZWZjb25maWcKbWFrZSAtagptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcvc2VsZnRl
+c3RzIFNLSVBfVEFSR0VUUz0gVEFSR0VUUz1icGYgRk9SQ0VfVEFSR0VUUz0xCgojICBDTE5HLUJQ
+RiBbdGVzdF9wcm9nc10gbHd0X21pc2MuYnBmLm8KI3Byb2dzL2x3dF9taXNjLmM6MTc6MjY6IGVy
+cm9yOiB1c2Ugb2YgdW5kZWNsYXJlZCBpZGVudGlmaWVyICdCUEZfTFdUX0VOQ0FQX0lQJwpzY3Jp
+cHRzL2NvbmZpZyAtLWZpbGUgLmNvbmZpZyAtLWVuYWJsZSBMV1RVTk5FTCAtLWVuYWJsZSBMV1RV
+Tk5FTF9CUEYKbWFrZSBvbGRkZWZjb25maWcKbWFrZSAtagptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcv
+c2VsZnRlc3RzIFNLSVBfVEFSR0VUUz0gVEFSR0VUUz1icGYgRk9SQ0VfVEFSR0VUUz0xCgojICBD
+TE5HLUJQRiBbdGVzdF9wcm9nc10gbXB0Y3Bfc29jay5icGYubwojcHJvZ3MvbXB0Y3Bfc29jay5j
+OjQ5OjQwOiBlcnJvcjogbm8gbWVtYmVyIG5hbWVkICdpc19tcHRjcCcgaW4gJ3N0cnVjdCB0Y3Bf
+c29jaycKI3Byb2dzL21wdGNwX3NvY2suYzo2OToyNTogZXJyb3I6IG5vIG1lbWJlciBuYW1lZCAn
+dG9rZW4nIGluICdzdHJ1Y3QgbXB0Y3Bfc29jaycKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25m
+aWcgLS1lbmFibGUgTVBUQ1AKbWFrZSBvbGRkZWZjb25maWcKbWFrZSAtagptYWtlIC1DIHRvb2xz
+L3Rlc3Rpbmcvc2VsZnRlc3RzIFNLSVBfVEFSR0VUUz0gVEFSR0VUUz1icGYgRk9SQ0VfVEFSR0VU
+Uz0xCgojICBDTE5HLUJQRiBbdGVzdF9wcm9nc10gcHJvZmlsZXIxLzIvMy5icGYubwojcHJvZ3Mv
+cHJvZmlsZXIuaW5jLmg6NTk5OjQ5OiBlcnJvcjogZGVjbGFyYXRpb24gb2YgJ3N0cnVjdCBzeXNj
+YWxsX3RyYWNlX2VudGVyJyB3aWxsIG5vdCBiZQojICAgICAgdmlzaWJsZSBvdXRzaWRlIG9mIHRo
+aXMgZnVuY3Rpb24gWy1XZXJyb3IsLVd2aXNpYmlsaXR5XQpzY3JpcHRzL2NvbmZpZyAtLWZpbGUg
+LmNvbmZpZyAtLWVuYWJsZSBGVFJBQ0VfU1lTQ0FMTFMKbWFrZSBvbGRkZWZjb25maWcKbWFrZSAt
+agptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzIFNLSVBfVEFSR0VUUz0gVEFSR0VUUz1i
+cGYgRk9SQ0VfVEFSR0VUUz0xCgojICBDTE5HLUJQRiBbdGVzdF9wcm9nc10gdGVzdF9icGZfbmYu
+YnBmLm8KI3Byb2dzL3Rlc3RfYnBmX25mLmM6ODk6NDk6IGVycm9yOiBkZWNsYXJhdGlvbiBvZiAn
+dW5pb24gbmZfaW5ldF9hZGRyJyB3aWxsIG5vdCBiZSB2aXNpYmxlIC4uLgojcHJvZ3MvdGVzdF9i
+cGZfbmYuYzoyMDA6NTogZXJyb3I6IGluY29tcGxldGUgZGVmaW5pdGlvbiBvZiB0eXBlICdzdHJ1
+Y3QgbmZfY29ubicKI3Byb2dzL3Rlc3RfYnBmX25mLmM6MjMzOjEyOiBlcnJvcjogdXNlIG9mIHVu
+ZGVjbGFyZWQgaWRlbnRpZmllciAnSVBTX0NPTkZJUk1FRCcKc2NyaXB0cy9jb25maWcgLS1maWxl
+IC5jb25maWcgXAogICAgICAgICAgICAgICAtLWVuYWJsZSBORVRGSUxURVIgXAogICAgICAgICAg
+ICAgICAtLWVuYWJsZSBORl9DT05OVFJBQ0sgXAogICAgICAgICAgICAgICAtLWVuYWJsZSBORl9D
+T05OVFJBQ0tfTUFSSyBcCiAgICAgICAgICAgICAgIC0tZW5hYmxlIE5GX05BVAptYWtlIG9sZGRl
+ZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMgU0tJUF9UQVJH
+RVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkctQlBGIFt0ZXN0X3Byb2dz
+XSB0ZXN0X2x3dF9pcF9lbmNhcC5icGYubwojcHJvZ3MvdGVzdF9sd3RfaXBfZW5jYXAuYzoxMDU6
+MTk6IGVycm9yOiBmaWVsZCBoYXMgaW5jb21wbGV0ZSB0eXBlICdzdHJ1Y3QgdnhsYW5oZHInCnNj
+cmlwdHMvY29uZmlnIC0tZmlsZSAuY29uZmlnIC0tZW5hYmxlIE5FVERFVklDRVMgLS1lbmFibGUg
+VlhMQU4KbWFrZSBvbGRkZWZjb25maWcKbWFrZSAtagptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcvc2Vs
+ZnRlc3RzIFNLSVBfVEFSR0VUUz0gVEFSR0VUUz1icGYgRk9SQ0VfVEFSR0VUUz0xCgojICBDTE5H
+LUJQRiBbdGVzdF9wcm9nc10gdGVzdF90dW5uZWxfa2Vybi5icGYubwojcHJvZ3MvdGVzdF90dW5u
+ZWxfa2Vybi5jOjk2NDoyNDogZXJyb3I6IHZhcmlhYmxlIGhhcyBpbmNvbXBsZXRlIHR5cGUgJ3N0
+cnVjdCBicGZfeGZybV9zdGF0ZScKI3Byb2dzL3Rlc3RfdHVubmVsX2tlcm4uYzo5ODM6Mjk6IGVy
+cm9yOiB2YXJpYWJsZSBoYXMgaW5jb21wbGV0ZSB0eXBlICdzdHJ1Y3QgYnBmX3hmcm1fc3RhdGVf
+b3B0cycKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25maWcgLS1lbmFibGUgWEZSTV9VU0VSCm1h
+a2Ugb2xkZGVmY29uZmlnCm1ha2UgLWoKbWFrZSAtQyB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cyBT
+S0lQX1RBUkdFVFM9IFRBUkdFVFM9YnBmIEZPUkNFX1RBUkdFVFM9MQo=
+--cbac917a6c7b2d466c8c0622d204a998728c2ee28196d6565575a9d670f0
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=bpf-tumbleweed.sh
+Content-Type: application/x-shellscript; name=bpf-tumbleweed.sh
+
+IyEvYmluL2Jhc2gKCiMgb3BlblNVU0UgVHVtYmxld2VlZCB4ODZfNjQgS2NvbmZpZwpjdXJsIGh0
+dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9TVVNFL2tlcm5lbC1zb3VyY2UvcmVmcy9o
+ZWFkcy9zdGFibGUvY29uZmlnL3g4Nl82NC9kZWZhdWx0ID4gLmNvbmZpZwpzY3JpcHRzL2NvbmZp
+ZyAtLWZpbGUgLmNvbmZpZyAtLXNldC1zdHIgTU9EVUxFX1NJR19LRVkgImNlcnRzL3NpZ25pbmdf
+a2V5LnBlbSIKbWFrZSBvbGRkZWZjb25maWcKbWFrZSBtb2Qybm9jb25maWcKCiMgdjcuMy1yYzUK
+bWFrZSAtagptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzIFNLSVBfVEFSR0VUUz0gVEFS
+R0VUUz1icGYgRk9SQ0VfVEFSR0VUUz0xCgojICBDTE5HLUJQRiBbdGVzdF9wcm9nc10gbHNtX2Nn
+cm91cC5icGYubwojcHJvZ3MvbHNtX2Nncm91cC5jOjEwNzoyMTogZXJyb3I6IHZhcmlhYmxlIGhh
+cyBpbmNvbXBsZXRlIHR5cGUgJ3N0cnVjdCBzb2NrYWRkcl9sbCcKc2NyaXB0cy9jb25maWcgLS1m
+aWxlIC5jb25maWcgLS1lbmFibGUgUEFDS0VUCm1ha2Ugb2xkZGVmY29uZmlnCm1ha2UgLWoKbWFr
+ZSAtQyB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cyBTS0lQX1RBUkdFVFM9IFRBUkdFVFM9YnBmIEZP
+UkNFX1RBUkdFVFM9MQoKIyAgQ0xORy1CUEYgW3Rlc3RfcHJvZ3NdIHRlc3RfYnBmX25mLmJwZi5v
+CiNwcm9ncy90ZXN0X2JwZl9uZi5jOjg5OjQ5OiBlcnJvcjogZGVjbGFyYXRpb24gb2YgJ3VuaW9u
+IG5mX2luZXRfYWRkcicgd2lsbCBub3QgYmUgdmlzaWJsZSBvdXRzaWRlIG9mIHRoaXMgZnVuY3Rp
+b24gWy1XZXJyb3IsLVd2aXNpYmlsaXR5XQojcHJvZ3MvdGVzdF9icGZfbmYuYzoxOTU6MjI6IGVy
+cm9yOiB2YXJpYWJsZSBoYXMgaW5jb21wbGV0ZSB0eXBlICd1bmlvbiBuZl9pbmV0X2FkZHInCiNw
+cm9ncy90ZXN0X2JwZl9uZi5jOjIwMDo1OiBlcnJvcjogaW5jb21wbGV0ZSBkZWZpbml0aW9uIG9m
+IHR5cGUgJ3N0cnVjdCBuZl9jb25uJwojcHJvZ3MvdGVzdF9icGZfbmYuYzoyMzM6MTI6IGVycm9y
+OiB1c2Ugb2YgdW5kZWNsYXJlZCBpZGVudGlmaWVyICdJUFNfQ09ORklSTUVEJwojcHJvZ3MvdGVz
+dF9icGZfbmYuYzoyMzM6Mjg6IGVycm9yOiB1c2Ugb2YgdW5kZWNsYXJlZCBpZGVudGlmaWVyICdJ
+UFNfU0VFTl9SRVBMWScKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25maWcgLWUgTkZfQ09OTlRS
+QUNLIC1lIE5GX05BVAptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVz
+dGluZy9zZWxmdGVzdHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEK
+CiMgIENMTkctQlBGIFt0ZXN0X3Byb2dzXSB0ZXN0X2JwZl9uZi5icGYubwojcHJvZ3MvdGVzdF9i
+cGZfbmYuYzoyMDA6NzogZXJyb3I6IG5vIG1lbWJlciBuYW1lZCAnbWFyaycgaW4gJ3N0cnVjdCBu
+Zl9jb25uJwpzY3JpcHRzL2NvbmZpZyAtLWZpbGUgLmNvbmZpZyAtZSBORl9DT05OVFJBQ0tfTUFS
+SwptYWtlIG9sZGRlZmNvbmZpZwptYWtlIC1qCm1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxmdGVz
+dHMgU0tJUF9UQVJHRVRTPSBUQVJHRVRTPWJwZiBGT1JDRV9UQVJHRVRTPTEKCiMgIENMTkctQlBG
+IFt0ZXN0X3Byb2dzXSB0ZXN0X2x3dF9pcF9lbmNhcC5icGYubwojcHJvZ3MvdGVzdF9sd3RfaXBf
+ZW5jYXAuYzoxMDU6MTk6IGVycm9yOiBmaWVsZCBoYXMgaW5jb21wbGV0ZSB0eXBlICdzdHJ1Y3Qg
+dnhsYW5oZHInCnNjcmlwdHMvY29uZmlnIC0tZmlsZSAuY29uZmlnIC1lIFZYTEFOCm1ha2Ugb2xk
+ZGVmY29uZmlnCm1ha2UgLWoKbWFrZSAtQyB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cyBTS0lQX1RB
+UkdFVFM9IFRBUkdFVFM9YnBmIEZPUkNFX1RBUkdFVFM9MQoKIyAgQ0xORy1CUEYgW3Rlc3RfcHJv
+Z3NdIHRlc3RfdHVubmVsX2tlcm4uYnBmLm8KI3Byb2dzL3Rlc3RfdHVubmVsX2tlcm4uYzo0NTo1
+MTogZXJyb3I6IGRlY2xhcmF0aW9uIG9mICdzdHJ1Y3QgYnBmX3hmcm1fc3RhdGVfb3B0cycgd2ls
+bCBub3QgYmUgdmlzaWJsZSBvdXRzaWRlIG9mIHRoaXMgZnVuY3Rpb24gWy1XZXJyb3IsLVd2aXNp
+YmlsaXR5XQojcHJvZ3MvdGVzdF90dW5uZWxfa2Vybi5jOjk2NDoyNDogZXJyb3I6IHZhcmlhYmxl
+IGhhcyBpbmNvbXBsZXRlIHR5cGUgJ3N0cnVjdCBicGZfeGZybV9zdGF0ZScKI3Byb2dzL3Rlc3Rf
+dHVubmVsX2tlcm4uYzo5ODM6Mjk6IGVycm9yOiB2YXJpYWJsZSBoYXMgaW5jb21wbGV0ZSB0eXBl
+ICdzdHJ1Y3QgYnBmX3hmcm1fc3RhdGVfb3B0cycKc2NyaXB0cy9jb25maWcgLS1maWxlIC5jb25m
+aWcgLWUgWEZSTV9VU0VSCm1ha2Ugb2xkZGVmY29uZmlnCm1ha2UgLWoKbWFrZSAtQyB0b29scy90
+ZXN0aW5nL3NlbGZ0ZXN0cyBTS0lQX1RBUkdFVFM9IFRBUkdFVFM9YnBmIEZPUkNFX1RBUkdFVFM9
+MQo=
+--cbac917a6c7b2d466c8c0622d204a998728c2ee28196d6565575a9d670f0--
