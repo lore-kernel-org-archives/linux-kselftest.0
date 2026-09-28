@@ -1,144 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC733FC5AE;
-	Mon, 28 Sep 2026 23:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5487349D581;
+	Mon, 28 Sep 2026 23:31:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790636983; cv=none; b=WFtGrCYF1xcVcv9csWivXfz+XispwhOa6y8q136vprzdG9OHRUrrIvUB/qtOAWFN3xZ4kckv8pKBjJXsJM2lb+xSIjIEhy3A1qK44MyvNj9iJO2RcT+X7v/xZ6ImYMo+iReG2xXpBtmUthHYJXIHEUvcxE/WPacn7kIjMdTz8fE=
+	t=1790638289; cv=none; b=euhCAPqE1uHM3wlyT+4q+ux7vsFzpMjO4Lr3HQxAV5PIT2WgEB+WY0RgiLv0PB4FATBNKhwXfut+oPZfsfyZHRa52xtlEd7lK0sf4RmZw1ZeWlB/5tckv5lCF9PjphWFDU+IbTHWfqRD/ewo2S+jXgakHIkrHTKnlAsLmsju/i0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790636983; c=relaxed/simple;
-	bh=xq1CPA79atUqxdiHTJOQkvM7HJAj7Vi9nvtAOk3UMas=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KT40Txc8NGEW1oHpue28qP7cvmViNZpkv5XDFH7zN+kPzQjS2RDQ5XtG68Zz6pZiSH6YpFDfvTymrvDktSIvSpLQwEIOrWG3j4i6+4P3kuYKBx0E2dutFaBzRc3RIj+oq2RRPHDYfr7s/8Ocw2OicYDDBJ1WKta2fUHyyWzm5vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YUmlNjyi; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790638289; c=relaxed/simple;
+	bh=S+Uw/0WtdZaOYyywIy5D6MNBzh1f+wNfHoc/BvDzB38=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ucuZ28XAVU3SvVz190rsrjuvu5MDNuLx814wmdZqLZpkiGUGuY5dLSfPez9Pzr+YAJymSSc7EbjROoHVIh3xQHQumgBqfaPyAKyoBQvgonQ9X3wRb4PmHaxH1AkVwLlIXoXPldnjlEcLy1SJnzDYjve6Eu4eUjUCSqQ+3OW4F0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NLtvvT6F; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YUmlNjyi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC801F000FF;
-	Mon, 28 Sep 2026 23:09:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NLtvvT6F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAAA11F000FF;
+	Mon, 28 Sep 2026 23:31:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790636982;
-	bh=LcgmQHfKVXwQycuEIp0YeI6oaglMEocrzzRC4NS5Xew=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=YUmlNjyiWlz9jEw7//cFr/esUnddvNoZ7F84EL3p+AlApXWTUEicBb8dcavrv9ysG
-	 oC2huhu8Q+GlMqpdgJuzYlJ5CFN4f8+kiwyzAcKwcUFqhtKWk4ccp71f9kQv4UJFB1
-	 6434QaLVHlJdQDLWnBFvTEuZdk+DemhdjMTdHEDUza/tiaJPJkQmk9soYXpIVp60/i
-	 miXnGyRbHlvuhEy1xRTt0JzkpbidqQFB74G1o7bH90ta1TPWbZxGKxlXqzjlvd+TJ2
-	 sT0EeZuYMc3u7zGxwP5Wd8vDx3mxWL/YWMCCKdEbhwTP54h5UYCDHP5gBNsvV6zY4M
-	 IdDd4wb3bYx6A==
-Subject:
- Re: [PATCH net-next] net: mctp: Stop selecting flow support for KUnit tests
-From: netdev-bot+sashiko@kernel.org
-To: kmehltretter@gmail.com
-Cc: jk@codeconstruct.com.au, matt@codeconstruct.com.au, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- netdev@vger.kernel.org, geert@linux-m68k.org, brendan.higgins@linux.dev,
- david@davidgow.net, raemoar63@gmail.com, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Date: Mon, 28 Sep 2026 23:09:40 +0000
-Message-ID: <179063698082.3145.2926312612788491843@kernel.org>
-In-Reply-To: <20260925192510.93840-1-kmehltretter@gmail.com>
-References: <20260925192510.93840-1-kmehltretter@gmail.com>
-X-sashiko-severity: Medium
+	s=k20260515; t=1790638288;
+	bh=N7tH57G3bjBEBmvSHKajlxChx2aCHZLfCUEw08v1UCE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=NLtvvT6Fy/98uI46pS1aEcqSn6/CYvSN/mH/4bxImIC8RI5+2DEMJEY0fSYldVaIP
+	 zgPxCBHciK4kHqn696Q0oQJiKV1MvGDQR3ldr1hD9CzeBu7Mq3ia5ANJqiV7xVvsyL
+	 fK7/dp6G6Ui50xR2CprCWI7H2VYTIJksCSj8L5uSA8Iy0YEMGpBPFmoSd3rSgE5QSD
+	 VHltB8BKrN8A7HO9dtiZPWsvg7unsNVNaU9ja9XzgQBj+Jiz2TKw8l8HivaeDHDY+J
+	 8Wiz+GAfRfvlZ/N8zgw5PJ684fOaBZ78WEfXVk3Ip4X/t+iL1zco4wOkk88jHq7Yef
+	 ooAhRltuP7Jqw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A943924FE4;
+	Mon, 28 Sep 2026 23:30:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v5 0/2] selftests: openvswitch: SCTP flow key
+ coverage (IPv6 + NAT)
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179063821213.174580.11443408950385438893.git-patchwork-notify@kernel.org>
+Date: Mon, 28 Sep 2026 23:30:12 +0000
+References: <20260918144647.2024095-1-houminxi@gmail.com>
+In-Reply-To: <20260918144647.2024095-1-houminxi@gmail.com>
+To: Minxi Hou <houminxi@gmail.com>
+Cc: netdev@vger.kernel.org, aconole@redhat.com, echaudro@redhat.com,
+ i.maximets@ovn.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ dev@openvswitch.org, linux-kselftest@vger.kernel.org
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Hello:
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+On Fri, 18 Sep 2026 10:46:45 -0400 you wrote:
+> The merged IPv4 SCTP flow-key test covers only IPv4 and only the
+> plain forwarding path. This series adds SCTP over IPv6, and SCTP
+> across conntrack NAT (ovs_nat_update_key() rewrites L4 ports on the
+> recirculated skb). Patch 2 translates the destination port so that
+> SCTP branch is load-bearing; address-only NAT cannot tell a working
+> branch from a missing one.
+> 
+> [...]
 
-- [Medium] The patch removes `select MCTP_FLOWS` from `config MCTP_TEST`
-  in net/mctp/Kconfig.
+Here is the summary with links:
+  - [net-next,v5,1/2] selftests/net/openvswitch: add SCTP flow key test over IPv6
+    https://git.kernel.org/netdev/net-next/c/392551884f44
+  - [net-next,v5,2/2] selftests/net/openvswitch: add SCTP flow key test across conntrack NAT
+    https://git.kernel.org/netdev/net-next/c/3e5e024c2075
 
---
-
-net: mctp: Stop selecting flow support for KUnit tests
-
-This commit removes "select MCTP_FLOWS" from MCTP_TEST in net/mctp/Kconfig.
-The selection also enabled SKB_EXTENSIONS, and KUnit style guidance says
-tests should not pull in dependencies this way. The two flow-specific tests
-already skip when MCTP_FLOWS is disabled.
-
-> diff --git a/net/mctp/Kconfig b/net/mctp/Kconfig
-> index d8d3413a37f7e..3a5c0e70da776 100644
-> --- a/net/mctp/Kconfig
-> +++ b/net/mctp/Kconfig
-> @@ -14,7 +14,6 @@ menuconfig MCTP
->  
->  config MCTP_TEST
->          bool "MCTP core tests" if !KUNIT_ALL_TESTS
-> -        select MCTP_FLOWS
-
-[Severity: Medium]
-Will this break kunit.py run --alltests? tools/testing/kunit/configs/all_tests.config
-still asks for flow support:
-
-tools/testing/kunit/configs/all_tests.config:
-    CONFIG_NET=y
-    CONFIG_MCTP=y
-    CONFIG_MCTP_FLOWS=y
-
-Commit 109a5331143d, the one named in the Fixes: tag, added this line
-together with the select.
-
-MCTP_FLOWS is a bool with no prompt and no default:
-
-net/mctp/Kconfig:
-    config MCTP_FLOWS
-        bool
-        depends on MCTP
-        select SKB_EXTENSIONS
-
-That means a config fragment cannot turn it on. Only a select can.
-
-After this patch the only selector left is MCTP_TRANSPORT_I2C in
-drivers/net/mctp/Kconfig. That symbol depends on I2C_SLAVE, and neither
-one is on by default or set in all_tests.config. So after olddefconfig,
-MCTP_FLOWS stays unset in the generated .config.
-
-validate_config() in tools/testing/kunit/kunit_kernel.py then calls
-Kconfig.is_subset_of() in kunit_config.py:
-
-    b = other._entries.get(name)
-    if b is None:
-        if value == 'n':
-            continue
-        return False
-
-This returns False for CONFIG_MCTP_FLOWS=y. The run then stops at config
-time with "Not all Kconfig options selected in kunitconfig were in the
-generated .config", before any KUnit suite is built. That affects every
-suite in the all-tests run, not only the MCTP ones.
-
-Should all_tests.config be updated in this patch as well? One option is to
-drop CONFIG_MCTP_FLOWS=y. In that case mctp_test_packet_flow() and
-mctp_test_fragment_flow() in net/mctp/test/route-test.c would always skip
-in the all-tests configuration.
-
-Another option is to replace the line with CONFIG_I2C_SLAVE=y and
-CONFIG_MCTP_TRANSPORT_I2C=y. The flow tests would then still run. That
-matches the validation notes, which say the enabled configuration used the
-I2C transport to select MCTP_FLOWS.
-
-Since the patch carries a Fixes: tag, a stable backport would bring this
-mismatch along with it.
-
->          depends on MCTP=y && KUNIT=y
->          default KUNIT_ALL_TESTS
->
-
+You are awesome, thank you!
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260925192510.93840-1-kmehltretter%40gmail.com
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
