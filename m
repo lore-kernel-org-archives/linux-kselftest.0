@@ -1,172 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB30F4E0B85;
-	Mon, 28 Sep 2026 15:43:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C1B4E80B5
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 16:13:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790610195; cv=none; b=cLOTQj5lcxnWkOuJy6YeZw7xT7kfEemKHepCu9m7dL1Qre2JXS/AsSQLkL7RkdLeeDuO1QfTh92FxIv2WuWwImb2x+Mw7iJI7DZe9WrquoZ9xh0W5TFjlXnkAWBkKSFQAMQwMdNQQ4qEJzhQAf9Wa9HCGv3o+mOky4G41gxBBCA=
+	t=1790612001; cv=none; b=LAkxpeAKWiWdNy+TXER63jzQ7/Jwm+Zhc/gdGWbPsW50r7iTjSBX0zS7NcPCK1z06T1WqSyP4suHWp42ryyL9XFf+KDH0/3uPImlEJDMv4rRbmTDlz2MBHNZoIwGzWpZ9H0Gs9RB/fEDwmgr2ux2CyKG6Ew1gV7N08azyvscR70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790610195; c=relaxed/simple;
-	bh=KsqOujjQ/oW8ig5DcOGJOdeLYwsIDW7kbTI96hTCUh0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fKFcX/XXUG33nwqmgHdKd6s+iX6S0V7P5JrZ5tKDKMkMflo5yeXG06CHvt9kRcMgY+ITLYsScq1l+mSxasH3kZxVvSSn8BzyEbUXtwvM+pwnnEiDJEyBiOZfuSxqysaSVVkYwOpkFm3BpKW+LxEl8Vi/B53DcTnEKpNGSfuWBwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BcT7OKmu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790612001; c=relaxed/simple;
+	bh=6gtprv+I7d5L3pBHaUUFHArfk9rtSviWLekbvSkYtZo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Cep8FGJyeB51efvRfKBu4YGyJpAyHb20nifSfQc5d66Jc6kPIg88KcHY2U9utbMz6apVqkwfydDyhVid0F0994yBs4Sw+OpAy9AVPcWks6+Ck/NV7sy7NsMzy+N0fGQHagoNA8HMoMPfI9mt8tqCU03MfwS062I4SzktRLIHq00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KsfL4A8J; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BcT7OKmu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A20611F000FF;
-	Mon, 28 Sep 2026 15:43:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790610193;
-	bh=WvjIK8lMJjZQ6TYt7Ry3gctA6WmwroJ6f2WMOorPUPQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=BcT7OKmuAFs0uf8ul2TBIRFuaFueW7Kb6CkzFZ6XOaDunxOrqBe3KUlh+ZEoGfa87
-	 0sFowvcUP1n3cQ9adY6DXnGNtxKliItjrZLIi1dzwLIu2B69nx2HEeuPisLLMIXS7B
-	 Ipbw7ltcGWYiwYGy/ZpT+Loe+Ro15NquMCbhIUxVi8E6ns+fWEGvcG8SRFTOsnTUaH
-	 UKob4f0VJ5rmvuZS0XKoe0csPSxFdsEIt8eWw2yZ1w+GTPlHToC3Lb3DS3b76k3+RJ
-	 1jPorzDrT/qUDBznGdaeIQGbtNGG64lPI0jSEGHv+WvAU5TweAl2ClO3M2pY36cIdB
-	 yUD8iGWfYi0bw==
-Date: Mon, 28 Sep 2026 16:43:06 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Ben Horgan <ben.horgan@arm.com>, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 3/3] KVM: selftests: arm64: Make set_id_regs bitfield
- validatity checks non-fatal
-Message-ID: <arqIqSd33vvr1_lC@gremlin>
-References: <20260901-kvm-arm64-set-id-regs-aarch64-v7-0-7b065b0bda9a@kernel.org>
- <20260901-kvm-arm64-set-id-regs-aarch64-v7-3-7b065b0bda9a@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KsfL4A8J"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790611997;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3yjRvgCo71Q2/uVN+UiK3J2F/H+VV1qWlgtYqAluoao=;
+	b=KsfL4A8Ji2BTE7+uZTZaH1qTRQfTDr2QlxE/fA/Pp3ng6N+8vqby5a+2SQdjCduuVwzTOg
+	GAU+91pXaKF7kFUkuT6xzf7hn9eoN299+GshfEE3I4ZFfOgV62OcEKUkQ6pMvilnKS09dP
+	58Thyy9CMhHV8wKXm06DhIKKss9yXyo=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-518-SzX7qyHtNEW_m7DoV7sE-w-1; Mon,
+ 28 Sep 2026 12:13:10 -0400
+X-MC-Unique: SzX7qyHtNEW_m7DoV7sE-w-1
+X-Mimecast-MFC-AGG-ID: SzX7qyHtNEW_m7DoV7sE-w_1790611986
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9889618DA5C8;
+	Mon, 28 Sep 2026 16:13:05 +0000 (UTC)
+Received: from [100.91.18.181] (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 41E741956047;
+	Mon, 28 Sep 2026 16:13:02 +0000 (UTC)
+Message-ID: <7e8fa7ac-4438-4dea-b3e0-c142523aeab3@redhat.com>
+Date: Mon, 28 Sep 2026 12:13:02 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260901-kvm-arm64-set-id-regs-aarch64-v7-3-7b065b0bda9a@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/3] cgroup/cpuset: prevent activating local partition
+ over remote one
+To: Ridong Chen <ridong.chen@linux.dev>, Hui Peng <benquike@gmail.com>,
+ Guopeng Zhang <guopeng.zhang@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>
+Cc: Shuah Khan <shuah@kernel.org>, Chen Ridong <chenridong@huawei.com>,
+ cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20260924042729.1908863-1-benquike@gmail.com>
+ <20260924042729.1908863-3-benquike@gmail.com>
+ <93e48fe3-d229-4870-af8a-32431d236211@linux.dev>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <93e48fe3-d229-4870-af8a-32431d236211@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Typo in subject: validatity -> validity
+On 9/27/26 9:40 PM, Ridong Chen wrote:
+>
+>
+> On 9/24/2026 12:27 PM, Hui Peng wrote:
+>> Commit 6da580ec656a ("cgroup/cpuset: Don't allow creation of local
+>> partition over a remote one") added a check in update_prstate() to 
+>> reject
+>> creating a top-level local partition whose cs->exclusive_cpus intersects
+>> subpartitions_cpus.
+>>
+>> However, if a top-level cgroup A1 has a child A1/A2 enabled as a remote
+>> partition on a subset of its exclusive CPUs (X2-3 on A1, CX2-3:P2 on
+>> A1/A2), and A1 is then set to "root" (P1, becoming "root invalid" via
+>> update_prstate() because its exclusive CPUs intersect 
+>> subpartitions_cpus)
+>> followed by expanding its CPUs to include additional non-remote CPUs
+>> (CX1-3), update_cpumask() / update_exclusive_cpumask() calls
+>> validate_partition() without going through update_prstate(). Because
+>> validate_partition() does not check trialcs->exclusive_cpus against
+>> subpartitions_cpus, A1 transitions from "root invalid" to a valid local
+>> partition over the existing remote partition A1/A2 and triggers:
+>>
+>>    WARNING: kernel/cgroup/cpuset.c:1943 at 
+>> update_parent_effective_cpumask+0x189b/0x1fd0
+>>
+>> Check trialcs->exclusive_cpus against subpartitions_cpus in
+>> validate_partition() when !is_partition_valid(cs), and add a regression
+>> test case to tools/testing/selftests/cgroup/test_cpuset_prs.sh.
+>>
+>
+> Was this message assisted by an LLM?
+>
+> It would be helpful if you could provide the reproducer as I replied 
+> earlier, so that it can be understood more easily and tested.
 
-On Tue, Sep 01, 2026 at 07:50:03PM +0100, Mark Brown wrote:
-> Currently when set_id_regs encounters a problem checking validation of
-> writes to feature registers it uses an immediately fatal assert to report
-> the problem. This is not idiomatic for kselftest, and it is also not great
-> for usability. The affected bitfield is not clearly reported and further
-> tests do not have their results reported.
->
-> Switch to using standard kselftest result reporting for the two asserts
-> we do, these are non-fatal asserts so allow the program to continue and the
-> test names include the affected field.
->
-> Reviewed-by: Ben Horgan <ben.horgan@arm.com>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+The provided test case for test-cpuset_prs.sh is supposed to be the 
+reproducer if you don't have deadline task running in the test system or 
+the kernel includes the last cpuset patch that I sent out.
 
-One NIT below and typo noted above, with those addressed LGTM so:
+Cheers,
+Longman
 
-Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-
-> ---
->  tools/testing/selftests/kvm/arm64/set_id_regs.c | 22 ++++++++++++++++------
->  1 file changed, 16 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/arm64/set_id_regs.c b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-> index 3aa8886e8b70..385e1f1c0133 100644
-> --- a/tools/testing/selftests/kvm/arm64/set_id_regs.c
-> +++ b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-> @@ -422,6 +422,7 @@ static u64 test_reg_set_success(struct kvm_vcpu *vcpu, u64 reg,
->  	u8 shift = ftr_bits->shift;
->  	u64 mask = ftr_bits->mask;
->  	u64 val, new_val, ftr;
-> +	bool match;
->
->  	val = vcpu_get_reg(vcpu, reg);
->  	ftr = (val & mask) >> shift;
-> @@ -434,7 +435,10 @@ static u64 test_reg_set_success(struct kvm_vcpu *vcpu, u64 reg,
->
->  	vcpu_set_reg(vcpu, reg, val);
->  	new_val = vcpu_get_reg(vcpu, reg);
-> -	TEST_ASSERT_EQ(new_val, val);
-> +	match = new_val == val;
-> +	if (!match)
-> +		ksft_print_msg("%lx != %lx\n", new_val, val);
-> +	ksft_test_result(match, "%s valid write succeeded\n", ftr_bits->name);
-
-Same pattern (I wonder, not for this series, but perhaps a follow up whether
-this could be generalised?)
-
->
->  	return new_val;
->  }
-> @@ -446,6 +450,7 @@ static void test_reg_set_fail(struct kvm_vcpu *vcpu, u64 reg,
->  	u64 mask = ftr_bits->mask;
->  	u64 val, old_val, ftr;
->  	int r;
-> +	bool match;
->
->  	val = vcpu_get_reg(vcpu, reg);
->  	ftr = (val & mask) >> shift;
-> @@ -462,7 +467,10 @@ static void test_reg_set_fail(struct kvm_vcpu *vcpu, u64 reg,
->  		    "Unexpected KVM_SET_ONE_REG error: r=%d, errno=%d", r, errno);
->
-
-NIT:
-
-There's a:
-
-	TEST_ASSERT(r < 0 && errno == EINVAL,
-		    "Unexpected KVM_SET_ONE_REG error: r=%d, errno=%d", r, errno);
-
-Above, do we want to make that non-fatal too?
-
->  	val = vcpu_get_reg(vcpu, reg);
-> -	TEST_ASSERT_EQ(val, old_val);
-> +	match = val == old_val;
-> +	if (!match)
-> +		ksft_print_msg("%lx != %lx\n", val, old_val);
-> +	ksft_test_result(match, "%s invalid write rejected\n", ftr_bits->name);
->  }
->
->  static u64 test_reg_vals[KVM_ARM_FEATURE_ID_RANGE_SIZE];
-> @@ -502,7 +510,11 @@ static void test_vm_ftr_id_regs(struct kvm_vcpu *vcpu, bool aarch64_only)
->  		for (int j = 0;  ftr_bits[j].type != FTR_END; j++) {
->  			/* Skip aarch32 reg on aarch64 only system, since they are RAZ/WI. */
->  			if (aarch64_only && sys_reg_CRm(reg_id) < 4) {
-> -				ksft_test_result_skip("%s on AARCH64 only system\n",
-> +				ksft_print_msg("%s on AARCH64 only system\n",
-> +					       ftr_bits[j].name);
-> +				ksft_test_result_skip("%s invalid write rejected\n",
-> +						      ftr_bits[j].name);
-> +				ksft_test_result_skip("%s valid write succeeded\n",
->  						      ftr_bits[j].name);
->  				continue;
->  			}
-> @@ -514,8 +526,6 @@ static void test_vm_ftr_id_regs(struct kvm_vcpu *vcpu, bool aarch64_only)
->
->  			test_reg_vals[idx] = test_reg_set_success(vcpu, reg,
->  								  &ftr_bits[j]);
-> -
-> -			ksft_test_result_pass("%s\n", ftr_bits[j].name);
->  		}
->  	}
->  }
-> @@ -882,7 +892,7 @@ int main(void)
->  		ID_REG_RESET_UNCHANGED_TEST;
->  	for (i = 0; i < ARRAY_SIZE(test_regs); i++)
->  		for (j = 0; test_regs[i].ftr_bits[j].type != FTR_END; j++)
-> -			test_cnt++;
-> +			test_cnt += 2;
->
->  	ksft_set_plan(test_cnt);
->
->
-> --
-> 2.47.3
->
->
-
---
-Cheers, Lorenzo
