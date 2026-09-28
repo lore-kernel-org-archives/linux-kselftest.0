@@ -1,135 +1,86 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CFED3515F9;
-	Mon, 28 Sep 2026 12:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30D73C73F7;
+	Mon, 28 Sep 2026 12:33:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790598139; cv=none; b=hAiFk3NfsG7NN4fqrhuT7nwm+0q29YV5jAxonIahdL8FL//MDD1W15MUpRxZnMzBkl1lm/R17eo3/Qi1yGQW4b/I2PEPrMudMQ66pjy8HZAX0wHOeOy1lh2LHUTlz3CKlFEmUN3ukX9a5bxsmboDTF/RDujnd/w/0nQ3eURwavc=
+	t=1790598783; cv=none; b=oRM4H/yj34zVBlTnCV6klXpRwRxNjokwZK9FYoEuDTPbRcOjvuJzGN1I3RvvncFSwhU0hUVWvIyKBZqZZnWjaVawuXHrgDat80WFADNFr81JOikWDAjQE/E9fyicThQ+vffvSWT3bxrWaYvJRJAgGCmT6nkjrv2bFnUWJYxcu6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790598139; c=relaxed/simple;
-	bh=BrsBM5b+jhrtkW9EbuXBMTCH/6ologB5CM38m+YZG2w=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iKGaHi72WQU7VGU3VUqDIVZ6b3lSx2DPzJZ/LQk1es01MAM+LPeI8Ezc37/TgiB7iM/pMtxAXQ76dRGxHwq1juc2tHS26VemO5dI+ZLPijR5tp04V0ozAQ0W2YPtoqAt6AysKpcEI3BMUhYM/5qfONXOJsyrpaCje5kLb5eaN/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=p0Rjsju8; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=mTC4KTg6; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Hj1gGLkK; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=EndqyVQe; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1790598783; c=relaxed/simple;
+	bh=Iya9wujgQEdqUfmH+V2H4et1ziGVCRoqLQ6GAz7eQu0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MxQUMmWpKHqramclACeGwqOvFLJSWW8P7ayBzXGABZZV1SOrPvY4dtXv85dc8hOTJ33V6U2peZdCsJnCFzZFHlxRnSHVMwYgK9tAsutXyaOOjuQab1u51vJxFp6rpLOl5eXGGn6kockpEF5f3OinzlgGUuZkbH8wKvJBZG1v4Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=permerror header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=v4gh2dMD; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=permerror header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="p0Rjsju8";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="mTC4KTg6";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Hj1gGLkK";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="EndqyVQe"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 2057222321;
-	Mon, 28 Sep 2026 12:22:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1790598132; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ilbfi+4a89869sF6Jw39CE/+8m7auO72mbhe8bLvxe8=;
-	b=p0Rjsju8vF9zzn/yv9s6ELPU1dA7Cz9QprB6LiG5lF3VJJtH5uhZrjNxjCeUaPSeZ4aNWt
-	WH7apr+6IWgaDWgdbCNoTPKac3NqfZgWq3jcIESDwmL3dv4sCM3zwZKrEu361zcWvLs0B4
-	x+mgIfRxmq/Ef6lnwhbsdW+nl0Gshbs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1790598132;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ilbfi+4a89869sF6Jw39CE/+8m7auO72mbhe8bLvxe8=;
-	b=mTC4KTg6eQ8OQwv0GkCfHeITV9tHBQC/pYBnqU8blnjYk1rO1pRYYSeVBR+ZAm9SbiMNQe
-	w+Bb6JpUcP/dwjAA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1790598128; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ilbfi+4a89869sF6Jw39CE/+8m7auO72mbhe8bLvxe8=;
-	b=Hj1gGLkKYDE2kGs23yJZb9Tob1m3Y7SyxBygyuvFxl+LReGy5MuhrKcrwBFKaUV79zoqLr
-	nClZq+FyXWoJFJuZ+dAjUuqWEfyCWUZj9aZdpxTOcmYVfnVKBwyU6AFsR4cNMvZBqjiv8q
-	Q1WLiyostUTtXmbQYdINACi2Oz6a/ss=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1790598128;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ilbfi+4a89869sF6Jw39CE/+8m7auO72mbhe8bLvxe8=;
-	b=EndqyVQeo7iPULFsoCY+VlskdquWuPrymGWTjK5BY8C207AnbeIYuCkDylmmxz7nbY41LG
-	BLWuc7AEK7BthCCQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BC40A133F1;
-	Mon, 28 Sep 2026 12:22:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id HlSmI+9bumpPdAAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Mon, 28 Sep 2026 12:22:07 +0000
-Date: Mon, 28 Sep 2026 14:22:07 +0200
-Message-ID: <87ld8l5zww.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Alireza Feyzabadi Farahani <arfa79lg@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests: ALSA: Skip timer tests when device is unavailable
-In-Reply-To: <20260927064430.2112688-1-arfa79lg@gmail.com>
-References: <20260927064430.2112688-1-arfa79lg@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="v4gh2dMD"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=Iya9wujgQEdqUfmH+V2H4et1ziGVCRoqLQ6GAz7eQu0=;
+	t=1790598781; x=1791808381; b=v4gh2dMDUsVDk+sg2amC8alPBTQ4LlH14hjBEtXiEF85h+g
+	gUHisUAIie+2SR+5isvFeY5ceq6PBTAYJn61cbPp+X/HwQWhawio/uJXeJDqt6xUyRYri9HJMa51d
+	otoG7ReWnM74Hl9BVReg5ciwWXkRW64ATzMnQqTbBJOw+1BpCEOvW0IGypa4VLD23VIh95CZfBnSV
+	nPk7ueYXUc2rzoUVoz/wNd+Km9T5H98UFqshUQDW1gKZZK1xz5DhlBhBrI/n37xRKZ+tOeBEX+oQf
+	MQK3XJs4gKME7w+UMUlYE3JzuQS5DLcgaD8O6Qy/lVNbTC0PK/8IMFgRsf51vSdA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__ECDSA_SECP256R1_SHA256__AES_256_GCM:256)
+	(Exim 4.98.2)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1xBAXM-0000000DXzf-0Rx8;
+	Mon, 28 Sep 2026 14:32:52 +0200
+Message-ID: <8dfc0ec9ed660e373451c96b6fcc352c35a6a004.camel@sipsolutions.net>
+Subject: Re: [PATCH v3 2/3] selftests: run tests on nommu architecture
+From: Johannes Berg <johannes@sipsolutions.net>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Hajime Tazaki <thehajime@gmail.com>, linux-mm@kvack.org,
+ liam@infradead.org, 	rbm@suse.com, akpm@linux-foundation.org,
+ luto@amacapital.net, 	brendan.jackman@linux.dev, david@kernel.org,
+ liuhangbin@gmail.com, corbet@lwn.net, 	kees@kernel.org, broonie@kernel.org,
+ mhocko@suse.com, rppt@kernel.org, 	shuah@kernel.org, surenb@google.com,
+ vbabka@kernel.org, wad@chromium.org, 	linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, 	linux-um@lists.infradead.org,
+ geert@linux-m68k.org, daniel@thingy.jp
+Date: Mon, 28 Sep 2026 14:32:50 +0200
+In-Reply-To: <arpIi5QBG1_MuZzJ@gremlin>
+References: <20260926010819.604346-1-thehajime@gmail.com>
+	 <20260926010819.604346-3-thehajime@gmail.com>
+	 <04259a99ed91f8a527b255951a6f626310728170.camel@sipsolutions.net>
+	 <arpIi5QBG1_MuZzJ@gremlin>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Level: 
-X-Spam-Score: -3.30
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid]
+MIME-Version: 1.0
+X-malware-bazaar: not-scanned
 
-On Sun, 27 Sep 2026 08:44:30 +0200,
-Alireza Feyzabadi Farahani wrote:
-> 
-> When CONFIG_SND is disabled, opening /dev/snd/timer fails and the
-> userspace timer tests report failures even though the test environment
-> does not support ALSA timers.
-> 
-> Skip the affected tests when opening the timer device fails because the
-> device is unavailable. Continue to report unexpected open failures as
-> test failures.
-> 
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218479
-> Signed-off-by: Alireza Feyzabadi Farahani <arfa79lg@gmail.com>
+On Mon, 2026-09-28 at 12:00 +0100, Lorenzo Stoakes (ARM) wrote:
+> > Not sure where this should be merged? I guess selftests would make most
+> > sense, but you can't actually test it out before the UML nommu changes,
+> > so that doesn't work too well right now?
+>=20
+> I seem to recall Hajime saying he tested this on an actual nommu
+> device/virtualised equivalent so nommu UML isn't strictly necessary (thou=
+gh very
+> nice to have!)
 
-Applied to for-next branch.  Thanks.
+Oh, I don't recall, but I guess that's plausibe.
 
+> I think I saw something fly by that implied it might be coming in 7.4 is =
+that
+> so? :)
 
-Takashi
+I did end up merging just about everything that was pending for
+uml/next, so if we don't forget to send a pull request in the merge
+window, or something equally catastrophic happens, yes ;-)
+
+Sorry for the delay. The onslaught of LLMs means priority is elsewhere,
+sadly.
+
+johannes
