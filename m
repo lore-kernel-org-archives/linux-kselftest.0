@@ -1,44 +1,40 @@
-Received: from out-2z4y-a131.jellyfish.systems (out-2z4y-a131.jellyfish.systems [198.54.127.131])
+Received: from out-2z4y-a149.jellyfish.systems (out-2z4y-a149.jellyfish.systems [198.54.127.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE124F7CAD
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6674E50AF
 	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 17:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790616042; cv=none; b=O8jEBPblbCWWNfmW7eTk1lQuRomE99KyxR9gwg3usUdeDNWiXmSKvn0t2iiCFDTYQNL4X4WpE/5Y/X79zr7Ccswo+ocyol464jcrKSiBXgPK2sAIl69H3Ak1EfhExns/n/0S6I87ZQFkdmOcX8M21nOdoL/zH4lJjmMbKOFbYl0=
+	t=1790616042; cv=none; b=fvMHr0i6J6YtgwLiD+O+xfkK+dwjq4P1HPyScb/v97cBaGCCNtHmuLYK56aA45/jhuNQ9MP7qCgicGKawSg4pTR/XjI9LV8V7awcjomVjISlUeAsBqnRCuX/Qu6H0i5hTppIJel3S2eX2VztO3IQzuqaePAteakBNk8KhhgkXsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790616042; c=relaxed/simple;
-	bh=TZlmMwCSAptSOQCNe89KhKXnmRoFY3zLKkFX63FCwdc=;
-	h=Message-ID:In-Reply-To:References:From:Date:Subject:To:Cc; b=NPRMO+wwzC2Gr+nPftHBC/bfyeE2kIs8PCYpHTA8+4g8bNFtef4AN+8j4cJN1A9hnqK9NGGTqo5DbURfaTqlDo1PyI3dfa+UgSL2c/07pRNB38U4YGCQ7fye24TfXHgSRXXPFPxN8Mh5MCBSM+s9Qke5wCqDXabHJ7PbX3DemCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=Dje2TbsH; arc=none smtp.client-ip=198.54.127.131
+	bh=gw9hfRMP5K8RM/53d5o4qZzIGdwYsTgi3pnXv2QXXyo=;
+	h=Message-ID:From:Date:Subject:To:Cc; b=q5bi8/tBLx/+XAv/XqnPA+R27GuI61/EOE8Hx2SK2TpE8RW9lGaD7+6p8gbewty28Kx6/Wip3xiNTn6FcOnFL2gozdqViRIojOIvw8LIgsQ4CSD8cy9y2eSpRZF5h3wGwn35PJ7SStCKhSqbvND54Jle3LZy4MEbSKU7QGsp/cI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=pPvB0oaq; arc=none smtp.client-ip=198.54.127.149
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="Dje2TbsH"
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="pPvB0oaq"
 Received: from [172.20.10.14] (unknown [151.145.76.168])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4htp3S3Nyzz6tkR;
-	Mon, 28 Sep 2026 17:20:20 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4htp3P11wfz6tkK;
+	Mon, 28 Sep 2026 17:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1790616023;
-	bh=nBJBkN/UDf/U+XYmA3Ugo3eORqVSDHqFXFq9rPkHJCw=;
-	h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-	b=Dje2TbsHrUPIAaM/iyrEnnSmHEm85rFmiMKfXQQmVV1nnXN8iycQe473bPYV6lRTw
-	 Qs48gYYsN6DFf5uoa3HYqHxT8xFyrfL56iaIJUSOlNMUooDWkTOycID3pkcZsXHkNW
-	 xwiftj6SvmDD77s59cr46I+eLiWaeAV4FBj6HFX+DdhyIo2uR2TUwIayQvSQpw0cvv
-	 x3B76hf214eojfL9X8BikkhkdEaWQTFcwntPKIJtQ2smaouDYm6hHKwTrrTaBh8n7V
-	 DO/S0/rqp2GCKBT5zVslzbdvW5X/YJH4LJWXeoFhWBvqpS5JlksX9ZMs0BrkVxst1c
-	 69tTotCID57rQ==
-Message-ID:
- <14f8779c59411e88bc320f1064a94aa580ca5be8.1790615923.git.hi@tychen.cc>
-In-Reply-To: <cover.1790615923.git.hi@tychen.cc>
-References: <cover.1790615923.git.hi@tychen.cc>
+	s=spacemail; t=1790616019;
+	bh=p4jmEPfiL19R0WbLDiO7llxGbAVI26cpPxruli/nSR4=;
+	h=From:Date:Subject:To:Cc:From;
+	b=pPvB0oaq/na1rUv4XCq+NmEUQbA8gdjeVEPcw78HoyYBlp/CIgrvQ6yMxeFtmsrmh
+	 UFaa7vupnKur7739UPa0RAVtElNzsUgCetr3yW1Z983peeR2+fBHTnmMgG+PXPyHq1
+	 vR61in9b/j93Kxrap2nb/G33IpBdu7eRz8biuo1AFH9pPUjuZPVqVymDedrAuVHLe/
+	 Ka3SzqeLEjMcvJcbR3FXC43ZepX5RKVCGBCRvND7GGd23HOoYHb+tb521LuD9zhquE
+	 XOb6nt+mFML7OWeKjDcFTLlAChX2w7/2/oyO88/uivtBxG4js7iiNA0V0LoHDnI65s
+	 BL9RrLZzOfhGg==
+Message-ID: <cover.1790615923.git.hi@tychen.cc>
 From: Tianyi Chen <hi@tychen.cc>
-Date: Tue, 29 Sep 2026 02:13:21 +0900
-Subject: [PATCH bpf-next 1/2] bpftool: Reset map info before each query in
- show and dump loops
+Date: Tue, 29 Sep 2026 02:18:43 +0900
+Subject: [PATCH bpf-next 0/2] bpftool: Reset map info between queries
 To: bpf@vger.kernel.org
 Cc: qmo@kernel.org,
     andrii@kernel.org,
@@ -53,63 +49,28 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 
-The kernel copies bpf_map_info from userspace and only fills in the BTF
-fields when a map has BTF. Reusing the structure for a later map without
-BTF therefore retains the preceding map's BTF IDs.
+Reset map info before each query in the existing show and dump loops
+to prevent BTF metadata from a preceding map leaking into a map without
+BTF.
 
-Clear the structure and restore its length before each query in map
-listing, named-map listing, BTF detection and dumping. This prevents
-reporting stale BTF IDs, choosing BTF output for mixed map selections,
-and formatting a map with another map's key and value types.
+Patch 1 fixes the four query loops. Patch 2 adds regression tests for
+full and named listings, JSON dumps, and plain dumps.
 
-Reported-by: Quentin Monnet <qmo@kernel.org>
-Link: https://lore.kernel.org/r/3acbe829-06f0-4df4-b57c-a8c7b802ec96@kernel.org
-Assisted-by: LLM
-Signed-off-by: Tianyi Chen <hi@tychen.cc>
----
- tools/bpf/bpftool/map.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+All four regression subtests fail on the unmodified bpf-next base and
+pass with the fix in an x86-64 VM. This series does not depend on
+recursive dumping or Maxim's series.
 
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 20d59eab09a1..f84311fa640d 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -647,6 +647,8 @@ static int do_show_subset(int argc, char **argv)
- 	if (json_output && nb_fds > 1)
- 		jsonw_start_array(json_wtr);	/* root array */
- 	for (i = 0; i < nb_fds; i++) {
-+		memset(&info, 0, sizeof(info));
-+		len = sizeof(info);
- 		err = bpf_map_get_info_by_fd(fds[i], &info, &len);
- 		if (err) {
- 			p_err("can't get map info: %s",
-@@ -718,6 +720,8 @@ static int do_show(int argc, char **argv)
- 			break;
- 		}
- 
-+		memset(&info, 0, sizeof(info));
-+		len = sizeof(info);
- 		err = bpf_map_get_info_by_fd(fd, &info, &len);
- 		if (err) {
- 			p_err("can't get map info: %s", strerror(errno));
-@@ -774,6 +778,8 @@ static int maps_have_btf(int *fds, int nb_fds)
- 	int err, i;
- 
- 	for (i = 0; i < nb_fds; i++) {
-+		memset(&info, 0, sizeof(info));
-+		len = sizeof(info);
- 		err = bpf_map_get_info_by_fd(fds[i], &info, &len);
- 		if (err) {
- 			p_err("can't get map info: %s", strerror(errno));
-@@ -952,6 +958,8 @@ static int do_dump(int argc, char **argv)
- 	if (wtr && nb_fds > 1)
- 		jsonw_start_array(wtr);	/* root array */
- 	for (i = 0; i < nb_fds; i++) {
-+		memset(&info, 0, sizeof(info));
-+		len = sizeof(info);
- 		if (bpf_map_get_info_by_fd(fds[i], &info, &len)) {
- 			p_err("can't get map info: %s", strerror(errno));
- 			err = -1;
+Tianyi Chen (2):
+  bpftool: Reset map info before each query in show and dump loops
+  selftests/bpf: Check bpftool map info across mixed BTF maps
+
+ tools/bpf/bpftool/map.c                       |   8 ++
+ .../bpf/prog_tests/bpftool_map_info.c         | 126 ++++++++++++++++++
+ 2 files changed, 134 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_info.c
+
+
+base-commit: ea9358e1270ab2c3ba6f36bd9bdda68617665516
 -- 
 2.55.0
 
