@@ -1,64 +1,509 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from knight.cons.org (knight.cons.org [212.12.50.241])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177BD1ACEDE;
-	Mon, 28 Sep 2026 03:38:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED5422576E
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 03:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.12.50.241
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790566701; cv=none; b=rjUx7RRiirFT6JiHvQMqdhV41qlj7jL3TRWEblX2JXf5rsfPa/tkF3DfxlZCD5CLLid7WizuSdG7ym8w8cQEOWLiVu6X1jrSI1LmWz4GlirAILluKl+hkEY1sp1R2w0PYHOrE3ULLzsTpPhIMv6982tZuFs9UkUW50TYMMU63+o=
+	t=1790567248; cv=none; b=Q4/cGarsO0FYt9HAGWg8XXQ0cmB1axeOENW1LAAHm7/dMj6G66Onw+L9d+aXu5xjofQqxK2OVD0OrVoO29Htvip7mu0xJMzMLKzjUCyaoZT7lo+baNsxxQijCAfrZrXXBoRIZQy6/nAcRhTJtW5QN6U4dJ5Z1Oe2EHrkD45OwkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790566701; c=relaxed/simple;
-	bh=e1FzCridveI351/gfFU1tms0yyFTfLVWqo9GWJ0c2g0=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=qL1ecP/xulKxKxdn2t8W9Vv+oCepUE5mCDcFpb/Ug65yfkIWeCOAjbG0S7GR5dN+VZiVmjmIPLY2TSdWpPvddjAl0OX5JLoXUEOw1vzC1zSGygqXX4fahemcqNhtIa6qwO8TStE5eXM+CLZGzdjdgEQTWpZuAGkIfTDi+U56kY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=M8jfexNR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790567248; c=relaxed/simple;
+	bh=nhcoyZM+W5veOaueM53zk+zEMg27iV8GqdyFNhlS+Qw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=se5Wh9266qdbm5b+d0purnMaYxe892wAlq3V9LXd1qSs1BiVZ7YPiXN/8DzSz8eh//t9M48VDn4i5Ex+FL0FP1izSxobc3nwpwUa2zIYVBPlCpk4KdOCJL/TyU2o8Qd+XwrmUYIGwJB9z/fjpZvSVlQdunaC2XBDn9zJIJhBNJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cons.org; spf=pass smtp.mailfrom=cons.org; dkim=pass (2048-bit key) header.d=cons.org header.i=@cons.org header.b=GxdBFs0+; arc=none smtp.client-ip=212.12.50.241
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cons.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cons.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="M8jfexNR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 388F51F000FF;
-	Mon, 28 Sep 2026 03:38:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1790566699;
-	bh=Rqd+kxmYgnmYy9//PxWDP0AuMpqwxlp40X1NB7XfM3U=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=M8jfexNRiMmn5SqJpBK6o3SBKOT0HgRRk9cgWxXQbDn6pmXiFaiW2OMkxLHbUwS5d
-	 AWY3tunpj+e3LTLNE6nOknZGSZu/zBOT4QQRUMfbIxV40WhmGPFoIfks2bG9gJwIco
-	 iAgzaVlcT+BSLLgdxPzrtPNJcORV+bgYVOmdu5jY=
-Date: Sun, 27 Sep 2026 20:38:18 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Martin Cracauer <cracauer@cons.org>
-Cc: linux-mm@kvack.org, david@kernel.org, ljs@kernel.org,
- liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
- mhocko@suse.com, shuah@kernel.org, peterx@redhat.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: uffd-missing-wp: add GC related
- functionality test
-Message-Id: <20260927203818.2f4b34b37f4a6e1685c3d142@linux-foundation.org>
-In-Reply-To: <arneZ-KkRWUNI0Ho@cons.org>
-References: <arneZ-KkRWUNI0Ho@cons.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=cons.org header.i=@cons.org header.b="GxdBFs0+"
+Received: from knight.cons.org (localhost [127.0.0.1])
+	by 0ons.org (8.18.2/8.18.1) with ESMTP id 68S3QVTQ061396;
+	Mon, 28 Sep 2026 05:26:31 +0200 (CEST)
+	(envelope-from cracauer@knight.cons.org)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cons.org; s=default;
+	t=1790565992; bh=N0J5HDZxc76uDFcd7IU9j6Jt+sdQub9jiX5ZAdngrhY=;
+	h=Date:From:To:Cc:Subject;
+	b=GxdBFs0+wusUQ3Mpq7WQtNmwYoPco06mgQdglw2+7SctYTSxgPdZsnLcqIpeHFtTn
+	 dB0C5Bglmr8DORW8FrGI/0Ge8zx/LC9LnMY+3FmuzKidnsLb4QJ2dNyz2Lw4orNEZa
+	 GfBuphi3G5WNJHKaypNHFQ+hUK7PZbjeEOTdxB1w5kvEoiEXbUqQVTmJtACqqoFtnu
+	 QKXDNg2p61z7zfhMvSK84y/gUEFtAOHpNDYNT5Az1m5+wED7Nmmof6EPsOXU/8tWcC
+	 wgyHG399Qv+yy8cxJDkeK0MqtqaIjefNhiabfwrih2ymh+NNxxDVttwFE4yOaXAuN4
+	 dm11RdsTurTGA==
+Received: (from cracauer@localhost)
+	by knight.cons.org (8.18.2/8.18.1/Submit) id 68S3QVVe061395;
+	Sun, 27 Sep 2026 23:26:31 -0400 (EDT)
+	(envelope-from cracauer)
+Date: Sun, 27 Sep 2026 23:26:31 -0400
+From: Martin Cracauer <cracauer@cons.org>
+To: akpm@linux-foundation.org, linux-mm@kvack.org
+Cc: david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+        rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org,
+        peterx@redhat.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/mm: uffd-missing-wp: add GC related functionality
+ test
+Message-ID: <arneZ-KkRWUNI0Ho@cons.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, 27 Sep 2026 23:26:31 -0400 Martin Cracauer <cracauer@cons.org> wrote:
+Add a test that asserts that functionality needed for generational
+garbage collection works.  Namely to implement a write barrier using
+userfaultfd instead of using segmentation faults.  The planned target
+is the GC in SBCL.
 
-> Add a test that asserts that functionality needed for generational
-> garbage collection works.  Namely to implement a write barrier using
-> userfaultfd instead of using segmentation faults.  The planned target
-> is the GC in SBCL.
-> 
-> The real GC will initially fill heap pages by using on-demand loading
-> of pages from an image file, either via mmap(2) or using userfaultfd
-> to decompress a page read from an image file made from individually
-> compressed blocks.  This test doesn't do that so that it needs no disk
-> I/O and no decompression library.  Instead, a fault will be filled by
-> copying page content from prepared pages in the heap.
+The real GC will initially fill heap pages by using on-demand loading
+of pages from an image file, either via mmap(2) or using userfaultfd
+to decompress a page read from an image file made from individually
+compressed blocks.  This test doesn't do that so that it needs no disk
+I/O and no decompression library.  Instead, a fault will be filled by
+copying page content from prepared pages in the heap.
 
-Thanks.  Sashiko asked a couple of things:
-	https://sashiko.dev/#/patchset/arneZ-KkRWUNI0Ho@cons.org
+Assisted-by: Anthropic:Opus-5.5
+Signed-off-by: Martin Cracauer <cracauer@cons.org>
+---
+ tools/testing/selftests/mm/Makefile          |   1 +
+ tools/testing/selftests/mm/uffd-missing-wp.c | 413 +++++++++++++++++++
+ 2 files changed, 414 insertions(+)
+ create mode 100644 tools/testing/selftests/mm/uffd-missing-wp.c
+
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index d3e9bd67904a..76176d62b3b3 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -92,6 +92,7 @@ TEST_GEN_FILES += transhuge-stress
+ TEST_GEN_FILES += uffd-stress
+ TEST_GEN_FILES += uffd-unit-tests
+ TEST_GEN_FILES += uffd-wp-mremap
++TEST_GEN_FILES += uffd-missing-wp
+ TEST_GEN_FILES += split_huge_page_test
+ TEST_GEN_FILES += ksm_tests
+ TEST_GEN_FILES += ksm_functional_tests
+diff --git a/tools/testing/selftests/mm/uffd-missing-wp.c b/tools/testing/selftests/mm/uffd-missing-wp.c
+new file mode 100644
+index 000000000000..481e7056cebd
+--- /dev/null
++++ b/tools/testing/selftests/mm/uffd-missing-wp.c
+@@ -0,0 +1,413 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * userfaultfd MISSING + WP test, modelled on a garbage collector.
++ *
++ * An anonymous region is registered with userfaultfd in both MISSING and
++ * WP modes.  A handler thread plays the part of the GC runtime:
++ *
++ *  - On a missing fault it fills the page from a backing store with
++ *    UFFDIO_COPY.  (A real GC might keep evicted pages compressed on disk;
++ *    here the backing store is an in-memory buffer with distinct contents
++ *    per page, so a page filled with the wrong data is detected.)
++ *
++ *  - On a write-protect fault it records the page as dirty and removes
++ *    write protection from that page only.  This is the userfaultfd
++ *    equivalent of mprotect(PROT_READ) plus bookkeeping in a SIGSEGV
++ *    handler, as used for GC write barriers.
++ *
++ * The main thread checks that:
++ *  - reads of missing pages are resolved with the right contents,
++ *  - a write to a missing page is resolved before the write lands,
++ *  - a write to a write-protected page is reported with the WP flag and
++ *    then completes,
++ *  - write protection is tracked and resolved per page,
++ *  - UFFDIO_UNREGISTER leaves populated contents intact and stops
++ *    delivering faults for the range.
++ *
++ * Like the GC it models, the handler assumes pages are only write-protected
++ * after they have been populated.
++ */
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <poll.h>
++#include <pthread.h>
++#include <stdbool.h>
++#include <stdint.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/eventfd.h>
++#include <sys/ioctl.h>
++#include <sys/mman.h>
++#include <sys/syscall.h>
++#include <unistd.h>
++#include <linux/userfaultfd.h>
++
++#include "../kselftest.h"
++
++#define NR_PAGES 4
++#define NR_TESTS 7
++
++/* GC bookkeeping, updated by the handler thread. */
++struct page_stats {
++	unsigned int missing_faults;
++	unsigned int wp_faults;
++	uint64_t last_flags;
++};
++
++static size_t page_size;
++static size_t area_len;
++static int uffd;
++static int stop_fd;
++static char *area;
++static char *backing;/* what the handler fills missing pages from */
++static char *expected;/* what each page should contain right now */
++static struct page_stats stats[NR_PAGES];
++
++#define LOAD(x)__atomic_load_n(&(x), __ATOMIC_ACQUIRE)
++#define STORE(x, v)__atomic_store_n(&(x), (v), __ATOMIC_RELEASE)
++#define INC(x)__atomic_add_fetch(&(x), 1, __ATOMIC_RELEASE)
++
++static uint64_t pattern(unsigned long page, unsigned long word)
++{
++	return 0xdeadbeef00000000ULL | (page << 16) | word;
++}
++
++static uint64_t *page_ptr(unsigned long page)
++{
++	return (uint64_t *)(area + page * page_size);
++}
++
++/* Write a word in the region and record it in the expected image. */
++static void store(unsigned long page, unsigned long word, uint64_t val)
++{
++	page_ptr(page)[word] = val;
++	((uint64_t *)(expected + page * page_size))[word] = val;
++}
++
++static void handle_missing(unsigned long page)
++{
++	struct uffdio_copy copy = {
++		.dst = (unsigned long)area + page * page_size,
++		.src = (unsigned long)backing + page * page_size,
++		.len = page_size,
++		.mode = 0,
++	};
++	struct uffdio_range range = {
++		.start = copy.dst,
++		.len = page_size,
++	};
++
++	if (!ioctl(uffd, UFFDIO_COPY, &copy))
++		return;
++	if (errno != EEXIST)
++		ksft_exit_fail_msg("UFFDIO_COPY page %lu: %s\n",
++				   page, strerror(errno));
++	/* Populated concurrently; the faulting thread still needs a wake. */
++	if (ioctl(uffd, UFFDIO_WAKE, &range))
++		ksft_exit_fail_msg("UFFDIO_WAKE page %lu: %s\n",
++				   page, strerror(errno));
++}
++
++static void handle_wp(unsigned long page)
++{
++	struct uffdio_writeprotect wp = {
++		.range = {
++			.start = (unsigned long)area + page * page_size,
++			.len = page_size,
++		},
++		.mode = 0,/* clear WP; also wakes the faulting thread */
++	};
++
++	if (ioctl(uffd, UFFDIO_WRITEPROTECT, &wp))
++		ksft_exit_fail_msg("UFFDIO_WRITEPROTECT clear page %lu: %s\n",
++				   page, strerror(errno));
++}
++
++static void *fault_handler(void *arg)
++{
++	struct pollfd pfd[2] = {
++		{ .fd = uffd, .events = POLLIN },
++		{ .fd = stop_fd, .events = POLLIN },
++	};
++	struct uffd_msg msg;
++	unsigned long addr, page;
++	uint64_t flags;
++	ssize_t ret;
++
++	for (;;) {
++		if (poll(pfd, 2, -1) < 0) {
++			if (errno == EINTR)
++				continue;
++			ksft_exit_fail_msg("poll: %s\n", strerror(errno));
++		}
++		if (pfd[1].revents & POLLIN)
++			return NULL;
++		if (pfd[0].revents & POLLERR)
++			ksft_exit_fail_msg("POLLERR on userfaultfd\n");
++		if (!(pfd[0].revents & POLLIN))
++			continue;
++
++		ret = read(uffd, &msg, sizeof(msg));
++		if (ret < 0) {
++			if (errno == EAGAIN)
++				continue;
++			ksft_exit_fail_msg("read userfaultfd: %s\n",
++					   strerror(errno));
++		}
++		if (ret != sizeof(msg))
++			ksft_exit_fail_msg("short read from userfaultfd: %zd\n",
++					   ret);
++		if (msg.event != UFFD_EVENT_PAGEFAULT)
++			ksft_exit_fail_msg("unexpected userfaultfd event %u\n",
++					   msg.event);
++
++		addr = msg.arg.pagefault.address & ~(page_size - 1);
++		if (addr < (unsigned long)area ||
++		    addr >= (unsigned long)area + area_len)
++			ksft_exit_fail_msg("fault at %#lx outside region\n",
++					   addr);
++		page = (addr - (unsigned long)area) / page_size;
++		flags = msg.arg.pagefault.flags;
++
++		/* Record before resolving, so the faulter sees it on wake. */
++		STORE(stats[page].last_flags, flags);
++		if (flags & UFFD_PAGEFAULT_FLAG_WP) {
++			INC(stats[page].wp_faults);
++			handle_wp(page);
++		} else {
++			INC(stats[page].missing_faults);
++			handle_missing(page);
++		}
++	}
++}
++
++static bool check_stats(unsigned long page, unsigned int missing,
++			unsigned int wp)
++{
++	unsigned int m = LOAD(stats[page].missing_faults);
++	unsigned int w = LOAD(stats[page].wp_faults);
++
++	if (m == missing && w == wp)
++		return true;
++	ksft_print_msg("page %lu: %u missing / %u wp faults, expected %u / %u\n",
++		       page, m, w, missing, wp);
++	return false;
++}
++
++static bool check_flags(unsigned long page, uint64_t want)
++{
++	uint64_t mask = UFFD_PAGEFAULT_FLAG_WRITE | UFFD_PAGEFAULT_FLAG_WP;
++	uint64_t got = LOAD(stats[page].last_flags) & mask;
++
++	if (got == want)
++		return true;
++	ksft_print_msg("page %lu: fault flags %#llx, expected %#llx\n", page,
++		       (unsigned long long)got, (unsigned long long)want);
++	return false;
++}
++
++static bool check_page(unsigned long page)
++{
++	const uint64_t *want = (uint64_t *)(expected + page * page_size);
++	unsigned long i;
++	uint64_t got;
++
++	for (i = 0; i < page_size / sizeof(uint64_t); i++) {
++		got = page_ptr(page)[i];
++		if (got != want[i]) {
++			ksft_print_msg("page %lu word %lu: %#llx, expected %#llx\n",
++				       page, i, (unsigned long long)got,
++				       (unsigned long long)want[i]);
++			return false;
++		}
++	}
++	return true;
++}
++
++static void test_read_missing(unsigned long page)
++{
++	bool ok;
++
++	(void)page_ptr(page)[0];
++	ok = check_stats(page, 1, 0);
++	ok &= check_flags(page, 0);
++	ok &= check_page(page);
++	ksft_test_result(ok, "read fault fills missing page %lu\n", page);
++}
++
++static void test_write_missing(void)
++{
++	bool ok;
++
++	store(1, 0, 0x42);
++	ok = check_stats(1, 1, 0);
++	ok &= check_flags(1, UFFD_PAGEFAULT_FLAG_WRITE);
++	ok &= check_page(1);
++	ksft_test_result(ok, "write fault fills missing page 1 before the write\n");
++}
++
++static void test_write_protected(void)
++{
++	struct uffdio_writeprotect wp = {
++		.range = { .start = (unsigned long)area, .len = area_len },
++		.mode = UFFDIO_WRITEPROTECT_MODE_WP,
++	};
++	bool ok;
++
++	if (ioctl(uffd, UFFDIO_WRITEPROTECT, &wp))
++		ksft_exit_fail_msg("UFFDIO_WRITEPROTECT: %s\n", strerror(errno));
++
++	store(0, 0, 0x43);
++	ok = check_stats(0, 1, 1);
++	ok &= check_flags(0, UFFD_PAGEFAULT_FLAG_WRITE | UFFD_PAGEFAULT_FLAG_WP);
++	ok &= check_page(0);
++	ksft_test_result(ok, "write to write-protected page 0 is reported, then completes\n");
++}
++
++static void test_wp_per_page(void)
++{
++	bool ok;
++
++	store(0, 1, 0x45);/* page 0 already unprotected: no new fault */
++	store(1, 2, 0x44);/* page 1 still protected: its own fault */
++	ok = check_stats(0, 1, 1);
++	ok &= check_stats(1, 1, 1);
++	ok &= check_flags(1, UFFD_PAGEFAULT_FLAG_WRITE | UFFD_PAGEFAULT_FLAG_WP);
++	ok &= check_stats(2, 1, 0);/* never written: not dirty */
++	ok &= check_page(0);
++	ok &= check_page(1);
++	ksft_test_result(ok, "write protection is tracked and resolved per page\n");
++}
++
++static void test_unregister(void)
++{
++	struct uffdio_range range = {
++		.start = (unsigned long)area,
++		.len = area_len,
++	};
++	unsigned long page;
++	bool ok = true;
++
++	if (ioctl(uffd, UFFDIO_UNREGISTER, &range))
++		ksft_exit_fail_msg("UFFDIO_UNREGISTER: %s\n", strerror(errno));
++
++	for (page = 0; page < 3; page++)
++		ok &= check_page(page);
++	ksft_test_result(ok, "populated contents survive UFFDIO_UNREGISTER\n");
++}
++
++static void test_after_unregister(void)
++{
++	bool ok;
++
++	/*
++	 * Page 3 was never touched.  If the fault were still routed to us,
++	 * the handler would fill it from the backing store.
++	 */
++	ok = check_page(3);
++	ok &= check_stats(3, 0, 0);
++	ksft_test_result(ok, "untouched page is zero-filled after unregister\n");
++}
++
++static int uffd_open(uint64_t features, uint64_t *supported)
++{
++	struct uffdio_api api = { .api = UFFD_API, .features = features };
++	int fd;
++
++	fd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
++#ifdef UFFD_USER_MODE_ONLY
++	if (fd < 0 && errno == EPERM)
++		fd = syscall(__NR_userfaultfd,
++			     O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
++#endif
++	if (fd < 0) {
++		if (errno == ENOSYS || errno == EPERM)
++			ksft_exit_skip("userfaultfd unavailable: %s\n",
++				       strerror(errno));
++		ksft_exit_fail_msg("userfaultfd: %s\n", strerror(errno));
++	}
++	if (ioctl(fd, UFFDIO_API, &api))
++		ksft_exit_fail_msg("UFFDIO_API: %s\n", strerror(errno));
++	if (supported)
++		*supported = api.features;
++	return fd;
++}
++
++int main(void)
++{
++	uint64_t required = (1ULL << _UFFDIO_COPY) | (1ULL << _UFFDIO_WAKE) |
++		(1ULL << _UFFDIO_WRITEPROTECT);
++	struct uffdio_register reg;
++	unsigned long page, i;
++	uint64_t features;
++	pthread_t thread;
++	int ret;
++
++	ksft_print_header();
++
++	page_size = sysconf(_SC_PAGESIZE);
++	area_len = NR_PAGES * page_size;
++
++	/* UFFDIO_API can only be issued once per fd: probe on a throwaway. */
++	close(uffd_open(0, &features));
++	if (!(features & UFFD_FEATURE_PAGEFAULT_FLAG_WP))
++		ksft_exit_skip("userfaultfd write-protect not supported\n");
++	uffd = uffd_open(UFFD_FEATURE_PAGEFAULT_FLAG_WP, NULL);
++
++	area = mmap(NULL, area_len, PROT_READ | PROT_WRITE,
++		    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	if (area == MAP_FAILED)
++		ksft_exit_fail_msg("mmap: %s\n", strerror(errno));
++
++	backing = malloc(area_len);
++	expected = malloc(area_len);
++	if (!backing || !expected)
++		ksft_exit_fail_msg("malloc failed\n");
++	for (page = 0; page < NR_PAGES; page++)
++		for (i = 0; i < page_size / sizeof(uint64_t); i++)
++			((uint64_t *)(backing + page * page_size))[i] =
++				pattern(page, i);
++	memcpy(expected, backing, area_len);
++	/* Page 3 is only read after unregister: expect a fresh zero page. */
++	memset(expected + 3 * page_size, 0, page_size);
++
++	reg.range.start = (unsigned long)area;
++	reg.range.len = area_len;
++	reg.mode = UFFDIO_REGISTER_MODE_MISSING | UFFDIO_REGISTER_MODE_WP;
++	if (ioctl(uffd, UFFDIO_REGISTER, &reg))
++		ksft_exit_fail_msg("UFFDIO_REGISTER: %s\n", strerror(errno));
++	if ((reg.ioctls & required) != required)
++		ksft_exit_fail_msg("missing range ioctls: have %#llx, need %#llx\n",
++				   (unsigned long long)reg.ioctls,
++				   (unsigned long long)required);
++
++	stop_fd = eventfd(0, EFD_CLOEXEC);
++	if (stop_fd < 0)
++		ksft_exit_fail_msg("eventfd: %s\n", strerror(errno));
++	ret = pthread_create(&thread, NULL, fault_handler, NULL);
++	if (ret)
++		ksft_exit_fail_msg("pthread_create: %s\n", strerror(ret));
++
++	ksft_set_plan(NR_TESTS);
++
++	test_read_missing(0);
++	test_read_missing(2);
++	test_write_missing();
++	test_write_protected();
++	test_wp_per_page();
++	test_unregister();
++	test_after_unregister();
++
++	if (eventfd_write(stop_fd, 1))
++		ksft_exit_fail_msg("eventfd_write: %s\n", strerror(errno));
++	pthread_join(thread, NULL);
++
++	close(stop_fd);
++	close(uffd);
++	munmap(area, area_len);
++	free(backing);
++	free(expected);
++
++	ksft_finished();
++}
+-- 
+2.47.3
+
 
