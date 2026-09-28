@@ -1,144 +1,196 @@
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0144EF15E
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 16:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 316464F0537
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 17:14:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790613610; cv=none; b=rzie/HDrn4s6mvdraPfxA7HEAveFmlrA9GskIH8L6Xi7vBtAC+8JJz8jifaDQGnwZcEjUVG80w2sKfwX4YfGnPaJslcFcGzt6ezfRimolAU5F9p0Z3FkjCmrjRfDg7yBiYo7iWWVEDUFSAGhtSgPiJCuCQyrxDiuTJcyJzutI8Y=
+	t=1790615649; cv=none; b=sfjvVyKv6N2F969D+YfcPjUbbClnrN1RZDQ1mhDPOGC47Alei9fgalBUTepe9pUsiSbk22eg7xK8Hwy+prMm/X5T+YTHMTc8ej46KE/UCgel4FhGqS+x7VxjeGeKf2BEVkpdmscnXezWqb/fq8RJC5kfCdce9d7yVpE5MNRJKT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790613610; c=relaxed/simple;
-	bh=6THoCCBVd+/ZjxZ3xgtcJIVoQhC/QcPIewn4tAZ+WI0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=l25Ipm+tMOIcNbiPN8eshWMDC64lMlux/5v1IujCF+xeS0J6l/lKT12XlTRQHgiQAIgpZbX4DA4v+UYnWbMk+nrsrvaXaOemyRW7h8UHiqNZ1I92a08sW2C2gNPC3R5jM6jdmX/yap+533ImqcJ/31u9FLoH2n7vklF8P/fSIcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rTkfir8/; arc=none smtp.client-ip=209.85.215.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1790615649; c=relaxed/simple;
+	bh=MbYUL73La3phT6CWXVxz3A2hkcPLAKJyAdn49kkRKFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lptB4jrz+Ct6azi6Uce2Pw9HHbMgOU+dArAm99Cti2v+7zVc3zNl7Llujhx0vW5o/1KP6kf6uCE4rAfuE/rxWJJVCXN6gaLkJ/fYRxRPYfODpxu6TVkA0utgKu3Csh21hkDAKNQsDToK8JvncVKfwcY+jAmgqne9wDnWcKuv12E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DpEt8Q/R; arc=none smtp.client-ip=74.125.224.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rTkfir8/"
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cc11b5dd54dso4729024a12.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 09:40:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DpEt8Q/R"
+Received: by mail-yx2-f12.google.com with SMTP id 956f58d0204a3-66e4ab20a33so3456972d50.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 10:14:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790613607; x=1791218407; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/MWRr8LBMaJZmxpSUxy/Rjeh3NVu2xmhfdirmx3vVU0=;
-        b=rTkfir8/1F6a7yCgMrZ8Y2agqXtHOhZboanxGWqljoN5OqYK3Nu7vjGMWJqU//DrMY
-         BttlSBZEBJzVE6UTGIzFW+cRmgMSDpKF9Up+fMCn+sLY5hFBnVrcEoIsmwZUoirnFrdM
-         lJfYtZM61NwtPhbv13XpXqmBqIx5v8ez0VaXggGywcXiE0/gqYKZmaoHvv8T77ve7bFf
-         MhVX4mu7Ch0eLAKTrhXMpXsT9g1f4pJZl++Xc5pWYTeQvU/YmDcbTH8QCQxQIXKBuj6z
-         6MqEMvF3IOenKzaK/zY2LZBcsFKtYIQ6pfHjow/kJtA6KyvFb4KJEMKE74tkGqX79TgY
-         MTKA==
+        d=gmail.com; s=20251104; t=1790615647; x=1791220447; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=MmJ/EW0KwY0F0cm8LaUC3Fhj6N704NFs3EmzLQEffnQ=;
+        b=DpEt8Q/Rtt6CU3VVCy088mlM94gI41xgFL8/OIpF7pLSuO5iZe0mNZsHnYrtDAxXH0
+         hJUBdhVhN4oej1WlPQhTfYlrf8FVZLn/Kqq6kzE7jSdpa5rY1Prk7NIoKnPW7z9n+klw
+         mWAtVjQboIZziiPgP+TY2Bge/YSusfHHOvkSn59MNZR1OAL3agPO+Lq0bqe90fr4z29l
+         BZDEZFONCqNi35OL8P0pUwsiDVQddf++iE7GOXMf2O6JOD4jkWmv+EUpdgqp/9MwXfbE
+         bhVWF7vK2Q+15ah7ydijagIGn6QwcNK70wA1I1/gAJIHvjji3tEm5JUboSICRcvCP8nh
+         fHZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790613607; x=1791218407;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/MWRr8LBMaJZmxpSUxy/Rjeh3NVu2xmhfdirmx3vVU0=;
-        b=Suv/+xEkvAs/DbQ7c9XUeV+L/FhG1AhMhMgUDDO5TnL9YV4DKObrA5MMEazgGYFWTV
-         J02HPu2G3/LtsKu/KSBYwjnsgyaFNCpko33XtK8iDFXsrAh2A1e/vyY8rLMaef0GI02O
-         usVg1LJnYE8fRo/32vOrv1784puFijfvmf1JqJWCYXPscN5pV7JbXZNIUVGgUqUGfqa1
-         A6CHI2WS+31rE/MQoQaTNPSFdKI4z7N0YEfpmX0DElCyGBzH6QSXyxlR0pO6phGTGFeD
-         JYPDmiUwhtgjpKXU/Oszt0qxoHvNaqXpb9LOLuzJfQNcOMtt3siESnPfeyFyJHke1lHr
-         2CKg==
-X-Forwarded-Encrypted: i=1; AKwUvBw7BjlB2LfqEykigsZcCXcfkS8rY82h1mmaIBd6nweEHtOniPkyDvPDoY74AAix6Lh27pxvRdmNJXaGUJMMiyo=@vger.kernel.org
-X-Gm-Message-State: AFuF++k24lidT3U46nOE8buDUq7s4trqktqNDYttXNRVJcWVkayKmR5P
-	fJvWq0kSANToTofaj/+I3yI9g1/u8lp6xyWFohyVfuqEo6OfsaRfjOtaHRuoWH4GD80+WhVDu3W
-	NrsjeBw==
-X-Received: from pgbgj7.prod.google.com ([2002:a05:6a02:4947:b0:cc7:9d5b:c2ac])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:cf8f:b0:3de:79b7:d62e
- with SMTP id adf61e73a8af0-3de79b7da7cmr609965637.54.1790613606937; Mon, 28
- Sep 2026 09:40:06 -0700 (PDT)
-Date: Mon, 28 Sep 2026 09:40:06 -0700
-In-Reply-To: <20260926104355.13697-1-tharitt97@gmail.com>
+        d=1e100.net; s=20260707; t=1790615647; x=1791220447;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=MmJ/EW0KwY0F0cm8LaUC3Fhj6N704NFs3EmzLQEffnQ=;
+        b=mwMfXc1wFCvbS5PHZVsYr6vXMcw5VwDGS4htCQmrYPtgTRbIR6WIrEDwJ24kHuwt5N
+         4qgMoSIadhnHINWMmIcHmlY644NfkUdNDxzZGRCQNLfeGX1ErF2/FiH/iZrZM+wv0lcl
+         N1wv5TFMjY+gz90G9uIDCFrzkrU6mZuXkzNi/fE/yR7cTrOHI9Ep1kLJJk2H/tey8t/w
+         umRkhpg+eqs9aKTDlrbjNAoBEpResQ5J6+5b+jqqL1d38ttlyWGdkW8Pz96qozpdCZ8x
+         aiJsRWRGznpQ5xJjUifHJmYNPHJjeVq1raZtGSTKSiwPOm9yELqd2J7ygwp66CLsuFBA
+         BRfA==
+X-Forwarded-Encrypted: i=1; AKwUvBxSQwA84ltbELyBrcTESQob2xQr35oLt12CEya+XhDvP8mgcvyLguXGITVGj9pkZ0i72YXhsc870sOZFOspxk4=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJmX1GyFX6SJYI9d+qlpSG7qxU2sPjDKDc8y29DwhYIPt93DBv7
+	Hfrgjz4oGh3CviznRlrZHTVnv5SIyGGXnYXRAf/Ya76FXgvIfgU8RDyV
+X-Gm-Gg: AYBFou17r6c0bQTiiJ06zA7W6sL6h6NUDoSUXbCAR7hL3woeJlohfeevLOKVJvDwdkS
+	dpw2H7I5GnTwvLid/47UwYDoJkrgB9hEXKQK4xbrECW1Mmn4PvUXHOrwweidUYUz3gsl8ClCXwD
+	HYMXQ1fgsOyZ1/RO58RHlefcaLdEUDwj22vOI3RpMBt41RCWf584+nnuPwI3zJBZhOgLlEY14lw
+	4cnl3hvQmSJfTGKETNR5T39m2zyAxA6Ki/FcIh96f9uL+bZHD+EFQVQvvR5Q3abYAFUW5VsWFr7
+	tBUB0x2kg/SOOuuwwPRQl1W7kH7rS+y5yaXi201PdS2qoghKA+nPEQTmHwFTltP97bui75vcUuL
+	iLP8Z3/BJyBQEh0QAa00oWxUIYoPON42/TazfbhFJeLcl7As0rWkuDe+AqA4D16xG3R11CCK2t4
+	PcXQxX7svtK2vhkk1NbDt4CLmPE7421yrRH6T+dG5RTWQbqE7Cbl5gx1TocUu43UUK3udlLGHCE
+	48=
+X-Received: by 2002:a53:ac98:0:b0:671:1398:648d with SMTP id 956f58d0204a3-674111a8a77mr3399078d50.9.1790615647178;
+        Mon, 28 Sep 2026 10:14:07 -0700 (PDT)
+Received: from suesslenovo ([71.132.185.69])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6740ee940a0sm4752038d50.3.2026.09.28.10.14.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Sep 2026 10:14:06 -0700 (PDT)
+Date: Mon, 28 Sep 2026 13:13:35 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>
+Cc: Cai Xinchen <caixinchen1@huawei.com>, mic@digikod.net, 
+	gnoack@google.com, paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, 
+	corbet@lwn.net, skhan@linuxfoundation.org, rdunlap@infradead.org, 
+	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, dlemoal@kernel.org, 
+	hch@lst.de, axboe@kernel.dk, viro@zeniv.linux.org.uk, brauner@kernel.org, 
+	jack@suse.cz, dhowells@redhat.com, code@tyhicks.com, linkinjeon@kernel.org, 
+	sj1557.seo@samsung.com, yuezhang.mo@sony.com, hirofumi@mail.parknet.co.jp, 
+	cel@kernel.org, jlayton@kernel.org, neil@brown.name, okorniev@redhat.com, 
+	Dai.Ngo@oracle.com, tom@talpey.com, miklos@szeredi.hu, amir73il@gmail.com, 
+	senozhatsky@chromium.org, chenxiaosong@chenxiaosong.com, zohar@linux.ibm.com, 
+	roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
+	stephen.smalley.work@gmail.com, omosnacek@gmail.com, casey@schaufler-ca.com, nanx95726@gmail.com, 
+	djwong@kernel.org, daniel@iogearbox.net, linux-security-module@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, driver-core@lists.linux.dev, 
+	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org, netfs@lists.linux.dev, 
+	ecryptfs@vger.kernel.org, exfat@lists.linux.dev, linux-nfs@vger.kernel.org, 
+	linux-unionfs@vger.kernel.org, linux-cifs@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, xiujianfeng@huawei.com, 
+	lujialin4@huawei.com
+Subject: Re: [PATCH RFC -next 00/12] landlock: Add READ_METADATA and
+ WRITE_METADATA access rights
+Message-ID: <arqcbjWLN1CLkL_Y@suesslenovo>
+References: <20260924104831.1081137-1-caixinchen1@huawei.com>
+ <araxO4ze0KZBz756@suesslenovo>
+ <20260926.255b951d3013@gnoack.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260926104355.13697-1-tharitt97@gmail.com>
-Message-ID: <arqYZpzSNppxYBK9@google.com>
-Subject: Re: [PATCH] KVM: selftests: Verify KVM_MSR_EXIT_REASON_INVAL on
- reserved EFER write
-From: Sean Christopherson <seanjc@google.com>
-To: Tharit Tangkijwanichakul <tharitt97@gmail.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kernel-mentees@lists.linux.dev, me@brighamcampbell.com, 
-	jkoolstra@xs4all.nl
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260926.255b951d3013@gnoack.org>
 
-On Sat, Sep 26, 2026, Tharit Tangkijwanichakul wrote:
-> The msr_filter_deny test covers the FILTER and UNKNOWN MSR exit
-> reasons, but nothing exercises KVM_MSR_EXIT_REASON_INVAL.
+On Sat, Sep 26, 2026 at 09:56:28AM +0200, Günther Noack wrote:
+> Hello!
 > 
-> Have the guest set a reserved bit (bit 63) in EFER while preserving
-> the other bits, and verify that the write exits to userspace with
-> KVM_MSR_EXIT_REASON_INVAL along with the attempted value.
-> 
-> Signed-off-by: Tharit Tangkijwanichakul <tharitt97@gmail.com>
-> ---
-> Tested on Intel Core i5-10210U (VMX). Not tested on AMD.
-> ---
->  .../selftests/kvm/x86/userspace_msr_exit_test.c      | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86/userspace_msr_exit_test.c b/tools/testing/selftests/kvm/x86/userspace_msr_exit_test.c
-> index 2808ce727e5f..7446e1404264 100644
-> --- a/tools/testing/selftests/kvm/x86/userspace_msr_exit_test.c
-> +++ b/tools/testing/selftests/kvm/x86/userspace_msr_exit_test.c
-> @@ -309,6 +309,9 @@ static void guest_msr_calls(bool trapped)
->  	/* Invalid MSR, should always be handled by user space exit */
->  	GUEST_ASSERT(rdmsr(0xdeadbeef) == 0xdeadbeef);
->  	wrmsr(0xdeadbeef, 0x1234);
-> +
-> +	/* Setting a reserved EFER bit is rejected by KVM, exit with INVAL */
-> +	wrmsr(MSR_EFER, rdmsr(MSR_EFER) | BIT_ULL(63));
+> On Fri, Sep 25, 2026 at 02:03:05PM -0400, Justin Suess wrote:
+> > On Thu, Sep 24, 2026 at 06:48:19PM +0800, Cai Xinchen wrote:
+> > > This series adds two new Landlock filesystem access rights,
+> > > LANDLOCK_ACCESS_FS_READ_METADATA and LANDLOCK_ACCESS_FS_WRITE_METADATA,
+> > > which control access to file and directory metadata such as inode
+> > > attributes (mode, ownership, timestamps), extended attributes and POSIX
+> > > ACLs.  It picks up the work from the "landlock: add chmod and chown
+> > > support" series [1] and follows the coarse-grained grouping discussed in
+> > > that thread [2]: instead of separate chmod/chown rights, metadata
+> > > operations are grouped into one read and one write right.
+> > > 
+> > > Landlock evaluates access rights on a per-path basis, but the metadata
+> > > related LSM hooks (inode_getattr, inode_setattr, inode_setxattr,
+> > > inode_getxattr, inode_listxattr, inode_removexattr, inode_set_acl,
+> > > inode_get_acl, inode_remove_acl) only receive the dentry of the accessed
+> > > object.  Patches 1-7 therefore first pass struct path instead of dentry
+> > > through the metadata-related VFS helpers and LSM hooks.  This is a pure
+> > > refactoring with no behavior change, split so that every patch builds
+> > > and works on its own:
+> > >
+> > I like these patches, but is the ability to read metadata already
+> > sorta controlled by LANDLOCK_ACCESS_FS_READ_DIR on the parent
+> > directory?
+> > 
+> > The one case I see this being different is:
+> > 
+> > 1. if you wanted to grant read access to the file, but not metadata
+> > read access, but I can't think of any usecase for being able to read
+> > the contents of a file, but not the metadata. (see below)
+> > 
+> > 2. If you had the absolute path already and didn't need READ_DIR.
+> > 
+> > I see introducing this READ_METADATA as causing potential
+> > hard-to-diagnose issues.
+> > 
+> > Say you handle READ_METADATA and READ_FILE, but only grant READ_FILE.
+> > 
+> > The program can technically open the file with the READ_FILE permission,
+> > but it may error out because the stat() on it beforehand failed.
+> > It's pretty common for programs to do that kind of thing (stat before
+> > open), like for checking for config files (strace bash and you see it
+> > stat .profile, /etc/profile)
+> > 
+> > There may be other bugs, because being able to set permissions to read
+> > a file *but not read it's metadata* isn't possible currently in posix
+> > acl and userspace may not work well if that assumption no longer holds.
+> >
+* posix acl and linux DAC.
 
-I'd rather use an MSR that is less likely to gain supported bits in the future.
-It's definitely unlikely EFER[63] will be used in the near future, but it's far
-from impossible.
-
-My vote would be to write a non-canonical (even with LA57=1) value to MSR_FS_BASE
-and/or MSR_GS_BASE.  While it's technically possible that x86 could extend the
-canonical address space, that's pretty much guaranteed to require truly massive
-architectural changes.  And if we reuse the NONCANONICAL macro (which we should),
-then even if the unlikely happens, at the very least it will be easy to find what
-all needs to be updated.  As a bonus, the test already uses in MSR_FS_BASE and
-MSR_GS_BASE, so they're naturally fits.
-
-Alternatively, we could use PAT, as it's extremely unlikely x86 is going to gain
-new memory types in the near future, but I like using a non-canonical value.
-
->  }
->  
->  static void guest_code_filter_deny(void)
-> @@ -627,6 +630,13 @@ static void handle_wrmsr(struct kvm_run *run)
->  		TEST_ASSERT(run->msr.reason == KVM_MSR_EXIT_REASON_UNKNOWN,
->  			    "deadbeef trap w/o inval fault");
->  	}
-> +
-> +	if (run->msr.index == MSR_EFER) {
-> +		TEST_ASSERT(run->msr.data & BIT_ULL(63),
-> +			    "MSR_EFER data missing reserved bit");
-> +		TEST_ASSERT(run->msr.reason == KVM_MSR_EXIT_REASON_INVAL,
-> +			    "MSR_EFER trap w/o inval fault");
-> +	}
->  }
->  
->  KVM_ONE_VCPU_TEST(user_msr, msr_filter_deny, guest_code_filter_deny)
-> @@ -667,7 +677,7 @@ KVM_ONE_VCPU_TEST(user_msr, msr_filter_deny, guest_code_filter_deny)
->  
->  done:
->  	TEST_ASSERT(msr_reads == 4, "Handled 4 rdmsr in user space");
-> -	TEST_ASSERT(msr_writes == 3, "Handled 3 wrmsr in user space");
-> +	TEST_ASSERT(msr_writes == 5, "Handled 5 wrmsr in user space");
->  }
->  
->  KVM_ONE_VCPU_TEST(user_msr, msr_permission_bitmap, guest_code_permission_bitmap)
-> -- 
-> 2.53.0
+> > So maybe WRITE_METADATA is good enough?
 > 
+> The existing use cases are the combinations of (a) READ_DIR
+> allowed/denied and (b) READ_METADATA allowed/denied.  Because these
+> two access rights overlap slightly, it seems likely that for a given
+> directory or file, users will want to either grant both, or deny both.
 > 
+> At the moment, where the (not yet existing) READ_METADATA is
+> implicitly always allowed, the problematic case is the one where the
+> Landlock user wants to deny READ_DIR, but where much of the same
+> metadata is still available through stat() and the various
+> get-attribute syscalls.  (c.f. the warning box in the Landlock docs
+> [1])
+> 
+> In my view the READ_METADATA right closes a gap that READ_DIR left
+> open (which is also potentially surprising to callers if they did not
+> read the docs closely).  Also, if its implementation is symmetric to
+> WRITE_METADATA, I feel that it's worth having it in the same patch
+> set.
+> 
+> –Günther
+> 
+> P.S.: I know, even after we can control stat(), there are likely ways
+> to infer the presence of a file by observing Landlock error codes.
+> This would be nice to fix as well, but is harder to do without
+> controlling the path walk itself [2].  But also, the fact that this is
+> currently not controllable is not an excuse for leaving READ_METADATA
+> open IMHO.
+>
+I'm still sort of concerned about the case where read access is allowed,
+but metadata isn't, due to how many applications will not cleanly handle
+such an unexpected condition. You can reproduce this with a seccomp
+policy forbidding stat().
+
+Would it make sense to have the existing READ rights
+(READ_DIR/READ_FILE) imply READ_METADATA on the files/directories 
+if READ_METADATA is handled? Reading a file's contents should always
+imply that you can read the metadata.
+
+Thanks,
+Justin
+> [1] https://docs.kernel.org/userspace-api/landlock.html#filesystem-flags
+> [2] https://github.com/landlock-lsm/linux/issues/9
