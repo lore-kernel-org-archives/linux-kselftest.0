@@ -1,201 +1,168 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B68A37269B;
-	Mon, 28 Sep 2026 18:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2195632;
+	Mon, 28 Sep 2026 18:55:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790619531; cv=none; b=Kf3Q8omYobh72rfJtlKiqvtdjmR9H7WCyvyEoEmW3QI3fVkX8ocFj4qm4lBbJAkfgLzYVrlMD8H5OCYl5f9bzSw6CCEu/yCKzIe2fal3Yx8kIaKoMJhmVOsYAgOld9zrfczdBqoh4Rcg+vjc/VcZxUnVhKuhHx+qPyujRpArPbc=
+	t=1790621745; cv=none; b=qPOr9+fAtzWkWXCwXbnNxcjgdDhkH2hr6ybU8huoq+xFpDPJY1MWSMyvbq39IeQ1bvWGX3Q4+UyXqzDdDCTw4mgeEr3nYUHJs1cZJIJHNdOAmD7Kz8KySYRAuWmPUDYU/2E+ygsZqz7mGe2gTvmyAxVievFOKKVX8O1oxCysKtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790619531; c=relaxed/simple;
-	bh=K+gm/+Cc9qAPK0prI75QXEUR81iMnLHYkECUNXcg+H0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HIltLqfplqUZdCRkEx7vDc7fBnPpeRBuvrzdtH6t0B3nfZH29P61kjmFCquutQpV/nc1uO4nZLAsXRPrc/la9CQz0iUTV34WyPU/bl0UdfNbwfQIMKcpPPSSzvQygs4eT76bJu94g1nI+ddpYd8gyICrynEZ72t9p/cNlqUKcTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VDahCbPk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790621745; c=relaxed/simple;
+	bh=onZDiNCv4SpLXbclYO7QTRI0/zTxTJio8MMiVpSA3ys=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=G1ZMk3w8aoWLJ4/CjU9ICxsYo0TEfNUmUCu3BDPIHqX656zF9hG4jBm4JQiBqgerkJ1TISxvm9JIU2SfOsx/bfyq9LIUqIbkSP0TLMDp0DjSS8am08IGj4RaqVRdrss1pt7t6uGR6npa0JJyyZ+xRpo8AvANU3xDNzO/q3A9AWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RHmy2ePq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VDahCbPk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B91C51F000FF;
-	Mon, 28 Sep 2026 18:18:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RHmy2ePq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CA091F000FF;
+	Mon, 28 Sep 2026 18:55:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790619529;
-	bh=IngvfdjDTuMxuKWaiC5XQNkdziiuEHqoUpcP04yDirI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VDahCbPkV+RSr4vSZ1HWmkwUpQ/kplhol52IB+WLXyrnPMar5mgI7cZhss+Ge7G17
-	 go6E0RRqYMg0QqKIiMnQgb5vOpVDpsh9YGKDXc60lR2r5WMPXbKC0dr4AjCw9rIfgj
-	 yNzICd4YdTMd0dcx4wh2BbxmbTUVThYBNlXVqq5iF+cQI8wIgK03FE27niBRpoKOJL
-	 DN6TTpxi1FyykohiU1CIcPfEA9siwthZ2XQ8FZw/WHPqDBlBo8CKTQmHN3cjaQcneR
-	 Le+tNHmx2qpKojmC561RZeS+UTHSJ/q0Wnyt7hlPO6A9HoE9jiQSISLLwBLycEdKGV
-	 mTdaWVAHDVOMg==
-Date: Mon, 28 Sep 2026 13:18:48 -0500
-From: Rob Herring <robh@kernel.org>
-To: Alex Ousherovitch <aousherovitch@rambus.com>
-Cc: Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor+dt@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
-	Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>,
-	Shuah Khan <shuah@kernel.org>, Alexandre Ghiti <alex@ghiti.fr>,
-	devicetree@vger.kernel.org,
-	Joel Wittenauer <Joel.Wittenauer@cryptography.com>,
-	linux-api@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Thi Nguyen <thin@rambus.com>
-Subject: Re: [PATCH v5 01/19] dt-bindings: crypto: add Rambus CryptoManager
- Hub
-Message-ID: <20260928181848.GA150882-robh@kernel.org>
-References: <20260917225929.2494111-1-aousherovitch@rambus.com>
- <20260917225929.2494111-2-aousherovitch@rambus.com>
+	s=k20260515; t=1790621743;
+	bh=LV5foDq0te//h3ZFoq+eAVN3kgz2N/aXomur4SLjfrs=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=RHmy2ePqKXcwoZ6sOF7EkuTmUGsyy55qFEnR3bxmPV1Md1l2SfmzNinWLsWWYVIbP
+	 FIs5DyhSATA5lJBx14pPb7T8WFefOrpjQo7hd5tLPTq1Hq7lA2+Tz3ogCVa58Dm9J5
+	 hye2SrWsvIn0NJinRY7xbAQUM7cHTh/aL3xLwKgAfxPrSwFz0cEGr9HySQwNIuG8V1
+	 JEs4uuUfDn8pmTlqDb7BeUApsz8sj9gHf9P781S0VgS/nBHT6M64zisqGiVP6qLnCw
+	 UT1Z88sVXIaHIzRD8oCujjnxZ8mTYMTaFXXBhfEwPwmZZULbTvr9TFwg9s2WxTCQh0
+	 CVrDnOsMYT7rA==
+Subject: Re: [PATCH net-next 1/6] ipv6: reject a negative optlen in
+ do_ipv6_getsockopt()
+From: netdev-bot+sashiko@kernel.org
+To: leitao@debian.org
+Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, john.fastabend@gmail.com, sdf@fomichev.me,
+ shuah@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ david.laight.linux@gmail.com, kernel-team@meta.com
+Date: Mon, 28 Sep 2026 18:55:41 +0000
+Message-ID: <179062174160.3145.8573490114986242294@kernel.org>
+In-Reply-To: <20260925-sockopt_expand_out_v2-v1-1-c3ef2e3bb5c0@debian.org>
+References: <20260925-sockopt_expand_out_v2-v1-1-c3ef2e3bb5c0@debian.org>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260917225929.2494111-2-aousherovitch@rambus.com>
 
-On Thu, Sep 17, 2026 at 03:59:10PM -0700, Alex Ousherovitch wrote:
-> Add device tree binding schema for the Rambus CryptoManager Hub (CMH)
-> hardware crypto accelerator.  The binding describes the parent
-> SoC-level node with its SIC register region and one queue@N child
-> node per mailbox the host owns, each carrying a reg (mailbox instance
-> index), an optional interrupt, VCQ ring geometry (rambus,num-slots /
-> rambus,slot-stride-bytes) and a rambus,cores affinity list.  Which
-> crypto cores are present is discovered from the SIC CORE_ENABLE
-> register at probe, not described in the device tree.
-> 
-> Register the 'rambus' vendor prefix for Rambus Inc.
-> 
-> Signed-off-by: Alex Ousherovitch <aousherovitch@rambus.com>
-> Co-developed-by: Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>
-> Signed-off-by: Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>
-> ---
->  .../bindings/crypto/rambus,cmh-v1030.yaml     | 151 ++++++++++++++++++
->  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
->  2 files changed, 153 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/crypto/rambus,cmh-v1030.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/crypto/rambus,cmh-v1030.yaml b/Documentation/devicetree/bindings/crypto/rambus,cmh-v1030.yaml
-> new file mode 100644
-> index 000000000000..a0df35bdc371
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/crypto/rambus,cmh-v1030.yaml
-> @@ -0,0 +1,151 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/crypto/rambus,cmh-v1030.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Rambus CryptoManager Hub (CMH) Hardware Crypto Accelerator
-> +
-> +maintainers:
-> +  - Alex Ousherovitch <aousherovitch@rambus.com>
-> +  - Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>
-> +  - Joel Wittenauer <Joel.Wittenauer@cryptography.com>
-> +
-> +description: |
-> +  The Rambus CryptoManager Hub (CMH) is a hardware cryptographic accelerator
-> +  accessed via a mailbox-based VCQ (Virtual Command Queue) interface.  The
-> +  host writes VCQ command sequences into per-mailbox DMA queue buffers and
-> +  rings a doorbell; the CMH eSW processes them and signals completion via
-> +  interrupt.
-> +
-> +  The management host statically partitions the hardware mailboxes across
-> +  the SoC's host interfaces at integration time; the set of mailboxes a
-> +  given host owns is therefore fixed and not runtime-discoverable (a
-> +  mailbox locked to a host reads as unavailable in the SIC availability
-> +  register).  Each owned mailbox is described by a child node.  Which
-> +  crypto cores are present is a fixed silicon-build property indicated by
-> +  the SIC CORE_ENABLE register, so cores are not described in the device
-> +  tree.  Clock and reset are owned by the management host; a node
-> +  describing a non-management host has no clock or reset provider of its
-> +  own, so clocks and reset-gpios are optional.
-> +
-> +  CMH gates access to a locked mailbox by a hardware HOST ID presented on
-> +  the bus with every access, permitting only the owning host's ID.  An
-> +  integration must present a single, stable HOST ID for all accesses to a
-> +  given mailbox, independent of the issuing CPU (relevant on SMP hosts
-> +  whose interconnect encodes the issuing CPU in the HOST ID).
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - not: {}
-> +        description: SoC-specific compatible, e.g. vendor,soc-cmh
-> +      - const: rambus,cmh-v1030
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description:
-> +      SIC (System Interface Controller) MMIO region.  The registers of
-> +      mailbox instance N are at offset N * 0x1000 within this region.
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 3
-> +    description:
-> +      The "core" functional clock, and optionally the half-rate "core-div2"
-> +      clock (present only on configurations with side-channel-protected
-> +      cores) and/or the "rt" real-time tick clock.  See clock-names for the
-> +      valid combinations.
-> +
-> +  clock-names:
-> +    oneOf:
-> +      - items:
-> +          - const: core
-> +      - items:
-> +          - const: core
-> +          - const: core-div2
-> +      - items:
-> +          - const: core
-> +          - const: rt
-> +      - items:
-> +          - const: core
-> +          - const: core-div2
-> +          - const: rt
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Can be simplified to:
+Low priority / nit picks for your consideration:
 
-items:
-  - const: core
-  - enum: [ core-div2, rt ]
-  - const: rt
+- [Low] The commit message misdescribes how a negative optlen behaved
+  before the patch.
+- [Low] The commit message frames the change as a standalone bug fix
+  ("the fix stands on its own here") for user-visible behaviour, but it…
 
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description:
-> +      Host-controlled reset for the CryptoManager Hub.  The hub has two
-> +      external, active-low reset inputs -- a power-on reset and a hard
-> +      reset; where a board routes one of them to a host GPIO, that line is
-> +      described here.
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +patternProperties:
-> +  "^queue@[0-9a-f]+$":
-> +    type: object
-> +    description:
-> +      One node per hardware mailbox (VCQ command queue) this host owns.
-> +      The set of owned mailboxes is fixed by the management host at
-> +      integration time and enumerated here.
-> +    properties:
-> +      reg:
-> +        maxItems: 1
-> +        description:
-> +          0-based mailbox instance index.  The instance's registers are
-> +          at reg * 0x1000 within the SIC region.
+--
 
-Is there a maximum number of instances? If so, 'maximum: N'.
+ipv6: reject a negative optlen in do_ipv6_getsockopt()
 
-Rob
+This commit makes do_ipv6_getsockopt() return -EINVAL when the optlen
+read from userspace is negative. IPv4's do_ip_getsockopt() already does
+this.
+
+> IPv4's do_ip_getsockopt() rejects a negative optlen right after reading
+> it. do_ipv6_getsockopt() never has, and nothing downstream treats it as
+> an error either: len is an int, but every consumer compares it unsigned,
+> so -1 behaves as a huge value and each site clamps to its own reply
+> size.
+
+[Severity: Low]
+
+Is this an accurate description of the old behaviour? Two cases in
+do_ipv6_getsockopt() in net/ipv6/ipv6_sockglue.c don't seem to match it.
+
+For MCAST_MSFILTER, ipv6_get_msfilter() and compat_ipv6_get_msfilter()
+already use a signed compare, because size0 is a const int:
+
+	const int size0 = offsetof(struct group_filter, gf_slist_flex);
+	...
+	if (len < size0)
+		return -EINVAL;
+
+So len = -1 already returned -EINVAL before this patch.
+
+For IPV6_2292PKTOPTIONS on a SOCK_STREAM socket, len is never compared
+or clamped:
+
+		msg.msg_controllen = len;
+
+msg_controllen is __kernel_size_t, so -1 becomes SIZE_MAX. That value
+passes both size checks in put_cmsg():
+
+  msg_controllen < sizeof(struct cmsghdr)
+  msg_controllen < cmlen
+
+As a result, every pending cmsg is written to optval with no limit from
+the real buffer size. This covers the cmsgs from ip6_datagram_recv_ctl()
+and from the sticky rxopt put_cmsg() calls. After that:
+
+		len -= msg.msg_controllen;
+
+reports the number of bytes written, not a clamped reply size.
+
+The writes only land in the caller's own address space. The BPF kernel
+sockptr path through sol_ipv6_sockopt() only allows IPV6_TCLASS,
+IPV6_AUTOFLOWLABEL and IPV6_TRANSPARENT with *optlen == sizeof(int).
+So this is a changelog problem only, and the code change covers both
+paths.
+
+Could the commit message mention the IPV6_2292PKTOPTIONS case, and drop
+the claim that every consumer compares len unsigned?
+
+> This is a bug ready to bite us in the near future, let's get this fixed.
+>
+> I've found this because testing the rest of the patch was returning
+> inconsistency when optlen = -1.
+>
+> Later patches make the check unreachable, since sockopt_init_user() and
+> sockptr_to_sockopt() both reject a negative length before the switch
+> runs. Keep it as a guard; the fix stands on its own here.
+
+[Severity: Low]
+
+Is this meant as a standalone fix, or as preparatory hardening for the
+series?
+
+Userspace can see the change on the baseline. The IPv6 proto_ops have no
+getsockopt_iter, so do_sock_getsockopt() takes the legacy
+ops->getsockopt path and never reaches sockptr_to_sockopt():
+
+do_sock_getsockopt()
+  sock_common_getsockopt()
+    udpv6_getsockopt()
+      ipv6_getsockopt()
+        do_ipv6_getsockopt()
+
+Nothing on that path checks the sign of len. With len = -1,
+getsockopt(udp6_fd, SOL_IPV6, IPV6_TCLASS, buf, &len) reaches:
+
+	len = min_t(unsigned int, sizeof(int), len);
+
+It then writes 4 bytes and returns 0. With this patch it returns -EINVAL.
+
+If this is a fix, should it have a Fixes: tag and target net? The
+unchecked len predates git history, so something like this would fit:
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+
+If it is hardening for the net-next series, could "a bug ready to bite
+us" and "the fix stands on its own here" be reworded?
+
+Also, "the rest of the patch" and "Later patches make the check
+unreachable" refer to the series. Once this is in git history, readers
+won't have that context. Could those sentences be reworded too?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260925-sockopt_expand_out_v2-v1-0-c3ef2e3bb5c0%40debian.org
