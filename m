@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A198B486E78;
-	Mon, 28 Sep 2026 08:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E7F485CF7;
+	Mon, 28 Sep 2026 08:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790585602; cv=none; b=BnskpN+yf8x6O4ueF0PlAJUkpF9YSHvUPsUOQ4gcV8PIWj34+KTpvy4/XYJkGztSgq9PEiUZoCJ3CIHrZWmBGdQs1d+zk5hIA4LupRYwSi76HIznBOX22vAxp0yyDWIN76z4dA0+Dijk1gBUCFoaa8y45UeK2fvs+oV8Fh4GjlE=
+	t=1790585638; cv=none; b=E3tPf6dC9LjvLBgHrS1O5l8QpKbmGPu+viZo3Mw9TLTcybnabkvjtp76nzbJSpf25pCaQW+GrnT0hizjmK0jXxhYZg/hQmeVHyRUVQLy6RZoteKGpb1shmpoqeAEOef4h5tYFQJbwIhS1DgDsFz2wg0xiTukEYpkKUmdUoo8uy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790585602; c=relaxed/simple;
-	bh=a1gjw015DETcieT1DcIKm+L9rR/PU6Ll3zjww55sHRo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LTFFfY1FENiVqhuwfkMpnoBYFogiGHtWC9phrCzBobbttbKPkk1ZwVtDCjdtdnrc4IopsKjEpSaBh+dXSlcEvTtpcM1DaMV+U4o7bLlr+Jrc5YzkWc9LV8Z4zEJbW3t9igHfLglyxifM0rT1VLCJBryqJKyGXq4nrTvbo/As4qE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hrFYJfwf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790585638; c=relaxed/simple;
+	bh=U7p+ll+lx6MHhl2gZLm9ZnSx1Cc3HreKMd2uTg2Ay0U=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=L5iinYQxptRvdOJgj+Q9EaKmwqt3apbVPwrZRi/MQwxEgm65dnlCGKka/Y9HWMZ+ntV+jBF+MdHujvjrrXatOhk9K9LAVYhjejfx2uXcR111pJAiQYeFhxyIoafndIaFf6rFdxzHC1PPdsUdVDYd9Ipk1EoZpnX3Wg8+FF6JYaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lc49o/Gj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hrFYJfwf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 110201F00893;
-	Mon, 28 Sep 2026 08:53:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lc49o/Gj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BFC51F000FF;
+	Mon, 28 Sep 2026 08:53:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790585600;
-	bh=5PVeGOJnaKCpJJY0+kbJzTfUxuIOeJRjTWg+Uf9bzrY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=hrFYJfwfCcGmTGKwfH4kA1bByopbzivdG95gwg9QPSMCGENY3BYLnIJuz03bHzn1m
-	 Auytg8u9pwWvX2XtvlywvDnrVK9KT2YmJWuYTRSbLMbIj+BWVo2ucIYvOYthdKZo94
-	 pvMD3pulkrFS7Hx+dQ29+b9K424ZJRXVXUIdZELDA+71CmEW2mr3AlD8jxMhNjScX8
-	 zoQBOjv3qbDWZPo0Fo8+qslY0f1ixzEYJj3rMOf4XlhTW8tyVOiwxfJmzpuI1Xq/xL
-	 hxqF2tmWBUKuwUZOBJuOxhfybAj4egnRehaLH8BOnjgHTWhDupwm49rZ/RDiMOUB0N
-	 YeqNkMD711OUw==
-Message-ID: <4e4223f4-dfec-4e82-97fe-25ae3a3b0f73@kernel.org>
-Date: Mon, 28 Sep 2026 10:53:10 +0200
+	s=k20260515; t=1790585637;
+	bh=SoMUT2BwfJC5COzbHfnGci4NZdcVm+iQPUkVyhkFY0Y=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To;
+	b=Lc49o/GjqegLQqj0XCZDeVz5FkD9g8IF9bKFYEUjp4Y3OB81Sw7NlOmJpVplTGR6e
+	 YFgr6CsScU19Q6DXfkHkm5D3S+C7znPTicVnirUwx2eG02C13dY2Nr8/mj5mxN2ue3
+	 BPlIybV2xEW0mqgJEyVuDpmtktYJ6wDfnObzWKEpyEQw+2hNjdkjHcZWO6hiE15GVx
+	 b6dj/Qoc0EKruxMHbjx9xilKEBDJWVStMT2koRkSebYcosSpP7WMw0vs8kPjcxRD31
+	 Z3rpvKi8lwtcxU3s/2WjY64ryo2hB91DOfvMq6GHoAM/DVawc1gIYfuFhAs+tfCdYM
+	 UbcNStzifoHkQ==
+Message-ID: <4facb8d8-2ccc-4337-bdbf-3e8c03351b7e@kernel.org>
+Date: Mon, 28 Sep 2026 10:53:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,6 +37,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 2/2] selftests/mm: add tests for UFFDIO_MOVE of a
  uffd-protected swap entry
+From: "David Hildenbrand (Arm)" <david@kernel.org>
 To: Donggeun Yoo <donggeunyoo.kernel@gmail.com>, akpm@linux-foundation.org,
  rppt@kernel.org
 Cc: peterx@redhat.com, surenb@google.com, aarcange@redhat.com,
@@ -45,7 +46,7 @@ Cc: peterx@redhat.com, surenb@google.com, aarcange@redhat.com,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20260926124145.2878520-1-donggeunyoo.kernel@gmail.com>
  <20260926124145.2878520-3-donggeunyoo.kernel@gmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
+ <4e4223f4-dfec-4e82-97fe-25ae3a3b0f73@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -91,128 +92,57 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260926124145.2878520-3-donggeunyoo.kernel@gmail.com>
+In-Reply-To: <4e4223f4-dfec-4e82-97fe-25ae3a3b0f73@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/26/26 14:41, Donggeun Yoo wrote:
-> Move a swapped-out page out of a write-protected or RWP-protected area into
-> a destination registered for missing faults only, and read pagemap bit 57
-> at the destination.  The destination was never protected, so the bit must
-> be clear.
+On 9/28/26 10:53, David Hildenbrand (Arm) wrote:
+> On 9/26/26 14:41, Donggeun Yoo wrote:
+>> Move a swapped-out page out of a write-protected or RWP-protected area into
+>> a destination registered for missing faults only, and read pagemap bit 57
+>> at the destination.  The destination was never protected, so the bit must
+>> be clear.
+>>
+>> Assisted-by: LLM
+>> Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+>> ---
+>>  tools/testing/selftests/mm/uffd-unit-tests.c | 84 ++++++++++++++++++++
+>>  1 file changed, 84 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+>> index ef9b3956bdcfd..580178630eded 100644
+>> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
+>> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+>> @@ -2037,6 +2037,75 @@ static void uffd_move_pmd_split_test(uffd_global_test_opts_t *gopts, uffd_test_a
+>>  			      uffd_move_pmd_handle_fault);
+>>  }
+>>  
+>> +/*
+>> + * Moving a swapped-out page out of a write-protected or RWP-protected area
+>> + * must not carry the uffd bit into a destination registered for missing
+>> + * faults only: such a bit is never cleared afterwards, so pagemap keeps
+>> + * reporting the page as uffd-tracked.
+>> + *
+>> + * Needs a swap device; skipped if MADV_PAGEOUT cannot evict the page.
+>> + */
+>> +static void uffd_move_swap_test_common(uffd_global_test_opts_t *gopts,
+>> +				       bool rwp)
+>> +{
+>> +	unsigned long page_size = gopts->page_size;
+>> +	struct uffdio_move move = { };
+>> +	int pagemap_fd;
+>> +
+>> +	if (rwp) {
+>> +		if (uffd_register_rwp(gopts->uffd, gopts->area_src, page_size))
+>> +			err("register src failure");
+>> +	} else if (uffd_register(gopts->uffd, gopts->area_src, page_size,
+>> +				 false, true, false)) {
+>> +		err("register src failure");
+>> +	}
 > 
-> Assisted-by: LLM
-> Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
-> ---
->  tools/testing/selftests/mm/uffd-unit-tests.c | 84 ++++++++++++++++++++
->  1 file changed, 84 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-> index ef9b3956bdcfd..580178630eded 100644
-> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
-> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-> @@ -2037,6 +2037,75 @@ static void uffd_move_pmd_split_test(uffd_global_test_opts_t *gopts, uffd_test_a
->  			      uffd_move_pmd_handle_fault);
->  }
->  
-> +/*
-> + * Moving a swapped-out page out of a write-protected or RWP-protected area
-> + * must not carry the uffd bit into a destination registered for missing
-> + * faults only: such a bit is never cleared afterwards, so pagemap keeps
-> + * reporting the page as uffd-tracked.
-> + *
-> + * Needs a swap device; skipped if MADV_PAGEOUT cannot evict the page.
-> + */
-> +static void uffd_move_swap_test_common(uffd_global_test_opts_t *gopts,
-> +				       bool rwp)
-> +{
-> +	unsigned long page_size = gopts->page_size;
-> +	struct uffdio_move move = { };
-> +	int pagemap_fd;
-> +
-> +	if (rwp) {
-> +		if (uffd_register_rwp(gopts->uffd, gopts->area_src, page_size))
-> +			err("register src failure");
-> +	} else if (uffd_register(gopts->uffd, gopts->area_src, page_size,
-> +				 false, true, false)) {
-> +		err("register src failure");
-> +	}
+> if ()
 
-if ()
-
-> +	if (uffd_register(gopts->uffd, gopts->area_dst, page_size,
-> +			  true, false, false))
-> +		err("register dst failure");
-> +
-> +	if (rwp)
-> +		rwprotect_range(gopts->uffd, (unsigned long)gopts->area_src,
-> +				page_size, true);
-> +	else
-> +		wp_range(gopts->uffd, (unsigned long)gopts->area_src,
-> +			 page_size, true);
-> +
-> +	pagemap_fd = pagemap_open();
-> +	if (madvise(gopts->area_src, page_size, MADV_PAGEOUT))
-> +		err("MADV_PAGEOUT");
-> +	if (!pagemap_is_swapped(pagemap_fd, gopts->area_src)) {
-> +		uffd_test_skip("MADV_PAGEOUT did not swap the page; is swap enabled?");
-> +		goto out;
-> +	}
-> +
-> +	move.dst = (unsigned long)gopts->area_dst;
-> +	move.src = (unsigned long)gopts->area_src;
-> +	move.len = page_size;
-> +	if (ioctl(gopts->uffd, UFFDIO_MOVE, &move))
-> +		err("UFFDIO_MOVE");
-> +
-> +	if (pagemap_get_entry(pagemap_fd, gopts->area_dst) & PM_UFFD_WP)
-> +		uffd_test_fail("uffd bit moved into an area registered for missing faults only");
-> +	else
-> +		uffd_test_pass();
-> +out:
-> +	close(pagemap_fd);
-> +	uffd_unregister(gopts->uffd, gopts->area_src, page_size);
-> +	uffd_unregister(gopts->uffd, gopts->area_dst, page_size);
-> +}
-> +
-> +static void uffd_move_swap_wp_test(uffd_global_test_opts_t *gopts,
-> +				   uffd_test_args_t *targs)
-> +{
-> +	uffd_move_swap_test_common(gopts, false);
-> +}
-> +
-> +static void uffd_move_swap_rwp_test(uffd_global_test_opts_t *gopts,
-> +				    uffd_test_args_t *targs)
-> +{
-> +	uffd_move_swap_test_common(gopts, true);
-> +}
-> +
->  static bool
->  uffdio_verify_results(const char *name, int ret, int error, long result)
->  {
-> @@ -2359,6 +2428,21 @@ uffd_test_case_t uffd_tests[] = {
->  		.uffd_feature_required = UFFD_FEATURE_MOVE,
->  		.test_case_ops = &uffd_move_test_pmd_case_ops,
->  	},
-> +	{
-> +		.name = "move-swap-wp",
-> +		.uffd_fn = uffd_move_swap_wp_test,
-> +		.mem_targets = MEM_ANON,
-> +		.uffd_feature_required = UFFD_FEATURE_MOVE |
-> +		UFFD_FEATURE_PAGEFAULT_FLAG_WP,
-> +		.test_case_ops = &uffd_move_test_case_ops,
-> +	},
-> +	{
-> +		.name = "move-swap-rwp",
-> +		.uffd_fn = uffd_move_swap_rwp_test,
-> +		.mem_targets = MEM_ANON,
-> +		.uffd_feature_required = UFFD_FEATURE_MOVE | UFFD_FEATURE_RWP,
-> +		.test_case_ops = &uffd_move_test_case_ops,
-> +	},
->  	{
->  		.name = "wp-fork",
->  		.uffd_fn = uffd_wp_fork_test,
-
+Clicked sent by accident ... let me reply once more.
 
 -- 
 Cheers,
