@@ -1,95 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210ED3F86EF;
-	Mon, 28 Sep 2026 05:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF1238F624;
+	Mon, 28 Sep 2026 06:19:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790574819; cv=none; b=nBIKn0yL2PlvSuLVdDi1sFu4azz/UvAo6wggdEvpN3otbpjlgWX+bB1Mz9hMnKYFglFYbwQjXCMqZua/SrnmcRq4Aou/QAJ6f+TDRCoD+fgdCUKVAYj4sBL3VQB7/pj5A6YN60RsSgRKa9MH/2RoI//JtnYe0RBBPySQowMYZVM=
+	t=1790576360; cv=none; b=ExPKGgblfPlM4BNGTd7meJIFp9cRXkmcaANMYEZD0JlVeTrwratVZS4+krE9v0AuTqbZeBwd7kWBK5zR8oqRz7PRID2qtuAQUk4uzugErmilS8tM7xFoMRjXvMjLh/NrD2Jt1ovtYqCfzsHv/sLbj0iqIO0Gv4S+cp+CZf59TJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790574819; c=relaxed/simple;
-	bh=DunKnc3bPJ58jVAWjZyerYcgdaAXaL1XDTzmmXf9obc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=jsEv/VAKsjFPWzf+gb/LuKrtUuPrCV/aeNJHDPxctBOx0KZNt2X9NXyHPsevUE9dRyiptHbhb+gWhnkU1PjmiMCcvnON6BHCg8PC1b0AcFRNtc2eNN1HEP0FUPq6GrX6kCVHjx3RCIJqgCt3Kmf2UYx184ogisgqyat2pl/seP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YFgQYIvq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790576360; c=relaxed/simple;
+	bh=4fL1geGwR/vTw2pP+aud257yMQC2kIMBAThqmN3v7XE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=tcgQAugebzns6PvivHglY1Q3BAeWg822Q0LhpPQKYLye9TB7Ue9YbBDZUBLvwiEBIZypGvU4J7hhHMHRyZ69eBpvnxxQsb9B/d3V2V0Tl3s6dml8c8gxzb+KEQsqk9YvARhl0KkEFXuDZF6qLJ3mCyT/RAZiqynLKaopWHeGlmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=XvJLuFVF; arc=none smtp.client-ip=113.46.200.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YFgQYIvq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAAF61F000FF;
-	Mon, 28 Sep 2026 05:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790574817;
-	bh=oiaWAk2ChzwSv+/OHxCIuOjma1tWl+GAlbfyo47VIHo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=YFgQYIvqNH5Y0lPP6y/Ba0aWrLpu4gI1vjh21V1qIY8jRvSF5FUge7FelPatbAqI7
-	 b1p1msKmXEEjeb17CELxSOGRjThjBWR94m8KCKCve9VokhW2tybgoTFIzwMIR6UUxk
-	 9Xdai2nE/ZG9SDF2NVAuHOXsfpFMH55VJqMoIMkNnMxj7Gv+2ag9WrgjsElI036QyZ
-	 fdrYSCtx9iLkD+Aj1GuilZUGtBmJ54h7pSZ1EMMO4Xbc9t9uQFf07SBZ1mKUHQInY/
-	 pB238vuX+owGxxE+m2FWdGn4DpY5zDSMjnyizHPIMhu7fWaGHjiB24ZUhSgafx3owT
-	 5XqswYVPyXLfQ==
-Content-Type: multipart/mixed; boundary="===============1210779320454498450=="
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="XvJLuFVF"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=hQEbXTR0WO6OLctre3xEpANMZkBOustPdfsjT/vetaI=;
+	b=XvJLuFVFKIsF5clGxrSoqwAGVY+g3ugM68udF3ON7tQ/lQLwaMuoYIolmm9/YnF1e05w8Iw8K
+	PDQnaD7jO+WxUfz/naLxHMBEuQrIGqHIYfxDCR1YoRyqyy6HAML1dNc1Gcw3j4CInQXfpbQm9P0
+	yW8zOpXooIbBwC6YE0IqSuo=
+Received: from mail.maildlp.com (unknown [172.19.163.200])
+	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4htW6Y0jfbzKm5t;
+	Mon, 28 Sep 2026 14:07:01 +0800 (CST)
+Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
+	by mail.maildlp.com (Postfix) with ESMTPS id CAABB40563;
+	Mon, 28 Sep 2026 14:19:12 +0800 (CST)
+Received: from [10.67.109.91] (10.67.109.91) by whupemk100010.china.huawei.com
+ (7.152.184.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Mon, 28 Sep
+ 2026 14:19:06 +0800
+Message-ID: <7161a5f0-0176-45c3-9e78-d90e39cf4288@huawei.com>
+Date: Mon, 28 Sep 2026 14:19:05 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5c4f07d70efb357deef9f256e98298c9ef861831e3ffcfa4bd42fbd9b4b31a5a@mail.kernel.org>
-In-Reply-To: <a8257022057cbb71928c960be589e10b89fc0899.1789982239.git.skb99@linux.ibm.com>
-References: <a8257022057cbb71928c960be589e10b89fc0899.1789982239.git.skb99@linux.ibm.com>
-Subject: Re: [PATCH v14 4/5] powerpc/bpf: fix alignment of long branch trampoline address
-From: bot+bpf-ci@kernel.org
-To: skb99@linux.ibm.com,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org
-Cc: hbathini@linux.ibm.com,maddy@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,shuah@kernel.org,linux-kselftest@vger.kernel.org,stable@vger.kernel.org,venkat88@linux.ibm.com,yeswanth@linux.ibm.com,skb99@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 28 Sep 2026 05:53:36 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC -next 09/12] landlock: Implement metadata access hooks
+To: =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>
+CC: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
+	<jmorris@namei.org>, <serge@hallyn.com>, <corbet@lwn.net>,
+	<skhan@linuxfoundation.org>, <rdunlap@infradead.org>,
+	<gregkh@linuxfoundation.org>, <rafael@kernel.org>, <dakr@kernel.org>,
+	<dlemoal@kernel.org>, <hch@lst.de>, <axboe@kernel.dk>,
+	<viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <jack@suse.cz>,
+	<dhowells@redhat.com>, <code@tyhicks.com>, <linkinjeon@kernel.org>,
+	<sj1557.seo@samsung.com>, <yuezhang.mo@sony.com>,
+	<hirofumi@mail.parknet.co.jp>, <cel@kernel.org>, <jlayton@kernel.org>,
+	<neil@brown.name>, <okorniev@redhat.com>, <Dai.Ngo@oracle.com>,
+	<tom@talpey.com>, <miklos@szeredi.hu>, <amir73il@gmail.com>,
+	<senozhatsky@chromium.org>, <chenxiaosong@chenxiaosong.com>,
+	<zohar@linux.ibm.com>, <roberto.sassu@huawei.com>,
+	<dmitry.kasatkin@gmail.com>, <eric.snowberg@oracle.com>,
+	<stephen.smalley.work@gmail.com>, <omosnacek@gmail.com>,
+	<casey@schaufler-ca.com>, <nanx95726@gmail.com>, <djwong@kernel.org>,
+	<daniel@iogearbox.net>, <linux-security-module@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<driver-core@lists.linux.dev>, <linux-block@vger.kernel.org>,
+	<linux-fsdevel@vger.kernel.org>, <netfs@lists.linux.dev>,
+	<ecryptfs@vger.kernel.org>, <exfat@lists.linux.dev>,
+	<linux-nfs@vger.kernel.org>, <linux-unionfs@vger.kernel.org>,
+	<linux-cifs@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+	<selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<xiujianfeng@huawei.com>, <lujialin4@huawei.com>
+References: <20260924104831.1081137-1-caixinchen1@huawei.com>
+ <20260924104831.1081137-10-caixinchen1@huawei.com>
+ <20260926.a96402fcbd4b@gnoack.org>
+Content-Language: en-US
+From: Cai Xinchen <caixinchen1@huawei.com>
+In-Reply-To: <20260926.a96402fcbd4b@gnoack.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ whupemk100010.china.huawei.com (7.152.184.41)
 
---===============1210779320454498450==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+You are right.
 
-> commit 6ef500644d23a07941d6ec45def92b9391c03a10
-> Author: Abhishek Dubey <adubey@linux.ibm.com>
-> Date:   Mon Sep 28 10:43:53 2026 +0530
->
->     powerpc/bpf: fix alignment of long branch trampoline address
->
->     Ensure the dummy trampoline address field present between the OOL stub
->     and the long branch stub is 4/8-byte aligned, for memory compatibility
->     when content loaded to a register.
->
->     Reported-by: Hari Bathini <hbathini@linux.ibm.com>
->     Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
->     Cc: stable@vger.kernel.org
->     Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
->     Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
->     Tested-by: Yeswanth Krishna Tellakula <yeswanth@linux.ibm.com>
->     Tested-by: R Nageswara Sastry <rnsastry@linux.ibm.com>
->     Reviewed-by: Hari Bathini <hbathini@linux.ibm.com>
+I will change in the next version
 
-This isn't a bug, but could the changelog say what fails when the slot
-is only 4-byte aligned, and briefly explain why sizing with an
-unconditional NOP and then conditionally dropping it in the final pass
-is safe?
-
-The load-bearing rationale seems to be missing. From the code,
-bpf_jit_binary_pack_alloc() only guarantees 4-byte alignment of the
-final image, so the SZL-sized slot read by the long branch stub and
-rewritten by patch_ulong() from bpf_arch_text_poke() may be only 4-byte
-aligned on ppc64, where an 8-byte access is then not guaranteed to be
-single-copy atomic against a concurrent patch.
-
-The non-obvious part of the fix is that the NOP is emitted
-unconditionally in the sizing pass when image is NULL and conditionally
-on the final fimage address in the codegen passes, so the allocated
-buffer may have 4 spare bytes while jited_len reflects the actual size.
-
-The phrase "4/8-byte aligned" also blurs that only the 64-bit case needs
-the NOP since SZL is 4 on ppc32.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36381917401
---===============1210779320454498450==--
+On 9/26/2026 4:38 PM, Günther Noack wrote:
+> Nit: It feels like this comment about implicit timestamp updates
+> (especially the size change) should go in the top-level documentation
+> for the WRITE_METADATA right?  setattr() can not result in a size
+> change, after all, AFAIK?
