@@ -1,151 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AFD448488D;
-	Mon, 28 Sep 2026 08:40:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B553FC5AE;
+	Mon, 28 Sep 2026 08:44:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790584816; cv=none; b=laqouVemvP/1bNBg6x3OqtthtsizMJ2G/Dw/8xCXaElfhnutDBn2X0BEb31k5R4hUbyVta+EMWtQkO2y73PB9PWhUa0k9BAORnt4TeNk3AeftgQGkPXtgOsSPglQC3h1XCsbnCzA9ASc2mW8hyP+dJCVi5JXm2vYsxltDs1u9yw=
+	t=1790585096; cv=none; b=cNA6/xLPW9ioG5KbsFcNMOkFKQxD/6BIb1iJzKOX8GU0ztWKA9r1V8M9Foc1+bA80Tmi/0JNx7BGa7Cs9GzPgPzn7cpJJpezGF4h17Yhwu4wJt6S4iuz5f6XWlx0KTYsvp952DtNe/MoWA6bvr1ccIdYfjiMbKn+gN24XHPvSnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790584816; c=relaxed/simple;
-	bh=h7evO3RcDKawrqH+2r5GnVJXoUllTPiWt0SIU9IWj9w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hEFhqG+VG1p3g+bCHQtOU2aV/0oKInU4TxQ2WIg10uGsnUUY0vM2eOtSTBCFiSUFHMHnh++JZ//4tSeQyvqLkTQrkyYeXL02wmBoZF65reMlZ1PyUdTolZ5FbjPkUO0UUJmcXxqYyo1BfLQOD2CTN0PL57prOhVfGFUIYIQArgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ouiy1Hwy; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790585096; c=relaxed/simple;
+	bh=iDGp7P3BEvSWs1L7iNJIWjF45NYDB+xMs1LHa1Er8uQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=pfVyHmoq/Q2gQ9ebu3eQEWsXTWUPT4NHNHmPcFjQ+8UGE6UQNtsJfEr6vEGPjXVoCQA9YwGRQqHNObSz9szPhIhfNHxaXKrgFh8SO7NBcG+M39TySQxTEXDQ2VVV5Ep8S+kp14dgFxn4MLU5vPNGlv4KjAcCQ6+WDhfWt0ZEqHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Il61np93; arc=none smtp.client-ip=113.46.200.217
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ouiy1Hwy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A87D31F000FF;
-	Mon, 28 Sep 2026 08:40:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790584815;
-	bh=QvJUQAwtTUqWjCL+OziAjJmsBq454CkzwYAl5nK+x/E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Ouiy1HwyCYaUI/6+irBuhHecQHFC48KigeHFwfi3HT7ohp/BjmgP2sISwQmFwbJFJ
-	 puXwxpH5Bs0tqz71RPnr1CvC1mP9jwoGQS4+iabRpSQVjjq/Q24nu8+gwdQryrMxPx
-	 9ve+/1vbmjl+EMKLgoUkMsOGnBsKm57LfGJ9BN/j8PMglicbrGNF6PPdGzFyJiEe7a
-	 aJ480RSA2ChAXIv9eb0eklGnB1ljkv8J/t2l8gmAyXDuoQqxqcqrPa9Bf1i2UZwsXZ
-	 6mvC4WziuAsALJLULuawfQofcBmlquxcj6BxgXt5e5BoIk1Gn1WdTm+2FqrHDliXzV
-	 grEBSYpFMEAPw==
-From: SJ Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	Kunwu Chan <kunwu.chan@gmail.com>,
-	Lian Wang <lianux.mm@gmail.com>,
-	SJ Park <sj@kernel.org>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH 3/3] mm/damon/tests/core-kunit: test PSI goal values with explicit samples
-Date: Mon, 28 Sep 2026 01:39:57 -0700
-Message-ID: <20260928083959.4030-4-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260928083959.4030-1-sj@kernel.org>
-References: <20260928083959.4030-1-sj@kernel.org>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Il61np93"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=iDGp7P3BEvSWs1L7iNJIWjF45NYDB+xMs1LHa1Er8uQ=;
+	b=Il61np93Mzpfh1Yw6ZTaudK8+nCQ4+DjNBs7VntEmE0tZXcn7sPEF3AumdIjHPSk2gTjz273a
+	wBOH1W7k/4xR4wPV7l62M9UPquFd63zSevJQns1zbf6BGnLBtZpCHWpqVhapwho/G5mndn+Ez1O
+	jCI6EYJd4AynyN7whX7Q3xA=
+Received: from mail.maildlp.com (unknown [172.19.162.197])
+	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4htZM82gK2zcb3G;
+	Mon, 28 Sep 2026 16:33:08 +0800 (CST)
+Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
+	by mail.maildlp.com (Postfix) with ESMTPS id A9A0740579;
+	Mon, 28 Sep 2026 16:44:41 +0800 (CST)
+Received: from [10.67.109.91] (10.67.109.91) by whupemk100010.china.huawei.com
+ (7.152.184.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Mon, 28 Sep
+ 2026 16:44:37 +0800
+Message-ID: <f697efa0-81c9-4ace-b9cc-d672b98dfc9d@huawei.com>
+Date: Mon, 28 Sep 2026 16:44:35 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC -next 03/12] fs: pass struct path to xattr helpers
+To: Amir Goldstein <amir73il@gmail.com>
+CC: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
+	<jmorris@namei.org>, <serge@hallyn.com>, <corbet@lwn.net>,
+	<skhan@linuxfoundation.org>, <rdunlap@infradead.org>,
+	<gregkh@linuxfoundation.org>, <rafael@kernel.org>, <dakr@kernel.org>,
+	<dlemoal@kernel.org>, <hch@lst.de>, <axboe@kernel.dk>,
+	<viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <jack@suse.cz>,
+	<dhowells@redhat.com>, <code@tyhicks.com>, <linkinjeon@kernel.org>,
+	<sj1557.seo@samsung.com>, <yuezhang.mo@sony.com>,
+	<hirofumi@mail.parknet.co.jp>, <cel@kernel.org>, <jlayton@kernel.org>,
+	<neil@brown.name>, <okorniev@redhat.com>, <Dai.Ngo@oracle.com>,
+	<tom@talpey.com>, <miklos@szeredi.hu>, <senozhatsky@chromium.org>,
+	<chenxiaosong@chenxiaosong.com>, <zohar@linux.ibm.com>,
+	<roberto.sassu@huawei.com>, <dmitry.kasatkin@gmail.com>,
+	<eric.snowberg@oracle.com>, <stephen.smalley.work@gmail.com>,
+	<omosnacek@gmail.com>, <casey@schaufler-ca.com>, <nanx95726@gmail.com>,
+	<djwong@kernel.org>, <daniel@iogearbox.net>,
+	<linux-security-module@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <driver-core@lists.linux.dev>,
+	<linux-block@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+	<netfs@lists.linux.dev>, <ecryptfs@vger.kernel.org>, <exfat@lists.linux.dev>,
+	<linux-nfs@vger.kernel.org>, <linux-unionfs@vger.kernel.org>,
+	<linux-cifs@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+	<selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<xiujianfeng@huawei.com>, <lujialin4@huawei.com>
+References: <20260924104831.1081137-1-caixinchen1@huawei.com>
+ <20260924104831.1081137-4-caixinchen1@huawei.com>
+ <CAOQ4uxhMhcxq5+crz84f8xj+Wi1bHhNqa_TecP-RvipheBR+ug@mail.gmail.com>
+Content-Language: en-US
+From: Cai Xinchen <caixinchen1@huawei.com>
+In-Reply-To: <CAOQ4uxhMhcxq5+crz84f8xj+Wi1bHhNqa_TecP-RvipheBR+ug@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ whupemk100010.china.huawei.com (7.152.184.41)
 
-From: Karl Mehltretter <kmehltretter@gmail.com>
+Thank you for review
 
-Test the PSI current-value helper with explicit totals so the result does
-not depend on the test system's memory pressure. Cover an unmeasured
-consist goal, unmeasured temporal goals with zero and nonzero effective
-quotas, and measured rounds for both tuners. Check last_psi_total after
-each call.
+I will switched to ovl_path_real in the next version.
 
-Cc: Lian Wang <lianux.mm@gmail.com>
-Cc: Kunwu Chan <kunwu.chan@gmail.com>
-Assisted-by: LLM
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
-Reviewed-by: SJ Park <sj@kernel.org>
-Signed-off-by: SJ Park <sj@kernel.org>
----
-Changes from v2
-- v2: https://lore.kernel.org/20260921020013.33105-1-kmehltretter@gmail.com
-- Collect R-b: from SJ.
-- Split out from the series.
-- Rebase to the latest mm-new.
-- Delete mention of old behavior, as it is irrelevant for commit message.
-Changes from v1
-- v1: https://lore.kernel.org/20260915060937.3423-1-kmehltretter@gmail.com/
-- Use the previous effective quota for the temporal decision, including
-  when it is zero. Keep resetting last_psi_total for new and updated
-  goals.
-- Move the current-value calculation and last_psi_total update into a
-  helper. Test both tuners with explicit samples and check
-  last_psi_total after each call.
+ovl_creds is a prepare_creds() clone of the mounter, so unless
+the mounter itself was sandboxed, the clone carries no Landlock
+domain and every check short-circuits. The new rights are also
+enforced at the security_inode_*xattr() call sites in fs/xattr.c,
+which run with the user-visible overlay path.
 
- mm/damon/tests/core-kunit.h | 43 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+The exception is an unprivileged overlay mount by an already
+sandboxed mounter: the domain is inherited into
+creator_cred through the cred_prepare hook, so the internal
+real-path calls *do* get checked there.  For this series that
+means:
 
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index df84d9cc7d20..ef4b8b85d67b 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -910,6 +910,48 @@ static void damos_test_commit_quota_goal(struct kunit *test)
- 			});
- }
- 
-+static void damos_test_set_psi_current_val(struct kunit *test)
-+{
-+	struct damos s = {
-+		.quota.goal_tuner = DAMOS_QUOTA_GOAL_TUNER_CONSIST,
-+	};
-+	struct damos_quota_goal goal = {
-+		.metric = DAMOS_QUOTA_SOME_MEM_PSI_US,
-+		.target_value = 100,
-+		.last_psi_total = U64_MAX,
-+	};
-+
-+	/* uninitialized last_psi_total keeps the consist tuner quota */
-+	damos_set_psi_current_val(1000, &goal, &s);
-+	KUNIT_EXPECT_EQ(test, goal.current_value, 100ul);
-+	KUNIT_EXPECT_EQ(test, goal.last_psi_total, 1000ull);
-+
-+	/* initialized last_psi_total gives the delta */
-+	damos_set_psi_current_val(1030, &goal, &s);
-+	KUNIT_EXPECT_EQ(test, goal.current_value, 30ul);
-+	KUNIT_EXPECT_EQ(test, goal.last_psi_total, 1030ull);
-+
-+	/* temporal tuner keeps a zero quota */
-+	s.quota.goal_tuner = DAMOS_QUOTA_GOAL_TUNER_TEMPORAL;
-+	s.quota.esz = 0;
-+	goal.last_psi_total = U64_MAX;
-+	damos_set_psi_current_val(2000, &goal, &s);
-+	KUNIT_EXPECT_EQ(test, goal.current_value, 100ul);
-+	KUNIT_EXPECT_EQ(test, goal.last_psi_total, 2000ull);
-+
-+	/* temporal tuner keeps a non-zero quota */
-+	s.quota.esz = SZ_64K;
-+	goal.last_psi_total = U64_MAX;
-+	damos_set_psi_current_val(3000, &goal, &s);
-+	KUNIT_EXPECT_EQ(test, goal.current_value, 0ul);
-+	KUNIT_EXPECT_EQ(test, goal.last_psi_total, 3000ull);
-+
-+	/* temporal tuner uses the measured PSI delta */
-+	damos_set_psi_current_val(3250, &goal, &s);
-+	KUNIT_EXPECT_EQ(test, goal.current_value, 250ul);
-+	KUNIT_EXPECT_EQ(test, goal.last_psi_total, 3250ull);
-+}
-+
- static void damos_test_commit_quota_goals_for(struct kunit *test,
- 		struct damos_quota_goal *dst_goals, int nr_dst_goals,
- 		struct damos_quota_goal *src_goals, int nr_src_goals)
-@@ -2260,6 +2302,7 @@ static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_nr_accesses_mvsum),
- 	KUNIT_CASE(damos_test_new_filter),
- 	KUNIT_CASE(damos_test_commit_quota_goal),
-+	KUNIT_CASE(damos_test_set_psi_current_val),
- 	KUNIT_CASE(damos_test_commit_quota_goals),
- 	KUNIT_CASE(damos_test_commit_quota),
- 	KUNIT_CASE(damos_test_commit_dests),
--- 
-2.47.3
+- ovl_xattr_get/set/ovl_listxattr() forwarding and the
+   ovl_setattr() -> ovl_do_notify_change() forwarding would be
+   checked against the upper/lower paths;
+- copy-up would newly require the metadata rights on the backing
+   directories too (ovl_copy_xattr() calls the security-checking
+   vfs_listxattr()/vfs_setxattr());
+- stat() is unaffected: ovl_getattr() goes through the _nosec
+   variant.
+
+This is not Landlock-specific: every LSM
+that keeps its state in the cred blob inherits the mounter's
+context into creator_cred through cred_prepare.
+
+On 9/24/2026 7:12 PM, Amir Goldstein wrote:
+> that's ovl_path_real()
+>
+> I have no technical issue with the ovl patch bits in this series.
+> Anyway, I guess landlock is not going to enforce anything on the
+> private mnt with ovl_creds anyway?
