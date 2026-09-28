@@ -1,88 +1,89 @@
-Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B7C4F96CF
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 20:23:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC904F5E16
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 20:54:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790627005; cv=none; b=RAKycWMalkPStUwKjM/kbK+lyr8NqYWHV8TlJa/U0kvGMz9jTwdw1cfspFgaR8RzL0cz1HVQtV964fcJUp5GbAPZaVIFErtlRcHtoPrIzOQo2wdbtCyfeu9qUb6wn52PjsTHvyYBD6/3xErtd17MyfSlPbv5p+DlGDsLgJdy9Qc=
+	t=1790628847; cv=none; b=SJqERIHUpKmnVaK2uppbyHAob3D+Nk9qyMnP48XishZSkdINz/89IOhKMTJKNnCnl8ahNigoqnSnjKMiV5bb+MzHod7J17tqGqaaygs6+/iQghix62A5sevhg4NoKXmqDkqLJzbAk/H0MmcJjlDAKE/zFdcBOz4Zz8jolfg/IpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790627005; c=relaxed/simple;
-	bh=3qVnGX5rRaJCRwlcgQzeEp0Kkeac6bWfTm59GQvGhnk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OfCqj4pNXL1MGFUf08uk4NkGxjkoyQuQp1g0Hy+/pjZGJaM8qnSG09fbP2Zha6pWhSfNXBZplc6BTdwpTGnijkMWCGbolClCi0TX+2YUxAupIBcv+MORgKoEwxBOuovgHs6O7lF1zcEBlO4JCrF5BvPyKGoEubXwEiyLJLnZloI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net; spf=pass smtp.mailfrom=blockcast.net; dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.b=PhIE8MLr; arc=none smtp.client-ip=209.85.128.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blockcast.net
+	s=arc-20240116; t=1790628847; c=relaxed/simple;
+	bh=p4z8FqgH2wRH3DNXfLP/C8tVgznBcTgSwV5kisQHgOU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=oWAaiGYPYetgFcNnpBY78un3ZmEVzMuIDzTdKM8KA284AZdmYyQ3sHARhgl7UUq/Bny6k0FCeOBg4+BGT9A3R+JA+OrRMm+5wseKvfpEWwyws/ICxNnEczYLjP530drdiMNAzdAhrPvuP/vz93lPUGxZz/d+9z2hwKPxgfqTGdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nizLRGAa; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.b="PhIE8MLr"
-Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-49e73611928so2707795e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 13:23:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nizLRGAa"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49fff72474fso11722535e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 13:54:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blockcast.net; s=google; t=1790627001; x=1791231801; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790628844; x=1791233644; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Z1fkwGoumcXsELwjWXc8Y0RIsf/dT14wb+aaMLvRjLc=;
-        b=PhIE8MLrmekDU/QOE4bV2Q8L0OykDqthq2V4TYqajzgS+tG8DAcptQogKDQNqzTmwu
-         ksW+GYFNw8/npEtnDVZ8JK0DLjAPhhNftzhdhO/SR1xD8sa3oJpcV4RuDi2bS/ugDSvi
-         VvrljkM0bxCmK0UD5CjKGLgWO8avZCTBTXGERvhUkic82Mf0e4cqU8nM1jjPCw4FdVc0
-         BLOX6Ifb3FFhYQztC7Y+aKd3qEzldayrdhbF4BRv0jKOo0gBmBfSsZmado+R/Kqk41Bj
-         5DEekzDXEFhTVo9QyzR9AAU92SE1+DeNaC5knHLbwMocaw5SXKtXrVs0+a3KXT6IIGHb
-         h8Qw==
+        bh=MoftrO08HwDktpofinrTBCoRJxn64c18AOQxxmnppJw=;
+        b=nizLRGAaKFUMCIahkZZE2GItc1v6vkpzHOzS/r8qI487Td6UTZcGg7REC555U9QtyX
+         axizRcFPBZ6Lv5TYF102D2O1EDk/AdN3kkdXDKGwjHK7dok1oSa+qrAnAj5rM3uYg2+s
+         0QX9P+BRWYZj3N+9ReyoD87Go57wyskAS7KdvL6431DLvoX4V2u/bo5lBv+Y1QXY0yy3
+         /JE+5rV1jtMeCcQaPLPDZu1K+ELrv8L+WoSwIttqlheGpoZ+gX0SjBdBFDedGGOk7B8Q
+         mZscQevshL2fGEbhAnD9mpcAqUWSorJyhn3lZoTUF0w9tuN8uMNaX9s2DLeTpNl2tToh
+         RsiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790627001; x=1791231801;
+        d=1e100.net; s=20260707; t=1790628844; x=1791233644;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Z1fkwGoumcXsELwjWXc8Y0RIsf/dT14wb+aaMLvRjLc=;
-        b=d2yn8ZF80b06vWvMuu0jllvSFBrKCeHpZn/1HhZ/KzUl9w17brhk4yWKuOLHF5WLKY
-         U3V8Gu6u+UvDbPL9AFio1mlQxcGvdqibRyHFZpxu8PiLkBnWGIRWvNlya2QLrYpdp5FE
-         ZulbIOBtDzUyiZdAWlYuBL/FMaLnK6G+n47Jck1MpdXrg086B2BDwJ//XWh8q2hqbWOI
-         MpplddvHsZEx9TrZNBjNb7lObfz5yLE6x5g1pgofpNd+2lFfsMTsUbSYghAIqGp/4lSO
-         iB00H4oFtoclCpHs8wBVSKzaLw4Y0Kd497p2FQYtmqi9XJVGwFhnHtFhmwmDv6YTX3YB
-         dswg==
-X-Forwarded-Encrypted: i=1; AKwUvBzT7+JE527W1uniFrvmpD66OHHEDGj029hkuYte8Y0YDBYY/Lx53LyKPLlEZRllVpDm7fah+WJBoNqUzsrtx2g=@vger.kernel.org
-X-Gm-Message-State: AFuF++laec2YgbLkxxhNPmqJKEGJ6/CqPgjTsy0yCv6pnTYEW11+0bY0
-	1jlnVaS/Ys0CNdN3ujsFSDg7C+btiJmWRVn6giYRsXk7GUz+izpPDLiRD984BLqff1c=
-X-Gm-Gg: AYBFou36RZXx5LDcQtv9U7cJwWv1NoisK+GJDeYPm3nhGYVR2eHIQKeNtBzRKar14sj
-	1G+jzyTIAbHvOQbMJfrXHVqaGJ6wy0OBxQY/Vf3srT+j/qF+QG63ClobPLdB2bn9aLIzc8iFwh9
-	X4/iG9qZXyDc7xejzujbga2JZxqTSQBibQhKAzKwGGEJXiviZ7sdqmhqQgtonwsW96zUgAoPid0
-	sp+E4EJgsfEzTlf0FOzi1tlq+2C5c3maS8UtoKCc0PUuNKDeP8u9ymsrWukmo5ks/luxcQLaQDT
-	e8oOF3ciFpf2ewqrT4ZEEKAV7gqYbcCsc7eTosegw1XKUU1xzlDPLAkb/+/wnfW6cF7FmIZWN1F
-	+aVY/yukbu7UvULLwx7Pp8Eke4o/uE3ZL4yapyNkMphoVsxeI+iFvRk+3OBkNEdchXUfre+I8NR
-	5DZzUkw4nWQsJBM9Ca9oiEsZkd31nf2pInnHZLubnfilS0fjqWYVGz1/y1S2zSHxVGEfcnlF7qA
-	5YUSydfgFhKMs1mJWLfrnAoPl8RhH2U/B7KHzkM9y9WRAgFKjFQDrAVLuCQ4AYeqEF5eDvAwmV2
-	xleyfXQ/gDtR
-X-Received: by 2002:a05:600c:6c41:b0:49d:28fc:d6a0 with SMTP id 5b1f17b1804b1-4a00d7b2adbmr4612875e9.18.1790627000712;
-        Mon, 28 Sep 2026 13:23:20 -0700 (PDT)
-Received: from localhost.localdomain ([197.51.38.79])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a30bcdbsm29620500f8f.2.2026.09.28.13.23.18
+        bh=MoftrO08HwDktpofinrTBCoRJxn64c18AOQxxmnppJw=;
+        b=ZOGcz7oXmJYSBD/zFLCt3vqD4EZjlEu+QeMz5CSGZAv+P9ukoTQg1goR1ud4moS2OZ
+         sWG3UU1pnw3COw8hbCdo3vIYZIAXtDRbl3yKQd2pBvSezv3TgrjOpGVMoOQqm8h3uHn3
+         17nWSKC453fFyUkU99mGCjsQJoWadTLKYAPkvrByme90iQuTgRdwdyshg/vu10VY6GB9
+         vxo3O5hIikWHHdkIfYW7MlwzzhHhM6XEdn0S4YFQnUR8yrvz/ZdWo/O22j4ITFSoBwxo
+         ecz34LNbLAo0cFSzEufEyK/AX2rbF6mx+1WCnCQ0t8giee8KxnaNes4o5C3xKvfhBcqk
+         IxJg==
+X-Forwarded-Encrypted: i=1; AKwUvBykq5nVuNhzZHZaRrYKaAHcvWe/sCde7fpv3W2KApWPhTbDFiIcwYTI4wFg+sOYbbMyjm7zLz56s61qQeJJlZY=@vger.kernel.org
+X-Gm-Message-State: AFuF++lSZzTd+dlj+XrFRnRiyH6cbeg7/sPE/qXTeHAlRuSpTPEAcPQC
+	0Mew6t9Xh7EHnQklL6IBvyzUaNkfhUBH8bfta0I8AmIMxb4fPAuh1Va2
+X-Gm-Gg: AYBFou3AizJuFkq6KWXwDOMmbY2ac6QjDwsWFe/gIz7AP6Uykd2gl02AEqyzrZY6K/v
+	wPB8tUV+xvmAzdYuS2PuulM5GfYY7PYoPVN1ZZe57SaF5I5mn8vqMsG1sqQi/99S9yPTkQhqTNR
+	qqPdmsDk+hgzQzaLVkk+aohJm2y393fmwWo/bnnXicveZcnMnLzQUwhIzaaR6dOM7PeOso57QaG
+	c+N/vhWoPIXCNpXk8dZ2ufcJOC8ibycTIFyNIkJR6XrKdho9vBpv8Tsv2S6pergNHJzX43KnIvb
+	1jrVR1FqAAosGqSRCF1Vo4cQFwlOIXwM9chD1SAJ7SLr5iGPe82jUMgozimbJdKBCi2PWjoVX7U
+	b8dpV9fTaJuSd53MAqlk/LvPN4s1FzZl1C6+cUCbWASvixg/i3dDxPKfZJTqFmiljF4ij0g4Qgp
+	OzJdhw3PN2vmqBBGalwaL7PDB3XRp1/UWaivwS6YrHJ8ki4bIHxG0kAUVXphzukpk9hF61Luc/7
+	OS73krBa14pjEc+rppzheivGwCtdPR0fUShHpOM1cNoaN8I0Jw1kd9+3KDkHFD7dv0axJTBWIOm
+	7bUWG5yOngFXOMx+afm6Nqq6v+i7SzK0fXNwxmZ/EFBAnE5XAbeyFJ7Sj1FfTkfOwYU2AD3MkXF
+	GmHqkXdchteg=
+X-Received: by 2002:a05:600c:8a1a:20b0:49f:f0bd:1e40 with SMTP id 5b1f17b1804b1-49ff0bd1ea8mr133111765e9.23.1790628843492;
+        Mon, 28 Sep 2026 13:54:03 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a02-3100-acba-a601-4494-3582-465b-0eab.310.pool.telefonica.de. [2a02:3100:acba:a601:4494:3582:465b:eab])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a00d0f66cfsm21210805e9.14.2026.09.28.13.54.02
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 28 Sep 2026 13:23:19 -0700 (PDT)
-From: Omar Ramadan <omar@blockcast.net>
-To: Taehee Yoo <ap420073@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
+        Mon, 28 Sep 2026 13:54:03 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Jeremy Kerr <jk@codeconstruct.com.au>,
+	Matt Johnston <matt@codeconstruct.com.au>
+Cc: Karl Mehltretter <kmehltretter@gmail.com>,
 	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
 	netdev@vger.kernel.org,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>,
+	Rae Moar <raemoar63@gmail.com>,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	AutonomousCodeSecurity@microsoft.com,
-	Xiang Mei <xmei5@asu.edu>,
-	tgopinath@linux.microsoft.com,
-	kys@microsoft.com,
-	Cen Zhang <cenzhang@linux.microsoft.com>
-Subject: [PATCH net v4 2/2] selftests: net: amt: check that the relay's queries bypass the amt device
-Date: Mon, 28 Sep 2026 23:23:12 +0300
-Message-ID: <20260928202312.74574-3-omar@blockcast.net>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260928202312.74574-1-omar@blockcast.net>
-References: <20260928202312.74574-1-omar@blockcast.net>
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2] net: mctp: Make KUnit tests depend on flow support
+Date: Mon, 28 Sep 2026 22:53:52 +0200
+Message-Id: <20260928205352.30502-1-kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20260925192510.93840-1-kmehltretter@gmail.com>
+References: <20260925192510.93840-1-kmehltretter@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,79 +92,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The relay used to hand its General Queries to dev_queue_xmit() on the
-amt device, where a query could wait in a qdisc and outlive the tunnel
-it pointed to. The previous patch sends them directly from the receive
-path instead.
+MCTP_TEST selects MCTP_FLOWS, which also enables SKB_EXTENSIONS when no
+transport requires them. Enabling tests should not silently enable
+additional kernel functionality.
 
-Count the IGMP and MLD queries that leave the relay through amtr with
-tc flower filters on its egress, installed before the gateway comes
-up, and check that there are none. The forwarding tests before it
-already show that the gateway received its queries, since it cannot
-join without one.
+Make the tests depend on MCTP_FLOWS instead, following the dependency
+rule in Documentation/dev-tools/kunit/style.rst.
 
-Without the previous patch the new test fails (one run counted 7 IGMP
-and 6 MLD queries); with it, all of amt.sh passes.
+This keeps the full flow-test coverage: the suite is available only
+when flow support is enabled, for example by the I2C transport.
 
-Signed-off-by: Omar Ramadan <omar@blockcast.net>
+Fixes: 109a5331143d ("net: mctp: tests: Test that outgoing skbs have flow data populated")
+Assisted-by: LLM
+Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
- tools/testing/selftests/net/amt.sh | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+Changes in v2:
+- Depend on MCTP_FLOWS instead of removing the selection, as Jeremy
+  requested, to retain full flow-test coverage.
+- Rebase onto current net-next (014d795c7383).
 
-diff --git a/tools/testing/selftests/net/amt.sh b/tools/testing/selftests/net/amt.sh
-index 663744305..d13b20ccc 100755
---- a/tools/testing/selftests/net/amt.sh
-+++ b/tools/testing/selftests/net/amt.sh
-@@ -150,6 +150,13 @@ setup_interface()
- 	ip netns exec "${RELAY}" ip a a 10.0.0.2/24 dev relay_gw
- 	ip netns exec "${RELAY}" ip link add amtr type amt mode relay \
- 		local 10.0.0.2 dev relay_gw relay_port 2268 max_tunnels 4
-+	# Count the IGMP and MLD queries that leave the relay through its own
-+	# amt device; test_query_egress expects none.
-+	ip netns exec "${RELAY}" tc qdisc add dev amtr clsact
-+	ip netns exec "${RELAY}" tc filter add dev amtr egress pref 1 \
-+		protocol ip flower ip_proto 0x2 action pass
-+	ip netns exec "${RELAY}" tc filter add dev amtr egress pref 2 \
-+		protocol ipv6 flower ip_proto icmpv6 type 130 action pass
- 	ip netns exec "${RELAY}" ip a a 172.17.0.1/24 dev relay_src
- 	ip netns exec "${RELAY}" ip a a 2001:db8:3::1/64 dev relay_src
- 	ip netns exec "${SOURCE}" ip a a 172.17.0.2/24 dev src_relay
-@@ -246,6 +253,27 @@ test_ipv6_forward()
- 	fi
- }
+v1: https://lore.kernel.org/r/20260925192510.93840-1-kmehltretter@gmail.com/
+Review: https://lore.kernel.org/r/8edc4e71edceb124e2dca233cddb75e198b53a51.camel@codeconstruct.com.au/
+
+Validation on net-next 014d795c7383: x86_64 GCC 15.2 builds and QEMU
+run. Both MCTP suites pass all 80 cases, including both flow tests,
+with no skips. Kconfig checks cover flow support on/off,
+KUNIT_ALL_TESTS on/off and a module I2C transport.
+
+ net/mctp/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/mctp/Kconfig b/net/mctp/Kconfig
+index d8d3413a37f7..e64d4f7ef6aa 100644
+--- a/net/mctp/Kconfig
++++ b/net/mctp/Kconfig
+@@ -14,7 +14,7 @@ menuconfig MCTP
  
-+# The relay sends its General Queries straight from the receive path, in
-+# the same context that found the tunnel. A query queued on the amt device
-+# instead could outlive the tunnel it was built for. The forwarding tests
-+# above show that the gateway got its queries.
-+test_query_egress()
-+{
-+	local n4 n6
-+
-+	n4=$(ip netns exec "${RELAY}" tc -s -j filter show dev amtr egress \
-+		pref 1 | jq '[.[].options.actions[0].stats.packets // empty] | add // 0')
-+	n6=$(ip netns exec "${RELAY}" tc -s -j filter show dev amtr egress \
-+		pref 2 | jq '[.[].options.actions[0].stats.packets // empty] | add // 0')
-+	if [ "$n4" -eq 0 ] && [ "$n6" -eq 0 ]; then
-+		printf "TEST: %-60s  [ OK ]\n" "amt relay queries bypass the amt device"
-+	else
-+		printf "TEST: %-60s  [FAIL]\n" "amt relay queries bypass the amt device"
-+		echo "IGMP queries on amtr egress: $n4, MLD queries: $n6" >&2
-+		ERR=1
-+	fi
-+}
-+
- send_mcast4()
- {
- 	sleep 5
-@@ -287,6 +315,7 @@ wait $pid || err=$?
- if [ $err -eq 1 ]; then
- 	ERR=1
- fi
-+test_query_egress
- printf "TEST: %-50s" "IPv4 amt traffic forwarding torture"
- send_mcast_torture4
- printf "  [ OK ]\n"
--- 
-2.47.3
+ config MCTP_TEST
+         bool "MCTP core tests" if !KUNIT_ALL_TESTS
+-        select MCTP_FLOWS
++        depends on MCTP_FLOWS
+         depends on MCTP=y && KUNIT=y
+         default KUNIT_ALL_TESTS
+ 
 
+base-commit: 014d795c73837ea2339a4ea8e8f82c6e959b845d
+-- 
+2.39.5 (Apple Git-154)
