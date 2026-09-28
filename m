@@ -1,132 +1,167 @@
-Received: from mta1.migadu.com (out-232.mta1.migadu.com [95.215.58.232])
+Received: from mail-dl2-f43.google.com (mail-dl2-f43.google.com [74.125.229.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6A233A9C4
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 03:51:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F8A1172E
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 04:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790567464; cv=none; b=knPjwroeewcjIFb1iv2umLldKW7RaxVDzN9kq6my9MSqvbM7/V5RXaXgpJjT2uOFUvHQ5jRYMD8U/AJ2qOqWUVXh83RR+k+vtBhunozEXlku40/V5LLDWISwu4pi+GuCfL6URVcj5ui0Hw5kZz6qtQ4+4nnLFcywhdsk8jMimBM=
+	t=1790570058; cv=none; b=rlfN+VFXlhn3CadOtu171kvvxbNG+6jPe2leyESqrkNFuilN1+OpBnnRsFnCEZbuq9tXWMfQVUk3yoiTd0US8+Zj6uYywQzYUGhNePnp1jlygPJ93ta+ttvHdWgZD0FkW4dG/dZZdBDDdjhs9OhYRUVN9TPLce6UGz/rpwT3tuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790567464; c=relaxed/simple;
-	bh=qJckOsQEo+P6Q3TxXb+3mRRw8bbwMJ3dFYvm27FlOC0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ik3gb4TuJAa45VmfbyTwiFKwo7DFnDpHXQqev5caS80cCzEVaa6j9a8sfjqhi5oKZwRt0T+tF6lWgfWME3w2YYwftx6iJufwokjHDxYHonrB03f2oCI5fyiixBAY7Pj49QaR/gVHM+YkhGdpTczKQ9qV+D4s5i/1zgDIeUknqY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Dwn5oOlV; arc=none smtp.client-ip=95.215.58.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790570058; c=relaxed/simple;
+	bh=8URoYWDkdFnc7wu98Aykk7vM00DX6zXxMA+kJkJhync=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pZf4vV4Zr5sZwBovt4XV0bMAaIfrArqPMca54hMYoRzidNjzd5yCyQQ11ydOeGtPR1hantwKqqixeayJUpJT4VjqYqq/PaLYxmg+jtazujt/iRUnzGU9+clZp5ZR2PyS8RPbt1WTQKgA5RxUqrwMhhzTjU+IVurwH2Soaey8vWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XUpwwFeL; arc=none smtp.client-ip=74.125.229.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Dwn5oOlV"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=qJckOsQEo+P6Q3TxXb+3mRRw8bbwMJ3dFYvm27FlOC0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790567461; v=1; x=1791172261;
- b=Dwn5oOlVXwMuc8K15rBpjuuUXd/PUnWpcIXabWE2MB0spRnZquKQ4qZ4ggf1KbPFrt25VTLN
- eo+6OaSS0++mBTn1LHZF+Wv0vvWP9vM3VCRO89NSCrnIwKc+yLoFFBJxnrUr6ayg1RuqtFMlhi/
- hjbtqyYkLVFJE14eB8kBcgc4=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 5b926d13267ff78e;
-	Mon, 28 Sep 2026 03:51:00 +0000
-X-Mizu-Trace-ID: 5b926d13267ff78e
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <2f03544b-b503-4339-9b2f-234dcdb9a03e@linux.dev>
-Date: Sun, 27 Sep 2026 20:50:55 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XUpwwFeL"
+Received: by mail-dl2-f43.google.com with SMTP id a92af1059eb24-143880e27dfso438274c88.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 21:34:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790570055; x=1791174855; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=qCSCsxfpeFRT3FvC58Mpv9YAqG4Y65eHsvaTh9jj6ec=;
+        b=XUpwwFeLVBilXTrVOz1eHaPnG/gIFuUU+7+8S7gWBhpVvpthbNqS/0+fyFJqtlvOnR
+         OrxPnCNrHHu+2Gef0u1Ple6xmlwWFXZ7NzePSxNShhSJMpWfuo0e/SQj1NVQlrfmCEby
+         sQ4DPBu8g7YvVQCxXiN4MDnDiSFB4Bmn66S5kwsFaHPeloGzvAFZbi1IZ17BpBXCTqhD
+         yQByox2TnCUSqCsL5kVKeGB4DJvZ3lIP6BFAVX/ynd8jFk3s6QLW4VD/qJXb7RJvcoDE
+         T220LiYQqd+Nb90T48elGQqqXfqgIkkRVnKNFhCpRbBMieUx0XHubTquhHQqgDR6nxbH
+         7n+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790570055; x=1791174855;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=qCSCsxfpeFRT3FvC58Mpv9YAqG4Y65eHsvaTh9jj6ec=;
+        b=LHi9myEPALYv8ZWa8MYjMgUHT+BfmwBPDfHX4n+eFcFJQoCdSoY2xZJeIpJExCutcR
+         E7Il+qc8kD3A+VDL9sFJPOtqMSCJoRU+Gpkz0SbQSS7SDV0KSQMNtCmOWkyXtSE5z0h+
+         /ELzxsrjJ5ZGbf8ZtyRjE1VCf4TorU3AdLC5AUSA6AnYFKMT48ZHK5s7Q7F5VWeRQcAh
+         F8MbjGKtXEfvLCLN8XYZjAP0WSFLH796+83OzrfgDrLoNEs4pdenYfkzFU6U1O3RqlPe
+         hYL59ac/98lycZS4AcG8Yb/5J0fv6zBTzxRr41/lpxeTf8GHKPjdbyphEGG1v9AR59H3
+         Rplw==
+X-Forwarded-Encrypted: i=1; AKwUvBwmCllxdg0VQny8TFl7UjzmBwH+EBzCRlisZ243jEqN/IH7xcl3QCHWdesXbW4KY2yRApdLSgjIyDUa7fxeXB8=@vger.kernel.org
+X-Gm-Message-State: AFuF++kO1xw3PRcALWqxajSYNrkgYrTFr7JTBacadVyw/IRY9K18gF7I
+	ch5qRRSHgfxuf97xIYR4x0sqs6VvaXLxlu11ktS3PeCTu/4f+kvEIb/q
+X-Gm-Gg: AYBFou0HcY2m29EreYK+uvChLFPRZh7lqLgowewFsjFd4SP1UKYzs7IQZl84aZGBXim
+	jgecGJVdl+MGFQ0pZ1MlCs1la1PiqXbEnW7bqVU27E6pXusPAMMuBrzvpyT7AcQXjrNxF1Yrgjj
+	4Vl+udElRa9VHApWDh97IeKdLXnOwLmpKAy2k7ROu5e7penH2h+INay2jiWX0eblBVbutl5xASb
+	hue2s7JKstK9o9W+UF9qjfp/CBkusmy7KT5EEA6EIRbsQCkX5x96+4k3TyS3DKdMFRl/+w2J4G6
+	gg7d1COUEL3FpaajAdXHDuub2gR3hGa2JcwFdIZrJBLaVE2hS3V/UU/UvukTNxmoa6zCsOcI45T
+	DNcY6LZmmKeCvMkenxZp+YAok9YaFglwQyi4TfV+Cc+meepjKXRHLC40Np6pAji2g7NRj8uJNxx
+	IumiXZVaGonLLDZ5nVXhN0svIsvEvJlHWnlMjEOwaxBY+pqtjwx+/4p3Jos0JSLxVJ3A75T7wFN
+	xE8KZLUuYNCuCTno3fg808eT9527S4KF8la2Owg8AzUReuT1klsUOho7cE0D9swbLEkoCYKaGCy
+	XW++2ks=
+X-Received: by 2002:a05:7022:f515:b0:141:b2c3:d878 with SMTP id a92af1059eb24-146cdebd135mr9019464c88.7.1790570054439;
+        Sun, 27 Sep 2026 21:34:14 -0700 (PDT)
+Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:571a:2a:d409:bce3])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-145adbcd1bcsm27921045c88.14.2026.09.27.21.34.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Sep 2026 21:34:14 -0700 (PDT)
+From: "Hemendra M. Naik" <hemendranaik@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	jiri@resnulli.us,
+	jhs@mojatatu.com,
+	shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	vishy0777@gmail.com,
+	tahiliani@nitk.edu.in,
+	"Hemendra M. Naik" <hemendranaik@gmail.com>
+Subject: [PATCH net-next v9 0/3] net/sched: sch_fq_pie: add per-flow class statistics
+Date: Mon, 28 Sep 2026 10:03:55 +0530
+Message-Id: <20260928043358.6866-1-hemendranaik@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] RDMA/selftests: Fix the kernel config fragment
-To: Sasha Levin <sashal@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- Leon Romanovsky <leon@kernel.org>, Shuah Khan <shuah@kernel.org>,
- David Ahern <dsahern@kernel.org>, Jiri Pirko <jiri@resnulli.us>,
- "yanjun.zhu@linux.dev" <yanjun.zhu@linux.dev>
-Cc: linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260927161655.1184153-1-sashal@kernel.org>
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <20260927161655.1184153-1-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+FQ-PIE runs an independent PIE controller per flow but exposes no
+per-flow statistics. This series wires up fq_pie_class_ops to expose
+per-flow AQM state (prob, delay, deficit, avg_dq_rate) via
+'tc -s class show', following a similar pattern as FQ-CoDel.
 
-在 2026/9/27 9:16, Sasha Levin 写道:
-> The config fragment lists bare option names with no values:
->
->    CONFIG_TUN
->    CONFIG_VETH
->    CONFIG_DUMMY
->    CONFIG_NET_NS
->    CONFIG_RDMA_RXE
->
-> which is not valid Kconfig syntax. When the fragment is merged, for
-> example by "make kselftest-merge" or by CI systems, the lines are
-> rejected:
->
->    .config:5514:warning: unexpected data: CONFIG_TUN
->    .config:5515:warning: unexpected data: CONFIG_VETH
->    .config:5516:warning: unexpected data: CONFIG_DUMMY
->
-> and none of the options gets enabled, so the rxe tests skip or fail
-> for lack of the modules they load.
->
-> Give each option a value. The scripts load and unload tun, veth,
-> dummy and rdma_rxe with modprobe, so build those as modules.
-> RDMA_RXE also depends on INFINIBAND, and rxe_rping_between_netns.sh
-> runs rping, which needs the RDMA CM userspace interface provided by
-> INFINIBAND_USER_ACCESS, so add both.
->
-> Found by KernelCI kselftest builds.
->
-> Fixes: e01027cab38a ("RDMA/rxe: Add testcase for net namespace rxe")
-> Fixes: ecdcc8a455b7 ("RDMA/selftests: Add rxe_netns_names test")
-> Assisted-by: LLM
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+This patch series is accompanied by a companion iproute2 patch series that
+will be posted on net-next as well.
 
-The fix looks correct. The existing entries in 
-tools/testing/selftests/rdma/config are
+Both the kernel and iproute2 patches can also be found in GitHub:
+- https://github.com/H-N41K/linux-net-next/tree/fq_pie_class_stats/
+- https://github.com/H-N41K/iproute2-next/tree/fq_pie_class_stats
 
-not valid config fragment assignments and are rejected by kselftest-merge.
+---
+Changelog:
 
-Using m for the modules loaded by the RXE netns tests is appropriate,
+v9:
+- Add a blank line between structs in commit 1/3.
 
-while NET_NS=y provides the required network namespace support.
+v8: https://lore.kernel.org/netdev/20260922205924.32173-1-hemendranaik@gmail.com/
+- No code changes since v7.
+- Reword commit message to reflect usage of div_u64().
 
-Adding INFINIBAND and INFINIBAND_USER_ACCESS also matches
+v7: https://lore.kernel.org/netdev/20260919060125.38063-1-hemendranaik@gmail.com/
+- No code changes since v6.
+- Rebased over the latest net-next tree and re-submitted patch.
 
-the RXE/rping runtime dependencies.
+v6: https://lore.kernel.org/netdev/20260917204225.275251-1-hemendranaik@gmail.com/
+- Address Sashiko review comments:
+  - Revert the fq_pie flows range to [1..65536]. 
+  - Also drop the accompanying selftest 83be change.
+  - Compute the per-flow delay with div_u64() on the full 64-bit
+    nanosecond value.
+  - Widen avg_dq_rate to u64 before scaling it by PSCHED_TICKS_PER_SEC.
+  - Document the 36 to 64 byte xstats growth in the patch 1 commit message.
+  - Fix selftest 83c0. The ping payload exceeded the TBF burst so no
+    packet ever reached fq_pie, and the missing -W left the run waiting
+    out ping's default timeout.
 
-Thanks a lot.
+v5: https://lore.kernel.org/netdev/20260902035231.81866-1-hemendranaik@gmail.com/
+- Addressed Sashiko review comments:
+ - Omitted .tcf_block / .bind_tcf / .unbind_tcf from cl_ops (statistics
+   only being exported; filter attach to fq_pie is now disabled).
+ - Dropped empty tc_fq_pie_xqd_stats placeholder; class_stats is a direct
+   struct member.
+ - Limited flows to [1..65535] so per-flow class handles fit in a 16-bit
+   TC minor.
+ - Rewrote selftest 83c0 with TBF + fq_pie, ping traffic, and
+   matchCount 1 on per-flow stats output.
+ - Updated selftest 83be for the new flows limit.
+ - Dropped the tools/include UAPI mirror changes from patch 3/3.
 
-Reviewed-by: Zhu Yanjun <yanjun.zhu@linux.dev>
+v4: https://lore.kernel.org/netdev/20260727164056.106203-1-hemendranaik@gmail.com/
+- Fixed unaligned commit message; moved typo fixes to another patch.
 
-Zhu Yanjun
+v3: https://lore.kernel.org/netdev/20260630183702.170798-1-hemendranaik@gmail.com/
+- No changes since v2.
+- Resent after the previous submission was deferred due to the
+  net-next tree closing during review.
+- Updated corresponding iproute2 patch in response to review comments;
+  kernel patches unchanged.
 
-> ---
->   tools/testing/selftests/rdma/config | 12 +++++++-----
->   1 file changed, 7 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/testing/selftests/rdma/config b/tools/testing/selftests/rdma/config
-> index e1ff54ec0f579..1be43c4274bb8 100644
-> --- a/tools/testing/selftests/rdma/config
-> +++ b/tools/testing/selftests/rdma/config
-> @@ -1,5 +1,7 @@
-> -CONFIG_TUN
-> -CONFIG_VETH
-> -CONFIG_DUMMY
-> -CONFIG_NET_NS
-> -CONFIG_RDMA_RXE
-> +CONFIG_TUN=m
-> +CONFIG_VETH=m
-> +CONFIG_DUMMY=m
-> +CONFIG_NET_NS=y
-> +CONFIG_INFINIBAND=m
-> +CONFIG_INFINIBAND_USER_ACCESS=m
-> +CONFIG_RDMA_RXE=m
+v2: https://lore.kernel.org/netdev/20260614125000.6058-1-hemendranaik@gmail.com/
+- Addressed ABI backward compatibility issue for tc_fq_pie_xstats.
+
+v1: https://lore.kernel.org/netdev/20260531125314.22492-1-hemendranaik@gmail.com/
+- Initial submission
+
+Hemendra M. Naik (3):
+  net/sched: sch_fq_pie: add per-flow statistics via class ops
+  selftests: tc-testing: add fq_pie per-flow class stats test
+  net/sched: pie: correct tc_pie_xstats field documentation
+
+ include/uapi/linux/pkt_sched.h                | 21 ++++-
+ net/sched/sch_fq_pie.c                        | 88 ++++++++++++++++++-
+ .../tc-testing/tc-tests/qdiscs/fq_pie.json    | 27 ++++++
+ 3 files changed, 133 insertions(+), 3 deletions(-)
 
 -- 
-Best Regards,
-Yanjun.Zhu
+2.34.1
 
