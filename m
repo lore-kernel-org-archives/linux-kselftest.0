@@ -1,116 +1,95 @@
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B553FC5AE;
-	Mon, 28 Sep 2026 08:44:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D80481648;
+	Mon, 28 Sep 2026 08:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790585096; cv=none; b=cNA6/xLPW9ioG5KbsFcNMOkFKQxD/6BIb1iJzKOX8GU0ztWKA9r1V8M9Foc1+bA80Tmi/0JNx7BGa7Cs9GzPgPzn7cpJJpezGF4h17Yhwu4wJt6S4iuz5f6XWlx0KTYsvp952DtNe/MoWA6bvr1ccIdYfjiMbKn+gN24XHPvSnU=
+	t=1790585303; cv=none; b=RTt0d64Zm++tH5wAQPgXyf3bIK+Y3GeaMtCJ/zdAuJ8NWp/wddt+CFBsaXxEu4VtUhcJHINaaFTD6r6hOI0IVQNuIKR8EpAoM0zFHOnVfkmDhFqEStk1fv/mtHdH4rDAZywjaaQxpIuQPuPPF6nHIQZSOPsxnQUzfIjZjoA7mIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790585096; c=relaxed/simple;
-	bh=iDGp7P3BEvSWs1L7iNJIWjF45NYDB+xMs1LHa1Er8uQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=pfVyHmoq/Q2gQ9ebu3eQEWsXTWUPT4NHNHmPcFjQ+8UGE6UQNtsJfEr6vEGPjXVoCQA9YwGRQqHNObSz9szPhIhfNHxaXKrgFh8SO7NBcG+M39TySQxTEXDQ2VVV5Ep8S+kp14dgFxn4MLU5vPNGlv4KjAcCQ6+WDhfWt0ZEqHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Il61np93; arc=none smtp.client-ip=113.46.200.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1790585303; c=relaxed/simple;
+	bh=X9hpWD/8au3zSMoad2aznIEfJeIMxtia6g6FOjrIjK8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Yw0hmU4OE7A+mpsumhYTyD9+1axGIdjixc1s1YRD2CuLL+SSRmim7OZF0r0xkkKWAF6PR9w5+5iSlVeJJTGPLEHAxDo93EymLo2Do7GcN6W9HCPsz0etDu8J3H0aDECQoVhyI73jwxawisK/gSzExxZKuvEKGusBRt6bGNvdMe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZHumC8vX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Il61np93"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=iDGp7P3BEvSWs1L7iNJIWjF45NYDB+xMs1LHa1Er8uQ=;
-	b=Il61np93Mzpfh1Yw6ZTaudK8+nCQ4+DjNBs7VntEmE0tZXcn7sPEF3AumdIjHPSk2gTjz273a
-	wBOH1W7k/4xR4wPV7l62M9UPquFd63zSevJQns1zbf6BGnLBtZpCHWpqVhapwho/G5mndn+Ez1O
-	jCI6EYJd4AynyN7whX7Q3xA=
-Received: from mail.maildlp.com (unknown [172.19.162.197])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4htZM82gK2zcb3G;
-	Mon, 28 Sep 2026 16:33:08 +0800 (CST)
-Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
-	by mail.maildlp.com (Postfix) with ESMTPS id A9A0740579;
-	Mon, 28 Sep 2026 16:44:41 +0800 (CST)
-Received: from [10.67.109.91] (10.67.109.91) by whupemk100010.china.huawei.com
- (7.152.184.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Mon, 28 Sep
- 2026 16:44:37 +0800
-Message-ID: <f697efa0-81c9-4ace-b9cc-d672b98dfc9d@huawei.com>
-Date: Mon, 28 Sep 2026 16:44:35 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZHumC8vX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 335E21F000FF;
+	Mon, 28 Sep 2026 08:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790585301;
+	bh=NBdiz7HaIMQ0kv1HYgvd7Hd/nQ/wzhey31vNxMDWYvY=;
+	h=From:To:Cc:Subject:Date;
+	b=ZHumC8vXAhibmcN/uapBiw/qdKiYPrCEPDB59apHbTjT1y4+gdEUwpI0g/KuA/TX/
+	 8nP6OHJNlHhwI4O9/fg69dqQyLa5cgfawO19hUkbhOrYFQn910zW7/KcFIhIVhDFSt
+	 QgI7nvhie651Okgyb58Hg/LV0zXyzubmkSAXhWmFO8Y/5ocJn3HwTfud4+G7nsG5Xh
+	 tPlzeyrWbXjXtksnFY2M5eIOG6BIdG3eR1bVR6l3WUfIz9CIIlk0/zrrA5JXHFihiI
+	 sVNNxy3rs9d1eD+Sdu1nkWOuVvGOCVHzhE45A5A289T2yW4Pe6A4595QhorQdrrQeK
+	 NWJWvJF281HxQ==
+From: SJ Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SJ Park <sj@kernel.org>,
+	stable@vger.kernel.org,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH v5 0/2] mm/damon: fix the temporal goal tuner's size quota conversion
+Date: Mon, 28 Sep 2026 01:48:13 -0700
+Message-ID: <20260928084816.5575-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC -next 03/12] fs: pass struct path to xattr helpers
-To: Amir Goldstein <amir73il@gmail.com>
-CC: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
-	<jmorris@namei.org>, <serge@hallyn.com>, <corbet@lwn.net>,
-	<skhan@linuxfoundation.org>, <rdunlap@infradead.org>,
-	<gregkh@linuxfoundation.org>, <rafael@kernel.org>, <dakr@kernel.org>,
-	<dlemoal@kernel.org>, <hch@lst.de>, <axboe@kernel.dk>,
-	<viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <jack@suse.cz>,
-	<dhowells@redhat.com>, <code@tyhicks.com>, <linkinjeon@kernel.org>,
-	<sj1557.seo@samsung.com>, <yuezhang.mo@sony.com>,
-	<hirofumi@mail.parknet.co.jp>, <cel@kernel.org>, <jlayton@kernel.org>,
-	<neil@brown.name>, <okorniev@redhat.com>, <Dai.Ngo@oracle.com>,
-	<tom@talpey.com>, <miklos@szeredi.hu>, <senozhatsky@chromium.org>,
-	<chenxiaosong@chenxiaosong.com>, <zohar@linux.ibm.com>,
-	<roberto.sassu@huawei.com>, <dmitry.kasatkin@gmail.com>,
-	<eric.snowberg@oracle.com>, <stephen.smalley.work@gmail.com>,
-	<omosnacek@gmail.com>, <casey@schaufler-ca.com>, <nanx95726@gmail.com>,
-	<djwong@kernel.org>, <daniel@iogearbox.net>,
-	<linux-security-module@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <driver-core@lists.linux.dev>,
-	<linux-block@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-	<netfs@lists.linux.dev>, <ecryptfs@vger.kernel.org>, <exfat@lists.linux.dev>,
-	<linux-nfs@vger.kernel.org>, <linux-unionfs@vger.kernel.org>,
-	<linux-cifs@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-	<selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<xiujianfeng@huawei.com>, <lujialin4@huawei.com>
-References: <20260924104831.1081137-1-caixinchen1@huawei.com>
- <20260924104831.1081137-4-caixinchen1@huawei.com>
- <CAOQ4uxhMhcxq5+crz84f8xj+Wi1bHhNqa_TecP-RvipheBR+ug@mail.gmail.com>
-Content-Language: en-US
-From: Cai Xinchen <caixinchen1@huawei.com>
-In-Reply-To: <CAOQ4uxhMhcxq5+crz84f8xj+Wi1bHhNqa_TecP-RvipheBR+ug@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- whupemk100010.china.huawei.com (7.152.184.41)
 
-Thank you for review
+From: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
 
-I will switched to ovl_path_real in the next version.
+damos_goal_tune_esz_bp_temporal() hands the size quota to
+damos_set_effective_quota() through quota->esz_bp in basis points, and
+the multiply that gets it there is unchecked.  On 32-bit it wraps above
+429496 bytes, and a wrapped product below 10000 divides to a zero
+effective quota.  damos_quota_is_full() is then true on the first test
+of every charge window, so the scheme makes no progress for as long as
+the goal is unachieved.
 
-ovl_creds is a prepare_creds() clone of the mounter, so unless
-the mounter itself was sandboxed, the clone carries no Landlock
-domain and every check short-circuits. The new rights are also
-enforced at the security_inode_*xattr() call sites in fs/xattr.c,
-which run with the user-visible overlay path.
+Patch 1 bounds the conversion.  Patch 2 pins the boundary in the core
+kunit suite, where the new test would fail without patch 1 on any word
+size.
 
-The exception is an unprivileged overlay mount by an already
-sandboxed mounter: the domain is inherited into
-creator_cred through the cred_prepare hook, so the internal
-real-path calls *do* get checked there.  For this series that
-means:
+Changes in v5
+- v4: https://lore.kernel.org/20260923002600.1825448-1-donggeunyoo.kernel@gmail.com
+- Collec R-b: from SJ for patch 1.
+- Rebase to the latest mm-new.
+Changes in v4, from SJ Park's review of v2; the code is unchanged:
+- patch 1: drop the 256 MiB mention
+- patch 1: say what the user sees before saying the setup is unlikely
+- patch 1: cut the closing paragraph to "Bound the multiply."
+- patch 2: unchanged, and carries the Reviewed-by
+v3: https://lore.kernel.org/damon/20260920122411.610213-1-donggeunyoo.kernel@gmail.com/
+v2: https://lore.kernel.org/damon/20260920023111.2466265-1-donggeunyoo.kernel@gmail.com/
 
-- ovl_xattr_get/set/ovl_listxattr() forwarding and the
-   ovl_setattr() -> ovl_do_notify_change() forwarding would be
-   checked against the upper/lower paths;
-- copy-up would newly require the metadata rights on the backing
-   directories too (ovl_copy_xattr() calls the security-checking
-   vfs_listxattr()/vfs_setxattr());
-- stat() is unaffected: ovl_getattr() goes through the _nosec
-   variant.
+v3 was posted before the discussion on v2 had finished.  My mistake;
+this version was held until the thread settled.
 
-This is not Landlock-specific: every LSM
-that keeps its state in the cred blob inherits the mounter's
-context into creator_cred through cred_prepare.
+DAMON kunit on x86_64: 39 tests, all passing with both patches; 38
+passing and damos_test_esz_goal_temporal failing with patch 2 alone.
 
-On 9/24/2026 7:12 PM, Amir Goldstein wrote:
-> that's ovl_path_real()
->
-> I have no technical issue with the ovl patch bits in this series.
-> Anyway, I guess landlock is not going to enforce anything on the
-> private mnt with ovl_creds anyway?
+Donggeun Yoo (2):
+  mm/damon/core: prevent size quota overflow in the temporal goal tuner
+  mm/damon/tests/core-kunit: test the temporal tuner's size quota
+    conversion
+
+ mm/damon/core.c             |  2 +-
+ mm/damon/tests/core-kunit.h | 48 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 49 insertions(+), 1 deletion(-)
+
+
+base-commit: 2fbc36fcb37d79b22b904066065952050a7ea307
+-- 
+2.47.3
