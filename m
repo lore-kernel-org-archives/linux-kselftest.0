@@ -1,253 +1,221 @@
-Received: from mail-ed2-f35.google.com (mail-ed2-f35.google.com [74.125.228.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8AD30D3FA
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 00:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CD7E31F9B9
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 00:19:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790554548; cv=none; b=tzqv7NaoamnYrPgjKNTMitf2/3OIBXB3GEnULu7P5TZBRgdw2upznVyQTjojLzEELYFYQUkPK79/zZ3cSX20a784VPAuH0k1mN0fXBwwwJbsano8a6Mu0Sl2RvqSYcGkeKgO9caD1zKZY38TO437gGjD9sBdjmIKgz6QeMqVY+U=
+	t=1790554777; cv=none; b=lB3PPauDO7jWofEk3ABDDDuCioGgb7d294IOxlsw+u3jK5drTAcnQURJmrme3Vxk/IcLhNLu5SakT2whI+fGExeSXXPCIXxSwvzmO5JPvG9HTQIgO7sceyrML6XCYTnO1x9INhg4XmlEE7huUXjRampH525h2mvG/y5gtRvDf5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790554548; c=relaxed/simple;
-	bh=RUB8RCJZi4+RIvvzdlJKvb07glNORaBdfkx4SwrdYWY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aRT83JUVmljNRdzsk9s2zolOxQUCZXtqCCl01tyuXSipkjR7o39FsdR+2PXytGota8C+HEFwkGnyVm6G03vCLJ1dxZLzP276qGNELnwPvGb63avZc/jmjkz2RlFe2kmBv2k+8M28cwv7S8NTNjKaYxhqpmAd4/jJ+dEI9xejIJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uy7yt24v; arc=none smtp.client-ip=74.125.228.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790554777; c=relaxed/simple;
+	bh=HEgF2P+1+y5g+ATlOPzavhWaPRyRERUoCblxXCR8tVk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HKmFSqFuaKI9sqgrgRCbpb3YlFbkj3zcpDHDyFDZLIMeqnoYqOmRH+VfpHee4s5vIaHRxBuO9AreRIXdJ8JwrAzjQAcA/dYdyhtJvnuf+cjRx9nbPeFuAfdGuoEme+yeykudyEPC/QDKH3rA3gqKzckz3QM5uIuOLeg8wsE5HVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q8TZD+Kc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uy7yt24v"
-Received: by mail-ed2-f35.google.com with SMTP id 4fb4d7f45d1cf-6aaf10bf094so2866548a12.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 17:15:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790554542; x=1791159342; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=bZMySgRNvVIU+FJ9l96Xdac3PNNn0DHXgu2rt2rVOIU=;
-        b=Uy7yt24vq58ZsbpjZ+hIZYiYwIY3cxvCpWExs5sNlFAXzg0js7UOtdXbohfqgxOrYj
-         t3CFJYEWLgwxzAKGsH9eRSedTdPFCdBxyTJ+nC4d22IsETxHJcdn/i0UJXjiPfkIkV2i
-         XZHMYTnHQhRu+aPzcV1F8gpleYx/CYSdmq0YkEU3u7zkur+rT5105SX8wfyB91VYSAv7
-         oYXKLixz7EJkd/U1wDc7BEGU3Pw7RS+/yi4xTVsCQhifajHHwYw87ehOIAdcrno9Jiv0
-         6ffij1h8u6fxE5iFZzneDuW8OJSQ2MKtQqFtQK5wkDj5YfMrJ/DrFKtD5FU9btHc9rPD
-         CAFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790554542; x=1791159342;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=bZMySgRNvVIU+FJ9l96Xdac3PNNn0DHXgu2rt2rVOIU=;
-        b=ihhU0n44iWzL+Dbajr9otCf4cvORJhlx37IYmN7hTSsrgvBx8vXtUhhwj8GWp0gLQw
-         gVlyuRMwW8pek2i+hfBbicobKY4nvI9G707FA2Ve+eeN+aSZ3/y1+PdxD1nA+Bd85eF2
-         L36anUdUZjAxXuuU5LO7I0ndkV81xXvLsct3wsDDOK2oeWEYYgV8emAO+tWoeW7JyMw/
-         fVujWBsyX5dr6FEDuWY2rv4iy19FbiRPHFaYMTFmx4coz7nSvv42rsKvIhni+2Dl8kY3
-         hvRw2O4f7OHih8m5lVKwMU6BBybgn9pWsWIhyqWzT+mGXIpLYMan6f1zAckQnkR8wikH
-         KRnw==
-X-Forwarded-Encrypted: i=1; AKwUvBzGRkPTQGuK2etPEPAKoroxro1R1uqsyFxT8E6avakhKtfgwi6UOSsp7jj0XkMn9mshZ3HJQNCrz7KR1L2e5Hs=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLI6IWGHPYlO/bodY3GF8yxvXRV25ynAGP0MvKunKxiv5jaF3FX
-	P7k2BNR5wZW3TinT98ubILVKXz7lN+k5boY32CUubjbN5zckn3veGyxS
-X-Gm-Gg: AYBFou3jz2+11esvpmtOu3UDHQEnoO+8vc9aeBy4zqMIZ5gT2L5OhvQiSIy0BGo+YqB
-	/t78HXrJrCVK1eoo66KA/6sKXqYB+CBJh9ctoXrKVjDsDMGTif4esP5gSxDniyvdPwH9qxj8IWo
-	5rIdrcSuVx+Y7WiplM/AA6w/emFXyQFbbNckLVz1qBvjVg58y9Cz9tZh88pDGIui1AwTFWBYCZ1
-	an68GZZ/oa8ygQP5ssppHamegRbrvHgg8PgRBaNMSBdY+Ufdgotb1Pmovh5E2PB2jrssXnzm94y
-	A2JUuymuxIdcYfTQN/an9NA4q8FJHQ3Jlsd0NQkntFvxkiAk8rEh7h58zxTgJOm1oMPDEwhaj6e
-	nUtFPYdvRO3wszbmGG4k8xaJDXRyxDpIRjvYW9Iz6j6bSzK4EAvyw60IGBjuSSZDR5LvxbkijSb
-	FGxQnFcNBeiAnrd5nJUpWY+nFhgm9RDVWKtuN2GzUVfRPexH9tdtOhzlZpFj2zM8ZMAn643eWih
-	xAs1zUhlPKRljU=
-X-Received: by 2002:a05:6402:1d4d:b0:6aa:734b:1a33 with SMTP id 4fb4d7f45d1cf-6aac90a25d0mr9564123a12.45.1790554541943;
-        Sun, 27 Sep 2026 17:15:41 -0700 (PDT)
-Received: from localhost.localdomain ([80.66.93.99])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ab5be57b13sm1933955a12.33.2026.09.27.17.15.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Sep 2026 17:15:40 -0700 (PDT)
-From: Maxim Skokov <skokovmaksimevg@gmail.com>
-To: bpf@vger.kernel.org
-Cc: qmo@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	kuba@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	hi@tychen.cc
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Test bpftool map dump on maps that can't be iterated
-Date: Mon, 28 Sep 2026 03:15:08 +0300
-Message-ID: <20260928001513.7072-3-skokovmaksimevg@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260928001513.7072-1-skokovmaksimevg@gmail.com>
-References: <20260928001513.7072-1-skokovmaksimevg@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q8TZD+Kc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF89B1F0089C
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 00:19:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790554771;
+	bh=QP6xyVeWK0fjKYOX13CdCHacAmA58q94pWWFU7WezpA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=Q8TZD+KcqH7MAX6dUpS/JSAVMhLxLCz/zKjss7NWuWteWhn4UPDXrNDTw4/3wJkzu
+	 s0A7Sjr9iUneoZmNMS6n41xk58hMloD6szVNGTpPcNlvLwtWtHe1zI1SpzYUY71fs0
+	 euQ8yCgYZj0M5Pn++1NUZ+XhF4WZhkFhpQxcN3QLWTc78ucAx0zfGa9u1CwhoSql9K
+	 MMJlEK18oXfl81axHE7227Mf2OPzIvDCuz0iKyckAoqhel+s+dk+sHdJIY8Yzng8LM
+	 4ct4VucEoZlYQzCkk6Ywu0aMBNgxbDnfAC8Wi+uM/UaM0qE8+qPddtXDjHc6Y7OXR+
+	 CnAKxfVBpSEAw==
+Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c264788fd58so356959166b.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 17:19:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBxjgdmzZvhBzInAZvVA3F9ZY90srqbepmQtowC8OctGazq45U47L/RT59+gqmiZNg7NLQfSt5IJeMXILgEpcZo=@vger.kernel.org
+X-Gm-Message-State: AFuF++kXVV0gj3SahWvD+vUK9sLI8yY6Av6RheMyLUbDwsSIwh5X9kns
+	i0qKE/EpFcOPhehjVbYNWaMQ3lfDs+kFgj7OE9+jhjpnJPNWuYRXlb6kaLX6PxShvHGBg2Itr41
+	rR3Luso0cR5su5oBuRrNw5vYG0ZH+VJ0MgAHEMit2Fw==
+X-Received: by 2002:a17:907:3f91:b0:c21:450d:cd88 with SMTP id
+ a640c23a62f3a-c2ae979e5eamr638636266b.6.1790554770310; Sun, 27 Sep 2026
+ 17:19:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260926045517.3458413-1-matthias.goergens@gmail.com>
+In-Reply-To: <20260926045517.3458413-1-matthias.goergens@gmail.com>
+From: Chris Li <chrisl@kernel.org>
+Date: Sun, 27 Sep 2026 14:19:18 -1000
+X-Gmail-Original-Message-ID: <CACePvbWM8kMjtJbH4vc6Qt=TBZQ-0d-Yj9NOtkepZmtNN3wd9w@mail.gmail.com>
+X-Gm-Features: AclHuK_Emqiw5PPDnEui2wzXu2lByLHdjYDOsTY-4bLEBoChvn9DrfIUdVmpewI
+Message-ID: <CACePvbWM8kMjtJbH4vc6Qt=TBZQ-0d-Yj9NOtkepZmtNN3wd9w@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/4] mm/swap: reserve swap areas for deliberate offload
+To: Matthias Goergens <matthias.goergens@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Kairui Song <kasong@tencent.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, David Hildenbrand <david@kernel.org>, Michal Hocko <mhocko@kernel.org>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Yosry Ahmed <yosry@kernel.org>, 
+	Youngjun Park <youngjun.park@lge.com>, Baoquan He <baoquan.he@linux.dev>, 
+	Barry Song <baohua@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-api@vger.kernel.org, 
+	Alejandro Colomar <alx@kernel.org>, linux-man@vger.kernel.org, Karel Zak <kzak@redhat.com>, 
+	util-linux@vger.kernel.org, Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, intel-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Socket storage can't be iterated from user space. Create a
-BPF_MAP_TYPE_SK_STORAGE map, attach storage to a socket, pin it, and
-check that "bpftool map dump" fails with nothing but an error: a JSON
-error object with -j, no elements on stdout in plain mode, and the
-reason on stderr.
+On Fri, Sep 25, 2026 at 6:55=E2=80=AFPM Matthias Goergens
+<matthias.goergens@gmail.com> wrote:
+>
+> This RFC adds offload-only swap areas for deliberate cold-page offload to
+> backends unsuitable for pressure reclaim. ZFS zvol swap has documented
+> deadlocks under memory pressure [3]; compressed swap is another target
+> because writes may need memory despite free logical slots.
 
-Socket storage always has BTF, so its plain dump goes through the BTF
-writer and never prints an element count. Check that path with a queue
-map created without BTF that holds one element: its plain dump must
-fail without a "Found" line, which bpftool printed as "Found 0
-elements" before, and give the reason on stderr.
+What is the high-level user-visible impact of this series?
 
-Assisted-by: LLM
-Signed-off-by: Maxim Skokov <skokovmaksimevg@gmail.com>
----
- .../bpf/prog_tests/bpftool_map_dump.c         | 132 ++++++++++++++++++
- 1 file changed, 132 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
+I am curious: if we never run out of swap file space on the
+non-offload swap area, does that mean we don't need this patch series?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
-new file mode 100644
-index 0000000000000..e39a978e6cbd8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
-@@ -0,0 +1,132 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <sys/socket.h>
-+#include <unistd.h>
-+#include <bpf/btf.h>
-+#include <test_progs.h>
-+#include "bpftool_helpers.h"
-+
-+#define PIN_PATH	"/sys/fs/bpf/test_bpftool_map_dump_sk_storage"
-+#define QUEUE_PIN_PATH	"/sys/fs/bpf/test_bpftool_map_dump_queue"
-+#define JSON_ERROR	"{\"error\":\"can't dump sk_storage map"
-+
-+/* An empty socket storage map with an int value. */
-+static int create_sk_storage_map(void)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_flags = BPF_F_NO_PREALLOC);
-+	struct btf *btf;
-+	int int_id, fd = -1;
-+
-+	btf = btf__new_empty();
-+	if (!ASSERT_OK_PTR(btf, "btf__new_empty"))
-+		return -1;
-+
-+	int_id = btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
-+	if (!ASSERT_GT(int_id, 0, "btf__add_int"))
-+		goto out;
-+	if (!ASSERT_OK(btf__load_into_kernel(btf), "btf__load_into_kernel"))
-+		goto out;
-+
-+	opts.btf_fd = btf__fd(btf);
-+	opts.btf_key_type_id = int_id;
-+	opts.btf_value_type_id = int_id;
-+	fd = bpf_map_create(BPF_MAP_TYPE_SK_STORAGE, "sk_storage", sizeof(int),
-+			    sizeof(int), 0, &opts);
-+	ASSERT_OK_FD(fd, "bpf_map_create");
-+out:
-+	btf__free(btf);
-+	return fd;
-+}
-+
-+static void test_sk_storage(void)
-+{
-+	int map_fd, sk_fd = -1, value = 42, ret;
-+	char output[1024] = {};
-+
-+	map_fd = create_sk_storage_map();
-+	if (map_fd < 0)
-+		return;
-+
-+	sk_fd = socket(AF_INET, SOCK_STREAM, 0);
-+	if (!ASSERT_OK_FD(sk_fd, "socket"))
-+		goto out;
-+	if (!ASSERT_OK(bpf_map_update_elem(map_fd, &sk_fd, &value, BPF_NOEXIST),
-+		       "add socket storage"))
-+		goto out;
-+	if (!ASSERT_OK(bpf_obj_pin(map_fd, PIN_PATH), "pin map"))
-+		goto out;
-+
-+	/*
-+	 * Socket storage can't be iterated, so the dump must fail with an
-+	 * error and nothing else, rather than print an empty map that holds
-+	 * an element. The buffer is cleared before each run so that a run
-+	 * that fails to start can't match stale or uninitialised output.
-+	 */
-+	ret = get_bpftool_command_output("-j map dump pinned " PIN_PATH,
-+					 output, sizeof(output));
-+	ASSERT_NEQ(ret, 0, "json dump fails");
-+	ASSERT_STRNEQ(output, JSON_ERROR, strlen(JSON_ERROR),
-+		      "json dump is only the error");
-+
-+	memset(output, 0, sizeof(output));
-+	ret = get_bpftool_command_output("map dump pinned " PIN_PATH,
-+					 output, sizeof(output));
-+	ASSERT_NEQ(ret, 0, "plain dump fails");
-+	ASSERT_NULL(strchr(output, '['), "plain dump prints no elements");
-+
-+	memset(output, 0, sizeof(output));
-+	get_bpftool_command_output("map dump pinned " PIN_PATH " 2>&1 >/dev/null",
-+				   output, sizeof(output));
-+	ASSERT_HAS_SUBSTR(output, "can't dump sk_storage map",
-+			  "plain dump explains why on stderr");
-+
-+out:
-+	unlink(PIN_PATH);
-+	if (sk_fd >= 0)
-+		close(sk_fd);
-+	close(map_fd);
-+}
-+
-+/*
-+ * A queue map has no BTF, so its plain dump prints an element count
-+ * rather than JSON. A dump that ignored the error would print "Found 0
-+ * elements" for a queue that holds one.
-+ */
-+static void test_queue(void)
-+{
-+	char output[1024] = {};
-+	int map_fd, value = 42, ret;
-+
-+	map_fd = bpf_map_create(BPF_MAP_TYPE_QUEUE, "queue", 0, sizeof(int), 1,
-+				NULL);
-+	if (!ASSERT_OK_FD(map_fd, "bpf_map_create"))
-+		return;
-+	if (!ASSERT_OK(bpf_map_update_elem(map_fd, NULL, &value, BPF_ANY),
-+		       "push to queue"))
-+		goto out;
-+	if (!ASSERT_OK(bpf_obj_pin(map_fd, QUEUE_PIN_PATH), "pin map"))
-+		goto out;
-+
-+	ret = get_bpftool_command_output("map dump pinned " QUEUE_PIN_PATH,
-+					 output, sizeof(output));
-+	ASSERT_NEQ(ret, 0, "plain dump fails");
-+	ASSERT_NULL(strstr(output, "Found"), "plain dump prints no count");
-+
-+	memset(output, 0, sizeof(output));
-+	get_bpftool_command_output("map dump pinned " QUEUE_PIN_PATH " 2>&1 >/dev/null",
-+				   output, sizeof(output));
-+	ASSERT_HAS_SUBSTR(output, "can't dump queue map",
-+			  "plain dump explains why on stderr");
-+
-+out:
-+	unlink(QUEUE_PIN_PATH);
-+	close(map_fd);
-+}
-+
-+void test_bpftool_map_dump(void)
-+{
-+	if (test__start_subtest("sk_storage"))
-+		test_sk_storage();
-+	if (test__start_subtest("queue"))
-+		test_queue();
-+}
--- 
-2.47.3
+The series discusses proactive reclaim and direct reclaim. The
+offload-only swap area is for proactive reclaim. However, direct
+reclaim can use both types of swap areas. Wouldn't using the
+non-offload case cause memory allocation which you want to avoid?
 
+I was wondering if we should actually flip things around. Mark the
+type of swap device that avoids memory allocation during swap out.
+Then direct reclaim prioritizes using those.That would make the happy
+path allocate less memory during direct reclaim. Right now this series
+does not seem to guarantee that direct reclaim stays away from the
+area that allocates memory.
+
+Chris
+
+>
+> Explicit proactive reclaim can use these areas alongside conventional
+> swap, ordered by priority. Ordinary reclaim cannot initiate non-zero
+> writes to them, including through retained swap entries. Conventional
+> capacity is not reserved for emergencies. Operators choose the policy;
+> the kernel does not measure headroom or make an allocating backend safe.
+>
+> TMO/Senpai [4] and DAMON_RECLAIM [5] are related cold-page reclaim
+> approaches. This RFC admits offload-only swap through memory.reclaim and
+> per-node reclaim, but not DAMON. Other related work includes per-cgroup
+> zswap writeback control [6], Virtual Swap Space v4 [1] and swap tiers v10
+> [2].
+>
+> The util-linux companion [8] proposes swapon --offload-only and an fstab
+> option. Older swapon silently ignores the fstab token, so persistent
+> activation needs discussion. Apply the separate i915 fix [9] first to avo=
+id
+> a pre-existing folio-lock leak when shmem writeback is skipped.
+>
+> The series fixes zram selftest device tracking and error reporting, adds
+> the swap policy with DRM eligibility checks, and tests routing, workingse=
+t
+> activation and retained-entry write refusal. It is based on mm-new at
+> 995829088503.
+>
+> Feedback is particularly welcome on:
+>
+> - Activation-time eligibility versus backend placement or migration:
+>   is retained-entry refusal, with possible reclaim churn or OOM,
+>   acceptable without migration?
+> - Eligible-capacity accounting, including overcommit limits and OOM
+>   scoring; cache recovery, cluster invalidation and workingset activation=
+.
+> - Persistent activation and visibility: current swap listings do not
+>   expose the policy.
+>
+> Validation includes x86 builds, affected arm64 MTE objects and builds
+> without swap or memory cgroups. QEMU tests covered routing, retained-entr=
+y
+> recovery, data integrity and cleanup, with negative controls for write
+> refusal and teardown failure.
+>
+> I have also been using this policy on my own machine with experimental
+> bcachefs swap support, with no problems observed so far. Deliberate stres=
+s
+> testing is confined to VMs; I do not deliberately stress-test this machin=
+e.
+>
+> Changes since v1, incorporating Sashiko's public review [7]:
+>
+> - Improve selftest isolation, retained-swap measurement and memlock skips=
+.
+> - Track allocated zram devices, wait for udev probes and report cleanup
+>   errors without deleting data through a mount that could not be released=
+.
+> - Clarify activation, capacity reporting and conventional fallback limits=
+.
+>
+> [1] https://patchew.org/linux/20260825153238.2695446-1-nphamcs@gmail.com/
+> [2] https://patchew.org/linux/20260713025644.170839-1-youngjun.park@lge.c=
+om/
+> [3] https://openzfs.github.io/openzfs-docs/Project%20and%20Community/FAQ.=
+html#using-a-zvol-for-a-swap-device-on-linux
+> [4] https://engineering.fb.com/2022/06/20/data-infrastructure/transparent=
+-memory-offloading-more-memory-at-a-fraction-of-the-cost-and-power/
+> [5] https://www.kernel.org/doc/html/latest/admin-guide/mm/damon/reclaim.h=
+tml
+> [6] https://www.kernel.org/doc/html/latest/admin-guide/mm/zswap.html
+> [7] https://sashiko.dev/#/patchset/20260914104501.3960616-1-matthias.goer=
+gens@gmail.com
+> [8] https://github.com/util-linux/util-linux/pull/4633
+> [9] https://lore.kernel.org/all/20260914105606.3997649-1-matthias.goergen=
+s@gmail.com/
+>
+> v1: https://lore.kernel.org/all/20260914104501.3960616-1-matthias.goergen=
+s@gmail.com/
+>
+> Matthias Goergens (4):
+>   selftests: zram: track owned devices and report cleanup failures
+>   mm: restrict offload-only swap to proactive reclaim
+>   selftests: zram: cover offload-only swap policy
+>   selftests: zram: cover retained offload-only entries
+>
+>  Documentation/mm/swap.rst                     | 105 ++++
+>  drivers/gpu/drm/i915/gem/i915_gem_shrinker.c  |   2 +-
+>  .../gpu/drm/i915/gem/selftests/huge_pages.c   |   6 +-
+>  drivers/gpu/drm/msm/msm_gem_shrinker.c        |   2 +-
+>  drivers/gpu/drm/panthor/panthor_gem.c         |   2 +-
+>  drivers/gpu/drm/ttm/ttm_backup.c              |   2 +-
+>  drivers/gpu/drm/xe/tests/xe_bo.c              |   2 +-
+>  include/linux/swap.h                          |  29 +-
+>  include/linux/vm_event_item.h                 |   1 +
+>  mm/memcontrol.c                               |  20 +-
+>  mm/page_io.c                                  |  24 +-
+>  mm/swapfile.c                                 | 123 ++++-
+>  mm/vmscan.c                                   |  31 +-
+>  mm/vmstat.c                                   |   1 +
+>  tools/testing/selftests/zram/.gitignore       |   2 +
+>  tools/testing/selftests/zram/Makefile         |   4 +-
+>  tools/testing/selftests/zram/README           |  20 +-
+>  tools/testing/selftests/zram/config           |  10 +-
+>  tools/testing/selftests/zram/settings         |   1 +
+>  tools/testing/selftests/zram/swap_offload.c   | 425 +++++++++++++++++
+>  .../selftests/zram/workingset_offload.c       | 207 ++++++++
+>  tools/testing/selftests/zram/zram.sh          |   9 +
+>  tools/testing/selftests/zram/zram01.sh        |   9 +-
+>  tools/testing/selftests/zram/zram02.sh        |   9 +-
+>  tools/testing/selftests/zram/zram03.sh        | 174 +++++++
+>  tools/testing/selftests/zram/zram04.sh        | 164 +++++++
+>  tools/testing/selftests/zram/zram05.sh        | 447 ++++++++++++++++++
+>  tools/testing/selftests/zram/zram_lib.sh      | 189 ++++++--
+>  28 files changed, 1926 insertions(+), 94 deletions(-)
+>  create mode 100644 tools/testing/selftests/zram/settings
+>  create mode 100644 tools/testing/selftests/zram/swap_offload.c
+>  create mode 100644 tools/testing/selftests/zram/workingset_offload.c
+>  create mode 100755 tools/testing/selftests/zram/zram03.sh
+>  create mode 100755 tools/testing/selftests/zram/zram04.sh
+>  create mode 100755 tools/testing/selftests/zram/zram05.sh
+>
+> --
+> 2.55.0
+>
