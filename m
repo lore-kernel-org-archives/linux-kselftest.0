@@ -1,135 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-161.mta1.migadu.com [95.215.58.161])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBB6488DB2;
-	Mon, 28 Sep 2026 08:48:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 737AE48F022
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 08:51:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790585309; cv=none; b=dM+BAD2BFAad9wiS8b8J/XYodJosqfT71N/Eh/FMNahtlTB5OYyj9Ec5s/ST5X3S8TuepHh/wmHtbwqW7O/9KGMNmeaFRHJOQwG8wcrTs2Ujd3Om0LzprMGq13NKFMtyzLCdD+bF6pSwug/YYutYwx1G/b+G9MMP2aASi6MjkMc=
+	t=1790585463; cv=none; b=lxX7K52lsQfzRoWWTr5Yp8nAl3MBqwZAVqemK8/ETX+3cM3F7Cs22jSGouO/5UxaWTxUP7N1P/4OHhJFt0BLSNoT1W1l7aB5+E/Wk29aOKv7pZurjUj1MvXmXH6HJRXsWSNVYBLNUqu8wTQSns6Uw1HsIM9jStuhIvORurxt+zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790585309; c=relaxed/simple;
-	bh=hYQWAuyH4Mknu8HsvEzCSBQhgRmeUm5PRhpm7S51nLQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DyHqTFM6cvvcLwhIoBs77XgOANSiVdCUJWfcQ1fvOG/hbgKB0N8C+5eqvYGQIT7ywkrmyCjfHBI6Jpmyp5k60nQ7XRhjkjaC9wI62UnUGklJEBhEbFnwQrprapCA6ujaquNXvrnq+hT7Qol5uL/39vc514UIlmU3hul2V9IMWas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AMjaCbTk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790585463; c=relaxed/simple;
+	bh=09WBzyqcOHBSt5hLHqAwbTciP1G0S+c8iry/IFi/HlI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=TzLu/WeBfOb3+N8JCgIgz4BlFIPZ5jY2R/kWFpq1YsPDih9Z2vKlopxjqNGLRO7k0ACmjML3qRi62wbyHEPx1KzBQ0zfBDes/42VcsSBmtQtwriYIKvxNdduuQQuf1VnuuKWdskzhE22Xg8i9tgPSJJAHnrDNLQ+5HQ11sEtTwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hlJSyJb4; arc=none smtp.client-ip=95.215.58.161
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AMjaCbTk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16E491F000FF;
-	Mon, 28 Sep 2026 08:48:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790585306;
-	bh=u8DaDbB8ZQKuqKU9oeD4+Afniur8EUd6QsbN8UoqPQM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=AMjaCbTkzMFB49B+wdgtKL4qKys8VbvfkDsQOxvkodGnJPZwYWjHX3u7MbtWVPVDl
-	 iPt9/Nql44ZfEL+pBq7j79WiMzAUzMwZrIHoKyZTgbME8/RyqKBuiQxMXQch6+zDgT
-	 Jekt1qFlVYGH0jqatHqcI4fEJQnhvAsEH83iJDhxR/OLRT8gxP43ScnoqAPpsL1bjL
-	 q8ZnOOhzNOFtK4cy57Q7LW/t9SWuhVeky05qH6K/Gm9KRBxWHCmNYY3NIvZyVNgqkU
-	 lDmttwxSVmwrUgjReFjkB7DIL9+cvg5tBYscLAD2Abz6XP1Crbf/3z4YJrEmTFwYZM
-	 gneuqZQP4+QKA==
-From: SJ Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Donggeun Yoo <donggeunyoo.kernel@gmail.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	SJ Park <sj@kernel.org>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH v5 2/2] mm/damon/tests/core-kunit: test the temporal tuner's size quota conversion
-Date: Mon, 28 Sep 2026 01:48:15 -0700
-Message-ID: <20260928084816.5575-3-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260928084816.5575-1-sj@kernel.org>
-References: <20260928084816.5575-1-sj@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hlJSyJb4"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=09WBzyqcOHBSt5hLHqAwbTciP1G0S+c8iry/IFi/HlI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790585459; v=1; x=1791190259;
+ b=hlJSyJb4zyvL5tTc5B+UKJvJCZdxkTMJPLEWB4nUbp/tleH04SocnIPGb4w8yi3m5ovXyx/z
+ NSXt9VR0s+2Xg/Os5fYU54qClXCgayhYrJKbIYjmLqn2jdYk36jdndIr87ji4R0cYdAR0U+78QB
+ B7kA8WSWg0tewIstOzALdJoI=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id dcca5a333ecbdbdc;
+	Mon, 28 Sep 2026 08:50:58 +0000
+X-Mizu-Trace-ID: dcca5a333ecbdbdc
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 28 Sep 2026 08:50:55 +0000
+Message-Id: <DLQTKIGNXKLS.1E0Y9RS93S82N@linux.dev>
+From: "Florent Revest" <florent.revest@linux.dev>
+To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>
+Cc: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+ <kpsingh@kernel.org>, <john.fastabend@gmail.com>, <leon.hwang@linux.dev>,
+ <zirajs7@gmail.com>, <rhkrqnwk98@gmail.com>, <puranjay@kernel.org>,
+ <xukuohai@huaweicloud.com>, <iii@linux.ibm.com>, <hbathini@linux.ibm.com>,
+ <chleroy@kernel.org>, <naveen@kernel.org>, <bjorn@kernel.org>,
+ <pulehui@huawei.com>, <yangtiezhu@loongson.cn>, <hengqi.chen@gmail.com>,
+ <linux-kernel@vger.kernel.org>, <aou@eecs.berkeley.edu>,
+ <agordeev@linux.ibm.com>, <alex@ghiti.fr>, <bp@alien8.de>,
+ <catalin.marinas@arm.com>, <borntraeger@linux.ibm.com>,
+ <dave.hansen@linux.intel.com>, <emil@etsalapatis.com>, <hca@linux.ibm.com>,
+ <hpa@zytor.com>, <chenhuacai@kernel.org>, <ihor.solodrai@linux.dev>,
+ <mingo@redhat.com>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-kselftest@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+ <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+ <loongarch@lists.linux.dev>, <maddy@linux.ibm.com>, <mark.rutland@arm.com>,
+ <mpe@ellerman.id.au>, <npiggin@g>
+Subject: Re: [PATCH bpf v5 1/3] bpf: Wait for an RCU tasks grace period
+ before freeing trampoline progs
+X-Mailer: aerc 0.17.0
+References: <20260926135605.1217928-2-florent.revest@linux.dev>
+ <9d932a22ca908da9378ea281633ddb749453911ac6ae7a27a09e376f9ad02ff7@mail.kernel.org>
+In-Reply-To: <9d932a22ca908da9378ea281633ddb749453911ac6ae7a27a09e376f9ad02ff7@mail.kernel.org>
 
-From: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+On Sun Sep 27, 2026 at 8:41 PM UTC,  wrote:
+> > bpf: Wait for an RCU tasks grace period before freeing trampoline progs
+> >
+> > When a prog is detached from a trampoline, it is freed after an RCU
+> > grace period, or an RCU tasks trace one if it is sleepable. This covers
+> > the tasks that are running the prog, since the prog's enter helper take=
+s
+> > the matching read lock before the prog is called. On a preemptible
+> > kernel, it doesn't cover a task that was preempted in the trampoline
+> > just before the enter helper. That task holds no lock yet, and it calls
+> > the prog after it was freed:
+> >
+> >   BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_enter_recur+0x3a5/0x3=
+f0
+> >   Read of size 8 at addr ffffc90000055040 by task candidate/110
+> >   CPU: 1 UID: 0 PID: 110 Comm: candidate Not tainted 7.3.0-rc2-00014-g1=
+5071f2a1263-dirty #2 PREEMPT(full)
+> >   Call Trace:
+> >    <TASK>
+> >    __bpf_prog_enter_recur+0x3a5/0x3f0
+> >    bpf_trampoline_6442509193+0x37/0xf1
+> >    __x64_sys_futex+0x9/0x410
+> >    do_syscall_64+0xb0/0x530
+> >    ...
+> >
+> > Wait for an RCU tasks grace period before the existing one when freeing
+> > a prog that was linked to a trampoline. An RCU tasks grace period only
+> > ends once the tasks that were preempted have run again, and
+> > bpf_tramp_image_put() already relies on it to free the image. It doesn'=
+t
+> > wait for tasks that sleep in the trampoline, the next commit takes care
+> > of those.
+> >
+> > Only progs that were linked to a trampoline can be called this way, so
+> > bpf_trampoline_add_prog() marks them and other progs are still freed as
+> > before.
+> >
+> > Fixes: e21aa341785c ("bpf: Fix fexit trampoline.")
+>
+> Is this the right Fixes: target?
+>
+> The race being closed here (a task preempted inside the trampoline image
+> before __bpf_prog_enter*() takes its RCU read lock, while the prog is fre=
+ed
+> after only a regular RCU or RCU tasks trace grace period) appears to pred=
+ate
+> e21aa341785c.
+>
+> In fec56f5890d9 ("bpf: Introduce BPF trampoline") bpf_trampoline_update()
+> switched images with no tasks RCU wait, and __bpf_prog_put_noref() freed =
+the
+> prog with a plain call_rcu(&prog->aux->rcu, __bpf_prog_put_rcu).
+>
+> Just before e21aa341785c, the synchronize_rcu_mult(call_rcu_tasks,
+> call_rcu_tasks_trace) in bpf_trampoline_update() ran before
+> arch_prepare_bpf_trampoline() rather than after the new image was install=
+ed,
+> and the total =3D=3D 0 unregister_fentry() path had no wait at all, so a =
+task
+> preempted in the old image could already reach a freed prog.
+>
+> Would Fixes: fec56f5890d9 ("bpf: Introduce BPF trampoline") be more
+> accurate, so that stable trees without e21aa341785c also pick this up? Th=
+e
+> follow-up 49ca60187380 in this series uses the same tag.
 
-damos_goal_tune_esz_bp_temporal() encodes the size quota in basis
-points, so the conversion is exact only up to ULONG_MAX / 10000.  Pin
-the three sizes around that boundary: the largest one that fits, the
-first one that does not, and ULONG_MAX.
-
-Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
-Reviewed-by: SJ Park <sj@kernel.org>
-Signed-off-by: SJ Park <sj@kernel.org>
----
- mm/damon/tests/core-kunit.h | 48 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
-
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index ef4b8b85d67b..caf582882f5f 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -2284,6 +2284,53 @@ static void damon_test_rand(struct kunit *test)
- 	}
- }
- 
-+static void damos_test_esz_goal_temporal(struct kunit *test)
-+{
-+	struct damos_access_pattern pattern = {};
-+	struct damos_watermarks wmarks = {};
-+	struct damos_quota quota = {
-+		.goal_tuner = DAMOS_QUOTA_GOAL_TUNER_TEMPORAL,
-+	};
-+	struct damos_quota_goal *goal;
-+	struct damon_ctx *ctx;
-+	struct damos *s;
-+
-+	ctx = damon_new_ctx();
-+	KUNIT_ASSERT_NOT_NULL(test, ctx);
-+
-+	s = damon_new_scheme(&pattern, DAMOS_STAT, 0, &quota, &wmarks,
-+			NUMA_NO_NODE);
-+	if (!s) {
-+		damon_destroy_ctx(ctx);
-+		kunit_skip(test, "scheme alloc fail");
-+	}
-+	damon_add_scheme(ctx, s);
-+
-+	goal = damos_new_quota_goal(DAMOS_QUOTA_USER_INPUT, 10000);
-+	if (!goal) {
-+		damon_destroy_ctx(ctx);
-+		kunit_skip(test, "quota goal alloc fail");
-+	}
-+	goal->current_value = 0;
-+	damos_add_quota_goal(&s->quota, goal);
-+
-+	/* The largest size quota the basis-point conversion can hold. */
-+	s->quota.sz = ULONG_MAX / 10000;
-+	damos_set_effective_quota(ctx, s);
-+	KUNIT_EXPECT_EQ(test, s->quota.esz, ULONG_MAX / 10000);
-+
-+	/* Any larger one saturates instead of wrapping. */
-+	s->quota.sz = ULONG_MAX / 10000 + 1;
-+	damos_set_effective_quota(ctx, s);
-+	KUNIT_EXPECT_EQ(test, s->quota.esz, ULONG_MAX / 10000);
-+
-+	s->quota.sz = ULONG_MAX;
-+	damos_set_effective_quota(ctx, s);
-+	KUNIT_EXPECT_EQ(test, s->quota.esz, ULONG_MAX / 10000);
-+
-+	damon_destroy_ctx(ctx);
-+}
-+
- static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_target),
- 	KUNIT_CASE(damon_test_regions),
-@@ -2324,6 +2371,7 @@ static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_is_last_region),
- 	KUNIT_CASE(damon_test_walk_control_obsolete),
- 	KUNIT_CASE(damon_test_rand),
-+	KUNIT_CASE(damos_test_esz_goal_temporal),
- 	{},
- };
- 
--- 
-2.47.3
+Yeah, that seems right. It shouldn't make much of a difference for stable
+because both have been introduced in the same 5.10.y. I can either switch t=
+his
+if there's a v6 or a maintainer can change when applying.
