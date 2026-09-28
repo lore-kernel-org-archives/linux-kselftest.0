@@ -1,86 +1,105 @@
-Received: from out-2z4y-a151.jellyfish.systems (out-2z4y-a151.jellyfish.systems [198.54.127.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C2164F7CD0
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 17:20:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328B2352034;
+	Mon, 28 Sep 2026 17:27:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790616055; cv=none; b=dTEZ0BzJNeO0wDByRkyLl/6OczSyW6eXIFZujRJ34xmHA0oHCybiR5niS3czkDVFbnSmB9eeuwyH2tjT9FcVeVyNsO1/BAKuQhZTaytImirT4/N1V63FbUgBn8MAw0HcXBxH61vgngzXc1nXRzMWBdfUpqYVIpTSSyrZHZdQw5U=
+	t=1790616455; cv=none; b=XwehDSi8uJjzMpdSQh/VO5CCxVONDZrULEwXDdOlvYl1T5MbmzE/EQmXwOcraY9UrQTjhOMJl76/OcRdxZ8yGUce7PGF4RvbFgWBrJ6B/VmWE8CsLX5I+SR4EbejUC30Obke7FNZayYDuqCyMaad6rdWhqpkY2DW+GjBnifibCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790616055; c=relaxed/simple;
-	bh=ORcxSyRaNnJVD8bh6I82E326igKpAU0fT7W0tS41VX8=;
-	h=From:To:Cc:Date:Subject:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mDcyaE+NVZTz/7e7/Z0GBgOvZXIDcw3O8UUBccSIyzJvBGGtXi/zyeqzpy6bXjv2AxyWOBhXvUP0A5fPmgHZVOZaXtUqj/i0mRoyM2qK6R4j9wNenMDOWjmB7WsAZDfsmajKfAxz82LOXgcNshb5OX93U/dszAkv20eKNxAmLiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=Lg1xRPiw; arc=none smtp.client-ip=198.54.127.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
+	s=arc-20240116; t=1790616455; c=relaxed/simple;
+	bh=DREW0pnsHVnYIRYZJD9DChr73EUt3Hcbs4tKegeuVNU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=oERuX8OhrGNDJEbDOxABHlj4eKVV1txULdBkWfdrp8t3/MKEMb3U1bGKif1zPMt7BsXnzW0expWcxVy6H8//k8fpRZh4c6N6NsKT8dORw6KvNUzphj22OxxR91FXx3Rsjt5m4HDf7idQW2fLyiL0uGc5EbJmwzsZaeKT4nWPT94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PMF4MzQQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="Lg1xRPiw"
-Received: from [172.20.10.14] (unknown [151.145.76.168])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4htp3c42K5z6tkK;
-	Mon, 28 Sep 2026 17:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1790616031;
-	bh=ORcxSyRaNnJVD8bh6I82E326igKpAU0fT7W0tS41VX8=;
-	h=From:To:Cc:Date:Subject:In-Reply-To:References:From;
-	b=Lg1xRPiwxwZVxexO5qo4qRQqcdBll2N4mBK5oJLPCYkfJXGqwFkmG38TuHr8syd7M
-	 R/BuDC8thxylsMh/nyFPP1IlspedrItVEaPjJjyNSerxi2/SlwPWq603CastsKaKeE
-	 DWYyBlQFk6Jd5qwr1sQDs64b/WTeN3yVWWGSr6ivuMEetls1mjgUSrsAGVpUh88mdb
-	 cFmxBmg7pA3m3XTulrt0XhaNzV55m0qOyc1a+l3AF0plZ18gvoIePqqcKlbl9+SAgV
-	 jw0Ze47vLKllOm5+z7TbTRMF5JZWflGTIFIcMgLBrQQ8feIA9Stkc0j87GsueeONCb
-	 qmCzApohYg7TQ==
-From: Tianyi Chen <hi@tychen.cc>
-To: Quentin Monnet <qmo@kernel.org>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- linux-kselftest@vger.kernel.org, skokovmaksimevg@gmail.com
-Date: Tue, 29 Sep 2026 02:19:36 +0900
-Subject: Re: [PATCH bpf-next v9 1/2] bpftool: Add recursive map dumping
-Message-ID: <179061597606.1293644.6733910074393293547@tychen.cc>
-In-Reply-To: <3acbe829-06f0-4df4-b57c-a8c7b802ec96@kernel.org>
-References: <20260926014208.24773-2-hi@tychen.cc>
- <3acbe829-06f0-4df4-b57c-a8c7b802ec96@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PMF4MzQQ"
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 555441F000FF;
+	Mon, 28 Sep 2026 17:27:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790616453;
+	bh=bYY6SIuB38pNpvOXnuI019MieEUYiynUJJ9aqYbDrY4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=PMF4MzQQaBO1S123rLATz7lD7J/3S79MF4F1iuNOzs88eZr9hChaxqvOeeYV/q6PW
+	 CUo5hRjsrTwhTnA9VFnZ/YLT1rAS/LLuWTfTi+r321ElD6RZFkwxvOrxqESVvkX2G/
+	 rkXOaNGG/CUIhSvkIkBhNq/hbUZy8jgWYxVZc5ErX+du+7cruK/f9tYoyilePUgOuM
+	 KTjDceMzVZVR/0cRH5EAtEZ4BIsNS5DJ6H7bv9NMP+b4dRzdsAFTzDG6a/jMebFu6R
+	 K0J0VS5ArMRQARYfpVFXhnCwhQNfiF/fu+52s5O1LxcAOPLZuOzEVRHNJn2CzkyzZ0
+	 ypIUc5Ir8JYuw==
+From: Nicolas Schier <nsc@kernel.org>
+Date: Mon, 28 Sep 2026 19:26:57 +0200
+Subject: [PATCH v4 1/2] kbuild: Mark usr_gen_init_cpio as
+ no-dot-config-target
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Envelope-From: hi@tychen.cc
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260928-move-gen_init_cpio-to-scripts-v4-1-f437a33c40ac@kernel.org>
+References: <20260928-move-gen_init_cpio-to-scripts-v4-0-f437a33c40ac@kernel.org>
+In-Reply-To: <20260928-move-gen_init_cpio-to-scripts-v4-0-f437a33c40ac@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, 
+ Luis Augenstein <luis.augenstein@tngtech.com>, 
+ Maximilian Huber <maximilian.huber@tngtech.com>, 
+ Mike Rapoport <rppt@kernel.org>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
+ Pratyush Yadav <pratyush@kernel.org>, Alexander Graf <graf@amazon.com>, 
+ Willy Tarreau <w@1wt.eu>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Askar Safin <safinaskar@gmail.com>, linux-doc@vger.kernel.org, 
+ kexec@lists.infradead.org, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1117; i=nsc@kernel.org;
+ s=20250924; h=from:subject:message-id;
+ bh=DREW0pnsHVnYIRYZJD9DChr73EUt3Hcbs4tKegeuVNU=;
+ b=owEBbQKS/ZANAwAKAQdSCnAWJhJpAcsmYgBquqNnSXZkN50m/3I+6jr4xgQZQchL3CmlL4kEv
+ i+EigEvgyaJAjMEAAEKAB0WIQSHQTenhzckp4G+wsYHUgpwFiYSaQUCarqjZwAKCRAHUgpwFiYS
+ ae2zD/9RtzfbLSq2k0CTp9fSMzaHgvIq9PoA0g6ReAplrJoADU/2bqSjWLjJPd5c9RuqfuAHgp4
+ fHW7Kc6on2hwnObtpbvt7w90j83hS1KOni88O9ez2ACmdmYyz7ZuQYbtDw0TqFgP3xz8lJVorTv
+ vtsXQS/7bIVX4rhIY7CX41T6yc93jsVHgMOuXgyBjM/dPRWXJpWTysvgRBrDFRO9z+a9QEOJXiB
+ V9cbYfZAGpdKHphXhOlXCpZG0tftpvv6FUv/ruB0VBSJS9WccGl8dZRdCrMnCHS5Yc3iqNxhuua
+ GMIwwaxiHufFAFS3BDQOHfd27k0t18Kx3VT3hsam8a2bp+3Ic8uMWB15ZbCatgalDbIufOAt59R
+ kR3fSmYKau1A52n8L7ChcSV8vFhkMBkNoclyibapUbreuliExvScTFXtUHPa9IBF/yYVsd/5NT0
+ gjaYUihtoKQz0jzX7KZKLPzxAVLD8C7rCcHT6Wko6YgDFUJNSdPubrLbCreF5aRTFsZsUk1Ph+P
+ yqJwaam6eZX2Q18p+BLbEvYPJg6A4PK1ryUh+4HRzeRAVwvhuE5uyRugm1ihl0VSC9JNfMrYudt
+ jQoY9lo8YjCTd9IgJHWtd+H1IjcMhmG8we+W5Wui3EHheGGBmvXvWQoWIYhkrAKB+ly6TwAlCdV
+ Jqz/BL+0xKqSI6g==
+X-Developer-Key: i=nsc@kernel.org; a=openpgp;
+ fpr=18ED52DBE34F860EE9FBC82B7D97093255A0CE7F
 
-Hi Quentin,
+Let usr/gen_init_cpio be built also if there is no kernel configuration.
 
-> We'll need to fix these, but this should be a
-> different patch or series. You're welcome to go at it if you want, I'll
-> send a patch otherwise, just let me know.
+Askar Safin reported that gen_init_cpio may be of use before any kernel
+configuration is available.  Add usr_gen_init_cpio to list of targets
+that do not require a .config file.
 
-I've taken care of this in a separate two-patch series:
-https://lore.kernel.org/r/cover.1790615923.git.hi@tychen.cc
+Reported-by: Askar Safin <safinaskar@gmail.com>
+Closes: https://lore.kernel.org/all/20260220191150.244006-1-safinaskar@gmail.com
+Fixes: f8e05c10631e ("kbuild: Add top-level target for building gen_init_cpio")
+Signed-off-by: Nicolas Schier <nsc@kernel.org>
+---
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-It clears info and resets len before each query in do_show(),
-do_show_subset(), maps_have_btf(), and the existing do_dump() loop.
-The four regression subtests fail before the fix and pass after it.
+diff --git a/Makefile b/Makefile
+index 751a08643bf85ccfd05060a3f574980f73b3a97f..51fada9059d68a92e6f5725e45ff9a594bfd9645 100644
+--- a/Makefile
++++ b/Makefile
+@@ -298,6 +298,7 @@ no-dot-config-targets := $(clean-targets) \
+ 			 %asm-generic kernelversion %src-pkg dt_binding_check \
+ 			 dt_style_selftest \
+ 			 outputmakefile rustavailable rustfmt rustfmtcheck \
++			 usr_gen_init_cpio \
+ 			 run-command
+ no-sync-config-targets := $(no-dot-config-targets) %install modules_sign kernelrelease \
+ 			  image_name
 
-> I would maybe move this
-> memset() (the hunk above) to that dedicated patch.
+-- 
+2.47.3
 
-Done. The resets in the two new recursive-only loops stay with the
-recursive implementation.
-
-> You still have a conflict with Maxim's series on patch 2 though, both of
-> you picked the same test file name. Maybe use
-> bpftool_map_dump_recursive.c instead?
-
-Done locally, including renaming the test entry point. I tested against
-Maxim's complete v4 series, keeping his tests intact: all 21 focused
-subtests pass in an x86-64 VM.
-
-Thanks for the Ack. I'll carry it forward and wait for the prerequisites
-to land before rebasing and resending the recursive series.
-
-Thanks,
-Tianyi
