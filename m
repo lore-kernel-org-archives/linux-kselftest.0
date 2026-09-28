@@ -1,93 +1,158 @@
-Received: from mail-oo2-f42.google.com (mail-oo2-f42.google.com [74.125.231.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400A0501F33
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 21:54:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE07478842;
+	Mon, 28 Sep 2026 22:28:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790632503; cv=none; b=m1TbyN8XK52BLWRwExpkIBCtTNv7aRDd/IVMG3bNqkVni5TlUNUvyKGKUzX+8qwF+EsuOlSVpJo3SWnDVclIXj1uB0A9uGTo9uds2a8OuMp0NWtaih/KyTtoq9nPDX/gOKTtvI/oUr19tl6Ji8K+z4QBaptQQ/Hs3DhhdBjA7h0=
+	t=1790634529; cv=none; b=S2IrNwYuk30dJnJVnF87XANOjo4jc1iYUeRbcDxup7pq6vOexPJF/J4alGggLG4F9GRVO4x+zzRQtnUHO1KKkjzeWd6deXRIMBT382zMJsCpxriXRB/AoN4r6lk7nrCSpBWK2QvWS9xFGdfQScGv9pG/roMmNqjaQ3+21ip/Lws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790632503; c=relaxed/simple;
-	bh=4aBCe9JhpyN4TkjwCmlcQnGVb5cYh2Qy34BAJ5vWWr8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P7lul0Rc2OLHJB7Hti/1bquq/ZUK3dP5TA64OYbqWN0A/BKsvnW5mm61nlX79j35HvznoHb3k6HQpZDZGtQvYedwCpQq4MRScB+O8NikC0dsOmqT9Jyiu3jaAePZLvmGgwuklK0ImsO+7ABZ89zXTtvEZ13TGA2qTFF54tgX628=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com; spf=pass smtp.mailfrom=openai.com; dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b=DvUaaZIL; arc=none smtp.client-ip=74.125.231.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openai.com
+	s=arc-20240116; t=1790634529; c=relaxed/simple;
+	bh=6w98JnFuqLQ7swHNEd357ROn9GLTXPPxfoytR/6X2d8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oSsQa2rAArffSCesnvvA0HdN1PiUyeEe44sIjBl2vduZYgX1NJQbpV1YvNyTYLChSh2hM187y/O4dayy462hXoCIzCx/P2zS9O0OFt4bU9WvVgNh0aXPRWYTiIcxU9DcBsxNYK9HHyDzB6Jb0+Xe+DeGjTAy2zYfOQOIvqPVTcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=j3wTQjhT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EWj7Cksj; arc=none smtp.client-ip=202.12.124.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.b="DvUaaZIL"
-Received: by mail-oo2-f42.google.com with SMTP id 006d021491bc7-6d797cfdd5fso1335855eaf.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 14:54:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openai.com; s=google; t=1790632497; x=1791237297; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=4aBCe9JhpyN4TkjwCmlcQnGVb5cYh2Qy34BAJ5vWWr8=;
-        b=DvUaaZILADnwMVKEUX0PgmuY8FmMMzWHVR7VQffs6C2jOX1gdv01eYO8hjq5bmj1I0
-         YhrZ7JUU24ePSO4mg0Zut1ABJ7tcrd0DIPH/Kfwlc3VCDRdcJjM+FDpI9m7j/n/H0v/N
-         EcYCH7zpN1uaiXnJalWp6Jj4doSd/8uLPGXEk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790632497; x=1791237297;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=4aBCe9JhpyN4TkjwCmlcQnGVb5cYh2Qy34BAJ5vWWr8=;
-        b=aTdsrUN/QmsKSdzp2W7DEeovgeSEPNAIl/+vvlyeanDzn5V3AxGn9t4eb5d8GDKiOy
-         x8wEkJW1orEf9FAiFKztRIjoYiWgqdDSIKO1SknGigiftmJwA/ydKcnyIEVDF7M03XnW
-         ISCcHzZAInLJV2fCG9KpnoG5eqc703mlh2UjPuyk49Yhbd2StCKgNvRwFLnFMkQm36ui
-         z1ZOqPwA46of7ad7TTd9to/PPMqV9uqpMm+pa6FptEZiOShJ7ZgADGzyMCa/bMM15QyI
-         OA0kLYZa1DBX20vVLQ4sB1V8AHSzf6CH4xKucXDT0bIpBBKjpqkwaMiwjXzQbJnIu0Pe
-         zfkA==
-X-Forwarded-Encrypted: i=1; AKwUvBzfXxsPUIReiema65srqgZkBahYYyVIiRowmK933B8dnTR90bHUN+LfTWp97GSiyfL7hi2j1pphmETttXhOdOU=@vger.kernel.org
-X-Gm-Message-State: AFuF++n3ckDev+WiNmIzhxu0uLjxI+r9iLWDCoXX8azriDr2HYxGWp6T
-	IRkCYm9/+O+Jq9hdCmAfQqD/6/WyjwQnTBU+UQGtQM6HS58rrs5wfLnX5feowBa+1xw=
-X-Gm-Gg: AYBFou1p9SN0nPEr9xipH5gQ/AJgZ88YkafR+oPQzDl5zB02kMLq+JtoUl/SNdtTx6F
-	PzEe3Ae8DM9q2ZGceUrx6IpE3nH3/uQbFPVVgSlfDVg9emWWZrP7Qmxe3k4zya+2wgW5AFcedub
-	SGiczsX6NVWwg6VN0zGvXu15LGlEPBkSfIs4dP7IIy7G58W6uwQ4Nl1ALEf4sUUwOrjCFB1nVj7
-	cy4552Kikt0MrZO1h60ygbb9qajGdkYKZox/b9u7CY5XlCNglsprnFG6x5Ywy0a+ONxWfXhKAUS
-	RjYhDjf18f2rGnWmu2NZQohzs2Mr+ZuuitkyQ0zseEcXJxNju3sKYw9WM6i6VP5wwRshAmiDgqZ
-	FiL4IojdLTpWgMeYCYSVZCJKOO+gkpLb0f2BRx9/Gpu/LwiiAdhLFN6j0/ux9OwZ9VdxtTMm7dX
-	huD8mngjVYR6sF4kEJO+KIZ55f1CNu11/FxdRTifgbqucNfjrLY0MOZaqy2rNXvWcRm4bfgxnrk
-	7AzGzf3DC+RiEHwarKM6j6iClXY2ktD6I0CBCS5ZnA5qUraFHIRCD0WCi2eO2KXELJlSDgZl6w2
-	s6I=
-X-Received: by 2002:a05:6820:1798:b0:6d8:3caa:a468 with SMTP id 006d021491bc7-6d83cd96f72mr4817511eaf.77.1790632496519;
-        Mon, 28 Sep 2026 14:54:56 -0700 (PDT)
-Received: from com-68297.corp.openai.org ([199.47.143.7])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-81d57ef36b0sm2605923a34.6.2026.09.28.14.54.54
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 28 Sep 2026 14:54:56 -0700 (PDT)
-From: nramaswamy@openai.com
-To: netdev@vger.kernel.org
-Cc: Neil Ramaswamy <nramaswamy@openai.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Yuchung Cheng <ycheng@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 0/2] tcp: preserve RACK tracking across partial undo
-Date: Mon, 28 Sep 2026 14:53:04 -0700
-Message-ID: <20260928215440.25109-2-nramaswamy@openai.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260926002520.42955-4-nramaswamy@openai.com>
-References: <20260926002520.42955-4-nramaswamy@openai.com>
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="j3wTQjhT";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EWj7Cksj"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfout.stl.internal (Postfix) with ESMTP id 7BE121D000F5;
+	Mon, 28 Sep 2026 18:28:43 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-06.internal (MEProxy); Mon, 28 Sep 2026 18:28:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1790634523;
+	 x=1790720923; bh=9MPDcqcdVPxLHwAEsIz514gjGwXbAqqJQTEEaOtjMO4=; b=
+	j3wTQjhTxx52qxsu1bMl9sKoMbMl1BZnN2+NpHHsZ1BT1YX0ehYUiK+LN6iVE063
+	3S1nhAJxVe83MoBpHjPj7GgMuckze7YcDr2ou8eq5SZUFeiHo2cDGZrWmryik7Ug
+	2GcUmh10FNCI9nPAXfwliw/MwL7C9munsoXET0YAyTaSrxtuLCudZPGVk/ljg9eF
+	Fg4Md0EtUhzkvATPsRMG1STwkbwXdVoycpy2lwQUmixG/wWvuHRsUCUGdzaI99Rb
+	ljr75nX+RM5LGjZ4kqxe59u5FVZVGUxh+yDSJ3rdZgbZr9XO9gRY/gwKL/XBYtDX
+	51Ge7V3EcRiYZH0mlJdhXw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1790634523; x=
+	1790720923; bh=9MPDcqcdVPxLHwAEsIz514gjGwXbAqqJQTEEaOtjMO4=; b=E
+	Wj7CksjYMwdPK8xmqIDeZ54MgQKToCMAwtXGQnbdFgizxPZEbaaCRcOwRKhbLkvf
+	WWQO0ySQW0Q50JWuP41HcANiYfqSfAlGcVvdUngsv946b3zoMHO373s8LnIcWId1
+	lruw2cmo//rKffEaK85yShp9HxKkz2gPFIaW00nxaXidasZ2v8WninLDGEGpIkCT
+	XKYo0UeT9m/Md8S3J4LFin3vyHova+adSRIOcM/VJjh8Wm7zAYNjWS8qJUvJYGOq
+	4ROh8NaCZB55hb8Wn6spfS8sPAtRPJ5INVzAWrotx/mU7papQsS07ciY1CK/OMxw
+	2/CyIUvDf85bEGAhfv+hg==
+X-ME-Sender: <xms:Guq6alx2AwZECemahxNwQPKZ7z2_KexZDXZep-GdBOy7y9lt9eKJMg>
+    <xme:Guq6am-o_CPnO-6avvxCwsvF3DQeaU7YHlzI4jOH_Gr2BphmbvMuajDKqUBoRegrH
+    ObMBuDdJbvm6JIy5sH-zZE9dmTJPHjMm-5Dwd33S9Z1dZ13LCYB8BY>
+X-ME-Received: <xmr:Guq6aiwiOtcexKnuJj_2UZ1VkvwSmIzme9mbKJHqYV22rM-iKb5ELfk3eadttg>
+X-ME-Proxy-Cause: dmFkZTFtelLzGYVdByzqF87ZFqdfB2mHNpYaUcMvT3rUJICZTimYyNFKN0gvw38v8OfulS
+    V+LtKiv9pTdKAJkxNact9rNtRfWcp1ZGRLo4EiS7QK47poRep96qaNDx+k6VLf1aCP9ajp
+    GWmIqF5zmAislVGo3WAhg9qeGF8kjw6J+atOHc9LOkjvP7htlA1d3beVjPXdbRSDFuWPTA
+    EZxQlx4IuRccXM0/a9U+aBKw7ikA0m6o/ohVm1qZUYvBgIzPJIcNlZadEAp4dVzTaJwS+w
+    GqjOfEWO15mdHZS2k6h2kgUs6G4fLmoKfmzbX/9m5D2PJV5Q2VMghmHV5RYGgbv2BfLicD
+    RiuG3VRpRNoyntw+Dl6M04vackSXZ88Gp/Kv/qDC1sqzEdnB7MqH7e31vaYP37e587LiAv
+    jL6xJ1skQVPk8FSKPEByOnYvqa3tVOYH2oua34FfOtXwLHUQpV8tx3Z3cu1oJSmL+hCOoR
+    ZRAL9ObWl+fdooqw/6hxw1SoTYJuStMAq7isswv8fC59VOXq1G0vRuMTltm2m52iUXn9Zp
+    dFZ4tzCir3cHpBVykLjIDXnFS5qC25visDUh6ehKSgADHqM1s2ktp9CrNTJ+m7vt6JjapV
+    mgpeSq81kVD2g60MTQSU60KQNwJZ4DBESmWvMzhcEgokS9EvnwdHMR7FHtMg
+X-ME-Proxy: <xmx:Guq6anUKc-C8WE-WKXQPOmycrnrMSdVJRemt4J2GHIHz1HXivqoHLg>
+    <xmx:Guq6atbuqApBLPkF6syEogeopjD3l2-LLL3UJmVVRlZe0BhYquI_oQ>
+    <xmx:Guq6akR0rDJQQdbvTWSWxhBWyH5wuswX8TXhlJQh7uo46aIlGeUSlg>
+    <xmx:Guq6atSfagFSZAJcoRygzwN_UhBzo1gyKK3Dl1y5UzFps-oWKtl6Pw>
+    <xmx:G-q6ai7wgQ7FDkIe0PnIuexj2YKVBzji4IlLXWlWk_2uxff7tT7h7M2Y>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 28 Sep 2026 18:28:40 -0400 (EDT)
+Date: Mon, 28 Sep 2026 16:28:38 -0600
+From: Alex Williamson <alex@shazbot.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: David Matlack <dmatlack@google.com>, Fuad Tabba <fuad.tabba@linux.dev>,
+ Joey Gouly <joey.gouly@arm.com>, kvm@vger.kernel.org,
+ kvmarm@lists.linux.dev, Leon Romanovsky <leon@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org,
+ linux-rdma@vger.kernel.org, Marc Zyngier <maz@kernel.org>, Mark Bloch
+ <mbloch@nvidia.com>, netdev@vger.kernel.org, Oliver Upton
+ <oupton@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Saeed Mahameed
+ <saeedm@nvidia.com>, Sean Christopherson <seanjc@google.com>, Steffen Eiden
+ <seiden@linux.ibm.com>, Shuah Khan <shuah@kernel.org>, Suzuki K Poulose
+ <suzuki.poulose@arm.com>, Tariq Toukan <tariqt@nvidia.com>, Zenghui Yu
+ <yuzenghui@huawei.com>, patches@lists.linux.dev, alex@shazbot.org
+Subject: Re: [PATCH v7 00/10] mlx5 support for VFIO self test
+Message-ID: <20260928162838.44dc6abb@shazbot.org>
+In-Reply-To: <0-v7-c6d30e8ce1e4+3dfa6-mlx5st_jgg@nvidia.com>
+References: <0-v7-c6d30e8ce1e4+3dfa6-mlx5st_jgg@nvidia.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Neil Ramaswamy <nramaswamy@openai.com>
+On Mon, 21 Sep 2026 19:35:40 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Adding the maintainers/lists I missed on the original CC. Sorry for the
-omission. The cover letter and both patches are available here:
+> Add an mlx5 driver to VFIO self test. This is largely a remix of the
+> existing VFIO mlx5 driver in rdma-core. It uses an RDMA loopback QP
+> to issue RDMA WRITE operations which effectively perform memory
+> copies using DMA. Since mlx5 has a stable programming ABI this
+> should work on devices from CX5 to current HW. The device FW must
+> support the QP loopback configuration.
+> 
+> Also support send_msi by arming completion events of the RDMA WRITE
+> to trigger MSI delivery.
+> 
+> mlx5 device startup is very complex and most of this code is just
+> booting the device, with a smaller amount for operating the QP.
+> 
+> This entire series was coded by Claude Code in about 4 days. It
+> used about 4.5M output tokens, 30 individual sessions and 5600 lines
+> of AI-generated .md files. I spent an annoying amount of time
+> de-slopping and cleaning its work product to make it presentable.
+> However, previous VFIO drivers have taken on the order of 1-2
+> months to write, so getting one in a week is pretty remarkable.
+> 
+> For those interested, the flow I used was broadly a prompt sequence
+> sort of like:
+> 
+>  - Hey Claude, go look at the falcon series, VFIO self test, the
+>    mlx5 driver, rdma-core and some PDF documentation and make a
+>    plan to put mlx5 under the selftest.
+>  - Write an rdma-core application using the built-in VFIO provider
+>    that can do the required memcpy operations that vfio selftests
+>    wants.
+>    (This resulted in a 1k loc C file that compiled and ran the
+>     first time but had a few bugs related to device programming
+>     that the AI resolved.)
+>  - Replace the rdma-core components with open-coded versions to
+>    create a fully stand-alone program that does the DMA memcpy.
+>  - Review and audit the thing.
+>  [Pause and de-slop it]
+>  - Make it work on a PF too (this is surprisingly hard!).
+>  [Move to a kernel tree and copy all the .md files and .c program
+>   it made]
+>  - Hey Claude, look at all this stuff and make a broad plan to
+>    actually build a VFIO self test.
+>  - Here is my 1 sentence advice on what each patch should look
+>    like, make a detailed plan to make a patch for every one.
+>  [Pause and polish the patch plans]
+>  - Execute plan X then commit it [pause and de-slop each patch,
+>    repeat].
+>  [Review and final polish]
+> eeb2cc76b0b4
+> v7:
+>  - Fix some compilation problems, kvm and the igb
 
-https://lore.kernel.org/netdev/20260926002520.42955-4-nramaswamy@openai.com/T/
+Applied to vfio next branch for v7.4.  Topic branch published as
+mlx5-vfio-selftest-v7[1] for conflict management.  Thanks,
+
+Alex
+
+[1]https://github.com/awilliam/linux-vfio.git mlx5-vfio-selftest-v7
