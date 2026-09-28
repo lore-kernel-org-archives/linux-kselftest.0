@@ -1,114 +1,87 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C1B4E80B5
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 16:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D361A4EF140;
+	Mon, 28 Sep 2026 16:23:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790612001; cv=none; b=LAkxpeAKWiWdNy+TXER63jzQ7/Jwm+Zhc/gdGWbPsW50r7iTjSBX0zS7NcPCK1z06T1WqSyP4suHWp42ryyL9XFf+KDH0/3uPImlEJDMv4rRbmTDlz2MBHNZoIwGzWpZ9H0Gs9RB/fEDwmgr2ux2CyKG6Ew1gV7N08azyvscR70=
+	t=1790612597; cv=none; b=m8iE3bptAJicNB5FAyEJAiYGibQF3MexzSlbd+onShAYX5RyoKi+lL35zi9hHxOYIjKIo5/Tf6ZpIGSo6vCmLMyQ09bCOHADOhGF4Uq4W2MIZXCjf2EBwLDnVeAoX7HLiNPR6k8jdZzAwIattOBbJxq2LaaMZX6WisTVCHMsmko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790612001; c=relaxed/simple;
-	bh=6gtprv+I7d5L3pBHaUUFHArfk9rtSviWLekbvSkYtZo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Cep8FGJyeB51efvRfKBu4YGyJpAyHb20nifSfQc5d66Jc6kPIg88KcHY2U9utbMz6apVqkwfydDyhVid0F0994yBs4Sw+OpAy9AVPcWks6+Ck/NV7sy7NsMzy+N0fGQHagoNA8HMoMPfI9mt8tqCU03MfwS062I4SzktRLIHq00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KsfL4A8J; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1790612597; c=relaxed/simple;
+	bh=dNDAcGHNy09VRA5c5vXMv5G1dwyTJJ5okykDl+SczM8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kbAFtd+w1E8xW7yToOznlj0ZCji7mDfhm+HQuBQAnExWTROJNeTeVOb728OlcmPlhPfECd731zl4yxGfbpYywO5UowvL/IrSeuyY8yNBPtCJlWiXJlezfhkeA4e0VG8A2k7W2qSJwzrlOY+bcHA/xm8Iuqf4EMSMSWWs8qUh1Ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AdKe3Puz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KsfL4A8J"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790611997;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3yjRvgCo71Q2/uVN+UiK3J2F/H+VV1qWlgtYqAluoao=;
-	b=KsfL4A8Ji2BTE7+uZTZaH1qTRQfTDr2QlxE/fA/Pp3ng6N+8vqby5a+2SQdjCduuVwzTOg
-	GAU+91pXaKF7kFUkuT6xzf7hn9eoN299+GshfEE3I4ZFfOgV62OcEKUkQ6pMvilnKS09dP
-	58Thyy9CMhHV8wKXm06DhIKKss9yXyo=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-518-SzX7qyHtNEW_m7DoV7sE-w-1; Mon,
- 28 Sep 2026 12:13:10 -0400
-X-MC-Unique: SzX7qyHtNEW_m7DoV7sE-w-1
-X-Mimecast-MFC-AGG-ID: SzX7qyHtNEW_m7DoV7sE-w_1790611986
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9889618DA5C8;
-	Mon, 28 Sep 2026 16:13:05 +0000 (UTC)
-Received: from [100.91.18.181] (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 41E741956047;
-	Mon, 28 Sep 2026 16:13:02 +0000 (UTC)
-Message-ID: <7e8fa7ac-4438-4dea-b3e0-c142523aeab3@redhat.com>
-Date: Mon, 28 Sep 2026 12:13:02 -0400
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AdKe3Puz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54C8B1F0089A;
+	Mon, 28 Sep 2026 16:23:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790612596;
+	bh=dNDAcGHNy09VRA5c5vXMv5G1dwyTJJ5okykDl+SczM8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=AdKe3PuzxBeIfMRzAElN7KJNlKqTeYxTv3RiLkw/Qz7zSVjL8rh3hz+brQG9Rl0bw
+	 4FC4Y6iUVl8feOfDgHg3UMd8MhU6S6JawTo5suISocRvxaMFCN044OBdhh8q4QSPzm
+	 +84ocNwkhgBfQ1aDLsOl181/6k8blbWN99FN7JDQx3AGzlJNTzWmITGFdRp4WIzIu4
+	 jYZICQBD3DbSAThjkRuJHvNzQorEuRquCsQq8bHfEy+9Eo49vSzkuMj34fUFRYF0ow
+	 SlysURxuHxAAvgD/PtsHtPh4xlw2nSGiLzbixrt35t5zyhNs9HZSuzvytQul8CXo5P
+	 asQRSILi8GvMg==
+Date: Mon, 28 Sep 2026 17:23:08 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Johannes Berg <johannes@sipsolutions.net>
+Cc: Hajime Tazaki <thehajime@gmail.com>, linux-mm@kvack.org, 
+	liam@infradead.org, rbm@suse.com, akpm@linux-foundation.org, luto@amacapital.net, 
+	brendan.jackman@linux.dev, david@kernel.org, liuhangbin@gmail.com, corbet@lwn.net, 
+	kees@kernel.org, broonie@kernel.org, mhocko@suse.com, rppt@kernel.org, 
+	shuah@kernel.org, surenb@google.com, vbabka@kernel.org, wad@chromium.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org, 
+	geert@linux-m68k.org, daniel@thingy.jp
+Subject: Re: [PATCH v3 2/3] selftests: run tests on nommu architecture
+Message-ID: <arqUVCrA0rC7-c0b@gremlin>
+References: <20260926010819.604346-1-thehajime@gmail.com>
+ <20260926010819.604346-3-thehajime@gmail.com>
+ <04259a99ed91f8a527b255951a6f626310728170.camel@sipsolutions.net>
+ <arpIi5QBG1_MuZzJ@gremlin>
+ <8dfc0ec9ed660e373451c96b6fcc352c35a6a004.camel@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/3] cgroup/cpuset: prevent activating local partition
- over remote one
-To: Ridong Chen <ridong.chen@linux.dev>, Hui Peng <benquike@gmail.com>,
- Guopeng Zhang <guopeng.zhang@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>
-Cc: Shuah Khan <shuah@kernel.org>, Chen Ridong <chenridong@huawei.com>,
- cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20260924042729.1908863-1-benquike@gmail.com>
- <20260924042729.1908863-3-benquike@gmail.com>
- <93e48fe3-d229-4870-af8a-32431d236211@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <93e48fe3-d229-4870-af8a-32431d236211@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8dfc0ec9ed660e373451c96b6fcc352c35a6a004.camel@sipsolutions.net>
 
-On 9/27/26 9:40 PM, Ridong Chen wrote:
+On Mon, Sep 28, 2026 at 02:32:50PM +0200, Johannes Berg wrote:
+> On Mon, 2026-09-28 at 12:00 +0100, Lorenzo Stoakes (ARM) wrote:
+> > > Not sure where this should be merged? I guess selftests would make most
+> > > sense, but you can't actually test it out before the UML nommu changes,
+> > > so that doesn't work too well right now?
+> >
+> > I seem to recall Hajime saying he tested this on an actual nommu
+> > device/virtualised equivalent so nommu UML isn't strictly necessary (though very
+> > nice to have!)
 >
+> Oh, I don't recall, but I guess that's plausibe.
 >
-> On 9/24/2026 12:27 PM, Hui Peng wrote:
->> Commit 6da580ec656a ("cgroup/cpuset: Don't allow creation of local
->> partition over a remote one") added a check in update_prstate() to 
->> reject
->> creating a top-level local partition whose cs->exclusive_cpus intersects
->> subpartitions_cpus.
->>
->> However, if a top-level cgroup A1 has a child A1/A2 enabled as a remote
->> partition on a subset of its exclusive CPUs (X2-3 on A1, CX2-3:P2 on
->> A1/A2), and A1 is then set to "root" (P1, becoming "root invalid" via
->> update_prstate() because its exclusive CPUs intersect 
->> subpartitions_cpus)
->> followed by expanding its CPUs to include additional non-remote CPUs
->> (CX1-3), update_cpumask() / update_exclusive_cpumask() calls
->> validate_partition() without going through update_prstate(). Because
->> validate_partition() does not check trialcs->exclusive_cpus against
->> subpartitions_cpus, A1 transitions from "root invalid" to a valid local
->> partition over the existing remote partition A1/A2 and triggers:
->>
->>    WARNING: kernel/cgroup/cpuset.c:1943 at 
->> update_parent_effective_cpumask+0x189b/0x1fd0
->>
->> Check trialcs->exclusive_cpus against subpartitions_cpus in
->> validate_partition() when !is_partition_valid(cs), and add a regression
->> test case to tools/testing/selftests/cgroup/test_cpuset_prs.sh.
->>
+> > I think I saw something fly by that implied it might be coming in 7.4 is that
+> > so? :)
 >
-> Was this message assisted by an LLM?
->
-> It would be helpful if you could provide the reproducer as I replied 
-> earlier, so that it can be understood more easily and tested.
+> I did end up merging just about everything that was pending for
+> uml/next, so if we don't forget to send a pull request in the merge
+> window, or something equally catastrophic happens, yes ;-)
 
-The provided test case for test-cpuset_prs.sh is supposed to be the 
-reproducer if you don't have deadline task running in the test system or 
-the kernel includes the last cpuset patch that I sent out.
+Awesome, thanks! :)
 
-Cheers,
-Longman
+>
+> Sorry for the delay. The onslaught of LLMs means priority is elsewhere,
+> sadly.
 
+Yeah understood, onslaught has reached all areas of the kernel it seems...
+
+>
+> johannes
+
+--
+Cheers, Lorenzo
