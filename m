@@ -1,238 +1,138 @@
-Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [84.16.66.172])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50084E77E2
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 19:58:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4F94F6483;
+	Mon, 28 Sep 2026 20:00:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790625502; cv=none; b=ZAeb5NTixPdCTwzeNyFWyZqlbLcvc9bQ85Ie2N4iYHIXyYi3HcSaCMhTUwuzqVbcws4PUykPKa5rE4FyYMi4QLUjwnfFnvoznNXl9wqu8P8a0nPmI+PSK5NREItL1jpDgueHZrIGFBr35RjgbYH6lMS+6znkEaKrSumF83L8CLI=
+	t=1790625658; cv=none; b=LYAWvWajJgtLkZJFJZvSngvGwfcp+2OGppG4k8/HymwnhFc0cyExbTWfrh2UT6I8cLelCu3TYLdx/UY7zKy8fvQurr+XiXTQlLmRTCS3aY9v3n6drEpeVOBhdqrq4gX0IAWZjxMbuEv6pTDzcwyGm1RKBhIitBObk2h2UTUBgQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790625502; c=relaxed/simple;
-	bh=U+kqju76cNoJQVhw6/DyvDJkrDhq+++/O9NLhBaWyAU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J+G7v537a39yCPIPZ02F0fP4fm/upXDJwmcjze8cbO3294OpoySJ/WgrK5RHEd0ObEwJT6dyj3ANXIYf8HKNz/BlpfdjKS3s0OeeimGWc7RxBuvzPGfmsSBYCcjwbaw7Q+JqSzNJaLkjEF7/4i8Q/W1Gk/L4H8CGaq0cxNYL2bo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=kxjEERuW; arc=none smtp.client-ip=84.16.66.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1790625658; c=relaxed/simple;
+	bh=SopRBs7O5o3d69lmp3KkpKZDCg/7ZdSGHUvWPTXc8V4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KZQmxKmV3oopLobCEtdeczcobR6Fs+nhOGFk7FuiIpNNxDLaXD8iv5d5SUthcoBSYKfOGpIiY5Z9EksklqI2vmTiajJ1BQVVGPQtBqNtc17RBzEmtspai7NZpqQta8fibYIY3zFHEwbt+uSO+1K1rChB9XEu/7JYHm1NfRxwmjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=FZqS3nbi; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="kxjEERuW"
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4htsK66G5jznW5;
-	Mon, 28 Sep 2026 21:47:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1790624842;
-	bh=+VdTVqBVlfaHaioRFQvSt61ywqOeh3oyx/gpUYheHVw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kxjEERuWtRNOkoKYbnyFMJQOilbAHdkBxlSQMMZMvjbqPrsq2eMZbZvAL/F1Lg8wr
-	 hZmXb9TizZwTXzGEERZSbI2gk8zdZKkYDQsk+a7k5MydGnxkPjmDiTH92dVoV3de77
-	 Dqw46RQmrVe5y7Ys5yBJNPv2q4pSUH00ZdtLOuvg=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4htsJl14b7z2g4;
-	Mon, 28 Sep 2026 21:47:03 +0200 (CEST)
-Date: Mon, 28 Sep 2026 21:46:59 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Cai Xinchen <caixinchen1@huawei.com>
-Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>, 
-	gnoack@google.com, paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, 
-	corbet@lwn.net, skhan@linuxfoundation.org, rdunlap@infradead.org, 
-	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, dlemoal@kernel.org, 
-	hch@lst.de, axboe@kernel.dk, viro@zeniv.linux.org.uk, brauner@kernel.org, 
-	jack@suse.cz, dhowells@redhat.com, code@tyhicks.com, linkinjeon@kernel.org, 
-	sj1557.seo@samsung.com, yuezhang.mo@sony.com, hirofumi@mail.parknet.co.jp, 
-	cel@kernel.org, jlayton@kernel.org, neil@brown.name, okorniev@redhat.com, 
-	Dai.Ngo@oracle.com, tom@talpey.com, miklos@szeredi.hu, amir73il@gmail.com, 
-	senozhatsky@chromium.org, chenxiaosong@chenxiaosong.com, zohar@linux.ibm.com, 
-	roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
-	stephen.smalley.work@gmail.com, omosnacek@gmail.com, casey@schaufler-ca.com, nanx95726@gmail.com, 
-	djwong@kernel.org, daniel@iogearbox.net, linux-security-module@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, driver-core@lists.linux.dev, 
-	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org, netfs@lists.linux.dev, 
-	ecryptfs@vger.kernel.org, exfat@lists.linux.dev, linux-nfs@vger.kernel.org, 
-	linux-unionfs@vger.kernel.org, linux-cifs@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, xiujianfeng@huawei.com, 
-	lujialin4@huawei.com, bpf@vger.kernel.org, kpsingh@kernel.org, matt@bobrowski.net, 
-	alexei.starovoitov@gmail.com
-Subject: Re: [PATCH RFC -next 00/12] landlock: Add READ_METADATA and
- WRITE_METADATA access rights
-Message-ID: <20260928.phei6Ohmeiba@digikod.net>
-References: <20260924104831.1081137-1-caixinchen1@huawei.com>
- <20260926.e0135fe7712f@gnoack.org>
- <a6a40c38-0e1c-4a3f-a705-e4a38c575c25@huawei.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="FZqS3nbi"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68SI5acM1642773;
+	Mon, 28 Sep 2026 20:00:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pp1; bh=3CgW6u3tR/aoyojWa2wdAq6Bg/Va
+	QhuO287Rhf/vJxI=; b=FZqS3nbiepFwVSvOD0uBgomdI1FrUbkvBiRx9plU8itb
+	XW/m+QHwYPkMXCYDrIQFgou0rX2iJrgP/FdFeIt3/kf+5Q+KzQjuApuWxsRgtfGA
+	/w8Dlco1yr/9qiMtSLHUOPVsEvfyA2F4uv5vEJQKUxlDwkaC7BHl6yc0noN1Q5e2
+	mQ84tyw5T0WgZHOLhs5oascLc009UTI0YRCviOeBbLr3tGkrOZAno1unsO3TqdiM
+	ObHjAAgKHsLbnrbLSWIsvHSUCtry6edsrq0SYlyf6NJfRrx+lLdrIZYRy1RoPNxV
+	le2wSScIiBWLSwlqzN8/f4G5Ui4QU65CsEa40mmrIQ==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gx3fk3c5t-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 28 Sep 2026 20:00:51 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68SI2TeI525891;
+	Mon, 28 Sep 2026 20:00:51 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4gxrcppxwh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 28 Sep 2026 20:00:50 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68SK0nHI40305014
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 28 Sep 2026 20:00:49 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 33BCD2004B;
+	Mon, 28 Sep 2026 20:00:49 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 40F3C20040;
+	Mon, 28 Sep 2026 20:00:45 +0000 (GMT)
+Received: from vishalc-ibm.ibmuc.com (unknown [9.43.92.38])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 28 Sep 2026 20:00:44 +0000 (GMT)
+From: Vishal Chourasia <vishalc@linux.ibm.com>
+To: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com
+Cc: cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vishal Chourasia <vishalc@linux.ibm.com>
+Subject: [PATCH] selftests/cgroup: add settings file with a longer timeout
+Date: Tue, 29 Sep 2026 01:30:34 +0530
+Message-ID: <20260928200034.1769120-1-vishalc@linux.ibm.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a6a40c38-0e1c-4a3f-a705-e4a38c575c25@huawei.com>
-X-Infomaniak-Routing: alpha
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: BiKW2WjqvottcmDwzMeCUQHaJjHnyqLP
+X-Proofpoint-GUID: BiKW2WjqvottcmDwzMeCUQHaJjHnyqLP
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI4MDA3OCBTYWx0ZWRfX9Q6kE/NWxJFJ
+ w0YWoQ7bXnvj43N3XioDWQC8g8JDBnKiOFZgzYtzZGueBE41YPdzka2YMwJlPu/6hJ+YXHuVQAb
+ T1md2GpYL6FyJUrnZc0082X0+Z5KHss=
+X-Authority-Analysis: v=2.4 cv=Vv62kO2n c=1 sm=1 tr=0 ts=6abac773 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8
+ a=cM6yLABnzD-VEF3jybsA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI4MDA3OCBTYWx0ZWRfXyB+55uvEkbAi
+ 4qrqEwQrPqtd7hKBrCVTgfElR5kIHRTwSPSNRZ/j4jwbfMB81RHRQeHNGJdELiumb//V8DQ2BWw
+ vXY2wI+h0tL8weAbgUOupNMSuoAmaUTz9aHFKOr/5DL9ugVYLjKoyqAO/vOEK9ACFDNeb5Jf0qo
+ Ghs2h9Aho5U55sHf+uKrsizFOm1mrnOm/EmyFwzXgy1Oi7mhWS8PIMgG8ycgF1OohmwMC8Jyuiv
+ sVpYAr274vgoc0ALsG1KrzzlGfkOad41ZkIg2uO43Ikmcy5049rsxeHuKN/RvROLJC3PcMR+IX/
+ nfERjpbWMZuVa/0xgxJwtR395f4TbZT3pfeoBDgKDLw0RQEn04xxNNwrYQFVOVsogUiK4nl8jyy
+ COdx3jYbdnLjdM9ZdmOfA/ugkMoAKFSKpGfTygSm6IzIMUSZQpDI48nLWAtLi2rIhFRgs5Ml96a
+ Kv3S1BR0BuKue4tNtgw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-28_05,2026-09-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 spamscore=0 phishscore=0 bulkscore=0 adultscore=0
+ priorityscore=1501 malwarescore=0 clxscore=1011 lowpriorityscore=0
+ impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
+ definitions=main-2609280078
 
-Thank for this patch series!
+The cgroup selftests lack a settings file, causing the kselftest runner
+to apply its default 45s timeout. The test_cpu binary now exceeds this
+limit, resulting in timeout failures that prevent the final test cases
+from reporting results:
 
-I'll send more reviews tomorrow, but in the meantime here are some
-answers:
+  not ok 2 selftests: cgroup: test_cpu # TIMEOUT 45 seconds
 
-On Mon, Sep 28, 2026 at 02:52:02PM +0800, Cai Xinchen wrote:
-> Thank you for review!
-> 
-> I will link the feature request
-> (https://github.com/landlock-lsm/linux/issues/11) in the v2 cover letter.
-> 
-> For https://github.com/landlock-lsm/linux/issues/18, the current
-> READ_METADATA cannot solve this problem, and I don't have a good idea for
-> now.
-> 
-> For path_* rename, I'd rather keep the inode_* names:
-> 
-> * There is precedent for the mismatch: the inode_getattr hook
->   upstream already takes a "const struct path *" (this series just
->   aligns the other metadata hooks with it).
-> 
-> * The path_* prefix has an established meaning in the LSM hook
->   interface: it denotes the pathname-based (TOMOYO/AppArmor-style)
->   hooks that are invoked at the VFS path level *before* the
->   corresponding inode_* hook, as a paired, duplicate check
->   serving a different class of LSMs.  For example, a chmod(2)
->   currently runs security_path_chmod() (fs/open.c, for TOMOYO and
->   AppArmor) and then, via notify_change(),
->   security_inode_setattr() (for SELinux, Smack and now Landlock);
->   vfs_mknod() similarly calls both security_path_mknod() and
->   security_inode_mknod().  Renaming inode_setattr to
->   path_setattr would put two path_-prefixed hooks with different
->   call contracts into the same syscall, and path_chown(path,
->   uid, gid) next to a path_setattr(path, attr) would read as a
->   redundant pair, even though they belong to different hook
->   families.  Landlock itself already uses the path_* family for
->   its real path-level hooks (e.g. path_truncate for the TRUNCATE
->   right), so mixing renamed inode hooks into that prefix would
->   also blur its own hook table.
+Test execution times:
+|Test                  | Duration             |
+|----------------------|--------------------  |
+|cpu.weight (×4)       | ~10s each            |
+|test_cpucg_stats      |  2s CPU time         |
+|test_cpucg_nice       |  2s CPU time         |
+|test_cpucg_max        |  1000/HZ seconds     |
+|test_cpucg_max_nested |  1000/HZ seconds     |
 
-I had the same though as Günther on this, but I'll leave that up to
-Paul.
+Total runtime: ~46s at HZ=1000, ~64s at HZ=100
 
-Regarding the BPF LSM use case, I don't think it would make a big
-difference.  Anyway, some BPF selftests need to be updated at the same
-time, which will also make the changes clear to the BPF folks.
+When executed independently, all nine test cases complete
+successfully (46.2s on a ppc64le HZ=1000 guest).
 
-> 
-> * If the consensus is that these hooks should be renamed, I think
->   that should be a standalone, tree-wide rename series (including
->   inode_getattr), so that BPF programs only break once instead of
->   twice.
+Introduce a settings file that increases the timeout to 120 seconds,
+providing sufficient margin above the HZ=100 worst-case scenario.
 
-As a general rule, please create bisectable patches (e.g. any patch must
-pass BPF and Landlock selftests; all dependent kernel code must build).
-But new tests still deserve their own patches.
+Signed-off-by: Vishal Chourasia <vishalc@linux.ibm.com>
+---
+ tools/testing/selftests/cgroup/settings | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 tools/testing/selftests/cgroup/settings
 
-> 
-> On 9/26/2026 4:27 PM, Günther Noack wrote:
-> > On Thu, Sep 24, 2026 at 06:48:19PM +0800, Cai Xinchen wrote:
-> > > This series adds two new Landlock filesystem access rights,
-> > > LANDLOCK_ACCESS_FS_READ_METADATA and LANDLOCK_ACCESS_FS_WRITE_METADATA,
-> > > which control access to file and directory metadata such as inode
-> > > attributes (mode, ownership, timestamps), extended attributes and POSIX
-> > > ACLs.  It picks up the work from the "landlock: add chmod and chown
-> > > support" series [1] and follows the coarse-grained grouping discussed in
-> > > that thread [2]: instead of separate chmod/chown rights, metadata
-> > > operations are grouped into one read and one write right.
-> > > 
-> > > Landlock evaluates access rights on a per-path basis, but the metadata
-> > > related LSM hooks (inode_getattr, inode_setattr, inode_setxattr,
-> > > inode_getxattr, inode_listxattr, inode_removexattr, inode_set_acl,
-> > > inode_get_acl, inode_remove_acl) only receive the dentry of the accessed
-> > > object.  Patches 1-7 therefore first pass struct path instead of dentry
-> > > through the metadata-related VFS helpers and LSM hooks.  This is a pure
-> > > refactoring with no behavior change, split so that every patch builds
-> > > and works on its own:
-> > > 
-> > >    1: notify_change() and its callers
-> > >    2: inode_setsecctx hook (must come before 3: the SELinux and Smack
-> > >       implementations call __vfs_setxattr_locked internally)
-> > >    3: xattr helpers, which also drops a redundant EVM xattr size sanity
-> > >       check whose vfs_getxattr() call only has a dentry and therefore
-> > >       cannot be migrated to the new path-based signature
-> > >    4: POSIX ACL helpers
-> > >    5: inode_setattr hook
-> > >    6: inode xattr hooks
-> > >    7: inode POSIX ACL hooks
-> > > 
-> > > Two deliberate scoping decisions for this refactor:
-> > > 
-> > > - The hooks consistently take struct path rather than struct file.  The
-> > >    VFS call sites involved (chmod(2), chown(2), utimensat(2), xattr(2)
-> > >    and ACL syscalls) operate on paths, and several of them (lstat(2),
-> > >    lchown(2), llistxattr(2), ...) have no struct file to begin with.
-> > > 
-> > > - struct inode_operations->setattr still receives (idmap, dentry, attr).
-> > >    Only the VFS boundary (notify_change()) and the LSM hook layer see the
-> > >    path, which keeps the refactor contained to fs/attr.c and the LSM
-> > >    infrastructure instead of touching every filesystem.
-> > > 
-> > > Patches 8-12 then implement the new rights, their tests, the sandboxer
-> > > sample and the documentation.  Semantics:
-> > > 
-> > > - READ_METADATA covers stat(2) and friends, getxattr(2) and friends,
-> > >    listxattr(2) and friends, and POSIX ACL reads.
-> > > - WRITE_METADATA covers chmod(2), chown(2), utimensat(2), setxattr(2),
-> > >    removexattr(2) and friends, and POSIX ACL set and remove.
-> > > - Only explicit metadata changes requested by user space are restricted.
-> > >    Implicit changes performed by the kernel (e.g. timestamp updates on
-> > >    write(2), size changes on truncate(2)) are not, and neither are
-> > >    chmod(2)/chown(2) calls that change nothing (e.g. chown(2) with
-> > >    (-1, -1), which never reaches the hook), matching the SELinux
-> > >    inode_setattr behavior.
-> > > - Kernel-internal accesses performed with override_creds() (e.g.
-> > >    overlayfs, cachefiles) and kernel threads without a Landlock domain
-> > >    (e.g. nfsd, ksmbd) are not restricted.
-> > > 
-> > > The Landlock ABI version is incremented from 11 to 12.
-> > > 
-> > > The series is based on linux-next commit 5c4d4169604b ("Add linux-next
-> > > specific files for 20260921").
-> > > 
-> > > Testing: each patch has been built for aarch64 (gcc, -Werror) and the
-> > > landlock selftests (445 tests, including the new ones) pass in QEMU on
-> > > aarch64; base_test reports ABI v12.
-> > > 
-> > > [1] https://lore.kernel.org/all/20220827111215.131442-1-xiujianfeng@huawei.com/
-> > > [2] https://lore.kernel.org/all/abc960a1-e66e-792e-6869-cfd201c29dbe@digikod.net/
-> > Thank you for sending this patch set!
-> > 
-> > Some meta-remarks at the beginning:
-> > 
-> > * You might want to link the bugtracker feature request:
-> >    https://github.com/landlock-lsm/linux/issues/11
-> > * In the final version, I think it's preferred to merge patches 8
-> >    (adding the access right enums) and 9 (adding the LSM hooks that use
-> >    them).  Having the feature as an atomic commit makes it harder to
-> >    accidentally mess it up during a backport, because you can't patch 8
-> >    without 9.
-> > * As Paul alluded to, the changes to the LSM hook interface and to the
-> >    existing callers in VFS are likely the hardest part of this patch
-> >    set.  Alexei from the BPF subsystem has also reiterated recently
-> >    that he wants BPF to be looped into such changes.  BPF hooks do not
-> >    give the same backwards compatibility guarantees as the syscall
-> >    layer, but there are existing users of LSM hooks specifically
-> >    through the BPF LSM.
-> > 
-> > * In https://github.com/landlock-lsm/linux/issues/18, we came across
-> >    statfs(), which returns file system meta-information based for the
-> >    file system that a given file belongs to.  I have weak confidence
-> >    that READ_METADATA would be the right access right to protect this
-> >    with, but it's a somewhat related operation.  Maybe you have some
-> >    thoughts on this?
-> > 
-> > More concrete questions:
-> > 
-> > * If a "inode" LSM hook gets a "path" argument now, should it be
-> >    renamed from "inode_..." to "path_..."?
-> > 
-> >    (Maybe the BPF people can chime in about to what extent that would
-> >    cause additional churn for BPF users, in a situation where they
-> >    anyway already need to make a change due to the changing function
-> >    signature?)
-> > 
-> > –Günther
-> 
+diff --git a/tools/testing/selftests/cgroup/settings b/tools/testing/selftests/cgroup/settings
+new file mode 100644
+index 000000000000..6091b45d226b
+--- /dev/null
++++ b/tools/testing/selftests/cgroup/settings
+@@ -0,0 +1 @@
++timeout=120
+-- 
+2.54.0
+
