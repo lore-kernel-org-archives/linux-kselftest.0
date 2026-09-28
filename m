@@ -1,37 +1,37 @@
-Received: from mta1.migadu.com (out-204.mta1.migadu.com [95.215.58.204])
+Received: from mta1.migadu.com (out-239.mta1.migadu.com [95.215.58.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07CF3148B4
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 02:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2583446A7
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 02:36:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790562723; cv=none; b=UEIr+K+YM/cRp8D3b+N8xZduhKQ2Kz08y+YGE+WetfzcoXVrrQjm6l8P8sHEpHKmIBKauEDAFcLdfKweZBqe7FaxTDuyhHjRQm2AEDJti37lrLWg8iWj0NETkUQILMODFfuwuYR9ATKzimDJ4B3i/hENBQxisWVRrz4pkSCmzx4=
+	t=1790562969; cv=none; b=hpS7Cbr3aPF85+wMYIs1hW9sj+TsHSt+TE8A9GB30lUSCkErdxFRUxOCko0C0i49IelFQyrK/Lbk1/2tcTSSogUlm6FNGQrMAJmPfL7vdL0aayR41aeo56UmubqdAEj5IqXwPq1a7sfv3xfVhxCKUslluR908TEUuhEH83insO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790562723; c=relaxed/simple;
-	bh=DW9brMfjxEZ4LdnlejE7w4LKans6SXlOOKLWOzSQBzA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QiikjbAZxE/ITJ2mEJfdC3Juhr8Un3iP8P7ZU2IWQ+HuNjZ3Q28q9+yE4+rgGmPqzH6dk6NMMYS9+0/x59TmFdlhLqQRWJGc2iLTE3uZJsX5Epx6ISRXKwnAPyylGuSk6/jqmm7O17UjyI2W8WsPrmZDsluIwuqYoqb5UhvuuLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=axZFeV5I; arc=none smtp.client-ip=95.215.58.204
+	s=arc-20240116; t=1790562969; c=relaxed/simple;
+	bh=OUtN1NPk1mRcfZkghFoTTbHusGeyv7h9M8UBOmmvCtc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=k8b386+wck2hNq5xvyyfbyBizbs9jJSjsg+5W19CAQp1S2VpMl0beSKLaVLS22swsszKa3BHx+kPJ0Cysg+J1A1hjD3BnfptXHWUrfYESKmOFaX1eG63ZU32hXpV9uUL7EOcTQZzNmKObUTic5BCT3wWp6FTS+1zU3GLfCT+nBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ExIenBAr; arc=none smtp.client-ip=95.215.58.239
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="axZFeV5I"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ExIenBAr"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=DW9brMfjxEZ4LdnlejE7w4LKans6SXlOOKLWOzSQBzA=;
+DKIM-Signature: a=rsa-sha256; bh=OUtN1NPk1mRcfZkghFoTTbHusGeyv7h9M8UBOmmvCtc=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790562719; v=1; x=1791167519;
- b=axZFeV5IamO0XSgeQqlAUuJbr7x1pK4QugEwW81NJdzqqtspTl0zVUTGIrbxFCiuxoL+24h1
- wr4cr3axku9eYKlJn9x25n/xpKtreiagPbAyl8ltQ+RLPcuBm4OKWywo4i2MeBE6STIA3qpJJBS
- 797UVxSNEodJvcbFBp0koLWY=
+ t=1790562964; v=1; x=1791167764;
+ b=ExIenBArV7FedfoeAA9QxeR4kIbQmTaySFLtdu8yio8xOiYmZ8QAsN71JpQ7saBgfEcZjTsR
+ PAX6x7qyfBTe5JcXlM1QWboqGU5Vzivon4lPuWUSfpKyBg7+3T3GZ3/oPlzBQiSaGzujPDSklR8
+ RvQm/Uc5V6uOwnK/PzOQar3M=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 84bfa35f4903e19b;
-	Mon, 28 Sep 2026 02:31:59 +0000
-X-Mizu-Trace-ID: 84bfa35f4903e19b
+Received: by smtp.migadu.com with ESMTPS id 9cace0c6bcb29ea3;
+	Mon, 28 Sep 2026 02:36:04 +0000
+X-Mizu-Trace-ID: 9cace0c6bcb29ea3
 X-Migadu-Flow: FLOW_OUT
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: netdev@vger.kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	stable+noautosel@kernel.org,
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -42,10 +42,12 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Tom Herbert <therbert@google.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v2 1/2] udp: fix auto-selected port colliding with an existing SO_REUSEPORT socket
-Date: Mon, 28 Sep 2026 10:31:41 +0800
-Message-ID: <20260928023145.301855-1-jiayuan.chen@linux.dev>
+Subject: [PATCH net-next v2 2/2] selftests/net: check auto-selected port with reuse options
+Date: Mon, 28 Sep 2026 10:31:42 +0800
+Message-ID: <20260928023145.301855-2-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260928023145.301855-1-jiayuan.chen@linux.dev>
+References: <20260928023145.301855-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,94 +56,134 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Observed with two independent servers in the same process:
+Use IP_LOCAL_PORT_RANGE to limit a socket to 8 ports, bind 8 sockets
+to port 0 and check they get 8 distinct ports and the 9th bind fails
+with EADDRINUSE. Run it for the four combinations of reuse options on
+the sockets:
 
-  fd1 = socket(AF_INET, SOCK_DGRAM, 0);
-  setsockopt(fd1, SOL_SOCKET, SO_REUSEPORT, ...);
-  bind(fd1, port 0);          /* got 40000 */
+  none                         (existing test)
+  SO_REUSEPORT
+  SO_REUSEADDR
+  SO_REUSEADDR + SO_REUSEPORT
 
-  fd2 = socket(AF_INET, SOCK_DGRAM, 0);
-  setsockopt(fd2, SOL_SOCKET, SO_REUSEPORT, ...);
-  bind(fd2, port 0);          /* got 40000 as well */
+TCP passes all four. Before the udp fix UDP only passes the first
+one: the scan hands out a port already taken by a socket with the
+same reuse options, so fewer than 8 distinct ports come back and the
+9th bind succeeds.
 
-Both sockets end up on the same port and join the same reuseport
-group, so each of them takes part of the other's datagrams. The same
-port sharing happens with SO_REUSEADDR, without the reuseport group.
+  # ./ip_local_port_range.sh
 
-udp_lib_lport_inuse() keeps the reuse rules when it scans for a free
-port: a socket with SO_REUSEADDR set, or one with SO_REUSEPORT and
-the same uid, is not a conflict, so its port is never marked in the
-bitmap and the scan can hand it out again. Those rules only make
-sense when the user asks for a specific port. bind(0) wants a free
-port and has no way to know whose port it lands on.
+Before:
 
-TCP already does this: inet_csk_find_open_port() passes relax=false
-and reuseport_ok=false, so the scan treats every port in use as a
-conflict whatever options the sockets have. Commit aacd9289af8b
-("tcp: bind() use stronger condition for bind_conflict") did it for
-SO_REUSEADDR and commit 0643ee4fd1b7 ("inet: Fix get port to handle
-zero port number with soreuseport set") for SO_REUSEPORT.
+  ok 13 ip_local_port_range.ip4_udp.exhaust_8_port_range
+  not ok 14 ip_local_port_range.ip4_udp.exhaust_8_port_range_reuseport
+  not ok 15 ip_local_port_range.ip4_udp.exhaust_8_port_range_reuseaddr
+  not ok 16 ip_local_port_range.ip4_udp.exhaust_8_port_range_reuseaddr_reuseport
+  ok 49 ip_local_port_range.ip6_udp.exhaust_8_port_range
+  not ok 50 ip_local_port_range.ip6_udp.exhaust_8_port_range_reuseport
+  not ok 51 ip_local_port_range.ip6_udp.exhaust_8_port_range_reuseaddr
+  not ok 52 ip_local_port_range.ip6_udp.exhaust_8_port_range_reuseaddr_reuseport
 
-Do the same for UDP: ignore both options during a scan, keep them
-for an explicit port.
+After:
 
-This changes bind(0) for SO_REUSEADDR sockets once the port range is
-full: it used to share a port and now fails with EADDRINUSE, like
-TCP. Sharing a port on purpose when the range is full is a feature,
-TCP has net.ipv4.ip_autobind_reuse for it, off by default. UDP can
-get the same knob later, this patch only fixes the scan.
+  ok 13 ip_local_port_range.ip4_udp.exhaust_8_port_range
+  ok 14 ip_local_port_range.ip4_udp.exhaust_8_port_range_reuseport
+  ok 15 ip_local_port_range.ip4_udp.exhaust_8_port_range_reuseaddr
+  ok 16 ip_local_port_range.ip4_udp.exhaust_8_port_range_reuseaddr_reuseport
+  ok 49 ip_local_port_range.ip6_udp.exhaust_8_port_range
+  ok 50 ip_local_port_range.ip6_udp.exhaust_8_port_range_reuseport
+  ok 51 ip_local_port_range.ip6_udp.exhaust_8_port_range_reuseaddr
+  ok 52 ip_local_port_range.ip6_udp.exhaust_8_port_range_reuseaddr_reuseport
 
-Fixes: ba418fa357a7 ("soreuseport: UDP/IPv4 implementation")
-Cc: stable+noautosel@kernel.org # bind() behaviour change
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
-v1 -> v2: also fix reuseaddr suggested by Eric.
-v1: https://lore.kernel.org/netdev/CANn89iKHH1s+kXqBXVKmDxmELU0fL-SwU4N8qHRUJjaNECMt_g@mail.gmail.com/
----
- net/ipv4/udp.c | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+ .../selftests/net/ip_local_port_range.c       | 52 ++++++++++++++++++-
+ 1 file changed, 51 insertions(+), 1 deletion(-)
 
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index b3887c42adfd..cc7f8a4e5f2a 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -139,25 +139,26 @@ static int udp_lib_lport_inuse(struct net *net, __u16 num,
- 	kuid_t uid = sk_uid(sk);
- 	struct sock *sk2;
- 
-+	/* With @bitmap we are scanning for a free port: every port in use
-+	 * is marked, whatever reuse options the sockets have. Without it
-+	 * we are checking a specific port and honour the reuse options.
-+	 */
- 	sk_for_each(sk2, &hslot->head) {
- 		if (net_eq(sock_net(sk2), net) &&
- 		    sk2 != sk &&
- 		    (bitmap || udp_sk(sk2)->udp_port_hash == num) &&
--		    (!sk2->sk_reuse || !sk->sk_reuse) &&
-+		    (bitmap || !sk2->sk_reuse || !sk->sk_reuse) &&
- 		    (!sk2->sk_bound_dev_if || !sk->sk_bound_dev_if ||
- 		     sk2->sk_bound_dev_if == sk->sk_bound_dev_if) &&
- 		    inet_rcv_saddr_equal(sk, sk2, true)) {
--			if (sk2->sk_reuseport && sk->sk_reuseport &&
--			    !rcu_access_pointer(sk->sk_reuseport_cb) &&
--			    uid_eq(uid, sk_uid(sk2))) {
--				if (!bitmap)
-+			if (!bitmap) {
-+				if (sk2->sk_reuseport && sk->sk_reuseport &&
-+				    !rcu_access_pointer(sk->sk_reuseport_cb) &&
-+				    uid_eq(uid, sk_uid(sk2)))
- 					return 0;
--			} else {
--				if (!bitmap)
--					return 1;
--				__set_bit(udp_sk(sk2)->udp_port_hash >> log,
--					  bitmap);
-+				return 1;
- 			}
-+			__set_bit(udp_sk(sk2)->udp_port_hash >> log, bitmap);
- 		}
+diff --git a/tools/testing/selftests/net/ip_local_port_range.c b/tools/testing/selftests/net/ip_local_port_range.c
+index e6834a6cfc8f..3d32b33cba46 100644
+--- a/tools/testing/selftests/net/ip_local_port_range.c
++++ b/tools/testing/selftests/net/ip_local_port_range.c
+@@ -301,7 +301,27 @@ TEST_F(ip_local_port_range, single_port_range)
  	}
- 	return 0;
+ }
+ 
+-TEST_F(ip_local_port_range, exhaust_8_port_range)
++#define REUSEADDR	0x1
++#define REUSEPORT	0x2
++
++static int set_reuse_opts(int fd, unsigned int flags)
++{
++	int one = 1;
++
++	if ((flags & REUSEADDR) &&
++	    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one)))
++		return -1;
++
++	if ((flags & REUSEPORT) &&
++	    setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &one, sizeof(one)))
++		return -1;
++
++	return 0;
++}
++
++static void exhaust_8_port_range(struct __test_metadata *_metadata,
++				 const FIXTURE_VARIANT(ip_local_port_range) *variant,
++				 unsigned int flags)
+ {
+ 	__u8 port_set = 0;
+ 	int i, fd, err;
+@@ -313,6 +333,9 @@ TEST_F(ip_local_port_range, exhaust_8_port_range)
+ 		fd = socket(variant->so_domain, variant->so_type, variant->so_protocol);
+ 		ASSERT_GE(fd, 0) TH_LOG("socket failed");
+ 
++		err = set_reuse_opts(fd, flags);
++		ASSERT_TRUE(!err) TH_LOG("setsockopt(SO_REUSE*) failed");
++
+ 		range = pack_port_range(40000, 40007);
+ 		err = setsockopt(fd, SOL_IP, IP_LOCAL_PORT_RANGE, &range, sizeof(range));
+ 		ASSERT_TRUE(!err) TH_LOG("setsockopt(IP_LOCAL_PORT_RANGE) failed");
+@@ -335,6 +358,9 @@ TEST_F(ip_local_port_range, exhaust_8_port_range)
+ 	fd = socket(variant->so_domain, variant->so_type, variant->so_protocol);
+ 	ASSERT_GE(fd, 0) TH_LOG("socket failed");
+ 
++	err = set_reuse_opts(fd, flags);
++	ASSERT_TRUE(!err) TH_LOG("setsockopt(SO_REUSE*) failed");
++
+ 	range = pack_port_range(40000, 40007);
+ 	err = setsockopt(fd, SOL_IP, IP_LOCAL_PORT_RANGE, &range, sizeof(range));
+ 	ASSERT_TRUE(!err) TH_LOG("setsockopt(IP_LOCAL_PORT_RANGE) failed");
+@@ -352,6 +378,30 @@ TEST_F(ip_local_port_range, exhaust_8_port_range)
+ 	}
+ }
+ 
++TEST_F(ip_local_port_range, exhaust_8_port_range)
++{
++	exhaust_8_port_range(_metadata, variant, 0);
++}
++
++/* Auto-selected port must not land on a port already taken by another
++ * socket, whatever reuse options both of them have, so all 8 sockets
++ * must get distinct ports.
++ */
++TEST_F(ip_local_port_range, exhaust_8_port_range_reuseport)
++{
++	exhaust_8_port_range(_metadata, variant, REUSEPORT);
++}
++
++TEST_F(ip_local_port_range, exhaust_8_port_range_reuseaddr)
++{
++	exhaust_8_port_range(_metadata, variant, REUSEADDR);
++}
++
++TEST_F(ip_local_port_range, exhaust_8_port_range_reuseaddr_reuseport)
++{
++	exhaust_8_port_range(_metadata, variant, REUSEADDR | REUSEPORT);
++}
++
+ TEST_F(ip_local_port_range, late_bind)
+ {
+ 	union {
 -- 
 2.43.0
 
