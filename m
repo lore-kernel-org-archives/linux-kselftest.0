@@ -1,65 +1,64 @@
-Received: from mail-dl2-f41.google.com (mail-dl2-f41.google.com [74.125.229.169])
+Received: from mail-dl2-f43.google.com (mail-dl2-f43.google.com [74.125.229.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90123315D32
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 04:34:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5AD355F49
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 04:34:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790570079; cv=none; b=P1Ze/s7PrA1qAHY+fjGYGcctmwVwTiN6VqLZv+ToUNMKsVgc8za017f47MPOXV3/lp9EQVTfDJuGy61mTz0bu2tBa2GJQKUkLv0V2VigPoOQ/O7D40PXdPnlcfr+GEb3PACw4/Y+6p8n/xkFqoPxYtgLV9M8yvP2flCl+rXeKFM=
+	t=1790570096; cv=none; b=rwRXQW9GJtWaExuzeOENNgIyaw4w9GT1LUOMVcY5rHQMPg9vIsvL710LOD2B3RyJNo80CD2qPmNA+Ohv/LFSdeLzq8cW6OhH8h73ltZywFhHpVIRsP+EkWS4Z7AUm/zXa0fiPzS2V9puCXMe4cjObzgJ4zccyks7zugVkLrLSiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790570079; c=relaxed/simple;
-	bh=EfkQyGvJKcJIlERuYYl99LlLoocWM/vzIQceRWFC7Tc=;
+	s=arc-20240116; t=1790570096; c=relaxed/simple;
+	bh=eBMgFXdaXRWRqMM9g40eqrVjtsqHy7m4XXDCRXlFFk8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=j+ddaGwr7JKE9pnzxBAgnGBU3JvzcIW8NTDEiXI7l5tBDg6oRBGEhSzDpmEQW2FluZC1ECzBvF7LvSpAjqEi4ZGvFEs+NO58hopACxALpNNILxzx5dtBOugtG0u4j5fILrI8cPNnzOa6ZKH1I4Erpdfg8oBRvdNgUZVVt6n7DQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SSGttAIe; arc=none smtp.client-ip=74.125.229.169
+	 MIME-Version; b=adbysNyRm/hoKbcq7dYM0znPTMbyLMWeHw61lXmpk8HZ3jSebNwJiM3HBnecoVEqLUPILeUgnVMFWNWqvKLP723VFBkxojxfbysL8SSFTKSyOthdefR9Cg0Moe/NseoJk28gi7RZCfOEkUaFst2aF5Wu8K4acxSnxI0L2MQ8LhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mQKqcpYd; arc=none smtp.client-ip=74.125.229.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SSGttAIe"
-Received: by mail-dl2-f41.google.com with SMTP id a92af1059eb24-148b5c829e8so709193c88.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 21:34:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mQKqcpYd"
+Received: by mail-dl2-f43.google.com with SMTP id a92af1059eb24-144f7915355so2160408c88.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 21:34:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790570078; x=1791174878; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790570094; x=1791174894; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Td911GW/RuVeylqJZh+mg3PMQ4kx9/FZxzP7fXWcQL4=;
-        b=SSGttAIeCU47ECAoDOt7zXP3utQfxuIKuhFJ9cs8NdO4mPYdpWs5cLj7wT5bw5tR5R
-         PahxToIkbfRi9AJ8Zkj/fDrh7NQIBfDFeulZjXaqsT/PkqcDPq+c9S00sgA9qAXKsdf7
-         D7kcir+PRc35UjwTOHrifaPA309GScZ01saq8FBg8doEiZ8nQYjvPMH09tZYsO/BGzb9
-         JABjjcghXUn9Laugp0E3QLe/MEP+n/CSA/vaBia0AVkm/H4TZ8dKLJymv9FBYmxn83hu
-         6r/ATSUgQuVut3zGvpLJlkxZFbEkkSWrGNTorNJCh3ey3SZutP8LVdRIYuraT2JXbM+J
-         zDjA==
+        bh=LrXsda7Q/wV7+l2k+sGQxx8wXojvBKGw7M+uJmFtdYU=;
+        b=mQKqcpYdIW+H7+SHclXaRuyAwdjXTaFT8/pmja26aEwgaeC6sxs2auLP77RhxfqLbH
+         gZbfqip8JhiZvtdJ6VRyftMZrZzfDbo2j1tLhXHE3j+QpG9fCTE+HDFJUTWI+rXdx+AA
+         U4oNkxIzwMiKN19DKhLovBHid7FS25onv5iZ4DEASdmCGTQKPsbEG4VSWuYdYwTrZ/zD
+         8GmYZfkvXgFVdbEDV+KPT74cC7fW2zrM1/8hqTV+6NdMVh36uia92vtRdNl1oo9NWU+6
+         ul3yJkKsEnyZbOIFtJiP8momqiq5Add+7TXwJmhoRT6ePZS1SolLLeF6JzcwGNvDY8DY
+         lGIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790570078; x=1791174878;
+        d=1e100.net; s=20260707; t=1790570094; x=1791174894;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Td911GW/RuVeylqJZh+mg3PMQ4kx9/FZxzP7fXWcQL4=;
-        b=pYnlYSGN9XC1pmtJLwAfMmwvbZ1myclgKacmZ68sHA9V34TZvLX6GZwqjBdNnILY+7
-         qitR1GTzHFuU1pbjZxs84tIN5HJCPxEzXBq4pvGfShK915qYWUhLcioob3xZWfHMRptH
-         seP18wu4bZa5QOGfBC+dmjV6Zhsg9jo3Vks4byF8YDQbl5uEx2XmtFYan6brxHozAuI9
-         bYy/ks3cDz/6BsdrETo7oFPp9oqiAqps95+dx3Jtn+kPLf9gq31Hj3CVLetoUsEzxlx7
-         fQhF69XUotyLhjxwEkDx1J8J1pxZTXjGKG2VoeqJTDy/FQ1AUcMqJKpD5trKnTW1fmBE
-         CYPg==
-X-Forwarded-Encrypted: i=1; AKwUvBy+/w1OScCcDgnB4eqM8jz0Xz8Iqr1dQbuLdrWbh83042D82+fmNN5k0KZK8/cufBRAvGH8k+J7SG92F+hNb04=@vger.kernel.org
-X-Gm-Message-State: AFuF++nGa0FLcdhDe9KwGfHK9/2QUUEoMunAUaeuwUIqrQNRUpbjQKWv
-	bmJmiEnehSvSBpm6xee/8WvhBVG6RQ/dA86EtLzTnl/qq7gmUZ8KNxWd
-X-Gm-Gg: AYBFou2aZNkNH9YV/xfJ+BzsAwxH+zFXgfcx6UaZInqWA/2bnPidW4xiixzebGi8spq
-	1qVLM9cQ8zbA8HCZ1sC4pb93aB57IH6JgQBlAWy25sTfHA2CA0YNNsuDAg8J4tCNXaSEPpgUqmn
-	q/9w7uPCm5Kf33Dm07E/ARQJH29IEQh1S43o57aKSJFOIuwsrQRCNWWRgO6hiBamL74BY8BWWdw
-	TACirZ0VQ7xWSHtqxr9VxbtJ7BSmljK72QcBhB5JMviI7l5wAlJyPP6nrYxzmwZ78adPqYFZR+m
-	UH+T5AKcOfd/jce6GXqf0EWZF1v9qcDGfBYV6EEqF++kx+ILidwMbUAsHawh1050+mnUvx/QxPq
-	vRr3f500ZJi+Qd8tu9pBvuPra/1yNrrzBOZ0iIRMImz9N9ET3Qo66i48Kefh5FyD/UmzWNluvJz
-	BrcwGfUqdtD73y4AijMYpQzDESWXO9esS2bjmxqHVmRcEggdKfHyC+Ok9BjHhhV04tyW94nWy49
-	6+ogpYFY9NV/rh2EuvtL+6BvSk3kYXj1RvKVthf26ek9RHertMFV9o5huCN0n7oi5dwCr0Ndbdj
-	9fu4Lv8=
-X-Received: by 2002:a05:701b:4204:10b0:139:fb6c:b37c with SMTP id a92af1059eb24-146ce777babmr9343617c88.21.1790570076591;
-        Sun, 27 Sep 2026 21:34:36 -0700 (PDT)
+        bh=LrXsda7Q/wV7+l2k+sGQxx8wXojvBKGw7M+uJmFtdYU=;
+        b=pq6XDLfZurx4awgdvi3/2hsk4FE6M7Hb5CgEtyKAeIYWpVOzorKW6L1aqLZwZHK6w6
+         AfkD+aicig00NdLVU76jTqEJbHkYQzm+ub+T8S9yMT484E7AIGpabr56M3AIbmpIdj0z
+         XynNOKbOVWBUlCx3LZi1Nftx8gvoy+SsFdamThb8iJEJuMJpWp2eAoNdcbJKARNKlbf+
+         i/r9PnKMiNTko9BRp6xV0vKPnaPH8bAC9+2dlb9uTFYOqipwAdHFsI2GQmDNlsA4kw7T
+         bHSi2jsOBXE71MhZfN1v1NEKeN+dWbc3BrsUKJH88OV0hpG1MZ6Lb6fByDM7XL7imh6J
+         tdzQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzh8tLKscmq8P+9n8cuKlq+aKVcE+Dy0pFGObWGk8c7D1X2Wo80qbA4Wyd4pL+BXbj49EP6jh1X4LD0QejNs1w=@vger.kernel.org
+X-Gm-Message-State: AFuF++nxNpTDloFc5Mplrs4/c6SvMJpfRSUqw8VvRk2yowHF1k5qcYUm
+	OSmp325qCLO2l4SzSOzGSZynVuM2sMue0jl7MvGevsKrVfSU6OkbBq7S
+X-Gm-Gg: AYBFou3i80WfsS8BXPfbtgGpi+NA3D5tkqgURbnWzyRHlP3ueL90E/mY9dsbKf/uzgz
+	R0lGaPfaW7Sr3E+ONYw4mndP39bqhQbNhJGrus4Lp40/fFQvT/ukcIR02xaOqSR6xktdjRVb2Ab
+	NOMtSNL5pe49IcmlkIQP3ytIbxb7qMpurUU5Uqf/F93n3YqkBHz6H6E/gZcPtv0HsQRzWiPP0g9
+	OYNWU0D1EJWeGt159osIQxdEXafbL3V5c6bSGUUcmRAov2sHyg2gtMumeYA7Yite1ItIyFzjIwU
+	/wXB5EUysGQ9v704bDlj60smIo7rArDoCpIWcM0b7ZYQ/HqeEDKrhCUj3+l3fnD/WvGCU2FhcRy
+	PWx+P/rP2Aig0wRMFIhoxEa6mJt26gaacFmehmcV9H2wtM+1Ou7sw2rABrCI9ZpNA+T5ZGQOQqC
+	7scTYZ3uyp2CQgmHhYDSdD/IlpBmFNGWrn/r5IZekLVUv3OQsx+BFzLF4UKQKnbwDKD7jcSNZ0F
+	SeZFduoWtnAi3H3wmgThLEfyeFIMJwiHtlpiyG0cSTfSMWpHgzNnT75s2zTgX40+1rltnGo
+X-Received: by 2002:a05:701b:4589:b0:143:26f9:becb with SMTP id a92af1059eb24-146d049577cmr8459429c88.35.1790570094265;
+        Sun, 27 Sep 2026 21:34:54 -0700 (PDT)
 Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:571a:2a:d409:bce3])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-145adbcd1bcsm27921045c88.14.2026.09.27.21.34.31
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-145adbcd1bcsm27921045c88.14.2026.09.27.21.34.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Sep 2026 21:34:36 -0700 (PDT)
+        Sun, 27 Sep 2026 21:34:53 -0700 (PDT)
 From: "Hemendra M. Naik" <hemendranaik@gmail.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -75,9 +74,9 @@ Cc: davem@davemloft.net,
 	vishy0777@gmail.com,
 	tahiliani@nitk.edu.in,
 	"Hemendra M. Naik" <hemendranaik@gmail.com>
-Subject: [PATCH net-next v9 2/3] selftests: tc-testing: add fq_pie per-flow class stats test
-Date: Mon, 28 Sep 2026 10:03:57 +0530
-Message-Id: <20260928043358.6866-3-hemendranaik@gmail.com>
+Subject: [PATCH net-next v9 3/3] net/sched: pie: correct tc_pie_xstats field documentation
+Date: Mon, 28 Sep 2026 10:03:58 +0530
+Message-Id: <20260928043358.6866-4-hemendranaik@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260928043358.6866-1-hemendranaik@gmail.com>
 References: <20260928043358.6866-1-hemendranaik@gmail.com>
@@ -89,58 +88,39 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add tc-testing case 83c0: build a TBF + fq_pie hierarchy on $DUMMY, push
-traffic through it with ping, and verify that 'tc -s class show' reports
-an fq_pie class.
+The comments describing struct tc_pie_xstats do not match the values
+exported by the kernel.
 
-The per-flow counters themselves (prob, delay, deficit) are printed with
-the companion iproute2 change, "tc: fq_pie: add support for printing
-per-flow PIE statistics"
+Update the delay field comment to microseconds (PSCHED_TICKS2NS() /
+NSEC_PER_USEC). Update avg_dq_rate to bytes/second (avg_dq_rate *
+PSCHED_TICKS_PER_SEC >> PIE_SCALE).
+
+Documentation-only; no UAPI layout or runtime change. Touch
+include/uapi/linux/pkt_sched.h only
 
 Signed-off-by: Hemendra M. Naik <hemendranaik@gmail.com>
 Signed-off-by: Vishal Kamath <vishy0777@gmail.com>
 Signed-off-by: Mohit P. Tahiliani <tahiliani@nitk.edu.in>
 ---
- .../tc-testing/tc-tests/qdiscs/fq_pie.json    | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ include/uapi/linux/pkt_sched.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-index 229fe1bf4a90..15b2667285eb 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-@@ -40,5 +40,32 @@
-         "matchPattern": "qdisc fq_pie 1: root refcnt [0-9]+ limit 1p",
-         "matchCount": "1",
-         "teardown": ["$TC qdisc del dev $DEV1 handle 1: root"]
-+    },
-+    {
-+        "id": "83c0",
-+        "name": "FQ-PIE class stats accessible via tc class show",
-+        "category": [
-+            "qdisc",
-+            "fq_pie"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link set dev $DUMMY up || true",
-+            "$IP addr add 10.10.11.10/24 dev $DUMMY || true",
-+            "$TC qdisc add dev $DUMMY root handle 1: tbf rate 8bit burst 100b latency 100ms",
-+            "$TC qdisc add dev $DUMMY parent 1:1 handle 2: fq_pie limit 100 flows 1",
-+            "ping -c 50 -i 0.001 -W 0.01 -s 56 10.10.11.11 -I $DUMMY > /dev/null 2>&1 || true"
-+        ],
-+        "cmdUnderTest": "$TC -s class show dev $DUMMY",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC -s class show dev $DUMMY",
-+        "matchPattern": "class fq_pie 2:[0-9]+ .*prob .*delay .*deficit",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP addr del 10.10.11.10/24 dev $DUMMY || true"
-+        ]
-     }
- ]
+diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
+index fef848eaaab2..445a041cd103 100644
+--- a/include/uapi/linux/pkt_sched.h
++++ b/include/uapi/linux/pkt_sched.h
+@@ -920,9 +920,9 @@ enum {
+ 
+ struct tc_pie_xstats {
+ 	__u64 prob;			/* current probability */
+-	__u32 delay;			/* current delay in ms */
++	__u32 delay;			/* current delay in microseconds */
+ 	__u32 avg_dq_rate;		/* current average dq_rate in
+-					 * bits/pie_time
++					 * bytes/second
+ 					 */
+ 	__u32 dq_rate_estimating;	/* is avg_dq_rate being calculated? */
+ 	__u32 packets_in;		/* total number of packets enqueued */
 -- 
 2.34.1
 
