@@ -1,119 +1,212 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-69.mta0.migadu.com [91.218.175.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BC73537C8
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 06:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52C963909AE
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 06:51:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790578269; cv=none; b=g6+mCqsdidowH5TefeVgWDrBcPmSXtS7ytOpfjSJn9GWnuwaVO+1cPQ+gXv5+xTzSosumKjo2aoJJV9A18fZZgQkAbid2x/h1IFk0VOUSrPI+sBHl2psAOxkWJuIJGxbr4yJudGBVGKBarzH+rHyrleP0FbI9E39VaQiNQpzAk0=
+	t=1790578297; cv=none; b=Q3GexIfMO3UyWCSqldH7Lr2lPqKMDuvuIoOcxWe4a0KdCLXC/0yJLJBu7JeiyVm+dsY7cBNOZZwvbiEQ2kxwA5ARCNjiDoO4/oQceRDfii59nQXabNwUTG39RQwDafumr9oAAbzzjppndAlzCF8OMyuI8eGU0SQgWppxveXxPxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790578269; c=relaxed/simple;
-	bh=eIKla4S6a3D0MHGwhrlPCSrXWKbvb2Ko4TtW5GQrom8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ShzO60KVPMpyNA7qApR/zoxD6N6CQLxmLRJtz/zR6iQfEiPgHB9qBwVKKroWEy62B2Yxg5dau1TZNHnwPU7b3q6Oo0iPfYp05dVHNdn7YfqydaAajTsmgm/qBDbhv2NXzOEtGpgb99xXv4a1+CO1swfv6PdfuJ05+5+6NmSyl58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jRahg4cA; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790578297; c=relaxed/simple;
+	bh=S65Su3u6l3QjEEjqlT1UaR7HWq+bwOyoeYIpkTcHUUM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IKIgHnp+TwhX1ZvoBPV7vd4P1I/tuAt08Q1SYWL3XQpDWw5SC/9avD1nYU8Zw+TLKWU26FqSX6yb7gAYC43/jtBql6THSwS4vfInx8wHL+YIysckjLg/ql5RbeI0WBKYaph8ki8GuiWHIj/EF/XpU9C47Mb8lYVozr6vCeG9lFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xDVvP07g; arc=none smtp.client-ip=91.218.175.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jRahg4cA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73F361F008A0
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 06:51:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790578268;
-	bh=s5UI4Wy+eGiErrBzR7b2VedGpOFJDsN75qbhAxc0yzs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=jRahg4cAxN6Tle2r15oJe/vmxLHt/LqsTmTxt34l9F+NJ+DReohvk6pR5vCHz2B3O
-	 pcJWUAQ6QH4Lp0CuwBlUfYDuo8LRITlBQkrUs+FWRkmUazrwaGqVihIh4IqyqQnhho
-	 SzyMTgwzEgMUZNVh1F/Zj0azGL+N+c5Ip34weRdyBiQruy5eAGdfDQpOqcJy0xC9If
-	 XninYxyuXj034C3GWnRU/6CjCPxeYVDzZ7UFgT6+ITXDEVEQGj43lpS/oBRFluKgN6
-	 GcObbZtLOxjCr5AeIQf/biJ0/q1/t08Vi+9JBBBQYwnZtkEnOC4gB+89RwY77H8Rzi
-	 ckorlts8LfjXQ==
-Received: by mail-qk2-f39.google.com with SMTP id d75a77b69052e-5332bdd8296so27680861cf.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 23:51:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvByJGJcxJrf+t6zBOzIqGZ5/cQ6cr+RGaW+ywxWovyqjZsaHP9HeE55sTCkrIqE6GLfSmlV1L2n+67CG+lHn1kU=@vger.kernel.org
-X-Gm-Message-State: AFuF++kivWXKMF4cP3AjENk7336zRGeaEk6Ergy7F0VcYtKaoq1vxzF1
-	OR+HXAhT9sGvQzR2bkaVfzB9DkDlaQ4VPZzalfryyNKEbv544iVOQwxk26xSYQpj31Ix6GNVEvl
-	an8zsKxYkv10vsWzOjKavZaU51RaQYIA=
-X-Received: by 2002:a05:620a:6486:b0:93c:6925:dfeb with SMTP id
- af79cd13be357-93c6925e8a2mr834739185a.56.1790578267654; Sun, 27 Sep 2026
- 23:51:07 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xDVvP07g"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=S65Su3u6l3QjEEjqlT1UaR7HWq+bwOyoeYIpkTcHUUM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790578292; v=1; x=1791183092;
+ b=xDVvP07gNn6/KBANVOoN54dJAHWMkY+FFkIw296SJI4pdFGpMpgsjQpkBjiRBkLpELPQvao8
+ NhrnifP03WvU89KCAH4edARDSqkRu49Nf3qG7bTqhxDTJh/D3HDW7BcWlFCYdNHKPTanbWui2mb
+ ltUdaa0Ov+1XZrjs3zBfwpIU=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id b44e6e57b2fd478e;
+	Mon, 28 Sep 2026 06:51:32 +0000
+X-Mizu-Trace-ID: b44e6e57b2fd478e
+X-Migadu-Flow: FLOW_OUT
+Date: Mon, 28 Sep 2026 14:51:26 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: netdev-bot+sashiko@kernel.org
+Cc: andrea.mayer@uniroma2.it, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+	shuah@kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	liuhangbin@kylinos.cn
+Subject: Re: [PATCH net-next 4/5] selftest: seg6: add explicit cleanup for
+ SRv6 End PSP test
+Message-ID: <aroOXOzCzYjEQKCV@fedora>
+References: <20260922-srv6_flavors_endx-v1-4-4d01c05c47b7@kylinos.cn>
+ <179025107951.2160803.7004145160447009717@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260928063724.24008-1-hui.zhu@linux.dev>
-In-Reply-To: <20260928063724.24008-1-hui.zhu@linux.dev>
-From: Barry Song <baohua@kernel.org>
-Date: Mon, 28 Sep 2026 14:50:55 +0800
-X-Gmail-Original-Message-ID: <CAGsJ_4wrWdw+4B10K3J+sDCSjVoBs2=LtObb6MKehuYsx9pXMg@mail.gmail.com>
-X-Gm-Features: AclHuK-c7GpN5AyOOlaUnzGeJcdZoBH-1EyfOLTse_68UQXS73MXqF_7DQKjthA
-Message-ID: <CAGsJ_4wrWdw+4B10K3J+sDCSjVoBs2=LtObb6MKehuYsx9pXMg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Add bpf_proactive_reclaim test
-To: Hui Zhu <hui.zhu@linux.dev>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
-	David Hildenbrand <david@kernel.org>, Geliang Tang <geliang@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
-	Hui Zhu <zhuhui@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179025107951.2160803.7004145160447009717@kernel.org>
 
-On Mon, Sep 28, 2026 at 2:37=E2=80=AFPM Hui Zhu <hui.zhu@linux.dev> wrote:
->
-> From: Hui Zhu <zhuhui@kylinos.cn>
->
-> bpf_proactive_reclaim() performs one bounded reclaim pass per call and,
-> unlike a write to memory.reclaim, does not retry until the goal is
-> reached.
->
-> Charge 32 MiB of page cache to a cgroup, ask for all of it in one call,
-> and check that the result is positive but well below the request: one
-> pass is capped at MEMCG_CHARGE_BATCH pages, far short of 32 MiB on both
-> 4K and 64K page kernels.
->
-> The test deliberately covers only the kfunc itself. A full example of
-> the intended asynchronous use, where a BPF program watches one cgroup's
-> workingset refaults and reclaims another one from bpf_wq callbacks, is
-> maintained out of tree at [1], released under GPLv2.
->
-> Add CONFIG_MEMCG to the config fragment, without which mm/bpf_memcontrol.=
-c
-> is not built at all.
->
-> [1] https://github.com/teawater/memcg-async-reclaim
->
-> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
-> ---
-[...]
-> +
-> +       /*
-> +        * Charge FILE_SIZE of page cache to the cgroup. Reading rather t=
-han
-> +        * writing keeps the pages clean, so reclaim does not have to sta=
-rt
-> +        * writeback before it can evict them.
-> +        */
-> +       if (!ASSERT_OK(ftruncate(data_fd, FILE_SIZE), "ftruncate"))
-> +               goto out;
-> +       for (off =3D 0; off < (off_t)FILE_SIZE; off +=3D sizeof(buf))
-> +               if (!ASSERT_GT(read(data_fd, buf, sizeof(buf)), 0, "read"=
-))
-> +                       goto out;
-> +
+On Thu, Sep 24, 2026 at 11:57:59AM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider.
+> 
+> Critical: 0 � High: 0 � Medium: 1 � Low: 0
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Medium] Asymmetric teardown: `cleanup_rt_policy_ipv6()` deletes
+>   localsid routes it never created.
 
-In case we might map file holes to the zero PFN someday (not sure when),
-this wouldn't necessarily give us page cache. So maybe write + fsync is
-more future-proof? In that case, you could also drop the two lines of
-comments.
+Ack, I will not remove the End localsid routes.
 
-Best Regards
-Barry
+Thanks
+Hangbin
+> 
+> --
+> 
+> selftest: seg6: add explicit cleanup for SRv6 End PSP test
+> 
+> This adds cleanup_rt_policy_ipv6() and cleanup_end_flv_psp(), called at the
+> end of host_srv6_end_flv_psp_tests(), to tear down the policy and localsid
+> state installed for the PSP test.  It also moves the host neighbour proxy
+> entries from __setup_rt_policy() into the common setup().
+> 
+> > diff --git a/tools/testing/selftests/net/srv6_end_flavors_test.sh b/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> > index 56a1c5f865a77..52731983b4cc9 100755
+> > --- a/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> > +++ b/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> 
+> [ ... ]
+> 
+> > @@ -576,6 +572,56 @@ setup_rt_policy_ipv6()
+> >  	__setup_rt_policy "$1" "$2" "$3"
+> >  }
+> >  
+> > +cleanup_rt_policy_ipv6()
+> > +{
+> [ ... ]
+> > +	for n in ${policy_rts}; do
+> > +		node="$(__get_srv6_rtcfg_id "${n}")"
+> > +		op_type="$(__get_srv6_rtcfg_op "${n}")"
+> > +		rt_nsname="$(get_rtname "${node}")"
+> > +
+> > +		case "${op_type}" in
+> > +		"noflv")
+> > +			function="${END_FUNC}"
+> > +			;;
+> 
+> [Severity: Medium]
+> Does the "noflv" case here delete a SID that the policy helper never
+> created?
+> 
+> On the add side, __setup_rt_policy() only installs the SID if it is not
+> already present:
+> 
+> 	fullsid="${LOCATOR_SERVICE}:${node}::${function}"
+> 
+> 	# add SRv6 Endpoint behavior to the selected router
+> 	if ! ip -netns "${rt_nsname}" -6 route get "${fullsid}" \
+> 		&>/dev/null; then
+> 		ip -netns "${rt_nsname}" -6 route \
+> 			add "${fullsid}" \
+> 	...
+> 
+> For "noflv" that guard is always taken, because setup_rt_local_sids()
+> already installed fcff:<rt>::${END_FUNC} for every router during the
+> common setup():
+> 
+> 	# Local End behavior (note that "dev" is a dummy interface chosen for
+> 	# the sake of simplicity).
+> 	ip -netns "${nsname}" -6 route \
+> 		add "${LOCATOR_SERVICE}:${rt}::${END_FUNC}" \
+> 		table "${LOCALSID_TABLE_ID}" \
+> 		encap seg6local action End dev "${DUMMY_DEVNAME}"
+> 
+> > +
+> > +		fullsid="${LOCATOR_SERVICE}:${node}::${function}"
+> > +
+> > +		# Remove SRv6 Endpoint behavior for the selected router
+> > +		if ip -netns "${rt_nsname}" -6 route get "${fullsid}" &>/dev/null; then
+> > +			ip -netns "${rt_nsname}" -6 route \
+> > +				del "${fullsid}" \
+> > +				table "${LOCALSID_TABLE_ID}" \
+> > +				dev "${DUMMY_DEVNAME}"
+> > +		fi
+> > +	done
+> 
+> Since the delete is gated on the route existing rather than on whether
+> this helper created it, the condition succeeds precisely for the
+> setup()-owned End SID, and it is removed.
+> 
+> [ ... ]
+> 
+> > @@ -669,6 +723,12 @@ setup_end_flv_psp()
+> >  	setup_rt_policy_ipv6 1 2 "1:psp"
+> >  }
+> >  
+> > +cleanup_end_flv_psp()
+> > +{
+> > +	cleanup_rt_policy_ipv6 2 1 "3:noflv 4:psp 2:psp"
+> > +	cleanup_rt_policy_ipv6 1 2 "1:psp"
+> > +}
+> > +
+> 
+> With the "3:noflv" entry above, every normal run ends with
+> fcff:3::${END_FUNC} deleted from rt-3's localsid table, so the
+> environment no longer matches what setup() built.  After the deletion a
+> lookup of fcff:3::000e in rt-3 falls through the
+> 
+> 	to fcff::/16 lookup localsid
+> 
+> rule down to the "unreachable default" route that setup_rt_local_sids()
+> installed.  Should the teardown mirror the guarded add and only remove
+> the flavor SIDs plus the encap route it actually created?
+> 
+> This matters for exactly the case the commit message mentions, "when
+> later tests are added to the same script": a later test that depends on
+> the default End SIDs would fail or take a different path unless it
+> happens to call __setup_rt_policy() with a noflv entry, which silently
+> re-creates the SID.  In this series the End.X PSP test added later does
+> re-add fcff:3::000e via setup_endx_flv_psp(), so the asymmetry is
+> currently masked and the behaviour becomes order dependent.  The
+> cleanup_rt_policy_ipv6() and cleanup_end_flv_psp() helpers are unchanged
+> at the end of the series, still passing "3:noflv".
+> 
+> The commit message describes the change as tearing down flavor-specific
+> state the PSP test installed:
+> 
+>   "The PSP test installs policy and route state, but relies on global
+>    cleanup to tear it down. That can leave flavor-specific state around
+>    when later tests are added to the same script."
+> 
+> Could it also mention that shared state created by setup() is removed?
+> 
+> >  check_rt_connectivity()
+> >  {
+> >  	local rtsrc="$1"
+> > @@ -771,6 +831,8 @@ host_srv6_end_flv_psp_tests()
+> >  
+> >  	check_and_log_hs_connectivity 1 2
+> >  	check_and_log_hs_connectivity 2 1
+> > +
+> > +	cleanup_end_flv_psp
+> >  }
+> 
+> One more question on the call site: host_srv6_end_flv_psp_tests() runs
+> after "set +e", so a failing or over-reaching "ip route del" in
+> cleanup_end_flv_psp() produces no test failure.  Would it be worth
+> checking the return values here so teardown errors are visible?
+> 
+> -- 
+> Sashiko AI review � https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260922-srv6_flavors_endx-v1-0-4d01c05c47b7%40kylinos.cn
