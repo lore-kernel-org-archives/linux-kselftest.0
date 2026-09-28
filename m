@@ -1,169 +1,331 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC96037B01E;
-	Mon, 28 Sep 2026 07:50:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE60246EC64
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 07:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790581829; cv=none; b=JpbqDeEMDphOAEyuDiyj8jXqS7Id+7RyPTuAbqWHsq+vR/1PZTdhECOaAfp3fA5I5AQTgZOzKoUE6nBogbEgprJDsbqJkUfR84MZIYbt6lanJ0wsBF0m8w7TmGOkE6gycU/4foI6aVaJ3duL0u+9ygU8DN/P8OixJImf4eKDzLo=
+	t=1790581993; cv=none; b=bSlXRZ+H4ODOngLpO19drJfS7cQlH9zQbJ6fC3xNqXD27EOP64scB68gCnWAXq6REM2WRORGjzlPGjcz2Wo/AfD0Ece02eoLu3/v2nd5vCIEDFTNu+K4h+arcD0hKrLSZBVECfJosyAEb4mMV1VY4k3euZbvINgAjLbYCt4njwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790581829; c=relaxed/simple;
-	bh=R91UUIGxGdUUal1Fjt/Fda413UziiCKSUMl+y9Z8ltc=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nYLK2tHZFXvg82Wx+IadDl6ugVxn1vqR5jLgDL+Y8+dhyLvGhOtxv17etEowOuB1qkRbKOwmJIRHtH0orOhRBVMIcWQBGuBEJghc4AXHyC/I5pXdnNzISNxWjMt2IN/PTegz8uPuXtbej2zkhDlyOz5F1C8svdOv4Nnbli08HYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E75x7JfB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790581993; c=relaxed/simple;
+	bh=aA/zrPMspakEuvzH3RaiPDVitAjjOTzjf/L/Kpmyf0I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MA5bZWbuHU36lmhgemkCu/xl4un2kqDWsP3RgGbVpJarItH/pwEUJOtGiAk38oWvBmUjDYKLAv+MSGNPTqGfgLHwnjyr3Lhr664M5iFgZnWgcQ/qHUSNL3iWH1ooUQ9i4pCjpU/9svbd4nTuKZeA3O3aIQD6VR6cW0DY6ClsWdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=jFJ+16CF; arc=none smtp.client-ip=74.125.225.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E75x7JfB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 884751F000FF;
-	Mon, 28 Sep 2026 07:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790581827;
-	bh=dDbHCVi7NQDvGZJMX6z09Gx0Mb5wxCotL+4xFXUjdcM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=E75x7JfBLkSCIx80JCNO6MZo2TQgY+pNlojZ34G6ZaHgAAKzJbuMxy/1YjOYjPM5H
-	 noKREW2DboSoBxqre4h+80rXReD4ygomZdavRBGKL0x/q2xRnZbtY38ppqgQevCpgV
-	 JU2uSa47P2w3ui2X1w1qhfHWGjh8ldi3MjbE/2UKttRFYiTZZT60eaVUVD85E+uFXL
-	 wyEgrAvTaan3IQOhFPorA8Sp9EoJXlI9rBBNW+N3XulSwUBidMs6QbEGUW+q5FRfqm
-	 klN3lF9VxWcB91FRjspjbEYzl55P+atD5yVDGPSK6Tg9xfdFKLd6DaqkW/MK088VS3
-	 1vVvRpgoQ4btQ==
-Subject: Re: [PATCH net-next v5] selftests: net: move log_test to lib file and
- remove duplicate code
-From: netdev-bot+sashiko@kernel.org
-To: hangbin.liu@linux.dev
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, dsahern@kernel.org,
- idosch@nvidia.com, andrea.mayer@uniroma2.it, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- liuhangbin@kylinos.cn
-Date: Mon, 28 Sep 2026 07:50:26 +0000
-Message-ID: <179058182603.3145.7204688879722696786@kernel.org>
-In-Reply-To: <20260924-self_log_test-v5-1-1f00bd383146@kylinos.cn>
-References: <20260924-self_log_test-v5-1-1f00bd383146@kylinos.cn>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="jFJ+16CF"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49b93204449so1602865e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 00:53:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=6wind.com; s=google; t=1790581989; x=1791186789; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=BF10bhz/UbdNdYSJY9TUFjfFC06TQP6+N+yfVQ0ryuw=;
+        b=jFJ+16CFM+jjpt2BWFeCO0quo16TnjakV33xfGKLyK/hjPepDAD0KA0xNzxQi+Us72
+         jQVCm+wnHpKDbXX5oGaU+FSTNaSMk6fmEvZqLQdtxoJWUTol0NvVJbSzlV5Hu/aL4LPT
+         DiTdbnzeISIkNohNqdaYaHHc29U3qdP3oLmv+sz0Vdy3qhEjbMls5wjGibT9UH9bVGtL
+         aDwFnm2fBF9/GdwWAJGp2z1j9Oi3lAcH0Cky89rXK2yKmsn/ziBVKd+w+GUWgxjHlWBr
+         quwHEC79+TfhQRf3934ZIIpEC3CDg2bnKgPfH3VEkTMANujdjmaE0VQeK5MtUTFO75XB
+         d+sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790581989; x=1791186789;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=BF10bhz/UbdNdYSJY9TUFjfFC06TQP6+N+yfVQ0ryuw=;
+        b=UFQIulI3pqq79jIRLOLYidQmDGJlStnq7mWLAKGGeNYO6R2dbJ3fGtdSwk/E3qVDAP
+         G2PTuNLGEJDJVaTDsTdyS/YIKmSQcC3HhKfbCO8lBNMueU4o87HVYMupu6+wRQVxF2iy
+         8LN6wSb5gSasyEtD0JTjsnV9iszW86TISURtYSMN94l8pQPvByqY6xLzigYpTWagsVin
+         NlTGllOWFMLAHbKcRFFYiQOvjozsUK7ubSxVWeM87e7CJRNWcwQ1jqM/RNW+YYCSrmkk
+         MWuLi0pB/gSxcdfTXGba4TWjnyQKsFRsfdN8140HfWZP9J02DoyuLVUi191UUIvjq4fG
+         qqJg==
+X-Forwarded-Encrypted: i=1; AKwUvBwehAU00McXp0NR7bLWDj6p60M8exLoJOd8+4Jeq458bGVKEX7GObNfwOwBLesQqCcKpW0J66zT/DU/UdFIYJY=@vger.kernel.org
+X-Gm-Message-State: AFuF++nUeCjtW57ZAWzEBhqdMusQb5ghXKyN6EYzSKOReKBaCwEz3G0p
+	+1+KCrDwFoxqNZ5MmnMIg1b12veBDGUtjT2Yh/hVrWzjrnpOxBXQIbGPrGDvZvqomi4=
+X-Gm-Gg: AYBFou03Josc5WKWZBrIrxNSVUSkdoJozBiqHKs75wYLO+6RvYE1ck2otzHKdUXPNHu
+	3e7KXjCBBaPtjpXMsgdVHAfLB2xSotSkleSfXKHlbPdxgU61phefXcfIk27h1soMtlwcCi5VDAp
+	BQCM4LGyOIhhhSdK9Hc3hzwed294UCCJkILadtSCY9eN/tcLId9db9VU3/1igQhIO12qyOE1O6Q
+	wDvgIjigjd9CrYLKfH2/4R8To5/RxlEQfi1oB+R9i68gbeHp1BYnpntrMXTsdE1X7UuYXwKMMlE
+	WFarIUQU96l8w926QGY7WV5T1WC6sEsYNfCYl+9Qna1DubojICdkOehJxQesBHhLT+QlWedZDMP
+	7Y9Mp0HX/jPO3nmf0MiD+/+CHZ7JvjaD/i009IWLYRatBOXp/PMDMMJ0hKEdHoXlvvqe3jgOBA7
+	D8v1wD+7Zm7oY9f2ucf7KEyIaBwVoEE5JrdR/+oCvipUbd0tt4rvAAOXfDap3bo1VYhJDVh//Us
+	a9dFqtvFwEbEPki2qbEWZgdpo70uN4MutMv7jxcwz/k3OJl8Uo=
+X-Received: by 2002:a05:600c:a414:b0:49f:ff2c:e0cf with SMTP id 5b1f17b1804b1-49fff2ce1a7mr66131745e9.0.1790581988608;
+        Mon, 28 Sep 2026 00:53:08 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:ab7:2110:6a1d:efff:fe52:1959? ([2a01:e0a:ab7:2110:6a1d:efff:fe52:1959])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a001922102sm122800265e9.15.2026.09.28.00.53.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Sep 2026 00:53:08 -0700 (PDT)
+Message-ID: <cd00e6e7-aa2d-4f98-8a79-083b64b3376a@6wind.com>
+Date: Mon, 28 Sep 2026 09:53:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [PATCH net-next v8 2/5] net: add a generation counter for dev->mc
+ changes
+To: Yuyang Huang <sigefriedhyy@gmail.com>
+Cc: Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>,
+ Ido Schimmel <idosch@nvidia.com>, Jacob Keller <jacob.e.keller@intel.com>,
+ Jakub Kicinski <kuba@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
+ Nikolaos Gkarlis <nickgarlis@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
+ Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>,
+ Simon Horman <horms@kernel.org>, Stanislav Fomichev <sdf.kernel@gmail.com>,
+ Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+References: <20260927002427.4519-1-sigefriedhyy@gmail.com>
+ <20260927002427.4519-3-sigefriedhyy@gmail.com>
+From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Content-Language: en-US
+Organization: 6WIND
+In-Reply-To: <20260927002427.4519-3-sigefriedhyy@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Le 27/09/2026 à 02:24, Yuyang Huang a écrit :
+> A multi-part RTM_GETMULTICAST dump of dev->mc resumes by position, so
+> entries added or removed between two dump rounds can be skipped or
+> repeated. The IPv4 and IPv6 dumps report that with NLM_F_DUMP_INTR by
+> stamping cb->seq from a per netns generation counter combined with
+> dev_base_seq, see inet_base_seq().
+> 
+> Add the equivalent for the device multicast lists: a per netns counter
+> bumped whenever an entry is added to or removed from any dev->mc. The
+> list helpers do not know which device a list belongs to, so give
+> netdev_hw_addr_list an owner, set for the lists of a device and NULL
+> for snapshots and other standalone lists, and change list->count
+> through helpers that bump the counter of dev_net(owner) when the list
+> is dev->mc. That covers the dev_mc_* helpers, both lists of a sync,
+> the hardware sync helpers drivers call from their rx mode callbacks or
+> their own workers and the reconciliation after an asynchronous rx mode
+> update. It is atomic since the writers only hold the address lock of
+> their own device.
+> 
+> Used by the following patch for the AF_PACKET multicast dump.
+> 
+> Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
 
-- [Medium] In the new log_test_expected()
-  (tools/testing/selftests/net/lib.sh), the failure branch calls the…
-- [Low] The commit message miscounts one output-format change.
 
---
+If another version is needed, you can rename counter to _counter to highlight
+that the helpers should be used.
+> ---
+>  include/linux/netdevice.h   |  5 ++++
+>  include/net/net_namespace.h |  1 +
+>  net/core/dev_addr_lists.c   | 52 +++++++++++++++++++++++++++++++------
+>  3 files changed, 50 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index d037faff7c44..69d1cde0a38a 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -256,6 +256,11 @@ struct netdev_hw_addr_list {
+>  
+>  	/* Auxiliary tree for faster lookup on addition and deletion */
+>  	struct rb_root		tree;
+> +
+> +	/* The device a list belongs to, NULL for snapshots and other
+> +	 * standalone lists
+> +	 */
+> +	struct net_device	*owner;
+>  };
+>  
+>  #define netdev_hw_addr_list_count(l) ((l)->count)
+> diff --git a/include/net/net_namespace.h b/include/net/net_namespace.h
+> index 46b4c67e2966..d8c681ab5c74 100644
+> --- a/include/net/net_namespace.h
+> +++ b/include/net/net_namespace.h
+> @@ -71,6 +71,7 @@ struct net {
+>  	spinlock_t		rules_mod_lock;
+>  
+>  	unsigned int		dev_base_seq;	/* protected by rtnl_mutex */
+> +	atomic_t		dev_mc_genid;	/* bumped on dev->mc changes */
+>  	u32			ifindex;
+>  
+>  	spinlock_t		nsid_lock;
+> diff --git a/net/core/dev_addr_lists.c b/net/core/dev_addr_lists.c
+> index 08528ca0a8b3..c941c3ec1007 100644
+> --- a/net/core/dev_addr_lists.c
+> +++ b/net/core/dev_addr_lists.c
+> @@ -16,6 +16,37 @@
+>  
+>  #include "dev.h"
+>  
+> +/* Only dev->mc is tracked, RTM_GETMULTICAST dumps use the netns generation
+> + * counter to detect changes between dump rounds.
+> + */
+> +static void __hw_addr_changed(struct netdev_hw_addr_list *list)
+> +{
+> +	struct net_device *dev = list->owner;
+> +
+> +	if (dev && list == &dev->mc)
+> +		atomic_inc(&dev_net(dev)->dev_mc_genid);
+> +}
+> +
+> +static void __hw_addr_count_inc(struct netdev_hw_addr_list *list)
+static void __hw_addr_count_add(struct netdev_hw_addr_list *list, int value)
+> +{
+> +	list->count++;
+list->count += value;> +	__hw_addr_changed(list);
+> +}
+#define __hw_addr_count_inc(l) __hw_addr_count_add(l, 1)
 
-selftests: net: move log_test to lib file and remove duplicate code
-
-This adds a shared log_test_expected() helper to
-tools/testing/selftests/net/lib.sh. It converts 31 net selftests so their
-local log_test() wrappers call the helper instead of carrying their own
-copies. The output format becomes "    TEST: %-60s" in all of them, and
-PAUSE, PAUSE_ON_FAIL and VERBOSE are handled the same way in every
-converted script.
-
-> In addition to the above, 13 tests that previously used "TEST:" now use
-> "    TEST:" (4-space prefix), and srv6 tests plus vrf_strict_mode_test.sh
-> that previously used "\n    TEST:" (newline + 4-space prefix) now with no
-> leading newline.
-
-[Severity: Low]
-Is the count of 13 still right? The patch converts 12 scripts that printed
-an unprefixed "TEST:":
-
-  fcnal-test.sh, fdb_flush.sh, fib_nexthop_multiprefix.sh,
-  fib_nexthop_nongw.sh, icmp_redirect.sh, l2tp.sh,
-  test_bridge_backup_port.sh, test_bridge_neigh_suppress.sh,
-  test_vxlan_mdb.sh, test_vxlan_nolocalbypass.sh, vrf-xfrm-tests.sh,
-  vrf_route_leaking.sh
-
-The 13th looks like fib_nexthops.sh. It was dropped in v4 and still has its
-own log_test() that prints "TEST: %-60s". Could the number be updated?
-
-> diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-> index d46d2cec89e4..b31bd6f6efd8 100644
-> --- a/tools/testing/selftests/net/lib.sh
-> +++ b/tools/testing/selftests/net/lib.sh
-> @@ -454,6 +454,40 @@ log_test_xfail()
->  	RET=$ksft_xfail retmsg= log_test "$@"
+> +
+> +static void __hw_addr_count_dec(struct netdev_hw_addr_list *list)
+> +{
+> +	list->count--;
+> +	__hw_addr_changed(list);
+> +}
+> +
+> +static void __hw_addr_count_reset(struct netdev_hw_addr_list *list)
+> +{
+> +	if (!list->count)
+> +		return;
+> +	list->count = 0;
+> +	__hw_addr_changed(list);
+> +}
+> +
+>  /*
+>   * General list handling functions
+>   */
+> @@ -125,7 +156,7 @@ static int __hw_addr_add_ex(struct netdev_hw_addr_list *list,
+>  	rb_insert_color(&ha->node, &list->tree);
+>  
+>  	list_add_tail_rcu(&ha->list, &list->list);
+> -	list->count++;
+> +	__hw_addr_count_inc(list);
+>  
+>  	return 0;
+>  }
+> @@ -161,7 +192,7 @@ static int __hw_addr_del_entry(struct netdev_hw_addr_list *list,
+>  
+>  	list_del_rcu(&ha->list);
+>  	kfree_rcu(ha, rcu_head);
+> -	list->count--;
+> +	__hw_addr_count_dec(list);
+>  	return 0;
 >  }
 >  
-> +# Log test result with expected return value
-> +log_test_expected()
-> +{
-> +	local rc=$1
-> +	local expected=$2
-> +	local msg="$3"
-> +	local a
-> +
-> +	if [ "${rc}" -eq "${expected}" ]; then
-> +		nsuccess=$((nsuccess+1))
-> +		printf "    TEST: %-60s  [ OK ]\n" "${msg}"
-> +	else
-> +		ret="$ksft_fail"
-> +		nfail=$((nfail+1))
-> +		printf "    TEST: %-60s  [FAIL]\n" "${msg}"
-> +		if [ "$VERBOSE" = "1" ]; then
-> +			echo "    rc=$rc, expected $expected"
-> +		fi
-> +
-> +		pause_on_fail
-> +	fi
+> @@ -492,7 +523,7 @@ void __hw_addr_flush(struct netdev_hw_addr_list *list)
+>  		list_del_rcu(&ha->list);
+>  		kfree_rcu(ha, rcu_head);
+>  	}
+> -	list->count = 0;
+> +	__hw_addr_count_reset(list);
+>  }
+>  EXPORT_SYMBOL_IF_KUNIT(__hw_addr_flush);
+>  
+> @@ -501,6 +532,7 @@ void __hw_addr_init(struct netdev_hw_addr_list *list)
+>  	INIT_LIST_HEAD(&list->list);
+>  	list->count = 0;
+>  	list->tree = RB_ROOT;
+> +	list->owner = NULL;
+>  }
+>  EXPORT_SYMBOL(__hw_addr_init);
 
-[Severity: Medium]
-Could this call end a caller that runs under set -e? The shared
-pause_on_fail() in lib.sh ends with an && list:
+For correctness, __hw_addr_splice() should use helper:
 
-pause_on_fail()
-{
-	if [[ $PAUSE_ON_FAIL == yes ]]; then
-		echo "Hit enter to continue, 'q' to quit"
-		read a
-		[[ $a == q ]] && exit 1
-	fi
-}
+@@ -509,8 +509,8 @@ static void __hw_addr_splice(struct netdev_hw_addr_list *dst,
+ {
+         src->tree = RB_ROOT;
+         list_splice_init(&src->list, &dst->list);
+-        dst->count += src->count;
+-        src->count = 0;
++        __hw_addr_count_add(dst, src->count);
++        __hw_addr_count_reset(src);
+ }
 
-If the user presses Enter, or types anything other than q, the function
-returns 1. Here it is called as a plain command, so errexit applies to it.
+Renaming  struct netdev_hw_addr_list->count to _count would help to check all
+users and highlight that modifying _count should be done with helpers.
 
-fib6_gc_test() in fib_tests.sh turns on errexit and then calls log_test:
+>  
+> @@ -536,7 +568,7 @@ int __hw_addr_list_snapshot(struct netdev_hw_addr_list *snap,
+>  			entry = list_first_entry(&cache->list,
+>  						 struct netdev_hw_addr, list);
+>  			list_del(&entry->list);
+> -			cache->count--;
+> +			__hw_addr_count_dec(cache);
+>  			memcpy(entry->addr, ha->addr, addr_len);
+>  			entry->type = ha->type;
+>  			entry->global_use = false;
+> @@ -554,7 +586,7 @@ int __hw_addr_list_snapshot(struct netdev_hw_addr_list *snap,
+>  
+>  		list_add_tail(&entry->list, &snap->list);
+>  		__hw_addr_insert(snap, entry, addr_len);
+> -		snap->count++;
+> +		__hw_addr_count_inc(snap);
+>  	}
+>  
+>  	return 0;
+> @@ -604,14 +636,14 @@ void __hw_addr_list_reconcile(struct netdev_hw_addr_list *real_list,
+>  			if (delta > 0) {
+>  				rb_erase(&ref_ha->node, &ref->tree);
+>  				list_del(&ref_ha->list);
+> -				ref->count--;
+> +				__hw_addr_count_dec(ref);
+>  				ref_ha->sync_cnt = delta;
+>  				ref_ha->refcount = delta;
+>  				list_add_tail_rcu(&ref_ha->list,
+>  						  &real_list->list);
+>  				__hw_addr_insert(real_list, ref_ha,
+>  						 addr_len);
+> -				real_list->count++;
+> +				__hw_addr_count_inc(real_list);
+>  			}
+>  			continue;
+>  		}
+> @@ -622,7 +654,7 @@ void __hw_addr_list_reconcile(struct netdev_hw_addr_list *real_list,
+>  			rb_erase(&real_ha->node, &real_list->tree);
+>  			list_del_rcu(&real_ha->list);
+>  			kfree_rcu(real_ha, rcu_head);
+> -			real_list->count--;
+> +			__hw_addr_count_dec(real_list);
+>  		}
+>  	}
+>  
+> @@ -685,6 +717,7 @@ int dev_addr_init(struct net_device *dev)
+>  	/* rtnl_mutex must be held here */
+>  
+>  	__hw_addr_init(&dev->dev_addrs);
+> +	dev->dev_addrs.owner = dev;
+>  	memset(addr, 0, sizeof(addr));
+>  	err = __hw_addr_add(&dev->dev_addrs, addr, sizeof(addr),
+>  			    NETDEV_HW_ADDR_T_LAN);
+> @@ -962,6 +995,7 @@ EXPORT_SYMBOL(dev_uc_flush);
+>  void dev_uc_init(struct net_device *dev)
+>  {
+>  	__hw_addr_init(&dev->uc);
+> +	dev->uc.owner = dev;
+>  }
+>  EXPORT_SYMBOL(dev_uc_init);
+>  
+> @@ -1177,6 +1211,7 @@ EXPORT_SYMBOL(dev_mc_flush);
+>  void dev_mc_init(struct net_device *dev)
+>  {
+>  	__hw_addr_init(&dev->mc);
+> +	dev->mc.owner = dev;
+>  }
+>  EXPORT_SYMBOL(dev_mc_init);
+>  
+> @@ -1348,6 +1383,7 @@ static void netif_rx_mode_retry(struct timer_list *t)
+>  void netif_rx_mode_init(struct net_device *dev)
+>  {
+>  	__hw_addr_init(&dev->rx_mode_addr_cache);
+> +	dev->rx_mode_addr_cache.owner = dev;
+>  	timer_setup(&dev->rx_mode_retry_timer, netif_rx_mode_retry, 0);
+>  }
+>  
 
-fib6_gc_test()
-{
-	...
-	set -e
-	...
-	check_rt_num 0 $($IP -6 route list |grep expires|wc -l)
-	log_test $ret 0 "ipv6 route garbage collection"
-
-Take "fib_tests.sh -p -t ipv6_gc" with a wrong route count. Pressing Enter
-at the prompt would then exit the whole script with status 1. The remaining
-tests and the summary are skipped, and the "return 0" at the end of
-log_test_expected() is never reached.
-
-The old log_test() in fib_tests.sh ran the prompt inline in an if body.
-There the trailing && list is exempt from errexit, so the script kept
-running. The other set -e regions in fib_tests.sh that call log_test
-before set +e look affected in the same way.
-
-This also doesn't match the commit message's statement that "The function
-always returns 0 to avoid influencing later code". Would something like
-"pause_on_fail || true" avoid the early exit?
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260924-self_log_test-v5-1-1f00bd383146%40kylinos.cn
