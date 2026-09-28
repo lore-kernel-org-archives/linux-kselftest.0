@@ -1,99 +1,119 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B5A03644C9;
-	Mon, 28 Sep 2026 06:38:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BC73537C8
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 06:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790577509; cv=none; b=pLCpBfr3ijzZNdSp7cN2bcJkKOwpK4RNUOfJxgu90kxYqjJYwDXQejRm6doM4L4LGpUBJxFQtfGLlbpyhh3iDVWevAK18LF46bMJysvlpPVDgN0NUKO4hwReSOjvdj7Ghtwa6qKn1rVJZzRqTXFaabdscCv2YFHfL3Xn7GcxQ7w=
+	t=1790578269; cv=none; b=g6+mCqsdidowH5TefeVgWDrBcPmSXtS7ytOpfjSJn9GWnuwaVO+1cPQ+gXv5+xTzSosumKjo2aoJJV9A18fZZgQkAbid2x/h1IFk0VOUSrPI+sBHl2psAOxkWJuIJGxbr4yJudGBVGKBarzH+rHyrleP0FbI9E39VaQiNQpzAk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790577509; c=relaxed/simple;
-	bh=oab10M41cORlOaqNO3JIQuODWkcTzu++0eN5IsOiEkw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kIeci7hk7W1kgWDYFVEN/CF0d8xckoE9bG36LVARm2F1BrrfHD4VNzkqzUg1NPnik8Rrqn+T+N7+xMytsWCBI9UBsVknxf1inNYeL2uRE8mN9998G+907AHn0ivinK4gqugdM98FZEUdnDpt8aU/6rsCVmbvmMB8Eq+hA66tIM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=rWuYiW0s; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=iCixssuX; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1790578269; c=relaxed/simple;
+	bh=eIKla4S6a3D0MHGwhrlPCSrXWKbvb2Ko4TtW5GQrom8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ShzO60KVPMpyNA7qApR/zoxD6N6CQLxmLRJtz/zR6iQfEiPgHB9qBwVKKroWEy62B2Yxg5dau1TZNHnwPU7b3q6Oo0iPfYp05dVHNdn7YfqydaAajTsmgm/qBDbhv2NXzOEtGpgb99xXv4a1+CO1swfv6PdfuJ05+5+6NmSyl58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jRahg4cA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="rWuYiW0s";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="iCixssuX"
-Date: Mon, 28 Sep 2026 08:38:24 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1790577506;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oab10M41cORlOaqNO3JIQuODWkcTzu++0eN5IsOiEkw=;
-	b=rWuYiW0sOfIl39b6o8KIoPDZucRz832wEPEknuqnV3ffsqIh08vTFNJRLt2D4gQaDCeCGz
-	0yIoYKlHlcJbyhKsgEdVeC+grUizo2MuTD5cD32Ev/5EGiuz6M5VbgKWS97/KDDqlVzbgz
-	hgxD1Vui1Q0xHxkRRHqFTGdXvLkPaeqJ+8ISLxcHfdaggvjjWVB8PR8LyKvAkuMT6r5c2P
-	9HkL6UZQS7kPW0wfRhMvs4Td0xbOAtJGKUHCOTwXOQbsCE133DfA29MUcIgiLNQmM1ol0U
-	y4bBsr/XO6ICPEvx+0RutCc+MtqFFpLLrLiRWM7hV9suooZ85+q0giO8Kfw7bw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1790577506;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oab10M41cORlOaqNO3JIQuODWkcTzu++0eN5IsOiEkw=;
-	b=iCixssuXrvneknmIGOp4I2w9Ciyb3RZgXNROKFtxPQW0BKzdD8MHwzcz2JNJxyEZgfoehD
-	vfgEdL2tsRK9WrCA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Xin Xie <xiexinet@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
-	kees@kernel.org, petr.wozniak@gmail.com, qingfang.deng@linux.dev,
-	fmaurer@redhat.com, luka.gejak@linux.dev, xiaoliang.yang_1@nxp.com,
-	skhawaja@google.com, liuhangbin@gmail.com, stable@vger.kernel.org,
-	sdf.kernel@gmail.com
-Subject: Re: [PATCH 3/4] net: hsr: unfold GSO super-packets at the forward
- entry
-Message-ID: <20260928063824.0E3LO1vu@linutronix.de>
-References: <20260809121455.1745-1-xiexinet@gmail.com>
- <20260809121455.1745-4-xiexinet@gmail.com>
- <20260923104346.ur63K3h2@linutronix.de>
- <2cf54664-c07d-471f-af6d-4b70e09626b4@gmail.com>
- <20260925082954.MYDugnDU@linutronix.de>
- <21bfa8a9-c488-49aa-b2a1-4d282fd51c42@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jRahg4cA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73F361F008A0
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 06:51:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790578268;
+	bh=s5UI4Wy+eGiErrBzR7b2VedGpOFJDsN75qbhAxc0yzs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=jRahg4cAxN6Tle2r15oJe/vmxLHt/LqsTmTxt34l9F+NJ+DReohvk6pR5vCHz2B3O
+	 pcJWUAQ6QH4Lp0CuwBlUfYDuo8LRITlBQkrUs+FWRkmUazrwaGqVihIh4IqyqQnhho
+	 SzyMTgwzEgMUZNVh1F/Zj0azGL+N+c5Ip34weRdyBiQruy5eAGdfDQpOqcJy0xC9If
+	 XninYxyuXj034C3GWnRU/6CjCPxeYVDzZ7UFgT6+ITXDEVEQGj43lpS/oBRFluKgN6
+	 GcObbZtLOxjCr5AeIQf/biJ0/q1/t08Vi+9JBBBQYwnZtkEnOC4gB+89RwY77H8Rzi
+	 ckorlts8LfjXQ==
+Received: by mail-qk2-f39.google.com with SMTP id d75a77b69052e-5332bdd8296so27680861cf.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Sep 2026 23:51:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvByJGJcxJrf+t6zBOzIqGZ5/cQ6cr+RGaW+ywxWovyqjZsaHP9HeE55sTCkrIqE6GLfSmlV1L2n+67CG+lHn1kU=@vger.kernel.org
+X-Gm-Message-State: AFuF++kivWXKMF4cP3AjENk7336zRGeaEk6Ergy7F0VcYtKaoq1vxzF1
+	OR+HXAhT9sGvQzR2bkaVfzB9DkDlaQ4VPZzalfryyNKEbv544iVOQwxk26xSYQpj31Ix6GNVEvl
+	an8zsKxYkv10vsWzOjKavZaU51RaQYIA=
+X-Received: by 2002:a05:620a:6486:b0:93c:6925:dfeb with SMTP id
+ af79cd13be357-93c6925e8a2mr834739185a.56.1790578267654; Sun, 27 Sep 2026
+ 23:51:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20260928063724.24008-1-hui.zhu@linux.dev>
+In-Reply-To: <20260928063724.24008-1-hui.zhu@linux.dev>
+From: Barry Song <baohua@kernel.org>
+Date: Mon, 28 Sep 2026 14:50:55 +0800
+X-Gmail-Original-Message-ID: <CAGsJ_4wrWdw+4B10K3J+sDCSjVoBs2=LtObb6MKehuYsx9pXMg@mail.gmail.com>
+X-Gm-Features: AclHuK-c7GpN5AyOOlaUnzGeJcdZoBH-1EyfOLTse_68UQXS73MXqF_7DQKjthA
+Message-ID: <CAGsJ_4wrWdw+4B10K3J+sDCSjVoBs2=LtObb6MKehuYsx9pXMg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Add bpf_proactive_reclaim test
+To: Hui Zhu <hui.zhu@linux.dev>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+	David Hildenbrand <david@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
+	Hui Zhu <zhuhui@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <21bfa8a9-c488-49aa-b2a1-4d282fd51c42@gmail.com>
 
-On 2026-09-25 11:52:52 [+0200], Xin Xie wrote:
-=E2=80=A6
-> A veth pair is simply an in-kernel memory pipe. When a large TCP skb=20
-> arrives at prp0-peer, veth does not trigger TSO or software segmentation,
-> it simply hands over the intact skb pointer directly to prp0-int.
->=20
-> Turning GRO off on prp0-int does not force prp0-peer to split it. I=20
-> confirmed this with ordinary TCP traffic in a VM, with GRO off on both=20
-> veth ends.
+On Mon, Sep 28, 2026 at 2:37=E2=80=AFPM Hui Zhu <hui.zhu@linux.dev> wrote:
+>
+> From: Hui Zhu <zhuhui@kylinos.cn>
+>
+> bpf_proactive_reclaim() performs one bounded reclaim pass per call and,
+> unlike a write to memory.reclaim, does not retry until the goal is
+> reached.
+>
+> Charge 32 MiB of page cache to a cgroup, ask for all of it in one call,
+> and check that the result is positive but well below the request: one
+> pass is capped at MEMCG_CHARGE_BATCH pages, far short of 32 MiB on both
+> 4K and 64K page kernels.
+>
+> The test deliberately covers only the kfunc itself. A full example of
+> the intended asynchronous use, where a BPF program watches one cgroup's
+> workingset refaults and reclaims another one from bpf_wq callbacks, is
+> maintained out of tree at [1], released under GPLv2.
+>
+> Add CONFIG_MEMCG to the config fragment, without which mm/bpf_memcontrol.=
+c
+> is not built at all.
+>
+> [1] https://github.com/teawater/memcg-async-reclaim
+>
+> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> ---
+[...]
+> +
+> +       /*
+> +        * Charge FILE_SIZE of page cache to the cgroup. Reading rather t=
+han
+> +        * writing keeps the pages clean, so reclaim does not have to sta=
+rt
+> +        * writeback before it can evict them.
+> +        */
+> +       if (!ASSERT_OK(ftruncate(data_fd, FILE_SIZE), "ftruncate"))
+> +               goto out;
+> +       for (off =3D 0; off < (off_t)FILE_SIZE; off +=3D sizeof(buf))
+> +               if (!ASSERT_GT(read(data_fd, buf, sizeof(buf)), 0, "read"=
+))
+> +                       goto out;
+> +
 
-So veth. The test suite is using veth I don't remember that it was (is)
-a problem there. But then there is no TCP.
-Wouldn't it be also a problem if you attach veth interface to a bridge
-and that large TCP skb would have to leave the bridge via a physical
-port?
-This does not sound like it is limited to hsr. I think it deserves a
-helper similar to skb_linearize().
+In case we might map file holes to the zero PFN someday (not sure when),
+this wouldn't necessarily give us page cache. So maybe write + fsync is
+more future-proof? In that case, you could also drop the two lines of
+comments.
 
-> Patch 3 splits that skb before PRP assigns sequence numbers and adds
-> RCTs. Each resulting frame needs its own sequence number and RCT.
-> Ordinary non-GSO skbs skip the segmentation path.
->=20
-> In addition, if GRO disablement fails (e.g., buggy drivers or
-> hardware-fixed GRO_HW that cannot be turned off via ethtool), Patch 3
-> also acts as a fallback defense for these edge cases.
->=20
-
-Sebastian
+Best Regards
+Barry
