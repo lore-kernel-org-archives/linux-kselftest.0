@@ -1,320 +1,205 @@
-Received: from mail-oo2-f41.google.com (mail-oo2-f41.google.com [74.125.231.169])
+Received: from out-zbxj-a74.jellyfish.systems (out-zbxj-a74.jellyfish.systems [198.54.127.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A583F360EE4
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 17:14:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A9024F68C5
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 17:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790615672; cv=none; b=MOFDA0twEsGJm3uguCAt/BJhLi2G+khscu/Bw0XkblYCjGCIfe8rweAsrDV/glq8kolrrDgZTYXBdUV8dGkZUOIA+TVnVyJ+GRll7xsOrBaNEDtkNg0+JyyCHtwfGxSgLz+inMstFvKLcyiL+np8refA/l92c0kQlSufZDFXgRI=
+	t=1790616042; cv=none; b=aO3HhxbRVAlYQdlDJnBNhl2p+5AAEMUYAM/DzaJg1RMjNpY+1AjjR9Ek4gflDeDilQa0luStJNplzeDN8OfvfTmrJls1aC1c/utMUwC7cwyRI/PujQDMZUM4kq+jyYh0v1k3ukShkJQmq4tqK+n2WMxp3+GpkSYJX/TZASDTvLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790615672; c=relaxed/simple;
-	bh=o59pLErvV1Eka8G0igqbbC6iIQ7emfCpQ9bDOzw+AAE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M7cHmx5Q4GhiWKBEGQLvgKu9T+nkG8+4rOg3HitolWq+elV3OVotU/f0UmbK5eTCoIwYXgmUsY6vUI5s8rY+J0WKpGvTOANDBFYgpLsjDekxcp92HMtozk03JyrDE+orB+HfOKSLDcOyPKlAxD7Jmw6W+eSjbA9Oihw9d3yZnxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AmMbLBhl; arc=none smtp.client-ip=74.125.231.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790616042; c=relaxed/simple;
+	bh=01y/iGt8E8+7GTBoZl9BI+q8HMQ4idh0ucD/ynriE8o=;
+	h=Message-ID:In-Reply-To:References:From:Date:Subject:To:Cc; b=AUdn3F8Q0hrFP5QPvfhwiNLojAWLPbyd1k5GIoKyY7M1x9DDx2+TcPm6fXrkjGTPx8SZu9sIvYGpSTcK8TXFzOMbOpd4xqxrf5fcETjER7zZxH2YT5fkl4BbSF9CweBRgyFCBX5zDH/zhPkVSw8m6dNkQbr8Mk1jvRYfvktulJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=GphOTRUC; arc=none smtp.client-ip=198.54.127.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AmMbLBhl"
-Received: by mail-oo2-f41.google.com with SMTP id 46e09a7af769-7fcb425fb68so1993465a34.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 10:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790615669; x=1791220469; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=brqpvi0CsTT/mXnGEZ0fbXA8kawPBkDyjGi1skaJHcQ=;
-        b=AmMbLBhlejMXSnZI3uouKyZftGnw4B8IlNH7OZfigtXEyRfw2pWiXI5IZnuaOolB8e
-         rTUiP8Gdgm6s9I3Pv+45yPPEf6yQfJdP4660dcH1Px6ju3Ko+l6CvrgRIrNi9KAEOFPm
-         Xi6c3Wc5q3HlAkuF81AnMxx2nv0pMhGCh9LhzVI8JdcFMvRYrrqmR/C7xbuoYa4g1ZLx
-         DrZCgI9oVM/zlPfiuYJszedIqinDzvgNHz43CZAccb9SSH4czSHI+zPu4PPSBQydmSuL
-         EdvuHTl9SLxOiwzSgsAQ/LOcCYMYZMi7GMABEB499pfCBuVE2jLo7dJXJKE01pMeQwS/
-         bkaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790615669; x=1791220469;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=brqpvi0CsTT/mXnGEZ0fbXA8kawPBkDyjGi1skaJHcQ=;
-        b=cv9AnlBRG7gcp9keAwOAifit7dPd0uJ++y05a85X4F8MJwh2IiA8hOVTjGB5AicQlQ
-         TFWu7mj8nr2s1AVPGH1ZI+Gu7i0FH8QcZooqpItylb5+4g2l9rZ6KokEM2aByPFepuej
-         BVOX+HAnB5ccnlfE+8NFFP4l5FU/3diwblO/X9wC2Whv5eRpAeu2hy97DRDqCrjTNWsK
-         XeGBOKGkpTsRJT9IQohih8UEkt7FcBdOd4egr1No7McV9H8b76D/EANcr2uhHpQ144tq
-         HGn7mg6tV4GhPbU93AUl7MDna9CmcQZ2sieaT4yUa3Jo10ZtIHne9sMST+T6qWdXTFlY
-         96BQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzF0Xiq6dBwLWrTP8ofhBy1H0aSfaS5Eiv+ZU0oBkydCF6lPSyiPOhBjiuSbnHzKSvj0+JD8IwhxA4fZtgdJEY=@vger.kernel.org
-X-Gm-Message-State: AFuF++nbQNPJSfaPQqrVJa1WTlSu8TZaU0ceykJx7fBht2Zmki2qAz3j
-	FgIKlFYEAnD2Fcn5oz8Qko/gfQLZEEPafNGzZ0crNgeXr9qAmAJROVMJ
-X-Gm-Gg: AYBFou1SBZj5IAyCE7ncYHu3/271XJdN4KE69o+dN23R2/e+79MHiGDwr8v0Ou7PFuQ
-	DaODcQW57ZmPc0VHewP1nxzD+Pq5JCRcsxxh/rBlYkcLFeyrXt2X/R0tZaDV0hJYWM4+0hU8R3R
-	+0vvOM3EZMLJJHPCvWGdvKJHhYqI7tNG+5HwXQa/12UkUil3BaMde1y37Xljcc4tJxOT3V+sj38
-	Zzy9VgI2qLLBK/rCjAE7sw0u3xaOzYP0lMSnx3yfPqni/QR2+s9FqnxL5cKPv6bA/5iHcJ4J1NN
-	G7eoQWyHmHABpek6fxrDaVDq8E4YErzgIMjFsfeXXxigPcUhrnsWE28Y0oKDcthksgSCsvF/CMm
-	XpPhxTn+oglEl7OFjJhoL+OeXDs5wYuZR7FXN50nua+AiEAZZhWbjP1eo50fq3IyAhUqFRTk4ao
-	6BaiNgtQwK+qvps5LX+wG861K3XPQ3f2tuWBo5faRxxakgqSJsdMnnKNaj4g07pcvlS5QZneHP6
-	e83x9/fZvehAtSNKEVseCZFDnCREWiUSiVvVmUi
-X-Received: by 2002:a05:6820:81d1:b0:6d7:9cf4:e993 with SMTP id 006d021491bc7-6d79cf4f414mr6840896eaf.11.1790615669113;
-        Mon, 28 Sep 2026 10:14:29 -0700 (PDT)
-Received: from archlinux.lan ([136.34.156.120])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6d87d9060cbsm5492874eaf.0.2026.09.28.10.14.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 10:14:28 -0700 (PDT)
-From: Danish Khateeb <danishkhateeb03@gmail.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Beau Belgrave <beaub@linux.microsoft.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Danish Khateeb <danishkhateeb03@gmail.com>
-Subject: [PATCH 2/2] selftests/user_events: Fix pointer casts for 32-bit builds
-Date: Mon, 28 Sep 2026 12:14:24 -0500
-Message-ID: <20260928171424.199202-2-danishkhateeb03@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260928171424.199202-1-danishkhateeb03@gmail.com>
-References: <20260928171424.199202-1-danishkhateeb03@gmail.com>
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="GphOTRUC"
+Received: from [172.20.10.14] (unknown [151.145.76.168])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4htp3X310bz6tkV;
+	Mon, 28 Sep 2026 17:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1790616028;
+	bh=xyWF0nGHzWfJpsbRecUZtBY956VjJxb1mVyLqW64Ufo=;
+	h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+	b=GphOTRUCH7voytIDddTrvV3y81WmjjCILKIrL3txUbhOWd3RL8zwedXiy6aSggOgD
+	 QXsSO4VfNFMVDcoQXtUnMke4mJ9eOTFIefKDGfpqowAXbiTdJISTDXR6zJ3tNiuc8n
+	 HLxw5eGru5cRj9bqSKdJNriG0MmonIMNRJt35gSz7plWcYyUfFn1jk86FyrVkHpEib
+	 iptj9kZGviDArVOCP5Ac8wufHTm+sbi1BcDb0uMQDXRg3G71LEWQdKc43Dr4VLOJXJ
+	 ZkOw+qB8oK4xsLe9Url7XBBiwRii9mVWCJayd3OqHXU4/stTKc4n87jibRFs2ZlPS9
+	 UylvKE4G0FHIw==
+Message-ID:
+ <cea9cb26c3267c22da2101a0e3d075e2633a2e61.1790615923.git.hi@tychen.cc>
+In-Reply-To: <cover.1790615923.git.hi@tychen.cc>
+References: <cover.1790615923.git.hi@tychen.cc>
+From: Tianyi Chen <hi@tychen.cc>
+Date: Tue, 29 Sep 2026 02:13:21 +0900
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Check bpftool map info across
+ mixed BTF maps
+To: bpf@vger.kernel.org
+Cc: qmo@kernel.org,
+    andrii@kernel.org,
+    eddyz87@gmail.com,
+    ihor.solodrai@linux.dev,
+    linux-kselftest@vger.kernel.org,
+    skokovmaksimevg@gmail.com
+X-Envelope-From: hi@tychen.cc
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The tests cast pointers directly to __u64. On 32-bit builds GCC
-sign-extends such casts, so addresses above 2 GiB, like the stack of a
-32-bit task on a 64-bit kernel, become 0xffffffffxxxxxxxx and every
-registration fails.
+Create a typed map followed by a smaller untyped map with the same name.
+Check that full and named listings do not report BTF for the untyped map,
+JSON dumps match independently dumped contents, and plain dumps use raw
+output when the selected maps do not all have BTF.
 
-Cast through uintptr_t so the tests also work when built for 32-bit and
-cover the compat ioctl path.
+These cover the separate info-query loops in map show and map dump
+without requiring recursive dumping.
 
 Assisted-by: LLM
-Signed-off-by: Danish Khateeb <danishkhateeb03@gmail.com>
+Signed-off-by: Tianyi Chen <hi@tychen.cc>
 ---
+ .../bpf/prog_tests/bpftool_map_info.c         | 126 ++++++++++++++++++
+ 1 file changed, 126 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_info.c
 
-Notes:
-    Built with and without -m32. With 1/2 applied, the 32-bit tests pass on
-    x86_64; the 64-bit binaries are unchanged in behaviour and still pass.
-    The -Wpointer-to-int-cast warnings left in a 32-bit build come from
-    kselftest_harness.h, not from these tests.
-
- .../testing/selftests/user_events/abi_test.c  | 10 +++---
- .../testing/selftests/user_events/dyn_test.c  |  6 ++--
- .../selftests/user_events/ftrace_test.c       | 32 +++++++++----------
- .../testing/selftests/user_events/perf_test.c | 10 +++---
- 4 files changed, 29 insertions(+), 29 deletions(-)
-
-diff --git a/tools/testing/selftests/user_events/abi_test.c b/tools/testing/selftests/user_events/abi_test.c
-index b71813eaf5c0..21e1e3cca197 100644
---- a/tools/testing/selftests/user_events/abi_test.c
-+++ b/tools/testing/selftests/user_events/abi_test.c
-@@ -179,10 +179,10 @@ static int reg_enable_multi(void *enable, int size, int bit, int flags,
- 	}
- 
- 	reg.size = sizeof(reg);
--	reg.name_args = (__u64)full_args;
-+	reg.name_args = (__u64)(uintptr_t)full_args;
- 	reg.flags = USER_EVENT_REG_MULTI_FORMAT | flags;
- 	reg.enable_bit = bit;
--	reg.enable_addr = (__u64)enable;
-+	reg.enable_addr = (__u64)(uintptr_t)enable;
- 	reg.enable_size = size;
- 
- 	ret = ioctl(fd, DIAG_IOCSREG, &reg);
-@@ -202,10 +202,10 @@ static int reg_enable_flags(void *enable, int size, int bit, int flags)
- 		return -1;
- 
- 	reg.size = sizeof(reg);
--	reg.name_args = (__u64)"__abi_event";
-+	reg.name_args = (__u64)(uintptr_t)"__abi_event";
- 	reg.flags = flags;
- 	reg.enable_bit = bit;
--	reg.enable_addr = (__u64)enable;
-+	reg.enable_addr = (__u64)(uintptr_t)enable;
- 	reg.enable_size = size;
- 
- 	ret = ioctl(fd, DIAG_IOCSREG, &reg);
-@@ -231,7 +231,7 @@ static int reg_disable(void *enable, int bit)
- 
- 	reg.size = sizeof(reg);
- 	reg.disable_bit = bit;
--	reg.disable_addr = (__u64)enable;
-+	reg.disable_addr = (__u64)(uintptr_t)enable;
- 
- 	ret = ioctl(fd, DIAG_IOCSUNREG, &reg);
- 
-diff --git a/tools/testing/selftests/user_events/dyn_test.c b/tools/testing/selftests/user_events/dyn_test.c
-index 78e3c33f4015..32f159544d0b 100644
---- a/tools/testing/selftests/user_events/dyn_test.c
-+++ b/tools/testing/selftests/user_events/dyn_test.c
-@@ -58,9 +58,9 @@ static int reg_event(int fd, int *check, int bit, const char *value)
- 	struct user_reg reg = {0};
- 
- 	reg.size = sizeof(reg);
--	reg.name_args = (__u64)value;
-+	reg.name_args = (__u64)(uintptr_t)value;
- 	reg.enable_bit = bit;
--	reg.enable_addr = (__u64)check;
-+	reg.enable_addr = (__u64)(uintptr_t)check;
- 	reg.enable_size = sizeof(*check);
- 
- 	if (ioctl(fd, DIAG_IOCSREG, &reg) == -1)
-@@ -75,7 +75,7 @@ static int unreg_event(int fd, int *check, int bit)
- 
- 	unreg.size = sizeof(unreg);
- 	unreg.disable_bit = bit;
--	unreg.disable_addr = (__u64)check;
-+	unreg.disable_addr = (__u64)(uintptr_t)check;
- 
- 	return ioctl(fd, DIAG_IOCSUNREG, &unreg);
- }
-diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
-index decce06b9ba8..b9c75202f0bd 100644
---- a/tools/testing/selftests/user_events/ftrace_test.c
-+++ b/tools/testing/selftests/user_events/ftrace_test.c
-@@ -127,7 +127,7 @@ static int clear(int *check)
- 
- 	unreg.size = sizeof(unreg);
- 	unreg.disable_bit = 31;
--	unreg.disable_addr = (__u64)check;
-+	unreg.disable_addr = (__u64)(uintptr_t)check;
- 
- 	fd = open(data_file, O_RDWR);
- 
-@@ -174,9 +174,9 @@ static int check_print_fmt(const char *event, const char *expected, int *check)
- 		return fd;
- 
- 	reg.size = sizeof(reg);
--	reg.name_args = (__u64)event;
-+	reg.name_args = (__u64)(uintptr_t)event;
- 	reg.enable_bit = 31;
--	reg.enable_addr = (__u64)check;
-+	reg.enable_addr = (__u64)(uintptr_t)check;
- 	reg.enable_size = sizeof(*check);
- 
- 	/* Register should work */
-@@ -239,14 +239,14 @@ TEST_F(user, register_events) {
- 	struct user_unreg unreg = {0};
- 
- 	reg.size = sizeof(reg);
--	reg.name_args = (__u64)"__test_event u32 field1; u32 field2";
-+	reg.name_args = (__u64)(uintptr_t)"__test_event u32 field1; u32 field2";
- 	reg.enable_bit = 31;
--	reg.enable_addr = (__u64)&self->check;
-+	reg.enable_addr = (__u64)(uintptr_t)&self->check;
- 	reg.enable_size = sizeof(self->check);
- 
- 	unreg.size = sizeof(unreg);
- 	unreg.disable_bit = 31;
--	unreg.disable_addr = (__u64)&self->check;
-+	unreg.disable_addr = (__u64)(uintptr_t)&self->check;
- 
- 	/* Register should work */
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
-@@ -263,13 +263,13 @@ TEST_F(user, register_events) {
- 
- 	/* Register without separator spacing should still match */
- 	reg.enable_bit = 29;
--	reg.name_args = (__u64)"__test_event u32 field1;u32 field2";
-+	reg.name_args = (__u64)(uintptr_t)"__test_event u32 field1;u32 field2";
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
- 
- 	/* Multiple registers to same name but different args should fail */
- 	reg.enable_bit = 29;
--	reg.name_args = (__u64)"__test_event u32 field1;";
-+	reg.name_args = (__u64)(uintptr_t)"__test_event u32 field1;";
- 	ASSERT_EQ(-1, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(EADDRINUSE, errno);
- 
-@@ -310,9 +310,9 @@ TEST_F(user, write_events) {
- 	int before = 0, after = 0;
- 
- 	reg.size = sizeof(reg);
--	reg.name_args = (__u64)"__test_event u32 field1; u32 field2";
-+	reg.name_args = (__u64)(uintptr_t)"__test_event u32 field1; u32 field2";
- 	reg.enable_bit = 31;
--	reg.enable_addr = (__u64)&self->check;
-+	reg.enable_addr = (__u64)(uintptr_t)&self->check;
- 	reg.enable_size = sizeof(self->check);
- 
- 	field1 = 1;
-@@ -367,9 +367,9 @@ TEST_F(user, write_empty_events) {
- 	int before = 0, after = 0;
- 
- 	reg.size = sizeof(reg);
--	reg.name_args = (__u64)"__test_event";
-+	reg.name_args = (__u64)(uintptr_t)"__test_event";
- 	reg.enable_bit = 31;
--	reg.enable_addr = (__u64)&self->check;
-+	reg.enable_addr = (__u64)(uintptr_t)&self->check;
- 	reg.enable_size = sizeof(self->check);
- 
- 	io[0].iov_base = &reg.write_index;
-@@ -401,9 +401,9 @@ TEST_F(user, write_fault) {
- 	void *anon;
- 
- 	reg.size = sizeof(reg);
--	reg.name_args = (__u64)"__test_event u64 anon";
-+	reg.name_args = (__u64)(uintptr_t)"__test_event u64 anon";
- 	reg.enable_bit = 31;
--	reg.enable_addr = (__u64)&self->check;
-+	reg.enable_addr = (__u64)(uintptr_t)&self->check;
- 	reg.enable_size = sizeof(self->check);
- 
- 	anon = mmap(NULL, l, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-@@ -439,9 +439,9 @@ TEST_F(user, write_validator) {
- 	int before = 0, after = 0;
- 
- 	reg.size = sizeof(reg);
--	reg.name_args = (__u64)"__test_event __rel_loc char[] data";
-+	reg.name_args = (__u64)(uintptr_t)"__test_event __rel_loc char[] data";
- 	reg.enable_bit = 31;
--	reg.enable_addr = (__u64)&self->check;
-+	reg.enable_addr = (__u64)(uintptr_t)&self->check;
- 	reg.enable_size = sizeof(self->check);
- 
- 	/* Register should work */
-diff --git a/tools/testing/selftests/user_events/perf_test.c b/tools/testing/selftests/user_events/perf_test.c
-index 5727cb5b914c..b444d114b2f0 100644
---- a/tools/testing/selftests/user_events/perf_test.c
-+++ b/tools/testing/selftests/user_events/perf_test.c
-@@ -89,7 +89,7 @@ static int clear(int *check)
- 
- 	unreg.size = sizeof(unreg);
- 	unreg.disable_bit = 31;
--	unreg.disable_addr = (__u64)check;
-+	unreg.disable_addr = (__u64)(uintptr_t)check;
- 
- 	int fd = open(data_file, O_RDWR);
- 
-@@ -160,9 +160,9 @@ TEST_F(user, perf_write) {
- 	__u32 *val;
- 
- 	reg.size = sizeof(reg);
--	reg.name_args = (__u64)"__test_event u32 field1; u32 field2";
-+	reg.name_args = (__u64)(uintptr_t)"__test_event u32 field1; u32 field2";
- 	reg.enable_bit = 31;
--	reg.enable_addr = (__u64)&self->check;
-+	reg.enable_addr = (__u64)(uintptr_t)&self->check;
- 	reg.enable_size = sizeof(self->check);
- 
- 	/* Register should work */
-@@ -224,9 +224,9 @@ TEST_F(user, perf_empty_events) {
- 	__u32 *val;
- 
- 	reg.size = sizeof(reg);
--	reg.name_args = (__u64)"__test_event";
-+	reg.name_args = (__u64)(uintptr_t)"__test_event";
- 	reg.enable_bit = 31;
--	reg.enable_addr = (__u64)&self->check;
-+	reg.enable_addr = (__u64)(uintptr_t)&self->check;
- 	reg.enable_size = sizeof(self->check);
- 
- 	/* Register should work */
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_info.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_info.c
+new file mode 100644
+index 000000000000..5bcfef952619
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_info.c
+@@ -0,0 +1,126 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <test_progs.h>
++#include <bpftool_helpers.h>
++#include <bpf/btf.h>
++
++#define OUTPUT_SIZE (1024 * 1024)
++
++static void check_show(char *output, struct bpf_map_info *info)
++{
++	char id[32];
++	char *map, *end, *btf;
++
++	snprintf(id, sizeof(id), "{\"id\":%u,", info->id);
++	map = strstr(output, id);
++	if (!ASSERT_OK_PTR(map, "map_in_output"))
++		return;
++	end = strchr(map, '}');
++	if (!ASSERT_OK_PTR(end, "map_object_end"))
++		return;
++	btf = strstr(map, "\"btf_id\":");
++	if (info->btf_id) {
++		ASSERT_TRUE(btf && btf < end, "typed_map_btf");
++		if (btf && btf < end)
++			ASSERT_EQ(strtoul(btf + strlen("\"btf_id\":"), NULL, 10),
++				  info->btf_id, "btf_id");
++	} else {
++		ASSERT_TRUE(!btf || btf > end, "raw_map_no_btf");
++	}
++}
++
++static void test_map_info(const char *operation)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, opts);
++	struct bpf_map_info info[2] = {};
++	char command[MAX_BPFTOOL_CMD_LEN], name[BPF_OBJ_NAME_LEN];
++	char elements[2][1024] = {}, expected[4096];
++	struct btf *btf = NULL;
++	int fds[] = { -1, -1 };
++	__u64 wide_key = 0, wide_value = 1;
++	__u32 key = 0, value = 2;
++	char *output;
++	int i;
++
++	output = malloc(OUTPUT_SIZE);
++	if (!ASSERT_OK_PTR(output, "output"))
++		return;
++	snprintf(name, sizeof(name), "info_%u", getpid());
++	btf = btf__new_empty();
++	if (!ASSERT_OK_PTR(btf, "create_btf") ||
++	    !ASSERT_EQ(btf__add_int(btf, "unsigned long long", 8, 0), 1, "btf_int") ||
++	    !ASSERT_OK(btf__load_into_kernel(btf), "load_btf"))
++		goto out;
++	opts.btf_fd = btf__fd(btf);
++	opts.btf_key_type_id = 1;
++	opts.btf_value_type_id = 1;
++	/* Query the typed map before a smaller map without BTF. */
++	fds[0] = bpf_map_create(BPF_MAP_TYPE_HASH, name, 8, 8, 1, &opts);
++	fds[1] = bpf_map_create(BPF_MAP_TYPE_HASH, name, 4, 4, 1, NULL);
++	if (!ASSERT_OK_FD(fds[0], "create_typed") ||
++	    !ASSERT_OK_FD(fds[1], "create_raw") ||
++	    !ASSERT_OK(bpf_map_update_elem(fds[0], &wide_key, &wide_value, BPF_ANY),
++		       "populate_typed") ||
++	    !ASSERT_OK(bpf_map_update_elem(fds[1], &key, &value, BPF_ANY), "populate_raw"))
++		goto out;
++	for (i = 0; i < ARRAY_SIZE(fds); i++) {
++		__u32 len = sizeof(info[i]);
++
++		if (!ASSERT_OK(bpf_map_get_info_by_fd(fds[i], &info[i], &len), "map_info"))
++			goto out;
++	}
++	if (!ASSERT_LT(info[0].id, info[1].id, "map_order"))
++		goto out;
++
++	if (!strcmp(operation, "show_all"))
++		snprintf(command, sizeof(command), "-j map show");
++	else if (!strcmp(operation, "show_name"))
++		snprintf(command, sizeof(command), "-j map show name %s", name);
++	else
++		snprintf(command, sizeof(command), "%s map dump name %s",
++			 !strcmp(operation, "dump_json") ? "-j" : "", name);
++	output[0] = '\0';
++	if (!ASSERT_OK(get_bpftool_command_output(command, output, OUTPUT_SIZE), operation))
++		goto out;
++	if (!strncmp(operation, "show_", 5)) {
++		check_show(output, &info[0]);
++		check_show(output, &info[1]);
++	} else if (!strcmp(operation, "dump_json")) {
++		for (i = 0; i < ARRAY_SIZE(fds); i++) {
++			snprintf(command, sizeof(command), "-j map dump id %u", info[i].id);
++			if (!ASSERT_OK(get_bpftool_command_output(command, elements[i],
++							 sizeof(elements[i])), "single_dump"))
++				goto out;
++			elements[i][strcspn(elements[i], "\n")] = '\0';
++		}
++		snprintf(expected, sizeof(expected),
++			 "[{\"id\":%u,\"type\":\"hash\",\"name\":\"%s\",\"flags\":0,"
++			 "\"elements\":%s},{\"id\":%u,\"type\":\"hash\",\"name\":\"%s\","
++			 "\"flags\":0,\"elements\":%s}]\n",
++			 info[0].id, name, elements[0], info[1].id, name, elements[1]);
++		ASSERT_STREQ(output, expected, "independent_map_formatting");
++	} else {
++		char *count = strstr(output, "Found 1 element\n");
++
++		ASSERT_NULL(strstr(output, "\"value\":"), "mixed_maps_use_raw_output");
++		if (ASSERT_OK_PTR(count, "first_map_count"))
++			ASSERT_HAS_SUBSTR(count + 1, "Found 1 element\n", "second_map_count");
++	}
++out:
++	for (i = 0; i < ARRAY_SIZE(fds); i++)
++		if (fds[i] >= 0)
++			close(fds[i]);
++	btf__free(btf);
++	free(output);
++}
++
++void serial_test_bpftool_map_info(void)
++{
++	if (test__start_subtest("show_all"))
++		test_map_info("show_all");
++	if (test__start_subtest("show_name"))
++		test_map_info("show_name");
++	if (test__start_subtest("dump_json"))
++		test_map_info("dump_json");
++	if (test__start_subtest("dump_plain"))
++		test_map_info("dump_plain");
++}
 -- 
 2.55.0
 
