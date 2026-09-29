@@ -1,32 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14373AFD15;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E3C3B14A8;
 	Tue, 29 Sep 2026 20:30:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790713830; cv=none; b=c7gxQBD0lOnhKJs/Rks3TmXXVvBuQRH3Bcw45fd3t/BWDkWSP2idh0oAyIzMqvoGt/XagzTLxMDzTpmekAIIcvLVU5iwolOHbEGNSpo/oxfs4MjhR9OtBS4E3ts3u3g8yWgTek0hXalvFVbu/Gs22jNbBnKY1s1sVB3qcRznI4o=
+	t=1790713830; cv=none; b=efTR96rhvLlyK9xTIfEULHq7UxdbcdZcjOmmkBtr7nLuTRBwBEGY9VztME/USVi7+XFCciooMxp8eZOK5BUxuqu6DgCBLljSPCrv25myDqcC9bnVeNWcOxRuwie1U7tA+/fjSSpipe6cKq1wBPB4JMwwjVkXdhaYloTK3lK4xfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790713830; c=relaxed/simple;
-	bh=LFtm3Eo2BRBl3Q+0TVGZq4TWMDNPMJU4orCucJmdj54=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BCNCmTb4+HetMmam7L20GVlwyew6Prmn0M17kUeuXPhj+j5IRtbhuv420UsfdMQqpMNgit5ig3N7O5s87Bp5/xWq16YTCgJipnK/TJMzMKatR7P6/Xh+FF9yIBr8/uRz8BkBUx61xmolJ1fZxZI/teouEo9uGHdBYsnzYhGBNAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=q3RECGix; arc=none smtp.client-ip=159.69.126.157
+	bh=mLPIHaLN1zwEgiiNoLS6x7fmmNkTgRH/XZf4sdQONSM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SbtlAaEyP3mQJhTPmt4wvpkHoVizxt3mJ0dFy8iG8/vGBXHF6Gamgp4m5OhJQF/y20OrSQizWPL1AjC4Glz69jNpS1OKWMC6CETrx7f0QqbUeH8Ors9O2HvqygrayGRBZTIMCOZW5/ckEIom7kFZ15/5z3IMKMe/c8SGOCZJD4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=OhdYY5E6; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="q3RECGix"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="OhdYY5E6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1790713465;
-	bh=LFtm3Eo2BRBl3Q+0TVGZq4TWMDNPMJU4orCucJmdj54=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=q3RECGixf/ZtS71FT+2U7SyVl3CrqLJ79RPTmu9IVxJzTH2zkLpfMil/GakqbSc83
-	 VyjDEaL7Iap9g3OcmGZ9t8EIHT0rzeIm61gIp6zcg4dujtwf281s+qNJpLe35wbjhf
-	 /e9Q6au/AetTZYRbsCOIF4hcf8R8y9N+P91IJEYA=
+	bh=mLPIHaLN1zwEgiiNoLS6x7fmmNkTgRH/XZf4sdQONSM=;
+	h=From:Subject:Date:To:Cc:From;
+	b=OhdYY5E6rsEcTNi84oAIaoCEg/UrQfODjAV6jfakIeUdDNqCf9Ias0UcGO56G+grg
+	 4YTaQBA/ILbrmoCY/A35W+DZBvpB+7q44HBoXQewTuvPAdoth0wyqEvZN1ssGPA5gE
+	 sp/Pwi1qXt9xVFUHuGB3gnJuXaTfuPGkywKZXUOc=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Tue, 29 Sep 2026 22:24:23 +0200
-Subject: [PATCH v2 3/3] vdso/gettimeofday: Add support for
- CLOCK_REALTIME_ALARM
+Subject: [PATCH v2 0/3] vdso/gettimeofday: Add support for ALARM clocks
+Date: Tue, 29 Sep 2026 22:24:20 +0200
+Message-Id: <20260929-vdso-alarm-clocks-v2-0-a7af4089a698@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,64 +34,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260929-vdso-alarm-clocks-v2-3-a7af4089a698@weissschuh.net>
-References: <20260929-vdso-alarm-clocks-v2-0-a7af4089a698@weissschuh.net>
-In-Reply-To: <20260929-vdso-alarm-clocks-v2-0-a7af4089a698@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/32OTQ7CIBCFr9KwFgMktNGV9zBd0OkoaC2Voahpe
+ ndpNXHn8nt5fxMjDA6J7YuJBUyOnO8zqE3BwJr+jNy1mZkSqhQ7JXlqyXPTmXDj0Hm4Ei+1UEZ
+ raVoNLOeGgCf3XDuP9YdpbC4IcSn6OgLexzwWfzbrKPrwWp8kuaj/RpPkgpeyMk2jVSWhOjzQE
+ RHY0W57jKye5/kN7fSCLt4AAAA=
+X-Change-ID: 20260921-vdso-alarm-clocks-6502a551ad5c
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
  Vincenzo Frascino <vincenzo.frascino@arm.com>, 
  Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790713464; l=1632;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790713464; l=1073;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=LFtm3Eo2BRBl3Q+0TVGZq4TWMDNPMJU4orCucJmdj54=;
- b=NhIp/rSGCgQGwA2NMrcjQZJqvzDfwxpHdQA0kWIC36YaNUx1VYkf7dloKUAcoKR9N8MuCKysv
- tbgenkp712SDcsicxLSfqFwO7DK301XF8cVmFgz//N3C5kHRQP6tvrW
+ bh=mLPIHaLN1zwEgiiNoLS6x7fmmNkTgRH/XZf4sdQONSM=;
+ b=fKnrtMutvKVcLjC7m84LyT9vBRESgFDml+XA9KRu8jPTnp/9U6/73QmS7sQn6ynlE9HCZGXKj
+ izrm/2VyPlbCrSFUzQvZjQoFW02+h3qvzT+O0++IG3OZrLt/gDoVR5r
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-CLOCK_REALTIME_ALARM behaves exactly as CLOCK_REALTIME as far as the
-vDSO is concerned. The vDSO library can handle it automatically
-correctly. Only the basetime needs to be maintained during the tick.
-
-Reuse the CLOCK_REALTIME basetime for CLOCK_REALTIME_ALARM and update
-the userspace hres clock mask to include CLOCK_REALTIME_ALARM.
+Extend the generic vDSO library to also handle CLOCK_BOOTTIME_ALARM
+and CLOCK_REALTIME_ALARM. This does not introduce any runtime overhead
+in the userspace fast path and only memory copies in the tick update
+path.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- include/vdso/datapage.h | 1 +
- kernel/time/vsyscall.c  | 4 ++++
- 2 files changed, 5 insertions(+)
+Changes in v2:
+- Rebase on tip/timers/vdso.
+- Add Signed-off-by tags.
+- Link to v1: https://patch.msgid.link/20260921-vdso-alarm-clocks-v1-0-617abb5271c7@weissschuh.net
 
-diff --git a/include/vdso/datapage.h b/include/vdso/datapage.h
-index 33297b5e2521..0aa28a484dcd 100644
---- a/include/vdso/datapage.h
-+++ b/include/vdso/datapage.h
-@@ -33,6 +33,7 @@ struct vdso_arch_data {
- #define VDSO_BASES	(CLOCK_TAI + 1)
- #define VDSO_BASE_AUX	0
- #define VDSO_HRES	(BIT(CLOCK_REALTIME)		| \
-+			 BIT(CLOCK_REALTIME_ALARM)	| \
- 			 BIT(CLOCK_MONOTONIC)		| \
- 			 BIT(CLOCK_BOOTTIME)		| \
- 			 BIT(CLOCK_BOOTTIME_ALARM)	| \
-diff --git a/kernel/time/vsyscall.c b/kernel/time/vsyscall.c
-index bb412ad1782f..0cf4eadf6996 100644
---- a/kernel/time/vsyscall.c
-+++ b/kernel/time/vsyscall.c
-@@ -69,6 +69,10 @@ static inline void update_vdso_time_data(struct vdso_time_data *vdata, struct ti
- 	vdso_ts		= &vc[CS_HRES_COARSE].basetime[CLOCK_TAI];
- 	vdso_ts->sec	= tk->xtime_sec + (s64)tk->tai_offset;
- 	vdso_ts->nsec	= tk->tkr_mono.xtime_nsec;
-+
-+	/* CLOCK_REALTIME_ALARM, copy of CLOCK_REALTIME */
-+	vdso_ts		= &vc[CS_HRES_COARSE].basetime[CLOCK_REALTIME_ALARM];
-+	*vdso_ts	= vc[CS_HRES_COARSE].basetime[CLOCK_REALTIME];
- }
- 
- void update_vsyscall(struct timekeeper *tk)
+---
+Thomas Weißschuh (3):
+      selftests: vDSO: vdso_test_abi: Also test ALARM clocks
+      vdso/gettimeofday: Add support for CLOCK_BOOTTIME_ALARM
+      vdso/gettimeofday: Add support for CLOCK_REALTIME_ALARM
 
--- 
-2.55.0
+ include/vdso/datapage.h                      | 2 ++
+ kernel/time/vsyscall.c                       | 7 +++++++
+ tools/testing/selftests/vDSO/vdso_test_abi.c | 4 +++-
+ 3 files changed, 12 insertions(+), 1 deletion(-)
+---
+base-commit: ca46a07c4b68246c4e400ce3649ab7228a878d8f
+change-id: 20260921-vdso-alarm-clocks-6502a551ad5c
+
+Best regards,
+--  
+Thomas Weißschuh <linux@weissschuh.net>
 
