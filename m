@@ -1,139 +1,123 @@
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+Received: from mail-wr2-f34.google.com (mail-wr2-f34.google.com [74.125.225.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 121522DECA8
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2026 04:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 966D73B4EAB
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2026 05:34:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790656603; cv=none; b=Q/02HJpZ0q4OTthzbC3W/Y+nqc+OD0rgkkioejnzMSuG2ilozeI/z8ZNNQX02B24/NZQmCWqdivAllHGItoYJfJA+Vp6q7Lt/LlBIbUqJgVsaVg+ThIpJ0wv7aMJfj2ebhonPYSluskOvaAa28HxHxGMOscwW8fomwhc5Kw3ax8=
+	t=1790660053; cv=none; b=sJFUdbZKRiJGkDfv4e/EC8YpXz27wxB7b/8DwT7mj8CTnY9rUkp1/AGMe2j51gPWsn/yOi04zCDqgB++F4gGI4qR0oHjmXb5gJ2RiPa6BWWVDKzM7f3yv7PraEMYOAkpG0cgY0Fl2ohKrcph84W8STwduqH9GARD6Yy3+uqvOYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790656603; c=relaxed/simple;
-	bh=8BmDe7CieBenlT6QQFs8X3709Irc2hkQ7xYDpghBtVc=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Xe3sEaLqasZM9EGm9PIXGLjaO45/6oRvvLdiu06OrwzWV7V10r6O9r3HemY9KbHK+sKufUfdGkdFk50qG9ezLmL60Ua2B4Eq8wC+jhBjpRiRS+UCCEtwFkxbkdXi+t/YboaTb31jiASXaleh8kWwpaYiyRvwFUWJIyg0bSj63AQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gmlkzkju; arc=none smtp.client-ip=209.85.210.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
+	s=arc-20240116; t=1790660053; c=relaxed/simple;
+	bh=m2lqawFRROq7VOxJCYnJVdA4aB6TI0mUCVIlIeUuTzI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A+jfzQkRlF4J7BG+sop6pLWPKIVUBsrppswUyv/TVaRpwvaI6yZrFFYduKwyDj0sQcO8PqZHOZX7CBEYruipufNCQobfKi4PJP8nUILv2Fn6euh9kP2zpCRZ9Ng1Ub2TtPPvZPSU62JrR7GIVy88f+7AswDtgUcWaN8364aN8Pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g+zLSDTB; arc=none smtp.client-ip=74.125.225.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gmlkzkju"
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-882a1e6099aso2977012b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 21:36:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g+zLSDTB"
+Received: by mail-wr2-f34.google.com with SMTP id ffacd0b85a97d-48884b926f0so2441094f8f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 22:34:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790656601; x=1791261401; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=p4X3fobrUTS2dztsfdh4qouH9z1FompKqh33UTTDA4U=;
-        b=gmlkzkjuQlVGaAHFQ6N/lp7gT/9FaW5F1K7gWddxiM5fzKPOdZp1wTaIpxXe+NNiUL
-         ecJLGr8O0LtbaSONgNokpReoQLZCOkaq8hWOyuvopkkiyhFtEB1Dcrg6U5ymOLoQxfs/
-         SXxpfF16fzueYjyJC2Yc8BhvKo958t57acEomd+GSBtB5ctsYwY+0i78joDcnz6Q5TvL
-         jdMuS9WQXKCszmv+LtJARt2ESX5ytmYt14b6NNx8riubmn/39917D7j9zTSgXVlfaNiW
-         S6wnlBSByMhoKyu7DNcbEoqa3+/r+LrGIK1c7Dh+qiqdUz0MiXRMADBOr2uvESJFH9qd
-         XVBA==
+        d=gmail.com; s=20251104; t=1790660050; x=1791264850; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=vDrRpA1W/7JjCEY/lfrVQceoo3M5nHbNKEhFmkg5umg=;
+        b=g+zLSDTBN5PBcQHF5j5AAGj8sobOayPMm/lPnpU7fFtjmd3yNMI9nSQHvybIYKg/n+
+         GnGtfnaSbNuUbTmkxDnLFRqu09paoQmpeHA9gNMpY/dnIiFV2aTWuyoV1ec/eekRx1+w
+         +cFWuPIJoHLHgXUoyu2mRuVcCvIFCsfVnszBEcOfx33IZmpH8ZPyNBUgz3kKmqunn1Tg
+         uKWjYgPIBuXLK+Cs/AqKE+2lqdLlelH0tOcKaTzbAFTopW7ebyce/4Sp1LnRuciwb8ov
+         zrfKTEZqkXuAiXYdLJdO1RPcMxP+iSEhL6TFXWJxtc9mGiJT6dynqKgOppieq46c7rex
+         nwaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790656601; x=1791261401;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
+        d=1e100.net; s=20260707; t=1790660050; x=1791264850;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=p4X3fobrUTS2dztsfdh4qouH9z1FompKqh33UTTDA4U=;
-        b=BkjR4bp7l7MMgAlw6g4VBWnD3i64JrETtC+W7lbDMPFl4ECt8dp2AtDT0vfHysncZQ
-         EZ+lk+/QiPeRbWxf2r+p8FKU2GNsOckVpJDzyTlni9Y1nisbsyIBnG/JHGCMDwOlPNjL
-         W2NC9pHuvG6jX9Vr+r+JFpZOzyMyn/iornD7i1AGJYL1ycTVtlgGgJ+TbcCkMtD+Spmc
-         9Wi/xlTOhp/exVEUOso+DmS7VPdYixj80Y5DGw6e+lkBAZkJknJ709/Dy/+cTdCCqMHs
-         R5vPG4UaXHkh77reigrpTwE/Shyd6ULyCoOtOCKSsRjcmFQb11J5xIjUEwqZ0XLsaMJN
-         EuHQ==
-X-Forwarded-Encrypted: i=1; AKwUvByNlOVhXSLoqBdWfjUntT+ffUj4zNOLRUPf8HjjnvdqrzJevZHGGyvxZhtkPS1E+xibywHLPd7W39q/ORg6EGI=@vger.kernel.org
-X-Gm-Message-State: AFuF++kgh7QVV1aJ/djGr5+W2nQ8VW2qppKsSoDtCdBLui/mVgVjLi6V
-	+Y9wNHcFj+JS1M2gL7sMo2NxmVfFL89NZTEGXeWsR5WaC2k0NySnsgzzX4ErQq93QsLjqdOv7Ly
-	RiA==
-X-Received: from pfrg28.prod.google.com ([2002:aa7:9f1c:0:b0:87f:bed6:5016])
- (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:4192:b0:885:fcc1:a9b7
- with SMTP id d2e1a72fcca58-885fcc1bda1mr42636b3a.6.1790656601112; Mon, 28 Sep
- 2026 21:36:41 -0700 (PDT)
-Date: Tue, 29 Sep 2026 04:36:37 +0000
+        bh=vDrRpA1W/7JjCEY/lfrVQceoo3M5nHbNKEhFmkg5umg=;
+        b=dlLgbZldM7Jw5fhVRZfLnvaFa65eoG1UipfGoJsUbBPraUPI0tCrR93GI91ors6syD
+         iC6Kc+BpqacrlD8Oo1+HA/hcHhnSmKHFhKoveAsM1hkqKMqUfA4yjr4GwWq0Jn9gC5AB
+         QxODo4cCo0lR4KK8G1vZ7tQ3mQXYssoPMzfOFmD/SLVJLqQl9lheqBWH7IuWY+fjJ1Is
+         2gIdfj+KpKTw/TXboqV9WbH0MnO21sGqlI7fCGcn41ugKVf9rbg5vC/GVAwlk41OAXEe
+         1JFua54U0m6PKgEgMLj7UsJVUkHeXSPhbtiSQmZhd118Ms5iGx+W9kTv/+V450wSZIdw
+         BVRQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxwwtM0tibrKiUXW7+Nv5bJA39q9GKI03Syb0a4lkvW5T4AZFEQ5QJopnw6go5MDcAJ3AsQMSBx0Ff+MNnHu3k=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJGDGpzv75lDU6th73hdtDtfhVrU1R9+EZjkzkrY2Rtfuu20YBN
+	7nNNGEMeFzZNbKfR+yzHH1QsCnS2p+7gDX/nemCCEDBry08mEOCz6c/2
+X-Gm-Gg: AYBFou2rUZNWPkXGUiWZdyYrsODRxI+8aetPGrzkx7CuxBnMNYF+e5bEB7ya+Nl8h0Z
+	veQequtGsFuFAvR8o57TcWgcdYmS0FCmVW42bJQysybXlq37xGzIucdKeSdLYWPhmHvxVs+NpbC
+	pl+SERb+iNot9kr3hPgmxyZN5w/cs8P14bu85fPsCjfxbuBXmo4vnXxuIOP//FtMFF+FTo4bB5J
+	7Vk5JQx4VuFpg5BJOWd3vCfcBPVmoGdh1e8yDWxNq7Wz2N0abBWNrp/XmUNejvDsZID2W7bn7gL
+	EyoEcHw9NJYikBDaGwHCRzP8IhmgwuSP/ctfqv41aAqsUHDw5ZoEctgf/OLQWIX6VtHq96it2Y3
+	xAW3pV1CzQnwjaY6LUo6EThpXNpnH/7kmtOXXhUMYho20+l3e42YgG1VgZM3+YHMunIuuUOjG0W
+	lGgYiwy+exkUi1GYmUFqNp7w2BAiKtePU0XxPvHSeGj3DJcMB35rVNJitYOwVaAOSvR09bofB0s
+	ECX/gKJYRPAvBZj52w0AkYO/KtgNmtlZ3oZtwdm8PxPtKRgU5ZlA7c6TOKzPHH04wH5IrRKDlNX
+	tBsVV0c2Q8g+zJPqWDGZ0Bnm8pc1WegvFvZQM3FUmPQmXysV3PRDR1tROkByyeoBW3vO5SD1yjU
+	=
+X-Received: by 2002:a5d:5e83:0:b0:488:84bf:eedf with SMTP id ffacd0b85a97d-48884bff147mr15033151f8f.48.1790660049555;
+        Mon, 28 Sep 2026 22:34:09 -0700 (PDT)
+Received: from unknown748F3CBA5068 (dynamic-2a02-3100-9c32-f801-0451-cc94-d3ca-f56b.310.pool.telefonica.de. [2a02:3100:9c32:f801:451:cc94:d3ca:f56b])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48af506fdc1sm1047634f8f.21.2026.09.28.22.34.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Sep 2026 22:34:08 -0700 (PDT)
+Date: Tue, 29 Sep 2026 07:34:06 +0200
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Jeremy Kerr <jk@codeconstruct.com.au>
+Cc: Matt Johnston <matt@codeconstruct.com.au>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	netdev@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2] net: mctp: Make KUnit tests depend on flow
+ support
+Message-ID: <artKykZLgwngX5zs@gmail.com>
+References: <20260925192510.93840-1-kmehltretter@gmail.com>
+ <20260928205352.30502-1-kmehltretter@gmail.com>
+ <fb39875c7fa4131e565eebf8ffc9b3b19bb5ad87.camel@codeconstruct.com.au>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.56.0.rc1.315.gc6ed9934b7-goog
-Message-ID: <20260929043637.1917707-1-wakel@google.com>
-Subject: [PATCH] selftests/size: Fix SIGSEGV on 32-bit x86 due to
- uninitialized vDSO pointer
-From: Wake Liu <wakel@google.com>
-To: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Cc: Tim Bird <tim.bird@sony.com>, Siddhesh Poyarekar <siddhesh@gotplt.org>, linux-kernel@vger.kernel.org, 
-	Wake Liu <wakel@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fb39875c7fa4131e565eebf8ffc9b3b19bb5ad87.camel@codeconstruct.com.au>
 
-Commit 6b64a650f0b2 ("kselftest: Minimise dependency of get_size on C
-library interfaces") replaced direct C library calls with syscall() to
-avoid accessing uninitialized TLS on x86_64 when built with
--nostartfiles.
+On Tue, Sep 29, 2026 at 09:02:23AM +0100, Jeremy Kerr wrote:
+> > This keeps the full flow-test coverage: the suite is available only
+> > when flow support is enabled, for example by the I2C transport.
+> 
+> Hardware transports are typically not enabled for kunit test kernels.
+> 
+> Are you attempting to fix an actual problem you're encountering? What's
+> the aim with this change?
+> 
 
-However, on 32-bit x86 (i386), the C library's syscall() wrapper itself
-relies on CRT startup initialization to dispatch system calls via the
-vDSO entry point:
-- In glibc (libc.a), syscall() executes "call *%gs:0x10", reading the
-  __kernel_vsyscall pointer from the Thread Control Block (TCB).
-- In Android Bionic (libc.a), syscall() calls __kernel_syscall(), which
-  returns the global __libc_sysinfo pointer in .bss.
+Hi Jeremy,
 
-Because get_size is compiled with -static -ffreestanding -nostartfiles
-and defines its own _start, CRT and TLS initialization never run. As a
-result, calling libc's syscall() on 32-bit x86 dereferences an
-uninitialized %gs selector or jumps to NULL (0x0), crashing immediately
-with SIGSEGV.
+It's no real-world MCTP workload bug. This came from a similar issue in
+my 842 KUnit patch: the test selected the decompressor. Geert pointed
+out that tests should not silently enable otherwise-unused code:
 
-Provide a local syscall() implementation on __i386__ that invokes
-"int $0x80" directly, avoiding the C library's syscall() wrapper and
-its CRT initialization dependency.
+https://lore.kernel.org/r/CAMuHMdVcZ5cV4-HrjLYfFKh6UshiVxq5eXCNyp0Z1k_SMAvF5g@mail.gmail.com/
 
-Fixes: 6b64a650f0b2 ("kselftest: Minimise dependency of get_size on C library interfaces")
-Signed-off-by: Wake Liu <wakel@google.com>
----
- tools/testing/selftests/size/get_size.c | 29 +++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+My goal is to keep KUNIT_ALL_TESTS from pulling in otherwise-unused
+production code. An explicit opt-in could preserve the coverage,
+following CRC_ENABLE_ALL_FOR_KUNIT and CRYPTO_LIB_ENABLE_ALL_FOR_KUNIT:
 
-diff --git a/tools/testing/selftests/size/get_size.c b/tools/testing/selftests/size/get_size.c
-index 2980b1a63366..352c90d5c770 100644
---- a/tools/testing/selftests/size/get_size.c
-+++ b/tools/testing/selftests/size/get_size.c
-@@ -32,6 +32,35 @@
- 
- #define STDOUT_FILENO 1
- 
-+#ifdef __i386__
-+#include <stdarg.h>
-+
-+/*
-+ * On 32-bit x86, libc's syscall() wrapper invokes the vDSO entry point
-+ * stored in TLS (%gs:0x10 in glibc) or a global variable (__libc_sysinfo
-+ * in Bionic) initialized by CRT startup routines. Because this binary is
-+ * built with -nostartfiles, those pointers remain uninitialized and
-+ * calling libc's syscall() crashes with SIGSEGV. Use int $0x80 directly.
-+ */
-+long syscall(long num, ...)
-+{
-+	va_list ap;
-+	long a1, a2, a3, ret;
-+
-+	va_start(ap, num);
-+	a1 = va_arg(ap, long);
-+	a2 = va_arg(ap, long);
-+	a3 = va_arg(ap, long);
-+	va_end(ap);
-+
-+	__asm__ volatile("int $0x80"
-+		: "=a"(ret)
-+		: "a"(num), "b"(a1), "c"(a2), "d"(a3)
-+		: "memory", "cc");
-+	return ret;
-+}
-+#endif
-+
- static int print(const char *s)
- {
- 	size_t len = 0;
--- 
-2.56.0.rc1.315.gc6ed9934b7-goog
+- MCTP_ENABLE_ALL_FOR_KUNIT depends on KUNIT=y and MCTP=y
+- it selects MCTP_FLOWS
+- all_tests.config enables it
+- MCTP_TEST depends on MCTP_FLOWS
 
+This keeps KUNIT_ALL_TESTS from enabling optional flow code, while the
+explicit kunit.py run --alltests profile opts into it and retains full
+flow coverage without requiring a hardware transport.
+
+Would that approach work for you?
+
+Karl
