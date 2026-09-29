@@ -1,69 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f38.google.com (mail-oo2-f38.google.com [74.125.231.166])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752DF386C17;
-	Tue, 29 Sep 2026 00:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFBA296BD2
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2026 01:00:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790642546; cv=none; b=aVzkweuNHp4TxN8m94YBvEe1sKCggZXViIKNUb8SZyAoowEmiNy14yl4lEKXgERWkTmi5k9xTUMAMHYzd0YsokoN8oq3ht5if2KoZYNeLphQy/Y9lPX1FGGl4CVw2KVgZ5GILij4gV225MBuykPRGholcxpqdKHvpv3XDyMDTRs=
+	t=1790643650; cv=none; b=PIUZHkBHMPrS/7sFKsK+vrUhpZwFXJg9HtUQE1gTCdKxuholS8MyVLnT1yuCrzyvcY3LzJpv/ikXAArvdAcgIswZXKGWE8LBsjz0XOaVGdUyr8QRsnn35xR6kaRcFxaVofnNeUVpvFdZunBjmrlr3YM/zXU1UdkhmaIHozaOsMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790642546; c=relaxed/simple;
-	bh=S9xPAU/9/TKIf6DgBdZhMLcz2QhAmyPlTKG+BECZji4=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fAlIb+OLD+J5YyE9Hh2Ays6uTENJt6fZXiqcVBlBmqODDVnymA+9wJwtIDDtfY1vCkKfF3CBWFu20xowHJ8vMOTcwx+YVh+beC32iwU5FhTl6QIQ9a3h1hpL6v1m38N4X2DrBXDD8RtQ7kCvFG7XwAzFFE6eGvHntNtEekIfDaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bZnlEW6h; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790643650; c=relaxed/simple;
+	bh=tTvzke3DfKKWtYV8+SwzyB0UUAV5X0AJTYUDzhIU7pI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jM5Yl3w5u4okJi8lcymdDDrFDS6nHTBR9WTE2N+txQZEew4wzBiu3oiCpSFbqUSZkXvELpqMiyOHMisz0xLuR/RjUL9EALDFFu+a0edOpmjWqOz7VA5/XRs5Q2/ieoMWGM/ObvljyLPUDXMSHZIbppsvVaA8i4dBjlmC18ltbgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AoDDDKpK; arc=none smtp.client-ip=74.125.231.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bZnlEW6h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4BBE1F00898;
-	Tue, 29 Sep 2026 00:42:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790642544;
-	bh=ZSkuFme1leGMg1COAGhFiRyunbh28v3KGifLjAR+V7s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=bZnlEW6hDCC0qhf2Df3A+4KYxgsloJMp2cghtj4Zl4YDXBep7rfOBipzv4z/XKb7g
-	 1ZsUmkk7wWzsFoYxnIdxoHkL9uSQvqBTmYQnBbdBdh5Lax9NSzd5vN3kFy4yBcicem
-	 EYFiDPL2XacWkURHY+7kYGSk29PFwKQWecyhTuXjpn8hLPUypZRgGqLaQ1I7l7sohz
-	 yX5TK4ooH4WaqAQ8J7sh6BPPtKATbM7ay/4ouCS/azCpCIAL7ZBoUiz2I6uPRZDxoq
-	 mKxO3z/pcrkp4bIFAyH0IKHEIpjsW+g7JquhYF+pu+t0EHAhNWLttTKkeIBQQmas4Z
-	 IZehZPghSATbA==
-Date: Mon, 28 Sep 2026 14:42:23 -1000
-Message-ID: <4af70c48e8c7d1eac1425d368be92dcb@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Tao Cui <cui.tao@linux.dev>
-Cc: josef@toxicopanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
- linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
- daniel@iogearbox.net, linux-kselftest@vger.kernel.org,
- Tao Cui <cuitao@kylinos.cn>, ameryhung@gmail.com,
- alexei.starovoitov@gmail.com
-Subject: Re: [RFC PATCH v7 3/4] blk-iocost: add iocost_ioc_tick tracepoint
- for per-period device summary
-In-Reply-To: <20260924054549.2271705-4-cui.tao@linux.dev>
-References: <20260924054549.2271705-1-cui.tao@linux.dev>
- <20260924054549.2271705-4-cui.tao@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AoDDDKpK"
+Received: by mail-oo2-f38.google.com with SMTP id 006d021491bc7-6d89a3ebc93so378998eaf.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 18:00:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790643648; x=1791248448; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=6it+SmeVeHMYo8qun+39zeU0I/4M6Z51mplDGX3Lxkg=;
+        b=AoDDDKpKwmXEmG4TjHmmL/aw293eFXnAK2hSnhnZPH72muSYcqOQQTj37QaccBGs93
+         uw19NqPGroF8JVWNDhdHfldDqDgshPT19+OX/bzHXKBYGdiTTDTplPetWaNrd0BnJWks
+         bSJd8Ts2U2ln5CJ9KYM/UJl7RFN8/gq+LDeJCN+9xXswFhq3fBSerWdEnHrT11vTwUjy
+         QnHfiCocnAV67fFyl4lliq970mT9C80BO8FiWajGhj8kTvj1smNoDhnNmmF7LhtGWbAA
+         cP4mwqzAMUq0WTobVnVczCpvJ+zkkf/XGwHXESg5EYBSZyUYwWcvf9tpPjt8ewLwub5C
+         qwAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790643648; x=1791248448;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=6it+SmeVeHMYo8qun+39zeU0I/4M6Z51mplDGX3Lxkg=;
+        b=Z/w4S24xwKeIxGeHjD/bEf0XjwG6iAz1vQCBBXHCX6uu+maYdlMcmjzXhxrM7nmS9J
+         Y90fcY7n3TDzHwSi8XF6RLwt5Oi2ozzRvo0TiqJ+9wkRECOr/pB/w0QZDb1NNqYQoRpB
+         NUQbZKD2uy/tkgVeEpEEPaQwLoA6hffbHa/8y0pN5E40RM7u01MbDAMWxfcbZedSBDPX
+         Rvnj/3a+zRrLL/e1c/NwsPuQfXiniqOh2/Z5uxRsMZ+IXkt25/F7WfWZZetAyiQWWYht
+         eC+4BxYqpsQx5M4JsAr+JgQNkzM3g8VhvGSMYkt5KLQIvO7uRBhIqLVNETbtz3mBqVyc
+         GEWg==
+X-Forwarded-Encrypted: i=1; AKwUvBy3AEuoIvry9ytg+Sm9xxvdeXey1+Kj5c4sNivXVQqB41wfzYAboKG5PuTs/MhsNUHfS+/Cq0FnXx5sD5KrOqY=@vger.kernel.org
+X-Gm-Message-State: AFuF++mSHgLzm/CyZLeOZRc+t30Ie9eN9ogJXAgT/IpMAO+uWhFkfhfp
+	8l0IDi6G6resasRWFzx+4vNAhUcUlN+x/lIlFMxIAQQORHlz/Iceh/hC
+X-Gm-Gg: AYBFou3imyAW85GdOewVl3JVArnMhYg2lLGkMb30LDN2j+ybSjnWj7Yh7wQNUcsIUTu
+	xz0ttXJZlexqXfk/vJG9QHKqKc7QJVcSghrVdjXWseagH5Mk1vz12TF6fLZsHYEFiPrTECEO5id
+	BrDDA3fq3BMHl6Qwkdr/3U3rbE1j/b/UvK0mOpaDi0eL3IE0tXpp1yts+4j76ORjA5tmmzI0IX7
+	NByV9xktzCyb/Bq1ti+oh6xR684MVo02LmVZ/xdU0prUFlGjkYU6J9KWb+J8vLFRdm+s2mdtWVe
+	kiZHPWqjEBIKPRxQ6t6u0mLMckRWQ9ex2hcXS1J5Y+Qxg8yxO5Cu10JdnSAHGtJKwLFlGgomiTB
+	Zn0tGk+4K0Yc1ZWbYptt2aqeL0iugeawS145LguvVtQyGvggPixyscVUAJjHtYW2YaANQbgiMjT
+	J85DVGEfWX0e1T4r/I/Pnq5YKEwUW5I+bXRMHwuRxjuJr8K38/LsykoccWqmJwXD+eHRaJ9O4X9
+	QEubUlQvh4Zlg0sqyt34BrCeFQ5A4n10L86eeb+me6zjv3vyk8=
+X-Received: by 2002:a05:6820:827:b0:6da:9dae:a22 with SMTP id 006d021491bc7-6da9dae1613mr1713830eaf.62.1790643647899;
+        Mon, 28 Sep 2026 18:00:47 -0700 (PDT)
+Received: from archlinux.lan ([136.34.156.120])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6d88358bb8dsm6410092eaf.14.2026.09.28.18.00.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Sep 2026 18:00:46 -0700 (PDT)
+From: Danish Khateeb <danishkhateeb03@gmail.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Miklos Szeredi <mszeredi@redhat.com>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	linux-unionfs@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Danish Khateeb <danishkhateeb03@gmail.com>
+Subject: [PATCH] selftests/filesystems: expect EINVAL from overlayfs in fscontext_ns_test
+Date: Mon, 28 Sep 2026 20:00:44 -0500
+Message-ID: <20260929010044.5297-1-danishkhateeb03@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hello, Tao.
+Since commit a518e63c3775 ("ovl: return EINVAL instead of EIO in case of
+mismatched user_ns"), overlayfs refuses a context created in another
+user namespace with EINVAL, like binfmt_misc does. The test still
+expects EIO, so it fails:
 
-On Thu, 24 Sep 2026 13:45:48 +0800, Tao Cui wrote:
+  # fscontext_ns_test.c:208:create_from_descendant_userns:Expected variant->expected_errno (5) == errno (22)
+  #          FAIL  fscontext_ns.overlay.create_from_descendant_userns
 
-> +	trace_iocost_ioc_tick(ioc, nr_active, usage_us_sum,
-> +			      ioc->period_us, ioc->vtime_base_rate,
-> +			      ioc->busy_level, ioc->running,
-> +			      now.now - ioc->period_at);
+Expect EINVAL.
 
-These are still passed in. Can you pass only ioc, &now, nr_active and
-usage_us_sum and read the rest from ioc in TP_fast_assign() like the
-other iocost events do?
+Fixes: a518e63c3775 ("ovl: return EINVAL instead of EIO in case of mismatched user_ns")
+Assisted-by: LLM
+Signed-off-by: Danish Khateeb <danishkhateeb03@gmail.com>
+---
 
-Thanks.
+Notes:
+    Tested on next-20260925 in QEMU: fails as above without this patch, and
+    all 3 tests pass with it.
 
---
-tejun
+ .../selftests/filesystems/fscontext_ns/fscontext_ns_test.c      | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/filesystems/fscontext_ns/fscontext_ns_test.c b/tools/testing/selftests/filesystems/fscontext_ns/fscontext_ns_test.c
+index 0f30a3e6e197..535bf1f4e1a3 100644
+--- a/tools/testing/selftests/filesystems/fscontext_ns/fscontext_ns_test.c
++++ b/tools/testing/selftests/filesystems/fscontext_ns/fscontext_ns_test.c
+@@ -193,7 +193,7 @@ FIXTURE_VARIANT_ADD(fscontext_ns, binfmt_misc) {
+ 
+ FIXTURE_VARIANT_ADD(fscontext_ns, overlay) {
+ 	.fsname = "overlay",
+-	.expected_errno = EIO,
++	.expected_errno = EINVAL,
+ };
+ 
+ TEST_F(fscontext_ns, create_from_descendant_userns)
+
+base-commit: 6812ce4e4379ffc99c52401ec28f0d7ffbc36206
+-- 
+2.55.0
+
