@@ -1,100 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21C5296BCF;
-	Tue, 29 Sep 2026 06:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA996440A32;
+	Tue, 29 Sep 2026 06:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.110
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790662830; cv=none; b=g0dR+5MNE+Sbp9Em6pl2gAmthOkftZsl8pvTaU3Pwb7W/3ViBfwZIWTuYfociCRKU6UEx6DkBzP+vtHGdCj2Edxzf7M/O+djrf4yH7Migv2BIoWZXSw/3Q9+ZpQCaob3iA993cXBIZAGutXfFrl8ca0Wabj3XlpCxWiVme4VYQM=
+	t=1790663826; cv=none; b=NOIUmHEI9rgZ8YKUGi01Oyn6luSahJ6EnYFkmSBSP/kU/tHmH4DGqi8OuzmRyy4JOI7NWLrUif4iA5Y11ShfSR9oqrPvl2HG/tFbrBrhwTZ76tdGaMm5yn8nlgIxk5HBjXq/7QBh/jatqisYJi+B/vbS4ByN9O+Iet5QVXlXm1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790662830; c=relaxed/simple;
-	bh=nBq0ce4U8pjNwOIB6srOmZAAPAVFm/4GWAgw9e8Y3ds=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=YQqt3FU44wfZsLETUCNUSlsk0u9t8sAkkZyz9Qaqr36kqb2KsWX5Ow0dlUWtsOugDyb24xrPJ5z+xGNQ//UbY+wk8ESLO+lYTU/Jhr1/eQcIwPWFXcHWqbOtw1z3/PzaAHS/gahp701tc1rnVIDYaMD/vJoJUyiGYAXqPch15mA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FEu8IKuJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790663826; c=relaxed/simple;
+	bh=LEnYCQ+SXWphQQRmpbZYMlO5RCXzzgtRaLDkTmHbq6g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MEcMooG1/UN+N94uKcXe2ta7lhZoOSeBKP+q6jDQs4Y9KRx1XrPEYn1xiqKa0R9DBXeLxCRKIRcCauoTkDzmzMvrsRK0qm2xvj5AGZ0fr0TIHqYeUtKly7f/UVwdzGlmJRKcbkpSrc1IlDue0sVwjwRIL9iFiuz5PeMQYM/+umI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=O3ZBsYZM; arc=none smtp.client-ip=115.124.30.110
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FEu8IKuJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE9C1F00893;
-	Tue, 29 Sep 2026 06:20:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790662829;
-	bh=lTp0iuvGgJlzLvCthN8H5DikguIjM02dg6D/PwjsUlQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=FEu8IKuJTM9UMyqWZRahuIUiQ6ZhkU4IDa2UZdQ+AHlfxY177GM88K5j47ZpxQMhi
-	 9FiOENuKjoLTRooDK6SGMn2gMDlmCoehRnP5Cw/6TyFOVTgHclMnxY1UKAjDkiTEI6
-	 K/Sd5XrAq9hpy03DSh95TZmK/hIC7jyt/XZ/GJsm1/KicRH8pbBdQeoXB2Cik/5FrY
-	 LhMT7P074WF9asToy5KM2I1lRfV//rJ6lF3tB8DG7vCsCS3rFqo0lGgSOlqUmWzNHX
-	 s6HPW0a40ZjDMKNQPLiD/ZEq0vCO79vhQpa0nH73XgM4QaTO4I76tb4UQji83RPvZR
-	 pHebvU6K9zPcg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A59239253E9;
-	Tue, 29 Sep 2026 06:20:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="O3ZBsYZM"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1790663819; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=nHGoHv8Lq74Dy6sjVbuTyE2Azn0gGlPCXjF0DUVDx64=;
+	b=O3ZBsYZM7u6Ng97Wh8UoFDOCFVWIVGCddAd1HCfYiQZwTVpA0oFwJWO+XADfaRoFaKaipG8BVoqtVu+OciYwPTQWAg1dHwLaswAbPEBR4a7tvegaFVE34oGjHqFObg/3zrIR3968eClBXEpBLEyQKM/ZfKISGfF+eETZfQfk2Sg=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R751e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0XBsKUCx_1790663816;
+Received: from 30.74.144.142(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0XBsKUCx_1790663816 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 29 Sep 2026 14:36:57 +0800
+Message-ID: <c324eab6-aaae-47c8-bc89-d2dbf4b0a1ad@linux.alibaba.com>
+Date: Tue, 29 Sep 2026 14:36:55 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 2/4] kselftest: mm: replace usage of /proc/self/smaps
+ for __check_pmd_huge()
+To: Yeoreum Yun <yeoreum.yun@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, "Liam R. Howlett" <liam@infradead.org>,
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260924-fix_split-v8-0-cba7359d882a@arm.com>
+ <20260924-fix_split-v8-2-cba7359d882a@arm.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20260924-fix_split-v8-2-cba7359d882a@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v5 0/3] bpf: Fix use-after-free of progs detached from
- busy trampolines
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179066282803.293113.8557815551946775052.git-patchwork-notify@kernel.org>
-Date: Tue, 29 Sep 2026 06:20:28 +0000
-References: <20260926135605.1217928-1-florent.revest@linux.dev>
-In-Reply-To: <20260926135605.1217928-1-florent.revest@linux.dev>
-To: Florent Revest <florent.revest@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- kpsingh@kernel.org, john.fastabend@gmail.com, leon.hwang@linux.dev,
- zirajs7@gmail.com, rhkrqnwk98@gmail.com, puranjay@kernel.org,
- xukuohai@huaweicloud.com, iii@linux.ibm.com, hbathini@linux.ibm.com,
- chleroy@kernel.org, naveen@kernel.org, bjorn@kernel.org, pulehui@huawei.com,
- yangtiezhu@loongson.cn, hengqi.chen@gmail.com, linux-kernel@vger.kernel.org,
- aou@eecs.berkeley.edu, agordeev@linux.ibm.com, alex@ghiti.fr, bp@alien8.de,
- catalin.marinas@arm.com, borntraeger@linux.ibm.com,
- dave.hansen@linux.intel.com, emil@etsalapatis.com, hca@linux.ibm.com,
- hpa@zytor.com, chenhuacai@kernel.org, ihor.solodrai@linux.dev,
- mingo@redhat.com, linux-arm-kernel@lists.infradead.org,
- linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- loongarch@lists.linux.dev, maddy@linux.ibm.com, mark.rutland@arm.com,
- mpe@ellerman.id.au, npiggin@gmail.com, palmer@dabbelt.com,
- paulmck@kernel.org, pjw@kernel.org, ritesh.list@gmail.com,
- sshegde@linux.ibm.com, shuah@kernel.org, svens@linux.ibm.com,
- tglx@kernel.org, gor@linux.ibm.com, kernel@xen0n.name, will@kernel.org,
- x86@kernel.org
 
-Hello:
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
 
-On Sat, 26 Sep 2026 13:55:57 +0000 you wrote:
-> A task running in a trampoline image can call a prog that was detached
-> and freed in the meantime, when it slept in a sleepable prog before
-> reaching the detached one or was preempted right before calling it.
-> Patch 1 handles the preempted case with an RCU tasks grace period,
-> patch 2 handles the sleeping case by patching detached progs out of the
-> images that still call them and patch 3 adds a selftest for the sleeping
-> case.
+On 9/25/26 3:11 AM, Yeoreum Yun wrote:
+> Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
+> glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
+> made by memalign().
 > 
-> [...]
+> The underlying VMA may start at a different address from the aligned
+> address returned by memalign(). Furthermore, a subsequent
+> madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
+> already set.
+> 
+> This causes split_huge_page_test to fail because the check_pmd_huge()
+> helpers incorrectly require the address returned by memalign() to
+> match the VMA start address reported in /proc/self/smaps.
+> 
+> Instead of relying on /proc/self/smaps, use /proc/self/pagemap and
+> /proc/kpageflags to detect huge-page mappings checking PAGE_IS_HUGE
+> and PAGE_IS_FILE accroding to type of huge page.
+> 
+> Since shmem pages are also file-backed, simply check whether the page
+> is file-backed.
+> 
+> Fixes: 642bc52aed9 ("selftests: vm: bring common functions to a new file")
+> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> ---
 
-Here is the summary with links:
-  - [bpf,v5,1/3] bpf: Wait for an RCU tasks grace period before freeing trampoline progs
-    https://git.kernel.org/bpf/bpf/c/0fb5751a6e41
-  - [bpf,v5,2/3] bpf: Skip detached progs in trampoline images that are still in use
-    https://git.kernel.org/bpf/bpf/c/17637e1a581a
-  - [bpf,v5,3/3] selftests/bpf: Detach a trampoline prog while a task sleeps before it
-    https://git.kernel.org/bpf/bpf/c/d5288c519bbd
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+With comments from Sarthak addressed,
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
