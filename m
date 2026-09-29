@@ -1,134 +1,240 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF4F517BA0;
-	Tue, 29 Sep 2026 11:44:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DAF351D53A
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2026 12:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790682247; cv=none; b=asGIRt6wo2UozkwyBaW/CwKdHzvIm9iT9xFzZcR8U2ZGk3VTEn4pU5+01ZppBMR90Azzey0T8sLrJ/JefCqa8C4lM3bNnBstNhJ9bXz8ClvM23d1QQukyLpNOcsyogzLCslnKgEt17czzeJKrAEWOER3gVbpMkTzGh2iNGmd27c=
+	t=1790683973; cv=none; b=qtRM23yPIW9iG6eLxFtlJlBiNskjCkWZWEO8TF926Wosvl+xfsuHQvf2lJXdUxhR6Cmj0TfgE5+fsww9YCqfE3k8tJWV79hQ/wLFNxupEwJl6SXMzsqI0H4KmNcsPgAWSdLS/ayf0/JRkNZlRX8wQXagAZNCXJG/vaEzkCKCgFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790682247; c=relaxed/simple;
-	bh=W+KCnZ/8/YZgnJzNW3EAgvngp53lMdxenDXSaBIk6HY=;
+	s=arc-20240116; t=1790683973; c=relaxed/simple;
+	bh=aOHR2S9JoDTNHa4EinckRR5sM8LP9tsgVirzxTuKr0g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i4cMF1VUbPZ+npqnFo+GBcUsflvXUO9oVPsHyEyWn4HUVJkbeP2yPnGQlnwPh6jTeAfy6m+c1IMaH6LbLfOu7q8qqV2kTQdt7mYG1bobYhy2blRo1bA0zagqPwHzyVLkctKC8cb1B8XAORlv3Kg4XoZ8xyVKU2+fcwFZThFj5RU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fj4X+yZ5; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=IcrplY78umwkSQS2t4VDROcGDMGsr2z8KNFv94Ma1RYxaKjZXTP1RqSToDGV7k/WLKDymdbdk3Bv0NhHuJ/jCptCtiPLuS4bMKg04aaqRvOcZiWy3rkotlxRHRC2g7wF2EOJzRxby4ehcINMyuXfYfR0dcVc1zItlF/CQZ1M1xM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QyEG82Sm; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fj4X+yZ5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 400A61F00899;
-	Tue, 29 Sep 2026 11:44:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790682246;
-	bh=JupBWX5Dgm/XapolKaVNX89w3aaQEMjgcwgvyhJcaKU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=fj4X+yZ5nn4k+cLEiL2kKRq/ZLId3xzZ1TtrXnvnz6oyTRR9SiGtndisyhUv7Gahn
-	 oSt2r4vbBBpQ1RgLMsnp8Z2Zgu8L0XHxhZv/rJXenox8fk2ey39U+H37ranOlf2oZo
-	 aJmzPDhKOG5FYTh6+v+hhrFJTl7Y8MTT1FlNrCNFjh6KsMu9GgjKxrDSpuZwTG2MCJ
-	 94QxjRJ7A5JMXzBAzZ8U9sjI/nyYST6jM9t7OWW6vF4tlITQnWQSxEZTKpuCyG9yV5
-	 ItVM8X3RCemKdMqwHRGmDhoAs3fj/+OTrqUN+pyJdgT1RZL0TdAXXkbHUxoQfQ0O9l
-	 /kPEIRUoMZxOA==
-Date: Tue, 29 Sep 2026 12:43:57 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	"Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	"Gregory Price (Meta)" <gourry@gourry.net>
-Subject: Re: [PATCH v4 2/2] kselftest: mm: fix intermittent failure
- khugepaged test
-Message-ID: <arukdavnogCNfrzm@gremlin>
-References: <20260929-fix_khugepagd_fail-v4-0-2169c18f2576@arm.com>
- <20260929-fix_khugepagd_fail-v4-2-2169c18f2576@arm.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QyEG82Sm"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912df756so32428995e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2026 05:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1790683970; x=1791288770; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=paQ2/onKT319WLEUhupq6lCWp4YbjzVGMuOnFcHWo94=;
+        b=QyEG82SmuQbhxv/tvt8fWEEJyBx3C/J67V1ppnGriDCnECzwj7IiLhhzdcgcBxymrj
+         kS9Pe6wkinSaUtJwWQtEOU6MUkf9yk/l80tHOztmTsC9qzublESDlQ6H2Hl2vHAxcwEW
+         c84NBPFYN5ZkQmX5Bk7yHpMVlu5WfN98cI7tRIrh4Wfenc0HHl3so+tRXnYHK36oCVoN
+         QLbEnJGJs58Nrq2elz35x/N6B92ykl2YmbFpPzQAgfaoag0Tyv207hHGY9+w0FnJqvxQ
+         u4FeNQ+fwqN0HF3KfGxiicb3NAtmej3V/zUBvciwLUInq5y+YV0oXc2dtc00TH9svvpX
+         nz8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790683970; x=1791288770;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=paQ2/onKT319WLEUhupq6lCWp4YbjzVGMuOnFcHWo94=;
+        b=IUL/tZ6yGYsrifxq3c3AZcGONAVEbax4CvCodYblb+vALUqbm1rDyD6GDKYXOxty24
+         GlEwQcT2LBJyf8qAS4e9igIuY8v3GxDKLrDmR7fmqGpCjgYVypxy00TWwpjmcFoumbLX
+         lWvayp0uwDcrq1Ab0OnkPS63vabK9uz4J2oew3iLpAjyiOvBqoXK3fro0A3ESlptXJyR
+         kN2h07cpyRn+7ol9ID7vEpScaAtxPJKKFJLCGzkN+RRkXA24/JVgc04iYkSpCJtFFP7g
+         0F9aDyKHj44/fO8Ir77t/g0LU7tpjS43tEfmMmVYS2plhTdJ4zOB+KHJvJ0ojjllb4sn
+         ei4w==
+X-Forwarded-Encrypted: i=1; AKwUvBz0QrY0MjYkJePS+lhhzmCHbP/7XufXBl7gjBfXjZipuCB4KlPsz6XREFRPEJto8GP4KWUyTjki2IIHQlxcO+M=@vger.kernel.org
+X-Gm-Message-State: AFuF++l9HAVQA0VOdwId4VOAYs+Mb/XT2W1xShUdt2Eu2xiREsNx/oOh
+	2JKUPu5CMYy88pGLdkK8tuE7BCysZJDEy7O4esFJ2Hazs2PcD4Twb/7/2EAsELCEkA==
+X-Gm-Gg: AYBFou1jikgsR3/DP3Ui+SRJgotSyHsZuAJSuDMpLYwbcaPhYvHKYotqCFlQ0I63tL9
+	mOtVdr54JLccoAGPM5y9ArTjeP73TjfJL/vQlihEAgIRzjc48gnOT0t7JKIzVWx41aAnCASzPQb
+	oESkl86myUigL/sWmFjxbzzfNIv5dvakv9JR46qi4rYKv5vt2Dj1zAT9iF/n4ik9/td3GU87wnG
+	NNNTIDOFwFUfpIuFQcu/yRWl4tstOqy1GD7x1fdxO8CXvrptADEGlj9VVzrF5anKF5XkNoPT49R
+	aQiGZoGYC6HvMf00H/CZi/yildOcTt6Zt/fuMmOS6BWOY8qhDszCCt+MOaYcAb3TJytSvVh+DYn
+	ULN8y9Jq+pNyuARDQUiCvxq6haFq5eP2HryB75bjfrmufDofhXenHeIEaJYh1dWsyKe/bgJHoLi
+	zqeCwgJ7Z/TsyHjjlahrGYXoqaPm3wNmuE1Iak+yOHo2WirVkMG2V/pH6NEmtOUp77+HAS8wKiv
+	TB0tuucI9WVjfBTfarZWroEBO4r2A==
+X-Received: by 2002:a05:600c:1d28:b0:49c:fc6e:8cbd with SMTP id 5b1f17b1804b1-49fe66fc677mr302281505e9.33.1790683968737;
+        Tue, 29 Sep 2026 05:12:48 -0700 (PDT)
+Received: from google.com ([2a00:79e0:288a:8:ce20:1d4f:298a:2070])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a013b8f6f5sm4087715e9.10.2026.09.29.05.12.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2026 05:12:48 -0700 (PDT)
+Date: Tue, 29 Sep 2026 14:12:42 +0200
+From: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>
+To: Justin Suess <utilityemal77@gmail.com>
+Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>,
+	Cai Xinchen <caixinchen1@huawei.com>, mic@digikod.net,
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+	corbet@lwn.net, skhan@linuxfoundation.org, rdunlap@infradead.org,
+	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
+	dlemoal@kernel.org, hch@lst.de, axboe@kernel.dk,
+	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
+	dhowells@redhat.com, code@tyhicks.com, linkinjeon@kernel.org,
+	sj1557.seo@samsung.com, yuezhang.mo@sony.com,
+	hirofumi@mail.parknet.co.jp, cel@kernel.org, jlayton@kernel.org,
+	neil@brown.name, okorniev@redhat.com, Dai.Ngo@oracle.com,
+	tom@talpey.com, miklos@szeredi.hu, amir73il@gmail.com,
+	senozhatsky@chromium.org, chenxiaosong@chenxiaosong.com,
+	zohar@linux.ibm.com, roberto.sassu@huawei.com,
+	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+	stephen.smalley.work@gmail.com, omosnacek@gmail.com,
+	casey@schaufler-ca.com, nanx95726@gmail.com, djwong@kernel.org,
+	daniel@iogearbox.net, linux-security-module@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	driver-core@lists.linux.dev, linux-block@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, netfs@lists.linux.dev,
+	ecryptfs@vger.kernel.org, exfat@lists.linux.dev,
+	linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
+	linux-cifs@vger.kernel.org, linux-integrity@vger.kernel.org,
+	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	xiujianfeng@huawei.com, lujialin4@huawei.com
+Subject: Re: [PATCH RFC -next 00/12] landlock: Add READ_METADATA and
+ WRITE_METADATA access rights
+Message-ID: <arurOphe6QIx2Zr8@google.com>
+References: <20260924104831.1081137-1-caixinchen1@huawei.com>
+ <araxO4ze0KZBz756@suesslenovo>
+ <20260926.255b951d3013@gnoack.org>
+ <arqcbjWLN1CLkL_Y@suesslenovo>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260929-fix_khugepagd_fail-v4-2-2169c18f2576@arm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <arqcbjWLN1CLkL_Y@suesslenovo>
 
-On Tue, Sep 29, 2026 at 11:33:19AM +0100, Yeoreum Yun wrote:
-> There are intermittent failures in collapse_max_ptes_swap() and
-> collapse_max_ptes_shared() when using the khugepaged_context:
->
->   // while running ./khugepaged -s 2
->
->   # Run test: collapse_max_ptes_shared (khugepaged:anon)
->   # Allocate huge page... OK
->   # Share huge page over fork()... OK
->   # Trigger CoW on page 1023 of 2048... OK
->   # Maybe collapse with max_ptes_shared exceeded.... OK
->   # Trigger CoW on page 1024 of 2048... Fail
->   Bail out! Unexpected huge page
->   # Planned tests != run tests (26 != 23)
->   # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0
->
->   # Run test: collapse_max_ptes_swap (khugepaged:anon)
->   # Swapout 257 of 2048 pages... OK
->   # Maybe collapse with max_ptes_swap exceeded.... OK
->   # Swapout 256 of 2048 pages... OK
->   Bail out! Unexpected huge page
->   # Planned tests != run tests (26 != 17)
->   # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:0 error:0
->
-> This happens because khugepaged may collapse the pages before wait_for_scan()
-> is called, causing a sanity check that expects uncollapsed pages to fail.
->
-> For example, in collapse_max_ptes_swap(), after faulting the pages back in
-> and paging out up to max_ptes_swap pages, khugepaged may collapse them again
-> before c->collapse() is called.
->
-> To prevent this, mark the VMA with MADV_NOHUGEPAGE after it has been
-> collapsed by wait_for_scan() for anon. This prevents khugepaged from
-> collapsing it again before c->collapse() is called.
->
-> This failure was observed on NVIDIA Spark with 16KB page.
->
-> Reviewed-by: Gregory Price (Meta) <gourry@gourry.net>
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+On Mon, Sep 28, 2026 at 01:13:35PM -0400, Justin Suess wrote:
+> On Sat, Sep 26, 2026 at 09:56:28AM +0200, Günther Noack wrote:
+> > Hello!
+> > 
+> > On Fri, Sep 25, 2026 at 02:03:05PM -0400, Justin Suess wrote:
+> > > On Thu, Sep 24, 2026 at 06:48:19PM +0800, Cai Xinchen wrote:
+> > > > This series adds two new Landlock filesystem access rights,
+> > > > LANDLOCK_ACCESS_FS_READ_METADATA and LANDLOCK_ACCESS_FS_WRITE_METADATA,
+> > > > which control access to file and directory metadata such as inode
+> > > > attributes (mode, ownership, timestamps), extended attributes and POSIX
+> > > > ACLs.  It picks up the work from the "landlock: add chmod and chown
+> > > > support" series [1] and follows the coarse-grained grouping discussed in
+> > > > that thread [2]: instead of separate chmod/chown rights, metadata
+> > > > operations are grouped into one read and one write right.
+> > > > 
+> > > > Landlock evaluates access rights on a per-path basis, but the metadata
+> > > > related LSM hooks (inode_getattr, inode_setattr, inode_setxattr,
+> > > > inode_getxattr, inode_listxattr, inode_removexattr, inode_set_acl,
+> > > > inode_get_acl, inode_remove_acl) only receive the dentry of the accessed
+> > > > object.  Patches 1-7 therefore first pass struct path instead of dentry
+> > > > through the metadata-related VFS helpers and LSM hooks.  This is a pure
+> > > > refactoring with no behavior change, split so that every patch builds
+> > > > and works on its own:
+> > > >
+> > > I like these patches, but is the ability to read metadata already
+> > > sorta controlled by LANDLOCK_ACCESS_FS_READ_DIR on the parent
+> > > directory?
+> > > 
+> > > The one case I see this being different is:
+> > > 
+> > > 1. if you wanted to grant read access to the file, but not metadata
+> > > read access, but I can't think of any usecase for being able to read
+> > > the contents of a file, but not the metadata. (see below)
+> > > 
+> > > 2. If you had the absolute path already and didn't need READ_DIR.
+> > > 
+> > > I see introducing this READ_METADATA as causing potential
+> > > hard-to-diagnose issues.
+> > > 
+> > > Say you handle READ_METADATA and READ_FILE, but only grant READ_FILE.
+> > > 
+> > > The program can technically open the file with the READ_FILE permission,
+> > > but it may error out because the stat() on it beforehand failed.
+> > > It's pretty common for programs to do that kind of thing (stat before
+> > > open), like for checking for config files (strace bash and you see it
+> > > stat .profile, /etc/profile)
+> > > 
+> > > There may be other bugs, because being able to set permissions to read
+> > > a file *but not read it's metadata* isn't possible currently in posix
+> > > acl and userspace may not work well if that assumption no longer holds.
+> > >
+> * posix acl and linux DAC.
+> 
+> > > So maybe WRITE_METADATA is good enough?
+> > 
+> > The existing use cases are the combinations of (a) READ_DIR
+> > allowed/denied and (b) READ_METADATA allowed/denied.  Because these
+> > two access rights overlap slightly, it seems likely that for a given
+> > directory or file, users will want to either grant both, or deny both.
+> > 
+> > At the moment, where the (not yet existing) READ_METADATA is
+> > implicitly always allowed, the problematic case is the one where the
+> > Landlock user wants to deny READ_DIR, but where much of the same
+> > metadata is still available through stat() and the various
+> > get-attribute syscalls.  (c.f. the warning box in the Landlock docs
+> > [1])
+> > 
+> > In my view the READ_METADATA right closes a gap that READ_DIR left
+> > open (which is also potentially surprising to callers if they did not
+> > read the docs closely).  Also, if its implementation is symmetric to
+> > WRITE_METADATA, I feel that it's worth having it in the same patch
+> > set.
+> > 
+> > –Günther
+> > 
+> > P.S.: I know, even after we can control stat(), there are likely ways
+> > to infer the presence of a file by observing Landlock error codes.
+> > This would be nice to fix as well, but is harder to do without
+> > controlling the path walk itself [2].  But also, the fact that this is
+> > currently not controllable is not an excuse for leaving READ_METADATA
+> > open IMHO.
+> >
+> I'm still sort of concerned about the case where read access is allowed,
+> but metadata isn't, due to how many applications will not cleanly handle
+> such an unexpected condition. You can reproduce this with a seccomp
+> policy forbidding stat().
+> 
+> Would it make sense to have the existing READ rights
+> (READ_DIR/READ_FILE) imply READ_METADATA on the files/directories 
+> if READ_METADATA is handled? Reading a file's contents should always
+> imply that you can read the metadata.
 
-Looks sensible to me so:
+I am wary of situations where the handling of access rights implicity
+implies other access rights.  We have discussed such schemes in the
+past (e.g. we considered a design for RESOLVE_UNIX where we'd have
+both a "scoped" and a "access_fs" right that would interact with each
+other), but in the end we always settled for approaches where such
+interactions would not be necessary.  One of the concerns was that it
+would complicate "best effort" fallback logic in all Landlock
+libraries and in the countless places where people use the syscalls
+directly.
 
-Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+To throw another option in the mix.  (To be clear, I have only 70%
+confidence, so feel free to push back, but it feels like it might
+work?):
 
-> ---
->  tools/testing/selftests/mm/khugepaged.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-> index 2aa7c9197158..4e888b7bf310 100644
-> --- a/tools/testing/selftests/mm/khugepaged.c
-> +++ b/tools/testing/selftests/mm/khugepaged.c
-> @@ -618,6 +618,16 @@ static bool wait_for_scan(const char *msg, char *p, size_t len,
->  		usleep(TICK);
->  	}
->
-> +	/*
-> +	 * The file and shmem tests rely on refaults to install PMD mappings
-> +	 * after collapse. MADV_NOHUGEPAGE would prevent those mappings.
-> +	 *
-> +	 * Apply MADV_NOHUGEPAGE only to anonymous VMAs to prevent khugepaged
-> +	 * from unexpectedly collapsing pages during the test.
-> +	 */
-> +	if (is_anon(ops))
-> +		madvise(p, len, MADV_NOHUGEPAGE);
-> +
->  	return timeout == -1;
->  }
->
->
-> --
-> 2.43.0
->
+Is this similar to the "truncate" right?
+----------------------------------------
 
---
-Cheers, Lorenzo
+With "truncate", there was an existing common operation (open(2) with
+O_TRUNC, a.k.a. creat(2)) which called the truncation hook and checked
+for the truncation access right.  But that was in fact OK.  The way we
+resolved it at the time was by documenting very loudly that WRITE_FILE
+and TRUNCATE access rights should always be requested in lockstep, if
+TRUNCATE is handled.
+
+If READ_DIR and READ_FILE do in fact read and return metadata to the
+user, maybe the right thing would be to do it the same way here and
+*require* that we have READ_METADATA to do these operations?
+
+(READ_METADATA is automatically allowed as long as it's not handled,
+so that approach does not break existing programs.  Programs who
+consciously start handling READ_METADATA must simply take into account
+that reading directories and opening files for reading requires
+READ_METADATA.)
+
+(BTW, I can see it for reading directories, but I am not sure I fully
+follow the argument why opening files for reading means that you can
+read the metadata?  Can't that be guarded on fstat()-like operations?)
+
+—Günther
