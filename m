@@ -1,85 +1,92 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E3C3B14A8;
-	Tue, 29 Sep 2026 20:30:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47C937DE8D;
+	Tue, 29 Sep 2026 21:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790713830; cv=none; b=efTR96rhvLlyK9xTIfEULHq7UxdbcdZcjOmmkBtr7nLuTRBwBEGY9VztME/USVi7+XFCciooMxp8eZOK5BUxuqu6DgCBLljSPCrv25myDqcC9bnVeNWcOxRuwie1U7tA+/fjSSpipe6cKq1wBPB4JMwwjVkXdhaYloTK3lK4xfQ=
+	t=1790718976; cv=none; b=EZFPfvZV7xuy7Ku6Zn7Msea0fsKj1BPykN+aNzaOu1KQUrEDBn85JejykGIBNSaK8XMUZjX8Lf/IBLR1OzFDo65VRiCGKGaVuiylB9ajO1sRxcMUh1n/hIJD09+PgaauMXs1HwvIP+TF8KHOweteajtAIDZOaPAf2THI0pmHvJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790713830; c=relaxed/simple;
-	bh=mLPIHaLN1zwEgiiNoLS6x7fmmNkTgRH/XZf4sdQONSM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SbtlAaEyP3mQJhTPmt4wvpkHoVizxt3mJ0dFy8iG8/vGBXHF6Gamgp4m5OhJQF/y20OrSQizWPL1AjC4Glz69jNpS1OKWMC6CETrx7f0QqbUeH8Ors9O2HvqygrayGRBZTIMCOZW5/ckEIom7kFZ15/5z3IMKMe/c8SGOCZJD4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=OhdYY5E6; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1790718976; c=relaxed/simple;
+	bh=zUIC2VCMrwz7Mc9wvMFbGrapY6XsDKKaIKaIUQsMM/c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dws3Xs5EqBIy5V++6ssWanpYYSfhzGwbX+oKYea30yGopw+YbjbTfqY4BswWbXyIASJHnWepf9v3EW2viQbdxO4EGNuaZISl3mYkc/1hfOq2+R7VPAbNO320EhXdKOqfvkwQgKIU+yfqx2e2GJOsM7fSfIQLOf6XrJiSWq7yN0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=im/ErjYU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="OhdYY5E6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1790713465;
-	bh=mLPIHaLN1zwEgiiNoLS6x7fmmNkTgRH/XZf4sdQONSM=;
-	h=From:Subject:Date:To:Cc:From;
-	b=OhdYY5E6rsEcTNi84oAIaoCEg/UrQfODjAV6jfakIeUdDNqCf9Ias0UcGO56G+grg
-	 4YTaQBA/ILbrmoCY/A35W+DZBvpB+7q44HBoXQewTuvPAdoth0wyqEvZN1ssGPA5gE
-	 sp/Pwi1qXt9xVFUHuGB3gnJuXaTfuPGkywKZXUOc=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v2 0/3] vdso/gettimeofday: Add support for ALARM clocks
-Date: Tue, 29 Sep 2026 22:24:20 +0200
-Message-Id: <20260929-vdso-alarm-clocks-v2-0-a7af4089a698@weissschuh.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="im/ErjYU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD271F00898;
+	Tue, 29 Sep 2026 21:56:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790718975;
+	bh=Re4QQcAs/Cvsl5dDnqb8X6ZnBVY+DhJFENczAUr8r6A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=im/ErjYUssfdgz/Kf72KQ0N245vq4BW+IBFkzEpUWQAoG3lSon1uiI+p32sa8Fdou
+	 h7Oy535Oa89aPfdBABT/h2WoTSkyA79XbU0X6Gk+azJLeF86D89+6XxkefMS0IcTRm
+	 XF+blcrtiMQN7CP1L6+k8Oj95J2XLir6SRSF7Y7VmmrVhyfzzo10T5IssJLLE5Z/FC
+	 taSyRJTDVeKVgKkHirWNKhq9OjbXeC3pVJ2y7o74vZQe+IjOwpPcM1A1ctXl5w4wYU
+	 zA0v7yfeFtbBpPMDEEJrvkZo4gor8xSlUnC4TXrxMAM9k9u+puj9j21FMEwBPOVEJ5
+	 RSoQirlxQI/fA==
+Date: Tue, 29 Sep 2026 22:56:10 +0100
+From: Mark Brown <broonie@kernel.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+	Fuad Tabba <fuad.tabba@linux.dev>,
+	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 03/11] kselftest/arm64: Move exit calls out of fp-stress
+ loads
+Message-ID: <636db593-b6b6-4338-b9b0-e87c54111d14@sirena.org.uk>
+References: <20260901-arm64-fp-stress-kvm-v1-0-31bce995b49b@kernel.org>
+ <20260901-arm64-fp-stress-kvm-v1-3-31bce995b49b@kernel.org>
+ <arvjKjrh1NU4CKPE@gremlin>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/32OTQ7CIBCFr9KwFgMktNGV9zBd0OkoaC2Voahpe
- ndpNXHn8nt5fxMjDA6J7YuJBUyOnO8zqE3BwJr+jNy1mZkSqhQ7JXlqyXPTmXDj0Hm4Ei+1UEZ
- raVoNLOeGgCf3XDuP9YdpbC4IcSn6OgLexzwWfzbrKPrwWp8kuaj/RpPkgpeyMk2jVSWhOjzQE
- RHY0W57jKye5/kN7fSCLt4AAAA=
-X-Change-ID: 20260921-vdso-alarm-clocks-6502a551ad5c
-To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790713464; l=1073;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=mLPIHaLN1zwEgiiNoLS6x7fmmNkTgRH/XZf4sdQONSM=;
- b=fKnrtMutvKVcLjC7m84LyT9vBRESgFDml+XA9KRu8jPTnp/9U6/73QmS7sQn6ynlE9HCZGXKj
- izrm/2VyPlbCrSFUzQvZjQoFW02+h3qvzT+O0++IG3OZrLt/gDoVR5r
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="zPKB6sLRXO6DyADj"
+Content-Disposition: inline
+In-Reply-To: <arvjKjrh1NU4CKPE@gremlin>
+X-Cookie: 1 bulls, 3 cows.
 
-Extend the generic vDSO library to also handle CLOCK_BOOTTIME_ALARM
-and CLOCK_REALTIME_ALARM. This does not introduce any runtime overhead
-in the userspace fast path and only memory copies in the tick update
-path.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
-Changes in v2:
-- Rebase on tip/timers/vdso.
-- Add Signed-off-by tags.
-- Link to v1: https://patch.msgid.link/20260921-vdso-alarm-clocks-v1-0-617abb5271c7@weissschuh.net
+--zPKB6sLRXO6DyADj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
----
-Thomas Weißschuh (3):
-      selftests: vDSO: vdso_test_abi: Also test ALARM clocks
-      vdso/gettimeofday: Add support for CLOCK_BOOTTIME_ALARM
-      vdso/gettimeofday: Add support for CLOCK_REALTIME_ALARM
+On Tue, Sep 29, 2026 at 05:22:44PM +0100, Lorenzo Stoakes (ARM) wrote:
+> On Tue, Sep 01, 2026 at 06:06:43PM +0100, Mark Brown wrote:
 
- include/vdso/datapage.h                      | 2 ++
- kernel/time/vsyscall.c                       | 7 +++++++
- tools/testing/selftests/vDSO/vdso_test_abi.c | 4 +++-
- 3 files changed, 12 insertions(+), 1 deletion(-)
----
-base-commit: ca46a07c4b68246c4e400ce3649ab7228a878d8f
-change-id: 20260921-vdso-alarm-clocks-6502a551ad5c
+> > No functional change.
 
-Best regards,
---  
-Thomas Weißschuh <linux@weissschuh.net>
+> I don't think this is accurate, as you're changing the register into which a
+> value is loaded (x0 instead of x1).
 
+> That seems to be correct to me, but worth calling out that you're fixing that up
+> in the commit message and dropping this line.
+
+That's actually an unintentional bugfix, the original code just uses
+whatever random value was in x0 as an exit code.  Probably that was
+non-zero so it all works out but still.
+
+--zPKB6sLRXO6DyADj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmq8M/oACgkQJNaLcl1U
+h9DbeAf8C8nZFlnRID2OBd8OZhIoqwONWnOjUfc7e88n8BL3U3f9gqi0aLKUu21a
+49TZ0kD3k7FLWElNkch4olF4stGSIOSX3oXbf/1CDqg4idW0/zJZNriF7p6olzD2
+VtgfsTxGHdHmvno6HUx3mQAQ0iDghOrx4VWj/VeOmnysW+XH2xisYGx+hBTdS9To
+WMZFDoE9kTTmDHHArh6KqxPcVGHEzTqJ5lgRv0Fj5p8KP/Px5QEosC+24dNnQcpR
+zAiI4W2PjFFKXgUbs8QPVwWNJSz7kHNDPdCh1zfXmgShEecIX2GUrDyYR7cWzmf6
+c4XrVFVy895JLbLtZviifPCyQOzP6A==
+=90AP
+-----END PGP SIGNATURE-----
+
+--zPKB6sLRXO6DyADj--
