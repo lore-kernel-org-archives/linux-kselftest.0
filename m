@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2123513A258;
-	Tue, 29 Sep 2026 07:47:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE90014A60F;
+	Tue, 29 Sep 2026 07:58:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790668063; cv=none; b=sfAw6CgKPPznoknHrWJ2VrD4Bljlg+5KE+GZx/1EW6ukwIetzEhesX26MZTgxeTz3BSHTO7BO+WMg6m76XdCxK0Sh1upZMPKKO4YBdlzAmBG4FIsh+/l0p3gr4Cztdvx7vAhwS1XYXIAyeW8YJNfqCbgM3acqqfOYTm78BmZtcI=
+	t=1790668736; cv=none; b=kkJ/j72yfZiBdmTxgJ5C9rlxshtucWHRyRRBwCEpAC69bejXuCjDjBen3mevqnWSFuTPmnn0UiBXYv4OHJ/p3a6lQxuy0gYrEfJ1GFXfK6aEfnU4v8Utr6Mt1rS+ssDWKmCwHLNHOeBc7xDV3/iU9w/rtCFjVKCzmgT6Opx+YyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790668063; c=relaxed/simple;
-	bh=xwIorkGZw83w0UWkQzqAfWPC1HH/KsgDfCC+3ffAr+I=;
+	s=arc-20240116; t=1790668736; c=relaxed/simple;
+	bh=m/15/Y98HcsXIHQ2cjH89Yem0jJenowOvSgx3AheMGU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UIY9j1MRKfLCixy/0LB8a2xjQq0UG0ubIp5zuzMj9k7oJEjqeIH1cfd+cFxd/UBaBYUPPHj6pkPZva8QODptMIS+i5wr6NxfuZ03wINI0sq77zYgUyFQafirOsD19tGftD7SkCv8wF/Dz3AUbJETAJKK2vi0+yAR/HpwEtJbk/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gg5xZePM; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=qj1VZezYTNdfVhMAejqTf9Hi/wniWEwFGK3BhUqjJ243GB4iWd48sj859odtQSHoqUzDQAgqazGlvIQ1IYNqnSZC/72zLRTi2vrkQ0CcNHzCtDWzxKsC0LZmI5+Ro5MG4iO2g1pW3uhfj1zbL2zF74+/GWyHtjbcHRI2dkPqpDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dpg3NxSK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gg5xZePM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 269FF1F000FF;
-	Tue, 29 Sep 2026 07:47:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dpg3NxSK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F3C81F000FF;
+	Tue, 29 Sep 2026 07:58:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790668062;
-	bh=mLNdmFrM1t3FQWmwFYe8TkIte1jls2u/1QCzj1F20EY=;
+	s=k20260515; t=1790668734;
+	bh=7pk1v3z+VGNvnZ31sDmqvV8W/43hqaDHhcD0ieAuWqM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=gg5xZePM0dIkrhC1PdGvJcGV+oFHBPWdh25qEyGA/kv1arZLYUnlWIg8wYuuY2JMv
-	 0Cv8TB0Q443gxxo1iT1HdyRBGyaNgNImagvoVmhbTl97GAVsPW/gCeBReirTK6Gmc+
-	 z3/aCs5FelgEO1RJ+5g49VeJ9Q3KDuYnWzfwdptnkL5L2UOkvG0UaHfpj2mWcFAdG+
-	 oNsbmTfZzPB+ZYrpR8qZJGzzptj+mMD4CC2TNVZItnO3Lx9qH4U4ku3moBnlZ4Y5v3
-	 to3Ypf7+EnuF3CDkDuLWSVKxqoXh4n7einnw7diI2GmBZ5IcyjK67gW42MUdXYEI+i
-	 N0JNy58OXWQtg==
-Message-ID: <92ec3966-e68c-4dda-9d8b-9462f22c9e93@kernel.org>
-Date: Tue, 29 Sep 2026 09:47:36 +0200
+	b=dpg3NxSKrMNJWRZNr2K0ov4/Q0jMbqr0pMwW/bMcZLPvUNEU7KxfLvevHMN58VSMB
+	 iyrFoBNb2JfTJEPKfsBZCnESvjtg38WlSV13uOFUD4H7DpQ4J6SBpwCB4dyfKLbmOd
+	 5r36xxXmVk0xudeYIGqs3y1+3uyIP78/AVcOH67+Hi9U0GvgYOKBy6OO4mAgVxI8ZF
+	 8Lj3Wg2NXS+RLiMl9EyO3dqDGGargFsV20R61Ca+UhP9LUUwh30yI2R+t2ePZhA8N8
+	 imlbYivATAtcPbTXIOF/+u/0hvU1mhOIWRKZsVFeJ/lZWBKysrznRulAGFff2kLfvh
+	 2RLfq+e2mvgYw==
+Message-ID: <6c349d10-2160-4166-8b63-3d60b42a5b69@kernel.org>
+Date: Tue, 29 Sep 2026 09:58:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,20 +35,20 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND 0/9] selftests/mm: improve mremap_test
-To: Kalesh Singh <kaleshsingh@google.com>,
- Sarthak Sharma <sarthak.sharma@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, John Hubbard <jhubbard@nvidia.com>,
+Subject: Re: [PATCH RESEND 1/9] selftests/mm: mremap_test: use kselftest
+ helpers
+To: Sarthak Sharma <sarthak.sharma@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
+ <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ John Hubbard <jhubbard@nvidia.com>, Kalesh Singh <kaleshsingh@google.com>,
  Anshuman Khandual <anshuman.khandual@arm.com>, Park Tae-sun
  <ts930@dgu.ac.kr>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260924050009.19974-1-sarthak.sharma@arm.com>
- <b8da4a73-296b-47f9-95dd-b8a74f3a0984@arm.com>
- <CAC_TJvexEaehZno0P=xsoCbLw7wgfz+22iV4fwzcuGCiu3vAAw@mail.gmail.com>
+ <20260924050009.19974-2-sarthak.sharma@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -95,70 +95,139 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <CAC_TJvexEaehZno0P=xsoCbLw7wgfz+22iV4fwzcuGCiu3vAAw@mail.gmail.com>
+In-Reply-To: <20260924050009.19974-2-sarthak.sharma@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 9/29/26 09:32, Kalesh Singh wrote:
-> On Mon, Sep 28, 2026 at 10:54 PM Sarthak Sharma <sarthak.sharma@arm.com> wrote:
->>
->>
->>
->> On 9/24/26 10:30 AM, Sarthak Sharma wrote:
->>> This series fixes several correctness issues in mremap_test and
->>> simplifies and strengthens its data validation.
->>>
->>> Patch 1 converts the mremap_test to use kselftest helpers, removes
->>> manual tracking of failed tests and corrects some spelling errors.
->>>
->>> Patches 2 to 5 fix userfaultfd skipping, unexpected mremap success
->>> handling, multi-VMA data validation and failure reporting when data
->>> corruption is detected.
->>>
->>> Patch 6 removes the randomization and uses a simple pattern based approach.
->>>
->>> Patch 7 removes perf tests and timing infrastructure.
->>>
->>> Patch 8 removes validation threshold and always validates complete mappings.
->>>
->>> Patch 9 strengthens the multi VMA validation by also checking the
->>> mapping state of holes after remapping.
->>
->> Hello everyone! Just wanted to check if someone has had a chance to look
->> at the series.
->>
->> Also, Sashiko has a concern [1], and I had the same while posting the
->> series. I hope I can get some opinion from the community.
->>
->> Currently, for PUD remap tests, we allocate a source mapping of 2GB. We
->> only fault in the first threshold_mb amount of memory, remap the whole
->> region, and validate the already faulted threshold_mb amount of memory,
->> which is, by default, equal to 4MB and can be changed by the user by
->> supplying a command line option.
->>
->> Since we plan to remove all command line options from teh selftests, I
->> removed threshold_mb altogether, following some discussion on the list
->> [2]. This would now cause a 2GB source mapping, and its contents copied
->> from another 2GB buffer. This causes the process to have a 4GB RSS.
-
-Yeah, that's a lot for small CI systems indeed.
-
->> Sashiko says that this can cause OOM killing in small CI machines.
->>
->> Would it be okay to keep a 4GB RSS in this case, or should we find some
->> other way of validating a part of the whole range instead?
+On 9/24/26 07:00, Sarthak Sharma wrote:
+> mremap_test currently uses a lot of fprintf() and perror()
+> calls. It also uses a variable "failures" to track the number
+> of failed table driven tests.
 > 
-> Hi Sarthak,
+> Use ksft_print_msg() and ksft_perror() for diagnostics.
+> Remove the variable "failures" and let kselftest counters
+> handle the final exit status. Use ksft_finished() at
+> the end instead of manually checking if failures > 0. Replace
 > 
-> IIRC when I initially introduced the test, John was concerned that
-> validating the whole range would significantly increase the duration
-> of the mm selftests; this is why the threshold was introduced. Please
-> check how much it increases if we validate the full range (with
-> David's suggestions) and if it's no longer a concern from other folks.
-> I am fine with removing the threshold.
+> if (success)
+> 	ksft_test_result_pass(...);
+> else
+> 	ksft_test_result_fail(...);
+> 
+> calls with ksft_test_result(success, ...);
+> 
+> Also correct the duplicated "mremap" in "mremap move within
+> range" and the spelling of "dontunmap".
+> 
+> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
+> ---
 
-As discussed off-list, I guess it makes more sense to validate a couple of pages
-at the beginning, the middle and the end?
+[...]
+
+>  #endif /* __NR_userfaultfd */
+>  
+> @@ -1124,7 +1096,7 @@ static void mremap_move_1mb_from_start(unsigned int pattern_seed,
+>  	void *new_ptr = mremap(src + SIZE_MB(1), SIZE_MB(1), SIZE_MB(1),
+>  						   MREMAP_MAYMOVE | MREMAP_FIXED, dest + SIZE_MB(1));
+>  	if (new_ptr == MAP_FAILED) {
+> -		perror("mremap");
+> +		ksft_perror("mremap");
+>  		success = 0;
+>  		goto out;
+>  	}
+> @@ -1145,59 +1117,49 @@ static void mremap_move_1mb_from_start(unsigned int pattern_seed,
+>  
+>  out:
+>  	if (src && munmap(src, c.region_size) == -1)
+
+While at it ... why the comparison with -1. And why do we worry about munmap()
+failing at all? We generally ignore these errors on the exit path, as it's
+unlikely we would ever hit them, and there isn't a lot we can do.
+
+So maybe just remove printing errors entirely?
+
+if (src)
+	munmap(src, c.region_size)
+
+...
+
+> -		perror("munmap src");
+> +		ksft_perror("munmap src");
+>  
+>  	if (dest && munmap(dest, c.region_size) == -1)
+> -		perror("munmap dest");
+> +		ksft_perror("munmap dest");
+>  
+> -	if (success)
+> -		ksft_test_result_pass("%s\n", test_name);
+> -	else
+> -		ksft_test_result_fail("%s\n", test_name);
+> +	ksft_test_result(success, "%s\n", test_name);
+>  }
+
+[...]
+
+>  static void usage(const char *cmd)
+>  {
+> -	fprintf(stderr,
+> -		"Usage: %s [[-t <threshold_mb>] [-p <pattern_seed>]]\n"
+> -		"-t\t only validate threshold_mb of the remapped region\n"
+> -		"  \t if 0 is supplied no threshold is used; all tests\n"
+> -		"  \t are run and remapped regions validated fully.\n"
+> -		"  \t The default threshold used is 4MB.\n"
+> -		"-p\t provide a seed to generate the random pattern for\n"
+> -		"  \t validating the remapped region.\n", cmd);
+> +	ksft_print_msg("Usage: %s [[-t <threshold_mb>] [-p <pattern_seed>]]\n", cmd);
+> +	ksft_print_msg("-t\t only validate threshold_mb of the remapped region\n");
+> +	ksft_print_msg("  \t if 0 is supplied no threshold is used; all tests\n");
+> +	ksft_print_msg("  \t are run and remapped regions validated fully.\n");
+> +	ksft_print_msg("  \t The default threshold used is 4MB.\n");
+> +	ksft_print_msg("-p\t provide a seed to generate the random pattern for\n");
+> +	ksft_print_msg("  \t validating the remapped region.\n");
+>  }
+
+That looks odd, as we will now print this as "# ". I would have assumed that
+removing all parameters as the first patch would make things cleaner?
+
+So as a first patch I think we should just remove the parameters entirely. They
+are unused by our infrastrcture:
+
+	run_vmtests.sh:CATEGORY="mremap" run_test ./mremap_test
+
+Does anything speak against that?
+
+>  
+>  static int parse_args(int argc, char **argv, unsigned int *threshold_mb,
+> @@ -1232,7 +1194,6 @@ static int parse_args(int argc, char **argv, unsigned int *threshold_mb,
+>  #define MAX_PERF_TEST 3
+>  int main(int argc, char **argv)
+>  {
+> -	int failures = 0;
+>  	unsigned int i;
+>  	int run_perf_tests;
+>  	unsigned int threshold_mb = VALIDATION_DEFAULT_THRESHOLD;
+> @@ -1260,7 +1221,7 @@ int main(int argc, char **argv)
+>  	pattern_seed = (unsigned int) time(&t);
+>  
+>  	if (parse_args(argc, argv, &threshold_mb, &pattern_seed) < 0)
+> -		exit(EXIT_FAILURE);
+> +		ksft_exit_fail_msg("Invalid arguments\n");
+>  
+>  	ksft_print_msg("Test configs:\n");
+>  	ksft_print_msg("threshold_mb=%u\n", threshold_mb);
+> @@ -1282,7 +1243,7 @@ int main(int argc, char **argv)
+>  	rand_addr = (char *)mmap(NULL, rand_size, PROT_READ | PROT_WRITE,
+>  				 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+>  	if (rand_addr == MAP_FAILED) {
+> -		perror("mmap");
+> +		ksft_perror("mmap");
+>  		ksft_exit_fail_msg("cannot mmap rand_addr\n");
+
+Would be better combined like:
+
+ksft_exit_fail_msg("cannot mmap rand_addr: %s\n", strerror(errno));
+
+?
 
 -- 
 Cheers,
