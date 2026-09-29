@@ -1,145 +1,199 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE87E3AA4E4;
-	Tue, 29 Sep 2026 08:00:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE8003AE6FC;
+	Tue, 29 Sep 2026 08:01:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790668837; cv=none; b=q1W/dGhxq0OjxzoSn/47b3BiYHWNGgyUoKOLa/bUuEnAL9w3IcVKSR0EIFN9EIQ1NW8J4i8CmGFyHU2TFqWCpZOm6tzI+s6DSb4Z8UQCbLzoViguaS/efT0XMy0gvluP+4r+BzNai6eLrNCZ51QKxcGIr7uw7b8LjxTrIxBp7og=
+	t=1790668882; cv=none; b=hvxC+UnxPLYD4pfjAXDp5YTdjip+7doVgoPGqKJLcKb8v1sVDRYU70iZOloIdNBGESRUgsnq7nttisoKzWFSXcj7VWaazsYVYfNQuy9c5myeRVpqrrq+bx8PWoruvAl/M0jHQIvcDYsheQA+qWHP9OmIHybtJItEg/1UfnKOjoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790668837; c=relaxed/simple;
-	bh=YaTz+zSbct5BJPUWrnK5V+ILeIoBcmxC5zOXeh0+94s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gjH8sKJz0QiOuGr+GdI7ll6egkN9wdWIWMm/KqeXEnBmi0EwSaK5MAKWCw3dtdBaTU8iTlODdaarTaCebJ0Ax8faKbuKQYfj06MXEYNVpNj4ABoidRbbRxTHNDImc3/LJFSfM4D0eItNwZ5KsvfubqfagUY9mZ06pgfyKH4HnyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kE5JbP/+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790668882; c=relaxed/simple;
+	bh=PmlbDtksbQyBLekA8pPOMkFDXd2oDQXvK0e+zqfxaxY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qGLnci7cnPAJvm6Rd2HMhnEt+6JuKeVuja6Pol9gWAVaBTv7lp6b2XMpdxvRWA1uQ7YKplf81vLbHM9IYnB/zNxVlVsY1Ta6xbZy6OEVboLkp9kt8un6UG0vAiK4bapNXK8EfGBXBYfTH4a51jMToV8BJDeUbXjGZudqnKwiZKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EjZv7jzf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kE5JbP/+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 526B01F00898;
-	Tue, 29 Sep 2026 08:00:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EjZv7jzf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3825C1F000FF;
+	Tue, 29 Sep 2026 08:01:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790668835;
-	bh=SsI1aTMhUQ7yFgcuS8q6sGuXK6PShOkRgxLHwIxo8bw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=kE5JbP/+geGNhnoBZyfrBLg74+xS12GUf2yVMpOt33AwH+tFxw5kfhqEmbb5drQCW
-	 cRNGUhmKzfdm2uX5rWJLwbXvI/Wdo9Cr/2mhKlUueg7CB9FDQptXHVrwBE8+bwvm6I
-	 Si7XCofnpDL+yQLGYIq57L0PNC82PTyh0f3c3GYmUai6NW/leDhRzNsgE0ZGIaWQXA
-	 sux4DbUOHu52JNjdEIkuurGYpWKUQgYKBCf2mVyq4Zgax5SoWT/QDaHzfHDc0uAGcj
-	 q3sSGgg00cOrJh9L8184eGu8uI3XwsWuH3Rj7IurpNbXpZMzji+gaz2GFQGmIKFzgV
-	 9X4FxJFbG4g6A==
-Message-ID: <49b0b8c5-4605-41af-9a83-26ec6a07bb96@kernel.org>
-Date: Tue, 29 Sep 2026 10:00:30 +0200
+	s=k20260515; t=1790668880;
+	bh=a6KTCI9sEhcxrT3X+lHb4vCE6F9AtSD5ReH23TAc3Jk=;
+	h=From:To:Cc:Subject:Date;
+	b=EjZv7jzfA7ZhfyPnj6C565KTMPF9Xp9dnV2T7/7V2B6zmLT4IOSRbMTM0iWRDwKxZ
+	 Eior/5Cq15wHnuYwodm5mcQeGLg15ze8xOEbUJr1yd/GfD3ey41ChrmUoj2Tvon6Vc
+	 X//5FAf87wv+cfIz2WF99Oras9LC7ZuXmoX7gcIHJ+b6nWEb9odN5PnBs+rv6aDNFH
+	 QZsueVeWxTr0BPafzyAIr+/xrRTdGwf3kOAQ48IMbZ5HpE/ANprjg1l1UeucZ/93Na
+	 iLizpBqTT3a6NxuuAsQybdeCJ0mckJ6dRGAEhD23gUDGfRwuN/3hL0HhDqEbcJMmp/
+	 Xsy3H/2c4q2LQ==
+From: SJ Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SJ Park <sj@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH 0/8] mm/damon: introduce damos quota goal target metric complement flag
+Date: Tue, 29 Sep 2026 01:01:03 -0700
+Message-ID: <20260929080113.41708-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND 2/9] selftests/mm: mremap_test: skip test when
- userfaultfd is unavailable
-To: Sarthak Sharma <sarthak.sharma@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
- <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- John Hubbard <jhubbard@nvidia.com>, Kalesh Singh <kaleshsingh@google.com>,
- Anshuman Khandual <anshuman.khandual@arm.com>, Park Tae-sun
- <ts930@dgu.ac.kr>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260924050009.19974-1-sarthak.sharma@arm.com>
- <20260924050009.19974-3-sarthak.sharma@arm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260924050009.19974-3-sarthak.sharma@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/24/26 07:00, Sarthak Sharma wrote:
-> The userfaultfd syscall can return ENOSYS even when __NR_userfaultfd is
-> defined by the architecture headers, for example when the kernel is
-> built without CONFIG_USERFAULTFD. The test currently skips for EPERM
-> when the caller lacks permission to use userfaultfd but treats
-> ENOSYS as a failure.
-> 
-> Handle ENOSYS like EPERM and skip the mremap_move_multi_invalid_vmas()
-> test when userfaultfd syscall is not implemented.
-> 
-> Fixes: 742d3663a577 ("selftests/mm: add test for invalid multi VMA operations")
-> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
-> ---
->  tools/testing/selftests/mm/mremap_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-> index 5532d3151ed0..a5813a5e8f5b 100644
-> --- a/tools/testing/selftests/mm/mremap_test.c
-> +++ b/tools/testing/selftests/mm/mremap_test.c
-> @@ -721,7 +721,7 @@ static void mremap_move_multi_invalid_vmas(FILE *maps_fp,
->  	if (uffd == -1) {
->  		err = errno;
->  		ksft_perror("userfaultfd");
+Aim-oriented DAMOS quota auto-tuning assumes the aggressiveness of the
+scheme (quota) and the quota goal metric are directly proportional.
+Depending on the scheme setup and usage, keeping the relationship can be
+challenging.
 
-Should we rather move that below the if? Doesn't quite make sense to print the
-error if we are skipping and printing a proper message.
+For example, let's suppose a memory tiering approach for higher upper
+tier utilization.  One common idea for that (TPP) is utilizing two
+schemes, one for promotion and the other one for demotion.  The
+promotion scheme migrates hot pages from lower tier to upper tier,
+aiming for high utilization of the upper tier.  The demotion scheme
+migrates cold pages from upper tier to lower tier, aiming for head room
+free memory of the upper tier.  Both schemes and their goals are in
+direct proportion.  However, for this kind of use case, we need to
+implement two different goal metrics (per-node memory utilization and
+free memory ratio) while essentially the free memory ratio is just a
+complemented value of the utilization.
 
-Maybe that should go into the previous patch?
+To avoid adding too many new metrics, we are adding metrics that turn
+out to be really needed for each found use case.  For example,
+some_mem_psi_us, node_eligible_mem_bp and hugepage_mem_bp don't have
+their complemented value version.  But it is not really difficult to
+expect use cases that their complemented version can be useful.  For
+example, hugepage_mem_bp use case may need a way to reduce the hugepage
+ratio.  That would require a complemented version of hugepage_mem_bp.
+Adding a new metric for each of such use cases could make the number of
+metrics unnecessarily high, and discourage flexible usages of DAMOS.
 
-> -		if (err == EPERM) {
-> +		if (err == EPERM || err == ENOSYS) {
->  			ksft_test_result_skip("%s - missing uffd\n", test_name);
->  			return;
->  		}
+Add a new flag, quota goal complement, to allow flexible tuning goal
+setup without unnecessarily increasing the number of metrics.  The flag
+specifies whether to use the complemented value of the given goal metric
+for the tuning.  For example, if the complement flag is set, the upper
+tier memory utilization ratio metric works the same as the free memory
+ratio metric for the tier.
 
-Apart from that LGTM.
+Patches Sequence
+================
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Patch 1 introduces the quota goal complement flag API and implements its
+behavior.  Patch 2 updates damos_new_quota_goal() to receive the flag.
+Patch 3 update DAMON sysfs interface to support the complement flag.
+Patches 4 and 5 extend existing kunit and kselftest to cover the new
+flag.  Patches 6-8 update design, usage and ABI documents for the new
+feature.
 
+Note: Below is additional information that is not intended to be added
+to the final commit message.
+
+Test
+====
+
+I tested this feature using the latest version of DAMON user-space tool,
+damo [1], as below.
+
+On an idle system having 10 GiB single node memory (node id 0), fill up
+80% of memory with page cache.
+
+    $ dd if=/dev/zero of=foo bs=1M count=$((1024*8))
+
+Run DAMOS with pageout action for 80% of free memory, but using
+node_mem_used_bp metric like below.
+
+    $ sudo ./damo start --damos_action pageout \
+            --damos_quota_space 100M --damos_quota_interval 1s \
+            --damos_quota_fail_charge_ratio 1 4096 \
+            --damos_quota_goal_tuner temporal \
+            --damos_quota_goal node_mem_used_bp 20% 0
+
+Because the system has more than 20% node 0 memory utilization, DAMOS
+does nothing, as expected.
+
+Run DAMOS with pageout action for 80% of free memory, using
+node_mem_used_bp metrics with complement flag like below.
+
+    $ sudo ./damo start --damos_action pageout \
+            --damos_quota_space 100M --damos_quota_interval 1s \
+            --damos_quota_fail_charge_ratio 1 4096 \
+            --damos_quota_goal_tuner temporal \
+            --damos_quota_goal node_mem_used_bp 80% complement 0
+
+Because the complement flag is given, it is effectively the same as
+node_mem_freepbp metrics with a target of 80%.  DAMOS reclaims the page
+cache ~100 MiB per second, until the free memory ratio (complemented
+memory utilization ratio) reaches the goal, 80%.
+
+Changes from RFC v5
+- RFC v5: https://lore.kernel.org/20260928093342.16584-1-sj@kernel.org
+- Rebase to latest mm-new.
+- Drop RFC tag.
+Changes from RFC v4
+- RFC v4: https://lore.kernel.org/20260927120533.50484-1-sj@kernel.org
+- Fix a typo in test code (s/complementfalse/complement/).
+- Extend sysfs.sh DAMON selftest for complement flag sysfs file.
+Changes from RFC v3
+- RFC v3: https://lore.kernel.org/20260923101454.5748-1-sj@kernel.org
+- Rebase to the latest mm-new.
+- Add tests done to the cover letter.
+Changes from RFC v2
+- RFC v2: https://lore.kernel.org/20260919011359.88921-1-sj@kernel.org
+- Avoid quota goal value underflow for some_mem_psi.
+- Handle complement flag for psi goal with unset last_psi_total.
+- Pass complement argument to damos_new_quota_goal() from core and
+  core-kunit.
+- Explicitly document no-op complement behavior for user_input.
+Changes from RFC
+- RFC: https://lore.kernel.org/20260918142827.85303-1-sj@kernel.org
+- Avoid quota goal value underflow.
+- Fix usage doc for number of files in each goal directory.
+- Rebase to the latest mm-new.
+
+[1] https://github.com/damonitor/damo
+
+SJ Park (8):
+  mm/damon/core: introduce damos_quota_goal->complement
+  mm/damon/core: add complement argument to damos_new_quota_goal()
+  mm/damon/sysfs-schemes: support quota goal complement flag
+  mm/damon/tests/core-kunit: test quota_goal->complement commit
+  selftests/damon/sysfs.sh: test quota goal complement flag file
+  Docs/mm/damon/design: document damos quota goal complement flag
+  Docs/admin-guide/mm/damon/usage: update for quota goal complement file
+  Docs/ABI/damon: update for quota goal metric complement sysfs file
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  6 ++++
+ Documentation/admin-guide/mm/damon/usage.rst  | 15 +++++----
+ Documentation/mm/damon/design.rst             | 15 ++++++---
+ include/linux/damon.h                         |  4 ++-
+ mm/damon/core.c                               | 33 ++++++++++++++++---
+ mm/damon/lru_sort.c                           |  5 +--
+ mm/damon/reclaim.c                            |  5 +--
+ mm/damon/sysfs-schemes.c                      | 30 +++++++++++++++++
+ mm/damon/tests/core-kunit.h                   |  5 ++-
+ samples/damon/mtier.c                         |  2 +-
+ tools/testing/selftests/damon/sysfs.sh        |  3 ++
+ 11 files changed, 101 insertions(+), 22 deletions(-)
+
+
+base-commit: af86bf5500fcc53d591e1000e6e08dec1227fb06
 -- 
-Cheers,
-
-David
+2.47.3
