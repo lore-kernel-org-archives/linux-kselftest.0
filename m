@@ -1,64 +1,53 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590674FDA4D;
-	Tue, 29 Sep 2026 09:49:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92E2F3D0BEC;
+	Tue, 29 Sep 2026 10:01:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790675386; cv=none; b=OvRpfIWbkIMHZ6dbJwRoAzHrBl9V5g1oy5a77CVFGzw+DeRk79dWwbTORfmBAtvG1ZSlecF1WmJioP2g7BQ0IQrc04J+Ljo/1xQWYViTMmIZTd2ALxaUFmXtON38/pyt59lTUbXuPj5bmv+zagYJjZEYYPz+BMZSlInVDZYJtZ4=
+	t=1790676108; cv=none; b=kcEnwtarhhBW6ikx85DICcVqXctO4SvgtzISmZgvHjwplF7+PnvoMzNu4yVe94Dy4GDOnD5KYkoSdV2/BWxCmiedVwYi7WzJl/nOccMnSikU/YVE9RHtLNmkMQCs2h5msIi4QMV5hZzbBqtvp9vYQS5iBX/stiWV6xWF98wC4mU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790675386; c=relaxed/simple;
-	bh=xyQiEg8J5C6AndKTyPKA1JFthTC47DtNPxckDejzBkI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=utJlgSFsEDQ3zuDwyyVJjg467ogQ/C2zk0J8zlINDrFmUgrEt0xE+J7Zaaiah1L4sGOjhRzs3gPwcNyToetjQCYew4axjvpoKLceXjsP6D33Hz2QEKnHNW+QPaQXzO8wkFRuPLP/P2adBeYudg+RlVeVGb109IuNVNcHXw3KPOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MJEDp5k6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790676108; c=relaxed/simple;
+	bh=sOf1yxpICIHQ0diMdP7xrm0ukUMRWepHeq2vSRPG4qQ=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i3oD8h8v4MP2khiE2xCgu32CiJewK+SRpV54COo4VD6ttacaDEbDSyo/lBPJ/uweME4qp77WsIhK9je93jAY1JUE01JyWp50nLvQlz4/0jRZQbhyjTgaFGNnqYqoLySbOeJRNBWkuM3PZoHlOHZWR6il5DH2435PhHEFsqOjTJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=JjsM4U0d; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MJEDp5k6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBDD31F000FF;
-	Tue, 29 Sep 2026 09:49:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790675383;
-	bh=4EGzsamnE7S9zSPfntnKu9/cfo1q7r+TWTQ73npLdn0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=MJEDp5k6Ucc8s3Ifyqwotl+EOWiB4VH4kDYItmut6mgr4p1E/fmdMvwOHJTXukLeB
-	 lShwNXpwS3GAq/BhUEwLMKlSNEdSOMbXvC5r4cSpQP4Nok6AvIHRvKixxlTMTjyjiF
-	 luhwn9msVSLEZnDoSn/SY/pi2BvbgXSp7DyFh8mXZr5MoN+Vjd+aeUjDzmRpDqR0Bw
-	 v/UfiISJWwrUkNbctv0c4I4elnCaOY2RS1qLupTGasgl7rPeeTH2FOZOnOC4xe9Sfq
-	 mCx6OtB50a0+nCo0u9eENpuVd9OFkoY+mf655PeiHb5T0eykMekeRKD1wnk4BKG39T
-	 T2TaAKHdE6XNA==
-Date: Tue, 29 Sep 2026 15:10:41 +0530
-From: Naveen N Rao <naveen@kernel.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com, 
-	andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org, 
-	chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com, jthoughton@google.com, 
-	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, steven.price@arm.com, 
-	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Vishal Annapurve <vannapurve@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Youngjun Park <youngjun.park@lge.com>, Qi Zheng <qi.zheng@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, 
-	Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
-	Fuad Tabba <fuad.tabba@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev
-Subject: Re: [PATCH v11 15/46] KVM: guest_memfd: Call arch make_shared
- callback for to-shared conversion
-Message-ID: <art6ARechyK0iytK@blrnaveerao1>
-References: <20260826-gmem-inplace-conversion-v11-0-0a15d8a799aa@google.com>
- <20260826-gmem-inplace-conversion-v11-15-0a15d8a799aa@google.com>
- <ao9CKMXAX-hScRSa@google.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="JjsM4U0d"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 134DD1516;
+	Tue, 29 Sep 2026 03:01:41 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 57C053F85F;
+	Tue, 29 Sep 2026 03:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1790676104; bh=sOf1yxpICIHQ0diMdP7xrm0ukUMRWepHeq2vSRPG4qQ=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=JjsM4U0dCWQiwBxbACDJ3APXp7SAAY6WZjEcCJGR+fkF0lJD+DKExuMsMdh+XnBDu
+	 i0z/7aw1bFIIV5rVltVcodA/qy/Z73WE/sqRztwIokaAaVcrTjcm6DLx8c/CDtsnYi
+	 fzYfg2Y59P6spKNrcItxhEh8ew13b7ZcHr9keCoA=
+Date: Tue, 29 Sep 2026 11:01:38 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Nico Pache <nico.pache@linux.dev>,
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+	Usama Arif <usama.arif@linux.dev>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 3/4] kselftest: mm: integrate huge page checks
+Message-ID: <aruMgm8UZ_t2V_wh@e129823.arm.com>
+References: <20260924-fix_split-v8-0-cba7359d882a@arm.com>
+ <20260924-fix_split-v8-3-cba7359d882a@arm.com>
+ <16f16e77-05ab-418e-ad06-8f48fb29375a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,81 +56,117 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ao9CKMXAX-hScRSa@google.com>
+In-Reply-To: <16f16e77-05ab-418e-ad06-8f48fb29375a@kernel.org>
 
-On Wed, Aug 26, 2026 at 12:44:40PM -0700, Sean Christopherson wrote:
-> On Wed, Aug 26, 2026, Ackerley Tng wrote:
-> > +
-> >  static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
-> >  				     size_t nr_pages, uint64_t attrs,
-> >  				     pgoff_t *err_index)
-> > @@ -624,7 +661,12 @@ static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
-> >  
-> >  	filter = to_private ? KVM_FILTER_SHARED : KVM_FILTER_PRIVATE;
-> >  	kvm_gmem_invalidate_start(inode, start, end, filter);
-> > +
-> > +	if (!to_private && kvm_arch_has_gmem_convert())
-> > +		kvm_gmem_make_shared(inode, start, end);
-> > +
-> >  	mas_store_prealloc(&mas, xa_mk_value(attrs));
-> > +
-> >  	kvm_gmem_invalidate_end(inode, start, end);
+On Tue, Sep 29, 2026 at 10:07:37AM +0200, David Hildenbrand (Arm) wrote:
+> On 9/24/26 21:11, Yeoreum Yun wrote:
+> > check_large_folios() only checks for large folios without distinguishing
+> > between anonymous and file-backed huge pages.
+> > 
+> > To add huge page type checking, integrate the huge page checks into
+> > __check_huge():
+> > 
+> >   1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of using
+> >      check_large_folios(), since only the mapping type matters. This
+> >      identifies PMD-mapped huge pages.
+> > 
+> >   2. Otherwise, use check_large_folios() to detect large folios. This
+> >      covers mTHP cases.
+> > 
+> >   3. Check the folio flags according to the huge page type.
+> > 
+> > Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+> > Suggested-by: Zi Yan <ziy@nvidia.com>
+> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> > ---
 > 
-> The real reason I responded...
+> Instead of merging both things (detecting mapping vs. detecting anon vs. file),
+> could we simply perform the anon vs. file change separately?
 > 
-> Thinking about the Secure AVIC mess made me realize zapping NPTs for SNP VMs isn't
-> strictly necessary in this path.  The PFN isn't changing, just the attributes, and
-> that's (obviously) tracked in the RMP.  KVM doesn't need to zap SPTEs to induce a
-> fault, because the mismatched C-bit vs. RMP status will cause an #NPF(RMP), and
-> AFAICT kvm_mmu_page_fault() will do the right thing.  A misbehaving guest could
-> continue to access the shared data (assuming we stick with lazy conversions), but
-> that should be fine?  E.g. it's not really any different than implicit conversions.
+> Doing another pagemap walk that focuses on that should end up with something
+> that is easier to read.
 
-Brilliant idea!
+Okay. I'll change like below in next-spin:
 
-> 
-> In other words, couldn't we do this (as an on-top optimization)?  The only wrinkle
-> I can think of is that it could delay reconstituion of a hugepage, especially if
-> we opted for eager conversion (because the guest wouldn't hit #NPFs to trigger the
-> hugepage promotion).
-> 
-> diff --git arch/x86/kvm/mmu/mmu.c arch/x86/kvm/mmu/mmu.c
-> index 62f751952ad8..61f3e270ab61 100644
-> --- arch/x86/kvm/mmu/mmu.c
-> +++ arch/x86/kvm/mmu/mmu.c
-> @@ -1670,6 +1670,7 @@ static bool __kvm_rmap_zap_gfn_range(struct kvm *kvm,
->  
->  bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
->  {
-> +       unsigned long shared_private =  KVM_FILTER_SHARED | KVM_FILTER_PRIVATE;
->         bool flush = false;
->  
->         /*
-> @@ -1683,6 +1684,10 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
->         lockdep_assert_once(kvm->mmu_invalidate_in_progress ||
->                             lockdep_is_held(&kvm->slots_lock));
->  
-> +       if (gmem_in_place_conversion && !kvm_has_mirrored_tdp(kvm) &&
-> +           ((range->attr_filter & shared_private) != shared_private))
-> +               return false;
-> +
->         if (kvm_memslots_have_rmaps(kvm))
->                 flush = __kvm_rmap_zap_gfn_range(kvm, range->slot,
->                                                  range->start, range->end,
+-------&<-------
 
-Can this be a problem with gmem hugepages? Not sure how that is going to 
-look like, so this may be covered in other ways.
+@@ -411,57 +400,78 @@ static bool check_huge_type(uint64_t categories, enum check_huge_type type)
+        return false;
+ }
 
-But, as it exists today, if the guest converts part of a 2M page to 
-shared, then this skips zapping the SPTEs from the call in 
-kvm_gmem_invalidate_start(). sev_gmem_make_shared() then issues PSMASH 
-to convert RMP entry to 4k entries and we end up with 2M NPT+4K RMP. If 
-the guest then writes to any private page in that range, 
-page_fault_can_be_fast() returns true, fast_page_fault() only checks 
-permissions with spte_permission_fault() and does not do anything.  
-sev_handle_rmp_fault() also does not issue a zap since it finds that the 
-RMP entry is already 4k, and we end up in a loop.
+-static bool __check_pmd_huge(void *addr, size_t len, int nr_hpages,
+-                 uint64_t hpage_size, enum check_huge_type type)
++static bool __check_huge(void *addr, size_t len, int nr_hpages,
++               uint64_t hpage_size, enum check_huge_type type)
+ {
+ {
+-       int pagemap_fd;
++       bool ret = false;
++       int pagemap_fd, kpageflags_fd;
+        int nr_pmd_mappings = 0;
++       uint64_t pmd_pagesize, scan_mapping_size;
+        uint64_t categories;
++       unsigned long pfn;
++       bool check_pmd_mapping, allow_nonpresent;
+        char *start = addr;
+        char *end = start + len;
 
++       pmd_pagesize = read_pmd_pagesize();
++       if (!pmd_pagesize)
++               ksft_exit_fail_msg("reading PMD pagesize failed\n");
++
++       check_pmd_mapping = hpage_size == pmd_pagesize;
++       scan_mapping_size = (nr_hpages > 0) ? hpage_size : psize();
++       /* Some mTHP tests check a partially populated PMD-sized range. */
++       allow_nonpresent = (uint64_t)nr_hpages * hpage_size < len;
++
+        pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
+        if (pagemap_fd < 0)
+                ksft_exit_fail_perror("open pagemap");
 
-- Naveen
+-       for (; start < end; start += hpage_size) {
++       kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
++       if (kpageflags_fd < 0)
++               ksft_exit_fail_perror("open kpageflags");
++
++       for (; start < end; start += scan_mapping_size) {
+                categories = pagemap_scan_get_categories(pagemap_fd, start);
+-               if (!(categories & PAGE_IS_HUGE))
++               pfn = pagemap_get_pfn(pagemap_fd, start);
++               if (pfn == -1UL) {
++                       if (!allow_nonpresent)
++                               goto out;
+                        continue;
+-               if (check_huge_type(categories, type))
++               }
++               if (!check_huge_type(categories, type))
++                       goto out;
++       }
++
++       if (!check_pmd_mapping) {
++               ret = check_large_folios(pagemap_fd, kpageflags_fd,
++                               addr, len, nr_hpages, hpage_size);
++               goto out;
++       }
++
++       for (start = addr; start < end; start += scan_mapping_size) {
++               categories = pagemap_scan_get_categories(pagemap_fd, start);
++               if (categories & PAGE_IS_HUGE)
+                        nr_pmd_mappings++;
+        }
+-       close(pagemap_fd);
 
+-       return nr_hpages == nr_pmd_mappings;
++       if (nr_pmd_mappings != nr_hpages)
++               goto out;
++       ret = true;
++
++out:
++       close(pagemap_fd);
++       close(kpageflags_fd);
++       return ret;
+ }
+
+-- 
+Sincerely,
+Yeoreum Yun
