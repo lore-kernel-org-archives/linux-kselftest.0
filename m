@@ -1,38 +1,38 @@
-Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9BC051A754;
-	Tue, 29 Sep 2026 10:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C0451477C;
+	Tue, 29 Sep 2026 10:37:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790678241; cv=none; b=u9Q5fYbctdDidBHThbDmFTt+mWfvSOkGkd7d0jxfs3fb+CLcpHFO1C4I/h01FVKT4GRWjoerkvfrX33vpNAz177kZsse/k5D6GWFzOdJyzhAs9V3piGm33CEgovNhKAcF6ct4b7IkLY45SSV3OB1Yd6gPLsVd1MQf34fnLBsKgU=
+	t=1790678241; cv=none; b=kseBZAsnqmV7P/g2BWJQp3CXisD03dRAt9ckpRA4iGdPnhiPsgYmoXNUQOzmnBQhUi/Ezckvsu2N9P6YY5c3GX8V9RRd3d2Yw0cmoG3A72E62gxgB8yYrP+C2I0J6KvtqwRcccrkPUCCJULHsDO+xSPSl38J0bjQ+7lxAqxKMEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790678241; c=relaxed/simple;
-	bh=7dAGAZt61NcYflfhAv0nDLW17VM0ti4kgeJDgL6NmkU=;
+	bh=xOzV7sX8Hl1oUH6thulieIiyIW9WreMN6lm/eWJySZ4=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ed7le2gWFsd1OesCYBl3t3zV0FXH1CJDcJg95n2tMaRUP0065KAacrZn737DipQ3a7kEt1BbnMl287knFxOMfU3YGPMePkVrmliRGeUuVycyd64tN3iU8g2CV73BP3kTg72kGbqJtTvNiiQs2o4rrSQcb7ZaGU8Dq2qAnM6u/6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=ljGVRr9d; arc=none smtp.client-ip=113.46.200.223
+	 MIME-Version:Content-Type; b=HjGgmdA2qgChJncehNsZwcHqkFrgv/sCvjv3Eb2LQ9bdXJxKFqo1ks+PuGmY0jZVE2B3u9NB0KhC5uUoTooq8FlmTb8zeZodbcFo8cN3niboCi7oIvytDt9ngbsq2P+QbTYGEwj/X9WS3zf4CBRD5zEm+ilY9cvSoPBcaWLDKkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=gD4gRAxf; arc=none smtp.client-ip=113.46.200.219
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="ljGVRr9d"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="gD4gRAxf"
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=FG2fSrBLzTEi5cgZPg/wmj6p28Uf1X+o6OUro3L7LTw=;
-	b=ljGVRr9djyRE4Nc9scgYujgOAYfl8s9i1kh2EthogOwA4BFrUs6cZ6GZawsCn9OyBxbDJe1P+
-	Z0znAg+Rz4XKlsJ5d8Drw0f1+0hAkNZRjsplR4Ne6mu7GHDsLwEUC6zBhWPDo3iiHeXUD+LKDWQ
-	FxANwd2uTN7saIN91CWsX9w=
-Received: from mail.maildlp.com (unknown [172.19.163.200])
-	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4hvDnZ4yH4zmV8f;
-	Tue, 29 Sep 2026 18:24:50 +0800 (CST)
+	bh=UhCl5i1QqeG6DsLGoEVhwhQZILgarOVG0u5bGP7j+qo=;
+	b=gD4gRAxfs4SbgG+kI4hny6tT0fFtf6zYwuRXd+A1rHopu/M32i+ZYP0i2JRO2/OpYIT6FslfL
+	1ROClicrUEOgjqdQ49NYH7Uy3alwpWNcfktQyCVzkFtybvL3MuPk6rUUpaSmdw6qdZRxzzbAQe2
+	Pks7TeWi8tA5K0TNNNsmNGo=
+Received: from mail.maildlp.com (unknown [172.19.162.140])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4hvDnc0xypz1prLc;
+	Tue, 29 Sep 2026 18:24:52 +0800 (CST)
 Received: from kwepemr100010.china.huawei.com (unknown [7.202.195.125])
-	by mail.maildlp.com (Postfix) with ESMTPS id F20DA4055B;
-	Tue, 29 Sep 2026 18:36:58 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id E1A5E203C8;
+	Tue, 29 Sep 2026 18:37:02 +0800 (CST)
 Received: from huawei.com (10.50.163.32) by kwepemr100010.china.huawei.com
  (7.202.195.125) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Tue, 29 Sep
- 2026 18:36:57 +0800
+ 2026 18:37:01 +0800
 From: Tian Zheng <zhengtian10@huawei.com>
 To: <maz@kernel.org>, <oupton@kernel.org>, <catalin.marinas@arm.com>,
 	<will@kernel.org>, <corbet@lwn.net>, <pbonzini@redhat.com>,
@@ -47,9 +47,9 @@ CC: <yuzenghui@huawei.com>, <wangzhou1@hisilicon.com>,
 	<mark.rutland@arm.com>, <seanjc@google.com>, <rdunlap@infradead.org>,
 	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
 	<skhan@linuxfoundation.org>
-Subject: [PATCH v5 03/15] KVM: arm64: Introduce a dedicated walker for stage2 write-protect
-Date: Tue, 29 Sep 2026 18:36:43 +0800
-Message-ID: <20260929103655.85107-4-zhengtian10@huawei.com>
+Subject: [PATCH v5 08/15] KVM: arm64: Flush the HDBSS buffer on VM exit
+Date: Tue, 29 Sep 2026 18:36:48 +0800
+Message-ID: <20260929103655.85107-9-zhengtian10@huawei.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20260929103655.85107-1-zhengtian10@huawei.com>
 References: <20260929103655.85107-1-zhengtian10@huawei.com>
@@ -64,64 +64,166 @@ Content-Type: text/plain
 X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
  kwepemr100010.china.huawei.com (7.202.195.125)
 
-From: Leonardo Bras <leo.bras@arm.com>
+From: Eillon <yezhenyu2@huawei.com>
 
-The new walker cleans the dirty bit on leaf entries, as well as clean
-the DBM bit in blocks so it still faults for lazy hugepage splitting when
-we enable FEAT_HDBSS in future patches.
+HDBSS entries accumulate in the per-vCPU buffer while the guest runs,
+and must be drained into the dirty bitmap or dirty ring before
+userspace can observe them.
 
-With disabled HDBSS, there should be no change in faulting behavior.
+Drain the buffer at a single point: kvm_arch_vcpu_ioctl_run() flushes
+it on every VM exit, before the exit reason is handled. Flushing
+inside the run loop keeps the dirty-ring feedback timely: when a flush
+pushes the ring past its soft limit, kvm_dirty_ring_push() raises
+KVM_REQ_DIRTY_RING_SOFT_FULL, which check_vcpu_requests() observes at
+the top of the next loop iteration, so the vCPU exits to userspace for
+the harvest before re-entering the guest.
 
-Link: https://lore.kernel.org/all/20260901171558.2674031-4-leo.bras@arm.com/
-Signed-off-by: Leonardo Bras <leo.bras@arm.com>
+kvm_arch_sync_dirty_log() relies on the exit path to flush: it kicks
+vCPUs out of guest mode, and the GET/CLEAR protocol tolerates
+concurrent bitmap writes, so the snapshot is complete without extra
+synchronization.
+
+Signed-off-by: Eillon <yezhenyu2@huawei.com>
 Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
 ---
- arch/arm64/kvm/hyp/pgtable.c | 30 ++++++++++++++++++++++++++----
- 1 file changed, 26 insertions(+), 4 deletions(-)
+ arch/arm64/include/asm/kvm_dirty_bit.h | 15 +++++++++
+ arch/arm64/kvm/arm.c                   | 20 ++++++++++++
+ arch/arm64/kvm/dirty_bit.c             | 45 ++++++++++++++++++++++++++
+ 3 files changed, 80 insertions(+)
 
-diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-index 357b06648418..aa0448d3a6a4 100644
---- a/arch/arm64/kvm/hyp/pgtable.c
-+++ b/arch/arm64/kvm/hyp/pgtable.c
-@@ -1293,12 +1293,34 @@ static int stage2_update_leaf_attrs(struct kvm_pgtable *pgt, u64 addr,
- 	return 0;
+diff --git a/arch/arm64/include/asm/kvm_dirty_bit.h b/arch/arm64/include/asm/kvm_dirty_bit.h
+index fe703f02626b..d828e6b43fe9 100644
+--- a/arch/arm64/include/asm/kvm_dirty_bit.h
++++ b/arch/arm64/include/asm/kvm_dirty_bit.h
+@@ -13,6 +13,9 @@
+ #include <asm/sysreg.h>
+ #include <linux/sizes.h>
+
++#define HDBSS_ENTRY_VALID	BIT(0)
++#define HDBSS_ENTRY_IPA	GENMASK_ULL(55, 12)
++
+ #define KVM_ARM_HDBSS_DEFAULT_SIZE  PAGE_SIZE
+ #define KVM_ARM_HDBSS_MAX_SIZE      SZ_2M
+
+@@ -22,7 +25,19 @@ static inline u32 kvm_hdbss_buffer_size(struct kvm *kvm)
+ 	return kvm->arch.hdbss_buffer_size ?: KVM_ARM_HDBSS_DEFAULT_SIZE;
  }
 
-+static int stage2_wrprotect_walker(const struct kvm_pgtable_visit_ctx *ctx,
-+				   enum kvm_pgtable_walk_flags visit)
++static inline bool kvm_hdbss_enabled(struct kvm *kvm)
 +{
-+	kvm_pte_t new = ctx->old & ~KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W;
-+
-+	/* We remove DBM on blocks so they can fault and get split */
-+	if (ctx->level < KVM_PGTABLE_LAST_LEVEL)
-+		new &= ~KVM_PTE_LEAF_ATTR_HI_S2_DBM;
-+
-+	/*
-+	 * We may race with the CPU trying to set the access flag here,
-+	 * but worst-case the access flag update gets lost and will be
-+	 * set on the next access instead.
-+	 */
-+	if (kvm_pte_valid(ctx->old) && ctx->old != new)
-+		WRITE_ONCE(*ctx->ptep, new);
-+
-+	return 0;
++	return kvm->arch.mmu.vtcr & VTCR_EL2_HDBSS;
 +}
 +
- int kvm_pgtable_stage2_wrprotect(struct kvm_pgtable *pgt, u64 addr, u64 size)
- {
--	return stage2_update_leaf_attrs(pgt, addr, size, 0,
--					KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W,
--					NULL, NULL,
--					KVM_PGTABLE_WALK_IGNORE_EAGAIN);
-+	struct kvm_pgtable_walker walker = {
-+		.cb	= stage2_wrprotect_walker,
-+		.flags	= KVM_PGTABLE_WALK_LEAF,
-+	};
++static inline bool vcpu_hdbss_enabled(struct kvm_vcpu *vcpu)
++{
++	return vcpu->arch.hw_mmu &&
++		(vcpu->arch.hw_mmu->vtcr & VTCR_EL2_HDBSS);
++}
 +
-+	return kvm_pgtable_walk(pgt, addr, size, &walker);
+ int kvm_arm_vcpu_alloc_hdbss(struct kvm_vcpu *vcpu);
+ void kvm_arm_vcpu_free_hdbss(struct kvm_vcpu *vcpu);
++void kvm_flush_hdbss_buffer(struct kvm_vcpu *vcpu);
+
+ #endif /* __ARM64_KVM_DIRTY_BIT_H__ */
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 5ea4ac26995e..9d7bdece149a 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -1430,6 +1430,14 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+
+ 		trace_kvm_exit(ret, kvm_vcpu_trap_get_class(vcpu), *vcpu_pc(vcpu));
+
++		/*
++		 * Drain the HDBSS buffer before the exit is handled, so
++		 * entries pushed to the dirty ring are accounted for by
++		 * dirty_ring_check_request() on the next iteration.
++		 */
++		if (vcpu_hdbss_enabled(vcpu))
++			kvm_flush_hdbss_buffer(vcpu);
++
+ 		/* Exit types that need handling before we can be preempted */
+ 		handle_exit_early(vcpu, ret);
+
+@@ -2017,7 +2025,19 @@ long kvm_arch_vcpu_unlocked_ioctl(struct file *filp, unsigned int ioctl,
+
+ void kvm_arch_sync_dirty_log(struct kvm *kvm, struct kvm_memory_slot *memslot)
+ {
++	unsigned long i;
++	struct kvm_vcpu *vcpu;
+
++	if (!kvm_hdbss_enabled(kvm))
++		return;
++
++	/*
++	 * The buffer is drained on every VM exit, so kicking running
++	 * vCPUs is enough to flush them; the dirty-log GET/CLEAR
++	 * protocol tolerates bits set concurrently with the snapshot.
++	 */
++	kvm_for_each_vcpu(i, vcpu, kvm)
++		kvm_vcpu_kick(vcpu);
  }
 
- void kvm_pgtable_stage2_mkyoung(struct kvm_pgtable *pgt, u64 addr,
+ static int kvm_vm_ioctl_set_device_addr(struct kvm *kvm,
+diff --git a/arch/arm64/kvm/dirty_bit.c b/arch/arm64/kvm/dirty_bit.c
+index f9aeb9f34ad0..be0d12555c84 100644
+--- a/arch/arm64/kvm/dirty_bit.c
++++ b/arch/arm64/kvm/dirty_bit.c
+@@ -13,6 +13,7 @@
+ #include <linux/kconfig.h>
+ #include <linux/log2.h>
+ #include <linux/mm.h>
++#include <linux/srcu.h>
+
+ int kvm_arm_vcpu_alloc_hdbss(struct kvm_vcpu *vcpu)
+ {
+@@ -53,3 +54,47 @@ void kvm_arm_vcpu_free_hdbss(struct kvm_vcpu *vcpu)
+ 	vcpu->arch.hdbss.hdbss_pg = NULL;
+ 	vcpu->arch.hdbss.hdbssbr_el2 = 0;
+ }
++
++void kvm_flush_hdbss_buffer(struct kvm_vcpu *vcpu)
++{
++	int idx, curr_idx;
++	u64 prod;
++	u32 entries;
++	u64 *hdbss_buf;
++	struct kvm *kvm = vcpu->kvm;
++	int srcu_idx;
++
++	if (!vcpu_hdbss_enabled(vcpu))
++		return;
++
++	prod = read_sysreg_s(SYS_HDBSSPROD_EL2);
++	curr_idx = HDBSSPROD_IDX(prod);
++
++	if (curr_idx == 0 || !vcpu->arch.hdbss.hdbss_pg)
++		return;
++
++	hdbss_buf = page_address(vcpu->arch.hdbss.hdbss_pg);
++	if (!hdbss_buf)
++		return;
++
++	entries = kvm_hdbss_buffer_size(kvm) / sizeof(u64);
++
++	/* kvm_vcpu_mark_page_dirty() resolves the memslot under SRCU. */
++	srcu_idx = srcu_read_lock(&kvm->srcu);
++	for (idx = 0; idx < min_t(u32, curr_idx, entries); idx++) {
++		u64 gpa;
++
++		gpa = hdbss_buf[idx];
++		if (!(gpa & HDBSS_ENTRY_VALID))
++			continue;
++
++		gpa &= HDBSS_ENTRY_IPA;
++		kvm_vcpu_mark_page_dirty(vcpu, gpa >> PAGE_SHIFT);
++	}
++	srcu_read_unlock(&kvm->srcu, srcu_idx);
++
++	prod &= ~HDBSSPROD_EL2_INDEX_MASK;
++	write_sysreg_s(prod, SYS_HDBSSPROD_EL2);
++	vcpu->arch.hdbss.hdbssprod_el2 = prod;
++	isb();
++}
 --
 2.43.0
 
