@@ -1,70 +1,73 @@
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A470346771;
-	Tue, 29 Sep 2026 13:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3E73B38B9;
+	Tue, 29 Sep 2026 13:15:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790687728; cv=none; b=D57t8zwKyjx00Ok82/0z+WwRGySwevPnuwbGOHv+W/6n+Hw8lIxLXhcOvuJrvwJrxN+2AeIR1PmndyPWlYKHKBor3K2tEsNEUurqSPcsLYXmPzMXP2FVjLr9EDIgn8DJx/JNBaObqVpDZDba0LHluSZcEis2C03WghLxmtG1iNE=
+	t=1790687731; cv=none; b=fora7LaCxBy283RRQKfg5POMKDQ5PD0JreL3Iz8gfoZi/Uyo1E7SjwoYXN93gCHUi76P/97Jh+xUSz/A3vGGr9UDd2HEOq89/MME+TJOnC6BWucETJooSRvGY7Y3NVtaGEul10Ewz2CPCuDBx/AWdJYWxUjtSUiJ2DFTOn4j0kI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790687728; c=relaxed/simple;
-	bh=xoVVUwwV7zfH7B9nRlz47Lz+PWZGkHyWRvJBgM8w/FQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cNM0Eruvts+NuIIOB2jVC4h3fAeljTsvYJR1FD1QcgdjEGf+vfcVNHXomOfP99T5E/kyPUzV0RAwL8gVUlgolci3eY9m4BuLVrRtGhCvRe0HAHK5kIjV35C1nRtxvxHh0UFSzU0zcz+JBXpcKpjw0XzIuhRBGDyxuucj+rabMB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=Bi/PaIQp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gB90BWbs; arc=none smtp.client-ip=103.168.172.152
+	s=arc-20240116; t=1790687731; c=relaxed/simple;
+	bh=RN4IKlMYfNGgGS2U+XWBy+qveK5P8iFOzLeWNOncUB4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fUVDiQ7Lv30BAiSpkWs8FQDVyGHV8raUSCWnVV6h84W0acbtGy9Yn1ZmPQeqMZlSNhrfpajDckonNbOPAGVCo0MwaPj/pr7c1XlCrtpaLl9qfwrvMh/fkrcq6EYfc9SXDa+cDjOqlhsdRIpr3b02fMnUN3d2oAxw6lXn41GtNX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=jAn/3+Ke; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=eBAiXbB6; arc=none smtp.client-ip=103.168.172.148
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="Bi/PaIQp";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gB90BWbs"
-Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 73FBF1400DE9;
-	Tue, 29 Sep 2026 09:15:25 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-07.internal (MEProxy); Tue, 29 Sep 2026 09:15:25 -0400
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="jAn/3+Ke";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="eBAiXbB6"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id EFFB9EC0D18;
+	Tue, 29 Sep 2026 09:15:27 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Tue, 29 Sep 2026 09:15:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
-	:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to; s=fm3; t=1790687725; x=1790774125; bh=dln44ETuiX
-	wXPmOn5cFsvpQrPsJf7dyzZ/xlI0gN724=; b=Bi/PaIQpgq++yJqpVx/Z33jNvb
-	SvAxltNdXLj4vsR0g5jLhrfKa7jM+wDPOJVylXdFfU6yVZF+civwcp+TS2IMl7zk
-	Mpwn8WD3YXhQwjrttuH0HjZHRaroT4gnD4uH/ONjGWCdN6Ftp2zoDLCQKTzF81BY
-	Rz4lWPlGhoMBMmVP7Q0woy/pWrjhlGuGsm6HvwNVDPyTpRWJ7pPRiDjnSyVSZAq6
-	jkCfH7vLGfw9PEq/MoWwHt6TrLEfihhzjoh6MagFMc3RbhbOXqOGfcdR3Ml3PR4m
-	D+XNmXCZXtTq2zrV00Kox5LUUJ1XT/pKqmM6QLduZwzqsbVt3aZbcoyp1K/g==
+	:from:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1790687727; x=
+	1790774127; bh=GU/GEika9AgtPqkhOeR2xfVt/VRGijJWCE2f39JUMhA=; b=j
+	An/3+Ken8mfNGlA/cpIUluQ6poFpV+zVCIzC5NnmxL2Y2hw2oyD9hUKGt7UN64Ae
+	Fa+rBBBl6zuBEB9nFEoYvDV4GoIY6UtfJ6f47zDJm2zWcXxsqBNXz19j3nFa58SQ
+	SV0toohclpUsGprTgfVq0WxvnGjbZSI+ArrSiOtLlBog6jh9LkRctiyytvSQTV62
+	4LciVfc5OfrVQRULS1fuGDo3VatbUvdOydxbzo2yKLQCceyxDaKBr8COfp4mcgo5
+	ZvDEZzObbaPn5g0qJgNZU5pO1cMhQNgJwIp6Xz9lWxBUTj2EvTQnhW0+WpQvOLsj
+	aHnHldwjsCyBQ80+/m5QA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1790687725; x=1790774125; bh=dln44ETuiXwXPmOn5cFsvpQrPsJf7dyzZ/x
-	lI0gN724=; b=gB90BWbsm1+K0aSfQ6hhzHMwBkWDLYWVSNdRONEfgAzPHgkH5N5
-	hrHfucS/MAr1iQDxuPNc6TwGWs73SHPiCnjLGJxbUe/4hRIM3BoUOKqOOxcejECP
-	aLXn+RznCMumAZ7LRkPRLEsG8whF3KoH6adBqr+iOwtlAvUjbALHOEfHkXG80xo0
-	KiHxKFPcXhPjnMm0iw4K4Ld8nojmO6pbefM/nbxNkNzMV4Id9CA7l6AHy7q0JjRI
-	gmZdow7U+P6zRMlMoHqsLTy1A5nSGWq7Z+1TDRM+LWXpJGMqKK+jubGjLBeDZsDl
-	XWNz78V4Xoas6cNMcUQnfFoV1nXBvNDyJbg==
-X-ME-Sender: <xms:7Lm7aj1K495RalAp36TemdYS50cOON2KImp5lxK0G2cY-p_dpBvG2A>
-    <xme:7Lm7ajtxfocCtCXro7xsFyASeIzxa2_cyN2tSk-I3aVixQeBoyBCEN8XmaH-WnHAX
-    bWwsNC11QqT1HPIdPFDuVmhGhzEyrdZjGEO-3yoUtmKNlrEVIRMseou>
-X-ME-Received: <xmr:7Lm7an8dtz3x0XRlB5N7q8sOTtyI5JPQswEn-CjZnCFi9wHRZet_FNdnccM>
-X-ME-Proxy-Cause: dmFkZTEdRzjebqwEyKUsmCMnVq/d6i3oNDeazqWgQUaCchZvTgbioD5tEK+m1B45sYEP7u
-    TntqU8fdl6QP5zx5E69fZ51nHWl+I26EBc2HC3WqwFRQ63udJjmQqPvC1EtMFZ2vLEDK8A
-    jjfmS8b69efhc3joRYo74vNDRZ8zClIgdG5l2bRF/M6NC3hbjvylUFvA/MvgT2ujD1YAZh
-    IzkQbFH50g9a00b2iMKNZkMTpFzHG/hLdMdg3VRS2Uj6FQJTdX0Jsjit76F/1Pzs13p3Mk
-    cbY9gO59pD4jGkwsD6g/gmAD1FIzaa6+dkemqQYDHhLKebwqbPYD7ynQiPvWsaZg0z5SKk
-    /or2nd2ppG//ZDj05dGdqm72C1Y4QT9bmB1rPVs3uM1g5pLUlh3ZNiXVUtj6PwLGGByivR
-    3/f/MWtgldm9D0KnOLAFqh7y/S+6zOEvf0qgTi5rARGK8xeDQMoAFhqx3RM9U+VPSTAi8O
-    r+M6FzHvN+8MI210952MlPgAipoxkYrWni9LVgNHrQCIUD7RrI15C3penw+WmMKTuGULK8
-    zdeEWQQ5VgG7WnMsFTNxDb9NDBsq9mzz9CkFRk+xn6hzuMj5SdPQEo+is4YAIR4zgDuWp4
-    ZtFEgBdh3L2icI0Vmxm5mNCS/6UGOkYhcoydVBIblgsfofnUI6L/+Knvn9Rg
-X-ME-Proxy: <xmx:7Lm7avRPneSVcBJVWT_JjXNBbWegXjyfwdu6-umBDyNWCoyqvnuWag>
-    <xmx:7Lm7alDfusfvHescl9rIxVFniotiqVAyeA9f7VU2YEsaOIMoSIpMYw>
-    <xmx:7Lm7aoboQy9LsGd6e9psgvdaslroXk_sTjIiFfC_gUpNzrAK6Qgq1g>
-    <xmx:7Lm7auJ1hgrn7tUVnSwqmB2fj7dCAOdwdeqPyYJBqM-ISvXJMtjorQ>
-    <xmx:7bm7an12QHvh6yInRK7UjF5L1PldHoYcW7S14J4xm-F1kGsifmHspSP7>
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm1; t=1790687727; x=1790774127; bh=G
+	U/GEika9AgtPqkhOeR2xfVt/VRGijJWCE2f39JUMhA=; b=eBAiXbB6rSEHZX6oE
+	RQlG5+4JYN66xe8rwBdku4sezNImkkU3PE0GNGVNp/lDGjLkzZ0mUY3pTOxYkYUv
+	9X0m9sfK/+ffqC8E9SC9AFO99y/CpO3Rl3KtDIeTj5HyrEN/sraDNL4J3jldasm3
+	ZmqjGTYLumHZGu7LUUY+SsC5a0xr3b2qpevW5DzBmghY1cSLWUCqa4ttq9aXFVsp
+	6R/RcnFEgreZY0F5NpjM+nwlBbwl0mIlwmmP4rN8fEktLBUrWiaDUidtOaDThclv
+	9LUdK7pSYQnYrPjxUgLYQJE/yasTYOaHKaz7cQuoJyU/5KyqFAPE1A9ZFaYz+KtA
+	4s5wg==
+X-ME-Sender: <xms:77m7aqjOiKrBbJfZL9IJypuX3YX1gdJpYjnWdmRYZE6UYqBeDN_9mw>
+    <xme:77m7aujSjB9zyr_uhBy-6xwhTebWRg2da8Cs2_hi_GwJrk_WmY0L3VORO3yLdfVY1
+    yfthUTkr_vIze_1OZOWr6cI37a-IKdVMywThzi8r5-07jiFE8dt_T2Q2g>
+X-ME-Received: <xmr:77m7aqnjY1g9XETLiPKZItR1jTm1cSXK8rL19BhBREdhH3aSTuoU112QfgY>
+X-ME-Proxy-Cause: dmFkZTGYccH7Ntb7J02Xj6JuS6MvJY1gl/a+neyh0zdr6nO/D8luWVmgZr3vVncFfxaOyz
+    sDayM6uE9Hs1eK+ME/un6msYT/H9GLEGqCUuaUC0DyOMSfCWuXDxjPjsdGPyoevruFuRE+
+    g2yJgkk5PdFa3SMVKZ6gjwNZL3TlLTTB/zh71tz7d1GIGv71iHICfh77uMSsSdxCueqjsF
+    W9a0jjllcDDBY3d85i1vta2YOFpbdbcbcx15YCW3q0go4uhoLMlvpNUCT8+kMmJ22Ad1HO
+    uVgBzj94RdAq0amic7bSBxVqTdtP3Nc9GZu2B+9nbtIeSv2ligKQDG9XD/qLIwJ7GU89bm
+    p8N2XHjAnkP18qIAtkgBI3Now4GKQg7mhdViYW8+mFb8S7jPN6pTLd49ipYnlZqnF7zeWx
+    IvHz5bn7KXXZgMw/1yTaXoXk48eRLo+5dWn5VRHINowBvomuNt9vKPGSmA1/752zGJkK/C
+    AxoYH7YonktaZqqC+XUZ63FMC25P8rWZ3BFz4PFd5z+C6umuHkmYGfUBhj49yuTow/nCP7
+    akJy1w5WG4XwstYmTiiHwrOU1SZSrK+OBym26CtV2DPssWXYKePYJ2OGO+Ohbbwe+eIzCP
+    58lg8diuJvi8JWzrythenmQIn/p5lMMVZVOX5noxDjBkqqdxGgtP48zhyBFw
+X-ME-Proxy: <xmx:77m7amFh2Jzk1wwFnUyJvSZiuSbcGGwnNXhsgW3jbJT1LtVpiz5pQQ>
+    <xmx:77m7asOPWxVOvC-h1Cs0Kkdy8d5e8CpyiumFKM3DfVBcuTqF4re_Hg>
+    <xmx:77m7att4FVXbnns5F-_IMa75aJq3Rt8dpWE7rMiuAMsS6H6yLpLtYQ>
+    <xmx:77m7aiIHQOUTE0iBV84IM6c7Vl18ZKBgebK7n84Y2E4Q4i913GC4Rw>
+    <xmx:77m7as5Jzyfmc3Up91MgSYz3tjEayRixkfss1obiW2sEcfaIp1wdeXaj>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 29 Sep 2026 09:15:23 -0400 (EDT)
+ 29 Sep 2026 09:15:26 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>,
@@ -89,10 +92,12 @@ Cc: "Kiryl Shutsemau (Meta)" <kas@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH 0/4] selftests/mm: check large folio results through check_huge() only
-Date: Tue, 29 Sep 2026 14:15:15 +0100
-Message-ID: <20260929131521.153079-1-kirill@shutemov.name>
+Subject: [PATCH 1/4] selftests/mm: open pagemap and kpageflags once for check_huge()
+Date: Tue, 29 Sep 2026 14:15:16 +0100
+Message-ID: <20260929131521.153079-2-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260929131521.153079-1-kirill@shutemov.name>
+References: <20260929131521.153079-1-kirill@shutemov.name>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -103,45 +108,153 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-The mm selftests had two ways to check that a range came out as folios
-of a given order.  check_huge_anon() and check_huge_file() counted
-folios of the order in the range.  is_range_backed_by_order() checked
-each window for a folio with its head at the window start.  Baolin found
-the two sets in khugepaged.c confusing [1], and the answer at the time
-was to merge them once Yeoreum's rewrite of check_huge_*() on top of
-pagemap and kpageflags landed.  It is in mm-new now.
+check_huge_anon() and check_huge_file() open /proc/self/pagemap and
+/proc/kpageflags on every call and read the PMD size from sysfs on top.
+The khugepaged test calls them hundreds of times.
 
-Make check_huge() check windows below the PMD size, route every caller
-through it, and make is_range_backed_by_order() an internal of vm_util.c.
-The split test's count-based check goes the same way, which also makes
-it notice a split at the wrong offset.  On the way check_huge() stops
-reopening pagemap and kpageflags on every call, which was the other
-reason the separate helper existed.
+Open both once and keep the descriptors.  A pagemap descriptor is tied
+to the mm of the process that opened it, and the khugepaged fork() cases
+call check_huge() from the child, so reopen it when getpid() changes.
 
-Tested on mm-new 2589c5593c20 with KASAN, in 16G guests, x86-64/4K under
-KVM and arm64/64K under TCG: the khugepaged matrix at every order,
-split_huge_page_test, pagemap_ioctl and khugepaged all:all on tmpfs pass
-with the same counts as before.
+Cache the PMD size in read_pmd_pagesize() as well.
 
-[1] https://lore.kernel.org/all/65bf1722-c1fd-452a-88c1-c030b042cfbc@linux.alibaba.com/
+Assisted-by: LLM
+Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+---
+ tools/testing/selftests/mm/vm_util.c | 68 ++++++++++++++++++++--------
+ 1 file changed, 50 insertions(+), 18 deletions(-)
 
-Kiryl Shutsemau (Meta) (4):
-  selftests/mm: open pagemap and kpageflags once for check_huge()
-  selftests/mm: check sub-PMD ranges window by window in check_huge()
-  selftests/mm: check collapse results through check_huge() only
-  selftests/mm: check split results by position, drop
-    gather_folio_orders()
-
- .../testing/selftests/mm/folio_order_check.c  |  28 +-
- tools/testing/selftests/mm/khugepaged.c       |  47 ++-
- .../selftests/mm/khugepaged_sync_check.c      |   7 +-
- .../selftests/mm/split_huge_page_test.c       | 104 +++---
- tools/testing/selftests/mm/vm_util.c          | 320 ++++++------------
- tools/testing/selftests/mm/vm_util.h          |   7 +-
- 6 files changed, 176 insertions(+), 337 deletions(-)
-
-
-base-commit: 2589c5593c200e5146db848730baa1d7dd0c9f4e
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index 762c31f7dfab..e284e378d806 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -22,6 +22,43 @@
+ unsigned int __page_size;
+ unsigned int __page_shift;
+ 
++/*
++ * A pagemap file reads the mm of the process that opened it, so a child
++ * inherits a descriptor that describes its parent.  Open a new one whenever
++ * the pid changed since the last open.
++ */
++static int pagemap_fd_get(void)
++{
++	static int fd = -1;
++	static pid_t pid;
++
++	if (fd >= 0 && pid == getpid())
++		return fd;
++
++	if (fd >= 0)
++		close(fd);
++
++	fd = open(PAGEMAP_PATH, O_RDONLY);
++	if (fd < 0)
++		ksft_exit_fail_msg("open pagemap fail\n");
++	pid = getpid();
++
++	return fd;
++}
++
++static int kpageflags_fd_get(void)
++{
++	static int fd = -1;
++
++	if (fd < 0) {
++		fd = open(KPAGEFLAGS_PATH, O_RDONLY);
++		if (fd < 0)
++			ksft_exit_fail_msg("open kpageflags fail\n");
++	}
++
++	return fd;
++}
++
+ uint64_t pagemap_get_entry(int fd, char *start)
+ {
+ 	const unsigned long pfn = (unsigned long)start / getpagesize();
+@@ -161,10 +198,14 @@ bool check_for_pattern(FILE *fp, const char *pattern, char *buf, size_t len)
+ 
+ uint64_t read_pmd_pagesize(void)
+ {
++	static uint64_t pmd_pagesize;
+ 	int fd;
+ 	char buf[20];
+ 	ssize_t num_read;
+ 
++	if (pmd_pagesize)
++		return pmd_pagesize;
++
+ 	fd = open(PMD_SIZE_FILE_PATH, O_RDONLY);
+ 	if (fd == -1)
+ 		return 0;
+@@ -177,7 +218,8 @@ uint64_t read_pmd_pagesize(void)
+ 	buf[num_read] = '\0';
+ 	close(fd);
+ 
+-	return strtoul(buf, NULL, 10);
++	pmd_pagesize = strtoul(buf, NULL, 10);
++	return pmd_pagesize;
+ }
+ 
+ unsigned long rss_anon(void)
+@@ -407,7 +449,6 @@ static bool check_huge_type(uint64_t categories, enum check_huge_type type)
+ static bool __check_huge(void *addr, size_t len, int nr_hpages,
+ 		uint64_t hpage_size, enum check_huge_type type)
+ {
+-	bool ret = false;
+ 	int pagemap_fd, kpageflags_fd;
+ 	int nr_pmd_mappings = 0;
+ 	uint64_t pmd_pagesize, scan_mapping_size;
+@@ -426,42 +467,33 @@ static bool __check_huge(void *addr, size_t len, int nr_hpages,
+ 	/* Some mTHP tests check a partially populated PMD-sized range. */
+ 	allow_nonpresent = (uint64_t)nr_hpages * hpage_size < len;
+ 
+-	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
+-	if (pagemap_fd < 0)
+-		ksft_exit_fail_msg("open pagemap fail\n");
+-
+-	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
+-	if (kpageflags_fd < 0)
+-		ksft_exit_fail_msg("open kpageflags fail\n");
++	pagemap_fd = pagemap_fd_get();
++	kpageflags_fd = kpageflags_fd_get();
+ 
+ 	if (!check_pmd_mapping &&
+ 	    !check_large_folios(pagemap_fd, kpageflags_fd,
+ 				addr, len, nr_hpages, hpage_size))
+-		goto out;
++		return false;
+ 
+ 	for (; start < end; start += scan_mapping_size) {
+ 		categories = pagemap_scan_get_categories(pagemap_fd, start);
+ 		pfn = pagemap_get_pfn(pagemap_fd, start);
+ 		if (pfn == -1UL) {
+ 			if (!allow_nonpresent)
+-				goto out;
++				return false;
+ 			else
+ 				continue;
+ 		}
+ 		if (check_pmd_mapping && (categories & PAGE_IS_HUGE))
+ 			nr_pmd_mappings++;
+ 		if (!check_huge_type(categories, type))
+-			goto out;
++			return false;
+ 	}
+ 
+ 	if (check_pmd_mapping && (nr_pmd_mappings != nr_hpages))
+-		goto out;
+-	ret = true;
++		return false;
+ 
+-out:
+-	close(pagemap_fd);
+-	close(kpageflags_fd);
+-	return ret;
++	return true;
+ }
+ 
+ bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
 -- 
 2.54.0
 
