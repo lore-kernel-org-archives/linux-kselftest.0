@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9AA03B14A8;
-	Tue, 29 Sep 2026 08:17:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B763D7D64;
+	Tue, 29 Sep 2026 08:22:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790669878; cv=none; b=KIU0UrutrOrvGqLMs+bvIWL/OjqpREMtaZVzariOx5e6WlCp8z7Yov+pBirLRW/wVM3eqE43liHdcssap7wTcCJMP+pUXOsSmPrU4muLUyILK7IDi8XHgWadP9NErpz8Xe5pe/7M+Mz2nie72euJ4+s3MWz44nRmNjUUDtMTNVs=
+	t=1790670125; cv=none; b=VZ155bg3HUt8c7TEqZajcl3thlM6pk7lw/fEpyysPk449PKdEdYPYaNMF7/CVwvTKgh5MCdP9mwNQtvhHn1p5gGm8FeqxPnL0O7smcKT6VF8effZ0DXzw3o7LuqYGjjcb33sYipnZUESqeijXeU+tBE4pkCWN7c02L9+6oto0vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790669878; c=relaxed/simple;
-	bh=ebhaR8Leic7MbocH1kNWvLQzscIVhvTH3oGRwLlJwbY=;
+	s=arc-20240116; t=1790670125; c=relaxed/simple;
+	bh=QIQeK4e/IbjNUWdBVEqFEbfDXYWVvLAtThVE3hrdn/k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pqU0MoagQcOztd1hOc+09u4Z++TumziroOnSNsqmE/ZqgKpi615e9kPDCTr3akQeU0JkuJffQJMkagQQDyuOiqIdSHLo4FmYSajGXInPiJ+kWCH2CWOC5If0cM/FIleOzPjI4sfqGtQVTraceB4rauiC1DRM5vt5B2ZMOOrW8zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d8gHhrqH; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=X1flmZF5H0oCrXLaDxbuBDpDYTuyrW0L21q8QweadcI6f06LSbkCUjsrWyb0caEISfQyHDz2OtgjKyperttTjQAWYkgS9miTiq1v09jlAFUKvvBWlsTeuhMih0Kp0znqjJKzuMYo+bQFU9+SFC7rKV+9fo7Mh9XxOsZmmq21Ht4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c3HPnUQ4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d8gHhrqH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 702BD1F000FF;
-	Tue, 29 Sep 2026 08:17:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c3HPnUQ4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62DC31F000FF;
+	Tue, 29 Sep 2026 08:21:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790669877;
-	bh=Yz0jiAwudK9OW80keceLOYRv/mXKUZ2PZm0r7rgGpDQ=;
+	s=k20260515; t=1790670119;
+	bh=dudcfgQ+U80HosFEMLniY29B8GpEpDKgVLsTf9hVEyM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=d8gHhrqHVJEOUzsa6bUhJydt7Kk6k+QGl3qstMrjo1Moa9IdIQ+hGPaTnG68pvM8c
-	 6rY0mPW06vljN3J9Mhtd3s09LgV43cXdQPUBm54cVJt6BxFbrvbZlqOReKwD7uPQzf
-	 Kx7ZZNXuViXEIUCO0hH8SfJ8L8lbEWH6lKV74QnkK8HaMVNdMLKABYcYaRFtdSuY7k
-	 /JykC0QMD2G4/xT4jAbmiGfukp/bozir8K6aSLgV6va9zc+aSAR8xLYxzWuBi9Q1w4
-	 hXoJN5CdZGH25i+uTz+vFvYJ7fwRprbX329EuxLfmyIq4VvaJQQEyyBUpQBnTnAwF2
-	 Ux1WE11eJAmIA==
-Message-ID: <86f16f56-c204-4629-b2b7-460ecfbb6dda@kernel.org>
-Date: Tue, 29 Sep 2026 10:17:51 +0200
+	b=c3HPnUQ4tusSpEue14ve0rl76w3siWOCOiPWcL5/FLV4AFdvpjYu0xXJ5NNCZD7pD
+	 NYQWOH1kgMNMMMRLg8Mv6PmGN8gJgFDkFDDZUuuKp6mQeN7V3wTuXHqd4bNX0Fz79b
+	 k8iolFPyxXtwFm7OBUOqWKE7eZdpa7mNpU4cgBMcby4Z1e9nUp1dV+90Pv5Gbu1TW7
+	 j76Mg9ZmkTq2qx3fVifjWqDWHJaUbJGs1xiT9nCR+SWSoSfixkzSIsfirRGNJ94pJ8
+	 9g2JfDfcpb2kYeb8dhz1GWWSdU3syuePnM7IhaYRbGbW1R/PKedQyROCaA0n9gnARH
+	 OFczK3zNATd3g==
+Message-ID: <1246dd4e-b2a1-42e6-8fcf-7e6b2514cb87@kernel.org>
+Date: Tue, 29 Sep 2026 10:21:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,20 +35,21 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND 3/9] selftests/mm: mremap_test: fail unexpected
- mremap successes
-To: Sarthak Sharma <sarthak.sharma@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
- <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+Subject: Re: [PATCH v3 1/2] kselftest: mm: return fail when child test result
+ is fail in khugepaged
+To: Yeoreum Yun <yeoreum.yun@arm.com>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>,
  Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- John Hubbard <jhubbard@nvidia.com>, Kalesh Singh <kaleshsingh@google.com>,
- Anshuman Khandual <anshuman.khandual@arm.com>, Park Tae-sun
- <ts930@dgu.ac.kr>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260924050009.19974-1-sarthak.sharma@arm.com>
- <20260924050009.19974-4-sarthak.sharma@arm.com>
+ Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+References: <20260923-fix_khugepagd_fail-v3-0-b387e92fe1a9@arm.com>
+ <20260923-fix_khugepagd_fail-v3-1-b387e92fe1a9@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -95,48 +96,41 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260924050009.19974-4-sarthak.sharma@arm.com>
+In-Reply-To: <20260923-fix_khugepagd_fail-v3-1-b387e92fe1a9@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/24/26 07:00, Sarthak Sharma wrote:
-> run_mremap_test_case() reports a test as pass when remap_region()
-> succeeds. But if the test was expecting failure and remap succeeds,
-> it should be treated as a failure and not a success.
+On 9/23/26 17:29, Yeoreum Yun wrote:
+> Although the child process in collapse_fork*() or collapse_max_ptes_shared()
+> reports `KSFT_FAIL`, the result is ignored because the test only checks
+> whether the parent’s page was collapsed into a huge page.
 > 
-> Check test_case.expect_failure on the successful remap path. If
-> it expected failure, report a failure instead of success.
+> As a result, the test is considered successful whenever the parent’s page
+> is a huge page, even if the child test fails, as shown below:
 > 
-> Fixes: 7df666253f26 ("kselftests: vm: add mremap tests")
-> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
+>   #
+>   # Run test: collapse_max_ptes_shared (khugepaged:anon)
+>   # Allocate huge page... OK
+>   # Share huge page over fork()... OK
+>   # Trigger CoW on page 1023 of 2048... OK
+>   # Maybe collapse with max_ptes_shared exceeded.... OK
+>   # Trigger CoW on page 1024 of 2048... Fail
+>   Bail out! Unexpected huge page
+>   # Planned tests != run tests (26 != 23)
+>   # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0  // child failed.
+>   # Check if parent still has huge page... OK              // parent hpage success
+>   ok 24 collapse_max_ptes_shared                           // considered as success
+>   ...
+>   # Totals: pass:26 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> To address this, propagate the child’s failure and skip the subsequent
+> check in the parent.
+> 
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 > ---
->  tools/testing/selftests/mm/mremap_test.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-> index a5813a5e8f5b..ba9b7f7566d0 100644
-> --- a/tools/testing/selftests/mm/mremap_test.c
-> +++ b/tools/testing/selftests/mm/mremap_test.c
-> @@ -1138,12 +1138,15 @@ static void run_mremap_test_case(struct test test_case, unsigned int threshold_m
->  		else
->  			ksft_test_result_fail("%s\n", test_case.name);
->  	} else {
-> +		if (test_case.expect_failure)
-> +			ksft_test_result_fail("%s: unexpected mremap success\n",
-> +					      test_case.name);
->  		/*
->  		 * Comparing mremap time is only applicable if entire region
->  		 * was faulted in.
->  		 */
-> -		if (threshold_mb == VALIDATION_NO_THRESHOLD ||
-> -		    test_case.config.region_size <= threshold_mb * _1MB)
-> +		else if (threshold_mb == VALIDATION_NO_THRESHOLD ||
-> +			 test_case.config.region_size <= threshold_mb * _1MB)
->  			ksft_test_result_pass("%s: mremap time: %12lldns\n",
->  					      test_case.name, remap_time);
->  		else
 
-That sounds about right to me.
+That test implementation is rather messy ... :)
 
 Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
