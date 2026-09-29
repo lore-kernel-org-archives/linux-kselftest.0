@@ -1,184 +1,232 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012052.outbound.protection.outlook.com [40.93.195.52])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7393D0903;
-	Tue, 29 Sep 2026 15:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790695851; cv=fail; b=ZruSlR/OkKBeS1Hu6mFkMt344Y92Q03sOilGYWp8GF4LxHacmwJulmBHkS976txh7Qr9+kXkkgeRqNgrahB0l+sXAD15wQ0tzB8WVnuxMtvS3jXjvEbWUHcecV8rc+yI448Y0DE2lbf75mDP6DZssw6+d0k7VFt4F/XsFzFFVu8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790695851; c=relaxed/simple;
-	bh=TsR9gRiDC1j+31KS997hJ67PWnyE3gg515J9eNzmKBQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fsqcFQjAdkWHqMR/v2WipUPuKQG/AvTMLP75hNiyCELbmhTpQYYxUZhR+3QlPdNPH3esk+cYUI0D5nweUnQTuQDXd6+6xlbtrmKwCE2iJA9ttuMbLJFEfrvqRToohHL3N2OeMD4Mt5Iixrv/Ip2TiCB40Owzb4sIaNgFDOZoo7Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CyFpg5+W; arc=fail smtp.client-ip=40.93.195.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D393DC87A;
+	Tue, 29 Sep 2026 15:51:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790697073; cv=none; b=qpAU/tHbMImmWaC03wBu7fgjiDulKqZmFNw5ygQ1G4v4QjpzD2rbibPyAbkEXp5ZGG0akmnJFqzSpRYKch9nvcrGhZ/NPrPV6kkHG1wMq3lSPys5CEGE174DEFXkNIS51uRDTKCQaDuZ4tBjH6j8hYWduJH2SHZ+o9rkeeLJ3gM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790697073; c=relaxed/simple;
+	bh=CWevSBXALK5VJGZwqUIRc64Xktm5k8Pt6yH/lhSUznI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=tQDrnC2Bx58DVO75hsbdMoDum7G0f7iBPXTQcwGn3X6+domzSu5bBmucNj/VcH92ZQ6v5lxzDq1/iilwkE2drYz9u4hHiBIHbaX5x0c0OGIxKfWVwuuINv/LmBjHUuswRNvqwcGi/1Sjk6RyokV628O4OGVfU9HHQuUjHh+eolc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PFZ7xqsO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CyFpg5+W"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RbkFIQ7nBUm5Jfn9VYshC8QcyMqhc/0d9k/0kWXGHpFMmJMKPX7SHMcB1Z+mKKr/1V6sQeaRQir2Rj9RswcI+su5Z2/xvAg7KvoDEsJO+fzeAjF6wZrMQcep/72rcbKsTVnUqLlBkQLbSJZJjJYJ5SQs8YoBTho4WYxzf1egh/jD+XMTM7/+pKIOymBt2ZGvZIB5ac6numMJGqfcUaS4Yabw5yKR6Ouem/YGcMhNZOHB9NGpPTWHYg7l3xVpR+E35CXZzPqK11JK5ekWqDs7YERrA+Yao8G9qvQhHhfs1LxRsEfNIgIC9nta6Uszg/dqMP8yRI7cHC6+aZeBoEDQZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aN/iiDajVj+LLMWL5HSlHAuk28Y9qAnTxQWoMoVACd4=;
- b=ht/U8kuvJ75VSvrslwQZD1dpswl6JOntq5dIu8WZL9tkvIH+Om2788qwouYkBh9H3Jkvg78fQAZwzvX5shHtmL0LlKDVH3Z1E6/b6Xgf81sDSqbKtO0Et3oM7C/+0L1X1MChpGzQ7oDhKeb2DxwHiy44am0UDefG6nO32qFF+5FLZoMavzuRNvibNP/lHyImQVhEpDzG0ikv4/7JONDAwCJ5LnruSmIPH2qgF9xfK44yujpMYcxGahA6WZTuXrA3tZYSbZS0kgQn654BiIDCWbBIpWUg0YQ0jqcDOwFtH4Oo0XxP40yhhZyr92s3p9Nq2JKDCzftYX8Ue6+6Vb5+qA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aN/iiDajVj+LLMWL5HSlHAuk28Y9qAnTxQWoMoVACd4=;
- b=CyFpg5+Waob/qMoy0uipM7vqJ0nk8aRGdot2ZE/2yXI99WFwSXUjJsmgeIwgUmn4o2DFL18UDUP84OguBABUC//lAvwDYlXbleFC3na+RmpWf0ysPiZgBLF0Hwiyb8W8TywPTOvKo5CpZ8UwOWYes4V+SdmbHV7jDUzMzeJj+UUR5DTCoNPo4jZC/KNwfHsJk7Naaysh9ReZlubz9t6l7JXO3kH5ZVW11UVB8ImcH1LCBBAHYDV4kAK0OFI4LZwpk3WKvPJvRTtrHHGvFz32lLQITQDkswsj62kefwcFCJYcfeVbaTN8sGsJpp08wUUdXVl/pYGiBdLKZgWKNnQoLA==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
- by MN0PR12MB6004.namprd12.prod.outlook.com (2603:10b6:208:380::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.23; Tue, 29 Sep
- 2026 15:30:38 +0000
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16%6]) with mapi id 15.21.0451.022; Tue, 29 Sep 2026
- 15:30:37 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
- "Gregory Price (Meta)" <gourry@gourry.net>
-Subject: Re: [PATCH v4 1/2] kselftest: mm: return fail when child test result
- is fail in khugepaged
-Date: Tue, 29 Sep 2026 11:30:36 -0400
-X-Mailer: MailMate (3.0r7032)
-Message-ID: <236634F8-80E1-4C8D-BA5F-87446F061494@nvidia.com>
-In-Reply-To: <20260929-fix_khugepagd_fail-v4-1-2169c18f2576@arm.com>
-References: <20260929-fix_khugepagd_fail-v4-0-2169c18f2576@arm.com>
- <20260929-fix_khugepagd_fail-v4-1-2169c18f2576@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-MS-Reactions: disallow
-X-ClientProxiedBy: BL1P223CA0029.NAMP223.PROD.OUTLOOK.COM
- (2603:10b6:208:2c4::34) To IA0PR12MB8374.namprd12.prod.outlook.com
- (2603:10b6:208:40e::7)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PFZ7xqsO"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B70A9C2BCF6;
+	Tue, 29 Sep 2026 15:51:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1790697072;
+	bh=CWevSBXALK5VJGZwqUIRc64Xktm5k8Pt6yH/lhSUznI=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=PFZ7xqsO5sDbjEoJj0SF5EiMHbMl10MmCCIgeL1ZMKYIf2e9QDspLeP/EFK1LJYAJ
+	 sjAPJCDthJLEvRnaWBRV3zf9d8NyehoLDzSPkxNCQvcMGh32uRxoaUMJGdW0cwcIVZ
+	 UBl+Ik90CcguMgHv5bLq3I5zVa+F+6J6mHZM8TWOmuZzeKYXMH9U5z3P8iPMW8By8h
+	 MahTWwWO6f/pzBRKFNE686yAl0Tr2suqVzZmZkQj6FwcUi3s10/atWIuLiCOicbxnj
+	 crBOwGxrSXsCFecEPA980ZQ7TEKrNO2VtS7XHXrkflLOChUuWyPhVwAiWKWLfobMgV
+	 PFBVidaGw6eNQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5199CA5FAC;
+	Tue, 29 Sep 2026 15:51:12 +0000 (UTC)
+From: Simon Sudarushkin via B4 Relay <devnull+simonsudarushkin.gmail.com@kernel.org>
+Date: Tue, 29 Sep 2026 20:50:32 +0500
+Subject: [PATCH] kunit: tool: report executor errors when listing tests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|MN0PR12MB6004:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5051faca-0e1d-41cf-0aa8-08df1e3e9cbf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|23010399003|1800799024|4143699003|6133799003|10067099003|56012099006|11063799006|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	2GTh5PiXPMjhF9UWRz9+NqNrmMuTmXKNz6feF2IdcdHTTELS0PIa7f6zCUq8zcWkL8DgdiGxS43+Vvpg3FBPq6ZvGuCF6ap7zicUKFjzR72+33Fg7fzb8VeKXQ5ZRGTuZgZYwDr+TlQKxPW7A/GQFIxuEgLlV4RVfKYFT99VlFzSiNW3gOaoKJGCzRTeJRKOcIdYSiBrWZdJLldmMBGRz0Aw1VAgebef4NTluL24mdBYG7XCPZkwQFgr8DGWXw4afnl6izPUsuIMx24SbuIANF2U/xOc2lTJkjX3mnXTHP2bPLoVsILAHG2gWi4BXu8TjrkuSd7NX5dcCejHu39PvGQzVxaDwhzaP4hgLgcyvbOt8/QpluEU+L5X0xQ1vhUJfLipSpvxiVhDeGYiBwLBXpL5qXKHlwiCzwqKAsEADsZ5TvyDerQ9EB13j8CClhHT+nTw7wYOyhxDv8DrLIMCmpAxWMRVPiZQkJ1jLPiXeTThZNYjbThWYLXjmi4aa/vW4QBZtWolkQqsPjMOCCh30LyFyYupHQak4Vzsb5BMALbmUIKX5i4gmGnqgnsm1KGdiDNE6EGBUzcJPFoJPFnkSvfkGuFszwpQvdmQwDPS3kpFAYrIusTTAIXZ1q3CYay1dH96qhrkyo7vlAS45gNpOpxV+7+8s29f+fE5ZtL4WNQ=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(23010399003)(1800799024)(4143699003)(6133799003)(10067099003)(56012099006)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bXZNdlg1eXYySzlvVDVUYWVXZ0Q1NUpKcC9Wd1FQaUVLQXpncVpwMFBNUkV1?=
- =?utf-8?B?STNONU1HSDJDSTM5RTh2NWFBOW9ZdjdDb1BXcnlZaS9rT3ZyYXl3MU04YkFa?=
- =?utf-8?B?eVVQd1ZCRm5FdjJJNXNaMFBjbzVxOFZYMzJmTWFqY3pXRkVtNDZGbUluYy9m?=
- =?utf-8?B?Wm1pcCtlRzcyU3VjWnhNeDR0Ym5mYVdRb21GdWRvVGtWa0pzWTM5TlVOSGdj?=
- =?utf-8?B?SHFLNWdybThKZmVhUVJibmw1OFZycmt3NnJiSnhsOUVSR3BtR3NnV3JMT0lY?=
- =?utf-8?B?bldkb2xFektCYWtQTndnSGFINE9UWDJtZzRLdTY0bFVqWk5sYVJTMkxwVzhB?=
- =?utf-8?B?dytEK1paVWhtTXVHbGpRVHZlejd1SkdjL3RQYVFwa3RQRkt0TmxPbnpYdVIx?=
- =?utf-8?B?NHlnVUpMcDZCRjZ0YlJBRzRCTEZBa203dmUrdUxSbTFVVlFXcUJURWNJUlQ2?=
- =?utf-8?B?SS9aRzFiU3BMUXNTZk5zVE9HMytmUHh1U2RKdWozcURlSzdBSjFpZDl6N0J1?=
- =?utf-8?B?dFhWaUYrOUswLzdER1g4QVdxRVpZek5yOGxkMnAwdy9HRkQ2bmpnajZweW9H?=
- =?utf-8?B?ak1JTjM3TElFcjhBOVFXcCtzdytySlk1RVdSUVZoV1gzbXB2Ri9OS281UW00?=
- =?utf-8?B?Y25ZcHNscWNkTFkxUlgzaDRDcUljdy9UbEVzSG5Xamp6dFE3WTlNRW1LZWhj?=
- =?utf-8?B?VXBidWU4cGplZE0xODVFR090Lzh5TmFJUm5weEVCdkNGcjg4YytoYm5mUVlq?=
- =?utf-8?B?UlMwMVd0MWQvYVRRTnNRZWx0QlY5QURtcG16a3NLYklDMVExTEFOV3NwWUgr?=
- =?utf-8?B?NzlYeHJzRHJwMmtGRVc2bFBIRStJdjI0RFlrVXE0amFidjk5MkdMZUFGcXVP?=
- =?utf-8?B?YitwdklOclRmZVFmekZVdkNjUG54cTFaZVA3M1B2WjlFVVhqWEdVdHlhUlRw?=
- =?utf-8?B?a1hZVElqVnB0MDQ4QTEvWTBiWlpLK29UTzVNV1l6Y2E5Yk1TNFhuOUFJcXVs?=
- =?utf-8?B?QVB4T3BUSW9NYmNZOVdNeFFzYkRLa21JOFZJdzB6ampWS2VDNUNmMnhOZlhH?=
- =?utf-8?B?TDdlSm5aaXRLSTkzeFBSTFpYYlZzOFIxUDVMT3I2aVEvL1BGSDc5NWs2emhu?=
- =?utf-8?B?ZU9ORXJ3YjZERGJVT08zVDlPNUhhcXZpRHIzVGZQRXZKWDhJSWxoT0YvSTNS?=
- =?utf-8?B?VGpEeFhYMjZEVHBZSzc3aWZhUlNxaW9GbDVoN1FnUWFXYnNQdEVTWFpzYVVo?=
- =?utf-8?B?bHp1a0dMSFo5Y0VhNENBUzlEaXFpSmQ4T2dkN3JqNW5xSWU2NVpKRm92ODJ0?=
- =?utf-8?B?RE9FSVp3Y1Y3dVZoeXE1anpreXNXaldMVS92RWd6SmtXYnpybTRCQ0dmeXg0?=
- =?utf-8?B?MGN5bGx2YXlGdllXL2MyYmNteXRnNDc2UmkrQjFiQVlrQjFIdHg0aHZyNXVY?=
- =?utf-8?B?UitvODJ3NDJpQm9TQ28yeG5qam1tS20vLzE3UktpOUxkZUZtMjJCVUhrVy85?=
- =?utf-8?B?WERtTFpMa2g0cTB6ckg4Q0x1TGRhbjdUMDF0ZTFiYXNPZVZLT0pIV2YydCt4?=
- =?utf-8?B?cXZrV1U5NzY3ZlZ0SDdwWTNYSmY2L3BSeVQ2UW1Mb0lzTjdhK0RRazRoVW9z?=
- =?utf-8?B?YkdmV25UMENaclUvWSt5eTdNN3dRMUdWUCt3QkdDVnpUVkREeHZNNTArbjh6?=
- =?utf-8?B?K1FLc1lLUXE5UmNzRTFwNklpOUJTa0MxSytSTEhTeG4wOGJuSUJMbzc0UzZz?=
- =?utf-8?B?VmlwRll4ZHVMd1BhV0p2cEFBTTNtR0VMeS9iVlRxcGJPbkdxVmJLZ0dVeDRC?=
- =?utf-8?B?TTBLVVpnUU1xc2RxUm1LZVZFNmZNOUR3Wm5uQnNVelo0cDR1WmhmVVhtejNv?=
- =?utf-8?B?NDE0ejhLYnQvdS9UY0FxRjNsV0lyZTRGTytGeXNscVNGR3JhSzhiK1VZVXJz?=
- =?utf-8?B?OUphTWQwZm1DeFNXaFo2NVhPYWlqaStiMkhiL3V4U3RTL0xvZE84R3c2dGpC?=
- =?utf-8?B?am5vRDlUaE8rMlpyeE5VclNYbERYeVVNVENuV0JDVHBoeEdLVFhRaXAwWHZB?=
- =?utf-8?B?YzBiZ1pKS3llRXlUU3pjazBuVlhhekFHOGt6bW4wcWhob2FpNGs4RDVCWTZp?=
- =?utf-8?B?SnlJZHRad2hmWlhGZ2FmSGQrdVlmRjlFR0NGQk9IamdJNWlWOXBvWlVuTyt0?=
- =?utf-8?B?SGNTNlJQZmFzQkhSZ3oyY3FZMW0xUlAzblB3dmdtd0lPU0JoanNKa2Nkb2Zx?=
- =?utf-8?B?S1BJL0xUNzRqcVE3dEdDRzBKU1ExNTY5Q3VuVWg3NThrOFVkeG0xWG84Nm53?=
- =?utf-8?B?NENSaDFZMWYxM21zeHo2QXZJUTVhdUx1ZEQyRm85WEdndlNnSXhQQT09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5051faca-0e1d-41cf-0aa8-08df1e3e9cbf
-X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2026 15:30:37.8970
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ls5KR5/+G+ZCQwifuCvBFw0bxaXZsrFoSlEYYt9ShoXE7l/pfyTd17FHiVf7XRii
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6004
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260929-kunit-list-errors-v1-1-16bf855e2ec3@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQqDMBBA0avIrB1IIoTqVYoLjWM7tcQyE0UQ7
+ 26qy7f4fwclYVJoih2EVlaeY4YtCwjvLr4IecgGZ5w3tatxWiIn/LImJJFZFH0VbF8Z7x/WQe5
+ +QiNv1/PZ3tal/1BI/xEcxwmVASRgdQAAAA==
+X-Change-ID: 20260929-kunit-list-errors-63c1b3066812
+To: Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+ Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ linux-kernel@vger.kernel.org, 
+ Simon Sudarushkin <simonsudarushkin@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790697071; l=6951;
+ i=simonsudarushkin@gmail.com; s=20260929; h=from:subject:message-id;
+ bh=WISOKMy68itHiwuQRD0Fmjjiui3rz30qfn+eKl1cbEg=;
+ b=2hMvzP9MHwfL3ht8v7Ws1fJh00YzKB+GZ4aNPMQ1ISqxKx64d4UVbVckhrceLlFRU2LbpB8oC
+ HFNoguCEPH/AY1vr10POZLabd8eQEMQTxLWKAj3qU6s90J3QxIC41Qq
+X-Developer-Key: i=simonsudarushkin@gmail.com; a=ed25519;
+ pk=yr+Zf16IVZZq8kE1LwDB48Z/iOOIAkvBRA07CDmvH2M=
+X-Endpoint-Received: by B4 Relay for simonsudarushkin@gmail.com/20260929
+ with auth_id=1081
+X-Original-From: Simon Sudarushkin <simonsudarushkin@gmail.com>
+Reply-To: simonsudarushkin@gmail.com
 
-On 29 Sep 2026, at 6:33, Yeoreum Yun wrote:
+From: Simon Sudarushkin <simonsudarushkin@gmail.com>
 
-> Although the child process in collapse_fork*() or collapse_max_ptes_shared()
-> reports `KSFT_FAIL`, the result is ignored because the test only checks
-> whether the parent’s page was collapsed into a huge page.
->
-> As a result, the test is considered successful whenever the parent’s page
-> is a huge page, even if the child test fails, as shown below:
->
->   #
->   # Run test: collapse_max_ptes_shared (khugepaged:anon)
->   # Allocate huge page... OK
->   # Share huge page over fork()... OK
->   # Trigger CoW on page 1023 of 2048... OK
->   # Maybe collapse with max_ptes_shared exceeded.... OK
->   # Trigger CoW on page 1024 of 2048... Fail
->   Bail out! Unexpected huge page
->   # Planned tests != run tests (26 != 23)
->   # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0  // child failed.
->   # Check if parent still has huge page... OK              // parent hpage success
->   ok 24 collapse_max_ptes_shared                           // considered as success
->   ...
->   # Totals: pass:26 fail:0 xfail:0 xpass:0 skip:0 error:0
->
-> To address this, propagate the child’s failure and skip the subsequent
-> check in the parent.
->
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Reviewed-by: Gregory Price (Meta) <gourry@gourry.net>
-> Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> ---
->  tools/testing/selftests/mm/khugepaged.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-Makes sense.
+--list_tests, --list_suites, --list_tests_attr and --run_isolated first
+ask the kernel for the list of tests. extract_tap_lines() keeps the
+"kunit executor:" lines printed before the KTAP header, but the list
+code then drops the first line as the dummy header and filters the rest
+by name, so an executor error is silently lost:
 
-Acked-by: Zi Yan <ziy@nvidia.com>
+  $ ./tools/testing/kunit/kunit.py run --list_tests --filter 'nosuchattr=1'
+  ...
+  $ echo $?
+  0
 
-Best Regards,
-Yan, Zi
+The kernel log has "attribute not found: nosuchattr=1" and "error
+filtering suites: -22", while a normal run with the same filter reports
+the error and exits with 1. If the kernel prints no KTAP output at all,
+the same pop() raises ValueError and kunit.py exits with a traceback.
+
+Move the code shared by _list_tests() and _list_tests_attr() into
+_run_list_action(), which raises ListError on executor errors or when
+there is no KTAP output. exec_tests() prints the error and returns
+TEST_FAILURE, as a normal run does.
+
+Fixes: ff9e09a3762f ("kunit: tool: support running each suite/test separately")
+Fixes: 723c8258c8fe ("kunit: tool: Add command line interface to filter and report attributes")
+Assisted-by: LLM
+Signed-off-by: Simon Sudarushkin <simonsudarushkin@gmail.com>
+---
+Tested with kunit.py on arm64 (QEMU with KVM): a bad --filter now prints
+both executor errors and exits with 1 for --list_tests and
+--run_isolated, while normal listing, --list_suites, --list_tests_attr
+and --run_isolated=suite behave as before. In run_checks.py,
+kunit_tool_test.py and mypy pass; the UML smoke test could not be run,
+as UML does not build on this arm64 host (it fails the same way
+without this patch).
+---
+ tools/testing/kunit/kunit.py           | 57 +++++++++++++++++++++-------------
+ tools/testing/kunit/kunit_tool_test.py | 18 +++++++++++
+ 2 files changed, 54 insertions(+), 21 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 91d234ac3b579..6db09144d7cfc 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -109,8 +109,12 @@ def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
+ 
+ 	return build_tests(linux, request)
+ 
+-def _list_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> List[str]:
+-	args = ['kunit.action=list']
++class ListError(Exception):
++	"""Represents an error from the kernel while listing tests."""
++
++
++def _run_list_action(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest, action: str) -> List[str]:
++	args = ['kunit.action=' + action]
+ 
+ 	if request.kernel_args:
+ 		args.extend(request.kernel_args)
+@@ -121,31 +125,34 @@ def _list_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest)
+ 			   filter=request.filter,
+ 			   filter_action=request.filter_action,
+ 			   build_dir=request.build_dir)
+-	lines = kunit_parser.extract_tap_lines(output)
++	stream = kunit_parser.extract_tap_lines(output)
++	lines = []  # type: List[str]
++	errors = []  # type: List[str]
++	while stream:
++		line = stream.pop()
++		match = kunit_parser.EXECUTOR_ERROR.search(line)
++		if match:
++			errors.append(match.group(0).strip())
++		else:
++			lines.append(line)
++
++	# The executor reports a bad filter or action instead of listing.
++	if errors:
++		raise ListError('\n'.join(errors))
++	if not lines:
++		raise ListError('Could not find any KTAP output. Did any KUnit tests run?')
++
+ 	# Hack! Drop the dummy TAP version header that the executor prints out.
+-	lines.pop()
++	return lines[1:]
++
++def _list_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> List[str]:
++	lines = _run_list_action(linux, request, 'list')
+ 
+ 	# Filter out any extraneous non-test output that might have gotten mixed in.
+ 	return [l for l in lines if re.match(r'^[^\s.]+\.[^\s.]+$', l)]
+ 
+ def _list_tests_attr(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> Iterable[str]:
+-	args = ['kunit.action=list_attr']
+-
+-	if request.kernel_args:
+-		args.extend(request.kernel_args)
+-
+-	output = linux.run_kernel(args=args,
+-			   timeout=request.timeout,
+-			   filter_glob=request.filter_glob,
+-			   filter=request.filter,
+-			   filter_action=request.filter_action,
+-			   build_dir=request.build_dir)
+-	lines = kunit_parser.extract_tap_lines(output)
+-	# Hack! Drop the dummy TAP version header that the executor prints out.
+-	lines.pop()
+-
+-	# Filter out any extraneous non-test output that might have gotten mixed in.
+-	return lines
++	return _run_list_action(linux, request, 'list_attr')
+ 
+ def _suites_from_test_list(tests: List[str]) -> List[str]:
+ 	"""Extracts all the suites from an ordered list of tests."""
+@@ -160,6 +167,14 @@ def _suites_from_test_list(tests: List[str]) -> List[str]:
+ 	return suites
+ 
+ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> KunitResult:
++	try:
++		return _exec_tests(linux, request)
++	except ListError as e:
++		for line in str(e).splitlines():
++			stdout.print_with_timestamp(stdout.red('[ERROR] ') + line)
++		return KunitResult(status=KunitStatus.TEST_FAILURE, elapsed_time=0.0)
++
++def _exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> KunitResult:
+ 	filter_globs = [request.filter_glob]
+ 	if request.list_tests:
+ 		output = _list_tests(linux, request)
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 85ae21754bdf9..d0cb3340a328d 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -991,6 +991,24 @@ class KUnitMainTest(unittest.TestCase):
+ 				     kunit.KunitExecRequest(None, None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'suite', False, False, False))
+ 		self.assertEqual(got, want)
+ 
++	def test_list_tests_executor_error(self):
++		self.linux_source_mock.run_kernel.return_value = [
++			'[    0.100000] kunit executor: attribute not found: nosuchattr=1',
++			'[    0.100000] kunit executor: error filtering suites: -22']
++
++		with self.assertRaises(SystemExit) as e:
++			kunit.main(['exec', '--list_tests'])
++		self.assertEqual(e.exception.code, 1)
++		self.print_mock.assert_any_call(StrContains('attribute not found: nosuchattr=1'))
++
++	def test_list_tests_no_output(self):
++		self.linux_source_mock.run_kernel.return_value = []
++
++		with self.assertRaises(SystemExit) as e:
++			kunit.main(['exec', '--list_suites'])
++		self.assertEqual(e.exception.code, 1)
++		self.print_mock.assert_any_call(StrContains('Could not find any KTAP output'))
++
+ 	@mock.patch.object(kunit, '_list_tests')
+ 	def test_run_isolated_by_suite(self, mock_tests):
+ 		mock_tests.return_value = ['suite.test1', 'suite.test2', 'suite2.test1']
+
+---
+base-commit: e38f53f0482468efd04397f66bda4648b70ac9fa
+change-id: 20260929-kunit-list-errors-63c1b3066812
+
+Best regards,
+--  
+Simon Sudarushkin <simonsudarushkin@gmail.com>
+
+
