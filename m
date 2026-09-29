@@ -1,171 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9DDD501F25;
-	Tue, 29 Sep 2026 16:25:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B2054FDA51;
+	Tue, 29 Sep 2026 16:27:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790699153; cv=none; b=ODB6KguYVSNk6fEQWB/MHeaQuufDktVuq/jY3KrV/i6ZLxV+q8gOnhGSGBMdJ19pwl8ado4Xpdpuz6DeXFT+PWV3M8ngI1GdLTuLoIl5ep9rMyO1DnkkgTLMviWcQ5RK7usdrDknLLBC8g5FGelr3XyaWWMEeXjpYDV02JVVaBI=
+	t=1790699258; cv=none; b=UD+HJxMcHklZ3NijMlqF749eWPigsEio4H/hU3qT8h8AG6X4necb5P1e0zX9AbK6du9T3C4iwh/lkM/bZV3amWHCLa8qt9sz7uT0pI6F2s3ilrsOD6tOrKtxTFKpAMjGUgCecXBuZoWtCj5p7siHlie0gaMPIEn/IWrhUDJ8JIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790699153; c=relaxed/simple;
-	bh=Kwt7NK9oH5FmK5X09UqbhhtL97/yzBABChsZOu0XnUc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lPUMDY6naJ2xwsVsoO38oKLxRib7rr2YZBEQ4/jbg7c2DzDH5FOMEDd9Uwj3C1c4UGl5s75Iz0G4xxKD8hWXHZtR7Lem70FRO7FoePT0PEb+gmD58xCcC+shoiEKUyMTPcd6ACce4WvZmqhkBQied7zXWO1jCnqwBzYzpaUD8jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6qOf9cS; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790699258; c=relaxed/simple;
+	bh=f+toKPxTkGskuYP4BIAoBwY0gM1JTizLIKbQIY6XvLw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K/eCz3tLWx4Xi8WyBDcfZRenQ4SmszMwAyiYJUbZAybVScmzIhlkOAB4leuukooESOF5n6mFEBxIuvuSrn94z4pNENaE4QcA4gxd55D9Meg5RJt0M4TvwgqRbqr0Yl5D5tZHBz6dyWdRaQm1p3/SSsRYUtCKNHB+10wN76nJg0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=VfLzuTya; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6qOf9cS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C1E91F00893;
-	Tue, 29 Sep 2026 16:25:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790699151;
-	bh=FDsvSmIYjY7Wlu5xjH/XblAkB0TRMYrgy/Yq1eEWrDQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=T6qOf9cS1m3QYKzDLkO+yE9M1yE4okzFEsCnW9ZxmdTNTyhgW+WTIbbgMOyFDWbkf
-	 2NomCNw0Q5PN4n2w7oyNxstUvfJ+kOPCpWSYunwu9qyTDcQzJMIAV0pVL1sHrkq/vI
-	 5/SUozIZv4GW9Ql1a+/UZIF41MCXgJ/Y5kX7u2odPS9T2mGMxlDHHwnN/QSNSEHZOn
-	 pXr1mjS+uySi+wr4JF77nWG+Gz7ZjTPgyazZ/IF6J5smCsVt2KFwf0N22lrDQt7Lnu
-	 I3hQ8M9j6SYGtvPqg8rEWfzyDq/uhUdS15j/jXUuShlPDM21udtaRxYfDc/zyzHW3B
-	 U46GpymF6dIJA==
-From: Mark Brown <broonie@kernel.org>
-Date: Tue, 29 Sep 2026 17:16:54 +0100
-Subject: [PATCH v8 3/3] KVM: selftests: arm64: Make set_id_regs bitfield
- validity checks non-fatal
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="VfLzuTya"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E3ED1516;
+	Tue, 29 Sep 2026 09:27:31 -0700 (PDT)
+Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 42EF53F85F;
+	Tue, 29 Sep 2026 09:27:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1790699255; bh=f+toKPxTkGskuYP4BIAoBwY0gM1JTizLIKbQIY6XvLw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VfLzuTyaXU010of07I75FH3lL4Coynai8PZ2wFNavd8Ces8RJ4ImO/+ytxcQJq88z
+	 kuxsp2k8s137nhkan9jywVpwOu0ATqD1Q1VAAcKeUA6QJxhLh8KCpZ3cP4ilakLqjE
+	 qe5mTt/LJzYFTDqH/oywNbKlACZMMCcMQV21rpQg=
+Date: Tue, 29 Sep 2026 17:27:28 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+	Fuad Tabba <fuad.tabba@linux.dev>, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 03/11] kselftest/arm64: Move exit calls out of fp-stress
+ loads
+Message-ID: <arvm8O6kL1I9Plrw@J2N7QTR9R3.cambridge.arm.com>
+References: <20260901-arm64-fp-stress-kvm-v1-0-31bce995b49b@kernel.org>
+ <20260901-arm64-fp-stress-kvm-v1-3-31bce995b49b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260929-kvm-arm64-set-id-regs-aarch64-v8-3-58aabe2c2fac@kernel.org>
-References: <20260929-kvm-arm64-set-id-regs-aarch64-v8-0-58aabe2c2fac@kernel.org>
-In-Reply-To: <20260929-kvm-arm64-set-id-regs-aarch64-v8-0-58aabe2c2fac@kernel.org>
-To: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, 
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- Oliver Upton <oupton@kernel.org>
-Cc: Ben Horgan <ben.horgan@arm.com>, linux-arm-kernel@lists.infradead.org, 
- kvmarm@lists.linux.dev, kvm@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>, "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3917; i=broonie@kernel.org;
- h=from:subject:message-id; bh=Kwt7NK9oH5FmK5X09UqbhhtL97/yzBABChsZOu0XnUc=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBqu+aBqXzx00nzUEuB2LfTbrWnbVSZTlb7CkI00
- lr3/p6auLyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCarvmgQAKCRAk1otyXVSH
- 0FVSB/9oxGazFsvlXdHLhoAUYTxZ7MgTCm6AnNbR8S3Bo1cSBe98pqQklokTY94QfIQnBhqvGWr
- /3mWeQYDvkAfp+T3M+8q4TLwGx32vcdnuoi+erCxlvZJfqBWHejyH+OWgOOj14iY0FgIS0j1pPm
- UFzArso7o4QCiLfjUvGo/lCDIjHttYH5rW8Uo7O4ywvswSROtO6XBg48Kz3qt7eETZntI8fXVwd
- ErW4oQkcClL1DjiS/z8BTIeTacrXw0Ih6jfAuQ+HYDsTl+5KzgS6oVGuXdqxG0UphC5S78HhZqd
- +csfIxak8Vgw5PJltY57mZz9H5ez1FLywLN3q8pUBMPIEzSz
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260901-arm64-fp-stress-kvm-v1-3-31bce995b49b@kernel.org>
 
-Currently when set_id_regs encounters a problem checking validation of
-writes to feature registers it uses an immediately fatal assert to report
-the problem. This is not idiomatic for kselftest, and it is also not great
-for usability. The affected bitfield is not clearly reported and further
-tests do not have their results reported.
+On Tue, Sep 01, 2026 at 06:06:43PM +0100, Mark Brown wrote:
+> When they detect corruption the fp-stress test loads print load specific
+> diagnostics and exits with a failure status.  In preparation for
+> building versions intended to run as KVM guests factor the exits into
+> asm-utils-linux.S.
+> 
+> No functional change.
 
-Switch to using standard kselftest result reporting for the asserts we
-do, these are non-fatal asserts so allow the program to continue and the
-test names include the affected field.
+This is a good cleanup, but I do think it'd be worth noting that some of
+the existing asm was wrong and worked by coincidence.
 
-Reviewed-by: Ben Horgan <ben.horgan@arm.com>
-Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/kvm/arm64/set_id_regs.c | 31 ++++++++++++++++++-------
- 1 file changed, 23 insertions(+), 8 deletions(-)
+I did mention that in the patches I linked you to a while back:
 
-diff --git a/tools/testing/selftests/kvm/arm64/set_id_regs.c b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-index 3aa8886e8b70..43dd9506036c 100644
---- a/tools/testing/selftests/kvm/arm64/set_id_regs.c
-+++ b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-@@ -422,6 +422,7 @@ static u64 test_reg_set_success(struct kvm_vcpu *vcpu, u64 reg,
- 	u8 shift = ftr_bits->shift;
- 	u64 mask = ftr_bits->mask;
- 	u64 val, new_val, ftr;
-+	bool match;
- 
- 	val = vcpu_get_reg(vcpu, reg);
- 	ftr = (val & mask) >> shift;
-@@ -434,7 +435,10 @@ static u64 test_reg_set_success(struct kvm_vcpu *vcpu, u64 reg,
- 
- 	vcpu_set_reg(vcpu, reg, val);
- 	new_val = vcpu_get_reg(vcpu, reg);
--	TEST_ASSERT_EQ(new_val, val);
-+	match = new_val == val;
-+	if (!match)
-+		ksft_print_msg("%lx != %lx\n", new_val, val);
-+	ksft_test_result(match, "%s valid write succeeded\n", ftr_bits->name);
- 
- 	return new_val;
- }
-@@ -446,6 +450,7 @@ static void test_reg_set_fail(struct kvm_vcpu *vcpu, u64 reg,
- 	u64 mask = ftr_bits->mask;
- 	u64 val, old_val, ftr;
- 	int r;
-+	bool match;
- 
- 	val = vcpu_get_reg(vcpu, reg);
- 	ftr = (val & mask) >> shift;
-@@ -458,11 +463,19 @@ static void test_reg_set_fail(struct kvm_vcpu *vcpu, u64 reg,
- 	val |= ftr;
- 
- 	r = __vcpu_set_reg(vcpu, reg, val);
--	TEST_ASSERT(r < 0 && errno == EINVAL,
--		    "Unexpected KVM_SET_ONE_REG error: r=%d, errno=%d", r, errno);
-+	if (r >= 0 || errno != EINVAL) {
-+		ksft_print_msg("Unexpected KVM_SET_ONE_REG error: r=%d, errno=%d (%s)\n",
-+			       r, errno, strerror(errno));
-+		ksft_test_result_fail("%s invalid write rejected\n",
-+				      ftr_bits->name);
-+		return;
-+	}
- 
- 	val = vcpu_get_reg(vcpu, reg);
--	TEST_ASSERT_EQ(val, old_val);
-+	match = val == old_val;
-+	if (!match)
-+		ksft_print_msg("%lx != %lx\n", val, old_val);
-+	ksft_test_result(match, "%s invalid write rejected\n", ftr_bits->name);
- }
- 
- static u64 test_reg_vals[KVM_ARM_FEATURE_ID_RANGE_SIZE];
-@@ -502,7 +515,11 @@ static void test_vm_ftr_id_regs(struct kvm_vcpu *vcpu, bool aarch64_only)
- 		for (int j = 0;  ftr_bits[j].type != FTR_END; j++) {
- 			/* Skip aarch32 reg on aarch64 only system, since they are RAZ/WI. */
- 			if (aarch64_only && sys_reg_CRm(reg_id) < 4) {
--				ksft_test_result_skip("%s on AARCH64 only system\n",
-+				ksft_print_msg("%s on AARCH64 only system\n",
-+					       ftr_bits[j].name);
-+				ksft_test_result_skip("%s invalid write rejected\n",
-+						      ftr_bits[j].name);
-+				ksft_test_result_skip("%s valid write succeeded\n",
- 						      ftr_bits[j].name);
- 				continue;
- 			}
-@@ -514,8 +531,6 @@ static void test_vm_ftr_id_regs(struct kvm_vcpu *vcpu, bool aarch64_only)
- 
- 			test_reg_vals[idx] = test_reg_set_success(vcpu, reg,
- 								  &ftr_bits[j]);
--
--			ksft_test_result_pass("%s\n", ftr_bits[j].name);
- 		}
- 	}
- }
-@@ -882,7 +897,7 @@ int main(void)
- 		ID_REG_RESET_UNCHANGED_TEST;
- 	for (i = 0; i < ARRAY_SIZE(test_regs); i++)
- 		for (j = 0; test_regs[i].ftr_bits[j].type != FTR_END; j++)
--			test_cnt++;
-+			test_cnt += 2;
- 
- 	ksft_set_plan(test_cnt);
- 
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=922d15ef46cb486a79f168949e103f6df26f4fba
 
--- 
-2.47.3
+Mark.
 
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/testing/selftests/arm64/fp/asm-utils-linux.S | 8 ++++++++
+>  tools/testing/selftests/arm64/fp/fpsimd-test.S     | 4 +---
+>  tools/testing/selftests/arm64/fp/sve-test.S        | 8 ++------
+>  tools/testing/selftests/arm64/fp/za-test.S         | 8 ++------
+>  tools/testing/selftests/arm64/fp/zt-test.S         | 4 +---
+>  5 files changed, 14 insertions(+), 18 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/arm64/fp/asm-utils-linux.S b/tools/testing/selftests/arm64/fp/asm-utils-linux.S
+> index 3effeb1fbf50..9cd31dc47709 100644
+> --- a/tools/testing/selftests/arm64/fp/asm-utils-linux.S
+> +++ b/tools/testing/selftests/arm64/fp/asm-utils-linux.S
+> @@ -84,3 +84,11 @@ function tickle_handler
+>  	ret
+>  endfunction
+>  .globl	tickle_handler
+> +
+> +// Terminate the program, reporting failure.  Does not return.
+> +function exit_error
+> +	mov	x0, #1
+> +	mov	x8, #__NR_exit
+> +	svc	#0
+> +endfunction
+> +.globl	exit_error
+> diff --git a/tools/testing/selftests/arm64/fp/fpsimd-test.S b/tools/testing/selftests/arm64/fp/fpsimd-test.S
+> index 9db7b5419397..5ee8ef51ea4e 100644
+> --- a/tools/testing/selftests/arm64/fp/fpsimd-test.S
+> +++ b/tools/testing/selftests/arm64/fp/fpsimd-test.S
+> @@ -298,7 +298,5 @@ function barf
+>  	bl	dumphex
+>  	puts	"]\n"
+>  
+> -	mov	x8, #__NR_exit
+> -	mov	x1, #1
+> -	svc	#0
+> +	b	exit_error
+>  endfunction
+> diff --git a/tools/testing/selftests/arm64/fp/sve-test.S b/tools/testing/selftests/arm64/fp/sve-test.S
+> index 2aadb5c3c0f3..3447fe0e5554 100644
+> --- a/tools/testing/selftests/arm64/fp/sve-test.S
+> +++ b/tools/testing/selftests/arm64/fp/sve-test.S
+> @@ -543,9 +543,7 @@ function vl_barf
+>  	mov	x0, x10
+>  	bl	putdecn
+>  
+> -	mov	x8, #__NR_exit
+> -	mov	x1, #1
+> -	svc	#0
+> +	b	exit_error
+>  endfunction
+>  
+>  function svcr_barf
+> @@ -555,7 +553,5 @@ function svcr_barf
+>  	mov	x0, x10
+>  	bl	putdecn
+>  
+> -	mov	x8, #__NR_exit
+> -	mov	x1, #1
+> -	svc	#0
+> +	b	exit_error
+>  endfunction
+> diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
+> index 84e63e510f23..33dc4ce8bfa1 100644
+> --- a/tools/testing/selftests/arm64/fp/za-test.S
+> +++ b/tools/testing/selftests/arm64/fp/za-test.S
+> @@ -354,9 +354,7 @@ function vl_barf
+>  	mov	x0, x10
+>  	bl	putdecn
+>  
+> -	mov	x8, #__NR_exit
+> -	mov	x1, #1
+> -	svc	#0
+> +	b	exit_error
+>  endfunction
+>  
+>  function svcr_barf
+> @@ -366,7 +364,5 @@ function svcr_barf
+>  	mov	x0, x10
+>  	bl	putdecn
+>  
+> -	mov	x8, #__NR_exit
+> -	mov	x1, #1
+> -	svc	#0
+> +	b	exit_error
+>  endfunction
+> diff --git a/tools/testing/selftests/arm64/fp/zt-test.S b/tools/testing/selftests/arm64/fp/zt-test.S
+> index afcadb5aff23..c67242c2d5ab 100644
+> --- a/tools/testing/selftests/arm64/fp/zt-test.S
+> +++ b/tools/testing/selftests/arm64/fp/zt-test.S
+> @@ -284,7 +284,5 @@ function svcr_barf
+>  	mov	x0, x10
+>  	bl	putdecn
+>  
+> -	mov	x8, #__NR_exit
+> -	mov	x1, #1
+> -	svc	#0
+> +	b	exit_error
+>  endfunction
+> 
+> -- 
+> 2.47.3
+> 
