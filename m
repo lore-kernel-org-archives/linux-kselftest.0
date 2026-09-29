@@ -1,143 +1,72 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D28693E5A2A;
-	Tue, 29 Sep 2026 10:08:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0197A51123A;
+	Tue, 29 Sep 2026 10:28:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790676521; cv=none; b=amk+aLab7gzbMYW7XCmmdFWk6a6gJIhTXPXyzBTWsSZ4KydPwmqaQbFpFEo5zUT3vt3bpL1RLGexT7NFDfApz2SYlaC3UGE+En6oOfIS3LU9or5LEWAEwCSs8g80EOwEdkSdg5+RLGbvQg5lVkfi6GVTeoDaDMLTwva9CUgU3pM=
+	t=1790677743; cv=none; b=MilUNPAXm9fRfr2rleva3x/vXRsve2GQntg3F1u6HPUUN6P+9p+MYYJhyelV2pBFhc6tHPsoT1aocnLcRh0V3omIl/356wgOOawxMr4nrIQiVIqnmyAZqHmNTybsNg92Hk0LnX8ncOQ85MixE/i7xhMStlBQ6KLPiJzJ6z/djc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790676521; c=relaxed/simple;
-	bh=1CYkzAv1UTOgfjhP/3+i1axtbxG6zEvJxlpMfUNZI7M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mYDlOS/KL/yv17IYeinG/Ip45b0hepO57tqKEUxmyRjS/6Bk5flwdATxXYVReod2i8nntpfZWJuVkFLMhe4Zd0GPak0APdOXf8pFqUby+sfS/aUUu/wVLpulX8RHjBHzmHnNTIb+Po0P47+CNgWu1rypudUKf9OsuzZAKhLdBrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=qAIyhHaP; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1790677743; c=relaxed/simple;
+	bh=BHYNrO8QQj88KS/+WIZ4V9qEvETlrOQ5N7+RYQMkciU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Q06uxsVYHeMuTT+Ig7+MQ9jCpN3m2f+ZDd5JsaPqAAgr/OerBXWx5nqMFKgT//MXlXAX9V6UiaYO/H8jaCtlWY97KZY2WvG9jaTt7Wym4bWr97an/raK6d86Ni2KrUGXbWmNBI2amZKGs9TdGhWEwVfXIe90aRVL2qwYtLr9rTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CAg1JuKv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="qAIyhHaP"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD8501516;
-	Tue, 29 Sep 2026 03:08:29 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 758093FA1F;
-	Tue, 29 Sep 2026 03:08:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1790676513; bh=1CYkzAv1UTOgfjhP/3+i1axtbxG6zEvJxlpMfUNZI7M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qAIyhHaPe22UOjd0zvagXkjWWMEzDE+8CWsaIgPMqqvkJLe9g/mFhHaS6vmtvCgB/
-	 a4X+hXCZQKGxZlUxyYJqbOgDaFC5UaE9hpi5gd2HWgesheChZ/neID7JzTFSuRI5iN
-	 uAEBhOuuwow5j8+ay83HPaHCNneDHjFcbTHl9ins=
-Date: Tue, 29 Sep 2026 11:08:29 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Yeoreum Yun <yeoreum.yun@arm.com>, Zi Yan <ziy@nvidia.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v3 2/2] kselftest: mm: fix intermittent failure
- khugepaged test
-Message-ID: <aruOHat9wlu1H8la@e129823.arm.com>
-References: <20260923-fix_khugepagd_fail-v3-0-b387e92fe1a9@arm.com>
- <20260923-fix_khugepagd_fail-v3-2-b387e92fe1a9@arm.com>
- <447e0be9-836d-4324-9a36-77f8a0cbecf9@kernel.org>
- <84d3a9f5-4bfb-4f5e-86ad-ac8fb896d885@linux.alibaba.com>
- <dcf6fb14-7048-481b-83c6-9e8da6d874f5@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CAg1JuKv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 517CE1F00898;
+	Tue, 29 Sep 2026 10:28:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790677736;
+	bh=o/enivjbuzdBYTIELdw3QQ5GvFfjNgBfSjbfhZAZT2o=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=CAg1JuKvEEGQC0loGdc0YlQd+MsvjcPVdcfJ5QtYzodzBwil/CKu6jT4ZG5eE6ymn
+	 jWl2fVF9oOUz1vAKhPoibdcSKkfmyq0AxfWf6Zvl8NyQ/NA2o6UEPMC3/zq1k83+71
+	 goRniisiWAtTZ+LS41ujRnD4pJYYg+TC902VdHyz/oo3YP2dA08AXvpFw//Q/hjQKN
+	 w+88l7iq/i5j72BoXWnGDj0Uch7u9QnqnBF6ROb6H7eaR1sJtmeStAEfr1hgyvpoeg
+	 Z+FfjAHYvGAuTSJZyCqH2Iaa1f9n2feyrLWVI+XHP3PAXZpzj7sj+tA0QnHH6Liy7v
+	 7WGQ5S1w+eTyg==
+Message-ID: <0e477c5d-4fa2-464d-bbf0-853804fa07f9@kernel.org>
+Date: Tue, 29 Sep 2026 11:28:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dcf6fb14-7048-481b-83c6-9e8da6d874f5@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/2] bpftool: Reset map info before each query in
+ show and dump loops
+To: Tianyi Chen <hi@tychen.cc>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
+ linux-kselftest@vger.kernel.org, skokovmaksimevg@gmail.com
+References: <cover.1790615923.git.hi@tychen.cc>
+ <14f8779c59411e88bc320f1064a94aa580ca5be8.1790615923.git.hi@tychen.cc>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <14f8779c59411e88bc320f1064a94aa580ca5be8.1790615923.git.hi@tychen.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 29, 2026 at 10:46:50AM +0200, David Hildenbrand (Arm) wrote:
-> On 9/29/26 10:43, Baolin Wang wrote:
-> > 
-> > 
-> > On 9/29/26 4:38 PM, David Hildenbrand (Arm) wrote:
-> >> On 9/23/26 17:29, Yeoreum Yun wrote:
-> >>> There are intermittent failures in collapse_max_ptes_swap() and
-> >>> collapse_max_ptes_shared() when using the khugepaged_context:
-> >>>
-> >>>    // while running ./khugepaged -s 2
-> >>>
-> >>>    # Run test: collapse_max_ptes_shared (khugepaged:anon)
-> >>>    # Allocate huge page... OK
-> >>>    # Share huge page over fork()... OK
-> >>>    # Trigger CoW on page 1023 of 2048... OK
-> >>>    # Maybe collapse with max_ptes_shared exceeded.... OK
-> >>>    # Trigger CoW on page 1024 of 2048... Fail
-> >>>    Bail out! Unexpected huge page
-> >>>    # Planned tests != run tests (26 != 23)
-> >>>    # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:0 error:0
-> >>>
-> >>>    # Run test: collapse_max_ptes_swap (khugepaged:anon)
-> >>>    # Swapout 257 of 2048 pages... OK
-> >>>    # Maybe collapse with max_ptes_swap exceeded.... OK
-> >>>    # Swapout 256 of 2048 pages... OK
-> >>>    Bail out! Unexpected huge page
-> >>>    # Planned tests != run tests (26 != 17)
-> >>>    # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:0 error:0
-> >>>
-> >>> This happens because khugepaged may collapse the pages before wait_for_scan()
-> >>> is called, causing a sanity check that expects uncollapsed pages to fail.
-> >>>
-> >>> For example, in collapse_max_ptes_swap(), after faulting the pages back in
-> >>> and paging out up to max_ptes_swap pages, khugepaged may collapse them again
-> >>> before c->collapse() is called.
-> >>>
-> >>> To prevent this, mark the VMA with MADV_NOHUGEPAGE after it has been
-> >>> collapsed by wait_for_scan() for anon. This prevents khugepaged from
-> >>> collapsing it again before c->collapse() is called.
-> >>>
-> >>> This failure was observed on NVIDIA Spark with 16KB page.
-> >>>
-> >>> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> >>> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> >>> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> >>> ---
-> >>>   tools/testing/selftests/mm/khugepaged.c | 3 +++
-> >>>   1 file changed, 3 insertions(+)
-> >>>
-> >>> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/
-> >>> selftests/mm/khugepaged.c
-> >>> index 2aa7c9197158..b0cb02bf1a73 100644
-> >>> --- a/tools/testing/selftests/mm/khugepaged.c
-> >>> +++ b/tools/testing/selftests/mm/khugepaged.c
-> >>> @@ -618,6 +618,9 @@ static bool wait_for_scan(const char *msg, char *p,
-> >>> size_t len,
-> >>>           usleep(TICK);
-> >>>       }
-> >>>   +    if (is_anon(ops))
-> >>> +        madvise(p, len, MADV_NOHUGEPAGE);
-> >>> +
-> >>
-> >> Any reason we just do that unconditionally?
-> > 
-> > Although it's a bit messy, as I mentioned before [1], unconditionally setting
-> > MADV_NOHUGEPAGE will break shmem testing. Maybe add some comments.
+2026-09-29 02:13 UTC+0900 ~ Tianyi Chen <hi@tychen.cc>
+> The kernel copies bpf_map_info from userspace and only fills in the BTF
+> fields when a map has BTF. Reusing the structure for a later map without
+> BTF therefore retains the preceding map's BTF IDs.
 > 
-> Ah, thanks for clarifying. The problem really is that we cannot undo a
-> MADV_HUGEPAGE (give me hugepages) cleanly. We can only go to the other extreme
-> (no huge pages).
+> Clear the structure and restore its length before each query in map
+> listing, named-map listing, BTF detection and dumping. This prevents
+> reporting stale BTF IDs, choosing BTF output for mixed map selections,
+> and formatting a map with another map's key and value types.
 > 
-> Yes, let's please add a comment describing why we limit it to anon.
+> Reported-by: Quentin Monnet <qmo@kernel.org>
+> Link: https://lore.kernel.org/r/3acbe829-06f0-4df4-b57c-a8c7b802ec96@kernel.org
+> Assisted-by: LLM
+> Signed-off-by: Tianyi Chen <hi@tychen.cc>
 
-Okay.
 
--- 
-Sincerely,
-Yeoreum Yun
+Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
+Fixes: 99f9863a0c45 ("bpftool: Match maps by name")
+
+Acked-by: Quentin Monnet <qmo@kernel.org>
+
+Thanks for this.
