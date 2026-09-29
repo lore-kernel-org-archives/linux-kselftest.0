@@ -1,163 +1,127 @@
-Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0702251B18F;
-	Tue, 29 Sep 2026 10:37:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8D8E5158B6;
+	Tue, 29 Sep 2026 11:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790678252; cv=none; b=muknQSTChNje9HO8e8jYXYdXYJv0qP7upHVujr3XOvSWhK0To9eiSzywM8SUAfFE4PvL1zaZxvKlVxlS+znPMtg+bcR5QrdeoDX3lU5tbfc/lM90GBUPkJUdJ1XKZvDrkTdNZsls2lse6zmyRoE24YPa/XjUKuMiFJ09PUwcnuk=
+	t=1790681883; cv=none; b=Z0r38Yue/FUWauZDtZ3e0/5ujIi5wFmX8n9MKQKypW4/FeVGCtQa98+0qk8Q57K6msElv68jTUvUNt8pfocp22VGB4xMRw1Y5jIY4NDFgbLjGbYrNPHXXcE3ROO2Xb4ENvf4/WAX7PzT6w3geOqqNr2np56mwjmhPQJoVzPAzHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790678252; c=relaxed/simple;
-	bh=+5LXgvRrHafgY1U80BTcKmqn+Tr3cpw3rQZZ4XzqF4w=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NUTC3etOfTDXqrz7Ll+RiyZnAAmvS5NpwSetrF/TNoqK2JQk2p+MstWGB0vfFf0+51Z56TtYckUsZ95HM8AFP82m48f/HgNd0VoZPyYlxuGV+XZZRFZjVcTR4Cy0mJaMc6sqBW2woXbfegBY9NJ3CfFAwIVMp8LNr/42hZDDJDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=DjC2iA7j; arc=none smtp.client-ip=113.46.200.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1790681883; c=relaxed/simple;
+	bh=tqjmlp+/lUnMUWbQnrX31y/+aHqlRJRtl0e4XiSbrZM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I0ugvnN1OV3r1GQzXXTd9ecfGW9XyjjC5BXyKXZVZSyDmnjJ9vHbmPDDzDw1g4hGkdbEH4KDrchDVglcqZ8NJMKRl8ahvR4TickgOatWDoII0rF8h17XGrTDsnSVLNGiyy32FwLzjq7q33yAhTbJRdDCWYe/cmI1ETXEl7cWq0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=d0jXuIL/; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="DjC2iA7j"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=ZJAd5Fzr/+97dvVwRiv6inP1iXx4xlncs5YPyHz47Yk=;
-	b=DjC2iA7jJ8wi304eZdQG3npFe8quE4JO6ISTERGuGDtYPaStoSDqJEpUdOWC19TIwG5K6jiDI
-	J+VCUy3ZoWOviqJNuKaX7eBrnRTslCCV2FfgHFu7F0F9rEmY2RMBrXtPxn6stnJPR8EYfi1dwNP
-	Sv/JqNUA99Zbx5pMtrTL8Zk=
-Received: from mail.maildlp.com (unknown [172.19.163.200])
-	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4hvDnj3YJBz1K9Ck;
-	Tue, 29 Sep 2026 18:24:57 +0800 (CST)
-Received: from kwepemr100010.china.huawei.com (unknown [7.202.195.125])
-	by mail.maildlp.com (Postfix) with ESMTPS id BE9064055B;
-	Tue, 29 Sep 2026 18:37:06 +0800 (CST)
-Received: from huawei.com (10.50.163.32) by kwepemr100010.china.huawei.com
- (7.202.195.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Tue, 29 Sep
- 2026 18:37:05 +0800
-From: Tian Zheng <zhengtian10@huawei.com>
-To: <maz@kernel.org>, <oupton@kernel.org>, <catalin.marinas@arm.com>,
-	<will@kernel.org>, <corbet@lwn.net>, <pbonzini@redhat.com>,
-	<zhengtian10@huawei.com>, <leo.bras@arm.com>
-CC: <yuzenghui@huawei.com>, <wangzhou1@hisilicon.com>,
-	<yangjinqian1@huawei.com>, <caijian11@h-partners.com>,
-	<liuyonglong@huawei.com>, <tangchengchang@huawei.com>,
-	<yezhenyu2@huawei.com>, <yubihong@huawei.com>, <linuxarm@huawei.com>,
-	<joey.gouly@arm.com>, <kvmarm@lists.linux.dev>, <kvm@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<seiden@linux.ibm.com>, <suzuki.poulose@arm.com>, <fuad.tabba@linux.dev>,
-	<mark.rutland@arm.com>, <seanjc@google.com>, <rdunlap@infradead.org>,
-	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<skhan@linuxfoundation.org>
-Subject: [PATCH v5 13/15] KVM: arm64: Add HDBSS buffer size ioctl for dirty-bitmap mode
-Date: Tue, 29 Sep 2026 18:36:53 +0800
-Message-ID: <20260929103655.85107-14-zhengtian10@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20260929103655.85107-1-zhengtian10@huawei.com>
-References: <20260929103655.85107-1-zhengtian10@huawei.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="d0jXuIL/"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B629C1476;
+	Tue, 29 Sep 2026 04:37:56 -0700 (PDT)
+Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F40D33F85F;
+	Tue, 29 Sep 2026 04:37:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1790681880; bh=tqjmlp+/lUnMUWbQnrX31y/+aHqlRJRtl0e4XiSbrZM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=d0jXuIL/6Emp4J/TGs+f2eNtHj6eC2hd23MA10VhpzQ3oX5codkrdBvd36sYXREKb
+	 wHYjOdCMGCYCRWksplqCqoSYQsrLey51qyF2LE0dbXjQNTmdPNX1v/AIb9N210rlcn
+	 If/6UsSAoT/YifI0XMo6LFEJ8PZGxXtnEcR2pmqw=
+From: Leonardo Bras <leo.bras@arm.com>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	David Matlack <dmatlack@google.com>,
+	Leonardo Bras <leo.bras@arm.com>,
+	Ackerley Tng <ackerleytng@google.com>,
+	Marc Zyngier <maz@kernel.org>,
+	Josh Hilke <jrhilke@google.com>,
+	Oliver Upton <oupton@kernel.org>,
+	Wu Fei <wu.fei9@sanechips.com.cn>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc: kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/3] KVM: selftests: Add support for dirty-ring on dirty_log_perf_test
+Date: Tue, 29 Sep 2026 12:37:05 +0100
+Message-ID: <20260929113711.2064390-1-leo.bras@arm.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2850; i=leo.bras@arm.com; h=from:subject; bh=tqjmlp+/lUnMUWbQnrX31y/+aHqlRJRtl0e4XiSbrZM=; b=owGbwMvMwCX2pizjszvTwvWMp9WSGLJ2L5r+tcx4B/ODecnZDSUiZYXz+VLmZS2yP2O6QG+PX Mwpm5mLO0pZGMS4GGTFFFlkH81fxfN9SsaRKz8WwMxhZQIZwsDFKQATcf/DyPDdUOeawynG6om+ Utf2xdW85QvoL/7oMvNpq6dV5vYAJXWGP9ysr65NYnjHkxNU9/7jApHWin21KySMb6SldUw5rfN QgwUA
+X-Developer-Key: i=leo.bras@arm.com; a=openpgp; fpr=36E6C95AE0F111CC5B6F4D2E688C33F8A0C5B0C5
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- kwepemr100010.china.huawei.com (7.202.195.125)
 
-In dirty-bitmap mode, a larger HDBSS buffer lets the guest dirty more
-pages between VM exits, at the cost of memory. The default of one page
-per vCPU is a reasonable starting point, so allow userspace to opt
-into a larger buffer via KVM_CAP_ARM_HDBSS_BUFFER_SIZE.
+Add support to dirty-ring on dirty_log_perf_test, so we can measure
+performance differences when we change / improve the mechanism.
 
-The size is specified in bytes through KVM_ENABLE_CAP and must be a
-power of two in [PAGE_SIZE, SZ_2M]: the upper bound is the largest
-HDBSSBR_EL2.SZ encoding, and the power-of-two requirement matches the
-buddy allocator. It must be set before any vCPU is created: -EINVAL
-after vCPUs exist, -EBUSY if already set.
+One big change in this set is that dirty-ring needs to be enabled 
+after the VM was created, but before any cpu is created, so for that,
+I made a few changes on memstress so it can actually take dirty-ring
+size as a parameter for VM creation. (Patch #1)
+I honestly don't think it's pretty, but I could not think on a
+better way of doing this without messing too much in the code.
 
-The capability is rejected in dirty-ring mode, where the size is
-pinned by kvm_arch_dirty_ring_size_updated().
+Also added some checks in dirty-ring enable, so an error message on
+ring size is more informative.
 
-KVM_CHECK_EXTENSION returns the configured size for a VM, or SZ_2M
-when queried globally with a NULL kvm.
+Please provide feedback :)
 
-Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
----
- arch/arm64/kvm/arm.c     | 34 ++++++++++++++++++++++++++++++++++
- include/uapi/linux/kvm.h |  1 +
- 2 files changed, 35 insertions(+)
+Thanks!
+Leo
 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 5a7046acb62e..eadbf3a88d31 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -19,6 +19,7 @@
- #include <linux/kvm.h>
- #include <linux/kvm_irqfd.h>
- #include <linux/irqbypass.h>
-+#include <linux/log2.h>
- #include <linux/sched/stat.h>
- #include <linux/psci.h>
- #include <trace/events/kvm.h>
-@@ -203,6 +204,31 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
- 		r = 0;
- 		set_bit(KVM_ARCH_FLAG_EXIT_SEA, &kvm->arch.flags);
- 		break;
-+	case KVM_CAP_ARM_HDBSS_BUFFER_SIZE: {
-+		u64 size = cap->args[0];
-+
-+		if (!system_supports_hdbss())
-+			break;
-+		if (kvm->dirty_ring_size)
-+			break;
-+		if (size < KVM_ARM_HDBSS_DEFAULT_SIZE ||
-+		    size > KVM_ARM_HDBSS_MAX_SIZE)
-+			break;
-+		if (!is_power_of_2(size))
-+			break;
-+
-+		mutex_lock(&kvm->lock);
-+		if (kvm->created_vcpus) {
-+			r = -EINVAL;
-+		} else if (kvm->arch.hdbss_buffer_size) {
-+			r = -EBUSY;
-+		} else {
-+			kvm->arch.hdbss_buffer_size = size;
-+			r = 0;
-+		}
-+		mutex_unlock(&kvm->lock);
-+		break;
-+	}
- 	default:
- 		break;
- 	}
-@@ -500,6 +526,14 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 		else
- 			r = KVM_ARM_EAGER_SPLIT_CHUNK_SIZE_DEFAULT;
- 		break;
-+	case KVM_CAP_ARM_HDBSS_BUFFER_SIZE:
-+		if (!system_supports_hdbss())
-+			r = 0;
-+		else if (kvm)
-+			r = kvm->arch.hdbss_buffer_size ?: KVM_ARM_HDBSS_DEFAULT_SIZE;
-+		else
-+			r = KVM_ARM_HDBSS_MAX_SIZE;
-+		break;
- 	case KVM_CAP_ARM_SUPPORTED_BLOCK_SIZES:
- 		r = kvm_supported_block_sizes();
- 		break;
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index ac2d77d14963..59eb211494e4 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -999,6 +999,7 @@ struct kvm_enable_cap {
- #define KVM_CAP_S390_HPAGE_2G 249
- #define KVM_CAP_PPC_COMPAT_CAPS 250
- #define KVM_CAP_ARM_PMU_V3_STRICT 251
-+#define KVM_CAP_ARM_HDBSS_BUFFER_SIZE 252
+Changes since RFCv4:
+- Series title 
+- Rebase on v7.3-rc5
+Link: https://lore.kernel.org/all/20260729161519.3778839-2-leo.bras@arm.com/
 
- struct kvm_irq_routing_irqchip {
- 	__u32 irqchip;
---
-2.43.0
+- Using acquire/release barriers to make sure there is no reorder between
+  incrementing iteration and summing the time spent on cleaning.
+- Improved ring-size checks, although not perfect due to reserved entries
+  affecting minimum size.
+- Do not allocate bitmaps for dirty-ring tests, as they are unused.
+- Improve help text
+- Make sure ret==0 before going back to vcpu_run in dirty-ring case
+Link: https://lore.kernel.org/all/20260708152232.2568907-1-leo.bras@arm.com/
+
+Changes since RFCv2:
+- Added mutex to make sure only a single vcpu is 
+  collecting/cleaning at a time. This gets us the ability to
+  test return values, and not account for kvm.slot_lock waiting time.
+- Stuff reported by Sashiko
+  - Return value always positive, so assert was pointless
+  - Concurrency inflating the time for dirty-ring cleaning
+Link: https://lore.kernel.org/all/20260629105950.1790259-1-leo.bras@arm.com/
+
+Changes since RFCv1:
+- Stuff reported by Sashiko
+  - Fixed elements / byte size wrapping issue
+  - Removed element count due to concurrency
+  - Testing exit_reason instead of ioctl return value
+  - Some nits
+Link: https://lore.kernel.org/all/20260624171656.1737580-1-leo.bras@arm.com/
+
+Leonardo Bras (3):
+  KVM: selftests: memstress: Add option to enable dirty-ring on VM
+    creation
+  KVM: selftests: Check dirty-ring size before enabling
+  KVM: selftests: dirty_log_perf_test: Add dirty-ring support
+
+ .../testing/selftests/kvm/include/memstress.h |   3 +-
+ .../selftests/kvm/access_tracking_perf_test.c |   2 +-
+ .../selftests/kvm/demand_paging_test.c        |   2 +-
+ .../selftests/kvm/dirty_log_perf_test.c       | 128 ++++++++++++++++--
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  21 ++-
+ tools/testing/selftests/kvm/lib/memstress.c   |  34 ++++-
+ .../kvm/memslot_modification_stress_test.c    |   2 +-
+ .../kvm/x86/dirty_log_page_splitting_test.c   |   2 +-
+ 8 files changed, 167 insertions(+), 27 deletions(-)
+
+
+base-commit: 72d3fcf802c45d00b300f25b848a93c3a2bd7c7e
+-- 
+2.55.0
 
