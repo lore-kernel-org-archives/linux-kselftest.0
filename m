@@ -1,160 +1,121 @@
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012070.outbound.protection.outlook.com [52.101.43.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f11.google.com (mail-pj2-f11.google.com [74.125.227.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F482306768;
-	Tue, 29 Sep 2026 23:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790722823; cv=fail; b=frfZ+QQSWXh4FmNkLshPM+eS5OmK8E7m9XrGZ+ODKxm+vqLI266KfW6WD2MdsXud7NHqQ3i5pcgqz1+fssMMo1e269MOhrZLaz3oGsDbK8ijK1jGoLl9XVvdi2Yn3xfWfc3bP/HJpNJm/X0Oo/JvmSlrrt9yEnnHBPdVrbi2q0A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790722823; c=relaxed/simple;
-	bh=goz/B8RzTeWDvDkwx9hCrtlniUuukI5lhEhHpz3QsKo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=TYmNn70bANAgKoHmllE1K5dxsSL8lmEbZBlj8dFxk7yLbpXvUYeI7ZjHXoVDzp47kRfJO6qYyz6jaUS97QkcNZwqszSoKTgBlrOqTCHbvTR4kpjl/cVLzYY9PRPmbOVKThYpFXJQ8UcSjx1CYa9s491uxVVOBve94bZ/6NMGU+k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CDBW8qz3; arc=fail smtp.client-ip=52.101.43.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64D4475336
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2026 23:34:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.139
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790724847; cv=none; b=TfQeMRKqbvzz8yKEvKiG67Ge7zWZbMLx042OX5m8cokRaVEppBlRMTmberEfvII0GgZAEdnNGXhZ0YKOpUj/scJQTcfWTY/0qTRm9zrHvKx05dGZ/WlttYPXgvFPd3HyAohqnFNaGHUOLi7il247fyZ95YHbNib/ngBqikXik5U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790724847; c=relaxed/simple;
+	bh=pppU/o89qm1sLiO0OoAbWHZ4lhtSEjVPfFnL708X03k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lS+uPmCppdeKyuOLnr97sObVY+G/o83Bephkk9HsI/nyJFXvnohn9yRCtGfJdz2bqXjJXcPhSm1jN1+wPT2UkpLziCxXaxLXNFV3om0LKq7vkASZA7Q2WUZO4OphH36+xKJtzt03PXw/2rQnuUJWwFef4idSaYQor2aQWgbbRos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XWPpsaZr; arc=none smtp.client-ip=74.125.227.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CDBW8qz3"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NPWhJdL5Hqurkh+GoJUIfLoFDGDUoc0hIsNEsan9vp4D6YOjHxTUQZqguJuB5Lzq2THV/xPqUt0c6iivedDjdiapxj3R9sNh5A4V9854OjbtwX+8vlZ80aXrEg4yCQI1hlq4xVRPmcEHjt9p3Mj5R5rgfJOR5TiLn3gXPkjv5Y+K90BxhXatGsK6/iGsSLfBn6LjDlhkfte+pwCSbdqrfWeVdZ+Kyvz5A7DcpMwju3qOqCw9aA/r6etZuM9UaLW9S66GM4royyW4rV+iCBkuq6Mfb97XuAqV7OaE9cC7lKSvKzD8LypIZbGwbMJvD8w5gMPOsCxaIs/x7SUpelc1ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=K3paQFs6Wm6NIg6HMzNygrXX0ufR2Ts8jwtq3pmv/MU=;
- b=nhtmOvqqSZktvTtt0X6y/8qJR6FM96stnUVctWTzsmAJQ0ux31iCKTMLpxkHuFDEga+xo8QL49UZrQWxkv3+Im8sSlki8gxNXdhFGsuVvIk6tJInh4KQn/X6ahNyoUeZN16dX9o7TnVa5goafGShra9UeJBsU4fjQDmeousTadVINTbR3+SOPWpqxnJ4LJCBLqmK7hmqpwFBG5ZcRJo9bPlYHARAQlG+CpJOUodyTkfLSpVGvVxqi+cttZA7nX/wbI3cgHTLYComLHrZOePgM8qpDfadCMTglYLC9hGD4M9UpCkw+E8HGufcpspBUrhnl+ECfeL/FC6HHb4Glpomlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=K3paQFs6Wm6NIg6HMzNygrXX0ufR2Ts8jwtq3pmv/MU=;
- b=CDBW8qz33oKc42wMCkcSVwN5WpctNyNfP2Q+22p0znaDjW1P0JeQex9oHrTFHdeNxSlWouJaZphJsitTaQAV217eyY5u6PzKozgASjqxiA3k9PV91O8t/IdJaV7ymwCUMuYjFWq9L3iSMDu1f8eIDRhje4hJkSibwMX0dzFfBCaxrlbVNls0kQZB9TZ1DT6HTIZfBatree42bt43k6ZjAxNpezF48VKXnV5NseLDEnQdJ1CXemP8MucVYT+l5y7c4GFoBwpAaySVrzzjNPlKo8VJnXJeLVEqShXjlyb4CE0Ti55TST2nXjk64IYHrOU9KGOZH6sd/c/rsp4ydsrPgA==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CHBPR12MB731189.namprd12.prod.outlook.com
- (2603:10b6:610:33d::12) by SJ2PR12MB8034.namprd12.prod.outlook.com
- (2603:10b6:a03:4cb::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.24; Tue, 29 Sep
- 2026 23:00:11 +0000
-Received: from CHBPR12MB731189.namprd12.prod.outlook.com
- ([fe80::b0e5:123d:fe06:e10d]) by CHBPR12MB731189.namprd12.prod.outlook.com
- ([fe80::b0e5:123d:fe06:e10d%6]) with mapi id 15.21.0451.024; Tue, 29 Sep 2026
- 23:00:11 +0000
-Date: Tue, 29 Sep 2026 20:00:09 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Leon Romanovsky <leon@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	David Ahern <dsahern@kernel.org>, Zhu Yanjun <yanjun.zhu@linux.dev>,
-	Jiri Pirko <jiri@resnulli.us>, linux-rdma@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RDMA/selftests: Fix the kernel config fragment
-Message-ID: <20260929230009.GC2446731@nvidia.com>
-References: <20260927161655.1184153-1-sashal@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260927161655.1184153-1-sashal@kernel.org>
-X-ClientProxiedBy: SJ0PR03CA0193.namprd03.prod.outlook.com
- (2603:10b6:a03:2ef::18) To CHBPR12MB731189.namprd12.prod.outlook.com
- (2603:10b6:610:33d::12)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XWPpsaZr"
+Received: by mail-pj2-f11.google.com with SMTP id 98e67ed59e1d1-38de693676dso2453574a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2026 16:34:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790724845; x=1791329645; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=90vGdgLltOmZQprXn366F7yU1jtNwuxzXIhmT3hWVVU=;
+        b=XWPpsaZrC3iyN4IQ5PfJ4Cc9ltb26LLu6wszgkNnPmvrXU6+Di0GFJ4L4i0cizDH4f
+         JtWMPGHPRzRQ3h2EJzu2nY3DbdZWBWhwPfUcvkrBjIfHli0wB6tVMten9EjGsa+BjLBN
+         tl/MZwyIqL6bgos3xZ2uNHQKRLZeVPBHy7QV/BWEeQP3CDa5Q7J87vHOcY+v6qONuj+l
+         kTkqQ4DXuX8ZlM2dkwdoziTMQzSdkOCmp9qN/ynaMX+CBVt3quEGMsY2RtGAzA1h0wpO
+         nqc07ksW8m7HxUlqhczw4pWy4aPay4dmksMhAZsUNAo/nLAa1+vxwbVqcFj/nQWy08rU
+         LoRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790724845; x=1791329645;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=90vGdgLltOmZQprXn366F7yU1jtNwuxzXIhmT3hWVVU=;
+        b=LqXtrY8EwLO4yjTZhwhV+ev2OGt8IryVkP6iUm7sLI8nMMwHlZENy/NPv5Sw2ZrXl4
+         xK0hE0y5+RCuX8bGisttGgy7hWonIcCeSg7PHUq6o3i29wber9t/Ji7uSFCeEHvkqE6M
+         J+D9jcJRO8trBgn7CVaWiMPjjju6YsUZ+2UCv6M0nO5VnEZGFbbtn7yUlEip75Vye90d
+         zlQPOh1bOrEzXeT8wjoLJCIK2Esg2aZNpr0hvnDxSWbeOca+yfMb+R82ZNUdfouMFvkA
+         yIepkpa+fw3YbR4EMMH9fZ4Ysx1ly1+Dhn0HWy64co/aF/xojs4oDvLXztiC41M7crq2
+         IhIQ==
+X-Forwarded-Encrypted: i=1; AKwUvByn2IqIaBCPZPhJd7FcSSa1qMjIAwpb54obmekThc95+G02QEQwDxLbIiq1mMPBpsKgd6oS82G0UUci0IJSgH0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJuXDTWF7jAvwRp+9INKLmsaRVSlydLk7XBsJKgcrsBiiEn+l7m
+	Wr7aprIcCjZVLVhFHcm2g2m2Ja57dY1o3Q0y/neYIDWJLU5C4P+FxawT
+X-Gm-Gg: AYBFou3/YeQ95XzzkXNWxweUNCaOVx6nfnC6edcUzt6qdbqcW6InhXSduUsxdAJfyt7
+	spHNJwNOByh5ykFyK2hztpMXcNR2Q2QUCR8jPH9GshYT5ubJYElqrgq17LFi2eC7NBm/H6xRzeP
+	OCW+9P7lYL6mSqLYVFNEYlQmYKaiYTLnreEL9doxqABfosUZL8Z5YvSIc5Z6aWRquTnYhM5WyNQ
+	E2Uf2jFeTmZFdYW0yk9obH3KI64elmLJk01m+v5pZiuPyJvDfNnn6mDD4kIP0BGrMi9NLZPAo/4
+	l3HTTmXC3zxRJk9kJZDvvywvSvLyHbt7rrFVK1BXEye/rJuO4P/J1Q+3kSfUJdxnx4J4k9YmkID
+	BVR0qx7UiQ9rbUyh1i0LFB2mP7en1P786KRU1ZpHRVB6UrheHxwhWIGFxxq0G6ITBNLjyzkKmJW
+	QWTqQtMFIchzRiR7KsnFLP0iaDXmv2Ycq+U25iSKSlDLzwp0uRb1L3HWPdSvXXalTt
+X-Received: by 2002:a17:90a:ad7:b0:3a4:c673:7649 with SMTP id 98e67ed59e1d1-3a4c6737775mr195074a91.21.1790724845069;
+        Tue, 29 Sep 2026 16:34:05 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:4e::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a4cac131c7sm163775a91.11.2026.09.29.16.34.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2026 16:34:04 -0700 (PDT)
+Date: Tue, 29 Sep 2026 16:32:08 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, jv@jvosburgh.net, 
+	hawk@kernel.org, sdf@fomichev.me, emil@etsalapatis.com, liuhangbin@gmail.com, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, willemdebruijn.kernel@gmail.com, 
+	aleksander.lobakin@intel.com
+Subject: Re: [PATCH net-next 1/5] net: record XDP programs propagated to
+ lower devices
+Message-ID: <arxKZIebRaEoMsN5@devvm7509.cco0.facebook.com>
+References: <20260928223648.2739371-1-kuba@kernel.org>
+ <20260928223648.2739371-2-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CHBPR12MB731189:EE_|SJ2PR12MB8034:EE_
-X-MS-Office365-Filtering-Correlation-Id: d21e090a-fa70-4338-a1a9-08df1e7d6a4d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|366016|23010399003|18002099003|22082099003|6133799003|10067099003|11063799006|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	W+sxM3UwcWy3FLNP6OJkzPbk3eAD+hXBUDClIxKdR1UTCVy/PlN6F/kov3jB4MonP8WOZTwSm5A+dw5s0cYqUhGHpDam4g1JSAe+ElVnq4WcNvuzNSsaYZrOCg53yW2g6ygADi0IsWEVTaGW4lVKOIfM4KPHoKecTpBaOBmHBCG1DK1jnCS6/PW3zoZK2MeOvJNEcUAV5xRwhbKOREzND49C2EOz18xNqHQGRk2F72lQ9VVCkXI5SPIMuF7C//vGClzvy/DdoQxMDRTq1s3Dhrz8pev0yxTkBaLITz4ifqnEwuYgBscMbn/cYMGkchmWfxjVJofOIHo8Cff57aq9rTkY8Uf7HgPjEeMXIaR6Kk3THHMcRS8kAHIkQwZZEqHcCrGIgVo/Hw8g2OleXEiMMfRci0tbio30JHek4Suzza8brYPhTi6M9fwuriUTjPPNFpQrg66xiiVXCjkgmKnmL61aTvfuIzbkqnML5qJ1y2AAJ+UOyc+iQV/zR6UcIwS+R9m285CnNSb+n/xarag9+l4P/aoa9g75hFy0g1LmxSGO5KI9yDokopgbk38yEC7L2PhABsk+oOBK9U3utnEkt0qxFc+qzlAAj/BxiS7dmRc7uo+fQTZRFqIC5lYka135fSqJa1a677lY5OSGOFKhCp4xnpgKhR4T+aow/O24av4=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CHBPR12MB731189.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(23010399003)(18002099003)(22082099003)(6133799003)(10067099003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?U7JjAiPYPYAUx58VuxfThsxM4veVbi16rgoNIXRpsPDHP8woEaU6K5s8Ohsp?=
- =?us-ascii?Q?4IZE4w4tPoGOzPQSEFmn5PqCRQpStejB9cwBs2TPWaDeVc8fq/Hh6yj/AYTl?=
- =?us-ascii?Q?31gp2M9GiXc0qbPXEYV1dMxUyM/5dCv2TXVrh5l0vu+6DVlSL1CDxOBYzW02?=
- =?us-ascii?Q?5Pi1wAyjg0ihMO0/kgetkzi4Yt/z9vL4H+XTvKNhuUE50rGLbdR1am+P3gGD?=
- =?us-ascii?Q?jNOAGWe/cUFUMjCbZ51A8itmlyE1F33GFgxJz0lviVXekAaJUU68G4rc9Upd?=
- =?us-ascii?Q?Txh5cLdnl6IQ87aWNDBQXrTdQ1zXX3yGVc5JG4RbfEzsBfQCGLeDXDfQlKXQ?=
- =?us-ascii?Q?kj5TnhHpuJoITA8hcZbL+d8ebuo6GCqhKy2Gu859MPeL79bh6sF8SayR2NSu?=
- =?us-ascii?Q?dGYJUPh9LCq4JUhJBVmMt9DVjxvVSB+h6R6sobzsHsknmwUkAF6086Y++mrE?=
- =?us-ascii?Q?5sbZ9u7TNJvP8fU88nQrlCMF0a4ySULyyy5xd/2rLrj8NB9kfu3COnE0aUm7?=
- =?us-ascii?Q?Bm0zhuvpHcewjiRQKcdE2xKaYytVq+g8/WxbR6N9F526hO26oXivb6hrWcDD?=
- =?us-ascii?Q?aiUCpn16h9+/5G3rX70rhNxV0kyVWVb/J/lx6noDnK6T1G4CMawAyVXDrdHM?=
- =?us-ascii?Q?aS5SPInIde/D0zO88bah4ErH/ECLVX1CeBZrp0nb5U0WvlnvXIIrUmw+hTHx?=
- =?us-ascii?Q?oGTfYH5Y73u9mj7EyL/PYlMcMUUTXShJfHqF3dNhQ7eJug3AacDYcBmdgr4Y?=
- =?us-ascii?Q?5YM+utHostBVgd212uVO+bnDL5knUZGzA4rlgVDmHtRRF89vjvi2hiFmbPz9?=
- =?us-ascii?Q?z4p0uR3dHaYQUeUv/JGI0K84wBfVKkSimrDnOS8RXWCASvQ9SEfSi73OgaTz?=
- =?us-ascii?Q?5inU9gD/+fLA6ab69GIrToN3vMvGcfTFx5HETCadUFfw4XQbCsn1op7vzRem?=
- =?us-ascii?Q?3LcRkv2LXT45BYHgUybfHIDP0plqHHA+z3bhM2dlSe0pltl8Dq3CDIeBiCLA?=
- =?us-ascii?Q?9JdiGjAMYbik+UbS6SACTGEpp2RovXIopMGCLtwBkIhShbPJkHJiEYWrnCj8?=
- =?us-ascii?Q?PMI3xxrCR8QblqMm3ajTpkChSuWY07xFIPFE+RyPEuoshNiVGczJ34QABq5G?=
- =?us-ascii?Q?kfxcEMV4OlWSvQVXSbJWsGTuPj5hoQ8l21q0FZ8YY/oxYDyFddfBy/yAkLaV?=
- =?us-ascii?Q?CN2KNU+MGYLHR9zPquoRgDh0nGJaj4MxbdwfprW/EkLVBXa3ahKF7ev5vE/P?=
- =?us-ascii?Q?CLNGmuambPJyijk7a8NoT2Pt34hVPyPMKmyCH1bnrziT98ysWHvZmaHxolYc?=
- =?us-ascii?Q?rn1mJp4roTIxWBEcuzlIbjQg0+v3KRNs8QmLoKGHlXeeAgvKWw2VTt/pone9?=
- =?us-ascii?Q?ryIIP7tSPZfF4/3Wz7XcaYd14l4ZlA2iHs8ZxzA0VRb6Gh6iyj6NbusFxATk?=
- =?us-ascii?Q?e87j2WLwBbn5icy+qF1sOm2N1Y+qfzrILkCJ+WGQPHpbur74EBBbhn/v81ku?=
- =?us-ascii?Q?MxeIaRRRD1e84ClkYasTtDF2RgygqG42klAaCAWYNNWnFdaoRVEvtaB3nBmC?=
- =?us-ascii?Q?g4vbUOou35XzNJqWEr481qgWz4YQKs2bDENMb4C+K7ZoLKFqCFdacOed1TUt?=
- =?us-ascii?Q?3uJ2YMMoc7FM/9j+8OWYasE88gvj2Q7A6N3q1okE1T3lwhVgOJ5pZq0L3S/M?=
- =?us-ascii?Q?d8v+ZOXUgAuDxe4WGrELzClwIEeoS8R3K27MwMZWHBTQkCtb?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d21e090a-fa70-4338-a1a9-08df1e7d6a4d
-X-MS-Exchange-CrossTenant-AuthSource: CHBPR12MB731189.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2026 23:00:11.3868
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: D7sHqbvMbp7XdIoQOLxNVCqxxh93gNmW32sxzWzNm2RR6dVFdjEGOa3TBe2roqKf
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8034
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260928223648.2739371-2-kuba@kernel.org>
 
-On Sun, Sep 27, 2026 at 12:16:54PM -0400, Sasha Levin wrote:
-> The config fragment lists bare option names with no values:
+On 09/28, Jakub Kicinski wrote:
+> An upper device installs its XDP program on each lower with
+> dev_xdp_propagate(), which calls ndo_bpf() directly and records nothing
+> in the lower's xdp_state[]. netif_xdp_propagate() open-codes two of the
+> checks dev_xdp_install() makes, but the lower still looks program-free
+> to everything else, so the checks made in the opposite direction miss it
+> entirely:
 > 
->   CONFIG_TUN
->   CONFIG_VETH
->   CONFIG_DUMMY
->   CONFIG_NET_NS
->   CONFIG_RDMA_RXE
+>   ethtool -G $slave tcp-data-split on
 > 
-> which is not valid Kconfig syntax. When the fragment is merged, for
-> example by "make kselftest-merge" or by CI systems, the lines are
-> rejected:
+> is refused by dev_xdp_sb_prog_count() for a device running a
+> single-buffer XDP program, but not for a bond slave running the bond's,
+> even though netif_xdp_propagate() would have refused to install that
+> same program had header-data split been on already. Binding a memory
+> provider has the same asymmetry. The lower does not report the program
+> over rtnetlink either, so it is invisible to userspace as well.
 > 
->   .config:5514:warning: unexpected data: CONFIG_TUN
->   .config:5515:warning: unexpected data: CONFIG_VETH
->   .config:5516:warning: unexpected data: CONFIG_DUMMY
+> Install it into xdp_state[] like any other program and mark it with
+> xdp_from_upper, rather than tracking it separately. Every existing user
+> of dev_xdp_prog_count() and dev_xdp_sb_prog_count() then gets the right
+> answer with no changes. The flag is only needed where the owner matters:
+> bonding reads it to tell a slave's own program apart from the one it
+> pushed down, both to refuse enslaving such a device and to let the
+> bond-wide program be replaced, and dev_xdp_attach() reads it to keep the
+> program from being replaced or removed behind the upper's back.
 > 
-> and none of the options gets enabled, so the rxe tests skip or fail
-> for lack of the modules they load.
+> The lower now holds its own reference, as it does for a program of its
+> own; the upper's per-lower reference for the driver is unchanged.
 > 
-> Give each option a value. The scripts load and unload tun, veth,
-> dummy and rdma_rxe with modprobe, so build those as modules.
-> RDMA_RXE also depends on INFINIBAND, and rxe_rping_between_netns.sh
-> runs rping, which needs the RDMA CM userspace interface provided by
-> INFINIBAND_USER_ACCESS, so add both.
+> While here, refuse to propagate onto a device which has a program of its
+> own, matching dev_xdp_install(). Bonding checks this before enslaving
+> and before installing, netvsc does not and would silently replace the
+> VF's program.
 > 
-> Found by KernelCI kselftest builds.
-> 
-> Fixes: e01027cab38a ("RDMA/rxe: Add testcase for net namespace rxe")
-> Fixes: ecdcc8a455b7 ("RDMA/selftests: Add rxe_netns_names test")
-> Assisted-by: LLM
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> Reviewed-by: Zhu Yanjun <yanjun.zhu@linux.dev>
-> ---
->  tools/testing/selftests/rdma/config | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-Applied to for-next, thanks
-
-Jason
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
