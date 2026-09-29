@@ -1,119 +1,149 @@
-Received: from mail-pj2-f39.google.com (mail-pj2-f39.google.com [74.125.227.167])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C621A326951
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2026 00:20:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBF737C0F6
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2026 00:27:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790641229; cv=none; b=iQ2nPjbUe3qF4hKn2raNbe1g6btrLo8LLH68MfiL2WBZxQ82gQp1vCmZkgq1yydUZsfE6E4NWKonI9IQpAwGyUqFC14AaSI0TwOaztxel6N4Bpn+UCUI19ICi8V4/dZ7YqkcHkqBOHdl8Z5KMkpieP+XMi03tCjwKMAR5Q7FwgE=
+	t=1790641669; cv=none; b=lohh7G54jwavq03o0Ug3MEgpN/FsvrgXgqujMAAknr+e3OKuWJt0wy66TAFn5afSObroKEaMu8LrpNJ2fqre75C/WWOxr3ghAPT/jCbV1v5cyitBvQ+93wwZiz65sOQgqpUNeTxU0cFhJOwSdeKke5j6dQk7T6kxnzGww5Az82A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790641229; c=relaxed/simple;
-	bh=JB+Tmj3rI7ONx/tLDWlB6lOOPKvo5RIyeaTTXknKqpc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Wv2uiRJo7UVgUVmSZ/VT5G7onrNzKKguL8M1QmpcSqjzT7PulJzoNp/mO1g7O1pKIyWwWlJ7wywVPbWpD+WIalDCJXIdp33EGOZ+maNfVix/F3k/uNfW3M4c6R8+0fAbcbiVeW+IM4K6qceLjsM2/vmnCnk6ulb780A5aXM8xLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qfCcEU/Z; arc=none smtp.client-ip=74.125.227.167
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790641669; c=relaxed/simple;
+	bh=pMvCDTEkuAALUIrceyZBHP9kCx7IfJSFKZfbXoVEGjQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qvx6Wm0LsjHmpM0ITOtk1d8iM/gDp6JsCyA1i0ysCb3XLRrYwg5gRKX1iPR01J2bQDHCfEi1Y+Bu/JuPVYyT7EStpFLl6HHqG3eK8aYBM+cRYPhf7lKG6TdebJ51eJ6gjXm8qbrCoEJZry4RqWnVxJiOUxi8RB5r+upd+Cstpe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wu5BxIpw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qfCcEU/Z"
-Received: by mail-pj2-f39.google.com with SMTP id 98e67ed59e1d1-3a498cb99b3so191733a91.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 17:20:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790641228; x=1791246028; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=JB+Tmj3rI7ONx/tLDWlB6lOOPKvo5RIyeaTTXknKqpc=;
-        b=qfCcEU/ZJefY2FkYRjt+IYVPC6XR/X8Jq8r6y6Dj525Y3WyI445bSnj+dtQpXzBz4Z
-         Toa09reD9HGGxZkZpr0674gXE0ykxhpbTbvVOCc3OlopCciHKhvwHS2UxrXF4M/1EtsC
-         cxT209oSgEiIMUm3gqfIcp0Bp3MdMYbWHwruFD3ctr//ypiEzN6mUjNmiAoTA1BBza8y
-         6uEhXOr+UOi4mgad8CbeAe22e1yQLMlaVWyKEic8KQu/zd86xMT6+WJ4DLCvutODshK2
-         c4L+Wg89atFd4saEmRNM69ugxUss20kdz24gjxG8OgLkjMSeLDcoyB/wPDRPcsriAmHq
-         lDDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790641228; x=1791246028;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JB+Tmj3rI7ONx/tLDWlB6lOOPKvo5RIyeaTTXknKqpc=;
-        b=Q3KPtKxDVUAdX/RLHEvLqvpvDflnf+AWCCkbJsmGQilgbkXSFMSUx0U4rMpWEsm0Xw
-         gg8qiUtrbo8pKlrTOFYki/advA0W6XJc1s/4XKUZbDv8pVExJ+xl98tOU4eLQO6oXWdb
-         AMuJkfM1mxs48cwveZ51OOzyQaeZ/sKb7Ls5YD+ocgpITRoJiQ3WWk+m+9NeiYXjlzr9
-         sQ7WwNmiaRwJ51h2YxUCVjYF5ACNLX7auLDHputhL8GKK0+1zl4V4OPFwI8gGRtLMG54
-         VMD+0AN2nbFWP66rAIcucUUlvc032vr3Hj8fKA4Ztrv677soxamyJPQ3Ods6Tg8ww45T
-         LaIg==
-X-Forwarded-Encrypted: i=1; AKwUvByz4+YzWd5n6wz+T1faiAYpIiBPnRdNB/waxR3DmR2QeVIsFLk3mvQ0u4/VoZ0i1PD1Vbrv94Ex1VT5jOBFH2A=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ7iz9OIy3Ap+EVKWvEl4xJrt/WBgSTXhBa6nlJkUJ7JzP7pDOP
-	v/vstlQOTJIS/FenrbqTBhsFmgp0UE6gupttB5zgTaSwOHT6LXJvKvQ=
-X-Gm-Gg: AYBFou0/iXRwDo1SFEhJyflGWW89318MipH0dXEWlDtkl29CjyqU9boEtVv8MX4CBQQ
-	I/EUiqpMfeofVFc8EE1Oil9KfenXX/JNl9UTIpHwLtLxZRuXGpakWE6g+rppz4KlSXB9HH0pvMr
-	tfurVbjuhYHV4iebl7pE89bbzQC7aymRfmxmNJFngIkL/bLMxEo1kVGElTr7j9VS7dQhXTrJUp1
-	wmA8eNj2i1NrK5pVMPtVczntIzdCJp1+Q2Td1c09dAi9JRMoKLquNQygeQkFx1LFlmQgkhgqjIN
-	e9GrgvoHKjN4L8J+Tk6wVrOdY+G/EsYF8zcGw+5c+WUYer3sfcmdXDaOIisvndLyfAJAHwWwQ6i
-	Bjeq+lFuYSl6JmKMSboYothQa9asEyo5K+JS+X1hTUrusdh4dHNiRgObgeRTtWa8RPmCTzmY9gj
-	E/y9twDPxm0N7vc9QRrFNgiFrHGG9PPHS8o6ZSBbnp2hLJKNC0kOePPBxQsP92LnXUuptVQfz3v
-	DVXPEzzA7OrsK8qjzOhs7dOo9Ll0JBt8JziQw==
-X-Received: by 2002:a17:90b:4d09:b0:3a0:c85a:e602 with SMTP id 98e67ed59e1d1-3a0c85aeba7mr6091841a91.9.1790641228008;
-        Mon, 28 Sep 2026 17:20:28 -0700 (PDT)
-Received: from ydg-Zenbook-14-UM3406GA ([2001:2d8:712c:b4ae:f935:9398:3170:36f6])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a497718037sm2047605a91.0.2026.09.28.17.20.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 17:20:27 -0700 (PDT)
-From: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: akpm@linux-foundation.org,
-	rppt@kernel.org,
-	peterx@redhat.com,
-	surenb@google.com,
-	aarcange@redhat.com,
-	ljs@kernel.org,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	mhocko@suse.com,
-	shuah@kernel.org,
-	kirill@shutemov.name,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	donggeunyoo.kernel@gmail.com
-Subject: Re: [PATCH v3 2/2] selftests/mm: add tests for UFFDIO_MOVE of a uffd-protected swap entry
-Date: Tue, 29 Sep 2026 09:20:19 +0900
-Message-ID: <20260929002019.1847080-1-donggeunyoo.kernel@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <cc123233-5b48-4069-8f84-f95301a83dcf@kernel.org>
-References: <20260926124145.2878520-1-donggeunyoo.kernel@gmail.com> <20260926124145.2878520-3-donggeunyoo.kernel@gmail.com> <cc123233-5b48-4069-8f84-f95301a83dcf@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wu5BxIpw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF6CA1F0089F
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2026 00:27:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790641667;
+	bh=APJhL/UXcBCjjwICTLFT+qLin1KDXiRR0y2N5bPp8T8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=Wu5BxIpwb/FW7a7LVMgUEWE126572fMwxWfDEmSurmLLgZKqLptJ2bkNEyksVOVSz
+	 5ufScNK88XA1hwYooXSrAjSOXbMENJ2iJs9O9M7X918VxaFf3FFU+RgtileZfmuQMA
+	 HVIRnOR/aY2Gu2Gkko7FskKtHz1H4U5zxj8jhGhVP2AikPDUSrzFGXQh13W8bxkt13
+	 lTBun4ty7FNs3z4BauBl6P4qDCwvzR7uPgXTHpQfB0WOiJkiaReRD/TUKvaHMvwtIs
+	 4MPqxMiNzixcmr1FUFDRMVTz4Itok5WLx3q236W6EcQzqmXVXa/LtOKJEke/zqFfr+
+	 hhp0kOAXIyIOA==
+Received: by mail-ej2-f43.google.com with SMTP id a640c23a62f3a-c2af9270c53so346518166b.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2026 17:27:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBzSrDicjwlYtFHf/3e2SwOwn5tcBPNMC32lcfB90bm3gLsiUfDR21yYavaiocDWhTEFY7EyIQtvVdN9qMMroao=@vger.kernel.org
+X-Gm-Message-State: AFuF++lDE/mfldst3mjZCT2W44aQ+JM2EHqHQwrjAKnPI11oV8w2KugX
+	orqGY0R0Kifw28Oz9+roCXXWeFK/atDZl51LwlOLP+PvrxKTKD9Avg0xjexnaDj/iWKk6yLQ3Ma
+	vbiRFQ+w6OTB+I55dIwm9OKmUVccOw9NbbFqJtQYyrw==
+X-Received: by 2002:a17:907:a909:b0:c26:1649:47b4 with SMTP id
+ a640c23a62f3a-c2ac53fbdb4mr1170576266b.42.1790641665270; Mon, 28 Sep 2026
+ 17:27:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260926045517.3458413-1-matthias.goergens@gmail.com>
+ <CACePvbWM8kMjtJbH4vc6Qt=TBZQ-0d-Yj9NOtkepZmtNN3wd9w@mail.gmail.com> <20260928151924.2686290-1-matthias.goergens@gmail.com>
+In-Reply-To: <20260928151924.2686290-1-matthias.goergens@gmail.com>
+From: Chris Li <chrisl@kernel.org>
+Date: Mon, 28 Sep 2026 14:27:33 -1000
+X-Gmail-Original-Message-ID: <CACePvbW=fZ3G1JwnbiRo+_qsteN2smbbf3jX0UPFmhVyWA5_6A@mail.gmail.com>
+X-Gm-Features: AclHuK_oifA42INPrgsCc_iqlMTCQtFcDVPMyqJSWfGYorE6tGAaJtv8iXHRTRc
+Message-ID: <CACePvbW=fZ3G1JwnbiRo+_qsteN2smbbf3jX0UPFmhVyWA5_6A@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/4] mm/swap: reserve swap areas for deliberate offload
+To: Matthias Goergens <matthias.goergens@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Kairui Song <kasong@tencent.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, David Hildenbrand <david@kernel.org>, Michal Hocko <mhocko@kernel.org>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Yosry Ahmed <yosry@kernel.org>, 
+	Youngjun Park <youngjun.park@lge.com>, Baoquan He <baoquan.he@linux.dev>, 
+	Barry Song <baohua@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-api@vger.kernel.org, 
+	Alejandro Colomar <alx@kernel.org>, linux-man@vger.kernel.org, Karel Zak <kzak@redhat.com>, 
+	util-linux@vger.kernel.org, Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, intel-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 28 Sep 2026 11:11:50 +0200, David Hildenbrand (Arm) wrote:
-> Why not combine it with the protection?
+On Mon, Sep 28, 2026 at 5:19=E2=80=AFAM Matthias Goergens
+<matthias.goergens@gmail.com> wrote:
+>
+> Hi Chris,
+>
+> Thanks for resolving the conflicts yourself and reviewing it.
+>
+> > What is the high-level user-visible impact of this series?
+>
+> Being able to use more interesting swap backends and logic when the
+> machine is not under memory pressure.  It is much easier to write a
+> swap backend that may occasionally allocate memory than one that is
+> guaranteed never to, so today such backends are either unsafe as swap
 
-Will do.
+I actually don't know of a swap backend that absolutely will not
+allocate memory on swap out yet. Some backends allocate more than
+others. Because the proactive reclaim can write to the non-offloaded
+swap backend. That brings me back to my original question, in what way
+this series helps.
 
-> Why not do that at the very top?
+So the answer seems to be that previously, some backends were unusable
+by swap, due to possible memory allocation. With this series, those
+back ends are usable for the proactive reclaim now. It is a 0 to 0.5
+improvement because direct reclaim can't use it yet.
 
-Will do.
 
-> You can set that all already when initializing aboce
+> or ruled out (btrfs, for example, refuses swapfiles that are
+> copy-on-write, checksummed or compressed).
+>
+> > I am curious: if we never run out of swap file space on the
+> > non-offload swap area, does that mean we don't need this patch series?
+>
+> No: running out of conventional swap isn't the point.  Without the
+> series, any active swap area may be written under pressure, so a
+> backend that may allocate can't be used as swap at all, however much
+> conventional swap there is next to it.
 
-Will do.
+But proactive reclaim can also use the non-offload swap area. So if we
+have plenty of non-offload swap area, both proactive reclaim and
+direct reclaim can use that non-offload area. The value of this series
+isn't apparent. If you don't have a traditional swap-capable backend,
+then your non-offload area is zero.  That is considered a special case
+of running out of non-offload swap area: never having a traditional
+swap area in the first place.
 
-> BTW, why do we fail the entire test here instead of only this test case?
+>
+> > However, direct reclaim can use both types of swap areas.
+>
+> In v2 it can't: only memory.reclaim, per-node reclaim and MGLRU's
 
-I did that because the test is about the bit after the move, not the move
-itself, so a failing move is closer to a setup failure. I thought it was
-better to stop there and let whoever runs it check their environment
-before running the rest.
+Sorry I meant proactive reclaim can use both types, nothing constrains
+proactive reclaim.
 
-But having gone through the file's history, I see the direction has been
-to skip or fail just that one test and keep the rest running. I'll change
-it in v4.
+> debugfs eviction may write new data to an offload-only area; direct
+> reclaim, kswapd, MADV_PAGEOUT and DAMON reclaim may not.  But I think
+> your suggestion to flip it round is closer to what I want: mark the
 
-Thanks for the review!
+Flipping it around might provide additional benefit. I know some users
+maintain off tree patches to turn off zswap on the direct reclaim path
+exactly because zswap might allocate more memory before it can free
+some. If the kernel can be smart about it. It provides additional
+value to the status quo.
 
-Donggeun
+> areas whose writes may allocate, and keep pressure reclaim away from
+> those, rather than tying it to what started the reclaim.  I'll work
+> that into v3, together with Kairui's suggestion to build on the swap
+> tiers work.
+
+Yes, I feel that cluster-level marking might not be needed, you can
+remember which si has the offload flag. However the per cpu cache
+needs to know which context might require using a different cached
+cluster. That is the trickiest part. The rest of the patch is just
+enough plumbing to preserve whether the swap-out context is proactive
+or not.
+
+Chris
