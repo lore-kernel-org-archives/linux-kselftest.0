@@ -1,213 +1,199 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f39.google.com (mail-pj2-f39.google.com [74.125.227.167])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789C2175A89;
-	Wed, 30 Sep 2026 18:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790793247; cv=none; b=K/n8v0LH7NDyEVHto+QZ02CI8cSv4oyO1ozQW/ZWtsbLqxS7D96q/KGDnARqHKhGnF+qo/KWoptK8z09h0T9vk02PJz033UapgZ4hSF3xcOxBMUPwXleH47cyUSYqd1Yr7C/qhed6aXHuI+KBV4lyxovPXl1vEI02y8ocNNLQ4c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790793247; c=relaxed/simple;
-	bh=jgOz9keS3tRgSl0JmDjgntvXeVQ2gnZuHJr1aH5f42w=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=eHbdcU8H7K7bcyYXyEkQKWMc7QFMyJj7HUX8stRudjOVRdP/S23I1eybRGJ/ihXKoKMfiP+QJgmBi7gnx82KG8sY3iJ/UFsSe4XJy3b2Fbdg66Cc5Le6q5rtAoeO/U1PjFkLAQ4q06PhkuK33vBGsNDYN9Ijs0jTQzN3Ku/GvZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YNRD1+yK; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 462194248BB
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 19:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.167
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790797775; cv=pass; b=XmDdciQ7t19WCU6lypFu35JkSA7Xicm/D8xb5mE9wFq6lL76hlD3oq5qyJksFU3rcAdTQUo2v0B0NNXZCWNqEB+YjMWAbF375J4YKomcLDDmqqafNarUbZu2J6pW30eVwwuvv2CNu3PG7ESC8i2OHLfRSSxWlen24iUsu/Y1t9M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790797775; c=relaxed/simple;
+	bh=F3Dung+nzJVGL2YRHUmvwY+adZaiJpqAN9OQIrYPVJg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Q84rxOTK0svKpBLrCOlLOl1qU8zmBovtG8T8ZUwMzDZIgVb+y5odnZy6XgGrgXOShgMH3E5JcqBDPvwzM1Rbt9aOGevwM7htfygsmfFQovobgwtQC8AVCzBIPnwurSWV3MhwQMMDPf4AFxBULrbl6LG++W51yUiGVQdnmIaUpbw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BceiKZYF; arc=pass smtp.client-ip=74.125.227.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YNRD1+yK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46F061F000FF;
-	Wed, 30 Sep 2026 18:34:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790793246;
-	bh=Q+YKqfQ3/s8F1tcHSL05pBU5RCUSKJAtNCNMVSPjlCc=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=YNRD1+yKqXjQvM/W1AjvE4o86Pl+C2aSyPxA0Ao4ThE4Z3zOVOnwOu/NOsbCLTAon
-	 esbMu0iC6VafxLeceo92SEb0LfLwFbZsnVu5QdmkNTf7/dLKGuVG6h+hlIwRkrMhQB
-	 mFU0HzV0CNHU0nezmtLEgJLnKy17BUtZL+JDGv4AX9iKMpYkmgF8vZPfxgfCpuEsEt
-	 Cxe4UaQVBGxR948+oX27SM5G4+73eKYaRqMXXZnQxk5/oKoIOz7bG3GZJdOMsJH1t0
-	 qjcs/ep2iJCONHvOxmK7GKvpcdH7LrFsPAPR9qJc5DV+hzxOwmu1oxIKjbtxm3sC/r
-	 V2E1390lNCKNQ==
-Subject:
- Re: [PATCH 1/2] net: gso: validate TCP headers before segment length checks
-From: netdev-bot+sashiko@kernel.org
-To: bestswngs@gmail.com
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, jhs@mojatatu.com, jiri@resnulli.us,
- shuah@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, xmei5@asu.edu, co+1fe9b56e2c61be5e@bugs.sh
-Date: Wed, 30 Sep 2026 18:34:04 +0000
-Message-ID: <179079324479.434549.5810038850478297945@kernel.org>
-In-Reply-To: <20260927163117.746432-2-bestswngs@gmail.com>
-References: <20260927163117.746432-2-bestswngs@gmail.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BceiKZYF"
+Received: by mail-pj2-f39.google.com with SMTP id 98e67ed59e1d1-3a4805e15cfso1958244a91.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 12:49:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790797769; cv=none;
+        d=google.com; s=arc-20260327;
+        b=haA+ouXTBEfE6E0D4JprQU8sfLtD3jiwdaTO/ChpY0Yg2ksdSPssR3IYXqkHvwwW6a
+         wvY2siJFTou/944KTE405TSFfWTPTFm8FJO3uzaYW6PAZJO8LyEyKmaxTw0c0e20zyDv
+         KtTwkh07TaJ8Z9WJKUzgAFu5hwsJK7A8NChbAMYsz+qPCRV/fK3QDKwQlnyn391J+B+u
+         Kdc037KFLC/eWvcRHRbDTe+ZrHrbVxe0cPZcR5xVesHwmm0OUPY+ugioEQlEDRtZYHjW
+         UXDTeuniBrT3zVq1s48aabHsm3pOM4NPYE0GtXdL8IDxOBgG+1/XG8MeSFFZH1Wou5gY
+         M0Gw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=vYuuNb8fsv3iPf0xhDXc4/1qYP3hZrQ9mcUnQuSOi8Q=;
+        fh=Ro87GV1d857R0XYtJtIvBikAsERazvpZWVwe7YjIa3A=;
+        b=N9V9L45rcOF1crQxODy2OIAZTs1N9y5E4DgH8PtBtHdfO6A9ZZAAFYI4CZMja/IU+Z
+         cNEGBWvDKzQ6knGglexmpfzh816gapyv8Yal9CCDxzJk9wJ/0qcsKapD2+0LeqGvC77s
+         vUrZf2iSv2dqlI+Wv889hZTrGpPj//H52bQIXUvBRPk0UgqmqGmBkNM4qTYJHXnmPaNK
+         4yJvTRrlUo2llp47EFFn7WB2A4kHkDjXYfdINmW53lLrDpJZ6jR8QneQgWI1alw2NWx4
+         FCkG3VMo3zqJDScnbe0Bp7lA5ma2tu3S22dUpzDF06UivcMRmcMhQvB61QQTYHe6ANAr
+         S2Bg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790797769; x=1791402569; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=vYuuNb8fsv3iPf0xhDXc4/1qYP3hZrQ9mcUnQuSOi8Q=;
+        b=BceiKZYFgwpTQCcc2uKOc7bQ46apJXS1p0mpIESAcLtLxFrCt+eTN33BGmgCHX8wCT
+         s0076ZYulwaT2rsd9R6PjixhraJomGackH+U9vi5eHNhKUBCQnZqW+OnyzPOMYA1ODYd
+         7Kb1PUFjT8JvHajh9T+AZtOHFHEJg55RSFJ/nsbMnB3X5TKPOpk5XzPDvOd3aj2OMWGD
+         DxXsVcr8knz0w4pZ//xL0PCqg/lXHuSYLNKeF/wXw3l6FytSZeHIdu0tENrf+j3Kp746
+         VXE2f4fvz6OP40Vjo8pHG1842NsIlMhngY/uKw/5zOIPnfsfx6jRS1FJiOf3ldzvOCht
+         WZdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790797769; x=1791402569;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=vYuuNb8fsv3iPf0xhDXc4/1qYP3hZrQ9mcUnQuSOi8Q=;
+        b=PvHnkdVo4na+wSy4CBTKFwuIOiP0jLOPpEj3U3U6ljz5D57z1Sk6bfT+b9Q3riw4eC
+         4OgkFNChEuKBh/l5pKrK0qfxbXLyNBu61s3h6mFTyyhKKhRoo4CRexalC9KofBzg/Mrq
+         V1hxlqVgrf52JWi+ktKrrfKbv5PKJqtNClq8NlZmrwkHrmrseSsWCiT3+gj9HWm6h9mE
+         TmSucDGegYLP9BxNRqHT6tbYpmYPjwr9DvujX4gMVx3exm8X/8C8UH2D/UdtF7Zdm4/N
+         Fw2Nf9jPGna7pEPYQOY/E/5nT0VpUhyxi1It+egolNyqFl6gw62RTVqz6k4qi/IB5iEB
+         310g==
+X-Forwarded-Encrypted: i=1; AKwUvBy/I6IGJULWm3l2v8IoWv47uyfq8dpTN0DM1Oy+bz+J5iNDUf0RN0m2YesdpJbRhPzMO14b5Rl84dNwYg3WRxY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJQDK9BCj+f/7eXIptZGJCxbcDrwCtLy1jTktFAHzGWgkcugp6e
+	6x5uWZ/CTjx117n5eTOEGNg9dfTehpPmYSsge54C+4iyYdkYuwhQ0RdS7QGkmE6FR6UIoPUUSlW
+	EpqbcVgg90Sl9fqI0iYaJTzhGE88OP5M=
+X-Gm-Gg: AYBFou0/YDHjq/6fdICQHfbTHNwZ5HP55tqRFdfAaUkyV817sc1hOipaXpuz5zMqAib
+	y9yH4d3u14838/oqP+z1A/nsAp6d55/tBbFvSlcFPbJ5cGQA/t/sqg/3J60yGeXd+JUjLizkZBv
+	HY/067yjZZKMLp5rGdbII7ZYqGe1ukRDK0DSZXeUDaXh2kyVMDFCqBwjePimrZugW1FMBCu5/5B
+	RuD9jH8E/rWLNCYe1WTkDNOl+Rs8QOE9Sz8a9C2nLRF0ABoNTO3WBMMwN1c3hhU3PhZ6+FGB9M7
+	98ZLKG74REeYB246eIzJIqaGf8+OulyXm8dSOyezRJcLMFTOPVvpBEI=
+X-Received: by 2002:a17:90a:e7c9:b0:3a4:85c4:68fc with SMTP id
+ 98e67ed59e1d1-3a4d1545a03mr2271482a91.29.1790797769174; Wed, 30 Sep 2026
+ 12:49:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260926-nsfs-prune-rfc-v2-0-53509260e4e7@gmail.com>
+ <20260926-nsfs-prune-rfc-v2-1-53509260e4e7@gmail.com> <CANaxB-yj2QV183nk3UC-2PD6qh6hh-_iLRuryTdUsebd+RqxdA@mail.gmail.com>
+In-Reply-To: <CANaxB-yj2QV183nk3UC-2PD6qh6hh-_iLRuryTdUsebd+RqxdA@mail.gmail.com>
+From: Kirill Kolyshkin <kolyshkin@gmail.com>
+Date: Wed, 30 Sep 2026 12:49:18 -0700
+X-Gm-Features: AclHuK_hWd00XXCC76l8VVWW4Hx6PvZ0qFMn_sLHCwFO53Dqn518ibmeNSsj6yg
+Message-ID: <CAGmPdrwOnNRHJqk1mZVB+tFCnJBr3ZTaSZqbiGu54kXPkMtRoQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] mount: add OPEN_TREE_DROP_MNTNS_MOUNTS
+To: Andrei Vagin <avagin@gmail.com>
+Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Aleksa Sarai <cyphar@cyphar.com>, Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>, 
+	"Eric W . Biederman" <ebiederm@xmission.com>, David Howells <dhowells@redhat.com>, 
+	Amir Goldstein <amir73il@gmail.com>, Andrei Vagin <avagin@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Giuseppe Scrivano <giuseppe@scrivano.org>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	containers@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On Wed, Sep 30, 2026 at 10:22=E2=80=AFAM Andrei Vagin <avagin@gmail.com> wr=
+ote:
+>
+> On Sat, Sep 26, 2026 at 12:01=E2=80=AFAM Kir Kolyshkin <kolyshkin@gmail.c=
+om> wrote:
+> >
+> > A recursive open_tree(OPEN_TREE_CLONE) copies the nsfs mounts of any
+> > mount namespaces pinned below the source.  When the clone is attached
+> > inside a mount namespace younger than a pinned one, move_mount(2) fails
+> > with ELOOP from check_for_nsfs_mounts(), per the rule from commit
+> > 8823c079ba71 ("vfs: Add setns support for the mount namespace") that
+> > prevents mount namespace reference loops.
+> >
+> > This breaks container runtimes that use OPEN_TREE_NAMESPACE, such as
+> > crun [1].  The new namespace is younger than everything else, so bind
+> > mounting e.g. the host root fails on any host that pins a mount namespa=
+ce
+> > (snapd does, under /run/snapd/ns).  By the time it fails, setns() has
+> > already run and userspace cannot recover: the host tree is out of reach=
+,
+> > and the offending mounts cannot be unmounted from the detached copy.
+> >
+> > copy_mnt_ns() and create_new_namespace() already leave these mounts
+> > behind; only get_detached_copy() copies them.  Add an open_tree() flag =
+to
+> > drop them from the clone, as suggested by Aleksa [2].  Locked nsfs moun=
+ts
+> > are dropped the same way copy_mnt_ns() does it, so nothing new is expos=
+ed.
+> >
+> > Keep it opt-in: open_tree(OPEN_TREE_CLONE) plus move_mount(2) is how
+> > mount --rbind works through a file descriptor, and in the caller's own
+> > or an older namespace such mounts remain usable.
+> >
+> > The flag requires OPEN_TREE_CLONE or OPEN_TREE_NAMESPACE.  With the
+> > latter it is a no-op, so a runtime can pass it unconditionally.
+> >
+> > Link: https://github.com/containers/crun/issues/2262 [1]
+> > Link: https://lore.kernel.org/all/2026-01-07-oldest-grim-captions-spill=
+s-ywC2O3@cyphar.com/ [2]
+> > Assisted-by: Claude:claude-opus-5
+> > Signed-off-by: Kir Kolyshkin <kolyshkin@gmail.com>
+> > ---
+> >  fs/namespace.c             | 14 ++++++++++++--
+> >  include/uapi/linux/mount.h |  1 +
+> >  2 files changed, 13 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/fs/namespace.c b/fs/namespace.c
+> > index ae5dc64f8b45..a95173996a8f 100644
+> > --- a/fs/namespace.c
+> > +++ b/fs/namespace.c
+> > @@ -3062,7 +3062,8 @@ static struct mnt_namespace *get_detached_copy(co=
+nst struct path *path, unsigned
+> >                         ns->seq_origin =3D src_mnt_ns->ns.ns_id;
+> >         }
+> >
+> > -       mnt =3D __do_loopback(path, (flags & AT_RECURSIVE), CL_COPY_MNT=
+_NS_FILE);
+> > +       mnt =3D __do_loopback(path, (flags & AT_RECURSIVE),
+> > +                           (flags & OPEN_TREE_DROP_MNTNS_MOUNTS) ? 0 :=
+ CL_COPY_MNT_NS_FILE);
+>
+> Overall, the patch looks good. One small thing is that open_tree() with
+> OPEN_TREE_DROP_MNTNS_MOUNTS doesn't fail on a mntns file if AT_RECURSIVE
+> isn't set:
+>
+>   open_tree(AT_FDCWD, "/proc/self/ns/mnt",
+>             OPEN_TREE_CLONE|OPEN_TREE_CLOEXEC|0x4) =3D 3
+>
+> With AT_RECURSIVE, __do_loopback() calls copy_tree(), which checks
+> !(flag & CL_COPY_MNT_NS_FILE) && is_mnt_ns_file(dentry) and returns
+> -EINVAL, but without AT_RECURSIVE it calls clone_mnt(), which doesn't
+> have such check.
 
-Critical: 0 · High: 1 · Medium: 1 · Low: 0
+Thanks! A call with arguments like this does not make any sense*, as you're
+asking to clone a pinned mount namespace while skipping it.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+* except maybe to check if the path is indeed a pinned mount namespace,
+but there are cheaper ways to do it.
 
-- [High] Over-strict ordering check rejects valid decapsulated TCP GSO
-  traffic.
-- [Medium] skb_gso_tcp_header_valid() ends with `return sizeof(struct
-  tcphdr) <= tail - transport;`, where tail is the linear tail.
+That said, we can either keep things as is, or
+1. require AT_RECURSIVE with OPEN_TREE_DROP_MNTNS_MOUNTS
+    when checking valid flags; probably the easiest thing to do;
+2. add a check to a non-recursive path in __do_loopback, something like:
+    if (!(copy_flags & CL_COPY_MNT_NS_FILE) && is_mnt_ns_file(old_path->den=
+try))
+       return ERR_PTR(-EINVAL);
 
---
+I'm going to implement either one in the next iteration (v3); do you have
+a preference?
 
-net: gso: validate TCP headers before segment length checks
+Kir.
 
-This adds skb_gso_tcp_header_valid(). The helper checks TCP transport
-header ordering, linear bounds and fixed header presence before
-skb_gso_validate_network_len() and skb_gso_validate_mac_len() compute
-segment lengths. It targets a KASAN out-of-bounds read of tcp->doff when
-malformed TUN-supplied TCP GSO skbs reach TBF or police.
-
-> diff --git a/net/core/gso.c b/net/core/gso.c
-> index bcd156372f4df..7c76f721fe24e 100644
-> --- a/net/core/gso.c
-> +++ b/net/core/gso.c
-> @@ -240,6 +240,29 @@ static inline bool skb_gso_size_check(const struct sk_buff *skb,
->  	return true;
->  }
->  
-> +/* TCP segment length reads doff, so validate its header offsets first. */
-> +static bool skb_gso_tcp_header_valid(const struct sk_buff *skb)
-> +{
-> +	unsigned int transport = skb->transport_header;
-> +	unsigned int tail = skb_tail_pointer(skb) - skb->head;
-> +
-> +	if (!skb_is_gso_tcp(skb))
-> +		return true;
-> +
-> +	if (!skb_transport_header_was_set(skb) ||
-> +	    transport <= skb->network_header || transport > tail)
-> +		return false;
-
-[Severity: High]
-Can this ordering check reject valid decapsulated TCP GSO skbs on the RX
-path?
-
-After UDP tunnel decapsulation, a valid TCP GSO skb can keep a stale
-transport_header. This happens when the tunnel device skips GRO, either
-because NETIF_F_GRO is off or because an XDP program is attached, so
-netif_elide_gro() is true:
-
-ip_rcv_core()
-    skb->transport_header = skb->network_header + iph->ihl*4;  <- outer UDP
-
-vxlan_rcv()->__iptunnel_pull_header()->iptunnel_pull_offloads()
-    clears the encap GSO bits and encapsulation,
-    leaves transport_header alone
-
-gro_cells_receive()
-    if (!gcells->cells || skb_cloned(skb) || netif_elide_gro(dev)) {
-        res = netif_rx(skb);
-    so inet_gro_receive() never refreshes the transport header
-
-__netif_receive_skb_core()
-    skb_reset_network_header(skb);
-    ...
-    if (!skb_transport_header_was_set(skb))
-        skb_reset_transport_header(skb);
-
-That leaves gso_type=TCPV4 and encapsulation=0, with transport_header still
-pointing at the outer UDP header. That offset comes before both the inner
-mac header and the inner network header.
-
-In that case transport <= skb->network_header is true. The extra
-skb->transport_header <= skb->mac_header test in skb_gso_validate_mac_len()
-is also true. So both validators return false.
-
-Callers read false as "segments do not fit". tcf_police_mtu_check() runs
-this for every policed GSO packet:
-
-    if (skb_is_gso(skb))
-        return skb_gso_validate_mac_len(skb, limit);
-
-tcfp_mtu defaults to ~0 when no mtu is given. Before this patch, the
-unsigned wrapped arithmetic happened to fit and these packets passed.
-
-Would a police action on the tunnel device's ingress now send every such
-GSO packet to the exceed action?
-
-tbf_enqueue() would likewise drop the packet with qdisc_drop() instead of
-calling tbf_segment(). skb_tunnel_check_pmtu() would treat it as a PMTU
-violation, which produces ICMP FRAG_NEEDED on bridge ports.
-
-This patch is tagged for stable. Would it be safer to reject only an unset
-transport header or offsets outside the linear head, or to read doff with
-skb_header_pointer(), rather than rely on header ordering?
-
-> +
-> +	if (skb->encapsulation) {
-> +		transport = skb->inner_transport_header;
-> +		if (transport <= skb->inner_network_header ||
-> +		    transport < skb->transport_header || transport > tail)
-> +			return false;
-> +	}
-> +
-> +	return sizeof(struct tcphdr) <= tail - transport;
-
-[Severity: Medium]
-Does this reject TCP GSO skbs whose headers are valid but whose fixed TCP
-header is partly in paged frags?
-
-tail here is the linear tail, so the whole 20-byte tcphdr has to be in the
-linear area.
-
-Take the IFF_TAP path of tun_get_user() without
-VIRTIO_NET_HDR_F_NEEDS_CSUM, which is the producer the commit message
-describes. __virtio_net_hdr_to_skb() has no network header yet, so it takes
-this branch:
-
-    } else if (gso_type) {
-        p_off = nh_min_len + thlen;
-        if (!pskb_may_pull(skb, p_off))
-            return -EINVAL;
-    }
-
-That pulls only 40 bytes counted from the MAC header. With a small hdr_len
-and a packet larger than a page, tun_alloc_skb() leaves the rest in frags.
-After eth_type_trans(), skb_probe_transport_header() sets transport to
-network + 20 for a valid IPv4 header. Only 6 TCP bytes are then linear.
-
-Before this patch, such a packet was forwarded, or segmented by
-skb_gso_segment(), which pulls headers properly. tcp_hdrlen() did read
-stale tailroom bytes on that path.
-
-Now both validators report the packet as too big. For example, in
-ip_exceeds_mtu():
-
-    if (skb_is_gso(skb) && skb_gso_validate_network_len(skb, mtu))
-        return false;
-
-the packet gets ICMP_FRAG_NEEDED and is dropped. ip6_pkt_too_big(),
-skb_tunnel_check_pmtu(), tbf_enqueue(), execute_check_pkt_len() and
-tcf_police_act() get the same false result.
-
-The commit message doesn't mention that header linearity failures are now
-reported as MTU violations.
-
-The validators take a const skb and cannot pull. Would reading doff through
-skb_header_pointer() avoid the out-of-bounds read without rejecting
-non-linear but valid headers?
-
-> +}
-> +
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260927163117.746432-2-bestswngs%40gmail.com
+>
+> Thanks,
+> Andrei
