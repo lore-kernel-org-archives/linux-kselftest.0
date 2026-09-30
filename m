@@ -1,279 +1,208 @@
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17441A683D;
-	Wed, 30 Sep 2026 02:57:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4759224676D;
+	Wed, 30 Sep 2026 03:52:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790737066; cv=none; b=nc/AI346ljOc7RYTlCALkASP5N7yVTwt5T/RxCyQTR7Aw9zpkG0S52psCqVpg5zUvm+P0mGE2b27CB1bIAOwqJIZ9g5CwmdHaakqeWL8XGz0kxZ0Nd2aTjnzLwQAAkNqgF6Sa3XOTkBP3hNcRVCSU9od+LaCL402mL/p457SX6Q=
+	t=1790740340; cv=none; b=PLuUH4iF9fk7e2j1oZoYz9xBe/Y9nZR6FKb/Dr830HGolEgeMSDr8QyeJElH357SUdbOK7CSATjR8Pn5/XlkryjGhYYcBFFKotc+8g1ttZ49xTjNhvguw4Es2pRfendAeb9S5A/KYSCdZEVnE9G+ZVInDn7QqmoNm2oNapqO7rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790737066; c=relaxed/simple;
-	bh=rp/fa2uhrTfZKpBLhFbKPrXCvV6jaxnedczZC9x4sTA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Eq+hTgUB9is4+8RHIJ1C0f4nq2eASWkjFGc8uKKIk17VhOQkF45cRkdL2R2rq45NpL+6pDOd/b3yfR+Tqkd7lRuq7RDLn/dd6dirA07mWKOrGLLMPkVhwxwXwnqA6c0RpEdXyrLTJdfyzjHwSS+W2Snyj37w/AAi0h2wSXhrws0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=0lCB/uTY; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1790740340; c=relaxed/simple;
+	bh=sR1Z2Tu0TX4h7028aVqo9aEPtibcKb0vO2MekE8kzaw=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jX0vqPzlr01U1hzYborplgixZA4oo9/Oer6zmP6l55ZCsftOe8nfFOR/Kk9Zdlp4wey4tKguAquqlFI98FAapdFcF6+0QGM0NT5AnHhQS/snA5FVyEu/p9kxaR5KKRtINgDOzbWa4XLV1mbWgWECRCTdJjBYxbCZYdsA56i91lI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q2YqnDlo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="0lCB/uTY"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=PtER5Ch5agf7GPvfInLQseCkLl2+EkQBBEjndL6mdYQ=;
-	b=0lCB/uTYB7aCqVXW8PztZKfAa6OWU4z20mzjITJY31WXWXn+VD/TqSvCecQB7sVmw+jJQIVui
-	hZWRTNr3yQbyGvwMZDm2ugYfQfEhS9ZdVfmClIhd3W8zhgVxw49QnOf2Kgo3x1WzToQcZ3B6eIl
-	uNIxfa8sIll7qx7Dp53RqAE=
-Received: from mail.maildlp.com (unknown [172.19.162.197])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4hvfYB2Bznz1T4Lb;
-	Wed, 30 Sep 2026 10:45:34 +0800 (CST)
-Received: from kwepemr100010.china.huawei.com (unknown [7.202.195.125])
-	by mail.maildlp.com (Postfix) with ESMTPS id 59FE94057D;
-	Wed, 30 Sep 2026 10:57:35 +0800 (CST)
-Received: from [10.67.120.103] (10.67.120.103) by
- kwepemr100010.china.huawei.com (7.202.195.125) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Wed, 30 Sep 2026 10:57:34 +0800
-Message-ID: <ff218960-c412-4283-aa41-b7af2a7048b8@huawei.com>
-Date: Wed, 30 Sep 2026 10:57:33 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q2YqnDlo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F9FB1F000FF;
+	Wed, 30 Sep 2026 03:52:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790740338;
+	bh=9cNnFGoevFOeZWAWTmFPoocbC2E0QbIOFTTZj5dLcYc=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=Q2YqnDlozdrcagf4UodP7SOEorFQH2mBPBEPyWDLjKKl8nrwD6pJUFL4d6xr7Pas/
+	 w0+tLGIrQ8dydFlofWU4+c11ikxAXMDjpWfLoS5ZLNbXswBwbRNWaZCNvCp5gyiVvi
+	 etjongacgsh5A2c7uY7ICzRy8aqJ40YEI4YEhHqa8j/60OyUCv9sWzBbOTnvFhmy1e
+	 1Zoulh8sGaZclQshVhsg9kcri8AjXVwiHdhbUpfyLtmjkmdWunn8eaBLIi3tkolazz
+	 ZGRudO+9zbM3k4jrixxZGZr8EQD7/78OvicUPNodeVTVlTQknqvqLjjuwk67PDeKKb
+	 ZDYH/7yaQb3OA==
+Subject: Re: [PATCH net-next v3 1/6] vxlan: vnifilter: validate the
+ VXLAN_VNIFILTER_ENTRY nest
+From: netdev-bot+sashiko@kernel.org
+To: alishmery18@gmail.com
+Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
+ pabeni@redhat.com, davem@davemloft.net, edumazet@google.com,
+ andrew+netdev@lunn.ch, horms@kernel.org, razor@blackwall.org,
+ roopa@nvidia.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Wed, 30 Sep 2026 03:52:17 +0000
+Message-ID: <179074033755.434549.2348132981395970201@kernel.org>
+In-Reply-To: <20260927215209.2581830-2-alishmery18@gmail.com>
+References: <20260927215209.2581830-2-alishmery18@gmail.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 02/15] KVM: arm64: Add KVM_PGTABLE_PROT_DIRTY
-To: Oliver Upton <oupton@kernel.org>
-CC: <maz@kernel.org>, <catalin.marinas@arm.com>, <will@kernel.org>,
-	<corbet@lwn.net>, <pbonzini@redhat.com>, <leo.bras@arm.com>,
-	<yuzenghui@huawei.com>, <wangzhou1@hisilicon.com>, <yangjinqian1@huawei.com>,
-	<caijian11@h-partners.com>, <liuyonglong@huawei.com>,
-	<tangchengchang@huawei.com>, <yezhenyu2@huawei.com>, <yubihong@huawei.com>,
-	<linuxarm@huawei.com>, <joey.gouly@arm.com>, <kvmarm@lists.linux.dev>,
-	<kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <seiden@linux.ibm.com>,
-	<suzuki.poulose@arm.com>, <fuad.tabba@linux.dev>, <mark.rutland@arm.com>,
-	<seanjc@google.com>, <rdunlap@infradead.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>
-References: <20260929103655.85107-1-zhengtian10@huawei.com>
- <20260929103655.85107-3-zhengtian10@huawei.com> <arxZQwkLCLBnITzH@kernel.org>
-From: Tian Zheng <zhengtian10@huawei.com>
-In-Reply-To: <arxZQwkLCLBnITzH@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemr100010.china.huawei.com (7.202.195.125)
 
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
+Critical: 0 · High: 1 (1) · Medium: 0 · Low: 0
 
-On 9/30/2026 8:35 AM, Oliver Upton wrote:
-> On Tue, Sep 29, 2026 at 06:36:42PM +0800, Tian Zheng wrote:
->> @@ -731,8 +731,12 @@ static int stage2_set_prot_attr(struct kvm_pgtable *pgt, enum kvm_pgtable_prot p
->>   	if (prot & KVM_PGTABLE_PROT_R)
->>   		attr |= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_R;
->>
->> -	if (prot & KVM_PGTABLE_PROT_W)
->> -		attr |= KVM_PTE_LEAF_ATTR_HI_S2_DBM | KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W;
->> +	if (prot & KVM_PGTABLE_PROT_W) {
->> +		attr |= KVM_PTE_LEAF_ATTR_HI_S2_DBM;
->> +
->> +		if (prot & KVM_PGTABLE_PROT_DIRTY)
->> +			attr |= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W;
->> +	}
-> 
-> Can you introduce the dirty state first? You're temporarily setting
-> DBM+S2AP[1] as a workaround in the preceding patch.
-> 
-> Then we can have it encoded such that when FEAT_HAFDBS is implemented:
-> 
-> 	KVM_PGTABLE_PROT_W	=> KVM_PTE_LEAF_ATTR_HI_S2_DBM
-> 	KVM_PGTABLE_PROT_DIRTY	=> KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W
-> 
-> And if FEAT_HAFDBS is *not* implemented:
-> 
-> 	KVM_PGTABLE_PROT_W	=> KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W
-> 	KVM_PGTABLE_PROT_DIRTY	=> KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W
-> 
-> i.e. aliasing both to bit 7.
-> 
-> Thanks,
-> Oliver
-> 
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Hi Oliver,
+- [High] The commit message says more than the patch does.
 
-You're right, the intermediate DBM+S2AP[1] encoding is not worth
-keeping. I'll introduce KVM_PGTABLE_PROT_DIRTY first, aliased to
-S2AP[1] alongside PROT_W, with no behavior change. In the next
-version I'll then switch the encoding so that:
+Pre-existing issues:
+- [High] This problem wasn't introduced by this patch, and later patches
+  in the series fix it (baseline decision: discard).
 
-- with FEAT_HAFDBS: PROT_W -> DBM, PROT_DIRTY -> S2AP[1]
-- without FEAT_HAFDBS: both -> S2AP[1]
+--
 
-as you described.
+vxlan: vnifilter: validate the VXLAN_VNIFILTER_ENTRY nest
 
-Thanks,
-Tian
+This patch links the VXLAN_VNIFILTER_ENTRY nest in vni_filter_policy to
+vni_filter_entry_policy with NLA_POLICY_NESTED(). The entry attributes are
+then checked by nlmsg_parse() in vxlan_vnifilter_process() before any entry
+is dispatched. The goal is to reject a message that carries an invalid
+entry as a whole.
 
->>   	if (!kvm_lpa2_is_enabled())
->>   		attr |= FIELD_PREP(KVM_PTE_LEAF_ATTR_LO_S2_SH, sh);
->> @@ -753,9 +757,13 @@ enum kvm_pgtable_prot kvm_pgtable_stage2_pte_prot(kvm_pte_t pte)
->>
->>   	if (pte & KVM_PTE_LEAF_ATTR_LO_S2_S2AP_R)
->>   		prot |= KVM_PGTABLE_PROT_R;
->> -	if (pte & KVM_PTE_LEAF_ATTR_HI_S2_DBM)
->> +	if (pte & KVM_PTE_LEAF_ATTR_HI_S2_DBM) {
->>   		prot |= KVM_PGTABLE_PROT_W;
->>
->> +		if (pte & KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W)
->> +			prot |= KVM_PGTABLE_PROT_DIRTY;
->> +	}
->> +
->>   	switch (FIELD_GET(KVM_PTE_LEAF_ATTR_HI_S2_XN, pte)) {
->>   	case 0b00:
->>   		prot |= KVM_PGTABLE_PROT_PX | KVM_PGTABLE_PROT_UX;
->> @@ -1288,7 +1296,6 @@ static int stage2_update_leaf_attrs(struct kvm_pgtable *pgt, u64 addr,
->>   int kvm_pgtable_stage2_wrprotect(struct kvm_pgtable *pgt, u64 addr, u64 size)
->>   {
->>   	return stage2_update_leaf_attrs(pgt, addr, size, 0,
->> -					KVM_PTE_LEAF_ATTR_HI_S2_DBM |
->>   					KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W,
->>   					NULL, NULL,
->>   					KVM_PGTABLE_WALK_IGNORE_EAGAIN);
->> @@ -1368,8 +1375,12 @@ int kvm_pgtable_stage2_relax_perms(struct kvm_pgtable *pgt, u64 addr,
->>   	if (prot & KVM_PGTABLE_PROT_R)
->>   		set |= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_R;
->>
->> -	if (prot & KVM_PGTABLE_PROT_W)
->> -		set |= KVM_PTE_LEAF_ATTR_HI_S2_DBM | KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W;
->> +	if (prot & KVM_PGTABLE_PROT_W) {
->> +		set |= KVM_PTE_LEAF_ATTR_HI_S2_DBM;
->> +
->> +		if (prot & KVM_PGTABLE_PROT_DIRTY)
->> +			set |= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W;
->> +	}
->>
->>   	if (prot & KVM_PGTABLE_PROT_X) {
->>   		ret = stage2_set_xn_attr(prot, &xn);
->> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
->> index 2d44cd6a5aed..698a87e85a6d 100644
->> --- a/arch/arm64/kvm/mmu.c
->> +++ b/arch/arm64/kvm/mmu.c
->> @@ -1221,7 +1221,9 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
->>   	struct kvm_pgtable *pgt = mmu->pgt;
->>   	enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
->>   				     KVM_PGTABLE_PROT_R |
->> -				     (writable ? KVM_PGTABLE_PROT_W : 0);
->> +				     (writable ?
->> +				      (KVM_PGTABLE_PROT_W | KVM_PGTABLE_PROT_DIRTY) :
->> +				      0);
->>
->>   	if (is_protected_kvm_enabled())
->>   		return -EPERM;
->> @@ -1587,7 +1589,7 @@ static enum kvm_pgtable_prot adjust_nested_fault_perms(struct kvm_s2_trans *nest
->>   						       enum kvm_pgtable_prot prot)
->>   {
->>   	if (!kvm_s2_trans_writable(nested))
->> -		prot &= ~KVM_PGTABLE_PROT_W;
->> +		prot &= ~(KVM_PGTABLE_PROT_W | KVM_PGTABLE_PROT_DIRTY);
->>   	if (!kvm_s2_trans_readable(nested))
->>   		prot &= ~KVM_PGTABLE_PROT_R;
->>
->> @@ -1658,7 +1660,7 @@ static int gmem_abort(const struct kvm_s2_fault_desc *s2fd)
->>   	}
->>
->>   	if (!(s2fd->memslot->flags & KVM_MEM_READONLY))
->> -		prot |= KVM_PGTABLE_PROT_W;
->> +		prot |= KVM_PGTABLE_PROT_W | KVM_PGTABLE_PROT_DIRTY;
->>
->>   	if (s2fd->nested)
->>   		prot = adjust_nested_fault_perms(s2fd->nested, prot);
->> @@ -1690,10 +1692,17 @@ static int gmem_abort(const struct kvm_s2_fault_desc *s2fd)
->>   	}
->>
->>   out_unlock:
->> +	/*
->> +	 * Dirty the folio for any write-permitting mapping: hardware can
->> +	 * promote a writable-clean entry to writable-dirty without a VM
->> +	 * exit, so a clean release could lose a guest write at reclaim.
->> +	 * The dirty bitmap is only marked for mappings installed dirty,
->> +	 * or pre-copy would treat every writable page as dirty.
->> +	 */
->>   	kvm_release_faultin_page(kvm, page, !!ret, prot & KVM_PGTABLE_PROT_W);
->>   	kvm_fault_unlock(kvm);
->>
->> -	if ((prot & KVM_PGTABLE_PROT_W) && !ret)
->> +	if ((prot & KVM_PGTABLE_PROT_DIRTY) && !ret)
->>   		mark_page_dirty_in_slot(kvm, s2fd->memslot, gfn);
->>
->>   	return ret != -EAGAIN ? ret : 0;
->> @@ -1993,11 +2002,14 @@ static int kvm_s2_fault_compute_prot(const struct kvm_s2_fault_desc *s2fd,
->>
->>   	*prot = KVM_PGTABLE_PROT_R;
->>
->> -	if (s2vi->map_writable && (s2vi->device ||
->> -				   !memslot_is_logging(s2fd->memslot) ||
->> -				   kvm_is_write_fault(s2fd->vcpu)))
->> +	if (s2vi->map_writable) {
->>   		*prot |= KVM_PGTABLE_PROT_W;
->>
->> +		if (s2vi->device || !memslot_is_logging(s2fd->memslot) ||
->> +		    kvm_is_write_fault(s2fd->vcpu))
->> +			*prot |= KVM_PGTABLE_PROT_DIRTY;
->> +	}
->> +
->>   	if (s2fd->nested)
->>   		*prot = adjust_nested_fault_perms(s2fd->nested, *prot);
->>
->> @@ -2028,7 +2040,7 @@ static int kvm_s2_fault_map(const struct kvm_s2_fault_desc *s2fd,
->>   			    void *memcache)
->>   {
->>   	enum kvm_pgtable_walk_flags flags = KVM_PGTABLE_WALK_SHARED;
->> -	bool writable = prot & KVM_PGTABLE_PROT_W;
->> +	bool dirty = prot & KVM_PGTABLE_PROT_DIRTY;
->>   	struct kvm *kvm = s2fd->vcpu->kvm;
->>   	struct kvm_pgtable *pgt;
->>   	long perm_fault_granule;
->> @@ -2091,7 +2103,11 @@ static int kvm_s2_fault_map(const struct kvm_s2_fault_desc *s2fd,
->>   	}
->>
->>   out_unlock:
->> -	kvm_release_faultin_page(kvm, s2vi->page, !!ret, writable);
->> +	/*
->> +	 * Speculative folio dirtying: W, not DIRTY, per the contract
->> +	 * documented in kvm_release_faultin_page().
->> +	 */
->> +	kvm_release_faultin_page(kvm, s2vi->page, !!ret, prot & KVM_PGTABLE_PROT_W);
->>   	kvm_fault_unlock(kvm);
->>
->>   	/*
->> @@ -2099,7 +2115,7 @@ static int kvm_s2_fault_map(const struct kvm_s2_fault_desc *s2fd,
->>   	 * making sure we adjust the canonical IPA if the mapping size has
->>   	 * been updated (via a THP upgrade, for example).
->>   	 */
->> -	if (writable && !ret) {
->> +	if (dirty && !ret) {
->>   		phys_addr_t ipa = gfn_to_gpa(get_canonical_gfn(s2fd, s2vi));
->>   		ipa &= ~(mapping_size - 1);
->>   		mark_page_dirty_in_slot(kvm, s2fd->memslot, gpa_to_gfn(ipa));
->> diff --git a/arch/arm64/kvm/ptdump.c b/arch/arm64/kvm/ptdump.c
->> index b0cb8d84a9e9..a1251e252b4f 100644
->> --- a/arch/arm64/kvm/ptdump.c
->> +++ b/arch/arm64/kvm/ptdump.c
->> @@ -45,6 +45,12 @@ static const struct ptdump_prot_bits stage2_pte_bits[] = {
->>   		.set	= "W",
->>   		.clear	= " ",
->>   	},
->> +	{
->> +		.mask	= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W,
->> +		.val	= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W,
->> +		.set	= "D",
->> +		.clear	= "C",
->> +	},
->>   	{
->>   		.mask	= KVM_PTE_LEAF_ATTR_HI_S2_XN,
->>   		.val	= 0b00UL << __bf_shf(KVM_PTE_LEAF_ATTR_HI_S2_XN),
->> --
->> 2.43.0
->>
+Link: https://lore.kernel.org/netdev/20260921150904.65a704eb@kernel.org/
 
+> Link the nest to vni_filter_entry_policy with NLA_POLICY_NESTED() so the
+> whole message is validated up front, before any entry is acted on. A
+> message carrying an invalid entry is now rejected as a unit and installs
+> nothing.
+
+[Severity: High]
+Is this claim accurate? NLA_POLICY_NESTED() moves only the attribute
+policy checks (type, length, unknown attributes) ahead of dispatch. Two
+other checks that make an entry invalid still run one entry at a time in
+vxlan_process_vni_filter():
+
+drivers/net/vxlan/vxlan_vnifilter.c:vxlan_process_vni_filter() {
+    ...
+	if (!vni_start && !vni_end) {
+		NL_SET_ERR_MSG_ATTR(extack, nlvnifilter,
+				    "vni start nor end found in vni entry");
+		return -EINVAL;
+	}
+    ...
+	if (vxlan_addr_multicast(&group) && !vxlan->default_dst.remote_ifindex) {
+		NL_SET_ERR_MSG(extack,
+			       "Local interface required for multicast remote group");
+
+		return -EINVAL;
+	}
+    ...
+}
+
+An empty VXLAN_VNIFILTER_ENTRY nest gets through the new policy, because
+validate_nla() returns before it applies the nested policy:
+
+lib/nlattr.c:validate_nla() {
+    ...
+	case NLA_NESTED:
+		/* a nested attributes is allowed to be empty; if its not,
+		 * it must have a size of at least NLA_HDRLEN.
+		 */
+		if (attrlen == 0)
+			break;
+    ...
+}
+
+An entry with only START=0, or with only GROUP, also gets through.
+
+vxlan_vnifilter_process() applies entries in order, stops at the first
+error and does not roll anything back:
+
+	nlmsg_for_each_attr_type(attr, VXLAN_VNIFILTER_ENTRY, nlh,
+				 sizeof(*tmsg), rem) {
+		err = vxlan_process_vni_filter(vxlan, attr, nlh->nlmsg_type,
+					       extack);
+		vnis++;
+		if (err)
+			break;
+	}
+
+Take an RTM_NEWTUNNEL to a vnifilter device with entry1 {START=100} and
+entry2 {}. Entry2 could also be {START=0}, or {START=200, GROUP=239.1.1.1}
+on a device with no remote_ifindex. That message passes nlmsg_parse().
+Then:
+
+vxlan_vnifilter_process()
+  vxlan_process_vni_filter(entry1)
+    vxlan_vni_add_del()
+      vxlan_vni_add()
+        inserts VNI 100, vxlan_vnifilter_notify(..., RTM_NEWTUNNEL)
+  vxlan_process_vni_filter(entry2)
+    returns -EINVAL
+
+RTM_DELTUNNEL works the same way: earlier deletes are applied and notified.
+
+Isn't this the same "first entry valid, second invalid" case the commit
+message says is now fixed?
+
+Later in the series, the vxlan_vnifilter_check_msg() pre-pass from "vxlan:
+vnifilter: bound the number of VNIs one request may touch" counts an empty
+entry as one VNI. It does neither of these checks, so the case can still
+happen at the end of the series.
+
+Should the commit message say that only policy-level invalid entries are
+now all-or-nothing? The alternative is to run the START/END presence check
+and the multicast/remote_ifindex check over every entry before any entry is
+applied.
+
+> diff --git a/drivers/net/vxlan/vxlan_vnifilter.c b/drivers/net/vxlan/vxlan_vnifilter.c
+> index dd94085e08865..d391ec5796610 100644
+> --- a/drivers/net/vxlan/vxlan_vnifilter.c
+> +++ b/drivers/net/vxlan/vxlan_vnifilter.c
+> @@ -467,7 +467,7 @@ static const struct nla_policy vni_filter_entry_policy[VXLAN_VNIFILTER_ENTRY_MAX
+>  };
+>  
+>  static const struct nla_policy vni_filter_policy[VXLAN_VNIFILTER_MAX + 1] = {
+> -	[VXLAN_VNIFILTER_ENTRY] = { .type = NLA_NESTED },
+> +	[VXLAN_VNIFILTER_ENTRY] = NLA_POLICY_NESTED(vni_filter_entry_policy),
+>  };
+
+[Severity: High]
+This isn't a bug introduced by this patch, but at this commit the entry
+policy that is now linked still has no range check on START and END:
+
+	[VXLAN_VNIFILTER_ENTRY_START] = { .type = NLA_U32 },
+	[VXLAN_VNIFILTER_ENTRY_END] = { .type = NLA_U32 },
+
+vxlan_process_vni_filter() hands any values other than both-zero to
+vxlan_vni_add_del(). That function loops with a signed counter:
+
+	int v, err = 0;
+	...
+	for (v = start_vni; v <= end_vni; v++) {
+
+With START=0xffffffff and no END, v starts at -1. Compared with the __u32
+end_vni it becomes 0xffffffff, and v++ then climbs up from 0.
+
+Can this loop run for a very long time under RTNL? Each iteration allocates
+a vxlan_vni_node with per-CPU stats and sends a notification. The loop only
+stops on an error.
+
+VNIs >= VXLAN_N_VID are also accepted and stored, so they alias on the
+wire.
+
+Later patches in this series fix this. "vxlan: vnifilter: reject VNIs
+outside the 24-bit space" adds NLA_POLICY_FULL_RANGE(NLA_U32,
+&vni_filter_vni_range) to START and END, and makes the loop counter u32.
+"vxlan: vnifilter: bound the number of VNIs one request may touch" caps the
+total span at VXLAN_VNI_FILTER_MSG_MAX before dispatch.
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260927215209.2581830-1-alishmery18%40gmail.com
