@@ -1,93 +1,213 @@
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3757C5187DE
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 18:21:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789C2175A89;
+	Wed, 30 Sep 2026 18:34:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790792485; cv=none; b=I6IzqpvJYA1Mms2nIvoGu4d+rgnBCo8Qyvaez3Xizs8eVaDkL8tlL61qeYMDcxuh3o0KDB781L3wnI0XueiDaBzW759GDXcRjqmijhgqdHTIXI7M34mvqtuh8aAYQhCXKJX7PjZSmPAfVdPYv6/jeGSx/9n/j+497XkwzLmuQHs=
+	t=1790793247; cv=none; b=K/n8v0LH7NDyEVHto+QZ02CI8cSv4oyO1ozQW/ZWtsbLqxS7D96q/KGDnARqHKhGnF+qo/KWoptK8z09h0T9vk02PJz033UapgZ4hSF3xcOxBMUPwXleH47cyUSYqd1Yr7C/qhed6aXHuI+KBV4lyxovPXl1vEI02y8ocNNLQ4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790792485; c=relaxed/simple;
-	bh=RIBmG7T5GhMUhIGxO0Hp7Z1fyqLfGep9Ek3+Z8JVsig=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=hLDvdjKYE3++uqNWq7kAzeRaaOJLV+N9wJlqMro/9RMRNG5Hrt1DXNXAOlPzKTC4NBViT+FApbGF/7e10vexqwXK+oRKw59FXjSEio5PyEK1ktKClelasyGIkOtMf9w7pUD6zFtIql+poysmWzsi4kFj6LqGhSLLLjgMc8yXSq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aOroD+4h; arc=none smtp.client-ip=209.85.216.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1790793247; c=relaxed/simple;
+	bh=jgOz9keS3tRgSl0JmDjgntvXeVQ2gnZuHJr1aH5f42w=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eHbdcU8H7K7bcyYXyEkQKWMc7QFMyJj7HUX8stRudjOVRdP/S23I1eybRGJ/ihXKoKMfiP+QJgmBi7gnx82KG8sY3iJ/UFsSe4XJy3b2Fbdg66Cc5Le6q5rtAoeO/U1PjFkLAQ4q06PhkuK33vBGsNDYN9Ijs0jTQzN3Ku/GvZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YNRD1+yK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aOroD+4h"
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-3a4aa263a4aso2053550a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 11:21:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790792483; x=1791397283; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=V6jmdTOoqfk9NpdkdE3nQvbuTvNJoC6kAafCKfbFDU0=;
-        b=aOroD+4hNXqlVvnuKIT61n1rhnl+eZqvlQxXD0sqX5Hal6lMJqTXlPW/zVSwHav/AS
-         vfvgU+GE8nhwu69DrWyWRQeGhnmUycUP9VlQcmFbqbRftZH3Btxu+h1+8bOuF/q8PelK
-         BheyCVPGzNJlrVa7XpXa0SoOT3ZlMMQeq/5TFvIYHIf+DgIh4ask6p1Xn9AZKBAg2KNc
-         nJ9LJXt6HXF1B+tBs8owLaR2GyCD9E7zsbOx7z/F7OyUSMmiruwJE7j9iYlEwoTnhiPY
-         uzWcmciFZEEeZsk3BHQ+DZtpxLDTV7GL9yhDLFp2Bo4hquMlZI8UOB6g132G4Okf1inp
-         tpAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790792483; x=1791397283;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=V6jmdTOoqfk9NpdkdE3nQvbuTvNJoC6kAafCKfbFDU0=;
-        b=CLVcjFOhWxNeJsl4JzYZRCLG3q06Q2FBnukom3J7t6MFGRwIcLA9aUxKHTgI+S8aGN
-         LEd/FsCY76nu4OWR5UOae3HkN7+2uho9lQVwDmmAzfz6IuGzE8Mguz7U/pygp1szqdzx
-         qdcUYW59HIoa2pVzlrIv9omrkZSvmpylIW3HtfDnzWlfz07Wp0ttquyAHCiueYh4mI3G
-         SG3Vm31tv384RRQDozrVXpq95enpzIvPqjp5scZ/uk7aj504V1wKn3xlbxBBEP/SUWce
-         CGZA3zcbdUbVIEhM3GSpGTAw5HabAAZtUNz05sZ7QjGje5dBqZpsgBwUMNcsY+lyQfy4
-         Rlng==
-X-Forwarded-Encrypted: i=1; AKwUvBxZ9RCOqpOk+Wwav4F+/uqOAtv3ibg19rnvI0AMaeM3xNO6D0mhKSbIvGMMB93OLjVKR/0PWndc33z0Fjigog8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLSxCQaQABfdIR6Nl9L5Uz9wK0XBkFYTYRqn7ROsIIsR6zKw5LI
-	T+lO24lDFx6Knz/4kW0t056kSAghV0k3HEH4eyd/NMW4TuWJ2ZBPU+DSF5JfXXxcSmGtf9q0swI
-	X0J93mQ==
-X-Received: from plrp8.prod.google.com ([2002:a17:902:b088:b0:2e2:aae2:7762])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3b43:b0:3a0:c276:1ec0
- with SMTP id 98e67ed59e1d1-3a4d1654d49mr2004241a91.28.1790792483132; Wed, 30
- Sep 2026 11:21:23 -0700 (PDT)
-Date: Wed, 30 Sep 2026 11:21:22 -0700
-In-Reply-To: <20260929113711.2064390-2-leo.bras@arm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YNRD1+yK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46F061F000FF;
+	Wed, 30 Sep 2026 18:34:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790793246;
+	bh=Q+YKqfQ3/s8F1tcHSL05pBU5RCUSKJAtNCNMVSPjlCc=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=YNRD1+yKqXjQvM/W1AjvE4o86Pl+C2aSyPxA0Ao4ThE4Z3zOVOnwOu/NOsbCLTAon
+	 esbMu0iC6VafxLeceo92SEb0LfLwFbZsnVu5QdmkNTf7/dLKGuVG6h+hlIwRkrMhQB
+	 mFU0HzV0CNHU0nezmtLEgJLnKy17BUtZL+JDGv4AX9iKMpYkmgF8vZPfxgfCpuEsEt
+	 Cxe4UaQVBGxR948+oX27SM5G4+73eKYaRqMXXZnQxk5/oKoIOz7bG3GZJdOMsJH1t0
+	 qjcs/ep2iJCONHvOxmK7GKvpcdH7LrFsPAPR9qJc5DV+hzxOwmu1oxIKjbtxm3sC/r
+	 V2E1390lNCKNQ==
+Subject:
+ Re: [PATCH 1/2] net: gso: validate TCP headers before segment length checks
+From: netdev-bot+sashiko@kernel.org
+To: bestswngs@gmail.com
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, jhs@mojatatu.com, jiri@resnulli.us,
+ shuah@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, xmei5@asu.edu, co+1fe9b56e2c61be5e@bugs.sh
+Date: Wed, 30 Sep 2026 18:34:04 +0000
+Message-ID: <179079324479.434549.5810038850478297945@kernel.org>
+In-Reply-To: <20260927163117.746432-2-bestswngs@gmail.com>
+References: <20260927163117.746432-2-bestswngs@gmail.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260929113711.2064390-1-leo.bras@arm.com> <20260929113711.2064390-2-leo.bras@arm.com>
-Message-ID: <ar1TItRR7o789i6_@google.com>
-Subject: Re: [PATCH v1 1/3] KVM: selftests: memstress: Add option to enable
- dirty-ring on VM creation
-From: Sean Christopherson <seanjc@google.com>
-To: Leonardo Bras <leo.bras@arm.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	David Matlack <dmatlack@google.com>, Ackerley Tng <ackerleytng@google.com>, 
-	Marc Zyngier <maz@kernel.org>, Josh Hilke <jrhilke@google.com>, Oliver Upton <oupton@kernel.org>, 
-	Wu Fei <wu.fei9@sanechips.com.cn>, Steffen Eiden <seiden@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 
-On Tue, Sep 29, 2026, Leonardo Bras wrote:
-> Dirty-ring should be enabled after the VM is created, but before the
-> creation of any cpu. To to so, add an option on memstress_create_vm() that
-> takes dirty-ring size, and enables it at the correct moment.
-> 
-> This required a new function memstress_vm_create_with_vcpus() to be
-> created based on the previously used __vm_create_with_vcpus();
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Rather than pile on more params, if I ask really nicely, would you rework
-memstress_create_vm() and friends APIs to take a "struct memstress_params"?
-Except for dirty_log_page_splitting_test.c, all of the memstress tests already
-use a struct, i.e. while tedious, it should be straightforward and won't put
-undue burden on tests (which is why the core VM creation APIs don't take a struct
-of params).
+Critical: 0 · High: 1 · Medium: 1 · Low: 0
 
-Then it will be easier to extend memstress in the future, and I suspect the
-existing code will come out cleaner as well.  E.g. dirty_log_perf_test.c stores
-nr_vcpus as a global, despite it being fully contained by main() => run_test(),
-right alongside the test params...
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [High] Over-strict ordering check rejects valid decapsulated TCP GSO
+  traffic.
+- [Medium] skb_gso_tcp_header_valid() ends with `return sizeof(struct
+  tcphdr) <= tail - transport;`, where tail is the linear tail.
+
+--
+
+net: gso: validate TCP headers before segment length checks
+
+This adds skb_gso_tcp_header_valid(). The helper checks TCP transport
+header ordering, linear bounds and fixed header presence before
+skb_gso_validate_network_len() and skb_gso_validate_mac_len() compute
+segment lengths. It targets a KASAN out-of-bounds read of tcp->doff when
+malformed TUN-supplied TCP GSO skbs reach TBF or police.
+
+> diff --git a/net/core/gso.c b/net/core/gso.c
+> index bcd156372f4df..7c76f721fe24e 100644
+> --- a/net/core/gso.c
+> +++ b/net/core/gso.c
+> @@ -240,6 +240,29 @@ static inline bool skb_gso_size_check(const struct sk_buff *skb,
+>  	return true;
+>  }
+>  
+> +/* TCP segment length reads doff, so validate its header offsets first. */
+> +static bool skb_gso_tcp_header_valid(const struct sk_buff *skb)
+> +{
+> +	unsigned int transport = skb->transport_header;
+> +	unsigned int tail = skb_tail_pointer(skb) - skb->head;
+> +
+> +	if (!skb_is_gso_tcp(skb))
+> +		return true;
+> +
+> +	if (!skb_transport_header_was_set(skb) ||
+> +	    transport <= skb->network_header || transport > tail)
+> +		return false;
+
+[Severity: High]
+Can this ordering check reject valid decapsulated TCP GSO skbs on the RX
+path?
+
+After UDP tunnel decapsulation, a valid TCP GSO skb can keep a stale
+transport_header. This happens when the tunnel device skips GRO, either
+because NETIF_F_GRO is off or because an XDP program is attached, so
+netif_elide_gro() is true:
+
+ip_rcv_core()
+    skb->transport_header = skb->network_header + iph->ihl*4;  <- outer UDP
+
+vxlan_rcv()->__iptunnel_pull_header()->iptunnel_pull_offloads()
+    clears the encap GSO bits and encapsulation,
+    leaves transport_header alone
+
+gro_cells_receive()
+    if (!gcells->cells || skb_cloned(skb) || netif_elide_gro(dev)) {
+        res = netif_rx(skb);
+    so inet_gro_receive() never refreshes the transport header
+
+__netif_receive_skb_core()
+    skb_reset_network_header(skb);
+    ...
+    if (!skb_transport_header_was_set(skb))
+        skb_reset_transport_header(skb);
+
+That leaves gso_type=TCPV4 and encapsulation=0, with transport_header still
+pointing at the outer UDP header. That offset comes before both the inner
+mac header and the inner network header.
+
+In that case transport <= skb->network_header is true. The extra
+skb->transport_header <= skb->mac_header test in skb_gso_validate_mac_len()
+is also true. So both validators return false.
+
+Callers read false as "segments do not fit". tcf_police_mtu_check() runs
+this for every policed GSO packet:
+
+    if (skb_is_gso(skb))
+        return skb_gso_validate_mac_len(skb, limit);
+
+tcfp_mtu defaults to ~0 when no mtu is given. Before this patch, the
+unsigned wrapped arithmetic happened to fit and these packets passed.
+
+Would a police action on the tunnel device's ingress now send every such
+GSO packet to the exceed action?
+
+tbf_enqueue() would likewise drop the packet with qdisc_drop() instead of
+calling tbf_segment(). skb_tunnel_check_pmtu() would treat it as a PMTU
+violation, which produces ICMP FRAG_NEEDED on bridge ports.
+
+This patch is tagged for stable. Would it be safer to reject only an unset
+transport header or offsets outside the linear head, or to read doff with
+skb_header_pointer(), rather than rely on header ordering?
+
+> +
+> +	if (skb->encapsulation) {
+> +		transport = skb->inner_transport_header;
+> +		if (transport <= skb->inner_network_header ||
+> +		    transport < skb->transport_header || transport > tail)
+> +			return false;
+> +	}
+> +
+> +	return sizeof(struct tcphdr) <= tail - transport;
+
+[Severity: Medium]
+Does this reject TCP GSO skbs whose headers are valid but whose fixed TCP
+header is partly in paged frags?
+
+tail here is the linear tail, so the whole 20-byte tcphdr has to be in the
+linear area.
+
+Take the IFF_TAP path of tun_get_user() without
+VIRTIO_NET_HDR_F_NEEDS_CSUM, which is the producer the commit message
+describes. __virtio_net_hdr_to_skb() has no network header yet, so it takes
+this branch:
+
+    } else if (gso_type) {
+        p_off = nh_min_len + thlen;
+        if (!pskb_may_pull(skb, p_off))
+            return -EINVAL;
+    }
+
+That pulls only 40 bytes counted from the MAC header. With a small hdr_len
+and a packet larger than a page, tun_alloc_skb() leaves the rest in frags.
+After eth_type_trans(), skb_probe_transport_header() sets transport to
+network + 20 for a valid IPv4 header. Only 6 TCP bytes are then linear.
+
+Before this patch, such a packet was forwarded, or segmented by
+skb_gso_segment(), which pulls headers properly. tcp_hdrlen() did read
+stale tailroom bytes on that path.
+
+Now both validators report the packet as too big. For example, in
+ip_exceeds_mtu():
+
+    if (skb_is_gso(skb) && skb_gso_validate_network_len(skb, mtu))
+        return false;
+
+the packet gets ICMP_FRAG_NEEDED and is dropped. ip6_pkt_too_big(),
+skb_tunnel_check_pmtu(), tbf_enqueue(), execute_check_pkt_len() and
+tcf_police_act() get the same false result.
+
+The commit message doesn't mention that header linearity failures are now
+reported as MTU violations.
+
+The validators take a const skb and cannot pull. Would reading doff through
+skb_header_pointer() avoid the out-of-bounds read without rejecting
+non-linear but valid headers?
+
+> +}
+> +
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260927163117.746432-2-bestswngs%40gmail.com
