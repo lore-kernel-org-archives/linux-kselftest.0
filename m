@@ -1,68 +1,68 @@
-Received: from mail-ed2-f32.google.com (mail-ed2-f32.google.com [74.125.228.96])
+Received: from mail-ej2-f28.google.com (mail-ej2-f28.google.com [74.125.228.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 090BD501299
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 15:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.96
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD544EF13C
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 15:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790781997; cv=none; b=CEXsaAwkYCyuta7BlLFT2EnZputGnOdcQtTkPhRbh3Rih/6tPLbldbx4Qtuh4T8fhneIuvZ1BkuMqnVxCFZKNaNcl53Rh/J8NC0R4J65GZrWMjVcrGoHb2wAfJicnpvbjrDOcmNCyU88f3EXm9lFnUB9DkWIZM6qp24CJvHiaqk=
+	t=1790782062; cv=none; b=dp61FnxjjHQBhywWHAptsZDIwynd4BguC+95e8u/0bT+LJg0z+YafhVTJR0O3AB3Sa19YxFNL4cpAvrJ5Q5qNldyvuVwezDOMaISECn6XDYibhtIPDcoLLmshr6grcGuHWBDN1rmh/9tnhb97Pw8ZJBsYEwxTQB2BNN4xkWuVmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790781997; c=relaxed/simple;
-	bh=CmJey6zW6gZQHUwSRtJfbdEySzFFefHFLUZjWb5UfHw=;
+	s=arc-20240116; t=1790782062; c=relaxed/simple;
+	bh=0s/Gn6TxRqE+ma6MSeiSWHaaSkW4KWvpR2ed33nhSXw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tW03lvF4ZXUs9CSvQpe53BiJEdtOCcftASfyYvJ0CZJylXEwwAB38XOYUcZYdlje/0cAMfjnqopAxlAy9AQI+Vch/io5wlR/Qfw5VM1AiQtwbKtcbQEuRRbmtz7uNpzV8Zw4Z+OtTpGoSTId2Y8LR3SwDaPplwdicaO8jy859TQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kJjMe/Ew; arc=none smtp.client-ip=74.125.228.96
+	 In-Reply-To:Content-Type; b=lTQkoVOLc7a5Vq7VAccGWE7uiqRP7sOBQ1XwCM0SXdBXehZSAwSl9HAgobtZ2BrOyHjmrqMxZHe21lVdLw1+iKWNJhsRCZgaDG5Ln61CYvszLYfciZY3IFkFoEPKdbj4a74Srt3MWcQEHQ5roGboMsg+xF4wbkmGmiw6h84qv0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sqPNDQvw; arc=none smtp.client-ip=74.125.228.156
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kJjMe/Ew"
-Received: by mail-ed2-f32.google.com with SMTP id 4fb4d7f45d1cf-6acac47206aso3143647a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 08:26:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sqPNDQvw"
+Received: by mail-ej2-f28.google.com with SMTP id a640c23a62f3a-c2af3701927so837765366b.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 08:27:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1790781986; x=1791386786; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1790782050; x=1791386850; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jTz7JFysavVzx+3a8DoDd2wDpfretAnN3j2Hpag3BAM=;
-        b=kJjMe/Ewi883Zr55hLAReTogAxTfTn9oA3HHmS2btoN6cAAiFHXJ151GyKOxyFOGpg
-         IHOG2KUqY6476g4V6DPbRXC0XPHHiZ9a56P7CRDOltWqXs3aflIuuFCSFoJ3uP/ehfi/
-         hhNpcDagGVTMzjl3ZEfg86hjUSjzc+WeKIAyA01Ie8gqa408VWLnN+dfU9LvzAnWEEDD
-         KRx5IR9+i5myf1C1ixhQ349cV2QYlcCXs1y9BNWHD1AEFL296/+wzAjz6cquFxFxTBSG
-         yDRzZ7tFyZKQe62/ERYBGv5qnSrtRDvFRnwhwvFP93gCO7hyBiLjQV/cVjbqOJdMql2i
-         PanA==
+        bh=m8/ka+J/ZNQmE2G5JtUp2jlHYt7CIUXWsqK/1+vFYBc=;
+        b=sqPNDQvwO44ngOq8O0pVz0s6Xf/8otThIx3hzOlCrlrpP+yARDTfCB3cRifadR5d47
+         wMhJ9k48vKUdKavoYpf1Z7ICVGc82wKkPoxUh2/gf44pJlOP65FVabCnFBvmVITZ9Css
+         j21+OxQ/zcudYzfMjwbtXUHsih/6VHMiNf6OXd8XNs9aJjBRkDza5FATdGv5AZgaaeRW
+         55z/oDGeFd4h8Vt95TTnOBGuLwd8UEOM8O8IPFBzBdjyGVXore2bJd083NYoJhKQrdZy
+         AX5kpSopg+1yg7WtZr2pPaCd4hL8bljgKuTTR8LO2xoh9pY5OfeioN3Sq/aUpW/FbD7l
+         oRzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790781986; x=1791386786;
+        d=1e100.net; s=20260707; t=1790782050; x=1791386850;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=jTz7JFysavVzx+3a8DoDd2wDpfretAnN3j2Hpag3BAM=;
-        b=cpMo7RELadBDIL6mUFJiQu2SIJVW9E23ik2tfavZD2L2H7SwDRFOjuoJhbijW0+/pT
-         H0FB8e3inbzhDz8oeGFpPCLLLD9LpSbANVfqMnU0Pv5TIzD26ODXO9SA9h1Zu0wXMe0d
-         fXjrhkcI2DbCLeZXJUj0EEKKwPnRrOVSdH828R9NmMuf3WSeUNtcSXmJxSlPctkAd+bJ
-         2jqCmEDgFXqFOUbJ03syl96w08zCEFRzjo663pYbMm/XYgk+7TxsR0nfXzQ08j1inIMJ
-         AVPc3Z9iMyBQy051kg5/vnAkrnkr+h2EgXQlTifTp9jJInOjFpCWV8CadY8NouP/FFsP
-         12Dw==
-X-Forwarded-Encrypted: i=1; AKwUvBySDSDpKv/rmUSH2IJmphG0Bq4X2Qw+ImkyzGI+CFIWU0amK8cV396d8BVLiobsN+YvwB8iQlO6oENSnyzg0oY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIZ4LeqKLdn/h3aVuKZcBgnCiYfnSoHw+3j9PBqmYNuzzSD4YVE
-	4ydMTCZ9yfMOR4M8Sul3UijHNDb+0r5SeK5nabFbzIswdg9I6gCu6o67rcb3rUGwyBw=
-X-Gm-Gg: AYBFou1jIpdJkbXLuQXWqmocJwwHObpO6pXudCKw4KeOspUuXJfz+HoDiy8e106hwU7
-	4xEc7EsEP7vaLb3dIQWjHd1SiWZh2NFhIoIZXjL/0P15aqO3ID/KyYhh+L9amh7pUseBXv1Fl+U
-	TkeICLS17DHLxSIAyizC2CAUiAlxOx7wqRdk+OdSyR/SnUROYOJmGWCFRkGK1W0Y/xRazHAGU9t
-	W2G26epRSNjGZqg9yYCNdKQLQdOkuV/os7n8XVCzQqhls2tNWoBK0mCBQL7tf0fzLNaZsiwnbYJ
-	8bYZgGzDAEBZ3yWhsP/z1RBWAg9/oJ2zWQJwjo1hJAvqLNwJq+4E8HaRPp7qKBivdFt/PFYmS3c
-	grurb8tjrjePMB1UsA6wBGGLX07hr17wSkeDH2iJz8J1vqE2vnMSx86/LZKakUAF3Ie33tIa/el
-	CaHwqWgGyhn7C4NwOsHhSfsoMyzPrGbpY/wRRotPOaMBvwL2NTACQf0QOv3EbCdjPcIfmcRX2cC
-	FY=
-X-Received: by 2002:a05:6402:46d0:b0:6aa:f187:26b8 with SMTP id 4fb4d7f45d1cf-6ae1994fe10mr1077601a12.37.1790781985959;
-        Wed, 30 Sep 2026 08:26:25 -0700 (PDT)
+        bh=m8/ka+J/ZNQmE2G5JtUp2jlHYt7CIUXWsqK/1+vFYBc=;
+        b=x4FGtK137xd7DzZ+TwougPDEqpF0DoK9RJNOeCMpDx6FCHL4b+HO8097iOJkma4bgh
+         fYrVwIO39cRjuT9E02zwsjKn45hPOmXK2+fFpMkRMq3DNfNwxsC1R0j0Flzn5hAT4mGi
+         laFUW99bj9eI8t0OxkhtojjAIfMO6kwKJr7UNJChgF9AriDkiOZ8cNNEH2vsZ7FlpC3/
+         5x0eN/c+2+SpIlLOkedr5h2lOz9zhBlMph8H6q5KhPM8sioWZjzQvCvysjD8Grg/2Nna
+         1YUweYsRxenXsZEk9mb7lkMJ/CH22S+5xn/bCYD/vno0q5HgKSen2r52MmmRyVhdHTO7
+         j2zg==
+X-Forwarded-Encrypted: i=1; AKwUvBwHo/+7XmpgY4UzhGh16b1fpuHkK0qM+fGCv3Y0nXO+JfiLNUclbXRsuq3a8TjryqUNDWCrHxtfC+4mX+vmMG0=@vger.kernel.org
+X-Gm-Message-State: AFuF++mwphpoMxzThbb9zVyo062ohHEHbFpaKATUwD+sF9gRznQzVKhh
+	SpH32SgKol3MnHaUE4VX9LeQXT75bgjcVgtWcMZg4A1sw7Jo4vU7cPGsTY+twl4FCDY=
+X-Gm-Gg: AYBFou0s3+VNxRkPAwlQQWpS37ksYhiq4kXp7TtNlgjMxgKJvS6cngRPSCaozuEQF2x
+	40VsPos1QXqv2BemD8rmpkDFCFRimQuAYqoruhL6oVL+OJDRQYW8pohx7YhiRTbKcykMWCeg89W
+	WbrLUuJg+GUT7R3vYwkX9B7R4mH74MNgw+g21izW9DJxSRXmayZrlKX8LJjKZ7Zc3O4Fp0jGxg+
+	wonQjrBw09GcfiKNsJhpU91TTy6xgwEKGnYJ9rfC4QPu38B9E3He7SwP7RLbIhyW6SbYz6GguQE
+	5xV7S/AUsO3JhMPt7BeKcBcXH+I8E0rdK0neF0o5zfS7wysOoDJBaHuC/ELYecQvXZ+goWfJqWr
+	BSdES7Ke5waMaN+rcsFaR5QWeaomRwd/7O7BysH20YM/Y0WLPJWi8LKkkXl8CAcJad7eDYJH+VY
+	j3counez9Pf14aHMzG4aa4Jgq1OfTdqogDHP5zROdwT2UuKlY5Bmftv+Vf2S+KPZP+MzHyK/PVd
+	es=
+X-Received: by 2002:a17:907:e002:20b0:c2d:ca32:2176 with SMTP id a640c23a62f3a-c2e23be61f9mr114745266b.8.1790782049863;
+        Wed, 30 Sep 2026 08:27:29 -0700 (PDT)
 Received: from [192.168.1.3] ([37.18.141.193])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ae1568e8b2sm954439a12.19.2026.09.30.08.26.24
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2e31a3eb32sm28640766b.3.2026.09.30.08.27.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Sep 2026 08:26:25 -0700 (PDT)
-Message-ID: <5750151d-cb99-4f9d-b469-12a7b7796985@linaro.org>
-Date: Wed, 30 Sep 2026 16:26:23 +0100
+        Wed, 30 Sep 2026 08:27:29 -0700 (PDT)
+Message-ID: <56d86280-fcea-4d2d-b6b9-b47449f3408d@linaro.org>
+Date: Wed, 30 Sep 2026 16:27:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 00/22] ARM64 PMU Partitioning
+Subject: Re: [PATCH v9 20/22] KVM: arm64: Add vCPU device attr to partition
+ the PMU
 To: Colton Lewis <coltonlewis@google.com>
 Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
  Oliver Upton <oliver.upton@linux.dev>, Joey Gouly <joey.gouly@arm.com>,
@@ -91,30 +92,63 @@ Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
  kvm@vger.kernel.org, kvmarm@lists.linux.dev,
  linux-arm-kernel@lists.infradead.org
 References: <20260924172928.2110956-1-coltonlewis@google.com>
+ <20260924172928.2110956-21-coltonlewis@google.com>
 Content-Language: en-US
 From: James Clark <james.clark@linaro.org>
-In-Reply-To: <20260924172928.2110956-1-coltonlewis@google.com>
+In-Reply-To: <20260924172928.2110956-21-coltonlewis@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 24/09/2026 18:29, Colton Lewis wrote:
-> This series creates a new PMU scheme on ARM, a partitioned PMU that
-> allows reserving a subset of counters for more direct guest access,
-> significantly reducing overhead. More details, including performance
-> benchmarks, can be read in the v1 cover letter linked below.
+> Add the KVM_ARM_VCPU_PMU_V3_ENABLE_PARTITION vCPU device attribute to
+> enable a Partitioned PMU for a VM where PMUv3 and VHE are supported.
 > 
-> There is no longer a kernel command line parameter
-> (`arm_pmuv3.reserved_host_counters`); PMU partitioning is now completely
-> controlled via the KVM API using `KVM_ARM_VCPU_PMU_V3_ENABLE_PARTITION`
-> and `KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS` vCPU device attributes. When
+> When partitioning is enabled (tracked via
+> KVM_ARCH_FLAG_PARTITION_PMU_ENABLED), userspace must explicitly
+> configure the number of guest event counters via
+> KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS with a value strictly less than the
+> maximum number of general-purpose counters implemented by the PMU (or
+> 0 only when FEAT_HPMN0 is supported), leaving at least one
+> general-purpose counter reserved for host profiling prior to calling
+> KVM_ARM_VCPU_PMU_V3_INIT.
+> 
+> Signed-off-by: Colton Lewis <coltonlewis@google.com>
+> ---
+>   Documentation/virt/kvm/devices/vcpu.rst | 42 ++++++++++++++-
+>   arch/arm64/include/asm/kvm_host.h       |  1 +
+>   arch/arm64/include/uapi/asm/kvm.h       |  2 +
+>   arch/arm64/kvm/pmu.c                    | 71 ++++++++++++++++++++++++-
+>   arch/arm64/kvm/sys_regs.c               |  5 +-
+>   5 files changed, 118 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/devices/vcpu.rst b/Documentation/virt/kvm/devices/vcpu.rst
+> index deb5c51bc00c8..fb5921ed9dea2 100644
+> --- a/Documentation/virt/kvm/devices/vcpu.rst
+> +++ b/Documentation/virt/kvm/devices/vcpu.rst
+> @@ -57,6 +57,9 @@ Returns:
+>                     hardware PMU, or interrupt number not set (non-GICv5
+>                     guests, only)
+>   	 -EBUSY   PMUv3 already initialized
+> +	 -EINVAL  Partitioning enabled without explicitly configuring
+> +		  fewer than max_counters via
+> +		  KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS
+>   	 =======  ======================================================
+>   
+>   Request the initialization of the PMUv3.  If using the PMUv3 with an in-kernel
+> @@ -162,7 +165,8 @@ the cpu field to the processor id.
+>   	 -EFAULT  Error accessing the value pointed to by addr
+>   	 -ENODEV  PMUv3 not supported or GIC not initialized
+>   	 -EINVAL  No PMUv3 explicitly selected, or value of N out of
+> -	 	  range
+> +	 	  range (or N >= max_counters when partitioning is
+> +		  enabled)
 
-As far as I know there isn't a straightforward way to get the number of 
-hw counters from userspace. You have to either parse dmesg or attempt to 
-open incrementally more counters in a group until it fails.
+"No PMUv3 explicitly selected, or value of N > max_counters, or N > 
+max_counters - 1 when partitioning is enabled".
 
-This makes doing things like "use all counters for guest" or "reserve 
-two for the host" difficult. Maybe it's time to add a file to the PMU 
-that userspace can use query this.
+That might be clearer, otherwise it seems like max_counters being 
+relevant to "out of range" only applies to when partitioning is enabled, 
+not that it's max_counters all the time but one is -1.
 
