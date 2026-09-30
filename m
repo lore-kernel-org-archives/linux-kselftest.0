@@ -1,75 +1,74 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pj2-f40.google.com (mail-pj2-f40.google.com [74.125.227.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6937339376
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 06:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1163C339376
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 06:03:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790748217; cv=none; b=EkP28xIim65jRETf+SOeiUDVd4X+seRomCVZ5OPxKIVIrzRxga9bRiyVUb1pJYqRfLdMfMYdpR/pcwa7Nz+uXiHPDyI605Oa+A8q9HVXy1M++OnnfhYMDE5ajBfjHi6uAj6ywVz5K3GXDvgbfOZYXB98GKHASe0SdZwM6bPxqg4=
+	t=1790748221; cv=none; b=VMFQmhq8NbfyVAu0JiisPnPkxfLe1jRUWKi4VUj67ELAyM5sqbtEilPuyli/LFlMNsCTl7vFhLGtwcl2+he3E/tmZ3Ua/hZ0Duvfyvd/4+ZkXz1LL/T233o0IH+c1kWE/vXqJx1fP+of21L3/yKTlOIapLey1+BD0WA9C/0+WiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790748217; c=relaxed/simple;
-	bh=axdDbCUJzEf1U4BkmExcoQBin+GjinUVGoYj1DB4yNg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=A9pZCbWoVUf/m4VyFXR2HnCJ3cLSf3JyxphvBG80ijacIlWJL5xWqaFbt2aKtei/1a4KioQbpzzR45l49VVXFV4QlQAvPELvFn5/r173LgrtlWR4/zHrfOxwkLi8J8ySlRbHyqEdK5sSmT0Fw4qZhDlwYzKn99JJuNjcjRSTcRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sKQIjK45; arc=none smtp.client-ip=74.125.227.140
+	s=arc-20240116; t=1790748221; c=relaxed/simple;
+	bh=UARglUKAvqBq0oxbnGvbQklaKOcZCNUwsD/ukl9WrKs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SGp8NORfpCti3hH0OfyVcqOZGkSmk1oBym/kewlE0nNngjLZDdNQBch/tgh1BIYmP3pOipznksRRexDXwXIQ644Fb5DIQl3uxJy0xAdC+nOqNqpMPf8MpYnnGjoUrUvXTNM7Yy/ew+9dwLn/PY8RBaixoh9/TcKA16rMoQGg3CQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UL08RL5J; arc=none smtp.client-ip=74.125.227.168
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sKQIjK45"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747f066d8so13225375ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2026 23:03:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UL08RL5J"
+Received: by mail-pj2-f40.google.com with SMTP id d9443c01a7336-2e22e123350so16340795ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2026 23:03:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790748214; x=1791353014; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790748219; x=1791353019; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:message-id:date
          :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=x3ttmE9X6/fAonyMgTPG4YUEsTGdFYYGeA/sfbV45M8=;
-        b=sKQIjK45wPoS1dNuHPFH3ByFc5m6coPbzzQAuc8gEFd7k6yOoXmNJKc9FsXk6PMS88
-         Mzqqgqx4i/UuNZr2Lc4dpqOJg8Ht18WmpkHl+1jwZ7j2601gMNWeSyP0ZRlOC7b7ZGVV
-         E4P+yLuNZLVBwj5+o1RLqzOCVZFT8usKP7Sac2j2GaPjgZc2JApop1JrTKLRgK7B+HLX
-         WE/Z8xke+gtBJBUEm8LEOxbHjnldneWHVvqKStMkdE2if+kQUbPzaV8rZJ/YUUXBDHUN
-         V2XWJkxrL3ZOngYhNS18GJPZGazNobY/mlITvBgD8ge+0cIJ1FdEYGVv/I4aub/eakDc
-         TZ6Q==
+        bh=rnB9FKIKFzNu1Po5I3Gn7uovAY3H37YHyKqyanOeRws=;
+        b=UL08RL5Jh3DrD968l86xLqCF+DqjZAj0uqyWfUYyBjs9yXitkSB4FL6Wtg9ZuERqVB
+         FcIKjar3y7l/ZEbt/asvO2M6xiE5kihLoTFLqQJjY/ix7WJI58pQ26d9L2an3Pwzl/ft
+         y1FarPqEn+Xwd1kJjqlo5m/vS2A+30tZO2APCFV3Wp3yyOD2gmvCPkJmniMUuDOCVIlB
+         6KLfuNQTkz+dYzWFjJPZas5EaU2Uq4/CRWzBV0lJombzf5MKA/oq3EtapUiAqEusUvqb
+         NSQ3naEp9ldMyPiMAr5M6KO4cLs4/ZKUHuPtLmNVpILEtKDztXwxM1KjYBkzyVtCtiN7
+         oWVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790748214; x=1791353014;
+        d=1e100.net; s=20260707; t=1790748219; x=1791353019;
         h=content-transfer-encoding:content-type:mime-version:message-id:date
          :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=x3ttmE9X6/fAonyMgTPG4YUEsTGdFYYGeA/sfbV45M8=;
-        b=dSvvJs5hMkjiaN+zTy9O/GOZfkTW/L87eZBOQie0QMVB3MBD3LtnPhv33HgZNLfIkG
-         w1MW/FColELwmRQMBF58oSV2ATmJIFCv9Nwb4hTLT4DfXhvD91jMcp5xHwYi0RaXjo7S
-         AzbjrUFKrZqgwgZbRQvxOfWviKE4dYTmHn6aW3RRaIgOLWZw3PfOvU7ayZmnyvp6v8LZ
-         UJYfi+57rYGtr1R8Cmq4KoVmNWxuF7MmiBSBby6curqUJ8klz8TllRuWrU68KGYaLFsC
-         dwovXGs6K4GT7frw1uOgHMfNbhHHdaike7+Bhi6wE03c1lJgUmF/MX0zBlZ+ewji1Rev
-         6NTA==
-X-Forwarded-Encrypted: i=1; AKwUvByvE5iHdEHUyqdNClkN3xC5ie28kvuJt3e8lcEqbhU4lLQyqeS9NwOpLf5SXAoaFg64bu8LH0iZNQA2GjM9nr4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJLtkBMCIqbHzPO/sFkDgl6ctUOCcUJGdi79LWKrmEOgGk8Icwa
-	b+nyNecqxIqfJVAdie0V/oHS4hObZsYo03wvG4Jx9PA4W0rC2NZjLkGRSL4PWa7SFpY=
-X-Gm-Gg: AYBFou2cbWPRaoH2fh4nxpjmX8x4T+Qa55Mcrm4lKTyvkoRLrFB/b7D/oIxfW6dewzO
-	NV65196HSkDGciYVTJMg7fKQoSzbcZVJzsyhBk7ru/orJwOEsIy/6tAbhHb1LZkQjx82p7BT4pU
-	3cd9LAmhJolWwCZkO5/6Ad0hz7Pqp4/0WCEQB/0305PBy2Pysdvfv1TlenqTKGo53zZoBTHYhe6
-	3TDp8xdPImppUEFbhBz8GvI4EuzbBJ40j8SbKNG1Eu5JDA/NRtuUe4F+IffJs0JkgI0xa3tk9AS
-	2JkRW4Lwy0NvE11Um3tnOmV7sB6hVLUqiRQivYMfCfadHI/AScQXMjxpCWy3IVr6zNPUITbpy5M
-	d14tzvhDrfdsKtqxfFI9LwwRwO9jmn2VvgfWpO/u/lgNQu4epJR5k5yGG0896ywcj6ni0ifJYx6
-	5g49puf7/+D/bZihznfM/LwZ+QR0wVGvX1xTfEejQPzgDdnsYuqacPadwQLKXs4e9dW3X6JoJDk
-	0Q=
-X-Received: by 2002:a17:903:2947:b0:2e2:d3ef:125 with SMTP id d9443c01a7336-2e2e4edf4a8mr1557185ad.5.1790748213905;
-        Tue, 29 Sep 2026 23:03:33 -0700 (PDT)
+        bh=rnB9FKIKFzNu1Po5I3Gn7uovAY3H37YHyKqyanOeRws=;
+        b=YA+i9x9FVqI5jUEN3rNxo6sQ1GW0/0anwAcdWh1f/FFqfgiM8jOs/HCuTBFSx81nCB
+         etHBWtlPbdZv1PMA/+kXGMmfG+UoW3NUFg3p4S90RKHN0JohXzAwMB92LveH8ewGXD1n
+         u04DwK60KWB3kdeyATOTjUfKPvYlwrXkUlVnoMvvH86DkFcOX085PSOmoMxuOujkBLXy
+         aUPvuts2FHLYNpOTo+M7+yyA07BFwTyBVA+Y8yGQetTGZQaF/4ez6TI9KuImF1n2ig6V
+         xZCbBTFWnIWfRGX8EziV2FZd6d+KcRNlsQ9TkKDLx5TSb60wKT5yAtm7BmKtGiWttFF8
+         yL0A==
+X-Forwarded-Encrypted: i=1; AKwUvBxKNOcb4xit6yujPyGk6yTa9dUt55Ch4ElUBI1hA74E/NGZvCHg8bls+18GOjyK66OMGD8FxFpmexq7vHToq2I=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ62bdg6qIA7+0DWspPoORSXABPGNAcsroRjiHsEb8HsCv4u0gt
+	ksNf/+y/xAylBUewSRLPQaB9XGc7qhY2U3IVRclbWpKnH1OdiXB+GwF5
+X-Gm-Gg: AYBFou1A9xvSIo1tx8lInGlIYhtjvY3uYqkzKc1gnlsC2m97ebxFZGrjvmPH6qVxj88
+	HIMNWPirxjnAoOIWMspoA2Cy91wWpaWjoWDYrBf+WNCZdT0S+wwHhHSvjlOmls78h9tQLVj7sa+
+	SZvzhnoKnaZqiG5DPiNJAE2B26fTRrGCGVP3MfM6nuUJieys10s+wkIHeRSGEXp97U/FNznfEWR
+	w+grTBVj88rSUHAu7WnyN+3st1ZU1afZF9PsIviy2KZWrIIuy0uUTT3ywdNQWvrz96yGnnOM51p
+	8uZh0x37abwvLW8YtrsNTUzrS4K05qh+dbfj6A44RKxygoIVsK8naA9HOZiXsXv4eI/+jIp/3jm
+	ukMfgwGjOqb8O9BEVwLOgbXgSibPRg3rgtuP2+p/U7bfHBgLL1b8bZ5d3sw4r9EezWp190JQPCD
+	X2GGbfste+SxbydJ3OnamBZF4tl1OLTUYNboWKOpzinpo8mlg0jZBPXDsYDxSCm23/fwobIZgRZ
+	E4=
+X-Received: by 2002:a17:903:b4b:b0:2d6:ff5f:eeda with SMTP id d9443c01a7336-2e2e49179ebmr3989585ad.6.1790748219186;
+        Tue, 29 Sep 2026 23:03:39 -0700 (PDT)
 Received: from omarchy ([2404:7a81:bb40:2400:e077:4928:9847:63b3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e2e5c39578sm1465025ad.76.2026.09.29.23.03.32
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e2e5b89c89sm1509225ad.15.2026.09.29.23.03.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2026 23:03:33 -0700 (PDT)
+        Tue, 29 Sep 2026 23:03:38 -0700 (PDT)
 From: Ren Tamura <ren.tamura.oss@gmail.com>
 To: tj@kernel.org
 Cc: hannes@cmpxchg.org,
 	mkoutny@suse.com,
 	shuah@kernel.org,
-	void@manifault.com,
 	cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: cgroup: enable the cpu controller in test_cpu
-Date: Wed, 30 Sep 2026 15:03:24 +0900
-Message-ID: <179074810117.139422.8287518907118199923@gmail.com>
+Subject: [PATCH] selftests: cgroup: preserve command arguments in with_stress.sh
+Date: Wed, 30 Sep 2026 15:03:34 +0900
+Message-ID: <179074810121.139422.1170111592692928081@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,55 +78,48 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-test_cpu uses cg_read_strstr() to check for "cpu" in the root cgroup's
-cgroup.subtree_control. The substring also matches "cpuset", so a
-hierarchy with only cpuset enabled skips writing "+cpu" during setup.
+with_stress.sh invokes the requested command through unquoted $*. This
+subjects the arguments to word splitting and pathname expansion:
+arguments containing whitespace are split, empty arguments disappear,
+and literal wildcard characters can expand to filenames.
 
-The tests then run without the required controller enabled and report
-failures. When cpu is unavailable in that hierarchy, the suite also
-reports failures instead of skipping.
+Invoke the command through "$@" so that the command name and each
+argument are passed as supplied by the caller.
 
-Always write "+cpu" during setup and skip if the write fails. Enabling a
-controller that is already enabled is a no-op, so a separate presence
-check is unnecessary. This requires write access to
-cgroup.subtree_control even when cpu is already enabled.
-
-Fixes: 820a4f88ee46 ("cgroup: Add new test_cpu.c test suite in cgroup selftests")
+Fixes: 1a99fcc035fb ("selftests: cgroup: Run test_core under interfering stress")
 Assisted-by: LLM
 Signed-off-by: Ren Tamura <ren.tamura.oss@gmail.com>
 ---
-Validation (2026-09-24, mainline 62f4c998b297): ran the full, unfiltered
-test_cpu binary as root on a freshly built mainline kernel in a
-four-vCPU KVM guest. With only cpuset enabled, the original reports two
-passes and seven failures; the modified binary passes all nine tests.
-With cpu already enabled, both pass all nine tests in the comparison
-with vCPUs pinned to separate physical cores. With cpu disabled at boot
-and only cpuset enabled, the original reports test failures while the
-modified binary skips with exit status 4.
+Validation (2026-09-24, mainline 62f4c998b297): ran both versions of the
+actual wrapper under Bash on Linux with a fixture mount listing and no
+stress workers. The argument boundaries, empty argument and literal
+wildcard are preserved after the change:
 
-The guest validation used a writable root cgroup.
+    Input:  ["two words", "", "*.txt"]
+    Before: ["two", "words", "match.txt"]
+    After:  ["two words", "", "*.txt"]
+
+Ordinary arguments and the child command's nonzero exit status are
+unchanged.
 
 LLM assistance: finding small cgroup fixes, drafting code and commit
 messages, and preparing validation.
 
- tools/testing/selftests/cgroup/test_cpu.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ tools/testing/selftests/cgroup/with_stress.sh |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
-index 735a53bb222ba98812d5c6ace221c3154362d859..3456e3e988c68aa6105a0d862fdc51fa0cb10d6a 100644
---- a/tools/testing/selftests/cgroup/test_cpu.c
-+++ b/tools/testing/selftests/cgroup/test_cpu.c
-@@ -835,9 +835,8 @@ int main(int argc, char *argv[])
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+diff --git a/tools/testing/selftests/cgroup/with_stress.sh b/tools/testing/selftests/cgroup/with_stress.sh
+index e28c35008f5b7a0f66654b10d8fccf4678120f6e..a95fb387464460ba24775a3e947a91875b743bc9 100755
+--- a/tools/testing/selftests/cgroup/with_stress.sh
++++ b/tools/testing/selftests/cgroup/with_stress.sh
+@@ -87,7 +87,7 @@ time=0
+ start=$(date +%s)
  
--	if (cg_read_strstr(root, "cgroup.subtree_control", "cpu"))
--		if (cg_write(root, "cgroup.subtree_control", "+cpu"))
--			ksft_exit_skip("Failed to set cpu controller\n");
-+	if (cg_write(root, "cgroup.subtree_control", "+cpu"))
-+		ksft_exit_skip("Failed to set cpu controller\n");
- 
- 	ksft_set_plan(ARRAY_SIZE(tests));
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+ while [ $time -lt $duration ] ; do
+-	$*
++	"$@"
+ 	rc=$?
+ 	[ $rc -eq 0 ] || break
+ 	time=$(($(date +%s) - $start))
 
 base-commit: 551c722f40809618230001baccf219193e22fc5a
