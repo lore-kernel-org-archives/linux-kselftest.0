@@ -1,74 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243FE46A618;
-	Wed, 30 Sep 2026 08:41:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7611E471432;
+	Wed, 30 Sep 2026 08:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790757685; cv=none; b=aw9AS26xjyhQu9cSB+XoUV+2ZRs8y/dHB+VStEgyQCu0ofEsXqexyo7bVe8n64xEGAkbpySgfOBnkp5sYXqbLo/+MSaoyeC8mY1eNEn/3AurCrLXa6L7HgWHvPC7xB9ijuyGP1oyoU9u5uv7guBuhGG0dK9AfRt+8XX4hbAMmiA=
+	t=1790757915; cv=none; b=c06r4cmAoWS4oFpVySQfAh8jxVGl86aCCFreQ334IF3ml+iCmDuQ7ToJZVD8uRaz2PthZKXTGdN/TMrUM7r8vA9z35qbtxwAIQ7HFeCfEJpnS8cNbXsuR4xAQiRYcHOjIZNQeoHMHi01bjsGC+wkCHqc2vDL5wnc0FYR1nKfIh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790757685; c=relaxed/simple;
-	bh=8u2gb3KMo67glqbPwoMMfM8CXuNu/lEjAWa4yVIksu0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qlpe2O+pJIlLBxIz3riK3DCHb+M/D712aBpaVhmEQ3dig82RCWZ7XaocIUhbjD/Cn8MRHFBsVusbzvdPXJcAXIeNMda7PBg+BfSb2Kcz9d+PMwvfkXsjP2S4duxDWbP755GiHkA5njQgwHjm5jVvMLSG8MbaQVcdBFD1C1LltBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mhzhUa9u; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790757915; c=relaxed/simple;
+	bh=+xtx+T+y3RrRKTqC8Bf8SkRbgyyqyiqJI5xvwc6gtGU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=X/U+p3Zxfxa7OahS0orI3JmP0Xj37qiLckj+b8JbBbRdFvBzAoehSgR3hcZpHz6Kby0R6JE6mZQF7q2wwFffarrCn6sx1sZ8BHxjLXs9/0m10WDeRURqmfXtyRlMxUByuxgItFmsFxtBQUlyhxKAtxTALPREiZrybuAxus3Kp74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LlqXmAPW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mhzhUa9u"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 309C81F000FF;
-	Wed, 30 Sep 2026 08:41:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LlqXmAPW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24C661F000FF;
+	Wed, 30 Sep 2026 08:45:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790757682;
-	bh=sFCvsXZLdxLKdHXwpS2nWXBpKLwepoPfVilE5Kh5WMA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=mhzhUa9uS6ktb80BJuDJGmtAxdhIqUzAP/HXGJ7IC4X+tI8VvcgkCZyJtgdQx2F1r
-	 Wrle757SiP9fvECGBPdskTJcuCihZHNIm/GJhqcohJbrZB2acm3rOqVKdBesQcDel3
-	 H5g3r9F32WcMdawUsIdP66lqstfbNKTT1MAPHwlZLn+LtqwQv8RCPfFpRGUam9zGqn
-	 F9lPkFmZw32empK7ClckYchozBtr3NMoeTGgUfu1WrZJ1OOOwgPU58lZziwN85tUul
-	 Sd7cFoXEFut1UZHCZ/WBLqsiKcQO1NHumtPIYYmPHhxLFt7tDRXPS0/g5bUvJUiaKX
-	 6ozrSPKWxej9A==
-Date: Wed, 30 Sep 2026 09:41:16 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>, Fuad Tabba <fuad.tabba@linux.dev>, 
-	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 03/11] kselftest/arm64: Move exit calls out of fp-stress
- loads
-Message-ID: <arzHLZdKJ0qJFNHg@gremlin>
-References: <20260901-arm64-fp-stress-kvm-v1-0-31bce995b49b@kernel.org>
- <20260901-arm64-fp-stress-kvm-v1-3-31bce995b49b@kernel.org>
- <arvjKjrh1NU4CKPE@gremlin>
- <636db593-b6b6-4338-b9b0-e87c54111d14@sirena.org.uk>
+	s=k20260515; t=1790757905;
+	bh=arDYhxHpGG4MOLTb9VLYxs9bYjwV6esCnhBx9b/qxHs=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=LlqXmAPWub7bJ2s18Jgni9t8rZyX5fg6Eoppdh5lzZrOiHJ15zFibMPXPnb8/rE8m
+	 tvuQZM8ZriEmMMvIpgPjJvWW+dE1DhnWGMUXtS5amNKLJgt45TmNN5/2GQU1nbbd+b
+	 NMrUu8G7gZAVztaQTtalB5Ck11+q+SAXtGmBt8n61htXj8IBi/n2yIBol7UsTmaz74
+	 LjaEsFtNwXlFWASq25ieB1sDYR8gFPM2M6She53J9fXsiPckztvuGws/8wyi/h1Ogl
+	 Gb7gCestXo3tQd4ayOXIn6leHZgcqmZkRQaxilPHrilqbFrFf75+uvEnd9k2YdBkiX
+	 t5t2S5YAgY2qA==
+Content-Type: multipart/mixed; boundary="===============5156715475000709067=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <636db593-b6b6-4338-b9b0-e87c54111d14@sirena.org.uk>
+Message-Id: <17920ecc726c484de4a46eb61ddbe63000838a799bdb87783f55c50ca743af94@mail.kernel.org>
+In-Reply-To: <20260930075154.189958-5-cui.tao@linux.dev>
+References: <20260930075154.189958-5-cui.tao@linux.dev>
+Subject: Re: [RFC PATCH v8 4/4] docs: cgroup-v2: document the iocost BPF cost model attachment
+From: bot+bpf-ci@kernel.org
+To: cui.tao@linux.dev,tj@kernel.org,josef@toxicopanda.com,axboe@kernel.dk
+Cc: cgroups@vger.kernel.org,linux-block@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,linux-kselftest@vger.kernel.org,cui.tao@linux.dev,cuitao@kylinos.cn,ameryhung@gmail.com,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 30 Sep 2026 08:45:04 +0000 (UTC)
 
-On Tue, Sep 29, 2026 at 10:56:10PM +0100, Mark Brown wrote:
-> On Tue, Sep 29, 2026 at 05:22:44PM +0100, Lorenzo Stoakes (ARM) wrote:
-> > On Tue, Sep 01, 2026 at 06:06:43PM +0100, Mark Brown wrote:
->
-> > > No functional change.
->
-> > I don't think this is accurate, as you're changing the register into which a
-> > value is loaded (x0 instead of x1).
->
-> > That seems to be correct to me, but worth calling out that you're fixing that up
-> > in the commit message and dropping this line.
->
-> That's actually an unintentional bugfix, the original code just uses
-> whatever random value was in x0 as an exit code.  Probably that was
-> non-zero so it all works out but still.
+--===============5156715475000709067==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Yeah absolutely, it seems that we just got lucky before with it which is
-slightly ludicrous :)
+> docs: cgroup-v2: document the iocost BPF cost model attachment
 
---
-Cheers, Lorenzo
+TL;DR: Commit message only: it claims the docs cover detach restoring the
+builtin model and ctrl= never selecting a model, but the added text may not
+say either; add a sentence or trim the message.
+
+> docs: cgroup-v2: document the iocost BPF cost model attachment
+>
+> Document the BPF cost model attachment in the io.cost.model section
+> of the cgroup v2 documentation: attaching an iocost_model_ops
+> struct_ops to a device by its major:minor, the model=bpf readback
+> while attached (ctrl keeps describing the coefficients), that
+> detaching restores the builtin model, and that ctrl= writes never
+> select a model.
+>
+> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+
+The commit message says the patch documents "that detaching restores the
+builtin model, and that ctrl= writes never select a model".  Does the added
+text actually cover both of those points?
+
+The new paragraph says:
+
+    only detaching removes the model, after which "model=bpf" fails.
+    "ctrl" keeps describing the builtin coefficients, ...
+
+It never says that the device goes back to the builtin model on detach,
+although ioc_bpf_detach() clears ioc->model and the readback then shows
+"linear".
+
+It also never says that a ctrl= write cannot select the BPF model.  That
+is what the code does:
+
+block/blk-iocost.c:ioc_cost_model_write() {
+    ...
+    accepts only ctrl=auto and ctrl=user, and any other value takes
+    'goto unlock' and returns -EINVAL
+    ...
+}
+
+Could a sentence be added to the documentation saying that "ctrl" accepts
+only "auto" or "user" and that detaching returns the device to the builtin
+model?  Otherwise, could those two clauses be dropped from the commit
+message?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36689638400
+--===============5156715475000709067==--
