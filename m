@@ -1,238 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-73.mta0.migadu.com [91.218.175.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04CA3A7F6B;
-	Wed, 30 Sep 2026 03:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD7C38DC78
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 04:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790740347; cv=none; b=GQg7FkgNM/StJDlkJNEHndtTC1xPYWX/OX9M3mDfa8/f+d73v+jK9wvRDuKSU/Ai969K5ZLR5xiU/05dFtOrF/P3mtsYk6ahg87Sal+ECGj3QWh2oTVhXHXIQfGm2FDv010hp6W5dY5syWS5ooi7Y3boFsHh01NOXjlnCg0BbBk=
+	t=1790741542; cv=none; b=cTDGR66joFkkJa0Rj37PsK6ErlOuUAqg8NflHA7xXflHnJn5ZZ5pYywXuQZTI46k1luWX1xsTCLCmP0i+WXyCIn4IwvFQL9LdhyUnmtV7ks0oVjptUdgPzymmR/TFBz+qTxObJv0wlLyf6rDXzTmjGTkn2YugKu3hCY0kUrugJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790740347; c=relaxed/simple;
-	bh=Dt4d97eoZ3PePb00AqToCh4LH/TJ6gYFh1uBYT89e1w=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Gebp5Mx9IbQImBdUd63P+DHjiEgxTdxtCfc4ZZwJdcysz/4NkyoAmzs77s9wYP6meZMAc1iIF7c5KYLVFAFjiY9XzgbdWazY1Rbqipi4fOQSZRoHNMEfD1c03OBusIXWG8+nwZEob0y0cGyF3XfxnJGyNwQiiYHHlo2kV6hWajo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i502RT8F; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790741542; c=relaxed/simple;
+	bh=5ZodmMk5mazCcATEXU3st4ZtMCZZcl1LFNQi48kL3+c=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=HO7wAHMYUrSA6U5K63Nt12BeElQc5amr2j4mpGfkwAsr2GC7t0zYBIS+1tv40dYt5oY18P9xF2LKXuUqM6P/JMZTVKVhaaT2SSdfgCThThe6MSHHSC3lDYQsAORzpXVGiL88IuhR32YuHky0TX6MT1u4doAwYwDuCQiCYJrYNCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HiODBe9H; arc=none smtp.client-ip=91.218.175.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i502RT8F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 004641F00893;
-	Wed, 30 Sep 2026 03:52:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790740345;
-	bh=m8GGQZLYt5tT8UjtiPcT9CBqG/2fsE9LqgB57R5mlao=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=i502RT8FEEMwPFFdCGnU+451TtRr1ZorrvlpUK0k2vCJF+j61MEyhB3ge8vgtrkoN
-	 GkAWIKmXwlrXGMG+zlpLvQK21FfbMZPOIfEOn6qniHLfePSwjr4NarswW8P0NxBwX3
-	 R7eZPWi9MXAN5fdD+f8pP9+T6urjBpVWKQftKPP90sa/JbKu4om/DlBr7N1tUr6IZG
-	 TOOkZP+YOIY3Q4rFZ5HEoKgztDUVKJ5ZYgYG1qcoLCwcVLup4hek+cwEe/VVY9aDJX
-	 EHi7/f/+bRIzcTOzJDbiY5mlSNB2VHDuK1jk21hb/vsMqOewyyDCGy28NetgEd8wjR
-	 NK2mn+bjybxAw==
-Subject: Re: [PATCH net-next v3 6/6] selftests: net: test the vxlan vnifilter
- request limit and dump replay
-From: netdev-bot+sashiko@kernel.org
-To: alishmery18@gmail.com
-Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
- pabeni@redhat.com, davem@davemloft.net, edumazet@google.com,
- andrew+netdev@lunn.ch, horms@kernel.org, razor@blackwall.org,
- roopa@nvidia.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Wed, 30 Sep 2026 03:52:24 +0000
-Message-ID: <179074034453.434549.18329009232307431760@kernel.org>
-In-Reply-To: <20260927215209.2581830-7-alishmery18@gmail.com>
-References: <20260927215209.2581830-7-alishmery18@gmail.com>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HiODBe9H"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=5ZodmMk5mazCcATEXU3st4ZtMCZZcl1LFNQi48kL3+c=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790741537; v=1; x=1791346337;
+ b=HiODBe9HJYSiStjIaj0hKbWEyCJHh2u7tZa3Sy5HEHm61R7IQSiGrQ3mSNfRPDkakKiNXhUy
+ JC/6NYE9rgobU5kOYroEBvdFT+ardKefMXCg5ge7Qi/MGKQGBVg6D34YjixFFVXkQKWkF9Tn3sT
+ EdRAj5dmvG3ibtbLXaTKc6/8=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 8e53c0bfa2c49de2;
+	Wed, 30 Sep 2026 04:12:17 +0000
+X-Mizu-Trace-ID: 8e53c0bfa2c49de2
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <693c4abd-e074-463d-a859-ac8033982c81@linux.dev>
+Date: Wed, 30 Sep 2026 12:09:39 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
+ cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ linux-kselftest@vger.kernel.org, Tao Cui <cuitao@kylinos.cn>,
+ ameryhung@gmail.com, alexei.starovoitov@gmail.com
+Subject: Re: [RFC PATCH v7 0/4] blk-iocost: BPF struct_ops cost model
+To: Tejun Heo <tj@kernel.org>
+References: <20260924054549.2271705-1-cui.tao@linux.dev>
+ <6f80eca83c87b60398110c3a6d735aec@kernel.org>
+ <4f1571a1-7e56-4264-aa7f-8dce32931ddb@linux.dev>
+ <44f02289433805946d1e3272f626a925@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <44f02289433805946d1e3272f626a925@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Hello, Tejun.
 
-Low priority / nit picks for your consideration:
+在 2026/9/30 00:27, Tejun Heo 写道:
+> Hello, Tao.
+> 
+> On Tue, 29 Sep 2026 21:39:00 +0800, Tao Cui wrote:
+>> To make sure I understood correctly: attaching switches the active
+>> model to the attached BPF model, while model=linear and model=bpf
+>> only switch between the attached model and the builtin model without
+>> affecting the attachment itself.  The attachment survives enable=0,
+>> and only .unreg removes it.  Please shout if I still got that wrong.
+> 
+> Yes, except that removing the device also removes the attachment, as
+> ioc_rqos_exit() ejects the model.
+> 
 
-- [Low] No test rejects a VNI because its START is outside the 24-bit
-  space, even though the commit message says the bound is "exercised…
-- [Low] In vxlan_vnifilter_dump_replay()
-  (test_vxlan_vnifiltering.sh:469-471), two run_cmd calls populate the…
-- [Low] vxlan_vnifilter_dump_replay() only compares the source dump with
-  the destination dump.
-- [Low] Every absence and "installed nothing" check in
-  vxlan_vnifilter_api() (lines 389, 393, 399, 403, 428, 432) runs…
+Thanks for confirming.  I had left out the device removal case in
+the summary.  v8 keeps the attachment independent from controller state
+and model selection; only .unreg and device removal (where
+ioc_rqos_exit() ejects the model) remove the attachment.
 
---
+Thanks.
+Tao> Thanks.
+> 
+> --
+> tejun
 
-selftests: net: test the vxlan vnifilter request limit and dump replay
-
-This extends test_vxlan_vnifiltering.sh to cover the vnifilter request-size
-limit, the 24-bit VNI range, and symmetric add/delete caps. It adds a new
-vxlan_vnifilter_dump_replay() test that builds a run twice the limit,
-replays the dumped ranges into a second device, and compares the two dumps.
-It also adds veth-host and the test netns to cleanup().
-
-> diff --git a/tools/testing/selftests/net/test_vxlan_vnifiltering.sh b/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
-> index 8deacc565afa1..f48bc861bb88e 100755
-> --- a/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
-> +++ b/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
-
-[ ... ]
-
-> @@ -371,6 +373,116 @@ vxlan_vnifilter_api()
-
-[ ... ]
-
-> +	# The rejected oversized add must install nothing. Assert the range is
-> +	# absent first: vxlan_vni_add() folds an already-present VNI into the
-> +	# update path and returns 0, so a later probe cannot tell "installed
-> +	# nothing" from "installed part" unless it started absent.
-> +	run_cmd "bridge -netns $testns vni show dev vxlan-ext1 | grep -qw 20000"
-> +	log_test $? 1 "VNI 20000 absent before the oversized add"
-> +	run_cmd "bridge -netns $testns vni add dev vxlan-ext1 vni 20000-24096"
-> +	log_test $? 255 "Cannot add a request over the maximum VNI count"
-> +	run_cmd "bridge -netns $testns vni show dev vxlan-ext1 | grep -qw 20000"
-> +	log_test $? 1 "The rejected oversized add installed nothing"
-
-[Severity: Low]
-Can these absence checks pass without looking at the device at all?
-
-run_cmd() does this:
-
-	out=$(eval $cmd $stderr)
-	rc=$?
-
-That returns the status of the last command in the pipeline, which is
-grep. The script does not set pipefail.
-
-Suppose bridge vni show fails or prints nothing, for example because of a
-regression in the dump path. grep -qw 20000 then exits 1 on empty input,
-and log_test $? 1 reports OK.
-
-The same pattern is used for every absence and "installed nothing" check
-in vxlan_vnifilter_api(), for VNIs 20000, 30000 and 55000.
-
-Could the dump status be checked on its own, or pipefail be enabled for
-these commands?
-
-[ ... ]
-
-> +	# The VXLAN header carries 24 bits. The bound is on both endpoints, so a
-> +	# range whose END alone leaves the space is rejected too.
-> +	run_cmd "bridge -netns $testns vni add dev vxlan-ext1 vni 16777215"
-> +	log_test $? 0 "Add the highest VNI the header can carry"
-> +	run_cmd "bridge -netns $testns vni del dev vxlan-ext1 vni 16777215"
-> +	log_test $? 0 "Delete the highest VNI the header can carry"
-> +	run_cmd "bridge -netns $testns vni add dev vxlan-ext1 vni 16777215-16777216"
-> +	log_test $? 255 "Cannot add a range whose END leaves the 24-bit space"
-> +	run_cmd "bridge -netns $testns vni add dev vxlan-ext1 vni 100-4294967295"
-> +	log_test $? 255 "Cannot add a range whose END wraps past the 24-bit space"
-> +}
-
-[Severity: Low]
-The commit message says:
-
-    and the 24-bit bound exercised through END,
-    not only START.
-
-Does any case here reject a VNI because its START is out of range? START
-only appears as an accepted value (vni 16777215). Both rejected cases go
-out of range through END only.
-
-The 100-4294967295 case also seems to be rejected by the request cap
-whatever the policy says. In vxlan_vnifilter_check_msg():
-
-		vnis += vni_end - vni_start + 1;
-		if (vnis > VXLAN_VNI_FILTER_MSG_MAX) {
-
-The span is far over 4096, so this returns -EINVAL whether or not the
-NLA_POLICY_FULL_RANGE entries in vni_filter_entry_policy exist. So only
-16777215-16777216 tests the 24-bit policy.
-
-The case the series' "reject VNIs outside the 24-bit space" patch is
-mainly about, a lone START=0xffffffff, has no test. That request has
-vnis == 1, so the cap accepts it. Only the START policy then keeps
-vxlan_vni_add_del() out of this endless loop:
-
-	for (v = start_vni; v <= end_vni; v++) {
-
-Would a case such as vni 16777216 expecting 255 be worth adding? It
-covers START without risking a hang if it regresses.
-
-> +
-> +# A device may hold a contiguous run longer than one request's limit, built
-> +# from several requests. The dump coalesces it, so the dump must break the run
-> +# into entries each no larger than the limit, or the configuration it reports
-> +# cannot be replayed. Install such a run, then feed every range the dump
-> +# reports back into a second device and require all to be accepted.
-> +vxlan_vnifilter_dump_replay()
-> +{
-
-[ ... ]
-
-> +	# 8192 contiguous VNIs sharing the default remote: one run, twice the
-> +	# limit, installed in two accepted requests.
-> +	run_cmd "bridge -netns $testns vni add dev vxlan-src vni 10000-14095"
-> +	run_cmd "bridge -netns $testns vni add dev vxlan-src vni 14096-18191"
-> +	log_test $? 0 "dump/replay: populate a run larger than the limit"
-
-[Severity: Low]
-Is the exit status of the first add ever checked? The second run_cmd
-overwrites $?, so log_test only sees the 14096-18191 add.
-
-If the first add fails and the second succeeds, vxlan-src holds only
-14096-18191. That is exactly 4096 VNIs, and it dumps as one entry the
-input path accepts, with or without this clamp in
-vxlan_vnifilter_dump_dev():
-
-		    vnirange(vbegin, v) < VXLAN_VNI_FILTER_MSG_MAX &&
-
-Replay then succeeds and the two dumps match, so all three dump/replay
-checks report OK without testing the clamp.
-
-This also applies when the test runs alone with
--t vxlan_vnifilter_dump_replay. In that case the API test's max-size add
-check does not run first.
-
-Could each add get its own log_test?
-
-> +
-> +	for range in $(bridge -netns $testns vni show dev vxlan-src | \
-> +		       grep -oE '[0-9]+-[0-9]+|[0-9]{2,}'); do
-> +		bridge -netns $testns vni add dev vxlan-dst vni "$range" \
-> +			2>/dev/null || rc=$?
-> +	done
-> +	log_test $rc 0 "dump/replay: every dumped entry is accepted on replay"
-> +
-> +	src_ranges=$(bridge -netns $testns vni show dev vxlan-src | \
-> +		     grep -oE '[0-9]+-[0-9]+|[0-9]{2,}' | sort)
-> +	dst_ranges=$(bridge -netns $testns vni show dev vxlan-dst | \
-> +		     grep -oE '[0-9]+-[0-9]+|[0-9]{2,}' | sort)
-> +	[ -n "$src_ranges" ] && [ "$src_ranges" = "$dst_ranges" ]
-> +	log_test $? 0 "dump/replay: source and destination dump the same ranges"
-
-[Severity: Low]
-Would this comparison catch a dump that drops part of the run? Both sides
-come from the same vxlan_vnifilter_dump_dev(), and neither is compared
-with the 10000-18191 range that was installed.
-
-Suppose the clamp regressed so the dump stopped at the first limit
-boundary and reported only 10000-14095, with no new entry starting at
-14096. The replay loop would install 10000-14095 on vxlan-dst, and both
-dumps would print 10000-14095.
-
-Both the "every dumped entry is accepted on replay" and "source and
-destination dump the same ranges" checks would pass, even though half
-the configuration was missing from the dump.
-
-Could src_ranges also be compared against the expected
-10000-14095 14096-18191?
-
->  }
->  
->  # Sanity test vnifilter datapath
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260927215209.2581830-1-alishmery18%40gmail.com
