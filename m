@@ -1,68 +1,68 @@
 Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1A24D9579
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 13:03:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDEDF4D0CFD
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 13:04:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790773413; cv=none; b=T0oESA4N+kYasCUBeucXGfRenhpbpkvG1N+n4oLsYfyAkLquNXEN9eIZ84i9aBmkTeGNNW4KGpkllobLjhWl48mZ4koGHE1ztGKUfHqqTpO4s9O4JWsslt3ZuJQvPbOEWuOIs9jLhzazxRiyOp9sV822M8D+AHGixCE/mRIthfQ=
+	t=1790773493; cv=none; b=I7bIHrt5yxDkUJQtDvj+G/hTzCI2xsk5/kJTKtycgM9pce37gikI1NknBy81zxom8+1ncJECBF1abDz1AAkzsLi6QiAGuHE4qgQ8eIdi1pgOX4w+v4Aw8FyH2DAMW+vW4UmkUg5/9DLeLO/ds+Ft7coJCsJV5ZJmpHhG53aArcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790773413; c=relaxed/simple;
-	bh=H+DcAKtcxqYbxHPTih+Vv3PnTOLzwij99V2TWd7P1DE=;
+	s=arc-20240116; t=1790773493; c=relaxed/simple;
+	bh=oxZiTuR2Id+eSkbVoP8hkGx6rui7jsikVu42ZGlSRFc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eftqKW7EjEgamTNCiGgKIWifcgDixBFvC5Vb7zrAlCjnFXcjOosXqN0Lf3NxgY9qwQfZahbIU3lAHj80im1ixGrs8PJL+uw0Y+a4HLbteW4IlW85/oiGnHB2WhGEQX8p1eTGb/r+pW5/IvmACx9br0VaCM6Z1y5tk0MlqkmOOHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=MNV4Xz6E; arc=none smtp.client-ip=74.125.225.76
+	 In-Reply-To:Content-Type; b=h/iEQz7vHVGj/4d6mqSvw3JK85pAzKR3dwfrIc/JcefLceGh3A+NVVGKlPgatjRITK4xR7DQMw/9883+UFFx6BosIBGKcJpSsHmrdmAwgV5loRlLxHrzOgCMS5vyh2q9gCj0rWLqdLseVFmf+Je2ED0YzunCo7Htc0mQ64Gn/44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=AwFW2UVF; arc=none smtp.client-ip=74.125.225.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="MNV4Xz6E"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4843178b1c8so568969f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 06:03:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="AwFW2UVF"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-482e1b55da8so549065f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 06:04:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=6wind.com; s=google; t=1790773402; x=1791378202; darn=vger.kernel.org;
+        d=6wind.com; s=google; t=1790773482; x=1791378282; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:organization
          :content-language:from:references:cc:to:subject:reply-to:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=babN9DRBy5azMYxvib8SKBkZUslU6O5ONocKKc4sKc0=;
-        b=MNV4Xz6EaMuv65MQ7JfswBlkewKV/SH3bn7+57KAcGCM4b6ycvIVU3dQ/HbSYg0xeY
-         svh1pB1BuZblJ5zblhb7YmW4MrZXqCQhnaoQb+Xr8Qhsb+dmD4lFFiL2szvYtDsFdfPr
-         AsIEXGsvT/gRVMP+tVUCVepsk7//eQq253ZoGEUiY4AgUB0W7cHKr932Td+8JKm9fTAa
-         1Kgg4HxXiJX60ZLZ44b2/i14X4d6A8M7AUdJZcb1Xbhr+echJSg4HrU6ZCDJOEYKzZ1Z
-         9dEoJfC12dbGBEp/m+GJnEGh6o0vJm5uIkp64KH4+pEC94moRP6ttlfwX0Bqv/P7LTYe
-         VQWw==
+        bh=cdMdvjWVLIDEVS1UUHPgTOR23ut4C2R+qU5zRynN6ZE=;
+        b=AwFW2UVFDut0KXcQby5r755V4y+wkBed/xWk8s+Cmq1sIBMuJ88qlBDia90lktIt4m
+         Cb5Lno14zl2pcc9//aY1+Q0sBoBrXTOIlSG/qVHo6NUyzR604zuemIJz8XjrqogvmHLf
+         zV/gcQdpRTiGj6BnfzdWIps4wFphkDBQzMAL5aVAOsfuDJYGx8P4/cwypOsL2oY3vAL2
+         qTkPcibOojxkncb0cSphmUSFLyeFAfarGwUcQnN0z3vcUsh3ntILlgS5bzQFBszq6ZLp
+         3dJsCbggGUzDgqAkJ2PM8NIdt09mexIQuCzPGg9CJALW5QrvP5ypLuw18MWczKxiAM96
+         PdIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790773402; x=1791378202;
+        d=1e100.net; s=20260707; t=1790773482; x=1791378282;
         h=content-transfer-encoding:content-type:in-reply-to:organization
          :content-language:from:references:cc:to:subject:reply-to:user-agent
          :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=babN9DRBy5azMYxvib8SKBkZUslU6O5ONocKKc4sKc0=;
-        b=YW/ZV4n/va0Q5vx0qinot5BSAlb4HaFyXFYbvQC11UjcINa9VYg2TzNmUtfmAR2JSe
-         R3DK5289hM12Wnlzk3Yza/0JerlFKkc/K0Uc0Z3x//s1J7Q1liemxgS7XK72/zgWqVNt
-         0bs2sP71nI5buPcl4YAfEl3ZiawCk5TksoEDu32WpkUUD7Kcswj4T7VMQHnxfzrVZ0K2
-         KnKwRajo77f46SmuEBwpYHCBC0ZvDIjT46lzFPk6HrUvi71MAJTD2UUjqjA97Tm0qAo+
-         XXUGu+3WXGB+cAbeojd27QqOQxlRncoiv88iq/EtMVXedYu4uL1T8XEo4a852lkYtdgy
-         qpZw==
-X-Forwarded-Encrypted: i=1; AKwUvBwBJiyWzb4H881RbA1ei2UsSczs7BvfUPTSr+n5h8WsRzhp1gXH+Yu+khz2bQWoh4xLf+d692wN6vWui/rOKrA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKie8RdFtrr/7ND4L7DpJC7PtO0UoHI/RwZuC6zr4/FiNMA4YkG
-	N8vfPIAYJrGbI5K4BjXmHK97GXDJsDwfY+d5VJtOI+aKYxd2TqbTGMRCGzkLOp8NPLs=
-X-Gm-Gg: AYBFou3ij5xg1jD4anP+mCQp2KV3XK4BBvA0ErAARZXnbG/U8kIn2181TTuuKrtxbCs
-	U19NzJYkdGKF0fpzrSth50RVTmHmDjOU4En/Y0a/qJX00HuSRuljzNeCHhQ9GqNUQVU88AjhK6K
-	hYdj1Ci0Wvr45PKIAKbkF672jN+NwHWWD1Ji2TNujpAk1L/Nmk+raDlBDAzJNFCKS5Vcsc6NcT8
-	kV7vrCyIRbhUlYHT5ip3JArBX4BPYT2LnQMZ0bdl7PgGx/cWz5ddT6W7otT+OqiNlc3Mk+AZuMM
-	0I0ztErYKMi6iQLRQUkPhpngQ+oP4DEZ080dPC7GuI3zktbPoDveQVnTFbuyHwJeJZ2lIirv2cS
-	I4ruYtITFzIvGIqb0V1iEfhZR4yYbBbY+ggeajqkNsTrlz7sDqfvGYMKxUqJ2OSm3zR1F9QpKja
-	3oe/GhVEJfKD7MPEnOpD99udtHRPGF2RXW4mFkzzuYWMIVr2suqBl3Xx+HCjVjxhfGeRdRg0djJ
-	TQtYDt7mASWTMlcxR6D9QF0QOnjU+XxbETixeS/zVthq/Qng0s=
-X-Received: by 2002:a05:6000:18a8:b0:487:342:d145 with SMTP id ffacd0b85a97d-48b0245d2ebmr2617321f8f.2.1790773402155;
-        Wed, 30 Sep 2026 06:03:22 -0700 (PDT)
+        bh=cdMdvjWVLIDEVS1UUHPgTOR23ut4C2R+qU5zRynN6ZE=;
+        b=HTgIr58U1B6bVFm+3R3qYXS+u+G8ojORg4xP2+xO/b50XAS+N8DfZaEGVdRoNKiLdS
+         c43N7nUBghWeK+6zjbvkTATxYDQq8NZCImtR1KDnQEYhXxObgDdmryQcsNHWJQMsNS3Q
+         c7cP1+yeC5tzlM+SI+/dKJX6jxBbKsJAmGIsZr1BFL5TNgrFTBZZ/DkIeM6XWjZ5ELrP
+         vATGZoydHFnIraUrzoBmYLtm01i6EHda+1aukU5IUdQLBKiKQ/9LM68QuBgVHQss49EB
+         3PrHj4qaWB8NLMb5gyBuUM60ZSpT7vmVndux96KDLu1i0p5Av80afmrtGGMswzADBS5C
+         MpfA==
+X-Forwarded-Encrypted: i=1; AKwUvByoLPrSKX9FwDGLJza2KdjXto3ZNRPnzexxMQY1eRXg74fQhGxNtbedO+d7UIz6BlHQQHItFK8OGbIzM91DU+4=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIBxXGvP/UGHIT5DSh4ferUx33ao3xBwPtHhLe/2RlhIJz7fms5
+	0uid1LBE/hFPAN3UHk4Qw++FmW1nc+xohF0GPpxR2Y/ZHlHdEVEP+/7TTSxuIdKzlqY=
+X-Gm-Gg: AYBFou0BFLW2r9+5depIo6+C3b+JaMGzByT8Q2/LNJ4l0qHSBCrIN8y+lNVHXpbAtXv
+	iUFR8Ouq+UO/5UjK0BfG14TjFE0SrqrAQ3jCJKzvGYimOMAHfQAe4U0n6jtj5fQTPNtBpVyLYOL
+	0cCvncIsmWAv8oDfzmCWz446U8Iq/mvqAuzC+2SwEAhhi1+9sITpkUI+r8s3WMxzQjpuYZPF0Hf
+	CxLVcKf4Jyf5ttzIr+oMBGGOj3PTtiIpKpvC489B8tFwpzxWdz4w9gKTqPbSJ4rA9nHKSwRMTKC
+	jo57aTc2tWhGcHm2rqUt01OvE4uxYvvjJlGxp9p35l3SwTQdzHqcfgIJ8OqY79nmPeFQF60yXUJ
+	dY5JU2Iv1PB6cqxGXJQ9kayohlXkQFMfeT9NtiOSQlPaNp6jjd01ADSqyccyf8LVZ37/o/RSw4+
+	0T+ne8DpyySXoyfgb/ndh7qx+v70Mm4t5w5wTpwdo0/wHq8mE2UTHy1eMDMsAUjUp5Uea+DvgDA
+	xgPD1otCd2VxQjCRnInPbNVKxZugEEDNwmetVlwWSBmAsKdf2g=
+X-Received: by 2002:a5d:5d85:0:b0:487:8ba:8b4c with SMTP id ffacd0b85a97d-48b024297b0mr3902212f8f.1.1790773482052;
+        Wed, 30 Sep 2026 06:04:42 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:ab7:2110:6a1d:efff:fe52:1959? ([2a01:e0a:ab7:2110:6a1d:efff:fe52:1959])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b02a0185asm3461189f8f.32.2026.09.30.06.03.20
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b029be7cesm3805401f8f.8.2026.09.30.06.04.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Sep 2026 06:03:21 -0700 (PDT)
-Message-ID: <235a33c2-7138-4815-820d-793568757d95@6wind.com>
-Date: Wed, 30 Sep 2026 15:03:20 +0200
+        Wed, 30 Sep 2026 06:04:41 -0700 (PDT)
+Message-ID: <3019f327-1ea1-42f6-b133-597ca1cc524a@6wind.com>
+Date: Wed, 30 Sep 2026 15:04:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,8 +71,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Reply-To: nicolas.dichtel@6wind.com
-Subject: Re: [PATCH net-next v9 2/6] net: change netdev_hw_addr_list count
- through helpers
+Subject: Re: [PATCH net-next v9 3/6] net: add a generation counter for dev->mc
+ changes
 To: Yuyang Huang <sigefriedhyy@gmail.com>
 Cc: Ajay Singh <ajay.kathat@microchip.com>,
  Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
@@ -92,31 +92,35 @@ Cc: Ajay Singh <ajay.kathat@microchip.com>,
  linux-kselftest@vger.kernel.org, linux-wireless@vger.kernel.org,
  netdev@vger.kernel.org
 References: <20260930112842.21323-1-sigefriedhyy@gmail.com>
- <20260930112842.21323-3-sigefriedhyy@gmail.com>
+ <20260930112842.21323-4-sigefriedhyy@gmail.com>
 From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
 Content-Language: en-US
 Organization: 6WIND
-In-Reply-To: <20260930112842.21323-3-sigefriedhyy@gmail.com>
+In-Reply-To: <20260930112842.21323-4-sigefriedhyy@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 Le 30/09/2026 à 13:28, Yuyang Huang a écrit :
-> The count of a netdev_hw_addr_list is changed in several places of
-> dev_addr_lists.c and a few drivers read it directly. The next patch
-> needs to account every change of the count of dev->mc.
+> A multi-part RTM_GETMULTICAST dump of dev->mc resumes by position, so
+> entries added or removed between two dump rounds can be skipped or
+> repeated. The IPv4 and IPv6 dumps report that with NLM_F_DUMP_INTR by
+> stamping cb->seq from a per netns generation counter combined with
+> dev_base_seq, see inet_base_seq().
 > 
-> Add __hw_addr_count_add(), __hw_addr_count_inc(), __hw_addr_count_dec()
-> and __hw_addr_count_reset(), use them for every change of the count
-> and rename the field to _count so that a direct write stands out.
-> Readers keep using netdev_hw_addr_list_count() and the netdev_uc_count()
-> and netdev_mc_count() helpers, the few that read the field directly
-> are converted. No functional change.
+> Add the equivalent for the device multicast lists: a per netns counter
+> bumped whenever an entry is added to or removed from any dev->mc. The
+> list helpers do not know which device a list belongs to, so give
+> netdev_hw_addr_list an owner, set for the lists of a device and NULL
+> for snapshots and other standalone lists, and bump the counter of
+> dev_net(owner) from the count helpers when the list is dev->mc. That
+> covers the dev_mc_* helpers, both lists of a sync, the hardware sync
+> helpers drivers call from their rx mode callbacks or their own workers
+> and the reconciliation after an asynchronous rx mode update. It is
+> atomic since the writers only hold the address lock of their own
+> device.
+> 
+> Used by the following patch for the AF_PACKET multicast dump.
 > 
 > Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
+
 Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-
-If you respin a version, you can use netdev_hw_addr_list_count() in
-__hw_addr_list_snapshot() also.
-
-Thanks,
-Nicolas
