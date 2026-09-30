@@ -1,148 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out198-23.us.a.mail.aliyun.com (out198-23.us.a.mail.aliyun.com [47.90.198.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46C264CCDC1;
-	Wed, 30 Sep 2026 12:06:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD32F3624DB;
+	Wed, 30 Sep 2026 12:24:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790769965; cv=none; b=Z2PcUkBlbP55AXsWUfTsdvfHk9g8qgReBv6y4dKIPyRGX4CuPKiJjJ+DTGHbxwRlprDoAhA5Al2hwBIqBR1z3aH5DQuUGA0LbmsNj+Uvk4fjrX67zc8W4O8SU9AidXIUBt04mmh2RFyC4D0sOfIGIKZuIWbZ7tjBX6IKb9fW2FI=
+	t=1790771094; cv=none; b=BjNWHxXn0tdyfWZ76ntdN+7zD2myZrGLQDhkANQDMmBH3id+HBsWoVGY+cuyMpUGqovWmaf3nBEFhgB6LwxEbkEviH/u80ts6LRPSKk+6+bgAYSWHjtMIXVMb/cH4bcGSxVosc7Kgv9O7Ut1CGItn16rX/7vPO8BhBzpmDIS0U0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790769965; c=relaxed/simple;
-	bh=buBf7t9Hn6EBP0vAciAAVetVActYmbebNI7mVh5g4oo=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nwyTHOUBm6tVgZJMQPJe2wTLMsDBl/jTXNqe5B3nDe12vXCrMnyrg3mr4HzMWZNbHSZy5oZDoHeBj95z/Rs/X+FMrzNSF42dLG5HXsJaZlCMqAeAKt8TOIh6FKph4XoZoSXWlSZcByrdlXfseeuUgrWJGUfbeAR+/VtKxgyNjXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aytuilX+; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aytuilX+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B4901F000FF;
-	Wed, 30 Sep 2026 12:06:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790769963;
-	bh=8nNtuJZdcWbpoaJYlOZyiCIkleDqMmN5g1ivBvMT0rQ=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=aytuilX+0FO6M/0ru752d7Xv7MoofxyAiHYqkWFI64N/XgsFoC92jl7+LYapkyYgx
-	 txtXm2t7odGuKhdKSoBCzJVeb2oAzyiu2b5pC3RGqWd5xV7lsLbap+dIATZz8nDa02
-	 HGN/7PHSzxJ1WkZkxWy9WFBRzZvGfu/n3ylKVO+3EQQonrVpkzyDC7CW/+6sH1EXkS
-	 WAPX8TGN/WyxLZTYeRS+Px4JgFO1swoCggUVGaxaU7Ruyy9JXJwrWxafuB3E7OFr8m
-	 rNS9WqrGnzwsxpTgNKIfIWkgbeaZWMCO/CJoSUGpKnHZ4v1rKLf9XoAwdAgfmh/kLT
-	 Slf6Zl/nODSMA==
-Subject: Re: [PATCH net] macsec: check the resolved SCI for duplicates
-From: netdev-bot+sashiko@kernel.org
-To: haseebulhaq55@gmail.com
-Cc: sd@queasysnail.net, netdev@vger.kernel.org, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- shuah@kernel.org, hannes@stressinduktion.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Wed, 30 Sep 2026 12:06:02 +0000
-Message-ID: <179076996248.434549.3813789807508446133@kernel.org>
-In-Reply-To: <20260927-fix-macsec-duplicate-sci-v1-1-085bd742c8e9@gmail.com>
-References: <20260927-fix-macsec-duplicate-sci-v1-1-085bd742c8e9@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1790771094; c=relaxed/simple;
+	bh=oOx89ZkTYto6hTf/g/P9vzE9FciTS9IGNHzImGjKszE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=K1Xc9rj7RPkAT0azWFAh4vi4BoK6UVh8BkocTe8726weWA5et1X1aoc0Yf65VnI2YyW48tJoSoMNsGfEA0fjCcUNR6TSSFUUPrVD8iI+pmj37HQxRe1RWy3VZyElIG354SvgCm+HQVmqQSbQyaFhut64Ke1r88qeKRvBD4W7gOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=47.90.198.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.07469621|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_enroll_verification|0.0552072-0.000323851-0.944469;FP=14945158427218365692|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033032023038;MF=zhang_wei@open-hieco.net;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.jSMK3gv_1790771069;
+Received: from 192.168.0.110(mailfrom:zhang_wei@open-hieco.net fp:SMTPD_---.jSMK3gv_1790771069 cluster:ay29)
+          by smtp.aliyun-inc.com;
+          Wed, 30 Sep 2026 20:24:30 +0800
+Message-ID: <ec1fb2e5-87c5-443f-9bd6-6983b96f63d7@open-hieco.net>
+Date: Wed, 30 Sep 2026 20:24:28 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 5/8] KVM: nSVM: Fetch DecodeAssist bytes for
+ synthesized faults
+To: Jim Mattson <jmattson@google.com>, Sean Christopherson <seanjc@google.com>
+Cc: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, zhouyanjing@hygon.cn,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1790171702.git.zhang_wei@open-hieco.net>
+ <b614e927c6c1ce9265cb9a37b296b0b30598da72.1790171702.git.zhang_wei@open-hieco.net>
+ <CALMp9eT1qMk7V7=md68LEXvmWH5ecj1YBn-YHoQ-vzJziaP5VA@mail.gmail.com>
+Content-Language: en-US
+From: Tina Zhang <zhang_wei@open-hieco.net>
+In-Reply-To: <CALMp9eT1qMk7V7=md68LEXvmWH5ecj1YBn-YHoQ-vzJziaP5VA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+On 9/24/2026 6:20 AM, Jim Mattson wrote:
+> I hadn't anticipated the need for this special-case, and it's more
+> intrusive than just returning the number of bytes read.
+> 
+> I see now that it's complicated to match the behavior of the
+> emulator's __do_insn_fetch_bytes(). You could clamp the number of
+> bytes to read up-front to deal with the end of the address space, but
+> you would still need a second call to handle the wrap.  Something like
+> the following (mangled by my MUA):
+> 
+> static unsigned int __kvm_fetch_guest_virt(struct kvm_vcpu *vcpu, gva_t addr,
+>    void *val, unsigned int bytes)
+> {
+> struct x86_exception exception = {};
+> unsigned int bytes_read;
+> u64 access = PFERR_FETCH_MASK;
+> 
+> if (kvm_x86_call(get_cpl)(vcpu) == 3)
+> access |= PFERR_USER_MASK;
+> 
+> kvm_read_guest_virt_helper(addr, val, bytes, vcpu, access,
+>    &exception, &bytes_read);
+> return bytes_read;
+> }
+> 
+> unsigned int kvm_fetch_guest_virt(struct kvm_vcpu *vcpu, gva_t addr,
+>   void *val, unsigned int bytes)
+> {
+> unsigned int first, bytes_read;
+> bool wraps;
+> u64 avail;
+> 
+> /* An instruction-sized fetch can wrap at most once. */
+> if (WARN_ON_ONCE(bytes > X86_MAX_INSTRUCTION_LENGTH))
+> return 0;
+> 
+> if (!is_64_bit_mode(vcpu)) {
+> addr = (u32)addr;
+> avail = BIT_ULL(32) - addr;
+> wraps = true;
+> } else if (is_noncanonical_address(addr, vcpu, 0)) {
+> return 0;
+> } else if (addr < BIT_ULL(63)) {
+> avail = BIT_ULL(vcpu_virt_addr_bits(vcpu) - 1) - addr;
+> wraps = false;
+> } else {
+> avail = -addr;
+> wraps = true;
+> }
+> 
+> first = min_t(u64, bytes, avail);
+> bytes_read = __kvm_fetch_guest_virt(vcpu, addr, val, first);
+> 
+> if (wraps && bytes_read == first && first < bytes)
+> bytes_read += __kvm_fetch_guest_virt(vcpu, 0, val + first,
+>      bytes - first);
+> 
+> return bytes_read;
+> }
+> 
+> I think this solution may be worse than what you have now, but I will
+> defer to Sean. Maybe he will have a better idea. (Maybe my suggestion
+> to return the number of bytes read was misguided.)
+> 
+> Reviewed-by: Jim Mattson<jmattson@google.com>
+> 
+Thanks, Jim, for the suggestion and review.
 
-- [Medium] The two new tests, test_duplicate_sci() and
-  test_undefined_sci() in tools/testing/selftests/drivers/net/macsec.py,…
+Hi Sean, what do you think?
 
---
-
-macsec: check the resolved SCI for duplicates
-
-macsec_newlink() now passes macsec->secy.sci to sci_exists() when checking
-for duplicates, instead of the unresolved local sci. Before this change, an
-all-ones IFLA_MACSEC_SCI request could create a second MACsec device with
-the same transmit SCI on the same lower device. The commit also adds
-selftests for duplicate rejection and for the all-ones fallback.
-
-Link: https://lists.openwall.net/netdev/2026/09/16/11
-
-> diff --git a/tools/testing/selftests/drivers/net/macsec.py b/tools/testing/selftests/drivers/net/macsec.py
-> index 9a83d9542e04a..72ee1c6e146ee 100755
-> --- a/tools/testing/selftests/drivers/net/macsec.py
-> +++ b/tools/testing/selftests/drivers/net/macsec.py
-> @@ -263,6 +263,52 @@ def test_offload_state(cfg) -> None:
->              "features should match first offload-on snapshot")
->  
->  
-> +@ksft_variants([
-> +    KsftNamedVariant("default", "", ""),
-> +    KsftNamedVariant("explicit", "", "sci {sci}"),
-> +    KsftNamedVariant("undefined", "", "sci ffffffffffffffff"),
-> +    KsftNamedVariant("undefined_default", "sci ffffffffffffffff", ""),
-> +    KsftNamedVariant("undefined_explicit", "sci ffffffffffffffff", "sci {sci}"),
-> +    KsftNamedVariant("undefined_twice", "sci ffffffffffffffff",
-> +                     "sci ffffffffffffffff"),
-> +])
-> +def test_duplicate_sci(cfg, first, second) -> None:
-> +    """Reject duplicate transmit SCIs, including the undefined-SCI fallback."""
-> +
-> +    ms0 = _macsec_name(0)
-> +    ms1 = _macsec_name(1)
-> +    sci = _get_mac(cfg.ifname).replace(":", "") + "0001"
-> +
-> +    ip(f"link add link {cfg.ifname} {ms0} type macsec {first}")
-
-[Severity: Medium]
-Should test_duplicate_sci() and test_undefined_sci() check that the local
-iproute2 supports MACsec before they create links?
-
-Every other test in this file calls a _require_* helper first:
-
-  test_offload_api, test_offload_state -> _require_macsec_offload(cfg)
-  test_max_secy, test_max_sc           -> _require_ip_macsec_offload()
-  test_vlan, test_vlan_toggle          -> _require_ip_macsec(cfg)
-
-Each of these helpers raises KsftSkipEx when "ip macsec help" shows that
-support is missing.
-
-In test_duplicate_sci(), this first ip link add runs outside ksft_raises().
-With an iproute2 that lacks MACsec, it raises CmdExitFailure and the case
-is reported as a failure instead of a skip.
-
-test_undefined_sci() has the same problem:
-
-    ip(f"link add link {cfg.ifname} {ms0} type macsec port 2")
-    ...
-    info = ip(f"-d link show dev {ms1}", json=True)[0]
-    ksft_eq(info["linkinfo"]["info_data"]["sci"], sci)
-
-If info_data is not in the JSON output, indexing it directly raises
-KeyError, which also counts as a failure.
-
-In that environment, all seven new cases (the six test_duplicate_sci
-variants plus test_undefined_sci) would FAIL, while the rest of the file
-would SKIP.
-
-Both tests use only the local host. Would a local-only check be enough
-here, such as _require_ip_macsec_offload() or a local variant of
-_require_ip_macsec()? The existing _require_ip_macsec(cfg) also checks
-cfg.remote, which these tests don't use.
-
-> +    defer(ip, f"link del {ms0}")
-> +    with ksft_raises(CmdExitFailure):
-> +        ip(f"link add link {cfg.ifname} {ms1} type macsec "
-> +           f"{second.format(sci=sci)}")
-> +        # Clean up if the kernel incorrectly accepted the duplicate.
-> +        defer(ip, f"link del {ms1}")
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260927-fix-macsec-duplicate-sci-v1-1-085bd742c8e9%40gmail.com
+Thanks,
+Tina
