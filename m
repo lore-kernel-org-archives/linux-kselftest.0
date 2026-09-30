@@ -1,82 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-195.mta1.migadu.com [95.215.58.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B62433A9E8;
-	Wed, 30 Sep 2026 00:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBAB78F2B
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 00:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790729408; cv=none; b=urMTdUQT0KYS8/6hM3/jDnhucqvTUaBNYDY1iHWthbF4VZLiXM5ycjn5brKgNTpzvmDEQYB+3BfY74sOpQVQ4s9gvoWyASxBcvKjXo1pw4naeoCEKOa2OFjFwFRnvUeIOAv2hZdsGsRlU20IZ7tqiz+Mw4IFPUuoMTvok5lulBA=
+	t=1790729666; cv=none; b=EVH55qAFKAHTO9DhzE5n5I9uk/wva44ZyXbemN1kYpkUIdtPBaJ+ZUVfybmJvQwodALNyjALZq+5USutVTUFYIZhfhItB+lLxVxQnsod8s3CWxwV489eORPhnwRZBb9bcx/88oUEHWtxWitSwvmQoJv5pEObOTrVz4YL9jhW0eY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790729408; c=relaxed/simple;
-	bh=TjiKnNl1rUdu6C/SiyWkAG/6zIZAFl+XTZQALhS4gCY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=oUP2qkoebX9V4KuLCiqgO2+I1r1CWDnExBCXsjQQgMTNL8EsoaAttlK6aYZqOtCXyufXd6anp9Bsphsix5V7/YGPndlvyVhrGR+6W40BB/Q/RMIDoaKKXADdjQb9S1r1GJHfMePMToyXq8OrAbpp5cc33jFrXVJ+fwHqRsvHzPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SUdStqcp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790729666; c=relaxed/simple;
+	bh=Z+KFjxZ/7VN7LhoM4Ek2PNsW+mvz4O9ijB5/9/MmV7k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=thzBdQ8Sbeol/NzDSXPVH5C20Q1/ZIIPn36pfY9ctAX3DjSNmCkK//cY483/kklivHOpOpMJcOGa+xAUDXFnv0hqUD3O4ajB5wxRf10y2dyzvap6CFtzNm9Xn7hzxFMWuEGOqce7P72Q3ZPPhtxu33ilBGSUn0I7LkztZlyd7Tw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xqmVVf6z; arc=none smtp.client-ip=95.215.58.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SUdStqcp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45E081F000FF;
-	Wed, 30 Sep 2026 00:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790729407;
-	bh=9v1GAkHoBOPWp5VtYA6kIbswGlgJ8597azWdEv7u8Uk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=SUdStqcpeiuuetzdR4h0MIN6ogcod0wC07kWe3A4pPeQyt3iJY8/LQqJrv2CLh9NC
-	 c9YBs3vupjY1XpUQVnjPMevo0bX+Yk8Ai8yCR+5xPbMAfStVOk+X/LsxPl4gTTerdt
-	 or9eFvtuZp/+0oulAej5E9GBRvRHefF3mNC0dKVeu6qAfg7j76rGwLL1ybWMEn99+2
-	 fl3SX0W7gYZLs1ReFPb+TWHOaxn/gVRAXd/C9YTZ9od9M3GCP5boXsJW6f+tBGu9TS
-	 MXPSR1IV2wuvMr6p/OrCdR19SwEMpHBCkyKEUdflsT6RouNNT1grfV0zgsEv8bQmt9
-	 JmSsT4OUbfyOg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A3803924FEA;
-	Wed, 30 Sep 2026 00:50:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xqmVVf6z"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Z+KFjxZ/7VN7LhoM4Ek2PNsW+mvz4O9ijB5/9/MmV7k=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790729662; v=1; x=1791334462;
+ b=xqmVVf6z8bFh06MlzcqtGRLUovfP9oYR2M/1ahZQRjT0rY9mpPrNw8YFydI1LZhv/lgn7kH5
+ QioWy5MYVpaYOnHV3HX2d8z3esVw4cJoo78NR6IS8PiyM9fz8HAPGMQqtR07Zfeq5eB6LYT2yjT
+ 6vGgEvVWobJlVndixJmLl7lg=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 752e7d1f9e23d04f;
+	Wed, 30 Sep 2026 00:54:22 +0000
+X-Mizu-Trace-ID: 752e7d1f9e23d04f
+X-Migadu-Flow: FLOW_OUT
+Date: Wed, 30 Sep 2026 08:54:10 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Ido Schimmel <idosch@nvidia.com>
+Cc: David Ahern <dsahern@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Ido Schimmel <idosch@mellanox.com>, David Ahern <dsahern@gmail.com>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Hangbin Liu <liuhangbin@kylinos.cn>,
+	Sashiko <netdev-bot+sashiko@kernel.org>
+Subject: Re: [PATCH net] selftests: fib_tests: use per-test return value in
+ subtests
+Message-ID: <arxdshcuvddlf5WP@fedora>
+References: <20260929-self_fib_tests-v1-1-0eab6a3c3a3c@kylinos.cn>
+ <20260929134517.GA832345@shredder>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v4 0/2] ipv6: update NUD_FAILED neighbors from NA
- messages
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179072940591.1186988.3707181901513774796.git-patchwork-notify@kernel.org>
-Date: Wed, 30 Sep 2026 00:50:05 +0000
-References: <cover.1790127207.git.lfqlee314@gmail.com>
-In-Reply-To: <cover.1790127207.git.lfqlee314@gmail.com>
-To: Lawrence Lee <lfqlee314@gmail.com>
-Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- rdunlap@infradead.org, netdev@vger.kernel.org, aajith@arista.com,
- roopa@nvidia.com, jhpark1013@gmail.com, corbet@lwn.net,
- skhan@linuxfoundation.org, shuah@kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260929134517.GA832345@shredder>
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 23 Sep 2026 01:34:17 +0000 you wrote:
-> Neighbor Advertisements for existing NUD_FAILED entries are currently
-> ignored. This can leave a first-hop router with an unusable neighbor after
-> the host becomes reachable and announces itself, particularly when
-> forwarding is offloaded away from the kernel and traffic destined to the
-> FAILED neighbor is unable to trigger the kernel's normal neighbor
-> resolution process.
+On Tue, Sep 29, 2026 at 04:45:17PM +0300, Ido Schimmel wrote:
+> On Tue, Sep 29, 2026 at 09:57:01AM +0800, Hangbin Liu wrote:
+> > From: Hangbin Liu <liuhangbin@kylinos.cn>
+> > 
+> > fib_tests mixes use of $ret for both per-test return value and global exit
+> > code. If an earlier subtest fails and a later function sets ret=0, the
+> > script will exit with status 0 even though [FAIL] lines were printed.
+> > 
+> > Use RET as the per-test return value, as already defined in lib.sh. The
+> > exit code ret will only be set in log_test().
+> > 
+> > Fixes: 607bd2e502f5 ("selftests: fib_tests: Add test cases for IPv4/IPv6 FIB")
+> > Reported-by: Sashiko <netdev-bot+sashiko@kernel.org>
+> > Closes: https://lore.kernel.org/all/178961184152.22033.9267194009793243294@kernel.org
+> > Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
 > 
-> [...]
+> Please target the patch at net-next and drop the Fixes tag. The patch
+> doesn't fix a regression, nothing is failing (or passing when it
+> shouldn't) because of it and it cannot be backported cleanly to old
+> kernels anyway. I targeted similar patches at net-next in the past. See
+> [1], for example.
+> 
+> [1] https://lore.kernel.org/all/20250908073238.119240-5-idosch@nvidia.com/
 
-Here is the summary with links:
-  - [net-next,v4,1/2] ipv6: update NUD_FAILED neighbors from NA messages
-    https://git.kernel.org/netdev/net-next/c/24717a02aee4
-  - [net-next,v4,2/2] selftests: net: test untracked NA recovery of FAILED neighbors
-    https://git.kernel.org/netdev/net-next/c/022e48e20776
+OK, got it.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> 
+> > ---
+> >  tools/testing/selftests/net/fib_tests.sh | 40 ++++++++++++++++----------------
+> >  1 file changed, 20 insertions(+), 20 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+> > index b338bfb196a2..9ce5623b049c 100755
+> > --- a/tools/testing/selftests/net/fib_tests.sh
+> > +++ b/tools/testing/selftests/net/fib_tests.sh
+> > @@ -369,7 +369,7 @@ fib_carrier_local_test()
+> >  
+> >  fib_carrier_unicast_test()
+> >  {
+> > -	ret=0
+> > +	RET=0
+> 
+> Looks like this line can be removed (similar to fib_carrier_local_test()
+> above it) given that RET is never used in this function
 
+Right, I will remove it.
 
+Thanks
+Hangbin
