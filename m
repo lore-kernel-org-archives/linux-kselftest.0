@@ -1,102 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf2-f13.google.com (mail-lf2-f13.google.com [74.125.229.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EAE24CB8AB;
-	Wed, 30 Sep 2026 13:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790775636; cv=none; b=AzxdTmPqw9DytqBcm4Dze7ouVSATD+Dslk1QS9cEttRC/pMDMhv4kol23zRG4kRHCGDO6KOnHJUNB6NDGvdpHsEwEg60dHUDAhO0pEKnysjDueKZbtdui4anrmsV6zeXfARJI31Kf0VWSESeJ8/eKVTgv1kJiIDha17WDc87kQM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790775636; c=relaxed/simple;
-	bh=uzHGM/3maVkIGwCJuKvC/PNaFcYXYyU6EAt9CwiwkGY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=kljH8SepuIueXoJyaVYI47jm/xyuxAC+ERzGbuYaP2IVqaCVmq/RXoYxL0egxZDPVJUFWZG1TF9+xK59TMPeEqRvPnazTWgSrXodaIMGNbfw5A0vatd6BRuy460dkJEaWEjMTXSG1FArC4UBgF/pHTfF1jm36h8J6fQUkHuV9V4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XKtt4/A5; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3D64E4331
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 13:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.229.205
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790775829; cv=pass; b=lKnuN1tq4vmVrl9TEd4sg5j6Lo5mC6QWP4GU75pGjSsbTBiXC0ZiOq7uq+DIHJdbNE9CC2+ozQUfxTk4oxsO8THPvRHCSTIik2EWetIfn8kyu4juqwYBVhUNhPc2Vl/hUJ5FsQg61j1LZR6VGIw6New2k9qHd1qhW7IKabJiTdI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790775829; c=relaxed/simple;
+	bh=cCtGCKJIdKETCLLrblWPIJiV47ko5Aowu8J0xSZcZvA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BXAbrc0zeuS4a90c+c04jISnc7i3lMUIWYFEWmbDbLloy0cTndmdN9vg4qcoNbScLpIl5UiZpqC2slAl+5r48Y6fw8wp1qvqQ/OJeMYQ8R0e1yS4ygnZDhaFGx7mOzBQgv+5lVy46fF9zZx+yywgI6gRAmuSD3ZAy91uya8Tp2I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Abwb83fs; arc=pass smtp.client-ip=74.125.229.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XKtt4/A5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607161F000FF;
-	Wed, 30 Sep 2026 13:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790775620;
-	bh=zbkUDNwMgnqGHrbog0cra0S8SRCtAdGfYKEuqQ54rHU=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=XKtt4/A5r/NkfGSvjGsvCW5EFKALT4VUt/RHVBjfHu+gJmFaF8/SWNcnrhlmbywAS
-	 ifcqRGWYrmSjygRyyrsTfwOoN2bR2RY4k37nRTO86Fe/6ZQMJmouyYQepITjzW/tLt
-	 an92bB88qaT5hqoqilJyvJmu9fzkThXkvwq+yIw2k0S/X/1iXOxZ7uRrI2+wOdRlWG
-	 gg5IBr0eTLWXVU78MxgA3y+//L0MbFHibkUIsEBDi1XKQOlJjPlbCAIAprCWNyzfu2
-	 N4dBImdVO92xInyLowtE5Vy0a5O3aWxh1xfY0cTW7PyFmz5QQNqBm+piNDE9yfYwhg
-	 ZZSNukz9/nwOQ==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>, 
- Luis Augenstein <luis.augenstein@tngtech.com>, 
- Maximilian Huber <maximilian.huber@tngtech.com>, 
- Mike Rapoport <rppt@kernel.org>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
- Pratyush Yadav <pratyush@kernel.org>, Alexander Graf <graf@amazon.com>, 
- Willy Tarreau <w@1wt.eu>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
- Nicolas Schier <nsc@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Askar Safin <safinaskar@gmail.com>, linux-doc@vger.kernel.org, 
- kexec@lists.infradead.org, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-In-Reply-To: <20260928-move-gen_init_cpio-to-scripts-v4-0-f437a33c40ac@kernel.org>
-References: <20260928-move-gen_init_cpio-to-scripts-v4-0-f437a33c40ac@kernel.org>
-Subject: Re: [PATCH v4 0/2] Move tool for generating initramfs cpio to
- scripts/
-Message-Id: <179077560598.3184845.8880862675609960141.b4-ty@b4>
-Date: Wed, 30 Sep 2026 15:40:05 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Abwb83fs"
+Received: by mail-lf2-f13.google.com with SMTP id 2adb3069b0e04-5b8cbb7b9cfso4305448e87.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 06:43:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790775811; cv=none;
+        d=google.com; s=arc-20260327;
+        b=UF7uZLOFmEP1/7FCAsi9f/mSEzCleA96iRK0MSoaZ3lapzPke7x2WsjEbgIHVPyzdE
+         /zXM2vABuhRbA+cRQZriSom2yodV+qthjbr5zGCXa3H804+shlEkQmtVi/1epgmCfuEU
+         +AIfV7P553SRav3YFH2vtihnTbRp2zQRCBg5tnXV2NHU0OfcowdswdDRKQr3r0AEfXA8
+         qKfUPlOATkJum0jkkaY1nHQEbiHOrrBORD8oJpZpN7nynRfD2C21wSWqSP+A5ZUkgM8F
+         q3CiwNyut6gs9BkPY8IEwNnj41Ir7G+fyyJJaKvrbLFxMwByG/htKZ2UsA6vIpKTu3Gv
+         ZBnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=cCtGCKJIdKETCLLrblWPIJiV47ko5Aowu8J0xSZcZvA=;
+        fh=TtJ0mAXE0NTjDUv9QDhW2+Yr1lwuZaJBlpJZN3+GH8E=;
+        b=MChJ05w43/CliUH7ofYNEtM4bHHxhKwEyPy9/xN3hx2fdT/N1Q1eezAYmSM9q65nUT
+         0yWsRL6WtZKj+MNjaPwRSn6GVOs/y6sNCmCP+BB79hYJoXYkV1tYDMR6tCMfEVWyAqo0
+         qk5RO/+5V5bqglsg4H3wiM8139+oYBd5N1pMJKZ3YKbFT6k+xgfOYm6hCuTbnRL13HqV
+         oht3ruPyyTcdaS5UEoXEIC7Tm7Eo5fxUOIdSwIil6HYQ2Y+RPc8bQ7jISVlYcnAt4XTf
+         aCE1mviW59xbnKefEAi1SDDzb5wtdeq/hDxoBuB2qhQZP+P/Ba2rrt+MNp2i79NM1MRw
+         c+Cg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790775811; x=1791380611; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=cCtGCKJIdKETCLLrblWPIJiV47ko5Aowu8J0xSZcZvA=;
+        b=Abwb83fsHbVpFom07AyBbpD8lFlxcGjmykARrOKp1fEkZ5oFgOMcOil6oA+XBjIA4u
+         VpHxhpr99eY0XrjQ0fH6vQj2WGP4SaUUkQbPZkV6eL0+Eh2K7xGmReydj100JWDeaA2m
+         Ejoy0YYjPwnLLA8Qva95dPsyhbZy/LE7x2OPGuRAf8bSsFJfjKIMEzixk/DfeL/Fv3RF
+         4QI1Yh3RBlRp2YPpWQI0aph0AsUN5ZcrBCMzRRZkvqgau45sRl92pAOYYeW6f+yjnCHQ
+         sWuLaMYhVV1MBs8lB3BGRT3u97pMMllnj4pmMtDtq19bRWSxI1U8dgz459H0yoRTlXuq
+         Tpug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790775811; x=1791380611;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=cCtGCKJIdKETCLLrblWPIJiV47ko5Aowu8J0xSZcZvA=;
+        b=sKj9nVcMndKbgbRFiRekNLVo+uH9joNAYlmE2ks6yNWruPctPuyOBq2KvkGQDdBJ/1
+         zQ8BMAZ5GWvS7RA3tx7zjMUG82INu4zR2dYx8aZMdtil+8wg4uVix/AxGH3vbR5/Qfh6
+         /TK9/Xy74r84jVbbnq3+mJQVJST1sjLuEOBXwJN6dFofQB6AtdaSVJyi8eQsHzdw+Nbu
+         wUyKpPqAOxXTop5P45ch8UwcXJoO/kd04UI7sZMyhyVLrQrjl6+B8Lj/OFT67OrvnWzR
+         NDAPzuTd3GoanI6ZN6zd8BwnxBdCCN01ThLK6BdVPO+f0Dm+1+v9lYpj9aQUA56MNWYv
+         4cvg==
+X-Forwarded-Encrypted: i=1; AKwUvByt/VDRK78+dG3I6Bl8cyA19L8iAcqSMZ9VUpc2C/ChfqhEfkEQgdIPMwyntxZ9EAKZlLMFhWuxMm1AuqOa8KE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKdwBPTiVA0hE3mNrfkUarWolT4IiQaawjphMBfM7+5ep0vcPef
+	NCFtkRWPzJI9A712Gui1oWT3s0+Yb4EzFrlSO3CNjFa3PmiyIpAlDNTMa4tFQ+xfhAaw/qBDnq0
+	08jTxm+fI9C1EgwVVQlGc4+ttPuvJZRQ=
+X-Gm-Gg: AYBFou2AUmumOC51vMGEGkCVziKFGAaLm06RtOQyckO4i1EB5GES0qTiIvdt7Ogw4Ey
+	xxy2dvw/ci9qjTQSwOo9Xsmp+CJc/YVRrM/dr2QgsNZnhuiWNdduUDAt/Gw3jyp/nn1hESs0Z7o
+	rIFnE/+v5C+bkNKuDQyVlqGbf+0b9XZv4V78OJ+LlhHUrokpyPXCjgDgorqhdnC2sS2V6Q9xv4i
+	PJm2y/pMSxblVHAhM8ZPJ1EMjvfBruKaY03csQ+phy87bdWtt9MCaQE6tMtujqtFS/GUOlU5AZg
+	Wd/zH9IqU5Meuvg4KFw0fJRlawANnVn7TyoZy6QUgw4kGKe1ixlFtckmIWmNoeRTTgzkvcaEV9W
+	zlyYFBkCSeXKhG4ye6Sqqqdg5oVR1wBaxaxcKle7J+Udo
+X-Received: by 2002:a05:6512:3ca2:b0:5b8:f83b:30bf with SMTP id
+ 2adb3069b0e04-5ba405f9b82mr609416e87.65.1790775810584; Wed, 30 Sep 2026
+ 06:43:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1195; i=nathan@kernel.org;
- h=from:subject:message-id; bh=uzHGM/3maVkIGwCJuKvC/PNaFcYXYyU6EAt9CwiwkGY=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFl7BS33Hd+UGvve0kZKZXb3b+nkhL8/ZL9esLiXa6xya
- v0x49U3O0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEPioy/NNPOlPA9cZP+FZm
- WdDsvrtCQplpXb/C83d5LD07//GadGVGhqs7v7rem/Z96nyOPVe/fK5Nf7Jo0d+HUju3xd+vdmE
- 8H8wIAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+References: <20260930112842.21323-1-sigefriedhyy@gmail.com>
+ <20260930112842.21323-3-sigefriedhyy@gmail.com> <235a33c2-7138-4815-820d-793568757d95@6wind.com>
+In-Reply-To: <235a33c2-7138-4815-820d-793568757d95@6wind.com>
+From: Yuyang Huang <sigefriedhyy@gmail.com>
+Date: Wed, 30 Sep 2026 22:43:26 +0900
+X-Gm-Features: AclHuK-5JDzwUkEH5VWEa1bCvpw7pms_UcYcspNYWPTwaPuJPPDlw6Pn3dQKWJk
+Message-ID: <CA+7S2v+VaVYksOpuUKzo+DoWZ97M_XKvnMr8cCcgwTkrOxsvEw@mail.gmail.com>
+Subject: Re: [PATCH net-next v9 2/6] net: change netdev_hw_addr_list count
+ through helpers
+To: nicolas.dichtel@6wind.com
+Cc: Ajay Singh <ajay.kathat@microchip.com>, 
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Donald Hunter <donald.hunter@gmail.com>, 
+	Eric Dumazet <edumazet@google.com>, Ido Schimmel <idosch@nvidia.com>, 
+	Jacob Keller <jacob.e.keller@intel.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Johannes Berg <johannes@sipsolutions.net>, Kees Cook <kees@kernel.org>, 
+	Kory Maincent <kory.maincent@bootlin.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Nikolaos Gkarlis <nickgarlis@gmail.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	Stanislav Fomichev <sdf.kernel@gmail.com>, Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
+	Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 28 Sep 2026 19:26:56 +0200, Nicolas Schier wrote:
-> Move tool for generating initramfs cpio to scripts/
-> 
-> initramfs cpio tools had been subject of several recent discussions on
-> linux-kbuild.  Let's get two minor steps forward by enabling a
-> top-level target for building gen_init_cpio w/o the need of a valid
-> kbuild configuration [1] and move the tools for generating the built-in
-> initramfs from usr/ to scripts/ [2].
-> 
-> [...]
+> If you respin a version, you can use netdev_hw_addr_list_count() in
+> __hw_addr_list_snapshot() also.
 
-Applied to
+Thanks, will do if there is a v10.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-next-unstable
-
-Thanks!
-
-[1/2] kbuild: Mark usr_gen_init_cpio as no-dot-config-target
-      https://git.kernel.org/kbuild/c/14e2c1f5431a0
-[2/2] kbuild: Move gen_init_cpio and gen_initramfs.sh to scripts/
-      https://git.kernel.org/kbuild/c/33bef82263082
-
-Please look out for regression or issue reports or other follow up
-comments, as they may result in the patch/series getting dropped or
-reverted. Patches applied to an "unstable" branch are accepted pending
-wider testing in -next and any post-commit review; they will generally
-be moved to the main branch in a week if no issues are found.
-
-Best regards,
--- 
-Cheers,
-Nathan
-
-
+On Wed, Sep 30, 2026 at 10:03=E2=80=AFPM Nicolas Dichtel
+<nicolas.dichtel@6wind.com> wrote:
+>
+> Le 30/09/2026 =C3=A0 13:28, Yuyang Huang a =C3=A9crit :
+> > The count of a netdev_hw_addr_list is changed in several places of
+> > dev_addr_lists.c and a few drivers read it directly. The next patch
+> > needs to account every change of the count of dev->mc.
+> >
+> > Add __hw_addr_count_add(), __hw_addr_count_inc(), __hw_addr_count_dec()
+> > and __hw_addr_count_reset(), use them for every change of the count
+> > and rename the field to _count so that a direct write stands out.
+> > Readers keep using netdev_hw_addr_list_count() and the netdev_uc_count(=
+)
+> > and netdev_mc_count() helpers, the few that read the field directly
+> > are converted. No functional change.
+> >
+> > Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
+> Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+>
+> If you respin a version, you can use netdev_hw_addr_list_count() in
+> __hw_addr_list_snapshot() also.
+>
+> Thanks,
+> Nicolas
