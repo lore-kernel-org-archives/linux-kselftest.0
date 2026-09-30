@@ -1,46 +1,45 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AF9E2EEE65;
-	Wed, 30 Sep 2026 08:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F0D3B71D1;
+	Wed, 30 Sep 2026 09:17:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790758289; cv=none; b=Rkz6qTiwOQEdUr0Jgjs/38FN6wsjaDQe7k5Xmbx84knpA/CLrVK9l1Zovar5/KkCoT1ILf2ZFf7HUz6Z5oAcKsC6DAe+ISAc86JyG7x7n3heOH5Bq4MEECh70VaJ6atxwWrYJkFqZtbr3zDqcB94Ot6q0Kw560gbkH62zpaNiRU=
+	t=1790759876; cv=none; b=pKsYMSYvYbUQv0uC9NScGWU/2iLT19naH8paepgKp9Sst6+iG9AfR0zZnabCoYKNgxWg1z7BgRteTh9QMdYHDq+P49dCwtIIqcsTAUPuSEaAvGEHWHlBrIa+dlkwvn5egwG4AUcfkvK6imnziJ1spZS0wyjXt7e2qgkt9AYomc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790758289; c=relaxed/simple;
-	bh=MZWTqZGizf2e4awlEik6xcTG3aUNk25jrVwdTTqUtAw=;
+	s=arc-20240116; t=1790759876; c=relaxed/simple;
+	bh=ftbkTwrG9CVQyXvF/1PpXRiixtFQvE4ouNvv6aSVwXM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cs7PAEP6tpGhOzmMok0W+jZo4feO8eQb3fpDvYJ/DoLR27J+0mGvjnjaCLQLPbDWNVW4ewlsixEep/AccBJzuKyZBH8jq29KyC/jAFgpECVKI8bDAea1KvFNBmuLALJAcTXCVWtzM1TCKDWKtqdXGhBO6j1QmJI7zylhkPiNCQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=JVZXWF9x; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=ux9nZB/kTPjZ70ngwvpZ9poKif9YRAXyEccN/iz7dLEduUy+9Km/nm3bF6eWxKO+uguw45MLP1uX+1NCW86frpfZfSKC4zGoa9Y/j16cyHNnm2W8FZ+VzDN7VssGMQzjmBYxxiQtuGT2C/cRXz3VSZlqgzuNOL3oHvQQuV1o/pI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UauxHsxm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="JVZXWF9x"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 57DBB143D;
-	Wed, 30 Sep 2026 01:51:24 -0700 (PDT)
-Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 364523F85F;
-	Wed, 30 Sep 2026 01:51:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1790758287; bh=MZWTqZGizf2e4awlEik6xcTG3aUNk25jrVwdTTqUtAw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JVZXWF9xXQVk47nJJSaN6p+8Fx2fMXbO+4U8Qi17EeMFjFgx3/NeFEBN7ngYuVCiQ
-	 hMpKiQeTtxY9JH+kfuWM5KCtGZtk2ZJRqF8Chhjo3LBcKavdBv93ov1Bon1ayAvCba
-	 LIoeW37n7jkrQo01Y5Gs3B8lhR+sonKW3vnSMNV8=
-Date: Wed, 30 Sep 2026 09:51:15 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 03/11] kselftest/arm64: Move exit calls out of fp-stress
- loads
-Message-ID: <arzNg0jxDmbEMrJm@J2N7QTR9R3.cambridge.arm.com>
-References: <20260901-arm64-fp-stress-kvm-v1-0-31bce995b49b@kernel.org>
- <20260901-arm64-fp-stress-kvm-v1-3-31bce995b49b@kernel.org>
- <arvm8O6kL1I9Plrw@J2N7QTR9R3.cambridge.arm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UauxHsxm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9B151F000FF;
+	Wed, 30 Sep 2026 09:17:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790759875;
+	bh=Q1A+WlULujwTkG6nahgS6pUXERQ7Qa2I13iMuWs4TUk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=UauxHsxmJYoEhmXuIJJ/UPFeXejYxaiQKZPO7NyNDw8gm9kLo127Hkg6o/OuzYpak
+	 neThc3i4svWHBeRIH+8LFrKnMz6R8dnr/d2qT3JvphBBimg4og/E96u78huJKXROKA
+	 r7RLUXzeC5+a53CwSpr1klK6yaS9QJn0ib0rWiordGcQSAzioHQSCpVrqdA6yOr++L
+	 RTeL41++Yywva4yIrj09NdzHIhH4TVag8EYtKFjD+ti37gHNU7RQIBm9Aq0/0s4gkp
+	 qyE5TiqZaToB/wSCoy0IQ7RPqS7Hi3DFEnCIOrBBO3R7y+79tn66UGmQ60a1IZgQd3
+	 4iKrX3a57sFnw==
+Date: Wed, 30 Sep 2026 10:17:47 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Hajime Tazaki <thehajime@gmail.com>
+Cc: linux-mm@kvack.org, liam@infradead.org, rbm@suse.com, 
+	akpm@linux-foundation.org, luto@amacapital.net, brendan.jackman@linux.dev, david@kernel.org, 
+	liuhangbin@gmail.com, corbet@lwn.net, kees@kernel.org, broonie@kernel.org, 
+	mhocko@suse.com, rppt@kernel.org, shuah@kernel.org, surenb@google.com, 
+	vbabka@kernel.org, wad@chromium.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org, geert@linux-m68k.org, 
+	daniel@thingy.jp
+Subject: Re: [PATCH v4 1/2] selftests: run tests on nommu architecture
+Message-ID: <arzTBqww5_1MH0B7@gremlin>
+References: <20260929235711.2287931-1-thehajime@gmail.com>
+ <20260929235711.2287931-2-thehajime@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,54 +48,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <arvm8O6kL1I9Plrw@J2N7QTR9R3.cambridge.arm.com>
+In-Reply-To: <20260929235711.2287931-2-thehajime@gmail.com>
 
-On Tue, Sep 29, 2026 at 05:27:28PM +0100, Mark Rutland wrote:
-> On Tue, Sep 01, 2026 at 06:06:43PM +0100, Mark Brown wrote:
-> > When they detect corruption the fp-stress test loads print load specific
-> > diagnostics and exits with a failure status.  In preparation for
-> > building versions intended to run as KVM guests factor the exits into
-> > asm-utils-linux.S.
-> > 
-> > No functional change.
-> 
-> This is a good cleanup, but I do think it'd be worth noting that some of
-> the existing asm was wrong and worked by coincidence.
-> 
-> I did mention that in the patches I linked you to a while back:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=922d15ef46cb486a79f168949e103f6df26f4fba
+On Wed, Sep 30, 2026 at 08:57:10AM +0900, Hajime Tazaki wrote:
+> Architectures lacking MMU don't support fork(2) syscall and only
+> vfork(2) is available with limitations.  Thus, we cannot run kselftest
+> on nommu architecture as is.
+>
+> This commit addresses this issue with the following changes:
+>
+> - on test run stage, avoid calling timeout command when NOMMU=1 variable
+>   added to environmental variable, since timeout command uses fork
+>   syscall which nommu platform doesn't support.
+> - describe the difference of nommu tests in the document.
+>
+> So command line to build/execute tests for nommu should be like below:
+>
+>  $ make ARCH=um NOMMU=1 O=build kselftest-all TARGETS=nommu
+>  $ make ARCH=um NOMMU=1 O=build kselftest-install TARGETS=nommu
+>  $ NOMMU=1 ./build/kselftest/kselftest_install/run_kselftest.sh -p \
+>    -c nommu
+>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Kees Cook <kees@kernel.org>
+> Cc: Andy Lutomirski <luto@amacapital.net>
+> Cc: Will Drewry <wad@chromium.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Brendan Jackman <brendan.jackman@linux.dev>
+> Cc: Hangbin Liu <liuhangbin@gmail.com>
+> Cc: "Ricardo B. Marliere" <rbm@suse.com>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: linux-um@lists.infradead.org
+> Cc: linux-mm@kvack.org
+> Cc: linux-doc@vger.kernel.org
 
-Sorry, that was the wrong link; I meant to share:
+Not sure we need all the Cc's explicitly :) Andrew adds them in (I'm actually
+not sure in general if they're really all that useful, some of my series sent to
+hoards of people due to touching multiple bits scroll off the screen :P)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=2db277185f5c252decdf49b25cd461782e890cd1
+> Closes: https://sashiko.dev/#/patchset/20260813063401.1786548-1-thehajime%40gmail.com
+> Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
 
-... which was another patch from that cleanup series:
+LGTM so:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/selftests/cleanup
+Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-The description of the problem from the commit message was:
-
-| The barf functions in the fp-stress sub-tests erroneously place the
-| status value into x1 (rather than x0) when invoking the exit syscall,
-| potentially returning a different status than expected.
-| 
-| By coincidence, the low 8 bits of x0 happen to be non-zero for all of
-| these cases, and the exit will be treated as a failure by the fp-stress
-| harness, which is the desired behaviour. Hence this doesn't lead to
-| failing tests being reported as passing.
-| 
-| In all cases x0 contains either:
-| 
-| * The result of the prior write syscall made by the puts macro, which is
-|   a write of the two character string "]\n".
-| 
-| * The result of the prior write syscall made by the putdecn() function,
-|   which is a write of the single-character '\n'.
-| 
-| In either case, the return value of that write syscall may be a non-zero
-| number of bytes written, or a negative error code. As the relevant
-| strings are fewer than 256 characters, and all (positive) error codes
-| are less than 256, the value in the low 8 bits of x0 will not be zero.
-
-Mark.
+--
+Cheers, Lorenzo
