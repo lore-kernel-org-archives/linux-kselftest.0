@@ -1,183 +1,140 @@
-Received: from mail-pj2-f14.google.com (mail-pj2-f14.google.com [74.125.227.142])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6824D956D
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 15:55:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.142
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790783707; cv=pass; b=pStXaHKvQchWitYjcxanBuggiL9gy79tNChXVcZ9bOzdGenoCbQ32LCj2cwV9cCzgNgWQYbecLGZ5brx2gR5/F3zNYKqImUdnPaQw9/hQMM0u1IV3tSVJdRf6jP7+GQIuLIUWGNGT4r7Zu0IJ9BjIZx5/KbTVAuC/V0dPr9aLho=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790783707; c=relaxed/simple;
-	bh=R4Q9kST2fKyPZcf28pPVfrlZhTiZCMyaGq+/7TCxRsM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m5vABi9+RqM5hvZ3lhzvgc0g4b7hZ/up7qc5wQr7wsPWZuLiG8/dzJ1XpZU9/RgIPg861xyUs0jjdB7OYrZhNPq61fptl0oJhZ/inmocwUMZopJKMz3iTYW0r8JLDys5V8SNt4xeYCmg+fII9mEFelZ3uIad6DitzAhwPLvlH4c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FMbLnN97; arc=pass smtp.client-ip=74.125.227.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A52513555
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 16:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790786649; cv=none; b=MyukYPN77R81muix0Ca6JCA0QHlaz0BQ2FHxiCz3EBhEQofQ0jtprSZtl/9iiwr21fvhtdChnZYHeK767Wnw9bhVrG5heUC26IhMr4om+QLUdC4oiE1ZPf6K/0VPtIUJzP/OAc82qCfdjzBjV7FnkduZDPZ4Nv3II2rqEUO+kNM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790786649; c=relaxed/simple;
+	bh=IlOWPmoIS1wBYoM/00Hywy9qyD6BB4xhp9iVnM/iX8Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Avyp4pRJhA+gczttjowrXRpFFS25Ralt0GA11cUxJAR8jE4amdJSi692d+RaHZcXwoRxfU/zopzORG7fMcwqy+Uet3xwCfLJ86bANeYE6lno0JX0DVFtz+B/XHG3z1a/Uwi1H60v5WF4QukSu9g9F7zUfBOVkf0Hh3Q6sQb1pZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=RLqFp+gq; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FMbLnN97"
-Received: by mail-pj2-f14.google.com with SMTP id d9443c01a7336-2dd58e1e2c7so26997805ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 08:55:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790783701; cv=none;
-        d=google.com; s=arc-20260327;
-        b=hhh2XuAhEIiQq4r9o8CqxLYTlSFcnnAigK3E3h8B4vysz5lqzE3HMdHrgP9siCZ21g
-         EZFzkIPPGPyJYp1EgJl/s7f3l9AZUhiv9q9PM4WhKh8LD6w/1J5m+NDlRrdG5HzxDTll
-         JVF2WJ3SYc6YzG18BPeNml36IEPyALsit/f0Ff9QohYs6ImXWWD79+b3vAogwklentd8
-         AOt0vaVJuJxO5i3M8VeNrHg9MU024eI2aBQF8coNfwDaKKvMUDZA1RD9fJ9qa/ZvZ0dB
-         Z1bgovznRTGV7chdSTUAOB6Dowq3tsaikkTN9Edid3sQw+Ukgjxuq7TJJ0nr5xMDl+Cv
-         eBOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=AzYpaD+uTPvrogD/aZ+s9EWcQbyRUEaKyQXD8umEsLo=;
-        fh=ebkofVh/DY7/KS8HgbVmACF6AXnVlGcGJsoKpSuNL7c=;
-        b=XxVZ3bopfbAheYf2kwfFIq/YfhGBS4dROGhzB7LTJj4O4H0b0mEu0z/B9DN6Q24mDx
-         0LVnwFTNieS+rH8zwrFdP3g3tj3sAUReqsrZwluW/1IOg8NFPguLdvaJTZxh2dJCKj5c
-         MOiIjnf2HNdcwBfkubh6oStRNt965v7HbRy/opx9frRgQtnyV7thBegID4QX5ZX8ff6P
-         gXdRxKiYeF2+dK0UDard8A9QZ3KRirMl4RcvsaKLsZAOZNmadZUeOJ/vgCDipjawwYZf
-         jqlFwBtEpzsQJwCDfLutXmawnUMlE/5KUhexYkwXyM53FhIzsL0mHV/oE2CKBr/A+3w7
-         WnZA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="RLqFp+gq"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747eb79f7so25284105ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 09:44:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790783701; x=1791388501; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=AzYpaD+uTPvrogD/aZ+s9EWcQbyRUEaKyQXD8umEsLo=;
-        b=FMbLnN97rof8pVyql3pYRF0Gnvk3EwNSzNWGM8bjHAtz48AKR1UWxjdTun8ocpEc96
-         NbLDnKFHjYzcGithV5oWS7/bvGcsf8X2JexhWzw3siJRhK3Z6Evi/vMgCHcY8s3Fb9Rn
-         hfxUz5tYIVkpAL14eRKXdUisTTjxIblU7JjhYC2/A0ZieSyvcqGSkQgioqKDD7mY7e/G
-         Mr8lOw6m/mbtSAHq5HeKP0Xmg9hraZHkKiZuNGhpowqb9mUa7SdF3ihUcNV+FqzZ0JBY
-         jPN/llR4kAkvQ3ai6NNCbbbeKY2BKVxmhq5ZI/TfEvchAzUlF3i9NxzUF/1zHrhFbS3m
-         HgRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790783701; x=1791388501;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1790786646; x=1791391446; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:mail-followup-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=AzYpaD+uTPvrogD/aZ+s9EWcQbyRUEaKyQXD8umEsLo=;
-        b=B7Ac17UMYwIPXUMroTdy49CCiqHSeclGkuyYv0N5bdZ4QQ2ttNnQ2PxR5NXd0Hsi5S
-         3UroDhh4vWc2vXfoQlyuhJawHHJQXXNbwr5A3WqUz65pd2jXEptOyodZcpIBpjlxMZ/g
-         EW8IBzlDr5yshTRM4tWMyqEWkxYRZLmiAJ6IvyeLToQfVeyk89HMBiWqsumL1EgVa4JM
-         UWyPeYACbPWPPGpc+Nr9waH4gQsVDPp3UjJf9DmKIT36bMwpewZS1EXMt3OXL+rygw0p
-         +fVhoQcBWp6yvnWG3mAQXDaFLjEMZNEqwjYVyFhdJQCW0KO71aRZxhuek2xFBABLGfSv
-         tdKA==
-X-Forwarded-Encrypted: i=1; AKwUvBz936GpMO9EschTtqCwOy5UA1nxxOAF3JGyov2uQadI0wPwmSHqVFZFyoGGX/dM8+BLyUwcASMeOWBIfy6nohU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJFzbOYkWeI3AB+rV5y6iCe7ojXQiehI5AJtCKOTfZw9MA7n1dC
-	q2EiYtysou8vgwO5d3/nOGGsO7h8/IZn8ONGPNjnzkblTGde7yKfk8Mhj59A5cha3GziizGA3eF
-	I2Qnt5Hx/gzKxP8/Pm9EzFWUPcnBKfpE=
-X-Gm-Gg: AYBFou2oni/3X9nGGJNI0KVVs5Sl7tSLpbBY1lLFGq6u6SUlKPm7h629XId+RwPAy07
-	YeX9VddQ9HcuGL1tWDucF2t2b3+CNjo5NTSd4SV3ksfGC5LlyEA+G9ZLVARkNuD2cArEMueaFLh
-	BgIsLbjnmV8UB5YcknqSimGBBriScsLL4EpZ/OR0WrfT69hgaO52xQYGs0kUTb2CGVs8cvVdreD
-	E5Kigq9l17vSeBrUthWAeo7qp1IoAu9COd693AqSXaAuNtPRVpcBoP9TWymLsbR5Cb4R/lJFNId
-	mYAG04hDdz3mVBYnjnoGW3AFNMIRvQWZs4iUFhD6XwIkGS/+UCaQ2Bmw3H+3ZyNsp3QdJwqeXRi
-	+e9H/42ESwvZKlkdV6Sv6gW/JqeRFIqoDUhE4dKSQmzayrA==
-X-Received: by 2002:a17:902:f691:b0:2dd:c100:b2c8 with SMTP id
- d9443c01a7336-2e2e4b8b0b2mr15413965ad.51.1790783700945; Wed, 30 Sep 2026
- 08:55:00 -0700 (PDT)
+        bh=W33h7LP0cHQ4lydwZhCKuU0weHrmwtzViKu5Dtf4WpU=;
+        b=RLqFp+gq1gtZHRAJ7J6pg4LyuxJz0ALeaC4BLXm5WdYLthF0aY71xGsw/t06TWo5DS
+         +yqB5pjq9zCt41x91hnMDDu5WmXyht8COG5H/7JJtAiWmOwTJGNwG+2oVtt8BuTh58tF
+         BuCg83Ej/4gY8pdP5eXqajGKPoJ4yTtK0TjweGilCAZD5qOezzZyQDgIkH7Wlh92EUgv
+         EzNbzWl7Ja1tVzNNsVsYGUrgnYstiWUZnkGwifLMr6TFKtUR51TnevaCOfHE82rPlIDh
+         k8TYkxStM0jPzS/kmTeQ9NZuP4KoSbPWX8tFnpoDPcwTdAwa+UoHLkm4iQyTQ4FjDdW1
+         1hUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790786646; x=1791391446;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:mail-followup-to:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=W33h7LP0cHQ4lydwZhCKuU0weHrmwtzViKu5Dtf4WpU=;
+        b=nniZrVDW4wBkVzvwMsssNOMij0IprD6EkPaIr/7n23NTUV8uuG67uN8B3kdHSgween
+         n1acKeTFpGjawBhgEhSLGBfWn08Z1NiarvDEDvqMuXknUrGS6q1vRRhc+WriB6DqYsWM
+         3Awt8TZDOdAXReeKYU7gO2+RlIrGARlh5iFSYy9BboYNptUKqaPGWnSp48IBKo2XKpaL
+         JJpEt51yNKh04EA2WTrSPYYPKHIL9q6l6+9EIj6o/oeohHdRl2Z34uHbYYj8NCtj2AY/
+         TvxyWX0U61VXajns/HIDhU43tz/7xDLKoU4KthArRNlbhQxUDQD0OpBS5hc5MsDOJURl
+         E28w==
+X-Forwarded-Encrypted: i=1; AKwUvByKY82zaa3n2kNLmFbDHiSyAx8FUEuYlGGWs68IyvE7dOnh+xIw70UVrTQ2LXiebezn0hZynlBv48PLJOlEv68=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJA5YfE4FZHNiY8ncFYFAewThPErNJ6hSkhVp6PSuamFVpJS9AK
+	hwF0mPKuNcep5pmwtiNeMy48jZlPaeB8QSMdRxvoh01gyTWZaCFW7r1frL6eHPbTkMBHB5Bacz4
+	LFkiejxw=
+X-Gm-Gg: AYBFou0BCdGiL+tEOS6EF9L/Mziao36wIG0VH183fh9k7JPXDLsYQBL+djIUz51CB9P
+	GmxloYfQii5mNQtTMswZT7u/2dmyGtWuriaKp8ZbLIsQGLsn34ZlVS9geqGoPdL1HW0AB3Cib6i
+	3KO82k6oD5wqhc1Jw81FMgV6TmZDUw2qQxrxO85k3W2v2/KJF1WRZFYnGluk9kfcBWY3I18aBMx
+	t0pU+FbiU43DQM3JixtysD//azpl1p44YVh1wBYdwJefBDnMoq9VsyebssIe84cZSKjnjCP5MSH
+	VmHwAAkfLS6tBideaCWxux6181w4SgJUizJ/jAOMFfZh0TnJa9e1JgrTXxd4JMfhyvizbVL57H6
+	eFdoEeHIQO1cwQ4wMVtAbAFebUWsTh09CMCcns67yY8UoB8LilnZQ6wI7grOhpfjtC6SugyRwuP
+	H+uGnZCSYO5dMyCbnwOT5tAQ2OJ5ndpU9kfKh/Pgs4+QBavLmJbrtjg4Iui1YmCGTYZQORkXoEj
+	go+ugwbzSf8
+X-Received: by 2002:a17:903:b06:b0:2e2:fc69:c15e with SMTP id d9443c01a7336-2e2fc69c990mr2871005ad.65.1790786646189;
+        Wed, 30 Sep 2026 09:44:06 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:48::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e3005839d7sm396175ad.6.2026.09.30.09.44.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Sep 2026 09:44:05 -0700 (PDT)
+Date: Wed, 30 Sep 2026 09:44:04 -0700
+From: Joe Damato <joe@dama.to>
+To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+Cc: Alexander Duyck <alexanderduyck@fb.com>,
+	Jakub Kicinski <kuba@kernel.org>, kernel-team@meta.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
+	Mohsin Bashir <mohsin.bashr@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>,
+	Dimitri Daskalakis <daskald@meta.com>,
+	Weiming Shi <bestswngs@gmail.com>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Breno Leitao <leitao@debian.org>, Tao Cui <cuitao@kylinos.cn>,
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>
+Subject: Re: [PATCH net-next v4 1/5] net: Add netdev_config helpers
+Message-ID: <ar08VMVC+hYDI62t@devvm20253.cco0.facebook.com>
+Mail-Followup-To: Joe Damato <joe@dama.to>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Alexander Duyck <alexanderduyck@fb.com>,
+	Jakub Kicinski <kuba@kernel.org>, kernel-team@meta.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
+	Mohsin Bashir <mohsin.bashr@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>,
+	Dimitri Daskalakis <daskald@meta.com>,
+	Weiming Shi <bestswngs@gmail.com>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Breno Leitao <leitao@debian.org>, Tao Cui <cuitao@kylinos.cn>,
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>
+References: <20260925104417.2325213-1-bjorn@kernel.org>
+ <20260925104417.2325213-2-bjorn@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260928-libbpf-btf-enodata-fix-v1-1-56dae4cab778@gmail.com>
-In-Reply-To: <20260928-libbpf-btf-enodata-fix-v1-1-56dae4cab778@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 30 Sep 2026 08:54:48 -0700
-X-Gm-Features: AclHuK91g6yBjzv5Wydmwd7HcTJSbYJJfGMPfHuF7wf05VbALjgbejhsjOtOctA
-Message-ID: <CAEf4BzZDFm-RH+wj=Lf_7MQ6wVnYuNEyiEMGgpLm6uyqPEt0nw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] libbpf: Fix struct and union zero detection in
- BTF dumper
-To: Luis Vieira <luisflavieira@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260925104417.2325213-2-bjorn@kernel.org>
 
-On Mon, Sep 28, 2026 at 4:47=E2=80=AFAM Luis Vieira <luisflavieira@gmail.co=
-m> wrote:
->
-> btf_dump_type_data_check_zero() uses -ENODATA to indicate that a value
-> is zero. The array path handles this sentinel correctly, but the struct
-> and union path compares the return value against positive ENODATA.
->
-> As a result, the member loop returns after examining its first member.
-> A nested struct or union whose first member is zero can therefore be
-> treated as entirely zero even when a later member is non-zero.
->
-> Compare against -ENODATA so zero members are skipped while looking for
-> a non-zero member. Add a regression test with a nested struct whose
-> first member is zero and second member is non-zero.
->
-> Signed-off-by: Luis Vieira <luisflavieira@gmail.com>
+On Fri, Sep 25, 2026 at 12:44:08PM +0200, Björn Töpel wrote:
+> From: Jakub Kicinski <kuba@kernel.org>
+> 
+> netdev_config manipulation will become slightly more complicated
+> soon and will be used by both ethtool and the queue API.
+> Encapsulate the logic in helper functions.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Björn Töpel <bjorn@kernel.org>
+> Reviewed-by: Breno Leitao <leitao@debian.org>
 > ---
->  tools/lib/bpf/btf_dump.c                          | 2 +-
->  tools/testing/selftests/bpf/prog_tests/btf_dump.c | 5 +++++
->  2 files changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-> index fa995c02a170..dbf9f17e4b37 100644
-> --- a/tools/lib/bpf/btf_dump.c
-> +++ b/tools/lib/bpf/btf_dump.c
-> @@ -2474,7 +2474,7 @@ static int btf_dump_type_data_check_zero(struct btf=
-_dump *d,
->                         bit_sz =3D btf_member_bitfield_size(t, i);
->                         err =3D btf_dump_type_data_check_zero(d, mtype, m=
-->type, data + moffset / 8,
->                                                             moffset % 8, =
-bit_sz);
-> -                       if (err !=3D ENODATA)
-> +                       if (err !=3D -ENODATA)
->                                 return err;
->                 }
->                 return -ENODATA;
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/te=
-sting/selftests/bpf/prog_tests/btf_dump.c
-> index fe04a955d46c..dd1241fcdb01 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-> @@ -886,6 +886,11 @@ static void test_btf_dump_struct_data(struct btf *bt=
-f, struct btf_dump *d,
->                            "(union bpf_iter_link_info){.map =3D (struct){=
-.map_fd =3D (__u32)1,},.cgroup =3D (struct){.order =3D (enum bpf_cgroup_ite=
-r_order)BPF_CGROUP_ITER_SELF_ONLY,.cgroup_fd =3D (__u32)1,},.task =3D (stru=
-ct){.tid =3D (__u32)1,.pid =3D (__u32)1,},}",
->                            { .cgroup =3D { .order =3D 1, .cgroup_fd =3D 1=
-, }});
->
-> +       /* nested structs with zero first member and non-zero second memb=
-er */
-> +       TEST_BTF_DUMP_DATA(btf, d, "union", str, union bpf_iter_link_info=
-, BTF_F_COMPACT,
-> +                          "(union bpf_iter_link_info){.cgroup =3D (struc=
-t){.cgroup_fd =3D (__u32)1,},.task =3D (struct){.pid =3D (__u32)1,},}",
-> +                          { .cgroup =3D { .cgroup_fd =3D 1 }});
-> +
+>  net/core/dev.c           |  7 ++-----
+>  net/core/dev.h           |  5 +++++
+>  net/core/netdev_config.c | 37 +++++++++++++++++++++++++++++++++++++
+>  net/ethtool/netlink.c    | 15 +++++++--------
+>  4 files changed, 51 insertions(+), 13 deletions(-)
 
-can you please split selftest into a separate patch and send as v2?
-the fix makes sense, that missing - is definitely a typo we missed
-
-pw-bot: cr
-
->         /* struct skb with nested structs/unions; because type output is =
-so
->          * complex, we don't do a string comparison, just verify we retur=
-n
->          * the type size as the amount of data displayed.
->
-> ---
-> base-commit: ea9358e1270ab2c3ba6f36bd9bdda68617665516
-> change-id: 20260928-libbpf-btf-enodata-fix-ac6381645ab8
->
-> Best regards,
-> --
-> Luis Vieira <luisflavieira@gmail.com>
->
+Reviewed-by: Joe Damato <joe@dama.to>
