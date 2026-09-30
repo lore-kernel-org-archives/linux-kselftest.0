@@ -1,68 +1,68 @@
-Received: from mail-oo2-f42.google.com (mail-oo2-f42.google.com [74.125.231.170])
+Received: from mail-oi2-f42.google.com (mail-oi2-f42.google.com [74.125.231.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 848664BD353
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 23:46:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C884BF948
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 23:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790812016; cv=none; b=HnBGu3Wyn86zXK4rHQDn5mWdoumeZNIBzVDFtDwnWKkGWyNTaUX94G+ovsi+akOlZj+9laQKQTyLD60GNRLbiwJgO/kbUAg9DXewSAHPqO1XSeaouFMSnnLAaivN+aVrrt8hGyW2+Cv4h09w9zyG9R7VRIK4/FRQlYYMXi0t0ug=
+	t=1790812020; cv=none; b=YyyvJW7SrO2VDS1aovq29lQFWBtxEZjeW2BTwkSy86UEzzJv4yYVvhbKOb42doVwDulpNoCLgfyJJTOcql3LcO7vaARyWlxC/mfV16c/c1lANV7q39yT5yzGYDL3idsCELrT6KuhQw/1ABfriefe1LwRMW2OmlpS9cJa+zbjsv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790812016; c=relaxed/simple;
-	bh=a9J7Nq5XTvk1euwH9fxE45YMOouwsgX6YBiYDC+ciAY=;
+	s=arc-20240116; t=1790812020; c=relaxed/simple;
+	bh=iblGMahgLZune0cSe5e5OmjGa+556ag6bGB4xcI13V0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EfRyon/acVZPemYvFY4UmbkYYqh/BduDBt0HkdUUeuHh+QsdTAnIkv472gqi2VZJkV+MkrIS6T0QC6Js4KfjPMRZygmvsbSRv3rCld4S6mjl2rZMrwaDPvd+jmxCQTqOnjNOJTOY4jI6ZgiRp0uZbppEplebFC3NkcpUCOEq5+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nXrxBxIB; arc=none smtp.client-ip=74.125.231.170
+	 In-Reply-To:To:Cc; b=J7oYerG7Xhb0m4MuRsKXuCQxIVW/xPaCj59FoyjS4ouExoibsvNI2m0E/a3QGWVpLM7uo2hW5c/abCM/c0J4bXl40+K2NlYFNmJo0tLY1mOx/HaCM8FFvV0wIjzK/iCkzQcG+3ZOv5rI0Msu9KC/4WHQ5tYfjKu6XOKJzJLROY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BpIhlJ5x; arc=none smtp.client-ip=74.125.231.234
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nXrxBxIB"
-Received: by mail-oo2-f42.google.com with SMTP id 006d021491bc7-6d83e283445so614468eaf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 16:46:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BpIhlJ5x"
+Received: by mail-oi2-f42.google.com with SMTP id 5614622812f47-4e789152a79so2533911b6e.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 16:46:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790812013; x=1791416813; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790812017; x=1791416817; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=62tiuAR0kBMOsxzPYH5jLWDtv5hJHdhsb8KVBwgGC5c=;
-        b=nXrxBxIBeqohdMk0Gj7ZjSC/FfoHacnkHj1WH9W6oZnGaAY7vMwfkFeZuw/65ijAsl
-         7m18bOktucXyuHpvrRkHbYFI/34EoGRcneCrM9azAPf90Fi1oSvyjhnPO7mKRBFzJfwh
-         ZmSDthON3QjrJjYGpUEUHtwmJguoj3KbEiQEjP0DTzgKdSvfTjsmN7vM2hfVbx0wOgTV
-         V/i566gqDWIeHYfojL+PNp0vgIWdaT16AhCxnsdVRxyN94JqGu9dTcox8FTNRe4mYLft
-         O40DExXf4NszRemjUjtTt/S+VOSp6MEctwdKelHF/MUeeL8EZu34xkKGWQvEu6dFIdpj
-         lqSQ==
+        bh=0j17oIRuAGUkTjUjCIFdQDlJWq8HxpJZyTfiOjsPwXU=;
+        b=BpIhlJ5xP2y0imDxf5FITGPFXXIaKjNgIwPtITgSurTNLwuyMHaDYdiSzjzcKL6Nab
+         XrH2gyxMdT9POEvMKFbvRfjxkmdAUoGAuFR01bqsjuPow3QGeRTNE6AW6vz9BtQhLhbe
+         m2pvF1y+YAL9mGLNd/E6chXkO82aF8zVKOlt1653Wujf2EGro0gkBGWKr7Tjaxx6WIT2
+         o5tRrDsOHY1PiuO94YE3815/WyldVf2Jd/3tO2u8lCMEREiivYRIc02aZX65EwkYJlCg
+         2Q6fmne4LBEISIG7SnhYBRLi8aA5uL9TDcLSeYXDeuEJ1sUBjQeMtwIFhdjYoPyToos0
+         i31A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790812013; x=1791416813;
+        d=1e100.net; s=20260707; t=1790812017; x=1791416817;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=62tiuAR0kBMOsxzPYH5jLWDtv5hJHdhsb8KVBwgGC5c=;
-        b=F+dY5sXDk/eypYiqhU1bJuw8MQdGDSovR8pmpBBd8XwPOrb/iCpe1HEnRAbhA5X4Rs
-         VvvFiWQ5HPQ7HuzXPqvFA6/9xp6b0eVyxmOuYuKmSVo11rC+2yGJRKRowv5/yCvFYVuD
-         ILQSg2jFFmgeV0GcwPEXBKIrEeaLN0GWcTeW21Orbk3NXhKirxTcDxAmqio5C2xjLMgZ
-         O7FwFe3VvDoEv3T5R5wK9elmgoua+T0i4EX8fBiM5lb2AfdrkqO0LKG2D6JnNRihYwJ5
-         jQlhQTeER3Bsk+60d42fNvi3+To70jZvBq6RZjyeP/x36no4HE3h2PvAPHjhhGlvTCxw
-         zqTw==
-X-Forwarded-Encrypted: i=1; AKwUvBw25M3lYcs45rhKlzzV/IlalUyqZuN6VyJqgqLMLmSzMt5F6ENgE1cHtXwxJPf7b5wdNlZ+BFXmwRRmMxPuqCE=@vger.kernel.org
-X-Gm-Message-State: AFuF++mU1rLvH5uTM9snQlXN766iMgjrTz7YiehEEgmTH8DY5prrhL9G
-	F68TOLJHvTbtdRhKIo824ITdi23QaYRALYuzXl5uPEn7T6HRret0vd3C
-X-Gm-Gg: AYBFou27a0UGHahYKDygcatSmPDuAQWCnxxHhlfQ+boPoI+P15MltJokuJIDsBMdzSI
-	4W7kqutKUvsbT7yQHGui6As1RS0Ltx5U+m1/EyygXSo1V4tFMZEPqPLaQFhSu+DeqoMQP5+pG2r
-	bavRqgV8gmzBfUucYimpOKUgcwUxbejVX/ZVIGRVOeq37gY65tN0khmtfmzyLaLmmv89aMOaEz1
-	qx3OUzEefnXkSp+ixH5NgnrvHlPmrIkn736dLe3R7yf68yCfvaQZSa0DGxEjATslCWEI04z3dgA
-	hN7InhFhVqMoCoZivA5YTuh4rctDse825ZZHuvmSaebH1uMgtk983I3mPYXy+9zBM4P8ZAqugO5
-	j56/o9qIMUvG9RnLruSGiKe5pPj6McKPvVR0BQECVIHkMMQh8A0YPJABokS87cEF2lLV7+SrqJ4
-	krYwnBf+Cha+CQvOFFZ+7udzJVIFowKpJujbIKKS79K7rS8ThKy8EoQ7vCVKKUiwPHczwy
-X-Received: by 2002:a4a:ee0c:0:b0:6d9:aea6:8bc0 with SMTP id 006d021491bc7-6ddbab9434fmr1139254eaf.43.1790812013284;
-        Wed, 30 Sep 2026 16:46:53 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:73::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6dd9751595csm1466682eaf.3.2026.09.30.16.46.52
+        bh=0j17oIRuAGUkTjUjCIFdQDlJWq8HxpJZyTfiOjsPwXU=;
+        b=FG4efJ6eD/KiuE3HaENEL+QaBGdUQG0DjEYjbsmWLya/XaZjoRBv/E5eQIxpgTLy13
+         w8fA80xq42T+p2B8m4ntJ9X4755k/LUz4CyFfP7g4aUnuZWmxp+sFOWQdnimilox+PzC
+         cErEvoXNLXe4hOGTdRJ9QhtXrdjwHGXxUGv2VGRMdjF2KyGNYbToQmiC2ffS+Z1Pmyj7
+         vKUvcPZx8y763h5rZ+94JOc1WIG5Al0K3AlQMy8x6kUP9VQnJfawSAbjBEBTIo/WxrRm
+         3lYhiDrX9U9/HAV/9+hPWD8DqF8Xa/uH0ZkueHDAQKaPHJ4cNw8SqVwt4OXTexjGEssk
+         SPFg==
+X-Forwarded-Encrypted: i=1; AKwUvBwnITPjtLN01sU432m7/Evau2BlCUhXV7NhNkn0sZQ/SSSqiyyqiqWVveHNz+up605M0OvgQvrkZfqZ67ejkAE=@vger.kernel.org
+X-Gm-Message-State: AFuF++le8eGIJFssDNRPuA09j4GeH5WVrnBBD6ye+hJMUAI9kskRmV7k
+	CE6HGyu9o+pEvYlhlBCkQA22Y6bhHYc0NEbgf5um/j+rCsijus0jvkjq
+X-Gm-Gg: AYBFou0mDgxWbM5h7Dv5meQIb1ixlv61LrduM056EQH2v/M0bSQiEuPhXscyvexqGUz
+	KJMaqwBc3wNy153iAL8iZ0hjErUCaSnQMn9Px0nV7B1XRGgRJIsb0I0gKhL2gZpuh0mhFzfpu1D
+	xn3BPUH6V5m8jRhUM59yWFAEh+QJd5lw0YtsKArK2s4dwYamDqjl43fDKZ4M9e4X0SQCtLYr+bN
+	bnTtqoVZf/S3KcfYnHArp9ioYkH20GVhn788kv4Y9+7he5v8GO09bBWRwyvlr0jL8tAuK1buJ08
+	HqBt5qS6idZzitf4H4ftrA56myKpgEpWGf7XsagdQ+kcfgpKXMLIOyYG2f0+ha9vHlrl/hhKCKV
+	Dm2S+asz7eOStOv/9wY3bHImYM57dMm96UjOR7TKuuZc2Wd76N6p4RaaPpDWa7NXcSUA+uAUv+J
+	C4JSbJuYxs5/EfpkIBJcT3ltQyg4uHmBPtXAgADnuxRGLzt4ZAuro4fX2neoJ1BHSdRhU=
+X-Received: by 2002:a05:6808:1825:b0:4e5:a74e:d6c0 with SMTP id 5614622812f47-4f1ba4fa10emr3448107b6e.64.1790812016621;
+        Wed, 30 Sep 2026 16:46:56 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:9::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4f34c58cb6dsm872370b6e.13.2026.09.30.16.46.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Sep 2026 16:46:52 -0700 (PDT)
+        Wed, 30 Sep 2026 16:46:55 -0700 (PDT)
 From: Daniel Zahka <daniel.zahka@gmail.com>
-Date: Wed, 30 Sep 2026 16:46:46 -0700
-Subject: [PATCH net-next v2 1/4] selftests: drv-net: psp: swap closed for
- connected sockets in assoc tests
+Date: Wed, 30 Sep 2026 16:46:47 -0700
+Subject: [PATCH net-next v2 2/4] net: psp: require an established
+ connection for association setup
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260930-psp-defeat-v2-1-f266e7447129@gmail.com>
+Message-Id: <20260930-psp-defeat-v2-2-f266e7447129@gmail.com>
 References: <20260930-psp-defeat-v2-0-f266e7447129@gmail.com>
 In-Reply-To: <20260930-psp-defeat-v2-0-f266e7447129@gmail.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -87,136 +87,157 @@ Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
 X-Mailer: b4 0.13.0
 
-Future work will only allow rx-assoc and tx-assoc to be performed when
-the sock is in TCP_ESTABLISHED state.
+Check sk_state under the socket lock in both the rx-assoc and tx-assoc
+handlers, and only allow association setup on sockets in
+TCP_ESTABLISHED. Also, fail connect() when PSP assoc state is already
+present, and remove the dead PSP MSS adjustment from
+tcp_v[46]_connect().
 
-Several assoc_ tests, as well as dev_rotate_spi, test using the rx-assoc
-and tx-assoc uapi calls against sockets in TCP_CLOSE state.
-These tests don't involve sending or receiving data, nor involve looking
-up psp device by dst entry, so using a disposable disconnected socket
-was just a convenience. These can be replaced by a disposable loopback
-socket.
+The net effect of this commit is:
+1. PSP assoc state can never exist on a listen socket.
+2. The upgrade to PSP must be done while the socket is in
+   TCP_ESTABLISHED.
 
-The loopback sockets are IPv4, where the sockets they replace were
-AF_INET6. This doesn't reduce coverage, since the assoc handlers accept
-any TCP socket and don't look at the address family.
+This change defeatures behavior that was previously allowed under the
+PSP uapi. My justification is:
 
-Some users of rx-assoc and tx-assoc on closed sockets are left if they
-validate errors that are returned before the kernel will check the
-socket for TCP_ESTABLISHED.
+Nothing useful can be done after association setup on closed or listen
+sockets today. Listen sockets could accept a PSP-encrypted TCP SYN, but
+the child socket will not inherit any PSP state. On the other side,
+establishing PSP state prior to connect() will result in a PSP-encrypted
+TCP SYN sent to a listening peer, which in turn has the aforementioned
+limitations. That implies that there cannot be any users of this
+feature, so it should be safe to remove it from the PSP uapi.
+
+In theory, the check in the tx-assoc path is more restrictive than
+necessary. FIN_WAIT1/2, CLOSING, LAST_ACK and CLOSE_WAIT could be
+allowed, and the peer would accept PSP-encrypted ACKs in the
+post-FIN-sent states, or data in the half-close case, but it is simpler
+to disallow those states because they don't fit the upgrade model.
+
+The check in the tx-assoc path fixes a bug in commit 6b46ca260e22 ("net:
+psp: add socket security association code") where an unsynchronized
+write can be performed on an assoc shared with a timewait socket when
+the socket is in TCP_CLOSE after shutdown. This commit is not targeted
+at net because its premise of preventing listen sockets from holding
+assoc state depends on net-next commit 8cc3aef0cb19 ("tcp: Do not allow
+buggy transitions between ehash and lhash2.")
 
 Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
 ---
- tools/testing/selftests/drivers/net/psp.py | 30 +++++++++++++++++++-----------
- 1 file changed, 19 insertions(+), 11 deletions(-)
+v2:
+- reject connect() on sockets with PSP assoc state
+- drop PSP MSS overhead handling from tcp_v{4,6}_connect()
+---
+ Documentation/networking/psp.rst |  8 ++++++++
+ net/ipv4/tcp_ipv4.c              |  7 +++++--
+ net/ipv6/tcp_ipv6.c              |  9 ++++++---
+ net/psp/psp_sock.c               | 12 ++++++++++++
+ 4 files changed, 31 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
-index 5a81f40cac7d..0a2329f41431 100755
---- a/tools/testing/selftests/drivers/net/psp.py
-+++ b/tools/testing/selftests/drivers/net/psp.py
-@@ -11,6 +11,8 @@ import struct
- import termios
- import time
+diff --git a/Documentation/networking/psp.rst b/Documentation/networking/psp.rst
+index 4ac09e64e95a..0f9b6b73f244 100644
+--- a/Documentation/networking/psp.rst
++++ b/Documentation/networking/psp.rst
+@@ -132,6 +132,14 @@ numbers in a way that deletes a prefix of the PSP protected part of
+ the TCP stream. If userspace cares to mitigate this type of attack, a
+ special "start of PSP" message should be exchanged after ``tx-assoc``.
  
-+from contextlib import contextmanager
++Upgrade to PSP must be done on established TCP connections.
++``rx-assoc`` and ``tx-assoc`` will return ``-ENOTCONN`` if
++``sk_state`` is not ``TCP_ESTABLISHED``.
 +
- from lib.py import defer
- from lib.py import ksft_run, ksft_exit, ksft_pr
- from lib.py import ksft_true, ksft_eq, ksft_ne, ksft_gt, ksft_raises
-@@ -58,6 +60,17 @@ def _make_psp_conn(cfg, version=0, ipver=None):
-     return s
- 
- 
-+@contextmanager
-+def _make_lo_conn():
-+    # After tx-assoc, the client's egress is dropped, since lo has no
-+    # psp_dev, so its FIN never reaches the server. Closing the server
-+    # resets the unaccepted child, and the client accepts the cleartext
-+    # RST because it hasn't received any PSP traffic yet.
-+    with socket.create_server(("localhost", 0)) as srv, \
-+         socket.create_connection(srv.getsockname()[:2]) as s:
-+        yield s
++The PSP assoc state of a socket is not reset when the connection is
++torn down. ``connect()`` on a socket that has PSP assoc state will
++return ``-EINVAL``.
 +
+ Rotation notifications
+ ----------------------
+ 
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index c107b7e44e5b..410d63d9e5c1 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -238,6 +238,9 @@ int tcp_v4_connect(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len
+ 	if (usin->sin_family != AF_INET)
+ 		return -EAFNOSUPPORT;
+ 
++	if (psp_sk_assoc(sk))
++		return -EINVAL;
 +
- def _close_conn(cfg, s):
-     _send_with_ack(cfg, b'data close\0')
-     s.close()
-@@ -200,20 +213,18 @@ def dev_rotate_spi(cfg):
-     _init_psp_dev(cfg)
+ 	nexthop = daddr = usin->sin_addr.s_addr;
+ 	inet_opt = rcu_dereference_protected(inet->inet_opt,
+ 					     lockdep_sock_is_held(sk));
+@@ -291,9 +294,9 @@ int tcp_v4_connect(struct sock *sk, struct sockaddr_unsized *uaddr, int addr_len
+ 	inet->inet_dport = usin->sin_port;
+ 	sk_daddr_set(sk, daddr);
  
-     top_a = top_b = 0
--    with socket.socket(socket.AF_INET6, socket.SOCK_STREAM) as s:
-+    with _make_lo_conn() as s:
-         assoc_a = cfg.pspnl.rx_assoc({"version": 0,
-                                      "dev-id": cfg.psp_dev_id,
-                                      "sock-fd": s.fileno()})
-         top_a = assoc_a['rx-key']['spi'] >> 31
--        s.close()
-     rot = cfg.pspnl.key_rotate({"id": cfg.psp_dev_id})
--    with socket.socket(socket.AF_INET6, socket.SOCK_STREAM) as s:
-+    with _make_lo_conn() as s:
-         ksft_eq(rot['id'], cfg.psp_dev_id)
-         assoc_b = cfg.pspnl.rx_assoc({"version": 0,
-                                     "dev-id": cfg.psp_dev_id,
-                                     "sock-fd": s.fileno()})
-         top_b = assoc_b['rx-key']['spi'] >> 31
--        s.close()
-     ksft_ne(top_a, top_b)
+-	inet_csk(sk)->icsk_ext_hdr_len = psp_sk_overhead(sk);
++	inet_csk(sk)->icsk_ext_hdr_len = 0;
+ 	if (inet_opt)
+-		inet_csk(sk)->icsk_ext_hdr_len += inet_opt->opt.optlen;
++		inet_csk(sk)->icsk_ext_hdr_len = inet_opt->opt.optlen;
  
+ 	tp->rx_opt.mss_clamp = TCP_MSS_DEFAULT;
  
-@@ -221,7 +232,7 @@ def assoc_basic(cfg):
-     """ Test creating associations """
-     _init_psp_dev(cfg)
+diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+index afb4d8e9fa67..e006a30360ea 100644
+--- a/net/ipv6/tcp_ipv6.c
++++ b/net/ipv6/tcp_ipv6.c
+@@ -153,6 +153,9 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr_unsized *uaddr,
+ 	if (usin->sin6_family != AF_INET6)
+ 		return -EAFNOSUPPORT;
  
--    with socket.socket(socket.AF_INET6, socket.SOCK_STREAM) as s:
-+    with _make_lo_conn() as s:
-         assoc = cfg.pspnl.rx_assoc({"version": 0,
-                                   "dev-id": cfg.psp_dev_id,
-                                   "sock-fd": s.fileno()})
-@@ -234,7 +245,6 @@ def assoc_basic(cfg):
-                                   "tx-key": assoc['rx-key'],
-                                   "sock-fd": s.fileno()})
-         ksft_eq(len(assoc), 0)
--        s.close()
++	if (psp_sk_assoc(sk))
++		return -EINVAL;
++
+ 	fl6 = &inet_sk(sk)->cork.fl.u.ip6;
+ 	memset(fl6, 0, sizeof(*fl6));
  
+@@ -311,10 +314,10 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr_unsized *uaddr,
+ 	sk->sk_gso_type = SKB_GSO_TCPV6;
+ 	ip6_dst_store(sk, dst, false, false);
  
- def assoc_bad_dev(cfg):
-@@ -320,7 +330,7 @@ def assoc_version_mismatch(cfg):
-     # Translate versions to integers
-     versions = [cfg.pspnl.consts["version"].entries[v].value for v in versions]
+-	icsk->icsk_ext_hdr_len = psp_sk_overhead(sk);
++	icsk->icsk_ext_hdr_len = 0;
+ 	if (opt)
+-		icsk->icsk_ext_hdr_len += opt->opt_flen +
+-					  opt->opt_nflen;
++		icsk->icsk_ext_hdr_len = opt->opt_flen +
++					 opt->opt_nflen;
  
--    with socket.socket(socket.AF_INET6, socket.SOCK_STREAM) as s:
-+    with _make_lo_conn() as s:
-         rx = cfg.pspnl.rx_assoc({"version": versions[0],
-                                  "dev-id": cfg.psp_dev_id,
-                                  "sock-fd": s.fileno()})
-@@ -393,7 +403,7 @@ def assoc_twice(cfg):
+ 	tp->rx_opt.mss_clamp = IPV6_MIN_MTU - sizeof(struct tcphdr) - sizeof(struct ipv6hdr);
  
-         return assoc
+diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
+index a9cfeebe4ba1..a6b1c42dd626 100644
+--- a/net/psp/psp_sock.c
++++ b/net/psp/psp_sock.c
+@@ -159,6 +159,12 @@ int psp_sock_assoc_set_rx(struct sock *sk, struct psp_assoc *pas,
  
--    with socket.socket(socket.AF_INET6, socket.SOCK_STREAM) as s:
-+    with _make_lo_conn() as s:
-         assoc = rx_assoc_check(s)
-         tx = cfg.pspnl.tx_assoc({"dev-id": cfg.psp_dev_id,
-                                "version": 0,
-@@ -402,7 +412,7 @@ def assoc_twice(cfg):
-         ksft_eq(len(tx), 0)
+ 	lock_sock(sk);
  
-         # Use the same Tx assoc second time
--        with socket.socket(socket.AF_INET6, socket.SOCK_STREAM) as s2:
-+        with _make_lo_conn() as s2:
-             rx_assoc_check(s2)
-             tx = cfg.pspnl.tx_assoc({"dev-id": cfg.psp_dev_id,
-                                    "version": 0,
-@@ -410,8 +420,6 @@ def assoc_twice(cfg):
-                                    "sock-fd": s2.fileno()})
-             ksft_eq(len(tx), 0)
++	if (sk->sk_state != TCP_ESTABLISHED) {
++		NL_SET_ERR_MSG(extack, "Socket must be in established state");
++		err = -ENOTCONN;
++		goto exit_unlock;
++	}
++
+ 	if (psp_sk_assoc(sk)) {
+ 		NL_SET_ERR_MSG(extack, "Socket already has PSP state");
+ 		err = -EBUSY;
+@@ -252,6 +258,12 @@ int psp_sock_assoc_set_tx(struct sock *sk, struct psp_dev *psd,
  
--        s.close()
--
+ 	lock_sock(sk);
  
- def _data_basic_send(cfg, version, ipver):
-     """ Test basic data send """
++	if (sk->sk_state != TCP_ESTABLISHED) {
++		NL_SET_ERR_MSG(extack, "Socket must be in established state");
++		err = -ENOTCONN;
++		goto exit_unlock;
++	}
++
+ 	pas = psp_sk_assoc(sk);
+ 	if (!pas) {
+ 		NL_SET_ERR_MSG(extack, "Socket has no Rx key");
 
 -- 
 2.52.0
