@@ -1,206 +1,209 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75663FD137
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 19:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790798007; cv=pass; b=aRPduETiuK275pGIJd4wIFmzomfqbGhZRG0AIYCJrNkRCw8iE+Bj+cD33Qj0UtEzdgiS0nDOPk4b+s31VSKAmGCElbgsDgcfvXw0n0jFQbjGx+J0pvEdiTaCDRCfFBNxEsmXIYApohXSgLB9dHYZjKAuavEJkk3j8NUYbm7jhKA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790798007; c=relaxed/simple;
-	bh=jEjOJJgnQ8TLl1NXrjU0PSvQC15w6bG/fD+IpOaPESg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U0zAN4CnGJ2UgCWR1IxOi5bIE5dfjo7tuxXtJoUoMtv3v9Fg94c9lAeLYTiqFU+SiyFPiziagA2aijWYpWNdiPh6tD1E9EQ/dl9O7RSCfhWLvqvBcIJ+88Wz9aUstPgNrdmSGbAbYHyIIVDKRxvPnl4I7pDFIYD4aj76f1YcUgA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LNThRzfZ; arc=pass smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365F44BF932
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 20:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.200
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790800288; cv=none; b=e49PVUixdZH2fAOe+fBRAYrtbm3scKxl6GOvnZXC7VlxVS0YKRUvpL54I25qtQE6wFQNTBeoG/BQTmjSjjOhcjeLTOoQCP6E4Nk4HsNPvCtskYdDjEPwh635I4snKN0Dja54wK6cjwbYraz4N6unRSm7fJasKYyhIfFfFBMdcXg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790800288; c=relaxed/simple;
+	bh=LJ2FwQpwObWh271AdoFSJE+GxXItZd5CsHQDkzEL0JM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=a8jJmP15DE6wZjOXfhS8hmWt7zJFD0Rgia+ACd2kBISz5pSQewNOMUq1unBFpts4tYydj+TYS11d0gdzVg9pavW+iYDBcwHz4WTnp+ZYF+WvilNdCVVrZ8E70cQ7/mlTfxRzaucXF/t0J0oBNFDPzPqM7ibH8M13EmUL3DjD2ck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=o1gfgKLv; arc=none smtp.client-ip=209.85.214.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LNThRzfZ"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-5337c7b9937so63581cf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 12:53:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790798003; cv=none;
-        d=google.com; s=arc-20260327;
-        b=FsSJGHZo9WyoBrO7t3mGgqnqONJiGFimuKqusEeK6e7JwEhxl609mX64Il3WVc+4Ws
-         MrQ2yTvSjNOEoylIk3nQFCGrQ94uYN0KyAuXthTwpJ2I5rk9mQaMkjUJB+LtFv/C+Ocf
-         hlhjljdWmJlnobYkgDabybnJ7N+AyvjLjJ2PGXcxk4FAsAaNmpOSHrgDhnkUqX8oS8bR
-         IrPpa9+AnUVUxXkTeoUMQuLrIXVt3rGXCeAdIx6ZaiUe6PQ1Hl2Yaoc9zMOATzHOuGB2
-         iK/WKAIj87oYg+KqPWHm5rHCtVqoo359wEYqSfMW/pp50MMsFGJdtSz9hW7E7XRHoKHX
-         gRkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0eIq1qnomZnnsUKsF5xFhZ0yFWtEcE3Qo/pF8vzCbBI=;
-        fh=79mV85MI7oM4TWm6BsSEGUtK3MgH6T5InXn8tl+DUqo=;
-        b=Z7gY2NYPpK6RTE6SrBdOj4C1JLnxuNkruaZQ3eAVoYFjyqNEwBsmCOG3p/YEAGwVzY
-         fHGIZtpLT+8zZv7zFmXV/gEyD0KuW+V2KeNyCD0vhD2HLMFB2v9ixcZi2Z/Y3l7Qagl2
-         rpare/bp3NhDuUB2mlcg5MZlZDP/6sTAP80gWIMLCV9MpbD28FPCXGJaHFMIqCxKWB6l
-         PLaqagj4j+yBu22PS8P1VU5WrCv6V5czMNybb1yHSzDSCblP2TAr0y8nWYiUExXM7fvW
-         FgciJJWI9egrOtLb/h4Y20pNVcLA+0MHu5jgWQvPZFwAVNDHnokdkSdx9PXF1ZSGnCKl
-         s2lg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o1gfgKLv"
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2e2e0bc619fso10549915ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 13:31:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790798003; x=1791402803; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=0eIq1qnomZnnsUKsF5xFhZ0yFWtEcE3Qo/pF8vzCbBI=;
-        b=LNThRzfZxyghISoHjbKesH0mtqWbAY+JNadXmCvZDfwiQAQTYg37VupAsToagdf8ZZ
-         3R0iXfmdnaQTeRi0Hxcp/Qu7BAjWkYrQqR+w+SHZ9XW+okr8TCYPf1wktVth8b9yUrKo
-         mmXTmLmxp1jOYV74tQS4/9/QGLzBx3Tst56IofuSoxysS1pt9nijBxFyIYZNGgnrf6qM
-         hR7PGdsNYv2ADwfrcHw+VqsKlI2wqvNGYSOMxJYrjWBk/V10++LpA+iN3hk7ZOIwdMt2
-         /g6riwK8bIzz8voSw26HWpTbwoMRsb4hQeF5sdRxMc6TptrT94Eii9wbiXBxFEFZCym7
-         tHuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790798003; x=1791402803;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1790800286; x=1791405086; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=0eIq1qnomZnnsUKsF5xFhZ0yFWtEcE3Qo/pF8vzCbBI=;
-        b=utUy0Zi1iLeFzEn7VvdSZML+iuJBRSHptBNey+7ns5o2/ZTZVeRVGrIuTv4JoWR5sy
-         2UxFfq7GxbjShjNdmTJTFocZsaz3G7u+BLWNgQ1WJrLX+hY3mNSCE8/T5TCFGF1eSyZW
-         8cH9pw0QiQOnSWxouQ4ZUd5J+xDwZZvRy9fOPPLxNL6NfY4Um4s5dz6oXHdGKngINNGd
-         jjnXYeASuoAx8wzv4pMzLRVWQU9h9ieXOnofcY67QTgBAILAIOoutEMjLxktCV7s5lqS
-         JWzSpPdWy/XivvDs+LVUO6Mz7PJPrd0nMUIknUW2ZfO6noFzDKm91vc9HhJAJVIzjSLu
-         Kz7Q==
-X-Forwarded-Encrypted: i=1; AKwUvBx7Ee2L1igE/8eHbhEq1Z7eBuM2ZFkR43X0CO26yO2yjhOAN8XC85itrFAnR0qJKeUEfhkPNeSVD6AalZiXZ+c=@vger.kernel.org
-X-Gm-Message-State: AFuF++kEutE4kNLa+ECLSfBH+YvVlCKEEp3JIih+DFQwj+arxveCVEmV
-	TZwssla/LmGwJ0bE/Okfw3KE20BRiyRBeD1HFc//i69gQ3pmczky3x6YBPYPRO1n/LxAOgTQIos
-	y+RY0s+MQud7hXLj0G455wsK+0lNIH+/I218QUnJc
-X-Gm-Gg: AYBFou0yX9PV9bUfdYLd8YU8FHcPRVyM4vRAJg5lfIhgsvrF/KWJA6+RsLrNnPDrttn
-	wuuqVzRpWATG1RfJy9mo9SpKM3Lkr3j/OiaRgt7CglvuqgaAnJLl8L7shRUcM+oenXqFce2Dnxl
-	ofdCPxomiRfG9EXWm7bxNkQ3Gc4VSIwFjbhBvDG7lla7rtFHjaOceDKWHt6QmiY5ai168V32A+2
-	ARKNrfiv9mJhIXi6DH4KPwquUz45aSrZWzIKxQIhYuMisGKRb+VjCt6LG0B4pl/YdX/dQh98EAz
-	6U5GDwYuEBSgiIFtp4S095SMt3+FeOZU9RgTqd597g6eJtx2PbxWHA==
-X-Received: by 2002:a05:622a:610:b0:531:6de:6028 with SMTP id
- d75a77b69052e-53386815ca8mr222861cf.13.1790798002634; Wed, 30 Sep 2026
- 12:53:22 -0700 (PDT)
+        bh=cbH/iIJC3eRQ5JnQest1F4rR/Bil/2nGEuST9AeVkzY=;
+        b=o1gfgKLv8lzT1UjMgdCOAaylhbsqhM8xURtiDb0j0NdpijXu+gorf4jKMlIn2F01Kp
+         h+VRZ4jvii9xSQ+UqnCAhij3/nBA7+HBPjYZNKJ/559BiE5R15qK9kJejtpG1QuN7b1s
+         SUbRUYxyCi2A6fy/VNBl8JpzzwzNkuSYSMUR/moNPm2Dsa8GmC8+KMq3cAk+YnXgLTDp
+         Cf0x/D400bB3USN0p1xd+XHEmE4o3XmtYusJp2P2DtZ1alP0LsJ+Gw/Hz9PO/8+8eWKQ
+         f5i5ViMXK6rq94hHtQB4iXNd+w5g/eUj4HakNmf6Lxb2ZOCYQz37skurkgmI/+jKIJpH
+         jKtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790800286; x=1791405086;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=cbH/iIJC3eRQ5JnQest1F4rR/Bil/2nGEuST9AeVkzY=;
+        b=VapIjPtObVfy31FdycBP6y8sN9gyhr16B3HvvVBF8oywqCzuWXB8zKJTOqUCyIgZNA
+         zrVO1V9HUf+BTYzDDYfA/lN1T0c5Yo3qgmBEFzPKkY0TPxzTK1f2RjWf3kV3cyRRA4/a
+         Xfe4XCjvniPx/2LNjzyngxFWbjaFXFYMKQWeJ5i0vxroi9CYQdEiC235GqVTFsSKJfxb
+         PU+5kyhgXKQEl+HgCwPnNZGxl4kOrjdRwNpLUBQjDyh+ihTKgUQH6bnsmlgBb9ZfnMgM
+         WvWWCA1K4FUbxfHuI7MZoPfCRnRXGUgVJQ7nDGv9DJeu99v8JLxpd8pkfiyJ285dSLjR
+         Y7dA==
+X-Forwarded-Encrypted: i=1; AKwUvBzxTOFjH7bIKOZDZb1iz5AqitPXu7jOdeP0xwXD93WUmFStpdQqqFu+0McKedVI91J0AoBJLvNs7Yd5qW86guI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKvStqHB/FZbE8VR60+dyjk/k1yCwXmwW/2uldawoEzu4+Q/uH0
+	uakwI1kLRmwdZj3hqoQnnQOmvtIdfDXL1hTHKfA0knN/6cmvLIcyKc59iCMUXA++PAr4b1nyHKR
+	Nrl7YTQ==
+X-Received: from pllk3.prod.google.com ([2002:a17:902:7603:b0:2df:80bc:73c7])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:e54d:b0:2dd:b83b:fe1e
+ with SMTP id d9443c01a7336-2e2e4a299a3mr18780185ad.22.1790800286226; Wed, 30
+ Sep 2026 13:31:26 -0700 (PDT)
+Date: Wed, 30 Sep 2026 13:31:25 -0700
+In-Reply-To: <20260929113711.2064390-3-leo.bras@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260926-nsfs-prune-rfc-v2-0-53509260e4e7@gmail.com>
- <20260926-nsfs-prune-rfc-v2-1-53509260e4e7@gmail.com> <CANaxB-yj2QV183nk3UC-2PD6qh6hh-_iLRuryTdUsebd+RqxdA@mail.gmail.com>
- <CAGmPdrwOnNRHJqk1mZVB+tFCnJBr3ZTaSZqbiGu54kXPkMtRoQ@mail.gmail.com>
-In-Reply-To: <CAGmPdrwOnNRHJqk1mZVB+tFCnJBr3ZTaSZqbiGu54kXPkMtRoQ@mail.gmail.com>
-From: Andrei Vagin <avagin@google.com>
-Date: Wed, 30 Sep 2026 12:53:11 -0700
-X-Gm-Features: AclHuK9MG__TVWG37WqPhPUQdYK5bsOXfsAt-eoCDlcKjWQdQUjwS0-jBycCRa0
-Message-ID: <CAEWA0a5OjmjE-CVhiUcLXqrpE4xSd3-L5OszDd41DFDqUgcp1g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] mount: add OPEN_TREE_DROP_MNTNS_MOUNTS
-To: Kirill Kolyshkin <kolyshkin@gmail.com>
-Cc: Andrei Vagin <avagin@gmail.com>, Christian Brauner <brauner@kernel.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Aleksa Sarai <cyphar@cyphar.com>, Jan Kara <jack@suse.cz>, 
-	Jeff Layton <jlayton@kernel.org>, "Eric W . Biederman" <ebiederm@xmission.com>, 
-	David Howells <dhowells@redhat.com>, Amir Goldstein <amir73il@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Giuseppe Scrivano <giuseppe@scrivano.org>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	containers@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20260929113711.2064390-1-leo.bras@arm.com> <20260929113711.2064390-3-leo.bras@arm.com>
+Message-ID: <ar1xne00AHnJ-p_d@google.com>
+Subject: Re: [PATCH v1 2/3] KVM: selftests: Check dirty-ring size before enabling
+From: Sean Christopherson <seanjc@google.com>
+To: Leonardo Bras <leo.bras@arm.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	David Matlack <dmatlack@google.com>, Ackerley Tng <ackerleytng@google.com>, 
+	Marc Zyngier <maz@kernel.org>, Josh Hilke <jrhilke@google.com>, Oliver Upton <oupton@kernel.org>, 
+	Wu Fei <wu.fei9@sanechips.com.cn>, Steffen Eiden <seiden@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Wed, Sep 30, 2026 at 12:49=E2=80=AFPM Kirill Kolyshkin <kolyshkin@gmail.=
-com> wrote:
->
-> On Wed, Sep 30, 2026 at 10:22=E2=80=AFAM Andrei Vagin <avagin@gmail.com> =
-wrote:
-> >
-> > On Sat, Sep 26, 2026 at 12:01=E2=80=AFAM Kir Kolyshkin <kolyshkin@gmail=
-.com> wrote:
-> > >
-> > > A recursive open_tree(OPEN_TREE_CLONE) copies the nsfs mounts of any
-> > > mount namespaces pinned below the source.  When the clone is attached
-> > > inside a mount namespace younger than a pinned one, move_mount(2) fai=
-ls
-> > > with ELOOP from check_for_nsfs_mounts(), per the rule from commit
-> > > 8823c079ba71 ("vfs: Add setns support for the mount namespace") that
-> > > prevents mount namespace reference loops.
-> > >
-> > > This breaks container runtimes that use OPEN_TREE_NAMESPACE, such as
-> > > crun [1].  The new namespace is younger than everything else, so bind
-> > > mounting e.g. the host root fails on any host that pins a mount names=
-pace
-> > > (snapd does, under /run/snapd/ns).  By the time it fails, setns() has
-> > > already run and userspace cannot recover: the host tree is out of rea=
-ch,
-> > > and the offending mounts cannot be unmounted from the detached copy.
-> > >
-> > > copy_mnt_ns() and create_new_namespace() already leave these mounts
-> > > behind; only get_detached_copy() copies them.  Add an open_tree() fla=
-g to
-> > > drop them from the clone, as suggested by Aleksa [2].  Locked nsfs mo=
-unts
-> > > are dropped the same way copy_mnt_ns() does it, so nothing new is exp=
-osed.
-> > >
-> > > Keep it opt-in: open_tree(OPEN_TREE_CLONE) plus move_mount(2) is how
-> > > mount --rbind works through a file descriptor, and in the caller's ow=
-n
-> > > or an older namespace such mounts remain usable.
-> > >
-> > > The flag requires OPEN_TREE_CLONE or OPEN_TREE_NAMESPACE.  With the
-> > > latter it is a no-op, so a runtime can pass it unconditionally.
-> > >
-> > > Link: https://github.com/containers/crun/issues/2262 [1]
-> > > Link: https://lore.kernel.org/all/2026-01-07-oldest-grim-captions-spi=
-lls-ywC2O3@cyphar.com/ [2]
-> > > Assisted-by: Claude:claude-opus-5
-> > > Signed-off-by: Kir Kolyshkin <kolyshkin@gmail.com>
-> > > ---
-> > >  fs/namespace.c             | 14 ++++++++++++--
-> > >  include/uapi/linux/mount.h |  1 +
-> > >  2 files changed, 13 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/fs/namespace.c b/fs/namespace.c
-> > > index ae5dc64f8b45..a95173996a8f 100644
-> > > --- a/fs/namespace.c
-> > > +++ b/fs/namespace.c
-> > > @@ -3062,7 +3062,8 @@ static struct mnt_namespace *get_detached_copy(=
-const struct path *path, unsigned
-> > >                         ns->seq_origin =3D src_mnt_ns->ns.ns_id;
-> > >         }
-> > >
-> > > -       mnt =3D __do_loopback(path, (flags & AT_RECURSIVE), CL_COPY_M=
-NT_NS_FILE);
-> > > +       mnt =3D __do_loopback(path, (flags & AT_RECURSIVE),
-> > > +                           (flags & OPEN_TREE_DROP_MNTNS_MOUNTS) ? 0=
- : CL_COPY_MNT_NS_FILE);
-> >
-> > Overall, the patch looks good. One small thing is that open_tree() with
-> > OPEN_TREE_DROP_MNTNS_MOUNTS doesn't fail on a mntns file if AT_RECURSIV=
-E
-> > isn't set:
-> >
-> >   open_tree(AT_FDCWD, "/proc/self/ns/mnt",
-> >             OPEN_TREE_CLONE|OPEN_TREE_CLOEXEC|0x4) =3D 3
-> >
-> > With AT_RECURSIVE, __do_loopback() calls copy_tree(), which checks
-> > !(flag & CL_COPY_MNT_NS_FILE) && is_mnt_ns_file(dentry) and returns
-> > -EINVAL, but without AT_RECURSIVE it calls clone_mnt(), which doesn't
-> > have such check.
->
-> Thanks! A call with arguments like this does not make any sense*, as you'=
-re
-> asking to clone a pinned mount namespace while skipping it.
->
-> * except maybe to check if the path is indeed a pinned mount namespace,
-> but there are cheaper ways to do it.
->
-> That said, we can either keep things as is, or
-> 1. require AT_RECURSIVE with OPEN_TREE_DROP_MNTNS_MOUNTS
->     when checking valid flags; probably the easiest thing to do;
-> 2. add a check to a non-recursive path in __do_loopback, something like:
->     if (!(copy_flags & CL_COPY_MNT_NS_FILE) && is_mnt_ns_file(old_path->d=
-entry))
->        return ERR_PTR(-EINVAL);
->
-> I'm going to implement either one in the next iteration (v3); do you have
-> a preference?
+On Tue, Sep 29, 2026, Leonardo Bras wrote:
+> As of today, trying to enable dirty-ring with a size bigger than the
+> maximum will return an "argument list too long" error.
+> 
+> Change vm_enable_dirty_ring() to get the maximum size, then compare it to
+> the desired size before enabling. If the value is invalid, print a more
+> precise error message.
+> 
+> Signed-off-by: Leonardo Bras <leo.bras@arm.com>
+> ---
+>  tools/testing/selftests/kvm/lib/kvm_util.c | 21 +++++++++++++++++----
+>  1 file changed, 17 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 9ddc047d5c27..15a671b71553 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -168,24 +168,37 @@ unsigned int kvm_check_cap(long cap)
+>  	ret = __kvm_ioctl(kvm_fd, KVM_CHECK_EXTENSION, (void *)cap);
+>  	TEST_ASSERT(ret >= 0, KVM_IOCTL_ERROR(KVM_CHECK_EXTENSION, ret));
+>  
+>  	kvm_free_fd(kvm_fd);
+>  
+>  	return (unsigned int)ret;
+>  }
+>  
+>  void vm_enable_dirty_ring(struct kvm_vm *vm, u32 ring_size)
+>  {
+> -	if (vm_check_cap(vm, KVM_CAP_DIRTY_LOG_RING_ACQ_REL))
+> -		vm_enable_cap(vm, KVM_CAP_DIRTY_LOG_RING_ACQ_REL, ring_size);
+> -	else
+> -		vm_enable_cap(vm, KVM_CAP_DIRTY_LOG_RING, ring_size);
+> +	long cap = KVM_CAP_DIRTY_LOG_RING_ACQ_REL;
+> +	int max_size = vm_check_cap(vm, cap);
+> +
+> +	if (!max_size) {
+> +		cap = KVM_CAP_DIRTY_LOG_RING;
+> +		max_size = vm_check_cap(vm, cap);
+> +	}
+> +
+> +	TEST_ASSERT(max_size > 0,
 
-I prefer the first option.
+Rather than open code this, which is kinda sorta going to show up in multiple
+places, what if we do this as a prep patch?  Then vm_enable_dirty_ring() can use
+kvm_get_dirty_ring_cap() (completely untested).
 
-Thanks,
-Andrei
+diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
+index af5eb0334a74..558a71d631da 100644
+--- a/tools/testing/selftests/kvm/dirty_log_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_test.c
+@@ -291,8 +291,7 @@ static void default_after_vcpu_run(struct kvm_vcpu *vcpu)
+ 
+ static bool dirty_ring_supported(void)
+ {
+-	return (kvm_has_cap(KVM_CAP_DIRTY_LOG_RING) ||
+-		kvm_has_cap(KVM_CAP_DIRTY_LOG_RING_ACQ_REL));
++	return kvm_get_dirty_ring_cap();
+ }
+ 
+ static void dirty_ring_create_vm_done(struct kvm_vm *vm)
+diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+index e3b122719262..c08d1581221e 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util.h
++++ b/tools/testing/selftests/kvm/include/kvm_util.h
+@@ -339,6 +339,17 @@ static inline bool kvm_has_cap(long cap)
+ 	return kvm_check_cap(cap);
+ }
+ 
++static inline long kvm_get_dirty_ring_cap(void)
++{
++	if (kvm_has_cap(KVM_CAP_DIRTY_LOG_RING_ACQ_REL))
++		return KVM_CAP_DIRTY_LOG_RING_ACQ_REL;
++
++	if (kvm_has_cap(KVM_CAP_DIRTY_LOG_RING))
++		return KVM_CAP_DIRTY_LOG_RING;
++
++	return 0;	
++}
++
+ /*
+  * Use the "inner", double-underscore macro when reporting errors from within
+  * other macros so that the name of ioctl() and not its literal numeric value
+
+
+> "Dirty-ring not supported in this kernel\n");
+
+"this kernel" could be misleading, some architectures simply don't support the
+dirty ring.
+
+> +	TEST_ASSERT(ring_size <= max_size && is_power_of_2(ring_size) &&
+> +		    ring_size >= getpagesize(),
+> +		    "Invalid dirty-ring size: Should be a power of two "
+> +		    "between %lu and %lu entries\n",
+
+Don't wrap strings.  The "Invalid dirty-ring size:" part is redudant with the
+expressions, just drop that to shorten things.  This should also spit out the
+requested ring_size.  Stating the range as a number of entries is also confusing;
+as a debugger, I don't want to have to go look at the size of kvm_dirty_gfn to
+understand why ring_size is invalid.
+
+And maybe split up the asserts?  If the goal is to make it easier for developers
+to know when they messed up, might as well make it as easy as possible.  E.g.
+leaning on the above diff, something like this?
+
+	long cap = kvm_get_dirty_ring_cap();
+
+	TEST_ASSERT(cap, "Dirty-ring not supported");
+
+	TEST_ASSERT(is_power_of_2(ring_size),
+		    "Dirty-ring size '0x%x' must be a power-of-2", ring_size);
+	TEST_ASSERT(ring_size >= getpagesize(),
+		    "Dirty-ring size '0x%x' must be at least one (host) page", ring_size);
+	TEST_ASSERT(ring_size >= vm_check_cap(vm, cap),
+		    "Dirty-ring size '0x%x' is larger than KVM's limit of '0x%x'",
+		    ring_size, vm_check_cap(vm, cap));
+
+	vm_enable_cap(vm, cap, ring_size);
+	vm->dirty_ring_size = ring_size;
+
+> +		    getpagesize() / sizeof(struct kvm_dirty_gfn),
+> +		    max_size / sizeof(struct kvm_dirty_gfn));
+> +
+> +	vm_enable_cap(vm, cap, ring_size);
+>  	vm->dirty_ring_size = ring_size;
+>  }
+>  
+>  static void vm_open(struct kvm_vm *vm)
+>  {
+>  	vm->kvm_fd = _open_kvm_dev_path_or_exit(O_RDWR);
+>  
+>  	TEST_REQUIRE(kvm_has_cap(KVM_CAP_IMMEDIATE_EXIT));
+>  
+>  	vm->fd = __kvm_ioctl(vm->kvm_fd, KVM_CREATE_VM, (void *)vm->type);
+> -- 
+> 2.55.0
+> 
