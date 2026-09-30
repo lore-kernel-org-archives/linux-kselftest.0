@@ -1,48 +1,102 @@
-Received: from mail-106112.protonmail.ch (mail-106112.protonmail.ch [79.135.106.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95E784CE68D
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 11:29:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D824CC600
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 11:29:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790767770; cv=none; b=DkJJgqbsK+1pKdBnLjSUmIFAP4hrzQDpkTTkHWBgAWpoZ6xSqNe88LtJo0BhcWx4ly+4iIqMQL7dYoOHCPEp9ppNohQhVhfW3aqY3Cga7DFnmsXqI1fGsprRuaXlUn2BJqL9/h61DpYs6Ia/xrLg0Rhrig5A3862xh0p7wNsPJE=
+	t=1790767775; cv=none; b=SX2tH0WDUHrips3hnUkcJttu9mAJSXQYBfoF/Cwjx1i1mi3Gq0Mbx56ZR8LRwNV/YLlKWuXciXN+//7HkBZ5q9RWplhWOREILg/ptnW9GXldXjjRDmn/OSDkPiWLGK+OzSi7uUGKIuzAgKHgGpFvH060OjxPyKwwYE1r3PxX5LI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790767770; c=relaxed/simple;
-	bh=9tfCC66xR/mBw9sO0R6mzNjqBXs+Q19kiEO1QkNKVK0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tCsMmQVkNx0Qe45Bsnq7ZpA5mEFh2UEKe+tBRh0WQyKktwzCo5jXzu06Alrtj8xvnQRjSSDq2ax8ikpX99Ji/hRu0SfPMNDFiDJtThZTsXVsLeIrQTlooD14cnxP/0vE72crQY9g6KjVNSQmAk4rStsTRmM5yXyXwUNnayXvbIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runtimeverification.com; spf=pass smtp.mailfrom=runtimeverification.com; dkim=pass (2048-bit key) header.d=runtimeverification.com header.i=@runtimeverification.com header.b=lfvxie2z; arc=none smtp.client-ip=79.135.106.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runtimeverification.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runtimeverification.com
+	s=arc-20240116; t=1790767775; c=relaxed/simple;
+	bh=6I9/o2fsb95RZ/cdcrjocTXvh86feiHHlbzI4OFSZMY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QnKv3EMCuf3LBCy3mD/+u9f86XVYc1FuInRSzb+3Lp59+oNquYxctOxngrBix6CpNTq+udyLiVy4akrIVOg3lyXzvu7cEzzaRyRRDju2WDj7xvR2fz/eK+xhv74vfMG3LUya2RKq3ChRvwnmkhhFI6LtPQYTYQoFa9ZqD6N4Nus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RhouW3A1; arc=none smtp.client-ip=74.125.228.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=runtimeverification.com header.i=@runtimeverification.com header.b="lfvxie2z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RhouW3A1"
+Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85f0fc1fd8eso2534025b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 04:29:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=runtimeverification.com; s=protonmail; t=1790767759; x=1791026959;
-	bh=zbino4/7n790rzcUQtAw8KiZcHbAAb5Mkx4WtCtnIjk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:From:To:
-	 Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=lfvxie2zRRVffOlNt6R06mSxHAl9kCdWKUPdt8pInd+P3/Zki6Y4ftygja0yUZHZV
-	 1Qzm33xZX/JQBYTWIWF1s27s+o3chvXwvW2XlTYMJbS4ozQfUZ7BtFXOkwEpryKej1
-	 TXRsMBnt+XtWUMMQHaTc1qdHCtO8gP3xaWr2jojWNYa8x16dgYFvgKhMjdXzYDqhKS
-	 zD8W1JdSlxXeIykOwl/VzWo7MBm/1kk+7E34t+yl8CMHfajCjogMEdE5NGJx25PcAN
-	 zHZDwYluGkiwsPynerf/o8hbIq5IKeny0gULVkcVbmJCLcZjoBLyWKms/4ok/QCHSj
-	 Ec3t+aYZ5Gw7Q==
-X-Pm-Submission-Id: 4hvt9N49mpz2ScPN
-From: Natasha Klaus <natalie.klaus@runtimeverification.com>
-To: Christian Brauner <brauner@kernel.org>,
+        d=gmail.com; s=20251104; t=1790767773; x=1791372573; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=8tVHCGk2Xwqu+yf2mIq4Pai4+4x8BJRwBsQH1o/snK8=;
+        b=RhouW3A1HoH73HAXMBtDC8A87acGjfD6grYWDwNGBDdrMe8U2NoWq453YYgCWB/EFG
+         GPomUPqtEQSVXek1CDxjIOTxEA2iqMbtsCWl4btj6Df8An4q0F6gsfG19RZ8GzJJu5CP
+         JZjnyjeYcvDxrYtC6isah2QuRSoDajCTWmY96jDye4sIoSTFZOWWTEqal/kuojdW9AO7
+         d8u7adNeEwFcmW0JzsTn2xa/rYGOW0DjHK9xmUZ8f5dQwd5EAUbjIHwVAybe2yCI+3gk
+         Bn0hFuQ8hb2bN6GHJ75LOqVDgDdGiowyztRyE9d3Kht3M+s1rrg//yvXcYO8Sx3mDhEY
+         b1+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790767773; x=1791372573;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8tVHCGk2Xwqu+yf2mIq4Pai4+4x8BJRwBsQH1o/snK8=;
+        b=mlBAtbuS4CGnCnE8h0yMcr3SZ+Sjc+FCqLD+wGXYirA5KqAw5EwvYxGfW5HJiQ+lnY
+         PWBWXrp37Ws0UfqgeWoFZKEIFxR3MBEknA6rhec5Px1LpOfODnj1ltVNNLOsEWY1bjEt
+         SlmkN3rNId+5+bm1nI7Q/XviVyVS833X54GW9zTJU7WwaS0Y4CEraPQcEguCTPSGwWOG
+         0jepHVTaJwX1ANJTkhpQnNH7Fr5T/nKsiFmOEbejug74qW3sLtGyLeeZevuyH1VmQ2ww
+         7eGagJuvSFilw240mSUBDw0JLgOACa2XTfdcPusmqLciRlZeauCVqN9PcEFJ9B4ToTzH
+         hEAg==
+X-Forwarded-Encrypted: i=1; AKwUvByKVuIg+KVhezlOB6ptQhbiHCgiE+AS97+BDuprcSJctfSVlc+UQ1B/3gHsY7VTV5r81tkDuxRSyymQ2qteiSQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++m/SQHu6lUfUV91KVCLf1a5B9j2JUkF7m9Q6G1FiEye2JcsnzZv
+	YCEvVZ5d8p0LLZ1eOjmSSUajYZwfg8hVSxMuz/4HTHaOKMfMTKWU/SD5
+X-Gm-Gg: AYBFou2RkrDFsGPtJIAY248I7sQIlStaSRaMI4VZLtMf8ZUYmsPcGGExWUREEtMjbDJ
+	3GsGXIfwxEhk6jrn3dkzoqqABhpmz/J+rnmHpGTHnJSdrxXnv/Od74pobjYjOX6UlZLAQRgzWdo
+	IU20eu+1B+8+9E3gcqNg7thLKjreGQZ9t4gnVjU3l/ofi5g3bYMhGMd9brebT8pD6d9v7OVRreZ
+	I9VaqMg+S/H/kW79013XSNgROU+vGB8IcSTXDS3Zn/i8ETtuP7ZcnoBt7Tb/AVT/IZSV6wqtY4m
+	2sUlT6Jx6H0QwUB0CZpTVe+fZhmrh3y+p3SXRpzPjllWbPcNSa7QwaeQpHpF75U0g7kA6BEZnJO
+	E1G3+LtbFa4IEMC4XA3ohOUBdi4KmpCzhiLIXcYywn3YloCX9RwQa+qv5VRyKsNZSOdg6UyrsQV
+	asN8RA8aS+TGceIaUrwGJTBEZlE/fIm4naS9UnW8/XXH3/xvHV3l2kRbxz9R9+7k9D+gZfqyFjX
+	V9Ij6D2F1SEURDRHWLT2zCx1vJxc3KXjZ3Po+v7kN2k
+X-Received: by 2002:a05:6a21:32a2:b0:3dd:a197:735c with SMTP id adf61e73a8af0-3de9e84e31cmr980963637.53.1790767773292;
+        Wed, 30 Sep 2026 04:29:33 -0700 (PDT)
+Received: from m-upc-A520M-HDV.lan ([2400:2410:3f60:500:3fb:270c:7df4:18f])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc7dab46db6sm712637a12.31.2026.09.30.04.29.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Sep 2026 04:29:32 -0700 (PDT)
+Sender: Yuyang Huang <uyoko90@gmail.com>
+From: Yuyang Huang <sigefriedhyy@gmail.com>
+To: Yuyang Huang <sigefriedhyy@gmail.com>
+Cc: Ajay Singh <ajay.kathat@microchip.com>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Johannes Berg <johannes@sipsolutions.net>,
 	Kees Cook <kees@kernel.org>,
-	"Eric W . Biederman" <ebiederm@xmission.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	linux-kselftest@vger.kernel.org,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+	Nikolaos Gkarlis <nickgarlis@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Stanislav Fomichev <sdf.kernel@gmail.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
 	linux-kernel@vger.kernel.org,
-	Natasha Klaus <natalie.klaus@runtimeverification.com>
-Subject: [PATCH v2 2/2] selftests/namespaces: add uid_map/gid_map range tests
-Date: Wed, 30 Sep 2026 14:28:54 +0300
-Message-Id: <20260930112854.373184-3-natalie.klaus@runtimeverification.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260930112854.373184-1-natalie.klaus@runtimeverification.com>
-References: <20260930112854.373184-1-natalie.klaus@runtimeverification.com>
+	linux-kselftest@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH net-next v9 6/6] selftests: net: test AF_PACKET multicast dumps
+Date: Wed, 30 Sep 2026 20:28:42 +0900
+Message-ID: <20260930112842.21323-7-sigefriedhyy@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260930112842.21323-1-sigefriedhyy@gmail.com>
+References: <20260930112842.21323-1-sigefriedhyy@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,355 +105,122 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Check that a uid_map or gid_map line with a value that does not fit in
-u32, or with a negative value, is rejected with EINVAL and installs
-nothing, for each of the three fields.
+Dump the link-layer multicast addresses of a dummy device and verify
+that ifa_index restricts the dump to that device, that the all-hosts
+address joined on link up is listed without IFA_F_GLOBAL, that an
+address added with SIOCADDMULTI is listed with IFA_F_GLOBAL and
+IFA_MC_USERS, and that IFA_TARGET_NETNSID dumps another netns.
 
-Check that in-range lines are still accepted and read back unchanged:
-a plain single-id mapping, first id 0, the largest valid first id
-4294967294, and a line with extra spaces between the fields. When run
-as root in the initial user namespace, also check that the largest
-count, "0 0 4294967295", is accepted when written by the parent into
-the uid_map of a child namespace; an unprivileged writer can only map
-a single id.
-
-Signed-off-by: Natasha Klaus <natalie.klaus@runtimeverification.com>
-Assisted-by: LLM
+Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
+Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
 ---
- tools/testing/selftests/namespaces/.gitignore |   1 +
- tools/testing/selftests/namespaces/Makefile   |   3 +-
- .../selftests/namespaces/uid_map_range_test.c | 299 ++++++++++++++++++
- 3 files changed, 302 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/namespaces/uid_map_range_test.c
+ tools/testing/selftests/net/rtnetlink.py | 73 +++++++++++++++++++++++-
+ 1 file changed, 71 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/namespaces/.gitignore b/tools/testing/selftests/namespaces/.gitignore
-index 0989e80da457..995b082357fa 100644
---- a/tools/testing/selftests/namespaces/.gitignore
-+++ b/tools/testing/selftests/namespaces/.gitignore
-@@ -10,3 +10,4 @@ cred_change_test
- stress_test
- listns_pagination_bug
- regression_pidfd_setns_test
-+uid_map_range_test
-diff --git a/tools/testing/selftests/namespaces/Makefile b/tools/testing/selftests/namespaces/Makefile
-index fbb821652c17..9b22d12708e1 100644
---- a/tools/testing/selftests/namespaces/Makefile
-+++ b/tools/testing/selftests/namespaces/Makefile
-@@ -13,7 +13,8 @@ TEST_GEN_PROGS := nsid_test \
- 		  cred_change_test \
- 		  stress_test \
- 		  listns_pagination_bug \
--		  regression_pidfd_setns_test
-+		  regression_pidfd_setns_test \
-+		  uid_map_range_test
+diff --git a/tools/testing/selftests/net/rtnetlink.py b/tools/testing/selftests/net/rtnetlink.py
+index dc8c77db48974..5534ade056a5c 100755
+--- a/tools/testing/selftests/net/rtnetlink.py
++++ b/tools/testing/selftests/net/rtnetlink.py
+@@ -5,13 +5,18 @@ import socket
+ import struct
+ import time
+ from lib.py import bkg, ip, ksft_exit, ksft_run, ksft_eq, ksft_ge, ksft_true, KsftSkipEx
+-from lib.py import ksft_not_in, ksft_not_none
++from lib.py import ksft_in, ksft_not_in, ksft_not_none
+ from lib.py import CmdExitFailure, NetNS, NetNSEnter, RtnlAddrFamily, RtnlRouteFamily
+ from lib.py import defer
  
- include ../lib.mk
+ IPV4_ALL_HOSTS_MULTICAST = b'\xe0\x00\x00\x01'
+ IPV4_TEST_MULTICAST = b'\xef\x01\x01\x01'
+ IPV6_TEST_MULTICAST = bytes.fromhex('ff020000000000000000000000000123')
++ETH_ALL_HOSTS_MULTICAST = bytes.fromhex('01005e000001')
++ETH_TEST_MULTICAST_STR = '01:00:5e:01:01:01'
++ETH_TEST_MULTICAST = bytes.fromhex(ETH_TEST_MULTICAST_STR.replace(':', ''))
++ETH_PEER_MULTICAST_STR = '01:00:5e:02:02:02'
++ETH_PEER_MULTICAST = bytes.fromhex(ETH_PEER_MULTICAST_STR.replace(':', ''))
  
-diff --git a/tools/testing/selftests/namespaces/uid_map_range_test.c b/tools/testing/selftests/namespaces/uid_map_range_test.c
-new file mode 100644
-index 000000000000..1eba1e609205
---- /dev/null
-+++ b/tools/testing/selftests/namespaces/uid_map_range_test.c
-@@ -0,0 +1,299 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include "../kselftest_harness.h"
+ 
+ def _users_for(rtnl: RtnlAddrFamily, family: int, grp: bytes, ifindex: int):
+@@ -105,6 +110,69 @@ def dump_mcaddr6_check() -> None:
+                 s2.close()
+ 
+ 
++def dump_mcaddr_l2_check() -> None:
++    """
++    Verify link-layer multicast addresses in an AF_PACKET RTM_GETMULTICAST
++    dump: the ifa-index filter, mc-users, the global flag and
++    target-netnsid.
++    """
 +
-+/*
-+ * The fields of a uid_map/gid_map line are stored in u32. Values that
-+ * do not fit, and negative values, must be rejected with EINVAL instead
-+ * of being silently truncated, and in-range values must still be
-+ * accepted.
-+ */
++    with NetNS() as ns, NetNSEnter(str(ns)):
++        for ifname in ("dummy1", "dummy2"):
++            ip(f"link add name {ifname} type dummy")
++            ip(f"link set {ifname} up")
++        dev_idx = socket.if_nametoindex("dummy1")
++        ip(f"maddr add {ETH_TEST_MULTICAST_STR} dev dummy1")
 +
-+static int write_file(const char *path, const char *buf)
-+{
-+	ssize_t len = strlen(buf);
-+	ssize_t ret;
-+	int fd;
++        rtnl = RtnlAddrFamily()
++        defer(rtnl.close)
++        addresses = rtnl.getmulticast(
++            {"ifa-family": socket.AF_PACKET, "ifa-index": dev_idx},
++            dump=True)
 +
-+	fd = open(path, O_WRONLY | O_CLOEXEC);
-+	if (fd < 0)
-+		return -errno;
-+	ret = write(fd, buf, len);
-+	if (ret < 0)
-+		ret = -errno;
-+	close(fd);
-+	if (ret < 0)
-+		return ret;
-+	return ret == len ? 0 : -EIO;
-+}
++        # dummy2 has entries as well, only dummy1 may be listed
++        ksft_eq({addr['ifa-index'] for addr in addresses}, {dev_idx},
++                "AF_PACKET multicast dump ignored ifa-index filter")
 +
-+static ssize_t read_file(const char *path, char *buf, size_t size)
-+{
-+	ssize_t ret;
-+	int fd;
++        entries = {addr['multicast']: addr for addr in addresses}
 +
-+	fd = open(path, O_RDONLY | O_CLOEXEC);
-+	if (fd < 0)
-+		return -errno;
-+	ret = read(fd, buf, size - 1);
-+	if (ret < 0)
-+		ret = -errno;
-+	else
-+		buf[ret] = '\0';
-+	close(fd);
-+	return ret;
-+}
++        # Bringing an Ethernet device up joins 224.0.0.1, which maps
++        # to 01:00:5e:00:00:01 in the device multicast list.
++        all_hosts = entries.get(ETH_ALL_HOSTS_MULTICAST)
++        ksft_not_none(all_hosts,
++                      "dummy1 does not have the all-hosts link-layer address")
++        if all_hosts is not None:
++            ksft_not_in('global', all_hosts['flags'],
++                        "protocol entry is global")
 +
-+/* Enter a fresh user namespace, remembering the outer ids. */
-+static int enter_userns(uid_t *uid, gid_t *gid)
-+{
-+	*uid = geteuid();
-+	*gid = getegid();
-+	if (unshare(CLONE_NEWUSER) < 0)
-+		return -errno;
-+	/* Required before an unprivileged gid_map write. */
-+	return write_file("/proc/self/setgroups", "deny");
-+}
++        static = entries.get(ETH_TEST_MULTICAST)
++        ksft_not_none(static, "dummy1 does not have the SIOCADDMULTI address")
++        if static is not None:
++            ksft_eq(static['mc-users'], 1,
++                    "unexpected mc-users for the SIOCADDMULTI address")
++            ksft_in('global', static['flags'],
++                    "SIOCADDMULTI entry is not global")
 +
-+static void expect_rejected(struct __test_metadata *_metadata,
-+			    const char *path, const char *line)
-+{
-+	char buf[256];
++        # target-netnsid dumps another netns, ifa-index is relative to it
++        with NetNS() as peer:
++            ip(f"netns set {peer} 5")
++            ip("link add name dummy3 type dummy", ns=peer)
++            ip("link set dummy3 up", ns=peer)
++            ip(f"maddr add {ETH_PEER_MULTICAST_STR} dev dummy3", ns=peer)
++            peer_idx = ip("link show dummy3", json=True, ns=peer)[0]['ifindex']
 +
-+	TH_LOG("writing \"%s\" to %s", line, path);
-+	EXPECT_EQ(write_file(path, line), -EINVAL);
-+	/* Nothing may have been installed. */
-+	EXPECT_EQ(read_file(path, buf, sizeof(buf)), 0) {
-+		TH_LOG("installed: %s", buf);
-+	}
-+}
++            addresses = rtnl.getmulticast(
++                {"ifa-family": socket.AF_PACKET, "target-netnsid": 5,
++                 "ifa-index": peer_idx}, dump=True)
++            ksft_eq({(addr['ifa-index'], addr['target-netnsid'])
++                     for addr in addresses}, {(peer_idx, 5)},
++                    "target-netnsid did not dump the peer netns")
++            # dummy1 in this netns can have the same ifindex as dummy3
++            ksft_in(ETH_PEER_MULTICAST,
++                    {addr['multicast'] for addr in addresses},
++                    "target-netnsid did not dump the peer device")
 +
-+static void expect_accepted(struct __test_metadata *_metadata,
-+			    const char *path, const char *line,
-+			    unsigned int first, unsigned int lower_first,
-+			    unsigned int count)
-+{
-+	unsigned int f, l, c;
-+	char buf[256];
 +
-+	TH_LOG("writing \"%s\" to %s", line, path);
-+	ASSERT_EQ(write_file(path, line), 0);
-+
-+	ASSERT_GT(read_file(path, buf, sizeof(buf)), 0);
-+	ASSERT_EQ(sscanf(buf, "%u %u %u", &f, &l, &c), 3);
-+	EXPECT_EQ(f, first);
-+	EXPECT_EQ(l, lower_first);
-+	EXPECT_EQ(c, count);
-+	/* Exactly one extent. */
-+	EXPECT_EQ(strchr(buf, '\n'), buf + strlen(buf) - 1);
-+}
-+
-+TEST(uid_map_first_above_u32)
-+{
-+	char line[64];
-+	uid_t uid;
-+	gid_t gid;
-+	int ret;
-+
-+	ret = enter_userns(&uid, &gid);
-+	if (ret)
-+		SKIP(return, "cannot set up user namespace: %s", strerror(-ret));
-+	snprintf(line, sizeof(line), "4294967301 %u 1", uid);
-+	expect_rejected(_metadata, "/proc/self/uid_map", line);
-+}
-+
-+TEST(uid_map_lower_first_above_u32)
-+{
-+	char line[64];
-+	uid_t uid;
-+	gid_t gid;
-+	int ret;
-+
-+	ret = enter_userns(&uid, &gid);
-+	if (ret)
-+		SKIP(return, "cannot set up user namespace: %s", strerror(-ret));
-+	snprintf(line, sizeof(line), "0 %llu 1", (1ULL << 32) + uid);
-+	expect_rejected(_metadata, "/proc/self/uid_map", line);
-+}
-+
-+TEST(uid_map_count_above_u32)
-+{
-+	char line[64];
-+	uid_t uid;
-+	gid_t gid;
-+	int ret;
-+
-+	ret = enter_userns(&uid, &gid);
-+	if (ret)
-+		SKIP(return, "cannot set up user namespace: %s", strerror(-ret));
-+	snprintf(line, sizeof(line), "0 %u 4294967297", uid);
-+	expect_rejected(_metadata, "/proc/self/uid_map", line);
-+}
-+
-+TEST(gid_map_first_above_u32)
-+{
-+	char line[64];
-+	uid_t uid;
-+	gid_t gid;
-+	int ret;
-+
-+	ret = enter_userns(&uid, &gid);
-+	if (ret)
-+		SKIP(return, "cannot set up user namespace: %s", strerror(-ret));
-+	snprintf(line, sizeof(line), "4294967301 %u 1", gid);
-+	expect_rejected(_metadata, "/proc/self/gid_map", line);
-+}
-+
-+TEST(uid_map_first_negative)
-+{
-+	char line[64];
-+	uid_t uid;
-+	gid_t gid;
-+	int ret;
-+
-+	ret = enter_userns(&uid, &gid);
-+	if (ret)
-+		SKIP(return, "cannot set up user namespace: %s", strerror(-ret));
-+	snprintf(line, sizeof(line), "-1 %u 1", uid);
-+	expect_rejected(_metadata, "/proc/self/uid_map", line);
-+}
-+
-+TEST(uid_map_lower_first_negative)
-+{
-+	uid_t uid;
-+	gid_t gid;
-+	int ret;
-+
-+	ret = enter_userns(&uid, &gid);
-+	if (ret)
-+		SKIP(return, "cannot set up user namespace: %s", strerror(-ret));
-+	expect_rejected(_metadata, "/proc/self/uid_map", "0 -1 1");
-+}
-+
-+TEST(uid_map_count_negative)
-+{
-+	char line[64];
-+	uid_t uid;
-+	gid_t gid;
-+	int ret;
-+
-+	ret = enter_userns(&uid, &gid);
-+	if (ret)
-+		SKIP(return, "cannot set up user namespace: %s", strerror(-ret));
-+	snprintf(line, sizeof(line), "0 %u -1", uid);
-+	expect_rejected(_metadata, "/proc/self/uid_map", line);
-+}
-+
-+TEST(uid_map_in_range)
-+{
-+	char line[64];
-+	uid_t uid;
-+	gid_t gid;
-+	int ret;
-+
-+	ret = enter_userns(&uid, &gid);
-+	if (ret)
-+		SKIP(return, "cannot set up user namespace: %s", strerror(-ret));
-+	snprintf(line, sizeof(line), "5 %u 1", uid);
-+	expect_accepted(_metadata, "/proc/self/uid_map", line, 5, uid, 1);
-+}
-+
-+TEST(uid_map_zero)
-+{
-+	char line[64];
-+	uid_t uid;
-+	gid_t gid;
-+	int ret;
-+
-+	ret = enter_userns(&uid, &gid);
-+	if (ret)
-+		SKIP(return, "cannot set up user namespace: %s", strerror(-ret));
-+	snprintf(line, sizeof(line), "0 %u 1", uid);
-+	expect_accepted(_metadata, "/proc/self/uid_map", line, 0, uid, 1);
-+}
-+
-+/* 4294967295 is (u32)-1, which map_write() refuses as a starting id. */
-+TEST(uid_map_largest_first)
-+{
-+	char line[64];
-+	uid_t uid;
-+	gid_t gid;
-+	int ret;
-+
-+	ret = enter_userns(&uid, &gid);
-+	if (ret)
-+		SKIP(return, "cannot set up user namespace: %s", strerror(-ret));
-+	snprintf(line, sizeof(line), "4294967294 %u 1", uid);
-+	expect_accepted(_metadata, "/proc/self/uid_map", line,
-+			4294967294U, uid, 1);
-+}
-+
-+TEST(uid_map_extra_spaces)
-+{
-+	char line[64];
-+	uid_t uid;
-+	gid_t gid;
-+	int ret;
-+
-+	ret = enter_userns(&uid, &gid);
-+	if (ret)
-+		SKIP(return, "cannot set up user namespace: %s", strerror(-ret));
-+	snprintf(line, sizeof(line), "0   %u  1", uid);
-+	expect_accepted(_metadata, "/proc/self/uid_map", line, 0, uid, 1);
-+}
-+
-+/*
-+ * An unprivileged writer may only map a single id, so the largest count
-+ * needs a privileged parent writing the map of a child namespace. With
-+ * first and lower_first 0, the no-wrap rule allows up to 4294967295.
-+ */
-+TEST(uid_map_largest_count)
-+{
-+	unsigned int first, lower_first, count;
-+	int to_child[2], from_child[2];
-+	char path[64], buf[256];
-+	pid_t pid;
-+	char c;
-+
-+	if (geteuid() != 0)
-+		SKIP(return, "needs root in the initial user namespace");
-+	ASSERT_GT(read_file("/proc/self/uid_map", buf, sizeof(buf)), 0);
-+	ASSERT_EQ(sscanf(buf, "%u %u %u", &first, &lower_first, &count), 3);
-+	if (first != 0 || lower_first != 0 || count != 4294967295U)
-+		SKIP(return, "not in the initial user namespace");
-+
-+	ASSERT_EQ(pipe(to_child), 0);
-+	ASSERT_EQ(pipe(from_child), 0);
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0) {
-+		close(to_child[1]);
-+		close(from_child[0]);
-+		c = unshare(CLONE_NEWUSER) ? 'F' : 'K';
-+		if (write(from_child[1], &c, 1) != 1)
-+			_exit(1);
-+		/* Stay alive until the parent is done with our uid_map. */
-+		if (read(to_child[0], &c, 1) < 0)
-+			_exit(1);
-+		_exit(0);
-+	}
-+	close(to_child[0]);
-+	close(from_child[1]);
-+
-+	ASSERT_EQ(read(from_child[0], &c, 1), 1);
-+	ASSERT_EQ(c, 'K');
-+	snprintf(path, sizeof(path), "/proc/%d/uid_map", pid);
-+	expect_accepted(_metadata, path, "0 0 4294967295", 0, 0, 4294967295U);
-+
-+	close(to_child[1]);
-+	EXPECT_EQ(waitpid(pid, NULL, 0), pid);
-+}
-+
-+TEST_HARNESS_MAIN
+ def ipv4_devconf_notify() -> None:
+     """
+     Configure an interface and set ipv4-devconf values through netlink
+@@ -424,7 +492,8 @@ def ipv6_verify_inter_scope_addr_order() -> None:
+ 
+ 
+ def main() -> None:
+-    ksft_run([dump_mcaddr_check, dump_mcaddr6_check, ipv4_devconf_notify,
++    ksft_run([dump_mcaddr_check, dump_mcaddr6_check, dump_mcaddr_l2_check,
++              ipv4_devconf_notify,
+               ipv6_route_del_reason_expired,
+               ipv6_route_del_reason_ra_withdrawn,
+               ipv6_route_del_reason_absent,
 -- 
-2.34.1
+2.43.0
 
