@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4759224676D;
-	Wed, 30 Sep 2026 03:52:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568BC37AA86;
+	Wed, 30 Sep 2026 03:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790740340; cv=none; b=PLuUH4iF9fk7e2j1oZoYz9xBe/Y9nZR6FKb/Dr830HGolEgeMSDr8QyeJElH357SUdbOK7CSATjR8Pn5/XlkryjGhYYcBFFKotc+8g1ttZ49xTjNhvguw4Es2pRfendAeb9S5A/KYSCdZEVnE9G+ZVInDn7QqmoNm2oNapqO7rk=
+	t=1790740341; cv=none; b=QiyoXeDZTRTscPsOeucQDjvPUvOnAkuNbRDDNZ3HWFPVZhYayN6kLeeTIIvkiEmJQKPNlo77sfGl97DIAGMlR07dquImgF/udZgz2XZojqxbdkqCZVMAajo/UEjqQgRZoCzELSklnWAcKYzZm9MdAbFC6GpG7jIxbXOkIBtUhec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790740340; c=relaxed/simple;
-	bh=sR1Z2Tu0TX4h7028aVqo9aEPtibcKb0vO2MekE8kzaw=;
+	s=arc-20240116; t=1790740341; c=relaxed/simple;
+	bh=PQulKUagK/hx+K9OD+4u1945gC9NJnHDw3gILbmknhM=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jX0vqPzlr01U1hzYborplgixZA4oo9/Oer6zmP6l55ZCsftOe8nfFOR/Kk9Zdlp4wey4tKguAquqlFI98FAapdFcF6+0QGM0NT5AnHhQS/snA5FVyEu/p9kxaR5KKRtINgDOzbWa4XLV1mbWgWECRCTdJjBYxbCZYdsA56i91lI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q2YqnDlo; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=jR+o52F6dTpeVJCa9CgMD+zmdNb8OkGW4uLonQXrJjbaJIpR5XnAt/CLL6Z7VQcl2qp0s+fFHxrvCBH8m+4J+t1V3MOCwUuJUvRKXI4b7OKtJNu30IRXlazBE6xZRTIttpAp8bZ59BFZnvWk5TD4MYYAlUUTtXlgvuZgLzu9N9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Er6B4J08; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q2YqnDlo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F9FB1F000FF;
-	Wed, 30 Sep 2026 03:52:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Er6B4J08"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BA351F00893;
+	Wed, 30 Sep 2026 03:52:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790740338;
-	bh=9cNnFGoevFOeZWAWTmFPoocbC2E0QbIOFTTZj5dLcYc=;
+	s=k20260515; t=1790740340;
+	bh=uIWHzJ+gZ7ymB62EEMiGcRSLYz+rrOzqCzhM7YIXV30=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Q2YqnDlozdrcagf4UodP7SOEorFQH2mBPBEPyWDLjKKl8nrwD6pJUFL4d6xr7Pas/
-	 w0+tLGIrQ8dydFlofWU4+c11ikxAXMDjpWfLoS5ZLNbXswBwbRNWaZCNvCp5gyiVvi
-	 etjongacgsh5A2c7uY7ICzRy8aqJ40YEI4YEhHqa8j/60OyUCv9sWzBbOTnvFhmy1e
-	 1Zoulh8sGaZclQshVhsg9kcri8AjXVwiHdhbUpfyLtmjkmdWunn8eaBLIi3tkolazz
-	 ZGRudO+9zbM3k4jrixxZGZr8EQD7/78OvicUPNodeVTVlTQknqvqLjjuwk67PDeKKb
-	 ZDYH/7yaQb3OA==
-Subject: Re: [PATCH net-next v3 1/6] vxlan: vnifilter: validate the
- VXLAN_VNIFILTER_ENTRY nest
+	b=Er6B4J08oVt0vXHJisLC+ZUQL7aqru7ADxFQ/tb79HMLU+lONsobtXK4DrZN84oDk
+	 epajy9GkLFlOlp1haOcI+DAS7cYDGg0bf7uLrfsiLy1mLYGTAgN1VKKKE1EYaEqaG4
+	 dAQ76FhMuYa1dwhro4JF6Da/MTXDpibFhMWSSqZD3uYROk7O4gd12h9yP3KGBb9NKV
+	 A4RJr+a8AnQlncfiBzkuo05y0HKImonyPlW2Vtztbc1Vb5s8Hey9RKxWykM95H4G+E
+	 Uah5+qUZ+9iOitTxeSVjspEBAfej6Y4aQKe4+rcSTFasJEtvUUviqmzpKuz8wPRRyh
+	 8iNUDjGU3xaVg==
+Subject: Re: [PATCH net-next v3 2/6] vxlan: vnifilter: reject VNIs outside the
+ 24-bit space
 From: netdev-bot+sashiko@kernel.org
 To: alishmery18@gmail.com
 Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
@@ -35,11 +35,11 @@ Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
  andrew+netdev@lunn.ch, horms@kernel.org, razor@blackwall.org,
  roopa@nvidia.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Date: Wed, 30 Sep 2026 03:52:17 +0000
-Message-ID: <179074033755.434549.2348132981395970201@kernel.org>
-In-Reply-To: <20260927215209.2581830-2-alishmery18@gmail.com>
-References: <20260927215209.2581830-2-alishmery18@gmail.com>
-X-sashiko-severity: High
+Date: Wed, 30 Sep 2026 03:52:19 +0000
+Message-ID: <179074033905.434549.17567477957506954682@kernel.org>
+In-Reply-To: <20260927215209.2581830-3-alishmery18@gmail.com>
+References: <20260927215209.2581830-3-alishmery18@gmail.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -52,7 +52,7 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 (1) · Medium: 0 · Low: 0
+Critical: 0 · High: 0 · Medium: 1 (1) · Low: 0 (3)
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -60,149 +60,205 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] The commit message says more than the patch does.
+- [Medium] This commit fixes a real denial-of-service that users can
+  trigger, but it has no Fixes: tag and no stable marking.
 
 Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, and later patches
-  in the series fix it (baseline decision: discard).
+- [Medium] At this commit, both endpoints are limited to 0..0xffffff, but
+  a single RTM_NEWTUNNEL entry such as START=0 END=0xffffff (or END…
+- [Low] The vxlan FDB netlink path takes NDA_VNI and NDA_SRC_VNI with
+  nla_get_u32() and never checks them against VXLAN_N_VID.
+- [Low] A reversed range (START > END, e.g. START=100 END=50) passes
+  vxlan_process_vni_filter(), which rejects only `!vni_start &&…
+- [Low] VNI 0 can be added as part of a range but cannot be added,
+  updated, or deleted on its own.
 
 --
 
-vxlan: vnifilter: validate the VXLAN_VNIFILTER_ENTRY nest
+vxlan: vnifilter: reject VNIs outside the 24-bit space
 
-This patch links the VXLAN_VNIFILTER_ENTRY nest in vni_filter_policy to
-vni_filter_entry_policy with NLA_POLICY_NESTED(). The entry attributes are
-then checked by nlmsg_parse() in vxlan_vnifilter_process() before any entry
-is dispatched. The goal is to reject a message that carries an invalid
-entry as a whole.
+This commit adds NLA_POLICY_FULL_RANGE validation to the
+VXLAN_VNIFILTER_ENTRY_START and VXLAN_VNIFILTER_ENTRY_END attributes. Both
+are limited to 0..VXLAN_N_VID - 1. It also changes the loop counter in
+vxlan_vni_add_del() from int to u32, which stops the loop from running
+without bound when end_vni is 0xffffffff.
 
-Link: https://lore.kernel.org/netdev/20260921150904.65a704eb@kernel.org/
+> diff --git a/drivers/net/vxlan/vxlan_vnifilter.c b/drivers/net/vxlan/vxlan_vnifilter.c
+> index d391ec5796610..9cffaf4998a98 100644
+> --- a/drivers/net/vxlan/vxlan_vnifilter.c
+> +++ b/drivers/net/vxlan/vxlan_vnifilter.c
+> @@ -459,9 +459,15 @@ static int vxlan_vnifilter_dump(struct sk_buff *skb, struct netlink_callback *cb
+>  	return err;
+>  }
+>  
+> +static const struct netlink_range_validation vni_filter_vni_range = {
+> +	.max = VXLAN_N_VID - 1,
+> +};
+> +
+>  static const struct nla_policy vni_filter_entry_policy[VXLAN_VNIFILTER_ENTRY_MAX + 1] = {
+> -	[VXLAN_VNIFILTER_ENTRY_START] = { .type = NLA_U32 },
+> -	[VXLAN_VNIFILTER_ENTRY_END] = { .type = NLA_U32 },
+> +	[VXLAN_VNIFILTER_ENTRY_START] = NLA_POLICY_FULL_RANGE(NLA_U32,
+> +							      &vni_filter_vni_range),
+> +	[VXLAN_VNIFILTER_ENTRY_END] = NLA_POLICY_FULL_RANGE(NLA_U32,
+> +							    &vni_filter_vni_range),
+>  	[VXLAN_VNIFILTER_ENTRY_GROUP]	= NLA_POLICY_EXACT_LEN(sizeof_field(struct iphdr, daddr)),
+>  	[VXLAN_VNIFILTER_ENTRY_GROUP6]	= NLA_POLICY_EXACT_LEN(sizeof(struct in6_addr)),
+>  };
 
-> Link the nest to vni_filter_entry_policy with NLA_POLICY_NESTED() so the
-> whole message is validated up front, before any entry is acted on. A
-> message carrying an invalid entry is now rejected as a unit and installs
-> nothing.
+[Severity: Medium]
+This fixes a problem that users can trigger, but the trailers have no
+Fixes: tag:
 
-[Severity: High]
-Is this claim accurate? NLA_POLICY_NESTED() moves only the attribute
-policy checks (type, length, unknown attributes) ahead of dispatch. Two
-other checks that make an entry invalid still run one entry at a time in
+    Assisted-by: LLM
+    Signed-off-by: Ali Firas <alishmery18@gmail.com>
+
+The bare NLA_U32 policy, the int loop counter and the loop in
+vxlan_vni_add_del() all come from:
+
+    f9c4bb0b245c ("vxlan: vni filtering support on collect metadata device")
+
+Before this patch, a single RTM_NEWTUNNEL entry with START=0xffffffff
+passed the !vni_start && !vni_end check in vxlan_process_vni_filter(). The
+loop then stopped only when vxlan_vni_add() failed. That means either
+-ENOMEM, or -E2BIG from the rhashtable: vxlan_vni_rht_params.max_size is
+VXLAN_N_VID, so the limit is about 2^25 nodes.
+
+Each iteration allocates a vxlan_vni_node and a per-CPU stats block, does
+an rhashtable insert and sends a notification, all under rtnl_lock.
+RTM_NEWTUNNEL only needs CAP_NET_ADMIN in the user namespace that owns the
+netns.
+
+Should this carry a Fixes: tag for f9c4bb0b245c so that stable kernels
+pick it up?
+
+A related point: the changelog says:
+
+    With the nest now linked to this policy, an out-of-range endpoint is
+    rejected during netlink policy validation, before
+    vxlan_process_vni_filter() runs and before anything is allocated.
+
+That depends on the preceding patch, "vxlan: vnifilter: validate the
+VXLAN_VNIFILTER_ENTRY nest". If this patch is backported alone, the
+rejection happens in the nla_parse_nested() call inside
+vxlan_process_vni_filter(). By then, earlier entries in the same message
+have already been applied.
+
+If both patches are meant for stable, could the changelog state this
+dependency?
+
+[Severity: Low]
+This isn't a bug introduced by this patch, but the FDB netlink path seems
+to have the same class of problem. vxlan_fdb_parse() in
+drivers/net/vxlan/vxlan_core.c only checks the length of NDA_VNI and
+NDA_SRC_VNI:
+
+	if (tb[NDA_VNI]) {
+		if (nla_len(tb[NDA_VNI]) != sizeof(u32)) {
+			NL_SET_ERR_MSG(extack, "Invalid vni");
+			return -EINVAL;
+		}
+		*vni = cpu_to_be32(nla_get_u32(tb[NDA_VNI]));
+	...
+		*src_vni = cpu_to_be32(nla_get_u32(tb[NDA_SRC_VNI]));
+
+The FDB get and bulk flush paths do not check the range either.
+
+A remote_vni >= VXLAN_N_VID can be stored, and vxlan_vni_field() then drops
+its top byte on transmit. A src_vni that large can never match a received
+24-bit VNI.
+
+IFLA_VXLAN_ID, vxlan_mdb.c and now vnifilter all enforce the 24-bit bound.
+Would a follow-up doing the same for the FDB attributes make sense? Note
+that vxlan_core.c uses cpu_to_be32(VXLAN_N_VID) internally as a sentinel
+remote_vni.
+
+> @@ -814,7 +820,8 @@ static int vxlan_vni_add_del(struct vxlan_dev *vxlan, __u32 start_vni,
+>  			     int cmd, struct netlink_ext_ack *extack)
+>  {
+>  	struct vxlan_vni_group *vg;
+> -	int v, err = 0;
+> +	int err = 0;
+> +	u32 v;
+>  
+>  	vg = rtnl_dereference(vxlan->vnigrp);
+>  
+
+[Severity: Medium]
+This is a pre-existing issue, but with both endpoints capped at 0xffffff,
+one entry with START=0 END=0xffffff still makes the loop in
+vxlan_vni_add_del() run about 16.7M times under rtnl_lock, with no
+cond_resched(). An entry with END alone does the same, because vni_start
+then stays 0:
+
+	for (v = start_vni; v <= end_vni; v++) {
+		switch (cmd) {
+		case RTM_NEWTUNNEL:
+			err = vxlan_vni_add(vxlan, vg, v, group, extack);
+
+Each iteration walks the netns vxlan_list in vxlan_vni_in_use(). It also
+allocates a node and a per-CPU stats block with plain GFP_KERNEL, which is
+not charged to memcg. A single message can carry many such entries.
+
+The changelog leaves the span limit to the next patch, and later patches
+in the series handle it:
+
+  - "vxlan: vnifilter: bound the number of VNIs one request may touch"
+    adds VXLAN_VNI_FILTER_MSG_MAX (4096). The limit is summed across all
+    entries and checked in vxlan_vnifilter_check_msg() before the dispatch
+    loop in vxlan_vnifilter_process().
+
+  - "vxlan: vnifilter: account per-VNI memory to memcg" switches
+    vxlan_vni_alloc() and the per-CPU stats allocation to
+    GFP_KERNEL_ACCOUNT.
+
+[Severity: Low]
+This isn't a bug introduced by this patch, but a reversed range still
+returns success. vxlan_process_vni_filter() only rejects the case where
+both endpoints are zero:
+
+	if (!vni_start && !vni_end) {
+
+So START=100 END=50 reaches the loop in vxlan_vni_add_del(). The body
+never runs, and 0 is returned for both RTM_NEWTUNNEL and RTM_DELTUNNEL.
+The new range policy checks each endpoint on its own, not their order.
+
+Later in the series, vxlan_vnifilter_check_msg() documents this as
+intended:
+
+	/* A start above the end selects no VNI and costs nothing; leave it
+	   behaving as it does today. */
+
+The selftest in that series also checks that an inverted range is
+accepted as a no-op.
+
+Is a success reply for a request that does nothing the intended uAPI
+here?
+
+[Severity: Low]
+This is also a pre-existing issue: VNI 0 is handled inconsistently. With
+START=0 END=1, the zero check passes and the loop calls vxlan_vni_add() for
+v == 0, which inserts VNI 0.
+
+A later request for VNI 0 alone (START=0, or START=0 END=0) is rejected in
 vxlan_process_vni_filter():
 
-drivers/net/vxlan/vxlan_vnifilter.c:vxlan_process_vni_filter() {
-    ...
 	if (!vni_start && !vni_end) {
 		NL_SET_ERR_MSG_ATTR(extack, nlvnifilter,
 				    "vni start nor end found in vni entry");
 		return -EINVAL;
 	}
-    ...
-	if (vxlan_addr_multicast(&group) && !vxlan->default_dst.remote_ifindex) {
-		NL_SET_ERR_MSG(extack,
-			       "Local interface required for multicast remote group");
 
-		return -EINVAL;
-	}
-    ...
-}
+The check tests the endpoint values rather than whether the attributes
+are present.
 
-An empty VXLAN_VNIFILTER_ENTRY nest gets through the new policy, because
-validate_nla() returns before it applies the nested policy:
+As a result, VNI 0 added through a range can only be removed by another
+range that covers it, or by tearing down the device. VNI 0 is otherwise
+valid: IFLA_VXLAN_ID accepts it, and the minimum of the new
+vni_filter_vni_range is 0.
 
-lib/nlattr.c:validate_nla() {
-    ...
-	case NLA_NESTED:
-		/* a nested attributes is allowed to be empty; if its not,
-		 * it must have a size of at least NLA_HDRLEN.
-		 */
-		if (attrlen == 0)
-			break;
-    ...
-}
-
-An entry with only START=0, or with only GROUP, also gets through.
-
-vxlan_vnifilter_process() applies entries in order, stops at the first
-error and does not roll anything back:
-
-	nlmsg_for_each_attr_type(attr, VXLAN_VNIFILTER_ENTRY, nlh,
-				 sizeof(*tmsg), rem) {
-		err = vxlan_process_vni_filter(vxlan, attr, nlh->nlmsg_type,
-					       extack);
-		vnis++;
-		if (err)
-			break;
-	}
-
-Take an RTM_NEWTUNNEL to a vnifilter device with entry1 {START=100} and
-entry2 {}. Entry2 could also be {START=0}, or {START=200, GROUP=239.1.1.1}
-on a device with no remote_ifindex. That message passes nlmsg_parse().
-Then:
-
-vxlan_vnifilter_process()
-  vxlan_process_vni_filter(entry1)
-    vxlan_vni_add_del()
-      vxlan_vni_add()
-        inserts VNI 100, vxlan_vnifilter_notify(..., RTM_NEWTUNNEL)
-  vxlan_process_vni_filter(entry2)
-    returns -EINVAL
-
-RTM_DELTUNNEL works the same way: earlier deletes are applied and notified.
-
-Isn't this the same "first entry valid, second invalid" case the commit
-message says is now fixed?
-
-Later in the series, the vxlan_vnifilter_check_msg() pre-pass from "vxlan:
-vnifilter: bound the number of VNIs one request may touch" counts an empty
-entry as one VNI. It does neither of these checks, so the case can still
-happen at the end of the series.
-
-Should the commit message say that only policy-level invalid entries are
-now all-or-nothing? The alternative is to run the START/END presence check
-and the multicast/remote_ifindex check over every entry before any entry is
-applied.
-
-> diff --git a/drivers/net/vxlan/vxlan_vnifilter.c b/drivers/net/vxlan/vxlan_vnifilter.c
-> index dd94085e08865..d391ec5796610 100644
-> --- a/drivers/net/vxlan/vxlan_vnifilter.c
-> +++ b/drivers/net/vxlan/vxlan_vnifilter.c
-> @@ -467,7 +467,7 @@ static const struct nla_policy vni_filter_entry_policy[VXLAN_VNIFILTER_ENTRY_MAX
->  };
->  
->  static const struct nla_policy vni_filter_policy[VXLAN_VNIFILTER_MAX + 1] = {
-> -	[VXLAN_VNIFILTER_ENTRY] = { .type = NLA_NESTED },
-> +	[VXLAN_VNIFILTER_ENTRY] = NLA_POLICY_NESTED(vni_filter_entry_policy),
->  };
-
-[Severity: High]
-This isn't a bug introduced by this patch, but at this commit the entry
-policy that is now linked still has no range check on START and END:
-
-	[VXLAN_VNIFILTER_ENTRY_START] = { .type = NLA_U32 },
-	[VXLAN_VNIFILTER_ENTRY_END] = { .type = NLA_U32 },
-
-vxlan_process_vni_filter() hands any values other than both-zero to
-vxlan_vni_add_del(). That function loops with a signed counter:
-
-	int v, err = 0;
-	...
-	for (v = start_vni; v <= end_vni; v++) {
-
-With START=0xffffffff and no END, v starts at -1. Compared with the __u32
-end_vni it becomes 0xffffffff, and v++ then climbs up from 0.
-
-Can this loop run for a very long time under RTNL? Each iteration allocates
-a vxlan_vni_node with per-CPU stats and sends a notification. The loop only
-stops on an error.
-
-VNIs >= VXLAN_N_VID are also accepted and stored, so they alias on the
-wire.
-
-Later patches in this series fix this. "vxlan: vnifilter: reject VNIs
-outside the 24-bit space" adds NLA_POLICY_FULL_RANGE(NLA_U32,
-&vni_filter_vni_range) to START and END, and makes the loop counter u32.
-"vxlan: vnifilter: bound the number of VNIs one request may touch" caps the
-total span at VXLAN_VNI_FILTER_MSG_MAX before dispatch.
+Should this check look at whether vattrs[VXLAN_VNIFILTER_ENTRY_START] and
+vattrs[VXLAN_VNIFILTER_ENTRY_END] are present instead?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260927215209.2581830-1-alishmery18%40gmail.com
