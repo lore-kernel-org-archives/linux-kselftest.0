@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B99E38DC50;
-	Wed, 30 Sep 2026 03:52:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7174E39C657;
+	Wed, 30 Sep 2026 03:52:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790740344; cv=none; b=Z2CNqaD0jBXiAywqp0PY8fRZFrepnd7EP6SVSN7KFWHAGIB561MI55e2ZKvlOMpUz1ZuhpTbtD2kS/kZbyJtFxkVn1QBJlNW/Ar1w1tEKhbCtDaWzTSU6V+eavIpIKGHTKPZH7HEXsST04twmyzsZ3g1xLCnuvV1Q3fS2Clw71s=
+	t=1790740345; cv=none; b=SLDEy8jN0Ya/BjRpXanLH8C1bT+Xg7HmaGP0hO9erahlDsdCy4bYvt3fyhEjLNn40F7lWolz1N7sQoJBxUzqX9xisK7Do+xpv/70oyNKQGN5QPaVWuEmXUnfHf7htmAIamlbAyTPbPC2XkzFo3Tfzx2FiaWooAroif7swSU7wHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790740344; c=relaxed/simple;
-	bh=HWjuypE/QgtXVJhiD3MpGvtxLq9AQJNjLdynRrrrhlw=;
+	s=arc-20240116; t=1790740345; c=relaxed/simple;
+	bh=UuNXPGBLpIKfaZhSZgnggv0bl/B49zvjstr72vtxk9w=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=emYiVRy/Wcvp9ZQffJGkRM8Wah8saGCNgLXJoa5U1nBFDGiPhkg8H8ED+Iq2z0Ua0hHCXsYbJytWRz6P0NqKBNeuVV/7jHzpllHgvdawoQzw8n/cckVpLT62UNR90c2K3avNr+A/XIPgUrfKp5TzPO6zlW8Tuvj2d0SD1nlhW/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ezSen5d9; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=t1c4c+DHkIKTOqHm0R7DtXBC/M9LnZ5yHYyGUNo03cQMsfchdPmdjGBtPSuGEGVjFFOmXhpNkW4yJvZyinx7A5JyXJYBHzvWaMMyq6iCzc+eOfJIecyxGLBcSPHyAedNDzcHU6p/TAV03Zq3dC+kp87B7EKPFm90/8vYV3mu70E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mVlnf78L; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ezSen5d9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40B581F00893;
-	Wed, 30 Sep 2026 03:52:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mVlnf78L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98BB91F000FF;
+	Wed, 30 Sep 2026 03:52:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790740343;
-	bh=s41UKHmjIRCegPwcfxCv2MQeBjOAfersOgANyjjFq8s=;
+	s=k20260515; t=1790740344;
+	bh=LDCef2ZrQIA1ANH641ejY76T8PtvFvddxBQ3hNBYUds=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ezSen5d92i8EA8iL8AHoZxMC6FPIEvmvjGVbK/2rdq6JMjn5OAr7kRor5hi1yDvKN
-	 wVip92QU94xvd3fW5Ezw6PNg07YXai2LHYtviWX5kTxYbT81F6mosc9QJLg6Eg2SQy
-	 7wiO0E9eZaa5FQQjkgPjz1N9rIPJozyaUkfFIXr72+rr0VqSsDlalWvNKul37zmQjQ
-	 RR9WWQysKxWtkcUa9N50jB/lg3BmnAvdU1KG6Au6ZfFxU5IBYW1YIVR8lnokb5DkRm
-	 rJMsa4WuMgf4BTa2dWBryzKtksgPUVm9XmhxYEdkAgfN4ybLApUC0XOPh5daF+jPUO
-	 I7/pjlt1sWucg==
-Subject: Re: [PATCH net-next v3 4/6] vxlan: vnifilter: clamp the dumped VNI
- range to the request limit
+	b=mVlnf78LwlPGD7U/fjchquRJnL/2geGGvCQNa6nYb6hiWNacZS66ReqOL7UC9xUaE
+	 IttlHUT+1OmJeY++2u4nWVcjVxQdIMpMYZv9XHD6yXToxVkoSyDsgpLyXiKGfLq+UQ
+	 GmV26pi8TDU+aOj4qVivngUNRFn8ZjRs6bRkge+HENhIzM3JEhEvyxf8gB0x3Peqwz
+	 cp07aATuDTawyU9PpA/JNzWs2wcAsRM2zgWGefST3GkUmk0vGXOwwLmduRM7V8xOnT
+	 Gn0OwMmtFSrdAC7RrHTxxefitZ8IT376BF2fkfqVOs8co6Az8xBjGjaZQbENWQHt5i
+	 j17BI+3bImzDw==
+Subject:
+ Re: [PATCH net-next v3 5/6] vxlan: vnifilter: account per-VNI memory to memcg
 From: netdev-bot+sashiko@kernel.org
 To: alishmery18@gmail.com
 Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
@@ -35,11 +35,11 @@ Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
  andrew+netdev@lunn.ch, horms@kernel.org, razor@blackwall.org,
  roopa@nvidia.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Date: Wed, 30 Sep 2026 03:52:21 +0000
-Message-ID: <179074034181.434549.1824812445002430210@kernel.org>
-In-Reply-To: <20260927215209.2581830-5-alishmery18@gmail.com>
-References: <20260927215209.2581830-5-alishmery18@gmail.com>
-X-sashiko-severity: Medium
+Date: Wed, 30 Sep 2026 03:52:23 +0000
+Message-ID: <179074034317.434549.11265028313535602829@kernel.org>
+In-Reply-To: <20260927215209.2581830-6-alishmery18@gmail.com>
+References: <20260927215209.2581830-6-alishmery18@gmail.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -52,7 +52,7 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 2 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Critical: 0 · High: 1 · Medium: 0 · Low: 1
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -60,93 +60,122 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] The patch limits each dumped VXLAN_VNIFILTER_ENTRY to
-  VXLAN_VNI_FILTER_MSG_MAX (4096) VNIs.
-- [Low] The dump/replay mismatch this patch fixes comes from the previous
-  patch in the same unmerged series, commit "vxlan: vnifilter: bound the…
+- [High] The per-VNI accounting in commit "vxlan: vnifilter: account per-
+  VNI memory to memcg" is incomplete, and its commit message overstates…
+- [Low] The commit message credits commit c948f51c1654 ("memcg: enable
+  accounting for net_device and Tx/Rx queues") with making "a…
 
 --
 
-vxlan: vnifilter: clamp the dumped VNI range to the request limit
+vxlan: vnifilter: account per-VNI memory to memcg
 
-This commit caps each VXLAN_VNIFILTER_ENTRY produced by
-vxlan_vnifilter_dump_dev() at VXLAN_VNI_FILTER_MSG_MAX VNIs. It does this
-by ending a merged run of contiguous VNIs once the run reaches the limit.
-The goal is for dumped entries to be accepted when they are sent back
-through RTM_NEWTUNNEL.
+This commit changes the struct vxlan_vni_node allocation and its per-CPU
+stats block in vxlan_vni_alloc() from GFP_KERNEL to GFP_KERNEL_ACCOUNT.
+Per-VNI memory added through the vnifilter netlink interface is then
+charged to the caller's memcg.
 
-> diff --git a/drivers/net/vxlan/vxlan_vnifilter.c b/drivers/net/vxlan/vxlan_vnifilter.c
-> index 13f4e115701ac..92ea1fc94f458 100644
-> --- a/drivers/net/vxlan/vxlan_vnifilter.c
-> +++ b/drivers/net/vxlan/vxlan_vnifilter.c
-> @@ -382,6 +382,7 @@ static int vxlan_vnifilter_dump_dev(const struct net_device *dev,
->  			continue;
->  		}
->  		if (!dump_stats && vnirange(vend, v) == 1 &&
-> +		    vnirange(vbegin, v) < VXLAN_VNI_FILTER_MSG_MAX &&
->  		    vxlan_addr_equal(&v->remote_ip, &vend->remote_ip)) {
->  			goto update_end;
->  		} else {
+> A netdevice's own
+> queues, ethtool state and NAPI config are already GFP_KERNEL_ACCOUNT in
+> alloc_netdev_mqs() (commit c948f51c1654 ("memcg: enable accounting for
+> net_device and Tx/Rx queues")), so these per-VNI allocations are the
+> unaccounted part of a device that a cgroup can grow one VNI at a time.
 
-[Severity: Medium]
-Does this clamp work at the same granularity as the input-side limit? It
-bounds each entry. However, vxlan_vnifilter_check_msg() adds up the spans
-of every VXLAN_VNIFILTER_ENTRY in a message:
+[Severity: Low]
+Is this attribution accurate? Commit c948f51c1654 seems to change only
+three allocations to GFP_KERNEL_ACCOUNT:
 
-drivers/net/vxlan/vxlan_vnifilter.c:vxlan_vnifilter_check_msg() {
+- the rx queues in netif_alloc_rx_queues()
+- the tx queues in netif_alloc_netdev_queues()
+- the net_device itself in alloc_netdev_mqs()
+
+The accounted allocations of dev->ethtool, dev->cfg and dev->napi_config
+in alloc_netdev_mqs() came from later commits:
+
+net/core/dev.c:alloc_netdev_mqs() {
     ...
-		vnis += vni_end - vni_start + 1;
-		if (vnis > VXLAN_VNI_FILTER_MSG_MAX) {
-			NL_SET_ERR_MSG_ATTR_FMT(extack, attr,
-						"Request asks for more than %u VNIs",
-						VXLAN_VNI_FILTER_MSG_MAX);
-			return -EINVAL;
-		}
+	dev->ethtool = kzalloc_obj(*dev->ethtool, GFP_KERNEL_ACCOUNT);
+    ...
+	dev->cfg = kzalloc_obj(*dev->cfg, GFP_KERNEL_ACCOUNT);
+    ...
+	dev->napi_config = kvzalloc(napi_config_sz, GFP_KERNEL_ACCOUNT);
     ...
 }
 
-The comment above the define also describes a per-message limit:
+Could the reference be corrected?
 
-/* Maximum number of VNIs one RTM_NEWTUNNEL or RTM_DELTUNNEL message may add or
- * delete, summed over all of its VXLAN_VNIFILTER_ENTRY attributes. ...
+> diff --git a/drivers/net/vxlan/vxlan_vnifilter.c b/drivers/net/vxlan/vxlan_vnifilter.c
+> index 92ea1fc94f458..3087877ed1cb9 100644
+> --- a/drivers/net/vxlan/vxlan_vnifilter.c
+> +++ b/drivers/net/vxlan/vxlan_vnifilter.c
+> @@ -711,10 +711,11 @@ static struct vxlan_vni_node *vxlan_vni_alloc(struct vxlan_dev *vxlan,
+>  {
+>  	struct vxlan_vni_node *vninode;
+>  
+> -	vninode = kzalloc_obj(*vninode);
+> +	vninode = kzalloc_obj(*vninode, GFP_KERNEL_ACCOUNT);
+>  	if (!vninode)
+>  		return NULL;
+> -	vninode->stats = netdev_alloc_pcpu_stats(struct vxlan_vni_stats_pcpu);
+> +	vninode->stats = __netdev_alloc_pcpu_stats(struct vxlan_vni_stats_pcpu,
+> +						   GFP_KERNEL_ACCOUNT);
 
-vxlan_vnifilter_dump_dev() still opens one RTM_NEWTUNNEL nlmsg per device
-per skb. It keeps adding entries until the skb is full, so nothing limits
-the total number of VNIs in one dumped message.
+[Severity: High]
+Is the per-VNI accounting complete? The commit message calls these two
+allocations "the unaccounted part of a device that a cgroup can grow one
+VNI at a time".
 
-For example, say a device holds VNIs 1-8192, added with two requests. The
-dump now produces one message with the entries 1-4096 and 4097-8192.
-Wouldn't resending that message unchanged still fail with "Request asks for
-more than 4096 VNIs"?
+However, vxlan_vni_add(), the only caller, then creates a default FDB
+entry for each VNI that has a remote address:
 
-The commit message says:
+vxlan_vni_add()
+  vxlan_vni_alloc()                 <- now accounted
+  vxlan_vni_update_group(..., create=true, ...)
+    vxlan_update_default_fdb_entry()
+      spin_lock_bh(&vxlan->hash_lock)
+      vxlan_fdb_update(..., NLM_F_APPEND | NLM_F_CREATE, ...)
+        vxlan_fdb_create()
+          vxlan_fdb_alloc()
+          vxlan_fdb_append()
 
-    the two representations then agree on the same bound.
+In vxlan_vni_update_group(), the remote address is the per-VNI group. If
+no group is given and the device has a default remote, it is
+vxlan->default_dst.remote_ip.
 
-Is that accurate? After this change, replay works only if each entry goes
-in its own request, which is what the selftest in this series does. No
-later patch in the series changes vxlan_vnifilter_dump_dev().
+None of the allocations on that path are accounted:
 
-One option is for the dump to count VNIs per nlmsg, end the message early
-and resume through cb->args. The other is for the commit message to state
-that the guarantee applies per entry only.
+drivers/net/vxlan/vxlan_core.c:vxlan_fdb_alloc() {
+    ...
+	f = kmalloc_obj(*f, GFP_ATOMIC);
+    ...
+}
 
-[Severity: Low]
-The final state of the series is fine. However, the mismatch fixed here
-comes from the earlier patch in this series, "vxlan: vnifilter: bound the
-number of VNIs one request may touch". The commit message says so:
+drivers/net/vxlan/vxlan_core.c:vxlan_fdb_append() {
+    ...
+	rd = kmalloc_obj(*rd, GFP_ATOMIC);
+    ...
+	dst_cache_init(&rd->dst_cache, GFP_ATOMIC | __GFP_NOWARN);
+    ...
+}
 
-    Now that a single request is bounded to VXLAN_VNI_FILTER_MSG_MAX VNIs,
-    replaying such an entry in one RTM_NEWTUNNEL is rejected
+The dst_cache_init() call makes a per-CPU allocation of struct
+dst_cache_pcpu. Per CPU, that is about the same size as the
+vxlan_vni_stats_pcpu block this patch now charges.
 
-At that earlier commit, vxlan_vnifilter_dump_dev() still merges a
-contiguous run of any length into one entry. A fully populated device
-therefore dumps as a single 1-16777215 entry, and
-vxlan_vnifilter_check_msg() rejects it.
+vxlan_fdb_create() only enforces cfg.addrmax when it is non-zero, and it
+defaults to 0. A task with CAP_NET_ADMIN in its own netns might be inside
+a user namespace, for example.
 
-Could this clamp be squashed into the limit patch, or moved before it, so
-that each commit in the series is consistent for bisection? A Fixes: tag
-would not be appropriate, since the cause is not upstream.
+Could such a task still add VNIs one at a time and pin slab and per-CPU
+memory that is never charged to its memcg?
+
+vxlan_fdb_alloc() and vxlan_fdb_append() are also used by vxlan_snoop()
+learning in softirq context. Charging current would be wrong there, so
+any accounting would have to be limited to the netlink-driven create
+path, for example by using GFP_ATOMIC | __GFP_ACCOUNT only there. No
+later patch in this series seems to touch drivers/.
+
+If extending the accounting isn't planned, could the commit message be
+narrowed to what the patch actually covers?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260927215209.2581830-1-alishmery18%40gmail.com
