@@ -1,187 +1,289 @@
-Received: from mail-ej2-f42.google.com (mail-ej2-f42.google.com [74.125.228.170])
+Received: from mail-ej2-f43.google.com (mail-ej2-f43.google.com [74.125.228.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8733A4FDE70
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 15:23:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E9C3C0623
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 15:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790781814; cv=none; b=HiKW3X0lsTsdE3jweou8/OsV93ERyrIunwuAgckN+5W1mfF8uiriYcXAh/K49NWa4qT9toJC0c5egyM4U7gHxLQPTrXnGaPh0z79kd09Lba7Vbzwh308sBWRVJ9c0JwpoPeKcOmhYMBuDft/mPo7K6G6XRgh5G6XByy6ICGVi7U=
+	t=1790781949; cv=none; b=M3W4JkhvGgw2EQfhncXifUp1n9wqva+Wqg0YE4vhCEMTZTKzg8n3H4mhB+xHtc9v0yWB3wg9hWqD+MKd66+bl6T0IYNHgOUXh/ugORPL+XmzbKsKxG4qEsoE7JpoIJHtY5GgpSDKTYHkln21SQ8I0eHZiRaz2LV1u+bZb7pzY3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790781814; c=relaxed/simple;
-	bh=b9y4NXkgYg8B4pqDswquuydxBE3Tjnq/EUwfuU2Enwk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Sbl438B1kL1xlsYsWqWsbbFMDgjm9BtM8XuL2WeWWoxQUCk3rnpdZng2kV61CfDMRKy5Q9LLN1hXlzH672qkzwTpElZVb4W9HPnohUW+9E9r6uWBB7n/R236dhH2Z3CIyQpLOC3x4WMvtO7FXF4Q5TetK46QxRIVsgZKTXKh5nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu; spf=pass smtp.mailfrom=cs.unc.edu; dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.b=TGT+Thhp; arc=none smtp.client-ip=74.125.228.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.unc.edu
+	s=arc-20240116; t=1790781949; c=relaxed/simple;
+	bh=tw8VEhkaJLys3VBxozpDegjtznBwhDam2zldl0cUZcQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uoTOX7QqMCTWAzVZU10sBw7forBLa1M5IAdr6vhnufFtE7Gw8QuyB6CCHbYKAVAseGm7dQ5reET1p/A+xL8Je6b/GtI0a8dm8xmJ/8k4WEujL8xtXIHQXG4GLsz8vGKU8i1yy8O3rTDoMUM++ddFffQDEbJxQ9iRbvJdcXMxwDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Q36wcles; arc=none smtp.client-ip=74.125.228.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.b="TGT+Thhp"
-Received: by mail-ej2-f42.google.com with SMTP id a640c23a62f3a-c2bf3cc16baso625368766b.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 08:23:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Q36wcles"
+Received: by mail-ej2-f43.google.com with SMTP id a640c23a62f3a-c2a8b9acbc6so847767366b.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 08:25:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs.unc.edu; s=google; t=1790781797; x=1791386597; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=xKz38TwNtR/kCvzhvPBXJpWiMyE9q1ag9Gm3OPI54Dw=;
-        b=TGT+Thhpg0Ome/58A2npn/9DZHfV2RSvXLQdydNKZwVHgXJFKU4sxgIwaegEwh/RSK
-         44jrC0I6HQcO10IRe1BhsuNFYaxsP+Lu5P4VFYn9Whp1P0f80fmmjyFRm/H05FbxmyLO
-         +T62Cp4TlM/AxwFk1hnQuG06ptzNVnLHt2HvbqLfv+6P76fVZqk73SXfnfeRICUFjw6J
-         P+n/1VI2ZHUl7P8jPVqiALdJzG4abHjkOsXVCS0lDRJ1gny86iZ+P4sczwu7EyxtEpLk
-         3y/FMgjCf7U+NOYWyngLfLIs+MXf6Kl5NwbLiyk7AL1DyX/z+jxUNDJpkBuHz3NHNmi0
-         +mlg==
+        d=linaro.org; s=google; t=1790781938; x=1791386738; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=URPVZ5mnqaX/4a/mHP5WDlkoNKbhEPagHNKAx4oZedE=;
+        b=Q36wclesB1UtjsuT1MQjzsEC+th2KFiw+6hmjFDREld0hLhqYQWIfktoczL0FZRhQJ
+         HdUL/QKwAkymoyHsFD1f5x4zVxgDicjVez5p9pedQL6raS1zX7MLcViwpL0YaU8zHftj
+         xEXU7176AdNpBZwF/yRnpoQVQ8ADw7Z+fv7fhk6MWfEMjDfSD3bmXjJeFyBoev8T5Fgo
+         Ul0vSUziU2jqHRl6maScMoyoDCu+qC63uRM50Qyv0TzWrJbr3Gv8QLeR9regoIaHz0NN
+         60XU4wHFcmltVK/LhmjepTk227XOQFoGwqIQgw/kZrjMGMsk/Bk79TE45nrmB+FX6UoZ
+         bGgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790781797; x=1791386597;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=xKz38TwNtR/kCvzhvPBXJpWiMyE9q1ag9Gm3OPI54Dw=;
-        b=e0U3Lcb2+c6s0/3TJGaD6pUj2tZSy5k2OV3sWKwsbL4hhStgdgnQDKBq7xz9SB67KG
-         5KOljRd4YzhoaW7nCP5+mF18oajO7O410Us8nKcM3BA0j/Kk/rUVczHMGw4OVCLoChj6
-         x8iIO7pKhMdiV0W8/RvAGajbVjcqeMIPAdN4HV3a1J05nv84kVh7VGJXqRx2tB8LERPu
-         R90Bxtxh7zg0x87FVbzqoKubeBP6NoScYcw30wG3FIZaDkK2HnA8prLFTp+tFOQSkxWD
-         MnTcB+eTISuVIUaOLRmx/j6G7jN4RewPHuGf4WTY7/gUYNI86iUbOb17RxqP7d9zeud7
-         UPgw==
-X-Forwarded-Encrypted: i=1; AKwUvBy7qUJhm3ZuTflrdFUrj1zBIkIeMGrfTgdewK224+WLDgSqnDBHrZtTJxAvf7EJqkR1vaWu/Zn1r7sTJrm4Wb0=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKsAg395qydiDGStPJUvBHJ5PWq8Fm5B2uV7Yh67ALUq+ZzKqLa
-	X0t4LImY2d5luCR7ZyJqtkn/SIBIepxKo4TtZ6T2JCAn4RqfBxd4uNNG1ZTQBD17sw==
-X-Gm-Gg: AYBFou3+wiVkumJ2VxJxwCkQrihYD4MwO31cXB2pYP6wBZCUuj8jNkFQycymg1JlZ5h
-	iH7zRdQU4PF3uJuUuSh3h+vDFweAraOf6eJC+J1Rs6Zj+VXyqgFXJAPt8oyK7oyGQix9ZV+shSS
-	UWdEoTvNaYTmTdd3avauPgwqiwNdcP16LJZVx/BjvdNLsZppQd8aJur3zGFgJ8zI+9BLw8EtJNj
-	nF+OA+trgsszG5Nqoke4nnR7hdvtov4khbLGi8cuwfprbNfFkrd0yinD9x3TZ65zCC6EJkZNk6r
-	Pi3mSPR5hQIPDGPmf41DLBOyPSzDpP6tcsIyBho7Y67/fnB5TJCBfe0DGEjLlbrI6VMGCqiKTtH
-	Nj3+AwCWD+MuOpX2w3sih74K5jTYjKPmpK8HFw5S9+oYlLc4dp35nMbdwds7ZU1XltHi9oXJRYL
-	ichaTXtlMmlMq9o0WqN3YHr00jSzzEaTM/3gjUg5NagXXrOXC2PpYZJk7Oe6j4khYrXB2OefRE1
-	xWqxYgJj+XFyrSiztz1BQ==
-X-Received: by 2002:a17:906:478d:b0:c29:f0a4:a4f8 with SMTP id a640c23a62f3a-c2e233cd0bbmr149280466b.0.1790781797242;
-        Wed, 30 Sep 2026 08:23:17 -0700 (PDT)
-Received: from cobra01.cs.unc.edu (cobra01.cs.unc.edu. [152.2.130.143])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2e31ce6499sm23874966b.33.2026.09.30.08.23.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Sep 2026 08:23:16 -0700 (PDT)
-From: hengyul@cs.unc.edu
-To: netdev@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Jiayuan Chen <jiayuan.chen@shopee.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hengyu Liang <hengyul@cs.unc.edu>
-Subject: [PATCH net 2/2] selftests: net: fib_tests: add tests for IPv6 routes via loopback device
-Date: Wed, 30 Sep 2026 11:22:29 -0400
-Message-ID: <20260930152229.1453929-3-hengyul@cs.unc.edu>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260930152229.1453929-1-hengyul@cs.unc.edu>
-References: <20260930152229.1453929-1-hengyul@cs.unc.edu>
+        d=1e100.net; s=20260707; t=1790781938; x=1791386738;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=URPVZ5mnqaX/4a/mHP5WDlkoNKbhEPagHNKAx4oZedE=;
+        b=w8PimXlxdfUXMobXqUpQqLBBgGL32NICMGyfIjJA2wDAUxtifKm6YS9HnZsXEdBVg+
+         DztQMxiJbpU6CzVLEpC3pIWVB6R7EBP1PkEYXUSXU8ldpMRUm69znjuDDyXGVptUgVg3
+         Ex/M+kKpcK0Hcj/NNDkJ3kfSi6rf3IRnsY1eRUXfQJKGBiRNcNBiiXjbrrCRD7wV2i8m
+         mjeqUCOz76VghIG4NNzczPio3/1cyIpcipmbUrWojMWEjsR/i86iO+lwMbcqwVxZgzcV
+         kIAJrwwhK8HivtWHg7CXH3gtU7e9fkKX48srakyJ3pjA4orCLdOlHCBpI4khhAVj4ksM
+         NAfA==
+X-Forwarded-Encrypted: i=1; AKwUvBxzG6TDUKJzKN+L44CsZaFt/czCy6vXfQzablEm55STIJzqhT1rtXtHDZz2iA0x7GAc9MzSvnUBYgH1bfchkk4=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL88Cw3wxt7824+jUqAurvbk+Y+e4fmSsnTLOXR1MVSfA5EEHH9
+	mQPZ1hprf4mti9XLU5+dU0wKBcZYudolA9cj0uU/o9KpoSglKPuzCFtztDg9MCOwbrc=
+X-Gm-Gg: AYBFou2HDMKbGuMplhSTPY9xjArF2xRZ0/8W0jfX6WDbj/rjs24IVxwJZ5sU79dXpXa
+	mih3dPFDorF3hKwuvd4sLl0EYtUwA1Kqk8D4+Bz8DEPmzG+4EdPZU4faEBL0Ot++mh2Zq1H4Iii
+	WjP5xXujAwJzLlgO0GgPmZYcYkaJUt9q2XWidtL4xPVglHTojrJGeBbEbxlCnbdg7Zhcwpcwfjt
+	QR5DmY38ke+FPXf2OK1uLg5p8Yno3YJaTXqhHbc8xNYYwXHAOA3WFPY7nrUR6R5nK/8syFNJy01
+	7qSzhp//nm0tA2KeAn3RzwIkN/6yMkG6Q+LzSawCDVTkwq+l9twS0pvmwALCowkFubagd9IBpI0
+	msr1+eX9BoRjN12LdI1fmAII4fHLX8WCAK/9rbaR3wZZEn4vktvzyOg3XmK/frcNpm57A1EUix8
+	YBXLwTN8qiuqAmRyDzfGMZyNWG/Dj/Te8qDh5ACcau7MJcCDzvsjhlnKFKyim9lmuhIOwCo8IBw
+	nc=
+X-Received: by 2002:a17:907:6095:b0:c29:5215:b2d8 with SMTP id a640c23a62f3a-c2e23cabf4fmr155306066b.14.1790781938443;
+        Wed, 30 Sep 2026 08:25:38 -0700 (PDT)
+Received: from [192.168.1.3] ([37.18.141.193])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2e31dd955bsm23066166b.70.2026.09.30.08.25.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Sep 2026 08:25:38 -0700 (PDT)
+Message-ID: <8e47bb89-a894-4fd0-9f96-e11b5dea1972@linaro.org>
+Date: Wed, 30 Sep 2026 16:25:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 00/22] ARM64 PMU Partitioning
+To: Colton Lewis <coltonlewis@google.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+ Oliver Upton <oliver.upton@linux.dev>, Joey Gouly <joey.gouly@arm.com>,
+ Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
+ <yuzenghui@huawei.com>, Fuad Tabba <fuad.tabba@linux.dev>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>, Paolo Bonzini <pbonzini@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+ Zide Chen <zide.chen@intel.com>, Alexandru Elisei
+ <alexandru.elisei@arm.com>,
+ Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+ Mingwei Zhang <mizhang@google.com>, Jonathan Corbet <corbet@lwn.net>,
+ Russell King <linux@armlinux.org.uk>, Shuah Khan <shuah@kernel.org>,
+ linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org
+References: <20260924172928.2110956-1-coltonlewis@google.com>
+Content-Language: en-US
+From: James Clark <james.clark@linaro.org>
+In-Reply-To: <20260924172928.2110956-1-coltonlewis@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Hengyu Liang <hengyul@cs.unc.edu>
 
-Check that an IPv6 route via the loopback device can be added when the
-loopback device is down, when a gateway is specified, including an
-IPv4-mapped one, and when IPv6 is disabled on the loopback device. Such
-routes are promoted to reject routes, so their nexthop is not validated.
 
-Without the previous patch:
+On 24/09/2026 18:29, Colton Lewis wrote:
+> This series creates a new PMU scheme on ARM, a partitioned PMU that
+> allows reserving a subset of counters for more direct guest access,
+> significantly reducing overhead. More details, including performance
+> benchmarks, can be read in the v1 cover letter linked below.
+> 
+> There is no longer a kernel command line parameter
+> (`arm_pmuv3.reserved_host_counters`); PMU partitioning is now completely
+> controlled via the KVM API using `KVM_ARM_VCPU_PMU_V3_ENABLE_PARTITION`
+> and `KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS` vCPU device attributes. When
+> partitioning is enabled for a VM, userspace must explicitly configure a
+> guest event counter count strictly less than the maximum general-purpose
+> counters implemented by the PMU (leaving at least one general-purpose
+> counter for the host) prior to calling `KVM_ARM_VCPU_PMU_V3_INIT`. A QEMU
+> patch demonstrating how to use the uAPI is sent separately.
+> 
+> An overview of what this series accomplishes was presented at KVM
+> Forum 2025. Slides [1] and video [2] are linked below.
+> 
+> v9:
+> 
+> * Rebase on top of v7.3-rc4.
+> 
+> * Drop the `arm_pmuv3.reserved_host_counters` module parameter so
+>    partitioning is completely controlled via the KVM vCPU device
+>    attribute uAPI (`KVM_ARM_VCPU_PMU_V3_ENABLE_PARTITION` and
+>    `KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS`), and document the new
+>    attribute and counter allocation rules in
+>    `Documentation/virt/kvm/devices/vcpu.rst` (James Clark).
+> 
+> * Move the dynamic counter allocation mask (`cntr_mask`) from global
+>    `struct arm_pmu` to per-CPU `struct pmu_hw_events` (`cpuc->cntr_mask`)
+>    in a dedicated `drivers/perf` patch, fixing multi-pCPU counter
+>    reservation clobbering on vCPU migration and eliminating the
+>    `cpu_pm_pmu_setup()` cpuidle `WARN_ON_ONCE` (Zide Chen, James Clark).
+> 
+> * Synchronously propagate trapped guest writes to `PMEVTYPER<n>_EL0`
+>    and `PMCCFILTR_EL0` to hardware via `kvm_pmu_apply_single_event_filter()`
+>    when guest-owned, fixing in-guest `perf stat` event count skew across
+>    runs (James Clark, Sashiko AI Review).
+> 
+> * Refactor `armv8pmu_can_use_pmccntr()` and `armv8pmu_get_event_idx()`
+>    to check `cntr_mask` inside `armv8pmu_can_use_pmccntr()` and un-nest
+>    the 64-bit user-access check so cycle events fall back cleanly to
+>    general-purpose counters when `PMCCNTR_EL0` is reserved by a guest
+>    (Robin Murphy).
+> 
+> * Restrict the lazy transition to `VCPU_PMU_ACCESS_GUEST_OWNED` to when
+>    the guest actively enables counting (`PMCR_EL0.E = 1` or setting guest
+>    counter bits in `PMCNTENSET_EL0` / `PMINTENSET_EL1`), preventing guest
+>    boot-time PMU probing from prematurely claiming hardware counters and
+>    triggering spurious host counter preemption warnings (James Clark).
+> 
+> * Fix patch dependency ordering and series bisectability across all
+>    commits, removing intermediate `max_guest_counters` / `hw_cntr_impl`
+>    churn and squashing the selftest exception relaxation into the
+>    Partitioned PMU selftest patch (James Clark).
+> 
+> * Fix compiler warning for `struct arm_pmu` declaration in
+>    `include/kvm/arm_pmu.h` (kernel test robot) and guard
+>    `kvm_pmu_host_counter_mask()` when KVM is compiled in but not active
+>    (wuyifan).
+> 
+> * Track physical CPU PMU residency in `vcpu->arch.pmu.loaded_on_cpu`
+>    separately from `VCPU_PMU_ACCESS_GUEST_OWNED`, and toggle
+>    `MDCR_EL2.HPME` via `kvm_pmu_host_start()` / `kvm_pmu_host_stop()`
+>    instead of `PMCR_EL0.E` when starting/stopping host perf events while
+>    a partitioned guest is loaded.
+> 
+> * Allow `kvm_vcpu_pmu_resync_el0()` to resynchronize VHE EL0 event
+>    filters (`PMEVTYPER<n>_EL0.U`) in process context and order
+>    `kvm_pmu_put()` before `kvm_vcpu_pmu_restore_host()` in
+>    `kvm_arch_vcpu_put()`.
+> 
+> * Address additional Sashiko AI Review findings:
+>    - Check `idx - 1` against `cpuc->cntr_mask` in `armv8pmu_get_chain_idx()`
+>      to prevent 64-bit chained host events from crossing an odd `HPMN`
+>      partition boundary, and use `cpuc->cntr_mask` in
+>      `armv8pmu_enable_user_access()`.
+>    - Latch live hardware `PMOVSSET_EL0` overflow bits for guest counters
+>      with IRQs disabled (`local_irq_save()`) in `kvm_pmu_part_overflow_status()`
+>      and during trapped guest accesses to `PMOVS{SET,CLR}_EL0`.
+>    - Add mandatory `isb()` barriers after control-plane system register
+>      writes (`mdcr_el2`, `pmcntenclr_el0`, `pmintenclr_el1`), preserve
+>      guest `PMSELR_EL0` / `PMUSERENR_EL0` when `MDCR_EL2.TPM == 0`, and
+>      restore host `PMCR_EL0` control flags on `kvm_pmu_put()`.
+> 
+> v8:
+> https://lore.kernel.org/kvmarm/20260612192909.1153907-1-coltonlewis@google.com/
+> 
+> v7:
+> https://lore.kernel.org/kvmarm/20260504211813.1804997-1-coltonlewis@google.com/
+> 
+> v6:
+> https://lore.kernel.org/kvmarm/20260209221414.2169465-1-coltonlewis@google.com/
+> 
+> v5:
+> https://lore.kernel.org/kvmarm/20251209205121.1871534-1-coltonlewis@google.com/
+> 
+> v4:
+> https://lore.kernel.org/kvmarm/20250714225917.1396543-1-coltonlewis@google.com/
+> 
+> v3:
+> https://lore.kernel.org/kvm/20250626200459.1153955-1-coltonlewis@google.com/
+> 
+> v2:
+> https://lore.kernel.org/kvm/20250620221326.1261128-1-coltonlewis@google.com/
+> 
+> v1:
+> https://lore.kernel.org/kvm/20250602192702.2125115-1-coltonlewis@google.com/
+> 
+> [1] https://gitlab.com/qemu-project/kvm-forum/-/raw/main/_attachments/2025/Optimizing__itvHkhc.pdf
+> [2] https://www.youtube.com/watch?v=YRzZ8jMIA6M&list=PLW3ep1uCIRfxwmllXTOA2txfDWN6vUOHp&index=9
+> 
+> Colton Lewis (21):
+>    arm64: cpufeature: Add cpucap for HPMN0
+>    KVM: arm64: Reorganize PMU functions
+>    perf: arm_pmuv3: Generalize counter bitmasks
+>    perf: arm_pmuv3: Move counter allocation mask to per-CPU struct
+>      pmu_hw_events
+>    perf: arm_pmuv3: Check cntr_mask before using pmccntr
+>    perf: arm_pmuv3: Allocate counter indices from high to low
+>    KVM: arm64: Add initial scaffolding for Partitioned PMU
+>    KVM: arm64: Set up FGT for Partitioned PMU
+>    KVM: arm64: Add Partitioned PMU register trap handlers
+>    KVM: arm64: Set up MDCR_EL2 to handle a Partitioned PMU
+>    KVM: arm64: Context swap Partitioned PMU guest registers
+>    KVM: arm64: Enforce PMU event filter at vcpu_load()
+>    perf: Add perf_pmu_resched_update()
+>    KVM: arm64: Allow kvm_vcpu_pmu_resync_el0() to resync filters in
+>      process context
+>    KVM: arm64: Apply dynamic guest counter reservations
+>    KVM: arm64: Implement lazy PMU context swaps
+>    perf: arm_pmuv3: Handle IRQs for Partitioned PMU guest counters
+>    KVM: arm64: Detect overflows for the Partitioned PMU
+>    KVM: arm64: Add vCPU device attr to partition the PMU
+>    KVM: selftests: Add find_bit to KVM library
+>    KVM: arm64: selftests: Add test case for Partitioned PMU
+> 
+> Marc Zyngier (1):
+>    KVM: arm64: Reorganize PMU includes
+> 
+>   Documentation/virt/kvm/devices/vcpu.rst       |  42 +-
+>   arch/arm/include/asm/arm_pmuv3.h              |  16 +
+>   arch/arm64/include/asm/arm_pmuv3.h            |   7 +-
+>   arch/arm64/include/asm/kvm_host.h             |  18 +-
+>   arch/arm64/include/asm/kvm_types.h            |   6 +-
+>   arch/arm64/include/uapi/asm/kvm.h             |   2 +
+>   arch/arm64/kernel/cpufeature.c                |  10 +-
+>   arch/arm64/kvm/Makefile                       |   2 +-
+>   arch/arm64/kvm/arm.c                          |   4 +-
+>   arch/arm64/kvm/config.c                       |  49 +-
+>   arch/arm64/kvm/debug.c                        |  41 +-
+>   arch/arm64/kvm/pmu-direct.c                   | 636 ++++++++++++++
+>   arch/arm64/kvm/pmu-emul.c                     | 718 +---------------
+>   arch/arm64/kvm/pmu.c                          | 787 +++++++++++++++++-
+>   arch/arm64/kvm/sys_regs.c                     | 334 ++++++--
+>   arch/arm64/tools/cpucaps                      |   1 +
+>   arch/arm64/tools/sysreg                       |   6 +-
+>   drivers/perf/arm_pmu.c                        |   7 +-
+>   drivers/perf/arm_pmuv3.c                      |  97 ++-
+>   include/kvm/arm_pmu.h                         |  93 ++-
+>   include/linux/perf/arm_pmu.h                  |   2 +
+>   include/linux/perf/arm_pmuv3.h                |  14 +-
+>   include/linux/perf_event.h                    |   3 +
+>   kernel/events/core.c                          |  31 +-
+>   tools/include/perf/arm_pmuv3.h                |  12 +-
+>   tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+>   .../selftests/kvm/arm64/vpmu_counter_access.c | 129 ++-
+>   tools/testing/selftests/kvm/lib/find_bit.c    |   2 +
+>   28 files changed, 2200 insertions(+), 870 deletions(-)
+>   create mode 100644 arch/arm64/kvm/pmu-direct.c
+>   create mode 100644 tools/testing/selftests/kvm/lib/find_bit.c
+> 
+> 
+> base-commit: 93f51579e7df248780214094418f205253383cc5
 
-  # ./fib_tests.sh -t ipv6_route_lo
+Hi Colton,
 
-  IPv6 routes via loopback device tests
-      TEST: Route via loopback device that is down              [FAIL]
-      TEST: Route via loopback device with gateway              [FAIL]
-      TEST: Route via loopback device with IPv4-mapped gateway  [FAIL]
-      TEST: Route via loopback device with IPv6 disabled        [FAIL]
+Looks good to me, everything seems to be working now:
 
-  Tests passed:   0
-  Tests failed:   4
+Tested-by: James Clark <james.clark@linaro.org>
 
-With the previous patch:
-
-  # ./fib_tests.sh -t ipv6_route_lo
-
-  IPv6 routes via loopback device tests
-      TEST: Route via loopback device that is down              [ OK ]
-      TEST: Route via loopback device with gateway              [ OK ]
-      TEST: Route via loopback device with IPv4-mapped gateway  [ OK ]
-      TEST: Route via loopback device with IPv6 disabled        [ OK ]
-
-  Tests passed:   4
-  Tests failed:   0
-
-Signed-off-by: Hengyu Liang <hengyul@cs.unc.edu>
----
- tools/testing/selftests/net/fib_tests.sh | 31 +++++++++++++++++++++++-
- 1 file changed, 30 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-index b338bfb196a2..19e55a8630a2 100755
---- a/tools/testing/selftests/net/fib_tests.sh
-+++ b/tools/testing/selftests/net/fib_tests.sh
-@@ -14,7 +14,7 @@ TESTS="unregister down carrier nexthop suppress ipv6_notify ipv4_notify \
-        ipv4_mpath_list ipv6_mpath_list ipv4_mpath_balance ipv6_mpath_balance \
-        ipv4_mpath_balance_preferred ipv4_mpath_oif ipv4_mpath_oif_nh \
-        ipv4_mpath_oif_vrf ipv6_mpath_oif ipv6_mpath_oif_nh ipv6_mpath_oif_vrf \
--       fib6_ra_to_static fib6_temp_addr_renewal"
-+       fib6_ra_to_static fib6_temp_addr_renewal ipv6_route_lo"
- 
- VERBOSE=0
- PAUSE_ON_FAIL=no
-@@ -2466,6 +2466,34 @@ ipv4_route_v6_gw_test()
- 	route_cleanup
- }
- 
-+ipv6_route_lo_test()
-+{
-+	echo
-+	echo "IPv6 routes via loopback device tests"
-+
-+	setup_ns ns1
-+	IP="$(which ip) -netns $ns1"
-+
-+	# Routes via the loopback device are promoted to reject routes, so
-+	# their nexthop is not validated.
-+	run_cmd "$IP link set dev lo down"
-+	run_cmd "$IP -6 ro add 2001:db8:101::/64 dev lo"
-+	log_test $? 0 "Route via loopback device that is down"
-+
-+	run_cmd "$IP link set dev lo up"
-+	run_cmd "$IP -6 ro add 2001:db8:102::/64 via 2001:db8:1::2 dev lo"
-+	log_test $? 0 "Route via loopback device with gateway"
-+
-+	run_cmd "$IP -6 ro add 2001:db8:103::/64 via ::ffff:192.0.2.2 dev lo"
-+	log_test $? 0 "Route via loopback device with IPv4-mapped gateway"
-+
-+	run_cmd "ip netns exec $ns1 sysctl -qw net.ipv6.conf.lo.disable_ipv6=1"
-+	run_cmd "$IP -6 ro add 2001:db8:104::/64 dev lo"
-+	log_test $? 0 "Route via loopback device with IPv6 disabled"
-+
-+	cleanup_ns "$ns1"
-+}
-+
- socat_check()
- {
- 	if [ ! -x "$(command -v socat)" ]; then
-@@ -3291,6 +3319,7 @@ do
- 	ipv6_route_metrics)		ipv6_route_metrics_test;;
- 	ipv4_route_metrics)		ipv4_route_metrics_test;;
- 	ipv4_route_v6_gw)		ipv4_route_v6_gw_test;;
-+	ipv6_route_lo)			ipv6_route_lo_test;;
- 	ipv4_mangle)			ipv4_mangle_test;;
- 	ipv6_mangle)			ipv6_mangle_test;;
- 	ipv4_bcast_neigh)		ipv4_bcast_neigh_test;;
--- 
-2.53.0
+There are still a few Sashiko comments though, and one critical one 
+about racing with pseudo-NMI PMU interrupts that looked reasonable. I 
+tried to test it and reproduce an actual issue but couldn't, so maybe 
+it's bogus.
 
