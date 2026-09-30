@@ -1,109 +1,74 @@
-Received: from mta0.migadu.com (out-75.mta0.migadu.com [91.218.175.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBB545DF68
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2026 07:52:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243FE46A618;
+	Wed, 30 Sep 2026 08:41:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790754756; cv=none; b=RhrvtwqSp44v8XncAwcDauhITvQiIpewUM3MBGTzQc0Vwnd9XUVj1P+o75h5xRrGcHnNuleOg38e/cIxz7YsVe5aE2TtqwRWmgtBMO/7451N6tMNvDDPY5cHq1bdWdQTPxFxw0ROkfn05wUgZJXL5wAJ2GXwvlbhha706cM9wh0=
+	t=1790757685; cv=none; b=aw9AS26xjyhQu9cSB+XoUV+2ZRs8y/dHB+VStEgyQCu0ofEsXqexyo7bVe8n64xEGAkbpySgfOBnkp5sYXqbLo/+MSaoyeC8mY1eNEn/3AurCrLXa6L7HgWHvPC7xB9ijuyGP1oyoU9u5uv7guBuhGG0dK9AfRt+8XX4hbAMmiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790754756; c=relaxed/simple;
-	bh=8ma5wy0oJIj/chbeeAhuh0ZtFGfNhOnQTVLc6I5RlKQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mbodxr+5RTPqO2WwZ0W+pBew3BbfrFYgxFnMAzvylPUk87SwZWQaqZ80xSPmf32PXjlpebd5ie19sv0Sm/J3/mm5n5I5gPDi1fVD7x71p4YguvOH5RCfnIlmDahi2okUdOjuZS76j0inmq8jWc37qocmUQsW+6xDB+W+EJDkzqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hoyIe2tV; arc=none smtp.client-ip=91.218.175.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790757685; c=relaxed/simple;
+	bh=8u2gb3KMo67glqbPwoMMfM8CXuNu/lEjAWa4yVIksu0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qlpe2O+pJIlLBxIz3riK3DCHb+M/D712aBpaVhmEQ3dig82RCWZ7XaocIUhbjD/Cn8MRHFBsVusbzvdPXJcAXIeNMda7PBg+BfSb2Kcz9d+PMwvfkXsjP2S4duxDWbP755GiHkA5njQgwHjm5jVvMLSG8MbaQVcdBFD1C1LltBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mhzhUa9u; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hoyIe2tV"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=8ma5wy0oJIj/chbeeAhuh0ZtFGfNhOnQTVLc6I5RlKQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790754752; v=1; x=1791359552;
- b=hoyIe2tVu7LbrNdOK4BCoPaXkPloBQPEyssSc7kF0Js8c9v8xA2QemWicEDl2OqDyVZGiYzZ
- RWR6Lmt3LpI/XrLGa4RsriPvM5M9TGjN5Ne1HMCH4FxBo0OL4w7Fx7tLYDjzqCMhCY7QQM/1lB1
- 0t2AyW2lyN5zFhmrPQ54bIlI=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7b477e88c5b0e9d9;
-	Wed, 30 Sep 2026 07:52:32 +0000
-X-Mizu-Trace-ID: 7b477e88c5b0e9d9
-X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org,
-	josef@toxicopanda.com,
-	axboe@kernel.dk
-Cc: cgroups@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	linux-kselftest@vger.kernel.org,
-	cui.tao@linux.dev,
-	cuitao@kylinos.cn,
-	ameryhung@gmail.com,
-	alexei.starovoitov@gmail.com
-Subject: [RFC PATCH v8 4/4] docs: cgroup-v2: document the iocost BPF cost model attachment
-Date: Wed, 30 Sep 2026 15:51:54 +0800
-Message-ID: <20260930075154.189958-5-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260930075154.189958-1-cui.tao@linux.dev>
-References: <20260930075154.189958-1-cui.tao@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mhzhUa9u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 309C81F000FF;
+	Wed, 30 Sep 2026 08:41:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790757682;
+	bh=sFCvsXZLdxLKdHXwpS2nWXBpKLwepoPfVilE5Kh5WMA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=mhzhUa9uS6ktb80BJuDJGmtAxdhIqUzAP/HXGJ7IC4X+tI8VvcgkCZyJtgdQx2F1r
+	 Wrle757SiP9fvECGBPdskTJcuCihZHNIm/GJhqcohJbrZB2acm3rOqVKdBesQcDel3
+	 H5g3r9F32WcMdawUsIdP66lqstfbNKTT1MAPHwlZLn+LtqwQv8RCPfFpRGUam9zGqn
+	 F9lPkFmZw32empK7ClckYchozBtr3NMoeTGgUfu1WrZJ1OOOwgPU58lZziwN85tUul
+	 Sd7cFoXEFut1UZHCZ/WBLqsiKcQO1NHumtPIYYmPHhxLFt7tDRXPS0/g5bUvJUiaKX
+	 6ozrSPKWxej9A==
+Date: Wed, 30 Sep 2026 09:41:16 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Fuad Tabba <fuad.tabba@linux.dev>, 
+	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 03/11] kselftest/arm64: Move exit calls out of fp-stress
+ loads
+Message-ID: <arzHLZdKJ0qJFNHg@gremlin>
+References: <20260901-arm64-fp-stress-kvm-v1-0-31bce995b49b@kernel.org>
+ <20260901-arm64-fp-stress-kvm-v1-3-31bce995b49b@kernel.org>
+ <arvjKjrh1NU4CKPE@gremlin>
+ <636db593-b6b6-4338-b9b0-e87c54111d14@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <636db593-b6b6-4338-b9b0-e87c54111d14@sirena.org.uk>
 
-Document the BPF cost model attachment in the io.cost.model section
-of the cgroup v2 documentation: attaching an iocost_model_ops
-struct_ops to a device by its major:minor, the model=bpf readback
-while attached (ctrl keeps describing the coefficients), that
-detaching restores the builtin model, and that ctrl= writes never
-select a model.
+On Tue, Sep 29, 2026 at 10:56:10PM +0100, Mark Brown wrote:
+> On Tue, Sep 29, 2026 at 05:22:44PM +0100, Lorenzo Stoakes (ARM) wrote:
+> > On Tue, Sep 01, 2026 at 06:06:43PM +0100, Mark Brown wrote:
+>
+> > > No functional change.
+>
+> > I don't think this is accurate, as you're changing the register into which a
+> > value is loaded (x0 instead of x1).
+>
+> > That seems to be correct to me, but worth calling out that you're fixing that up
+> > in the commit message and dropping this line.
+>
+> That's actually an unintentional bugfix, the original code just uses
+> whatever random value was in x0 as an exit code.  Probably that was
+> non-zero so it all works out but still.
 
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
----
- Documentation/admin-guide/cgroup-v2.rst | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+Yeah absolutely, it seems that we just got lucky before with it which is
+slightly ludicrous :)
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 7fe950425216..5e780bdcf324 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2117,8 +2117,27 @@ IO Interface Files
- 	  =====		================================
- 	  ctrl		"auto" or "user"
- 	  model		The cost model in use - "linear"
-+			or "bpf" while the BPF model
-+			is in use
- 	  =====		================================
- 
-+	When CONFIG_BLK_CGROUP_IOCOST_BPF is enabled, a BPF cost model
-+	can be attached to a device by loading an "iocost_model_ops"
-+	struct_ops with the whole disk's major:minor in its "dev" member
-+	(a partition's major:minor is rejected).  Attaching creates the
-+	controller if needed, like an io.cost.model write does, and
-+	switches the device's pricing to the model; enabling and
-+	disabling the controller stays with io.cost.qos.  While a model
-+	is attached, "model" selects between it and the builtin model:
-+	"model=bpf" switches to the attached model and "model=linear"
-+	switches back to the builtin model, and neither detaches the
-+	struct_ops; only detaching removes the model, after which
-+	"model=bpf" fails.  "ctrl" keeps describing the builtin
-+	coefficients, which are kept while the BPF model is in use and
-+	take effect again when switched back, and the automatic profile
-+	stepping does not switch profiles while the BPF model is in
-+	use.
-+
- 	When "ctrl" is "auto", the kernel may change all parameters
- 	dynamically.  When "ctrl" is set to "user" or any other
- 	parameters are written to, "ctrl" become "user" and the
--- 
-2.43.0
-
+--
+Cheers, Lorenzo
