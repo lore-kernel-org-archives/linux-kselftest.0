@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF50C3921E6;
-	Wed, 30 Sep 2026 03:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B99E38DC50;
+	Wed, 30 Sep 2026 03:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790740343; cv=none; b=iW3ygV5E1n/D4h/hViBwfuEGwdzQjThj09Rxt5RN11WEyblm7NcjhyhYYJ9FpD1Lyob3vuSLg9r3zbIycH0GueIDe1AwhvRC+PPcjie4aVYn0G3K+ahtkdenau6maegC/3B28WdD7+8iRlt7U8rT6ueO39rU6SeSXGqVZWaiIls=
+	t=1790740344; cv=none; b=Z2CNqaD0jBXiAywqp0PY8fRZFrepnd7EP6SVSN7KFWHAGIB561MI55e2ZKvlOMpUz1ZuhpTbtD2kS/kZbyJtFxkVn1QBJlNW/Ar1w1tEKhbCtDaWzTSU6V+eavIpIKGHTKPZH7HEXsST04twmyzsZ3g1xLCnuvV1Q3fS2Clw71s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790740343; c=relaxed/simple;
-	bh=YdiXFHOiEJNV0QDGIm8u6eOt/stAb3WIYoG8AKuX9tU=;
+	s=arc-20240116; t=1790740344; c=relaxed/simple;
+	bh=HWjuypE/QgtXVJhiD3MpGvtxLq9AQJNjLdynRrrrhlw=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Zm49O2hWs/ms/IeAm5NGfi7SthGugxrEJsyifL/wmssu09TGl5QImn9FLKW7DwsyX3BMo8u7019zwbTXuy+qxu3fzUjzHixadc5rGbtcgMOvl0+1/rPjr58F1sx1TOoOALvP3Y03c9NPmPxU/NPpPvKU6JKjjzL+NDm0dT7hLNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L8BCV4J7; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=emYiVRy/Wcvp9ZQffJGkRM8Wah8saGCNgLXJoa5U1nBFDGiPhkg8H8ED+Iq2z0Ua0hHCXsYbJytWRz6P0NqKBNeuVV/7jHzpllHgvdawoQzw8n/cckVpLT62UNR90c2K3avNr+A/XIPgUrfKp5TzPO6zlW8Tuvj2d0SD1nlhW/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ezSen5d9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L8BCV4J7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D73411F000FF;
-	Wed, 30 Sep 2026 03:52:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ezSen5d9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40B581F00893;
+	Wed, 30 Sep 2026 03:52:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790740341;
-	bh=lIaHWQukOG20sGvSPj5jA8NFd4ZOLSKKkuI12eMmL/Q=;
+	s=k20260515; t=1790740343;
+	bh=s41UKHmjIRCegPwcfxCv2MQeBjOAfersOgANyjjFq8s=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=L8BCV4J7rdYHtOyovhcRpIlG6fZZcvwK+EHahjp/zRl7kEI9OZ6aI/MxHHAa85Q3a
-	 /NqicC1NXMO3kZYCVnLTf3ap5k5jUNR6TMX++UcPH1ppkKQ2lE5piVJ5pwVKTsIjP5
-	 z0A9YzA6NVkfSts9insp8ttafbgi4u4CHd8xTiQFOStn2R9kDhsRFIo4L7io9nbilo
-	 xYE8TXqx7C4X9XJfWFr+70SzF4yL33n6y/lEJuagJ7Cr0f+sACvUtExZuWbMDb77CN
-	 yQOCBj1zDf/jjOf7gHi9UbtBqvHPdglMEOlaW0D0qauysWk09hylxbTQhZr6fFh9r3
-	 WIk7UYoUqH+aw==
-Subject: Re: [PATCH net-next v3 3/6] vxlan: vnifilter: bound the number of
- VNIs one request may touch
+	b=ezSen5d92i8EA8iL8AHoZxMC6FPIEvmvjGVbK/2rdq6JMjn5OAr7kRor5hi1yDvKN
+	 wVip92QU94xvd3fW5Ezw6PNg07YXai2LHYtviWX5kTxYbT81F6mosc9QJLg6Eg2SQy
+	 7wiO0E9eZaa5FQQjkgPjz1N9rIPJozyaUkfFIXr72+rr0VqSsDlalWvNKul37zmQjQ
+	 RR9WWQysKxWtkcUa9N50jB/lg3BmnAvdU1KG6Au6ZfFxU5IBYW1YIVR8lnokb5DkRm
+	 rJMsa4WuMgf4BTa2dWBryzKtksgPUVm9XmhxYEdkAgfN4ybLApUC0XOPh5daF+jPUO
+	 I7/pjlt1sWucg==
+Subject: Re: [PATCH net-next v3 4/6] vxlan: vnifilter: clamp the dumped VNI
+ range to the request limit
 From: netdev-bot+sashiko@kernel.org
 To: alishmery18@gmail.com
 Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
@@ -35,11 +35,11 @@ Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
  andrew+netdev@lunn.ch, horms@kernel.org, razor@blackwall.org,
  roopa@nvidia.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Date: Wed, 30 Sep 2026 03:52:20 +0000
-Message-ID: <179074034041.434549.3857875143564705061@kernel.org>
-In-Reply-To: <20260927215209.2581830-4-alishmery18@gmail.com>
-References: <20260927215209.2581830-4-alishmery18@gmail.com>
-X-sashiko-severity: Low
+Date: Wed, 30 Sep 2026 03:52:21 +0000
+Message-ID: <179074034181.434549.1824812445002430210@kernel.org>
+In-Reply-To: <20260927215209.2581830-5-alishmery18@gmail.com>
+References: <20260927215209.2581830-5-alishmery18@gmail.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -49,146 +49,104 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-- [Low] The changelog justifies capping delete as well as add by saying
-  the two "both walk the same span and hold rtnl the same way".
-- [Low] The commit message says the 4096 limit follows "the usable VLAN
-  ID space".
-- [Low] At this commit, the dump path can emit a VXLAN_VNIFILTER_ENTRY
-  that the new request parser refuses.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] The patch limits each dumped VXLAN_VNIFILTER_ENTRY to
+  VXLAN_VNI_FILTER_MSG_MAX (4096) VNIs.
+- [Low] The dump/replay mismatch this patch fixes comes from the previous
+  patch in the same unmerged series, commit "vxlan: vnifilter: bound the…
 
 --
 
-vxlan: vnifilter: bound the number of VNIs one request may touch
+vxlan: vnifilter: clamp the dumped VNI range to the request limit
 
-This patch caps the number of VNIs that one RTM_NEWTUNNEL or RTM_DELTUNNEL
-message may add or delete at 4096. The count is summed across all
-VXLAN_VNIFILTER_ENTRY attributes and checked in a new
-vxlan_vnifilter_check_msg() before any entry is applied. The range
-extraction moves into vxlan_vni_filter_entry_range() so the check and the
-dispatch path use the same range.
-
-> That walk is the cost being bounded, not the memory: an add allocates a
-> VNI node and a per-CPU stats block per VNI, a delete creates neither,
-> but both walk the same span and hold rtnl the same way, so both are
-> bounded.
-
-[Severity: Low]
-Is "both walk the same span" accurate for delete? vxlan_vni_del() returns
--ENOENT for a VNI that is not installed:
-
-drivers/net/vxlan/vxlan_vnifilter.c:vxlan_vni_del() {
-    ...
-	vninode = rhashtable_lookup_fast(&vg->vni_hash, &v,
-					 vxlan_vni_rht_params);
-	if (!vninode) {
-		err = -ENOENT;
-		goto out;
-	}
-    ...
-}
-
-vxlan_vni_add_del() then stops the walk at the first error:
-
-		if (err)
-			goto out;
-
-So an RTM_DELTUNNEL walk covers the full span only when every VNI in it is
-installed. That worst case can happen after several capped adds, so there
-is still a reason to bound delete. The wording could be more precise,
-though.
-
-The changelog says that installs can be split across requests and that
-vxlan_vnigroup_uninit() is exempt. It does not say that a user who
-installed a contiguous run of more than 4096 VNIs can no longer delete it
-in one message. The same applies to re-issuing RTM_NEWTUNNEL over that run
-to change the group. vxlan_vnifilter_check_msg() charges the full requested
-span, whatever is actually installed.
-
-Could the changelog spell out this user-visible narrowing?
-
-> The limit is 4096, following the usable VLAN ID space, since vnifilter
-> is mainly used on bridged devices where the VNI is derived from the
-> VLAN.
-
-[Severity: Low]
-This isn't a bug, but is "usable" the right word here? The usable 802.1Q
-VLAN IDs are 1..4094. br_vlan_valid_id() in net/bridge/br_private.h only
-accepts:
-
-	bool ret = vid > 0 && vid < VLAN_VID_MASK;
-
-4096 is the size of the full 12-bit VID field, which includes the reserved
-IDs 0 and 4095. The in-code comment on VXLAN_VNI_FILTER_MSG_MAX says "the
-VLAN ID space", which reads fine.
+This commit caps each VXLAN_VNIFILTER_ENTRY produced by
+vxlan_vnifilter_dump_dev() at VXLAN_VNI_FILTER_MSG_MAX VNIs. It does this
+by ending a merged run of contiguous VNIs once the run reaches the limit.
+The goal is for dumped entries to be accepted when they are sent back
+through RTM_NEWTUNNEL.
 
 > diff --git a/drivers/net/vxlan/vxlan_vnifilter.c b/drivers/net/vxlan/vxlan_vnifilter.c
-> index 9cffaf4998a98..13f4e115701ac 100644
+> index 13f4e115701ac..92ea1fc94f458 100644
 > --- a/drivers/net/vxlan/vxlan_vnifilter.c
 > +++ b/drivers/net/vxlan/vxlan_vnifilter.c
+> @@ -382,6 +382,7 @@ static int vxlan_vnifilter_dump_dev(const struct net_device *dev,
+>  			continue;
+>  		}
+>  		if (!dump_stats && vnirange(vend, v) == 1 &&
+> +		    vnirange(vbegin, v) < VXLAN_VNI_FILTER_MSG_MAX &&
+>  		    vxlan_addr_equal(&v->remote_ip, &vend->remote_ip)) {
+>  			goto update_end;
+>  		} else {
 
-[ ... ]
+[Severity: Medium]
+Does this clamp work at the same granularity as the input-side limit? It
+bounds each entry. However, vxlan_vnifilter_check_msg() adds up the spans
+of every VXLAN_VNIFILTER_ENTRY in a message:
 
-> +static int vxlan_vnifilter_check_msg(const struct nlmsghdr *nlh,
-> +				     struct netlink_ext_ack *extack)
-> +{
-> +	struct nlattr *vattrs[VXLAN_VNIFILTER_ENTRY_MAX + 1];
-> +	struct nlattr *attr;
-> +	u32 vnis = 0;
-> +	int err, rem;
-> +
-> +	nlmsg_for_each_attr_type(attr, VXLAN_VNIFILTER_ENTRY, nlh,
-> +				 sizeof(struct tunnel_msg), rem) {
-
-[ ... ]
-
-> +		vnis += vni_end - vni_start + 1;
-> +		if (vnis > VXLAN_VNI_FILTER_MSG_MAX) {
-> +			NL_SET_ERR_MSG_ATTR_FMT(extack, attr,
-> +						"Request asks for more than %u VNIs",
-> +						VXLAN_VNI_FILTER_MSG_MAX);
-> +			return -EINVAL;
-> +		}
-
-[Severity: Low]
-At this point in the series, can a dump emit an entry that this check then
-rejects?
-
-vxlan_vnifilter_dump_dev() merges any contiguous run of VNIs with the same
-remote into a single START/END entry. It puts no bound on the span:
-
-drivers/net/vxlan/vxlan_vnifilter.c:vxlan_vnifilter_dump_dev() {
+drivers/net/vxlan/vxlan_vnifilter.c:vxlan_vnifilter_check_msg() {
     ...
-		if (!dump_stats && vnirange(vend, v) == 1 &&
-		    vxlan_addr_equal(&v->remote_ip, &vend->remote_ip)) {
-			goto update_end;
+		vnis += vni_end - vni_start + 1;
+		if (vnis > VXLAN_VNI_FILTER_MSG_MAX) {
+			NL_SET_ERR_MSG_ATTR_FMT(extack, attr,
+						"Request asks for more than %u VNIs",
+						VXLAN_VNI_FILTER_MSG_MAX);
+			return -EINVAL;
+		}
     ...
 }
 
-A device can still hold more than 4096 contiguous VNIs installed over
-several requests, because vxlan_vni_rht_params uses
-.max_size = VXLAN_N_VID. If such a dumped entry is replayed in one
-RTM_NEWTUNNEL, vxlan_vnifilter_check_msg() returns -EINVAL.
+The comment above the define also describes a per-message limit:
 
-The next patch in the series, "vxlan: vnifilter: clamp the dumped VNI
-range to the request limit", fixes this. It adds
-vnirange(vbegin, v) < VXLAN_VNI_FILTER_MSG_MAX to the merge condition, and
-the selftest commit checks the dump/replay round trip.
+/* Maximum number of VNIs one RTM_NEWTUNNEL or RTM_DELTUNNEL message may add or
+ * delete, summed over all of its VXLAN_VNIFILTER_ENTRY attributes. ...
 
-Would it make sense to put the clamp before this patch, or fold it in, so
-dump and request stay consistent at every commit in the series?
+vxlan_vnifilter_dump_dev() still opens one RTM_NEWTUNNEL nlmsg per device
+per skb. It keeps adding entries until the skb is full, so nothing limits
+the total number of VNIs in one dumped message.
 
-> +	}
-> +
-> +	return 0;
-> +}
+For example, say a device holds VNIs 1-8192, added with two requests. The
+dump now produces one message with the entries 1-4096 and 4097-8192.
+Wouldn't resending that message unchanged still fail with "Request asks for
+more than 4096 VNIs"?
 
-[ ... ]
+The commit message says:
+
+    the two representations then agree on the same bound.
+
+Is that accurate? After this change, replay works only if each entry goes
+in its own request, which is what the selftest in this series does. No
+later patch in the series changes vxlan_vnifilter_dump_dev().
+
+One option is for the dump to count VNIs per nlmsg, end the message early
+and resume through cb->args. The other is for the commit message to state
+that the guarantee applies per entry only.
+
+[Severity: Low]
+The final state of the series is fine. However, the mismatch fixed here
+comes from the earlier patch in this series, "vxlan: vnifilter: bound the
+number of VNIs one request may touch". The commit message says so:
+
+    Now that a single request is bounded to VXLAN_VNI_FILTER_MSG_MAX VNIs,
+    replaying such an entry in one RTM_NEWTUNNEL is rejected
+
+At that earlier commit, vxlan_vnifilter_dump_dev() still merges a
+contiguous run of any length into one entry. A fully populated device
+therefore dumps as a single 1-16777215 entry, and
+vxlan_vnifilter_check_msg() rejects it.
+
+Could this clamp be squashed into the limit patch, or moved before it, so
+that each commit in the series is consistent for bisection? A Fixes: tag
+would not be appropriate, since the cause is not upstream.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260927215209.2581830-1-alishmery18%40gmail.com
