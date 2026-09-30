@@ -1,187 +1,326 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9364F85BE;
-	Wed, 30 Sep 2026 20:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C0F51CF46;
+	Wed, 30 Sep 2026 21:48:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790801736; cv=none; b=f+KH/apiUpEP6o8YQRsEGE3/kGIa1+pHX61xQyaIZAYeAmq1EoKrBsZmomCSIX76XChHXzMGKeDkT+HZid1X3yqrTsjWlUjc74WjntqyH1sCNy0W8nfLmkzDMm/OcOqZal3GWSuA0eMfFjAoMvx5FE5xfIlt6aCjl+6gX934b7w=
+	t=1790804935; cv=none; b=AD1QtKbIQ3HGyUGrJiUZqhvm7pbwjQHZI04Cf0vbo4Ldcd2i0dSrr+rq3u/yU94dTFBuFKlE5f4dnC48mNNCFMOVugpq2pIuBa5Msvt0pU2HveYUoFaYsJ6Qbaz57EM2nxBg6/aYKGaAFRdqFtEa1jZLT1way2Iwrm2YcBpGaXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790801736; c=relaxed/simple;
-	bh=A230iVNsAqBVZ+IaBkxNWqwUWVyBB8FyI5l67yLWTvo=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PFGAlPjHJaI0Rp+Je9asik2IFhtZA2+QFji9q8sLCqTUcsie+X5zgS3tkholWD61iVyETjdij0+3ZoTQrMtvn+3xE+iMn+VZa4U5Opy3fDMow9q8Fmp4WJS0m1fpg5Hac5LRsuoUk8FJERzh/RseIcu88510HrWfW/sS0oVWNSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOwrWzkr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790804935; c=relaxed/simple;
+	bh=v+tDIe2bYsLeFuxQFNRoHsarF1iqezQy1Lpm3BSHqxk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SmE98b900AiImQdsnYzlH++Jrai+HNtCIRsm5YmcYyBA4gLaKi2swo7yUAwlK6D2/3j8EVHyhpeOSZq1GPaN8Qseb2mcL5O1xojzwjlehTfgK9zRLonoLac6odkZgppXayRmtHuaBA4VV10CnNdsBCZRYev+3tTVxgdfbzILAVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PcLMukfH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOwrWzkr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B11C51F000FF;
-	Wed, 30 Sep 2026 20:55:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PcLMukfH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E1C71F00898;
+	Wed, 30 Sep 2026 21:48:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790801734;
-	bh=D+QBnD5d45LP6j+lpnTToXdnei1sUTQnyrZuwrKGyRk=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=kOwrWzkrH3OmiNFF/qMTMM1dj706xXO+WXNS3MVBFYC5GAVeY+zOrUx+LMgPKBE+s
-	 8AKLkSheLWXJojEdyXNdBLuiGxquGkCco0G5D+K6aldWh2malpzdS1gmYSFQXXmql8
-	 yk4KmyZYqR9iBDj02WX0msKS1hHlW+d/CWdnXuhxOEA5c9prhHLZ/Xcf87veg4ZRNh
-	 Afnd08WhetUATtjdliRgxJDBw4dB8WjlO+o4aM2UGxgrqk8FPwjR08UQFHqZaezUHd
-	 a8GrVq3kNZcVeb7Rndh+c40g4ypuOwOhQr/wQHyb2NmM6XOpVhaRrK0NyquImCFNy+
-	 MXRGgKBGB/q6Q==
-Subject:
- Re: [PATCH net-next v2] net: mctp: Make KUnit tests depend on flow support
-From: netdev-bot+sashiko@kernel.org
-To: kmehltretter@gmail.com
-Cc: jk@codeconstruct.com.au, matt@codeconstruct.com.au, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- netdev@vger.kernel.org, geert@linux-m68k.org, brendan.higgins@linux.dev,
- david@davidgow.net, raemoar63@gmail.com, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Date: Wed, 30 Sep 2026 20:55:33 +0000
-Message-ID: <179080173322.434549.16914782890279505094@kernel.org>
-In-Reply-To: <20260928205352.30502-1-kmehltretter@gmail.com>
-References: <20260928205352.30502-1-kmehltretter@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1790804933;
+	bh=bFy3jTIJd0CBUdXyZYoM8DX2iCT9pxoBv6EcSa0Ixd8=;
+	h=From:Subject:Date:To:Cc;
+	b=PcLMukfHRQaVJaWDLFBq+edP2aE+4+KzWQhIguSqkypvzPj8+SyBedZiYcEoMyGcz
+	 t+8lRRVDFjteUni1aWozFjBEvpcMkurS4oEhDY6EDVVP8yTzkVkj+YTg9QgDz36cvB
+	 EBns7khkqi3w7AFmBW1QYOsYKGVx01QLI8zK2nqzsnYvM2tCMoONvkLB1Fbjp3l9gk
+	 LFOa+lpkPgzzfRlOtiqlS/LxXiNxaCgBo9NkZftl/UJ7aHKJ/uT8mr7uwIeAS8Stf2
+	 PtsggXuMXm0+BmpHQdzKLcf5wHpncFee3gCMJ3jreIcoGcjaLznADGkdpCD8fiqnMi
+	 5xwXONvhQOC6Q==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v21 00/15] KVM: arm64: Provide guest support for GCS
+Date: Wed, 30 Sep 2026 22:48:10 +0100
+Message-Id: <20260930-arm64-gcs-v21-0-3556644cd927@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJuDvWoC/23US27bMBAG4KsEWlfFzPDdVe9RZMHH0Bba2IEUG
+ A0C371kglqkaWglQh/J4fzUx7TxuvA2/Xj6mFa+LNtyPpUXwm9PUzz604HnJZWBiYAElGf264u
+ W8yFuMwtEHyBZQ24q3we/8RxWf4rHKt5eXuvo68p5+fu5xK/n8n5ctrfz+v654gXr6NfcBnUz9
+ wVnmENW2mQnQvD6529eT/zn+3k9THWaCzWUZEup0BQpYpIyEoeBioYKbKkoNKaUXXYWkrMDlTu
+ 1YFoqC9U2Zi/KlkG7gaqGErVUFeo4o8WUtCA5UH2jCOBaqgs1lpVK7L1MaaBmp9ivagolwCitC
+ MkYNVD7n0qgrvEXW4/JZY7GaCM4D9TtVJNqqSsUshZSahdshoEi7NZC1x2EesbOMYVE6GDsLGK
+ D+3KxJkpisOik4RjGepFa3B0z1kxJKhUXLIX2I76FSpYe9duuqSKiYGy5K8w8Ytni7ryw5kqVQ
+ EFMGhw9qPkWLFW2DR2uyVIshEwebbBjslDv2GF/YDVbWgrFiqMw6cHKt3Dp+4uE5mtlFz1gQPm
+ gZrtj28cLa75yslFCVj7Z8Rqia/DdtmvCHILyZQayPo5/Dtix61tFNWFZoFEQUvZ3NV+v139+G
+ 6CFMQUAAA==
+X-Change-ID: 20230303-arm64-gcs-e311ab0d8729
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+ Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+ Fuad Tabba <fuad.tabba@linux.dev>
+Cc: Peter Maydell <peter.maydell@linaro.org>, 
+ Leonardo Bras <leo.bras@arm.com>, Wei-Lin Chang <weilin.chang@arm.com>, 
+ Yao Yuan <yaoyuan@linux.alibaba.com>, linux-arm-kernel@lists.infradead.org, 
+ linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>, "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, 
+ Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11678; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=v+tDIe2bYsLeFuxQFNRoHsarF1iqezQy1Lpm3BSHqxk=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBqvYOzUcUTCh61ohFa79m0Es/zHw4CYG/nUT95O
+ QKR6/cCyDmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCar2DswAKCRAk1otyXVSH
+ 0MvLB/44y/UytoybP5f3vbX03aCxLX4aCD6ucZqgje4CGMwrjD/KFdthDgUAfWPic5MaB5ikibV
+ YVp1MXk8uOeO33goZK8pVWj9pwSO1OdNwXkkN/LfrW44P8af/YbqbOVFHSvUYtXbbsBKEQLTcPp
+ 51btDdhugIo+TKtKznfiprSPjb66RALVNRxGNUTiEEP6A6Qwe2UEDjDTjN0nP4L0x0FPOazCBhd
+ NWsypJpQWibuF1Vc9rE+KHtEL6IWtEa+HVeS/rqSJZsY7MUzSI0Eie4UgXIO5hqbxumaIgD2LCq
+ aJg2+rOaS2kPK64QajuaS3kNS9nOMVFyetXOa9HxHJl3Yfgz
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+The arm64 Guarded Control Stack (GCS) feature provides support for
+hardware protected stacks of return addresses, intended to provide
+hardening against return oriented programming (ROP) attacks and to make
+it easier to gather call stacks for applications such as profiling.
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 0
+When GCS is active a secondary stack called the Guarded Control Stack is
+maintained, protected with a memory attribute which means that it can
+only be written with specific GCS operations.  The current GCS pointer
+can not be directly written to by userspace.  When a BL is executed the
+value stored in LR is also pushed onto the GCS, and when a RET is
+executed the top of the GCS is popped and compared to LR with a fault
+being raised if the values do not match.  GCS operations may only be
+performed on GCS pages, a data abort is generated if they are not.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+The combination of hardware enforcement and lack of extra instructions
+in the function entry and exit paths should result in something which
+has less overhead and is more difficult to attack than a purely software
+implementation like clang's shadow stacks.
 
-- [Medium] This patch breaks `kunit.py run --alltests` and drops the MCTP
-  core KUnit suite from all-tests CI runs.
-- [Medium] mctp: core test suite disabled on minimal configs due to
-  hidden Kconfig dependency
+This series implements support for managing GCS for KVM guests.
 
---
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v21:
+- Drop "KVM: arm64: Fix FGT mapping for HFGITR_EL2.nGCSEPP" which was
+  applied as 089e4f3c4862.
+- Reject creation of guests with GCS without S1PIE, or S1PIE/S1POE
+  without TCR2.  Add selftest coverage for this.
+- Flip order of GCSPR_EL2 and GCSCR_EL2 in el2_reg in get-reg-list.
+- Remove ineffective selftest cases with HFGITR_EL2.ERET set.
+- Formatting and clarity tweaks.
+- Link to v20: https://patch.msgid.link/20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org
 
-net: mctp: Make KUnit tests depend on flow support
+Changes in v20:
+- Rebase onto v7.3-rc1.
+- Relax GCSB DSYNCs, remove them when loading the vCPU and move them to
+  vcpu_put() on the outgoing path.
+- Make kvm_check_illegal_exlock_returns() mode change checks more
+  similar to compute_exlock().
+- Use kvm_has_gcs() in ctxt_has_gcs().
+- Move some EL2 register saves under S1PIE checks.
+- Link to v19: https://patch.msgid.link/20260812-arm64-gcs-v19-0-9105afd828ac@kernel.org
 
-This patch changes MCTP_TEST so that it depends on MCTP_FLOWS instead of
-selecting it. The goal is to stop the tests from silently turning on
-SKB_EXTENSIONS. The suite is then available only when something else,
-such as the I2C transport, enables flow support.
+Changes in v19:
+- Fix accessor for GCSCR_EL2 in emulation.
+- Correct locate_direct_register() for EL0 registers.
+- Don't check for GCS without S1PIE when restoring vEL2.
+- Move barriers to align better with nearby dsbs.
+- Link to v18: https://patch.msgid.link/20260803-arm64-gcs-v18-0-fd8c40f5ad88@kernel.org
 
-> diff --git a/net/mctp/Kconfig b/net/mctp/Kconfig
-> index d8d3413a37f7e..e64d4f7ef6aaf 100644
-> --- a/net/mctp/Kconfig
-> +++ b/net/mctp/Kconfig
-> @@ -14,7 +14,7 @@ menuconfig MCTP
->  
->  config MCTP_TEST
->          bool "MCTP core tests" if !KUNIT_ALL_TESTS
-> -        select MCTP_FLOWS
-> +        depends on MCTP_FLOWS
->          depends on MCTP=y && KUNIT=y
->          default KUNIT_ALL_TESTS
+Changes in v18:
+- Reinject all GCS exceptions from nested guests.
+- Include GCSCRE0_EL1 and GCSPR_EL0 in the live CPU register accessors.
+- Sort el2_regs in get-reg-list.
+- Link to v17: https://patch.msgid.link/20260731-arm64-gcs-v17-0-5e39ca01b14e@kernel.org
 
-[Severity: Medium]
-Does this make the whole MCTP core suite unreachable on minimal KUnit
-configs?
+Changes in v17:
+- Rebase onto v7.2-rc4.
+- Fix mapping of HFGITR_EL2.nGCSEPP.
+- Implement a test for NV emulation around EXLOCK.
+- Fix NV exception emulation issues.
+- Add GCS[PC]R_EL1 to locate_direct_register().
+- Add barriers.
+- Add ID_AA64PFR1_EL1.GCS to set_id_regs.
+- Comment updates.
+- Link to v16: https://lore.kernel.org/r/20250912-arm64-gcs-v16-0-6435e5ec37db@kernel.org
 
-MCTP_FLOWS is a bool with no prompt, so it can only be enabled through
-a select. After this change, the only way to satisfy the new dependency
-is to pull in a transport that selects it. Today that means I2C,
-I2C_SLAVE and MCTP_TRANSPORT_I2C.
+Changes in v16:
+- Rebase onto v6.17-rc3.
+- Also expose the feature to nested guests.
+- Implement emulation of EXLOCK when returning from nested guests.
+- Rename enter_exception_gcs() to compute_exlock().
+- Move all ID_AA64PFR1_EL1 handling to the final kernel patch.
+- Drop unneeded forwarding of GCS exceptions.
+- Commit and cover message updates.
+- Link to v15: https://lore.kernel.org/r/20250820-arm64-gcs-v15-0-5e334da18b84@kernel.org
 
-A .kunitconfig that asks only for the core pieces, something like:
+Changes in v15:
+- Rebase onto v6.17-rc1.
+- Link to v14: https://lore.kernel.org/r/20241005-arm64-gcs-v14-0-59060cd6092b@kernel.org
 
-    CONFIG_KUNIT=y
-    CONFIG_NET=y
-    CONFIG_MCTP=y
-    CONFIG_MCTP_TEST=y
+Changes in v14:
+- Rebase onto arm64/for-next/gcs which includes all the non-KVM support.
+- Manage the fine grained traps for GCS instructions.
+- Manage PSTATE.EXLOCK when delivering exceptions to KVM guests.
+- Link to v13: https://lore.kernel.org/r/20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org
 
-now resolves MCTP_TEST to n. KunitConfig.validate_config() would then
-reject the run, because CONFIG_MCTP_TEST=y never reaches the generated
-.config. In menuconfig the "MCTP core tests" prompt simply disappears,
-with no hint that an I2C slave transport is needed to get it back.
+Changes in v13:
+- Rebase onto v6.12-rc1.
+- Allocate VM_HIGH_ARCH_6 since protection keys used all the existing
+  bits.
+- Implement mm_release() and free transparently allocated GCSs there.
+- Use bit 32 of AT_HWCAP for GCS due to AT_HWCAP2 being filled.
+- Since we now only set GCSCRE0_EL1 on change ensure that it is
+  initialised with GCSPR_EL0 accessible to EL0.
+- Fix OOM handling on thread copy.
+- Link to v12: https://lore.kernel.org/r/20240829-arm64-gcs-v12-0-42fec947436a@kernel.org
 
-The commit message says the suite is available only when flow support
-is enabled. That undersells the cost. The gate is not only on the two
-flow tests but on every routing and socket case in route-test.c and
-sock-test.c. Most of those have nothing to do with flows. The configs
-that lose them are exactly the small ones developers are most likely
-to use for quick KUnit runs.
+Changes in v12:
+- Clarify and simplify the signal handling code so we work with the
+  register state.
+- When checking for write aborts to shadow stack pages ensure the fault
+  is a data abort.
+- Depend on !UPROBES.
+- Comment cleanups.
+- Link to v11: https://lore.kernel.org/r/20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org
 
-The patch also leaves dead code behind. route-test.c still has the
-!CONFIG_MCTP_FLOWS stubs, such as mctp_test_packet_flow(), which only
-call kunit_skip(test, "Requires CONFIG_MCTP_FLOWS=y"). With MCTP_TEST
-now depending on MCTP_FLOWS, those branches can never be compiled.
+Changes in v11:
+- Remove the dependency on the addition of clone3() support for shadow
+  stacks, rebasing onto v6.11-rc3.
+- Make ID_AA64PFR1_EL1.GCS writeable in KVM.
+- Hide GCS registers when GCS is not enabled for KVM guests.
+- Require HCRX_EL2.GCSEn if booting at EL1.
+- Require that GCSCR_EL1 and GCSCRE0_EL1 be initialised regardless of
+  if we boot at EL2 or EL1.
+- Remove some stray use of bit 63 in signal cap tokens.
+- Warn if we see a GCS with VM_SHARED.
+- Remove rdundant check for VM_WRITE in fault handling.
+- Cleanups and clarifications in the ABI document.
+- Clean up and improve documentation of some sync placement.
+- Only set the EL0 GCS mode if it's actually changed.
+- Various minor fixes and tweaks.
+- Link to v10: https://lore.kernel.org/r/20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org
 
-Which direction do you and Jeremy prefer here? Some options:
+Changes in v10:
+- Fix issues with THP.
+- Tighten up requirements for initialising GCSCR*.
+- Only generate GCS signal frames for threads using GCS.
+- Only context switch EL1 GCS registers if S1PIE is enabled.
+- Move context switch of GCSCRE0_EL1 to EL0 context switch.
+- Make GCS registers unconditionally visible to userspace.
+- Use FHU infrastructure.
+- Don't change writability of ID_AA64PFR1_EL1 for KVM.
+- Remove unused arguments from alloc_gcs().
+- Typo fixes.
+- Link to v9: https://lore.kernel.org/r/20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org
 
-  - Keep the core suite independent of MCTP_FLOWS and let the existing
-    skip stubs report the flow cases as skipped.
-  - Move the flow cases into a separate suite that carries the
-    dependency.
-  - Provide a net/mctp/.kunitconfig that enables the I2C transport
-    bits so the suite is still easy to run.
+Changes in v9:
+- Rebase onto v6.10-rc3.
+- Restructure and clarify memory management fault handling.
+- Fix up basic-gcs for the latest clone3() changes.
+- Convert to newly merged KVM ID register based feature configuration.
+- Fixes for NV traps.
+- Link to v8: https://lore.kernel.org/r/20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org
 
-If the dependency stays as written, should the unreachable kunit_skip()
-stubs be removed in the same patch?
+Changes in v8:
+- Invalidate signal cap token on stack when consuming.
+- Typo and other trivial fixes.
+- Don't try to use process_vm_write() on GCS, it intentionally does not
+  work.
+- Fix leak of thread GCSs.
+- Rebase onto latest clone3() series.
+- Link to v7: https://lore.kernel.org/r/20231122-arm64-gcs-v7-0-201c483bd775@kernel.org
 
-[Severity: Medium]
-Will this break kunit.py run --alltests?
+Changes in v7:
+- Rebase onto v6.7-rc2 via the clone3() patch series.
+- Change the token used to cap the stack during signal handling to be
+  compatible with GCSPOPM.
+- Fix flags for new page types.
+- Fold in support for clone3().
+- Replace copy_to_user_gcs() with put_user_gcs().
+- Link to v6: https://lore.kernel.org/r/20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org
 
-tools/testing/kunit/configs/all_tests.config still contains:
+Changes in v6:
+- Rebase onto v6.6-rc3.
+- Add some more gcsb_dsync() barriers following spec clarifications.
+- Due to ongoing discussion around clone()/clone3() I've not updated
+  anything there, the behaviour is the same as on previous versions.
+- Link to v5: https://lore.kernel.org/r/20230822-arm64-gcs-v5-0-9ef181dd6324@kernel.org
 
-    CONFIG_MCTP=y
-    CONFIG_MCTP_FLOWS=y
+Changes in v5:
+- Don't map any permissions for user GCSs, we always use EL0 accessors
+  or use a separate mapping of the page.
+- Reduce the standard size of the GCS to RLIMIT_STACK/2.
+- Enforce a PAGE_SIZE alignment requirement on map_shadow_stack().
+- Clarifications and fixes to documentation.
+- More tests.
+- Link to v4: https://lore.kernel.org/r/20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org
 
-That line came in with commit 109a5331143d. It only took effect because
-MCTP_TEST, enabled via KUNIT_ALL_TESTS=y, selected MCTP_FLOWS.
+Changes in v4:
+- Implement flags for map_shadow_stack() allowing the cap and end of
+  stack marker to be enabled independently or not at all.
+- Relax size and alignment requirements for map_shadow_stack().
+- Add more blurb explaining the advantages of hardware enforcement.
+- Link to v3: https://lore.kernel.org/r/20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org
 
-MCTP_FLOWS has no prompt:
+Changes in v3:
+- Rebase onto v6.5-rc4.
+- Add a GCS barrier on context switch.
+- Add a GCS stress test.
+- Link to v2: https://lore.kernel.org/r/20230724-arm64-gcs-v2-0-dc2c1d44c2eb@kernel.org
 
-    config MCTP_FLOWS
-    	bool
-    	depends on MCTP
-    	select SKB_EXTENSIONS
+Changes in v2:
+- Rebase onto v6.5-rc3.
+- Rework prctl() interface to allow each bit to be locked independently.
+- map_shadow_stack() now places the cap token based on the size
+  requested by the caller not the actual space allocated.
+- Mode changes other than enable via ptrace are now supported.
+- Expand test coverage.
+- Various smaller fixes and adjustments.
+- Link to v1: https://lore.kernel.org/r/20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org
 
-so a direct assignment in a config fragment is ignored unless something
-selects the symbol.
+---
+Mark Brown (15):
+      arm64/gcs: Ensure FGTs for EL1 GCS instructions are disabled
+      KVM: arm64: Refuse to start a guest with S1PIE or S1POE but not TCR2
+      KVM: arm64: Manage GCS access and registers for guests
+      KVM: arm64: Ensure GCS memory effects are visible
+      KVM: arm64: Set PSTATE.EXLOCK when entering an exception
+      KVM: arm64: Validate GCS exception lock when emulating ERET
+      KVM: arm64: Forward GCS exceptions to nested guests
+      KVM: arm64: Enforce EXLOCK for SPSR and ELR
+      KVM: arm64: Allow GCS to be enabled for guests
+      KVM: selftests: arm64: Check that invalid feature combinations are rejected
+      KVM: selftests: arm64: Add GCS registers to get-reg-list
+      KVM: selftests: arm64: Add GCS to set_id_regs
+      KVM: selftests: arm64: Only restore SPSR_EL1 and ELR_EL1 if they change
+      tools: Synchronise the kernel esr.h
+      KVM: selftests: arm64: Add GCS EXLOCK exception emulation test
 
-After this patch, the only selector left in the tree is
-MCTP_TRANSPORT_I2C in drivers/net/mctp/Kconfig:
+ arch/arm64/include/asm/el2_setup.h                 |   5 +
+ arch/arm64/include/asm/kvm_emulate.h               |  11 +
+ arch/arm64/include/asm/kvm_host.h                  |  14 +
+ arch/arm64/include/asm/kvm_nested.h                |  32 ++
+ arch/arm64/include/asm/vncr_mapping.h              |   2 +
+ arch/arm64/include/uapi/asm/ptrace.h               |   1 +
+ arch/arm64/kvm/arm.c                               |   7 +
+ arch/arm64/kvm/emulate-nested.c                    |   5 +-
+ arch/arm64/kvm/handle_exit.c                       |  18 +-
+ arch/arm64/kvm/hyp/exception.c                     |  37 +++
+ arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h         |  27 ++
+ arch/arm64/kvm/hyp/nvhe/hyp-main.c                 |   7 +
+ arch/arm64/kvm/hyp/vhe/switch.c                    |   4 +
+ arch/arm64/kvm/hyp/vhe/sysreg-sr.c                 |  10 +
+ arch/arm64/kvm/nested.c                            |   3 +-
+ arch/arm64/kvm/sys_regs.c                          | 113 ++++++-
+ tools/arch/arm64/include/asm/esr.h                 | 113 ++++++-
+ tools/testing/selftests/kvm/Makefile.kvm           |   1 +
+ tools/testing/selftests/kvm/arm64/gcs_exceptions.c | 336 +++++++++++++++++++++
+ tools/testing/selftests/kvm/arm64/get-reg-list.c   |  12 +
+ tools/testing/selftests/kvm/arm64/set_id_regs.c    |  95 ++++++
+ tools/testing/selftests/kvm/lib/arm64/handlers.S   |  10 +
+ 22 files changed, 840 insertions(+), 23 deletions(-)
+---
+base-commit: fd73f4a6659897191fa0d40695fe370925dd3780
+change-id: 20230303-arm64-gcs-e311ab0d8729
 
-    	depends on I2C_SLAVE
-    	select MCTP_FLOWS
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
 
-all_tests.config enables neither I2C_SLAVE nor MCTP_TRANSPORT_I2C, so
-MCTP_FLOWS resolves to n.
-
-KunitConfig.validate_config() in tools/testing/kunit/kunit_kernel.py
-would then find CONFIG_MCTP_FLOWS=y missing from the generated .config.
-It would report "Not all Kconfig options selected in kunitconfig were in
-the generated .config" and return False. build_config() then fails, so
-the whole --alltests run would stop at the config step.
-
-Even if validation were skipped, the new "depends on MCTP_FLOWS" would
-make MCTP_TEST resolve to n there. That drops the whole MCTP core suite
-(sock-test.c and route-test.c) from all-tests coverage.
-
-Given that, is this statement in the commit message accurate for the
-in-tree all-tests config?
-
-    This keeps the full flow-test coverage: the suite is available only
-    when flow support is enabled, for example by the I2C transport.
-
-Could all_tests.config be updated in the same patch? For example, it
-could add CONFIG_I2C_SLAVE=y and CONFIG_MCTP_TRANSPORT_I2C=y
-(CONFIG_I2C=y is already set there). At minimum, the line that can no
-longer be satisfied could be removed.
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260928205352.30502-1-kmehltretter%40gmail.com
