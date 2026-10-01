@@ -1,160 +1,179 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4ECC49BD7F;
-	Thu,  1 Oct 2026 21:11:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64A403B5E15;
+	Thu,  1 Oct 2026 21:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790889117; cv=none; b=h0WGeUGOEqqZiW5ax8iJl1bs8QfQNGY92/1SWlOIL05nnO2LfBns89TbUw/Xd8Gq/3diCFA+VFjxF+ufn1zp3fQ3UlOkiS5ulvrTNNw3oLshybkryFYoHa21T28wTkguwz2z/xAiOb43g7ZOkSiDewWZU7N5HDiVUDCyPCgnzdM=
+	t=1790889488; cv=none; b=XZY54x1DGzfXi+u2ySyRkMgE3YW0U3Ys7t4cRPScp5qTTixZO/KjlUlmXoehJpmGsxs6EzrwpxjETBj18n8PsJFBtuP3BwGvg3T+V52bidFCIc1D1eEtY2p2MAt6mgrQ+Q5rjVwsQl6VGBtdVjSG/TUIqTGJ4Aj0UPS63SxXtMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790889117; c=relaxed/simple;
-	bh=3Zx7mZTcZxBEPzyMjLgv3nmr1xCwyHk4Zs8Em19mPuw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NcGGEJZ7tsOuqcIvpW60ujdBvPc3UBIJIwkeOVW/CNTxNXRBYAxhxo4U6spV7DH+QzXdZbUI47JMUeInC11DNtuxCGpv4Po72jXm/Pw3jCWBzUfezh/hdeMZsgqZCctTwMUmgwCPwE8NLyJOIp93ziXGVsNgLCGZ006vjyN8GZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VLvG3LAB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790889488; c=relaxed/simple;
+	bh=elVZHf3wDmPU0tfGL4EH9o7DXhEwI7HvqsyNCh92HrY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=N5wHGccWiCj+rhRWjkQAmRiD6kFh1AIdPZTauyTz3Kz+EhWHIvDvvs2EolWORdvpmhQPhrQ+RAKPgnngjQNffw870Wy5bqEnQFbJ9Ga+4SBuZkgrCNiBQrVAmVbq0oFwH+uaFqRCSxxC8SUTy116/4g2tyRfpGd28npG4JTNXX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=m3xOepUI; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VLvG3LAB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92AC51F000FF;
-	Thu,  1 Oct 2026 21:11:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790889116;
-	bh=ZRl45zOulKSzHu0gpa5gJKuaLYcXh2vCa43UARtQmaM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VLvG3LABMRXOFV0rgrekJzhEHgOaAUj51pCohlr6tbG0Kfz2+O31tpT/VOJmKa2qv
-	 aoqtWaO1OHmw6NEuOwkkzH+ITshRx/cFcvuH30U6Z3Z+1f5M2XRpJW5j0kZQMfBpNm
-	 aDJiV/OkpNSN247u+74LZ2vH1rAJrHOISVEvOLsSU/SkHlDUq8HY1dMdUOolhLzS4O
-	 mNj00cw/HyADcX5F9EhC+DfLOsZJiBgJnAxDjXk7eheCEFsSCfLQQ8G0dWHfPfNsvP
-	 XfEfksywZyaJ74TR0NoPtMy+hlIkUHjIHexpIJSmCzCsK9XTgP8DkePoYwHX0nhJjT
-	 /zuYeQ4/jGOFw==
-Date: Thu, 1 Oct 2026 22:11:49 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Leonardo Bras <leo.bras@arm.com>,
-	Wei-Lin Chang <weilin.chang@arm.com>,
-	Yao Yuan <yaoyuan@linux.alibaba.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v21 08/15] KVM: arm64: Enforce EXLOCK for SPSR and ELR
-Message-ID: <659cba01-3c53-4eb8-9124-7c62d266a64f@sirena.org.uk>
-References: <20260930-arm64-gcs-v21-0-3556644cd927@kernel.org>
- <20260930-arm64-gcs-v21-8-3556644cd927@kernel.org>
- <ar5thpZI5GiCfVRR@gremlin>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="m3xOepUI"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35AA1497;
+	Thu,  1 Oct 2026 14:18:03 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9EBB83F86F;
+	Thu,  1 Oct 2026 14:18:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1790889486; bh=elVZHf3wDmPU0tfGL4EH9o7DXhEwI7HvqsyNCh92HrY=;
+	h=From:Subject:Date:To:Cc:From;
+	b=m3xOepUIC8hdRxYywAiIF5vtRDekYWf/7c295Zg1wqeeeoAppiDD6ypWp0sWJe+df
+	 QIMr1y0GfX5MbVVohQrIm7xQL2sle2zYASnzUEvqQKa8tNSMNqLvrpGMiPOO3nyzKn
+	 YX0sgY3UT15ctZ5mpfB8OkFrpxs+NO5yzCV5SVsE=
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [PATCH v9 0/4] kselftest: mm: fix some failure of
+ split_huge_page_test
+Date: Thu, 01 Oct 2026 22:17:50 +0100
+Message-Id: <20261001-fix_split-v9-0-0f4ba8bbdbdf@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="q9J3ZXhLEIPLOZjy"
-Content-Disposition: inline
-In-Reply-To: <ar5thpZI5GiCfVRR@gremlin>
-X-Cookie: Do not stamp.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAP7NvmoC/23QQW7DIBAF0KtErOtqGAYzZNV7VFEFGDdITRxBZ
+ KWKfPfibIKjLj/w/oy4ixJzikXsd3eR45xKms412LedCEd3/o5dGmoWCNgDI3Rjun2Vy0+6diO
+ RVTYGIs+ivr/kWC8fXZ+Hmo+pXKf8+6ie5Xr6X8ssO+icJwVBczBh/HD59B6mk1g7ZtU6bp2qT
+ hkCRM29I7919HQWsHVUHesRlAU9Gi+3TrfOtE6vDtGzBNLsw9b1jZPUur462cfBSFQM8LKnaRz
+ K1pnqBtQxWCulti//wq3bzOPqgndGaTswo3u6ZVn+AFmT7f3wAQAA
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>, 
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
+ Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+ Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Sarthak Sharma <sarthak.sharma@arm.com>, 
+ Yeoreum Yun <yeoreum.yun@arm.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4504; i=yeoreum.yun@arm.com;
+ h=from:subject:message-id; bh=elVZHf3wDmPU0tfGL4EH9o7DXhEwI7HvqsyNCh92HrY=;
+ b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBqvs4J9kNPaSxDmOGK6cAuegoeJSlB/nC6jvHsp
+ 92wNFXht1OJAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCar7OCQAKCRBt1cPRWsUx
+ M1JfC/sFJzOYGspJBLB/MTgJIVH2alzwBjlzkrTRTPo4Zh0NKFh/Nx66ovKfSxWpLsll9rhdbFL
+ i2e2ZA5IJbS57pbkyea0YnCXEwF4jQ1/K+CZf+jdzNZrZntfzLBdzx98s8m3+01437QXeyvYama
+ BsnN9PNwvB6e+hs+q3XaLkw5YUP9e7izGSGOBSxE+luNEXaz3bBLrYx9cuGInQ8ptiAaTJ4yHEr
+ FEE7vDFaQIJt5EJOXJ3uwmdzrM2F3Mzxx6R+rH+VOGLwu3VoJwhaViBAtbFV7KES6yvBzg7CsGb
+ 0U2hro+rZVBHL5CqEl6P059jEzIeV3kx4/0KDH6DKdpC8RvjlG59u5EjQgTZUmBeHIIU20G/kPr
+ JkrND+KuRU+OOne1rp7qs5Ns4lJ/uIvjxwwJgSwrmxLYVApNM7WG4f8Q4Uzrvsc8Vmo9Ob4RKRh
+ k/ruWgOh5dFPivdwV25w/qHVHEQXTrgGmKw+nXduP/S3VOA/JGy6Q471pC1YdiwBuuvO0=
+X-Developer-Key: i=yeoreum.yun@arm.com; a=openpgp;
+ fpr=2D83E092DD0533B85875A49D6DD5C3D15AC53133
 
+split_huge_page_test can fail for the following reasons:
 
---q9J3ZXhLEIPLOZjy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  1. During the test, khugepaged may collapse previously split pages again,
+     causing intermittent failures.
 
-On Thu, Oct 01, 2026 at 05:26:41PM +0100, Lorenzo Stoakes (ARM) wrote:
-> On Wed, Sep 30, 2026 at 10:48:18PM +0100, Mark Brown wrote:
-> > As per I_CFFNS and the pseudocode for the SPSR_ELx and ELR_ELx registers
-> > a GCS exception with ExType 1 is generated for attempts to write to
-> > those registers when both GCSCR_ELx.EXLOCKEN and PSTATE.EXLOCK are set.
+  2. Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
+     glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
+     made by memalign(). The underlying VMA may start at a different address
+     from the aligned address returned by memalign(). Moreover, a subsequent
+     madvise(MADV_HUGEPAGE) call does not split the VMA because it already
+     has the same advice.
 
-> From [4] I see I_CFFNS is defined as:
+     This causes the test to fail because the check_huge_xxx() helpers
+     incorrectly require the address returned by memalign() to match the
+     VMA start address reported in /proc/self/smaps.
 
-> "When an MSR instruction would write to the relevant ELR_ELx or SPSR_ELx
-> for the current Exception level ELy, the Effective value of
-> GCSCR_ELy.EXLOCKEN and PSTATE.EXLOCK may prevent the write."
+Address these issues by applying MADV_NOHUGEPAGE after faulting in the
+huge page, preventing khugepaged from collapsing it again, and instead of
+relying on /proc/self/smaps, use /proc/self/pagemap and
+/proc/kpageflags to detect huge-page mappings and large folios:
 
-> So the lock applies to writes to the current EL's own ELR/SPSR rather than
-> to any ELR_ELx/SPSR_ELx the current EL can write to?
+  1. If hpage_size == pmd_pagesize, check PAGE_IS_HUGE instead of
+     using check_large_folios(), since only the mapping type matters.
+     This identifies PMD-mapped huge pages.
+  2. Otherwise, use check_large_folios() to detect large folios. This
+     covers mTHP cases.
+  3. Check the folio flags according to the type of huge page.
 
-VHE and NV complicate things so "own" isn't just the same ELx, but my
-text above definitely oversimplifies too much and so is wrong.
+Since check_huge_shmem() was required to distinguish shmem huge pages
+because /proc/self/smaps reports them using a dedicated “ShmemPmdMapped”
+entry, as opposed to “FilePmdMapped” for file-backed huge pages.
 
-For example refering to the pseudocode for ELR_EL1 and SPSR_EL1 we see
-in the MSR handling:
+Now that /proc/self/smaps is no longer used to detect huge pages and
+/proc/kpageflags is used instead, it is sufficient to distinguish
+ between file-backed and anonymous pages since the ShmemPmdMapped is also
+kind of file-backed.
 
-  elsif PSTATE.EL =3D=3D EL2 then
-      if IsFeatureImplemented(FEAT_GCS) && GetCurrentEXLOCKEN() && !Halted(=
-) && PSTATE.EXLOCK =3D=3D '1' && ELIsInHost(EL2) then
-          EXLOCKException();
+Therefore, remove check_huge_shmem() and use check_huge_file() instead.
 
-and note the use of ELx for ELR/SPSR and ELy for the current exception
-level and GCSCR in I_CFFNS (ie, ELx vs ELy).  My interpretation here is
-that the use of "the relevant" rather than just using ELx throughout is
-an effort to cover the complications resulting from VHE and NV.  With
-the above pseudocode writes to the EL1 register from EL2 are also
-covered when we're in host mode - the fact that we're in host mode makes
-the EL1 access relevant.
+This patch based on mm-unstable
 
-I'll reword what I've written in the commit log, like I say it's wrong.
+---
+Changes in v9:
+  - fix some typos in comment and Fixes tag.
+  - separating huge and type checking.
+  - add r-b tags.
+  - Link to v8: https://lore.kernel.org/r/20260924-fix_split-v8-0-cba7359d882a@arm.com
 
-> So... TL;DR is, shouldn't this function look like:
->=20
-> static inline bool sysregs_exlocked(struct kvm_vcpu *vcpu)
-> {
-> 	if (!kvm_has_gcs(vcpu->kvm))
-> 		return false;
->=20
-> 	if (!(vcpu->arch.ctxt.regs.pstate & PSR_EXLOCK_BIT))
-> 		return false;
->=20
-> 	if (is_hyp_ctxt(vcpu))
-> 		return false;
->=20
-> 	return vcpu_read_sys_reg(vcpu, GCSCR_EL1) & GCSCR_ELx_EXLOCKEN;
-> }
+Changes in v8:
+  - add intermediate patch for __check_pmd_huge().
+  - add r-b, a-b tags.
+  - Link to v7: https://lore.kernel.org/r/20260921-fix_split-v7-0-d25ec991159f@arm.com
 
-I think so, but I'll check through again.
+Changes in v7:
+  - change khugepaged's check_huge() callback.
+  - Link to v6: https://lore.kernel.org/r/20260914-fix_split-v6-0-16ed7123800b@arm.com
 
-The confusions you identified in the bit of your mail above this were
-the result of me doing some but on all of the simplifications.  I was
-trying to make things clearer by including some code that couldn't run
-so it was more obvious that things correspond to the pseudocode, but
-really that shouldn't have had any simplifications in it - we should
-either have all the simplifications or none of them.  I'll add more
-comments instead.
+Changes in v6:
+  - drop alloc_isolated_mem() patch.
+  - remove check_huge_shmem().
+  - Link to v5: https://lore.kernel.org/r/20260907-fix_split-v5-0-822b810458bc@arm.com
 
-> > +	/*
-> > +	 * Note that the EXLOCKEN for the running EL is checked
-> > +	 * regardless of the register written to.
-> > +	 */
->=20
-> This seems to contradict [4] - the register written to is what decides
-> whether the lock applies?
+Changes in v5:
+  - rename madv_nohuge() to disable_khugepaged().
+  - Link to v4: https://lore.kernel.org/r/20260902-fix_split-v4-0-85f03905f7b1@arm.com
 
-[4] is section D11.4.1 of DDI0487 M.d, containing rule I_CFFNS discussed
-above.  My intent there is to express that if EXLOCK exceptions might be
-generated we check EXLOCKEN for the running EL, not one influenced by
-the written register.  Some combinations of register, EL and system
-state do not generate exceptions but those that do use the current EL's
-EXLOCKEN rather than an _ELx register using GCSCR_ELx.EXLOCKEN.
+Changes in v4:
+  - reparse commit message.
+  - introduce alloc_isolated_mem().
+  - make madv_nohuge() helper according to suggestion.
+  - Link to v3: https://lore.kernel.org/r/20260828-fix_split-v3-0-374022586a4b@arm.com
 
---q9J3ZXhLEIPLOZjy
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes in v3:
+  - change  message in case of failure of madvise() with MADV_NOHUGEPAGE.
+  - fix collapse_single_mthp (mthp_khugepaged:anon) test case failure.
+  - Link to v2: https://lore.kernel.org/all/20260826-fix_split-v2-0-71153c7f579a@arm.com/
 
------BEGIN PGP SIGNATURE-----
+Changes in v2:
+  - rebase to mm-unstable.
+  - add message in case of failure of madvise() with MADV_NOHUGEPAGE.
+  - fix wrong setup expected_huge in check_huge_shmem().
+  - Link to v1: https://lore.kernel.org/r/20260820-fix_split-v1-0-ab430c58c7cf@arm.com
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmq+zJUACgkQJNaLcl1U
-h9BVtAf+PDpVuQacuftSkXtdJrBZMHKg8vNuetDKBvz9KvhrxoYoWQjRmPVuAoX2
-OcGHpNojxajl33f7aKUa28MSH8eOOSZuypPQ1cvORyeyrLK7fTnN7r/MVRpccdQl
-VgMAgLADQyNtyXisrzEFNQorksK5ns7ifIN7qsf6hRMZM11ZMHhxQ0jM4EdhmLX2
-OmHFYM3ynGbTgwltOCO3mXd4DWQOw/QFxzBXc7Y83BNhW7oWphPC0qw098y7WbRo
-pTQnmDtpms4njthjpsM8eSwsTJ+geholf5xtxuI9ssE3JhR1tuN5Su3E3hKjQM5y
-Livc7aiNwu7yvT6t0SYfIcx3omJ/Tg==
-=yzBf
------END PGP SIGNATURE-----
+---
+Yeoreum Yun (4):
+      kselftest: mm: prevent random failure of huge page split for khugepaged
+      kselftest: mm: replace usage of /proc/self/smaps for __check_pmd_huge()
+      kselftest: mm: integrate huge page checks
+      kselftest: mm: remove check_huge_shmem()
 
---q9J3ZXhLEIPLOZjy--
+ tools/testing/selftests/mm/folio_split_race_test.c |   2 +-
+ tools/testing/selftests/mm/khugepaged.c            |  38 ++-----
+ tools/testing/selftests/mm/split_huge_page_test.c  |  16 +++
+ tools/testing/selftests/mm/uffd-common.c           |   4 +-
+ tools/testing/selftests/mm/vm_util.c               | 113 ++++++++++++++-------
+ tools/testing/selftests/mm/vm_util.h               |   1 -
+ 6 files changed, 100 insertions(+), 74 deletions(-)
+---
+base-commit: e8d0f6a1b2a447d02845984fa6288787543cb03c
+change-id: 20260820-fix_split-f44939ec44b8
+
+Best regards,
+-- 
+Sincerely,
+Yeoreum Yun
+
