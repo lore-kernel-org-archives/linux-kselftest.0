@@ -1,90 +1,414 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D39554949E0;
-	Thu,  1 Oct 2026 16:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0361541B8F9
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 Oct 2026 16:55:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790873598; cv=none; b=CKO4xmzmcrWZpTWPidMapJwbnGzctm5Cgr4/zjxKCzq4VhFXJpuJxh9bnIGVTwCuUffiVOTH7x8j09rjJvmpvWNN3rKQCplp/nJ8e54Lp4VrCPJyVY3i38PN7QIYGNMVf/ZcVa5VtbvDrm5uCkBvy6MPWz+XI1ZKnOrzyJALHxY=
+	t=1790873757; cv=none; b=u1sQP9uTd5OUzOzMP8s/Mc6Ahf8VTqPQNDK7qp5b+vmTsT+C+HAjeGqNCE3F5ixxlUH7RYb9+t5Xwl/OZcupxFYMx5TWM3ce/eXXR4EiqIK/l82BCEOSHO8DKZunQ2f79KFVLPsdwkiWF4PESQvgI6W/0glvviQSCT6VIXXyvwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790873598; c=relaxed/simple;
-	bh=pldxfBBUJszv2h95WSmrqJHgRj+RN0mpAukKCJ4Us+g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i3RC18Q2/OjGr9ySsipBjjZZa4Ph4qmLTEOS7H0j5zNQq/xJnEinQIwzmf7eHbm3aJ8KxTq61slqjyxVdo81Pkhgw65se54iN58S4aNubv0zgpQNUZeh5e7vm+eWZAKbiHcR5jNeGkfExN8TJq2Q1zVf4AmiocGyDfX3pEQyL9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LvbSVCpa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790873757; c=relaxed/simple;
+	bh=L51AOdJa7D5n6jR5j8AolWvI3Mu+aQ/fvgqMfOpwZbs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bqxRjgsYDqW5zUCLmiZAhxDzFPrNQBAZt6WjGNXDl/0IrtxnU+ca6SNncMQ6pkaJFdUUX3cbdZYV6J1v3Yd5WufehrziKZLJBPwOWp1/Qk3ZWHCYJpDWCZJMGbsdKP6nyy/2YsCN8+zIsBQFelKuRUEcgL7/7QWHLafmNxPatHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I/wobIqT; arc=none smtp.client-ip=209.85.219.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LvbSVCpa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 204151F000FF;
-	Thu,  1 Oct 2026 16:53:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790873596;
-	bh=pldxfBBUJszv2h95WSmrqJHgRj+RN0mpAukKCJ4Us+g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=LvbSVCpaCUVkCAz7so8zugOU3NwB259fPKMks2lna/kHm0w4qsV+s9KRttiSYjuTA
-	 YWqi1beCw/63VRYo0D6E/5KjdiQoKuWAd02GWBKBvUyHv2gNb5OpWIBZgmsUN+JO77
-	 fPkC76O599BnM951u6Mz1XTKKEeAlR3aeV0Pw8AKnIPyIHfQuI6mwgdcokO0RvViPk
-	 RdT41/5KVCI+WaVbKnShZrhW6IiaQJW0alniE3u/M/Mzo96jeQdxwX+5sWe3XE02nT
-	 gHobMG1OESuD/ILEtZBbpiDZA1gbnXyxoe6/X/W0xeRaKXMcPnl4XzBCqJkfx7M4xQ
-	 tOdXdnwJxlghw==
-Date: Thu, 1 Oct 2026 17:53:09 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Fuad Tabba <fuad.tabba@linux.dev>, Peter Maydell <peter.maydell@linaro.org>, 
-	Leonardo Bras <leo.bras@arm.com>, Wei-Lin Chang <weilin.chang@arm.com>, 
-	Yao Yuan <yaoyuan@linux.alibaba.com>, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v21 15/15] KVM: selftests: arm64: Add GCS EXLOCK
- exception emulation test
-Message-ID: <ar6PJqq3Ujaz-ibx@gremlin>
-References: <20260930-arm64-gcs-v21-0-3556644cd927@kernel.org>
- <20260930-arm64-gcs-v21-15-3556644cd927@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I/wobIqT"
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-917a6dccc60so11637226d6.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Oct 2026 09:55:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790873755; x=1791478555; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=oTHYWKz08F9IFT21q78Znvc/ay+y5kvWeCV4R01cPMI=;
+        b=I/wobIqTMlGY12JjvlklPRHQBIY0eln+EZ+u1GZVagFUMzqgLRmyLJLYChkmBaf+jg
+         sRrTaCceVanO73ZfbhFeRSqFLYSX2Z/8RVr4wJvHU9LLjMjuvA/WiGGgAzKXruavqnO/
+         B08yyVqnQUz1TG8lrIigh8rCofKPhRGNVrRBTpn8+TDF78pSYmRRuiLXlDNJIpcJ1u50
+         Yiys535RjP4bJUw0rg832geARsBhH4IwrCah7de2K5P2usIlqr99GRFBBAszEBG5Qhvo
+         CRS8U7xTXRyA1UiNB8Z+nyld12RcJs9XYPx8SgcQ7sDQ2UHUYmxGpflqOqCER1LxdOMZ
+         KZGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790873755; x=1791478555;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=oTHYWKz08F9IFT21q78Znvc/ay+y5kvWeCV4R01cPMI=;
+        b=gqVEYhoiPxlnd9VHBsS1fXGO9TQXTfsgv1TI5eyFKR/5fTol5wjNFYm6Aem7AONcuK
+         yPnuI2EXEQI9Rb7lLr+HSx8KoFPFo/AJC5vFMfUeyqI1KTv5U//KddcDrZDdkFgHANxX
+         LoIZXJJzXaQRdADCFOTjC2VZd3s7Yp/zdpWgtkbTHUtIYaoutCjdNezc+cFvHd/jvT2e
+         lyB2wl6fme9YSF29dFnu8KF9Naa9HHo1s6+aFbWhNNAA/lr/wi4RwD3kNgPA9xVCgH0P
+         jHGOEipjRBMuTO/VFKftlF8VESchwH7lmJyxoApa1f+/iMTJ/BP44X1tr/ombds9dzlz
+         oI6A==
+X-Forwarded-Encrypted: i=1; AKwUvBwnnjgPFMJISWPk/xbQFtNP5TiwkGrHuzYM+lpoaC05tc6BuuzsLhY3ZmuHpuTpxC4XlIr4CSf49Y9PUO2+5gE=@vger.kernel.org
+X-Gm-Message-State: AFuF++moPf30kxuf+ApJeSIDGylAwss2rF046teIcEmL17hsPypNCUri
+	rcIFut60DJC046nAD81iH1/T+ioLtv8T/Oqj6901OtTl3H//M9X90Q6eAM/aqOvL
+X-Gm-Gg: AYBFou2Oro89D6shw901oSkgpqbP8eKvRLvScOJGKVZnmoAT5s99zaB2qhAkRmr8CGC
+	iYeSwTRc2N3GTvl1bjX/VroyRa43N8ZfqD/5p/K2CQdjTLIqyM24g7gZs+8WGFQbriqQUdVYvV3
+	ifHv5Czyillbfm4jq99MNylbHX0tgU8iXPCti7SmpDdzoDBn2vvWicK1IwN6ERKFA56sauB9f8L
+	hJVEUNLqI5FN0szg6RapbQPvMeEcybnzgYE+dae59TlNluJ24kIo/pxZAiSBAAXlWz980N1vXr2
+	szu+r9TW6zfEdMpY6jAoD2KtNfg6Zo9zK23pTwiypLHH9B7kvXgTN9SI3mvhyYv+9nxKJIjTszd
+	vVtGfdfmk7vjIA9Vn0gbT5rc6OXFU3vhFtbdQWk0bI5PGHG+L67ziW4tMCO7G9KQthbc69N/E0i
+	MMpMYojby244As3wXohHqwiFSdwisQhPudd9IMBKd8Zr+N8olEm3mZU8+rjkuayViVYVs5xL06z
+	dMYvo1KZ9JPRXtWSbTtsmG4FAoxQ42sfxal2XX9Jt8zgIfxQXrYm09P7Pw+kqo6xkwy7Aq/Xtw7
+	zm+8jXo=
+X-Received: by 2002:a05:6214:3199:b0:917:a1d0:890c with SMTP id 6a1803df08f44-917aa185d44mr59027796d6.17.1790873754640;
+        Thu, 01 Oct 2026 09:55:54 -0700 (PDT)
+Received: from localhost.localdomain (pool-173-71-97-169.cmdnnj.fios.verizon.net. [173.71.97.169])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-917a89aca2asm30200356d6.15.2026.10.01.09.55.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Oct 2026 09:55:54 -0700 (PDT)
+From: Akira Patafio <kokokoala4211@gmail.com>
+To: gregkh@linuxfoundation.org,
+	jirislaby@kernel.org
+Cc: linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Akira Patafio <kokokoala4211@gmail.com>
+Subject: [PATCH] tty: pty: preserve open slaves after rejected locked open
+Date: Thu,  1 Oct 2026 12:55:52 -0400
+Message-ID: <20261001165552.2439-1-kokokoala4211@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260930-arm64-gcs-v21-15-3556644cd927@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 30, 2026 at 10:48:25PM +0100, Mark Brown wrote:
-> When running in vEL2 ERET is emulated, this means that we must emulate
-> the behaviour of GCSCR_EL2.EXLOCKEN. Add a test that validates the
-> behaviour.
->
-> As per DDI0487 R_WTXBY PSTATE.EXLOCK is set to the value of
-> GCSCR_ELx.EXLOCKEN when taking an exception to the same exception level.
-> As per DDI0487 R_TYTWB if on exception return to the same EL
-> GCSCR_ELx.EXLOCKEN is 1 and PSTATE.EXLOCK is not 1 then the exception
-> return is illegal.
->
-> We nest handling of two UDFs to allow us to both observe and modify
-> PSTATE.EXLOCK, checking that expected exceptions are generated for ERET.
-> We also repeat the UDF tests having enabled fine grained traps for ERET
-> to try to ensure that the slow paths are taken.
->
-> We also attempt to write to both SPSR_ELx and ELR_ELx, again using a UDF
-> handler to control PSTATE.EXLOCK. We do all this both with and without
-> having enabled EXLOCKEN, though only for code running at EL2 due to
-> framework limitations.
->
-> For completeness we also inject a data abort from EL0 to EL2 with
-> GCSCR_EL2.EXLOCKEN set, ensuring that PSTATE.EXLOCK is not set.
->
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> Reviewed-by: Leonardo Bras <leo.bras@arm.com>
+Opening a locked PTY slave fails with EIO, but the failure path sets
+TTY_IO_ERROR on the shared slave tty. Previously opened slave files then
+fail I/O even though their master is still open.
 
-This all seems reasonable test-wise, but I wonder if the discussion around 8/15
-might alter some of what's tested here?
+tty_open() releases a file after the slave open callback fails. Merely
+skipping TTY_IO_ERROR on the rejected open is insufficient: pty_close()
+can mistake the failed file for the last slave and close the master.
+Counting tty references is also insufficient because a real last close
+can race the failed open and its release.
 
-In that - if it's only hardware that's doing the locked check then the SPSR (and
-probably ELR?) bits might only be exercising that rather than KVM stuff?
+Track which slave files opened successfully. Ignore failed files during
+close, and mark the master peer closed only when the last successful
+slave file closes. A selftest checks locked opens with zero, one, and
+two existing slave files, plus ordinary last-slave close behavior.
 
-It might only need a comment update though :)
+Fixes: 699390354da6 ("pty: Ignore slave pty close() if never successfully opened")
+Signed-off-by: Akira Patafio <kokokoala4211@gmail.com>
+---
+The pre-fix EIO transition was reproduced on an Android 5.10.240 device.
+The new selftest cross-compiles for arm64 with -Werror. I have not booted
+a kernel with this patch yet.
 
---
-Cheers, Lorenzo
+ drivers/tty/pty.c                             |  32 ++-
+ drivers/tty/tty_io.c                          |   1 +
+ include/linux/tty.h                           |   1 +
+ .../testing/selftests/filesystems/.gitignore  |   1 +
+ tools/testing/selftests/filesystems/Makefile  |   2 +-
+ .../selftests/filesystems/pty_locked_open.c   | 187 ++++++++++++++++++
+ 6 files changed, 220 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/filesystems/pty_locked_open.c
+
+diff --git a/drivers/tty/pty.c b/drivers/tty/pty.c
+index cc7f709..3cc1494 100644
+--- a/drivers/tty/pty.c
++++ b/drivers/tty/pty.c
+@@ -46,12 +46,29 @@ static DEFINE_MUTEX(devpts_mutex);
+ 
+ static void pty_close(struct tty_struct *tty, struct file *filp)
+ {
++	struct tty_file_private *priv = filp->private_data;
++	struct tty_file_private *other;
++	bool another_open = false;
++
+ 	if (tty->driver->subtype == PTY_TYPE_MASTER)
+ 		WARN_ON(tty->count > 1);
+ 	else {
+-		if (tty_io_error(tty))
++		/* tty_release() also calls close after an unsuccessful open. */
++		if (!priv->pty_opened)
++			return;
++		/* tty->count includes opens that have not succeeded yet. */
++		spin_lock(&tty->files_lock);
++		priv->pty_opened = false;
++		list_for_each_entry(other, &tty->tty_files, list) {
++			if (other->pty_opened) {
++				another_open = true;
++				break;
++			}
++		}
++		spin_unlock(&tty->files_lock);
++		if (another_open)
+ 			return;
+-		if (tty->count > 2)
++		if (tty_io_error(tty))
+ 			return;
+ 	}
+ 	set_bit(TTY_IO_ERROR, &tty->flags);
+@@ -223,14 +240,23 @@ static int pty_open(struct tty_struct *tty, struct file *filp)
+ 
+ 	if (test_bit(TTY_OTHER_CLOSED, &tty->flags))
+ 		goto out;
++	/* A rejected open must not disrupt already-open slave descriptors. */
+ 	if (test_bit(TTY_PTY_LOCK, &tty->link->flags))
+-		goto out;
++		return -EIO;
+ 	if (tty->driver->subtype == PTY_TYPE_SLAVE && tty->link->count != 1)
+ 		goto out;
+ 
+ 	clear_bit(TTY_IO_ERROR, &tty->flags);
+ 	clear_bit(TTY_OTHER_CLOSED, &tty->link->flags);
+ 	set_bit(TTY_THROTTLED, &tty->flags);
++	/* Record a successful open before another slave can close. */
++	if (tty->driver->subtype == PTY_TYPE_SLAVE) {
++		struct tty_file_private *priv = filp->private_data;
++
++		spin_lock(&tty->files_lock);
++		priv->pty_opened = true;
++		spin_unlock(&tty->files_lock);
++	}
+ 	return 0;
+ 
+ out:
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index 4856903..e0b5f97 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -186,6 +186,7 @@ int tty_alloc_file(struct file *file)
+ 	priv = kmalloc_obj(*priv);
+ 	if (!priv)
+ 		return -ENOMEM;
++	priv->pty_opened = false;
+ 
+ 	file->private_data = priv;
+ 
+diff --git a/include/linux/tty.h b/include/linux/tty.h
+index 0a46e40..c44d11f 100644
+--- a/include/linux/tty.h
++++ b/include/linux/tty.h
+@@ -247,6 +247,7 @@ struct tty_file_private {
+ 	struct tty_struct *tty;
+ 	struct file *file;
+ 	struct list_head list;
++	bool pty_opened;
+ };
+ 
+ /**
+diff --git a/tools/testing/selftests/filesystems/.gitignore b/tools/testing/selftests/filesystems/.gitignore
+index 9eb185f..5cbbfca 100644
+--- a/tools/testing/selftests/filesystems/.gitignore
++++ b/tools/testing/selftests/filesystems/.gitignore
+@@ -6,4 +6,5 @@ file_stressor
+ anon_inode_test
+ kernfs_test
+ idmapped_tmpfile
++pty_locked_open
+ ustat_test
+diff --git a/tools/testing/selftests/filesystems/Makefile b/tools/testing/selftests/filesystems/Makefile
+index 03be337..b92a4f1 100644
+--- a/tools/testing/selftests/filesystems/Makefile
++++ b/tools/testing/selftests/filesystems/Makefile
+@@ -2,7 +2,7 @@
+ 
+ CFLAGS += $(KHDR_INCLUDES)
+ TEST_GEN_PROGS := devpts_pts file_stressor anon_inode_test kernfs_test fclog ustat_test
+-TEST_GEN_PROGS += idmapped_tmpfile
++TEST_GEN_PROGS += idmapped_tmpfile pty_locked_open
+ TEST_GEN_PROGS_EXTENDED := dnotify_test
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/filesystems/pty_locked_open.c b/tools/testing/selftests/filesystems/pty_locked_open.c
+new file mode 100644
+index 0000000..eba661c
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/pty_locked_open.c
+@@ -0,0 +1,187 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <poll.h>
++#include <stdio.h>
++#include <sys/ioctl.h>
++#include <unistd.h>
++#include <asm/ioctls.h>
++
++#include "kselftest.h"
++
++#ifndef TIOCGPTPEER
++int main(void)
++{
++	ksft_exit_skip("TIOCGPTPEER is unavailable\n");
++}
++#else
++static int expect_no_master_hup(int master)
++{
++	struct pollfd pfd = { .fd = master, .events = POLLIN | POLLOUT };
++	int ret;
++
++	ret = poll(&pfd, 1, 0);
++	if (ret < 0 || (pfd.revents & POLLHUP)) {
++		ksft_print_msg("master poll returned %d (revents %#x)\n",
++			       ret, pfd.revents);
++		return -1;
++	}
++	return 0;
++}
++
++static int expect_master_hup(int master)
++{
++	struct pollfd pfd = { .fd = master, .events = POLLIN | POLLOUT };
++	int ret;
++
++	ret = poll(&pfd, 1, 0);
++	if (ret != 1 || !(pfd.revents & POLLHUP)) {
++		ksft_print_msg("master poll returned %d (revents %#x), expected HUP\n",
++			       ret, pfd.revents);
++		return -1;
++	}
++	return 0;
++}
++
++static int expect_locked_peer_rejected(int master)
++{
++	int fd;
++
++	errno = 0;
++	fd = ioctl(master, TIOCGPTPEER, O_RDWR | O_NOCTTY | O_CLOEXEC);
++	if (fd >= 0) {
++		ksft_print_msg("locked slave unexpectedly opened\n");
++		close(fd);
++		return -1;
++	}
++	if (errno != EIO) {
++		ksft_print_msg("locked slave open returned errno %d, expected EIO\n",
++			       errno);
++		return -1;
++	}
++	return 0;
++}
++
++static int transfer_byte(int master, int slave, char value)
++{
++	struct pollfd pfd = { .fd = master, .events = POLLIN };
++	char received;
++	ssize_t ret;
++
++	ret = write(slave, &value, 1);
++	if (ret != 1) {
++		ksft_print_msg("slave write returned %zd (errno %d)\n", ret, errno);
++		return -1;
++	}
++
++	ret = poll(&pfd, 1, 1000);
++	if (ret != 1 || !(pfd.revents & POLLIN)) {
++		ksft_print_msg("master poll returned %zd (revents %#x)\n",
++			       ret, pfd.revents);
++		return -1;
++	}
++
++	ret = read(master, &received, 1);
++	if (ret != 1 || received != value) {
++		ksft_print_msg("master read returned %zd (value %#x)\n",
++			       ret, ret == 1 ? (unsigned char)received : 0);
++		return -1;
++	}
++
++	return 0;
++}
++
++int main(void)
++{
++	int master = -1, slave_a = -1, slave_b = -1;
++	int locked = 1, unlocked = 0;
++	int ret = KSFT_FAIL;
++
++	ksft_print_header();
++	ksft_set_plan(1);
++
++	master = open("/dev/ptmx", O_RDWR | O_NOCTTY | O_CLOEXEC);
++	if (master < 0) {
++		ksft_print_msg("cannot open /dev/ptmx: %d\n", errno);
++		goto out;
++	}
++	if (expect_no_master_hup(master) ||
++	    expect_locked_peer_rejected(master) ||
++	    expect_no_master_hup(master))
++		goto out;
++
++	if (ioctl(master, TIOCSPTLCK, &unlocked) < 0) {
++		ksft_print_msg("cannot unlock slave: %d\n", errno);
++		goto out;
++	}
++	slave_a = ioctl(master, TIOCGPTPEER, O_RDWR | O_NOCTTY | O_CLOEXEC);
++	if (slave_a < 0) {
++		ksft_print_msg("cannot open slave A: %d\n", errno);
++		goto out;
++	}
++	if (transfer_byte(master, slave_a, 'A'))
++		goto out;
++	if (ioctl(master, TIOCSPTLCK, &locked) < 0) {
++		ksft_print_msg("cannot relock slave: %d\n", errno);
++		goto out;
++	}
++	if (expect_locked_peer_rejected(master) ||
++	    transfer_byte(master, slave_a, 'B'))
++		goto out;
++	if (ioctl(master, TIOCSPTLCK, &unlocked) < 0) {
++		ksft_print_msg("cannot unlock slave: %d\n", errno);
++		goto out;
++	}
++	slave_b = ioctl(master, TIOCGPTPEER, O_RDWR | O_NOCTTY | O_CLOEXEC);
++	if (slave_b < 0) {
++		ksft_print_msg("cannot open slave B: %d\n", errno);
++		goto out;
++	}
++	if (transfer_byte(master, slave_a, 'C') ||
++	    transfer_byte(master, slave_b, 'D'))
++		goto out;
++
++	if (ioctl(master, TIOCSPTLCK, &locked) < 0) {
++		ksft_print_msg("cannot relock slave: %d\n", errno);
++		goto out;
++	}
++	if (transfer_byte(master, slave_a, 'E') ||
++	    transfer_byte(master, slave_b, 'F'))
++		goto out;
++
++	if (expect_locked_peer_rejected(master) ||
++	    transfer_byte(master, slave_a, 'G') ||
++	    transfer_byte(master, slave_b, 'H'))
++		goto out;
++	if (close(slave_b)) {
++		ksft_print_msg("cannot close slave B: %d\n", errno);
++		slave_b = -1;
++		goto out;
++	}
++	slave_b = -1;
++	if (expect_no_master_hup(master) ||
++	    transfer_byte(master, slave_a, 'I'))
++		goto out;
++	if (close(slave_a)) {
++		ksft_print_msg("cannot close slave A: %d\n", errno);
++		slave_a = -1;
++		goto out;
++	}
++	slave_a = -1;
++	if (expect_master_hup(master))
++		goto out;
++	ret = KSFT_PASS;
++
++out:
++	if (slave_b >= 0)
++		close(slave_b);
++	if (slave_a >= 0)
++		close(slave_a);
++	if (master >= 0)
++		close(master);
++	ksft_test_result(ret == KSFT_PASS,
++			 "locked slave open preserves master and existing slave I/O\n");
++	ksft_exit(ret == KSFT_PASS);
++}
++#endif
+-- 
+2.50.1
