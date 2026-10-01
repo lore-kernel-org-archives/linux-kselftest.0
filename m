@@ -1,139 +1,156 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521B62F7EE0;
-	Thu,  1 Oct 2026 23:29:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA1433E37C;
+	Thu,  1 Oct 2026 23:31:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790897354; cv=none; b=KeHE9TVj1QBJ9Sqmd5P2vuxAgRC9yPbEcwUopJeZlFvhMuwZViCYQiFdkr3gjzz0n8lqrYAtn+akNCUu5aeIEJ3qonctMw8eDOLzplCq5D1AnHwVnYR3q0Kb/vBiMpqDbAJ3NMFfvTqKidOKznOEFEwBntJHaHRuW7a/YDtoIAc=
+	t=1790897480; cv=none; b=XEKWB3JAOwYTBPML7zUKDtwH2hq33Txkbln9DyZRMu27hdABZE+frhZb7iaEK4Z+kCq9u0hGLbCvdvJBhV0xvdiR1J8PWLg0JKM3hKqTMVbnbIlMBAxKPxxi7re/tIt0VVewrz3wHjbUOs2JwYbbpCgGrEShI8GetKXtEOmN64o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790897354; c=relaxed/simple;
-	bh=F9sNR8uDTG36T1yCX+2t3qyQu6bPwVnlyLuwhWIk1YM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=uDGpMsRmFHRY3mCK1fHpVdUZhsvjcDV2i+uQF8A1GK28nK7nc8Wo2i26HToCvFq3XnxMpmWdsbaPKx5AICHZnjSNiiJ17hffrs+XA1X06RwBN3zHHSVL0Ey/qbRQSWyC5cf3Syq5Lrk1oVlKEFSS7eS1hDltGR0O9Ihjg3MoHFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CpeBFHqH reason="signature verification failed"; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790897480; c=relaxed/simple;
+	bh=P1+qC6QMcvsNqQi8vL9sAGTCsIAKk4aFLZwe3gqiKrU=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VIFcUUhJl+yM7+5tpOjYGPlOIVyuNh6a6a+lkwPOK38cHkckCJJGbxVjDmTD4g7N/FH470Enpu8Vwx/6u1Ek27v5RqIgKiFOqw1rC0bZz4Y3+x2bJsG6s7mMe9qyo95HVejZa3SkuU1E4YH5MlXfT/BWCoIPpjRNDWM0z81xw84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B3PGcKAG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CpeBFHqH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFE651F000FF;
-	Thu,  1 Oct 2026 23:29:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B3PGcKAG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EA7E1F000FF;
+	Thu,  1 Oct 2026 23:31:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790897353;
-	bh=UCp1D+bv7tlX4Dr/jntNO+4AHuP9rt2modE0wkIcwtc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=CpeBFHqHmryldip33VnRdbzF7UDAkLGKgPdQ9lHYGrW6rtOepKTkX10IheVlSV68s
-	 zP0+ZgJcG6bJNHQ09dSoiIdm4t4Q2z8WoOAAtjBk0k7/hl4Md2ZyvgW3poockTNLH2
-	 NaSj4VRTTucIRopc40Fe4twHCke9Vh2jXEzblEZ2qOYNojWt8POe7HzKlwHhLj7wD2
-	 NerpPQWJ3T/qkqRnZP6EaMXe+ywenBpGPOz4vFuzDM5605Fuz9abCJM58rGHBQDe4C
-	 ml6DhqhVjbS1yy2XEBmIPvgjYCC6tdMC0fEwobsoCpL99DTeXhZka9b3v7UpLTruYk
-	 3SBAUkOKC/JnA==
-Content-Type: multipart/mixed; boundary="===============6923769064512196432=="
+	s=k20260515; t=1790897479;
+	bh=8Yd3WzxEXuLjcx2PTW67B8euJHw5K1GAhQXQ5b9k29U=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=B3PGcKAG9PjvEGgHgo33xYcWg9IxTibWmg1wb8GHcdCCZtgMPC+7irolwa+M6g7bx
+	 Kdu4Vx+9cWWDMthbFOA69DIgrUpBwN+f9xtki8BJ/lhGMweR8Yr+mzE88QY4bfBr0V
+	 ouer3q5pLMgAfvTZh16Xd0Y+YySqht85KY0z+CtOQmKs3besOd6dmOC+l+9D2TnRhk
+	 sOxyb0MpM1hdBHLOiXDBcETiZ2/Wsraufyj9uGQZBFTjeJvisYdk4jqZzMSM+95YDc
+	 wx+SCGxVJ0Kggti5WnLJT46yUo0GKtwNRDmuiRNnD6gWNnYbKNVuEVAmLS0Oo9lWf6
+	 jb/iTTY9ShhkQ==
+Subject: Re: [PATCH net-next v9 1/6] netlink: specs: rt-addr: fix the type of
+ target-netnsid
+From: netdev-bot+sashiko@kernel.org
+To: sigefriedhyy@gmail.com
+Cc: ajay.kathat@microchip.com, aleksandr.loktionov@intel.com,
+ andrew+netdev@lunn.ch, claudiu.beznea@tuxon.dev, davem@davemloft.net,
+ dsahern@kernel.org, donald.hunter@gmail.com, edumazet@google.com,
+ idosch@nvidia.com, jacob.e.keller@intel.com, kuba@kernel.org,
+ johannes@sipsolutions.net, kees@kernel.org, kory.maincent@bootlin.com,
+ kuniyu@google.com, nicolas.dichtel@6wind.com, nickgarlis@gmail.com,
+ pabeni@redhat.com, sd@queasysnail.net, shuah@kernel.org, horms@kernel.org,
+ sdf.kernel@gmail.com, vadim.fedorenko@linux.dev, willemb@google.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Date: Thu, 01 Oct 2026 23:31:17 +0000
+Message-ID: <179089747717.434549.10025971158678601177@kernel.org>
+In-Reply-To: <20260930112842.21323-2-sigefriedhyy@gmail.com>
+References: <20260930112842.21323-2-sigefriedhyy@gmail.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <562cbc38006e96e7fed9d935db2dbf4849bb20353f3fc86be22980680557d9d3@mail.kernel.org>
-In-Reply-To: <20261001225214.12351-11-wanjay@amazon.com>
-References: <20261001225214.12351-11-wanjay@amazon.com>
-Subject: Re: [PATCH bpf-next v4 10/12] resolve_btfids: add --btf_link to fill in .BTF.link records
-From: bot+bpf-ci@kernel.org
-To: wanjay@amazon.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: alan.maguire@oracle.com,martin.lau@linux.dev,yonghong.song@linux.dev,jolsa@kernel.org,ihor.solodrai@linux.dev,qmo@kernel.org,nathan@kernel.org,nsc@kernel.org,linux-kbuild@vger.kernel.org,linux@weissschuh.net,christian@heusel.eu,mcgrof@kernel.org,petr.pavlu@suse.com,samitolvanen@google.com,linux-modules@vger.kernel.org,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com,linux-trace-kernel@vger.kernel.org,acme@kernel.org,namhyung@kernel.org,irogers@google.com,linux-perf-users@vger.kernel.org,jikos@kernel.org,bentiss@kernel.org,linux-input@vger.kernel.org,tj@kernel.org,void@manifault.com,arighi@nvidia.com,changwoo@igalia.com,sched-ext@lists.linux.dev,shuah@kernel.org,linux-kselftest@vger.kernel.org,ojeda@kernel.org,rust-for-linux@vger.kernel.org,arnd@arndb.de,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,abuehaze@amazon.com,doebel@amazon.de,mpohlack@amazon.de,jay.wang.upstream@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kern
- el.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu,  1 Oct 2026 23:29:10 +0000 (UTC)
 
---===============6923769064512196432==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-> resolve_btfids: add --btf_link to fill in .BTF.link records
+Low priority / nit picks for your consideration:
 
-TL;DR: Not a bug: patch_btf_link() duplicates most of patch_btfids()'s ELF
-open/find-section/update code, so each --btf_link reopens and rewrites the
-file; suggests a shared helper or a single ELF handle.
+- [Low] The commit "netlink: specs: rt-addr: fix the type of target-
+  netnsid" fixes a bug in one specific earlier commit, but its message…
 
-> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-> --- a/tools/bpf/resolve_btfids/main.c
-> +++ b/tools/bpf/resolve_btfids/main.c
+Pre-existing issues:
+- [Low] This problem wasn't introduced by this patch, but after this
+  commit rt-addr.yaml still lists target-netnsid in no operation's…
 
-[ ... ]
+--
 
-> +static int patch_btf_link(const char *elf_path, const struct btf_link *link)
-> +{
+netlink: specs: rt-addr: fix the type of target-netnsid
 
-[ ... ]
+This commit changes the type of the target-netnsid attribute in the rt-addr
+netlink spec from binary to s32. That matches the NLA_S32 policy the kernel
+uses for IFA_TARGET_NETNSID and the type rt-link.yaml already declares.
 
-> +	elf_version(EV_CURRENT);
-> +	fd = open(elf_path, O_RDWR);
-> +	if (fd < 0) {
-> +		pr_err("FAILED to open %s: %s\n", elf_path, strerror(errno));
-> +		goto out_data;
-> +	}
-> +	elf = elf_begin(fd, ELF_C_RDWR_MMAP, NULL);
-> +	if (!elf) {
-> +		pr_err("FAILED cannot create ELF descriptor: %s\n", elf_errmsg(-1));
-> +		goto out_close;
-> +	}
-> +	elf_flagelf(elf, ELF_C_SET, ELF_F_LAYOUT);
+> diff --git a/Documentation/netlink/specs/rt-addr.yaml b/Documentation/netlink/specs/rt-addr.yaml
+> index 0ecbd24c890c6..17ead22034515 100644
+> --- a/Documentation/netlink/specs/rt-addr.yaml
+> +++ b/Documentation/netlink/specs/rt-addr.yaml
+> @@ -119,7 +119,7 @@ attribute-sets:
+>          type: u32
+>        -
+>          name: target-netnsid
+> -        type: binary
+> +        type: s32
 
-[ ... ]
+[Severity: Low]
+Should this patch carry a Fixes: tag?
 
-> +	if (elf_getshdrstrndx(elf, &shdrstrndx)) {
-> +		pr_err("FAILED cannot get shdr str ndx\n");
-> +		goto out_elf;
-> +	}
-> +	while ((scn = elf_nextscn(elf, scn))) {
-> +		if (gelf_getshdr(scn, &sh) != &sh) {
-> +			pr_err("FAILED to get section header\n");
-> +			goto out_elf;
-> +		}
-> +		name = elf_strptr(elf, shdrstrndx, sh.sh_name);
-> +		if (name && !strcmp(name, section))
-> +			break;
-> +	}
+The binary type for target-netnsid has been there since the spec was first
+added, when the file was still named rt_addr.yaml. Commit 0c8e30252d9f
+later renamed the attribute but did not change its type.
 
-[ ... ]
+The kernel has always treated this attribute as s32. In net/ipv4/devinet.c
+and net/ipv6/addrconf.c the policy entry is:
 
-> +	elf_flagdata(data, ELF_C_SET, ELF_F_DIRTY);
-> +	if (elf_update(elf, ELF_C_WRITE) < 0) {
-> +		pr_err("FAILED to update ELF file %s: %s\n", elf_path, elf_errmsg(-1));
-> +		goto out_elf;
-> +	}
+	[IFA_TARGET_NETNSID]	= { .type = NLA_S32 },
 
-[ ... ]
+The value is written with nla_put_s32() and read with nla_get_s32().
 
-> @@ -1773,21 +1974,28 @@ int main(int argc, const char **argv)
-[ ... ]
-> -	if (btfids_path)
-> -		return patch_btfids(btfids_path, obj.path);
-> +	if (btfids_path) {
-> +		err = patch_btfids(btfids_path, obj.path);
-> +		for (i = 0; !err && i < btf_links.cnt; i++)
-> +			err = patch_btf_link(obj.path, &btf_links.links[i]);
-> +		goto out;
-> +	}
+Perhaps:
 
-This isn't a bug, but patch_btf_link() repeats most of what patch_btfids()
-does just above it: elf_version(), open(O_RDWR), elf_begin(ELF_C_RDWR_MMAP),
-elf_flagelf(ELF_F_LAYOUT), the elf_getshdrstrndx() plus elf_nextscn() /
-gelf_getshdr() / elf_strptr() / strcmp() loop that finds a section by name,
-and the elf_flagdata(ELF_F_DIRTY) / elf_update() / elf_end() / close()
-teardown.  Only the section name and what gets written into data->d_buf
-differ.
+Fixes: dfb0f7d9d979 ("doc/netlink: Add spec for rt addr messages")
 
-With the loop in main(), a --patch_btfids run with N --btf_link options
-opens, maps and rewrites the same ELF file N + 1 times.
+[Severity: Low]
+This is a pre-existing issue and was not introduced by this patch. Even with
+the type corrected, no operation in rt-addr.yaml lists target-netnsid. The
+getaddr dump in particular leaves it out:
 
-Could the two share a small helper that opens the ELF and returns the
-Elf_Data of a named section, or could the .BTF.link records be written while
-.BTF_ids is being patched, using the same ELF handle?
+      name: getaddr
+      doc: Dump address information.
+      attribute-set: addr-attrs
+      dump:
+        request:
+          value: 22
+          attributes: []
+        reply:
+          value: 20
+          attributes: *ifaddr-all
 
+The kernel accepts IFA_TARGET_NETNSID in RTM_GETADDR dump requests:
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+net/ipv4/devinet.c:inet_valid_dump_ifaddr_req() {
+    ...
+		if (i == IFA_TARGET_NETNSID) {
+			struct net *net;
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36938681172
---===============6923769064512196432==--
+			fillargs->netnsid = nla_get_s32(tb[i]);
+    ...
+}
+
+inet6_rtm_valid_getaddr_req() and inet6_rtm_getaddr() in
+net/ipv6/addrconf.c accept it too.
+
+The kernel also puts it in replies, from inet_fill_ifaddr() and
+inet6_fill_ifaddr():
+
+	if (args->netnsid >= 0 &&
+	    nla_put_s32(skb, IFA_TARGET_NETNSID, args->netnsid))
+
+Could getaddr's request and reply attribute lists include target-netnsid?
+Without it, YNL-generated code cannot dump addresses from another netns
+through getaddr.
+
+A later commit in this series, "netlink: specs: rt-addr: document AF_PACKET
+multicast dumps", adds target-netnsid to the getmulticast request and reply
+lists. getaddr is still unchanged at the end of the series.
+
+>        -
+>          name: proto
+>          type: u8
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260930112842.21323-1-sigefriedhyy%40gmail.com
